@@ -35,20 +35,21 @@
 
 /**
  * gdk_pixbuf_get_from_window:
- * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf should be created.
- * @src: Source drawable.
- * @src_x: Source X coordinate within drawable.
- * @src_y: Source Y coordinate within drawable.
- * @dest_x: Destination X coordinate in pixbuf, or 0 if @dest is NULL.
- * @dest_y: Destination Y coordinate in pixbuf, or 0 if @dest is NULL.
- * @width: Width in pixels of region to get.
- * @height: Height in pixels of region to get.
+ * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf
+ *     should be created
+ * @window: Source window
+ * @src_x: Source X coordinate within @window
+ * @src_y: Source Y coordinate within @window
+ * @dest_x: Destination X coordinate in @dest, or 0 if @dest is NULL
+ * @dest_y: Destination Y coordinate in @dest, or 0 if @dest is NULL
+ * @width: Width in pixels of region to get
+ * @height: Height in pixels of region to get
  *
- * Transfers image data from a #GdkDrawable and converts it to an RGB(A)
+ * Transfers image data from a #GdkWindow and converts it to an RGB(A)
  * representation inside a #GdkPixbuf. In other words, copies
  * image data from a server-side drawable to a client-side RGB(A) buffer.
  * This allows you to efficiently read individual pixels on the client side.
- * 
+ *
  * If the specified destination pixbuf @dest is %NULL, then this
  * function will create an RGB pixbuf with 8 bits per channel and no
  * alpha, with the same size specified by the @width and @height
@@ -57,18 +58,17 @@
  * and it contains alpha information, then the filled pixels will be
  * set to full opacity (alpha = 255).
  *
- * If the specified drawable is a window, and the window is off the
- * screen, then there is no image data in the obscured/offscreen
- * regions to be placed in the pixbuf. The contents of portions of the
- * pixbuf corresponding to the offscreen region are undefined.
+ * If the window is off the screen, then there is no image data in the
+ * obscured/offscreen regions to be placed in the pixbuf. The contents
+ * of portions of the pixbuf corresponding to the offscreen region are
+ * undefined.
  *
  * If the window you're obtaining data from is partially obscured by
  * other windows, then the contents of the pixbuf areas corresponding
  * to the obscured regions are undefined.
- * 
- * If the target drawable is not mapped (typically because it's
- * iconified/minimized or not on the current workspace), then %NULL
- * will be returned.
+ *
+ * If the window is not mapped (typically because it's iconified/minimized
+ * or not on the current workspace), then %NULL will be returned.
  *
  * If memory can't be allocated for the return value, %NULL will be returned
  * instead.
@@ -76,8 +76,9 @@
  * (In short, there are several ways this function can fail, and if it fails
  *  it returns %NULL; so check the return value.)
  *
- * Return value: The same pixbuf as @dest if it was non-%NULL, or a newly-created
- * pixbuf with a reference count of 1 if no destination pixbuf was specified, or %NULL on error
+ * Return value: The same pixbuf as @dest if it was non-%NULL, or a
+ *     newly-created pixbuf with a reference count of 1 if no destinatio
+ *     pixbuf was specified, or %NULL on error
  **/
 GdkPixbuf *
 gdk_pixbuf_get_from_window (GdkPixbuf   *dest,
@@ -231,42 +232,29 @@ convert_no_alpha (guchar  *dest_data,
 
 /**
  * gdk_pixbuf_get_from_surface:
- * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf should be created.
+ * @dest: (allow-none): Destination pixbuf, or %NULL if a new pixbuf
+ *     should be created
  * @surface: surface to copy from
- * @src_x: Source X coordinate within drawable.
- * @src_y: Source Y coordinate within drawable.
- * @dest_x: Destination X coordinate in pixbuf, or 0 if @dest is NULL.
- * @dest_y: Destination Y coordinate in pixbuf, or 0 if @dest is NULL.
- * @width: Width in pixels of region to get.
- * @height: Height in pixels of region to get.
+ * @src_x: Source X coordinate within @surface
+ * @src_y: Source Y coordinate within @surface
+ * @dest_x: Destination X coordinate in @dest, or 0 if @dest is NULL
+ * @dest_y: Destination Y coordinate in @dest, or 0 if @dest is NULL
+ * @width: Width in pixels of region to get
+ * @height: Height in pixels of region to get
  *
  * Transfers image data from a #cairo_surface_t and converts it to an RGB(A)
- * representation inside a #GdkPixbuf. This allows you to efficiently read individual
- * pixels from Cairo surfaces. For #GdkWindows, use gdk_pixbuf_get_from_drawable()
- * instead.
- * 
- * If the specified destination pixbuf @dest is %NULL, then this
- * function will create an RGB pixbuf with 8 bits per channel. The pixbuf will
- * contain an alpha channel if the @surface contains one. In this case, the @dest_x 
+ * representation inside a #GdkPixbuf. This allows you to efficiently read
+ * individual pixels from cairo surfaces. For #GdkWindows, use
+ * gdk_pixbuf_get_from_surface() instead.
+ *
+ * If the specified destination pixbuf @dest is %NULL, then this function
+ * will create an RGB pixbuf with 8 bits per channel. The pixbuf will contain
+ * an alpha channel if the @surface contains one. In this case, the @dest_x
  * and @dest_y arguments must be specified as 0.
  *
- * If the specified drawable is a window, and the window is off the
- * screen, then there is no image data in the obscured/offscreen
- * regions to be placed in the pixbuf. The contents of portions of the
- * pixbuf corresponding to the offscreen region are undefined.
- *
- * If the window you're obtaining data from is partially obscured by
- * other windows, then the contents of the pixbuf areas corresponding
- * to the obscured regions are undefined.
- * 
- * If memory can't be allocated for the return value, %NULL will be returned
- * instead.
- *
- * (In short, there are several ways this function can fail, and if it fails
- *  it returns %NULL; so check the return value.)
- *
- * Return value: The same pixbuf as @dest if it was non-%NULL, or a newly-created
- * pixbuf with a reference count of 1 if no destination pixbuf was specified, or %NULL on error
+ * Return value: The same pixbuf as @dest if it was non-%NULL, or a
+ *     newly-created pixbuf with a reference count of 1 if no destination
+ *     pixbuf was specified, or %NULL on error
  **/
 GdkPixbuf *
 gdk_pixbuf_get_from_surface  (GdkPixbuf       *dest,
@@ -288,9 +276,9 @@ gdk_pixbuf_get_from_surface  (GdkPixbuf       *dest,
   if (!dest)
     {
       g_return_val_if_fail (dest_x == 0 && dest_y == 0, NULL);
-      
+
       content = cairo_surface_get_content (surface) | CAIRO_CONTENT_COLOR;
-      dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB, 
+      dest = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
                              !!(content & CAIRO_CONTENT_ALPHA),
                              8,
                              width, height);
