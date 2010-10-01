@@ -4,20 +4,22 @@ include $(top_srcdir)/Makefile.decl
 SUBDIRS = tutorial faq reference tools
 
 EXTRA_DIST += \
-	defsformat.txt			\
+	CODING-STYLE			\
 	developers.txt			\
 	dnd_internals.txt		\
-	make-todo			\
-	refcounting.txt			\
-	sizing-test.txt			\
-	styles.txt			\
-	text_widget.txt 		\
-	text_widget_internals.txt	\
-	tree-column-sizing.txt		\
-	widget_geometry.txt		\
-	widget_system.txt 		\
+	focus_tracking.txt		\
 	generation.txt			\
 	gtkdocs_fix			\
-	RELEASE-HOWTO
+	make-todo			\
+	refcounting.txt			\
+	RELEASE-HOWTO			\
+	sizing-test.txt			\
+	styles.txt			\
+	text_widget_internals.txt	\
+	text_widget.txt 		\
+	tree-column-sizing.png		\
+	tree-column-sizing.txt		\
+	widget_geometry.txt		\
+	widget_system.txt
 
 -include $(top_srcdir)/git.mk
