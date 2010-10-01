@@ -17,7 +17,6 @@ SUBDIRS = 	arrow \
 		notebook \
 		packbox \
 		paned \
-		pixmap \
 		progressbar \
 		radiobuttons \
 		rangewidgets \

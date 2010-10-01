@@ -70,8 +70,6 @@ EXTRA_DIST +=			\
 	examples/packbox/packbox.c  \
 	examples/paned/Makefile  \
 	examples/paned/paned.c  \
-	examples/pixmap/Makefile  \
-	examples/pixmap/pixmap.c  \
 	examples/progressbar/Makefile  \
 	examples/progressbar/progressbar.c  \
 	examples/radiobuttons/Makefile  \
