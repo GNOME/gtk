@@ -2790,10 +2790,13 @@ delete_outdated_error_traps (GdkDisplayX11 *display_x11)
 
 /**
  * gdk_x11_display_error_trap_push:
+ * @display: a #GdkDisplay
  *
- * Begins a range of X requests for which X error events will be
- * ignored. Unignored errors (when no trap is pushed) will abort the
- * application.
+ * Begins a range of X requests on @display for which X error events
+ * will be ignored. Unignored errors (when no trap is pushed) will abort
+ * the application. Use gdk_x11_display_error_trap_pop() or
+ * gdk_x11_display_error_trap_pop_ignored()to lift a trap pushed
+ * with this function.
  *
  * See also gdk_error_trap_push() to push a trap on all displays.
  *
