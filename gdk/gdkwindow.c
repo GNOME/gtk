@@ -4368,12 +4368,11 @@ impl_window_add_update_area (GdkWindowObject *impl_window,
  * system has already cleared the area).
  */
 static void
-gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
+gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 					  const cairo_region_t *region,
-					  ClearBg          clear_bg,
-					  gboolean       (*child_func) (GdkWindow *,
-									gpointer),
-					  gpointer   user_data)
+					  ClearBg               clear_bg,
+                                          GdkWindowChildFunc    child_func,
+					  gpointer              user_data)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowObject *impl_window;
@@ -4489,11 +4488,10 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow       *window,
  * invalidated.
  **/
 void
-gdk_window_invalidate_maybe_recurse (GdkWindow       *window,
+gdk_window_invalidate_maybe_recurse (GdkWindow            *window,
 				     const cairo_region_t *region,
-				     gboolean       (*child_func) (GdkWindow *,
-								   gpointer),
-				     gpointer   user_data)
+                                     GdkWindowChildFunc    child_func,
+				     gpointer              user_data)
 {
   gdk_window_invalidate_maybe_recurse_full (window, region, CLEAR_BG_NONE,
 					    child_func, user_data);

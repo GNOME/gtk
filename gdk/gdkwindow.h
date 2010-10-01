@@ -802,11 +802,26 @@ void       gdk_window_invalidate_rect           (GdkWindow          *window,
 void       gdk_window_invalidate_region         (GdkWindow          *window,
 					         const cairo_region_t    *region,
 					         gboolean            invalidate_children);
-void       gdk_window_invalidate_maybe_recurse  (GdkWindow          *window,
-						 const cairo_region_t    *region,
-						 gboolean (*child_func) (GdkWindow *, gpointer),
-						 gpointer   user_data);
-cairo_region_t *gdk_window_get_update_area     (GdkWindow    *window);
+
+/**
+ * GdkWindowChildFunc:
+ * @window: a #GdkWindow
+ * @user_data: user data
+ *
+ * A function of this type is passed to gdk_window_invalidate_maybe_recurse().
+ * It gets called for each child of the window to determine whether to
+ * recursively invalidate it or now.
+ *
+ * Returns: %TRUE to invalidate @window recursively
+ */
+typedef gboolean (*GdkWindowChildFunc)          (GdkWindow *window,
+                                                 gpointer   user_data);
+
+void       gdk_window_invalidate_maybe_recurse  (GdkWindow            *window,
+						 const cairo_region_t *region,
+						 GdkWindowChildFunc    child_func,
+						 gpointer              user_data);
+cairo_region_t *gdk_window_get_update_area      (GdkWindow            *window);
 
 void       gdk_window_freeze_updates      (GdkWindow    *window);
 void       gdk_window_thaw_updates        (GdkWindow    *window);
