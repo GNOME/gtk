@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gnome-menus\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-06-26 23:16-0400\n"
+"POT-Creation-Date: 2010-10-01 15:41-0400\n"
 "PO-Revision-Date: 2009-02-14 03:17+0200\n"
 "Last-Translator: Alaksandar Navicki <zolak@lacinka.org>\n"
 "Language-Team: Belarusian Latin <i18n@mova.org>\n"
@@ -71,21 +71,23 @@ msgstr "PADEKRAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:164
-msgid "Gdk debugging flags to set"
-msgstr "Ściažki adsočki Gdk"
+#, fuzzy
+msgid "GDK debugging flags to set"
+msgstr "Ustalavanyja ściažki adsočki GTK+"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:439 gtk/gtkmain.c:442
+#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:533 gtk/gtkmain.c:536
 msgid "FLAGS"
 msgstr "ŚCIAŽKI"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:167
-msgid "Gdk debugging flags to unset"
-msgstr "Vyčyščanyja ściažki adsočki Gdk"
+#, fuzzy
+msgid "GDK debugging flags to unset"
+msgstr "Vyčyščanyja ściažki adsočki GTK+"
 
 #: gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -273,51 +275,46 @@ msgid "Delete"
 msgstr "Delete"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:55
+#: gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "Biez hrupavańnia patrabavańniaŭ GDI"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:57
+#: gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Biez užyvańnia API Wintab pry absłuhoŭvańni tabletaŭ"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:59
+#: gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "Hetak ža jak --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:61
+#: gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr "Biez užyvańnia API Wintab [zmoŭčana]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:63
+#: gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr "Pamier palitry ŭ 8-bitnym režymie"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:64
+#: gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "KOLERY"
 
-#. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:95
-msgid "Make X calls synchronous"
-msgstr "Sinchronnaja łučnaść z serveram X"
-
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
+#: gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Starting %s"
 msgstr "Pačynańnie %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:315
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %s"
 msgstr "Adčynieńnie %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:318
+#: gdk/x11/gdkapplaunchcontext-x11.c:321
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -325,51 +322,64 @@ msgstr[0] "Adčynieńnie %d elementu"
 msgstr[1] "Adčynieńnie %d elementaŭ"
 msgstr[2] "Adčynieńnie %d elementaŭ"
 
-#: gtk/gtkaboutdialog.c:242
-#, fuzzy
-msgid "Could not show link"
-msgstr "Niemahčyma vyčyścić element"
+#. Description of --sync in --help output
+#: gdk/x11/gdkmain-x11.c:96
+msgid "Make X calls synchronous"
+msgstr "Sinchronnaja łučnaść z serveram X"
 
-#: gtk/gtkaboutdialog.c:365 gtk/gtkaboutdialog.c:2228
+#. Translators: this is the license preamble; the string at the end
+#. * contains the URL of the license.
+#.
+#: gtk/gtkaboutdialog.c:101
+#, c-format
+msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
+msgstr ""
+
+#: gtk/gtkaboutdialog.c:339 gtk/gtkaboutdialog.c:2235
 msgid "License"
 msgstr "Licenzija"
 
-#: gtk/gtkaboutdialog.c:366
+#: gtk/gtkaboutdialog.c:340
 msgid "The license of the program"
 msgstr "Licenzija prahramy"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:629
+#: gtk/gtkaboutdialog.c:621
 msgid "C_redits"
 msgstr "Z_asłuhi"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:643
+#: gtk/gtkaboutdialog.c:635
 msgid "_License"
 msgstr "_Licenzija"
 
-#: gtk/gtkaboutdialog.c:902
+#: gtk/gtkaboutdialog.c:839
+#, fuzzy
+msgid "Could not show link"
+msgstr "Niemahčyma vyčyścić element"
+
+#: gtk/gtkaboutdialog.c:932
 #, c-format
 msgid "About %s"
 msgstr "Infarmacyja pra %s"
 
-#: gtk/gtkaboutdialog.c:2145
+#: gtk/gtkaboutdialog.c:2153
 msgid "Credits"
 msgstr "Zasłuhi"
 
-#: gtk/gtkaboutdialog.c:2178
+#: gtk/gtkaboutdialog.c:2185
 msgid "Written by"
 msgstr "Prahrama"
 
-#: gtk/gtkaboutdialog.c:2181
+#: gtk/gtkaboutdialog.c:2188
 msgid "Documented by"
 msgstr "Dakumentacyja"
 
-#: gtk/gtkaboutdialog.c:2193
+#: gtk/gtkaboutdialog.c:2200
 msgid "Translated by"
 msgstr "Pierakład"
 
-#: gtk/gtkaboutdialog.c:2197
+#: gtk/gtkaboutdialog.c:2204
 msgid "Artwork by"
 msgstr "Hrafika"
 
@@ -378,7 +388,7 @@ msgstr "Hrafika"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:157
+#: gtk/gtkaccellabel.c:160
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -388,7 +398,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:163
+#: gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -398,7 +408,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:169
+#: gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -408,7 +418,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:767
+#: gtk/gtkaccellabel.c:770
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -418,7 +428,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:780
+#: gtk/gtkaccellabel.c:783
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -428,17 +438,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:794
+#: gtk/gtkaccellabel.c:797
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:811
+#: gtk/gtkaccellabel.c:813
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Prabieł"
 
-#: gtk/gtkaccellabel.c:814
+#: gtk/gtkaccellabel.c:816
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -450,7 +460,7 @@ msgstr "Niapravilnaja funkcyja typu: `%s'"
 
 #: gtk/gtkbuilderparser.c:407
 #, c-format
-msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr ""
 
 #: gtk/gtkbuilderparser.c:859
@@ -473,7 +483,7 @@ msgstr "Značnik, jaki nie absłuhoŭvajecca: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:759
+#: gtk/gtkcalendar.c:883
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -481,7 +491,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:797
+#: gtk/gtkcalendar.c:921
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -490,7 +500,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:1807
+#: gtk/gtkcalendar.c:2006
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -505,7 +515,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1838 gtk/gtkcalendar.c:2496
+#: gtk/gtkcalendar.c:2037 gtk/gtkcalendar.c:2719
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -521,7 +531,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1870 gtk/gtkcalendar.c:2359
+#: gtk/gtkcalendar.c:2069 gtk/gtkcalendar.c:2579
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -537,7 +547,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2150
+#: gtk/gtkcalendar.c:2361
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -545,7 +555,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:256
+#: gtk/gtkcellrendereraccel.c:272
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Vyklučany"
@@ -554,7 +564,7 @@ msgstr "Vyklučany"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:266
+#: gtk/gtkcellrendereraccel.c:282
 #, fuzzy
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -564,25 +574,25 @@ msgstr "Niapravilny URI"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:401 gtk/gtkcellrendereraccel.c:652
+#: gtk/gtkcellrendereraccel.c:418 gtk/gtkcellrendereraccel.c:675
 msgid "New accelerator..."
 msgstr "Novy skarot..."
 
-#: gtk/gtkcellrendererprogress.c:361 gtk/gtkcellrendererprogress.c:448
+#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:452
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:188 gtk/gtkcolorbutton.c:559
+#: gtk/gtkcolorbutton.c:176 gtk/gtkcolorbutton.c:445
 msgid "Pick a Color"
 msgstr "Vybar koleru"
 
-#: gtk/gtkcolorbutton.c:448
+#: gtk/gtkcolorbutton.c:336
 msgid "Received invalid color data\n"
 msgstr "Atrymanyja niapravilnyja źviestki koleru\n"
 
-#: gtk/gtkcolorsel.c:356
+#: gtk/gtkcolorsel.c:384
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -590,7 +600,7 @@ msgstr ""
 "Abiary žadany koler z vonkavaha kołca, trochkutnikam unutry abiary "
 "jaskravaść hetaha koleru."
 
-#: gtk/gtkcolorsel.c:380
+#: gtk/gtkcolorsel.c:408
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -598,68 +608,68 @@ msgstr ""
 "Klikni hetuju pipietku, a potym adzin z punktaŭ vyjavy, kab uziać ź jaho "
 "koler."
 
-#: gtk/gtkcolorsel.c:389
+#: gtk/gtkcolorsel.c:417
 msgid "_Hue:"
 msgstr "A_dcieńnie:"
 
-#: gtk/gtkcolorsel.c:390
+#: gtk/gtkcolorsel.c:418
 msgid "Position on the color wheel."
 msgstr "Pazycyja na kole koleraŭ."
 
-#: gtk/gtkcolorsel.c:392
+#: gtk/gtkcolorsel.c:420
 msgid "_Saturation:"
 msgstr "Na_syčanaść:"
 
-#: gtk/gtkcolorsel.c:393
+#: gtk/gtkcolorsel.c:421
 #, fuzzy
 msgid "Intensity of the color."
 msgstr "Prazrystaść koleru."
 
-#: gtk/gtkcolorsel.c:394
+#: gtk/gtkcolorsel.c:422
 msgid "_Value:"
 msgstr "_Vartaść:"
 
-#: gtk/gtkcolorsel.c:395
+#: gtk/gtkcolorsel.c:423
 msgid "Brightness of the color."
 msgstr "Nasyčanaść koleru."
 
-#: gtk/gtkcolorsel.c:396
+#: gtk/gtkcolorsel.c:424
 msgid "_Red:"
 msgstr "_Čyrvony:"
 
-#: gtk/gtkcolorsel.c:397
+#: gtk/gtkcolorsel.c:425
 msgid "Amount of red light in the color."
 msgstr "Kolkaść čyrvonaha śviatła ŭ kolery."
 
-#: gtk/gtkcolorsel.c:398
+#: gtk/gtkcolorsel.c:426
 msgid "_Green:"
 msgstr "_Zialony:"
 
-#: gtk/gtkcolorsel.c:399
+#: gtk/gtkcolorsel.c:427
 msgid "Amount of green light in the color."
 msgstr "Kolkaść zialonaha śviatła ŭ kolery."
 
-#: gtk/gtkcolorsel.c:400
+#: gtk/gtkcolorsel.c:428
 msgid "_Blue:"
 msgstr "_Sini:"
 
-#: gtk/gtkcolorsel.c:401
+#: gtk/gtkcolorsel.c:429
 msgid "Amount of blue light in the color."
 msgstr "Kolkaść siniaha śviatła ŭ kolery."
 
-#: gtk/gtkcolorsel.c:404
+#: gtk/gtkcolorsel.c:432
 msgid "Op_acity:"
 msgstr "_Nieprazrystaść:"
 
-#: gtk/gtkcolorsel.c:411 gtk/gtkcolorsel.c:421
+#: gtk/gtkcolorsel.c:439 gtk/gtkcolorsel.c:449
 msgid "Transparency of the color."
 msgstr "Prazrystaść koleru."
 
-#: gtk/gtkcolorsel.c:428
+#: gtk/gtkcolorsel.c:456
 msgid "Color _name:"
 msgstr "Nazva _koleru:"
 
-#: gtk/gtkcolorsel.c:442
+#: gtk/gtkcolorsel.c:470
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -667,15 +677,15 @@ msgstr ""
 "Možaš u hetym miescy padać šasnaccatkovuju vartaść koleru (jak u HTML) albo "
 "prosta nazvu koleru pa anhielsku, naprykład: 'orange'."
 
-#: gtk/gtkcolorsel.c:472
+#: gtk/gtkcolorsel.c:500
 msgid "_Palette:"
 msgstr "Pal_itra:"
 
-#: gtk/gtkcolorsel.c:501
+#: gtk/gtkcolorsel.c:529
 msgid "Color Wheel"
 msgstr "Koła koleraŭ"
 
-#: gtk/gtkcolorsel.c:960
+#: gtk/gtkcolorsel.c:988
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -685,7 +695,7 @@ msgstr ""
 "pieraciahnuć hety koler na adnu z pazycyjaŭ palitry albo abrać jaho "
 "niepasredna pieraciahvajučy jaho na susiedni koler."
 
-#: gtk/gtkcolorsel.c:963
+#: gtk/gtkcolorsel.c:991
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -693,21 +703,21 @@ msgstr ""
 "Abrany koler. Hety koler ty možaš pieraciahnuć na adnu z pazycyjaŭ palitry, "
 "kab zachavać jaho na budučyniu."
 
-#: gtk/gtkcolorsel.c:968
+#: gtk/gtkcolorsel.c:996
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:971
+#: gtk/gtkcolorsel.c:999
 msgid "The color you've chosen."
 msgstr ""
 
-#: gtk/gtkcolorsel.c:1384
+#: gtk/gtkcolorsel.c:1396
 msgid "_Save color here"
 msgstr "_Zapišy koler u hetym miescy"
 
-#: gtk/gtkcolorsel.c:1589
+#: gtk/gtkcolorsel.c:1601
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -716,7 +726,7 @@ msgstr ""
 "źmianić hety element, pieraciahni siudy prykład kolery albo klikni pravaj "
 "klavišaj i abiary \"Zapišy koler u hetym miescy\"."
 
-#: gtk/gtkcolorseldialog.c:170
+#: gtk/gtkcolorseldialog.c:189
 msgid "Color Selection"
 msgstr "Vybar koleru"
 
@@ -726,89 +736,101 @@ msgstr "Vybar koleru"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkcustompaperunixdialog.c:118
+#: gtk/gtkcustompaperunixdialog.c:116
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:373 gtk/gtkprintunixdialog.c:3226
+#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3233
 msgid "Manage Custom Sizes"
 msgstr "Kiravańnie ŭłasnymi pamierami"
 
-#: gtk/gtkcustompaperunixdialog.c:533 gtk/gtkpagesetupunixdialog.c:793
+#: gtk/gtkcustompaperunixdialog.c:534 gtk/gtkpagesetupunixdialog.c:790
 msgid "inch"
 msgstr "cali"
 
-#: gtk/gtkcustompaperunixdialog.c:535 gtk/gtkpagesetupunixdialog.c:791
+#: gtk/gtkcustompaperunixdialog.c:536 gtk/gtkpagesetupunixdialog.c:788
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:580
+#: gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr "Paboččy z drukarki..."
 
-#: gtk/gtkcustompaperunixdialog.c:746
+#: gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr "Ułasny pamier %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1054
+#: gtk/gtkcustompaperunixdialog.c:1059
 msgid "_Width:"
 msgstr "_Šyrynia:"
 
-#: gtk/gtkcustompaperunixdialog.c:1066
+#: gtk/gtkcustompaperunixdialog.c:1071
 msgid "_Height:"
 msgstr "_Vyšynia:"
 
-#: gtk/gtkcustompaperunixdialog.c:1078
+#: gtk/gtkcustompaperunixdialog.c:1083
 msgid "Paper Size"
 msgstr "Pamier papiery"
 
-#: gtk/gtkcustompaperunixdialog.c:1087
+#: gtk/gtkcustompaperunixdialog.c:1092
 msgid "_Top:"
 msgstr "_Vierchniaje:"
 
-#: gtk/gtkcustompaperunixdialog.c:1099
+#: gtk/gtkcustompaperunixdialog.c:1104
 msgid "_Bottom:"
 msgstr "_Nižniaje:"
 
-#: gtk/gtkcustompaperunixdialog.c:1111
+#: gtk/gtkcustompaperunixdialog.c:1116
 msgid "_Left:"
 msgstr "_Levaje:"
 
-#: gtk/gtkcustompaperunixdialog.c:1123
+#: gtk/gtkcustompaperunixdialog.c:1128
 msgid "_Right:"
 msgstr "_Pravaje:"
 
-#: gtk/gtkcustompaperunixdialog.c:1164
+#: gtk/gtkcustompaperunixdialog.c:1169
 msgid "Paper Margins"
 msgstr "Paboččy arkuša"
 
-#: gtk/gtkentry.c:8612 gtk/gtktextview.c:8012
+#: gtk/gtkentry.c:8601 gtk/gtktextview.c:8248
 msgid "Input _Methods"
 msgstr "_Metady ŭvodu"
 
-#: gtk/gtkentry.c:8626 gtk/gtktextview.c:8026
+#: gtk/gtkentry.c:8615 gtk/gtktextview.c:8262
 msgid "_Insert Unicode Control Character"
 msgstr "_Ustaŭ kantrolny znak Unikodu"
 
-#: gtk/gtkentry.c:10020
+#: gtk/gtkentry.c:10015
+msgid "Caps Lock and Num Lock are on"
+msgstr ""
+
+#: gtk/gtkentry.c:10017
+#, fuzzy
+msgid "Num Lock is on"
+msgstr "Caps Lock uklučany"
+
+#: gtk/gtkentry.c:10019
 msgid "Caps Lock is on"
 msgstr "Caps Lock uklučany"
 
-#: gtk/gtkfilechooserbutton.c:64
+#. **************** *
+#. *  Private Macros  *
+#. * ****************
+#: gtk/gtkfilechooserbutton.c:61
 msgid "Select A File"
 msgstr "Vybar fajłu"
 
-#: gtk/gtkfilechooserbutton.c:65 gtk/gtkfilechooserdefault.c:1839
+#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1812
 msgid "Desktop"
 msgstr "Stoł"
 
-#: gtk/gtkfilechooserbutton.c:66
+#: gtk/gtkfilechooserbutton.c:63
 msgid "(None)"
 msgstr "(niama)"
 
-#: gtk/gtkfilechooserbutton.c:2016
+#: gtk/gtkfilechooserbutton.c:2005
 msgid "Other..."
 msgstr "Inšaje..."
 
@@ -816,23 +838,23 @@ msgstr "Inšaje..."
 msgid "Type name of new folder"
 msgstr "Padaj nazvu novaha katalohu"
 
-#: gtk/gtkfilechooserdefault.c:965
+#: gtk/gtkfilechooserdefault.c:938
 msgid "Could not retrieve information about the file"
 msgstr "Niemahčyma atrymać infarmacyju pra fajł"
 
-#: gtk/gtkfilechooserdefault.c:976
+#: gtk/gtkfilechooserdefault.c:949
 msgid "Could not add a bookmark"
 msgstr "Niemahčyma dadać zakładku"
 
-#: gtk/gtkfilechooserdefault.c:987
+#: gtk/gtkfilechooserdefault.c:960
 msgid "Could not remove bookmark"
 msgstr "Niemahčyma vydalić zakładku"
 
-#: gtk/gtkfilechooserdefault.c:998
+#: gtk/gtkfilechooserdefault.c:971
 msgid "The folder could not be created"
 msgstr "Niemahčyma stvaryć kataloh"
 
-#: gtk/gtkfilechooserdefault.c:1011
+#: gtk/gtkfilechooserdefault.c:984
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -840,11 +862,11 @@ msgstr ""
 "Niemahčyma stvaryć kataloh, bo isnuje ŭxo fajł z takoj nazvaj. Prydumaj "
 "inšuju nazvu katalohu albo źmiani nazvu fajłu."
 
-#: gtk/gtkfilechooserdefault.c:1022
+#: gtk/gtkfilechooserdefault.c:995
 msgid "Invalid file name"
 msgstr "Niapravilnaja nazva fajłu"
 
-#: gtk/gtkfilechooserdefault.c:1032
+#: gtk/gtkfilechooserdefault.c:1005
 msgid "The folder contents could not be displayed"
 msgstr "Niemahčyma pakazać źmieściva katalohu"
 
@@ -852,187 +874,187 @@ msgstr "Niemahčyma pakazać źmieściva katalohu"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1582
+#: gtk/gtkfilechooserdefault.c:1555
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s na %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1758
+#: gtk/gtkfilechooserdefault.c:1731
 msgid "Search"
 msgstr "Šukaj"
 
-#: gtk/gtkfilechooserdefault.c:1782 gtk/gtkfilechooserdefault.c:9454
+#: gtk/gtkfilechooserdefault.c:1755 gtk/gtkfilechooserdefault.c:9289
 msgid "Recently Used"
 msgstr "Niadaŭna ŭžyvanyja"
 
-#: gtk/gtkfilechooserdefault.c:2422
+#: gtk/gtkfilechooserdefault.c:2409
 msgid "Select which types of files are shown"
 msgstr "Abiraje jakija vidy fajłaŭ pakazvać"
 
-#: gtk/gtkfilechooserdefault.c:2781
+#: gtk/gtkfilechooserdefault.c:2768
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Dadaje kataloh '%s' u zakładki"
 
-#: gtk/gtkfilechooserdefault.c:2825
+#: gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Dadaje dziejny kataloh u zakładki"
 
-#: gtk/gtkfilechooserdefault.c:2827
+#: gtk/gtkfilechooserdefault.c:2814
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Dadaje zaznačanyja katalohi ŭ zakładki"
 
-#: gtk/gtkfilechooserdefault.c:2865
+#: gtk/gtkfilechooserdefault.c:2852
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Vydalaje zakładku '%s'"
 
-#: gtk/gtkfilechooserdefault.c:2867
+#: gtk/gtkfilechooserdefault.c:2854
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr ""
 
-#: gtk/gtkfilechooserdefault.c:2874 gtk/gtkfilechooserdefault.c:3898
+#: gtk/gtkfilechooserdefault.c:2861 gtk/gtkfilechooserdefault.c:3725
 msgid "Remove the selected bookmark"
 msgstr "Vydalaje abranuju zakładku"
 
-#: gtk/gtkfilechooserdefault.c:3594
+#: gtk/gtkfilechooserdefault.c:3421
 msgid "Remove"
 msgstr "Vydali"
 
-#: gtk/gtkfilechooserdefault.c:3603
+#: gtk/gtkfilechooserdefault.c:3430
 msgid "Rename..."
 msgstr "Źmiani nazvu..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3766
+#: gtk/gtkfilechooserdefault.c:3593
 msgid "Places"
 msgstr "Miescy"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3823
+#: gtk/gtkfilechooserdefault.c:3650
 msgid "_Places"
 msgstr "_Miescy"
 
-#: gtk/gtkfilechooserdefault.c:3879
+#: gtk/gtkfilechooserdefault.c:3706
 msgid "_Add"
 msgstr "_Dadaj"
 
-#: gtk/gtkfilechooserdefault.c:3886
+#: gtk/gtkfilechooserdefault.c:3713
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Dadaje abrany kataloh u zakładki"
 
-#: gtk/gtkfilechooserdefault.c:3891
+#: gtk/gtkfilechooserdefault.c:3718
 msgid "_Remove"
 msgstr "_Vydali"
 
-#: gtk/gtkfilechooserdefault.c:4026
+#: gtk/gtkfilechooserdefault.c:3860
 msgid "Could not select file"
 msgstr "Niemahčyma vybrać fajł"
 
-#: gtk/gtkfilechooserdefault.c:4201
+#: gtk/gtkfilechooserdefault.c:4035
 msgid "_Add to Bookmarks"
 msgstr "_Dadaj u zakładki"
 
-#: gtk/gtkfilechooserdefault.c:4214
+#: gtk/gtkfilechooserdefault.c:4048
 msgid "Show _Hidden Files"
 msgstr "Pakažy s_chavanyja fajły"
 
-#: gtk/gtkfilechooserdefault.c:4221
+#: gtk/gtkfilechooserdefault.c:4055
 msgid "Show _Size Column"
 msgstr "Pakažy _kalonu z pamierami"
 
-#: gtk/gtkfilechooserdefault.c:4441
+#: gtk/gtkfilechooserdefault.c:4281
 msgid "Files"
 msgstr "Fajły"
 
-#: gtk/gtkfilechooserdefault.c:4492
+#: gtk/gtkfilechooserdefault.c:4332
 msgid "Name"
 msgstr "Nazva"
 
-#: gtk/gtkfilechooserdefault.c:4515
+#: gtk/gtkfilechooserdefault.c:4355
 msgid "Size"
 msgstr "Pamier"
 
-#: gtk/gtkfilechooserdefault.c:4529
+#: gtk/gtkfilechooserdefault.c:4369
 msgid "Modified"
 msgstr "Zmadyfikavany"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4784 gtk/gtkprinteroptionwidget.c:802
+#: gtk/gtkfilechooserdefault.c:4624 gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "_Nazva:"
 
-#: gtk/gtkfilechooserdefault.c:4827
+#: gtk/gtkfilechooserdefault.c:4667
 msgid "_Browse for other folders"
 msgstr "_Prahladaj inšyja katalohi"
 
-#: gtk/gtkfilechooserdefault.c:5099
+#: gtk/gtkfilechooserdefault.c:4937
 msgid "Type a file name"
 msgstr "Uviadzi nazvu fajłu"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:5140
+#: gtk/gtkfilechooserdefault.c:4980
 msgid "Create Fo_lder"
 msgstr "Stvary ka_taloh"
 
-#: gtk/gtkfilechooserdefault.c:5150
+#: gtk/gtkfilechooserdefault.c:4990
 msgid "_Location:"
 msgstr "Pałaž_eńnie:"
 
-#: gtk/gtkfilechooserdefault.c:5354
+#: gtk/gtkfilechooserdefault.c:5194
 msgid "Save in _folder:"
 msgstr "Zapis u k_atalozie:"
 
-#: gtk/gtkfilechooserdefault.c:5356
+#: gtk/gtkfilechooserdefault.c:5196
 msgid "Create in _folder:"
 msgstr "Stvary ŭ kat_alozie:"
 
-#: gtk/gtkfilechooserdefault.c:6419
+#: gtk/gtkfilechooserdefault.c:6248
 #, fuzzy, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nie ŭdałosia stvaryć płyń: %s"
 
-#: gtk/gtkfilechooserdefault.c:6423
+#: gtk/gtkfilechooserdefault.c:6252
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "Hałoŭny folder (root) niedasiahalny"
 
-#: gtk/gtkfilechooserdefault.c:6516 gtk/gtkfilechooserdefault.c:6584
-#: gtk/gtkfilechooserdefault.c:6729
+#: gtk/gtkfilechooserdefault.c:6345 gtk/gtkfilechooserdefault.c:6413
+#: gtk/gtkfilechooserdefault.c:6558
 msgid "Unknown"
 msgstr "Nieviadomy"
 
-#: gtk/gtkfilechooserdefault.c:6531
+#: gtk/gtkfilechooserdefault.c:6360
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6533
+#: gtk/gtkfilechooserdefault.c:6362
 msgid "Yesterday at %H:%M"
 msgstr "Učora a %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7199
+#: gtk/gtkfilechooserdefault.c:7028
 msgid "Cannot change to folder because it is not local"
 msgstr "Niemahčyma pierajści da katalohu, bo jon nie lakalny"
 
-#: gtk/gtkfilechooserdefault.c:7796 gtk/gtkfilechooserdefault.c:7817
+#: gtk/gtkfilechooserdefault.c:7625 gtk/gtkfilechooserdefault.c:7646
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Skarot %s užo isnuje"
 
-#: gtk/gtkfilechooserdefault.c:7907
+#: gtk/gtkfilechooserdefault.c:7736
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Skarot %s nie isnuje"
 
-#: gtk/gtkfilechooserdefault.c:8162 gtk/gtkprintunixdialog.c:480
+#: gtk/gtkfilechooserdefault.c:7997 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Fajł pad nazvaj \"%s\" isnuje. Ty chočaš zamianić jaho?"
 
-#: gtk/gtkfilechooserdefault.c:8165 gtk/gtkprintunixdialog.c:484
+#: gtk/gtkfilechooserdefault.c:8000 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1040,15 +1062,15 @@ msgstr ""
 "Fajł užo isnuje ŭ \"%s\". Zamiena jaho pryviadzie da nadpisańnia jahonaha "
 "źmieściva."
 
-#: gtk/gtkfilechooserdefault.c:8170 gtk/gtkprintunixdialog.c:491
+#: gtk/gtkfilechooserdefault.c:8005 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Zamiani"
 
-#: gtk/gtkfilechooserdefault.c:8822
+#: gtk/gtkfilechooserdefault.c:8658
 msgid "Could not start the search process"
 msgstr "Niemahčyma ŭruchomić praces pošuku"
 
-#: gtk/gtkfilechooserdefault.c:8823
+#: gtk/gtkfilechooserdefault.c:8659
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1056,37 +1078,37 @@ msgstr ""
 "Prahramie nie ŭdałosia spałučycca z demanam indeksacyi. Pravier, ci jon "
 "uruchomleny."
 
-#: gtk/gtkfilechooserdefault.c:8837
+#: gtk/gtkfilechooserdefault.c:8673
 msgid "Could not send the search request"
 msgstr "Niemahčyma dasłać zapyt na pošuk"
 
-#: gtk/gtkfilechooserdefault.c:9026
+#: gtk/gtkfilechooserdefault.c:8861
 #, fuzzy
 msgid "Search:"
 msgstr "Šukaj"
 
-#: gtk/gtkfilechooserdefault.c:9630
+#: gtk/gtkfilechooserdefault.c:9466
 #, c-format
 msgid "Could not mount %s"
 msgstr "Niemahčyma zamantavać %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: gtk/gtkfilechooserentry.c:698 gtk/gtkfilechooserentry.c:1163
+#: gtk/gtkfilechooserentry.c:702 gtk/gtkfilechooserentry.c:1169
 msgid "Invalid path"
 msgstr "Niapravilnaja ściežka"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1095
+#: gtk/gtkfilechooserentry.c:1101
 msgid "No match"
 msgstr "Niama adpaviednikaŭ"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1106
+#: gtk/gtkfilechooserentry.c:1112
 msgid "Sole completion"
 msgstr "Adziny varyjant zakančeńnia"
 
@@ -1094,13 +1116,13 @@ msgstr "Adziny varyjant zakančeńnia"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: gtk/gtkfilechooserentry.c:1122
+#: gtk/gtkfilechooserentry.c:1128
 msgid "Complete, but not unique"
 msgstr "Zakončany, ale nie adziny"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: gtk/gtkfilechooserentry.c:1154
+#: gtk/gtkfilechooserentry.c:1160
 msgid "Completing..."
 msgstr "Zakančeńńie..."
 
@@ -1108,7 +1130,7 @@ msgstr "Zakančeńńie..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: gtk/gtkfilechooserentry.c:1176 gtk/gtkfilechooserentry.c:1201
+#: gtk/gtkfilechooserentry.c:1182 gtk/gtkfilechooserentry.c:1207
 msgid "Only local files may be selected"
 msgstr "Možna vybrać tolki lakalnych fajłaŭ"
 
@@ -1116,18 +1138,18 @@ msgstr "Možna vybrać tolki lakalnych fajłaŭ"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: gtk/gtkfilechooserentry.c:1185
+#: gtk/gtkfilechooserentry.c:1191
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Niapoŭnaja nazva hostu: zakončy jaje znakam \"/\""
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: gtk/gtkfilechooserentry.c:1196
+#: gtk/gtkfilechooserentry.c:1202
 msgid "Path does not exist"
 msgstr "Ściežka nie isnuje"
 
-#: gtk/gtkfilechoosersettings.c:487
+#: gtk/gtkfilechoosersettings.c:486
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Pamyłka pry tvareńni katalohu \"%s\": %s"
@@ -1137,11 +1159,11 @@ msgstr "Pamyłka pry tvareńni katalohu \"%s\": %s"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:52
+#: gtk/gtkfilesystem.c:48
 msgid "File System"
 msgstr "Systema fajłaŭ"
 
-#: gtk/gtkfontbutton.c:144 gtk/gtkfontbutton.c:266
+#: gtk/gtkfontbutton.c:142 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Vybar šryftu"
 
@@ -1156,40 +1178,40 @@ msgstr "Šryft"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:75
+#: gtk/gtkfontsel.c:103
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcćčdefghi ABCĆČDEFGHI"
 
-#: gtk/gtkfontsel.c:343
+#: gtk/gtkfontsel.c:370
 msgid "_Family:"
 msgstr "_Siamja:"
 
-#: gtk/gtkfontsel.c:349
+#: gtk/gtkfontsel.c:376
 msgid "_Style:"
 msgstr "_Styl:"
 
-#: gtk/gtkfontsel.c:355
+#: gtk/gtkfontsel.c:382
 msgid "Si_ze:"
 msgstr "P_amier:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:532
+#: gtk/gtkfontsel.c:559
 msgid "_Preview:"
 msgstr "_Pieradahlad:"
 
-#: gtk/gtkfontsel.c:1631
+#: gtk/gtkfontsel.c:1659
 msgid "Font Selection"
 msgstr "Vybar šryftu"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1400
+#: gtk/gtkiconfactory.c:1356
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Pamyłka pry adčytańni ikony: %s"
 
-#: gtk/gtkicontheme.c:1363
+#: gtk/gtkicontheme.c:1354
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1202,77 +1224,77 @@ msgstr ""
 "Zahruzić ichnyja kopii možna z:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1543
+#: gtk/gtkicontheme.c:1535
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikona \"%s\" adsutnaja ŭ matyvie"
 
-#: gtk/gtkicontheme.c:3074
+#: gtk/gtkicontheme.c:3048
 msgid "Failed to load icon"
 msgstr "Niemahčyma zahruzić ikonu"
 
-#: gtk/gtkimmodule.c:527
+#: gtk/gtkimmodule.c:526
 msgid "Simple"
 msgstr "Prosty"
 
-#: gtk/gtkimmulticontext.c:563
+#: gtk/gtkimmulticontext.c:588
 msgctxt "input method menu"
 msgid "System"
 msgstr "Systema"
 
-#: gtk/gtkimmulticontext.c:573
+#: gtk/gtkimmulticontext.c:598
 #, fuzzy
 msgctxt "input method menu"
 msgid "None"
 msgstr "Niama"
 
-#: gtk/gtkimmulticontext.c:656
+#: gtk/gtkimmulticontext.c:681
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Systema (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6072
+#: gtk/gtklabel.c:6202
 #, fuzzy
 msgid "_Open Link"
 msgstr "_Adčyni"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6084
+#: gtk/gtklabel.c:6214
 msgid "Copy _Link Address"
 msgstr ""
 
-#: gtk/gtklinkbutton.c:428
+#: gtk/gtklinkbutton.c:449
 msgid "Copy URL"
 msgstr "Skopijuj URL"
 
-#: gtk/gtklinkbutton.c:586
+#: gtk/gtklinkbutton.c:601
 msgid "Invalid URI"
 msgstr "Niapravilny URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:432
+#: gtk/gtkmain.c:526
 msgid "Load additional GTK+ modules"
 msgstr "Zahružaje dadatkovyja moduli GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:433
+#: gtk/gtkmain.c:527
 msgid "MODULES"
 msgstr "MODULI"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:435
+#: gtk/gtkmain.c:529
 msgid "Make all warnings fatal"
 msgstr "Uspryjmańnie aściarohaŭ jak pamyłak"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:438
+#: gtk/gtkmain.c:532
 msgid "GTK+ debugging flags to set"
 msgstr "Ustalavanyja ściažki adsočki GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:441
+#: gtk/gtkmain.c:535
 msgid "GTK+ debugging flags to unset"
 msgstr "Vyčyščanyja ściažki adsočki GTK+"
 
@@ -1281,127 +1303,127 @@ msgstr "Vyčyščanyja ściažki adsočki GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:704
+#: gtk/gtkmain.c:798
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:769
+#: gtk/gtkmain.c:863
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nie ŭdałosia adčynić ekran: %s"
 
-#: gtk/gtkmain.c:806
+#: gtk/gtkmain.c:922
 msgid "GTK+ Options"
 msgstr "Opcyi GTK+"
 
-#: gtk/gtkmain.c:806
+#: gtk/gtkmain.c:922
 msgid "Show GTK+ Options"
 msgstr "Pakazvaje opcyi GTK+"
 
-#: gtk/gtkmountoperation.c:489
+#: gtk/gtkmountoperation.c:491
 msgid "Co_nnect"
 msgstr "S_pałučy"
 
-#: gtk/gtkmountoperation.c:556
+#: gtk/gtkmountoperation.c:558
 msgid "Connect _anonymously"
 msgstr "Spałučy _ananimna"
 
-#: gtk/gtkmountoperation.c:565
+#: gtk/gtkmountoperation.c:567
 msgid "Connect as u_ser:"
 msgstr "Spałučy jak _karystalnika:"
 
-#: gtk/gtkmountoperation.c:603
+#: gtk/gtkmountoperation.c:605
 msgid "_Username:"
 msgstr "_Karystalnik:"
 
-#: gtk/gtkmountoperation.c:608
+#: gtk/gtkmountoperation.c:610
 msgid "_Domain:"
 msgstr "_Damen:"
 
-#: gtk/gtkmountoperation.c:614
+#: gtk/gtkmountoperation.c:616
 msgid "_Password:"
 msgstr "_Parol:"
 
-#: gtk/gtkmountoperation.c:632
+#: gtk/gtkmountoperation.c:634
 msgid "Forget password _immediately"
 msgstr "_Adrazu zabudźsia pra parol"
 
-#: gtk/gtkmountoperation.c:642
+#: gtk/gtkmountoperation.c:644
 msgid "Remember password until you _logout"
 msgstr "Pomni parol, pakul ja nia vyjdu z sesii"
 
-#: gtk/gtkmountoperation.c:652
+#: gtk/gtkmountoperation.c:654
 msgid "Remember _forever"
 msgstr "Zapaminaj nazaŭždy"
 
-#: gtk/gtkmountoperation.c:881
+#: gtk/gtkmountoperation.c:883
 #, c-format
-msgid "Unknown Application (pid %d)"
+msgid "Unknown Application (PID %d)"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:1064
+#: gtk/gtkmountoperation.c:1066
 #, c-format
 msgid "Unable to end process"
 msgstr ""
 
-#: gtk/gtkmountoperation.c:1101
+#: gtk/gtkmountoperation.c:1103
 msgid "_End Process"
 msgstr ""
 
 #: gtk/gtkmountoperation-stub.c:64
 #, c-format
-msgid "Cannot kill process with pid %d. Operation is not implemented."
+msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:865
+#: gtk/gtkmountoperation-x11.c:862
 msgid "Terminal Pager"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:866
+#: gtk/gtkmountoperation-x11.c:863
 #, fuzzy
 msgid "Top Command"
 msgstr "Zahadny radok"
 
-#: gtk/gtkmountoperation-x11.c:867
+#: gtk/gtkmountoperation-x11.c:864
 msgid "Bourne Again Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:868
+#: gtk/gtkmountoperation-x11.c:865
 msgid "Bourne Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:869
+#: gtk/gtkmountoperation-x11.c:866
 msgid "Z Shell"
 msgstr ""
 
-#: gtk/gtkmountoperation-x11.c:966
+#: gtk/gtkmountoperation-x11.c:963
 #, c-format
-msgid "Cannot end process with pid %d: %s"
+msgid "Cannot end process with PID %d: %s"
 msgstr ""
 
-#: gtk/gtknotebook.c:4631 gtk/gtknotebook.c:7060
+#: gtk/gtknotebook.c:4619 gtk/gtknotebook.c:7170
 #, c-format
 msgid "Page %u"
 msgstr "Staronka %u"
 
-#: gtk/gtkpagesetup.c:597 gtk/gtkpapersize.c:826 gtk/gtkpapersize.c:868
+#: gtk/gtkpagesetup.c:596 gtk/gtkpapersize.c:838 gtk/gtkpapersize.c:880
 msgid "Not a valid page setup file"
 msgstr "Nia pravilny fajł naładaŭ staronki"
 
-#: gtk/gtkpagesetupunixdialog.c:182
+#: gtk/gtkpagesetupunixdialog.c:179
 #, fuzzy
 msgid "Any Printer"
 msgstr "Drukarka"
 
-#: gtk/gtkpagesetupunixdialog.c:182
+#: gtk/gtkpagesetupunixdialog.c:179
 #, fuzzy
 msgid "For portable documents"
 msgstr ""
 "<b>Lubaja drukarka</b>\n"
 "Dla pieranosnych dakumentaŭ"
 
-#: gtk/gtkpagesetupunixdialog.c:812
+#: gtk/gtkpagesetupunixdialog.c:809
 #, c-format
 msgid ""
 "Margins:\n"
@@ -1416,7 +1438,7 @@ msgstr ""
 " Vierchniaje: %s %s\n"
 " Nižniaje: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:861 gtk/gtkprintunixdialog.c:3277
+#: gtk/gtkpagesetupunixdialog.c:858 gtk/gtkprintunixdialog.c:3284
 msgid "Manage Custom Sizes..."
 msgstr "Kiruj ułasnymi pamierami..."
 
@@ -1424,7 +1446,7 @@ msgstr "Kiruj ułasnymi pamierami..."
 msgid "_Format for:"
 msgstr "_Farmat dla:"
 
-#: gtk/gtkpagesetupunixdialog.c:931 gtk/gtkprintunixdialog.c:3449
+#: gtk/gtkpagesetupunixdialog.c:931 gtk/gtkprintunixdialog.c:3456
 msgid "_Paper size:"
 msgstr "_Pamier papiery:"
 
@@ -1432,19 +1454,19 @@ msgstr "_Pamier papiery:"
 msgid "_Orientation:"
 msgstr "_Aryjentacyja:"
 
-#: gtk/gtkpagesetupunixdialog.c:1026 gtk/gtkprintunixdialog.c:3511
+#: gtk/gtkpagesetupunixdialog.c:1026 gtk/gtkprintunixdialog.c:3518
 msgid "Page Setup"
 msgstr "Nałady staronki"
 
-#: gtk/gtkpathbar.c:151
+#: gtk/gtkpathbar.c:154
 msgid "Up Path"
 msgstr "Uvierch ściežki"
 
-#: gtk/gtkpathbar.c:153
+#: gtk/gtkpathbar.c:156
 msgid "Down Path"
 msgstr "Uniz ściežki"
 
-#: gtk/gtkpathbar.c:1480
+#: gtk/gtkpathbar.c:1497
 msgid "File System Root"
 msgstr "Fajłavaja systema"
 
@@ -1453,16 +1475,16 @@ msgstr "Fajłavaja systema"
 msgid "Authentication"
 msgstr "Aplikacyja"
 
-#: gtk/gtkprinteroptionwidget.c:695
+#: gtk/gtkprinteroptionwidget.c:694
 msgid "Not available"
 msgstr "Niedastupna"
 
-#: gtk/gtkprinteroptionwidget.c:795
+#: gtk/gtkprinteroptionwidget.c:794
 #, fuzzy
 msgid "Select a folder"
 msgstr "Vybar fajłu"
 
-#: gtk/gtkprinteroptionwidget.c:814
+#: gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
 msgstr "_Zapis w foldery:"
 
@@ -1553,25 +1575,25 @@ msgstr "Pamyłka ŭklučeńnia pieradahladu"
 msgid "Application"
 msgstr "Aplikacyja"
 
-#: gtk/gtkprintoperation-win32.c:612
+#: gtk/gtkprintoperation-win32.c:611
 msgid "Printer offline"
 msgstr "Drukarka nie aktyŭnaja"
 
-#: gtk/gtkprintoperation-win32.c:614
+#: gtk/gtkprintoperation-win32.c:613
 msgid "Out of paper"
 msgstr "Niama papiery"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:616
+#: gtk/gtkprintoperation-win32.c:615
 #: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Paŭza"
 
-#: gtk/gtkprintoperation-win32.c:618
+#: gtk/gtkprintoperation-win32.c:617
 msgid "Need user intervention"
 msgstr "Vymahaje ŭmiašalnictva karystalnika"
 
-#: gtk/gtkprintoperation-win32.c:718
+#: gtk/gtkprintoperation-win32.c:717
 msgid "Custom size"
 msgstr "Ułasny pamier"
 
@@ -1608,50 +1630,50 @@ msgstr "Niapravilnaja ručka dla PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Nieakreślenaja pamyłka"
 
-#: gtk/gtkprintunixdialog.c:614
+#: gtk/gtkprintunixdialog.c:618
 msgid "Getting printer information failed"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:1862
+#: gtk/gtkprintunixdialog.c:1873
 msgid "Getting printer information..."
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:2132
+#: gtk/gtkprintunixdialog.c:2139
 msgid "Printer"
 msgstr "Drukarka"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2142
+#: gtk/gtkprintunixdialog.c:2149
 msgid "Location"
 msgstr "Pałažeńnie"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2153
+#: gtk/gtkprintunixdialog.c:2160
 msgid "Status"
 msgstr "Stan"
 
-#: gtk/gtkprintunixdialog.c:2179
+#: gtk/gtkprintunixdialog.c:2186
 msgid "Range"
 msgstr "Absiah"
 
-#: gtk/gtkprintunixdialog.c:2183
+#: gtk/gtkprintunixdialog.c:2190
 msgid "_All Pages"
 msgstr "_Usie arkušy"
 
-#: gtk/gtkprintunixdialog.c:2190
+#: gtk/gtkprintunixdialog.c:2197
 msgid "C_urrent Page"
 msgstr "_Dziejny arkuš"
 
-#: gtk/gtkprintunixdialog.c:2200
+#: gtk/gtkprintunixdialog.c:2207
 #, fuzzy
 msgid "Se_lection"
 msgstr "_Vybar: "
 
-#: gtk/gtkprintunixdialog.c:2209
+#: gtk/gtkprintunixdialog.c:2216
 msgid "Pag_es:"
 msgstr "_Arkušy:"
 
-#: gtk/gtkprintunixdialog.c:2210
+#: gtk/gtkprintunixdialog.c:2217
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -1659,29 +1681,29 @@ msgstr ""
 "Akreśl adzin albo bolej absiahaŭ staronki,\n"
 " naprykład 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2220
+#: gtk/gtkprintunixdialog.c:2227
 #, fuzzy
 msgid "Pages"
 msgstr "_Arkušy:"
 
-#: gtk/gtkprintunixdialog.c:2233
+#: gtk/gtkprintunixdialog.c:2240
 msgid "Copies"
 msgstr "Kopii"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2238
+#: gtk/gtkprintunixdialog.c:2245
 msgid "Copie_s:"
 msgstr "Kopi_i:"
 
-#: gtk/gtkprintunixdialog.c:2256
+#: gtk/gtkprintunixdialog.c:2263
 msgid "C_ollate"
 msgstr "_Pašerahavanyja"
 
-#: gtk/gtkprintunixdialog.c:2264
+#: gtk/gtkprintunixdialog.c:2271
 msgid "_Reverse"
 msgstr "A_dvarotna"
 
-#: gtk/gtkprintunixdialog.c:2284
+#: gtk/gtkprintunixdialog.c:2291
 msgid "General"
 msgstr "Ahulnaje"
 
@@ -1691,42 +1713,42 @@ msgstr "Ahulnaje"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3010
+#: gtk/gtkprintunixdialog.c:3017
 #: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Źleva ŭprava, źvierchu ŭniz"
 
-#: gtk/gtkprintunixdialog.c:3010
+#: gtk/gtkprintunixdialog.c:3017
 #: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Źleva ŭprava, źnizu ŭvierch"
 
-#: gtk/gtkprintunixdialog.c:3011
+#: gtk/gtkprintunixdialog.c:3018
 #: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Sprava ŭleva, źvierchu ŭniz"
 
-#: gtk/gtkprintunixdialog.c:3011
+#: gtk/gtkprintunixdialog.c:3018
 #: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Sprava ŭleva, źnizu ŭvierch"
 
-#: gtk/gtkprintunixdialog.c:3012
+#: gtk/gtkprintunixdialog.c:3019
 #: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Źvierchu ŭniz, źleva ŭprava"
 
-#: gtk/gtkprintunixdialog.c:3012
+#: gtk/gtkprintunixdialog.c:3019
 #: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Źvierchu ŭniz, sprava ŭleva"
 
-#: gtk/gtkprintunixdialog.c:3013
+#: gtk/gtkprintunixdialog.c:3020
 #: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Źnizu ŭvierch, źleva ŭprava"
 
-#: gtk/gtkprintunixdialog.c:3013
+#: gtk/gtkprintunixdialog.c:3020
 #: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Źnizu ŭvierch, sprava ŭleva"
@@ -1734,132 +1756,132 @@ msgstr "Źnizu ŭvierch, sprava ŭleva"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3017 gtk/gtkprintunixdialog.c:3030
+#: gtk/gtkprintunixdialog.c:3024 gtk/gtkprintunixdialog.c:3037
 #: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Paradkavańnie staronak"
 
-#: gtk/gtkprintunixdialog.c:3046
+#: gtk/gtkprintunixdialog.c:3053
 msgid "Left to right"
 msgstr "Źleva naprava"
 
-#: gtk/gtkprintunixdialog.c:3047
+#: gtk/gtkprintunixdialog.c:3054
 msgid "Right to left"
 msgstr "Sprava naleva"
 
-#: gtk/gtkprintunixdialog.c:3059
+#: gtk/gtkprintunixdialog.c:3066
 #, fuzzy
 msgid "Top to bottom"
 msgstr "Źvierchu ŭniz, źleva ŭprava"
 
-#: gtk/gtkprintunixdialog.c:3060
+#: gtk/gtkprintunixdialog.c:3067
 #, fuzzy
 msgid "Bottom to top"
 msgstr "Źnizu ŭvierch, źleva ŭprava"
 
-#: gtk/gtkprintunixdialog.c:3300
+#: gtk/gtkprintunixdialog.c:3307
 msgid "Layout"
 msgstr "Schiema"
 
-#: gtk/gtkprintunixdialog.c:3304
+#: gtk/gtkprintunixdialog.c:3311
 msgid "T_wo-sided:"
 msgstr "_Dvuchbakova:"
 
-#: gtk/gtkprintunixdialog.c:3319
+#: gtk/gtkprintunixdialog.c:3326
 msgid "Pages per _side:"
 msgstr "Staronak _na arkuš:"
 
-#: gtk/gtkprintunixdialog.c:3336
+#: gtk/gtkprintunixdialog.c:3343
 msgid "Page or_dering:"
 msgstr "_Paradkavańnie staronak:"
 
-#: gtk/gtkprintunixdialog.c:3352
+#: gtk/gtkprintunixdialog.c:3359
 msgid "_Only print:"
 msgstr "Vydruk _tolki:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3367
+#: gtk/gtkprintunixdialog.c:3374
 msgid "All sheets"
 msgstr "Usie arkušy"
 
-#: gtk/gtkprintunixdialog.c:3368
+#: gtk/gtkprintunixdialog.c:3375
 msgid "Even sheets"
 msgstr "Cotnyja arkušy"
 
-#: gtk/gtkprintunixdialog.c:3369
+#: gtk/gtkprintunixdialog.c:3376
 msgid "Odd sheets"
 msgstr "Niacotnyja arkušy"
 
-#: gtk/gtkprintunixdialog.c:3372
+#: gtk/gtkprintunixdialog.c:3379
 msgid "Sc_ale:"
 msgstr "Maš_tab:"
 
-#: gtk/gtkprintunixdialog.c:3399
+#: gtk/gtkprintunixdialog.c:3406
 msgid "Paper"
 msgstr "Papiera"
 
-#: gtk/gtkprintunixdialog.c:3403
+#: gtk/gtkprintunixdialog.c:3410
 msgid "Paper _type:"
 msgstr "Vid papier_y:"
 
-#: gtk/gtkprintunixdialog.c:3418
+#: gtk/gtkprintunixdialog.c:3425
 msgid "Paper _source:"
 msgstr "Krynica pap_iery:"
 
-#: gtk/gtkprintunixdialog.c:3433
+#: gtk/gtkprintunixdialog.c:3440
 msgid "Output t_ray:"
 msgstr "_Padnos vyjścia:"
 
-#: gtk/gtkprintunixdialog.c:3473
+#: gtk/gtkprintunixdialog.c:3480
 #, fuzzy
 msgid "Or_ientation:"
 msgstr "_Aryjentacyja:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3488
+#: gtk/gtkprintunixdialog.c:3495
 #, fuzzy
 msgid "Portrait"
 msgstr "Vertykalna"
 
-#: gtk/gtkprintunixdialog.c:3489
+#: gtk/gtkprintunixdialog.c:3496
 #, fuzzy
 msgid "Landscape"
 msgstr "Haryzantalna"
 
-#: gtk/gtkprintunixdialog.c:3490
+#: gtk/gtkprintunixdialog.c:3497
 #, fuzzy
 msgid "Reverse portrait"
 msgstr "Vertykalna pieraviernutaje"
 
-#: gtk/gtkprintunixdialog.c:3491
+#: gtk/gtkprintunixdialog.c:3498
 #, fuzzy
 msgid "Reverse landscape"
 msgstr "Haryzantalna pieraviernutaje"
 
-#: gtk/gtkprintunixdialog.c:3536
+#: gtk/gtkprintunixdialog.c:3543
 msgid "Job Details"
 msgstr "Detali zadańnia"
 
-#: gtk/gtkprintunixdialog.c:3542
+#: gtk/gtkprintunixdialog.c:3549
 msgid "Pri_ority:"
 msgstr "Pry_jarytet:"
 
-#: gtk/gtkprintunixdialog.c:3557
+#: gtk/gtkprintunixdialog.c:3564
 msgid "_Billing info:"
 msgstr "Infarmacyja ab apłatac_h:"
 
-#: gtk/gtkprintunixdialog.c:3575
+#: gtk/gtkprintunixdialog.c:3582
 msgid "Print Document"
 msgstr "Vydruk dakumentu"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3584
+#: gtk/gtkprintunixdialog.c:3591
 msgid "_Now"
 msgstr "_Ciapier"
 
-#: gtk/gtkprintunixdialog.c:3595
+#: gtk/gtkprintunixdialog.c:3602
 msgid "A_t:"
 msgstr "_A:"
 
@@ -1867,7 +1889,7 @@ msgstr "_A:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3601
+#: gtk/gtkprintunixdialog.c:3608
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -1875,121 +1897,121 @@ msgstr ""
 "Vyznačy čas dla vydruku.\n"
 "Naprykład, 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:3611
+#: gtk/gtkprintunixdialog.c:3618
 msgid "Time of print"
 msgstr ""
 
-#: gtk/gtkprintunixdialog.c:3627
+#: gtk/gtkprintunixdialog.c:3634
 msgid "On _hold"
 msgstr "Ustry_many"
 
-#: gtk/gtkprintunixdialog.c:3628
+#: gtk/gtkprintunixdialog.c:3635
 msgid "Hold the job until it is explicitly released"
 msgstr "Strymvaj zadańnie, pakul jano nasamreč nie zapracuje"
 
-#: gtk/gtkprintunixdialog.c:3648
+#: gtk/gtkprintunixdialog.c:3655
 msgid "Add Cover Page"
 msgstr "Dadaj staronku na vokładku"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3657
+#: gtk/gtkprintunixdialog.c:3664
 msgid "Be_fore:"
 msgstr "P_ierad:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3675
+#: gtk/gtkprintunixdialog.c:3682
 msgid "_After:"
 msgstr "_Paśla:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3693
+#: gtk/gtkprintunixdialog.c:3700
 msgid "Job"
 msgstr "Zadańnie"
 
-#: gtk/gtkprintunixdialog.c:3759
+#: gtk/gtkprintunixdialog.c:3766
 msgid "Advanced"
 msgstr "Pašyranaje"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3794
+#: gtk/gtkprintunixdialog.c:3804
 msgid "Image Quality"
 msgstr "Jakaść vyjavy"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3798
+#: gtk/gtkprintunixdialog.c:3808
 msgid "Color"
 msgstr "Koler"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/gtkprintunixdialog.c:3803
+#: gtk/gtkprintunixdialog.c:3813
 msgid "Finishing"
 msgstr "Zaviaršeńnie"
 
-#: gtk/gtkprintunixdialog.c:3813
+#: gtk/gtkprintunixdialog.c:3823
 msgid "Some of the settings in the dialog conflict"
 msgstr "Nałady vakna častkova supiarečnyja"
 
-#: gtk/gtkprintunixdialog.c:3836
+#: gtk/gtkprintunixdialog.c:3846
 msgid "Print"
 msgstr "Vydruk"
 
-#: gtk/gtkrc.c:2839
+#: gtk/gtkrc.c:2834
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Niemahčyma znajści dałučany fajł: \"%s\""
 
-#: gtk/gtkrc.c:3469 gtk/gtkrc.c:3472
+#: gtk/gtkrc.c:3470 gtk/gtkrc.c:3473
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Niemahčyma znajści fajł z vyjavaj na ściežcy: \"%s\""
 
-#: gtk/gtkrecentaction.c:171 gtk/gtkrecentaction.c:179
-#: gtk/gtkrecentchoosermenu.c:616 gtk/gtkrecentchoosermenu.c:624
+#: gtk/gtkrecentaction.c:165 gtk/gtkrecentaction.c:173
+#: gtk/gtkrecentchoosermenu.c:615 gtk/gtkrecentchoosermenu.c:623
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Funkcyja nie implementavanaja dla widgetaŭ klasy '%s'"
 
-#: gtk/gtkrecentchooserdefault.c:481
+#: gtk/gtkrecentchooserdefault.c:482
 msgid "Select which type of documents are shown"
 msgstr "Abiraje jakija vidy dakumentaŭ pakazvać"
 
-#: gtk/gtkrecentchooserdefault.c:1134 gtk/gtkrecentchooserdefault.c:1171
+#: gtk/gtkrecentchooserdefault.c:1138 gtk/gtkrecentchooserdefault.c:1175
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "Dakument dla URI '%s' nia znojdzieny"
 
-#: gtk/gtkrecentchooserdefault.c:1298
+#: gtk/gtkrecentchooserdefault.c:1302
 msgid "Untitled filter"
 msgstr "Filter biaz nazvy"
 
-#: gtk/gtkrecentchooserdefault.c:1651
+#: gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not remove item"
 msgstr "Niemahčyma vydalić element"
 
-#: gtk/gtkrecentchooserdefault.c:1695
+#: gtk/gtkrecentchooserdefault.c:1699
 msgid "Could not clear list"
 msgstr "Niemahčyma vyčyścić element"
 
-#: gtk/gtkrecentchooserdefault.c:1779
+#: gtk/gtkrecentchooserdefault.c:1783
 msgid "Copy _Location"
 msgstr "S_kapijuj pałažeńnie"
 
-#: gtk/gtkrecentchooserdefault.c:1792
+#: gtk/gtkrecentchooserdefault.c:1796
 msgid "_Remove From List"
 msgstr "_Vydali sa śpisu"
 
-#: gtk/gtkrecentchooserdefault.c:1801
+#: gtk/gtkrecentchooserdefault.c:1805
 msgid "_Clear List"
 msgstr "Vy_čyść śpis"
 
-#: gtk/gtkrecentchooserdefault.c:1815
+#: gtk/gtkrecentchooserdefault.c:1819
 msgid "Show _Private Resources"
 msgstr "Pakažy p_ryvatnyja resursy"
 
@@ -2003,21 +2025,21 @@ msgstr "Pakažy p_ryvatnyja resursy"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:370
+#: gtk/gtkrecentchoosermenu.c:369
 msgid "No items found"
 msgstr "Elementy nia znojdzienyja"
 
-#: gtk/gtkrecentchoosermenu.c:536 gtk/gtkrecentchoosermenu.c:592
+#: gtk/gtkrecentchoosermenu.c:535 gtk/gtkrecentchoosermenu.c:591
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "Niadaŭna ŭžyvany resurs z URI `%s' nia znojdzieny"
 
-#: gtk/gtkrecentchoosermenu.c:803
+#: gtk/gtkrecentchoosermenu.c:802
 #, c-format
 msgid "Open '%s'"
 msgstr "Adčyni '%s'"
 
-#: gtk/gtkrecentchoosermenu.c:833
+#: gtk/gtkrecentchoosermenu.c:832
 msgid "Unknown item"
 msgstr "Nieviadomy element"
 
@@ -2026,7 +2048,7 @@ msgstr "Nieviadomy element"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:844
+#: gtk/gtkrecentchoosermenu.c:843
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2035,47 +2057,47 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:849
+#: gtk/gtkrecentchoosermenu.c:848
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:968 gtk/gtkrecentmanager.c:981
-#: gtk/gtkrecentmanager.c:1119 gtk/gtkrecentmanager.c:1129
-#: gtk/gtkrecentmanager.c:1182 gtk/gtkrecentmanager.c:1191
-#: gtk/gtkrecentmanager.c:1206
+#: gtk/gtkrecentmanager.c:980 gtk/gtkrecentmanager.c:993
+#: gtk/gtkrecentmanager.c:1131 gtk/gtkrecentmanager.c:1141
+#: gtk/gtkrecentmanager.c:1194 gtk/gtkrecentmanager.c:1203
+#: gtk/gtkrecentmanager.c:1218
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Niemahčyma znajści element z URI '%s'"
 
-#: gtk/gtkspinner.c:458
+#: gtk/gtkspinner.c:456
 #, fuzzy
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Super"
 
-#: gtk/gtkspinner.c:459
+#: gtk/gtkspinner.c:457
 msgid "Provides visual indication of progress"
 msgstr ""
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:314
+#: gtk/gtkstock.c:313
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Infarmacyja"
 
-#: gtk/gtkstock.c:315
+#: gtk/gtkstock.c:314
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Aściaroha"
 
-#: gtk/gtkstock.c:316
+#: gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Pamyłka"
 
-#: gtk/gtkstock.c:317
+#: gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pytańnie"
@@ -2083,90 +2105,97 @@ msgstr "Pytańnie"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:322
+#: gtk/gtkstock.c:321
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Ab prahramie"
 
-#: gtk/gtkstock.c:323
+#: gtk/gtkstock.c:322
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Dadaj"
 
-#: gtk/gtkstock.c:324
+#: gtk/gtkstock.c:323
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Užyj"
 
-#: gtk/gtkstock.c:325
+#: gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Toŭsty"
 
-#: gtk/gtkstock.c:326
+#: gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Anuluj"
 
-#: gtk/gtkstock.c:327
+#: gtk/gtkstock.c:326
+#, fuzzy
 msgctxt "Stock label"
-msgid "_CD-Rom"
+msgid "_CD-ROM"
 msgstr "_CD-Rom"
 
-#: gtk/gtkstock.c:328
+#: gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "Vy_čyści"
 
-#: gtk/gtkstock.c:329
+#: gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Začyni"
 
-#: gtk/gtkstock.c:330
+#: gtk/gtkstock.c:329
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "S_pałučy"
 
-#: gtk/gtkstock.c:331
+#: gtk/gtkstock.c:330
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "S_kanvertuj"
 
-#: gtk/gtkstock.c:332
+#: gtk/gtkstock.c:331
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "S_kapijuj"
 
-#: gtk/gtkstock.c:333
+#: gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_Vytni"
 
-#: gtk/gtkstock.c:334
+#: gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Vydali"
 
-#: gtk/gtkstock.c:335
+#: gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Pakiń byłoje"
 
-#: gtk/gtkstock.c:336
+#: gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Razłučy"
 
-#: gtk/gtkstock.c:337
+#: gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "Vyk_anaj"
 
-#: gtk/gtkstock.c:338
+#: gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Redahuj"
+
+#: gtk/gtkstock.c:338
+#, fuzzy
+msgctxt "Stock label"
+msgid "_File"
+msgstr "_Fajły"
 
 #: gtk/gtkstock.c:339
 msgctxt "Stock label"
@@ -2242,8 +2271,9 @@ msgid "_Up"
 msgstr "_Uharu"
 
 #: gtk/gtkstock.c:360
+#, fuzzy
 msgctxt "Stock label"
-msgid "_Harddisk"
+msgid "_Hard Disk"
 msgstr "Ć_viordy dysk"
 
 #: gtk/gtkstock.c:361
@@ -2558,165 +2588,165 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Pa_mienš"
 
-#: gtk/gtktextbufferrichtext.c:651
+#: gtk/gtktextbufferrichtext.c:650
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Nieviadomaja pamyłka padčas sproby deseryjalizacyi %s"
 
-#: gtk/gtktextbufferrichtext.c:710
+#: gtk/gtktextbufferrichtext.c:709
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Nia znojdzienaja funkcyja deseryjalizacyi dla farmatu %s"
 
-#: gtk/gtktextbufferserialize.c:796 gtk/gtktextbufferserialize.c:822
+#: gtk/gtktextbufferserialize.c:795 gtk/gtktextbufferserialize.c:821
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Jak \"id\" hetak i \"nazva\" byli znojdzienyja ŭ elemencie <%s>"
 
-#: gtk/gtktextbufferserialize.c:806 gtk/gtktextbufferserialize.c:832
+#: gtk/gtktextbufferserialize.c:805 gtk/gtktextbufferserialize.c:831
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Atrybut \"%s\" byŭ dvojčy znojdzieny ŭ elemencie <%s>"
 
-#: gtk/gtktextbufferserialize.c:846
-#, c-format
-msgid "<%s> element has invalid id \"%s\""
+#: gtk/gtktextbufferserialize.c:845
+#, fuzzy, c-format
+msgid "<%s> element has invalid ID \"%s\""
 msgstr "Element <%s> maje ŭ sabie niapravilny id \"%s\""
 
-#: gtk/gtktextbufferserialize.c:856
+#: gtk/gtktextbufferserialize.c:855
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "Element <%s> nia maje atrybutu \"nazva\" ani atrybutu \"id\""
 
-#: gtk/gtktextbufferserialize.c:943
+#: gtk/gtktextbufferserialize.c:942
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Atrybut \"%s\" vykarystany dvojčy na adnym i tym ža elemencie <%s>"
 
-#: gtk/gtktextbufferserialize.c:961 gtk/gtktextbufferserialize.c:986
+#: gtk/gtktextbufferserialize.c:960 gtk/gtktextbufferserialize.c:985
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Atrybut \"%s\" niapravilny ŭ hetym kantekście na elemencie <%s>"
 
-#: gtk/gtktextbufferserialize.c:1022
+#: gtk/gtktextbufferserialize.c:1024
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Značnik \"%s\" nia byŭ akreśleny."
 
-#: gtk/gtktextbufferserialize.c:1034
+#: gtk/gtktextbufferserialize.c:1036
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Znojdzieny ananimny značnik i značniki nia mohuć być stvoranyja."
 
-#: gtk/gtktextbufferserialize.c:1045
+#: gtk/gtktextbufferserialize.c:1047
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "Značnik \"%s\" nie isnuje ŭ bufery i značniki nia mohuć być stvoranyja."
 
-#: gtk/gtktextbufferserialize.c:1144 gtk/gtktextbufferserialize.c:1219
-#: gtk/gtktextbufferserialize.c:1320 gtk/gtktextbufferserialize.c:1394
+#: gtk/gtktextbufferserialize.c:1146 gtk/gtktextbufferserialize.c:1221
+#: gtk/gtktextbufferserialize.c:1324 gtk/gtktextbufferserialize.c:1398
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Element <%s> niedapuščalny nižej <%s>"
 
-#: gtk/gtktextbufferserialize.c:1175
+#: gtk/gtktextbufferserialize.c:1177
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" nie źjaŭlajecca pravilnym vidam atrybutu"
 
-#: gtk/gtktextbufferserialize.c:1183
+#: gtk/gtktextbufferserialize.c:1185
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" nie źjaŭlajecca pravilnaj nazvaj atrybutu"
 
-#: gtk/gtktextbufferserialize.c:1193
+#: gtk/gtktextbufferserialize.c:1195
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "\"%s\" nielha źmianić na vartaść typu \"%s\" dla atrybutu \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1202
+#: gtk/gtktextbufferserialize.c:1204
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" nie źjaŭlajecca pravilnaj vartaściu dla atrybutu \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1285
+#: gtk/gtktextbufferserialize.c:1289
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Značnik \"%s\" užo akreśleny"
 
-#: gtk/gtktextbufferserialize.c:1296
+#: gtk/gtktextbufferserialize.c:1300
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Značnik \"%s\" maje niapravilny pryjarytet \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1349
+#: gtk/gtktextbufferserialize.c:1353
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Vonkavy element tekstu musić być <text_view_markup> a nie <%s>"
 
-#: gtk/gtktextbufferserialize.c:1358 gtk/gtktextbufferserialize.c:1374
+#: gtk/gtktextbufferserialize.c:1362 gtk/gtktextbufferserialize.c:1378
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Element <%s> užo akreśleny"
 
-#: gtk/gtktextbufferserialize.c:1380
+#: gtk/gtktextbufferserialize.c:1384
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Element <text> nia moža pajavicca pierad elementam <tags>"
 
-#: gtk/gtktextbufferserialize.c:1779
+#: gtk/gtktextbufferserialize.c:1784
 msgid "Serialized data is malformed"
 msgstr "Seryjalizavanyja źviestki niapravilna raźvityja"
 
-#: gtk/gtktextbufferserialize.c:1857
+#: gtk/gtktextbufferserialize.c:1862
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Seryjalizavanyja źviestki niapravilna raźvityja. Pieršaja sekcyja nie "
 "źjaŭlajecca GTKEXTBUFFERCONTENTS-0001"
 
-#: gtk/gtktextutil.c:61
+#: gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
 msgstr "LRM – značnik napramku ź_leva naprava"
 
-#: gtk/gtktextutil.c:62
+#: gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
 msgstr "RLM – značnik napramku sp_rava naleva"
 
-#: gtk/gtktextutil.c:63
+#: gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE – _ukaranieńnie źleva naprava"
 
-#: gtk/gtktextutil.c:64
+#: gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE – uk_aranieńnie sprava naleva"
 
-#: gtk/gtktextutil.c:65
+#: gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
 msgstr "LRO – _nakładańnie źleva naprava"
 
-#: gtk/gtktextutil.c:66
+#: gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO – n_akładańnie sprava naleva"
 
-#: gtk/gtktextutil.c:67
+#: gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
 msgstr "PDF – _źniaćcio napramku farmatavańnia"
 
-#: gtk/gtktextutil.c:68
+#: gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
 msgstr "ZWS – prabieł n_ulavoj šyryni"
 
-#: gtk/gtktextutil.c:69
+#: gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWN – łu_čak znakaŭ nulavoj šyryni"
 
 # Fihniu z hetym vykluvnikam prydumaŭ, skrušajusia, ale ničoha lepšaha ŭ hałavu nie pryjšło. :) Padumać na budučyniu.
-#: gtk/gtktextutil.c:70
+#: gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWNJ – vyklučni_k znakaŭ nulavoj šyryni"
 
-#: gtk/gtkthemes.c:71
+#: gtk/gtkthemes.c:72
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Niemahčyma znajści modul absłuhoŭvańnia matyvu ŭ module_path: \"%s\","
@@ -2747,27 +2777,27 @@ msgstr "Źmianiaje hučnaść"
 msgid "Adjusts the volume"
 msgstr "Padładź hučnaść"
 
-#: gtk/gtkvolumebutton.c:91 gtk/gtkvolumebutton.c:94
+#: gtk/gtkvolumebutton.c:94 gtk/gtkvolumebutton.c:97
 msgid "Volume Down"
 msgstr "Ścišeńnie"
 
-#: gtk/gtkvolumebutton.c:93
+#: gtk/gtkvolumebutton.c:96
 msgid "Decreases the volume"
 msgstr "Źmianšaje hučnaść"
 
-#: gtk/gtkvolumebutton.c:97 gtk/gtkvolumebutton.c:100
+#: gtk/gtkvolumebutton.c:100 gtk/gtkvolumebutton.c:103
 msgid "Volume Up"
 msgstr "Padhučnieńnie"
 
-#: gtk/gtkvolumebutton.c:99
+#: gtk/gtkvolumebutton.c:102
 msgid "Increases the volume"
 msgstr "Pavialičvaje hučnaść"
 
-#: gtk/gtkvolumebutton.c:157
+#: gtk/gtkvolumebutton.c:160
 msgid "Muted"
 msgstr "Abiazhučany"
 
-#: gtk/gtkvolumebutton.c:161
+#: gtk/gtkvolumebutton.c:164
 msgid "Full Volume"
 msgstr "Poŭnaja hučnaść"
 
@@ -2776,7 +2806,7 @@ msgstr "Poŭnaja hučnaść"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:174
+#: gtk/gtkvolumebutton.c:177
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -3902,8 +3932,8 @@ msgid "Printer '%s' is out of paper."
 msgstr "U drukarcy \"%s\" niama papiery."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1686
-#, c-format
-msgid "Printer '%s' is currently off-line."
+#, fuzzy, c-format
+msgid "Printer '%s' is currently offline."
 msgstr "Drukarka \"%s\" adłučanaja ad sietki."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
@@ -4215,6 +4245,12 @@ msgid ""
 msgstr ""
 "Niemahčyma adčytać vyjavu \"%s\": pryčyna nieviadomaja; fajł vyjavy "
 "vierahodna paškodžany"
+
+#~ msgid "Gdk debugging flags to set"
+#~ msgstr "Ściažki adsočki Gdk"
+
+#~ msgid "Gdk debugging flags to unset"
+#~ msgstr "Vyčyščanyja ściažki adsočki Gdk"
 
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "Fajł vyjavy '%s' biaź źviestak"
@@ -4877,9 +4913,6 @@ msgstr ""
 
 #~ msgid "Fol_ders"
 #~ msgstr "_Katalohi"
-
-#~ msgid "_Files"
-#~ msgstr "_Fajły"
 
 #~ msgid "Folder unreadable: %s"
 #~ msgstr "Niemahčyma adčytać kataloh: %s"
