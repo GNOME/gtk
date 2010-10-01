@@ -9,6 +9,7 @@ AUTOMAKE_OPTIONS = 1.7
 ACLOCAL_AMFLAGS = -I m4
 
 EXTRA_DIST +=			\
+	autogen.sh		\
 	HACKING			\
 	makecopyright		\
 	NEWS.pre-1-0		\
