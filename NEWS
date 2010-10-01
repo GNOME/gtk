@@ -1,3 +1,88 @@
+Overview of Changes from GTK+ 2.90.7 to 2.91.0
+==============================================
+
+* The rendering cleanup work has landed. This is a large change that
+  affects many APIs.
+  - All gtkstyle functions have been changed to take a cairo_t argument
+    instead of a window + area.
+  - GdkPixmap is gone. APIs that took pixmaps are being replaced by ones
+    that take pixbufs or cairo surfaces, or regions (where pixmaps were
+    used as masks). In background handling, pixmaps have been replaced
+    by cairo patterns, see gdk_window_set_background_pattern().
+  - GdkColormap is gone. It is replaced by visuals, see
+    gtk_widget_set_visual().
+  - The ::expose-event signal on GtkWidget has been replaced by a
+    ::draw signal.
+  - gtk_widget_get_snapshot() has been removed. Instead, gtk_widget_draw()
+    can render a widget onto an cairo_t.
+
+* The GtkSizeRequest interface has been merged into GtkWidget, and
+  GtkCellSizeRequest has been merged into GtkCellRenderer. The wrapper
+  functions have been renamed to include 'preferred', e.g
+  gtk_size_request_get_width() is now gtk_widget_get_preferred_width()
+  and gtk_cell_size_request_get_width_for_height() is now
+  gtk_cell_renderer_get_preferred_width_for_height().
+
+* GtkObject has been removed. The ::destroy signal has been moved
+  to GtkWidget. At the same time, GtkWidgetFlags have been removed,
+  they already had getters and setters anyway.
+
+* GtkWidget has gained generic alignment and padding properties:
+  halign, valign, margin-left, margin-right, margin-top, margin-bottom
+  These can be used instead of container-specific child properties or
+  GtkMisc and GtkAlignment widgets.
+
+* Container widgets can now let GTK+ handle border-width for them, using
+  gtk_container_class_handle_border_width()
+
+* The GtkEditableClass struct has been renamed to GtkEditableInterface
+
+* Mouse wheel scrolling has been removed from GtkNotebook
+
+* The default policy for scrolled windows has been changed to 'automatic'
+
+* Global url hooks have been removed from GtkAboutDialog and GtkLinkButton
+
+* The global window creation hook has been removed from GtkNotebook
+
+* The error handling in GDK has been modernized and avoids synchronizing
+  X requests as much as possible
+
+* Fixed Bugs:
+ 323904 GtkEditable header is slightly incorrect
+ 339745 Return value of gtk_link_button_set_uri_hook not usable
+ 468672 GTK_POLICY_AUTOMATIC should be the default policy...
+ 486839 Filechooser 'Places' items should not move up and down...
+ 601731 Drag and Drop from Workspace to Activities Overview
+ 617316 Move documentation to inline comments: GtkEditable
+ 621590 Add length to gtk_tree_path_get_indices
+ 623664 Missing accessors for gtk_menu_get_position_func{,_data}
+ 628829 Chain get_width_for_height default impl to vfunc...
+ 629177 Do not use deprecated gtk_widget_get_child_requisition()
+ 629277 Hanging because do_syntheszie_crossing_event is called...
+ 629387 Use gint16 for GtkBorder
+ 629598 Do not use deprecated gtk_widget_size_request()
+ 629608 Revamp and modernize X error traps
+ 629733 There is a misprint in the description of the gtk_check_...
+ 629748 Fails to build without XComposite
+ 629785 Do not use deprecated gtk_cell_renderer_get_size()
+ 630033 Improve tests for X error traps, fix two bugs
+ 630226 Removing tab scrolling from GtkNotebook
+ 630520 Don't try to unref event->dnd.context unconditionally...
+ 630521 Remove some remaining API warts from tab dnd api
+ 630532 invalid drop point in drag-data-received callback
+
+Updated translations:
+Catalan
+Czech
+Danish
+Dutch
+German
+Gujarati
+Japanese
+Simplified Chinese
+
+
 Overview of Changes from GTK+ 2.90.6 to 2.90.7
 ==============================================
 
