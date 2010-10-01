@@ -25,9 +25,9 @@
 /**
  * SECTION:gtksizerequest
  * @Short_Description: Height-for-width geometry management
- * @Title: GtkWidget     
+ * @Title: GtkWidget
  *
- * The GtkWidget      interface is GTK+'s height-for-width (and width-for-height)
+ * The GtkWidget interface is GTK+'s height-for-width (and width-for-height)
  * geometry management system. Height-for-width means that a widget can
  * change how much vertical space it needs, depending on the amount
  * of horizontal space that it is given (and similar for width-for-height).
@@ -36,14 +36,14 @@
  *
  * GTK+'s traditional two-pass <link linkend="size-allocation">size-allocation</link>
  * algorithm does not allow this flexibility. #GtkWidget provides a default
- * implementation of the #GtkWidget      interface for existing widgets,
+ * implementation of the #GtkWidget interface for existing widgets,
  * which always requests the same height, regardless of the available width.
  *
  * <refsect2>
- * <title>Implementing GtkWidget     </title>
+ * <title>Implementing GtkWidget</title>
  * <para>
  * Some important things to keep in mind when implementing
- * the GtkWidget      interface and when using it in container
+ * the GtkWidget interface and when using it in container
  * implementations.
  *
  * The geometry management system will query a logical hierarchy in
@@ -67,13 +67,13 @@
  *
  * That means that the request operation at allocation time will
  * usually fire again in contexts of different allocated sizes than
- * the ones originally queried for. #GtkWidget      caches a
+ * the ones originally queried for. #GtkWidget caches a
  * small number of results to avoid re-querying for the same
  * allocated size in one allocation cycle.
  *
  * A widget that does not actually do height-for-width
  * or width-for-height size negotiations only has to implement
- * get_width() and get_height().
+ * get_preferred_width() and get_preferred_height().
  *
  * If a widget does move content around to smartly use up the
  * allocated size, then it must support the request properly in
@@ -81,7 +81,7 @@
  * one orientation.
  *
  * For instance, a GtkLabel that does height-for-width word wrapping
- * will not expect to have get_height() called because that
+ * will not expect to have get_preferred_height() called because that
  * call is specific to a width-for-height request, in this case the
  * label must return the heights contextual to its minimum possible
  * width. By following this rule any widget that handles height-for-width
@@ -96,12 +96,12 @@
  * <example>
  *   <title>Widget calling its own size request method.</title>
  *   <programlisting>
- * GTK_SIZE_REQUEST_GET_IFACE(widget)-&gt;get_width(GTK_SIZE_REQUEST(widget), &min, &natural);
+ * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget), &min, &natural);
  *   </programlisting>
  * </example>
  *
  * It will not work to use the wrapper functions, such as
- * gtk_size_request_get_width(), inside your own size request
+ * gtk_widget_get_preferred_width(), inside your own size request
  * implementation. These return a request adjusted by #GtkSizeGroup
  * and by the GtkWidgetClass::adjust_size_request virtual method. If a
  * widget used the wrappers inside its virtual method implementations,
