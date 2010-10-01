@@ -237,8 +237,7 @@ struct _GtkTextLineDisplay
 {
   PangoLayout *layout;
   GSList *cursors;
-  GSList *shaped_objects;	/* Only for backwards compatibility */
-  
+
   GtkTextDirection direction;
 
   gint width;                   /* Width of layout */
