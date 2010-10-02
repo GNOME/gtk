@@ -43,9 +43,6 @@ static void	 gail_adjustment_get_minimum_increment (AtkValue        *obj,
 static gboolean	 gail_adjustment_set_current_value (AtkValue            *obj,
                                                     const GValue        *value);
 
-static void      gail_adjustment_destroyed         (GtkAdjustment       *adjustment,
-                                                    GailAdjustment      *gail_adjustment);
-
 G_DEFINE_TYPE_WITH_CODE (GailAdjustment, gail_adjustment, ATK_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_VALUE, atk_value_interface_init))
 
@@ -83,18 +80,18 @@ gail_adjustment_real_initialize (AtkObject *obj,
                                  gpointer  data)
 {
   GtkAdjustment *adjustment;
+  GailAdjustment *gail_adjustment;
 
   ATK_OBJECT_CLASS (gail_adjustment_parent_class)->initialize (obj, data);
 
   adjustment = GTK_ADJUSTMENT (data);
 
   obj->role = ATK_ROLE_UNKNOWN;
-  GAIL_ADJUSTMENT (obj)->adjustment = adjustment;
+  gail_adjustment = GAIL_ADJUSTMENT (obj);
+  gail_adjustment->adjustment = adjustment;
 
-  g_signal_connect_object (G_OBJECT (adjustment),
-                           "destroy",
-                           G_CALLBACK (gail_adjustment_destroyed),
-                           obj, 0);
+  g_object_add_weak_pointer (G_OBJECT (adjustment),
+                             (gpointer *) &gail_adjustment->adjustment);
 }
 
 static void	 
@@ -230,15 +227,4 @@ gail_adjustment_set_current_value (AtkValue             *obj,
   }
   else
     return FALSE;
-}
-
-static void
-gail_adjustment_destroyed (GtkAdjustment       *adjustment,
-                           GailAdjustment      *gail_adjustment)
-{
-  /*
-   * This is the signal handler for the "destroy" signal for the 
-   * GtkAdjustment. We set the  pointer location to NULL;
-   */
-  gail_adjustment->adjustment = NULL;
 }
