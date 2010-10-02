@@ -212,7 +212,7 @@ convert_no_alpha (guchar  *dest_data,
  * Transfers image data from a #cairo_surface_t and converts it to an RGB(A)
  * representation inside a #GdkPixbuf. This allows you to efficiently read
  * individual pixels from cairo surfaces. For #GdkWindows, use
- * gdk_pixbuf_get_from_surface() instead.
+ * gdk_pixbuf_get_from_window() instead.
  *
  * This function will create an RGB pixbuf with 8 bits per channel. The pixbuf
  * will contain an alpha channel if the @surface contains one.
