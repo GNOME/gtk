@@ -697,6 +697,7 @@ gail_focus_tracker_init (void)
        * We cannot be sure that the classes exist so we make sure that they do.
        */
       g_type_class_ref (GTK_TYPE_WIDGET);
+      g_type_class_ref (GTK_TYPE_MENU_ITEM);
       g_type_class_ref (GTK_TYPE_MENU_SHELL);
       g_type_class_ref (GTK_TYPE_NOTEBOOK);
 
@@ -707,6 +708,22 @@ gail_focus_tracker_init (void)
       g_signal_add_emission_hook (
              g_signal_lookup ("event-after", GTK_TYPE_WIDGET), 0,
              gail_focus_watcher, NULL, (GDestroyNotify) NULL);
+      /*
+       * A "select" signal is emitted when arrow key is used to
+       * move to a list item in the popup window of a GtkCombo or
+       * a menu item in a menu.
+       */
+      g_signal_add_emission_hook (
+             g_signal_lookup ("select", GTK_TYPE_MENU_ITEM), 0,
+             gail_select_watcher, NULL, (GDestroyNotify) NULL);
+
+      /*
+       * A "deselect" signal is emitted when arrow key is used to
+       * move from a menu item in a menu to the parent menu.
+       */
+      g_signal_add_emission_hook (
+             g_signal_lookup ("deselect", GTK_TYPE_MENU_ITEM), 0,
+             gail_deselect_watcher, NULL, (GDestroyNotify) NULL);
 
       /*
        * We listen for deactivate signals on menushells to determine
