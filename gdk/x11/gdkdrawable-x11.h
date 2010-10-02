@@ -27,8 +27,6 @@
 #ifndef __GDK_DRAWABLE_X11_H__
 #define __GDK_DRAWABLE_X11_H__
 
-#include "config.h"
-
 #include <gdk/gdkdrawable.h>
 
 #include <X11/Xlib.h>

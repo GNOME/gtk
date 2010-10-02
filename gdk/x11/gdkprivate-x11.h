@@ -40,8 +40,6 @@
 
 #include "gdkinternals.h"
 
-#include "config.h"
-
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 
 struct _GdkCursorPrivate
