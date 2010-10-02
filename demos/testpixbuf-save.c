@@ -335,8 +335,8 @@ configure_cb (GtkWidget *drawing_area, GdkEventConfigure *evt, gpointer data)
                 GdkPixbuf *new_pixbuf;
 
                 root = gdk_get_default_root_window ();
-                new_pixbuf = gdk_pixbuf_get_from_window (NULL, root,
-                                                         0, 0, 0, 0, evt->width, evt->height);
+                new_pixbuf = gdk_pixbuf_get_from_window (root,
+                                                         0, 0, evt->width, evt->height);
                 g_object_set_data_full (G_OBJECT (drawing_area), "pixbuf", new_pixbuf,
                                         (GDestroyNotify) g_object_unref);
         }
@@ -356,8 +356,8 @@ main (int argc, char **argv)
         gtk_init (&argc, &argv);   
 
         root = gdk_get_default_root_window ();
-        pixbuf = gdk_pixbuf_get_from_window (NULL, root,
-                                             0, 0, 0, 0, 150, 160);
+        pixbuf = gdk_pixbuf_get_from_window (root,
+                                             0, 0, 150, 160);
    
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         g_signal_connect (window, "delete_event",

@@ -38,21 +38,15 @@
 G_BEGIN_DECLS
 
 /* Fetching a region from a drawable */
-GdkPixbuf *gdk_pixbuf_get_from_window   (GdkPixbuf   *dest,
-					 GdkWindow   *window,
+GdkPixbuf *gdk_pixbuf_get_from_window   (GdkWindow   *window,
 					 int          src_x,
 					 int          src_y,
-					 int          dest_x,
-					 int          dest_y,
 					 int          width,
 					 int          height);
 
-GdkPixbuf *gdk_pixbuf_get_from_surface  (GdkPixbuf       *dest,
-                                         cairo_surface_t *surface,
+GdkPixbuf *gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
 					 int              src_x,
 					 int              src_y,
-					 int              dest_x,
-					 int              dest_y,
 					 int              width,
 					 int              height);
 

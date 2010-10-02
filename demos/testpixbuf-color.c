@@ -112,8 +112,8 @@ main (int argc, char **argv)
 	gtk_init (&argc, &argv);
 
 	root = gdk_get_default_root_window ();
-	pixbuf = gdk_pixbuf_get_from_window (NULL, root,
-					     0, 0, 0, 0, 150, 160);
+	pixbuf = gdk_pixbuf_get_from_window (root,
+					     0, 0, 150, 160);
 
 	/* PASS */
 	g_debug ("try to save PNG with a profile");

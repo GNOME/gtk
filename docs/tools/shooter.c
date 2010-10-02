@@ -164,8 +164,8 @@ take_window_shot (Window   child,
   if (y_orig + height > gdk_screen_height ())
     height = gdk_screen_height () - y_orig;
 
-  tmp = gdk_pixbuf_get_from_window (NULL, window,
-				    x, y, 0, 0, width, height);
+  tmp = gdk_pixbuf_get_from_window (window,
+				    x, y, width, height);
 
   if (include_decoration)
     tmp2 = remove_shaped_area (tmp, xid);
