@@ -38,7 +38,7 @@
 #include <gdk/x11/gdkwindow-x11.h>
 #include <gdk/x11/gdkdisplay-x11.h>
 
-#include "gdkinternals.h"
+#include "gdk/gdkinternals.h"
 
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 
