@@ -3363,7 +3363,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
                     0, 1, 3, 4,  GTK_FILL, 0,
                     0, 0);
 
-  combo = gtk_combo_box_new_text ();
+  combo = gtk_combo_box_text_new ();
   priv->page_set_combo = combo;
   gtk_widget_show (combo);
   gtk_table_attach (GTK_TABLE (table), combo,
@@ -3371,9 +3371,9 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
                     0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
   /* In enum order */
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("All sheets"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Even sheets"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Odd sheets"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("All sheets"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Even sheets"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Odd sheets"));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
 
   label = gtk_label_new_with_mnemonic (_("Sc_ale:"));
@@ -3485,17 +3485,17 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
 		    0, 1, 4, 5,
 		    GTK_FILL, 0, 0, 0);
 
-  combo = gtk_combo_box_new_text ();
+  combo = gtk_combo_box_text_new ();
   priv->orientation_combo = GTK_WIDGET (combo);
   gtk_table_attach (GTK_TABLE (table), combo,
 		    1, 2, 4, 5,  GTK_FILL, 0,
 		    0, 0);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo);
   /* In enum order */
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Portrait"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Landscape"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Reverse portrait"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), _("Reverse landscape"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Portrait"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Landscape"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Reverse portrait"));
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), _("Reverse landscape"));
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
   gtk_widget_set_sensitive (combo, FALSE);
   gtk_widget_show (combo);

@@ -74,12 +74,9 @@
  * not restricted to a flat list, it can be a real tree, and the popup will
  * reflect the tree structure.
  *
- * In addition to the model-view API, GtkComboBox offers a simple API which
- * is suitable for text-only combo boxes, and hides the complexity of
- * managing the data in a model. It consists of the functions
- * gtk_combo_box_new_text(), gtk_combo_box_append_text(),
- * gtk_combo_box_insert_text(), gtk_combo_box_prepend_text(),
- * gtk_combo_box_remove_text() and gtk_combo_box_get_active_text().
+ * For a simple list of textual choices, the model-view API of GtkComboBox
+ * can be a bit overwhelming. In this case, #GtkComboBoxText offers a
+ * simple alternative.
  */
 
 
@@ -5439,9 +5436,7 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
  * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
  *
  * Returns the currently active string in @combo_box or %NULL if none
- * is selected.  Note that you can only use this function with combo
- * boxes constructed with gtk_combo_box_new_text() and with
- * #GtkComboBoxEntry<!-- -->s.
+ * is selected.
  *
  * Returns: a newly allocated string containing the currently active text.
  *     Must be freed with g_free().

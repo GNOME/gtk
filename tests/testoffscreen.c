@@ -211,11 +211,11 @@ create_widgets (void)
   label = gtk_label_new ("This label may be ellipsized\nto make it fit.");
   gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
 
-  combo = gtk_combo_box_new_text ();
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "NONE");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "START");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "MIDDLE");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "END");
+  combo = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "NONE");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "START");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "MIDDLE");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "END");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
   gtk_box_pack_start (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
 
@@ -237,17 +237,17 @@ create_widgets (void)
   button = gtk_check_button_new_with_mnemonic ("_Check button");
   gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
-  cb = gtk_combo_box_new_text ();
+  cb = gtk_combo_box_text_new ();
   entry = gtk_entry_new ();
   gtk_widget_show (entry);
   gtk_container_add (GTK_CONTAINER (cb), entry);
 
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item0");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item1");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item1");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item2");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item2");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (cb), "item2");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (cb), "item0");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (cb), "item1");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (cb), "item1");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (cb), "item2");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (cb), "item2");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (cb), "item2");
   gtk_entry_set_text (GTK_ENTRY (entry), "hello world ♥ foo");
   gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
   gtk_box_pack_start (GTK_BOX (vbox), cb, TRUE, TRUE, 0);

@@ -109,12 +109,12 @@ build_option_menu (gchar           *items[],
   GtkWidget *omenu;
   gint i;
 
-  omenu = gtk_combo_box_new_text ();
+  omenu = gtk_combo_box_text_new ();
   g_signal_connect (omenu, "changed",
 		    G_CALLBACK (func), data);
       
   for (i = 0; i < num_items; i++)
-      gtk_combo_box_append_text (GTK_COMBO_BOX (omenu), items[i]);
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (omenu), items[i]);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (omenu), history);
   
@@ -3296,8 +3296,8 @@ create_menus (GtkWidget *widget)
 				  GDK_KEY_F3,
 				  0,
 				  GTK_ACCEL_VISIBLE);
-      
-      optionmenu = gtk_combo_box_new_text ();
+
+      optionmenu = gtk_combo_box_text_new ();
       gtk_combo_box_set_active (GTK_COMBO_BOX (optionmenu), 3);
       gtk_box_pack_start (GTK_BOX (box2), optionmenu, TRUE, TRUE, 0);
       gtk_widget_show (optionmenu);
@@ -5646,8 +5646,8 @@ create_display_screen (GtkWidget *widget)
 	 "only one screen on the current display");
       gtk_widget_set_sensitive (radio_scr, FALSE);
     }
-  combo_dpy = gtk_combo_box_new_text ();
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo_dpy), "diabolo:0.0");
+  combo_dpy = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
   gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_dpy))),
                       "<hostname>:<X Server Num>.<Screen Num>");
 
@@ -8102,8 +8102,8 @@ window_controls (GtkWidget *window)
                            window,
 			   G_CONNECT_SWAPPED);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  
-  om = gtk_combo_box_new_text ();
+
+  om = gtk_combo_box_text_new ();
   i = 0;
   while (i < 10)
     {
@@ -8122,7 +8122,7 @@ window_controls (GtkWidget *window)
       };
 
       g_assert (names[i]);
-      gtk_combo_box_append_text (GTK_COMBO_BOX (om), names[i]);
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (om), names[i]);
 
       ++i;
     }
@@ -8135,7 +8135,7 @@ window_controls (GtkWidget *window)
   gtk_box_pack_end (GTK_BOX (vbox), om, FALSE, FALSE, 0);
 
 
-  om = gtk_combo_box_new_text ();
+  om = gtk_combo_box_text_new ();
   i = 0;
   while (i < 5)
     {
@@ -8149,7 +8149,7 @@ window_controls (GtkWidget *window)
       };
 
       g_assert (names[i]);
-      gtk_combo_box_append_text (GTK_COMBO_BOX (om), names[i]);
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (om), names[i]);
 
       ++i;
     }

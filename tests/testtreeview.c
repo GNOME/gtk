@@ -754,10 +754,10 @@ main (int    argc,
 					GDK_ACTION_MOVE | GDK_ACTION_COPY);
   
   /* Model menu */
-  combo_box = gtk_combo_box_new_text ();
+  combo_box = gtk_combo_box_text_new ();
   for (i = 0; i < MODEL_LAST; i++)
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), model_names[i]);
-  
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), model_names[i]);
+
   gtk_table_attach (GTK_TABLE (table), combo_box,
                     0, 1, 0, 1,
                     0, 0, 
@@ -769,10 +769,10 @@ main (int    argc,
 		    tv);
   
   /* Columns menu */
-  combo_box = gtk_combo_box_new_text ();
+  combo_box = gtk_combo_box_text_new ();
   for (i = 0; i < COLUMNS_LAST; i++)
-      gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), column_type_names[i]);
-  
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), column_type_names[i]);
+
   gtk_table_attach (GTK_TABLE (table), combo_box,
                     0, 1, 1, 2,
                     0, 0, 
