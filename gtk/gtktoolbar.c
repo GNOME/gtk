@@ -59,6 +59,29 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktoolbar
+ * @Short_description: Create bars of buttons and other widgets
+ * @Title: GtkToolbar
+ * @See_also: #GtkToolItem
+ *
+ * A toolbar is created with a call to gtk_toolbar_new().
+ *
+ * A toolbar can contain instances of a subclass of #GtkToolItem. To add
+ * a #GtkToolItem to the a toolbar, use gtk_toolbar_insert(). To remove
+ * an item from the toolbar use gtk_container_remove(). To add a button
+ * to the toolbar, add an instance of #GtkToolButton.
+ *
+ * Toolbar items can be visually grouped by adding instances of
+ * #GtkSeparatorToolItem to the toolbar. If the GtkToolbar child property
+ * "expand" is #TRUE and the property #GtkSeparatorToolItem:draw is set to
+ * #FALSE, the effect is to force all following items to the end of the toolbar.
+ *
+ * Creating a context menu for the toolbar can be done by connecting to
+ * the #GtkToolbar::popup-context-menu signal.
+ */
+
+
 typedef struct _ToolbarContent ToolbarContent;
 
 #define DEFAULT_IPADDING    0
