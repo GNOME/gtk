@@ -30,6 +30,48 @@
 #include "gtkbuildable.h"
 
 
+/**
+ * SECTION:gtkcomboboxentry
+ * @Short_description: A text entry field with a dropdown list
+ * @Title: GtkComboBoxEntry
+ * @See_also:#GtkComboBox
+ *
+ * A #GtkComboBoxEntry is a widget that allows the user to choose from a
+ * list of valid choices or enter a different value. It is very similar
+ * to a #GtkComboBox, but it displays the selected value in an entry to
+ * allow modifying it.
+ *
+ * In contrast to a #GtkComboBox, the underlying model of a #GtkComboBoxEntry
+ * must always have a text column (see gtk_combo_box_entry_set_text_column()),
+ * and the entry will show the content of the text column in the selected row.
+ * To get the text from the entry, use gtk_combo_box_get_active_text().
+ *
+ * The changed signal will be emitted while typing into a GtkComboBoxEntry,
+ * as well as when selecting an item from the GtkComboBoxEntry's list. Use
+ * gtk_combo_box_get_active() or gtk_combo_box_get_active_iter() to discover
+ * whether an item was actually selected from the list.
+ *
+ * Connect to the activate signal of the GtkEntry (use gtk_bin_get_child())
+ * to detect when the user actually finishes entering text.
+ *
+ * The convenience API to construct simple text-only #GtkComboBox<!-- -->es
+ * can also be used with #GtkComboBoxEntry<!-- -->s which have been constructed
+ * with gtk_combo_box_entry_new_text().
+ *
+ * If you have special needs that go beyond a simple entry (e.g. input validation),
+ * it is possible to replace the child entry by a different widget using
+ * gtk_container_remove() and gtk_container_add().
+ *
+ * <refsect2 id="GtkComboBoxEntry-BUILDER-UI">
+ * <title>GtkComboBoxEntry as GtkBuildable</title>
+ * Beyond the &lt;attributes&gt; support that is shared by all
+ * <link linkend="GtkCellLayout-BUILDER-UI">GtkCellLayout</link> implementation,
+ * GtkComboBoxEntry makes the entry available in UI definitions as an internal
+ * child with name "entry".
+ * </refsect2>
+ */
+
+
 struct _GtkComboBoxEntryPrivate
 {
   GtkCellRenderer *text_renderer;
