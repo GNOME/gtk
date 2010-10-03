@@ -20,11 +20,11 @@
 
     <para>
       The steps outlined in the following sections assume that your
-      application is working with GTK+ 2.22, which is the final stable
+      application is working with GTK+ 2.24, which is the final stable
       release of GTK+ 2.x. It includes all the necessary APIs and tools
       to help you port your application to GTK+ 3. If you are still using
       an older version of GTK+ 2.x, you should first get your application
-      to build and work with 2.22.
+      to build and work with 2.24.
     </para>
 
   <section>
@@ -339,7 +339,7 @@ cairo_destroy (cr);
   <para>
     This section outlines porting tasks that you need to tackle when
     you get to the point that you actually build your application against
-    GTK+ 3. Making it possible to prepare for these in GTK+ 2.22 would
+    GTK+ 3. Making it possible to prepare for these in GTK+ 2.24 would
     have been either impossible or impractical.
   </para>
 
