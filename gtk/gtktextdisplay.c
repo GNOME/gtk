@@ -810,16 +810,17 @@ gtk_text_layout_draw (GtkTextLayout *layout,
   GSList *line_list;
   GSList *tmp_list;
   GList *tmp_widgets;
-  double x, y, width, height;
+  GdkRectangle clip;
   
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (layout->default_style != NULL);
   g_return_if_fail (layout->buffer != NULL);
   g_return_if_fail (cr != NULL);
 
-  cairo_clip_extents (cr, &x, &y, &width, &height);
+  if (!gdk_cairo_get_clip_rectangle (cr, &clip))
+    return;
 
-  line_list =  gtk_text_layout_get_lines (layout, y, y + height, &current_y);
+  line_list =  gtk_text_layout_get_lines (layout, clip.y, clip.y + clip.height, &current_y);
 
   if (line_list == NULL)
     return; /* nothing on the screen */
