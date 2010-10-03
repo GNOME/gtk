@@ -6503,7 +6503,7 @@ gtk_window_constrain_size (GtkWindow   *window,
 
 /* Compute the set of geometry hints and flags for a window
  * based on the application set geometry, and requisition
- * of the window. gtk_size_request_get_preferred_size() must have been
+ * of the window. gtk_widget_get_preferred_size() must have been
  * called first.
  */
 static void

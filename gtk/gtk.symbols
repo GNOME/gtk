@@ -370,7 +370,6 @@ gtk_scroll_type_get_type G_GNUC_CONST
 gtk_selection_mode_get_type G_GNUC_CONST
 gtk_shadow_type_get_type G_GNUC_CONST
 gtk_size_group_mode_get_type G_GNUC_CONST
-gtk_size_request_mode_get_type G_GNUC_CONST
 gtk_sort_type_get_type G_GNUC_CONST
 gtk_spin_type_get_type G_GNUC_CONST
 gtk_state_type_get_type G_GNUC_CONST

@@ -58,7 +58,7 @@ of their children.
 <para>
 The size requisition phase of the widget layout process operates top-down.
 It starts at a top-level widget, typically a #GtkWindow. The top-level widget
-asks its child for its size requisition by calling gtk_size_request_get_preferred_size().
+asks its child for its size requisition by calling gtk_widget_get_preferred_size().
 To determine its requisition, the child asks its own children for their
 requisitions and so on. Finally, the top-level widget will get a requisition
 back from its child.
