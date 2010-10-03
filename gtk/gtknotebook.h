@@ -97,7 +97,26 @@ struct _GtkNotebookClass
                                    gint               x,
                                    gint               y);
 
+  void (* page_reordered)      (GtkNotebook     *notebook,
+                                GtkWidget       *child,
+                                guint            page_num);
+
+  void (* page_removed)        (GtkNotebook     *notebook,
+                                GtkWidget       *child,
+                                guint            page_num);
+
+  void (* page_added)          (GtkNotebook     *notebook,
+                                GtkWidget       *child,
+                                guint            page_num);
+
   void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
+  void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 /***********************************************************

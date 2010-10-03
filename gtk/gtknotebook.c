@@ -959,11 +959,12 @@ gtk_notebook_class_init (GtkNotebookClass *class)
     g_signal_new (I_("page-reordered"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_UINT,
+                  G_STRUCT_OFFSET (GtkNotebookClass, page_reordered),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT_UINT,
                   G_TYPE_NONE, 2,
-		  GTK_TYPE_WIDGET,
-		  G_TYPE_UINT);
+                  GTK_TYPE_WIDGET,
+                  G_TYPE_UINT);
   /**
    * GtkNotebook::page-removed:
    * @notebook: the #GtkNotebook
@@ -979,11 +980,12 @@ gtk_notebook_class_init (GtkNotebookClass *class)
     g_signal_new (I_("page-removed"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_UINT,
+                  G_STRUCT_OFFSET (GtkNotebookClass, page_removed),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT_UINT,
                   G_TYPE_NONE, 2,
-		  GTK_TYPE_WIDGET,
-		  G_TYPE_UINT);
+                  GTK_TYPE_WIDGET,
+                  G_TYPE_UINT);
   /**
    * GtkNotebook::page-added:
    * @notebook: the #GtkNotebook
@@ -999,11 +1001,12 @@ gtk_notebook_class_init (GtkNotebookClass *class)
     g_signal_new (I_("page-added"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
-                  0, NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_UINT,
+                  G_STRUCT_OFFSET (GtkNotebookClass, page_added),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT_UINT,
                   G_TYPE_NONE, 2,
-		  GTK_TYPE_WIDGET,
-		  G_TYPE_UINT);
+                  GTK_TYPE_WIDGET,
+                  G_TYPE_UINT);
 
   /**
    * GtkNotebook::create-window:
