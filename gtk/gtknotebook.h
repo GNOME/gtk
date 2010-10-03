@@ -58,9 +58,9 @@ typedef struct _GtkNotebookClass         GtkNotebookClass;
 
 struct _GtkNotebook
 {
+  /* <private> */
   GtkContainer container;
 
-  /* <private> */
   GtkNotebookPrivate *priv;
 };
 

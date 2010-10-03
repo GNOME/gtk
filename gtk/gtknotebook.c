@@ -45,6 +45,60 @@
 #include "gtkdnd.h"
 #include "gtkbuildable.h"
 
+
+/**
+ * SECTION:gtknotebook
+ * @Short_description: A tabbed notebook container
+ * @Title: GtkNotebook
+ * @See_also: #GtkContainer
+ *
+ * The #GtkNotebook widget is a #GtkContainer whose children are pages that
+ * can be switched between using tab labels along one edge.
+ *
+ * There are many configuration options for GtkNotebook. Among other
+ * things, you can choose on which edge the tabs appear
+ * (see gtk_notebook_set_tab_pos()), whether, if there are too many
+ * tabs to fit the notebook should be made bigger or scrolling
+ * arrows added (see gtk_notebook_set_scrollable()), and whether there
+ * will be a popup menu allowing the users to switch pages.
+ * (see gtk_notebook_popup_enable(), gtk_notebook_popup_disable())
+ *
+ * <refsect2 id="GtkNotebook-BUILDER-UI">
+ * <title>GtkNotebook as GtkBuildable</title>
+ * <para>
+ * The GtkNotebook implementation of the #GtkBuildable interface
+ * supports placing children into tabs by specifying "tab" as the
+ * "type" attribute of a &lt;child&gt; element. Note that the content
+ * of the tab must be created before the tab can be filled.
+ * A tab child can be specified without specifying a &lt;child&gt;
+ * type attribute.
+ * </para>
+ * <para>
+ * To add a child widget in the notebooks action area, specify
+ * "action-start" or "action-end" as the "type" attribute of the &lt;child&gt;
+ * element.
+ * <para>
+ * <example>
+ * <title>A UI definition fragment with GtkNotebook</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkNotebook">
+ *   <child>
+ *     <object class="GtkLabel" id="notebook-content">
+ *       <property name="label">Content</property>
+ *     </object>
+ *   </child>
+ *   <child type="tab">
+ *     <object class="GtkLabel" id="notebook-tab">
+ *       <property name="label">Tab</property>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
+
+
 #define SCROLL_DELAY_FACTOR   5
 #define SCROLL_THRESHOLD      12
 #define DND_THRESHOLD_MULTIPLIER 4
@@ -685,6 +739,13 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								    P_("Whether the child's tab should fill the allocated area"),
 								    TRUE,
 								    GTK_PARAM_READWRITE));
+
+  /**
+   * GtkNotebook:tab-pack:
+   *
+   *  Deprecated: 2.20: The tab packing functionality of children should not
+   *  be used anymore and support will be removed in the future.
+   */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_TAB_PACK,
 					      g_param_spec_enum ("tab-pack", 
@@ -819,6 +880,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              0,
                                                              GTK_PARAM_READABLE));
 
+  /**
+   * GtkNotebook::switch-page:
+   * @notebook: the object which received the signal.
+   * @page: the new current page
+   * @page_num: the index of the page
+   *
+   * Emitted when the user or a function changes the current page.
+   */
   notebook_signals[SWITCH_PAGE] =
     g_signal_new (I_("switch-page"),
 		  G_TYPE_FROM_CLASS (gobject_class),
