@@ -41,21 +41,21 @@ static void gtk_cell_renderer_accel_set_property (GObject         *object,
                                                   guint            param_id,
                                                   const GValue    *value,
                                                   GParamSpec      *pspec);
-static void gtk_cell_renderer_accel_get_size     (GtkCellRenderer *cell,
-                                                  GtkWidget       *widget,
-                                                  GdkRectangle    *cell_area,
-                                                  gint            *x_offset,
-                                                  gint            *y_offset,
-                                                  gint            *width,
-                                                  gint            *height);
+static void gtk_cell_renderer_accel_get_size     (GtkCellRenderer    *cell,
+                                                  GtkWidget          *widget,
+                                                  const GdkRectangle *cell_area,
+                                                  gint               *x_offset,
+                                                  gint               *y_offset,
+                                                  gint               *width,
+                                                  gint               *height);
 static GtkCellEditable *
-           gtk_cell_renderer_accel_start_editing (GtkCellRenderer *cell,
-                                                  GdkEvent        *event,
-                                                  GtkWidget       *widget,
-                                                  const gchar     *path,
-                                                  GdkRectangle    *background_area,
-                                                  GdkRectangle    *cell_area,
-                                                  GtkCellRendererState flags);
+           gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
+                                                  GdkEvent             *event,
+                                                  GtkWidget            *widget,
+                                                  const gchar          *path,
+                                                  const GdkRectangle   *background_area,
+                                                  const GdkRectangle   *cell_area,
+                                                  GtkCellRendererState  flags);
 static gchar *convert_keysym_state_to_string     (GtkCellRendererAccel *accel,
                                                   guint                 keysym,
                                                   GdkModifierType       mask,
@@ -402,13 +402,13 @@ gtk_cell_renderer_accel_set_property  (GObject      *object,
 }
 
 static void
-gtk_cell_renderer_accel_get_size (GtkCellRenderer *cell,
-                                  GtkWidget       *widget,
-                                  GdkRectangle    *cell_area,
-                                  gint            *x_offset,
-                                  gint            *y_offset,
-                                  gint            *width,
-                                  gint            *height)
+gtk_cell_renderer_accel_get_size (GtkCellRenderer    *cell,
+                                  GtkWidget          *widget,
+                                  const GdkRectangle *cell_area,
+                                  gint               *x_offset,
+                                  gint               *y_offset,
+                                  gint               *width,
+                                  gint               *height)
 
 {
   GtkCellRendererAccelPrivate *priv = GTK_CELL_RENDERER_ACCEL (cell)->priv;
@@ -579,8 +579,8 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
                                        GdkEvent             *event,
                                        GtkWidget            *widget,
                                        const gchar          *path,
-                                       GdkRectangle         *background_area,
-                                       GdkRectangle         *cell_area,
+                                       const GdkRectangle   *background_area,
+                                       const GdkRectangle   *cell_area,
                                        GtkCellRendererState  flags)
 {
   GtkCellRendererAccelPrivate *priv;

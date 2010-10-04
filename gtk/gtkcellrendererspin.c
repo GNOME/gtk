@@ -50,8 +50,8 @@ static GtkCellEditable * gtk_cell_renderer_spin_start_editing (GtkCellRenderer  
 							       GdkEvent            *event,
 							       GtkWidget           *widget,
 							       const gchar         *path,
-							       GdkRectangle        *background_area,
-							       GdkRectangle        *cell_area,
+							       const GdkRectangle  *background_area,
+							       const GdkRectangle  *cell_area,
 							       GtkCellRendererState flags);
 enum {
   PROP_0,
@@ -290,13 +290,13 @@ gtk_cell_renderer_spin_button_press_event (GtkWidget      *widget,
 }
 
 static GtkCellEditable *
-gtk_cell_renderer_spin_start_editing (GtkCellRenderer     *cell,
-				      GdkEvent            *event,
-				      GtkWidget           *widget,
-				      const gchar         *path,
-				      GdkRectangle        *background_area,
-				      GdkRectangle        *cell_area,
-				      GtkCellRendererState flags)
+gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
+				      GdkEvent             *event,
+				      GtkWidget            *widget,
+				      const gchar          *path,
+				      const GdkRectangle   *background_area,
+				      const GdkRectangle   *cell_area,
+				      GtkCellRendererState  flags)
 {
   GtkCellRendererSpinPrivate *priv;
   GtkCellRendererText *cell_text;

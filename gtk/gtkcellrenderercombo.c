@@ -59,12 +59,12 @@ static void gtk_cell_renderer_combo_set_property (GObject      *object,
 						  GParamSpec   *pspec);
 
 static GtkCellEditable *gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
-							       GdkEvent            *event,
-							       GtkWidget           *widget,
-							       const gchar         *path,
-							       GdkRectangle        *background_area,
-							       GdkRectangle        *cell_area,
-							       GtkCellRendererState flags);
+                                                               GdkEvent            *event,
+                                                               GtkWidget           *widget,
+                                                               const gchar         *path,
+                                                               const GdkRectangle  *background_area,
+                                                               const GdkRectangle  *cell_area,
+                                                               GtkCellRendererState flags);
 
 enum {
   PROP_0,
@@ -421,12 +421,12 @@ find_text (GtkTreeModel *model,
 
 static GtkCellEditable *
 gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
-				       GdkEvent            *event,
-				       GtkWidget           *widget,
-				       const gchar         *path,
-				       GdkRectangle        *background_area,
-				       GdkRectangle        *cell_area,
-				       GtkCellRendererState flags)
+                                       GdkEvent            *event,
+                                       GtkWidget           *widget,
+                                       const gchar         *path,
+                                       const GdkRectangle  *background_area,
+                                       const GdkRectangle  *cell_area,
+                                       GtkCellRendererState flags)
 {
   GtkCellRendererCombo *cell_combo;
   GtkCellRendererText *cell_text;

@@ -39,7 +39,7 @@ static void gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf 
 							  GtkWidget             *widget);
 static void gtk_cell_renderer_pixbuf_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
-						 GdkRectangle               *rectangle,
+						 const GdkRectangle         *rectangle,
 						 gint                       *x_offset,
 						 gint                       *y_offset,
 						 gint                       *width,
@@ -664,13 +664,13 @@ create_colorized_pixbuf (GdkPixbuf *src,
 
 
 static void
-gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer *cell,
-				   GtkWidget       *widget,
-				   GdkRectangle    *cell_area,
-				   gint            *x_offset,
-				   gint            *y_offset,
-				   gint            *width,
-				   gint            *height)
+gtk_cell_renderer_pixbuf_get_size (GtkCellRenderer    *cell,
+				   GtkWidget          *widget,
+				   const GdkRectangle *cell_area,
+				   gint               *x_offset,
+				   gint               *y_offset,
+				   gint               *width,
+				   gint               *height)
 {
   GtkCellRendererPixbuf *cellpixbuf = (GtkCellRendererPixbuf *) cell;
   GtkCellRendererPixbufPrivate *priv = cellpixbuf->priv;

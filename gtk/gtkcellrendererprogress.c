@@ -83,7 +83,7 @@ static void compute_dimensions                      (GtkCellRenderer         *ce
 						     gint                    *height);
 static void gtk_cell_renderer_progress_get_size     (GtkCellRenderer         *cell,
 						     GtkWidget               *widget,
-						     GdkRectangle            *cell_area,
+						     const GdkRectangle      *cell_area,
 						     gint                    *x_offset,
 						     gint                    *y_offset,
 						     gint                    *width,
@@ -434,13 +434,13 @@ compute_dimensions (GtkCellRenderer *cell,
 }
 
 static void
-gtk_cell_renderer_progress_get_size (GtkCellRenderer *cell,
-				     GtkWidget       *widget,
-				     GdkRectangle    *cell_area,
-				     gint            *x_offset,
-				     gint            *y_offset,
-				     gint            *width,
-				     gint            *height)
+gtk_cell_renderer_progress_get_size (GtkCellRenderer    *cell,
+				     GtkWidget          *widget,
+				     const GdkRectangle *cell_area,
+				     gint               *x_offset,
+				     gint               *y_offset,
+				     gint               *width,
+				     gint               *height)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
   GtkCellRendererProgressPrivate *priv = cellprogress->priv;

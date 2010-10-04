@@ -36,7 +36,7 @@ static void gtk_cell_renderer_toggle_set_property  (GObject                    *
 						    GParamSpec                 *pspec);
 static void gtk_cell_renderer_toggle_get_size   (GtkCellRenderer            *cell,
 						 GtkWidget                  *widget,
- 						 GdkRectangle               *cell_area,
+						 const GdkRectangle         *cell_area,
 						 gint                       *x_offset,
 						 gint                       *y_offset,
 						 gint                       *width,
@@ -51,8 +51,8 @@ static gboolean gtk_cell_renderer_toggle_activate  (GtkCellRenderer            *
 						    GdkEvent                   *event,
 						    GtkWidget                  *widget,
 						    const gchar                *path,
-						    GdkRectangle               *background_area,
-						    GdkRectangle               *cell_area,
+						    const GdkRectangle         *background_area,
+						    const GdkRectangle         *cell_area,
 						    GtkCellRendererState        flags);
 
 
@@ -271,13 +271,13 @@ gtk_cell_renderer_toggle_new (void)
 }
 
 static void
-gtk_cell_renderer_toggle_get_size (GtkCellRenderer *cell,
-				   GtkWidget       *widget,
-				   GdkRectangle    *cell_area,
-				   gint            *x_offset,
-				   gint            *y_offset,
-				   gint            *width,
-				   gint            *height)
+gtk_cell_renderer_toggle_get_size (GtkCellRenderer    *cell,
+				   GtkWidget          *widget,
+				   const GdkRectangle *cell_area,
+				   gint               *x_offset,
+				   gint               *y_offset,
+				   gint               *width,
+				   gint               *height)
 {
   GtkCellRendererTogglePrivate *priv;
   gint calc_width;
@@ -337,7 +337,7 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   GtkShadowType shadow;
   GtkStateType state = 0;
 
-  gtk_cell_renderer_toggle_get_size (cell, widget, (GdkRectangle *) cell_area,
+  gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
 				     &width, &height);
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
@@ -399,8 +399,8 @@ gtk_cell_renderer_toggle_activate (GtkCellRenderer      *cell,
 				   GdkEvent             *event,
 				   GtkWidget            *widget,
 				   const gchar          *path,
-				   GdkRectangle         *background_area,
-				   GdkRectangle         *cell_area,
+				   const GdkRectangle   *background_area,
+				   const GdkRectangle   *cell_area,
 				   GtkCellRendererState  flags)
 {
   GtkCellRendererTogglePrivate *priv;

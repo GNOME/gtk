@@ -53,8 +53,8 @@ static GtkCellEditable *gtk_cell_renderer_text_start_editing (GtkCellRenderer   
 							      GdkEvent             *event,
 							      GtkWidget            *widget,
 							      const gchar          *path,
-							      GdkRectangle         *background_area,
-							      GdkRectangle         *cell_area,
+							      const GdkRectangle   *background_area,
+							      const GdkRectangle   *cell_area,
 							      GtkCellRendererState  flags);
 
 static void       gtk_cell_renderer_text_get_preferred_width            (GtkCellRenderer       *cell,
@@ -1566,14 +1566,14 @@ get_layout (GtkCellRendererText *celltext,
 
 
 static void
-get_size (GtkCellRenderer *cell,
-	  GtkWidget       *widget,
-	  GdkRectangle    *cell_area,
-	  PangoLayout     *layout,
-	  gint            *x_offset,
-	  gint            *y_offset,
-	  gint            *width,
-	  gint            *height)
+get_size (GtkCellRenderer    *cell,
+	  GtkWidget          *widget,
+	  const GdkRectangle *cell_area,
+	  PangoLayout        *layout,
+	  gint               *x_offset,
+	  gint               *y_offset,
+	  gint               *width,
+	  gint               *height)
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = celltext->priv;
@@ -1708,7 +1708,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gint xpad, ypad;
 
   layout = get_layout (celltext, widget, cell_area, flags);
-  get_size (cell, widget, (GdkRectangle *) cell_area, layout, &x_offset, &y_offset, NULL, NULL);
+  get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
 
   if (!gtk_cell_renderer_get_sensitive (cell))
     {
@@ -1891,8 +1891,8 @@ gtk_cell_renderer_text_start_editing (GtkCellRenderer      *cell,
 				      GdkEvent             *event,
 				      GtkWidget            *widget,
 				      const gchar          *path,
-				      GdkRectangle         *background_area,
-				      GdkRectangle         *cell_area,
+				      const GdkRectangle   *background_area,
+				      const GdkRectangle   *cell_area,
 				      GtkCellRendererState  flags)
 {
   GtkRequisition requisition;

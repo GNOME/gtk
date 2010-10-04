@@ -90,7 +90,7 @@ struct _GtkCellRendererClass
                                                           gint                 *natural_width);
   void               (* get_size)                        (GtkCellRenderer      *cell,
                                                           GtkWidget            *widget,
-                                                          GdkRectangle         *cell_area,
+                                                          const GdkRectangle   *cell_area,
                                                           gint                 *x_offset,
                                                           gint                 *y_offset,
                                                           gint                 *width,
@@ -105,15 +105,15 @@ struct _GtkCellRendererClass
                                                           GdkEvent             *event,
                                                           GtkWidget            *widget,
                                                           const gchar          *path,
-                                                          GdkRectangle         *background_area,
-                                                          GdkRectangle         *cell_area,
+                                                          const GdkRectangle   *background_area,
+                                                          const GdkRectangle   *cell_area,
                                                           GtkCellRendererState  flags);
   GtkCellEditable *  (* start_editing)                   (GtkCellRenderer      *cell,
                                                           GdkEvent             *event,
                                                           GtkWidget            *widget,
                                                           const gchar          *path,
-                                                          GdkRectangle         *background_area,
-                                                          GdkRectangle         *cell_area,
+                                                          const GdkRectangle   *background_area,
+                                                          const GdkRectangle   *cell_area,
                                                           GtkCellRendererState  flags);
 
   /* Signals */
