@@ -167,6 +167,20 @@ gdk_quartz_drawable_get_context (GdkDrawable *drawable,
   return GDK_DRAWABLE_IMPL_QUARTZ_GET_CLASS (drawable)->get_context (drawable, antialias);
 }
 
+void
+gdk_quartz_drawable_release_context (GdkDrawable  *drawable, 
+				     CGContextRef  cg_context)
+{
+  if (!GDK_DRAWABLE_IMPL_QUARTZ_GET_CLASS (drawable)->release_context)
+    {
+      g_warning ("%s doesn't implement GdkDrawableImplQuartzClass::release_context()",
+                 G_OBJECT_TYPE_NAME (drawable));
+      return;
+    }
+
+  GDK_DRAWABLE_IMPL_QUARTZ_GET_CLASS (drawable)->release_context (drawable, cg_context);
+}
+
 /* Help preventing "beam sync penalty" where CG makes all graphics code
  * block until the next vsync if we try to flush (including call display on
  * a view) too often. We do this by limiting the manual flushing done
@@ -210,26 +224,6 @@ _gdk_quartz_drawable_flush (GdkDrawable *drawable)
     }
   else
     prev_tv = tv;
-}
-
-void
-gdk_quartz_drawable_release_context (GdkDrawable  *drawable, 
-				     CGContextRef  cg_context)
-{
-  if (GDK_IS_WINDOW_IMPL_QUARTZ (drawable))
-    {
-      GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (drawable);
-
-      CGContextRestoreGState (cg_context);
-      CGContextSetAllowsAntialiasing (cg_context, TRUE);
-
-      /* See comment in gdk_quartz_drawable_get_context(). */
-      if (window_impl->in_paint_rect_count == 0)
-        {
-          _gdk_quartz_drawable_flush (drawable);
-          [window_impl->view unlockFocus];
-        }
-    }
 }
 
 void

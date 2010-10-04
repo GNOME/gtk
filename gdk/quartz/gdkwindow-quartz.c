@@ -30,6 +30,7 @@
 #include "gdkinputprivate.h"
 
 static gpointer parent_class;
+static gpointer root_window_parent_class;
 
 static GSList   *update_nswindows;
 static gboolean  in_process_all_updates = FALSE;
@@ -142,6 +143,23 @@ gdk_window_impl_quartz_get_context (GdkDrawable *drawable,
 }
 
 static void
+gdk_window_impl_quartz_release_context (GdkDrawable  *drawable,
+                                        CGContextRef  cg_context)
+{
+  GdkWindowImplQuartz *window_impl = GDK_WINDOW_IMPL_QUARTZ (drawable);
+
+  CGContextRestoreGState (cg_context);
+  CGContextSetAllowsAntialiasing (cg_context, TRUE);
+
+  /* See comment in gdk_quartz_drawable_get_context(). */
+  if (window_impl->in_paint_rect_count == 0)
+    {
+      _gdk_quartz_drawable_flush (drawable);
+      [window_impl->view unlockFocus];
+    }
+}
+
+static void
 check_grab_unmap (GdkWindow *window)
 {
   GList *list, *l;
@@ -214,6 +232,7 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   object_class->finalize = gdk_window_impl_quartz_finalize;
 
   drawable_quartz_class->get_context = gdk_window_impl_quartz_get_context;
+  drawable_quartz_class->release_context = gdk_window_impl_quartz_release_context;
 }
 
 static void
@@ -1009,7 +1028,7 @@ _gdk_windowing_window_init (void)
   _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
 
   private = (GdkWindowObject *)_gdk_root;
-  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl = g_object_new (_gdk_root_window_impl_quartz_get_type (), NULL);
   private->impl_window = private;
   private->visual = gdk_screen_get_system_visual (_gdk_screen);
 
@@ -2967,4 +2986,79 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = _gdk_quartz_window_queue_antiexpose;
   iface->translate = _gdk_quartz_window_translate;
   iface->destroy = _gdk_quartz_window_destroy;
+}
+
+
+static CGContextRef
+gdk_root_window_impl_quartz_get_context (GdkDrawable *drawable,
+                                         gboolean     antialias)
+{
+  GdkDrawableImplQuartz *drawable_impl = GDK_DRAWABLE_IMPL_QUARTZ (drawable);
+  CGColorSpaceRef colorspace;
+  CGContextRef cg_context;
+
+  if (GDK_WINDOW_DESTROYED (drawable_impl->wrapper))
+    return NULL;
+
+  /* We do not have the notion of a root window on OS X.  We fake this
+   * by creating a 1x1 bitmap and return a context to that.
+   */
+  colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
+  cg_context = CGBitmapContextCreate (NULL,
+                                      1, 1, 8, 4, colorspace,
+                                      kCGImageAlphaPremultipliedLast);
+  CGColorSpaceRelease (colorspace);
+
+  return cg_context;
+}
+
+static void
+gdk_root_window_impl_quartz_release_context (GdkDrawable  *drawable,
+                                             CGContextRef  cg_context)
+{
+  CGContextRelease (cg_context);
+}
+
+static void
+gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
+{
+  GdkDrawableImplQuartzClass *drawable_quartz_class = GDK_DRAWABLE_IMPL_QUARTZ_CLASS (klass);
+
+  root_window_parent_class = g_type_class_peek_parent (klass);
+
+  drawable_quartz_class->get_context = gdk_root_window_impl_quartz_get_context;
+  drawable_quartz_class->release_context = gdk_root_window_impl_quartz_release_context;
+}
+
+static void
+gdk_root_window_impl_quartz_init (GdkRootWindowImplQuartz *impl)
+{
+}
+
+GType
+_gdk_root_window_impl_quartz_get_type (void)
+{
+  static GType object_type = 0;
+
+  if (!object_type)
+    {
+      const GTypeInfo object_info =
+        {
+          sizeof (GdkRootWindowImplQuartzClass),
+          (GBaseInitFunc) NULL,
+          (GBaseFinalizeFunc) NULL,
+          (GClassInitFunc) gdk_root_window_impl_quartz_class_init,
+          NULL,           /* class_finalize */
+          NULL,           /* class_data */
+          sizeof (GdkRootWindowImplQuartz),
+          0,              /* n_preallocs */
+          (GInstanceInitFunc) gdk_root_window_impl_quartz_init,
+        };
+
+      object_type = g_type_register_static (GDK_TYPE_WINDOW_IMPL_QUARTZ,
+                                            "GdkRootWindowQuartz",
+                                            &object_info, 0);
+    }
+
+  return object_type;
 }
