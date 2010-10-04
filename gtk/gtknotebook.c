@@ -72,12 +72,11 @@
  * of the tab must be created before the tab can be filled.
  * A tab child can be specified without specifying a &lt;child&gt;
  * type attribute.
- * </para>
- * <para>
+ *
  * To add a child widget in the notebooks action area, specify
  * "action-start" or "action-end" as the "type" attribute of the &lt;child&gt;
  * element.
- * <para>
+ * </para>
  * <example>
  * <title>A UI definition fragment with GtkNotebook</title>
  * <programlisting><![CDATA[
