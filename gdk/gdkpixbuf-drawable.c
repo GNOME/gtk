@@ -31,7 +31,16 @@
 #include "gdkinternals.h"
 
 
-/* Exported functions */
+/**
+ * SECTION:pixbufs
+ * @Short_description: Functions for rendering pixbufs on drawables
+ * @Title: Pixbufs
+ *
+ * These functions allow to render pixbufs on drawables. Pixbufs are
+ * client-side images. For details on how to create and manipulate
+ * pixbufs, see the #GdkPixbuf API documentation.
+ */
+
 
 /**
  * gdk_pixbuf_get_from_window:
