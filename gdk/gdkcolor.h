@@ -36,9 +36,19 @@
 
 G_BEGIN_DECLS
 
-/* The color type.
- *   A color consists of red, green and blue values in the
- *    range 0-65535 and a pixel value. The pixel value is unused.
+
+/**
+ * GdkColor:
+ * @pixel: For allocated colors, the value used to
+ *  draw this color on the screen.
+ * @red: The red component of the color. This is
+ *  a value between 0 and 65535, with 65535 indicating
+ *  full intensitiy.
+ * @green: The green component of the color.
+ * @blue: The blue component of the color.
+ *
+ * The #GdkColor structure is used to describe an
+ * allocated or unallocated color.
  */
 struct _GdkColor
 {

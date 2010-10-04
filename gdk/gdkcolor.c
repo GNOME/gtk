@@ -33,6 +33,13 @@
 
 
 /**
+ * SECTION:colors
+ * @Short_description: Manipulation of colors
+ * @Title: Colors
+ */
+
+
+/**
  * gdk_color_copy:
  * @color: a #GdkColor.
  * 
