@@ -5474,7 +5474,7 @@ get_menu_height (GtkMenu *menu)
   gtk_widget_get_allocation (widget, &allocation);
 
   height = allocation.height;
-  height -= gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->ythickness * 2;
+  height -= (gtk_container_get_border_width (GTK_CONTAINER (widget)) + gtk_widget_get_style (widget)->ythickness) * 2;
 
   if (!menu->tearoff_active)
     {
