@@ -29,6 +29,26 @@
 
 
 /**
+ * SECTION:regions
+ * @Short_description: Simple graphical data types
+ * @Title: Points and Rectangles
+ *
+ * GDK provides the #GdkPoint and #GdkRectangle data types for representing pixels
+ * and sets of pixels on the screen. Together with Cairo's #cairo_region_t data
+ * type, they make up the central types for representing graphical data.
+ *
+ * #GdkPoint is a simple structure containing an x and y coordinate of a point.
+ *
+ * #GdkRectangle is a structure holding the position and size of a rectangle.
+ * The intersection of two rectangles can be computed with
+ * gdk_rectangle_intersect(). To find the union of two rectangles use
+ * gdk_rectangle_union().
+ *
+ * #cairo_region_t is usually used for managing clipping of graphical operations.
+ */
+
+
+/**
  * gdk_rectangle_union:
  * @src1: a #GdkRectangle
  * @src2: a #GdkRectangle
