@@ -896,6 +896,8 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   GdkColor *bg_color, *base_color;
   cairo_pattern_t *pattern;
   GtkStateFlags flags;
+  gboolean prelight;
+  gdouble progress;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -914,6 +916,156 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                           "background-color", &bg_color,
                           "base-color", &base_color,
                           NULL);
+
+  prelight = gtk_theming_engine_is_state_set (engine, GTK_STATE_PRELIGHT, &progress);
+
+  if (prelight || progress > 0 )
+    {
+      cairo_pattern_t *other_pattern;
+      GtkStateFlags other_flags;
+      GdkColor *other_bg, *other_base;
+      cairo_pattern_t *new_pattern = NULL;
+
+      if (prelight)
+        {
+          other_flags = flags & ~(GTK_STATE_FLAG_PRELIGHT);
+          progress = 1 - progress;
+        }
+      else
+        other_flags = flags | GTK_STATE_FLAG_PRELIGHT;
+
+      gtk_theming_engine_get (engine, other_flags,
+                              "background-image", &other_pattern,
+                              "background-color", &other_bg,
+                              "base-color", &other_base,
+                              NULL);
+
+      if (pattern && other_pattern)
+        {
+          gdouble offset0, red0, green0, blue0, alpha0;
+          gdouble offset1, red1, green1, blue1, alpha1;
+          gdouble x00, x01, y00, y01, x10, x11, y10, y11;
+          gint n0, n1;
+          guint i;
+
+          cairo_pattern_get_linear_points (pattern, &x00, &y00, &x01, &y01);
+          cairo_pattern_get_linear_points (other_pattern, &x10, &y10, &x11, &y11);
+
+          new_pattern = cairo_pattern_create_linear (x00 + (x10 - x00) * progress,
+                                                     y00 + (y10 - y00) * progress,
+                                                     x01 + (x11 - x01) * progress,
+                                                     y01 + (y11 - y01) * progress);
+          cairo_pattern_set_filter (new_pattern, CAIRO_FILTER_FAST);
+
+          cairo_pattern_get_color_stop_count (pattern, &n0);
+          cairo_pattern_get_color_stop_count (other_pattern, &n1);
+          i = 0;
+
+          /* Blend both gradients into one */
+          while (i < n0 && i < n1)
+            {
+              cairo_pattern_get_color_stop_rgba (pattern, i,
+                                                 &offset0,
+                                                 &red0, &green0, &blue0,
+                                                 &alpha0);
+              cairo_pattern_get_color_stop_rgba (other_pattern, i,
+                                                 &offset1,
+                                                 &red1, &green1, &blue1,
+                                                 &alpha1);
+
+              cairo_pattern_add_color_stop_rgba (new_pattern,
+                                                 offset0 + ((offset1 - offset0) * progress),
+                                                 red0 + ((red1 - red0) * progress),
+                                                 green0 + ((green1 - green0) * progress),
+                                                 blue0 + ((blue1 - blue0) * progress),
+                                                 alpha0 + ((alpha1 - alpha0) * progress));
+              i++;
+            }
+
+          /* FIXME: Handle remaining color stops in both source patterns */
+        }
+      else if (pattern || other_pattern)
+        {
+          cairo_pattern_t *p;
+          GdkColor *c;
+          gdouble x0, y0, x1, y1;
+          gdouble red0, green0, blue0;
+          gdouble red1, green1, blue1;
+          gint n, i;
+
+          /* Blend a pattern with a color */
+          if (pattern)
+            {
+              p = pattern;
+              c = gtk_theming_engine_has_class (engine, "entry") ? other_base : other_bg;
+              progress = 1 - progress;
+            }
+          else
+            {
+              p = other_pattern;
+              c = gtk_theming_engine_has_class (engine, "entry") ? base_color : bg_color;
+            }
+
+          cairo_pattern_get_linear_points (p, &x0, &y0, &x1, &y1);
+          new_pattern = cairo_pattern_create_linear (x0, y0, x1, y1);
+          cairo_pattern_get_color_stop_count (p, &n);
+
+          red0 = c->red / 65535.;
+          green0 = c->green / 65535.;
+          blue0 = c->blue / 65535.;
+
+          for (i = 0; i < n; i++)
+            {
+              gdouble offset, alpha;
+
+              cairo_pattern_get_color_stop_rgba (p, i,
+                                                 &offset,
+                                                 &red1, &green1, &blue1,
+                                                 &alpha);
+              cairo_pattern_add_color_stop_rgba (new_pattern, offset,
+                                                 red0 + ((red1 - red0) * progress),
+                                                 green0 + ((green1 - green0) * progress),
+                                                 blue0 + ((blue1 - blue0) * progress),
+                                                 alpha + ((1 - alpha) * progress));
+            }
+        }
+      else
+        {
+          const GdkColor *color, *other_color;
+
+          /* Merge just colors */
+          if (gtk_theming_engine_has_class (engine, "entry"))
+            {
+              color = base_color;
+              other_color = other_base;
+            }
+          else
+            {
+              color = bg_color;
+              other_color = other_bg;
+            }
+
+          new_pattern = cairo_pattern_create_rgb ((gdouble) (color->red + ((other_color->red - color->red) * progress)) / 65535.,
+                                                  (gdouble) (color->green + ((other_color->green - color->green) * progress)) / 65535.,
+                                                  (gdouble) (color->blue + ((other_color->blue - color->blue) * progress)) / 65535.);
+        }
+
+      if (new_pattern)
+        {
+          /* Replace pattern to use */
+          cairo_pattern_destroy (pattern);
+          pattern = new_pattern;
+        }
+
+      if (other_pattern)
+        cairo_pattern_destroy (other_pattern);
+
+      if (other_bg)
+        gdk_color_free (other_bg);
+
+      if (other_base)
+        gdk_color_free (other_base);
+    }
 
   if (pattern)
     {
