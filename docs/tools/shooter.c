@@ -224,7 +224,7 @@ int main (int argc, char **argv)
 	  gtk_main_iteration ();
 	}
 
-      id = gdk_x11_drawable_get_xid (GDK_DRAWABLE (window));
+      id = gdk_x11_window_get_xid (window);
       screenshot = take_window_shot (id, info->include_decorations);
       filename = g_strdup_printf ("./%s.png", info->name);
       gdk_pixbuf_save (screenshot, filename, "png", NULL, NULL);

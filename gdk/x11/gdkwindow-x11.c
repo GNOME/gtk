@@ -5584,3 +5584,40 @@ gdk_x11_get_server_time (GdkWindow *window)
 
   return xevent.xproperty.time;
 }
+
+/**
+ * gdk_x11_window_get_xid:
+ * @window: a native #GdkWindow.
+ * 
+ * Returns the X resource (window) belonging to a #GdkWindow.
+ * 
+ * Return value: the ID of @drawable's X resource.
+ **/
+XID
+gdk_x11_window_get_xid (GdkWindow *window)
+{
+  GdkDrawable *impl;
+      
+  /* Try to ensure the window has a native window */
+  if (!_gdk_window_has_impl (window))
+    {
+      gdk_window_ensure_native (window);
+
+      /* We sync here to ensure the window is created in the Xserver when
+       * this function returns. This is required because the returned XID
+       * for this window must be valid immediately, even with another
+       * connection to the Xserver */
+      gdk_display_sync (gdk_window_get_display (window));
+    }
+  
+  if (!GDK_WINDOW_IS_X11 (window))
+    {
+      g_warning (G_STRLOC " drawable is not a native X11 window");
+      return None;
+    }
+  
+  impl = ((GdkWindowObject *) window)->impl;
+
+  return ((GdkDrawableImplX11 *)impl)->xid;
+}
+
