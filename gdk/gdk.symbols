@@ -567,7 +567,6 @@ gdk_x11_screen_lookup_visual
 gdk_x11_screen_supports_net_wm_hint
 gdk_x11_ungrab_server
 gdk_x11_visual_get_xvisual
-gdk_x11_window_get_drawable_impl
 gdk_x11_window_get_xid
 gdk_x11_window_move_to_current_desktop
 gdk_x11_window_set_user_time

@@ -68,7 +68,6 @@ GType _gdk_drawable_impl_x11_get_type (void);
 /* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
 void _gdk_x11_drawable_finish           (GdkDrawable  *drawable);
 void _gdk_x11_drawable_update_size      (GdkDrawable  *drawable);
-GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
 
 G_END_DECLS
 

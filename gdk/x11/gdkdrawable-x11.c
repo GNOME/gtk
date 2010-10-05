@@ -134,12 +134,6 @@ gdk_x11_drawable_get_xdisplay (GdkDrawable *drawable)
     return GDK_SCREEN_XDISPLAY (GDK_DRAWABLE_IMPL_X11 (get_impl_drawable (drawable))->screen);
 }
 
-GdkDrawable *
-gdk_x11_window_get_drawable_impl (GdkWindow *window)
-{
-  return ((GdkWindowObject *)window)->impl;
-}
-
 static void
 gdk_x11_cairo_surface_destroy (void *data)
 {
