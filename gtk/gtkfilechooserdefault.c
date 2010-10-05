@@ -1014,6 +1014,19 @@ error_creating_folder_over_existing_file_dialog (GtkFileChooserDefault *impl,
 		file, error);
 }
 
+/* Shows an error about not being able to select a folder because a file with
+ * the same name is already there.
+ */
+static void
+error_selecting_folder_over_existing_file_dialog (GtkFileChooserDefault *impl,
+						  GFile                 *file)
+{
+  error_dialog (impl,
+		_("You may only select folders.  The item that you selected is not a folder; "
+                  "try using a different item."),
+		file, NULL);
+}
+
 /* Shows an error dialog about not being able to create a filename */
 static void
 error_building_filename_dialog (GtkFileChooserDefault *impl,
@@ -8385,7 +8398,9 @@ file_exists_get_info_cb (GCancellable *cancellable,
 {
   gboolean data_ownership_taken = FALSE;
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  gboolean file_exists_and_is_not_folder;
+  gboolean file_exists;
+  gboolean is_folder;
+  gboolean needs_file_type_check = FALSE;
   struct FileExistsData *data = user_data;
 
   if (cancellable != data->impl->file_exists_get_info_cancellable)
@@ -8398,29 +8413,63 @@ file_exists_get_info_cb (GCancellable *cancellable,
   if (cancelled)
     goto out;
 
-  file_exists_and_is_not_folder = info && (! _gtk_file_info_consider_as_directory (info));
+  file_exists = (info != NULL);
+  is_folder = (file_exists && _gtk_file_info_consider_as_directory (info));
 
   if (data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    /* user typed a filename; we are done */
-    g_signal_emit_by_name (data->impl, "response-requested");
-  else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER
-	   && file_exists_and_is_not_folder)
     {
-      /* Oops, the user typed the name of an existing path which is not
-       * a folder
-       */
-      error_creating_folder_over_existing_file_dialog (data->impl, data->file,
-						       g_error_copy (error));
+      /* user typed a filename; we are done */
+      g_signal_emit_by_name (data->impl, "response-requested");
+    }
+  else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    {
+      if (file_exists && !is_folder)
+        {
+          /* Oops, the user typed the name of an existing path which is not
+           * a folder
+           */
+          error_creating_folder_over_existing_file_dialog (data->impl, data->file,
+						           g_error_copy (error));
+        }
+      else
+        {
+          needs_file_type_check = TRUE;
+        }
+    }
+  else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    {
+      if (!file_exists)
+        {
+	  needs_file_type_check = TRUE;
+        }
+      else
+	{
+	  if (is_folder)
+	    {
+	      /* User typed a folder; we are done */
+	      g_signal_emit_by_name (data->impl, "response-requested");
+	    }
+	  else
+	    error_selecting_folder_over_existing_file_dialog (data->impl, data->file);
+	}
+    }
+  else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+    {
+      needs_file_type_check = TRUE;
     }
   else
     {
-      /* check that everything up to the last component exists */
+      g_assert_not_reached();
+    }
 
-      data->file_exists_and_is_not_folder = file_exists_and_is_not_folder;
-      data_ownership_taken = TRUE;
+  if (needs_file_type_check) {
+    /* check that everything up to the last component exists */
 
-      if (data->impl->should_respond_get_info_cancellable)
-	g_cancellable_cancel (data->impl->should_respond_get_info_cancellable);
+    data->file_exists_and_is_not_folder = file_exists && !is_folder;
+    data_ownership_taken = TRUE;
+
+    if (data->impl->should_respond_get_info_cancellable)
+      g_cancellable_cancel (data->impl->should_respond_get_info_cancellable);
 
       data->impl->should_respond_get_info_cancellable =
 	_gtk_file_system_get_info (data->impl->file_system,
@@ -8630,7 +8679,11 @@ gtk_file_chooser_default_should_respond (GtkFileChooserEmbed *chooser_embed)
 	{
 	  struct FileExistsData *data;
 
-	  /* We need to check whether file exists and is not a folder */
+	  /* We need to check whether file exists and whether it is a folder -
+	   * the GtkFileChooserEntry *does* report is_folder==FALSE as a false
+	   * negative (it doesn't know yet if your last path component is a
+	   * folder).
+	   */
 
 	  data = g_new0 (struct FileExistsData, 1);
 	  data->impl = g_object_ref (impl);
