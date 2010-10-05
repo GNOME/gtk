@@ -74,6 +74,25 @@ G_BEGIN_DECLS
  */
 #define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 
+/**
+ * GDK_EVENT_PROPAGATE:
+ *
+ * Use this macro as the return value for continuing the propagation of
+ * an event handler.
+ *
+ * Since: 3.4
+ */
+#define GDK_EVENT_PROPAGATE     (FALSE)
+
+/**
+ * GDK_EVENT_STOP:
+ *
+ * Use this macro as the return value for stopping the propagation of
+ * an event handler.
+ *
+ * Since: 3.4
+ */
+#define GDK_EVENT_STOP          (TRUE)
 
 typedef struct _GdkEventAny	    GdkEventAny;
 typedef struct _GdkEventExpose	    GdkEventExpose;
