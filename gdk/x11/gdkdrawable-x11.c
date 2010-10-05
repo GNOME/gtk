@@ -122,7 +122,7 @@ gdk_x11_create_cairo_surface (GdkDrawable *drawable,
   GdkVisual *visual;
     
   visual = gdk_window_get_visual (impl->wrapper);
-  return cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
+  return cairo_xlib_surface_create (GDK_WINDOW_XDISPLAY (impl->wrapper),
                                     impl->xid,
                                     GDK_VISUAL_XVISUAL (visual),
                                     width, height);
