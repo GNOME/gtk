@@ -41,7 +41,7 @@
 void
 gdk_test_render_sync (GdkWindow *window)
 {
-  Display *display = gdk_x11_drawable_get_xdisplay (window);
+  Display *display = GDK_WINDOW_XDISPLAY (window);
   XImage *ximage;
 
   /* syncronize to X drawing queue, see:
