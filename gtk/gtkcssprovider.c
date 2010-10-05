@@ -1701,7 +1701,7 @@ slice_parse_str (GtkCssProvider  *css_provider,
   if (i != 2)
     {
       /* Fill in second modifier, same as the first */
-      mods[1] = mods[1];
+      mods[1] = mods[0];
     }
 
   pixbuf = gdk_pixbuf_new_from_file (path, &error);
