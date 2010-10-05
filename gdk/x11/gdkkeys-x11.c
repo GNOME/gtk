@@ -384,9 +384,9 @@ update_keymaps (GdkKeymapX11 *keymap_x11)
 						&keymap_x11->keysyms_per_keycode);
 
 
-      /* GDK_ISO_Left_Tab, as usually configured through XKB, really messes
+      /* GDK_KEY_ISO_Left_Tab, as usually configured through XKB, really messes
        * up the whole idea of "consumed modifiers" because shift is consumed.
-       * However, <shift>Tab is not usually GDK_ISO_Left_Tab without XKB,
+       * However, <shift>Tab is not usually GDK_KEY_ISO_Left_Tab without XKB,
        * we we fudge the map here.
        */
       keycode = keymap_x11->min_keycode;
