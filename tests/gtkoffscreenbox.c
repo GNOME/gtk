@@ -47,9 +47,11 @@ to_child_2 (GtkOffscreenBox *offscreen_box,
   x = widget_x;
   y = widget_y;
 
-  gtk_widget_get_allocation (offscreen_box->child1, &child_area);
   if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
-    y -= child_area.height;
+    {
+      gtk_widget_get_allocation (offscreen_box->child1, &child_area);
+      y -= child_area.height;
+    }
 
   gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
@@ -99,9 +101,11 @@ to_parent_2 (GtkOffscreenBox *offscreen_box,
   x += child_area.width / 2;
   y += child_area.height / 2;
 
-  gtk_widget_get_allocation (offscreen_box->child1, &child_area);
   if (offscreen_box->child1 && gtk_widget_get_visible (offscreen_box->child1))
-    y += child_area.height;
+    {
+      gtk_widget_get_allocation (offscreen_box->child1, &child_area);
+      y += child_area.height;
+    }
 
   *x_out = x;
   *y_out = y;
@@ -612,6 +616,7 @@ gtk_offscreen_box_draw (GtkWidget *widget,
       if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
         {
           surface = gdk_offscreen_window_get_surface (offscreen_box->offscreen_window2);
+
           gtk_widget_get_allocation (offscreen_box->child2, &child_area);
 
           /* transform */
