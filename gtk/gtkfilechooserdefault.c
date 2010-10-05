@@ -8306,10 +8306,10 @@ struct FileExistsData
 };
 
 static void
-save_entry_get_info_cb (GCancellable *cancellable,
-			GFileInfo    *info,
-			const GError *error,
-			gpointer      user_data)
+name_entry_get_parent_info_cb (GCancellable *cancellable,
+			       GFileInfo    *info,
+			       const GError *error,
+			       gpointer      user_data)
 {
   gboolean parent_is_folder;
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
@@ -8353,7 +8353,7 @@ save_entry_get_info_cb (GCancellable *cancellable,
 	  else
 	    g_signal_emit_by_name (data->impl, "response-requested");
 	}
-      else /* GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER */
+      else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
         {
 	  GError *error = NULL;
 
@@ -8366,6 +8366,8 @@ save_entry_get_info_cb (GCancellable *cancellable,
 	  else
 	    error_creating_folder_dialog (data->impl, data->file, error);
         }
+      else
+	g_assert_not_reached ();
     }
   else
     {
@@ -8467,7 +8469,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
 	_gtk_file_system_get_info (data->impl->file_system,
 				   data->parent_file,
 				   "standard::type",
-				   save_entry_get_info_cb,
+				   name_entry_get_parent_info_cb,
 				   data);
       set_busy_cursor (data->impl, TRUE);
     }
