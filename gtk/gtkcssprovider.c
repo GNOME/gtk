@@ -1239,6 +1239,7 @@ symbolic_color_parse_str (const gchar  *string,
         }
 
       symbolic_color = gtk_symbolic_color_new_shade (param_color, factor);
+      gtk_symbolic_color_unref (param_color);
       (*end_ptr)++;
     }
   else if (g_str_has_prefix (str, "mix"))
@@ -1309,6 +1310,8 @@ symbolic_color_parse_str (const gchar  *string,
         }
 
       symbolic_color = gtk_symbolic_color_new_mix (color1, color2, factor);
+      gtk_symbolic_color_unref (color1);
+      gtk_symbolic_color_unref (color2);
       (*end_ptr)++;
     }
 
@@ -1617,6 +1620,7 @@ slice_parse_str (GtkCssProvider  *css_provider,
   GtkSliceSideModifier mods[2];
   GError *error = NULL;
   GdkPixbuf *pixbuf;
+  Gtk9Slice *slice;
   gchar *path;
   gint i = 0;
 
@@ -1640,6 +1644,8 @@ slice_parse_str (GtkCssProvider  *css_provider,
 
       full_path = g_build_filename (dirname, path, NULL);
       g_free (path);
+      g_free (dirname);
+
       path = full_path;
     }
 
@@ -1715,10 +1721,13 @@ slice_parse_str (GtkCssProvider  *css_provider,
       return NULL;
     }
 
-  return gtk_9slice_new (pixbuf,
-                         distance_top, distance_bottom,
-                         distance_left, distance_right,
-                         mods[0], mods[1]);
+  slice = gtk_9slice_new (pixbuf,
+                          distance_top, distance_bottom,
+                          distance_left, distance_right,
+                          mods[0], mods[1]);
+  g_object_unref (pixbuf);
+
+  return slice;
 }
 
 static Gtk9Slice *

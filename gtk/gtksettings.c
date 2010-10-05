@@ -1276,6 +1276,7 @@ gtk_settings_get_style (GtkStyleProvider *provider,
 
   for (i = 0; colors[i]; i++)
     {
+      GtkSymbolicColor *color;
       gchar *name, *pos;
       GdkColor col;
 
@@ -1299,8 +1300,9 @@ gtk_settings_get_style (GtkStyleProvider *provider,
       if (!*pos || !gdk_color_parse (pos, &col))
         continue;
 
-      gtk_style_set_map_color (set, name,
-                               gtk_symbolic_color_new_literal (&col));
+      color = gtk_symbolic_color_new_literal (&col);
+      gtk_style_set_map_color (set, name, color);
+      gtk_symbolic_color_unref (color);
     }
 
   font_desc = pango_font_description_from_string (font_name);

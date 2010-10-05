@@ -177,6 +177,8 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
   cairo_paint (cr);
   cairo_destroy (cr);
 
+  cairo_surface_destroy (surface);
+
   return slice;
 }
 
@@ -216,6 +218,8 @@ render_border (cairo_t              *cr,
 
   cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
+
+  cairo_pattern_destroy (pattern);
 
   cairo_restore (cr);
 }
