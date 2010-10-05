@@ -301,6 +301,8 @@ timeline_frame_cb (GtkTimeline *timeline,
   if (info->invalidation_region &&
       !cairo_region_is_empty (info->invalidation_region))
     gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
+  else
+    gdk_window_invalidate_rect (info->window, NULL, TRUE);
 }
 
 static void
@@ -327,6 +329,8 @@ timeline_finished_cb (GtkTimeline *timeline,
           if (info->invalidation_region &&
               !cairo_region_is_empty (info->invalidation_region))
             gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
+          else
+            gdk_window_invalidate_rect (info->window, NULL, TRUE);
 
           animation_info_free (info);
           break;
