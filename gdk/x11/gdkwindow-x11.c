@@ -194,7 +194,7 @@ gdk_window_impl_x11_finalize (GObject *object)
 
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
-      GdkDisplay *display = GDK_WINDOW_DISPLAY (wrapper);
+      GdkDisplay *display = GDK_WINDOW_DISPLAY ((GdkWindow *) wrapper);
       
       _gdk_xid_table_remove (display, draw_impl->xid);
       if (window_impl->toplevel && window_impl->toplevel->focus_window)

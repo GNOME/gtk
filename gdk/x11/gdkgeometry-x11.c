@@ -308,7 +308,7 @@ _gdk_x11_window_translate (GdkWindow      *window,
   item->u.translate.dy = dy;
   gdk_window_queue (window, item);
 
-  XCopyArea (GDK_WINDOW_XDISPLAY (impl),
+  XCopyArea (GDK_WINDOW_XDISPLAY ((GdkWindow *) impl),
              GDK_DRAWABLE_IMPL_X11 (private->impl)->xid,
              GDK_DRAWABLE_IMPL_X11 (impl->impl)->xid,
              xgc,
