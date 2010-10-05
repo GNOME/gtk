@@ -18,12 +18,8 @@ of an RGB pixel may be in the top 8 bits of the pixel, or may be in the lower
 </para>
 <para>
 There are several standard visuals. The visual returned
-by gdk_visual_get_system() is the system's default
-visual. gdk_rgb_get_visual() return the visual most
-suited to displaying full-color image data. If you
-use the calls in #GdkRGB, you should create your windows
-using this visual (and the colormap returned by
-gdk_rgb_get_colormap()).
+by gdk_screen_get_system_visual() is the system's default
+visual.
 </para>
 <para>
 A number of functions are provided for determining
