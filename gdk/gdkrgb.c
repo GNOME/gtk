@@ -3675,7 +3675,7 @@ gdk_rgb_ditherable (void)
  * 
  * Return value: (transfer none): the preferred colormap
  *
- * Deprecated: 2.22: Use gdk_get_system_colormap()
+ * Deprecated: 2.22: Use gdk_screen_get_system_colormap (gdk_screen_get_default ()) instead.
  **/
 GdkColormap *
 gdk_rgb_get_colormap (void)
@@ -3758,7 +3758,7 @@ gdk_screen_get_rgb_visual (GdkScreen *screen)
  * 
  * Return value: (transfer none): The #GdkVisual chosen by GdkRGB.
  *
- * Deprecated: 2.22: Use gdk_get_system_visual()
+ * Deprecated: 2.22: Use gdk_visual_get_system_visual (gdk_screen_get_default ()) instead.
  **/
 GdkVisual *
 gdk_rgb_get_visual (void)
