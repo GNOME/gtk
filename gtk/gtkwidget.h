@@ -172,8 +172,6 @@ struct _GtkWidgetClass
 
   guint set_scroll_adjustments_signal;
 
-  /*< private >*/
-  
   /* seldomly overidden */
   void (*dispatch_child_properties_changed) (GtkWidget   *widget,
 					     guint        n_pspecs,
@@ -366,8 +364,6 @@ struct _GtkWidgetClass
 				       gint        y,
 				       gboolean    keyboard_tooltip,
 				       GtkTooltip *tooltip);
-
-  /*< public >*/
 
   void         (* adjust_size_request)    (GtkWidget         *widget,
                                            GtkOrientation     orientation,
