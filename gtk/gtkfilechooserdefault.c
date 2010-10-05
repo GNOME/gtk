@@ -5829,6 +5829,7 @@ gtk_file_chooser_default_get_property (GObject    *object,
 	strv = slist_to_strv (impl->root_uris);
 	g_value_set_boxed (value, strv);
 	g_strfreev (strv);
+	break;
       }
 
     default:
