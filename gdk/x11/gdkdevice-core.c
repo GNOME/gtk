@@ -133,8 +133,8 @@ gdk_device_core_get_history (GdkDevice      *device,
   int i, j;
 
   impl_window = _gdk_window_get_impl_window (window);
-  xcoords = XGetMotionEvents (GDK_DRAWABLE_XDISPLAY (window),
-                              GDK_DRAWABLE_XID (impl_window),
+  xcoords = XGetMotionEvents (GDK_WINDOW_XDISPLAY (window),
+                              GDK_WINDOW_XID (impl_window),
                               start, stop, &tmp_n_events);
   if (!xcoords)
     return FALSE;

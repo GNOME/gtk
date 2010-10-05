@@ -726,8 +726,8 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	      Window child_window = 0;
 
 	      gdk_error_trap_push ();
-	      if (XTranslateCoordinates (GDK_DRAWABLE_XDISPLAY (window),
-					 GDK_DRAWABLE_XID (window),
+	      if (XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
+					 GDK_WINDOW_XID (window),
 					 screen_x11->xroot_window,
 					 0, 0,
 					 &tx, &ty,

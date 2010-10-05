@@ -306,8 +306,8 @@ tmp_unset_bg (GdkWindow *window)
 
   impl->no_bg = TRUE;
 
-  XSetWindowBackgroundPixmap (GDK_DRAWABLE_XDISPLAY (window),
-                              GDK_DRAWABLE_XID (window), None);
+  XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
+                              GDK_WINDOW_XID (window), None);
 }
 
 static void

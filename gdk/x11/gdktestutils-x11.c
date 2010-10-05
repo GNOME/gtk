@@ -121,7 +121,7 @@ gdk_test_simulate_key (GdkWindow      *window,
   y = y + priv->abs_y;
 
   xev.type = key_pressrelease == GDK_KEY_PRESS ? KeyPress : KeyRelease;
-  xev.display = GDK_DRAWABLE_XDISPLAY (window);
+  xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
   xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
   xev.subwindow = 0;
@@ -228,7 +228,7 @@ gdk_test_simulate_button (GdkWindow      *window,
   y = y + priv->abs_y;
 
   xev.type = button_pressrelease == GDK_BUTTON_PRESS ? ButtonPress : ButtonRelease;
-  xev.display = GDK_DRAWABLE_XDISPLAY (window);
+  xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
   xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
   xev.subwindow = 0;
