@@ -22,6 +22,8 @@
 #include "gtkstyleset.h"
 #include "gtkintl.h"
 
+G_DEFINE_BOXED_TYPE (GtkSymbolicColor, gtk_symbolic_color,
+		     gtk_symbolic_color_ref, gtk_symbolic_color_unref)
 G_DEFINE_BOXED_TYPE (GtkGradient, gtk_gradient,
                      gtk_gradient_ref, gtk_gradient_unref)
 
@@ -249,19 +251,6 @@ gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
     }
 
   return FALSE;
-}
-
-GType
-gtk_symbolic_color_get_type (void)
-{
-  static GType type = 0;
-
-  if (G_UNLIKELY (!type))
-    type = g_boxed_type_register_static (I_("GtkSymbolicColor"),
-					 (GBoxedCopyFunc) gtk_symbolic_color_ref,
-					 (GBoxedFreeFunc) gtk_symbolic_color_unref);
-
-  return type;
 }
 
 /* GtkGradient */
