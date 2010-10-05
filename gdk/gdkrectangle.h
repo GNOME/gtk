@@ -31,6 +31,8 @@
 #ifndef __GDK_RECTANGLE_H__
 #define __GDK_RECTANGLE_H__
 
+#include <gdk/gdktypes.h>
+
 G_BEGIN_DECLS
 
 /* Rectangle utilities

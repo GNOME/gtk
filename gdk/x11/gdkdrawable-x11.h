@@ -28,7 +28,6 @@
 #define __GDK_DRAWABLE_X11_H__
 
 #include <gdk/gdkdrawable.h>
-
 #include <X11/Xlib.h>
 
 G_BEGIN_DECLS

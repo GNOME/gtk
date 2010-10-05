@@ -23,6 +23,8 @@
 #ifndef XSETTINGS_COMMON_H
 #define XSETTINGS_COMMON_H
 
+#include <unistd.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */

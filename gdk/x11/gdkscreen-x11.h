@@ -24,10 +24,10 @@
 #ifndef __GDK_SCREEN_X11_H__
 #define __GDK_SCREEN_X11_H__
 
-#include "gdkprivate-x11.h"
-#include "xsettings-client.h"
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkvisual.h>
+#include "gdkprivate-x11.h"
+#include "xsettings-client.h"
 #include <X11/X.h>
 #include <X11/Xlib.h>
 

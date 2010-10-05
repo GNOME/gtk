@@ -29,8 +29,8 @@
 #define __GDK_SCREEN_H__
 
 #include <cairo.h>
-#include "gdk/gdktypes.h"
-#include "gdk/gdkdisplay.h"
+#include <gdk/gdktypes.h>
+#include <gdk/gdkdisplay.h>
 
 G_BEGIN_DECLS
 

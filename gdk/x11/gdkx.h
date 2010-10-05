@@ -28,7 +28,6 @@
 #define __GDK_X_H__
 
 #include <gdk/gdkprivate.h>
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 

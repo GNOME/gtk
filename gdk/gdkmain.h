@@ -31,7 +31,6 @@
 #ifndef __GDK_MAIN_H__
 #define __GDK_MAIN_H__
 
-#include <glib.h>
 #include <gdk/gdktypes.h>
 
 G_BEGIN_DECLS

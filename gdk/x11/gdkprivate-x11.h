@@ -31,14 +31,12 @@
 #ifndef __GDK_PRIVATE_X11_H__
 #define __GDK_PRIVATE_X11_H__
 
-#include <cairo-xlib.h>
-
 #include <gdk/gdkcursor.h>
 #include <gdk/gdkprivate.h>
-#include <gdk/x11/gdkwindow-x11.h>
-#include <gdk/x11/gdkdisplay-x11.h>
-
-#include "gdk/gdkinternals.h"
+#include <gdk/gdkinternals.h>
+#include "gdkwindow-x11.h"
+#include "gdkdisplay-x11.h"
+#include <cairo-xlib.h>
 
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 

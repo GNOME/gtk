@@ -31,6 +31,8 @@
 #ifndef __GDK_THREADS_H__
 #define __GDK_THREADS_H__
 
+#include <gdk/gdktypes.h>
+
 G_BEGIN_DECLS
 
 void     gdk_threads_init                     (void);

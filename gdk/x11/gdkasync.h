@@ -21,8 +21,8 @@
 #ifndef __GDK_ASYNC_H__
 #define __GDK_ASYNC_H__
 
+#include <gdk/gdkdisplay.h>
 #include <X11/Xlib.h>
-#include "gdk.h"
 
 G_BEGIN_DECLS
 
