@@ -1028,6 +1028,17 @@ _gdk_x11_window_destroy (GdkWindow *window,
     }
 }
 
+static cairo_surface_t *
+gdk_window_x11_resize_cairo_surface (GdkWindow       *window,
+                                     cairo_surface_t *surface,
+                                     gint             width,
+                                     gint             height)
+{
+  cairo_xlib_surface_set_size (surface, width, height);
+
+  return surface;
+}
+
 void
 _gdk_windowing_window_destroy_foreign (GdkWindow *window)
 {
@@ -5514,6 +5525,7 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   iface->translate = _gdk_x11_window_translate;
   iface->destroy = _gdk_x11_window_destroy;
+  iface->resize_cairo_surface = gdk_window_x11_resize_cairo_surface;
 }
 
 static Bool

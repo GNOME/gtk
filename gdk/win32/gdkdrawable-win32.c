@@ -228,15 +228,6 @@ gdk_win32_ref_cairo_surface (GdkDrawable *drawable)
   return impl->cairo_surface;
 }
 
-gboolean
-_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
-				       gint width,
-				       gint height)
-{
-  // Do nothing.  The surface size is determined by the DC
-  return FALSE;
-}
-
 HGDIOBJ
 gdk_win32_drawable_get_handle (GdkDrawable *drawable)
 {

@@ -597,6 +597,18 @@ gdk_offscreen_window_translate (GdkWindow      *window,
   _gdk_window_add_damage (window, area);
 }
 
+static cairo_surface_t *
+gdk_offscreen_window_resize_cairo_surface (GdkWindow       *window,
+                                           cairo_surface_t *surface,
+                                           gint             width,
+                                           gint             height)
+{
+  /* No-op.  The surface gets resized in
+   * gdk_offscreen_window_move_resize_internal().
+   */
+  return surface;
+}
+
 /**
  * gdk_offscreen_window_set_embedder:
  * @window: a #GdkWindow
@@ -700,4 +712,5 @@ gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->get_root_coords = gdk_offscreen_window_get_root_coords;
   iface->get_device_state = gdk_offscreen_window_get_device_state;
   iface->destroy = gdk_offscreen_window_destroy;
+  iface->resize_cairo_surface = gdk_offscreen_window_resize_cairo_surface;
 }

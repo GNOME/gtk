@@ -194,15 +194,6 @@ gdk_x11_cairo_surface_destroy (void *data)
   impl->cairo_surface = NULL;
 }
 
-gboolean
-_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
-				       int width,
-				       int height)
-{
-  cairo_xlib_surface_set_size (surface, width, height);
-  return TRUE;
-}
-
 static cairo_surface_t *
 gdk_x11_create_cairo_surface (GdkDrawable *drawable,
 			      int width,
