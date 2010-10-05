@@ -8361,9 +8361,14 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
 	  else
 	    g_signal_emit_by_name (data->impl, "response-requested");
 	}
-      else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+      else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
+	       || data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
         {
 	  GError *error = NULL;
+
+	  /* In both cases (SELECT_FOLDER and CREATE_FOLDER), if you type
+	   * "/blah/nonexistent" you *will* want a folder created.
+	   */
 
 	  set_busy_cursor (data->impl, TRUE);
 	  g_file_make_directory (data->file, NULL, &error);
