@@ -105,35 +105,6 @@ _gdk_x11_drawable_update_size (GdkDrawable *drawable)
  * X11 specific implementations of generic functions *
  *****************************************************/
 
-static GdkDrawable *
-get_impl_drawable (GdkDrawable *drawable)
-{
-  if (GDK_IS_WINDOW (drawable))
-    return ((GdkWindowObject *)drawable)->impl;
-  else
-    {
-      g_warning (G_STRLOC " drawable is not a window");
-      return NULL;
-    }
-}
-
-/**
- * gdk_x11_drawable_get_xdisplay:
- * @drawable: a #GdkDrawable.
- * 
- * Returns the display of a #GdkDrawable.
- * 
- * Return value: an Xlib <type>Display*</type>.
- **/
-Display *
-gdk_x11_drawable_get_xdisplay (GdkDrawable *drawable)
-{
-  if (GDK_IS_DRAWABLE_IMPL_X11 (drawable))
-    return GDK_SCREEN_XDISPLAY (GDK_DRAWABLE_IMPL_X11 (drawable)->screen);
-  else
-    return GDK_SCREEN_XDISPLAY (GDK_DRAWABLE_IMPL_X11 (get_impl_drawable (drawable))->screen);
-}
-
 static void
 gdk_x11_cairo_surface_destroy (void *data)
 {

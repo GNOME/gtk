@@ -55,7 +55,6 @@ G_BEGIN_DECLS
  */
 
 
-Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 Window   gdk_x11_window_get_xid           (GdkWindow   *window);
 Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
@@ -193,7 +192,7 @@ gint     gdk_x11_get_default_screen       (void);
  * Another name for GDK_DRAWABLE_XID().
  */
 #define GDK_WINDOW_XWINDOW(win)       (gdk_x11_window_get_xid (win))
-#define GDK_DRAWABLE_XDISPLAY(win)    (gdk_x11_drawable_get_xdisplay (win))
+#define GDK_DRAWABLE_XDISPLAY(win)    (GDK_WINDOW_XDISPLAY (win))
 #define GDK_DRAWABLE_XID(win)         (gdk_x11_window_get_xid (win))
 #define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
 #define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))

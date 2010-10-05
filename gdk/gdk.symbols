@@ -547,7 +547,6 @@ gdk_x11_display_grab
 gdk_x11_display_set_cursor_theme
 gdk_x11_display_set_startup_notification_id
 gdk_x11_display_ungrab
-gdk_x11_drawable_get_xdisplay
 gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
