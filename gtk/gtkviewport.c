@@ -784,6 +784,21 @@ gtk_viewport_draw (GtkWidget *widget,
                         gdk_window_get_height (gtk_widget_get_window (widget)));
     }
   
+  if (gtk_cairo_should_draw_window (cr, priv->view_window))
+    {
+      /* This is a cute hack to ensure the contents of bin_window are
+       * restricted to where they are visible. We only need to do this
+       * clipping when called via gtk_widget_draw() and not in expose
+       * events. And when that happens every window (including this one)
+       * should be drawn.
+       */
+      gdk_window_get_position (priv->view_window, &x, &y);
+      cairo_rectangle (cr, x, y, 
+                       gdk_window_get_width (priv->view_window),
+                       gdk_window_get_height (priv->view_window));
+      cairo_clip (cr);
+    }
+
   if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     {
       gdk_window_get_position (priv->bin_window, &x, &y);
