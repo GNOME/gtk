@@ -407,6 +407,26 @@ unmap_and_remap_cb (GtkButton *button,
 }
 
 static void
+root_to_home_and_tmp_cb (GtkButton *button,
+			 GtkFileChooser *chooser)
+{
+  char *root_uris[] = { "",
+			"file:///tmp",
+			NULL };
+
+  root_uris[0] = g_strconcat ("file://", g_get_home_dir (), NULL);
+  gtk_file_chooser_set_root_uris (chooser, (const char **) root_uris);
+  g_free (root_uris[0]);
+}
+
+static void
+unroot_cb (GtkButton *button,
+	   GtkFileChooser *chooser)
+{
+  gtk_file_chooser_set_root_uris (chooser, NULL);
+}
+
+static void
 kill_dependent (GtkWindow *win, GtkWidget *dep)
 {
   gtk_widget_destroy (dep);
@@ -472,6 +492,16 @@ confirm_overwrite_cb (GtkFileChooser *chooser,
   gtk_widget_destroy (dialog);
 
   return conf;
+}
+
+static void
+add_test_button (GtkWidget *container, const char *label_text, GCallback callback, gpointer data)
+{
+  GtkWidget *button;
+
+  button = gtk_button_new_with_label (label_text);
+  gtk_container_add (GTK_CONTAINER (container), button);
+  g_signal_connect (button, "clicked", callback, data);
 }
 
 int
@@ -660,30 +690,13 @@ main (int argc, char **argv)
   g_signal_connect_swapped (button, "clicked",
 			    G_CALLBACK (gtk_file_chooser_unselect_all), dialog);
 
-  button = gtk_button_new_with_label ("set_current_folder (\"/nonexistent\")");
-  gtk_container_add (GTK_CONTAINER (vbbox), button);
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (set_folder_nonexistent_cb), dialog);
-
-  button = gtk_button_new_with_label ("set_current_folder (\"/usr/nonexistent\")");
-  gtk_container_add (GTK_CONTAINER (vbbox), button);
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (set_folder_existing_nonexistent_cb), dialog);
-
-  button = gtk_button_new_with_label ("set_filename (\"/nonexistent\")");
-  gtk_container_add (GTK_CONTAINER (vbbox), button);
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (set_filename_nonexistent_cb), dialog);
-
-  button = gtk_button_new_with_label ("set_filename (\"/usr/nonexistent\")");
-  gtk_container_add (GTK_CONTAINER (vbbox), button);
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (set_filename_existing_nonexistent_cb), dialog);
-
-  button = gtk_button_new_with_label ("Unmap and remap");
-  gtk_container_add (GTK_CONTAINER (vbbox), button);
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (unmap_and_remap_cb), dialog);
+  add_test_button (vbbox, "set_current_folder (\"/nonexistent\")", G_CALLBACK (set_folder_nonexistent_cb), dialog);
+  add_test_button (vbbox, "set_current_folder (\"/usr/nonexistent\")", G_CALLBACK (set_folder_existing_nonexistent_cb), dialog);
+  add_test_button (vbbox, "set_filename (\"/nonexistent\")", G_CALLBACK (set_filename_nonexistent_cb), dialog);
+  add_test_button (vbbox, "set_filename (\"/usr/nonexistent\")", G_CALLBACK (set_filename_existing_nonexistent_cb), dialog);
+  add_test_button (vbbox, "Unmap and remap", G_CALLBACK (unmap_and_remap_cb), dialog);
+  add_test_button (vbbox, "Root to $HOME and /tmp", G_CALLBACK (root_to_home_and_tmp_cb), dialog);
+  add_test_button (vbbox, "Unroot", G_CALLBACK (unroot_cb), dialog);
 
   gtk_widget_show_all (control_window);
 
