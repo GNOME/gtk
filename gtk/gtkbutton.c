@@ -1746,6 +1746,18 @@ gtk_button_enter_notify (GtkWidget        *widget,
     {
       priv->in_button = TRUE;
       gtk_button_enter (button);
+
+      if (gtk_widget_get_realized (widget) &&
+          gtk_widget_is_drawable (widget))
+        {
+          GtkStyleContext *context;
+
+          context = gtk_widget_get_style_context (widget);
+          gtk_style_context_notify_state_change (context,
+                                                 gtk_widget_get_window (widget),
+                                                 NULL, GTK_STATE_PRELIGHT,
+                                                 button->in_button);
+        }
     }
 
   return FALSE;
@@ -1764,6 +1776,18 @@ gtk_button_leave_notify (GtkWidget        *widget,
     {
       priv->in_button = FALSE;
       gtk_button_leave (button);
+
+      if (gtk_widget_get_realized (widget) &&
+          gtk_widget_is_drawable (widget))
+        {
+          GtkStyleContext *context;
+
+          context = gtk_widget_get_style_context (widget);
+          gtk_style_context_notify_state_change (context,
+                                                 gtk_widget_get_window (widget),
+                                                 NULL, GTK_STATE_PRELIGHT,
+                                                 button->in_button);
+        }
     }
 
   return FALSE;
