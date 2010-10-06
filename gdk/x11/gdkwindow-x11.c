@@ -439,7 +439,6 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   
-  draw_impl->screen = screen;
   draw_impl->xid = screen_x11->xroot_window;
   draw_impl->wrapper = GDK_DRAWABLE (private);
   
@@ -686,7 +685,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   draw_impl = GDK_DRAWABLE_IMPL_X11 (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
   
-  draw_impl->screen = screen;
   xdisplay = screen_x11->xdisplay;
 
   xattributes_mask = 0;
@@ -898,12 +896,11 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
-  draw_impl->screen = screen;
   
   private->parent = gdk_xid_table_lookup_for_display (display, parent);
   
   if (!private->parent || GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_FOREIGN)
-    private->parent = (GdkWindowObject *) gdk_screen_get_root_window (draw_impl->screen);
+    private->parent = (GdkWindowObject *) gdk_screen_get_root_window (screen);
   
   private->parent->children = g_list_prepend (private->parent->children, window);
 
