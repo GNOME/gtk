@@ -836,7 +836,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    * The default is NULL, which provides the default level of access
    * for the file chooser.
    *
-   * Since: 2.18
+   * Since: 3.0
    */
   g_object_interface_install_property (g_iface,
 				       g_param_spec_boxed ("root-uris",
@@ -982,7 +982,7 @@ gtk_file_chooser_get_local_only (GtkFileChooser *chooser)
  *
  * See gtk_file_chooser_get_root_uris()
  *
- * Since: 2.18
+ * Since: 3.0
  **/
 void
 gtk_file_chooser_set_root_uris (GtkFileChooser *chooser,
@@ -1017,7 +1017,7 @@ gtk_file_chooser_set_root_uris (GtkFileChooser *chooser,
  * or simply %NULL if there are no roots set for the @chooser.  You should free
  * this array with g_strfreev().
  *
- * Since: 2.18
+ * Since: 3.0
  **/
 gchar **
 gtk_file_chooser_get_root_uris (GtkFileChooser *chooser)
