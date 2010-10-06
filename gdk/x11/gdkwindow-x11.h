@@ -58,6 +58,8 @@ struct _GdkWindowImplX11
 {
   GdkDrawableImplX11 parent_instance;
 
+  Window xid;
+
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
   GHashTable *device_cursor;

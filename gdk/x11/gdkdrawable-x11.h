@@ -51,8 +51,6 @@ struct _GdkDrawableImplX11
 
   GdkDrawable *wrapper;
   
-  Window xid;
-
   cairo_surface_t *cairo_surface;
 };
  

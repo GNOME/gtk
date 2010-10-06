@@ -196,7 +196,7 @@ gdk_window_impl_x11_finalize (GObject *object)
     {
       GdkDisplay *display = GDK_WINDOW_DISPLAY ((GdkWindow *) wrapper);
       
-      _gdk_xid_table_remove (display, draw_impl->xid);
+      _gdk_xid_table_remove (display, window_impl->xid);
       if (window_impl->toplevel && window_impl->toplevel->focus_window)
 	_gdk_xid_table_remove (display, window_impl->toplevel->focus_window);
     }
@@ -439,7 +439,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
   
-  draw_impl->xid = screen_x11->xroot_window;
+  GDK_WINDOW_IMPL_X11 (draw_impl)->xid = screen_x11->xroot_window;
   draw_impl->wrapper = GDK_DRAWABLE (private);
   
   private->window_type = GDK_WINDOW_ROOT;
@@ -665,7 +665,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   Window xparent;
   Visual *xvisual;
   Display *xdisplay;
-  Window xid;
 
   XSetWindowAttributes xattributes;
   long xattributes_mask;
@@ -765,15 +764,15 @@ _gdk_window_impl_new (GdkWindow     *window,
 	private->height = 65535;
     }
   
-  xid = draw_impl->xid = XCreateWindow (xdisplay, xparent,
-					private->x + private->parent->abs_x,
-					private->y + private->parent->abs_y,
-					private->width, private->height,
-					0, private->depth, class, xvisual,
-					xattributes_mask, &xattributes);
+  impl->xid = XCreateWindow (xdisplay, xparent,
+                             private->x + private->parent->abs_x,
+                             private->y + private->parent->abs_y,
+                             private->width, private->height,
+                             0, private->depth, class, xvisual,
+                             xattributes_mask, &xattributes);
 
   g_object_ref (window);
-  _gdk_xid_table_insert (screen_x11->display, &draw_impl->xid, window);
+  _gdk_xid_table_insert (screen_x11->display, &impl->xid, window);
 
   switch (GDK_WINDOW_TYPE (private))
     {
@@ -791,7 +790,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 	  class_hint = XAllocClassHint ();
 	  class_hint->res_name = attributes->wmclass_name;
 	  class_hint->res_class = attributes->wmclass_class;
-	  XSetClassHint (xdisplay, xid, class_hint);
+	  XSetClassHint (xdisplay, impl->xid, class_hint);
 	  XFree (class_hint);
 	}
   
@@ -904,7 +903,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   
   private->parent->children = g_list_prepend (private->parent->children, window);
 
-  draw_impl->xid = anid;
+  impl->xid = anid;
 
   private->x = attrs.x;
   private->y = attrs.y;
@@ -5615,6 +5614,6 @@ gdk_x11_window_get_xid (GdkWindow *window)
   
   impl = ((GdkWindowObject *) window)->impl;
 
-  return ((GdkDrawableImplX11 *)impl)->xid;
+  return ((GdkWindowImplX11 *)impl)->xid;
 }
 
