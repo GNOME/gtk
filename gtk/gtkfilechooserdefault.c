@@ -8425,8 +8425,13 @@ file_exists_get_info_cb (GCancellable *cancellable,
 
   if (data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
     {
-      /* user typed a filename; we are done */
-      g_signal_emit_by_name (data->impl, "response-requested");
+      if (is_folder)
+	change_folder_and_display_error (data->impl, data->file, TRUE);
+      else
+	{
+	  /* user typed a filename; we are done */
+	  g_signal_emit_by_name (data->impl, "response-requested");
+	}
     }
   else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
@@ -8462,7 +8467,10 @@ file_exists_get_info_cb (GCancellable *cancellable,
     }
   else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
     {
-      needs_file_type_check = TRUE;
+      if (is_folder)
+	change_folder_and_display_error (data->impl, data->file, TRUE);
+      else
+	needs_file_type_check = TRUE;
     }
   else
     {
