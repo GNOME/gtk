@@ -224,8 +224,6 @@ static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
 							 int width,
 							 int height);
 static void             gdk_window_drop_cairo_surface (GdkWindowObject *private);
-static void             gdk_window_set_cairo_clip    (GdkDrawable *drawable,
-						      cairo_t *cr);
 
 static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
 static cairo_region_t*   gdk_window_get_visible_region     (GdkDrawable *drawable);
@@ -385,7 +383,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
-  drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
 
@@ -2818,6 +2815,23 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
   return TRUE;
 }
 
+static cairo_t *
+gdk_cairo_create_for_impl (GdkWindow *window)
+{
+  GdkWindowObject *priv;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  priv = (GdkWindowObject*) window;
+
+  surface = _gdk_drawable_ref_cairo_surface (priv->impl);
+  cr = cairo_create (surface);
+
+  cairo_surface_destroy (surface);
+
+  return cr;
+}
+
 /* Ensure that all content related to this (sub)window is pushed to the
    native region. If there is an active paint then that area is not
    pushed, in order to not show partially finished double buffers. */
@@ -2858,7 +2872,7 @@ gdk_window_flush_implicit_paint (GdkWindow *window)
       cairo_region_subtract (paint->region, region);
 
       /* Some regions are valid, push these to window now */
-      cr = gdk_cairo_create (private->impl);
+      cr = gdk_cairo_create_for_impl (window);
       gdk_cairo_region (cr, region);
       cairo_clip (cr);
       cairo_set_source_surface (cr, paint->surface, 0, 0);
@@ -2890,7 +2904,7 @@ gdk_window_end_implicit_paint (GdkWindow *window)
       cairo_t *cr;
 
       /* Some regions are valid, push these to window now */
-      cr = gdk_cairo_create (private->impl);
+      cr = gdk_cairo_create_for_impl (window);
       gdk_cairo_region (cr, paint->region);
       cairo_clip (cr);
       cairo_set_source_surface (cr, paint->surface, 0, 0);
@@ -3727,11 +3741,35 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
   return surface;
 }
 
-static void
-gdk_window_set_cairo_clip (GdkDrawable *drawable,
-			   cairo_t *cr)
+/**
+ * gdk_cairo_create:
+ * @drawable: a #GdkWindow
+ * 
+ * Creates a Cairo context for drawing to @window.
+ *
+ * <note><warning>
+ * Note that calling cairo_reset_clip() on the resulting #cairo_t will
+ * produce undefined results, so avoid it at all costs.
+ * </warning></note>
+ *
+ * Return value: A newly created Cairo context. Free with
+ *  cairo_destroy() when you are done drawing.
+ * 
+ * Since: 2.8
+ **/
+cairo_t *
+gdk_cairo_create (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject*) drawable;
+  GdkWindowObject *private;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+    
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  private = (GdkWindowObject*) window;
+
+  surface = _gdk_drawable_ref_cairo_surface (window);
+  cr = cairo_create (surface);
 
   if (!private->paint_stack)
     {
@@ -3765,6 +3803,10 @@ gdk_window_set_cairo_clip (GdkDrawable *drawable,
 	  cairo_clip (cr);
 	}
     }
+    
+  cairo_surface_destroy (surface);
+
+  return cr;
 }
 
 /* Code for dirty-region queueing

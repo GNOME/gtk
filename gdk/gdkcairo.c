@@ -43,42 +43,6 @@
 
 
 /**
- * gdk_cairo_create:
- * @drawable: a #GdkDrawable
- * 
- * Creates a Cairo context for drawing to @drawable.
- *
- * <note><para>
- * Note that due to double-buffering, Cairo contexts created 
- * in a GTK+ expose event handler cannot be cached and reused 
- * between different expose events. 
- * </para></note>
- *
- * Return value: A newly created Cairo context. Free with
- *  cairo_destroy() when you are done drawing.
- * 
- * Since: 2.8
- **/
-cairo_t *
-gdk_cairo_create (GdkDrawable *drawable)
-{
-  cairo_surface_t *surface;
-  cairo_t *cr;
-    
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  surface = _gdk_drawable_ref_cairo_surface (drawable);
-  cr = cairo_create (surface);
-
-  if (GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip)
-    GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip (drawable, cr);
-    
-  cairo_surface_destroy (surface);
-
-  return cr;
-}
-
-/**
  * gdk_cairo_get_clip_rectangle:
  * @cr: a cairo context
  * @rect: (out) (allow-none): return location for the clip, or %NULL

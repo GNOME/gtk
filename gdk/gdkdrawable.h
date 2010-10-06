@@ -67,9 +67,6 @@ struct _GdkDrawableClass
 
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
-  void         (*set_cairo_clip)      (GdkDrawable *drawable,
-				       cairo_t *cr);
-
   cairo_surface_t * (*create_cairo_surface) (GdkDrawable *drawable,
 					     int width,
 					     int height);
