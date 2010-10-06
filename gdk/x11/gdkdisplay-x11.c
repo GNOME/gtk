@@ -693,7 +693,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  window_private->height = xevent->xconfigure.height;
 
 	  _gdk_window_update_size (window);
-	  _gdk_x11_drawable_update_size (window_private->impl);
+	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window_private->impl));
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }
 
@@ -749,7 +749,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  window_private->height = xevent->xconfigure.height;
 
 	  _gdk_window_update_size (window);
-	  _gdk_x11_drawable_update_size (window_private->impl);
+	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window_private->impl));
 
 	  if (window_private->resize_count >= 1)
 	    {

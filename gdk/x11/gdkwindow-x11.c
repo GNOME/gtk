@@ -171,17 +171,15 @@ _gdk_x11_window_get_toplevel (GdkWindow *window)
 static const cairo_user_data_key_t gdk_x11_cairo_key;
 
 /**
- * _gdk_x11_drawable_update_size:
- * @drawable: a #GdkDrawableImplX11.
+ * _gdk_x11_window_update_size:
+ * @impl: a #GdkWindowImplX11.
  * 
- * Updates the state of the drawable (in particular the drawable's
+ * Updates the state of the window (in particular the drawable's
  * cairo surface) when its size has changed.
  **/
 void
-_gdk_x11_drawable_update_size (GdkDrawable *drawable)
+_gdk_x11_window_update_size (GdkWindowImplX11 *impl)
 {
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (drawable);
-  
   if (impl->cairo_surface)
     {
       cairo_xlib_surface_set_size (impl->cairo_surface,
@@ -1565,7 +1563,7 @@ window_x11_resize (GdkWindow *window,
         {
           private->width = width;
           private->height = height;
-          _gdk_x11_drawable_update_size (private->impl);
+          _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (private->impl));
         }
       else
         {
@@ -1574,7 +1572,7 @@ window_x11_resize (GdkWindow *window,
         }
     }
 
-  _gdk_x11_drawable_update_size (private->impl);
+  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (private->impl));
 }
 
 static inline void
@@ -1595,7 +1593,7 @@ window_x11_move_resize (GdkWindow *window,
   if (GDK_WINDOW_TYPE (private) == GDK_WINDOW_CHILD)
     {
       _gdk_window_move_resize_child (window, x, y, width, height);
-      _gdk_x11_drawable_update_size (private->impl);
+      _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (private->impl));
     }
   else
     {
@@ -1613,7 +1611,7 @@ window_x11_move_resize (GdkWindow *window,
           private->width = width;
           private->height = height;
 
-          _gdk_x11_drawable_update_size (private->impl);
+          _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (private->impl));
         }
       else
         {

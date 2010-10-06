@@ -58,8 +58,6 @@ struct _GdkDrawableImplX11Class
 
 GType _gdk_drawable_impl_x11_get_type (void);
 
-/* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
-void _gdk_x11_drawable_update_size      (GdkDrawable  *drawable);
 
 G_END_DECLS
 
