@@ -1279,9 +1279,6 @@ gtk_about_dialog_get_website (GtkAboutDialog *about)
  *
  * Sets the URL to use for the website link.
  *
- * Note that that the hook functions need to be set up
- * before calling this function.
- *
  * Since: 2.6
  */
 void
