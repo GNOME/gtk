@@ -202,7 +202,6 @@ x11_introspection_files = 		\
 	x11/gdkdevice-xi.c		\
 	x11/gdkdisplay-x11.c		\
 	x11/gdkdnd-x11.c		\
-	x11/gdkdrawable-x11.c		\
 	x11/gdkeventsource.c		\
 	x11/gdkeventtranslator.c	\
 	x11/gdkgeometry-x11.c		\

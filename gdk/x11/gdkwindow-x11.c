@@ -130,7 +130,7 @@ static void        gdk_window_impl_iface_init     (GdkWindowImplIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GdkWindowImplX11,
                          gdk_window_impl_x11,
-                         GDK_TYPE_DRAWABLE_IMPL_X11,
+                         GDK_TYPE_DRAWABLE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_WINDOW_IMPL,
                                                 gdk_window_impl_iface_init));
 
