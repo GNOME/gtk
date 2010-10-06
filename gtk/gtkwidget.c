@@ -1341,12 +1341,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget::draw:
    * @widget: the object which received the signal
    * @cr: the cairo context to draw to
-   * @width: width of the widget
-   * @height: height of the widget
    *
    * This signal is emitted when a widget is supposed to render itself.
    * The @widget's top left corner must be painted at the origin of
-   * the passed in context and be sized in the given @width and @height.
+   * the passed in context and be sized to the values returned by
+   * gtk_widget_get_allocated_width() and
+   * gtk_widget_get_allocated_height().
    *
    * Signal handlers connected to this signal can modify the cairo
    * context passed as @cr in any way they like and don't need to
