@@ -3080,6 +3080,20 @@ gtk_spinner_stop
 #endif
 #endif
 
+#if IN_HEADER(__GTK_SPREAD_TABLE_H__)
+#if IN_FILE(__GTK_SPREAD_TABLE_C__)
+gtk_spread_table_get_horizontal_spacing
+gtk_spread_table_get_lines
+gtk_spread_table_get_type
+gtk_spread_table_get_vertical_spacing
+gtk_spread_table_insert_child
+gtk_spread_table_new
+gtk_spread_table_set_horizontal_spacing
+gtk_spread_table_set_lines
+gtk_spread_table_set_vertical_spacing
+#endif
+#endif
+
 #if IN_HEADER(__GTK_STATUSBAR_H__)
 #if IN_FILE(__GTK_STATUSBAR_C__)
 gtk_statusbar_get_context_id

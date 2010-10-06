@@ -91,7 +91,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtooltips			\
 	testexpander			\
 	testvolumebutton		\
-	testwrapbox
+	testwrapbox			\
+	testspreadtable
 
 if USE_X11
 noinst_PROGRAMS += testapplication testerrors
@@ -175,6 +176,7 @@ testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 testwrapbox_DEPENDENCIES = $(TEST_DEPS)
+testspreadtable_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 
@@ -246,6 +248,7 @@ testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 testwrapbox_LDADD = $(LDADDS)
+testspreadtable_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
 
@@ -347,6 +350,9 @@ testvolumebutton_SOURCES =	\
 
 testwrapbox_SOURCES =	\
 	testwrapbox.c
+
+testspreadtable_SOURCES =	\
+	testspreadtable.c
 
 testoffscreen_SOURCES = 	\
 	gtkoffscreenbox.c	\

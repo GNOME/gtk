@@ -167,6 +167,7 @@
 #include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkspinner.h>
+#include <gtk/gtkspreadtable.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
