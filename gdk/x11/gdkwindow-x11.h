@@ -58,7 +58,7 @@ struct _GdkWindowImplX11
 {
   GdkDrawable parent_instance;
 
-  GdkDrawable *wrapper;
+  GdkWindow *wrapper;
 
   Window xid;
 

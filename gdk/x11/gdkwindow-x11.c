@@ -514,7 +514,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
   
   impl->xid = screen_x11->xroot_window;
-  impl->wrapper = GDK_DRAWABLE (private);
+  impl->wrapper = GDK_WINDOW (private);
   
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = DefaultDepthOfScreen (screen_x11->xscreen);
@@ -754,7 +754,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl = (GdkDrawable *)impl;
-  impl->wrapper = GDK_DRAWABLE (window);
+  impl->wrapper = GDK_WINDOW (window);
   
   xdisplay = screen_x11->xdisplay;
 
@@ -964,7 +964,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
                                                   XVisualIDFromVisual (attrs.visual));
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
-  impl->wrapper = GDK_DRAWABLE (window);
+  impl->wrapper = window;
   
   private->parent = gdk_xid_table_lookup_for_display (display, parent);
   
