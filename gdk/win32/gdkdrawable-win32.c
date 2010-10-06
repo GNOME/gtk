@@ -113,30 +113,9 @@ _gdk_win32_drawable_acquire_dc (GdkDrawable *drawable)
 
   if (!impl->hdc)
     {
-      if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
-	{
-	  impl->hdc = CreateCompatibleDC (NULL);
-	  if (!impl->hdc)
-	    WIN32_GDI_FAILED ("CreateCompatibleDC");
-	  
-	  if (impl->hdc)
-	    {
-	      impl->saved_dc_bitmap = SelectObject (impl->hdc,
-						    impl->handle);
-	      if (!impl->saved_dc_bitmap)
-		{
-		  WIN32_GDI_FAILED ("CreateCompatibleDC");
-		  DeleteDC (impl->hdc);
-		  impl->hdc = NULL;
-		}
-	    }
-	}
-      else
-	{
-	  impl->hdc = GetDC (impl->handle);
-	  if (!impl->hdc)
-	    WIN32_GDI_FAILED ("GetDC");
-	}
+      impl->hdc = GetDC (impl->handle);
+      if (!impl->hdc)
+	WIN32_GDI_FAILED ("GetDC");
     }
 
   if (impl->hdc)
@@ -175,10 +154,7 @@ _gdk_win32_drawable_release_dc (GdkDrawable *drawable)
       
       if (impl->hdc)
 	{
-	  if (GDK_IS_PIXMAP_IMPL_WIN32 (impl))
-	    GDI_CALL (DeleteDC, (impl->hdc));
-	  else
-	    GDI_CALL (ReleaseDC, (impl->handle, impl->hdc));
+	  GDI_CALL (ReleaseDC, (impl->handle, impl->hdc));
 	  impl->hdc = NULL;
 	}
     }

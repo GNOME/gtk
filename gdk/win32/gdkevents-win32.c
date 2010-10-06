@@ -1193,102 +1193,6 @@ synthesize_enter_or_leave_event (GdkWindow        *window,
     _gdk_device_wintab_update_window_coords (window);
 }
 			 
-static void
-synthesize_expose_events (GdkWindow *window)
-{
-  RECT r;
-  HDC hdc;
-  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
-  GList *list = gdk_window_get_children (window);
-  GList *head = list;
-  GdkEvent *event;
-  int k;
-  
-  while (list)
-    {
-      synthesize_expose_events ((GdkWindow *) list->data);
-      list = list->next;
-    }
-
-  g_list_free (head);
-
-  if (((GdkWindowObject *) window)->input_only)
-    ;
-  else if (!(hdc = GetDC (impl->handle)))
-    WIN32_GDI_FAILED ("GetDC");
-  else
-    {
-      if ((k = GetClipBox (hdc, &r)) == ERROR)
-	WIN32_GDI_FAILED ("GetClipBox");
-      else if (k != NULLREGION)
-	{
-	  event = gdk_event_new (GDK_EXPOSE);
-	  event->expose.window = window;
-	  event->expose.area.x = r.left;
-	  event->expose.area.y = r.top;
-	  event->expose.area.width = r.right - r.left;
-	  event->expose.area.height = r.bottom - r.top;
-	  event->expose.region = cairo_region_create_rectangle (&(event->expose.area));
-	  event->expose.count = 0;
-  
-	  append_event (event);
-	}
-      GDI_CALL (ReleaseDC, (impl->handle, hdc));
-    }
-}
-
-static void
-update_colors (GdkWindow *window,
-	       gboolean   top)
-{
-  HDC hdc;
-  GdkDrawableImplWin32 *impl = GDK_DRAWABLE_IMPL_WIN32 (((GdkWindowObject *) window)->impl);
-  GList *list = gdk_window_get_children (window);
-  GList *head = list;
-
-  GDK_NOTE (COLORMAP, (top ? g_print ("update_colors:") : (void) 0));
-
-  while (list)
-    {
-      update_colors ((GdkWindow *) list->data, FALSE);
-      list = list->next;
-    }
-  g_list_free (head);
-
-  if (((GdkWindowObject *) window)->input_only ||
-      impl->colormap == NULL)
-    return;
-
-  if (!(hdc = GetDC (impl->handle)))
-    WIN32_GDI_FAILED ("GetDC");
-  else
-    {
-      GdkColormapPrivateWin32 *cmapp = GDK_WIN32_COLORMAP_DATA (impl->colormap);
-      HPALETTE holdpal;
-      gint k;
-      
-      if ((holdpal = SelectPalette (hdc, cmapp->hpal, TRUE)) == NULL)
-	WIN32_GDI_FAILED ("SelectPalette");
-      else if ((k = RealizePalette (hdc)) == GDI_ERROR)
-	WIN32_GDI_FAILED ("RealizePalette");
-      else
-	{
-	  GDK_NOTE (COLORMAP,
-		    (k > 0 ?
-		     g_print (" %p pal=%p: realized %d colors\n"
-			      "update_colors:",
-			      impl->handle, cmapp->hpal, k) :
-		     (void) 0,
-		     g_print (" %p", impl->handle)));
-	  GDI_CALL (UpdateColors, (hdc));
-	  SelectPalette (hdc, holdpal, TRUE);
-	  RealizePalette (hdc);
-	}
-      GDI_CALL (ReleaseDC, (impl->handle, hdc));
-    }
-  GDK_NOTE (COLORMAP, (top ? g_print ("\n") : (void) 0));
-}
-
 /* The check_extended flag controls whether to check if the windows want
  * events from extended input devices and if the message should be skipped
  * because an extended input device is active
@@ -1840,7 +1744,6 @@ gdk_event_translate (MSG  *msg,
   GdkDeviceGrabInfo *pointer_grab = NULL;
   GdkWindow *grab_window = NULL;
 
-  static gint update_colors_counter = 0;
   gint button;
   GdkAtom target;
 
@@ -2436,35 +2339,6 @@ gdk_event_translate (MSG  *msg,
 		 (LOWORD (msg->wParam) == SB_THUMBPOSITION ||
 		  LOWORD (msg->wParam) == SB_THUMBTRACK) ?
 		 (g_print (" %d", HIWORD (msg->wParam)), 0) : 0));
-      break;
-
-    case WM_QUERYNEWPALETTE:
-      if (gdk_visual_get_system ()->type == GDK_VISUAL_PSEUDO_COLOR)
-	{
-	  synthesize_expose_events (window);
-	  update_colors_counter = 0;
-	}
-      return_val = TRUE;
-      break;
-
-    case WM_PALETTECHANGED:
-      GDK_NOTE (EVENTS_OR_COLORMAP, g_print (" %p", (HWND) msg->wParam));
-      if (gdk_visual_get_system ()->type != GDK_VISUAL_PSEUDO_COLOR)
-	break;
-
-      return_val = TRUE;
-
-      if (msg->hwnd == (HWND) msg->wParam)
-	break;
-
-      if (++update_colors_counter == 5)
-	{
-	  synthesize_expose_events (window);
-	  update_colors_counter = 0;
-	  break;
-	}
-      
-      update_colors (window, TRUE);
       break;
 
      case WM_MOUSEACTIVATE:

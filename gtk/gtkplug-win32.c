@@ -29,6 +29,7 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkplugprivate.h"
+#include "gtkdebug.h"
 
 #include "win32/gdkwin32.h"
 

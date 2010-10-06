@@ -34,6 +34,7 @@
 #include "gtkprivate.h"
 #include "gtksocket.h"
 #include "gtksocketprivate.h"
+#include "gtkdebug.h"
 
 #include "win32/gdkwin32.h"
 
