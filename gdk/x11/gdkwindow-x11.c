@@ -5467,7 +5467,7 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
 
-  display = gdk_screen_get_display (GDK_DRAWABLE_IMPL_X11 (impl)->screen);
+  display = gdk_window_get_display (window);
   dpy = GDK_DISPLAY_XDISPLAY (display);
   xid = GDK_WINDOW_XWINDOW (private);
 
