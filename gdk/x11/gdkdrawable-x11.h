@@ -48,10 +48,6 @@ typedef struct _GdkDrawableImplX11Class GdkDrawableImplX11Class;
 struct _GdkDrawableImplX11
 {
   GdkDrawable parent_instance;
-
-  GdkDrawable *wrapper;
-  
-  cairo_surface_t *cairo_surface;
 };
  
 struct _GdkDrawableImplX11Class 
@@ -63,7 +59,6 @@ struct _GdkDrawableImplX11Class
 GType _gdk_drawable_impl_x11_get_type (void);
 
 /* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
-void _gdk_x11_drawable_finish           (GdkDrawable  *drawable);
 void _gdk_x11_drawable_update_size      (GdkDrawable  *drawable);
 
 G_END_DECLS

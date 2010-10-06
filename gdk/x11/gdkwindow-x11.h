@@ -58,6 +58,8 @@ struct _GdkWindowImplX11
 {
   GdkDrawableImplX11 parent_instance;
 
+  GdkDrawable *wrapper;
+
   Window xid;
 
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
@@ -69,6 +71,8 @@ struct _GdkWindowImplX11
 				 * unset during resizing and scaling */
   guint override_redirect : 1;
   guint use_synchronized_configure : 1;
+  
+  cairo_surface_t *cairo_surface;
 
 #if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
   Damage damage;

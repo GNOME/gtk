@@ -168,27 +168,103 @@ _gdk_x11_window_get_toplevel (GdkWindow *window)
   return impl->toplevel;
 }
 
+static const cairo_user_data_key_t gdk_x11_cairo_key;
+
+/**
+ * _gdk_x11_drawable_update_size:
+ * @drawable: a #GdkDrawableImplX11.
+ * 
+ * Updates the state of the drawable (in particular the drawable's
+ * cairo surface) when its size has changed.
+ **/
+void
+_gdk_x11_drawable_update_size (GdkDrawable *drawable)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (drawable);
+  
+  if (impl->cairo_surface)
+    {
+      cairo_xlib_surface_set_size (impl->cairo_surface,
+                                   gdk_window_get_width (impl->wrapper),
+                                   gdk_window_get_height (impl->wrapper));
+    }
+}
+
+/*****************************************************
+ * X11 specific implementations of generic functions *
+ *****************************************************/
+
+static void
+gdk_x11_cairo_surface_destroy (void *data)
+{
+  GdkWindowImplX11 *impl = data;
+
+  impl->cairo_surface = NULL;
+}
+
+static cairo_surface_t *
+gdk_x11_create_cairo_surface (GdkDrawable *drawable,
+			      int width,
+			      int height)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (drawable);
+  GdkVisual *visual;
+    
+  visual = gdk_window_get_visual (impl->wrapper);
+  return cairo_xlib_surface_create (GDK_WINDOW_XDISPLAY (impl->wrapper),
+                                    GDK_WINDOW_IMPL_X11 (impl)->xid,
+                                    GDK_VISUAL_XVISUAL (visual),
+                                    width, height);
+}
+
+static cairo_surface_t *
+gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (drawable);
+
+  if (GDK_IS_WINDOW_IMPL_X11 (drawable) &&
+      GDK_WINDOW_DESTROYED (impl->wrapper))
+    return NULL;
+
+  if (!impl->cairo_surface)
+    {
+      impl->cairo_surface = gdk_x11_create_cairo_surface (drawable,
+                                                          gdk_window_get_width (impl->wrapper),
+                                                          gdk_window_get_height (impl->wrapper));
+      
+      if (impl->cairo_surface)
+	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
+				     drawable, gdk_x11_cairo_surface_destroy);
+    }
+  else
+    cairo_surface_reference (impl->cairo_surface);
+
+  return impl->cairo_surface;
+}
+
 static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   
   object_class->finalize = gdk_window_impl_x11_finalize;
+  
+  drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
+  drawable_class->create_cairo_surface = gdk_x11_create_cairo_surface;
 }
 
 static void
 gdk_window_impl_x11_finalize (GObject *object)
 {
   GdkWindowObject *wrapper;
-  GdkDrawableImplX11 *draw_impl;
-  GdkWindowImplX11 *window_impl;
+  GdkWindowImplX11 *impl;
   
   g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (object));
 
-  draw_impl = GDK_DRAWABLE_IMPL_X11 (object);
-  window_impl = GDK_WINDOW_IMPL_X11 (object);
+  impl = GDK_WINDOW_IMPL_X11 (object);
   
-  wrapper = (GdkWindowObject*) draw_impl->wrapper;
+  wrapper = (GdkWindowObject*) impl->wrapper;
 
   _gdk_xgrab_check_destroy (GDK_WINDOW (wrapper));
 
@@ -196,17 +272,17 @@ gdk_window_impl_x11_finalize (GObject *object)
     {
       GdkDisplay *display = GDK_WINDOW_DISPLAY ((GdkWindow *) wrapper);
       
-      _gdk_xid_table_remove (display, window_impl->xid);
-      if (window_impl->toplevel && window_impl->toplevel->focus_window)
-	_gdk_xid_table_remove (display, window_impl->toplevel->focus_window);
+      _gdk_xid_table_remove (display, impl->xid);
+      if (impl->toplevel && impl->toplevel->focus_window)
+	_gdk_xid_table_remove (display, impl->toplevel->focus_window);
     }
 
-  g_free (window_impl->toplevel);
+  g_free (impl->toplevel);
 
-  if (window_impl->cursor)
-    gdk_cursor_unref (window_impl->cursor);
+  if (impl->cursor)
+    gdk_cursor_unref (impl->cursor);
 
-  g_hash_table_destroy (window_impl->device_cursor);
+  g_hash_table_destroy (impl->device_cursor);
 
   G_OBJECT_CLASS (gdk_window_impl_x11_parent_class)->finalize (object);
 }
@@ -423,7 +499,7 @@ void
 _gdk_windowing_window_init (GdkScreen * screen)
 {
   GdkWindowObject *private;
-  GdkDrawableImplX11 *draw_impl;
+  GdkWindowImplX11 *impl;
   GdkScreenX11 *screen_x11;
 
   screen_x11 = GDK_SCREEN_X11 (screen);
@@ -437,10 +513,10 @@ _gdk_windowing_window_init (GdkScreen * screen)
   private->impl_window = private;
   private->visual = gdk_screen_get_system_visual (screen);
 
-  draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
   
-  GDK_WINDOW_IMPL_X11 (draw_impl)->xid = screen_x11->xroot_window;
-  draw_impl->wrapper = GDK_DRAWABLE (private);
+  impl->xid = screen_x11->xroot_window;
+  impl->wrapper = GDK_DRAWABLE (private);
   
   private->window_type = GDK_WINDOW_ROOT;
   private->depth = DefaultDepthOfScreen (screen_x11->xscreen);
@@ -658,7 +734,6 @@ _gdk_window_impl_new (GdkWindow     *window,
 {
   GdkWindowObject *private;
   GdkWindowImplX11 *impl;
-  GdkDrawableImplX11 *draw_impl;
   GdkScreenX11 *screen_x11;
   GdkDisplayX11 *display_x11;
   
@@ -681,8 +756,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl = (GdkDrawable *)impl;
-  draw_impl = GDK_DRAWABLE_IMPL_X11 (impl);
-  draw_impl->wrapper = GDK_DRAWABLE (window);
+  impl->wrapper = GDK_DRAWABLE (window);
   
   xdisplay = screen_x11->xdisplay;
 
@@ -852,7 +926,6 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
   GdkWindow *window;
   GdkWindowObject *private;
   GdkWindowImplX11 *impl;
-  GdkDrawableImplX11 *draw_impl;
   GdkDisplayX11 *display_x11;
   XWindowAttributes attrs;
   Window root, parent;
@@ -893,8 +966,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
                                                   XVisualIDFromVisual (attrs.visual));
 
   impl = GDK_WINDOW_IMPL_X11 (private->impl);
-  draw_impl = GDK_DRAWABLE_IMPL_X11 (private->impl);
-  draw_impl->wrapper = GDK_DRAWABLE (window);
+  impl->wrapper = GDK_DRAWABLE (window);
   
   private->parent = gdk_xid_table_lookup_for_display (display, parent);
   
@@ -1007,6 +1079,7 @@ _gdk_x11_window_destroy (GdkWindow *window,
 			 gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (private->impl);
   GdkToplevelX11 *toplevel;
   
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1017,7 +1090,12 @@ _gdk_x11_window_destroy (GdkWindow *window,
   if (toplevel)
     gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), toplevel);
 
-  _gdk_x11_drawable_finish (private->impl);
+  if (impl->cairo_surface)
+    {
+      cairo_surface_finish (impl->cairo_surface);
+      cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
+				   NULL, NULL);
+    }
 
   if (!recursing && !foreign_destroy)
     {
