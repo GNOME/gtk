@@ -154,7 +154,6 @@ gdk_drag_get_selection
 gdk_drag_motion
 gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_drag_status
-gdk_drawable_get_clip_region
 gdk_drawable_get_type G_GNUC_CONST
 gdk_drawable_get_visible_region
 gdk_drop_finish
@@ -414,6 +413,7 @@ gdk_window_geometry_changed
 gdk_window_get_accept_focus
 gdk_window_get_background_pattern
 gdk_window_get_children
+gdk_window_get_clip_region
 gdk_window_get_composited
 gdk_window_get_cursor
 gdk_window_get_decorations

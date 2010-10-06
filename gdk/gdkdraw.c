@@ -51,28 +51,6 @@ gdk_drawable_init (GdkDrawable *drawable)
 }
 
 /**
- * gdk_drawable_get_clip_region:
- * @drawable: a #GdkDrawable
- * 
- * Computes the region of a drawable that potentially can be written
- * to by drawing primitives. This region will not take into account
- * the clip region for the GC, and may also not take into account
- * other factors such as if the window is obscured by other windows,
- * but no area outside of this region will be affected by drawing
- * primitives.
- * 
- * Returns: a #cairo_region_t. This must be freed with cairo_region_destroy()
- *          when you are done.
- **/
-cairo_region_t *
-gdk_drawable_get_clip_region (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  return GDK_DRAWABLE_GET_CLASS (drawable)->get_clip_region (drawable);
-}
-
-/**
  * gdk_drawable_get_visible_region:
  * @drawable: a #GdkDrawable
  * 

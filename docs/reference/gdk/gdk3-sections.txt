@@ -278,7 +278,6 @@ GDK_TYPE_RGBA
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
 GdkDrawable
-gdk_drawable_get_clip_region
 gdk_drawable_get_visible_region
 
 <SUBSECTION Standard>
@@ -397,6 +396,7 @@ gdk_window_constrain_size
 gdk_window_beep
 
 <SUBSECTION>
+gdk_window_get_clip_region
 gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
 gdk_window_end_paint

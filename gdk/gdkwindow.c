@@ -225,7 +225,6 @@ static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
 							 int height);
 static void             gdk_window_drop_cairo_surface (GdkWindowObject *private);
 
-static cairo_region_t*   gdk_window_get_clip_region        (GdkDrawable *drawable);
 static cairo_region_t*   gdk_window_get_visible_region     (GdkDrawable *drawable);
 
 static void gdk_window_free_paint_stack (GdkWindow *window);
@@ -383,7 +382,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
-  drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
 
   klass->create_surface = _gdk_offscreen_window_create_surface;
@@ -3516,11 +3514,28 @@ gdk_window_flush_recursive (GdkWindowObject *window)
   gdk_window_flush_recursive_helper (window, window->impl);
 }
 
-static cairo_region_t*
-gdk_window_get_clip_region (GdkDrawable *drawable)
+/**
+ * gdk_window_get_clip_region:
+ * @window: a #GdkWindow
+ * 
+ * Computes the region of a window that potentially can be written
+ * to by drawing primitives. This region may not take into account
+ * other factors such as if the window is obscured by other windows,
+ * but no area outside of this region will be affected by drawing
+ * primitives.
+ * 
+ * Returns: a #cairo_region_t. This must be freed with cairo_region_destroy()
+ *          when you are done.
+ **/
+cairo_region_t*
+gdk_window_get_clip_region (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject *)drawable;
+  GdkWindowObject *private;
   cairo_region_t *result;
+
+  g_return_val_if_fail (GDK_WINDOW (window), NULL);
+
+  private = (GdkWindowObject *) window;
 
   result = cairo_region_copy (private->clip_region);
 
