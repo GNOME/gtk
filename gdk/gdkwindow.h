@@ -681,6 +681,8 @@ void          gdk_window_set_geometry_hints (GdkWindow          *window,
 void          gdk_set_sm_client_id          (const gchar        *sm_client_id);
 
 cairo_region_t *gdk_window_get_clip_region  (GdkWindow          *window);
+cairo_region_t *gdk_window_get_visible_region(GdkWindow         *window);
+
 
 void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
 					     const GdkRectangle *rectangle);

@@ -225,8 +225,6 @@ static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
 							 int height);
 static void             gdk_window_drop_cairo_surface (GdkWindowObject *private);
 
-static cairo_region_t*   gdk_window_get_visible_region     (GdkDrawable *drawable);
-
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
 static void gdk_window_init       (GdkWindowObject      *window);
@@ -382,7 +380,6 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 
   drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
   drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
-  drawable_class->get_visible_region = gdk_window_get_visible_region;
 
   klass->create_surface = _gdk_offscreen_window_create_surface;
 
@@ -3560,10 +3557,26 @@ gdk_window_get_clip_region (GdkWindow *window)
   return result;
 }
 
-static cairo_region_t*
-gdk_window_get_visible_region (GdkDrawable *drawable)
+/**
+ * gdk_window_get_visible_region:
+ * @window: a #GdkWindow
+ * 
+ * Computes the region of the @window that is potentially visible.
+ * This does not necessarily take into account if the window is
+ * obscured by other windows, but no area outside of this region
+ * is visible.
+ * 
+ * Returns: a #cairo_region_t. This must be freed with cairo_region_destroy()
+ *          when you are done.
+ **/
+cairo_region_t *
+gdk_window_get_visible_region (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject*) drawable;
+  GdkWindowObject *private;
+  
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  private = (GdkWindowObject*) window;
 
   return cairo_region_copy (private->clip_region);
 }
@@ -4511,7 +4524,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
       private->window_type == GDK_WINDOW_ROOT)
     return;
 
-  visible_region = gdk_drawable_get_visible_region (window);
+  visible_region = gdk_window_get_visible_region (window);
   cairo_region_intersect (visible_region, region);
 
   tmp_list = private->children;

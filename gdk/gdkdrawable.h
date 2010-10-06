@@ -62,8 +62,6 @@ struct _GdkDrawableClass
 {
   GObjectClass parent_class;
   
-  cairo_region_t*   (*get_visible_region) (GdkDrawable  *drawable);
-
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
   cairo_surface_t * (*create_cairo_surface) (GdkDrawable *drawable,
@@ -82,8 +80,6 @@ struct _GdkDrawableClass
 };
 
 GType           gdk_drawable_get_type     (void) G_GNUC_CONST;
-
-cairo_region_t *gdk_drawable_get_visible_region (GdkDrawable *drawable);
 
 G_END_DECLS
 
