@@ -23,12 +23,21 @@
 
 /**
  * SECTION:gtkwrapbox
- * @Short_Description: A container that wraps its children;
+ * @Short_Description: A container that wraps its children
  * @Title: GtkWrapBox
  *
- * #GtkWrapBox allocates space for an ordered list of children
- * by wrapping them over in the box's orentation.
+ * #GtkWrapBox positions child widgets in sequence according to its
+ * orientation. For instance, with the horizontal orientation, the widgets
+ * will be arranged from left to right, starting a new row under the
+ * previous row when necessary. Reducing the width in this case will
+ * require more rows, so a larger height will be requested.
  *
+ * Likewise, with the vertical orientation, the widgets will be arranged
+ * from top to bottom, starting a new column to the right when necessary.
+ * Reducing the height will require more columns, so a larger width will be
+ * requested.
+ *
+ * Unlike a GtkTable, the child widgets do not need to align in a grid.
  */
 
 #include "config.h"
