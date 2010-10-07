@@ -267,7 +267,6 @@ struct _GdkWindowObject
   cairo_region_t *input_shape;
   
   cairo_surface_t *cairo_surface;
-  guint outstanding_surfaces; /* only set on impl window */
 
   GList *devices_inside;
   GHashTable *device_events;

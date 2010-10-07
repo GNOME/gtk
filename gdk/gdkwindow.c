@@ -2784,9 +2784,6 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
       private->implicit_paint != NULL)
     return FALSE; /* Don't stack implicit paints */
 
-  if (private->outstanding_surfaces != 0)
-    return FALSE; /* May conflict with direct drawing to cairo surface */
-
   /* Never do implicit paints for foreign windows, they don't need
    * double buffer combination since they have no client side children,
    * and creating surfaces for them is risky since they could disappear
@@ -3393,11 +3390,7 @@ move_region_on_impl (GdkWindowObject *impl_window,
       cairo_region_destroy (exposing);
     }
 
-  if (impl_window->outstanding_surfaces == 0) /* Enable flicker free handling of moves. */
-    append_move_region (impl_window, region, dx, dy);
-  else
-    do_move_region_bits_on_impl (impl_window,
-				 region, dx, dy);
+  append_move_region (impl_window, region, dx, dy);
 
   cairo_region_destroy (region);
 }
@@ -3702,7 +3695,6 @@ gdk_window_cairo_surface_destroy (void *data)
   GdkWindowObject *private = (GdkWindowObject*) data;
 
   private->cairo_surface = NULL;
-  private->impl_window->outstanding_surfaces--;
 }
 
 static cairo_surface_t *
@@ -3754,8 +3746,6 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
 
 	  if (private->cairo_surface)
 	    {
-	      private->impl_window->outstanding_surfaces++;
-
 	      cairo_surface_set_user_data (private->cairo_surface, &gdk_window_cairo_key,
 					   drawable, gdk_window_cairo_surface_destroy);
 	    }
