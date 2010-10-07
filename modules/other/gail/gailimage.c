@@ -146,9 +146,11 @@ gail_image_get_name (AtkObject *accessible)
   g_free (image_accessible->stock_name);
   image_accessible->stock_name = NULL;
 
+  if (gtk_image_get_storage_type (image) != GTK_IMAGE_STOCK)
+    return NULL;
+
   gtk_image_get_stock (image, &stock_id, NULL);
-  if (gtk_image_get_storage_type (image) != GTK_IMAGE_STOCK ||
-      stock_id == NULL)
+  if (stock_id == NULL)
     return NULL;
 
   if (!gtk_stock_lookup (stock_id, &stock_item))
