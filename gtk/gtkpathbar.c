@@ -1960,8 +1960,3 @@ _gtk_path_bar_down (GtkPathBar *path_bar)
 	}
     }
 }
-
-#define __GTK_PATH_BAR_C__
-#include "gtkaliasdef.c"
-
-/* vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s */

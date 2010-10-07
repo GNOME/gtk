@@ -838,7 +838,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
    *
    * Since: 3.0
    */
-  g_object_interface_install_property (g_iface,
+  g_object_interface_install_property (iface,
 				       g_param_spec_boxed ("root-uris",
 							   P_("Root URIs"),
 							   P_("The URIs, if any, to use as the root for all access in the file chooser."),
@@ -3016,8 +3016,5 @@ _gtk_file_chooser_get_visible_roots (GtkFileChooser *chooser)
   return results;
 }
 
-
-#define __GTK_FILE_CHOOSER_C__
-#include "gtkaliasdef.c"
 
 /* vim: et sw=2 cinoptions=(0,t0,f1s,n-1s,{1s,>2s,^-1s */
