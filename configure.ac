@@ -2,6 +2,14 @@
 # require autoconf 2.54
 AC_PREREQ([2.62])
 
+AC_INIT([gtk+], [gtk_version],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
+        [gtk+])
+
+AC_CONFIG_HEADER([config.h])
+AC_CONFIG_SRCDIR([gdk/gdktypes.h])
+AC_CONFIG_MACRO_DIR([m4])
+
 # Making releases:
 #   GTK_MICRO_VERSION += 1;
 #   GTK_INTERFACE_AGE += 1;
@@ -47,14 +55,6 @@ AC_SUBST(ATK_REQUIRED_VERSION)
 AC_SUBST(CAIRO_REQUIRED_VERSION)
 AC_SUBST(GDK_PIXBUF_REQUIRED_VERSION)
 
-
-AC_INIT([gtk+], [gtk_version],
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
-	[gtk+])
-
-AC_CONFIG_HEADER([config.h])
-AC_CONFIG_SRCDIR([gdk/gdktypes.h])
-AC_CONFIG_MACRO_DIR([m4])
 
 # Save this value here, since automake will set cflags later
 cflags_set=${CFLAGS+set}
