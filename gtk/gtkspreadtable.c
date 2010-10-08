@@ -62,17 +62,6 @@ struct _GtkSpreadTablePrivate {
   guint16        vertical_spacing;
 };
 
-/* Our column equalizing algorithm splits up
- * children into 'lines' segments and maintains
- * the integrity of the array of line segments while
- * itterating over columns (or 'segments').
- */
-typedef struct {
-  GList *children; /* List of children in this segment */
-  gint   size;     /* Overall size of segment (or 'height of column') */
-} LineSegment;
-
-
 /* GObjectClass */
 static void gtk_spread_table_get_property         (GObject             *object,
 						   guint                prop_id,
@@ -424,182 +413,57 @@ get_segment_length (GtkSpreadTable *table,
   return size;
 }
 
-/* Moves a child from the previous line segment (column) into a given column
- * and keeps the LineSegments array updated */
 static gboolean
-child_forward (GtkSpreadTable *table, 
-	       LineSegment    *line_segments, 
-	       gint            line_thickness,
-	       gint            line_index)
+children_fit_segment_size (GtkSpreadTable *table, 
+			   GList          *children,
+			   gint            line_thickness,
+			   gint            size,
+			   gint           *segments,
+			   gint           *largest_segment_size)
 {
-  GtkSpreadTablePrivate  *priv = table->priv;
-  GtkWidget              *child;
-  GList                  *link;
-  gint                    child_size;
+  GtkSpreadTablePrivate  *priv;
+  GList                  *l;
+  gint                    segment_size, i;
+  gint                    spacing;
 
-  g_assert (line_index > 0);
- 
-  /* Get the last child from the previous line */
-  link = g_list_last (line_segments[line_index - 1].children);
+  priv    = table->priv;
+  spacing = ITEM_SPACING (table);
 
-  if (!link)
-    return FALSE;
+  /* reset segments */
+  memset (segments, 0x0, sizeof (gint) * priv->lines);
 
-  child = link->data;
-  get_widget_size (child, priv->orientation, line_thickness, NULL, &child_size);
-
-  /* Adjust target column size */
-  if (line_segments[line_index].children)
-    line_segments[line_index].size += ITEM_SPACING (table);
-  line_segments[line_index].size += child_size;
-
-  /* Remove it from the previous line */
-  line_segments[line_index - 1].children = 
-    g_list_remove_link (line_segments[line_index - 1].children, link);
-
-  /* Prepend child to this line */
-  line_segments[line_index].children = 
-    g_list_concat (link, line_segments[line_index].children);
-
-  /* Adjust previous column size */
-  if (line_segments[line_index - 1].children)
-    line_segments[line_index - 1].size -= ITEM_SPACING (table);
-  line_segments[line_index - 1].size -= child_size;
-  
-  return TRUE;
-}
-
-/* Gets the largest size of line segments between two inclusive indexes*/
-static gint 
-count_size (LineSegment  *line_segments,
-	    gint          index_from,
-	    gint          index_to)
-{
-  gint total_size = 0;
-  gint i;
-
-  g_assert (index_from < index_to);
-
-  for (i = index_from; i < index_to + 1; i++)
+  for (l = children, i = 0; l && i < priv->lines; i++)
     {
-      /* Ignore the size of columns which have only one child,
-       * if they are huge widgets then we want to ignore them and
-       * even out the remaining columns, if they are small then we
-       * still want to put at least one widget on every line.
-       */
-      if (line_segments[i].children && 
-	  line_segments[i].children->next)
-	total_size = MAX (total_size, line_segments[i].size);
-    }
+      segment_size = 0;
 
-  return total_size;
-}
-
-/* Creates a copy of the LineSegments array */
-static LineSegment *
-copy_line_segments (GtkSpreadTable *table,
-		    LineSegment    *segments)
-{
-  GtkSpreadTablePrivate *priv = table->priv;
-  LineSegment           *copy = g_new0 (LineSegment, priv->lines);
-  gint                   i;
-
-  for (i = 0; i < priv->lines; i++)
-    {
-      copy[i].children = g_list_copy (segments[i].children);
-      copy[i].size     = segments[i].size;
-    }
-
-  return copy;
-}
-
-/* Frees the LineSegments array */
-static void
-free_line_segments (GtkSpreadTable *table, 
-		    LineSegment    *segments)
-{
-  GtkSpreadTablePrivate *priv = table->priv;
-  gint                 i;
-
-  for (i = 0; i < priv->lines; i++)
-    g_list_free (segments[i].children);
-
-  g_free (segments);
-}
-
-static void
-merge_line_segments (LineSegment  *dest,
-		     LineSegment  *src,
-		     gint          index)
-{
-  gint i;
-
-  for (i = 0; i < index + 1; i++)
-    {
-      g_list_free (dest[i].children);
-      dest[i].children = g_list_copy (src[i].children);
-      dest[i].size     = src[i].size;
-    }
-}
-
-/* This algorithm equalizes 2 columns but recurses into previously
- * equalized columns when widgets are moved over from previous columns */
-static void
-equalize_line_segments (GtkSpreadTable *table, 
-			LineSegment    *line_segments,
-			gint            line_thickness,
-			gint            line_index)
-{
-  gint         guess_size, best_size;
-  gboolean     child_moved;
-  LineSegment *segments;
-
-  g_assert (line_index > 0);
-
-  /* Use a local copy to check for a best size of this index and all
-   * previous indexes recursively (this allows us to 'try' our array
-   * and compare it before updating the return value)  */
-  segments = copy_line_segments (table, line_segments);
-
-  /* Get the total best size for all preceeding columns */
-  guess_size = best_size = count_size (segments, 0, line_index);
-
-  /* Loop shifting one widget from the previous column over at a time
-   * until the new size is worse than the last size (pull as many widgets
-   * across into the new segment without getting a larger size)
-   */
-  while (guess_size <= best_size)
-    {
-      child_moved = child_forward (table, segments, line_thickness, line_index);
-
-      /* No more children to pull into this column, break out
-       * (never decide to leave a preceeding column empty, stick
-       * with the last result instead)
-       */
-      if (!child_moved)
-	break;
-
-      /* Now that we've pulled a widget over, recurse backwards through the list and see
-       * if we need to shift any widgets in previous lines (columns) 
-       */
-      if (line_index > 1)
-	equalize_line_segments (table, segments, line_thickness, line_index - 1);
-      
-      /* Get the total new best size for columns iterated over so far */
-      guess_size = count_size (segments, 0, line_index);
-
-      /* keep pulling widgets along even if the whole thing stays 
-       * the same size (untill the new guess is actually worse) */
-      if (guess_size <= best_size)
+      /* While we still have children to place and
+       * there is space left on this line */
+      while (l && segment_size < size)
 	{
- 	  best_size = guess_size;
+	  GtkWidget *child = l->data;
+	  gint       widget_size;
 
-	  /* This one's a keeper, override our portion of 'line_segments' */
-	  merge_line_segments (line_segments, segments, line_index);
+	  get_widget_size (child, priv->orientation, line_thickness, NULL, &widget_size);
+
+	  if (segment_size != 0)
+	    segment_size += spacing;
+
+	  segment_size += widget_size;
+
+	  /* Consume this widget in this line segment if it fits the size
+	   * or it is alone taller than the whole tested size */
+	  if (segment_size <= size || segments[i] == 0)
+	    {
+	      *largest_segment_size = MAX (*largest_segment_size, segment_size);
+	      segments[i]++;
+
+	      l = l->next;
+	    }
 	}
     }
 
-  free_line_segments (table, segments);
+  /* If we placed all the widgets in the target size, the size fits. */
+  return (l == NULL);
 }
 
 /* All purpose algorithm entry point, this function takes an allocated size
@@ -616,44 +480,76 @@ segment_lines_for_size (GtkSpreadTable *table,
 			gint            for_size,
 			gint          **segments)
 {
-  GtkSpreadTablePrivate  *priv = table->priv;
-  LineSegment            *line_segments;
+  GtkSpreadTablePrivate  *priv;
+  GList                  *children;
   gint                    line_thickness;
-  gint                    max_segment_length = 0;
-  gint                   *segment_counts = NULL;
-  gint                    i;
+  gint                   *segment_counts = NULL, *test_counts;
+  gint                    upper, lower, segment_size, largest_size = 0;
+  gint                    i, j;
 
-  line_segments    = g_new0 (LineSegment, priv->lines);
-  if (segments)
-    segment_counts = g_new0 (gint, priv->lines);
-
+  priv           = table->priv;
   line_thickness = get_line_thickness (table, for_size);
 
-  /* Start by lining up all widgets in the first segment */
-  line_segments[0].children = get_visible_children (table);
-  line_segments[0].size     = get_segment_length (table, line_thickness, line_segments[0].children);
+  segment_counts = g_new0 (gint, priv->lines);
+  test_counts    = g_new0 (gint, priv->lines);
 
-  /* For every segment (column), equalize it and pull widgets from previous segments 
-   * until we've pulled widgets into all columns */
-  for (i = 1; i < priv->lines; i++)
-    equalize_line_segments (table, line_segments, line_thickness, i);
+  /* Start by getting the child list/total size/average size */
+  children = get_visible_children (table);
+  upper    = get_segment_length (table, line_thickness, children);
+  lower    = upper / priv->lines;
 
-  /* Free the line segments and tally up the 'segment_counts' for size_allocate */
+  /* Start with half way between the average and total height */
+  segment_size = lower + (upper - lower) / 2;
+
+  while (segment_size > lower && segment_size < upper)
+    {
+      gint test_largest = 0;
+
+      if (children_fit_segment_size (table, children, line_thickness,
+				     segment_size, test_counts, &test_largest))
+	{
+	  upper         = segment_size;
+	  segment_size -= (segment_size - lower) / 2;
+
+	  /* Save the last arrangement that 'fit' */
+	  largest_size  = test_largest;
+	  memcpy (segment_counts, test_counts, sizeof (gint) * priv->lines);
+	}
+      else
+	{
+	  lower         = segment_size;
+	  segment_size += (upper - segment_size) / 2;
+	}
+    }
+
+  /* Perform some corrections: fill in any trailing columns that are missing widgets */
   for (i = 0; i < priv->lines; i++)
     {
-      max_segment_length = MAX (max_segment_length, line_segments[i].size);
-
-      if (segment_counts)
-	segment_counts[i] = g_list_length (line_segments[i].children);
-
-      g_list_free (line_segments[i].children);
+      /* If this column has no widgets... */
+      if (!segment_counts[i])
+	{
+	  /* rewind to the last column that had more than 1 widget */
+	  for (j = i - 1; j >= 0; j--)
+	    {
+	      if (segment_counts[j] > 1)
+		{
+		  /* put an available widget in the empty column */
+		  segment_counts[j]--;
+		  segment_counts[i]++;
+		  break;
+		}
+	    }
+	}
     }
-  g_free (line_segments);
 
   if (segments)
     *segments = segment_counts;
+  else
+    g_free (segment_counts);
 
-  return max_segment_length;
+  g_free (test_counts);
+
+  return largest_size;
 }
 
 
