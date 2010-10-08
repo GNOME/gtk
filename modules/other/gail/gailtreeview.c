@@ -203,7 +203,6 @@ static void             model_row_changed               (GtkTreeModel           
 static void             column_visibility_changed       (GObject                *object,
                                                          GParamSpec             *param,
                                                          gpointer               user_data);
-static void             column_destroy                  (GObject                *obj); 
 static void             model_row_inserted              (GtkTreeModel           *tree_model,
                                                          GtkTreePath            *path,
                                                          GtkTreeIter            *iter,
@@ -523,9 +522,6 @@ gail_tree_view_real_initialize (AtkObject *obj,
       g_signal_connect_data (tmp_list->data, "notify::visible",
        (GCallback)column_visibility_changed, 
         tree_view, NULL, FALSE);
-      g_signal_connect_data (tmp_list->data, "destroy",
-       (GCallback)column_destroy, 
-        NULL, NULL, FALSE);
       g_array_append_val (view->col_data, tmp_list->data);
     }
 
@@ -1547,7 +1543,6 @@ gail_tree_view_set_column_header (AtkTable  *table,
   GtkWidget *widget;
   GtkTreeView *tree_view;
   GtkTreeViewColumn *tv_col;
-  AtkObject *rc;
   AtkPropertyValues values = { NULL };
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (table));
@@ -1560,14 +1555,10 @@ gail_tree_view_set_column_header (AtkTable  *table,
   if (tv_col == NULL)
      return;
 
-  rc = g_object_get_qdata (G_OBJECT (tv_col),
-                          quark_column_header_object);
-  if (rc)
-    g_object_unref (rc);
-
-  g_object_set_qdata (G_OBJECT (tv_col),
-			quark_column_header_object,
-			header);
+  g_object_set_qdata_full (G_OBJECT (tv_col),
+                           quark_column_header_object,
+                           header,
+                           g_object_unref);
   if (header)
     g_object_ref (header);
   g_value_init (&values.new_value, G_TYPE_INT);
@@ -1665,9 +1656,10 @@ gail_tree_view_set_column_description (AtkTable	   *table,
   if (tv_col == NULL)
      return;
 
-  g_object_set_qdata (G_OBJECT (tv_col),
-                      quark_column_desc_object,
-                      g_strdup (description));
+  g_object_set_qdata_full (G_OBJECT (tv_col),
+                           quark_column_desc_object,
+                           g_strdup (description),
+                           g_free);
   g_value_init (&values.new_value, G_TYPE_INT);
   g_value_set_int (&values.new_value, in_col);
 
@@ -2807,28 +2799,6 @@ column_visibility_changed (GObject    *object,
 	  }
         }
     }
-}
-
-/*
- * This is the signal handler for the "destroy" signal for a GtkTreeViewColumn
- *
- * We check whether we have stored column description or column header
- * and if so we get rid of it.
- */
-static void
-column_destroy (GObject *obj)
-{
-  GtkTreeViewColumn *tv_col = GTK_TREE_VIEW_COLUMN (obj);
-  AtkObject *header;
-  gchar *desc;
-
-  header = g_object_get_qdata (G_OBJECT (tv_col),
-                          quark_column_header_object);
-  if (header)
-    g_object_unref (header);
-  desc = g_object_get_qdata (G_OBJECT (tv_col),
-                           quark_column_desc_object);
-  g_free (desc); 
 }
 
 static void
