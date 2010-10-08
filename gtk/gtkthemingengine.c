@@ -442,7 +442,7 @@ gtk_theming_module_init (GtkThemingModule *module)
 {
 }
 
-G_CONST_RETURN GtkThemingEngine *
+GtkThemingEngine *
 gtk_theming_engine_load (const gchar *name)
 {
   static GHashTable *engines = NULL;
