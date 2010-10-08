@@ -2732,7 +2732,8 @@ calendar_paint_arrow (GtkCalendar *calendar,
       cairo_paint (cr);
       cairo_destroy (cr);
       
-      gdk_drawable_get_size (window, &width, &height);
+      width = gdk_window_get_width (window);
+      height = gdk_window_get_height (window);
       if (arrow == ARROW_MONTH_LEFT || arrow == ARROW_YEAR_LEFT)
 	gtk_paint_arrow (widget->style, window, state, 
 			 GTK_SHADOW_OUT, NULL, widget, "calendar",

@@ -3000,7 +3000,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
   if (gtk_widget_get_realized (widget))
-    gdk_drawable_get_size (widget->window, NULL, &frame_height);
+    frame_height = gdk_window_get_height (widget->window);
   else
     frame_height = requisition.height;
 
@@ -4067,7 +4067,7 @@ set_invisible_cursor (GdkWindow *window)
   GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
 
   gdk_window_set_cursor (window, cursor);
