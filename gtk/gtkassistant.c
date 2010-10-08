@@ -1444,6 +1444,9 @@ gtk_assistant_draw (GtkWidget *widget,
   GtkAssistantPrivate *priv = assistant->priv;
   GtkContainer *container = GTK_CONTAINER (widget);
 
+  if (GTK_WIDGET_CLASS (gtk_assistant_parent_class)->draw)
+    GTK_WIDGET_CLASS (gtk_assistant_parent_class)->draw (widget, cr);
+
   assistant_paint_colored_box (widget, cr);
 
   gtk_container_propagate_draw (container, priv->header_image, cr);
