@@ -1905,40 +1905,50 @@ parse_rule (GtkCssProvider *css_provider,
 
   css_provider_push_scope (css_provider, SCOPE_SELECTOR);
 
+  /* Handle directives */
   if (scanner->token == G_TOKEN_IDENTIFIER &&
       scanner->value.v_identifier[0] == '@')
     {
-      GtkSymbolicColor *color;
-      gchar *color_name, *color_str;
+      gchar *directive;
 
-      /* Rule is a color mapping */
-      color_name = g_strdup (&scanner->value.v_identifier[1]);
-      g_scanner_get_next_token (scanner);
+      directive = &scanner->value.v_identifier[1];
 
-      if (scanner->token != ':')
-        return ':';
+      if (strcmp (directive, "define-color") == 0)
+        {
+          GtkSymbolicColor *color;
+          gchar *color_name, *color_str;
 
-      css_provider_push_scope (css_provider, SCOPE_VALUE);
-      g_scanner_get_next_token (scanner);
+          /* Directive is a color mapping */
+          g_scanner_get_next_token (scanner);
 
-      if (scanner->token != G_TOKEN_IDENTIFIER)
+          if (scanner->token != G_TOKEN_IDENTIFIER)
+            return G_TOKEN_IDENTIFIER;
+
+          color_name = g_strdup (scanner->value.v_identifier);
+          css_provider_push_scope (css_provider, SCOPE_VALUE);
+          g_scanner_get_next_token (scanner);
+
+          if (scanner->token != G_TOKEN_IDENTIFIER)
+            return G_TOKEN_IDENTIFIER;
+
+          color_str = g_strstrip (scanner->value.v_identifier);
+          color = symbolic_color_parse (color_str);
+
+          if (!color)
+            return G_TOKEN_IDENTIFIER;
+
+          g_hash_table_insert (priv->symbolic_colors, color_name, color);
+
+          css_provider_pop_scope (css_provider);
+          g_scanner_get_next_token (scanner);
+
+          if (scanner->token != ';')
+            return ';';
+
+          return G_TOKEN_NONE;
+        }
+      else
         return G_TOKEN_IDENTIFIER;
-
-      color_str = g_strstrip (scanner->value.v_identifier);
-      color = symbolic_color_parse (color_str);
-
-      if (!color)
-        return G_TOKEN_IDENTIFIER;
-
-      g_hash_table_insert (priv->symbolic_colors, color_name, color);
-
-      css_provider_pop_scope (css_provider);
-      g_scanner_get_next_token (scanner);
-
-      if (scanner->token != ';')
-        return ';';
-
-      return G_TOKEN_NONE;
     }
 
   expected_token = parse_selector (css_provider, scanner, &selector);
@@ -2225,14 +2235,14 @@ gtk_css_provider_get_default (void)
   if (G_UNLIKELY (!provider))
     {
       const gchar *str =
-        "@fg_color: #000; \n"
-        "@bg_color: #dcdad5; \n"
-        "@text_color: #000; \n"
-        "@base_color: #fff; \n"
-        "@selected_bg_color: #4b6983; \n"
-        "@selected_fg_color: #fff; \n"
-        "@tooltip_bg_color: #eee1b3; \n"
-        "@tooltip_fg_color: #000; \n"
+        "@define-color fg_color #000; \n"
+        "@define-color bg_color #dcdad5; \n"
+        "@define-color text_color #000; \n"
+        "@define-color base_color #fff; \n"
+        "@define-color selected_bg_color #4b6983; \n"
+        "@define-color selected_fg_color #fff; \n"
+        "@define-color tooltip_bg_color #eee1b3; \n"
+        "@define-color tooltip_fg_color #000; \n"
         "\n"
         "*,\n"
         "GtkTreeView > GtkButton {\n"
