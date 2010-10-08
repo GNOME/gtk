@@ -338,6 +338,16 @@ GtkWidget *      gtk_window_group_get_current_device_grab (GtkWindowGroup *windo
                                                            GdkDevice      *device);
 
 
+/* Window grips
+ */
+void     gtk_window_set_has_resize_grip    (GtkWindow    *window,
+                                            gboolean      value);
+gboolean gtk_window_get_has_resize_grip    (GtkWindow    *window);
+gboolean gtk_window_resize_grip_is_visible (GtkWindow    *window);
+gboolean gtk_window_get_resize_grip_area   (GtkWindow    *window,
+                                            GdkRectangle *rect);
+
+
 /* --- internal functions --- */
 void            _gtk_window_internal_set_focus (GtkWindow *window,
 						GtkWidget *focus);
