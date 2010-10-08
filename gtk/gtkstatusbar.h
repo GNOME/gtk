@@ -95,11 +95,6 @@ void       gtk_statusbar_remove        	(GtkStatusbar *statusbar,
 					 guint         message_id);
 void       gtk_statusbar_remove_all    	(GtkStatusbar *statusbar,
 					 guint	       context_id);
-					 
-
-void     gtk_statusbar_set_has_resize_grip (GtkStatusbar *statusbar,
-					    gboolean      setting);
-gboolean gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar);
 
 GtkWidget* gtk_statusbar_get_message_area  (GtkStatusbar *statusbar);
 

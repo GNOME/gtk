@@ -2970,8 +2970,6 @@ gtk_statusbar_push
 gtk_statusbar_pop
 gtk_statusbar_remove
 gtk_statusbar_remove_all
-gtk_statusbar_set_has_resize_grip
-gtk_statusbar_get_has_resize_grip
 gtk_statusbar_get_message_area
 <SUBSECTION Standard>
 GTK_STATUSBAR
