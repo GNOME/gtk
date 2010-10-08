@@ -4730,7 +4730,11 @@ gtk_window_realize (GtkWidget *widget)
       allocation.height == 1)
     {
       GtkRequisition requisition;
-      GtkAllocation allocation = { 0, 0, 200, 200 };
+
+      allocation.x = 0;
+      allocation.y = 0;
+      allocation.width = 200;
+      allocation.height = 200;
 
       gtk_widget_get_preferred_size (widget, &requisition, NULL);
       if (requisition.width || requisition.height)
@@ -4784,7 +4788,7 @@ gtk_window_realize (GtkWidget *widget)
 			       GDK_BUTTON_RELEASE_MASK);
       
       attributes_mask = GDK_WA_VISUAL;
-      
+
       priv->frame = gdk_window_new (gtk_widget_get_root_window (widget),
 				      &attributes, attributes_mask);
 						 
@@ -5061,11 +5065,13 @@ gtk_window_size_allocate (GtkWidget     *widget,
       gtk_widget_size_allocate (child, &child_allocation);
     }
 
-  if (gtk_widget_get_realized (widget) && priv->frame)
+  if (gtk_widget_get_realized (widget))
     {
-      gdk_window_resize (priv->frame,
-			 allocation->width + priv->frame_left + priv->frame_right,
-			 allocation->height + priv->frame_top + priv->frame_bottom);
+      if (priv->frame)
+        gdk_window_resize (priv->frame,
+                           allocation->width + priv->frame_left + priv->frame_right,
+                           allocation->height + priv->frame_top + priv->frame_bottom);
+      set_grip_position (window);
     }
 }
 
@@ -6720,12 +6726,9 @@ gtk_window_move_resize (GtkWindow *window)
       /* gtk_window_configure_event() filled in widget->allocation */
       gtk_widget_size_allocate (widget, &allocation);
 
-      if (priv->grip_window != NULL)
-        {
-          set_grip_position (window);
-          set_grip_cursor (window);
-          set_grip_shape (window);
-        }
+      set_grip_position (window);
+      set_grip_cursor (window);
+      set_grip_shape (window);
 
       gdk_window_process_updates (gdk_window, TRUE);
 
