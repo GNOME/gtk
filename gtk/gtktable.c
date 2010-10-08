@@ -1033,9 +1033,6 @@ gtk_table_size_request_init (GtkTable *table)
       child = children->data;
       children = children->next;
       
-      if (gtk_widget_get_visible (child->widget))
-        gtk_widget_get_preferred_size (child->widget, NULL, NULL);
-
       if (child->left_attach == (child->right_attach - 1) && child->xexpand)
 	priv->cols[child->left_attach].expand = TRUE;
       
