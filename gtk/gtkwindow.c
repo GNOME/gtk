@@ -6293,7 +6293,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
   screen = gtk_window_check_screen (window);
 
-  gtk_widget_get_preferred_size (widget, NULL, NULL);
   gtk_window_compute_configure_request_size (window, (guint *)&w, (guint *)&h);
   
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
