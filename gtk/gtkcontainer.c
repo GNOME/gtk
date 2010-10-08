@@ -1867,7 +1867,7 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
 	{
 
 	  focus_child = priv->focus_child;
-	  while (gtk_container_get_focus_child (GTK_CONTAINER (focus_child)))
+	  while (GTK_IS_CONTAINER (focus_child) && gtk_container_get_focus_child (GTK_CONTAINER (focus_child)))
 	    {
 	      focus_child = gtk_container_get_focus_child (GTK_CONTAINER (focus_child));
 	    }
