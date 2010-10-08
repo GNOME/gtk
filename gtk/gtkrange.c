@@ -37,6 +37,7 @@
 #include "gtkrange.h"
 #include "gtkscale.h"
 #include "gtkscrollbar.h"
+#include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -185,6 +186,8 @@ static void gtk_range_size_request   (GtkWidget        *widget,
                                       GtkRequisition   *requisition);
 static void gtk_range_size_allocate  (GtkWidget        *widget,
                                       GtkAllocation    *allocation);
+static void gtk_range_hierarchy_changed (GtkWidget     *widget,
+                                         GtkWidget     *previous_toplevel);
 static void gtk_range_realize        (GtkWidget        *widget);
 static void gtk_range_unrealize      (GtkWidget        *widget);
 static void gtk_range_map            (GtkWidget        *widget);
@@ -215,6 +218,8 @@ static void update_slider_position   (GtkRange	       *range,
 				      gint              mouse_x,
 				      gint              mouse_y);
 static void stop_scrolling           (GtkRange         *range);
+static gboolean modify_allocation_for_window_grip (GtkWidget     *widget,
+                                                   GtkAllocation *allocation);
 
 /* Range methods */
 
@@ -290,8 +295,9 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->destroy = gtk_range_destroy;
   widget_class->size_request = gtk_range_size_request;
   widget_class->size_allocate = gtk_range_size_allocate;
+  widget_class->hierarchy_changed = gtk_range_hierarchy_changed;
   widget_class->realize = gtk_range_realize;
-  widget_class->unrealize = gtk_range_unrealize;  
+  widget_class->unrealize = gtk_range_unrealize;
   widget_class->map = gtk_range_map;
   widget_class->unmap = gtk_range_unmap;
   widget_class->draw = gtk_range_draw;
@@ -1560,13 +1566,72 @@ gtk_range_size_request (GtkWidget      *widget,
                        &stepper_spacing, NULL,
                        NULL, NULL);
 
-  gtk_range_calc_request (range, 
+  gtk_range_calc_request (range,
                           slider_width, stepper_size,
                           focus_width, trough_border, stepper_spacing,
                           &range_rect, &border, NULL, NULL, NULL, NULL);
 
   requisition->width = range_rect.width + border.left + border.right;
   requisition->height = range_rect.height + border.top + border.bottom;
+}
+
+static gboolean
+modify_allocation_for_window_grip (GtkWidget     *widget,
+                                   GtkAllocation *allocation)
+{
+  GtkRange *range = GTK_RANGE (widget);
+  GtkRangePrivate *priv = range->priv;
+  GtkWidget *window;
+  GdkRectangle grip_rect;
+  GdkRectangle translated_rect;
+  gint x;
+  gint y;
+
+  window = gtk_widget_get_toplevel (widget);
+  if (!GTK_IS_WINDOW (window))
+    return FALSE;
+
+  if (!gtk_window_resize_grip_is_visible (GTK_WINDOW (window)))
+    return FALSE;
+
+  /* Get the area of the window's corner grip */
+  gtk_window_get_resize_grip_area (GTK_WINDOW (window), &grip_rect);
+
+  x = 0;
+  y = 0;
+
+  /* Translate the stepper's area into window coords */
+  if (gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
+                                        window,
+                                        allocation->x,
+                                        allocation->y,
+                                        &x,
+                                        &y))
+    {
+      translated_rect.x = x;
+      translated_rect.y = y;
+      translated_rect.width = allocation->width;
+      translated_rect.height = allocation->height;
+
+      /* If the stepper button intersects the window resize grip.. */
+      if (gdk_rectangle_intersect (&grip_rect, &translated_rect, NULL))
+        {
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              allocation->width -= grip_rect.width;
+              if (gtk_widget_get_direction (window) == GTK_TEXT_DIR_RTL)
+                allocation->x += grip_rect.width;
+            }
+          else
+            {
+              allocation->height -= grip_rect.height;
+            }
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
 }
 
 static void
@@ -1576,6 +1641,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
 
+  modify_allocation_for_window_grip (widget, allocation);
   gtk_widget_set_allocation (widget, allocation);
 
   priv->recalc_marks = TRUE;
@@ -1590,6 +1656,30 @@ gtk_range_size_allocate (GtkWidget     *widget,
 }
 
 static void
+resize_grip_visible_changed (GObject    *object,
+                             GParamSpec *pspec,
+                             gpointer    user_data)
+{
+  gtk_widget_queue_resize (GTK_WIDGET (user_data));
+}
+
+static void
+gtk_range_hierarchy_changed (GtkWidget *widget,
+                             GtkWidget *previous_toplevel)
+{
+  GtkWidget *window;
+
+  if (previous_toplevel)
+    g_signal_handlers_disconnect_by_func (previous_toplevel,
+                                          G_CALLBACK (resize_grip_visible_changed),
+                                          widget);
+  window = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (window))
+    g_signal_connect (window, "notify::resize-grip-visible",
+                      G_CALLBACK (resize_grip_visible_changed), widget);
+}
+
+static void
 gtk_range_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
@@ -1597,10 +1687,10 @@ gtk_range_realize (GtkWidget *widget)
   GtkRangePrivate *priv = range->priv;
   GdkWindow *window;
   GdkWindowAttr attributes;
-  gint attributes_mask;  
+  gint attributes_mask;
 
   gtk_range_calc_layout (range, priv->adjustment->value);
-  
+
   gtk_widget_set_realized (widget, TRUE);
 
   window = gtk_widget_get_parent_window (widget);
@@ -1608,6 +1698,8 @@ gtk_range_realize (GtkWidget *widget)
   g_object_ref (window);
 
   gtk_widget_get_allocation (widget, &allocation);
+  if (modify_allocation_for_window_grip (widget, &allocation))
+    gtk_widget_set_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = allocation.x;
