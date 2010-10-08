@@ -891,7 +891,7 @@ gtk_paned_size_allocate (GtkWidget     *widget,
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           gtk_paned_calc_position (paned,
-                                   MAX (1, widget_allocation.width- handle_size),
+                                   MAX (1, widget_allocation.width - handle_size),
                                    child1_requisition.width,
                                    child2_requisition.width);
 
