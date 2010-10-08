@@ -140,7 +140,7 @@ gtk_table_class_init (GtkTableClass *class)
   container_class->child_type = gtk_table_child_type;
   container_class->set_child_property = gtk_table_set_child_property;
   container_class->get_child_property = gtk_table_get_child_property;
-  
+  gtk_container_class_handle_border_width (container_class);
 
   g_object_class_install_property (gobject_class,
                                    PROP_N_ROWS,
@@ -912,7 +912,6 @@ gtk_table_size_request (GtkWidget      *widget,
   GtkTable *table = GTK_TABLE (widget);
   GtkTablePrivate *priv = table->priv;
   gint row, col;
-  guint border_width;
 
   requisition->width = 0;
   requisition->height = 0;
@@ -932,10 +931,6 @@ gtk_table_size_request (GtkWidget      *widget,
     requisition->height += priv->rows[row].requisition;
   for (row = 0; row + 1 < priv->nrows; row++)
     requisition->height += priv->rows[row].spacing;
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (table));
-  requisition->width += border_width * 2;
-  requisition->height += border_width * 2;
 }
 
 static void
@@ -1448,16 +1443,14 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
   gint nexpand;
   gint nshrink;
   gint extra;
-  guint border_width;
 
   /* If we were allocated more space than we requested
    *  then we have to expand any expandable rows and columns
    *  to fill in the extra space.
    */
   gtk_widget_get_allocation (GTK_WIDGET (table), &allocation);
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (table));
-  real_width = allocation.width - border_width * 2;
-  real_height = allocation.height - border_width * 2;
+  real_width = allocation.width;
+  real_height = allocation.height;
 
   if (priv->homogeneous)
     {
@@ -1666,15 +1659,13 @@ gtk_table_size_allocate_pass2 (GtkTable *table)
       if (gtk_widget_get_visible (child->widget))
 	{
 	  GtkRequisition child_requisition;
-          guint border_width;
 
           gtk_widget_get_preferred_size (child->widget,
                                          &child_requisition, NULL);
 
           gtk_widget_get_allocation (GTK_WIDGET (table), &table_allocation);
-          border_width = gtk_container_get_border_width (GTK_CONTAINER (table));
-	  x = table_allocation.x + border_width;
-	  y = table_allocation.y + border_width;
+	  x = table_allocation.x;
+	  y = table_allocation.y;
 	  max_width = 0;
 	  max_height = 0;
 	  
