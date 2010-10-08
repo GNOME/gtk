@@ -5354,9 +5354,16 @@ update_grip_visibility (GtkWindow *window)
 gboolean
 gtk_window_resize_grip_is_visible (GtkWindow *window)
 {
+  GtkWindowPrivate *priv;
+
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-  if (!window->priv->resizable)
+  priv = window->priv;
+
+  if (priv->type == GTK_WINDOW_POPUP)
+    return FALSE;
+
+  if (!priv->resizable)
     return FALSE;
 
   if (gtk_widget_get_realized (GTK_WIDGET (window)))
