@@ -975,24 +975,8 @@ static void
 gtk_layout_size_request (GtkWidget     *widget,
 			 GtkRequisition *requisition)
 {
-  GtkLayout *layout = GTK_LAYOUT (widget);
-  GtkLayoutPrivate *priv = layout->priv;
-  GList *tmp_list;
-
   requisition->width = 0;
   requisition->height = 0;
-
-  tmp_list = priv->children;
-
-  while (tmp_list)
-    {
-      GtkLayoutChild *child = tmp_list->data;
-      GtkRequisition child_requisition;
-      
-      tmp_list = tmp_list->next;
-
-      gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
-    }
 }
 
 static void     
