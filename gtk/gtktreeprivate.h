@@ -242,7 +242,7 @@ struct _GtkTreeViewPrivate
   GDestroyNotify search_position_destroy;
   GtkWidget *search_window;
   GtkWidget *search_entry;
-  guint search_entry_changed_id;
+  gulong search_entry_changed_id;
   guint typeselect_flush_timeout;
 
   /* Grid and tree lines */

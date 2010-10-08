@@ -125,10 +125,10 @@ struct _GtkComboBoxPrivate
   GtkWidget *popup_window;
   GtkWidget *scrolled_window;
 
-  guint inserted_id;
-  guint deleted_id;
-  guint reordered_id;
-  guint changed_id;
+  gulong inserted_id;
+  gulong deleted_id;
+  gulong reordered_id;
+  gulong changed_id;
   guint popup_idle_id;
   guint activate_button;
   guint32 activate_time;

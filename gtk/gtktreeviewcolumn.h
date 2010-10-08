@@ -68,7 +68,7 @@ struct _GtkTreeViewColumn
   GdkWindow *GSEAL (window);
   GtkCellEditable *GSEAL (editable_widget);
   gfloat GSEAL (xalign);
-  guint GSEAL (property_changed_signal);
+  gulong GSEAL (property_changed_signal);
   gint GSEAL (spacing);
 
   /* Sizing fields */
@@ -90,8 +90,8 @@ struct _GtkTreeViewColumn
   GList *GSEAL (cell_list);
 
   /* Sorting */
-  guint GSEAL (sort_clicked_signal);
-  guint GSEAL (sort_column_changed_signal);
+  gulong GSEAL (sort_clicked_signal);
+  gulong GSEAL (sort_column_changed_signal);
   gint GSEAL (sort_column_id);
   GtkSortType GSEAL (sort_order);
 

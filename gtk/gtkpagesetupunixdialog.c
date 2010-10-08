@@ -87,7 +87,7 @@ struct _GtkPageSetupUnixDialogPrivate
   GtkWidget *landscape_radio;
   GtkWidget *reverse_landscape_radio;
 
-  guint request_details_tag;
+  gulong request_details_tag;
   GtkPrinter *request_details_printer;
   
   GtkPrintSettings *print_settings;

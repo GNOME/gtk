@@ -106,11 +106,11 @@ struct _GtkTreeModelFilterPrivate
   gboolean virtual_root_deleted;
 
   /* signal ids */
-  guint changed_id;
-  guint inserted_id;
-  guint has_child_toggled_id;
-  guint deleted_id;
-  guint reordered_id;
+  gulong changed_id;
+  gulong inserted_id;
+  gulong has_child_toggled_id;
+  gulong deleted_id;
+  gulong reordered_id;
 };
 
 /* properties */

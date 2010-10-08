@@ -248,7 +248,7 @@ struct GtkPrintUnixDialogPrivate
 
   GtkPrinter *current_printer;
   GtkPrinter *request_details_printer;
-  guint request_details_tag;
+  gulong request_details_tag;
   GtkPrinterOptionSet *options;
   gulong options_changed_handler;
   gulong mark_conflicts_id;

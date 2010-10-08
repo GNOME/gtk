@@ -214,28 +214,17 @@ gail_container_real_initialize (AtkObject *obj,
                                 gpointer  data)
 {
   GailContainer *container = GAIL_CONTAINER (obj);
-  guint handler_id;
 
   ATK_OBJECT_CLASS (gail_container_parent_class)->initialize (obj, data);
 
   container->children = gtk_container_get_children (GTK_CONTAINER (data));
 
-  /*
-   * We store the handler ids for these signals in case some objects
-   * need to remove these handlers.
-   */
-  handler_id = g_signal_connect (data,
-                                 "add",
-                                 G_CALLBACK (gail_container_add_gtk),
-                                 obj);
-  g_object_set_data (G_OBJECT (obj), "gail-add-handler-id", 
-                     GUINT_TO_POINTER (handler_id));
-  handler_id = g_signal_connect (data,
-                                 "remove",
-                                 G_CALLBACK (gail_container_remove_gtk),
-                                 obj);
-  g_object_set_data (G_OBJECT (obj), "gail-remove-handler-id", 
-                     GUINT_TO_POINTER (handler_id));
+  g_signal_connect (data, "add",
+                    G_CALLBACK (gail_container_add_gtk),
+                    obj);
+  g_signal_connect (data, "remove",
+                    G_CALLBACK (gail_container_remove_gtk),
+                    obj);
 
   if (GTK_IS_TOOLBAR (data))
     obj->role = ATK_ROLE_TOOL_BAR;

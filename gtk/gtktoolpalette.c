@@ -138,7 +138,7 @@ struct _GtkToolItemGroupInfo
 {
   GtkToolItemGroup *widget;
 
-  guint             notify_collapsed;
+  gulong            notify_collapsed;
   guint             pos;
   guint             exclusive : 1;
   guint             expand : 1;

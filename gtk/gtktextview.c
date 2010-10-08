@@ -118,7 +118,7 @@ struct _GtkTextViewPrivate
   GdkDevice *grab_device;
   GdkDevice *dnd_device;
 
-  guint selection_drag_handler;
+  gulong selection_drag_handler;
   guint scroll_timeout;
 
   GtkTextWindow *text_window;

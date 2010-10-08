@@ -167,7 +167,7 @@ typedef struct
 {
   GQueue *queue;
   GtkTreeModel *client;
-  guint signal_ids[LAST_SIGNAL];
+  gulong signal_ids[LAST_SIGNAL];
 }
 SignalMonitor;
 

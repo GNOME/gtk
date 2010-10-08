@@ -3711,7 +3711,7 @@ create_message_dialog (GtkWidget *widget)
 
 static GtkWidget *sw_parent = NULL;
 static GtkWidget *sw_float_parent;
-static guint sw_destroyed_handler = 0;
+static gulong sw_destroyed_handler = 0;
 
 static gboolean
 scrolled_windows_delete_cb (GtkWidget *widget, GdkEventAny *event, GtkWidget *scrollwin)
@@ -5673,8 +5673,8 @@ create_display_screen (GtkWidget *widget)
 
 /* Event Watcher
  */
-static gboolean event_watcher_enter_id = 0;
-static gboolean event_watcher_leave_id = 0;
+static gulong event_watcher_enter_id = 0;
+static gulong event_watcher_leave_id = 0;
 
 static gboolean
 event_watcher (GSignalInvocationHint *ihint,
@@ -8635,7 +8635,7 @@ struct PropertiesData {
   GtkWidget **window;
   GdkCursor *cursor;
   gboolean in_query;
-  gint handler;
+  gulong handler;
 };
 
 static void
