@@ -707,7 +707,6 @@ gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
   GtkPrintBackendCups *cups_backend = GTK_PRINT_BACKEND_CUPS (backend);
   GList *l;
   char   dispatch_hostname[HTTP_MAX_URI];
-  gchar *key;
   gchar *username = NULL;
   gchar *hostname = NULL;
   gchar *password = NULL;
@@ -729,15 +728,15 @@ gtk_print_backend_cups_set_password (GtkPrintBackend  *backend,
 
   if (hostname != NULL && username != NULL && password != NULL)
     {
-      key = g_strconcat (username, "@", hostname, NULL);
+      gchar *key = g_strconcat (username, "@", hostname, NULL);
       g_hash_table_insert (cups_backend->auth, key, g_strdup (password));
+      GTK_NOTE (PRINTING,
+                g_print ("CUPS backend: storing password for %s\n", key));
     }
 
   g_free (cups_backend->username);
   cups_backend->username = g_strdup (username);
 
-  GTK_NOTE (PRINTING,
-            g_print ("CUPS backend: storing password for %s\n", key));
 
   for (l = cups_backend->requests; l; l = l->next)
     {
