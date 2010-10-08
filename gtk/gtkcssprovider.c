@@ -1571,8 +1571,9 @@ gradient_parse (const gchar *str)
 }
 
 static gchar *
-url_parse_str (const gchar  *str,
-               gchar       **end_ptr)
+path_parse_str (GtkCssProvider  *css_provider,
+		const gchar     *str,
+		gchar          **end_ptr)
 {
   gchar *path, *chr;
 
@@ -1607,6 +1608,54 @@ url_parse_str (const gchar  *str,
 
   *end_ptr = chr + 1;
 
+  /* Always return an absolute path */
+  if (!g_path_is_absolute (path))
+    {
+      GtkCssProviderPrivate *priv;
+      gchar *dirname, *full_path;
+
+      priv = css_provider->priv;
+
+      /* Use relative path to the current CSS file path, if any */
+      dirname = g_path_get_dirname (priv->filename);
+
+      full_path = g_build_filename (dirname, path, NULL);
+      g_free (path);
+      g_free (dirname);
+
+      path = full_path;
+    }
+
+  if (!g_file_test (path, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_REGULAR))
+    {
+      g_warning ("File doesn't exist: %s\n", path);
+      g_free (path);
+      path = NULL;
+    }
+
+  return path;
+}
+
+static gchar *
+path_parse (GtkCssProvider *css_provider,
+            const gchar    *str)
+{
+  gchar *path, *end;
+
+  path = path_parse_str (css_provider, str, &end);
+
+  if (*end != '\0')
+    {
+      g_warning ("Error parsing file path \"%s\", stopped at char %ld : '%c'",
+                 str, end - str, *end);
+
+      if (path)
+        {
+          g_free (path);
+          path = NULL;
+        }
+    }
+
   return path;
 }
 
@@ -1627,27 +1676,10 @@ slice_parse_str (GtkCssProvider  *css_provider,
   SKIP_SPACES (str);
 
   /* Parse image url */
-  path = url_parse_str (str, end_ptr);
+  path = path_parse_str (css_provider, str, end_ptr);
 
   if (!path)
       return NULL;
-
-  if (!g_path_is_absolute (path))
-    {
-      GtkCssProviderPrivate *priv;
-      gchar *dirname, *full_path;
-
-      priv = css_provider->priv;
-
-      /* Use relative path to the current CSS file path, if any */
-      dirname = g_path_get_dirname (priv->filename);
-
-      full_path = g_build_filename (dirname, path, NULL);
-      g_free (path);
-      g_free (dirname);
-
-      path = full_path;
-    }
 
   str = *end_ptr;
   SKIP_SPACES (str);
