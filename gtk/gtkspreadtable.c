@@ -906,7 +906,7 @@ gtk_spread_table_insert_child (GtkSpreadTable *table,
 			       gint            index)
 {
   GtkSpreadTablePrivate *priv;
-  GList               *list;
+  GList                 *list;
 
   g_return_if_fail (GTK_IS_SPREAD_TABLE (table));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -919,6 +919,64 @@ gtk_spread_table_insert_child (GtkSpreadTable *table,
   priv->children = g_list_insert (priv->children, child, index);
 
   gtk_widget_set_parent (child, GTK_WIDGET (table));
+}
+
+
+
+/**
+ * gtk_spread_table_get_child_line:
+ * @table: A #GtkSpreadTable
+ * @child: A Child of the @table.
+ * @size: A size in the opposing orientation of @table
+ *
+ * Gets the line index in which @child would be positioned 
+ * if @table were to be allocated @size in the opposing
+ * orientation of @table.
+ *
+ * For instance, if the @table is oriented vertically,
+ * this function will return @child's column if @table
+ * were to be allocated @size width.
+ *
+ * Returns: the line index @child would be positioned in
+ * for @size (starting from 0).
+ */
+guint
+gtk_spread_table_get_child_line (GtkSpreadTable *table,
+				 GtkWidget      *child,
+				 gint            size)
+
+{
+  GtkSpreadTablePrivate *priv;
+  gint                  *segments = NULL;
+  gint                   i, child_count, child_idx = 0;
+  GList                 *l;
+
+  g_return_val_if_fail (GTK_IS_SPREAD_TABLE (table), 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), 0);
+
+  priv = table->priv;
+
+  segment_lines_for_size (table, size, &segments);
+
+  /* Get child index in list */
+  l = g_list_find (priv->children, child);
+  g_return_val_if_fail (l != NULL, 0);
+
+  child_idx = g_list_position (priv->children, l);
+
+  for (i = 0, child_count = 0; i < priv->lines; i++)
+    {
+      child_count += segments[i];
+
+      if (child_idx < child_count)
+	break;
+    }
+
+  g_assert (i < priv->lines);
+
+  g_free (segments);
+
+  return i;
 }
 
 

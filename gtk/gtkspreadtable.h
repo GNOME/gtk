@@ -64,6 +64,10 @@ void                  gtk_spread_table_insert_child              (GtkSpreadTable
 								  GtkWidget      *child,
 								  gint            index);
 
+guint                 gtk_spread_table_get_child_line            (GtkSpreadTable *table,
+								  GtkWidget      *child,
+								  gint            size);
+
 void                  gtk_spread_table_set_lines                 (GtkSpreadTable *table,
 								  guint           lines);
 guint                 gtk_spread_table_get_lines                 (GtkSpreadTable *table);
