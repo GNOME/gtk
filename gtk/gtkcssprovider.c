@@ -2159,7 +2159,6 @@ gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
   if (priv->selectors_info->len > 0)
     g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
 
-  css_provider_reset_parser (css_provider);
   priv->scanner->input_name = "-";
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
@@ -2200,7 +2199,6 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   g_free (priv->filename);
   priv->filename = g_file_get_path (file);
 
-  css_provider_reset_parser (css_provider);
   priv->scanner->input_name = priv->filename;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
@@ -2248,7 +2246,6 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
   g_free (priv->filename);
   priv->filename = g_strdup (path);
 
-  css_provider_reset_parser (css_provider);
   priv->scanner->input_name = priv->filename;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
