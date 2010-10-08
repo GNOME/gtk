@@ -125,11 +125,16 @@ enum ParserSymbol {
 static void gtk_css_provider_finalize (GObject *object);
 static void gtk_css_style_provider_iface_init (GtkStyleProviderIface *iface);
 
-static void css_provider_apply_scope (GtkCssProvider *css_provider,
-                                      ParserScope     scope);
+static void scanner_apply_scope (GScanner    *scanner,
+                                 ParserScope  scope);
 static gboolean css_provider_parse_value (GtkCssProvider *css_provider,
                                           const gchar    *value_str,
                                           GValue         *value);
+static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
+                                                          const gchar     *path,
+                                                          gboolean         reset,
+                                                          GError         **error);
+
 
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
@@ -317,17 +322,10 @@ selector_style_info_set_style (SelectorStyleInfo *info,
     info->style = NULL;
 }
 
-static void
-gtk_css_provider_init (GtkCssProvider *css_provider)
+static GScanner *
+create_scanner (void)
 {
-  GtkCssProviderPrivate *priv;
   GScanner *scanner;
-
-  priv = css_provider->priv = G_TYPE_INSTANCE_GET_PRIVATE (css_provider,
-                                                           GTK_TYPE_CSS_PROVIDER,
-                                                           GtkCssProviderPrivate);
-
-  priv->selectors_info = g_ptr_array_new_with_free_func ((GDestroyNotify) selector_style_info_free);
 
   scanner = g_scanner_new (NULL);
 
@@ -346,8 +344,22 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
   g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "first", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_FIRST));
   g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "last", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_LAST));
 
-  priv->scanner = scanner;
-  css_provider_apply_scope (css_provider, SCOPE_SELECTOR);
+  scanner_apply_scope (scanner, SCOPE_SELECTOR);
+
+  return scanner;
+}
+
+static void
+gtk_css_provider_init (GtkCssProvider *css_provider)
+{
+  GtkCssProviderPrivate *priv;
+
+  priv = css_provider->priv = G_TYPE_INSTANCE_GET_PRIVATE (css_provider,
+                                                           GTK_TYPE_CSS_PROVIDER,
+                                                           GtkCssProviderPrivate);
+
+  priv->selectors_info = g_ptr_array_new_with_free_func ((GDestroyNotify) selector_style_info_free);
+  priv->scanner = create_scanner ();
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
@@ -756,40 +768,36 @@ property_value_free (GValue *value)
 }
 
 static void
-css_provider_apply_scope (GtkCssProvider *css_provider,
-                          ParserScope     scope)
+scanner_apply_scope (GScanner    *scanner,
+                     ParserScope  scope)
 {
-  GtkCssProviderPrivate *priv;
-
-  priv = css_provider->priv;
-
-  g_scanner_set_scope (priv->scanner, scope);
+  g_scanner_set_scope (scanner, scope);
 
   if (scope == SCOPE_VALUE)
     {
-      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "@#-_0123456789" G_CSET_A_2_Z;
-      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.\n" G_CSET_A_2_Z;
-      priv->scanner->config->scan_identifier_1char = TRUE;
+      scanner->config->cset_identifier_first = G_CSET_a_2_z "@#-_0123456789" G_CSET_A_2_Z;
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.\n" G_CSET_A_2_Z;
+      scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
     {
-      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
-      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_#" G_CSET_A_2_Z;
-      priv->scanner->config->scan_identifier_1char = TRUE;
+      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_#" G_CSET_A_2_Z;
+      scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_PSEUDO_CLASS ||
            scope == SCOPE_NTH_CHILD ||
            scope == SCOPE_DECLARATION)
     {
-      priv->scanner->config->cset_identifier_first = G_CSET_a_2_z "-" G_CSET_A_2_Z;
-      priv->scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
-      priv->scanner->config->scan_identifier_1char = FALSE;
+      scanner->config->cset_identifier_first = G_CSET_a_2_z "-" G_CSET_A_2_Z;
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
+      scanner->config->scan_identifier_1char = FALSE;
     }
   else
     g_assert_not_reached ();
 
-  priv->scanner->config->scan_float = FALSE;
-  priv->scanner->config->cpair_comment_single = NULL;
+  scanner->config->scan_float = FALSE;
+  scanner->config->cpair_comment_single = NULL;
 }
 
 static void
@@ -801,7 +809,7 @@ css_provider_push_scope (GtkCssProvider *css_provider,
   priv = css_provider->priv;
   priv->state = g_slist_prepend (priv->state, GUINT_TO_POINTER (scope));
 
-  css_provider_apply_scope (css_provider, scope);
+  scanner_apply_scope (priv->scanner, scope);
 }
 
 static ParserScope
@@ -815,7 +823,7 @@ css_provider_pop_scope (GtkCssProvider *css_provider)
   if (!priv->state)
     {
       g_warning ("Push/pop calls to parser scope aren't paired");
-      css_provider_apply_scope (css_provider, SCOPE_SELECTOR);
+      scanner_apply_scope (priv->scanner, SCOPE_SELECTOR);
       return SCOPE_SELECTOR;
     }
 
@@ -825,7 +833,7 @@ css_provider_pop_scope (GtkCssProvider *css_provider)
   if (priv->state)
     scope = GPOINTER_TO_INT (priv->state->data);
 
-  css_provider_apply_scope (css_provider, scope);
+  scanner_apply_scope (priv->scanner, scope);
 
   return scope;
 }
@@ -840,7 +848,7 @@ css_provider_reset_parser (GtkCssProvider *css_provider)
   g_slist_free (priv->state);
   priv->state = NULL;
 
-  css_provider_apply_scope (css_provider, SCOPE_SELECTOR);
+  scanner_apply_scope (priv->scanner, SCOPE_SELECTOR);
 
   g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
   g_slist_free (priv->cur_selectors);
@@ -1979,6 +1987,64 @@ parse_rule (GtkCssProvider *css_provider,
 
           return G_TOKEN_NONE;
         }
+      else if (strcmp (directive, "import") == 0)
+        {
+          GScanner *scanner_backup;
+          GSList *state_backup;
+          GError *error = NULL;
+          gboolean loaded;
+          gchar *path;
+
+          css_provider_push_scope (css_provider, SCOPE_VALUE);
+          g_scanner_get_next_token (scanner);
+
+          if (scanner->token != G_TOKEN_IDENTIFIER)
+            return G_TOKEN_IDENTIFIER;
+
+          path = path_parse (css_provider,
+                             g_strstrip (scanner->value.v_identifier));
+
+          if (!path)
+            return G_TOKEN_IDENTIFIER;
+
+          css_provider_pop_scope (css_provider);
+          g_scanner_get_next_token (scanner);
+
+          if (scanner->token != ';')
+            {
+              g_free (path);
+              return ';';
+            }
+
+          /* Snapshot current parser state and scanner in order to restore after importing */
+          state_backup = priv->state;
+          scanner_backup = priv->scanner;
+
+          priv->state = NULL;
+          priv->scanner = create_scanner ();
+
+          /* FIXME: Avoid recursive importing */
+          loaded = gtk_css_provider_load_from_path_internal (css_provider, path,
+                                                             FALSE, &error);
+
+          /* Restore previous state */
+          css_provider_reset_parser (css_provider);
+          priv->state = state_backup;
+          g_scanner_destroy (priv->scanner);
+          priv->scanner = scanner_backup;
+
+          g_free (path);
+
+          if (!loaded)
+            {
+              g_warning ("Error loading imported file \"%s\": %s",
+                         path, (error) ? error->message : "");
+              g_error_free (error);
+              return G_TOKEN_IDENTIFIER;
+            }
+          else
+            return G_TOKEN_NONE;
+        }
       else
         return G_TOKEN_IDENTIFIER;
     }
@@ -2209,19 +2275,17 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   return TRUE;
 }
 
-gboolean
-gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
-                                 const gchar     *path,
-                                 GError         **error)
+static gboolean
+gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
+                                          const gchar     *path,
+                                          gboolean         reset,
+                                          GError         **error)
 {
   GtkCssProviderPrivate *priv;
   GError *internal_error = NULL;
   GMappedFile *mapped_file;
   const gchar *data;
   gsize length;
-
-  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
-  g_return_val_if_fail (path != NULL, FALSE);
 
   priv = css_provider->priv;
 
@@ -2240,11 +2304,14 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
   if (!data)
     return FALSE;
 
-  if (priv->selectors_info->len > 0)
-    g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
+  if (reset)
+    {
+      if (priv->selectors_info->len > 0)
+        g_ptr_array_remove_range (priv->selectors_info, 0, priv->selectors_info->len);
 
-  g_free (priv->filename);
-  priv->filename = g_strdup (path);
+      g_free (priv->filename);
+      priv->filename = g_strdup (path);
+    }
 
   priv->scanner->input_name = priv->filename;
   g_scanner_input_text (priv->scanner, data, (guint) length);
@@ -2254,6 +2321,20 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
   g_mapped_file_unref (mapped_file);
 
   return TRUE;
+}
+
+gboolean
+gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
+                                 const gchar     *path,
+                                 GError         **error)
+{
+  GtkCssProviderPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
+
+  return gtk_css_provider_load_from_path_internal (css_provider, path,
+                                                   TRUE, error);
 }
 
 GtkCssProvider *
