@@ -7131,7 +7131,7 @@ gtk_window_draw (GtkWidget *widget,
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
     ret = GTK_WIDGET_CLASS (gtk_window_parent_class)->draw (widget, cr);
 
-  if (priv->has_resize_grip &&
+  if (priv->grip_window != NULL &&
       gtk_cairo_should_draw_window (cr, priv->grip_window))
     {
       GdkRectangle rect;
