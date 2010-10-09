@@ -1581,7 +1581,7 @@ modify_allocation_for_window_grip (GtkWidget     *widget,
 {
   GtkRange *range = GTK_RANGE (widget);
   GtkRangePrivate *priv = range->priv;
-  GtkWidget *window;
+  GtkWidget *window, *parent;
   GdkRectangle grip_rect;
   GdkRectangle translated_rect;
   gint x;
@@ -1600,35 +1600,51 @@ modify_allocation_for_window_grip (GtkWidget     *widget,
   x = 0;
   y = 0;
 
-  /* Translate the stepper's area into window coords */
-  if (gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
-                                        window,
-                                        allocation->x,
-                                        allocation->y,
-                                        &x,
-                                        &y))
+  /* Translate the stepper's area into window coords.
+   * This is slightly tricky. We can't just use
+   * gtk_widget_translate_coordinates (widget, window, 0, 0, &x, &y)
+   * since that translates wrt to the _current_ allocation
+   * and will lead to alternating between overlap and nonoverlap
+   * for successive allocations.
+   * Therefore, we find the window-widget to whose window allocation
+   * is relative, and translate from there upwards.
+   */
+  parent = widget;
+  while (gtk_widget_get_window (parent) == gtk_widget_get_window (widget) &&
+         parent != window)
     {
+      parent = gtk_widget_get_parent (parent);
+    }
+
+  if (parent == window)
+    translated_rect = *allocation;
+  else
+    {
+      gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
+                                        window,
+                                        allocation->x, allocation->y,
+                                        &x, &y);
       translated_rect.x = x;
       translated_rect.y = y;
       translated_rect.width = allocation->width;
       translated_rect.height = allocation->height;
+    }
 
-      /* If the stepper button intersects the window resize grip.. */
-      if (gdk_rectangle_intersect (&grip_rect, &translated_rect, NULL))
+  /* If the stepper button intersects the window resize grip.. */
+  if (gdk_rectangle_intersect (&grip_rect, &translated_rect, NULL))
+    {
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              allocation->width -= grip_rect.width;
-              if (gtk_widget_get_direction (window) == GTK_TEXT_DIR_RTL)
-                allocation->x += grip_rect.width;
-            }
-          else
-            {
-              allocation->height -= grip_rect.height;
-            }
-
-          return TRUE;
+          allocation->width -= grip_rect.width;
+          if (gtk_widget_get_direction (window) == GTK_TEXT_DIR_RTL)
+            allocation->x += grip_rect.width;
         }
+      else
+        {
+          allocation->height -= grip_rect.height;
+        }
+
+      return TRUE;
     }
 
   return FALSE;
