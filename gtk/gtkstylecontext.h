@@ -152,7 +152,9 @@ const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                        GType            widget_type,
                                                        GParamSpec      *pspec);
 void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);
-void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context);
+void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,
+                                                              gint             rel_x,
+                                                              gint             rel_y);
 
 /* Animation for state changes */
 void gtk_style_context_state_transition_start  (GtkStyleContext *context,

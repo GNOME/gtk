@@ -1852,7 +1852,9 @@ _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context)
 }
 
 void
-_gtk_style_context_coalesce_animation_areas (GtkStyleContext *context)
+_gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
+                                             gint             rel_x,
+                                             gint             rel_y)
 {
   GtkStyleContextPrivate *priv;
   GSList *l;
@@ -1885,11 +1887,16 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context)
           cairo_rectangle_int_t *rect;
 
           rect = &g_array_index (info->rectangles, cairo_rectangle_int_t, i);
+          rect->x += rel_x;
+          rect->y += rel_y;
+
           cairo_region_union_rectangle (info->invalidation_region, rect);
         }
 
       g_array_remove_range (info->rectangles, 0, info->rectangles->len);
     }
+
+  priv->animations_invalidated = FALSE;
 }
 
 static void

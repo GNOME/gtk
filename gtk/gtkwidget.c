@@ -4160,7 +4160,6 @@ gtk_widget_realize (GtkWidget *widget)
   GtkWidgetPrivate *priv;
   GdkExtensionMode mode;
   cairo_region_t *region;
-  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (widget->priv->anchored ||
@@ -5413,6 +5412,8 @@ _gtk_widget_draw_internal (GtkWidget *widget,
                            cairo_t   *cr,
                            gboolean   clip_to_size)
 {
+  GtkStyleContext *context;
+
   if (!gtk_widget_is_drawable (widget))
     return;
 
@@ -5433,6 +5434,11 @@ _gtk_widget_draw_internal (GtkWidget *widget,
                      0, cr,
                      &result);
     }
+
+  context = gtk_widget_get_style_context (widget);
+  _gtk_style_context_coalesce_animation_areas (context,
+                                               widget->priv->allocation.x,
+                                               widget->priv->allocation.y);
 }
 
 /**
@@ -5652,7 +5658,6 @@ gtk_widget_send_expose (GtkWidget *widget,
   cairo_t *cr;
   int x, y;
   gboolean do_clip;
-  GtkStyleContext *context;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
   g_return_val_if_fail (gtk_widget_get_realized (widget), TRUE);
@@ -5676,9 +5681,6 @@ gtk_widget_send_expose (GtkWidget *widget,
    * don't leak the window. */
   gtk_cairo_set_event (cr, NULL);
   cairo_destroy (cr);
-
-  context = gtk_widget_get_style_context (widget);
-  _gtk_style_context_coalesce_animation_areas (context);
 
   return result;
 }
