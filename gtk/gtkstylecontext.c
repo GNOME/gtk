@@ -524,10 +524,13 @@ rebuild_properties (GtkStyleContext *context)
   priv = context->priv;
   list = priv->providers;
 
+  gtk_style_set_clear (priv->store);
+
+  if (!priv->widget_path)
+    return;
+
   if (priv->screen)
     global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
-
-  gtk_style_set_clear (priv->store);
 
   while ((elem = find_next_candidate (list, global_list)) != NULL)
     {
@@ -566,10 +569,12 @@ rebuild_icon_factories (GtkStyleContext *context)
   GList *elem, *list, *global_list = NULL;
 
   priv = context->priv;
-
   g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
   g_slist_free (priv->icon_factories);
   priv->icon_factories = NULL;
+
+  if (!priv->widget_path)
+    return;
 
   list = priv->providers_last;
 
@@ -948,10 +953,9 @@ gtk_style_context_set_path (GtkStyleContext *context,
     }
 
   if (path)
-    {
-      priv->widget_path = gtk_widget_path_copy (path);
-      gtk_style_context_invalidate (context);
-    }
+    priv->widget_path = gtk_widget_path_copy (path);
+
+  gtk_style_context_invalidate (context);
 }
 
 G_CONST_RETURN GtkWidgetPath *
@@ -1951,9 +1955,6 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 
   /* Avoid reentrancy */
   if (priv->invalidating_context)
-    return;
-
-  if (!priv->widget_path)
     return;
 
   priv->invalidating_context = TRUE;

@@ -374,6 +374,9 @@ struct _GtkWidgetPrivate
   /* The widget's parent.
    */
   GtkWidget *parent;
+
+  /* Widget's path for styling */
+  GtkWidgetPath *path;
 };
 
 enum {
@@ -7229,6 +7232,18 @@ gtk_widget_is_sensitive (GtkWidget *widget)
   return widget->priv->sensitive && widget->priv->parent_sensitive;
 }
 
+static void
+_gtk_widget_update_path (GtkWidget *widget)
+{
+  if (widget->priv->path)
+    {
+      gtk_widget_path_free (widget->priv->path);
+      widget->priv->path = NULL;
+    }
+
+  gtk_widget_get_path (widget);
+}
+
 /**
  * gtk_widget_set_parent:
  * @widget: a #GtkWidget
@@ -7326,11 +7341,8 @@ gtk_widget_set_parent (GtkWidget *widget,
                                 quark_style_context);
   if (context)
     {
-      GtkWidgetPath *path;
-
-      path = gtk_widget_get_path (widget);
-      gtk_style_context_set_path (context, path);
-      gtk_widget_path_free (path);
+      _gtk_widget_update_path (widget);
+      gtk_style_context_set_path (context, widget->priv->path);
 
       gtk_style_context_set_screen (context,
                                     gtk_widget_get_screen (widget));
@@ -8139,7 +8151,10 @@ reset_style_recurse (GtkWidget *widget, gpointer data)
   context = g_object_get_qdata (G_OBJECT (widget),
                                 quark_style_context);
   if (context)
-    gtk_style_context_invalidate (context);
+    {
+      _gtk_widget_update_path (widget);
+      gtk_style_context_set_path (context, widget->priv->path);
+    }
 
   if (GTK_IS_CONTAINER (widget))
     gtk_container_forall (GTK_CONTAINER (widget),
@@ -13267,71 +13282,34 @@ _gtk_widget_set_height_request_needed (GtkWidget *widget,
 GtkWidgetPath *
 gtk_widget_get_path (GtkWidget *widget)
 {
-  GtkStyleContext *context;
-  GtkWidgetPath *path;
-  GtkWidget *parent;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  parent = widget->priv->parent;
-
-  path = gtk_widget_path_new ();
-  gtk_widget_path_prepend_type (path, G_OBJECT_TYPE (widget));
-
-  if (widget->priv->name)
-    gtk_widget_path_iter_set_name (path, 0, widget->priv->name);
-
-  context = g_object_get_qdata (G_OBJECT (widget),
-                                quark_style_context);
-
-  if (context)
+  if (!widget->priv->path)
     {
-      GList *list, *l;
+      GtkWidget *parent;
+      guint pos;
 
-      list = l = gtk_style_context_list_regions (context);
+      parent = widget->priv->parent;
 
-      while (l)
+      if (parent)
+        widget->priv->path = gtk_container_get_path_for_child (GTK_CONTAINER (parent), widget);
+      else
         {
-          GtkRegionFlags flags;
-          const gchar *region_name;
-
-          region_name = l->data;
-          l = l->next;
-
-          gtk_style_context_has_region (context, region_name, &flags);
-          gtk_widget_path_iter_add_region (path, 0, region_name, flags);
+          /* Widget is either toplevel or unparented, treat both
+           * as toplevels style wise, since there are situations
+           * where style properties might be retrieved on that
+           * situation.
+           */
+          widget->priv->path = gtk_widget_path_new ();
         }
 
-      g_list_free (list);
+      pos = gtk_widget_path_append_type (widget->priv->path, G_OBJECT_TYPE (widget));
 
-      list = l = gtk_style_context_list_classes (context);
-
-      while (l)
-        {
-          const gchar *class_name;
-
-          class_name = l->data;
-          l = l->next;
-
-          gtk_widget_path_iter_add_class (path, 0, class_name);
-        }
-
-      g_list_free (list);
+      if (widget->priv->name)
+        gtk_widget_path_iter_set_name (widget->priv->path, pos, widget->priv->name);
     }
 
-  while (parent)
-    {
-      guint position;
-
-      position = gtk_widget_path_prepend_type (path, G_OBJECT_TYPE (parent));
-
-      if (parent->priv->name)
-        gtk_widget_path_iter_set_name (path, position, parent->priv->name);
-
-      parent = parent->priv->parent;
-    }
-
-  return path;
+  return widget->priv->path;
 }
 
 static void
@@ -13355,8 +13333,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
   if (G_UNLIKELY (!context))
     {
-      GtkWidgetPath *path;
-
       context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
                               "direction", gtk_widget_get_direction (widget),
                               NULL);
@@ -13371,9 +13347,8 @@ gtk_widget_get_style_context (GtkWidget *widget)
       gtk_style_context_set_screen (context,
                                     gtk_widget_get_screen (widget));
 
-      path = gtk_widget_get_path (widget);
-      gtk_style_context_set_path (context, path);
-      gtk_widget_path_free (path);
+      _gtk_widget_update_path (widget);
+      gtk_style_context_set_path (context, widget->priv->path);
     }
 
   return context;

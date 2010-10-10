@@ -35,6 +35,8 @@ void            gtk_widget_path_free                (GtkWidgetPath       *path);
 
 guint           gtk_widget_path_length              (const GtkWidgetPath *path);
 
+guint           gtk_widget_path_append_type         (GtkWidgetPath       *path,
+                                                     GType                type);
 guint           gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
                                                      GType                type);
 

@@ -334,6 +334,9 @@ static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
 
+static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *container,
+                                                              GtkWidget    *child);
+
 /* GtkBuildable */
 static void gtk_container_buildable_init           (GtkBuildableIface *iface);
 static void gtk_container_buildable_add_child      (GtkBuildable *buildable,
@@ -465,6 +468,7 @@ gtk_container_class_init (GtkContainerClass *class)
   class->set_focus_child = gtk_container_real_set_focus_child;
   class->child_type = NULL;
   class->composite_name = gtk_container_child_default_composite_name;
+  class->get_path_for_child = gtk_container_real_get_path_for_child;
 
   g_object_class_install_property (gobject_class,
                                    PROP_RESIZE_MODE,
@@ -2207,6 +2211,13 @@ gtk_container_get_all_children (GtkContainer *container)
   return children;
 }
 
+static GtkWidgetPath *
+gtk_container_real_get_path_for_child (GtkContainer *container,
+                                       GtkWidget    *child)
+{
+  return gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+}
+
 static gboolean
 gtk_container_focus (GtkWidget        *widget,
                      GtkDirectionType  direction)
@@ -3219,4 +3230,15 @@ gboolean
 _gtk_container_get_reallocate_redraws (GtkContainer *container)
 {
   return container->priv->reallocate_redraws;
+}
+
+GtkWidgetPath *
+gtk_container_get_path_for_child (GtkContainer *container,
+                                  GtkWidget    *child)
+{
+  g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
+  g_return_val_if_fail (container == (GtkContainer *) gtk_widget_get_parent (child), NULL);
+
+  return GTK_CONTAINER_GET_CLASS (container)->get_path_for_child (container, child);
 }
