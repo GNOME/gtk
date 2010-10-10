@@ -47,6 +47,7 @@
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
+#include "gtkprivate.h"
 #include "gtkbuildable.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -7021,28 +7022,52 @@ gtk_window_compute_hints (GtkWindow   *window,
   
   if (geometry_info && geometry_info->widget)
     {
-      GtkRequisition requisition;
-      GtkRequisition child_requisition;
-
-      /* FIXME: This really isn't right. It gets the min size wrong and forces
-       * callers to do horrible hacks like set a huge usize on the child requisition
-       * to get the base size right. We really want to find the answers to:
+      /* If the geometry widget is set, then the hints really apply to that
+       * widget. This is pretty much meaningless unless the window layout
+       * is such that the rest of the window adds fixed size borders to
+       * the geometry widget. Our job is to figure the size of the borders;
+       * We do that by asking how big the toplevel would be if the
+       * geometry widget was *really big*.
        *
-       *  - If the geometry widget was infinitely big, how much extra space
-       *    would be needed for the stuff around it.
+       *  +----------+
+       *  |AAAAAAAAA | At small sizes, the minimum sizes of widgets
+       *  |GGGGG    B| in the border can confuse things
+       *  |GGGGG    B|
+       *  |         B|
+       *  +----------+
        *
-       *  - If the geometry widget was infinitely small, how big would the
-       *    window still have to be.
-       *
-       * Finding these answers would be a bit of a mess here. (Bug #68668)
+       *  +-----------+
+       *  |AAAAAAAAA  | When the geometry widget is large, things are
+       *  |GGGGGGGGGGB| clearer.
+       *  |GGGGGGGGGGB|
+       *  |GGGGGGGGGG |
+       *  +-----------+
        */
-      gtk_widget_get_preferred_size (geometry_info->widget,
-                                     &child_requisition, NULL);
+#define TEMPORARY_SIZE 10000 /* 10,000 pixels should be bigger than real widget sizes */
+      GtkRequisition requisition;
+      int current_width, current_height;
 
+      _gtk_widget_override_size_request (geometry_info->widget,
+					 TEMPORARY_SIZE, TEMPORARY_SIZE,
+					 &current_width, &current_height);
       gtk_widget_get_preferred_size (widget,
                                      &requisition, NULL);
-      extra_width = requisition.width - child_requisition.width;
-      extra_height = requisition.height - child_requisition.height;
+      _gtk_widget_restore_size_request (geometry_info->widget,
+					current_width, current_height);
+
+      extra_width = requisition.width - TEMPORARY_SIZE;
+      extra_height = requisition.height - TEMPORARY_SIZE;
+
+      if (extra_width < 0 || extra_width < 0)
+	{
+	  g_warning("Toplevel size doesn't seem to directly depend on the "
+		    "size of the geometry widget from gtk_window_set_geometry_hints(). "
+		    "The geometry widget might not be in the window, or it might not "
+		    "be packed into the window appropriately");
+	  extra_width = MAX(extra_width, 0);
+	  extra_height = MAX(extra_height, 0);
+	}
+#undef TEMPORARY_SIZE
     }
 
   /* We don't want to set GDK_HINT_POS in here, we just set it
@@ -7055,27 +7080,38 @@ gtk_window_compute_hints (GtkWindow   *window,
       new_geometry->base_width += extra_width;
       new_geometry->base_height += extra_height;
     }
-  else if (!(*new_flags & GDK_HINT_MIN_SIZE) &&
-	   (*new_flags & GDK_HINT_RESIZE_INC) &&
-	   ((extra_width != 0) || (extra_height != 0)))
+  else
     {
+      /* For simplicity, we always set the base hint, even when we
+       * don't expect it to have any visible effect.
+       */
       *new_flags |= GDK_HINT_BASE_SIZE;
-      
+
       new_geometry->base_width = extra_width;
       new_geometry->base_height = extra_height;
+
+      /* As for X, if BASE_SIZE is not set but MIN_SIZE is set, then the
+       * base size is the minimum size */
+      if (*new_flags & GDK_HINT_MIN_SIZE)
+	{
+	  if (new_geometry->min_width > 0)
+	    new_geometry->base_width += new_geometry->min_width;
+	  if (new_geometry->min_height > 0)
+	    new_geometry->base_height += new_geometry->min_height;
+	}
     }
-  
+
   if (*new_flags & GDK_HINT_MIN_SIZE)
     {
       if (new_geometry->min_width < 0)
 	new_geometry->min_width = requisition.width;
       else
-        new_geometry->min_width += extra_width;
+        new_geometry->min_width = MAX (requisition.width, new_geometry->min_width + extra_width);
 
       if (new_geometry->min_height < 0)
 	new_geometry->min_height = requisition.height;
       else
-	new_geometry->min_height += extra_height;
+	new_geometry->min_height = MAX (requisition.height, new_geometry->min_height + extra_height);
     }
   else
     {

@@ -40,7 +40,7 @@
 #include "gtkrc.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
-#include "gtksizegroup.h"
+#include "gtksizegroup-private.h"
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkbindings.h"
@@ -563,9 +563,10 @@ static void             gtk_widget_real_adjust_size_request     (GtkWidget      
 static void             gtk_widget_real_adjust_size_allocation  (GtkWidget         *widget,
                                                                  GtkAllocation     *allocation);
 
-static void gtk_widget_set_usize_internal (GtkWidget *widget,
-					   gint       width,
-					   gint       height);
+static void gtk_widget_set_usize_internal (GtkWidget          *widget,
+					   gint                width,
+					   gint                height,
+					   GtkQueueResizeFlags flags);
 
 static void gtk_widget_add_events_internal (GtkWidget *widget,
                                             GdkDevice *device,
@@ -3022,10 +3023,10 @@ gtk_widget_set_property (GObject         *object,
       gtk_container_add (GTK_CONTAINER (g_value_get_object (value)), widget);
       break;
     case PROP_WIDTH_REQUEST:
-      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2);
+      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2, 0);
       break;
     case PROP_HEIGHT_REQUEST:
-      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
+      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value), 0);
       break;
     case PROP_VISIBLE:
       gtk_widget_set_visible (widget, g_value_get_boolean (value));
@@ -4207,7 +4208,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (gtk_widget_get_realized (widget))
     gtk_widget_queue_shallow_draw (widget);
       
-  _gtk_size_group_queue_resize (widget);
+  _gtk_size_group_queue_resize (widget, 0);
 }
 
 /**
@@ -4224,7 +4225,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  _gtk_size_group_queue_resize (widget);
+  _gtk_size_group_queue_resize (widget, 0);
 }
 
 /**
@@ -8643,9 +8644,10 @@ gtk_widget_error_bell (GtkWidget *widget)
 }
 
 static void
-gtk_widget_set_usize_internal (GtkWidget *widget,
-			       gint       width,
-			       gint       height)
+gtk_widget_set_usize_internal (GtkWidget          *widget,
+			       gint                width,
+			       gint                height,
+			       GtkQueueResizeFlags flags)
 {
   GtkWidgetAuxInfo *aux_info;
   gboolean changed = FALSE;
@@ -8656,19 +8658,26 @@ gtk_widget_set_usize_internal (GtkWidget *widget,
   
   if (width > -2 && aux_info->width != width)
     {
-      g_object_notify (G_OBJECT (widget), "width-request");
+      if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
+	g_object_notify (G_OBJECT (widget), "width-request");
       aux_info->width = width;
       changed = TRUE;
     }
   if (height > -2 && aux_info->height != height)
     {
-      g_object_notify (G_OBJECT (widget), "height-request");  
+      if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
+	g_object_notify (G_OBJECT (widget), "height-request");
       aux_info->height = height;
       changed = TRUE;
     }
   
   if (gtk_widget_get_visible (widget) && changed)
-    gtk_widget_queue_resize (widget);
+    {
+      if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
+	gtk_widget_queue_resize (widget);
+      else
+	_gtk_size_group_queue_resize (widget, GTK_QUEUE_RESIZE_INVALIDATE_ONLY);
+    }
 
   g_object_thaw_notify (G_OBJECT (widget));
 }
@@ -8728,7 +8737,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
   if (height == 0)
     height = 1;
   
-  gtk_widget_set_usize_internal (widget, width, height);
+  gtk_widget_set_usize_internal (widget, width, height, 0);
 }
 
 
@@ -8762,6 +8771,52 @@ gtk_widget_get_size_request (GtkWidget *widget,
 
   if (height)
     *height = aux_info->height;
+}
+
+/**
+ * _gtk_widget_override_size_request:
+ * @widget: a #GtkWidget
+ * @width: new forced minimum width
+ * @height: new forced minimum height
+ * @old_width: location to store previous forced minimum width
+ * @old_width: location to store previous forced minumum height
+ *
+ * Temporarily establishes a forced minimum size for a widget; this
+ * is used by GtkWindow when calculating the size to add to the
+ * window's geometry widget. Cached sizes for the widget and its
+ * parents are invalidated, so that subsequent calls to the size
+ * negotiation machinery produce the overriden result, but the
+ * widget is not queued for relayout or redraw. The old size must
+ * be restored with _gtk_widget_restore_size_request() or things
+ * will go screwy.
+ */
+void
+_gtk_widget_override_size_request (GtkWidget *widget,
+				   int        width,
+				   int        height,
+				   int       *old_width,
+				   int       *old_height)
+{
+  gtk_widget_get_size_request (widget, old_width, old_height);
+  gtk_widget_set_usize_internal (widget, width, height,
+				 GTK_QUEUE_RESIZE_INVALIDATE_ONLY);
+}
+
+/**
+ * _gtk_widget_restore_size_request:
+ * @widget: a #GtkWidget
+ * @old_width: saved forced minimum size
+ * @old_height: saved forced minimum size
+ *
+ * Undoes the operation of_gtk_widget_override_size_request().
+ */
+void
+_gtk_widget_restore_size_request (GtkWidget *widget,
+				  int        old_width,
+				  int        old_height)
+{
+  gtk_widget_set_usize_internal (widget, old_width, old_height,
+				 GTK_QUEUE_RESIZE_INVALIDATE_ONLY);
 }
 
 /**

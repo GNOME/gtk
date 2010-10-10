@@ -1609,8 +1609,9 @@ gtk_container_idle_sizer (gpointer data)
   return FALSE;
 }
 
-void
-_gtk_container_queue_resize (GtkContainer *container)
+static void
+_gtk_container_queue_resize_internal (GtkContainer *container,
+				      gboolean      invalidate_only)
 {
   GtkContainerPrivate *priv;
   GtkContainer *resize_container;
@@ -1637,7 +1638,7 @@ _gtk_container_queue_resize (GtkContainer *container)
       widget = parent;
     }
       
-  if (resize_container)
+  if (resize_container && !invalidate_only)
     {
       if (gtk_widget_get_visible (GTK_WIDGET (resize_container)) &&
           (gtk_widget_is_toplevel (GTK_WIDGET (resize_container)) ||
@@ -1675,6 +1676,36 @@ _gtk_container_queue_resize (GtkContainer *container)
 	  resize_container->priv->need_resize = TRUE;
 	}
     }
+}
+
+/**
+ * _gtk_container_queue_resize:
+ * @container: a #GtkContainer
+ *
+ * Determines the "resize container" in the hierarchy above this container
+ * (typically the toplevel, but other containers can be set as resize
+ * containers with gtk_container_set_resize_mode()), marks the container
+ * and all parents up to and including the resize container as needing
+ * to have sizes recompted, and if necessary adds the resize container
+ * to the queue of containers that will be resized out at idle.
+ */
+void
+_gtk_container_queue_resize (GtkContainer *container)
+{
+  _gtk_container_queue_resize_internal (container, FALSE);
+}
+
+/**
+ * _gtk_container_resize_invalidate:
+ * @container: a #GtkContainer
+ *
+ * Invalidates cached sizes like _gtk_container_queue_resize() but doesn't
+ * actually queue the resize container for resize.
+ */
+void
+_gtk_container_resize_invalidate (GtkContainer *container)
+{
+  _gtk_container_queue_resize_internal (container, TRUE);
 }
 
 void

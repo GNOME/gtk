@@ -23,7 +23,7 @@
 #include "gtkcontainer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "gtksizegroup.h"
+#include "gtksizegroup-private.h"
 #include "gtkbuildable.h"
 
 
@@ -182,19 +182,27 @@ add_widget_to_closure (GtkWidget       *widget,
 }
 
 static void
-real_queue_resize (GtkWidget *widget)
+real_queue_resize (GtkWidget          *widget,
+		   GtkQueueResizeFlags flags)
 {
-  GtkWidget *parent;
+  GtkWidget *container;
 
   _gtk_widget_set_alloc_needed (widget, TRUE);
   _gtk_widget_set_width_request_needed (widget, TRUE);
   _gtk_widget_set_height_request_needed (widget, TRUE);
 
-  parent = gtk_widget_get_parent (widget);
-  if (parent)
-    _gtk_container_queue_resize (GTK_CONTAINER (parent));
-  else if (gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
-    _gtk_container_queue_resize (GTK_CONTAINER (widget));
+  container = gtk_widget_get_parent (widget);
+  if (!container &&
+      gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
+    container = widget;
+
+  if (container)
+    {
+      if (flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY)
+	_gtk_container_resize_invalidate (GTK_CONTAINER (container));
+      else
+	_gtk_container_queue_resize (GTK_CONTAINER (container));
+    }
 }
 
 static void
@@ -214,8 +222,9 @@ reset_group_sizes (GSList *groups)
 }
 
 static void
-queue_resize_on_widget (GtkWidget *widget,
-			gboolean   check_siblings)
+queue_resize_on_widget (GtkWidget          *widget,
+			gboolean            check_siblings,
+			GtkQueueResizeFlags flags)
 {
   GtkWidget *parent = widget;
   GSList *tmp_list;
@@ -228,7 +237,7 @@ queue_resize_on_widget (GtkWidget *widget,
       
       if (widget == parent && !check_siblings)
 	{
-	  real_queue_resize (widget);
+	  real_queue_resize (widget, flags);
           parent = gtk_widget_get_parent (parent);
 	  continue;
 	}
@@ -237,7 +246,7 @@ queue_resize_on_widget (GtkWidget *widget,
       if (!widget_groups)
 	{
 	  if (widget == parent)
-	    real_queue_resize (widget);
+	    real_queue_resize (widget, flags);
 
           parent = gtk_widget_get_parent (parent);
 	  continue;
@@ -258,14 +267,14 @@ queue_resize_on_widget (GtkWidget *widget,
 	  if (tmp_list->data == parent)
 	    {
 	      if (widget == parent)
-		real_queue_resize (parent);
+		real_queue_resize (parent, flags);
 	    }
 	  else if (tmp_list->data == widget)
             {
               g_warning ("A container and its child are part of this SizeGroup");
             }
 	  else
-	    queue_resize_on_widget (tmp_list->data, FALSE);
+	    queue_resize_on_widget (tmp_list->data, FALSE, flags);
 
 	  tmp_list = tmp_list->next;
 	}
@@ -288,14 +297,14 @@ queue_resize_on_widget (GtkWidget *widget,
 	  if (tmp_list->data == parent)
 	    {
 	      if (widget == parent)
-		real_queue_resize (parent);
+		real_queue_resize (parent, flags);
 	    }
 	  else if (tmp_list->data == widget)
             {
               g_warning ("A container and its child are part of this SizeGroup");
             }
 	  else
-	    queue_resize_on_widget (tmp_list->data, FALSE);
+	    queue_resize_on_widget (tmp_list->data, FALSE, flags);
 
 	  tmp_list = tmp_list->next;
 	}
@@ -308,12 +317,12 @@ queue_resize_on_widget (GtkWidget *widget,
 }
 
 static void
-queue_resize_on_group (GtkSizeGroup *size_group)
+queue_resize_on_group (GtkSizeGroup       *size_group)
 {
   GtkSizeGroupPrivate *priv = size_group->priv;
 
   if (priv->widgets)
-    queue_resize_on_widget (priv->widgets->data, TRUE);
+    queue_resize_on_widget (priv->widgets->data, TRUE, 0);
 }
 
 static void
@@ -806,11 +815,12 @@ _gtk_size_group_bump_requisition (GtkWidget        *widget,
  * Queue a resize on a widget, and on all other widgets grouped with this widget.
  **/
 void
-_gtk_size_group_queue_resize (GtkWidget *widget)
+_gtk_size_group_queue_resize (GtkWidget           *widget,
+			      GtkQueueResizeFlags  flags)
 {
   initialize_size_group_quarks ();
 
-  queue_resize_on_widget (widget, TRUE);
+  queue_resize_on_widget (widget, TRUE, flags);
 }
 
 typedef struct {

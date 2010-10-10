@@ -23,7 +23,7 @@
 
 #include <config.h>
 #include "gtksizerequest.h"
-#include "gtksizegroup.h"
+#include "gtksizegroup-private.h"
 #include "gtkdebug.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"

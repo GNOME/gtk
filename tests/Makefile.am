@@ -47,6 +47,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testfilechooser			\
 	testfilechooserbutton		\
 	testframe			\
+	testgeometry			\
 	testgtk				\
 	testheightforwidth		\
 	testiconview			\
@@ -136,6 +137,7 @@ testerrors_DEPENDENCIES = $(TEST_DEPS)
 testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testframe_DEPENDENCIES = $(TEST_DEPS)
+testgeometry_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
@@ -201,6 +203,7 @@ testerrors_LDADD = $(LDADDS)
 testfilechooser_LDADD = $(LDADDS)
 testfilechooserbutton_LDADD = $(LDADDS)
 testframe_LDADD = $(LDADDS)
+testgeometry_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testheightforwidth_LDADD = $(LDADDS)
 testicontheme_LDADD = $(LDADDS)
@@ -321,6 +324,9 @@ testbuttons_SOURCES = 		\
 
 testframe_SOURCES = 		\
 	testframe.c
+
+testgeometry_SOURCES = 		\
+	testgeometry.c
 
 testiconview_SOURCES = 		\
 	testiconview.c		\

@@ -55,6 +55,15 @@ gboolean     _gtk_widget_get_height_request_needed (GtkWidget *widget);
 void         _gtk_widget_set_height_request_needed (GtkWidget *widget,
                                                     gboolean   height_request_needed);
 
+void _gtk_widget_override_size_request (GtkWidget *widget,
+					int        width,
+					int        height,
+					int       *old_width,
+					int       *old_height);
+void _gtk_widget_restore_size_request  (GtkWidget *widget,
+					int        old_width,
+					int        old_height);
+
 #ifdef G_OS_WIN32
 
 const gchar *_gtk_get_datadir ();
