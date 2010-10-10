@@ -8820,12 +8820,19 @@ gtk_window_parse_geometry (GtkWindow   *window,
 {
   gint result, x = 0, y = 0;
   guint w, h;
+  GtkWidget *child;
   GdkGravity grav;
   gboolean size_set, pos_set;
   GdkScreen *screen;
   
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
   g_return_val_if_fail (geometry != NULL, FALSE);
+
+  child = gtk_bin_get_child (GTK_BIN (window));
+  if (!child || !gtk_widget_get_visible (child))
+    g_warning ("gtk_window_parse_geometry() called on a window with no "
+	       "visible children; the window should be set up before "
+	       "gtk_window_parse_geometry() is called.");
 
   screen = gtk_window_check_screen (window);
   
