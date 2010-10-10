@@ -5021,6 +5021,7 @@ set_grip_shape (GtkWindow *window)
   cairo_surface_destroy (surface);
 
   gdk_window_shape_combine_region (priv->grip_window, region, 0, 0);
+  cairo_region_destroy (region);
 }
 
 static void
