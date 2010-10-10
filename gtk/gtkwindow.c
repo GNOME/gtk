@@ -281,11 +281,15 @@ struct _GtkWindowGeometryInfo
    */
   guint          position_constraints_changed : 1;
 
-  /* if true, default_width, height come from gtk_window_parse_geometry,
-   * and thus should be multiplied by the increments and affect the
-   * geometry widget only
+  /* if true, default_width, height should be multiplied by the
+   * increments and affect the geometry widget only
    */
   guint          default_is_geometry : 1;
+
+  /* if true, resize_width, height should be multiplied by the
+   * increments and affect the geometry widget only
+   */
+  guint          resize_is_geometry : 1;
   
   GtkWindowLastGeometryInfo last;
 };
@@ -3929,6 +3933,30 @@ gtk_window_set_default_size (GtkWindow   *window,
 }
 
 /**
+ * gtk_window_set_default_geometry:
+ * @window: a #GtkWindow
+ * @width: width in resize increments, or -1 to unset the default width
+ * @height: height in resize increments, or -1 to unset the default height
+ *
+ * Like gtk_window_set_default_size(), but @width and @height are interpreted
+ * in terms of the base size and increment set with
+ * gtk_window_set_geometry_hints.
+ *
+ * Since: 3.0
+ */
+void
+gtk_window_set_default_geometry (GtkWindow *window,
+				 gint       width,
+				 gint       height)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (width >= -1);
+  g_return_if_fail (height >= -1);
+
+  gtk_window_set_default_size_internal (window, TRUE, width, TRUE, height, TRUE);
+}
+
+/**
  * gtk_window_get_default_size:
  * @window: a #GtkWindow
  * @width: (out) (allow-none): location to store the default width, or %NULL
@@ -3992,6 +4020,39 @@ gtk_window_resize (GtkWindow *window,
 
   info->resize_width = width;
   info->resize_height = height;
+  info->resize_is_geometry = FALSE;
+
+  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+}
+
+/**
+ * gtk_window_resize_to_geometry:
+ * @window: a #GtkWindow
+ * @width: width in resize increments to resize the window to
+ * @height: height in resize increments to resize the window to
+ *
+ * Like gtk_window_resize(), but @width and @height are interpreted
+ * in terms of the base size and increment set with
+ * gtk_window_set_geometry_hints.
+ *
+ * Since: 3.0
+ */
+void
+gtk_window_resize_to_geometry (GtkWindow *window,
+			       gint       width,
+			       gint       height)
+{
+  GtkWindowGeometryInfo *info;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
+
+  info = gtk_window_get_geometry_info (window, TRUE);
+
+  info->resize_width = width;
+  info->resize_height = height;
+  info->resize_is_geometry = TRUE;
 
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
@@ -6061,11 +6122,48 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
  * Functions related to resizing *
  *********************************/
 
+static void
+geometry_size_to_pixels (GdkGeometry *geometry,
+			 guint        flags,
+			 guint       *width,
+			 guint       *height)
+{
+  gint base_width = 0;
+  gint base_height = 0;
+  gint min_width = 0;
+  gint min_height = 0;
+  gint width_inc = 1;
+  gint height_inc = 1;
+
+  if (flags & GDK_HINT_BASE_SIZE)
+    {
+      base_width = geometry->base_width;
+      base_height = geometry->base_height;
+    }
+  if (flags & GDK_HINT_MIN_SIZE)
+    {
+      min_width = geometry->min_width;
+      min_height = geometry->min_height;
+    }
+  if (flags & GDK_HINT_RESIZE_INC)
+    {
+      width_inc = geometry->width_inc;
+      height_inc = geometry->height_inc;
+    }
+
+  if (width)
+    *width = MAX (*width * width_inc + base_width, min_width);
+  if (height)
+    *height = MAX (*height * height_inc + base_height, min_height);
+}
+
 /* This function doesn't constrain to geometry hints */
 static void 
-gtk_window_compute_configure_request_size (GtkWindow *window,
-                                           guint     *width,
-                                           guint     *height)
+gtk_window_compute_configure_request_size (GtkWindow   *window,
+                                           GdkGeometry *geometry,
+                                           guint        flags,
+                                           guint       *width,
+                                           guint       *height)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkRequisition requisition;
@@ -6098,44 +6196,16 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
        /* Override requisition with default size */
 
        if (info)
-         {
-	   gint base_width = 0;
-	   gint base_height = 0;
-	   gint min_width = 0;
-	   gint min_height = 0;
-	   gint width_inc = 1;
-	   gint height_inc = 1;
-	   
-	   if (info->default_is_geometry &&
-	       (info->default_width > 0 || info->default_height > 0))
-	     {
-	       GdkGeometry geometry;
-	       guint flags;
-	       
-	       gtk_window_compute_hints (window, &geometry, &flags);
-
-	       if (flags & GDK_HINT_BASE_SIZE)
-		 {
-		   base_width = geometry.base_width;
-		   base_height = geometry.base_height;
-		 }
-	       if (flags & GDK_HINT_MIN_SIZE)
-		 {
-		   min_width = geometry.min_width;
-		   min_height = geometry.min_height;
-		 }
-	       if (flags & GDK_HINT_RESIZE_INC)
-		 {
-		   width_inc = geometry.width_inc;
-		   height_inc = geometry.height_inc;
-		 }
-	     }
-	     
+	 {
 	   if (info->default_width > 0)
-	     *width = MAX (info->default_width * width_inc + base_width, min_width);
-	   
+	     *width = info->default_width;
 	   if (info->default_height > 0)
-	     *height = MAX (info->default_height * height_inc + base_height, min_height);
+	     *height = info->default_height;
+
+	   if (info->default_is_geometry)
+	     geometry_size_to_pixels (geometry, flags,
+				      info->default_width > 0 ? width : NULL,
+				      info->default_height > 0 ? height : NULL);
          }
     }
   else
@@ -6153,10 +6223,14 @@ gtk_window_compute_configure_request_size (GtkWindow *window,
   if (info)
     {
       if (info->resize_width > 0)
-        *width = info->resize_width;
-
+	*width = info->resize_width;
       if (info->resize_height > 0)
-        *height = info->resize_height;
+	*height = info->resize_height;
+
+      if (info->resize_is_geometry)
+	geometry_size_to_pixels (geometry, flags,
+				 info->resize_width > 0 ? width : NULL,
+				 info->resize_height > 0 ? height : NULL);
     }
 
   /* Don't ever request zero width or height, its not supported by
@@ -6308,9 +6382,11 @@ gtk_window_compute_configure_request (GtkWindow    *window,
 
   screen = gtk_window_check_screen (window);
 
-  gtk_window_compute_configure_request_size (window, (guint *)&w, (guint *)&h);
-  
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
+  gtk_window_compute_configure_request_size (window,
+					     &new_geometry, new_flags,
+					     (guint *)&w, (guint *)&h);
+
   gtk_window_constrain_size (window,
                              &new_geometry, new_flags,
                              w, h,
@@ -7084,6 +7160,7 @@ gtk_window_compute_hints (GtkWindow   *window,
     {
       /* For simplicity, we always set the base hint, even when we
        * don't expect it to have any visible effect.
+       * (Note: geometry_size_to_pixels() depends on this.)
        */
       *new_flags |= GDK_HINT_BASE_SIZE;
 

@@ -315,6 +315,14 @@ void     gtk_window_get_position     (GtkWindow   *window,
                                       gint        *root_y);
 gboolean gtk_window_parse_geometry   (GtkWindow   *window,
                                       const gchar *geometry);
+
+void gtk_window_set_default_geometry (GtkWindow *window,
+                                      gint       width,
+                                      gint       height);
+void gtk_window_resize_to_geometry   (GtkWindow *window,
+                                      gint       width,
+                                      gint       height);
+
 GtkWindowGroup *gtk_window_get_group (GtkWindow   *window);
 gboolean gtk_window_has_group        (GtkWindow   *window);
 

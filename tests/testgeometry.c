@@ -74,12 +74,26 @@ on_drawing_area_draw (GtkWidget *drawing_area,
 }
 
 static void
+on_resize_clicked (GtkWidget *button,
+		   gpointer   data)
+{
+  GtkWidget *window = gtk_widget_get_toplevel (button);
+  GdkWindowHints mask = GPOINTER_TO_UINT(data);
+
+  if ((mask & GDK_HINT_RESIZE_INC) != 0)
+    gtk_window_resize_to_geometry (GTK_WINDOW (window), 8, 8);
+  else
+    gtk_window_resize_to_geometry (GTK_WINDOW (window), 8 * GRID_SIZE, 8 * GRID_SIZE);
+}
+
+static void
 create_window (GdkWindowHints  mask)
 {
   GtkWidget *window;
   GtkWidget *drawing_area;
   GtkWidget *table;
   GtkWidget *label;
+  GtkWidget *button;
   GdkGeometry geometry;
   GString *label_text = g_string_new (NULL);
   int border = 0;
@@ -130,6 +144,15 @@ create_window (GdkWindowHints  mask)
 		    GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL,
 		    0,                     0);
 
+  button = gtk_button_new_with_label ("Resize");
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (on_resize_clicked),
+		    GUINT_TO_POINTER (mask));
+  gtk_table_attach (GTK_TABLE (table), button,
+		    0, 2,              2, 3,
+		    GTK_EXPAND,        0,
+		    0,                 8);
+
   gtk_container_add (GTK_CONTAINER (window), table);
 
   if ((mask & GDK_HINT_BASE_SIZE) != 0)
@@ -169,6 +192,12 @@ create_window (GdkWindowHints  mask)
     {
       if (geometry_string)
 	gtk_window_parse_geometry (GTK_WINDOW (window), geometry_string);
+      else
+	gtk_window_set_default_geometry (GTK_WINDOW (window), 10, 10);
+    }
+  else
+    {
+      gtk_window_set_default_geometry (GTK_WINDOW (window), 10 * GRID_SIZE, 10 * GRID_SIZE);
     }
 
   gtk_widget_show (window);
