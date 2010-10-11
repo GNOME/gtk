@@ -89,8 +89,7 @@ guint                 gtk_wrap_box_get_natural_line_children (GtkWrapBox        
 
 void                  gtk_wrap_box_insert_child              (GtkWrapBox           *box,
                                                               GtkWidget            *widget,
-                                                              gint                  index,
-                                                              GtkWrapBoxPacking     packing);
+                                                              gint                  index);
 
 void                  gtk_wrap_box_reorder_child             (GtkWrapBox           *box,
                                                               GtkWidget            *widget,

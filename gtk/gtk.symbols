@@ -4510,7 +4510,6 @@ gtk_wrap_box_get_type G_GNUC_CONST
 gtk_wrap_box_get_vertical_spacing
 gtk_wrap_box_insert_child
 gtk_wrap_box_new
-gtk_wrap_box_packing_get_type
 gtk_wrap_box_reorder_child
 gtk_wrap_box_set_allocation_mode
 gtk_wrap_box_set_horizontal_spacing

@@ -61,9 +61,12 @@ populate_wrapbox_simple (GtkWrapBox *wrapbox)
       if (text_orientation == GTK_ORIENTATION_VERTICAL)
         gtk_label_set_angle (GTK_LABEL (widget), 90);
 
-      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1,
-                                 (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0)); 
+      if (items_xexpand)
+        gtk_widget_set_hexpand (frame, TRUE);
+      if (items_yexpand)
+        gtk_widget_set_vexpand (frame, TRUE);
+
+      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1);
 
       g_free (text);
     }
@@ -100,9 +103,12 @@ populate_wrapbox_wrappy (GtkWrapBox *wrapbox)
       gtk_label_set_line_wrap_mode (GTK_LABEL (widget), PANGO_WRAP_WORD);
       gtk_label_set_width_chars (GTK_LABEL (widget), 10);
 
-      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1,
-                                 (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0));
+      if (items_xexpand)
+        gtk_widget_set_hexpand (frame, TRUE);
+      if (items_yexpand)
+        gtk_widget_set_vexpand (frame, TRUE);
+
+      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), frame, -1);
     }
 }
 
@@ -125,9 +131,12 @@ populate_wrapbox_stock (GtkWrapBox *wrapbox)
       widget = gtk_button_new_from_stock (stock_id);
       gtk_widget_show (widget);
 
-      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), widget, -1,
-                                 (items_xexpand ? GTK_WRAP_BOX_H_EXPAND : 0) |
-                                 (items_yexpand ? GTK_WRAP_BOX_V_EXPAND : 0));
+      if (items_xexpand)
+        gtk_widget_set_hexpand (widget, TRUE);
+      if (items_yexpand)
+        gtk_widget_set_vexpand (widget, TRUE);
+
+      gtk_wrap_box_insert_child (GTK_WRAP_BOX (wrapbox), widget, -1);
     }
 }
 
