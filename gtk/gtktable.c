@@ -78,6 +78,9 @@ static void gtk_table_size_request  (GtkWidget	    *widget,
 				     GtkRequisition *requisition);
 static void gtk_table_size_allocate (GtkWidget	    *widget,
 				     GtkAllocation  *allocation);
+static void gtk_table_compute_expand (GtkWidget     *widget,
+                                      gboolean      *hexpand,
+                                      gboolean      *vexpand);
 static void gtk_table_add	    (GtkContainer   *container,
 				     GtkWidget	    *widget);
 static void gtk_table_remove	    (GtkContainer   *container,
@@ -133,6 +136,7 @@ gtk_table_class_init (GtkTableClass *class)
   
   widget_class->size_request = gtk_table_size_request;
   widget_class->size_allocate = gtk_table_size_allocate;
+  widget_class->compute_expand = gtk_table_compute_expand;
   
   container_class->add = gtk_table_add;
   container_class->remove = gtk_table_remove;
@@ -244,6 +248,43 @@ gtk_table_class_init (GtkTableClass *class)
 								 GTK_PARAM_READWRITE));
 
   g_type_class_add_private (class, sizeof (GtkTablePrivate));
+}
+
+static void
+gtk_table_compute_expand (GtkWidget *widget,
+                          gboolean  *hexpand_p,
+                          gboolean  *vexpand_p)
+{
+  GtkTable *table = GTK_TABLE (widget);
+  GtkTablePrivate *priv = table->priv;
+  GList *list;
+  GtkTableChild *child;
+  gboolean hexpand;
+  gboolean vexpand;
+
+  hexpand = FALSE;
+  vexpand = FALSE;
+
+  for (list = priv->children; list; list = list->next)
+    {
+      child = list->data;
+
+      if (!hexpand)
+        hexpand = child->xexpand ||
+                  gtk_widget_compute_expand (child->widget,
+                                             GTK_ORIENTATION_HORIZONTAL);
+
+      if (!vexpand)
+        vexpand = child->yexpand ||
+                  gtk_widget_compute_expand (child->widget,
+                                             GTK_ORIENTATION_VERTICAL);
+
+      if (hexpand && vexpand)
+        break;
+    }
+
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
 }
 
 static GType
@@ -373,14 +414,36 @@ gtk_table_set_child_property (GtkContainer    *container,
 	gtk_table_resize (table, table_child->bottom_attach, priv->ncols);
       break;
     case CHILD_PROP_X_OPTIONS:
-      table_child->xexpand = (g_value_get_flags (value) & GTK_EXPAND) != 0;
-      table_child->xshrink = (g_value_get_flags (value) & GTK_SHRINK) != 0;
-      table_child->xfill = (g_value_get_flags (value) & GTK_FILL) != 0;
+      {
+        gboolean xexpand;
+
+        xexpand = (g_value_get_flags (value) & GTK_EXPAND) != 0;
+
+        if (table_child->xexpand != xexpand)
+          {
+            table_child->xexpand = xexpand;
+            gtk_widget_queue_compute_expand (GTK_WIDGET (table));
+          }
+
+        table_child->xshrink = (g_value_get_flags (value) & GTK_SHRINK) != 0;
+        table_child->xfill = (g_value_get_flags (value) & GTK_FILL) != 0;
+      }
       break;
     case CHILD_PROP_Y_OPTIONS:
-      table_child->yexpand = (g_value_get_flags (value) & GTK_EXPAND) != 0;
-      table_child->yshrink = (g_value_get_flags (value) & GTK_SHRINK) != 0;
-      table_child->yfill = (g_value_get_flags (value) & GTK_FILL) != 0;
+      {
+        gboolean yexpand;
+
+        yexpand = (g_value_get_flags (value) & GTK_EXPAND) != 0;
+
+        if (table_child->yexpand != yexpand)
+          {
+            table_child->yexpand = yexpand;
+            gtk_widget_queue_compute_expand (GTK_WIDGET (table));
+          }
+
+        table_child->yshrink = (g_value_get_flags (value) & GTK_SHRINK) != 0;
+        table_child->yfill = (g_value_get_flags (value) & GTK_FILL) != 0;
+      }
       break;
     case CHILD_PROP_X_PADDING:
       table_child->xpadding = g_value_get_uint (value);
@@ -1032,11 +1095,13 @@ gtk_table_size_request_init (GtkTable *table)
     {
       child = children->data;
       children = children->next;
-      
-      if (child->left_attach == (child->right_attach - 1) && child->xexpand)
+
+      if (child->left_attach == (child->right_attach - 1) &&
+          (child->xexpand || gtk_widget_compute_expand (child->widget, GTK_ORIENTATION_HORIZONTAL)))
 	priv->cols[child->left_attach].expand = TRUE;
       
-      if (child->top_attach == (child->bottom_attach - 1) && child->yexpand)
+      if (child->top_attach == (child->bottom_attach - 1) &&
+          (child->yexpand || gtk_widget_compute_expand (child->widget, GTK_ORIENTATION_VERTICAL)))
 	priv->rows[child->top_attach].expand = TRUE;
     }
 }
@@ -1282,7 +1347,7 @@ gtk_table_size_allocate_init (GtkTable *table)
 	{
 	  if (child->left_attach == (child->right_attach - 1))
 	    {
-	      if (child->xexpand)
+	      if (child->xexpand || gtk_widget_compute_expand (child->widget, GTK_ORIENTATION_HORIZONTAL))
 		priv->cols[child->left_attach].expand = TRUE;
 
 	      if (!child->xshrink)
@@ -1293,7 +1358,7 @@ gtk_table_size_allocate_init (GtkTable *table)
 	  
 	  if (child->top_attach == (child->bottom_attach - 1))
 	    {
-	      if (child->yexpand)
+	      if (child->yexpand || gtk_widget_compute_expand (child->widget, GTK_ORIENTATION_VERTICAL))
 		priv->rows[child->top_attach].expand = TRUE;
 	      
 	      if (!child->yshrink)
