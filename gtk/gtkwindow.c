@@ -1063,8 +1063,7 @@ gtk_window_set_property (GObject      *object,
       gtk_window_set_startup_id (window, g_value_get_string (value));
       break; 
     case PROP_RESIZABLE:
-      priv->resizable = g_value_get_boolean (value);
-      gtk_widget_queue_resize (GTK_WIDGET (window));
+      gtk_window_set_resizable (window, g_value_get_boolean (value));
       break;
     case PROP_MODAL:
       gtk_window_set_modal (window, g_value_get_boolean (value));
@@ -7495,11 +7494,16 @@ gtk_window_set_resizable (GtkWindow *window,
 
   priv = window->priv;
 
-  priv->resizable = (resizable != FALSE);
+  resizable = (resizable != FALSE);
 
-  g_object_notify (G_OBJECT (window), "resizable");
+  if (priv->resizable != resizable)
+    {
+      priv->resizable = (resizable != FALSE);
 
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+      g_object_notify (G_OBJECT (window), "resizable");
+
+      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+    }
 }
 
 /**
