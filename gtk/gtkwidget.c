@@ -68,7 +68,7 @@
  * GtkWidget is the base class all widgets in GTK+ derive from. It manages the
  * widget lifecycle, states and style.
  *
- * <refsect2>
+ * <refsect2 id="geometry-management">
  * <title>Height-for-width Geometry Management</title>
  * <para>
  * GTK+ uses a height-for-width (and width-for-height) geometry management system. 

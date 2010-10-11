@@ -44,6 +44,90 @@
 #include <gobject/gobjectnotifyqueue.c>
 #include <gobject/gvaluecollector.h>
 
+
+/**
+ * SECTION:gtkcontainer
+ * @Short_description: Base class for widgets which contain other widgets
+ * @Title: GtkContainer
+ *
+ * A GTK+ user interface is constructed by nesting widgets inside widgets.
+ * Container widgets are the inner nodes in the resulting tree of widgets:
+ * they contain other widgets. So, for example, you might have a #GtkWindow
+ * containing a #GtkFrame containing a #GtkLabel. If you wanted an image instead
+ * of a textual label inside the frame, you might replace the #GtkLabel widget
+ * with a #GtkImage widget.
+ *
+ * There are two major kinds of container widgets in GTK+. Both are subclasses
+ * of the abstract GtkContainer base class.
+ *
+ * The first type of container widget has a single child widget and derives
+ * from #GtkBin. These containers are <emphasis>decorators</emphasis>, which
+ * add some kind of functionality to the child. For example, a #GtkButton makes
+ * its child into a clickable button; a #GtkFrame draws a frame around its child
+ * and a #GtkWindow places its child widget inside a top-level window.
+ *
+ * The second type of container can have more than one child; its purpose is to
+ * manage <emphasis>layout</emphasis>. This means that these containers assign
+ * sizes and positions to their children. For example, a #GtkHBox arranges its
+ * children in a horizontal row, and a #GtkTable arranges the widgets it contains
+ * in a two-dimensional grid.
+ *
+ * GTK+ uses a height-for-width (and width-for-height) geometry management system.
+ * Height-for-width means that a widget can change how much vertical space it needs,
+ * depending on the amount of horizontal space that it is given (and similar for
+ * width-for-height).
+ * See <link linkend="geometry-management">GtkWidget's geometry management section</link>
+ * to learn more about height-for-width geometry management.
+ * <refsect2 id="child-properties">
+ * <title>Child properties</title>
+ * <para>
+ * GtkContainer introduces <emphasis>child properties</emphasis>.
+ * These are object properties that are not specific
+ * to either the container or the contained widget, but rather to their relation.
+ * Typical examples of child properties are the position or pack-type of a widget
+ * which is contained in a #GtkBox.
+ *
+ * Use gtk_container_class_install_child_property() to install child properties
+ * for a container class and gtk_container_class_find_child_property() or
+ * gtk_container_class_list_child_properties() to get information about existing
+ * child properties.
+ *
+ * To set the value of a child property, use gtk_container_child_set_property(),
+ * gtk_container_child_set() or gtk_container_child_set_valist().
+ * To obtain the value of a child property, use
+ * gtk_container_child_get_property(), gtk_container_child_get() or
+ * gtk_container_child_get_valist(). To emit notification about child property
+ * changes, use gtk_widget_child_notify().
+ * </para>
+ * </refsect2>
+ * <refsect2 id="GtkContainer-BUILDER-UI">
+ * <title>GtkContainer as GtkBuildable</title>
+ * <para>
+ * The GtkContainer implementation of the GtkBuildable interface
+ * supports a &lt;packing&gt; element for children, which can
+ * contain multiple &lt;property&gt; elements that specify
+ * child properties for the child.
+ * <example>
+ * <title>Child properties in UI definitions</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkVBox">
+ *   <child>
+ *     <object class="GtkLabel"/>
+ *     <packing>
+ *       <property name="pack-type">start</property>
+ *     </packing>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * Since 2.16, child properties can also be marked as translatable using
+ * the same "translatable", "comments" and "context" attributes that are used
+ * for regular properties.
+ * </para>
+ * </refsect2>
+ */
+
+
 struct _GtkContainerPrivate
 {
   GtkWidget *focus_child;
