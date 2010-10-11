@@ -150,19 +150,19 @@ create_table_window (void)
   gtk_table_attach (GTK_TABLE (table),
                     gtk_label_new ("Top"),
                     1, 2, 0, 1,
-                    0, 0, 0, 0);
+                    GTK_FILL, GTK_FILL, 0, 0);
   gtk_table_attach (GTK_TABLE (table),
                     gtk_label_new ("Bottom"),
                     1, 2, 3, 4,
-                    0, 0, 0, 0);
+                    GTK_FILL, GTK_FILL, 0, 0);
   gtk_table_attach (GTK_TABLE (table),
                     gtk_label_new ("Left"),
                     0, 1, 1, 3,
-                    0, 0, 0, 0);
+                    GTK_FILL, GTK_FILL, 0, 0);
   gtk_table_attach (GTK_TABLE (table),
                     gtk_label_new ("Right"),
                     2, 3, 1, 3,
-                    0, 0, 0, 0);
+                    GTK_FILL, GTK_FILL, 0, 0);
 
   gdk_color_parse ("red", &red);
   gdk_color_parse ("blue", &blue);
@@ -182,7 +182,7 @@ create_table_window (void)
   gtk_table_attach (GTK_TABLE (table),
                     colorbox,
                     1, 2, 1, 2,
-                    0, 0, 0, 0);
+                    GTK_FILL, GTK_FILL, 0, 0);
 
   colorbox = gtk_event_box_new ();
   gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &blue);
@@ -199,7 +199,7 @@ create_table_window (void)
   gtk_table_attach (GTK_TABLE (table),
                     colorbox,
                     1, 2, 2, 3,
-                    0, 0, 0, 0);
+                    GTK_FILL, GTK_FILL, 0, 0);
 
   gtk_container_add (GTK_CONTAINER (window), table);
   gtk_widget_show_all (window);
