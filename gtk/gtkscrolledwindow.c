@@ -1679,7 +1679,10 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  priv->hscrollbar_visible = (adjustment->upper - adjustment->lower >
 					      adjustment->page_size);
 	  if (priv->hscrollbar_visible != visible)
-	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+            {
+	      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+              gtk_widget_queue_compute_expand (GTK_WIDGET (scrolled_window));
+            }
 	}
     }
   else if (priv->vscrollbar &&
@@ -1693,7 +1696,10 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  priv->vscrollbar_visible = (adjustment->upper - adjustment->lower >
 					      adjustment->page_size);
 	  if (priv->vscrollbar_visible != visible)
-	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+            {
+	      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
+              gtk_widget_queue_compute_expand (GTK_WIDGET (scrolled_window));
+            }
 	}
     }
 }
