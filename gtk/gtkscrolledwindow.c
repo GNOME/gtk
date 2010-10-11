@@ -1392,7 +1392,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   gboolean scrollbars_within_bevel;
   gint scrollbar_spacing;
   guint border_width;
-  
+  gboolean hscrollbar_was_visible;
+  gboolean vscrollbar_was_visible;
+
   g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
   g_return_if_fail (allocation != NULL);
 
@@ -1408,6 +1410,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (scrolled_window));
 
   gtk_widget_set_allocation (widget, allocation);
+
+  hscrollbar_was_visible = priv->hscrollbar_visible;
+  vscrollbar_was_visible = priv->vscrollbar_visible;
 
   if (priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
     priv->hscrollbar_visible = TRUE;
@@ -1449,6 +1454,10 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	      priv->hscrollbar_visible = TRUE;
 	      priv->vscrollbar_visible = TRUE;
 
+              if (hscrollbar_was_visible != priv->hscrollbar_visible ||
+                  vscrollbar_was_visible != priv->vscrollbar_visible)
+                gtk_widget_queue_compute_expand (widget);
+
 	      /* a new resize is already queued at this point,
 	       * so we will immediatedly get reinvoked
 	       */
@@ -1466,6 +1475,10 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       priv->vscrollbar_visible = priv->vscrollbar_policy == GTK_POLICY_ALWAYS;
       gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
     }
+
+  if (hscrollbar_was_visible != priv->hscrollbar_visible ||
+      vscrollbar_was_visible != priv->vscrollbar_visible)
+    gtk_widget_queue_compute_expand (widget);
 
   if (priv->hscrollbar_visible)
     {
