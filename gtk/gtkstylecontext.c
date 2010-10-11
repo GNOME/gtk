@@ -39,6 +39,7 @@ typedef struct GtkStyleInfo GtkStyleInfo;
 typedef struct GtkRegion GtkRegion;
 typedef struct PropertyValue PropertyValue;
 typedef struct AnimationInfo AnimationInfo;
+typedef struct StyleData StyleData;
 
 struct GtkRegion
 {
@@ -66,6 +67,13 @@ struct GtkStyleInfo
   GtkJunctionSides junction_sides;
 };
 
+struct StyleData
+{
+  GtkStyleSet *store;
+  GSList *icon_factories;
+  GArray *property_cache;
+};
+
 struct AnimationInfo
 {
   GtkTimeline *timeline;
@@ -86,15 +94,12 @@ struct GtkStyleContextPrivate
   GList *providers;
   GList *providers_last;
 
-  GSList *icon_factories;
-
-  GtkStyleSet *store;
   GtkWidgetPath *widget_path;
-
-  GArray *property_cache;
+  GHashTable *style_data;
+  GSList *info_stack;
+  StyleData *current_data;
 
   GtkStateFlags state_flags;
-  GSList *info_stack;
 
   GSList *animation_regions;
   GSList *animations;
@@ -212,6 +217,107 @@ style_info_copy (const GtkStyleInfo *info)
   return copy;
 }
 
+static guint
+style_info_hash (gconstpointer elem)
+{
+  const GtkStyleInfo *info;
+  guint i, hash = 0;
+
+  info = elem;
+
+  for (i = 0; i < info->style_classes->len; i++)
+    {
+      hash += g_array_index (info->style_classes, GQuark, i);
+      hash <<= 5;
+    }
+
+  for (i = 0; i < info->regions->len; i++)
+    {
+      GtkRegion *region;
+
+      region = &g_array_index (info->regions, GtkRegion, i);
+      hash += region->class_quark;
+      hash += region->flags;
+      hash <<= 5;
+    }
+
+  return hash;
+}
+
+static gboolean
+style_info_equal (gconstpointer elem1,
+                  gconstpointer elem2)
+{
+  const GtkStyleInfo *info1, *info2;
+
+  info1 = elem1;
+  info2 = elem2;
+
+  if (info1->junction_sides != info2->junction_sides)
+    return FALSE;
+
+  if (info1->style_classes->len != info2->style_classes->len)
+    return FALSE;
+
+  if (memcmp (info1->style_classes->data,
+              info2->style_classes->data,
+              info1->style_classes->len * sizeof (GQuark)) != 0)
+    return FALSE;
+
+  if (info1->regions->len != info2->regions->len)
+    return FALSE;
+
+  if (memcmp (info1->regions->data,
+              info2->regions->data,
+              info1->regions->len * sizeof (GtkRegion)) != 0)
+    return FALSE;
+
+  return TRUE;
+}
+
+static StyleData *
+style_data_new (void)
+{
+  StyleData *data;
+
+  data = g_slice_new0 (StyleData);
+  data->store = gtk_style_set_new ();
+
+  return data;
+}
+
+static void
+clear_property_cache (StyleData *data)
+{
+  guint i;
+
+  if (!data->property_cache)
+    return;
+
+  for (i = 0; i < data->property_cache->len; i++)
+    {
+      PropertyValue *node = &g_array_index (data->property_cache, PropertyValue, i);
+
+      g_param_spec_unref (node->pspec);
+      g_value_unset (&node->value);
+    }
+
+  g_array_free (data->property_cache, TRUE);
+  data->property_cache = NULL;
+}
+
+static void
+style_data_free (StyleData *data)
+{
+  g_object_unref (data->store);
+  clear_property_cache (data);
+
+  g_slist_foreach (data->icon_factories, (GFunc) g_object_unref, NULL);
+  g_slist_free (data->icon_factories);
+
+  g_slice_free (StyleData, data);
+}
+
 static void
 gtk_style_context_init (GtkStyleContext *style_context)
 {
@@ -222,7 +328,10 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                                             GTK_TYPE_STYLE_CONTEXT,
                                                             GtkStyleContextPrivate);
 
-  priv->store = gtk_style_set_new ();
+  priv->style_data = g_hash_table_new_full (style_info_hash,
+                                            style_info_equal,
+                                            (GDestroyNotify) style_info_free,
+                                            (GDestroyNotify) style_data_free);
   priv->theming_engine = g_object_ref ((gpointer) gtk_theming_engine_load (NULL));
 
   priv->direction = GTK_TEXT_DIR_RTL;
@@ -250,30 +359,6 @@ style_provider_data_free (GtkStyleProviderData *data)
 {
   g_object_unref (data->provider);
   g_slice_free (GtkStyleProviderData, data);
-}
-
-static void
-clear_property_cache (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv;
-
-  priv = context->priv;
-
-  if (priv->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < priv->property_cache->len; i++)
-	{
-	  PropertyValue *node = &g_array_index (priv->property_cache, PropertyValue, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-
-      g_array_free (priv->property_cache, TRUE);
-      priv->property_cache = NULL;
-    }
 }
 
 static void
@@ -411,18 +496,13 @@ gtk_style_context_finalize (GObject *object)
   if (priv->widget_path)
     gtk_widget_path_free (priv->widget_path);
 
-  g_object_unref (priv->store);
+  g_hash_table_destroy (priv->style_data);
 
   g_list_foreach (priv->providers, (GFunc) style_provider_data_free, NULL);
   g_list_free (priv->providers);
 
-  clear_property_cache (GTK_STYLE_CONTEXT (object));
-
   g_slist_foreach (priv->info_stack, (GFunc) style_info_free, NULL);
   g_slist_free (priv->info_stack);
-
-  g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
-  g_slist_free (priv->icon_factories);
 
   g_slist_free (priv->animation_regions);
 
@@ -516,18 +596,15 @@ find_next_candidate (GList *local,
 }
 
 static void
-rebuild_properties (GtkStyleContext *context)
+build_properties (GtkStyleContext *context,
+                  StyleData       *style_data,
+                  GtkWidgetPath   *path)
 {
   GtkStyleContextPrivate *priv;
   GList *elem, *list, *global_list = NULL;
 
   priv = context->priv;
   list = priv->providers;
-
-  gtk_style_set_clear (priv->store);
-
-  if (!priv->widget_path)
-    return;
 
   if (priv->screen)
     global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
@@ -544,38 +621,25 @@ rebuild_properties (GtkStyleContext *context)
       else
         global_list = global_list->next;
 
-      provider_style = gtk_style_provider_get_style (data->provider,
-                                                     priv->widget_path);
+      provider_style = gtk_style_provider_get_style (data->provider, path);
 
       if (provider_style)
         {
-          gtk_style_set_merge (priv->store, provider_style, TRUE);
+          gtk_style_set_merge (style_data->store, provider_style, TRUE);
           g_object_unref (provider_style);
         }
     }
-
-  if (priv->theming_engine)
-    g_object_unref (priv->theming_engine);
-
-  gtk_style_set_get (priv->store, 0,
-                     "engine", &priv->theming_engine,
-                     NULL);
 }
 
 static void
-rebuild_icon_factories (GtkStyleContext *context)
+build_icon_factories (GtkStyleContext *context,
+                      StyleData       *style_data,
+                      GtkWidgetPath   *path)
 {
   GtkStyleContextPrivate *priv;
   GList *elem, *list, *global_list = NULL;
 
   priv = context->priv;
-  g_slist_foreach (priv->icon_factories, (GFunc) g_object_unref, NULL);
-  g_slist_free (priv->icon_factories);
-  priv->icon_factories = NULL;
-
-  if (!priv->widget_path)
-    return;
-
   list = priv->providers_last;
 
   if (priv->screen)
@@ -596,12 +660,93 @@ rebuild_icon_factories (GtkStyleContext *context)
       else
         global_list = global_list->prev;
 
-      factory = gtk_style_provider_get_icon_factory (data->provider,
-						     priv->widget_path);
+      factory = gtk_style_provider_get_icon_factory (data->provider, path);
 
       if (factory)
-	priv->icon_factories = g_slist_prepend (priv->icon_factories, factory);
+	style_data->icon_factories = g_slist_prepend (style_data->icon_factories, factory);
     }
+}
+
+GtkWidgetPath *
+create_query_path (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  GtkWidgetPath *path;
+  GtkStyleInfo *info;
+  guint i, pos;
+
+  priv = context->priv;
+  path = gtk_widget_path_copy (priv->widget_path);
+  pos = gtk_widget_path_length (path) - 1;
+
+  info = priv->info_stack->data;
+
+  /* Set widget regions */
+  for (i = 0; i < info->regions->len; i++)
+    {
+      GtkRegion *region;
+
+      region = &g_array_index (info->regions, GtkRegion, i);
+      gtk_widget_path_iter_add_region (path, pos,
+                                       g_quark_to_string (region->class_quark),
+                                       region->flags);
+    }
+
+  /* Set widget classes */
+  for (i = 0; i < info->style_classes->len; i++)
+    {
+      GQuark quark;
+
+      quark = g_array_index (info->style_classes, GQuark, i);
+      gtk_widget_path_iter_add_class (path, pos,
+                                      g_quark_to_string (quark));
+    }
+
+  return path;
+}
+
+StyleData *
+style_data_lookup (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+
+  priv = context->priv;
+
+  /* Current data in use is cached, just return it */
+  if (priv->current_data)
+    return priv->current_data;
+
+  g_assert (priv->widget_path != NULL);
+
+  data = g_hash_table_lookup (priv->style_data, priv->info_stack->data);
+
+  if (!data)
+    {
+      GtkWidgetPath *path;
+
+      data = style_data_new ();
+      path = create_query_path (context);
+
+      build_properties (context, data, path);
+      build_icon_factories (context, data, path);
+
+      g_hash_table_insert (priv->style_data,
+                           style_info_copy (priv->info_stack->data),
+                           data);
+
+      gtk_widget_path_free (path);
+    }
+
+  priv->current_data = data;
+
+  if (priv->theming_engine)
+    g_object_unref (priv->theming_engine);
+
+  gtk_style_set_get (data->store, 0,
+                     "engine", &priv->theming_engine,
+                     NULL);
+  return data;
 }
 
 static void
@@ -787,13 +932,18 @@ gtk_style_context_get_property (GtkStyleContext *context,
                                 GValue          *value)
 {
   GtkStyleContextPrivate *priv;
+  StyleData *data;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (property != NULL);
   g_return_if_fail (value != NULL);
 
   priv = context->priv;
-  gtk_style_set_get_property (priv->store, property, state, value);
+
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  gtk_style_set_get_property (data->store, property, state, value);
 }
 
 void
@@ -802,11 +952,15 @@ gtk_style_context_get_valist (GtkStyleContext *context,
                               va_list          args)
 {
   GtkStyleContextPrivate *priv;
+  StyleData *data;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
-  gtk_style_set_get_valist (priv->store, state, args);
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  gtk_style_set_get_valist (data->store, state, args);
 }
 
 void
@@ -815,14 +969,18 @@ gtk_style_context_get (GtkStyleContext *context,
                        ...)
 {
   GtkStyleContextPrivate *priv;
+  StyleData *data;
   va_list args;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
 
   va_start (args, state);
-  gtk_style_set_get_valist (priv->store, state, args);
+  gtk_style_set_get_valist (data->store, state, args);
   va_end (args);
 }
 
@@ -1009,37 +1167,7 @@ gtk_style_context_restore (GtkStyleContext *context)
       priv->info_stack = g_slist_prepend (priv->info_stack, info);
     }
 
-  if (priv->widget_path)
-    {
-      guint i;
-
-      info = priv->info_stack->data;
-
-      /* Update widget path regions */
-      gtk_widget_path_iter_clear_regions (priv->widget_path, 0);
-
-      for (i = 0; i < info->regions->len; i++)
-        {
-          GtkRegion *region;
-
-          region = &g_array_index (info->regions, GtkRegion, i);
-          gtk_widget_path_iter_add_region (priv->widget_path, 0,
-                                           g_quark_to_string (region->class_quark),
-                                           region->flags);
-        }
-
-      /* Update widget path classes */
-      gtk_widget_path_iter_clear_classes (priv->widget_path, 0);
-
-      for (i = 0; i < info->style_classes->len; i++)
-        {
-          GQuark quark;
-
-          quark = g_array_index (info->style_classes, GQuark, i);
-          gtk_widget_path_iter_add_class (priv->widget_path, 0,
-                                          g_quark_to_string (quark));
-        }
-    }
+  priv->current_data = NULL;
 }
 
 static gboolean
@@ -1156,11 +1284,8 @@ gtk_style_context_set_class (GtkStyleContext *context,
     {
       g_array_insert_val (info->style_classes, position, class_quark);
 
-      if (priv->widget_path)
-        {
-          gtk_widget_path_iter_add_class (priv->widget_path, 0, class_name);
-          gtk_style_context_invalidate (context);
-        }
+      /* Unset current data, as it likely changed due to the class change */
+      priv->current_data = NULL;
     }
 }
 
@@ -1190,11 +1315,8 @@ gtk_style_context_unset_class (GtkStyleContext *context,
     {
       g_array_remove_index (info->style_classes, position);
 
-      if (priv->widget_path)
-        {
-          gtk_widget_path_iter_remove_class (priv->widget_path, 0, class_name);
-          gtk_style_context_invalidate (context);
-        }
+      /* Unset current data, as it likely changed due to the class change */
+      priv->current_data = NULL;
     }
 }
 
@@ -1308,11 +1430,8 @@ gtk_style_context_set_region (GtkStyleContext *context,
 
       g_array_insert_val (info->regions, position, region);
 
-      if (priv->widget_path)
-        {
-          gtk_widget_path_iter_add_region (priv->widget_path, 0, class_name, flags);
-          gtk_style_context_invalidate (context);
-        }
+      /* Unset current data, as it likely changed due to the region change */
+      priv->current_data = NULL;
     }
 }
 
@@ -1342,11 +1461,8 @@ gtk_style_context_unset_region (GtkStyleContext    *context,
     {
       g_array_remove_index (info->regions, position);
 
-      if (priv->widget_path)
-        {
-          gtk_widget_path_iter_remove_region (priv->widget_path, 0, class_name);
-          gtk_style_context_invalidate (context);
-        }
+      /* Unset current data, as it likely changed due to the region change */
+      priv->current_data = NULL;
     }
 }
 
@@ -1411,33 +1527,35 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   PropertyValue *pcache, key = { 0 };
+  StyleData *data;
   GList *list;
   guint i;
 
   priv = context->priv;
+  data = style_data_lookup (context);
 
   key.widget_type = widget_type;
   key.pspec = pspec;
 
   /* need value cache array */
-  if (!priv->property_cache)
-    priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
+  if (!data->property_cache)
+    data->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
   else
     {
       pcache = bsearch (&key,
-                        priv->property_cache->data, priv->property_cache->len,
+                        data->property_cache->data, data->property_cache->len,
                         sizeof (PropertyValue), style_property_values_cmp);
       if (pcache)
         return &pcache->value;
     }
 
   i = 0;
-  while (i < priv->property_cache->len &&
-	 style_property_values_cmp (&key, &g_array_index (priv->property_cache, PropertyValue, i)) >= 0)
+  while (i < data->property_cache->len &&
+	 style_property_values_cmp (&key, &g_array_index (data->property_cache, PropertyValue, i)) >= 0)
     i++;
 
-  g_array_insert_val (priv->property_cache, i, key);
-  pcache = &g_array_index (priv->property_cache, PropertyValue, i);
+  g_array_insert_val (data->property_cache, i, key);
+  pcache = &g_array_index (data->property_cache, PropertyValue, i);
 
   /* cache miss, initialize value type, then set contents */
   g_param_spec_ref (pcache->pspec);
@@ -1589,14 +1707,18 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
 				   const gchar     *stock_id)
 {
   GtkStyleContextPrivate *priv;
+  StyleData *data;
   GSList *list;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
 
   priv = context->priv;
+  g_return_val_if_fail (priv->widget_path != NULL, NULL);
 
-  for (list = priv->icon_factories; list; list = list->next)
+  data = style_data_lookup (context);
+
+  for (list = data->icon_factories; list; list = list->next)
     {
       GtkIconFactory *factory;
       GtkIconSet *icon_set;
@@ -1697,18 +1819,22 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkSymbolicColor *sym_color;
+  StyleData *data;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (color_name != NULL, FALSE);
   g_return_val_if_fail (color != NULL, FALSE);
 
   priv = context->priv;
-  sym_color = gtk_style_set_lookup_color (priv->store, color_name);
+  g_return_val_if_fail (priv->widget_path != NULL, FALSE);
+
+  data = style_data_lookup (context);
+  sym_color = gtk_style_set_lookup_color (data->store, color_name);
 
   if (!sym_color)
     return FALSE;
 
-  return gtk_symbolic_color_resolve (sym_color, priv->store, color);
+  return gtk_symbolic_color_resolve (sym_color, data->store, color);
 }
 
 void
@@ -1722,13 +1848,16 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   GtkAnimationDescription *desc;
   AnimationInfo *info;
   GtkStateFlags flags;
+  StyleData *data;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (state < GTK_STATE_LAST);
 
-  state_value = (state_value == TRUE);
   priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  state_value = (state_value == TRUE);
 
   switch (state)
     {
@@ -1759,7 +1888,8 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   /* Find out if there is any animation description for the given
    * state, it will fallback to the normal state as well if necessary.
    */
-  gtk_style_set_get (priv->store, flags,
+  data = style_data_lookup (context);
+  gtk_style_set_get (data->store, flags,
                      "transition", &desc,
                      NULL);
 
@@ -1959,9 +2089,8 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 
   priv->invalidating_context = TRUE;
 
-  rebuild_properties (context);
-  clear_property_cache (context);
-  rebuild_icon_factories (context);
+  g_hash_table_remove_all (priv->style_data);
+  priv->current_data = NULL;
 
   g_signal_emit (context, signals[CHANGED], 0);
 
