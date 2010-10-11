@@ -50,8 +50,8 @@ on_toggle_vexpand (GtkToggleButton *toggle,
                 NULL);
 }
 
-static GtkWidget*
-create_window (void)
+static void
+create_box_window (void)
 {
   GtkWidget *window;
   GtkWidget *box1, *box2, *box3;
@@ -61,6 +61,7 @@ create_window (void)
   GdkColor red, blue;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Boxes");
 
   box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
@@ -100,6 +101,7 @@ create_window (void)
   gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &red);
 
   alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);
   gtk_container_add (GTK_CONTAINER (colorbox), alignment);
 
   toggle = gtk_toggle_button_new_with_label ("H Expand");
@@ -115,6 +117,7 @@ create_window (void)
   gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &blue);
 
   alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);
   gtk_container_add (GTK_CONTAINER (colorbox), alignment);
 
   toggle = gtk_toggle_button_new_with_label ("V Expand");
@@ -125,26 +128,90 @@ create_window (void)
                       colorbox,
                       FALSE, TRUE, 0);
 
-  gtk_container_add (GTK_CONTAINER (window),
-                     box1);
-  gtk_widget_show_all (box1);
+  gtk_container_add (GTK_CONTAINER (window), box1);
+  gtk_widget_show_all (window);
+}
 
-  return window;
+static void
+create_table_window (void)
+{
+  GtkWidget *window;
+  GtkWidget *table;
+  GtkWidget *toggle;
+  GtkWidget *alignment;
+  GtkWidget *colorbox;
+  GdkColor red, blue;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (window), "Table");
+
+  table = gtk_table_new (4, 3, FALSE);
+
+  gtk_table_attach (GTK_TABLE (table),
+                    gtk_label_new ("Top"),
+                    1, 2, 0, 1,
+                    0, 0, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+                    gtk_label_new ("Bottom"),
+                    1, 2, 3, 4,
+                    0, 0, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+                    gtk_label_new ("Left"),
+                    0, 1, 1, 3,
+                    0, 0, 0, 0);
+  gtk_table_attach (GTK_TABLE (table),
+                    gtk_label_new ("Right"),
+                    2, 3, 1, 3,
+                    0, 0, 0, 0);
+
+  gdk_color_parse ("red", &red);
+  gdk_color_parse ("blue", &blue);
+
+  colorbox = gtk_event_box_new ();
+  gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &red);
+
+  alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);
+  gtk_container_add (GTK_CONTAINER (colorbox), alignment);
+
+  toggle = gtk_toggle_button_new_with_label ("H Expand");
+  g_signal_connect (G_OBJECT (toggle), "toggled",
+                    G_CALLBACK (on_toggle_hexpand), NULL);
+  gtk_container_add (GTK_CONTAINER (alignment), toggle);
+
+  gtk_table_attach (GTK_TABLE (table),
+                    colorbox,
+                    1, 2, 1, 2,
+                    0, 0, 0, 0);
+
+  colorbox = gtk_event_box_new ();
+  gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &blue);
+
+  alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);
+  gtk_container_add (GTK_CONTAINER (colorbox), alignment);
+
+  toggle = gtk_toggle_button_new_with_label ("V Expand");
+  g_signal_connect (G_OBJECT (toggle), "toggled",
+                    G_CALLBACK (on_toggle_vexpand), NULL);
+  gtk_container_add (GTK_CONTAINER (alignment), toggle);
+
+  gtk_table_attach (GTK_TABLE (table),
+                    colorbox,
+                    1, 2, 2, 3,
+                    0, 0, 0, 0);
+
+  gtk_container_add (GTK_CONTAINER (window), table);
+  gtk_widget_show_all (window);
 }
 
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window;
-
   gtk_init (&argc, &argv);
 
-  window = create_window ();
-
-  g_signal_connect (window, "delete-event",
-                    G_CALLBACK (gtk_main_quit), window);
-
-  gtk_widget_show (window);
+  create_box_window ();
+  create_table_window ();
 
   gtk_main ();
 
