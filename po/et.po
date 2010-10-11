@@ -14,69 +14,59 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-01 15:41-0400\n"
-"PO-Revision-Date: 2010-09-02 20:40+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2010-08-22 14:07+0000\n"
+"PO-Revision-Date: 2010-10-10 18:48+0300\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
-"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: et\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: gdk/gdk.c:103
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Viga võtme --gdk-debug parsimisel"
 
-#: gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Viga võtme --gdk-no-debug parsimisel"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr "Aknahalduri poolt kasutatav programmi klass"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:152
 msgid "CLASS"
 msgstr "KLASS"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:154
 msgid "Program name as used by the window manager"
 msgstr "Aknahalduri poolt kasutatav programmi nimi"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:155
 msgid "NAME"
 msgstr "NIMI"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:157
 msgid "X display to use"
 msgstr "Kasutatav X'i kuva"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:158
 msgid "DISPLAY"
 msgstr "KUVA"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:160
 msgid "X screen to use"
 msgstr "Kasutatav X'i ekraan"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:161
 msgid "SCREEN"
 msgstr "EKRAAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:164
 msgid "GDK debugging flags to set"
 msgstr "GDK silumislipud, mida seada"
 
@@ -84,304 +74,243 @@ msgstr "GDK silumislipud, mida seada"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:533 gtk/gtkmain.c:536
 msgid "FLAGS"
 msgstr "LIPUD"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:167
 msgid "GDK debugging flags to unset"
 msgstr "GDK silumislipud, mida maha võtta"
 
-#: gdk/keyname-table.h:3940
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#: gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Enter"
 
-#: gdk/keyname-table.h:3943
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pause"
 
-#: gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Scroll_Lock"
 
-#: gdk/keyname-table.h:3945
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "Sys_Req"
 
-#: gdk/keyname-table.h:3946
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Escape"
 
-#: gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multi_key"
 
-#: gdk/keyname-table.h:3948
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
-#: gdk/keyname-table.h:3949
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Left"
 
-#: gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Up"
 
-#: gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Right"
 
-#: gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Down"
 
-#: gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page_Up"
 
-#: gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page_Down"
 
-#: gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
-#: gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num_Lock"
 
-#: gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "KP_Space"
 
-#: gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "KP_Tab"
 
-#: gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "KP_Enter"
 
-#: gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "KP_Home"
 
-#: gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "KP_Left"
 
-#: gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "KP_Up"
 
-#: gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "KP_Right"
 
-#: gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "KP_Down"
 
-#: gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "KP_Page_Up"
 
-#: gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "KP_Prior"
 
-#: gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "KP_Page_Down"
 
-#: gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "KP_Next"
 
-#: gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "KP_End"
 
-#: gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "KP_Begin"
 
-#: gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "KP_Insert"
 
-#: gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "KP_Delete"
 
-#: gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "GDI päringuid ei kuhjata"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
 msgstr "Digitahvli jaoks ei kasutata Wintab API-t"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "Sama mis --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr "Wintab API-t ei kasutata [vaikimisi]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr "Paleti suurus 8-bitises režiimis"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "VÄRVID"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:312
+#. Description of --sync in --help output
+msgid "Make X calls synchronous"
+msgstr "X'i kutsungid sünkroonseks"
+
 #, c-format
 msgid "Starting %s"
 msgstr "Käivitamine: %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %s"
 msgstr "Avamine: %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:321
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Avamine: %d kirje"
 msgstr[1] "Avamine: %d kirjet"
 
-#. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:96
-msgid "Make X calls synchronous"
-msgstr "X'i kutsungid sünkroonseks"
-
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: gtk/gtkaboutdialog.c:101
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
 msgstr "See programm on ILMA IGASUGUSE GARANTIITA. Üksikasjade kohta vaata %s"
 
-#: gtk/gtkaboutdialog.c:339 gtk/gtkaboutdialog.c:2235
+msgid "Could not show link"
+msgstr "Linki pole võimalik kuvada"
+
 msgid "License"
 msgstr "Litsents"
 
-#: gtk/gtkaboutdialog.c:340
 msgid "The license of the program"
 msgstr "Programmi litsents"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:621
 msgid "C_redits"
 msgstr "_Autorid"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:635
 msgid "_License"
 msgstr "_Litsents"
 
-#: gtk/gtkaboutdialog.c:839
-msgid "Could not show link"
-msgstr "Linki pole võimalik kuvada"
-
-#: gtk/gtkaboutdialog.c:932
 #, c-format
 msgid "About %s"
 msgstr "Lähem teave %s kohta"
 
-#: gtk/gtkaboutdialog.c:2153
 msgid "Credits"
 msgstr "Autorid"
 
-#: gtk/gtkaboutdialog.c:2185
 msgid "Written by"
 msgstr "Programmeerimine"
 
-#: gtk/gtkaboutdialog.c:2188
 msgid "Documented by"
 msgstr "Dokumentatsioon"
 
-#: gtk/gtkaboutdialog.c:2200
 msgid "Translated by"
 msgstr "Tõlge"
 
-#: gtk/gtkaboutdialog.c:2204
 msgid "Artwork by"
 msgstr "Kunst"
 
@@ -390,7 +319,6 @@ msgstr "Kunst"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:160
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -400,7 +328,6 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:166
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -410,7 +337,6 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:172
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -420,7 +346,6 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -430,7 +355,6 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:783
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hüper"
@@ -440,37 +364,30 @@ msgstr "Hüper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:797
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:813
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Tühik"
 
-#: gtk/gtkaccellabel.c:816
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: gtk/gtkbuilderparser.c:343
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
 msgstr "Vigast liiki funktsioon real %d: '%s'"
 
-#: gtk/gtkbuilderparser.c:407
 #, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Duplikaatobjekt ID-ga '%s' real %d (eelmine real %d)"
 
-#: gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Vigane juurkirje: %s"
 
-#: gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "Käsitlematu silt: '%s'"
@@ -485,7 +402,6 @@ msgstr "Käsitlematu silt: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:883
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -493,7 +409,6 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:921
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -502,7 +417,6 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:2006
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -517,7 +431,6 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:2037 gtk/gtkcalendar.c:2719
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -533,7 +446,6 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:2069 gtk/gtkcalendar.c:2579
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -549,7 +461,6 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2361
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -557,7 +468,6 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:272
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Välja lülitatud"
@@ -566,7 +476,6 @@ msgstr "Välja lülitatud"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:282
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Vigane"
@@ -575,25 +484,20 @@ msgstr "Vigane"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:418 gtk/gtkcellrendereraccel.c:675
 msgid "New accelerator..."
 msgstr "Uus kiirklahv..."
 
-#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:452
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:176 gtk/gtkcolorbutton.c:445
 msgid "Pick a Color"
 msgstr "Värvuse valimine"
 
-#: gtk/gtkcolorbutton.c:336
 msgid "Received invalid color data\n"
 msgstr "Võeti vastu vigased värviandmed\n"
 
-#: gtk/gtkcolorsel.c:384
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -601,7 +505,6 @@ msgstr ""
 "Vali oma soovitud värv välimiselt ringilt. Kasutades sisemist kolmnurka, "
 "vali värvi heledus või tumedus."
 
-#: gtk/gtkcolorsel.c:408
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -609,67 +512,51 @@ msgstr ""
 "Pipeti abil on võimalik valida värvi ekraani suvalisest punktist. Klõpsa "
 "pipetil ja siis klõpsa soovitud värvi pikslil."
 
-#: gtk/gtkcolorsel.c:417
 msgid "_Hue:"
 msgstr "_Toon:"
 
-#: gtk/gtkcolorsel.c:418
 msgid "Position on the color wheel."
 msgstr "Asukoht värviringil."
 
-#: gtk/gtkcolorsel.c:420
 msgid "_Saturation:"
 msgstr "_Küllastus:"
 
-#: gtk/gtkcolorsel.c:421
 msgid "Intensity of the color."
 msgstr "Värvi intensiivsus."
 
-#: gtk/gtkcolorsel.c:422
 msgid "_Value:"
 msgstr "_Heledus:"
 
-#: gtk/gtkcolorsel.c:423
 msgid "Brightness of the color."
 msgstr "Värvi heledus."
 
-#: gtk/gtkcolorsel.c:424
 msgid "_Red:"
 msgstr "_Punane:"
 
-#: gtk/gtkcolorsel.c:425
 msgid "Amount of red light in the color."
 msgstr "Punase valguse kogus värvis."
 
-#: gtk/gtkcolorsel.c:426
 msgid "_Green:"
 msgstr "_Roheline:"
 
-#: gtk/gtkcolorsel.c:427
 msgid "Amount of green light in the color."
 msgstr "Rohelise valguse kogus värvis."
 
-#: gtk/gtkcolorsel.c:428
 msgid "_Blue:"
 msgstr "_Sinine:"
 
-#: gtk/gtkcolorsel.c:429
 msgid "Amount of blue light in the color."
 msgstr "Sinise valguse kogus värvis."
 
-#: gtk/gtkcolorsel.c:432
 msgid "Op_acity:"
 msgstr "Kat_vus:"
 
-#: gtk/gtkcolorsel.c:439 gtk/gtkcolorsel.c:449
 msgid "Transparency of the color."
 msgstr "Värvi läbipaistvus."
 
-#: gtk/gtkcolorsel.c:456
 msgid "Color _name:"
 msgstr "Värvi _nimi:"
 
-#: gtk/gtkcolorsel.c:470
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -677,15 +564,12 @@ msgstr ""
 "Siia võid sisestada HTML-stiilis kuueteistkümnendarvuna värvi väärtuse, või "
 "värvi ingliskeelse nimetuse (näiteks 'orange')."
 
-#: gtk/gtkcolorsel.c:500
 msgid "_Palette:"
 msgstr "Pal_ett:"
 
-#: gtk/gtkcolorsel.c:529
 msgid "Color Wheel"
 msgstr "Värviratas"
 
-#: gtk/gtkcolorsel.c:988
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -695,7 +579,6 @@ msgstr ""
 "värvi lohistada paletikirjetesse või määrata värvi käesolevaks värviks "
 "lohistades selle kõrvalasuvale värviproovile."
 
-#: gtk/gtkcolorsel.c:991
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -703,21 +586,17 @@ msgstr ""
 "Sinu valitud värv. Võid selle värvi lohistada paletikirjetesse, et kasutada "
 "seda hõlpsasti ka tulevikus."
 
-#: gtk/gtkcolorsel.c:996
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "Eelnevalt valitud värvus hetkel valitava värvusega võrdlemiseks."
 
-#: gtk/gtkcolorsel.c:999
 msgid "The color you've chosen."
 msgstr "Sinu poolt valitud värvus."
 
-#: gtk/gtkcolorsel.c:1396
 msgid "_Save color here"
 msgstr "_Salvesta värv siia"
 
-#: gtk/gtkcolorsel.c:1601
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -726,7 +605,6 @@ msgstr ""
 "kirje salvestamiseks lohista värviproov siia või vali parema hiireklõpsu alt "
 "\"Salvesta värv siia\"."
 
-#: gtk/gtkcolorseldialog.c:189
 msgid "Color Selection"
 msgstr "Värvi valik"
 
@@ -736,124 +614,95 @@ msgstr "Värvi valik"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkcustompaperunixdialog.c:116
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3233
 msgid "Manage Custom Sizes"
 msgstr "Kohandatud suuruste haldamine"
 
-#: gtk/gtkcustompaperunixdialog.c:534 gtk/gtkpagesetupunixdialog.c:790
 msgid "inch"
 msgstr "tolli"
 
-#: gtk/gtkcustompaperunixdialog.c:536 gtk/gtkpagesetupunixdialog.c:788
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:581
 msgid "Margins from Printer..."
 msgstr "Veerised printerist..."
 
-#: gtk/gtkcustompaperunixdialog.c:747
 #, c-format
 msgid "Custom Size %d"
 msgstr "Kohandatud suurus %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1059
 msgid "_Width:"
 msgstr "La_ius:"
 
-#: gtk/gtkcustompaperunixdialog.c:1071
 msgid "_Height:"
 msgstr "Kõr_gus:"
 
-#: gtk/gtkcustompaperunixdialog.c:1083
 msgid "Paper Size"
 msgstr "Paberi suurus"
 
-#: gtk/gtkcustompaperunixdialog.c:1092
 msgid "_Top:"
 msgstr "_Ülemine:"
 
-#: gtk/gtkcustompaperunixdialog.c:1104
 msgid "_Bottom:"
 msgstr "_Alumine:"
 
-#: gtk/gtkcustompaperunixdialog.c:1116
 msgid "_Left:"
 msgstr "_Vasak:"
 
-#: gtk/gtkcustompaperunixdialog.c:1128
 msgid "_Right:"
 msgstr "_Parem:"
 
-#: gtk/gtkcustompaperunixdialog.c:1169
 msgid "Paper Margins"
 msgstr "Paberi veerised"
 
-#: gtk/gtkentry.c:8601 gtk/gtktextview.c:8248
 msgid "Input _Methods"
 msgstr "Sisestus_meetodid"
 
-#: gtk/gtkentry.c:8615 gtk/gtktextview.c:8262
 msgid "_Insert Unicode Control Character"
 msgstr "L_isa Unicode'i juhtmärk"
 
-#: gtk/gtkentry.c:10015
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock ja Num Lock on sisse lülitatud"
 
-#: gtk/gtkentry.c:10017
 msgid "Num Lock is on"
 msgstr "Num Lock on sisse lülitatud"
 
-#: gtk/gtkentry.c:10019
 msgid "Caps Lock is on"
 msgstr "Caps Lock on sisse lülitatud"
 
 #. **************** *
 #. *  Private Macros  *
 #. * ****************
-#: gtk/gtkfilechooserbutton.c:61
 msgid "Select A File"
 msgstr "Faili valimine"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1812
 msgid "Desktop"
 msgstr "Töölaud"
 
-#: gtk/gtkfilechooserbutton.c:63
 msgid "(None)"
 msgstr "(puudub)"
 
-#: gtk/gtkfilechooserbutton.c:2005
 msgid "Other..."
 msgstr "Muu..."
 
-#: gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
 msgstr "Sisesta uue kataloogi nimi"
 
-#: gtk/gtkfilechooserdefault.c:938
 msgid "Could not retrieve information about the file"
 msgstr "Faili kohta pole võimalik teavet hankida"
 
-#: gtk/gtkfilechooserdefault.c:949
 msgid "Could not add a bookmark"
 msgstr "Järjehoidjat pole võimalik lisada"
 
-#: gtk/gtkfilechooserdefault.c:960
 msgid "Could not remove bookmark"
 msgstr "Järjehoidjat pole võimalik eemaldada"
 
-#: gtk/gtkfilechooserdefault.c:971
 msgid "The folder could not be created"
 msgstr "Kataloogi pole võimalik luua"
 
-#: gtk/gtkfilechooserdefault.c:984
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -862,11 +711,9 @@ msgstr ""
 "kataloogile määrata mõni muu nimi või nimeta fail enne kataloogi loomist "
 "ümber."
 
-#: gtk/gtkfilechooserdefault.c:995
 msgid "Invalid file name"
 msgstr "Vigane failinimi"
 
-#: gtk/gtkfilechooserdefault.c:1005
 msgid "The folder contents could not be displayed"
 msgstr "Kataloogi sisu pole võimalik kuvada"
 
@@ -874,203 +721,157 @@ msgstr "Kataloogi sisu pole võimalik kuvada"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1555
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s hostil %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1731
 msgid "Search"
 msgstr "Otsing"
 
-#: gtk/gtkfilechooserdefault.c:1755 gtk/gtkfilechooserdefault.c:9289
 msgid "Recently Used"
 msgstr "Viimati kasutatud"
 
-#: gtk/gtkfilechooserdefault.c:2409
 msgid "Select which types of files are shown"
 msgstr "Vali, milliseid failitüüpe näidata"
 
-#: gtk/gtkfilechooserdefault.c:2768
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Kataloogi '%s' lisamine järjehoidjatesse"
 
-#: gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Käesoleva kataloogi lisamine järjehoidjatesse"
 
-#: gtk/gtkfilechooserdefault.c:2814
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Valitud kataloogide lisamine järjehoidjatesse"
 
-#: gtk/gtkfilechooserdefault.c:2852
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Järjehoidja '%s' eemaldamine"
 
-#: gtk/gtkfilechooserdefault.c:2854
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Järjehoidjat '%s' pole võimalik eemaldada"
 
-#: gtk/gtkfilechooserdefault.c:2861 gtk/gtkfilechooserdefault.c:3725
 msgid "Remove the selected bookmark"
 msgstr "Eemalda valitud järjehoidja"
 
-#: gtk/gtkfilechooserdefault.c:3421
 msgid "Remove"
 msgstr "Eemalda"
 
-#: gtk/gtkfilechooserdefault.c:3430
 msgid "Rename..."
 msgstr "Muuda nime..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3593
 msgid "Places"
 msgstr "Asukohad"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3650
 msgid "_Places"
 msgstr "As_ukohad"
 
 # kas keegi teab, millise programmi pärast siin kiirklahv i-le on määratud?
 # seda kasutatakse ka networkmanager-appletis, kus oleks ka ilma väga sobiv
-#: gtk/gtkfilechooserdefault.c:3706
 msgid "_Add"
 msgstr "L_isa"
 
-#: gtk/gtkfilechooserdefault.c:3713
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Valitud kataloogi lisamine järjehoidjate hulka"
 
-#: gtk/gtkfilechooserdefault.c:3718
 msgid "_Remove"
 msgstr "_Eemalda"
 
-#: gtk/gtkfilechooserdefault.c:3860
 msgid "Could not select file"
 msgstr "Faili pole võimalik valida"
 
-#: gtk/gtkfilechooserdefault.c:4035
 msgid "_Add to Bookmarks"
 msgstr "_Lisa järjehoidjatesse"
 
-#: gtk/gtkfilechooserdefault.c:4048
 msgid "Show _Hidden Files"
 msgstr "Näita _peidetud faile"
 
-#: gtk/gtkfilechooserdefault.c:4055
 msgid "Show _Size Column"
-msgstr "_Suuruse tulpa näidatakse"
+msgstr "Näita _suuruse tulpa"
 
-#: gtk/gtkfilechooserdefault.c:4281
 msgid "Files"
 msgstr "Failid"
 
-#: gtk/gtkfilechooserdefault.c:4332
 msgid "Name"
 msgstr "Nimi"
 
-#: gtk/gtkfilechooserdefault.c:4355
 msgid "Size"
 msgstr "Suurus"
 
-#: gtk/gtkfilechooserdefault.c:4369
 msgid "Modified"
 msgstr "Muudetud"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4624 gtk/gtkprinteroptionwidget.c:801
 msgid "_Name:"
 msgstr "_Nimi:"
 
-#: gtk/gtkfilechooserdefault.c:4667
 msgid "_Browse for other folders"
 msgstr "Si_rvi teisi katalooge"
 
-#: gtk/gtkfilechooserdefault.c:4937
 msgid "Type a file name"
 msgstr "Faili nime sisestamine"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4980
 msgid "Create Fo_lder"
 msgstr "Loo _kataloog"
 
-#: gtk/gtkfilechooserdefault.c:4990
 msgid "_Location:"
 msgstr "Asuk_oht:"
 
-#: gtk/gtkfilechooserdefault.c:5194
 msgid "Save in _folder:"
 msgstr "Salvestatakse _kataloogi:"
 
-#: gtk/gtkfilechooserdefault.c:5196
 msgid "Create in _folder:"
 msgstr "Loo _kataloogi:"
 
-#: gtk/gtkfilechooserdefault.c:6248
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Faili %s sisu pole võimalik lugeda"
 
-#: gtk/gtkfilechooserdefault.c:6252
 msgid "Could not read the contents of the folder"
 msgstr "Kataloogi sisu pole võimalik lugeda"
 
-#: gtk/gtkfilechooserdefault.c:6345 gtk/gtkfilechooserdefault.c:6413
-#: gtk/gtkfilechooserdefault.c:6558
 msgid "Unknown"
 msgstr "Tundmatu"
 
-#: gtk/gtkfilechooserdefault.c:6360
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6362
 msgid "Yesterday at %H:%M"
 msgstr "Eile kell %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7028
 msgid "Cannot change to folder because it is not local"
 msgstr "Kataloogi pole võimalik muuta kuna see pole kohalik kataloog"
 
-#: gtk/gtkfilechooserdefault.c:7625 gtk/gtkfilechooserdefault.c:7646
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Kiirklahv %s on juba olemas"
 
-#: gtk/gtkfilechooserdefault.c:7736
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Kiirklahvi %s pole olemas"
 
-#: gtk/gtkfilechooserdefault.c:7997 gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Fail nimega \"%s\" on juba olemas.  Kas sa soovid seda asendada?"
 
-#: gtk/gtkfilechooserdefault.c:8000 gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "Fail on juba \"%s\" all olemas.  Asendamine kirjutab selle faili sisu üle."
 
-#: gtk/gtkfilechooserdefault.c:8005 gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Asenda"
 
-#: gtk/gtkfilechooserdefault.c:8658
 msgid "Could not start the search process"
 msgstr "Otsinguprotsessi pole võimalik alustada"
 
-#: gtk/gtkfilechooserdefault.c:8659
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1078,36 +879,30 @@ msgstr ""
 "Programmil pole võimalik indekseerimisdeemoniga ühendust luua. Palun veendu, "
 "et see deemon töötab."
 
-#: gtk/gtkfilechooserdefault.c:8673
 msgid "Could not send the search request"
 msgstr "Otsingupäringut pole võimalik saata"
 
-#: gtk/gtkfilechooserdefault.c:8861
 msgid "Search:"
 msgstr "Otsing:"
 
-#: gtk/gtkfilechooserdefault.c:9466
 #, c-format
 msgid "Could not mount %s"
 msgstr "%s pole võimalik ühendada"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: gtk/gtkfilechooserentry.c:702 gtk/gtkfilechooserentry.c:1169
 msgid "Invalid path"
 msgstr "Vigane asukoht"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1101
 msgid "No match"
 msgstr "Vastavusi pole"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1112
 msgid "Sole completion"
 msgstr "Lõplik"
 
@@ -1115,13 +910,11 @@ msgstr "Lõplik"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: gtk/gtkfilechooserentry.c:1128
 msgid "Complete, but not unique"
 msgstr "Lõplik, kuid mitte unikaalne"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: gtk/gtkfilechooserentry.c:1160
 msgid "Completing..."
 msgstr "Lõpetamine..."
 
@@ -1129,7 +922,6 @@ msgstr "Lõpetamine..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: gtk/gtkfilechooserentry.c:1182 gtk/gtkfilechooserentry.c:1207
 msgid "Only local files may be selected"
 msgstr "Valida saab ainult kohalikke faile"
 
@@ -1137,18 +929,15 @@ msgstr "Valida saab ainult kohalikke faile"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: gtk/gtkfilechooserentry.c:1191
 msgid "Incomplete hostname; end it with '/'"
 msgstr "Lõpetamata hostinimi; lõpeta see kaldkriipsuga '/'"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: gtk/gtkfilechooserentry.c:1202
 msgid "Path does not exist"
 msgstr "Asukohta pole olemas"
 
-#: gtk/gtkfilechoosersettings.c:486
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "Viga kataloogi '%s' loomisel: %s"
@@ -1158,59 +947,47 @@ msgstr "Viga kataloogi '%s' loomisel: %s"
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:48
 msgid "File System"
 msgstr "Failisüsteem"
 
-#: gtk/gtkfontbutton.c:142 gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Kirjatüübi valimine"
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "Kirjatüüp"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:103
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghijkõäöü ABCDEFGHIJKÕÄÖÜ"
 
-#: gtk/gtkfontsel.c:370
 msgid "_Family:"
 msgstr "_Perekond:"
 
-#: gtk/gtkfontsel.c:376
 msgid "_Style:"
 msgstr "Laa_d:"
 
-#: gtk/gtkfontsel.c:382
 msgid "Si_ze:"
 msgstr "_Suurus:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:559
 msgid "_Preview:"
 msgstr "_Näidis:"
 
-#: gtk/gtkfontsel.c:1659
 msgid "Font Selection"
 msgstr "Kirjatüübi valik"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1356
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "Viga ikooni laadimisel: %s"
 
-#: gtk/gtkicontheme.c:1354
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1223,75 +1000,60 @@ msgstr ""
 "Sul on võimalik hankida koopia:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1535
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikoon '%s' ei sisaldu teemas"
 
-#: gtk/gtkicontheme.c:3048
 msgid "Failed to load icon"
 msgstr "Tõrge ikooni laadimisel"
 
-#: gtk/gtkimmodule.c:526
 msgid "Simple"
 msgstr "Lihtne"
 
-#: gtk/gtkimmulticontext.c:588
 msgctxt "input method menu"
 msgid "System"
 msgstr "Süsteem"
 
-#: gtk/gtkimmulticontext.c:598
 msgctxt "input method menu"
 msgid "None"
 msgstr "Puudub"
 
-#: gtk/gtkimmulticontext.c:681
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Süsteem (%s)"
 
 #. Open Link
-#: gtk/gtklabel.c:6202
 msgid "_Open Link"
 msgstr "_Ava link"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6214
 msgid "Copy _Link Address"
 msgstr "Kopeeri _lingi aadress"
 
-#: gtk/gtklinkbutton.c:449
 msgid "Copy URL"
 msgstr "Kopeeri URL"
 
-#: gtk/gtklinkbutton.c:601
 msgid "Invalid URI"
 msgstr "Vigane URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:526
 msgid "Load additional GTK+ modules"
 msgstr "Täiendavate GTK+ moodulite laadimine"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:527
 msgid "MODULES"
 msgstr "MOODULID"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:529
 msgid "Make all warnings fatal"
 msgstr "Kõikide hoiatuste muutmine fataalseks"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:532
 msgid "GTK+ debugging flags to set"
 msgstr "GTK+ silumislipud, mida seada"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:535
 msgid "GTK+ debugging flags to unset"
 msgstr "GTK+ silumislipud, mida maha võtta"
 
@@ -1300,123 +1062,94 @@ msgstr "GTK+ silumislipud, mida maha võtta"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:798
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:863
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kuva pole võimalik avada: %s"
 
-#: gtk/gtkmain.c:922
 msgid "GTK+ Options"
 msgstr "GTK+ võtmed"
 
-#: gtk/gtkmain.c:922
 msgid "Show GTK+ Options"
 msgstr "GTK+ võtmete näitamine"
 
-#: gtk/gtkmountoperation.c:491
 msgid "Co_nnect"
 msgstr "Ü_hendu"
 
-#: gtk/gtkmountoperation.c:558
 msgid "Connect _anonymously"
 msgstr "Ühendu _anonüümselt"
 
-#: gtk/gtkmountoperation.c:567
 msgid "Connect as u_ser:"
 msgstr "Ühendu _kasutajana:"
 
-#: gtk/gtkmountoperation.c:605
 msgid "_Username:"
 msgstr "_Kasutajanimi:"
 
-#: gtk/gtkmountoperation.c:610
 msgid "_Domain:"
 msgstr "_Domeen:"
 
-#: gtk/gtkmountoperation.c:616
 msgid "_Password:"
 msgstr "_Parool:"
 
-#: gtk/gtkmountoperation.c:634
 msgid "Forget password _immediately"
 msgstr "_Unusta parool koheselt"
 
-#: gtk/gtkmountoperation.c:644
 msgid "Remember password until you _logout"
 msgstr "_Jäta parool kuni väljalogimiseni meelde"
 
-#: gtk/gtkmountoperation.c:654
 msgid "Remember _forever"
 msgstr "_Jäta igavesti meelde"
 
-#: gtk/gtkmountoperation.c:883
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Tundmatu rakendus (PID %d)"
 
-#: gtk/gtkmountoperation.c:1066
-#, c-format
 msgid "Unable to end process"
 msgstr "Protsessi pole võimalik lõpetada"
 
-#: gtk/gtkmountoperation.c:1103
 msgid "_End Process"
 msgstr "_Lõpeta protsess"
 
-#: gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
 "Protsessi PID-iga %d pole võimalik kõrvaldada. Toiming pole implementeeritud."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:862
 msgid "Terminal Pager"
 msgstr "Terminaliaknas lehitseja"
 
-#: gtk/gtkmountoperation-x11.c:863
 msgid "Top Command"
 msgstr "Top-käsk"
 
-#: gtk/gtkmountoperation-x11.c:864
 msgid "Bourne Again Shell"
 msgstr "Bourne Again kest"
 
-#: gtk/gtkmountoperation-x11.c:865
 msgid "Bourne Shell"
 msgstr "Bourne kest"
 
-#: gtk/gtkmountoperation-x11.c:866
 msgid "Z Shell"
 msgstr "Z-kest"
 
-#: gtk/gtkmountoperation-x11.c:963
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Protsessi PID-iga %d pole võimalik lõpetada: %s"
 
-#: gtk/gtknotebook.c:4619 gtk/gtknotebook.c:7170
 #, c-format
 msgid "Page %u"
 msgstr "Lehekülg %u"
 
-#: gtk/gtkpagesetup.c:596 gtk/gtkpapersize.c:838 gtk/gtkpapersize.c:880
 msgid "Not a valid page setup file"
 msgstr "Pole korrektne lehekülje sätete fail"
 
-#: gtk/gtkpagesetupunixdialog.c:179
 msgid "Any Printer"
 msgstr "Iga printer"
 
-#: gtk/gtkpagesetupunixdialog.c:179
 msgid "For portable documents"
 msgstr "Portaablitele dokumentidele"
 
-#: gtk/gtkpagesetupunixdialog.c:809
 #, c-format
 msgid ""
 "Margins:\n"
@@ -1431,51 +1164,39 @@ msgstr ""
 " Ülemine: %s %s\n"
 " Alumine: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:858 gtk/gtkprintunixdialog.c:3284
 msgid "Manage Custom Sizes..."
 msgstr "Kohandatud suuruste haldamine..."
 
-#: gtk/gtkpagesetupunixdialog.c:909
 msgid "_Format for:"
 msgstr "Millele _vormindatakse:"
 
-#: gtk/gtkpagesetupunixdialog.c:931 gtk/gtkprintunixdialog.c:3456
 msgid "_Paper size:"
 msgstr "_Paberi suurus:"
 
-#: gtk/gtkpagesetupunixdialog.c:962
 msgid "_Orientation:"
 msgstr "_Suund:"
 
-#: gtk/gtkpagesetupunixdialog.c:1026 gtk/gtkprintunixdialog.c:3518
 msgid "Page Setup"
 msgstr "Lehekülje sätted"
 
-#: gtk/gtkpathbar.c:154
 msgid "Up Path"
 msgstr "Ülemine rada"
 
-#: gtk/gtkpathbar.c:156
 msgid "Down Path"
 msgstr "Alumine rada"
 
-#: gtk/gtkpathbar.c:1497
 msgid "File System Root"
 msgstr "Failisüsteemi juurkataloog"
 
-#: gtk/gtkprintbackend.c:749
 msgid "Authentication"
 msgstr "Autentimine"
 
-#: gtk/gtkprinteroptionwidget.c:694
 msgid "Not available"
 msgstr "Pole saadaval"
 
-#: gtk/gtkprinteroptionwidget.c:794
 msgid "Select a folder"
 msgstr "Kataloogi valimine"
 
-#: gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
 msgstr "Salvestada _kataloogi:"
 
@@ -1483,188 +1204,142 @@ msgstr "Salvestada _kataloogi:"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:190
 #, c-format
 msgid "%s job #%d"
 msgstr "Rakenduse %s printimistöö %d"
 
-#: gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Algolek"
 
-#: gtk/gtkprintoperation.c:1696
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Printimiseks ettevalmistumine"
 
-#: gtk/gtkprintoperation.c:1697
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Andmete genereerimine"
 
-#: gtk/gtkprintoperation.c:1698
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Andmete saatmine"
 
-#: gtk/gtkprintoperation.c:1699
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Ootamine"
 
-#: gtk/gtkprintoperation.c:1700
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Blokeeriv viga"
 
-#: gtk/gtkprintoperation.c:1701
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Printimine"
 
-#: gtk/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Lõpetatud"
 
-#: gtk/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Lõpetatud veaga"
 
-#: gtk/gtkprintoperation.c:2270
 #, c-format
 msgid "Preparing %d"
 msgstr "Ettevalmistamine: %d"
 
-#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
-#, c-format
 msgid "Preparing"
 msgstr "Ettevalmistamine"
 
-#: gtk/gtkprintoperation.c:2275
 #, c-format
 msgid "Printing %d"
 msgstr "Printimine: %d"
 
-#: gtk/gtkprintoperation.c:2932
-#, c-format
 msgid "Error creating print preview"
 msgstr "Viga printimise eelvaate loomisel"
 
-#: gtk/gtkprintoperation.c:2935
-#, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "Kõige tõonäolisemalt on põhjus selles, et ajutisi faile pole võimalik luua."
 
-#: gtk/gtkprintoperation-unix.c:297
 msgid "Error launching preview"
 msgstr "Viga eelvaate näitamisel"
 
-#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Rakendus"
 
-#: gtk/gtkprintoperation-win32.c:611
 msgid "Printer offline"
 msgstr "Printer on ühendamata"
 
-#: gtk/gtkprintoperation-win32.c:613
 msgid "Out of paper"
 msgstr "Paber on lõppenud"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:615
-#: modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "Pausitud"
 
-#: gtk/gtkprintoperation-win32.c:617
 msgid "Need user intervention"
 msgstr "Vajalik on kasutaja sekkumine"
 
-#: gtk/gtkprintoperation-win32.c:717
 msgid "Custom size"
 msgstr "Kohandatud suurus"
 
-#: gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "Printerit ei leitud"
 
-#: gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
 msgstr "Vigane CreateDC argument"
 
-#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "Viga StartDoc'ist"
 
-#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
-#: gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "Vaba mälu pole piisavalt"
 
-#: gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Vigane PrintDlgEx argument"
 
-#: gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Vigane PrintDlgEx pointer"
 
-#: gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Vigane PrintDlgEx käsitleja"
 
-#: gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "Kirjeldamata viga"
 
-#: gtk/gtkprintunixdialog.c:618
 msgid "Getting printer information failed"
 msgstr "Tõrge printeri andmete hankimisel"
 
-#: gtk/gtkprintunixdialog.c:1873
 msgid "Getting printer information..."
 msgstr "Printeri andmete hankimine..."
 
-#: gtk/gtkprintunixdialog.c:2139
 msgid "Printer"
 msgstr "Printer"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2149
 msgid "Location"
 msgstr "Asukoht"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2160
 msgid "Status"
 msgstr "Olek"
 
-#: gtk/gtkprintunixdialog.c:2186
 msgid "Range"
 msgstr "Vahemik"
 
-#: gtk/gtkprintunixdialog.c:2190
 msgid "_All Pages"
 msgstr "_Kõik leheküljed"
 
-#: gtk/gtkprintunixdialog.c:2197
 msgid "C_urrent Page"
 msgstr "Kä_esolev lehekülg"
 
-#: gtk/gtkprintunixdialog.c:2207
 msgid "Se_lection"
 msgstr "_Valik"
 
-#: gtk/gtkprintunixdialog.c:2216
 msgid "Pag_es:"
 msgstr "Le_heküljed:"
 
-#: gtk/gtkprintunixdialog.c:2217
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -1672,28 +1347,22 @@ msgstr ""
 "Määra üks või rohkem leheküljevahemikku.\n"
 " Näiteks: 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2227
 msgid "Pages"
 msgstr "Le_heküljed"
 
-#: gtk/gtkprintunixdialog.c:2240
 msgid "Copies"
 msgstr "Koopiad"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2245
 msgid "Copie_s:"
 msgstr "Koop_iaid:"
 
-#: gtk/gtkprintunixdialog.c:2263
 msgid "C_ollate"
 msgstr "_Eksemplarhaaval"
 
-#: gtk/gtkprintunixdialog.c:2271
 msgid "_Reverse"
 msgstr "Pöö_ratud järjestuses"
 
-#: gtk/gtkprintunixdialog.c:2291
 msgid "General"
 msgstr "Üldine"
 
@@ -1703,169 +1372,123 @@ msgstr "Üldine"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3017
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "Vasakult paremale, ülevalt alla"
 
-#: gtk/gtkprintunixdialog.c:3017
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "Vasakult paremale, alt üles"
 
-#: gtk/gtkprintunixdialog.c:3018
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "Paremalt vasakule, ülevalt alla"
 
-#: gtk/gtkprintunixdialog.c:3018
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "Paremalt vasakule, alt üles"
 
-#: gtk/gtkprintunixdialog.c:3019
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "Ülevalt alla, vasakult paremale"
 
-#: gtk/gtkprintunixdialog.c:3019
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "Ülevalt alla, paremalt vasakule"
 
-#: gtk/gtkprintunixdialog.c:3020
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "Alt üles, vasakult paremale"
 
-#: gtk/gtkprintunixdialog.c:3020
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "Alt üles, paremalt vasakule"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3024 gtk/gtkprintunixdialog.c:3037
-#: modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Lehekülgede järjekord"
 
-#: gtk/gtkprintunixdialog.c:3053
 msgid "Left to right"
 msgstr "Vasakult paremale"
 
-#: gtk/gtkprintunixdialog.c:3054
 msgid "Right to left"
 msgstr "Paremalt vasakule"
 
-#: gtk/gtkprintunixdialog.c:3066
 msgid "Top to bottom"
 msgstr "Ülevalt alla"
 
-#: gtk/gtkprintunixdialog.c:3067
 msgid "Bottom to top"
 msgstr "Alt üles"
 
-#: gtk/gtkprintunixdialog.c:3307
 msgid "Layout"
 msgstr "Paigutus"
 
 # msgstr "Le_hekülgi lehel:"
-#: gtk/gtkprintunixdialog.c:3311
 msgid "T_wo-sided:"
 msgstr "Kahe_poolne:"
 
-#: gtk/gtkprintunixdialog.c:3326
 msgid "Pages per _side:"
 msgstr "Le_hekülgi slaidil:"
 
-#: gtk/gtkprintunixdialog.c:3343
 msgid "Page or_dering:"
 msgstr "Lehekülgede _järjestamine:"
 
-#: gtk/gtkprintunixdialog.c:3359
 msgid "_Only print:"
 msgstr "Prindita_kse ainult:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3374
 msgid "All sheets"
 msgstr "Kõik leheküljed"
 
-#: gtk/gtkprintunixdialog.c:3375
 msgid "Even sheets"
 msgstr "Paarisnumbriga leheküljed"
 
-#: gtk/gtkprintunixdialog.c:3376
 msgid "Odd sheets"
 msgstr "Paaritu numbriga leheküljed"
 
-#: gtk/gtkprintunixdialog.c:3379
 msgid "Sc_ale:"
 msgstr "_Skaleerimine:"
 
-#: gtk/gtkprintunixdialog.c:3406
 msgid "Paper"
 msgstr "Paber"
 
-#: gtk/gtkprintunixdialog.c:3410
 msgid "Paper _type:"
 msgstr "Pa_beri liik:"
 
-#: gtk/gtkprintunixdialog.c:3425
 msgid "Paper _source:"
 msgstr "Paberi _allikas:"
 
-#: gtk/gtkprintunixdialog.c:3440
 msgid "Output t_ray:"
 msgstr "_Väljundsalv:"
 
-#: gtk/gtkprintunixdialog.c:3480
 msgid "Or_ientation:"
 msgstr "_Suund:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3495
 msgid "Portrait"
 msgstr "Püstine"
 
-#: gtk/gtkprintunixdialog.c:3496
 msgid "Landscape"
 msgstr "Rõhtne"
 
-#: gtk/gtkprintunixdialog.c:3497
 msgid "Reverse portrait"
 msgstr "Ümberpööratud püstine"
 
-#: gtk/gtkprintunixdialog.c:3498
 msgid "Reverse landscape"
 msgstr "Ümberpööratud rõhtne"
 
-#: gtk/gtkprintunixdialog.c:3543
 msgid "Job Details"
 msgstr "Töö üksikasjad"
 
-#: gtk/gtkprintunixdialog.c:3549
 msgid "Pri_ority:"
 msgstr "Tä_htsus:"
 
-#: gtk/gtkprintunixdialog.c:3564
 msgid "_Billing info:"
 msgstr "_Maksmise andmed:"
 
-#: gtk/gtkprintunixdialog.c:3582
 msgid "Print Document"
 msgstr "Dokumendi printimine"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3591
 msgid "_Now"
 msgstr "_Nüüd"
 
-#: gtk/gtkprintunixdialog.c:3602
 msgid "A_t:"
 msgstr "A_jal:"
 
@@ -1873,7 +1496,6 @@ msgstr "A_jal:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3608
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -1881,121 +1503,95 @@ msgstr ""
 "Määra printimise kellaaeg,\n"
 " nt 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: gtk/gtkprintunixdialog.c:3618
 msgid "Time of print"
 msgstr "Printimise aeg"
 
-#: gtk/gtkprintunixdialog.c:3634
 msgid "On _hold"
 msgstr "_Ootel"
 
-#: gtk/gtkprintunixdialog.c:3635
 msgid "Hold the job until it is explicitly released"
 msgstr "Tööd hoitakse kuni selle selgesõnalise vabastamiseni"
 
-#: gtk/gtkprintunixdialog.c:3655
 msgid "Add Cover Page"
 msgstr "Kaane lisamine"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3664
 msgid "Be_fore:"
 msgstr "_Enne:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3682
 msgid "_After:"
 msgstr "_Pärast:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3700
 msgid "Job"
 msgstr "Töö"
 
-#: gtk/gtkprintunixdialog.c:3766
 msgid "Advanced"
 msgstr "Laiendatud"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3804
 msgid "Image Quality"
 msgstr "Pildikvaliteet"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3808
 msgid "Color"
 msgstr "Värv"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/gtkprintunixdialog.c:3813
 msgid "Finishing"
 msgstr "Lõpetamine"
 
-#: gtk/gtkprintunixdialog.c:3823
 msgid "Some of the settings in the dialog conflict"
 msgstr "Selle dialoogi mõned sätted on omavahel vastuolus"
 
-#: gtk/gtkprintunixdialog.c:3846
 msgid "Print"
 msgstr "Printimine"
 
-#: gtk/gtkrc.c:2834
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Faili pole võimalik kaasata: \"%s\""
 
-#: gtk/gtkrc.c:3470 gtk/gtkrc.c:3473
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
 
-#: gtk/gtkrecentaction.c:165 gtk/gtkrecentaction.c:173
-#: gtk/gtkrecentchoosermenu.c:615 gtk/gtkrecentchoosermenu.c:623
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "See funktsioon pole vidinate klassis '%s' teostatud"
 
-#: gtk/gtkrecentchooserdefault.c:482
 msgid "Select which type of documents are shown"
 msgstr "Vali, milliseid dokumendiliike näidata"
 
-#: gtk/gtkrecentchooserdefault.c:1138 gtk/gtkrecentchooserdefault.c:1175
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "'%s' URI jaoks ei leitud kirjet"
 
-#: gtk/gtkrecentchooserdefault.c:1302
 msgid "Untitled filter"
 msgstr "Pealkirjata filter"
 
-#: gtk/gtkrecentchooserdefault.c:1655
 msgid "Could not remove item"
 msgstr "Kirjet pole võimalik eemaldada"
 
-#: gtk/gtkrecentchooserdefault.c:1699
 msgid "Could not clear list"
 msgstr "Loendit pole võimalik tühjendada"
 
-#: gtk/gtkrecentchooserdefault.c:1783
 msgid "Copy _Location"
 msgstr "Kopeeri _asukoht"
 
-#: gtk/gtkrecentchooserdefault.c:1796
 msgid "_Remove From List"
 msgstr "_Eemalda loetelust"
 
-#: gtk/gtkrecentchooserdefault.c:1805
 msgid "_Clear List"
 msgstr "_Tühjenda loend"
 
-#: gtk/gtkrecentchooserdefault.c:1819
 msgid "Show _Private Resources"
 msgstr "Näita _privaatressursse"
 
@@ -2009,21 +1605,17 @@ msgstr "Näita _privaatressursse"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:369
 msgid "No items found"
 msgstr "Kirjeid ei leitud"
 
-#: gtk/gtkrecentchoosermenu.c:535 gtk/gtkrecentchoosermenu.c:591
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "URI-ga '%s' ei leitud viimati kasutatud ressurssi"
 
-#: gtk/gtkrecentchoosermenu.c:802
 #, c-format
 msgid "Open '%s'"
 msgstr "'%s' avamine"
 
-#: gtk/gtkrecentchoosermenu.c:832
 msgid "Unknown item"
 msgstr "Tundmatu kirje"
 
@@ -2032,7 +1624,6 @@ msgstr "Tundmatu kirje"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:843
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2041,46 +1632,35 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:848
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:980 gtk/gtkrecentmanager.c:993
-#: gtk/gtkrecentmanager.c:1131 gtk/gtkrecentmanager.c:1141
-#: gtk/gtkrecentmanager.c:1194 gtk/gtkrecentmanager.c:1203
-#: gtk/gtkrecentmanager.c:1218
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI-ga '%s' pole võimalik leida ühtegi kirjet"
 
-#: gtk/gtkspinner.c:456
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Edenemisnäidik"
 
-#: gtk/gtkspinner.c:457
 msgid "Provides visual indication of progress"
 msgstr "Edenemise visuaalne kajastus"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:313
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Teave"
 
-#: gtk/gtkstock.c:314
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Hoiatus"
 
-#: gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Viga"
 
-#: gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Küsimus"
@@ -2088,557 +1668,451 @@ msgstr "Küsimus"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:321
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Programmist lähemalt"
 
-#: gtk/gtkstock.c:322
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "L_isa"
 
-#: gtk/gtkstock.c:323
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Rakenda"
 
-#: gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Paks"
 
-#: gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Loobu"
 
-#: gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "_CD-ROM"
 
-#: gtk/gtkstock.c:327
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Tühjenda"
 
-#: gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "Sul_ge"
 
-#: gtk/gtkstock.c:329
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "Ü_hendu"
 
-#: gtk/gtkstock.c:330
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Konverdi"
 
-#: gtk/gtkstock.c:331
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Kopeeri"
 
-#: gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "_Lõika"
 
-#: gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "Ku_stuta"
 
-#: gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Hülga"
 
-#: gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "Katkesta ühen_dus"
 
-#: gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "K_äivita"
 
-#: gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Redigeeri"
 
-#: gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_File"
 msgstr "_Fail"
 
-#: gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Otsi"
 
-#: gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Otsi ja _asenda"
 
-#: gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Flopi"
 
-#: gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Täisekraan"
 
-#: gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "_Lahku täisekraanist"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Alla"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:347
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Esimene"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:349
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "_Viimane"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:351
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Üles"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Tagasi"
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:355
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "_Alla"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "_Edasi"
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "_Üles"
 
-#: gtk/gtkstock.c:360
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "_Kõvaketas"
 
-#: gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "A_bi"
 
-#: gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Kodu"
 
-#: gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Suurenda taanet"
 
-#: gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Vähenda taanet"
 
-#: gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "_Indeks"
 
-#: gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Teave"
 
-#: gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "_Kursiiv"
 
-#: gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Hüppa kuni"
 
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Keskele"
 
 #. This is about text justification
-#: gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Rööpne"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Vasakule"
 
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Paremale"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "Keri e_dasi"
 
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:381
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Järgmine"
 
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:383
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "_Pausi"
 
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:385
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Esita"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "Ee_lmine"
 
 #. Media label
-#: gtk/gtkstock.c:389
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "_Salvesta"
 
 #. Media label
-#: gtk/gtkstock.c:391
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "Keri _tagasi"
 
 #. Media label
-#: gtk/gtkstock.c:393
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Peata"
 
-#: gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Võrk"
 
-#: gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Uus"
 
-#: gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_Ei"
 
-#: gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_Olgu"
 
-#: gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Ava"
 
 #. Page orientation
-#: gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Rõhtne"
 
 #. Page orientation
-#: gtk/gtkstock.c:402
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Püstine"
 
 #. Page orientation
-#: gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Ümberpööratud rõhtne"
 
 #. Page orientation
-#: gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Ümberpööratud püstine"
 
-#: gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Lehekül_je sätted"
 
-#: gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Aseta"
 
-#: gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Eelistused"
 
-#: gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Prindi"
 
-#: gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Printimise eel_vaade"
 
-#: gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Omadused"
 
-#: gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "_Lõpeta"
 
-#: gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "Uu_esti"
 
-#: gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Värskenda"
 
-#: gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Eemalda"
 
-#: gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Taasta"
 
-#: gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "_Salvesta"
 
-#: gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "Salvesta _kui"
 
-#: gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Vali k_õik"
 
-#: gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Värv"
 
-#: gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Kirjatüüp"
 
 #. Sorting direction
-#: gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Kasvav"
 
 #. Sorting direction
-#: gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "K_ahanev"
 
-#: gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "Õ_igekirjakontroll"
 
-#: gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Peata"
 
 #. Font variant
-#: gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Läbikriipsutus"
 
-#: gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "_Taasta"
 
 #. Font variant
-#: gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "_Allajoonitud"
 
-#: gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Unusta"
 
-#: gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Jah"
 
 #. Zoom
-#: gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "_Normaalsuurus"
 
 #. Zoom
-#: gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "_Parim mahutus"
 
-#: gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Suurenda"
 
-#: gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_Vähenda"
 
-#: gtk/gtktextbufferrichtext.c:650
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Tundmatu viga %s deserialiseerimise katsel"
 
-#: gtk/gtktextbufferrichtext.c:709
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Vormingu %s jaoks ei leitud deserialiseerimise funktsiooni"
 
-#: gtk/gtktextbufferserialize.c:795 gtk/gtktextbufferserialize.c:821
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "<%s> kirjes leidub nii \"id\" kui ka \"name\""
 
-#: gtk/gtktextbufferserialize.c:805 gtk/gtktextbufferserialize.c:831
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "\"%s\" rekvisiit esineb <%s> kirjes kaks korda"
 
-#: gtk/gtktextbufferserialize.c:845
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "<%s> kirjel on vigane ID \"%s\""
 
-#: gtk/gtktextbufferserialize.c:855
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "<%s> kirjel puuduvad nii \"name\" kui ka \"id\" rekvisiidid"
 
-#: gtk/gtktextbufferserialize.c:942
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Rekvisiiti \"%s\" korratakse samas <%s> kirjes kaks korda"
 
-#: gtk/gtktextbufferserialize.c:960 gtk/gtktextbufferserialize.c:985
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Rekvisiit \"%s\" on <%s> kirjes selle konteksti korral vigane"
 
-#: gtk/gtktextbufferserialize.c:1024
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Silti \"%s\" pole defineeritud."
 
-#: gtk/gtktextbufferserialize.c:1036
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Leiti anonüümne silt ja silte pole võimalik luua."
 
-#: gtk/gtktextbufferserialize.c:1047
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Silti \"%s\" pole puhvris ja silte pole võimalik luua."
 
-#: gtk/gtktextbufferserialize.c:1146 gtk/gtktextbufferserialize.c:1221
-#: gtk/gtktextbufferserialize.c:1324 gtk/gtktextbufferserialize.c:1398
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Element <%s> pole <%s> sees lubatud"
 
-#: gtk/gtktextbufferserialize.c:1177
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" pole rekvisiidi liigiks lubatud"
 
-#: gtk/gtktextbufferserialize.c:1185
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" pole rekvisiidi väärtuseks lubatud"
 
-#: gtk/gtktextbufferserialize.c:1195
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
@@ -2646,138 +2120,107 @@ msgstr ""
 "Väärtust \"%1$s\" pole võimalik rekvisiidi \"%3$s\" jaoks \"%2$s\"-"
 "tüübiliseks väärtuseks teisendada"
 
-#: gtk/gtktextbufferserialize.c:1204
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" pole rekvisiidile \"%s\" sobilik väärtus"
 
-#: gtk/gtktextbufferserialize.c:1289
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Silt \"%s\" on juba kirjeldatud"
 
-#: gtk/gtktextbufferserialize.c:1300
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Sildil \"%s\" on vigane tähtsus \"%s\""
 
-#: gtk/gtktextbufferserialize.c:1353
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Teksti kõige välisem kirje peab olema <text_view_markup>, mitte <%s>"
 
-#: gtk/gtktextbufferserialize.c:1362 gtk/gtktextbufferserialize.c:1378
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Kirje <%s> on juba kirjeldatud"
 
-#: gtk/gtktextbufferserialize.c:1384
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Kirje <text> ei tohi olla enne kirjet <tags>"
 
-#: gtk/gtktextbufferserialize.c:1784
 msgid "Serialized data is malformed"
 msgstr "Serialiseeritud andmed on vääralt vormindatud"
 
-#: gtk/gtktextbufferserialize.c:1862
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Serialiseeritud andmed pole korrektselt vormindatud. Esimene sektsioon pole "
 "GTKTEXTBUFFERCONTENTS-0001"
 
-#: gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
 msgstr "LRM _Vasakult-paremale märk"
 
-#: gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
 msgstr "RLM _Paremalt-vasakule märk"
 
-#: gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
 msgstr "LRE Va_sakult-paremale põimimine"
 
-#: gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
 msgstr "RLE Pa_remalt-vasakule põimimine"
 
-#: gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
 msgstr "LRO Vasakult-paremale ü_lekirjutamine"
 
-#: gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
 msgstr "RLO Paremalt-vasakule üle_kirjutamine"
 
-#: gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
 msgstr "_Suundvormindus (PDF Pop directional formatting)"
 
-#: gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
 msgstr "ZWS _Null-laiusega tühik"
 
-#: gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
 msgstr "ZWJ Null-laiusega ü_hendaja"
 
-#: gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWJ Null-laiusega _mitteühendaja"
 
-#: gtk/gtkthemes.c:72
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Ei leia teemamootorit otsingurajalt 'module_path': \"%s\","
 
-#: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Tundmatu algussilt '%s', rida %d sümbol %d"
 
-#: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Tundmatu andmevoog, rida %d sümbol %d"
 
-#: gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Tühi"
 
-#: gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Valjus"
 
-#: gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Helivaljuse muutmine valjemaks või vaiksemaks"
 
-#: gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Helivaljuse reguleerimine"
 
-#: gtk/gtkvolumebutton.c:94 gtk/gtkvolumebutton.c:97
 msgid "Volume Down"
 msgstr "Vaiksemaks"
 
-#: gtk/gtkvolumebutton.c:96
 msgid "Decreases the volume"
 msgstr "Helivaljuse vähendamine"
 
-#: gtk/gtkvolumebutton.c:100 gtk/gtkvolumebutton.c:103
 msgid "Volume Up"
 msgstr "Valjemaks"
 
-#: gtk/gtkvolumebutton.c:102
 msgid "Increases the volume"
 msgstr "Helivaljuse suurendamine"
 
-#: gtk/gtkvolumebutton.c:160
 msgid "Muted"
 msgstr "Tumm"
 
-#: gtk/gtkvolumebutton.c:164
 msgid "Full Volume"
 msgstr "Täisvaljus"
 
@@ -2786,933 +2229,746 @@ msgstr "Täisvaljus"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:177
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
 msgstr "asme_f"
 
-#: gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
 msgstr "A0x2"
 
-#: gtk/paper_names_offsets.c:6
 msgctxt "paper size"
 msgid "A0"
 msgstr "A0"
 
-#: gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
 msgstr "A0x3"
 
-#: gtk/paper_names_offsets.c:8
 msgctxt "paper size"
 msgid "A1"
 msgstr "A1"
 
-#: gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A10"
 msgstr "A10"
 
-#: gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
 msgstr "A1x3"
 
-#: gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
 msgstr "A1x4"
 
-#: gtk/paper_names_offsets.c:12
 msgctxt "paper size"
 msgid "A2"
 msgstr "A2"
 
-#: gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
 msgstr "A2x3"
 
-#: gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
 msgstr "A2x4"
 
-#: gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
 msgstr "A2x5"
 
-#: gtk/paper_names_offsets.c:16
 msgctxt "paper size"
 msgid "A3"
 msgstr "A3"
 
-#: gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
 msgstr "A3 Ekstra"
 
-#: gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
 msgstr "A3x3"
 
-#: gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
 msgstr "A3x4"
 
-#: gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
 msgstr "A3x5"
 
-#: gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
 msgstr "A3x6"
 
-#: gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
 msgstr "A3x7"
 
-#: gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A4"
 msgstr "A4"
 
-#: gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
 msgstr "A4 Ekstra"
 
-#: gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
 msgstr "A4 Tab"
 
-#: gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
 msgstr "A4x3"
 
-#: gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
 msgstr "A4x4"
 
-#: gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
 msgstr "A4x5"
 
-#: gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
 msgstr "A4x6"
 
-#: gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
 msgstr "A4x7"
 
-#: gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
 msgstr "A4x8"
 
-#: gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
 msgstr "A4x9"
 
-#: gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A5"
 msgstr "A5"
 
-#: gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
 msgstr "A5 Ekstra"
 
-#: gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A6"
 msgstr "A6"
 
-#: gtk/paper_names_offsets.c:36
 msgctxt "paper size"
 msgid "A7"
 msgstr "A7"
 
-#: gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A8"
 msgstr "A8"
 
-#: gtk/paper_names_offsets.c:38
 msgctxt "paper size"
 msgid "A9"
 msgstr "A9"
 
-#: gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
 msgstr "B0"
 
-#: gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
 msgstr "B1"
 
-#: gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
 msgstr "B10"
 
-#: gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
 msgstr "B2"
 
-#: gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
 msgstr "B3"
 
-#: gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
 msgstr "B4"
 
-#: gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
 msgstr "B5"
 
-#: gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
 msgstr "B5 Ekstra"
 
-#: gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
 msgstr "B6"
 
-#: gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
 msgstr "B6/C4"
 
-#: gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
 msgstr "B7"
 
-#: gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
 msgstr "B8"
 
-#: gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
 msgstr "B9"
 
-#: gtk/paper_names_offsets.c:52
 msgctxt "paper size"
 msgid "C0"
 msgstr "C0"
 
-#: gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "C1"
 msgstr "C1"
 
-#: gtk/paper_names_offsets.c:54
 msgctxt "paper size"
 msgid "C10"
 msgstr "C10"
 
-#: gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "C2"
 msgstr "C2"
 
-#: gtk/paper_names_offsets.c:56
 msgctxt "paper size"
 msgid "C3"
 msgstr "C3"
 
-#: gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "C4"
 msgstr "C4"
 
-#: gtk/paper_names_offsets.c:58
 msgctxt "paper size"
 msgid "C5"
 msgstr "C5"
 
-#: gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "C6"
 msgstr "C6"
 
-#: gtk/paper_names_offsets.c:60
 msgctxt "paper size"
 msgid "C6/C5"
 msgstr "C6/C5"
 
-#: gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "C7"
 msgstr "C7"
 
-#: gtk/paper_names_offsets.c:62
 msgctxt "paper size"
 msgid "C7/C6"
 msgstr "C7/C6"
 
-#: gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "C8"
 msgstr "C8"
 
-#: gtk/paper_names_offsets.c:64
 msgctxt "paper size"
 msgid "C9"
 msgstr "C9"
 
-#: gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "DL-ümbrik"
 
-#: gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
 msgstr "RA0"
 
-#: gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
 msgstr "RA1"
 
-#: gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
 msgstr "RA2"
 
-#: gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "SRA0"
 msgstr "SRA0"
 
-#: gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "SRA1"
 msgstr "SRA1"
 
-#: gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA2"
 msgstr "SRA2"
 
-#: gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "JB0"
 msgstr "JB0"
 
-#: gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "JB1"
 msgstr "JB1"
 
-#: gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "JB10"
 msgstr "JB10"
 
-#: gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "JB2"
 msgstr "JB2"
 
-#: gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB3"
 msgstr "JB3"
 
-#: gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB4"
 msgstr "JB4"
 
-#: gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB5"
 msgstr "JB5"
 
-#: gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB6"
 msgstr "JB6"
 
-#: gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB7"
 msgstr "JB7"
 
-#: gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB8"
 msgstr "JB8"
 
-#: gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB9"
 msgstr "JB9"
 
-#: gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
 msgstr "jis exec"
 
-#: gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Choukei 2 ümbrik"
 
-#: gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Choukei 3 ümbrik"
 
-#: gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 ümbrik"
 
-#: gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "hagaki (postkaart)"
 
-#: gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "kahu ümbrik"
 
-#: gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "kaku2 ümbrik"
 
-#: gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "Oufuku (vastusepostkaart)"
 
-#: gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "you4 ümbrik"
 
-#: gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
 msgstr "10x11"
 
-#: gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
 msgstr "10x13"
 
-#: gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
-#: gtk/paper_names_offsets.c:95 gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "10x15"
 
-#: gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
 msgstr "11x12"
 
-#: gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
 msgstr "11x15"
 
-#: gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
 msgstr "12x19"
 
-#: gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
 msgstr "5x7"
 
-#: gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "6x9 Envelope"
 msgstr "6x9 ümbrik"
 
-#: gtk/paper_names_offsets.c:102
 msgctxt "paper size"
 msgid "7x9 Envelope"
 msgstr "7x9 ümbrik"
 
-#: gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "9x11 Envelope"
 msgstr "9x11 ümbrik"
 
-#: gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "a2-ümbrik"
 
-#: gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
 msgstr "Arch A"
 
-#: gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
 msgstr "Arch B"
 
-#: gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
 msgstr "Arch C"
 
-#: gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
 msgstr "Arch D"
 
-#: gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
 msgstr "Arch E"
 
-#: gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
 msgstr "b-plus"
 
-#: gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
 msgstr "c"
 
-#: gtk/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "c5-ümbrik"
 
-#: gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
 msgstr "d"
 
-#: gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
 msgstr "e"
 
-#: gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
 msgstr "edp"
 
-#: gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "European edp"
 msgstr "Euroopa edp"
 
-#: gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Executive"
 msgstr "Executive"
 
-#: gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
 msgstr "f"
 
-#: gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "FanFold European"
 msgstr "FanFold euroopa"
 
-#: gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "FanFold US"
 msgstr "FanFold USA"
 
-#: gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "FanFold German Legal"
 msgstr "FanFold saksa"
 
-#: gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Government Legal"
 
-#: gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Government Letter"
 
-#: gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
 msgstr "Indeks 3x5"
 
-#: gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
 msgstr "Indeks 4x6 (postkaart)"
 
-#: gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
 msgstr "Indeks 4x6 laiendatud"
 
-#: gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "Index 5x8"
 msgstr "Indeks 5x8"
 
-#: gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "Arve"
 
-#: gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
 msgstr "US Legal"
 
-#: gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "US Legal ekstra"
 
-#: gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "US Letter"
 
-#: gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "US Letter ekstra"
 
-#: gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "US Letter Plus"
 
-#: gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Monarch-ümbrik"
 
-#: gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "#10 ümbrik"
 
-#: gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "#11 ümbrik"
 
-#: gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "#12 ümbrik"
 
-#: gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "#14 ümbrik"
 
-#: gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "#9 ümbrik"
 
-#: gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Personal-ümbrik"
 
-#: gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
 msgstr "Quarto"
 
-#: gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
 msgstr "Super A"
 
-#: gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
 msgstr "Super B"
 
-#: gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Laiformaat"
 
-#: gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
-#: gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Folio"
 msgstr "Foolio"
 
-#: gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
 msgstr "Foolio sp"
 
-#: gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Kutse ümbrik"
 
-#: gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Itaalia ümbrik"
 
-#: gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
-#: gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
 msgstr "pa-kai"
 
-#: gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Postfix ümbrik"
 
-#: gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Väike foto"
 
-#: gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "prc1-ümbrik"
 
-#: gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "prc10-ümbrik"
 
-#: gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
 msgstr "prc 16k"
 
-#: gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "prc2-ümbrik"
 
-#: gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "prc3-ümbrik"
 
-#: gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
 msgstr "prc 32k"
 
-#: gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "prc4-ümbrik"
 
-#: gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "prc5 Envelope"
 msgstr "c5-ümbrik"
 
-#: gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "prc6-ümbrik"
 
-#: gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "prc7-ümbrik"
 
-#: gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "prc8-ümbrik"
 
-#: gtk/paper_names_offsets.c:166
 msgctxt "paper size"
 msgid "prc9 Envelope"
 msgstr "prc9-ümbrik"
 
-#: gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 16k"
 msgstr "ROC 16k"
 
-#: gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "erinevad idata andmed nimeviidaga seotud '%s' ja '%s' jaoks\n"
 
-#: gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Tõrge päise kirjutamisel\n"
 
-#: gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Tõrge räsitabeli kirjutamisel\n"
 
-#: gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Tõrge kataloogiindeksi kirjutamisel\n"
 
-#: gtk/updateiconcache.c:1394
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Tõrge päise uuestikirjutamisel\n"
 
-#: gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Tõrge faili %s avamisel: %s\n"
 
-#: gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Tõrge puhverfaili kirjutamisel: %s\n"
 
-#: gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Genereeritud puhver on vigane.\n"
 
-#: gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
 "Faili %s nime pole võimalik nimeks %s muuta: %s, sestap %s eemaldatakse.\n"
 
-#: gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Kataloogi %s pole võimalik nime %s alla ümber nimetada: %s\n"
 
-#: gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Kataloogi %s pole võimalik tagasi nime %s alla ümber nimetada: %s\n"
 
-#: gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Puhverfail edukalt loodud.\n"
 
-#: gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Olemasoleva puhvri ülekirjutamine isegi värskeima puhvri korral"
 
-#: gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
 msgstr "index.theme olemasolu ei kontrollita"
 
-#: gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
 msgstr "Pildiandmeid puhvrisse ei kaasata"
 
-#: gtk/updateiconcache.c:1614
 msgid "Output a C header file"
 msgstr "C-päisefaili väljastamine"
 
-#: gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
 msgstr "Teaberohke väljundi keelamine"
 
-#: gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
 msgstr "Olemasoleva ikoonipuhvri valideerimine"
 
-#: gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Faili ei leitud: %s\n"
 
-#: gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ikoonipuhver pole korras: %s\n"
 
-#: gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Teema indeksifail on puudu.\n"
 
-#: gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -3723,309 +2979,239 @@ msgstr ""
 "võtit.\n"
 
 #. ID
-#: modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "Amhari (EZ+)"
 
 #. ID
-#: modules/input/imcedilla.c:92
 msgid "Cedilla"
 msgstr "Sedii"
 
 #. ID
-#: modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
 msgstr "Kirillits (translitereeritud)"
 
 #. ID
-#: modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
 msgstr "Inukitut (translitereeritud)"
 
 #. ID
-#: modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: modules/input/immultipress.c:31
 msgid "Multipress"
 msgstr "Multipress"
 
 #. ID
-#: modules/input/imthai.c:35
 msgid "Thai-Lao"
 msgstr "Tai-Laose"
 
 #. ID
-#: modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrinja-Eritrea (EZ+)"
 
 #. ID
-#: modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigrinja-Etioopia (EZ+)"
 
 #. ID
-#: modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnami (VIQR)"
 
 #. ID
-#: modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "X'i sisestusmeetod"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:811
-#: modules/printbackends/cups/gtkprintbackendcups.c:1020
 msgid "Username:"
 msgstr "Kasutajanimi:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:812
-#: modules/printbackends/cups/gtkprintbackendcups.c:1029
 msgid "Password:"
 msgstr "Parool:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:850
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Faili tõmbamiseks %s-st on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:854
-#: modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Dokumendi '%s' printimiseks printerisse %s on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Dokumendi printimiseks %s-sse on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:860
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Töö '%s' rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:862
 msgid "Authentication is required to get attributes of a job"
 msgstr "Töö rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:866
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Printeri '%s' rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:868
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Printeri rekvisiitide hankimiseks on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Vaikimisi printeri hankimiseks %s-st on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Printerite hankimiseks %s-st on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:877
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s jaoks on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1014
 msgid "Domain:"
 msgstr "Domeen:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "Dokumendi '%s' printimiseks on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 "Selle dokumendi printimiseks printerisse %s on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
 msgstr "Selle dokumendi printimiseks on vaja eelnevalt autentida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "Printeris '%s' on vähe toonerit."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "Printeris '%s' pole toonerit."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "Printeris '%s' on ilmuti lõppemas."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "Printeris '%s' on ilmuti otsas."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr "Printeris '%s' on vähemalt ühe tindi varu lõppemas."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr "Printeris '%s' on vähemalt ühe tindi varu otsas."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "The cover is open on printer '%s'."
 msgstr "Printeril '%s' on kaas lahti."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The door is open on printer '%s'."
 msgstr "Printeril '%s' on luuk lahti."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "Printeris '%s' on vähe paberit."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "Printeril '%s' on paber otsas."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1686
 #, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "Printer '%s' on hetkel ühendamata."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Printeriga '%s on probleem."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
 msgstr "Pausitud, printimistööde tagasilükkamine"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
 msgstr "Printimistööde tagasilükkamine"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Kahepoolne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Paberi liik"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Paberi allikas"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Väljastussalv"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Lahutus"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "GhostScripti eelfilter"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Ühepoolne"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Pikk külg (tavaline)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Lühike külg (pööratud)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2797
-#: modules/printbackends/cups/gtkprintbackendcups.c:2799
-#: modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Automaatne valik"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2801
-#: modules/printbackends/cups/gtkprintbackendcups.c:2803
-#: modules/printbackends/cups/gtkprintbackendcups.c:2805
-#: modules/printbackends/cups/gtkprintbackendcups.c:2809
-#: modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Printeri vaikimisi"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Kaasa pannakse ainult GhostScript fondid"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Teisenda vormingusse PS level 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Teisenda vormingusse PS level 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Eelfilter väljas"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Mitmesugust"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Kiireloomuline"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Kõrge"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Keskmine"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Madal"
 
@@ -4033,66 +3219,54 @@ msgstr "Madal"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Lehekülgi lehel"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Printimistöö tähtsus"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Maksmise andmed"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Puudub"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Liigitatud"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Konfidentsiaalne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Salajane"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Tavaline"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Ülisalajane"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
 msgstr "Liigitamata"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Enne"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Pärast"
 
@@ -4100,14 +3274,12 @@ msgstr "Pärast"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Prindi ajal"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Printimine kindlal kellaajal"
 
@@ -4115,104 +3287,81 @@ msgstr "Printimine kindlal kellaajal"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Kohandatud %sx%s"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
 msgid "output.%s"
 msgstr "väljund.%s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
 msgstr "Printimine faili"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:582
-#: modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Le_hekülgi lehel:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:641
 msgid "File"
 msgstr "Fail"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
 msgstr "_Väljundvorming"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "Printimine LPR-i"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "Lehekülgi lehel"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "Käsurida"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "printer offline"
 msgstr "printer on ühendamata"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:829
 msgid "ready to print"
 msgstr "printimiseks valmis"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
 msgstr "printimistöö töötlemine"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:836
 msgid "paused"
 msgstr "pausitud"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:839
 msgid "unknown"
 msgstr "tundmatu"
 
 #. default filename used for print-to-test
-#: modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
 msgstr "testväljund.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Printimine testprinterisse"
 
-#: tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "Faili '%s' kohta pole võimalik andmeid hankida: %s"
 
-#: tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "Tõrge faili '%s' avamisel: %s"
 
-#: tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
