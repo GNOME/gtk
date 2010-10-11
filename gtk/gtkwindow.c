@@ -7970,14 +7970,19 @@ gtk_window_set_resizable (GtkWindow *window,
 
   priv = window->priv;
 
-  priv->resizable = (resizable != FALSE);
+  resizable = (resizable != FALSE);
 
-  g_object_notify (G_OBJECT (window), "resizable");
+  if (priv->resizable != resizable)
+    {
+      priv->resizable = (resizable != FALSE);
 
-  if (priv->grip_window != NULL)
-    update_grip_visibility (window);
+      if (priv->grip_window != NULL)
+        update_grip_visibility (window);
 
-  gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+      gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
+
+      g_object_notify (G_OBJECT (window), "resizable");
+    }
 }
 
 /**
