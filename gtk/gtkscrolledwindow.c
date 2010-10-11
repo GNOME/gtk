@@ -395,7 +395,19 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 						    GTK_CORNER_TOP_LEFT,
 						    G_PARAM_READABLE | G_PARAM_WRITABLE));
 
-
+  /**
+   * GtkScrolledWindow::scroll-child:
+   * @scrolled_window: a #GtkScrolledWindow
+   * @scroll: a #GtkScrollType describing how much to scroll
+   * @horizontal: whether the keybinding scrolls the child
+   *   horizontally or not
+   *
+   * The ::scroll-child signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when a keybinding that scrolls is pressed.
+   * The horizontal or vertical adjustment is updated which triggers a
+   * signal that the scrolled windows child may listen to and scroll itself.
+   */
   signals[SCROLL_CHILD] =
     g_signal_new (I_("scroll-child"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -406,6 +418,24 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                   G_TYPE_BOOLEAN, 2,
                   GTK_TYPE_SCROLL_TYPE,
 		  G_TYPE_BOOLEAN);
+
+  /**
+   * GtkScrolledWindow::move-focus-out:
+   * @scrolled_window: a #GtkScrolledWindow
+   * @direction_type: either %GTK_DIR_TAB_FORWARD or
+   *   %GTK_DIR_TAB_BACKWARD
+   *
+   * The ::move-focus-out signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when focus is moved away from the scrolled
+   * window by a keybinding.
+   * The #GtkWidget::move-focus signal is emitted with @direction_type
+   * on this scrolled windows toplevel parent in the container hierarchy.
+   * The default bindings for this signal are
+   * <keycombo><keycap>Tab</keycap><keycap>Ctrl</keycap></keycombo>
+   * and
+   * <keycombo><keycap>Tab</keycap><keycap>Ctrl</keycap><keycap>Shift</keycap></keycombo>.
+   */
   signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move-focus-out"),
                   G_TYPE_FROM_CLASS (gobject_class),
