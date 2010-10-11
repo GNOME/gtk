@@ -162,7 +162,7 @@ gtk_spread_table_class_init (GtkSpreadTableClass *class)
 						      P_("Lines"),
 						      P_("The number of lines (rows/columns) to "
 							 "evenly distribute children to."),
-						      DEFAULT_LINES,
+						      1,
 						      65535,
 						      DEFAULT_LINES,
 						      G_PARAM_READABLE | G_PARAM_WRITABLE));
@@ -498,45 +498,54 @@ segment_lines_for_size (GtkSpreadTable *table,
   upper    = get_segment_length (table, line_thickness, children);
   lower    = upper / priv->lines;
 
-  /* Start with half way between the average and total height */
-  segment_size = lower + (upper - lower) / 2;
-
-  while (segment_size > lower && segment_size < upper)
+  /* Handle a single line spread table as a special case */
+  if (priv->lines == 1)
     {
-      gint test_largest = 0;
-
-      if (children_fit_segment_size (table, children, line_thickness,
-				     segment_size, test_counts, &test_largest))
-	{
-	  upper         = segment_size;
-	  segment_size -= (segment_size - lower) / 2;
-
-	  /* Save the last arrangement that 'fit' */
-	  largest_size  = test_largest;
-	  memcpy (segment_counts, test_counts, sizeof (gint) * priv->lines);
-	}
-      else
-	{
-	  lower         = segment_size;
-	  segment_size += (upper - segment_size) / 2;
-	}
+      segment_counts[0] = g_list_length (children);
+      largest_size      = upper;
     }
-
-  /* Perform some corrections: fill in any trailing columns that are missing widgets */
-  for (i = 0; i < priv->lines; i++)
+  else 
     {
-      /* If this column has no widgets... */
-      if (!segment_counts[i])
+      /* Start with half way between the average and total height */
+      segment_size = lower + (upper - lower) / 2;
+      
+      while (segment_size > lower && segment_size < upper)
 	{
-	  /* rewind to the last column that had more than 1 widget */
-	  for (j = i - 1; j >= 0; j--)
+	  gint test_largest = 0;
+	  
+	  if (children_fit_segment_size (table, children, line_thickness,
+					 segment_size, test_counts, &test_largest))
 	    {
-	      if (segment_counts[j] > 1)
+	      upper         = segment_size;
+	      segment_size -= (segment_size - lower) / 2;
+	      
+	      /* Save the last arrangement that 'fit' */
+	      largest_size  = test_largest;
+	      memcpy (segment_counts, test_counts, sizeof (gint) * priv->lines);
+	    }
+	  else
+	    {
+	      lower         = segment_size;
+	      segment_size += (upper - segment_size) / 2;
+	    }
+	}
+      
+      /* Perform some corrections: fill in any trailing columns that are missing widgets */
+      for (i = 0; i < priv->lines; i++)
+	{
+	  /* If this column has no widgets... */
+	  if (!segment_counts[i])
+	    {
+	      /* rewind to the last column that had more than 1 widget */
+	      for (j = i - 1; j >= 0; j--)
 		{
-		  /* put an available widget in the empty column */
-		  segment_counts[j]--;
-		  segment_counts[i]++;
-		  break;
+		  if (segment_counts[j] > 1)
+		    {
+		      /* put an available widget in the empty column */
+		      segment_counts[j]--;
+		      segment_counts[i]++;
+		      break;
+		    }
 		}
 	    }
 	}
@@ -987,6 +996,11 @@ gtk_spread_table_get_child_line (GtkSpreadTable *table,
  *
  * Sets the fixed amount of lines (rows or columns) to
  * distribute children to.
+ *
+ * <note><para>Space will be allocated for all lines even
+ * if there are not enough children to be placed on every
+ * line, for instance if @lines is set to 4 and the table
+ * has only 3 children; then the last line will appear empty.</para></note>
  */
 void
 gtk_spread_table_set_lines (GtkSpreadTable *table, 
@@ -995,6 +1009,7 @@ gtk_spread_table_set_lines (GtkSpreadTable *table,
   GtkSpreadTablePrivate *priv;
 
   g_return_if_fail (GTK_IS_SPREAD_TABLE (table));
+  g_return_if_fail (lines > 0);
 
   priv = table->priv;
 

@@ -289,7 +289,7 @@ create_window (void)
   gtk_widget_show (widget);
   gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
 
-  widget = gtk_spin_button_new_with_range (2, 30, 1);
+  widget = gtk_spin_button_new_with_range (1, 30, 1);
   gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), INITIAL_LINES);
   gtk_widget_show (widget);
 
