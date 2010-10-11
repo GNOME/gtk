@@ -240,6 +240,8 @@ included-modules: $(noinst_LTLIBRARIES)
 gtk.immodules: Makefile.am $(module_LTLIBRARIES)
 	$(top_builddir)/gtk/gtk-query-immodules-2.0 $(module_LTLIBRARIES) > gtk.immodules
 
+EXTRA_DIST += README.multipress
+
 CLEANFILES = gtk.immodules
 
 if CROSS_COMPILING
