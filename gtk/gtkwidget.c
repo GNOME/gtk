@@ -113,15 +113,16 @@
  *
  * A widget that does not actually do height-for-width
  * or width-for-height size negotiations only has to implement
- * get_preferred_width() and get_preferred_height().
+ * #GtkWidgetClass.get_preferred_width() and
+ * #GtkWidgetClass.get_preferred_height().
  *
  * If a widget does move content around to smartly use up the
  * allocated size, then it must support the request properly in
  * both orientations; even if the request only makes sense in
  * one orientation.
  *
- * For instance, a GtkLabel that does height-for-width word wrapping
- * will not expect to have get_preferred_height() called because that
+ * For instance, a #GtkLabel that does height-for-width word wrapping
+ * will not expect to have #GtkWidgetClass.get_preferred_height() called because that
  * call is specific to a width-for-height request. In this case the
  * label must return the heights contextual to its minimum possible
  * width. By following this rule any widget that handles height-for-width
@@ -143,7 +144,7 @@
  * It will not work to use the wrapper functions, such as
  * gtk_widget_get_preferred_width(), inside your own size request
  * implementation. These return a request adjusted by #GtkSizeGroup
- * and by the GtkWidgetClass::adjust_size_request virtual method. If a
+ * and by the #GtkWidgetClass.adjust_size_request() virtual method. If a
  * widget used the wrappers inside its virtual method implementations,
  * then the adjustments (such as widget margins) would be applied
  * twice. GTK+ therefore does not allow this and will warn if you try
@@ -157,6 +158,7 @@
  * </para>
  * </refsect2>
  * <refsect2 id="style-properties">
+ * <title>Style Properties</title>
  * <para>
  * <structname>GtkWidget</structname> introduces <firstterm>style
  * properties</firstterm> - these are basically object properties that are stored
