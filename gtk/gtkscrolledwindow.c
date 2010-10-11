@@ -150,6 +150,9 @@ static void     gtk_scrolled_window_adjustment_changed (GtkAdjustment     *adjus
                                                         gpointer           data);
 
 static void  gtk_scrolled_window_update_real_placement (GtkScrolledWindow *scrolled_window);
+static void gtk_scrolled_window_compute_expand         (GtkWidget         *widget,
+                                                        gboolean          *hexpand_p,
+                                                        gboolean          *vexpand_p);
 
 static void  gtk_scrolled_window_size_request_init     (GtkSizeRequestIface *iface);
 static void  gtk_scrolled_window_get_width             (GtkSizeRequest      *widget,
@@ -229,6 +232,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->size_allocate = gtk_scrolled_window_size_allocate;
   widget_class->scroll_event = gtk_scrolled_window_scroll_event;
   widget_class->focus = gtk_scrolled_window_focus;
+  widget_class->compute_expand = gtk_scrolled_window_compute_expand;
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
@@ -1811,6 +1815,23 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
     }
 }
 
+static void
+gtk_scrolled_window_compute_expand (GtkWidget *widget,
+                                    gboolean  *hexpand_p,
+                                    gboolean  *vexpand_p)
+{
+  GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *child;
+
+  child = gtk_bin_get_child (GTK_BIN (scrolled_window));
+
+  *hexpand_p = priv->hscrollbar_visible ||
+     gtk_widget_compute_expand (child, GTK_ORIENTATION_HORIZONTAL);
+
+  *vexpand_p = priv->vscrollbar_visible ||
+     gtk_widget_compute_expand (child, GTK_ORIENTATION_VERTICAL);
+}
 
 static void
 gtk_scrolled_window_size_request_init (GtkSizeRequestIface *iface)
