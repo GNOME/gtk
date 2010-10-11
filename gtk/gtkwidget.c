@@ -357,6 +357,7 @@ struct _GtkWidgetPrivate
    *  the font to use for text.
    */
   GtkStyle *style;
+  GtkStyleContext *context;
 
   /* The widget's allocated size.
    */
@@ -678,7 +679,6 @@ static GQuark		quark_tooltip_markup = 0;
 static GQuark		quark_has_tooltip = 0;
 static GQuark		quark_tooltip_window = 0;
 static GQuark		quark_visual = 0;
-static GQuark           quark_style_context = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -792,7 +792,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_has_tooltip = g_quark_from_static_string ("gtk-has-tooltip");
   quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
   quark_visual = g_quark_from_static_string ("gtk-widget-visual");
-  quark_style_context = g_quark_from_static_string ("gtk-style-context");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -6239,12 +6238,8 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
 static void
 gtk_widget_real_style_updated (GtkWidget *widget)
 {
-  GtkStyleContext *context;
-
-  context = g_object_get_qdata (G_OBJECT (widget),
-                                quark_style_context);
-  if (context)
-    gtk_style_context_invalidate (context);
+  if (widget->priv->context)
+    gtk_style_context_invalidate (widget->priv->context);
 }
 
 static gboolean
@@ -7262,7 +7257,6 @@ gtk_widget_set_parent (GtkWidget *widget,
 {
   GtkWidgetPrivate *priv;
   GtkStateData data;
-  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_WIDGET (parent));
@@ -7337,14 +7331,12 @@ gtk_widget_set_parent (GtkWidget *widget,
       gtk_widget_queue_compute_expand (parent);
     }
 
-  context = g_object_get_qdata (G_OBJECT (widget),
-                                quark_style_context);
-  if (context)
+  if (widget->priv->context)
     {
       _gtk_widget_update_path (widget);
-      gtk_style_context_set_path (context, widget->priv->path);
+      gtk_style_context_set_path (widget->priv->context, widget->priv->path);
 
-      gtk_style_context_set_screen (context,
+      gtk_style_context_set_screen (widget->priv->context,
                                     gtk_widget_get_screen (widget));
     }
 }
@@ -8141,19 +8133,16 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 static void
 reset_style_recurse (GtkWidget *widget, gpointer data)
 {
-  GtkStyleContext *context;
-
 #if 0
   if (widget->priv->rc_style)
     gtk_widget_reset_rc_style (widget);
 #endif
 
-  context = g_object_get_qdata (G_OBJECT (widget),
-                                quark_style_context);
-  if (context)
+  if (widget->priv->context)
     {
       _gtk_widget_update_path (widget);
-      gtk_style_context_set_path (context, widget->priv->path);
+      gtk_style_context_set_path (widget->priv->context,
+                                  widget->priv->path);
     }
 
   if (GTK_IS_CONTAINER (widget))
@@ -9648,12 +9637,8 @@ gtk_widget_set_direction (GtkWidget        *widget,
 
   if (old_dir != gtk_widget_get_direction (widget))
     {
-      GtkStyleContext *context;
-
-      context = g_object_get_qdata (G_OBJECT (widget), quark_style_context);
-
-      if (context)
-        gtk_style_context_set_direction (context,
+      if (widget->priv->context)
+        gtk_style_context_set_direction (widget->priv->context,
                                          gtk_widget_get_direction (widget));
 
       gtk_widget_emit_direction_changed (widget, old_dir);
@@ -9815,6 +9800,12 @@ gtk_widget_finalize (GObject *object)
   accessible = g_object_get_qdata (G_OBJECT (widget), quark_accessible_object);
   if (accessible)
     g_object_unref (accessible);
+
+  if (priv->path)
+    gtk_widget_path_free (priv->path);
+
+  if (priv->context)
+    g_object_unref (priv->context);
 
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
@@ -13324,32 +13315,24 @@ style_context_changed (GtkStyleContext *context,
 GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
 {
-  GtkStyleContext *context;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  context = g_object_get_qdata (G_OBJECT (widget),
-                                quark_style_context);
-
-  if (G_UNLIKELY (!context))
+  if (G_UNLIKELY (!widget->priv->context))
     {
-      context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
-                              "direction", gtk_widget_get_direction (widget),
-                              NULL);
+      widget->priv->context = g_object_new (GTK_TYPE_STYLE_CONTEXT,
+                                            "direction", gtk_widget_get_direction (widget),
+                                            NULL);
 
-      g_signal_connect (context, "changed",
+      g_signal_connect (widget->priv->context, "changed",
                         G_CALLBACK (style_context_changed), widget);
 
-      g_object_set_qdata_full (G_OBJECT (widget),
-                               quark_style_context, context,
-                               (GDestroyNotify) g_object_unref);
-
-      gtk_style_context_set_screen (context,
+      gtk_style_context_set_screen (widget->priv->context,
                                     gtk_widget_get_screen (widget));
 
       _gtk_widget_update_path (widget);
-      gtk_style_context_set_path (context, widget->priv->path);
+      gtk_style_context_set_path (widget->priv->context,
+                                  widget->priv->path);
     }
 
-  return context;
+  return widget->priv->context;
 }
