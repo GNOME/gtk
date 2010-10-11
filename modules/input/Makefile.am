@@ -240,6 +240,8 @@ included-modules: $(noinst_LTLIBRARIES)
 immodules.cache: Makefile.am $(module_LTLIBRARIES)
 	$(top_builddir)/gtk/gtk-query-immodules-3.0 $(module_LTLIBRARIES) > immodules.cache
 
+EXTRA_DIST += README.multipress
+
 CLEANFILES = immodules.cache
 
 if CROSS_COMPILING
