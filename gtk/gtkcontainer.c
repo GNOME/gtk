@@ -63,21 +63,145 @@
  * The first type of container widget has a single child widget and derives
  * from #GtkBin. These containers are <emphasis>decorators</emphasis>, which
  * add some kind of functionality to the child. For example, a #GtkButton makes
- * its child into a clickable button; a #GtkFrame draws a frame around its child
- * and a #GtkWindow places its child widget inside a top-level window.
+ * it's child into a clickable button; a #GtkFrame draws a frame around it's child
+ * and a #GtkWindow places it's child widget inside a top-level window.
  *
- * The second type of container can have more than one child; its purpose is to
+ * The second type of container can have more than one child; it's purpose is to
  * manage <emphasis>layout</emphasis>. This means that these containers assign
- * sizes and positions to their children. For example, a #GtkHBox arranges its
+ * sizes and positions to their children. For example, a #GtkHBox arranges it's
  * children in a horizontal row, and a #GtkTable arranges the widgets it contains
  * in a two-dimensional grid.
  *
+ * <refsect2 id="container-geometry-management">
+ * <title>Height for width geometry management</title>
+ * <para>
  * GTK+ uses a height-for-width (and width-for-height) geometry management system.
  * Height-for-width means that a widget can change how much vertical space it needs,
  * depending on the amount of horizontal space that it is given (and similar for
  * width-for-height).
+ *
+ * There are some things to keep in mind when implementing container widgets
+ * that make use of GTK+'s height for width geometry management system; first 
+ * of all it's important to note that a container must prioritize one of it's
+ * dimensions, that is to say that a widget or container can only have a
+ * #GtkSizeRequestMode that is %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or 
+ * %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT. However, every widget and container 
+ * must be able to respond to the APIs for both dimensions, i.e. even if a 
+ * widget has a request mode that is height-for-width, it is possible that 
+ * it's parent will request it's sizes using the width-for-height APIs.
+ *
+ * To ensure that everything works properly, here are some guidelines to follow
+ * when implementing height-for-width (or width-for-height) containers.
+ *
+ * Each request mode has 2 virtual methods involved. Height-for-width apis run
+ * through gtk_widget_get_preferred_width() and then through gtk_widget_get_preferred_height_for_width().
+ * When handling requests in the opposite #GtkSizeRequestMode it is important that
+ * every widget request at least enough space to display all of it's content at all times.
+ *
+ * When gtk_widget_get_preferred_height() is called on a container that is height-for-width,
+ * the container must return the height for minimum width, this is easily achieved by
+ * simply calling the reverse apis implemented for itself as follows:
+ *
+ * <programlisting><![CDATA[
+ * static void
+ * foo_container_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
+ * {
+ *    if (i_am_in_height_for_width_mode)
+ *      {
+ *        gint min_width;
+ *
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width, 
+ *                                                                       min_height, nat_height);
+ *      }
+ *    else
+ *      {
+ *        ... many containers support both request modes, execute the real width-for-height
+ *        request here by returning the collective heights of all widgets that are
+ *        stacked vertically (or whatever is appropriate for this container) ...
+ *      }
+ * }
+ * ]]></programlisting>
+ *
+ * Similarly, when gtk_widget_get_preferred_width_for_height() is called for a container or widget
+ * that is height-for-width, it then only needs to return the base minimum width like so:
+ *
+ * <programlisting><![CDATA[
+ * static void
+ * foo_container_get_preferred_width_for_height (GtkWidget *widget, gint for_height, 
+ *                                               gint *min_width, gint *nat_width)
+ * {
+ *    if (i_am_in_height_for_width_mode)
+ *      {
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, min_width, nat_width);
+ *      }
+ *    else
+ *      {
+ *        ... execute the real width-for-height request here based on required width 
+ *        of the children collectively if the container were to be allocated the said height ...
+ *      }
+ * }
+ * ]]></programlisting>
+ *
+ * Furthermore, in order to ensure correct height-for-width requests it is important
+ * to check the input width against the real required minimum width, this can
+ * easily be achieved as follows:
+ *
+ * <programlisting><![CDATA[
+ * static void
+ * foo_container_get_preferred_height_for_width (GtkWidget *widget, gint for_width, 
+ *                                               gint *min_height, gint *nat_height)
+ * {
+ *    if (i_am_in_height_for_width_mode)
+ *      {
+ *        gint min_width;
+ *
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
+ *
+ *        for_width = MAX (min_width, for_width);
+ *
+ *        execute_real_height_for_width_request_code (widget, for_width, min_height, nat_height);
+ *      }
+ *    else
+ *      {
+ *        ... fall back on virtual results as mentioned in the previous example ...
+ *      }
+ * }
+ * ]]></programlisting>
+ *
+ * Height for width requests are generally implemented in terms of a virtual allocation
+ * of widgets in the input orientation. Assuming an height-for-width request mode, a container
+ * would implement the <function>get_preferred_height_for_width()</function> virtual function by first calling
+ * gtk_widget_get_preferred_width() for each of its children.
+ *
+ * For each potential group of children that are lined up horizontally the values returned by 
+ * gtk_widget_get_preferred_width() should be collected in an array of #GtkRequestedSize structures; 
+ * any child spacing should be removed from the input @for_width and then the collective size be 
+ * allocated using the gtk_distribute_natural_allocation() convenience function
+ *
+ * The container will then move on to request the preferred height for each child by using 
+ * gtk_widget_get_preferred_height_for_width() and using the sizes stored in the #GtkRequestedSize array.
+ *
+ * When it comes time to allocate a height-for-width container, it's again important
+ * to consider that a container has to prioritize one dimension over the other. So if
+ * a container is a height-for-width container it must first allocate all widgets horizontally
+ * using a #GtkRequestedSize array and gtk_distribute_natural_allocation() and then add any
+ * extra space (if and where appropriate) for the widget to expand.
+ *
+ * After adding all the expand space, the container assumes it was allocated sufficient
+ * height to fit all of its content. At this time, the container must use the total horizontal sizes
+ * of each widget to request the height-for-width of each of its children and store the requests in a
+ * #GtkRequestedSize array for any widgets that stack vertically (for tabular containers this can
+ * be generalized into the heights and widths of rows and columns).
+ * The vertical space must then again be distributed using gtk_distribute_natural_allocation()
+ * while this time considering the allocated height of the widget minus any vertical spacing
+ * that the container adds. Then vertical expand space should be added where appropriate if available
+ * and go on to actually allocating the child widgets.
+ * 
  * See <link linkend="geometry-management">GtkWidget's geometry management section</link>
- * to learn more about height-for-width geometry management.
+ * to learn more about implementing height-for-width geometry management for widgets.
+ * </para>
+ * </refsect2>
  * <refsect2 id="child-properties">
  * <title>Child properties</title>
  * <para>
