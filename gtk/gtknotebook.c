@@ -587,6 +587,39 @@ gtk_object_handled_accumulator (GSignalInvocationHint *ihint,
 }
 
 static void
+gtk_notebook_compute_expand (GtkContainer *container,
+                             gboolean     *hexpand_p,
+                             gboolean     *vexpand_p)
+{
+  GtkNotebook *notebook = GTK_NOTEBOOK (container);
+  GtkNotebookPrivate *priv = notebook->priv;
+  gboolean hexpand;
+  gboolean vexpand;
+  GList *list;
+  GtkNotebookPage *page;
+
+  hexpand = FALSE;
+  vexpand = FALSE;
+
+  for (list = priv->children; list; list = list->next)
+    {
+      page = list->data;
+
+      hexpand = hexpand ||
+        gtk_widget_compute_expand (page->child, GTK_ORIENTATION_HORIZONTAL);
+
+      vexpand = vexpand ||
+        gtk_widget_compute_expand (page->child, GTK_ORIENTATION_VERTICAL);
+
+      if (hexpand & vexpand)
+        break;
+    }
+
+  *hexpand_p = hexpand;
+  *vexpand_p = vexpand;
+}
+
+static void
 gtk_notebook_class_init (GtkNotebookClass *class)
 {
   GObjectClass   *gobject_class = G_OBJECT_CLASS (class);
@@ -623,6 +656,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->drag_drop = gtk_notebook_drag_drop;
   widget_class->drag_data_get = gtk_notebook_drag_data_get;
   widget_class->drag_data_received = gtk_notebook_drag_data_received;
+  widget_class->compute_expand = gtk_notebook_compute_expand;
 
   container_class->add = gtk_notebook_add;
   container_class->remove = gtk_notebook_remove;
@@ -5423,9 +5457,14 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
     }
   else /* !show_arrows */
     {
+      GtkOrientation tab_expand_orientation;
       gint c = 0;
       *n = 0;
 
+      if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
+        tab_expand_orientation = GTK_ORIENTATION_HORIZONTAL;
+      else
+        tab_expand_orientation = GTK_ORIENTATION_VERTICAL;
       *remaining_space = max - min - tab_overlap - tab_space;
       children = priv->children;
       priv->first_tab = gtk_notebook_search_page (notebook, NULL,
@@ -5441,7 +5480,8 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
 
 	  c++;
 
-	  if (page->expand)
+	  if (page->expand ||
+              (gtk_widget_compute_expand (page->tab_label, tab_expand_orientation)))
 	    (*n)++;
 	}
 
@@ -5501,6 +5541,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   guint border_width;
   gboolean gap_left, packing_changed;
   GtkAllocation child_allocation = { 0, };
+  GtkOrientation tab_expand_orientation;
 
   widget = GTK_WIDGET (notebook);
   container = GTK_CONTAINER (notebook);
@@ -5550,6 +5591,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   bottom_y = top_y + priv->cur_page->allocation.height;
   gap_left = packing_changed = FALSE;
 
+  if (priv->tab_pos == GTK_POS_TOP || priv->tab_pos == GTK_POS_BOTTOM)
+    tab_expand_orientation = GTK_ORIENTATION_HORIZONTAL;
+  else
+    tab_expand_orientation = GTK_ORIENTATION_VERTICAL;
+
   while (*children && *children != last_child)
     {
       page = (*children)->data;
@@ -5576,7 +5622,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 	continue;
 
       tab_extra_space = 0;
-      if (*expanded_tabs && (showarrow || page->expand || priv->homogeneous))
+      if (*expanded_tabs && (showarrow || page->expand || gtk_widget_compute_expand (page->tab_label, tab_expand_orientation) || priv->homogeneous))
 	{
 	  tab_extra_space = *remaining_space / *expanded_tabs;
 	  *remaining_space -= tab_extra_space;
