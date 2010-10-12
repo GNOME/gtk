@@ -6,7 +6,17 @@ X backend-specific functions
 
 <!-- ##### SECTION Long_Description ##### -->
 <para>
-
+The functions in this section are specific to the GDK X11 backend.
+To use them, you need to include the <literal>&lt;gdk/gdkx.h&gt;</literal>
+header and use the X11-specific pkg-config files to build your application
+(either <literal>gdk-x11-3.0</literal> or <literal>gtk+-x11-3.0</literal>.
+To make your code compile with other GDK backends, guard backend-specific
+calls by an ifdef as follows:
+<informalexample><programlisting>
+#ifdef GDK_WINDOWING_X11
+  /* X11-specific calls here... */
+#endif
+</programlisting></informalexample>
 </para>
 
 <!-- ##### SECTION See_Also ##### -->
@@ -27,14 +37,6 @@ Obtains the Xlib window id of the root window of the current screen.
 
 
 
-<!-- ##### MACRO GDK_DISPLAY ##### -->
-<para>
-The current display.
-</para>
-
-@Returns: an Xlib <type>Display*</type>.
-
-
 <!-- ##### MACRO GDK_WINDOW_XDISPLAY ##### -->
 <para>
 Returns the display of a #GdkWindow.
@@ -51,24 +53,6 @@ Returns the X window belonging to a #GdkWindow.
 
 @win: a #GdkWindow.
 @Returns: the Xlib <type>Window</type> of @win.
-
-
-<!-- ##### MACRO GDK_PIXMAP_XDISPLAY ##### -->
-<para>
-Returns the display of a #GdkPixmap.
-</para>
-
-@pix: a #GdkPixmap.
-@Returns: an Xlib <type>Display*</type>.
-
-
-<!-- ##### MACRO GDK_PIXMAP_XID ##### -->
-<para>
-Returns the X pixmap belonging to a #GdkPixmap.
-</para>
-
-@pix: a #GdkPixmap.
-@Returns: the Xlib <type>XPixmap</type> of @win.
 
 
 <!-- ##### MACRO GDK_DISPLAY_XDISPLAY ##### -->
@@ -97,24 +81,6 @@ Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
 @Returns: the ID of @win's X resource.
 
 
-<!-- ##### MACRO GDK_COLORMAP_XDISPLAY ##### -->
-<para>
-Returns the display of a #GdkColormap.
-</para>
-
-@cmap: a #GdkColormap.
-@Returns: an Xlib <type>Display*</type>.
-
-
-<!-- ##### MACRO GDK_COLORMAP_XCOLORMAP ##### -->
-<para>
-Returns the X colormap belonging to a #GdkColormap.
-</para>
-
-@cmap: a #GdkColormap.
-@Returns: an Xlib <type>Colormap</type>.
-
-
 <!-- ##### MACRO GDK_SCREEN_XDISPLAY ##### -->
 <para>
 Returns the display of a #GdkScreen.
@@ -141,15 +107,6 @@ Returns the screen of a #GdkScreen.
 
 @screen: a #GdkScreen
 @Returns: an Xlib <type>Screen*</type>.
-
-
-<!-- ##### MACRO GDK_VISUAL_XVISUAL ##### -->
-<para>
-Returns the X visual belonging to a #GdkVisual.
-</para>
-
-@vis: a #GdkVisual.
-@Returns: an Xlib <type>Visual*</type>.
 
 
 <!-- ##### MACRO GDK_CURSOR_XCURSOR ##### -->
@@ -183,38 +140,6 @@ Another name for GDK_DRAWABLE_XID().
 </para>
 
 @xvisualid: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixmap_foreign_new ##### -->
-<para>
-
-</para>
-
-@anid: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixmap_foreign_new_for_display ##### -->
-<para>
-
-</para>
-
-@display: 
-@anid: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixmap_foreign_new_for_screen ##### -->
-<para>
-
-</para>
-
-@screen: 
-@anid: 
-@width: 
-@height: 
-@depth: 
 @Returns: 
 
 
@@ -265,24 +190,6 @@ Another name for GDK_DRAWABLE_XID().
 
 
 <!-- ##### FUNCTION gdk_window_lookup_for_display ##### -->
-<para>
-
-</para>
-
-@display: 
-@anid: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixmap_lookup ##### -->
-<para>
-</para>
-
-@anid: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_pixmap_lookup_for_display ##### -->
 <para>
 
 </para>
@@ -384,34 +291,6 @@ Another name for GDK_DRAWABLE_XID().
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_x11_colormap_foreign_new ##### -->
-<para>
-
-</para>
-
-@visual: 
-@xcolormap: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_colormap_get_xcolormap ##### -->
-<para>
-
-</para>
-
-@colormap: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_x11_colormap_get_xdisplay ##### -->
-<para>
-
-</para>
-
-@colormap: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_x11_cursor_get_xcursor ##### -->
 <para>
 
@@ -472,6 +351,22 @@ Another name for GDK_DRAWABLE_XID().
 </para>
 
 @display: 
+
+
+<!-- ##### FUNCTION gdk_x11_display_error_trap_push ##### -->
+<para>
+
+</para>
+
+@display:
+
+
+<!-- ##### FUNCTION gdk_x11_display_error_trap_pop_ignored ##### -->
+<para>
+
+</para>
+
+@display:
 
 
 <!-- ##### FUNCTION gdk_x11_display_set_cursor_theme ##### -->
