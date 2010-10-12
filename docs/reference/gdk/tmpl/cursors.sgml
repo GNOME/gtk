@@ -8,10 +8,10 @@ Standard and pixmap cursors
 <para>
 These functions are used to create and destroy cursors.
 There is a number of standard cursors, but it is also
-possible to construct new cursors from pixmaps and
-pixbufs. There may be limitations as to what kinds of
-cursors can be constructed on a given display, see
-gdk_display_supports_cursor_alpha(), 
+possible to construct new cursors from pixbufs. There
+may be limitations as to what kinds of cursors can be
+constructed on a given display, see
+gdk_display_supports_cursor_alpha(),
 gdk_display_supports_cursor_color(),
 gdk_display_get_default_cursor_size() and
 gdk_display_get_maximal_cursor_size().
