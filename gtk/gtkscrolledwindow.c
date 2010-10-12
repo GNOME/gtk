@@ -1453,10 +1453,132 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     {
-      gboolean previous_vvis;
+      gint child_min_width;
+      gint child_min_height;
       gboolean previous_hvis;
+      gboolean previous_vvis;
       guint count = 0;
 
+      /* In the case that both scrollbars are visible in the previous round,
+       * we dont do our guess-work before hand because it's possible some
+       * infinite recursion was detected (leave it up to the child scrollable
+       * widget in this case to drive the scrollbar visibility completely 
+       * with the adjustment values).
+       */
+      if (!priv->vscrollbar_visible || !priv->hscrollbar_visible)
+	{
+
+	  /* Determine scrollbar visibility first via hfw apis */
+	  if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+	    {
+	      gtk_widget_get_preferred_width (child, &child_min_width, NULL);
+	      
+	      if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
+		{
+		  /* First try without a vertical scrollbar if the content will fit the height
+		   * given the extra width of the scrollbar */
+		  gtk_widget_get_preferred_height_for_width (child, allocation->width, 
+							     &child_min_height, NULL);
+		  
+		  if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
+		    {
+		      /* Does the content height fit the allocation height ? */
+		      priv->vscrollbar_visible = child_min_height > allocation->height;
+		      
+		      /* Does the content width fit the allocation with minus a possible scrollbar ? */
+		      priv->hscrollbar_visible = 
+			child_min_width > allocation->width - 
+			(priv->vscrollbar_visible ? sb_width + sb_spacing : 0);
+		      
+		      /* Now that we've guessed the hscrollbar, does the content height fit
+		       * the possible new allocation height ? */
+		      priv->vscrollbar_visible = 
+			child_min_height > allocation->height - 
+			(priv->hscrollbar_visible ? sb_height + sb_spacing : 0);
+		      
+		      /* Now that we've guessed the vscrollbar, does the content width fit
+		       * the possible new allocation width ? */
+		      priv->hscrollbar_visible = 
+			child_min_width > allocation->width - 
+			(priv->vscrollbar_visible ? sb_width + sb_spacing : 0);
+		    }
+		  else /* priv->hscrollbar_policy != GTK_POLICY_AUTOMATIC */
+		    {
+		      priv->hscrollbar_visible = priv->hscrollbar_policy != GTK_POLICY_NEVER;
+		      priv->vscrollbar_visible = child_min_height > allocation->height - 
+			(priv->hscrollbar_visible ? sb_height + sb_spacing : 0);
+		    }
+		}
+	      else /* priv->vscrollbar_policy != GTK_POLICY_AUTOMATIC */
+		{
+		  priv->vscrollbar_visible = priv->vscrollbar_policy != GTK_POLICY_NEVER;
+		  
+		  if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
+		    priv->hscrollbar_visible = 
+		      child_min_width > allocation->width - 
+		      (priv->vscrollbar_visible ? 0 : sb_width + sb_spacing);
+		  else
+		    priv->hscrollbar_visible = priv->hscrollbar_policy != GTK_POLICY_NEVER;
+		}
+	    } 
+	  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
+	    {
+	      gtk_widget_get_preferred_height (child, &child_min_height, NULL);
+	      
+	      if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
+		{
+		  /* First try without a horizontal scrollbar if the content will fit the width
+		   * given the extra height of the scrollbar */
+		  gtk_widget_get_preferred_width_for_height (child, allocation->height, 
+							     &child_min_width, NULL);
+		  
+		  if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
+		    {
+		      /* Does the content width fit the allocation width ? */
+		      priv->hscrollbar_visible = child_min_width > allocation->width;
+		      
+		      /* Does the content height fit the allocation with minus a possible scrollbar ? */
+		      priv->vscrollbar_visible = 
+			child_min_height > allocation->height - 
+			(priv->hscrollbar_visible ? sb_height + sb_spacing : 0);
+		      
+		      /* Now that we've guessed the vscrollbar, does the content width fit
+		       * the possible new allocation width ? */
+		      priv->hscrollbar_visible = 
+			child_min_width > allocation->width - 
+			(priv->vscrollbar_visible ? sb_width + sb_spacing : 0);
+		      
+		      /* Now that we've guessed the hscrollbar, does the content height fit
+		       * the possible new allocation height ? */
+		      priv->vscrollbar_visible = 
+			child_min_height > allocation->height - 
+			(priv->hscrollbar_visible ? sb_height + sb_spacing : 0);
+		    }
+		  else /* priv->vscrollbar_policy != GTK_POLICY_AUTOMATIC */
+		    {
+		      priv->vscrollbar_visible = priv->vscrollbar_policy != GTK_POLICY_NEVER;
+		      priv->hscrollbar_visible = child_min_width > allocation->width - 
+			(priv->vscrollbar_visible ? sb_width + sb_spacing : 0);
+		    }
+		}
+	      else /* priv->hscrollbar_policy != GTK_POLICY_AUTOMATIC */
+		{
+		  priv->hscrollbar_visible = priv->hscrollbar_policy != GTK_POLICY_NEVER;
+		  
+		  if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
+		    priv->vscrollbar_visible = 
+		      child_min_height > allocation->height - 
+		      (priv->hscrollbar_visible ? 0 : sb_height + sb_spacing);
+		  else
+		    priv->vscrollbar_visible = priv->vscrollbar_policy != GTK_POLICY_NEVER;
+		}
+	    }
+	}
+
+      /* Now after guessing scrollbar visibility; fall back on the allocation loop which 
+       * observes the adjustments to detect scrollbar visibility and also avoids 
+       * infinite recursion
+       */
       do
 	{
 	  gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
