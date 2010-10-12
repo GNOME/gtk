@@ -273,7 +273,7 @@ test_position_with_align (GtkTreeView  *tree_view,
 			  gint          row_y,
 			  gint          row_start,
 			  gint          row_height,
-			  gfloat        row_align)
+			  gdouble       row_align)
 {
 	gboolean passed = TRUE;
 	GtkAdjustment *vadj = gtk_tree_view_get_vadjustment (tree_view);
@@ -392,8 +392,8 @@ static void
 test_position (GtkTreeView *tree_view,
 	       GtkTreePath *path,
 	       gboolean     use_align,
-	       gfloat       row_align,
-	       gfloat       col_align)
+	       gdouble      row_align,
+	       gdouble      col_align)
 {
 	gint pos;
 	gchar *path_str;
@@ -453,7 +453,7 @@ static void
 scroll (ScrollFixture *fixture,
 	GtkTreePath   *path,
 	gboolean       use_align,
-	gfloat         row_align)
+	gdouble        row_align)
 {
 	gtk_tree_view_set_cursor (GTK_TREE_VIEW (fixture->tree_view), path,
 				  NULL, FALSE);
@@ -519,7 +519,7 @@ static void
 scroll_after_realize (ScrollFixture *fixture,
 		      GtkTreePath   *path,
 		      gboolean       use_align,
-		      gfloat         row_align)
+		      gdouble        row_align)
 {
 	gtk_widget_show_all (fixture->window);
 
@@ -588,7 +588,7 @@ static void
 scroll_both_realize (ScrollFixture *fixture,
 		     GtkTreePath   *path,
 		     gboolean       use_align,
-		     gfloat         row_align)
+		     gdouble        row_align)
 {
 	GtkTreePath *end;
 
@@ -973,7 +973,7 @@ test_type_string (int test_type)
 
 static char *
 align_string (gboolean use_align,
-	      gfloat   row_align)
+	      gdouble  row_align)
 {
 	char *ret;
 
@@ -989,7 +989,7 @@ add_test (const char *path,
 	  gboolean    mixed,
 	  int         test_type,
 	  gboolean    use_align,
-	  gfloat      row_align,
+	  gdouble     row_align,
 	  void (* setup) (ScrollFixture *, gconstpointer),
 	  void (* scroll_func) (ScrollFixture *, gconstpointer))
 {
@@ -1014,7 +1014,7 @@ static void
 add_tests (gboolean mixed,
 	   int test_type,
 	   gboolean use_align,
-	   gfloat row_align,
+	   gdouble  row_align,
 	   void (*scroll_func) (ScrollFixture *, gconstpointer))
 {
 	void (* setup) (ScrollFixture *, gconstpointer);
