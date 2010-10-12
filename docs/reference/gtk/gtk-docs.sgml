@@ -127,6 +127,7 @@ that is, GUI components such as GtkButton or GtkTextView.
   <part  id="gtkbase">
     <title>GTK+ Core Reference</title>
     <xi:include href="xml/gtkmain.xml" />
+    <xi:include href="xml/gtkfeatures.xml" />
     <xi:include href="xml/gtkaccelgroup.xml" />
     <xi:include href="xml/gtkaccelmap.xml" />
     <xi:include href="xml/gtkclipboard.xml" />
@@ -140,7 +141,6 @@ that is, GUI components such as GtkButton or GtkTextView.
     <xi:include href="xml/gtkenums.xml" />
     <xi:include href="xml/gtkstyle.xml" />
     <xi:include href="xml/gtkselection.xml" />
-    <xi:include href="xml/gtkfeatures.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
   </part>
@@ -365,12 +365,12 @@ that is, GUI components such as GtkButton or GtkTextView.
 
     <chapter id="AbstractObjects">
       <title>Abstract Base Classes</title>
-      <xi:include href="xml/gtkbin.xml" />
+      <xi:include href="xml/gtkwidget.xml" />
       <xi:include href="xml/gtkcontainer.xml" />
+      <xi:include href="xml/gtkbin.xml" />
       <xi:include href="xml/gtkmenushell.xml" />
       <xi:include href="xml/gtkmisc.xml" />
       <xi:include href="xml/gtkrange.xml" />
-      <xi:include href="xml/gtkwidget.xml" />
       <xi:include href="xml/gtkimcontext.xml" />
     </chapter>
 
