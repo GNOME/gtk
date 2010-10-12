@@ -126,8 +126,7 @@ static void gtk_theming_engine_render_handle    (GtkThemingEngine *engine,
                                                  gdouble           x,
                                                  gdouble           y,
                                                  gdouble           width,
-                                                 gdouble           height,
-                                                 GtkOrientation    orientation);
+                                                 gdouble           height);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -1998,8 +1997,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
                                   gdouble           x,
                                   gdouble           y,
                                   gdouble           width,
-                                  gdouble           height,
-                                  GtkOrientation    orientation)
+                                  gdouble           height)
 {
   GtkStateFlags flags;
   GdkColor *bg_color;
@@ -2023,7 +2021,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
   if (gtk_theming_engine_has_class (engine, "paned"))
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (width > height)
         for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
           render_dot (cr, &lighter, &darker, xx, y + height / 2 - 1, 3);
       else

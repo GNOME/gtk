@@ -3135,8 +3135,7 @@ gtk_default_draw_handle (GtkStyle      *style,
                      (gdouble) x,
                      (gdouble) y,
                      (gdouble) width,
-                     (gdouble) height,
-                     orientation);
+                     (gdouble) height);
 
   cairo_restore (cr);
   gtk_style_context_restore (context);

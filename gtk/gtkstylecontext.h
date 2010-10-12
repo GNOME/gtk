@@ -255,8 +255,13 @@ void gtk_render_handle    (GtkStyleContext *context,
                            gdouble          x,
                            gdouble          y,
                            gdouble          width,
-                           gdouble          height,
-                           GtkOrientation   orientation);
+                           gdouble          height);
+void gtk_render_progress  (GtkStyleContext *context,
+                           cairo_t         *cr,
+                           gdouble          x,
+                           gdouble          y,
+                           gdouble          width,
+                           gdouble          height);
 
 G_END_DECLS
 

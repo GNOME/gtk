@@ -2385,8 +2385,7 @@ gtk_render_handle (GtkStyleContext *context,
                    gdouble          x,
                    gdouble          y,
                    gdouble          width,
-                   gdouble          height,
-                   GtkOrientation   orientation)
+                   gdouble          height)
 {
   GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
@@ -2400,5 +2399,5 @@ gtk_render_handle (GtkStyleContext *context,
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
-  engine_class->render_handle (priv->theming_engine, cr, x, y, width, height, orientation);
+  engine_class->render_handle (priv->theming_engine, cr, x, y, width, height);
 }
