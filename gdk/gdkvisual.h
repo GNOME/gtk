@@ -45,13 +45,29 @@ G_BEGIN_DECLS
 typedef struct _GdkVisualPrivate  GdkVisualPrivate;
 typedef struct _GdkVisualClass    GdkVisualClass;
 
-/* Types of visuals.
- *   StaticGray:
- *   Grayscale:
- *   StaticColor:
- *   PseudoColor:
- *   TrueColor:
- *   DirectColor:
+/**
+ * GdkVisualType:
+ * @GDK_VISUAL_STATIC_GRAY: Each pixel value indexes a grayscale value
+ *     directly.
+ * @GDK_VISUAL_GRAYSCALE: Each pixel is an index into a color map that
+ *     maps pixel values into grayscale values. The color map can be
+ *     changed by an application.
+ * @GDK_VISUAL_STATIC_COLOR: Each pixel value is an index into a predefined,
+ *     unmodifiable color map that maps pixel values into RGB values.
+ * @GDK_VISUAL_PSEUDO_COLOR: Each pixel is an index into a color map that
+ *     maps pixel values into rgb values. The color map can be changed by
+ *     an application.
+ * @GDK_VISUAL_TRUE_COLOR: Each pixel value directly contains red, green,
+ *     and blue components. Use gdk_visual_get_red_pixel_details(), etc,
+ *     to obtain information about how the components are assembled into
+ *     a pixel value.
+ * @GDK_VISUAL_DIRECT_COLOR: Each pixel value contains red, green, and blue
+ *     components as for %GDK_VISUAL_TRUE_COLOR, but the components are
+ *     mapped via a color table into the final output table instead of
+ *     being converted directly.
+ *
+ * A set of values that describe the manner in which the pixel values
+ * for a visual are converted into RGB values for display.
  */
 typedef enum
 {
