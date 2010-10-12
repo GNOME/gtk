@@ -5507,7 +5507,7 @@ gtk_window_resize_grip_is_visible (GtkWindow *window)
  * gtk_window_get_has_resize_grip:
  * @window: a #GtkWindow
  *
- * Determines whether the window may has a resize grip.
+ * Determines whether the window may have a resize grip.
  *
  * Returns: %TRUE if the window has a resize grip.
  *
