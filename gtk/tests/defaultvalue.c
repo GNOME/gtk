@@ -275,6 +275,11 @@ test_type (gconstpointer data)
 	   strcmp (pspec->name, "style") == 0))
 	continue;
 
+      /* resize-grip-visible is determined at runtime */
+      if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
+          (strcmp (pspec->name, "resize-grip-visible") == 0))
+        continue;
+
       if (g_test_verbose ())
       g_print ("Property %s.%s\n", 
 	     g_type_name (pspec->owner_type),
