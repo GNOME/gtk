@@ -14,22 +14,22 @@ not require extensive effort on the user's part.
 
 <para>
 GTK+ treats a dialog as a window split vertically. The top section is a
-#GtkVBox, and is where widgets such as a #GtkLabel or a #GtkEntry should
-be packed. The bottom area is known as the
-<structfield>action_area</structfield>. This is generally used for
-packing buttons into the dialog which may perform functions such as
-cancel, ok, or apply. The two areas are separated by a #GtkHSeparator.
+#GtkVBox known as the <structfield>content_area</structfield>, and is
+where widgets such as a #GtkLabel or a #GtkEntry should be packed.
+The bottom area is known as the <structfield>action_area</structfield>.
+This is generally used for packing buttons into the dialog which may
+perform functions such as cancel, ok, or apply.
 </para>
 
 <para>
-#GtkDialog boxes are created with a call to gtk_dialog_new() or
-gtk_dialog_new_with_buttons(). gtk_dialog_new_with_buttons() is recommended; it
-allows you to set the dialog title, some convenient flags, and add simple
+GtkDialog boxes are created with a call to gtk_dialog_new() or
+gtk_dialog_new_with_buttons(). gtk_dialog_new_with_buttons() is recommended;
+it allows you to set the dialog title, some convenient flags, and add simple
 buttons.
 </para>
 
 <para>
-If 'dialog' is a newly created dialog, the two primary areas of the window 
+If 'dialog' is a newly created dialog, the two primary areas of the window
 can be accessed through gtk_dialog_get_content_area() and
 gtk_dialog_get_action_area(), as can be seen from the example, below.
 </para>
@@ -196,11 +196,6 @@ as any other #GtkHButtonBox.
 @dialog: 
 @arg1: 
 
-<!-- ##### ARG GtkDialog:has-separator ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkDialog:action-area-border ##### -->
 <para>
 
@@ -230,8 +225,6 @@ Flags used to influence dialog construction.
   see gtk_window_set_modal().
 @GTK_DIALOG_DESTROY_WITH_PARENT: Destroy the dialog when its
   parent is destroyed, see gtk_window_set_destroy_with_parent().
-@GTK_DIALOG_NO_SEPARATOR: Don't put a separator between the
-  action area and the dialog content.
 
 <!-- ##### ENUM GtkResponseType ##### -->
 <para>
@@ -325,15 +318,6 @@ directly, but into the @vbox and @action_area, as described above.
 @response_id: 
 
 
-<!-- ##### FUNCTION gtk_dialog_get_has_separator ##### -->
-<para>
-
-</para>
-
-@dialog: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gtk_dialog_set_default_response ##### -->
 <para>
 
@@ -341,15 +325,6 @@ directly, but into the @vbox and @action_area, as described above.
 
 @dialog: 
 @response_id: 
-
-
-<!-- ##### FUNCTION gtk_dialog_set_has_separator ##### -->
-<para>
-
-</para>
-
-@dialog: 
-@setting: 
 
 
 <!-- ##### FUNCTION gtk_dialog_set_response_sensitive ##### -->
