@@ -110,6 +110,9 @@ scroll_fixture_setup (ScrollFixture *fixture,
 	fixture->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
 	sw = gtk_scrolled_window_new (NULL, NULL);
+	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+					GTK_POLICY_NEVER,
+					GTK_POLICY_ALWAYS);
 	gtk_container_add (GTK_CONTAINER (fixture->window), sw);
 
 	fixture->tree_view = gtk_tree_view_new_with_model (model);
