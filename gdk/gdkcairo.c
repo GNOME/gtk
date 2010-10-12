@@ -32,13 +32,12 @@
  *
  * <link href="http://cairographics.org">Cairo</link> is a graphics
  * library that supports vector graphics and image compositing that
- * can be used with GDK. Since 2.8, GTK+ does most of its drawing
- * using Cairo.
+ * can be used with GDK. GTK+ does all of its drawing using Cairo.
  *
  * GDK does not wrap the Cairo API, instead it allows to create Cairo
- * contexts which can be used to draw on #GdkDrawables. Additional
- * functions allow to convert GDK's rectangles and regions into
- * Cairo paths and to use pixbufs as sources for drawing operations.
+ * contexts which can be used to draw on #GdkWindows. Additional
+ * functions allow use #GdkRectangles with cairo and to use #GdkColors,
+ * #GdkPixbufs and #GdkWindows as sources for drawing operations.
  */
 
 
