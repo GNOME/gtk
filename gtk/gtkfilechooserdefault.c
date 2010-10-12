@@ -6367,7 +6367,15 @@ show_and_select_files (GtkFileChooserDefault *impl,
           
       if (_gtk_file_system_model_iter_is_visible (fsmodel, &iter))
         {
+          GtkTreePath *path;
+
           gtk_tree_selection_select_iter (selection, &iter);
+
+          path = gtk_tree_model_get_path (fsmodel, &iter);
+          gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view),
+                                    path, NULL, FALSE);
+          gtk_tree_path_free (path);
+
           selected_a_file = TRUE;
         }
     }
