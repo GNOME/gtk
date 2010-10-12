@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <unistd.h>
+#include <math.h>
 
 #define VIEW_WIDTH 320
 #define VIEW_HEIGHT 240
@@ -250,7 +251,7 @@ get_row_start_for_index (GtkTreeView *tree_view, int index)
 static enum Pos
 get_pos_from_path (GtkTreeView   *tree_view,
 		   GtkTreePath   *path,
-		   gint           row_height,
+		   gdouble        row_height,
 		   GtkAdjustment *vadj)
 {
 	int row_start;
@@ -272,7 +273,7 @@ test_position_with_align (GtkTreeView  *tree_view,
 			  enum Pos      pos,
 			  gint          row_y,
 			  gint          row_start,
-			  gint          row_height,
+			  gdouble       row_height,
 			  gdouble       row_align)
 {
 	gboolean passed = TRUE;
@@ -333,7 +334,8 @@ test_position_with_align (GtkTreeView  *tree_view,
 			 *      (ie. the row's center is at the
 			 *       center of the view).
 			 */
-			if (row_y != (int)(vadj->page_size / 2 - row_height / 2))
+			gdouble middle = vadj->page_size / 2 - row_height / 2;
+			if (row_y != ceil (middle) && row_y != floor (middle))
 				passed = FALSE;
 		}
 		break;
@@ -372,8 +374,8 @@ test_position_with_align (GtkTreeView  *tree_view,
 
 static gboolean
 test_position_without_align (GtkTreeView *tree_view,
-			     gint         row_start,
-			     gint         row_height)
+			     gdouble      row_start,
+			     gdouble      row_height)
 {
 	GtkAdjustment *vadj = gtk_tree_view_get_vadjustment (tree_view);
 
