@@ -36,21 +36,6 @@ orientation of the bar, optional text can be displayed along with
 the bar, and the step size used in activity mode can be set.
 </para>
 
-<note>
-<para>
-The #GtkProgressBar/#GtkProgress API in GTK 1.2 was bloated, needlessly complex
-and hard to use properly.  Therefore #GtkProgress has been deprecated
-completely and the #GtkProgressBar API has been reduced to the following 10
-functions: gtk_progress_bar_new(), gtk_progress_bar_pulse(), 
-gtk_progress_bar_set_text(), gtk_progress_bar_set_fraction(), 
-gtk_progress_bar_set_pulse_step(), gtk_progress_bar_set_orientation(), 
-gtk_progress_bar_get_text(), gtk_progress_bar_get_fraction(), 
-gtk_progress_bar_get_pulse_step(), gtk_progress_bar_get_orientation(). 
-These have been grouped at the beginning of this section, followed by 
-a large chunk of deprecated 1.2 compatibility functions.
-</para>
-</note>
-
 <!-- ##### SECTION See_Also ##### -->
 <para>
 
@@ -79,7 +64,7 @@ and should be accessed using the functions below.
 
 </para>
 
-<!-- ##### ARG GtkProgressBar:orientation ##### -->
+<!-- ##### ARG GtkProgressBar:inverted ##### -->
 <para>
 
 </para>
@@ -164,27 +149,16 @@ Creates a new #GtkProgressBar.
 @Returns: 
 
 
-<!-- ##### ENUM GtkProgressBarOrientation ##### -->
-<para>
-An enumeration representing possible orientations and growth
-directions for the visible progress bar.
-</para>
-
-@GTK_PROGRESS_LEFT_TO_RIGHT: A horizontal progress bar growing from left to right.
-@GTK_PROGRESS_RIGHT_TO_LEFT: A horizontal progress bar growing from right to left.
-@GTK_PROGRESS_BOTTOM_TO_TOP: A vertical progress bar growing from bottom to top.
-@GTK_PROGRESS_TOP_TO_BOTTOM: A vertical progress bar growing from top to bottom.
-
-<!-- ##### FUNCTION gtk_progress_bar_set_orientation ##### -->
+<!-- ##### FUNCTION gtk_progress_bar_set_inverted ##### -->
 <para>
 
 </para>
 
 @pbar: 
-@orientation: 
+@inverted:
 
 
-<!-- ##### FUNCTION gtk_progress_bar_get_orientation ##### -->
+<!-- ##### FUNCTION gtk_progress_bar_get_inverted ##### -->
 <para>
 
 </para>
@@ -263,5 +237,3 @@ directions for the visible progress bar.
 
 @pbar: 
 @Returns: 
-
-
