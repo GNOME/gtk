@@ -632,8 +632,6 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gint exterior_size, interior_size, pad, thickness;
   gdouble radius;
 
-  /* FIXME: set clipping */
-
   flags = gtk_theming_engine_get_state (engine);
   path = gtk_theming_engine_get_path (engine);
   radius = MIN (width, height) / 2 - 0.5;
@@ -897,7 +895,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   cairo_pattern_t *pattern;
   GtkStateFlags flags;
   gboolean prelight;
-  gdouble progress;
+  gdouble progress, alpha = 1;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -918,6 +916,9 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                           NULL);
 
   prelight = gtk_theming_engine_is_state_set (engine, GTK_STATE_PRELIGHT, &progress);
+
+  cairo_translate (cr, x, y);
+  cairo_scale (cr, width, height);
 
   if (prelight || progress > 0 )
     {
@@ -942,53 +943,89 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 
       if (pattern && other_pattern)
         {
-          gdouble offset0, red0, green0, blue0, alpha0;
-          gdouble offset1, red1, green1, blue1, alpha1;
-          gdouble x00, x01, y00, y01, x10, x11, y10, y11;
+          cairo_pattern_type_t type, other_type;
           gint n0, n1;
-          guint i;
-
-          cairo_pattern_get_linear_points (pattern, &x00, &y00, &x01, &y01);
-          cairo_pattern_get_linear_points (other_pattern, &x10, &y10, &x11, &y11);
-
-          new_pattern = cairo_pattern_create_linear (x00 + (x10 - x00) * progress,
-                                                     y00 + (y10 - y00) * progress,
-                                                     x01 + (x11 - x01) * progress,
-                                                     y01 + (y11 - y01) * progress);
-          cairo_pattern_set_filter (new_pattern, CAIRO_FILTER_FAST);
 
           cairo_pattern_get_color_stop_count (pattern, &n0);
           cairo_pattern_get_color_stop_count (other_pattern, &n1);
-          i = 0;
+          type = cairo_pattern_get_type (pattern);
+          other_type = cairo_pattern_get_type (other_pattern);
 
-          /* Blend both gradients into one */
-          while (i < n0 && i < n1)
+          if (type == other_type && n0 == n1)
             {
-              cairo_pattern_get_color_stop_rgba (pattern, i,
-                                                 &offset0,
-                                                 &red0, &green0, &blue0,
-                                                 &alpha0);
-              cairo_pattern_get_color_stop_rgba (other_pattern, i,
-                                                 &offset1,
-                                                 &red1, &green1, &blue1,
-                                                 &alpha1);
+              gdouble offset0, red0, green0, blue0, alpha0;
+              gdouble offset1, red1, green1, blue1, alpha1;
+              gdouble x00, x01, y00, y01, x10, x11, y10, y11;
+              gdouble r00, r01, r10, r11;
+              guint i;
 
-              cairo_pattern_add_color_stop_rgba (new_pattern,
-                                                 offset0 + ((offset1 - offset0) * progress),
-                                                 red0 + ((red1 - red0) * progress),
-                                                 green0 + ((green1 - green0) * progress),
-                                                 blue0 + ((blue1 - blue0) * progress),
-                                                 alpha0 + ((alpha1 - alpha0) * progress));
-              i++;
+              if (type == CAIRO_PATTERN_TYPE_LINEAR)
+                {
+                  cairo_pattern_get_linear_points (pattern, &x00, &y00, &x01, &y01);
+                  cairo_pattern_get_linear_points (other_pattern, &x10, &y10, &x11, &y11);
+
+                  new_pattern = cairo_pattern_create_linear (x00 + (x10 - x00) * progress,
+                                                             y00 + (y10 - y00) * progress,
+                                                             x01 + (x11 - x01) * progress,
+                                                             y01 + (y11 - y01) * progress);
+                }
+              else
+                {
+                  cairo_pattern_get_radial_circles (pattern, &x00, &y00, &r00, &x01, &y01, &r01);
+                  cairo_pattern_get_radial_circles (other_pattern, &x10, &y10, &r10, &x11, &y11, &r11);
+
+                  new_pattern = cairo_pattern_create_radial (x00 + (x10 - x00) * progress,
+                                                             y00 + (y10 - y00) * progress,
+                                                             r00 + (r10 - r00) * progress,
+                                                             x01 + (x11 - x01) * progress,
+                                                             y01 + (y11 - y01) * progress,
+                                                             r01 + (r11 - r01) * progress);
+                }
+
+              cairo_pattern_set_filter (new_pattern, CAIRO_FILTER_FAST);
+              i = 0;
+
+              /* Blend both gradients into one */
+              while (i < n0 && i < n1)
+                {
+                  cairo_pattern_get_color_stop_rgba (pattern, i,
+                                                     &offset0,
+                                                     &red0, &green0, &blue0,
+                                                     &alpha0);
+                  cairo_pattern_get_color_stop_rgba (other_pattern, i,
+                                                     &offset1,
+                                                     &red1, &green1, &blue1,
+                                                     &alpha1);
+
+                  cairo_pattern_add_color_stop_rgba (new_pattern,
+                                                     offset0 + ((offset1 - offset0) * progress),
+                                                     red0 + ((red1 - red0) * progress),
+                                                     green0 + ((green1 - green0) * progress),
+                                                     blue0 + ((blue1 - blue0) * progress),
+                                                     alpha0 + ((alpha1 - alpha0) * progress));
+                  i++;
+                }
             }
+          else
+            {
+              /* Different pattern types, or different color
+               * stop counts, alpha blend both patterns.
+               */
+              cairo_rectangle (cr, 0, 0, 1, 1);
+              cairo_set_source (cr, other_pattern);
+              cairo_fill (cr);
 
-          /* FIXME: Handle remaining color stops in both source patterns */
+              /* Set alpha for posterior drawing
+               * of the target pattern
+               */
+              alpha = 1 - progress;
+            }
         }
       else if (pattern || other_pattern)
         {
           cairo_pattern_t *p;
           GdkColor *c;
-          gdouble x0, y0, x1, y1;
+          gdouble x0, y0, x1, y1, r0, r1;
           gdouble red0, green0, blue0;
           gdouble red1, green1, blue1;
           gint n, i;
@@ -1006,8 +1043,17 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
               c = gtk_theming_engine_has_class (engine, "entry") ? base_color : bg_color;
             }
 
-          cairo_pattern_get_linear_points (p, &x0, &y0, &x1, &y1);
-          new_pattern = cairo_pattern_create_linear (x0, y0, x1, y1);
+          if (cairo_pattern_get_type (p) == CAIRO_PATTERN_TYPE_LINEAR)
+            {
+              cairo_pattern_get_linear_points (p, &x0, &y0, &x1, &y1);
+              new_pattern = cairo_pattern_create_linear (x0, y0, x1, y1);
+            }
+          else
+            {
+              cairo_pattern_get_radial_circles (p, &x0, &y0, &r0, &x1, &y1, &r1);
+              new_pattern = cairo_pattern_create_radial (x0, y0, r0, x1, y1, r1);
+            }
+
           cairo_pattern_get_color_stop_count (p, &n);
 
           red0 = c->red / 65535.;
@@ -1067,14 +1113,11 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
         gdk_color_free (other_base);
     }
 
+  cairo_rectangle (cr, 0, 0, 1, 1);
+
   if (pattern)
     {
-      cairo_translate (cr, x, y);
-      cairo_scale (cr, width, height);
-
-      cairo_rectangle (cr, 0, 0, 1, 1);
       cairo_set_source (cr, pattern);
-
       cairo_pattern_destroy (pattern);
     }
   else
@@ -1083,8 +1126,6 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
         gdk_cairo_set_source_color (cr, base_color);
       else
         gdk_cairo_set_source_color (cr, bg_color);
-
-      cairo_rectangle (cr, x, y, width, height);
     }
 
   if (gtk_theming_engine_has_class (engine, "tooltip"))
@@ -1095,7 +1136,18 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
       cairo_stroke (cr);
     }
   else
-    cairo_fill (cr);
+    {
+      if (alpha == 1)
+        cairo_fill (cr);
+      else
+        {
+          cairo_pattern_t *mask;
+
+          mask = cairo_pattern_create_rgba (1, 1, 1, alpha);
+          cairo_mask (cr, mask);
+          cairo_pattern_destroy (mask);
+        }
+    }
 
   cairo_restore (cr);
 
@@ -1543,8 +1595,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
-
-  /* FIXME: Set clipping */
 
   gtk_theming_engine_get (engine, flags,
                           "foreground-color", &fg_color,

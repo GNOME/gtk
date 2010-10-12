@@ -49,6 +49,12 @@ GtkGradient * gtk_gradient_new_linear (gdouble x0,
                                        gdouble y0,
                                        gdouble x1,
                                        gdouble y1);
+GtkGradient * gtk_gradient_new_radial (gdouble x0,
+				       gdouble y0,
+				       gdouble radius0,
+				       gdouble x1,
+				       gdouble y1,
+				       gdouble radius1);
 
 void gtk_gradient_add_color_stop (GtkGradient      *gradient,
                                   gdouble           offset,

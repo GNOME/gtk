@@ -74,6 +74,8 @@ struct GtkGradient
   gdouble y0;
   gdouble x1;
   gdouble y1;
+  gdouble radius0;
+  gdouble radius1;
 
   GArray *stops;
 
@@ -269,6 +271,33 @@ gtk_gradient_new_linear (gdouble x0,
   gradient->y0 = y0;
   gradient->x1 = x1;
   gradient->y1 = y1;
+  gradient->radius0 = 0;
+  gradient->radius1 = 0;
+
+  gradient->ref_count = 1;
+
+  return gradient;
+}
+
+GtkGradient *
+gtk_gradient_new_radial (gdouble x0,
+			 gdouble y0,
+			 gdouble radius0,
+			 gdouble x1,
+			 gdouble y1,
+			 gdouble radius1)
+{
+  GtkGradient *gradient;
+
+  gradient = g_slice_new (GtkGradient);
+  gradient->stops = g_array_new (FALSE, FALSE, sizeof (ColorStop));
+
+  gradient->x0 = x0;
+  gradient->y0 = y0;
+  gradient->x1 = x1;
+  gradient->y1 = y1;
+  gradient->radius0 = radius0;
+  gradient->radius1 = radius1;
 
   gradient->ref_count = 1;
 
@@ -336,8 +365,14 @@ gtk_gradient_resolve (GtkGradient      *gradient,
   g_return_val_if_fail (GTK_IS_STYLE_SET (style_set), FALSE);
   g_return_val_if_fail (resolved_gradient != NULL, FALSE);
 
-  pattern = cairo_pattern_create_linear (gradient->x0, gradient->y0,
-                                         gradient->x1, gradient->y1);
+  if (gradient->radius0 == 0 && gradient->radius1 == 0)
+    pattern = cairo_pattern_create_linear (gradient->x0, gradient->y0,
+                                           gradient->x1, gradient->y1);
+  else
+    pattern = cairo_pattern_create_radial (gradient->x0, gradient->y0,
+                                           gradient->radius0,
+                                           gradient->x1, gradient->y1,
+                                           gradient->radius1);
 
   for (i = 0; i < gradient->stops->len; i++)
     {
