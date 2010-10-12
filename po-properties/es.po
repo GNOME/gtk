@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
 "POT-Creation-Date: 2010-10-08 06:20+0000\n"
-"PO-Revision-Date: 2010-10-12 21:51+0200\n"
+"PO-Revision-Date: 2010-10-13 01:23+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -6983,52 +6983,47 @@ msgstr "Cómo posicionar en el espacio horizontal adicional"
 
 #: ../gtk/gtkwidget.c:967
 msgid "How to position in extra vertical space"
-msgstr ""
+msgstr "Cómo posicionar en el espacio vertical adicional"
 
 #: ../gtk/gtkwidget.c:986
-#, fuzzy
 msgid "Margin on Left"
-msgstr "Margen"
+msgstr "Margen a la izquierda"
 
 #: ../gtk/gtkwidget.c:987
 msgid "Pixels of extra space on the left side"
-msgstr ""
+msgstr "Píxeles de espacio adicional en la parte izquierda"
 
 #: ../gtk/gtkwidget.c:1007
 msgid "Margin on Right"
-msgstr ""
+msgstr "Margen a la derecha"
 
 #: ../gtk/gtkwidget.c:1008
-#, fuzzy
 msgid "Pixels of extra space on the right side"
-msgstr "Píxeles de espacio en blanco encima de los párrafos"
+msgstr "Píxeles de espacio adicional en la parte derecha"
 
 #: ../gtk/gtkwidget.c:1028
-#, fuzzy
 msgid "Margin on Top"
-msgstr "Margen"
+msgstr "Margen arriba"
 
 #: ../gtk/gtkwidget.c:1029
-#, fuzzy
 msgid "Pixels of extra space on the top side"
-msgstr "Píxeles de espacio en blanco encima de los párrafos"
+msgstr "Píxeles de espacio adicional en la parte superior"
 
 #: ../gtk/gtkwidget.c:1049
 msgid "Margin on Bottom"
-msgstr ""
+msgstr "Margen abajo"
 
 #: ../gtk/gtkwidget.c:1050
 msgid "Pixels of extra space on the bottom side"
-msgstr ""
+msgstr "Píxeles de espacio adicional en la parte inferior"
 
 #: ../gtk/gtkwidget.c:1067
-#, fuzzy
 msgid "All Margins"
-msgstr "Margen"
+msgstr "Todos los márgenes"
 
 #: ../gtk/gtkwidget.c:1068
 msgid "Pixels of extra space on all four sides"
-msgstr ""
+msgstr "Píxeles de espacio adicionales en las cuatro partes"
 
 #: ../gtk/gtkwidget.c:2741
 msgid "Interior Focus"
