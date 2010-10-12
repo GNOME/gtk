@@ -5010,7 +5010,46 @@ gtk_window_unrealize (GtkWidget *widget)
 static GdkWindowEdge
 get_grip_edge (GtkWidget *widget)
 {
-  return gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ? GDK_WINDOW_EDGE_SOUTH_EAST : GDK_WINDOW_EDGE_SOUTH_WEST;
+  return gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR
+         ? GDK_WINDOW_EDGE_SOUTH_EAST
+         : GDK_WINDOW_EDGE_SOUTH_WEST;
+}
+
+static GdkWindowEdge
+get_drag_edge (GtkWidget *widget)
+{
+  GdkGeometry geometry;
+  guint flags;
+  gboolean hresizable;
+  gboolean vresizable;
+  GtkTextDirection dir;
+  GdkWindowEdge edge;
+
+  gtk_window_compute_hints (GTK_WINDOW (widget), &geometry, &flags);
+
+  if ((flags & GDK_HINT_MIN_SIZE) && (flags & GDK_HINT_MAX_SIZE))
+    {
+      hresizable = geometry.min_width < geometry.max_width;
+      vresizable = geometry.min_height < geometry.max_height;
+    }
+  else
+    {
+      hresizable = TRUE;
+      vresizable = TRUE;
+    }
+
+  dir = gtk_widget_get_direction (widget);
+
+  if (hresizable && vresizable)
+    edge = dir == GTK_TEXT_DIR_LTR ? GDK_WINDOW_EDGE_SOUTH_EAST : GDK_WINDOW_EDGE_SOUTH_WEST;
+  else if (hresizable)
+    edge = dir == GTK_TEXT_DIR_LTR ? GDK_WINDOW_EDGE_EAST : GDK_WINDOW_EDGE_WEST;
+  else if (vresizable)
+    edge = GDK_WINDOW_EDGE_SOUTH;
+  else
+    edge = (GdkWindowEdge)-1;
+
+  return edge;
 }
 
 static void
@@ -5028,12 +5067,28 @@ set_grip_cursor (GtkWindow *window)
 
   if (gtk_widget_is_sensitive (widget))
     {
-      edge = get_grip_edge (widget);
-
-      if (edge == GDK_WINDOW_EDGE_SOUTH_EAST)
-        cursor_type = GDK_BOTTOM_RIGHT_CORNER;
-      else
-        cursor_type = GDK_BOTTOM_LEFT_CORNER;
+      edge = get_drag_edge (widget);
+      switch (edge)
+        {
+        case GDK_WINDOW_EDGE_EAST:
+          cursor_type = GDK_RIGHT_SIDE;
+          break;
+        case GDK_WINDOW_EDGE_SOUTH_EAST:
+          cursor_type = GDK_BOTTOM_RIGHT_CORNER;
+          break;
+        case GDK_WINDOW_EDGE_SOUTH:
+          cursor_type = GDK_BOTTOM_SIDE;
+          break;
+        case GDK_WINDOW_EDGE_SOUTH_WEST:
+          cursor_type = GDK_BOTTOM_LEFT_CORNER;
+          break;
+        case GDK_WINDOW_EDGE_WEST:
+          cursor_type = GDK_LEFT_SIDE;
+          break;
+        default:
+          cursor_type = GDK_LEFT_PTR;
+          break;
+        }
 
       display = gtk_widget_get_display (widget);
       cursor = gdk_cursor_new_for_display (display, cursor_type);
@@ -5665,12 +5720,16 @@ gtk_window_button_press_event (GtkWidget *widget,
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
 
   if (event->window == priv->grip_window)
-    gtk_window_begin_resize_drag (GTK_WINDOW (widget),
-                                  get_grip_edge (widget),
-                                  event->button,
-                                  event->x_root,
-                                  event->y_root,
-                                  event->time);
+    {
+      gtk_window_begin_resize_drag (GTK_WINDOW (widget),
+                                    get_drag_edge (widget),
+                                    event->button,
+                                    event->x_root,
+                                    event->y_root,
+                                    event->time);
+
+      return TRUE;
+    }
 
   return FALSE;
 }
