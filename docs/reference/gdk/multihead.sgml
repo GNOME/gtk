@@ -106,12 +106,12 @@ gtk_window_set_screen (window, second_screen);<!--
       <para>
 	<variablelist>
 	  <varlistentry>
-	    <term><link linkend="gdk-GdkDisplay">GdkDisplay</link></term>
+	    <term><link linkend="GdkDisplay">GdkDisplay</link></term>
 	    <listitem><para>the GDK Object used to represent and manipulate display
 		related data</para></listitem>
 	  </varlistentry>
 	  <varlistentry>
-	    <term><link linkend="gdk-GdkScreen">GdkScreen</link></term>
+	    <term><link linkend="GdkScreen">GdkScreen</link></term>
 	    <listitem><para>the GDK Object used to represent and query screen related
 		data</para></listitem>
 	  </varlistentry>
