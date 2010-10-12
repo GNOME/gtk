@@ -78,9 +78,10 @@ typedef struct _GtkWindow          GtkWindow;
  * @width: the width of the widget's allocated area.
  * @height: the height of the widget's allocated area.
  *
- * A <structname>GtkAllocation</structname> of a widget represents region which has been allocated to the
- * widget by its parent. It is a subregion of its parents allocation. See
- * <xref linkend="size-allocation"/> for more information.
+ * A <structname>GtkAllocation</structname> of a widget represents region
+ * which has been allocated to the widget by its parent. It is a subregion
+ * of its parents allocation. See <xref linkend="geometry-management"/> for
+ * more information.
  */
 typedef 	GdkRectangle	   GtkAllocation;
 

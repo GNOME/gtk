@@ -315,7 +315,6 @@ that is, GUI components such as GtkButton or GtkTextView.
       <xi:include href="xml/gtktable.xml" />
       <xi:include href="xml/gtkexpander.xml" />
       <xi:include href="xml/gtkorientable.xml" />
-      <xi:include href="xml/gtksizerequest.xml" />
     </chapter>
 
     <chapter id="Ornaments">
