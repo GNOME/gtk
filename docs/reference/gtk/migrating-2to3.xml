@@ -672,6 +672,7 @@ gtk_arrow_draw (GtkWidget *widget,
      gtk_statusbar_set_has_resize_grip() and gtk_statusbar_get_has_resize_grip()
      have disappeared, and instead there are now
      gtk_window_set_has_resize_grip() and gtk_window_get_has_resize_grip().
+    </para>
   </section>
 
   <section>
