@@ -54,8 +54,8 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
                 gdouble               distance_bottom,
                 gdouble               distance_left,
                 gdouble               distance_right,
-                GtkSliceSideModifier  vertical_modifier,
-                GtkSliceSideModifier  horizontal_modifier)
+                GtkSliceSideModifier  horizontal_modifier,
+                GtkSliceSideModifier  vertical_modifier)
 {
   Gtk9Slice *slice;
   cairo_surface_t *surface;
@@ -185,13 +185,13 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
 static void
 render_border (cairo_t              *cr,
                cairo_surface_t      *surface,
+               guint                 side,
                gdouble               x,
                gdouble               y,
                gdouble               width,
                gdouble               height,
                GtkSliceSideModifier  modifier)
 {
-  cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
 
   cairo_save (cr);
@@ -199,27 +199,46 @@ render_border (cairo_t              *cr,
   cairo_rectangle (cr, x, y, width, height);
   cairo_clip (cr);
 
-  pattern = cairo_pattern_create_for_surface (surface);
-
-  cairo_matrix_init_translate (&matrix, - x, - y);
-
   if (modifier == GTK_SLICE_REPEAT)
-    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+    {
+      cairo_pattern_t *pattern;
+
+      pattern = cairo_pattern_create_for_surface (surface);
+
+      cairo_matrix_init_translate (&matrix, - x, - y);
+      cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+
+      cairo_pattern_set_matrix (pattern, &matrix);
+      cairo_set_source (cr, pattern);
+      cairo_pattern_destroy (pattern);
+
+      cairo_rectangle (cr, x, y, width, height);
+    }
   else
     {
-      gint w;
+      gint d;
 
-      w = cairo_image_surface_get_width (surface);
-      cairo_matrix_scale (&matrix, width / w, 0);
+      if (side == SIDE_TOP || side == SIDE_BOTTOM)
+        {
+          d = cairo_image_surface_get_width (surface);
+
+          cairo_translate (cr, x + (width / 2), y);
+          cairo_scale (cr, width / d, 1);
+          cairo_set_source_surface (cr, surface, - d / 2, 0);
+          cairo_rectangle (cr, - width / 2, 0, width, height);
+        }
+      else
+        {
+          d = cairo_image_surface_get_height (surface);
+
+          cairo_translate (cr, x, y + (height / 2));
+          cairo_scale (cr, 1, height / d);
+          cairo_set_source_surface (cr, surface, 0, - d / 2);
+          cairo_rectangle (cr, 0, - height / 2, width, height);
+        }
     }
 
-  cairo_pattern_set_matrix (pattern, &matrix);
-  cairo_set_source (cr, pattern);
-
-  cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
-
-  cairo_pattern_destroy (pattern);
 
   cairo_restore (cr);
 }
@@ -261,7 +280,7 @@ gtk_9slice_render (Gtk9Slice *slice,
   surface = slice->surfaces[BORDER_MIDDLE][BORDER_TOP];
   img_height = cairo_image_surface_get_height (surface);
 
-  render_border (cr, surface,
+  render_border (cr, surface, SIDE_TOP,
                  x + slice->distances[SIDE_LEFT], y,
                  (gdouble) width - slice->distances[SIDE_LEFT] - slice->distances[SIDE_RIGHT],
                  (gdouble) img_height,
@@ -271,7 +290,7 @@ gtk_9slice_render (Gtk9Slice *slice,
   surface = slice->surfaces[BORDER_MIDDLE][BORDER_BOTTOM];
   img_height = cairo_image_surface_get_height (surface);
 
-  render_border (cr, surface,
+  render_border (cr, surface, SIDE_BOTTOM,
                  x + slice->distances[SIDE_LEFT], y + height - img_height,
                  (gdouble) width - slice->distances[SIDE_LEFT] - slice->distances[SIDE_RIGHT],
                  (gdouble) img_height,
@@ -281,7 +300,7 @@ gtk_9slice_render (Gtk9Slice *slice,
   surface = slice->surfaces[BORDER_LEFT][BORDER_MIDDLE];
   img_width = cairo_image_surface_get_width (surface);
 
-  render_border (cr, surface,
+  render_border (cr, surface, SIDE_LEFT,
                  x, y + slice->distances[SIDE_TOP],
                  (gdouble) img_width,
                  (gdouble) height - slice->distances[SIDE_TOP] - slice->distances[SIDE_BOTTOM],
@@ -291,7 +310,7 @@ gtk_9slice_render (Gtk9Slice *slice,
   surface = slice->surfaces[BORDER_RIGHT][BORDER_MIDDLE];
   img_width = cairo_image_surface_get_width (surface);
 
-  render_border (cr, surface,
+  render_border (cr, surface, SIDE_RIGHT,
                  x + width - img_width, y + slice->distances[SIDE_TOP],
                  (gdouble) img_width, height - slice->distances[SIDE_TOP] - slice->distances[SIDE_BOTTOM],
                  slice->modifiers[SIDE_RIGHT]);

@@ -41,8 +41,8 @@ Gtk9Slice * gtk_9slice_new (GdkPixbuf            *pixbuf,
                             gdouble               distance_bottom,
                             gdouble               distance_left,
                             gdouble               distance_right,
-                            GtkSliceSideModifier  vertical_modifier,
-                            GtkSliceSideModifier  horizontal_modifier);
+                            GtkSliceSideModifier  horizontal_modifier,
+                            GtkSliceSideModifier  vertical_modifier);
 
 Gtk9Slice * gtk_9slice_ref   (Gtk9Slice *slice);
 void        gtk_9slice_unref (Gtk9Slice *slice);
