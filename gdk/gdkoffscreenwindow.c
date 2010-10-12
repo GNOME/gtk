@@ -80,7 +80,8 @@ gdk_offscreen_window_finalize (GObject *object)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (object);
 
-  cairo_surface_destroy (offscreen->surface);
+  if (offscreen->surface)
+    cairo_surface_destroy (offscreen->surface);
 
   G_OBJECT_CLASS (gdk_offscreen_window_parent_class)->finalize (object);
 }
@@ -106,6 +107,28 @@ gdk_offscreen_window_destroy (GdkWindow *window,
     gdk_offscreen_window_hide (window);
 }
 
+static cairo_surface_t *
+get_surface (GdkOffscreenWindow *offscreen)
+{
+  if (! offscreen->surface)
+    {
+      GdkWindowObject *private = (GdkWindowObject *) offscreen->wrapper;
+      cairo_surface_t *similar;
+
+      similar = _gdk_drawable_ref_cairo_surface ((GdkWindow *)private->parent);
+
+      offscreen->surface = cairo_surface_create_similar (similar,
+                                                         /* FIXME: use visual */
+                                                         CAIRO_CONTENT_COLOR,
+                                                         private->width,
+                                                         private->height);
+
+      cairo_surface_destroy (similar);
+    }
+
+  return offscreen->surface;
+}
+
 static gboolean
 is_parent_of (GdkWindow *parent,
 	      GdkWindow *child)
@@ -129,7 +152,7 @@ gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
 
-  return cairo_surface_reference (offscreen->surface);
+  return cairo_surface_reference (get_surface (offscreen));
 }
 
 void
@@ -153,11 +176,6 @@ _gdk_offscreen_window_new (GdkWindow     *window,
   private->impl = g_object_new (GDK_TYPE_OFFSCREEN_WINDOW, NULL);
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
   offscreen->wrapper = window;
-
-  offscreen->surface = gdk_window_create_similar_surface ((GdkWindow *)private->parent,
-                                                          CAIRO_CONTENT_COLOR,
-                                                          private->width,
-                                                          private->height);
 }
 
 static gboolean
@@ -332,7 +350,8 @@ gdk_offscreen_window_get_surface (GdkWindow *window)
     return NULL;
 
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
-  return offscreen->surface;
+
+  return get_surface (offscreen);
 }
 
 static void
@@ -360,7 +379,6 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkOffscreenWindow *offscreen;
   gint dx, dy, dw, dh;
-  cairo_surface_t *old_surface;
 
   offscreen = GDK_OFFSCREEN_WINDOW (private->impl);
 
@@ -383,23 +401,26 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
   if (private->width != width ||
       private->height != height)
     {
-      cairo_t *cr;
-
       private->width = width;
       private->height = height;
 
-      old_surface = offscreen->surface;
-      offscreen->surface = cairo_surface_create_similar (old_surface,
-                                                         cairo_surface_get_content (old_surface),
-                                                         width,
-                                                         height);
+      if (offscreen->surface)
+        {
+          cairo_surface_t *old_surface;
+          cairo_t *cr;
 
-      cr = cairo_create (offscreen->surface);
-      cairo_set_source_surface (cr, old_surface, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
+          old_surface = offscreen->surface;
+          offscreen->surface = NULL;
 
-      cairo_surface_destroy (old_surface);
+          offscreen->surface = get_surface (offscreen);
+
+          cr = cairo_create (offscreen->surface);
+          cairo_set_source_surface (cr, old_surface, 0, 0);
+          cairo_paint (cr);
+          cairo_destroy (cr);
+
+          cairo_surface_destroy (old_surface);
+        }
     }
 
   if (GDK_WINDOW_IS_MAPPED (private))
@@ -572,27 +593,31 @@ gdk_offscreen_window_translate (GdkWindow      *window,
                                 gint            dy)
 {
   GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (((GdkWindowObject *) window)->impl);
-  cairo_t *cr;
 
-  cr = cairo_create (offscreen->surface);
+  if (offscreen->surface)
+    {
+      cairo_t *cr;
 
-  area = cairo_region_copy (area);
+      cr = cairo_create (offscreen->surface);
 
-  gdk_cairo_region (cr, area);
-  cairo_clip (cr);
-  
-  /* NB: This is a self-copy and Cairo doesn't support that yet.
-   * So we do a litle trick.
-   */
-  cairo_push_group (cr);
+      area = cairo_region_copy (area);
 
-  cairo_set_source_surface (cr, offscreen->surface, dx, dy);
-  cairo_paint (cr);
+      gdk_cairo_region (cr, area);
+      cairo_clip (cr);
 
-  cairo_pop_group_to_source (cr);
-  cairo_paint (cr);
+      /* NB: This is a self-copy and Cairo doesn't support that yet.
+       * So we do a litle trick.
+       */
+      cairo_push_group (cr);
 
-  cairo_destroy (cr);
+      cairo_set_source_surface (cr, offscreen->surface, dx, dy);
+      cairo_paint (cr);
+
+      cairo_pop_group_to_source (cr);
+      cairo_paint (cr);
+
+      cairo_destroy (cr);
+    }
 
   _gdk_window_add_damage (window, area);
 }
