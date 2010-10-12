@@ -334,10 +334,6 @@ How to compile GTK+ itself
             <arg>--enable-Bsymbolic</arg>
           </group>
           <group>
-            <arg>--disable-shm</arg>
-            <arg>--enable-shm</arg>
-          </group>
-          <group>
             <arg>--disable-xkb</arg>
             <arg>--enable-xkb</arg>
           </group>
@@ -445,17 +441,6 @@ How to compile GTK+ itself
           compatibility
           problems when libraries that GTK+ depends upon change
           their versions, and should be avoided if possible.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--disable-shm</systemitem> and
-          <systemitem>--enable-shm</systemitem></title>
-
-        <para>
-          These options can be used to control whether GTK+ will use shared
-          memory to communicate with the X server when possible.
-          The default is 'yes'.
         </para>
       </formalpara>
 

@@ -5486,8 +5486,6 @@ GtkScrollType
 GtkSelectionMode
 GtkShadowType
 GtkStateType
-GtkSubmenuDirection
-GtkSubmenuPlacement
 GtkToolbarStyle
 GtkUpdateType
 GtkWindowPosition

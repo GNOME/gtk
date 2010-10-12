@@ -19,11 +19,11 @@
     <partintro>
     <para>
 GTK+ is a library for creating graphical user interfaces. It
-works on many UNIX-like platforms, Windows, and on framebuffer
-devices. GTK+ is released under the GNU Library General Public License
+works on many UNIX-like platforms, Windows, and OS X.
+GTK+ is released under the GNU Library General Public License
 (GNU LGPL), which allows for flexible licensing of client
 applications. GTK+ has a C-based object-oriented architecture that
-allows for maximum flexibility.  Bindings for other languages have
+allows for maximum flexibility.  Bindings for many other languages have
 been written, including C++, Objective-C, Guile/Scheme, Perl, Python,
 TOM, Ada95, Free Pascal, and Eiffel.
     </para>
@@ -66,8 +66,8 @@ output devices.
 <term>Pango</term>
 <listitem><para>
 Pango is a library for internationalized text handling. It centers
-around the #PangoLayout object, representing a paragraph of text.
-Pango provides the engine for #GtkTextView, #GtkLabel, #GtkEntry, and
+around the PangoLayout object, representing a paragraph of text.
+Pango provides the engine for GtkTextView, GtkLabel, GtkEntry, and
 other widgets that display text.
 </para></listitem>
 </varlistentry>
@@ -87,9 +87,9 @@ framework.
 <varlistentry>
 <term>GdkPixbuf</term>
 <listitem><para>
-This is a small library which allows you to create #GdkPixbuf
+This is a small library which allows you to create GdkPixbuf
 ("pixel buffer") objects from image data or image files.
-Use a #GdkPixbuf in combination with #GtkImage to display images.
+Use a GdkPixbuf in combination with GtkImage to display images.
 </para></listitem>
 </varlistentry>
 
@@ -97,8 +97,8 @@ Use a #GdkPixbuf in combination with #GtkImage to display images.
 <term>GDK</term>
 <listitem><para>
 GDK is the abstraction layer that allows GTK+ to support multiple
-windowing systems. GDK provides drawing and window system facilities
-on X11, Windows, and the Linux framebuffer device.
+windowing systems. GDK provides window system facilities on X11, Windows,
+and OS X.
 </para></listitem>
 </varlistentry>
 
@@ -106,7 +106,7 @@ on X11, Windows, and the Linux framebuffer device.
 <term>GTK+</term>
 <listitem><para>
 The GTK+ library itself contains <firstterm>widgets</firstterm>,
-that is, GUI components such as #GtkButton or #GtkTextView.
+that is, GUI components such as GtkButton or GtkTextView.
 </para></listitem>
 </varlistentry>
 </variablelist>
