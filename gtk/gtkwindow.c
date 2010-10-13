@@ -3035,7 +3035,7 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
     {
       gtk_window_set_gravity (window, geometry->win_gravity);
     }
-  
+
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 }
 
@@ -5021,23 +5021,26 @@ static gboolean
 get_drag_edge (GtkWidget     *widget,
                GdkWindowEdge *edge)
 {
-  GdkGeometry geometry;
-  guint flags;
+  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   gboolean hresizable;
   gboolean vresizable;
   GtkTextDirection dir;
+  GtkWindowGeometryInfo *info;
 
-  gtk_window_compute_hints (GTK_WINDOW (widget), &geometry, &flags);
+  hresizable = TRUE;
+  vresizable = TRUE;
 
-  if ((flags & GDK_HINT_MIN_SIZE) && (flags & GDK_HINT_MAX_SIZE))
+  info = priv->geometry_info;
+  if (info)
     {
-      hresizable = geometry.min_width < geometry.max_width;
-      vresizable = geometry.min_height < geometry.max_height;
-    }
-  else
-    {
-      hresizable = TRUE;
-      vresizable = TRUE;
+      GdkWindowHints flags = info->last.flags;
+      GdkGeometry *geometry = &info->last.geometry;
+
+      if ((flags & GDK_HINT_MIN_SIZE) && (flags & GDK_HINT_MAX_SIZE))
+        {
+          hresizable = geometry->min_width < geometry->max_width;
+          vresizable = geometry->min_height < geometry->max_height;
+        }
     }
 
   dir = gtk_widget_get_direction (widget);
@@ -5487,11 +5490,14 @@ update_grip_visibility (GtkWindow *window)
 gboolean
 gtk_window_resize_grip_is_visible (GtkWindow *window)
 {
+  GtkWidget *widget;
   GtkWindowPrivate *priv;
+  GdkWindowEdge *edge;
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
   priv = window->priv;
+  widget = GTK_WIDGET (window);
 
   if (priv->type == GTK_WINDOW_POPUP)
     return FALSE;
@@ -5499,15 +5505,18 @@ gtk_window_resize_grip_is_visible (GtkWindow *window)
   if (!priv->resizable)
     return FALSE;
 
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (gtk_widget_get_realized (widget))
     {
       GdkWindowState state;
 
-      state = gdk_window_get_state (gtk_widget_get_window (GTK_WIDGET (window)));
+      state = gdk_window_get_state (gtk_widget_get_window (widget));
 
       if (state & GDK_WINDOW_STATE_MAXIMIZED || state & GDK_WINDOW_STATE_FULLSCREEN)
         return FALSE;
     }
+
+  if (!get_drag_edge (widget, &edge))
+    return FALSE;
 
   return window->priv->has_resize_grip;
 }
@@ -7976,8 +7985,7 @@ gtk_window_set_resizable (GtkWindow *window,
     {
       priv->resizable = (resizable != FALSE);
 
-      if (priv->grip_window != NULL)
-        update_grip_visibility (window);
+      update_grip_visibility (window);
 
       gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 
