@@ -1912,9 +1912,9 @@ gtk_recent_info_get_icon (GtkRecentInfo *info,
     {
       if (info->mime_type &&
           strcmp (info->mime_type, "x-directory/normal") == 0)
-        retval = get_icon_fallback (GTK_STOCK_DIRECTORY, size);
+        retval = get_icon_fallback ("folder", size);
       else
-        retval = get_icon_fallback (GTK_STOCK_FILE, size);
+        retval = get_icon_fallback ("document-x-generic", size);
     }
   
   return retval;
