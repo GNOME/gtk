@@ -176,4 +176,3 @@ gtk_vseparator_get_type
 gtk_widget_get_type
 gtk_window_get_type
 gtk_window_group_get_type
-gtk_wrap_box_get_type
