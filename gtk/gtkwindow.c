@@ -115,7 +115,6 @@ struct _GtkWindowPrivate
 
   gdouble  opacity;
 
-  gboolean   has_resize_grip;
   GdkWindow *grip_window;
 
   gchar   *startup_id;
@@ -129,11 +128,6 @@ struct _GtkWindowPrivate
   guint    frame_right;
   guint    frame_top;
   guint    keys_changed_handler;
-
-  /* Don't use this value, it's only used for determining when
-   * to fire notify events on the "resize-grip-visible" property.
-   */
-  gboolean resize_grip_visible;
 
   guint16  configure_request_count;
 
@@ -176,9 +170,17 @@ struct _GtkWindowPrivate
   guint    stick_initially           : 1;
   guint    transient_parent_group    : 1;
   guint    type                      : 4; /* GtkWindowType */
-  guint    type_hint                 : 3; /* GdkWindowTypeHint if the hint is one of the original eight. If not, then
-				           * it contains GDK_WINDOW_TYPE_HINT_NORMAL */
+  guint    type_hint                 : 3; /* GdkWindowTypeHint if the hint is
+                                           * one of the original eight. If not,
+                                           * then it contains
+                                           * GDK_WINDOW_TYPE_HINT_NORMAL
+                                           */
   guint    urgent                    : 1;
+  guint    has_resize_grip           : 1;
+  guint    resize_grip_visible       : 1;  /* don't use, just for "resize-
+                                            * grip-visible" notification
+                                            */
+
 };
 
 enum {
@@ -5192,6 +5194,7 @@ gtk_window_size_allocate (GtkWidget     *widget,
         gdk_window_resize (priv->frame,
                            allocation->width + priv->frame_left + priv->frame_right,
                            allocation->height + priv->frame_top + priv->frame_bottom);
+      update_grip_visibility (window);
       set_grip_position (window);
     }
 }
@@ -5347,7 +5350,6 @@ gtk_window_state_changed (GtkWidget    *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  set_grip_cursor (window);
   update_grip_visibility (window);
 }
 
@@ -5388,7 +5390,6 @@ resize_grip_create_window (GtkWindow *window)
 
   gdk_window_raise (priv->grip_window);
 
-  set_grip_cursor (window);
   set_grip_shape (window);
   update_grip_visibility (window);
 }
@@ -5455,9 +5456,14 @@ update_grip_visibility (GtkWindow *window)
   if (priv->grip_window != NULL)
     {
       if (val)
-        gdk_window_show (priv->grip_window);
+        {
+          gdk_window_show (priv->grip_window);
+          set_grip_cursor (window);
+        }
       else
-        gdk_window_hide (priv->grip_window);
+        {
+          gdk_window_hide (priv->grip_window);
+        }
     }
 
   if (priv->resize_grip_visible != val)
@@ -6869,8 +6875,7 @@ gtk_window_move_resize (GtkWindow *window)
       gtk_widget_size_allocate (widget, &allocation);
 
       set_grip_position (window);
-      set_grip_cursor (window);
-      set_grip_shape (window);
+      update_grip_visibility (window);
 
       gdk_window_process_updates (gdk_window, TRUE);
 
