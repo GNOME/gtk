@@ -4925,7 +4925,7 @@ gtk_widget_get_request_mode
 gtk_widget_get_preferred_size
 gtk_distribute_natural_allocation
 
-<SUBSECTION>
+<SUBSECTION Alignment and Margins>
 GtkAlign
 gtk_widget_get_halign
 gtk_widget_set_halign
@@ -4939,6 +4939,18 @@ gtk_widget_get_margin_top
 gtk_widget_set_margin_top
 gtk_widget_get_margin_bottom
 gtk_widget_set_margin_bottom
+
+<SUBSECTION Expand>
+gtk_widget_get_hexpand
+gtk_widget_set_hexpand
+gtk_widget_get_hexpand_set
+gtk_widget_set_hexpand_set
+gtk_widget_get_vexpand
+gtk_widget_set_vexpand
+gtk_widget_get_vexpand_set
+gtk_widget_set_vexpand_set
+gtk_widget_queue_compute_expand
+gtk_widget_compute_expand
 
 <SUBSECTION Standard>
 GTK_WIDGET
