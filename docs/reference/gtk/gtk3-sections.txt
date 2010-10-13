@@ -5202,7 +5202,6 @@ gtk_device_grab_remove
 
 <SUBSECTION>
 GtkFunction
-gtk_init_add
 gtk_quit_add_destroy
 gtk_quit_add
 GtkCallbackMarshal

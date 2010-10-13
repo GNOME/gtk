@@ -146,15 +146,8 @@ _gtk_get_localedir (void)
 
 /* Private type definitions
  */
-typedef struct _GtkInitFunction		 GtkInitFunction;
 typedef struct _GtkQuitFunction		 GtkQuitFunction;
 typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
-
-struct _GtkInitFunction
-{
-  GtkFunction function;
-  gpointer data;
-};
 
 struct _GtkQuitFunction
 {
@@ -187,8 +180,6 @@ static GList *current_events = NULL;
 
 static GSList *main_loops = NULL;      /* stack of currently executing main loops */
 
-static GList *init_functions = NULL;	   /* A list of init functions.
-					    */
 static GList *quit_functions = NULL;	   /* A list of quit functions.
 					    */
 static GSList *key_snoopers = NULL;
@@ -1293,27 +1284,12 @@ void
 gtk_main (void)
 {
   GList *tmp_list;
-  GList *functions;
-  GtkInitFunction *init;
   GMainLoop *loop;
 
   gtk_main_loop_level++;
   
   loop = g_main_loop_new (NULL, TRUE);
   main_loops = g_slist_prepend (main_loops, loop);
-
-  tmp_list = functions = init_functions;
-  init_functions = NULL;
-  
-  while (tmp_list)
-    {
-      init = tmp_list->data;
-      tmp_list = tmp_list->next;
-      
-      (* init->function) (init->data);
-      g_free (init);
-    }
-  g_list_free (functions);
 
   if (g_main_loop_is_running (main_loops->data))
     {
@@ -2130,19 +2106,6 @@ gtk_device_grab_remove (GtkWidget *widget,
   new_grab_widget = gtk_window_group_get_current_device_grab (group, device);
 
   gtk_grab_notify (group, device, widget, new_grab_widget, FALSE);
-}
-
-void
-gtk_init_add (GtkFunction function,
-	      gpointer	  data)
-{
-  GtkInitFunction *init;
-  
-  init = g_new (GtkInitFunction, 1);
-  init->function = function;
-  init->data = data;
-  
-  init_functions = g_list_prepend (init_functions, init);
 }
 
 guint

@@ -143,8 +143,6 @@ void       gtk_device_grab_remove  (GtkWidget          *widget,
                                     GdkDevice          *device);
 
 #if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-void	   gtk_init_add		   (GtkFunction	       function,
-				    gpointer	       data);
 void	   gtk_quit_add_destroy	   (guint	       main_level,
 				    GtkWidget	      *object);
 guint	   gtk_quit_add		   (guint	       main_level,
