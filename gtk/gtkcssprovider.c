@@ -24,6 +24,7 @@
 #include <gtk/gtk.h>
 #include <gtkstyleprovider.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#include <cairo/cairo-gobject.h>
 
 #include "gtkanimationdescription.h"
 #include "gtk9slice.h"
@@ -1926,7 +1927,7 @@ css_provider_parse_value (GtkCssProvider *css_provider,
       if (parsed)
         g_value_set_boxed (value, &border);
     }
-  else if (type == GDK_TYPE_CAIRO_PATTERN)
+  else if (type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
       GtkGradient *gradient;
 

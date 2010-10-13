@@ -21,6 +21,7 @@
 
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
+#include <cairo/cairo-gobject.h>
 
 #include "gtkstyleprovider.h"
 #include "gtkstyleset.h"
@@ -90,7 +91,7 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
   gtk_style_set_register_property ("border", G_TYPE_INT, NULL, NULL);
 
-  gtk_style_set_register_property ("background-image", GDK_TYPE_CAIRO_PATTERN, NULL, NULL);
+  gtk_style_set_register_property ("background-image", CAIRO_GOBJECT_TYPE_PATTERN, NULL, NULL);
   gtk_style_set_register_property ("border-image", GTK_TYPE_9SLICE, NULL, NULL);
 
   g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
@@ -501,10 +502,10 @@ gtk_style_set_set_property (GtkStyleSet   *set,
       /* Allow GtkSymbolicColor as well */
       g_return_if_fail (value_type == GDK_TYPE_COLOR || value_type == GTK_TYPE_SYMBOLIC_COLOR);
     }
-  else if (node->property_type == GDK_TYPE_CAIRO_PATTERN)
+  else if (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
       /* Allow GtkGradient as a substitute */
-      g_return_if_fail (value_type == GDK_TYPE_CAIRO_PATTERN ||
+      g_return_if_fail (value_type == CAIRO_GOBJECT_TYPE_PATTERN ||
                         value_type == GTK_TYPE_GRADIENT);
     }
   else
@@ -639,7 +640,7 @@ resolve_gradient (GtkStyleSet *set,
 
   /* Store it back, this is where cairo_pattern_t caching happens */
   g_value_unset (value);
-  g_value_init (value, GDK_TYPE_CAIRO_PATTERN);
+  g_value_init (value, CAIRO_GOBJECT_TYPE_PATTERN);
   g_value_take_boxed (value, gradient);
 
   return TRUE;
@@ -693,7 +694,7 @@ gtk_style_set_get_property (GtkStyleSet   *set,
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
     {
-      g_return_val_if_fail (node->property_type == GDK_TYPE_CAIRO_PATTERN, FALSE);
+      g_return_val_if_fail (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
 
       if (!resolve_gradient (set, val))
         return FALSE;
@@ -750,7 +751,7 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
         }
       else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
         {
-          g_return_if_fail (node->property_type == GDK_TYPE_CAIRO_PATTERN);
+          g_return_if_fail (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN);
 
           if (!resolve_gradient (set, val))
             val = &node->default_value;
