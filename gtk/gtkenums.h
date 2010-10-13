@@ -541,60 +541,6 @@ typedef enum
   GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT
 } GtkSizeRequestMode;
 
-
-/**
- * GtkWrapAllocationMode:
- * @GTK_WRAP_ALLOCATE_FREE:        Items wrap freely in the box's orientation
- * @GTK_WRAP_ALLOCATE_ALIGNED:     Items are aligned into rows and columns
- * @GTK_WRAP_ALLOCATE_HOMOGENEOUS: Items are all allocated the same size
- *
- * Describes how an #GtkWrapBox positions its children.
- */
-typedef enum {
-  GTK_WRAP_ALLOCATE_FREE = 0,
-  GTK_WRAP_ALLOCATE_ALIGNED,
-  GTK_WRAP_ALLOCATE_HOMOGENEOUS
-} GtkWrapAllocationMode;
-
-/**
- * GtkWrapBoxSpreading:
- * @GTK_WRAP_BOX_SPREAD_START:  Children are allocated no more than their natural size
- *                              in the given orientation and any extra space is left trailing at 
- *                              the end of each row/column.
- * @GTK_WRAP_BOX_SPREAD_END:    Children are allocated no more than their natural size
- *                              in the given orientation and any extra space skipped at the beginning
- *                              of each row/column.
- * @GTK_WRAP_BOX_SPREAD_EVEN:   Children are allocated no more than their natural size
- *                              in the given orientation and any extra space is evenly distributed
- *                              as empty space between children.
- * @GTK_WRAP_BOX_SPREAD_EXPAND: Extra space is given to children which asked to expand in the given
- *                              orientation (or columns/rows which contain children who asked to expand).
- *                              If no children asked to expand; extra space is distributed evenly.
- *
- * Describes how a #GtkWrapBox deals with extra space in a given orientation when allocating children.
- */
-typedef enum {
-  GTK_WRAP_BOX_SPREAD_START = 0,
-  GTK_WRAP_BOX_SPREAD_END,
-  GTK_WRAP_BOX_SPREAD_EVEN,
-  GTK_WRAP_BOX_SPREAD_EXPAND
-} GtkWrapBoxSpreading;
-
-/**
- * GtkWrapBoxPacking:
- * @GTK_WRAP_BOX_H_EXPAND: Whether the child expands horizontally.
- * @GTK_WRAP_BOX_V_EXPAND: Whether the child expands vertically.
- *
- * Specifies how widgets will expand vertically and
- * horizontally when placed inside a #GtkWrapBox.
- */
-typedef enum
-{
-  GTK_WRAP_BOX_H_EXPAND = 1 << 0,
-  GTK_WRAP_BOX_V_EXPAND = 1 << 1
-} GtkWrapBoxPacking;
-
-
 G_END_DECLS
 
 #endif /* __GTK_ENUMS_H__ */

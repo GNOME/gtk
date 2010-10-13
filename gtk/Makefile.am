@@ -332,8 +332,7 @@ gtk_public_h_sources =          \
 	gtkvscrollbar.h		\
 	gtkvseparator.h		\
 	gtkwidget.h		\
-	gtkwindow.h		\
-	gtkwrapbox.h
+	gtkwindow.h
 
 if OS_UNIX
 gtk_unix_print_public_h_sources =    \
@@ -615,7 +614,6 @@ gtk_base_c_sources =            \
 	gtkwidget.c		\
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
-	gtkwrapbox.c		\
 	$(gtk_clipboard_dnd_c_sources)
 
 gtk_c_sources = $(gtk_base_c_sources)

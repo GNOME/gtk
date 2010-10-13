@@ -305,7 +305,6 @@ that is, GUI components such as GtkButton or GtkTextView.
       <xi:include href="xml/gtkbbox.xml" />
       <xi:include href="xml/gtkhbbox.xml" />
       <xi:include href="xml/gtkvbbox.xml" />
-      <xi:include href="xml/gtkwrapbox.xml" />
       <xi:include href="xml/gtkfixed.xml" />
       <xi:include href="xml/gtkpaned.xml" />
       <xi:include href="xml/gtkhpaned.xml" />

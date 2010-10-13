@@ -4475,33 +4475,6 @@ gtk_window_unstick
 #endif
 
 
-#if IN_HEADER(__GTK_WRAP_BOX_H__)
-#if IN_FILE(__GTK_WRAP_BOX_C__)
-gtk_wrap_allocation_mode_get_type
-gtk_wrap_box_get_allocation_mode
-gtk_wrap_box_get_horizontal_spacing
-gtk_wrap_box_get_minimum_line_children
-gtk_wrap_box_get_natural_line_children
-gtk_wrap_box_get_horizontal_spreading
-gtk_wrap_box_get_vertical_spreading
-gtk_wrap_box_get_type G_GNUC_CONST
-gtk_wrap_box_get_vertical_spacing
-gtk_wrap_box_insert_child
-gtk_wrap_box_new
-gtk_wrap_box_packing_get_type
-gtk_wrap_box_reorder_child
-gtk_wrap_box_set_allocation_mode
-gtk_wrap_box_set_horizontal_spacing
-gtk_wrap_box_set_minimum_line_children
-gtk_wrap_box_set_natural_line_children
-gtk_wrap_box_set_horizontal_spreading
-gtk_wrap_box_set_vertical_spreading
-gtk_wrap_box_set_vertical_spacing
-gtk_wrap_box_spreading_get_type
-#endif
-#endif
-
-
 #if IN_HEADER(__GTK_WIN32_EMBED_WIDGET_H__)
 #if IN_FILE(__GTK_WIN32_EMBED_WIDGET_C__)
 #ifdef G_OS_WIN32
