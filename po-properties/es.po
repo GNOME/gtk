@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
 "POT-Creation-Date: 2010-10-08 06:20+0000\n"
-"PO-Revision-Date: 2010-10-13 01:23+0200\n"
+"PO-Revision-Date: 2010-10-13 14:24+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -66,11 +66,11 @@ msgstr "Dispositivo apuntador o teclado asociado con este dispositivo"
 
 #: ../gdk/gdkdevice.c:173
 msgid "Input source"
-msgstr ""
+msgstr "Fuente de entrada"
 
 #: ../gdk/gdkdevice.c:174
 msgid "Source type for the device"
-msgstr ""
+msgstr "Tipo de la fuente de entrada para el dispositivo"
 
 #: ../gdk/gdkdevice.c:189 ../gdk/gdkdevice.c:190
 msgid "Input mode for the device"
@@ -761,13 +761,12 @@ msgid "Layout style"
 msgstr "Estilo de la distribución"
 
 #: ../gtk/gtkbbox.c:172
-#, fuzzy
 msgid ""
 "How to lay out the buttons in the box. Possible values are: spread, edge, "
 "start and end"
 msgstr ""
 "Como disponer los botones en la caja. Los valores posibles son: esparcidos, "
-"esquinas, inicio  y final"
+"esquinas, inicio y final"
 
 #: ../gtk/gtkbbox.c:180
 msgid "Secondary"
@@ -7341,26 +7340,23 @@ msgid "Whether the window frame should have a close button"
 msgstr "Indica si el marco de la ventana debe tener un botón de cierre"
 
 #: ../gtk/gtkwindow.c:857
-#, fuzzy
 #| msgid "Has Resize Grip"
 msgid "Resize grip"
-msgstr "Tiene tirador de redimensión"
+msgstr "Redimensionar tirador"
 
 #: ../gtk/gtkwindow.c:858
-#, fuzzy
 #| msgid "Whether the window frame should have a close button"
 msgid "Specifies whether the window should have a resize grip"
-msgstr "Indica si el marco de la ventana debe tener un botón de cierre"
+msgstr "Especifica si la ventana debe tener un tirador de redimensión"
 
 #: ../gtk/gtkwindow.c:872
 msgid "Resize grip is visible"
-msgstr ""
+msgstr "El tirador de redimensión es visible"
 
 #: ../gtk/gtkwindow.c:873
-#, fuzzy
 #| msgid "Whether the action group is visible."
 msgid "Specifies whether the window's resize grip is visible."
-msgstr "Indica si el grupo de acción es visible."
+msgstr "Indica si el tirador de redimensión de la ventana es visible."
 
 #: ../gtk/gtkwindow.c:889
 msgid "Gravity"
@@ -7388,13 +7384,12 @@ msgstr "La opacidad de la ventana, desde 0 hasta 1"
 
 #: ../gtk/gtkwindow.c:935 ../gtk/gtkwindow.c:936
 msgid "Width of resize grip"
-msgstr ""
+msgstr "Anchura del tirador de redimensión"
 
 #: ../gtk/gtkwindow.c:941 ../gtk/gtkwindow.c:942
-#, fuzzy
 #| msgid "Has Resize Grip"
 msgid "Height of resize grip"
-msgstr "Tiene tirador de redimensión"
+msgstr "Altura del tirador de redimensión"
 
 #: ../modules/input/gtkimcontextxim.c:334
 msgid "IM Preedit style"
