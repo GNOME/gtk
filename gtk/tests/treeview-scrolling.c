@@ -995,6 +995,42 @@ test_bug359231 (void)
 	scroll_fixture_teardown (fixture, NULL);
 }
 
+/* Test for GNOME bugzilla bug 93584.  We add 150 rows to an existing
+ * small model, and scroll to one of these with alignment.
+ */
+static void
+test_bug93584 (ScrollFixture *fixture,
+	       gconstpointer  test_data)
+{
+	int row, i;
+	GtkTreeStore *store;
+	GtkTreePath *path;
+
+	g_test_bug ("93584");
+
+	/* Mimic state as in original test case */
+	g_signal_connect (G_OBJECT (fixture->tree_view), "realize",
+			  G_CALLBACK (gtk_tree_view_expand_all), NULL);
+	gtk_widget_show_all (fixture->window);
+
+	store = GTK_TREE_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view)));
+
+	/* Add 150 rows */
+	for (i = 0; i < 150; i++) {
+		GtkTreeIter iter;
+
+		gtk_tree_store_append (store, &iter, NULL);
+		gtk_tree_store_set (store, &iter, 0, "Row", -1);
+	}
+
+	row = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL);
+	row -= 20;
+
+	path = gtk_tree_path_new_from_indices (row, -1);
+	scroll (fixture, path, TRUE, 0.5);
+	gtk_tree_path_free (path);
+}
+
 /* Infrastructure for automatically adding tests */
 enum
 {
@@ -1274,6 +1310,10 @@ main (int argc, char **argv)
 		    scroll_fixture_teardown);
 	g_test_add_func ("/TreeView/scrolling/specific/bug-359231",
 			test_bug359231);
+	g_test_add ("/TreeView/scrolling/specific/bug-93584",
+		    ScrollFixture, NULL,
+		    scroll_fixture_tree_setup, test_bug93584,
+		    scroll_fixture_teardown);
 
 	return g_test_run ();
 }
