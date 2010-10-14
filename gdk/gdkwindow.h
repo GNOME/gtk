@@ -490,9 +490,34 @@ struct _GdkWindowObjectClass
 {
   GdkDrawableClass parent_class;
 
-  cairo_surface_t * (* create_surface) (GdkWindow *window,
-                                        gint       width,
-                                        gint       height);
+  GdkWindow       * (* pick_embedded_child) (GdkWindow *window,
+                                             gdouble    x,
+                                             gdouble    y);
+
+  /*  the following 3 signals will only be emitted by offscreen windows */
+  void              (* to_embedder)         (GdkWindow *window,
+                                             gdouble    offscreen_x,
+                                             gdouble    offscreen_y,
+                                             gdouble   *embedder_x,
+                                             gdouble   *embedder_y);
+  void              (* from_embedder)       (GdkWindow *window,
+                                             gdouble    embedder_x,
+                                             gdouble    embedder_y,
+                                             gdouble   *offscreen_x,
+                                             gdouble   *offscreen_y);
+  cairo_surface_t * (* create_surface)      (GdkWindow *window,
+                                             gint       width,
+                                             gint       height);
+
+  /* Padding for future expansion */
+  void (*_gdk_reserved1) (void);
+  void (*_gdk_reserved2) (void);
+  void (*_gdk_reserved3) (void);
+  void (*_gdk_reserved4) (void);
+  void (*_gdk_reserved5) (void);
+  void (*_gdk_reserved6) (void);
+  void (*_gdk_reserved7) (void);
+  void (*_gdk_reserved8) (void);
 };
 
 /* Windows
