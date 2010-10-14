@@ -27,6 +27,8 @@
 
 #include "config.h"
 
+#include <cairo-gobject.h>
+
 #include "gdkwindow.h"
 
 #ifdef GDK_WINDOWING_X11
@@ -185,6 +187,7 @@ enum {
   PICK_EMBEDDED_CHILD, /* only called if children are embedded */
   TO_EMBEDDER,
   FROM_EMBEDDER,
+  CREATE_SURFACE,
   LAST_SIGNAL
 };
 
@@ -353,6 +356,18 @@ accumulate_get_window (GSignalInvocationHint *ihint,
   return g_value_get_object (handler_return) == NULL;
 }
 
+static gboolean
+create_surface_accumulator (GSignalInvocationHint *ihint,
+                            GValue                *return_accu,
+                            const GValue          *handler_return,
+                            gpointer               data)
+{
+  g_value_copy (handler_return, return_accu);
+
+  /* Stop on the first non-NULL return value */
+  return g_value_get_boxed (handler_return) == NULL;
+}
+
 static GQuark quark_pointer_window = 0;
 
 static void
@@ -372,6 +387,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
   drawable_class->set_cairo_clip = gdk_window_set_cairo_clip;
   drawable_class->get_clip_region = gdk_window_get_clip_region;
   drawable_class->get_visible_region = gdk_window_get_visible_region;
+
+  klass->create_surface = _gdk_offscreen_window_create_surface;
 
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
 
@@ -476,6 +493,39 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
 		  G_TYPE_DOUBLE,
 		  G_TYPE_POINTER,
 		  G_TYPE_POINTER);
+
+  /**
+   * GdkWindow::create-surface:
+   * @window: the offscreen window on which the signal is emitted
+   * @width: the width of the offscreen surface to create
+   * @height: the height of the offscreen surface to create
+   *
+   * The ::create-surface signal is emitted when an offscreen window
+   * needs its surface (re)created, which happens either when the the
+   * window is first drawn to, or when the window is being
+   * resized. The first signal handler that returns a non-%NULL
+   * surface will stop any further signal emission, and its surface
+   * will be used.
+   *
+   * Note that it is not possible to access the window's previous
+   * surface from within any callback of this signal. Calling
+   * gdk_offscreen_window_get_surface() will lead to a crash.
+   *
+   * Returns: the newly created #cairo_surface_t for the offscreen window
+   *
+   * Since: 3.0
+   */
+  signals[CREATE_SURFACE] =
+    g_signal_new (g_intern_static_string ("create-surface"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkWindowObjectClass, create_surface),
+                  create_surface_accumulator, NULL,
+                  _gdk_marshal_BOXED__INT_INT,
+                  CAIRO_GOBJECT_TYPE_SURFACE,
+                  2,
+                  G_TYPE_INT,
+                  G_TYPE_INT);
 }
 
 static void

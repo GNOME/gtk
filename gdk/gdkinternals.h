@@ -550,6 +550,9 @@ GType gdk_offscreen_window_get_type (void);
 void       _gdk_offscreen_window_new                 (GdkWindow     *window,
 						      GdkWindowAttr *attributes,
 						      gint           attributes_mask);
+cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
+                                                        gint       width,
+                                                        gint       height);
 
 
 /************************************

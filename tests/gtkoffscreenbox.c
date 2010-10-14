@@ -234,6 +234,14 @@ offscreen_window_from_parent2 (GdkWindow       *window,
 	      offscreen_x, offscreen_y);
 }
 
+static cairo_surface_t *
+gdk_offscreen_box_create_alpha_image_surface (GdkWindow *offscreen,
+                                              gint       width,
+                                              gint       height)
+{
+  return cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+}
+
 static void
 gtk_offscreen_box_realize (GtkWidget *widget)
 {
@@ -323,6 +331,10 @@ gtk_offscreen_box_realize (GtkWidget *widget)
     gtk_widget_set_parent_window (offscreen_box->child2, offscreen_box->offscreen_window2);
   gdk_offscreen_window_set_embedder (offscreen_box->offscreen_window2,
 				     window);
+
+  g_signal_connect (offscreen_box->offscreen_window2, "create-surface",
+                    G_CALLBACK (gdk_offscreen_box_create_alpha_image_surface),
+                    offscreen_box);
   g_signal_connect (offscreen_box->offscreen_window2, "to-embedder",
 		    G_CALLBACK (offscreen_window_to_parent2), offscreen_box);
   g_signal_connect (offscreen_box->offscreen_window2, "from-embedder",

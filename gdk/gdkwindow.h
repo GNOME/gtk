@@ -489,6 +489,10 @@ typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
 struct _GdkWindowObjectClass
 {
   GdkDrawableClass parent_class;
+
+  cairo_surface_t * (* create_surface) (GdkWindow *window,
+                                        gint       width,
+                                        gint       height);
 };
 
 /* Windows
