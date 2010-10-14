@@ -5069,6 +5069,9 @@ gdk_window_get_device_position (GdkWindow       *window,
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
+  tmp_x = 0;
+  tmp_y = 0;
+
   display = gdk_window_get_display (window);
   child = display->device_hooks->window_get_device_position (display, device, window,
                                                              &tmp_x, &tmp_y, &tmp_mask);
