@@ -1429,6 +1429,9 @@ gdk_window_new (GdkWindow     *parent,
   if (private->parent)
     private->parent->children = g_list_prepend (private->parent->children, window);
 
+  private->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
+                                                  (GDestroyNotify) gdk_cursor_unref);
+
   native = _gdk_native_windows; /* Default */
   if (private->parent->window_type == GDK_WINDOW_ROOT)
     native = TRUE; /* Always use native windows for toplevels */
@@ -1466,9 +1469,6 @@ gdk_window_new (GdkWindow     *parent,
   gdk_window_set_cursor (window, ((attributes_mask & GDK_WA_CURSOR) ?
 				  (attributes->cursor) :
 				  NULL));
-
-  private->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
-                                                  (GDestroyNotify) gdk_cursor_unref);
 
   device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent));
   g_signal_connect (device_manager, "device-removed",
