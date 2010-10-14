@@ -6371,7 +6371,7 @@ show_and_select_files (GtkFileChooserDefault *impl,
 
           gtk_tree_selection_select_iter (selection, &iter);
 
-          path = gtk_tree_model_get_path (fsmodel, &iter);
+          path = gtk_tree_model_get_path (GTK_TREE_MODEL (fsmodel), &iter);
           gtk_tree_view_set_cursor (GTK_TREE_VIEW (impl->browse_files_tree_view),
                                     path, NULL, FALSE);
           gtk_tree_path_free (path);
