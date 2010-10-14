@@ -211,6 +211,40 @@ scroll_fixture_tree_setup (ScrollFixture *fixture,
 }
 
 static void
+scroll_fixture_mixed_tree_setup (ScrollFixture *fixture,
+			         gconstpointer   test_data)
+{
+	GtkTreeStore *store;
+	GtkTreeIter iter, child;
+	int i;
+
+	store = gtk_tree_store_new (1, G_TYPE_STRING);
+
+	gtk_tree_store_append (store, &iter, NULL);
+	gtk_tree_store_set (store, &iter, 0, "Root\nnode", -1);
+
+	for (i = 0; i < 5; i++) {
+		gtk_tree_store_append (store, &child, &iter);
+		if (i % 2 == 0)
+			gtk_tree_store_set (store, &child, 0, "Child node", -1);
+		else
+			gtk_tree_store_set (store, &child,
+					    0, "Child\nnode", -1);
+	}
+
+	for (i = 0; i < 5; i++) {
+		gtk_tree_store_append (store, &iter, NULL);
+		if (i % 2 != 0)
+			gtk_tree_store_set (store, &iter, 0, "Other node", -1);
+		else
+			gtk_tree_store_set (store, &iter, 0, "Other\nnode", -1);
+	}
+
+	/* The teardown will also destroy the model */
+	scroll_fixture_setup (fixture, GTK_TREE_MODEL (store), test_data);
+}
+
+static void
 scroll_fixture_teardown (ScrollFixture *fixture,
 			 gconstpointer  test_data)
 {
@@ -682,9 +716,19 @@ create_new_row (GtkListStore *store,
 			gtk_list_store_prepend (store, iter);
 			break;
 
+                case 3:
+			/* Add a row in the middle of the visible area */
+			gtk_list_store_insert (store, iter, 3);
+			break;
+
 		case 4:
 			/* Add a row in the middle of the visible area */
 			gtk_list_store_insert (store, iter, 4);
+			break;
+
+                case 5:
+			/* Add a row which is not completely visible */
+			gtk_list_store_insert (store, iter, 5);
 			break;
 
 		case 8:
@@ -1183,6 +1227,43 @@ main (int argc, char **argv)
 	g_test_add ("/TreeView/scrolling/new-row/tree", ScrollFixture,
 		    NULL,
 		    scroll_fixture_tree_setup,
+		    scroll_new_row_tree,
+		    scroll_fixture_teardown);
+
+	/* Test scrolling to a newly created row, in a mixed height model */
+	g_test_add ("/TreeView/scrolling/new-row-mixed/path-0", ScrollFixture,
+		    GINT_TO_POINTER (0),
+		    scroll_fixture_mixed_setup,
+		    scroll_new_row,
+		    scroll_fixture_teardown);
+	g_test_add ("/TreeView/scrolling/new-row-mixed/path-3", ScrollFixture,
+		    GINT_TO_POINTER (3),
+		    scroll_fixture_mixed_setup,
+		    scroll_new_row,
+		    scroll_fixture_teardown);
+	/* We scroll to 8 to test a partial visible row.  The 8 is
+	 * based on my font setting of "Vera Sans 11" and
+	 * the separators set to 0.  (This should be made dynamic; FIXME).
+	 */
+	g_test_add ("/TreeView/scrolling/new-row-mixed/path-5", ScrollFixture,
+		    GINT_TO_POINTER (5),
+		    scroll_fixture_mixed_setup,
+		    scroll_new_row,
+		    scroll_fixture_teardown);
+	g_test_add ("/TreeView/scrolling/new-row-mixed/path-500", ScrollFixture,
+		    GINT_TO_POINTER (500),
+		    scroll_fixture_mixed_setup,
+		    scroll_new_row,
+		    scroll_fixture_teardown);
+	g_test_add ("/TreeView/scrolling/new-row-mixed/path-999", ScrollFixture,
+		    GINT_TO_POINTER (999),
+		    scroll_fixture_mixed_setup,
+		    scroll_new_row,
+		    scroll_fixture_teardown);
+
+	g_test_add ("/TreeView/scrolling/new-row-mixed/tree", ScrollFixture,
+		    NULL,
+		    scroll_fixture_mixed_tree_setup,
 		    scroll_new_row_tree,
 		    scroll_fixture_teardown);
 
