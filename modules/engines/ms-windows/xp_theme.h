@@ -115,14 +115,17 @@ typedef enum
 
 typedef struct
 {
+  HDC hdc;
+  HBITMAP hBitmap, hOldBitmap;
   cairo_t *cr;
-  HDC dc;
-  gint x_offset;
-  gint y_offset;
+  gint x;
+  gint y;
+  gint width;
+  gint height;
 } XpDCInfo;
 
 HDC get_window_dc (GtkStyle *style,
-		   GdkWindow *window,
+		   cairo_t *cr,
 		   GtkStateType state_type,
 		   XpDCInfo *dc_info_out,
 		   gint x, gint y, gint width, gint height,
@@ -132,10 +135,9 @@ void release_window_dc (XpDCInfo *dc_info);
 void xp_theme_init (void);
 void xp_theme_reset (void);
 void xp_theme_exit (void);
-gboolean xp_theme_draw (GdkWindow *win, XpThemeElement element,
+gboolean xp_theme_draw (cairo_t *cr, XpThemeElement element,
                         GtkStyle *style, int x, int y, int width,
-                        int height, GtkStateType state_type,
-                        GdkRectangle *area);
+                        int height, GtkStateType state_type);
 gboolean xp_theme_is_drawable (XpThemeElement element);
 gboolean xp_theme_get_element_dimensions (XpThemeElement element,
                                           GtkStateType state_type,

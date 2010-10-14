@@ -916,9 +916,9 @@ is_combo_box_child (GtkWidget *w)
 /* This function is not needed anymore */
 /* static gboolean
 combo_box_draw_arrow (GtkStyle *style,
-		      GdkWindow *window,
+		      cairo_t *cr,
 		      GtkStateType state,
-		      GdkRectangle *area, GtkWidget *widget)
+		      GtkWidget *widget)
 {
   if (xp_theme_is_active ())
     return TRUE;
@@ -930,7 +930,7 @@ combo_box_draw_arrow (GtkStyle *style,
       HDC dc;
       XpDCInfo dc_info;
 
-      dc = get_window_dc (style, window, state, &dc_info, area->x, area->y, area->width,
+      dc = get_window_dc (style, cr, state, &dc_info, area->x, area->y, area->width,
 			  area->height, &rect);
       border = (GTK_TOGGLE_BUTTON (gtk_widget_get_parent (widget))->
 		active ? DFCS_PUSHED | DFCS_FLAT : 0);
@@ -947,17 +947,9 @@ combo_box_draw_arrow (GtkStyle *style,
 }*/
 
 static void
-draw_part (GdkDrawable *drawable,
-           GdkColor *gc, GdkRectangle *area, gint x, gint y, Part part)
+draw_part (cairo_t *cr,
+           GdkColor *gc, gint x, gint y, Part part)
 {
-  cairo_t *cr = gdk_cairo_create (drawable);
-
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
-    }
-
   if (!parts[part].bmap)
     {
       parts[part].bmap = cairo_image_surface_create_for_data ((unsigned char *)parts[part].bits,
@@ -967,16 +959,13 @@ draw_part (GdkDrawable *drawable,
 
   gdk_cairo_set_source_color (cr, gc);
   cairo_mask_surface (cr, parts[part].bmap, x, y);
-
-  cairo_destroy(cr);
 }
 
 static void
 draw_check (GtkStyle *style,
-	    GdkWindow *window,
+	    cairo_t *cr,
 	    GtkStateType state,
 	    GtkShadowType shadow,
-	    GdkRectangle *area,
 	    GtkWidget *widget,
 	    const gchar *detail, gint x, gint y, gint width, gint height)
 {
@@ -987,8 +976,8 @@ draw_check (GtkStyle *style,
     {
       if (shadow == GTK_SHADOW_IN)
 	{
-          draw_part (window, &style->black, area, x, y, CHECK_TEXT);
-          draw_part (window, &style->dark[state], area, x, y, CHECK_AA);
+          draw_part (cr, &style->black, x, y, CHECK_TEXT);
+          draw_part (cr, &style->dark[state], x, y, CHECK_AA);
 	}
     }
   else
@@ -1008,31 +997,27 @@ draw_check (GtkStyle *style,
 	  break;
 	}
 
-      if (!xp_theme_draw (window, theme_elt,
-			  style, x, y, width, height, state, area))
+      if (!xp_theme_draw (cr, theme_elt,
+			  style, x, y, width, height, state))
 	{
 	  if (detail && !strcmp (detail, "cellcheck"))
 	    state = GTK_STATE_NORMAL;
 
-          draw_part (window, &style->black, area, x, y, CHECK_BLACK);
-          draw_part (window, &style->dark[state], area, x, y, CHECK_DARK);
-          draw_part (window, &style->mid[state], area, x, y, CHECK_MID);
-          draw_part (window, &style->light[state], area, x, y, CHECK_LIGHT);
-          draw_part (window, &style->base[state], area, x, y, CHECK_BASE);
+          draw_part (cr, &style->black, x, y, CHECK_BLACK);
+          draw_part (cr, &style->dark[state], x, y, CHECK_DARK);
+          draw_part (cr, &style->mid[state], x, y, CHECK_MID);
+          draw_part (cr, &style->light[state], x, y, CHECK_LIGHT);
+          draw_part (cr, &style->base[state], x, y, CHECK_BASE);
 
 	  if (shadow == GTK_SHADOW_IN)
 	    {
-              draw_part (window, &style->text[state], area, x,
-			 y, CHECK_TEXT);
-              draw_part (window, &style->text_aa[state], area,
-			 x, y, CHECK_AA);
+              draw_part (cr, &style->text[state], x, y, CHECK_TEXT);
+              draw_part (cr, &style->text_aa[state], x, y, CHECK_AA);
 	    }
 	  else if (shadow == GTK_SHADOW_ETCHED_IN)
 	    {
-              draw_part (window, &style->text[state], area, x, y,
-			 CHECK_INCONSISTENT);
-              draw_part (window, &style->text_aa[state], area, x, y,
-			 CHECK_AA);
+              draw_part (cr, &style->text[state], x, y, CHECK_INCONSISTENT);
+              draw_part (cr, &style->text_aa[state], x, y, CHECK_AA);
 	    }
 	}
     }
@@ -1040,15 +1025,12 @@ draw_check (GtkStyle *style,
 
 static void
 draw_expander (GtkStyle *style,
-	       GdkWindow *window,
+	       cairo_t *cr,
 	       GtkStateType state,
-	       GdkRectangle *area,
 	       GtkWidget *widget,
 	       const gchar *detail,
 	       gint x, gint y, GtkExpanderStyle expander_style)
 {
-  cairo_t *cr = gdk_cairo_create (window);
-
   gint expander_size;
   gint expander_semi_size;
   XpThemeElement xp_expander;
@@ -1073,19 +1055,16 @@ draw_expander (GtkStyle *style,
   if (expander_size > 2)
     expander_size -= 2;
 
-  if (area)
-    {
-      gdk_cairo_rectangle (cr, area);
-      cairo_clip (cr);
+/* FIXME: wtf?
       gdk_cairo_set_source_color (cr, &style->fg[state]);
-    }
+ */
 
   expander_semi_size = expander_size / 2;
   x -= expander_semi_size;
   y -= expander_semi_size;
 
-  if (!xp_theme_draw (window, xp_expander, style,
-		      x, y, expander_size, expander_size, state, area))
+  if (!xp_theme_draw (cr, xp_expander, style,
+		      x, y, expander_size, expander_size, state))
     {
       HDC dc;
       RECT rect;
@@ -1093,7 +1072,7 @@ draw_expander (GtkStyle *style,
       HGDIOBJ old_pen;
       XpDCInfo dc_info;
 
-      dc = get_window_dc (style, window, state, &dc_info, x, y, expander_size,
+      dc = get_window_dc (style, cr, state, &dc_info, x, y, expander_size,
 			  expander_size, &rect);
       FrameRect (dc, &rect, GetSysColorBrush (COLOR_GRAYTEXT));
       InflateRect (&rect, -1, -1);
@@ -1121,16 +1100,13 @@ draw_expander (GtkStyle *style,
       DeleteObject (pen);
       release_window_dc (&dc_info);
     }
-
-  cairo_destroy(cr);
 }
 
 static void
 draw_option (GtkStyle *style,
-	     GdkWindow *window,
+	     cairo_t *cr,
 	     GtkStateType state,
 	     GtkShadowType shadow,
-	     GdkRectangle *area,
 	     GtkWidget *widget,
 	     const gchar *detail, gint x, gint y, gint width, gint height)
 {
@@ -1141,15 +1117,15 @@ draw_option (GtkStyle *style,
     {
       if (shadow == GTK_SHADOW_IN)
 	{
-          draw_part (window, &style->fg[state], area, x, y, RADIO_TEXT);
+          draw_part (cr, &style->fg[state], x, y, RADIO_TEXT);
 	}
     }
   else
     {
-      if (xp_theme_draw (window, shadow == GTK_SHADOW_IN
+      if (xp_theme_draw (cr, shadow == GTK_SHADOW_IN
 			 ? XP_THEME_ELEMENT_PRESSED_RADIO_BUTTON
 			 : XP_THEME_ELEMENT_RADIO_BUTTON,
-			 style, x, y, width, height, state, area))
+			 style, x, y, width, height, state))
 	{
 	}
       else
@@ -1157,37 +1133,27 @@ draw_option (GtkStyle *style,
 	  if (detail && !strcmp (detail, "cellradio"))
 	    state = GTK_STATE_NORMAL;
 
-          draw_part (window, &style->black, area, x, y, RADIO_BLACK);
-          draw_part (window, &style->dark[state], area, x, y, RADIO_DARK);
-          draw_part (window, &style->mid[state], area, x, y, RADIO_MID);
-          draw_part (window, &style->light[state], area, x, y, RADIO_LIGHT);
-          draw_part (window, &style->base[state], area, x, y, RADIO_BASE);
+          draw_part (cr, &style->black, x, y, RADIO_BLACK);
+          draw_part (cr, &style->dark[state], x, y, RADIO_DARK);
+          draw_part (cr, &style->mid[state], x, y, RADIO_MID);
+          draw_part (cr, &style->light[state], x, y, RADIO_LIGHT);
+          draw_part (cr, &style->base[state], x, y, RADIO_BASE);
 
 	  if (shadow == GTK_SHADOW_IN)
-            draw_part (window, &style->text[state], area, x, y, RADIO_TEXT);
+            draw_part (cr, &style->text[state], x, y, RADIO_TEXT);
 	}
     }
 }
 
 static void
-draw_varrow (GdkWindow *window,
+draw_varrow (cairo_t *cr,
              GdkColor *gc,
 	     GtkShadowType shadow_type,
-	     GdkRectangle *area,
 	     GtkArrowType arrow_type, gint x, gint y, gint width, gint height)
 {
   gint steps, extra;
   gint y_start, y_increment;
   gint i;
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (window);
-
-  if (area)
-    {
-       gdk_cairo_rectangle (cr, area);
-       cairo_clip (cr);
-    }
 
   width = width + width % 2 - 1;	/* Force odd */
   steps = 1 + width / 2;
@@ -1210,29 +1176,17 @@ draw_varrow (GdkWindow *window,
 		     x + (i - extra), y_start + i * y_increment,
 		     x + width - (i - extra) - 1, y_start + i * y_increment);
     }
-
-  cairo_destroy(cr);
 }
 
 static void
-draw_harrow (GdkWindow *window,
+draw_harrow (cairo_t *cr,
              GdkColor *gc,
 	     GtkShadowType shadow_type,
-	     GdkRectangle *area,
 	     GtkArrowType arrow_type, gint x, gint y, gint width, gint height)
 {
   gint steps, extra;
   gint x_start, x_increment;
   gint i;
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (window);
-
-  if (area)
-    {
-       gdk_cairo_rectangle (cr, area);
-       cairo_clip (cr);
-    }
 
   height = height + height % 2 - 1;	/* Force odd */
   steps = 1 + height / 2;
@@ -1255,8 +1209,6 @@ draw_harrow (GdkWindow *window,
 		     x_start + i * x_increment, y + (i - extra),
 		     x_start + i * x_increment, y + height - (i - extra) - 1);
     }
-
-  cairo_destroy(cr);
 }
 
 /* This function makes up for some brokeness in gtkrange.c
@@ -1328,10 +1280,9 @@ to_xp_arrow (GtkArrowType arrow_type)
 
 static void
 draw_arrow (GtkStyle *style,
-	    GdkWindow *window,
+	    cairo_t *cr,
 	    GtkStateType state,
 	    GtkShadowType shadow,
-	    GdkRectangle *area,
 	    GtkWidget *widget,
 	    const gchar *detail,
 	    GtkArrowType arrow_type,
@@ -1366,7 +1317,7 @@ draw_arrow (GtkStyle *style,
 	  ++y;
 	}
 
-      draw_varrow (window, &style->fg[state], shadow, area,
+      draw_varrow (cr, &style->fg[state], shadow,
 		   arrow_type, x, y, width, height);
 
       return;
@@ -1393,8 +1344,8 @@ draw_arrow (GtkStyle *style,
 	  is_disabled = TRUE;
 	}
 
-      if (xp_theme_draw (window, to_xp_arrow (arrow_type), style, box_x, box_y,
-			 box_width, box_height, state, area))
+      if (xp_theme_draw (cr, to_xp_arrow (arrow_type), style, box_x, box_y,
+			 box_width, box_height, state))
 	{
 	}
       else
@@ -1428,7 +1379,7 @@ draw_arrow (GtkStyle *style,
 
 	  if (widget)
 	    {
-	      dc = get_window_dc (style, window, state, &dc_info,
+	      dc = get_window_dc (style, cr, state, &dc_info,
 				  box_x, box_y, box_width, box_height, &rect);
 	      DrawFrameControl (dc, &rect, DFC_SCROLL,
 				btn_type | (shadow ==
@@ -1444,8 +1395,8 @@ draw_arrow (GtkStyle *style,
       if (name && !strcmp (name, "gtk-toolbar-arrow"))
 	{
 	  if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_REBAR_CHEVRON, style, x, y,
-	       width, height, state, area))
+	      (cr, XP_THEME_ELEMENT_REBAR_CHEVRON, style, x, y,
+	       width, height, state))
 	    {
 	      return;
 	    }
@@ -1458,9 +1409,9 @@ draw_arrow (GtkStyle *style,
 
 	  gtk_widget_get_allocation (widget, &allocation);
 	  if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x - 3,
+	      (cr, XP_THEME_ELEMENT_COMBOBUTTON, style, x - 3,
 	       allocation.y + 1, width + 5,
-	       allocation.height - 4, state, area))
+	       allocation.height - 4, state))
 	    {
 	      return;
 	    }
@@ -1471,7 +1422,7 @@ draw_arrow (GtkStyle *style,
 	  x += (width - 7) / 2;
 	  y += (height - 5) / 2;
 
-          draw_varrow (window, &style->fg[state], shadow, area,
+          draw_varrow (cr, &style->fg[state], shadow,
 		       arrow_type, x, y, 7, 5);
 	}
       else
@@ -1479,7 +1430,7 @@ draw_arrow (GtkStyle *style,
 	  x += (width - 5) / 2;
 	  y += (height - 7) / 2;
 
-          draw_harrow (window, &style->fg[state], shadow, area,
+          draw_harrow (cr, &style->fg[state], shadow,
 		       arrow_type, x, y, 5, 7);
 	}
     }
@@ -1601,9 +1552,9 @@ draw_3d_border (HDC hdc, RECT *rc, gboolean sunken)
 }
 
 static gboolean
-draw_menu_item (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
+draw_menu_item (cairo_t *cr, GtkWidget *widget, GtkStyle *style,
 		gint x, gint y, gint width, gint height,
-		GtkStateType state_type, GdkRectangle *area)
+		GtkStateType state_type)
 {
   GtkWidget *parent;
   GtkMenuShell *bar;
@@ -1613,8 +1564,8 @@ draw_menu_item (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 
   if (xp_theme_is_active ())
     {
-      return (xp_theme_draw (window, XP_THEME_ELEMENT_MENU_ITEM, style,
-                             x, y, width, height, state_type, area));
+      return (xp_theme_draw (cr, XP_THEME_ELEMENT_MENU_ITEM, style,
+                             x, y, width, height, state_type));
     }
 
   if ((parent = gtk_widget_get_parent (widget))
@@ -1622,7 +1573,7 @@ draw_menu_item (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
     {
       bar = GTK_MENU_SHELL (parent);
 
-      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
       if (state_type == GTK_STATE_PRELIGHT)
 	{
@@ -1664,9 +1615,9 @@ get_dither_brush (void)
 }
 
 static gboolean
-draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
+draw_tool_button (cairo_t *cr, GtkWidget *widget, GtkStyle *style,
 		  gint x, gint y, gint width, gint height,
-		  GtkStateType state_type, GdkRectangle *area)
+		  GtkStateType state_type)
 {
   HDC dc;
   RECT rect;
@@ -1675,8 +1626,8 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 
   if (xp_theme_is_active ())
     {
-      return (xp_theme_draw (window, XP_THEME_ELEMENT_TOOLBAR_BUTTON, style,
-			     x, y, width, height, state_type, area));
+      return (xp_theme_draw (cr, XP_THEME_ELEMENT_TOOLBAR_BUTTON, style,
+			     x, y, width, height, state_type));
     }
 
   if (GTK_IS_TOGGLE_BUTTON (widget))
@@ -1693,7 +1644,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
       return FALSE;
     }
 
-  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+  dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
   if (state_type == GTK_STATE_PRELIGHT)
     {
       if (is_toggled)
@@ -1721,7 +1672,7 @@ draw_tool_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 }
 
 static void
-draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
+draw_push_button (cairo_t *cr, GtkWidget *widget, GtkStyle *style,
 		  gint x, gint y, gint width, gint height,
 		  GtkStateType state_type, gboolean is_default)
 {
@@ -1729,7 +1680,7 @@ draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
   RECT rect;
   XpDCInfo dc_info;
 
-  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+  dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
   if (GTK_IS_TOGGLE_BUTTON (widget))
     {
@@ -1774,10 +1725,9 @@ draw_push_button (GdkWindow *window, GtkWidget *widget, GtkStyle *style,
 
 static void
 draw_box (GtkStyle *style,
-	  GdkWindow *window,
+	  cairo_t *cr,
 	  GtkStateType state_type,
 	  GtkShadowType shadow_type,
-	  GdkRectangle *area,
 	  GtkWidget *widget,
 	  const gchar *detail, gint x, gint y, gint width, gint height)
 {
@@ -1791,20 +1741,20 @@ draw_box (GtkStyle *style,
 
       border = (GTK_TOGGLE_BUTTON (widget)->active ? DFCS_PUSHED | DFCS_FLAT : 0);
 
-      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
       release_window_dc (&dc_info);
 
       if (xp_theme_is_active ()
-	  && xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON, style, x, y,
-			    width, height, state_type, area))
+	  && xp_theme_draw (cr, XP_THEME_ELEMENT_COMBOBUTTON, style, x, y,
+			    width, height, state_type))
 	{
       cx = GetSystemMetrics(SM_CXVSCROLL);
       x += width - cx;
       width = cx;
 
 
-      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width - cx, height, &rect);
+      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width - cx, height, &rect);
       FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
       release_window_dc (&dc_info);
       return;
@@ -1817,8 +1767,8 @@ draw_box (GtkStyle *style,
       if (GTK_IS_TREE_VIEW (gtk_widget_get_parent (widget)))
       {
         if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
-	       width, height, state_type, area))
+	      (cr, XP_THEME_ELEMENT_LIST_HEADER, style, x, y,
+	       width, height, state_type))
 	    {
 	      return;
 	    }
@@ -1827,7 +1777,7 @@ draw_box (GtkStyle *style,
 	      HDC dc;
 	      RECT rect;
 	      XpDCInfo dc_info;
-	      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+	      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
 	      DrawFrameControl (dc, &rect, DFC_BUTTON, DFCS_BUTTONPUSH |
 				(state_type ==
@@ -1840,8 +1790,8 @@ draw_box (GtkStyle *style,
 	       || (!GTK_IS_BUTTON (widget) ||
 		   (GTK_RELIEF_NONE == gtk_button_get_relief (GTK_BUTTON (widget)))))
 	{
-	  if (draw_tool_button (window, widget, style, x, y,
-				width, height, state_type, area))
+	  if (draw_tool_button (cr, widget, style, x, y,
+				width, height, state_type))
 	    {
 	      return;
 	    }
@@ -1850,15 +1800,15 @@ draw_box (GtkStyle *style,
 	{
 	  gboolean is_default = gtk_widget_has_default (widget);
 	  if (xp_theme_draw
-	      (window,
+	      (cr,
 	       is_default ? XP_THEME_ELEMENT_DEFAULT_BUTTON :
 	       XP_THEME_ELEMENT_BUTTON, style, x, y, width, height,
-	       state_type, area))
+	       state_type))
 	    {
 	      return;
 	    }
 
-	  draw_push_button (window, widget, style,
+	  draw_push_button (cr, widget, style,
 			    x, y, width, height, state_type, is_default);
 
 	  return;
@@ -1876,17 +1826,17 @@ draw_box (GtkStyle *style,
   else if (detail && (!strcmp (detail, "spinbutton_up")
 		      || !strcmp (detail, "spinbutton_down")))
     {
-      if (!xp_theme_draw (window,
+      if (!xp_theme_draw (cr,
 			  (!strcmp (detail, "spinbutton_up"))
 			  ? XP_THEME_ELEMENT_SPIN_BUTTON_UP
 			  : XP_THEME_ELEMENT_SPIN_BUTTON_DOWN,
-			  style, x, y, width, height, state_type, area))
+			  style, x, y, width, height, state_type))
 	{
 	  RECT rect;
 	  XpDCInfo dc_info;
 	  HDC dc;
 
-	  dc = get_window_dc (style, window, state_type, &dc_info,
+	  dc = get_window_dc (style, cr, state_type, &dc_info,
 			      x, y, width, height, &rect);
 	  DrawEdge (dc, &rect,
 		    state_type ==
@@ -1902,11 +1852,11 @@ draw_box (GtkStyle *style,
 	  GtkScrollbar *scrollbar = GTK_SCROLLBAR (widget);
 	  gboolean is_v = GTK_IS_VSCROLLBAR (widget);
 
-	  if (xp_theme_draw (window,
+	  if (xp_theme_draw (cr,
 			     is_v
 			     ? XP_THEME_ELEMENT_SCROLLBAR_V
 			     : XP_THEME_ELEMENT_SCROLLBAR_H,
-			     style, x, y, width, height, state_type, area))
+			     style, x, y, width, height, state_type))
 	    {
 	      XpThemeElement gripper =
 		(is_v ? XP_THEME_ELEMENT_SCROLLBAR_GRIPPER_V :
@@ -1925,8 +1875,8 @@ draw_box (GtkStyle *style,
 		  return;
 		}
 
-	      xp_theme_draw (window, gripper, style, x, y,
-			     width, height, state_type, area);
+	      xp_theme_draw (cr, gripper, style, x, y,
+			     width, height, state_type);
 	      return;
 	    }
 	  else
@@ -1948,8 +1898,8 @@ draw_box (GtkStyle *style,
 	  XpThemeElement xp_progress_bar =
 	    map_gtk_progress_bar_to_xp (progress_bar, FALSE);
 
-	  if (xp_theme_draw (window, xp_progress_bar, style, x, y,
-			     width, height, state_type, area))
+	  if (xp_theme_draw (cr, xp_progress_bar, style, x, y,
+			     width, height, state_type))
 	    {
 	      return;
 	    }
@@ -1960,8 +1910,8 @@ draw_box (GtkStyle *style,
   else if (detail && strcmp (detail, "menuitem") == 0)
     {
       shadow_type = GTK_SHADOW_NONE;
-      if (draw_menu_item (window, widget, style,
-			  x, y, width, height, state_type, area))
+      if (draw_menu_item (cr, widget, style,
+			  x, y, width, height, state_type))
 	{
 	  return;
 	}
@@ -1974,8 +1924,8 @@ draw_box (GtkStyle *style,
 	  XpThemeElement xp_progress_bar =
 	    map_gtk_progress_bar_to_xp (progress_bar, TRUE);
 	  if (xp_theme_draw
-	      (window, xp_progress_bar, style, x, y, width, height,
-	       state_type, area))
+	      (cr, xp_progress_bar, style, x, y, width, height,
+	       state_type))
 	    {
 	      return;
 	    }
@@ -1988,11 +1938,11 @@ draw_box (GtkStyle *style,
 	{
 	  gboolean is_vertical = GTK_IS_VSCROLLBAR (widget);
 
-	  if (xp_theme_draw (window,
+	  if (xp_theme_draw (cr,
 			     is_vertical
 			     ? XP_THEME_ELEMENT_TROUGH_V
 			     : XP_THEME_ELEMENT_TROUGH_H,
-			     style, x, y, width, height, state_type, area))
+			     style, x, y, width, height, state_type))
 	    {
 	      return;
 	    }
@@ -2002,7 +1952,7 @@ draw_box (GtkStyle *style,
 	      RECT rect;
 	      XpDCInfo dc_info;
 
-	      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+	      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
 	      SetTextColor (dc, GetSysColor (COLOR_3DHILIGHT));
 	      SetBkColor (dc, GetSysColor (COLOR_BTNFACE));
@@ -2019,39 +1969,39 @@ draw_box (GtkStyle *style,
 
 	  if (!xp_theme_is_active ())
 	    {
-	      parent_class->draw_box (style, window, state_type,
-				      GTK_SHADOW_NONE, area,
+	      parent_class->draw_box (style, cr, state_type,
+				      GTK_SHADOW_NONE,
 				      widget, detail, x, y, width, height);
 	    }
 
 	  if (is_vertical)
 	    {
 	      if (xp_theme_draw
-		  (window, XP_THEME_ELEMENT_SCALE_TROUGH_V,
+		  (cr, XP_THEME_ELEMENT_SCALE_TROUGH_V,
 		   style, (2 * x + width) / 2, y, 2, height,
-		   state_type, area))
+		   state_type))
 		{
 		  return;
 		}
 
-	      parent_class->draw_box (style, window, state_type,
+	      parent_class->draw_box (style, cr, state_type,
 				      GTK_SHADOW_ETCHED_IN,
-				      area, NULL, NULL,
+				      NULL, NULL,
 				      (2 * x + width) / 2, y, 1, height);
 	    }
 	  else
 	    {
 	      if (xp_theme_draw
-		  (window, XP_THEME_ELEMENT_SCALE_TROUGH_H,
+		  (cr, XP_THEME_ELEMENT_SCALE_TROUGH_H,
 		   style, x, (2 * y + height) / 2, width, 2,
-		   state_type, area))
+		   state_type))
 		{
 		  return;
 		}
 
-	      parent_class->draw_box (style, window, state_type,
+	      parent_class->draw_box (style, cr, state_type,
 				      GTK_SHADOW_ETCHED_IN,
-				      area, NULL, NULL, x,
+				      NULL, NULL, x,
 				      (2 * y + height) / 2, width, 1);
 	    }
 
@@ -2060,8 +2010,8 @@ draw_box (GtkStyle *style,
     }
   else if (detail && strcmp (detail, "optionmenu") == 0)
     {
-      if (xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT,
-			 style, x, y, width, height, state_type, area))
+      if (xp_theme_draw (cr, XP_THEME_ELEMENT_EDIT_TEXT,
+			 style, x, y, width, height, state_type))
 	{
 	  return;
 	}
@@ -2077,8 +2027,8 @@ draw_box (GtkStyle *style,
 	       || strcmp (detail, "toolbar") == 0
 	       || strcmp (detail, "menubar") == 0))
     {
-      if (xp_theme_draw (window, XP_THEME_ELEMENT_REBAR,
-			 style, x, y, width, height, state_type, area))
+      if (xp_theme_draw (cr, XP_THEME_ELEMENT_REBAR,
+			 style, x, y, width, height, state_type))
 	{
 	  return;
 	}
@@ -2092,8 +2042,8 @@ draw_box (GtkStyle *style,
     }
   else if (detail && !strcmp (detail, "notebook") && GTK_IS_NOTEBOOK (widget))
     {
-      if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
-			 x, y, width, height, state_type, area))
+      if (xp_theme_draw (cr, XP_THEME_ELEMENT_TAB_PANE, style,
+			 x, y, width, height, state_type))
 	{
 	  return;
 	}
@@ -2106,8 +2056,8 @@ draw_box (GtkStyle *style,
       if (name && !strcmp (name, "gtk-tooltips"))
 	{
 	  if (xp_theme_draw
-	      (window, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width,
-	       height, state_type, area))
+	      (cr, XP_THEME_ELEMENT_TOOLTIP, style, x, y, width,
+	       height, state_type))
 	    {
 	      return;
 	    }
@@ -2118,7 +2068,7 @@ draw_box (GtkStyle *style,
 	      XpDCInfo dc_info;
 	      HDC hdc;
 
-	      hdc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+	      hdc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
 	      brush = GetSysColorBrush (COLOR_3DDKSHADOW);
 
@@ -2137,7 +2087,7 @@ draw_box (GtkStyle *style,
 	}
     }
 
-  parent_class->draw_box (style, window, state_type, shadow_type, area,
+  parent_class->draw_box (style, cr, state_type, shadow_type,
 			  widget, detail, x, y, width, height);
 
   if (detail && strcmp (detail, "optionmenu") == 0)
@@ -2160,7 +2110,7 @@ draw_box (GtkStyle *style,
 				 indicator_spacing.left +
 				 indicator_spacing.right) - style->xthickness;
 
-	  parent_class->draw_vline (style, window, state_type, area, widget,
+	  parent_class->draw_vline (style, cr, state_type, widget,
 				    detail,
 				    y + style->ythickness + 1,
 				    y + height - style->ythickness - 3, vline_x);
@@ -2170,10 +2120,9 @@ draw_box (GtkStyle *style,
 
 static void
 draw_tab (GtkStyle *style,
-	  GdkWindow *window,
+	  cairo_t *cr,
 	  GtkStateType state,
 	  GtkShadowType shadow,
-	  GdkRectangle *area,
 	  GtkWidget *widget,
 	  const gchar *detail, gint x, gint y, gint width, gint height)
 {
@@ -2183,17 +2132,17 @@ draw_tab (GtkStyle *style,
   gint arrow_height;
 
   g_return_if_fail (style != NULL);
-  g_return_if_fail (window != NULL);
+  g_return_if_fail (cr != NULL);
 
   if (detail && !strcmp (detail, "optionmenutab"))
     {
       GtkAllocation allocation;
 
       gtk_widget_get_allocation (widget, &allocation);
-      if (xp_theme_draw (window, XP_THEME_ELEMENT_COMBOBUTTON,
+      if (xp_theme_draw (cr, XP_THEME_ELEMENT_COMBOBUTTON,
 			 style, x - 5, allocation.y + 1,
 			 width + 10, allocation.height - 2,
-			 state, area))
+			 state))
 	{
 	  return;
 	}
@@ -2206,7 +2155,7 @@ draw_tab (GtkStyle *style,
 
   y += (height - arrow_height) / 2;
 
-  draw_varrow (window, &style->black, shadow, area, GTK_ARROW_DOWN,
+  draw_varrow (cr, &style->black, shadow, GTK_ARROW_DOWN,
 	       x, y, indicator_size.width, arrow_height);
 }
 
@@ -2324,19 +2273,20 @@ DrawTab (HDC hdc, const RECT R, gint32 aPosition, gboolean aSelected,
 
 static gboolean
 draw_themed_tab_button (GtkStyle *style,
-			GdkWindow *window,
+			cairo_t *cr,
 			GtkStateType state_type,
 			GtkNotebook *notebook,
 			gint x, gint y,
 			gint width, gint height, gint gap_side)
 {
+/* FIXME: poop
   GdkPixmap *pixmap = NULL;
+ */
   gint border_width =
     gtk_container_get_border_width (GTK_CONTAINER (notebook));
   GtkWidget *widget = GTK_WIDGET (notebook);
-  GdkRectangle draw_rect, clip_rect;
+  GdkRectangle draw_rect;
   GdkPixbufRotation rotation = GDK_PIXBUF_ROTATE_NONE;
-  cairo_t *cr;
   GtkAllocation allocation;
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -2352,8 +2302,9 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.width = width + 2;
 	  draw_rect.height = height;
 
-	  clip_rect = draw_rect;
+/* FIXME: wtf?
 	  clip_rect.height--;
+ */
 	}
       else
 	{
@@ -2361,7 +2312,6 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.y = y;
 	  draw_rect.width = width - 2;
 	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
 	}
 
       /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
@@ -2369,7 +2319,7 @@ draw_themed_tab_button (GtkStyle *style,
 
       if (draw_rect.x + draw_rect.width >= widget_right)
 	{
-	  draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
+	  draw_rect.width = widget_right - draw_rect.x;
 	}
     }
   if (gap_side == GTK_POS_BOTTOM)
@@ -2382,8 +2332,6 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.y = y;
 	  draw_rect.width = width + 2;
 	  draw_rect.height = height;
-
-	  clip_rect = draw_rect;
 	}
       else
 	{
@@ -2391,7 +2339,6 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.y = y + 2;
 	  draw_rect.width = width - 2;
 	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
 	}
 
       /* If we are currently drawing the right-most tab, and if that tab is the selected tab... */
@@ -2399,7 +2346,7 @@ draw_themed_tab_button (GtkStyle *style,
 
       if (draw_rect.x + draw_rect.width >= widget_right)
 	{
-	  draw_rect.width = clip_rect.width = widget_right - draw_rect.x;
+	  draw_rect.width = widget_right - draw_rect.x;
 	}
 
       rotation = GDK_PIXBUF_ROTATE_UPSIDEDOWN;
@@ -2415,8 +2362,9 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.width = width;
 	  draw_rect.height = height + 2;
 
-	  clip_rect = draw_rect;
+/* FIXME: wtf?
 	  clip_rect.width--;
+ */
 	}
       else
 	{
@@ -2424,7 +2372,6 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.y = y + 2;
 	  draw_rect.width = width - 2;
 	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
 	}
 
       /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
@@ -2432,7 +2379,7 @@ draw_themed_tab_button (GtkStyle *style,
 
       if (draw_rect.y + draw_rect.height >= widget_bottom)
 	{
-	  draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
+	  draw_rect.height = widget_bottom - draw_rect.y;
 	}
 
       rotation = GDK_PIXBUF_ROTATE_COUNTERCLOCKWISE;
@@ -2448,8 +2395,9 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.width = width;
 	  draw_rect.height = height + 2;
 
-	  clip_rect = draw_rect;
+/* FIXME: wtf?
 	  clip_rect.width--;
+ */
 	}
       else
 	{
@@ -2457,7 +2405,6 @@ draw_themed_tab_button (GtkStyle *style,
 	  draw_rect.y = y + 2;
 	  draw_rect.width = width - 2;
 	  draw_rect.height = height - 2;
-	  clip_rect = draw_rect;
 	}
 
       /* If we are currently drawing the bottom-most tab, and if that tab is the selected tab... */
@@ -2465,7 +2412,7 @@ draw_themed_tab_button (GtkStyle *style,
 
       if (draw_rect.y + draw_rect.height >= widget_bottom)
 	{
-	  draw_rect.height = clip_rect.height = widget_bottom - draw_rect.y;
+	  draw_rect.height = widget_bottom - draw_rect.y;
 	}
 
       rotation = GDK_PIXBUF_ROTATE_CLOCKWISE;
@@ -2473,10 +2420,10 @@ draw_themed_tab_button (GtkStyle *style,
 
   if (gap_side == GTK_POS_TOP)
     {
-      if (!xp_theme_draw (window, XP_THEME_ELEMENT_TAB_ITEM, style,
+      if (!xp_theme_draw (cr, XP_THEME_ELEMENT_TAB_ITEM, style,
 			  draw_rect.x, draw_rect.y,
 			  draw_rect.width, draw_rect.height,
-			  state_type, &clip_rect))
+			  state_type))
 	{
 	  return FALSE;
 	}
@@ -2486,12 +2433,15 @@ draw_themed_tab_button (GtkStyle *style,
       GdkPixbuf *pixbuf;
       GdkPixbuf *rotated;
 
+/* FIXME: poop */
+#if 0
       if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT)
 	{
-	  pixmap = gdk_pixmap_new (window, clip_rect.height, clip_rect.width, -1);
+	  pixmap = gdk_pixmap_new (cr, draw_rect.height, draw_rect.width, -1);
 
 	  if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
-			      draw_rect.y - clip_rect.y, draw_rect.x - clip_rect.x,
+/* FIXME: wtf? */
+			      draw_rect.y - draw_rect.y, draw_rect.x - draw_rect.x,
 			      draw_rect.height, draw_rect.width, state_type, 0))
 	    {
 	      g_object_unref (pixmap);
@@ -2499,15 +2449,16 @@ draw_themed_tab_button (GtkStyle *style,
 	    }
 
 	  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
-						 clip_rect.height, clip_rect.width);
+						 draw_rect.height, draw_rect.width);
 	  g_object_unref (pixmap);
 	}
       else
 	{
-	  pixmap = gdk_pixmap_new (window, clip_rect.width, clip_rect.height, -1);
+	  pixmap = gdk_pixmap_new (cr, draw_rect.width, draw_rect.height, -1);
 
 	  if (!xp_theme_draw (pixmap, XP_THEME_ELEMENT_TAB_ITEM, style,
-			      draw_rect.x - clip_rect.x, draw_rect.y - clip_rect.y,
+/* FIXME: wtf? */
+			      draw_rect.x - draw_rect.x, draw_rect.y - draw_rect.y,
 			      draw_rect.width, draw_rect.height, state_type, 0))
 	    {
 	      g_object_unref (pixmap);
@@ -2515,7 +2466,7 @@ draw_themed_tab_button (GtkStyle *style,
 	    }
 
 	  pixbuf = gdk_pixbuf_get_from_drawable (NULL, pixmap, NULL, 0, 0, 0, 0,
-						 clip_rect.width, clip_rect.height);
+						 draw_rect.width, draw_rect.height);
 	  g_object_unref (pixmap);
 	}
 
@@ -2543,11 +2494,10 @@ draw_themed_tab_button (GtkStyle *style,
 	    }
 	}
 
-      cr = gdk_cairo_create (window);
       gdk_cairo_set_source_pixbuf (cr, pixbuf, clip_rect.x, clip_rect.y);
       cairo_paint (cr);
-      cairo_destroy (cr);
       g_object_unref (pixbuf);
+#endif
     }
 
   return TRUE;
@@ -2555,10 +2505,9 @@ draw_themed_tab_button (GtkStyle *style,
 
 static gboolean
 draw_tab_button (GtkStyle *style,
-		 GdkWindow *window,
+		 cairo_t *cr,
 		 GtkStateType state_type,
 		 GtkShadowType shadow_type,
-		 GdkRectangle *area,
 		 GtkWidget *widget,
 		 const gchar *detail,
 		 gint x, gint y, gint width, gint height, gint gap_side)
@@ -2570,10 +2519,8 @@ draw_tab_button (GtkStyle *style,
       XpDCInfo dc_info;
       HDC dc;
       gint32 aPosition;
-	  cairo_t *cr;
 
-      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
-	  cr = gdk_cairo_create (window);
+      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
       if (gap_side == GTK_POS_TOP)
 	aPosition = BF_TOP;
@@ -2586,20 +2533,17 @@ draw_tab_button (GtkStyle *style,
 
       if (state_type == GTK_STATE_PRELIGHT)
 	state_type = GTK_STATE_NORMAL;
-      if (area)
-        {
-           gdk_cairo_rectangle (cr, area);
-           cairo_clip (cr);
+
+/* FIXME: wtf? 
            gdk_cairo_set_source_color (cr, &style->dark[state_type]);
-        }
+ */
 
       DrawTab (dc, rect, aPosition,
 	       state_type != GTK_STATE_PRELIGHT,
 	       (gap_side != GTK_POS_LEFT), (gap_side != GTK_POS_RIGHT));
 
-      cairo_destroy (cr);
-
       release_window_dc (&dc_info);
+
       return TRUE;
     }
 
@@ -2608,10 +2552,9 @@ draw_tab_button (GtkStyle *style,
 
 static void
 draw_extension (GtkStyle *style,
-		GdkWindow *window,
+		cairo_t *cr,
 		GtkStateType state_type,
 		GtkShadowType shadow_type,
-		GdkRectangle *area,
 		GtkWidget *widget,
 		const gchar *detail,
 		gint x, gint y,
@@ -2624,16 +2567,16 @@ draw_extension (GtkStyle *style,
       /* Why this differs from gap_side, I have no idea.. */
       int real_gap_side = gtk_notebook_get_tab_pos (notebook);
 
-      if (!draw_themed_tab_button (style, window, state_type,
+      if (!draw_themed_tab_button (style, cr, state_type,
 				   GTK_NOTEBOOK (widget), x, y,
 				   width, height, real_gap_side))
 	{
-	  if (!draw_tab_button (style, window, state_type,
-				shadow_type, area, widget,
+	  if (!draw_tab_button (style, cr, state_type,
+				shadow_type, widget,
 				detail, x, y, width, height, real_gap_side))
 	    {
-	      parent_class->draw_extension (style, window, state_type,
-					    shadow_type, area, widget, detail,
+	      parent_class->draw_extension (style, cr, state_type,
+					    shadow_type, widget, detail,
 					    x, y, width, height,
 					    real_gap_side);
 	    }
@@ -2642,8 +2585,8 @@ draw_extension (GtkStyle *style,
 }
 
 static void
-draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
-	      GtkShadowType shadow_type, GdkRectangle *area,
+draw_box_gap (GtkStyle *style, cairo_t *cr, GtkStateType state_type,
+	      GtkShadowType shadow_type,
 	      GtkWidget *widget, const gchar *detail, gint x,
 	      gint y, gint width, gint height, GtkPositionType gap_side,
 	      gint gap_x, gint gap_width)
@@ -2683,15 +2626,15 @@ draw_box_gap (GtkStyle *style, GdkWindow *window, GtkStateType state_type,
 	  h2 = height;
 	}
 
-      if (xp_theme_draw (window, XP_THEME_ELEMENT_TAB_PANE, style,
-			 x2, y2, w2, h2, state_type, area))
+      if (xp_theme_draw (cr, XP_THEME_ELEMENT_TAB_PANE, style,
+			 x2, y2, w2, h2, state_type))
 	{
 	  return;
 	}
     }
 
-  parent_class->draw_box_gap (style, window, state_type, shadow_type,
-			      area, widget, detail, x, y, width, height,
+  parent_class->draw_box_gap (style, cr, state_type, shadow_type,
+			      widget, detail, x, y, width, height,
 			      gap_side, gap_x, gap_width);
 }
 
@@ -2717,9 +2660,9 @@ is_popup_window_child (GtkWidget *widget)
 }
 
 static void
-draw_flat_box (GtkStyle *style, GdkWindow *window,
+draw_flat_box (GtkStyle *style, cairo_t *cr,
 	       GtkStateType state_type, GtkShadowType shadow_type,
-	       GdkRectangle *area, GtkWidget *widget,
+	       GtkWidget *widget,
 	       const gchar *detail, gint x, gint y, gint width, gint height)
 {
   if (detail)
@@ -2728,11 +2671,8 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
 	  (!strncmp ("cell_even", detail, 9) || !strncmp ("cell_odd", detail, 8)))
 	{
           GdkColor *gc = gtk_widget_has_focus (widget) ? &style->base[state_type] : &style->base[GTK_STATE_ACTIVE];
-          cairo_t *cr = gdk_cairo_create (window);
 
           _cairo_draw_rectangle (cr, gc, TRUE, x, y, width, height);
-
-		  cairo_destroy (cr);
 
 	  return;
 	}
@@ -2745,19 +2685,19 @@ draw_flat_box (GtkStyle *style, GdkWindow *window,
 	}
     }
 
-  parent_class->draw_flat_box (style, window, state_type, shadow_type,
-			       area, widget, detail, x, y, width, height);
+  parent_class->draw_flat_box (style, cr, state_type, shadow_type,
+			       widget, detail, x, y, width, height);
 }
 
 static gboolean
-draw_menu_border (GdkWindow *win, GtkStyle *style,
+draw_menu_border (cairo_t *cr, GtkStyle *style,
 		  gint x, gint y, gint width, gint height)
 {
   RECT rect;
   XpDCInfo dc_info;
   HDC dc;
 
-  dc = get_window_dc (style, win, GTK_STATE_NORMAL, &dc_info, x, y, width, height, &rect);
+  dc = get_window_dc (style, cr, GTK_STATE_NORMAL, &dc_info, x, y, width, height, &rect);
 
   if (!dc)
     return FALSE;
@@ -2778,10 +2718,9 @@ draw_menu_border (GdkWindow *win, GtkStyle *style,
 
 static void
 draw_shadow (GtkStyle *style,
-	     GdkWindow *window,
+	     cairo_t *cr,
 	     GtkStateType state_type,
 	     GtkShadowType shadow_type,
-	     GdkRectangle *area,
 	     GtkWidget *widget,
 	     const gchar *detail, gint x, gint y, gint width, gint height)
 {
@@ -2797,7 +2736,7 @@ draw_shadow (GtkStyle *style,
 
 
 
-      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
       if (is_combo_box_child (widget))
         {
           FillRect (dc, &rect, GetSysColorBrush (COLOR_WINDOW));
@@ -2844,14 +2783,14 @@ draw_shadow (GtkStyle *style,
       if (shadow_type != GTK_SHADOW_IN)
 	return;
 
-      if (!xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
-			  x, y, width, height, state_type, area))
+      if (!xp_theme_draw (cr, XP_THEME_ELEMENT_EDIT_TEXT, style,
+			  x, y, width, height, state_type))
 	{
 	  HDC dc;
 	  RECT rect;
 	  XpDCInfo dc_info;
 
-	  dc = get_window_dc (style, window, state_type, &dc_info,
+	  dc = get_window_dc (style, cr, state_type, &dc_info,
 			      x, y, width, height, &rect);
 
 	  DrawEdge (dc, &rect, EDGE_SUNKEN, BF_RECT);
@@ -2862,8 +2801,8 @@ draw_shadow (GtkStyle *style,
     }
 
   if (detail && !strcmp (detail, "scrolled_window") &&
-      xp_theme_draw (window, XP_THEME_ELEMENT_EDIT_TEXT, style,
-		     x, y, width, height, state_type, area))
+      xp_theme_draw (cr, XP_THEME_ELEMENT_EDIT_TEXT, style,
+		     x, y, width, height, state_type))
     {
       return;
     }
@@ -2873,7 +2812,7 @@ draw_shadow (GtkStyle *style,
 
   if (detail && !strcmp (detail, "menu"))
     {
-      if (draw_menu_border (window, style, x, y, width, height))
+      if (draw_menu_border (cr, style, x, y, width, height))
 	{
 	  return;
 	}
@@ -2949,7 +2888,7 @@ draw_shadow (GtkStyle *style,
 		}
 	    }
 
-	  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+	  dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
 	  if (pos != GTK_POS_LEFT)
 	    {
@@ -2988,22 +2927,17 @@ draw_shadow (GtkStyle *style,
       return;
     }
 
-  parent_class->draw_shadow (style, window, state_type, shadow_type, area,
+  parent_class->draw_shadow (style, cr, state_type, shadow_type,
 			     widget, detail, x, y, width, height);
 }
 
 static void
 draw_hline (GtkStyle *style,
-	    GdkWindow *window,
+	    cairo_t *cr,
 	    GtkStateType state_type,
-	    GdkRectangle *area,
 	    GtkWidget *widget,
 	    const gchar *detail, gint x1, gint x2, gint y)
 {
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (window);
-
   if (xp_theme_is_active () && detail && !strcmp (detail, "menuitem"))
     {
       gint cx, cy;
@@ -3015,24 +2949,18 @@ draw_hline (GtkStyle *style,
 				       &cx, &cy);
 
       /* Center the separator */
-      y_offset = (area->height / 2) - (cy / 2);
-      new_y = y_offset >= 0 ? area->y + y_offset : area->y;
+      y_offset = (cy / 2) - 1;
+      new_y = (y - y_offset) >= 0 ? y - y_offset : y;
       new_height = cy;
 
       if (xp_theme_draw
-	  (window, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, new_y, x2, new_height,
-	   state_type, area))
+	  (cr, XP_THEME_ELEMENT_MENU_SEPARATOR, style, x1, new_y, x2, new_height,
+	   state_type))
 	{
 	  return;
 	}
       else
 	{
-	  if (area)
-	    {
-              gdk_cairo_rectangle (cr, area);
-              cairo_clip (cr);
-	    }
-
           _cairo_draw_line (cr, &style->dark[state_type], x1, y, x2, y);
 
 	}
@@ -3041,12 +2969,6 @@ draw_hline (GtkStyle *style,
     {
       if (style->ythickness == 2)
 	{
-	  if (area)
-	    {
-              gdk_cairo_rectangle (cr, area);
-              cairo_clip (cr);
-	    }
-
           _cairo_draw_line (cr, &style->dark[state_type], x1, y, x2, y);
 	  ++y;
           _cairo_draw_line (cr, &style->light[state_type], x1, y, x2, y);
@@ -3054,33 +2976,21 @@ draw_hline (GtkStyle *style,
 	}
       else
 	{
-	  parent_class->draw_hline (style, window, state_type, area, widget,
+	  parent_class->draw_hline (style, cr, state_type, widget,
 				    detail, x1, x2, y);
 	}
     }
-  cairo_destroy (cr);
 }
 
 static void
 draw_vline (GtkStyle *style,
-	    GdkWindow *window,
+	    cairo_t *cr,
 	    GtkStateType state_type,
-	    GdkRectangle *area,
 	    GtkWidget *widget,
 	    const gchar *detail, gint y1, gint y2, gint x)
 {
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (window);
-
   if (style->xthickness == 2)
     {
-      if (area)
-	{
-              gdk_cairo_rectangle (cr, area);
-              cairo_clip (cr);
-	}
-
       _cairo_draw_line (cr, &style->dark[state_type], x, y1, x, y2);
       ++x;
       _cairo_draw_line (cr, &style->light[state_type], x, y1, x, y2);
@@ -3088,91 +2998,77 @@ draw_vline (GtkStyle *style,
     }
   else
     {
-      parent_class->draw_vline (style, window, state_type, area, widget,
+      parent_class->draw_vline (style, cr, state_type, widget,
 				detail, y1, y2, x);
     }
-
-  cairo_destroy (cr);
 }
 
 static void
 draw_slider (GtkStyle *style,
-	     GdkWindow *window,
+	     cairo_t *cr,
 	     GtkStateType state_type,
 	     GtkShadowType shadow_type,
-	     GdkRectangle *area,
 	     GtkWidget *widget,
 	     const gchar *detail,
 	     gint x,
 	     gint y, gint width, gint height, GtkOrientation orientation)
 {
   if (GTK_IS_SCALE (widget) &&
-      xp_theme_draw (window, ((orientation == GTK_ORIENTATION_VERTICAL) ?
+      xp_theme_draw (cr, ((orientation == GTK_ORIENTATION_VERTICAL) ?
 			      XP_THEME_ELEMENT_SCALE_SLIDER_V :
 			      XP_THEME_ELEMENT_SCALE_SLIDER_H), style, x, y, width,
-		     height, state_type, area))
+		     height, state_type))
     {
       return;
     }
 
-  parent_class->draw_slider (style, window, state_type, shadow_type, area,
+  parent_class->draw_slider (style, cr, state_type, shadow_type,
 			     widget, detail, x, y, width, height,
 			     orientation);
 }
 
 static void
 draw_resize_grip (GtkStyle *style,
-		  GdkWindow *window,
+		  cairo_t *cr,
 		  GtkStateType state_type,
-		  GdkRectangle *area,
 		  GtkWidget *widget,
 		  const gchar *detail,
 		  GdkWindowEdge edge, gint x, gint y, gint width, gint height)
 {
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (window);
-  
   if (detail && !strcmp (detail, "statusbar"))
     {
       if (xp_theme_draw
-	  (window, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width,
-	   height, state_type, area))
+	  (cr, XP_THEME_ELEMENT_STATUS_GRIPPER, style, x, y, width,
+	   height, state_type))
 	{
-          cairo_destroy (cr);
 	  return;
 	}
       else
 	{
 	  RECT rect;
 	  XpDCInfo dc_info;
-	  HDC dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+	  HDC dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
-	  if (area)
-            {
-              gdk_cairo_rectangle (cr, area);
-              cairo_clip (cr);
+/* FIXME: wtf?
               gdk_cairo_set_source_color (cr, &style->dark[state_type]);
-            }
+ */
 
 	  DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLSIZEGRIP);
 	  release_window_dc (&dc_info);
 
-          cairo_destroy (cr);
 	  return;
 	}
     }
 
-  parent_class->draw_resize_grip (style, window, state_type, area,
+  parent_class->draw_resize_grip (style, cr, state_type,
 				  widget, detail, edge, x, y, width, height);
 }
 
 static void
 draw_handle (GtkStyle *style,
-	     GdkWindow *window,
+	     cairo_t *cr,
 	     GtkStateType state_type,
 	     GtkShadowType shadow_type,
-	     GdkRectangle *area,
 	     GtkWidget *widget,
 	     const gchar *detail,
 	     gint x,
@@ -3181,9 +3077,6 @@ draw_handle (GtkStyle *style,
   HDC dc;
   RECT rect;
   XpDCInfo dc_info;
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (window);
 
   if (is_toolbar_child (widget))
     {
@@ -3209,13 +3102,13 @@ draw_handle (GtkStyle *style,
       else
 	hndl = XP_THEME_ELEMENT_REBAR_GRIPPER_H;
 
-      if (xp_theme_draw (window, hndl, style, x, y, width, height,
-			 state_type, area))
+      if (xp_theme_draw (cr, hndl, style, x, y, width, height,
+			 state_type))
 	{
 	  return;
 	}
 
-      dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+      dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
 	{
@@ -3243,7 +3136,7 @@ draw_handle (GtkStyle *style,
       GdkColor *light, *dark, *shadow;
       GdkRectangle dest;
 
-      gtk_paint_box (style, window, state_type, shadow_type, area,
+      gtk_paint_box (style, cr, state_type, shadow_type,
 		     widget, detail, x, y, width, height);
 
       light = &style->light[state_type];
@@ -3262,9 +3155,6 @@ draw_handle (GtkStyle *style,
 	dest.x += 2;
       else
 	dest.y += 2;
-
-      gdk_cairo_rectangle (cr, &dest);
-      cairo_clip (cr);
 
       if (dest.width < dest.height)
 	{
@@ -3286,16 +3176,13 @@ draw_handle (GtkStyle *style,
 			 dest.y + dest.height, dest.x + dest.width,
 			 dest.y + dest.height);
 	}
-
-      cairo_destroy (cr);
     }
 }
 
 static void
 draw_focus (GtkStyle *style,
-	    GdkWindow *window,
+	    cairo_t *cr,
 	    GtkStateType state_type,
-	    GdkRectangle *area,
 	    GtkWidget *widget,
 	    const gchar *detail, gint x, gint y, gint width, gint height)
 {
@@ -3318,21 +3205,20 @@ draw_focus (GtkStyle *style,
       return;
     }
 
-  dc = get_window_dc (style, window, state_type, &dc_info, x, y, width, height, &rect);
+  dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
   DrawFocusRect (dc, &rect);
   release_window_dc (&dc_info);
 /*
-    parent_class->draw_focus (style, window, state_type,
-						     area, widget, detail, x, y, width, height);
+    parent_class->draw_focus (style, cr, state_type,
+						     widget, detail, x, y, width, height);
 */
 }
 
 static void
 draw_layout (GtkStyle *style,
-	     GdkWindow *window,
+	     cairo_t *cr,
 	     GtkStateType state_type,
 	     gboolean use_text,
-	     GdkRectangle *area,
 	     GtkWidget *widget,
 	     const gchar *detail,
 	     gint old_x, gint old_y, PangoLayout *layout)
@@ -3363,8 +3249,8 @@ draw_layout (GtkStyle *style,
 	}
     }
 
-  parent_class->draw_layout (style, window, state_type,
-			     use_text, area, widget, detail, x, y, layout);
+  parent_class->draw_layout (style, cr, state_type,
+			     use_text, widget, detail, x, y, layout);
 }
 
 static void

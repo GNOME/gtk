@@ -894,69 +894,102 @@ xp_theme_map_gtk_state (XpThemeElement element, GtkStateType state)
 
 HDC
 get_window_dc (GtkStyle *style,
-	       GdkWindow *window,
+	       cairo_t *cr,
 	       GtkStateType state_type,
 	       XpDCInfo *dc_info_out,
 	       gint x, gint y, gint width, gint height,
 	       RECT *rect_out)
 {
-  cairo_t *cr;
-  cairo_surface_t *surface;
-  HDC dc;
-  gint x_offset = 0, y_offset = 0;
-  double x_off, y_off;
+  HDC hDC, hTempDC;
+  HBITMAP hBitmap, hOldBitmap;
+  cairo_surface_t *sourceCS, *tempCS;
+  cairo_t *tempCR;
+  double x_off = 0, y_off = 0;
 
-  dc_info_out->cr = NULL;
-  dc_info_out->dc = NULL;
+  dc_info_out->hdc = NULL;
   
-  cr = gdk_cairo_create (window);
-  if (!cr)
+  hDC = GetDC(NULL);
+  hTempDC = CreateCompatibleDC(hDC);
+  hBitmap = CreateCompatibleBitmap(hDC, x + width, y + height);
+  hOldBitmap = (HBITMAP)SelectObject(hTempDC, hBitmap);
+  ReleaseDC(NULL, hDC);
+
+  tempCS = cairo_win32_surface_create (hTempDC);
+  if (!tempCS)
     return NULL;
 
-  surface = cairo_get_target (cr);
-  cairo_surface_get_device_offset (surface, &x_off, &y_off);
-  cairo_surface_flush (surface);
+  sourceCS = cairo_get_target (cr);
+  tempCR = cairo_create (tempCS);
   
-  dc = cairo_win32_surface_get_dc (surface);
-  if (!dc)
-   return NULL;
+  /* FIXME: I am missing something here - why is it needed to have device
+   *        for cairo_set_source_surface() ? */
+  cairo_surface_get_device_offset (sourceCS, &x_off, &y_off);
+  cairo_set_source_surface (tempCR, sourceCS, x_off, y_off);
+  cairo_set_operator (tempCR, CAIRO_OPERATOR_OVER);
+  /* FIXME: Something is not quit right here - seems the CR or SURFACE do
+   *        not always have the correct data. Hovering on a GtkToolbar from
+   *        left to right draws the previous button over the next for ex. */
+  cairo_rectangle (tempCR, x, y, width, height);
+  cairo_fill (tempCR);
   
-  x_offset = -x_off;
-  y_offset = -y_off;
+  cairo_destroy (tempCR);
 
-  rect_out->left = x - x_offset;
-  rect_out->top = y - y_offset;
+  cairo_surface_flush (tempCS);
+  cairo_surface_destroy (tempCS);
+  
+  rect_out->left = x;
+  rect_out->top = y;
   rect_out->right = rect_out->left + width;
   rect_out->bottom = rect_out->top + height;
   
+  dc_info_out->hdc = hTempDC;
+  dc_info_out->hBitmap = hBitmap;
+  dc_info_out->hOldBitmap = hOldBitmap;
   dc_info_out->cr = cr;
-  dc_info_out->dc = dc;
-  dc_info_out->x_offset = x_offset;
-  dc_info_out->y_offset = y_offset;
+  dc_info_out->x = x;
+  dc_info_out->y = y;
+  dc_info_out->width = width;
+  dc_info_out->height = height;
   
-  return dc;
+  return hTempDC;
 }
 
 void
 release_window_dc (XpDCInfo *dc_info)
 {
-  if (!dc_info->cr || !dc_info->dc)
+  cairo_surface_t *tempCS, *target;
+
+  if (!dc_info->hdc)
     return;
 
-  ReleaseDC (NULL, dc_info->dc);
-  cairo_destroy (dc_info->cr);
+  tempCS = cairo_win32_surface_create (dc_info->hdc);
+  target = cairo_get_target (dc_info->cr);
+
+  cairo_save (dc_info->cr);
   
-  dc_info->cr = NULL;
-  dc_info->dc = NULL;
+  cairo_set_source_surface (dc_info->cr, tempCS, 0, 0);
+  cairo_set_operator (dc_info->cr, CAIRO_OPERATOR_OVER);
+  cairo_rectangle (dc_info->cr, dc_info->x, dc_info->y, dc_info->width, dc_info->height);
+  cairo_fill (dc_info->cr);
+  
+  cairo_restore (dc_info->cr);
+  
+  cairo_surface_destroy (tempCS);
+
+  SelectObject(dc_info->hdc, dc_info->hOldBitmap);
+  DeleteDC(dc_info->hdc);
+  DeleteObject(dc_info->hBitmap);
+  
+  dc_info->hdc = NULL;
 }
 
 gboolean
-xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
+xp_theme_draw (cairo_t *cr, XpThemeElement element, GtkStyle *style,
 	       int x, int y, int width, int height,
-	       GtkStateType state_type, GdkRectangle *area)
+	       GtkStateType state_type)
 {
   HTHEME theme;
-  RECT rect, clip, *pClip;
+  RECT rect;
   HDC dc;
   XpDCInfo dc_info;
   int part_state;
@@ -969,37 +1002,24 @@ xp_theme_draw (GdkWindow *win, XpThemeElement element, GtkStyle *style,
     return FALSE;
 
   /* FIXME: Recheck its function */
-  if (GDK_IS_WINDOW (win) && gdk_win32_window_is_win32 (win))
-    enable_theme_dialog_texture_func (GDK_WINDOW_HWND (win), ETDT_ENABLETAB);
+//  if (GDK_IS_WINDOW (win) && gdk_win32_window_is_win32 (win))
+//    enable_theme_dialog_texture_func (GDK_WINDOW_HWND (win), ETDT_ENABLETAB);
 
-  dc = get_window_dc (style, win, state_type, &dc_info,
+  dc = get_window_dc (style, cr, state_type, &dc_info,
 		      x, y, width, height,
 		      &rect);
   if (!dc)
     return FALSE;
 
-  if (area)
-    {
-      clip.left = area->x - dc_info.x_offset;
-      clip.top = area->y - dc_info.y_offset;
-      clip.right = clip.left + area->width;
-      clip.bottom = clip.top + area->height;
-
-      pClip = &clip;
-    }
-  else
-    {
-      pClip = NULL;
-    }
-
   part_state = xp_theme_map_gtk_state (element, state_type);
 
   /* Support transparency */
-  if (is_theme_partially_transparent_func (theme, element_part_map[element], part_state))
-    draw_theme_parent_background_func (GDK_WINDOW_HWND (win), dc, pClip);
+//  if (is_theme_partially_transparent_func (theme, element_part_map[element], part_state))
+//    draw_theme_parent_background_func (GDK_WINDOW_HWND (win), dc, pClip);
 
+  /* FIXME: Should we get and handle clipping (check it on the CR?) ? */
   draw_theme_background_func (theme, dc, element_part_map[element],
-			      part_state, &rect, pClip);
+			      part_state, &rect, NULL);
 
   release_window_dc (&dc_info);
 
