@@ -4390,8 +4390,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
       return TRUE;
     }
 
-  validate_visible_area (tree_view);
-
   style = gtk_widget_get_style (widget);
 
   bin_window_width = gdk_window_get_width (tree_view->priv->bin_window);
@@ -6449,6 +6447,21 @@ install_presize_handler (GtkTreeView *tree_view)
       tree_view->priv->validate_rows_timer =
 	gdk_threads_add_idle_full (GTK_TREE_VIEW_PRIORITY_VALIDATE, (GSourceFunc) validate_rows_handler, tree_view, NULL);
     }
+}
+
+static void
+gtk_tree_view_bin_process_updates (GtkTreeView *tree_view)
+{
+  /* Prior to drawing, we make sure the visible area is validated. */
+  if (tree_view->priv->presize_handler_timer)
+    {
+      g_source_remove (tree_view->priv->presize_handler_timer);
+      tree_view->priv->presize_handler_timer = 0;
+
+      do_presize_handler (tree_view);
+    }
+
+  gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
 }
 
 static gboolean
@@ -8908,7 +8921,8 @@ gtk_tree_view_clamp_node_visible (GtkTreeView *tree_view,
     {
       /* We process updates because we want to clear old selected items when we scroll.
        * if this is removed, we get a "selection streak" at the bottom. */
-      gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
+      gtk_tree_view_bin_process_updates (tree_view);
+
       gtk_tree_view_scroll_to_cell (tree_view, path, NULL, FALSE, 0.0, 0.0);
       gtk_tree_path_free (path);
     }
@@ -10683,7 +10697,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 	}
 
       gdk_window_process_updates (tree_view->priv->header_window, TRUE);
-      gdk_window_process_updates (tree_view->priv->bin_window, TRUE);
+      gtk_tree_view_bin_process_updates (tree_view);
     }
 }
 
