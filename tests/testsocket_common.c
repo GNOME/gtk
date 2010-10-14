@@ -134,8 +134,16 @@ create_combo (void)
 {
   GtkComboBox *combo;
   GtkWidget *entry;
+  GtkListStore *store;
 
-  combo = GTK_COMBO_BOX (gtk_combo_box_entry_new_text ());
+  store = gtk_list_store_new (1, G_TYPE_STRING);
+  combo = g_object_new (GTK_TYPE_COMBO_BOX,
+			"has-entry", TRUE,
+			"model", store,
+			"entry-text-column", 0,
+			NULL);
+  g_object_unref (store);
+
   gtk_combo_box_append_text (combo, "item0");
   gtk_combo_box_append_text (combo, "item1 item1");
   gtk_combo_box_append_text (combo, "item2 item2 item2");

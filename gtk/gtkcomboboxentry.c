@@ -19,6 +19,9 @@
 
 #include "config.h"
 #include <string.h>
+
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkcomboboxentry.h"
 #include "gtkcelllayout.h"
 
@@ -363,6 +366,8 @@ gtk_combo_box_entry_contents_changed (GtkEntry *entry,
  * Return value: A new #GtkComboBoxEntry.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use gtk_combo_box_new_with_entry() instead
  */
 GtkWidget *
 gtk_combo_box_entry_new (void)
@@ -384,6 +389,8 @@ gtk_combo_box_entry_new (void)
  * Return value: A new #GtkComboBoxEntry.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use gtk_combo_box_new_with_entry() instead
  */
 GtkWidget *
 gtk_combo_box_entry_new_with_model (GtkTreeModel *model,
@@ -412,6 +419,8 @@ gtk_combo_box_entry_new_with_model (GtkTreeModel *model,
  * to be @text_column.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use gtk_combo_box_set_entry_text_column() instead
  */
 void
 gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
@@ -439,6 +448,8 @@ gtk_combo_box_entry_set_text_column (GtkComboBoxEntry *entry_box,
  * Return value: A column in the data source model of @entry_box.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use gtk_combo_box_get_entry_text_column() instead
  */
 gint
 gtk_combo_box_entry_get_text_column (GtkComboBoxEntry *entry_box)

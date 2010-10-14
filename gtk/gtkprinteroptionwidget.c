@@ -29,7 +29,6 @@
 #include "gtkcelllayout.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
-#include "gtkcomboboxentry.h"
 #include "gtkfilechooserbutton.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -287,11 +286,11 @@ static GtkWidget *
 combo_box_entry_new (void)
 {
   GtkWidget *combo_box;
-  combo_box = gtk_combo_box_entry_new ();
+  combo_box = g_object_new (GTK_TYPE_COMBO_BOX, "has-entry", TRUE, NULL);
 
   combo_box_set_model (combo_box);
 
-  gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo_box), NAME_COLUMN);
+  gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (combo_box), NAME_COLUMN);
 
   return combo_box;
 }
@@ -373,7 +372,7 @@ combo_box_get (GtkWidget *combo)
   gchar *value;
   GtkTreeIter iter;
 
-  if (GTK_IS_COMBO_BOX_ENTRY (combo))
+  if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
     {
       value = gtk_combo_box_get_active_text(GTK_COMBO_BOX (combo));
     }

@@ -282,12 +282,21 @@ create_combo_box_entry (void)
   GtkWidget *widget;
   GtkWidget *align;
   GtkWidget *child;
+  GtkTreeModel *model;
   
   gtk_rc_parse_string ("style \"combo-box-entry-style\" {\n"
 		       "  GtkComboBox::appears-as-list = 1\n"
 		       "}\n"
 		       "widget_class \"GtkComboBoxEntry\" style \"combo-box-entry-style\"\n" );
-  widget = gtk_combo_box_entry_new_text ();
+
+  model = (GtkTreeModel *)gtk_list_store_new (1, G_TYPE_STRING);
+  widget = g_object_new (GTK_TYPE_COMBO_BOX,
+			 "has-entry", TRUE,
+			 "model", model,
+			 "entry-text-column", 0,
+			 NULL);
+  g_object_unref (model);
+
   child = gtk_bin_get_child (GTK_BIN (widget));
   gtk_entry_set_text (GTK_ENTRY (child), "Combo Box Entry");
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);

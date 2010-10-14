@@ -428,7 +428,14 @@ do_combobox (GtkWidget *do_widget)
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
     
-    combo = gtk_combo_box_entry_new_text ();
+    model = (GtkTreeModel *)gtk_list_store_new (1, G_TYPE_STRING);
+    combo = g_object_new (GTK_TYPE_COMBO_BOX,
+                          "has-entry", TRUE,
+                          "model", model,
+                          "entry-text-column", 0,
+                          NULL);
+    g_object_unref (model);
+
     fill_combo_entry (combo);
     gtk_container_add (GTK_CONTAINER (box), combo);
     

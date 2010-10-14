@@ -27,7 +27,6 @@
 #include "gtkcellrenderercombo.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcombobox.h"
-#include "gtkcomboboxentry.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
@@ -351,7 +350,7 @@ gtk_cell_renderer_combo_editing_done (GtkCellEditable *combo,
       return;
     }
 
-  if (GTK_IS_COMBO_BOX_ENTRY (combo))
+  if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
     {
       entry = GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo)));
       new_text = g_strdup (gtk_entry_get_text (entry));
@@ -449,11 +448,11 @@ gtk_cell_renderer_combo_start_editing (GtkCellRenderer     *cell,
 
   if (priv->has_entry)
     {
-      combo = gtk_combo_box_entry_new ();
+      combo = g_object_new (GTK_TYPE_COMBO_BOX, "has-entry", TRUE, NULL);
 
       if (priv->model)
         gtk_combo_box_set_model (GTK_COMBO_BOX (combo), priv->model);
-      gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo),
+      gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (combo),
                                            priv->text_column);
 
       g_object_get (cell_text, "text", &text, NULL);

@@ -1021,7 +1021,8 @@ main (int argc, char **argv)
 	GtkTreePath *path;
 	GtkTreeIter iter;
         GdkColor color;
-	
+	GtkListStore *store;
+
         gtk_init (&argc, &argv);
 
 	if (g_getenv ("RTL"))
@@ -1265,14 +1266,21 @@ main (int argc, char **argv)
 
 
         /* GtkComboBoxEntry */
-        tmp = gtk_frame_new ("GtkComboBoxEntry");
+        tmp = gtk_frame_new ("GtkComboBox with entry");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
         boom = gtk_vbox_new (FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
-        comboboxtext = gtk_combo_box_entry_new_text ();
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+        comboboxtext = g_object_new (GTK_TYPE_COMBO_BOX,
+				     "has-entry", TRUE,
+				     "model", store,
+				     "entry-text-column", 0,
+				     NULL);
+	g_object_unref (store);
+
 	setup_combo_entry (comboboxtext);
         gtk_container_add (GTK_CONTAINER (boom), comboboxtext);
 

@@ -72,7 +72,6 @@ list_ignore_properties (gboolean buglist)
     { "GtkColorSelection",      "current-color",        (void*) NULL, },                /* not a valid boxed color */
     { "GtkComboBox",            "row-span-column",      (void*) MATCH_ANY_VALUE },      /* GtkComboBoxEntry needs a tree model for this */
     { "GtkComboBox",            "column-span-column",   (void*) MATCH_ANY_VALUE },      /* GtkComboBoxEntry needs a tree model for this */
-    { "GtkComboBoxEntry",       "text-column",          (void*) MATCH_ANY_VALUE },      /* GtkComboBoxEntry needs a tree model for this */
     { "GtkFileChooserButton",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
     { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_SAVE },
     { "GtkFileChooserButton",   "action",               (void*) GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER },
@@ -279,14 +278,7 @@ static void
 widget_fixups (GtkWidget *widget)
 {
   /* post-constructor for widgets that need additional settings to work correctly */
-  if (GTK_IS_COMBO_BOX_ENTRY (widget))
-    {
-      GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
-      g_object_set (widget, "model", store, "text-column", 0, NULL);
-      g_object_unref (store);
-      gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "test text");
-    }
-  else if (GTK_IS_COMBO_BOX (widget))
+  if (GTK_IS_COMBO_BOX (widget))
     {
       GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
       g_object_set (widget, "model", store, NULL);

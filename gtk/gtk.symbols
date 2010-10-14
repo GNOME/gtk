@@ -804,7 +804,9 @@ gtk_combo_box_get_active_iter
 gtk_combo_box_get_active_text
 gtk_combo_box_get_add_tearoffs
 gtk_combo_box_get_column_span_column
+gtk_combo_box_get_entry_text_column
 gtk_combo_box_get_focus_on_click
+gtk_combo_box_get_has_entry
 gtk_combo_box_get_model
 gtk_combo_box_get_popup_accessible
 gtk_combo_box_get_row_separator_func
@@ -816,6 +818,7 @@ gtk_combo_box_get_wrap_width
 gtk_combo_box_insert_text
 gtk_combo_box_new
 gtk_combo_box_new_text
+gtk_combo_box_new_with_entry
 gtk_combo_box_new_with_model
 gtk_combo_box_popdown
 gtk_combo_box_popup
@@ -826,6 +829,7 @@ gtk_combo_box_set_active
 gtk_combo_box_set_active_iter
 gtk_combo_box_set_add_tearoffs
 gtk_combo_box_set_column_span_column
+gtk_combo_box_set_entry_text_column
 gtk_combo_box_set_focus_on_click
 gtk_combo_box_set_model
 gtk_combo_box_set_row_separator_func
@@ -838,12 +842,14 @@ gtk_combo_box_set_wrap_width
 
 #if IN_HEADER(__GTK_COMBO_BOX_ENTRY_H__)
 #if IN_FILE(__GTK_COMBO_BOX_ENTRY_C__)
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_combo_box_entry_get_text_column
 gtk_combo_box_entry_get_type G_GNUC_CONST
 gtk_combo_box_entry_new
 gtk_combo_box_entry_new_text
 gtk_combo_box_entry_new_with_model
 gtk_combo_box_entry_set_text_column
+#endif
 #endif
 #endif
 

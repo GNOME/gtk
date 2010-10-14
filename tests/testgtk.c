@@ -3955,6 +3955,7 @@ create_entry (GtkWidget *widget)
   GtkWidget *cb_entry;
   GtkWidget *button;
   GtkWidget *separator;
+  GtkListStore *store;
 
   if (!window)
     {
@@ -3992,7 +3993,14 @@ create_entry (GtkWidget *widget)
 			G_CALLBACK (props_clicked),
 			entry);
 
-      cb = GTK_COMBO_BOX (gtk_combo_box_entry_new_text ());
+      store = gtk_list_store_new (1, G_TYPE_STRING);
+      cb = g_object_new (GTK_TYPE_COMBO_BOX,
+			 "has-entry", TRUE,
+			 "model", store,
+			 "entry-text-column", 0,
+			 NULL);
+      g_object_unref (store);
+
       gtk_combo_box_append_text (cb, "item0");
       gtk_combo_box_append_text (cb, "item0");
       gtk_combo_box_append_text (cb, "item1 item1");
