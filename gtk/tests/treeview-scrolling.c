@@ -1149,6 +1149,66 @@ test_bug111500_mixed (ScrollFixture *fixture,
 	gtk_tree_path_free (path);
 }
 
+/* Test for GNOME bugzilla bug 163214.  Invalidate a couple of rows,
+ * then scroll to one of these.
+ */
+static void
+test_bug163214 (ScrollFixture *fixture,
+		gconstpointer  test_data)
+{
+	int i;
+	GtkListStore *store;
+	GtkTreePath *path;
+
+	g_test_bug ("163214");
+
+	gtk_widget_show_all (fixture->window);
+
+	/* Make sure all events have been processed and the window
+	 * is visible.
+	 */
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
+
+	store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view)));
+
+	/* Invalidate a page of rows */
+	for (i = 100; i < 110; i++) {
+		GtkTreeIter iter;
+
+		gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter,
+					       NULL, i);
+		gtk_list_store_set (store, &iter, 0, "Row", -1);
+	}
+
+	/* Then scroll to that page. */
+	path = gtk_tree_path_new_from_indices (105, -1);
+	scroll (fixture, path, TRUE, 0.5);
+	gtk_tree_path_free (path);
+
+	/* Make sure all events have been processed and the window
+	 * is visible.
+	 */
+	while (gtk_events_pending ())
+		gtk_main_iteration ();
+
+	store = GTK_LIST_STORE (gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view)));
+
+	/* Invalidate a page of rows */
+	for (i = 300; i < 310; i++) {
+		GtkTreeIter iter;
+
+		gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter,
+					       NULL, i);
+		gtk_list_store_set (store, &iter, 0, "Row", -1);
+	}
+
+	/* Then scroll to the first row */
+	path = gtk_tree_path_new_from_indices (0, -1);
+	scroll (fixture, path, TRUE, 0.5);
+	gtk_tree_path_free (path);
+}
+
 /* Infrastructure for automatically adding tests */
 enum
 {
@@ -1439,6 +1499,10 @@ main (int argc, char **argv)
 	g_test_add ("/TreeView/scrolling/specific/bug-111500-mixed",
 		    ScrollFixture, NULL,
 		    scroll_fixture_mixed_tree_setup, test_bug111500_mixed,
+		    scroll_fixture_teardown);
+	g_test_add ("/TreeView/scrolling/specific/bug-163214",
+		    ScrollFixture, NULL,
+		    scroll_fixture_constant_setup, test_bug163214,
 		    scroll_fixture_teardown);
 
 	return g_test_run ();
