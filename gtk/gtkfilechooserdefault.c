@@ -5584,10 +5584,11 @@ set_root_uris (GtkFileChooserDefault *impl,
     {
       if (list_selected != NULL)
         {
-          shortcuts_find_folder (impl, list_selected);
-
-          if (shortcut_type == SHORTCUT_TYPE_FILE)
-            g_object_unref (list_selected);
+	  if (shortcut_type == SHORTCUT_TYPE_FILE)
+	    {
+	      shortcuts_find_folder (impl, list_selected);
+	      g_object_unref (list_selected);
+	    }
         }
       else
         {
