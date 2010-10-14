@@ -29,6 +29,8 @@
 
 G_BEGIN_DECLS
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 #define GTK_TYPE_COMBO_BOX_ENTRY             (gtk_combo_box_entry_get_type ())
 #define GTK_COMBO_BOX_ENTRY(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COMBO_BOX_ENTRY, GtkComboBoxEntry))
 #define GTK_COMBO_BOX_ENTRY_CLASS(vtable)    (G_TYPE_CHECK_CLASS_CAST ((vtable), GTK_TYPE_COMBO_BOX_ENTRY, GtkComboBoxEntryClass))
@@ -72,6 +74,7 @@ gint        gtk_combo_box_entry_get_text_column (GtkComboBoxEntry *entry_box);
 /* convenience -- text */
 GtkWidget  *gtk_combo_box_entry_new_text        (void);
 
+#endif
 
 G_END_DECLS
 

@@ -6094,6 +6094,18 @@ static void
 create_list (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
+  GtkWidget *box1;
+  GtkWidget *box2;
+  GtkWidget *hbox;
+  GtkWidget *has_frame_check;
+  GtkWidget *sensitive_check;
+  GtkWidget *progress_check;
+  GtkWidget *entry;
+  GtkComboBox *cb;
+  GtkWidget *cb_entry;
+  GtkWidget *button;
+  GtkWidget *separator;
+  GtkListStore *store;
 
   if (!window)
     {
@@ -6171,11 +6183,30 @@ create_list (GtkWidget *widget)
 			G_CALLBACK (list_add),
 			list);
 
-      button = gtk_button_new_with_label ("Clear List");
-      gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (list_clear),
-			list);
+      store = gtk_list_store_new (1, G_TYPE_STRING);
+      cb = g_object_new (GTK_TYPE_COMBO_BOX,
+			 "has-entry", TRUE,
+			 "model", store,
+			 "entry-text-column", 0,
+			 NULL);
+      g_object_unref (store);
+
+      gtk_combo_box_append_text (cb, "item0");
+      gtk_combo_box_append_text (cb, "item0");
+      gtk_combo_box_append_text (cb, "item1 item1");
+      gtk_combo_box_append_text (cb, "item2 item2 item2");
+      gtk_combo_box_append_text (cb, "item3 item3 item3 item3");
+      gtk_combo_box_append_text (cb, "item4 item4 item4 item4 item4");
+      gtk_combo_box_append_text (cb, "item5 item5 item5 item5 item5 item5");
+      gtk_combo_box_append_text (cb, "item6 item6 item6 item6 item6");
+      gtk_combo_box_append_text (cb, "item7 item7 item7 item7");
+      gtk_combo_box_append_text (cb, "item8 item8 item8");
+      gtk_combo_box_append_text (cb, "item9 item9");
+
+      cb_entry = gtk_bin_get_child (GTK_BIN (cb));
+      gtk_entry_set_text (GTK_ENTRY (cb_entry), "hello world \n\n\n foo");
+      gtk_editable_select_region (GTK_EDITABLE (cb_entry), 0, -1);
+      gtk_box_pack_start (GTK_BOX (box2), GTK_WIDGET (cb), TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Remove Selection");
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);

@@ -69,6 +69,7 @@ struct _GtkComboBoxClass
 /* construction */
 GType         gtk_combo_box_get_type         (void) G_GNUC_CONST;
 GtkWidget    *gtk_combo_box_new              (void);
+GtkWidget    *gtk_combo_box_new_with_entry   (void);
 GtkWidget    *gtk_combo_box_new_with_model   (GtkTreeModel    *model);
 
 /* grids */
@@ -117,6 +118,11 @@ void                        gtk_combo_box_set_row_separator_func (GtkComboBox   
 void               gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
 							 GtkSensitivityType  sensitivity);
 GtkSensitivityType gtk_combo_box_get_button_sensitivity (GtkComboBox        *combo_box);
+
+gboolean           gtk_combo_box_get_has_entry          (GtkComboBox        *combo_box);
+void               gtk_combo_box_set_entry_text_column  (GtkComboBox        *combo_box,
+							 gint                text_column);
+gint               gtk_combo_box_get_entry_text_column  (GtkComboBox        *combo_box);
 
 /* convenience -- text */
 GtkWidget    *gtk_combo_box_new_text         (void);

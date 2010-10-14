@@ -932,6 +932,7 @@ gtk_combo_get_type
 <TITLE>GtkComboBox</TITLE>
 GtkComboBox
 gtk_combo_box_new
+gtk_combo_box_new_with_entry
 gtk_combo_box_new_with_model
 gtk_combo_box_get_wrap_width
 gtk_combo_box_set_wrap_width
@@ -964,6 +965,9 @@ gtk_combo_box_set_focus_on_click
 gtk_combo_box_get_focus_on_click
 gtk_combo_box_set_button_sensitivity
 gtk_combo_box_get_button_sensitivity
+gtk_combo_box_get_has_entry
+gtk_combo_box_set_entry_text_column
+gtk_combo_box_get_entry_text_column
 <SUBSECTION Standard>
 GTK_TYPE_COMBO_BOX
 GTK_COMBO_BOX
