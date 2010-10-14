@@ -1225,9 +1225,9 @@ LDFLAGS="$saved_ldflags"
 
 # Pull in gio-unix for GDesktopAppInfo usage, see at least gdkapplaunchcontext-x11.c
 if test "x$gdktarget" = "xx11"; then
-  GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend"
+  GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES gdk-pixbuf-2.0 cairo-$cairo_backend cairo-gobject"
 else
-  GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend"
+  GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 cairo-$cairo_backend cairo-gobject"
 fi
 
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES`"
