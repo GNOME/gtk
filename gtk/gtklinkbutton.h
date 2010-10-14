@@ -44,17 +44,36 @@ typedef struct _GtkLinkButton		GtkLinkButton;
 typedef struct _GtkLinkButtonClass	GtkLinkButtonClass;
 typedef struct _GtkLinkButtonPrivate	GtkLinkButtonPrivate;
 
+/**
+ * GtkLinkButton:
+ *
+ * The <structname>GtkLinkButton</structname> structure contains only
+ * private data and should be accessed using the provided API.
+ */
 struct _GtkLinkButton
 {
+  /*< private >*/
   GtkButton parent_instance;
 
   GtkLinkButtonPrivate *priv;
 };
 
+/**
+ * GtkLinkButtonClass:
+ * @activate_link: class handler for the #GtkLinkButton::activate-link signal
+ *
+ * The <structname>GtkLinkButtonClass</structname> structure contains only
+ * private data.
+ */
 struct _GtkLinkButtonClass
 {
+  /*< private >*/
   GtkButtonClass parent_class;
 
+  /*< public >*/
+  gboolean (* activate_link) (GtkLinkButton *button);
+
+  /*< private >*/
   void (*_gtk_padding1) (void);
   void (*_gtk_padding2) (void);
   void (*_gtk_padding3) (void);

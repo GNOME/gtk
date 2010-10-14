@@ -41,7 +41,8 @@
  *
  * By default, GtkLinkButton calls gtk_show_uri() when the button is
  * clicked. This behaviour can be overridden by connecting to the
- * #GtkButton::clicked signal.
+ * #GtkLinkButton::activate-link signal and returning %TRUE from the
+ * signal handler.
  */
 
 #include "config.h"
@@ -55,6 +56,7 @@
 #include "gtkimagemenuitem.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
+#include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
 #include "gtksizerequest.h"
@@ -81,6 +83,12 @@ enum
   PROP_VISITED
 };
 
+enum
+{
+  ACTIVATE_LINK,
+
+  LAST_SIGNAL
+};
 
 static void     gtk_link_button_finalize     (GObject          *object);
 static void     gtk_link_button_get_property (GObject          *object,
@@ -117,7 +125,7 @@ static gboolean gtk_link_button_query_tooltip_cb (GtkWidget    *widget,
                                                   gboolean      keyboard_tip,
                                                   GtkTooltip   *tooltip,
                                                   gpointer      data);
-
+static gboolean gtk_link_button_activate_link (GtkLinkButton *link_button);
 
 static const GtkTargetEntry link_drop_types[] = {
   { "text/uri-list", 0, 0 },
@@ -126,6 +134,8 @@ static const GtkTargetEntry link_drop_types[] = {
 
 static const GdkColor default_link_color = { 0, 0, 0, 0xeeee };
 static const GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
+
+static guint link_signals[LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GtkLinkButton, gtk_link_button, GTK_TYPE_BUTTON)
 
@@ -148,6 +158,8 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   container_class->add = gtk_link_button_add;
 
   button_class->clicked = gtk_link_button_clicked;
+
+  klass->activate_link = gtk_link_button_activate_link;
 
   /**
    * GtkLinkButton:uri
@@ -180,6 +192,29 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                                                          G_PARAM_READWRITE));
   
   g_type_class_add_private (gobject_class, sizeof (GtkLinkButtonPrivate));
+
+  /**
+   * GtkLinkButton::activate-link:
+   * @button: the #GtkLinkButton that emitted the signal
+   *
+   * The ::activate-link signal is emitted each time the #GtkLinkButton
+   * has been clicked.
+   *
+   * The default handler will call gtk_show_uri() with the URI stored inside
+   * the #GtkLinkButton:uri property.
+   *
+   * To override the default behavior, you can connect to the ::activate-link
+   * signal and stop the propagation of the signal by returning %TRUE from
+   * your handler.
+   */
+  link_signals[ACTIVATE_LINK] =
+    g_signal_new (I_("activate-link"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkLinkButtonClass, activate_link),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__VOID,
+                  G_TYPE_BOOLEAN, 0);
 }
 
 static void
@@ -489,15 +524,14 @@ gtk_link_button_button_press (GtkWidget      *widget,
   return FALSE;
 }
 
-static void
-gtk_link_button_clicked (GtkButton *button)
+static gboolean
+gtk_link_button_activate_link (GtkLinkButton *link_button)
 {
-  GtkLinkButton *link_button = GTK_LINK_BUTTON (button);
   GdkScreen *screen;
   GError *error;
 
-  if (gtk_widget_has_screen (GTK_WIDGET (button)))
-    screen = gtk_widget_get_screen (GTK_WIDGET (button));
+  if (gtk_widget_has_screen (GTK_WIDGET (link_button)))
+    screen = gtk_widget_get_screen (GTK_WIDGET (link_button));
   else
     screen = NULL;
 
@@ -509,9 +543,21 @@ gtk_link_button_clicked (GtkButton *button)
                  link_button->priv->uri,
                  error->message);
       g_error_free (error);
+
+      return FALSE;
     }
 
   gtk_link_button_set_visited (link_button, TRUE);
+
+  return TRUE;
+}
+
+static void
+gtk_link_button_clicked (GtkButton *button)
+{
+  gboolean retval = FALSE;
+
+  g_signal_emit (button, link_signals[ACTIVATE_LINK], 0, &retval);
 }
 
 static gboolean
