@@ -8037,8 +8037,7 @@ gtk_tree_view_focus (GtkWidget        *widget,
   /* Case 2. We don't have focus at all. */
   if (!gtk_widget_has_focus (widget))
     {
-      if (!gtk_tree_view_header_focus (tree_view, direction, FALSE))
-	gtk_widget_grab_focus (widget);
+      gtk_widget_grab_focus (widget);
       return TRUE;
     }
 
