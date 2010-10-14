@@ -343,6 +343,8 @@ static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 					   GdkEventFocus     *event);
+static void gtk_window_style_set          (GtkWidget         *widget,
+                                           GtkStyle          *style);
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
 					   GdkEventClient    *event);
 static gboolean gtk_window_state_event    (GtkWidget          *widget,
@@ -589,6 +591,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->window_state_event = gtk_window_state_event;
   widget_class->direction_changed = gtk_window_direction_changed;
   widget_class->state_changed = gtk_window_state_changed;
+  widget_class->style_set = gtk_window_style_set;
 
   container_class->check_resize = gtk_window_check_resize;
 
@@ -5357,6 +5360,25 @@ gtk_window_state_changed (GtkWidget    *widget,
 }
 
 static void
+gtk_window_style_set (GtkWidget *widget,
+                      GtkStyle  *style)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
+  GdkRectangle rect;
+
+  if (priv->grip_window != NULL && gtk_window_get_resize_grip_area (window, &rect))
+    {
+      gdk_window_move_resize (priv->grip_window,
+                              rect.x, rect.y,
+                              rect.width, rect.height);
+
+      set_grip_shape (window);
+      gtk_widget_queue_resize (widget);
+    }
+}
+
+static void
 resize_grip_create_window (GtkWindow *window)
 {
   GtkWidget *widget;
@@ -5492,7 +5514,7 @@ gtk_window_resize_grip_is_visible (GtkWindow *window)
 {
   GtkWidget *widget;
   GtkWindowPrivate *priv;
-  GdkWindowEdge *edge;
+  GdkWindowEdge edge;
 
   g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
