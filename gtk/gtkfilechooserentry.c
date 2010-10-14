@@ -1634,6 +1634,12 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry,
   if (folder_file)
     g_object_unref (folder_file);
 
+  if (result != REFRESH_OK)
+    {
+      clear_completions (chooser_entry);
+      discard_completion_store (chooser_entry);
+    }
+
   g_assert (/* we are OK and we have a current folder file and (loading process or folder handle)... */
 	    ((result == REFRESH_OK)
 	     && (chooser_entry->current_folder_file != NULL)
