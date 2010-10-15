@@ -17,44 +17,28 @@
   <reference id="reference">
     <title>API Reference</title>
     <xi:include href="xml/general.xml" />
-
     <xi:include href="multihead.sgml" />
     <xi:include href="xml/gdkdisplay.xml" />
     <xi:include href="xml/gdkdisplaymanager.xml" />
     <xi:include href="xml/gdkscreen.xml" />
-
     <xi:include href="xml/regions.xml" />
     <xi:include href="xml/drawing.xml" />
-
     <xi:include href="xml/colors.xml" />
     <xi:include href="xml/visuals.xml" />
-
-    <xi:include href="xml/fonts.xml" />
     <xi:include href="xml/cursors.xml" />
-
     <xi:include href="xml/windows.xml" />
-
     <xi:include href="xml/events.xml" />
     <xi:include href="xml/event_structs.xml" />
-
     <xi:include href="xml/keys.xml" />
-
     <xi:include href="xml/selections.xml" />
     <xi:include href="xml/dnd.xml" />
-
     <xi:include href="xml/properties.xml" />
-
     <xi:include href="xml/threads.xml" />
-
-    <xi:include href="xml/input.xml" />
     <xi:include href="xml/gdkdevicemanager.xml" />
-
     <xi:include href="xml/pango_interaction.xml" />
     <xi:include href="xml/cairo_interaction.xml" />
     <xi:include href="xml/x_interaction.xml" />
-
     <xi:include href="xml/gdkapplaunchcontext.xml" />
-
     <xi:include href="xml/gdktesting.xml" />
   </reference>
 
