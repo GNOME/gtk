@@ -5,8 +5,16 @@
 <chapter id="gtk-getting-started" xmlns:xi="http://www.w3.org/2003/XInclude">
   <title>Getting Started with GTK+</title>
 
+  <para>This chapter is contains some tutorial information to get you
+  started with GTK+ programming. It assumes that you have GTK+, its
+  dependencies and a C compiler installed and ready to use. If you
+  need to build GTK+ itself first, refer to the
+  <link linkend="gtk-compiling">Compiling the GTK+ libraries</link>
+  section in this reference.</para>
+
   <para>To begin our introduction to GTK, we'll start with the simplest
-  program possible. This program will create a 200x200 pixel window:</para>
+  program possible. This program will create an empty 200x200 pixel
+  window:</para>
 
   <para>
     <inlinegraphic fileref="window-default.png" format="PNG"></inlinegraphic>
@@ -84,10 +92,14 @@
   <para>In the long tradition of programming languages and libraries,
   it is called <emphasis>Hello, World</emphasis>.</para>
 
+  <para>
+    <inlinegraphic fileref="hello-world.png" format="PNG"></inlinegraphic>
+  </para>
+
   <example id="gtk-getting-started-hello-world">
     <title>Hello World in GTK+</title>
     <programlisting>
-      <xi:include href="../../../examples/hello-world.c" parse="text">
+      <xi:include href="../../../../examples/hello-world.c" parse="text">
         <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
       </xi:include>
     </programlisting>

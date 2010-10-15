@@ -133,7 +133,8 @@ content_files =					\
 	gtk-update-icon-cache-3.0.xml		\
 	gtk-builder-convert-3.0.xml		\
 	visual_index.xml			\
-	getting_started.xml
+	getting_started.xml			\
+	overview.xml
 
 expand_content_files = 				\
 	drawing-model.xml			\
@@ -317,7 +318,9 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-rlbt.png				\
 	$(srcdir)/images/layout-rltb.png				\
 	$(srcdir)/images/layout-tblr.png				\
-	$(srcdir)/images/layout-tbrl.png
+	$(srcdir)/images/layout-tbrl.png				\
+	$(srcdir)/images/window-default.png				\
+	$(srcdir)/images/hello-world.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \
