@@ -1,3 +1,79 @@
+Overview of Changes from GTK+ 2.91.0 to 2.91.1
+==============================================
+
+* GTK+ can now add a resize grip to any window. The resize
+  grip functionality in GtkStatusbar has been removed.
+
+* A very old bug in the handling of geometry widgets has
+  been fixed, and a way to set geometry in terms of the
+  geometry widget has been added: gtk_window_resize_to_geometry()
+
+* The GtkFileChooser now uses GSettings to store its settings
+  instead of the keyfile ~/.config/gtk-2.0/gtkfilechooser.ini
+
+* GtkWrapBox has been dropped from GTK+ again. The widget
+  will be available in libegg until clear use cases have
+  been established.
+
+* GtkWidget now has horizontal and vertical expand flags, in
+  the form of ::hexpand and ::vexpand properties. These flags
+  are intended to obsolete most custom container-specific
+  expand child properties, over time.
+  Expandability is inherited up the widget hierarchy.
+
+* GtkComboBoxEntry has been deprecated in favor of a
+  ::has-entry property on GtkComboBox.
+
+* The GtkComboBox text convenience API (gtk_combo_box_new_text(), etc)
+  has been deprecated in favor of a new GtkComboBoxText class.
+
+* GtkLinkButton has gained a ::activate-link signal that
+  can be used to suppress the default behavior.
+
+* The very outdated tutorial has been dropped from the GTK+ distribution,
+  and a new 'Getting started' section has been added to the API
+  documentation that will accumulate tutorial material over time.
+
+* Bugs fixed:
+  68668 Fix handling of geometry widget
+ 313350 Return type of gtk_accelerator_get_default_mod_mask...
+ 351247 GtkScrolledWindow is mis documented
+ 423201 gtk_combo_box_entry_active_changed does not transform...
+ 563002 Doesn't call 'update-preview' on set_filename
+ 612396 Implement GtkComboBoxText subclass to supersede "text"...
+ 613728 Rationalize GtkTreeView focus
+ 628902 use expand flags to determine window resizability
+ 629722 save_entry_get_info_cb() doesn't behave correctly
+ 629778 Scrolled window does not behave properly with height-for...
+ 629955 Deprecate / remove gtk_main and gtk_init_add / remove* API
+ 630850 Use GSettings for the filechooser settings
+ 630900 GtkCellRendererClass: unify const of GdkRectangle args
+ 631203 Scrolling in GtkTextView can use 100% cpu
+ 631311 Obvious fix for nasty crash in menu code
+ 631473 Fix GTK+3 documentation
+ 631475 Two old GDK_foo key macros left in gdk/quartz/gdkkeys-quartz.c
+ 631599 Allow to use arbitrary surfaces for offscreen windows
+ 631719 Action-based menu accelerators don't synch with GtkMenuItem
+ 631794 Warn when calling gtk_window_parse_geometry() on an empty...
+ 631976 Remove GtkWidgetAuxInfo from GtkScrolledWindow
+ 632059 Move the introduction of the tutorial in the reference
+ 632095 GtkTargetEntry: Add boxed type and constructor
+ 632140 optionally take hotspot coordinates from the pixbuf...
+ 632218 BadMatch when starting gnome-shell
+
+* New or updated translations:
+ Catalan
+ Estonian
+ Galician
+ Greek
+ Kazakh
+ Kikongo
+ Lithuanian
+ Punjabi
+ Slovenian
+ Spanish
+
+
 Overview of Changes from GTK+ 2.90.7 to 2.91.0
 ==============================================
 
