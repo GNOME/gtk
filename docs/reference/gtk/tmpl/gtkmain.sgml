@@ -437,7 +437,7 @@ Registers a function to be called when the mainloop is started.
 
 @function: Function to invoke when gtk_main() is called next.
 @data: Data to pass to that function.
-
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 <!-- ##### FUNCTION gtk_quit_add_destroy ##### -->
 <para>
@@ -447,6 +447,7 @@ is quit.
 
 @main_level: Level of the mainloop which shall trigger the destruction.
 @object: Object to be destroyed.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_add ##### -->
@@ -462,6 +463,7 @@ Registers a function to be called when an instance of the mainloop is left.
 @data: Pointer to pass when calling @function.
 @Returns: A handle for this quit handler (you need this for gtk_quit_remove())
   or 0 if you passed a %NULL pointer in @function.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_add_full ##### -->
@@ -488,6 +490,7 @@ used by GTK+ wrappers for languages other than C.
 @destroy: Function to call to destruct @data. Gets @data as argument.
 @Returns: A handle for this quit handler (you need this for gtk_quit_remove())
   or 0 if you passed a %NULL pointer in @function.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_remove ##### -->
@@ -496,6 +499,7 @@ Removes a quit handler by its identifier.
 </para>
 
 @quit_handler_id: Identifier for the handler returned when installing it.
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### FUNCTION gtk_quit_remove_by_data ##### -->
@@ -504,6 +508,7 @@ Removes a quit handler identified by its @data field.
 </para>
 
 @data: The pointer passed as @data to gtk_quit_add() or gtk_quit_add_full().
+@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### MACRO GTK_PRIORITY_RESIZE ##### -->

@@ -26,6 +26,8 @@
 
 #include "config.h"
 
+#include "gtkmain.h"
+
 #include <glib.h>
 #include "gdkconfig.h"
 
@@ -52,7 +54,6 @@
 #include "gtkclipboard.h"
 #include "gtkdnd.h"
 #include "gtkversion.h"
-#include "gtkmain.h"
 #include "gtkmodules.h"
 #include "gtkrc.h"
 #include "gtkrecentmanager.h"
