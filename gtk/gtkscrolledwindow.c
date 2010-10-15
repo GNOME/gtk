@@ -2010,19 +2010,9 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 	    }
 	  else
 	    {
-	      GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (child, FALSE);
-	      
-	      if (aux_info && aux_info->width > 0)
-		{
-		  minimum_req.width += aux_info->width;
-		  natural_req.width += aux_info->width;
-		  extra_width = -1;
-		}
-	      else
-		{
-		  minimum_req.width += vscrollbar_requisition.width;
-		  natural_req.width += vscrollbar_requisition.width;
-		}
+	      /* Always ask for at least enough to fit the scrollbars */
+	      minimum_req.width += vscrollbar_requisition.width;
+	      natural_req.width += vscrollbar_requisition.width;
 	    }
 	}
       else /* GTK_ORIENTATION_VERTICAL */
@@ -2038,19 +2028,9 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 	    }
 	  else
 	    {
-	      GtkWidgetAuxInfo *aux_info = _gtk_widget_get_aux_info (child, FALSE);
-	      
-	      if (aux_info && aux_info->height > 0)
-		{
-		  minimum_req.height += aux_info->height;
-		  natural_req.height += aux_info->height;
-		  extra_height = -1;
-		}
-	      else
-		{
-		  minimum_req.height += hscrollbar_requisition.height;
-		  natural_req.height += hscrollbar_requisition.height;
-		}
+	      /* Always ask for at least enough to fit the scrollbars */
+	      minimum_req.height += hscrollbar_requisition.height;
+	      natural_req.height += hscrollbar_requisition.height;
 	    }
 	}
     }
@@ -2073,10 +2053,10 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 	extra_width = scrollbar_spacing + vscrollbar_requisition.width;
     }
 
-  minimum_req.width += MAX (0, extra_width);
-  minimum_req.height += MAX (0, extra_height);
-  natural_req.width += MAX (0, extra_width);
-  natural_req.height += MAX (0, extra_height);
+  minimum_req.width  += extra_width;
+  minimum_req.height += extra_height;
+  natural_req.width  += extra_width;
+  natural_req.height += extra_height;
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
