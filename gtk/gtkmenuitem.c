@@ -1104,15 +1104,18 @@ gtk_menu_item_sync_action_properties (GtkActivatable *activatable,
     {
       label = gtk_bin_get_child (GTK_BIN (menu_item));
 
-      /* make sure label is a label */
+      /* make sure label is a label, deleting it otherwise */
       if (label && !GTK_IS_LABEL (label))
 	{
 	  gtk_container_remove (GTK_CONTAINER (menu_item), label);
 	  label = NULL;
 	}
-
+      /* Make sure that menu_item has a label and that any
+       * accelerators are set */
       gtk_menu_item_ensure_label (menu_item);
       gtk_menu_item_set_use_underline (menu_item, TRUE);
+      /* Make label point to the menu_item's label */
+      label = gtk_bin_get_child (GTK_BIN (menu_item));
 
       if (GTK_IS_ACCEL_LABEL (label) && gtk_action_get_accel_path (action))
         {
