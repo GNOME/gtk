@@ -124,6 +124,8 @@ void               gtk_combo_box_set_entry_text_column  (GtkComboBox        *com
 							 gint                text_column);
 gint               gtk_combo_box_get_entry_text_column  (GtkComboBox        *combo_box);
 
+#ifndef GTK_DISABLE_DEPRECATED
+
 /* convenience -- text */
 GtkWidget    *gtk_combo_box_new_text         (void);
 void          gtk_combo_box_append_text      (GtkComboBox     *combo_box,
@@ -136,6 +138,8 @@ void          gtk_combo_box_prepend_text     (GtkComboBox     *combo_box,
 void          gtk_combo_box_remove_text      (GtkComboBox     *combo_box,
                                               gint             position);
 gchar        *gtk_combo_box_get_active_text  (GtkComboBox     *combo_box);
+
+#endif
 
 /* programmatic control */
 void          gtk_combo_box_popup            (GtkComboBox     *combo_box);

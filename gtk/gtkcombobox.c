@@ -5305,6 +5305,8 @@ gtk_combo_box_get_model (GtkComboBox *combo_box)
  * Return value: (transfer none): A new text combo box.
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use #GtkComboBoxText
  */
 GtkWidget *
 gtk_combo_box_new_text (void)
@@ -5336,6 +5338,8 @@ gtk_combo_box_new_text (void)
  * gtk_combo_box_new_text().
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use #GtkComboBoxText
  */
 void
 gtk_combo_box_append_text (GtkComboBox *combo_box,
@@ -5367,6 +5371,8 @@ gtk_combo_box_append_text (GtkComboBox *combo_box,
  * with gtk_combo_box_new_text().
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use #GtkComboBoxText
  */
 void
 gtk_combo_box_insert_text (GtkComboBox *combo_box,
@@ -5399,6 +5405,8 @@ gtk_combo_box_insert_text (GtkComboBox *combo_box,
  * gtk_combo_box_new_text().
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use #GtkComboBoxText
  */
 void
 gtk_combo_box_prepend_text (GtkComboBox *combo_box,
@@ -5428,6 +5436,8 @@ gtk_combo_box_prepend_text (GtkComboBox *combo_box,
  * this function with combo boxes constructed with gtk_combo_box_new_text().
  *
  * Since: 2.4
+ *
+ * Deprecated: 2.24: Use #GtkComboBoxText
  */
 void
 gtk_combo_box_remove_text (GtkComboBox *combo_box,
@@ -5460,6 +5470,8 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
  *     Must be freed with g_free().
  *
  * Since: 2.6
+ *
+ * Deprecated: 2.24: Use #GtkComboBoxText
  */
 gchar *
 gtk_combo_box_get_active_text (GtkComboBox *combo_box)
