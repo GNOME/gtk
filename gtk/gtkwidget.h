@@ -102,7 +102,7 @@ typedef void    (*GtkCallback)     (GtkWidget        *widget,
  * @height: the widget's desired height
  *
  * A <structname>GtkRequisition</structname> represents the desired size of a widget. See
- * <xref linkend="size-requisition"/> for more information.
+ * <xref linkend="geometry-management"/> for more information.
  */
 struct _GtkRequisition
 {
