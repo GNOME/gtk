@@ -2972,7 +2972,10 @@ gtk_target_list_ref
 gtk_target_list_remove
 gtk_target_list_unref
 gtk_target_table_new_from_list
+gtk_target_entry_get_type G_GNUC_CONST
 gtk_target_table_free
+gtk_target_entry_new
+gtk_target_entry_copy
 #endif
 #endif
 

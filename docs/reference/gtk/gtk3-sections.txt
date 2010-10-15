@@ -5319,6 +5319,9 @@ GtkRcContext
 GtkTargetEntry
 GtkTargetList
 GtkTargetPair
+gtk_target_entry_new
+gtk_target_entry_copy
+gtk_target_entry_free
 gtk_target_list_new
 gtk_target_list_ref
 gtk_target_list_unref

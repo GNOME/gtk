@@ -212,6 +212,12 @@ GType             gtk_selection_data_get_type (void) G_GNUC_CONST;
 GtkSelectionData *gtk_selection_data_copy     (GtkSelectionData *data);
 void		  gtk_selection_data_free     (GtkSelectionData *data);
 
+GType             gtk_target_entry_get_type    (void) G_GNUC_CONST;
+
+GtkTargetEntry   *gtk_target_entry_new        (const char *target, guint flags, guint info);
+GtkTargetEntry   *gtk_target_entry_copy       (GtkTargetEntry *data);
+void		  gtk_target_entry_free       (GtkTargetEntry *data);
+
 GType             gtk_target_list_get_type    (void) G_GNUC_CONST;
 
 G_END_DECLS
