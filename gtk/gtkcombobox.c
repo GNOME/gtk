@@ -5688,7 +5688,6 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  gchar *str = NULL;
 
   if (gtk_combo_box_get_active_iter (combo_box, &iter))
     {
@@ -5696,17 +5695,18 @@ gtk_combo_box_entry_active_changed (GtkComboBox *combo_box,
 
       if (entry)
 	{
+          GValue value = {0,};
+
 	  g_signal_handlers_block_by_func (entry,
 					   gtk_combo_box_entry_contents_changed,
 					   combo_box);
 
 	  model = gtk_combo_box_get_model (combo_box);
 
-	  gtk_tree_model_get (model, &iter,
-			      priv->text_column, &str,
-			      -1);
-	  gtk_entry_set_text (entry, str);
-	  g_free (str);
+          gtk_tree_model_get_value (model, &iter,
+                                    priv->text_column, &value);
+          g_object_set_property (G_OBJECT (entry), "text", &value);
+          g_value_unset (&value);
 
 	  g_signal_handlers_unblock_by_func (entry,
 					     gtk_combo_box_entry_contents_changed,
