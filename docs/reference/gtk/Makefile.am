@@ -132,16 +132,18 @@ content_files =					\
 	gtk-query-immodules-3.0.xml		\
 	gtk-update-icon-cache-3.0.xml		\
 	gtk-builder-convert-3.0.xml		\
-	visual_index.xml
+	visual_index.xml			\
+	getting_started.xml
 
 expand_content_files = 				\
 	drawing-model.xml			\
+	getting_started.xml			\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
-	tree_widget.sgml			\
+	question_index.sgml			\
 	text_widget.sgml			\
-	question_index.sgml
+	tree_widget.sgml
 
 # Images to copy into HTML directory
 HTML_IMAGES = \
