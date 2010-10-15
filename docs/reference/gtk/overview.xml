@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE partintro PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+               ]>
+<partintro>
+<para>
+GTK+ is a library for creating graphical user interfaces. It
+works on many UNIX-like platforms, Windows, and OS X.
+GTK+ is released under the GNU Library General Public License
+(GNU LGPL), which allows for flexible licensing of client
+applications. GTK+ has a C-based object-oriented architecture that
+allows for maximum flexibility.  Bindings for many other languages have
+been written, including C++, Objective-C, Guile/Scheme, Perl, Python,
+TOM, Ada95, Free Pascal, and Eiffel.
+</para>
+<para>
+GTK+ depends on the following libraries:
+<variablelist>
+
+<varlistentry>
+<term>GLib</term>
+<listitem><para>
+A general-purpose utility library, not specific to graphical user interfaces.
+GLib provides many useful data types, macros, type conversions,
+string utilities, file utilities, a main loop abstraction, and so on.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GObject</term>
+<listitem><para>A library that provides a type system, a collection of
+fundamental types including an object type, a signal system.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GIO</term>
+<listitem><para>A modern, easy-to-use VFS API including abstractions for
+files, drives, volumes, stream IO, as well as network programming and
+DBus communication.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>cairo</term>
+<listitem><para>Cairo is a 2D graphics library with support for multiple
+output devices.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>Pango</term>
+<listitem><para>
+Pango is a library for internationalized text handling. It centers
+around the PangoLayout object, representing a paragraph of text.
+Pango provides the engine for GtkTextView, GtkLabel, GtkEntry, and
+other widgets that display text.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>ATK</term>
+<listitem><para>
+ATK is the Accessibility Toolkit. It provides a set of generic
+interfaces allowing accessibility technologies to interact with a
+graphical user interface. For example, a screen reader uses ATK to
+discover the text in an interface and read it to blind users.  GTK+
+widgets have built-in support for accessibility using the ATK
+framework.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GdkPixbuf</term>
+<listitem><para>
+This is a small library which allows you to create GdkPixbuf
+("pixel buffer") objects from image data or image files.
+Use a GdkPixbuf in combination with GtkImage to display images.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GDK</term>
+<listitem><para>
+GDK is the abstraction layer that allows GTK+ to support multiple
+windowing systems. GDK provides window system facilities on X11, Windows,
+and OS X.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term>GTK+</term>
+<listitem><para>
+The GTK+ library itself contains <firstterm>widgets</firstterm>,
+that is, GUI components such as GtkButton or GtkTextView.
+</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+</partintro>
