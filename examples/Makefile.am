@@ -1,5 +1,5 @@
 
-SUBDIRS = 	arrow \
+DIST_SUBDIRS = 	arrow \
 		aspectframe \
 		base \
 		buttonbox \
@@ -28,18 +28,20 @@ SUBDIRS = 	arrow \
 		spinbutton \
 		statusbar \
 		table \
-		tictactoe \
-		wheelbarrow
+		tictactoe
+# wheelbarrow
 
-all:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  (cd $$subdir && $(MAKE)); \
-	done
+INCLUDES = \
+	-I$(top_srcdir)				\
+	-I$(top_srcdir)/gdk			\
+	-DGDK_DISABLE_DEPRECATED		\
+	-DGTK_DISABLE_DEPRECATED		\
+	$(GTK_DEBUG_FLAGS)			\
+	$(GTK_DEP_CFLAGS)
 
-clean:
-	list='$(SUBDIRS)'; \
-	for subdir in $$list; do \
-	  (cd $$subdir && $(MAKE) clean); \
-	done
+LDADD = \
+	$(top_builddir)/gdk/$(gdktargetlib)		\
+	$(top_builddir)/gtk/$(gtktargetlib)		\
+	$(GTK_DEP_LIBS)
 
+bin_PROGRAMS = hello-world window-default

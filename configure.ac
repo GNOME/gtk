@@ -1640,6 +1640,7 @@ po-properties/Makefile.in
 demos/Makefile
 demos/gtk-demo/Makefile
 demos/gtk-demo/geninclude.pl
+examples/Makefile
 tests/Makefile
 docs/Makefile
 docs/reference/Makefile
