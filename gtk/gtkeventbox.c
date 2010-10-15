@@ -53,8 +53,12 @@ static void     gtk_event_box_realize       (GtkWidget        *widget);
 static void     gtk_event_box_unrealize     (GtkWidget        *widget);
 static void     gtk_event_box_map           (GtkWidget        *widget);
 static void     gtk_event_box_unmap         (GtkWidget        *widget);
-static void     gtk_event_box_size_request  (GtkWidget        *widget,
-                                             GtkRequisition   *requisition);
+static void     gtk_event_box_get_preferred_width  (GtkWidget *widget,
+                                                    gint      *minimum,
+                                                    gint      *natural);
+static void     gtk_event_box_get_preferred_height (GtkWidget *widget,
+                                                    gint      *minimum,
+                                                    gint      *natural);
 static void     gtk_event_box_size_allocate (GtkWidget        *widget,
                                              GtkAllocation    *allocation);
 static gboolean gtk_event_box_draw          (GtkWidget        *widget,
@@ -84,7 +88,8 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
   widget_class->unrealize = gtk_event_box_unrealize;
   widget_class->map = gtk_event_box_map;
   widget_class->unmap = gtk_event_box_unmap;
-  widget_class->size_request = gtk_event_box_size_request;
+  widget_class->get_preferred_width = gtk_event_box_get_preferred_width;
+  widget_class->get_preferred_height = gtk_event_box_get_preferred_height;
   widget_class->size_allocate = gtk_event_box_size_allocate;
   widget_class->draw = gtk_event_box_draw;
 
@@ -482,33 +487,47 @@ gtk_event_box_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_event_box_parent_class)->unmap (widget);
 }
 
-
-
 static void
-gtk_event_box_size_request (GtkWidget      *widget,
-			    GtkRequisition *requisition)
+gtk_event_box_get_preferred_width (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
 
-  requisition->width = 0;
-  requisition->height = 0;
+  if (minimum)
+    *minimum = 0;
+
+  if (natural)
+    *natural = 0;
 
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
-    {
-      GtkRequisition child_requisition;
+    gtk_widget_get_preferred_width (child, minimum, natural);
+}
 
-      gtk_widget_get_preferred_size (child, &child_requisition, NULL);
+static void
+gtk_event_box_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum,
+                                    gint      *natural)
+{
+  GtkBin *bin = GTK_BIN (widget);
+  GtkWidget *child;
 
-      requisition->width += child_requisition.width;
-      requisition->height += child_requisition.height;
-    }
+  if (minimum)
+    *minimum = 0;
+
+  if (natural)
+    *natural = 0;
+
+  child = gtk_bin_get_child (bin);
+  if (child && gtk_widget_get_visible (child))
+    gtk_widget_get_preferred_height (child, minimum, natural);
 }
 
 static void
 gtk_event_box_size_allocate (GtkWidget     *widget,
-			     GtkAllocation *allocation)
+                             GtkAllocation *allocation)
 {
   GtkBin *bin;
   GtkAllocation child_allocation;
