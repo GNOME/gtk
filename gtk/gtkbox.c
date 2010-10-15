@@ -63,7 +63,10 @@
  * of the GtkBox are forced to get the same amount of space.
  *
  * Use gtk_box_set_spacing() to determine how much space will be
- * minimally placed between all children in the GtkBox.
+ * minimally placed between all children in the GtkBox. Note that
+ * spacing is added <emphasis>between</emphasis> the children, while
+ * padding added by gtk_box_pack_start() or gtk_box_pack_end() is added
+ * <emphasis>on either side</emphasis> of the widget it belongs to.
  *
  * Use gtk_box_reorder_child() to move a GtkBox child to a different
  * place in the box.
@@ -1256,22 +1259,22 @@ gtk_box_new (GtkOrientation orientation,
  * gtk_box_pack_start:
  * @box: a #GtkBox
  * @child: the #GtkWidget to be added to @box
- * @expand: %TRUE if the new child is to be given extra space allocated to
- * @box.  The extra space will be divided evenly between all children of
- * @box that use this option
+ * @expand: %TRUE if the new child is to be given extra space allocated
+ *     to @box. The extra space will be divided evenly between all children
+ *     that use this option
  * @fill: %TRUE if space given to @child by the @expand option is
- *   actually allocated to @child, rather than just padding it.  This
- *   parameter has no effect if @expand is set to %FALSE.  A child is
- *   always allocated the full height of a #GtkHBox and the full width 
- *   of a #GtkVBox. This option affects the other dimension
+ *     actually allocated to @child, rather than just padding it.  This
+ *     parameter has no effect if @expand is set to %FALSE.  A child is
+ *     always allocated the full height of a #GtkHBox and the full width
+ *     of a #GtkVBox. This option affects the other dimension
  * @padding: extra space in pixels to put between this child and its
  *   neighbors, over and above the global amount specified by
- *   #GtkBox:spacing property.  If @child is a widget at one of the 
- *   reference ends of @box, then @padding pixels are also put between 
+ *   #GtkBox:spacing property.  If @child is a widget at one of the
+ *   reference ends of @box, then @padding pixels are also put between
  *   @child and the reference edge of @box
  *
  * Adds @child to @box, packed with reference to the start of @box.
- * The @child is packed after any other child packed with reference 
+ * The @child is packed after any other child packed with reference
  * to the start of @box.
  */
 void

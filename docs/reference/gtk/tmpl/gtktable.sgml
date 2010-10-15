@@ -22,8 +22,11 @@ convenient (but slightly less flexible) gtk_table_attach_defaults().
 To alter the space next to a specific row, use gtk_table_set_row_spacing(),
 and for a column, gtk_table_set_col_spacing().</para>
 <para>
-The gaps between <emphasis>all</emphasis> rows or columns can be changed by calling
-gtk_table_set_row_spacings() or gtk_table_set_col_spacings() respectively.
+The gaps between <emphasis>all</emphasis> rows or columns can be changed by
+calling gtk_table_set_row_spacings() or gtk_table_set_col_spacings()
+respectively. Note that spacing is added <emphasis>between</emphasis> the
+children, while padding added by gtk_table_atach() is added <emphasis>on
+either side</emphasis> of the widget it belongs to.
 </para>
 <para>
 gtk_table_set_homogeneous(), can be used to set whether all cells in the
@@ -168,6 +171,17 @@ Adds a widget to a table. The number of 'cells' that a widget will occupy is
 specified by @left_attach, @right_attach, @top_attach and @bottom_attach.
 These each represent the leftmost, rightmost, uppermost and lowest column
 and row numbers of the table. (Columns and rows are indexed from zero).
+</para>
+<para>
+To make a button occupy the lower right cell of a 2x2 table, use
+<informalexample><programlisting>
+gtk_table_attach (table, button,
+                  1, 2, /* left, right attach */
+                  1, 2, /* top, bottom attach */
+                  xoptions, yoptions,
+                  xpadding, ypadding);
+</programlisting></informalexample>
+If you want to make the button span the entire bottom row, use @left_attach == 0 and @right_attach = 2 instead.
 </para>
 
 @table: The #GtkTable to add a new widget to.
