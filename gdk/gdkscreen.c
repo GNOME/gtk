@@ -22,9 +22,11 @@
  */
 
 #include "config.h"
-#include "gdk.h"		/* For gdk_rectangle_intersect() */
-#include "gdkwindow.h"
+
 #include "gdkscreen.h"
+
+#include "gdkrectangle.h"
+#include "gdkwindow.h"
 #include "gdkintl.h"
 
 

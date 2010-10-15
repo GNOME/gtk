@@ -17,9 +17,13 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  */
-#include <gdk/gdktestutils.h>
-#include <gdk/gdkkeysyms.h>
-#include <x11/gdkx.h>
+
+#include "config.h"
+
+#include "gdktestutils.h"
+
+#include "gdkkeysyms.h"
+#include "gdkx.h"
 
 #include <X11/Xlib.h>
 

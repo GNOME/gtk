@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkdevicemanager-xi.h"
+
 #include "gdkeventtranslator.h"
 #include "gdkdevice-xi.h"
 #include "gdkintl.h"

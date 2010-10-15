@@ -25,12 +25,11 @@
  */
 
 #include "config.h"
-#include <string.h>		/* For memset() */
-#include <math.h>
 
-#include "gdk.h"
 #include "gdkinternals.h"
 
+#include <string.h>
+#include <math.h>
 
 typedef struct _GdkIOClosure GdkIOClosure;
 

@@ -22,18 +22,18 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <unistd.h>
-
-#include <glib.h>
-#include <gio/gdesktopappinfo.h>
+#include "gdkapplaunchcontext.h"
 
 #include "gdkx.h"
-#include "gdkapplaunchcontext.h"
 #include "gdkscreen.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+#include <glib.h>
+#include <gio/gdesktopappinfo.h>
+
+#include <string.h>
+#include <unistd.h>
 
 static char *
 get_display_name (GFile *file)

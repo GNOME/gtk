@@ -25,7 +25,8 @@
  */
 
 #include "config.h"
-#include "gdk.h"
+
+#include "gdktypes.h"
 
 
 /* Thanks to Markus G. Kuhn <mkuhn@acm.org> for the ksysym<->Unicode

@@ -25,7 +25,9 @@
  */
 
 #include "config.h"
+
 #include "gdkcursor.h"
+
 #include "gdkdisplay.h"
 #include "gdkinternals.h"
 

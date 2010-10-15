@@ -19,9 +19,10 @@
 
 #include "config.h"
 
-#include <gdk/gdktypes.h>
-#include <gdk/gdkdevicemanager.h>
 #include "gdkdevicemanager-core.h"
+
+#include "gdktypes.h"
+#include "gdkdevicemanager.h"
 #include "gdkeventtranslator.h"
 #include "gdkdevice-core.h"
 #include "gdkkeysyms.h"

@@ -25,9 +25,11 @@
  */
 
 #include "config.h"
+
+#include "gdkselection.h"
+
 #include "gdkproperty.h"
 #include "gdkdisplay.h"
-#include "gdkselection.h"
 
 
 gboolean

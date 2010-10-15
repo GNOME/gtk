@@ -25,16 +25,18 @@
  */
 
 #include "config.h"
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <string.h>
+
+#include "gdkselection.h"
 
 #include "gdkx.h"
 #include "gdkproperty.h"
-#include "gdkselection.h"
 #include "gdkprivate.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <string.h>
 
 
 typedef struct _OwnerInfo OwnerInfo;

@@ -26,6 +26,17 @@
 
 #include "config.h"
 
+#include "gdkdnd.h"
+
+#include "gdkmain.h"
+#include "gdkx.h"
+#include "gdkasync.h"
+#include "gdkproperty.h"
+#include "gdkprivate-x11.h"
+#include "gdkinternals.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
+
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -33,16 +44,6 @@
 #include <X11/extensions/Xcomposite.h>
 
 #include <string.h>
-
-#include "gdk.h"          /* For gdk_flush() */
-#include "gdkx.h"
-#include "gdkasync.h"
-#include "gdkdnd.h"
-#include "gdkproperty.h"
-#include "gdkprivate-x11.h"
-#include "gdkinternals.h"
-#include "gdkscreen-x11.h"
-#include "gdkdisplay-x11.h"
 
 typedef struct _GdkDragContextPrivateX11 GdkDragContextPrivateX11;
 

@@ -25,7 +25,9 @@
  */
 
 #include "config.h"
+
 #include "gdkwindowimpl.h"
+
 #include "gdkinternals.h"
 
 

@@ -25,18 +25,20 @@
  */
 
 #include "config.h"
-#include <X11/Xlib.h>
-#include <X11/Xatom.h>
-#include <string.h>
 
-#include "gdk.h"          /* For gdk_error_trap_push/pop() */
-#include "gdkx.h"
 #include "gdkproperty.h"
+
+#include "gdkmain.h"
+#include "gdkx.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
-#include "gdkselection.h"	/* only from predefined atom */
+#include "gdkselection.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
+#include <string.h>
 
 
 static GPtrArray *virtual_atom_array;

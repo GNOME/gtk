@@ -26,20 +26,18 @@
 
 #include "config.h"
 
+#include "gdkx.h"
+#include "gdkprivate-x11.h"
+#include "gdkinternals.h"
+#include "gdkdisplay-x11.h"
+#include "gdkkeysyms.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <limits.h>
 #include <errno.h>
-
-#include "gdk.h"
-#include "gdkx.h"
-
-#include "gdkprivate-x11.h"
-#include "gdkinternals.h"
-#include "gdkdisplay-x11.h"
-#include "gdkkeysyms.h"
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>

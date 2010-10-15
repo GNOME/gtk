@@ -19,15 +19,16 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <gdk/gdkdeviceprivate.h>
-
 #include "gdkdevicemanager-xi2.h"
+
+#include <gdk/gdkdeviceprivate.h>
 #include "gdkeventtranslator.h"
 #include "gdkdevice-xi2.h"
 #include "gdkkeysyms.h"
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
+
+#include <string.h>
 
 #define HAS_FOCUS(toplevel) ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 

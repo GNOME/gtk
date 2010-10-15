@@ -23,15 +23,17 @@
 
 #include "config.h"
 
-#include <stdlib.h>
-#include <string.h>
-
-#include <glib.h>
-#include "gdkscreen.h"
 #include "gdkscreen-x11.h"
+
+#include "gdkscreen.h"
 #include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
 #include "gdkx.h"
+
+#include <glib.h>
+
+#include <stdlib.h>
+#include <string.h>
 
 #include <X11/Xatom.h>
 

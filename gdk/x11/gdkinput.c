@@ -26,11 +26,11 @@
 
 #include "config.h"
 
-#include <stdlib.h>
-
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkwindow.h"
+
+#include <stdlib.h>
 
 
 /* Addition used for extension_events mask */

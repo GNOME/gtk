@@ -25,10 +25,11 @@
  */
 
 #include "config.h"
-#include <stdio.h>
 
 #include "gdktypes.h"
 #include "gdkprivate-x11.h"
+
+#include <stdio.h>
 
 
 gboolean          _gdk_use_xshm = TRUE;  /* used as a cmd line arg */

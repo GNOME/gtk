@@ -26,6 +26,14 @@
 
 #include "config.h"
 
+#include "gdkx.h"
+#include "gdkasync.h"
+#include "gdkdisplay-x11.h"
+#include "gdkinternals.h"
+#include "gdkprivate-x11.h"
+#include "gdkintl.h"
+#include "gdkdeviceprivate.h"
+
 #include <glib/gprintf.h>
 #include <stdlib.h>
 #include <string.h>
@@ -41,16 +49,6 @@
 #include <X11/XKBlib.h>
 #endif
 
-#include "gdk.h"
-
-#include "gdkx.h"
-#include "gdkasync.h"
-#include "gdkdisplay-x11.h"
-#include "gdkinternals.h"
-#include "gdkprivate-x11.h"
-#include "gdkintl.h"
-
-#include <gdk/gdkdeviceprivate.h>
 
 typedef struct _GdkPredicate        GdkPredicate;
 typedef struct _GdkGlobalErrorTrap  GdkGlobalErrorTrap;

@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkeventsource.h"
+
 #include "gdkinternals.h"
 #include "gdkx.h"
 

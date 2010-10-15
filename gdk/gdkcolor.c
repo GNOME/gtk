@@ -25,12 +25,13 @@
  */
 
 #include "config.h"
-#include <time.h>
+
+#include "gdkcolor.h"
 
 #include "gdkscreen.h"
-#include "gdkcolor.h"
 #include "gdkinternals.h"
 
+#include <time.h>
 
 /**
  * SECTION:colors

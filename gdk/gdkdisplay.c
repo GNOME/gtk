@@ -22,15 +22,17 @@
  */
 
 #include "config.h"
-#include <math.h>
-#include <glib.h>
-#include "gdk.h"		/* gdk_event_send_client_message() */
+
 #include "gdkdisplay.h"
+
+#include "gdkevents.h"
 #include "gdkwindowimpl.h"
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
 
+#include <glib.h>
+#include <math.h>
 
 enum {
   OPENED,

@@ -25,9 +25,11 @@
  */
 
 #include "config.h"
+
 #include "gdkx.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
+
 #include <stdio.h>
 
 static guint     gdk_xid_hash  (XID *xid);

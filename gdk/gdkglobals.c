@@ -26,10 +26,10 @@
 
 #include "config.h"
 
-#include <stdio.h>
-
 #include "gdktypes.h"
 #include "gdkprivate.h"
+
+#include <stdio.h>
 
 
 guint               _gdk_debug_flags = 0;

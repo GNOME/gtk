@@ -25,16 +25,18 @@
  */
 
 #include "config.h"
-#include <math.h>
-#include <pango/pangocairo.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
-#include "gdkcairo.h"
+
 #include "gdkdrawable.h"
+
+#include "gdkcairo.h"
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkscreen.h"
 #include "gdkpixbuf.h"
 
+#include <pango/pangocairo.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+#include <math.h>
 
 G_DEFINE_ABSTRACT_TYPE (GdkDrawable, gdk_drawable, G_TYPE_OBJECT)
 

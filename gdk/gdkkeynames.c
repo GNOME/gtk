@@ -25,9 +25,6 @@
  */
 
 #include "config.h"
-#include <glib/gprintf.h>
-#include <stdlib.h>
-#include <string.h>
 
 #include "gdkkeysyms.h"
 #include "gdkinternals.h"
@@ -35,6 +32,10 @@
 /* Key handling not part of the keymap */
 
 #include "keyname-table.h"
+
+#include <glib/gprintf.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define GDK_NUM_KEYS G_N_ELEMENTS (gdk_keys_by_keyval)
 

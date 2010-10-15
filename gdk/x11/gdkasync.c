@@ -44,12 +44,15 @@ in this Software without prior written authorization from The Open Group.
 
 */
 #include "config.h"
+
+#include "gdkasync.h"
+#include "gdkx.h"
+
 #ifdef NEED_XIPROTO_H_FOR_XREPLY
 #include <X11/extensions/XIproto.h>
 #endif
+
 #include <X11/Xlibint.h>
-#include "gdkasync.h"
-#include "gdkx.h"
 
 
 typedef struct _ChildInfoChildState ChildInfoChildState;

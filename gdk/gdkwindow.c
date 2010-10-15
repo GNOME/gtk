@@ -34,9 +34,8 @@
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"           /* For workaround */
 #endif
-#include "math.h"
 
-#include "gdk.h"                /* For gdk_rectangle_union() */
+#include "gdkrectangle.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkscreen.h"
@@ -45,6 +44,8 @@
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
 #include "gdkwindowimpl.h"
+
+#include <math.h>
 
 #undef DEBUG_WINDOW_PRINTING
 

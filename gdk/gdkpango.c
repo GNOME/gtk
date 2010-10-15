@@ -18,11 +18,14 @@
  */
 
 #include "config.h"
-#include <math.h>
-#include <pango/pangocairo.h>
+
 #include "gdkpango.h"
+
 #include "gdkscreen.h"
 #include "gdkintl.h"
+
+#include <math.h>
+#include <pango/pangocairo.h>
 
 /* Get a clip region to draw only part of a layout. index_ranges
  * contains alternating range starts/stops. The region is the

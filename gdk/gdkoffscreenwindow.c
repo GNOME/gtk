@@ -26,12 +26,11 @@
 
 #include "config.h"
 
-#include <math.h>
-
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkwindowimpl.h"
 
+#include <math.h>
 
 /* LIMITATIONS:
  *

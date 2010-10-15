@@ -22,7 +22,9 @@
  */
 
 #include "config.h"
+
 #include "gdkvisual.h"
+
 #include "gdkscreen.h"
 
 

@@ -18,7 +18,8 @@
  */
 
 #include "config.h"
-#include "gdk.h"		/* For gdk_rectangle_intersect */
+
+#include "gdkrectangle.h"
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
 #include "gdkinternals.h"

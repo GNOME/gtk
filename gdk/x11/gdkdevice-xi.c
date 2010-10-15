@@ -19,9 +19,10 @@
 
 #include "config.h"
 
-#include <gdk/gdkwindow.h>
-#include "gdkdeviceprivate.h"
 #include "gdkdevice-xi.h"
+
+#include "gdkwindow.h"
+#include "gdkdeviceprivate.h"
 #include "gdkprivate-x11.h"
 #include "gdkintl.h"
 #include "gdkx.h"

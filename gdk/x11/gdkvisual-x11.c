@@ -25,14 +25,16 @@
  */
 
 #include "config.h"
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
+
+#include "gdkvisual.h"
 
 #include "gdkx.h"
-#include "gdkvisual.h"
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkinternals.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
 
 struct _GdkVisualPrivate
 {

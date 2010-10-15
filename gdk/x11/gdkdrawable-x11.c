@@ -26,17 +26,17 @@
 
 #include "config.h"
 
+#include "gdkdrawable-x11.h"
+
 #include "gdkx.h"
+#include "gdkprivate-x11.h"
+#include "gdkscreen-x11.h"
+#include "gdkdisplay-x11.h"
 
 #include <cairo-xlib.h>
 
 #include <stdlib.h>
-#include <string.h>		/* for memcpy() */
-
-#include "gdkprivate-x11.h"
-#include "gdkdrawable-x11.h"
-#include "gdkscreen-x11.h"
-#include "gdkdisplay-x11.h"
+#include <string.h>
 
 
 static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);

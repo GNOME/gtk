@@ -17,13 +17,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include "gdkcairo.h"
+#include "config.h"
 
-#include <math.h>
+#include "gdkcairo.h"
 
 #include "gdkdrawable.h"
 #include "gdkinternals.h"
 
+#include <math.h>
 
 /**
  * SECTION:cairo_interaction

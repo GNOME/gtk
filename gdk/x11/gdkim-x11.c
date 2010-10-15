@@ -26,14 +26,14 @@
 
 #include "config.h"
 
+#include "gdkx.h"
+#include "gdkmain.h"
+#include "gdkinternals.h"
+#include "gdkdisplay-x11.h"
+
 #include <locale.h>
 #include <stdlib.h>
 #include <string.h>
-
-#include "gdkx.h"
-#include "gdk.h"		/* For gdk_flush() */
-#include "gdkinternals.h"
-#include "gdkdisplay-x11.h"
 
 
 /* If this variable is FALSE, it indicates that we should

@@ -19,8 +19,9 @@
 
 #include "config.h"
 
-#include <gdk/gdkwindow.h>
 #include "gdkdevice-core.h"
+
+#include "gdkwindow.h"
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
 

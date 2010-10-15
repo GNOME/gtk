@@ -27,39 +27,37 @@
 
 #include "config.h"
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
+#include "gdkwindow-x11.h"
 
-#ifdef HAVE_XKB
-#include <X11/XKBlib.h>
-#endif
-
-#include <cairo-xlib.h>
-
-#include <netinet/in.h>
-#include <unistd.h>
-
-#include "gdk.h"
 #include "gdkx.h"
-
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 #include "gdkinternals.h"
-#include "MwmUtil.h"
-#include "gdkwindow-x11.h"
 #include "gdkdeviceprivate.h"
 #include "gdkeventsource.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <netinet/in.h>
+#include <unistd.h>
 
+#include <cairo-xlib.h>
+
+#include "MwmUtil.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
 
 #include <X11/extensions/shape.h>
+
+#ifdef HAVE_XKB
+#include <X11/XKBlib.h>
+#endif
 
 #ifdef HAVE_XCOMPOSITE
 #include <X11/extensions/Xcomposite.h>

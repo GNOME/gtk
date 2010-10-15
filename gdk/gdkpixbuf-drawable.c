@@ -23,13 +23,14 @@
  */
 
 #include "config.h"
-#include <gdk-pixbuf/gdk-pixbuf.h>
+
+#include "gdkpixbuf.h"
 
 #include "gdkcolor.h"
 #include "gdkwindow.h"
-#include "gdkpixbuf.h"
 #include "gdkinternals.h"
 
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 /**
  * SECTION:pixbufs

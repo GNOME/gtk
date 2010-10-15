@@ -20,7 +20,11 @@
  *
  * Author:  Owen Taylor, Red Hat, Inc.
  */
+
 #include "config.h"
+
+#include "xsettings-client.h"
+
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -28,8 +32,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>		/* For CARD16 */
-
-#include "xsettings-client.h"
 
 struct _XSettingsClient
 {

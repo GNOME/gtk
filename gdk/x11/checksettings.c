@@ -17,8 +17,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <string.h>
+#include "config.h"
+
+#include "gdktypes.h"
+
 #include <glib.h>
+#include <string.h>
+
 #include "gdksettings.c"
 
 int

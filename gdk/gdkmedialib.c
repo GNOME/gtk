@@ -27,6 +27,8 @@
 
 #include "config.h"
 
+#include "gdkmedialib.h"
+
 #include <stdlib.h>
 #include <dlfcn.h>
 
@@ -43,8 +45,6 @@
 #elif defined(HAVE_SYS_SYSINFO_H)
 #include <sys/sysinfo.h>
 #endif
-
-#include "gdkmedialib.h"
 
 typedef char *      (*ml_version)         (void);
 

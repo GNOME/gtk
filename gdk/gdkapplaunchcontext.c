@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "gdkapplaunchcontext.h"
+
 #include "gdkinternals.h"
 #include "gdkscreen.h"
 #include "gdkintl.h"

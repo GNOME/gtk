@@ -20,13 +20,12 @@
  */
 
 #include "config.h"
-#include <string.h>
-#include <stdlib.h>
 
 #include "gdkspawn.h"
 
 #include <glib.h>
-#include <gdk/gdk.h>
+#include <string.h>
+#include <stdlib.h>
 
 
 typedef struct {

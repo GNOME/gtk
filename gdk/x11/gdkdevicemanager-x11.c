@@ -18,15 +18,15 @@
  */
 
 #include "config.h"
-#include "gdkx.h"
-#include "gdkdevicemanager-core.h"
 
+#include "gdkdevicemanager-core.h"
 #ifdef XINPUT_XFREE
 #include "gdkdevicemanager-xi.h"
 #ifdef XINPUT_2
 #include "gdkdevicemanager-xi2.h"
 #endif
 #endif
+#include "gdkx.h"
 
 GdkDeviceManager *
 _gdk_device_manager_new (GdkDisplay *display)

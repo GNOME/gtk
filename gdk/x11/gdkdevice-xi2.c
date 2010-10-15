@@ -19,11 +19,12 @@
 
 #include "config.h"
 
-#include <X11/extensions/XInput2.h>
 #include "gdkdevice-xi2.h"
+
 #include "gdkintl.h"
 #include "gdkx.h"
 
+#include <X11/extensions/XInput2.h>
 
 struct _GdkDeviceXI2Private
 {

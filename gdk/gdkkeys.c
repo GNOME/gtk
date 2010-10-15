@@ -26,8 +26,9 @@
 
 #include "config.h"
 
-#include "gdkdisplay.h"
 #include "gdkkeys.h"
+
+#include "gdkdisplay.h"
 
 
 enum {

@@ -26,16 +26,17 @@
 
 #include "config.h"
 
-#include <string.h>
-#include <stdlib.h>
+#include "gdkmain.h"
 
-#include "gdk.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
 #ifndef HAVE_XCONVERTCASE
 #include "gdkkeysyms.h"
 #endif
+
+#include <string.h>
+#include <stdlib.h>
 
 typedef struct _GdkPredicate  GdkPredicate;
 

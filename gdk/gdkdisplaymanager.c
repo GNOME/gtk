@@ -26,13 +26,12 @@
 
 #include "config.h"
 
-#include "gdkscreen.h"
-#include "gdkdisplay.h"
 #include "gdkdisplaymanager.h"
 
+#include "gdkscreen.h"
+#include "gdkdisplay.h"
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
-
 #include "gdkintl.h"
 
 

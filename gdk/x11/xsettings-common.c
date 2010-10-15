@@ -20,14 +20,16 @@
  *
  * Author:  Owen Taylor, Red Hat, Inc.
  */
+
 #include "config.h"
+
+#include "xsettings-common.h"
+
 #include "string.h"
 #include "stdlib.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>		/* For CARD32 */
-
-#include "xsettings-common.h"
 
 XSettingsSetting *
 xsettings_setting_copy (XSettingsSetting *setting)

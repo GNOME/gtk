@@ -25,9 +25,11 @@
  */
 
 #include "config.h"
-#include <gdkdnd.h>
-#include <gdkdisplay.h>
-#include <gdkwindow.h>
+
+#include "gdkdnd.h"
+
+#include "gdkdisplay.h"
+#include "gdkwindow.h"
 
 
 /**
