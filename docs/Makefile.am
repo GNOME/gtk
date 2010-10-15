@@ -1,7 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 include $(top_srcdir)/Makefile.decl
 
-SUBDIRS = tutorial faq reference tools
+SUBDIRS = faq reference tools
 
 EXTRA_DIST += \
 	CODING-STYLE			\
