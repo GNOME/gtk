@@ -2828,11 +2828,21 @@ static const struct {
 static const struct {
   const char *ppd_keyword;
   const char *name;
-} option_names[] = {
+} ppd_option_names[] = {
   {"Duplex", "gtk-duplex" },
   {"MediaType", "gtk-paper-type"},
   {"InputSlot", "gtk-paper-source"},
   {"OutputBin", "gtk-output-tray"},
+};
+
+static const struct {
+  const char *lpoption;
+  const char *name;
+} lpoption_names[] = {
+  {"number-up", "gtk-n-up" },
+  {"number-up-layout", "gtk-n-up-layout"},
+  {"job-billing", "gtk-billing-info"},
+  {"job-priority", "gtk-job-prio"},
 };
 
 /* keep sorted when changing */
@@ -3350,15 +3360,31 @@ create_boolean_option (ppd_file_t   *ppd_file,
 }
 
 static gchar *
-get_option_name (const gchar *keyword)
+get_ppd_option_name (const gchar *keyword)
 {
   int i;
 
-  for (i = 0; i < G_N_ELEMENTS (option_names); i++)
-    if (strcmp (option_names[i].ppd_keyword, keyword) == 0)
-      return g_strdup (option_names[i].name);
+  for (i = 0; i < G_N_ELEMENTS (ppd_option_names); i++)
+    if (strcmp (ppd_option_names[i].ppd_keyword, keyword) == 0)
+      return g_strdup (ppd_option_names[i].name);
 
   return g_strdup_printf ("cups-%s", keyword);
+}
+
+static gchar *
+get_lpoption_name (const gchar *lpoption)
+{
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (ppd_option_names); i++)
+    if (strcmp (ppd_option_names[i].ppd_keyword, lpoption) == 0)
+      return g_strdup (ppd_option_names[i].name);
+
+  for (i = 0; i < G_N_ELEMENTS (lpoption_names); i++)
+    if (strcmp (lpoption_names[i].lpoption, lpoption) == 0)
+      return g_strdup (lpoption_names[i].name);
+
+  return g_strdup_printf ("cups-%s", lpoption);
 }
 
 static int
@@ -3395,7 +3421,7 @@ handle_option (GtkPrinterOptionSet *set,
   if (STRING_IN_TABLE (ppd_option->keyword, cups_option_blacklist))
     return;
 
-  name = get_option_name (ppd_option->keyword);
+  name = get_ppd_option_name (ppd_option->keyword);
 
   option = NULL;
   if (ppd_option->ui == PPD_UI_PICKONE)
@@ -3719,10 +3745,62 @@ cups_printer_get_options (GtkPrinter           *printer,
       if (STRING_IN_TABLE (opts[i].name, cups_option_blacklist))
         continue;
 
-      name = get_option_name (opts[i].name);
-      option = gtk_printer_option_set_lookup (set, name);
-      if (option)
-        gtk_printer_option_set (option, opts[i].value);
+      name = get_lpoption_name (opts[i].name);
+      if (strcmp (name, "cups-job-sheets") == 0)
+        {
+          gchar **values;
+          gint    num_values;
+          
+          values = g_strsplit (opts[i].value, ",", 2);
+          num_values = g_strv_length (values);
+
+          option = gtk_printer_option_set_lookup (set, "gtk-cover-before");
+          if (option && num_values > 0)
+            gtk_printer_option_set (option, g_strstrip (values[0]));
+
+          option = gtk_printer_option_set_lookup (set, "gtk-cover-after");
+          if (option && num_values > 1)
+            gtk_printer_option_set (option, g_strstrip (values[1]));
+
+          g_strfreev (values);
+        }
+      else if (strcmp (name, "cups-job-hold-until") == 0)
+        {
+          GtkPrinterOption *option2 = NULL;
+
+          option = gtk_printer_option_set_lookup (set, "gtk-print-time-text");
+          if (option && opts[i].value)
+            {
+              option2 = gtk_printer_option_set_lookup (set, "gtk-print-time");
+              if (option2)
+                {
+                  if (strcmp (opts[i].value, "indefinite") == 0)
+                    gtk_printer_option_set (option2, "on-hold");
+                  else
+                    {
+                      gtk_printer_option_set (option2, "at");
+                      gtk_printer_option_set (option, opts[i].value);
+                    }
+                }
+            }
+        }
+      else if (strcmp (name, "cups-sides") == 0)
+        {
+          option = gtk_printer_option_set_lookup (set, "gtk-duplex");
+          if (option && opts[i].value)
+            {
+              if (strcmp (opts[i].value, "two-sided-short-edge") == 0)
+                gtk_printer_option_set (option, "DuplexTumble");
+              else if (strcmp (opts[i].value, "two-sided-long-edge") == 0)
+                gtk_printer_option_set (option, "DuplexNoTumble");
+            }
+        }
+      else
+        {
+          option = gtk_printer_option_set_lookup (set, name);
+          if (option)
+            gtk_printer_option_set (option, opts[i].value);
+        }
       g_free (name);
     }
 
@@ -3738,7 +3816,7 @@ mark_option_from_set (GtkPrinterOptionSet *set,
 		      ppd_option_t        *ppd_option)
 {
   GtkPrinterOption *option;
-  char *name = get_option_name (ppd_option->keyword);
+  char *name = get_ppd_option_name (ppd_option->keyword);
 
   option = gtk_printer_option_set_lookup (set, name);
 
@@ -3773,7 +3851,7 @@ set_conflicts_from_option (GtkPrinterOptionSet *set,
 
   if (ppd_option->conflicted)
     {
-      name = get_option_name (ppd_option->keyword);
+      name = get_ppd_option_name (ppd_option->keyword);
       option = gtk_printer_option_set_lookup (set, name);
 
       if (option)

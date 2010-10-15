@@ -2565,6 +2565,13 @@ dialog_get_number_up_layout (GtkPrintUnixDialog *dialog)
   if (val == NULL)
     return layout;
 
+  if (val[0] == '\0' && priv->options)
+    {
+      GtkPrinterOption *option = gtk_printer_option_set_lookup (priv->options, "gtk-n-up-layout");
+      if (option)
+        val = option->value;
+    }
+
   enum_class = g_type_class_ref (GTK_TYPE_NUMBER_UP_LAYOUT);
   enum_value = g_enum_get_value_by_nick (enum_class, val);
   if (enum_value)
