@@ -168,7 +168,8 @@ gchar*	 gtk_accelerator_name		      (guint	        accelerator_key,
 gchar*   gtk_accelerator_get_label            (guint           accelerator_key,
                                                GdkModifierType accelerator_mods);
 void	 gtk_accelerator_set_default_mod_mask (GdkModifierType  default_mod_mask);
-guint	 gtk_accelerator_get_default_mod_mask (void);
+GdkModifierType
+	 gtk_accelerator_get_default_mod_mask (void);
 
 
 /* --- internal --- */

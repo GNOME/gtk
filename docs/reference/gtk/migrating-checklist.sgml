@@ -265,7 +265,7 @@ my_widget_expose_event_handler (GtkWidget *widget, GdkEventExpose *event)
 static gboolean
 my_widget_key_press_event_handler (GtkWidget *widget, GdkEventKey *event)
 {
-  guint modifiers;
+  GdkModifierType modifiers;
 
   modifiers = gtk_accelerator_get_default_mod_mask (<!-- -->);
 

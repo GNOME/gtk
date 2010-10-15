@@ -1461,7 +1461,7 @@ gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
  *
  * Gets the value set by gtk_accelerator_set_default_mod_mask().
  */
-guint
+GdkModifierType
 gtk_accelerator_get_default_mod_mask (void)
 {
   return default_accel_mod_mask;
