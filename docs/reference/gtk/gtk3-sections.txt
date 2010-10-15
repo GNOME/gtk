@@ -860,7 +860,7 @@ GTK_COMBO_BOX_TEXT_GET_CLASS
 <SUBSECTION Private>
 GtkComboBoxTextPrivate
 gtk_combo_box_text_get_type
-<SECTION>
+</SECTION>
 
 <FILE>gtkcontainer</FILE>
 <TITLE>GtkContainer</TITLE>

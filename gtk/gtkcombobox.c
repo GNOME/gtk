@@ -57,7 +57,7 @@
  * SECTION:gtkcombobox
  * @Short_description: A widget used to choose from a list of items
  * @Title: GtkComboBox
- * @See_also: #GtkComboBoxEntry, #GtkTreeModel, #GtkCellRenderer
+ * @See_also: #GtkComboBoxText, #GtkTreeModel, #GtkCellRenderer
  *
  * A GtkComboBox is a widget that allows the user to choose from a list of
  * valid choices. The GtkComboBox displays the selected choice. When
