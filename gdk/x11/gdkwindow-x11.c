@@ -2674,6 +2674,7 @@ gdk_window_x11_set_background (GdkWindow      *window,
       if (cairo_pattern_get_surface (pattern, &surface) == CAIRO_STATUS_SUCCESS &&
           matrix_is_identity (&matrix) &&
           cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_XLIB &&
+          cairo_xlib_surface_get_visual (surface) == GDK_VISUAL_XVISUAL (gdk_window_get_visual ((window))) &&
           cairo_xlib_surface_get_display (surface) == GDK_WINDOW_XDISPLAY (window))
         {
           double x, y;
