@@ -63,6 +63,26 @@ gtk_combo_box_text_new (void)
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT, NULL);
 }
 
+
+/**
+ * gtk_combo_box_text_new_with_entry:
+ *
+ * Creates a new #GtkComboBoxText, which is a #GtkComboBox just displaying
+ * strings. The combo box created by this function has an entry.
+ *
+ * Return value: a new #GtkComboBoxText
+ *
+ * Since: 2.24
+ */
+GtkWidget *
+gtk_combo_box_text_new_with_entry (void)
+{
+  return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
+                       "has-entry", TRUE,
+                       "entry-text-column", 0,
+                       NULL);
+}
+
 /**
  * gtk_combo_box_text_append_text:
  * @combo_box: A #GtkComboBoxText
@@ -120,7 +140,7 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
 
   store = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box)));
   g_return_if_fail (GTK_IS_LIST_STORE (store));
-  text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box)); 
+  text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box));
   column_type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), text_column);
   g_return_if_fail (column_type == G_TYPE_STRING);
 
@@ -151,7 +171,7 @@ gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
 
   store = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box)));
   g_return_if_fail (GTK_IS_LIST_STORE (store));
-  text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box)); 
+  text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box));
   column_type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), text_column);
   g_return_if_fail (column_type == G_TYPE_STRING);
 
@@ -175,8 +195,6 @@ gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
   GtkTreeModel *model;
   GtkListStore *store;
   GtkTreeIter iter;
-  gint text_column;
-  gint column_type;
 
   g_return_if_fail (GTK_IS_COMBO_BOX_TEXT (combo_box));
   g_return_if_fail (position >= 0);
@@ -184,9 +202,6 @@ gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box));
   store = GTK_LIST_STORE (model);
   g_return_if_fail (GTK_IS_LIST_STORE (store));
-  text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box)); 
-  column_type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), text_column);
-  g_return_if_fail (column_type == G_TYPE_STRING);
 
   if (gtk_tree_model_iter_nth_child (model, &iter, NULL, position))
     gtk_list_store_remove (store, &iter);

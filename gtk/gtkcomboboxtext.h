@@ -59,6 +59,7 @@ struct _GtkComboBoxTextClass
 
 GType         gtk_combo_box_text_get_type        (void) G_GNUC_CONST;
 GtkWidget*    gtk_combo_box_text_new             (void);
+GtkWidget*    gtk_combo_box_text_new_with_entry  (void);
 void          gtk_combo_box_text_append_text     (GtkComboBoxText     *combo_box,
                                                   const gchar         *text);
 void          gtk_combo_box_text_insert_text     (GtkComboBoxText     *combo_box,
