@@ -38,7 +38,7 @@
  * You can add items to a GtkComboBoxText with
  * gtk_combo_box_text_append_text(), gtk_combo_box_text_insert_text()
  * or gtk_combo_box_text_prepend_text() and remove options with
- * gtk_combo_box_text_remove_text().
+ * gtk_combo_box_text_remove().
  */
 
 G_DEFINE_TYPE (GtkComboBoxText, gtk_combo_box_text, GTK_TYPE_COMBO_BOX);
