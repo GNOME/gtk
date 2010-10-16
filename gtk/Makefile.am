@@ -1303,8 +1303,9 @@ EXTRA_DIST +=                   \
 	makefile.msc		\
 	makefile.msc.in		\
 	abicheck.sh		\
-	gtktypebuiltins.c.template      \
-	gtktypebuiltins.h.template
+	gtktypebuiltins.c.template \
+	gtktypebuiltins.h.template \
+	org.gtk.Settings.FileChooser.gschema.xml
 
 gsettings_SCHEMAS = \
 	org.gtk.Settings.FileChooser.gschema.xml
