@@ -6176,13 +6176,16 @@ gtk_combo_box_get_has_entry (GtkComboBox *combo_box)
 
 /**
  * gtk_combo_box_set_entry_text_column:
- * @combo_box: A #GtkComboBox.
- * @text_column: A column in @model to get the strings from for the internal entry.
+ * @combo_box: A #GtkComboBox
+ * @text_column: A column in @model to get the strings from for
+ *     the internal entry
  *
  * Sets the model column which @combo_box should use to get strings from
- * to be @text_column.
+ * to be @text_column. The column @text_column in the model of @combo_box
+ * must be of type %G_TYPE_STRING.
  *
- * @combo_box must be created with GtkComboBox:has-entry as %TRUE.
+ * This is only relevant if @combo_box has been created with
+ * #GtkComboBox:has-entry as %TRUE.
  *
  * Since: 2.24
  */
@@ -6190,22 +6193,23 @@ void
 gtk_combo_box_set_entry_text_column (GtkComboBox *combo_box,
 				     gint         text_column)
 {
+  GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeModel *model;
 
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (combo_box->priv->has_entry != FALSE);
 
   model = gtk_combo_box_get_model (combo_box);
 
   g_return_if_fail (text_column >= 0);
   g_return_if_fail (model == NULL || text_column < gtk_tree_model_get_n_columns (model));
 
-  combo_box->priv->text_column = text_column;
+  priv->text_column = text_column;
 
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box),
-                                  combo_box->priv->text_renderer,
-                                  "text", text_column,
-                                  NULL);
+  if (priv->text_renderer != NULL)
+    gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box),
+                                    priv->text_renderer,
+                                    "text", text_column,
+                                    NULL);
 }
 
 /**
