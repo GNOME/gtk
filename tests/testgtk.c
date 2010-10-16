@@ -117,7 +117,7 @@ build_option_menu (gchar           *items[],
   GSList *group;
   gint i;
 
-  omenu = gtk_option_menu_new ();
+  omenu = gtk_combo_box_text_new ();
   g_signal_connect (omenu, "changed",
 		    G_CALLBACK (func), data);
       
@@ -125,14 +125,7 @@ build_option_menu (gchar           *items[],
   group = NULL;
   
   for (i = 0; i < num_items; i++)
-    {
-      menu_item = gtk_radio_menu_item_new_with_label (group, items[i]);
-      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menu_item));
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-      if (i == history)
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menu_item), TRUE);
-      gtk_widget_show (menu_item);
-    }
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (omenu), items[i]);
 
   gtk_option_menu_set_menu (GTK_OPTION_MENU (omenu), menu);
   gtk_option_menu_set_history (GTK_OPTION_MENU (omenu), history);
@@ -8483,14 +8476,10 @@ create_display_screen (GtkWidget *widget)
 	 "only one screen on the current display");
       gtk_widget_set_sensitive (radio_scr, FALSE);
     }
-  combo_dpy = gtk_combo_new ();
-  if (!valid_display_list)
-    valid_display_list = g_list_append (valid_display_list, "diabolo:0.0");
-    
-  gtk_combo_set_popdown_strings (GTK_COMBO (combo_dpy), valid_display_list);
-    
-  gtk_entry_set_text (GTK_ENTRY (GTK_COMBO (combo_dpy)->entry), 
-		      "<hostname>:<X Server Num>.<Screen Num>");
+  combo_dpy = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
+  gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_dpy))),
+                      "<hostname>:<X Server Num>.<Screen Num>");
 
   gtk_table_attach_defaults (GTK_TABLE (table), radio_dpy, 0, 1, 0, 1);
   gtk_table_attach_defaults (GTK_TABLE (table), radio_scr, 0, 1, 1, 2);
@@ -11128,9 +11117,8 @@ window_controls (GtkWidget *window)
                            window,
 			   G_CONNECT_SWAPPED);
   gtk_box_pack_end (GTK_BOX (vbox), button, FALSE, FALSE, 0);
-  
-  menu = gtk_menu_new ();
-  
+
+  om = gtk_combo_box_text_new ();
   i = 0;
   while (i < 10)
     {
@@ -11150,10 +11138,7 @@ window_controls (GtkWidget *window)
       };
 
       g_assert (names[i]);
-      
-      mi = gtk_menu_item_new_with_label (names[i]);
-
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (om), names[i]);
 
       ++i;
     }
@@ -11172,8 +11157,7 @@ window_controls (GtkWidget *window)
   gtk_box_pack_end (GTK_BOX (vbox), om, FALSE, FALSE, 0);
 
 
-  menu = gtk_menu_new ();
-  
+  om = gtk_combo_box_text_new ();
   i = 0;
   while (i < 5)
     {
@@ -11188,10 +11172,7 @@ window_controls (GtkWidget *window)
       };
 
       g_assert (names[i]);
-      
-      mi = gtk_menu_item_new_with_label (names[i]);
-
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), mi);
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (om), names[i]);
 
       ++i;
     }

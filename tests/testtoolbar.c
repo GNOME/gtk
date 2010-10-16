@@ -551,23 +551,16 @@ main (gint argc, gchar **argv)
   checkbox = gtk_check_button_new_with_mnemonic("_Set Toolbar Style:");
   g_signal_connect (checkbox, "toggled", G_CALLBACK (set_toolbar_style_toggled), toolbar);
   gtk_box_pack_start (GTK_BOX (hbox1), checkbox, FALSE, FALSE, 0);
-  
-  option_menu = gtk_option_menu_new();
+
+  option_menu = gtk_combo_box_text_new ();
   gtk_widget_set_sensitive (option_menu, FALSE);  
   g_object_set_data (G_OBJECT (checkbox), "option-menu", option_menu);
   
   menu = gtk_menu_new();
   for (i = 0; i < G_N_ELEMENTS (toolbar_styles); i++)
-    {
-      GtkWidget *menuitem;
-
-      menuitem = gtk_menu_item_new_with_label (toolbar_styles[i]);
-      gtk_container_add (GTK_CONTAINER (menu), menuitem);
-      gtk_widget_show (menuitem);
-    }
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
-  gtk_option_menu_set_history (GTK_OPTION_MENU (option_menu),
-			       GTK_TOOLBAR (toolbar)->style);
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (option_menu), toolbar_styles[i]);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (option_menu),
+                            gtk_toolbar_get_style (GTK_TOOLBAR (toolbar)));
   gtk_box_pack_start (GTK_BOX (hbox2), option_menu, FALSE, FALSE, 0);
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (change_toolbar_style), toolbar);
@@ -576,21 +569,12 @@ main (gint argc, gchar **argv)
   g_signal_connect (checkbox, "toggled", G_CALLBACK (set_icon_size_toggled), toolbar);
   gtk_box_pack_start (GTK_BOX (hbox2), checkbox, FALSE, FALSE, 0);
 
-  option_menu = gtk_option_menu_new();
+  option_menu = gtk_combo_box_text_new ();
   g_object_set_data (G_OBJECT (checkbox), "option-menu", option_menu);
   gtk_widget_set_sensitive (option_menu, FALSE);
-  menu = gtk_menu_new();
-  menuitem = gtk_menu_item_new_with_label ("small toolbar");
-  g_object_set_data (G_OBJECT (menuitem), "value-id", GINT_TO_POINTER (GTK_ICON_SIZE_SMALL_TOOLBAR));
-  gtk_container_add (GTK_CONTAINER (menu), menuitem);
-  gtk_widget_show (menuitem);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (option_menu), "small toolbar");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (option_menu), "large toolbar");
 
-  menuitem = gtk_menu_item_new_with_label ("large toolbar");
-  g_object_set_data (G_OBJECT (menuitem), "value-id", GINT_TO_POINTER (GTK_ICON_SIZE_LARGE_TOOLBAR));
-  gtk_container_add (GTK_CONTAINER (menu), menuitem);
-  gtk_widget_show (menuitem);
-
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (option_menu), menu);
   gtk_box_pack_start (GTK_BOX (hbox2), option_menu, FALSE, FALSE, 0);
   g_signal_connect (option_menu, "changed",
 		    G_CALLBACK (icon_size_history_changed), toolbar);

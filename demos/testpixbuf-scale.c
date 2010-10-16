@@ -104,12 +104,12 @@ main(int argc, char **argv)
 	vbox = gtk_vbox_new (FALSE, 0);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
-        combo_box = gtk_combo_box_new_text ();
+        combo_box = gtk_combo_box_text_new ();
 
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "NEAREST");
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "BILINEAR");
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "TILES");
-        gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), "HYPER");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "NEAREST");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "BILINEAR");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "TILES");
+        gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), "HYPER");
 
         gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 1);
 

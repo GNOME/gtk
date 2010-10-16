@@ -198,12 +198,12 @@ create_menubar (GtkWindow *window)
 static GtkWidget *
 create_combo_box (void)
 {
-  GtkComboBox *combo_box = GTK_COMBO_BOX (gtk_combo_box_new_text ());
+  GtkComboBoxText *combo_box = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new ());
 
-  gtk_combo_box_append_text (combo_box, "This");
-  gtk_combo_box_append_text (combo_box, "Is");
-  gtk_combo_box_append_text (combo_box, "A");
-  gtk_combo_box_append_text (combo_box, "ComboBox");
+  gtk_combo_box_text_append_text (combo_box, "This");
+  gtk_combo_box_text_append_text (combo_box, "Is");
+  gtk_combo_box_text_append_text (combo_box, "A");
+  gtk_combo_box_text_append_text (combo_box, "ComboBox");
   
   return GTK_WIDGET (combo_box);
 }

@@ -29,7 +29,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
-#include "gtkcombobox.h"
+#include "gtkcomboboxtext.h"
 #include "gtkentry.h"
 #include "gtkexpander.h"
 #include "gtkfilechooserprivate.h"
@@ -2425,7 +2425,10 @@ renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
 static GtkWidget *
 filter_create (GtkFileChooserDefault *impl)
 {
-  impl->filter_combo = gtk_combo_box_new_text ();
+  GtkCellRenderer *cell;
+  GList           *cells;
+
+  impl->filter_combo = gtk_combo_box_text_new ();
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
 
   g_signal_connect (impl->filter_combo, "changed",
@@ -7688,7 +7691,7 @@ gtk_file_chooser_default_add_filter (GtkFileChooser *chooser,
   if (!name)
     name = "Untitled filter";	/* Place-holder, doesn't need to be marked for translation */
 
-  gtk_combo_box_append_text (GTK_COMBO_BOX (impl->filter_combo), name);
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (impl->filter_combo), name);
 
   if (!g_slist_find (impl->filters, impl->current_filter))
     set_current_filter (impl, filter);

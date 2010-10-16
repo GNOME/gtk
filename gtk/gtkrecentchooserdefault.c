@@ -41,7 +41,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
-#include "gtkcombobox.h"
+#include "gtkcomboboxtext.h"
 #include "gtkentry.h"
 #include "gtkeventbox.h"
 #include "gtkexpander.h"
@@ -473,7 +473,7 @@ gtk_recent_chooser_default_constructor (GType                  type,
 
   impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
   
-  impl->filter_combo = gtk_combo_box_new_text ();
+  impl->filter_combo = gtk_combo_box_text_new ();
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);
   g_signal_connect (impl->filter_combo, "changed",
                     G_CALLBACK (filter_combo_changed_cb), impl);
@@ -1296,9 +1296,9 @@ gtk_recent_chooser_default_add_filter (GtkRecentChooser *chooser,
   name = gtk_recent_filter_get_name (filter);
   if (!name)
     name = _("Untitled filter");
-    
-  gtk_combo_box_append_text (GTK_COMBO_BOX (impl->filter_combo), name);
-  
+
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (impl->filter_combo), name);
+
   if (!g_slist_find (impl->filters, impl->current_filter))
     set_current_filter (impl, filter);
   

@@ -25,10 +25,10 @@ create_combo_box (const char **strings)
   GtkWidget *combo_box;
   const char **str;
 
-  combo_box = gtk_combo_box_new_text ();
+  combo_box = gtk_combo_box_text_new ();
   
   for (str = strings; *str; str++)
-    gtk_combo_box_append_text (GTK_COMBO_BOX (combo_box), *str);
+    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_box), *str);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo_box), 0);
 

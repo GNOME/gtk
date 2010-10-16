@@ -40,7 +40,7 @@ combo_changed_cb (GtkWidget *combo,
 int
 main (int argc, char *argv[])
 {
-  GtkWidget *window, *vbox, *hbox, *label, *combo;
+  GtkWidget *window, *vbox, *hbox, *label, *combo, *scale;
 
   gtk_init (&argc, &argv);
 
@@ -48,15 +48,15 @@ main (int argc, char *argv[])
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
   vbox = gtk_vbox_new (0, FALSE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
-  hbox = gtk_hbox_new (0, FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
+
+  combo = gtk_combo_box_text_new ();
+  scale = gtk_hscale_new_with_range (0, 360, 1);
   label = gtk_label_new ("This label may be ellipsized\nto make it fit.");
-  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-  combo = gtk_combo_box_new_text ();
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "NONE");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "START");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "MIDDLE");
-  gtk_combo_box_append_text (GTK_COMBO_BOX (combo), "END");
+
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "NONE");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "START");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "MIDDLE");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo), "END");
   gtk_combo_box_set_active (GTK_COMBO_BOX (combo), 0);
   gtk_box_pack_start (GTK_BOX (hbox), combo, TRUE, TRUE, 0);
   g_signal_connect (combo, "changed", G_CALLBACK (combo_changed_cb), label);

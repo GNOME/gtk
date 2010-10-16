@@ -822,15 +822,15 @@ property_widget (GObject    *object,
 	GEnumClass *eclass;
 	gint j;
 	
-	prop_edit = gtk_combo_box_new_text ();
+	prop_edit = gtk_combo_box_text_new ();
 	
 	eclass = G_ENUM_CLASS (g_type_class_ref (spec->value_type));
 	
 	j = 0;
 	while (j < eclass->n_values)
 	  {
-	    gtk_combo_box_append_text (GTK_COMBO_BOX (prop_edit),
-	                               eclass->values[j].value_name);
+	    gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (prop_edit),
+	                                    eclass->values[j].value_name);
 	    ++j;
 	  }
 	

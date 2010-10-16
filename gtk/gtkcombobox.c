@@ -53,6 +53,32 @@
 #include "gtktreeprivate.h"
 #include "gtkalias.h"
 
+/**
+ * SECTION:gtkcombobox
+ * @Short_description: A widget used to choose from a list of items
+ * @Title: GtkComboBox
+ * @See_also: #GtkComboBoxEntry, #GtkTreeModel, #GtkCellRenderer
+ *
+ * A GtkComboBox is a widget that allows the user to choose from a list of
+ * valid choices. The GtkComboBox displays the selected choice. When
+ * activated, the GtkComboBox displays a popup which allows the user to
+ * make a new choice. The style in which the selected value is displayed,
+ * and the style of the popup is determined by the current theme. It may
+ * be similar to a Windows-style combo box.
+ *
+ * The GtkComboBox uses the model-view pattern; the list of valid choices
+ * is specified in the form of a tree model, and the display of the choices
+ * can be adapted to the data in the model by using cell renderers, as you
+ * would in a tree view. This is possible since GtkComboBox implements the
+ * #GtkCellLayout interface. The tree model holding the valid choices is
+ * not restricted to a flat list, it can be a real tree, and the popup will
+ * reflect the tree structure.
+ *
+ * For a simple list of textual choices, the model-view API of GtkComboBox
+ * can be a bit overwhelming. In this case, #GtkComboBoxText offers a
+ * simple alternative.
+ */
+
 /* WELCOME, to THE house of evil code */
 
 typedef struct _ComboCellInfo ComboCellInfo;
@@ -5428,9 +5454,7 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
  * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
  *
  * Returns the currently active string in @combo_box or %NULL if none
- * is selected.  Note that you can only use this function with combo
- * boxes constructed with gtk_combo_box_new_text() and with
- * #GtkComboBoxEntry<!-- -->s.
+ * is selected.
  *
  * Returns: a newly allocated string containing the currently active text.
  *     Must be freed with g_free().
