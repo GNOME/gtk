@@ -124,7 +124,7 @@ void               gtk_combo_box_set_entry_text_column  (GtkComboBox        *com
 							 gint                text_column);
 gint               gtk_combo_box_get_entry_text_column  (GtkComboBox        *combo_box);
 
-#ifndef GTK_DISABLE_DEPRECATED
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 
 /* convenience -- text */
 GtkWidget    *gtk_combo_box_new_text         (void);
