@@ -60,6 +60,8 @@ gtk_combo_box_text_init (GtkComboBoxText *combo_box)
   gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
   g_object_unref (store);
 
+  gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX (combo_box), 0);
+
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
@@ -97,10 +99,7 @@ gtk_combo_box_text_new (void)
 GtkWidget *
 gtk_combo_box_text_new_with_entry (void)
 {
-  return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
-                       "has-entry", TRUE,
-                       "entry-text-column", 0,
-                       NULL);
+  return g_object_new (GTK_TYPE_COMBO_BOX_TEXT, "has-entry", TRUE, NULL);
 }
 
 /**
@@ -127,6 +126,7 @@ gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
   store = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box)));
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box));
+  g_return_if_fail (text_column == 0);
   column_type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), text_column);
   g_return_if_fail (column_type == G_TYPE_STRING);
 

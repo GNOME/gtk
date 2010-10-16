@@ -658,12 +658,12 @@ create_tree_model (void)
 }
 
 static void
-model_selected (GtkOptionMenu *om, gpointer data)
+model_selected (GtkComboBox *combo_box, gpointer data)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   gint hist;
 
-  hist = gtk_option_menu_get_history (om);
+  hist = gtk_combo_box_get_active (combo_box);
 
   if (models[hist] != gtk_tree_view_get_model (tree_view))
     {
@@ -672,12 +672,12 @@ model_selected (GtkOptionMenu *om, gpointer data)
 }
 
 static void
-columns_selected (GtkOptionMenu *om, gpointer data)
+columns_selected (GtkComboBox *combo_box, gpointer data)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (data);
   gint hist;
 
-  hist = gtk_option_menu_get_history (om);
+  hist = gtk_combo_box_get_active (combo_box);
 
   if (hist != get_columns_type ())
     {
@@ -705,7 +705,6 @@ main (int    argc,
   GtkWidget *tv;
   GtkWidget *table;
   GtkWidget *combo_box;
-  GtkWidget *menu;
   GtkTreeModel *model;
   gint i;
   
