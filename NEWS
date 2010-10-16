@@ -1,3 +1,38 @@
+Overview of Changes from GTK+ 2.22.0 to 2.23.0
+==============================================
+
+* New deprecations:
+ - gdk_cairo_set_source_pixmap
+ - Misc GdkDrawable APIs
+ - gtk_object_destroy
+ - gtk_init_add, gtk_remove_add, etc
+ - gtk_noteboook_set_window_creation_hook
+ - gtk_notebook_set/get_group
+ - gtk_link_button_set_uri_hook
+ - gtk_about_dialog_set_url/email_hook
+ - GtkComboBoxEntry
+ - combo box text convenience API
+
+* New APIs added to aid migration to GTK+ 3:
+ - gdk_cairo_set_source_window
+ - GdkWindow API to supersede GdkDrawable API
+ - gtk_notebook_set/get_group_name
+ - GtkLinkButton::activate-link signal
+ - gtk_combo_box_new_with_entry
+ - GtkComboBoxText
+
+* Bugs fixed:
+ 423201i gtk_combo_box_entry_active_changed does not transform...
+ 612396 Implement GtkComboBoxText subclass to supersede "text"...
+ 613728 Rationalize GtkTreeView focus
+ 629722 save_entry_get_info_cb() doesn't behave correctly
+ 629955 Deprecate / remove gtk_main and gtk_init_add / remove* API
+ 630521 Remove some remaining API warts from tab dnd api
+ 631473 Fix GTK+3 documentation
+ 631697 [2.24] build warnings which might crash 64-bit
+ 632140 optionally take hotspot coordinates from the pixbuf...
+
+
 Overview of Changes from GTK+ 2.21.8 to 2.22.0
 ==============================================
 
