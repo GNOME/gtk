@@ -25,6 +25,24 @@
 #include "gtkalias.h"
 
 
+/**
+ * SECTION:gtkcomboboxtext
+ * @Short_description: A simple, text-only combo box
+ * @Title: GtkComboBoxText
+ * @See_also: @GtkComboBox
+ *
+ * A GtkComboBoxText is a simple variant of #GtkComboBox that hides
+ * the model-view complexity for simple text-only use cases.
+ *
+ * To create a GtkComboBoxText, use gtk_combo_box_text_new() or
+ * gtk_combo_box_text_new_with_entry().
+ *
+ * You can add items to a GtkComboBoxText with
+ * gtk_combo_box_text_append_text(), gtk_combo_box_text_insert_text()
+ * or gtk_combo_box_text_prepend_text() and remove options with
+ * gtk_combo_box_text_remove_text().
+ */
+
 G_DEFINE_TYPE (GtkComboBoxText, gtk_combo_box_text, GTK_TYPE_COMBO_BOX);
 
 static void
