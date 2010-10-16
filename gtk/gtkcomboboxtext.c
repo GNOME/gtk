@@ -78,7 +78,9 @@ gtk_combo_box_text_init (GtkComboBoxText *combo_box)
 GtkWidget *
 gtk_combo_box_text_new (void)
 {
-  return g_object_new (GTK_TYPE_COMBO_BOX_TEXT, NULL);
+  return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
+                       "entry-text-column", 0,
+                       NULL);
 }
 
 
