@@ -31,76 +31,8 @@ EXTRA_DIST +=			\
 	gtk-zip.sh.in		\
 	sanitize-la.sh		\
 	po/README.translators	\
-	po/po2tbl.sed.in	\
-	examples/aspectframe/Makefile  \
-	examples/aspectframe/aspectframe.c  \
-	examples/Makefile  \
-	examples/arrow/Makefile	\
-	examples/arrow/arrow.c	\
-	examples/base/Makefile  \
-	examples/base/base.c  \
-	examples/buttonbox/Makefile \
-	examples/buttonbox/buttonbox.c	\
-	examples/buttons/Makefile  \
-	examples/buttons/buttons.c  \
-	examples/buttons/info.xpm  \
-	examples/calendar/Makefile  \
-	examples/calendar/calendar.c  \
-	examples/entry/Makefile  \
-	examples/entry/entry.c  \
-	examples/eventbox/Makefile  \
-	examples/eventbox/eventbox.c  \
-	examples/gtkdial/Makefile  \
-	examples/gtkdial/dial_test.c  \
-	examples/gtkdial/gtkdial.c  \
-	examples/gtkdial/gtkdial.h  \
-	examples/helloworld/Makefile  \
-	examples/helloworld/helloworld.c  \
-	examples/helloworld2/Makefile  \
-	examples/helloworld2/helloworld2.c  \
-	examples/label/Makefile	\
-	examples/label/label.c	\
-	examples/menu/Makefile  \
-	examples/menu/menu.c  \
-	examples/notebook/Makefile  \
-	examples/notebook/notebook.c  \
-	examples/packbox/Makefile  \
-	examples/packbox/packbox.c  \
-	examples/paned/Makefile  \
-	examples/paned/paned.c  \
-	examples/progressbar/Makefile  \
-	examples/progressbar/progressbar.c  \
-	examples/radiobuttons/Makefile  \
-	examples/radiobuttons/radiobuttons.c  \
-	examples/rangewidgets/Makefile  \
-	examples/rangewidgets/rangewidgets.c  \
-	examples/rulers/Makefile  \
-	examples/rulers/rulers.c  \
-	examples/scribble-simple/Makefile  \
-	examples/scribble-simple/scribble-simple.c  \
-	examples/scribble-xinput/Makefile	\
-	examples/scribble-xinput/scribble-xinput.c	\
-	examples/scrolledwin/Makefile  \
-	examples/scrolledwin/scrolledwin.c  \
-	examples/selection/Makefile  \
-	examples/selection/gettargets.c  \
-	examples/selection/setselection.c  \
-	examples/statusbar/Makefile  \
-	examples/statusbar/statusbar.c  \
-	examples/table/Makefile  \
-	examples/table/table.c  \
-	examples/tictactoe/Makefile  \
-	examples/tictactoe/tictactoe.c  \
-	examples/tictactoe/tictactoe.h  \
-	examples/tictactoe/ttt_test.c  \
-	examples/wheelbarrow/Makefile  \
-	examples/wheelbarrow/wheelbarrow.c  \
-	examples/fixed/fixed.c  \
-	examples/fixed/Makefile  \
-	examples/frame/frame.c  \
-	examples/frame/Makefile  \
-	examples/spinbutton/spinbutton.c  \
-	examples/spinbutton/Makefile
+	po/po2tbl.sed.in
+
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
 	$(srcdir)/README \
