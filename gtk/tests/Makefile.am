@@ -37,7 +37,7 @@ TEST_PROGS			+= treeview
 treeview_SOURCES		 = treeview.c
 treeview_LDADD			 = $(progs_ldadd)
 
-TEST_PROGS			+= treeview-scrolling
+#TEST_PROGS			+= treeview-scrolling
 treeview_scrolling_SOURCES	 = treeview-scrolling.c
 treeview_scrolling_LDADD	 = $(progs_ldadd)
 
@@ -49,7 +49,7 @@ TEST_PROGS			+= floating
 floating_SOURCES		 = floating.c
 floating_LDADD			 = $(progs_ldadd)
 
-TEST_PROGS			+= object
+#TEST_PROGS			+= object
 object_SOURCES			 = object.c pixbuf-init.c
 object_LDADD			 = $(progs_ldadd)
 
@@ -71,7 +71,7 @@ builder_LDADD			 = $(progs_ldadd)
 builder_LDFLAGS			 = -export-dynamic
 
 if OS_UNIX
-TEST_PROGS			+= defaultvalue
+#TEST_PROGS			+= defaultvalue
 endif
 defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
 defaultvalue_LDADD 		 = $(progs_ldadd)
