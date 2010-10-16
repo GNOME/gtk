@@ -1,7 +1,7 @@
 ## Makefile.am for GTK+
 include $(top_srcdir)/Makefile.decl
 
-SRC_SUBDIRS = gdk gtk modules demos tests perf
+SRC_SUBDIRS = gdk gtk modules demos tests perf examples
 SUBDIRS = po po-properties $(SRC_SUBDIRS) docs m4macros build
 
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
@@ -35,9 +35,6 @@ EXTRA_DIST +=			\
 	examples/aspectframe/Makefile  \
 	examples/aspectframe/aspectframe.c  \
 	examples/Makefile  \
-	examples/README.1ST  \
-	examples/extract.awk  \
-	examples/extract.sh  \
 	examples/arrow/Makefile	\
 	examples/arrow/arrow.c	\
 	examples/base/Makefile  \
@@ -103,8 +100,7 @@ EXTRA_DIST +=			\
 	examples/frame/frame.c  \
 	examples/frame/Makefile  \
 	examples/spinbutton/spinbutton.c  \
-	examples/spinbutton/Makefile  \
-	examples/find-examples.sh
+	examples/spinbutton/Makefile
 MAINTAINERCLEANFILES = \
 	$(srcdir)/INSTALL \
 	$(srcdir)/README \
