@@ -155,6 +155,7 @@ struct _GtkComboBoxPrivate
   guint focus_on_click : 1;
   guint button_sensitivity : 2;
   guint has_entry : 1;
+  guint popup_fixed_width : 1;
 
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
@@ -243,7 +244,8 @@ enum {
   PROP_BUTTON_SENSITIVITY,
   PROP_EDITING_CANCELED,
   PROP_HAS_ENTRY,
-  PROP_ENTRY_TEXT_COLUMN
+  PROP_ENTRY_TEXT_COLUMN,
+  PROP_POPUP_FIXED_WIDTH
 };
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
@@ -949,6 +951,24 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 						      -1, G_MAXINT, -1,
 						      GTK_PARAM_READWRITE));
 
+   /**
+    * GtkComboBox:popup-fixed-width:
+    *
+    * Whether the popup's width should be a fixed width matching the
+    * allocated width of the combo box.
+    *
+    * Since: 3.0
+    */
+   g_object_class_install_property (object_class,
+                                    PROP_POPUP_FIXED_WIDTH,
+                                    g_param_spec_boolean ("popup-fixed-width",
+							  P_("Popup Fixed Width"),
+							  P_("Whether the popup's width should be a "
+							     "fixed width matching the allocated width "
+							     "of the combo box"),
+							  TRUE,
+							  GTK_PARAM_READWRITE));
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("appears-as-list",
                                                                  P_("Appears as list"),
@@ -1056,6 +1076,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->focus_on_click = TRUE;
   priv->button_sensitivity = GTK_SENSITIVITY_AUTO;
   priv->has_entry = FALSE;
+  priv->popup_fixed_width = TRUE;
 
   priv->text_column = -1;
   priv->text_renderer = NULL;
@@ -1133,6 +1154,11 @@ gtk_combo_box_set_property (GObject      *object,
                                             g_value_get_enum (value));
       break;
 
+    case PROP_POPUP_FIXED_WIDTH:
+      gtk_combo_box_set_popup_fixed_width (combo_box,
+					   g_value_get_boolean (value));
+      break;
+
     case PROP_EDITING_CANCELED:
       combo_box->priv->editing_canceled = g_value_get_boolean (value);
       break;
@@ -1204,6 +1230,10 @@ gtk_combo_box_get_property (GObject    *object,
 
       case PROP_BUTTON_SENSITIVITY:
         g_value_set_enum (value, combo_box->priv->button_sensitivity);
+        break;
+
+      case PROP_POPUP_FIXED_WIDTH:
+        g_value_set_boolean (value, combo_box->priv->popup_fixed_width);
         break;
 
       case PROP_EDITING_CANCELED:
@@ -1677,8 +1707,10 @@ gtk_combo_box_menu_position_below (GtkMenu  *menu,
   if (GTK_SHADOW_NONE != combo_box->priv->shadow_type)
     sx -= gtk_widget_get_style (GTK_WIDGET (combo_box))->xthickness;
 
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu),
-                                 &req, NULL);
+  if (combo_box->priv->popup_fixed_width)
+    gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
+  else
+    gtk_widget_get_preferred_size (GTK_WIDGET (menu), NULL, &req);
 
   if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_LTR)
     *x = sx;
@@ -1737,7 +1769,10 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
   menu_xpos = allocation.x;
   menu_ypos = allocation.y + allocation.height / 2 - 2;
 
-  gtk_widget_get_preferred_width (GTK_WIDGET (menu), &menu_width, NULL);
+  if (combo_box->priv->popup_fixed_width)
+    gtk_widget_get_preferred_width (GTK_WIDGET (menu), &menu_width, NULL);
+  else
+    gtk_widget_get_preferred_width (GTK_WIDGET (menu), NULL, &menu_width);
 
   if (active != NULL)
     {
@@ -1794,7 +1829,6 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
   GtkComboBox *combo_box = GTK_COMBO_BOX (user_data);
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *menu_item;
-
 
   if (priv->wrap_width > 0 || priv->cell_view == NULL)	
     gtk_combo_box_menu_position_below (menu, x, y, push_in, user_data);
@@ -1854,16 +1888,47 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   hpolicy = vpolicy = GTK_POLICY_NEVER;
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
 				  hpolicy, vpolicy);
-  gtk_widget_get_preferred_size (priv->scrolled_window,
-                                 &popup_req, NULL);
 
-  if (popup_req.width > *width)
+  /* XXX This set_size_request call is part of the hack outlined below and can 
+   * go away once height-for-width is implemented on treeviews. */
+  gtk_widget_set_size_request (priv->tree_view, -1, -1);
+
+  if (combo_box->priv->popup_fixed_width)
     {
-      hpolicy = GTK_POLICY_ALWAYS;
-      gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
-				      hpolicy, vpolicy);
-      gtk_widget_get_preferred_size (priv->scrolled_window,
-                                     &popup_req, NULL);
+      gtk_widget_get_preferred_size (priv->scrolled_window, &popup_req, NULL);
+
+      if (popup_req.width > *width)
+	{
+	  hpolicy = GTK_POLICY_ALWAYS;
+	  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
+					  hpolicy, vpolicy);
+	}
+    }
+  else
+    {
+      gtk_combo_box_remeasure (combo_box);
+
+      if (priv->natural_width > *width)
+	{
+	  hpolicy = GTK_POLICY_NEVER;
+	  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
+					  hpolicy, vpolicy);
+
+
+	  /* XXX Currently we set the size-request on the internal treeview to be
+	   * the natural width of the cells, this hack can go away once our
+	   * treeview does height-for-width properly (i.e. just adjust *width
+	   * here to be the natural width request of the scrolled-window). 
+	   *
+	   * I can't tell why the magic number 5 is needed here (i.e. without it 
+	   * treeviews are left ellipsizing) , however it this all should be
+	   * removed with height-for-width treeviews.
+	   */
+	  gtk_widget_set_size_request (priv->tree_view, priv->natural_width + 5, -1);
+	  gtk_widget_get_preferred_size (priv->scrolled_window, NULL, &popup_req);
+
+	  *width = popup_req.width;
+	}
     }
 
   *height = popup_req.height;
@@ -1871,6 +1936,9 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   screen = gtk_widget_get_screen (GTK_WIDGET (combo_box));
   monitor_num = gdk_screen_get_monitor_at_window (screen, window);
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (combo_box)) == GTK_TEXT_DIR_RTL)
+    *x = *x + allocation.width - *width;
 
   if (*x < monitor.x)
     *x = monitor.x;
@@ -2014,7 +2082,7 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreePath *path;
   gint active_item;
-  gint width, min_width;
+  gint width, min_width, nat_width;
   
   update_menu_sensitivity (combo_box, priv->popup_widget);
 
@@ -2039,10 +2107,14 @@ gtk_combo_box_menu_popup (GtkComboBox *combo_box,
       gtk_widget_get_allocation (GTK_WIDGET (combo_box), &allocation);
       width = allocation.width;
       gtk_widget_set_size_request (priv->popup_widget, -1, -1);
-      gtk_widget_get_preferred_width (priv->popup_widget, &min_width, NULL);
-      
-      gtk_widget_set_size_request (priv->popup_widget,
-				   MAX (width, min_width), -1);
+      gtk_widget_get_preferred_width (priv->popup_widget, &min_width, &nat_width);
+
+      if (combo_box->priv->popup_fixed_width)
+	width = MAX (width, min_width);
+      else
+	width = MAX (width, nat_width);
+
+      gtk_widget_set_size_request (priv->popup_widget, width, -1);
     }
   
   gtk_menu_popup (GTK_MENU (priv->popup_widget),
@@ -2440,7 +2512,7 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
 
           if (gtk_widget_get_visible (priv->popup_widget))
             {
-              gint width, min_width;
+              gint width, menu_width;
 
               if (priv->wrap_width == 0)
                 {
@@ -2449,9 +2521,14 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
                   gtk_widget_get_allocation (GTK_WIDGET (combo_box), &combo_box_allocation);
                   width = combo_box_allocation.width;
                   gtk_widget_set_size_request (priv->popup_widget, -1, -1);
-                  gtk_widget_get_preferred_width (priv->popup_widget, &min_width, NULL);
+
+		  if (combo_box->priv->popup_fixed_width)
+		    gtk_widget_get_preferred_width (priv->popup_widget, &menu_width, NULL);
+		  else
+		    gtk_widget_get_preferred_width (priv->popup_widget, NULL, &menu_width);
+
                   gtk_widget_set_size_request (priv->popup_widget,
-                    MAX (width, min_width), -1);
+					       MAX (width, menu_width), -1);
                }
 
               /* reposition the menu after giving it a new width */
@@ -6020,6 +6097,49 @@ gtk_combo_box_set_title (GtkComboBox *combo_box,
       g_object_notify (G_OBJECT (combo_box), "tearoff-title");
     }
 }
+
+
+/**
+ * gtk_combo_box_set_popup_fixed_width:
+ * @combo_box: a #GtkComboBox
+ * @fixed: whether to use a fixed popup width
+ *
+ * Specifies whether the popup's width should be a fixed width matching 
+ * the allocated width of the combo box.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_combo_box_set_popup_fixed_width (GtkComboBox *combo_box,
+				     gboolean     fixed)
+{
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  if (combo_box->priv->popup_fixed_width != fixed)
+    {
+      combo_box->priv->popup_fixed_width = fixed;
+
+      g_object_notify (G_OBJECT (combo_box), "popup-fixed-width");
+    }
+}
+
+/**
+ * gtk_combo_box_get_popup_fixed_width:
+ * @combo_box: a #GtkComboBox
+ *
+ * Gets whether the popup uses a fixed width matching 
+ * the allocated width of the combo box.
+ *
+ * Since: 3.0
+ **/
+gboolean
+gtk_combo_box_get_popup_fixed_width (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), FALSE);
+
+  return combo_box->priv->popup_fixed_width;
+}
+
 
 /**
  * gtk_combo_box_get_popup_accessible:

@@ -124,6 +124,10 @@ void               gtk_combo_box_set_entry_text_column  (GtkComboBox        *com
 							 gint                text_column);
 gint               gtk_combo_box_get_entry_text_column  (GtkComboBox        *combo_box);
 
+void               gtk_combo_box_set_popup_fixed_width  (GtkComboBox      *combo_box,
+							 gboolean          fixed);
+gboolean           gtk_combo_box_get_popup_fixed_width  (GtkComboBox      *combo_box);
+
 #ifndef GTK_DISABLE_DEPRECATED
 
 /* convenience -- text */
