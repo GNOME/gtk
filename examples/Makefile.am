@@ -1,5 +1,9 @@
 
-DIST_SUBDIRS = 	arrow \
+# these have a handrolled Makefile that gets in the way of distchecking
+# so they will not be included in tarballs until they get integrated
+# in the new 'getting started' section of the docs
+OLD_EXAMPLES = \
+		arrow \
 		aspectframe \
 		base \
 		buttonbox \
@@ -28,8 +32,8 @@ DIST_SUBDIRS = 	arrow \
 		spinbutton \
 		statusbar \
 		table \
-		tictactoe
-# wheelbarrow
+		tictactoe \
+		wheelbarrow
 
 INCLUDES = \
 	-I$(top_srcdir)				\
