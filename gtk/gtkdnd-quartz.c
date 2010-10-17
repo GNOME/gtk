@@ -1629,6 +1629,79 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
   set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y);
 }
 
+
+/* XXX: This function is in gdk, too. Should it be in Cairo? */
+static gboolean
+_gtk_cairo_surface_extents (cairo_surface_t *surface,
+                            GdkRectangle *extents)
+{
+  double x1, x2, y1, y2;
+  cairo_t *cr;
+
+  g_return_val_if_fail (surface != NULL, FALSE);
+  g_return_val_if_fail (extents != NULL, FALSE);
+
+  cr = cairo_create (surface);
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+
+  x1 = floor (x1);
+  y1 = floor (y1);
+  x2 = ceil (x2);
+  y2 = ceil (y2);
+  x2 -= x1;
+  y2 -= y1;
+  
+  if (x1 < G_MININT || x1 > G_MAXINT ||
+      y1 < G_MININT || y1 > G_MAXINT ||
+      x2 > G_MAXINT || y2 > G_MAXINT)
+    {
+      extents->x = extents->y = extents->width = extents->height = 0;
+      return FALSE;
+    }
+
+  extents->x = x1;
+  extents->y = y1;
+  extents->width = x2;
+  extents->height = y2;
+
+  return TRUE;
+}
+
+/**
+ * gtk_drag_set_icon_surface:
+ * @context: the context for a drag. (This must be called
+ *            with a context for the source side of a drag)
+ * @surface: the surface to use as icon
+ *
+ * Sets @surface as the icon for a given drag. GTK+ retains
+ * references for the arguments, and will release them when
+ * they are no longer needed.
+ *
+ * To position the surface relative to the mouse, use
+ * cairo_surface_set_device_offset() on @surface. The mouse
+ * cursor will be positioned at the (0,0) coordinate of the
+ * surface.
+ **/
+void
+gtk_drag_set_icon_surface (GdkDragContext  *context,
+                           cairo_surface_t *surface)
+{
+  GdkPixbuf *pixbuf;
+  GdkRectangle extents;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+  g_return_if_fail (context->is_source);
+  g_return_if_fail (surface != NULL);
+
+  _gtk_cairo_surface_extents (surface, &extents);
+
+  pixbuf = gdk_pixbuf_get_from_surface (surface,
+                                        extents.x, extents.y,
+                                        extents.width, extents.height);
+  gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
+  g_object_unref (pixbuf);
+}
+
 /**
  * gtk_drag_set_icon_name:
  * @context: the context for a drag. (This must be called 
