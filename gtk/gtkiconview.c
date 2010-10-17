@@ -58,6 +58,8 @@
 
 #define SCROLL_EDGE_SIZE 15
 
+#define GTK_ICON_VIEW_PRIORITY_LAYOUT (GDK_PRIORITY_REDRAW + 5)
+
 typedef struct _GtkIconViewItem GtkIconViewItem;
 struct _GtkIconViewItem
 {
@@ -1564,11 +1566,6 @@ gtk_icon_view_draw (GtkWidget *widget,
 
   gtk_cairo_transform_to_window (cr, widget, icon_view->priv->bin_window);
       
-  /* If a layout has been scheduled, do it now so that all
-   * cell view items have valid sizes before we proceed. */
-  if (icon_view->priv->layout_idle_id != 0)
-    gtk_icon_view_layout (icon_view);
-
   cairo_set_line_width (cr, 1.);
 
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &dest_pos);
@@ -2660,6 +2657,19 @@ gtk_icon_view_real_toggle_cursor_item (GtkIconView *icon_view)
 
 /* Internal functions */
 static void
+gtk_icon_view_process_updates (GtkIconView *icon_view)
+{
+  /* Prior to drawing, we check if a layout has been scheduled.  If so,
+   * do it now that all cell view items have valid sizes before we proceeed
+   * (and resize the bin_window if required).
+   */
+  if (icon_view->priv->layout_idle_id != 0)
+    gtk_icon_view_layout (icon_view);
+
+  gdk_window_process_updates (icon_view->priv->bin_window, TRUE);
+}
+
+static void
 gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
 				  GtkIconView   *icon_view)
 {
@@ -2672,7 +2682,7 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
       if (icon_view->priv->doing_rubberband)
 	gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
 
-      gdk_window_process_updates (icon_view->priv->bin_window, TRUE);
+      gtk_icon_view_process_updates (icon_view);
     }
 }
 
@@ -3386,7 +3396,9 @@ gtk_icon_view_queue_layout (GtkIconView *icon_view)
   if (icon_view->priv->layout_idle_id != 0)
     return;
 
-  icon_view->priv->layout_idle_id = gdk_threads_add_idle (layout_callback, icon_view);
+  icon_view->priv->layout_idle_id =
+      gdk_threads_add_idle_full (GTK_ICON_VIEW_PRIORITY_LAYOUT,
+                                 layout_callback, icon_view, NULL);
 }
 
 static void
