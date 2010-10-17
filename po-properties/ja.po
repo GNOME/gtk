@@ -13,13 +13,14 @@ msgstr ""
 "Project-Id-Version: gtk+-properties gtk-2-22\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-09-19 15:42+0000\n"
-"PO-Revision-Date: 2010-09-14 01:36+0900\n"
+"POT-Creation-Date: 2010-10-14 09:30+0000\n"
+"PO-Revision-Date: 2010-10-15 02:28+0900\n"
 "Last-Translator: Takayuki KUSANO <AE5T-KSN@asahi-net.or.jp>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: ../gdk/gdkdisplaymanager.c:103
@@ -989,7 +990,7 @@ msgstr "内側の境界線の空間"
 
 #: ../gtk/gtkcalendar.c:598
 msgid "Vertical separation"
-msgstr ""
+msgstr "垂直分割"
 
 #: ../gtk/gtkcalendar.c:599
 msgid "Space between day headers and main area"
@@ -997,7 +998,7 @@ msgstr "日のヘッダとメインエリアの間のスペース"
 
 #: ../gtk/gtkcalendar.c:610
 msgid "Horizontal separation"
-msgstr ""
+msgstr "水平分割"
 
 #: ../gtk/gtkcalendar.c:611
 msgid "Space between week headers and main area"
@@ -6465,7 +6466,7 @@ msgstr "このツールパレットでのアイテムのスタイル"
 
 #: ../gtk/gtktoolpalette.c:1038
 msgid "Exclusive"
-msgstr ""
+msgstr "排他的"
 
 #: ../gtk/gtktoolpalette.c:1039
 msgid "Whether the item group should be the only expanded at a given time"
