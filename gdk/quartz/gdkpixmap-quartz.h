@@ -48,8 +48,7 @@ struct _GdkPixmapImplQuartz
   gint height;
 
   void *data;
-  
-  CGImageRef image;
+  CGDataProviderRef data_provider;
 };
  
 struct _GdkPixmapImplQuartzClass 
