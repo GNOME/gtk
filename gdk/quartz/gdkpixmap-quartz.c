@@ -65,7 +65,7 @@ gdk_pixmap_impl_quartz_get_image_parameters (GdkPixmap           *pixmap,
           *bytes_per_row = impl->width * 4;
 
         if (colorspace)
-          *colorspace = CGColorSpaceCreateDeviceRGB ();
+          *colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
 
         if (alpha_info)
           *alpha_info = kCGImageAlphaNoneSkipLast;
@@ -82,7 +82,7 @@ gdk_pixmap_impl_quartz_get_image_parameters (GdkPixmap           *pixmap,
           *bytes_per_row = impl->width * 4;
 
         if (colorspace)
-          *colorspace = CGColorSpaceCreateDeviceRGB ();
+          *colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB);
 
         if (alpha_info)
           *alpha_info = kCGImageAlphaPremultipliedFirst;
@@ -99,7 +99,7 @@ gdk_pixmap_impl_quartz_get_image_parameters (GdkPixmap           *pixmap,
           *bytes_per_row = impl->width;
 
         if (colorspace)
-          *colorspace = CGColorSpaceCreateDeviceGray ();
+          *colorspace = CGColorSpaceCreateWithName (kCGColorSpaceGenericGray);
 
         if (alpha_info)
           *alpha_info = kCGImageAlphaNone;
