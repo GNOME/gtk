@@ -43,27 +43,49 @@
 
 G_DEFINE_TYPE (GtkComboBoxText, gtk_combo_box_text, GTK_TYPE_COMBO_BOX);
 
-static void
-gtk_combo_box_text_class_init (GtkComboBoxTextClass *klass)
+static GObject *
+gtk_combo_box_text_constructor (GType                  type,
+                                guint                  n_construct_properties,
+                                GObjectConstructParam *construct_properties)
 {
+  GObject            *object;
+
+  object = G_OBJECT_CLASS (gtk_combo_box_text_parent_class)->constructor
+    (type, n_construct_properties, construct_properties);
+
+  if (!gtk_combo_box_get_has_entry (GTK_COMBO_BOX (object)))
+    {
+      GtkCellRenderer *cell;
+
+      cell = gtk_cell_renderer_text_new ();
+      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (object), cell, TRUE);
+      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (object), cell,
+                                      "text", 0,
+                                      NULL);
+    }
+
+  return object;
 }
 
 static void
 gtk_combo_box_text_init (GtkComboBoxText *combo_box)
 {
   GtkListStore *store;
-  GtkCellRenderer *cell;
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
   g_object_unref (store);
-
-  cell = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
-                                  "text", 0,
-                                  NULL);
 }
+
+static void
+gtk_combo_box_text_class_init (GtkComboBoxTextClass *klass)
+{
+  GObjectClass *object_class;
+
+  object_class = (GObjectClass *)klass;
+  object_class->constructor = gtk_combo_box_text_constructor;
+}
+
 
 /**
  * gtk_combo_box_text_new:
@@ -82,7 +104,6 @@ gtk_combo_box_text_new (void)
                        "entry-text-column", 0,
                        NULL);
 }
-
 
 /**
  * gtk_combo_box_text_new_with_entry:
