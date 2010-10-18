@@ -845,9 +845,6 @@ request_password (gpointer data)
 
       switch (dispatch->request->ipp_request->request.op.operation_id)
         {
-          case 0:
-            prompt = g_strdup_printf ( _("Authentication is required to get a file from %s"), hostname);
-            break;
           case IPP_PRINT_JOB:
             if (job_title != NULL && printer_name != NULL)
               prompt = g_strdup_printf ( _("Authentication is required to print document '%s' on printer %s"), job_title, printer_name);
@@ -873,7 +870,11 @@ request_password (gpointer data)
             prompt = g_strdup_printf ( _("Authentication is required to get printers from %s"), hostname);
             break;
           default:
-            prompt = g_strdup_printf ( _("Authentication is required on %s"), hostname);
+            /* work around gcc warning about 0 not being a value for this enum */
+            if (dispatch->request->ipp_request->request.op.operation_id == 0)
+              prompt = g_strdup_printf ( _("Authentication is required to get a file from %s"), hostname);
+            else
+              prompt = g_strdup_printf ( _("Authentication is required on %s"), hostname);
             break;
         }
 
