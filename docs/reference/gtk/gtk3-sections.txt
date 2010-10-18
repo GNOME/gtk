@@ -578,6 +578,7 @@ GTK_BUTTON_CLASS
 GTK_IS_BUTTON_CLASS
 GTK_BUTTON_GET_CLASS
 <SUBSECTION Private>
+GtkButtonPrivate
 gtk_button_get_type
 </SECTION>
 
