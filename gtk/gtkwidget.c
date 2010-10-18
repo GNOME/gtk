@@ -4287,42 +4287,6 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
     if (!gtk_widget_get_mapped (w))
       return;
 
-  /* Find the correct widget */
-
-  if (gtk_widget_get_has_window (widget))
-    {
-      if (priv->parent)
-	{
-	  /* Translate widget relative to window-relative */
-
-	  gint wx, wy, wwidth, wheight;
-
-	  gdk_window_get_position (priv->window, &wx, &wy);
-	  x -= wx - priv->allocation.x;
-	  y -= wy - priv->allocation.y;
-
-          wwidth = gdk_window_get_width (priv->window);
-          wheight = gdk_window_get_height (priv->window);
-
-	  if (x + width <= 0 || y + height <= 0 ||
-	      x >= wwidth || y >= wheight)
-	    return;
-	  
-	  if (x < 0)
-	    {
-	      width += x;  x = 0;
-	    }
-	  if (y < 0)
-	    {
-	      height += y; y = 0;
-	    }
-	  if (x + width > wwidth)
-	    width = wwidth - x;
-	  if (y + height > wheight)
-	    height = wheight - y;
-	}
-    }
-
   invalid_rect.x = x;
   invalid_rect.y = y;
   invalid_rect.width = width;
