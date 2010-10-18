@@ -372,18 +372,11 @@ combo_box_get (GtkWidget *combo)
   gchar *value;
   GtkTreeIter iter;
 
-  if (gtk_combo_box_get_has_entry (GTK_COMBO_BOX (combo)))
-    {
-      value = gtk_combo_box_get_active_text(GTK_COMBO_BOX (combo));
-    }
-  else
-    {
-      model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+  model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
 
-      value = NULL;
-      if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
-         gtk_tree_model_get (model, &iter, VALUE_COLUMN, &value, -1);
-     }
+  value = NULL;
+  if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter))
+     gtk_tree_model_get (model, &iter, VALUE_COLUMN, &value, -1);
 
   return value;
 }
