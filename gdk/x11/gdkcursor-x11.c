@@ -26,14 +26,15 @@
 
 #include "config.h"
 
+/* needs to be first because any header might include gdk-pixbuf.h otherwise */
+#define GDK_PIXBUF_ENABLE_BACKEND
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include "gdkcursor.h"
 
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkx.h"
-
-#define GDK_PIXBUF_ENABLE_BACKEND
-#include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include <X11/Xlib.h>
 #include <X11/cursorfont.h>
