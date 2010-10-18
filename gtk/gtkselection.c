@@ -3132,7 +3132,7 @@ gtk_target_entry_new (const char *target,
 		      guint       flags,
 		      guint       info)
 {
-  GtkTargetEntry entry = { target, flags, info };
+  GtkTargetEntry entry = { (char *) target, flags, info };
   return gtk_target_entry_copy (&entry);
 }
 
