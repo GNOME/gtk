@@ -6094,11 +6094,10 @@ create_list (GtkWidget *widget)
   GtkWidget *sensitive_check;
   GtkWidget *progress_check;
   GtkWidget *entry;
-  GtkComboBox *cb;
+  GtkComboBoxText *cb;
   GtkWidget *cb_entry;
   GtkWidget *button;
   GtkWidget *separator;
-  GtkListStore *store;
 
   if (!window)
     {
@@ -6176,25 +6175,19 @@ create_list (GtkWidget *widget)
 			G_CALLBACK (list_add),
 			list);
 
-      store = gtk_list_store_new (1, G_TYPE_STRING);
-      cb = g_object_new (GTK_TYPE_COMBO_BOX,
-			 "has-entry", TRUE,
-			 "model", store,
-			 "entry-text-column", 0,
-			 NULL);
-      g_object_unref (store);
+      cb = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new_with_entry ());
 
-      gtk_combo_box_append_text (cb, "item0");
-      gtk_combo_box_append_text (cb, "item0");
-      gtk_combo_box_append_text (cb, "item1 item1");
-      gtk_combo_box_append_text (cb, "item2 item2 item2");
-      gtk_combo_box_append_text (cb, "item3 item3 item3 item3");
-      gtk_combo_box_append_text (cb, "item4 item4 item4 item4 item4");
-      gtk_combo_box_append_text (cb, "item5 item5 item5 item5 item5 item5");
-      gtk_combo_box_append_text (cb, "item6 item6 item6 item6 item6");
-      gtk_combo_box_append_text (cb, "item7 item7 item7 item7");
-      gtk_combo_box_append_text (cb, "item8 item8 item8");
-      gtk_combo_box_append_text (cb, "item9 item9");
+      gtk_combo_box_text_append_text (cb, "item0");
+      gtk_combo_box_text_append_text (cb, "item0");
+      gtk_combo_box_text_append_text (cb, "item1 item1");
+      gtk_combo_box_text_append_text (cb, "item2 item2 item2");
+      gtk_combo_box_text_append_text (cb, "item3 item3 item3 item3");
+      gtk_combo_box_text_append_text (cb, "item4 item4 item4 item4 item4");
+      gtk_combo_box_text_append_text (cb, "item5 item5 item5 item5 item5 item5");
+      gtk_combo_box_text_append_text (cb, "item6 item6 item6 item6 item6");
+      gtk_combo_box_text_append_text (cb, "item7 item7 item7 item7");
+      gtk_combo_box_text_append_text (cb, "item8 item8 item8");
+      gtk_combo_box_text_append_text (cb, "item9 item9");
 
       cb_entry = gtk_bin_get_child (GTK_BIN (cb));
       gtk_entry_set_text (GTK_ENTRY (cb_entry), "hello world \n\n\n foo");
@@ -8398,15 +8391,25 @@ screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
 			    NULL);
 	}
       else
-	{
-	  if (!g_list_find_custom (data->valid_display_list, 
-				   display_name,
-				   display_name_cmp))
-	    data->valid_display_list = g_list_append (data->valid_display_list,
-						      display_name);
-	  
-	  new_screen = gdk_display_get_default_screen (display);
-	}
+        {
+          GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (data->combo));
+          gint i = 0;
+          GtkTreeIter iter;
+          gboolean found = FALSE;
+          while (gtk_tree_model_iter_nth_child (model, &iter, NULL, i++))
+            {
+              gchar *name;
+              gtk_tree_model_get (model, &iter, 0, &name, -1);
+              found = !g_ascii_strcasecmp (display_name, name);
+              g_free (name);
+
+              if (found)
+                break;
+            }
+          if (!found)
+            gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (data->combo), display_name);
+          new_screen = gdk_display_get_default_screen (display);
+        }
     }
   else
     {
@@ -8476,7 +8479,7 @@ create_display_screen (GtkWidget *widget)
 	 "only one screen on the current display");
       gtk_widget_set_sensitive (radio_scr, FALSE);
     }
-  combo_dpy = gtk_combo_box_text_new ();
+  combo_dpy = gtk_combo_box_text_new_with_entry ();
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (combo_dpy), "diabolo:0.0");
   gtk_entry_set_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combo_dpy))),
                       "<hostname>:<X Server Num>.<Screen Num>");

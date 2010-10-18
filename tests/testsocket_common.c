@@ -145,28 +145,21 @@ add_buttons (GtkWidget *widget, GtkWidget *box)
 static GtkWidget *
 create_combo (void)
 {
-  GtkComboBox *combo;
+  GtkComboBoxText *combo;
   GtkWidget *entry;
-  GtkListStore *store;
 
-  store = gtk_list_store_new (1, G_TYPE_STRING);
-  combo = g_object_new (GTK_TYPE_COMBO_BOX,
-			"has-entry", TRUE,
-			"model", store,
-			"entry-text-column", 0,
-			NULL);
-  g_object_unref (store);
+  combo = GTK_COMBO_BOX_TEXT (gtk_combo_box_text_new_with_entry ());
 
-  gtk_combo_box_append_text (combo, "item0");
-  gtk_combo_box_append_text (combo, "item1 item1");
-  gtk_combo_box_append_text (combo, "item2 item2 item2");
-  gtk_combo_box_append_text (combo, "item3 item3 item3 item3");
-  gtk_combo_box_append_text (combo, "item4 item4 item4 item4 item4");
-  gtk_combo_box_append_text (combo, "item5 item5 item5 item5 item5 item5");
-  gtk_combo_box_append_text (combo, "item6 item6 item6 item6 item6");
-  gtk_combo_box_append_text (combo, "item7 item7 item7 item7");
-  gtk_combo_box_append_text (combo, "item8 item8 item8");
-  gtk_combo_box_append_text (combo, "item9 item9");
+  gtk_combo_box_text_append_text (combo, "item0");
+  gtk_combo_box_text_append_text (combo, "item1 item1");
+  gtk_combo_box_text_append_text (combo, "item2 item2 item2");
+  gtk_combo_box_text_append_text (combo, "item3 item3 item3 item3");
+  gtk_combo_box_text_append_text (combo, "item4 item4 item4 item4 item4");
+  gtk_combo_box_text_append_text (combo, "item5 item5 item5 item5 item5 item5");
+  gtk_combo_box_text_append_text (combo, "item6 item6 item6 item6 item6");
+  gtk_combo_box_text_append_text (combo, "item7 item7 item7 item7");
+  gtk_combo_box_text_append_text (combo, "item8 item8 item8");
+  gtk_combo_box_text_append_text (combo, "item9 item9");
 
   entry = gtk_bin_get_child (GTK_BIN (combo));
   gtk_entry_set_text (GTK_ENTRY (entry), "hello world");
