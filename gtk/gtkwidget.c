@@ -4236,43 +4236,26 @@ gtk_widget_unrealize (GtkWidget *widget)
  *****************************************/
 
 /**
- * gtk_widget_queue_draw_area:
+ * gtk_widget_queue_draw_region:
  * @widget: a #GtkWidget
- * @x: x coordinate of upper-left corner of rectangle to redraw
- * @y: y coordinate of upper-left corner of rectangle to redraw
- * @width: width of region to draw
- * @height: height of region to draw
+ * @region: region to draw
  *
- * Invalidates the rectangular area of @widget defined by @x, @y,
- * @width and @height by calling gdk_window_invalidate_rect() on the
- * widget's window and all its child windows. Once the main loop
- * becomes idle (after the current batch of events has been processed,
- * roughly), the window will receive expose events for the union of
- * all regions that have been invalidated.
+ * Invalidates the rectangular area of @widget defined by @region by
+ * calling gdk_window_invalidate_region() on the widget's window and
+ * all its child windows. Once the main loop becomes idle (after the
+ * current batch of events has been processed, roughly), the window
+ * will receive expose events for the union of all regions that have
+ * been invalidated.
  *
  * Normally you would only use this function in widget
- * implementations. You might also use it, or
- * gdk_window_invalidate_rect() directly, to schedule a redraw of a
+ * implementations. You might also use it to schedule a redraw of a
  * #GtkDrawingArea or some portion thereof.
- *
- * Frequently you can just call gdk_window_invalidate_rect() or
- * gdk_window_invalidate_region() instead of this function. Those
- * functions will invalidate only a single window, instead of the
- * widget and all its children.
- *
- * The advantage of adding to the invalidated region compared to
- * simply drawing immediately is efficiency; using an invalid region
- * ensures that you only have to redraw one time.
  **/
 void	   
-gtk_widget_queue_draw_area (GtkWidget *widget,
-			    gint       x,
-			    gint       y,
-			    gint       width,
- 			    gint       height)
+gtk_widget_queue_draw_region (GtkWidget      *widget,
+                              cairo_region_t *region)
 {
   GtkWidgetPrivate *priv;
-  GdkRectangle invalid_rect;
   GtkWidget *w;
   
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -4287,12 +4270,40 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
     if (!gtk_widget_get_mapped (w))
       return;
 
-  invalid_rect.x = x;
-  invalid_rect.y = y;
-  invalid_rect.width = width;
-  invalid_rect.height = height;
-  
-  gdk_window_invalidate_rect (priv->window, &invalid_rect, TRUE);
+  gdk_window_invalidate_region (priv->window, region, TRUE);
+}
+
+/**
+ * gtk_widget_queue_draw_area:
+ * @widget: a #GtkWidget
+ * @x: x coordinate of upper-left corner of rectangle to redraw
+ * @y: y coordinate of upper-left corner of rectangle to redraw
+ * @width: width of region to draw
+ * @height: height of region to draw
+ *
+ * Convenience function that calls gtk_widget_queue_draw_region() on
+ * the region created from the given coordinates.
+ **/
+void	   
+gtk_widget_queue_draw_area (GtkWidget *widget,
+			    gint       x,
+			    gint       y,
+			    gint       width,
+			    gint       height)
+{
+  GdkRectangle rect;
+  cairo_region_t *region;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  rect.x = x;
+  rect.y = y;
+  rect.width = width;
+  rect.height = height;
+
+  region = cairo_region_create_rectangle (&rect);
+  gtk_widget_queue_draw_region (widget, region);
+  cairo_region_destroy (region);
 }
 
 /**
