@@ -2010,45 +2010,15 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   if (startup_id && *startup_id != '\0')
     {
-      gchar *time_str;
-
       if (!g_utf8_validate (startup_id, -1, NULL))
-	g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
+        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
       else
-	display_x11->startup_notification_id = g_strdup (startup_id);
-
-      /* Find the launch time from the startup_id, if it's there.  Newer spec
-       * states that the startup_id is of the form <unique>_TIME<timestamp>
-       */
-      time_str = g_strrstr (startup_id, "_TIME");
-      if (time_str != NULL)
-        {
-	  gulong retval;
-          gchar *end;
-          errno = 0;
-
-          /* Skip past the "_TIME" part */
-          time_str += 5;
-
-          retval = strtoul (time_str, &end, 0);
-          if (end != time_str && errno == 0)
-            display_x11->user_time = retval;
-        }
+        gdk_x11_display_set_startup_notification_id (display, startup_id);
       
       /* Clear the environment variable so it won't be inherited by
        * child processes and confuse things.  
        */
       g_unsetenv ("DESKTOP_STARTUP_ID");
-
-      /* Set the startup id on the leader window so it
-       * applies to all windows we create on this display
-       */
-      XChangeProperty (display_x11->xdisplay,
-		       display_x11->leader_window,
-		       gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"),
-		       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-		       PropModeReplace,
-		       (guchar *)startup_id, strlen (startup_id));
     }
 }
 
@@ -2485,6 +2455,69 @@ G_CONST_RETURN gchar *
 gdk_x11_display_get_startup_notification_id (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->startup_notification_id;
+}
+
+/**
+ * gdk_x11_display_set_startup_notification_id:
+ * @display: a #GdkDisplay
+ * @startup_id: the startup notification ID (must be valid utf8)
+ *
+ * Sets the startup notification ID for a display.
+ *
+ * This is usually taken from the value of the DESKTOP_STARTUP_ID
+ * environment variable, but in some cases (such as the application not
+ * being launched using exec()) it can come from other sources.
+ *
+ * If the ID contains the string "_TIME" then the portion following that
+ * string is taken to be the X11 timestamp of the event that triggered
+ * the application to be launched and the GDK current event time is set
+ * accordingly.
+ *
+ * The startup ID is also what is used to signal that the startup is
+ * complete (for example, when opening a window or when calling
+ * gdk_notify_startup_complete()).
+ *
+ * Since: 3.0
+ **/
+void
+gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
+                                             const gchar *startup_id)
+{
+  GdkDisplayX11 *display_x11;
+  gchar *time_str;
+
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  g_free (display_x11->startup_notification_id);
+  display_x11->startup_notification_id = g_strdup (startup_id);
+
+  /* Find the launch time from the startup_id, if it's there.  Newer spec
+   * states that the startup_id is of the form <unique>_TIME<timestamp>
+   */
+  time_str = g_strrstr (startup_id, "_TIME");
+  if (time_str != NULL)
+    {
+      gulong retval;
+      gchar *end;
+      errno = 0;
+
+      /* Skip past the "_TIME" part */
+      time_str += 5;
+
+      retval = strtoul (time_str, &end, 0);
+      if (end != time_str && errno == 0)
+        display_x11->user_time = retval;
+    }
+
+  /* Set the startup id on the leader window so it
+   * applies to all windows we create on this display
+   */
+  XChangeProperty (display_x11->xdisplay,
+                   display_x11->leader_window,
+                   gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"),
+                   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+                   PropModeReplace,
+                   (guchar *)startup_id, strlen (startup_id));
 }
 
 /**
