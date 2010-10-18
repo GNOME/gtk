@@ -587,11 +587,11 @@ gtk_object_handled_accumulator (GSignalInvocationHint *ihint,
 }
 
 static void
-gtk_notebook_compute_expand (GtkContainer *container,
-                             gboolean     *hexpand_p,
-                             gboolean     *vexpand_p)
+gtk_notebook_compute_expand (GtkWidget *widget,
+                             gboolean  *hexpand_p,
+                             gboolean  *vexpand_p)
 {
-  GtkNotebook *notebook = GTK_NOTEBOOK (container);
+  GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
   gboolean hexpand;
   gboolean vexpand;
