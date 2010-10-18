@@ -8352,6 +8352,7 @@ typedef struct
   GtkWidget *radio_dpy;
   GtkWidget *toplevel; 
   GtkWidget *dialog_window;
+  GtkWidget *combo;
   GList *valid_display_list;
 } ScreenDisplaySelection;
 
@@ -8504,6 +8505,7 @@ create_display_screen (GtkWidget *widget)
   scr_dpy_data->toplevel = gtk_widget_get_toplevel (widget);
   scr_dpy_data->dialog_window = window;
   scr_dpy_data->valid_display_list = valid_display_list;
+  scr_dpy_data->combo = combo_dpy;
 
   g_signal_connect (cancelb, "clicked", 
 		    G_CALLBACK (screen_display_destroy_diag), window);
