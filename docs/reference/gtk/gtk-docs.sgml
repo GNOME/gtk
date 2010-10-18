@@ -236,6 +236,7 @@
       <xi:include href="xml/gtkhscrollbar.xml" />
       <xi:include href="xml/gtkvscrollbar.xml" />
       <xi:include href="xml/gtkscrolledwindow.xml" />
+      <xi:include href="xml/gtkscrollable.xml" />
     </chapter>
 
     <chapter id="Printing">

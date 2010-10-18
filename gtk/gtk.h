@@ -154,6 +154,7 @@
 #include <gtk/gtkruler.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscalebutton.h>
+#include <gtk/gtkscrollable.h>
 #include <gtk/gtkscrollbar.h>
 #include <gtk/gtkscrolledwindow.h>
 #include <gtk/gtkselection.h>

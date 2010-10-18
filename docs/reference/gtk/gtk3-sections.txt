@@ -2742,6 +2742,32 @@ gtk_scale_button_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkscrollable</FILE>
+<TITLE>GtkScrollable</TITLE>
+GtkScrollable
+gtk_scrollable_get_hadjustment
+gtk_scrollable_set_hadjustment
+gtk_scrollable_get_vadjustment
+gtk_scrollable_set_vadjustment
+gtk_scrollable_get_min_display_width
+gtk_scrollable_set_min_display_width
+gtk_scrollable_get_min_display_height
+gtk_scrollable_set_min_display_height
+
+<SUBSECTION Standard>
+GtkScrollableIface
+GTK_IS_SCROLLABLE
+GTK_IS_SCROLLABLE_CLASS
+GTK_SCROLLABLE
+GTK_SCROLLABLE_CLASS
+GTK_SCROLLABLE_GET_IFACE
+GTK_TYPE_SCROLLABLE
+
+<SUBSECTION Private>
+gtk_scrollable_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkscrollbar</FILE>
 <TITLE>GtkScrollbar</TITLE>
 GtkScrollbar
@@ -3365,7 +3391,9 @@ gtk_text_view_new
 gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer
 gtk_text_view_get_buffer
+gtk_text_view_set_hadjustment
 gtk_text_view_get_hadjustment
+gtk_text_view_set_vadjustment
 gtk_text_view_get_vadjustment
 gtk_text_view_scroll_to_mark
 gtk_text_view_scroll_to_iter
@@ -3792,7 +3820,9 @@ gtk_tool_palette_get_drop_item
 GtkToolPaletteDragTargets
 gtk_tool_palette_set_drag_source
 gtk_tool_palette_get_hadjustment
+gtk_tool_palette_set_hadjustment
 gtk_tool_palette_get_vadjustment
+gtk_tool_palette_set_vadjustment
 <SUBSECTION Standard>
 GtkToolPaletteClass
 GTK_TOOL_PALETTE
@@ -4825,7 +4855,6 @@ gtk_widget_set_app_paintable
 gtk_widget_set_double_buffered
 gtk_widget_set_redraw_on_allocate
 gtk_widget_set_composite_name
-gtk_widget_set_scroll_adjustments
 gtk_widget_mnemonic_activate
 gtk_widget_class_install_style_property
 gtk_widget_class_install_style_property_parser

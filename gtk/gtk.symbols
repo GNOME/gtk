@@ -2887,6 +2887,20 @@ gtk_scale_button_get_popup
 #endif
 #endif
 
+#if IN_HEADER(__GTK_SCROLLABLE_H__)
+#if IN_FILE(__GTK_SCROLLABLE_C__)
+gtk_scrollable_get_hadjustment
+gtk_scrollable_get_type G_GNUC_CONST
+gtk_scrollable_get_vadjustment
+gtk_scrollable_set_hadjustment
+gtk_scrollable_set_vadjustment
+gtk_scrollable_get_min_display_width
+gtk_scrollable_set_min_display_width
+gtk_scrollable_get_min_display_height
+gtk_scrollable_set_min_display_height
+#endif
+#endif
+
 #if IN_HEADER(__GTK_SCROLLBAR_H__)
 #if IN_FILE(__GTK_SCROLLBAR_C__)
 gtk_scrollbar_get_type G_GNUC_CONST
@@ -4019,7 +4033,6 @@ gtk_tree_view_set_enable_tree_lines
 gtk_tree_view_set_expander_column
 gtk_tree_view_set_fixed_height_mode
 gtk_tree_view_set_grid_lines
-gtk_tree_view_set_hadjustment
 gtk_tree_view_set_headers_clickable
 gtk_tree_view_set_headers_visible
 gtk_tree_view_set_hover_expand
@@ -4038,7 +4051,6 @@ gtk_tree_view_set_show_expanders
 gtk_tree_view_set_tooltip_row
 gtk_tree_view_set_tooltip_cell
 gtk_tree_view_set_tooltip_column
-gtk_tree_view_set_vadjustment
 gtk_tree_view_unset_rows_drag_dest
 gtk_tree_view_unset_rows_drag_source
 gtk_tree_view_columns_autosize
@@ -4287,7 +4299,6 @@ gtk_widget_set_parent
 gtk_widget_set_parent_window
 gtk_widget_set_receives_default
 gtk_widget_set_redraw_on_allocate
-gtk_widget_set_scroll_adjustments
 gtk_widget_set_sensitive
 gtk_widget_set_size_request
 gtk_widget_set_state

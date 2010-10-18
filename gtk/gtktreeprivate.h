@@ -102,6 +102,8 @@ struct _GtkTreeViewPrivate
   /* Adjustments */
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
+  gint           min_display_width;
+  gint           min_display_height;
 
   /* Sub windows */
   GdkWindow *bin_window;

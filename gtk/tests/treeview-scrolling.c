@@ -125,6 +125,8 @@ scroll_fixture_setup (ScrollFixture *fixture,
 
 	fixture->tree_view = gtk_tree_view_new_with_model (model);
 	g_object_unref (model);
+	gtk_scrollable_set_min_display_width (GTK_SCROLLABLE (fixture->tree_view), VIEW_WIDTH);
+	gtk_scrollable_set_min_display_height (GTK_SCROLLABLE (fixture->tree_view), VIEW_HEIGHT);
 	gtk_widget_set_size_request (fixture->tree_view, VIEW_WIDTH, VIEW_HEIGHT);
 
 	renderer = gtk_cell_renderer_text_new ();

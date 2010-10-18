@@ -39,6 +39,7 @@
 #include "gtkentry.h"
 #include "gtkcombobox.h"
 #include "gtktextbuffer.h"
+#include "gtkscrollable.h"
 #include "gtksizerequest.h"
 #include "gtktreednd.h"
 #include "gtkprivate.h"
@@ -134,6 +135,8 @@ struct _GtkIconViewPrivate
   
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
+  gint           min_display_width;
+  gint           min_display_height;
 
   guint layout_idle_id;
   
@@ -238,7 +241,13 @@ enum
   PROP_MARGIN,
   PROP_REORDERABLE,
   PROP_TOOLTIP_COLUMN,
-  PROP_ITEM_PADDING
+  PROP_ITEM_PADDING,
+
+  /* For scrollable interface */
+  PROP_HADJUSTMENT,
+  PROP_VADJUSTMENT,
+  PROP_MIN_DISPLAY_WIDTH,
+  PROP_MIN_DISPLAY_HEIGHT
 };
 
 /* GObject vfuncs */
@@ -288,9 +297,6 @@ static void             gtk_icon_view_forall                    (GtkContainer   
 								 gpointer            callback_data);
 
 /* GtkIconView vfuncs */
-static void             gtk_icon_view_set_adjustments           (GtkIconView        *icon_view,
-								 GtkAdjustment      *hadj,
-								 GtkAdjustment      *vadj);
 static void             gtk_icon_view_real_select_all           (GtkIconView        *icon_view);
 static void             gtk_icon_view_real_unselect_all         (GtkIconView        *icon_view);
 static void             gtk_icon_view_real_select_cursor_item   (GtkIconView        *icon_view);
@@ -298,6 +304,15 @@ static void             gtk_icon_view_real_toggle_cursor_item   (GtkIconView    
 static gboolean         gtk_icon_view_real_activate_cursor_item (GtkIconView        *icon_view);
 
  /* Internal functions */
+static void                 gtk_icon_view_set_hadjustment_values         (GtkIconView            *icon_view);
+static void                 gtk_icon_view_set_vadjustment_values         (GtkIconView            *icon_view);
+static void                 gtk_icon_view_set_hadjustment                (GtkIconView            *icon_view,
+                                                                          GtkAdjustment          *adjustment);
+static void                 gtk_icon_view_set_vadjustment                (GtkIconView            *icon_view,
+                                                                          GtkAdjustment          *adjustment);
+static void                 gtk_icon_view_accessible_set_adjustment      (GtkIconView            *icon_view,
+                                                                          GtkOrientation          orientation,
+                                                                          GtkAdjustment          *adjustment);
 static void                 gtk_icon_view_adjustment_changed             (GtkAdjustment          *adjustment,
 									  GtkIconView            *icon_view);
 static void                 gtk_icon_view_layout                         (GtkIconView            *icon_view);
@@ -485,7 +500,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkIconView, gtk_icon_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_icon_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_icon_view_buildable_init))
+						gtk_icon_view_buildable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
 gtk_icon_view_class_init (GtkIconViewClass *klass)
@@ -533,7 +549,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   container_class->remove = gtk_icon_view_remove;
   container_class->forall = gtk_icon_view_forall;
 
-  klass->set_scroll_adjustments = gtk_icon_view_set_adjustments;
   klass->select_all = gtk_icon_view_real_select_all;
   klass->unselect_all = gtk_icon_view_real_unselect_all;
   klass->select_cursor_item = gtk_icon_view_real_select_cursor_item;
@@ -782,6 +797,11 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     0, G_MAXINT, 6,
 						     GTK_PARAM_READWRITE));
 
+  /* Scrollable interface properties */
+  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
+  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_MIN_DISPLAY_WIDTH,  "min-display-width");
+  g_object_class_override_property (gobject_class, PROP_MIN_DISPLAY_HEIGHT, "min-display-height");
 
 
   /* Style properties */
@@ -801,25 +821,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
                                                                GTK_PARAM_READABLE));
 
   /* Signals */
-  /**
-   * GtkIconView::set-scroll-adjustments
-   * @horizontal: the horizontal #GtkAdjustment
-   * @vertical: the vertical #GtkAdjustment
-   *
-   * Set the scroll adjustments for the icon view. Usually scrolled containers
-   * like #GtkScrolledWindow will emit this signal to connect two instances
-   * of #GtkScrollbar to the scroll directions of the #GtkIconView.
-   */
-  widget_class->set_scroll_adjustments_signal =
-    g_signal_new (I_("set-scroll-adjustments"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkIconViewClass, set_scroll_adjustments),
-		  NULL, NULL, 
-		  _gtk_marshal_VOID__OBJECT_OBJECT,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_ADJUSTMENT, GTK_TYPE_ADJUSTMENT);
-
   /**
    * GtkIconView::item-activated:
    * @iconview: the object on which the signal is emitted
@@ -1118,8 +1119,6 @@ gtk_icon_view_init (GtkIconView *icon_view)
 
   gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
   
-  gtk_icon_view_set_adjustments (icon_view, NULL, NULL);
-
   icon_view->priv->cell_list = NULL;
   icon_view->priv->n_cells = 0;
   icon_view->priv->cursor_cell = -1;
@@ -1133,6 +1132,9 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->column_spacing = 6;
   icon_view->priv->margin = 6;
   icon_view->priv->item_padding = 6;
+
+  icon_view->priv->min_display_width = -1;
+  icon_view->priv->min_display_height = -1;
 
   icon_view->priv->draw_focus = TRUE;
 }
@@ -1207,6 +1209,19 @@ gtk_icon_view_set_property (GObject      *object,
       gtk_icon_view_set_item_padding (icon_view, g_value_get_int (value));
       break;
 
+    case PROP_HADJUSTMENT:
+      gtk_icon_view_set_hadjustment (icon_view, g_value_get_object (value));
+      break;
+    case PROP_VADJUSTMENT:
+      gtk_icon_view_set_vadjustment (icon_view, g_value_get_object (value));
+      break;
+    case PROP_MIN_DISPLAY_WIDTH:
+      icon_view->priv->min_display_width = g_value_get_int (value);
+      break;
+    case PROP_MIN_DISPLAY_HEIGHT:
+      icon_view->priv->min_display_height = g_value_get_int (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1270,6 +1285,19 @@ gtk_icon_view_get_property (GObject      *object,
 
     case PROP_ITEM_PADDING:
       g_value_set_int (value, icon_view->priv->item_padding);
+      break;
+
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, icon_view->priv->hadjustment);
+      break;
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, icon_view->priv->vadjustment);
+      break;
+    case PROP_MIN_DISPLAY_WIDTH:
+      g_value_set_int (value, icon_view->priv->min_display_width);
+      break;
+    case PROP_MIN_DISPLAY_HEIGHT:
+      g_value_set_int (value, icon_view->priv->min_display_height);
       break;
 
     default:
@@ -1491,8 +1519,6 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
-  GtkAdjustment *hadjustment, *vadjustment;
-
   gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_realized (widget))
@@ -1509,26 +1535,12 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
   
   gtk_icon_view_allocate_children (icon_view);
 
-  hadjustment = icon_view->priv->hadjustment;
-  vadjustment = icon_view->priv->vadjustment;
+  /* Delay signal emission */
+  g_object_freeze_notify (G_OBJECT (icon_view->priv->hadjustment));
+  g_object_freeze_notify (G_OBJECT (icon_view->priv->vadjustment));
 
-  hadjustment->page_size = allocation->width;
-  hadjustment->page_increment = allocation->width * 0.9;
-  hadjustment->step_increment = allocation->width * 0.1;
-  hadjustment->lower = 0;
-  hadjustment->upper = MAX (allocation->width, icon_view->priv->width);
-
-  if (hadjustment->value > hadjustment->upper - hadjustment->page_size)
-    gtk_adjustment_set_value (hadjustment, hadjustment->upper - hadjustment->page_size);
-
-  vadjustment->page_size = allocation->height;
-  vadjustment->page_increment = allocation->height * 0.9;
-  vadjustment->step_increment = allocation->height * 0.1;
-  vadjustment->lower = 0;
-  vadjustment->upper = MAX (allocation->height, icon_view->priv->height);
-
-  if (vadjustment->value > vadjustment->upper - vadjustment->page_size)
-    gtk_adjustment_set_value (vadjustment, vadjustment->upper - vadjustment->page_size);
+  gtk_icon_view_set_hadjustment_values (icon_view);
+  gtk_icon_view_set_vadjustment_values (icon_view);
 
   if (gtk_widget_get_realized (widget) &&
       icon_view->priv->scroll_to_path)
@@ -1544,11 +1556,10 @@ gtk_icon_view_size_allocate (GtkWidget      *widget,
 				    icon_view->priv->scroll_to_col_align);
       gtk_tree_path_free (path);
     }
-  else
-    {
-      gtk_adjustment_changed (hadjustment);
-      gtk_adjustment_changed (vadjustment);
-    }
+
+  /* Emit any pending signals now */
+  g_object_thaw_notify (G_OBJECT (icon_view->priv->hadjustment));
+  g_object_thaw_notify (G_OBJECT (icon_view->priv->vadjustment));
 }
 
 static gboolean
@@ -2515,62 +2526,6 @@ gtk_icon_view_unselect_all_internal (GtkIconView  *icon_view)
 
 /* GtkIconView signals */
 static void
-gtk_icon_view_set_adjustments (GtkIconView   *icon_view,
-			       GtkAdjustment *hadj,
-			       GtkAdjustment *vadj)
-{
-  gboolean need_adjust = FALSE;
-
-  if (hadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
-  else
-    hadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  if (vadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (vadj));
-  else
-    vadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-  if (icon_view->priv->hadjustment && (icon_view->priv->hadjustment != hadj))
-    {
-      g_signal_handlers_disconnect_matched (icon_view->priv->hadjustment, G_SIGNAL_MATCH_DATA,
-					   0, 0, NULL, NULL, icon_view);
-      g_object_unref (icon_view->priv->hadjustment);
-    }
-
-  if (icon_view->priv->vadjustment && (icon_view->priv->vadjustment != vadj))
-    {
-      g_signal_handlers_disconnect_matched (icon_view->priv->vadjustment, G_SIGNAL_MATCH_DATA,
-					    0, 0, NULL, NULL, icon_view);
-      g_object_unref (icon_view->priv->vadjustment);
-    }
-
-  if (icon_view->priv->hadjustment != hadj)
-    {
-      icon_view->priv->hadjustment = hadj;
-      g_object_ref_sink (icon_view->priv->hadjustment);
-
-      g_signal_connect (icon_view->priv->hadjustment, "value-changed",
-			G_CALLBACK (gtk_icon_view_adjustment_changed),
-			icon_view);
-      need_adjust = TRUE;
-    }
-
-  if (icon_view->priv->vadjustment != vadj)
-    {
-      icon_view->priv->vadjustment = vadj;
-      g_object_ref_sink (icon_view->priv->vadjustment);
-
-      g_signal_connect (icon_view->priv->vadjustment, "value-changed",
-			G_CALLBACK (gtk_icon_view_adjustment_changed),
-			icon_view);
-      need_adjust = TRUE;
-    }
-
-  if (need_adjust)
-    gtk_icon_view_adjustment_changed (NULL, icon_view);
-}
-
-static void
 gtk_icon_view_real_select_all (GtkIconView *icon_view)
 {
   gtk_icon_view_select_all (icon_view);
@@ -2675,17 +2630,161 @@ gtk_icon_view_process_updates (GtkIconView *icon_view)
 }
 
 static void
-gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
-				  GtkIconView   *icon_view)
+gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
 {
+  GtkAllocation  allocation;
+  GtkAdjustment *adj = icon_view->priv->hadjustment;
+  gdouble old_page_size;
+  gdouble old_upper;
+  gdouble old_value;
+  gdouble new_value;
+  gdouble new_upper;
+
+  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
+
+  old_value = gtk_adjustment_get_value (adj);
+  old_upper = gtk_adjustment_get_upper (adj);
+  old_page_size = gtk_adjustment_get_page_size (adj);
+  new_upper = MAX (allocation.width, icon_view->priv->width);
+
+  g_object_set (adj,
+                "lower", 0.0,
+                "upper", new_upper,
+                "page-size", (gdouble)allocation.width,
+                "step-increment", allocation.width * 0.1,
+                "page-increment", allocation.width * 0.9,
+                NULL);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (icon_view)) == GTK_TEXT_DIR_RTL)
+    {
+      /* Make sure no scrolling occurs for RTL locales also (if possible) */
+      /* Quick explanation:
+       *   In LTR locales, leftmost portion of visible rectangle should stay
+       *   fixed, which means left edge of scrollbar thumb should remain fixed
+       *   and thus adjustment's value should stay the same.
+       *
+       *   In RTL locales, we want to keep rightmost portion of visible
+       *   rectangle fixed. This means right edge of thumb should remain fixed.
+       *   In this case, upper - value - page_size should remain constant.
+       */
+      new_value = (new_upper - allocation.width) -
+                  (old_upper - old_value - old_page_size);
+      new_value = CLAMP (new_value, 0, new_upper - allocation.width);
+    }
+  else
+    new_value = CLAMP (old_value, 0, new_upper - allocation.width);
+
+  if (new_value != old_value)
+    gtk_adjustment_set_value (adj, new_value);
+}
+
+static void
+gtk_icon_view_set_vadjustment_values (GtkIconView *icon_view)
+{
+  GtkAllocation  allocation;
+  GtkAdjustment *adj = icon_view->priv->vadjustment;
+  gdouble old_value;
+  gdouble new_value;
+  gdouble new_upper;
+
+  gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
+
+  old_value = gtk_adjustment_get_value (adj);
+  new_upper = MAX (allocation.height, icon_view->priv->height);
+
+  g_object_set (adj,
+                "lower", 0.0,
+                "upper", new_upper,
+                "page-size", (gdouble)allocation.height,
+                "step-increment", allocation.height * 0.1,
+                "page-increment", allocation.height * 0.9,
+                NULL);
+
+  new_value = CLAMP (old_value, 0, new_upper - allocation.height);
+  if (new_value != old_value)
+    gtk_adjustment_set_value (adj, new_value);
+}
+
+static void
+gtk_icon_view_set_hadjustment (GtkIconView   *icon_view,
+                               GtkAdjustment *adjustment)
+{
+  GtkIconViewPrivate *priv = icon_view->priv;
+
+  if (adjustment && priv->hadjustment == adjustment)
+    return;
+
+  if (priv->hadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_matched (priv->hadjustment,
+                                            G_SIGNAL_MATCH_DATA,
+                                            0, 0, NULL, NULL, icon_view);
+      g_object_unref (priv->hadjustment);
+    }
+
+  if (!adjustment)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
+                                     0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_icon_view_adjustment_changed), icon_view);
+  priv->hadjustment = g_object_ref_sink (adjustment);
+  gtk_icon_view_set_hadjustment_values (icon_view);
+
+  gtk_icon_view_accessible_set_adjustment (icon_view,
+                                           GTK_ORIENTATION_HORIZONTAL,
+                                           priv->hadjustment);
+
+  g_object_notify (G_OBJECT (icon_view), "hadjustment");
+}
+
+static void
+gtk_icon_view_set_vadjustment (GtkIconView   *icon_view,
+                               GtkAdjustment *adjustment)
+{
+  GtkIconViewPrivate *priv = icon_view->priv;
+
+  if (adjustment && priv->vadjustment == adjustment)
+    return;
+
+  if (priv->vadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_matched (priv->vadjustment,
+                                            G_SIGNAL_MATCH_DATA,
+                                            0, 0, NULL, NULL, icon_view);
+      g_object_unref (priv->vadjustment);
+    }
+
+  if (!adjustment)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
+                                     0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_icon_view_adjustment_changed), icon_view);
+  priv->vadjustment = g_object_ref_sink (adjustment);
+  gtk_icon_view_set_vadjustment_values (icon_view);
+
+  gtk_icon_view_accessible_set_adjustment (icon_view,
+                                           GTK_ORIENTATION_VERTICAL,
+                                           priv->vadjustment);
+
+  g_object_notify (G_OBJECT (icon_view), "vadjustment");
+}
+
+static void
+gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
+                                  GtkIconView   *icon_view)
+{
+  GtkIconViewPrivate *priv = icon_view->priv;
+
   if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     {
-      gdk_window_move (icon_view->priv->bin_window,
-		       - icon_view->priv->hadjustment->value,
-		       - icon_view->priv->vadjustment->value);
+      gdk_window_move (priv->bin_window,
+                       - priv->hadjustment->value,
+                       - priv->vadjustment->value);
 
       if (icon_view->priv->doing_rubberband)
-	gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
+        gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
 
       gtk_icon_view_process_updates (icon_view);
     }
@@ -9124,60 +9223,53 @@ gtk_icon_view_accessible_adjustment_changed (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_icon_view_accessible_set_scroll_adjustments (GtkWidget      *widget,
-                                                 GtkAdjustment *hadj,
-                                                 GtkAdjustment *vadj)
+gtk_icon_view_accessible_set_adjustment (GtkIconView    *icon_view,
+                                         GtkOrientation  orientation,
+                                         GtkAdjustment  *adjustment)
 {
   AtkObject *atk_obj;
   GtkIconViewAccessiblePrivate *priv;
+  GtkAdjustment **old_adj_ptr;
 
-  atk_obj = gtk_widget_get_accessible (widget);
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
   priv = gtk_icon_view_accessible_get_priv (atk_obj);
 
-  if (priv->old_hadj != hadj)
+  /* Adjustments are set for the first time in constructor and priv is not
+   * initialized at that time, so skip this first setting. */
+  if (!priv)
+    return;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (priv->old_hadj)
-        {
-          g_object_remove_weak_pointer (G_OBJECT (priv->old_hadj),
-                                        (gpointer *)&priv->old_hadj);
-          
-          g_signal_handlers_disconnect_by_func (priv->old_hadj,
-                                                (gpointer) gtk_icon_view_accessible_adjustment_changed,
-                                                widget);
-        }
-      priv->old_hadj = hadj;
-      if (priv->old_hadj)
-        {
-          g_object_add_weak_pointer (G_OBJECT (priv->old_hadj),
-                                     (gpointer *)&priv->old_hadj);
-          g_signal_connect (hadj,
-                            "value-changed",
-                            G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
-                            widget);
-        }
+      if (priv->old_hadj == adjustment)
+        return;
+
+      old_adj_ptr = &priv->old_hadj;
     }
-  if (priv->old_vadj != vadj)
+  else
     {
-      if (priv->old_vadj)
-        {
-          g_object_remove_weak_pointer (G_OBJECT (priv->old_vadj),
-                                        (gpointer *)&priv->old_vadj);
-          
-          g_signal_handlers_disconnect_by_func (priv->old_vadj,
-                                                (gpointer) gtk_icon_view_accessible_adjustment_changed,
-                                                widget);
-        }
-      priv->old_vadj = vadj;
-      if (priv->old_vadj)
-        {
-          g_object_add_weak_pointer (G_OBJECT (priv->old_vadj),
-                                     (gpointer *)&priv->old_vadj);
-          g_signal_connect (vadj,
-                            "value-changed",
-                            G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
-                            widget);
-        }
+      if (priv->old_vadj == adjustment)
+        return;
+
+      old_adj_ptr = &priv->old_vadj;
     }
+
+  /* Disconnect signal handlers */
+  if (*old_adj_ptr)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (*old_adj_ptr),
+                                    (gpointer *)&priv->old_hadj);
+      g_signal_handlers_disconnect_by_func (*old_adj_ptr,
+                                            gtk_icon_view_accessible_adjustment_changed,
+                                            icon_view);
+    }
+
+  /* Connect signal */
+  *old_adj_ptr = adjustment;
+  g_object_add_weak_pointer (G_OBJECT (adjustment), (gpointer *)old_adj_ptr);
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
+                    icon_view);
 }
 
 static void
@@ -9480,27 +9572,13 @@ gtk_icon_view_accessible_initialize (AtkObject *accessible,
 
   icon_view = GTK_ICON_VIEW (data);
   if (icon_view->priv->hadjustment)
-    {
-      priv->old_hadj = icon_view->priv->hadjustment;
-      g_object_add_weak_pointer (G_OBJECT (priv->old_hadj), (gpointer *)&priv->old_hadj);
-      g_signal_connect (icon_view->priv->hadjustment,
-                        "value-changed",
-                        G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
-                        icon_view);
-    } 
+    gtk_icon_view_accessible_set_adjustment (icon_view,
+					     GTK_ORIENTATION_HORIZONTAL,
+					     icon_view->priv->hadjustment);
   if (icon_view->priv->vadjustment)
-    {
-      priv->old_vadj = icon_view->priv->vadjustment;
-      g_object_add_weak_pointer (G_OBJECT (priv->old_vadj), (gpointer *)&priv->old_vadj);
-      g_signal_connect (icon_view->priv->vadjustment,
-                        "value-changed",
-                        G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
-                        icon_view);
-    }
-  g_signal_connect_after (data,
-                          "set-scroll-adjustments",
-                          G_CALLBACK (gtk_icon_view_accessible_set_scroll_adjustments),
-                          NULL);
+    gtk_icon_view_accessible_set_adjustment (icon_view,
+					     GTK_ORIENTATION_VERTICAL,
+					     icon_view->priv->vadjustment);
   g_signal_connect (data,
                     "notify",
                     G_CALLBACK (gtk_icon_view_accessible_notify_gtk),

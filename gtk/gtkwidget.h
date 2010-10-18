@@ -131,10 +131,6 @@ struct _GtkWidget
  * @activate_signal: The signal to emit when a widget of this class is
  *   activated, gtk_widget_activate() handles the emission.
  *   Implementation of this signal is optional.
- * @set_scroll_adjustments_signal: This signal is emitted  when a widget of
- *   this class is added to a scrolling aware parent,
- *   gtk_widget_set_scroll_adjustments() handles the emission.
- *   Implementation of this signal is optional.
  * @adjust_size_request: Convert an initial size request from a widget's
  *   #GtkSizeRequest virtual method implementations into a size request to
  *   be used by parent containers in laying out the widget.
@@ -170,8 +166,6 @@ struct _GtkWidgetClass
   /*< public >*/
 
   guint activate_signal;
-
-  guint set_scroll_adjustments_signal;
 
   /* seldomly overidden */
   void (*dispatch_child_properties_changed) (GtkWidget   *widget,
@@ -499,9 +493,6 @@ gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
                                            GdkEvent            *event);
 
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
-gboolean   gtk_widget_set_scroll_adjustments (GtkWidget        *widget,
-					      GtkAdjustment    *hadjustment,
-					      GtkAdjustment    *vadjustment);
      
 void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 					   GtkWidget	       *new_parent);

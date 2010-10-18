@@ -44,6 +44,7 @@
 #include "gtkframe.h"
 #include "gtktreemodelsort.h"
 #include "gtktooltip.h"
+#include "gtkscrollable.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -145,7 +146,9 @@ enum {
   PROP_RUBBER_BANDING,
   PROP_ENABLE_GRID_LINES,
   PROP_ENABLE_TREE_LINES,
-  PROP_TOOLTIP_COLUMN
+  PROP_TOOLTIP_COLUMN,
+  PROP_MIN_DISPLAY_WIDTH,
+  PROP_MIN_DISPLAY_HEIGHT
 };
 
 /* object signals */
@@ -249,9 +252,10 @@ static void     gtk_tree_view_drag_data_received (GtkWidget        *widget,
                                                   guint             time);
 
 /* tree_model signals */
-static void gtk_tree_view_set_adjustments                 (GtkTreeView     *tree_view,
-							   GtkAdjustment   *hadj,
-							   GtkAdjustment   *vadj);
+static void     gtk_tree_view_set_hadjustment             (GtkTreeView     *tree_view,
+                                                           GtkAdjustment   *adjustment);
+static void     gtk_tree_view_set_vadjustment             (GtkTreeView     *tree_view,
+                                                           GtkAdjustment   *adjustment);
 static gboolean gtk_tree_view_real_move_cursor            (GtkTreeView     *tree_view,
 							   GtkMovementStep  step,
 							   gint             count);
@@ -488,7 +492,8 @@ static guint tree_view_signals [LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_tree_view_buildable_init))
+						gtk_tree_view_buildable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
 gtk_tree_view_class_init (GtkTreeViewClass *class)
@@ -546,7 +551,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   container_class->forall = gtk_tree_view_forall;
   container_class->set_focus_child = gtk_tree_view_set_focus_child;
 
-  class->set_scroll_adjustments = gtk_tree_view_set_adjustments;
   class->move_cursor = gtk_tree_view_real_move_cursor;
   class->select_all = gtk_tree_view_real_select_all;
   class->unselect_all = gtk_tree_view_real_unselect_all;
@@ -566,21 +570,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							GTK_TYPE_TREE_MODEL,
 							GTK_PARAM_READWRITE));
 
-  g_object_class_install_property (o_class,
-                                   PROP_HADJUSTMENT,
-                                   g_param_spec_object ("hadjustment",
-							P_("Horizontal Adjustment"),
-                                                        P_("Horizontal Adjustment for the widget"),
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (o_class,
-                                   PROP_VADJUSTMENT,
-                                   g_param_spec_object ("vadjustment",
-							P_("Vertical Adjustment"),
-                                                        P_("Vertical Adjustment for the widget"),
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_READWRITE));
+  g_object_class_override_property (o_class, PROP_HADJUSTMENT, "hadjustment");
+  g_object_class_override_property (o_class, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (o_class, PROP_MIN_DISPLAY_WIDTH,  "min-display-width");
+  g_object_class_override_property (o_class, PROP_MIN_DISPLAY_HEIGHT, "min-display-height");
 
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_VISIBLE,
@@ -856,26 +849,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 								GTK_PARAM_READABLE));
 
   /* Signals */
-  /**
-   * GtkTreeView::set-scroll-adjustments
-   * @horizontal: the horizontal #GtkAdjustment
-   * @vertical: the vertical #GtkAdjustment
-   *
-   * Set the scroll adjustments for the tree view. Usually scrolled containers
-   * like #GtkScrolledWindow will emit this signal to connect two instances
-   * of #GtkScrollbar to the scroll directions of the #GtkTreeView.
-   */
-  widget_class->set_scroll_adjustments_signal =
-    g_signal_new (I_("set-scroll-adjustments"),
-		  G_TYPE_FROM_CLASS (o_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkTreeViewClass, set_scroll_adjustments),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_OBJECT,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_ADJUSTMENT,
-		  GTK_TYPE_ADJUSTMENT);
-
   /**
    * GtkTreeView::row-activated:
    * @tree_view: the object on which the signal is emitted
@@ -1337,7 +1310,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->fixed_height = -1;
   tree_view->priv->fixed_height_mode = FALSE;
   tree_view->priv->fixed_height_check = 0;
-  gtk_tree_view_set_adjustments (tree_view, NULL, NULL);
   tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
   tree_view->priv->enable_search = TRUE;
   tree_view->priv->search_column = -1;
@@ -1367,6 +1339,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
+
+  tree_view->priv->min_display_width  = -1;
+  tree_view->priv->min_display_height = -1;
 }
 
 
@@ -1443,6 +1418,12 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_TOOLTIP_COLUMN:
       gtk_tree_view_set_tooltip_column (tree_view, g_value_get_int (value));
       break;
+    case PROP_MIN_DISPLAY_WIDTH:
+      tree_view->priv->min_display_width = g_value_get_int (value);
+      break;
+    case PROP_MIN_DISPLAY_HEIGHT:
+      tree_view->priv->min_display_height = g_value_get_int (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1517,6 +1498,12 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_TOOLTIP_COLUMN:
       g_value_set_int (value, tree_view->priv->tooltip_column);
+      break;
+    case PROP_MIN_DISPLAY_WIDTH:
+      g_value_set_int (value, tree_view->priv->min_display_width);
+      break;
+    case PROP_MIN_DISPLAY_HEIGHT:
+      g_value_set_int (value, tree_view->priv->min_display_height);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -8112,67 +8099,6 @@ gtk_tree_view_set_focus_child (GtkContainer *container,
   GTK_CONTAINER_CLASS (gtk_tree_view_parent_class)->set_focus_child (container, child);
 }
 
-static void
-gtk_tree_view_set_adjustments (GtkTreeView   *tree_view,
-			       GtkAdjustment *hadj,
-			       GtkAdjustment *vadj)
-{
-  gboolean need_adjust = FALSE;
-
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
-
-  if (hadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
-  else
-    hadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  if (vadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (vadj));
-  else
-    vadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-
-  if (tree_view->priv->hadjustment && (tree_view->priv->hadjustment != hadj))
-    {
-      g_signal_handlers_disconnect_by_func (tree_view->priv->hadjustment,
-					    gtk_tree_view_adjustment_changed,
-					    tree_view);
-      g_object_unref (tree_view->priv->hadjustment);
-    }
-
-  if (tree_view->priv->vadjustment && (tree_view->priv->vadjustment != vadj))
-    {
-      g_signal_handlers_disconnect_by_func (tree_view->priv->vadjustment,
-					    gtk_tree_view_adjustment_changed,
-					    tree_view);
-      g_object_unref (tree_view->priv->vadjustment);
-    }
-
-  if (tree_view->priv->hadjustment != hadj)
-    {
-      tree_view->priv->hadjustment = hadj;
-      g_object_ref_sink (tree_view->priv->hadjustment);
-
-      g_signal_connect (tree_view->priv->hadjustment, "value-changed",
-			G_CALLBACK (gtk_tree_view_adjustment_changed),
-			tree_view);
-      need_adjust = TRUE;
-    }
-
-  if (tree_view->priv->vadjustment != vadj)
-    {
-      tree_view->priv->vadjustment = vadj;
-      g_object_ref_sink (tree_view->priv->vadjustment);
-
-      g_signal_connect (tree_view->priv->vadjustment, "value-changed",
-			G_CALLBACK (gtk_tree_view_adjustment_changed),
-			tree_view);
-      need_adjust = TRUE;
-    }
-
-  if (need_adjust)
-    gtk_tree_view_adjustment_changed (NULL, tree_view);
-}
-
-
 static gboolean
 gtk_tree_view_real_move_cursor (GtkTreeView       *tree_view,
 				GtkMovementStep    step,
@@ -10929,14 +10855,13 @@ gtk_tree_view_get_selection (GtkTreeView *tree_view)
  *
  * Return value: (transfer none): A #GtkAdjustment object, or %NULL
  *     if none is currently being used.
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
  **/
 GtkAdjustment *
 gtk_tree_view_get_hadjustment (GtkTreeView *tree_view)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
-
-  if (tree_view->priv->hadjustment == NULL)
-    gtk_tree_view_set_hadjustment (tree_view, NULL);
 
   return tree_view->priv->hadjustment;
 }
@@ -10947,16 +10872,40 @@ gtk_tree_view_get_hadjustment (GtkTreeView *tree_view)
  * @adjustment: (allow-none): The #GtkAdjustment to set, or %NULL
  *
  * Sets the #GtkAdjustment for the current horizontal aspect.
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_set_hadjustment()
  **/
 void
 gtk_tree_view_set_hadjustment (GtkTreeView   *tree_view,
-			       GtkAdjustment *adjustment)
+                               GtkAdjustment *adjustment)
 {
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  GtkTreeViewPrivate *priv = tree_view->priv;
 
-  gtk_tree_view_set_adjustments (tree_view,
-				 adjustment,
-				 tree_view->priv->vadjustment);
+  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
+
+  if (adjustment && priv->hadjustment == adjustment)
+    return;
+
+  if (priv->hadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->hadjustment,
+                                            gtk_tree_view_adjustment_changed,
+                                            tree_view);
+      g_object_unref (priv->hadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
+                                     0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_tree_view_adjustment_changed), tree_view);
+  priv->hadjustment = g_object_ref_sink (adjustment);
+  /* FIXME: Adjustment should probably be populated here with fresh values, but
+   * internal details are too complicated for me to decipher right now.
+   */
+  gtk_tree_view_adjustment_changed (NULL, tree_view);
 
   g_object_notify (G_OBJECT (tree_view), "hadjustment");
 }
@@ -10969,14 +10918,13 @@ gtk_tree_view_set_hadjustment (GtkTreeView   *tree_view,
  *
  * Return value: (transfer none): A #GtkAdjustment object, or %NULL
  *     if none is currently being used.
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
  **/
 GtkAdjustment *
 gtk_tree_view_get_vadjustment (GtkTreeView *tree_view)
 {
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
-
-  if (tree_view->priv->vadjustment == NULL)
-    gtk_tree_view_set_vadjustment (tree_view, NULL);
 
   return tree_view->priv->vadjustment;
 }
@@ -10987,17 +10935,40 @@ gtk_tree_view_get_vadjustment (GtkTreeView *tree_view)
  * @adjustment: (allow-none): The #GtkAdjustment to set, or %NULL
  *
  * Sets the #GtkAdjustment for the current vertical aspect.
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_set_vadjustment()
  **/
 void
 gtk_tree_view_set_vadjustment (GtkTreeView   *tree_view,
-			       GtkAdjustment *adjustment)
+                               GtkAdjustment *adjustment)
 {
+  GtkTreeViewPrivate *priv = tree_view->priv;
+
   g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
+  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
-  gtk_tree_view_set_adjustments (tree_view,
-				 tree_view->priv->hadjustment,
-				 adjustment);
+  if (adjustment && priv->vadjustment == adjustment)
+    return;
 
+  if (priv->vadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->vadjustment,
+                                            gtk_tree_view_adjustment_changed,
+                                            tree_view);
+      g_object_unref (priv->vadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
+                                     0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_tree_view_adjustment_changed), tree_view);
+  priv->vadjustment = g_object_ref_sink (adjustment);
+  /* FIXME: Adjustment should probably be populated here with fresh values, but
+   * internal details are too complicated for me to decipher right now.
+   */
+  gtk_tree_view_adjustment_changed (NULL, tree_view);
   g_object_notify (G_OBJECT (tree_view), "vadjustment");
 }
 

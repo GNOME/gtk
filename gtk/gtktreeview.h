@@ -70,9 +70,6 @@ struct _GtkTreeViewClass
 {
   GtkContainerClass parent_class;
 
-  void     (* set_scroll_adjustments)     (GtkTreeView       *tree_view,
-				           GtkAdjustment     *hadjustment,
-				           GtkAdjustment     *vadjustment);
   void     (* row_activated)              (GtkTreeView       *tree_view,
 				           GtkTreePath       *path,
 					   GtkTreeViewColumn *column);
@@ -150,12 +147,18 @@ GtkTreeModel          *gtk_tree_view_get_model                     (GtkTreeView 
 void                   gtk_tree_view_set_model                     (GtkTreeView               *tree_view,
 								    GtkTreeModel              *model);
 GtkTreeSelection      *gtk_tree_view_get_selection                 (GtkTreeView               *tree_view);
+
+#ifndef GTK_DISABLE_DEPRECATED
+
 GtkAdjustment         *gtk_tree_view_get_hadjustment               (GtkTreeView               *tree_view);
 void                   gtk_tree_view_set_hadjustment               (GtkTreeView               *tree_view,
 								    GtkAdjustment             *adjustment);
 GtkAdjustment         *gtk_tree_view_get_vadjustment               (GtkTreeView               *tree_view);
 void                   gtk_tree_view_set_vadjustment               (GtkTreeView               *tree_view,
 								    GtkAdjustment             *adjustment);
+
+#endif
+
 gboolean               gtk_tree_view_get_headers_visible           (GtkTreeView               *tree_view);
 void                   gtk_tree_view_set_headers_visible           (GtkTreeView               *tree_view,
 								    gboolean                   headers_visible);
