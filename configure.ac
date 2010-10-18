@@ -1649,7 +1649,6 @@ docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
 docs/reference/gtk/version.xml
 docs/reference/libgail-util/Makefile
-docs/faq/Makefile
 docs/tools/Makefile
 build/Makefile
 build/win32/Makefile
