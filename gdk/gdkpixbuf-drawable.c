@@ -118,17 +118,13 @@ gdk_cairo_format_for_content (cairo_content_t content)
 static cairo_surface_t *
 gdk_cairo_surface_coerce_to_image (cairo_surface_t *surface,
                                    cairo_content_t content,
+                                   int src_x,
+                                   int src_y,
                                    int width,
                                    int height)
 {
   cairo_surface_t *copy;
   cairo_t *cr;
-
-  if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE &&
-      cairo_surface_get_content (surface) == content &&
-      cairo_image_surface_get_width (surface) >= width &&
-      cairo_image_surface_get_height (surface) >= height)
-    return cairo_surface_reference (surface);
 
   copy = cairo_image_surface_create (gdk_cairo_format_for_content (content),
                                      width,
@@ -136,7 +132,7 @@ gdk_cairo_surface_coerce_to_image (cairo_surface_t *surface,
 
   cr = cairo_create (copy);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-  cairo_set_source_surface (cr, surface, 0, 0);
+  cairo_set_source_surface (cr, surface, -src_x, -src_y);
   cairo_paint (cr);
   cairo_destroy (cr);
 
@@ -242,7 +238,6 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
   
   /* General sanity checks */
   g_return_val_if_fail (surface != NULL, NULL);
-  g_return_val_if_fail (src_x >= 0 && src_y >= 0, NULL);
   g_return_val_if_fail (width > 0 && height > 0, NULL);
 
   content = cairo_surface_get_content (surface) | CAIRO_CONTENT_COLOR;
@@ -251,7 +246,8 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                          8,
                          width, height);
 
-  surface = gdk_cairo_surface_coerce_to_image (surface, content, src_x + width, src_y + height);
+  surface = gdk_cairo_surface_coerce_to_image (surface, content, src_x, src_y,
+                                               width, height);
   cairo_surface_flush (surface);
   if (cairo_surface_status (surface) || dest == NULL)
     {
@@ -264,14 +260,14 @@ gdk_pixbuf_get_from_surface  (cairo_surface_t *surface,
                    gdk_pixbuf_get_rowstride (dest),
                    cairo_image_surface_get_data (surface),
                    cairo_image_surface_get_stride (surface),
-                   src_x, src_y,
+                   0, 0,
                    width, height);
   else
     convert_no_alpha (gdk_pixbuf_get_pixels (dest),
                       gdk_pixbuf_get_rowstride (dest),
                       cairo_image_surface_get_data (surface),
                       cairo_image_surface_get_stride (surface),
-                      src_x, src_y,
+                      0, 0,
                       width, height);
 
   cairo_surface_destroy (surface);
