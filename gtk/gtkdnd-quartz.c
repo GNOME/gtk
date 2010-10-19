@@ -1691,17 +1691,19 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 {
   GdkPixbuf *pixbuf;
   GdkRectangle extents;
+  double x_offset, y_offset;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
   g_return_if_fail (context->is_source);
   g_return_if_fail (surface != NULL);
 
   _gtk_cairo_surface_extents (surface, &extents);
+  cairo_surface_get_device_offset (surface, &x_offset, &y_offset);
 
   pixbuf = gdk_pixbuf_get_from_surface (surface,
                                         extents.x, extents.y,
                                         extents.width, extents.height);
-  gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
+  gtk_drag_set_icon_pixbuf (context, pixbuf, -x_offset, -y_offset);
   g_object_unref (pixbuf);
 }
 
