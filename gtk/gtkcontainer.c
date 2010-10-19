@@ -316,7 +316,6 @@ static gboolean gtk_container_focus_move           (GtkContainer      *container
 static void     gtk_container_children_callback    (GtkWidget         *widget,
 						    gpointer           client_data);
 static void     gtk_container_show_all             (GtkWidget         *widget);
-static void     gtk_container_hide_all             (GtkWidget         *widget);
 static gint     gtk_container_draw                 (GtkWidget         *widget,
                                                     cairo_t           *cr);
 static void     gtk_container_map                  (GtkWidget         *widget);
@@ -448,7 +447,6 @@ gtk_container_class_init (GtkContainerClass *class)
   widget_class->destroy = gtk_container_destroy;
   widget_class->compute_expand = gtk_container_compute_expand;
   widget_class->show_all = gtk_container_show_all;
-  widget_class->hide_all = gtk_container_hide_all;
   widget_class->draw = gtk_container_draw;
   widget_class->map = gtk_container_map;
   widget_class->unmap = gtk_container_unmap;
@@ -3030,18 +3028,6 @@ gtk_container_show_all (GtkWidget *widget)
 			 NULL);
   gtk_widget_show (widget);
 }
-
-static void
-gtk_container_hide_all (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_CONTAINER (widget));
-
-  gtk_widget_hide (widget);
-  gtk_container_foreach (GTK_CONTAINER (widget),
-			 (GtkCallback) gtk_widget_hide_all,
-			 NULL);
-}
-
 
 static void
 gtk_container_draw_child (GtkWidget *child,

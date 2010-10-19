@@ -217,7 +217,6 @@ static void     gtk_file_chooser_button_drag_data_received (GtkWidget        *wi
 							    guint             type,
 							    guint             drag_time);
 static void     gtk_file_chooser_button_show_all           (GtkWidget        *widget);
-static void     gtk_file_chooser_button_hide_all           (GtkWidget        *widget);
 static void     gtk_file_chooser_button_show               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_hide               (GtkWidget        *widget);
 static void     gtk_file_chooser_button_map                (GtkWidget        *widget);
@@ -328,7 +327,6 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->destroy = gtk_file_chooser_button_destroy;
   widget_class->drag_data_received = gtk_file_chooser_button_drag_data_received;
   widget_class->show_all = gtk_file_chooser_button_show_all;
-  widget_class->hide_all = gtk_file_chooser_button_hide_all;
   widget_class->show = gtk_file_chooser_button_show;
   widget_class->hide = gtk_file_chooser_button_hide;
   widget_class->map = gtk_file_chooser_button_map;
@@ -1098,12 +1096,6 @@ static void
 gtk_file_chooser_button_show_all (GtkWidget *widget)
 {
   gtk_widget_show (widget);
-}
-
-static void
-gtk_file_chooser_button_hide_all (GtkWidget *widget)
-{
-  gtk_widget_hide (widget);
 }
 
 static void

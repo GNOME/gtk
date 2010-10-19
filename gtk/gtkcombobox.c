@@ -2343,7 +2343,7 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
     return;
 
   gtk_device_grab_remove (priv->popup_window, priv->grab_pointer);
-  gtk_widget_hide_all (priv->popup_window);
+  gtk_widget_hide (priv->popup_window);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
                                 FALSE);
 

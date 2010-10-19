@@ -746,7 +746,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->show = gtk_widget_real_show;
   klass->show_all = gtk_widget_show;
   klass->hide = gtk_widget_real_hide;
-  klass->hide_all = gtk_widget_hide;
   klass->map = gtk_widget_real_map;
   klass->unmap = gtk_widget_real_unmap;
   klass->realize = gtk_widget_real_realize;
@@ -3970,28 +3969,6 @@ gtk_widget_show_all (GtkWidget *widget)
 
   if (class->show_all)
     class->show_all (widget);
-}
-
-/**
- * gtk_widget_hide_all:
- * @widget: a #GtkWidget
- * 
- * Recursively hides a widget and any child widgets.
- **/
-void
-gtk_widget_hide_all (GtkWidget *widget)
-{
-  GtkWidgetClass *class;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (gtk_widget_get_no_show_all (widget))
-    return;
-
-  class = GTK_WIDGET_GET_CLASS (widget);
-
-  if (class->hide_all)
-    class->hide_all (widget);
 }
 
 /**
@@ -12503,11 +12480,11 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
 /**
  * gtk_widget_get_no_show_all:
  * @widget: a #GtkWidget
- * 
- * Returns the current value of the GtkWidget:no-show-all property, 
- * which determines whether calls to gtk_widget_show_all() and 
- * gtk_widget_hide_all() will affect this widget. 
- * 
+ *
+ * Returns the current value of the GtkWidget:no-show-all property,
+ * which determines whether calls to gtk_widget_show_all()
+ * will affect this widget.
+ *
  * Return value: the current value of the "no-show-all" property.
  *
  * Since: 2.4
@@ -12516,7 +12493,7 @@ gboolean
 gtk_widget_get_no_show_all (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-  
+
   return widget->priv->no_show_all;
 }
 
@@ -12524,10 +12501,9 @@ gtk_widget_get_no_show_all (GtkWidget *widget)
  * gtk_widget_set_no_show_all:
  * @widget: a #GtkWidget
  * @no_show_all: the new value for the "no-show-all" property
- * 
- * Sets the #GtkWidget:no-show-all property, which determines whether 
- * calls to gtk_widget_show_all() and gtk_widget_hide_all() will affect 
- * this widget. 
+ *
+ * Sets the #GtkWidget:no-show-all property, which determines whether
+ * calls to gtk_widget_show_all() will affect this widget.
  *
  * This is mostly for use in constructing widget hierarchies with externally
  * controlled visibility, see #GtkUIManager.

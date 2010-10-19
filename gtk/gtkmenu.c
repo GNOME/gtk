@@ -241,7 +241,6 @@ static void     gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
  
 static void gtk_menu_deactivate	    (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all       (GtkWidget         *widget);
-static void gtk_menu_hide_all       (GtkWidget         *widget);
 static void gtk_menu_position       (GtkMenu           *menu);
 static void gtk_menu_reparent       (GtkMenu           *menu, 
 				     GtkWidget         *new_parent, 
@@ -479,7 +478,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->button_release_event = gtk_menu_button_release;
   widget_class->motion_notify_event = gtk_menu_motion_notify;
   widget_class->show_all = gtk_menu_show_all;
-  widget_class->hide_all = gtk_menu_hide_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
   widget_class->style_set = gtk_menu_style_set;
@@ -5134,14 +5132,6 @@ gtk_menu_show_all (GtkWidget *widget)
 {
   /* Show children, but not self. */
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_show_all, NULL);
-}
-
-
-static void
-gtk_menu_hide_all (GtkWidget *widget)
-{
-  /* Hide children, but not self. */
-  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
 }
 
 /**

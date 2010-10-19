@@ -114,7 +114,6 @@ static void gtk_menu_item_position_menu  (GtkMenu          *menu,
 					  gboolean         *push_in,
 					  gpointer          user_data);
 static void gtk_menu_item_show_all       (GtkWidget        *widget);
-static void gtk_menu_item_hide_all       (GtkWidget        *widget);
 static void gtk_menu_item_forall         (GtkContainer    *container,
 					  gboolean         include_internals,
 					  GtkCallback      callback,
@@ -194,7 +193,6 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   widget_class->enter_notify_event = gtk_menu_item_enter;
   widget_class->leave_notify_event = gtk_menu_item_leave;
   widget_class->show_all = gtk_menu_item_show_all;
-  widget_class->hide_all = gtk_menu_item_hide_all;
   widget_class->mnemonic_activate = gtk_menu_item_mnemonic_activate;
   widget_class->parent_set = gtk_menu_item_parent_set;
   widget_class->can_activate_accel = gtk_menu_item_can_activate_accel;
@@ -2185,23 +2183,6 @@ gtk_menu_item_show_all (GtkWidget *widget)
   gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_show_all, NULL);
 
   gtk_widget_show (widget);
-}
-
-static void
-gtk_menu_item_hide_all (GtkWidget *widget)
-{
-  GtkMenuItem *menu_item;
-
-  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
-
-  gtk_widget_hide (widget);
-
-  menu_item = GTK_MENU_ITEM (widget);
-
-  /* hide children including submenu */
-  gtk_container_foreach (GTK_CONTAINER (widget), (GtkCallback) gtk_widget_hide_all, NULL);
-  if (menu_item->submenu)
-    gtk_widget_hide_all (menu_item->submenu);
 }
 
 static gboolean

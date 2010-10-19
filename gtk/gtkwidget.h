@@ -183,7 +183,6 @@ struct _GtkWidgetClass
   void (* show)		       (GtkWidget        *widget);
   void (* show_all)            (GtkWidget        *widget);
   void (* hide)		       (GtkWidget        *widget);
-  void (* hide_all)            (GtkWidget        *widget);
   void (* map)		       (GtkWidget        *widget);
   void (* unmap)	       (GtkWidget        *widget);
   void (* realize)	       (GtkWidget        *widget);
@@ -416,13 +415,12 @@ void	   gtk_widget_destroy		  (GtkWidget	       *widget);
 void	   gtk_widget_destroyed		  (GtkWidget	       *widget,
 					   GtkWidget	      **widget_pointer);
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
-void	   gtk_widget_show		  (GtkWidget	       *widget);
+void       gtk_widget_show                (GtkWidget           *widget);
+void       gtk_widget_hide                (GtkWidget           *widget);
 void       gtk_widget_show_now            (GtkWidget           *widget);
-void	   gtk_widget_hide		  (GtkWidget	       *widget);
-void	   gtk_widget_show_all		  (GtkWidget	       *widget);
-void	   gtk_widget_hide_all		  (GtkWidget	       *widget);
+void       gtk_widget_show_all            (GtkWidget           *widget);
 void       gtk_widget_set_no_show_all     (GtkWidget           *widget,
-					   gboolean             no_show_all);
+                                           gboolean             no_show_all);
 gboolean   gtk_widget_get_no_show_all     (GtkWidget           *widget);
 void	   gtk_widget_map		  (GtkWidget	       *widget);
 void	   gtk_widget_unmap		  (GtkWidget	       *widget);
