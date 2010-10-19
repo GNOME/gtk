@@ -33,16 +33,16 @@ G_BEGIN_DECLS
 #define GTK_IS_STYLE_CONTEXT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_STYLE_CONTEXT))
 #define GTK_STYLE_CONTEXT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_STYLE_CONTEXT, GtkStyleContextClass))
 
-typedef struct _GtkStyleContext GtkStyleContext;
-typedef struct _GtkStyleContextClass GtkStyleContextClass;
+typedef struct GtkStyleContext GtkStyleContext;
+typedef struct GtkStyleContextClass GtkStyleContextClass;
 
-struct _GtkStyleContext
+struct GtkStyleContext
 {
   GObject parent_object;
   gpointer priv;
 };
 
-struct _GtkStyleContextClass
+struct GtkStyleContextClass
 {
   GObjectClass parent_class;
 
@@ -50,6 +50,8 @@ struct _GtkStyleContextClass
 };
 
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
+
+GtkStyleContext * gtk_style_context_new (void);
 
 void gtk_style_context_add_provider_for_screen    (GdkScreen        *screen,
                                                    GtkStyleProvider *provider,
@@ -82,9 +84,9 @@ void          gtk_style_context_set_state    (GtkStyleContext *context,
                                               GtkStateFlags    flags);
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
-gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
-                                                  GtkStateType     state,
-                                                  gdouble         *progress);
+gboolean      gtk_style_context_is_state_set (GtkStyleContext *context,
+                                              GtkStateType     state,
+                                              gdouble         *progress);
 
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
@@ -146,8 +148,6 @@ void gtk_style_context_push_animatable_region (GtkStyleContext *context,
                                                gpointer         region_id);
 void gtk_style_context_pop_animatable_region  (GtkStyleContext *context);
 
-void gtk_style_context_invalidate (GtkStyleContext *context);
-void gtk_style_context_reset_widgets (GdkScreen *screen);
 
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
@@ -157,6 +157,23 @@ void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *c
 void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,
                                                               gint             rel_x,
                                                               gint             rel_y);
+
+/* Animation for state changes */
+void gtk_style_context_state_transition_start  (GtkStyleContext *context,
+                                                gpointer         identifier,
+                                                GtkWidget       *widget,
+                                                GtkStateType     state,
+                                                gboolean         value,
+                                                GdkRectangle    *rect);
+void gtk_style_context_state_transition_update (GtkStyleContext *context,
+                                                gpointer         identifier,
+                                                GdkRectangle    *rect,
+                                                GtkStateType     state);
+void gtk_style_context_state_transition_stop   (GtkStyleContext *context,
+                                                gpointer         identifier);
+
+void gtk_style_context_invalidate (GtkStyleContext *context);
+void gtk_style_context_reset_widgets (GdkScreen *screen);
 
 /* Paint methods */
 void gtk_render_check (GtkStyleContext *context,

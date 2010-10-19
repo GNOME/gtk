@@ -985,6 +985,29 @@ style_provider_remove (GList            **list,
 }
 
 /**
+ * gtk_style_context_new:
+ *
+ * Creates a standalone #GtkStyleContext, this style context
+ * won't be attached to any widget nor screen, so you may want
+ * to call gtk_style_context_set_path() and
+ * gtk_style_context_set_screen() yourself.
+ *
+ * <note>
+ * This function is only useful when using the theming layer
+ * separated from GTK+, if you are using #GtkStyleContext to
+ * theme #GtkWidget<!-- -->s, use gtk_widget_get_style_context()
+ * in order to get a style context ready to theme the widget.
+ * </note>
+ *
+ * Returns: A newly created #GtkStyleContext.
+ **/
+GtkStyleContext *
+gtk_style_context_new (void)
+{
+  return g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
+}
+
+/**
  * gtk_style_context_add_provider:
  * @context: a #GtkStyleContext
  * @provider: a #GtkStyleProvider
