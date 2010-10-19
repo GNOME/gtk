@@ -54,7 +54,7 @@ static gboolean gdk_device_xi_get_history (GdkDevice      *device,
                                            guint32         start,
                                            guint32         stop,
                                            GdkTimeCoord ***events,
-                                           guint          *n_events);
+                                           gint           *n_events);
 
 static void gdk_device_xi_get_state       (GdkDevice       *device,
                                            GdkWindow       *window,
@@ -229,7 +229,7 @@ gdk_device_xi_get_history (GdkDevice      *device,
                            guint32         start,
                            guint32         stop,
                            GdkTimeCoord ***events,
-                           guint          *n_events)
+                           gint           *n_events)
 {
   GdkTimeCoord **coords;
   XDeviceTimeCoord *device_coords;
@@ -253,7 +253,7 @@ gdk_device_xi_get_history (GdkDevice      *device,
   if (!device_coords)
     return FALSE;
 
-  *n_events = (guint) n_events_return;
+  *n_events = n_events_return;
   coords = _gdk_device_allocate_history (device, *n_events);
 
   for (i = 0; i < *n_events; i++)

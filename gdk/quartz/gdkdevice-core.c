@@ -30,7 +30,7 @@ static gboolean gdk_device_core_get_history (GdkDevice      *device,
                                              guint32         start,
                                              guint32         stop,
                                              GdkTimeCoord ***events,
-                                             guint          *n_events);
+                                             gint           *n_events);
 static void gdk_device_core_get_state (GdkDevice       *device,
                                        GdkWindow       *window,
                                        gdouble         *axes,
@@ -105,7 +105,7 @@ gdk_device_core_get_history (GdkDevice      *device,
                              guint32         start,
                              guint32         stop,
                              GdkTimeCoord ***events,
-                             guint          *n_events)
+                             gint           *n_events)
 {
   return FALSE;
 }

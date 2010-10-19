@@ -40,7 +40,7 @@ struct _GdkDeviceClass
                             guint32         start,
                             guint32         stop,
                             GdkTimeCoord ***events,
-                            guint          *n_events);
+                            gint           *n_events);
 
   void (* get_state) (GdkDevice       *device,
                       GdkWindow       *window,
@@ -121,7 +121,7 @@ gboolean   _gdk_device_translate_axis         (GdkDevice *device,
                                                gdouble   *axis_value);
 
 GdkTimeCoord ** _gdk_device_allocate_history  (GdkDevice *device,
-                                               guint      n_events);
+                                               gint       n_events);
 
 void _gdk_input_check_extension_events (GdkDevice *device);
 

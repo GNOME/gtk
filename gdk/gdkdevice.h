@@ -249,7 +249,7 @@ gboolean gdk_device_get_history  (GdkDevice         *device,
 				  guint32            start,
 				  guint32            stop,
 				  GdkTimeCoord    ***events,
-				  guint             *n_events);
+				  gint              *n_events);
 void     gdk_device_free_history (GdkTimeCoord     **events,
 				  gint               n_events);
 

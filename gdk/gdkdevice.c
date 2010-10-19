@@ -407,7 +407,7 @@ gdk_device_get_history (GdkDevice      *device,
                         guint32         start,
                         guint32         stop,
                         GdkTimeCoord ***events,
-                        guint          *n_events)
+                        gint           *n_events)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
@@ -431,7 +431,7 @@ gdk_device_get_history (GdkDevice      *device,
 
 GdkTimeCoord **
 _gdk_device_allocate_history (GdkDevice *device,
-                              guint      n_events)
+                              gint       n_events)
 {
   GdkTimeCoord **result = g_new (GdkTimeCoord *, n_events);
   gint i;
