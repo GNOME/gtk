@@ -73,11 +73,11 @@ static void choicecb (GtkWidget *widget, gpointer data)
   AtkObject **ptr_to_obj = (AtkObject **)data;
   AtkObject *obj = *ptr_to_obj;
 
-  if (GTK_TOGGLE_BUTTON(tc->tb_others)->active)
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tc->tb_others)))
   {
     other_runtest(obj);
   }
-  else if (GTK_TOGGLE_BUTTON(tc->tb_ref_selection)->active)
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tc->tb_ref_selection)))
   {
     const gchar *indexstr;
     gint index;
@@ -87,7 +87,7 @@ static void choicecb (GtkWidget *widget, gpointer data)
 
     ref_selection_runtest(obj, index); 
   }
-  else if (GTK_TOGGLE_BUTTON(tc->tb_ref_at)->active)
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tc->tb_ref_at)))
   {
     const gchar *rowstr, *colstr;
     gint row, col;
@@ -99,7 +99,7 @@ static void choicecb (GtkWidget *widget, gpointer data)
  
     ref_at_runtest(obj, row, col);
   }
-  else if (GTK_TOGGLE_BUTTON(tc->tb_ref_accessible_child)->active)
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tc->tb_ref_accessible_child)))
   {
     const gchar *childstr;
     gint childno;
