@@ -34,6 +34,8 @@
 #include <ftw.h>
 #endif
 
+#include <gdk/gdk.h>
+
 #include "gtksearchenginesimple.h"
 #include "gtkprivate.h"
 
@@ -188,6 +190,7 @@ send_batch (SearchThreadData *data)
       
       gdk_threads_add_idle (search_thread_add_hits_idle, hits);
     }
+
   data->uri_hits = NULL;
 }
 

@@ -45,6 +45,7 @@
 #include "gtktreemodelsort.h"
 #include "gtktooltip.h"
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
 #define GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC (GTK_TREE_VIEW_PRIORITY_VALIDATE + 2)

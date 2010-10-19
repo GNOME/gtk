@@ -47,6 +47,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkprivate.h"
 #include "gtktextutil.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 
 

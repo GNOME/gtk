@@ -38,6 +38,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"

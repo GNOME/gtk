@@ -103,6 +103,7 @@
 
 #include "gtkrecentmanager.h"
 #include "gtkintl.h"
+#include "gtksettings.h"
 #include "gtkstock.h"
 #include "gtkicontheme.h"
 #include "gtktypebuiltins.h"

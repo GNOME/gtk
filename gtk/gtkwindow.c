@@ -47,8 +47,8 @@
 #include "gtkicontheme.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
-#include "gtkprivate.h"
 #include "gtkbuildable.h"
+#include "gtkwidgetprivate.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"

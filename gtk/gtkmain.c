@@ -59,7 +59,7 @@
 #include "gtkrecentmanager.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
-#include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtktooltip.h"
 #include "gtkdebug.h"

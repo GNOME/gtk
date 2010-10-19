@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 
 /**

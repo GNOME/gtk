@@ -22,11 +22,14 @@
  */
 
 #include <config.h>
+
 #include "gtksizerequest.h"
-#include "gtksizegroup-private.h"
+
 #include "gtkdebug.h"
-#include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtksizegroup-private.h"
+#include "gtkwidgetprivate.h"
 
 /* looks for a cached size request for this for_size. If not
  * found, returns the oldest entry so it can be overwritten

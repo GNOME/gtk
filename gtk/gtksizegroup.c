@@ -20,13 +20,13 @@
 
 #include "config.h"
 #include <string.h>
+
+#include "gtkbuildable.h"
 #include "gtkcontainer.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtksizegroup-private.h"
-#include "gtkbuildable.h"
-
-
+#include "gtkwidgetprivate.h"
 
 struct _GtkSizeGroupPrivate
 {

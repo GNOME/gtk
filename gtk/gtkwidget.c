@@ -42,6 +42,7 @@
 #include "gtksettings.h"
 #include "gtksizegroup-private.h"
 #include "gtkwidget.h"
+#include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkbindings.h"
 #include "gtkprivate.h"

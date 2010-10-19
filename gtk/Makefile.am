@@ -16,7 +16,7 @@ GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %
 endif
 
 SUBDIRS = theme-bits . tests
-DIST_SUBDIRS=theme-bits tests
+DIST_SUBDIRS = theme-bits tests
 
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups
@@ -396,6 +396,7 @@ gtk_private_h_sources =		\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwindow-decorate.h	\
+	gtkwidgetprivate.h	\
 	$(gtk_clipboard_dnd_h_sources)
 
 # GTK+ C sources to build the library from

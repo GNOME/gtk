@@ -21,6 +21,8 @@
 #include "config.h"
 #include <string.h>
 
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
 #include "gtkfilefilter.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
