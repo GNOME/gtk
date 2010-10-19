@@ -41,6 +41,7 @@ G_BEGIN_DECLS
 #define GTK_TYPE_IDENTIFIER (gtk_identifier_get_type ())
 GType gtk_identifier_get_type (void) G_GNUC_CONST;
 
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /* --- typedefs --- */
 /* here we come with some necessary forward declarations for structures and
  * provide some fundamental function signatures
@@ -54,6 +55,8 @@ typedef struct _GtkArg	       	     GtkArg;
  * Defines a function pointer.
  *
  * Returns: #gint
+ *
+ * Deprecated: 2.24: Use GSourceFunc() instead.
  */
 typedef gboolean (*GtkFunction)	    (gpointer      data);
 
@@ -65,19 +68,14 @@ typedef gboolean (*GtkFunction)	    (gpointer      data);
  * @args: #GtkArg*
  *
  * Defines a function pointer.
+ *
+ * Deprecated: 2.24:
  */
 typedef void (*GtkCallbackMarshal)  (GObject      *object,
 				     gpointer      data,
 				     guint         n_args,
 				     GtkArg       *args);
 
-/* This used to be defined in gtkitemfactory.h, but moved over here after
- * the complete deprecation of that header
- */
-typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
-				     gpointer      func_data);
-
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /**
  * GtkArg:
  *
@@ -118,7 +116,14 @@ struct _GtkArg
     } signal_data;
   } d;
 };
-#endif /* GTK_COMPILATION */
+#endif /* GTK_DISABLE_DEPRECATED */
+
+/* This used to be defined in gtkitemfactory.h, but moved over here after
+ * the complete deprecation of that header
+ */
+typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
+                                     gpointer      func_data);
+
 
 G_END_DECLS
 
