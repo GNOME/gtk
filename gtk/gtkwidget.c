@@ -3273,6 +3273,8 @@ gtk_widget_show_now (GtkWidget *widget)
  * 
  * Reverses the effects of gtk_widget_show(), causing the widget to be
  * hidden (invisible to the user).
+ *
+ * Deprecated: 2.0: Use gtk_widget_hide() instead.
  **/
 void
 gtk_widget_hide (GtkWidget *widget)

@@ -843,6 +843,7 @@ void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_set		  (GtkWidget	       *widget,
 					   const gchar         *first_property_name,
 					   ...) G_GNUC_NULL_TERMINATED;
+void       gtk_widget_hide_all            (GtkWidget           *widget);
 #endif /* GTK_DISABLE_DEPRECATED */
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
