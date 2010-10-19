@@ -689,6 +689,8 @@ create_scanner (void)
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "hover", GUINT_TO_POINTER (GTK_STATE_PRELIGHT));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "selected", GUINT_TO_POINTER (GTK_STATE_SELECTED));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "insensitive", GUINT_TO_POINTER (GTK_STATE_INSENSITIVE));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "inconsistent", GUINT_TO_POINTER (GTK_STATE_INCONSISTENT));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "focused", GUINT_TO_POINTER (GTK_STATE_FOCUSED));
 
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "nth-child", GUINT_TO_POINTER (SYMBOL_NTH_CHILD));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "first-child", GUINT_TO_POINTER (SYMBOL_FIRST_CHILD));
