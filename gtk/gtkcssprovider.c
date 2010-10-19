@@ -469,6 +469,8 @@ enum ParserSymbol {
   SYMBOL_NTH_CHILD = GTK_STATE_LAST,
   SYMBOL_FIRST_CHILD,
   SYMBOL_LAST_CHILD,
+  SYMBOL_DEFAULT_CHILD,
+  SYMBOL_SORTED_CHILD,
 
   /* Scope: nth-child */
   SYMBOL_NTH_CHILD_EVEN,
@@ -695,6 +697,8 @@ create_scanner (void)
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "nth-child", GUINT_TO_POINTER (SYMBOL_NTH_CHILD));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "first-child", GUINT_TO_POINTER (SYMBOL_FIRST_CHILD));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "last-child", GUINT_TO_POINTER (SYMBOL_LAST_CHILD));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "default", GUINT_TO_POINTER (SYMBOL_DEFAULT_CHILD));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "sorted", GUINT_TO_POINTER (SYMBOL_SORTED_CHILD));
 
   g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "even", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_EVEN));
   g_scanner_scope_add_symbol (scanner, SCOPE_NTH_CHILD, "odd", GUINT_TO_POINTER (SYMBOL_NTH_CHILD_ODD));
@@ -1307,6 +1311,10 @@ parse_nth_child (GtkCssProvider *css_provider,
     *flags = GTK_REGION_FIRST;
   else if (symbol == SYMBOL_LAST_CHILD)
     *flags = GTK_REGION_LAST;
+  else if (symbol == SYMBOL_DEFAULT_CHILD)
+    *flags = GTK_REGION_DEFAULT;
+  else if (symbol == SYMBOL_SORTED_CHILD)
+    *flags = GTK_REGION_SORTED;
   else
     {
       *flags = 0;
@@ -1453,7 +1461,9 @@ parse_selector (GtkCssProvider  *css_provider,
 
               if (symbol == SYMBOL_FIRST_CHILD ||
                   symbol == SYMBOL_LAST_CHILD ||
-                  symbol == SYMBOL_NTH_CHILD)
+                  symbol == SYMBOL_NTH_CHILD ||
+                  symbol == SYMBOL_DEFAULT_CHILD ||
+                  symbol == SYMBOL_SORTED_CHILD)
                 {
                   GTokenType token;
 
