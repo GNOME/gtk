@@ -364,11 +364,12 @@ bool_modified (GtkToggleButton *tb, gpointer data)
       GtkWidget *widget = GTK_WIDGET (p->obj);
       GtkWidget *parent = gtk_widget_get_parent (widget);
 
-      gtk_container_child_set (GTK_CONTAINER (parent), 
-			       widget, p->spec->name, (int) tb->active, NULL);
+      gtk_container_child_set (GTK_CONTAINER (parent), widget,
+                               p->spec->name, (int) gtk_toggle_button_get_active (tb),
+                               NULL);
     }
   else
-    g_object_set (p->obj, p->spec->name, (int) tb->active, NULL);
+    g_object_set (p->obj, p->spec->name, (int) gtk_toggle_button_get_active (tb), NULL);
 }
 
 static void
@@ -381,7 +382,7 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_init (&val, G_TYPE_BOOLEAN);
   get_property_value (object, pspec, &val);
 
-  if (g_value_get_boolean (&val) != tb->active)
+  if (g_value_get_boolean (&val) != gtk_toggle_button_get_active (tb))
     {
       block_controller (G_OBJECT (tb));
       gtk_toggle_button_set_active (tb, g_value_get_boolean (&val));
