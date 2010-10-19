@@ -3273,9 +3273,7 @@ gtk_widget_show_now (GtkWidget *widget)
  * 
  * Reverses the effects of gtk_widget_show(), causing the widget to be
  * hidden (invisible to the user).
- *
- * Deprecated: 2.0: Use gtk_widget_hide() instead.
- **/
+ */
 void
 gtk_widget_hide (GtkWidget *widget)
 {
@@ -3361,7 +3359,9 @@ gtk_widget_show_all (GtkWidget *widget)
  * @widget: a #GtkWidget
  * 
  * Recursively hides a widget and any child widgets.
- **/
+ *
+ * Deprecated: 2.24: Use gtk_widget_hide() instead.
+ */
 void
 gtk_widget_hide_all (GtkWidget *widget)
 {
