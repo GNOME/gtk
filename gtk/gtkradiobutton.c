@@ -25,9 +25,12 @@
  */
 
 #include "config.h"
+
+#include "gtkradiobutton.h"
+
+#include "gtkbuttonprivate.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
-#include "gtkradiobutton.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -209,7 +212,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 
   _gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
 
-  GTK_BUTTON (radio_button)->depress_on_activate = FALSE;
+  GTK_BUTTON (radio_button)->priv->depress_on_activate = FALSE;
 
   priv->group = g_slist_prepend (NULL, radio_button);
 
@@ -814,14 +817,14 @@ gtk_radio_button_clicked (GtkButton *button)
 
       if (!tmp_button)
 	{
-	  new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
+	  new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
 	}
       else
 	{
 	  toggled = TRUE;
           _gtk_toggle_button_set_active (toggle_button,
                                          !gtk_toggle_button_get_active (toggle_button));
-	  new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
+	  new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
 	}
     }
   else
@@ -843,12 +846,12 @@ gtk_radio_button_clicked (GtkButton *button)
 	    }
 	}
 
-      new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
+      new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
     }
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     depressed = FALSE;
-  else if (button->in_button && button->button_down)
+  else if (button->priv->in_button && button->priv->button_down)
     depressed = !gtk_toggle_button_get_active (toggle_button);
   else
     depressed = gtk_toggle_button_get_active (toggle_button);
@@ -923,9 +926,9 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   else
     shadow_type = GTK_SHADOW_OUT;
 
-  if (button->activate_timeout || (button->button_down && button->in_button))
+  if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
     state_type = GTK_STATE_ACTIVE;
-  else if (button->in_button)
+  else if (button->priv->in_button)
     state_type = GTK_STATE_PRELIGHT;
   else if (!gtk_widget_is_sensitive (widget))
     state_type = GTK_STATE_INSENSITIVE;

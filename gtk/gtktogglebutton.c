@@ -25,10 +25,13 @@
  */
 
 #include "config.h"
+
+#include "gtktogglebutton.h"
+
+#include "gtkbuttonprivate.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtktogglebutton.h"
 #include "gtktoggleaction.h"
 #include "gtkactivatable.h"
 #include "gtkprivate.h"
@@ -164,7 +167,7 @@ gtk_toggle_button_init (GtkToggleButton *toggle_button)
 
   priv->active = FALSE;
   priv->draw_indicator = FALSE;
-  GTK_BUTTON (toggle_button)->depress_on_activate = TRUE;
+  GTK_BUTTON (toggle_button)->priv->depress_on_activate = TRUE;
 }
 
 static void
@@ -327,8 +330,8 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
   if (priv->draw_indicator != draw_indicator)
     {
       priv->draw_indicator = draw_indicator;
-      GTK_BUTTON (toggle_button)->depress_on_activate = !draw_indicator;
-      
+      GTK_BUTTON (toggle_button)->priv->depress_on_activate = !draw_indicator;
+
       if (gtk_widget_get_visible (GTK_WIDGET (toggle_button)))
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
 
@@ -468,7 +471,7 @@ gtk_toggle_button_draw (GtkWidget *widget,
       shadow_type = GTK_SHADOW_ETCHED_IN;
     }
   else
-    shadow_type = button->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
+    shadow_type = button->priv->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
 
   _gtk_button_paint (button, cr,
                      gtk_widget_get_allocated_width (widget),
@@ -503,7 +506,7 @@ gtk_toggle_button_mnemonic_activate (GtkWidget *widget,
 static void
 gtk_toggle_button_pressed (GtkButton *button)
 {
-  button->button_down = TRUE;
+  button->priv->button_down = TRUE;
 
   gtk_toggle_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
@@ -512,11 +515,11 @@ gtk_toggle_button_pressed (GtkButton *button)
 static void
 gtk_toggle_button_released (GtkButton *button)
 {
-  if (button->button_down)
+  if (button->priv->button_down)
     {
-      button->button_down = FALSE;
+      button->priv->button_down = FALSE;
 
-      if (button->in_button)
+      if (button->priv->in_button)
 	gtk_button_clicked (button);
 
       gtk_toggle_button_update_state (button);
@@ -556,12 +559,12 @@ gtk_toggle_button_update_state (GtkButton *button)
 
   if (priv->inconsistent)
     depressed = FALSE;
-  else if (button->in_button && button->button_down)
+  else if (button->priv->in_button && button->priv->button_down)
     depressed = TRUE;
   else
     depressed = priv->active;
 
-  if (!touchscreen && button->in_button && (!button->button_down || priv->draw_indicator))
+  if (!touchscreen && button->priv->in_button && (!button->priv->button_down || priv->draw_indicator))
     new_state = GTK_STATE_PRELIGHT;
   else
     new_state = depressed ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL;

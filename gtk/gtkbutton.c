@@ -39,9 +39,12 @@
  */
 
 #include "config.h"
+
+#include "gtkbutton.h"
+#include "gtkbuttonprivate.h"
+
 #include <string.h>
 #include "gtkalignment.h"
-#include "gtkbutton.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -54,38 +57,6 @@
 #include "gtksizerequest.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
-
-
-struct _GtkButtonPrivate
-{
-  GtkAction             *action;
-  GtkPositionType        image_position;
-  GtkWidget             *image;
-
-  GdkDevice             *grab_keyboard;
-  GdkWindow             *event_window;
-
-  gchar         *label_text;
-
-  gfloat         xalign;
-  gfloat         yalign;
-
-  guint          activate_timeout;
-  guint32        grab_time;
-
-  guint          align_set             : 1;
-  guint          button_down           : 1;
-  guint          constructed           : 1;
-  guint          depressed             : 1;
-  guint          depress_on_activate   : 1;
-  guint          focus_on_click        : 1;
-  guint          image_is_stock        : 1;
-  guint          in_button             : 1;
-  guint          relief                : 2;
-  guint          use_action_appearance : 1;
-  guint          use_stock             : 1;
-  guint          use_underline         : 1;
-};
 
 
 static const GtkBorder default_default_border = { 1, 1, 1, 1 };

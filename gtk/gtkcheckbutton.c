@@ -28,6 +28,7 @@
 
 #include "gtkcheckbutton.h"
 
+#include "gtkbuttonprivate.h"
 #include "gtklabel.h"
 
 #include "gtkprivate.h"
@@ -452,9 +453,9 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   else
     shadow_type = GTK_SHADOW_OUT;
 
-  if (button->activate_timeout || (button->button_down && button->in_button))
+  if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
     state_type = GTK_STATE_ACTIVE;
-  else if (button->in_button)
+  else if (button->priv->in_button)
     state_type = GTK_STATE_PRELIGHT;
   else if (!gtk_widget_is_sensitive (widget))
     state_type = GTK_STATE_INSENSITIVE;
