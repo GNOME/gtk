@@ -652,7 +652,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
   /* Radio buttons with draw_indicator unset focus "normally", since
    * they look like buttons to the user.
    */
-  if (!GTK_TOGGLE_BUTTON (widget)->draw_indicator)
+  if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
     return GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->focus (widget, direction);
   
   if (gtk_widget_is_focus (widget))
@@ -766,7 +766,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
       tmp_slist = priv->group;
       while (tmp_slist)
 	{
-	  if (GTK_TOGGLE_BUTTON (tmp_slist->data)->active)
+	  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tmp_slist->data)))
 	    selected_button = tmp_slist->data;
 	  tmp_slist = tmp_slist->next;
 	}
@@ -795,7 +795,7 @@ gtk_radio_button_clicked (GtkButton *button)
 
   g_object_ref (GTK_WIDGET (button));
 
-  if (toggle_button->active)
+  if (gtk_toggle_button_get_active (toggle_button))
     {
       tmp_button = NULL;
       tmp_list = priv->group;
@@ -805,7 +805,8 @@ gtk_radio_button_clicked (GtkButton *button)
 	  tmp_button = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_button->active && tmp_button != toggle_button)
+          if (tmp_button != toggle_button &&
+              gtk_toggle_button_get_active (tmp_button))
 	    break;
 
 	  tmp_button = NULL;
@@ -833,7 +834,7 @@ gtk_radio_button_clicked (GtkButton *button)
 	  tmp_button = tmp_list->data;
 	  tmp_list = tmp_list->next;
 
-	  if (tmp_button->active && (tmp_button != toggle_button))
+	  if (gtk_toggle_button_get_active (tmp_button) && (tmp_button != toggle_button))
 	    {
 	      gtk_button_clicked (GTK_BUTTON (tmp_button));
 	      break;
@@ -843,12 +844,12 @@ gtk_radio_button_clicked (GtkButton *button)
       new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
     }
 
-  if (toggle_button->inconsistent)
+  if (gtk_toggle_button_get_inconsistent (toggle_button))
     depressed = FALSE;
   else if (button->in_button && button->button_down)
-    depressed = !toggle_button->active;
+    depressed = !gtk_toggle_button_get_active (toggle_button);
   else
-    depressed = toggle_button->active;
+    depressed = gtk_toggle_button_get_active (toggle_button);
 
   if (gtk_widget_get_state (GTK_WIDGET (button)) != new_state)
     gtk_widget_set_state (GTK_WIDGET (button), new_state);
@@ -913,9 +914,9 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
     x += focus_width + focus_pad;      
 
-  if (toggle_button->inconsistent)
+  if (gtk_toggle_button_get_inconsistent (toggle_button))
     shadow_type = GTK_SHADOW_ETCHED_IN;
-  else if (toggle_button->active)
+  else if (gtk_toggle_button_get_active (toggle_button))
     shadow_type = GTK_SHADOW_IN;
   else
     shadow_type = GTK_SHADOW_OUT;
