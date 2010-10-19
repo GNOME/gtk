@@ -1080,6 +1080,9 @@ gtk_drag_begin_idle (gpointer arg)
 
   drag_image = _gtk_quartz_create_image_from_pixbuf (info->icon_pixbuf);
 
+  point.x -= info->hot_x;
+  point.y -= info->hot_y;
+
   [nswindow dragImage:drag_image
                    at:point
                offset:NSMakeSize(0, 0)
