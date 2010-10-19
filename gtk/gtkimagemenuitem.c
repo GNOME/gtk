@@ -186,15 +186,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 							GTK_TYPE_ACCEL_GROUP,
 							GTK_PARAM_WRITABLE));
 
-  gtk_settings_install_property (g_param_spec_boolean ("gtk-menu-images",
-						       P_("Show menu images"),
-						       P_("Whether images should be shown in menus"),
-						       TRUE,
-						       GTK_PARAM_READWRITE));
-  
-
-  g_type_class_add_private (object_class, sizeof (GtkImageMenuItemPrivate));
-
+  g_type_class_add_private (klass, sizeof (GtkImageMenuItemPrivate));
 }
 
 static void

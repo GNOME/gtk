@@ -206,15 +206,7 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
                                                              DEFAULT_IPADDING,
                                                              GTK_PARAM_READABLE));
 
-  gtk_settings_install_property (g_param_spec_int ("gtk-menu-bar-popup-delay",
-						   P_("Delay before drop down menus appear"),
-						   P_("Delay before the submenus of a menu bar appear"),
-						   0,
-						   G_MAXINT,
-						   0,
-						   GTK_PARAM_READWRITE));
-
-  g_type_class_add_private (gobject_class, sizeof (GtkMenuBarPrivate));  
+  g_type_class_add_private (gobject_class, sizeof (GtkMenuBarPrivate));
 }
 
 static void

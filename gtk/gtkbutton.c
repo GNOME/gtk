@@ -519,19 +519,6 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     2,
 							     GTK_PARAM_READABLE));
 
-  /**
-   * GtkSettings::gtk-button-images:
-   *
-   * Whether images should be shown on buttons
-   *
-   * Since: 2.4
-   */
-  gtk_settings_install_property (g_param_spec_boolean ("gtk-button-images",
-						       P_("Show button images"),
-						       P_("Whether images should be shown on buttons"),
-						       TRUE,
-						       GTK_PARAM_READWRITE));
-
   g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));
 }
 

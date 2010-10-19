@@ -855,13 +855,6 @@ gtk_label_class_init (GtkLabelClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KP_Enter, 0,
 				"activate-current-link", 0);
 
-  gtk_settings_install_property (g_param_spec_boolean ("gtk-label-select-on-focus",
-						       P_("Select on focus"),
-						       P_("Whether to select the contents of a selectable label when it is focused"),
-						       TRUE,
-						       GTK_PARAM_READWRITE));
-
-				
   g_type_class_add_private (class, sizeof (GtkLabelPrivate));
 }
 

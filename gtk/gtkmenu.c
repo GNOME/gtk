@@ -46,9 +46,6 @@
 #include "gtkalias.h"
 
 
-#define DEFAULT_POPUP_DELAY     225
-#define DEFAULT_POPDOWN_DELAY  1000
-
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
 					 * extends below the submenu
 					 */
@@ -800,28 +797,6 @@ gtk_menu_class_init (GtkMenuClass *class)
 				"move-scroll", 1,
 				GTK_TYPE_SCROLL_TYPE,
 				GTK_SCROLL_PAGE_DOWN);
-
-  gtk_settings_install_property (g_param_spec_boolean ("gtk-can-change-accels",
-						       P_("Can change accelerators"),
-						       P_("Whether menu accelerators can be changed by pressing a key over the menu item"),
-						       FALSE,
-						       GTK_PARAM_READWRITE));
-
-  gtk_settings_install_property (g_param_spec_int ("gtk-menu-popup-delay",
-						   P_("Delay before submenus appear"),
-						   P_("Minimum time the pointer must stay over a menu item before the submenu appear"),
-						   0,
-						   G_MAXINT,
-						   DEFAULT_POPUP_DELAY,
-						   GTK_PARAM_READWRITE));
-
-  gtk_settings_install_property (g_param_spec_int ("gtk-menu-popdown-delay",
-						   P_("Delay before hiding a submenu"),
-						   P_("The time before hiding a submenu when the pointer is moving towards the submenu"),
-						   0,
-						   G_MAXINT,
-						   DEFAULT_POPDOWN_DELAY,
-						   GTK_PARAM_READWRITE));
 
   g_type_class_add_private (gobject_class, sizeof (GtkMenuPrivate));
 }

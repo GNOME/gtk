@@ -301,21 +301,18 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							     GTK_PARAM_READABLE));
 
   /**
-   * GtkSettings:gtk-scrolled-window-placement:
+   * GtkScrolledWindow::scroll-child:
+   * @scrolled_window: a #GtkScrolledWindow
+   * @scroll: a #GtkScrollType describing how much to scroll
+   * @horizontal: whether the keybinding scrolls the child
+   *   horizontally or not
    *
-   * Where the contents of scrolled windows are located with respect to the 
-   * scrollbars, if not overridden by the scrolled window's own placement.
-   *
-   * Since: 2.10
+   * The ::scroll-child signal is a
+   * <link linkend="keybinding-signals">keybinding signal</link>
+   * which gets emitted when a keybinding that scrolls is pressed.
+   * The horizontal or vertical adjustment is updated which triggers a
+   * signal that the scrolled windows child may listen to and scroll itself.
    */
-  gtk_settings_install_property (g_param_spec_enum ("gtk-scrolled-window-placement",
-						    P_("Scrolled Window Placement"),
-						    P_("Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."),
-						    GTK_TYPE_CORNER_TYPE,
-						    GTK_CORNER_TOP_LEFT,
-						    G_PARAM_READABLE | G_PARAM_WRITABLE));
-
-
   signals[SCROLL_CHILD] =
     g_signal_new (I_("scroll-child"),
                   G_TYPE_FROM_CLASS (object_class),

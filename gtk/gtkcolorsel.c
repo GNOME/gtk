@@ -61,6 +61,9 @@
 #include "gtkintl.h"
 #include "gtkalias.h"
 
+/* Keep it in sync with gtksettings.c:default_color_palette */
+#define DEFAULT_COLOR_PALETTE   "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90"
+
 /* Number of elements in the custom palatte */
 #define GTK_CUSTOM_PALETTE_WIDTH 10
 #define GTK_CUSTOM_PALETTE_HEIGHT 2
@@ -232,8 +235,6 @@ static void shutdown_eyedropper (GtkWidget *widget);
 
 static guint color_selection_signals[LAST_SIGNAL] = { 0 };
 
-static const gchar default_colors[] = "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
-
 static GtkColorSelectionChangePaletteFunc noscreen_change_palette_hook = default_noscreen_change_palette_func;
 static GtkColorSelectionChangePaletteWithScreenFunc change_palette_hook = default_change_palette_func;
 
@@ -320,13 +321,7 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
-  gtk_settings_install_property (g_param_spec_string ("gtk-color-palette",
-                                                      P_("Custom palette"),
-                                                      P_("Palette to use in the color selector"),
-                                                      default_colors,
-                                                      GTK_PARAM_READWRITE));
-
-   g_type_class_add_private (gobject_class, sizeof (ColorSelectionPrivate));
+  g_type_class_add_private (gobject_class, sizeof (ColorSelectionPrivate));
 }
 
 static void
@@ -1175,13 +1170,13 @@ get_current_colors (GtkColorSelection *colorsel)
   gchar *palette;
 
   settings = gtk_widget_get_settings (GTK_WIDGET (colorsel));
-  g_object_get (settings,
-		"gtk-color-palette", &palette,
-		NULL);
+  g_object_get (settings, "gtk-color-palette", &palette, NULL);
   
   if (!gtk_color_selection_palette_from_string (palette, &colors, &n_colors))
     {
-      gtk_color_selection_palette_from_string (default_colors, &colors, &n_colors);
+      gtk_color_selection_palette_from_string (DEFAULT_COLOR_PALETTE,
+                                               &colors,
+                                               &n_colors);
     }
   else
     {
@@ -1193,14 +1188,17 @@ get_current_colors (GtkColorSelection *colorsel)
 	  GdkColor *tmp_colors = colors;
 	  gint tmp_n_colors = n_colors;
 	  
-	  gtk_color_selection_palette_from_string (default_colors, &colors, &n_colors);
+	  gtk_color_selection_palette_from_string (DEFAULT_COLOR_PALETTE,
+                                                   &colors,
+                                                   &n_colors);
 	  memcpy (colors, tmp_colors, sizeof (GdkColor) * tmp_n_colors);
 
 	  g_free (tmp_colors);
 	}
     }
 
-  g_assert (n_colors >= GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT);
+  /* make sure that we fill every slot */
+  g_assert (n_colors == GTK_CUSTOM_PALETTE_WIDTH * GTK_CUSTOM_PALETTE_HEIGHT);
   g_free (palette);
   
   return colors;
