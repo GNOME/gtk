@@ -207,7 +207,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
   gtk_widget_set_has_window (GTK_WIDGET (radio_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
 
-  GTK_TOGGLE_BUTTON (radio_button)->active = TRUE;
+  _gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
 
   GTK_BUTTON (radio_button)->depress_on_activate = FALSE;
 
@@ -819,14 +819,16 @@ gtk_radio_button_clicked (GtkButton *button)
       else
 	{
 	  toggled = TRUE;
-	  toggle_button->active = !toggle_button->active;
+          _gtk_toggle_button_set_active (toggle_button,
+                                         !gtk_toggle_button_get_active (toggle_button));
 	  new_state = (button->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
 	}
     }
   else
     {
       toggled = TRUE;
-      toggle_button->active = !toggle_button->active;
+      _gtk_toggle_button_set_active (toggle_button,
+                                     !gtk_toggle_button_get_active (toggle_button));
 
       tmp_list = priv->group;
       while (tmp_list)

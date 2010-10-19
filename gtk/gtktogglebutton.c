@@ -347,6 +347,13 @@ gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
     gtk_button_clicked (GTK_BUTTON (toggle_button));
 }
 
+void
+_gtk_toggle_button_set_active (GtkToggleButton *toggle_button,
+                               gboolean         is_active)
+{
+  toggle_button->active = is_active;
+}
+
 
 gboolean
 gtk_toggle_button_get_active (GtkToggleButton *toggle_button)
