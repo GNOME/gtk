@@ -582,6 +582,7 @@ timeline_finished_cb (GtkTimeline *timeline,
 
 static AnimationInfo *
 animation_info_new (GtkStyleContext         *context,
+                    gpointer                 region_id,
                     gdouble                  duration,
                     GtkTimelineProgressType  progress_type,
                     GtkStateType             state,
@@ -597,6 +598,7 @@ animation_info_new (GtkStyleContext         *context,
   info->window = g_object_ref (window);
   info->state = state;
   info->target_value = target_value;
+  info->region_id = region_id;
 
   gtk_timeline_set_progress_type (info->timeline, progress_type);
 
@@ -2515,7 +2517,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
     }
   else
     {
-      info = animation_info_new (context,
+      info = animation_info_new (context, region_id,
                                  gtk_animation_description_get_duration (desc),
                                  gtk_animation_description_get_progress_type (desc),
                                  state, state_value, window);
