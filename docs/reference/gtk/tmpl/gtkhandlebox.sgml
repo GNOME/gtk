@@ -115,11 +115,6 @@ handlebox are detached from the main window.
 
 </para>
 
-<!-- ##### ARG GtkHandleBox:shadow ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkHandleBox:shadow-type ##### -->
 <para>
 

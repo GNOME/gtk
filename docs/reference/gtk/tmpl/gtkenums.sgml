@@ -29,29 +29,6 @@ Public enumerated types used throughout GTK+
 @GTK_ACCEL_LOCKED: 
 @GTK_ACCEL_MASK: 
 
-<!-- ##### ENUM GtkAnchorType ##### -->
-<para>
-
-</para>
-
-@GTK_ANCHOR_CENTER: 
-@GTK_ANCHOR_NORTH: 
-@GTK_ANCHOR_NORTH_WEST: 
-@GTK_ANCHOR_NORTH_EAST: 
-@GTK_ANCHOR_SOUTH: 
-@GTK_ANCHOR_SOUTH_WEST: 
-@GTK_ANCHOR_SOUTH_EAST: 
-@GTK_ANCHOR_WEST: 
-@GTK_ANCHOR_EAST: 
-@GTK_ANCHOR_N: 
-@GTK_ANCHOR_NW: 
-@GTK_ANCHOR_NE: 
-@GTK_ANCHOR_S: 
-@GTK_ANCHOR_SW: 
-@GTK_ANCHOR_SE: 
-@GTK_ANCHOR_W: 
-@GTK_ANCHOR_E: 
-
 <!-- ##### ENUM GtkArrowPlacement ##### -->
 <para>
 Used to specify the placement of scroll arrows in scrolling menus.
@@ -89,7 +66,6 @@ Used to dictate the style that a #GtkButtonBox uses to layout the buttons it
 contains. (See also: #GtkVButtonBox and #GtkHButtonBox).
 </para>
 
-@GTK_BUTTONBOX_DEFAULT_STYLE: Default packing.
 @GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the box.
 @GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the box.
 @GTK_BUTTONBOX_START: Buttons are grouped towards the start of the box, 
@@ -334,7 +310,6 @@ Used to control what selections users are allowed to make.
    The Ctrl key may be used to enlarge the selection, and Shift key to select 
    between the focus and the child pointed to. Some widgets may also allow
    Click-drag to select a range of elements.
-@GTK_SELECTION_EXTENDED: Deprecated, behaves identical to %GTK_SELECTION_MULTIPLE.
 
 <!-- ##### ENUM GtkShadowType ##### -->
 <para>
@@ -363,22 +338,6 @@ the widget and the widget will respond to mouse clicks.
 @GTK_STATE_INSENSITIVE: State indicating that the widget is
 unresponsive to user actions.
 
-<!-- ##### ENUM GtkSubmenuDirection ##### -->
-<para>
-Indicates the direction a sub-menu will appear.
-</para>
-
-@GTK_DIRECTION_LEFT: A sub-menu will appear to the left of the current menu.
-@GTK_DIRECTION_RIGHT: A sub-menu will appear to the right of the current menu.
-
-<!-- ##### ENUM GtkSubmenuPlacement ##### -->
-<para>
-
-</para>
-
-@GTK_TOP_BOTTOM: 
-@GTK_LEFT_RIGHT: 
-
 <!-- ##### ENUM GtkToolbarStyle ##### -->
 <para>
 Used to customize the appearance of a #GtkToolbar. Note that 
@@ -402,15 +361,6 @@ Used by #GtkRange to control the policy for notifying value changes.
 @GTK_UPDATE_CONTINUOUS: Notify updates whenever the value changed
 @GTK_UPDATE_DISCONTINUOUS: Notify updates when the mouse button has been released
 @GTK_UPDATE_DELAYED: Space out updates with a small timeout
-
-<!-- ##### ENUM GtkVisibility ##### -->
-<para>
-Used by #GtkCList and #GtkCTree to indicate whether a row is visible.
-</para>
-
-@GTK_VISIBILITY_NONE: The row is not visible.
-@GTK_VISIBILITY_PARTIAL: The row is partially visible.
-@GTK_VISIBILITY_FULL: The row is fully visible.
 
 <!-- ##### ENUM GtkWindowPosition ##### -->
 <para>

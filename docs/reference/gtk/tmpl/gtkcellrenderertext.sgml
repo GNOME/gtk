@@ -143,6 +143,11 @@ the #GtkCellRendererText allows to edit its text using an entry.
 
 </para>
 
+<!-- ##### ARG GtkCellRendererText:max-width-chars ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG GtkCellRendererText:rise ##### -->
 <para>
 

@@ -143,8 +143,8 @@ g_object_unref (context);
 
 </para>
 
-@void:
-@Returns:
+@void: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gdk_pango_context_get_for_screen ##### -->
@@ -152,7 +152,7 @@ g_object_unref (context);
 
 </para>
 
-@screen:
-@Returns:
+@screen: 
+@Returns: 
 
 

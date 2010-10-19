@@ -155,7 +155,7 @@ Creates a new #GtkProgressBar.
 </para>
 
 @pbar: 
-@inverted:
+@inverted: 
 
 
 <!-- ##### FUNCTION gtk_progress_bar_get_inverted ##### -->
@@ -237,3 +237,5 @@ Creates a new #GtkProgressBar.
 
 @pbar: 
 @Returns: 
+
+

@@ -367,11 +367,6 @@ internal GtkTreeSelection in UI definitions.
 
 </para>
 
-<!-- ##### ARG GtkTreeView:row-ending-details ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkTreeView:tree-line-pattern ##### -->
 <para>
 

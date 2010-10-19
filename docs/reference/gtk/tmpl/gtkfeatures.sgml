@@ -22,6 +22,51 @@ typically use the features described here.
 <!-- ##### SECTION Image ##### -->
 
 
+<!-- ##### FUNCTION gtk_get_major_version ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_get_minor_version ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_get_micro_version ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_get_binary_age ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_get_interface_age ##### -->
+<para>
+
+</para>
+
+@void: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_check_version ##### -->
 <para>
 </para>

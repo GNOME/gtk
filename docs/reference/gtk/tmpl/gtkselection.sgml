@@ -86,6 +86,34 @@ selection handling code.
 @flags: 
 @info: 
 
+<!-- ##### FUNCTION gtk_target_entry_new ##### -->
+<para>
+
+</para>
+
+@target: 
+@flags: 
+@info: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_target_entry_copy ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_target_entry_free ##### -->
+<para>
+
+</para>
+
+@data: 
+
+
 <!-- ##### FUNCTION gtk_target_list_new ##### -->
 <para>
 </para>

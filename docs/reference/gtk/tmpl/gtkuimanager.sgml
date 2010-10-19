@@ -336,7 +336,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @add_tearoffs: 
 
 
@@ -345,7 +345,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @Returns: 
 
 
@@ -354,7 +354,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @action_group: 
 @pos: 
 
@@ -364,7 +364,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @action_group: 
 
 
@@ -373,7 +373,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @Returns: 
 
 
@@ -382,7 +382,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @Returns: 
 
 
@@ -391,7 +391,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @path: 
 @Returns: 
 
@@ -401,7 +401,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @types: 
 @Returns: 
 
@@ -411,7 +411,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @path: 
 @Returns: 
 
@@ -421,7 +421,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @buffer: 
 @length: 
 @error: 
@@ -433,7 +433,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @filename: 
 @error: 
 @Returns: 
@@ -444,7 +444,7 @@ members and should not be accessed directly.
 
 </para>
 
-@self: 
+@manager: 
 @Returns: 
 
 
@@ -471,7 +471,7 @@ what UI element to create.
 
 </para>
 
-@self: 
+@manager: 
 @merge_id: 
 @path: 
 @name: 
@@ -485,7 +485,7 @@ what UI element to create.
 
 </para>
 
-@self: 
+@manager: 
 @merge_id: 
 
 
@@ -494,7 +494,7 @@ what UI element to create.
 
 </para>
 
-@self: 
+@manager: 
 @Returns: 
 
 
@@ -503,6 +503,6 @@ what UI element to create.
 
 </para>
 
-@self: 
+@manager: 
 
 

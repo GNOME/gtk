@@ -358,7 +358,7 @@ Another name for GDK_DRAWABLE_XID().
 
 </para>
 
-@display:
+@display: 
 
 
 <!-- ##### FUNCTION gdk_x11_display_error_trap_pop_ignored ##### -->
@@ -366,7 +366,7 @@ Another name for GDK_DRAWABLE_XID().
 
 </para>
 
-@display:
+@display: 
 
 
 <!-- ##### FUNCTION gdk_x11_display_set_cursor_theme ##### -->

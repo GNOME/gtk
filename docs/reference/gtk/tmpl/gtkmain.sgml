@@ -395,8 +395,8 @@ widget and this function does nothing.
 
 </para>
 
-@void:
-@Returns:
+@void: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_grab_remove ##### -->
@@ -430,6 +430,15 @@ If @widget does not have the grab, this function does nothing.
 @device: 
 
 
+<!-- ##### USER_FUNCTION GtkFunction ##### -->
+<para>
+
+</para>
+
+@data: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_init_add ##### -->
 <para>
 Registers a function to be called when the mainloop is started.
@@ -438,6 +447,7 @@ Registers a function to be called when the mainloop is started.
 @function: Function to invoke when gtk_main() is called next.
 @data: Data to pass to that function.
 @Deprecated: This function is going to be removed in GTK+ 3.0
+
 
 <!-- ##### FUNCTION gtk_quit_add_destroy ##### -->
 <para>
@@ -465,6 +475,25 @@ Registers a function to be called when an instance of the mainloop is left.
   or 0 if you passed a %NULL pointer in @function.
 @Deprecated: This function is going to be removed in GTK+ 3.0
 
+
+<!-- ##### USER_FUNCTION GtkCallbackMarshal ##### -->
+<para>
+
+</para>
+
+@object: 
+@data: 
+@n_args: 
+@args: 
+
+
+<!-- ##### STRUCT GtkArg ##### -->
+<para>
+
+</para>
+
+@type: 
+@name: 
 
 <!-- ##### FUNCTION gtk_quit_add_full ##### -->
 <para>

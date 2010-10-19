@@ -77,43 +77,7 @@ when GDK gets multihead support.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_screen_get_default_colormap ##### -->
-<para>
-
-</para>
-
-@screen: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_set_default_colormap ##### -->
-<para>
-
-</para>
-
-@screen: 
-@colormap: 
-
-
-<!-- ##### FUNCTION gdk_screen_get_system_colormap ##### -->
-<para>
-
-</para>
-
-@screen: 
-@Returns: 
-
-
 <!-- ##### FUNCTION gdk_screen_get_system_visual ##### -->
-<para>
-
-</para>
-
-@screen: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gdk_screen_get_rgba_colormap ##### -->
 <para>
 
 </para>

@@ -89,15 +89,6 @@ types related to the text widget and how they work together.
 @arg1: 
 @arg2: 
 
-<!-- ##### SIGNAL GtkTextView::page-horizontally ##### -->
-<para>
-
-</para>
-
-@textview: the object which received the signal.
-@arg1: 
-@arg2: 
-
 <!-- ##### SIGNAL GtkTextView::paste-clipboard ##### -->
 <para>
 

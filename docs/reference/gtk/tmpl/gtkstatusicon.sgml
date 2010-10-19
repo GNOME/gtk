@@ -115,11 +115,6 @@ on Win32 doesn't allow to embed arbitrary widgets.
 @arg1: 
 @Returns: 
 
-<!-- ##### ARG GtkStatusIcon:blinking ##### -->
-<para>
-
-</para>
-
 <!-- ##### ARG GtkStatusIcon:embedded ##### -->
 <para>
 
@@ -457,24 +452,6 @@ on Win32 doesn't allow to embed arbitrary widgets.
 
 
 <!-- ##### FUNCTION gtk_status_icon_get_visible ##### -->
-<para>
-
-</para>
-
-@status_icon: 
-@Returns: 
-
-
-<!-- ##### FUNCTION gtk_status_icon_set_blinking ##### -->
-<para>
-
-</para>
-
-@status_icon: 
-@blinking: 
-
-
-<!-- ##### FUNCTION gtk_status_icon_get_blinking ##### -->
 <para>
 
 </para>

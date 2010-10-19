@@ -245,6 +245,7 @@ Moves a #GtkMenuItem to a new position within the #GtkMenu.
 @parent_menu_item: 
 @func: 
 @data: 
+@destroy: 
 @button: 
 @activate_time: 
 

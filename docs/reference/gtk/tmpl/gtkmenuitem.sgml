@@ -78,6 +78,20 @@ submenu. For normal applications, the relevant signal is "activate".
 
 @menuitem: the object which received the signal.
 
+<!-- ##### SIGNAL GtkMenuItem::deselect ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+
+<!-- ##### SIGNAL GtkMenuItem::select ##### -->
+<para>
+
+</para>
+
+@menuitem: the object which received the signal.
+
 <!-- ##### SIGNAL GtkMenuItem::toggle-size-allocate ##### -->
 <para>
 

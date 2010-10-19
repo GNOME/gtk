@@ -404,11 +404,6 @@ The #GtkEntry-struct struct contains only private data.
 
 </para>
 
-<!-- ##### ARG GtkEntry:state-hint ##### -->
-<para>
-
-</para>
-
 <!-- ##### FUNCTION gtk_entry_new ##### -->
 <para>
 

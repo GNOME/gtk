@@ -181,6 +181,11 @@ it cannot be individually modified.
 </para>
 
 @parent_class: 
+@get_request_mode: 
+@get_preferred_width: 
+@get_preferred_height_for_width: 
+@get_preferred_height: 
+@get_preferred_width_for_height: 
 @get_size: 
 @render: 
 @activate: 
@@ -210,11 +215,10 @@ it cannot be individually modified.
 </para>
 
 @cell: 
-@window: 
+@cr: 
 @widget: 
 @background_area: 
 @cell_area: 
-@expose_area: 
 @flags: 
 
 
@@ -351,5 +355,94 @@ it cannot be individually modified.
 @cell: 
 @xpad: 
 @ypad: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_preferred_height ##### -->
+<para>
+
+</para>
+
+@cell: 
+@widget: 
+@minimum_size: 
+@natural_size: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_preferred_height_for_width ##### -->
+<para>
+
+</para>
+
+@cell: 
+@widget: 
+@width: 
+@minimum_height: 
+@natural_height: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_preferred_size ##### -->
+<para>
+
+</para>
+
+@cell: 
+@widget: 
+@minimum_size: 
+@natural_size: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_preferred_width ##### -->
+<para>
+
+</para>
+
+@cell: 
+@widget: 
+@minimum_size: 
+@natural_size: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_preferred_width_for_height ##### -->
+<para>
+
+</para>
+
+@cell: 
+@widget: 
+@height: 
+@minimum_width: 
+@natural_width: 
+
+
+<!-- ##### FUNCTION gtk_cell_renderer_get_request_mode ##### -->
+<para>
+
+</para>
+
+@cell: 
+@Returns: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_get_desired_height_for_width_of_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@path: 
+@avail_size: 
+@minimum_size: 
+@natural_size: 
+
+
+<!-- ##### FUNCTION gtk_cell_view_get_desired_width_of_row ##### -->
+<para>
+
+</para>
+
+@cell_view: 
+@path: 
+@minimum_size: 
+@natural_size: 
 
 

@@ -31,7 +31,7 @@ The #GtkCellRendererProgress cell renderer was added in GTK+ 2.6.
 </para>
 
 
-<!-- ##### ARG GtkCellRendererProgress:orientation ##### -->
+<!-- ##### ARG GtkCellRendererProgress:inverted ##### -->
 <para>
 
 </para>

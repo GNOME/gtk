@@ -224,8 +224,8 @@ drops.
 
 </para>
 
-@context:
-@Returns:
+@context: 
+@Returns: 
 
 
 <!-- ##### FUNCTION gtk_drag_highlight ##### -->
@@ -271,18 +271,6 @@ a widget.
 @hot_y: 
 
 
-<!-- ##### FUNCTION gtk_drag_set_icon_pixmap ##### -->
-<para>
-</para>
-
-@context: 
-@colormap: 
-@pixmap: 
-@mask: 
-@hot_x: 
-@hot_y: 
-
-
 <!-- ##### FUNCTION gtk_drag_set_icon_pixbuf ##### -->
 <para>
 
@@ -303,6 +291,15 @@ a widget.
 @stock_id: 
 @hot_x: 
 @hot_y: 
+
+
+<!-- ##### FUNCTION gtk_drag_set_icon_surface ##### -->
+<para>
+
+</para>
+
+@context: 
+@surface: 
 
 
 <!-- ##### FUNCTION gtk_drag_set_icon_name ##### -->
@@ -346,16 +343,6 @@ a widget.
 @targets: 
 @n_targets: 
 @actions: 
-
-
-<!-- ##### FUNCTION gtk_drag_source_set_icon ##### -->
-<para>
-</para>
-
-@widget: 
-@colormap: 
-@pixmap: 
-@mask: 
 
 
 <!-- ##### FUNCTION gtk_drag_source_set_icon_pixbuf ##### -->
