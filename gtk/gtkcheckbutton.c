@@ -273,7 +273,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
       gtk_widget_set_allocation (widget, allocation);
 
       if (gtk_widget_get_realized (widget))
-	gdk_window_move_resize (button->event_window,
+	gdk_window_move_resize (gtk_button_get_event_window (button),
 				allocation->x, allocation->y,
 				allocation->width, allocation->height);
 
