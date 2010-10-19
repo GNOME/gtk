@@ -35,7 +35,7 @@ typedef enum {
   COLOR_TYPE_MIX
 } ColorType;
 
-struct GtkSymbolicColor
+struct _GtkSymbolicColor
 {
   ColorType type;
   guint ref_count;
@@ -68,7 +68,7 @@ struct ColorStop
   GtkSymbolicColor *color;
 };
 
-struct GtkGradient
+struct _GtkGradient
 {
   gdouble x0;
   gdouble y0;
@@ -82,6 +82,16 @@ struct GtkGradient
   guint ref_count;
 };
 
+/**
+ * gtk_symbolic_color_new_literal:
+ * @color: a #GdkColor
+ *
+ * Creates a symbolic color pointing to a literal color.
+ *
+ * Returns: a newly created #GtkSymbolicColor
+ *
+ * Since: 3.0
+ **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_literal (GdkColor *color)
 {
@@ -97,6 +107,18 @@ gtk_symbolic_color_new_literal (GdkColor *color)
   return symbolic_color;
 }
 
+/**
+ * gtk_symbolic_color_new_name:
+ * @name: color name
+ *
+ * Creates a symbolic color pointing to an unresolved named
+ * color. See gtk_style_context_lookup_color() and
+ * gtk_style_set_lookup_color().
+ *
+ * Returns: a newly created #GtkSymbolicColor
+ *
+ * Since: 3.0
+ **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_name (const gchar *name)
 {
@@ -112,6 +134,20 @@ gtk_symbolic_color_new_name (const gchar *name)
   return symbolic_color;
 }
 
+/**
+ * gtk_symbolic_color_new_shade:
+ * @color: another #GtkSymbolicColor
+ * @factor: shading factor to apply to @color
+ *
+ * Creates a symbolic color defined as a shade of
+ * another color. A factor > 1.0 would resolve to
+ * a brighter color, while < 1.0 would resolve to
+ * a darker color.
+ *
+ * Returns: A newly created #GtkSymbolicColor
+ *
+ * Since: 3.0
+ **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
                               gdouble           factor)
@@ -129,6 +165,20 @@ gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
   return symbolic_color;
 }
 
+/**
+ * gtk_symbolic_color_new_mix:
+ * @color1: color to mix
+ * @color2: another color to mix
+ * @factor: mix factor
+ *
+ * Creates a symbolic color defined as a mix of another
+ * two colors. a mix factor of 0 would resolve to @color1,
+ * while a factor of 1 would resolve to @color2.
+ *
+ * Returns: A newly created #GtkSymbolicColor
+ *
+ * Since: 3.0
+ **/
 GtkSymbolicColor *
 gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
                             GtkSymbolicColor *color2,
@@ -149,6 +199,16 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
   return symbolic_color;
 }
 
+/**
+ * gtk_symbolic_color_ref:
+ * @color: a #GtkSymbolicColor
+ *
+ * Increases the reference count of @color
+ *
+ * Returns: the same @color
+ *
+ * Since: 3.0
+ **/
 GtkSymbolicColor *
 gtk_symbolic_color_ref (GtkSymbolicColor *color)
 {
@@ -159,6 +219,15 @@ gtk_symbolic_color_ref (GtkSymbolicColor *color)
   return color;
 }
 
+/**
+ * gtk_symbolic_color_unref:
+ * @color: a #GtkSymbolicColor
+ *
+ * Decreases the reference count of @color, freeing its memory if the
+ * reference count reaches 0.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_symbolic_color_unref (GtkSymbolicColor *color)
 {
@@ -188,6 +257,21 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
     }
 }
 
+/**
+ * gtk_symbolic_color_resolve:
+ * @color: a #GtkSymbolicColor
+ * @style_set: #GtkStyleSet to use when resolving named colors
+ * @resolved_color: (out): return location for the resolved color
+ *
+ * If @color is resolvable, @resolved_color will be filled in
+ * with the resolved color, and %TRUE will be returned. Generally,
+ * if @color can't be resolved, it is due to it being defined on
+ * top of a named color that doesn't exist in @style_set.
+ *
+ * Returns: %TRUE if the color has been resolved
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
                             GtkStyleSet         *style_set,
@@ -256,6 +340,20 @@ gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
 }
 
 /* GtkGradient */
+/**
+ * gtk_gradient_new_linear:
+ * @x0: X coordinate of the starting point
+ * @y0: Y coordinate of the starting point
+ * @x1: X coordinate of the end point
+ * @y1: Y coordinate of the end point
+ *
+ * Creates a new linear gradient along the line defined by (x0, y0) and (x1, y1). Before using the gradient
+ * a number of stop colors must be added through gtk_gradient_add_color_stop().
+ *
+ * Returns: A newly created #GtkGradient
+ *
+ * Since: 3.0
+ **/
 GtkGradient *
 gtk_gradient_new_linear (gdouble x0,
                          gdouble y0,
@@ -279,6 +377,23 @@ gtk_gradient_new_linear (gdouble x0,
   return gradient;
 }
 
+/**
+ * gtk_gradient_new_radial:
+ * @x0: X coordinate of the start circle
+ * @y0: Y coordinate of the start circle
+ * @radius0: radius of the start circle
+ * @x1: X coordinate of the end circle
+ * @y1: Y coordinate of the end circle
+ * @radius1: radius of the end circle
+ *
+ * Creates a new radial gradient along the two circles defined by (x0, y0, radius0) and
+ * (x1, y1, radius1). Before using the gradient a number of stop colors must be added
+ * through gtk_gradient_add_color_stop().
+ *
+ * Returns: A newly created #GtkGradient
+ *
+ * Since: 3.0
+ **/
 GtkGradient *
 gtk_gradient_new_radial (gdouble x0,
 			 gdouble y0,
@@ -304,6 +419,16 @@ gtk_gradient_new_radial (gdouble x0,
   return gradient;
 }
 
+/**
+ * gtk_gradient_add_color_stop:
+ * @gradient: a #GtkGradient
+ * @offset: offset for the color stop
+ * @color: color to use
+ *
+ * Adds a stop color to @gradient.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_gradient_add_color_stop (GtkGradient      *gradient,
                              gdouble           offset,
@@ -319,6 +444,16 @@ gtk_gradient_add_color_stop (GtkGradient      *gradient,
   g_array_append_val (gradient->stops, stop);
 }
 
+/**
+ * gtk_gradient_ref:
+ * @gradient: a #GtkGradient
+ *
+ * Increases the reference count of @gradient.
+ *
+ * Returns: The same @gradient
+ *
+ * Since: 3.0
+ **/
 GtkGradient *
 gtk_gradient_ref (GtkGradient *gradient)
 {
@@ -329,6 +464,15 @@ gtk_gradient_ref (GtkGradient *gradient)
   return gradient;
 }
 
+/**
+ * gtk_gradient_unref:
+ * @gradient: a #GtkGradient
+ *
+ * Decreases the reference count of @gradient, freeing its memory
+ * if the reference count reaches 0.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_gradient_unref (GtkGradient *gradient)
 {
@@ -353,6 +497,22 @@ gtk_gradient_unref (GtkGradient *gradient)
     }
 }
 
+/**
+ * gtk_gradient_resolve:
+ * @gradient: a #GtkGradient
+ * @style_set: #GtkStyleSet to use when resolving named colors
+ * @resolved_gradient: (out): return location for the resolved pattern
+ *
+ * If @gradient is resolvable, @resolved_gradient will be filled in
+ * with the resolved gradient as a cairo_pattern_t, and %TRUE will
+ * be returned. Generally, if @gradient can't be resolved, it is
+ * due to it being defined on top of a named color that doesn't
+ * exist in @style_set.
+ *
+ * Returns: %TRUE if the gradient has been resolved
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_gradient_resolve (GtkGradient      *gradient,
                       GtkStyleSet      *style_set,

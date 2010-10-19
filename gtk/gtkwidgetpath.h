@@ -25,7 +25,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct GtkWidgetPath GtkWidgetPath;
+typedef struct _GtkWidgetPath GtkWidgetPath;
 
 
 GtkWidgetPath * gtk_widget_path_new (void);

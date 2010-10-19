@@ -47,6 +47,7 @@ gtk_color_selection_get_type
 gtk_combo_box_get_type
 gtk_combo_box_text_get_type
 gtk_container_get_type
+gtk_css_provider_get_type
 gtk_dialog_get_type
 gtk_drawing_area_get_type
 gtk_editable_get_type
@@ -141,6 +142,8 @@ gtk_statusbar_get_type
 gtk_status_icon_get_type
 gtk_switch_get_type
 gtk_style_get_type
+gtk_style_context_get_type
+gtk_style_provider_get_type
 gtk_table_get_type
 gtk_tearoff_menu_item_get_type
 gtk_text_buffer_get_type
@@ -150,6 +153,7 @@ gtk_text_mark_get_type
 gtk_text_tag_get_type
 gtk_text_tag_table_get_type
 gtk_text_view_get_type
+gtk_theming_engine_get_type
 gtk_toggle_action_get_type
 gtk_toggle_button_get_type
 gtk_toggle_tool_button_get_type

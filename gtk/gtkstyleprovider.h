@@ -39,10 +39,16 @@ G_BEGIN_DECLS
 #define GTK_STYLE_PROVIDER_PRIORITY_APPLICATION 600
 #define GTK_STYLE_PROVIDER_PRIORITY_USER        800
 
-typedef struct GtkStyleProviderIface GtkStyleProviderIface;
-typedef struct GtkStyleProvider GtkStyleProvider; /* dummy typedef */
+typedef struct _GtkStyleProviderIface GtkStyleProviderIface;
+typedef struct _GtkStyleProvider GtkStyleProvider; /* dummy typedef */
 
-struct GtkStyleProviderIface
+/**
+ * GtkStyleProviderIface
+ * @get_style: Gets a set of style information that applies to a widget path.
+ * @get_style_property: Gets the value of a widget style property that applies to a widget path.
+ * @get_icon_factory: Gets the icon factory that applies to a widget path.
+ */
+struct _GtkStyleProviderIface
 {
   GTypeInterface g_iface;
 

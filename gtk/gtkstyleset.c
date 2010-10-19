@@ -325,6 +325,21 @@ property_node_lookup (GQuark quark)
 }
 
 /* Property registration functions */
+
+/**
+ * gtk_style_set_register_property:
+ * @property_name: property name to register
+ * @type: #GType the property will hold
+ * @default_value: default value for this property
+ * @parse_func: parsing function to use, or %NULL
+ *
+ * Registers a property so it can be used in the CSS file format.
+ * This function is the low-level equivalent of
+ * gtk_theming_engine_register_property(), if you are implementing
+ * a theming engine, you want to use that function instead.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_register_property (const gchar            *property_name,
                                  GType                   type,
@@ -377,6 +392,20 @@ gtk_style_set_register_property (const gchar            *property_name,
   g_array_insert_val (properties, i, new);
 }
 
+/**
+ * gtk_style_set_lookup_property:
+ * @property_name: property name to look up
+ * @type: (out): return location for the looked up property type
+ * @parse_func: (out): return value for the parse function
+ *
+ * Returns %TRUE if a property has been registered, if @type or
+ * @parse_func are not %NULL, the property #GType and parsing function
+ * will be respectively returned.
+ *
+ * Returns: %TRUE if the property is registered, %FALSE otherwise
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_style_set_lookup_property (const gchar            *property_name,
                                GType                  *type,
@@ -425,12 +454,30 @@ gtk_style_set_lookup_property (const gchar            *property_name,
 
 /* GtkStyleSet methods */
 
+/**
+ * gtk_style_set_new:
+ *
+ * Returns a newly created #GtkStyleSet
+ *
+ * Returns: a new #GtkStyleSet
+ **/
 GtkStyleSet *
 gtk_style_set_new (void)
 {
   return g_object_new (GTK_TYPE_STYLE_SET, NULL);
 }
 
+/**
+ * gtk_style_set_map_color:
+ * @set: a #GtkStyleSet
+ * @name: color name
+ * @color: #GtkSymbolicColor to map @name to
+ *
+ * Maps @color so it can be referenced by @name. See
+ * gtk_style_set_lookup_color()
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_map_color (GtkStyleSet      *set,
 			 const gchar      *name,
@@ -455,6 +502,18 @@ gtk_style_set_map_color (GtkStyleSet      *set,
                         gtk_symbolic_color_ref (color));
 }
 
+/**
+ * gtk_style_set_lookup_color:
+ * @set: a #GtkStyleSet
+ * @name: color name to lookup
+ *
+ * Returns the symbolic color that is mapped
+ * to @name.
+ *
+ * Returns: The mapped color
+ *
+ * Since: 3.0
+ **/
 GtkSymbolicColor *
 gtk_style_set_lookup_color (GtkStyleSet *set,
 			    const gchar *name)
@@ -472,6 +531,17 @@ gtk_style_set_lookup_color (GtkStyleSet *set,
   return g_hash_table_lookup (priv->color_map, name);
 }
 
+/**
+ * gtk_style_set_set_property:
+ * @set: a #GtkStyleSet
+ * @property: styling property to set
+ * @state: state to set the value for
+ * @value: new value for the property
+ *
+ * Sets a styling property in @set.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_set_property (GtkStyleSet   *set,
                             const gchar   *property,
@@ -538,6 +608,16 @@ gtk_style_set_set_property (GtkStyleSet   *set,
   g_value_copy (value, val);
 }
 
+/**
+ * gtk_style_set_set_valist:
+ * @set: a #GtkStyleSet
+ * @state: state to set the values for
+ * @args: va_list of property name/value pairs, followed by %NULL
+ *
+ * Sets several style properties on @set.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_set_valist (GtkStyleSet   *set,
                           GtkStateFlags  state,
@@ -597,6 +677,16 @@ gtk_style_set_set_valist (GtkStyleSet   *set,
     }
 }
 
+/**
+ * gtk_style_set_set:
+ * @set: a #GtkStyleSet
+ * @state: state to set the values for
+ * @...: property name/value pairs, followed by %NULL
+ *
+ * Sets several style properties on @set.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_set (GtkStyleSet   *set,
                    GtkStateFlags  state,
@@ -646,6 +736,20 @@ resolve_gradient (GtkStyleSet *set,
   return TRUE;
 }
 
+/**
+ * gtk_style_set_get_property:
+ * @set: a #GtkStyleSet
+ * @property: style property name
+ * @state: state to retrieve the property value for
+ * @value: (out) (transfer full):  return location for the style property value.
+ *
+ * Gets a style property from @set for the given state. When done with @value,
+ * g_value_unset() needs to be called to free any allocated memory.
+ *
+ * Returns: %TRUE if the property exists in @set, %FALSE otherwise
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_style_set_get_property (GtkStyleSet   *set,
                             const gchar   *property,
@@ -705,6 +809,16 @@ gtk_style_set_get_property (GtkStyleSet   *set,
   return TRUE;
 }
 
+/**
+ * gtk_style_set_get_valist:
+ * @set: a #GtkStyleSet
+ * @state: state to retrieve the property values for
+ * @args: va_list of property name/return location pairs, followed by %NULL
+ *
+ * Retrieves several style property values from @set for a given state.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_get_valist (GtkStyleSet   *set,
                           GtkStateFlags  state,
@@ -770,6 +884,17 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
     }
 }
 
+/**
+ * gtk_style_set_get:
+ * @set: a #GtkStyleSet
+ * @state: state to retrieve the property values for
+ * @...: property name /return value pairs, followed by %NULL
+ *
+ * Retrieves several style property values from @set for a
+ * given state.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_get (GtkStyleSet   *set,
                    GtkStateFlags  state,
@@ -784,6 +909,16 @@ gtk_style_set_get (GtkStyleSet   *set,
   va_end (args);
 }
 
+/**
+ * gtk_style_set_unset_property:
+ * @set: a #GtkStyleSet
+ * @property: property to unset
+ * @state: state to unset
+ *
+ * Unsets a style property in @set.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_unset_property (GtkStyleSet   *set,
                               const gchar   *property,
@@ -825,6 +960,12 @@ gtk_style_set_unset_property (GtkStyleSet   *set,
     }
 }
 
+/**
+ * gtk_style_set_clear:
+ * @set: a #GtkStyleSet
+ *
+ * Clears all style information from @set.
+ **/
 void
 gtk_style_set_clear (GtkStyleSet *set)
 {
@@ -836,6 +977,19 @@ gtk_style_set_clear (GtkStyleSet *set)
   g_hash_table_remove_all (priv->properties);
 }
 
+/**
+ * gtk_style_set_merge:
+ * @set: a #GtkStyleSet
+ * @set_to_merge: a second #GtkStyleSet
+ * @replace: whether to replace values or not
+ *
+ * Merges into @set all the style information contained
+ * in @set_to_merge. If @replace is %TRUE, the values
+ * will be overwritten, if it is %FALSE, the older values
+ * will prevail.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_set_merge (GtkStyleSet       *set,
                      const GtkStyleSet *set_to_merge,

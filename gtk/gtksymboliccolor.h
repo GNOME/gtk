@@ -25,8 +25,8 @@
 G_BEGIN_DECLS
 
 /* Dummy typedefs */
-typedef struct GtkSymbolicColor GtkSymbolicColor;
-typedef struct GtkGradient GtkGradient;
+typedef struct _GtkSymbolicColor GtkSymbolicColor;
+typedef struct _GtkGradient GtkGradient;
 
 #define GTK_TYPE_SYMBOLIC_COLOR (gtk_symbolic_color_get_type ())
 #define GTK_TYPE_GRADIENT (gtk_gradient_get_type ())

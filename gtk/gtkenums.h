@@ -560,6 +560,16 @@ typedef enum
   GTK_SCROLL_NATURAL
 } GtkScrollablePolicy;
 
+/**
+ * GtkStateFlags:
+ * @GTK_STATE_FLAG_ACTIVE: Widget is active.
+ * @GTK_STATE_FLAG_PRELIGHT: Widget has a mouse pointer over it.
+ * @GTK_STATE_FLAG_SELECTED: Widget is selected.
+ * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent.
+ * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus.
+ *
+ * Describes a widget state.
+ */
 typedef enum
 {
   GTK_STATE_FLAG_ACTIVE       = 1 << 0,
@@ -570,6 +580,17 @@ typedef enum
   GTK_STATE_FLAG_FOCUSED      = 1 << 5
 } GtkStateFlags;
 
+/**
+ * GtkRegionFlags:
+ * @GTK_REGION_EVEN: Region has an even number within a set.
+ * @GTK_REGION_ODD: Region has an odd number within a set.
+ * @GTK_REGION_FIRST: Region is the first one within a set.
+ * @GTK_REGION_LAST: Region is the last one within a set.
+ * @GTK_REGION_DEFAULT: Region is the default option.
+ * @GTK_REGION_SORTED: Region is part of a sorted area.
+ *
+ * Describes a region within a widget.
+ */
 typedef enum {
   GTK_REGION_EVEN    = 1 << 0,
   GTK_REGION_ODD     = 1 << 1,
@@ -579,6 +600,16 @@ typedef enum {
   GTK_REGION_SORTED  = 1 << 5
 } GtkRegionFlags;
 
+/**
+ * GtkJunctionSides:
+ * @GTK_JUNCTION_NONE: No junctions.
+ * @GTK_JUNCTION_TOP: Element connects on the top side.
+ * @GTK_JUNCTION_BOTTOM: Element connects on the bottom side.
+ * @GTK_JUNCTION_LEFT: Element connects on the left side.
+ * @GTK_JUNCTION_RIGHT: Element connects on the right side.
+ *
+ * Describes how a rendered element connects to adjacent elements.
+ */
 typedef enum {
   GTK_JUNCTION_NONE   = 0,
   GTK_JUNCTION_TOP    = 1 << 0,

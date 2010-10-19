@@ -34,16 +34,16 @@ G_BEGIN_DECLS
 #define GTK_IS_STYLE_SET_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_STYLE_SET))
 #define GTK_STYLE_SET_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_STYLE_SET, GtkStyleSetClass))
 
-typedef struct GtkStyleSet GtkStyleSet;
-typedef struct GtkStyleSetClass GtkStyleSetClass;
+typedef struct _GtkStyleSet GtkStyleSet;
+typedef struct _GtkStyleSetClass GtkStyleSetClass;
 
-struct GtkStyleSet
+struct _GtkStyleSet
 {
   GObject parent_object;
   gpointer priv;
 };
 
-struct GtkStyleSetClass
+struct _GtkStyleSetClass
 {
   GObjectClass parent_class;
 };

@@ -23,6 +23,16 @@
 #include "gtkstyleprovider.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkstyleprovider
+ * @Short_description: Interface to provide style information to #GtkStyleContext
+ * @Title: GtkStyleProvider
+ * @See_also: #GtkStyleContext, #GtkCssProvider
+ *
+ * #GtkStyleProvider is an interface used to provide style information to a #GtkStyleContext,
+ * see gtk_style_context_add_provider() and gtk_style_context_add_provider_for_screen().
+ */
+
 static void gtk_style_provider_iface_init (gpointer g_iface);
 
 GType
@@ -44,6 +54,18 @@ gtk_style_provider_iface_init (gpointer g_iface)
 {
 }
 
+/**
+ * gtk_style_provider_get_style:
+ * @provider: a #GtkStyleProvider
+ * @path: #GtkWidgetPath to query
+ *
+ * Returns the style settings affecting a widget defined by @path, or %NULL if
+ * @provider doesn't contemplate styling @path.
+ *
+ * Returns: a #GtkStyleSet containing the style settings affecting @path
+ *
+ * Since: 3.0
+ **/
 GtkStyleSet *
 gtk_style_provider_get_style (GtkStyleProvider *provider,
                               GtkWidgetPath    *path)
@@ -60,16 +82,28 @@ gtk_style_provider_get_style (GtkStyleProvider *provider,
   return iface->get_style (provider, path);
 }
 
+/**
+ * gtk_style_provider_get_style_property:
+ * @provider: a #GtkStyleProvider
+ * @path: #GtkWidgetPath to query
+ * @property_name: the property name
+ * @value: (out): return location for the property value
+ *
+ * Looks up a widget style property as defined by @provider for
+ * the widget represented by @widget_path.
+ *
+ * Returns: %TRUE if the property was found and has a value, %FALSE otherwise
+ **/
 gboolean
 gtk_style_provider_get_style_property (GtkStyleProvider *provider,
-                                       GtkWidgetPath    *widget_path,
+                                       GtkWidgetPath    *path,
                                        const gchar      *property_name,
                                        GValue           *value)
 {
   GtkStyleProviderIface *iface;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), FALSE);
-  g_return_val_if_fail (widget_path != NULL, FALSE);
+  g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (property_name != NULL, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
@@ -78,9 +112,21 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
   if (!iface->get_style_property)
     return FALSE;
 
-  return iface->get_style_property (provider, widget_path, property_name, value);
+  return iface->get_style_property (provider, path, property_name, value);
 }
 
+/**
+ * gtk_style_provider_get_icon_factory:
+ * @provider: a #GtkStyleProvider
+ * @path: #GtkWidgetPath to query
+ *
+ * Returns the #GtkIconFactory defined to be in use for @path, or %NULL if none
+ * is defined.
+ *
+ * Returns: The icon factory to use for @path, or %NULL
+ *
+ * Since: 3.0
+ **/
 GtkIconFactory *
 gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,
 				     GtkWidgetPath    *path)

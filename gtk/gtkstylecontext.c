@@ -33,6 +33,163 @@
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
 
+/**
+ * SECTION:gtkstylecontext
+ * @Short_description: rendering UI elements
+ * @Title: GtkStyleContext
+ * @See_also:
+ *
+ * #GtkStyleContext is an object that stores styling information affecting
+ * a widget defined by #GtkWidgetPath.
+ *
+ * In order to construct the final style information, #GtkStyleContext
+ * queries information to all attached #GtkStyleProvider<!-- -->s, either
+ * to the context specifically through gtk_style_context_add_provider(), or
+ * to the screen through gtk_style_context_add_provider_for_screen(). The
+ * resulting style is a combination of all provider's information in priority
+ * order.
+ *
+ * For GTK+ widgets, any #GtkStyleContext returned by
+ * gtk_widget_get_style_context() will already have a #GtkWidgetPath, a
+ * #GdkScreen and RTL/LTR information set, the style context will be also
+ * updated automatically if any of these settings change on the widget.
+ *
+ * If you using are the theming layer standalone, you will need to set a
+ * widget path and a screen yourself to the created style context through
+ * gtk_style_context_set_path() and gtk_style_context_set_screen(), as well
+ * as updating the context yourself using gtk_style_context_invalidate()
+ * whenever any of the conditions change, such as a change in the
+ * #GtkSettings:gtk-theme-name property or a hierarchy change in the rendered
+ * widget.
+ *
+ * <refsect2 id="gtkstylecontext-animations">
+ * <title>Transition animations</title>
+ * <para>
+ * #GtkStyleContext has built-in support for state change transitions.
+ * </para>
+ * <note>
+ * For simple widgets where state changes affect the whole widget area,
+ * calling gtk_style_context_notify_state_change() with a %NULL identifier
+ * would be sufficient.
+ * </note>
+ * <para>
+ * If a widget needs to declare several animatable regions (i.e. not
+ * affecting the whole widget area), its #GtkWidget::draw signal handler
+ * needs to wrap the render operations for the different regions around
+ * gtk_style_context_push_animatable_region() and
+ * gtk_style_context_pop_animatable_region(). These functions take an
+ * unique identifier within the style context, for simple widgets with
+ * little animatable regions, an enum may be used:
+ * </para>
+ * <example>
+ * <title>Using an enum as animatable region identifier</title>
+ * <programlisting>
+ * enum {
+ *   REGION_ENTRY,
+ *   REGION_BUTTON_UP,
+ *   REGION_BUTTON_DOWN
+ * };
+ *
+ * ...
+ *
+ * gboolean
+ * spin_button_draw (GtkWidget *widget,
+ *                   cairo_t   *cr)
+ * {
+ *   GtkStyleContext *context;
+ *
+ *   context = gtk_widget_get_style_context (widget);
+ *
+ *   gtk_style_context_push_animatable_region (context,
+ *                                             GUINT_TO_POINTER (REGION_ENTRY));
+ *
+ *   gtk_render_background (cr, 0, 0, 100, 30);
+ *   gtk_render_frame (cr, 0, 0, 100, 30);
+ *
+ *   gtk_style_context_pop_animatable_region (context);
+ *
+ *   ...
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * For complex widgets with an arbitrary number of animatable regions, it
+ * is up to the implementation to come up with a way to univocally identify
+ * an animatable region, pointers to internal structs would suffice.
+ * </para>
+ * <example>
+ * <title>Using an arbitrary pointer as animatable region identifier</title>
+ * <programlisting>
+ * void
+ * notebook_draw_tab (GtkWidget    *widget,
+ *                    NotebookPage *page,
+ *                    cairo_t      *cr)
+ * {
+ *   gtk_style_context_push_animatable_region (context, page);
+ *   gtk_render_extension (cr, page->x, page->y, page->width, page->height);
+ *   gtk_style_context_pop_animatable_region (context);
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * The widget also needs to notify the style context about a state change
+ * for a given animatable region so the animation is triggered.
+ * </para>
+ * <example>
+ * <title>Triggering a state change animation on a region</title>
+ * <programlisting>
+ * gboolean
+ * notebook_motion_notify (GtkWidget      *widget,
+ *                         GdkEventMotion *event)
+ * {
+ *   GtkStyleContext *context;
+ *   NotebookPage *page;
+ *
+ *   context = gtk_widget_get_style_context (widget);
+ *   page = find_page_under_pointer (widget, event);
+ *   gtk_style_context_notify_state_change (context,
+ *                                          gtk_widget_get_window (widget),
+ *                                          page,
+ *                                          GTK_STATE_PRELIGHT,
+ *                                          TRUE);
+ *   ...
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * gtk_style_context_notify_state_change() accepts %NULL region IDs as a
+ * special value, in this case, the whole widget area will be updated
+ * by the animation.
+ * </para>
+ * </refsect2>
+ *
+ * <refsect2 id="gtkstylecontext-custom-styling">
+ * <title>Custom styling in UI libraries and applications</title>
+ * <para>
+ * If you are developing a library with custom #GtkWidget<!-- -->s that
+ * render differently than standard components, you may need to add a
+ * #GtkStyleProvider yourself with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK
+ * priority, either a #GtkCssProvider or a custom object implementing the
+ * #GtkStyleProvider interface. This way theming engines may still attempt
+ * to style your UI elements in a different way if needed so.
+ * </para>
+ * <para>
+ * If you are using custom styling on an applications, you probably want then
+ * to make your style information prevail to the theme's, so you must use
+ * a #GtkStyleProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
+ * priority, keep in mind that the user settings in $HOME/.gtk-3.0.css will
+ * still take precedence over your changes, as it uses the
+ * %GTK_STYLE_PROVIDER_PRIORITY_USER priority.
+ * </para>
+ * <para>
+ * If a custom theming engine is needed, you probably want to implement a
+ * #GtkStyleProvider yourself so it points to your #GtkThemingEngine
+ * implementation, as #GtkCssProvider uses gtk_theming_engine_load()
+ * which loads the theming engine module from the standard paths.
+ * </para>
+ * </refsect2>
+ */
+
 typedef struct GtkStyleContextPrivate GtkStyleContextPrivate;
 typedef struct GtkStyleProviderData GtkStyleProviderData;
 typedef struct GtkStyleInfo GtkStyleInfo;
@@ -571,7 +728,7 @@ gtk_style_context_impl_get_property (GObject    *object,
     }
 }
 
-GList *
+static GList *
 find_next_candidate (GList *local,
                      GList *global)
 {
@@ -705,7 +862,7 @@ create_query_path (GtkStyleContext *context)
   return path;
 }
 
-StyleData *
+static StyleData *
 style_data_lookup (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
@@ -825,6 +982,20 @@ style_provider_remove (GList            **list,
   return FALSE;
 }
 
+/**
+ * gtk_style_context_add_provider:
+ * @context: a #GtkStyleContext
+ * @provider: a #GtkStyleProvider
+ * @priority: the priority of the style provider. The lower
+ *            it is, the earlier it will be used in the style
+ *            construction. Typically this will be in the range
+ *            between %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK and
+ *            %GTK_STYLE_PROVIDER_PRIORITY_USER
+ *
+ * Adds a style provider to @context, to be used in style construction.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_add_provider (GtkStyleContext  *context,
                                 GtkStyleProvider *provider,
@@ -842,6 +1013,15 @@ gtk_style_context_add_provider (GtkStyleContext  *context,
   gtk_style_context_invalidate (context);
 }
 
+/**
+ * gtk_style_context_remove_provider:
+ * @context: a #GtkStyleContext
+ * @provider: a #GtkStyleProvider
+ *
+ * Removes @provider from the style providers list in @context.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_remove_provider (GtkStyleContext  *context,
                                    GtkStyleProvider *provider)
@@ -861,6 +1041,19 @@ gtk_style_context_remove_provider (GtkStyleContext  *context,
     }
 }
 
+/**
+ * gtk_style_context_reset_widgets:
+ * @screen: a #GdkScreen
+ *
+ * This function recomputes the styles for all widgets under a particular
+ * #GdkScreen. This is useful when some global parameter has changed that
+ * affects the appearance of all widgets, because when a widget gets a new
+ * style, it will both redraw and recompute any cached information about
+ * its appearance. As an example, it is used when the color scheme changes
+ * in the related #GtkSettings object.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_reset_widgets (GdkScreen *screen)
 {
@@ -880,6 +1073,22 @@ gtk_style_context_reset_widgets (GdkScreen *screen)
   g_list_free (toplevels);
 }
 
+/**
+ * gtk_style_context_add_provider_for_screen:
+ * @screen: a #GdkScreen
+ * @provider: a #GtkStyleProvider
+ * @priority: the priority of the style provider. The lower
+ *            it is, the earlier it will be used in the style
+ *            construction. Typically this will be in the range
+ *            between %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK and
+ *            %GTK_STYLE_PROVIDER_PRIORITY_USER
+ *
+ * Adds a global style provider to @screen, which will be used
+ * in style construction for all #GtkStyleContext<!-- -->s under
+ * @screen.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_add_provider_for_screen (GdkScreen        *screen,
                                            GtkStyleProvider *provider,
@@ -902,6 +1111,15 @@ gtk_style_context_add_provider_for_screen (GdkScreen        *screen,
   gtk_style_context_reset_widgets (screen);
 }
 
+/**
+ * gtk_style_context_remove_provider_for_screen:
+ * @screen: a #GdkScreen
+ * @provider: a #GtkStyleProvider
+ *
+ * Removes @provider from the global style providers list in @screen.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
                                               GtkStyleProvider *provider)
@@ -925,6 +1143,18 @@ gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
     }
 }
 
+/**
+ * gtk_style_context_get_property:
+ * @context: a #GtkStyleContext
+ * @property: style property name
+ * @state: state to retrieve the property value for
+ * @value: (out) (transfer full):  return location for the style property value.
+ *
+ * Gets a style property from @context for the given state. When done with @value,
+ * g_value_unset() needs to be called to free any allocated memory.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_get_property (GtkStyleContext *context,
                                 const gchar     *property,
@@ -946,6 +1176,16 @@ gtk_style_context_get_property (GtkStyleContext *context,
   gtk_style_set_get_property (data->store, property, state, value);
 }
 
+/**
+ * gtk_style_context_get_valist:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the property values for
+ * @args: va_list of property name/return location pairs, followed by %NULL
+ *
+ * Retrieves several style property values from @context for a given state.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_get_valist (GtkStyleContext *context,
                               GtkStateFlags    state,
@@ -963,6 +1203,17 @@ gtk_style_context_get_valist (GtkStyleContext *context,
   gtk_style_set_get_valist (data->store, state, args);
 }
 
+/**
+ * gtk_style_context_get:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the property values for
+ * @...: property name /return value pairs, followed by %NULL
+ *
+ * Retrieves several style property values from @context for a
+ * given state.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_get (GtkStyleContext *context,
                        GtkStateFlags    state,
@@ -984,6 +1235,16 @@ gtk_style_context_get (GtkStyleContext *context,
   va_end (args);
 }
 
+/**
+ * gtk_style_context_set_state:
+ * @context: a #GtkStyleContext
+ * @flags: state to represent
+ *
+ * Sets the style to be used when rendering with any
+ * of the "gtk_render_" prefixed functions.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_set_state (GtkStyleContext *context,
                              GtkStateFlags    flags)
@@ -996,6 +1257,16 @@ gtk_style_context_set_state (GtkStyleContext *context,
   priv->state_flags = flags;
 }
 
+/**
+ * gtk_style_context_get_state:
+ * @context: a #GtkStyleContext
+ *
+ * returns the state used when rendering.
+ *
+ * Returns: the state flags
+ *
+ * Since: 3.0
+ **/
 GtkStateFlags
 gtk_style_context_get_state (GtkStyleContext *context)
 {
@@ -1093,6 +1364,19 @@ gtk_style_context_is_state_set (GtkStyleContext *context,
   return state_set;
 }
 
+/**
+ * gtk_style_context_set_path:
+ * @context: a #GtkStyleContext
+ * @path: a #GtkWidgetPath
+ *
+ * Sets the #GtkWidgetPath used for style matching. As a
+ * consequence, the style will be regenerated to match
+ * the new given path. If you are using a #GtkStyleContext
+ * returned from gtk_widget_get_style_context(), you do
+ * not need to call this yourself.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_set_path (GtkStyleContext *context,
                             GtkWidgetPath   *path)
@@ -1116,6 +1400,16 @@ gtk_style_context_set_path (GtkStyleContext *context,
   gtk_style_context_invalidate (context);
 }
 
+/**
+ * gtk_style_context_get_path:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the widget path used for style matching.
+ *
+ * Returns: (transfer none): A #GtkWidgetPath
+ *
+ * Since: 3.0
+ **/
 G_CONST_RETURN GtkWidgetPath *
 gtk_style_context_get_path (GtkStyleContext *context)
 {
@@ -1125,6 +1419,18 @@ gtk_style_context_get_path (GtkStyleContext *context)
   return priv->widget_path;
 }
 
+/**
+ * gtk_style_context_save:
+ * @context: a #GtkStyleContext
+ *
+ * Saves the @context state, so all modifications done through
+ * gtk_style_context_set_class(), gtk_style_context_unset_class(),
+ * gtk_style_context_set_region(), gtk_style_context_unset_region()
+ * or gtk_style_context_set_junction_sides() can be reverted in one
+ * go through gtk_style_context_restore().
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_save (GtkStyleContext *context)
 {
@@ -1141,6 +1447,15 @@ gtk_style_context_save (GtkStyleContext *context)
   priv->info_stack = g_slist_prepend (priv->info_stack, info);
 }
 
+/**
+ * gtk_style_context_restore:
+ * @context: a #GtkStyleContext
+ *
+ * Restores @context state to a previous stage. See
+ * gtk_style_context_save().
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_restore (GtkStyleContext *context)
 {
@@ -1262,6 +1577,30 @@ region_find (GArray *array,
   return found;
 }
 
+/**
+ * gtk_style_context_set_class:
+ * @context: a #GtkStyleContext
+ * @class_name: class name to use in styling
+ *
+ * Sets a class name to @context, so posterior calls to
+ * gtk_style_context_get() or any of the gtk_render_*
+ * functions will make use of this new class for styling.
+ *
+ * In the CSS file format, a #GtkEntry defining an "entry"
+ * class, would be matched by:
+ *
+ * <programlisting>
+ * GtkEntry.entry { ... }
+ * </programlisting>
+ *
+ * While any widget defining an "entry" class would be
+ * matched by:
+ * <programlisting>
+ * .entry { ... }
+ * </programlisting>
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_set_class (GtkStyleContext *context,
                              const gchar     *class_name)
@@ -1289,6 +1628,15 @@ gtk_style_context_set_class (GtkStyleContext *context,
     }
 }
 
+/**
+ * gtk_style_context_unset_class:
+ * @context: a #GtkStyleContext
+ * @class_name: class name to remove
+ *
+ * Removes @class_name from @context.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_unset_class (GtkStyleContext *context,
                                const gchar     *class_name)
@@ -1320,6 +1668,18 @@ gtk_style_context_unset_class (GtkStyleContext *context,
     }
 }
 
+/**
+ * gtk_style_context_has_class:
+ * @context: a #GtkStyleContext
+ * @class_name: a class name
+ *
+ * Returns %TRUE if @context currently has defined the
+ * given class name
+ *
+ * Returns: %TRUE if @context has @class_name defined
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_style_context_has_class (GtkStyleContext *context,
                              const gchar     *class_name)
@@ -1347,6 +1707,19 @@ gtk_style_context_has_class (GtkStyleContext *context,
   return FALSE;
 }
 
+/**
+ * gtk_style_context_list_classes:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the list of classes currently defined in @context.
+ *
+ * Returns: (transfer container) (element-type utf8): a #GList of
+ *          strings with the currently defined classes. The contents
+ *          of the list are owned by GTK+, but you must free the list
+ *          itself with g_list_free() when you are done with it.
+ *
+ * Since: 3.0
+ **/
 GList *
 gtk_style_context_list_classes (GtkStyleContext *context)
 {
@@ -1373,6 +1746,20 @@ gtk_style_context_list_classes (GtkStyleContext *context)
   return classes;
 }
 
+/**
+ * gtk_style_context_list_regions:
+ * @context: a #GtkStyleContext
+ *
+ *
+ * Returns the list of regions currently defined in @context.
+ *
+ * Returns: (transfer container) (element-type utf8): a #GList of
+ *          strings with the currently defined regions. The contents
+ *          of the list are owned by GTK+, but you must free the list
+ *          itself with g_list_free() when you are done with it.
+ *
+ * Since: 3.0
+ **/
 GList *
 gtk_style_context_list_regions (GtkStyleContext *context)
 {
@@ -1402,30 +1789,58 @@ gtk_style_context_list_regions (GtkStyleContext *context)
   return classes;
 }
 
+/**
+ * gtk_style_context_set_region:
+ * @context: a #GtkStyleContext
+ * @region_name: region name to use in styling
+ * @flags: flags that apply to the region
+ *
+ * Sets a region to @context, so posterior calls to
+ * gtk_style_context_get() or any of the gtk_render_*
+ * functions will make use of this new region for styling.
+ *
+ * In the CSS file format, a #GtkTreeView defining a "row"
+ * region, would be matched by:
+ *
+ * <programlisting>
+ * GtkTreeView row { ... }
+ * </programlisting>
+ *
+ * pseudo-classes are used for matching @flags, so the two
+ * following rules:
+ * <programlisting>
+ * GtkTreeView row:nth-child (even) { ... }
+ * GtkTreeView row:nth-child (odd) { ... }
+ * </programlisting>
+ *
+ * would apply to even and odd rows, respectively.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_set_region (GtkStyleContext *context,
-                              const gchar     *class_name,
+                              const gchar     *region_name,
                               GtkRegionFlags   flags)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark class_quark;
+  GQuark region_quark;
   guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (class_name != NULL);
+  g_return_if_fail (region_name != NULL);
 
   priv = context->priv;
-  class_quark = g_quark_from_string (class_name);
+  region_quark = g_quark_from_string (region_name);
 
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (!region_find (info->regions, class_quark, &position))
+  if (!region_find (info->regions, region_quark, &position))
     {
       GtkRegion region;
 
-      region.class_quark = class_quark;
+      region.class_quark = region_quark;
       region.flags = flags;
 
       g_array_insert_val (info->regions, position, region);
@@ -1435,21 +1850,30 @@ gtk_style_context_set_region (GtkStyleContext *context,
     }
 }
 
+/**
+ * gtk_style_context_unset_region:
+ * @context: a #GtkStyleContext
+ * @region_name: region name to unset
+ *
+ * Removes a region from @context
+ *
+ * Since: 3.0
+ **/
 void
-gtk_style_context_unset_region (GtkStyleContext    *context,
-                                const gchar        *class_name)
+gtk_style_context_unset_region (GtkStyleContext *context,
+                                const gchar     *region_name)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark class_quark;
+  GQuark region_quark;
   guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (class_name != NULL);
+  g_return_if_fail (region_name != NULL);
 
-  class_quark = g_quark_try_string (class_name);
+  region_quark = g_quark_try_string (region_name);
 
-  if (!class_quark)
+  if (!region_quark)
     return;
 
   priv = context->priv;
@@ -1457,7 +1881,7 @@ gtk_style_context_unset_region (GtkStyleContext    *context,
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (region_find (info->regions, class_quark, &position))
+  if (region_find (info->regions, region_quark, &position))
     {
       g_array_remove_index (info->regions, position);
 
@@ -1466,25 +1890,38 @@ gtk_style_context_unset_region (GtkStyleContext    *context,
     }
 }
 
+/**
+ * gtk_style_context_has_region:
+ * @context: a #GtkStyleContext
+ * @region_name: a region name
+ * @flags_return: (out) (allow-none): return location for region flags
+ *
+ * Returns %TRUE if @context has the region defined. If @flags_return is
+ * not %NULL, it is set to the flags affecting the region.
+ *
+ * Returns: %TRUE if region is defined
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_style_context_has_region (GtkStyleContext *context,
-                              const gchar     *class_name,
+                              const gchar     *region_name,
                               GtkRegionFlags  *flags_return)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
-  GQuark class_quark;
+  GQuark region_quark;
   guint position;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
-  g_return_val_if_fail (class_name != NULL, FALSE);
+  g_return_val_if_fail (region_name != NULL, FALSE);
 
   if (flags_return)
     *flags_return = 0;
 
-  class_quark = g_quark_try_string (class_name);
+  region_quark = g_quark_try_string (region_name);
 
-  if (!class_quark)
+  if (!region_quark)
     return FALSE;
 
   priv = context->priv;
@@ -1492,7 +1929,7 @@ gtk_style_context_has_region (GtkStyleContext *context,
   g_assert (priv->info_stack != NULL);
   info = priv->info_stack->data;
 
-  if (region_find (info->regions, class_quark, &position))
+  if (region_find (info->regions, region_quark, &position))
     {
       if (flags_return)
         {
@@ -1581,6 +2018,15 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   return &pcache->value;
 }
 
+/**
+ * gtk_style_context_get_style_property:
+ * @context: a #GtkStyleContext
+ * @property_name: the name of the widget style property
+ * @value: (out) (transfer full): Return location for the property value, free with
+ *         g_value_unset() after use.
+ *
+ * Gets the value for a widget style property.
+ **/
 void
 gtk_style_context_get_style_property (GtkStyleContext *context,
                                       const gchar     *property_name,
@@ -1631,6 +2077,16 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
                G_VALUE_TYPE_NAME (value));
 }
 
+/**
+ * gtk_style_context_get_style_valist:
+ * @context: a #GtkStyleContext
+ * @args: va_list of property name/return location pairs, followed by %NULL
+ *
+ * Retrieves several widget style properties from @context according to the
+ * current style.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_get_style_valist (GtkStyleContext *context,
                                     va_list          args)
@@ -1688,6 +2144,16 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
     }
 }
 
+/**
+ * gtk_style_context_get_style:
+ * @context: a #GtkStyleContext
+ * @...: property name /return value pairs, followed by %NULL
+ *
+ * Retrieves several widget style properties from @context according to the
+ * current style.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_get_style (GtkStyleContext *context,
                              ...)
@@ -1702,6 +2168,17 @@ gtk_style_context_get_style (GtkStyleContext *context,
 }
 
 
+/**
+ * gtk_style_context_lookup_icon_set:
+ * @context: a #GtkStyleContext
+ * @stock_id: an icon name
+ *
+ * Looks up @stock_id in the icon factories associated to @context and
+ * the default icon factory, returning an icon set if found, otherwise
+ * %NULL.
+ *
+ * Returns: (transfer none): The looked  up %GtkIconSet, or %NULL
+ **/
 GtkIconSet *
 gtk_style_context_lookup_icon_set (GtkStyleContext *context,
 				   const gchar     *stock_id)
@@ -1733,6 +2210,18 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
   return gtk_icon_factory_lookup_default (stock_id);
 }
 
+/**
+ * gtk_style_context_set_screen:
+ * @context: a #GtkStyleContext
+ * @screen: a #GdkScreen
+ *
+ * Sets the screen to which @context will be attached to, @screen
+ * is used in order to reconstruct style based on the global providers
+ * list. If you are using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to call this yourself.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_set_screen (GtkStyleContext *context,
                               GdkScreen       *screen)
@@ -1749,6 +2238,14 @@ gtk_style_context_set_screen (GtkStyleContext *context,
   gtk_style_context_invalidate (context);
 }
 
+/**
+ * gtk_style_context_get_screen:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the #GdkScreen to which @context is attached to.
+ *
+ * Returns: a #GdkScreen, or %NULL.
+ **/
 GdkScreen *
 gtk_style_context_get_screen (GtkStyleContext *context)
 {
@@ -1760,6 +2257,17 @@ gtk_style_context_get_screen (GtkStyleContext *context)
   return priv->screen;
 }
 
+/**
+ * gtk_style_context_set_direction:
+ * @context: a #GtkStyleContext
+ * @direction: the new direction.
+ *
+ * Sets the reading direction for rendering purposes. If you are
+ * using a #GtkStyleContext returned from gtk_widget_get_style_context(),
+ * you do not need to call this yourself.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_set_direction (GtkStyleContext  *context,
                                  GtkTextDirection  direction)
@@ -1774,6 +2282,16 @@ gtk_style_context_set_direction (GtkStyleContext  *context,
   g_object_notify (G_OBJECT (context), "direction");
 }
 
+/**
+ * gtk_style_context_get_direction:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the widget direction used for rendering.
+ *
+ * Returns: the widget direction
+ *
+ * Since: 3.0
+ **/
 GtkTextDirection
 gtk_style_context_get_direction (GtkStyleContext *context)
 {
@@ -1785,6 +2303,17 @@ gtk_style_context_get_direction (GtkStyleContext *context)
   return priv->direction;
 }
 
+/**
+ * gtk_style_context_set_junction_sides:
+ * @context: a #GtkStyleContext
+ * @sides: sides where rendered elements are visually connected to other elements.
+ *
+ * Sets the sides where rendered elements (mostly through gtk_render_frame()) will
+ * visually connect with other visual elements. This is merely a guideline that may
+ * be honored or not in theming engines.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_set_junction_sides (GtkStyleContext  *context,
 				      GtkJunctionSides  sides)
@@ -1799,6 +2328,16 @@ gtk_style_context_set_junction_sides (GtkStyleContext  *context,
   info->junction_sides = sides;
 }
 
+/**
+ * gtk_style_context_get_junction_sides:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the sides where rendered elements connect visually with others.
+ *
+ * Returns: the junction sides
+ *
+ * Since: 3.0
+ **/
 GtkJunctionSides
 gtk_style_context_get_junction_sides (GtkStyleContext *context)
 {
@@ -1812,6 +2351,16 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
   return info->junction_sides;
 }
 
+/**
+ * gtk_style_context_lookup_color:
+ * @context: a #GtkStyleContext
+ * @color_name: color name to lookup
+ * @color: (out): Return location for the looked up color
+ *
+ * Looks up and resolves a color name in the @context color map.
+ *
+ * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
+ **/
 gboolean
 gtk_style_context_lookup_color (GtkStyleContext *context,
                                 const gchar     *color_name,
@@ -1837,6 +2386,53 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   return gtk_symbolic_color_resolve (sym_color, data->store, color);
 }
 
+/**
+ * gtk_style_context_notify_state_change:
+ * @context: a #GtkStyleContext
+ * @window: a #GdkWindow
+ * @region_id: (allow-none): animatable region to notify on, or %NULL.
+ *             See gtk_style_context_push_animatable_region()
+ * @state: state to trigger transition for
+ * @state_value: target value of @state
+ *
+ * Notifies a state change on @context, so if the current style makes use
+ * of transition animations, one will be started so all rendered elements
+ * under @region_id are animated for state @state being set to value @state_value.
+ *
+ * The @window parameter is used in order to invalidate the rendered area
+ * as the animation runs, so make sure it is the same window that is being
+ * rendered on by the gtk_render_*() methods.
+ *
+ * If @region_id is %NULL, all rendered elements using @context will be
+ * affected by this state transition.
+ *
+ * As a practical example, a #GtkButton notifying a state transition on
+ * the prelight state:
+ * <programlisting>
+ * gtk_style_context_notify_state_change (context,
+ *                                        gtk_widget_get_window (widget),
+ *                                        NULL, GTK_STATE_PRELIGHT,
+ *                                        button->in_button);
+ * </programlisting>
+ *
+ * Could be handled in the CSS file like this:
+ * <programlisting>
+ * GtkButton {
+ *     background-color: #f00;
+ * }
+ *
+ * GtkButton:hover {
+ *     background-color: #fff;
+ *     transition: 200ms linear;
+ * }
+ * </programlisting>
+ *
+ * This combination would animate the button background from red to white
+ * if a pointer enters the button, and back to red if the pointer leaves
+ * the button.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_notify_state_change (GtkStyleContext *context,
                                        GdkWindow       *window,
@@ -1931,6 +2527,22 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   gtk_animation_description_unref (desc);
 }
 
+/**
+ * gtk_style_context_push_animatable_region:
+ * @context: a #GtkStyleContext
+ * @region_id: unique identifier for the animatable region
+ *
+ * Pushes an animatable region, so all further gtk_render_*() calls between
+ * this call and the following gtk_style_context_pop_animatable_region() will
+ * potentially show transition animations for if gtk_style_context_notify_state_change()
+ * is called for a given state, and the theme/style used contemplates the use of
+ * transition animations for state changes.
+ *
+ * The @region_id used must be unique in @context so the theming engine may
+ * univocally identify rendered elements subject to a state transition.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_push_animatable_region (GtkStyleContext *context,
                                           gpointer         region_id)
@@ -1944,6 +2556,14 @@ gtk_style_context_push_animatable_region (GtkStyleContext *context,
   priv->animation_regions = g_slist_prepend (priv->animation_regions, region_id);
 }
 
+/**
+ * gtk_style_context_pop_animatable_region:
+ * @context: a #GtkStyleContext
+ *
+ * Pops an animatable region from @context. See gtk_style_context_push_animatable_region().
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_pop_animatable_region (GtkStyleContext *context)
 {
@@ -2074,6 +2694,16 @@ store_animation_region (GtkStyleContext *context,
     }
 }
 
+/**
+ * gtk_style_context_invalidate:
+ * @context: a #GtkStyleContext.
+ *
+ * Invalidates @context style information, so it will be reconstructed
+ * again. If you're using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to call this yourself.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_style_context_invalidate (GtkStyleContext *context)
 {

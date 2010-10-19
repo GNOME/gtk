@@ -13270,6 +13270,16 @@ _gtk_widget_set_height_request_needed (GtkWidget *widget,
   widget->priv->height_request_needed = height_request_needed;
 }
 
+/**
+ * gtk_widget_get_path:
+ * @widget: a #GtkWidget
+ *
+ * Returns the #GtkWidgetPath representing @widget, if the widget
+ * is not connected to a toplevel widget, a partial path will be
+ * created.
+ *
+ * Returns: (transfer none): The #GtkWidgetPath representing @widget
+ **/
 GtkWidgetPath *
 gtk_widget_get_path (GtkWidget *widget)
 {
@@ -13312,6 +13322,15 @@ style_context_changed (GtkStyleContext *context,
   g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
 }
 
+/**
+ * gtk_widget_get_style_context:
+ * @widget: a #GtkWidget
+ *
+ * Returns the style context associated to @widget.
+ *
+ * Returns: (transfer none): a #GtkStyleContext. This memory is owned by @widget and
+ *          must not be freed.
+ **/
 GtkStyleContext *
 gtk_widget_get_style_context (GtkWidget *widget)
 {

@@ -36,16 +36,36 @@ G_BEGIN_DECLS
 #define GTK_IS_THEMING_ENGINE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_THEMING_ENGINE))
 #define GTK_THEMING_ENGINE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_THEMING_ENGINE, GtkThemingEngineClass))
 
-typedef struct GtkThemingEngine GtkThemingEngine;
-typedef struct GtkThemingEngineClass GtkThemingEngineClass;
+typedef struct _GtkThemingEngine GtkThemingEngine;
+typedef struct _GtkThemingEngineClass GtkThemingEngineClass;
 
-struct GtkThemingEngine
+struct _GtkThemingEngine
 {
   GObject parent_object;
   gpointer priv;
 };
 
-struct GtkThemingEngineClass
+/**
+ * GtkThemingEngineClass
+ * @parent_class: The parent class.
+ * @render_line: Renders a line between two points.
+ * @render_background: Renders the background area of a widget region.
+ * @render_frame: Renders the frame around a widget area.
+ * @render_frame_gap: Renders the frame around a widget area with a gap in it.
+ * @render_extension: Renders a extension to a box, usually a notebook tab.
+ * @render_check: Renders a checkmark, as in #GtkCheckButton.
+ * @render_option: Renders an option, as in #GtkRadioButton.
+ * @render_arrow: Renders an arrow pointing to a certain direction.
+ * @render_expander: Renders an element what will expose/expand part of
+ *                   the UI, as in #GtkExpander.
+ * @render_focus: Renders the focus indicator.
+ * @render_layout: Renders a #PangoLayout
+ * @render_slider: Renders a slider control, as in #GtkScale.
+ * @render_handle: Renders a handle to drag UI elements, as in #GtkPaned.
+ *
+ * Base class for theming engines.
+ */
+struct _GtkThemingEngineClass
 {
   GObjectClass parent_class;
 

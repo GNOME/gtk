@@ -180,6 +180,7 @@
 #include <gtk/gtkstyleset.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkswitch.h>
+#include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktextbuffer.h>

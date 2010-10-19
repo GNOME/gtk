@@ -33,16 +33,16 @@ G_BEGIN_DECLS
 #define GTK_IS_STYLE_CONTEXT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_STYLE_CONTEXT))
 #define GTK_STYLE_CONTEXT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_STYLE_CONTEXT, GtkStyleContextClass))
 
-typedef struct GtkStyleContext GtkStyleContext;
-typedef struct GtkStyleContextClass GtkStyleContextClass;
+typedef struct _GtkStyleContext GtkStyleContext;
+typedef struct _GtkStyleContextClass GtkStyleContextClass;
 
-struct GtkStyleContext
+struct _GtkStyleContext
 {
   GObject parent_object;
   gpointer priv;
 };
 
-struct GtkStyleContextClass
+struct _GtkStyleContextClass
 {
   GObjectClass parent_class;
 

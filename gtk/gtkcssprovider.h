@@ -31,16 +31,16 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_PROVIDER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_CSS_PROVIDER))
 #define GTK_CSS_PROVIDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_CSS_PROVIDER, GtkCssProviderClass))
 
-typedef struct GtkCssProvider GtkCssProvider;
-typedef struct GtkCssProviderClass GtkCssProviderClass;
+typedef struct _GtkCssProvider GtkCssProvider;
+typedef struct _GtkCssProviderClass GtkCssProviderClass;
 
-struct GtkCssProvider
+struct _GtkCssProvider
 {
   GObject parent_instance;
   gpointer priv;
 };
 
-struct GtkCssProviderClass
+struct _GtkCssProviderClass
 {
   GObjectClass parent_class;
 };

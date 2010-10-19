@@ -30,6 +30,360 @@
 #include "gtk9slice.h"
 #include "gtkcssprovider.h"
 
+/**
+ * SECTION:gtkcssprovider
+ * @Short_description: CSS-like styling for widgets
+ * @Title: GtkCssProvider
+ * @See_also: #GtkStyleContext, #GtkStyleProvider
+ *
+ * #GtkCssProvider is an object implementing #GtkStyleProvider, it is able
+ * to parse CSS-like input in order to style widgets.
+ *
+ * <refsect2 id="gtkcssprovider-selectors">
+ * <title>Widget selectors</title>
+ * <para>
+ * Selectors work in a really similar way than in common CSS, widget object
+ * names act as HTML tags:
+ * </para>
+ * <example>
+ * <title>Widgets in selectors</title>
+ * <programlisting>
+ * /&ast; Theme labels that are descendants of a window &ast;/
+ * GtkWindow GtkLabel {
+ *     background-color: &num;898989;
+ * }
+ *
+ * /&ast; Theme notebooks, and anything that's within these &ast;/
+ * GtkNotebook {
+ *     background-color: &num;a939f0;
+ * }
+ *
+ * /&ast; Theme combo boxes, and entries that
+ *  are direct children of a notebook &ast;/
+ * GtkComboBox,
+ * GtkNotebook > GtkEntry {
+ *     background-color: &num;1209a2;
+ * }
+ *
+ * /&ast; Theme any widget within a GtkBin &ast;/
+ * GtkBin * {
+ *     font-name: Sans 20;
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * Widget names may be matched in CSS as well:
+ * </para>
+ * <example>
+ * <title>Widget names in selectors</title>
+ * <programlisting>
+ * /&ast; Theme a label named title-label &ast;/
+ * GtkLabel&num;title-label {
+ *     font-name: Sans 15;
+ * }
+ *
+ * /&ast; Theme any widget named main-entry &ast;/
+ * &num;main-entry {
+ *     background-color: &num;f0a810;
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * Widgets may also define different classes, so these can be matched
+ * in CSS:
+ * </para>
+ * <example>
+ * <title>Widget names in selectors</title>
+ * <programlisting>
+ * /&ast; Theme all widgets defining the class entry &ast;/
+ * .entry {
+ *     foreground-color: &num;39f1f9;
+ * }
+ *
+ * /&ast; Theme spinbuttons' entry &ast;/
+ * GtkSpinButton.entry {
+ *     foreground-color: &num;900185;
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * Container widgets may define regions, these region names may be
+ * referenced in CSS, it's also possible to apply :nth-child
+ * pseudo-class information if the widget implementation provides
+ * such data.
+ * </para>
+ * <example>
+ * <title>Region names in containers</title>
+ * <programlisting>
+ * /&ast; Theme any label within a notebook &ast;/
+ * GtkNotebook GtkLabel {
+ *     foreground-color: &num;f90192;
+ * }
+ *
+ * /&ast; Theme labels within notebook tabs &ast;/
+ * GtkNotebook tab:nth-child GtkLabel {
+ *     foreground-color: &num;703910;
+ * }
+ *
+ * /&ast; Theme labels in the any first notebook
+ *  tab, both selectors are equivalent &ast;/
+ * GtkNotebook tab:nth-child(first) GtkLabel,
+ * GtkNotebook tab:first-child GtkLabel {
+ *     foreground-color: &num;89d012;
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * Widget states may be matched as pseudoclasses.
+ * Given the needed widget states differ from the
+ * offered pseudoclasses in CSS, some are unsupported,
+ * and some custom ones have been added.
+ * </para>
+ * <example>
+ * <title>Styling specific widget states</title>
+ * <programlisting>
+ * /&ast; Theme active (pressed) buttons &ast;/
+ * GtkButton:active {
+ *     background-color: &num;0274d9;
+ * }
+ *
+ * /&ast; Theme buttons with the mouse pointer on it &ast;/
+ * GtkButton:hover,
+ * GtkButton:prelight {
+ *     background-color: &num;3085a9;
+ * }
+ *
+ * /&ast; Theme insensitive widgets, both are equivalent &ast;/
+ * :insensitive,
+ * *:insensitive {
+ *     background-color: &num;320a91;
+ * }
+ *
+ * /&ast; Theme selection colors in entries &ast;/
+ * GtkEntry:selected {
+ *     background-color: &num;56f9a0;
+ * }
+ *
+ * /&ast; Theme focused labels &ast;/
+ * GtkLabel:focused {
+ *     background-color: &num;b4940f;
+ * }
+ *
+ * /&ast; Theme inconsistent checkbuttons &ast;/
+ * GtkCheckButton:inconsistent {
+ *     background-color: &num;20395a;
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
+ * Widget state pseudoclasses may only apply to the
+ * last element in a selector.
+ * </para>
+ * <para>
+ * All the mentioned elements may be combined to create
+ * complex selectors that match specific widget paths.
+ * As in CSS, rules apply by specificity, so the selectors
+ * describing the best a widget path will take precedence
+ * over the others.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-rules">
+ * <title>&commat; rules</title>
+ * <para>
+ * GTK+'s CSS supports the &commat;import rule, in order
+ * to load another CSS file in addition to the currently
+ * parsed one.
+ * </para>
+ * <example>
+ * <title>Using the &commat;import rule</title>
+ * <programlisting>
+ * &commat;import url (path/to/common.css)
+ * </programlisting>
+ * </example>
+ * <para>
+ * GTK+ also supports an additional &commat;define-color
+ * rule, in order to define a color name which may be used
+ * instead of color numeric representations.
+ * </para>
+ * <example>
+ * <title>Defining colors</title>
+ * <programlisting>
+ * &commat;define-color bg_color &num;f9a039;
+ *
+ * &ast; {
+ *     background-color: &commat;bg_color;
+ * }
+ * </programlisting>
+ * </example>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-symbolic-colors">
+ * <title>Symbolic colors</title>
+ * <para>
+ * Besides being able to define color names, the CSS
+ * parser is also able to read different color modifiers,
+ * which can also be nested, providing a rich language
+ * to define colors starting from other colors.
+ * </para>
+ * <example>
+ * <title>Using symbolic colors</title>
+ * <programlisting>
+ * &commat;define-color entry-color shade (&commat;bg_color, 0.7);
+ *
+ * GtkEntry {
+ *     background-color: @entry-color;
+ * }
+ *
+ * GtkEntry:focused {
+ *     background-color: mix (&commat;entry-color,
+ *                            shade (&num;fff, 0.5),
+ *                            0.8);
+ * }
+ * </programlisting>
+ * </example>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-properties">
+ * <title>Supported properties</title>
+ * <para>
+ * Properties are the part that differ the most to common CSS,
+ * not all properties are supported (some are planned to be
+ * supported eventually, some others are meaningless or don't
+ * map intuitively in a widget based environment).
+ * </para>
+ * <para>
+ * There is also a difference in shorthand properties, for
+ * example in common CSS it is fine to define a font through
+ * the different @font-family, @font-style, @font-size
+ * properties, meanwhile in GTK+'s CSS only the canonical
+ * @font property would be supported.
+ * </para>
+ * <para>
+ * The currently supported properties are:
+ * </para>
+ * <informaltable>
+ *   <tgroup cols="4">
+ *     <thead>
+ *       <row>
+ *         <entry>Property name</entry>
+ *         <entry>Syntax</entry>
+ *         <entry>Maps to</entry>
+ *         <entry>Examples</entry>
+ *       </row>
+ *     </thead>
+ *     <tbody>
+ *       <row>
+ *         <entry>engine</entry>
+ *         <entry><programlisting>engine-name</programlisting></entry>
+ *         <entry>#GtkThemingEngine</entry>
+ *         <entry><programlisting>engine: clearlooks;</programlisting></entry>
+ *       </row>
+ *       <row>
+ *         <entry>background-color</entry>
+ *         <entry morerows="3"><programlisting>color</programlisting></entry>
+ *         <entry morerows="3">#GdkColor</entry>
+ *         <entry morerows="3">
+ *           <programlisting>
+ * background-color: &num;fff;
+ * foreground-color: @color-name;
+ * text-color: shade (@color-name, 0.5);
+ * base-color: mix (@color-name, &num;f0f, 0.8);</programlisting>
+ *         </entry>
+ *       </row>
+ *       <row>
+ *         <entry>foreground-color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>text-color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>base-color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>font</entry>
+ *         <entry><programlisting>family [style] [size]</programlisting></entry>
+ *         <entry>#PangoFontDescription</entry>
+ *         <entry><programlisting>font: Sans 15;</programlisting></entry>
+ *       </row>
+ *       <row>
+ *         <entry>margin</entry>
+ *         <entry morerows="1">
+ *           <programlisting>
+ * width
+ * vertical-width horizontal-width
+ * top-width horizontal-width bottom-width
+ * top-width right-width bottom-width left-width
+ *           </programlisting>
+ *         </entry>
+ *         <entry morerows="1">#GtkBorder</entry>
+ *         <entry morerows="1">
+ *           <programlisting>
+ * margin: 5;
+ * margin: 5 10;
+ * margin: 5 10 3;
+ * margin: 5 10 3 5;</programlisting>
+ *         </entry>
+ *       </row>
+ *       <row>
+ *         <entry>padding</entry>
+ *       </row>
+ *       <row>
+ *         <entry>background-image</entry>
+ *         <entry>
+ *           <programlisting>
+ * -gtk-gradient (linear,
+ *                starting-x-position starting-y-position,
+ *                ending-x-position ending-y-position,
+ *                [ [from|to] (color) |
+ *                  color-stop (percentage, color) ] )
+ *
+ * -gtk-gradient (radial,
+ *                starting-x-position starting-y-position, starting-radius,
+ *                ending-x-position ending-y-position, ending-radius,
+ *                [ [from|to] (color) |
+ *                  color-stop (percentage, color) ]* )</programlisting>
+ *         </entry>
+ *         <entry>#cairo_pattern_t</entry>
+ *         <entry>
+ *           <programlisting>
+ * -gtk-gradient (linear,
+ *                top left, top right,
+ *                from (&num;fff), to (&num;000));
+ * -gtk-gradient (linear, 0.0 0.5, 0.5 1.0,
+ *                from (&num;fff),
+ *                color-stop (0.5, &num;f00),
+ *                to (&num;000));
+ * -gtk-gradient (radial,
+ *                center center, 0.2,
+ *                center center, 0.8,
+ *                color-stop (0.0, &num;fff),
+ *                color-stop (1.0, &num;000));</programlisting>
+ *         </entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-image</entry>
+ *         <entry><programlisting>url([path]) top-distance right-distance bottom-distance left-distance horizontal-option vertical-option</programlisting></entry>
+ *         <entry></entry>
+ *         <entry>
+ *           <programlisting>
+ * border-image: url (/path/to/image.png) 3 4 3 4 stretch;
+ * border-image: url (/path/to/image.png) 3 4 4 3 repeat stretch;</programlisting>
+ *         </entry>
+ *       </row>
+ *       <row>
+ *         <entry>transition</entry>
+ *         <entry><programlisting>duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out]</programlisting></entry>
+ *         <entry></entry>
+ *         <entry>
+ *           <programlisting>
+ * transition: 150ms ease-in-out;
+ * transition: 1s linear;</programlisting>
+ *         </entry>
+ *       </row>
+ *     </tbody>
+ *   </tgroup>
+ * </informaltable>
+ * </refsect2>
+ */
+
 typedef struct GtkCssProviderPrivate GtkCssProviderPrivate;
 typedef struct SelectorElement SelectorElement;
 typedef struct SelectorPath SelectorPath;
@@ -753,6 +1107,13 @@ gtk_css_provider_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
 }
 
+/**
+ * gtk_css_provider_new:
+ *
+ * Returns a newly created #GtkCssProvider.
+ *
+ * Returns: A new #GtkCssProvider
+ **/
 GtkCssProvider *
 gtk_css_provider_new (void)
 {
@@ -2235,6 +2596,18 @@ parse_stylesheet (GtkCssProvider *css_provider)
   return TRUE;
 }
 
+/**
+ * gtk_css_provider_load_from_data:
+ * @css_provider: a #GtkCssProvider
+ * @data: CSS data loaded in memory
+ * @length: the length of @data in bytes, or -1 for NUL terminated strings
+ * @error: (out) (allow-none): return location for a #GError, or %NULL
+ *
+ * Loads @data into @css_provider, making it clear any previously loaded
+ * information.
+ *
+ * Returns: %TRUE if the data could be loaded.
+ **/
 gboolean
 gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
                                  const gchar    *data,
@@ -2265,6 +2638,17 @@ gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
   return TRUE;
 }
 
+/**
+ * gtk_css_provider_load_from_file:
+ * @css_provider: a #GtkCssProvider
+ * @file: #GFile pointing to a file to load
+ * @error: (out) (allow-none): return location for a #GError, or %NULL
+ *
+ * Loads the data contained in @file into @css_provider, making it
+ * clear any previously loaded information.
+ *
+ * Returns: %TRUE if the data could be loaded.
+ **/
 gboolean
 gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                  GFile           *file,
@@ -2352,6 +2736,17 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   return TRUE;
 }
 
+/**
+ * gtk_css_provider_load_from_path:
+ * @css_provider: a #GtkCssProvider
+ * @path: the path of a filename to load, in the GLib filename encoding
+ * @error: (out) (allow-none): return location for a #GError, or %NULL
+ *
+ * Loads the data contained in @path into @css_provider, making it clear
+ * any previously loaded information.
+ *
+ * Returns: %TRUE if the data could be loaded.
+ **/
 gboolean
 gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                  const gchar     *path,
@@ -2364,6 +2759,15 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                    TRUE, error);
 }
 
+/**
+ * gtk_css_provider_get_default:
+ *
+ * Returns the provider containing the style settings used as a
+ * fallback for all widgets.
+ *
+ * Returns: (transfer none): The provider used for fallback styling.
+ *          This memory is owned by GTK+, and you must not free it.
+ **/
 GtkCssProvider *
 gtk_css_provider_get_default (void)
 {
@@ -2457,6 +2861,16 @@ css_provider_get_theme_dir (void)
   return path;
 }
 
+/**
+ * gtk_css_provider_get_named:
+ * @name: A theme name
+ * @variant: variant to load, for example, "dark", or %NULL for the default
+ *
+ * 
+ *
+ * Returns: (transfer none): The provider used for fallback styling.
+ *          This memory is owned by GTK+, and you must not free it.
+ **/
 GtkCssProvider *
 gtk_css_provider_get_named (const gchar *name,
                             const gchar *variant)

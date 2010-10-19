@@ -3232,6 +3232,16 @@ _gtk_container_get_reallocate_redraws (GtkContainer *container)
   return container->priv->reallocate_redraws;
 }
 
+/**
+ * gtk_container_get_path_for_child:
+ * @container: a #GtkContainer
+ * @child: a child of @container
+ *
+ * Returns a newly created widget path representing all the widget hierarchy
+ * from the toplevel down to @child (this one not being included).
+ *
+ * Returns: A newly created #GtkWidgetPath
+ **/
 GtkWidgetPath *
 gtk_container_get_path_for_child (GtkContainer *container,
                                   GtkWidget    *child)

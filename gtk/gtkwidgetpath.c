@@ -24,6 +24,62 @@
 #include "gtkwidget.h"
 #include "gtkwidgetpath.h"
 
+/**
+ * SECTION:gtkwidgetpath
+ * @Short_description: Widget path abstraction
+ * @Title: GtkWidgetPath
+ * @See_also: #GtkStyleContext
+ *
+ * #GtkWidgetPath is an struct that represents a widget hierarchy from
+ * the topmost widget, typically a toplevel, to any child. This widget
+ * path abstraction is used in #GtkStyleContext on behalf of the real
+ * widget in order to query style information.
+ *
+ * If you are using GTK+ widgets, there are many chances you don't
+ * need this API directly, as there is gtk_widget_get_path(), and the
+ * style context returned by gtk_widget_get_style_context() will be
+ * automatically updated on widget hierarchy changes.
+ *
+ * The widget path generation is generally simple:
+ * <example>
+ * <title>Defining a button within a window</title>
+ * <programlisting>
+ * {
+ *   GtkWidgetPath *path;
+ *
+ *   path = gtk_widget_path_new ();
+ *   gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
+ *   gtk_widget_path_append_type (path, GTK_TYPE_BUTTON);
+ * }
+ * </programlisting>
+ * </example>
+ *
+ * Although more complex information, such as widget names, or
+ * different classes (property that may be used by other widget
+ * types) and intermediate regions may be included:
+ *
+ * <example>
+ * <title>Defining the first tab widget in a notebook</title>
+ * <programlisting>
+ * {
+ *   GtkWidgetPath *path;
+ *   guint pos;
+ *
+ *   path = gtk_widget_path_new ();
+ *
+ *   pos = gtk_widget_path_append_type (path, GTK_TYPE_NOTEBOOK);
+ *   gtk_widget_path_iter_add_region (path, pos, "tab", GTK_REGION_EVEN | GTK_REGION_FIRST);
+ *
+ *   pos = gtk_widget_path_append_type (path, GTK_TYPE_LABEL);
+ *   gtk_widget_path_iter_set_name (path, pos, "first tab label");
+ * }
+ * </programlisting>
+ * </example>
+ *
+ * All this information will be used to match the style information
+ * that applies to the described widget.
+ **/
+
 typedef struct GtkPathElement GtkPathElement;
 
 struct GtkPathElement
@@ -34,11 +90,20 @@ struct GtkPathElement
   GArray *classes;
 };
 
-struct GtkWidgetPath
+struct _GtkWidgetPath
 {
   GArray *elems; /* First element contains the described widget */
 };
 
+/**
+ * gtk_widget_path_new:
+ *
+ * Returns an empty widget path.
+ *
+ * Returns: (transfer full): A newly created, empty, #GtkWidgetPath
+ *
+ * Since: 3.0
+ **/
 GtkWidgetPath *
 gtk_widget_path_new (void)
 {
@@ -50,6 +115,16 @@ gtk_widget_path_new (void)
   return path;
 }
 
+/**
+ * gtk_widget_path_copy:
+ * @path: a #GtkWidgetPath
+ *
+ * Returns a copy of @path
+ *
+ * Returns: (transfer full): a copy of @path
+ *
+ * Since: 3.0
+ **/
 GtkWidgetPath *
 gtk_widget_path_copy (const GtkWidgetPath *path)
 {
@@ -87,6 +162,14 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
   return new_path;
 }
 
+/**
+ * gtk_widget_path_free:
+ * @path: a #GtkWidgetPath
+ *
+ * Frees a #GtkWidgetPath.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_free (GtkWidgetPath *path)
 {
@@ -111,6 +194,17 @@ gtk_widget_path_free (GtkWidgetPath *path)
   g_slice_free (GtkWidgetPath, path);
 }
 
+/**
+ * gtk_widget_path_length:
+ * @path: a #GtkWidgetPath
+ *
+ * Returns the number of #GtkWidget #GTypes between the represented
+ * widget and its topmost container.
+ *
+ * Returns: the number of elements in the path
+ *
+ * Since: 3.0
+ **/
 guint
 gtk_widget_path_length (const GtkWidgetPath *path)
 {
@@ -119,6 +213,17 @@ gtk_widget_path_length (const GtkWidgetPath *path)
   return path->elems->len;
 }
 
+/**
+ * gtk_widget_path_prepend_type:
+ * @path: a #GtkWidgetPath
+ * @type: widget type to prepend
+ *
+ * Prepends a widget type to the widget hierachy represented by @path.
+ *
+ * Returns: the position where the element was inserted
+ *
+ * Since: 3.0
+ **/
 guint
 gtk_widget_path_prepend_type (GtkWidgetPath *path,
                               GType          type)
@@ -134,6 +239,17 @@ gtk_widget_path_prepend_type (GtkWidgetPath *path,
   return 0;
 }
 
+/**
+ * gtk_widget_path_append_type:
+ * @path: a #GtkWidgetPath
+ * @type: widget type to append
+ *
+ * Appends a widget type to the widget hierachy represented by @path.
+ *
+ * Returns: the position where the element was inserted
+ *
+ * Since: 3.0
+ **/
 guint
 gtk_widget_path_append_type (GtkWidgetPath *path,
                              GType          type)
@@ -149,6 +265,18 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
   return path->elems->len - 1;
 }
 
+/**
+ * gtk_widget_path_iter_get_widget_type:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the widget type for
+ *
+ * Returns the widget #GType that is at position @pos in the widget
+ * hierarchy defined in @path.
+ *
+ * Returns: a widget type
+ *
+ * Since: 3.0
+ **/
 GType
 gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
                                       guint                pos)
@@ -162,6 +290,17 @@ gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
   return elem->type;
 }
 
+/**
+ * gtk_widget_path_iter_set_widget_type:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify
+ * @type: widget type to set
+ *
+ * Sets the widget type for a given position in the widget hierarchy
+ * defined by @path. @type must be a #GtkWidget derived #GType.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_set_widget_type (GtkWidgetPath *path,
                                       guint          pos,
@@ -177,6 +316,17 @@ gtk_widget_path_iter_set_widget_type (GtkWidgetPath *path,
   elem->type = type;
 }
 
+/**
+ * gtk_widget_path_iter_get_name:
+ * @path: a #GtkWidgetPath
+ * @pos: position to get the widget name for
+ *
+ * Returns the name corresponding to the widget found at
+ * the position @pos in the widget hierarchy defined by
+ * @path
+ *
+ * Returns: The widget name, or %NULL if none was set.
+ **/
 G_CONST_RETURN gchar *
 gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
                                guint                pos)
@@ -190,6 +340,17 @@ gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
   return g_quark_to_string (elem->name);
 }
 
+/**
+ * gtk_widget_path_iter_set_name:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify
+ * @name: widget name
+ *
+ * Sets the widget name for the widget found at position @pos
+ * in the widget hierarchy defined by @path.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_set_name (GtkWidgetPath *path,
                                guint          pos,
@@ -206,6 +367,19 @@ gtk_widget_path_iter_set_name (GtkWidgetPath *path,
   elem->name = g_quark_from_string (name);
 }
 
+/**
+ * gtk_widget_path_iter_has_qname:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ * @qname: widget name as a #GQuark
+ *
+ * See gtk_widget_path_iter_has_name(). This is a version
+ * that operates on #GQuark<!-- -->s.
+ *
+ * Returns: %TRUE if the widget at @pos has this name
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
                                 guint                pos,
@@ -222,6 +396,19 @@ gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
   return (elem->name == qname);
 }
 
+/**
+ * gtk_widget_path_iter_has_name:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ * @name: a widget name
+ *
+ * Returns %TRUE if the widget at position @pos has the name @name,
+ * %FALSE otherwise.
+ *
+ * Returns: %TRUE if the widget at @pos has this name
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
                                guint                pos,
@@ -241,6 +428,18 @@ gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
   return gtk_widget_path_iter_has_qname (path, pos, qname);
 }
 
+/**
+ * gtk_widget_path_iter_add_class:
+ * @path: a #GtkWidget
+ * @pos: position to modify
+ * @name: a class name
+ *
+ * Adds the class @name to the widget at position @pos in
+ * the hierarchy defined in @path. See
+ * gtk_style_context_set_class().
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_add_class (GtkWidgetPath *path,
                                 guint          pos,
@@ -285,6 +484,17 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
     g_array_append_val (elem->classes, qname);
 }
 
+/**
+ * gtk_widget_path_iter_remove_class:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify
+ * @name: class name
+ *
+ * Removes the class @name from the widget at position @pos in
+ * the hierarchy defined in @path.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
                                    guint          pos,
@@ -324,6 +534,16 @@ gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
     }
 }
 
+/**
+ * gtk_widget_path_iter_clear_classes:
+ * @path: a #GtkWidget
+ * @pos: position to modify
+ *
+ * Removes all classes from the widget at position @pos in the
+ * hierarchy defined in @path.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
                                     guint          pos)
@@ -342,6 +562,21 @@ gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
     g_array_remove_range (elem->classes, 0, elem->classes->len);
 }
 
+/**
+ * gtk_widget_path_iter_list_classes:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ *
+ * Returns a list with all the class names defined for the widget
+ * at position @pos in the hierarchy defined in @path.
+ *
+ * Returns: (transfer container) (type utf8): The list of classes,
+ *          This is a list of strings, the #GSList contents are
+ *          owned by GTK+, but you should use g_slist_free() to
+ *          free the list itself.
+ *
+ * Since: 3.0
+ **/
 GSList *
 gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
                                    guint                pos)
@@ -369,6 +604,19 @@ gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
   return g_slist_reverse (list);
 }
 
+/**
+ * gtk_widget_path_iter_has_qclass:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ * @qname: class name as a #GQuark
+ *
+ * See gtk_widget_path_iter_has_class(). This is a version that operates
+ * with GQuark<!-- -->s.
+ *
+ * Returns: %TRUE if the widget at @pos has the class defined.
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_iter_has_qclass (const GtkWidgetPath *path,
                                  guint                pos,
@@ -401,6 +649,19 @@ gtk_widget_path_iter_has_qclass (const GtkWidgetPath *path,
   return FALSE;
 }
 
+/**
+ * gtk_widget_path_iter_has_class:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ * @name: class name
+ *
+ * Returns %TRUE if the widget at position @pos has the class @name
+ * defined, %FALSE otherwise.
+ *
+ * Returns: %TRUE if the class @name is defined for the widget at @pos
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
                                 guint                pos,
@@ -420,6 +681,19 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
   return gtk_widget_path_iter_has_qclass (path, pos, qname);
 }
 
+/**
+ * gtk_widget_path_iter_add_region:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify
+ * @name: region name
+ * @flags: flags affecting the region
+ *
+ * Adds the region @name to the widget at position @pos in
+ * the hierarchy defined in @path. See
+ * gtk_style_context_set_region().
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
                                  guint           pos,
@@ -444,6 +718,17 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
                        GUINT_TO_POINTER (flags));
 }
 
+/**
+ * gtk_widget_path_iter_remove_region:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify
+ * @name: region name
+ *
+ * Removes the region @name from the widget at position @pos in
+ * the hierarchy defined in @path.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
                                     guint          pos,
@@ -467,6 +752,16 @@ gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
     g_hash_table_remove (elem->regions, GUINT_TO_POINTER (qname));
 }
 
+/**
+ * gtk_widget_path_iter_clear_regions:
+ * @path: a #GtkWidgetPath
+ * @pos: position to modify
+ *
+ * Removes all regions from the widget at position @pos in the
+ * hierarchy defined in @path.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
                                     guint          pos)
@@ -482,6 +777,21 @@ gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
     g_hash_table_remove_all (elem->regions);
 }
 
+/**
+ * gtk_widget_path_iter_list_regions:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ *
+ * Returns a list with all the region names defined for the widget
+ * at position @pos in the hierarchy defined in @path.
+ *
+ * Returns: (transfer container) (type utf8): The list of regions,
+ *          This is a list of strings, the #GSList contents are
+ *          owned by GTK+, but you should use g_slist_free() to
+ *          free the list itself.
+ *
+ * Since: 3.0
+ **/
 GSList *
 gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
                                    guint                pos)
@@ -512,6 +822,20 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
   return list;
 }
 
+/**
+ * gtk_widget_path_iter_has_qregion:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ * @qname: region name as a #GQuark
+ * @flags: (out): return location for the region flags
+ *
+ * See gtk_widget_path_iter_has_region(). This is a version that operates
+ * with GQuark<!-- -->s.
+ *
+ * Returns: %TRUE if the widget at @pos has the region defined.
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
                                   guint                pos,
@@ -541,6 +865,20 @@ gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
   return TRUE;
 }
 
+/**
+ * gtk_widget_path_iter_has_region:
+ * @path: a #GtkWidgetPath
+ * @pos: position to query
+ * @name: region name
+ * @flags: (out): return location for the region flags
+ *
+ * Returns %TRUE if the widget at position @pos has the class @name
+ * defined, %FALSE otherwise.
+ *
+ * Returns: %TRUE if the class @name is defined for the widget at @pos
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
                                  guint                pos,
@@ -561,6 +899,17 @@ gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
   return gtk_widget_path_iter_has_qregion (path, pos, qname, flags);
 }
 
+/**
+ * gtk_widget_path_get_widget_type:
+ * @path: a #GtkWidget
+ *
+ * Returns the topmost widget type, that is, the widget type this path
+ * is representing.
+ *
+ * Returns: The widget type
+ *
+ * Since: 3.0
+ **/
 GType
 gtk_widget_path_get_widget_type (const GtkWidgetPath *path)
 {
@@ -568,10 +917,23 @@ gtk_widget_path_get_widget_type (const GtkWidgetPath *path)
 
   g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
 
-  elem = &g_array_index (path->elems, GtkPathElement, 0);
+  elem = &g_array_index (path->elems, GtkPathElement,
+                         path->elems->len - 1);
   return elem->type;
 }
 
+/**
+ * gtk_widget_path_is_type:
+ * @path: a #GtkWidgetPath
+ * @type: widget type to match
+ *
+ * Returns %TRUE if the widget type represented by this path
+ * is @type, or a subtype of it.
+ *
+ * Returns: %TRUE if the widget represented by @path is of type @type
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_is_type (const GtkWidgetPath *path,
                          GType                type)
@@ -581,7 +943,8 @@ gtk_widget_path_is_type (const GtkWidgetPath *path,
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), FALSE);
 
-  elem = &g_array_index (path->elems, GtkPathElement, 0);
+  elem = &g_array_index (path->elems, GtkPathElement,
+                         path->elems->len - 1);
 
   if (elem->type == type ||
       g_type_is_a (elem->type, type))
@@ -590,6 +953,18 @@ gtk_widget_path_is_type (const GtkWidgetPath *path,
   return FALSE;
 }
 
+/**
+ * gtk_widget_path_has_parent:
+ * @path: a #GtkWidgetPath
+ * @type: widget type to check in parents
+ *
+ * Returns %TRUE if any of the parents of the widget represented
+ * in @path is of type @type, or any subtype of it.
+ *
+ * Returns: %TRUE if any parent is of type @type
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_widget_path_has_parent (const GtkWidgetPath *path,
                             GType                type)
@@ -599,7 +974,7 @@ gtk_widget_path_has_parent (const GtkWidgetPath *path,
   g_return_val_if_fail (path != NULL, FALSE);
   g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), FALSE);
 
-  for (i = 1; i < path->elems->len; i++)
+  for (i = 0; i < path->elems->len - 1; i++)
     {
       GtkPathElement *elem;
 

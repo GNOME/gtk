@@ -44,4 +44,4 @@ GtkAnimationDescription * gtk_animation_description_from_string (const gchar *st
 
 G_END_DECLS
 
-#endif /* __GTK_ANIMATION_DESC_H__ */
+#endif /* __GTK_ANIMATION_DESCRIPTION_H__ */

@@ -29,6 +29,23 @@
 #include "gtk9slice.h"
 #include "gtkpango.h"
 
+/**
+ * SECTION:gtkthemingengine
+ * @Short_description: Theming renderers
+ * @Title: GtkThemingEngine
+ * @See_also: #GtkStyleContext
+ *
+ * #GtkThemingEngine is the object used for rendering themed content
+ * in GTK+ widgets. Even though GTK+ has a default implementation,
+ * it can be overridden in CSS files by enforcing a #GtkThemingEngine
+ * object to be loaded as a module.
+ *
+ * In order to implement a theming engine, a #GtkThemingEngine subclass
+ * must be created, alongside the CSS file that will reference it, the
+ * theming engine would be created as an .so library, and installed in
+ * $(gtk-modules-dir)/theming-engines/.
+ */
+
 typedef struct GtkThemingEnginePrivate GtkThemingEnginePrivate;
 
 enum {
@@ -194,6 +211,45 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
   priv->context = context;
 }
 
+/**
+ * gtk_theming_engine_register_property:
+ * @engine: a #GtkThemingEngine
+ * @property_name: property name to register
+ * @type: #GType the property will hold
+ * @default_value: default value for this property
+ * @parse_func: parsing function to use, or %NULL
+ *
+ * Registers a property so it can be used in the CSS file format,
+ * on the CSS file the property will look like
+ * "-${engine-object-name}-${@property_name}". being
+ * ${engine-object-name} the same than G_OBJECT_TYPE_NAME(engine)
+ * would return.
+ *
+ * For any type a @parse_func may be provided, being this function
+ * used for turning any property value (between ':' and ';') in
+ * CSS to the #GValue needed. For basic types there is already
+ * builtin parsing support, so %NULL may be provided for these
+ * cases.
+ *
+ * <note>
+ * This function needs to be called only once during theming
+ * engine object initialization.
+ * </note>
+ *
+ * <note>
+ * In order to make use of the custom registered properties in
+ * the CSS file, make sure the engine is loaded first either in
+ * a previous rule or within the same one.
+ * <programlisting>
+ * &ast; {
+ *     engine: someengine;
+ *     SomeEngine-custom-property: 2;
+ * }
+ * </programlisting>
+ * </note>
+ *
+ * Since: 3.0
+ **/
 void
 gtk_theming_engine_register_property (GtkThemingEngine       *engine,
                                       const gchar            *property_name,
@@ -213,6 +269,20 @@ gtk_theming_engine_register_property (GtkThemingEngine       *engine,
   g_free (name);
 }
 
+/**
+ * gtk_theming_engine_get_property:
+ * @engine: a #GtkThemingEngine
+ * @property: the property name
+ * @state: state to retrieve the value for
+ * @value: (out) (transfer full): return location for the property value,
+ *         you must free this memory using g_value_unset() once you are
+ *         done with it.
+ *
+ * Gets a property value as retrieved from the style settings that apply
+ * to the currently rendered element.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_theming_engine_get_property (GtkThemingEngine *engine,
                                  const gchar      *property,
@@ -229,6 +299,17 @@ gtk_theming_engine_get_property (GtkThemingEngine *engine,
   gtk_style_context_get_property (priv->context, property, state, value);
 }
 
+/**
+ * gtk_theming_engine_get_valist:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve values for
+ * @args: va_list of property name/return location pairs, followed by %NULL
+ *
+ * Retrieves several style property values that apply to the currently
+ * rendered element.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_theming_engine_get_valist (GtkThemingEngine *engine,
                                GtkStateFlags     state,
@@ -242,6 +323,17 @@ gtk_theming_engine_get_valist (GtkThemingEngine *engine,
   gtk_style_context_get_valist (priv->context, state, args);
 }
 
+/**
+ * gtk_theming_engine_get:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve values for
+ * @...: property name /return value pairs, followed by %NULL
+ *
+ * Retrieves several style property values that apply to the currently
+ * rendered element.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_theming_engine_get (GtkThemingEngine *engine,
                         GtkStateFlags     state,
@@ -259,6 +351,17 @@ gtk_theming_engine_get (GtkThemingEngine *engine,
   va_end (args);
 }
 
+/**
+ * gtk_theming_engine_get_style_property:
+ * @engine: a #GtkThemingEngine
+ * @property_name: the name of the widget style property
+ * @value: (out) (transfer full): Return location for the property value, free with
+ *         g_value_unset() after use.
+ *
+ * Gets the value for a widget style property.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_theming_engine_get_style_property (GtkThemingEngine *engine,
                                        const gchar      *property_name,
@@ -273,6 +376,16 @@ gtk_theming_engine_get_style_property (GtkThemingEngine *engine,
   gtk_style_context_get_style_property (priv->context, property_name, value);
 }
 
+/**
+ * gtk_theming_engine_get_style_valist:
+ * @engine: a #GtkThemingEngine
+ * @args: va_list of property name/return location pairs, followed by %NULL
+ *
+ * Retrieves several widget style properties from @engine according to the
+ * currently rendered content's style.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_theming_engine_get_style_valist (GtkThemingEngine *engine,
                                      va_list           args)
@@ -285,6 +398,16 @@ gtk_theming_engine_get_style_valist (GtkThemingEngine *engine,
   gtk_style_context_get_style_valist (priv->context, args);
 }
 
+/**
+ * gtk_theming_engine_get_style:
+ * @engine: a #GtkThemingEngine
+ * @...: property name /return value pairs, followed by %NULL
+ *
+ * Retrieves several widget style properties from @engine according
+ * to the currently rendered content's style.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_theming_engine_get_style (GtkThemingEngine *engine,
                               ...)
@@ -301,6 +424,16 @@ gtk_theming_engine_get_style (GtkThemingEngine *engine,
   va_end (args);
 }
 
+/**
+ * gtk_theming_engine_get_state:
+ * @engine: a #GtkThemingEngine
+ *
+ * returns the state used when rendering.
+ *
+ * Returns: the state flags
+ *
+ * Since: 3.0
+ **/
 GtkStateFlags
 gtk_theming_engine_get_state (GtkThemingEngine *engine)
 {
@@ -325,6 +458,16 @@ gtk_theming_engine_is_state_set (GtkThemingEngine *engine,
   return gtk_style_context_is_state_set (priv->context, state, progress);
 }
 
+/**
+ * gtk_theming_engine_get_path:
+ * @engine: a #GtkThemingEngine
+ *
+ * Returns the widget path used for style matching.
+ *
+ * Returns: (transfer none): A #GtkWidgetPath
+ *
+ * Since: 3.0
+ **/
 G_CONST_RETURN GtkWidgetPath *
 gtk_theming_engine_get_path (GtkThemingEngine *engine)
 {
@@ -336,6 +479,18 @@ gtk_theming_engine_get_path (GtkThemingEngine *engine)
   return gtk_style_context_get_path (priv->context);
 }
 
+/**
+ * gtk_theming_engine_has_class:
+ * @engine: a #GtkThemingEngine
+ * @style_class: class name to look up
+ *
+ * Returns %TRUE if the currently rendered contents have
+ * defined the given class name.
+ *
+ * Returns: %TRUE if @engine has @class_name defined
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_theming_engine_has_class (GtkThemingEngine *engine,
                               const gchar      *style_class)
@@ -348,9 +503,23 @@ gtk_theming_engine_has_class (GtkThemingEngine *engine,
   return gtk_style_context_has_class (priv->context, style_class);
 }
 
+/**
+ * gtk_theming_engine_has_region:
+ * @engine: a #GtkThemingEngine
+ * @style_region: a region name
+ * @flags: (out) (allow-none): return location for region flags
+ *
+ * Returns %TRUE if the currently rendered contents have the
+ * region defined. If @flags_return is not %NULL, it is set
+ * to the flags affecting the region.
+ *
+ * Returns: %TRUE if region is defined
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_theming_engine_has_region (GtkThemingEngine *engine,
-                               const gchar      *style_class,
+                               const gchar      *style_region,
                                GtkRegionFlags   *flags)
 {
   GtkThemingEnginePrivate *priv;
@@ -361,9 +530,19 @@ gtk_theming_engine_has_region (GtkThemingEngine *engine,
   g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
 
   priv = engine->priv;
-  return gtk_style_context_has_region (priv->context, style_class, flags);
+  return gtk_style_context_has_region (priv->context, style_region, flags);
 }
 
+/**
+ * gtk_theming_engine_get_direction:
+ * @engine: a #GtkThemingEngine
+ *
+ * Returns the widget direction used for rendering.
+ *
+ * Returns: the widget direction
+ *
+ * Since: 3.0
+ **/
 GtkTextDirection
 gtk_theming_engine_get_direction (GtkThemingEngine *engine)
 {
@@ -375,6 +554,16 @@ gtk_theming_engine_get_direction (GtkThemingEngine *engine)
   return gtk_style_context_get_direction (priv->context);
 }
 
+/**
+ * gtk_theming_engine_get_junction_sides:
+ * @engine: a #GtkThemingEngine
+ *
+ * Returns the widget direction used for rendering.
+ *
+ * Returns: the widget direction
+ *
+ * Since: 3.0
+ **/
 GtkJunctionSides
 gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine)
 {
@@ -441,6 +630,16 @@ gtk_theming_module_init (GtkThemingModule *module)
 {
 }
 
+/**
+ * gtk_theming_engine_load:
+ * @name: Theme engine name to load
+ *
+ * Loads and initializes a theming engine module from the
+ * standard directories.
+ *
+ * Returns: (transfer none): A theming engine, or %NULL if
+ * the engine @name doesn't exist.
+ **/
 GtkThemingEngine *
 gtk_theming_engine_load (const gchar *name)
 {
@@ -484,6 +683,14 @@ gtk_theming_engine_load (const gchar *name)
   return engine;
 }
 
+/**
+ * gtk_theming_engine_get_screen:
+ * @engine: a #GtkThemingEngine
+ *
+ * Returns the #GdkScreen to which @engine currently rendering to.
+ *
+ * Returns: a #GdkScreen, or %NULL.
+ **/
 GdkScreen *
 gtk_theming_engine_get_screen (GtkThemingEngine *engine)
 {
