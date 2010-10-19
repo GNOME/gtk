@@ -44,17 +44,16 @@ G_BEGIN_DECLS
 #define GTK_IS_TOGGLE_BUTTON_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TOGGLE_BUTTON))
 #define GTK_TOGGLE_BUTTON_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TOGGLE_BUTTON, GtkToggleButtonClass))
 
-
-typedef struct _GtkToggleButton       GtkToggleButton;
-typedef struct _GtkToggleButtonClass  GtkToggleButtonClass;
+typedef struct _GtkToggleButton              GtkToggleButton;
+typedef struct _GtkToggleButtonPrivate       GtkToggleButtonPrivate;
+typedef struct _GtkToggleButtonClass         GtkToggleButtonClass;
 
 struct _GtkToggleButton
 {
+  /*< private >*/
   GtkButton button;
 
-  guint GSEAL (active) : 1;
-  guint GSEAL (draw_indicator) : 1;
-  guint GSEAL (inconsistent) : 1;
+  GtkToggleButtonPrivate *priv;
 };
 
 struct _GtkToggleButtonClass
