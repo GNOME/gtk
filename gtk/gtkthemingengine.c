@@ -445,17 +445,36 @@ gtk_theming_engine_get_state (GtkThemingEngine *engine)
   return gtk_style_context_get_state (priv->context);
 }
 
+/**
+ * gtk_theming_engine_state_is_running:
+ * @engine: a #GtkThemingEngine
+ * @state: a widget state
+ * @progress: (out): return location for the transition progress
+ *
+ * Returns %TRUE if there is a transition animation running for the
+ * current region (see gtk_style_context_push_animatable_region()).
+ *
+ * If @progress is not %NULL, the animation progress will be returned
+ * there, 0.0 means the state is closest to being %FALSE, while 1.0 means
+ * it's closest to being %TRUE. This means transition animations will
+ * run from 0 to 1 when @state is being set to %TRUE and from 1 to 0 when
+ * it's being set to %FALSE.
+ *
+ * Returns: %TRUE if there is a running transition animation for @state.
+ *
+ * Since: 3.0
+ **/
 gboolean
-gtk_theming_engine_is_state_set (GtkThemingEngine *engine,
-                                 GtkStateType      state,
-                                 gdouble          *progress)
+gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
+                                     GtkStateType      state,
+                                     gdouble          *progress)
 {
   GtkThemingEnginePrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), 0);
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
 
   priv = engine->priv;
-  return gtk_style_context_is_state_set (priv->context, state, progress);
+  return gtk_style_context_state_is_running (priv->context, state, progress);
 }
 
 /**
@@ -766,7 +785,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   else
     gdk_cairo_set_source_color (cr, text_color);
 
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT, NULL))
+  if (flags & GTK_STATE_FLAG_INCONSISTENT)
     {
       int line_thickness = MAX (1, (3 + interior_size * 2) / 7);
 
@@ -780,12 +799,15 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   else
     {
       gdouble progress;
-      gboolean active;
+      gboolean running;
 
-      active = gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE, &progress);
+      running = gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress);
 
-      if (active || progress > 0)
+      if ((flags & GTK_STATE_FLAG_ACTIVE) || running)
         {
+          if (!running)
+            progress = 1;
+
           cairo_translate (cr,
                            x + pad, y + pad);
 
@@ -887,7 +909,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   /* FIXME: thickness */
   thickness = 1;
 
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INCONSISTENT, NULL))
+  if (flags & GTK_STATE_FLAG_INCONSISTENT)
     {
       gint line_thickness;
 
@@ -909,7 +931,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 		       line_thickness);
       cairo_fill (cr);
     }
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_ACTIVE, NULL))
+  if (flags & GTK_STATE_FLAG_ACTIVE)
     {
       pad = thickness + MAX (1, 2 * (exterior_size - 2 * thickness) / 9);
       interior_size = MAX (1, exterior_size - 2 * pad);
@@ -1100,7 +1122,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   GdkColor *bg_color, *base_color;
   cairo_pattern_t *pattern;
   GtkStateFlags flags;
-  gboolean prelight;
+  gboolean running;
   gdouble progress, alpha = 1;
 
   flags = gtk_theming_engine_get_state (engine);
@@ -1121,19 +1143,19 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                           "base-color", &base_color,
                           NULL);
 
-  prelight = gtk_theming_engine_is_state_set (engine, GTK_STATE_PRELIGHT, &progress);
+  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
 
   cairo_translate (cr, x, y);
   cairo_scale (cr, width, height);
 
-  if (prelight || progress > 0 )
+  if (running)
     {
       cairo_pattern_t *other_pattern;
       GtkStateFlags other_flags;
       GdkColor *other_bg, *other_base;
       cairo_pattern_t *new_pattern = NULL;
 
-      if (prelight)
+      if (flags & GTK_STATE_FLAG_PRELIGHT)
         {
           other_flags = flags & ~(GTK_STATE_FLAG_PRELIGHT);
           progress = 1 - progress;
@@ -1833,7 +1855,7 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   else
     cairo_translate (cr, x, y);
 
-  if (gtk_theming_engine_is_state_set (engine, GTK_STATE_INSENSITIVE, NULL))
+  if (flags & GTK_STATE_FLAG_INSENSITIVE)
     {
       cairo_save (cr);
       cairo_set_source_rgb (cr, 1, 1, 1);

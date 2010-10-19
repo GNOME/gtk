@@ -1304,66 +1304,53 @@ context_has_animatable_region (GtkStyleContext *context,
   return FALSE;
 }
 
+/**
+ * gtk_style_context_state_is_running:
+ * @context: a #GtkStyleContext
+ * @state: a widget state
+ * @progress: (out): return location for the transition progress
+ *
+ * Returns %TRUE if there is a transition animation running for the
+ * current region (see gtk_style_context_push_animatable_region()).
+ *
+ * If @progress is not %NULL, the animation progress will be returned
+ * there, 0.0 means the state is closest to being %FALSE, while 1.0 means
+ * it's closest to being %TRUE. This means transition animations will
+ * run from 0 to 1 when @state is being set to %TRUE and from 1 to 0 when
+ * it's being set to %FALSE.
+ *
+ * Returns: %TRUE if there is a running transition animation for @state.
+ *
+ * Since: 3.0
+ **/
 gboolean
-gtk_style_context_is_state_set (GtkStyleContext *context,
-                                GtkStateType     state,
-                                gdouble         *progress)
+gtk_style_context_state_is_running (GtkStyleContext *context,
+                                    GtkStateType     state,
+                                    gdouble         *progress)
 {
   GtkStyleContextPrivate *priv;
-  gboolean state_set;
+  AnimationInfo *info;
+  GSList *l;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
 
   priv = context->priv;
 
-  switch (state)
+  for (l = priv->animations; l; l = l->next)
     {
-    case GTK_STATE_NORMAL:
-      state_set = (priv->state_flags == 0);
-      break;
-    case GTK_STATE_ACTIVE:
-      state_set = (priv->state_flags & GTK_STATE_FLAG_ACTIVE);
-      break;
-    case GTK_STATE_PRELIGHT:
-      state_set = (priv->state_flags & GTK_STATE_FLAG_PRELIGHT);
-      break;
-    case GTK_STATE_SELECTED:
-      state_set = (priv->state_flags & GTK_STATE_FLAG_SELECTED);
-      break;
-    case GTK_STATE_INSENSITIVE:
-      state_set = (priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
-      break;
-    case GTK_STATE_INCONSISTENT:
-      state_set = (priv->state_flags & GTK_STATE_FLAG_INCONSISTENT);
-      break;
-    case GTK_STATE_FOCUSED:
-      state_set = (priv->state_flags & GTK_STATE_FLAG_FOCUSED);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+      info = l->data;
 
-  if (progress)
-    {
-      AnimationInfo *info;
-      GSList *l;
-
-      *progress = (state_set) ? 1 : 0;
-
-      for (l = priv->animations; l; l = l->next)
+      if (info->state == state &&
+          context_has_animatable_region (context, info->region_id))
         {
-          info = l->data;
+          if (progress)
+            *progress = gtk_timeline_get_progress (info->timeline);
 
-          if (info->state == state &&
-              context_has_animatable_region (context, info->region_id))
-            {
-              *progress = gtk_timeline_get_progress (info->timeline);
-              break;
-            }
+          return TRUE;
         }
     }
 
-  return state_set;
+  return FALSE;
 }
 
 /**

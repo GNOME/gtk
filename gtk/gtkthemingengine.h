@@ -192,10 +192,10 @@ gboolean gtk_theming_engine_has_region (GtkThemingEngine *engine,
                                         const gchar      *style_class,
                                         GtkRegionFlags   *flags);
 
-GtkStateFlags gtk_theming_engine_get_state     (GtkThemingEngine *engine);
-gboolean      gtk_theming_engine_is_state_set  (GtkThemingEngine *engine,
-                                                GtkStateType      state,
-                                                gdouble          *progress);
+GtkStateFlags gtk_theming_engine_get_state        (GtkThemingEngine *engine);
+gboolean      gtk_theming_engine_state_is_running (GtkThemingEngine *engine,
+                                                   GtkStateType      state,
+                                                   gdouble          *progress);
 
 GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
 

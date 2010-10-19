@@ -82,9 +82,9 @@ void          gtk_style_context_set_state    (GtkStyleContext *context,
                                               GtkStateFlags    flags);
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
-gboolean      gtk_style_context_is_state_set (GtkStyleContext *context,
-                                              GtkStateType     state,
-                                              gdouble         *progress);
+gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
+                                                  GtkStateType     state,
+                                                  gdouble         *progress);
 
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
@@ -146,6 +146,8 @@ void gtk_style_context_push_animatable_region (GtkStyleContext *context,
                                                gpointer         region_id);
 void gtk_style_context_pop_animatable_region  (GtkStyleContext *context);
 
+void gtk_style_context_invalidate (GtkStyleContext *context);
+void gtk_style_context_reset_widgets (GdkScreen *screen);
 
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
@@ -155,23 +157,6 @@ void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *c
 void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,
                                                               gint             rel_x,
                                                               gint             rel_y);
-
-/* Animation for state changes */
-void gtk_style_context_state_transition_start  (GtkStyleContext *context,
-                                                gpointer         identifier,
-                                                GtkWidget       *widget,
-                                                GtkStateType     state,
-                                                gboolean         value,
-                                                GdkRectangle    *rect);
-void gtk_style_context_state_transition_update (GtkStyleContext *context,
-                                                gpointer         identifier,
-                                                GdkRectangle    *rect,
-                                                GtkStateType     state);
-void gtk_style_context_state_transition_stop   (GtkStyleContext *context,
-                                                gpointer         identifier);
-
-void gtk_style_context_invalidate (GtkStyleContext *context);
-void gtk_style_context_reset_widgets (GdkScreen *screen);
 
 /* Paint methods */
 void gtk_render_check (GtkStyleContext *context,
