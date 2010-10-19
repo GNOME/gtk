@@ -3110,7 +3110,7 @@ get_pixmap_and_mask (GdkWindow		*window,
                      GdkPixmap         **pmap_return,
                      GdkBitmap         **mask_return)
 {
-  GdkScreen *screen = gdk_drawable_get_screen (window);
+  GdkScreen *screen = gdk_window_get_screen (window);
   ScreenIconInfo *default_icon_info = get_screen_icon_info (screen);
   GdkPixbuf *best_icon;
   GList *tmp_list;
@@ -4101,8 +4101,8 @@ gtk_window_get_size (GtkWindow *window,
 
   if (gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
-      gdk_drawable_get_size (GTK_WIDGET (window)->window,
-                             &w, &h);
+      w = gdk_window_get_width (GTK_WIDGET (window)->window);
+      h = gdk_window_get_height (GTK_WIDGET (window)->window);
     }
   else
     {

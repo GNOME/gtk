@@ -29,6 +29,8 @@
 #include <math.h>
 #include <string.h>
 
+#undef GDK_DISABLE_DEPRECATED /* We need gdk_drawable_get_size() */
+
 #include "gtkorientable.h"
 #include "gtkruler.h"
 #include "gtkprivate.h"

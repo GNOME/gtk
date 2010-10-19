@@ -669,7 +669,7 @@ beep_window (GdkWindow *window)
     }
   else
     {
-      GdkScreen *screen = gdk_drawable_get_screen (GDK_DRAWABLE (window));
+      GdkScreen *screen = gdk_window_get_screen (window);
       gboolean   beep;
 
       g_object_get (gtk_settings_get_for_screen (screen),
@@ -744,7 +744,7 @@ is_hex_keyval (guint keyval)
 static guint
 canonical_hex_keyval (GdkEventKey *event)
 {
-  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_drawable_get_display (event->window));
+  GdkKeymap *keymap = gdk_keymap_get_for_display (gdk_window_get_display (event->window));
   guint keyval;
   guint *keyvals = NULL;
   gint n_vals = 0;

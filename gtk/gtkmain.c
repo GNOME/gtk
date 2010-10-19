@@ -1438,7 +1438,7 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_MOTION_NOTIFY:
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
-      display = gdk_drawable_get_display (event->proximity.window);
+      display = gdk_window_get_display (event->proximity.window);
       if (!gdk_pointer_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;
@@ -1446,7 +1446,7 @@ rewrite_event_for_grabs (GdkEvent *event)
 
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
-      display = gdk_drawable_get_display (event->key.window);
+      display = gdk_window_get_display (event->key.window);
       if (!gdk_keyboard_grab_info_libgtk_only (display, &grab_window, &owner_events) ||
 	  !owner_events)
 	return NULL;

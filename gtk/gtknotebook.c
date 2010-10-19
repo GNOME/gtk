@@ -2327,8 +2327,8 @@ gtk_notebook_expose (GtkWidget      *widget,
       cairo_paint (cr);
       cairo_destroy (cr);
 
-      gdk_drawable_get_size (priv->drag_window,
-			     &area.width, &area.height);
+      area.width = gdk_window_get_width (priv->drag_window);
+      area.height = gdk_window_get_height (priv->drag_window);
       gtk_notebook_draw_tab (notebook,
 			     notebook->cur_page,
 			     &area);
@@ -3046,7 +3046,8 @@ get_pointer_position (GtkNotebook *notebook)
     return POINTER_BETWEEN;
 
   gdk_window_get_position (notebook->event_window, &wx, &wy);
-  gdk_drawable_get_size (GDK_DRAWABLE (notebook->event_window), &width, &height);
+  width = gdk_window_get_width (notebook->event_window);
+  height = gdk_window_get_height (notebook->event_window);
 
   if (notebook->tab_pos == GTK_POS_TOP ||
       notebook->tab_pos == GTK_POS_BOTTOM)
@@ -3127,7 +3128,8 @@ check_threshold (GtkNotebook *notebook,
   dnd_threshold *= DND_THRESHOLD_MULTIPLIER;
 
   gdk_window_get_position (notebook->event_window, &rectangle.x, &rectangle.y);
-  gdk_drawable_get_size (GDK_DRAWABLE (notebook->event_window), &rectangle.width, &rectangle.height);
+  rectangle.width = gdk_window_get_width (notebook->event_window);
+  rectangle.height = gdk_window_get_height (notebook->event_window);
 
   rectangle.x -= dnd_threshold;
   rectangle.width += 2 * dnd_threshold;

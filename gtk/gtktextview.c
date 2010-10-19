@@ -4046,7 +4046,7 @@ set_invisible_cursor (GdkWindow *window)
   GdkDisplay *display;
   GdkCursor *cursor;
 
-  display = gdk_drawable_get_display (window);
+  display = gdk_window_get_display (window);
   cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
  
   gdk_window_set_cursor (window, cursor);
@@ -6078,7 +6078,8 @@ drag_scan_timeout (gpointer data)
   text_view = GTK_TEXT_VIEW (data);
 
   get_iter_at_pointer (text_view, &newplace, &x, &y);
-  gdk_drawable_get_size (text_view->text_window->bin_window, &width, &height);
+  width = gdk_window_get_width (text_view->text_window->bin_window);
+  height = gdk_window_get_height (text_view->text_window->bin_window);
 
   gtk_text_buffer_move_mark (get_buffer (text_view),
                              text_view->dnd_mark,
@@ -8148,7 +8149,7 @@ text_window_realize (GtkTextWindow *win,
       if (gtk_widget_is_sensitive (widget))
         {
           /* I-beam cursor */
-          cursor = gdk_cursor_new_for_display (gdk_drawable_get_display (widget->window),
+          cursor = gdk_cursor_new_for_display (gdk_window_get_display (widget->window),
 					       GDK_XTERM);
           gdk_window_set_cursor (win->bin_window, cursor);
           gdk_cursor_unref (cursor);

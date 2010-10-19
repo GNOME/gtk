@@ -1298,7 +1298,7 @@ tooltips_enabled (GdkWindow *window)
   GdkScreen *screen;
   GtkSettings *settings;
 
-  screen = gdk_drawable_get_screen (window);
+  screen = gdk_window_get_screen (window);
   settings = gtk_settings_get_for_screen (screen);
 
   g_object_get (settings,
@@ -1323,7 +1323,7 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 
   /* Returns coordinates relative to has_tooltip_widget's allocation. */
   has_tooltip_widget = find_topmost_widget_coords_from_event (event, &x, &y);
-  display = gdk_drawable_get_display (event->any.window);
+  display = gdk_window_get_display (event->any.window);
   current_tooltip = g_object_get_data (G_OBJECT (display),
 				       "gdk-display-current-tooltip");
 

@@ -351,7 +351,8 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   if (gtk_widget_get_realized (widget))
     {
-      gdk_drawable_get_size (GDK_DRAWABLE (widget->window), &w, &h);
+      w = gdk_window_get_width (widget->window);
+      h = gdk_window_get_height (widget->window);
       gdk_window_reparent (widget->window, plug->socket_window, -w, -h);
     }
 

@@ -18,6 +18,8 @@
  *          Alexander Larsson <alexl@redhat.com>
  */
 
+#undef GDK_DISABLE_DEPRECATED /* We need gdk_drawable_get_size() */
+
 #include "gtkoffscreenwindow.h"
 #include "gtkalias.h"
 

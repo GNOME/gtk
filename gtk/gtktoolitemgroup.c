@@ -1181,7 +1181,7 @@ gtk_tool_item_group_realize (GtkWidget *widget)
   widget->window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                    &attributes, attributes_mask);
 
-  display = gdk_drawable_get_display (widget->window);
+  display = gdk_window_get_display (widget->window);
 
   if (gdk_display_supports_composite (display))
     gdk_window_set_composited (widget->window, TRUE);

@@ -752,7 +752,8 @@ gtk_spin_button_expose (GtkWidget      *widget,
               else
                 state = GTK_STATE_NORMAL;
 
-	      gdk_drawable_get_size (spin->panel, &width, &height);
+              width = gdk_window_get_width (spin->panel);
+              height = gdk_window_get_height (spin->panel);
 
 	      gtk_paint_box (widget->style, spin->panel,
 			     state, shadow_type,

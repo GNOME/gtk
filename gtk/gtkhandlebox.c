@@ -885,7 +885,8 @@ gtk_handle_box_paint (GtkWidget      *widget,
 
   handle_position = effective_handle_position (hb);
 
-  gdk_drawable_get_size (hb->bin_window, &width, &height);
+  width = gdk_window_get_width (hb->bin_window);
+  height = gdk_window_get_height (hb->bin_window);
   
   if (!event)
     gtk_paint_box (widget->style,
@@ -1083,7 +1084,8 @@ gtk_handle_box_button_press (GtkWidget      *widget,
                                         gtk_widget_get_screen (GTK_WIDGET (hb)));
 	      gdk_window_get_deskrelative_origin (hb->bin_window, &desk_x, &desk_y);
 	      gdk_window_get_origin (hb->bin_window, &root_x, &root_y);
-	      gdk_drawable_get_size (hb->bin_window, &width, &height);
+	      width = gdk_window_get_width (hb->bin_window);
+	      height = gdk_window_get_height (hb->bin_window);
 		  
 	      private->orig_x = event->x_root;
 	      private->orig_y = event->y_root;
@@ -1099,7 +1101,8 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 	      if (gdk_window_is_viewable (widget->window))
 		{
 		  gdk_window_get_origin (widget->window, &root_x, &root_y);
-		  gdk_drawable_get_size (widget->window, &width, &height);
+		  width = gdk_window_get_width (widget->window);
+		  height = gdk_window_get_height (widget->window);
 	      
 		  hb->attach_allocation.x = root_x;
 		  hb->attach_allocation.y = root_y;
@@ -1276,7 +1279,8 @@ gtk_handle_box_motion (GtkWidget      *widget,
     {
       gint width, height;
 
-      gdk_drawable_get_size (hb->float_window, &width, &height);
+      width = gdk_window_get_width (hb->float_window);
+      height = gdk_window_get_height (hb->float_window);
       new_x += hb->deskoff_x;
       new_y += hb->deskoff_y;
 

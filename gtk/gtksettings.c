@@ -1943,7 +1943,7 @@ _gtk_settings_handle_event (GdkEventSetting *event)
   GParamSpec *pspec;
   guint property_id;
 
-  settings = gtk_settings_get_for_screen (gdk_drawable_get_screen (event->window));
+  settings = gtk_settings_get_for_screen (gdk_window_get_screen (event->window));
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name);
  
   if (pspec) 

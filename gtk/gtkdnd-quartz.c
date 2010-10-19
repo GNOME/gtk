@@ -368,7 +368,8 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 	{
 	  x = 0;
 	  y = 0;
-	  gdk_drawable_get_size (widget->window, &width, &height);
+	  width = gdk_window_get_width (widget->window);
+	  height = gdk_window_get_height (widget->window);
 	}
       
       gtk_paint_shadow (widget->style, widget->window,
@@ -715,7 +716,8 @@ gtk_drag_find_widget (GtkWidget       *widget,
 	{
 	  GdkRectangle window_rect = { 0, 0, 0, 0 };
 	  
-	  gdk_drawable_get_size (window, &window_rect.width, &window_rect.height);
+	  window_rect.width = gdk_window_get_width (window);
+	  window_rect.height = gdk_window_get_height (window);
 
 	  gdk_rectangle_intersect (&new_allocation, &window_rect, &new_allocation);
 
@@ -1782,7 +1784,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (context->is_source);
   g_return_if_fail (icon_name != NULL);
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
   g_return_if_fail (screen != NULL);
 
   settings = gtk_settings_get_for_screen (screen);

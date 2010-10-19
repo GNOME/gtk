@@ -621,7 +621,7 @@ gtk_tool_palette_expose_event (GtkWidget      *widget,
   cairo_t *cr;
   guint i;
 
-  display = gdk_drawable_get_display (widget->window);
+  display = gdk_window_get_display (widget->window);
 
   if (!gdk_display_supports_composite (display))
     return FALSE;

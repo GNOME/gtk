@@ -3220,7 +3220,8 @@ draw_icon (GtkWidget            *widget,
   if (icon_info->pixbuf == NULL)
     return;
 
-  gdk_drawable_get_size (icon_info->window, &width, &height);
+  width = gdk_window_get_width (icon_info->window);
+  height = gdk_window_get_height (icon_info->window);
 
   /* size_allocate hasn't been called yet. These are the default values.
    */
@@ -3286,7 +3287,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   gboolean state_hint;
   GtkStateType state;
 
-  gdk_drawable_get_size (widget->window, &width, &height);
+  width = gdk_window_get_width (widget->window);
+  height = gdk_window_get_height (widget->window);
 
   /* Fix a problem with some themes which assume that entry->text_area's
    * width equals widget->window's width */
@@ -3374,7 +3376,8 @@ get_progress_area (GtkWidget *widget,
   *x = progress_border.left;
   *y = progress_border.top;
 
-  gdk_drawable_get_size (widget->window, width, height);
+  *width = gdk_window_get_width (widget->window);
+  *height = gdk_window_get_height (widget->window);
 
   *width -= progress_border.left + progress_border.right;
   *height -= progress_border.top + progress_border.bottom;
@@ -3475,7 +3478,8 @@ gtk_entry_expose (GtkWidget      *widget,
     {
       gint width, height;
 
-      gdk_drawable_get_size (entry->text_area, &width, &height);
+      width = gdk_window_get_width (entry->text_area);
+      height = gdk_window_get_height (entry->text_area);
 
       gtk_paint_flat_box (widget->style, entry->text_area, 
 			  state, GTK_SHADOW_NONE,
@@ -3507,7 +3511,8 @@ gtk_entry_expose (GtkWidget      *widget,
             {
               gint width, height;
 
-              gdk_drawable_get_size (icon_info->window, &width, &height);
+              width = gdk_window_get_width (icon_info->window);
+              height = gdk_window_get_height (icon_info->window);
 
               gtk_paint_flat_box (widget->style, icon_info->window,
                                   gtk_widget_get_state (widget), GTK_SHADOW_NONE,
@@ -3854,7 +3859,8 @@ gtk_entry_button_release (GtkWidget      *widget,
         {
           gint width, height;
 
-          gdk_drawable_get_size (icon_info->window, &width, &height);
+          width = gdk_window_get_width (icon_info->window);
+          height = gdk_window_get_height (icon_info->window);
 
           icon_info->pressed = FALSE;
 
@@ -4007,7 +4013,8 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   else
     {
       gint height;
-      gdk_drawable_get_size (entry->text_area, NULL, &height);
+
+      height = gdk_window_get_height (entry->text_area);
 
       if (event->y < 0)
 	tmp_pos = 0;
@@ -5619,7 +5626,8 @@ gtk_entry_draw_text (GtkEntry *entry)
         }
       else
         {
-          gdk_drawable_get_size (entry->text_area, &width, &height);
+          width = gdk_window_get_width (entry->text_area);
+          height = gdk_window_get_height (entry->text_area);
 
           cairo_rectangle (cr, 0, 0, width, height);
           cairo_clip (cr);
@@ -5697,7 +5705,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
       xoffset = inner_border.left - entry->scroll_offset;
 
-      gdk_drawable_get_size (entry->text_area, NULL, &text_area_height);
+      text_area_height = gdk_window_get_height (entry->text_area);
 
       layout = gtk_entry_ensure_layout (entry, TRUE);
       text = pango_layout_get_text (layout);
@@ -5969,7 +5977,7 @@ gtk_entry_adjust_scroll (GtkEntry *entry)
 
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
-  gdk_drawable_get_size (entry->text_area, &text_area_width, NULL);
+  text_area_width = gdk_window_get_width (entry->text_area);
   text_area_width -= inner_border.left + inner_border.right;
   if (text_area_width < 0)
     text_area_width = 0;
@@ -8641,7 +8649,7 @@ popup_position_func (GtkMenu   *menu,
 
   gdk_screen_get_monitor_geometry (screen, monitor_num, &monitor);
   gtk_widget_size_request (entry->popup_menu, &menu_req);
-  gdk_drawable_get_size (entry->text_area, NULL, &height);
+  height = gdk_window_get_height (entry->text_area);
   gtk_entry_get_cursor_locations (entry, CURSOR_STANDARD, &strong_x, NULL);
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
