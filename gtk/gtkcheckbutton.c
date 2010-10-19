@@ -89,8 +89,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
 {
   gtk_widget_set_has_window (GTK_WIDGET (check_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
-  GTK_TOGGLE_BUTTON (check_button)->draw_indicator = TRUE;
-  GTK_BUTTON (check_button)->depress_on_activate = FALSE;
+  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (check_button), TRUE);
 }
 
 GtkWidget*
@@ -201,7 +200,7 @@ gtk_check_button_size_request (GtkWidget      *widget,
 {
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (widget);
   
-  if (toggle_button->draw_indicator)
+  if (gtk_toggle_button_get_mode (toggle_button))
     {
       GtkWidget *child;
       gint temp;
@@ -257,7 +256,7 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
   check_button = GTK_CHECK_BUTTON (widget);
   toggle_button = GTK_TOGGLE_BUTTON (widget);
 
-  if (toggle_button->draw_indicator)
+  if (gtk_toggle_button_get_mode (toggle_button))
     {
       GtkWidget *child;
       gint indicator_size;
@@ -321,8 +320,8 @@ gtk_check_button_draw (GtkWidget *widget,
   
   toggle_button = GTK_TOGGLE_BUTTON (widget);
   bin = GTK_BIN (widget);
-  
-  if (toggle_button->draw_indicator)
+
+  if (gtk_toggle_button_get_mode (toggle_button))
     {
       gtk_check_button_paint (widget, cr);
 
@@ -395,9 +394,9 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
     x += focus_width + focus_pad;      
 
-  if (toggle_button->inconsistent)
+  if (gtk_toggle_button_get_inconsistent (toggle_button))
     shadow_type = GTK_SHADOW_ETCHED_IN;
-  else if (toggle_button->active)
+  else if (gtk_toggle_button_get_active (toggle_button))
     shadow_type = GTK_SHADOW_IN;
   else
     shadow_type = GTK_SHADOW_OUT;
