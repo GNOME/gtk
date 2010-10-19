@@ -126,9 +126,21 @@ enum {
   PROP_TOOLBAR_STYLE,
   PROP_TOOLBAR_ICON_SIZE,
   PROP_AUTO_MNEMONICS,
-  PROP_APPLICATION_PREFER_DARK_THEME
+  PROP_APPLICATION_PREFER_DARK_THEME,
+  PROP_BUTTON_IMAGES,
+  PROP_ENTRY_SELECT_ON_FOCUS,
+  PROP_ENTRY_PASSWORD_HINT_TIMEOUT,
+  PROP_MENU_IMAGES,
+  PROP_MENU_BAR_POPUP_DELAY,
+  PROP_SCROLLED_WINDOW_PLACEMENT,
+  PROP_CAN_CHANGE_ACCELS,
+  PROP_MENU_POPUP_DELAY,
+  PROP_MENU_POPDOWN_DELAY,
+  PROP_LABEL_SELECT_ON_FOCUS,
+  PROP_COLOR_PALETTE,
+  PROP_IM_PREEDIT_STYLE,
+  PROP_IM_STATUS_STYLE
 };
-
 
 /* --- prototypes --- */
 static void	gtk_settings_finalize		 (GObject		*object);
@@ -162,6 +174,10 @@ static void    merge_color_scheme                (GtkSettings           *setting
 static gchar  *get_color_scheme                  (GtkSettings           *settings);
 static GHashTable *get_color_hash                (GtkSettings           *settings);
 
+/* the default palette for GtkColorSelelection */
+static const gchar default_color_palette[] =
+  "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:"
+  "lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90";
 
 /* --- variables --- */
 static GQuark		 quark_property_parser = 0;
@@ -1044,6 +1060,154 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                  GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_APPLICATION_PREFER_DARK_THEME);
+
+  /**
+   * GtkSettings::gtk-button-images:
+   *
+   * Whether images should be shown on buttons
+   *
+   * Since: 2.4
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-button-images",
+                                                                   P_("Show button images"),
+                                                                   P_("Whether images should be shown on buttons"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_BUTTON_IMAGES);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-entry-select-on-focus",
+                                                                   P_("Select on focus"),
+                                                                   P_("Whether to select the contents of an entry when it is focused"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENTRY_SELECT_ON_FOCUS);
+
+  /**
+   * GtkSettings:gtk-entry-password-hint-timeout:
+   *
+   * How long to show the last input character in hidden
+   * entries. This value is in milliseconds. 0 disables showing the
+   * last char. 600 is a good value for enabling it.
+   *
+   * Since: 2.10
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_uint ("gtk-entry-password-hint-timeout",
+                                                                P_("Password Hint Timeout"),
+                                                                P_("How long to show the last input character in hidden entries"),
+                                                                0, G_MAXUINT,
+                                                                0,
+                                                                GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_ENTRY_PASSWORD_HINT_TIMEOUT);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-menu-images",
+                                                                   P_("Show menu images"),
+                                                                   P_("Whether images should be shown in menus"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_IMAGES);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-menu-bar-popup-delay",
+                                                               P_("Delay before drop down menus appear"),
+                                                               P_("Delay before the submenus of a menu bar appear"),
+                                                               0, G_MAXINT,
+                                                               0,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_BAR_POPUP_DELAY);
+
+  /**
+   * GtkSettings:gtk-scrolled-window-placement:
+   *
+   * Where the contents of scrolled windows are located with respect to the 
+   * scrollbars, if not overridden by the scrolled window's own placement.
+   *
+   * Since: 2.10
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-scrolled-window-placement",
+                                                                P_("Scrolled Window Placement"),
+                                                                P_("Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."),
+                                                                GTK_TYPE_CORNER_TYPE,
+                                                                GTK_CORNER_TOP_LEFT,
+                                                                GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_SCROLLED_WINDOW_PLACEMENT);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-can-change-accels",
+                                                                   P_("Can change accelerators"),
+                                                                   P_("Whether menu accelerators can be changed by pressing a key over the menu item"),
+                                                                   FALSE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_CAN_CHANGE_ACCELS);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-menu-popup-delay",
+                                                               P_("Delay before submenus appear"),
+                                                               P_("Minimum time the pointer must stay over a menu item before the submenu appear"),
+                                                               0, G_MAXINT,
+                                                               225,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_POPUP_DELAY);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_int ("gtk-menu-popdown-delay",
+                                                               P_("Delay before hiding a submenu"),
+                                                               P_("The time before hiding a submenu when the pointer is moving towards the submenu"),
+                                                               0, G_MAXINT,
+                                                               1000,
+                                                               GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_MENU_POPDOWN_DELAY);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_boolean ("gtk-label-select-on-focus",
+                                                                   P_("Select on focus"),
+                                                                   P_("Whether to select the contents of a selectable label when it is focused"),
+                                                                   TRUE,
+                                                                   GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_LABEL_SELECT_ON_FOCUS);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-color-palette",
+                                                                  P_("Custom palette"),
+                                                                  P_("Palette to use in the color selector"),
+                                                                  default_color_palette,
+                                                                  GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_COLOR_PALETTE);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-im-preedit-style",
+                                                                P_("IM Preedit style"),
+                                                                P_("How to draw the input method preedit string"),
+                                                                GTK_TYPE_IM_PREEDIT_STYLE,
+                                                                GTK_IM_PREEDIT_CALLBACK,
+                                                                GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_IM_PREEDIT_STYLE);
+
+  result = settings_install_property_parser (class,
+                                             g_param_spec_enum ("gtk-im-status-style",
+                                                                P_("IM Status style"),
+                                                                P_("How to draw the input method statusbar"),
+                                                                GTK_TYPE_IM_STATUS_STYLE,
+                                                                GTK_IM_STATUS_CALLBACK,
+                                                                GTK_PARAM_READWRITE),
+                                             gtk_rc_property_parse_enum);
+  g_assert (result == PROP_IM_STATUS_STYLE);
 }
 
 static void

@@ -1741,28 +1741,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                P_("Inner Border"),
                                                                P_("Border between text and frame."),
                                                                GTK_TYPE_BORDER,
-                                                               GTK_PARAM_READABLE));
-
-   gtk_settings_install_property (g_param_spec_boolean ("gtk-entry-select-on-focus",
-						       P_("Select on focus"),
-						       P_("Whether to select the contents of an entry when it is focused"),
-						       TRUE,
-						       GTK_PARAM_READWRITE));
-
-  /**
-   * GtkSettings:gtk-entry-password-hint-timeout:
-   *
-   * How long to show the last input character in hidden
-   * entries. This value is in milliseconds. 0 disables showing the
-   * last char. 600 is a good value for enabling it.
-   *
-   * Since: 2.10
-   */
-  gtk_settings_install_property (g_param_spec_uint ("gtk-entry-password-hint-timeout",
-                                                    P_("Password Hint Timeout"),
-                                                    P_("How long to show the last input character in hidden entries"),
-                                                    0, G_MAXUINT, 0,
-                                                    GTK_PARAM_READWRITE));
+                                                               GTK_PARAM_READABLE)); 
 
   g_type_class_add_private (gobject_class, sizeof (GtkEntryPrivate));
 }
