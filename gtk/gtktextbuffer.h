@@ -137,7 +137,6 @@ struct _GtkTextBufferClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
 };
 
 GType        gtk_text_buffer_get_type       (void) G_GNUC_CONST;

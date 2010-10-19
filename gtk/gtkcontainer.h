@@ -94,6 +94,10 @@ struct _GtkContainerClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
+  void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 

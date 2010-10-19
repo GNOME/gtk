@@ -65,6 +65,7 @@ struct _GtkPrintOperationPreviewIface
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
   void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 GType   gtk_print_operation_preview_get_type       (void) G_GNUC_CONST;

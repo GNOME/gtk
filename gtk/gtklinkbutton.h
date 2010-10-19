@@ -74,6 +74,7 @@ struct _GtkLinkButtonClass
   gboolean (* activate_link) (GtkLinkButton *button);
 
   /*< private >*/
+  /* Padding for future expansion */
   void (*_gtk_padding1) (void);
   void (*_gtk_padding2) (void);
   void (*_gtk_padding3) (void);

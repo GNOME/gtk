@@ -81,8 +81,6 @@ struct _GtkToolPaletteClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 GType                          gtk_tool_palette_get_type              (void) G_GNUC_CONST;

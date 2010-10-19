@@ -48,6 +48,12 @@ struct _GtkPrinterOptionWidgetClass
   GtkHBoxClass parent_class;
 
   void (*changed) (GtkPrinterOptionWidget *widget);
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 GType	     gtk_printer_option_widget_get_type           (void) G_GNUC_CONST;

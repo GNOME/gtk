@@ -115,7 +115,12 @@ struct _GtkCalendarClass
   void (* next_month)			(GtkCalendar *calendar);
   void (* prev_year)			(GtkCalendar *calendar);
   void (* next_year)			(GtkCalendar *calendar);
-  
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 

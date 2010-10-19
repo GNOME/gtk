@@ -125,6 +125,8 @@ struct _GtkPrintOperationClass
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
   void (*_gtk_reserved6) (void);
+  void (*_gtk_reserved7) (void);
+  void (*_gtk_reserved8) (void);
 };
 
 #define GTK_PRINT_ERROR gtk_print_error_quark ()

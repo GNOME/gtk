@@ -335,6 +335,13 @@ available.
 @void: 
 
 
+<!-- ##### MACRO gdk_error_trap_pop ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### FUNCTION gdk_error_trap_pop_ignored ##### -->
 <para>
 

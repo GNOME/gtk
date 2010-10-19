@@ -52,9 +52,6 @@ struct _GtkCustomPaperUnixDialogClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
-  void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
-  void (*_gtk_reserved7) (void);
 };
 
 GType             gtk_custom_paper_unix_dialog_get_type           (void) G_GNUC_CONST;

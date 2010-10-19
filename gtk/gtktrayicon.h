@@ -46,12 +46,11 @@ struct _GtkTrayIconClass
 {
   GtkPlugClass parent_class;
 
-  void (*__gtk_reserved1);
-  void (*__gtk_reserved2);
-  void (*__gtk_reserved3);
-  void (*__gtk_reserved4);
-  void (*__gtk_reserved5);
-  void (*__gtk_reserved6);
+  /* Padding for future expansion */
+  void (*_gtk_reserved1);
+  void (*_gtk_reserved2);
+  void (*_gtk_reserved3);
+  void (*_gtk_reserved4);
 };
 
 GType          gtk_tray_icon_get_type         (void) G_GNUC_CONST;
