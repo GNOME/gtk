@@ -2646,10 +2646,14 @@ gtk_window_release_application (GtkWindow *window)
 {
   if (window->priv->application)
     {
-      g_application_release (G_APPLICATION (window->priv->application));
-      g_object_unref (window->priv->application);
+      GtkApplication *application;
 
+      /* steal reference into temp variable */
+      application = window->priv->application;
       window->priv->application = NULL;
+
+      gtk_application_remove_window (application, window);
+      g_object_unref (application);
     }
 }
 
@@ -2679,8 +2683,9 @@ gtk_window_set_application (GtkWindow      *window,
 
       if (window->priv->application != NULL)
         {
-          g_application_hold (G_APPLICATION (window->priv->application));
           g_object_ref (window->priv->application);
+
+          gtk_application_add_window (window->priv->application, window);
         }
 
       g_object_notify (G_OBJECT (window), "application");

@@ -64,8 +64,16 @@ struct _GtkApplicationClass
 
 GType                   gtk_application_get_type                        (void) G_GNUC_CONST;
 
-GtkApplication*         gtk_application_new                             (const gchar       *application_id,
+GtkApplication *        gtk_application_new                             (const gchar       *application_id,
                                                                          GApplicationFlags  flags);
+
+void                    gtk_application_add_window                      (GtkApplication    *application,
+                                                                         GtkWindow         *window);
+
+void                    gtk_application_remove_window                   (GtkApplication    *application,
+                                                                         GtkWindow         *window);
+
+GList *                 gtk_application_get_windows                     (GtkApplication    *application);
 
 G_END_DECLS
 

@@ -61,19 +61,10 @@
 
 G_DEFINE_TYPE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
 
-GtkApplication *
-gtk_application_new (const gchar       *application_id,
-                     GApplicationFlags  flags)
+struct _GtkApplicationPrivate
 {
-  g_return_val_if_fail (g_application_id_is_valid (application_id), NULL);
-
-  g_type_init ();
-
-  return g_object_new (GTK_TYPE_APPLICATION,
-                       "application-id", application_id,
-                       "flags", flags,
-                       NULL);
-}
+  GList *windows;
+};
 
 static void
 gtk_application_startup (GApplication *application)
@@ -139,6 +130,9 @@ gtk_application_after_emit (GApplication *application,
 static void
 gtk_application_init (GtkApplication *application)
 {
+  application->priv = G_TYPE_INSTANCE_GET_PRIVATE (application,
+                                                   GTK_TYPE_APPLICATION,
+                                                   GtkApplicationPrivate);
 }
 
 static void
@@ -153,4 +147,98 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   application_class->quit_mainloop = gtk_application_quit_mainloop;
   application_class->run_mainloop = gtk_application_run_mainloop;
+
+  g_type_class_add_private (class, sizeof (GtkApplicationPrivate));
+}
+
+GtkApplication *
+gtk_application_new (const gchar       *application_id,
+                     GApplicationFlags  flags)
+{
+  g_return_val_if_fail (g_application_id_is_valid (application_id), NULL);
+
+  g_type_init ();
+
+  return g_object_new (GTK_TYPE_APPLICATION,
+                       "application-id", application_id,
+                       "flags", flags,
+                       NULL);
+}
+
+/**
+ * gtk_application_remove_window:
+ * @application: a #GtkApplication
+ * @window: a #GtkWindow
+ *
+ * Adds a window from @application.
+ *
+ * This call is equivalent to setting the <varname>application</varname>
+ * property of @window to @application.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_application_add_window (GtkApplication *application,
+                            GtkWindow      *window)
+{
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  if (!g_list_find (application->priv->windows, window))
+    {
+      application->priv->windows = g_list_prepend (application->priv->windows,
+                                                   window);
+      gtk_window_set_application (window, application);
+      g_application_hold (G_APPLICATION (application));
+    }
+}
+
+/**
+ * gtk_application_remove_window:
+ * @application: a #GtkApplication
+ * @window: a #GtkWindow
+ *
+ * Remove a window from @application.
+ *
+ * If @window belongs to @application then this call is equivalent to
+ * setting the <varname>application</varname> property of @window to
+ * %NULL.
+ *
+ * The application may stop running as a result of a call to this
+ * function.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_application_remove_window (GtkApplication *application,
+                               GtkWindow      *window)
+{
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  if (g_list_find (application->priv->windows, window))
+    {
+      application->priv->windows = g_list_remove (application->priv->windows,
+                                                  window);
+      g_application_release (G_APPLICATION (application));
+      gtk_window_set_application (window, NULL);
+    }
+}
+
+/**
+ * gtk_application_get_windows:
+ * @application: a #GtkApplication
+ *
+ * Gets a list of the #GtkWindow<!-- -->s associated with @application.
+ *
+ * The list that is returned should not be modified in any way.
+ *
+ * Returns: a #GList of #GtkWindow
+ *
+ * Since: 3.0
+ **/
+GList *
+gtk_application_get_windows (GtkApplication *application)
+{
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+
+  return application->priv->windows;
 }
