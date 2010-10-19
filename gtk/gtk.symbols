@@ -4247,7 +4247,6 @@ gtk_widget_has_grab
 gtk_widget_has_rc_style
 gtk_widget_has_screen
 gtk_widget_hide
-gtk_widget_hide_all
 gtk_widget_hide_on_delete
 gtk_widget_intersect
 gtk_widget_is_ancestor
