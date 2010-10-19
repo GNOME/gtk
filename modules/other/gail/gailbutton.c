@@ -539,7 +539,9 @@ idle_do_action (gpointer data)
 	case 0:
 	  /* first a press */ 
 
+          /* FIXME: Do not access public member
 	  button->in_button = TRUE;
+          */
 	  g_signal_emit_by_name (button, "enter");
 	  /*
 	   * Simulate a button press event. calling gtk_button_pressed() does
@@ -557,11 +559,15 @@ idle_do_action (gpointer data)
 	  /* then a release */
 	  tmp_event.button.type = GDK_BUTTON_RELEASE;
 	  gtk_widget_event (widget, &tmp_event);
+          /* FIXME: Do not access public member
 	  button->in_button = FALSE;
+          */
 	  g_signal_emit_by_name (button, "leave");
 	  break;
 	case 1:
+          /* FIXME: Do not access public member
 	  button->in_button = TRUE;
+          */
 	  g_signal_emit_by_name (button, "enter");
 	  /*
 	   * Simulate a button press event. calling gtk_button_pressed() does
@@ -577,7 +583,9 @@ idle_do_action (gpointer data)
 	  gtk_widget_event (widget, &tmp_event);
 	  break;
 	case 2:
+          /* FIXME: Do not access public member
 	  button->in_button = FALSE;
+          */
 	  g_signal_emit_by_name (button, "leave");
 	  break;
 	default:
