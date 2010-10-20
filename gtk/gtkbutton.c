@@ -1725,12 +1725,10 @@ gtk_button_enter_notify (GtkWidget        *widget,
 			 GdkEventCrossing *event)
 {
   GtkButton *button;
-  GtkWidget *event_widget;
 
   button = GTK_BUTTON (widget);
-  event_widget = gtk_get_event_widget ((GdkEvent*) event);
 
-  if ((event_widget == widget) &&
+  if ((event->window == button->event_window) &&
       (event->detail != GDK_NOTIFY_INFERIOR))
     {
       button->in_button = TRUE;
@@ -1745,14 +1743,12 @@ gtk_button_leave_notify (GtkWidget        *widget,
 			 GdkEventCrossing *event)
 {
   GtkButton *button;
-  GtkWidget *event_widget;
 
   button = GTK_BUTTON (widget);
-  event_widget = gtk_get_event_widget ((GdkEvent*) event);
 
-  if ((event_widget == widget) &&
+  if ((event->window == button->event_window) &&
       (event->detail != GDK_NOTIFY_INFERIOR) &&
-      (gtk_widget_get_sensitive (event_widget)))
+      (gtk_widget_get_sensitive (widget)))
     {
       button->in_button = FALSE;
       gtk_button_leave (button);
