@@ -436,7 +436,7 @@ gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
  *
  * Adds the class @name to the widget at position @pos in
  * the hierarchy defined in @path. See
- * gtk_style_context_set_class().
+ * gtk_style_context_add_class().
  *
  * Since: 3.0
  **/
@@ -690,7 +690,7 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
  *
  * Adds the region @name to the widget at position @pos in
  * the hierarchy defined in @path. See
- * gtk_style_context_set_region().
+ * gtk_style_context_add_region().
  *
  * Since: 3.0
  **/

@@ -1436,8 +1436,8 @@ gtk_style_context_get_path (GtkStyleContext *context)
  * @context: a #GtkStyleContext
  *
  * Saves the @context state, so all modifications done through
- * gtk_style_context_set_class(), gtk_style_context_unset_class(),
- * gtk_style_context_set_region(), gtk_style_context_unset_region()
+ * gtk_style_context_add_class(), gtk_style_context_remove_class(),
+ * gtk_style_context_add_region(), gtk_style_context_remove_region()
  * or gtk_style_context_set_junction_sides() can be reverted in one
  * go through gtk_style_context_restore().
  *
@@ -1590,7 +1590,7 @@ region_find (GArray *array,
 }
 
 /**
- * gtk_style_context_set_class:
+ * gtk_style_context_add_class:
  * @context: a #GtkStyleContext
  * @class_name: class name to use in styling
  *
@@ -1614,7 +1614,7 @@ region_find (GArray *array,
  * Since: 3.0
  **/
 void
-gtk_style_context_set_class (GtkStyleContext *context,
+gtk_style_context_add_class (GtkStyleContext *context,
                              const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
@@ -1641,7 +1641,7 @@ gtk_style_context_set_class (GtkStyleContext *context,
 }
 
 /**
- * gtk_style_context_unset_class:
+ * gtk_style_context_remove_class:
  * @context: a #GtkStyleContext
  * @class_name: class name to remove
  *
@@ -1650,8 +1650,8 @@ gtk_style_context_set_class (GtkStyleContext *context,
  * Since: 3.0
  **/
 void
-gtk_style_context_unset_class (GtkStyleContext *context,
-                               const gchar     *class_name)
+gtk_style_context_remove_class (GtkStyleContext *context,
+                                const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
@@ -1802,7 +1802,7 @@ gtk_style_context_list_regions (GtkStyleContext *context)
 }
 
 /**
- * gtk_style_context_set_region:
+ * gtk_style_context_add_region:
  * @context: a #GtkStyleContext
  * @region_name: region name to use in styling
  * @flags: flags that apply to the region
@@ -1830,7 +1830,7 @@ gtk_style_context_list_regions (GtkStyleContext *context)
  * Since: 3.0
  **/
 void
-gtk_style_context_set_region (GtkStyleContext *context,
+gtk_style_context_add_region (GtkStyleContext *context,
                               const gchar     *region_name,
                               GtkRegionFlags   flags)
 {
@@ -1863,7 +1863,7 @@ gtk_style_context_set_region (GtkStyleContext *context,
 }
 
 /**
- * gtk_style_context_unset_region:
+ * gtk_style_context_remove_region:
  * @context: a #GtkStyleContext
  * @region_name: region name to unset
  *
@@ -1872,8 +1872,8 @@ gtk_style_context_set_region (GtkStyleContext *context,
  * Since: 3.0
  **/
 void
-gtk_style_context_unset_region (GtkStyleContext *context,
-                                const gchar     *region_name)
+gtk_style_context_remove_region (GtkStyleContext *context,
+                                 const gchar     *region_name)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;

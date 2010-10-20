@@ -5068,7 +5068,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
     flags |= GTK_REGION_LAST;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_set_region (context, "tab", flags);
+  gtk_style_context_add_region (context, "tab", flags);
 
   gtk_paint_extension (gtk_widget_get_style (widget), cr,
                        state_type, GTK_SHADOW_OUT,
@@ -5096,7 +5096,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
                        allocation.height + 2 * focus_width);
     }
 
-  gtk_style_context_unset_region (context, "tab");
+  gtk_style_context_remove_region (context, "tab");
 }
 
 static void

@@ -1740,69 +1740,69 @@ transform_detail_string (const gchar     *detail,
     return;
 
   if (strcmp (detail, "arrow") == 0)
-    gtk_style_context_set_class (context, "arrow");
+    gtk_style_context_add_class (context, "arrow");
   else if (strcmp (detail, "button") == 0)
-    gtk_style_context_set_class (context, "button");
+    gtk_style_context_add_class (context, "button");
   else if (strcmp (detail, "buttondefault") == 0)
     {
-      gtk_style_context_set_class (context, "button");
-      gtk_style_context_set_class (context, "default");
+      gtk_style_context_add_class (context, "button");
+      gtk_style_context_add_class (context, "default");
     }
   else if (strcmp (detail, "calendar") == 0)
-    gtk_style_context_set_class (context, "calendar");
+    gtk_style_context_add_class (context, "calendar");
   else if (strcmp (detail, "cellcheck") == 0)
     {
-      gtk_style_context_set_class (context, "cell");
-      gtk_style_context_set_class (context, "check");
+      gtk_style_context_add_class (context, "cell");
+      gtk_style_context_add_class (context, "check");
     }
   else if (strcmp (detail, "cellradio") == 0)
     {
-      gtk_style_context_set_class (context, "cell");
-      gtk_style_context_set_class (context, "radio");
+      gtk_style_context_add_class (context, "cell");
+      gtk_style_context_add_class (context, "radio");
     }
   else if (strcmp (detail, "checkbutton") == 0)
-    gtk_style_context_set_class (context, "check");
+    gtk_style_context_add_class (context, "check");
   else if (strcmp (detail, "check") == 0)
     {
-      gtk_style_context_set_class (context, "check");
-      gtk_style_context_set_class (context, "menu");
+      gtk_style_context_add_class (context, "check");
+      gtk_style_context_add_class (context, "menu");
     }
   else if (strcmp (detail, "option") == 0)
     {
-      gtk_style_context_set_class (context, "radio");
-      gtk_style_context_set_class (context, "menu");
+      gtk_style_context_add_class (context, "radio");
+      gtk_style_context_add_class (context, "menu");
     }
   else if (strcmp (detail, "entry") == 0 ||
            strcmp (detail, "entry_bg") == 0)
-    gtk_style_context_set_class (context, "entry");
+    gtk_style_context_add_class (context, "entry");
   else if (strcmp (detail, "expander") == 0)
-    gtk_style_context_set_class (context, "expander");
+    gtk_style_context_add_class (context, "expander");
   else if (strcmp (detail, "tooltip") == 0)
-    gtk_style_context_set_class (context, "tooltip");
+    gtk_style_context_add_class (context, "tooltip");
   else if (strcmp (detail, "frame") == 0)
-    gtk_style_context_set_class (context, "frame");
+    gtk_style_context_add_class (context, "frame");
   else if (strcmp (detail, "scrolled_window") == 0)
-    gtk_style_context_set_class (context, "scrolled-window");
+    gtk_style_context_add_class (context, "scrolled-window");
   else if (strcmp (detail, "viewport") == 0 ||
 	   strcmp (detail, "viewportbin") == 0)
-    gtk_style_context_set_class (context, "viewport");
+    gtk_style_context_add_class (context, "viewport");
   else if (strcmp (detail, "trough") == 0)
     {
-      gtk_style_context_set_class (context, "scrollbar");
-      gtk_style_context_set_class (context, "trough");
+      gtk_style_context_add_class (context, "scrollbar");
+      gtk_style_context_add_class (context, "trough");
     }
   else if (strcmp (detail, "spinbutton") == 0)
-    gtk_style_context_set_class (context, "spinbutton");
+    gtk_style_context_add_class (context, "spinbutton");
   else if (strcmp (detail, "spinbutton_up") == 0)
     {
-      gtk_style_context_set_class (context, "spinbutton");
-      gtk_style_context_set_class (context, "button");
+      gtk_style_context_add_class (context, "spinbutton");
+      gtk_style_context_add_class (context, "button");
       gtk_style_context_set_junction_sides (context, GTK_JUNCTION_BOTTOM);
     }
   else if (strcmp (detail, "spinbutton_down") == 0)
     {
-      gtk_style_context_set_class (context, "spinbutton");
-      gtk_style_context_set_class (context, "button");
+      gtk_style_context_add_class (context, "spinbutton");
+      gtk_style_context_add_class (context, "button");
       gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
     }
   else if (g_str_has_prefix (detail, "cell_"))
@@ -1837,9 +1837,9 @@ transform_detail_string (const gchar     *detail,
       if (!ruled)
         row &= ~(GTK_REGION_EVEN | GTK_REGION_ODD);
 
-      gtk_style_context_set_class (context, "cell");
-      gtk_style_context_set_region (context, "row", row);
-      gtk_style_context_set_region (context, "column", col);
+      gtk_style_context_add_class (context, "cell");
+      gtk_style_context_add_region (context, "row", row);
+      gtk_style_context_add_region (context, "column", col);
 
       g_strfreev (tokens);
     }

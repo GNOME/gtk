@@ -94,23 +94,23 @@ G_CONST_RETURN GtkWidgetPath * gtk_style_context_get_path (GtkStyleContext *cont
 
 GList *  gtk_style_context_list_classes (GtkStyleContext *context);
 
-void     gtk_style_context_set_class   (GtkStyleContext *context,
-                                        const gchar     *class_name);
-void     gtk_style_context_unset_class (GtkStyleContext *context,
-                                        const gchar     *class_name);
-gboolean gtk_style_context_has_class   (GtkStyleContext *context,
-                                        const gchar     *class_name);
+void     gtk_style_context_add_class    (GtkStyleContext *context,
+                                         const gchar     *class_name);
+void     gtk_style_context_remove_class (GtkStyleContext *context,
+                                         const gchar     *class_name);
+gboolean gtk_style_context_has_class    (GtkStyleContext *context,
+                                         const gchar     *class_name);
 
 GList *  gtk_style_context_list_regions (GtkStyleContext *context);
 
-void     gtk_style_context_set_region   (GtkStyleContext    *context,
-                                         const gchar        *region_name,
-                                         GtkRegionFlags      flags);
-void     gtk_style_context_unset_region (GtkStyleContext    *context,
-                                         const gchar        *region_name);
-gboolean gtk_style_context_has_region   (GtkStyleContext    *context,
-                                         const gchar        *region_name,
-                                         GtkRegionFlags     *flags_return);
+void     gtk_style_context_add_region    (GtkStyleContext    *context,
+                                          const gchar        *region_name,
+                                          GtkRegionFlags      flags);
+void     gtk_style_context_remove_region (GtkStyleContext    *context,
+                                          const gchar        *region_name);
+gboolean gtk_style_context_has_region    (GtkStyleContext    *context,
+                                          const gchar        *region_name,
+                                          GtkRegionFlags     *flags_return);
 
 void gtk_style_context_get_style_property (GtkStyleContext *context,
                                            const gchar     *property_name,
