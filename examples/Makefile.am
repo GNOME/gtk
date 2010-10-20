@@ -49,4 +49,4 @@ LDADD = \
 	$(top_builddir)/gtk/$(gtktargetlib)		\
 	$(GTK_DEP_LIBS)
 
-bin_PROGRAMS = hello-world window-default
+noinst_PROGRAMS = hello-world window-default
