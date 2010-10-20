@@ -1059,6 +1059,7 @@ GTK_ENTRY_CLASS
 GTK_IS_ENTRY_CLASS
 GTK_ENTRY_GET_CLASS
 <SUBSECTION Private>
+GtkEntryPrivate
 gtk_entry_get_type
 </SECTION>
 
