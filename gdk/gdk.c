@@ -823,6 +823,9 @@ gdk_enable_multidevice (void)
  * you should check with gdk_threads_get_periodic() to ensure that it is
  * %NULL before attempting to call this function.
  *
+ * gtk_init() will set the default clock if it has not already been set,
+ * so you need to call this function before you call gtk_init().
+ *
  * Since: 3.0
  **/
 void

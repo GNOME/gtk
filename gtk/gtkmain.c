@@ -1068,6 +1068,9 @@ gtk_init_check (int	 *argc,
   if (!gtk_parse_args (argc, argv))
     return FALSE;
 
+  if (gdk_threads_get_periodic () == NULL)
+    gdk_threads_set_periodic (g_periodic_new (60, GDK_PRIORITY_REDRAW));
+
   return gdk_display_open_default_libgtk_only () != NULL;
 }
 
