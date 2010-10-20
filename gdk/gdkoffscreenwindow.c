@@ -156,16 +156,19 @@ _gdk_offscreen_window_create_surface (GdkWindow *offscreen,
   GdkWindowObject *private = (GdkWindowObject *) offscreen;
   cairo_surface_t *similar;
   cairo_surface_t *surface;
+  cairo_content_t  content = CAIRO_CONTENT_COLOR;
 
   g_return_val_if_fail (GDK_IS_OFFSCREEN_WINDOW (private->impl), NULL);
 
   similar = _gdk_drawable_ref_cairo_surface ((GdkWindow *)private->parent);
 
-  surface = cairo_surface_create_similar (similar,
-                                          /* FIXME: use visual */
-                                          CAIRO_CONTENT_COLOR,
-                                          width,
-                                          height);
+  if (gdk_window_get_visual (offscreen) ==
+      gdk_screen_get_rgba_visual (gdk_window_get_screen (offscreen)))
+    {
+      content = CAIRO_CONTENT_COLOR_ALPHA;
+    }
+
+  surface = cairo_surface_create_similar (similar, content, width, height);
 
   cairo_surface_destroy (similar);
 
