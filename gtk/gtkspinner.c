@@ -276,7 +276,7 @@ gtk_spinner_tick (GPeriodic *periodic,
 
   priv = GTK_SPINNER (user_data)->priv;
 
-  duration = priv->cycle_duration * g_periodic_get_hz (periodic);
+  duration = priv->cycle_duration * 1000;
   priv->current = (timestamp % duration) / (duration / priv->num_steps);
 
   gtk_widget_queue_draw (GTK_WIDGET (user_data));
