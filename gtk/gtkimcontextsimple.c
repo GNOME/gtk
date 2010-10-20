@@ -692,26 +692,15 @@ check_hex (GtkIMContextSimple *context_simple,
 static void
 beep_window (GdkWindow *window)
 {
-  GtkWidget *widget;
+  GdkScreen *screen = gdk_window_get_screen (GDK_DRAWABLE (window));
+  gboolean   beep;
 
-  gdk_window_get_user_data (window, (gpointer) &widget);
+  g_object_get (gtk_settings_get_for_screen (screen),
+                "gtk-error-bell", &beep,
+                NULL);
 
-  if (GTK_IS_WIDGET (widget))
-    {
-      gtk_widget_error_bell (widget);
-    }
-  else
-    {
-      GdkScreen *screen = gdk_window_get_screen (GDK_DRAWABLE (window));
-      gboolean   beep;
-
-      g_object_get (gtk_settings_get_for_screen (screen),
-                    "gtk-error-bell", &beep,
-                    NULL);
-
-      if (beep)
-        gdk_window_beep (window);
-    }
+  if (beep)
+    gdk_window_beep (window);
 }
 
 static gboolean
