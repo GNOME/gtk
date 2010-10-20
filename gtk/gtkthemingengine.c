@@ -154,8 +154,11 @@ typedef struct GtkThemingModuleClass GtkThemingModuleClass;
 struct GtkThemingModule
 {
   GTypeModule parent_instance;
+  GModule *module;
   gchar *name;
 
+  void (*init) (GTypeModule *module);
+  void (*exit) (void);
   GtkThemingEngine * (*create_engine) (void);
 };
 
@@ -622,18 +625,41 @@ gtk_theming_module_load (GTypeModule *type_module)
       return FALSE;
     }
 
-  if (!g_module_symbol (module, "create_engine",
+  if (!g_module_symbol (module, "theme_init",
+                        (gpointer *) &theming_module->init) ||
+      !g_module_symbol (module, "theme_exit",
+                        (gpointer *) &theming_module->exit) ||
+      !g_module_symbol (module, "create_engine",
                         (gpointer *) &theming_module->create_engine))
     {
-      g_warning ("%s", g_module_error());
+      g_warning ("%s", g_module_error ());
       g_module_close (module);
 
       return FALSE;
     }
 
-  g_module_make_resident (module);
+  theming_module->module = module;
+
+  theming_module->init (theming_module);
 
   return TRUE;
+}
+
+static void
+gtk_theming_module_unload (GTypeModule *type_module)
+{
+  GtkThemingModule *theming_module;
+
+  theming_module = GTK_THEMING_MODULE (type_module);
+
+  theming_module->exit ();
+
+  g_module_close (theming_module->module);
+
+  theming_module->module = NULL;
+  theming_module->init = NULL;
+  theming_module->exit = NULL;
+  theming_module->create_engine = NULL;
 }
 
 static void
@@ -642,6 +668,7 @@ gtk_theming_module_class_init (GtkThemingModuleClass *klass)
   GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (klass);
 
   module_class->load = gtk_theming_module_load;
+  module_class->unload = gtk_theming_module_unload;
 }
 
 static void
