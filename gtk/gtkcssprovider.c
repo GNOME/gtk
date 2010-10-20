@@ -848,12 +848,11 @@ compare_selector (GtkWidgetPath *path,
   GSList *elements = selector->elements;
   gboolean match = TRUE;
   guint64 score = 0;
-  guint len;
-  guint i = 0;
+  gint i;
 
-  len = gtk_widget_path_length (path);
+  i = gtk_widget_path_length (path) - 1;
 
-  while (elements && match && i < len)
+  while (elements && match && i >= 0)
     {
       SelectorElement *elem;
       guint8 elem_score;
@@ -874,7 +873,7 @@ compare_selector (GtkWidgetPath *path,
       if (!match ||
           (elem->elem_type == SELECTOR_GTYPE ||
            elem->elem_type == SELECTOR_GLOB))
-        i++;
+        i--;
 
       if (!match &&
           elem->elem_type != SELECTOR_TYPE_NAME &&
