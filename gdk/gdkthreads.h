@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright © 2010 Codethink Limited
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -63,6 +64,16 @@ guint    gdk_threads_add_timeout_seconds_full (gint           priority,
 guint    gdk_threads_add_timeout_seconds      (guint          interval,
                                                GSourceFunc    function,
                                                gpointer       data);
+
+void            gdk_threads_set_periodic        (GPeriodic           *periodic);
+GPeriodic *     gdk_threads_get_periodic        (void);
+guint           gdk_threads_periodic_add        (GPeriodicTickFunc    callback,
+                                                 gpointer             user_data,
+                                                 GDestroyNotify       notify);
+void            gdk_threads_periodic_remove     (guint                tag);
+void            gdk_threads_periodic_damaged    (GPeriodicRepairFunc  callback,
+                                                 gpointer             user_data,
+                                                 GDestroyNotify       notify);
 
 #define GDK_THREADS_ENTER() gdk_threads_enter()
 #define GDK_THREADS_LEAVE() gdk_threads_leave()

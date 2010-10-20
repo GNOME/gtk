@@ -192,6 +192,11 @@ gdk_threads_add_timeout
 gdk_threads_add_timeout_full
 gdk_threads_add_timeout_seconds
 gdk_threads_add_timeout_seconds_full
+gdk_threads_set_periodic
+gdk_threads_get_periodic
+gdk_threads_periodic_add
+gdk_threads_periodic_remove
+gdk_threads_periodic_damaged
 #endif
 #endif
 

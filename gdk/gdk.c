@@ -1,5 +1,6 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
+ * Copyright © 2010 Codethink Limited
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -65,6 +66,7 @@ static int gdk_initialized = 0;			    /* 1 if the library is initialized,
 static gchar  *gdk_progclass = NULL;
 
 static GMutex *gdk_threads_mutex = NULL;            /* Global GDK lock */
+static GPeriodic *gdk_threads_periodic;             /* Default paint clock */
 
 static GCallback gdk_threads_lock = NULL;
 static GCallback gdk_threads_unlock = NULL;
@@ -808,4 +810,188 @@ gdk_enable_multidevice (void)
     return;
 
   _gdk_enable_multidevice = TRUE;
+}
+
+/**
+ * gdk_threads_set_periodic:
+ * @periodic: a #GPeriodic, non-%NULL
+ *
+ * Sets the default #GPeriodic clock in use by GDK.  GDK takes a
+ * reference on @periodic and it lives forever.
+ *
+ * You may not replace the default #GPeriodic once it has been set, so
+ * you should check with gdk_threads_get_periodic() to ensure that it is
+ * %NULL before attempting to call this function.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_threads_set_periodic (GPeriodic *periodic)
+{
+  g_return_if_fail (gdk_threads_periodic == NULL);
+  g_return_if_fail (periodic != NULL);
+
+  gdk_threads_periodic = g_object_ref (periodic);
+}
+
+/**
+ * gdk_threads_get_periodic:
+ * 
+ * Gets the default #GPeriodic in use by GDK, or %NULL if one has not
+ * been set yet.
+ *
+ * GDK owns the return value, so you should not unref it.
+ *
+ * Returns: (transfer none): the default #GPeriodic, or %NULL
+ *
+ * Since: 3.0
+ **/
+GPeriodic *
+gdk_threads_get_periodic (void)
+{
+  return gdk_threads_periodic;
+}
+
+typedef struct
+{
+  GPeriodicTickFunc callback;
+  gpointer          user_data;
+  GDestroyNotify    notify;
+} GdkPeriodicTick;
+
+static void
+gdk_periodic_tick (GPeriodic *periodic,
+                   guint64    timestamp,
+                   gpointer   user_data)
+{
+  GdkPeriodicTick *tick = user_data;
+
+  gdk_threads_enter ();
+  tick->callback (periodic, timestamp, tick->user_data);
+  /* Do not touch 'tick' anymore.
+   * It might have been freed by the callback removing itself.
+   */
+  gdk_threads_leave ();
+}
+
+static void
+gdk_periodic_tick_free (gpointer data)
+{
+  GdkPeriodicTick *tick = data;
+
+  if (tick->notify)
+    tick->notify (tick->user_data);
+
+  g_slice_free (GdkPeriodicTick, tick);
+}
+
+/**
+ * gdk_threads_periodic_add:
+ * @callback: a #GPeriodicTickFunc
+ * @user_data: data for @callback
+ * @notify: for freeing @user_data when it is no longer needed
+ *
+ * Request periodic calls to @callback to start.  @callback is called
+ * with the GDK lock held.
+ *
+ * This function may not be called while a repair function is running,
+ * but it is perfectly reasonable to call it from a tick function.
+ *
+ * The callback may be cancelled later by using
+ * gdk_threads_periodic_remove().
+ *
+ * Returns: a non-zero tag identifying this callback
+ *
+ * Since: 3.0
+ **/
+guint
+gdk_threads_periodic_add (GPeriodicTickFunc callback,
+                          gpointer          user_data,
+                          GDestroyNotify    notify)
+{
+  GdkPeriodicTick *tick;
+
+  tick = g_slice_new (GdkPeriodicTick);
+  tick->callback = callback;
+  tick->user_data = user_data;
+  tick->notify = notify;
+
+  return g_periodic_add (gdk_threads_periodic, gdk_periodic_tick,
+                         tick, gdk_periodic_tick_free);
+}
+
+/**
+ * gdk_threads_periodic_remove:
+ * @tag: the ID of the callback to 
+ *
+ * Reverse the effect of a previous call to gdk_threads_periodic_add().
+ *
+ * @tag is the ID returned by that function.
+ *
+ * This function may not be called while a repair function is running,
+ * but it is perfectly reasonable to call it from a tick function.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_threads_periodic_remove (guint tag)
+{
+  g_periodic_remove (gdk_threads_periodic, tag);
+}
+
+typedef struct
+{
+  GPeriodicRepairFunc callback;
+  gpointer            user_data;
+  GDestroyNotify      notify;
+} GdkPeriodicRepair;
+
+static void
+gdk_periodic_repair (GPeriodic *periodic,
+                     gpointer   user_data)
+{
+  GdkPeriodicRepair *repair = user_data;
+
+  gdk_threads_enter ();
+  repair->callback (periodic, repair->user_data);
+  gdk_threads_leave ();
+}
+
+static void
+gdk_periodic_repair_free (gpointer data)
+{
+  GdkPeriodicRepair *repair = data;
+
+  if (repair->notify)
+    repair->notify (repair->user_data);
+
+  g_slice_free (GdkPeriodicRepair, repair);
+}
+
+/**
+ * gdk_threads_periodic_damaged:
+ * @callback: a #GPeriodicRepairFunc
+ * @user_data: data for @callback
+ * @notify: for freeing @user_data when it is no longer needed
+ *
+ * Reports damage to the GDK default #GPeriodic.
+ *
+ * @callback is called with the GDK lock held.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_threads_periodic_damaged (GPeriodicRepairFunc callback,
+                              gpointer            user_data,
+                              GDestroyNotify      notify)
+{
+  GdkPeriodicRepair *repair;
+
+  repair = g_slice_new (GdkPeriodicRepair);
+  repair->callback = callback;
+  repair->user_data = user_data;
+  repair->notify = notify;
+
+  g_periodic_damaged (gdk_threads_periodic, gdk_periodic_repair,
+                      repair, gdk_periodic_repair_free);
 }
