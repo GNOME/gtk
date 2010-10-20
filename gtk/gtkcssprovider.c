@@ -2314,6 +2314,17 @@ css_provider_parse_value (GtkCssProvider *css_provider,
       else
         parsed = FALSE;
     }
+  else if (G_TYPE_IS_ENUM (type))
+    {
+      GEnumClass *class;
+      GEnumValue *enum_value;
+
+      class = g_type_class_ref (type);
+      enum_value = g_enum_get_value_by_nick (class, value_str);
+
+      g_value_set_enum (value, enum_value->value);
+      g_type_class_unref (class);
+    }
   else if (type == GTK_TYPE_9SLICE)
     {
       Gtk9Slice *slice;
