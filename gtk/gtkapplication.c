@@ -166,13 +166,13 @@ gtk_application_new (const gchar       *application_id,
 }
 
 /**
- * gtk_application_remove_window:
+ * gtk_application_add_window:
  * @application: a #GtkApplication
  * @window: a #GtkWindow
  *
  * Adds a window from @application.
  *
- * This call is equivalent to setting the <varname>application</varname>
+ * This call is equivalent to setting the #GtkWindow:application
  * property of @window to @application.
  *
  * Since: 3.0
@@ -200,7 +200,7 @@ gtk_application_add_window (GtkApplication *application,
  * Remove a window from @application.
  *
  * If @window belongs to @application then this call is equivalent to
- * setting the <varname>application</varname> property of @window to
+ * setting the #GtkWindow:application property of @window to
  * %NULL.
  *
  * The application may stop running as a result of a call to this

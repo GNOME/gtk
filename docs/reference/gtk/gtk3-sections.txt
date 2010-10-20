@@ -6304,6 +6304,7 @@ gtk_application_quit
 gtk_application_set_action_group
 gtk_application_get_window
 gtk_application_add_window
+gtk_application_remove_window
 gtk_application_get_windows
 gtk_application_create_window
 
