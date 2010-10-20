@@ -187,7 +187,6 @@ gtk_public_h_sources =          \
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
 	gtkcombobox.h		\
-	gtkcomboboxentry.h	\
 	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
 	gtkdebug.h              \
@@ -446,7 +445,6 @@ gtk_base_c_sources =            \
 	gtkcolorsel.c		\
 	gtkcolorseldialog.c	\
 	gtkcombobox.c		\
-	gtkcomboboxentry.c	\
 	gtkcomboboxtext.c 	\
 	gtkcontainer.c		\
 	gtkdialog.c		\

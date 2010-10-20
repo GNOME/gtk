@@ -334,7 +334,6 @@ static void     gtk_combo_box_set_active_internal  (GtkComboBox      *combo_box,
 						    GtkTreePath      *path);
 
 static void     gtk_combo_box_check_appearance     (GtkComboBox      *combo_box);
-static gchar *  gtk_combo_box_real_get_active_text (GtkComboBox      *combo_box);
 static void     gtk_combo_box_real_move_active     (GtkComboBox      *combo_box,
                                                     GtkScrollType     scroll);
 static void     gtk_combo_box_real_popup           (GtkComboBox      *combo_box);
@@ -552,8 +551,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   GtkWidgetClass *widget_class;
   GtkBindingSet *binding_set;
 
-  klass->get_active_text = gtk_combo_box_real_get_active_text;
-
   container_class = (GtkContainerClass *)klass;
   container_class->forall = gtk_combo_box_forall;
   container_class->add = gtk_combo_box_add;
@@ -587,10 +584,10 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * 
    * The changed signal is emitted when the active
    * item is changed. The can be due to the user selecting
-   * a different item from the list, or due to a 
+   * a different item from the list, or due to a
    * call to gtk_combo_box_set_active_iter().
-   * It will also be emitted while typing into a GtkComboBoxEntry, 
-   * as well as when selecting an item from the GtkComboBoxEntry's list.
+   * It will also be emitted while typing into the entry of a combo box
+   * with an entry.
    *
    * Since: 2.4
    */
@@ -5346,236 +5343,6 @@ gtk_combo_box_get_model (GtkComboBox *combo_box)
   g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
 
   return combo_box->priv->model;
-}
-
-
-/* convenience API for simple text combos */
-
-/**
- * gtk_combo_box_new_text:
- *
- * Convenience function which constructs a new text combo box, which is a
- * #GtkComboBox just displaying strings. If you use this function to create
- * a text combo box, you should only manipulate its data source with the
- * following convenience functions: gtk_combo_box_append_text(),
- * gtk_combo_box_insert_text(), gtk_combo_box_prepend_text() and
- * gtk_combo_box_remove_text().
- *
- * Return value: (transfer none): A new text combo box.
- *
- * Since: 2.4
- *
- * Deprecated: 2.24: Use #GtkComboBoxText
- */
-GtkWidget *
-gtk_combo_box_new_text (void)
-{
-  GtkWidget *combo_box;
-  GtkCellRenderer *cell;
-  GtkListStore *store;
-
-  store = gtk_list_store_new (1, G_TYPE_STRING);
-  combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
-  g_object_unref (store);
-
-  cell = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), cell, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), cell,
-                                  "text", 0,
-                                  NULL);
-
-  return combo_box;
-}
-
-/**
- * gtk_combo_box_append_text:
- * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text()
- * @text: A string
- *
- * Appends @string to the list of strings stored in @combo_box. Note that
- * you can only use this function with combo boxes constructed with
- * gtk_combo_box_new_text().
- *
- * Since: 2.4
- *
- * Deprecated: 2.24: Use #GtkComboBoxText
- */
-void
-gtk_combo_box_append_text (GtkComboBox *combo_box,
-                           const gchar *text)
-{
-  GtkTreeIter iter;
-  GtkListStore *store;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
-  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
-		    == G_TYPE_STRING);
-  g_return_if_fail (text != NULL);
-
-  store = GTK_LIST_STORE (combo_box->priv->model);
-
-  gtk_list_store_append (store, &iter);
-  gtk_list_store_set (store, &iter, 0, text, -1);
-}
-
-/**
- * gtk_combo_box_insert_text:
- * @combo_box: A #GtkComboBox constructed using gtk_combo_box_new_text()
- * @position: An index to insert @text
- * @text: A string
- *
- * Inserts @string at @position in the list of strings stored in @combo_box.
- * Note that you can only use this function with combo boxes constructed
- * with gtk_combo_box_new_text().
- *
- * Since: 2.4
- *
- * Deprecated: 2.24: Use #GtkComboBoxText
- */
-void
-gtk_combo_box_insert_text (GtkComboBox *combo_box,
-                           gint         position,
-                           const gchar *text)
-{
-  GtkTreeIter iter;
-  GtkListStore *store;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
-  g_return_if_fail (position >= 0);
-  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
-		    == G_TYPE_STRING);
-  g_return_if_fail (text != NULL);
-
-  store = GTK_LIST_STORE (combo_box->priv->model);
-
-  gtk_list_store_insert (store, &iter, position);
-  gtk_list_store_set (store, &iter, 0, text, -1);
-}
-
-/**
- * gtk_combo_box_prepend_text:
- * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
- * @text: A string
- *
- * Prepends @string to the list of strings stored in @combo_box. Note that
- * you can only use this function with combo boxes constructed with
- * gtk_combo_box_new_text().
- *
- * Since: 2.4
- *
- * Deprecated: 2.24: Use #GtkComboBoxText
- */
-void
-gtk_combo_box_prepend_text (GtkComboBox *combo_box,
-                            const gchar *text)
-{
-  GtkTreeIter iter;
-  GtkListStore *store;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
-  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
-		    == G_TYPE_STRING);
-  g_return_if_fail (text != NULL);
-
-  store = GTK_LIST_STORE (combo_box->priv->model);
-
-  gtk_list_store_prepend (store, &iter);
-  gtk_list_store_set (store, &iter, 0, text, -1);
-}
-
-/**
- * gtk_combo_box_remove_text:
- * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
- * @position: Index of the item to remove
- *
- * Removes the string at @position from @combo_box. Note that you can only use
- * this function with combo boxes constructed with gtk_combo_box_new_text().
- *
- * Since: 2.4
- *
- * Deprecated: 2.24: Use #GtkComboBoxText
- */
-void
-gtk_combo_box_remove_text (GtkComboBox *combo_box,
-                           gint         position)
-{
-  GtkTreeIter iter;
-  GtkListStore *store;
-
-  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
-  g_return_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model));
-  g_return_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
-		    == G_TYPE_STRING);
-  g_return_if_fail (position >= 0);
-
-  store = GTK_LIST_STORE (combo_box->priv->model);
-
-  if (gtk_tree_model_iter_nth_child (combo_box->priv->model, &iter,
-                                     NULL, position))
-    gtk_list_store_remove (store, &iter);
-}
-
-/**
- * gtk_combo_box_get_active_text:
- * @combo_box: A #GtkComboBox constructed with gtk_combo_box_new_text()
- *
- * Returns the currently active string in @combo_box or %NULL if none
- * is selected.
- *
- * Returns: a newly allocated string containing the currently active text.
- *     Must be freed with g_free().
- *
- * Since: 2.6
- *
- * Deprecated: 2.24: Use #GtkComboBoxText
- */
-gchar *
-gtk_combo_box_get_active_text (GtkComboBox *combo_box)
-{
-  GtkComboBoxClass *class;
-
-  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), NULL);
-
-  class = GTK_COMBO_BOX_GET_CLASS (combo_box);
-
-  if (class->get_active_text)
-    return class->get_active_text (combo_box);
-
-  return NULL;
-}
-
-static gchar *
-gtk_combo_box_real_get_active_text (GtkComboBox *combo_box)
-{
-  GtkTreeIter iter;
-  gchar *text = NULL;
-
-  if (combo_box->priv->has_entry)
-    {
-      GtkBin *combo = GTK_BIN (combo_box);
-      GtkWidget *child;
-
-      child = gtk_bin_get_child (combo);
-      if (child)
-	return g_strdup (gtk_entry_get_text (GTK_ENTRY (child)));
-
-      return NULL;
-    }
-  else
-    {
-      g_return_val_if_fail (GTK_IS_LIST_STORE (combo_box->priv->model), NULL);
-      g_return_val_if_fail (gtk_tree_model_get_column_type (combo_box->priv->model, 0)
-			    == G_TYPE_STRING, NULL);
-
-      if (gtk_combo_box_get_active_iter (combo_box, &iter))
-        gtk_tree_model_get (combo_box->priv->model, &iter,
-			    0, &text, -1);
-
-      return text;
-    }
 }
 
 static void

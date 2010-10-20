@@ -221,7 +221,6 @@
  * <link linkend="GtkCellLayout-BUILDER-UI">GtkCellLayout</link>,
  * <link linkend="GtkColorSelectionDialog-BUILDER-UI">GtkColorSelectionDialog</link>,
  * <link linkend="GtkFontSelectionDialog-BUILDER-UI">GtkFontSelectionDialog</link>,
- * <link linkend="GtkComboBoxEntry-BUILDER-UI">GtkComboBoxEntry</link>,
  * <link linkend="GtkExpander-BUILDER-UI">GtkExpander</link>,
  * <link linkend="GtkFrame-BUILDER-UI">GtkFrame</link>,
  * <link linkend="GtkListStore-BUILDER-UI">GtkListStore</link>,

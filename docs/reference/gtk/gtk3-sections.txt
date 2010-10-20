@@ -781,12 +781,6 @@ gtk_combo_box_get_active_iter
 gtk_combo_box_set_active_iter
 gtk_combo_box_get_model
 gtk_combo_box_set_model
-gtk_combo_box_new_text
-gtk_combo_box_append_text
-gtk_combo_box_insert_text
-gtk_combo_box_prepend_text
-gtk_combo_box_remove_text
-gtk_combo_box_get_active_text
 gtk_combo_box_popup_for_device
 gtk_combo_box_popup
 gtk_combo_box_popdown
@@ -814,27 +808,6 @@ GTK_COMBO_BOX_GET_CLASS
 <SUBSECTION Private>
 GtkComboBoxPrivate
 gtk_combo_box_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkcomboboxentry</FILE>
-<TITLE>GtkComboBoxEntry</TITLE>
-GtkComboBoxEntry
-gtk_combo_box_entry_new
-gtk_combo_box_entry_new_with_model
-gtk_combo_box_entry_new_text
-gtk_combo_box_entry_set_text_column
-gtk_combo_box_entry_get_text_column
-<SUBSECTION Standard>
-GTK_TYPE_COMBO_BOX_ENTRY
-GTK_COMBO_BOX_ENTRY
-GTK_COMBO_BOX_ENTRY_CLASS
-GTK_IS_COMBO_BOX_ENTRY
-GTK_IS_COMBO_BOX_ENTRY_CLASS
-GTK_COMBO_BOX_ENTRY_GET_CLASS
-<SUBSECTION Private>
-GtkComboBoxEntryPrivate
-gtk_combo_box_entry_get_type
 </SECTION>
 
 <SECTION>
