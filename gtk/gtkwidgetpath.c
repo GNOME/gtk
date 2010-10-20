@@ -30,7 +30,7 @@
  * @Title: GtkWidgetPath
  * @See_also: #GtkStyleContext
  *
- * #GtkWidgetPath is an struct that represents a widget hierarchy from
+ * #GtkWidgetPath is a boxed type that represents a widget hierarchy from
  * the topmost widget, typically a toplevel, to any child. This widget
  * path abstraction is used in #GtkStyleContext on behalf of the real
  * widget in order to query style information.
@@ -79,6 +79,10 @@
  * All this information will be used to match the style information
  * that applies to the described widget.
  **/
+
+G_DEFINE_BOXED_TYPE (GtkWidgetPath, gtk_widget_path,
+		     gtk_widget_path_copy, gtk_widget_path_free)
+
 
 typedef struct GtkPathElement GtkPathElement;
 
