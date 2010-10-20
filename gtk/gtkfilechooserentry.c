@@ -998,13 +998,16 @@ get_entry_cursor_x (GtkFileChooserEntry *chooser_entry,
   gint layout_x, layout_y;
   gint layout_index;
   PangoRectangle strong_pos;
+  gint start_pos, end_pos;
 
   layout = gtk_entry_get_layout (GTK_ENTRY (chooser_entry));
 
   gtk_entry_get_layout_offsets (GTK_ENTRY (chooser_entry), &layout_x, &layout_y);
 
+  gtk_editable_get_selection_bounds (GTK_EDITABLE (chooser_entry), &start_pos, &end_pos);
   layout_index = gtk_entry_text_index_to_layout_index (GTK_ENTRY (chooser_entry),
-						       GTK_ENTRY (chooser_entry)->current_pos);
+                                                       end_pos);
+
 
   pango_layout_get_cursor_pos (layout, layout_index, &strong_pos, NULL);
 
