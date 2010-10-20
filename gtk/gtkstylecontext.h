@@ -84,9 +84,9 @@ void          gtk_style_context_set_state    (GtkStyleContext *context,
                                               GtkStateFlags    flags);
 GtkStateFlags gtk_style_context_get_state    (GtkStyleContext *context);
 
-gboolean      gtk_style_context_is_state_set (GtkStyleContext *context,
-                                              GtkStateType     state,
-                                              gdouble         *progress);
+gboolean      gtk_style_context_state_is_running (GtkStyleContext *context,
+                                                  GtkStateType     state,
+                                                  gdouble         *progress);
 
 void          gtk_style_context_set_path     (GtkStyleContext *context,
                                               GtkWidgetPath   *path);
