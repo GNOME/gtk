@@ -89,7 +89,9 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
 
   gtk_style_set_register_property ("margin", GTK_TYPE_BORDER, NULL, NULL);
   gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
-  gtk_style_set_register_property ("border", G_TYPE_INT, NULL, NULL);
+
+  gtk_style_set_register_property ("border-width", G_TYPE_INT, NULL, NULL);
+  gtk_style_set_register_property ("border-radius", G_TYPE_INT, NULL, NULL);
 
   gtk_style_set_register_property ("background-image", CAIRO_GOBJECT_TYPE_PATTERN, NULL, NULL);
   gtk_style_set_register_property ("border-image", GTK_TYPE_9SLICE, NULL, NULL);
