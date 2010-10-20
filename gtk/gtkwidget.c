@@ -337,6 +337,7 @@ enum {
   GRAB_FOCUS,
   FOCUS,
   MOVE_FOCUS,
+  KEYNAV_FAILED,
   EVENT,
   EVENT_AFTER,
   BUTTON_PRESS_EVENT,
@@ -363,6 +364,12 @@ enum {
   SELECTION_RECEIVED,
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
+  CLIENT_EVENT,
+  NO_EXPOSE_EVENT,
+  VISIBILITY_NOTIFY_EVENT,
+  WINDOW_STATE_EVENT,
+  DAMAGE_EVENT,
+  GRAB_BROKEN_EVENT,
   DRAG_BEGIN,
   DRAG_END,
   DRAG_DATA_DELETE,
@@ -371,21 +378,14 @@ enum {
   DRAG_DROP,
   DRAG_DATA_GET,
   DRAG_DATA_RECEIVED,
-  CLIENT_EVENT,
-  NO_EXPOSE_EVENT,
-  VISIBILITY_NOTIFY_EVENT,
-  WINDOW_STATE_EVENT,
   POPUP_MENU,
   SHOW_HELP,
   ACCEL_CLOSURES_CHANGED,
   SCREEN_CHANGED,
   CAN_ACTIVATE_ACCEL,
-  GRAB_BROKEN,
   COMPOSITED_CHANGED,
   QUERY_TOOLTIP,
-  KEYNAV_FAILED,
   DRAG_FAILED,
-  DAMAGE_EVENT,
   LAST_SIGNAL
 };
 
@@ -768,6 +768,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->mnemonic_activate = gtk_widget_real_mnemonic_activate;
   klass->grab_focus = gtk_widget_real_grab_focus;
   klass->focus = gtk_widget_real_focus;
+  klass->move_focus = gtk_widget_real_move_focus;
+  klass->keynav_failed = gtk_widget_real_keynav_failed;
   klass->event = NULL;
   klass->button_press_event = NULL;
   klass->button_release_event = NULL;
@@ -1594,15 +1596,39 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @direction:
    */
   widget_signals[MOVE_FOCUS] =
-    g_signal_new_class_handler (I_("move-focus"),
-                                G_TYPE_FROM_CLASS (klass),
-                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                G_CALLBACK (gtk_widget_real_move_focus),
-                                NULL, NULL,
-                                _gtk_marshal_VOID__ENUM,
-                                G_TYPE_NONE,
-                                1,
-                                GTK_TYPE_DIRECTION_TYPE);
+    g_signal_new (I_("move-focus"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkWidgetClass, move_focus),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__ENUM,
+                  G_TYPE_NONE,
+                  1,
+                  GTK_TYPE_DIRECTION_TYPE);
+
+  /**
+   * GtkWidget::keynav-failed:
+   * @widget: the object which received the signal
+   * @direction: the direction of movement
+   *
+   * Gets emitted if keyboard navigation fails. 
+   * See gtk_widget_keynav_failed() for details.
+   *
+   * Returns: %TRUE if stopping keyboard navigation is fine, %FALSE
+   *          if the emitting widget should try to handle the keyboard
+   *          navigation attempt in its parent container(s).
+   *
+   * Since: 2.12
+   **/
+  widget_signals[KEYNAV_FAILED] =
+    g_signal_new (I_("keynav-failed"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkWidgetClass, keynav_failed),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  _gtk_marshal_BOOLEAN__ENUM,
+                  G_TYPE_BOOLEAN, 1,
+                  GTK_TYPE_DIRECTION_TYPE);
 
   /**
    * GtkWidget::event:
@@ -1776,30 +1802,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkWidget::keynav-failed:
-   * @widget: the object which received the signal
-   * @direction: the direction of movement
-   *
-   * Gets emitted if keyboard navigation fails. 
-   * See gtk_widget_keynav_failed() for details.
-   *
-   * Returns: %TRUE if stopping keyboard navigation is fine, %FALSE
-   *          if the emitting widget should try to handle the keyboard
-   *          navigation attempt in its parent container(s).
-   *
-   * Since: 2.12
-   **/
-  widget_signals[KEYNAV_FAILED] =
-    g_signal_new_class_handler (I_("keynav-failed"),
-                                G_TYPE_FROM_CLASS (klass),
-                                G_SIGNAL_RUN_LAST,
-                                G_CALLBACK (gtk_widget_real_keynav_failed),
-                                _gtk_boolean_handled_accumulator, NULL,
-                                _gtk_marshal_BOOLEAN__ENUM,
-                                G_TYPE_BOOLEAN, 1,
-                                GTK_TYPE_DIRECTION_TYPE);
 
   /**
    * GtkWidget::delete-event:
@@ -2729,7 +2731,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     g_signal_new (I_("damage-event"),
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
-                  0,
+		  G_STRUCT_OFFSET (GtkWidgetClass, damage_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
@@ -2752,7 +2754,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * Since: 2.8
    */
-  widget_signals[GRAB_BROKEN] =
+  widget_signals[GRAB_BROKEN_EVENT] =
     g_signal_new (I_("grab-broken-event"),
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
@@ -5809,7 +5811,7 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  signal_num = VISIBILITY_NOTIFY_EVENT;
 	  break;
 	case GDK_GRAB_BROKEN:
-	  signal_num = GRAB_BROKEN;
+	  signal_num = GRAB_BROKEN_EVENT;
 	  break;
 	case GDK_DAMAGE:
 	  signal_num = DAMAGE_EVENT;
@@ -6296,11 +6298,10 @@ gtk_widget_real_move_focus (GtkWidget         *widget,
 {
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
-  if (GTK_IS_WINDOW (toplevel) &&
-      GTK_WINDOW_GET_CLASS (toplevel)->move_focus)
+  if (widget != toplevel && GTK_IS_WINDOW (toplevel))
     {
-      GTK_WINDOW_GET_CLASS (toplevel)->move_focus (GTK_WINDOW (toplevel),
-                                                   direction);
+      g_signal_emit (toplevel, widget_signals[MOVE_FOCUS], 0,
+                     direction);
     }
 }
 

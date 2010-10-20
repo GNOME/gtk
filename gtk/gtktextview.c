@@ -308,8 +308,6 @@ static void gtk_text_view_draw_focus           (GtkWidget        *widget,
                                                 cairo_t          *cr);
 static gboolean gtk_text_view_focus            (GtkWidget        *widget,
                                                 GtkDirectionType  direction);
-static void gtk_text_view_move_focus           (GtkWidget        *widget,
-                                                GtkDirectionType  direction_type);
 static void gtk_text_view_select_all           (GtkWidget        *widget,
                                                 gboolean          select);
 
@@ -379,8 +377,7 @@ static void gtk_text_view_copy_clipboard   (GtkTextView           *text_view);
 static void gtk_text_view_paste_clipboard  (GtkTextView           *text_view);
 static void gtk_text_view_toggle_overwrite (GtkTextView           *text_view);
 static void gtk_text_view_toggle_cursor_visible (GtkTextView      *text_view);
-static void gtk_text_view_compat_move_focus(GtkTextView           *text_view,
-                                            GtkDirectionType       direction_type);
+
 static void gtk_text_view_unselect         (GtkTextView           *text_view);
 
 static void     gtk_text_view_validate_onscreen     (GtkTextView        *text_view);
@@ -593,14 +590,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->motion_notify_event = gtk_text_view_motion_event;
   widget_class->draw = gtk_text_view_draw;
   widget_class->focus = gtk_text_view_focus;
-
-  /* need to override the base class function via override_class_handler,
-   * because the signal slot is not available in GtkWidgetCLass
-   */
-  g_signal_override_class_handler ("move-focus",
-                                   GTK_TYPE_TEXT_VIEW,
-                                   G_CALLBACK (gtk_text_view_move_focus));
-
   widget_class->drag_begin = gtk_text_view_drag_begin;
   widget_class->drag_end = gtk_text_view_drag_end;
   widget_class->drag_data_get = gtk_text_view_drag_data_get;
@@ -626,7 +615,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->copy_clipboard = gtk_text_view_copy_clipboard;
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
-  klass->move_focus = gtk_text_view_compat_move_focus;
   klass->set_scroll_adjustments = gtk_text_view_set_scroll_adjustments;
 
   /*
@@ -4932,17 +4920,6 @@ gtk_text_view_focus (GtkWidget        *widget,
     }
 }
 
-static void
-gtk_text_view_move_focus (GtkWidget        *widget,
-                          GtkDirectionType  direction_type)
-{
-  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
-
-  if (GTK_TEXT_VIEW_GET_CLASS (text_view)->move_focus)
-    GTK_TEXT_VIEW_GET_CLASS (text_view)->move_focus (text_view,
-                                                     direction_type);
-}
-
 /*
  * Container
  */
@@ -6147,36 +6124,6 @@ gtk_text_view_get_accepts_tab (GtkTextView *text_view)
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
 
   return text_view->priv->accepts_tab;
-}
-
-static void
-gtk_text_view_compat_move_focus (GtkTextView     *text_view,
-                                 GtkDirectionType direction_type)
-{
-  GSignalInvocationHint *hint = g_signal_get_invocation_hint (text_view);
-
-  /*  as of GTK+ 2.12, the "move-focus" signal has been moved to GtkWidget,
-   *  the evil code below makes sure that both emitting the signal and
-   *  calling the virtual function directly continue to work as expetcted
-   */
-
-  if (hint->signal_id == g_signal_lookup ("move-focus", GTK_TYPE_WIDGET))
-    {
-      /*  if this is a signal emission, chain up  */
-
-      gboolean retval;
-
-      g_signal_chain_from_overridden_handler (text_view,
-                                              direction_type, &retval);
-    }
-  else
-    {
-      /*  otherwise emit the signal, since somebody called the virtual
-       *  function directly
-       */
-
-      g_signal_emit_by_name (text_view, "move-focus", direction_type);
-    }
 }
 
 /*

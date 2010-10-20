@@ -354,6 +354,8 @@ static gboolean gtk_window_state_event    (GtkWidget          *widget,
 static void gtk_window_check_resize       (GtkContainer      *container);
 static gint gtk_window_focus              (GtkWidget        *widget,
 				           GtkDirectionType  direction);
+static void gtk_window_move_focus         (GtkWidget         *widget,
+                                           GtkDirectionType   dir);
 static void gtk_window_real_set_focus     (GtkWindow         *window,
 					   GtkWidget         *focus);
 static void gtk_window_direction_changed  (GtkWidget         *widget,
@@ -363,8 +365,6 @@ static void gtk_window_state_changed      (GtkWidget         *widget,
 
 static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
-static void gtk_window_move_focus            (GtkWindow         *window,
-                                              GtkDirectionType   dir);
 static void gtk_window_keys_changed          (GtkWindow         *window);
 static gint gtk_window_draw                  (GtkWidget         *widget,
 					      cairo_t           *cr);
@@ -587,6 +587,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus_out_event = gtk_window_focus_out_event;
   widget_class->client_event = gtk_window_client_event;
   widget_class->focus = gtk_window_focus;
+  widget_class->move_focus = gtk_window_move_focus;
   widget_class->draw = gtk_window_draw;
   widget_class->get_preferred_width = gtk_window_get_preferred_width;
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
@@ -602,7 +603,6 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
-  klass->move_focus = gtk_window_move_focus;
   klass->keys_changed = gtk_window_keys_changed;
 
   g_type_class_add_private (gobject_class, sizeof (GtkWindowPrivate));
@@ -4690,7 +4690,7 @@ gtk_window_show (GtkWidget *widget)
   /* Try to make sure that we have some focused widget
    */
   if (!priv->focus_widget && !GTK_IS_PLUG (window))
-    gtk_window_move_focus (window, GTK_DIR_TAB_FORWARD);
+    gtk_window_move_focus (widget, GTK_DIR_TAB_FORWARD);
   
   if (priv->modal)
     gtk_grab_add (widget);
@@ -5883,16 +5883,6 @@ gtk_window_real_activate_focus (GtkWindow *window)
   gtk_window_activate_focus (window);
 }
 
-static void
-gtk_window_move_focus (GtkWindow       *window,
-                       GtkDirectionType dir)
-{
-  gtk_widget_child_focus (GTK_WIDGET (window), dir);
-  
-  if (!gtk_container_get_focus_child (GTK_CONTAINER (window)))
-    gtk_window_set_focus (window, NULL);
-}
-
 static gint
 gtk_window_enter_notify_event (GtkWidget        *widget,
 			       GdkEventCrossing *event)
@@ -6117,6 +6107,16 @@ gtk_window_focus (GtkWidget        *widget,
     }
 
   return FALSE;
+}
+
+static void
+gtk_window_move_focus (GtkWidget       *widget,
+                       GtkDirectionType dir)
+{
+  gtk_widget_child_focus (widget, dir);
+
+  if (! gtk_container_get_focus_child (GTK_CONTAINER (widget)))
+    gtk_window_set_focus (GTK_WINDOW (widget), NULL);
 }
 
 static void
