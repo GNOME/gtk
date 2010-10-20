@@ -1139,6 +1139,29 @@ color_shade (const GdkColor *color,
 }
 
 static void
+_cairo_round_rectangle (cairo_t *cr,
+                        gdouble  radius,
+                        gdouble  x,
+                        gdouble  y,
+                        gdouble  width,
+                        gdouble  height)
+{
+  radius = CLAMP (radius, 0, MIN (width / 2, height / 2));
+
+  if (radius == 0)
+    cairo_rectangle (cr, x, y, width, height);
+  else
+    {
+      cairo_new_sub_path (cr);
+      cairo_arc (cr, x + width - radius, y + radius, radius, - G_PI / 2, 0);
+      cairo_arc (cr, x + width - radius, y + height - radius, radius, 0, G_PI / 2);
+      cairo_arc (cr, x + radius, y + height - radius, radius, G_PI / 2, G_PI);
+      cairo_arc (cr, x + radius, y + radius, radius, G_PI, 3 * (G_PI / 2));
+      cairo_close_path (cr);
+    }
+}
+
+static void
 gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       cairo_t          *cr,
                                       gdouble           x,
@@ -1151,6 +1174,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
+  gint radius;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1168,9 +1192,13 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                           "background-image", &pattern,
                           "background-color", &bg_color,
                           "base-color", &base_color,
+                          "border-radius", &radius,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+
+  _cairo_round_rectangle (cr, (gdouble) radius, x, y, width, height);
+  cairo_clip (cr);
 
   cairo_translate (cr, x, y);
   cairo_scale (cr, width, height);
@@ -1268,7 +1296,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                */
               cairo_rectangle (cr, 0, 0, 1, 1);
               cairo_set_source (cr, other_pattern);
-              cairo_fill (cr);
+              cairo_fill_preserve (cr);
 
               /* Set alpha for posterior drawing
                * of the target pattern
