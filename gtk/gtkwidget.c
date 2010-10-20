@@ -3810,7 +3810,8 @@ gtk_widget_show (GtkWidget *widget)
           widget->priv->computed_hexpand ||
           widget->priv->computed_vexpand)
         {
-          gtk_widget_queue_compute_expand (widget);
+          if (widget->priv->parent != NULL)
+            gtk_widget_queue_compute_expand (widget->priv->parent);
         }
 
       g_signal_emit (widget, widget_signals[SHOW], 0);
