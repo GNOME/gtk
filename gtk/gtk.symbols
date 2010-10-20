@@ -251,7 +251,10 @@ gtk_alignment_set_padding
 #if IN_HEADER(__GTK_APPLICATION_H__)
 #if IN_FILE(__GTK_APPLICATION_C__)
 gtk_application_get_type G_GNUC_CONST
+gtk_application_add_window
 gtk_application_new
+gtk_application_get_windows
+gtk_application_remove_window
 #endif
 #endif
 
