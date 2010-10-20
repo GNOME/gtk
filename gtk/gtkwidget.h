@@ -843,14 +843,15 @@ void	   gtk_widget_unref		  (GtkWidget	       *widget);
 void	   gtk_widget_set		  (GtkWidget	       *widget,
 					   const gchar         *first_property_name,
 					   ...) G_GNUC_NULL_TERMINATED;
-void       gtk_widget_hide_all            (GtkWidget           *widget);
 #endif /* GTK_DISABLE_DEPRECATED */
+#if !defined(GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
+void       gtk_widget_hide_all            (GtkWidget           *widget);
+#endif
 void	   gtk_widget_unparent		  (GtkWidget	       *widget);
 void	   gtk_widget_show		  (GtkWidget	       *widget);
 void       gtk_widget_show_now            (GtkWidget           *widget);
 void	   gtk_widget_hide		  (GtkWidget	       *widget);
 void	   gtk_widget_show_all		  (GtkWidget	       *widget);
-void	   gtk_widget_hide_all		  (GtkWidget	       *widget);
 void       gtk_widget_set_no_show_all     (GtkWidget           *widget,
 					   gboolean             no_show_all);
 gboolean   gtk_widget_get_no_show_all     (GtkWidget           *widget);
