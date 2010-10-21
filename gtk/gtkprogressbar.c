@@ -88,7 +88,6 @@ static void gtk_progress_bar_real_update   (GtkProgressBar      *progress);
 static gboolean gtk_progress_bar_draw      (GtkWidget           *widget,
                                             cairo_t             *cr);
 static void gtk_progress_bar_act_mode_enter (GtkProgressBar     *progress);
-static void gtk_progress_bar_realize       (GtkWidget           *widget);
 static void gtk_progress_bar_finalize      (GObject             *object);
 static void gtk_progress_bar_set_orientation (GtkProgressBar    *progress,
                                               GtkOrientation     orientation);
