@@ -1031,8 +1031,6 @@ gtk_entry_set_icon_tooltip_markup
 gtk_entry_get_icon_tooltip_markup
 gtk_entry_set_icon_drag_source
 gtk_entry_get_current_icon_drag_source
-gtk_entry_get_icon_window
-gtk_entry_get_text_window
 
 <SUBSECTION Standard>
 GTK_ENTRY

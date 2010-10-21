@@ -265,8 +265,7 @@ static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 static void   gtk_entry_draw_frame           (GtkWidget        *widget,
                                               cairo_t          *cr);
 static void   gtk_entry_draw_progress        (GtkWidget        *widget,
-                                              cairo_t          *cr,
-                                              GdkWindow        *window);
+                                              cairo_t          *cr);
 static gint   gtk_entry_draw                 (GtkWidget        *widget,
                                               cairo_t          *cr);
 static gint   gtk_entry_button_press         (GtkWidget        *widget,
@@ -468,7 +467,7 @@ static void         get_text_area_size                 (GtkEntry       *entry,
 							gint           *y,
 							gint           *width,
 							gint           *height);
-static void         get_widget_window_size             (GtkEntry       *entry,
+static void         get_frame_size                     (GtkEntry       *entry,
 							gint           *x,
 							gint           *y,
 							gint           *width,
@@ -2260,6 +2259,7 @@ gtk_entry_init (GtkEntry *entry)
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   gtk_widget_set_can_focus (GTK_WIDGET (entry), TRUE);
+  gtk_widget_set_has_window (GTK_WIDGET (entry), FALSE);
 
   entry->editable = TRUE;
   entry->visible = TRUE;
@@ -2622,11 +2622,9 @@ realize_icon_info (GtkWidget            *widget,
   attributes.width = 1;
   attributes.height = 1;
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_EXPOSURE_MASK |
-                                GDK_BUTTON_PRESS_MASK |
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
                                 GDK_BUTTON_RELEASE_MASK |
                                 GDK_BUTTON1_MOTION_MASK |
                                 GDK_BUTTON3_MOTION_MASK |
@@ -2634,14 +2632,12 @@ realize_icon_info (GtkWidget            *widget,
                                 GDK_POINTER_MOTION_MASK |
                                 GDK_ENTER_NOTIFY_MASK |
                             GDK_LEAVE_NOTIFY_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   icon_info->window = gdk_window_new (gtk_widget_get_window (widget),
                                       &attributes,
                                       attributes_mask);
   gdk_window_set_user_data (icon_info->window, widget);
-  gdk_window_set_background (icon_info->window,
-                             &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
 
   gtk_widget_queue_resize (widget);
 }
@@ -2715,21 +2711,21 @@ gtk_entry_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  gint frame_x, frame_y;
   int i;
 
   gtk_widget_set_realized (widget, TRUE);
+  window = gtk_widget_get_parent_window (widget);
+  gtk_widget_set_window (widget, window);
+  g_object_ref (window);
+
   entry = GTK_ENTRY (widget);
   priv = GTK_ENTRY_GET_PRIVATE (entry);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  
-  get_widget_window_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
-
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= (GDK_EXPOSURE_MASK |
-			    GDK_BUTTON_PRESS_MASK |
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_BUTTON1_MOTION_MASK |
 			    GDK_BUTTON3_MOTION_MASK |
@@ -2737,21 +2733,23 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_POINTER_MOTION_MASK |
                             GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
-
-  window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, attributes_mask);
-  gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, entry);
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   get_text_area_size (entry, &attributes.x, &attributes.y, &attributes.width, &attributes.height);
- 
+
+  get_frame_size (entry, &frame_x, &frame_y, NULL, NULL);
+  attributes.x += frame_x;
+  attributes.y += frame_y;
+
   if (gtk_widget_is_sensitive (widget))
     {
       attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       attributes_mask |= GDK_WA_CURSOR;
     }
 
-  entry->text_area = gdk_window_new (window, &attributes, attributes_mask);
+  entry->text_area = gdk_window_new (gtk_widget_get_window (widget),
+                                     &attributes,
+                                     attributes_mask);
 
   gdk_window_set_user_data (entry->text_area, entry);
 
@@ -2759,11 +2757,6 @@ gtk_entry_realize (GtkWidget *widget)
     gdk_cursor_unref (attributes.cursor);
 
   gtk_widget_style_attach (widget);
-
-  style = gtk_widget_get_style (widget);
-  state = gtk_widget_get_state (widget);
-  gdk_window_set_background (window, &style->base[state]);
-  gdk_window_set_background (entry->text_area, &style->base[state]);
 
   gdk_window_show (entry->text_area);
 
@@ -2918,10 +2911,12 @@ place_windows (GtkEntry *entry)
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint x, y, width, height;
+  gint frame_x, frame_y;
   GtkAllocation primary;
   GtkAllocation secondary;
   EntryIconInfo *icon_info = NULL;
 
+  get_frame_size (entry, &frame_x, &frame_y, NULL, NULL);
   get_text_area_size (entry, &x, &y, &width, &height);
   get_icon_allocations (entry, &primary, &secondary);
 
@@ -2933,6 +2928,13 @@ place_windows (GtkEntry *entry)
   else
     x += primary.width;
   width -= primary.width + secondary.width;
+
+  x += frame_x;
+  y += frame_y;
+  primary.x += frame_x;
+  primary.y += frame_y;
+  secondary.x += frame_x;
+  secondary.y += frame_y;
 
   if ((icon_info = priv->icons[GTK_ENTRY_ICON_PRIMARY]) != NULL)
     gdk_window_move_resize (icon_info->window,
@@ -2966,7 +2968,7 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
   _gtk_entry_get_borders (entry, &xborder, &yborder);
 
   if (gtk_widget_get_realized (widget))
-    frame_height = gdk_window_get_height (gtk_widget_get_window (widget));
+    get_frame_size (entry, NULL, NULL, NULL, &frame_height);
   else
     frame_height = requisition.height;
 
@@ -3005,11 +3007,11 @@ get_text_area_size (GtkEntry *entry,
 
 
 static void
-get_widget_window_size (GtkEntry *entry,
-                        gint     *x,
-                        gint     *y,
-                        gint     *width,
-                        gint     *height)
+get_frame_size (GtkEntry *entry,
+                gint     *x,
+                gint     *y,
+                gint     *width,
+                gint     *height)
 {
   GtkAllocation allocation;
   GtkRequisition requisition;
@@ -3077,12 +3079,7 @@ gtk_entry_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gint x, y, width, height;
       GtkEntryCompletion* completion;
-
-      get_widget_window_size (entry, &x, &y, &width, &height);
-      gdk_window_move_resize (gtk_widget_get_window (widget),
-                              x, y, width, height);
 
       place_windows (entry);
       gtk_entry_recompute (entry);
@@ -3250,11 +3247,17 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   GdkWindow *window;
   gint x = 0, y = 0, width, height;
   GtkStateType state;
+  GtkAllocation allocation;
+  gint frame_x, frame_y;
+
+  cairo_save (cr);
 
   window = gtk_widget_get_window (widget);
 
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
+  get_frame_size (GTK_ENTRY (widget), &frame_x, &frame_y, &width, &height);
+  gtk_widget_get_allocation (widget, &allocation);
+
+  cairo_translate (cr, frame_x - allocation.x, frame_y - allocation.y);
 
   /* Fix a problem with some themes which assume that entry->text_area's
    * width equals widget->window's width
@@ -3282,12 +3285,17 @@ gtk_entry_draw_frame (GtkWidget      *widget,
   state = gtk_widget_has_focus (widget) ?
     GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
+  gtk_paint_flat_box (style, cr,
+                      state, GTK_SHADOW_NONE,
+                      widget, "entry_bg",
+                      x, y, width, height);
+
   gtk_paint_shadow (style, cr,
                     state, priv->shadow_type,
                     widget, "entry", x, y, width, height);
 
 
-  gtk_entry_draw_progress (widget, cr, window);
+  gtk_entry_draw_progress (widget, cr);
 
   if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     {
@@ -3301,6 +3309,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
 		       widget, "entry",
 		       0, 0, width, height);
     }
+
+  cairo_restore (cr);
 }
 
 static void
@@ -3337,15 +3347,17 @@ get_progress_area (GtkWidget *widget,
   GtkEntryPrivate *private = GTK_ENTRY_GET_PRIVATE (widget);
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkBorder progress_border;
+  gint frame_width, frame_height;
 
+  get_frame_size (entry, NULL, NULL, &frame_width, &frame_height);
   gtk_entry_get_progress_border (widget, &progress_border);
 
   *x = progress_border.left;
   *y = progress_border.top;
 
-  *width = gdk_window_get_width (gtk_widget_get_window (widget))
+  *width = frame_width
            - progress_border.left - progress_border.right;
-  *height = gdk_window_get_height (gtk_widget_get_window (widget))
+  *height = frame_height
             - progress_border.top - progress_border.bottom;
 
   if (gtk_widget_has_focus (widget) && !private->interior_focus)
@@ -3389,8 +3401,7 @@ get_progress_area (GtkWidget *widget,
 
 static void
 gtk_entry_draw_progress (GtkWidget      *widget,
-                         cairo_t        *cr,
-                         GdkWindow      *window)
+                         cairo_t        *cr)
 {
   gint x, y, width, height;
   GtkStateType state;
@@ -3399,16 +3410,6 @@ gtk_entry_draw_progress (GtkWidget      *widget,
 
   if ((width <= 0) || (height <= 0))
     return;
-
-  if (window != gtk_widget_get_window (widget))
-    {
-      gint pos_x, pos_y;
-
-      gdk_window_get_position (window, &pos_x, &pos_y);
-
-      x -= pos_x;
-      y -= pos_y;
-    }
 
   state = GTK_STATE_SELECTED;
   if (!gtk_widget_get_sensitive (widget))
@@ -3437,22 +3438,14 @@ gtk_entry_draw (GtkWidget *widget,
     GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    gtk_entry_draw_frame (widget, cr);
-
-  if (gtk_cairo_should_draw_window (cr, entry->text_area))
     {
+      /* Draw entry_bg, shadow, progress and focus */
+      gtk_entry_draw_frame (widget, cr);
+
+      /* Draw text and cursor */
       cairo_save (cr);
 
       gtk_cairo_transform_to_window (cr, widget, entry->text_area);
-
-      gtk_paint_flat_box (style, cr,
-			  state, GTK_SHADOW_NONE,
-			  widget, "entry_bg",
-			  0, 0,
-                          gdk_window_get_width (entry->text_area),
-                          gdk_window_get_height (entry->text_area));
-
-      gtk_entry_draw_progress (widget, cr, entry->text_area);
 
       if (entry->dnd_position != -1)
 	gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_DND);
@@ -3462,35 +3455,26 @@ gtk_entry_draw (GtkWidget *widget,
       /* When no text is being displayed at all, don't show the cursor */
       if (gtk_entry_get_display_mode (entry) != DISPLAY_BLANK &&
 	  gtk_widget_has_focus (widget) &&
-	  entry->selection_bound == entry->current_pos && entry->cursor_visible) 
+	  entry->selection_bound == entry->current_pos && entry->cursor_visible)
         gtk_entry_draw_cursor (GTK_ENTRY (widget), cr, CURSOR_STANDARD);
 
       cairo_restore (cr);
-    }
 
-  for (i = 0; i < MAX_ICONS; i++)
-    {
-      EntryIconInfo *icon_info = priv->icons[i];
-
-      if (icon_info != NULL && gtk_cairo_should_draw_window (cr, icon_info->window))
+      /* Draw icons */
+      for (i = 0; i < MAX_ICONS; i++)
         {
-          cairo_save (cr);
+          EntryIconInfo *icon_info = priv->icons[i];
 
-          gtk_cairo_transform_to_window (cr, widget, icon_info->window);
+          if (icon_info != NULL)
+            {
+              cairo_save (cr);
 
-          gtk_paint_flat_box (style, cr,
-                              state, GTK_SHADOW_NONE,
-                              widget, "entry_bg",
-                              0, 0,
-                              gdk_window_get_width (icon_info->window),
-                              gdk_window_get_height (icon_info->window));
+              gtk_cairo_transform_to_window (cr, widget, icon_info->window);
 
-          gtk_entry_draw_progress (widget, cr, icon_info->window);
-          draw_icon (widget, cr, i);
+              draw_icon (widget, cr, i);
 
-          cairo_restore (cr);
-
-          break;
+              cairo_restore (cr);
+            }
         }
     }
 
@@ -4214,24 +4198,6 @@ gtk_entry_state_changed (GtkWidget      *widget,
   
   if (gtk_widget_get_realized (widget))
     {
-      GtkStateType state;
-      GtkStyle *style;
-
-      style = gtk_widget_get_style (widget);
-      state = gtk_widget_get_state (widget);
-
-      gdk_window_set_background (gtk_widget_get_window (widget),
-                                 &style->base[state]);
-      gdk_window_set_background (entry->text_area,
-                                 &style->base[state]);
-      for (i = 0; i < MAX_ICONS; i++) 
-        {
-          EntryIconInfo *icon_info = priv->icons[i];
-          if (icon_info && icon_info->window)
-            gdk_window_set_background (icon_info->window,
-                                       &style->base[state]);
-        }
-
       if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       else 
@@ -4438,25 +4404,6 @@ gtk_entry_style_set (GtkWidget *widget,
     entry->invisible_char = find_invisible_char (GTK_WIDGET (entry));
 
   gtk_entry_recompute (entry);
-
-  if (previous_style && gtk_widget_get_realized (widget))
-    {
-      GtkStyle *style;
-
-      style = gtk_widget_get_style (widget);
-
-      gdk_window_set_background (gtk_widget_get_window (widget),
-                                 &style->base[gtk_widget_get_state (widget)]);
-      gdk_window_set_background (entry->text_area,
-                                 &style->base[gtk_widget_get_state (widget)]);
-      for (i = 0; i < MAX_ICONS; i++) 
-        {
-          EntryIconInfo *icon_info = priv->icons[i];
-          if (icon_info && icon_info->window)
-            gdk_window_set_background (icon_info->window,
-                                       &style->base[gtk_widget_get_state (widget)]);
-        }
-    }
 
   icon_theme_changed (entry);
   icon_margin_changed (entry);
@@ -5567,7 +5514,7 @@ gtk_entry_draw_text (GtkEntry *entry,
   gint pos_x, pos_y;
   gint width, height;
   gint progress_x, progress_y, progress_width, progress_height;
-
+  gint clip_width, clip_height;
 
   /* Nothing to display at all */
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
@@ -5583,6 +5530,11 @@ gtk_entry_draw_text (GtkEntry *entry,
   get_progress_area (widget,
                      &progress_x, &progress_y,
                      &progress_width, &progress_height);
+
+  clip_width = gdk_window_get_width (entry->text_area);
+  clip_height = gdk_window_get_height (entry->text_area);
+  cairo_rectangle (cr, 0, 0, clip_width, clip_height);
+  cairo_clip (cr);
 
   /* If the color is the same, or the progress area has a zero
    * size, then we only need to draw once. */
@@ -5771,7 +5723,8 @@ static void
 gtk_entry_queue_draw (GtkEntry *entry)
 {
   if (gtk_widget_is_drawable (GTK_WIDGET (entry)))
-    gdk_window_invalidate_rect (entry->text_area, NULL, FALSE);
+    gdk_window_invalidate_rect (gtk_widget_get_window (GTK_WIDGET (entry)),
+                                NULL, FALSE);
 }
 
 void
@@ -6706,30 +6659,6 @@ gtk_entry_set_buffer (GtkEntry       *entry,
   gtk_editable_set_position (GTK_EDITABLE (entry), 0);
   gtk_entry_recompute (entry);
 }
-
-/**
- * gtk_entry_get_text_window:
- * @entry: a #GtkEntry
- *
- * Returns the #GdkWindow which contains the text. This function is
- * useful when drawing something to the entry in a draw
- * callback because it enables the callback to distinguish between
- * the text window and entry's icon windows.
- *
- * See also gtk_entry_get_icon_window().
- *
- * Return value: (transfer none): the entry's text window.
- *
- * Since: 2.20
- **/
-GdkWindow *
-gtk_entry_get_text_window (GtkEntry *entry)
-{
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
-
-  return entry->text_area;
-}
-
 
 /**
  * gtk_entry_set_text:
@@ -8032,8 +7961,13 @@ gtk_entry_get_icon_at_pos (GtkEntry *entry,
 {
   GtkAllocation primary;
   GtkAllocation secondary;
+  gint frame_x, frame_y;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), -1);
+
+  get_frame_size (entry, &frame_x, &frame_y, NULL, NULL);
+  x -= frame_x;
+  y -= frame_y;
 
   get_icon_allocations (entry, &primary, &secondary);
 
@@ -8133,41 +8067,6 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
     }
 
   return -1;
-}
-
-/**
- * gtk_entry_get_icon_window:
- * @entry: A #GtkEntry
- * @icon_pos: Icon position
- *
- * Returns the #GdkWindow which contains the entry's icon at
- * @icon_pos. This function is useful when drawing something to the
- * entry in a draw callback because it enables the callback
- * to distinguish between the text window and entry's icon windows.
- *
- * See also gtk_entry_get_text_window().
- *
- * Return value: (transfer none): the entry's icon window at @icon_pos.
- *
- * Since: 2.20
- */
-GdkWindow  *
-gtk_entry_get_icon_window (GtkEntry             *entry,
-                           GtkEntryIconPosition  icon_pos)
-{
-  GtkEntryPrivate *priv;
-  EntryIconInfo *icon_info;
-
-  g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
-
-  priv = GTK_ENTRY_GET_PRIVATE (entry);
-
-  icon_info = priv->icons[icon_pos];
-
-  if (icon_info)
-    return icon_info->window;
-
-  return NULL;
 }
 
 static void

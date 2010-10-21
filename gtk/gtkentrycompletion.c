@@ -1400,7 +1400,14 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   if (!window)
     return FALSE;
 
+  gtk_widget_get_allocation (completion->priv->entry, &allocation);
+  gtk_widget_get_preferred_size (completion->priv->entry,
+                                 &entry_req, NULL);
+
   gdk_window_get_origin (window, &x, &y);
+  x += allocation.x;
+  y += allocation.y + (allocation.height - entry_req.height) / 2;
+
   _gtk_entry_get_borders (GTK_ENTRY (completion->priv->entry), &x_border, &y_border);
 
   matches = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->filter_model), NULL);
@@ -1436,7 +1443,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   else
     gtk_widget_show (completion->priv->scrolled_window);
 
-  gtk_widget_get_allocation (completion->priv->entry, &allocation);
   if (completion->priv->popup_set_width)
     width = MIN (allocation.width, monitor.width) - 2 * x_border;
   else
@@ -1455,8 +1461,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 
   gtk_widget_get_preferred_size (completion->priv->popup_window,
                                  &popup_req, NULL);
-  gtk_widget_get_preferred_size (completion->priv->entry,
-                                 &entry_req, NULL);
 
   if (x < monitor.x)
     x = monitor.x;

@@ -172,8 +172,6 @@ GtkEntryBuffer* gtk_entry_get_buffer            (GtkEntry       *entry);
 void       gtk_entry_set_buffer                 (GtkEntry       *entry,
                                                  GtkEntryBuffer *buffer);
 
-GdkWindow *gtk_entry_get_text_window            (GtkEntry      *entry);
-
 void       gtk_entry_set_visibility 		(GtkEntry      *entry,
 						 gboolean       visible);
 gboolean   gtk_entry_get_visibility             (GtkEntry      *entry);
@@ -303,8 +301,6 @@ void         gtk_entry_set_icon_drag_source              (GtkEntry             *
 							  GtkTargetList        *target_list,
 							  GdkDragAction         actions);
 gint         gtk_entry_get_current_icon_drag_source      (GtkEntry             *entry);
-GdkWindow*   gtk_entry_get_icon_window                   (GtkEntry             *entry,
-                                                          GtkEntryIconPosition  icon_pos);
 
 gboolean    gtk_entry_im_context_filter_keypress         (GtkEntry             *entry,
                                                           GdkEventKey          *event);

@@ -607,8 +607,8 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
-  attributes.x = allocation.width - arrow_size - 2 * style->xthickness;
-  attributes.y = (allocation.height - requisition.height) / 2;
+  attributes.x = allocation.x + allocation.width - arrow_size - 2 * style->xthickness;
+  attributes.y = allocation.y + (allocation.height - requisition.height) / 2;
   attributes.width = arrow_size + 2 * style->xthickness;
   attributes.height = requisition.height;
 
@@ -752,14 +752,15 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    panel_allocation.x = 0;
+    panel_allocation.x = allocation->x;
   else
-    panel_allocation.x = allocation->width - panel_width;
+    panel_allocation.x = allocation->x + allocation->width - panel_width;
 
   panel_allocation.width = panel_width;
   panel_allocation.height = MIN (requisition.height, allocation->height);
 
-  panel_allocation.y = 0;
+  panel_allocation.y = allocation->y +
+                       (allocation->height - requisition.height) / 2;
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->size_allocate (widget, allocation);
 
