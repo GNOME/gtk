@@ -72,6 +72,7 @@ struct _GdkGCQuartz
   CGFloat           dash_phase;
 
   CGPatternRef      ts_pattern;
+  void             *ts_pattern_info;
 
   guint             is_window : 1;
 };
