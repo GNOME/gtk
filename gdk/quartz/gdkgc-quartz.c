@@ -195,6 +195,9 @@ gdk_gc_quartz_finalize (GObject *object)
   if (private->clip_mask)
     CGImageRelease (private->clip_mask);
 
+  if (private->ts_pattern)
+    CGPatternRelease (private->ts_pattern);
+
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
 
