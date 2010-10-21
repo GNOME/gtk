@@ -2310,7 +2310,7 @@ get_allocation_coords (GtkContainer  *container,
 		       GtkWidget     *widget,
 		       GdkRectangle  *allocation)
 {
-  gtk_widget_set_allocation (widget, allocation);
+  gtk_widget_get_allocation (widget, allocation);
 
   return gtk_widget_translate_coordinates (widget, GTK_WIDGET (container),
 					   0, 0, &allocation->x, &allocation->y);
