@@ -91,6 +91,7 @@ gdk_public_h_sources =				\
 	gdkprivate.h				\
 	gdkproperty.h				\
 	gdkrectangle.h				\
+	gdkrgba.h				\
 	gdkscreen.h				\
 	gdkselection.h				\
 	gdkspawn.h				\
@@ -130,6 +131,7 @@ gdk_c_sources =                 \
 	gdkpango.c		\
 	gdkpixbuf-drawable.c	\
 	gdkrectangle.c		\
+	gdkrgba.c		\
 	gdkscreen.c		\
 	gdkselection.c		\
 	gdkvisual.c		\
