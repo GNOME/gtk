@@ -111,7 +111,7 @@
 #include "gtkmarshalers.h"
 
 /* the file where we store the recently used items */
-#define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
+#define GTK_RECENTLY_USED_FILE	"recently-used.xbel"
 
 /* return all items by default */
 #define DEFAULT_LIMIT	-1
@@ -520,6 +520,14 @@ gtk_recent_manager_monitor_changed (GFileMonitor      *monitor,
     }
 }
 
+static gchar *
+get_default_filename (void)
+{
+  return g_build_filename (g_get_user_data_dir (),
+                           GTK_RECENTLY_USED_FILE,
+                           NULL);
+}
+
 static void
 gtk_recent_manager_set_filename (GtkRecentManager *manager,
 				 const gchar      *filename)
@@ -560,9 +568,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
   else
     {
       if (!filename || *filename == '\0')
-        priv->filename = g_build_filename (g_get_home_dir (),
-                                           GTK_RECENTLY_USED_FILE,
-                                           NULL);
+        priv->filename = get_default_filename ();
       else
         priv->filename = g_strdup (filename);
     }
