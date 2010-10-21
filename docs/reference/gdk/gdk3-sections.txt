@@ -436,6 +436,7 @@ gdk_window_merge_child_input_shapes
 gdk_window_set_static_gravities
 gdk_window_set_title
 gdk_window_set_background
+gdk_window_set_background_rgba
 gdk_window_set_background_pattern
 gdk_window_get_background_pattern
 GDK_PARENT_RELATIVE
