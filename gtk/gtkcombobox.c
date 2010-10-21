@@ -1420,10 +1420,6 @@ gtk_combo_box_add (GtkContainer *container,
 
   if (priv->has_entry)
     {
-      /* this flag is a hack to tell the entry to fill its allocation.
-       */
-      GTK_ENTRY (widget)->is_cell_renderer = TRUE;
-
       g_signal_connect (widget, "changed",
 			G_CALLBACK (gtk_combo_box_entry_contents_changed),
 			combo_box);
@@ -1451,7 +1447,6 @@ gtk_combo_box_remove (GtkContainer *container,
 	  g_signal_handlers_disconnect_by_func (widget,
 						gtk_combo_box_entry_contents_changed,
 						container);
-	  GTK_ENTRY (widget)->is_cell_renderer = FALSE;
 	}
     }
 
