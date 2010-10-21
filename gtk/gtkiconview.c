@@ -48,12 +48,17 @@
  * @title: GtkIconView
  * @short_description: A widget which displays a list of icons in a grid
  *
- * #GtkIconView provides an alternative view on a list model.
+ * #GtkIconView provides an alternative view on a #GtkTreeModel.
  * It displays the model as a grid of icons with labels. Like
  * #GtkTreeView, it allows to select one or multiple items
  * (depending on the selection mode, see gtk_icon_view_set_selection_mode()).
  * In addition to selection with the arrow keys, #GtkIconView supports
  * rubberband selection, which is controlled by dragging the pointer.
+ *
+ * Note that if the tree model is backed by an actual tree store (as
+ * opposed to a flat list where the mapping to icons is obvious),
+ * #GtkIconView will only display the first level of the tree and
+ * ignore the tree's branches.
  */
 
 #define SCROLL_EDGE_SIZE 15
@@ -3597,11 +3602,13 @@ gtk_icon_view_row_changed (GtkTreeModel *model,
 			   GtkTreeIter  *iter,
 			   gpointer      data)
 {
+  GtkIconView *icon_view = GTK_ICON_VIEW (data);
   GtkIconViewItem *item;
   gint index;
-  GtkIconView *icon_view;
 
-  icon_view = GTK_ICON_VIEW (data);
+  /* ignore changes in branches */
+  if (gtk_tree_path_get_depth (path) > 1)
+    return;
 
   gtk_icon_view_stop_editing (icon_view, TRUE);
   
@@ -3620,13 +3627,15 @@ gtk_icon_view_row_inserted (GtkTreeModel *model,
 			    GtkTreeIter  *iter,
 			    gpointer      data)
 {
+  GtkIconView *icon_view = GTK_ICON_VIEW (data);
   gint index;
   GtkIconViewItem *item;
   gboolean iters_persist;
-  GtkIconView *icon_view;
   GList *list;
-  
-  icon_view = GTK_ICON_VIEW (data);
+
+  /* ignore changes in branches */
+  if (gtk_tree_path_get_depth (path) > 1)
+    return;
 
   iters_persist = gtk_tree_model_get_flags (icon_view->priv->model) & GTK_TREE_MODEL_ITERS_PERSIST;
   
@@ -3664,13 +3673,15 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
 			   GtkTreePath  *path,
 			   gpointer      data)
 {
+  GtkIconView *icon_view = GTK_ICON_VIEW (data);
   gint index;
-  GtkIconView *icon_view;
   GtkIconViewItem *item;
   GList *list, *next;
   gboolean emit = FALSE;
-  
-  icon_view = GTK_ICON_VIEW (data);
+
+  /* ignore changes in branches */
+  if (gtk_tree_path_get_depth (path) > 1)
+    return;
 
   index = gtk_tree_path_get_indices(path)[0];
 
@@ -3714,14 +3725,16 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
 			      gint         *new_order,
 			      gpointer      data)
 {
+  GtkIconView *icon_view = GTK_ICON_VIEW (data);
   int i;
   int length;
-  GtkIconView *icon_view;
   GList *items = NULL, *list;
   GtkIconViewItem **item_array;
   gint *order;
-  
-  icon_view = GTK_ICON_VIEW (data);
+
+  /* ignore changes in branches */
+  if (iter != NULL)
+    return;
 
   gtk_icon_view_stop_editing (icon_view, TRUE);
 
@@ -5334,8 +5347,6 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
   if (model)
     {
       GType column_type;
-      
-      g_return_if_fail (gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_LIST_ONLY);
 
       if (icon_view->priv->pixbuf_column != -1)
 	{
