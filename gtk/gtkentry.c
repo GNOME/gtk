@@ -5840,6 +5840,11 @@ gtk_entry_im_context_filter_keypress (GtkEntry    *entry,
   return gtk_im_context_filter_keypress (entry->im_context, event);
 }
 
+GtkIMContext*
+_gtk_entry_get_im_context (GtkEntry *entry)
+{
+  return entry->im_context;
+}
 
 static gint
 gtk_entry_find_position (GtkEntry *entry,
