@@ -613,16 +613,19 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 	}
       else
 	{
+          struct PatternCallbackInfo *info;
+
 	  if (!private->ts_pattern)
 	    {
 	      gfloat     width, height;
 	      gboolean   is_colored = FALSE;
 	      CGPatternCallbacks callbacks =  { 0, NULL, NULL };
-              struct PatternCallbackInfo *info;
 	      CGPoint    phase;
               GdkPixmapImplQuartz *pix_impl = NULL;
 
               info = g_new (struct PatternCallbackInfo, 1);
+              private->ts_pattern_info = info;
+
               /* Won't ref to avoid circular dependencies */
               info->drawable = drawable;
               info->private_gc = private;
@@ -667,6 +670,13 @@ _gdk_quartz_gc_update_cg_context (GdkGC                      *gc,
 						     is_colored,
 						     &callbacks);
 	    }
+          else
+            info = (struct PatternCallbackInfo *)private->ts_pattern_info;
+
+          /* Update drawable in the pattern callback info.  Again, we
+           * won't ref to avoid circular dependencies.
+           */
+          info->drawable = drawable;
 
 	  baseSpace = (fill == GDK_STIPPLED) ? CGColorSpaceCreateWithName (kCGColorSpaceGenericRGB) : NULL;
 	  patternSpace = CGColorSpaceCreatePattern (baseSpace);
