@@ -249,6 +249,25 @@ gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
 }
 
 /**
+ * gtk_combo_box_text_remove_all:
+ * @combo_box: A #GtkComboBoxText
+ *
+ * Removes all the text entries from the combo box.
+ *
+ * Since: 3.0
+ */
+void
+gtk_combo_box_text_remove_all (GtkComboBoxText *combo_box)
+{
+  GtkListStore *store;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX_TEXT (combo_box));
+
+  store = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box)));
+  gtk_list_store_clear (store);
+}
+
+/**
  * gtk_combo_box_text_get_active_text:
  * @combo_box: A #GtkComboBoxText
  *
