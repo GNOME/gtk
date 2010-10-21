@@ -2705,8 +2705,6 @@ gtk_entry_realize (GtkWidget *widget)
 {
   GtkEntry *entry;
   GtkEntryPrivate *priv;
-  GtkStateType state;
-  GtkStyle *style;
   EntryIconInfo *icon_info;
   GdkWindow *window;
   GdkWindowAttr attributes;
@@ -4192,9 +4190,7 @@ gtk_entry_state_changed (GtkWidget      *widget,
 			 GtkStateType    previous_state)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (widget);
   GdkCursor *cursor;
-  gint i;
   
   if (gtk_widget_get_realized (widget))
     {
@@ -4390,7 +4386,6 @@ gtk_entry_style_set (GtkWidget *widget,
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   gint focus_width;
   gboolean interior_focus;
-  gint i;
 
   gtk_widget_style_get (widget,
 			"focus-line-width", &focus_width,
