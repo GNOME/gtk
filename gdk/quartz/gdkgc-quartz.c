@@ -363,7 +363,7 @@ gdk_quartz_draw_tiled_pattern (void         *info,
   CGImageRef   pattern_image;
   size_t       width, height;
 
-  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP_OBJECT (_gdk_gc_get_tile (gc))->impl);
+  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_tile (gc)));
 
   width = CGImageGetWidth (pattern_image);
   height = CGImageGetHeight (pattern_image);
@@ -384,7 +384,7 @@ gdk_quartz_draw_stippled_pattern (void         *info,
   CGRect      rect;
   CGColorRef  color;
 
-  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl);
+  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_stipple (gc)));
   rect = CGRectMake (0, 0,
 		     CGImageGetWidth (pattern_image),
 		     CGImageGetHeight (pattern_image));
@@ -410,7 +410,7 @@ gdk_quartz_draw_opaque_stippled_pattern (void         *info,
   CGRect      rect;
   CGColorRef  color;
 
-  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP_OBJECT (_gdk_gc_get_stipple (gc))->impl);
+  pattern_image = _gdk_pixmap_get_cgimage (GDK_PIXMAP (_gdk_gc_get_stipple (gc)));
   rect = CGRectMake (0, 0,
 		     CGImageGetWidth (pattern_image),
 		     CGImageGetHeight (pattern_image));
