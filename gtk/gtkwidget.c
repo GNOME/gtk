@@ -88,12 +88,10 @@
  *          This allows a widget to tell it's parent container whether
  *          it preferrs to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
  *          or %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
- *
  *          %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget preferrs to
  *          have #GtkWidgetClass.get_preferred_width() called and then
  *          #GtkWidgetClass.get_preferred_height_for_width() and is the 
  *          default return for unimplemented cases.
- *
  *          However it's important to note (as described below) that any
  *          widget which trades height-for-width must respond properly to 
  *          both #GtkSizeRequestModes since it might be queried in either
@@ -108,7 +106,6 @@
  *          a width less than it's minimum and will only ever be allocated
  *          a width greater than the natural width once all of the said
  *          widget's siblings have received their natural widths.
- *
  *          Furthermore a widget will only ever be allocated a width greater
  *          than it's natural width if it was configured to receive extra
  *          expand space from it's parent container.
@@ -119,7 +116,6 @@
  *       <listitem>
  *          This is called by containers to obtain the minimum and
  *          natural height of a widget.
- *
  *          A widget that does not actually trade any height for width
  *          or width for height only has to implement these two virtual 
  *          methods (#GtkWidgetClass.get_preferred_width() and
