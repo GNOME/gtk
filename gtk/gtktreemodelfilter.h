@@ -37,9 +37,38 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_MODEL_FILTER_CLASS(vtable)  (G_TYPE_CHECK_CLASS_TYPE ((vtable), GTK_TYPE_TREE_MODEL_FILTER))
 #define GTK_TREE_MODEL_FILTER_GET_CLASS(obj)   (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_MODEL_FILTER, GtkTreeModelFilterClass))
 
+/**
+ * GtkTreeModelFilterVisibleFunc:
+ * @model: the child model of the #GtkTreeModelFilter
+ * @iter: a #GtkTreeIter pointing to the row in @model whose visibility
+ *   is determined
+ * @data: user data given to gtk_tree_model_filter_set_visible_func()
+ *
+ * A function which decides whether the row indicated by @iter is visible.
+ *
+ * Returns: Whether the row indicated by @iter is visible.
+ */
 typedef gboolean (* GtkTreeModelFilterVisibleFunc) (GtkTreeModel *model,
                                                     GtkTreeIter  *iter,
                                                     gpointer      data);
+
+/**
+ * GtkTreeModelFilterModifyFunc:
+ * @model: the #GtkTreeModelFilter
+ * @iter: a #GtkTreeIter pointing to the row whose display values are determined
+ * @value: A #GValue which is already initialized for with the correct type for
+ *  the column @column.
+ * @column: the column whose display value is determined
+ * @data: user data given to gtk_tree_model_filter_set_modify_func()
+ *
+ * A function which calculates display values from raw values in the model.
+ * It must fill @value with the display value for the column @column in the
+ * row indicated by @iter.
+ *
+ * Since this function is called for each data access, it's not a
+ * particularly efficient operation.
+ */
+
 typedef void (* GtkTreeModelFilterModifyFunc) (GtkTreeModel *model,
                                                GtkTreeIter  *iter,
                                                GValue       *value,
