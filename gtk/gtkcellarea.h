@@ -1,5 +1,9 @@
 /* gtkcellarea.h
- * Copyright (C) 2000  Red Hat, Inc.,  Jonathan Blandford <jrb@redhat.com>
+ *
+ * Copyright (C) 2010 Openismus GmbH
+ *
+ * Authors:
+ *      Tristan Van Berkom <tristanvb@openismus.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -42,7 +46,7 @@ typedef struct _GtkCellAreaClass         GtkCellAreaClass;
 
 /**
  * GtkCellCallback:
- * @cell: the cell renderer to operate on
+ * @renderer: the cell renderer to operate on
  * @data: user-supplied data
  *
  * The type of the callback functions used for iterating over
@@ -52,12 +56,29 @@ typedef void    (*GtkCellCallback)     (GtkCellRenderer  *renderer,
 				        gpointer          data);
 
 
+/**
+ * GtkCellAttributeCallback:
+ * @area: the #GtkCellArea containing @renderer
+ * @renderer: the #GtkCellRenderer that has an attribute
+ * @attribute: the property attributed to @id
+ * @id: the identifier of this attributed value
+ * @data: user-supplied data
+ *
+ * The type of the callback functions used for iterating over the 
+ * attributes of the cell renderers in a #GtkCellArea, 
+ * see gtk_cell_area_attribute_forall().
+ */
+typedef void    (*GtkCellAttributeCallback)     (GtkCellArea      *area,
+						 GtkCellRenderer  *renderer,
+						 const gchar      *attribute,
+						 gint              id,
+						 gpointer          data);
+
+
 struct _GtkCellArea
 {
   GInitiallyUnowned parent_instance;
 
-  /* <private> */
-  GtkCellAreaPrivate *priv;
 };
 
 struct _GtkCellAreaClass
@@ -65,6 +86,8 @@ struct _GtkCellAreaClass
   GInitiallyUnownedClass parent_class;
 
   /* vtable - not signals */
+
+  /* Basic methods */
   void               (* add)                             (GtkCellArea        *area,
 							  GtkCellRenderer    *renderer);
   void               (* remove)                          (GtkCellArea        *area,
@@ -72,9 +95,6 @@ struct _GtkCellAreaClass
   void               (* forall)                          (GtkCellArea        *area,
 							  GtkCellCallback     callback,
 							  gpointer            callback_data);
-  void               (* apply_attribute)                 (GtkCellArea        *area,
-							  gint                attribute,
-							  GValue             *value);
   gint               (* event)                           (GtkCellArea        *area,
 							  GtkWidget          *widget,
 							  GdkEvent           *event,
@@ -84,6 +104,24 @@ struct _GtkCellAreaClass
 							  GtkWidget          *widget,
 							  const GdkRectangle *cell_area);
 
+  /* Attributes */
+  void               (* attribute_connect)               (GtkCellArea        *area,
+							  GtkCellRenderer    *renderer,
+							  const gchar        *attribute,
+							  gint                id);
+  void               (* attribute_disconnect)            (GtkCellArea        *area,
+							  GtkCellRenderer    *renderer,
+							  const gchar        *attribute,
+							  gint                id);
+  void               (* attribute_apply)                 (GtkCellArea        *area,
+							  gint                id,
+							  GValue                  *value);
+  void               (* attribute_forall)                (GtkCellArea             *area,
+							  GtkCellRenderer         *renderer,
+							  GtkCellAttributeCallback callback,
+							  gpointer                 user_data);
+
+  /* Geometry */
   GtkSizeRequestMode (* get_request_mode)                (GtkCellArea        *area);
   void               (* get_preferred_width)             (GtkCellArea        *area,
                                                           GtkWidget          *widget,
@@ -126,9 +164,6 @@ void               gtk_cell_area_remove                         (GtkCellArea    
 void               gtk_cell_area_forall                         (GtkCellArea        *area,
 								 GtkCellCallback     callback,
 								 gpointer            callback_data);
-void               gtk_cell_area_apply_attribute                (GtkCellArea        *area,
-								 gint                attribute,
-								 GValue             *value);
 gint               gtk_cell_area_event                          (GtkCellArea        *area,
 								 GtkWidget          *widget,
 								 GdkEvent           *event,
@@ -137,6 +172,23 @@ void               gtk_cell_area_render                         (GtkCellArea    
 								 cairo_t            *cr,
 								 GtkWidget          *widget,
 								 const GdkRectangle *cell_area);
+
+/* Attributes */
+void               gtk_cell_area_attribute_connect              (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *attribute,
+								 gint                id); 
+void               gtk_cell_area_attribute_disconnect           (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *attribute,
+								 gint                id);
+void               gtk_cell_area_attribute_apply                (GtkCellArea        *area,
+								 gint                id,
+								 GValue             *value);
+void               gtk_cell_area_attribute_forall               (GtkCellArea             *area,
+								 GtkCellRenderer         *renderer,
+								 GtkCellAttributeCallback callback,
+								 gpointer                 user_data);
 
 /* Geometry */
 GtkSizeRequestMode gtk_cell_area_get_request_mode               (GtkCellArea        *area);
@@ -158,10 +210,6 @@ void               gtk_cell_area_get_preferred_width_for_height (GtkCellArea    
 								 gint                height,
 								 gint               *minimum_width,
 								 gint               *natural_width);
-void               gtk_cell_area_get_preferred_size             (GtkCellArea        *area,
-								 GtkWidget          *widget,
-								 GtkRequisition     *minimum_size,
-								 GtkRequisition     *natural_size);
 
 
 G_END_DECLS
