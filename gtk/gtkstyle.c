@@ -1801,7 +1801,7 @@ transform_detail_string (const gchar     *detail,
   else if (strcmp (detail, "viewport") == 0 ||
 	   strcmp (detail, "viewportbin") == 0)
     gtk_style_context_add_class (context, "viewport");
-  else if (strcmp (detail, "trough") == 0)
+  else if (strncmp (detail, "trough", 6) == 0)
     {
       gtk_style_context_add_class (context, "scrollbar");
       gtk_style_context_add_class (context, "trough");
@@ -1820,6 +1820,8 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "button");
       gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
     }
+  else if (strcmp (detail, "slider") == 0)
+    gtk_style_context_add_class (context, "slider");
   else if (g_str_has_prefix (detail, "cell_"))
     {
       GtkRegionFlags row, col;
