@@ -543,19 +543,5 @@ typedef enum
 
 G_END_DECLS
 
-/**
- * GtkScrollablePolicy:
- * @GTK_SCROLL_MINIMUM: Scrollable adjustments are based on the minimum size
- * @GTK_SCROLL_NATURAL: Scrollable adjustments are based on the natural size
- *
- * Defines the policy to be used in a scrollable widget when updating
- * the scrolled window adjustments in a given orientation.
- */
-typedef enum
-{
-  GTK_SCROLL_MINIMUM = 0,
-  GTK_SCROLL_NATURAL
-} GtkScrollablePolicy;
-
 
 #endif /* __GTK_ENUMS_H__ */

@@ -134,8 +134,6 @@ struct _GtkScrolledWindowPrivate
   guint    vscrollbar_visible     : 1;
   guint    window_placement       : 2;
   guint    focus_out              : 1;   /* Flag used by ::move-focus-out implementation */
-  guint    hscroll_policy         : 1;
-  guint    vscroll_policy         : 1;
 
   gint     min_content_width;
   gint     min_content_height;
@@ -148,8 +146,6 @@ enum {
   PROP_VADJUSTMENT,
   PROP_HSCROLLBAR_POLICY,
   PROP_VSCROLLBAR_POLICY,
-  PROP_HSCROLL_POLICY,
-  PROP_VSCROLL_POLICY,
   PROP_WINDOW_PLACEMENT,
   PROP_WINDOW_PLACEMENT_SET,
   PROP_SHADOW_TYPE,
@@ -382,23 +378,6 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							     GTK_PARAM_READABLE));
 
   g_object_class_install_property (gobject_class,
-                                   PROP_HSCROLL_POLICY,
-                                   g_param_spec_enum ("hscroll-policy",
-                                                      P_("Horizontal Scrollable Policy"),
-                                                      P_("How the size of the content should be determined"),
-                                                      GTK_TYPE_SCROLLABLE_POLICY,
-GTK_SCROLL_NATURAL,
-                                                      GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-                                   PROP_VSCROLL_POLICY,
-                                   g_param_spec_enum ("vscroll-policy",
-                                                      P_("Vertical Scrollable Policy"),
-                                                      P_("How the size of the content should be determined"),
-                                                      GTK_TYPE_SCROLLABLE_POLICY,
-GTK_SCROLL_NATURAL,
-                                                      GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (gobject_class,
                                    PROP_MIN_CONTENT_WIDTH,
                                    g_param_spec_int ("min-content-width",
                                                      P_("Minimum Content Width"),
@@ -507,8 +486,6 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   priv->focus_out = FALSE;
   priv->window_placement = GTK_CORNER_TOP_LEFT;
   gtk_scrolled_window_update_real_placement (scrolled_window);
-  priv->hscroll_policy = GTK_SCROLL_NATURAL;
-  priv->vscroll_policy = GTK_SCROLL_NATURAL;
   priv->min_content_width = -1;
   priv->min_content_height = -1;
 }
@@ -1081,14 +1058,6 @@ gtk_scrolled_window_set_property (GObject      *object,
       gtk_scrolled_window_set_shadow_type (scrolled_window,
 					   g_value_get_enum (value));
       break;
-    case PROP_HSCROLL_POLICY:
-      gtk_scrolled_window_set_hscroll_policy (scrolled_window,
-                                              g_value_get_enum (value));
-      break;
-    case PROP_VSCROLL_POLICY:
-      gtk_scrolled_window_set_vscroll_policy (scrolled_window,
-                                              g_value_get_enum (value));
-      break;
     case PROP_MIN_CONTENT_WIDTH:
       gtk_scrolled_window_set_min_content_width (scrolled_window,
                                                  g_value_get_int (value));
@@ -1136,12 +1105,6 @@ gtk_scrolled_window_get_property (GObject    *object,
       break;
     case PROP_VSCROLLBAR_POLICY:
       g_value_set_enum (value, priv->vscrollbar_policy);
-      break;
-    case PROP_HSCROLL_POLICY:
-      g_value_set_enum (value, priv->hscroll_policy);
-      break;
-    case PROP_VSCROLL_POLICY:
-      g_value_set_enum (value, priv->vscroll_policy);
       break;
     case PROP_MIN_CONTENT_WIDTH:
       g_value_set_int (value, priv->min_content_width);
@@ -2271,61 +2234,5 @@ gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 
       g_object_notify (G_OBJECT (scrolled_window), "min-content-height");
-    }
-}
-
-GtkScrollablePolicy
-gtk_scrolled_window_get_hscroll_policy (GtkScrolledWindow *scrolled_window)
-{
-  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), 0);
-
-  return scrolled_window->priv->hscroll_policy;
-}
-
-void
-gtk_scrolled_window_set_hscroll_policy (GtkScrolledWindow   *scrolled_window,
-                                        GtkScrollablePolicy  policy)
-{
-  GtkScrolledWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-
-  priv = scrolled_window->priv;
-
-  if (priv->hscroll_policy != policy)
-    {
-      priv->hscroll_policy = policy;
-
-      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-
-      g_object_notify (G_OBJECT (scrolled_window), "hscroll-policy");
-    }
-}
-
-GtkScrollablePolicy
-gtk_scrolled_window_get_vscroll_policy (GtkScrolledWindow *scrolled_window)
-{
-  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), 0);
-
-  return scrolled_window->priv->vscroll_policy;
-}
-
-void
-gtk_scrolled_window_set_vscroll_policy (GtkScrolledWindow   *scrolled_window,
-                                        GtkScrollablePolicy  policy)
-{
-  GtkScrolledWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window));
-
-  priv = scrolled_window->priv;
-
-  if (priv->vscroll_policy != policy)
-    {
-      priv->vscroll_policy = policy;
-
-      gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
-
-      g_object_notify (G_OBJECT (scrolled_window), "vscroll-policy");
     }
 }

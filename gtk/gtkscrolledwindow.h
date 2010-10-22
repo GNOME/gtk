@@ -121,12 +121,6 @@ void           gtk_scrolled_window_set_min_content_width  (GtkScrolledWindow *sc
 gint           gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window);
 void           gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
                                                            gint               height);
-GtkScrollablePolicy gtk_scrolled_window_get_hscroll_policy (GtkScrolledWindow   *scrolled_window);
-void                gtk_scrolled_window_set_hscroll_policy (GtkScrolledWindow   *scrolled_window,
-                                                            GtkScrollablePolicy  policy);
-GtkScrollablePolicy gtk_scrolled_window_get_vscroll_policy (GtkScrolledWindow   *scrolled_window);
-void                gtk_scrolled_window_set_vscroll_policy (GtkScrolledWindow   *scrolled_window,
-                                                            GtkScrollablePolicy  policy);
 
 gint _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window);
 
