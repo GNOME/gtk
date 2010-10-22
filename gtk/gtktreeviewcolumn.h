@@ -39,6 +39,19 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW_COLUMN))
 #define GTK_TREE_VIEW_COLUMN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 
+typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
+typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
+
+/**
+ * GtkTreeViewColumnSizing:
+ * @GTK_TREE_VIEW_COLUMN_GROW_ONLY: Columns only get bigger in reaction to changes in the model
+ * @GTK_TREE_VIEW_COLUMN_AUTOSIZE: Columns resize to be the optimal size everytime the model changes.
+ * @GTK_TREE_VIEW_COLUMN_FIXED: Columns are a fixed numbers of pixels wide.
+ *
+ * The sizing method the column uses to determine its width.  Please note
+ * that @GTK_TREE_VIEW_COLUMN_AUTOSIZE are inefficient for large views, and
+ * can make columns appear choppy.
+ */
 typedef enum
 {
   GTK_TREE_VIEW_COLUMN_GROW_ONLY,
@@ -46,9 +59,21 @@ typedef enum
   GTK_TREE_VIEW_COLUMN_FIXED
 } GtkTreeViewColumnSizing;
 
-typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
-typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
-
+/**
+ * GtkTreeCellDataFunc:
+ * @tree_column: A #GtkTreeColumn
+ * @cell: The #GtkCellRenderer that is being rendered by @tree_column
+ * @tree_model: The #GtkTreeModel being rendered
+ * @iter: A #GtkTreeIter of the current row rendered
+ * @data: user data
+ *
+ * A function to set the properties of a cell instead of just using the
+ * straight mapping between the cell and the model.  This is useful for
+ * customizing the cell renderer.  For example, a function might get an
+ * integer from the @tree_model, and render it to the "text" attribute of
+ * "cell" by converting it to its written equivilent.  This is set by
+ * calling gtk_tree_view_column_set_cell_data_func()
+ */
 typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
 				      GtkCellRenderer   *cell,
 				      GtkTreeModel      *tree_model,
