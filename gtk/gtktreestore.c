@@ -28,6 +28,41 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktreestore
+ * @Short_description: A tree-like data structure that can be used with the GtkTreeView
+ * @Title: GtkTreeStore
+ * @See_also: #GtkTreeModel
+ *
+ * The #GtkTreeStore object is a list model for use with a #GtkTreeView
+ * widget.  It implements the #GtkTreeModel interface, and consequentialy,
+ * can use all of the methods available there.  It also implements the
+ * #GtkTreeSortable interface so it can be sorted by the view.  Finally,
+ * it also implements the tree <link linkend="gtktreednd">drag and
+ * drop</link> interfaces.
+ *
+ * <refsect2 id="GtkTreeStore-BUILDER-UI">
+ * <title>GtkTreeStore as GtkBuildable</title>
+ * The GtkTreeStore implementation of the #GtkBuildable interface allows
+ * to specify the model columns with a &lt;columns&gt; element that may
+ * contain multiple &lt;column&gt; elements, each specifying one model
+ * column. The "type" attribute specifies the data type for the column.
+ * <example>
+ * <title>A UI Definition fragment for a tree store</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkTreeStore">
+ *   <columns>
+ *     <column type="gchararray"/>
+ *     <column type="gchararray"/>
+ *     <column type="gint"/>
+ *   </columns>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
+
+
 #define G_NODE(node) ((GNode *)node)
 #define GTK_TREE_STORE_IS_SORTED(tree) (((GtkTreeStore*)(tree))->sort_column_id != GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID)
 #define VALID_ITER(iter, tree_store) ((iter)!= NULL && (iter)->user_data != NULL && ((GtkTreeStore*)(tree_store))->stamp == (iter)->stamp)
