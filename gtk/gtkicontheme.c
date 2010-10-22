@@ -3062,15 +3062,63 @@ gdk_color_to_css (GdkColor *color)
                           color->blue >> 8);
 }
 
+static GdkPixbuf *
+_gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
+                                       const gchar  *css_fg,
+                                       const gchar  *css_success,
+                                       const gchar  *css_warning,
+                                       const gchar  *css_error,
+                                       GError      **error)
+{
+  GInputStream *stream;
+  GdkPixbuf *pixbuf;
+  gchar *data;
+
+  data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
+                      "<svg version=\"1.1\"\n"
+                      "     xmlns=\"http://www.w3.org/2000/svg\"\n"
+                      "     xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n"
+                      "     width=\"16\"\n"
+                      "     height=\"16\">\n"
+                      "  <style type=\"text/css\">\n"
+                      "    rect,path {\n"
+                      "      fill: ", css_fg," !important;\n"
+                      "    }\n"
+                      "    .warning {\n"
+                      "      fill: ", css_warning," !important;\n"
+                      "    }\n"
+                      "    .error {\n"
+                      "      fill: ", css_error," !important;\n"
+                      "    }\n"
+                      "    .success {\n"
+                      "      fill: ", css_success," !important;\n"
+                      "    }\n"
+                      "  </style>\n"
+                      "  <xi:include href=\"", icon_info->filename, "\"/>\n"
+                      "</svg>",
+                      NULL);
+
+  stream = g_memory_input_stream_new_from_data (data, -1, g_free);
+  pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
+                                                icon_info->desired_size,
+                                                icon_info->desired_size,
+                                                TRUE,
+                                                NULL,
+                                                error);
+  g_object_unref (stream);
+
+  return pixbuf;
+}
+
 /**
  * gtk_icon_info_load_symbolic:
  * @icon_info: a #GtkIconInfo
- * @fg: a #GdkColor representing the foreground color of the icon
- * @success_color: (allow-none): a #GdkColor representing the warning color
+ * @fg: a #GdkRGBA representing the foreground color of the icon
+ * @success_color: (allow-none): a #GdkRGBA representing the warning color
  *     of the icon or %NULL to use the default color
- * @warning_color: (allow-none): a #GdkColor representing the warning color
+ * @warning_color: (allow-none): a #GdkRGBA representing the warning color
  *     of the icon or %NULL to use the default color
- * @error_color: (allow-none): a #GdkColor representing the error color
+ * @error_color: (allow-none): a #GdkRGBA representing the error color
  *     of the icon or %NULL to use the default color (allow-none)
  * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
  *     was a symbolic one and whether the @fg color was applied to it.
@@ -3100,16 +3148,14 @@ gdk_color_to_css (GdkColor *color)
  **/
 GdkPixbuf *
 gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
-                             GdkColor     *fg,
-                             GdkColor     *success_color,
-                             GdkColor     *warning_color,
-                             GdkColor     *error_color,
+                             GdkRGBA      *fg,
+                             GdkRGBA      *success_color,
+                             GdkRGBA      *warning_color,
+                             GdkRGBA      *error_color,
                              gboolean     *was_symbolic,
                              GError      **error)
 {
   GdkPixbuf *pixbuf;
-  GInputStream *stream;
-  gchar *data;
   gchar *css_fg;
   gchar *css_success;
   gchar *css_warning;
@@ -3128,67 +3174,39 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
   if (was_symbolic)
     *was_symbolic = TRUE;
 
-  css_fg = gdk_color_to_css (fg);
+  css_fg = gdk_rgba_to_string (fg);
   if (!warning_color)
     {
       GdkColor warning_default_color = { 0, 0xf500, 0x7900, 0x3e00 };
       css_warning = gdk_color_to_css (&warning_default_color);
     }
   else
-      css_warning = gdk_color_to_css (warning_color);
+      css_warning = gdk_rgba_to_string (warning_color);
+
   if (!error_color)
     {
       GdkColor error_default_color = { 0, 0xcc00, 0x0000, 0x0000 };
       css_error = gdk_color_to_css (&error_default_color);
     }
   else
-      css_error = gdk_color_to_css (error_color);
+      css_error = gdk_rgba_to_string (error_color);
+
   if (!success_color)
     {
       GdkColor success_default_color = { 0, 0x4e00, 0x9a00, 0x0600 };
       css_success = gdk_color_to_css (&success_default_color);
     }
   else
-      css_success = gdk_color_to_css (success_color);
+      css_success = gdk_rgba_to_string (success_color);
 
-  data = g_strconcat (
-"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-"<svg version=\"1.1\"\n"
-"     xmlns=\"http://www.w3.org/2000/svg\"\n"
-"     xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n"
-"     width=\"16\"\n"
-"     height=\"16\">\n"
-"  <style type=\"text/css\">\n"
-"    rect,path {\n"
-"      fill: ", css_fg," !important;\n"
-"    }\n"
-"    .warning {\n"
-"      fill: ", css_warning," !important;\n"
-"    }\n"
-"    .error {\n"
-"      fill: ", css_error," !important;\n"
-"    }\n"
-"    .success {\n"
-"      fill: ", css_success," !important;\n"
-"    }\n"
-"  </style>\n"
-"  <xi:include href=\"", icon_info->filename, "\"/>\n"
-"</svg>",
-         NULL);
+  pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
+                                                  css_fg, css_success,
+                                                  css_warning, css_error,
+                                                  error);
   g_free (css_fg);
   g_free (css_warning);
   g_free (css_success);
   g_free (css_error);
-
-  stream = g_memory_input_stream_new_from_data (data, -1, g_free);
-
-  pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
-                                                icon_info->desired_size,
-                                                icon_info->desired_size,
-                                                TRUE,
-                                                NULL,
-                                                error);
-  g_object_unref (stream);
 
   return pixbuf;
 }
@@ -3222,6 +3240,7 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
                                        gboolean      *was_symbolic,
                                        GError       **error)
 {
+  GdkPixbuf *pixbuf;
   GdkColor success_color;
   GdkColor warning_color;
   GdkColor error_color;
@@ -3229,6 +3248,19 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   GdkColor *success = NULL;
   GdkColor *warning = NULL;
   GdkColor *err = NULL;
+  gchar *css_fg, *css_success;
+  gchar *css_warning, *css_error;
+
+  if (!icon_info->filename ||
+      !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
+    {
+      if (was_symbolic)
+        *was_symbolic = FALSE;
+      return gtk_icon_info_load_icon (icon_info, error);
+    }
+
+  if (was_symbolic)
+    *was_symbolic = TRUE;
 
   fg = &style->fg[state];
   if (gtk_style_lookup_color (style, "success_color", &success_color))
@@ -3238,8 +3270,22 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   if (gtk_style_lookup_color (style, "error_color", &error_color))
     err = &error_color;
 
-  return gtk_icon_info_load_symbolic (icon_info, fg, success, warning, err,
-                                      was_symbolic, error);
+  css_fg = gdk_color_to_css (fg);
+  css_success = gdk_color_to_css (success);
+  css_warning = gdk_color_to_css (warning);
+  css_error = gdk_color_to_css (err);
+
+  pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
+                                                  css_fg, css_success,
+                                                  css_warning, css_error,
+                                                  error);
+
+  g_free (css_fg);
+  g_free (css_success);
+  g_free (css_warning);
+  g_free (css_error);
+
+  return pixbuf;
 }
 
 /**
