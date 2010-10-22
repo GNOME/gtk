@@ -196,44 +196,6 @@ gtk_grid_set_orientation (GtkGrid        *grid,
       priv->orientation = orientation;
 
       g_object_notify (G_OBJECT (grid), "orientation");
-
-      for (list = priv->children; list; list = list->next)
-        {
-          child = list->data;
-
-          left   = CHILD_LEFT (child);
-          top    = CHILD_TOP (child);
-          width  = CHILD_WIDTH (child);
-          height = CHILD_HEIGHT (child);
-
-          if (orientation == GTK_ORIENTATION_VERTICAL)
-            {
-              CHILD_LEFT (child)   = - (top + height);
-              CHILD_TOP (child)    = left;
-              CHILD_WIDTH (child)  = height;
-              CHILD_HEIGHT (child) = width;
-            }
-          else
-            {
-              CHILD_LEFT (child)   = top;
-              CHILD_TOP (child)    = - (left + width);
-              CHILD_WIDTH (child)  = height;
-              CHILD_HEIGHT (child) = width;
-            }
-        }
-
-      gtk_widget_queue_resize (GTK_WIDGET (grid));
-
-      for (list = priv->children; list; list = list->next)
-        {
-          child = list->data;
-
-          gtk_widget_child_notify (child->widget, "left-attach");
-          gtk_widget_child_notify (child->widget, "top-attach");
-          gtk_widget_child_notify (child->widget, "width");
-          gtk_widget_child_notify (child->widget, "height");
-
-        }
     }
 }
 
