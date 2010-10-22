@@ -22,7 +22,7 @@ allocated area, the alignment settings will not alter the widgets position.
 <para>
 Note that the desired effect can in most cases be achieved by using the
 #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
-on the child widget.
+on the child widget, so GtkMisc should not be used in new code.
 </para>
 
 <!-- ##### SECTION See_Also ##### -->

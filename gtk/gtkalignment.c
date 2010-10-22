@@ -44,7 +44,7 @@
  *
  * Note that the desired effect can in most cases be achieved by using the
  * #GtkWidget:halign, #GtkWidget:valign and #GtkWidget:margin properties
- * on the child widget.
+ * on the child widget, so #GtkAlignment should not be used in new code.
  */
 
 #include "config.h"
