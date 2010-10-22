@@ -2316,6 +2316,72 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
   return FALSE;
 }
 
+/**
+ * gtk_recent_info_create_app_info:
+ * @info: a #GtkRecentInfo
+ * @app_name: (allow-none): the name of the application that should
+ *   be mapped to a #GAppInfo; if %NULL is used then the default
+ *   application for the MIME type is used
+ * @error: (allow-none): return location for a #GError, or %NULL
+ *
+ * Creates a #GAppInfo for the specified #GtkRecentInfo
+ *
+ * Return value: (transfer full): the newly created #GAppInfo, or %NULL.
+ *   In case of error, @error will be set either with a
+ *   %GTK_RECENT_MANAGER_ERROR or a %G_IO_ERROR
+ */
+GAppInfo *
+gtk_recent_info_create_app_info (GtkRecentInfo  *info,
+                                 const gchar    *app_name,
+                                 GError        **error)
+{
+  RecentAppInfo *ai;
+  GAppInfo *app_info;
+  GError *internal_error = NULL;
+
+  g_return_val_if_fail (info != NULL, NULL);
+
+  if (app_name == NULL || *app_name == '\0')
+    {
+      char *content_type;
+
+      if (info->mime_type == NULL)
+        return NULL;
+
+      content_type = g_content_type_from_mime_type (info->mime_type);
+      if (content_type == NULL)
+        return NULL;
+
+      app_info = g_app_info_get_default_for_type (content_type, TRUE);
+      g_free (content_type);
+
+      return app_info;
+    }
+
+  ai = g_hash_table_lookup (info->apps_lookup, app_name);
+  if (ai == NULL)
+    {
+      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
+                   GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED,
+                   _("No registered application with name '%s' for item with URI '%s' found"),
+                   app_name,
+                   info->uri);
+      return NULL;
+    }
+
+  internal_error = NULL;
+  app_info = g_app_info_create_from_commandline (ai->exec, ai->name,
+                                                 G_APP_INFO_CREATE_NONE,
+                                                 &internal_error);
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+      return NULL;
+    }
+
+  return app_info;
+}
+
 /*
  * _gtk_recent_manager_sync:
  * 
