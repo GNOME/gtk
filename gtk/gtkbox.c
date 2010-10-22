@@ -74,6 +74,9 @@
  * Use gtk_box_set_child_packing() to reset the #GtkBox:expand,
  * #GtkBox:fill and #GtkBox:padding child properties.
  * Use gtk_box_query_child_packing() to query these fields.
+ *
+ * Note that a single-row or single-column #GtkGrid provides exactly the
+ * same functionality as #GtkBox.
  */
 
 #include "config.h"
