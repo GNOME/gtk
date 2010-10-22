@@ -1278,7 +1278,7 @@ gtk_settings_get_style (GtkStyleProvider *provider,
     {
       GtkSymbolicColor *color;
       gchar *name, *pos;
-      GdkColor col;
+      GdkRGBA col;
 
       if (!*colors[i])
         continue;
@@ -1297,7 +1297,7 @@ gtk_settings_get_style (GtkStyleProvider *provider,
       while (*pos == ' ')
         pos++;
 
-      if (!*pos || !gdk_color_parse (pos, &col))
+      if (!*pos || !gdk_rgba_parse (&col, pos))
         continue;
 
       color = gtk_symbolic_color_new_literal (&col);

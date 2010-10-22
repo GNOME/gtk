@@ -279,7 +279,7 @@
  *       <row>
  *         <entry>background-color</entry>
  *         <entry morerows="3"><programlisting>color</programlisting></entry>
- *         <entry morerows="3">#GdkColor</entry>
+ *         <entry morerows="3">#GdkRGBA</entry>
  *         <entry morerows="3">
  *           <programlisting>
  * background-color: &num;fff;
@@ -1532,21 +1532,30 @@ symbolic_color_parse_str (const gchar  *string,
 
   str = (gchar *) string;
 
-  if (str[0] == '#')
+  if (str[0] == '#' || str[0] == 'r')
     {
-      GdkColor color;
+      GdkRGBA color;
       gchar *color_str;
       const gchar *end;
 
       end = str + 1;
 
-      while (g_ascii_isxdigit (*end))
-        end++;
+      if (str[0] == '#')
+        while (g_ascii_isxdigit (*end))
+          end++;
+      else
+        {
+          while (*end != ')' && *end != '\0')
+            end++;
+
+          if (*end == ')')
+            end++;
+        }
 
       color_str = g_strndup (str, end - str);
       *end_ptr = (gchar *) end;
 
-      if (!gdk_color_parse (color_str, &color))
+      if (!gdk_rgba_parse (&color, color_str))
         {
           g_free (color_str);
           return NULL;
@@ -2205,11 +2214,11 @@ css_provider_parse_value (GtkCssProvider *css_provider,
 
   type = G_VALUE_TYPE (value);
 
-  if (type == GDK_TYPE_COLOR)
+  if (type == GDK_TYPE_RGBA)
     {
-      GdkColor color;
+      GdkRGBA color;
 
-      if (gdk_color_parse (value_str, &color) == TRUE)
+      if (gdk_rgba_parse (&color, value_str) == TRUE)
         g_value_set_boxed (value, &color);
       else
         {

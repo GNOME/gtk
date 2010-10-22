@@ -2376,7 +2376,7 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
 gboolean
 gtk_style_context_lookup_color (GtkStyleContext *context,
                                 const gchar     *color_name,
-                                GdkColor        *color)
+                                GdkRGBA         *color)
 {
   GtkStyleContextPrivate *priv;
   GtkSymbolicColor *sym_color;

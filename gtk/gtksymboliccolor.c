@@ -42,7 +42,7 @@ struct _GtkSymbolicColor
 
   union
   {
-    GdkColor color;
+    GdkRGBA color;
     gchar *name;
 
     struct
@@ -84,7 +84,7 @@ struct _GtkGradient
 
 /**
  * gtk_symbolic_color_new_literal:
- * @color: a #GdkColor
+ * @color: a #GdkRGBA
  *
  * Creates a symbolic color pointing to a literal color.
  *
@@ -93,7 +93,7 @@ struct _GtkGradient
  * Since: 3.0
  **/
 GtkSymbolicColor *
-gtk_symbolic_color_new_literal (GdkColor *color)
+gtk_symbolic_color_new_literal (GdkRGBA *color)
 {
   GtkSymbolicColor *symbolic_color;
 
@@ -273,9 +273,9 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
  * Since: 3.0
  **/
 gboolean
-gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
-                            GtkStyleSet         *style_set,
-                            GdkColor            *resolved_color)
+gtk_symbolic_color_resolve (GtkSymbolicColor *color,
+                            GtkStyleSet      *style_set,
+                            GdkRGBA          *resolved_color)
 {
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (GTK_IS_STYLE_SET (style_set), FALSE);
@@ -301,14 +301,15 @@ gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
       break;
     case COLOR_TYPE_SHADE:
       {
-        GdkColor shade;
+        GdkRGBA shade;
 
         if (!gtk_symbolic_color_resolve (color->shade.color, style_set, &shade))
           return FALSE;
 
-        resolved_color->red = CLAMP (shade.red * color->shade.factor, 0, 65535);
-        resolved_color->green = CLAMP (shade.green * color->shade.factor, 0, 65535);
-        resolved_color->blue = CLAMP (shade.blue * color->shade.factor, 0, 65535);
+        resolved_color->red = CLAMP (shade.red * color->shade.factor, 0, 1);
+        resolved_color->green = CLAMP (shade.green * color->shade.factor, 0, 1);
+        resolved_color->blue = CLAMP (shade.blue * color->shade.factor, 0, 1);
+        resolved_color->alpha = CLAMP (shade.alpha * color->shade.factor, 0, 1);
 
         return TRUE;
       }
@@ -316,7 +317,7 @@ gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
       break;
     case COLOR_TYPE_MIX:
       {
-        GdkColor color1, color2;
+        GdkRGBA color1, color2;
 
         if (!gtk_symbolic_color_resolve (color->mix.color1, style_set, &color1))
           return FALSE;
@@ -324,9 +325,10 @@ gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
         if (!gtk_symbolic_color_resolve (color->mix.color2, style_set, &color2))
           return FALSE;
 
-        resolved_color->red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 65535);
-        resolved_color->green = CLAMP (color1.green + ((color2.green - color1.green) * color->mix.factor), 0, 65535);
-        resolved_color->blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->mix.factor), 0, 65535);
+        resolved_color->red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 1);
+        resolved_color->green = CLAMP (color1.green + ((color2.green - color1.green) * color->mix.factor), 0, 1);
+        resolved_color->blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->mix.factor), 0, 1);
+        resolved_color->alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->mix.factor), 0, 1);
 
         return TRUE;
       }
@@ -537,7 +539,7 @@ gtk_gradient_resolve (GtkGradient      *gradient,
   for (i = 0; i < gradient->stops->len; i++)
     {
       ColorStop *stop;
-      GdkColor color;
+      GdkRGBA color;
 
       stop = &g_array_index (gradient->stops, ColorStop, i);
 
@@ -547,10 +549,9 @@ gtk_gradient_resolve (GtkGradient      *gradient,
           return FALSE;
         }
 
-      cairo_pattern_add_color_stop_rgb (pattern, stop->offset,
-                                        color.red / 65535.,
-                                        color.green / 65535.,
-                                        color.blue / 65535.);
+      cairo_pattern_add_color_stop_rgba (pattern, stop->offset,
+                                         color.red, color.green,
+                                         color.blue, color.alpha);
     }
 
   *resolved_gradient = pattern;

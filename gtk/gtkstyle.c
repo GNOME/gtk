@@ -642,7 +642,8 @@ set_color (GtkStyle        *style,
            GtkStateType     state,
            GtkRcFlags       prop)
 {
-  GdkColor *color = NULL;
+  GdkRGBA *color = NULL;
+  GdkColor *dest = { 0 }; /* Shut up gcc */
 
   switch (prop)
     {
@@ -650,34 +651,36 @@ set_color (GtkStyle        *style,
       gtk_style_context_get (context, state,
                              "background-color", &color,
                              NULL);
-      if (color)
-        style->bg[state] = *color;
+      dest = &style->bg[state];
       break;
     case GTK_RC_FG:
       gtk_style_context_get (context, state,
                              "foreground-color", &color,
                              NULL);
-      if (color)
-        style->fg[state] = *color;
+      dest = &style->fg[state];
       break;
     case GTK_RC_TEXT:
       gtk_style_context_get (context, state,
                              "text-color", &color,
                              NULL);
-      if (color)
-        style->text[state] = *color;
+      dest = &style->text[state];
       break;
     case GTK_RC_BASE:
       gtk_style_context_get (context, state,
                              "base-color", &color,
                              NULL);
-      if (color)
-	style->base[state] = *color;
+      dest = &style->base[state];
       break;
     }
 
   if (color)
-    gdk_color_free (color);
+    {
+      dest->pixel = 0;
+      dest->red = CLAMP ((guint) (color->red * 65535), 0, 65535);
+      dest->green = CLAMP ((guint) (color->green * 65535), 0, 65535);
+      dest->blue = CLAMP ((guint) (color->blue * 65535), 0, 65535);
+      gdk_rgba_free (color);
+    }
 }
 
 static void
@@ -973,6 +976,8 @@ gtk_style_lookup_color (GtkStyle   *style,
                         GdkColor   *color)
 {
   GtkStylePrivate *priv;
+  gboolean result;
+  GdkRGBA rgba;
 
   g_return_val_if_fail (GTK_IS_STYLE (style), FALSE);
   g_return_val_if_fail (color_name != NULL, FALSE);
@@ -983,7 +988,17 @@ gtk_style_lookup_color (GtkStyle   *style,
   if (!priv->context)
     return FALSE;
 
-  return gtk_style_context_lookup_color (priv->context, color_name, color);
+  result = gtk_style_context_lookup_color (priv->context, color_name, &rgba);
+
+  if (color)
+    {
+      color->red = (guint16) (rgba.red * 65535);
+      color->green = (guint16) (rgba.green * 65535);
+      color->blue = (guint16) (rgba.blue * 65535);
+      color->pixel = 0;
+    }
+
+  return result;
 }
 
 /**

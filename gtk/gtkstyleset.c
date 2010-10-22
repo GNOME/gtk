@@ -81,10 +81,10 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   object_class->finalize = gtk_style_set_finalize;
 
   /* Initialize default property set */
-  gtk_style_set_register_property ("foreground-color", GDK_TYPE_COLOR, NULL, NULL);
-  gtk_style_set_register_property ("background-color", GDK_TYPE_COLOR, NULL, NULL);
-  gtk_style_set_register_property ("text-color", GDK_TYPE_COLOR, NULL, NULL);
-  gtk_style_set_register_property ("base-color", GDK_TYPE_COLOR, NULL, NULL);
+  gtk_style_set_register_property ("foreground-color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_set_register_property ("background-color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_set_register_property ("text-color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_set_register_property ("base-color", GDK_TYPE_RGBA, NULL, NULL);
 
   gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL, NULL);
 
@@ -94,7 +94,7 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   gtk_style_set_register_property ("border-width", G_TYPE_INT, NULL, NULL);
   gtk_style_set_register_property ("border-radius", G_TYPE_INT, NULL, NULL);
   gtk_style_set_register_property ("border-style", GTK_TYPE_BORDER_STYLE, NULL, NULL);
-  gtk_style_set_register_property ("border-color", GDK_TYPE_COLOR, NULL, NULL);
+  gtk_style_set_register_property ("border-color", GDK_TYPE_RGBA, NULL, NULL);
 
   gtk_style_set_register_property ("background-image", CAIRO_GOBJECT_TYPE_PATTERN, NULL, NULL);
   gtk_style_set_register_property ("border-image", GTK_TYPE_9SLICE, NULL, NULL);
@@ -572,10 +572,10 @@ gtk_style_set_set_property (GtkStyleSet   *set,
       return;
     }
 
-  if (node->property_type == GDK_TYPE_COLOR)
+  if (node->property_type == GDK_TYPE_RGBA)
     {
       /* Allow GtkSymbolicColor as well */
-      g_return_if_fail (value_type == GDK_TYPE_COLOR || value_type == GTK_TYPE_SYMBOLIC_COLOR);
+      g_return_if_fail (value_type == GDK_TYPE_RGBA || value_type == GTK_TYPE_SYMBOLIC_COLOR);
     }
   else if (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
@@ -710,15 +710,15 @@ static gboolean
 resolve_color (GtkStyleSet *set,
 	       GValue      *value)
 {
-  GdkColor color;
+  GdkRGBA color;
 
-  /* Resolve symbolic color to GdkColor */
+  /* Resolve symbolic color to GdkRGBA */
   if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), set, &color))
     return FALSE;
 
-  /* Store it back, this is where GdkColor caching happens */
+  /* Store it back, this is where GdkRGBA caching happens */
   g_value_unset (value);
-  g_value_init (value, GDK_TYPE_COLOR);
+  g_value_init (value, GDK_TYPE_RGBA);
   g_value_set_boxed (value, &color);
 
   return TRUE;
@@ -796,7 +796,7 @@ gtk_style_set_get_property (GtkStyleSet   *set,
 
   if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
     {
-      g_return_val_if_fail (node->property_type == GDK_TYPE_COLOR, FALSE);
+      g_return_val_if_fail (node->property_type == GDK_TYPE_RGBA, FALSE);
 
       if (!resolve_color (set, val))
         return FALSE;
@@ -863,7 +863,7 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
 
       if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
         {
-          g_return_if_fail (node->property_type == GDK_TYPE_COLOR);
+          g_return_if_fail (node->property_type == GDK_TYPE_RGBA);
 
           if (!resolve_color (set, val))
             val = &node->default_value;
