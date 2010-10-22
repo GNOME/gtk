@@ -89,6 +89,8 @@ void              gtk_cell_view_get_desired_height_for_width_of_row(GtkCellView 
 
 void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
                                                          const GdkColor  *color);
+void              gtk_cell_view_set_background_rgba     (GtkCellView     *cell_view,
+                                                         const GdkRGBA   *rgba);
 
 G_END_DECLS
 
