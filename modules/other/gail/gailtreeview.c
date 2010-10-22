@@ -448,8 +448,7 @@ gail_tree_view_real_initialize (AtkObject *obj,
 {
   GailTreeView *view;
   GtkTreeView *tree_view;
-  GtkTreeModel *tree_model; 
-  GtkAdjustment *adj;
+  GtkTreeModel *tree_model;
   GList *tv_cols, *tmp_list;
   GtkWidget *widget;
 
@@ -520,8 +519,8 @@ gail_tree_view_real_initialize (AtkObject *obj,
 
   /* adjustment callbacks */
 
-  gail_tree_view_hadjustment_set (widget, NULL, view);
-  gail_tree_view_vadjustment_set (widget, NULL, view);
+  gail_tree_view_hadjustment_set (G_OBJECT (widget), NULL, view);
+  gail_tree_view_vadjustment_set (G_OBJECT (widget), NULL, view);
   g_signal_connect (widget,
                     "notify::hadjustment",
                     G_CALLBACK (gail_tree_view_hadjustment_set),
