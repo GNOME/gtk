@@ -46,6 +46,28 @@ enum {
 typedef struct _GtkTreeSortable      GtkTreeSortable; /* Dummy typedef */
 typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
 
+/**
+ * GtkTreeIterCompareFunc:
+ * @model: The #GtkTreeModel the comparison is within
+ * @a: A #GtkTreeIter in @model
+ * @b: Another #GtkTreeIter in @model
+ * @user_data: Data passed when the compare func is assigned e.g. by
+ *  gtk_tree_sortable_set_sort_func()
+ *
+ * A GtkTreeIterCompareFunc should return a negative integer, zero, or a positive
+ * integer if @a sorts before @b, @a sorts with @b, or @a sorts after @b
+ * respectively. If two iters compare as equal, their order in the sorted model
+ * is undefined. In order to ensure that the #GtkTreeSortable behaves as
+ * expected, the GtkTreeIterCompareFunc must define a partial order on
+ * the model, i.e. it must be reflexive, antisymmetric and transitive.
+ *
+ * For example, if @model is a product catalogue, then a compare function
+ * for the "price" column could be one which returns
+ * <literal>price_of(@a) - price_of(@b)</literal>.
+ *
+ * Returns: a negative integer, zero or a positive integer depending on whether
+ *   @a sorts before, with or after @b
+ */
 typedef gint (* GtkTreeIterCompareFunc) (GtkTreeModel *model,
 					 GtkTreeIter  *a,
 					 GtkTreeIter  *b,

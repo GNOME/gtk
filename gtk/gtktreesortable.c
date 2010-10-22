@@ -24,6 +24,18 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktreesortable
+ * @Short_description: The interface for sortable models used by GtkTreeView
+ * @Title: GtkTreeSortable
+ * @See_also:#GtkTreeModel, #GtkTreeView
+ *
+ * #GtkTreeSortable is an interface to be implemented by tree models which
+ * support sorting. The #GtkTreeView uses the methods provided by this interface
+ * to sort the model.
+ */
+
+
 static void gtk_tree_sortable_base_init (gpointer g_class);
 
 GType
