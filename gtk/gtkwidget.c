@@ -685,11 +685,13 @@ static void             gtk_widget_queue_tooltip_query          (GtkWidget *widg
 
 static void             gtk_widget_real_adjust_size_request     (GtkWidget         *widget,
                                                                  GtkOrientation     orientation,
-                                                                 gint               for_size,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
 static void             gtk_widget_real_adjust_size_allocation  (GtkWidget         *widget,
-                                                                 GtkAllocation     *allocation);
+                                                                 GtkOrientation     orientation,
+                                                                 gint              *natural_size,
+                                                                 gint              *allocated_pos,
+                                                                 gint              *allocated_size);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
@@ -4609,6 +4611,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   gboolean alloc_needed;
   gboolean size_changed;
   gboolean position_changed;
+  gint natural_width, natural_height;
+  gint min_width, min_height;
 
   priv = widget->priv;
 
@@ -4645,7 +4649,37 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   real_allocation = *allocation;
 
   adjusted_allocation = real_allocation;
-  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget, &adjusted_allocation);
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+    {
+      /* Go ahead and request the height for allocated width, note that the internals
+       * of get_height_for_width will internally limit the for_size to natural size
+       * when aligning implicitly.
+       */
+      gtk_widget_get_preferred_width (widget, &min_width, &natural_width);
+      gtk_widget_get_preferred_height_for_width (widget, real_allocation.width, NULL, &natural_height);
+    }
+  else
+    {
+      /* Go ahead and request the width for allocated height, note that the internals
+       * of get_width_for_height will internally limit the for_size to natural size
+       * when aligning implicitly.
+       */
+      gtk_widget_get_preferred_height (widget, &min_height, &natural_height);
+      gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, NULL, &natural_width);
+    }
+
+  /* Now that we have the right natural height and width, go ahead and remove any margins from the 
+   * allocated sizes and possibly limit them to the natural sizes */
+  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
+							 GTK_ORIENTATION_HORIZONTAL,
+							 &natural_width,
+							 &adjusted_allocation.x,
+							 &adjusted_allocation.width);
+  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
+							 GTK_ORIENTATION_VERTICAL,
+							 &natural_height,
+							 &adjusted_allocation.y,
+							 &adjusted_allocation.height);
 
   if (adjusted_allocation.x < real_allocation.x ||
       adjusted_allocation.y < real_allocation.y ||
@@ -4920,140 +4954,76 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
 }
 
 static void
-get_span_inside_border (GtkWidget              *widget,
-                        GtkAlign                align,
-                        int                     start_pad,
-                        int                     end_pad,
-                        int                     allocated_outside_size,
-                        int                     natural_inside_size,
-                        int                    *coord_inside_p,
-                        int                    *size_inside_p)
+adjust_for_align(GtkAlign           align,
+                 gint              *natural_size,
+                 gint              *allocated_pos,
+                 gint              *allocated_size)
 {
-  int inside_allocated;
-  int content_size;
-  int coord, size;
-
-  inside_allocated = allocated_outside_size - start_pad - end_pad;
-
-  content_size = natural_inside_size;
-  if (content_size > inside_allocated)
-    {
-      /* didn't get full natural size */
-      content_size = inside_allocated;
-    }
-
-  coord = size = 0; /* silence compiler */
   switch (align)
     {
     case GTK_ALIGN_FILL:
-      coord = start_pad;
-      size = inside_allocated;
+      /* change nothing */
       break;
     case GTK_ALIGN_START:
-      coord = start_pad;
-      size = content_size;
+      /* keep *allocated_pos where it is */
+      *allocated_size = MIN (*allocated_size, *natural_size);
       break;
     case GTK_ALIGN_END:
-      coord = allocated_outside_size - end_pad - content_size;
-      size = content_size;
+      if (*allocated_size > *natural_size)
+	{
+	  *allocated_pos += (*allocated_size - *natural_size);
+	  *allocated_size = *natural_size;
+	}
       break;
     case GTK_ALIGN_CENTER:
-      coord = start_pad + (inside_allocated - content_size) / 2;
-      size = content_size;
+      if (*allocated_size > *natural_size)
+	{
+	  *allocated_pos += (*allocated_size - *natural_size) / 2;
+	  *allocated_size = MIN (*allocated_size, *natural_size);
+	}
       break;
     }
-
-  if (coord_inside_p)
-    *coord_inside_p = coord;
-
-  if (size_inside_p)
-    *size_inside_p = size;
 }
 
 static void
-get_span_inside_border_horizontal (GtkWidget              *widget,
-                                   const GtkWidgetAuxInfo *aux_info,
-                                   int                     allocated_outside_width,
-                                   int                     natural_inside_width,
-                                   int                    *x_inside_p,
-                                   int                    *width_inside_p)
+adjust_for_margin(gint               start_margin,
+                  gint               end_margin,
+                  gint              *natural_size,
+                  gint              *allocated_pos,
+                  gint              *allocated_size)
 {
-  get_span_inside_border (widget,
-                          aux_info->halign,
-                          aux_info->margin.left,
-                          aux_info->margin.right,
-                          allocated_outside_width,
-                          natural_inside_width,
-                          x_inside_p,
-                          width_inside_p);
-}
-
-static void
-get_span_inside_border_vertical (GtkWidget              *widget,
-                                 const GtkWidgetAuxInfo *aux_info,
-                                 int                     allocated_outside_height,
-                                 int                     natural_inside_height,
-                                 int                    *y_inside_p,
-                                 int                    *height_inside_p)
-{
-  get_span_inside_border (widget,
-                          aux_info->valign,
-                          aux_info->margin.top,
-                          aux_info->margin.bottom,
-                          allocated_outside_height,
-                          natural_inside_height,
-                          y_inside_p,
-                          height_inside_p);
+  *natural_size -= (start_margin + end_margin);
+  *allocated_pos += start_margin;
+  *allocated_size -= (start_margin + end_margin);
 }
 
 static void
 gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
-                                        GtkAllocation     *allocation)
+                                        GtkOrientation     orientation,
+                                        gint              *natural_size,
+                                        gint              *allocated_pos,
+                                        gint              *allocated_size)
 {
   const GtkWidgetAuxInfo *aux_info;
-  gint natural_width;
-  gint natural_height;
-  int x, y, w, h;
 
   aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_widget_get_preferred_width (widget, NULL, &natural_width);
-      get_span_inside_border_horizontal (widget,
-					 aux_info,
-					 allocation->width,
-					 natural_width,
-					 &x, &w);
-
-      gtk_widget_get_preferred_height_for_width (widget, w, NULL, &natural_height);
-      get_span_inside_border_vertical (widget,
-				       aux_info,
-				       allocation->height,
-				       natural_height,
-				       &y, &h);
+      adjust_for_margin (aux_info->margin.left,
+                         aux_info->margin.right,
+                         natural_size, allocated_pos, allocated_size);
+      adjust_for_align (aux_info->halign,
+                        natural_size, allocated_pos, allocated_size);
     }
-  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
+  else
     {
-      gtk_widget_get_preferred_height (widget, NULL, &natural_height);
-      get_span_inside_border_vertical (widget,
-				       aux_info,
-				       allocation->height,
-				       natural_height,
-				       &y, &h);
-
-      gtk_widget_get_preferred_width_for_height (widget, h, NULL, &natural_width);
-      get_span_inside_border_horizontal (widget,
-					 aux_info,
-					 allocation->width,
-					 natural_width,
-					 &x, &w);
+      adjust_for_margin (aux_info->margin.top,
+                         aux_info->margin.bottom,
+                         natural_size, allocated_pos, allocated_size);
+      adjust_for_align (aux_info->valign,
+                        natural_size, allocated_pos, allocated_size);
     }
-
-  allocation->x += x;
-  allocation->y += y;
-  allocation->width = w;
-  allocation->height = h;
 }
 
 static gboolean
@@ -9960,7 +9930,6 @@ gtk_widget_real_size_request (GtkWidget         *widget,
 static void
 gtk_widget_real_adjust_size_request (GtkWidget         *widget,
                                      GtkOrientation     orientation,
-                                     gint               for_size,
                                      gint              *minimum_size,
                                      gint              *natural_size)
 {

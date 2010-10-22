@@ -323,11 +323,13 @@ static void     gtk_container_map                  (GtkWidget         *widget);
 static void     gtk_container_unmap                (GtkWidget         *widget);
 static void     gtk_container_adjust_size_request  (GtkWidget         *widget,
                                                     GtkOrientation     orientation,
-                                                    gint               for_size,
                                                     gint              *minimum_size,
                                                     gint              *natural_size);
 static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
-                                                      GtkAllocation   *allocation);
+                                                      GtkOrientation   orientation,
+                                                      gint            *natural_size,
+                                                      gint            *allocated_pos,
+                                                      gint            *allocated_size);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
 							  GtkWidget    *child);
@@ -1776,7 +1778,6 @@ gtk_container_resize_children (GtkContainer *container)
 static void
 gtk_container_adjust_size_request (GtkWidget         *widget,
                                    GtkOrientation     orientation,
-                                   gint               for_size,
                                    gint              *minimum_size,
                                    gint              *natural_size)
 {
@@ -1797,28 +1798,33 @@ gtk_container_adjust_size_request (GtkWidget         *widget,
   /* chain up last so gtk_widget_set_size_request() values
    * will have a chance to overwrite our border width.
    */
-  parent_class->adjust_size_request (widget, orientation, for_size,
+  parent_class->adjust_size_request (widget, orientation, 
                                      minimum_size, natural_size);
 }
 
 static void
 gtk_container_adjust_size_allocation (GtkWidget         *widget,
-                                      GtkAllocation     *allocation)
+                                      GtkOrientation     orientation,
+                                      gint              *natural_size,
+                                      gint              *allocated_pos,
+                                      gint              *allocated_size)
 {
   GtkContainer *container;
   int border_width;
 
   container = GTK_CONTAINER (widget);
 
-  parent_class->adjust_size_allocation (widget, allocation);
-
   if (!GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
-    return;
+    {
+      parent_class->adjust_size_allocation (widget, orientation,
+					    natural_size, allocated_pos,
+					    allocated_size);
+      return;
+    }
 
   border_width = container->priv->border_width;
 
-  allocation->width -= border_width * 2;
-  allocation->height -= border_width * 2;
+  *allocated_size -= border_width * 2;
 
   /* If we get a pathological too-small allocation to hold
    * even the border width, leave all allocation to the actual
@@ -1828,23 +1834,26 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
    * As long as we have space, set x,y properly.
    */
 
-  if (allocation->width < 1)
+  if (*allocated_size < 1)
     {
-      allocation->width += border_width * 2;
+      *allocated_size += border_width * 2;
     }
   else
     {
-      allocation->x += border_width;
+      *allocated_pos += border_width;
+      *natural_size -= border_width * 2;
     }
 
-  if (allocation->height < 1)
-    {
-      allocation->height += border_width * 2;
-    }
-  else
-    {
-      allocation->y += border_width;
-    }
+  /* Chain up to GtkWidgetClass *after* removing our border width from
+   * the proposed allocation size. This is because it's possible that the
+   * widget was allocated more space than it needs in a said orientation,
+   * if GtkWidgetClass does any alignments and thus limits the size to the 
+   * natural size... then we need that to be done *after* removing any margins 
+   * and padding values.
+   */
+  parent_class->adjust_size_allocation (widget, orientation,
+					natural_size, allocated_pos,
+					allocated_size);
 }
 
 /**

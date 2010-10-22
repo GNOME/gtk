@@ -157,7 +157,10 @@ struct _GtkWidget
  *   and alignment properties of #GtkWidget. Chain up
  *   <emphasis>before</emphasis> performing your own adjustments so your
  *   own adjustments remove more allocation after the #GtkWidget base
- *   class has already removed margin and alignment.
+ *   class has already removed margin and alignment. The natural size
+ *   passed in should be adjusted in the same way as the allocated size,
+ *   which allows adjustments to perform alignments or other changes
+ *   based on natural size.
  */
 struct _GtkWidgetClass
 {
@@ -372,11 +375,13 @@ struct _GtkWidgetClass
 
   void         (* adjust_size_request)    (GtkWidget         *widget,
                                            GtkOrientation     orientation,
-                                           gint               for_size,
                                            gint              *minimum_size,
                                            gint              *natural_size);
   void         (* adjust_size_allocation) (GtkWidget         *widget,
-                                           GtkAllocation     *allocation);
+                                           GtkOrientation     orientation,
+                                           gint              *natural_size,
+                                           gint              *allocated_pos,
+                                           gint              *allocated_size);
 
   /*< private >*/
 
