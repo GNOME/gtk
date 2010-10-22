@@ -46,6 +46,22 @@ G_BEGIN_DECLS
 typedef struct _GtkAdjustment	    GtkAdjustment;
 typedef struct _GtkAdjustmentClass  GtkAdjustmentClass;
 
+/**
+ * GtkAdjustment:
+ * @lower: the minimum value.
+ * @upper: the maximum value.
+ * @value: the current value.
+ * @step_increment: the increment to use to make minor changes to the @value.
+ *   In a #GtkScrollbar this increment is used when the mouse is clicked on the
+ *   arrows at the top and bottom of the scrollbar, to scroll by a small amount.
+ * @page_increment: the increment to use to make major changes to the @value.
+ *   In a #GtkScrollbar this increment is used when the mouse is clicked in the
+ *   trough, to scroll by a large amount.
+ * @page_size: In a #GtkScrollbar this is the size of the area which is currently
+ *   visible.
+ *
+ * The #GtkAdjustment struct contains the following fields.
+ */
 struct _GtkAdjustment
 {
   GInitiallyUnowned parent_instance;
