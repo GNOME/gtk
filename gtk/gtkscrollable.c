@@ -256,7 +256,7 @@ gtk_scrollable_get_min_display_width (GtkScrollable *scrollable)
 {
   gint width;
 
-  g_return_val_if_fail (GTK_IS_SCROLLABLE (scrollable), NULL);
+  g_return_val_if_fail (GTK_IS_SCROLLABLE (scrollable), 0);
 
   g_object_get (scrollable, "min-display-width", &width, NULL);
 
@@ -299,7 +299,7 @@ gtk_scrollable_get_min_display_height (GtkScrollable *scrollable)
 {
   gint height;
 
-  g_return_val_if_fail (GTK_IS_SCROLLABLE (scrollable), NULL);
+  g_return_val_if_fail (GTK_IS_SCROLLABLE (scrollable), 0);
 
   g_object_get (scrollable, "min-display-height", &height, NULL);
 
