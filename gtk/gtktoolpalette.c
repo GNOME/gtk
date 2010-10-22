@@ -751,50 +751,6 @@ gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_tool_palette_set_adjustment (GtkToolPalette *palette,
-				 GtkOrientation  orientation,
-				 GtkAdjustment  *adjustment)
-{
-  GtkAdjustment **adj_ptr;
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      if (adjustment && palette->priv->hadjustment == adjustment)
-	return;
-
-      adj_ptr = &palette->priv->hadjustment;
-    }
-  else
-    {
-      if (adjustment && palette->priv->vadjustment == adjustment)
-	return;
-
-      adj_ptr = &palette->priv->vadjustment;
-    }
-
-  /* Disconnect handler */
-  if (*adj_ptr)
-    {
-      g_signal_handlers_disconnect_by_func (*adj_ptr,
-					    gtk_tool_palette_adjustment_value_changed,
-					    palette);
-      g_object_unref (*adj_ptr);
-    }
-
-  /* Ensure adjustment */
-  if (!adjustment)
-    adjustment = GTK_ADJUSTMENT (gtk_adjustment_new (0.0, 0.0, 0.0,
-						     0.0, 0.0, 0.0));
-
-  /* Connect signal handler */
-  g_signal_connect (adjustment, "value-changed",
-		    G_CALLBACK (gtk_tool_palette_adjustment_value_changed),
-		    palette);
-  *adj_ptr = g_object_ref_sink (adjustment);
-  /* FIXME: Adjustment should probably have it's values updated now */
-}
-
-static void
 gtk_tool_palette_add (GtkContainer *container,
                       GtkWidget    *child)
 {
@@ -1977,7 +1933,7 @@ gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
       g_object_unref (priv->hadjustment);
     }
 
-  if (adjustment != NULL)
+  if (adjustment == NULL)
     adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
                                      0.0, 0.0, 0.0);
 
@@ -2026,7 +1982,7 @@ gtk_tool_palette_set_vadjustment (GtkToolPalette *palette,
       g_object_unref (priv->vadjustment);
     }
 
-  if (adjustment != NULL)
+  if (adjustment == NULL)
     adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
                                      0.0, 0.0, 0.0);
 
