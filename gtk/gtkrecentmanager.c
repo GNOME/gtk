@@ -687,8 +687,7 @@ gtk_recent_manager_new (void)
  * gtk_recent_manager_get_default:
  *
  * Gets a unique instance of #GtkRecentManager, that you can share
- * in your application without caring about memory management. The
- * returned instance will be freed when you application terminates.
+ * in your application without caring about memory management.
  *
  * Return value: (transfer none): A unique #GtkRecentManager. Do not ref or unref it.
  *
