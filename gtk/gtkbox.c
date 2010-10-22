@@ -28,7 +28,7 @@
  * SECTION:gtkbox
  * @Short_description: Base class for box containers
  * @Title: GtkBox
- * @See_also:i #GtkHBox, #GtkVBox, #GtkFrame, #GtkTable, #GtkLayout
+ * @See_also: #GtkHBox, #GtkVBox, #GtkFrame, #GtkTable, #GtkLayout
  *
  * GtkBox is an widget which encapsulates functionality for a
  * particular kind of container, one that organizes a variable number of
