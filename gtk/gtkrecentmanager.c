@@ -99,6 +99,9 @@ struct _GtkRecentManagerPrivate
   GBookmarkFile *recent_items;
 
   GFileMonitor *monitor;
+
+  guint changed_timeout;
+  guint changed_age;
 };
 
 enum
@@ -338,12 +341,26 @@ gtk_recent_manager_get_property (GObject               *object,
 } 
 
 static void
-gtk_recent_manager_dispose (GObject *object)
+gtk_recent_manager_finalize (GObject *object)
 {
   GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
   GtkRecentManagerPrivate *priv = manager->priv;
 
-  if (priv->monitor)
+  g_free (priv->filename);
+
+  if (priv->recent_items != NULL)
+    g_bookmark_file_free (priv->recent_items);
+
+  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->finalize (object);
+}
+
+static void
+gtk_recent_manager_dispose (GObject *gobject)
+{
+  GtkRecentManager *manager = GTK_RECENT_MANAGER (gobject);
+  GtkRecentManagerPrivate *priv = manager->priv;
+
+  if (priv->monitor != NULL)
     {
       g_signal_handlers_disconnect_by_func (priv->monitor,
                                             G_CALLBACK (gtk_recent_manager_monitor_changed),
@@ -352,21 +369,21 @@ gtk_recent_manager_dispose (GObject *object)
       priv->monitor = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->dispose (object);
-}
+  if (priv->changed_timeout != 0)
+    {
+      g_source_remove (priv->changed_timeout);
+      priv->changed_timeout = 0;
+      priv->changed_age = 0;
+    }
 
-static void
-gtk_recent_manager_finalize (GObject *object)
-{
-  GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
-  GtkRecentManagerPrivate *priv = manager->priv;
+  if (priv->is_dirty)
+    {
+      g_object_ref (manager);
+      g_signal_emit (manager, signal_changed, 0);
+      g_object_unref (manager);
+    }
 
-  g_free (priv->filename);
-  
-  if (priv->recent_items)
-    g_bookmark_file_free (priv->recent_items);
-
-  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->dispose (gobject);
 }
 
 static void
@@ -404,8 +421,6 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
           else if (age == 0)
             {
               g_bookmark_file_free (priv->recent_items);
-              priv->recent_items = NULL;
-
               priv->recent_items = g_bookmark_file_new ();
             }
         }
@@ -1115,7 +1130,6 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
    * will dump our changes
    */
   priv->is_dirty = TRUE;
-  
   gtk_recent_manager_changed (manager);
   
   return TRUE;
@@ -1176,7 +1190,6 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
     }
 
   priv->is_dirty = TRUE;
-
   gtk_recent_manager_changed (manager);
   
   return TRUE;
@@ -1400,7 +1413,6 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
     }
   
   priv->is_dirty = TRUE;
-
   gtk_recent_manager_changed (recent_manager);
   
   return TRUE;
@@ -1455,17 +1467,15 @@ purge_recent_items_list (GtkRecentManager  *manager,
 {
   GtkRecentManagerPrivate *priv = manager->priv;
 
-  if (!priv->recent_items)
+  if (priv->recent_items == NULL)
     return;
-  
+
   g_bookmark_file_free (priv->recent_items);
-  priv->recent_items = NULL;
-      
   priv->recent_items = g_bookmark_file_new ();
   priv->size = 0;
-  priv->is_dirty = TRUE;
-      
+
   /* emit the changed signal, to ensure that the purge is written */
+  priv->is_dirty = TRUE;
   gtk_recent_manager_changed (manager);
 }
 
@@ -1505,10 +1515,43 @@ gtk_recent_manager_purge_items (GtkRecentManager  *manager,
   return purged;
 }
 
-static void
-gtk_recent_manager_changed (GtkRecentManager *recent_manager)
+static gboolean
+emit_manager_changed (gpointer data)
 {
-  g_signal_emit (recent_manager, signal_changed, 0);
+  GtkRecentManager *manager = data;
+
+  manager->priv->changed_age = 0;
+  manager->priv->changed_timeout = 0;
+
+  g_signal_emit (manager, signal_changed, 0);
+
+  return FALSE;
+}
+
+static void
+gtk_recent_manager_changed (GtkRecentManager *manager)
+{
+  /* coalesce consecutive changes
+   *
+   * we schedule a write in 250 msecs immediately; if we get more than one
+   * request per millisecond before the timeout has a chance to run, we
+   * schedule an emission immediately.
+   */
+  if (manager->priv->changed_timeout == 0)
+    manager->priv->changed_timeout = gdk_threads_add_timeout (250, emit_manager_changed, manager);
+  else
+    {
+      manager->priv->changed_age += 1;
+
+      if (manager->priv->changed_age > 250)
+        {
+          g_source_remove (manager->priv->changed_timeout);
+          g_signal_emit (manager, signal_changed, 0);
+
+          manager->priv->changed_age = 0;
+          manager->priv->changed_timeout = 0;
+        }
+    }
 }
 
 static void
