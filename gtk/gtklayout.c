@@ -52,8 +52,6 @@ struct _GtkLayoutPrivate
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
-  gint           min_display_width;
-  gint           min_display_height;
 
   /* Properties */
 
@@ -78,8 +76,6 @@ enum {
    PROP_0,
    PROP_HADJUSTMENT,
    PROP_VADJUSTMENT,
-   PROP_MIN_DISPLAY_WIDTH,
-   PROP_MIN_DISPLAY_HEIGHT,
    PROP_WIDTH,
    PROP_HEIGHT
 };
@@ -622,18 +618,8 @@ gtk_layout_class_init (GtkLayoutClass *class)
                                                                 GTK_PARAM_READWRITE));
   
   /* Scrollable interface */
-  g_object_class_override_property (gobject_class,
-				    PROP_HADJUSTMENT,
-				    "hadjustment");
-  g_object_class_override_property (gobject_class,
-				    PROP_VADJUSTMENT,
-				    "vadjustment");
-  g_object_class_override_property (gobject_class,
-				    PROP_MIN_DISPLAY_WIDTH,
-				    "min-display-width");
-  g_object_class_override_property (gobject_class,
-				    PROP_MIN_DISPLAY_HEIGHT,
-				    "min-display-height");
+  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
+  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDTH,
@@ -685,12 +671,6 @@ gtk_layout_get_property (GObject     *object,
     case PROP_VADJUSTMENT:
       g_value_set_object (value, priv->vadjustment);
       break;
-    case PROP_MIN_DISPLAY_WIDTH:
-      g_value_set_int (value, priv->min_display_width);
-      break;
-    case PROP_MIN_DISPLAY_HEIGHT:
-      g_value_set_int (value, priv->min_display_height);
-      break;
     case PROP_WIDTH:
       g_value_set_uint (value, priv->width);
       break;
@@ -721,12 +701,6 @@ gtk_layout_set_property (GObject      *object,
     case PROP_VADJUSTMENT:
       gtk_layout_set_vadjustment (layout, 
 				  (GtkAdjustment*) g_value_get_object (value));
-      break;
-    case PROP_MIN_DISPLAY_WIDTH:
-      priv->min_display_width = g_value_get_int (value);
-      break;
-    case PROP_MIN_DISPLAY_HEIGHT:
-      priv->min_display_height = g_value_get_int (value);
       break;
     case PROP_WIDTH:
       gtk_layout_set_size (layout, g_value_get_uint (value),
@@ -811,8 +785,6 @@ gtk_layout_init (GtkLayout *layout)
 
   priv->hadjustment = NULL;
   priv->vadjustment = NULL;
-  priv->min_display_width = -1;
-  priv->min_display_height = -1;
 
   priv->bin_window = NULL;
 

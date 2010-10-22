@@ -122,9 +122,7 @@ enum
   PROP_ORIENTATION,
   PROP_TOOLBAR_STYLE,
   PROP_HADJUSTMENT,
-  PROP_VADJUSTMENT,
-  PROP_MIN_DISPLAY_WIDTH,
-  PROP_MIN_DISPLAY_HEIGHT
+  PROP_VADJUSTMENT
 };
 
 enum
@@ -150,8 +148,6 @@ struct _GtkToolPalettePrivate
 
   GtkAdjustment        *hadjustment;
   GtkAdjustment        *vadjustment;
-  gint                  min_display_width;
-  gint                  min_display_height;
 
   GtkIconSize           icon_size;
   gboolean              icon_size_set;
@@ -211,8 +207,6 @@ gtk_tool_palette_init (GtkToolPalette *palette)
   palette->priv->orientation = DEFAULT_ORIENTATION;
   palette->priv->style = DEFAULT_TOOLBAR_STYLE;
   palette->priv->style_set = FALSE;
-  palette->priv->min_display_width = -1;
-  palette->priv->min_display_height = -1;
 
   palette->priv->text_size_group = gtk_size_group_new (GTK_SIZE_GROUP_BOTH);
 }
@@ -282,14 +276,6 @@ gtk_tool_palette_set_property (GObject      *object,
         gtk_tool_palette_set_vadjustment (palette, g_value_get_object (value));
         break;
 
-      case PROP_MIN_DISPLAY_WIDTH:
-	palette->priv->min_display_width = g_value_get_int (value);
-	break;
-
-      case PROP_MIN_DISPLAY_HEIGHT:
-	palette->priv->min_display_height = g_value_get_int (value);
-	break;
-
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -329,14 +315,6 @@ gtk_tool_palette_get_property (GObject    *object,
       case PROP_VADJUSTMENT:
         g_value_set_object (value, palette->priv->vadjustment);
         break;
-
-      case PROP_MIN_DISPLAY_WIDTH:
-	g_value_set_int (value, palette->priv->min_display_width);
-	break;
-
-      case PROP_MIN_DISPLAY_HEIGHT:
-	g_value_set_int (value, palette->priv->min_display_height);
-	break;
 
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -978,8 +956,6 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
 
   g_object_class_override_property (oclass, PROP_HADJUSTMENT, "hadjustment");
   g_object_class_override_property (oclass, PROP_VADJUSTMENT, "vadjustment");
-  g_object_class_override_property (oclass, PROP_MIN_DISPLAY_WIDTH,  "min-display-width");
-  g_object_class_override_property (oclass, PROP_MIN_DISPLAY_HEIGHT, "min-display-height");
 
   /**
    * GtkToolPalette:icon-size:

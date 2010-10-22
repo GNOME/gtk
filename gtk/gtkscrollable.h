@@ -49,12 +49,6 @@ void           gtk_scrollable_set_hadjustment        (GtkScrollable *scrollable,
 GtkAdjustment *gtk_scrollable_get_vadjustment        (GtkScrollable *scrollable);
 void           gtk_scrollable_set_vadjustment        (GtkScrollable *scrollable,
                                                       GtkAdjustment *vadjustment);
-gint           gtk_scrollable_get_min_display_width  (GtkScrollable *scrollable);
-void           gtk_scrollable_set_min_display_width  (GtkScrollable *scrollable,
-                                                      gint           width);
-gint           gtk_scrollable_get_min_display_height (GtkScrollable *scrollable);
-void           gtk_scrollable_set_min_display_height (GtkScrollable *scrollable,
-                                                      gint           height);
 
 G_END_DECLS
 

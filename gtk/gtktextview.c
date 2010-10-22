@@ -129,8 +129,6 @@ struct _GtkTextViewPrivate
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
-  gint           min_display_width;
-  gint           min_display_height;
 
   gint xoffset;         /* Offsets between widget coordinates and buffer coordinates */
   gint yoffset;
@@ -262,9 +260,7 @@ enum
   PROP_ACCEPTS_TAB,
   PROP_IM_MODULE,
   PROP_HADJUSTMENT,
-  PROP_VADJUSTMENT,
-  PROP_MIN_DISPLAY_WIDTH,
-  PROP_MIN_DISPLAY_HEIGHT
+  PROP_VADJUSTMENT
 };
 
 static void gtk_text_view_finalize             (GObject          *object);
@@ -777,8 +773,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    /* GtkScrollable interface */
    g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
    g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
-   g_object_class_override_property (gobject_class, PROP_MIN_DISPLAY_WIDTH,  "min-display-width");
-   g_object_class_override_property (gobject_class, PROP_MIN_DISPLAY_HEIGHT, "min-display-height");
 
   /*
    * Style properties
@@ -1393,9 +1387,6 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->drag_start_y = -1;
 
   priv->pending_place_cursor_button = 0;
-
-  priv->min_display_width = -1;
-  priv->min_display_height = -1;
 
   /* We handle all our own redrawing */
   gtk_widget_set_redraw_on_allocate (widget, FALSE);
@@ -3101,14 +3092,6 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_vadjustment (text_view, g_value_get_object (value));
       break;
 
-    case PROP_MIN_DISPLAY_WIDTH:
-      priv->min_display_width = g_value_get_int (value);
-      break;
-
-    case PROP_MIN_DISPLAY_HEIGHT:
-      priv->min_display_height = g_value_get_int (value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3195,14 +3178,6 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_VADJUSTMENT:
       g_value_set_object (value, priv->vadjustment);
-      break;
-
-    case PROP_MIN_DISPLAY_WIDTH:
-      g_value_set_int (value, priv->min_display_width);
-      break;
-
-    case PROP_MIN_DISPLAY_HEIGHT:
-      g_value_set_int (value, priv->min_display_height);
       break;
 
     default:

@@ -146,9 +146,7 @@ enum {
   PROP_RUBBER_BANDING,
   PROP_ENABLE_GRID_LINES,
   PROP_ENABLE_TREE_LINES,
-  PROP_TOOLTIP_COLUMN,
-  PROP_MIN_DISPLAY_WIDTH,
-  PROP_MIN_DISPLAY_HEIGHT
+  PROP_TOOLTIP_COLUMN
 };
 
 /* object signals */
@@ -572,8 +570,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 
   g_object_class_override_property (o_class, PROP_HADJUSTMENT, "hadjustment");
   g_object_class_override_property (o_class, PROP_VADJUSTMENT, "vadjustment");
-  g_object_class_override_property (o_class, PROP_MIN_DISPLAY_WIDTH,  "min-display-width");
-  g_object_class_override_property (o_class, PROP_MIN_DISPLAY_HEIGHT, "min-display-height");
 
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_VISIBLE,
@@ -1339,9 +1335,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
-
-  tree_view->priv->min_display_width  = -1;
-  tree_view->priv->min_display_height = -1;
 }
 
 
@@ -1418,12 +1411,6 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_TOOLTIP_COLUMN:
       gtk_tree_view_set_tooltip_column (tree_view, g_value_get_int (value));
       break;
-    case PROP_MIN_DISPLAY_WIDTH:
-      tree_view->priv->min_display_width = g_value_get_int (value);
-      break;
-    case PROP_MIN_DISPLAY_HEIGHT:
-      tree_view->priv->min_display_height = g_value_get_int (value);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1498,12 +1485,6 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_TOOLTIP_COLUMN:
       g_value_set_int (value, tree_view->priv->tooltip_column);
-      break;
-    case PROP_MIN_DISPLAY_WIDTH:
-      g_value_set_int (value, tree_view->priv->min_display_width);
-      break;
-    case PROP_MIN_DISPLAY_HEIGHT:
-      g_value_set_int (value, tree_view->priv->min_display_height);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);

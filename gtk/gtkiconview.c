@@ -135,8 +135,6 @@ struct _GtkIconViewPrivate
   
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
-  gint           min_display_width;
-  gint           min_display_height;
 
   guint layout_idle_id;
   
@@ -245,9 +243,7 @@ enum
 
   /* For scrollable interface */
   PROP_HADJUSTMENT,
-  PROP_VADJUSTMENT,
-  PROP_MIN_DISPLAY_WIDTH,
-  PROP_MIN_DISPLAY_HEIGHT
+  PROP_VADJUSTMENT
 };
 
 /* GObject vfuncs */
@@ -800,9 +796,6 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   /* Scrollable interface properties */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
-  g_object_class_override_property (gobject_class, PROP_MIN_DISPLAY_WIDTH,  "min-display-width");
-  g_object_class_override_property (gobject_class, PROP_MIN_DISPLAY_HEIGHT, "min-display-height");
-
 
   /* Style properties */
   gtk_widget_class_install_style_property (widget_class,
@@ -1133,9 +1126,6 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->margin = 6;
   icon_view->priv->item_padding = 6;
 
-  icon_view->priv->min_display_width = -1;
-  icon_view->priv->min_display_height = -1;
-
   icon_view->priv->draw_focus = TRUE;
 }
 
@@ -1215,12 +1205,6 @@ gtk_icon_view_set_property (GObject      *object,
     case PROP_VADJUSTMENT:
       gtk_icon_view_set_vadjustment (icon_view, g_value_get_object (value));
       break;
-    case PROP_MIN_DISPLAY_WIDTH:
-      icon_view->priv->min_display_width = g_value_get_int (value);
-      break;
-    case PROP_MIN_DISPLAY_HEIGHT:
-      icon_view->priv->min_display_height = g_value_get_int (value);
-      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1292,12 +1276,6 @@ gtk_icon_view_get_property (GObject      *object,
       break;
     case PROP_VADJUSTMENT:
       g_value_set_object (value, icon_view->priv->vadjustment);
-      break;
-    case PROP_MIN_DISPLAY_WIDTH:
-      g_value_set_int (value, icon_view->priv->min_display_width);
-      break;
-    case PROP_MIN_DISPLAY_HEIGHT:
-      g_value_set_int (value, icon_view->priv->min_display_height);
       break;
 
     default:
