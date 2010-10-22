@@ -187,9 +187,6 @@ gtk_grid_set_orientation (GtkGrid        *grid,
                           GtkOrientation  orientation)
 {
   GtkGridPrivate *priv = grid->priv;
-  GList *list;
-  GtkGridChild *child;
-  gint left, top, width, height;
 
   if (priv->orientation != orientation)
     {
