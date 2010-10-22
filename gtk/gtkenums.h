@@ -618,6 +618,12 @@ typedef enum {
   GTK_JUNCTION_RIGHT  = 1 << 3
 } GtkJunctionSides;
 
+typedef enum {
+  GTK_BORDER_STYLE_NONE,
+  GTK_BORDER_STYLE_SOLID,
+  GTK_BORDER_STYLE_INSET,
+  GTK_BORDER_STYLE_OUTSET
+} GtkBorderStyle;
 
 G_END_DECLS
 
