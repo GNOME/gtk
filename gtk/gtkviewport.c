@@ -25,11 +25,13 @@
  */
 
 #include "config.h"
-#include "gtkviewport.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktypeutils.h"
 #include "gtkscrollable.h"
+#undef GTK_DISABLE_DEPRECATED
+#include "gtkviewport.h"
+#define GTK_DISABLE_DEPRECATED
 #include "gtkprivate.h"
 
 
