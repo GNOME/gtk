@@ -37,7 +37,7 @@ static void gtk_cell_renderer_set_property  (GObject              *object,
 					     const GValue         *value,
 					     GParamSpec           *pspec);
 static void set_cell_bg_color               (GtkCellRenderer      *cell,
-					     GdkColor             *color);
+					     GdkRGBA              *rgba);
 
 /* Fallback GtkCellRenderer    implementation to use remaining ->get_size() implementations */
 static void gtk_cell_renderer_real_get_preferred_width           (GtkCellRenderer         *cell,
@@ -80,7 +80,7 @@ struct _GtkCellRendererPrivate
   guint sensitive           : 1;
   guint editing             : 1;
 
-  GdkColor cell_background;
+  GdkRGBA cell_background;
 };
 
 
@@ -99,6 +99,7 @@ enum {
   PROP_IS_EXPANDED,
   PROP_CELL_BACKGROUND,
   PROP_CELL_BACKGROUND_GDK,
+  PROP_CELL_BACKGROUND_RGBA,
   PROP_CELL_BACKGROUND_SET,
   PROP_EDITING
 };
@@ -336,6 +337,20 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
 						       P_("Cell background color as a GdkColor"),
 						       GDK_TYPE_COLOR,
 						       GTK_PARAM_READWRITE));
+  /**
+   * GtkCellRenderer:cell-background-rgba:
+   *
+   * Cell background as a #GdkRGBA
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+				   PROP_CELL_BACKGROUND_RGBA,
+				   g_param_spec_boxed ("cell-background-rgba",
+						       P_("Cell background RGBA color"),
+						       P_("Cell background color as a GdkRGBA"),
+						       GDK_TYPE_RGBA,
+						       GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
 				   PROP_EDITING,
@@ -406,12 +421,15 @@ gtk_cell_renderer_get_property (GObject     *object,
       {
 	GdkColor color;
 
-	color.red = priv->cell_background.red;
-	color.green = priv->cell_background.green;
-	color.blue = priv->cell_background.blue;
+	color.red = (guint16) (priv->cell_background.red * 65535);
+	color.green = (guint16) (priv->cell_background.green * 65535);
+	color.blue = (guint16) (priv->cell_background.blue * 65535);
 
 	g_value_set_boxed (value, &color);
       }
+      break;
+    case PROP_CELL_BACKGROUND_RGBA:
+      g_value_set_boxed (value, &priv->cell_background);
       break;
     case PROP_CELL_BACKGROUND_SET:
       g_value_set_boolean (value, priv->cell_background_set);
@@ -473,12 +491,12 @@ gtk_cell_renderer_set_property (GObject      *object,
       break;
     case PROP_CELL_BACKGROUND:
       {
-	GdkColor color;
+        GdkRGBA rgba;
 
 	if (!g_value_get_string (value))
 	  set_cell_bg_color (cell, NULL);
-	else if (gdk_color_parse (g_value_get_string (value), &color))
-	  set_cell_bg_color (cell, &color);
+	else if (gdk_rgba_parse (g_value_get_string (value), &rgba))
+	  set_cell_bg_color (cell, &rgba);
 	else
 	  g_warning ("Don't know color `%s'", g_value_get_string (value));
 
@@ -486,6 +504,20 @@ gtk_cell_renderer_set_property (GObject      *object,
       }
       break;
     case PROP_CELL_BACKGROUND_GDK:
+      {
+        GdkColor *color;
+        GdkRGBA rgba;
+
+        color = g_value_get_boxed (value);
+        rgba.red = color->red / 65535.;
+        rgba.green = color->green / 65535.;
+        rgba.blue = color->blue / 65535.;
+        rgba.alpha = 1;
+
+        set_cell_bg_color (cell, &rgba);
+      }
+      break;
+    case PROP_CELL_BACKGROUND_RGBA:
       set_cell_bg_color (cell, g_value_get_boxed (value));
       break;
     case PROP_CELL_BACKGROUND_SET:
@@ -499,11 +531,11 @@ gtk_cell_renderer_set_property (GObject      *object,
 
 static void
 set_cell_bg_color (GtkCellRenderer *cell,
-		   GdkColor        *color)
+                   GdkRGBA         *rgba)
 {
   GtkCellRendererPrivate *priv = cell->priv;
 
-  if (color)
+  if (rgba)
     {
       if (!priv->cell_background_set)
         {
@@ -511,9 +543,7 @@ set_cell_bg_color (GtkCellRenderer *cell,
 	  g_object_notify (G_OBJECT (cell), "cell-background-set");
 	}
 
-      priv->cell_background.red = color->red;
-      priv->cell_background.green = color->green;
-      priv->cell_background.blue = color->blue;
+      priv->cell_background = *rgba;
     }
   else
     {
@@ -612,7 +642,7 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
   if (priv->cell_background_set && !selected)
     {
       gdk_cairo_rectangle (cr, background_area);
-      gdk_cairo_set_source_color (cr, &priv->cell_background);
+      gdk_cairo_set_source_rgba (cr, &priv->cell_background);
       cairo_fill (cr);
     }
 
