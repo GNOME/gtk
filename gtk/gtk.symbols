@@ -1075,6 +1075,7 @@ gtk_entry_get_current_icon_drag_source
 gtk_entry_get_cursor_hadjustment
 gtk_entry_get_has_frame
 gtk_entry_get_icon_activatable
+gtk_entry_get_icon_area
 gtk_entry_get_icon_at_pos
 gtk_entry_get_icon_gicon
 gtk_entry_get_icon_name
@@ -1093,6 +1094,7 @@ gtk_entry_get_overwrite_mode
 gtk_entry_get_progress_fraction
 gtk_entry_get_progress_pulse_step
 gtk_entry_get_text
+gtk_entry_get_text_area
 gtk_entry_get_text_length
 gtk_entry_get_type G_GNUC_CONST
 gtk_entry_get_visibility

@@ -6656,6 +6656,47 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 }
 
 /**
+ * gtk_entry_get_text_area:
+ * @entry: a #GtkEntry
+ * @text_area: Return location for the text area.
+ *
+ * Returns the area where the entry's text is drawn. This function is
+ * useful when drawing something to the entry in a draw callback.
+ *
+ * See also gtk_entry_get_icon_area().
+ *
+ * Since: 3.0
+ **/
+void
+gtk_entry_get_text_area (GtkEntry     *entry,
+                         GdkRectangle *text_area)
+{
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (text_area != NULL);
+
+  if (entry->text_area)
+    {
+      GtkAllocation allocation;
+      gint x, y;
+
+      gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
+      gdk_window_get_position (entry->text_area, &x, &y);
+
+      text_area->x = x - allocation.x;
+      text_area->y = y - allocation.y;
+      text_area->width = gdk_window_get_width (entry->text_area);
+      text_area->height = gdk_window_get_height (entry->text_area);
+    }
+  else
+    {
+      text_area->x = 0;
+      text_area->y = 0;
+      text_area->width = 0;
+      text_area->height = 0;
+    }
+}
+
+/**
  * gtk_entry_set_text:
  * @entry: a #GtkEntry
  * @text: the new text
@@ -8062,6 +8103,56 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
     }
 
   return -1;
+}
+
+/**
+ * gtk_entry_get_icon_area:
+ * @entry: A #GtkEntry
+ * @icon_pos: Icon position
+ * @icon_area: Return location for the icon's area
+ *
+ * Returns the area where entry's icon at @icon_pos is drawn.
+ * This function is useful when drawing something to the
+ * entry in a draw callback.
+ *
+ * See also gtk_entry_get_text_area()
+ *
+ * Since: 3.0
+ */
+void
+gtk_entry_get_icon_area (GtkEntry             *entry,
+                         GtkEntryIconPosition  icon_pos,
+                         GdkRectangle         *icon_area)
+{
+  GtkEntryPrivate *priv;
+  EntryIconInfo *icon_info;
+
+  g_return_if_fail (GTK_IS_ENTRY (entry));
+  g_return_if_fail (icon_area != NULL);
+
+  priv = GTK_ENTRY_GET_PRIVATE (entry);
+
+  icon_info = priv->icons[icon_pos];
+
+  if (icon_info)
+    {
+      GtkAllocation primary;
+      GtkAllocation secondary;
+
+      get_icon_allocations (entry, &primary, &secondary);
+
+      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
+        *icon_area = primary;
+      else
+        *icon_area = secondary;
+    }
+  else
+    {
+      icon_area->x = 0;
+      icon_area->y = 0;
+      icon_area->width = 0;
+      icon_area->height = 0;
+    }
 }
 
 static void
