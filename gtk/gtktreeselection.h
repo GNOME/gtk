@@ -36,11 +36,37 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_SELECTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_SELECTION))
 #define GTK_TREE_SELECTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
 
+/**
+ * GtkTreeSelectionFunc:
+ * @selection: A #GtkTreeSelection
+ * @model: A #GtkTreeModel being viewed
+ * @path: The #GtkTreePath of the row in question
+ * @path_currently_selected: %TRUE, if the path is currently selected
+ * @data: user data
+ *
+ * A function used by gtk_tree_selection_set_select_function() to filter
+ * whether or not a row may be selected.  It is called whenever a row's
+ * state might change.  A return value of %TRUE indicates to @selection
+ * that it is okay to change the selection.
+ *
+ * Returns: %TRUE, if the selection state of the row can be toggled
+ */
 typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
 					      GtkTreeModel      *model,
 					      GtkTreePath       *path,
                                               gboolean           path_currently_selected,
 					      gpointer           data);
+
+/**
+ * GtkTreeSelectionForeachFunc:
+ * @model: The #GtkTreeModel being viewed
+ * @path: The #GtkTreePath of a selected row
+ * @iter: A #GtkTreeIter pointing to a selected row
+ * @data: user data
+ *
+ * A function used by gtk_tree_selection_selected_foreach() to map all
+ * selected rows.  It will be called on every selected row in the view.
+ */
 typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
 					      GtkTreePath       *path,
 					      GtkTreeIter       *iter,
