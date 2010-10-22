@@ -1083,7 +1083,7 @@ gtk_tool_item_group_set_focus_cb (GtkWidget *window,
       /* Check that the focused widgets is fully visible within
        * the group's parent widget and make it visible otherwise. */
 
-      adjustment = gtk_tool_palette_get_vadjustment (GTK_TOOL_PALETTE (p));
+      adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (p));
 
       if (adjustment)
         {
@@ -1107,7 +1107,7 @@ gtk_tool_item_group_set_focus_cb (GtkWidget *window,
             }
         }
 
-      adjustment = gtk_tool_palette_get_hadjustment (GTK_TOOL_PALETTE (p));
+      adjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (p));
 
       if (adjustment)
         {
