@@ -143,6 +143,8 @@ struct _GtkComboBoxPrivate
   gint  text_column;
   GtkCellRenderer *text_renderer;
 
+  gint id_column;
+
   GSList *cells;
 
   guint popup_in_progress : 1;
@@ -245,7 +247,8 @@ enum {
   PROP_EDITING_CANCELED,
   PROP_HAS_ENTRY,
   PROP_ENTRY_TEXT_COLUMN,
-  PROP_POPUP_FIXED_WIDTH
+  PROP_POPUP_FIXED_WIDTH,
+  PROP_ID_COLUMN
 };
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
@@ -949,6 +952,23 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 						      GTK_PARAM_READWRITE));
 
    /**
+    * GtkComboBox:id-column:
+    *
+    * The column in the combo box's model that provides numeric
+    * IDs for the values in the model, if != -1.
+    *
+    * Since: 3.0
+    */
+   g_object_class_install_property (object_class,
+                                    PROP_ID_COLUMN,
+                                    g_param_spec_int ("id-column",
+                                                      P_("ID Column"),
+                                                      P_("The column in the combo box's model that provides "
+                                                      "numeric IDs for the values in the model"),
+                                                      -1, G_MAXINT, -1,
+                                                      GTK_PARAM_READWRITE));
+
+   /**
     * GtkComboBox:popup-fixed-width:
     *
     * Whether the popup's width should be a fixed width matching the
@@ -1077,6 +1097,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
 
   priv->text_column = -1;
   priv->text_renderer = NULL;
+  priv->id_column = -1;
 
   gtk_combo_box_check_appearance (combo_box);
 }
@@ -1168,6 +1189,10 @@ gtk_combo_box_set_property (GObject      *object,
       gtk_combo_box_set_entry_text_column (combo_box, g_value_get_int (value));
       break;
 
+    case PROP_ID_COLUMN:
+      gtk_combo_box_set_id_column (combo_box, g_value_get_int (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1244,6 +1269,10 @@ gtk_combo_box_get_property (GObject    *object,
       case PROP_ENTRY_TEXT_COLUMN:
 	g_value_set_int (value, priv->text_column);
 	break;
+
+      case PROP_ID_COLUMN:
+        g_value_set_int (value, priv->id_column);
+        break;
 
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -6544,14 +6573,14 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
 
 	  xpad = 2 * (border_width + cell_style->xthickness);
 	  ypad = 2 * (border_width + cell_style->ythickness);
-	}
+        }
 
       size -= but_width;
       size -= 2 * focus_width;
       size -= xpad;
 
       gtk_combo_box_measure_height_for_width (combo_box, size, &min_height, &nat_height);
-	  
+
       min_height = MAX (min_height, but_height);
       nat_height = MAX (nat_height, but_height);
 
@@ -6572,4 +6601,51 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
 
   if (natural_size)
     *natural_size = nat_height;
+}
+
+/**
+ * gtk_combo_box_set_id_column:
+ * @combo_box: A #GtkComboBox
+ * @id_column: A column in @model to get numeric IDs for values from
+ *
+ * Sets the model column which @combo_box should use to get numeric IDs
+ * for values from. The column @id_column in the model of @combo_box
+ * must be of type %G_TYPE_INT.
+ *
+ * Since: 3.0
+ */
+void
+gtk_combo_box_set_id_column (GtkComboBox *combo_box,
+                             gint         id_column)
+{
+  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkTreeModel *model;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  model = gtk_combo_box_get_model (combo_box);
+
+  g_return_if_fail (id_column >= 0);
+  g_return_if_fail (model == NULL || id_column < gtk_tree_model_get_n_columns (model));
+
+  priv->id_column = id_column;
+}
+
+/**
+ * gtk_combo_box_get_id_column:
+ * @combo_box: A #GtkComboBox
+ *
+ * Returns the column which @combo_box is using to get numeric IDs
+ * for values from.
+ *
+ * Return value: A column in the data source model of @combo_box.
+ *
+ * Since: 3.0
+ */
+gint
+gtk_combo_box_get_id_column (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), 0);
+
+  return combo_box->priv->id_column;
 }
