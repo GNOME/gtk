@@ -1278,6 +1278,13 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                 SIDE_ALL, junction);
   cairo_clip (cr);
 
+  if (gtk_theming_engine_has_class (engine, "background"))
+    {
+      cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0); /* transparent */
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      cairo_paint (cr);
+    }
+
   cairo_translate (cr, x, y);
   cairo_scale (cr, width, height);
 
