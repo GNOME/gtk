@@ -1335,6 +1335,9 @@ gtk_tree_view_init (GtkTreeView *tree_view)
 
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
+
+  gtk_tree_view_set_vadjustment (tree_view, NULL);
+  gtk_tree_view_set_hadjustment (tree_view, NULL);
 }
 
 
