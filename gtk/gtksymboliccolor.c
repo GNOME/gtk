@@ -309,7 +309,6 @@ gtk_symbolic_color_resolve (GtkSymbolicColor *color,
         resolved_color->red = CLAMP (shade.red * color->shade.factor, 0, 1);
         resolved_color->green = CLAMP (shade.green * color->shade.factor, 0, 1);
         resolved_color->blue = CLAMP (shade.blue * color->shade.factor, 0, 1);
-        resolved_color->alpha = CLAMP (shade.alpha * color->shade.factor, 0, 1);
 
         return TRUE;
       }

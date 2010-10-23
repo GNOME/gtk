@@ -1137,7 +1137,7 @@ color_shade (const GdkRGBA *color,
   color_return->red = CLAMP (color->red * factor, 0, 1);
   color_return->green = CLAMP (color->green * factor, 0, 1);
   color_return->blue = CLAMP (color->blue * factor, 0, 1);
-  color_return->alpha = CLAMP (color->alpha * factor, 0, 1);
+  color_return->alpha = color->alpha;
 }
 
 static void
