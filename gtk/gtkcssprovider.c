@@ -1531,6 +1531,7 @@ symbolic_color_parse_str (const gchar  *string,
   gchar *str;
 
   str = (gchar *) string;
+  *end_ptr = str;
 
   if (str[0] == '#' || str[0] == 'r')
     {
