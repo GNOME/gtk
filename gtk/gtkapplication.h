@@ -55,9 +55,6 @@ struct _GtkApplicationClass
 {
   GApplicationClass parent_class;
 
-  /*< vfuncs >*/
-  GtkWindow *(* create_window) (GtkApplication *application);
-
   /*< private >*/
   gpointer padding[12];
 };
