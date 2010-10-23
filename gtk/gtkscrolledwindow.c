@@ -2181,6 +2181,16 @@ gtk_scrolled_window_get_preferred_width_for_height (GtkWidget *widget,
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
+/**
+ * gtk_scrolled_window_get_min_content_width:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Gets the minimum content width of @scrolled_window, or -1 if not set.
+ *
+ * Returns: the minimum content width
+ *
+ * Since: 3.0
+ */
 gint
 gtk_scrolled_window_get_min_content_width (GtkScrolledWindow *scrolled_window)
 {
@@ -2189,9 +2199,20 @@ gtk_scrolled_window_get_min_content_width (GtkScrolledWindow *scrolled_window)
   return scrolled_window->priv->min_content_width;
 }
 
+/**
+ * gtk_scrolled_window_set_min_content_width:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @width: the minimal content width
+ *
+ * Sets the minimum width that @scrolled_window should keep visible.
+ * Note that this can and (usually will) be smaller than the minimum
+ * size of the content.
+ *
+ * Since: 3.0
+ */
 void
 gtk_scrolled_window_set_min_content_width (GtkScrolledWindow *scrolled_window,
-                                           gint               min_content_width)
+                                           gint               width)
 {
   GtkScrolledWindowPrivate *priv;
 
@@ -2199,9 +2220,9 @@ gtk_scrolled_window_set_min_content_width (GtkScrolledWindow *scrolled_window,
 
   priv = scrolled_window->priv;
 
-  if (priv->min_content_width != min_content_width)
+  if (priv->min_content_width != width)
     {
-      priv->min_content_width = min_content_width;
+      priv->min_content_width = width;
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 
@@ -2209,6 +2230,16 @@ gtk_scrolled_window_set_min_content_width (GtkScrolledWindow *scrolled_window,
     }
 }
 
+/**
+ * gtk_scrolled_window_get_min_content_height:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Gets the minimal content height of @scrolled_window, or -1 if not set.
+ *
+ * Returns: the minimal content height
+ *
+ * Since: 3.0
+ */
 gint
 gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window)
 {
@@ -2217,9 +2248,20 @@ gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window)
   return scrolled_window->priv->min_content_height;
 }
 
+/**
+ * gtk_scrolled_window_set_min_content_height:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @height: the minimal content height
+ *
+ * Sets the minimum height that @scrolled_window should keep visible.
+ * Note that this can and (usually will) be smaller than the minimum
+ * size of the content.
+ *
+ * Since: 3.0
+ */
 void
 gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
-                                            gint               min_content_height)
+                                            gint               height)
 {
   GtkScrolledWindowPrivate *priv;
 
@@ -2227,9 +2269,9 @@ gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
 
   priv = scrolled_window->priv;
 
-  if (priv->min_content_height != min_content_height)
+  if (priv->min_content_height != height)
     {
-      priv->min_content_height = min_content_height;
+      priv->min_content_height = height;
 
       gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 

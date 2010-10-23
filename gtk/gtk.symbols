@@ -754,6 +754,7 @@ gtk_color_button_get_type G_GNUC_CONST
 gtk_color_button_get_use_alpha
 gtk_color_button_new
 gtk_color_button_new_with_color
+gtk_color_button_new_with_rgba
 gtk_color_button_set_alpha
 gtk_color_button_set_color
 gtk_color_button_set_title

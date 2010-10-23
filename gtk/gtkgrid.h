@@ -74,7 +74,7 @@ void       gtk_grid_attach                 (GtkGrid         *grid,
                                             gint             width,
                                             gint             height);
 void       gtk_grid_attach_next_to         (GtkGrid         *grid,
-                                            GtkWidget       *widget,
+                                            GtkWidget       *child,
                                             GtkWidget       *sibling,
                                             GtkPositionType  side,
                                             gint             width,

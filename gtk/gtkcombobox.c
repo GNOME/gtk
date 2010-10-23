@@ -5871,14 +5871,14 @@ gtk_combo_box_set_title (GtkComboBox *combo_box,
  * @combo_box: a #GtkComboBox
  * @fixed: whether to use a fixed popup width
  *
- * Specifies whether the popup's width should be a fixed width matching 
- * the allocated width of the combo box.
+ * Specifies whether the popup's width should be a fixed width
+ * matching the allocated width of the combo box.
  *
  * Since: 3.0
  **/
 void
 gtk_combo_box_set_popup_fixed_width (GtkComboBox *combo_box,
-				     gboolean     fixed)
+                                     gboolean     fixed)
 {
   g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
 
@@ -5894,8 +5894,10 @@ gtk_combo_box_set_popup_fixed_width (GtkComboBox *combo_box,
  * gtk_combo_box_get_popup_fixed_width:
  * @combo_box: a #GtkComboBox
  *
- * Gets whether the popup uses a fixed width matching 
+ * Gets whether the popup uses a fixed width matching
  * the allocated width of the combo box.
+ *
+ * Returns: %TRUE if the popup uses a fixed width
  *
  * Since: 3.0
  **/
