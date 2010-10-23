@@ -1820,8 +1820,17 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "button");
       gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
     }
+  else if ((detail[0] == 'h' || detail[0] == 'v') &&
+           strncmp (&detail[1], "scrollbar_", 10) == 0)
+    {
+      gtk_style_context_add_class (context, "button");
+      gtk_style_context_add_class (context, "scrollbar");
+    }
   else if (strcmp (detail, "slider") == 0)
-    gtk_style_context_add_class (context, "slider");
+    {
+      gtk_style_context_add_class (context, "slider");
+      gtk_style_context_add_class (context, "scrollbar");
+    }
   else if (g_str_has_prefix (detail, "cell_"))
     {
       GtkRegionFlags row, col;
