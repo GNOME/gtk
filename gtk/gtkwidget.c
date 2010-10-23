@@ -72,73 +72,186 @@
  * <refsect2 id="geometry-management">
  * <title>Height-for-width Geometry Management</title>
  * <para>
- * GTK+ uses a height-for-width (and width-for-height) geometry management system. 
- * Height-for-width means that a widget can change how much vertical space it needs, 
- * depending on the amount of horizontal space that it is given (and similar for 
- * width-for-height). The most common example is a label that reflows to fill up the 
- * available width, wraps to fewer lines, and therefore needs less height.
+ * GTK+ uses a height-for-width (and width-for-height) geometry management
+ * system Height-for-width means that a widget can change how much 
+ * vertical space it needs, depending on the amount of horizontal space 
+ * that it is given (and similar for width-for-height). The most common 
+ * example is a label that reflows to fill up the available width, wraps 
+ * to fewer lines, and therefore needs less height.
  *
- * GTK+'s traditional two-pass <link linkend="size-allocation">size-allocation</link>
- * algorithm does not allow this flexibility. #GtkWidget provides a default
- * implementation of the height-for-width methods for existing widgets,
- * which always requests the same height, regardless of the available width.
+ * Height-for-width geometry management is implemented in GTK+ by way 
+ * of five virtual methods:
+ * <variablelist>
+ *    <varlistentry>
+ *       <term>#GtkWidgetClass.get_request_mode()</term>
+ *       <listitem>
+ *          This allows a widget to tell it's parent container whether
+ *          it preferrs to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
+ *          or %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
+ *          %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget preferrs to
+ *          have #GtkWidgetClass.get_preferred_width() called and then
+ *          #GtkWidgetClass.get_preferred_height_for_width() and is the 
+ *          default return for unimplemented cases.
+ *          However it's important to note (as described below) that any
+ *          widget which trades height-for-width must respond properly to 
+ *          both #GtkSizeRequestModes since it might be queried in either
+ *          orientation by it's parent container.
+ *       </listitem>
+ *    </varlistentry>
+ *    <varlistentry>
+ *       <term>#GtkWidgetClass.get_preferred_width()</term>
+ *       <listitem>
+ *          This is called by containers to obtain the minimum and
+ *          natural width of a widget. A widget will never be allocated
+ *          a width less than it's minimum and will only ever be allocated
+ *          a width greater than the natural width once all of the said
+ *          widget's siblings have received their natural widths.
+ *          Furthermore a widget will only ever be allocated a width greater
+ *          than it's natural width if it was configured to receive extra
+ *          expand space from it's parent container.
+ *       </listitem>
+ *    </varlistentry>
+ *    <varlistentry>
+ *       <term>#GtkWidgetClass.get_preferred_height()</term>
+ *       <listitem>
+ *          This is called by containers to obtain the minimum and
+ *          natural height of a widget.
+ *          A widget that does not actually trade any height for width
+ *          or width for height only has to implement these two virtual 
+ *          methods (#GtkWidgetClass.get_preferred_width() and
+ *          #GtkWidgetClass.get_preferred_height()).
+ *       </listitem>
+ *    </varlistentry>
+ *    <varlistentry>
+ *       <term>#GtkWidgetClass.get_preferred_height_for_width()</term>
+ *       <listitem>
+ *          This is similar to #GtkWidgetClass.get_preferred_height() except
+ *          that it is passed a contextual width to request height for. By
+ *          implementing this virtual method it is possible for a #GtkLabel
+ *          to tell it's parent how much height would be required if the
+ *          label were to be allocated a said width.
+ *       </listitem>
+ *    </varlistentry>
+ *    <varlistentry>
+ *       <term>#GtkWidgetClass.get_preferred_width_for_height()</term>
+ *       <listitem>
+ *          This is analogous to #GtkWidgetClass.get_preferred_height_for_width() 
+ *          except that it operates in the oposite orientation. It's rare that
+ *          a widget actually does %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT requests
+ *          but can happen when for example; a widget or container gets additional
+ *          columns to compensate for a smaller allocated height.
+ *       </listitem>
+ *    </varlistentry>
+ * </variablelist>
  *
- * Some important things to keep in mind when implementing
- * height-for-width and when using it in container
- * implementations.
+ * There are some important things to keep in mind when implementing
+ * height-for-width and when using it in container implementations.
  *
- * The geometry management system will query a logical hierarchy in
+ * The geometry management system will query a widget hierarchy in
  * only one orientation at a time. When widgets are initially queried
- * for their minimum sizes it is generally done in a dual pass
- * in the direction chosen by the toplevel.
+ * for their minimum sizes it is generally done in two initial passes
+ * in the #GtkSizeRequestMode chosen by the toplevel.
  *
- * For instance when queried in the normal height-for-width mode:
- * First the default minimum and natural width for each widget
- * in the interface will computed and collectively returned to
- * the toplevel by way of gtk_widget_get_preferred_width().
- * Next, the toplevel will use the minimum width to query for the
- * minimum height contextual to that width using
- * gtk_widget_get_preferred_height_for_width(), which will also
- * be a highly recursive operation. This minimum-for-minimum size can
- * be used to set the minimum size constraint on the toplevel.
+ * For example, when queried in the normal 
+ * %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
+ * First, the default minimum and natural width for each widget
+ * in the interface will be computed using gtk_width_get_preferred_width(). 
+ * Because the preferred widths for each container depends on the preferred 
+ * widths of thier children, this information propagates up the hierarchy, 
+ * and finally a minimum and natural width is determined for the entire
+ * toplevel. Next, the toplevel will use the minimum width to query for the 
+ * minimum height contextual to that width using 
+ * gtk_widget_get_preferred_height_for_width(), which will also be a highly 
+ * recursive operation. The minimum height for the minimum width is normally 
+ * used to set the minimum size constraint on the toplevel 
+ * (unless gtk_window_set_geometry_hints() is explicitly used instead).
  *
- * When allocating, each container can use the minimum and natural
- * sizes reported by their children to allocate natural sizes and
- * expose as much content as possible with the given allocation.
+ * After the toplevel window has initially requested it's size in both 
+ * dimensions it can go on to allocate itself a reasonable size (or a size 
+ * previously specified with gtk_window_set_default_size()). During the 
+ * recursive allocation process it's important to note that request cycles 
+ * will be recursively executed while container widgets allocate their children. 
+ * Each container widget, once allocated a size will go on to first share the 
+ * space in one orientation among its children and then request each child's 
+ * height for their target allocated width or width for allocated height 
+ * depending. In this way a #GtkWidget will typically be requested its size
+ * a number of times before actually being allocated a size, the size a 
+ * widget is finally allocated can of course differ from the size it 
+ * requested. For this reason; #GtkWidget caches a  small number of results 
+ * to avoid re-querying for the same sizes in one allocation cycle.
  *
- * That means that the request operation at allocation time will
- * usually fire again in contexts of different allocated sizes than
- * the ones originally queried for. #GtkWidget caches a
- * small number of results to avoid re-querying for the same
- * allocated size in one allocation cycle.
- *
- * A widget that does not actually do height-for-width
- * or width-for-height size negotiations only has to implement
- * #GtkWidgetClass.get_preferred_width() and
- * #GtkWidgetClass.get_preferred_height().
+ * See <link linkend="container-geometry-management">GtkContainer's 
+ * geometry management section</link>
+ * to learn more about how height-for-width allocations are performed 
+ * by container widgets.
  *
  * If a widget does move content around to smartly use up the
- * allocated size, then it must support the request properly in
- * both orientations; even if the request only makes sense in
- * one orientation.
+ * allocated size, then it must support the request in both
+ * #GtkSizeRequestModes even if the widget in question only 
+ * trades sizes in a single orientation.
  *
  * For instance, a #GtkLabel that does height-for-width word wrapping
- * will not expect to have #GtkWidgetClass.get_preferred_height() called because that
- * call is specific to a width-for-height request. In this case the
- * label must return the heights contextual to its minimum possible
- * width. By following this rule any widget that handles height-for-width
- * or width-for-height requests will always be allocated at least
- * enough space to fit its own content.
+ * will not expect to have #GtkWidgetClass.get_preferred_height() called 
+ * because that call is specific to a width-for-height request. In this 
+ * case the label must return the heights required for it's own minimum 
+ * possible width. By following this rule any widget that handles 
+ * height-for-width or width-for-height requests will always be allocated 
+ * at least enough space to fit its own content.
+ *
+ * Here are some examples of how a %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH widget
+ * generally deals with width-for-height requests, for #GtkWidgetClass.get_preferred_height()
+ * it will do:
+ * <programlisting><![CDATA[
+ * static void
+ * foo_widget_get_preferred_height (GtkWidget *widget, gint *min_height, gint *nat_height)
+ * {
+ *    if (i_am_in_height_for_width_mode)
+ *      {
+ *        gint min_width;
+ *
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width, 
+ *                                                                      min_height, nat_height);
+ *      }
+ *    else
+ *      {
+ *         ... some widgets do both, for instance if a GtkLabel is rotated to 90 degrees
+ *         it will return the minimum and natural height for the rotated label here.
+ *      }
+ * }
+ * ]]></programlisting>
+ * 
+ * And in #GtkWidgetClass.get_preferred_width_for_height() it will simply return
+ * the minimum and natural width:
+ *
+ * <programlisting><![CDATA[
+ * static void
+ * foo_widget_get_preferred_width_for_height (GtkWidget *widget, gint for_height, 
+ *                                            gint *min_width, gint *nat_width)
+ * {
+ *    if (i_am_in_height_for_width_mode)
+ *      {
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, min_width, nat_width);
+ *      }
+ *    else
+ *      {
+ *         ... again if a widget is sometimes operating in width-for-height mode
+ *         (like a rotated GtkLabel) it can go ahead and do it's real width for
+ *         height calculation here.
+ *      }
+ * }
+ * ]]></programlisting>
  *
  * Often a widget needs to get its own request during size request or
  * allocation, for example when computing height it may need to also
- * compute width, or when deciding how to use an allocation the widget may
- * need to know its natural size. In these cases, the widget should be
- * careful to call its virtual methods directly, like this:
+ * compute width, or when deciding how to use an allocation the widget 
+ * may need to know its natural size. In these cases, the widget should 
+ * be careful to call its virtual methods directly, like this:
  * <example>
  *   <title>Widget calling its own size request method.</title>
  *   <programlisting>
- * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget), &min, &natural);
+ * GTK_WIDGET_GET_CLASS(widget)-&gt;get_preferred_width (widget), 
+ *                                  &min, &natural);
  *   </programlisting>
  * </example>
  *
@@ -572,11 +685,13 @@ static void             gtk_widget_queue_tooltip_query          (GtkWidget *widg
 
 static void             gtk_widget_real_adjust_size_request     (GtkWidget         *widget,
                                                                  GtkOrientation     orientation,
-                                                                 gint               for_size,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
 static void             gtk_widget_real_adjust_size_allocation  (GtkWidget         *widget,
-                                                                 GtkAllocation     *allocation);
+                                                                 GtkOrientation     orientation,
+                                                                 gint              *natural_size,
+                                                                 gint              *allocated_pos,
+                                                                 gint              *allocated_size);
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
@@ -742,7 +857,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->destroy = gtk_widget_real_destroy;
 
   klass->activate_signal = 0;
-  klass->set_scroll_adjustments_signal = 0;
   klass->dispatch_child_properties_changed = gtk_widget_dispatch_child_properties_changed;
   klass->show = gtk_widget_real_show;
   klass->show_all = gtk_widget_show;
@@ -3810,7 +3924,8 @@ gtk_widget_show (GtkWidget *widget)
           widget->priv->computed_hexpand ||
           widget->priv->computed_vexpand)
         {
-          gtk_widget_queue_compute_expand (widget);
+          if (widget->priv->parent != NULL)
+            gtk_widget_queue_compute_expand (widget->priv->parent);
         }
 
       g_signal_emit (widget, widget_signals[SHOW], 0);
@@ -4496,6 +4611,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   gboolean alloc_needed;
   gboolean size_changed;
   gboolean position_changed;
+  gint natural_width, natural_height;
+  gint min_width, min_height;
 
   priv = widget->priv;
 
@@ -4532,7 +4649,37 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   real_allocation = *allocation;
 
   adjusted_allocation = real_allocation;
-  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget, &adjusted_allocation);
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+    {
+      /* Go ahead and request the height for allocated width, note that the internals
+       * of get_height_for_width will internally limit the for_size to natural size
+       * when aligning implicitly.
+       */
+      gtk_widget_get_preferred_width (widget, &min_width, &natural_width);
+      gtk_widget_get_preferred_height_for_width (widget, real_allocation.width, NULL, &natural_height);
+    }
+  else
+    {
+      /* Go ahead and request the width for allocated height, note that the internals
+       * of get_width_for_height will internally limit the for_size to natural size
+       * when aligning implicitly.
+       */
+      gtk_widget_get_preferred_height (widget, &min_height, &natural_height);
+      gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, NULL, &natural_width);
+    }
+
+  /* Now that we have the right natural height and width, go ahead and remove any margins from the 
+   * allocated sizes and possibly limit them to the natural sizes */
+  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
+							 GTK_ORIENTATION_HORIZONTAL,
+							 &natural_width,
+							 &adjusted_allocation.x,
+							 &adjusted_allocation.width);
+  GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
+							 GTK_ORIENTATION_VERTICAL,
+							 &natural_height,
+							 &adjusted_allocation.y,
+							 &adjusted_allocation.height);
 
   if (adjusted_allocation.x < real_allocation.x ||
       adjusted_allocation.y < real_allocation.y ||
@@ -4807,140 +4954,76 @@ gtk_widget_real_size_allocate (GtkWidget     *widget,
 }
 
 static void
-get_span_inside_border (GtkWidget              *widget,
-                        GtkAlign                align,
-                        int                     start_pad,
-                        int                     end_pad,
-                        int                     allocated_outside_size,
-                        int                     natural_inside_size,
-                        int                    *coord_inside_p,
-                        int                    *size_inside_p)
+adjust_for_align(GtkAlign           align,
+                 gint              *natural_size,
+                 gint              *allocated_pos,
+                 gint              *allocated_size)
 {
-  int inside_allocated;
-  int content_size;
-  int coord, size;
-
-  inside_allocated = allocated_outside_size - start_pad - end_pad;
-
-  content_size = natural_inside_size;
-  if (content_size > inside_allocated)
-    {
-      /* didn't get full natural size */
-      content_size = inside_allocated;
-    }
-
-  coord = size = 0; /* silence compiler */
   switch (align)
     {
     case GTK_ALIGN_FILL:
-      coord = start_pad;
-      size = inside_allocated;
+      /* change nothing */
       break;
     case GTK_ALIGN_START:
-      coord = start_pad;
-      size = content_size;
+      /* keep *allocated_pos where it is */
+      *allocated_size = MIN (*allocated_size, *natural_size);
       break;
     case GTK_ALIGN_END:
-      coord = allocated_outside_size - end_pad - content_size;
-      size = content_size;
+      if (*allocated_size > *natural_size)
+	{
+	  *allocated_pos += (*allocated_size - *natural_size);
+	  *allocated_size = *natural_size;
+	}
       break;
     case GTK_ALIGN_CENTER:
-      coord = start_pad + (inside_allocated - content_size) / 2;
-      size = content_size;
+      if (*allocated_size > *natural_size)
+	{
+	  *allocated_pos += (*allocated_size - *natural_size) / 2;
+	  *allocated_size = MIN (*allocated_size, *natural_size);
+	}
       break;
     }
-
-  if (coord_inside_p)
-    *coord_inside_p = coord;
-
-  if (size_inside_p)
-    *size_inside_p = size;
 }
 
 static void
-get_span_inside_border_horizontal (GtkWidget              *widget,
-                                   const GtkWidgetAuxInfo *aux_info,
-                                   int                     allocated_outside_width,
-                                   int                     natural_inside_width,
-                                   int                    *x_inside_p,
-                                   int                    *width_inside_p)
+adjust_for_margin(gint               start_margin,
+                  gint               end_margin,
+                  gint              *natural_size,
+                  gint              *allocated_pos,
+                  gint              *allocated_size)
 {
-  get_span_inside_border (widget,
-                          aux_info->halign,
-                          aux_info->margin.left,
-                          aux_info->margin.right,
-                          allocated_outside_width,
-                          natural_inside_width,
-                          x_inside_p,
-                          width_inside_p);
-}
-
-static void
-get_span_inside_border_vertical (GtkWidget              *widget,
-                                 const GtkWidgetAuxInfo *aux_info,
-                                 int                     allocated_outside_height,
-                                 int                     natural_inside_height,
-                                 int                    *y_inside_p,
-                                 int                    *height_inside_p)
-{
-  get_span_inside_border (widget,
-                          aux_info->valign,
-                          aux_info->margin.top,
-                          aux_info->margin.bottom,
-                          allocated_outside_height,
-                          natural_inside_height,
-                          y_inside_p,
-                          height_inside_p);
+  *natural_size -= (start_margin + end_margin);
+  *allocated_pos += start_margin;
+  *allocated_size -= (start_margin + end_margin);
 }
 
 static void
 gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
-                                        GtkAllocation     *allocation)
+                                        GtkOrientation     orientation,
+                                        gint              *natural_size,
+                                        gint              *allocated_pos,
+                                        gint              *allocated_size)
 {
   const GtkWidgetAuxInfo *aux_info;
-  gint natural_width;
-  gint natural_height;
-  int x, y, w, h;
 
   aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
-  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_widget_get_preferred_width (widget, NULL, &natural_width);
-      get_span_inside_border_horizontal (widget,
-					 aux_info,
-					 allocation->width,
-					 natural_width,
-					 &x, &w);
-
-      gtk_widget_get_preferred_height_for_width (widget, w, NULL, &natural_height);
-      get_span_inside_border_vertical (widget,
-				       aux_info,
-				       allocation->height,
-				       natural_height,
-				       &y, &h);
+      adjust_for_margin (aux_info->margin.left,
+                         aux_info->margin.right,
+                         natural_size, allocated_pos, allocated_size);
+      adjust_for_align (aux_info->halign,
+                        natural_size, allocated_pos, allocated_size);
     }
-  else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
+  else
     {
-      gtk_widget_get_preferred_height (widget, NULL, &natural_height);
-      get_span_inside_border_vertical (widget,
-				       aux_info,
-				       allocation->height,
-				       natural_height,
-				       &y, &h);
-
-      gtk_widget_get_preferred_width_for_height (widget, h, NULL, &natural_width);
-      get_span_inside_border_horizontal (widget,
-					 aux_info,
-					 allocation->width,
-					 natural_width,
-					 &x, &w);
+      adjust_for_margin (aux_info->margin.top,
+                         aux_info->margin.bottom,
+                         natural_size, allocated_pos, allocated_size);
+      adjust_for_align (aux_info->valign,
+                        natural_size, allocated_pos, allocated_size);
     }
-
-  allocation->x += x;
-  allocation->y += y;
-  allocation->width = w;
-  allocation->height = h;
 }
 
 static gboolean
@@ -5859,56 +5942,6 @@ gtk_widget_activate (GtkWidget *widget)
     }
   else
     return FALSE;
-}
-
-/**
- * gtk_widget_set_scroll_adjustments:
- * @widget: a #GtkWidget
- * @hadjustment: (allow-none): an adjustment for horizontal scrolling, or %NULL
- * @vadjustment: (allow-none): an adjustment for vertical scrolling, or %NULL
- *
- * For widgets that support scrolling, sets the scroll adjustments and
- * returns %TRUE.  For widgets that don't support scrolling, does
- * nothing and returns %FALSE. Widgets that don't support scrolling
- * can be scrolled by placing them in a #GtkViewport, which does
- * support scrolling.
- * 
- * Return value: %TRUE if the widget supports scrolling
- **/
-gboolean
-gtk_widget_set_scroll_adjustments (GtkWidget     *widget,
-				   GtkAdjustment *hadjustment,
-				   GtkAdjustment *vadjustment)
-{
-  guint signal_id;
-  GSignalQuery query;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
-
-  if (hadjustment)
-    g_return_val_if_fail (GTK_IS_ADJUSTMENT (hadjustment), FALSE);
-  if (vadjustment)
-    g_return_val_if_fail (GTK_IS_ADJUSTMENT (vadjustment), FALSE);
-
-  signal_id = WIDGET_CLASS (widget)->set_scroll_adjustments_signal;
-  if (!signal_id)
-    return FALSE;
-
-  g_signal_query (signal_id, &query);
-  if (!query.signal_id ||
-      !g_type_is_a (query.itype, GTK_TYPE_WIDGET) ||
-      query.return_type != G_TYPE_NONE ||
-      query.n_params != 2 ||
-      query.param_types[0] != GTK_TYPE_ADJUSTMENT ||
-      query.param_types[1] != GTK_TYPE_ADJUSTMENT)
-    {
-      g_warning (G_STRLOC ": signal \"%s::%s\" has wrong signature",
-		 G_OBJECT_TYPE_NAME (widget), query.signal_name);
-      return FALSE;
-    }
-      
-  g_signal_emit (widget, signal_id, 0, hadjustment, vadjustment);
-  return TRUE;
 }
 
 static void
@@ -9897,7 +9930,6 @@ gtk_widget_real_size_request (GtkWidget         *widget,
 static void
 gtk_widget_real_adjust_size_request (GtkWidget         *widget,
                                      GtkOrientation     orientation,
-                                     gint               for_size,
                                      gint              *minimum_size,
                                      gint              *natural_size)
 {

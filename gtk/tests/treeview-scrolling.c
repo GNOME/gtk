@@ -125,6 +125,8 @@ scroll_fixture_setup (ScrollFixture *fixture,
 
 	fixture->tree_view = gtk_tree_view_new_with_model (model);
 	g_object_unref (model);
+	gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (sw), VIEW_WIDTH);
+	gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), VIEW_HEIGHT);
 	gtk_widget_set_size_request (fixture->tree_view, VIEW_WIDTH, VIEW_HEIGHT);
 
 	renderer = gtk_cell_renderer_text_new ();
@@ -322,7 +324,7 @@ test_position_with_align (GtkTreeView  *tree_view,
 			  gdouble       row_align)
 {
 	gboolean passed = TRUE;
-	GtkAdjustment *vadj = gtk_tree_view_get_vadjustment (tree_view);
+	GtkAdjustment *vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
 
 	/* Switch on row-align: 0.0, 0.5, 1.0 */
 	switch ((int)(row_align * 2.)) {
@@ -422,7 +424,7 @@ test_position_without_align (GtkTreeView *tree_view,
 			     gdouble      row_start,
 			     gdouble      row_height)
 {
-	GtkAdjustment *vadj = gtk_tree_view_get_vadjustment (tree_view);
+  GtkAdjustment *vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
 
 	/* Without align the tree view does as less work as possible,
 	 * so basically we only have to check whether the row
@@ -458,7 +460,7 @@ test_position (GtkTreeView *tree_view,
 	/* Ugh */
 	pos = get_pos_from_path (GTK_TREE_VIEW (tree_view),
 				 path, rect.height,
-			         gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (tree_view)));
+			         gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view)));
 
 	/* This is only tested for during test_single() */
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (tree_view));
@@ -781,7 +783,7 @@ test_editable_position (GtkWidget   *tree_view,
 	gtk_tree_view_get_background_area (GTK_TREE_VIEW (tree_view),
 					   cursor_path, NULL, &rect);
 
-	vadj = gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (tree_view));
+	vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (tree_view));
 
 	/* There are all in bin_window coordinates */
         gtk_widget_get_allocation (editable, &allocation);
@@ -870,7 +872,7 @@ scroll_new_row_tree (ScrollFixture *fixture,
 		gtk_main_iteration ();
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (fixture->tree_view));
-	vadjustment = gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (fixture->tree_view));
+	vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (fixture->tree_view));
 
 	for (i = 0; i < 5; i++) {
 		GtkTreeIter scroll_iter;
@@ -933,7 +935,7 @@ test_bug316689 (ScrollFixture *fixture,
 	while (gtk_events_pending ())
 		gtk_main_iteration ();
 
-	vadj = gtk_tree_view_get_vadjustment (GTK_TREE_VIEW (fixture->tree_view));
+	vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (fixture->tree_view));
 
 	g_assert (vadj->value + vadj->page_size <= vadj->upper);
 	g_assert (vadj->value == vadj->upper - vadj->page_size);

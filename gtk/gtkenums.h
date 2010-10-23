@@ -543,4 +543,5 @@ typedef enum
 
 G_END_DECLS
 
+
 #endif /* __GTK_ENUMS_H__ */

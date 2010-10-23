@@ -226,20 +226,56 @@ compute_size_for_orientation (GtkWidget         *request,
           requisition_size = requisition.width;
 
           if (for_size < 0)
-            GTK_WIDGET_GET_CLASS (request)->get_preferred_width (request, &min_size, &nat_size);
+            {
+              GTK_WIDGET_GET_CLASS (request)->get_preferred_width (request, &min_size, &nat_size);
+            }
           else
-            GTK_WIDGET_GET_CLASS (request)->get_preferred_width_for_height (request, for_size, 
-                                                                                  &min_size, &nat_size);
+            {
+              int ignored_position = 0;
+              int natural_height;
+
+	      /* Pull the base natural height from the cache as it's needed to adjust 
+	       * the proposed 'for_size' */
+	      gtk_widget_get_preferred_height (widget, NULL, &natural_height);
+
+              /* convert for_size to unadjusted height (for_size is a proposed allocation) */
+              GTK_WIDGET_GET_CLASS (request)->adjust_size_allocation (widget,
+                                                                      GTK_ORIENTATION_VERTICAL,
+                                                                      &natural_height,
+                                                                      &ignored_position,
+                                                                      &for_size);
+
+              GTK_WIDGET_GET_CLASS (request)->get_preferred_width_for_height (request, for_size,
+                                                                              &min_size, &nat_size);
+            }
         }
       else
         {
           requisition_size = requisition.height;
 
           if (for_size < 0)
-            GTK_WIDGET_GET_CLASS (request)->get_preferred_height (request, &min_size, &nat_size);
+            {
+              GTK_WIDGET_GET_CLASS (request)->get_preferred_height (request, &min_size, &nat_size);
+            }
           else
-            GTK_WIDGET_GET_CLASS (request)->get_preferred_height_for_width (request, for_size, 
-                                                                                  &min_size, &nat_size);
+            {
+              int ignored_position = 0;
+              int natural_width;
+
+	      /* Pull the base natural width from the cache as it's needed to adjust 
+	       * the proposed 'for_size' */
+	      gtk_widget_get_preferred_width (widget, NULL, &natural_width);
+
+              /* convert for_size to unadjusted width (for_size is a proposed allocation) */
+              GTK_WIDGET_GET_CLASS (request)->adjust_size_allocation (widget,
+                                                                      GTK_ORIENTATION_HORIZONTAL,
+                                                                      &natural_width,
+                                                                      &ignored_position,
+                                                                      &for_size);
+
+              GTK_WIDGET_GET_CLASS (request)->get_preferred_height_for_width (request, for_size,
+                                                                              &min_size, &nat_size);
+            }
         }
       pop_recursion_check (request, orientation);
 
@@ -270,7 +306,6 @@ compute_size_for_orientation (GtkWidget         *request,
                                                            orientation == GTK_SIZE_GROUP_HORIZONTAL ?
                                                            GTK_ORIENTATION_HORIZONTAL :
                                                            GTK_ORIENTATION_VERTICAL,
-                                                           cached_size->for_size,
                                                            &adjusted_min,
                                                            &adjusted_natural);
 

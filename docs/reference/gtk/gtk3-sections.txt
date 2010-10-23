@@ -672,6 +672,8 @@ gtk_color_button_set_color
 gtk_color_button_get_color
 gtk_color_button_set_alpha
 gtk_color_button_get_alpha
+gtk_color_button_set_rgba
+gtk_color_button_get_rgba
 gtk_color_button_set_use_alpha
 gtk_color_button_get_use_alpha
 gtk_color_button_set_title
@@ -728,6 +730,10 @@ gtk_color_selection_get_previous_alpha
 gtk_color_selection_set_previous_alpha
 gtk_color_selection_get_previous_color
 gtk_color_selection_set_previous_color
+gtk_color_selection_get_current_rgba
+gtk_color_selection_set_current_rgba
+gtk_color_selection_get_previous_rgba
+gtk_color_selection_set_previous_rgba
 gtk_color_selection_is_adjusting
 gtk_color_selection_palette_from_string
 gtk_color_selection_palette_to_string
@@ -798,6 +804,8 @@ gtk_combo_box_get_button_sensitivity
 gtk_combo_box_get_has_entry
 gtk_combo_box_set_entry_text_column
 gtk_combo_box_get_entry_text_column
+gtk_combo_box_set_id_column
+gtk_combo_box_get_id_column
 <SUBSECTION Standard>
 GTK_TYPE_COMBO_BOX
 GTK_COMBO_BOX
@@ -817,9 +825,11 @@ GtkComboBoxText
 gtk_combo_box_text_new
 gtk_combo_box_text_new_with_entry
 gtk_combo_box_text_append_text
-gtk_combo_box_text_insert_text
 gtk_combo_box_text_prepend_text
+gtk_combo_box_text_insert_text
+gtk_combo_box_text_insert_text_with_id
 gtk_combo_box_text_remove
+gtk_combo_box_text_remove_all
 gtk_combo_box_text_get_active_text
 
 <SUBSECTION Standard>
@@ -1031,8 +1041,6 @@ gtk_entry_set_icon_tooltip_markup
 gtk_entry_get_icon_tooltip_markup
 gtk_entry_set_icon_drag_source
 gtk_entry_get_current_icon_drag_source
-gtk_entry_get_icon_window
-gtk_entry_get_text_window
 
 <SUBSECTION Standard>
 GTK_ENTRY
@@ -2621,10 +2629,12 @@ gtk_recent_info_get_private_hint
 gtk_recent_info_get_application_info
 gtk_recent_info_get_applications
 gtk_recent_info_last_application
+gtk_recent_info_has_application
+gtk_recent_info_create_app_info
 gtk_recent_info_get_groups
 gtk_recent_info_has_group
-gtk_recent_info_has_application
 gtk_recent_info_get_icon
+gtk_recent_info_get_gicon
 gtk_recent_info_get_short_name
 gtk_recent_info_get_uri_display
 gtk_recent_info_get_age
@@ -2743,6 +2753,28 @@ gtk_scale_button_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkscrollable</FILE>
+<TITLE>GtkScrollable</TITLE>
+GtkScrollable
+gtk_scrollable_get_hadjustment
+gtk_scrollable_set_hadjustment
+gtk_scrollable_get_vadjustment
+gtk_scrollable_set_vadjustment
+
+<SUBSECTION Standard>
+GtkScrollableIface
+GTK_IS_SCROLLABLE
+GTK_IS_SCROLLABLE_CLASS
+GTK_SCROLLABLE
+GTK_SCROLLABLE_CLASS
+GTK_SCROLLABLE_GET_IFACE
+GTK_TYPE_SCROLLABLE
+
+<SUBSECTION Private>
+gtk_scrollable_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkscrollbar</FILE>
 <TITLE>GtkScrollbar</TITLE>
 GtkScrollbar
@@ -2777,6 +2809,11 @@ gtk_scrolled_window_set_vadjustment
 gtk_scrolled_window_get_placement
 gtk_scrolled_window_get_policy
 gtk_scrolled_window_get_shadow_type
+gtk_scrolled_window_get_min_content_width
+gtk_scrolled_window_set_min_content_width
+gtk_scrolled_window_get_min_content_height
+gtk_scrolled_window_set_min_content_height
+
 <SUBSECTION Standard>
 GTK_SCROLLED_WINDOW
 GTK_IS_SCROLLED_WINDOW
@@ -3366,7 +3403,9 @@ gtk_text_view_new
 gtk_text_view_new_with_buffer
 gtk_text_view_set_buffer
 gtk_text_view_get_buffer
+gtk_text_view_set_hadjustment
 gtk_text_view_get_hadjustment
+gtk_text_view_set_vadjustment
 gtk_text_view_get_vadjustment
 gtk_text_view_scroll_to_mark
 gtk_text_view_scroll_to_iter
@@ -3793,7 +3832,9 @@ gtk_tool_palette_get_drop_item
 GtkToolPaletteDragTargets
 gtk_tool_palette_set_drag_source
 gtk_tool_palette_get_hadjustment
+gtk_tool_palette_set_hadjustment
 gtk_tool_palette_get_vadjustment
+gtk_tool_palette_set_vadjustment
 <SUBSECTION Standard>
 GtkToolPaletteClass
 GTK_TOOL_PALETTE
@@ -4826,7 +4867,6 @@ gtk_widget_set_app_paintable
 gtk_widget_set_double_buffered
 gtk_widget_set_redraw_on_allocate
 gtk_widget_set_composite_name
-gtk_widget_set_scroll_adjustments
 gtk_widget_mnemonic_activate
 gtk_widget_class_install_style_property
 gtk_widget_class_install_style_property_parser
@@ -6319,4 +6359,35 @@ GTK_APPLICATION_GET_CLASS
 <SUBSECTION Private>
 gtk_application_get_type
 GtkApplicationPrivate
+</SECTION>
+
+<SECTION>
+<FILE>gtkgrid</FILE>
+<TITLE>GtkGrid</TITLE>
+GtkGrid
+gtk_grid_new
+gtk_grid_attach
+gtk_grid_attach_next_to
+gtk_grid_set_row_homogeneous
+gtk_grid_get_row_homogeneous
+gtk_grid_set_row_spacing
+gtk_grid_get_row_spacing
+gtk_grid_set_column_homogeneous
+gtk_grid_get_column_homogeneous
+gtk_grid_set_column_spacing
+gtk_grid_get_column_spacing
+
+<SUBSECTION Standard>
+GtkGrid
+GtkGridClass
+GTK_TYPE_GRID
+GTK_GRID
+GTK_GRID_CLASS
+GTK_IS_GRID
+GTK_IS_GRID_CLASS
+GTK_GRID_GET_CLASS
+
+<SUBSECTION Private>
+GtkGridPrivate
+gtk_grid_get_type
 </SECTION>

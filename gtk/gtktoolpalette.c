@@ -28,6 +28,7 @@
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"
+#include "gtkscrollable.h"
 #include "gtkintl.h"
 
 #define DEFAULT_ICON_SIZE       GTK_ICON_SIZE_SMALL_TOOLBAR
@@ -120,6 +121,8 @@ enum
   PROP_ICON_SIZE_SET,
   PROP_ORIENTATION,
   PROP_TOOLBAR_STYLE,
+  PROP_HADJUSTMENT,
+  PROP_VADJUSTMENT
 };
 
 enum
@@ -133,7 +136,7 @@ struct _GtkToolItemGroupInfo
 {
   GtkToolItemGroup *widget;
 
-  guint             notify_collapsed;
+  gulong            notify_collapsed;
   guint             pos;
   guint             exclusive : 1;
   guint             expand : 1;
@@ -177,10 +180,17 @@ static const GtkTargetEntry dnd_targets[] =
   { "application/x-gtk-tool-palette-group", GTK_TARGET_SAME_APP, 0 },
 };
 
+static void gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
+                                              GtkAdjustment  *adjustment);
+static void gtk_tool_palette_set_vadjustment (GtkToolPalette *palette,
+                                              GtkAdjustment  *adjustment);
+
+
 G_DEFINE_TYPE_WITH_CODE (GtkToolPalette,
                gtk_tool_palette,
                GTK_TYPE_CONTAINER,
-               G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
+               G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+	       G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
 gtk_tool_palette_init (GtkToolPalette *palette)
@@ -258,6 +268,14 @@ gtk_tool_palette_set_property (GObject      *object,
           }
         break;
 
+      case PROP_HADJUSTMENT:
+        gtk_tool_palette_set_hadjustment (palette, g_value_get_object (value));
+        break;
+
+      case PROP_VADJUSTMENT:
+        gtk_tool_palette_set_vadjustment (palette, g_value_get_object (value));
+        break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -288,6 +306,14 @@ gtk_tool_palette_get_property (GObject    *object,
 
       case PROP_TOOLBAR_STYLE:
         g_value_set_enum (value, gtk_tool_palette_get_style (palette));
+        break;
+
+      case PROP_HADJUSTMENT:
+        g_value_set_object (value, palette->priv->hadjustment);
+        break;
+
+      case PROP_VADJUSTMENT:
+        g_value_set_object (value, palette->priv->vadjustment);
         break;
 
       default:
@@ -703,36 +729,6 @@ gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_tool_palette_set_scroll_adjustments (GtkWidget     *widget,
-                                         GtkAdjustment *hadjustment,
-                                         GtkAdjustment *vadjustment)
-{
-  GtkToolPalette *palette = GTK_TOOL_PALETTE (widget);
-
-  if (hadjustment)
-    g_object_ref_sink (hadjustment);
-  if (vadjustment)
-    g_object_ref_sink (vadjustment);
-
-  if (palette->priv->hadjustment)
-    g_object_unref (palette->priv->hadjustment);
-  if (palette->priv->vadjustment)
-    g_object_unref (palette->priv->vadjustment);
-
-  palette->priv->hadjustment = hadjustment;
-  palette->priv->vadjustment = vadjustment;
-
-  if (palette->priv->hadjustment)
-    g_signal_connect (palette->priv->hadjustment, "value-changed",
-                      G_CALLBACK (gtk_tool_palette_adjustment_value_changed),
-                      palette);
-  if (palette->priv->vadjustment)
-    g_signal_connect (palette->priv->vadjustment, "value-changed",
-                      G_CALLBACK (gtk_tool_palette_adjustment_value_changed),
-                      palette);
-}
-
-static void
 gtk_tool_palette_add (GtkContainer *container,
                       GtkWidget    *child)
 {
@@ -952,37 +948,14 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
   cclass->set_child_property  = gtk_tool_palette_set_child_property;
   cclass->get_child_property  = gtk_tool_palette_get_child_property;
 
-  cls->set_scroll_adjustments = gtk_tool_palette_set_scroll_adjustments;
-
   /* Handle screen-changed so we can update our GtkSettings.
    */
   wclass->screen_changed      = gtk_tool_palette_screen_changed;
 
-  /**
-   * GtkToolPalette::set-scroll-adjustments:
-   * @widget: the GtkToolPalette that received the signal
-   * @hadjustment: The horizontal adjustment
-   * @vadjustment: The vertical adjustment
-   *
-   * Set the scroll adjustments for the viewport.
-   * Usually scrolled containers like GtkScrolledWindow will emit this
-   * signal to connect two instances of GtkScrollbar to the scroll
-   * directions of the GtkToolpalette.
-   *
-   * Since: 2.20
-   */
-  wclass->set_scroll_adjustments_signal =
-    g_signal_new ("set-scroll-adjustments",
-                  G_TYPE_FROM_CLASS (oclass),
-                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                  G_STRUCT_OFFSET (GtkToolPaletteClass, set_scroll_adjustments),
-                  NULL, NULL,
-                  _gtk_marshal_VOID__OBJECT_OBJECT,
-                  G_TYPE_NONE, 2,
-                  GTK_TYPE_ADJUSTMENT,
-                  GTK_TYPE_ADJUSTMENT);
-
   g_object_class_override_property (oclass, PROP_ORIENTATION, "orientation");
+
+  g_object_class_override_property (oclass, PROP_HADJUSTMENT, "hadjustment");
+  g_object_class_override_property (oclass, PROP_VADJUSTMENT, "vadjustment");
 
   /**
    * GtkToolPalette:icon-size:
@@ -1908,6 +1881,8 @@ _gtk_tool_palette_set_expanding_child (GtkToolPalette *palette,
  * Returns: (transfer none): the horizontal adjustment of @palette
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
  */
 GtkAdjustment*
 gtk_tool_palette_get_hadjustment (GtkToolPalette *palette)
@@ -1915,6 +1890,35 @@ gtk_tool_palette_get_hadjustment (GtkToolPalette *palette)
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), NULL);
 
   return palette->priv->hadjustment;
+}
+
+static void
+gtk_tool_palette_set_hadjustment (GtkToolPalette *palette,
+                                  GtkAdjustment  *adjustment)
+{
+  GtkToolPalettePrivate *priv = palette->priv;
+
+  if (adjustment && priv->hadjustment == adjustment)
+    return;
+
+  if (priv->hadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->hadjustment,
+                                            gtk_tool_palette_adjustment_value_changed,
+                                            palette);
+      g_object_unref (priv->hadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
+                                     0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_tool_palette_adjustment_value_changed),
+                    palette);
+  priv->hadjustment = g_object_ref_sink (adjustment);
+  /* FIXME: Adjustment should probably have it's values updated now */
+  g_object_notify (G_OBJECT (palette), "hadjustment");
 }
 
 /**
@@ -1926,6 +1930,8 @@ gtk_tool_palette_get_hadjustment (GtkToolPalette *palette)
  * Returns: (transfer none): the vertical adjustment of @palette
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
  */
 GtkAdjustment*
 gtk_tool_palette_get_vadjustment (GtkToolPalette *palette)
@@ -1933,6 +1939,35 @@ gtk_tool_palette_get_vadjustment (GtkToolPalette *palette)
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), NULL);
 
   return palette->priv->vadjustment;
+}
+
+static void
+gtk_tool_palette_set_vadjustment (GtkToolPalette *palette,
+                                  GtkAdjustment  *adjustment)
+{
+  GtkToolPalettePrivate *priv = palette->priv;
+
+  if (adjustment && priv->vadjustment == adjustment)
+    return;
+
+  if (priv->vadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->vadjustment,
+                                            gtk_tool_palette_adjustment_value_changed,
+                                            palette);
+      g_object_unref (priv->vadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0,
+                                     0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_tool_palette_adjustment_value_changed),
+                    palette);
+  priv->vadjustment = g_object_ref_sink (adjustment);
+  /* FIXME: Adjustment should probably have it's values updated now */
+  g_object_notify (G_OBJECT (palette), "vadjustment");
 }
 
 GtkSizeGroup *

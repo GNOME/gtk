@@ -42,7 +42,7 @@ typedef struct _CalendarData
 
   GHashTable    *details_table;
   GtkTextBuffer *details_buffer;
-  guint          details_changed;
+  gulong         details_changed;
 } CalendarData;
 
 enum

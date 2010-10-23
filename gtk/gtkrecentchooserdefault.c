@@ -435,6 +435,7 @@ gtk_recent_chooser_default_constructor (GType                  type,
   gtk_tree_view_column_set_resizable (impl->icon_column, FALSE);
   
   renderer = gtk_cell_renderer_pixbuf_new ();
+  g_object_set (renderer, "stock-size", GTK_ICON_SIZE_BUTTON, NULL);
   gtk_tree_view_column_pack_start (impl->icon_column, renderer, FALSE);
   gtk_tree_view_column_set_cell_data_func (impl->icon_column,
   					   renderer,
@@ -984,23 +985,17 @@ recent_icon_data_func (GtkTreeViewColumn *tree_column,
 		       GtkTreeIter       *iter,
 		       gpointer           user_data)
 {
-  GtkRecentChooserDefault *impl = GTK_RECENT_CHOOSER_DEFAULT (user_data);
   GtkRecentInfo *info = NULL;
-  GdkPixbuf *pixbuf;
-  
-  gtk_tree_model_get (model, iter,
-                      RECENT_INFO_COLUMN, &info,
-                      -1);
+  GIcon *icon;
+
+  gtk_tree_model_get (model, iter, RECENT_INFO_COLUMN, &info, -1);
   g_assert (info != NULL);
-  
-  pixbuf = gtk_recent_info_get_icon (info, impl->icon_size);
-  
-  g_object_set (cell,
-                "pixbuf", pixbuf,
-                NULL);
-  
-  if (pixbuf)  
-    g_object_unref (pixbuf);
+
+  icon = gtk_recent_info_get_gicon (info);
+  g_object_set (cell, "gicon", icon, NULL);
+
+  if (icon != NULL)
+    g_object_unref (icon);
 
   gtk_recent_info_unref (info);
 }

@@ -25,6 +25,37 @@
 #include "gtkprivate.h"
 #include <string.h>
 
+
+/**
+ * SECTION:gtktreemodelfilter
+ * @Short_description: A GtkTreeModel which hides parts of an underlying tree model
+ * @Title: GtkTreeModelFilter
+ * @See_also:#GtkTreeModelSort
+ *
+ * A #GtkTreeModelFilter is a tree model which wraps another tree model,
+ * and can do the following things:
+ * <itemizedlist>
+ * <listitem><para>
+ * Filter specific rows, based on data from a "visible column", a column
+ * storing booleans indicating whether the row should be filtered or not,
+ * or based on the return value of a "visible function", which gets a
+ * model, iter and user_data and returns a boolean indicating whether the
+ * row should be filtered or not.
+ * </para></listitem>
+ * <listitem><para>
+ * Modify the "appearance" of the model, using a modify function.
+ * This is extremely powerful and allows for just changing
+ * some values and also for creating a completely different model based on
+ * the given child model.
+ * </para></listitem>
+ * <listitem><para>
+ * Set a different root node, also known as a "virtual root". You can pass in
+ * a #GtkTreePath indicating the root node for the filter at construction time.
+ * </para></listitem>
+ * </itemizedlist>
+ */
+
+
 /* ITER FORMAT:
  *
  * iter->stamp = filter->priv->stamp
@@ -106,11 +137,11 @@ struct _GtkTreeModelFilterPrivate
   gboolean virtual_root_deleted;
 
   /* signal ids */
-  guint changed_id;
-  guint inserted_id;
-  guint has_child_toggled_id;
-  guint deleted_id;
-  guint reordered_id;
+  gulong changed_id;
+  gulong inserted_id;
+  gulong has_child_toggled_id;
+  gulong deleted_id;
+  gulong reordered_id;
 };
 
 /* properties */

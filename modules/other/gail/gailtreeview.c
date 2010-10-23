@@ -183,10 +183,6 @@ static gboolean         gail_tree_view_collapse_row_gtk (GtkTreeView            
                                                          GtkTreePath            *path);
 static void             gail_tree_view_size_allocate_gtk (GtkWidget             *widget,
                                                          GtkAllocation          *allocation);
-static void             gail_tree_view_set_scroll_adjustments
-                                                        (GtkWidget              *widget,
-                                                         GtkAdjustment          *hadj,
-                                                         GtkAdjustment          *vadj);
 static void             gail_tree_view_changed_gtk      (GtkTreeSelection       *selection,
                                                          gpointer               data);
 
@@ -348,8 +344,6 @@ static gboolean          garbage_collect_cell_data      (gpointer data);
 static GQuark quark_column_desc_object = 0;
 static GQuark quark_column_header_object = 0;
 static gboolean editing = FALSE;
-static const gchar* hadjustment = "hadjustment";
-static const gchar* vadjustment = "vadjustment";
 
 struct _GailTreeViewRowInfo
 {
@@ -415,13 +409,46 @@ gail_tree_view_init (GailTreeView *view)
 }
 
 static void
+gail_tree_view_hadjustment_set (GObject    *widget,
+                                GParamSpec *pspec,
+                                gpointer    data)
+{
+  GtkAdjustment *adj;
+  GailTreeView *view = data;
+
+  g_object_get (widget, "hadjustment", &adj, NULL);
+  view->old_hadj = adj;
+  g_object_add_weak_pointer (G_OBJECT (view->old_hadj), (gpointer *)&view->old_hadj);
+  g_signal_connect (adj,
+                    "value-changed",
+                    G_CALLBACK (adjustment_changed),
+                    widget);
+}
+
+static void
+gail_tree_view_vadjustment_set (GObject    *widget,
+                                GParamSpec *pspec,
+                                gpointer    data)
+{
+  GtkAdjustment *adj;
+  GailTreeView *view = data;
+
+  g_object_get (widget, "vadjustment", &adj, NULL);
+  view->old_vadj = adj;
+  g_object_add_weak_pointer (G_OBJECT (view->old_vadj), (gpointer *)&view->old_vadj);
+  g_signal_connect (adj,
+                    "value-changed",
+                    G_CALLBACK (adjustment_changed),
+                    widget);
+}
+
+static void
 gail_tree_view_real_initialize (AtkObject *obj,
                                 gpointer  data)
 {
   GailTreeView *view;
   GtkTreeView *tree_view;
-  GtkTreeModel *tree_model; 
-  GtkAdjustment *adj;
+  GtkTreeModel *tree_model;
   GList *tv_cols, *tmp_list;
   GtkWidget *widget;
 
@@ -492,25 +519,16 @@ gail_tree_view_real_initialize (AtkObject *obj,
 
   /* adjustment callbacks */
 
-  g_object_get (tree_view, hadjustment, &adj, NULL);
-  view->old_hadj = adj;
-  g_object_add_weak_pointer (G_OBJECT (view->old_hadj), (gpointer *)&view->old_hadj);
-  g_signal_connect (adj, 
-                    "value_changed",
-                    G_CALLBACK (adjustment_changed),
-                    tree_view);
-
-  g_object_get (tree_view, vadjustment, &adj, NULL);
-  view->old_vadj = adj;
-  g_object_add_weak_pointer (G_OBJECT (view->old_vadj), (gpointer *)&view->old_vadj);
-  g_signal_connect (adj, 
-                    "value_changed",
-                    G_CALLBACK (adjustment_changed),
-                    tree_view);
-  g_signal_connect_after (widget,
-                          "set_scroll_adjustments",
-                          G_CALLBACK (gail_tree_view_set_scroll_adjustments),
-                          NULL);
+  gail_tree_view_hadjustment_set (G_OBJECT (widget), NULL, view);
+  gail_tree_view_vadjustment_set (G_OBJECT (widget), NULL, view);
+  g_signal_connect (widget,
+                    "notify::hadjustment",
+                    G_CALLBACK (gail_tree_view_hadjustment_set),
+                    view);
+  g_signal_connect (widget,
+                    "notify::vadjustment",
+                    G_CALLBACK (gail_tree_view_vadjustment_set),
+                    view);
 
   view->col_data = g_array_sized_new (FALSE, TRUE, 
                                       sizeof(GtkTreeViewColumn *), 0);
@@ -579,29 +597,29 @@ gail_tree_view_real_notify_gtk (GObject             *obj,
       g_signal_emit_by_name (atk_obj, "visible_data_changed");
       g_object_thaw_notify (G_OBJECT (atk_obj));
     }
-  else if (strcmp (pspec->name, hadjustment) == 0)
+  else if (strcmp (pspec->name, "hadjustment") == 0)
     {
-      g_object_get (tree_view, hadjustment, &adj, NULL);
+      g_object_get (tree_view, "hadjustment", &adj, NULL);
       g_signal_handlers_disconnect_by_func (gailview->old_hadj, 
                                            (gpointer) adjustment_changed,
                                            widget);
       gailview->old_hadj = adj;
       g_object_add_weak_pointer (G_OBJECT (gailview->old_hadj), (gpointer *)&gailview->old_hadj);
-      g_signal_connect (adj, 
-                        "value_changed",
+      g_signal_connect (adj,
+                        "value-changed",
                         G_CALLBACK (adjustment_changed),
                         tree_view);
     }
-  else if (strcmp (pspec->name, vadjustment) == 0)
+  else if (strcmp (pspec->name, "vadjustment") == 0)
     {
-      g_object_get (tree_view, vadjustment, &adj, NULL);
-      g_signal_handlers_disconnect_by_func (gailview->old_vadj, 
+      g_object_get (tree_view, "vadjustment", &adj, NULL);
+      g_signal_handlers_disconnect_by_func (gailview->old_vadj,
                                            (gpointer) adjustment_changed,
                                            widget);
       gailview->old_vadj = adj;
       g_object_add_weak_pointer (G_OBJECT (gailview->old_hadj), (gpointer *)&gailview->old_vadj);
-      g_signal_connect (adj, 
-                        "value_changed",
+      g_signal_connect (adj,
+                        "value-changed",
                         G_CALLBACK (adjustment_changed),
                         tree_view);
     }
@@ -2358,43 +2376,6 @@ gail_tree_view_size_allocate_gtk (GtkWidget     *widget,
    * update the cells visibility.
    */
   traverse_cells (gailview, NULL, FALSE, FALSE);
-}
-
-static void
-gail_tree_view_set_scroll_adjustments (GtkWidget     *widget,
-                                       GtkAdjustment *hadj,
-                                       GtkAdjustment *vadj)
-{
-  AtkObject *atk_obj = gtk_widget_get_accessible (widget);
-  GailTreeView *gailview = GAIL_TREE_VIEW (atk_obj);
-  GtkAdjustment *adj;
-
-  g_object_get (widget, hadjustment, &adj, NULL);
-  if (gailview->old_hadj != adj)
-     {
-        g_signal_handlers_disconnect_by_func (gailview->old_hadj, 
-                                              (gpointer) adjustment_changed,
-                                              widget);
-        gailview->old_hadj = adj;
-        g_object_add_weak_pointer (G_OBJECT (gailview->old_hadj), (gpointer *)&gailview->old_hadj);
-        g_signal_connect (adj, 
-                          "value_changed",
-                          G_CALLBACK (adjustment_changed),
-                          widget);
-     } 
-  g_object_get (widget, vadjustment, &adj, NULL);
-  if (gailview->old_vadj != adj)
-     {
-        g_signal_handlers_disconnect_by_func (gailview->old_vadj, 
-                                              (gpointer) adjustment_changed,
-                                              widget);
-        gailview->old_vadj = adj;
-        g_object_add_weak_pointer (G_OBJECT (gailview->old_vadj), (gpointer *)&gailview->old_vadj);
-        g_signal_connect (adj, 
-                          "value_changed",
-                          G_CALLBACK (adjustment_changed),
-                          widget);
-     } 
 }
 
 static void

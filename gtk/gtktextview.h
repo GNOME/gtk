@@ -73,10 +73,6 @@ struct _GtkTextViewClass
 {
   GtkContainerClass parent_class;
 
-  void (* set_scroll_adjustments)   (GtkTextView    *text_view,
-                                     GtkAdjustment  *hadjustment,
-                                     GtkAdjustment  *vadjustment);
-
   void (* populate_popup)           (GtkTextView    *text_view,
                                      GtkMenu        *menu);
 
@@ -182,8 +178,10 @@ void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             gint              *buffer_x,
                                             gint              *buffer_y);
 
-GtkAdjustment* gtk_text_view_get_hadjustment (GtkTextView *text_view);
-GtkAdjustment* gtk_text_view_get_vadjustment (GtkTextView *text_view);
+#ifndef GTK_DISABLE_DEPRECATED
+GtkAdjustment*   gtk_text_view_get_hadjustment (GtkTextView   *text_view);
+GtkAdjustment*   gtk_text_view_get_vadjustment (GtkTextView   *text_view);
+#endif
 
 GdkWindow*        gtk_text_view_get_window      (GtkTextView       *text_view,
                                                  GtkTextWindowType  win);

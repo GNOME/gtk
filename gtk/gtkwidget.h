@@ -131,10 +131,6 @@ struct _GtkWidget
  * @activate_signal: The signal to emit when a widget of this class is
  *   activated, gtk_widget_activate() handles the emission.
  *   Implementation of this signal is optional.
- * @set_scroll_adjustments_signal: This signal is emitted  when a widget of
- *   this class is added to a scrolling aware parent,
- *   gtk_widget_set_scroll_adjustments() handles the emission.
- *   Implementation of this signal is optional.
  * @adjust_size_request: Convert an initial size request from a widget's
  *   #GtkSizeRequest virtual method implementations into a size request to
  *   be used by parent containers in laying out the widget.
@@ -161,7 +157,10 @@ struct _GtkWidget
  *   and alignment properties of #GtkWidget. Chain up
  *   <emphasis>before</emphasis> performing your own adjustments so your
  *   own adjustments remove more allocation after the #GtkWidget base
- *   class has already removed margin and alignment.
+ *   class has already removed margin and alignment. The natural size
+ *   passed in should be adjusted in the same way as the allocated size,
+ *   which allows adjustments to perform alignments or other changes
+ *   based on natural size.
  */
 struct _GtkWidgetClass
 {
@@ -170,8 +169,6 @@ struct _GtkWidgetClass
   /*< public >*/
 
   guint activate_signal;
-
-  guint set_scroll_adjustments_signal;
 
   /* seldomly overidden */
   void (*dispatch_child_properties_changed) (GtkWidget   *widget,
@@ -378,11 +375,13 @@ struct _GtkWidgetClass
 
   void         (* adjust_size_request)    (GtkWidget         *widget,
                                            GtkOrientation     orientation,
-                                           gint               for_size,
                                            gint              *minimum_size,
                                            gint              *natural_size);
   void         (* adjust_size_allocation) (GtkWidget         *widget,
-                                           GtkAllocation     *allocation);
+                                           GtkOrientation     orientation,
+                                           gint              *natural_size,
+                                           gint              *allocated_pos,
+                                           gint              *allocated_size);
 
   /*< private >*/
 
@@ -499,9 +498,6 @@ gboolean   gtk_widget_send_focus_change   (GtkWidget           *widget,
                                            GdkEvent            *event);
 
 gboolean   gtk_widget_activate		     (GtkWidget	       *widget);
-gboolean   gtk_widget_set_scroll_adjustments (GtkWidget        *widget,
-					      GtkAdjustment    *hadjustment,
-					      GtkAdjustment    *vadjustment);
      
 void	   gtk_widget_reparent		  (GtkWidget	       *widget,
 					   GtkWidget	       *new_parent);

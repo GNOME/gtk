@@ -36,6 +36,24 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtktreeviewcolumn
+ * @Short_description: A visible column in a GtkTreeView widget
+ * @Title: GtkTreeViewColumn
+ * @See_also: #GtkTreeView, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode, #GtkTreeSortable,
+ *   #GtkTreeModelSort, #GtkListStore, #GtkTreeStore, #GtkCellRenderer, #GtkCellEditable,
+ *   #GtkCellRendererPixbuf, #GtkCellRendererText, #GtkCellRendererToggle
+ *
+ * The GtkTreeViewColumn object represents a visible column in a #GtkTreeView widget.
+ * It allows to set properties of the column header, and functions as a holding pen for
+ * the cell renderers which determine how the data in the column is displayed.
+ *
+ * Please refer to the <link linkend="TreeWidget">tree widget conceptual overview</link>
+ * for an overview of all the objects and data types related to the tree widget and how
+ * they work together.
+ */
+
+
 enum
 {
   PROP_0,

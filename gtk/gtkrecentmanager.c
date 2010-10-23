@@ -111,7 +111,7 @@
 #include "gtkmarshalers.h"
 
 /* the file where we store the recently used items */
-#define GTK_RECENTLY_USED_FILE	".recently-used.xbel"
+#define GTK_RECENTLY_USED_FILE	"recently-used.xbel"
 
 /* return all items by default */
 #define DEFAULT_LIMIT	-1
@@ -176,6 +176,9 @@ struct _GtkRecentManagerPrivate
   GBookmarkFile *recent_items;
 
   GFileMonitor *monitor;
+
+  guint changed_timeout;
+  guint changed_age;
 };
 
 enum
@@ -390,12 +393,26 @@ gtk_recent_manager_get_property (GObject               *object,
 } 
 
 static void
-gtk_recent_manager_dispose (GObject *object)
+gtk_recent_manager_finalize (GObject *object)
 {
   GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
   GtkRecentManagerPrivate *priv = manager->priv;
 
-  if (priv->monitor)
+  g_free (priv->filename);
+
+  if (priv->recent_items != NULL)
+    g_bookmark_file_free (priv->recent_items);
+
+  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->finalize (object);
+}
+
+static void
+gtk_recent_manager_dispose (GObject *gobject)
+{
+  GtkRecentManager *manager = GTK_RECENT_MANAGER (gobject);
+  GtkRecentManagerPrivate *priv = manager->priv;
+
+  if (priv->monitor != NULL)
     {
       g_signal_handlers_disconnect_by_func (priv->monitor,
                                             G_CALLBACK (gtk_recent_manager_monitor_changed),
@@ -404,21 +421,21 @@ gtk_recent_manager_dispose (GObject *object)
       priv->monitor = NULL;
     }
 
-  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->dispose (object);
-}
+  if (priv->changed_timeout != 0)
+    {
+      g_source_remove (priv->changed_timeout);
+      priv->changed_timeout = 0;
+      priv->changed_age = 0;
+    }
 
-static void
-gtk_recent_manager_finalize (GObject *object)
-{
-  GtkRecentManager *manager = GTK_RECENT_MANAGER (object);
-  GtkRecentManagerPrivate *priv = manager->priv;
+  if (priv->is_dirty)
+    {
+      g_object_ref (manager);
+      g_signal_emit (manager, signal_changed, 0);
+      g_object_unref (manager);
+    }
 
-  g_free (priv->filename);
-  
-  if (priv->recent_items)
-    g_bookmark_file_free (priv->recent_items);
-
-  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_recent_manager_parent_class)->dispose (gobject);
 }
 
 static void
@@ -456,8 +473,6 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
           else if (age == 0)
             {
               g_bookmark_file_free (priv->recent_items);
-              priv->recent_items = NULL;
-
               priv->recent_items = g_bookmark_file_new ();
             }
         }
@@ -520,6 +535,14 @@ gtk_recent_manager_monitor_changed (GFileMonitor      *monitor,
     }
 }
 
+static gchar *
+get_default_filename (void)
+{
+  return g_build_filename (g_get_user_data_dir (),
+                           GTK_RECENTLY_USED_FILE,
+                           NULL);
+}
+
 static void
 gtk_recent_manager_set_filename (GtkRecentManager *manager,
 				 const gchar      *filename)
@@ -560,9 +583,7 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
   else
     {
       if (!filename || *filename == '\0')
-        priv->filename = g_build_filename (g_get_home_dir (),
-                                           GTK_RECENTLY_USED_FILE,
-                                           NULL);
+        priv->filename = get_default_filename ();
       else
         priv->filename = g_strdup (filename);
     }
@@ -681,8 +702,7 @@ gtk_recent_manager_new (void)
  * gtk_recent_manager_get_default:
  *
  * Gets a unique instance of #GtkRecentManager, that you can share
- * in your application without caring about memory management. The
- * returned instance will be freed when you application terminates.
+ * in your application without caring about memory management.
  *
  * Return value: (transfer none): A unique #GtkRecentManager. Do not ref or unref it.
  *
@@ -937,7 +957,6 @@ gtk_recent_manager_add_full (GtkRecentManager     *manager,
    * will dump our changes
    */
   priv->is_dirty = TRUE;
-  
   gtk_recent_manager_changed (manager);
   
   return TRUE;
@@ -998,7 +1017,6 @@ gtk_recent_manager_remove_item (GtkRecentManager  *manager,
     }
 
   priv->is_dirty = TRUE;
-
   gtk_recent_manager_changed (manager);
   
   return TRUE;
@@ -1222,7 +1240,6 @@ gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
     }
   
   priv->is_dirty = TRUE;
-
   gtk_recent_manager_changed (recent_manager);
   
   return TRUE;
@@ -1277,17 +1294,15 @@ purge_recent_items_list (GtkRecentManager  *manager,
 {
   GtkRecentManagerPrivate *priv = manager->priv;
 
-  if (!priv->recent_items)
+  if (priv->recent_items == NULL)
     return;
-  
+
   g_bookmark_file_free (priv->recent_items);
-  priv->recent_items = NULL;
-      
   priv->recent_items = g_bookmark_file_new ();
   priv->size = 0;
-  priv->is_dirty = TRUE;
-      
+
   /* emit the changed signal, to ensure that the purge is written */
+  priv->is_dirty = TRUE;
   gtk_recent_manager_changed (manager);
 }
 
@@ -1327,10 +1342,43 @@ gtk_recent_manager_purge_items (GtkRecentManager  *manager,
   return purged;
 }
 
-static void
-gtk_recent_manager_changed (GtkRecentManager *recent_manager)
+static gboolean
+emit_manager_changed (gpointer data)
 {
-  g_signal_emit (recent_manager, signal_changed, 0);
+  GtkRecentManager *manager = data;
+
+  manager->priv->changed_age = 0;
+  manager->priv->changed_timeout = 0;
+
+  g_signal_emit (manager, signal_changed, 0);
+
+  return FALSE;
+}
+
+static void
+gtk_recent_manager_changed (GtkRecentManager *manager)
+{
+  /* coalesce consecutive changes
+   *
+   * we schedule a write in 250 msecs immediately; if we get more than one
+   * request per millisecond before the timeout has a chance to run, we
+   * schedule an emission immediately.
+   */
+  if (manager->priv->changed_timeout == 0)
+    manager->priv->changed_timeout = gdk_threads_add_timeout (250, emit_manager_changed, manager);
+  else
+    {
+      manager->priv->changed_age += 1;
+
+      if (manager->priv->changed_age > 250)
+        {
+          g_source_remove (manager->priv->changed_timeout);
+          g_signal_emit (manager, signal_changed, 0);
+
+          manager->priv->changed_age = 0;
+          manager->priv->changed_timeout = 0;
+        }
+    }
 }
 
 static void
@@ -1922,6 +1970,35 @@ gtk_recent_info_get_icon (GtkRecentInfo *info,
 }
 
 /**
+ * gtk_recent_info_get_gicon:
+ * @info: a #GtkRecentInfo
+ *
+ * Retrieves the icon associated to the resource MIME type.
+ *
+ * Return value: a #GIcon containing the icon, or %NULL. Use
+ *   g_object_unref() when finished using the icon
+ *
+ * Since: 2.22
+ */
+GIcon *
+gtk_recent_info_get_gicon (GtkRecentInfo  *info)
+{
+  GIcon *icon = NULL;
+  gchar *content_type;
+
+  g_return_val_if_fail (info != NULL, NULL);
+
+  if (info->mime_type != NULL &&
+      (content_type = g_content_type_from_mime_type (info->mime_type)) != NULL)
+    {
+      icon = g_content_type_get_icon (content_type);
+      g_free (content_type);
+    }
+
+  return icon;
+}
+
+/**
  * gtk_recent_info_is_local:
  * @info: a #GtkRecentInfo
  *
@@ -2308,6 +2385,72 @@ gtk_recent_info_has_group (GtkRecentInfo *info,
     }
 
   return FALSE;
+}
+
+/**
+ * gtk_recent_info_create_app_info:
+ * @info: a #GtkRecentInfo
+ * @app_name: (allow-none): the name of the application that should
+ *   be mapped to a #GAppInfo; if %NULL is used then the default
+ *   application for the MIME type is used
+ * @error: (allow-none): return location for a #GError, or %NULL
+ *
+ * Creates a #GAppInfo for the specified #GtkRecentInfo
+ *
+ * Return value: (transfer full): the newly created #GAppInfo, or %NULL.
+ *   In case of error, @error will be set either with a
+ *   %GTK_RECENT_MANAGER_ERROR or a %G_IO_ERROR
+ */
+GAppInfo *
+gtk_recent_info_create_app_info (GtkRecentInfo  *info,
+                                 const gchar    *app_name,
+                                 GError        **error)
+{
+  RecentAppInfo *ai;
+  GAppInfo *app_info;
+  GError *internal_error = NULL;
+
+  g_return_val_if_fail (info != NULL, NULL);
+
+  if (app_name == NULL || *app_name == '\0')
+    {
+      char *content_type;
+
+      if (info->mime_type == NULL)
+        return NULL;
+
+      content_type = g_content_type_from_mime_type (info->mime_type);
+      if (content_type == NULL)
+        return NULL;
+
+      app_info = g_app_info_get_default_for_type (content_type, TRUE);
+      g_free (content_type);
+
+      return app_info;
+    }
+
+  ai = g_hash_table_lookup (info->apps_lookup, app_name);
+  if (ai == NULL)
+    {
+      g_set_error (error, GTK_RECENT_MANAGER_ERROR,
+                   GTK_RECENT_MANAGER_ERROR_NOT_REGISTERED,
+                   _("No registered application with name '%s' for item with URI '%s' found"),
+                   app_name,
+                   info->uri);
+      return NULL;
+    }
+
+  internal_error = NULL;
+  app_info = g_app_info_create_from_commandline (ai->exec, ai->name,
+                                                 G_APP_INFO_CREATE_NONE,
+                                                 &internal_error);
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+      return NULL;
+    }
+
+  return app_info;
 }
 
 /*

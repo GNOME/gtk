@@ -62,11 +62,11 @@ struct _GtkTreeModelSort
   GDestroyNotify GSEAL (default_sort_destroy);
 
   /* signal ids */
-  guint GSEAL (changed_id);
-  guint GSEAL (inserted_id);
-  guint GSEAL (has_child_toggled_id);
-  guint GSEAL (deleted_id);
-  guint GSEAL (reordered_id);
+  gulong GSEAL (changed_id);
+  gulong GSEAL (inserted_id);
+  gulong GSEAL (has_child_toggled_id);
+  gulong GSEAL (deleted_id);
+  gulong GSEAL (reordered_id);
 };
 
 struct _GtkTreeModelSortClass

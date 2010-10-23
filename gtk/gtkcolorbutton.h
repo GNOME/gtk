@@ -82,6 +82,7 @@ struct _GtkColorButtonClass {
 GType      gtk_color_button_get_type       (void) G_GNUC_CONST;
 GtkWidget *gtk_color_button_new            (void);
 GtkWidget *gtk_color_button_new_with_color (const GdkColor *color);
+GtkWidget *gtk_color_button_new_with_rgba  (const GdkRGBA  *rgba);
 void       gtk_color_button_set_color      (GtkColorButton *color_button,
 					    const GdkColor *color);
 void       gtk_color_button_set_alpha      (GtkColorButton *color_button,
@@ -92,6 +93,11 @@ guint16    gtk_color_button_get_alpha      (GtkColorButton *color_button);
 void       gtk_color_button_set_use_alpha  (GtkColorButton *color_button,
 					    gboolean        use_alpha);
 gboolean   gtk_color_button_get_use_alpha  (GtkColorButton *color_button);
+
+void       gtk_color_button_set_rgba       (GtkColorButton *color_button,
+                                            const GdkRGBA  *rgba);
+void       gtk_color_button_get_rgba       (GtkColorButton *color_button,
+                                            GdkRGBA        *rgba);
 void       gtk_color_button_set_title      (GtkColorButton *color_button,
 					    const gchar    *title);
 G_CONST_RETURN gchar *gtk_color_button_get_title (GtkColorButton *color_button);

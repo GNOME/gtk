@@ -49,6 +49,7 @@
 #include "gtktextutil.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
+#include "gtkscrollable.h"
 
 
 /* How scrolling, validation, exposes, etc. work.
@@ -117,7 +118,7 @@ struct _GtkTextViewPrivate
   GdkDevice *grab_device;
   GdkDevice *dnd_device;
 
-  guint selection_drag_handler;
+  gulong selection_drag_handler;
   guint scroll_timeout;
 
   GtkTextWindow *text_window;
@@ -222,7 +223,6 @@ struct _GtkTextPendingScroll
 
 enum
 {
-  SET_SCROLL_ADJUSTMENTS,
   POPULATE_POPUP,
   MOVE_CURSOR,
   PAGE_HORIZONTALLY,
@@ -258,7 +258,9 @@ enum
   PROP_BUFFER,
   PROP_OVERWRITE,
   PROP_ACCEPTS_TAB,
-  PROP_IM_MODULE
+  PROP_IM_MODULE,
+  PROP_HADJUSTMENT,
+  PROP_VADJUSTMENT
 };
 
 static void gtk_text_view_finalize             (GObject          *object);
@@ -347,9 +349,6 @@ static void     gtk_text_view_drag_data_received (GtkWidget        *widget,
                                                   guint             info,
                                                   guint             time);
 
-static void gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
-                                                  GtkAdjustment *hadj,
-                                                  GtkAdjustment *vadj);
 static gboolean gtk_text_view_popup_menu         (GtkWidget     *widget);
 
 static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
@@ -438,9 +437,6 @@ static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
                                                   gint               x,
                                                   gint               y);
 
-static GtkAdjustment* get_hadjustment            (GtkTextView       *text_view);
-static GtkAdjustment* get_vadjustment            (GtkTextView       *text_view);
-
 static void gtk_text_view_do_popup               (GtkTextView       *text_view,
 						  GdkEventButton    *event);
 
@@ -456,6 +452,13 @@ static gboolean gtk_text_view_flush_scroll         (GtkTextView *text_view);
 static void     gtk_text_view_update_adjustments   (GtkTextView *text_view);
 static void     gtk_text_view_invalidate           (GtkTextView *text_view);
 static void     gtk_text_view_flush_first_validate (GtkTextView *text_view);
+
+static void     gtk_text_view_set_hadjustment        (GtkTextView   *text_view,
+                                                      GtkAdjustment *adjustment);
+static void     gtk_text_view_set_vadjustment        (GtkTextView   *text_view,
+                                                      GtkAdjustment *adjustment);
+static void     gtk_text_view_set_hadjustment_values (GtkTextView   *text_view);
+static void     gtk_text_view_set_vadjustment_values (GtkTextView   *text_view);
 
 static void gtk_text_view_update_im_spot_location (GtkTextView *text_view);
 
@@ -532,7 +535,8 @@ static gint           text_window_get_height      (GtkTextWindow     *win);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 static void
 add_move_binding (GtkBindingSet  *binding_set,
@@ -615,7 +619,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->copy_clipboard = gtk_text_view_copy_clipboard;
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
-  klass->set_scroll_adjustments = gtk_text_view_set_scroll_adjustments;
 
   /*
    * Properties
@@ -766,6 +769,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          P_("Which IM module should be used"),
                                                          NULL,
                                                          GTK_PARAM_READWRITE));
+
+   /* GtkScrollable interface */
+   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
+   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
 
   /*
    * Style properties
@@ -1019,27 +1026,6 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkTextView::set-scroll-adjustments
-   * @horizontal: the horizontal #GtkAdjustment
-   * @vertical: the vertical #GtkAdjustment
-   *
-   * Set the scroll adjustments for the text view. Usually scrolled containers
-   * like #GtkScrolledWindow will emit this signal to connect two instances
-   * of #GtkScrollbar to the scroll directions of the #GtkTextView.
-   */
-  signals[SET_SCROLL_ADJUSTMENTS] =
-    g_signal_new (I_("set-scroll-adjustments"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkTextViewClass, set_scroll_adjustments),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_OBJECT,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_ADJUSTMENT,
-		  GTK_TYPE_ADJUSTMENT);
-  widget_class->set_scroll_adjustments_signal = signals[SET_SCROLL_ADJUSTMENTS];
 
   /**
    * GtkTextView::populate-popup:
@@ -1913,7 +1899,7 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   if (scroll_inc != 0)
     {
-      retval = set_adjustment_clamped (get_vadjustment (text_view),
+      retval = set_adjustment_clamped (text_view->priv->vadjustment,
                                        current_y_scroll + scroll_inc);
 
       DV (g_print (" vert increment %d\n", scroll_inc));
@@ -1950,7 +1936,7 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   if (scroll_inc != 0)
     {
-      retval = set_adjustment_clamped (get_hadjustment (text_view),
+      retval = set_adjustment_clamped (text_view->priv->hadjustment,
                                        current_x_scroll + scroll_inc);
 
       DV (g_print (" horiz increment %d\n", scroll_inc));
@@ -2079,33 +2065,6 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
 }
 
 static void
-gtk_text_view_set_adjustment_upper (GtkAdjustment *adj, gdouble upper)
-{  
-  if (upper != adj->upper)
-    {
-      gdouble min = MAX (0.0, upper - adj->page_size);
-      gboolean value_changed = FALSE;
-
-      adj->upper = upper;
-
-      if (adj->value > min)
-        {
-          adj->value = min;
-          value_changed = TRUE;
-        }
-
-      gtk_adjustment_changed (adj);
-      DV(g_print(">Changed adj upper to %g ("G_STRLOC")\n", upper));
-      
-      if (value_changed)
-        {
-          DV(g_print(">Changed adj value because upper decreased ("G_STRLOC")\n"));
-	  gtk_adjustment_value_changed (adj);
-        }
-    }
-}
-
-static void
 gtk_text_view_update_adjustments (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv;
@@ -2129,28 +2088,8 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
       priv->width = width;
       priv->height = height;
 
-      gtk_text_view_set_adjustment_upper (get_hadjustment (text_view),
-                                          MAX (SCREEN_WIDTH (text_view), width));
-      gtk_text_view_set_adjustment_upper (get_vadjustment (text_view),
-                                          MAX (SCREEN_HEIGHT (text_view), height));
-      
-      /* hadj/vadj exist since we called get_hadjustment/get_vadjustment above */
-
-      /* Set up the step sizes; we'll say that a page is
-         our allocation minus one step, and a step is
-         1/10 of our allocation. */
-      priv->hadjustment->step_increment =
-        SCREEN_WIDTH (text_view) / 10.0;
-      priv->hadjustment->page_increment =
-        SCREEN_WIDTH (text_view) * 0.9;
-      
-      priv->vadjustment->step_increment =
-        SCREEN_HEIGHT (text_view) / 10.0;
-      priv->vadjustment->page_increment =
-        SCREEN_HEIGHT (text_view) * 0.9;
-
-      gtk_adjustment_changed (get_hadjustment (text_view));
-      gtk_adjustment_changed (get_vadjustment (text_view));
+      gtk_text_view_set_hadjustment_values (text_view);
+      gtk_text_view_set_vadjustment_values (text_view);
     }
 }
 
@@ -3145,6 +3084,14 @@ gtk_text_view_set_property (GObject         *object,
         gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (priv->im_context), priv->im_module);
       break;
 
+    case PROP_HADJUSTMENT:
+      gtk_text_view_set_hadjustment (text_view, g_value_get_object (value));
+      break;
+
+    case PROP_VADJUSTMENT:
+      gtk_text_view_set_vadjustment (text_view, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3223,6 +3170,14 @@ gtk_text_view_get_property (GObject         *object,
       
     case PROP_IM_MODULE:
       g_value_set_string (value, priv->im_module);
+      break;
+
+    case PROP_HADJUSTMENT:
+      g_value_set_object (value, priv->hadjustment);
+      break;
+
+    case PROP_VADJUSTMENT:
+      g_value_set_object (value, priv->vadjustment);
       break;
 
     default:
@@ -3464,8 +3419,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   GtkAllocation widget_allocation;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  GtkTextIter first_para;
-  gint y;
   gint width, height;
   GdkRectangle text_rect;
   GdkRectangle left_rect;
@@ -3596,44 +3549,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   /* Note that this will do some layout validation */
   gtk_text_view_allocate_children (text_view);
 
-  /* Ensure h/v adj exist */
-  get_hadjustment (text_view);
-  get_vadjustment (text_view);
-
-  priv->hadjustment->page_size = SCREEN_WIDTH (text_view);
-  priv->hadjustment->page_increment = SCREEN_WIDTH (text_view) * 0.9;
-  priv->hadjustment->step_increment = SCREEN_WIDTH (text_view) * 0.1;
-  priv->hadjustment->lower = 0;
-  priv->hadjustment->upper = MAX (SCREEN_WIDTH (text_view),
-                                  priv->width);
-
-  if (priv->hadjustment->value > priv->hadjustment->upper - priv->hadjustment->page_size)
-    gtk_adjustment_set_value (priv->hadjustment, MAX (0, priv->hadjustment->upper - priv->hadjustment->page_size));
-
-  gtk_adjustment_changed (priv->hadjustment);
-
-  priv->vadjustment->page_size = SCREEN_HEIGHT (text_view);
-  priv->vadjustment->page_increment = SCREEN_HEIGHT (text_view) * 0.9;
-  priv->vadjustment->step_increment = SCREEN_HEIGHT (text_view) * 0.1;
-  priv->vadjustment->lower = 0;
-  priv->vadjustment->upper = MAX (SCREEN_HEIGHT (text_view),
-                                  priv->height);
-
-  /* Now adjust the value of the adjustment to keep the cursor at the
-   * same place in the buffer
-   */
-  gtk_text_view_get_first_para_iter (text_view, &first_para);
-  gtk_text_layout_get_line_yrange (priv->layout, &first_para, &y, NULL);
-
-  y += priv->first_para_pixels;
-
-  if (y > priv->vadjustment->upper - priv->vadjustment->page_size)
-    y = MAX (0, priv->vadjustment->upper - priv->vadjustment->page_size);
-
-  if (y != priv->yoffset)
-    gtk_adjustment_set_value (priv->vadjustment, y);
-
-  gtk_adjustment_changed (priv->vadjustment);
+  /* Update adjustments */
+  gtk_text_view_set_hadjustment_values (text_view);
+  gtk_text_view_set_vadjustment_values (text_view);
 
   /* The GTK resize loop processes all the pending exposes right
    * after doing the resize stuff, so the idle sizer won't have a
@@ -3912,14 +3830,14 @@ changed_handler (GtkTextLayout     *layout,
         {
           priv->yoffset += new_first_para_top - old_first_para_top;
           
-          get_vadjustment (text_view)->value = priv->yoffset;
+          text_view->priv->vadjustment->value = priv->yoffset;
           yoffset_changed = TRUE;
         }
 
       if (yoffset_changed)
         {
           DV(g_print ("Changing scroll position (%s)\n", G_STRLOC));
-          gtk_adjustment_value_changed (get_vadjustment (text_view));
+          gtk_adjustment_value_changed (text_view->priv->vadjustment);
         }
 
       /* FIXME be smarter about which anchored widgets we update */
@@ -5508,15 +5426,15 @@ gtk_text_view_move_viewport (GtkTextView     *text_view,
     case GTK_SCROLL_STEPS:
     case GTK_SCROLL_PAGES:
     case GTK_SCROLL_ENDS:
-      adjustment = get_vadjustment (text_view);
+      adjustment = text_view->priv->vadjustment;
       break;
     case GTK_SCROLL_HORIZONTAL_STEPS:
     case GTK_SCROLL_HORIZONTAL_PAGES:
     case GTK_SCROLL_HORIZONTAL_ENDS:
-      adjustment = get_hadjustment (text_view);
+      adjustment = text_view->priv->hadjustment;
       break;
     default:
-      adjustment = get_vadjustment (text_view);
+      adjustment = text_view->priv->vadjustment;
       break;
     }
 
@@ -7296,13 +7214,43 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
  * Returns: (transfer none): pointer to the horizontal #GtkAdjustment
  *
  * Since: 2.22
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
  **/
 GtkAdjustment*
 gtk_text_view_get_hadjustment (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
 
-  return get_hadjustment (text_view);
+  return text_view->priv->hadjustment;
+}
+
+static void
+gtk_text_view_set_hadjustment (GtkTextView   *text_view,
+                               GtkAdjustment *adjustment)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  if (adjustment && priv->hadjustment == adjustment)
+    return;
+
+  if (priv->hadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->hadjustment,
+                                            gtk_text_view_value_changed,
+                                            text_view);
+      g_object_unref (priv->hadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_text_view_value_changed), text_view);
+  priv->hadjustment = g_object_ref_sink (adjustment);
+  gtk_text_view_set_hadjustment_values (text_view);
+
+  g_object_notify (G_OBJECT (text_view), "hadjustment");
 }
 
 /**
@@ -7320,89 +7268,103 @@ gtk_text_view_get_vadjustment (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
 
-  return get_vadjustment (text_view);
-}
-
-static GtkAdjustment*
-get_hadjustment (GtkTextView *text_view)
-{
-  if (text_view->priv->hadjustment == NULL)
-    gtk_text_view_set_scroll_adjustments (text_view,
-                                          NULL, /* forces creation */
-                                          text_view->priv->vadjustment);
-
-  return text_view->priv->hadjustment;
-}
-
-static GtkAdjustment*
-get_vadjustment (GtkTextView *text_view)
-{
-  if (text_view->priv->vadjustment == NULL)
-    gtk_text_view_set_scroll_adjustments (text_view,
-                                          text_view->priv->hadjustment,
-                                          NULL); /* forces creation */
   return text_view->priv->vadjustment;
 }
 
-
 static void
-gtk_text_view_set_scroll_adjustments (GtkTextView   *text_view,
-                                      GtkAdjustment *hadj,
-                                      GtkAdjustment *vadj)
+gtk_text_view_set_vadjustment (GtkTextView   *text_view,
+                               GtkAdjustment *adjustment)
 {
   GtkTextViewPrivate *priv = text_view->priv;
-  gboolean need_adjust = FALSE;
 
-  if (hadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
-  else
-    hadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-  if (vadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (vadj));
-  else
-    vadj = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+  if (adjustment && priv->vadjustment == adjustment)
+    return;
 
-  if (priv->hadjustment && (priv->hadjustment != hadj))
-    {
-      g_signal_handlers_disconnect_by_func (priv->hadjustment,
-					    gtk_text_view_value_changed,
-					    text_view);
-      g_object_unref (priv->hadjustment);
-    }
-
-  if (priv->vadjustment && (priv->vadjustment != vadj))
+  if (priv->vadjustment != NULL)
     {
       g_signal_handlers_disconnect_by_func (priv->vadjustment,
-					    gtk_text_view_value_changed,
-					    text_view);
+                                            gtk_text_view_value_changed,
+                                            text_view);
       g_object_unref (priv->vadjustment);
     }
 
-  if (priv->hadjustment != hadj)
-    {
-      priv->hadjustment = hadj;
-      g_object_ref_sink (priv->hadjustment);
-      
-      g_signal_connect (priv->hadjustment, "value-changed",
-                        G_CALLBACK (gtk_text_view_value_changed),
-			text_view);
-      need_adjust = TRUE;
-    }
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 
-  if (priv->vadjustment != vadj)
-    {
-      priv->vadjustment = vadj;
-      g_object_ref_sink (priv->vadjustment);
-      
-      g_signal_connect (priv->vadjustment, "value-changed",
-                        G_CALLBACK (gtk_text_view_value_changed),
-			text_view);
-      need_adjust = TRUE;
-    }
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_text_view_value_changed), text_view);
+  priv->vadjustment = g_object_ref_sink (adjustment);
+  gtk_text_view_set_vadjustment_values (text_view);
 
-  if (need_adjust)
-    gtk_text_view_value_changed (NULL, text_view);
+  g_object_notify (G_OBJECT (text_view), "vadjustment");
 }
+
+static void
+gtk_text_view_set_hadjustment_values (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv;
+  gint screen_width;
+  gdouble old_value;
+  gdouble new_value;
+  gdouble new_upper;
+
+  priv = text_view->priv;
+
+  screen_width = SCREEN_WIDTH (text_view);
+  old_value = gtk_adjustment_get_value (priv->hadjustment);
+  new_upper = MAX (screen_width, priv->width);
+
+  g_object_set (priv->hadjustment,
+                "lower", 0.0,
+                "upper", new_upper,
+                "page-size", (gdouble)screen_width,
+                "step-increment", screen_width * 0.1,
+                "page-increment", screen_width * 0.9,
+                NULL);
+
+  new_value = CLAMP (old_value, 0, new_upper - screen_width);
+  if (new_value != old_value)
+    gtk_adjustment_set_value (priv->hadjustment, new_value);
+}
+
+static void
+gtk_text_view_set_vadjustment_values (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv;
+  GtkTextIter first_para;
+  gint screen_height;
+  gint y;
+  gdouble old_value;
+  gdouble new_value;
+  gdouble new_upper;
+
+  priv = text_view->priv;
+
+  screen_height = SCREEN_HEIGHT (text_view);
+  old_value = gtk_adjustment_get_value (priv->vadjustment);
+  new_upper = MAX (screen_height, priv->height);
+
+  g_object_set (priv->vadjustment,
+                "lower", 0.0,
+                "upper", new_upper,
+                "page-size", (gdouble)screen_height,
+                "step-increment", screen_height * 0.1,
+                "page-increment", screen_height * 0.9,
+                NULL);
+
+  /* Now adjust the value of the adjustment to keep the cursor at the
+   * same place in the buffer */
+  gtk_text_view_ensure_layout (text_view);
+  gtk_text_view_get_first_para_iter (text_view, &first_para);
+  gtk_text_layout_get_line_yrange (priv->layout, &first_para, &y, NULL);
+
+  y += priv->first_para_pixels;
+
+  new_value = CLAMP (y, 0, new_upper - screen_height);
+  if (new_value != old_value)
+    gtk_adjustment_set_value (priv->vadjustment, new_value);
+ }
+
 
 /* FIXME this adjust_allocation is a big cut-and-paste from
  * GtkCList, needs to be some "official" way to do this

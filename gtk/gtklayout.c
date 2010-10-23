@@ -30,6 +30,8 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtklayout.h"
 
 #include "gdkconfig.h"
@@ -37,6 +39,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkscrollable.h"
 
 
 typedef struct _GtkLayoutChild   GtkLayoutChild;
@@ -49,6 +52,7 @@ struct _GtkLayoutPrivate
 
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
+
   /* Properties */
 
   GdkVisibilityState visibility;
@@ -90,9 +94,6 @@ static void gtk_layout_set_property       (GObject        *object,
                                            guint           prop_id,
                                            const GValue   *value,
                                            GParamSpec     *pspec);
-static GObject *gtk_layout_constructor    (GType                  type,
-					   guint                  n_properties,
-					   GObjectConstructParam *properties);
 static void gtk_layout_finalize           (GObject        *object);
 static void gtk_layout_realize            (GtkWidget      *widget);
 static void gtk_layout_unrealize          (GtkWidget      *widget);
@@ -111,9 +112,6 @@ static void gtk_layout_forall             (GtkContainer   *container,
                                            gboolean        include_internals,
                                            GtkCallback     callback,
                                            gpointer        callback_data);
-static void gtk_layout_set_adjustments    (GtkLayout      *layout,
-                                           GtkAdjustment  *hadj,
-                                           GtkAdjustment  *vadj);
 static void gtk_layout_set_child_property (GtkContainer   *container,
                                            GtkWidget      *child,
                                            guint           property_id,
@@ -131,11 +129,11 @@ static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
 static void gtk_layout_style_set          (GtkWidget      *widget,
 					   GtkStyle       *old_style);
 
-static void gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
-					     gdouble        upper,
-					     gboolean       always_emit_changed);
+static void gtk_layout_set_hadjustment_values (GtkLayout      *layout);
+static void gtk_layout_set_vadjustment_values (GtkLayout      *layout);
 
-G_DEFINE_TYPE (GtkLayout, gtk_layout, GTK_TYPE_CONTAINER)
+G_DEFINE_TYPE_WITH_CODE (GtkLayout, gtk_layout, GTK_TYPE_CONTAINER,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
 
 /* Public interface
  */
@@ -195,6 +193,8 @@ gtk_layout_get_bin_window (GtkLayout *layout)
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
  *
  * Return value: (transfer none): horizontal scroll adjustment
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_hadjustment()
  **/
 GtkAdjustment*
 gtk_layout_get_hadjustment (GtkLayout *layout)
@@ -215,6 +215,8 @@ gtk_layout_get_hadjustment (GtkLayout *layout)
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
  *
  * Return value: (transfer none): vertical scroll adjustment
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
  **/
 GtkAdjustment*
 gtk_layout_get_vadjustment (GtkLayout *layout)
@@ -224,73 +226,59 @@ gtk_layout_get_vadjustment (GtkLayout *layout)
   return layout->priv->vadjustment;
 }
 
-static GtkAdjustment *
-new_default_adjustment (void)
-{
-  return gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
-}
-
-static void           
-gtk_layout_set_adjustments (GtkLayout     *layout,
-			    GtkAdjustment *hadj,
-			    GtkAdjustment *vadj)
+static void
+gtk_layout_set_hadjustment_values (GtkLayout *layout)
 {
   GtkLayoutPrivate *priv = layout->priv;
-  gboolean need_adjust = FALSE;
+  GtkAllocation  allocation;
+  GtkAdjustment *adj = priv->hadjustment;
+  gdouble old_value;
+  gdouble new_value;
+  gdouble new_upper;
 
-  if (hadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (hadj));
-  else if (priv->hadjustment)
-    hadj = new_default_adjustment ();
-  if (vadj)
-    g_return_if_fail (GTK_IS_ADJUSTMENT (vadj));
-  else if (priv->vadjustment)
-    vadj = new_default_adjustment ();
+  gtk_widget_get_allocation (GTK_WIDGET (layout), &allocation);
 
-  if (priv->hadjustment && (priv->hadjustment != hadj))
-    {
-      g_signal_handlers_disconnect_by_func (priv->hadjustment,
-					    gtk_layout_adjustment_changed,
-					    layout);
-      g_object_unref (priv->hadjustment);
-    }
+  old_value = gtk_adjustment_get_value (adj);
+  new_upper = MAX (allocation.width, priv->width);
 
-  if (priv->vadjustment && (priv->vadjustment != vadj))
-    {
-      g_signal_handlers_disconnect_by_func (priv->vadjustment,
-					    gtk_layout_adjustment_changed,
-					    layout);
-      g_object_unref (priv->vadjustment);
-    }
+  g_object_set (adj,
+                "lower", 0.0,
+                "upper", new_upper,
+                "page-size", (gdouble)allocation.width,
+                "step-increment", allocation.width * 0.1,
+                "page-increment", allocation.width * 0.9,
+                NULL);
 
-  if (priv->hadjustment != hadj)
-    {
-      priv->hadjustment = hadj;
-      g_object_ref_sink (priv->hadjustment);
-      gtk_layout_set_adjustment_upper (priv->hadjustment, priv->width, FALSE);
+  new_value = CLAMP (old_value, 0, new_upper - allocation.width);
+  if (new_value != old_value)
+    gtk_adjustment_set_value (adj, new_value);
+}
 
-      g_signal_connect (priv->hadjustment, "value-changed",
-			G_CALLBACK (gtk_layout_adjustment_changed),
-			layout);
-      need_adjust = TRUE;
-    }
+static void
+gtk_layout_set_vadjustment_values (GtkLayout *layout)
+{
+  GtkAllocation  allocation;
+  GtkAdjustment *adj = layout->priv->vadjustment;
+  gdouble old_value;
+  gdouble new_value;
+  gdouble new_upper;
 
-  if (priv->vadjustment != vadj)
-    {
-      priv->vadjustment = vadj;
-      g_object_ref_sink (priv->vadjustment);
-      gtk_layout_set_adjustment_upper (priv->vadjustment, priv->height, FALSE);
+  gtk_widget_get_allocation (GTK_WIDGET (layout), &allocation);
 
-      g_signal_connect (priv->vadjustment, "value-changed",
-			G_CALLBACK (gtk_layout_adjustment_changed),
-			layout);
-      need_adjust = TRUE;
-    }
+  old_value = gtk_adjustment_get_value (adj);
+  new_upper = MAX (allocation.height, layout->priv->height);
 
-  /* vadj or hadj can be NULL while constructing; don't emit a signal
-     then */
-  if (need_adjust && vadj && hadj)
-    gtk_layout_adjustment_changed (NULL, layout);
+  g_object_set (adj,
+                "lower", 0.0,
+                "upper", new_upper,
+                "page-size", (gdouble)allocation.height,
+                "step-increment", allocation.height * 0.1,
+                "page-increment", allocation.height * 0.9,
+                NULL);
+
+  new_value = CLAMP (old_value, 0, new_upper - allocation.height);
+  if (new_value != old_value)
+    gtk_adjustment_set_value (adj, new_value);
 }
 
 static void
@@ -313,22 +301,43 @@ gtk_layout_finalize (GObject *object)
  * Sets the horizontal scroll adjustment for the layout.
  *
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
- * 
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_set_hadjustment()
  **/
-void           
+void
 gtk_layout_set_hadjustment (GtkLayout     *layout,
-			    GtkAdjustment *adjustment)
+                            GtkAdjustment *adjustment)
 {
   GtkLayoutPrivate *priv;
 
   g_return_if_fail (GTK_IS_LAYOUT (layout));
+  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
   priv = layout->priv;
 
-  gtk_layout_set_adjustments (layout, adjustment, priv->vadjustment);
+  if (adjustment && priv->hadjustment == adjustment)
+        return;
+
+  if (priv->hadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->hadjustment,
+                                            gtk_layout_adjustment_changed,
+                                            layout);
+      g_object_unref (priv->hadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_layout_adjustment_changed), layout);
+  priv->hadjustment = g_object_ref_sink (adjustment);
+  gtk_layout_set_hadjustment_values (layout);
+
   g_object_notify (G_OBJECT (layout), "hadjustment");
 }
- 
+
+
 /**
  * gtk_layout_set_vadjustment:
  * @layout: a #GtkLayout
@@ -337,19 +346,39 @@ gtk_layout_set_hadjustment (GtkLayout     *layout,
  * Sets the vertical scroll adjustment for the layout.
  *
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
- * 
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_set_vadjustment()
  **/
-void           
+void
 gtk_layout_set_vadjustment (GtkLayout     *layout,
-			    GtkAdjustment *adjustment)
+                            GtkAdjustment *adjustment)
 {
   GtkLayoutPrivate *priv;
 
   g_return_if_fail (GTK_IS_LAYOUT (layout));
+  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
   priv = layout->priv;
 
-  gtk_layout_set_adjustments (layout, priv->hadjustment, adjustment);
+  if (adjustment && priv->vadjustment == adjustment)
+        return;
+
+  if (priv->vadjustment != NULL)
+    {
+      g_signal_handlers_disconnect_by_func (priv->vadjustment,
+                                            gtk_layout_adjustment_changed,
+                                            layout);
+      g_object_unref (priv->vadjustment);
+    }
+
+  if (adjustment == NULL)
+    adjustment = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+
+  g_signal_connect (adjustment, "value-changed",
+                    G_CALLBACK (gtk_layout_adjustment_changed), layout);
+  priv->vadjustment = g_object_ref_sink (adjustment);
+  gtk_layout_set_vadjustment_values (layout);
+
   g_object_notify (G_OBJECT (layout), "vadjustment");
 }
 
@@ -472,34 +501,6 @@ gtk_layout_move (GtkLayout     *layout,
   gtk_layout_move_internal (layout, child_widget, TRUE, x, TRUE, y);
 }
 
-static void
-gtk_layout_set_adjustment_upper (GtkAdjustment *adj,
-				 gdouble        upper,
-				 gboolean       always_emit_changed)
-{
-  gboolean changed = FALSE;
-  gboolean value_changed = FALSE;
-  
-  gdouble min = MAX (0., upper - adj->page_size);
-
-  if (upper != adj->upper)
-    {
-      adj->upper = upper;
-      changed = TRUE;
-    }
-      
-  if (adj->value > min)
-    {
-      adj->value = min;
-      value_changed = TRUE;
-    }
-  
-  if (changed || always_emit_changed)
-    gtk_adjustment_changed (adj);
-  if (value_changed)
-    gtk_adjustment_value_changed (adj);
-}
-
 /**
  * gtk_layout_set_size:
  * @layout: a #GtkLayout
@@ -535,11 +536,6 @@ gtk_layout_set_size (GtkLayout     *layout,
      }
   g_object_thaw_notify (G_OBJECT (layout));
 
-  if (priv->hadjustment)
-    gtk_layout_set_adjustment_upper (priv->hadjustment, priv->width, FALSE);
-  if (priv->vadjustment)
-    gtk_layout_set_adjustment_upper (priv->vadjustment, priv->height, FALSE);
-
   if (gtk_widget_get_realized (widget))
     {
       GtkAllocation allocation;
@@ -549,6 +545,9 @@ gtk_layout_set_size (GtkLayout     *layout,
       height = MAX (height, allocation.height);
       gdk_window_resize (priv->bin_window, width, height);
     }
+
+  gtk_layout_set_hadjustment_values (layout);
+  gtk_layout_set_vadjustment_values (layout);
 }
 
 /**
@@ -594,7 +593,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
   gobject_class->set_property = gtk_layout_set_property;
   gobject_class->get_property = gtk_layout_get_property;
   gobject_class->finalize = gtk_layout_finalize;
-  gobject_class->constructor = gtk_layout_constructor;
 
   container_class->set_child_property = gtk_layout_set_child_property;
   container_class->get_child_property = gtk_layout_get_child_property;
@@ -619,21 +617,9 @@ gtk_layout_class_init (GtkLayoutClass *class)
                                                                 0,
                                                                 GTK_PARAM_READWRITE));
   
-  g_object_class_install_property (gobject_class,
-				   PROP_HADJUSTMENT,
-				   g_param_spec_object ("hadjustment",
-							P_("Horizontal adjustment"),
-							P_("The GtkAdjustment for the horizontal position"),
-							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (gobject_class,
-				   PROP_VADJUSTMENT,
-				   g_param_spec_object ("vadjustment",
-							P_("Vertical adjustment"),
-							P_("The GtkAdjustment for the vertical position"),
-							GTK_TYPE_ADJUSTMENT,
-							GTK_PARAM_READWRITE));
+  /* Scrollable interface */
+  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
+  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDTH,
@@ -664,28 +650,6 @@ gtk_layout_class_init (GtkLayoutClass *class)
   container_class->add = gtk_layout_add;
   container_class->remove = gtk_layout_remove;
   container_class->forall = gtk_layout_forall;
-
-  class->set_scroll_adjustments = gtk_layout_set_adjustments;
-
-  /**
-   * GtkLayout::set-scroll-adjustments
-   * @horizontal: the horizontal #GtkAdjustment
-   * @vertical: the vertical #GtkAdjustment
-   *
-   * Set the scroll adjustments for the layout. Usually scrolled containers
-   * like #GtkScrolledWindow will emit this signal to connect two instances
-   * of #GtkScrollbar to the scroll directions of the #GtkLayout.
-   */
-  widget_class->set_scroll_adjustments_signal =
-    g_signal_new (I_("set-scroll-adjustments"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-		  G_STRUCT_OFFSET (GtkLayoutClass, set_scroll_adjustments),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_OBJECT,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_ADJUSTMENT,
-		  GTK_TYPE_ADJUSTMENT);
 
   g_type_class_add_private (class, sizeof (GtkLayoutPrivate));
 }
@@ -829,32 +793,6 @@ gtk_layout_init (GtkLayout *layout)
   priv->visibility = GDK_VISIBILITY_PARTIAL;
 
   priv->freeze_count = 0;
-}
-
-static GObject *
-gtk_layout_constructor (GType                  type,
-			guint                  n_properties,
-			GObjectConstructParam *properties)
-{
-  GtkLayoutPrivate *priv;
-  GtkLayout *layout;
-  GObject *object;
-  GtkAdjustment *hadj, *vadj;
-  
-  object = G_OBJECT_CLASS (gtk_layout_parent_class)->constructor (type,
-								  n_properties,
-								  properties);
-
-  layout = GTK_LAYOUT (object);
-  priv = layout->priv;
-
-  hadj = priv->hadjustment ? priv->hadjustment : new_default_adjustment ();
-  vadj = priv->vadjustment ? priv->vadjustment : new_default_adjustment ();
-
-  if (!priv->hadjustment || !priv->vadjustment)
-    gtk_layout_set_adjustments (layout, hadj, vadj);
-
-  return object;
 }
 
 /* Widget methods
@@ -1010,17 +948,8 @@ gtk_layout_size_allocate (GtkWidget     *widget,
 			 MAX (priv->height, allocation->height));
     }
 
-  priv->hadjustment->page_size = allocation->width;
-  priv->hadjustment->page_increment = allocation->width * 0.9;
-  priv->hadjustment->lower = 0;
-  /* set_adjustment_upper() emits ::changed */
-  gtk_layout_set_adjustment_upper (priv->hadjustment, MAX (allocation->width, priv->width), TRUE);
-
-  priv->vadjustment->page_size = allocation->height;
-  priv->vadjustment->page_increment = allocation->height * 0.9;
-  priv->vadjustment->lower = 0;
-  priv->vadjustment->upper = MAX (allocation->height, priv->height);
-  gtk_layout_set_adjustment_upper (priv->vadjustment, MAX (allocation->height, priv->height), TRUE);
+  gtk_layout_set_hadjustment_values (layout);
+  gtk_layout_set_vadjustment_values (layout);
 }
 
 static gboolean

@@ -801,6 +801,7 @@ gtk_combo_box_get_column_span_column
 gtk_combo_box_get_entry_text_column
 gtk_combo_box_get_focus_on_click
 gtk_combo_box_get_has_entry
+gtk_combo_box_get_id_column
 gtk_combo_box_get_model
 gtk_combo_box_get_popup_accessible
 gtk_combo_box_get_popup_fixed_width
@@ -822,6 +823,7 @@ gtk_combo_box_set_add_tearoffs
 gtk_combo_box_set_column_span_column
 gtk_combo_box_set_entry_text_column
 gtk_combo_box_set_focus_on_click
+gtk_combo_box_set_id_column
 gtk_combo_box_set_model
 gtk_combo_box_set_popup_fixed_width
 gtk_combo_box_set_row_separator_func
@@ -838,10 +840,12 @@ gtk_combo_box_text_append_text
 gtk_combo_box_text_get_active_text
 gtk_combo_box_text_get_type G_GNUC_CONST
 gtk_combo_box_text_insert_text
+gtk_combo_box_text_insert_text_with_id
 gtk_combo_box_text_new
 gtk_combo_box_text_new_with_entry
 gtk_combo_box_text_prepend_text
 gtk_combo_box_text_remove
+gtk_combo_box_text_remove_all
 #endif
 #endif
 
@@ -1074,6 +1078,7 @@ gtk_entry_get_current_icon_drag_source
 gtk_entry_get_cursor_hadjustment
 gtk_entry_get_has_frame
 gtk_entry_get_icon_activatable
+gtk_entry_get_icon_area
 gtk_entry_get_icon_at_pos
 gtk_entry_get_icon_gicon
 gtk_entry_get_icon_name
@@ -1083,7 +1088,6 @@ gtk_entry_get_icon_stock
 gtk_entry_get_icon_storage_type
 gtk_entry_get_icon_tooltip_markup
 gtk_entry_get_icon_tooltip_text
-gtk_entry_get_icon_window
 gtk_entry_get_inner_border
 gtk_entry_get_invisible_char
 gtk_entry_get_layout
@@ -1093,11 +1097,11 @@ gtk_entry_get_overwrite_mode
 gtk_entry_get_progress_fraction
 gtk_entry_get_progress_pulse_step
 gtk_entry_get_text
+gtk_entry_get_text_area
 gtk_entry_get_text_length
 gtk_entry_get_type G_GNUC_CONST
 gtk_entry_get_visibility
 gtk_entry_get_width_chars
-gtk_entry_get_text_window
 gtk_entry_im_context_filter_keypress
 gtk_entry_layout_index_to_text_index
 gtk_entry_new
@@ -2794,9 +2798,11 @@ gtk_recent_info_get_application_info
 gtk_recent_info_get_applications G_GNUC_MALLOC
 gtk_recent_info_last_application G_GNUC_MALLOC
 gtk_recent_info_has_application
+gtk_recent_info_create_app_info
 gtk_recent_info_get_groups G_GNUC_MALLOC
 gtk_recent_info_has_group
 gtk_recent_info_get_icon
+gtk_recent_info_get_gicon
 gtk_recent_info_get_short_name G_GNUC_MALLOC
 gtk_recent_info_get_uri_display G_GNUC_MALLOC
 gtk_recent_info_get_age
@@ -2888,6 +2894,16 @@ gtk_scale_button_get_popup
 #endif
 #endif
 
+#if IN_HEADER(__GTK_SCROLLABLE_H__)
+#if IN_FILE(__GTK_SCROLLABLE_C__)
+gtk_scrollable_get_type G_GNUC_CONST
+gtk_scrollable_get_hadjustment
+gtk_scrollable_get_vadjustment
+gtk_scrollable_set_hadjustment
+gtk_scrollable_set_vadjustment
+#endif
+#endif
+
 #if IN_HEADER(__GTK_SCROLLBAR_H__)
 #if IN_FILE(__GTK_SCROLLBAR_C__)
 gtk_scrollbar_get_type G_GNUC_CONST
@@ -2913,6 +2929,10 @@ gtk_scrolled_window_set_policy
 gtk_scrolled_window_set_shadow_type
 gtk_scrolled_window_set_vadjustment
 gtk_scrolled_window_unset_placement
+gtk_scrolled_window_get_min_content_width
+gtk_scrolled_window_set_min_content_width
+gtk_scrolled_window_get_min_content_height
+gtk_scrolled_window_set_min_content_height
 #endif
 #endif
 
@@ -4020,7 +4040,6 @@ gtk_tree_view_set_enable_tree_lines
 gtk_tree_view_set_expander_column
 gtk_tree_view_set_fixed_height_mode
 gtk_tree_view_set_grid_lines
-gtk_tree_view_set_hadjustment
 gtk_tree_view_set_headers_clickable
 gtk_tree_view_set_headers_visible
 gtk_tree_view_set_hover_expand
@@ -4039,7 +4058,6 @@ gtk_tree_view_set_show_expanders
 gtk_tree_view_set_tooltip_row
 gtk_tree_view_set_tooltip_cell
 gtk_tree_view_set_tooltip_column
-gtk_tree_view_set_vadjustment
 gtk_tree_view_unset_rows_drag_dest
 gtk_tree_view_unset_rows_drag_source
 gtk_tree_view_columns_autosize
@@ -4288,7 +4306,6 @@ gtk_widget_set_parent
 gtk_widget_set_parent_window
 gtk_widget_set_receives_default
 gtk_widget_set_redraw_on_allocate
-gtk_widget_set_scroll_adjustments
 gtk_widget_set_sensitive
 gtk_widget_set_size_request
 gtk_widget_set_state
@@ -4512,5 +4529,22 @@ gtk_info_bar_set_default_response
 gtk_info_bar_response
 gtk_info_bar_set_message_type
 gtk_info_bar_get_message_type
+#endif
+#endif
+
+#if IN_HEADER(__GTK_GRID_H__)
+#if IN_FILE(__GTK_GRID_c__)
+gtk_grid_get_type G_GNUC_CONST
+gtk_grid_new
+gtk_grid_attach
+gtk_grid_attach_next_to
+gtk_grid_set_row_homogeneous
+gtk_grid_get_row_homogeneous
+gtk_grid_set_row_spacing
+gtk_grid_get_row_spacing
+gtk_grid_set_column_homogeneous
+gtk_grid_get_column_homogeneous
+gtk_grid_set_column_spacing
+gtk_grid_get_column_spacing
 #endif
 #endif

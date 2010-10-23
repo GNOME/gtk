@@ -84,13 +84,10 @@ static void gtk_progress_bar_get_property  (GObject             *object,
                                             GParamSpec          *pspec);
 static void gtk_progress_bar_size_request  (GtkWidget           *widget,
                                             GtkRequisition      *requisition);
-static void gtk_progress_bar_size_allocate (GtkWidget           *widget,
-                                            GtkAllocation       *allocation);
 static void gtk_progress_bar_real_update   (GtkProgressBar      *progress);
 static gboolean gtk_progress_bar_draw      (GtkWidget           *widget,
                                             cairo_t             *cr);
 static void gtk_progress_bar_act_mode_enter (GtkProgressBar     *progress);
-static void gtk_progress_bar_realize       (GtkWidget           *widget);
 static void gtk_progress_bar_finalize      (GObject             *object);
 static void gtk_progress_bar_set_orientation (GtkProgressBar    *progress,
                                               GtkOrientation     orientation);
@@ -111,10 +108,8 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   gobject_class->get_property = gtk_progress_bar_get_property;
   gobject_class->finalize = gtk_progress_bar_finalize;
 
-  widget_class->realize = gtk_progress_bar_realize;
   widget_class->draw = gtk_progress_bar_draw;
   widget_class->size_request = gtk_progress_bar_size_request;
-  widget_class->size_allocate = gtk_progress_bar_size_allocate;
 
   g_object_class_override_property (gobject_class,
                                     PROP_ORIENTATION,
@@ -276,39 +271,8 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
 
   priv->text = NULL;
   priv->fraction = 0.0;
-}
 
-static void
-gtk_progress_bar_realize (GtkWidget *widget)
-{
-  GtkAllocation allocation;
-  GdkWindow *window;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
-
-  gtk_widget_set_realized (widget, TRUE);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x;
-  attributes.y = allocation.y;
-  attributes.width = allocation.width;
-  attributes.height = allocation.height;
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= GDK_EXPOSURE_MASK;
-
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
-  window = gdk_window_new (gtk_widget_get_parent_window (widget),
-                           &attributes, attributes_mask);
-  gtk_widget_set_window (widget, window);
-  gdk_window_set_user_data (window, widget);
-
-  gtk_widget_style_attach (widget);
-  gtk_style_set_background (gtk_widget_get_style (widget),
-                            window, GTK_STATE_ACTIVE);
+  gtk_widget_set_has_window (GTK_WIDGET (pbar), FALSE);
 }
 
 static void
@@ -570,18 +534,6 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
   requisition->width = MAX (min_width, width);
   requisition->height = MAX (min_height, height);
-}
-
-static void
-gtk_progress_bar_size_allocate (GtkWidget     *widget,
-                                GtkAllocation *allocation)
-{
-  gtk_widget_set_allocation (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    gdk_window_move_resize (gtk_widget_get_window (widget),
-                            allocation->x, allocation->y,
-                            allocation->width, allocation->height);
 }
 
 static void

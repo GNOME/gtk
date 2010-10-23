@@ -167,6 +167,20 @@ gdk_cairo_set_source_color (cairo_t        *cr,
 			color->blue / 65535.);
 }
 
+void
+gdk_cairo_set_source_rgba (cairo_t       *cr,
+                           const GdkRGBA *rgba)
+{
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (rgba != NULL);
+
+  cairo_set_source_rgba (cr,
+                         rgba->red,
+                         rgba->green,
+                         rgba->blue,
+                         rgba->alpha);
+}
+
 /**
  * gdk_cairo_rectangle:
  * @cr: a #cairo_t

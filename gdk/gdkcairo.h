@@ -25,6 +25,7 @@
 #define __GDK_CAIRO_H__
 
 #include <gdk/gdkcolor.h>
+#include <gdk/gdkrgba.h>
 #include <gdk/gdkpixbuf.h>
 #include <pango/pangocairo.h>
 
@@ -38,6 +39,8 @@ gboolean gdk_cairo_get_clip_rectangle(cairo_t            *cr,
 
 void     gdk_cairo_set_source_color  (cairo_t            *cr,
                                       const GdkColor     *color);
+void     gdk_cairo_set_source_rgba   (cairo_t            *cr,
+                                      const GdkRGBA      *rgba);
 void     gdk_cairo_set_source_pixbuf (cairo_t            *cr,
                                       const GdkPixbuf    *pixbuf,
                                       double              pixbuf_x,

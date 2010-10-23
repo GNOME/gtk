@@ -28,7 +28,7 @@
  * SECTION:gtkbox
  * @Short_description: Base class for box containers
  * @Title: GtkBox
- * @See_also:i #GtkHBox, #GtkVBox, #GtkFrame, #GtkTable, #GtkLayout
+ * @See_also: #GtkHBox, #GtkVBox, #GtkFrame, #GtkTable, #GtkLayout
  *
  * GtkBox is an widget which encapsulates functionality for a
  * particular kind of container, one that organizes a variable number of
@@ -74,6 +74,9 @@
  * Use gtk_box_set_child_packing() to reset the #GtkBox:expand,
  * #GtkBox:fill and #GtkBox:padding child properties.
  * Use gtk_box_query_child_packing() to query these fields.
+ *
+ * Note that a single-row or single-column #GtkGrid provides exactly the
+ * same functionality as #GtkBox.
  */
 
 #include "config.h"

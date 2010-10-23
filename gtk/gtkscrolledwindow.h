@@ -115,6 +115,13 @@ GtkShadowType  gtk_scrolled_window_get_shadow_type   (GtkScrolledWindow *scrolle
 void	       gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 						      GtkWidget		*child);
 
+gint           gtk_scrolled_window_get_min_content_width  (GtkScrolledWindow *scrolled_window);
+void           gtk_scrolled_window_set_min_content_width  (GtkScrolledWindow *scrolled_window,
+                                                           gint               width);
+gint           gtk_scrolled_window_get_min_content_height (GtkScrolledWindow *scrolled_window);
+void           gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
+                                                           gint               height);
+
 gint _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window);
 
 

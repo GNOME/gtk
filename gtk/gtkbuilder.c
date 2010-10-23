@@ -1559,6 +1559,22 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               ret = FALSE;
             }
         }
+      else if (G_VALUE_HOLDS (value, GDK_TYPE_RGBA))
+        {
+          GdkRGBA rgba = { 0 };
+
+          if (gdk_rgba_parse (string, &rgba))
+            g_value_set_boxed (value, &rgba);
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse RGBA color '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
       else if (G_VALUE_HOLDS (value, G_TYPE_STRV))
         {
           gchar **vector = g_strsplit (string, "\n", 0);

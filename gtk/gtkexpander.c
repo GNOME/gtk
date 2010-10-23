@@ -970,11 +970,8 @@ gtk_expander_enter_notify (GtkWidget        *widget,
 			   GdkEventCrossing *event)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkWidget *event_widget;
 
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
-
-  if (event_widget == widget &&
+  if (event->window == expander->priv->event_window &&
       event->detail != GDK_NOTIFY_INFERIOR)
     {
       expander->priv->prelight = TRUE;
@@ -993,11 +990,8 @@ gtk_expander_leave_notify (GtkWidget        *widget,
 			   GdkEventCrossing *event)
 {
   GtkExpander *expander = GTK_EXPANDER (widget);
-  GtkWidget *event_widget;
 
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
-
-  if (event_widget == widget &&
+  if (event->window == expander->priv->event_window &&
       event->detail != GDK_NOTIFY_INFERIOR)
     {
       expander->priv->prelight = FALSE;

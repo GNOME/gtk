@@ -1,6 +1,7 @@
 gtkaccelmap.sgml
 gtkactiongroup.sgml
 gtkaboutdialog.sgml
+gtkadjustment.sgml
 gtkbbox.sgml
 gtkbox.sgml
 gtkbuilder.sgml
@@ -36,6 +37,7 @@ gtkrecentchooserwidget.sgml
 gtkrecentmanager.sgml
 gtkscale.sgml
 gtkscalebutton.sgml
+gtkscrollbar.sgml
 gtkscrolledwindow.sgml
 gtkseparator.sgml
 gtkseparatormenuitem.sgml
@@ -50,5 +52,10 @@ gtktoolbar.sgml
 gtktoolitem.sgml
 gtktooltip.sgml
 gtktreednd.sgml
+gtktreemodelfilter.sgml
+gtktreeselection.sgml
+gtktreesortable.sgml
+gtktreestore.sgml
+gtktreeviewcolumn.sgml
 gtktypeutils.sgml
 gtkwindow.sgml

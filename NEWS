@@ -1,3 +1,45 @@
+Overview of Changes from GTK+ 2.91.1 to 2.91.2
+==============================================
+
+* GtkApplication has been rewritten. It mostly relies on GApplication
+  API now. Remaining functions include gtk_application_new() and
+  gtk_window_set_application()
+
+* A GtkScrollable interface has been added and implemented by all
+  scrollable widgets. GtkScrolledWindow has ::min-display-width/height
+  properties to control the minimal size of the content area.
+
+* GtkComboBox changes:
+ - Popups can be wider than the combo box itself
+ - The deprecated GtkComboBoxEntry subclass has been removed
+ - The deprecated combo box text convenience API has been removed
+ - Numeric IDs can be associated with model values
+
+* GtkRecentManager changes:
+ - Store xbel file in XDG_USER_DATA
+ - Add gtk_recent_info_create_app_info()
+ - Add gtk_recent_info_get_gicon()
+ - Coalesce multiple changes
+
+* GtkIconView allows tree models (ignoring anything below the root level)
+
+* GtkProgressBar, GtkSpinButton and GtkEntry no longer have their own
+  input-output window
+
+* gtk_widget_hide_all() has been removed
+
+* GtkGrid: A legacy-free, height-for-width grid container
+
+* Bugs fixed:
+ 632381 438318 632538 632539 632677 632736 324899 524304 617174
+
+* Translation updates:
+ Japanese
+ Norwegian bokmål
+ Spanish
+ Telugu
+
+
 Overview of Changes from GTK+ 2.91.0 to 2.91.1
 ==============================================
 

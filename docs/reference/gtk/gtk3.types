@@ -61,6 +61,7 @@ gtk_font_button_get_type
 gtk_font_selection_dialog_get_type
 gtk_font_selection_get_type
 gtk_frame_get_type
+gtk_grid_get_type
 gtk_handle_box_get_type
 gtk_hbox_get_type
 gtk_hbutton_box_get_type
@@ -123,6 +124,7 @@ gtk_recent_manager_get_type
 gtk_ruler_get_type
 gtk_scale_button_get_type
 gtk_scale_get_type
+gtk_scrollable_get_type
 gtk_scrollbar_get_type
 gtk_scrolled_window_get_type
 gtk_separator_get_type

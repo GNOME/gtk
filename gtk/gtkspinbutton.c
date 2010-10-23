@@ -135,7 +135,7 @@ static void gtk_spin_button_state_changed  (GtkWidget          *widget,
 					    GtkStateType        previous_state);
 static void gtk_spin_button_style_set      (GtkWidget          *widget,
                                             GtkStyle           *previous_style);
-static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button, 
+static void gtk_spin_button_draw_arrow     (GtkSpinButton      *spin_button,
 					    cairo_t            *cr,
 					    GtkArrowType        arrow_type);
 static gboolean gtk_spin_button_timer          (GtkSpinButton      *spin_button);
@@ -598,7 +598,7 @@ gtk_spin_button_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->realize (widget);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.wclass = GDK_INPUT_OUTPUT;
+  attributes.wclass = GDK_INPUT_ONLY;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK 
@@ -607,17 +607,14 @@ gtk_spin_button_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
-  attributes.x = allocation.width - arrow_size - 2 * style->xthickness;
-  attributes.y = (allocation.height - requisition.height) / 2;
+  attributes.x = allocation.x + allocation.width - arrow_size - 2 * style->xthickness;
+  attributes.y = allocation.y + (allocation.height - requisition.height) / 2;
   attributes.width = arrow_size + 2 * style->xthickness;
   attributes.height = requisition.height;
 
   priv->panel = gdk_window_new (gtk_widget_get_window (widget),
                                 &attributes, attributes_mask);
   gdk_window_set_user_data (priv->panel, widget);
-
-  gtk_style_set_background (style,
-                            priv->panel, GTK_STATE_NORMAL);
 
   return_val = FALSE;
   g_signal_emit (spin_button, spinbutton_signals[OUTPUT], 0, &return_val);
@@ -755,14 +752,15 @@ gtk_spin_button_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    panel_allocation.x = 0;
+    panel_allocation.x = allocation->x;
   else
-    panel_allocation.x = allocation->width - panel_width;
+    panel_allocation.x = allocation->x + allocation->width - panel_width;
 
   panel_allocation.width = panel_width;
   panel_allocation.height = MIN (requisition.height, allocation->height);
 
-  panel_allocation.y = 0;
+  panel_allocation.y = allocation->y +
+                       (allocation->height - requisition.height) / 2;
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->size_allocate (widget, allocation);
 
@@ -784,36 +782,32 @@ gtk_spin_button_draw (GtkWidget      *widget,
 {
   GtkSpinButton *spin = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin->priv;
+  GtkShadowType shadow_type;
+  GtkStateType state;
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
 
-  if (gtk_cairo_should_draw_window (cr, priv->panel))
-    {
-      GtkShadowType shadow_type;
+  cairo_save (cr);
 
-      shadow_type = spin_button_get_shadow_type (spin);
+  shadow_type = spin_button_get_shadow_type (spin);
 
-      gtk_cairo_transform_to_window (cr, widget, priv->panel);
+  state = gtk_widget_has_focus (widget) ?
+    GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
 
-      if (shadow_type != GTK_SHADOW_NONE)
-        {
-          GtkStateType state;
+  gtk_cairo_transform_to_window (cr, widget, priv->panel);
 
-          state = gtk_widget_has_focus (widget) ?
-            GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
+  gtk_paint_box (gtk_widget_get_style (widget), cr,
+                 state, shadow_type,
+                 widget, "spinbutton",
+                 0, 0,
+                 gdk_window_get_width (priv->panel),
+                 gdk_window_get_height (priv->panel));
 
-          gtk_paint_box (gtk_widget_get_style (widget), cr,
-                         state, shadow_type,
-                         widget, "spinbutton",
-                         0, 0,
-                         gdk_window_get_width (priv->panel),
-                         gdk_window_get_height (priv->panel));
-        }
+  gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_UP);
+  gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_DOWN);
 
-      gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_UP);
-      gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_DOWN);
-    }
-  
+  cairo_restore (cr);
+
   return FALSE;
 }
 
@@ -844,18 +838,18 @@ spin_button_at_limit (GtkSpinButton *spin_button,
 }
 
 static void
-gtk_spin_button_draw_arrow (GtkSpinButton *spin_button, 
+gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
 			    cairo_t       *cr,
 			    GtkArrowType   arrow_type)
 {
   GtkSpinButtonPrivate *priv;
-  GtkRequisition requisition;
   GtkStateType state_type;
   GtkShadowType shadow_type;
   GtkStyle *style;
   GtkWidget *widget;
   gint x;
   gint y;
+  gint panel_height;
   gint height;
   gint width;
   gint h, w;
@@ -866,23 +860,23 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
   widget = GTK_WIDGET (spin_button);
 
   style = gtk_widget_get_style (widget);
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   width = spin_button_get_arrow_size (spin_button) + 2 * style->xthickness;
+  panel_height = gdk_window_get_height (priv->panel);
 
   if (arrow_type == GTK_ARROW_UP)
     {
       x = 0;
       y = 0;
 
-      height = requisition.height / 2;
+      height = panel_height / 2;
     }
   else
     {
       x = 0;
-      y = requisition.height / 2;
+      y = panel_height / 2;
 
-      height = (requisition.height + 1) / 2;
+      height = (panel_height + 1) / 2;
     }
 
   if (spin_button_at_limit (spin_button, arrow_type))
@@ -919,7 +913,7 @@ gtk_spin_button_draw_arrow (GtkSpinButton *spin_button,
                  (arrow_type == GTK_ARROW_UP)? "spinbutton_up" : "spinbutton_down",
                  x, y, width, height);
 
-  height = requisition.height;
+  height = panel_height;
 
   if (arrow_type == GTK_ARROW_DOWN)
     {

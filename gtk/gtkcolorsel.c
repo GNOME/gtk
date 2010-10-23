@@ -102,7 +102,8 @@ enum {
   PROP_HAS_PALETTE,
   PROP_HAS_OPACITY_CONTROL,
   PROP_CURRENT_COLOR,
-  PROP_CURRENT_ALPHA
+  PROP_CURRENT_ALPHA,
+  PROP_CURRENT_RGBA
 };
 
 enum {
@@ -332,7 +333,22 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
 						      P_("The current opacity value (0 fully transparent, 65535 fully opaque)"),
 						      0, 65535, 65535,
 						      GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkColorSelection:current-rgba
+   *
+   * The current RGBA color.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_CURRENT_RGBA,
+                                   g_param_spec_boxed ("current-rgba",
+                                                       P_("Current RGBA"),
+                                                       P_("The current RGBA color"),
+                                                       GDK_TYPE_RGBA,
+                                                       GTK_PARAM_READWRITE));
+
   color_selection_signals[COLOR_CHANGED] =
     g_signal_new (I_("color-changed"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
@@ -560,6 +576,9 @@ gtk_color_selection_set_property (GObject         *object,
     case PROP_CURRENT_ALPHA:
       gtk_color_selection_set_current_alpha (colorsel, g_value_get_uint (value));
       break;
+    case PROP_CURRENT_RGBA:
+      gtk_color_selection_set_current_rgba (colorsel, g_value_get_boxed (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -590,6 +609,14 @@ gtk_color_selection_get_property (GObject     *object,
       break;
     case PROP_CURRENT_ALPHA:
       g_value_set_uint (value, gtk_color_selection_get_current_alpha (colorsel));
+      break;
+    case PROP_CURRENT_RGBA:
+      {
+        GdkRGBA rgba;
+
+        gtk_color_selection_get_current_rgba (colorsel, &rgba);
+        g_value_set_boxed (value, &rgba);
+      }
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2631,6 +2658,142 @@ gtk_color_selection_get_previous_alpha (GtkColorSelection *colorsel)
   
   priv = colorsel->private_data;
   return priv->has_opacity ? UNSCALE (priv->old_color[COLORSEL_OPACITY]) : 65535;
+}
+
+/**
+ * gtk_color_selection_set_current_rgba:
+ * @colorsel: a #GtkColorSelection.
+ * @rgba: A #GdkRGBA to set the current color with
+ *
+ * Sets the current color to be @rgba.  The first time this is called, it will
+ * also set the original color to be @rgba too.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_color_selection_set_current_rgba (GtkColorSelection *colorsel,
+                                      const GdkRGBA     *rgba)
+{
+  GtkColorSelectionPrivate *priv;
+  gint i;
+
+  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (rgba != NULL);
+
+  priv = colorsel->private_data;
+  priv->changing = TRUE;
+
+  priv->color[COLORSEL_RED] = CLAMP (rgba->red, 0, 1);
+  priv->color[COLORSEL_GREEN] = CLAMP (rgba->green, 0, 1);
+  priv->color[COLORSEL_BLUE] = CLAMP (rgba->blue, 0, 1);
+  priv->color[COLORSEL_OPACITY] = CLAMP (rgba->alpha, 0, 1);
+
+  gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
+		  priv->color[COLORSEL_GREEN],
+		  priv->color[COLORSEL_BLUE],
+		  &priv->color[COLORSEL_HUE],
+		  &priv->color[COLORSEL_SATURATION],
+		  &priv->color[COLORSEL_VALUE]);
+
+  if (priv->default_set == FALSE)
+    {
+      for (i = 0; i < COLORSEL_NUM_CHANNELS; i++)
+	priv->old_color[i] = priv->color[i];
+    }
+
+  priv->default_set = TRUE;
+  update_color (colorsel);
+}
+
+/**
+ * gtk_color_selection_get_current_rgba:
+ * @colorsel: a #GtkColorSelection.
+ * @rgba: (out): a #GdkRGBA to fill in with the current color.
+ *
+ * Sets @rgba to be the current color in the GtkColorSelection widget.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_color_selection_get_current_rgba (GtkColorSelection *colorsel,
+                                      GdkRGBA           *rgba)
+{
+  GtkColorSelectionPrivate *priv;
+
+  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (rgba != NULL);
+
+  priv = colorsel->private_data;
+  rgba->red = priv->color[COLORSEL_RED];
+  rgba->green = priv->color[COLORSEL_GREEN];
+  rgba->blue = priv->color[COLORSEL_BLUE];
+  rgba->alpha = (priv->has_opacity) ? priv->color[COLORSEL_OPACITY] : 1;
+}
+
+/**
+ * gtk_color_selection_set_previous_rgba:
+ * @colorsel: a #GtkColorSelection.
+ * @rgba: a #GdkRGBA to set the previous color with
+ *
+ * Sets the 'previous' color to be @rgba.  This function should be called with
+ * some hesitations, as it might seem confusing to have that color change.
+ * Calling gtk_color_selection_set_current_rgba() will also set this color the first
+ * time it is called.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_color_selection_set_previous_rgba (GtkColorSelection *colorsel,
+                                       const GdkRGBA     *rgba)
+{
+  GtkColorSelectionPrivate *priv;
+
+  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (rgba != NULL);
+
+  priv = colorsel->private_data;
+  priv->changing = TRUE;
+
+  priv->old_color[COLORSEL_RED] = CLAMP (rgba->red, 0, 1);
+  priv->old_color[COLORSEL_GREEN] = CLAMP (rgba->green, 0, 1);
+  priv->old_color[COLORSEL_BLUE] = CLAMP (rgba->blue, 0, 1);
+  priv->old_color[COLORSEL_OPACITY] = CLAMP (rgba->alpha, 0, 1);
+
+  gtk_rgb_to_hsv (priv->old_color[COLORSEL_RED],
+		  priv->old_color[COLORSEL_GREEN],
+		  priv->old_color[COLORSEL_BLUE],
+		  &priv->old_color[COLORSEL_HUE],
+		  &priv->old_color[COLORSEL_SATURATION],
+		  &priv->old_color[COLORSEL_VALUE]);
+
+  color_sample_update_samples (colorsel);
+  priv->default_set = TRUE;
+  priv->changing = FALSE;
+}
+
+/**
+ * gtk_color_selection_get_previous_rgba:
+ * @colorsel: a #GtkColorSelection.
+ * @rgba: a #GdkRGBA to fill in with the original color value.
+ *
+ * Fills @rgba in with the original color value.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_color_selection_get_previous_rgba (GtkColorSelection *colorsel,
+                                       GdkRGBA           *rgba)
+{
+  GtkColorSelectionPrivate *priv;
+
+  g_return_if_fail (GTK_IS_COLOR_SELECTION (colorsel));
+  g_return_if_fail (rgba != NULL);
+
+  priv = colorsel->private_data;
+  rgba->red = priv->old_color[COLORSEL_RED];
+  rgba->green = priv->old_color[COLORSEL_GREEN];
+  rgba->blue = priv->old_color[COLORSEL_BLUE];
+  rgba->alpha = (priv->has_opacity) ? priv->old_color[COLORSEL_OPACITY] : 1;
 }
 
 /**

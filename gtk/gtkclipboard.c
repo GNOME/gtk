@@ -71,7 +71,7 @@ struct _GtkClipboard
   GdkAtom *cached_targets;
   gint     n_cached_targets;
 
-  guint      notify_signal_id;
+  gulong     notify_signal_id;
   gboolean   storing_selection;
   GMainLoop *store_loop;
   guint      store_timeout;

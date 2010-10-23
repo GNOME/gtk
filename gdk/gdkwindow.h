@@ -697,6 +697,8 @@ void          gdk_window_set_transient_for (GdkWindow     *window,
 					    GdkWindow     *parent);
 void	      gdk_window_set_background	 (GdkWindow	  *window,
 					  const GdkColor  *color);
+void          gdk_window_set_background_rgba (GdkWindow *window,
+                                              GdkRGBA   *rgba);
 void	      gdk_window_set_background_pattern (GdkWindow	 *window,
                                                  cairo_pattern_t *pattern);
 cairo_pattern_t *gdk_window_get_background_pattern (GdkWindow     *window);

@@ -48,6 +48,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testfilechooserbutton		\
 	testframe			\
 	testgeometry			\
+	testgrid			\
 	testgtk				\
 	testheightforwidth		\
 	testiconview			\
@@ -137,6 +138,7 @@ testfilechooser_DEPENDENCIES = $(TEST_DEPS)
 testfilechooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testframe_DEPENDENCIES = $(TEST_DEPS)
 testgeometry_DEPENDENCIES = $(TEST_DEPS)
+testgrid_DEPENDENCIES = $(TEST_DEPS)
 testgtk_DEPENDENCIES = $(TEST_DEPS)
 testinput_DEPENDENCIES = $(TEST_DEPS)
 testimage_DEPENDENCIES = $(TEST_DEPS)
@@ -202,6 +204,7 @@ testfilechooser_LDADD = $(LDADDS)
 testfilechooserbutton_LDADD = $(LDADDS)
 testframe_LDADD = $(LDADDS)
 testgeometry_LDADD = $(LDADDS)
+testgrid_LDADD = $(LDADDS)
 testgtk_LDADD = $(LDADDS)
 testheightforwidth_LDADD = $(LDADDS)
 testicontheme_LDADD = $(LDADDS)
@@ -265,6 +268,9 @@ testfilechooser_SOURCES = 	\
 testfilechooserbutton_SOURCES =	\
 	prop-editor.c		\
 	testfilechooserbutton.c
+
+testgrid_SOURCES =	\
+	testgrid.c
 
 testgtk_SOURCES =	\
 	prop-editor.c   \

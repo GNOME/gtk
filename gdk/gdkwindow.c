@@ -6670,6 +6670,32 @@ gdk_window_set_background (GdkWindow      *window,
 }
 
 /**
+ * gdk_window_set_background_rgba:
+ * @window: a #GdkWindow
+ * @rgba: a #GdkRGBA color
+ *
+ * Sets the background color of @window.
+ *
+ * See also gdk_window_set_background_pattern().
+ **/
+void
+gdk_window_set_background_rgba (GdkWindow *window,
+                                GdkRGBA   *rgba)
+{
+  cairo_pattern_t *pattern;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (rgba != NULL);
+
+  pattern = cairo_pattern_create_rgba (rgba->red, rgba->green,
+                                       rgba->blue, rgba->alpha);
+
+  gdk_window_set_background_pattern (window, pattern);
+
+  cairo_pattern_destroy (pattern);
+}
+
+/**
  * gdk_window_set_background_pattern:
  * @window: a #GdkWindow
  * @pattern: (allow-none): a pattern to use, or %NULL

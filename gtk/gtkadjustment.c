@@ -31,6 +31,27 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkadjustment
+ * @Short_description: A representation of an adjustable bounded value
+ * @Title: GtkAdjustment
+ *
+ * The #GtkAdjustment object represents a value which has an associated lower
+ * and upper bound, together with step and page increments, and a page size.
+ * It is used within several GTK+ widgets, including
+ * #GtkSpinButton, #GtkViewport, and #GtkRange (which is a base class for
+ * #GtkHScrollbar, #GtkVScrollbar, #GtkHScale, and #GtkVScale).
+ *
+ * The #GtkAdjustment object does not update the value itself. Instead
+ * it is left up to the owner of the #GtkAdjustment to control the value.
+ *
+ * The owner of the #GtkAdjustment typically calls the
+ * gtk_adjustment_value_changed() and gtk_adjustment_changed() functions
+ * after changing the value and its bounds. This results in the emission of the
+ * #GtkAdjustment::value_changed or #GtkAdjustment::changed signal respectively.
+ */
+
+
 enum
 {
   PROP_0,
@@ -188,6 +209,13 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 							0.0, 
 							GTK_PARAM_READWRITE));
 
+  /**
+   * GtkAdjustment::changed:
+   * @adjustment: the object which received the signal.
+   *
+   * Emitted when one or more of the #GtkAdjustment fields have been changed,
+   * other than the value field.
+   */
   adjustment_signals[CHANGED] =
     g_signal_new (I_("changed"),
 		  G_OBJECT_CLASS_TYPE (class),
@@ -197,6 +225,12 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
 
+  /**
+   * GtkAdjustment::value-changed:
+   * @adjustment: the object which received the signal.
+   *
+   * Emitted when the #GtkAdjustment value field has been changed.
+   */
   adjustment_signals[VALUE_CHANGED] =
     g_signal_new (I_("value-changed"),
 		  G_OBJECT_CLASS_TYPE (class),
@@ -318,6 +352,19 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
     }
 }
 
+/**
+ * gtk_adjustment_new:
+ * @value: the initial value.
+ * @lower: the minimum value.
+ * @upper: the maximum value.
+ * @step_increment: the step increment.
+ * @page_increment: the page increment.
+ * @page_size: the page size.
+ *
+ * Creates a new #GtkAdjustment.
+ *
+ * Returns: a new #GtkAdjustment.
+ */
 GtkAdjustment *
 gtk_adjustment_new (gdouble value,
 		    gdouble lower,
@@ -353,6 +400,18 @@ gtk_adjustment_get_value (GtkAdjustment *adjustment)
   return adjustment->value;
 }
 
+/**
+ * gtk_adjustment_set_value:
+ * @adjustment: a #GtkAdjustment.
+ * @value: the new value.
+ *
+ * Sets the #GtkAdjustment value. The value is clamped to lie between
+ * #GtkAdjustment.lower and #GtkAdjustment.upper.
+ *
+ * Note that for adjustments which are used in a #GtkScrollbar, the effective
+ * range of allowed values goes from #GtkAdjustment.lower to
+ * #GtkAdjustment.upper - #GtkAdjustment.page_size.
+ */
 void
 gtk_adjustment_set_value (GtkAdjustment *adjustment,
 			  gdouble        value)
@@ -656,6 +715,14 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
     gtk_adjustment_value_changed (adjustment);
 }
 
+/**
+ * gtk_adjustment_changed:
+ * @adjustment: a #GtkAdjustment
+ *
+ * Emits a #GtkAdjustment::changed signal from the #GtkAdjustment.
+ * This is typically called by the owner of the #GtkAdjustment after it has
+ * changed any of the #GtkAdjustment fields other than the value.
+ */
 void
 gtk_adjustment_changed (GtkAdjustment *adjustment)
 {
@@ -664,6 +731,14 @@ gtk_adjustment_changed (GtkAdjustment *adjustment)
   g_signal_emit (adjustment, adjustment_signals[CHANGED], 0);
 }
 
+/**
+ * gtk_adjustment_value_changed:
+ * @adjustment: a #GtkAdjustment
+ *
+ * Emits a #GtkAdjustment::value_changed signal from the #GtkAdjustment.
+ * This is typically called by the owner of the #GtkAdjustment after it has
+ * changed the #GtkAdjustment value field.
+ */
 void
 gtk_adjustment_value_changed (GtkAdjustment *adjustment)
 {
@@ -673,6 +748,19 @@ gtk_adjustment_value_changed (GtkAdjustment *adjustment)
   g_object_notify (G_OBJECT (adjustment), "value");
 }
 
+/**
+ * gtk_adjustment_clamp_page:
+ * @adjustment: a #GtkAdjustment.
+ * @lower: the lower value.
+ * @upper: the upper value.
+ *
+ * Updates the #GtkAdjustment #GtkAdjustment.value to ensure that the range
+ * between @lower and @upper is in the current page (i.e. between
+ * #GtkAdjustment.value and #GtkAdjustment.value + #GtkAdjustment.page_size).
+ * If the range is larger than the page size, then only the start of it will
+ * be in the current page.
+ * A #GtkAdjustment::changed signal will be emitted if the value is changed.
+ */
 void
 gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 			   gdouble        lower,

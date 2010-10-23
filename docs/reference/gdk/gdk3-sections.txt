@@ -260,6 +260,21 @@ GDK_TYPE_COLOR
 </SECTION>
 
 <SECTION>
+<TITLE>RGBA Colors</TITLE>
+<FILE>rgba_colors</FILE>
+GdkRGBA
+gdk_rgba_copy
+gdk_rgba_free
+gdk_rgba_parse
+gdk_rgba_equal
+gdk_rgba_hash
+gdk_rgba_to_string
+
+<SUBSECTION Standard>
+GDK_TYPE_RGBA
+</SECTION>
+
+<SECTION>
 <TITLE>Drawing Primitives</TITLE>
 <FILE>drawing</FILE>
 GdkDrawable
@@ -421,6 +436,7 @@ gdk_window_merge_child_input_shapes
 gdk_window_set_static_gravities
 gdk_window_set_title
 gdk_window_set_background
+gdk_window_set_background_rgba
 gdk_window_set_background_pattern
 gdk_window_get_background_pattern
 GDK_PARENT_RELATIVE
@@ -595,6 +611,7 @@ gdk_window_create_similar_surface
 gdk_cairo_create
 gdk_cairo_get_clip_rectangle
 gdk_cairo_set_source_color
+gdk_cairo_set_source_rgba
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_window
 gdk_cairo_rectangle

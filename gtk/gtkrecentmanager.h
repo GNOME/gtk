@@ -204,6 +204,9 @@ gboolean              gtk_recent_info_get_application_info (GtkRecentInfo  *info
 							    const gchar   **app_exec,
 							    guint          *count,
 							    time_t         *time_);
+GAppInfo *            gtk_recent_info_create_app_info      (GtkRecentInfo  *info,
+                                                            const gchar    *app_name,
+                                                            GError        **error);
 gchar **              gtk_recent_info_get_applications     (GtkRecentInfo  *info,
 							    gsize          *length) G_GNUC_MALLOC;
 gchar *               gtk_recent_info_last_application     (GtkRecentInfo  *info) G_GNUC_MALLOC;
@@ -215,6 +218,7 @@ gboolean              gtk_recent_info_has_group            (GtkRecentInfo  *info
 							    const gchar    *group_name);
 GdkPixbuf *           gtk_recent_info_get_icon             (GtkRecentInfo  *info,
 							    gint            size);
+GIcon *               gtk_recent_info_get_gicon            (GtkRecentInfo  *info);
 gchar *               gtk_recent_info_get_short_name       (GtkRecentInfo  *info) G_GNUC_MALLOC;
 gchar *               gtk_recent_info_get_uri_display      (GtkRecentInfo  *info) G_GNUC_MALLOC;
 gint                  gtk_recent_info_get_age              (GtkRecentInfo  *info);

@@ -55,7 +55,7 @@ struct _GtkCellViewPrivate
   GList *cell_list;
   gint spacing;
 
-  GdkColor background;
+  GdkRGBA background;
   gboolean background_set;
 };
 
@@ -143,6 +143,7 @@ enum
   PROP_0,
   PROP_BACKGROUND,
   PROP_BACKGROUND_GDK,
+  PROP_BACKGROUND_RGBA,
   PROP_BACKGROUND_SET,
   PROP_MODEL
 };
@@ -185,6 +186,20 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
                                                       P_("Background color"),
                                                       P_("Background color as a GdkColor"),
                                                       GDK_TYPE_COLOR,
+                                                      GTK_PARAM_READWRITE));
+  /**
+   * GtkCellView:background-rgba
+   *
+   * The background color as a #GdkRGBA
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_BACKGROUND_RGBA,
+                                   g_param_spec_boxed ("background-rgba",
+                                                      P_("Background RGBA color"),
+                                                      P_("Background color as a GdkRGBA"),
+                                                      GDK_TYPE_RGBA,
                                                       GTK_PARAM_READWRITE));
 
   /**
@@ -247,10 +262,16 @@ gtk_cell_view_get_property (GObject    *object,
         {
           GdkColor color;
 
-          color = view->priv->background;
+          color.red = (guint) (view->priv->background.red * 65535);
+          color.green = (guint) (view->priv->background.green * 65535);
+          color.blue = (guint) (view->priv->background.blue * 65535);
+          color.pixel = 0;
 
           g_value_set_boxed (value, &color);
         }
+        break;
+      case PROP_BACKGROUND_RGBA:
+        g_value_set_boxed (value, &view->priv->background);
         break;
       case PROP_BACKGROUND_SET:
         g_value_set_boolean (value, view->priv->background_set);
@@ -290,6 +311,9 @@ gtk_cell_view_set_property (GObject      *object,
         break;
       case PROP_BACKGROUND_GDK:
         gtk_cell_view_set_background_color (view, g_value_get_boxed (value));
+        break;
+      case PROP_BACKGROUND_RGBA:
+        gtk_cell_view_set_background_rgba (view, g_value_get_boxed (value));
         break;
       case PROP_BACKGROUND_SET:
         view->priv->background_set = g_value_get_boolean (value);
@@ -449,7 +473,7 @@ gtk_cell_view_draw (GtkWidget *widget,
   if (cellview->priv->background_set)
     {
       gdk_cairo_rectangle (cr, &area);
-      gdk_cairo_set_source_color (cr, &cellview->priv->background);
+      gdk_cairo_set_source_rgba (cr, &cellview->priv->background);
       cairo_fill (cr);
     }
 
@@ -1122,7 +1146,47 @@ gtk_cell_view_set_background_color (GtkCellView    *cell_view,
           g_object_notify (G_OBJECT (cell_view), "background-set");
         }
 
-      cell_view->priv->background = *color;
+      cell_view->priv->background.red = color->red / 65535.;
+      cell_view->priv->background.green = color->green / 65535.;
+      cell_view->priv->background.blue = color->blue / 65535.;
+      cell_view->priv->background.alpha = 1;
+    }
+  else
+    {
+      if (cell_view->priv->background_set)
+        {
+          cell_view->priv->background_set = FALSE;
+          g_object_notify (G_OBJECT (cell_view), "background-set");
+        }
+    }
+
+  gtk_widget_queue_draw (GTK_WIDGET (cell_view));
+}
+
+/**
+ * gtk_cell_view_set_background_rgba:
+ * @cell_view: a #GtkCellView
+ * @rgba: the new background color
+ *
+ * Sets the background color of @cell_view.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_view_set_background_rgba (GtkCellView   *cell_view,
+                                   const GdkRGBA *rgba)
+{
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
+
+  if (rgba)
+    {
+      if (!cell_view->priv->background_set)
+        {
+          cell_view->priv->background_set = TRUE;
+          g_object_notify (G_OBJECT (cell_view), "background-set");
+        }
+
+      cell_view->priv->background = *rgba;
     }
   else
     {
