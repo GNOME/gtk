@@ -2599,6 +2599,9 @@ gtk_default_draw_flat_box (GtkStyle      *style,
     case GTK_STATE_INSENSITIVE:
       flags |= GTK_STATE_FLAG_INSENSITIVE;
       break;
+    case GTK_STATE_ACTIVE:
+      flags |= GTK_STATE_FLAG_ACTIVE;
+      break;
     default:
       break;
     }
