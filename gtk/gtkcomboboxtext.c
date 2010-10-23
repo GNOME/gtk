@@ -27,7 +27,7 @@
  * SECTION:gtkcomboboxtext
  * @Short_description: A simple, text-only combo box
  * @Title: GtkComboBoxText
- * @See_also: @GtkComboBox
+ * @See_also: #GtkComboBox
  *
  * A GtkComboBoxText is a simple variant of #GtkComboBox that hides
  * the model-view complexity for simple text-only use cases.
@@ -147,7 +147,7 @@ gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
  * @combo_box: A #GtkComboBox
  * @text: A string
  *
- * Prepends @string to the list of strings stored in @combo_box.
+ * Prepends @text to the list of strings stored in @combo_box.
  *
  * Since: 2.24
  */
@@ -164,7 +164,7 @@ gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
  * @position: An index to insert @text
  * @text: A string
  *
- * Inserts @string at @position in the list of strings stored in @combo_box.
+ * Inserts @text at @position in the list of strings stored in @combo_box.
  *
  * Since: 2.24
  */
