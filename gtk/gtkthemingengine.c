@@ -1521,7 +1521,7 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
                                  gdouble           height)
 {
   GtkStateFlags flags;
-  GdkRGBA lighter, darker;
+  GdkRGBA lighter;
   GdkRGBA *border_color;
   Gtk9Slice *slice;
   GtkBorderStyle border_style;
@@ -1544,12 +1544,12 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
       gtk_9slice_render (slice, cr, x, y, width, height);
       gtk_9slice_unref (slice);
     }
-  else if (border_style != GTK_BORDER_STYLE_NONE)
+  else if (border_color &&
+           border_style != GTK_BORDER_STYLE_NONE)
     {
       cairo_save (cr);
 
-      color_shade (border_color, 0.7, &darker);
-      color_shade (border_color, 1.3, &lighter);
+      color_shade (border_color, 1.8, &lighter);
 
       switch (border_style)
         {
@@ -1579,28 +1579,30 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
 
           if (border_width > 1)
             {
-              gint d;
+              gdouble d;
 
-              d = border_width / 2;
+              d = (gdouble) border_width / 2;
               x += d;
               y += d;
-              width -= d * 2;
-              height -= d * 2;
+
+              d = (gdouble) (border_width - (gint) d) + 1;
+              width -= d;
+              height -= d;
             }
 
           if (border_style == GTK_BORDER_STYLE_INSET)
-            gdk_cairo_set_source_rgba (cr, border_color);
+            gdk_cairo_set_source_rgba (cr, &lighter);
           else
-            gdk_cairo_set_source_rgba (cr, &darker);
+            gdk_cairo_set_source_rgba (cr, border_color);
 
           _cairo_round_rectangle_sides (cr, (gdouble) radius, x, y, width, height,
                                         SIDE_BOTTOM | SIDE_RIGHT, junction);
           cairo_stroke (cr);
 
           if (border_style == GTK_BORDER_STYLE_INSET)
-            gdk_cairo_set_source_rgba (cr, &darker);
-          else
             gdk_cairo_set_source_rgba (cr, border_color);
+          else
+            gdk_cairo_set_source_rgba (cr, &lighter);
 
           _cairo_round_rectangle_sides (cr, (gdouble) radius, x, y, width, height,
                                         SIDE_TOP | SIDE_LEFT, junction);
