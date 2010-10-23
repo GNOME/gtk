@@ -131,7 +131,7 @@ gtk_combo_box_text_new_with_entry (void)
  * @combo_box: A #GtkComboBoxText
  * @text: A string
  *
- * Appends @string to the list of strings stored in @combo_box.
+ * Appends @text to the list of strings stored in @combo_box.
  *
  * Since: 2.24
  */
@@ -183,7 +183,7 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
  * @text: A string
  * @id: a numeric ID for this value
  *
- * Inserts @string at @position in the list of strings stored in @combo_box,
+ * Inserts @text at @position in the list of strings stored in @combo_box,
  * and sets its numeric ID to @id. See #GtkComboBox::id-column.
  *
  * Since: 3.0
