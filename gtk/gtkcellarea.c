@@ -49,7 +49,7 @@ static void      gtk_cell_area_clear                         (GtkCellLayout     
 static void      gtk_cell_area_add_attribute                 (GtkCellLayout         *cell_layout,
 							      GtkCellRenderer       *renderer,
 							      const gchar           *attribute,
-							      gint                   id);
+							      gint                   column);
 static void      gtk_cell_area_set_cell_data_func            (GtkCellLayout         *cell_layout,
 							      GtkCellRenderer       *cell,
 							      GtkCellLayoutDataFunc  func,
@@ -62,20 +62,31 @@ static void      gtk_cell_area_reorder                       (GtkCellLayout     
 							      gint                   position);
 static GList    *gtk_cell_area_get_cells                     (GtkCellLayout         *cell_layout);
 
-/* GtkCellLayoutDataFunc handling */
+/* Attribute/Cell metadata */
 typedef struct {
-  GtkCellLayoutDataFunc func;
-  gpointer              data;
-  GDestroyNotify        destroy;
-} CustomCellData;
+  const gchar *attribute;
+  gint         column;
+} CellAttribute;
 
-static CustomCellData *custom_cell_data_new  (GtkCellLayoutDataFunc  func,
-					      gpointer               data,
-					      GDestroyNotify         destroy);
-static void            custom_cell_data_free (CustomCellData        *custom);
+typedef struct {
+  GSList                *attributes;
 
-/* Struct to pass data while looping over 
- * cell renderer attributes
+  GtkCellLayoutDataFunc  func;
+  gpointer               data;
+  GDestroyNotify         destroy;
+} CellInfo;
+
+static CellInfo       *cell_info_new       (GtkCellLayoutDataFunc  func,
+					    gpointer               data,
+					    GDestroyNotify         destroy);
+static void            cell_info_free      (CellInfo              *info);
+static CellAttribute  *cell_attribute_new  (GtkCellRenderer       *renderer,
+					    const gchar           *attribute,
+					    gint                   column);
+static void            cell_attribute_free (CellAttribute         *attribute);
+
+/* Struct to pass data along while looping over 
+ * cell renderers to apply attributes
  */
 typedef struct {
   GtkCellArea  *area;
@@ -85,7 +96,7 @@ typedef struct {
 
 struct _GtkCellAreaPrivate
 {
-  GHashTable *custom_cell_data;
+  GHashTable *cell_info;
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_UNOWNED,
@@ -102,10 +113,10 @@ gtk_cell_area_init (GtkCellArea *area)
 					    GtkCellAreaPrivate);
   priv = area->priv;
 
-  priv->custom_cell_data = g_hash_table_new_full (g_direct_hash, 
-						  g_direct_equal,
-						  NULL, 
-						  (GDestroyNotify)custom_cell_data_free);
+  priv->cell_info = g_hash_table_new_full (g_direct_hash, 
+					   g_direct_equal,
+					   NULL, 
+					   (GDestroyNotify)cell_info_free);
 }
 
 static void 
@@ -123,11 +134,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->forall  = NULL;
   class->event   = NULL;
   class->render  = NULL;
-
-  /* attributes */
-  class->attribute_connect    = NULL;
-  class->attribute_disconnect = NULL;
-  class->attribute_forall     = NULL;
 
   /* geometry */
   class->get_request_mode               = NULL;
@@ -152,7 +158,7 @@ gtk_cell_area_finalize (GObject *object)
   /* All cell renderers should already be removed at this point,
    * just kill our hash table here. 
    */
-  g_hash_table_destroy (priv->custom_cell_data);
+  g_hash_table_destroy (priv->cell_info);
 
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->finalize (object);
 }
@@ -199,27 +205,70 @@ gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
 /*************************************************************
  *                   GtkCellLayoutIface                      *
  *************************************************************/
-static CustomCellData *
-custom_cell_data_new (GtkCellLayoutDataFunc  func,
-		      gpointer               data,
-		      GDestroyNotify         destroy)
+static CellInfo *
+cell_info_new (GtkCellLayoutDataFunc  func,
+	       gpointer               data,
+	       GDestroyNotify         destroy)
 {
-  CustomCellData *custom = g_slice_new (CustomCellData);
+  CellInfo *info = g_slice_new (CellInfo);
   
-  custom->func    = func;
-  custom->data    = data;
-  custom->destroy = destroy;
+  info->attributes = NULL;
+  info->func       = func;
+  info->data       = data;
+  info->destroy    = destroy;
 
-  return custom;
+  return info;
 }
 
 static void
-custom_cell_data_free (CustomCellData *custom)
+cell_info_free (CellInfo *info)
 {
-  if (custom->destroy)
-    custom->destroy (custom->data);
+  if (info->destroy)
+    info->destroy (info->data);
 
-  g_slice_free (CustomCellData, custom);
+  g_slist_foreach (info->attributes, (GFunc)cell_attribute_free, NULL);
+  g_slist_free (info->attributes);
+
+  g_slice_free (CellInfo, info);
+}
+
+static CellAttribute  *
+cell_attribute_new  (GtkCellRenderer       *renderer,
+		     const gchar           *attribute,
+		     gint                   column)
+{
+  GParamSpec *pspec;
+
+  /* Check if the attribute really exists and point to
+   * the property string installed on the cell renderer
+   * class (dont dup the string) 
+   */
+  pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (renderer), attribute);
+
+  if (pspec)
+    {
+      CellAttribute *cell_attribute = g_slice_new (CellAttribute);
+
+      cell_attribute->attribute = pspec->name;
+      cell_attribute->column    = column;
+
+      return cell_attribute;
+    }
+
+  return NULL;
+}
+
+static void
+cell_attribute_free (CellAttribute *attribute)
+{
+  g_slice_free (CellAttribute, attribute);
+}
+
+static gint
+cell_attribute_find (CellAttribute *cell_attribute,
+		     const gchar   *attribute)
+{
+  return g_strcmp0 (cell_attribute->attribute, attribute);
 }
 
 static void
@@ -263,76 +312,68 @@ static void
 gtk_cell_area_add_attribute (GtkCellLayout         *cell_layout,
 			     GtkCellRenderer       *renderer,
 			     const gchar           *attribute,
-			     gint                   id)
+			     gint                   column)
 {
   gtk_cell_area_attribute_connect (GTK_CELL_AREA (cell_layout),
-				   renderer, attribute, id);
-}
-
-typedef struct {
-  const gchar *attribute;
-  gchar        id;
-} CellAttribute;
-
-static void
-accum_attributes (GtkCellArea      *area,
-		  GtkCellRenderer  *renderer,
-		  const gchar      *attribute,
-		  gint              id,
-		  GList           **accum)
-{
-  CellAttribute *attrib = g_slice_new (CellAttribute);
-
-  attrib->attribute = attribute;
-  attrib->id        = id;
-
-  *accum = g_list_prepend (*accum, attrib);
+				   renderer, attribute, column);
 }
 
 static void
 gtk_cell_area_set_cell_data_func (GtkCellLayout         *cell_layout,
-				  GtkCellRenderer       *cell,
+				  GtkCellRenderer       *renderer,
 				  GtkCellLayoutDataFunc  func,
 				  gpointer               func_data,
 				  GDestroyNotify         destroy)
 {
   GtkCellArea        *area   = GTK_CELL_AREA (cell_layout);
   GtkCellAreaPrivate *priv   = area->priv;
-  CustomCellData     *custom;
+  CellInfo           *info;
 
-  if (func)
+  info = g_hash_table_lookup (priv->cell_info, renderer);
+
+  if (info)
     {
-      custom = custom_cell_data_new (func, func_data, destroy);
-      g_hash_table_insert (priv->custom_cell_data, cell, custom);
+      if (info->destroy && info->data)
+	info->destroy (info->data);
+
+      if (func)
+	{
+	  info->func    = func;
+	  info->data    = func_data;
+	  info->destroy = destroy;
+	}
+      else
+	{
+	  info->func    = NULL;
+	  info->data    = NULL;
+	  info->destroy = NULL;
+	}
     }
   else
-    g_hash_table_remove (priv->custom_cell_data, cell);
-}
+    {
+      info = cell_info_new (func, func_data, destroy);
 
+      g_hash_table_insert (priv->cell_info, renderer, info);
+    }
+}
 
 static void
 gtk_cell_area_clear_attributes (GtkCellLayout         *cell_layout,
 				GtkCellRenderer       *renderer)
 {
-  GtkCellArea *area = GTK_CELL_AREA (cell_layout);
-  GList       *l, *attributes = NULL;
+  GtkCellArea        *area = GTK_CELL_AREA (cell_layout);
+  GtkCellAreaPrivate *priv = area->priv;
+  CellInfo           *info;
 
-  /* Get a list of attributes so we dont modify the list inline */
-  gtk_cell_area_attribute_forall (area, renderer, 
-				  (GtkCellAttributeCallback)accum_attributes,
-				  &attributes);
+  info = g_hash_table_lookup (priv->cell_info, renderer);
 
-  for (l = attributes; l; l = l->next)
+  if (info)
     {
-      CellAttribute *attrib = l->data;
+      g_slist_foreach (info->attributes, (GFunc)cell_attribute_free, NULL);
+      g_slist_free (info->attributes);
 
-      gtk_cell_area_attribute_disconnect (area, renderer, 
-					  attrib->attribute, attrib->id);
-
-      g_slice_free (CellAttribute, attrib);
+      info->attributes = NULL;
     }
-
-  g_list_free (attributes);
 }
 
 static void 
@@ -368,7 +409,6 @@ gtk_cell_area_get_cells (GtkCellLayout *cell_layout)
  *                            API                            *
  *************************************************************/
 
-/* Basic methods */
 void
 gtk_cell_area_add (GtkCellArea        *area,
 		   GtkCellRenderer    *renderer)
@@ -391,16 +431,17 @@ void
 gtk_cell_area_remove (GtkCellArea        *area,
 		      GtkCellRenderer    *renderer)
 {
-  GtkCellAreaClass *class;
+  GtkCellAreaClass   *class;
+  GtkCellAreaPrivate *priv;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
 
   class = GTK_CELL_AREA_GET_CLASS (area);
+  priv  = area->priv;
 
-  /* Remove any custom cell data func we have for this renderer */
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (area),
-				      renderer, NULL, NULL, NULL);
+  /* Remove any custom attributes and custom cell data func here first */
+  g_hash_table_remove (priv->cell_info, renderer);
 
   if (class->remove)
     class->remove (area, renderer);
@@ -472,71 +513,6 @@ gtk_cell_area_render (GtkCellArea        *area,
     g_warning ("GtkCellAreaClass::render not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
-
-/* Attributes */ 
-void
-gtk_cell_area_attribute_connect (GtkCellArea        *area,
-				 GtkCellRenderer    *renderer,
-				 const gchar        *attribute,
-				 gint                id)
-{
-  GtkCellAreaClass *class;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-  g_return_if_fail (attribute != NULL);
-
-  class = GTK_CELL_AREA_GET_CLASS (area);
-
-  if (class->attribute_connect)
-    class->attribute_connect (area, renderer, attribute, id);
-  else
-    g_warning ("GtkCellAreaClass::attribute_connect not implemented for `%s'", 
-	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
-}
-
-void 
-gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
-				    GtkCellRenderer    *renderer,
-				    const gchar        *attribute,
-				    gint                id)
-{
-  GtkCellAreaClass *class;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-  g_return_if_fail (attribute != NULL);
-
-  class = GTK_CELL_AREA_GET_CLASS (area);
-
-  if (class->attribute_disconnect)
-    class->attribute_disconnect (area, renderer, attribute, id);
-  else
-    g_warning ("GtkCellAreaClass::attribute_disconnect not implemented for `%s'", 
-	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
-}
-
-void
-gtk_cell_area_attribute_forall (GtkCellArea             *area,
-				GtkCellRenderer         *renderer,
-				GtkCellAttributeCallback callback,
-				gpointer                 user_data)
-{
-  GtkCellAreaClass *class;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-  g_return_if_fail (callback != NULL);
-
-  class = GTK_CELL_AREA_GET_CLASS (area);
-
-  if (class->attribute_forall)
-    class->attribute_forall (area, renderer, callback, user_data);
-  else
-    g_warning ("GtkCellAreaClass::attribute_forall not implemented for `%s'", 
-	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
-}
-
 
 /* Geometry */
 GtkSizeRequestMode 
@@ -630,44 +606,118 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
   class->get_preferred_width_for_height (area, widget, height, minimum_width, natural_width);
 }
 
+void
+gtk_cell_area_attribute_connect (GtkCellArea        *area,
+				 GtkCellRenderer    *renderer,
+				 const gchar        *attribute,
+				 gint                column)
+{ 
+  GtkCellAreaPrivate *priv;
+  CellInfo           *info;
+  CellAttribute      *cell_attribute;
 
-static void 
-apply_attributes (GtkCellRenderer  *renderer,
-		  const gchar      *attribute,
-		  gint              id,
-		  AttributeData    *data)
-{
-  GValue value = { 0, };
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (attribute != NULL);
 
-  /* For each attribute of each renderer we apply the value
-   * from the model to the renderer here 
-   */
-  gtk_tree_model_get_value (data->model, data->iter, id, &value);
-  g_object_set_property (G_OBJECT (renderer), attribute, &value);
-  g_value_unset (&value);
+  priv = area->priv;
+  info = g_hash_table_lookup (priv->cell_info, renderer);
+
+  if (!info)
+    {
+      info = cell_info_new (NULL, NULL, NULL);
+
+      g_hash_table_insert (priv->cell_info, renderer, info);
+    }
+  else
+    {
+      GSList *node;
+
+      /* Check we are not adding the same attribute twice */
+      if ((node = g_slist_find_custom (info->attributes, attribute,
+				       (GCompareFunc)cell_attribute_find)) != NULL)
+	{
+	  cell_attribute = node->data;
+
+	  g_warning ("Cannot connect attribute `%s' for cell renderer class `%s' "
+		     "since `%s' is already attributed to column %d", 
+		     attribute,
+		     g_type_name (G_TYPE_FROM_INSTANCE (area)),
+		     attribute, cell_attribute->column);
+	  return;
+	}
+    }
+
+  cell_attribute = cell_attribute_new (renderer, attribute, column);
+
+  if (!cell_attribute)
+    {
+      g_warning ("Cannot connect attribute `%s' for cell renderer class `%s' "
+		 "since attribute does not exist", 
+		 attribute,
+		 g_type_name (G_TYPE_FROM_INSTANCE (area)));
+      return;
+    }
+
+  info->attributes = g_slist_prepend (info->attributes, cell_attribute);
 }
 
-static void 
-apply_render_attributes (GtkCellRenderer *renderer,
-			 AttributeData   *data)
+void 
+gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
+				    GtkCellRenderer    *renderer,
+				    const gchar        *attribute)
 {
-  gtk_cell_area_attribute_forall (data->area, renderer, 
-				  (GtkCellAttributeCallback)apply_attributes,
-				  data);
+  GtkCellAreaPrivate *priv;
+  CellInfo           *info;
+  CellAttribute      *cell_attribute;
+  GSList             *node;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (attribute != NULL);
+
+  priv = area->priv;
+  info = g_hash_table_lookup (priv->cell_info, renderer);
+
+  if (info)
+    {
+      node = g_slist_find_custom (info->attributes, attribute,
+				  (GCompareFunc)cell_attribute_find);
+      if (node)
+	{
+	  cell_attribute = node->data;
+
+	  cell_attribute_free (cell_attribute);
+
+	  info->attributes = g_slist_delete_link (info->attributes, node);
+	}
+    }
 }
 
 static void
-apply_custom_cell_data (GtkCellRenderer *renderer,
-			CustomCellData  *custom,
-			AttributeData   *data)
+apply_cell_attributes (GtkCellRenderer *renderer,
+		       CellInfo        *info,
+		       AttributeData   *data)
 {
-  g_assert (custom->func);
+  CellAttribute *attribute;
+  GSList        *list;
+  GValue         value = { 0, };
 
-  /* For each renderer that has a GtkCellLayoutDataFunc set,
-   * go ahead and envoke it to apply the data from the model 
+  /* Apply the attributes directly to the renderer */
+  for (list = info->attributes; list; list = list->next)
+    {
+      attribute = list->data;
+
+      gtk_tree_model_get_value (data->model, data->iter, attribute->column, &value);
+      g_object_set_property (G_OBJECT (renderer), attribute->attribute, &value);
+      g_value_unset (&value);
+    }
+
+  /* Call any GtkCellLayoutDataFunc that may have been set by the user
    */
-  custom->func (GTK_CELL_LAYOUT (data->area), renderer,
-		data->model, data->iter, custom->data);
+  if (info->func)
+    info->func (GTK_CELL_LAYOUT (data->area), renderer,
+		data->model, data->iter, info->data);
 }
 
 void
@@ -684,12 +734,7 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
 
   priv = area->priv;
 
-  /* For every cell renderer, for every attribute, apply the attribute */
-  data.area  = area;
-  data.model = tree_model;
-  data.iter  = iter;
-  gtk_cell_area_forall (area, (GtkCellCallback)apply_render_attributes, &data);
-
-  /* Now go over any custom cell data functions */
-  g_hash_table_foreach (priv->custom_cell_data, (GHFunc)apply_custom_cell_data, &data);
+  /* Go over any cells that have attributes or custom GtkCellLayoutDataFuncs and
+   * apply the data from the treemodel */
+  g_hash_table_foreach (priv->cell_info, (GHFunc)apply_cell_attributes, &data);
 }

@@ -53,19 +53,6 @@ static void      gtk_cell_area_box_render                         (GtkCellArea  
 								   GtkWidget          *widget,
 								   const GdkRectangle *cell_area);
 
-static void      gtk_cell_area_box_attribute_connect              (GtkCellArea             *area,
-								   GtkCellRenderer         *renderer,
-								   const gchar             *attribute,
-								   gint                     id); 
-static void      gtk_cell_area_box_attribute_disconnect           (GtkCellArea             *area,
-								   GtkCellRenderer         *renderer,
-								   const gchar             *attribute,
-								   gint                     id);
-static void      gtk_cell_area_box_attribute_forall               (GtkCellArea             *area,
-								   GtkCellRenderer         *renderer,
-								   GtkCellAttributeCallback callback,
-								   gpointer                 user_data);
-
 static GtkSizeRequestMode gtk_cell_area_box_get_request_mode      (GtkCellArea        *area);
 static void      gtk_cell_area_box_get_preferred_width            (GtkCellArea        *area,
 								   GtkWidget          *widget,
@@ -91,14 +78,12 @@ struct _GtkCellAreaBoxPrivate
 {
   GtkOrientation orientation;
 
-
 };
 
 enum {
   PROP_0,
   PROP_ORIENTATION
 };
-
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellAreaBox, gtk_cell_area_box, GTK_TYPE_CELL_AREA,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
@@ -135,10 +120,6 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->forall                         = gtk_cell_area_box_forall;
   area_class->event                          = gtk_cell_area_box_event;
   area_class->render                         = gtk_cell_area_box_render;
-  
-  area_class->attribute_connect              = gtk_cell_area_box_attribute_connect;
-  area_class->attribute_disconnect           = gtk_cell_area_box_attribute_disconnect;
-  area_class->attribute_forall               = gtk_cell_area_box_attribute_forall;
   
   area_class->get_request_mode               = gtk_cell_area_box_get_request_mode;
   area_class->get_preferred_width            = gtk_cell_area_box_get_preferred_width;
@@ -186,7 +167,6 @@ gtk_cell_area_box_get_property (GObject     *object,
 
 }
 
-
 /*************************************************************
  *                    GtkCellAreaClass                       *
  *************************************************************/
@@ -231,34 +211,6 @@ gtk_cell_area_box_render (GtkCellArea        *area,
 {
 
 }
-
-static void
-gtk_cell_area_box_attribute_connect (GtkCellArea             *area,
-				     GtkCellRenderer         *renderer,
-				     const gchar             *attribute,
-				     gint                     id)
-{
-
-}
-
-static void
-gtk_cell_area_box_attribute_disconnect (GtkCellArea             *area,
-					GtkCellRenderer         *renderer,
-					const gchar             *attribute,
-					gint                     id)
-{
-
-}
-
-static void
-gtk_cell_area_box_attribute_forall (GtkCellArea             *area,
-				    GtkCellRenderer         *renderer,
-				    GtkCellAttributeCallback callback,
-				    gpointer                 user_data)
-{
-
-}
-
 
 static GtkSizeRequestMode 
 gtk_cell_area_box_get_request_mode (GtkCellArea *area)
