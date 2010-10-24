@@ -117,7 +117,7 @@ main (int argc, char *argv[])
     </para>
 
     <para>
-      One the other hand, GApplication supports passing entire
+      On the other hand, GApplication supports passing entire
       commandlines to the running instance, which reduces the need
       for user-defined commands. And GDBus makes it very easy to
       implement D-Bus interfaces for communication between
