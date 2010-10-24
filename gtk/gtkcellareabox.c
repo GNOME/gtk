@@ -82,6 +82,9 @@ static void      gtk_cell_area_box_layout_pack_start              (GtkCellLayout
 static void      gtk_cell_area_box_layout_pack_end                (GtkCellLayout      *cell_layout,
 								   GtkCellRenderer    *renderer,
 								   gboolean            expand);
+static void      gtk_cell_area_box_layout_reorder                 (GtkCellLayout      *cell_layout,
+								   GtkCellRenderer    *renderer,
+								   gint                position);
 
 
 /* CellInfo metadata handling */
@@ -359,6 +362,7 @@ gtk_cell_area_box_cell_layout_init (GtkCellLayoutIface *iface)
 {
   iface->pack_start = gtk_cell_area_box_layout_pack_start;
   iface->pack_end   = gtk_cell_area_box_layout_pack_end;
+  iface->reorder    = gtk_cell_area_box_layout_reorder;
 }
 
 static void
@@ -375,6 +379,28 @@ gtk_cell_area_box_layout_pack_end (GtkCellLayout      *cell_layout,
 				   gboolean            expand)
 {
   gtk_cell_area_box_pack_end (GTK_CELL_AREA_BOX (cell_layout), renderer, expand);
+}
+
+static void
+gtk_cell_area_box_layout_reorder (GtkCellLayout      *cell_layout,
+				  GtkCellRenderer    *renderer,
+				  gint                position)
+{
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (cell_layout);
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GList                 *node;
+  CellInfo              *info;
+  
+  node = g_list_find_custom (priv->cells, renderer, 
+			     (GCompareFunc)cell_info_find);
+
+  if (node)
+    {
+      info = node->data;
+
+      priv->cells = g_list_delete_link (priv->cells, node);
+      priv->cells = g_list_insert (priv->cells, info, position);
+    }
 }
 
 /*************************************************************
