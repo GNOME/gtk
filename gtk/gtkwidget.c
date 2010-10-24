@@ -11204,6 +11204,16 @@ gtk_widget_update_computed_expand (GtkWidget *widget)
     }
 }
 
+/**
+ * gtk_widget_queue_compute_expand:
+ * @widget: a #GtkWidget
+ *
+ * Mark @widget as needing to recompute its expand flags. Call
+ * this function when setting legacy expand child properties
+ * on the child of a container.
+ *
+ * See gtk_widget_compute_expand().
+ */
 void
 gtk_widget_queue_compute_expand (GtkWidget *widget)
 {
@@ -13146,6 +13156,16 @@ gtk_widget_send_focus_change (GtkWidget *widget,
   return res;
 }
 
+/**
+ * gtk_widget_in_destruction:
+ * @widget: a #GtkWidget
+ *
+ * Returns whether the widget is currently being destroyed.
+ * This information can sometimes be used to avoid doing
+ * unnecessary work.
+ *
+ * Returns: %TRUE if @widget is being destroyed
+ */
 gboolean
 gtk_widget_in_destruction (GtkWidget *widget)
 {

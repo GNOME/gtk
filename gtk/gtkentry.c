@@ -6660,8 +6660,10 @@ gtk_entry_set_buffer (GtkEntry       *entry,
  * @entry: a #GtkEntry
  * @text_area: Return location for the text area.
  *
- * Returns the area where the entry's text is drawn. This function is
+ * Gets the area where the entry's text is drawn. This function is
  * useful when drawing something to the entry in a draw callback.
+ *
+ * If the entry is not realized, @text_area is filled with zeros.
  *
  * See also gtk_entry_get_icon_area().
  *
@@ -8111,9 +8113,12 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * @icon_pos: Icon position
  * @icon_area: Return location for the icon's area
  *
- * Returns the area where entry's icon at @icon_pos is drawn.
+ * Gets the area where entry's icon at @icon_pos is drawn.
  * This function is useful when drawing something to the
  * entry in a draw callback.
+ *
+ * If the entry is not realized or has no icon at the given position,
+ * @icon_area is filled with zeros.
  *
  * See also gtk_entry_get_text_area()
  *

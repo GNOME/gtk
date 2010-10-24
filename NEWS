@@ -13,7 +13,6 @@ Overview of Changes from GTK+ 2.91.1 to 2.91.2
  - Popups can be wider than the combo box itself
  - The deprecated GtkComboBoxEntry subclass has been removed
  - The deprecated combo box text convenience API has been removed
- - Numeric IDs can be associated with model values
 
 * GtkRecentManager changes:
  - Store xbel file in XDG_USER_DATA

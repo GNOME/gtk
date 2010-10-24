@@ -44,11 +44,11 @@
  * of a GTK+ application in a convenient fashion, without enforcing
  * a one-size-fits-all application model.
  *
- * Currently, GtkApplication handles application uniqueness, provides
- * some basic scriptability by exporting 'actions', implements some
- * standard actions itself (such as 'Quit') and provides a main window
- * whose life-cycle is automatically tied to the life-cycle of your
- * application.
+ * Currently, GtkApplication handles GTK+ initialization, application
+ * uniqueness, provides some basic scriptability by exporting 'actions',
+ * implements some standard actions itself (such as 'Quit') and manages
+ * a list of toplevel windows whose life-cycle is automatically tied to
+ * the life-cycle of your application.
  *
  * <example id="gtkapplication"><title>A simple application</title>
  * <programlisting>
@@ -151,6 +151,20 @@ gtk_application_class_init (GtkApplicationClass *class)
   g_type_class_add_private (class, sizeof (GtkApplicationPrivate));
 }
 
+/**
+ * gtk_application_new:
+ * @application_id: the application id
+ * @flags: the application flags
+ *
+ * Creates a new #GtkApplication instance.
+ *
+ * This function calls g_type_init() for you. gtk_init() is called
+ * as soon as the application gets registered as the primary instance.
+ *
+ * The application id must be valid. See g_application_id_is_valid().
+ *
+ * Returns: a new #GtkApplication instance
+ */
 GtkApplication *
 gtk_application_new (const gchar       *application_id,
                      GApplicationFlags  flags)
@@ -181,12 +195,15 @@ void
 gtk_application_add_window (GtkApplication *application,
                             GtkWindow      *window)
 {
+  GtkApplicationPrivate *priv;
+
   g_return_if_fail (GTK_IS_APPLICATION (application));
 
-  if (!g_list_find (application->priv->windows, window))
+  priv = application->priv;
+
+  if (!g_list_find (priv->windows, window))
     {
-      application->priv->windows = g_list_prepend (application->priv->windows,
-                                                   window);
+      priv->windows = g_list_prepend (priv->windows, window);
       gtk_window_set_application (window, application);
       g_application_hold (G_APPLICATION (application));
     }
@@ -212,12 +229,14 @@ void
 gtk_application_remove_window (GtkApplication *application,
                                GtkWindow      *window)
 {
+  GtkApplicationPrivate *priv;
+
   g_return_if_fail (GTK_IS_APPLICATION (application));
 
-  if (g_list_find (application->priv->windows, window))
+  priv = application->priv;
+  if (g_list_find (priv->windows, window))
     {
-      application->priv->windows = g_list_remove (application->priv->windows,
-                                                  window);
+      priv->windows = g_list_remove (priv->windows, window);
       g_application_release (G_APPLICATION (application));
       gtk_window_set_application (window, NULL);
     }

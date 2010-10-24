@@ -2673,19 +2673,22 @@ void
 gtk_window_set_application (GtkWindow      *window,
                             GtkApplication *application)
 {
+  GtkWindowPrivate *priv;
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  if (window->priv->application != application)
+  priv = window->priv;
+  if (priv->application != application)
     {
       gtk_window_release_application (window);
 
-      window->priv->application = application;
+      priv->application = application;
 
-      if (window->priv->application != NULL)
+      if (priv->application != NULL)
         {
-          g_object_ref (window->priv->application);
+          g_object_ref (priv->application);
 
-          gtk_application_add_window (window->priv->application, window);
+          gtk_application_add_window (priv->application, window);
         }
 
       g_object_notify (G_OBJECT (window), "application");

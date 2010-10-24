@@ -121,6 +121,7 @@ content_files =					\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
+	migrating-GtkApplication.xml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
 	question_index.sgml			\
@@ -142,6 +143,7 @@ expand_content_files = 				\
 	glossary.xml				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
+	migrating-GtkApplication.xml		\
 	question_index.sgml			\
 	text_widget.sgml			\
 	tree_widget.sgml

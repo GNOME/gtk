@@ -537,6 +537,16 @@ gtk_color_button_new_with_color (const GdkColor *color)
   return g_object_new (GTK_TYPE_COLOR_BUTTON, "color", color, NULL);
 }
 
+/**
+ * gtk_color_button_new_with_rgba:
+ * @rgba: A #GdkRGBA to set the current color with.
+ *
+ * Creates a new color button.
+ *
+ * Returns: a new color button
+ *
+ * Since: 3.0
+ */
 GtkWidget *
 gtk_color_button_new_with_rgba (const GdkRGBA *rgba)
 {
