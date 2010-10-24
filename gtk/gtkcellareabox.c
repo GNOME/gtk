@@ -61,9 +61,6 @@ static void      gtk_cell_area_box_attribute_disconnect           (GtkCellArea  
 								   GtkCellRenderer         *renderer,
 								   const gchar             *attribute,
 								   gint                     id);
-static void      gtk_cell_area_box_attribute_apply                (GtkCellArea             *area,
-								   gint                     id,
-								   GValue                  *value);
 static void      gtk_cell_area_box_attribute_forall               (GtkCellArea             *area,
 								   GtkCellRenderer         *renderer,
 								   GtkCellAttributeCallback callback,
@@ -141,7 +138,6 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   
   area_class->attribute_connect              = gtk_cell_area_box_attribute_connect;
   area_class->attribute_disconnect           = gtk_cell_area_box_attribute_disconnect;
-  area_class->attribute_apply                = gtk_cell_area_box_attribute_apply;
   area_class->attribute_forall               = gtk_cell_area_box_attribute_forall;
   
   area_class->get_request_mode               = gtk_cell_area_box_get_request_mode;
@@ -250,14 +246,6 @@ gtk_cell_area_box_attribute_disconnect (GtkCellArea             *area,
 					GtkCellRenderer         *renderer,
 					const gchar             *attribute,
 					gint                     id)
-{
-
-}
-
-static void
-gtk_cell_area_box_attribute_apply (GtkCellArea             *area,
-				   gint                     id,
-				   GValue                  *value)
 {
 
 }

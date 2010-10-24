@@ -30,6 +30,7 @@
 
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS
 
@@ -42,6 +43,7 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCellArea              GtkCellArea;
 typedef struct _GtkCellAreaClass         GtkCellAreaClass;
+typedef struct _GtkCellAreaPrivate       GtkCellAreaPrivate;
 
 
 /**
@@ -58,7 +60,6 @@ typedef void    (*GtkCellCallback)     (GtkCellRenderer  *renderer,
 
 /**
  * GtkCellAttributeCallback:
- * @area: the #GtkCellArea containing @renderer
  * @renderer: the #GtkCellRenderer that has an attribute
  * @attribute: the property attributed to @id
  * @id: the identifier of this attributed value
@@ -68,8 +69,7 @@ typedef void    (*GtkCellCallback)     (GtkCellRenderer  *renderer,
  * attributes of the cell renderers in a #GtkCellArea, 
  * see gtk_cell_area_attribute_forall().
  */
-typedef void    (*GtkCellAttributeCallback)     (GtkCellArea      *area,
-						 GtkCellRenderer  *renderer,
+typedef void    (*GtkCellAttributeCallback)     (GtkCellRenderer  *renderer,
 						 const gchar      *attribute,
 						 gint              id,
 						 gpointer          data);
@@ -79,6 +79,7 @@ struct _GtkCellArea
 {
   GInitiallyUnowned parent_instance;
 
+  GtkCellAreaPrivate *priv;
 };
 
 struct _GtkCellAreaClass
@@ -113,9 +114,6 @@ struct _GtkCellAreaClass
 							  GtkCellRenderer         *renderer,
 							  const gchar             *attribute,
 							  gint                     id);
-  void               (* attribute_apply)                 (GtkCellArea             *area,
-							  gint                     id,
-							  GValue                  *value);
   void               (* attribute_forall)                (GtkCellArea             *area,
 							  GtkCellRenderer         *renderer,
 							  GtkCellAttributeCallback callback,
@@ -182,9 +180,6 @@ void               gtk_cell_area_attribute_disconnect           (GtkCellArea    
 								 GtkCellRenderer         *renderer,
 								 const gchar             *attribute,
 								 gint                     id);
-void               gtk_cell_area_attribute_apply                (GtkCellArea             *area,
-								 gint                     id,
-								 GValue                  *value);
 void               gtk_cell_area_attribute_forall               (GtkCellArea             *area,
 								 GtkCellRenderer         *renderer,
 								 GtkCellAttributeCallback callback,
@@ -210,6 +205,12 @@ void               gtk_cell_area_get_preferred_width_for_height (GtkCellArea    
 								 gint                height,
 								 gint               *minimum_width,
 								 gint               *natural_width);
+
+
+/* Following apis are not class virtual methods */
+void               gtk_cell_area_apply_attributes               (GtkCellArea        *area,
+								 GtkTreeModel       *tree_model,
+								 GtkTreeIter        *iter);
 
 
 G_END_DECLS
