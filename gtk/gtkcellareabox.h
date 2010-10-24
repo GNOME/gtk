@@ -62,9 +62,15 @@ struct _GtkCellAreaBoxClass
   void (*_gtk_reserved4) (void);
 };
 
-GType              gtk_cell_area_box_get_type                       (void) G_GNUC_CONST;
+GType              gtk_cell_area_box_get_type    (void) G_GNUC_CONST;
 
-
+GtkCellArea       *gtk_cell_area_box_new         (void);
+void               gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
+						  GtkCellRenderer *renderer,
+						  gboolean         expand);
+void               gtk_cell_area_box_pack_end    (GtkCellAreaBox  *box,
+						  GtkCellRenderer *renderer,
+						  gboolean         expand);
 
 G_END_DECLS
 

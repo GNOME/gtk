@@ -22,6 +22,7 @@
  */
 
 #include "gtkorientable.h"
+#include "gtkcelllayout.h"
 #include "gtkcellareabox.h"
 
 /* GObjectClass */
@@ -73,11 +74,37 @@ static void      gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea  
 								   gint               *minimum_width,
 								   gint               *natural_width);
 
+/* GtkCellLayoutIface */
+static void      gtk_cell_area_box_cell_layout_init               (GtkCellLayoutIface *iface);
+static void      gtk_cell_area_box_layout_pack_start              (GtkCellLayout      *cell_layout,
+								   GtkCellRenderer    *renderer,
+								   gboolean            expand);
+static void      gtk_cell_area_box_layout_pack_end                (GtkCellLayout      *cell_layout,
+								   GtkCellRenderer    *renderer,
+								   gboolean            expand);
+
+
+/* CellInfo metadata handling */
+typedef struct {
+  GtkCellRenderer *renderer;
+
+  guint            expand : 1;
+  guint            pack   : 1;
+} CellInfo;
+
+static CellInfo  *cell_info_new  (GtkCellRenderer *renderer, 
+				  gboolean         expand,
+				  GtkPackType      pack);
+static void       cell_info_free (CellInfo        *info);
+static gint       cell_info_find (CellInfo        *info,
+				  GtkCellRenderer *renderer);
+
 
 struct _GtkCellAreaBoxPrivate
 {
   GtkOrientation orientation;
 
+  GList *cells;
 };
 
 enum {
@@ -86,8 +113,9 @@ enum {
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellAreaBox, gtk_cell_area_box, GTK_TYPE_CELL_AREA,
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
+						gtk_cell_area_box_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
-
 
 static void
 gtk_cell_area_box_init (GtkCellAreaBox *box)
@@ -100,6 +128,7 @@ gtk_cell_area_box_init (GtkCellAreaBox *box)
   priv = box->priv;
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+  priv->cells       = NULL;
 }
 
 static void 
@@ -133,6 +162,38 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   g_type_class_add_private (object_class, sizeof (GtkCellAreaBoxPrivate));
 }
 
+
+/*************************************************************
+ *                    CellInfo Basics                        *
+ *************************************************************/
+static CellInfo *
+cell_info_new  (GtkCellRenderer *renderer, 
+		gboolean         expand,
+		GtkPackType      pack)
+{
+  CellInfo *info = g_slice_new (CellInfo);
+  
+  info->renderer = g_object_ref_sink (renderer);
+  info->expand   = expand;
+  info->pack     = pack;
+
+  return info;
+}
+
+static void
+cell_info_free (CellInfo *info)
+{
+  g_object_unref (info->renderer);
+
+  g_slice_free (CellInfo, info);
+}
+
+static gint
+cell_info_find (CellInfo        *info,
+		GtkCellRenderer *renderer)
+{
+  return (info->renderer == renderer) ? 0 : -1;
+}
 
 /*************************************************************
  *                      GObjectClass                         *
@@ -174,14 +235,31 @@ static void
 gtk_cell_area_box_add (GtkCellArea        *area,
 		       GtkCellRenderer    *renderer)
 {
-
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area),
+				renderer, FALSE);
 }
 
 static void
 gtk_cell_area_box_remove (GtkCellArea        *area,
 			  GtkCellRenderer    *renderer)
 {
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GList                 *node;
 
+  node = g_list_find_custom (priv->cells, renderer, 
+			     (GCompareFunc)cell_info_find);
+
+  if (node)
+    {
+      CellInfo *info = node->data;
+
+      cell_info_free (info);
+
+      priv->cells = g_list_delete_link (priv->cells, node);
+    }
+  else
+    g_warning ("Trying to remove a cell renderer that is not present GtkCellAreaBox");
 }
 
 static void
@@ -189,7 +267,16 @@ gtk_cell_area_box_forall (GtkCellArea        *area,
 			  GtkCellCallback     callback,
 			  gpointer            callback_data)
 {
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GList                 *list;
 
+  for (list = priv->cells; list; list = list->next)
+    {
+      CellInfo *info = list->data;
+
+      callback (info->renderer, callback_data);
+    }
 }
 
 static gint
@@ -262,6 +349,89 @@ gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
 
 }
 
+
+
+/*************************************************************
+ *                    GtkCellLayoutIface                     *
+ *************************************************************/
+static void
+gtk_cell_area_box_cell_layout_init (GtkCellLayoutIface *iface)
+{
+  iface->pack_start = gtk_cell_area_box_layout_pack_start;
+  iface->pack_end   = gtk_cell_area_box_layout_pack_end;
+}
+
+static void
+gtk_cell_area_box_layout_pack_start (GtkCellLayout      *cell_layout,
+				     GtkCellRenderer    *renderer,
+				     gboolean            expand)
+{
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (cell_layout), renderer, expand);
+}
+
+static void
+gtk_cell_area_box_layout_pack_end (GtkCellLayout      *cell_layout,
+				   GtkCellRenderer    *renderer,
+				   gboolean            expand)
+{
+  gtk_cell_area_box_pack_end (GTK_CELL_AREA_BOX (cell_layout), renderer, expand);
+}
+
 /*************************************************************
  *                            API                            *
  *************************************************************/
+GtkCellArea *
+gtk_cell_area_box_new (void)
+{
+  return (GtkCellArea *)g_object_new (GTK_TYPE_CELL_AREA_BOX, NULL);
+}
+
+void
+gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
+			       GtkCellRenderer *renderer,
+			       gboolean         expand)
+{
+  GtkCellAreaBoxPrivate *priv;
+  CellInfo              *info;
+
+  g_return_if_fail (GTK_IS_CELL_AREA_BOX (box));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+
+  priv = box->priv;
+
+  if (g_list_find_custom (priv->cells, renderer, 
+			  (GCompareFunc)cell_info_find))
+    {
+      g_warning ("Refusing to add the same cell renderer to a GtkCellAreaBox twice");
+      return;
+    }
+
+  info = cell_info_new (renderer, expand, GTK_PACK_START);
+
+  priv->cells = g_list_append (priv->cells, info);
+}
+
+void
+gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
+			    GtkCellRenderer *renderer,
+			    gboolean         expand)
+{
+  GtkCellAreaBoxPrivate *priv;
+  CellInfo              *info;
+
+  g_return_if_fail (GTK_IS_CELL_AREA_BOX (box));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+
+  priv = box->priv;
+
+  if (g_list_find_custom (priv->cells, renderer, 
+			  (GCompareFunc)cell_info_find))
+    {
+      g_warning ("Refusing to add the same cell renderer to a GtkCellArea twice");
+      return;
+    }
+
+  info = cell_info_new (renderer, expand, GTK_PACK_END);
+
+  priv->cells = g_list_append (priv->cells, info);
+}

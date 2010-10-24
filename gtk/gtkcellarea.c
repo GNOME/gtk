@@ -84,6 +84,8 @@ static CellAttribute  *cell_attribute_new  (GtkCellRenderer       *renderer,
 					    const gchar           *attribute,
 					    gint                   column);
 static void            cell_attribute_free (CellAttribute         *attribute);
+static gint            cell_attribute_find (CellAttribute         *cell_attribute,
+					    const gchar           *attribute);
 
 /* Struct to pass data along while looping over 
  * cell renderers to apply attributes
@@ -145,65 +147,8 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   g_type_class_add_private (object_class, sizeof (GtkCellAreaPrivate));
 }
 
-
 /*************************************************************
- *                      GObjectClass                         *
- *************************************************************/
-static void
-gtk_cell_area_finalize (GObject *object)
-{
-  GtkCellArea        *area   = GTK_CELL_AREA (object);
-  GtkCellAreaPrivate *priv   = area->priv;
-
-  /* All cell renderers should already be removed at this point,
-   * just kill our hash table here. 
-   */
-  g_hash_table_destroy (priv->cell_info);
-
-  G_OBJECT_CLASS (gtk_cell_area_parent_class)->finalize (object);
-}
-
-
-static void
-gtk_cell_area_dispose (GObject *object)
-{
-  /* This removes every cell renderer that may be added to the GtkCellArea,
-   * subclasses should be breaking references to the GtkCellRenderers 
-   * at this point.
-   */
-  gtk_cell_layout_clear (GTK_CELL_LAYOUT (object));
-
-  G_OBJECT_CLASS (gtk_cell_area_parent_class)->dispose (object);
-}
-
-
-/*************************************************************
- *                    GtkCellAreaClass                       *
- *************************************************************/
-static void
-gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
-						   GtkWidget          *widget,
-						   gint                width,
-						   gint               *minimum_height,
-						   gint               *natural_height)
-{
-  /* If the area doesnt do height-for-width, fallback on base preferred height */
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, widget, minimum_height, natural_height);
-}
-
-static void
-gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
-						   GtkWidget          *widget,
-						   gint                height,
-						   gint               *minimum_width,
-						   gint               *natural_width)
-{
-  /* If the area doesnt do width-for-height, fallback on base preferred width */
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, widget, minimum_width, natural_width);
-}
-
-/*************************************************************
- *                   GtkCellLayoutIface                      *
+ *                    CellInfo Basics                        *
  *************************************************************/
 static CellInfo *
 cell_info_new (GtkCellLayoutDataFunc  func,
@@ -264,6 +209,7 @@ cell_attribute_free (CellAttribute *attribute)
   g_slice_free (CellAttribute, attribute);
 }
 
+/* GCompareFunc for g_slist_find_custom() */
 static gint
 cell_attribute_find (CellAttribute *cell_attribute,
 		     const gchar   *attribute)
@@ -271,6 +217,65 @@ cell_attribute_find (CellAttribute *cell_attribute,
   return g_strcmp0 (cell_attribute->attribute, attribute);
 }
 
+/*************************************************************
+ *                      GObjectClass                         *
+ *************************************************************/
+static void
+gtk_cell_area_finalize (GObject *object)
+{
+  GtkCellArea        *area   = GTK_CELL_AREA (object);
+  GtkCellAreaPrivate *priv   = area->priv;
+
+  /* All cell renderers should already be removed at this point,
+   * just kill our hash table here. 
+   */
+  g_hash_table_destroy (priv->cell_info);
+
+  G_OBJECT_CLASS (gtk_cell_area_parent_class)->finalize (object);
+}
+
+
+static void
+gtk_cell_area_dispose (GObject *object)
+{
+  /* This removes every cell renderer that may be added to the GtkCellArea,
+   * subclasses should be breaking references to the GtkCellRenderers 
+   * at this point.
+   */
+  gtk_cell_layout_clear (GTK_CELL_LAYOUT (object));
+
+  G_OBJECT_CLASS (gtk_cell_area_parent_class)->dispose (object);
+}
+
+
+/*************************************************************
+ *                    GtkCellAreaClass                       *
+ *************************************************************/
+static void
+gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
+						   GtkWidget          *widget,
+						   gint                width,
+						   gint               *minimum_height,
+						   gint               *natural_height)
+{
+  /* If the area doesnt do height-for-width, fallback on base preferred height */
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, widget, minimum_height, natural_height);
+}
+
+static void
+gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
+						   GtkWidget          *widget,
+						   gint                height,
+						   gint               *minimum_width,
+						   gint               *natural_width)
+{
+  /* If the area doesnt do width-for-height, fallback on base preferred width */
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, widget, minimum_width, natural_width);
+}
+
+/*************************************************************
+ *                   GtkCellLayoutIface                      *
+ *************************************************************/
 static void
 gtk_cell_area_cell_layout_init (GtkCellLayoutIface *iface)
 {
