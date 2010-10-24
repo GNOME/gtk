@@ -2107,7 +2107,6 @@ msgid "_Cancel"
 msgstr "أل_غِ"
 
 #: gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "ا_سطوانة"
@@ -2246,7 +2245,6 @@ msgid "_Up"
 msgstr "ف_وق"
 
 #: gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "قرص _صلب"
@@ -3898,7 +3896,7 @@ msgid "Printer '%s' is out of paper."
 msgstr "نفذ الورق من الطابعة '%s'."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1686
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "الطابعة '%s' غير متصلة حاليا."
 
