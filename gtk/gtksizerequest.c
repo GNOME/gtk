@@ -220,14 +220,15 @@ compute_size_for_orientation (GtkWidget         *request,
       /* Unconditional size request runs but is often unhandled. */
       do_size_request (widget, &requisition);
 
-      push_recursion_check (request, orientation, for_size);
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
         {
           requisition_size = requisition.width;
 
           if (for_size < 0)
             {
+	      push_recursion_check (request, orientation, for_size);
               GTK_WIDGET_GET_CLASS (request)->get_preferred_width (request, &min_size, &nat_size);
+	      pop_recursion_check (request, orientation);
             }
           else
             {
@@ -245,8 +246,10 @@ compute_size_for_orientation (GtkWidget         *request,
                                                                       &ignored_position,
                                                                       &for_size);
 
+	      push_recursion_check (request, orientation, for_size);
               GTK_WIDGET_GET_CLASS (request)->get_preferred_width_for_height (request, for_size,
                                                                               &min_size, &nat_size);
+	      pop_recursion_check (request, orientation);
             }
         }
       else
@@ -255,7 +258,9 @@ compute_size_for_orientation (GtkWidget         *request,
 
           if (for_size < 0)
             {
+	      push_recursion_check (request, orientation, for_size);
               GTK_WIDGET_GET_CLASS (request)->get_preferred_height (request, &min_size, &nat_size);
+	      pop_recursion_check (request, orientation);
             }
           else
             {
@@ -273,11 +278,12 @@ compute_size_for_orientation (GtkWidget         *request,
                                                                       &ignored_position,
                                                                       &for_size);
 
+	      push_recursion_check (request, orientation, for_size);
               GTK_WIDGET_GET_CLASS (request)->get_preferred_height_for_width (request, for_size,
                                                                               &min_size, &nat_size);
+	      pop_recursion_check (request, orientation);
             }
         }
-      pop_recursion_check (request, orientation);
 
       if (min_size > nat_size)
         {
