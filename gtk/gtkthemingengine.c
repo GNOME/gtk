@@ -1534,6 +1534,7 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
   GtkBorderStyle border_style;
   gint border_width, radius;
   GtkJunctionSides junction;
+  gdouble d1, d2, m;
 
   flags = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
@@ -1584,17 +1585,33 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
           cairo_set_line_width (cr, border_width);
           cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
 
+          d1 = d2 = 0;
+
           if (border_width > 1)
             {
-              gdouble d;
+              d1 = (gdouble) border_width / 2;
+              d2 = (gdouble) (border_width - (gint) d1) + 1;
+            }
 
-              d = (gdouble) border_width / 2;
-              x += d;
-              y += d;
+	  cairo_save (cr);
 
-              d = (gdouble) (border_width - (gint) d) + 1;
-              width -= d;
-              height -= d;
+	  m = MIN (width, height);
+	  m /= 2;
+
+          /* Only needed for square frames to have a 3D-like
+           * feeling, for rounded ones, the arc will ensure
+           * the stroke is painted to end at 45°.
+           */
+          if (radius == 0)
+            {
+              cairo_move_to (cr, x, y + height);
+              cairo_line_to (cr, x + m, y + height - m);
+              cairo_line_to (cr, x + width - m, y + m);
+              cairo_line_to (cr, x + width, y);
+              cairo_line_to (cr, x + width, y + height);
+              cairo_close_path (cr);
+
+              cairo_clip (cr);
             }
 
           if (border_style == GTK_BORDER_STYLE_INSET)
@@ -1602,18 +1619,40 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
           else
             gdk_cairo_set_source_rgba (cr, border_color);
 
-          _cairo_round_rectangle_sides (cr, (gdouble) radius, x, y, width, height,
+          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                        x + d1, y + d1,
+                                        width - d2, height - d2,
                                         SIDE_BOTTOM | SIDE_RIGHT, junction);
           cairo_stroke (cr);
 
-          if (border_style == GTK_BORDER_STYLE_INSET)
+	  cairo_restore (cr);
+
+	  cairo_save (cr);
+
+          if (radius == 0)
+            {
+              cairo_move_to (cr, x, y + height);
+              cairo_line_to (cr, x + m, y + height - m);
+              cairo_line_to (cr, x + width - m, y + m);
+              cairo_line_to (cr, x + width, y);
+              cairo_line_to (cr, x, y);
+              cairo_close_path (cr);
+
+              cairo_clip (cr);
+            }
+
+	  if (border_style == GTK_BORDER_STYLE_INSET)
             gdk_cairo_set_source_rgba (cr, border_color);
           else
             gdk_cairo_set_source_rgba (cr, &lighter);
 
-          _cairo_round_rectangle_sides (cr, (gdouble) radius, x, y, width, height,
+          _cairo_round_rectangle_sides (cr, (gdouble) radius,
+                                        x + d1, y + d1,
+                                        width - d2, height - d2,
                                         SIDE_TOP | SIDE_LEFT, junction);
           cairo_stroke (cr);
+
+	  cairo_restore (cr);
 
           break;
         }
