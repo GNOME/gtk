@@ -493,28 +493,36 @@ gtk_cell_renderer_set_property (GObject      *object,
       {
         GdkRGBA rgba;
 
-	if (!g_value_get_string (value))
-	  set_cell_bg_color (cell, NULL);
-	else if (gdk_rgba_parse (g_value_get_string (value), &rgba))
-	  set_cell_bg_color (cell, &rgba);
-	else
-	  g_warning ("Don't know color `%s'", g_value_get_string (value));
+        if (!g_value_get_string (value))
+          set_cell_bg_color (cell, NULL);
+        else if (gdk_rgba_parse (g_value_get_string (value), &rgba))
+          set_cell_bg_color (cell, &rgba);
+        else
+          g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-	g_object_notify (object, "cell-background-gdk");
+        g_object_notify (object, "cell-background-gdk");
       }
       break;
     case PROP_CELL_BACKGROUND_GDK:
       {
         GdkColor *color;
-        GdkRGBA rgba;
 
         color = g_value_get_boxed (value);
-        rgba.red = color->red / 65535.;
-        rgba.green = color->green / 65535.;
-        rgba.blue = color->blue / 65535.;
-        rgba.alpha = 1;
+        if (color)
+          {
+            GdkRGBA rgba;
 
-        set_cell_bg_color (cell, &rgba);
+            rgba.red = color->red / 65535.;
+            rgba.green = color->green / 65535.;
+            rgba.blue = color->blue / 65535.;
+            rgba.alpha = 1;
+
+            set_cell_bg_color (cell, &rgba);
+          }
+        else
+          {
+            set_cell_bg_color (cell, NULL);
+          }
       }
       break;
     case PROP_CELL_BACKGROUND_RGBA:
@@ -539,9 +547,9 @@ set_cell_bg_color (GtkCellRenderer *cell,
     {
       if (!priv->cell_background_set)
         {
-	  priv->cell_background_set = TRUE;
-	  g_object_notify (G_OBJECT (cell), "cell-background-set");
-	}
+          priv->cell_background_set = TRUE;
+          g_object_notify (G_OBJECT (cell), "cell-background-set");
+        }
 
       priv->cell_background = *rgba;
     }
