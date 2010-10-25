@@ -26,6 +26,7 @@
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkintl.h>
 
+#include "gtkprivate.h"
 #include "gtk9slice.h"
 #include "gtkpango.h"
 
@@ -56,12 +57,28 @@ enum {
   SIDE_ALL    = 0xF
 };
 
+enum {
+  PROP_0,
+  PROP_NAME
+};
+
 struct GtkThemingEnginePrivate
 {
   GtkStyleContext *context;
+  gchar *name;
 };
 
 #define GTK_THEMING_ENGINE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_THEMING_ENGINE, GtkThemingEnginePrivate))
+
+static void gtk_theming_engine_finalize          (GObject      *object);
+static void gtk_theming_engine_impl_set_property (GObject      *object,
+                                                  guint         prop_id,
+                                                  const GValue *value,
+                                                  GParamSpec   *pspec);
+static void gtk_theming_engine_impl_get_property (GObject      *object,
+                                                  guint         prop_id,
+                                                  GValue       *value,
+                                                  GParamSpec   *pspec);
 
 static void gtk_theming_engine_render_check (GtkThemingEngine *engine,
                                              cairo_t          *cr,
@@ -179,6 +196,10 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->finalize = gtk_theming_engine_finalize;
+  object_class->set_property = gtk_theming_engine_impl_set_property;
+  object_class->get_property = gtk_theming_engine_impl_get_property;
+
   klass->render_check = gtk_theming_engine_render_check;
   klass->render_option = gtk_theming_engine_render_option;
   klass->render_arrow = gtk_theming_engine_render_arrow;
@@ -193,6 +214,27 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_extension = gtk_theming_engine_render_extension;
   klass->render_handle = gtk_theming_engine_render_handle;
 
+  /**
+   * GtkThemingEngine:name:
+   *
+   * The theming engine name, this name will be used when registering
+   * custom properties, for a theming engine named "Clearlooks" registering
+   * a "glossy" custom property, it could be referenced in the CSS file as
+   *
+   * <programlisting>
+   * -Clearlooks-glossy: true;
+   * </programlisting>
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+				   PROP_NAME,
+				   g_param_spec_string ("name",
+                                                        P_("Name"),
+                                                        P_("Theming engine name"),
+                                                        NULL,
+                                                        G_PARAM_CONSTRUCT_ONLY | GTK_PARAM_READWRITE));
+
   g_type_class_add_private (object_class, sizeof (GtkThemingEnginePrivate));
 }
 
@@ -200,6 +242,62 @@ static void
 gtk_theming_engine_init (GtkThemingEngine *engine)
 {
   engine->priv = GTK_THEMING_ENGINE_GET_PRIVATE (engine);
+}
+
+static void
+gtk_theming_engine_finalize (GObject *object)
+{
+  GtkThemingEnginePrivate *priv;
+
+  priv = GTK_THEMING_ENGINE (object)->priv;
+  g_free (priv->name);
+
+  G_OBJECT_GET_CLASS (gtk_theming_engine_parent_class)->finalize (object);
+}
+
+static void
+gtk_theming_engine_impl_set_property (GObject      *object,
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
+{
+  GtkThemingEnginePrivate *priv;
+
+  priv = GTK_THEMING_ENGINE (object)->priv;
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      if (priv->name)
+        g_free (priv->name);
+
+      priv->name = g_value_dup_string (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_theming_engine_impl_get_property (GObject    *object,
+                                      guint       prop_id,
+                                      GValue     *value,
+                                      GParamSpec *pspec)
+{
+  GtkThemingEnginePrivate *priv;
+
+  priv = GTK_THEMING_ENGINE (object)->priv;
+
+  switch (prop_id)
+    {
+    case PROP_NAME:
+      g_value_set_string (value, priv->name);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 void
@@ -226,8 +324,8 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
  * Registers a property so it can be used in the CSS file format,
  * on the CSS file the property will look like
  * "-${engine-object-name}-${@property_name}". being
- * ${engine-object-name} the same than G_OBJECT_TYPE_NAME(engine)
- * would return.
+ * ${engine-object-name} either the GtkThemingEngine:name property
+ * or G_OBJECT_TYPE_NAME(engine).
  *
  * For any type a @parse_func may be provided, being this function
  * used for turning any property value (between ':' and ';') in
@@ -261,14 +359,22 @@ gtk_theming_engine_register_property (GtkThemingEngine       *engine,
                                       const GValue           *default_value,
                                       GtkStylePropertyParser  parse_func)
 {
-  gchar *name;
+  GtkThemingEnginePrivate *priv;
+  gchar *engine_name, *name;
 
   g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
   g_return_if_fail (property_name != NULL);
   g_return_if_fail (type != G_TYPE_INVALID);
   g_return_if_fail (default_value != NULL && G_IS_VALUE (default_value));
 
-  name = g_strdup_printf ("-%s-%s", G_OBJECT_TYPE_NAME (engine), property_name);
+  priv = engine->priv;
+
+  if (priv->name)
+    engine_name = priv->name;
+  else
+    engine_name = G_OBJECT_TYPE_NAME (engine);
+
+  name = g_strdup_printf ("-%s-%s", engine_name, property_name);
   gtk_style_set_register_property (name, type, default_value, parse_func);
   g_free (name);
 }
