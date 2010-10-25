@@ -239,7 +239,7 @@
 
 #include "config.h"
 #include <errno.h> /* errno */
-#include <stdlib.h> /* strtol, strtoul */
+#include <stdlib.h>
 #include <string.h> /* strlen */
 
 #include "gtkbuilder.h"
@@ -1451,9 +1451,9 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_LONG:
       {
         long l;
-        gchar *endptr;
+        gchar *endptr = NULL;
         errno = 0;
-        l = strtol (string, &endptr, 0);
+        l = g_ascii_strtoll (string, &endptr, 0);
         if (errno || endptr == string)
           {
 	    g_set_error (error,
@@ -1474,9 +1474,9 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_ULONG:
       {
         gulong ul;
-        gchar *endptr;
+        gchar *endptr = NULL;
         errno = 0;
-        ul = strtoul (string, &endptr, 0);
+        ul = g_ascii_strtoull (string, &endptr, 0);
         if (errno || endptr == string)
           {
 	    g_set_error (error,
@@ -1520,7 +1520,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
     case G_TYPE_DOUBLE:
       {
         gdouble d;
-        gchar *endptr;
+        gchar *endptr = NULL;
         errno = 0;
         d = g_ascii_strtod (string, &endptr);
         if (errno || endptr == string)
@@ -1676,8 +1676,10 @@ _gtk_builder_enum_from_string (GType         type,
   
   ret = TRUE;
 
-  value = strtoul (string, &endptr, 0);
-  if (endptr != string) /* parsed a number */
+  endptr = NULL;
+  errno = 0;
+  value = g_ascii_strtoull (string, &endptr, 0);
+  if (errno == 0 && endptr != string) /* parsed a number */
     *enum_value = value;
   else
     {
@@ -1723,9 +1725,11 @@ _gtk_builder_flags_from_string (GType         type,
   g_return_val_if_fail (string != 0, FALSE);
 
   ret = TRUE;
-  
-  value = strtoul (string, &endptr, 0);
-  if (endptr != string) /* parsed a number */
+
+  endptr = NULL;
+  errno = 0;
+  value = g_ascii_strtoull (string, &endptr, 0);
+  if (errno == 0 && endptr != string) /* parsed a number */
     *flags_value = value;
   else
     {

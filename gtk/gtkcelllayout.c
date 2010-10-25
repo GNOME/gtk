@@ -335,9 +335,9 @@ attributes_text_element (GMarkupParseContext *context,
   if (!parser_data->attr_name)
     return;
 
-  errno = 0;
   string = g_strndup (text, text_len);
-  l = strtol (string, &endptr, 0);
+  errno = 0;
+  l = g_ascii_strtoll (string, &endptr, 0);
   if (errno || endptr == string)
     {
       g_set_error (error, 
