@@ -309,7 +309,12 @@ compare_property (gconstpointer p1,
   PropertyNode *key = (PropertyNode *) p1;
   PropertyNode *node = (PropertyNode *) p2;
 
-  return (int) key->property_quark - node->property_quark;
+  if (key->property_quark > node->property_quark)
+    return 1;
+  else if (key->property_quark < node->property_quark)
+    return -1;
+
+  return 0;
 }
 
 static PropertyNode *
