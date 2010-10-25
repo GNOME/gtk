@@ -1,3 +1,4 @@
+#include <locale.h>
 #include <gdk/gdk.h>
 
 static void
@@ -50,6 +51,42 @@ test_color_parse (void)
   g_assert (gdk_rgba_equal (&color, &expected));
 }
 
+static void
+test_color_to_string (void)
+{
+  GdkRGBA rgba;
+  GdkRGBA out;
+  gchar *res;
+  gchar *res_de;
+  gchar *res_en;
+  gchar *orig;
+
+  rgba.red = 1.0;
+  rgba.green = 0.5;
+  rgba.blue = 0.1;
+  rgba.alpha = 1.0;
+
+  orig = g_strdup (setlocale (LC_ALL, NULL));
+  res = gdk_rgba_to_string (&rgba);
+  gdk_rgba_parse (res, &out);
+  g_assert (gdk_rgba_equal (&rgba, &out));
+
+  setlocale (LC_ALL, "de_DE.utf-8");
+  res_de = gdk_rgba_to_string (&rgba);
+  g_assert_cmpstr (res, ==, res_de);
+
+  setlocale (LC_ALL, "en_US.utf-8");
+  res_en = gdk_rgba_to_string (&rgba);
+  g_assert_cmpstr (res, ==, res_en);
+
+  g_free (res);
+  g_free (res_de);
+  g_free (res_en);
+
+  setlocale (LC_ALL, orig);
+  g_free (orig);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -57,6 +94,7 @@ main (int argc, char *argv[])
         gdk_init (&argc, &argv);
 
         g_test_add_func ("/color/parse", test_color_parse);
+        g_test_add_func ("/color/to-string", test_color_to_string);
 
         return g_test_run ();
 }
