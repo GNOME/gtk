@@ -1583,12 +1583,19 @@ symbolic_color_parse_str (const gchar  *string,
 
       *end_ptr = (gchar *) end;
     }
-  else if (g_str_has_prefix (str, "shade"))
+  else if (g_str_has_prefix (str, "shade") ||
+           g_str_has_prefix (str, "alpha"))
     {
       GtkSymbolicColor *param_color;
+      gboolean is_shade = FALSE;
       gdouble factor;
 
-      str += strlen ("shade");
+      is_shade = g_str_has_prefix (str, "shade");
+
+      if (is_shade)
+        str += strlen ("shade");
+      else
+        str += strlen ("alpha");
 
       SKIP_SPACES (str);
 
@@ -1629,7 +1636,11 @@ symbolic_color_parse_str (const gchar  *string,
           return NULL;
         }
 
-      symbolic_color = gtk_symbolic_color_new_shade (param_color, factor);
+      if (is_shade)
+        symbolic_color = gtk_symbolic_color_new_shade (param_color, factor);
+      else
+        symbolic_color = gtk_symbolic_color_new_alpha (param_color, factor);
+
       gtk_symbolic_color_unref (param_color);
       (*end_ptr)++;
     }
