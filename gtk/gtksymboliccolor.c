@@ -32,6 +32,7 @@ typedef enum {
   COLOR_TYPE_LITERAL,
   COLOR_TYPE_NAME,
   COLOR_TYPE_SHADE,
+  COLOR_TYPE_ALPHA,
   COLOR_TYPE_MIX
 } ColorType;
 
@@ -49,7 +50,7 @@ struct _GtkSymbolicColor
     {
       GtkSymbolicColor *color;
       gdouble factor;
-    } shade;
+    } shade, alpha;
 
     struct
     {
@@ -166,6 +167,37 @@ gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
 }
 
 /**
+ * gtk_symbolic_color_new_alpha:
+ * @color: another #GtkSymbolicColor
+ * @factor: factor to apply to @color alpha
+ *
+ * Creates a symbolic color by modifying the relative alpha
+ * value of @color. A factor < 1.0 would resolve to a more
+ * transparent color, while > 1.0 would resolve to a more
+ * opaque color.
+ *
+ * Returns: A newly created #GtkSymbolicColor
+ *
+ * Since: 3.0
+ **/
+GtkSymbolicColor *
+gtk_symbolic_color_new_alpha (GtkSymbolicColor *color,
+                              gdouble           factor)
+{
+  GtkSymbolicColor *symbolic_color;
+
+  g_return_val_if_fail (color != NULL, NULL);
+
+  symbolic_color = g_slice_new0 (GtkSymbolicColor);
+  symbolic_color->type = COLOR_TYPE_ALPHA;
+  symbolic_color->alpha.color = gtk_symbolic_color_ref (color);
+  symbolic_color->alpha.factor = CLAMP (factor, 0, 1);
+  symbolic_color->ref_count = 1;
+
+  return symbolic_color;
+}
+
+/**
  * gtk_symbolic_color_new_mix:
  * @color1: color to mix
  * @color2: another color to mix
@@ -245,6 +277,9 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
         case COLOR_TYPE_SHADE:
           gtk_symbolic_color_unref (color->shade.color);
           break;
+        case COLOR_TYPE_ALPHA:
+          gtk_symbolic_color_unref (color->alpha.color);
+          break;
         case COLOR_TYPE_MIX:
           gtk_symbolic_color_unref (color->mix.color1);
           gtk_symbolic_color_unref (color->mix.color2);
@@ -315,6 +350,18 @@ gtk_symbolic_color_resolve (GtkSymbolicColor *color,
       }
 
       break;
+    case COLOR_TYPE_ALPHA:
+      {
+        GdkRGBA alpha;
+
+        if (!gtk_symbolic_color_resolve (color->alpha.color, style_set, &alpha))
+          return FALSE;
+
+        *resolved_color = alpha;
+        resolved_color->alpha = CLAMP (alpha.alpha * color->alpha.factor, 0, 1);
+
+        return TRUE;
+      }
     case COLOR_TYPE_MIX:
       {
         GdkRGBA color1, color2;

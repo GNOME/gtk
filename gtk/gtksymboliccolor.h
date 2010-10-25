@@ -38,6 +38,8 @@ GtkSymbolicColor * gtk_symbolic_color_new_literal (GdkRGBA          *color);
 GtkSymbolicColor * gtk_symbolic_color_new_name    (const gchar      *name);
 GtkSymbolicColor * gtk_symbolic_color_new_shade   (GtkSymbolicColor *color,
                                                    gdouble           factor);
+GtkSymbolicColor * gtk_symbolic_color_new_alpha   (GtkSymbolicColor *color,
+                                                   gdouble           factor);
 GtkSymbolicColor * gtk_symbolic_color_new_mix     (GtkSymbolicColor *color1,
                                                    GtkSymbolicColor *color2,
                                                    gdouble           factor);
