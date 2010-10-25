@@ -22,12 +22,15 @@ Overview of Changes from GTK+ 2.91.1 to 2.91.2
 
 * GtkIconView allows tree models (ignoring anything below the root level)
 
-* GtkProgressBar, GtkSpinButton and GtkEntry no longer have their own
-  input-output window
+* GtkProgressBar, GtkSpinButton, GtkEntry and GtkCalendar no longer have
+  their own input-output window
 
 * gtk_widget_hide_all() has been removed
 
 * GtkGrid: A legacy-free, height-for-width grid container
+
+* GDK gained a GdkRGBA color struct containing 4 doubles, and various
+  GdkColor APIs have GdkRGBA counterparts now.
 
 * Bugs fixed:
  324899 GtkComboBoxText needs API to remove all items
@@ -39,8 +42,12 @@ Overview of Changes from GTK+ 2.91.1 to 2.91.2
  632539 Do not install gtkprivate.h
  632677 restore copyright header
  632736 change the window class of entry from INPUT_OUTPUT to INPUT_ONLY
+ 632936 gtkcellrenderer gdkrgba changes not correct
 
 * Translation updates:
+ Arabic
+ Galician
+ Hebrew
  Japanese
  Norwegian bokmål
  Spanish
