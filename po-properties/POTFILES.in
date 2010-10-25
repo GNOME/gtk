@@ -55,7 +55,6 @@ gtk/gtkcolorbutton.c
 gtk/gtkcolorsel.c
 gtk/gtkcolorseldialog.c
 gtk/gtkcombobox.c
-gtk/gtkcomboboxentry.c
 gtk/gtkcontainer.c
 gtk/gtkcustompaperunixdialog.c
 gtk/gtkdialog.c
