@@ -1831,7 +1831,7 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "slider");
       gtk_style_context_add_class (context, "scrollbar");
     }
-  else if (g_str_has_prefix (detail, "cell_"))
+  else if (g_str_has_prefix (detail, "cell"))
     {
       GtkRegionFlags row, col;
       gboolean ruled = FALSE;
