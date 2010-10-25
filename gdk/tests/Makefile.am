@@ -2,25 +2,26 @@ include $(top_srcdir)/Makefile.decl
 
 NULL=
 
-# check_PROGRAMS=check-gdk-cairo
-check_PROGRAMS=
-TESTS=$(check_PROGRAMS)
-TESTS_ENVIRONMENT=GDK_PIXBUF_MODULE_FILE=$(top_builddir)/gdk-pixbuf/loaders.cache
+noinst_PROGRAMS = $(TEST_PROGS)
 
-AM_CPPFLAGS=\
+AM_CPPFLAGS = \
 	$(GDK_DEP_CFLAGS) \
 	-I$(top_srcdir) \
 	-I$(top_builddir)/gdk \
 	$(NULL)
 
-check_gdk_cairo_SOURCES=\
-	check-gdk-cairo.c \
-	$(NULL)
-check_gdk_cairo_LDADD=\
+progs_ldadd = \
 	$(GDK_DEP_LIBS) \
-	$(top_builddir)/gdk-pixbuf/libgdk_pixbuf-$(GTK_API_VERSION).la \
 	$(top_builddir)/gdk/libgdk-$(gdktarget)-$(GTK_API_VERSION).la \
 	$(NULL)
+
+#TEST_PROGS              += check-gdk-cairo
+check_gdk_cairo_SOURCES  = check-gdk-cairo.c
+check_gdk_cairo_LDADD    = $(progs_ldadd)
+
+TEST_PROGS        += gdk-color
+gdk_color_SOURCES  = gdk-color.c
+gdk_color_LDADD    = $(progs_ldadd)
 
 CLEANFILES = \
 	cairosurface.png	\
