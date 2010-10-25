@@ -49,6 +49,7 @@
 #include <gdk/gdkpixbuf.h>
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkrectangle.h>
+#include <gdk/gdkrgba.h>
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkselection.h>
 #include <gdk/gdkspawn.h>
