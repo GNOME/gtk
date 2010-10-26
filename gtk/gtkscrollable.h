@@ -25,6 +25,7 @@
 #define __GTK_SCROLLABLE_H__
 
 #include <gtk/gtkadjustment.h>
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
@@ -42,13 +43,19 @@ struct _GtkScrollableInterface
 };
 
 /* Public API */
-GType          gtk_scrollable_get_type               (void) G_GNUC_CONST;
-GtkAdjustment *gtk_scrollable_get_hadjustment        (GtkScrollable *scrollable);
-void           gtk_scrollable_set_hadjustment        (GtkScrollable *scrollable,
-                                                      GtkAdjustment *hadjustment);
-GtkAdjustment *gtk_scrollable_get_vadjustment        (GtkScrollable *scrollable);
-void           gtk_scrollable_set_vadjustment        (GtkScrollable *scrollable,
-                                                      GtkAdjustment *vadjustment);
+GType                gtk_scrollable_get_type               (void) G_GNUC_CONST;
+GtkAdjustment       *gtk_scrollable_get_hadjustment        (GtkScrollable       *scrollable);
+void                 gtk_scrollable_set_hadjustment        (GtkScrollable       *scrollable,
+							    GtkAdjustment       *hadjustment);
+GtkAdjustment       *gtk_scrollable_get_vadjustment        (GtkScrollable       *scrollable);
+void                 gtk_scrollable_set_vadjustment        (GtkScrollable       *scrollable,
+							    GtkAdjustment       *vadjustment);
+GtkScrollablePolicy  gtk_scrollable_get_hscroll_policy     (GtkScrollable       *scrollable);
+void                 gtk_scrollable_set_hscroll_policy     (GtkScrollable       *scrollable,
+							    GtkScrollablePolicy  policy);
+GtkScrollablePolicy  gtk_scrollable_get_vscroll_policy     (GtkScrollable       *scrollable);
+void                 gtk_scrollable_set_vscroll_policy     (GtkScrollable       *scrollable,
+							    GtkScrollablePolicy  policy);
 
 G_END_DECLS
 

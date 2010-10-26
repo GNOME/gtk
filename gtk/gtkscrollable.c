@@ -63,6 +63,7 @@
 #include "config.h"
 
 #include "gtkscrollable.h"
+#include "gtktypeutils.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -105,6 +106,38 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
                                   "controller"),
                                GTK_TYPE_ADJUSTMENT,
                                GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT);
+  g_object_interface_install_property (iface, pspec);
+
+  /**
+   * GtkScrollable:hscroll-policy:
+   *
+   * Determines whether horizontal scrolling should commence once the scrollable 
+   * widget is allocated less than it's minimum width or less than it's natural width.
+   *
+   * Since: 3.0
+   */
+  pspec = g_param_spec_enum ("hscroll-policy",
+			     P_("Horizontal Scrollable Policy"),
+			     P_("How the size of the content should be determined"),
+			     GTK_TYPE_SCROLLABLE_POLICY,
+			     GTK_SCROLL_MINIMUM,
+			     GTK_PARAM_READWRITE);
+  g_object_interface_install_property (iface, pspec);
+
+  /**
+   * GtkScrollable:vscroll-policy:
+   *
+   * Determines whether vertical scrolling should commence once the scrollable 
+   * widget is allocated less than it's minimum height or less than it's natural height.
+   *
+   * Since: 3.0
+   */
+  pspec = g_param_spec_enum ("vscroll-policy",
+			     P_("Vertical Scrollable Policy"),
+			     P_("How the size of the content should be determined"),
+			     GTK_TYPE_SCROLLABLE_POLICY,
+			     GTK_SCROLL_MINIMUM,
+			     GTK_PARAM_READWRITE);
   g_object_interface_install_property (iface, pspec);
 }
 
@@ -202,4 +235,89 @@ gtk_scrollable_set_vadjustment (GtkScrollable *scrollable,
   g_return_if_fail (vadjustment == NULL || GTK_IS_ADJUSTMENT (vadjustment));
 
   g_object_set (scrollable, "vadjustment", vadjustment, NULL);
+}
+
+
+/**
+ * gtk_scrollable_get_hscroll_policy:
+ * @scrollable: a #GtkScrollable
+ *
+ * Gets the horizontal #GtkScrollablePolicy.
+ *
+ * Return value: The horizontal #GtkScrollablePolicy.
+ *
+ * Since: 3.0
+ **/
+GtkScrollablePolicy
+gtk_scrollable_get_hscroll_policy (GtkScrollable *scrollable)
+{
+  GtkScrollablePolicy policy;
+
+  g_return_val_if_fail (GTK_IS_SCROLLABLE (scrollable), GTK_SCROLL_MINIMUM);
+
+  g_object_get (scrollable, "hscroll-policy", &policy, NULL);
+
+  return policy;
+}
+
+/**
+ * gtk_scrollable_set_hscroll_policy:
+ * @scrollable: a #GtkScrollable
+ * @policy: the horizontal #GtkScrollablePolicy
+ *
+ * Sets the #GtkScrollablePolicy to determine whether 
+ * horizontal scrolling should commence below minimum or
+ * below natural width.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_scrollable_set_hscroll_policy (GtkScrollable       *scrollable,
+				   GtkScrollablePolicy  policy)
+{
+  g_return_if_fail (GTK_IS_SCROLLABLE (scrollable));
+
+  g_object_set (scrollable, "hscroll-policy", policy, NULL);
+}
+
+/**
+ * gtk_scrollable_get_vscroll_policy:
+ * @scrollable: a #GtkScrollable
+ *
+ * Gets the vertical #GtkScrollablePolicy.
+ *
+ * Return value: The vertical #GtkScrollablePolicy.
+ *
+ * Since: 3.0
+ **/
+GtkScrollablePolicy
+gtk_scrollable_get_vscroll_policy (GtkScrollable *scrollable)
+{
+  GtkScrollablePolicy policy;
+
+  g_return_val_if_fail (GTK_IS_SCROLLABLE (scrollable), GTK_SCROLL_MINIMUM);
+
+  g_object_get (scrollable, "vscroll-policy", &policy, NULL);
+
+  return policy;
+}
+
+/**
+ * gtk_scrollable_set_vscroll_policy:
+ * @scrollable: a #GtkScrollable
+ * @policy: the vertical #GtkScrollablePolicy
+ *
+ * Sets the #GtkScrollablePolicy to determine whether 
+ * vertical scrolling should commence below minimum or
+ * below natural height.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_scrollable_set_vscroll_policy (GtkScrollable       *scrollable,
+				   GtkScrollablePolicy  policy)
+{
+  g_return_if_fail (GTK_IS_SCROLLABLE (scrollable));
+
+  g_object_set (scrollable, "vscroll-policy", policy, NULL);
 }

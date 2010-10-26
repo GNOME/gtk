@@ -66,14 +66,19 @@ struct _GtkViewportPrivate
 
   GdkWindow      *bin_window;
   GdkWindow      *view_window;
+
+  /* GtkScrollablePolicy needs to be checked when
+   * driving the scrollable adjustment values */
+  guint hscroll_policy : 1;
+  guint vscroll_policy : 1;
 };
 
 enum {
   PROP_0,
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
-  PROP_MIN_DISPLAY_WIDTH,
-  PROP_MIN_DISPLAY_HEIGHT,
+  PROP_HSCROLL_POLICY,
+  PROP_VSCROLL_POLICY,
   PROP_SHADOW_TYPE
 };
 
@@ -139,8 +144,10 @@ gtk_viewport_class_init (GtkViewportClass *class)
   container_class->add = gtk_viewport_add;
 
   /* GtkScrollable implementation */
-  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
-  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
+  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
+  g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   g_object_class_install_property (gobject_class,
                                    PROP_SHADOW_TYPE,
@@ -172,6 +179,14 @@ gtk_viewport_set_property (GObject         *object,
     case PROP_VADJUSTMENT:
       gtk_viewport_set_vadjustment (viewport, g_value_get_object (value));
       break;
+    case PROP_HSCROLL_POLICY:
+      viewport->priv->hscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (viewport));
+      break;
+    case PROP_VSCROLL_POLICY:
+      viewport->priv->vscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (viewport));
+      break;
     case PROP_SHADOW_TYPE:
       gtk_viewport_set_shadow_type (viewport, g_value_get_enum (value));
       break;
@@ -197,6 +212,12 @@ gtk_viewport_get_property (GObject         *object,
       break;
     case PROP_VADJUSTMENT:
       g_value_set_object (value, priv->vadjustment);
+      break;
+    case PROP_HSCROLL_POLICY:
+      g_value_set_enum (value, priv->hscroll_policy);
+      break;
+    case PROP_VSCROLL_POLICY:
+      g_value_set_enum (value, priv->vscroll_policy);
       break;
     case PROP_SHADOW_TYPE:
       g_value_set_enum (value, priv->shadow_type);
@@ -414,13 +435,23 @@ viewport_set_hadjustment_values (GtkViewport *viewport,
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     {
-      gint minimum_width;
+      gint minimum_width, natural_width;
+      gint scroll_height;
+      
+      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
+	gtk_widget_get_preferred_height (child, &scroll_height, NULL);
+      else
+	gtk_widget_get_preferred_height (child, NULL, &scroll_height);
 
       gtk_widget_get_preferred_width_for_height (child,
-                                                 view_allocation.height,
+                                                 MAX (view_allocation.height, scroll_height),
                                                  &minimum_width,
-                                                 NULL);
-      hadjustment->upper = MAX (minimum_width, view_allocation.width);
+                                                 &natural_width);
+
+      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
+	hadjustment->upper = MAX (minimum_width, view_allocation.width);
+      else
+	hadjustment->upper = MAX (natural_width, view_allocation.width);
     }
   else
     hadjustment->upper = view_allocation.width;
@@ -456,14 +487,23 @@ viewport_set_vadjustment_values (GtkViewport *viewport,
   child = gtk_bin_get_child (bin);
   if (child && gtk_widget_get_visible (child))
     {
-      gint minimum_height;
+      gint minimum_height, natural_height;
+      gint scroll_width;
+
+      if (viewport->priv->hscroll_policy == GTK_SCROLL_MINIMUM)
+	gtk_widget_get_preferred_width (child, &scroll_width, NULL);
+      else
+	gtk_widget_get_preferred_width (child, NULL, &scroll_width);
 
       gtk_widget_get_preferred_height_for_width (child,
-                                                 view_allocation.width,
+                                                 MAX (view_allocation.width, scroll_width),
                                                  &minimum_height,
-                                                 NULL);
+                                                 &natural_height);
 
-      vadjustment->upper = MAX (minimum_height, view_allocation.height);
+      if (viewport->priv->vscroll_policy == GTK_SCROLL_MINIMUM)
+	vadjustment->upper = MAX (minimum_height, view_allocation.height);
+      else
+	vadjustment->upper = MAX (natural_height, view_allocation.height);
     }
   else
     vadjustment->upper = view_allocation.height;

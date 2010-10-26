@@ -205,6 +205,11 @@ struct _GtkIconViewPrivate
   guint shift_pressed : 1;
 
   guint draw_focus : 1;
+
+  /* GtkScrollablePolicy needs to be checked when
+   * driving the scrollable adjustment values */
+  guint hscroll_policy : 1;
+  guint vscroll_policy : 1;
 };
 
 /* Signals */
@@ -243,7 +248,9 @@ enum
 
   /* For scrollable interface */
   PROP_HADJUSTMENT,
-  PROP_VADJUSTMENT
+  PROP_VADJUSTMENT,
+  PROP_HSCROLL_POLICY,
+  PROP_VSCROLL_POLICY
 };
 
 /* GObject vfuncs */
@@ -794,8 +801,10 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     GTK_PARAM_READWRITE));
 
   /* Scrollable interface properties */
-  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
-  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
+  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
+  g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   /* Style properties */
   gtk_widget_class_install_style_property (widget_class,
@@ -1205,6 +1214,14 @@ gtk_icon_view_set_property (GObject      *object,
     case PROP_VADJUSTMENT:
       gtk_icon_view_set_vadjustment (icon_view, g_value_get_object (value));
       break;
+    case PROP_HSCROLL_POLICY:
+      icon_view->priv->hscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (icon_view));
+      break;
+    case PROP_VSCROLL_POLICY:
+      icon_view->priv->vscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (icon_view));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1276,6 +1293,12 @@ gtk_icon_view_get_property (GObject      *object,
       break;
     case PROP_VADJUSTMENT:
       g_value_set_object (value, icon_view->priv->vadjustment);
+      break;
+    case PROP_HSCROLL_POLICY:
+      g_value_set_enum (value, icon_view->priv->hscroll_policy);
+      break;
+    case PROP_VSCROLL_POLICY:
+      g_value_set_enum (value, icon_view->priv->vscroll_policy);
       break;
 
     default:
