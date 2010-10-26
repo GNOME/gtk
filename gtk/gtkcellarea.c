@@ -30,11 +30,13 @@ static void      gtk_cell_area_finalize                            (GObject     
 
 /* GtkCellAreaClass */
 static void      gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
+								    GtkCellAreaIter    *iter,
 								    GtkWidget          *widget,
 								    gint                width,
 								    gint               *minimum_height,
 								    gint               *natural_height);
 static void      gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
+								    GtkCellAreaIter    *iter,
 								    GtkWidget          *widget,
 								    gint                height,
 								    gint               *minimum_width,
@@ -138,6 +140,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->render  = NULL;
 
   /* geometry */
+  class->create_iter                    = NULL;
   class->get_request_mode               = NULL;
   class->get_preferred_width            = NULL;
   class->get_preferred_height           = NULL;
@@ -253,24 +256,26 @@ gtk_cell_area_dispose (GObject *object)
  *************************************************************/
 static void
 gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
+						   GtkCellAreaIter    *iter,
 						   GtkWidget          *widget,
 						   gint                width,
 						   gint               *minimum_height,
 						   gint               *natural_height)
 {
   /* If the area doesnt do height-for-width, fallback on base preferred height */
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, widget, minimum_height, natural_height);
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, iter, widget, minimum_height, natural_height);
 }
 
 static void
 gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
+						   GtkCellAreaIter    *iter,
 						   GtkWidget          *widget,
 						   gint                height,
 						   gint               *minimum_width,
 						   gint               *natural_width)
 {
   /* If the area doesnt do width-for-height, fallback on base preferred width */
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, widget, minimum_width, natural_width);
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, iter, widget, minimum_width, natural_width);
 }
 
 /*************************************************************
@@ -520,6 +525,25 @@ gtk_cell_area_render (GtkCellArea        *area,
 }
 
 /* Geometry */
+GtkCellAreaIter   *
+gtk_cell_area_create_iter (GtkCellArea *area)
+{
+  GtkCellAreaClass *class;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+
+  class = GTK_CELL_AREA_GET_CLASS (area);
+
+  if (class->create_iter)
+    return class->create_iter (area);
+
+  g_warning ("GtkCellAreaClass::create_iter not implemented for `%s'", 
+	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
+  
+  return NULL;
+}
+
+
 GtkSizeRequestMode 
 gtk_cell_area_get_request_mode (GtkCellArea *area)
 {
@@ -541,6 +565,7 @@ gtk_cell_area_get_request_mode (GtkCellArea *area)
 
 void
 gtk_cell_area_get_preferred_width (GtkCellArea        *area,
+				   GtkCellAreaIter    *iter,
 				   GtkWidget          *widget,
 				   gint               *minimum_size,
 				   gint               *natural_size)
@@ -553,7 +578,7 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->get_preferred_width)
-    class->get_preferred_width (area, widget, minimum_size, natural_size);
+    class->get_preferred_width (area, iter, widget, minimum_size, natural_size);
   else
     g_warning ("GtkCellAreaClass::get_preferred_width not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -561,6 +586,7 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
 
 void
 gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
+					      GtkCellAreaIter    *iter,
 					      GtkWidget          *widget,
 					      gint                width,
 					      gint               *minimum_height,
@@ -572,11 +598,12 @@ gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   class = GTK_CELL_AREA_GET_CLASS (area);
-  class->get_preferred_height_for_width (area, widget, width, minimum_height, natural_height);
+  class->get_preferred_height_for_width (area, iter, widget, width, minimum_height, natural_height);
 }
 
 void
 gtk_cell_area_get_preferred_height (GtkCellArea        *area,
+				    GtkCellAreaIter    *iter,
 				    GtkWidget          *widget,
 				    gint               *minimum_size,
 				    gint               *natural_size)
@@ -589,7 +616,7 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->get_preferred_height)
-    class->get_preferred_height (area, widget, minimum_size, natural_size);
+    class->get_preferred_height (area, iter, widget, minimum_size, natural_size);
   else
     g_warning ("GtkCellAreaClass::get_preferred_height not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -597,6 +624,7 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
 
 void
 gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
+					      GtkCellAreaIter    *iter,
 					      GtkWidget          *widget,
 					      gint                height,
 					      gint               *minimum_width,
@@ -608,7 +636,7 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   class = GTK_CELL_AREA_GET_CLASS (area);
-  class->get_preferred_width_for_height (area, widget, height, minimum_width, natural_width);
+  class->get_preferred_width_for_height (area, iter, widget, height, minimum_width, natural_width);
 }
 
 void

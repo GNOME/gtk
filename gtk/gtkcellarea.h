@@ -31,6 +31,7 @@
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktreemodel.h>
+#include <gtk/gtkcellareaiter.h>
 
 G_BEGIN_DECLS
 
@@ -88,21 +89,26 @@ struct _GtkCellAreaClass
 							  const GdkRectangle      *cell_area);
 
   /* Geometry */
+  GtkCellAreaIter   *(* create_iter)                     (GtkCellArea             *area);
   GtkSizeRequestMode (* get_request_mode)                (GtkCellArea             *area);
   void               (* get_preferred_width)             (GtkCellArea             *area,
+							  GtkCellAreaIter         *iter,
                                                           GtkWidget               *widget,
                                                           gint                    *minimum_size,
                                                           gint                    *natural_size);
   void               (* get_preferred_height_for_width)  (GtkCellArea             *area,
+							  GtkCellAreaIter         *iter,
                                                           GtkWidget               *widget,
                                                           gint                     width,
                                                           gint                    *minimum_height,
                                                           gint                    *natural_height);
   void               (* get_preferred_height)            (GtkCellArea             *area,
+							  GtkCellAreaIter         *iter,
                                                           GtkWidget               *widget,
                                                           gint                    *minimum_size,
                                                           gint                    *natural_size);
   void               (* get_preferred_width_for_height)  (GtkCellArea             *area,
+							  GtkCellAreaIter         *iter,
                                                           GtkWidget               *widget,
                                                           gint                     height,
                                                           gint                    *minimum_width,
@@ -140,21 +146,26 @@ void               gtk_cell_area_render                         (GtkCellArea    
 								 const GdkRectangle *cell_area);
 
 /* Geometry */
+GtkCellAreaIter   *gtk_cell_area_create_iter                    (GtkCellArea        *area);
 GtkSizeRequestMode gtk_cell_area_get_request_mode               (GtkCellArea        *area);
 void               gtk_cell_area_get_preferred_width            (GtkCellArea        *area,
+								 GtkCellAreaIter    *iter,
 								 GtkWidget          *widget,
 								 gint               *minimum_size,
 								 gint               *natural_size);
 void               gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
+								 GtkCellAreaIter    *iter,
 								 GtkWidget          *widget,
 								 gint                width,
 								 gint               *minimum_height,
 								 gint               *natural_height);
 void               gtk_cell_area_get_preferred_height           (GtkCellArea        *area,
+								 GtkCellAreaIter    *iter,
 								 GtkWidget          *widget,
 								 gint               *minimum_size,
 								 gint               *natural_size);
 void               gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
+								 GtkCellAreaIter    *iter,
 								 GtkWidget          *widget,
 								 gint                height,
 								 gint               *minimum_width,

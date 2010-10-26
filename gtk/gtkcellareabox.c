@@ -1,4 +1,4 @@
-/* gtkcellarea.c
+/* gtkcellareabox.c
  *
  * Copyright (C) 2010 Openismus GmbH
  *
@@ -54,21 +54,26 @@ static void      gtk_cell_area_box_render                         (GtkCellArea  
 								   GtkWidget          *widget,
 								   const GdkRectangle *cell_area);
 
-static GtkSizeRequestMode gtk_cell_area_box_get_request_mode      (GtkCellArea        *area);
+static GtkCellAreaIter    *gtk_cell_area_box_create_iter          (GtkCellArea        *area);
+static GtkSizeRequestMode  gtk_cell_area_box_get_request_mode     (GtkCellArea        *area);
 static void      gtk_cell_area_box_get_preferred_width            (GtkCellArea        *area,
+								   GtkCellAreaIter    *iter,
 								   GtkWidget          *widget,
 								   gint               *minimum_width,
 								   gint               *natural_width);
 static void      gtk_cell_area_box_get_preferred_height           (GtkCellArea        *area,
+								   GtkCellAreaIter    *iter,
 								   GtkWidget          *widget,
 								   gint               *minimum_height,
 								   gint               *natural_height);
 static void      gtk_cell_area_box_get_preferred_height_for_width (GtkCellArea        *area,
+								   GtkCellAreaIter    *iter,
 								   GtkWidget          *widget,
 								   gint                width,
 								   gint               *minimum_height,
 								   gint               *natural_height);
 static void      gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
+								   GtkCellAreaIter    *iter,
 								   GtkWidget          *widget,
 								   gint                height,
 								   gint               *minimum_width,
@@ -153,6 +158,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->event                          = gtk_cell_area_box_event;
   area_class->render                         = gtk_cell_area_box_render;
   
+  area_class->create_iter                    = gtk_cell_area_box_create_iter;
   area_class->get_request_mode               = gtk_cell_area_box_get_request_mode;
   area_class->get_preferred_width            = gtk_cell_area_box_get_preferred_width;
   area_class->get_preferred_height           = gtk_cell_area_box_get_preferred_height;
@@ -302,6 +308,12 @@ gtk_cell_area_box_render (GtkCellArea        *area,
 
 }
 
+static GtkCellAreaIter *
+gtk_cell_area_box_create_iter (GtkCellArea *area)
+{
+  return NULL;
+}
+
 static GtkSizeRequestMode 
 gtk_cell_area_box_get_request_mode (GtkCellArea *area)
 {
@@ -315,6 +327,7 @@ gtk_cell_area_box_get_request_mode (GtkCellArea *area)
 
 static void
 gtk_cell_area_box_get_preferred_width (GtkCellArea        *area,
+				       GtkCellAreaIter    *iter,
 				       GtkWidget          *widget,
 				       gint               *minimum_width,
 				       gint               *natural_width)
@@ -324,6 +337,7 @@ gtk_cell_area_box_get_preferred_width (GtkCellArea        *area,
 
 static void
 gtk_cell_area_box_get_preferred_height (GtkCellArea        *area,
+					GtkCellAreaIter    *iter,
 					GtkWidget          *widget,
 					gint               *minimum_height,
 					gint               *natural_height)
@@ -334,6 +348,7 @@ gtk_cell_area_box_get_preferred_height (GtkCellArea        *area,
 
 static void
 gtk_cell_area_box_get_preferred_height_for_width (GtkCellArea        *area,
+						  GtkCellAreaIter    *iter,
 						  GtkWidget          *widget,
 						  gint                width,
 						  gint               *minimum_height,
@@ -344,6 +359,7 @@ gtk_cell_area_box_get_preferred_height_for_width (GtkCellArea        *area,
 
 static void
 gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
+						  GtkCellAreaIter    *iter,
 						  GtkWidget          *widget,
 						  gint                height,
 						  gint               *minimum_width,
@@ -351,7 +367,6 @@ gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
 {
 
 }
-
 
 
 /*************************************************************
