@@ -1206,28 +1206,46 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_BACKGROUND_GDK:
       {
         GdkColor *color;
-        GdkRGBA rgba;
 
         color = g_value_get_boxed (value);
-        rgba.red = color->red / 65535.;
-        rgba.green = color->green / 65535.;
-        rgba.blue = color->blue / 65535.;
+        if (color)
+          {
+            GdkRGBA rgba;
 
-        set_bg_color (celltext, &rgba);
+            rgba.red = color->red / 65535.;
+            rgba.green = color->green / 65535.;
+            rgba.blue = color->blue / 65535.;
+            rgba.alpha = 1;
+
+            set_bg_color (celltext, &rgba);
+          }
+        else
+          {
+            set_bg_color (celltext, NULL);
+          }
       }
       break;
 
     case PROP_FOREGROUND_GDK:
       {
         GdkColor *color;
-        GdkRGBA rgba;
 
         color = g_value_get_boxed (value);
-        rgba.red = color->red / 65535.;
-        rgba.green = color->green / 65535.;
-        rgba.blue = color->blue / 65535.;
+        if (color)
+          {
+            GdkRGBA rgba;
 
-        set_fg_color (celltext, &rgba);
+            rgba.red = color->red / 65535.;
+            rgba.green = color->green / 65535.;
+            rgba.blue = color->blue / 65535.;
+            rgba.alpha = 1;
+
+            set_fg_color (celltext, &rgba);
+          }
+        else
+          {
+            set_fg_color (celltext, NULL);
+          }
       }
       break;
 

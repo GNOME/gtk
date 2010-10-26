@@ -290,6 +290,7 @@ gdk_cairo_create
 gdk_cairo_reset_clip
 gdk_cairo_get_clip_rectangle
 gdk_cairo_set_source_color
+gdk_cairo_set_source_rgba
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_window
 gdk_cairo_rectangle
@@ -307,6 +308,18 @@ gdk_color_get_type G_GNUC_CONST
 gdk_color_hash
 gdk_color_parse
 gdk_color_to_string
+#endif
+#endif
+
+#if IN_HEADER(__GDK_RGBA_H__)
+#if IN_FILE(__GDK_RGBA_H__)
+gdk_rgba_copy
+gdk_rgba_equal
+gdk_rgba_free
+gdk_rgba_get_type
+gdk_rgba_hash
+gdk_rgba_parse
+gdk_rgba_to_string
 #endif
 #endif
 
@@ -571,6 +584,7 @@ gdk_window_get_width
 gdk_window_has_native
 gdk_window_set_background
 gdk_window_set_background_pattern
+gdk_window_set_background_rgba
 gdk_window_set_cursor
 gdk_window_shape_combine_region
 gdk_window_set_child_shapes

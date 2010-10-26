@@ -158,9 +158,17 @@ calendar_day_selected_double_click (GtkWidget    *widget,
                                          CalendarData *data)
 {
   char buffer[256] = "day_selected_double_click: ";
+  guint day;
 
   calendar_date_to_string (data, buffer+27, 256-27);
   calendar_set_signal_strings (buffer, data);
+  gtk_calendar_get_date (GTK_CALENDAR (data->window),
+                         NULL, NULL, &day);
+
+  if (gtk_calendar_get_day_is_marked (GTK_CALENDAR (data->window), day))
+    gtk_calendar_unmark_day (GTK_CALENDAR (data->window), day);
+  else
+    gtk_calendar_mark_day (GTK_CALENDAR (data->window), day);
 }
 
 static void
@@ -663,6 +671,9 @@ int main(int   argc,
          char *argv[] )
 {
   gtk_init (&argc, &argv);
+
+  if (g_getenv ("GTK_RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
   create_calendar();
 

@@ -53,6 +53,11 @@ struct _GtkLayoutPrivate
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 
+  /* GtkScrollablePolicy needs to be checked when
+   * driving the scrollable adjustment values */
+  guint hscroll_policy : 1;
+  guint vscroll_policy : 1;
+
   /* Properties */
 
   GdkVisibilityState visibility;
@@ -75,7 +80,9 @@ struct _GtkLayoutChild {
 enum {
    PROP_0,
    PROP_HADJUSTMENT,
-   PROP_VADJUSTMENT,
+   PROP_VADJUSTMENT, 
+   PROP_HSCROLL_POLICY,
+   PROP_VSCROLL_POLICY,
    PROP_WIDTH,
    PROP_HEIGHT
 };
@@ -618,8 +625,10 @@ gtk_layout_class_init (GtkLayoutClass *class)
                                                                 GTK_PARAM_READWRITE));
   
   /* Scrollable interface */
-  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
-  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
+  g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
+  g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
+  g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   g_object_class_install_property (gobject_class,
 				   PROP_WIDTH,
@@ -671,6 +680,12 @@ gtk_layout_get_property (GObject     *object,
     case PROP_VADJUSTMENT:
       g_value_set_object (value, priv->vadjustment);
       break;
+    case PROP_HSCROLL_POLICY:
+      g_value_set_enum (value, priv->hscroll_policy);
+      break;
+    case PROP_VSCROLL_POLICY:
+      g_value_set_enum (value, priv->vscroll_policy);
+      break;
     case PROP_WIDTH:
       g_value_set_uint (value, priv->width);
       break;
@@ -701,6 +716,14 @@ gtk_layout_set_property (GObject      *object,
     case PROP_VADJUSTMENT:
       gtk_layout_set_vadjustment (layout, 
 				  (GtkAdjustment*) g_value_get_object (value));
+      break;
+    case PROP_HSCROLL_POLICY:
+      priv->hscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (layout));
+      break;
+    case PROP_VSCROLL_POLICY:
+      priv->vscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (layout));
       break;
     case PROP_WIDTH:
       gtk_layout_set_size (layout, g_value_get_uint (value),

@@ -122,7 +122,9 @@ enum
   PROP_ORIENTATION,
   PROP_TOOLBAR_STYLE,
   PROP_HADJUSTMENT,
-  PROP_VADJUSTMENT
+  PROP_VADJUSTMENT,
+  PROP_HSCROLL_POLICY,
+  PROP_VSCROLL_POLICY
 };
 
 enum
@@ -159,10 +161,15 @@ struct _GtkToolPalettePrivate
 
   GtkSizeGroup         *text_size_group;
 
-  GtkSettings       *settings;
-  gulong             settings_connection;
+  GtkSettings          *settings;
+  gulong                settings_connection;
 
   guint                 drag_source : 2;
+
+  /* GtkScrollablePolicy needs to be checked when
+   * driving the scrollable adjustment values */
+  guint hscroll_policy : 1;
+  guint vscroll_policy : 1;
 };
 
 struct _GtkToolPaletteDragData
@@ -276,6 +283,16 @@ gtk_tool_palette_set_property (GObject      *object,
         gtk_tool_palette_set_vadjustment (palette, g_value_get_object (value));
         break;
 
+      case PROP_HSCROLL_POLICY:
+	palette->priv->hscroll_policy = g_value_get_enum (value);
+	gtk_widget_queue_resize (GTK_WIDGET (palette));
+	break;
+
+      case PROP_VSCROLL_POLICY:
+	palette->priv->vscroll_policy = g_value_get_enum (value);
+	gtk_widget_queue_resize (GTK_WIDGET (palette));
+	break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -315,6 +332,14 @@ gtk_tool_palette_get_property (GObject    *object,
       case PROP_VADJUSTMENT:
         g_value_set_object (value, palette->priv->vadjustment);
         break;
+
+      case PROP_HSCROLL_POLICY:
+	g_value_set_enum (value, palette->priv->hscroll_policy);
+	break;
+
+      case PROP_VSCROLL_POLICY:
+	g_value_set_enum (value, palette->priv->vscroll_policy);
+	break;
 
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -952,10 +977,12 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
    */
   wclass->screen_changed      = gtk_tool_palette_screen_changed;
 
-  g_object_class_override_property (oclass, PROP_ORIENTATION, "orientation");
+  g_object_class_override_property (oclass, PROP_ORIENTATION,    "orientation");
 
-  g_object_class_override_property (oclass, PROP_HADJUSTMENT, "hadjustment");
-  g_object_class_override_property (oclass, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (oclass, PROP_HADJUSTMENT,    "hadjustment");
+  g_object_class_override_property (oclass, PROP_VADJUSTMENT,    "vadjustment");
+  g_object_class_override_property (oclass, PROP_HSCROLL_POLICY, "hscroll-policy");
+  g_object_class_override_property (oclass, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   /**
    * GtkToolPalette:icon-size:

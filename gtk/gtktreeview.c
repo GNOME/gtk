@@ -131,6 +131,8 @@ enum {
   PROP_MODEL,
   PROP_HADJUSTMENT,
   PROP_VADJUSTMENT,
+  PROP_HSCROLL_POLICY,
+  PROP_VSCROLL_POLICY,
   PROP_HEADERS_VISIBLE,
   PROP_HEADERS_CLICKABLE,
   PROP_EXPANDER_COLUMN,
@@ -568,8 +570,10 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
 							GTK_TYPE_TREE_MODEL,
 							GTK_PARAM_READWRITE));
 
-  g_object_class_override_property (o_class, PROP_HADJUSTMENT, "hadjustment");
-  g_object_class_override_property (o_class, PROP_VADJUSTMENT, "vadjustment");
+  g_object_class_override_property (o_class, PROP_HADJUSTMENT,    "hadjustment");
+  g_object_class_override_property (o_class, PROP_VADJUSTMENT,    "vadjustment");
+  g_object_class_override_property (o_class, PROP_HSCROLL_POLICY, "hscroll-policy");
+  g_object_class_override_property (o_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   g_object_class_install_property (o_class,
                                    PROP_HEADERS_VISIBLE,
@@ -1366,6 +1370,14 @@ gtk_tree_view_set_property (GObject         *object,
     case PROP_VADJUSTMENT:
       gtk_tree_view_set_vadjustment (tree_view, g_value_get_object (value));
       break;
+    case PROP_HSCROLL_POLICY:
+      tree_view->priv->hscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+      break;
+    case PROP_VSCROLL_POLICY:
+      tree_view->priv->vscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (tree_view));
+      break;
     case PROP_HEADERS_VISIBLE:
       gtk_tree_view_set_headers_visible (tree_view, g_value_get_boolean (value));
       break;
@@ -1440,6 +1452,12 @@ gtk_tree_view_get_property (GObject    *object,
       break;
     case PROP_VADJUSTMENT:
       g_value_set_object (value, tree_view->priv->vadjustment);
+      break;
+    case PROP_HSCROLL_POLICY:
+      g_value_set_enum (value, tree_view->priv->hscroll_policy);
+      break;
+    case PROP_VSCROLL_POLICY:
+      g_value_set_enum (value, tree_view->priv->vscroll_policy);
       break;
     case PROP_HEADERS_VISIBLE:
       g_value_set_boolean (value, gtk_tree_view_get_headers_visible (tree_view));

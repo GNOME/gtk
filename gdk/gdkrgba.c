@@ -269,9 +269,15 @@ gdk_rgba_equal (gconstpointer p1,
 gchar *
 gdk_rgba_to_string (GdkRGBA *rgba)
 {
-  return g_strdup_printf ("rgba(%f,%f,%f,%f)",
-                          CLAMP (rgba->red, 0, 1),
-                          CLAMP (rgba->green, 0, 1),
-                          CLAMP (rgba->blue, 0, 1),
-                          CLAMP (rgba->alpha, 0, 1));
+  gchar red[G_ASCII_DTOSTR_BUF_SIZE];
+  gchar green[G_ASCII_DTOSTR_BUF_SIZE];
+  gchar blue[G_ASCII_DTOSTR_BUF_SIZE];
+  gchar alpha[G_ASCII_DTOSTR_BUF_SIZE];
+
+  g_ascii_dtostr (red, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->red, 0, 1));
+  g_ascii_dtostr (green, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->green, 0, 1));
+  g_ascii_dtostr (blue, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->blue, 0, 1));
+  g_ascii_dtostr (alpha, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->alpha, 0, 1));
+
+  return g_strdup_printf ("rgba(%s,%s,%s,%s)", red, green, blue, alpha);
 }

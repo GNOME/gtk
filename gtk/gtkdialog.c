@@ -1357,7 +1357,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 	}
 
       ad = get_response_data (GTK_WIDGET (object), TRUE);
-      ad->response_id = atoi (item->response_id);
+      ad->response_id = g_ascii_strtoll (item->response_id, NULL, 10);
 
       if (GTK_IS_BUTTON (object))
 	signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);

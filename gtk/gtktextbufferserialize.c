@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <errno.h>
 
 #include "gdk-pixbuf/gdk-pixdata.h"
 #include "gtktextbufferserialize.h"
@@ -113,9 +114,10 @@ deserialize_value (const gchar *str,
       gchar *tmp;
       int v;
 
-      v = strtol (str, &tmp, 10);
+      errno = 0;
+      v = g_ascii_strtoll (str, &tmp, 10);
 
-      if (tmp == NULL || tmp == str)
+      if (errno || tmp == NULL || tmp == str)
 	return FALSE;
 
       g_value_set_int (value, v);
@@ -143,26 +145,32 @@ deserialize_value (const gchar *str,
       gchar *tmp;
 
       old = str;
-      color.red = strtol (old, &tmp, 16);
+      tmp = NULL;
+      errno = 0;
+      color.red = g_ascii_strtoll (old, &tmp, 16);
 
-      if (tmp == NULL || tmp == old)
+      if (errno || tmp == old)
 	return FALSE;
 
       old = tmp;
       if (*old++ != ':')
 	return FALSE;
 
-      color.green = strtol (old, &tmp, 16);
-      if (tmp == NULL || tmp == old)
+      tmp = NULL;
+      errno = 0;
+      color.green = g_ascii_strtoll (old, &tmp, 16);
+      if (errno || tmp == old)
 	return FALSE;
 
       old = tmp;
       if (*old++ != ':')
 	return FALSE;
 
-      color.blue = strtol (old, &tmp, 16);
+      tmp = NULL;
+      errno = 0;
+      color.blue = g_ascii_strtoll (old, &tmp, 16);
 
-      if (tmp == NULL || tmp == old || *tmp != '\0')
+      if (errno || tmp == old || *tmp != '\0')
 	return FALSE;
 
       g_value_set_boxed (value, &color);
@@ -836,9 +844,11 @@ check_id_or_name (GMarkupParseContext  *context,
 	  has_id = TRUE;
 
 	  /* Try parsing the integer */
-	  *id = strtol (attribute_values[i], &tmp, 10);
+          tmp = NULL;
+          errno = 0;
+	  *id = g_ascii_strtoll (attribute_values[i], &tmp, 10);
 
-	  if (tmp == NULL || tmp == attribute_values[i])
+	  if (errno || tmp == attribute_values[i])
 	    {
 	      set_error (error, context,
 			 G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,
@@ -1291,9 +1301,11 @@ parse_tag_element (GMarkupParseContext  *context,
 	    }
 	}
 
-      prio = strtol (priority, &tmp, 10);
+      tmp = NULL;
+      errno = 0;
+      prio = g_ascii_strtoll (priority, &tmp, 10);
 
-      if (tmp == NULL || tmp == priority)
+      if (errno || tmp == priority)
 	{
 	  set_error (error, context,
 		     G_MARKUP_ERROR, G_MARKUP_ERROR_PARSE,

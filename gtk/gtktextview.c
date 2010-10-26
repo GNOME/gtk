@@ -210,6 +210,11 @@ struct _GtkTextViewPrivate
   guint mouse_cursor_obscured : 1;
 
   guint scroll_after_paste : 1;
+
+  /* GtkScrollablePolicy needs to be checked when
+   * driving the scrollable adjustment values */
+  guint hscroll_policy : 1;
+  guint vscroll_policy : 1;
 };
 
 struct _GtkTextPendingScroll
@@ -260,7 +265,9 @@ enum
   PROP_ACCEPTS_TAB,
   PROP_IM_MODULE,
   PROP_HADJUSTMENT,
-  PROP_VADJUSTMENT
+  PROP_VADJUSTMENT,
+  PROP_HSCROLL_POLICY,
+  PROP_VSCROLL_POLICY
 };
 
 static void gtk_text_view_finalize             (GObject          *object);
@@ -771,8 +778,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          GTK_PARAM_READWRITE));
 
    /* GtkScrollable interface */
-   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT, "hadjustment");
-   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT, "vadjustment");
+   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
+   g_object_class_override_property (gobject_class, PROP_VADJUSTMENT,    "vadjustment");
+   g_object_class_override_property (gobject_class, PROP_HSCROLL_POLICY, "hscroll-policy");
+   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   /*
    * Style properties
@@ -3092,6 +3101,16 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_vadjustment (text_view, g_value_get_object (value));
       break;
 
+    case PROP_HSCROLL_POLICY:
+      priv->hscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (text_view));
+      break;
+
+    case PROP_VSCROLL_POLICY:
+      priv->vscroll_policy = g_value_get_enum (value);
+      gtk_widget_queue_resize (GTK_WIDGET (text_view));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3178,6 +3197,14 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_VADJUSTMENT:
       g_value_set_object (value, priv->vadjustment);
+      break;
+
+    case PROP_HSCROLL_POLICY:
+      g_value_set_enum (value, priv->hscroll_policy);
+      break;
+
+    case PROP_VSCROLL_POLICY:
+      g_value_set_enum (value, priv->vscroll_policy);
       break;
 
     default:
