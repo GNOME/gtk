@@ -24,8 +24,6 @@
 #include "config.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
-#include "gtkorientable.h"
-#include "gtkcelllayout.h"
 #include "gtkcellareaiter.h"
 
 /* GObjectClass */

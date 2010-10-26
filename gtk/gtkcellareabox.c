@@ -24,6 +24,7 @@
 #include "gtkorientable.h"
 #include "gtkcelllayout.h"
 #include "gtkcellareabox.h"
+#include "gtkcellareaboxiter.h"
 
 /* GObjectClass */
 static void      gtk_cell_area_box_finalize                       (GObject            *object);
@@ -311,7 +312,7 @@ gtk_cell_area_box_render (GtkCellArea        *area,
 static GtkCellAreaIter *
 gtk_cell_area_box_create_iter (GtkCellArea *area)
 {
-  return NULL;
+  return (GtkCellAreaIter *)g_object_new (GTK_TYPE_CELL_AREA_BOX_ITER, NULL);
 }
 
 static GtkSizeRequestMode 
@@ -332,7 +333,7 @@ gtk_cell_area_box_get_preferred_width (GtkCellArea        *area,
 				       gint               *minimum_width,
 				       gint               *natural_width)
 {
-
+  g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (iter));
 }
 
 static void
@@ -342,6 +343,7 @@ gtk_cell_area_box_get_preferred_height (GtkCellArea        *area,
 					gint               *minimum_height,
 					gint               *natural_height)
 {
+  g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (iter));
 
 
 }
@@ -354,6 +356,7 @@ gtk_cell_area_box_get_preferred_height_for_width (GtkCellArea        *area,
 						  gint               *minimum_height,
 						  gint               *natural_height)
 {
+  g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (iter));
 
 }
 
@@ -365,6 +368,7 @@ gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
 						  gint               *minimum_width,
 						  gint               *natural_width)
 {
+  g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (iter));
 
 }
 

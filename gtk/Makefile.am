@@ -170,6 +170,7 @@ gtk_public_h_sources =          \
 	gtkcalendar.h		\
 	gtkcellarea.h		\
 	gtkcellareabox.h	\
+	gtkcellareaboxiter.h	\
 	gtkcellareaiter.h	\
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
@@ -435,6 +436,7 @@ gtk_base_c_sources =            \
 	gtkcalendar.c		\
 	gtkcellarea.c		\
 	gtkcellareabox.c	\
+	gtkcellareaboxiter.c	\
 	gtkcellareaiter.c	\
 	gtkcelleditable.c	\
 	gtkcelllayout.c		\
