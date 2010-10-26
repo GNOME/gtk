@@ -310,7 +310,7 @@ menu_position_func (GtkMenu           *menu,
     }
   else 
     {
-      gdk_window_get_origin (GTK_BUTTON (priv->arrow_button)->event_window, x, y);
+      gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (priv->arrow_button)), x, y);
       gtk_widget_get_preferred_size (priv->arrow_button,
                                      &req, NULL);
 

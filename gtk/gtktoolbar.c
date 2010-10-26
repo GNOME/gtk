@@ -2603,7 +2603,7 @@ menu_position_func (GtkMenu  *menu,
 
   gtk_widget_get_allocation (priv->arrow_button, &allocation);
 
-  gdk_window_get_origin (GTK_BUTTON (priv->arrow_button)->event_window, x, y);
+  gdk_window_get_origin (gtk_button_get_event_window (GTK_BUTTON (priv->arrow_button)), x, y);
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_LTR) 

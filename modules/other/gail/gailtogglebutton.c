@@ -84,7 +84,7 @@ gail_toggle_button_toggled_gtk (GtkWidget       *widget)
 
   accessible = gtk_widget_get_accessible (widget);
   atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, 
-                                  toggle_button->active);
+                                  gtk_toggle_button_get_active (toggle_button));
 } 
 
 static AtkStateSet*

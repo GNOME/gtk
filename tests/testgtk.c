@@ -1773,7 +1773,8 @@ static void
 sensitivity_toggled (GtkWidget *toggle,
                      GtkWidget *widget)
 {
-  gtk_widget_set_sensitive (widget,  GTK_TOGGLE_BUTTON (toggle)->active);  
+  gtk_widget_set_sensitive (widget,
+                            gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle)));
 }
 
 static GtkWidget*
@@ -1826,7 +1827,7 @@ selectable_toggled (GtkWidget *toggle,
                     GtkWidget *widget)
 {
   set_selectable_recursive (widget,
-                            GTK_TOGGLE_BUTTON (toggle)->active);
+                            gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle)));
 }
 
 static GtkWidget*
@@ -2555,7 +2556,7 @@ static void
 uposition_stop_configure (GtkToggleButton *toggle,
 			  GObject         *window)
 {
-  if (toggle->active)
+  if (gtk_toggle_button_get_active (toggle))
     g_signal_handlers_block_by_func (window, G_CALLBACK (uposition_configure), NULL);
   else
     g_signal_handlers_unblock_by_func (window, G_CALLBACK (uposition_configure), NULL);
@@ -3862,14 +3863,15 @@ entry_toggle_frame (GtkWidget *checkbutton,
                     GtkWidget *entry)
 {
    gtk_entry_set_has_frame (GTK_ENTRY(entry),
-                            GTK_TOGGLE_BUTTON(checkbutton)->active);
+                            gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
 static void
 entry_toggle_sensitive (GtkWidget *checkbutton,
 			GtkWidget *entry)
 {
-   gtk_widget_set_sensitive (entry, GTK_TOGGLE_BUTTON(checkbutton)->active);
+   gtk_widget_set_sensitive (entry,
+                             gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(checkbutton)));
 }
 
 static gboolean
@@ -3905,7 +3907,7 @@ static void
 entry_toggle_progress (GtkWidget *checkbutton,
                        GtkWidget *entry)
 {
-  if (GTK_TOGGLE_BUTTON (checkbutton)->active)
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)))
     {
       guint timeout = gdk_threads_add_timeout (100,
                                                entry_progress_timeout,
@@ -3928,7 +3930,7 @@ entry_toggle_pulse (GtkWidget *checkbutton,
                     GtkWidget *entry)
 {
   g_object_set_data (G_OBJECT (entry), "progress-pulse",
-                     GUINT_TO_POINTER ((guint) GTK_TOGGLE_BUTTON (checkbutton)->active));
+                     GUINT_TO_POINTER ((guint) gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton))));
 }
 
 static void
@@ -4119,7 +4121,7 @@ event_box_toggle_visible_window (GtkWidget *checkbutton,
 				 GtkEventBox *event_box)
 {
   gtk_event_box_set_visible_window (event_box,
-				    GTK_TOGGLE_BUTTON(checkbutton)->active);
+                                    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
 static void
@@ -4127,7 +4129,7 @@ event_box_toggle_above_child (GtkWidget *checkbutton,
 			      GtkEventBox *event_box)
 {
   gtk_event_box_set_above_child (event_box,
-				 GTK_TOGGLE_BUTTON(checkbutton)->active);
+                                 gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton)));
 }
 
 static void
@@ -4406,13 +4408,15 @@ static GtkWidget *spinner1;
 static void
 toggle_snap (GtkWidget *widget, GtkSpinButton *spin)
 {
-  gtk_spin_button_set_snap_to_ticks (spin, GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_spin_button_set_snap_to_ticks (spin,
+                                     gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 }
 
 static void
 toggle_numeric (GtkWidget *widget, GtkSpinButton *spin)
 {
-  gtk_spin_button_set_numeric (spin, GTK_TOGGLE_BUTTON (widget)->active);
+  gtk_spin_button_set_numeric (spin,
+                               gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)));
 }
 
 static void
@@ -6239,7 +6243,7 @@ static void
 notebook_popup (GtkToggleButton *button,
 		GtkNotebook     *notebook)
 {
-  if (button->active)
+  if (gtk_toggle_button_get_active (button))
     gtk_notebook_popup_enable (notebook);
   else
     gtk_notebook_popup_disable (notebook);
@@ -7700,7 +7704,7 @@ resizable_callback (GtkWidget *widget,
                      gpointer   data)
 {
   g_object_set (g_object_get_data (data, "target"),
-                "resizable", GTK_TOGGLE_BUTTON (widget)->active,
+                "resizable", gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)),
                 NULL);
 }
 

@@ -2903,9 +2903,14 @@ gtk_scale_button_get_popup
 #if IN_FILE(__GTK_SCROLLABLE_C__)
 gtk_scrollable_get_type G_GNUC_CONST
 gtk_scrollable_get_hadjustment
+gtk_scrollable_get_hscroll_policy
 gtk_scrollable_get_vadjustment
+gtk_scrollable_get_vscroll_policy
+gtk_scrollable_policy_get_type G_GNUC_CONST
 gtk_scrollable_set_hadjustment
+gtk_scrollable_set_hscroll_policy
 gtk_scrollable_set_vadjustment
+gtk_scrollable_set_vscroll_policy
 #endif
 #endif
 

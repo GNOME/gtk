@@ -713,7 +713,7 @@ gchar **tests_set(gint window, int *count)
   for (i = 0; i < testcount[window]; i++)
     {
       nullparam = FALSE;
-      if (GTK_TOGGLE_BUTTON(listoftests[window][i].toggleButton)->active)
+      if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (listoftests[window][i].toggleButton)))
         {
           num = listoftests[window][i].numParameters;
           for (j = 0; j < num; j++)

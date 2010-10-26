@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-25 01:04+0200\n"
+"POT-Creation-Date: 2010-10-26 16:52+0200\n"
 "PO-Revision-Date: 2010-10-25 01:05+0200\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
@@ -807,11 +807,11 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: ../gtk/gtkentry.c:8570 ../gtk/gtktextview.c:8158
+#: ../gtk/gtkentry.c:8570 ../gtk/gtktextview.c:8185
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8584 ../gtk/gtktextview.c:8172
+#: ../gtk/gtkentry.c:8584 ../gtk/gtktextview.c:8199
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir un carácter de control Unicode"
 
@@ -1111,21 +1111,21 @@ msgstr "Non foi posíbel montar %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1169
+#: ../gtk/gtkfilechooserentry.c:702 ../gtk/gtkfilechooserentry.c:1172
 msgid "Invalid path"
 msgstr "Camiño incorrecto"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1101
+#: ../gtk/gtkfilechooserentry.c:1104
 msgid "No match"
 msgstr "Non houbo coincidencia"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: ../gtk/gtkfilechooserentry.c:1112
+#: ../gtk/gtkfilechooserentry.c:1115
 msgid "Sole completion"
 msgstr "Único completado"
 
@@ -1133,13 +1133,13 @@ msgstr "Único completado"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: ../gtk/gtkfilechooserentry.c:1128
+#: ../gtk/gtkfilechooserentry.c:1131
 msgid "Complete, but not unique"
 msgstr "Completado, mais non é o único"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: ../gtk/gtkfilechooserentry.c:1160
+#: ../gtk/gtkfilechooserentry.c:1163
 msgid "Completing..."
 msgstr "Completando..."
 
@@ -1147,7 +1147,7 @@ msgstr "Completando..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: ../gtk/gtkfilechooserentry.c:1182 ../gtk/gtkfilechooserentry.c:1207
+#: ../gtk/gtkfilechooserentry.c:1185 ../gtk/gtkfilechooserentry.c:1210
 msgid "Only local files may be selected"
 msgstr "Só se poden seleccionar ficheiros locais"
 
@@ -1155,14 +1155,14 @@ msgstr "Só se poden seleccionar ficheiros locais"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: ../gtk/gtkfilechooserentry.c:1191
+#: ../gtk/gtkfilechooserentry.c:1194
 msgid "Incomplete hostname; end it with '/'"
 msgstr "O nome do servidor está incompleto; finaliza con '/'"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: ../gtk/gtkfilechooserentry.c:1202
+#: ../gtk/gtkfilechooserentry.c:1205
 msgid "Path does not exist"
 msgstr "O camiño non existe"
 
@@ -2594,109 +2594,109 @@ msgstr "Erro descoñecido ao tentar deserializar %s"
 msgid "No deserialize function found for format %s"
 msgstr "Non se localizou a función de deserializar para o formato %s"
 
-#: ../gtk/gtktextbufferserialize.c:795 ../gtk/gtktextbufferserialize.c:821
+#: ../gtk/gtktextbufferserialize.c:803 ../gtk/gtktextbufferserialize.c:829
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Localizáronse tanto \"id\" como \"name\" no elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:805 ../gtk/gtktextbufferserialize.c:831
+#: ../gtk/gtktextbufferserialize.c:813 ../gtk/gtktextbufferserialize.c:839
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "O atributo «%s» localizouse dúas veces no elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:845
+#: ../gtk/gtktextbufferserialize.c:855
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "O elemento <%s> ten un ID «%s» non válido"
 
-#: ../gtk/gtktextbufferserialize.c:855
+#: ../gtk/gtktextbufferserialize.c:865
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr ""
 "O elemento <%s> non ten nin un atributo \"name\" nin un atributo \"id\""
 
-#: ../gtk/gtktextbufferserialize.c:942
+#: ../gtk/gtktextbufferserialize.c:952
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "O atributo «%s» repítese dúas veces no mesmo elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:960 ../gtk/gtktextbufferserialize.c:985
+#: ../gtk/gtktextbufferserialize.c:970 ../gtk/gtktextbufferserialize.c:995
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "O atributo «%s» non é válido no elemento <%s> neste contexto"
 
-#: ../gtk/gtktextbufferserialize.c:1024
+#: ../gtk/gtktextbufferserialize.c:1034
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "A etiqueta «%s» non foi definida."
 
-#: ../gtk/gtktextbufferserialize.c:1036
+#: ../gtk/gtktextbufferserialize.c:1046
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Localizouse unha etiqueta anónima e non é posíbel crear as etiquetas."
 
-#: ../gtk/gtktextbufferserialize.c:1047
+#: ../gtk/gtktextbufferserialize.c:1057
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "A etiqueta «%s» non existe no búfer e non é posíbel crear as etiquetas."
 
-#: ../gtk/gtktextbufferserialize.c:1146 ../gtk/gtktextbufferserialize.c:1221
-#: ../gtk/gtktextbufferserialize.c:1324 ../gtk/gtktextbufferserialize.c:1398
+#: ../gtk/gtktextbufferserialize.c:1156 ../gtk/gtktextbufferserialize.c:1231
+#: ../gtk/gtktextbufferserialize.c:1336 ../gtk/gtktextbufferserialize.c:1410
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Non se permite o elemento <%s> por baixo de <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1177
+#: ../gtk/gtktextbufferserialize.c:1187
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "«%s» non é un tipo de atributo correcto"
 
-#: ../gtk/gtktextbufferserialize.c:1185
+#: ../gtk/gtktextbufferserialize.c:1195
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "«%s» non é un nome de atributo correcto"
 
-#: ../gtk/gtktextbufferserialize.c:1195
+#: ../gtk/gtktextbufferserialize.c:1205
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "Non foi posíbel converter «%s» nun valor de tipo «%s» para o atributo «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1204
+#: ../gtk/gtktextbufferserialize.c:1214
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "«%s» non é un valor correcto para o atributo «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1289
+#: ../gtk/gtktextbufferserialize.c:1299
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "A etiqueta «%s» xa está definida"
 
-#: ../gtk/gtktextbufferserialize.c:1300
+#: ../gtk/gtktextbufferserialize.c:1312
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "A etiqueta «%s» ten a prioridade incorrecta«%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1353
+#: ../gtk/gtktextbufferserialize.c:1365
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "O elemento máis extremo no texto debe ser <text_view_markup> non <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1362 ../gtk/gtktextbufferserialize.c:1378
+#: ../gtk/gtktextbufferserialize.c:1374 ../gtk/gtktextbufferserialize.c:1390
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Xa se especificou un elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1384
+#: ../gtk/gtktextbufferserialize.c:1396
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Un elemento <text> non pode aparecer antes dun elemento <tags>"
 
-#: ../gtk/gtktextbufferserialize.c:1784
+#: ../gtk/gtktextbufferserialize.c:1796
 msgid "Serialized data is malformed"
 msgstr "Os datos serializados están formados incorrectamente"
 
-#: ../gtk/gtktextbufferserialize.c:1862
+#: ../gtk/gtktextbufferserialize.c:1874
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""

@@ -140,7 +140,7 @@ init_atoms (void)
 void
 selection_toggled (GtkWidget *widget)
 {
-  if (GTK_TOGGLE_BUTTON(widget)->active)
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)))
     {
       have_selection = gtk_selection_owner_set (selection_widget,
 						GDK_SELECTION_PRIMARY,

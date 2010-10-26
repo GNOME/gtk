@@ -679,7 +679,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->size_request (widget, requisition);
 
-  if (entry->width_chars < 0)
+  if (gtk_entry_get_width_chars (entry) < 0)
     {
       PangoContext *context;
       PangoFontMetrics *metrics;
@@ -1003,7 +1003,7 @@ static gint
 gtk_spin_button_focus_out (GtkWidget     *widget,
 			   GdkEventFocus *event)
 {
-  if (GTK_ENTRY (widget)->editable)
+  if (gtk_editable_get_editable (GTK_EDITABLE (widget)))
     gtk_spin_button_update (GTK_SPIN_BUTTON (widget));
 
   return GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->focus_out_event (widget, event);
@@ -1144,8 +1144,8 @@ gtk_spin_button_button_press (GtkWidget      *widget,
 	  if (!gtk_widget_has_focus (widget))
 	    gtk_widget_grab_focus (widget);
 	  priv->button = event->button;
-	  
-	  if (GTK_ENTRY (widget)->editable)
+
+          if (gtk_editable_get_editable (GTK_EDITABLE (widget)))
 	    gtk_spin_button_update (spin);
 	  
 	  gtk_widget_get_preferred_size (widget, &requisition, NULL);
@@ -1468,7 +1468,7 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
 static void
 gtk_spin_button_activate (GtkEntry *entry)
 {
-  if (entry->editable)
+  if (gtk_editable_get_editable (GTK_EDITABLE (entry)))
     gtk_spin_button_update (GTK_SPIN_BUTTON (entry));
 
   /* Chain up so that entry->activates_default is honored */
@@ -2291,7 +2291,7 @@ gtk_spin_button_set_snap_to_ticks (GtkSpinButton *spin_button,
   if (new_val != priv->snap_to_ticks)
     {
       priv->snap_to_ticks = new_val;
-      if (new_val && GTK_ENTRY (spin_button)->editable)
+      if (new_val && gtk_editable_get_editable (GTK_EDITABLE (spin_button)))
 	gtk_spin_button_update (spin_button);
       
       g_object_notify (G_OBJECT (spin_button), "snap-to-ticks");
