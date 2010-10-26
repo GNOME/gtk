@@ -55,7 +55,7 @@ struct _GtkViewport
 {
   GtkBin bin;
 
-  /* <private> */
+  /*< private >*/
   GtkViewportPrivate *priv;
 };
 

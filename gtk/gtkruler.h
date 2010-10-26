@@ -67,7 +67,7 @@ struct _GtkRuler
 {
   GtkWidget widget;
 
-  /* <private> */
+  /*< private >*/
   GtkRulerPrivate *priv;
 };
 

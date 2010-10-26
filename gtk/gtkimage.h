@@ -135,7 +135,7 @@ struct _GtkImage
 {
   GtkMisc misc;
 
-  /* <private> */
+  /*< private >*/
   GtkImagePrivate *priv;
 };
 

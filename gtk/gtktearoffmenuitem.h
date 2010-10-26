@@ -53,7 +53,7 @@ struct _GtkTearoffMenuItem
 {
   GtkMenuItem menu_item;
 
-  /* <private> */
+  /*< private >*/
   GtkTearoffMenuItemPrivate *priv;
 };
 

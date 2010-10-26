@@ -46,7 +46,7 @@ struct _GtkRecentChooserWidget
 {
   GtkVBox parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkRecentChooserWidgetPrivate *priv;
 };
 

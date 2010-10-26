@@ -46,7 +46,7 @@ struct _GtkPrintUnixDialog
 {
   GtkDialog parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkPrintUnixDialogPrivate *priv;
 };
 

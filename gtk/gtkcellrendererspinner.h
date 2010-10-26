@@ -46,7 +46,7 @@ struct _GtkCellRendererSpinner
 {
   GtkCellRenderer                parent;
 
-  /* <private> */
+  /*< private >*/
   GtkCellRendererSpinnerPrivate *priv;
 };
 

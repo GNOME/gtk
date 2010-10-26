@@ -91,7 +91,7 @@ struct _GtkRecentData
  */
 struct _GtkRecentManager
 {
-  /* <private> */
+  /*< private >*/
   GObject parent_instance;
 
   GtkRecentManagerPrivate *priv;

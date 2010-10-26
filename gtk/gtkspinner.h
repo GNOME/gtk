@@ -48,7 +48,7 @@ struct _GtkSpinner
 {
   GtkWidget parent;
 
-  /* <private> */
+  /*< private >*/
   GtkSpinnerPrivate *priv;
 };
 

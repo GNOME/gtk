@@ -53,7 +53,7 @@ struct _GtkCheckMenuItem
 {
   GtkMenuItem menu_item;
 
-  /* <private> */
+  /*< private >*/
   GtkCheckMenuItemPrivate *priv;
 };
 

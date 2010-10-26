@@ -77,7 +77,7 @@ struct _GtkSpinButton
 {
   GtkEntry entry;
 
-  /* <private> */
+  /*< private >*/
   GtkSpinButtonPrivate *priv;
 };
 

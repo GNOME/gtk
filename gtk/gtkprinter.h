@@ -68,7 +68,7 @@ struct _GtkPrinter
 {
   GObject parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkPrinterPrivate *priv;
 };
 

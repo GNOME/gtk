@@ -44,7 +44,7 @@ struct _GtkCellRendererCombo
 {
   GtkCellRendererText parent;
 
-  /* <private> */
+  /*< private >*/
   GtkCellRendererComboPrivate *priv;
 };
 

@@ -55,7 +55,7 @@ struct _GtkTable
 {
   GtkContainer container;
 
-  /* <private> */
+  /*< private >*/
   GtkTablePrivate *priv;
 };
 

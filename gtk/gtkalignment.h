@@ -53,7 +53,7 @@ struct _GtkAlignment
 {
   GtkBin bin;
 
-  /* <private> */
+  /*< private >*/
   GtkAlignmentPrivate *priv;
 };
 

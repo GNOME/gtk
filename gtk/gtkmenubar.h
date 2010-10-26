@@ -53,7 +53,7 @@ struct _GtkMenuBar
 {
   GtkMenuShell menu_shell;
 
-  /* <private> */
+  /*< private >*/
   GtkMenuBarPrivate *priv;
 };
 

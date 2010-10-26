@@ -53,7 +53,7 @@ struct _GtkScale
 {
   GtkRange range;
 
-  /* <private> */
+  /*< private >*/
   GtkScalePrivate *priv;
 };
 

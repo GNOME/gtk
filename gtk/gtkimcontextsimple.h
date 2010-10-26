@@ -52,7 +52,7 @@ struct _GtkIMContextSimple
 {
   GtkIMContext object;
 
-  /* <private> */
+  /*< private >*/
   GtkIMContextSimplePrivate *priv;
 };
 

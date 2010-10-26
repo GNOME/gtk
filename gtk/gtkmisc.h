@@ -53,7 +53,7 @@ struct _GtkMisc
 {
   GtkWidget widget;
 
-  /* <private> */
+  /*< private >*/
   GtkMiscPrivate *priv;
 };
 
