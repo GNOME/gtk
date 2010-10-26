@@ -200,10 +200,10 @@ gtk_cell_area_box_iter_flush_preferred_width_for_height (GtkCellAreaIter *iter,
  *************************************************************/
 
 void
-gtk_cell_area_box_push_cell_width (GtkCellAreaBoxIter *box_iter,
-				   GtkCellRenderer    *renderer,
-				   gint                minimum_width,
-				   gint                natural_width)
+gtk_cell_area_box_iter_push_cell_width (GtkCellAreaBoxIter *box_iter,
+					GtkCellRenderer    *renderer,
+					gint                minimum_width,
+					gint                natural_width)
 {
   GtkCellAreaBoxIterPrivate *priv;
   CachedSize                *size;
@@ -227,11 +227,11 @@ gtk_cell_area_box_push_cell_width (GtkCellAreaBoxIter *box_iter,
 }
 
 void
-gtk_cell_area_box_push_cell_height_for_width  (GtkCellAreaBoxIter *box_iter,
-					       GtkCellRenderer    *renderer,
-					       gint                for_width,
-					       gint                minimum_height,
-					       gint                natural_height)
+gtk_cell_area_box_iter_push_cell_height_for_width  (GtkCellAreaBoxIter *box_iter,
+						    GtkCellRenderer    *renderer,
+						    gint                for_width,
+						    gint                minimum_height,
+						    gint                natural_height)
 {
   GtkCellAreaBoxIterPrivate *priv;
   GHashTable                *cell_table;
@@ -266,10 +266,10 @@ gtk_cell_area_box_push_cell_height_for_width  (GtkCellAreaBoxIter *box_iter,
 }
 
 void
-gtk_cell_area_box_push_cell_height (GtkCellAreaBoxIter *box_iter,
-				    GtkCellRenderer    *renderer,
-				    gint                minimum_height,
-				    gint                natural_height)
+gtk_cell_area_box_iter_push_cell_height (GtkCellAreaBoxIter *box_iter,
+					 GtkCellRenderer    *renderer,
+					 gint                minimum_height,
+					 gint                natural_height)
 {
   GtkCellAreaBoxIterPrivate *priv;
   CachedSize                *size;
@@ -293,11 +293,11 @@ gtk_cell_area_box_push_cell_height (GtkCellAreaBoxIter *box_iter,
 }
 
 void
-gtk_cell_area_box_push_cell_width_for_height (GtkCellAreaBoxIter *box_iter,
-					      GtkCellRenderer    *renderer,
-					      gint                for_height,
-					      gint                minimum_width,
-					      gint                natural_width)
+gtk_cell_area_box_iter_push_cell_width_for_height (GtkCellAreaBoxIter *box_iter,
+						   GtkCellRenderer    *renderer,
+						   gint                for_height,
+						   gint                minimum_width,
+						   gint                natural_width)
 {
   GtkCellAreaBoxIterPrivate *priv;
   GHashTable                *cell_table;
@@ -332,10 +332,10 @@ gtk_cell_area_box_push_cell_width_for_height (GtkCellAreaBoxIter *box_iter,
 }
 
 void
-gtk_cell_area_box_get_cell_width (GtkCellAreaBoxIter *box_iter,
-				  GtkCellRenderer    *renderer,
-				  gint               *minimum_width,
-				  gint               *natural_width)
+gtk_cell_area_box_iter_get_cell_width (GtkCellAreaBoxIter *box_iter,
+				       GtkCellRenderer    *renderer,
+				       gint               *minimum_width,
+				       gint               *natural_width)
 {
   GtkCellAreaBoxIterPrivate *priv;
   CachedSize                *size;
@@ -365,11 +365,11 @@ gtk_cell_area_box_get_cell_width (GtkCellAreaBoxIter *box_iter,
 }
 
 void
-gtk_cell_area_box_get_cell_height_for_width (GtkCellAreaBoxIter *box_iter,
-					     GtkCellRenderer    *renderer,
-					     gint                for_width,
-					     gint               *minimum_height,
-					     gint               *natural_height)
+gtk_cell_area_box_iter_get_cell_height_for_width (GtkCellAreaBoxIter *box_iter,
+						  GtkCellRenderer    *renderer,
+						  gint                for_width,
+						  gint               *minimum_height,
+						  gint               *natural_height)
 {
   GtkCellAreaBoxIterPrivate *priv;
   GHashTable                *cell_table;
@@ -403,10 +403,10 @@ gtk_cell_area_box_get_cell_height_for_width (GtkCellAreaBoxIter *box_iter,
 }
 
 void
-gtk_cell_area_box_get_cell_height (GtkCellAreaBoxIter *box_iter,
-				   GtkCellRenderer    *renderer,
-				   gint               *minimum_height,
-				   gint               *natural_height)
+gtk_cell_area_box_iter_get_cell_height (GtkCellAreaBoxIter *box_iter,
+					GtkCellRenderer    *renderer,
+					gint               *minimum_height,
+					gint               *natural_height)
 {
   GtkCellAreaBoxIterPrivate *priv;
   CachedSize                *size;
@@ -436,11 +436,11 @@ gtk_cell_area_box_get_cell_height (GtkCellAreaBoxIter *box_iter,
 }
 
 void
-gtk_cell_area_box_get_cell_width_for_height (GtkCellAreaBoxIter *box_iter,
-					     GtkCellRenderer    *renderer,
-					     gint                for_height,
-					     gint               *minimum_width,
-					     gint               *natural_width)
+gtk_cell_area_box_iter_get_cell_width_for_height (GtkCellAreaBoxIter *box_iter,
+						  GtkCellRenderer    *renderer,
+						  gint                for_height,
+						  gint               *minimum_width,
+						  gint               *natural_width)
 {
   GtkCellAreaBoxIterPrivate *priv;
   GHashTable                *cell_table;

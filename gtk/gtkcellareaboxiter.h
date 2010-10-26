@@ -61,50 +61,50 @@ GType   gtk_cell_area_box_iter_get_type               (void) G_GNUC_CONST;
 
 
 /* Update cell alignments */
-void    gtk_cell_area_box_push_cell_width             (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint                minimum_width,
-						       gint                natural_width);
+void    gtk_cell_area_box_iter_push_cell_width             (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint                minimum_width,
+							    gint                natural_width);
 
-void    gtk_cell_area_box_push_cell_height_for_width  (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint                for_width,
-						       gint                minimum_height,
-						       gint                natural_height);
+void    gtk_cell_area_box_iter_push_cell_height_for_width  (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint                for_width,
+							    gint                minimum_height,
+							    gint                natural_height);
 
-void    gtk_cell_area_box_push_cell_height            (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint                minimum_height,
-						       gint                natural_height);
+void    gtk_cell_area_box_iter_push_cell_height            (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint                minimum_height,
+							    gint                natural_height);
 
-void    gtk_cell_area_box_push_cell_width_for_height  (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint                for_height,
-						       gint                minimum_width,
-						       gint                natural_width);
+void    gtk_cell_area_box_iter_push_cell_width_for_height  (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint                for_height,
+							    gint                minimum_width,
+							    gint                natural_width);
 
 /* Fetch cell alignments */
-void    gtk_cell_area_box_get_cell_width              (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint               *minimum_width,
-						       gint               *natural_width);
+void    gtk_cell_area_box_iter_get_cell_width              (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint               *minimum_width,
+							    gint               *natural_width);
 
-void    gtk_cell_area_box_get_cell_height_for_width   (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint                for_width,
-						       gint               *minimum_height,
-						       gint               *natural_height);
+void    gtk_cell_area_box_iter_get_cell_height_for_width   (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint                for_width,
+							    gint               *minimum_height,
+							    gint               *natural_height);
 
-void    gtk_cell_area_box_get_cell_height             (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint               *minimum_height,
-						       gint               *natural_height);
+void    gtk_cell_area_box_iter_get_cell_height             (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint               *minimum_height,
+							    gint               *natural_height);
 
-void    gtk_cell_area_box_get_cell_width_for_height   (GtkCellAreaBoxIter *box_iter,
-						       GtkCellRenderer    *renderer,
-						       gint                for_height,
-						       gint               *minimum_width,
-						       gint               *natural_width);
+void    gtk_cell_area_box_iter_get_cell_width_for_height   (GtkCellAreaBoxIter *box_iter,
+							    GtkCellRenderer    *renderer,
+							    gint                for_height,
+							    gint               *minimum_width,
+							    gint               *natural_width);
 
 G_END_DECLS
 

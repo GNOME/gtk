@@ -62,15 +62,21 @@ struct _GtkCellAreaBoxClass
   void (*_gtk_reserved4) (void);
 };
 
-GType              gtk_cell_area_box_get_type    (void) G_GNUC_CONST;
+GType              gtk_cell_area_box_get_type        (void) G_GNUC_CONST;
 
-GtkCellArea       *gtk_cell_area_box_new         (void);
-void               gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
-						  GtkCellRenderer *renderer,
-						  gboolean         expand);
-void               gtk_cell_area_box_pack_end    (GtkCellAreaBox  *box,
-						  GtkCellRenderer *renderer,
-						  gboolean         expand);
+GtkCellArea       *gtk_cell_area_box_new             (void);
+void               gtk_cell_area_box_pack_start      (GtkCellAreaBox  *box,
+						      GtkCellRenderer *renderer,
+						      gboolean         expand);
+void               gtk_cell_area_box_pack_end        (GtkCellAreaBox  *box,
+						      GtkCellRenderer *renderer,
+						      gboolean         expand);
+gint               gtk_cell_area_box_get_spacing     (GtkCellAreaBox  *box);
+void               gtk_cell_area_box_set_spacing     (GtkCellAreaBox  *box,
+						      gint             spacing);
+gboolean           gtk_cell_area_box_get_align_cells (GtkCellAreaBox  *box);
+void               gtk_cell_area_box_set_align_cells (GtkCellAreaBox  *box,
+						      gboolean         align);
 
 G_END_DECLS
 
