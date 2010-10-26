@@ -51,7 +51,7 @@ struct _GtkProgressBar
 {
   GtkWidget parent;
 
-  /* <private> */
+  /*< private >*/
   GtkProgressBarPrivate *priv;
 };
 

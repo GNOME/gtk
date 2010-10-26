@@ -45,7 +45,7 @@ struct _GtkSizeGroup
 {
   GObject parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkSizeGroupPrivate *priv;
 };
 

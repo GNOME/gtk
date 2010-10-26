@@ -57,7 +57,7 @@ struct _GtkHandleBox
 {
   GtkBin bin;
 
-  /* <private> */
+  /*< private >*/
   GtkHandleBoxPrivate *priv;
 };
 

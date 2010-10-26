@@ -54,7 +54,7 @@ struct _GtkColorSelectionDialog
 {
   GtkDialog parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkColorSelectionDialogPrivate *priv;
 };
 

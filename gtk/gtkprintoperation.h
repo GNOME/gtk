@@ -79,7 +79,7 @@ struct _GtkPrintOperation
 {
   GObject parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkPrintOperationPrivate *priv;
 };
 

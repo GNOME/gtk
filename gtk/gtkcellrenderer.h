@@ -60,7 +60,7 @@ struct _GtkCellRenderer
 {
   GInitiallyUnowned parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkCellRendererPrivate *priv;
 };
 

@@ -53,7 +53,7 @@ struct _GtkRadioMenuItem
 {
   GtkCheckMenuItem check_menu_item;
 
-  /* <private> */
+  /*< private >*/
   GtkRadioMenuItemPrivate *priv;
 };
 

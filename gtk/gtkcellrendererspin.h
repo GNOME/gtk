@@ -43,7 +43,7 @@ struct _GtkCellRendererSpin
 {
   GtkCellRendererText parent;
 
-  /* <private> */
+  /*< private >*/
   GtkCellRendererSpinPrivate *priv;
 };
 

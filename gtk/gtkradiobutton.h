@@ -53,7 +53,7 @@ struct _GtkRadioButton
 {
   GtkCheckButton check_button;
 
-  /* <private> */
+  /*< private >*/
   GtkRadioButtonPrivate *priv;
 };
 

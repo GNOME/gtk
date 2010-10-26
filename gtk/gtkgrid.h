@@ -45,7 +45,7 @@ typedef struct _GtkGridClass         GtkGridClass;
 
 struct _GtkGrid
 {
-  /* <private> */
+  /*< private >*/
   GtkContainer container;
 
   GtkGridPrivate *priv;

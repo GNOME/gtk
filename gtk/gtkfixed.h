@@ -53,7 +53,7 @@ struct _GtkFixed
 {
   GtkContainer container;
 
-  /* <private> */
+  /*< private >*/
   GtkFixedPrivate *priv;
 };
 

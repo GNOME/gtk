@@ -58,7 +58,7 @@ struct _GtkLayout
 {
   GtkContainer container;
 
-  /* <private> */
+  /*< private >*/
   GtkLayoutPrivate *priv;
 };
 

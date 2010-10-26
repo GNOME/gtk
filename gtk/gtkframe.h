@@ -53,7 +53,7 @@ struct _GtkFrame
 {
   GtkBin bin;
 
-  /* <private> */
+  /*< private >*/
   GtkFramePrivate *priv;
 };
 

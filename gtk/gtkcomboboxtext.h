@@ -40,7 +40,7 @@ typedef struct _GtkComboBoxTextClass        GtkComboBoxTextClass;
 
 struct _GtkComboBoxText
 {
-  /* <private> */
+  /*< private >*/
   GtkComboBox parent_instance;
 
   GtkComboBoxTextPrivate *priv;

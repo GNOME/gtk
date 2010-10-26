@@ -56,7 +56,7 @@ struct _GtkHSV
 {
   GtkWidget parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkHSVPrivate *priv;
 };
 

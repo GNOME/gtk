@@ -52,7 +52,7 @@ struct _GtkStatusbar
 {
   GtkHBox parent_widget;
 
-  /* <private> */
+  /*< private >*/
   GtkStatusbarPrivate *priv;
 };
 

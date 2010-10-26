@@ -53,7 +53,7 @@ struct _GtkIconFactory
 {
   GObject parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkIconFactoryPrivate *priv;
 };
 

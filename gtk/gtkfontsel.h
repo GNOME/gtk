@@ -70,7 +70,7 @@ struct _GtkFontSelection
 {
   GtkVBox parent_instance;
 
-  /* <private> */
+  /*< private >*/
   GtkFontSelectionPrivate *priv;
 };
 

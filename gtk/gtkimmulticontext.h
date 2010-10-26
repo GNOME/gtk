@@ -45,7 +45,7 @@ struct _GtkIMMulticontext
 {
   GtkIMContext object;
 
-  /* <private> */
+  /*< private >*/
   GtkIMMulticontextPrivate *priv;
 };
 

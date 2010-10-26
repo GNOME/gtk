@@ -51,7 +51,7 @@ struct _GtkInvisible
 {
   GtkWidget widget;
 
-  /* <private> */
+  /*< private >*/
   GtkInvisiblePrivate *priv;
 };
 
