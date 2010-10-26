@@ -97,8 +97,8 @@ void    gtk_cell_area_box_get_cell_height_for_width   (GtkCellAreaBoxIter *box_i
 
 void    gtk_cell_area_box_get_cell_height             (GtkCellAreaBoxIter *box_iter,
 						       GtkCellRenderer    *renderer,
-						       gint                minimum_height,
-						       gint                natural_height);
+						       gint               *minimum_height,
+						       gint               *natural_height);
 
 void    gtk_cell_area_box_get_cell_width_for_height   (GtkCellAreaBoxIter *box_iter,
 						       GtkCellRenderer    *renderer,

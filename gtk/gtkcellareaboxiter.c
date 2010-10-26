@@ -337,9 +337,31 @@ gtk_cell_area_box_get_cell_width (GtkCellAreaBoxIter *box_iter,
 				  gint               *minimum_width,
 				  gint               *natural_width)
 {
+  GtkCellAreaBoxIterPrivate *priv;
+  CachedSize                *size;
+
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
 
+  priv = box_iter->priv;
+  size = g_hash_table_lookup (priv->base_widths, renderer);
+
+  if (size)
+    {
+      if (minimum_width)
+	*minimum_width = size->min_size;
+
+      if (natural_width)
+	*natural_width = size->nat_size;
+    }
+  else
+    {
+      if (minimum_width)
+	*minimum_width = -1;
+
+      if (natural_width)
+	*natural_width = -1;      
+    }
 }
 
 void
@@ -349,20 +371,68 @@ gtk_cell_area_box_get_cell_height_for_width (GtkCellAreaBoxIter *box_iter,
 					     gint               *minimum_height,
 					     gint               *natural_height)
 {
+  GtkCellAreaBoxIterPrivate *priv;
+  GHashTable                *cell_table;
+  CachedSize                *size = NULL;
+
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
 
+  priv       = box_iter->priv;
+  cell_table = g_hash_table_lookup (priv->heights, GINT_TO_POINTER (for_width));
+
+  if (cell_table)
+    size = g_hash_table_lookup (cell_table, renderer);
+
+  if (size)
+    {
+      if (minimum_height)
+	*minimum_height = size->min_size;
+
+      if (natural_height)
+	*natural_height = size->nat_size;
+    }
+  else
+    {
+      if (minimum_height)
+	*minimum_height = -1;
+
+      if (natural_height)
+	*natural_height = -1;      
+    }
 }
 
 void
 gtk_cell_area_box_get_cell_height (GtkCellAreaBoxIter *box_iter,
 				   GtkCellRenderer    *renderer,
-				   gint                minimum_height,
-				   gint                natural_height)
+				   gint               *minimum_height,
+				   gint               *natural_height)
 {
+  GtkCellAreaBoxIterPrivate *priv;
+  CachedSize                *size;
+
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
 
+  priv = box_iter->priv;
+  size = g_hash_table_lookup (priv->base_heights, renderer);
+
+  if (size)
+    {
+      if (minimum_height)
+	*minimum_height = size->min_size;
+
+      if (natural_height)
+	*natural_height = size->nat_size;
+    }
+  else
+    {
+      if (minimum_height)
+	*minimum_height = -1;
+
+      if (natural_height)
+	*natural_height = -1;      
+    }
 }
 
 void
@@ -372,7 +442,33 @@ gtk_cell_area_box_get_cell_width_for_height (GtkCellAreaBoxIter *box_iter,
 					     gint               *minimum_width,
 					     gint               *natural_width)
 {
+  GtkCellAreaBoxIterPrivate *priv;
+  GHashTable                *cell_table;
+  CachedSize                *size = NULL;
+
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
 
+  priv       = box_iter->priv;
+  cell_table = g_hash_table_lookup (priv->widths, GINT_TO_POINTER (for_height));
+
+  if (cell_table)
+    size = g_hash_table_lookup (cell_table, renderer);
+
+  if (size)
+    {
+      if (minimum_width)
+	*minimum_width = size->min_size;
+
+      if (natural_width)
+	*natural_width = size->nat_size;
+    }
+  else
+    {
+      if (minimum_width)
+	*minimum_width = -1;
+
+      if (natural_width)
+	*natural_width = -1;      
+    }
 }
