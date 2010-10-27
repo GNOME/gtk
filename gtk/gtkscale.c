@@ -116,8 +116,12 @@ static void     gtk_scale_get_property            (GObject        *object,
                                                    guint           prop_id,
                                                    GValue         *value,
                                                    GParamSpec     *pspec);
-static void     gtk_scale_size_request            (GtkWidget      *widget,
-                                                   GtkRequisition *requisition);
+static void     gtk_scale_get_preferred_width     (GtkWidget      *widget,
+                                                   gint           *minimum,
+                                                   gint           *natural);
+static void     gtk_scale_get_preferred_height    (GtkWidget      *widget,
+                                                   gint           *minimum,
+                                                   gint           *natural);
 static void     gtk_scale_style_set               (GtkWidget      *widget,
                                                    GtkStyle       *previous);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
@@ -198,7 +202,8 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->style_set = gtk_scale_style_set;
   widget_class->screen_changed = gtk_scale_screen_changed;
   widget_class->draw = gtk_scale_draw;
-  widget_class->size_request = gtk_scale_size_request;
+  widget_class->get_preferred_width = gtk_scale_get_preferred_width;
+  widget_class->get_preferred_height = gtk_scale_get_preferred_height;
 
   range_class->slider_detail = "Xscale";
   range_class->get_range_border = gtk_scale_get_range_border;
@@ -938,32 +943,54 @@ gtk_scale_screen_changed (GtkWidget *widget,
 }
 
 static void
-gtk_scale_size_request (GtkWidget      *widget,
-                        GtkRequisition *requisition)
+gtk_scale_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
 {
-  GtkRange *range = GTK_RANGE (widget);
-  gint n1, w1, h1, n2, w2, h2;
-  gint slider_length;
-
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->size_request (widget, requisition);
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->get_preferred_width (widget, minimum, natural);
   
-  gtk_widget_style_get (widget, "slider-length", &slider_length, NULL);
-
-
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_HORIZONTAL)
     {
+      gint n1, w1, h1, n2, w2, h2;
+      gint slider_length;
+      gint w;
+
+      gtk_widget_style_get (widget, "slider-length", &slider_length, NULL);
+
       gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
 
       w1 = (n1 - 1) * w1 + MAX (w1, slider_length);
       w2 = (n2 - 1) * w2 + MAX (w2, slider_length);
-      requisition->width = MAX (requisition->width, MAX (w1, w2));
+      w = MAX (w1, w2);
+
+      *minimum = MAX (*minimum, w);
+      *natural = MAX (*natural, w);
     }
-  else
+}
+
+static void
+gtk_scale_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
+{
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->get_preferred_height (widget, minimum, natural);
+
+
+  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)) == GTK_ORIENTATION_VERTICAL)
     {
+      gint n1, w1, h1, n2, w2, h2;
+      gint slider_length;
+      gint h;
+
+      gtk_widget_style_get (widget, "slider-length", &slider_length, NULL);
+
       gtk_scale_get_mark_label_size (GTK_SCALE (widget), GTK_POS_LEFT, &n1, &w1, &h1, &n2, &w2, &h2);
       h1 = (n1 - 1) * h1 + MAX (h1, slider_length);
       h2 = (n2 - 1) * h1 + MAX (h2, slider_length);
-      requisition->height = MAX (requisition->height, MAX (h1, h2));
+      h = MAX (h1, h2);
+
+      *minimum = MAX (*minimum, h);
+      *natural = MAX (*natural, h);
     }
 }
 
