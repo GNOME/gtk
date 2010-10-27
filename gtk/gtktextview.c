@@ -3921,7 +3921,7 @@ changed_handler (GtkTextLayout     *layout,
      * to avoid the optimization which just returns widget->requisition
      * if a resize hasn't been queued.
      */
-    GTK_WIDGET_GET_CLASS (widget)->size_request (widget, &new_req);
+    gtk_text_view_size_request (widget, &new_req);
 
     if (old_req.width != new_req.width ||
         old_req.height != new_req.height)
