@@ -80,7 +80,7 @@ struct _GtkLayoutChild {
 enum {
    PROP_0,
    PROP_HADJUSTMENT,
-   PROP_VADJUSTMENT, 
+   PROP_VADJUSTMENT,
    PROP_HSCROLL_POLICY,
    PROP_VSCROLL_POLICY,
    PROP_WIDTH,
@@ -105,8 +105,12 @@ static void gtk_layout_finalize           (GObject        *object);
 static void gtk_layout_realize            (GtkWidget      *widget);
 static void gtk_layout_unrealize          (GtkWidget      *widget);
 static void gtk_layout_map                (GtkWidget      *widget);
-static void gtk_layout_size_request       (GtkWidget      *widget,
-                                           GtkRequisition *requisition);
+static void gtk_layout_get_preferred_width  (GtkWidget     *widget,
+                                             gint          *minimum,
+                                             gint          *natural);
+static void gtk_layout_get_preferred_height (GtkWidget     *widget,
+                                             gint          *minimum,
+                                             gint          *natural);
 static void gtk_layout_size_allocate      (GtkWidget      *widget,
                                            GtkAllocation  *allocation);
 static gint gtk_layout_draw               (GtkWidget      *widget,
@@ -651,7 +655,8 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->realize = gtk_layout_realize;
   widget_class->unrealize = gtk_layout_unrealize;
   widget_class->map = gtk_layout_map;
-  widget_class->size_request = gtk_layout_size_request;
+  widget_class->get_preferred_width = gtk_layout_get_preferred_width;
+  widget_class->get_preferred_height = gtk_layout_get_preferred_height;
   widget_class->size_allocate = gtk_layout_size_allocate;
   widget_class->draw = gtk_layout_draw;
   widget_class->style_set = gtk_layout_style_set;
@@ -932,15 +937,23 @@ gtk_layout_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_layout_parent_class)->unrealize (widget);
 }
 
-static void     
-gtk_layout_size_request (GtkWidget     *widget,
-			 GtkRequisition *requisition)
+static void
+gtk_layout_get_preferred_width (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
 {
-  requisition->width = 0;
-  requisition->height = 0;
+  *minimum = *natural = 0;
 }
 
-static void     
+static void
+gtk_layout_get_preferred_height (GtkWidget *widget,
+                                 gint      *minimum,
+                                 gint      *natural)
+{
+  *minimum = *natural = 0;
+}
+
+static void
 gtk_layout_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
