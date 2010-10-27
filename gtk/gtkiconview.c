@@ -272,8 +272,12 @@ static void             gtk_icon_view_style_set                 (GtkWidget      
 						                 GtkStyle         *previous_style);
 static void             gtk_icon_view_state_changed             (GtkWidget        *widget,
 			                                         GtkStateType      previous_state);
-static void             gtk_icon_view_size_request              (GtkWidget          *widget,
-								 GtkRequisition     *requisition);
+static void             gtk_icon_view_get_preferred_width       (GtkWidget          *widget,
+								 gint               *minimum,
+								 gint               *natural);
+static void             gtk_icon_view_get_preferred_height      (GtkWidget          *widget,
+								 gint               *minimum,
+								 gint               *natural);
 static void             gtk_icon_view_size_allocate             (GtkWidget          *widget,
 								 GtkAllocation      *allocation);
 static gboolean         gtk_icon_view_draw                      (GtkWidget          *widget,
@@ -531,7 +535,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class->unrealize = gtk_icon_view_unrealize;
   widget_class->style_set = gtk_icon_view_style_set;
   widget_class->get_accessible = gtk_icon_view_get_accessible;
-  widget_class->size_request = gtk_icon_view_size_request;
+  widget_class->get_preferred_width = gtk_icon_view_get_preferred_width;
+  widget_class->get_preferred_height = gtk_icon_view_get_preferred_height;
   widget_class->size_allocate = gtk_icon_view_size_allocate;
   widget_class->draw = gtk_icon_view_draw;
   widget_class->motion_notify_event = gtk_icon_view_motion;
@@ -1458,28 +1463,19 @@ gtk_icon_view_style_set (GtkWidget *widget,
 }
 
 static void
-gtk_icon_view_size_request (GtkWidget      *widget,
-			    GtkRequisition *requisition)
+gtk_icon_view_get_preferred_width (GtkWidget      *widget,
+				   gint           *minimum,
+				   gint           *natural)
 {
-  GtkIconView *icon_view = GTK_ICON_VIEW (widget);
-  GList *tmp_list;
+  *minimum = *natural = GTK_ICON_VIEW (widget)->priv->width;
+}
 
-  requisition->width = icon_view->priv->width;
-  requisition->height = icon_view->priv->height;
-
-  tmp_list = icon_view->priv->children;
-
-  while (tmp_list)
-    {
-      GtkIconViewChild *child = tmp_list->data;
-      GtkRequisition child_requisition;
-
-      tmp_list = tmp_list->next;
-
-      if (gtk_widget_get_visible (child->widget))
-        gtk_widget_get_preferred_size (child->widget,
-                                       &child_requisition, NULL);
-    }
+static void
+gtk_icon_view_get_preferred_height (GtkWidget      *widget,
+				   gint           *minimum,
+				   gint           *natural)
+{
+  *minimum = *natural = GTK_ICON_VIEW (widget)->priv->height;
 }
 
 static void
