@@ -333,6 +333,12 @@ static void gtk_notebook_realize             (GtkWidget        *widget);
 static void gtk_notebook_unrealize           (GtkWidget        *widget);
 static void gtk_notebook_size_request        (GtkWidget        *widget,
 					      GtkRequisition   *requisition);
+static void gtk_notebook_get_preferred_width (GtkWidget        *widget,
+					      gint             *minimum,
+					      gint             *natural);
+static void gtk_notebook_get_preferred_height(GtkWidget        *widget,
+					      gint             *minimum,
+					      gint             *natural);
 static void gtk_notebook_size_allocate       (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static gint gtk_notebook_draw                (GtkWidget        *widget,
@@ -635,7 +641,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->unmap = gtk_notebook_unmap;
   widget_class->realize = gtk_notebook_realize;
   widget_class->unrealize = gtk_notebook_unrealize;
-  widget_class->size_request = gtk_notebook_size_request;
+  widget_class->get_preferred_width = gtk_notebook_get_preferred_width;
+  widget_class->get_preferred_height = gtk_notebook_get_preferred_height;
   widget_class->size_allocate = gtk_notebook_size_allocate;
   widget_class->draw = gtk_notebook_draw;
   widget_class->button_press_event = gtk_notebook_button_press;
@@ -2207,6 +2214,31 @@ gtk_notebook_size_request (GtkWidget      *widget,
 	  gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (children));
 	}
     }
+}
+
+
+static void
+gtk_notebook_get_preferred_width (GtkWidget *widget,
+				  gint      *minimum,
+				  gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_notebook_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_notebook_get_preferred_height (GtkWidget *widget,
+				   gint      *minimum,
+				   gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_notebook_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
 }
 
 static void
