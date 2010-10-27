@@ -51,38 +51,71 @@
 G_DEFINE_TYPE (GtkOffscreenWindow, gtk_offscreen_window, GTK_TYPE_WINDOW);
 
 static void
-gtk_offscreen_window_size_request (GtkWidget *widget,
-                                   GtkRequisition *requisition)
+gtk_offscreen_window_get_preferred_width (GtkWidget *widget,
+					  gint      *minimum,
+					  gint      *natural)
 {
   GtkBin *bin = GTK_BIN (widget);
   GtkWidget *child;
   gint border_width;
-  gint default_width, default_height;
+  gint default_width;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  requisition->width = border_width * 2;
-  requisition->height = border_width * 2;
+  *minimum = border_width * 2;
+  *natural = border_width * 2;
 
   child = gtk_bin_get_child (bin);
 
   if (child != NULL && gtk_widget_get_visible (child))
     {
-      GtkRequisition child_req;
+      gint child_min, child_nat;
 
-      gtk_widget_get_preferred_size (child, &child_req, NULL);
+      gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
-      requisition->width += child_req.width;
-      requisition->height += child_req.height;
+      *minimum += child_min;
+      *natural += child_nat;
     }
 
   gtk_window_get_default_size (GTK_WINDOW (widget),
-                               &default_width, &default_height);
-  if (default_width > 0)
-    requisition->width = default_width;
+                               &default_width, NULL);
 
-  if (default_height > 0)
-    requisition->height = default_height;
+  *minimum = MAX (*minimum, default_width);
+  *natural = MAX (*natural, default_width);
+}
+
+static void
+gtk_offscreen_window_get_preferred_height (GtkWidget *widget,
+					   gint      *minimum,
+					   gint      *natural)
+{
+  GtkBin *bin = GTK_BIN (widget);
+  GtkWidget *child;
+  gint border_width;
+  gint default_height;
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+
+  *minimum = border_width * 2;
+  *natural = border_width * 2;
+
+  child = gtk_bin_get_child (bin);
+
+  if (child != NULL && gtk_widget_get_visible (child))
+    {
+      gint child_min, child_nat;
+
+      gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+
+      *minimum += child_min;
+      *natural += child_nat;
+    }
+
+  gtk_window_get_default_size (GTK_WINDOW (widget),
+                               NULL, &default_height);
+
+  *minimum = MAX (*minimum, default_height);
+  *natural = MAX (*natural, default_height);
 }
 
 static void
@@ -238,7 +271,8 @@ gtk_offscreen_window_class_init (GtkOffscreenWindowClass *class)
   widget_class->realize = gtk_offscreen_window_realize;
   widget_class->show = gtk_offscreen_window_show;
   widget_class->hide = gtk_offscreen_window_hide;
-  widget_class->size_request = gtk_offscreen_window_size_request;
+  widget_class->get_preferred_width = gtk_offscreen_window_get_preferred_width;
+  widget_class->get_preferred_height = gtk_offscreen_window_get_preferred_height;
   widget_class->size_allocate = gtk_offscreen_window_size_allocate;
 
   container_class->check_resize = gtk_offscreen_window_check_resize;
