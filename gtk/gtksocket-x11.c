@@ -281,9 +281,11 @@ _gtk_socket_windowing_embed_notify (GtkSocket *socket)
 #ifdef HAVE_XFIXES
   GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (socket));
 
+  gdk_error_trap_push ();
   XFixesChangeSaveSet (GDK_DISPLAY_XDISPLAY (display),
 		       GDK_WINDOW_XWINDOW (socket->plug_window),
 		       SetModeInsert, SaveSetRoot, SaveSetUnmap);
+  gdk_error_trap_pop_ignore ();
 #endif
   _gtk_xembed_send_message (socket->plug_window,
 			    XEMBED_EMBEDDED_NOTIFY, 0,
