@@ -81,8 +81,12 @@ static void gtk_button_box_get_property       (GObject           *object,
                                                guint              prop_id,
                                                GValue            *value,
                                                GParamSpec        *pspec);
-static void gtk_button_box_size_request       (GtkWidget         *widget,
-                                               GtkRequisition    *requisition);
+static void gtk_button_box_get_preferred_width  (GtkWidget        *widget,
+                                                 gint             *minimum,
+                                                 gint             *natural);
+static void gtk_button_box_get_preferred_height (GtkWidget        *widget,
+                                                 gint             *minimum,
+                                                 gint             *natural);
 static void gtk_button_box_size_allocate      (GtkWidget         *widget,
                                                GtkAllocation     *allocation);
 static void gtk_button_box_remove             (GtkContainer      *container,
@@ -120,7 +124,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
   gobject_class->set_property = gtk_button_box_set_property;
   gobject_class->get_property = gtk_button_box_get_property;
 
-  widget_class->size_request = gtk_button_box_size_request;
+  widget_class->get_preferred_width = gtk_button_box_get_preferred_width;
+  widget_class->get_preferred_height = gtk_button_box_get_preferred_height;
   widget_class->size_allocate = gtk_button_box_size_allocate;
 
   container_class->remove = gtk_button_box_remove;
@@ -610,6 +615,30 @@ gtk_button_box_size_request (GtkWidget      *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   requisition->width += border_width * 2;
   requisition->height += border_width * 2;
+}
+
+static void
+gtk_button_box_get_preferred_width (GtkWidget *widget,
+                                    gint      *minimum,
+                                    gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_button_box_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_button_box_get_preferred_height (GtkWidget *widget,
+                                     gint      *minimum,
+                                     gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_button_box_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
 }
 
 static void
