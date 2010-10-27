@@ -3073,6 +3073,30 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
   GInputStream *stream;
   GdkPixbuf *pixbuf;
   gchar *data;
+  gchar *success, *warning, *err;
+
+  /* css_fg can't possibly have failed, otherwise
+   * that would mean we have a broken style */
+  g_return_val_if_fail (css_fg != NULL, NULL);
+
+  success = warning = err = NULL;
+
+  if (!css_success)
+    {
+      GdkColor success_default_color = { 0, 0x4e00, 0x9a00, 0x0600 };
+      success = gdk_color_to_css (&success_default_color);
+    }
+  if (!css_warning)
+    {
+      GdkColor warning_default_color = { 0, 0xf500, 0x7900, 0x3e00 };
+      warning = gdk_color_to_css (&warning_default_color);
+    }
+  if (!css_error)
+    {
+      GdkColor error_default_color = { 0, 0xcc00, 0x0000, 0x0000 };
+      err = gdk_color_to_css (&error_default_color);
+    }
+
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
@@ -3085,18 +3109,21 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
                       "      fill: ", css_fg," !important;\n"
                       "    }\n"
                       "    .warning {\n"
-                      "      fill: ", css_warning," !important;\n"
+                      "      fill: ", css_warning ? css_warning : warning," !important;\n"
                       "    }\n"
                       "    .error {\n"
-                      "      fill: ", css_error," !important;\n"
+                      "      fill: ", css_error ? css_error : err," !important;\n"
                       "    }\n"
                       "    .success {\n"
-                      "      fill: ", css_success," !important;\n"
+                      "      fill: ", css_success ? css_success : success," !important;\n"
                       "    }\n"
                       "  </style>\n"
                       "  <xi:include href=\"", icon_info->filename, "\"/>\n"
                       "</svg>",
                       NULL);
+  g_free (warning);
+  g_free (err);
+  g_free (success);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
@@ -3175,29 +3202,17 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
     *was_symbolic = TRUE;
 
   css_fg = gdk_rgba_to_string (fg);
-  if (!warning_color)
-    {
-      GdkColor warning_default_color = { 0, 0xf500, 0x7900, 0x3e00 };
-      css_warning = gdk_color_to_css (&warning_default_color);
-    }
-  else
-      css_warning = gdk_rgba_to_string (warning_color);
 
-  if (!error_color)
-    {
-      GdkColor error_default_color = { 0, 0xcc00, 0x0000, 0x0000 };
-      css_error = gdk_color_to_css (&error_default_color);
-    }
-  else
-      css_error = gdk_rgba_to_string (error_color);
+  css_success = css_warning = css_error = NULL;
 
-  if (!success_color)
-    {
-      GdkColor success_default_color = { 0, 0x4e00, 0x9a00, 0x0600 };
-      css_success = gdk_color_to_css (&success_default_color);
-    }
-  else
-      css_success = gdk_rgba_to_string (success_color);
+  if (warning_color)
+    css_warning = gdk_rgba_to_string (warning_color);
+
+  if (error_color)
+    css_error = gdk_rgba_to_string (error_color);
+
+  if (success_color)
+    css_success = gdk_rgba_to_string (success_color);
 
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
                                                   css_fg, css_success,
@@ -3245,9 +3260,6 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   GdkColor warning_color;
   GdkColor error_color;
   GdkColor *fg;
-  GdkColor *success = NULL;
-  GdkColor *warning = NULL;
-  GdkColor *err = NULL;
   gchar *css_fg, *css_success;
   gchar *css_warning, *css_error;
 
@@ -3263,17 +3275,18 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
     *was_symbolic = TRUE;
 
   fg = &style->fg[state];
-  if (gtk_style_lookup_color (style, "success_color", &success_color))
-    success = &success_color;
-  if (gtk_style_lookup_color (style, "warning_color", &warning_color))
-    warning = &warning_color;
-  if (gtk_style_lookup_color (style, "error_color", &error_color))
-    err = &error_color;
-
   css_fg = gdk_color_to_css (fg);
-  css_success = gdk_color_to_css (success);
-  css_warning = gdk_color_to_css (warning);
-  css_error = gdk_color_to_css (err);
+
+  css_success = css_warning = css_error = NULL;
+
+  if (gtk_style_lookup_color (style, "success_color", &success_color))
+    css_success = gdk_color_to_css (&success_color);
+
+  if (gtk_style_lookup_color (style, "warning_color", &warning_color))
+    css_warning = gdk_color_to_css (&warning_color);
+
+  if (gtk_style_lookup_color (style, "error_color", &error_color))
+    css_error = gdk_color_to_css (&error_color);
 
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
                                                   css_fg, css_success,
