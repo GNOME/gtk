@@ -140,6 +140,12 @@ static void     gtk_handle_box_style_set     (GtkWidget      *widget,
                                               GtkStyle       *previous_style);
 static void     gtk_handle_box_size_request  (GtkWidget      *widget,
                                               GtkRequisition *requisition);
+static void     gtk_handle_box_get_preferred_width (GtkWidget *widget,
+						    gint      *minimum,
+						    gint      *natural);
+static void     gtk_handle_box_get_preferred_height (GtkWidget *widget,
+						    gint      *minimum,
+						    gint      *natural);
 static void     gtk_handle_box_size_allocate (GtkWidget      *widget,
                                               GtkAllocation  *real_allocation);
 static void     gtk_handle_box_add           (GtkContainer   *container,
@@ -224,7 +230,8 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->realize = gtk_handle_box_realize;
   widget_class->unrealize = gtk_handle_box_unrealize;
   widget_class->style_set = gtk_handle_box_style_set;
-  widget_class->size_request = gtk_handle_box_size_request;
+  widget_class->get_preferred_width = gtk_handle_box_get_preferred_width;
+  widget_class->get_preferred_height = gtk_handle_box_get_preferred_height;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
   widget_class->draw = gtk_handle_box_draw;
   widget_class->button_press_event = gtk_handle_box_button_press;
@@ -622,6 +629,31 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 	}
     }
 }
+
+static void
+gtk_handle_box_get_preferred_width (GtkWidget *widget,
+				     gint      *minimum,
+				     gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_handle_box_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_handle_box_get_preferred_height (GtkWidget *widget,
+				     gint      *minimum,
+				     gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_handle_box_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
+}
+
 
 static void
 gtk_handle_box_size_allocate (GtkWidget     *widget,
