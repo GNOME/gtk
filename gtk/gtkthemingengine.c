@@ -325,7 +325,7 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
  * on the CSS file the property will look like
  * "-${engine-object-name}-${@property_name}". being
  * ${engine-object-name} either the GtkThemingEngine:name property
- * or G_OBJECT_TYPE_NAME(engine).
+ * or G_OBJECT_TYPE_NAME(engine) if the property is unset.
  *
  * For any type a @parse_func may be provided, being this function
  * used for turning any property value (between ':' and ';') in
@@ -360,7 +360,8 @@ gtk_theming_engine_register_property (GtkThemingEngine       *engine,
                                       GtkStylePropertyParser  parse_func)
 {
   GtkThemingEnginePrivate *priv;
-  gchar *engine_name, *name;
+  const gchar *engine_name;
+  gchar *name;
 
   g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
   g_return_if_fail (property_name != NULL);
