@@ -1300,7 +1300,7 @@ gtk_drag_dest_set_proxy (GtkWidget      *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (!proxy_window || GDK_IS_WINDOW (proxy_window));
 
-  site = g_new (GtkDragDestSite, 1);
+  site = g_slice_new (GtkDragDestSite);
 
   site->flags = 0;
   site->have_drag = FALSE;
