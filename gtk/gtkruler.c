@@ -80,8 +80,14 @@ static void     gtk_ruler_get_property    (GObject        *object,
                                            GParamSpec     *pspec);
 static void     gtk_ruler_realize         (GtkWidget      *widget);
 static void     gtk_ruler_unrealize       (GtkWidget      *widget);
-static void     gtk_ruler_size_request    (GtkWidget      *widget,
-                                           GtkRequisition *requisition);
+static void     gtk_ruler_get_preferred_width
+                                          (GtkWidget      *widget,
+                                           gint           *minimum,
+                                           gint           *natural);
+static void     gtk_ruler_get_preferred_height
+                                          (GtkWidget        *widget,
+                                           gint             *minimum,
+                                           gint             *natural);
 static void     gtk_ruler_size_allocate   (GtkWidget      *widget,
                                            GtkAllocation  *allocation);
 static gboolean gtk_ruler_motion_notify   (GtkWidget      *widget,
@@ -120,7 +126,8 @@ gtk_ruler_class_init (GtkRulerClass *class)
 
   widget_class->realize = gtk_ruler_realize;
   widget_class->unrealize = gtk_ruler_unrealize;
-  widget_class->size_request = gtk_ruler_size_request;
+  widget_class->get_preferred_width = gtk_ruler_get_preferred_width;
+  widget_class->get_preferred_height = gtk_ruler_get_preferred_height;
   widget_class->size_allocate = gtk_ruler_size_allocate;
   widget_class->motion_notify_event = gtk_ruler_motion_notify;
   widget_class->draw = gtk_ruler_draw;
@@ -128,9 +135,7 @@ gtk_ruler_class_init (GtkRulerClass *class)
   class->draw_ticks = gtk_ruler_real_draw_ticks;
   class->draw_pos = gtk_ruler_real_draw_pos;
 
-  g_object_class_override_property (gobject_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
   g_object_class_install_property (gobject_class,
                                    PROP_LOWER,
@@ -532,25 +537,43 @@ gtk_ruler_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_ruler_size_request (GtkWidget      *widget,
-                        GtkRequisition *requisition)
+gtk_ruler_get_preferred_size (GtkWidget      *widget,
+                              GtkOrientation  orientation,
+                              gint           *minimum,
+                              gint           *natural)
 {
   GtkRuler *ruler = GTK_RULER (widget);
   GtkRulerPrivate *priv = ruler->priv;
   GtkStyle *style;
+  gint thickness;
 
   style = gtk_widget_get_style (widget);
 
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      requisition->width  = style->xthickness * 2 + 1;
-      requisition->height = style->ythickness * 2 + RULER_WIDTH;
-    }
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    thickness = style->xthickness;
   else
-    {
-      requisition->width  = style->xthickness * 2 + RULER_WIDTH;
-      requisition->height = style->ythickness * 2 + 1;
-    }
+    thickness = style->ythickness;
+
+  if (priv->orientation == orientation)
+    *minimum = *natural = thickness * 2 + 1;
+  else
+    *minimum = *natural = thickness * 2 + RULER_WIDTH;
+}
+
+static void
+gtk_ruler_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
+{
+  gtk_ruler_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
+}
+
+static void
+gtk_ruler_get_preferred_height (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
+{
+  gtk_ruler_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum, natural);
 }
 
 static void
