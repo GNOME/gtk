@@ -133,8 +133,14 @@ static void gtk_tool_item_realize       (GtkWidget      *widget);
 static void gtk_tool_item_unrealize     (GtkWidget      *widget);
 static void gtk_tool_item_map           (GtkWidget      *widget);
 static void gtk_tool_item_unmap         (GtkWidget      *widget);
-static void gtk_tool_item_size_request  (GtkWidget      *widget,
-					 GtkRequisition *requisition);
+static void gtk_tool_item_get_preferred_width
+                                        (GtkWidget      *widget,
+                                         gint           *minimum,
+                                         gint           *natural);
+static void gtk_tool_item_get_preferred_height
+                                        (GtkWidget      *widget,
+                                         gint           *minimum,
+                                         gint           *natural);
 static void gtk_tool_item_size_allocate (GtkWidget      *widget,
 					 GtkAllocation  *allocation);
 
@@ -163,7 +169,7 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   
   object_class = (GObjectClass *)klass;
   widget_class = (GtkWidgetClass *)klass;
-  
+
   object_class->set_property = gtk_tool_item_set_property;
   object_class->get_property = gtk_tool_item_get_property;
   object_class->finalize     = gtk_tool_item_finalize;
@@ -174,9 +180,12 @@ gtk_tool_item_class_init (GtkToolItemClass *klass)
   widget_class->unrealize     = gtk_tool_item_unrealize;
   widget_class->map           = gtk_tool_item_map;
   widget_class->unmap         = gtk_tool_item_unmap;
-  widget_class->size_request  = gtk_tool_item_size_request;
+  widget_class->get_preferred_width = gtk_tool_item_get_preferred_width;
+  widget_class->get_preferred_height = gtk_tool_item_get_preferred_height;
   widget_class->size_allocate = gtk_tool_item_size_allocate;
   widget_class->parent_set    = gtk_tool_item_parent_set;
+
+  gtk_container_class_handle_border_width (GTK_CONTAINER_CLASS (klass));
 
   klass->create_menu_proxy = _gtk_tool_item_create_menu_proxy;
   
@@ -403,20 +412,19 @@ create_drag_window (GtkToolItem *toolitem)
   GtkAllocation allocation;
   GtkWidget *widget;
   GdkWindowAttr attributes;
-  gint attributes_mask, border_width;
+  gint attributes_mask;
 
   g_return_if_fail (toolitem->priv->use_drag_window == TRUE);
 
   widget = GTK_WIDGET (toolitem);
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = allocation.x + border_width;
-  attributes.y = allocation.y + border_width;
-  attributes.width = allocation.width - border_width * 2;
-  attributes.height = allocation.height - border_width * 2;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
   attributes.wclass = GDK_INPUT_ONLY;
   attributes.event_mask = gtk_widget_get_events (widget);
   attributes.event_mask |= (GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
@@ -493,26 +501,31 @@ gtk_tool_item_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_tool_item_size_request (GtkWidget      *widget,
-			    GtkRequisition *requisition)
+gtk_tool_item_get_preferred_width (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
 {
   GtkWidget *child;
-  guint border_width;
+
+  *minimum = *natural = 0;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
-    {
-      gtk_widget_get_preferred_size (child, requisition, NULL);
-    }
-  else
-    {
-      requisition->height = 0;
-      requisition->width = 0;
-    }
+    gtk_widget_get_preferred_width (child, minimum, natural);
+}
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  requisition->width += border_width * 2;
-  requisition->height += border_width * 2;
+static void
+gtk_tool_item_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum,
+                                    gint      *natural)
+{
+  GtkWidget *child;
+
+  *minimum = *natural = 0;
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (child && gtk_widget_get_visible (child))
+    gtk_widget_get_preferred_height (child, minimum, natural);
 }
 
 static void
@@ -521,27 +534,24 @@ gtk_tool_item_size_allocate (GtkWidget     *widget,
 {
   GtkToolItem *toolitem = GTK_TOOL_ITEM (widget);
   GtkAllocation child_allocation;
-  gint border_width;
   GtkWidget *child;
 
   gtk_widget_set_allocation (widget, allocation);
 
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
   if (toolitem->priv->drag_window)
     gdk_window_move_resize (toolitem->priv->drag_window,
-                            allocation->x + border_width,
-                            allocation->y + border_width,
-                            allocation->width - border_width * 2,
-                            allocation->height - border_width * 2);
+                            allocation->x,
+                            allocation->y,
+                            allocation->width,
+                            allocation->height);
 
   child = gtk_bin_get_child (GTK_BIN (widget));
   if (child && gtk_widget_get_visible (child))
     {
-      child_allocation.x = allocation->x + border_width;
-      child_allocation.y = allocation->y + border_width;
-      child_allocation.width = allocation->width - 2 * border_width;
-      child_allocation.height = allocation->height - 2 * border_width;
+      child_allocation.x = allocation->x;
+      child_allocation.y = allocation->y;
+      child_allocation.width = allocation->width;
+      child_allocation.height = allocation->height;
       
       gtk_widget_size_allocate (child, &child_allocation);
     }
