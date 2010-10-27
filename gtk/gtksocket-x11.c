@@ -285,7 +285,7 @@ _gtk_socket_windowing_embed_notify (GtkSocket *socket)
   XFixesChangeSaveSet (GDK_DISPLAY_XDISPLAY (display),
 		       GDK_WINDOW_XWINDOW (socket->plug_window),
 		       SetModeInsert, SaveSetRoot, SaveSetUnmap);
-  gdk_error_trap_pop_ignore ();
+  gdk_error_trap_pop_ignored ();
 #endif
   _gtk_xembed_send_message (socket->plug_window,
 			    XEMBED_EMBEDDED_NOTIFY, 0,
