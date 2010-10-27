@@ -337,8 +337,8 @@ gtk_fixed_get_preferred_width (GtkWidget *widget,
 
       gtk_widget_get_preferred_width (child->widget, &child_min, &child_nat);
 
-      *minimum = MAX (*minimum, child->y + child_min);
-      *natural = MAX (*natural, child->y + child_nat);
+      *minimum = MAX (*minimum, child->x + child_min);
+      *natural = MAX (*natural, child->x + child_nat);
     }
 }
 
