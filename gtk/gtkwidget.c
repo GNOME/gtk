@@ -88,7 +88,7 @@
  *          This allows a widget to tell it's parent container whether
  *          it preferrs to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
  *          or %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
- *          %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget preferrs to
+ *          %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to
  *          have #GtkWidgetClass.get_preferred_width() called and then
  *          #GtkWidgetClass.get_preferred_height_for_width() and is the 
  *          default return for unimplemented cases.
