@@ -111,8 +111,10 @@ static void gtk_spin_button_map            (GtkWidget          *widget);
 static void gtk_spin_button_unmap          (GtkWidget          *widget);
 static void gtk_spin_button_realize        (GtkWidget          *widget);
 static void gtk_spin_button_unrealize      (GtkWidget          *widget);
-static void gtk_spin_button_size_request   (GtkWidget          *widget,
-					    GtkRequisition     *requisition);
+static void gtk_spin_button_get_preferred_width  (GtkWidget          *widget,
+                                                  gint               *minimum,
+                                                  gint               *natural);
+
 static void gtk_spin_button_size_allocate  (GtkWidget          *widget,
 					    GtkAllocation      *allocation);
 static gint gtk_spin_button_draw           (GtkWidget          *widget,
@@ -200,7 +202,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   widget_class->unmap = gtk_spin_button_unmap;
   widget_class->realize = gtk_spin_button_realize;
   widget_class->unrealize = gtk_spin_button_unrealize;
-  widget_class->size_request = gtk_spin_button_size_request;
+  widget_class->get_preferred_width = gtk_spin_button_get_preferred_width;
   widget_class->size_allocate = gtk_spin_button_size_allocate;
   widget_class->draw = gtk_spin_button_draw;
   widget_class->scroll_event = gtk_spin_button_scroll;
@@ -664,8 +666,9 @@ compute_double_length (double val, int digits)
 }
 
 static void
-gtk_spin_button_size_request (GtkWidget      *widget,
-			      GtkRequisition *requisition)
+gtk_spin_button_get_preferred_width (GtkWidget *widget,
+                                     gint      *minimum,
+                                     gint      *natural)
 {
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (widget);
   GtkSpinButtonPrivate *priv = spin_button->priv;
@@ -677,7 +680,7 @@ gtk_spin_button_size_request (GtkWidget      *widget,
 
   arrow_size = spin_button_get_arrow_size (spin_button);
 
-  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->size_request (widget, requisition);
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->get_preferred_width (widget, minimum, natural);
 
   if (gtk_entry_get_width_chars (entry) < 0)
     {
@@ -694,23 +697,22 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       GtkBorder inner_border;
 
       gtk_widget_style_get (widget,
-			    "interior-focus", &interior_focus,
-			    "focus-line-width", &focus_width,
-			    NULL);
+                            "interior-focus", &interior_focus,
+                            "focus-line-width", &focus_width,
+                            NULL);
 
       context = gtk_widget_get_pango_context (widget);
       metrics = pango_context_get_metrics (context,
                                            style->font_desc,
-					   pango_context_get_language (context));
+                                           pango_context_get_language (context));
 
       digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
       digit_width = PANGO_SCALE *
         ((digit_width + PANGO_SCALE - 1) / PANGO_SCALE);
 
       pango_font_metrics_unref (metrics);
-      
+
       /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
-      
       width = MIN_SPIN_BUTTON_WIDTH;
       max_string_len = MAX (10, compute_double_length (1e9 * priv->adjustment->step_increment,
                                                        priv->digits));
@@ -718,19 +720,22 @@ gtk_spin_button_size_request (GtkWidget      *widget,
       string_len = compute_double_length (priv->adjustment->upper,
                                           priv->digits);
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
-      width = MAX (width, w);
-      string_len = compute_double_length (priv->adjustment->lower,
-					  priv->digits);
+      *minimum = MAX (*minimum, w);
+      *natural = MAX (*natural, w);
+      string_len = compute_double_length (priv->adjustment->lower, priv->digits);
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
-      width = MAX (width, w);
-      
+      *minimum = MAX (*minimum, w);
+      *natural = MAX (*natural, w);
+
       _gtk_entry_get_borders (entry, &xborder, &yborder);
       _gtk_entry_effective_inner_border (entry, &inner_border);
 
-      requisition->width = width + xborder * 2 + inner_border.left + inner_border.right;
+      *minimum += xborder * 2 + inner_border.left + inner_border.right;
+      *natural += xborder * 2 + inner_border.left + inner_border.right;
     }
 
-  requisition->width += arrow_size + 2 * style->xthickness;
+  *minimum += arrow_size + 2 * style->xthickness;
+  *natural += arrow_size + 2 * style->xthickness;
 }
 
 static void
