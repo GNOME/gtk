@@ -2914,7 +2914,6 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
                                 gint      *natural)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
   PangoFontMetrics *metrics;
   gint xborder, yborder;
   GtkBorder inner_border;
