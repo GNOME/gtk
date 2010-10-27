@@ -85,8 +85,12 @@ static void gtk_path_bar_finalize                 (GObject          *object);
 static void gtk_path_bar_dispose                  (GObject          *object);
 static void gtk_path_bar_realize                  (GtkWidget        *widget);
 static void gtk_path_bar_unrealize                (GtkWidget        *widget);
-static void gtk_path_bar_size_request             (GtkWidget        *widget,
-						   GtkRequisition   *requisition);
+static void gtk_path_bar_get_preferred_width      (GtkWidget        *widget,
+                                                   gint             *minimum,
+                                                   gint             *natural);
+static void gtk_path_bar_get_preferred_height     (GtkWidget        *widget,
+                                                   gint             *minimum,
+                                                   gint             *natural);
 static void gtk_path_bar_map                      (GtkWidget        *widget);
 static void gtk_path_bar_unmap                    (GtkWidget        *widget);
 static void gtk_path_bar_size_allocate            (GtkWidget        *widget,
@@ -216,7 +220,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gobject_class->finalize = gtk_path_bar_finalize;
   gobject_class->dispose = gtk_path_bar_dispose;
 
-  widget_class->size_request = gtk_path_bar_size_request;
+  widget_class->get_preferred_width = gtk_path_bar_get_preferred_width;
+  widget_class->get_preferred_height = gtk_path_bar_get_preferred_height;
   widget_class->realize = gtk_path_bar_realize;
   widget_class->unrealize = gtk_path_bar_unrealize;
   widget_class->map = gtk_path_bar_map;
@@ -315,46 +320,74 @@ gtk_path_bar_dispose (GObject *object)
  * available space.
  */
 static void
-gtk_path_bar_size_request (GtkWidget      *widget,
-			   GtkRequisition *requisition)
+gtk_path_bar_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum,
+                                  gint      *natural)
 {
   ButtonData *button_data;
   GtkPathBar *path_bar;
-  GtkRequisition child_requisition;
   GList *list;
+  gint child_height;
+  gint height;
+  gint child_min, child_nat;
 
   path_bar = GTK_PATH_BAR (widget);
 
-  requisition->width = 0;
-  requisition->height = 0;
+  *minimum = *natural = 0;
+  height = 0;
 
   for (list = path_bar->button_list; list; list = list->next)
     {
       button_data = BUTTON_DATA (list->data);
-      gtk_widget_get_preferred_size (button_data->button,
-                                     &child_requisition, NULL);
+      gtk_widget_get_preferred_width (button_data->button, &child_min, &child_nat);
+      gtk_widget_get_preferred_height (button_data->button, &child_height, NULL);
+      height = MAX (height, child_height);
 
       if (button_data->type == NORMAL_BUTTON)
-	/* Use 2*Height as button width because of ellipsized label.  */
-	requisition->width = MAX (child_requisition.height * 2, requisition->width);
-      else
-	requisition->width = MAX (child_requisition.width, requisition->width);
+        {
+          /* Use 2*Height as button width because of ellipsized label.  */
+          child_min = MAX (child_min, child_height * 2);
+          child_nat = MAX (child_min, child_height * 2);
+        }
 
-      requisition->height = MAX (child_requisition.height, requisition->height);
+      *minimum = MAX (*minimum, child_min);
+      *natural = MAX (*natural, child_nat);
     }
 
   /* Add space for slider, if we have more than one path */
   /* Theoretically, the slider could be bigger than the other button.  But we're
    * not going to worry about that now.
    */
-  path_bar->slider_width = MIN(requisition->height * 2 / 3 + 5, requisition->height);
+  path_bar->slider_width = MIN (height * 2 / 3 + 5, height);
   if (path_bar->button_list && path_bar->button_list->next != NULL)
-    requisition->width += (path_bar->spacing + path_bar->slider_width) * 2;
+    {
+      *minimum += (path_bar->spacing + path_bar->slider_width) * 2;
+      *natural += (path_bar->spacing + path_bar->slider_width) * 2;
+    }
+}
 
-  gtk_widget_get_preferred_size (path_bar->up_slider_button,
-                                 &child_requisition, NULL);
-  gtk_widget_get_preferred_size (path_bar->down_slider_button,
-                                 &child_requisition, NULL);
+static void
+gtk_path_bar_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
+{
+  ButtonData *button_data;
+  GtkPathBar *path_bar;
+  GList *list;
+  gint child_min, child_nat;
+
+  path_bar = GTK_PATH_BAR (widget);
+
+  *minimum = *natural = 0;
+
+  for (list = path_bar->button_list; list; list = list->next)
+    {
+      button_data = BUTTON_DATA (list->data);
+      gtk_widget_get_preferred_height (button_data->button, &child_min, &child_nat);
+
+      *minimum = MAX (*minimum, child_min);
+      *natural = MAX (*natural, child_nat);
+    }
 }
 
 static void
