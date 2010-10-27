@@ -61,9 +61,14 @@ static void       gtk_separator_get_property (GObject        *object,
                                               guint           prop_id,
                                               GValue         *value,
                                               GParamSpec     *pspec);
-
-static void       gtk_separator_size_request (GtkWidget      *widget,
-                                              GtkRequisition *requisition);
+static void       gtk_separator_get_preferred_width
+                                             (GtkWidget      *widget,
+                                              gint           *minimum,
+                                              gint           *natural);
+static void       gtk_separator_get_preferred_height
+                                             (GtkWidget      *widget,
+                                              gint           *minimum,
+                                              gint           *natural);
 static gboolean   gtk_separator_draw         (GtkWidget      *widget,
                                               cairo_t        *cr);
 
@@ -82,12 +87,12 @@ gtk_separator_class_init (GtkSeparatorClass *class)
   object_class->set_property = gtk_separator_set_property;
   object_class->get_property = gtk_separator_get_property;
 
-  widget_class->size_request = gtk_separator_size_request;
+  widget_class->get_preferred_width = gtk_separator_get_preferred_width;
+  widget_class->get_preferred_height = gtk_separator_get_preferred_height;
+
   widget_class->draw         = gtk_separator_draw;
 
-  g_object_class_override_property (object_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
+  g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   g_type_class_add_private (object_class, sizeof (GtkSeparatorPrivate));
 }
@@ -149,40 +154,53 @@ gtk_separator_get_property (GObject    *object,
 }
 
 static void
-gtk_separator_size_request (GtkWidget      *widget,
-                            GtkRequisition *requisition)
+gtk_separator_get_preferred_size (GtkWidget      *widget,
+                                  GtkOrientation  orientation,
+                                  gint           *minimum,
+                                  gint           *natural)
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
   GtkStyle *style;
-  gboolean wide_separators;
-  gint     separator_width;
-  gint     separator_height;
+  gboolean wide_sep;
+  gint     sep_width;
+  gint     sep_height;
 
   style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget,
-                        "wide-separators",  &wide_separators,
-                        "separator-width",  &separator_width,
-                        "separator-height", &separator_height,
+                        "wide-separators",  &wide_sep,
+                        "separator-width",  &sep_width,
+                        "separator-height", &sep_height,
                         NULL);
 
-  requisition->width  = 1;
-  requisition->height = 1;
-
-  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (orientation == private->orientation)
     {
-      if (wide_separators)
-        requisition->height = separator_height;
-      else
-        requisition->height = style->ythickness;
+      *minimum = *natural = 1;
+    }
+  else if (orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      *minimum = *natural = wide_sep ? sep_height : style->ythickness;
     }
   else
     {
-      if (wide_separators)
-        requisition->width = separator_width;
-      else
-        requisition->width = style->xthickness;
+      *minimum = *natural = wide_sep ? sep_width : style->xthickness;
     }
+}
+
+static void
+gtk_separator_get_preferred_width (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
+{
+  gtk_separator_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum, natural);
+}
+
+static void
+gtk_separator_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum,
+                                    gint      *natural)
+{
+  gtk_separator_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum, natural);
 }
 
 static gboolean
