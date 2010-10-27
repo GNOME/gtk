@@ -182,8 +182,14 @@ static void gtk_range_get_property   (GObject          *object,
                                       GValue           *value,
                                       GParamSpec       *pspec);
 static void gtk_range_destroy        (GtkWidget        *widget);
-static void gtk_range_size_request   (GtkWidget        *widget,
-                                      GtkRequisition   *requisition);
+static void gtk_range_get_preferred_width
+                                     (GtkWidget        *widget,
+                                      gint             *minimum,
+                                      gint             *natural);
+static void gtk_range_get_preferred_height
+                                     (GtkWidget        *widget,
+                                      gint             *minimum,
+                                      gint             *natural);
 static void gtk_range_size_allocate  (GtkWidget        *widget,
                                       GtkAllocation    *allocation);
 static void gtk_range_hierarchy_changed (GtkWidget     *widget,
@@ -293,7 +299,8 @@ gtk_range_class_init (GtkRangeClass *class)
   gobject_class->get_property = gtk_range_get_property;
 
   widget_class->destroy = gtk_range_destroy;
-  widget_class->size_request = gtk_range_size_request;
+  widget_class->get_preferred_width = gtk_range_get_preferred_width;
+  widget_class->get_preferred_height = gtk_range_get_preferred_height;
   widget_class->size_allocate = gtk_range_size_allocate;
   widget_class->hierarchy_changed = gtk_range_hierarchy_changed;
   widget_class->realize = gtk_range_realize;
@@ -1550,16 +1557,17 @@ gtk_range_destroy (GtkWidget *widget)
 }
 
 static void
-gtk_range_size_request (GtkWidget      *widget,
-                        GtkRequisition *requisition)
+gtk_range_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
 {
   GtkRange *range;
   gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
   GdkRectangle range_rect;
   GtkBorder border;
-  
+
   range = GTK_RANGE (widget);
-  
+
   gtk_range_get_props (range,
                        &slider_width, &stepper_size,
                        &focus_width, &trough_border,
@@ -1571,8 +1579,33 @@ gtk_range_size_request (GtkWidget      *widget,
                           focus_width, trough_border, stepper_spacing,
                           &range_rect, &border, NULL, NULL, NULL, NULL);
 
-  requisition->width = range_rect.width + border.left + border.right;
-  requisition->height = range_rect.height + border.top + border.bottom;
+  *minimum = *natural = range_rect.width + border.left + border.right;
+}
+
+static void
+gtk_range_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
+{
+  GtkRange *range;
+  gint slider_width, stepper_size, focus_width, trough_border, stepper_spacing;
+  GdkRectangle range_rect;
+  GtkBorder border;
+
+  range = GTK_RANGE (widget);
+
+  gtk_range_get_props (range,
+                       &slider_width, &stepper_size,
+                       &focus_width, &trough_border,
+                       &stepper_spacing, NULL,
+                       NULL, NULL);
+
+  gtk_range_calc_request (range,
+                          slider_width, stepper_size,
+                          focus_width, trough_border, stepper_spacing,
+                          &range_rect, &border, NULL, NULL, NULL, NULL);
+
+  *minimum = *natural = range_rect.height + border.top + border.bottom;
 }
 
 static gboolean
