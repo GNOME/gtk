@@ -39,13 +39,17 @@ struct _GtkTearoffMenuItemPrivate
   guint torn_off : 1;
 };
 
-static void gtk_tearoff_menu_item_size_request (GtkWidget             *widget,
-				                GtkRequisition        *requisition);
-static gboolean gtk_tearoff_menu_item_draw   (GtkWidget             *widget,
-					      cairo_t               *cr);
-static void gtk_tearoff_menu_item_activate   (GtkMenuItem           *menu_item);
-static void gtk_tearoff_menu_item_parent_set (GtkWidget             *widget,
-					      GtkWidget             *previous);
+static void gtk_tearoff_menu_item_get_preferred_width  (GtkWidget      *widget,
+							gint           *minimum,
+							gint           *natural);
+static void gtk_tearoff_menu_item_get_preferred_height (GtkWidget      *widget,
+							gint           *minimum,
+							gint           *natural);
+static gboolean gtk_tearoff_menu_item_draw             (GtkWidget      *widget,
+							cairo_t        *cr);
+static void gtk_tearoff_menu_item_activate             (GtkMenuItem    *menu_item);
+static void gtk_tearoff_menu_item_parent_set           (GtkWidget      *widget,
+							GtkWidget      *previous);
 
 G_DEFINE_TYPE (GtkTearoffMenuItem, gtk_tearoff_menu_item, GTK_TYPE_MENU_ITEM)
 
@@ -65,7 +69,8 @@ gtk_tearoff_menu_item_class_init (GtkTearoffMenuItemClass *klass)
   menu_item_class = (GtkMenuItemClass*) klass;
 
   widget_class->draw = gtk_tearoff_menu_item_draw;
-  widget_class->size_request = gtk_tearoff_menu_item_size_request;
+  widget_class->get_preferred_width = gtk_tearoff_menu_item_get_preferred_width;
+  widget_class->get_preferred_height = gtk_tearoff_menu_item_get_preferred_height;
   widget_class->parent_set = gtk_tearoff_menu_item_parent_set;
 
   menu_item_class->activate = gtk_tearoff_menu_item_activate;
@@ -87,8 +92,23 @@ gtk_tearoff_menu_item_init (GtkTearoffMenuItem *tearoff_menu_item)
 }
 
 static void
-gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
-				    GtkRequisition *requisition)
+gtk_tearoff_menu_item_get_preferred_width (GtkWidget      *widget,
+					   gint           *minimum,
+					   gint           *natural)
+{
+  GtkStyle *style;
+  guint border_width;
+
+  style = gtk_widget_get_style (widget);
+
+  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  *minimum = *natural = (border_width + style->xthickness + BORDER_SPACING) * 2;
+}
+
+static void
+gtk_tearoff_menu_item_get_preferred_height (GtkWidget      *widget,
+					    gint           *minimum,
+					    gint           *natural)
 {
   GtkStyle *style;
   GtkWidget *parent;
@@ -97,17 +117,18 @@ gtk_tearoff_menu_item_size_request (GtkWidget      *widget,
   style = gtk_widget_get_style (widget);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  requisition->width = (border_width + style->xthickness + BORDER_SPACING) * 2;
-  requisition->height = (border_width + style->ythickness) * 2;
+  *minimum = *natural = (border_width + style->ythickness) * 2;
 
   parent = gtk_widget_get_parent (widget);
   if (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off)
     {
-      requisition->height += ARROW_SIZE;
+      *minimum += ARROW_SIZE;
+      *natural += ARROW_SIZE;
     }
   else
     {
-      requisition->height += style->ythickness + 4;
+      *minimum += style->ythickness + 4;
+      *natural += style->ythickness + 4;
     }
 }
 
