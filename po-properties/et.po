@@ -2,12 +2,12 @@
 # Estonian translation of GTK+-properties.
 #
 # Copyright (C) 1999, 2002-2006 Free Software Foundation, Inc.
-# Copyright (C) 2007,2009 The GNOME Project.
+# Copyright (C) 2007,2009, 2010 The GNOME Project.
 # This file is distributed under the same license as the gtk package.
 #
 # Lauris Kaplinski <lauris@ariman.ee>, 1999.
 # Tõivo Leedjärv <toivo@linux.ee>, 2002-2004.
-# Ivar Smolin <okul@linux.ee>, 2005-2007.
+# Ivar Smolin <okul@linux.ee>, 2005-2007, 2010.
 # Priit Laes <amd@store20.com>, 2006.
 # Mattias Põldaru <mahfiaz gmail com>, 2009.
 #
@@ -16,9 +16,9 @@ msgstr ""
 "Project-Id-Version: gtk+-properties 2.22\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
-"POT-Creation-Date: 2010-08-29 18:04+0000\n"
-"PO-Revision-Date: 2010-02-01 09:03+0300\n"
-"Last-Translator: Mattias Põldaru <mahfiaz gmail com>\n"
+"POT-Creation-Date: 2010-10-24 12:54+0000\n"
+"PO-Revision-Date: 2010-10-27 08:08+0300\n"
+"Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -583,7 +583,7 @@ msgid ""
 "for the mnemonic accelerator key"
 msgstr ""
 "Määramise korral tähendab tekstis olev alakriips, et sellest järgnevale "
-"märgile vastav klahv on mnemooniline kiirendusklahv"
+"märgile vastav klahv on mnemooniline kiirklahv"
 
 msgid "Use stock"
 msgstr ""
@@ -2308,6 +2308,11 @@ msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
 
+#, fuzzy
+#| msgid "Orientation"
+msgid "Item Orientation"
+msgstr "Asend"
+
 msgid "Reorderable"
 msgstr ""
 
@@ -2486,13 +2491,13 @@ msgid "Mnemonic key"
 msgstr "Mnemooniline klahv"
 
 msgid "The mnemonic accelerator key for this label"
-msgstr "Selle sildi mnemooniline kiirendusklahv"
+msgstr "Selle sildi mnemooniline kiirklahv"
 
 msgid "Mnemonic widget"
 msgstr "Mnemooniline vidin"
 
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "Mnemoonilise kiirendusklahvi vajutamise korral aktiveeritav vidin"
+msgstr "Mnemoonilise kiirklahvi vajutamise korral aktiveeritav vidin"
 
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
@@ -4076,10 +4081,10 @@ msgid "Command to run when displaying a print preview"
 msgstr ""
 
 msgid "Enable Mnemonics"
-msgstr ""
+msgstr "Mnemoonilised kiirklahvid"
 
 msgid "Whether labels should have mnemonics"
-msgstr ""
+msgstr "Kas siltide mnemoonilised kiirklahvid on lubatud või mitte"
 
 msgid "Enable Accelerators"
 msgstr "Kiirklahvide lubamine"
@@ -4793,7 +4798,7 @@ msgid ""
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
 "Määramise korral tähendab sildi omadusel olev alakriips, et sellest "
-"järgnevale märgile vastav klahv on mnemooniline kiirendusklahv"
+"järgnevale märgile vastav klahv on mnemooniline kiirklahv"
 
 msgid "Widget to use as the item label"
 msgstr ""
@@ -5492,7 +5497,7 @@ msgid "Whether mnemonics are currently visible in this window"
 msgstr ""
 
 msgid "Name of the themed icon for this window"
-msgstr "Sellele aknale määratud temaatiline ikoon"
+msgstr "Sellele aknale määratud teemakohane ikoon"
 
 msgid "Is Active"
 msgstr "On aktiivne"
@@ -5524,7 +5529,7 @@ msgid "Skip pager"
 msgstr ""
 
 msgid "TRUE if the window should not be in the pager."
-msgstr ""
+msgstr "Kui TÕENE, siis ei peaks akent töölaudade lülitajas näitama."
 
 msgid "Urgent"
 msgstr ""
@@ -5569,10 +5574,10 @@ msgid "The transient parent of the dialog"
 msgstr ""
 
 msgid "Opacity for Window"
-msgstr ""
+msgstr "Akna läbipaistvus"
 
 msgid "The opacity of the window, from 0 to 1"
-msgstr ""
+msgstr "Akna läbipaistvus, väärtused vahemikus 0-1"
 
 msgid "IM Preedit style"
 msgstr ""
