@@ -117,8 +117,12 @@ static void     gtk_assistant_init               (GtkAssistant      *assistant);
 static void     gtk_assistant_destroy            (GtkWidget         *widget);
 static void     gtk_assistant_style_set          (GtkWidget         *widget,
 						  GtkStyle          *old_style);
-static void     gtk_assistant_size_request       (GtkWidget         *widget,
-						  GtkRequisition    *requisition);
+static void     gtk_assistant_get_preferred_width  (GtkWidget        *widget,
+                                                    gint             *minimum,
+                                                    gint             *natural);
+static void     gtk_assistant_get_preferred_height (GtkWidget        *widget,
+                                                    gint             *minimum,
+                                                    gint             *natural);
 static void     gtk_assistant_size_allocate      (GtkWidget         *widget,
 						  GtkAllocation     *allocation);
 static void     gtk_assistant_map                (GtkWidget         *widget);
@@ -209,7 +213,8 @@ gtk_assistant_class_init (GtkAssistantClass *class)
 
   widget_class->destroy = gtk_assistant_destroy;
   widget_class->style_set = gtk_assistant_style_set;
-  widget_class->size_request = gtk_assistant_size_request;
+  widget_class->get_preferred_width = gtk_assistant_get_preferred_width;
+  widget_class->get_preferred_height = gtk_assistant_get_preferred_height;
   widget_class->size_allocate = gtk_assistant_size_allocate;
   widget_class->map = gtk_assistant_map;
   widget_class->unmap = gtk_assistant_unmap;
@@ -1200,6 +1205,29 @@ gtk_assistant_size_request (GtkWidget      *widget,
   requisition->height = height;
 }
 
+static void
+gtk_assistant_get_preferred_width (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_assistant_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_assistant_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum,
+                                    gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_assistant_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
+}
 
 static void
 gtk_assistant_size_allocate (GtkWidget      *widget,
