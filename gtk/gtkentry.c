@@ -258,8 +258,12 @@ static void   gtk_entry_realize              (GtkWidget        *widget);
 static void   gtk_entry_unrealize            (GtkWidget        *widget);
 static void   gtk_entry_map                  (GtkWidget        *widget);
 static void   gtk_entry_unmap                (GtkWidget        *widget);
-static void   gtk_entry_size_request         (GtkWidget        *widget,
-					      GtkRequisition   *requisition);
+static void   gtk_entry_get_preferred_width  (GtkWidget        *widget,
+                                              gint             *minimum,
+                                              gint             *natural);
+static void   gtk_entry_get_preferred_height (GtkWidget        *widget,
+                                              gint             *minimum,
+                                              gint             *natural);
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static void   gtk_entry_draw_frame           (GtkWidget        *widget,
@@ -577,7 +581,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->unmap = gtk_entry_unmap;
   widget_class->realize = gtk_entry_realize;
   widget_class->unrealize = gtk_entry_unrealize;
-  widget_class->size_request = gtk_entry_size_request;
+  widget_class->get_preferred_width = gtk_entry_get_preferred_width;
+  widget_class->get_preferred_height = gtk_entry_get_preferred_height;
   widget_class->size_allocate = gtk_entry_size_allocate;
   widget_class->draw = gtk_entry_draw;
   widget_class->enter_notify_event = gtk_entry_enter_notify;
@@ -2853,8 +2858,9 @@ _gtk_entry_get_borders (GtkEntry *entry,
 }
 
 static void
-gtk_entry_size_request (GtkWidget      *widget,
-			GtkRequisition *requisition)
+gtk_entry_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = GTK_ENTRY_GET_PRIVATE (entry);
@@ -2862,33 +2868,29 @@ gtk_entry_size_request (GtkWidget      *widget,
   gint xborder, yborder;
   GtkBorder inner_border;
   PangoContext *context;
-  int icon_widths = 0;
-  int icon_width, i;
-  
+  gint icon_widths = 0;
+  gint icon_width, i;
+  gint width;
+
   gtk_widget_ensure_style (widget);
   context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
-				       gtk_widget_get_style (widget)->font_desc,
-				       pango_context_get_language (context));
+                                       gtk_widget_get_style (widget)->font_desc,
+                                       pango_context_get_language (context));
 
-  entry->ascent = pango_font_metrics_get_ascent (metrics);
-  entry->descent = pango_font_metrics_get_descent (metrics);
-  
   _gtk_entry_get_borders (entry, &xborder, &yborder);
   _gtk_entry_effective_inner_border (entry, &inner_border);
 
   if (entry->width_chars < 0)
-    requisition->width = MIN_ENTRY_WIDTH + xborder * 2 + inner_border.left + inner_border.right;
+    width = MIN_ENTRY_WIDTH + xborder * 2 + inner_border.left + inner_border.right;
   else
     {
       gint char_width = pango_font_metrics_get_approximate_char_width (metrics);
       gint digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
       gint char_pixels = (MAX (char_width, digit_width) + PANGO_SCALE - 1) / PANGO_SCALE;
-      
-      requisition->width = char_pixels * entry->width_chars + xborder * 2 + inner_border.left + inner_border.right;
+
+      width = char_pixels * entry->width_chars + xborder * 2 + inner_border.left + inner_border.right;
     }
-    
-  requisition->height = PANGO_PIXELS (entry->ascent + entry->descent) + yborder * 2 + inner_border.top + inner_border.bottom;
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -2897,10 +2899,45 @@ gtk_entry_size_request (GtkWidget      *widget,
         icon_widths += icon_width + 2 * priv->icon_margin;
     }
 
-  if (icon_widths > requisition->width)
-    requisition->width += icon_widths;
+  if (icon_widths > width)
+    width += icon_widths;
 
   pango_font_metrics_unref (metrics);
+
+  *minimum = width;
+  *natural = width;
+}
+
+static void
+gtk_entry_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+  PangoFontMetrics *metrics;
+  gint xborder, yborder;
+  GtkBorder inner_border;
+  PangoContext *context;
+  gint height;
+
+  gtk_widget_ensure_style (widget);
+  context = gtk_widget_get_pango_context (widget);
+  metrics = pango_context_get_metrics (context,
+				       gtk_widget_get_style (widget)->font_desc,
+				       pango_context_get_language (context));
+
+  entry->ascent = pango_font_metrics_get_ascent (metrics);
+  entry->descent = pango_font_metrics_get_descent (metrics);
+
+  _gtk_entry_get_borders (entry, &xborder, &yborder);
+  _gtk_entry_effective_inner_border (entry, &inner_border);
+
+  height = PANGO_PIXELS (entry->ascent + entry->descent) + yborder * 2 + inner_border.top + inner_border.bottom;
+
+  pango_font_metrics_unref (metrics);
+
+  *minimum = height;
+  *natural = height;
 }
 
 static void

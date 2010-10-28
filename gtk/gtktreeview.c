@@ -167,6 +167,12 @@ static void     gtk_tree_view_destroy              (GtkWidget        *widget);
 static void     gtk_tree_view_realize              (GtkWidget        *widget);
 static void     gtk_tree_view_unrealize            (GtkWidget        *widget);
 static void     gtk_tree_view_map                  (GtkWidget        *widget);
+static void     gtk_tree_view_get_preferred_width  (GtkWidget        *widget,
+						    gint             *minimum,
+						    gint             *natural);
+static void     gtk_tree_view_get_preferred_height (GtkWidget        *widget,
+						    gint             *minimum,
+						    gint             *natural);
 static void     gtk_tree_view_size_request         (GtkWidget        *widget,
 						    GtkRequisition   *requisition);
 static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
@@ -519,7 +525,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->map = gtk_tree_view_map;
   widget_class->realize = gtk_tree_view_realize;
   widget_class->unrealize = gtk_tree_view_unrealize;
-  widget_class->size_request = gtk_tree_view_size_request;
+  widget_class->get_preferred_width = gtk_tree_view_get_preferred_width;
+  widget_class->get_preferred_height = gtk_tree_view_get_preferred_height;
   widget_class->size_allocate = gtk_tree_view_size_allocate;
   widget_class->button_press_event = gtk_tree_view_button_press;
   widget_class->button_release_event = gtk_tree_view_button_release;
@@ -2034,17 +2041,30 @@ gtk_tree_view_size_request (GtkWidget      *widget,
   requisition->height = tree_view->priv->height + TREE_VIEW_HEADER_HEIGHT (tree_view);
 
   tmp_list = tree_view->priv->children;
+}
 
-  while (tmp_list)
-    {
-      GtkTreeViewChild *child = tmp_list->data;
-      GtkRequisition child_requisition;
+static void
+gtk_tree_view_get_preferred_width (GtkWidget *widget,
+				   gint      *minimum,
+				   gint      *natural)
+{
+  GtkRequisition requisition;
 
-      tmp_list = tmp_list->next;
+  gtk_tree_view_size_request (widget, &requisition);
 
-      if (gtk_widget_get_visible (child->widget))
-        gtk_widget_get_preferred_size (child->widget, &child_requisition, NULL);
-    }
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_tree_view_get_preferred_height (GtkWidget *widget,
+				    gint      *minimum,
+				    gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_tree_view_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
 }
 
 static int
@@ -6332,12 +6352,23 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
   if (validated_area)
     {
       GtkRequisition requisition;
+
       /* We temporarily guess a size, under the assumption that it will be the
        * same when we get our next size_allocate.  If we don't do this, we'll be
        * in an inconsistent state when we call top_row_to_dy. */
 
-      gtk_widget_get_preferred_size (GTK_WIDGET (tree_view),
-                                     &requisition, NULL);
+      /* FIXME: This is called from size_request, for some reason it is not infinitely
+       * recursing, we cannot call gtk_widget_get_preferred_size() here because that's
+       * not allowed (from inside ->get_preferred_width/height() implementations, one
+       * should call the vfuncs directly). However what is desired here is the full
+       * size including any margins and limited by any alignment (i.e. after 
+       * GtkWidget:adjust_size_request() is called).
+       *
+       * Currently bypassing this but the real solution is to not update the scroll adjustments
+       * untill we've recieved an allocation (never update scroll adjustments from size-requests).
+       */
+      gtk_tree_view_size_request (GTK_WIDGET (tree_view), &requisition);
+
       tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
       tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
       gtk_adjustment_changed (tree_view->priv->hadjustment);

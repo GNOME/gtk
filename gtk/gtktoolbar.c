@@ -186,8 +186,13 @@ static gint       gtk_toolbar_draw                 (GtkWidget           *widget,
                                                     cairo_t             *cr);
 static void       gtk_toolbar_realize              (GtkWidget           *widget);
 static void       gtk_toolbar_unrealize            (GtkWidget           *widget);
-static void       gtk_toolbar_size_request         (GtkWidget           *widget,
-						    GtkRequisition      *requisition);
+static void       gtk_toolbar_get_preferred_width  (GtkWidget           *widget,
+                                                    gint                *minimum,
+                                                    gint                *natural);
+static void       gtk_toolbar_get_preferred_height (GtkWidget           *widget,
+                                                    gint                *minimum,
+                                                    gint                *natural);
+
 static void       gtk_toolbar_size_allocate        (GtkWidget           *widget,
 						    GtkAllocation       *allocation);
 static void       gtk_toolbar_style_set            (GtkWidget           *widget,
@@ -363,7 +368,8 @@ gtk_toolbar_class_init (GtkToolbarClass *klass)
   
   widget_class->button_press_event = gtk_toolbar_button_press;
   widget_class->draw = gtk_toolbar_draw;
-  widget_class->size_request = gtk_toolbar_size_request;
+  widget_class->get_preferred_width = gtk_toolbar_get_preferred_width;
+  widget_class->get_preferred_height = gtk_toolbar_get_preferred_height;
   widget_class->size_allocate = gtk_toolbar_size_allocate;
   widget_class->style_set = gtk_toolbar_style_set;
   widget_class->focus = gtk_toolbar_focus;
@@ -992,6 +998,30 @@ gtk_toolbar_size_request (GtkWidget      *widget,
   
   priv->button_maxw = max_homogeneous_child_width;
   priv->button_maxh = max_homogeneous_child_height;
+}
+
+static void
+gtk_toolbar_get_preferred_width (GtkWidget *widget,
+                                 gint      *minimum,
+                                 gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_toolbar_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_toolbar_get_preferred_height (GtkWidget *widget,
+                                  gint      *minimum,
+                                  gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_toolbar_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
 }
 
 static gint

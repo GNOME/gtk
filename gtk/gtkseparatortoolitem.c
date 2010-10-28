@@ -66,8 +66,12 @@ static void     gtk_separator_tool_item_get_property      (GObject              
                                                            guint                      prop_id,
                                                            GValue                    *value,
                                                            GParamSpec                *pspec);
-static void     gtk_separator_tool_item_size_request      (GtkWidget                 *widget,
-                                                           GtkRequisition            *requisition);
+static void     gtk_separator_tool_item_get_preferred_width (GtkWidget               *widget,
+                                                           gint                      *minimum,
+                                                           gint                      *natural);
+static void     gtk_separator_tool_item_get_preferred_height (GtkWidget              *widget,
+                                                           gint                      *minimum,
+                                                           gint                      *natural);
 static void     gtk_separator_tool_item_size_allocate     (GtkWidget                 *widget,
                                                            GtkAllocation             *allocation);
 static gboolean gtk_separator_tool_item_draw              (GtkWidget                 *widget,
@@ -118,7 +122,8 @@ gtk_separator_tool_item_class_init (GtkSeparatorToolItemClass *class)
 
   object_class->set_property = gtk_separator_tool_item_set_property;
   object_class->get_property = gtk_separator_tool_item_get_property;
-  widget_class->size_request = gtk_separator_tool_item_size_request;
+  widget_class->get_preferred_width = gtk_separator_tool_item_get_preferred_width;
+  widget_class->get_preferred_height = gtk_separator_tool_item_get_preferred_height;
   widget_class->size_allocate = gtk_separator_tool_item_size_allocate;
   widget_class->draw = gtk_separator_tool_item_draw;
   widget_class->realize = gtk_separator_tool_item_realize;
@@ -213,22 +218,37 @@ gtk_separator_tool_item_get_property (GObject      *object,
 }
 
 static void
-gtk_separator_tool_item_size_request (GtkWidget      *widget,
-                                      GtkRequisition *requisition)
+gtk_separator_tool_item_get_preferred_size (GtkWidget      *widget,
+                                            GtkOrientation  orientation,
+                                            gint           *minimum,
+                                            gint           *natural)
 {
-  GtkToolItem *item = GTK_TOOL_ITEM (widget);
-  GtkOrientation orientation = gtk_tool_item_get_orientation (item);
-  
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      requisition->width = get_space_size (item);
-      requisition->height = 1;
-    }
+  if (gtk_tool_item_get_orientation (GTK_TOOL_ITEM (widget)) == orientation)
+    *minimum = *natural = get_space_size (GTK_TOOL_ITEM (widget));
   else
-    {
-      requisition->height = get_space_size (item);
-      requisition->width = 1;
-    }
+    *minimum = *natural = 1;
+}
+
+static void
+gtk_separator_tool_item_get_preferred_width (GtkWidget *widget,
+                                             gint      *minimum,
+                                             gint      *natural)
+{
+  gtk_separator_tool_item_get_preferred_size (widget,
+                                              GTK_ORIENTATION_HORIZONTAL,
+                                              minimum,
+                                              natural);
+}
+
+static void
+gtk_separator_tool_item_get_preferred_height (GtkWidget *widget,
+                                              gint      *minimum,
+                                              gint      *natural)
+{
+  gtk_separator_tool_item_get_preferred_size (widget,
+                                              GTK_ORIENTATION_VERTICAL,
+                                              minimum,
+                                              natural);
 }
 
 static void

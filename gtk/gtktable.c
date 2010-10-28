@@ -74,8 +74,12 @@ enum
   
 
 static void gtk_table_finalize	    (GObject	    *object);
-static void gtk_table_size_request  (GtkWidget	    *widget,
-				     GtkRequisition *requisition);
+static void gtk_table_get_preferred_width  (GtkWidget *widget,
+                                            gint      *minimum,
+                                            gint      *natural);
+static void gtk_table_get_preferred_height (GtkWidget *widget,
+                                            gint      *minimum,
+                                            gint      *natural);
 static void gtk_table_size_allocate (GtkWidget	    *widget,
 				     GtkAllocation  *allocation);
 static void gtk_table_compute_expand (GtkWidget     *widget,
@@ -134,7 +138,8 @@ gtk_table_class_init (GtkTableClass *class)
   gobject_class->get_property = gtk_table_get_property;
   gobject_class->set_property = gtk_table_set_property;
   
-  widget_class->size_request = gtk_table_size_request;
+  widget_class->get_preferred_width = gtk_table_get_preferred_width;
+  widget_class->get_preferred_height = gtk_table_get_preferred_height;
   widget_class->size_allocate = gtk_table_size_allocate;
   widget_class->compute_expand = gtk_table_compute_expand;
   
@@ -969,31 +974,52 @@ gtk_table_finalize (GObject *object)
 }
 
 static void
-gtk_table_size_request (GtkWidget      *widget,
-			GtkRequisition *requisition)
+gtk_table_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
 {
   GtkTable *table = GTK_TABLE (widget);
   GtkTablePrivate *priv = table->priv;
   gint row, col;
 
-  requisition->width = 0;
-  requisition->height = 0;
-  
   gtk_table_size_request_init (table);
   gtk_table_size_request_pass1 (table);
   gtk_table_size_request_pass2 (table);
   gtk_table_size_request_pass3 (table);
   gtk_table_size_request_pass2 (table);
 
-  for (col = 0; col < priv->ncols; col++)
-    requisition->width += priv->cols[col].requisition;
-  for (col = 0; col + 1 < priv->ncols; col++)
-    requisition->width += priv->cols[col].spacing;
+  *minimum = 0;
 
+  for (col = 0; col < priv->ncols; col++)
+    *minimum += priv->cols[col].requisition;
+  for (col = 0; col + 1 < priv->ncols; col++)
+    *minimum += priv->cols[col].spacing;
+
+  *natural = *minimum;
+}
+
+static void
+gtk_table_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
+{
+  GtkTable *table = GTK_TABLE (widget);
+  GtkTablePrivate *priv = table->priv;
+  gint row, col;
+
+  gtk_table_size_request_init (table);
+  gtk_table_size_request_pass1 (table);
+  gtk_table_size_request_pass2 (table);
+  gtk_table_size_request_pass3 (table);
+  gtk_table_size_request_pass2 (table);
+
+  *minimum = 0;
   for (row = 0; row < priv->nrows; row++)
-    requisition->height += priv->rows[row].requisition;
+    *minimum += priv->rows[row].requisition;
   for (row = 0; row + 1 < priv->nrows; row++)
-    requisition->height += priv->rows[row].spacing;
+    *minimum += priv->rows[row].spacing;
+
+  *natural = *minimum;
 }
 
 static void

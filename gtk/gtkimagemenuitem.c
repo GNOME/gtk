@@ -62,8 +62,16 @@ enum {
 static GtkActivatableIface *parent_activatable_iface;
 
 static void gtk_image_menu_item_destroy              (GtkWidget        *widget);
-static void gtk_image_menu_item_size_request         (GtkWidget        *widget,
-                                                      GtkRequisition   *requisition);
+static void gtk_image_menu_item_get_preferred_width  (GtkWidget        *widget,
+                                                      gint             *minimum,
+						      gint             *natural);
+static void gtk_image_menu_item_get_preferred_height (GtkWidget        *widget,
+                                                      gint             *minimum,
+						      gint             *natural);
+static void gtk_image_menu_item_get_preferred_height_for_width (GtkWidget *widget,
+								gint       width,
+								gint      *minimum,
+								gint      *natural);
 static void gtk_image_menu_item_size_allocate        (GtkWidget        *widget,
                                                       GtkAllocation    *allocation);
 static void gtk_image_menu_item_map                  (GtkWidget        *widget);
@@ -117,7 +125,9 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
 
   widget_class->destroy = gtk_image_menu_item_destroy;
   widget_class->screen_changed = gtk_image_menu_item_screen_changed;
-  widget_class->size_request = gtk_image_menu_item_size_request;
+  widget_class->get_preferred_width = gtk_image_menu_item_get_preferred_width;
+  widget_class->get_preferred_height = gtk_image_menu_item_get_preferred_height;
+  widget_class->get_preferred_height_for_width = gtk_image_menu_item_get_preferred_height_for_width;
   widget_class->size_allocate = gtk_image_menu_item_size_allocate;
   widget_class->map = gtk_image_menu_item_map;
 
@@ -411,13 +421,13 @@ gtk_image_menu_item_get_label (GtkMenuItem *menu_item)
 }
 
 static void
-gtk_image_menu_item_size_request (GtkWidget      *widget,
-                                  GtkRequisition *requisition)
+gtk_image_menu_item_get_preferred_width (GtkWidget        *widget,
+					 gint             *minimum,
+					 gint             *natural)
 {
   GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
   GtkImageMenuItemPrivate *priv = image_menu_item->priv;
   gint child_width = 0;
-  gint child_height = 0;
   GtkPackDirection pack_dir;
   GtkWidget *parent;
 
@@ -435,25 +445,91 @@ gtk_image_menu_item_size_request (GtkWidget      *widget,
       gtk_widget_get_preferred_size (priv->image, &child_requisition, NULL);
 
       child_width = child_requisition.width;
+    }
+
+  GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->get_preferred_width (widget, minimum, natural);
+
+  if (pack_dir == GTK_PACK_DIRECTION_TTB || pack_dir == GTK_PACK_DIRECTION_BTT)
+    {
+      *minimum = MAX (*minimum, child_width);
+      *natural = MAX (*natural, child_width);
+    }
+}
+
+static void
+gtk_image_menu_item_get_preferred_height (GtkWidget        *widget,
+					  gint             *minimum,
+					  gint             *natural)
+{
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  GtkImageMenuItemPrivate *priv = image_menu_item->priv;
+  gint child_height = 0;
+  GtkPackDirection pack_dir;
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (widget);
+
+  if (GTK_IS_MENU_BAR (parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
+  else
+    pack_dir = GTK_PACK_DIRECTION_LTR;
+
+  if (priv->image && gtk_widget_get_visible (priv->image))
+    {
+      GtkRequisition child_requisition;
+
+      gtk_widget_get_preferred_size (priv->image, &child_requisition, NULL);
+
       child_height = child_requisition.height;
     }
 
-  GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->size_request (widget, requisition);
+  GTK_WIDGET_CLASS (gtk_image_menu_item_parent_class)->get_preferred_height (widget, minimum, natural);
 
-  /* not done with height since that happens via the
-   * toggle_size_request
-   */
-  if (pack_dir == GTK_PACK_DIRECTION_LTR || pack_dir == GTK_PACK_DIRECTION_RTL)
-    requisition->height = MAX (requisition->height, child_height);
-  else
-    requisition->width = MAX (requisition->width, child_width);
-    
-  
-  /* Note that GtkMenuShell always size requests before
-   * toggle_size_request, so toggle_size_request will be able to use
-   * priv->image->requisition
-   */
+  if (pack_dir == GTK_PACK_DIRECTION_RTL || pack_dir == GTK_PACK_DIRECTION_LTR)
+    {
+      *minimum = MAX (*minimum, child_height);
+      *natural = MAX (*natural, child_height);
+    }
 }
+
+static void
+gtk_image_menu_item_get_preferred_height_for_width (GtkWidget        *widget,
+						    gint              width,
+						    gint             *minimum,
+						    gint             *natural)
+{
+  GtkImageMenuItem *image_menu_item = GTK_IMAGE_MENU_ITEM (widget);
+  GtkImageMenuItemPrivate *priv = image_menu_item->priv;
+  gint child_height = 0;
+  GtkPackDirection pack_dir;
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (widget);
+
+  if (GTK_IS_MENU_BAR (parent))
+    pack_dir = gtk_menu_bar_get_child_pack_direction (GTK_MENU_BAR (parent));
+  else
+    pack_dir = GTK_PACK_DIRECTION_LTR;
+
+  if (priv->image && gtk_widget_get_visible (priv->image))
+    {
+      GtkRequisition child_requisition;
+
+      gtk_widget_get_preferred_size (priv->image, &child_requisition, NULL);
+
+      child_height = child_requisition.height;
+    }
+
+  GTK_WIDGET_CLASS
+    (gtk_image_menu_item_parent_class)->get_preferred_height_for_width (widget, width, minimum, natural);
+
+  if (pack_dir == GTK_PACK_DIRECTION_RTL || pack_dir == GTK_PACK_DIRECTION_LTR)
+    {
+      *minimum = MAX (*minimum, child_height);
+      *natural = MAX (*natural, child_height);
+    }
+}
+
 
 static void
 gtk_image_menu_item_size_allocate (GtkWidget     *widget,

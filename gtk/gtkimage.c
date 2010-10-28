@@ -155,34 +155,39 @@ struct _GtkImagePrivate
 
 
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
-static gint gtk_image_draw         (GtkWidget      *widget,
-                                    cairo_t        *cr);
-static void gtk_image_unmap        (GtkWidget      *widget);
-static void gtk_image_unrealize    (GtkWidget      *widget);
-static void gtk_image_size_request (GtkWidget      *widget,
-                                    GtkRequisition *requisition);
-static void gtk_image_style_set    (GtkWidget      *widget,
-				    GtkStyle       *prev_style);
-static void gtk_image_screen_changed (GtkWidget    *widget,
-				      GdkScreen    *prev_screen);
-static void gtk_image_destroy      (GtkWidget      *widget);
-static void gtk_image_reset        (GtkImage       *image);
-static void gtk_image_calc_size    (GtkImage       *image);
+static gint gtk_image_draw                 (GtkWidget    *widget,
+                                            cairo_t      *cr);
+static void gtk_image_unmap                (GtkWidget    *widget);
+static void gtk_image_unrealize            (GtkWidget    *widget);
+static void gtk_image_get_preferred_width  (GtkWidget    *widget,
+                                            gint         *minimum,
+                                            gint         *natural);
+static void gtk_image_get_preferred_height (GtkWidget    *widget,
+                                            gint         *minimum,
+                                            gint         *natural);
 
-static void gtk_image_update_size  (GtkImage       *image,
-                                    gint            image_width,
-                                    gint            image_height);
+static void gtk_image_style_set            (GtkWidget    *widget,
+                                            GtkStyle     *prev_style);
+static void gtk_image_screen_changed       (GtkWidget    *widget,
+                                            GdkScreen    *prev_screen);
+static void gtk_image_destroy              (GtkWidget    *widget);
+static void gtk_image_reset                (GtkImage     *image);
+static void gtk_image_calc_size            (GtkImage     *image);
 
-static void gtk_image_set_property      (GObject          *object,
-					 guint             prop_id,
-					 const GValue     *value,
-					 GParamSpec       *pspec);
-static void gtk_image_get_property      (GObject          *object,
-					 guint             prop_id,
-					 GValue           *value,
-					 GParamSpec       *pspec);
+static void gtk_image_update_size          (GtkImage     *image,
+                                            gint          image_width,
+                                            gint          image_height);
 
-static void icon_theme_changed          (GtkImage         *image);
+static void gtk_image_set_property         (GObject      *object,
+                                            guint         prop_id,
+                                            const GValue *value,
+                                            GParamSpec   *pspec);
+static void gtk_image_get_property         (GObject      *object,
+                                            guint         prop_id,
+                                            GValue       *value,
+                                            GParamSpec   *pspec);
+
+static void icon_theme_changed             (GtkImage     *image);
 
 enum
 {
@@ -215,7 +220,8 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   widget_class->draw = gtk_image_draw;
   widget_class->destroy = gtk_image_destroy;
-  widget_class->size_request = gtk_image_size_request;
+  widget_class->get_preferred_width = gtk_image_get_preferred_width;
+  widget_class->get_preferred_height = gtk_image_get_preferred_height;
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_set = gtk_image_style_set;
@@ -1928,19 +1934,35 @@ gtk_image_calc_size (GtkImage *image)
 }
 
 static void
-gtk_image_size_request (GtkWidget      *widget,
-                        GtkRequisition *requisition)
+gtk_image_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
 {
   GtkImage *image;
   GtkImagePrivate *priv;
-  
+
   image = GTK_IMAGE (widget);
   priv  = image->priv;
 
   gtk_image_calc_size (image);
 
-  requisition->width  = priv->required_width;
-  requisition->height = priv->required_height;
+  *minimum = *natural = priv->required_width;
+}
+
+static void
+gtk_image_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
+{
+  GtkImage *image;
+  GtkImagePrivate *priv;
+
+  image = GTK_IMAGE (widget);
+  priv  = image->priv;
+
+  gtk_image_calc_size (image);
+
+  *minimum = *natural = priv->required_height;
 }
 
 static void

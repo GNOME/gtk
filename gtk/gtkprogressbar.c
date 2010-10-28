@@ -74,23 +74,28 @@ enum {
   PROP_ELLIPSIZE
 };
 
-static void gtk_progress_bar_set_property  (GObject             *object,
-                                            guint                prop_id,
-                                            const GValue        *value,
-                                            GParamSpec          *pspec);
-static void gtk_progress_bar_get_property  (GObject             *object,
-                                            guint                prop_id,
-                                            GValue              *value,
-                                            GParamSpec          *pspec);
-static void gtk_progress_bar_size_request  (GtkWidget           *widget,
-                                            GtkRequisition      *requisition);
-static void gtk_progress_bar_real_update   (GtkProgressBar      *progress);
-static gboolean gtk_progress_bar_draw      (GtkWidget           *widget,
-                                            cairo_t             *cr);
-static void gtk_progress_bar_act_mode_enter (GtkProgressBar     *progress);
-static void gtk_progress_bar_finalize      (GObject             *object);
-static void gtk_progress_bar_set_orientation (GtkProgressBar    *progress,
-                                              GtkOrientation     orientation);
+static void gtk_progress_bar_set_property         (GObject        *object,
+                                                   guint           prop_id,
+                                                   const GValue   *value,
+                                                   GParamSpec     *pspec);
+static void gtk_progress_bar_get_property         (GObject        *object,
+                                                   guint           prop_id,
+                                                   GValue         *value,
+                                                   GParamSpec     *pspec);
+static void gtk_progress_bar_get_preferred_width  (GtkWidget      *widget,
+                                                   gint           *minimum,
+                                                   gint           *natural);
+static void gtk_progress_bar_get_preferred_height (GtkWidget      *widget,
+                                                   gint           *minimum,
+                                                   gint           *natural);
+
+static void     gtk_progress_bar_real_update      (GtkProgressBar *progress);
+static gboolean gtk_progress_bar_draw             (GtkWidget      *widget,
+                                                   cairo_t        *cr);
+static void     gtk_progress_bar_act_mode_enter   (GtkProgressBar *progress);
+static void     gtk_progress_bar_finalize         (GObject        *object);
+static void     gtk_progress_bar_set_orientation  (GtkProgressBar *progress,
+                                                   GtkOrientation  orientation);
 
 G_DEFINE_TYPE_WITH_CODE (GtkProgressBar, gtk_progress_bar, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
@@ -109,11 +114,10 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   gobject_class->finalize = gtk_progress_bar_finalize;
 
   widget_class->draw = gtk_progress_bar_draw;
-  widget_class->size_request = gtk_progress_bar_size_request;
+  widget_class->get_preferred_width = gtk_progress_bar_get_preferred_width;
+  widget_class->get_preferred_height = gtk_progress_bar_get_preferred_height;
 
-  g_object_class_override_property (gobject_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
   g_object_class_install_property (gobject_class,
                                    PROP_INVERTED,
@@ -462,8 +466,9 @@ get_current_text (GtkProgressBar *pbar)
 }
 
 static void
-gtk_progress_bar_size_request (GtkWidget      *widget,
-                               GtkRequisition *requisition)
+gtk_progress_bar_get_preferred_width (GtkWidget *widget,
+                                      gint      *minimum,
+                                      gint      *natural)
 {
   GtkProgressBar *pbar;
   GtkProgressBarPrivate *priv;
@@ -471,24 +476,21 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
   gchar *buf;
   PangoRectangle logical_rect;
   PangoLayout *layout;
-  gint width, height;
-  gint xspacing, yspacing;
-  gint min_width, min_height;
+  gint width;
+  gint xspacing;
+  gint min_width;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
-  g_return_if_fail (requisition != NULL);
 
   style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget,
                         "xspacing", &xspacing,
-                        "yspacing", &yspacing,
                         NULL);
 
   pbar = GTK_PROGRESS_BAR (widget);
   priv = pbar->priv;
 
   width = 2 * style->xthickness + xspacing;
-  height = 2 * style->ythickness + yspacing;
 
   if (priv->show_text)
     {
@@ -515,6 +517,56 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
       else
         width += logical_rect.width;
 
+      g_object_unref (layout);
+      g_free (buf);
+    }
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_widget_style_get (widget,
+                          "min-horizontal-bar-width", &min_width,
+                          NULL);
+  else
+    gtk_widget_style_get (widget,
+                          "min-vertical-bar-width", &min_width,
+                          NULL);
+
+  *minimum = *natural = MAX (min_width, width);
+}
+
+static void
+gtk_progress_bar_get_preferred_height (GtkWidget *widget,
+                                       gint      *minimum,
+                                       gint      *natural)
+{
+  GtkProgressBar *pbar;
+  GtkProgressBarPrivate *priv;
+  GtkStyle *style;
+  gchar *buf;
+  PangoRectangle logical_rect;
+  PangoLayout *layout;
+  gint height;
+  gint yspacing;
+  gint min_height;
+
+  g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
+
+  style = gtk_widget_get_style (widget);
+  gtk_widget_style_get (widget,
+                        "yspacing", &yspacing,
+                        NULL);
+
+  pbar = GTK_PROGRESS_BAR (widget);
+  priv = pbar->priv;
+
+  height = 2 * style->ythickness + yspacing;
+
+  if (priv->show_text)
+    {
+      buf = get_current_text (pbar);
+      layout = gtk_widget_create_pango_layout (widget, buf);
+
+      pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
+
       height += logical_rect.height;
 
       g_object_unref (layout);
@@ -523,17 +575,14 @@ gtk_progress_bar_size_request (GtkWidget      *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_widget_style_get (widget,
-                          "min-horizontal-bar-width", &min_width,
                           "min-horizontal-bar-height", &min_height,
                           NULL);
   else
     gtk_widget_style_get (widget,
-                          "min-vertical-bar-width", &min_width,
                           "min-vertical-bar-height", &min_height,
                           NULL);
 
-  requisition->width = MAX (min_width, width);
-  requisition->height = MAX (min_height, height);
+  *minimum = *natural = MAX (min_height, height);
 }
 
 static void

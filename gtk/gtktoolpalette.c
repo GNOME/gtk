@@ -436,6 +436,31 @@ gtk_tool_palette_size_request (GtkWidget      *widget,
 }
 
 static void
+gtk_tool_palette_get_preferred_width (GtkWidget *widget,
+				      gint      *minimum,
+				      gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_tool_palette_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_tool_palette_get_preferred_height (GtkWidget *widget,
+				       gint      *minimum,
+				       gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_tool_palette_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
+}
+
+
+static void
 gtk_tool_palette_size_allocate (GtkWidget     *widget,
                                 GtkAllocation *allocation)
 {
@@ -961,7 +986,8 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
   oclass->dispose             = gtk_tool_palette_dispose;
   oclass->finalize            = gtk_tool_palette_finalize;
 
-  wclass->size_request        = gtk_tool_palette_size_request;
+  wclass->get_preferred_width = gtk_tool_palette_get_preferred_width;
+  wclass->get_preferred_height= gtk_tool_palette_get_preferred_height;
   wclass->size_allocate       = gtk_tool_palette_size_allocate;
   wclass->draw                = gtk_tool_palette_draw;
   wclass->realize             = gtk_tool_palette_realize;

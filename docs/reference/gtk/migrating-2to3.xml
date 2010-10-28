@@ -344,6 +344,182 @@ cairo_destroy (cr);
   </para>
 
   <section>
+    <title>Replace size_request by get_preferred_width/height</title>
+
+    <para>
+      The request-phase of the traditional GTK+ geometry management
+      has been replaced by a more flexible height-for-width system,
+      which is described in detail in the API documentation
+      (see <xref linkend="geometry-management"/>). As a consequence,
+      the ::size-request signal and vfunc has been removed from
+      #GtkWidgetClass. The replacement for size_request() can
+      take several levels of sophistication:
+      <itemizedlist>
+        <listitem>As a minimal replacement to keep current functionality,
+        you can simply implement the get_preferred_width() and
+        get_preferred_height() vfuncs by calling your existing
+        size_request() function. So you go from
+        <informalexample><programlisting>
+static void
+my_widget_class_init (MyWidgetClass *class)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  /* ... */
+
+  widget_class->size_request = my_widget_size_request;
+
+  /* ... */
+}
+        </programlisting></informalexample>
+        to something that looks more like this:
+        <informalexample><programlisting>
+static void
+my_widget_get_preferred_width (GtkWidget *widget,
+                               gint      *minimal_width,
+                               gint      *natural_width)
+{
+  GtkRequisition requisition;
+
+  my_widget_size_request (widget, &amp;requisition);
+
+  *minimal_width = *natural_width = requisition.width;
+}
+
+static void
+my_widget_get_preferred_height (GtkWidget *widget,
+                                gint      *minimal_height,
+                                gint      *natural_height)
+{
+  GtkRequisition requisition;
+
+  my_widget_size_request (widget, &amp;requisition);
+
+  *minimal_height = *natural_height = requisition.height;
+}
+
+ /* ... */
+
+static void
+my_widget_class_init (MyWidgetClass *class)
+{
+  GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  /* ... */
+
+  widget_class->get_preferred_width = my_widget_get_preferred_width;
+  widget_class->get_preferred_height = my_widget_get_preferred_height;
+
+  /* ... */
+
+}
+        </programlisting></informalexample>
+          Sometimes you can make things a little more streamlined
+          by replacing your existing size_request() implementation by
+          one that takes an orientation parameter:
+          <informalexample><programlisting>
+static void
+my_widget_get_preferred_size (GtkWidget      *widget,
+                              GtkOrientation  orientation,
+                               gint          *minimal_size,
+                               gint          *natural_size)
+{
+
+  /* do things that are common for both orientations ... */
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      /* do stuff that only applies to width... */
+
+      *minimal_size = *natural_size = ...
+    }
+  else
+   {
+      /* do stuff that only applies to height... */
+
+      *minimal_size = *natural_size = ...
+   }
+}
+
+static void
+my_widget_get_preferred_width (GtkWidget *widget,
+                               gint      *minimal_width,
+                               gint      *natural_width)
+{
+  my_widget_get_preferred_size (widget,
+                                GTK_ORIENTATION_HORIZONTAL,
+                                minimal_width,
+                                natural_width);
+}
+
+static void
+my_widget_get_preferred_height (GtkWidget *widget,
+                                gint      *minimal_height,
+                                gint      *natural_height)
+{
+  my_widget_get_preferred_size (widget,
+                                GTK_ORIENTATION_VERTICAL,
+                                minimal_height,
+                                natural_height);
+}
+
+ /* ... */
+          </programlisting></informalexample>
+        </listitem>
+        <listitem>If your widget can cope with a small size,
+          but would appreciate getting some more space (a common
+          example would be that it contains ellipsizable labels),
+          you can do that by making your get_preferred_width()/height()
+          functions return a smaller value for @minimal than for @natural.
+          For @minimal, you probably want to return the same value
+          that your size_request() function returned before (since
+          size_request() was defined as returning the minimal size
+          a widget can work with). A simple way to obtain good
+          values for @natural, in the case of containers, is to use
+          gtk_widget_get_preferred_width() and
+          gtk_widget_get_preferred_height() on the children of the
+          container, as in the following example:
+          <informalexample><programlisting>
+static void
+gtk_fixed_get_preferred_height (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
+{
+  GtkFixed *fixed = GTK_FIXED (widget);
+  GtkFixedPrivate *priv = fixed->priv;
+  GtkFixedChild *child;
+  GList *children;
+  gint child_min, child_nat;
+
+  *minimum = 0;
+  *natural = 0;
+
+  for (children = priv->children; children; children = children->next)
+    {
+      child = children->data;
+
+      if (!gtk_widget_get_visible (child->widget))
+        continue;
+
+      gtk_widget_get_preferred_height (child->widget, &amp;child_min, &amp;child_nat);
+
+      *minimum = MAX (*minimum, child->y + child_min);
+      *natural = MAX (*natural, child->y + child_nat);
+    }
+}
+          </programlisting></informalexample>
+        </listitem>
+        <listitem>To make full use of the new capabilities of the
+          height-for-width geometry management, you need to additionally
+          implement the get_preferred_height_for_width() and
+          get_preferred_width_for_height(). For details on these functions,
+          see <xref linkend="geometry-management"/>.
+        </listitem>
+      </itemizedlist>
+    </para>
+  </section>
+
+  <section>
     <title>Replace GdkRegion by cairo_region_t</title>
 
     <para>

@@ -85,8 +85,12 @@ static void gtk_path_bar_finalize                 (GObject          *object);
 static void gtk_path_bar_dispose                  (GObject          *object);
 static void gtk_path_bar_realize                  (GtkWidget        *widget);
 static void gtk_path_bar_unrealize                (GtkWidget        *widget);
-static void gtk_path_bar_size_request             (GtkWidget        *widget,
-						   GtkRequisition   *requisition);
+static void gtk_path_bar_get_preferred_width      (GtkWidget        *widget,
+                                                   gint             *minimum,
+                                                   gint             *natural);
+static void gtk_path_bar_get_preferred_height     (GtkWidget        *widget,
+                                                   gint             *minimum,
+                                                   gint             *natural);
 static void gtk_path_bar_map                      (GtkWidget        *widget);
 static void gtk_path_bar_unmap                    (GtkWidget        *widget);
 static void gtk_path_bar_size_allocate            (GtkWidget        *widget,
@@ -216,7 +220,8 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gobject_class->finalize = gtk_path_bar_finalize;
   gobject_class->dispose = gtk_path_bar_dispose;
 
-  widget_class->size_request = gtk_path_bar_size_request;
+  widget_class->get_preferred_width = gtk_path_bar_get_preferred_width;
+  widget_class->get_preferred_height = gtk_path_bar_get_preferred_height;
   widget_class->realize = gtk_path_bar_realize;
   widget_class->unrealize = gtk_path_bar_unrealize;
   widget_class->map = gtk_path_bar_map;
@@ -315,46 +320,74 @@ gtk_path_bar_dispose (GObject *object)
  * available space.
  */
 static void
-gtk_path_bar_size_request (GtkWidget      *widget,
-			   GtkRequisition *requisition)
+gtk_path_bar_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum,
+                                  gint      *natural)
 {
   ButtonData *button_data;
   GtkPathBar *path_bar;
-  GtkRequisition child_requisition;
   GList *list;
+  gint child_height;
+  gint height;
+  gint child_min, child_nat;
 
   path_bar = GTK_PATH_BAR (widget);
 
-  requisition->width = 0;
-  requisition->height = 0;
+  *minimum = *natural = 0;
+  height = 0;
 
   for (list = path_bar->button_list; list; list = list->next)
     {
       button_data = BUTTON_DATA (list->data);
-      gtk_widget_get_preferred_size (button_data->button,
-                                     &child_requisition, NULL);
+      gtk_widget_get_preferred_width (button_data->button, &child_min, &child_nat);
+      gtk_widget_get_preferred_height (button_data->button, &child_height, NULL);
+      height = MAX (height, child_height);
 
       if (button_data->type == NORMAL_BUTTON)
-	/* Use 2*Height as button width because of ellipsized label.  */
-	requisition->width = MAX (child_requisition.height * 2, requisition->width);
-      else
-	requisition->width = MAX (child_requisition.width, requisition->width);
+        {
+          /* Use 2*Height as button width because of ellipsized label.  */
+          child_min = MAX (child_min, child_height * 2);
+          child_nat = MAX (child_min, child_height * 2);
+        }
 
-      requisition->height = MAX (child_requisition.height, requisition->height);
+      *minimum = MAX (*minimum, child_min);
+      *natural = MAX (*natural, child_nat);
     }
 
   /* Add space for slider, if we have more than one path */
   /* Theoretically, the slider could be bigger than the other button.  But we're
    * not going to worry about that now.
    */
-  path_bar->slider_width = MIN(requisition->height * 2 / 3 + 5, requisition->height);
+  path_bar->slider_width = MIN (height * 2 / 3 + 5, height);
   if (path_bar->button_list && path_bar->button_list->next != NULL)
-    requisition->width += (path_bar->spacing + path_bar->slider_width) * 2;
+    {
+      *minimum += (path_bar->spacing + path_bar->slider_width) * 2;
+      *natural += (path_bar->spacing + path_bar->slider_width) * 2;
+    }
+}
 
-  gtk_widget_get_preferred_size (path_bar->up_slider_button,
-                                 &child_requisition, NULL);
-  gtk_widget_get_preferred_size (path_bar->down_slider_button,
-                                 &child_requisition, NULL);
+static void
+gtk_path_bar_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
+{
+  ButtonData *button_data;
+  GtkPathBar *path_bar;
+  GList *list;
+  gint child_min, child_nat;
+
+  path_bar = GTK_PATH_BAR (widget);
+
+  *minimum = *natural = 0;
+
+  for (list = path_bar->button_list; list; list = list->next)
+    {
+      button_data = BUTTON_DATA (list->data);
+      gtk_widget_get_preferred_height (button_data->button, &child_min, &child_nat);
+
+      *minimum = MAX (*minimum, child_min);
+      *natural = MAX (*natural, child_nat);
+    }
 }
 
 static void
@@ -1363,25 +1396,25 @@ get_dir_name (ButtonData *button_data)
  * or not the contents are bold
  */
 static void
-label_size_request_cb (GtkWidget      *widget,
-		       GtkRequisition *requisition,
-		       ButtonData     *button_data)
+set_label_size_request (GtkWidget  *alignment,
+			ButtonData *button_data)
 {
   const gchar *dir_name = get_dir_name (button_data);
   PangoLayout *layout = gtk_widget_create_pango_layout (button_data->label, dir_name);
-  gint bold_width, bold_height;
+  gint width, height, bold_width, bold_height;
   gchar *markup;
-
-  pango_layout_get_pixel_size (layout, &requisition->width, &requisition->height);
+  
+  pango_layout_get_pixel_size (layout, &width, &height);
   
   markup = g_markup_printf_escaped ("<b>%s</b>", dir_name);
   pango_layout_set_markup (layout, markup, -1);
   g_free (markup);
 
   pango_layout_get_pixel_size (layout, &bold_width, &bold_height);
-  requisition->width = MAX (requisition->width, bold_width);
-  requisition->height = MAX (requisition->height, bold_height);
-  
+
+  gtk_widget_set_size_request (alignment,
+			       MAX (width, bold_width),
+			       MAX (height, bold_height));
   g_object_unref (layout);
 }
 
@@ -1509,17 +1542,18 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->image = NULL;
     }
 
-  /* label_alignment is created because we can't override size-request
-   * on label itself and still have the contents of the label centered
-   * properly in the label's requisition
-   */
-  if (label_alignment)
-    g_signal_connect (label_alignment, "size-request",
-		      G_CALLBACK (label_size_request_cb), button_data);
-
   button_data->dir_name = g_strdup (dir_name);
   button_data->file = g_object_ref (file);
   button_data->file_is_hidden = file_is_hidden;
+
+  /* FIXME: Maybe we dont need this alignment at all and we can
+   * use GtkMisc aligments or even GtkWidget:halign/valign center.
+   *
+   * The following function ensures that the alignment will always
+   * request the same size whether the button's text is bold or not.
+   */
+  if (label_alignment)
+    set_label_size_request (label_alignment, button_data);
 
   gtk_container_add (GTK_CONTAINER (button_data->button), child);
   gtk_widget_show_all (button_data->button);

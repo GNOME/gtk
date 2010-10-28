@@ -701,7 +701,7 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Video");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  image = gtk_image_new_from_icon_name ("utility-terminal", GTK_ICON_SIZE_LARGE_TOOLBAR);
+  image = gtk_image_new_from_icon_name ("utilities-terminal", GTK_ICON_SIZE_LARGE_TOOLBAR);
   item = gtk_tool_button_new (image, "Terminal");
   add_item_to_list (store, item, "Terminal");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);

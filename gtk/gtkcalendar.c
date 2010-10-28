@@ -341,8 +341,12 @@ static void gtk_calendar_get_property (GObject      *object,
 
 static void     gtk_calendar_realize        (GtkWidget        *widget);
 static void     gtk_calendar_unrealize      (GtkWidget        *widget);
-static void     gtk_calendar_size_request   (GtkWidget        *widget,
-					     GtkRequisition   *requisition);
+static void     gtk_calendar_get_preferred_width  (GtkWidget   *widget,
+                                                   gint        *minimum,
+                                                   gint        *natural);
+static void     gtk_calendar_get_preferred_height (GtkWidget   *widget,
+                                                   gint        *minimum,
+                                                   gint        *natural);
 static void     gtk_calendar_size_allocate  (GtkWidget        *widget,
 					     GtkAllocation    *allocation);
 static gboolean gtk_calendar_draw           (GtkWidget        *widget,
@@ -438,7 +442,8 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   widget_class->realize = gtk_calendar_realize;
   widget_class->unrealize = gtk_calendar_unrealize;
   widget_class->draw = gtk_calendar_draw;
-  widget_class->size_request = gtk_calendar_size_request;
+  widget_class->get_preferred_width = gtk_calendar_get_preferred_width;
+  widget_class->get_preferred_height = gtk_calendar_get_preferred_height;
   widget_class->size_allocate = gtk_calendar_size_allocate;
   widget_class->button_press_event = gtk_calendar_button_press;
   widget_class->button_release_event = gtk_calendar_button_release;
@@ -2027,6 +2032,30 @@ gtk_calendar_size_request (GtkWidget	  *widget,
   requisition->height = height + (style->ythickness + inner_border) * 2;
 
   g_object_unref (layout);
+}
+
+static void
+gtk_calendar_get_preferred_width (GtkWidget *widget,
+                                  gint      *minimum,
+                                  gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_calendar_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_calendar_get_preferred_height (GtkWidget *widget,
+                                   gint      *minimum,
+                                   gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_calendar_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
 }
 
 static void
