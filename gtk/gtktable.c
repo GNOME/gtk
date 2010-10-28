@@ -980,7 +980,7 @@ gtk_table_get_preferred_width (GtkWidget *widget,
 {
   GtkTable *table = GTK_TABLE (widget);
   GtkTablePrivate *priv = table->priv;
-  gint row, col;
+  gint col;
 
   gtk_table_size_request_init (table);
   gtk_table_size_request_pass1 (table);
@@ -1005,7 +1005,7 @@ gtk_table_get_preferred_height (GtkWidget *widget,
 {
   GtkTable *table = GTK_TABLE (widget);
   GtkTablePrivate *priv = table->priv;
-  gint row, col;
+  gint row;
 
   gtk_table_size_request_init (table);
   gtk_table_size_request_pass1 (table);
