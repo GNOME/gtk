@@ -104,6 +104,8 @@ get_cached_size (SizeRequestCache  *cache,
   return FALSE;
 }
 
+
+extern guint size_request_signal_id;
 static void
 do_size_request (GtkWidget      *widget,
 		 GtkRequisition *requisition)
@@ -114,6 +116,11 @@ do_size_request (GtkWidget      *widget,
     g_warning ("%s implements GtkWidgetClass::size_request which is deprecated and "
 	       "will be removed in the next release",
 	       G_OBJECT_TYPE_NAME (widget));
+
+  if (g_signal_has_handler_pending (widget, size_request_signal_id, 0, TRUE))
+    g_warning ("A %s (%p) has handler(s) connected to the GtkWidgetClass::size-request signal which is "
+	       "deprecated and will be removed in the next release",
+	       G_OBJECT_TYPE_NAME (widget), widget);
 
   /* Now we dont bother caching the deprecated "size-request" returns,
    * just unconditionally invoke here just in case we run into legacy stuff */

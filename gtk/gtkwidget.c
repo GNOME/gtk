@@ -710,6 +710,9 @@ static guint            composite_child_stack = 0;
 static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
 
+/* XXX Temporarily here to fire warnings from gtksizerequest.c */
+guint size_request_signal_id = 0;
+
 static GQuark		quark_property_parser = 0;
 static GQuark		quark_aux_info = 0;
 static GQuark		quark_accel_path = 0;
@@ -1467,7 +1470,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal.
    * @requisition:
    */
-  widget_signals[SIZE_REQUEST] =
+  size_request_signal_id = widget_signals[SIZE_REQUEST] =
     g_signal_new (I_("size-request"),
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_FIRST,
