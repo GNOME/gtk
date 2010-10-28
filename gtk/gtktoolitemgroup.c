@@ -308,15 +308,6 @@ gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
 }
 
 static void
-gtk_tool_item_group_header_size_request_cb (GtkWidget      *widget,
-                                            GtkRequisition *requisition,
-                                            gpointer        data)
-{
-  GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (data);
-  requisition->height = MAX (requisition->height, group->priv->expander_size);
-}
-
-static void
 gtk_tool_item_group_header_clicked_cb (GtkButton *button,
                                        gpointer   data)
 {
@@ -344,6 +335,8 @@ gtk_tool_item_group_header_adjust_style (GtkToolItemGroup *group)
                         "header-spacing", &(priv->header_spacing),
                         "expander-size", &(priv->expander_size),
                         NULL);
+  
+  gtk_widget_set_size_request (alignment, -1, priv->expander_size);
 
   switch (gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group)))
     {
@@ -411,9 +404,6 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
 
   g_signal_connect_after (alignment, "draw",
                           G_CALLBACK (gtk_tool_item_group_header_draw_cb),
-                          group);
-  g_signal_connect_after (alignment, "size-request",
-                          G_CALLBACK (gtk_tool_item_group_header_size_request_cb),
                           group);
 
   g_signal_connect (priv->header, "clicked",
