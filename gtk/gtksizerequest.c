@@ -108,6 +108,13 @@ static void
 do_size_request (GtkWidget      *widget,
 		 GtkRequisition *requisition)
 {
+  GtkWidgetClass *widget_class = g_type_class_peek (GTK_TYPE_WIDGET);
+
+  if (GTK_WIDGET_GET_CLASS (widget)->size_request != widget_class->size_request)
+    g_warning ("%s implements GtkWidgetClass::size_request which is deprecated and "
+	       "will be removed in the next release",
+	       G_OBJECT_TYPE_NAME (widget));
+
   /* Now we dont bother caching the deprecated "size-request" returns,
    * just unconditionally invoke here just in case we run into legacy stuff */
   gtk_widget_ensure_style (widget);
