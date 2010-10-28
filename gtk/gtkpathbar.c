@@ -1396,25 +1396,25 @@ get_dir_name (ButtonData *button_data)
  * or not the contents are bold
  */
 static void
-label_size_request_cb (GtkWidget      *widget,
-		       GtkRequisition *requisition,
-		       ButtonData     *button_data)
+set_label_size_request (GtkWidget  *alignment,
+			ButtonData *button_data)
 {
   const gchar *dir_name = get_dir_name (button_data);
   PangoLayout *layout = gtk_widget_create_pango_layout (button_data->label, dir_name);
-  gint bold_width, bold_height;
+  gint width, height, bold_width, bold_height;
   gchar *markup;
-
-  pango_layout_get_pixel_size (layout, &requisition->width, &requisition->height);
+  
+  pango_layout_get_pixel_size (layout, &width, &height);
   
   markup = g_markup_printf_escaped ("<b>%s</b>", dir_name);
   pango_layout_set_markup (layout, markup, -1);
   g_free (markup);
 
   pango_layout_get_pixel_size (layout, &bold_width, &bold_height);
-  requisition->width = MAX (requisition->width, bold_width);
-  requisition->height = MAX (requisition->height, bold_height);
-  
+
+  gtk_widget_set_size_request (alignment,
+			       MAX (width, bold_width),
+			       MAX (height, bold_height));
   g_object_unref (layout);
 }
 
@@ -1542,17 +1542,18 @@ make_directory_button (GtkPathBar  *path_bar,
       button_data->image = NULL;
     }
 
-  /* label_alignment is created because we can't override size-request
-   * on label itself and still have the contents of the label centered
-   * properly in the label's requisition
-   */
-  if (label_alignment)
-    g_signal_connect (label_alignment, "size-request",
-		      G_CALLBACK (label_size_request_cb), button_data);
-
   button_data->dir_name = g_strdup (dir_name);
   button_data->file = g_object_ref (file);
   button_data->file_is_hidden = file_is_hidden;
+
+  /* FIXME: Maybe we dont need this alignment at all and we can
+   * use GtkMisc aligments or even GtkWidget:halign/valign center.
+   *
+   * The following function ensures that the alignment will always
+   * request the same size whether the button's text is bold or not.
+   */
+  if (label_alignment)
+    set_label_size_request (label_alignment, button_data);
 
   gtk_container_add (GTK_CONTAINER (button_data->button), child);
   gtk_widget_show_all (button_data->button);
