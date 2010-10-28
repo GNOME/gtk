@@ -9780,12 +9780,12 @@ void create_layout (GtkWidget *widget)
       /* We set step sizes here since GtkLayout does not set
        * them itself.
        */
-      hadjustment = gtk_layout_get_hadjustment (layout);
-      vadjustment = gtk_layout_get_vadjustment (layout);
+      hadjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (layout));
+      vadjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (layout));
       gtk_adjustment_set_step_increment (hadjustment, 10.0);
       gtk_adjustment_set_step_increment (vadjustment, 10.0);
-      gtk_layout_set_hadjustment (layout, hadjustment);
-      gtk_layout_set_vadjustment (layout, vadjustment);
+      gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (layout), hadjustment);
+      gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (layout), vadjustment);
 
       gtk_widget_set_events (layout_widget, GDK_EXPOSURE_MASK);
       g_signal_connect (layout, "draw",
