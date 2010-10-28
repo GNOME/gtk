@@ -568,6 +568,31 @@ gtk_tool_item_group_size_request (GtkWidget      *widget,
   requisition->height += border_width * 2;
 }
 
+static void
+gtk_tool_item_group_get_preferred_width (GtkWidget *widget,
+					 gint      *minimum,
+					 gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_tool_item_group_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.width;
+}
+
+static void
+gtk_tool_item_group_get_preferred_height (GtkWidget *widget,
+					  gint      *minimum,
+					  gint      *natural)
+{
+  GtkRequisition requisition;
+
+  gtk_tool_item_group_size_request (widget, &requisition);
+
+  *minimum = *natural = requisition.height;
+}
+
+
 static gboolean
 gtk_tool_item_group_is_item_visible (GtkToolItemGroup      *group,
                                      GtkToolItemGroupChild *child)
@@ -1542,12 +1567,13 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   oclass->finalize           = gtk_tool_item_group_finalize;
   oclass->dispose            = gtk_tool_item_group_dispose;
 
-  wclass->size_request       = gtk_tool_item_group_size_request;
-  wclass->size_allocate      = gtk_tool_item_group_size_allocate;
-  wclass->realize            = gtk_tool_item_group_realize;
-  wclass->unrealize          = gtk_tool_item_group_unrealize;
-  wclass->style_set          = gtk_tool_item_group_style_set;
-  wclass->screen_changed     = gtk_tool_item_group_screen_changed;
+  wclass->get_preferred_width  = gtk_tool_item_group_get_preferred_width;
+  wclass->get_preferred_height = gtk_tool_item_group_get_preferred_height;
+  wclass->size_allocate        = gtk_tool_item_group_size_allocate;
+  wclass->realize              = gtk_tool_item_group_realize;
+  wclass->unrealize            = gtk_tool_item_group_unrealize;
+  wclass->style_set            = gtk_tool_item_group_style_set;
+  wclass->screen_changed       = gtk_tool_item_group_screen_changed;
 
   cclass->add                = gtk_tool_item_group_add;
   cclass->remove             = gtk_tool_item_group_remove;
