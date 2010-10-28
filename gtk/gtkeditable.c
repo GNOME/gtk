@@ -227,6 +227,8 @@ gtk_editable_insert_text (GtkEditable *editable,
  * are those from @start_pos to the end of the text.
  *
  * Note that the positions are specified in characters, not bytes.
+ *
+ * Virtual: do_delete_text
  */
 void
 gtk_editable_delete_text (GtkEditable *editable,
