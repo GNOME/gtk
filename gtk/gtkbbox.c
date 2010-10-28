@@ -126,6 +126,8 @@ gtk_button_box_class_init (GtkButtonBoxClass *class)
 
   widget_class->get_preferred_width = gtk_button_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_button_box_get_preferred_height;
+  widget_class->get_preferred_width_for_height = NULL;
+  widget_class->get_preferred_height_for_width = NULL;
   widget_class->size_allocate = gtk_button_box_size_allocate;
 
   container_class->remove = gtk_button_box_remove;
