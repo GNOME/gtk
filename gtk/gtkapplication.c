@@ -108,6 +108,7 @@ gtk_application_before_emit (GApplication *application,
   g_variant_iter_init (&iter, platform_data);
   while (g_variant_iter_loop (&iter, "{&sv}", &key, &value))
     {
+#ifdef GDK_WINDOWING_X11
       if (strcmp (key, "desktop-startup-id") == 0)
         {
           GdkDisplay *display;
@@ -117,6 +118,7 @@ gtk_application_before_emit (GApplication *application,
           id = g_variant_get_string (value, NULL);
           gdk_x11_display_set_startup_notification_id (display, id);
        }
+#endif
     }
 }
 
