@@ -62,11 +62,6 @@ struct _GtkHButtonBoxClass
 GType      gtk_hbutton_box_get_type (void) G_GNUC_CONST;
 GtkWidget* gtk_hbutton_box_new      (void);
 
-/* buttons can be added by gtk_container_add() */
-
-/* private API */
-GtkButtonBoxStyle _gtk_hbutton_box_get_layout_default (void);
-
 G_END_DECLS
 
 #endif /* __GTK_HBUTTON_BOX_H__ */
