@@ -81,10 +81,8 @@ gtk_style_set_class_init (GtkStyleSetClass *klass)
   object_class->finalize = gtk_style_set_finalize;
 
   /* Initialize default property set */
-  gtk_style_set_register_property ("foreground-color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_set_register_property ("color", GDK_TYPE_RGBA, NULL, NULL);
   gtk_style_set_register_property ("background-color", GDK_TYPE_RGBA, NULL, NULL);
-  gtk_style_set_register_property ("text-color", GDK_TYPE_RGBA, NULL, NULL);
-  gtk_style_set_register_property ("base-color", GDK_TYPE_RGBA, NULL, NULL);
 
   gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL, NULL);
 

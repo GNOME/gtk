@@ -97,12 +97,12 @@
  * <programlisting>
  * /&ast; Theme all widgets defining the class entry &ast;/
  * .entry {
- *     foreground-color: &num;39f1f9;
+ *     color: &num;39f1f9;
  * }
  *
  * /&ast; Theme spinbuttons' entry &ast;/
  * GtkSpinButton.entry {
- *     foreground-color: &num;900185;
+ *     color: &num;900185;
  * }
  * </programlisting>
  * </example>
@@ -117,19 +117,19 @@
  * <programlisting>
  * /&ast; Theme any label within a notebook &ast;/
  * GtkNotebook GtkLabel {
- *     foreground-color: &num;f90192;
+ *     color: &num;f90192;
  * }
  *
  * /&ast; Theme labels within notebook tabs &ast;/
  * GtkNotebook tab:nth-child GtkLabel {
- *     foreground-color: &num;703910;
+ *     color: &num;703910;
  * }
  *
  * /&ast; Theme labels in the any first notebook
  *  tab, both selectors are equivalent &ast;/
  * GtkNotebook tab:nth-child(first) GtkLabel,
  * GtkNotebook tab:first-child GtkLabel {
- *     foreground-color: &num;89d012;
+ *     color: &num;89d012;
  * }
  * </programlisting>
  * </example>
@@ -278,24 +278,18 @@
  *       </row>
  *       <row>
  *         <entry>background-color</entry>
- *         <entry morerows="3"><programlisting>color</programlisting></entry>
- *         <entry morerows="3">#GdkRGBA</entry>
- *         <entry morerows="3">
+ *         <entry morerows="1"><programlisting>color</programlisting></entry>
+ *         <entry morerows="1">#GdkRGBA</entry>
+ *         <entry morerows="1">
  *           <programlisting>
  * background-color: &num;fff;
- * foreground-color: @color-name;
- * text-color: shade (@color-name, 0.5);
- * base-color: mix (@color-name, &num;f0f, 0.8);</programlisting>
+ * color: @color-name;
+ * background-color: shade (@color-name, 0.5);
+ * color: mix (@color-name, &num;f0f, 0.8);</programlisting>
  *         </entry>
  *       </row>
  *       <row>
- *         <entry>foreground-color</entry>
- *       </row>
- *       <row>
- *         <entry>text-color</entry>
- *       </row>
- *       <row>
- *         <entry>base-color</entry>
+ *         <entry>color</entry>
  *       </row>
  *       <row>
  *         <entry>font</entry>
@@ -2872,38 +2866,34 @@ gtk_css_provider_get_default (void)
         "*,\n"
         "GtkTreeView > GtkButton {\n"
         "  background-color: @bg_color;\n"
-        "  foreground-color: @fg_color;\n"
-        "  text-color: @text_color; \n"
-        "  base-color: @base_color; \n"
+        "  color: @fg_color;\n"
         "  border-color: shade (@bg_color, 0.7);\n"
         "  padding: 2 2; \n"
         "}\n"
         "\n"
         "*:prelight {\n"
         "  background-color: shade (@bg_color, 2.0);\n"
-        "  foreground-color: shade (@fg_color, 1.3);\n"
-        "  text-color: @selected_fg_color;\n"
-        "  base-color: @selected_bg_color;\n"
+        "  color: shade (@fg_color, 1.3);\n"
         "}\n"
         "\n"
         "*:selected {\n"
         "  background-color: @selected_bg_color;\n"
-        "  foreground-color: @selected_fg_color;\n"
+        "  color: @selected_fg_color;\n"
         "}\n"
         "\n"
         "*:insensitive {\n"
         "  background-color: shade (@bg_color, 0.7);\n"
-        "  foreground-color: shade (@fg_color, 0.7);\n"
+        "  color: shade (@fg_color, 0.7);\n"
         "}\n"
         "\n"
-        "GtkTreeView, GtkIconView {\n"
+        "GtkTreeView, GtkIconView, GtkTextView {\n"
         "  background-color: @base_color;\n"
-        "  foreground-color: @text_color;\n"
+        "  color: @text_color;\n"
         "}\n"
         "\n"
         "GtkTreeView > row {\n"
         "  background-color: @base_color;\n"
-        "  foreground-color: @text_color;\n"
+        "  color: @text_color;\n"
         "}\n"
         "\n"
         "GtkTreeView > row:nth-child(odd) { \n"
@@ -2912,7 +2902,7 @@ gtk_css_provider_get_default (void)
         "\n"
         ".tooltip {\n"
         "  background-color: @tooltip_bg_color; \n"
-        "  foreground-color: @tooltip_fg_color; \n"
+        "  color: @tooltip_fg_color; \n"
         "}\n"
         "\n"
         ".button,\n"
@@ -2929,7 +2919,7 @@ gtk_css_provider_get_default (void)
         ".button:prelight,\n"
         ".slider:prelight {\n"
         "  background-color: @selected_bg_color;\n"
-        "  foreground-color: @selected_fg_color;\n"
+        "  color: @selected_fg_color;\n"
         "  border-color: shade (@selected_bg_color, 0.7);\n"
         "}\n"
         "\n"
@@ -2941,6 +2931,22 @@ gtk_css_provider_get_default (void)
         ".entry {\n"
         "  border-style: inset;\n"
         "  border-width: 2;\n"
+        "  background-color: @base_color;\n"
+        "  color: @text_color;\n"
+        "}\n"
+        ".check, .radio {\n"
+        "  background-color: @base_color;\n"
+        "  color: @text_color;\n"
+        "}\n"
+        "\n"
+        ".menu.check,\n"
+        ".menu.radio {\n"
+        "  color: @fg_color;\n"
+        "}\n"
+        "\n"
+        ".menu:hover {\n"
+        "  background-color: @selected_bg_color;\n"
+        "  border-style: none;\n"
         "}\n"
         "\n"
         ".viewport {\n"

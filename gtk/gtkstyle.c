@@ -655,19 +655,19 @@ set_color (GtkStyle        *style,
       break;
     case GTK_RC_FG:
       gtk_style_context_get (context, state,
-                             "foreground-color", &color,
+                             "color", &color,
                              NULL);
       dest = &style->fg[state];
       break;
     case GTK_RC_TEXT:
       gtk_style_context_get (context, state,
-                             "text-color", &color,
+                             "color", &color,
                              NULL);
       dest = &style->text[state];
       break;
     case GTK_RC_BASE:
       gtk_style_context_get (context, state,
-                             "base-color", &color,
+                             "background-color", &color,
                              NULL);
       dest = &style->base[state];
       break;
@@ -694,10 +694,28 @@ gtk_style_update_from_context (GtkStyle *style)
 
   for (state = GTK_STATE_NORMAL; state <= GTK_STATE_INSENSITIVE; state++)
     {
-      set_color (style, priv->context, state, GTK_RC_BG);
-      set_color (style, priv->context, state, GTK_RC_FG);
-      set_color (style, priv->context, state, GTK_RC_BASE);
-      set_color (style, priv->context, state, GTK_RC_TEXT);
+      if (gtk_style_context_has_class (priv->context, "entry"))
+        {
+          gtk_style_context_save (priv->context);
+          gtk_style_context_remove_class (priv->context, "entry");
+          set_color (style, priv->context, state, GTK_RC_BG);
+          set_color (style, priv->context, state, GTK_RC_FG);
+          gtk_style_context_restore (priv->context);
+
+          set_color (style, priv->context, state, GTK_RC_BASE);
+          set_color (style, priv->context, state, GTK_RC_TEXT);
+        }
+      else
+        {
+          gtk_style_context_save (priv->context);
+          gtk_style_context_add_class (priv->context, "entry");
+          set_color (style, priv->context, state, GTK_RC_BASE);
+          set_color (style, priv->context, state, GTK_RC_TEXT);
+          gtk_style_context_restore (priv->context);
+
+          set_color (style, priv->context, state, GTK_RC_BG);
+          set_color (style, priv->context, state, GTK_RC_FG);
+        }
     }
 
   if (style->font_desc)
@@ -1831,6 +1849,8 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "slider");
       gtk_style_context_add_class (context, "scrollbar");
     }
+  else if (strcmp (detail, "menuitem") == 0)
+    gtk_style_context_add_class (context, "menu");
   else if (g_str_has_prefix (detail, "cell"))
     {
       GtkRegionFlags row, col;
