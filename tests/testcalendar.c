@@ -642,7 +642,7 @@ create_calendar(void)
    *  Glue everything together
    */
 
-  bbox = gtk_hbutton_box_new ();
+  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_END);
 
   button = gtk_button_new_with_label ("Close");

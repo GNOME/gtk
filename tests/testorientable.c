@@ -75,7 +75,7 @@ main (int argc, char **argv)
                   TRUE, TRUE, 0);
 
   /* GtkButtonBox */
-  box = gtk_hbutton_box_new ();
+  box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   orientables = g_list_prepend (orientables, box);
   gtk_table_attach_defaults (GTK_TABLE (table), box, 1, 2, 1, 2);
   gtk_box_pack_start (GTK_BOX (box),

@@ -272,7 +272,7 @@ msgbox_run (GtkWindow  *parent,
   separator = gtk_hseparator_new ();
   gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
 
-  button_box = gtk_hbutton_box_new ();
+  button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox), button_box, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (button_box), 8);
   

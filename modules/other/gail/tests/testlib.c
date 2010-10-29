@@ -588,7 +588,7 @@ _create_select_tests_window (AtkObject    *obj,
       /* Setup Layout */
       md[window_no]->vbox = gtk_vbox_new (TRUE, 0);
       md[window_no]->button = gtk_button_new_with_mnemonic ("_Run Tests");
-      hbuttonbox = gtk_hbutton_box_new ();
+      hbuttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox),
                                  GTK_BUTTONBOX_SPREAD);
       gtk_box_pack_end (GTK_BOX (hbuttonbox),

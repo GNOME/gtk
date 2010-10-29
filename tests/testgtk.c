@@ -1088,9 +1088,9 @@ create_bbox (gint  horizontal,
   frame = gtk_frame_new (title);
 
   if (horizontal)
-    bbox = gtk_hbutton_box_new ();
+    bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   else
-    bbox = gtk_vbutton_box_new ();
+    bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
 
   gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
   gtk_container_add (GTK_CONTAINER (frame), bbox);
@@ -5194,7 +5194,7 @@ create_forward_back (const char       *title,
 		     GtkTextDirection  text_dir)
 {
   GtkWidget *frame = gtk_frame_new (title);
-  GtkWidget *bbox = gtk_hbutton_box_new ();
+  GtkWidget *bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   GtkWidget *back_button = gtk_button_new_from_stock (GTK_STOCK_GO_BACK);
   GtkWidget *forward_button = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);
 
@@ -5652,7 +5652,7 @@ create_display_screen (GtkWidget *widget)
   gtk_table_attach_defaults (GTK_TABLE (table), radio_scr, 0, 1, 1, 2);
   gtk_table_attach_defaults (GTK_TABLE (table), combo_dpy, 1, 2, 0, 1);
 
-  bbox = gtk_hbutton_box_new ();
+  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   applyb = gtk_button_new_from_stock (GTK_STOCK_APPLY);
   cancelb = gtk_button_new_from_stock (GTK_STOCK_CANCEL);
   

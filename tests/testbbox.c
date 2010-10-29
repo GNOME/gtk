@@ -137,7 +137,7 @@ main (int    argc,
   
   /* GtkHButtonBox */
   
-  hbbox = gtk_hbutton_box_new ();
+  hbbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox), hbbox, TRUE, TRUE, 5);
   
   for (i = 0; i < N_BUTTONS; i++) {
@@ -148,7 +148,7 @@ main (int    argc,
   bbox = hbbox;
   
   /* GtkVButtonBox */
-  vbbox = gtk_vbutton_box_new ();
+  vbbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (vbox), vbbox, TRUE, TRUE, 5);
   
   /* Options */
