@@ -376,7 +376,7 @@ gtk_theming_engine_register_property (GtkThemingEngine       *engine,
     engine_name = G_OBJECT_TYPE_NAME (engine);
 
   name = g_strdup_printf ("-%s-%s", engine_name, property_name);
-  gtk_style_set_register_property (name, type, default_value, parse_func);
+  gtk_style_properties_register_property (name, type, default_value, parse_func);
   g_free (name);
 }
 

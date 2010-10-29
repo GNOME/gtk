@@ -23,7 +23,7 @@
 #include <glib-object.h>
 #include "gtkwidgetpath.h"
 #include "gtkiconfactory.h"
-#include "gtkstyleset.h"
+#include "gtkstyleproperties.h"
 #include "gtkenums.h"
 
 G_BEGIN_DECLS
@@ -52,8 +52,8 @@ struct _GtkStyleProviderIface
 {
   GTypeInterface g_iface;
 
-  GtkStyleSet * (* get_style) (GtkStyleProvider *provider,
-                               GtkWidgetPath    *path);
+  GtkStyleProperties * (* get_style) (GtkStyleProvider *provider,
+                                      GtkWidgetPath    *path);
 
   gboolean (* get_style_property) (GtkStyleProvider *provider,
                                    GtkWidgetPath    *path,
@@ -66,8 +66,8 @@ struct _GtkStyleProviderIface
 
 GType gtk_style_provider_get_type (void) G_GNUC_CONST;
 
-GtkStyleSet *gtk_style_provider_get_style (GtkStyleProvider *provider,
-                                           GtkWidgetPath    *path);
+GtkStyleProperties *gtk_style_provider_get_style (GtkStyleProvider *provider,
+                                                  GtkWidgetPath    *path);
 
 gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                                 GtkWidgetPath    *path,

@@ -293,8 +293,8 @@ gtk_public_h_sources =          \
 	gtkstatusicon.h		\
 	gtkstock.h		\
 	gtkstylecontext.h	\
+	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
-	gtkstyleset.h		\
 	gtkstyle.h		\
 	gtkswitch.h		\
 	gtksymboliccolor.h	\
@@ -601,8 +601,8 @@ gtk_base_c_sources =            \
 	gtkstatusicon.c		\
 	gtkstock.c		\
 	gtkstylecontext.c	\
+	gtkstyleproperties.c	\
 	gtkstyleprovider.c	\
-	gtkstyleset.c		\
 	gtkstyle.c		\
 	gtkswitch.c		\
 	gtksymboliccolor.c	\

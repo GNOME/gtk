@@ -961,8 +961,8 @@ css_provider_get_selectors (GtkCssProvider *css_provider,
 }
 
 static void
-css_provider_dump_symbolic_colors (GtkCssProvider *css_provider,
-                                   GtkStyleSet    *set)
+css_provider_dump_symbolic_colors (GtkCssProvider     *css_provider,
+                                   GtkStyleProperties *props)
 {
   GtkCssProviderPrivate *priv;
   GHashTableIter iter;
@@ -979,25 +979,25 @@ css_provider_dump_symbolic_colors (GtkCssProvider *css_provider,
       name = key;
       color = value;
 
-      gtk_style_set_map_color (set, name, color);
+      gtk_style_properties_map_color (props, name, color);
     }
 }
 
-static GtkStyleSet *
+static GtkStyleProperties *
 gtk_css_provider_get_style (GtkStyleProvider *provider,
                             GtkWidgetPath    *path)
 {
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
-  GtkStyleSet *set;
+  GtkStyleProperties *props;
   GArray *priority_info;
   guint i;
 
   css_provider = GTK_CSS_PROVIDER (provider);
+  props = gtk_style_properties_new ();
   priv = css_provider->priv;
-  set = gtk_style_set_new ();
 
-  css_provider_dump_symbolic_colors (css_provider, set);
+  css_provider_dump_symbolic_colors (css_provider, props);
   priority_info = css_provider_get_selectors (css_provider, path);
 
   for (i = 0; i < priority_info->len; i++)
@@ -1018,16 +1018,16 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
            * the type is registered or not.
            */
           if (prop[0] == '-' &&
-              !gtk_style_set_lookup_property (prop, NULL, NULL))
+              !gtk_style_properties_lookup_property (prop, NULL, NULL))
             continue;
 
-          gtk_style_set_set_property (set, key, info->state, value);
+          gtk_style_properties_set_property (props, key, info->state, value);
         }
     }
 
   g_array_free (priority_info, TRUE);
 
-  return set;
+  return props;
 }
 
 static gboolean
@@ -2579,7 +2579,7 @@ parse_rule (GtkCssProvider *css_provider,
 
       value_str = g_strstrip (scanner->value.v_identifier);
 
-      if (gtk_style_set_lookup_property (prop, &prop_type, &parse_func))
+      if (gtk_style_properties_lookup_property (prop, &prop_type, &parse_func))
         {
           GValue *val;
 

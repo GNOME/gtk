@@ -25,14 +25,14 @@
 
 #include "gtktypebuiltins.h"
 #include "gtkstyleprovider.h"
-#include "gtkstyleset.h"
+#include "gtkstyleproperties.h"
 #include "gtkprivate.h"
 #include "gtkthemingengine.h"
 #include "gtkanimationdescription.h"
 #include "gtk9slice.h"
 #include "gtkintl.h"
 
-typedef struct GtkStyleSetPrivate GtkStyleSetPrivate;
+typedef struct GtkStylePropertiesPrivate GtkStylePropertiesPrivate;
 typedef struct PropertyData PropertyData;
 typedef struct PropertyNode PropertyNode;
 typedef struct ValueData ValueData;
@@ -56,7 +56,7 @@ struct PropertyData
   GArray *values;
 };
 
-struct GtkStyleSetPrivate
+struct GtkStylePropertiesPrivate
 {
   GHashTable *color_map;
   GHashTable *properties;
@@ -64,50 +64,50 @@ struct GtkStyleSetPrivate
 
 static GArray *properties = NULL;
 
-static void gtk_style_set_provider_init (GtkStyleProviderIface *iface);
-static void gtk_style_set_finalize      (GObject      *object);
+static void gtk_style_properties_provider_init (GtkStyleProviderIface *iface);
+static void gtk_style_properties_finalize      (GObject      *object);
 
 
-G_DEFINE_TYPE_EXTENDED (GtkStyleSet, gtk_style_set, G_TYPE_OBJECT, 0,
+G_DEFINE_TYPE_EXTENDED (GtkStyleProperties, gtk_style_properties, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
-                                               gtk_style_set_provider_init));
+                                               gtk_style_properties_provider_init));
 
 static void
-gtk_style_set_class_init (GtkStyleSetClass *klass)
+gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GValue val = { 0 };
 
-  object_class->finalize = gtk_style_set_finalize;
+  object_class->finalize = gtk_style_properties_finalize;
 
   /* Initialize default property set */
-  gtk_style_set_register_property ("color", GDK_TYPE_RGBA, NULL, NULL);
-  gtk_style_set_register_property ("background-color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_properties_register_property ("color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_properties_register_property ("background-color", GDK_TYPE_RGBA, NULL, NULL);
 
-  gtk_style_set_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL, NULL);
+  gtk_style_properties_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL, NULL);
 
-  gtk_style_set_register_property ("margin", GTK_TYPE_BORDER, NULL, NULL);
-  gtk_style_set_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
+  gtk_style_properties_register_property ("margin", GTK_TYPE_BORDER, NULL, NULL);
+  gtk_style_properties_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
 
-  gtk_style_set_register_property ("border-width", G_TYPE_INT, NULL, NULL);
-  gtk_style_set_register_property ("border-radius", G_TYPE_INT, NULL, NULL);
-  gtk_style_set_register_property ("border-style", GTK_TYPE_BORDER_STYLE, NULL, NULL);
-  gtk_style_set_register_property ("border-color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_properties_register_property ("border-width", G_TYPE_INT, NULL, NULL);
+  gtk_style_properties_register_property ("border-radius", G_TYPE_INT, NULL, NULL);
+  gtk_style_properties_register_property ("border-style", GTK_TYPE_BORDER_STYLE, NULL, NULL);
+  gtk_style_properties_register_property ("border-color", GDK_TYPE_RGBA, NULL, NULL);
 
-  gtk_style_set_register_property ("background-image", CAIRO_GOBJECT_TYPE_PATTERN, NULL, NULL);
-  gtk_style_set_register_property ("border-image", GTK_TYPE_9SLICE, NULL, NULL);
+  gtk_style_properties_register_property ("background-image", CAIRO_GOBJECT_TYPE_PATTERN, NULL, NULL);
+  gtk_style_properties_register_property ("border-image", GTK_TYPE_9SLICE, NULL, NULL);
 
   g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
   g_value_set_object (&val, (GObject *) gtk_theming_engine_load (NULL));
-  gtk_style_set_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val, NULL);
+  gtk_style_properties_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val, NULL);
   g_value_unset (&val);
 
   g_value_init (&val, GTK_TYPE_ANIMATION_DESCRIPTION);
   g_value_take_boxed (&val, gtk_animation_description_new (0, GTK_TIMELINE_PROGRESS_LINEAR));
-  gtk_style_set_register_property ("transition", GTK_TYPE_ANIMATION_DESCRIPTION, &val, NULL);
+  gtk_style_properties_register_property ("transition", GTK_TYPE_ANIMATION_DESCRIPTION, &val, NULL);
   g_value_unset (&val);
 
-  g_type_class_add_private (object_class, sizeof (GtkStyleSetPrivate));
+  g_type_class_add_private (object_class, sizeof (GtkStylePropertiesPrivate));
 }
 
 static PropertyData *
@@ -258,46 +258,46 @@ property_data_match_state (PropertyData  *data,
 }
 
 static void
-gtk_style_set_init (GtkStyleSet *set)
+gtk_style_properties_init (GtkStyleProperties *props)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
 
-  priv = set->priv = G_TYPE_INSTANCE_GET_PRIVATE (set,
-                                                  GTK_TYPE_STYLE_SET,
-                                                  GtkStyleSetPrivate);
+  priv = props->priv = G_TYPE_INSTANCE_GET_PRIVATE (props,
+                                                    GTK_TYPE_STYLE_PROPERTIES,
+                                                    GtkStylePropertiesPrivate);
 
   priv->properties = g_hash_table_new_full (NULL, NULL, NULL,
                                             (GDestroyNotify) property_data_free);
 }
 
 static void
-gtk_style_set_finalize (GObject *object)
+gtk_style_properties_finalize (GObject *object)
 {
-  GtkStyleSetPrivate *priv;
-  GtkStyleSet *set;
+  GtkStylePropertiesPrivate *priv;
+  GtkStyleProperties *props;
 
-  set = GTK_STYLE_SET (object);
-  priv = set->priv;
+  props = GTK_STYLE_PROPERTIES (object);
+  priv = props->priv;
   g_hash_table_destroy (priv->properties);
 
   if (priv->color_map)
     g_hash_table_destroy (priv->color_map);
 
-  G_OBJECT_CLASS (gtk_style_set_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_style_properties_parent_class)->finalize (object);
 }
 
-GtkStyleSet *
-gtk_style_set_get_style (GtkStyleProvider *provider,
-                         GtkWidgetPath    *path)
+GtkStyleProperties *
+gtk_style_properties_get_style (GtkStyleProvider *provider,
+                                GtkWidgetPath    *path)
 {
   /* Return style set itself */
   return g_object_ref (provider);
 }
 
 static void
-gtk_style_set_provider_init (GtkStyleProviderIface *iface)
+gtk_style_properties_provider_init (GtkStyleProviderIface *iface)
 {
-  iface->get_style = gtk_style_set_get_style;
+  iface->get_style = gtk_style_properties_get_style;
 }
 
 static int
@@ -335,7 +335,7 @@ property_node_lookup (GQuark quark)
 /* Property registration functions */
 
 /**
- * gtk_style_set_register_property:
+ * gtk_style_properties_register_property:
  * @property_name: property name to register
  * @type: #GType the property will hold
  * @default_value: default value for this property
@@ -349,10 +349,10 @@ property_node_lookup (GQuark quark)
  * Since: 3.0
  **/
 void
-gtk_style_set_register_property (const gchar            *property_name,
-                                 GType                   type,
-                                 const GValue           *default_value,
-                                 GtkStylePropertyParser  parse_func)
+gtk_style_properties_register_property (const gchar            *property_name,
+                                        GType                   type,
+                                        const GValue           *default_value,
+                                        GtkStylePropertyParser  parse_func)
 {
   PropertyNode *node, new = { 0 };
   GQuark quark;
@@ -401,7 +401,7 @@ gtk_style_set_register_property (const gchar            *property_name,
 }
 
 /**
- * gtk_style_set_lookup_property:
+ * gtk_style_properties_lookup_property:
  * @property_name: property name to look up
  * @type: (out): return location for the looked up property type
  * @parse_func: (out): return value for the parse function
@@ -415,19 +415,19 @@ gtk_style_set_register_property (const gchar            *property_name,
  * Since: 3.0
  **/
 gboolean
-gtk_style_set_lookup_property (const gchar            *property_name,
-                               GType                  *type,
-                               GtkStylePropertyParser *parse_func)
+gtk_style_properties_lookup_property (const gchar            *property_name,
+                                      GType                  *type,
+                                      GtkStylePropertyParser *parse_func)
 {
   PropertyNode *node;
-  GtkStyleSetClass *klass;
+  GtkStylePropertiesClass *klass;
   gboolean found = FALSE;
   GQuark quark;
   gint i;
 
   g_return_val_if_fail (property_name != NULL, FALSE);
 
-  klass = g_type_class_ref (GTK_TYPE_STYLE_SET);
+  klass = g_type_class_ref (GTK_TYPE_STYLE_PROPERTIES);
   quark = g_quark_try_string (property_name);
 
   if (quark == 0)
@@ -460,44 +460,44 @@ gtk_style_set_lookup_property (const gchar            *property_name,
   return found;
 }
 
-/* GtkStyleSet methods */
+/* GtkStyleProperties methods */
 
 /**
- * gtk_style_set_new:
+ * gtk_style_properties_new:
  *
- * Returns a newly created #GtkStyleSet
+ * Returns a newly created #GtkStyleProperties
  *
- * Returns: a new #GtkStyleSet
+ * Returns: a new #GtkStyleProperties
  **/
-GtkStyleSet *
-gtk_style_set_new (void)
+GtkStyleProperties *
+gtk_style_properties_new (void)
 {
-  return g_object_new (GTK_TYPE_STYLE_SET, NULL);
+  return g_object_new (GTK_TYPE_STYLE_PROPERTIES, NULL);
 }
 
 /**
- * gtk_style_set_map_color:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_map_color:
+ * @props: a #GtkStyleProperties
  * @name: color name
  * @color: #GtkSymbolicColor to map @name to
  *
  * Maps @color so it can be referenced by @name. See
- * gtk_style_set_lookup_color()
+ * gtk_style_properties_lookup_color()
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_map_color (GtkStyleSet      *set,
-			 const gchar      *name,
-			 GtkSymbolicColor *color)
+gtk_style_properties_map_color (GtkStyleProperties *props,
+                                const gchar        *name,
+                                GtkSymbolicColor   *color)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (name != NULL);
   g_return_if_fail (color != NULL);
 
-  priv = set->priv;
+  priv = props->priv;
 
   if (G_UNLIKELY (!priv->color_map))
     priv->color_map = g_hash_table_new_full (g_str_hash,
@@ -511,8 +511,8 @@ gtk_style_set_map_color (GtkStyleSet      *set,
 }
 
 /**
- * gtk_style_set_lookup_color:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_lookup_color:
+ * @props: a #GtkStyleProperties
  * @name: color name to lookup
  *
  * Returns the symbolic color that is mapped
@@ -523,15 +523,15 @@ gtk_style_set_map_color (GtkStyleSet      *set,
  * Since: 3.0
  **/
 GtkSymbolicColor *
-gtk_style_set_lookup_color (GtkStyleSet *set,
-			    const gchar *name)
+gtk_style_properties_lookup_color (GtkStyleProperties *props,
+                                   const gchar        *name)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_STYLE_SET (set), NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), NULL);
   g_return_val_if_fail (name != NULL, NULL);
 
-  priv = set->priv;
+  priv = props->priv;
 
   if (!priv->color_map)
     return NULL;
@@ -540,29 +540,29 @@ gtk_style_set_lookup_color (GtkStyleSet *set,
 }
 
 /**
- * gtk_style_set_set_property:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_set_property:
+ * @props: a #GtkStyleProperties
  * @property: styling property to set
  * @state: state to set the value for
  * @value: new value for the property
  *
- * Sets a styling property in @set.
+ * Sets a styling property in @props.
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_set_property (GtkStyleSet   *set,
-                            const gchar   *property,
-                            GtkStateFlags  state,
-                            const GValue  *value)
+gtk_style_properties_set_property (GtkStyleProperties *props,
+                                   const gchar        *property,
+                                   GtkStateFlags       state,
+                                   const GValue       *value)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
   GType value_type;
   GValue *val;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (property != NULL);
   g_return_if_fail (value != NULL);
 
@@ -589,7 +589,7 @@ gtk_style_set_set_property (GtkStyleSet   *set,
   else
     g_return_if_fail (node->property_type == value_type);
 
-  priv = set->priv;
+  priv = props->priv;
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
@@ -617,26 +617,26 @@ gtk_style_set_set_property (GtkStyleSet   *set,
 }
 
 /**
- * gtk_style_set_set_valist:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_set_valist:
+ * @props: a #GtkStyleProperties
  * @state: state to set the values for
  * @args: va_list of property name/value pairs, followed by %NULL
  *
- * Sets several style properties on @set.
+ * Sets several style properties on @props.
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_set_valist (GtkStyleSet   *set,
-                          GtkStateFlags  state,
-                          va_list        args)
+gtk_style_properties_set_valist (GtkStyleProperties *props,
+                                 GtkStateFlags       state,
+                                 va_list             args)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
   const gchar *property_name;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  priv = set->priv;
+  priv = props->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
@@ -686,37 +686,37 @@ gtk_style_set_set_valist (GtkStyleSet   *set,
 }
 
 /**
- * gtk_style_set_set:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_set:
+ * @props: a #GtkStyleProperties
  * @state: state to set the values for
  * @...: property name/value pairs, followed by %NULL
  *
- * Sets several style properties on @set.
+ * Sets several style properties on @props.
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_set (GtkStyleSet   *set,
-                   GtkStateFlags  state,
-                   ...)
+gtk_style_properties_set (GtkStyleProperties *props,
+                          GtkStateFlags       state,
+                          ...)
 {
   va_list args;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
   va_start (args, state);
-  gtk_style_set_set_valist (set, state, args);
+  gtk_style_properties_set_valist (props, state, args);
   va_end (args);
 }
 
 static gboolean
-resolve_color (GtkStyleSet *set,
-	       GValue      *value)
+resolve_color (GtkStyleProperties *props,
+	       GValue             *value)
 {
   GdkRGBA color;
 
   /* Resolve symbolic color to GdkRGBA */
-  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), set, &color))
+  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &color))
     return FALSE;
 
   /* Store it back, this is where GdkRGBA caching happens */
@@ -728,12 +728,12 @@ resolve_color (GtkStyleSet *set,
 }
 
 static gboolean
-resolve_gradient (GtkStyleSet *set,
-                  GValue      *value)
+resolve_gradient (GtkStyleProperties *props,
+                  GValue             *value)
 {
   cairo_pattern_t *gradient;
 
-  if (!gtk_gradient_resolve (g_value_get_boxed (value), set, &gradient))
+  if (!gtk_gradient_resolve (g_value_get_boxed (value), props, &gradient))
     return FALSE;
 
   /* Store it back, this is where cairo_pattern_t caching happens */
@@ -745,31 +745,31 @@ resolve_gradient (GtkStyleSet *set,
 }
 
 /**
- * gtk_style_set_get_property:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_get_property:
+ * @props: a #GtkStyleProperties
  * @property: style property name
  * @state: state to retrieve the property value for
  * @value: (out) (transfer full):  return location for the style property value.
  *
- * Gets a style property from @set for the given state. When done with @value,
+ * Gets a style property from @props for the given state. When done with @value,
  * g_value_unset() needs to be called to free any allocated memory.
  *
- * Returns: %TRUE if the property exists in @set, %FALSE otherwise
+ * Returns: %TRUE if the property exists in @props, %FALSE otherwise
  *
  * Since: 3.0
  **/
 gboolean
-gtk_style_set_get_property (GtkStyleSet   *set,
-                            const gchar   *property,
-                            GtkStateFlags  state,
-                            GValue        *value)
+gtk_style_properties_get_property (GtkStyleProperties *props,
+                                   const gchar        *property,
+                                   GtkStateFlags       state,
+                                   GValue             *value)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
   GValue *val;
 
-  g_return_val_if_fail (GTK_IS_STYLE_SET (set), FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (property != NULL, FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
@@ -781,7 +781,7 @@ gtk_style_set_get_property (GtkStyleSet   *set,
       return FALSE;
     }
 
-  priv = set->priv;
+  priv = props->priv;
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
@@ -801,14 +801,14 @@ gtk_style_set_get_property (GtkStyleSet   *set,
     {
       g_return_val_if_fail (node->property_type == GDK_TYPE_RGBA, FALSE);
 
-      if (!resolve_color (set, val))
+      if (!resolve_color (props, val))
         return FALSE;
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
     {
       g_return_val_if_fail (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
 
-      if (!resolve_gradient (set, val))
+      if (!resolve_gradient (props, val))
         return FALSE;
     }
 
@@ -818,26 +818,26 @@ gtk_style_set_get_property (GtkStyleSet   *set,
 }
 
 /**
- * gtk_style_set_get_valist:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_get_valist:
+ * @props: a #GtkStyleProperties
  * @state: state to retrieve the property values for
  * @args: va_list of property name/return location pairs, followed by %NULL
  *
- * Retrieves several style property values from @set for a given state.
+ * Retrieves several style property values from @props for a given state.
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_get_valist (GtkStyleSet   *set,
-                          GtkStateFlags  state,
-                          va_list        args)
+gtk_style_properties_get_valist (GtkStyleProperties *props,
+                                 GtkStateFlags       state,
+                                 va_list             args)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
   const gchar *property_name;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  priv = set->priv;
+  priv = props->priv;
   property_name = va_arg (args, const gchar *);
 
   while (property_name)
@@ -868,14 +868,14 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
         {
           g_return_if_fail (node->property_type == GDK_TYPE_RGBA);
 
-          if (!resolve_color (set, val))
+          if (!resolve_color (props, val))
             val = &node->default_value;
         }
       else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
         {
           g_return_if_fail (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN);
 
-          if (!resolve_gradient (set, val))
+          if (!resolve_gradient (props, val))
             val = &node->default_value;
         }
 
@@ -893,51 +893,51 @@ gtk_style_set_get_valist (GtkStyleSet   *set,
 }
 
 /**
- * gtk_style_set_get:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_get:
+ * @props: a #GtkStyleProperties
  * @state: state to retrieve the property values for
  * @...: property name /return value pairs, followed by %NULL
  *
- * Retrieves several style property values from @set for a
+ * Retrieves several style property values from @props for a
  * given state.
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_get (GtkStyleSet   *set,
-                   GtkStateFlags  state,
-                   ...)
+gtk_style_properties_get (GtkStyleProperties *props,
+                          GtkStateFlags       state,
+                          ...)
 {
   va_list args;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
   va_start (args, state);
-  gtk_style_set_get_valist (set, state, args);
+  gtk_style_properties_get_valist (props, state, args);
   va_end (args);
 }
 
 /**
- * gtk_style_set_unset_property:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_unset_property:
+ * @props: a #GtkStyleProperties
  * @property: property to unset
  * @state: state to unset
  *
- * Unsets a style property in @set.
+ * Unsets a style property in @props.
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_unset_property (GtkStyleSet   *set,
-                              const gchar   *property,
-                              GtkStateFlags  state)
+gtk_style_properties_unset_property (GtkStyleProperties *props,
+                                     const gchar        *property,
+                                     GtkStateFlags       state)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
   PropertyNode *node;
   PropertyData *prop;
   guint pos;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (property != NULL);
 
   node = property_node_lookup (g_quark_try_string (property));
@@ -948,7 +948,7 @@ gtk_style_set_unset_property (GtkStyleSet   *set,
       return;
     }
 
-  priv = set->priv;
+  priv = props->priv;
   prop = g_hash_table_lookup (priv->properties,
                               GINT_TO_POINTER (node->property_quark));
 
@@ -969,49 +969,49 @@ gtk_style_set_unset_property (GtkStyleSet   *set,
 }
 
 /**
- * gtk_style_set_clear:
- * @set: a #GtkStyleSet
+ * gtk_style_properties_clear:
+ * @props: a #GtkStyleProperties
  *
- * Clears all style information from @set.
+ * Clears all style information from @props.
  **/
 void
-gtk_style_set_clear (GtkStyleSet *set)
+gtk_style_properties_clear (GtkStyleProperties *props)
 {
-  GtkStyleSetPrivate *priv;
+  GtkStylePropertiesPrivate *priv;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
 
-  priv = set->priv;
+  priv = props->priv;
   g_hash_table_remove_all (priv->properties);
 }
 
 /**
- * gtk_style_set_merge:
- * @set: a #GtkStyleSet
- * @set_to_merge: a second #GtkStyleSet
+ * gtk_style_properties_merge:
+ * @props: a #GtkStyleProperties
+ * @props_to_merge: a second #GtkStyleProperties
  * @replace: whether to replace values or not
  *
- * Merges into @set all the style information contained
- * in @set_to_merge. If @replace is %TRUE, the values
+ * Merges into @props all the style information contained
+ * in @props_to_merge. If @replace is %TRUE, the values
  * will be overwritten, if it is %FALSE, the older values
  * will prevail.
  *
  * Since: 3.0
  **/
 void
-gtk_style_set_merge (GtkStyleSet       *set,
-                     const GtkStyleSet *set_to_merge,
-                     gboolean           replace)
+gtk_style_properties_merge (GtkStyleProperties       *props,
+                            const GtkStyleProperties *props_to_merge,
+                            gboolean                  replace)
 {
-  GtkStyleSetPrivate *priv, *priv_to_merge;
+  GtkStylePropertiesPrivate *priv, *priv_to_merge;
   GHashTableIter iter;
   gpointer key, value;
 
-  g_return_if_fail (GTK_IS_STYLE_SET (set));
-  g_return_if_fail (GTK_IS_STYLE_SET (set_to_merge));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
+  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props_to_merge));
 
-  priv = set->priv;
-  priv_to_merge = set_to_merge->priv;
+  priv = props->priv;
+  priv_to_merge = props_to_merge->priv;
 
   /* Merge symbolic color map */
   if (priv_to_merge->color_map)
@@ -1030,7 +1030,7 @@ gtk_style_set_merge (GtkStyleSet       *set,
               g_hash_table_lookup (priv->color_map, name))
             continue;
 
-          gtk_style_set_map_color (set, name, color);
+          gtk_style_properties_map_color (props, name, color);
         }
     }
 

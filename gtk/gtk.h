@@ -176,8 +176,8 @@
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
 #include <gtk/gtkstylecontext.h>
+#include <gtk/gtkstyleproperties.h>
 #include <gtk/gtkstyleprovider.h>
-#include <gtk/gtkstyleset.h>
 #include <gtk/gtkstyle.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtksymboliccolor.h>

@@ -19,7 +19,7 @@
 
 #include "config.h"
 #include "gtksymboliccolor.h"
-#include "gtkstyleset.h"
+#include "gtkstyleproperties.h"
 #include "gtkintl.h"
 
 G_DEFINE_BOXED_TYPE (GtkSymbolicColor, gtk_symbolic_color,
@@ -114,7 +114,7 @@ gtk_symbolic_color_new_literal (GdkRGBA *color)
  *
  * Creates a symbolic color pointing to an unresolved named
  * color. See gtk_style_context_lookup_color() and
- * gtk_style_set_lookup_color().
+ * gtk_style_properties_lookup_color().
  *
  * Returns: a newly created #GtkSymbolicColor
  *
@@ -295,25 +295,25 @@ gtk_symbolic_color_unref (GtkSymbolicColor *color)
 /**
  * gtk_symbolic_color_resolve:
  * @color: a #GtkSymbolicColor
- * @style_set: #GtkStyleSet to use when resolving named colors
+ * @props: #GtkStyleProperties to use when resolving named colors
  * @resolved_color: (out): return location for the resolved color
  *
  * If @color is resolvable, @resolved_color will be filled in
  * with the resolved color, and %TRUE will be returned. Generally,
  * if @color can't be resolved, it is due to it being defined on
- * top of a named color that doesn't exist in @style_set.
+ * top of a named color that doesn't exist in @props.
  *
  * Returns: %TRUE if the color has been resolved
  *
  * Since: 3.0
  **/
 gboolean
-gtk_symbolic_color_resolve (GtkSymbolicColor *color,
-                            GtkStyleSet      *style_set,
-                            GdkRGBA          *resolved_color)
+gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
+                            GtkStyleProperties *props,
+                            GdkRGBA            *resolved_color)
 {
   g_return_val_if_fail (color != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_STYLE_SET (style_set), FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (resolved_color != NULL, FALSE);
 
   switch (color->type)
@@ -325,12 +325,12 @@ gtk_symbolic_color_resolve (GtkSymbolicColor *color,
       {
         GtkSymbolicColor *named_color;
 
-        named_color = gtk_style_set_lookup_color (style_set, color->name);
+        named_color = gtk_style_properties_lookup_color (props, color->name);
 
         if (!named_color)
           return FALSE;
 
-        return gtk_symbolic_color_resolve (named_color, style_set, resolved_color);
+        return gtk_symbolic_color_resolve (named_color, props, resolved_color);
       }
 
       break;
@@ -338,7 +338,7 @@ gtk_symbolic_color_resolve (GtkSymbolicColor *color,
       {
         GdkRGBA shade;
 
-        if (!gtk_symbolic_color_resolve (color->shade.color, style_set, &shade))
+        if (!gtk_symbolic_color_resolve (color->shade.color, props, &shade))
           return FALSE;
 
         resolved_color->red = CLAMP (shade.red * color->shade.factor, 0, 1);
@@ -354,7 +354,7 @@ gtk_symbolic_color_resolve (GtkSymbolicColor *color,
       {
         GdkRGBA alpha;
 
-        if (!gtk_symbolic_color_resolve (color->alpha.color, style_set, &alpha))
+        if (!gtk_symbolic_color_resolve (color->alpha.color, props, &alpha))
           return FALSE;
 
         *resolved_color = alpha;
@@ -366,10 +366,10 @@ gtk_symbolic_color_resolve (GtkSymbolicColor *color,
       {
         GdkRGBA color1, color2;
 
-        if (!gtk_symbolic_color_resolve (color->mix.color1, style_set, &color1))
+        if (!gtk_symbolic_color_resolve (color->mix.color1, props, &color1))
           return FALSE;
 
-        if (!gtk_symbolic_color_resolve (color->mix.color2, style_set, &color2))
+        if (!gtk_symbolic_color_resolve (color->mix.color2, props, &color2))
           return FALSE;
 
         resolved_color->red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 1);
@@ -549,29 +549,29 @@ gtk_gradient_unref (GtkGradient *gradient)
 /**
  * gtk_gradient_resolve:
  * @gradient: a #GtkGradient
- * @style_set: #GtkStyleSet to use when resolving named colors
+ * @props: #GtkStyleProperties to use when resolving named colors
  * @resolved_gradient: (out): return location for the resolved pattern
  *
  * If @gradient is resolvable, @resolved_gradient will be filled in
  * with the resolved gradient as a cairo_pattern_t, and %TRUE will
  * be returned. Generally, if @gradient can't be resolved, it is
  * due to it being defined on top of a named color that doesn't
- * exist in @style_set.
+ * exist in @props.
  *
  * Returns: %TRUE if the gradient has been resolved
  *
  * Since: 3.0
  **/
 gboolean
-gtk_gradient_resolve (GtkGradient      *gradient,
-                      GtkStyleSet      *style_set,
-                      cairo_pattern_t **resolved_gradient)
+gtk_gradient_resolve (GtkGradient         *gradient,
+                      GtkStyleProperties  *props,
+                      cairo_pattern_t    **resolved_gradient)
 {
   cairo_pattern_t *pattern;
   guint i;
 
   g_return_val_if_fail (gradient != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_STYLE_SET (style_set), FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (resolved_gradient != NULL, FALSE);
 
   if (gradient->radius0 == 0 && gradient->radius1 == 0)
@@ -590,7 +590,7 @@ gtk_gradient_resolve (GtkGradient      *gradient,
 
       stop = &g_array_index (gradient->stops, ColorStop, i);
 
-      if (!gtk_symbolic_color_resolve (stop->color, style_set, &color))
+      if (!gtk_symbolic_color_resolve (stop->color, props, &color))
         {
           cairo_pattern_destroy (pattern);
           return FALSE;

@@ -226,7 +226,7 @@ struct GtkStyleInfo
 
 struct StyleData
 {
-  GtkStyleSet *store;
+  GtkStyleProperties *store;
   GSList *icon_factories;
   GArray *property_cache;
 };
@@ -438,7 +438,7 @@ style_data_new (void)
   StyleData *data;
 
   data = g_slice_new0 (StyleData);
-  data->store = gtk_style_set_new ();
+  data->store = gtk_style_properties_new ();
 
   return data;
 }
@@ -771,7 +771,7 @@ build_properties (GtkStyleContext *context,
   while ((elem = find_next_candidate (list, global_list)) != NULL)
     {
       GtkStyleProviderData *data;
-      GtkStyleSet *provider_style;
+      GtkStyleProperties *provider_style;
 
       data = elem->data;
 
@@ -784,7 +784,7 @@ build_properties (GtkStyleContext *context,
 
       if (provider_style)
         {
-          gtk_style_set_merge (style_data->store, provider_style, TRUE);
+          gtk_style_properties_merge (style_data->store, provider_style, TRUE);
           g_object_unref (provider_style);
         }
     }
@@ -902,9 +902,9 @@ style_data_lookup (GtkStyleContext *context)
   if (priv->theming_engine)
     g_object_unref (priv->theming_engine);
 
-  gtk_style_set_get (data->store, 0,
-                     "engine", &priv->theming_engine,
-                     NULL);
+  gtk_style_properties_get (data->store, 0,
+                            "engine", &priv->theming_engine,
+                            NULL);
   return data;
 }
 
@@ -1198,7 +1198,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
   g_return_if_fail (priv->widget_path != NULL);
 
   data = style_data_lookup (context);
-  gtk_style_set_get_property (data->store, property, state, value);
+  gtk_style_properties_get_property (data->store, property, state, value);
 }
 
 /**
@@ -1225,7 +1225,7 @@ gtk_style_context_get_valist (GtkStyleContext *context,
   g_return_if_fail (priv->widget_path != NULL);
 
   data = style_data_lookup (context);
-  gtk_style_set_get_valist (data->store, state, args);
+  gtk_style_properties_get_valist (data->store, state, args);
 }
 
 /**
@@ -1256,7 +1256,7 @@ gtk_style_context_get (GtkStyleContext *context,
   data = style_data_lookup (context);
 
   va_start (args, state);
-  gtk_style_set_get_valist (data->store, state, args);
+  gtk_style_properties_get_valist (data->store, state, args);
   va_end (args);
 }
 
@@ -2390,7 +2390,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   g_return_val_if_fail (priv->widget_path != NULL, FALSE);
 
   data = style_data_lookup (context);
-  sym_color = gtk_style_set_lookup_color (data->store, color_name);
+  sym_color = gtk_style_properties_lookup_color (data->store, color_name);
 
   if (!sym_color)
     return FALSE;
@@ -2497,9 +2497,9 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
    * state, it will fallback to the normal state as well if necessary.
    */
   data = style_data_lookup (context);
-  gtk_style_set_get (data->store, flags,
-                     "transition", &desc,
-                     NULL);
+  gtk_style_properties_get (data->store, flags,
+                            "transition", &desc,
+                            NULL);
 
   if (!desc)
     return;

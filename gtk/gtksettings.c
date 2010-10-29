@@ -1253,19 +1253,19 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_IM_STATUS_STYLE);
 }
 
-static GtkStyleSet *
+static GtkStyleProperties *
 gtk_settings_get_style (GtkStyleProvider *provider,
                         GtkWidgetPath    *path)
 {
   PangoFontDescription *font_desc;
   gchar *font_name, *color_scheme;
   GtkSettings *settings;
-  GtkStyleSet *set;
+  GtkStyleProperties *props;
   gchar **colors;
   guint i;
 
   settings = GTK_SETTINGS (provider);
-  set = gtk_style_set_new ();
+  props = gtk_style_properties_new ();
 
   g_object_get (settings,
                 "gtk-font-name", &font_name,
@@ -1301,22 +1301,22 @@ gtk_settings_get_style (GtkStyleProvider *provider,
         continue;
 
       color = gtk_symbolic_color_new_literal (&col);
-      gtk_style_set_map_color (set, name, color);
+      gtk_style_properties_map_color (props, name, color);
       gtk_symbolic_color_unref (color);
     }
 
   font_desc = pango_font_description_from_string (font_name);
 
-  gtk_style_set_set (set, 0,
-                     "font", font_desc,
-                     NULL);
+  gtk_style_properties_set (props, 0,
+                            "font", font_desc,
+                            NULL);
 
   pango_font_description_free (font_desc);
   g_strfreev (colors);
   g_free (color_scheme);
   g_free (font_name);
 
-  return set;
+  return props;
 }
 
 static void
