@@ -5943,7 +5943,7 @@ create_rulers (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (window), table);
       gtk_widget_show (table);
 
-      ruler = gtk_hruler_new ();
+      ruler = gtk_ruler_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_ruler_set_metric (GTK_RULER (ruler), GTK_CENTIMETERS);
       gtk_ruler_set_range (GTK_RULER (ruler), 100, 0, 0, 20);
 
@@ -5957,7 +5957,7 @@ create_rulers (GtkWidget *widget)
       gtk_widget_show (ruler);
 
 
-      ruler = gtk_vruler_new ();
+      ruler = gtk_ruler_new (GTK_ORIENTATION_VERTICAL);
       gtk_ruler_set_range (GTK_RULER (ruler), 5, 15, 0, 20);
 
       g_signal_connect_swapped (window, 
