@@ -433,7 +433,7 @@ create_calendar(void)
 		    G_CALLBACK (gtk_false),
 		    NULL);
 
-  hpaned = gtk_hpaned_new ();
+  hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
 
   /* Calendar widget */
 

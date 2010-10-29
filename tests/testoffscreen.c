@@ -328,7 +328,7 @@ main (int   argc,
     }
   else
     {
-      offscreen = gtk_vpaned_new ();
+      offscreen = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     }
 
   gtk_box_pack_start (GTK_BOX (vbox), offscreen, TRUE, TRUE, 0);

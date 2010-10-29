@@ -557,7 +557,7 @@ create_panes (void)
 
   vbox = gtk_vbox_new (FALSE, 3);
   hbox = gtk_hbox_new (TRUE, 12);
-  pane = gtk_hpaned_new ();
+  pane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack1 (GTK_PANED (pane),
 		   g_object_new (GTK_TYPE_FRAME,
 				 "shadow", GTK_SHADOW_IN,
@@ -571,7 +571,7 @@ create_panes (void)
   gtk_box_pack_start (GTK_BOX (hbox),
 		      pane,
 		      TRUE, TRUE, 0);
-  pane = gtk_vpaned_new ();
+  pane = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_paned_pack1 (GTK_PANED (pane),
 		   g_object_new (GTK_TYPE_FRAME,
 				 "shadow", GTK_SHADOW_IN,
