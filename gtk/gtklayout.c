@@ -30,8 +30,6 @@
 
 #include "config.h"
 
-#undef GTK_DISABLE_DEPRECATED
-
 #include "gtklayout.h"
 
 #include "gdkconfig.h"

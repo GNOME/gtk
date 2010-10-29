@@ -94,7 +94,7 @@ void           gtk_layout_get_size        (GtkLayout     *layout,
 					   guint         *width,
 					   guint         *height);
 
-#ifndef GTK_DISABLE_DEPRECATED
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 
 GtkAdjustment* gtk_layout_get_hadjustment (GtkLayout     *layout);
 GtkAdjustment* gtk_layout_get_vadjustment (GtkLayout     *layout);

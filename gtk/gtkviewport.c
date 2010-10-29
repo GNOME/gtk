@@ -26,9 +26,8 @@
 
 #include "config.h"
 
-#undef GTK_DISABLE_DEPRECATED
 #include "gtkviewport.h"
-#define GTK_DISABLE_DEPRECATED
+
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtktypeutils.h"
