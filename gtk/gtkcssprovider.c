@@ -1149,7 +1149,7 @@ scanner_apply_scope (GScanner    *scanner,
   else if (scope == SCOPE_SELECTOR)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_#" G_CSET_A_2_Z;
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_#." G_CSET_A_2_Z;
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_PSEUDO_CLASS ||
@@ -1364,6 +1364,28 @@ parse_pseudo_class (GtkCssProvider *css_provider,
   return G_TOKEN_NONE;
 }
 
+/* Parses a number of concatenated classes */
+static void
+parse_classes (SelectorPath   *path,
+               const gchar    *str)
+{
+  gchar *pos;
+
+  if ((pos = strchr (str, '.')) != NULL)
+    {
+      while (pos)
+        {
+          *pos = '\0';
+          selector_path_prepend_class (path, str);
+
+          str = pos + 1;
+          pos = strchr (str, '.');
+        }
+    }
+  else
+    selector_path_prepend_class (path, str);
+}
+
 static GTokenType
 parse_selector (GtkCssProvider  *css_provider,
                 GScanner        *scanner,
@@ -1388,6 +1410,7 @@ parse_selector (GtkCssProvider  *css_provider,
           scanner->token == '.')
         {
           gboolean is_class;
+          gchar *pos;
 
           is_class = (scanner->token == '.');
 
@@ -1400,9 +1423,18 @@ parse_selector (GtkCssProvider  *css_provider,
           selector_path_prepend_combinator (path, COMBINATOR_CHILD);
 
           if (is_class)
-            selector_path_prepend_class (path, scanner->value.v_identifier);
+            parse_classes (path, scanner->value.v_identifier);
           else
-            selector_path_prepend_name (path, scanner->value.v_identifier);
+            {
+              if ((pos = strchr (scanner->value.v_identifier, '.')) != NULL)
+                *pos = '\0';
+
+              selector_path_prepend_name (path, scanner->value.v_identifier);
+
+              /* Parse any remaining classes */
+              if (pos)
+                parse_classes (path, pos + 1);
+            }
         }
       else if (g_ascii_isupper (scanner->value.v_identifier[0]))
         {
@@ -1429,9 +1461,18 @@ parse_selector (GtkCssProvider  *css_provider,
               selector_path_prepend_combinator (path, COMBINATOR_CHILD);
 
               if (is_class)
-                selector_path_prepend_class (path, name);
+                parse_classes (path, name);
               else
-                selector_path_prepend_name (path, name);
+                {
+                  if ((pos = strchr (name, '.')) != NULL)
+                    *pos = '\0';
+
+                  selector_path_prepend_name (path, name);
+
+                  /* Parse any remaining classes */
+                  if (pos)
+                    parse_classes (path, pos + 1);
+                }
             }
           else
             selector_path_prepend_type (path, scanner->value.v_identifier);
