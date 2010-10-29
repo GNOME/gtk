@@ -4883,6 +4883,23 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 }
 
 /**
+ * gtk_combo_box_new_with_model_and_entry:
+ *
+ * Creates a new empty #GtkComboBox with an entry
+ * and with the model initialized to @model.
+ *
+ * Return value: A new #GtkComboBox
+ */
+GtkWidget *
+gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model)
+{
+  return g_object_new (GTK_TYPE_COMBO_BOX,
+                       "has-entry", TRUE,
+                       "model", model,
+                       NULL);
+}
+
+/**
  * gtk_combo_box_get_wrap_width:
  * @combo_box: A #GtkComboBox
  *
