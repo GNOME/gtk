@@ -959,6 +959,7 @@ gtk_combo_box_new
 gtk_combo_box_new_text
 gtk_combo_box_new_with_entry
 gtk_combo_box_new_with_model
+gtk_combo_box_new_with_model_and_entry
 gtk_combo_box_popdown
 gtk_combo_box_popup
 gtk_combo_box_prepend_text
