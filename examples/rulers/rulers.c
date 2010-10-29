@@ -42,7 +42,7 @@ int main( int   argc,
     /* The horizontal ruler goes on top. As the mouse moves across the
      * drawing area, a motion_notify_event is passed to the
      * appropriate event handler for the ruler. */
-    hrule = gtk_hruler_new ();
+    hrule = gtk_ruler_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_ruler_set_metric (GTK_RULER (hrule), GTK_PIXELS);
     gtk_ruler_set_range (GTK_RULER (hrule), 7, 13, 0, 20);
     g_signal_connect_swapped (area, "motion-notify-event",
@@ -55,7 +55,7 @@ int main( int   argc,
     /* The vertical ruler goes on the left. As the mouse moves across
      * the drawing area, a motion_notify_event is passed to the
      * appropriate event handler for the ruler. */
-    vrule = gtk_vruler_new ();
+    vrule = gtk_ruler_new (GTK_ORIENTATION_VERTICAL);
     gtk_ruler_set_metric (GTK_RULER (vrule), GTK_PIXELS);
     gtk_ruler_set_range (GTK_RULER (vrule), 0, YSIZE, 10, YSIZE );
     g_signal_connect_swapped (area, "motion-notify-event",
