@@ -651,11 +651,16 @@ create_calendar(void)
 
   vbox = gtk_vbox_new (FALSE, DEF_PAD_SMALL);
 
-  gtk_box_pack_start (GTK_BOX (vbox), hpaned,                TRUE,  TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), frame,                 FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), bbox,                  FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hpaned,
+                      TRUE,  TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
+                      FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), frame,
+                      FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
+                      FALSE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), bbox,
+                      FALSE, TRUE, 0);
 
   gtk_container_add (GTK_CONTAINER (window), vbox);
 

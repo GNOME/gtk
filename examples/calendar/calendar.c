@@ -322,7 +322,7 @@ static void create_calendar( void )
 		    &calendar_data);
 
 
-  separator = gtk_vseparator_new ();
+  separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (hbox), separator, FALSE, TRUE, 0);
 
   vbox2 = gtk_vbox_new (FALSE, DEF_PAD);

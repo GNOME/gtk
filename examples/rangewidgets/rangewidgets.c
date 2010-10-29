@@ -258,7 +258,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
-    separator = gtk_hseparator_new ();
+    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
     gtk_widget_show (separator);
 

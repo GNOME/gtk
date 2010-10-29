@@ -141,7 +141,7 @@ int main( int   argc,
 
 	/* Creates a separator, we'll learn more about these later,
 	 * but they are quite simple. */
-	separator = gtk_hseparator_new ();
+	separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
         /* Pack the separator into the vbox. Remember each of these
          * widgets is being packed into a vbox, so they'll be stacked
@@ -166,7 +166,7 @@ int main( int   argc,
 	gtk_widget_show (box2);
 
 	/* Another new separator. */
-	separator = gtk_hseparator_new ();
+	separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 	/* The last 3 arguments to gtk_box_pack_start are:
 	 * expand, fill, padding. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
@@ -193,7 +193,7 @@ int main( int   argc,
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 
-	separator = gtk_hseparator_new ();
+	separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 	/* The last 3 arguments to gtk_box_pack_start are:
 	 * expand, fill, padding. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
@@ -214,7 +214,7 @@ int main( int   argc,
 	gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, FALSE, 0);
 	gtk_widget_show (box2);
 
-	separator = gtk_hseparator_new ();
+	separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 	/* The last 3 arguments to gtk_box_pack_start are: expand, fill, padding. */
 	gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 	gtk_widget_show (separator);
@@ -239,7 +239,7 @@ int main( int   argc,
 	gtk_widget_show (box2);
 
 	/* A separator for the bottom. */
-	separator = gtk_hseparator_new ();
+	separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 	/* This explicitly sets the separator to 400 pixels wide by 5 pixels
 	 * high. This is so the hbox we created will also be 400 pixels wide,
 	 * and the "end" label will be separated from the other labels in the

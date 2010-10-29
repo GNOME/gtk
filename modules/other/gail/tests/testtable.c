@@ -808,7 +808,7 @@ void test_choice_gui(AtkObject **obj)
   tc->tb_others = gtk_toggle_button_new_with_label("others");
   gtk_box_pack_start (GTK_BOX (vbox), tc->tb_others, TRUE, TRUE, 0);
   
-  hseparator = gtk_hseparator_new();
+  hseparator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox), hseparator, TRUE, TRUE, 0);
 
   button = gtk_button_new_with_mnemonic("_Run Test");

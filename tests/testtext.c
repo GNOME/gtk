@@ -269,7 +269,7 @@ msgbox_run (GtkWindow  *parent,
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), label, TRUE, TRUE, 0);
 
-  separator = gtk_hseparator_new ();
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
 
   button_box = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);

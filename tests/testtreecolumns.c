@@ -943,7 +943,8 @@ main (int argc, char *argv[])
 					GDK_ACTION_MOVE);
 
 
-  gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
+                      FALSE, FALSE, 0);
 
   hbox = gtk_hbox_new (FALSE, 8);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);

@@ -3033,7 +3033,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
       priv->box = gtk_hbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (priv->button), priv->box);
 
-      priv->separator = gtk_vseparator_new ();
+      priv->separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
       gtk_container_add (GTK_CONTAINER (priv->box), priv->separator);
 
       priv->arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_NONE);
