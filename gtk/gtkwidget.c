@@ -6666,6 +6666,18 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (priv->name);
   priv->name = new_name;
 
+  if (priv->path)
+    {
+      guint pos;
+
+      pos = gtk_widget_path_length (priv->path) - 1;
+      gtk_widget_path_iter_set_name (priv->path, pos,
+                                     priv->name);
+    }
+
+  if (priv->context)
+    gtk_style_context_set_path (priv->context, priv->path);
+
   if (priv->rc_style)
     gtk_widget_reset_rc_style (widget);
 
