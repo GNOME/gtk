@@ -6507,11 +6507,11 @@ create_panes (GtkWidget *widget)
       vbox = gtk_vbox_new (FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), vbox);
       
-      vpaned = gtk_vpaned_new ();
+      vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_box_pack_start (GTK_BOX (vbox), vpaned, TRUE, TRUE, 0);
       gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
 
-      hpaned = gtk_hpaned_new ();
+      hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_paned_add1 (GTK_PANED (vpaned), hpaned);
 
       frame = gtk_frame_new (NULL);
@@ -6590,7 +6590,7 @@ paned_keyboard_window1 (GtkWidget *widget)
   gtk_window_set_screen (GTK_WINDOW (window1), 
 			 gtk_widget_get_screen (widget));
 
-  hpaned1 = gtk_hpaned_new ();
+  hpaned1 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (window1), hpaned1);
 
   frame1 = gtk_frame_new (NULL);
@@ -6609,7 +6609,7 @@ paned_keyboard_window1 (GtkWidget *widget)
   button9 = gtk_button_new_with_label ("button9");
   gtk_box_pack_start (GTK_BOX (vbox1), button9, FALSE, FALSE, 0);
 
-  vpaned1 = gtk_vpaned_new ();
+  vpaned1 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_paned_pack2 (GTK_PANED (hpaned1), vpaned1, TRUE, TRUE);
 
   frame2 = gtk_frame_new (NULL);
@@ -6684,7 +6684,7 @@ paned_keyboard_window2 (GtkWidget *widget)
   gtk_window_set_screen (GTK_WINDOW (window2), 
 			 gtk_widget_get_screen (widget));
 
-  hpaned2 = gtk_hpaned_new ();
+  hpaned2 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (window2), hpaned2);
 
   frame6 = gtk_frame_new (NULL);
@@ -6697,7 +6697,7 @@ paned_keyboard_window2 (GtkWidget *widget)
   hbox2 = gtk_hbox_new (FALSE, 0);
   gtk_paned_pack2 (GTK_PANED (hpaned2), hbox2, TRUE, TRUE);
 
-  vpaned2 = gtk_vpaned_new ();
+  vpaned2 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (hbox2), vpaned2, TRUE, TRUE, 0);
 
   frame7 = gtk_frame_new (NULL);
@@ -6752,7 +6752,7 @@ paned_keyboard_window3 (GtkWidget *widget)
   label1 = gtk_label_new ("Three panes nested inside each other");
   gtk_box_pack_start (GTK_BOX (vbox2), label1, FALSE, FALSE, 0);
 
-  hpaned3 = gtk_hpaned_new ();
+  hpaned3 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox2), hpaned3, TRUE, TRUE, 0);
 
   frame9 = gtk_frame_new (NULL);
@@ -6762,7 +6762,7 @@ paned_keyboard_window3 (GtkWidget *widget)
   button14 = gtk_button_new_with_label ("button14");
   gtk_container_add (GTK_CONTAINER (frame9), button14);
 
-  hpaned4 = gtk_hpaned_new ();
+  hpaned4 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack2 (GTK_PANED (hpaned3), hpaned4, TRUE, TRUE);
 
   frame10 = gtk_frame_new (NULL);
@@ -6772,7 +6772,7 @@ paned_keyboard_window3 (GtkWidget *widget)
   button15 = gtk_button_new_with_label ("button15");
   gtk_container_add (GTK_CONTAINER (frame10), button15);
 
-  hpaned5 = gtk_hpaned_new ();
+  hpaned5 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack2 (GTK_PANED (hpaned4), hpaned5, TRUE, TRUE);
 
   frame11 = gtk_frame_new (NULL);
@@ -6827,10 +6827,10 @@ paned_keyboard_window4 (GtkWidget *widget)
   gtk_box_pack_start (GTK_BOX (vbox3), label2, FALSE, FALSE, 0);
   gtk_label_set_justify (GTK_LABEL (label2), GTK_JUSTIFY_LEFT);
 
-  hpaned6 = gtk_hpaned_new ();
+  hpaned6 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox3), hpaned6, TRUE, TRUE, 0);
 
-  vpaned3 = gtk_vpaned_new ();
+  vpaned3 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_paned_pack1 (GTK_PANED (hpaned6), vpaned3, FALSE, TRUE);
 
   button19 = gtk_button_new_with_label ("button19");
@@ -6842,7 +6842,7 @@ paned_keyboard_window4 (GtkWidget *widget)
   hbox3 = gtk_hbox_new (FALSE, 0);
   gtk_paned_pack2 (GTK_PANED (hpaned6), hbox3, TRUE, TRUE);
 
-  vpaned4 = gtk_vpaned_new ();
+  vpaned4 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (hbox3), vpaned4, TRUE, TRUE, 0);
 
   button21 = gtk_button_new_with_label ("button21");
@@ -6851,7 +6851,7 @@ paned_keyboard_window4 (GtkWidget *widget)
   button20 = gtk_button_new_with_label ("button20");
   gtk_paned_pack2 (GTK_PANED (vpaned4), button20, TRUE, TRUE);
 
-  vpaned5 = gtk_vpaned_new ();
+  vpaned5 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (hbox3), vpaned5, TRUE, TRUE, 0);
 
   button23 = gtk_button_new_with_label ("button23");
@@ -6860,7 +6860,7 @@ paned_keyboard_window4 (GtkWidget *widget)
   button22 = gtk_button_new_with_label ("button22");
   gtk_paned_pack2 (GTK_PANED (vpaned5), button22, TRUE, TRUE);
 
-  vpaned6 = gtk_vpaned_new ();
+  vpaned6 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (hbox3), vpaned6, TRUE, TRUE, 0);
 
   button25 = gtk_button_new_with_label ("button25");

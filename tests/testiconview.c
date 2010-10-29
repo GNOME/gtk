@@ -436,7 +436,7 @@ main (gint argc, gchar **argv)
   vbox = gtk_vbox_new (FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  paned = gtk_hpaned_new ();
+  paned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (vbox), paned, TRUE, TRUE, 0);
 
   icon_list = gtk_icon_view_new ();

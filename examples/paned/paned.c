@@ -116,7 +116,7 @@ int main( int   argc,
 
     /* create a vpaned widget and add it to our toplevel window */
    
-    vpaned = gtk_vpaned_new ();
+    vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     gtk_container_add (GTK_CONTAINER (window), vpaned);
     gtk_widget_show (vpaned);
    

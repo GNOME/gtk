@@ -434,7 +434,7 @@ do_textview (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "TextView");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
-      vpaned = gtk_vpaned_new ();
+      vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
       gtk_container_set_border_width (GTK_CONTAINER(vpaned), 5);
       gtk_container_add (GTK_CONTAINER (window), vpaned);
 

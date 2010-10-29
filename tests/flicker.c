@@ -58,12 +58,12 @@ create_flicker (void)
   gtk_window_set_default_size (GTK_WINDOW (window1), 500, 400);
   gtk_window_set_title (GTK_WINDOW (window1), "window1");
 
-  hpaned1 = gtk_hpaned_new ();
+  hpaned1 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_show (hpaned1);
   gtk_container_add (GTK_CONTAINER (window1), hpaned1);
   gtk_paned_set_position (GTK_PANED (hpaned1), 100);
 
-  vpaned2 = gtk_vpaned_new ();
+  vpaned2 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_widget_show (vpaned2);
   gtk_paned_pack1 (GTK_PANED (hpaned1), vpaned2, FALSE, TRUE);
   gtk_paned_set_position (GTK_PANED (vpaned2), 100);
@@ -126,7 +126,7 @@ create_flicker (void)
   gtk_widget_show (spinbutton16);
   gtk_box_pack_start (GTK_BOX (vbox1), spinbutton16, FALSE, FALSE, 0);
 
-  vpaned1 = gtk_vpaned_new ();
+  vpaned1 = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
   gtk_widget_show (vpaned1);
   gtk_paned_pack2 (GTK_PANED (hpaned1), vpaned1, TRUE, TRUE);
   gtk_paned_set_position (GTK_PANED (vpaned1), 0);

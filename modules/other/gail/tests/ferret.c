@@ -1558,7 +1558,7 @@ static void _add_notebook_page (GtkNotebook *nbook,
     }
   else
     {
-      *new_page = gtk_vpaned_new ();
+      *new_page = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     }
 
   label = gtk_label_new ("");

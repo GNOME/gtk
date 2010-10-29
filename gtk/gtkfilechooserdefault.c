@@ -5013,7 +5013,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   gtk_box_pack_start (GTK_BOX (impl->location_entry_box), impl->location_label, FALSE, FALSE, 0);
 
   /* Paned widget */
-  hpaned = gtk_hpaned_new ();
+  hpaned = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_widget_show (hpaned);
   gtk_box_pack_start (GTK_BOX (vbox), hpaned, TRUE, TRUE, 0);
 
