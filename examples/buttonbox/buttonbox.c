@@ -16,9 +16,9 @@ static GtkWidget *create_bbox( gint  horizontal,
   frame = gtk_frame_new (title);
 
   if (horizontal)
-    bbox = gtk_hbutton_box_new ();
+    bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   else
-    bbox = gtk_vbutton_box_new ();
+    bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
 
   gtk_container_set_border_width (GTK_CONTAINER (bbox), 5);
   gtk_container_add (GTK_CONTAINER (frame), bbox);

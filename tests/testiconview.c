@@ -558,7 +558,7 @@ main (gint argc, gchar **argv)
 
   gtk_paned_add2 (GTK_PANED (paned), scrolled_window);
 
-  bbox = gtk_hbutton_box_new ();
+  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
 
@@ -582,7 +582,7 @@ main (gint argc, gchar **argv)
   g_signal_connect (button, "clicked", G_CALLBACK (swap_rows), icon_list);
   gtk_box_pack_start (GTK_BOX (bbox), button, TRUE, TRUE, 0);
 
-  bbox = gtk_hbutton_box_new ();
+  bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_button_box_set_layout (GTK_BUTTON_BOX (bbox), GTK_BUTTONBOX_START);
   gtk_box_pack_start (GTK_BOX (vbox), bbox, FALSE, FALSE, 0);
 

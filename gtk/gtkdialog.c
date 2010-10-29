@@ -262,7 +262,7 @@ gtk_dialog_init (GtkDialog *dialog)
   gtk_container_add (GTK_CONTAINER (dialog), priv->vbox);
   gtk_widget_show (priv->vbox);
 
-  priv->action_area = gtk_hbutton_box_new ();
+  priv->action_area = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
 
   gtk_button_box_set_layout (GTK_BUTTON_BOX (priv->action_area),
                              GTK_BUTTONBOX_END);
