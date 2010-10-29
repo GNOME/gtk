@@ -75,7 +75,7 @@ GType          gtk_viewport_get_type        (void) G_GNUC_CONST;
 GtkWidget*     gtk_viewport_new             (GtkAdjustment *hadjustment,
 					     GtkAdjustment *vadjustment);
 
-#ifndef GTK_DISABLE_DEPRECATED
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 
 GtkAdjustment* gtk_viewport_get_hadjustment (GtkViewport   *viewport);
 GtkAdjustment* gtk_viewport_get_vadjustment (GtkViewport   *viewport);
