@@ -151,7 +151,7 @@ main (int argc, char **argv)
 
       gtk_widget_show_all (box1);
             
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
 

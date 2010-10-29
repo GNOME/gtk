@@ -455,7 +455,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_container_add (GTK_CONTAINER (box), priv->label);
   gtk_widget_show (priv->label);
 
-  sep = gtk_vseparator_new ();
+  sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (box), sep, FALSE, FALSE, 0);
   gtk_widget_show (sep);
 

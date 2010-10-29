@@ -55,7 +55,7 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
 
-    separator = gtk_hseparator_new ();
+    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
     gtk_widget_show (separator);
 

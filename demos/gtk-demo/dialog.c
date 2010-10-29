@@ -132,7 +132,8 @@ do_dialog (GtkWidget *do_widget)
 			G_CALLBACK (message_dialog_clicked), NULL);
       gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
-      gtk_box_pack_start (GTK_BOX (vbox), gtk_hseparator_new (), FALSE, FALSE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
+                          FALSE, FALSE, 0);
 
       /* Interactive dialog*/
       hbox = gtk_hbox_new (FALSE, 8);

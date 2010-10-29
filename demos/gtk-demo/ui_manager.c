@@ -209,7 +209,7 @@ do_ui_manager (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (box1), label, TRUE, TRUE, 0);
 
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
 

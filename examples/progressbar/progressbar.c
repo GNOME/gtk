@@ -136,7 +136,7 @@ int main( int   argc,
     /* Add a timer callback to update the value of the progress bar */
     pdata->timer = gdk_threads_add_timeout (100, progress_timeout, pdata);
 
-    separator = gtk_hseparator_new ();
+    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_box_pack_start (GTK_BOX (vbox), separator, FALSE, FALSE, 0);
     gtk_widget_show (separator);
 

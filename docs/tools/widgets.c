@@ -504,7 +504,7 @@ create_file_button (void)
   gtk_box_pack_start (GTK_BOX (vbox),
 		      vbox2, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
-		      gtk_hseparator_new (),
+		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
 		      FALSE, FALSE, 0);
 
   vbox2 = gtk_vbox_new (FALSE, 3);
@@ -533,10 +533,10 @@ create_separator (void)
   vbox = gtk_vbox_new (FALSE, 3);
   hbox = gtk_hbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox),
-		      gtk_hseparator_new (),
+		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
 		      TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox),
-		      gtk_vseparator_new (),
+		      gtk_separator_new (GTK_ORIENTATION_VERTICAL),
 		      TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),

@@ -762,7 +762,7 @@ create_buttons (GtkWidget *widget)
       gtk_table_attach (GTK_TABLE (table), button[8], 0, 1, 1, 2,
 			GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -830,7 +830,7 @@ create_toggle_buttons (GtkWidget *widget)
       gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -959,7 +959,7 @@ create_check_buttons (GtkWidget *widget)
       gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       table = create_widget_grid (GTK_TYPE_CHECK_BUTTON);
@@ -1031,7 +1031,7 @@ create_radio_buttons (GtkWidget *widget)
       gtk_toggle_button_set_inconsistent (GTK_TOGGLE_BUTTON (button), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
       
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -1055,7 +1055,7 @@ create_radio_buttons (GtkWidget *widget)
       gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       table = create_widget_grid (GTK_TYPE_RADIO_BUTTON);
@@ -1622,7 +1622,7 @@ create_statusbar (GtkWidget *widget)
 				 "signal_after::clicked", statusbar_push_long, statusbar,
 				 NULL);
       
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -1696,7 +1696,7 @@ create_handle_box (GtkWidget *widget)
     gtk_container_add (GTK_CONTAINER (vbox), label);
     gtk_widget_show (label);
 
-    separator = gtk_hseparator_new ();
+    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_container_add (GTK_CONTAINER (vbox), separator);
     gtk_widget_show (separator);
     
@@ -1704,7 +1704,7 @@ create_handle_box (GtkWidget *widget)
     gtk_container_add (GTK_CONTAINER (vbox), hbox);
     gtk_widget_show (hbox);
 
-    separator = gtk_hseparator_new ();
+    separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_container_add (GTK_CONTAINER (vbox), separator);
     gtk_widget_show (separator);
 
@@ -2355,7 +2355,7 @@ create_reparent (GtkWidget *widget)
 			G_CALLBACK (reparent_label),
 			event_box);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -2730,7 +2730,7 @@ create_pixbuf (GtkWidget *widget)
 
       gtk_widget_set_sensitive (button, FALSE);
       
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -2829,7 +2829,7 @@ create_tooltips (GtkWidget *widget)
 			      NULL);
       gtk_box_set_child_packing (GTK_BOX (box2), frame, TRUE, TRUE, 10, GTK_PACK_START);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -3303,7 +3303,7 @@ create_menus (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box2), optionmenu, TRUE, TRUE, 0);
       gtk_widget_show (optionmenu);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
 
@@ -3631,7 +3631,7 @@ create_modal_window (GtkWidget *widget)
   gtk_container_add (GTK_CONTAINER (frame1), box2);
   gtk_box_pack_start (GTK_BOX (box2), btnColor, FALSE, FALSE, 4);
   gtk_box_pack_start (GTK_BOX (box2), btnFile, FALSE, FALSE, 4);
-  gtk_box_pack_start (GTK_BOX (box1), gtk_hseparator_new (), FALSE, FALSE, 4);
+  gtk_box_pack_start (GTK_BOX (box1), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), FALSE, FALSE, 4);
   gtk_box_pack_start (GTK_BOX (box1), btnClose, FALSE, FALSE, 4);
    
   /* connect signals */
@@ -4035,7 +4035,7 @@ create_entry (GtkWidget *widget)
       g_signal_connect (progress_check, "toggled",
 			G_CALLBACK (entry_toggle_pulse), entry);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -4203,7 +4203,7 @@ create_event_box (GtkWidget *widget)
 			G_CALLBACK (event_box_toggle_above_child), event_box);
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (above_child_check), FALSE);
       
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
       box2 = gtk_vbox_new (FALSE, 10);
@@ -5881,7 +5881,7 @@ create_range_controls (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box2), hbox, TRUE, TRUE, 0);
       gtk_widget_show (hbox);
       
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
 
@@ -6301,7 +6301,7 @@ create_notebook (GtkWidget *widget)
 
       create_pages (GTK_NOTEBOOK (sample_notebook), 1, 5);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 10);
       
       box2 = gtk_hbox_new (FALSE, 5);
@@ -6352,7 +6352,7 @@ create_notebook (GtkWidget *widget)
 			G_CALLBACK (rotate_notebook), sample_notebook);
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 5);
 
       button = gtk_button_new_with_label ("close");
@@ -7230,7 +7230,7 @@ create_wmhints (GtkWidget *widget)
       gtk_widget_show (label);
 
 
-      separator = gtk_hseparator_new ();
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
 
@@ -10114,7 +10114,7 @@ create_main_window (void)
       gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     }
 
-  separator = gtk_hseparator_new ();
+  separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
   box2 = gtk_vbox_new (FALSE, 10);

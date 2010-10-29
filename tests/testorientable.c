@@ -89,7 +89,7 @@ main (int argc, char **argv)
                   TRUE, TRUE, 0);
 
   /* GtkSeparator */
-  box = gtk_hseparator_new ();
+  box = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
   orientables = g_list_prepend (orientables, box);
   gtk_table_attach_defaults (GTK_TABLE (table), box, 2, 3, 1, 2);
 

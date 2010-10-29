@@ -438,7 +438,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
                          _("Amount of green light in the color."));
   make_label_spinbutton (colorsel, &priv->blue_spinbutton, _("_Blue:"), table, 6, 2, COLORSEL_BLUE,
                          _("Amount of blue light in the color."));
-  gtk_table_attach_defaults (GTK_TABLE (table), gtk_hseparator_new (), 0, 8, 3, 4); 
+  gtk_table_attach_defaults (GTK_TABLE (table), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL), 0, 8, 3, 4); 
 
   priv->opacity_label = gtk_label_new_with_mnemonic (_("Op_acity:")); 
   gtk_misc_set_alignment (GTK_MISC (priv->opacity_label), 0.0, 0.5); 
