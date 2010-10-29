@@ -63,11 +63,6 @@ struct _GtkVButtonBoxClass
 GType      gtk_vbutton_box_get_type (void) G_GNUC_CONST;
 GtkWidget *gtk_vbutton_box_new      (void);
 
-
-/* private API */
-GtkButtonBoxStyle _gtk_vbutton_box_get_layout_default (void);
-
-
 G_END_DECLS
 
 #endif /* __GTK_VBBOX_H__ */
