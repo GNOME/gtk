@@ -65,10 +65,11 @@ struct _GtkComboBoxClass
 
 
 /* construction */
-GType         gtk_combo_box_get_type         (void) G_GNUC_CONST;
-GtkWidget    *gtk_combo_box_new              (void);
-GtkWidget    *gtk_combo_box_new_with_entry   (void);
-GtkWidget    *gtk_combo_box_new_with_model   (GtkTreeModel    *model);
+GType         gtk_combo_box_get_type                 (void) G_GNUC_CONST;
+GtkWidget    *gtk_combo_box_new                      (void);
+GtkWidget    *gtk_combo_box_new_with_entry           (void);
+GtkWidget    *gtk_combo_box_new_with_model           (GtkTreeModel *model);
+GtkWidget    *gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model);
 
 /* grids */
 gint          gtk_combo_box_get_wrap_width         (GtkComboBox *combo_box);
