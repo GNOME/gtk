@@ -1,12 +1,6 @@
 # Catalan translation of GTK+.
 # Copyright © 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006
 #    Free Software Foundation, Inc.
-# Ivan Vilata i Balaguer <ivan@selidor.net>, 1999, 2000.
-# Softcatala <gnome@softcatala.net>, 2000, 2001, 2002.
-# Jordi Mallach <jordi@sindominio.net>, 2002, 2003, 2004, 2005, 2006.
-# Mireia Farrús <mifarrus@hotmail.com>, 2003.
-# Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006.
-# David Planella <david.planella@gmail.com>, 2008, 2009, 2010.
 #
 # Recull de termes
 #
@@ -24,383 +18,381 @@
 #               the thumb across the scale track to adjust the value» .
 #               Vegeu http://wiki.mozilla.org/XUL:Slider_Tag
 #
+# Ivan Vilata i Balaguer <ivan@selidor.net>, 1999, 2000.
+# Softcatala <gnome@softcatala.net>, 2000, 2001, 2002.
+# Jordi Mallach <jordi@sindominio.net>, 2002, 2003, 2004, 2005, 2006.
+# Mireia Farrús <mifarrus@hotmail.com>, 2003.
+# Josep Puigdemont <josep.puigdemont@gmail.com>, 2005, 2006.
+# David Planella <david.planella@gmail.com>, 2008, 2009, 2010.
+# Sílvia Miranda <silvia@softcatala.cat>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-01 15:41-0400\n"
-"PO-Revision-Date: 2010-04-02 18:26+0200\n"
-"Last-Translator: David Planella <david.planella@gmail.com>\n"
+"POT-Creation-Date: 2010-10-29 01:32+0100\n"
+"PO-Revision-Date: 2010-09-28 00:05+0200\n"
+"Last-Translator: Sílvia Miranda <silvia@softcatala.cat>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n!=1;\n"
+"X-Generator: Lokalize 1.0\n"
 
-#: gdk/gdk.c:103
+#: ../gdk/gdk.c:103
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "S'ha produït un error en analitzar l'opció --gdk-debug"
 
-#: gdk/gdk.c:123
+#: ../gdk/gdk.c:123
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "S'ha produït un error en analitzar l'opció --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: gdk/gdk.c:151
+#: ../gdk/gdk.c:151
 msgid "Program class as used by the window manager"
 msgstr "Classe del programa tal com l'utilitza el gestor de finestres"
 
 #. Placeholder in --class=CLASS in --help output
-#: gdk/gdk.c:152
+#: ../gdk/gdk.c:152
 msgid "CLASS"
 msgstr "CLASSE"
 
 #. Description of --name=NAME in --help output
-#: gdk/gdk.c:154
+#: ../gdk/gdk.c:154
 msgid "Program name as used by the window manager"
 msgstr "El nom del programa tal com l'utilitza el gestor de finestres"
 
 #. Placeholder in --name=NAME in --help output
-#: gdk/gdk.c:155
+#: ../gdk/gdk.c:155
 msgid "NAME"
 msgstr "NOM"
 
 #. Description of --display=DISPLAY in --help output
-#: gdk/gdk.c:157
+#: ../gdk/gdk.c:157
 msgid "X display to use"
-msgstr "Visualització X a utilitzar"
+msgstr "Visualització X que s'ha d'utilitzar"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: gdk/gdk.c:158
+#: ../gdk/gdk.c:158
 msgid "DISPLAY"
 msgstr "VISUALITZACIÓ"
 
 #. Description of --screen=SCREEN in --help output
-#: gdk/gdk.c:160
+#: ../gdk/gdk.c:160
 msgid "X screen to use"
-msgstr "Pantalla X a utilitzar"
+msgstr "Pantalla X que s'ha d'utilitzar"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: gdk/gdk.c:161
+#: ../gdk/gdk.c:161
 msgid "SCREEN"
 msgstr "PANTALLA"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: gdk/gdk.c:164
-#, fuzzy
+#: ../gdk/gdk.c:164
 msgid "GDK debugging flags to set"
-msgstr "Senyaladors de depuració de GTK+ a habilitar"
+msgstr "Senyaladors de depuració del GDK que s'han d'habilitar"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:165 gdk/gdk.c:168 gtk/gtkmain.c:533 gtk/gtkmain.c:536
+#: ../gdk/gdk.c:165 ../gdk/gdk.c:168 ../gtk/gtkmain.c:459 ../gtk/gtkmain.c:462
 msgid "FLAGS"
 msgstr "SENYALADORS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: gdk/gdk.c:167
-#, fuzzy
+#: ../gdk/gdk.c:167
 msgid "GDK debugging flags to unset"
-msgstr "Senyaladors de depuració de GTK+ a inhabilitar"
+msgstr "Senyaladors de depuració del GDK que s'han d'inhabilitar"
 
-#: gdk/keyname-table.h:3940
+#: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "Retrocés"
 
-#: gdk/keyname-table.h:3941
+#: ../gdk/keyname-table.h:3941
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tabulador"
 
-#: gdk/keyname-table.h:3942
+#: ../gdk/keyname-table.h:3942
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Retorn"
 
-#: gdk/keyname-table.h:3943
+#: ../gdk/keyname-table.h:3943
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pausa"
 
-#: gdk/keyname-table.h:3944
+#: ../gdk/keyname-table.h:3944
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Bloc_Despl"
 
-#: gdk/keyname-table.h:3945
+#: ../gdk/keyname-table.h:3945
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "Pet_Sis"
 
-#: gdk/keyname-table.h:3946
+#: ../gdk/keyname-table.h:3946
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Esc"
 
-#: gdk/keyname-table.h:3947
+#: ../gdk/keyname-table.h:3947
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Tecla_multi"
 
-#: gdk/keyname-table.h:3948
+#: ../gdk/keyname-table.h:3948
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Inici"
 
-#: gdk/keyname-table.h:3949
+#: ../gdk/keyname-table.h:3949
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Esquerra"
 
-#: gdk/keyname-table.h:3950
+#: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Amunt"
 
-#: gdk/keyname-table.h:3951
+#: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Dreta"
 
-#: gdk/keyname-table.h:3952
+#: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Avall"
 
-#: gdk/keyname-table.h:3953
+#: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Re_Pàg"
 
-#: gdk/keyname-table.h:3954
+#: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Av_Pàg"
 
-#: gdk/keyname-table.h:3955
+#: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
 msgstr "Fi"
 
 # FIXME És la mateixa traducció que «Home», però no tinc cap teclat
 # amb aquesta tecla per a comprovar-ho (dpm)
-#: gdk/keyname-table.h:3956
+#: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Inici"
 
-#: gdk/keyname-table.h:3957
+#: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Impr_Pant"
 
-#: gdk/keyname-table.h:3958
+#: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: gdk/keyname-table.h:3959
+#: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Bloc_Núm"
 
-#: gdk/keyname-table.h:3960
+#: ../gdk/keyname-table.h:3960
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "TN_Espai"
 
-#: gdk/keyname-table.h:3961
+#: ../gdk/keyname-table.h:3961
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "TN_Tabulador"
 
-#: gdk/keyname-table.h:3962
+#: ../gdk/keyname-table.h:3962
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "TN_Retorn"
 
-#: gdk/keyname-table.h:3963
+#: ../gdk/keyname-table.h:3963
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "TN_Inici"
 
-#: gdk/keyname-table.h:3964
+#: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "TN_Esquerra"
 
-#: gdk/keyname-table.h:3965
+#: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "TN_Amunt"
 
-#: gdk/keyname-table.h:3966
+#: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "TN_Dreta"
 
-#: gdk/keyname-table.h:3967
+#: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "TN_Avall"
 
-#: gdk/keyname-table.h:3968
+#: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "TN_Re_Pàg"
 
-#: gdk/keyname-table.h:3969
+#: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "TN_Anterior"
 
-#: gdk/keyname-table.h:3970
+#: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "TN_Av_Pàg"
 
-#: gdk/keyname-table.h:3971
+#: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "TN_Següent"
 
-#: gdk/keyname-table.h:3972
+#: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "TN_Fi"
 
 # FIXME És la mateixa traducció que «Home», però no tinc cap teclat
 # amb aquesta tecla per a comprovar-ho (dpm)
-#: gdk/keyname-table.h:3973
+#: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "TN_Inici"
 
-#: gdk/keyname-table.h:3974
+#: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "TN_Ins"
 
-#: gdk/keyname-table.h:3975
+#: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "TN_Supr"
 
-#: gdk/keyname-table.h:3976
+#: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Supr"
 
 #. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:54
+#: ../gdk/win32/gdkmain-win32.c:54
 msgid "Don't batch GDI requests"
 msgstr "No processis en lot les peticions del GDI"
 
 #. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:56
+#: ../gdk/win32/gdkmain-win32.c:56
 msgid "Don't use the Wintab API for tablet support"
-msgstr "No utilitzes l'API Wintab per al suport de tablet"
+msgstr "No utilitzes l'API Wintab per al suport de tauleta gràfica"
 
 #. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
+#: ../gdk/win32/gdkmain-win32.c:58
 msgid "Same as --no-wintab"
 msgstr "El mateix que --no-wintab"
 
 #. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
+#: ../gdk/win32/gdkmain-win32.c:60
 msgid "Do use the Wintab API [default]"
 msgstr "Utilitza l'API Wintab [per defecte]"
 
 #. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:62
+#: ../gdk/win32/gdkmain-win32.c:62
 msgid "Size of the palette in 8 bit mode"
 msgstr "Mida de la paleta al mode 8 bits"
 
 #. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:63
+#: ../gdk/win32/gdkmain-win32.c:63
 msgid "COLORS"
 msgstr "COLORS"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:312
+#. Description of --sync in --help output
+#: ../gdk/x11/gdkmain-x11.c:93
+msgid "Make X calls synchronous"
+msgstr "Fes les crides a X sincronitzades"
+
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:313
 #, c-format
 msgid "Starting %s"
 msgstr "S'està iniciant %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:316
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:317
 #, c-format
 msgid "Opening %s"
 msgstr "S'està obrint %s"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:321
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:322
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "S'està obrint %d element"
 msgstr[1] "S'estan obrint %d elements"
 
-#. Description of --sync in --help output
-#: gdk/x11/gdkmain-x11.c:96
-msgid "Make X calls synchronous"
-msgstr "Fes les crides a X sincronitzades"
+#: ../gtk/gtkaboutdialog.c:242
+msgid "Could not show link"
+msgstr "No s'ha pogut mostrar l'enllaç"
 
-#. Translators: this is the license preamble; the string at the end
-#. * contains the URL of the license.
-#.
-#: gtk/gtkaboutdialog.c:101
-#, c-format
-msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
-msgstr ""
-
-#: gtk/gtkaboutdialog.c:339 gtk/gtkaboutdialog.c:2235
+#: ../gtk/gtkaboutdialog.c:365 ../gtk/gtkaboutdialog.c:2263
 msgid "License"
 msgstr "Llicència"
 
-#: gtk/gtkaboutdialog.c:340
+#: ../gtk/gtkaboutdialog.c:366
 msgid "The license of the program"
 msgstr "La llicència del programa"
 
 #. Add the credits button
-#: gtk/gtkaboutdialog.c:621
+#: ../gtk/gtkaboutdialog.c:625
 msgid "C_redits"
 msgstr "C_rèdits"
 
 #. Add the license button
-#: gtk/gtkaboutdialog.c:635
+#: ../gtk/gtkaboutdialog.c:639
 msgid "_License"
 msgstr "_Llicència"
 
-#: gtk/gtkaboutdialog.c:839
-msgid "Could not show link"
-msgstr "No s'ha pogut mostrar l'enllaç"
-
-#: gtk/gtkaboutdialog.c:932
+#: ../gtk/gtkaboutdialog.c:917
 #, c-format
 msgid "About %s"
 msgstr "Quant a %s"
 
-#: gtk/gtkaboutdialog.c:2153
+#: ../gtk/gtkaboutdialog.c:2186
 msgid "Credits"
 msgstr "Crèdits"
 
-#: gtk/gtkaboutdialog.c:2185
+#: ../gtk/gtkaboutdialog.c:2215
 msgid "Written by"
 msgstr "Escrit per"
 
-#: gtk/gtkaboutdialog.c:2188
+#: ../gtk/gtkaboutdialog.c:2218
 msgid "Documented by"
 msgstr "Documentat per"
 
-#: gtk/gtkaboutdialog.c:2200
+#: ../gtk/gtkaboutdialog.c:2230
 msgid "Translated by"
 msgstr "Traduït per"
 
-#: gtk/gtkaboutdialog.c:2204
+#: ../gtk/gtkaboutdialog.c:2234
 msgid "Artwork by"
 msgstr "Art per"
 
@@ -409,7 +401,7 @@ msgstr "Art per"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:160
+#: ../gtk/gtkaccellabel.c:146
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Majús"
@@ -419,7 +411,7 @@ msgstr "Majús"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:166
+#: ../gtk/gtkaccellabel.c:152
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -429,7 +421,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:172
+#: ../gtk/gtkaccellabel.c:158
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -439,7 +431,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:770
+#: ../gtk/gtkaccellabel.c:743
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Súper"
@@ -449,7 +441,7 @@ msgstr "Súper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:783
+#: ../gtk/gtkaccellabel.c:756
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Híper"
@@ -459,39 +451,39 @@ msgstr "Híper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:797
+#: ../gtk/gtkaccellabel.c:770
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:813
+#: ../gtk/gtkaccellabel.c:787
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espai"
 
-#: gtk/gtkaccellabel.c:816
+#: ../gtk/gtkaccellabel.c:790
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Barra inversa"
 
-#: gtk/gtkbuilderparser.c:343
+#: ../gtk/gtkbuilderparser.c:343
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
 msgstr "Funció de tipus no vàlida a la línia %d: «%s»"
 
-#: gtk/gtkbuilderparser.c:407
-#, fuzzy, c-format
+#: ../gtk/gtkbuilderparser.c:407
+#, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr ""
 "Identificador d'objecte duplicat «%s» a la línia %d (anteriorment a la línia "
-"%d)"
+"% d)"
 
-#: gtk/gtkbuilderparser.c:859
+#: ../gtk/gtkbuilderparser.c:859
 #, c-format
 msgid "Invalid root element: '%s'"
 msgstr "El nom de l'element arrel no és vàlid: «%s»"
 
-#: gtk/gtkbuilderparser.c:898
+#: ../gtk/gtkbuilderparser.c:898
 #, c-format
 msgid "Unhandled tag: '%s'"
 msgstr "L'etiqueta no està gestionada: «%s»"
@@ -506,7 +498,7 @@ msgstr "L'etiqueta no està gestionada: «%s»"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:883
+#: ../gtk/gtkcalendar.c:799
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -514,7 +506,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:921
+#: ../gtk/gtkcalendar.c:837
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -523,7 +515,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: gtk/gtkcalendar.c:2006
+#: ../gtk/gtkcalendar.c:1890
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -538,7 +530,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:2037 gtk/gtkcalendar.c:2719
+#: ../gtk/gtkcalendar.c:1921 ../gtk/gtkcalendar.c:2584
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -554,7 +546,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:2069 gtk/gtkcalendar.c:2579
+#: ../gtk/gtkcalendar.c:1953 ../gtk/gtkcalendar.c:2447
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -570,7 +562,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:2361
+#: ../gtk/gtkcalendar.c:2235
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -578,7 +570,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: gtk/gtkcellrendereraccel.c:272
+#: ../gtk/gtkcellrendereraccel.c:244
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "Inhabilitat"
@@ -587,7 +579,7 @@ msgstr "Inhabilitat"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: gtk/gtkcellrendereraccel.c:282
+#: ../gtk/gtkcellrendereraccel.c:254
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "No vàlid"
@@ -596,25 +588,25 @@ msgstr "No vàlid"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: gtk/gtkcellrendereraccel.c:418 gtk/gtkcellrendereraccel.c:675
+#: ../gtk/gtkcellrendereraccel.c:389 ../gtk/gtkcellrendereraccel.c:603
 msgid "New accelerator..."
 msgstr "Accelerador nou..."
 
-#: gtk/gtkcellrendererprogress.c:362 gtk/gtkcellrendererprogress.c:452
+#: ../gtk/gtkcellrendererprogress.c:361 ../gtk/gtkcellrendererprogress.c:448
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkcolorbutton.c:176 gtk/gtkcolorbutton.c:445
+#: ../gtk/gtkcolorbutton.c:178 ../gtk/gtkcolorbutton.c:457
 msgid "Pick a Color"
 msgstr "Trieu un color"
 
-#: gtk/gtkcolorbutton.c:336
+#: ../gtk/gtkcolorbutton.c:350
 msgid "Received invalid color data\n"
 msgstr "S'han rebut dades de color no vàlides\n"
 
-#: gtk/gtkcolorsel.c:384
+#: ../gtk/gtkcolorsel.c:363
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -622,76 +614,75 @@ msgstr ""
 "Seleccioneu el color que vulgueu de l'anell extern. Seleccioneu la foscor o "
 "la claror del color utilitzant el triangle intern."
 
-#: gtk/gtkcolorsel.c:408
+#: ../gtk/gtkcolorsel.c:387
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Feu clic al selector de color, llavors feu clic on vulgueu de la vostra "
-"pantalla per seleccionar el seu color."
+"Feu clic al selector de color i, tot seguit, feu clic en un punt de la "
+"pantalla per seleccionar-ne el color."
 
-#: gtk/gtkcolorsel.c:417
+#: ../gtk/gtkcolorsel.c:396
 msgid "_Hue:"
 msgstr "_Matís:"
 
-#: gtk/gtkcolorsel.c:418
+#: ../gtk/gtkcolorsel.c:397
 msgid "Position on the color wheel."
 msgstr "Posició a la roda de colors."
 
-#: gtk/gtkcolorsel.c:420
+#: ../gtk/gtkcolorsel.c:399
 msgid "_Saturation:"
 msgstr "_Saturació:"
 
-#: gtk/gtkcolorsel.c:421
-#, fuzzy
-msgid "Intensity of the color."
-msgstr "Transparència del color."
+#: ../gtk/gtkcolorsel.c:400
+msgid "\"Deepness\" of the color."
+msgstr "«Profunditat» del color."
 
-#: gtk/gtkcolorsel.c:422
+#: ../gtk/gtkcolorsel.c:401
 msgid "_Value:"
 msgstr "_Valor:"
 
-#: gtk/gtkcolorsel.c:423
+#: ../gtk/gtkcolorsel.c:402
 msgid "Brightness of the color."
 msgstr "Brillantor del color."
 
-#: gtk/gtkcolorsel.c:424
+#: ../gtk/gtkcolorsel.c:403
 msgid "_Red:"
 msgstr "_Roig:"
 
-#: gtk/gtkcolorsel.c:425
+#: ../gtk/gtkcolorsel.c:404
 msgid "Amount of red light in the color."
 msgstr "Quantitat de llum vermella en el color."
 
-#: gtk/gtkcolorsel.c:426
+#: ../gtk/gtkcolorsel.c:405
 msgid "_Green:"
 msgstr "_Verd:"
 
-#: gtk/gtkcolorsel.c:427
+#: ../gtk/gtkcolorsel.c:406
 msgid "Amount of green light in the color."
 msgstr "Quantitat de llum verda en el color."
 
-#: gtk/gtkcolorsel.c:428
+#: ../gtk/gtkcolorsel.c:407
 msgid "_Blue:"
 msgstr "_Blau:"
 
-#: gtk/gtkcolorsel.c:429
+#: ../gtk/gtkcolorsel.c:408
 msgid "Amount of blue light in the color."
 msgstr "Quantitat de llum blava en el color."
 
-#: gtk/gtkcolorsel.c:432
+#: ../gtk/gtkcolorsel.c:411
 msgid "Op_acity:"
 msgstr "Op_acitat:"
 
-#: gtk/gtkcolorsel.c:439 gtk/gtkcolorsel.c:449
+#: ../gtk/gtkcolorsel.c:418 ../gtk/gtkcolorsel.c:428
 msgid "Transparency of the color."
 msgstr "Transparència del color."
 
-#: gtk/gtkcolorsel.c:456
+#: ../gtk/gtkcolorsel.c:435
 msgid "Color _name:"
 msgstr "_Nom del color:"
 
-#: gtk/gtkcolorsel.c:470
+#: ../gtk/gtkcolorsel.c:449
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -699,15 +690,15 @@ msgstr ""
 "Podeu introduir un valor de color hexadecimal a l'estil HTML, o simplement "
 "el nom d'un color (com ara «orange»)."
 
-#: gtk/gtkcolorsel.c:500
+#: ../gtk/gtkcolorsel.c:479
 msgid "_Palette:"
 msgstr "_Paleta:"
 
-#: gtk/gtkcolorsel.c:529
+#: ../gtk/gtkcolorsel.c:508
 msgid "Color Wheel"
 msgstr "Roda de colors"
 
-#: gtk/gtkcolorsel.c:988
+#: ../gtk/gtkcolorsel.c:967
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -718,7 +709,7 @@ msgstr ""
 "seleccionar-lo com a actual per portar-lo a l'altra banda de la gamma de "
 "colors."
 
-#: gtk/gtkcolorsel.c:991
+#: ../gtk/gtkcolorsel.c:970
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -726,32 +717,32 @@ msgstr ""
 "El color que heu escollit. Podeu arrossegar este color cap a una paleta i "
 "alçar-lo per utilitzar-lo més avant."
 
-#: gtk/gtkcolorsel.c:996
+#: ../gtk/gtkcolorsel.c:975
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr ""
-"El color seleccionat anteriorment, en comparació amb el color que esteu "
+"El color seleccionat anteriorment, per comparar-lo amb el color que esteu "
 "seleccionant."
 
-#: gtk/gtkcolorsel.c:999
+#: ../gtk/gtkcolorsel.c:978
 msgid "The color you've chosen."
 msgstr "El color que heu triat."
 
-#: gtk/gtkcolorsel.c:1396
+#: ../gtk/gtkcolorsel.c:1391
 msgid "_Save color here"
 msgstr "Al_ça el color ací"
 
-#: gtk/gtkcolorsel.c:1601
+#: ../gtk/gtkcolorsel.c:1596
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Feu clic a esta entrada de paleta per fer que siga el color actual. per "
+"Feu clic en esta entrada de paleta per fer que siga el color actual. Per "
 "canviar esta entrada, arrossegueu una gamma de colors ací o feu-hi clic amb "
 "el botó dret i seleccioneu «Alça el color ací»."
 
-#: gtk/gtkcolorseldialog.c:189
+#: ../gtk/gtkcolorseldialog.c:170
 msgid "Color Selection"
 msgstr "Selecció de color"
 
@@ -763,138 +754,126 @@ msgstr "Selecció de color"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: gtk/gtkcustompaperunixdialog.c:116
+#: ../gtk/gtkcustompaperunixdialog.c:118
 msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: gtk/gtkcustompaperunixdialog.c:374 gtk/gtkprintunixdialog.c:3233
+#: ../gtk/gtkcustompaperunixdialog.c:373 ../gtk/gtkprintunixdialog.c:3226
 msgid "Manage Custom Sizes"
 msgstr "Gestioneu mides personalitzades"
 
-#: gtk/gtkcustompaperunixdialog.c:534 gtk/gtkpagesetupunixdialog.c:790
+#: ../gtk/gtkcustompaperunixdialog.c:533 ../gtk/gtkpagesetupunixdialog.c:778
 msgid "inch"
-msgstr "inch"
+msgstr "in"
 
-#: gtk/gtkcustompaperunixdialog.c:536 gtk/gtkpagesetupunixdialog.c:788
+#: ../gtk/gtkcustompaperunixdialog.c:535 ../gtk/gtkpagesetupunixdialog.c:776
 msgid "mm"
 msgstr "mm"
 
-#: gtk/gtkcustompaperunixdialog.c:581
+#: ../gtk/gtkcustompaperunixdialog.c:580
 msgid "Margins from Printer..."
 msgstr "Marges de la impressora..."
 
-#: gtk/gtkcustompaperunixdialog.c:747
+#: ../gtk/gtkcustompaperunixdialog.c:746
 #, c-format
 msgid "Custom Size %d"
 msgstr "Mida personalitzada %d"
 
-#: gtk/gtkcustompaperunixdialog.c:1059
+#: ../gtk/gtkcustompaperunixdialog.c:1054
 msgid "_Width:"
 msgstr "_Amplada:"
 
-#: gtk/gtkcustompaperunixdialog.c:1071
+#: ../gtk/gtkcustompaperunixdialog.c:1066
 msgid "_Height:"
 msgstr "_Alçada:"
 
-#: gtk/gtkcustompaperunixdialog.c:1083
+#: ../gtk/gtkcustompaperunixdialog.c:1078
 msgid "Paper Size"
 msgstr "Mida del paper"
 
-#: gtk/gtkcustompaperunixdialog.c:1092
+#: ../gtk/gtkcustompaperunixdialog.c:1087
 msgid "_Top:"
 msgstr "_Superior:"
 
-#: gtk/gtkcustompaperunixdialog.c:1104
+#: ../gtk/gtkcustompaperunixdialog.c:1099
 msgid "_Bottom:"
 msgstr "_Inferior:"
 
-#: gtk/gtkcustompaperunixdialog.c:1116
+#: ../gtk/gtkcustompaperunixdialog.c:1111
 msgid "_Left:"
 msgstr "_Esquerre:"
 
-#: gtk/gtkcustompaperunixdialog.c:1128
+#: ../gtk/gtkcustompaperunixdialog.c:1123
 msgid "_Right:"
 msgstr "_Dret:"
 
-#: gtk/gtkcustompaperunixdialog.c:1169
+#: ../gtk/gtkcustompaperunixdialog.c:1164
 msgid "Paper Margins"
 msgstr "Marges del paper"
 
-#: gtk/gtkentry.c:8601 gtk/gtktextview.c:8248
+#: ../gtk/gtkentry.c:8751 ../gtk/gtktextview.c:7974
 msgid "Input _Methods"
 msgstr "_Mètodes d'entrada"
 
-#: gtk/gtkentry.c:8615 gtk/gtktextview.c:8262
+#: ../gtk/gtkentry.c:8765 ../gtk/gtktextview.c:7988
 msgid "_Insert Unicode Control Character"
 msgstr "_Insereix caràcters de control Unicode"
 
-#: gtk/gtkentry.c:10015
-msgid "Caps Lock and Num Lock are on"
-msgstr ""
-
-#: gtk/gtkentry.c:10017
-#, fuzzy
-msgid "Num Lock is on"
-msgstr "La fixació de majúscules està activada"
-
-#: gtk/gtkentry.c:10019
+#: ../gtk/gtkentry.c:10144
 msgid "Caps Lock is on"
 msgstr "La fixació de majúscules està activada"
 
-#. **************** *
-#. *  Private Macros  *
-#. * ****************
-#: gtk/gtkfilechooserbutton.c:61
+#: ../gtk/gtkfilechooserbutton.c:64
 msgid "Select A File"
 msgstr "Seleccioneu un fitxer"
 
-#: gtk/gtkfilechooserbutton.c:62 gtk/gtkfilechooserdefault.c:1812
+#: ../gtk/gtkfilechooserbutton.c:65 ../gtk/gtkfilechooserdefault.c:1839
 msgid "Desktop"
 msgstr "Escriptori"
 
-#: gtk/gtkfilechooserbutton.c:63
+#: ../gtk/gtkfilechooserbutton.c:66
 msgid "(None)"
 msgstr "(Cap)"
 
-#: gtk/gtkfilechooserbutton.c:2005
+#: ../gtk/gtkfilechooserbutton.c:2021
 msgid "Other..."
 msgstr "Altre..."
 
-#: gtk/gtkfilechooserdefault.c:148
+#: ../gtk/gtkfilechooserdefault.c:148
 msgid "Type name of new folder"
 msgstr "Escriviu el nom de la carpeta nova"
 
-#: gtk/gtkfilechooserdefault.c:938
+#: ../gtk/gtkfilechooserdefault.c:965
 msgid "Could not retrieve information about the file"
 msgstr "No s'ha pogut obtindre informació sobre el fitxer"
 
-#: gtk/gtkfilechooserdefault.c:949
+#: ../gtk/gtkfilechooserdefault.c:976
 msgid "Could not add a bookmark"
 msgstr "No s'ha pogut afegir una adreça d'interés"
 
-#: gtk/gtkfilechooserdefault.c:960
+#: ../gtk/gtkfilechooserdefault.c:987
 msgid "Could not remove bookmark"
 msgstr "No s'ha pogut suprimir l'adreça d'interés"
 
-#: gtk/gtkfilechooserdefault.c:971
+#: ../gtk/gtkfilechooserdefault.c:998
 msgid "The folder could not be created"
 msgstr "No s'ha pogut crear la carpeta"
 
-#: gtk/gtkfilechooserdefault.c:984
+#: ../gtk/gtkfilechooserdefault.c:1011
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
 msgstr ""
-"No s'ha pogut crear la carpeta, perquè ja existeix un fitxer amb el mateix "
-"nom. Proveu utilitzant un nom diferent per a la carpeta, o canvieu el nom "
-"del fitxer abans."
+"No s'ha pogut crear la carpeta perquè ja existeix un fitxer amb el mateix "
+"nom. Proveu d'utilitzar un nom diferent per a la carpeta, o bé canvieu el "
+"nom del fitxer abans de crear-la."
 
-#: gtk/gtkfilechooserdefault.c:995
+#: ../gtk/gtkfilechooserdefault.c:1022
 msgid "Invalid file name"
 msgstr "El nom del fitxer no és vàlid"
 
-#: gtk/gtkfilechooserdefault.c:1005
+#: ../gtk/gtkfilechooserdefault.c:1032
 msgid "The folder contents could not be displayed"
 msgstr "No s'ha pogut mostrar el contingut de la carpeta"
 
@@ -902,202 +881,201 @@ msgstr "No s'ha pogut mostrar el contingut de la carpeta"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: gtk/gtkfilechooserdefault.c:1555
+#: ../gtk/gtkfilechooserdefault.c:1582
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s a %2$s"
 
-#: gtk/gtkfilechooserdefault.c:1731
+#: ../gtk/gtkfilechooserdefault.c:1758
 msgid "Search"
 msgstr "Cerca"
 
-#: gtk/gtkfilechooserdefault.c:1755 gtk/gtkfilechooserdefault.c:9289
+#: ../gtk/gtkfilechooserdefault.c:1782 ../gtk/gtkfilechooserdefault.c:9465
 msgid "Recently Used"
 msgstr "Utilitzats recentment"
 
-#: gtk/gtkfilechooserdefault.c:2409
+#: ../gtk/gtkfilechooserdefault.c:2422
 msgid "Select which types of files are shown"
 msgstr "Seleccioneu quins tipus de fitxers es mostren"
 
-#: gtk/gtkfilechooserdefault.c:2768
+#: ../gtk/gtkfilechooserdefault.c:2781
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Afig la carpeta «%s» a les adreces d'interés"
 
-#: gtk/gtkfilechooserdefault.c:2812
+#: ../gtk/gtkfilechooserdefault.c:2825
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Afig la carpeta actual a les adreces d'interés"
 
-#: gtk/gtkfilechooserdefault.c:2814
+#: ../gtk/gtkfilechooserdefault.c:2827
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Afig les carpetes seleccionades a les adreces d'interés"
 
-#: gtk/gtkfilechooserdefault.c:2852
+#: ../gtk/gtkfilechooserdefault.c:2865
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Suprimeix l'adreça d'interés «%s»"
 
-#: gtk/gtkfilechooserdefault.c:2854
+#: ../gtk/gtkfilechooserdefault.c:2867
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "No es pot suprimir l'adreça d'interés «%s»"
 
-#: gtk/gtkfilechooserdefault.c:2861 gtk/gtkfilechooserdefault.c:3725
+#: ../gtk/gtkfilechooserdefault.c:2874 ../gtk/gtkfilechooserdefault.c:3898
 msgid "Remove the selected bookmark"
-msgstr "Suprimeix les adreces d'interés seleccionades"
+msgstr "Suprimeix l'adreça d'interés seleccionada"
 
-#: gtk/gtkfilechooserdefault.c:3421
+#: ../gtk/gtkfilechooserdefault.c:3594
 msgid "Remove"
 msgstr "Suprimeix"
 
-#: gtk/gtkfilechooserdefault.c:3430
+#: ../gtk/gtkfilechooserdefault.c:3603
 msgid "Rename..."
 msgstr "Canvia el nom..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3593
+#: ../gtk/gtkfilechooserdefault.c:3766
 msgid "Places"
 msgstr "Llocs"
 
 #. Column header for the file chooser's shortcuts pane
-#: gtk/gtkfilechooserdefault.c:3650
+#: ../gtk/gtkfilechooserdefault.c:3823
 msgid "_Places"
 msgstr "_Llocs"
 
-#: gtk/gtkfilechooserdefault.c:3706
+#: ../gtk/gtkfilechooserdefault.c:3879
 msgid "_Add"
 msgstr "_Afig"
 
-#: gtk/gtkfilechooserdefault.c:3713
+#: ../gtk/gtkfilechooserdefault.c:3886
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Afig la carpeta seleccionada a les adreces d'interés"
 
-#: gtk/gtkfilechooserdefault.c:3718
+#: ../gtk/gtkfilechooserdefault.c:3891
 msgid "_Remove"
 msgstr "_Suprimeix"
 
-#: gtk/gtkfilechooserdefault.c:3860
+#: ../gtk/gtkfilechooserdefault.c:4026
 msgid "Could not select file"
 msgstr "No s'ha pogut seleccionar el fitxer"
 
-#: gtk/gtkfilechooserdefault.c:4035
+#: ../gtk/gtkfilechooserdefault.c:4201
 msgid "_Add to Bookmarks"
 msgstr "_Afig a les adreces d'interés"
 
-#: gtk/gtkfilechooserdefault.c:4048
+#: ../gtk/gtkfilechooserdefault.c:4214
 msgid "Show _Hidden Files"
 msgstr "Mostra els fitxers _ocults"
 
-#: gtk/gtkfilechooserdefault.c:4055
+#: ../gtk/gtkfilechooserdefault.c:4221
 msgid "Show _Size Column"
 msgstr "Mostra la columna de la _mida"
 
-#: gtk/gtkfilechooserdefault.c:4281
+#: ../gtk/gtkfilechooserdefault.c:4441 ../gtk/gtkfilesel.c:730
 msgid "Files"
 msgstr "Fitxers"
 
-#: gtk/gtkfilechooserdefault.c:4332
+#: ../gtk/gtkfilechooserdefault.c:4492
 msgid "Name"
 msgstr "Nom"
 
-#: gtk/gtkfilechooserdefault.c:4355
+#: ../gtk/gtkfilechooserdefault.c:4515
 msgid "Size"
 msgstr "Mida"
 
-#: gtk/gtkfilechooserdefault.c:4369
+#: ../gtk/gtkfilechooserdefault.c:4529
 msgid "Modified"
 msgstr "Modificat"
 
 #. Label
-#: gtk/gtkfilechooserdefault.c:4624 gtk/gtkprinteroptionwidget.c:801
+#: ../gtk/gtkfilechooserdefault.c:4784 ../gtk/gtkprinteroptionwidget.c:802
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserdefault.c:4667
+#: ../gtk/gtkfilechooserdefault.c:4827
 msgid "_Browse for other folders"
 msgstr "Na_vega per altres carpetes"
 
-#: gtk/gtkfilechooserdefault.c:4937
+#: ../gtk/gtkfilechooserdefault.c:5097
 msgid "Type a file name"
 msgstr "Escriviu un nom de fitxer"
 
 #. Create Folder
-#: gtk/gtkfilechooserdefault.c:4980
+#: ../gtk/gtkfilechooserdefault.c:5140
 msgid "Create Fo_lder"
 msgstr "Crea una ca_rpeta"
 
-#: gtk/gtkfilechooserdefault.c:4990
+#: ../gtk/gtkfilechooserdefault.c:5150
 msgid "_Location:"
 msgstr "_Ubicació:"
 
-#: gtk/gtkfilechooserdefault.c:5194
+#: ../gtk/gtkfilechooserdefault.c:5354
 msgid "Save in _folder:"
-msgstr "Al_ça en la carpeta:"
+msgstr "De_sa a la carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:5196
+#: ../gtk/gtkfilechooserdefault.c:5356
 msgid "Create in _folder:"
-msgstr "Crea en la _carpeta:"
+msgstr "Crea a la _carpeta:"
 
-#: gtk/gtkfilechooserdefault.c:6248
+#: ../gtk/gtkfilechooserdefault.c:6431
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No s'ha pogut llegir el contingut de %s"
 
-#: gtk/gtkfilechooserdefault.c:6252
+#: ../gtk/gtkfilechooserdefault.c:6435
 msgid "Could not read the contents of the folder"
 msgstr "No s'ha pogut llegir el contingut de la carpeta"
 
-#: gtk/gtkfilechooserdefault.c:6345 gtk/gtkfilechooserdefault.c:6413
-#: gtk/gtkfilechooserdefault.c:6558
+#: ../gtk/gtkfilechooserdefault.c:6528 ../gtk/gtkfilechooserdefault.c:6596
+#: ../gtk/gtkfilechooserdefault.c:6741
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserdefault.c:6360
+#: ../gtk/gtkfilechooserdefault.c:6543
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserdefault.c:6362
+#: ../gtk/gtkfilechooserdefault.c:6545
 msgid "Yesterday at %H:%M"
 msgstr "Ahir a les %H:%M"
 
-#: gtk/gtkfilechooserdefault.c:7028
+#: ../gtk/gtkfilechooserdefault.c:7211
 msgid "Cannot change to folder because it is not local"
 msgstr "No es pot canviar a la carpeta perquè no és local"
 
-#: gtk/gtkfilechooserdefault.c:7625 gtk/gtkfilechooserdefault.c:7646
+#: ../gtk/gtkfilechooserdefault.c:7808 ../gtk/gtkfilechooserdefault.c:7829
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "La drecera %s ja existeix"
 
-#: gtk/gtkfilechooserdefault.c:7736
+#: ../gtk/gtkfilechooserdefault.c:7919
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "La drecera %s no existeix"
 
-#: gtk/gtkfilechooserdefault.c:7997 gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8174 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
-msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-ho?"
+msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
 
-#: gtk/gtkfilechooserdefault.c:8000 gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8177 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
-"El fitxer ja existeix a «%s». Si ho reemplaceu sobreescriureu el seu "
-"contingut."
+"El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu elcontingut."
 
-#: gtk/gtkfilechooserdefault.c:8005 gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8182 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserdefault.c:8658
+#: ../gtk/gtkfilechooserdefault.c:8834
 msgid "Could not start the search process"
 msgstr "No s'ha pogut iniciar el procés de cerca"
 
-#: gtk/gtkfilechooserdefault.c:8659
+#: ../gtk/gtkfilechooserdefault.c:8835
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1105,36 +1083,36 @@ msgstr ""
 "El programa no ha pogut crear cap connexió al dimoni d'indexació. Assegureu-"
 "vos que s'està executant."
 
-#: gtk/gtkfilechooserdefault.c:8673
+#: ../gtk/gtkfilechooserdefault.c:8849
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
-#: gtk/gtkfilechooserdefault.c:8861
+#: ../gtk/gtkfilechooserdefault.c:9037
 msgid "Search:"
 msgstr "Cerca:"
 
-#: gtk/gtkfilechooserdefault.c:9466
+#: ../gtk/gtkfilechooserdefault.c:9642
 #, c-format
 msgid "Could not mount %s"
 msgstr "No s'ha pogut muntar %s"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry, when the user enters an invalid path.
-#: gtk/gtkfilechooserentry.c:702 gtk/gtkfilechooserentry.c:1169
+#: ../gtk/gtkfilechooserentry.c:700 ../gtk/gtkfilechooserentry.c:1166
 msgid "Invalid path"
 msgstr "Camí no vàlid"
 
 #. translators: this text is shown when there are no completions
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1101
+#: ../gtk/gtkfilechooserentry.c:1098
 msgid "No match"
 msgstr "No hi ha cap coincidència"
 
 #. translators: this text is shown when there is exactly one completion
 #. * for something the user typed in a file chooser entry
 #.
-#: gtk/gtkfilechooserentry.c:1112
+#: ../gtk/gtkfilechooserentry.c:1109
 msgid "Sole completion"
 msgstr "Compleció única"
 
@@ -1142,13 +1120,13 @@ msgstr "Compleció única"
 #. * entry is a complete filename, but could be continued to find
 #. * a longer match
 #.
-#: gtk/gtkfilechooserentry.c:1128
+#: ../gtk/gtkfilechooserentry.c:1125
 msgid "Complete, but not unique"
 msgstr "Complet, però no és únic"
 
 #. Translators: this text is shown while the system is searching
 #. * for possible completions for filenames in a file chooser entry.
-#: gtk/gtkfilechooserentry.c:1160
+#: ../gtk/gtkfilechooserentry.c:1157
 msgid "Completing..."
 msgstr "S'està completant..."
 
@@ -1156,7 +1134,7 @@ msgstr "S'està completant..."
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user enters something like
 #. * "sftp://blahblah" in an app that only supports local filenames.
-#: gtk/gtkfilechooserentry.c:1182 gtk/gtkfilechooserentry.c:1207
+#: ../gtk/gtkfilechooserentry.c:1179 ../gtk/gtkfilechooserentry.c:1204
 msgid "Only local files may be selected"
 msgstr "Només es poden seleccionar fitxers locals"
 
@@ -1164,80 +1142,222 @@ msgstr "Només es poden seleccionar fitxers locals"
 #. Translators: this is shown in the feedback for Tab-completion in a
 #. * file chooser's text entry when the user hasn't entered the first '/'
 #. * after a hostname and yet hits Tab (such as "sftp://blahblah[Tab]")
-#: gtk/gtkfilechooserentry.c:1191
+#: ../gtk/gtkfilechooserentry.c:1188
 msgid "Incomplete hostname; end it with '/'"
 msgstr "El nom d'ordinador no és complet; ha de finalitzar amb «/»"
 
 #. Translators: this is shown in the feedback for Tab-completion in a file
 #. * chooser's text entry when the user enters a path that does not exist
 #. * and then hits Tab
-#: gtk/gtkfilechooserentry.c:1202
+#: ../gtk/gtkfilechooserentry.c:1199
 msgid "Path does not exist"
 msgstr "No existeix el camí"
 
-#: gtk/gtkfilechoosersettings.c:486
+#: ../gtk/gtkfilechoosersettings.c:487 ../gtk/gtkfilesel.c:1349
+#: ../gtk/gtkfilesel.c:1360
 #, c-format
 msgid "Error creating folder '%s': %s"
 msgstr "S'ha produït un error en crear la carpeta «%s»: %s"
+
+#: ../gtk/gtkfilesel.c:694
+msgid "Folders"
+msgstr "Carpetes"
+
+#: ../gtk/gtkfilesel.c:698
+msgid "Fol_ders"
+msgstr "_Carpetes"
+
+#: ../gtk/gtkfilesel.c:734
+msgid "_Files"
+msgstr "_Fitxers"
+
+#: ../gtk/gtkfilesel.c:821 ../gtk/gtkfilesel.c:2154
+#, c-format
+msgid "Folder unreadable: %s"
+msgstr "No es pot llegir la carpeta: %s"
+
+#: ../gtk/gtkfilesel.c:905
+#, c-format
+msgid ""
+"The file \"%s\" resides on another machine (called %s) and may not be "
+"available to this program.\n"
+"Are you sure that you want to select it?"
+msgstr ""
+"El fitxer «%s» es troba en una altra màquina (anomenada %s) i pot ser que no "
+"estiga disponible per a este programa.\n"
+"Esteu segur que voleu seleccionar-lo?"
+
+#: ../gtk/gtkfilesel.c:1020
+msgid "_New Folder"
+msgstr "Carpeta _nova"
+
+#: ../gtk/gtkfilesel.c:1031
+msgid "De_lete File"
+msgstr "Suprimeix e_l fitxer"
+
+#: ../gtk/gtkfilesel.c:1042
+msgid "_Rename File"
+msgstr "_Canvia el nom del fitxer"
+
+#: ../gtk/gtkfilesel.c:1347
+#, c-format
+msgid ""
+"The folder name \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"El nom de la carpeta «%s» conté símbols que no estan permesos als noms de "
+"fitxer"
+
+#: ../gtk/gtkfilesel.c:1394
+msgid "New Folder"
+msgstr "Carpeta nova"
+
+#: ../gtk/gtkfilesel.c:1409
+msgid "_Folder name:"
+msgstr "Nom de la _carpeta:"
+
+#: ../gtk/gtkfilesel.c:1433
+msgid "C_reate"
+msgstr "C_rea"
+
+#: ../gtk/gtkfilesel.c:1476 ../gtk/gtkfilesel.c:1585 ../gtk/gtkfilesel.c:1598
+#, c-format
+msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
+msgstr ""
+"El nom del fitxer «%s» conté símbols que no estan permesos als noms de fitxer"
+
+#: ../gtk/gtkfilesel.c:1479 ../gtk/gtkfilesel.c:1491
+#, c-format
+msgid "Error deleting file '%s': %s"
+msgstr "S'ha produït un error en suprimir el fitxer «%s»: %s"
+
+#: ../gtk/gtkfilesel.c:1534
+#, c-format
+msgid "Really delete file \"%s\"?"
+msgstr "Esteu segur de voler suprimir el fitxer «%s»?"
+
+#: ../gtk/gtkfilesel.c:1539
+msgid "Delete File"
+msgstr "Suprimeix el fitxer"
+
+#: ../gtk/gtkfilesel.c:1587
+#, c-format
+msgid "Error renaming file to \"%s\": %s"
+msgstr "S'ha produït un error en canviar el nom del fitxer a «%s»: %s"
+
+#: ../gtk/gtkfilesel.c:1600
+#, c-format
+msgid "Error renaming file \"%s\": %s"
+msgstr "S'ha produït un error en canviar el nom del fitxer «%s»: %s"
+
+#: ../gtk/gtkfilesel.c:1611
+#, c-format
+msgid "Error renaming file \"%s\" to \"%s\": %s"
+msgstr "S'ha produït un error en canviar el nom del fitxer «%s» a «%s»: %s"
+
+#: ../gtk/gtkfilesel.c:1658
+msgid "Rename File"
+msgstr "Canvia el nom del fitxer"
+
+#: ../gtk/gtkfilesel.c:1673
+#, c-format
+msgid "Rename file \"%s\" to:"
+msgstr "Canvia el nom del fitxer «%s» a:"
+
+#: ../gtk/gtkfilesel.c:1702
+msgid "_Rename"
+msgstr "_Canvia el nom"
+
+#: ../gtk/gtkfilesel.c:2134
+msgid "_Selection: "
+msgstr "_Selecció: "
+
+#: ../gtk/gtkfilesel.c:3056
+#, c-format
+msgid ""
+"The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+"environment variable G_FILENAME_ENCODING): %s"
+msgstr ""
+"No s'ha pogut convertir el nom de fitxer «%s» a UTF-8. (Proveu d'establir la "
+"variable d'entorn G_FILENAME_ENCODING): %s"
+
+#: ../gtk/gtkfilesel.c:3059
+msgid "Invalid UTF-8"
+msgstr "UTF-8 no vàlid"
+
+#: ../gtk/gtkfilesel.c:3935
+msgid "Name too long"
+msgstr "El nom és massa llarg"
+
+#: ../gtk/gtkfilesel.c:3937
+msgid "Couldn't convert filename"
+msgstr "No s'ha pogut convertir el nom del fitxer"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
 #. * token for the fake "File System" volume.  So, we'll return a pointer to
 #. * this particular string.
 #.
-#: gtk/gtkfilesystem.c:48
+#: ../gtk/gtkfilesystem.c:52
 msgid "File System"
 msgstr "Sistema de fitxers"
 
-#: gtk/gtkfontbutton.c:142 gtk/gtkfontbutton.c:266
+#: ../gtk/gtkfontbutton.c:144 ../gtk/gtkfontbutton.c:266
 msgid "Pick a Font"
 msgstr "Trieu un tipus de lletra"
 
 #. Initialize fields
-#: gtk/gtkfontbutton.c:260
+#: ../gtk/gtkfontbutton.c:260
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/gtkfontbutton.c:785
+#: ../gtk/gtkfontbutton.c:785
 msgid "Font"
 msgstr "Tipus de lletra"
 
 #. This is the default text shown in the preview entry, though the user
 #. can set it. Remember that some fonts only have capital letters.
-#: gtk/gtkfontsel.c:103
+#: ../gtk/gtkfontsel.c:75
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcçdefghijk ABCÇDEFGHIJK"
 
-#: gtk/gtkfontsel.c:370
+#: ../gtk/gtkfontsel.c:343
 msgid "_Family:"
 msgstr "_Família:"
 
-#: gtk/gtkfontsel.c:376
+#: ../gtk/gtkfontsel.c:349
 msgid "_Style:"
 msgstr "E_stil:"
 
-#: gtk/gtkfontsel.c:382
+#: ../gtk/gtkfontsel.c:355
 msgid "Si_ze:"
 msgstr "_Mida:"
 
 #. create the text entry widget
-#: gtk/gtkfontsel.c:559
+#: ../gtk/gtkfontsel.c:532
 msgid "_Preview:"
 msgstr "_Previsualització:"
 
-#: gtk/gtkfontsel.c:1659
+#: ../gtk/gtkfontsel.c:1649
 msgid "Font Selection"
 msgstr "Selecció del tipus de lletra"
+
+#: ../gtk/gtkgamma.c:410
+msgid "Gamma"
+msgstr "Gamma"
+
+#: ../gtk/gtkgamma.c:420
+msgid "_Gamma value"
+msgstr "Valor de la _gamma"
 
 #. Remove this icon source so we don't keep trying to
 #. * load it.
 #.
-#: gtk/gtkiconfactory.c:1356
+#: ../gtk/gtkiconfactory.c:1354
 #, c-format
 msgid "Error loading icon: %s"
 msgstr "S'ha produït un error en carregar la icona: %s"
 
-#: gtk/gtkicontheme.c:1354
+#: ../gtk/gtkicontheme.c:1363
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1250,77 +1370,156 @@ msgstr ""
 "Podeu obtindre'n una còpia de:\n"
 "\t%s"
 
-#: gtk/gtkicontheme.c:1535
+#: ../gtk/gtkicontheme.c:1543
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "La icona «%s» no es troba al tema"
 
-#: gtk/gtkicontheme.c:3048
+#: ../gtk/gtkicontheme.c:3074
 msgid "Failed to load icon"
 msgstr "No s'ha pogut carregar la icona"
 
-#: gtk/gtkimmodule.c:526
+#: ../gtk/gtkimmodule.c:527
 msgid "Simple"
 msgstr "Simple"
 
-#: gtk/gtkimmulticontext.c:588
+#: ../gtk/gtkimmulticontext.c:563
 msgctxt "input method menu"
 msgid "System"
 msgstr "Sistema"
 
-#: gtk/gtkimmulticontext.c:598
+#: ../gtk/gtkimmulticontext.c:573
 msgctxt "input method menu"
 msgid "None"
 msgstr "Cap"
 
-#: gtk/gtkimmulticontext.c:681
+#: ../gtk/gtkimmulticontext.c:656
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistema (%s)"
 
+#: ../gtk/gtkinputdialog.c:192
+msgid "Input"
+msgstr "Entrada"
+
+#: ../gtk/gtkinputdialog.c:207
+msgid "No extended input devices"
+msgstr "No hi ha cap dispositiu d'entrada ampliat"
+
+#: ../gtk/gtkinputdialog.c:220
+msgid "_Device:"
+msgstr "_Dispositiu:"
+
+#: ../gtk/gtkinputdialog.c:237
+msgid "Disabled"
+msgstr "Desactivat"
+
+#: ../gtk/gtkinputdialog.c:244
+msgid "Screen"
+msgstr "Pantalla"
+
+#: ../gtk/gtkinputdialog.c:251
+msgid "Window"
+msgstr "Finestra"
+
+#: ../gtk/gtkinputdialog.c:258
+msgid "_Mode:"
+msgstr "_Mode:"
+
+#. The axis listbox
+#: ../gtk/gtkinputdialog.c:279
+msgid "Axes"
+msgstr "Eixos"
+
+#. Keys listbox
+#: ../gtk/gtkinputdialog.c:297
+msgid "Keys"
+msgstr "Tecles"
+
+#: ../gtk/gtkinputdialog.c:524
+msgid "_X:"
+msgstr "_X:"
+
+#: ../gtk/gtkinputdialog.c:525
+msgid "_Y:"
+msgstr "_Y:"
+
+#: ../gtk/gtkinputdialog.c:526
+msgid "_Pressure:"
+msgstr "_Pressió:"
+
+#: ../gtk/gtkinputdialog.c:527
+msgid "X _tilt:"
+msgstr "_Inclinació en X:"
+
+#: ../gtk/gtkinputdialog.c:528
+msgid "Y t_ilt:"
+msgstr "I_nclinació en Y:"
+
+#: ../gtk/gtkinputdialog.c:529
+msgid "_Wheel:"
+msgstr "_Roda:"
+
+#: ../gtk/gtkinputdialog.c:581
+msgid "none"
+msgstr "cap"
+
+#: ../gtk/gtkinputdialog.c:618 ../gtk/gtkinputdialog.c:654
+msgid "(disabled)"
+msgstr "(desactivat)"
+
+#: ../gtk/gtkinputdialog.c:647
+msgid "(unknown)"
+msgstr "(desconegut)"
+
+#. and clear button
+#: ../gtk/gtkinputdialog.c:751
+msgid "Cl_ear"
+msgstr "_Neteja"
+
 #. Open Link
-#: gtk/gtklabel.c:6202
+#: ../gtk/gtklabel.c:5700
 msgid "_Open Link"
 msgstr "Obri l'_enllaç"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6214
+#: ../gtk/gtklabel.c:5712
 msgid "Copy _Link Address"
 msgstr "Copia l'adreça de l'en_llaç"
 
-#: gtk/gtklinkbutton.c:449
+#: ../gtk/gtklinkbutton.c:428
 msgid "Copy URL"
 msgstr "Copia l'URL"
 
-#: gtk/gtklinkbutton.c:601
+#: ../gtk/gtklinkbutton.c:586
 msgid "Invalid URI"
 msgstr "URI no vàlid"
 
 #. Description of --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:526
+#: ../gtk/gtkmain.c:452
 msgid "Load additional GTK+ modules"
 msgstr "Carrega mòduls del GTK+ addicionals"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: gtk/gtkmain.c:527
+#: ../gtk/gtkmain.c:453
 msgid "MODULES"
 msgstr "MÒDULS"
 
 #. Description of --g-fatal-warnings in --help output
-#: gtk/gtkmain.c:529
+#: ../gtk/gtkmain.c:455
 msgid "Make all warnings fatal"
 msgstr "Considera tots els avisos com a greus"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: gtk/gtkmain.c:532
+#: ../gtk/gtkmain.c:458
 msgid "GTK+ debugging flags to set"
-msgstr "Senyaladors de depuració de GTK+ a habilitar"
+msgstr "Senyaladors de depuració de GTK+ que s'han d'habilitar"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: gtk/gtkmain.c:535
+#: ../gtk/gtkmain.c:461
 msgid "GTK+ debugging flags to unset"
-msgstr "Senyaladors de depuració de GTK+ a inhabilitar"
+msgstr "Senyaladors de depuració de GTK+ que s'han d'inhabilitar"
 
 # Premi a qui va ficar "Per defecte:LTR. M'ha costat
 # trobar en quin mòdul estava l'error. jm
@@ -1329,123 +1528,123 @@ msgstr "Senyaladors de depuració de GTK+ a inhabilitar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:798
+#: ../gtk/gtkmain.c:731
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmain.c:863
+#: ../gtk/gtkmain.c:796
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "No es pot obrir la pantalla: %s"
 
-#: gtk/gtkmain.c:922
+#: ../gtk/gtkmain.c:833
 msgid "GTK+ Options"
 msgstr "Opcions del GTK+"
 
-#: gtk/gtkmain.c:922
+#: ../gtk/gtkmain.c:833
 msgid "Show GTK+ Options"
 msgstr "Mostra les opcions del GTK+"
 
-#: gtk/gtkmountoperation.c:491
+#: ../gtk/gtkmountoperation.c:489
 msgid "Co_nnect"
 msgstr "C_onnecta"
 
-#: gtk/gtkmountoperation.c:558
+#: ../gtk/gtkmountoperation.c:556
 msgid "Connect _anonymously"
 msgstr "Connecta't _anònimament"
 
-#: gtk/gtkmountoperation.c:567
+#: ../gtk/gtkmountoperation.c:565
 msgid "Connect as u_ser:"
 msgstr "Connecta't com a u_suari:"
 
-#: gtk/gtkmountoperation.c:605
+#: ../gtk/gtkmountoperation.c:603
 msgid "_Username:"
 msgstr "_Nom d'usuari:"
 
-#: gtk/gtkmountoperation.c:610
+#: ../gtk/gtkmountoperation.c:608
 msgid "_Domain:"
 msgstr "_Domini:"
 
-#: gtk/gtkmountoperation.c:616
+#: ../gtk/gtkmountoperation.c:614
 msgid "_Password:"
 msgstr "Contrasen_ya:"
 
-#: gtk/gtkmountoperation.c:634
+#: ../gtk/gtkmountoperation.c:632
 msgid "Forget password _immediately"
 msgstr "Oblida la _contrasenya immediatament"
 
-#: gtk/gtkmountoperation.c:644
+#: ../gtk/gtkmountoperation.c:642
 msgid "Remember password until you _logout"
 msgstr "Recorda la contrasenya _fins que isca"
 
-#: gtk/gtkmountoperation.c:654
+#: ../gtk/gtkmountoperation.c:652
 msgid "Remember _forever"
 msgstr "Recorda-la per se_mpre"
 
-#: gtk/gtkmountoperation.c:883
-#, fuzzy, c-format
+#: ../gtk/gtkmountoperation.c:881
+#, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplicació desconeguda (PID %d)"
 
-#: gtk/gtkmountoperation.c:1066
-#, c-format
+#: ../gtk/gtkmountoperation.c:1064
 msgid "Unable to end process"
 msgstr "No es pot finalitzar el procés"
 
-#: gtk/gtkmountoperation.c:1103
+#: ../gtk/gtkmountoperation.c:1101
 msgid "_End Process"
 msgstr "_Finalitza el procés"
 
-#: gtk/gtkmountoperation-stub.c:64
-#, fuzzy, c-format
+#: ../gtk/gtkmountoperation-stub.c:64
+#, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
 "No es pot matar el procés amb el PID %d. L'operació no està implementada."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:862
+#: ../gtk/gtkmountoperation-x11.c:865
 msgid "Terminal Pager"
 msgstr "Paginador del terminal"
 
-#: gtk/gtkmountoperation-x11.c:863
+#: ../gtk/gtkmountoperation-x11.c:866
 msgid "Top Command"
 msgstr "Orde «top»"
 
-#: gtk/gtkmountoperation-x11.c:864
+#: ../gtk/gtkmountoperation-x11.c:867
 msgid "Bourne Again Shell"
 msgstr "Intèrpret d'ordes «Bourne Again»"
 
-#: gtk/gtkmountoperation-x11.c:865
+#: ../gtk/gtkmountoperation-x11.c:868
 msgid "Bourne Shell"
 msgstr "Intèrpret d'ordes «Bourne»"
 
-#: gtk/gtkmountoperation-x11.c:866
+#: ../gtk/gtkmountoperation-x11.c:869
 msgid "Z Shell"
 msgstr "Intèrpret d'ordes «Z»"
 
-#: gtk/gtkmountoperation-x11.c:963
-#, fuzzy, c-format
+#: ../gtk/gtkmountoperation-x11.c:966
+#, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "No es pot finalitzar el procés amb el PID %d: %s"
 
-#: gtk/gtknotebook.c:4619 gtk/gtknotebook.c:7170
+#: ../gtk/gtknotebook.c:4705 ../gtk/gtknotebook.c:7311
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
 
-#: gtk/gtkpagesetup.c:596 gtk/gtkpapersize.c:838 gtk/gtkpapersize.c:880
+#: ../gtk/gtkpagesetup.c:597 ../gtk/gtkpapersize.c:826
+#: ../gtk/gtkpapersize.c:868
 msgid "Not a valid page setup file"
 msgstr "No és un fitxer de configuració de pàgina vàlid"
 
-#: gtk/gtkpagesetupunixdialog.c:179
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "Any Printer"
 msgstr "Qualsevol impressora"
 
-#: gtk/gtkpagesetupunixdialog.c:179
+#: ../gtk/gtkpagesetupunixdialog.c:167
 msgid "For portable documents"
-msgstr "Per a documents portables"
+msgstr "Per a documents portàtils"
 
-#: gtk/gtkpagesetupunixdialog.c:809
+#: ../gtk/gtkpagesetupunixdialog.c:797
 #, c-format
 msgid ""
 "Margins:\n"
@@ -1460,273 +1659,269 @@ msgstr ""
 " Superior: %s %s\n"
 " Inferior: %s %s"
 
-#: gtk/gtkpagesetupunixdialog.c:858 gtk/gtkprintunixdialog.c:3284
+#: ../gtk/gtkpagesetupunixdialog.c:846 ../gtk/gtkprintunixdialog.c:3277
 msgid "Manage Custom Sizes..."
 msgstr "Gestiona mides personalitzades..."
 
-#: gtk/gtkpagesetupunixdialog.c:909
+#: ../gtk/gtkpagesetupunixdialog.c:894
 msgid "_Format for:"
 msgstr "_Format per a:"
 
-#: gtk/gtkpagesetupunixdialog.c:931 gtk/gtkprintunixdialog.c:3456
+#: ../gtk/gtkpagesetupunixdialog.c:916 ../gtk/gtkprintunixdialog.c:3449
 msgid "_Paper size:"
 msgstr "Mida del _paper:"
 
-#: gtk/gtkpagesetupunixdialog.c:962
+#: ../gtk/gtkpagesetupunixdialog.c:947
 msgid "_Orientation:"
 msgstr "_Orientació:"
 
-#: gtk/gtkpagesetupunixdialog.c:1026 gtk/gtkprintunixdialog.c:3518
+#: ../gtk/gtkpagesetupunixdialog.c:1011 ../gtk/gtkprintunixdialog.c:3511
 msgid "Page Setup"
 msgstr "Configuració de la pàgina"
 
 # FIXME
-#: gtk/gtkpathbar.c:154
+#: ../gtk/gtkpathbar.c:151
 msgid "Up Path"
 msgstr "Amunt"
 
 # FIXME
-#: gtk/gtkpathbar.c:156
+#: ../gtk/gtkpathbar.c:153
 msgid "Down Path"
 msgstr "Avall"
 
-#: gtk/gtkpathbar.c:1497
+#: ../gtk/gtkpathbar.c:1469
 msgid "File System Root"
 msgstr "Arrel del sistema de fitxers"
 
-#: gtk/gtkprintbackend.c:749
+#: ../gtk/gtkprintbackend.c:749
 msgid "Authentication"
 msgstr "Autenticació"
 
-#: gtk/gtkprinteroptionwidget.c:694
+#: ../gtk/gtkprinteroptionwidget.c:695
 msgid "Not available"
 msgstr "No està disponible"
 
-#: gtk/gtkprinteroptionwidget.c:794
-#, fuzzy
-msgid "Select a folder"
-msgstr "Seleccioneu un fitxer"
-
-#: gtk/gtkprinteroptionwidget.c:813
+#: ../gtk/gtkprinteroptionwidget.c:814
 msgid "_Save in folder:"
-msgstr "Al_ça a la carpeta:"
+msgstr "De_sa a la carpeta:"
 
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/gtkprintoperation.c:190
+#: ../gtk/gtkprintoperation.c:190
 #, c-format
 msgid "%s job #%d"
 msgstr "%s treball #%d"
 
-#: gtk/gtkprintoperation.c:1695
+#: ../gtk/gtkprintoperation.c:1687
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Estat inicial"
 
-#: gtk/gtkprintoperation.c:1696
+#: ../gtk/gtkprintoperation.c:1688
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "S'està preparant per imprimir"
 
-#: gtk/gtkprintoperation.c:1697
+#: ../gtk/gtkprintoperation.c:1689
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "S'estan generant les dades"
 
-#: gtk/gtkprintoperation.c:1698
+#: ../gtk/gtkprintoperation.c:1690
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "S'estan enviant les dades"
 
-#: gtk/gtkprintoperation.c:1699
+#: ../gtk/gtkprintoperation.c:1691
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "S'està esperant"
 
-#: gtk/gtkprintoperation.c:1700
+#: ../gtk/gtkprintoperation.c:1692
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bloquejat degut a un problema"
 
-#: gtk/gtkprintoperation.c:1701
+#: ../gtk/gtkprintoperation.c:1693
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "S'està imprimint"
 
-#: gtk/gtkprintoperation.c:1702
+#: ../gtk/gtkprintoperation.c:1694
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "S'ha finalitzat"
 
-#: gtk/gtkprintoperation.c:1703
+#: ../gtk/gtkprintoperation.c:1695
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "S'ha finalitzat amb error"
 
-#: gtk/gtkprintoperation.c:2270
+#: ../gtk/gtkprintoperation.c:2254
 #, c-format
 msgid "Preparing %d"
 msgstr "S'està preparant %d"
 
-#: gtk/gtkprintoperation.c:2272 gtk/gtkprintoperation.c:2902
-#, c-format
+#: ../gtk/gtkprintoperation.c:2256 ../gtk/gtkprintoperation.c:2875
 msgid "Preparing"
 msgstr "S'està preparant"
 
-#: gtk/gtkprintoperation.c:2275
+#: ../gtk/gtkprintoperation.c:2259
 #, c-format
 msgid "Printing %d"
 msgstr "S'està imprimint %d"
 
-#: gtk/gtkprintoperation.c:2932
-#, c-format
+#: ../gtk/gtkprintoperation.c:2905
 msgid "Error creating print preview"
 msgstr "S'ha produït un error en crear la previsualització d'impressió"
 
-#: gtk/gtkprintoperation.c:2935
-#, c-format
+#: ../gtk/gtkprintoperation.c:2908
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "El motiu més probable és perquè no s'ha pogut crear un fitxer temporal."
 
-#: gtk/gtkprintoperation-unix.c:297
+#: ../gtk/gtkprintoperation-unix.c:297 ../gtk/gtkprintoperation-unix.c:314
 msgid "Error launching preview"
-msgstr "S'ha produït un error en llançar la previsualització"
+msgstr "S'ha produït un error en executar la previsualització"
 
-#: gtk/gtkprintoperation-unix.c:470 gtk/gtkprintoperation-win32.c:1447
+#: ../gtk/gtkprintoperation-unix.c:358
+msgid "Error printing"
+msgstr "S'ha produït un error en imprimir"
+
+#: ../gtk/gtkprintoperation-unix.c:494 ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Aplicació"
 
 # Connectada? (josep)
-#: gtk/gtkprintoperation-win32.c:611
+#: ../gtk/gtkprintoperation-win32.c:612
 msgid "Printer offline"
 msgstr "La impressora no està en línia"
 
-#: gtk/gtkprintoperation-win32.c:613
+#: ../gtk/gtkprintoperation-win32.c:614
 msgid "Out of paper"
 msgstr "No hi ha paper"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:615
-#: modules/printbackends/cups/gtkprintbackendcups.c:1998
+#: ../gtk/gtkprintoperation-win32.c:616
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1998
 msgid "Paused"
 msgstr "En pausa"
 
-#: gtk/gtkprintoperation-win32.c:617
+#: ../gtk/gtkprintoperation-win32.c:618
 msgid "Need user intervention"
 msgstr "Cal la intervenció de l'usuari"
 
-#: gtk/gtkprintoperation-win32.c:717
+#: ../gtk/gtkprintoperation-win32.c:718
 msgid "Custom size"
 msgstr "Mida personalitzada"
 
-#: gtk/gtkprintoperation-win32.c:1539
+#: ../gtk/gtkprintoperation-win32.c:1539
 msgid "No printer found"
 msgstr "No s'ha trobat cap impressora"
 
-#: gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1566
 msgid "Invalid argument to CreateDC"
-msgstr "Argument no vàlid per a la funció CreateDC"
+msgstr "Argument no vàlid a la funció CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1602 gtk/gtkprintoperation-win32.c:1829
+#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
 msgid "Error from StartDoc"
 msgstr "Error de StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1684 gtk/gtkprintoperation-win32.c:1707
-#: gtk/gtkprintoperation-win32.c:1755
+#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
+#: ../gtk/gtkprintoperation-win32.c:1755
 msgid "Not enough free memory"
 msgstr "No hi ha prou memòria"
 
-#: gtk/gtkprintoperation-win32.c:1760
+#: ../gtk/gtkprintoperation-win32.c:1760
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Argument no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1765
+#: ../gtk/gtkprintoperation-win32.c:1765
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Punter no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1770
+#: ../gtk/gtkprintoperation-win32.c:1770
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Gestor no vàlid a PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1775
+#: ../gtk/gtkprintoperation-win32.c:1775
 msgid "Unspecified error"
 msgstr "Error no especificat"
 
-#: gtk/gtkprintunixdialog.c:618
+#: ../gtk/gtkprintunixdialog.c:614
 msgid "Getting printer information failed"
 msgstr "Ha fallat l'obtenció d'informació de la impressora"
 
-#: gtk/gtkprintunixdialog.c:1873
+#: ../gtk/gtkprintunixdialog.c:1862
 msgid "Getting printer information..."
 msgstr "S'està obtenint informació de la impressora..."
 
-#: gtk/gtkprintunixdialog.c:2139
+#: ../gtk/gtkprintunixdialog.c:2132
 msgid "Printer"
 msgstr "Impressora"
 
 #. Translators: this is the header for the location column in the print dialog
-#: gtk/gtkprintunixdialog.c:2149
+#: ../gtk/gtkprintunixdialog.c:2142
 msgid "Location"
 msgstr "Ubicació"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: gtk/gtkprintunixdialog.c:2160
+#: ../gtk/gtkprintunixdialog.c:2153
 msgid "Status"
 msgstr "Estat"
 
-#: gtk/gtkprintunixdialog.c:2186
+#: ../gtk/gtkprintunixdialog.c:2179
 msgid "Range"
-msgstr "Rang"
+msgstr "Interval"
 
-#: gtk/gtkprintunixdialog.c:2190
+#: ../gtk/gtkprintunixdialog.c:2183
 msgid "_All Pages"
 msgstr "T_otes les pàgines"
 
-#: gtk/gtkprintunixdialog.c:2197
+#: ../gtk/gtkprintunixdialog.c:2190
 msgid "C_urrent Page"
 msgstr "Pàgina act_ual"
 
-#: gtk/gtkprintunixdialog.c:2207
+#: ../gtk/gtkprintunixdialog.c:2200
 msgid "Se_lection"
 msgstr "_Selecció"
 
-#: gtk/gtkprintunixdialog.c:2216
+#: ../gtk/gtkprintunixdialog.c:2209
 msgid "Pag_es:"
 msgstr "Pà_gines:"
 
-#: gtk/gtkprintunixdialog.c:2217
+#: ../gtk/gtkprintunixdialog.c:2210
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
 msgstr ""
-"Especifiqueu un o més rangs de pàgines,\n"
-"p.ex. 1-3,7,11"
+"Especifiqueu un o més intervals de pàgines,\n"
+"p. ex. 1-3,7,11"
 
-#: gtk/gtkprintunixdialog.c:2227
+#: ../gtk/gtkprintunixdialog.c:2220
 msgid "Pages"
 msgstr "Pàgines"
 
-#: gtk/gtkprintunixdialog.c:2240
+#: ../gtk/gtkprintunixdialog.c:2233
 msgid "Copies"
 msgstr "Còpies"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: gtk/gtkprintunixdialog.c:2245
+#: ../gtk/gtkprintunixdialog.c:2238
 msgid "Copie_s:"
 msgstr "Còpie_s:"
 
-#: gtk/gtkprintunixdialog.c:2263
+#: ../gtk/gtkprintunixdialog.c:2256
 msgid "C_ollate"
 msgstr "C_ompagina"
 
-#: gtk/gtkprintunixdialog.c:2271
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "_Reverse"
 msgstr "Inve_rteix"
 
-#: gtk/gtkprintunixdialog.c:2291
+#: ../gtk/gtkprintunixdialog.c:2284
 msgid "General"
 msgstr "General"
 
@@ -1736,206 +1931,206 @@ msgstr "General"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3017
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: ../gtk/gtkprintunixdialog.c:3010
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, top to bottom"
 msgstr "D'esquerra a dreta, de dalt a baix"
 
-#: gtk/gtkprintunixdialog.c:3017
-#: modules/printbackends/cups/gtkprintbackendcups.c:3508
+#: ../gtk/gtkprintunixdialog.c:3010
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3508
 msgid "Left to right, bottom to top"
 msgstr "D'esquerra a dreta, de baix a dalt"
 
-#: gtk/gtkprintunixdialog.c:3018
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: ../gtk/gtkprintunixdialog.c:3011
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, top to bottom"
 msgstr "De dreta a esquerra, de dalt a baix"
 
-#: gtk/gtkprintunixdialog.c:3018
-#: modules/printbackends/cups/gtkprintbackendcups.c:3509
+#: ../gtk/gtkprintunixdialog.c:3011
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3509
 msgid "Right to left, bottom to top"
 msgstr "De dreta a esquerra, de baix a dalt"
 
-#: gtk/gtkprintunixdialog.c:3019
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: ../gtk/gtkprintunixdialog.c:3012
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, left to right"
 msgstr "De dalt a baix, d'esquerra a dreta"
 
-#: gtk/gtkprintunixdialog.c:3019
-#: modules/printbackends/cups/gtkprintbackendcups.c:3510
+#: ../gtk/gtkprintunixdialog.c:3012
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3510
 msgid "Top to bottom, right to left"
 msgstr "De dalt a baix, de dreta a esquerra"
 
-#: gtk/gtkprintunixdialog.c:3020
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: ../gtk/gtkprintunixdialog.c:3013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, left to right"
 msgstr "De baix a dalt, d'esquerra a dreta"
 
-#: gtk/gtkprintunixdialog.c:3020
-#: modules/printbackends/cups/gtkprintbackendcups.c:3511
+#: ../gtk/gtkprintunixdialog.c:3013
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3511
 msgid "Bottom to top, right to left"
 msgstr "De baix a dalt, de dreta a esquerra"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: gtk/gtkprintunixdialog.c:3024 gtk/gtkprintunixdialog.c:3037
-#: modules/printbackends/cups/gtkprintbackendcups.c:3543
+#: ../gtk/gtkprintunixdialog.c:3017 ../gtk/gtkprintunixdialog.c:3030
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3543
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
-#: gtk/gtkprintunixdialog.c:3053
+#: ../gtk/gtkprintunixdialog.c:3046
 msgid "Left to right"
 msgstr "D'esquerra a dreta"
 
-#: gtk/gtkprintunixdialog.c:3054
+#: ../gtk/gtkprintunixdialog.c:3047
 msgid "Right to left"
 msgstr "De dreta a esquerra"
 
-#: gtk/gtkprintunixdialog.c:3066
+#: ../gtk/gtkprintunixdialog.c:3059
 msgid "Top to bottom"
 msgstr "De dalt a baix"
 
-#: gtk/gtkprintunixdialog.c:3067
+#: ../gtk/gtkprintunixdialog.c:3060
 msgid "Bottom to top"
 msgstr "De baix a dalt"
 
-#: gtk/gtkprintunixdialog.c:3307
+#: ../gtk/gtkprintunixdialog.c:3300
 msgid "Layout"
 msgstr "Disposició"
 
-#: gtk/gtkprintunixdialog.c:3311
+#: ../gtk/gtkprintunixdialog.c:3304
 msgid "T_wo-sided:"
 msgstr "_Doble cara:"
 
-#: gtk/gtkprintunixdialog.c:3326
+#: ../gtk/gtkprintunixdialog.c:3319
 msgid "Pages per _side:"
 msgstr "Pàgines per _cara:"
 
-#: gtk/gtkprintunixdialog.c:3343
+#: ../gtk/gtkprintunixdialog.c:3336
 msgid "Page or_dering:"
 msgstr "Or_denació de les pàgines:"
 
-#: gtk/gtkprintunixdialog.c:3359
+#: ../gtk/gtkprintunixdialog.c:3352
 msgid "_Only print:"
 msgstr "N_omés imprimeix:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3374
+#: ../gtk/gtkprintunixdialog.c:3367
 msgid "All sheets"
 msgstr "Tots els fulls"
 
-#: gtk/gtkprintunixdialog.c:3375
+#: ../gtk/gtkprintunixdialog.c:3368
 msgid "Even sheets"
 msgstr "Fulls parells"
 
-#: gtk/gtkprintunixdialog.c:3376
+#: ../gtk/gtkprintunixdialog.c:3369
 msgid "Odd sheets"
 msgstr "Fulls senars"
 
-#: gtk/gtkprintunixdialog.c:3379
+#: ../gtk/gtkprintunixdialog.c:3372
 msgid "Sc_ale:"
 msgstr "Esc_ala:"
 
-#: gtk/gtkprintunixdialog.c:3406
+#: ../gtk/gtkprintunixdialog.c:3399
 msgid "Paper"
 msgstr "Paper"
 
-#: gtk/gtkprintunixdialog.c:3410
+#: ../gtk/gtkprintunixdialog.c:3403
 msgid "Paper _type:"
 msgstr "_Tipus de paper:"
 
-#: gtk/gtkprintunixdialog.c:3425
+#: ../gtk/gtkprintunixdialog.c:3418
 msgid "Paper _source:"
 msgstr "Font del pape_r:"
 
-#: gtk/gtkprintunixdialog.c:3440
+#: ../gtk/gtkprintunixdialog.c:3433
 msgid "Output t_ray:"
 msgstr "Safata de so_rtida:"
 
-#: gtk/gtkprintunixdialog.c:3480
+#: ../gtk/gtkprintunixdialog.c:3473
 msgid "Or_ientation:"
 msgstr "_Orientació:"
 
 #. In enum order
-#: gtk/gtkprintunixdialog.c:3495
+#: ../gtk/gtkprintunixdialog.c:3488
 msgid "Portrait"
 msgstr "Vertical"
 
-#: gtk/gtkprintunixdialog.c:3496
+#: ../gtk/gtkprintunixdialog.c:3489
 msgid "Landscape"
 msgstr "Apaïsat"
 
-#: gtk/gtkprintunixdialog.c:3497
+#: ../gtk/gtkprintunixdialog.c:3490
 msgid "Reverse portrait"
 msgstr "Vertical del revés"
 
-#: gtk/gtkprintunixdialog.c:3498
+#: ../gtk/gtkprintunixdialog.c:3491
 msgid "Reverse landscape"
 msgstr "Apaïsat del revés"
 
-#: gtk/gtkprintunixdialog.c:3543
+#: ../gtk/gtkprintunixdialog.c:3536
 msgid "Job Details"
-msgstr "Detalls del treball"
+msgstr "Detalls de la tasca"
 
-#: gtk/gtkprintunixdialog.c:3549
+#: ../gtk/gtkprintunixdialog.c:3542
 msgid "Pri_ority:"
 msgstr "Pri_oritat:"
 
-#: gtk/gtkprintunixdialog.c:3564
+#: ../gtk/gtkprintunixdialog.c:3557
 msgid "_Billing info:"
 msgstr "Informació de _facturació:"
 
-#: gtk/gtkprintunixdialog.c:3582
+#: ../gtk/gtkprintunixdialog.c:3575
 msgid "Print Document"
 msgstr "Imprimeix el document"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3591
+#: ../gtk/gtkprintunixdialog.c:3584
 msgid "_Now"
 msgstr "A_ra"
 
-#: gtk/gtkprintunixdialog.c:3602
+#: ../gtk/gtkprintunixdialog.c:3595
 msgid "A_t:"
-msgstr "_a:"
+msgstr "_A les:"
 
 #. Translators: Ability to parse the am/pm format depends on actual locale.
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: gtk/gtkprintunixdialog.c:3608
+#: ../gtk/gtkprintunixdialog.c:3601
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgstr ""
 "Especifiqueu l'hora d'impressió,\n"
-" p.ex. 15:30, 2:35 PM, 14:15:20, 11:46:30 AM, 4 PM"
+" p. ex. 15:30, 2:35 PM, 14:15:20, 11:46:30 AM, 4 PM"
 
-#: gtk/gtkprintunixdialog.c:3618
+#: ../gtk/gtkprintunixdialog.c:3611
 msgid "Time of print"
 msgstr "Hora d'impressió"
 
-#: gtk/gtkprintunixdialog.c:3634
+#: ../gtk/gtkprintunixdialog.c:3627
 msgid "On _hold"
 msgstr "En es_pera"
 
-#: gtk/gtkprintunixdialog.c:3635
+#: ../gtk/gtkprintunixdialog.c:3628
 msgid "Hold the job until it is explicitly released"
 msgstr ""
 "Mantingues la tasca en espera fins que no s'haja alliberat de manera "
 "explícita"
 
-#: gtk/gtkprintunixdialog.c:3655
+#: ../gtk/gtkprintunixdialog.c:3648
 msgid "Add Cover Page"
-msgstr "Afig pàgina de coberta"
+msgstr "Afig portada"
 
 # Possiblement sigui "abans de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3664
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Be_fore:"
 msgstr "A_bans:"
 
@@ -1943,95 +2138,95 @@ msgstr "A_bans:"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: gtk/gtkprintunixdialog.c:3682
+#: ../gtk/gtkprintunixdialog.c:3675
 msgid "_After:"
 msgstr "_Després:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: gtk/gtkprintunixdialog.c:3700
+#: ../gtk/gtkprintunixdialog.c:3693
 msgid "Job"
-msgstr "Treball"
+msgstr "Tasca"
 
-#: gtk/gtkprintunixdialog.c:3766
+#: ../gtk/gtkprintunixdialog.c:3759
 msgid "Advanced"
 msgstr "Avançat"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3804
+#: ../gtk/gtkprintunixdialog.c:3794
 msgid "Image Quality"
 msgstr "Qualitat de la imatge"
 
 #. Translators: this will appear as tab label in print dialog.
-#: gtk/gtkprintunixdialog.c:3808
+#: ../gtk/gtkprintunixdialog.c:3798
 msgid "Color"
 msgstr "Color"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/gtkprintunixdialog.c:3813
+#: ../gtk/gtkprintunixdialog.c:3803
 msgid "Finishing"
 msgstr "Acabaments"
 
-#: gtk/gtkprintunixdialog.c:3823
+#: ../gtk/gtkprintunixdialog.c:3813
 msgid "Some of the settings in the dialog conflict"
 msgstr "Alguns paràmetres del diàleg estan en conflicte"
 
-#: gtk/gtkprintunixdialog.c:3846
+#: ../gtk/gtkprintunixdialog.c:3836
 msgid "Print"
 msgstr "Imprimeix"
 
-#: gtk/gtkrc.c:2834
+#: ../gtk/gtkrc.c:2878
 #, c-format
 msgid "Unable to find include file: \"%s\""
-msgstr "No s'ha pogut trobar el fitxer per a incloure: «%s»"
+msgstr "No s'ha pogut trobar el fitxer per incloure: «%s»"
 
-#: gtk/gtkrc.c:3470 gtk/gtkrc.c:3473
+#: ../gtk/gtkrc.c:3508 ../gtk/gtkrc.c:3511
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "No s'ha trobat un fitxer d'imatge al pixmap_path: «%s»"
 
-#: gtk/gtkrecentaction.c:165 gtk/gtkrecentaction.c:173
-#: gtk/gtkrecentchoosermenu.c:615 gtk/gtkrecentchoosermenu.c:623
+#: ../gtk/gtkrecentaction.c:154 ../gtk/gtkrecentaction.c:162
+#: ../gtk/gtkrecentchoosermenu.c:588 ../gtk/gtkrecentchoosermenu.c:596
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
 msgstr "Esta funció no està implementada per a ginys de la classe «%s»"
 
-#: gtk/gtkrecentchooserdefault.c:482
+#: ../gtk/gtkrecentchooserdefault.c:481
 msgid "Select which type of documents are shown"
 msgstr "Seleccioneu quins tipus de documents s'han de mostrar"
 
-#: gtk/gtkrecentchooserdefault.c:1138 gtk/gtkrecentchooserdefault.c:1175
+#: ../gtk/gtkrecentchooserdefault.c:1134 ../gtk/gtkrecentchooserdefault.c:1171
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "No s'ha trobat cap element per a l'URI «%s»"
 
-#: gtk/gtkrecentchooserdefault.c:1302
+#: ../gtk/gtkrecentchooserdefault.c:1298
 msgid "Untitled filter"
 msgstr "Filtre sense títol"
 
-#: gtk/gtkrecentchooserdefault.c:1655
+#: ../gtk/gtkrecentchooserdefault.c:1651
 msgid "Could not remove item"
 msgstr "No s'ha pogut suprimir l'element"
 
-#: gtk/gtkrecentchooserdefault.c:1699
+#: ../gtk/gtkrecentchooserdefault.c:1695
 msgid "Could not clear list"
 msgstr "No s'ha pogut netejar la llista"
 
-#: gtk/gtkrecentchooserdefault.c:1783
+#: ../gtk/gtkrecentchooserdefault.c:1779
 msgid "Copy _Location"
 msgstr "Copia la _ubicació"
 
-#: gtk/gtkrecentchooserdefault.c:1796
+#: ../gtk/gtkrecentchooserdefault.c:1792
 msgid "_Remove From List"
 msgstr "Sup_rimeix de la llista"
 
-#: gtk/gtkrecentchooserdefault.c:1805
+#: ../gtk/gtkrecentchooserdefault.c:1801
 msgid "_Clear List"
 msgstr "_Neteja la llista"
 
-#: gtk/gtkrecentchooserdefault.c:1819
+#: ../gtk/gtkrecentchooserdefault.c:1815
 msgid "Show _Private Resources"
 msgstr "Mostra els recursos _privats"
 
@@ -2045,21 +2240,21 @@ msgstr "Mostra els recursos _privats"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: gtk/gtkrecentchoosermenu.c:369
+#: ../gtk/gtkrecentchoosermenu.c:342
 msgid "No items found"
 msgstr "No s'ha trobat cap element"
 
-#: gtk/gtkrecentchoosermenu.c:535 gtk/gtkrecentchoosermenu.c:591
+#: ../gtk/gtkrecentchoosermenu.c:508 ../gtk/gtkrecentchoosermenu.c:564
 #, c-format
 msgid "No recently used resource found with URI `%s'"
 msgstr "No hi ha cap recurs emprat recentment amb l'URI «%s»"
 
-#: gtk/gtkrecentchoosermenu.c:802
+#: ../gtk/gtkrecentchoosermenu.c:775
 #, c-format
 msgid "Open '%s'"
 msgstr "Obri «%s»"
 
-#: gtk/gtkrecentchoosermenu.c:832
+#: ../gtk/gtkrecentchoosermenu.c:805
 msgid "Unknown item"
 msgstr "Element desconegut"
 
@@ -2068,7 +2263,7 @@ msgstr "Element desconegut"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: gtk/gtkrecentchoosermenu.c:843
+#: ../gtk/gtkrecentchoosermenu.c:816
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -2077,46 +2272,46 @@ msgstr "_%d. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: gtk/gtkrecentchoosermenu.c:848
+#: ../gtk/gtkrecentchoosermenu.c:821
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. (%s)"
 
-#: gtk/gtkrecentmanager.c:980 gtk/gtkrecentmanager.c:993
-#: gtk/gtkrecentmanager.c:1131 gtk/gtkrecentmanager.c:1141
-#: gtk/gtkrecentmanager.c:1194 gtk/gtkrecentmanager.c:1203
-#: gtk/gtkrecentmanager.c:1218
+#: ../gtk/gtkrecentmanager.c:1033 ../gtk/gtkrecentmanager.c:1046
+#: ../gtk/gtkrecentmanager.c:1184 ../gtk/gtkrecentmanager.c:1194
+#: ../gtk/gtkrecentmanager.c:1247 ../gtk/gtkrecentmanager.c:1256
+#: ../gtk/gtkrecentmanager.c:1271
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "No s'ha pogut trobar cap element amb l'URI «%s»"
 
-#: gtk/gtkspinner.c:456
+#: ../gtk/gtkspinner.c:458
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Indicador de progrés"
 
-#: gtk/gtkspinner.c:457
+#: ../gtk/gtkspinner.c:459
 msgid "Provides visual indication of progress"
 msgstr "Proporciona una indicació visual del progrés"
 
 #. KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
-#: gtk/gtkstock.c:313
+#: ../gtk/gtkstock.c:314
 msgctxt "Stock label"
 msgid "Information"
 msgstr "Informació"
 
-#: gtk/gtkstock.c:314
+#: ../gtk/gtkstock.c:315
 msgctxt "Stock label"
 msgid "Warning"
 msgstr "Avís"
 
-#: gtk/gtkstock.c:315
+#: ../gtk/gtkstock.c:316
 msgctxt "Stock label"
 msgid "Error"
 msgstr "Error"
 
-#: gtk/gtkstock.c:316
+#: ../gtk/gtkstock.c:317
 msgctxt "Stock label"
 msgid "Question"
 msgstr "Pregunta"
@@ -2124,703 +2319,699 @@ msgstr "Pregunta"
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
-#: gtk/gtkstock.c:321
+#: ../gtk/gtkstock.c:322
 msgctxt "Stock label"
 msgid "_About"
 msgstr "_Quant a"
 
-#: gtk/gtkstock.c:322
+#: ../gtk/gtkstock.c:323
 msgctxt "Stock label"
 msgid "_Add"
 msgstr "_Afig"
 
-#: gtk/gtkstock.c:323
+#: ../gtk/gtkstock.c:324
 msgctxt "Stock label"
 msgid "_Apply"
 msgstr "_Aplica"
 
-#: gtk/gtkstock.c:324
+#: ../gtk/gtkstock.c:325
 msgctxt "Stock label"
 msgid "_Bold"
 msgstr "_Negreta"
 
-#: gtk/gtkstock.c:325
+#: ../gtk/gtkstock.c:326
 msgctxt "Stock label"
 msgid "_Cancel"
 msgstr "_Cancel·la"
 
-#: gtk/gtkstock.c:326
-#, fuzzy
+#: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
-msgid "_CD-ROM"
+msgid "_CD-Rom"
 msgstr "_CD-ROM"
 
-#: gtk/gtkstock.c:327
+#: ../gtk/gtkstock.c:328
 msgctxt "Stock label"
 msgid "_Clear"
 msgstr "_Neteja"
 
-#: gtk/gtkstock.c:328
+#: ../gtk/gtkstock.c:329
 msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Tanca"
 
-#: gtk/gtkstock.c:329
+#: ../gtk/gtkstock.c:330
 msgctxt "Stock label"
 msgid "C_onnect"
 msgstr "C_onnecta"
 
-#: gtk/gtkstock.c:330
+#: ../gtk/gtkstock.c:331
 msgctxt "Stock label"
 msgid "_Convert"
 msgstr "_Converteix"
 
-#: gtk/gtkstock.c:331
+#: ../gtk/gtkstock.c:332
 msgctxt "Stock label"
 msgid "_Copy"
 msgstr "_Copia"
 
-#: gtk/gtkstock.c:332
+#: ../gtk/gtkstock.c:333
 msgctxt "Stock label"
 msgid "Cu_t"
 msgstr "Re_talla"
 
-#: gtk/gtkstock.c:333
+#: ../gtk/gtkstock.c:334
 msgctxt "Stock label"
 msgid "_Delete"
 msgstr "_Suprimeix"
 
-#: gtk/gtkstock.c:334
+#: ../gtk/gtkstock.c:335
 msgctxt "Stock label"
 msgid "_Discard"
 msgstr "_Descarta"
 
-#: gtk/gtkstock.c:335
+#: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Disconnect"
 msgstr "_Desconnecta"
 
-#: gtk/gtkstock.c:336
+#: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
 msgid "_Execute"
 msgstr "_Executa"
 
-#: gtk/gtkstock.c:337
+#: ../gtk/gtkstock.c:338
 msgctxt "Stock label"
 msgid "_Edit"
 msgstr "_Edita"
 
-#: gtk/gtkstock.c:338
-#, fuzzy
-msgctxt "Stock label"
-msgid "_File"
-msgstr "_Fitxers"
-
-#: gtk/gtkstock.c:339
+#: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
 msgstr "_Cerca"
 
-#: gtk/gtkstock.c:340
+#: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
 msgstr "Cerca i _reemplaça"
 
-#: gtk/gtkstock.c:341
+#: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
 msgid "_Floppy"
 msgstr "_Disquet"
 
-#: gtk/gtkstock.c:342
+#: ../gtk/gtkstock.c:342
 msgctxt "Stock label"
 msgid "_Fullscreen"
 msgstr "_Pantalla completa"
 
-#: gtk/gtkstock.c:343
+#: ../gtk/gtkstock.c:343
 msgctxt "Stock label"
 msgid "_Leave Fullscreen"
 msgstr "I_x de la pantalla completa"
 
 #. This is a navigation label as in "go to the bottom of the page"
-#: gtk/gtkstock.c:345
+#: ../gtk/gtkstock.c:345
 msgctxt "Stock label, navigation"
 msgid "_Bottom"
 msgstr "_Inferior"
 
 #. This is a navigation label as in "go to the first page"
-#: gtk/gtkstock.c:347
+#: ../gtk/gtkstock.c:347
 msgctxt "Stock label, navigation"
 msgid "_First"
 msgstr "_Primer"
 
 #. This is a navigation label as in "go to the last page"
-#: gtk/gtkstock.c:349
+#: ../gtk/gtkstock.c:349
 msgctxt "Stock label, navigation"
 msgid "_Last"
 msgstr "Ú_ltim"
 
 #. This is a navigation label as in "go to the top of the page"
-#: gtk/gtkstock.c:351
+#: ../gtk/gtkstock.c:351
 msgctxt "Stock label, navigation"
 msgid "_Top"
 msgstr "_Superior"
 
 #. This is a navigation label as in "go back"
-#: gtk/gtkstock.c:353
+#: ../gtk/gtkstock.c:353
 msgctxt "Stock label, navigation"
 msgid "_Back"
 msgstr "_Enrere"
 
 #. This is a navigation label as in "go down"
-#: gtk/gtkstock.c:355
+#: ../gtk/gtkstock.c:355
 msgctxt "Stock label, navigation"
 msgid "_Down"
 msgstr "A_vall"
 
 #. This is a navigation label as in "go forward"
-#: gtk/gtkstock.c:357
+#: ../gtk/gtkstock.c:357
 msgctxt "Stock label, navigation"
 msgid "_Forward"
 msgstr "E_ndavant"
 
 #. This is a navigation label as in "go up"
-#: gtk/gtkstock.c:359
+#: ../gtk/gtkstock.c:359
 msgctxt "Stock label, navigation"
 msgid "_Up"
 msgstr "A_munt"
 
-#: gtk/gtkstock.c:360
-#, fuzzy
+#: ../gtk/gtkstock.c:360
 msgctxt "Stock label"
-msgid "_Hard Disk"
+msgid "_Harddisk"
 msgstr "_Disc dur"
 
-#: gtk/gtkstock.c:361
+#: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
 msgid "_Help"
 msgstr "A_juda"
 
-#: gtk/gtkstock.c:362
+#: ../gtk/gtkstock.c:362
 msgctxt "Stock label"
 msgid "_Home"
 msgstr "_Inici"
 
-#: gtk/gtkstock.c:363
+#: ../gtk/gtkstock.c:363
 msgctxt "Stock label"
 msgid "Increase Indent"
 msgstr "Augmenta el sagnat"
 
-#: gtk/gtkstock.c:364
+#: ../gtk/gtkstock.c:364
 msgctxt "Stock label"
 msgid "Decrease Indent"
 msgstr "Disminueix el sagnat"
 
-#: gtk/gtkstock.c:365
+#: ../gtk/gtkstock.c:365
 msgctxt "Stock label"
 msgid "_Index"
 msgstr "Índe_x"
 
-#: gtk/gtkstock.c:366
+#: ../gtk/gtkstock.c:366
 msgctxt "Stock label"
 msgid "_Information"
 msgstr "_Informació"
 
-#: gtk/gtkstock.c:367
+#: ../gtk/gtkstock.c:367
 msgctxt "Stock label"
 msgid "_Italic"
 msgstr "Curs_iva"
 
-#: gtk/gtkstock.c:368
+#: ../gtk/gtkstock.c:368
 msgctxt "Stock label"
 msgid "_Jump to"
 msgstr "_Vés a"
 
 #. This is about text justification, "centered text"
-#: gtk/gtkstock.c:370
+#: ../gtk/gtkstock.c:370
 msgctxt "Stock label"
 msgid "_Center"
 msgstr "_Centrat"
 
 #. This is about text justification
-#: gtk/gtkstock.c:372
+#: ../gtk/gtkstock.c:372
 msgctxt "Stock label"
 msgid "_Fill"
 msgstr "_Justificat"
 
 #. This is about text justification, "left-justified text"
-#: gtk/gtkstock.c:374
+#: ../gtk/gtkstock.c:374
 msgctxt "Stock label"
 msgid "_Left"
 msgstr "_Esquerra"
 
 #. This is about text justification, "right-justified text"
-#: gtk/gtkstock.c:376
+#: ../gtk/gtkstock.c:376
 msgctxt "Stock label"
 msgid "_Right"
 msgstr "_Dreta"
 
 #. Media label, as in "fast forward"
-#: gtk/gtkstock.c:379
+#: ../gtk/gtkstock.c:379
 msgctxt "Stock label, media"
 msgid "_Forward"
 msgstr "E_ndavant"
 
 #. Media label, as in "next song"
-#: gtk/gtkstock.c:381
+#: ../gtk/gtkstock.c:381
 msgctxt "Stock label, media"
 msgid "_Next"
 msgstr "_Següent"
 
 #. Media label, as in "pause music"
-#: gtk/gtkstock.c:383
+#: ../gtk/gtkstock.c:383
 msgctxt "Stock label, media"
 msgid "P_ause"
 msgstr "En _pausa"
 
 #. Media label, as in "play music"
-#: gtk/gtkstock.c:385
+#: ../gtk/gtkstock.c:385
 msgctxt "Stock label, media"
 msgid "_Play"
 msgstr "_Reprodueix"
 
 #. Media label, as in  "previous song"
-#: gtk/gtkstock.c:387
+#: ../gtk/gtkstock.c:387
 msgctxt "Stock label, media"
 msgid "Pre_vious"
 msgstr "An_terior"
 
 #. Media label
-#: gtk/gtkstock.c:389
+#: ../gtk/gtkstock.c:389
 msgctxt "Stock label, media"
 msgid "_Record"
 msgstr "En_registra"
 
 #. Media label
-#: gtk/gtkstock.c:391
+#: ../gtk/gtkstock.c:391
 msgctxt "Stock label, media"
 msgid "R_ewind"
 msgstr "R_ebobina"
 
 #. Media label
-#: gtk/gtkstock.c:393
+#: ../gtk/gtkstock.c:393
 msgctxt "Stock label, media"
 msgid "_Stop"
 msgstr "_Atura"
 
-#: gtk/gtkstock.c:394
+#: ../gtk/gtkstock.c:394
 msgctxt "Stock label"
 msgid "_Network"
 msgstr "_Xarxa"
 
-#: gtk/gtkstock.c:395
+#: ../gtk/gtkstock.c:395
 msgctxt "Stock label"
 msgid "_New"
 msgstr "_Nou"
 
-#: gtk/gtkstock.c:396
+#: ../gtk/gtkstock.c:396
 msgctxt "Stock label"
 msgid "_No"
 msgstr "_No"
 
-#: gtk/gtkstock.c:397
+#: ../gtk/gtkstock.c:397
 msgctxt "Stock label"
 msgid "_OK"
 msgstr "_D'acord"
 
-#: gtk/gtkstock.c:398
+#: ../gtk/gtkstock.c:398
 msgctxt "Stock label"
 msgid "_Open"
 msgstr "_Obri"
 
 #. Page orientation
-#: gtk/gtkstock.c:400
+#: ../gtk/gtkstock.c:400
 msgctxt "Stock label"
 msgid "Landscape"
 msgstr "Apaïsat"
 
 #. Page orientation
-#: gtk/gtkstock.c:402
+#: ../gtk/gtkstock.c:402
 msgctxt "Stock label"
 msgid "Portrait"
 msgstr "Vertical"
 
 #. Page orientation
-#: gtk/gtkstock.c:404
+#: ../gtk/gtkstock.c:404
 msgctxt "Stock label"
 msgid "Reverse landscape"
 msgstr "Apaïsat del revés"
 
 #. Page orientation
-#: gtk/gtkstock.c:406
+#: ../gtk/gtkstock.c:406
 msgctxt "Stock label"
 msgid "Reverse portrait"
 msgstr "Vertical del revés"
 
-#: gtk/gtkstock.c:407
+#: ../gtk/gtkstock.c:407
 msgctxt "Stock label"
 msgid "Page Set_up"
 msgstr "Confi_guració de la pàgina"
 
-#: gtk/gtkstock.c:408
+#: ../gtk/gtkstock.c:408
 msgctxt "Stock label"
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: gtk/gtkstock.c:409
+#: ../gtk/gtkstock.c:409
 msgctxt "Stock label"
 msgid "_Preferences"
 msgstr "_Preferències"
 
-#: gtk/gtkstock.c:410
+#: ../gtk/gtkstock.c:410
 msgctxt "Stock label"
 msgid "_Print"
 msgstr "_Imprimeix"
 
-#: gtk/gtkstock.c:411
+#: ../gtk/gtkstock.c:411
 msgctxt "Stock label"
 msgid "Print Pre_view"
 msgstr "Pre_visualització de la impressió"
 
-#: gtk/gtkstock.c:412
+#: ../gtk/gtkstock.c:412
 msgctxt "Stock label"
 msgid "_Properties"
 msgstr "_Propietats"
 
-#: gtk/gtkstock.c:413
+#: ../gtk/gtkstock.c:413
 msgctxt "Stock label"
 msgid "_Quit"
 msgstr "I_x"
 
-#: gtk/gtkstock.c:414
+#: ../gtk/gtkstock.c:414
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "_Refés"
 
-#: gtk/gtkstock.c:415
+#: ../gtk/gtkstock.c:415
 msgctxt "Stock label"
 msgid "_Refresh"
 msgstr "_Actualitza"
 
-#: gtk/gtkstock.c:416
+#: ../gtk/gtkstock.c:416
 msgctxt "Stock label"
 msgid "_Remove"
 msgstr "_Suprimeix"
 
-#: gtk/gtkstock.c:417
+#: ../gtk/gtkstock.c:417
 msgctxt "Stock label"
 msgid "_Revert"
 msgstr "_Restaura"
 
-#: gtk/gtkstock.c:418
+#: ../gtk/gtkstock.c:418
 msgctxt "Stock label"
 msgid "_Save"
 msgstr "Al_ça"
 
-#: gtk/gtkstock.c:419
+#: ../gtk/gtkstock.c:419
 msgctxt "Stock label"
 msgid "Save _As"
 msgstr "_Anomena i alça"
 
-#: gtk/gtkstock.c:420
+#: ../gtk/gtkstock.c:420
 msgctxt "Stock label"
 msgid "Select _All"
 msgstr "Seleccion_a-ho tot"
 
-#: gtk/gtkstock.c:421
+#: ../gtk/gtkstock.c:421
 msgctxt "Stock label"
 msgid "_Color"
 msgstr "_Color"
 
-#: gtk/gtkstock.c:422
+#: ../gtk/gtkstock.c:422
 msgctxt "Stock label"
 msgid "_Font"
 msgstr "_Tipus de lletra"
 
 #. Sorting direction
-#: gtk/gtkstock.c:424
+#: ../gtk/gtkstock.c:424
 msgctxt "Stock label"
 msgid "_Ascending"
 msgstr "_Ascendent"
 
 #. Sorting direction
-#: gtk/gtkstock.c:426
+#: ../gtk/gtkstock.c:426
 msgctxt "Stock label"
 msgid "_Descending"
 msgstr "_Descendent"
 
-#: gtk/gtkstock.c:427
+#: ../gtk/gtkstock.c:427
 msgctxt "Stock label"
 msgid "_Spell Check"
 msgstr "_Verifica l'ortografia"
 
-#: gtk/gtkstock.c:428
+#: ../gtk/gtkstock.c:428
 msgctxt "Stock label"
 msgid "_Stop"
 msgstr "_Atura"
 
 #. Font variant
-#: gtk/gtkstock.c:430
+#: ../gtk/gtkstock.c:430
 msgctxt "Stock label"
 msgid "_Strikethrough"
 msgstr "_Barrat"
 
-#: gtk/gtkstock.c:431
+#: ../gtk/gtkstock.c:431
 msgctxt "Stock label"
 msgid "_Undelete"
 msgstr "Rec_upera"
 
 #. Font variant
-#: gtk/gtkstock.c:433
+#: ../gtk/gtkstock.c:433
 msgctxt "Stock label"
 msgid "_Underline"
 msgstr "S_ubratlla"
 
-#: gtk/gtkstock.c:434
+#: ../gtk/gtkstock.c:434
 msgctxt "Stock label"
 msgid "_Undo"
 msgstr "_Desfés"
 
-#: gtk/gtkstock.c:435
+#: ../gtk/gtkstock.c:435
 msgctxt "Stock label"
 msgid "_Yes"
 msgstr "_Sí"
 
 #. Zoom
-#: gtk/gtkstock.c:437
+#: ../gtk/gtkstock.c:437
 msgctxt "Stock label"
 msgid "_Normal Size"
 msgstr "Mida _normal"
 
 #. Zoom
-#: gtk/gtkstock.c:439
+#: ../gtk/gtkstock.c:439
 msgctxt "Stock label"
 msgid "Best _Fit"
 msgstr "Millor a_just"
 
-#: gtk/gtkstock.c:440
+#: ../gtk/gtkstock.c:440
 msgctxt "Stock label"
 msgid "Zoom _In"
 msgstr "_Amplia"
 
-#: gtk/gtkstock.c:441
+#: ../gtk/gtkstock.c:441
 msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_Redueix"
 
 # FIXME
-#: gtk/gtktextbufferrichtext.c:650
+#: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "S'ha produït un error en intentar deserialitzar %s"
 
 # FIXME
-#: gtk/gtktextbufferrichtext.c:709
+#: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "No s'ha trobat cap funció per deserialitzar el format %s"
 
-#: gtk/gtktextbufferserialize.c:795 gtk/gtktextbufferserialize.c:821
+#: ../gtk/gtktextbufferserialize.c:796 ../gtk/gtktextbufferserialize.c:822
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "S'ha trobat «id» i «name» a l'element <%s>"
 
-#: gtk/gtktextbufferserialize.c:805 gtk/gtktextbufferserialize.c:831
+#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "S'ha trobat dues vegades l'atribut «%s» a l'element <%s>"
 
-#: gtk/gtktextbufferserialize.c:845
-#, fuzzy, c-format
+#: ../gtk/gtktextbufferserialize.c:846
+#, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "L'element <%s> té un id no vàlid «%s»"
+msgstr "L'element <%s> té un identificador no vàlid «%s»"
 
-#: gtk/gtktextbufferserialize.c:855
+#: ../gtk/gtktextbufferserialize.c:856
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
-msgstr "L'element <%s> no té ni l'atribut «name» ni el «id»"
+msgstr "L'element <%s> no té ni l'atribut «name» ni l'«id»"
 
-#: gtk/gtktextbufferserialize.c:942
+#: ../gtk/gtktextbufferserialize.c:943
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "L'atribut «%s» està repetit dues vegades en el mateix element <%s>"
 
-#: gtk/gtktextbufferserialize.c:960 gtk/gtktextbufferserialize.c:985
+#: ../gtk/gtktextbufferserialize.c:961 ../gtk/gtktextbufferserialize.c:986
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "L'atribut «%s» no és vàlid per a l'element <%s> en este context"
 
-#: gtk/gtktextbufferserialize.c:1024
+#: ../gtk/gtktextbufferserialize.c:1022
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "L'etiqueta «%s» no ha estat definida."
 
-#: gtk/gtktextbufferserialize.c:1036
+#: ../gtk/gtktextbufferserialize.c:1034
 msgid "Anonymous tag found and tags can not be created."
 msgstr "S'han trobat etiquetes anònimes, i no se n'han pogut crear."
 
-#: gtk/gtktextbufferserialize.c:1047
+#: ../gtk/gtktextbufferserialize.c:1045
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "L'etiqueta «%s» no existeix a la memòria intermèdia, i no se'n poden crear."
 
-#: gtk/gtktextbufferserialize.c:1146 gtk/gtktextbufferserialize.c:1221
-#: gtk/gtktextbufferserialize.c:1324 gtk/gtktextbufferserialize.c:1398
+#: ../gtk/gtktextbufferserialize.c:1144 ../gtk/gtktextbufferserialize.c:1219
+#: ../gtk/gtktextbufferserialize.c:1320 ../gtk/gtktextbufferserialize.c:1394
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "No es permet l'element <%s> per sota de <%s>"
 
-#: gtk/gtktextbufferserialize.c:1177
+#: ../gtk/gtktextbufferserialize.c:1175
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "«%s» no és un tipus d'atribut vàlid"
 
-#: gtk/gtktextbufferserialize.c:1185
+#: ../gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "«%s» no és un nom d'atribut vàlid"
 
-#: gtk/gtktextbufferserialize.c:1195
+#: ../gtk/gtktextbufferserialize.c:1193
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "No s'ha pogut convertir «%s» a un valor de tipus «%s» per a l'atribut «%s»"
 
-#: gtk/gtktextbufferserialize.c:1204
+#: ../gtk/gtktextbufferserialize.c:1202
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "«%s» no és un valor vàlid per a l'atribut «%s»"
 
-#: gtk/gtktextbufferserialize.c:1289
+#: ../gtk/gtktextbufferserialize.c:1285
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "L'etiqueta «%s» ja està definida"
 
-#: gtk/gtktextbufferserialize.c:1300
+#: ../gtk/gtktextbufferserialize.c:1296
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "L'etiqueta «%s» té una prioritat («%s») no vàlida"
 
-#: gtk/gtktextbufferserialize.c:1353
+#: ../gtk/gtktextbufferserialize.c:1349
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr ""
 "L'element de més enfora del text ha de ser <text_view_markup> i no pas <%s>"
 
-#: gtk/gtktextbufferserialize.c:1362 gtk/gtktextbufferserialize.c:1378
+#: ../gtk/gtktextbufferserialize.c:1358 ../gtk/gtktextbufferserialize.c:1374
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Ja s'ha especificat un element <%s>"
 
-#: gtk/gtktextbufferserialize.c:1384
+#: ../gtk/gtktextbufferserialize.c:1380
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "No pot haver-hi un element <text> abans d'un de <tags>"
 
-#: gtk/gtktextbufferserialize.c:1784
+#: ../gtk/gtktextbufferserialize.c:1779
 msgid "Serialized data is malformed"
 msgstr "Les dades en sèrie estan mal formades"
 
-#: gtk/gtktextbufferserialize.c:1862
+#: ../gtk/gtktextbufferserialize.c:1857
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
 "Les dades en sèrie estan mal formades. La primera secció no és "
 "GTKTEXTBUFFERCONTENTS-0001"
 
-#: gtk/gtktextutil.c:60
+#: ../gtk/gtktextutil.c:61
 msgid "LRM _Left-to-right mark"
 msgstr "Marca _esquerra-a-dreta LRM"
 
-#: gtk/gtktextutil.c:61
+#: ../gtk/gtktextutil.c:62
 msgid "RLM _Right-to-left mark"
 msgstr "Marca _dreta-a-esquerra RLM"
 
-#: gtk/gtktextutil.c:62
+#: ../gtk/gtktextutil.c:63
 msgid "LRE Left-to-right _embedding"
 msgstr "_Incrustació esquerra-a-dreta LRE"
 
-#: gtk/gtktextutil.c:63
+#: ../gtk/gtktextutil.c:64
 msgid "RLE Right-to-left e_mbedding"
 msgstr "I_ncrustació dreta-a-esquerra RLE"
 
-#: gtk/gtktextutil.c:64
+#: ../gtk/gtktextutil.c:65
 msgid "LRO Left-to-right _override"
 msgstr "_Substitució esquerra-a-dreta LRO"
 
-#: gtk/gtktextutil.c:65
+#: ../gtk/gtktextutil.c:66
 msgid "RLO Right-to-left o_verride"
 msgstr "S_ubstitució dreta-a-esquerra RLO"
 
-#: gtk/gtktextutil.c:66
+#: ../gtk/gtktextutil.c:67
 msgid "PDF _Pop directional formatting"
 msgstr "_Format direccional pop PDF"
 
-#: gtk/gtktextutil.c:67
+#: ../gtk/gtktextutil.c:68
 msgid "ZWS _Zero width space"
 msgstr "Espai d'amplada _zero ZWS"
 
-#: gtk/gtktextutil.c:68
+#: ../gtk/gtktextutil.c:69
 msgid "ZWJ Zero width _joiner"
 msgstr "En_samblador d'amplada zero ZWJ"
 
-#: gtk/gtktextutil.c:69
+#: ../gtk/gtktextutil.c:70
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "_No-ensamblador d'amplada zero ZWNJ"
 
-#: gtk/gtkthemes.c:72
+#: ../gtk/gtkthemes.c:71
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "No s'ha trobat el motor de tema al module_path: «%s»,"
 
-#: gtk/gtkuimanager.c:1505
+#: ../gtk/gtktipsquery.c:188
+msgid "--- No Tip ---"
+msgstr "-- Cap consell --"
+
+#: ../gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr ""
 "S'ha trobat una etiqueta d'inici «%s» inesperada a la línia %d, caràcter %d"
 
-#: gtk/gtkuimanager.c:1595
+#: ../gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "S'han trobat dades de caràcter inesperades a la línia %d, caràcter %d"
 
-#: gtk/gtkuimanager.c:2427
+#: ../gtk/gtkuimanager.c:2427
 msgid "Empty"
 msgstr "Buit"
 
-#: gtk/gtkvolumebutton.c:83
+#: ../gtk/gtkvolumebutton.c:83
 msgid "Volume"
 msgstr "Volum"
 
-#: gtk/gtkvolumebutton.c:85
+#: ../gtk/gtkvolumebutton.c:85
 msgid "Turns volume down or up"
 msgstr "Apuja o abaixa el volum"
 
-#: gtk/gtkvolumebutton.c:88
+#: ../gtk/gtkvolumebutton.c:88
 msgid "Adjusts the volume"
 msgstr "Ajusta el volum"
 
-#: gtk/gtkvolumebutton.c:94 gtk/gtkvolumebutton.c:97
+#: ../gtk/gtkvolumebutton.c:91 ../gtk/gtkvolumebutton.c:94
 msgid "Volume Down"
 msgstr "Abaixa el volum"
 
-#: gtk/gtkvolumebutton.c:96
+#: ../gtk/gtkvolumebutton.c:93
 msgid "Decreases the volume"
 msgstr "Disminueix el volum"
 
-#: gtk/gtkvolumebutton.c:100 gtk/gtkvolumebutton.c:103
+#: ../gtk/gtkvolumebutton.c:97 ../gtk/gtkvolumebutton.c:100
 msgid "Volume Up"
 msgstr "Apuja el volum"
 
-#: gtk/gtkvolumebutton.c:102
+#: ../gtk/gtkvolumebutton.c:99
 msgid "Increases the volume"
 msgstr "Incrementa el volum"
 
-#: gtk/gtkvolumebutton.c:160
+#: ../gtk/gtkvolumebutton.c:157
 msgid "Muted"
 msgstr "Silencia"
 
-#: gtk/gtkvolumebutton.c:164
+#: ../gtk/gtkvolumebutton.c:161
 msgid "Full Volume"
 msgstr "Volum al màxim"
 
@@ -2829,935 +3020,935 @@ msgstr "Volum al màxim"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: gtk/gtkvolumebutton.c:177
+#: ../gtk/gtkvolumebutton.c:174
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/paper_names_offsets.c:4
+#: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
 msgstr "ASME_F"
 
-#: gtk/paper_names_offsets.c:5
+#: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0x2"
 msgstr "A0x2"
 
-#: gtk/paper_names_offsets.c:6
+#: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
 msgid "A0"
 msgstr "A0"
 
-#: gtk/paper_names_offsets.c:7
+#: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0x3"
 msgstr "A0x3"
 
-#: gtk/paper_names_offsets.c:8
+#: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
 msgid "A1"
 msgstr "A1"
 
-#: gtk/paper_names_offsets.c:9
+#: ../gtk/paper_names_offsets.c:9
 msgctxt "paper size"
 msgid "A10"
 msgstr "A10"
 
-#: gtk/paper_names_offsets.c:10
+#: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1x3"
 msgstr "A1x3"
 
-#: gtk/paper_names_offsets.c:11
+#: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1x4"
 msgstr "A1x4"
 
-#: gtk/paper_names_offsets.c:12
+#: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
 msgid "A2"
 msgstr "A2"
 
-#: gtk/paper_names_offsets.c:13
+#: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2x3"
 msgstr "A2x3"
 
-#: gtk/paper_names_offsets.c:14
+#: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2x4"
 msgstr "A2x4"
 
-#: gtk/paper_names_offsets.c:15
+#: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2x5"
 msgstr "A2x5"
 
-#: gtk/paper_names_offsets.c:16
+#: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
 msgid "A3"
 msgstr "A3"
 
-#: gtk/paper_names_offsets.c:17
+#: ../gtk/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
 msgstr "A3 extra"
 
-#: gtk/paper_names_offsets.c:18
+#: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3x3"
 msgstr "A3x3"
 
-#: gtk/paper_names_offsets.c:19
+#: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3x4"
 msgstr "A3x4"
 
-#: gtk/paper_names_offsets.c:20
+#: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3x5"
 msgstr "A3x5"
 
-#: gtk/paper_names_offsets.c:21
+#: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3x6"
 msgstr "A3x6"
 
-#: gtk/paper_names_offsets.c:22
+#: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3x7"
 msgstr "A3x7"
 
-#: gtk/paper_names_offsets.c:23
+#: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
 msgid "A4"
 msgstr "A4"
 
-#: gtk/paper_names_offsets.c:24
+#: ../gtk/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
 msgstr "A4 extra"
 
-#: gtk/paper_names_offsets.c:25
+#: ../gtk/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
 msgstr "A4 tabloide"
 
-#: gtk/paper_names_offsets.c:26
+#: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4x3"
 msgstr "A4x3"
 
-#: gtk/paper_names_offsets.c:27
+#: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4x4"
 msgstr "A4x4"
 
-#: gtk/paper_names_offsets.c:28
+#: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4x5"
 msgstr "A4x5"
 
-#: gtk/paper_names_offsets.c:29
+#: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4x6"
 msgstr "A4x6"
 
-#: gtk/paper_names_offsets.c:30
+#: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4x7"
 msgstr "A4x7"
 
-#: gtk/paper_names_offsets.c:31
+#: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4x8"
 msgstr "A4x8"
 
-#: gtk/paper_names_offsets.c:32
+#: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4x9"
 msgstr "A4x9"
 
-#: gtk/paper_names_offsets.c:33
+#: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
 msgid "A5"
 msgstr "A5"
 
-#: gtk/paper_names_offsets.c:34
+#: ../gtk/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
 msgstr "A5 extra"
 
-#: gtk/paper_names_offsets.c:35
+#: ../gtk/paper_names_offsets.c:35
 msgctxt "paper size"
 msgid "A6"
 msgstr "A6"
 
-#: gtk/paper_names_offsets.c:36
+#: ../gtk/paper_names_offsets.c:36
 msgctxt "paper size"
 msgid "A7"
 msgstr "A7"
 
-#: gtk/paper_names_offsets.c:37
+#: ../gtk/paper_names_offsets.c:37
 msgctxt "paper size"
 msgid "A8"
 msgstr "A8"
 
-#: gtk/paper_names_offsets.c:38
+#: ../gtk/paper_names_offsets.c:38
 msgctxt "paper size"
 msgid "A9"
 msgstr "A9"
 
-#: gtk/paper_names_offsets.c:39
+#: ../gtk/paper_names_offsets.c:39
 msgctxt "paper size"
 msgid "B0"
 msgstr "B0"
 
-#: gtk/paper_names_offsets.c:40
+#: ../gtk/paper_names_offsets.c:40
 msgctxt "paper size"
 msgid "B1"
 msgstr "B1"
 
-#: gtk/paper_names_offsets.c:41
+#: ../gtk/paper_names_offsets.c:41
 msgctxt "paper size"
 msgid "B10"
 msgstr "B10"
 
-#: gtk/paper_names_offsets.c:42
+#: ../gtk/paper_names_offsets.c:42
 msgctxt "paper size"
 msgid "B2"
 msgstr "B2"
 
-#: gtk/paper_names_offsets.c:43
+#: ../gtk/paper_names_offsets.c:43
 msgctxt "paper size"
 msgid "B3"
 msgstr "B3"
 
-#: gtk/paper_names_offsets.c:44
+#: ../gtk/paper_names_offsets.c:44
 msgctxt "paper size"
 msgid "B4"
 msgstr "B4"
 
-#: gtk/paper_names_offsets.c:45
+#: ../gtk/paper_names_offsets.c:45
 msgctxt "paper size"
 msgid "B5"
 msgstr "B5"
 
-#: gtk/paper_names_offsets.c:46
+#: ../gtk/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
 msgstr "B5 extra"
 
-#: gtk/paper_names_offsets.c:47
+#: ../gtk/paper_names_offsets.c:47
 msgctxt "paper size"
 msgid "B6"
 msgstr "B6"
 
-#: gtk/paper_names_offsets.c:48
+#: ../gtk/paper_names_offsets.c:48
 msgctxt "paper size"
 msgid "B6/C4"
 msgstr "B6/C4"
 
-#: gtk/paper_names_offsets.c:49
+#: ../gtk/paper_names_offsets.c:49
 msgctxt "paper size"
 msgid "B7"
 msgstr "B7"
 
-#: gtk/paper_names_offsets.c:50
+#: ../gtk/paper_names_offsets.c:50
 msgctxt "paper size"
 msgid "B8"
 msgstr "B8"
 
-#: gtk/paper_names_offsets.c:51
+#: ../gtk/paper_names_offsets.c:51
 msgctxt "paper size"
 msgid "B9"
 msgstr "B9"
 
-#: gtk/paper_names_offsets.c:52
+#: ../gtk/paper_names_offsets.c:52
 msgctxt "paper size"
 msgid "C0"
 msgstr "C0"
 
-#: gtk/paper_names_offsets.c:53
+#: ../gtk/paper_names_offsets.c:53
 msgctxt "paper size"
 msgid "C1"
 msgstr "C1"
 
-#: gtk/paper_names_offsets.c:54
+#: ../gtk/paper_names_offsets.c:54
 msgctxt "paper size"
 msgid "C10"
 msgstr "C10"
 
-#: gtk/paper_names_offsets.c:55
+#: ../gtk/paper_names_offsets.c:55
 msgctxt "paper size"
 msgid "C2"
 msgstr "C2"
 
-#: gtk/paper_names_offsets.c:56
+#: ../gtk/paper_names_offsets.c:56
 msgctxt "paper size"
 msgid "C3"
 msgstr "C3"
 
-#: gtk/paper_names_offsets.c:57
+#: ../gtk/paper_names_offsets.c:57
 msgctxt "paper size"
 msgid "C4"
 msgstr "C4"
 
-#: gtk/paper_names_offsets.c:58
+#: ../gtk/paper_names_offsets.c:58
 msgctxt "paper size"
 msgid "C5"
 msgstr "C5"
 
-#: gtk/paper_names_offsets.c:59
+#: ../gtk/paper_names_offsets.c:59
 msgctxt "paper size"
 msgid "C6"
 msgstr "C6"
 
-#: gtk/paper_names_offsets.c:60
+#: ../gtk/paper_names_offsets.c:60
 msgctxt "paper size"
 msgid "C6/C5"
 msgstr "C6/C5"
 
-#: gtk/paper_names_offsets.c:61
+#: ../gtk/paper_names_offsets.c:61
 msgctxt "paper size"
 msgid "C7"
 msgstr "C7"
 
-#: gtk/paper_names_offsets.c:62
+#: ../gtk/paper_names_offsets.c:62
 msgctxt "paper size"
 msgid "C7/C6"
 msgstr "C7/C6"
 
-#: gtk/paper_names_offsets.c:63
+#: ../gtk/paper_names_offsets.c:63
 msgctxt "paper size"
 msgid "C8"
 msgstr "C8"
 
-#: gtk/paper_names_offsets.c:64
+#: ../gtk/paper_names_offsets.c:64
 msgctxt "paper size"
 msgid "C9"
 msgstr "C9"
 
-#: gtk/paper_names_offsets.c:65
+#: ../gtk/paper_names_offsets.c:65
 msgctxt "paper size"
 msgid "DL Envelope"
 msgstr "Sobre DL"
 
-#: gtk/paper_names_offsets.c:66
+#: ../gtk/paper_names_offsets.c:66
 msgctxt "paper size"
 msgid "RA0"
 msgstr "RA0"
 
-#: gtk/paper_names_offsets.c:67
+#: ../gtk/paper_names_offsets.c:67
 msgctxt "paper size"
 msgid "RA1"
 msgstr "RA1"
 
-#: gtk/paper_names_offsets.c:68
+#: ../gtk/paper_names_offsets.c:68
 msgctxt "paper size"
 msgid "RA2"
 msgstr "RA2"
 
-#: gtk/paper_names_offsets.c:69
+#: ../gtk/paper_names_offsets.c:69
 msgctxt "paper size"
 msgid "SRA0"
 msgstr "SRA0"
 
-#: gtk/paper_names_offsets.c:70
+#: ../gtk/paper_names_offsets.c:70
 msgctxt "paper size"
 msgid "SRA1"
 msgstr "SRA1"
 
-#: gtk/paper_names_offsets.c:71
+#: ../gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA2"
 msgstr "SRA2"
 
-#: gtk/paper_names_offsets.c:72
+#: ../gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "JB0"
 msgstr "JB0"
 
-#: gtk/paper_names_offsets.c:73
+#: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "JB1"
 msgstr "JB1"
 
-#: gtk/paper_names_offsets.c:74
+#: ../gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "JB10"
 msgstr "JB10"
 
-#: gtk/paper_names_offsets.c:75
+#: ../gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "JB2"
 msgstr "JB2"
 
-#: gtk/paper_names_offsets.c:76
+#: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB3"
 msgstr "JB3"
 
-#: gtk/paper_names_offsets.c:77
+#: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB4"
 msgstr "JB4"
 
-#: gtk/paper_names_offsets.c:78
+#: ../gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB5"
 msgstr "JB5"
 
-#: gtk/paper_names_offsets.c:79
+#: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB6"
 msgstr "JB6"
 
-#: gtk/paper_names_offsets.c:80
+#: ../gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB7"
 msgstr "JB7"
 
-#: gtk/paper_names_offsets.c:81
+#: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB8"
 msgstr "JB8"
 
-#: gtk/paper_names_offsets.c:82
+#: ../gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB9"
 msgstr "JB9"
 
-#: gtk/paper_names_offsets.c:83
+#: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "jis exec"
 msgstr "JIS executiu"
 
-#: gtk/paper_names_offsets.c:84
+#: ../gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Sobre Choukei 2"
 
-#: gtk/paper_names_offsets.c:85
+#: ../gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Sobre Choukei 3"
 
-#: gtk/paper_names_offsets.c:86
+#: ../gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Sobre Choukei 4"
 
-#: gtk/paper_names_offsets.c:87
+#: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "Hagaki (postal)"
 
-#: gtk/paper_names_offsets.c:88
+#: ../gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "Sobre kahu"
 
-#: gtk/paper_names_offsets.c:89
+#: ../gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "Sobre kaku2"
 
 # FIXME
-#: gtk/paper_names_offsets.c:90
+#: ../gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "Oufuku (postal de resposta)"
 
-#: gtk/paper_names_offsets.c:91
+#: ../gtk/paper_names_offsets.c:91
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "Sobre you4"
 
-#: gtk/paper_names_offsets.c:92
+#: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "10x11"
 msgstr "10x11"
 
-#: gtk/paper_names_offsets.c:93
+#: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "10x13"
 msgstr "10x13"
 
-#: gtk/paper_names_offsets.c:94
+#: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "10x14"
 msgstr "10x14"
 
-#: gtk/paper_names_offsets.c:95 gtk/paper_names_offsets.c:96
+#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
 msgid "10x15"
 msgstr "10x15"
 
-#: gtk/paper_names_offsets.c:97
+#: ../gtk/paper_names_offsets.c:97
 msgctxt "paper size"
 msgid "11x12"
 msgstr "11x12"
 
-#: gtk/paper_names_offsets.c:98
+#: ../gtk/paper_names_offsets.c:98
 msgctxt "paper size"
 msgid "11x15"
 msgstr "11x15"
 
-#: gtk/paper_names_offsets.c:99
+#: ../gtk/paper_names_offsets.c:99
 msgctxt "paper size"
 msgid "12x19"
 msgstr "12x19"
 
-#: gtk/paper_names_offsets.c:100
+#: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "5x7"
 msgstr "5x7"
 
-#: gtk/paper_names_offsets.c:101
+#: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "6x9 Envelope"
 msgstr "Sobre 6x9"
 
-#: gtk/paper_names_offsets.c:102
+#: ../gtk/paper_names_offsets.c:102
 msgctxt "paper size"
 msgid "7x9 Envelope"
 msgstr "Sobre 7x9"
 
-#: gtk/paper_names_offsets.c:103
+#: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "9x11 Envelope"
 msgstr "Sobre 9x11"
 
-#: gtk/paper_names_offsets.c:104
+#: ../gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "Sobre A2"
 
 # Mides per a l'arquitectura (dpm)
-#: gtk/paper_names_offsets.c:105
+#: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "Arch A"
 msgstr "Arch A"
 
-#: gtk/paper_names_offsets.c:106
+#: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "Arch B"
 msgstr "Arch B"
 
-#: gtk/paper_names_offsets.c:107
+#: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "Arch C"
 msgstr "Arch C"
 
-#: gtk/paper_names_offsets.c:108
+#: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "Arch D"
 msgstr "Arch D"
 
-#: gtk/paper_names_offsets.c:109
+#: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "Arch E"
 msgstr "Arch E"
 
-#: gtk/paper_names_offsets.c:110
+#: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "b-plus"
 msgstr "B plus"
 
-#: gtk/paper_names_offsets.c:111
+#: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "c"
 msgstr "C"
 
-#: gtk/paper_names_offsets.c:112
+#: ../gtk/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "Sobre C5"
 
-#: gtk/paper_names_offsets.c:113
+#: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "d"
 msgstr "D"
 
-#: gtk/paper_names_offsets.c:114
+#: ../gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "e"
 msgstr "E"
 
-#: gtk/paper_names_offsets.c:115
+#: ../gtk/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "edp"
 msgstr "EDP"
 
-#: gtk/paper_names_offsets.c:116
+#: ../gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "European edp"
 msgstr "EDP europeu"
 
-#: gtk/paper_names_offsets.c:117
+#: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Executive"
 msgstr "Executiu"
 
-#: gtk/paper_names_offsets.c:118
+#: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "f"
 msgstr "F"
 
-#: gtk/paper_names_offsets.c:119
+#: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "FanFold European"
 msgstr "Paper continu europeu"
 
-#: gtk/paper_names_offsets.c:120
+#: ../gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "FanFold US"
 msgstr "Paper continu americà"
 
-#: gtk/paper_names_offsets.c:121
+#: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "FanFold German Legal"
 msgstr "Paper continu alemany legal"
 
-#: gtk/paper_names_offsets.c:122
+#: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Legal govern"
 
-#: gtk/paper_names_offsets.c:123
+#: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Carta governamental"
 
-#: gtk/paper_names_offsets.c:124
+#: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "Index 3x5"
 msgstr "Índex 3x5"
 
-#: gtk/paper_names_offsets.c:125
+#: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "Index 4x6 (postcard)"
 msgstr "Índex 4x6 (postal)"
 
-#: gtk/paper_names_offsets.c:126
+#: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "Index 4x6 ext"
 msgstr "Índex 4x6 ext"
 
-#: gtk/paper_names_offsets.c:127
+#: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "Index 5x8"
 msgstr "Índex 5x8"
 
-#: gtk/paper_names_offsets.c:128
+#: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "Factura"
 
-#: gtk/paper_names_offsets.c:129
+#: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Tabloid"
 msgstr "Tabloide"
 
-#: gtk/paper_names_offsets.c:130
+#: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "US Legal"
 msgstr "Legal americà"
 
-#: gtk/paper_names_offsets.c:131
+#: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "Legal americà extra"
 
-#: gtk/paper_names_offsets.c:132
+#: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "Carta americana"
 
-#: gtk/paper_names_offsets.c:133
+#: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "Carta americana extra"
 
-#: gtk/paper_names_offsets.c:134
+#: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "Carta americana plus"
 
-#: gtk/paper_names_offsets.c:135
+#: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Sobre Monarch"
 
-#: gtk/paper_names_offsets.c:136
+#: ../gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "Sobre del núm. 10"
 
-#: gtk/paper_names_offsets.c:137
+#: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "Sobre del núm. 11"
 
-#: gtk/paper_names_offsets.c:138
+#: ../gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "Sobre del núm. 12"
 
-#: gtk/paper_names_offsets.c:139
+#: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "Sobre del núm. 14"
 
-#: gtk/paper_names_offsets.c:140
+#: ../gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "Sobre del núm. 9"
 
-#: gtk/paper_names_offsets.c:141
+#: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Sobre personal"
 
-#: gtk/paper_names_offsets.c:142
+#: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "Quarto"
 msgstr "Quartilla"
 
-#: gtk/paper_names_offsets.c:143
+#: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "Super A"
 msgstr "Súper A"
 
-#: gtk/paper_names_offsets.c:144
+#: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "Super B"
 msgstr "Súper B"
 
-#: gtk/paper_names_offsets.c:145
+#: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Format ample"
 
-#: gtk/paper_names_offsets.c:146
+#: ../gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
-#: gtk/paper_names_offsets.c:147
+#: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Folio"
 msgstr "Foli"
 
-#: gtk/paper_names_offsets.c:148
+#: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "Folio sp"
 msgstr "Foli sp"
 
-#: gtk/paper_names_offsets.c:149
+#: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Sobre d'invitació"
 
-#: gtk/paper_names_offsets.c:150
+#: ../gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Sobre italià"
 
-#: gtk/paper_names_offsets.c:151
+#: ../gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "Juuro-ku-kai"
 
-#: gtk/paper_names_offsets.c:152
+#: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "pa-kai"
 msgstr "Pa-kai"
 
-#: gtk/paper_names_offsets.c:153
+#: ../gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Sobre Postfix"
 
-#: gtk/paper_names_offsets.c:154
+#: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Foto petita"
 
-#: gtk/paper_names_offsets.c:155
+#: ../gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "Sobre prc1"
 
-#: gtk/paper_names_offsets.c:156
+#: ../gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "Sobre prc10"
 
-#: gtk/paper_names_offsets.c:157
+#: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "prc 16k"
 msgstr "prc 16k"
 
-#: gtk/paper_names_offsets.c:158
+#: ../gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "Sobre prc2"
 
-#: gtk/paper_names_offsets.c:159
+#: ../gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "Sobre prc3"
 
-#: gtk/paper_names_offsets.c:160
+#: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "prc 32k"
 msgstr "prc 32k"
 
-#: gtk/paper_names_offsets.c:161
+#: ../gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "Sobre prc4"
 
-#: gtk/paper_names_offsets.c:162
+#: ../gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "prc5 Envelope"
 msgstr "Sobre c5"
 
-#: gtk/paper_names_offsets.c:163
+#: ../gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "Sobre prc6"
 
-#: gtk/paper_names_offsets.c:164
+#: ../gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "Sobre prc7"
 
-#: gtk/paper_names_offsets.c:165
+#: ../gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "Sobre prc8"
 
-#: gtk/paper_names_offsets.c:166
+#: ../gtk/paper_names_offsets.c:166
 msgctxt "paper size"
 msgid "prc9 Envelope"
 msgstr "Sobre prc9"
 
-#: gtk/paper_names_offsets.c:167
+#: ../gtk/paper_names_offsets.c:167
 msgctxt "paper size"
 msgid "ROC 16k"
 msgstr "ROC 16k"
 
-#: gtk/paper_names_offsets.c:168
+#: ../gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: gtk/updateiconcache.c:492 gtk/updateiconcache.c:552
+#: ../gtk/updateiconcache.c:492 ../gtk/updateiconcache.c:552
 #, c-format
 msgid "different idatas found for symlinked '%s' and '%s'\n"
 msgstr "s'han trobat diferents idatas per als enllaços simbòlics «%s» i «%s»\n"
 
-#: gtk/updateiconcache.c:1374
+#: ../gtk/updateiconcache.c:1374
 #, c-format
 msgid "Failed to write header\n"
 msgstr "No s'ha pogut escriure la capçalera\n"
 
 # FIXME
-#: gtk/updateiconcache.c:1380
+#: ../gtk/updateiconcache.c:1380
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "No s'ha pogut escriure la taula de resum\n"
 
-#: gtk/updateiconcache.c:1386
+#: ../gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "No s'ha pogut escriure l'índex de la carpeta\n"
 
-#: gtk/updateiconcache.c:1394
+#: ../gtk/updateiconcache.c:1394
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "No s'ha pogut reescriure la capçalera\n"
 
-#: gtk/updateiconcache.c:1463
+#: ../gtk/updateiconcache.c:1463
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "No s'ha pogut obrir el fitxer %s: %s\n"
 
-#: gtk/updateiconcache.c:1471
+#: ../gtk/updateiconcache.c:1471
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "No s'ha pogut escriure el fitxer de memòria cau: %s\n"
 
-#: gtk/updateiconcache.c:1507
+#: ../gtk/updateiconcache.c:1507
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "La memòria cau generada no era vàlida.\n"
 
-#: gtk/updateiconcache.c:1521
+#: ../gtk/updateiconcache.c:1521
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "No s'ha pogut canviar el nom de %s a %s: %s, se suprimirà %s.\n"
 
-#: gtk/updateiconcache.c:1535
+#: ../gtk/updateiconcache.c:1535
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "No s'ha pogut canviar el nom de %s a %s: %s\n"
 
-#: gtk/updateiconcache.c:1545
+#: ../gtk/updateiconcache.c:1545
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "No s'ha pogut tornar a anomenar %s a %s: %s.\n"
 
-#: gtk/updateiconcache.c:1572
+#: ../gtk/updateiconcache.c:1572
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr "S'ha creat el fitxer de memòria cau amb èxit.\n"
+msgstr "S'ha creat el fitxer de memòria cau correctament.\n"
 
-#: gtk/updateiconcache.c:1611
+#: ../gtk/updateiconcache.c:1611
 msgid "Overwrite an existing cache, even if up to date"
-msgstr "Sobreescriu una memòria cau existent, encara que estiga al dia"
+msgstr "Sobreescriu una memòria cau existent, encara que estiga actualitzada"
 
-#: gtk/updateiconcache.c:1612
+#: ../gtk/updateiconcache.c:1612
 msgid "Don't check for the existence of index.theme"
 msgstr "No comprovis l'existència d'index.theme"
 
-#: gtk/updateiconcache.c:1613
+#: ../gtk/updateiconcache.c:1613
 msgid "Don't include image data in the cache"
-msgstr "No inclogues dades d'imatges a la memòria cau"
+msgstr "No incloguis dades d'imatges a la memòria cau"
 
-#: gtk/updateiconcache.c:1614
+#: ../gtk/updateiconcache.c:1614
 msgid "Output a C header file"
 msgstr "Produeix un fitxer de capçalera C"
 
-#: gtk/updateiconcache.c:1615
+#: ../gtk/updateiconcache.c:1615
 msgid "Turn off verbose output"
-msgstr "Desactiva l'eixida detallada"
+msgstr "Desactiva la eixida detallada"
 
-#: gtk/updateiconcache.c:1616
+#: ../gtk/updateiconcache.c:1616
 msgid "Validate existing icon cache"
 msgstr "Valida la memòria cau d'icones existent"
 
-#: gtk/updateiconcache.c:1683
+#: ../gtk/updateiconcache.c:1683
 #, c-format
 msgid "File not found: %s\n"
 msgstr "No s'ha trobat el fitxer: %s\n"
 
-#: gtk/updateiconcache.c:1689
+#: ../gtk/updateiconcache.c:1689
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "No és una memòria cau d'icones vàlida: %s\n"
 
-#: gtk/updateiconcache.c:1702
+#: ../gtk/updateiconcache.c:1702
 #, c-format
 msgid "No theme index file.\n"
 msgstr "No hi ha cap fitxer d'índex de tema.\n"
 
-#: gtk/updateiconcache.c:1706
+#: ../gtk/updateiconcache.c:1706
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -3768,162 +3959,162 @@ msgstr ""
 "theme-index.\n"
 
 #. ID
-#: modules/input/imam-et.c:454
+#: ../modules/input/imam-et.c:454
 msgid "Amharic (EZ+)"
 msgstr "Amhàric (EZ+)"
 
 # FIXME
 #. ID
-#: modules/input/imcedilla.c:92
+#: ../modules/input/imcedilla.c:92
 msgid "Cedilla"
-msgstr "Cedilla"
+msgstr "Diacrític"
 
 #. ID
-#: modules/input/imcyrillic-translit.c:217
+#: ../modules/input/imcyrillic-translit.c:217
 msgid "Cyrillic (Transliterated)"
-msgstr "Ciríl·lic (Transliterat)"
+msgstr "Ciríl·lic (transliterat)"
 
 #. ID
-#: modules/input/iminuktitut.c:127
+#: ../modules/input/iminuktitut.c:127
 msgid "Inuktitut (Transliterated)"
-msgstr "Inuktitut (Transliterat)"
+msgstr "Inuktitut (transliterat)"
 
 #. ID
-#: modules/input/imipa.c:145
+#: ../modules/input/imipa.c:145
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
-#: modules/input/immultipress.c:31
+#: ../modules/input/immultipress.c:31
 msgid "Multipress"
 msgstr "Multipress"
 
 #. ID
-#: modules/input/imthai.c:35
+#: ../modules/input/imthai.c:35
 msgid "Thai-Lao"
 msgstr "Thai-Lao"
 
 #. ID
-#: modules/input/imti-er.c:453
+#: ../modules/input/imti-er.c:453
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrigna-Eritreà (EZ+)"
 
 #. ID
-#: modules/input/imti-et.c:453
+#: ../modules/input/imti-et.c:453
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigrigna-Etíop (EZ+)"
 
 #. ID
-#: modules/input/imviqr.c:244
+#: ../modules/input/imviqr.c:244
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamita (VIQR)"
 
 #. ID
-#: modules/input/imxim.c:28
+#: ../modules/input/imxim.c:28
 msgid "X Input Method"
 msgstr "Mètode d'entrada d'X"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:811
-#: modules/printbackends/cups/gtkprintbackendcups.c:1020
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:811
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1020
 msgid "Username:"
 msgstr "Nom d'usuari:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:812
-#: modules/printbackends/cups/gtkprintbackendcups.c:1029
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:812
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1029
 msgid "Password:"
 msgstr "Contrasenya:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:850
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:850
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Cal autenticació per obtindre un fitxer de %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:854
-#: modules/printbackends/cups/gtkprintbackendcups.c:1042
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:854
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Cal autenticació per imprimir el document «%s» a la impressora %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:856
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:856
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Cal autenticació per imprimir un document a %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:860
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
 msgstr "Cal autenticació per obtindre els atributs de la tasca «%s»"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:862
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:862
 msgid "Authentication is required to get attributes of a job"
 msgstr "Cal autenticació per obtindre els atributs d'una tasca"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:866
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:866
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Cal autenticació per obtindre els atributs de la impressora %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:868
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:868
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Cal autenticació per obtindre els atributs d'una impressora"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:871
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Cal autenticació per obtindre la impressora predeterminada de %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:874
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Cal autenticació per obtindre les impressores de %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:877
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:877
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Cal autenticació a %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1014
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1014
 msgid "Domain:"
 msgstr "Domini:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1044
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1044
 #, c-format
 msgid "Authentication is required to print document '%s'"
 msgstr "Cal autenticar-se per imprimir un document a «%s»"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1049
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Cal autenticar-se per imprimir este document a la impressora «%s»"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1051
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1051
 msgid "Authentication is required to print this document"
 msgstr "Cal autenticar-se per imprimir este document"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1672
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1672
 #, c-format
 msgid "Printer '%s' is low on toner."
 msgstr "El nivell del tòner de la impressora «%s» és baix."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1673
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1673
 #, c-format
 msgid "Printer '%s' has no toner left."
 msgstr "No li queda tòner a la impressora «%s»."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1675
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1675
 #, c-format
 msgid "Printer '%s' is low on developer."
 msgstr "El nivell del revelador de la impressora «%s» és baix."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1677
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1677
 #, c-format
 msgid "Printer '%s' is out of developer."
 msgstr "No li queda revelador a la impressora «%s»."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1679
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1679
 #, c-format
 msgid "Printer '%s' is low on at least one marker supply."
 msgstr ""
@@ -3931,150 +4122,150 @@ msgstr ""
 "baix."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1681
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1681
 #, c-format
 msgid "Printer '%s' is out of at least one marker supply."
 msgstr ""
 "No li queda tinta a almenys un dels contenidors de color a la impressora "
 "«%s»."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1682
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1682
 #, c-format
 msgid "The cover is open on printer '%s'."
-msgstr "La tapa de la impressora «%s» està oberta."
+msgstr "La tapa de la impressora «%s» és oberta."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1683
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1683
 #, c-format
 msgid "The door is open on printer '%s'."
-msgstr "La porta de la impressora «%s» està oberta."
+msgstr "La porta de la impressora «%s» és oberta."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1684
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1684
 #, c-format
 msgid "Printer '%s' is low on paper."
 msgstr "El nivell del paper de la impressora «%s» és baix."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1685
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1685
 #, c-format
 msgid "Printer '%s' is out of paper."
 msgstr "No li queda paper a la impressora «%s»."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1686
-#, fuzzy, c-format
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
+#, c-format
 msgid "Printer '%s' is currently offline."
-msgstr "La impressora «%s» actualment no està en línia."
+msgstr "La impressora «%s» no està en línia."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1687
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
 msgid "There is a problem on printer '%s'."
 msgstr "Hi ha un problema a la impressora «%s»."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:1995
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1995
 msgid "Paused ; Rejecting Jobs"
-msgstr "En pausa; refusa les tasques"
+msgstr "En pausa; es refusen les tasques"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2001
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2001
 msgid "Rejecting Jobs"
-msgstr "Refusa les tasques"
+msgstr "Es refusen les tasques"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2777
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2777
 msgid "Two Sided"
 msgstr "Doble cara"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2778
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2778
 msgid "Paper Type"
 msgstr "Tipus de paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2779
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2779
 msgid "Paper Source"
 msgstr "Font del paper"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2780
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2780
 msgid "Output Tray"
 msgstr "Safata d'eixida"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2781
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2781
 msgid "Resolution"
 msgstr "Resolució"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2782
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2782
 msgid "GhostScript pre-filtering"
 msgstr "Filtrat previ del GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2791
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2791
 msgid "One Sided"
 msgstr "Una cara"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2793
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2793
 msgid "Long Edge (Standard)"
 msgstr "Cantó llarg (estàndard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2795
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2795
 msgid "Short Edge (Flip)"
 msgstr "Cantó curt (capgirat)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2797
-#: modules/printbackends/cups/gtkprintbackendcups.c:2799
-#: modules/printbackends/cups/gtkprintbackendcups.c:2807
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2797
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2799
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2807
 msgid "Auto Select"
 msgstr "Selecció automàtica"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2801
-#: modules/printbackends/cups/gtkprintbackendcups.c:2803
-#: modules/printbackends/cups/gtkprintbackendcups.c:2805
-#: modules/printbackends/cups/gtkprintbackendcups.c:2809
-#: modules/printbackends/cups/gtkprintbackendcups.c:3295
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2801
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2803
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2805
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2809
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3295
 msgid "Printer Default"
 msgstr "Predeterminat de la impressora"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2811
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2811
 msgid "Embed GhostScript fonts only"
 msgstr "Incrusta només els tipus de lletra GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2813
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2813
 msgid "Convert to PS level 1"
 msgstr "Converteix a PS, nivell 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2815
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2815
 msgid "Convert to PS level 2"
 msgstr "Converteix a PS, nivell 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:2817
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2817
 msgid "No pre-filtering"
 msgstr "Sense filtratge previ"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2826
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2826
 msgid "Miscellaneous"
 msgstr "Miscel·lània"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Urgent"
 msgstr "Urgent"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "High"
 msgstr "Alta"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Medium"
 msgstr "Mitjana"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3503
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3503
 msgid "Low"
 msgstr "Baixa"
 
@@ -4082,60 +4273,60 @@ msgstr "Baixa"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3527
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3527
 msgid "Pages per Sheet"
 msgstr "Pàgines per full"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3564
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3564
 msgid "Job Priority"
 msgstr "Prioritat de la tasca"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3575
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3575
 msgid "Billing Info"
 msgstr "Informació de facturació"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "None"
 msgstr "Cap"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Classified"
 msgstr "Classificat"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Confidential"
 msgstr "Confidencial"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Secret"
 msgstr "Secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Standard"
 msgstr "Estàndard"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Top Secret"
 msgstr "Alt secret"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:3590
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3590
 msgid "Unclassified"
-msgstr "Desclassificat"
+msgstr "No classificat"
 
 # Possiblement sigui "abans de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3625
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3625
 msgid "Before"
 msgstr "Abans"
 
@@ -4143,7 +4334,7 @@ msgstr "Abans"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3640
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3640
 msgid "After"
 msgstr "Després"
 
@@ -4151,7 +4342,7 @@ msgstr "Després"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3660
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3660
 msgid "Print at"
 msgstr "Imprimeix"
 
@@ -4159,7 +4350,7 @@ msgstr "Imprimeix"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3671
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3671
 msgid "Print at time"
 msgstr "Imprimeix a una hora o data determinada"
 
@@ -4167,106 +4358,106 @@ msgstr "Imprimeix a una hora o data determinada"
 #. * size. The two placeholders are replaced with the width and height
 #. * in points. E.g: "Custom 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:3706
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:3706
 #, c-format
 msgid "Custom %sx%s"
 msgstr "Personalitzat %sx%s"
 
 #. default filename used for print-to-file
-#: modules/printbackends/file/gtkprintbackendfile.c:250
+#: ../modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
 msgid "output.%s"
 msgstr "eixida %s"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:493
+#: ../modules/printbackends/file/gtkprintbackendfile.c:493
 msgid "Print to File"
 msgstr "Imprimeix a un fitxer"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "Postscript"
 msgstr "Postscript"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:570
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:582
-#: modules/printbackends/test/gtkprintbackendtest.c:503
+#: ../modules/printbackends/file/gtkprintbackendfile.c:582
+#: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Pàgines per _full:"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:641
+#: ../modules/printbackends/file/gtkprintbackendfile.c:641
 msgid "File"
 msgstr "Fitxer"
 
-#: modules/printbackends/file/gtkprintbackendfile.c:651
+#: ../modules/printbackends/file/gtkprintbackendfile.c:651
 msgid "_Output format"
 msgstr "F_ormat d'eixida"
 
 # FIXME
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:395
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:395
 msgid "Print to LPR"
 msgstr "Imprimeix a LPR"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:421
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:421
 msgid "Pages Per Sheet"
 msgstr "Pàgines per full"
 
-#: modules/printbackends/lpr/gtkprintbackendlpr.c:428
+#: ../modules/printbackends/lpr/gtkprintbackendlpr.c:428
 msgid "Command Line"
 msgstr "Línia d'ordes"
 
 # Connectada? (josep)
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:811
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:811
 msgid "printer offline"
 msgstr "la impressora no està en línia"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:829
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:829
 msgid "ready to print"
 msgstr "a punt per imprimir"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:832
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:832
 msgid "processing job"
 msgstr "s'està processant la tasca"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:836
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:836
 msgid "paused"
 msgstr "en pausa"
 
 #. SUN_BRANDING
-#: modules/printbackends/papi/gtkprintbackendpapi.c:839
+#: ../modules/printbackends/papi/gtkprintbackendpapi.c:839
 msgid "unknown"
 msgstr "desconegut"
 
 #. default filename used for print-to-test
-#: modules/printbackends/test/gtkprintbackendtest.c:234
+#: ../modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
 msgstr "prova-de-eixida.%s"
 
-#: modules/printbackends/test/gtkprintbackendtest.c:467
+#: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
 msgstr "Imprimiu per provar la impressora"
 
-#: tests/testfilechooser.c:207
+#: ../tests/testfilechooser.c:207
 #, c-format
 msgid "Could not get information for file '%s': %s"
 msgstr "No s'ha pogut obtindre informació per al fitxer «%s»: %s"
 
-#: tests/testfilechooser.c:222
+#: ../tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
 msgstr "No s'ha pogut obrir el fitxer «%s»: %s"
 
-#: tests/testfilechooser.c:267
+#: ../tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
@@ -4274,11 +4465,34 @@ msgstr ""
 "No es pot carregar la imatge «%s»: se'n desconeix el motiu; probablement es "
 "tracta d'un fitxer d'imatge malmés"
 
+#~ msgid ""
+#~ "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
+#~ msgstr ""
+#~ "Aquest programa es proporciona sense CAP TIPUS DE GARANTIA; per obtenir-"
+#~ "ne més informació, visiteu %s."
+
+#~ msgid "Intensity of the color."
+#~ msgstr "Intensitat del color."
+
+#~ msgid "Caps Lock and Num Lock are on"
+#~ msgstr ""
+#~ "La fixació de majúscules i la fixació de teclat numèric estan activades"
+
+#~ msgid "Num Lock is on"
+#~ msgstr "La fixació de teclat numèric està activada"
+
+#~ msgid "Select a folder"
+#~ msgstr "Seleccioneu una carpeta"
+
+#~ msgctxt "Stock label"
+#~ msgid "_File"
+#~ msgstr "_Fitxer"
+
 #~ msgid "Gdk debugging flags to set"
-#~ msgstr "Senyaladors de depuració del Gdk a habilitar"
+#~ msgstr "Senyaladors de depuració del Gdk que s'han d'habilitar"
 
 #~ msgid "Gdk debugging flags to unset"
-#~ msgstr "Senyaladors de depuració del Gdk a inhabilitar"
+#~ msgstr "Senyaladors de depuració del Gdk que s'han d'inhabilitar"
 
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "El fitxer gràfic «%s» no conté dades"
@@ -4288,7 +4502,7 @@ msgstr ""
 #~ "animation file"
 #~ msgstr ""
 #~ "No es pot carregar l'animació «%s»: se'n desconeix el motiu; probablement "
-#~ "es tracta d'un fitxer d'animació malmés"
+#~ "es tracta d'un fitxer d'animació malmès"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "No és possible carregar el mòdul per a la càrrega d'imatges: %s: %s"
@@ -4317,10 +4531,11 @@ msgstr ""
 
 #~ msgid ""
 #~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr "Este muntatge de gdk-pixbuf no permet alçar el format d'imatge: %s"
+#~ msgstr ""
+#~ "Aquest muntatge de gdk-pixbuf no permet desar el format d'imatge: %s"
 
 #~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "No hi ha memòria suficient per alçar la imatge a la crida de retorn"
+#~ msgstr "No hi ha memòria suficient per desar la imatge a la crida de retorn"
 
 #~ msgid "Failed to open temporary file"
 #~ msgstr "No s'ha pogut obrir el fitxer temporal"
@@ -4335,12 +4550,12 @@ msgstr ""
 #~ "Failed to close '%s' while writing image, all data may not have been "
 #~ "saved: %s"
 #~ msgstr ""
-#~ "No s'ha pogut alçar «%s» en escriure la imatge, és probable que no "
-#~ "s'hagen alçat totes les dades: %s"
+#~ "No s'ha pogut desar «%s» en escriure la imatge, és probable que no "
+#~ "s'hagin desat totes les dades: %s"
 
 #~ msgid "Insufficient memory to save image into a buffer"
 #~ msgstr ""
-#~ "No hi ha memòria suficient per alçar la imatge en una memòria intermèdia"
+#~ "No hi ha memòria suficient per desar la imatge en una memòria intermèdia"
 
 #~ msgid "Error writing to image stream"
 #~ msgstr "S'ha produït un error en escriure al flux d'imatge"
@@ -4406,7 +4621,7 @@ msgstr ""
 #~ msgstr "S'ha trobat un final de fitxer abans d'hora"
 
 #~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "No s'ha pogut obtindre memòria per alçar el fitxer BMP"
+#~ msgstr "No s'ha pogut obtenir memòria per desar el fitxer BMP"
 
 #~ msgid "Couldn't write to BMP file"
 #~ msgstr "No s'ha pogut escriure al fitxer BMP"
@@ -4429,7 +4644,7 @@ msgstr ""
 #~ msgstr "Sobreeiximent de la pila"
 
 #~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "El carregador d'imatges GIF no entén esta imatge."
+#~ msgstr "El carregador d'imatges GIF no entén aquesta imatge."
 
 #~ msgid "Bad code encountered"
 #~ msgstr "S'ha trobat un codi incorrecte"
@@ -4447,7 +4662,7 @@ msgstr ""
 #~ msgstr "La imatge GIF és corrupta (la compressió LZW és incorrecte)"
 
 #~ msgid "File does not appear to be a GIF file"
-#~ msgstr "El fitxer no pareix ser un fitxer GIF"
+#~ msgstr "El fitxer no sembla ser un fitxer GIF"
 
 #~ msgid "Version %s of the GIF file format is not supported"
 #~ msgstr "No s'ha implementat la versió %s del format del fitxer GIF"
@@ -4487,7 +4702,7 @@ msgstr ""
 #~ msgstr "No hi ha memòria suficient per carregar el fitxer ICO"
 
 #~ msgid "Image too large to be saved as ICO"
-#~ msgstr "La imatge és massa gran per alçar-la com a ICO"
+#~ msgstr "La imatge és massa gran per desar-la com a ICO"
 
 #~ msgid "Cursor hotspot outside image"
 #~ msgstr "Lloc calent del cursor fora de la imatge"
@@ -4540,14 +4755,14 @@ msgstr ""
 #~ "Insufficient memory to load image, try exiting some applications to free "
 #~ "memory"
 #~ msgstr ""
-#~ "La memòria per carregar la imatge és insuficient, proveu d'eixir "
+#~ "La memòria per carregar la imatge és insuficient, proveu de sortir "
 #~ "d'algunes aplicacions per alliberar memòria"
 
 #~ msgid "Unsupported JPEG color space (%s)"
 #~ msgstr "Espai de color JPEG no implementat (%s)"
 
 #~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "No es pot obtindre memòria per carregar el fitxer JPEG"
+#~ msgstr "No es pot obtenir memòria per carregar el fitxer JPEG"
 
 #~ msgid "Transformed JPEG has zero width or height."
 #~ msgstr "El JPEG transformat té amplada o alçada zero."
@@ -4563,13 +4778,13 @@ msgstr ""
 #~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 #~ msgstr ""
 #~ "La qualitat JPEG ha de ser un valor entre 0 i 100; el valor «%d» no és "
-#~ "permés."
+#~ "permès."
 
 #~ msgid "The JPEG image format"
 #~ msgstr "El format d'imatge JPEG"
 
 #~ msgid "Couldn't allocate memory for header"
-#~ msgstr "No es pot obtindre memòria per a la capçalera"
+#~ msgstr "No es pot obtenir memòria per a la capçalera"
 
 #~ msgid "Couldn't allocate memory for context buffer"
 #~ msgstr ""
@@ -4629,7 +4844,7 @@ msgstr ""
 #~ "applications to reduce memory usage"
 #~ msgstr ""
 #~ "Memòria insuficient per emmagatzemar una imatge de %ld per %ld; proveu de "
-#~ "eixir d'algunes aplicacions per reduir l'ús de memòria"
+#~ "sortir d'algunes aplicacions per reduir l'ús de memòria"
 
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "Error fatal en llegir el fitxer gràfic PNG"
@@ -4640,7 +4855,7 @@ msgstr ""
 #~ msgid ""
 #~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
 #~ msgstr ""
-#~ "Les claus per als blocs text de PNG han de tindre entre 1 i 79 caràcters."
+#~ "Les claus per als blocs text de PNG han de tenir entre 1 i 79 caràcters."
 
 #~ msgid "Keys for PNG text chunks must be ASCII characters."
 #~ msgstr "Les claus per als blocs text de PNG han de ser caràcters ASCII."
@@ -4660,7 +4875,7 @@ msgstr ""
 #~ "allowed."
 #~ msgstr ""
 #~ "El nivell de compressió de PNG ha de ser un valor entre 0 i 9; el valor "
-#~ "«%d» no és permés."
+#~ "«%d» no és permès."
 
 #~ msgid ""
 #~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
@@ -4696,7 +4911,7 @@ msgstr ""
 #~ msgstr "El tipus d'imatge PNM en brut no és vàlid"
 
 #~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "El carregador d'imatges PNM no permet este subformat PNM"
+#~ msgstr "El carregador d'imatges PNM no permet aquest subformat PNM"
 
 #~ msgid "Raw PNM formats require exactly one whitespace before sample data"
 #~ msgstr ""
@@ -4704,7 +4919,7 @@ msgstr ""
 #~ "les dades de mostra"
 
 #~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "No es pot obtindre memòria per carregar la imatge PNM"
+#~ msgstr "No es pot obtenir memòria per carregar la imatge PNM"
 
 #~ msgid "Insufficient memory to load PNM context struct"
 #~ msgstr "No hi ha memòria suficient per carregar l'estructura de context PNM"
@@ -4739,7 +4954,7 @@ msgstr ""
 #~ msgstr "No s'han pogut ometre els següents %d bytes amb la crida seek()."
 
 #~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "No s'ha pogut obtindre memòria per al context de l'estructura QTIF."
+#~ msgstr "No s'ha pogut obtenir memòria per al context de l'estructura QTIF."
 
 #~ msgid "Failed to create GdkPixbufLoader object."
 #~ msgstr "No s'ha pogut crear l'objecte GdkPixbufLoader."
@@ -4766,10 +4981,10 @@ msgstr ""
 #~ msgstr "El format d'imatge Sun raster"
 
 #~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "No es pot obtindre memòria per a l'estructura IOBuffer"
+#~ msgstr "No es pot obtenir memòria per a l'estructura IOBuffer"
 
 #~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "No es pot obtindre memòria per les dades de l'IOBuffer"
+#~ msgstr "No es pot obtenir memòria per les dades de l'IOBuffer"
 
 #~ msgid "Cannot realloc IOBuffer data"
 #~ msgstr "No es pot reallotjar memòria per les dades de l'IOBuffer"
@@ -4793,16 +5008,16 @@ msgstr ""
 #~ msgstr "Profunditat de bit inesperada per a les entrades del mapa de color"
 
 #~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "No es pot obtindre memòria per les capçaleres TGA"
+#~ msgstr "No es pot obtenir memòria per les capçaleres TGA"
 
 #~ msgid "TGA image has invalid dimensions"
 #~ msgstr "La imatge TGA té unes dimensions no vàlides"
 
 #~ msgid "TGA image type not supported"
-#~ msgstr "El tipus d'imatge TGA no està permés"
+#~ msgstr "El tipus d'imatge TGA no està permès"
 
 #~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "No es pot obtindre memòria per al context de l'estructura TGA"
+#~ msgstr "No es pot obtenir memòria per al context de l'estructura TGA"
 
 #~ msgid "Excess data in file"
 #~ msgstr "Excés de dades al fitxer"
@@ -4811,10 +5026,10 @@ msgstr ""
 #~ msgstr "El format d'imatge Targa"
 
 #~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "No es pot obtindre l'amplada de la imatge (fitxer TIFF incorrecte)"
+#~ msgstr "No es pot obtenir l'amplada de la imatge (fitxer TIFF incorrecte)"
 
 #~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "No es pot obtindre l'alçada de la imatge (fitxer TIFF incorrecte)"
+#~ msgstr "No es pot obtenir l'alçada de la imatge (fitxer TIFF incorrecte)"
 
 #~ msgid "Width or height of TIFF image is zero"
 #~ msgstr "L'amplada o l'alçada de la imatge TIFF és zero"
@@ -4838,7 +5053,7 @@ msgstr ""
 #~ msgstr "No s'ha pogut carregar la imatge TIFF"
 
 #~ msgid "Failed to save TIFF image"
-#~ msgstr "No s'ha pogut alçar la imatge TIFF"
+#~ msgstr "No s'ha pogut desar la imatge TIFF"
 
 #~ msgid "TIFF compression doesn't refer to a valid codec."
 #~ msgstr "La compressió TIFF no es refereix a un còdec vàlid."
@@ -4862,7 +5077,7 @@ msgstr ""
 #~ msgstr "No hi ha memòria suficient per carregar la imatge"
 
 #~ msgid "Couldn't save the rest"
-#~ msgstr "No s'ha pogut alçar la resta"
+#~ msgstr "No s'ha pogut desar la resta"
 
 #~ msgid "The WBMP image format"
 #~ msgstr "El format d'imatge WBMP"
@@ -4898,7 +5113,7 @@ msgstr ""
 #~ msgstr "El fitxer XPM té un nombre de colors no vàlid"
 
 #~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "No es pot obtindre memòria per carregar la imatge XPM"
+#~ msgstr "No es pot obtenir memòria per carregar la imatge XPM"
 
 #~ msgid "Cannot read XPM colormap"
 #~ msgstr "No es pot llegir el mapa de color d'XPM"
@@ -4931,182 +5146,16 @@ msgstr ""
 #~ msgstr "No s'ha pogut carregar el metafitxer"
 
 #~ msgid "Unsupported image format for GDI+"
-#~ msgstr "El GDI+ no funciona amb este format d'imatge"
+#~ msgstr "El GDI+ no funciona amb aquest format d'imatge"
 
 #~ msgid "Couldn't save"
-#~ msgstr "No s'ha pogut alçar"
+#~ msgstr "No s'ha pogut desar"
 
 #~ msgid "The WMF image format"
 #~ msgstr "El format d'imatge WMF"
 
-#~ msgid "\"Deepness\" of the color."
-#~ msgstr "«Profunditat» del color."
-
-#~ msgid "Error printing"
-#~ msgstr "S'ha produït un error en imprimir"
-
 #~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Pot ser que la impressora «%s» no estiga connectada."
-
-#~ msgid "Folders"
-#~ msgstr "Carpetes"
-
-#~ msgid "Fol_ders"
-#~ msgstr "_Carpetes"
-
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "No es pot llegir la carpeta: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "El fitxer «%s» es troba en una altra màquina (anomenada %s) i pot ser que "
-#~ "no estiga disponible per a este programa.\n"
-#~ "Esteu segur que voleu seleccionar-lo?"
-
-#~ msgid "_New Folder"
-#~ msgstr "Carpeta _nova"
-
-#~ msgid "De_lete File"
-#~ msgstr "Suprimeix e_l fitxer"
-
-#~ msgid "_Rename File"
-#~ msgstr "_Canvia el nom del fitxer"
-
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "El nom de la carpeta «%s» conté símbols que no estan permesos als noms de "
-#~ "fitxer"
-
-#~ msgid "New Folder"
-#~ msgstr "Carpeta nova"
-
-#~ msgid "_Folder name:"
-#~ msgstr "Nom de la _carpeta:"
-
-#~ msgid "C_reate"
-#~ msgstr "C_rea"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr ""
-#~ "El nom del fitxer «%s» conté símbols que no estan permesos als noms de "
-#~ "fitxer"
-
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "S'ha produït un error en suprimir el fitxer «%s»: %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Esteu segur de voler suprimir el fitxer «%s»?"
-
-#~ msgid "Delete File"
-#~ msgstr "Suprimeix el fitxer"
-
-#~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr "S'ha produït un error en canviar el nom del fitxer a «%s»: %s"
-
-#~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr "S'ha produït un error en canviar el nom del fitxer «%s»: %s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "S'ha produït un error en canviar el nom del fitxer «%s» a «%s»: %s"
-
-#~ msgid "Rename File"
-#~ msgstr "Canvia el nom del fitxer"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Canvia el nom del fitxer «%s» a:"
-
-#~ msgid "_Rename"
-#~ msgstr "_Canvia el nom"
-
-#~ msgid "_Selection: "
-#~ msgstr "_Selecció: "
-
-#~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-#~ "environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr ""
-#~ "No s'ha pogut convertir el nom de fitxer «%s» a UTF-8. (Proveu d'establir "
-#~ "la variable d'entorn G_FILENAME_ENCODING): %s"
-
-#~ msgid "Invalid UTF-8"
-#~ msgstr "UTF-8 no vàlid"
-
-#~ msgid "Name too long"
-#~ msgstr "El nom és massa llarg"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "No s'ha pogut convertir el nom del fitxer"
-
-#~ msgid "Gamma"
-#~ msgstr "Gamma"
-
-#~ msgid "_Gamma value"
-#~ msgstr "Valor de la _gamma"
-
-#~ msgid "Input"
-#~ msgstr "Entrada"
-
-#~ msgid "No extended input devices"
-#~ msgstr "No hi ha cap dispositiu d'entrada ampliat"
-
-#~ msgid "_Device:"
-#~ msgstr "_Dispositiu:"
-
-#~ msgid "Disabled"
-#~ msgstr "Desactivat"
-
-#~ msgid "Screen"
-#~ msgstr "Pantalla"
-
-#~ msgid "Window"
-#~ msgstr "Finestra"
-
-#~ msgid "_Mode:"
-#~ msgstr "_Mode:"
-
-#~ msgid "Axes"
-#~ msgstr "Eixos"
-
-#~ msgid "Keys"
-#~ msgstr "Tecles"
-
-#~ msgid "_X:"
-#~ msgstr "_X:"
-
-#~ msgid "_Y:"
-#~ msgstr "_Y:"
-
-#~ msgid "_Pressure:"
-#~ msgstr "_Pressió:"
-
-#~ msgid "X _tilt:"
-#~ msgstr "_Inclinació en X:"
-
-#~ msgid "Y t_ilt:"
-#~ msgstr "I_nclinació en Y:"
-
-#~ msgid "_Wheel:"
-#~ msgstr "_Roda:"
-
-#~ msgid "none"
-#~ msgstr "cap"
-
-#~ msgid "(disabled)"
-#~ msgstr "(desactivat)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(desconegut)"
-
-#~ msgid "Cl_ear"
-#~ msgstr "_Neteja"
-
-#~ msgid "--- No Tip ---"
-#~ msgstr "-- Cap consell --"
+#~ msgstr "Pot ser que la impressora «%s» no estigui connectada."
 
 #~ msgid "(Empty)"
 #~ msgstr "(Buit)"
