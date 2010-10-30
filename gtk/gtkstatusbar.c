@@ -106,6 +106,7 @@ static GObject *gtk_statusbar_buildable_get_internal_child (GtkBuildable *builda
 static void     gtk_statusbar_update            (GtkStatusbar      *statusbar,
 						 guint              context_id,
 						 const gchar       *text);
+static void     gtk_statusbar_realize           (GtkWidget         *widget);
 static void     gtk_statusbar_destroy           (GtkWidget         *widget);
 static void     gtk_statusbar_size_allocate     (GtkWidget         *widget,
                                                  GtkAllocation     *allocation);
@@ -128,6 +129,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   gobject_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
 
+  widget_class->realize = gtk_statusbar_realize;
   widget_class->destroy = gtk_statusbar_destroy;
   widget_class->size_allocate = gtk_statusbar_size_allocate;
   widget_class->hierarchy_changed = gtk_statusbar_hierarchy_changed;
@@ -646,11 +648,11 @@ gtk_statusbar_size_allocate (GtkWidget     *widget,
   GdkRectangle translated_rect;
 
   window = gtk_widget_get_toplevel (widget);
+
   if (GTK_IS_WINDOW (window) &&
       gtk_window_resize_grip_is_visible (GTK_WINDOW (window)))
     {
       gtk_window_get_resize_grip_area (GTK_WINDOW (window), &rect);
-
       if (gtk_widget_translate_coordinates (gtk_widget_get_parent (widget),
                                             window,
                                             allocation->x,
@@ -733,9 +735,9 @@ resize_grip_visible_changed (GObject    *object,
   GtkStatusbar *statusbar = GTK_STATUSBAR (user_data);
   GtkStatusbarPrivate *priv = statusbar->priv;
 
-  gtk_widget_queue_resize (GTK_WIDGET (statusbar));
   gtk_widget_queue_resize (priv->label);
   gtk_widget_queue_resize (priv->frame);
+  gtk_widget_queue_resize (GTK_WIDGET (statusbar));
 }
 
 static void
@@ -752,4 +754,14 @@ gtk_statusbar_hierarchy_changed (GtkWidget *widget,
   if (GTK_IS_WINDOW (window))
     g_signal_connect (window, "notify::resize-grip-visible",
                       G_CALLBACK (resize_grip_visible_changed), widget);
+
+  resize_grip_visible_changed (NULL, NULL, widget);
+}
+
+static void
+gtk_statusbar_realize (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_statusbar_parent_class)->realize (widget);
+
+  resize_grip_visible_changed (NULL, NULL, widget);
 }
