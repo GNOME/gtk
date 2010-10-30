@@ -565,6 +565,7 @@ typedef enum
  * @GTK_STATE_FLAG_ACTIVE: Widget is active.
  * @GTK_STATE_FLAG_PRELIGHT: Widget has a mouse pointer over it.
  * @GTK_STATE_FLAG_SELECTED: Widget is selected.
+ * @GTK_STATE_FLAG_INSENSITIVE: Widget is insensitive.
  * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent.
  * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus.
  *
