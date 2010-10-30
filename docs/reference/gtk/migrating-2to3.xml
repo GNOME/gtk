@@ -509,6 +509,13 @@ gtk_fixed_get_preferred_height (GtkWidget *widget,
 }
           </programlisting></informalexample>
         </listitem>
+        <listitem>Note that the get_preferred_width()/height() functions
+          only allow you do return one dimension at a time. If your
+          size_request() handler is doing things that involve both
+          width and height at the same time (e.g. limiting the aspect
+          ratio), you will have to implement get_preferred_height_for_width()
+          and get_preferred_width_for_height().
+        </listitem>
         <listitem>To make full use of the new capabilities of the
           height-for-width geometry management, you need to additionally
           implement the get_preferred_height_for_width() and
@@ -800,13 +807,35 @@ gtk_arrow_draw (GtkWidget *widget,
   </section>
 
   <section>
-    <title>GtkScrolledWindow policy</title>
+    <title>Check your expand flags</title>
+
+    <para>
+      The behaviour of expanding widgets has changed slightly in GTK+ 3,
+      compared to GTK+ 2.x. It is now 'inherited', i.e. a container that
+      has an expanding child is considered expanding itself. This is often
+      the desired behaviour. In places where you don't want this to happen,
+      setting the container explicity as not expanding will stop the
+      expand flag of the child from being inherited. See
+      gtk_widget_set_hexpand() and gtk_widget_set_vexpand().
+    </para>
+  </section>
+
+  <section>
+    <title>Scrolling changes</title>
 
     <para>
       The default values for the #GtkScrolledWindow:hscrollbar-policy and
       #GtkScrolledWindow:vscrollbar-policy properties have been changed from
       'never' to 'automatic'. If your application was relying on the default
       value, you will have explicitly set it explicitly.
+    </para>
+
+    <para>
+      The ::set-scroll-adjustments signal on GtkWidget has been replaced
+      by the #GtkScrollable interface which must be implemented by a widget
+      that wants to be placed in a #GtkScrolledWindow. Instead of emitting
+      ::set-scroll-adjustments, the scrolled window simply sets the
+      #GtkScrollable::hadjustment and #GtkScrollable::vadjustment properties.
     </para>
   </section>
 
