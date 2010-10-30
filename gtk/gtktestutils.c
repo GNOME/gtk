@@ -534,7 +534,8 @@ try_main_quit (void)
 static int
 test_increment_intp (int *intp)
 {
-  *intp += 1;
+  if (intp != NULL)
+    *intp += 1;
   return 1; /* TRUE in case we're connected to event signals */
 }
 
