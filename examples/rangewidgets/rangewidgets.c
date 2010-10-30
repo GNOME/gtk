@@ -111,7 +111,7 @@ static void create_range_controls( void )
      * (upper - page_size). */
     adj1 = gtk_adjustment_new (0.0, 0.0, 101.0, 0.1, 1.0, 1.0);
 
-    vscale = gtk_vscale_new (GTK_ADJUSTMENT (adj1));
+    vscale = gtk_scale_new (GTK_ORIENTATION_VERTICAL, GTK_ADJUSTMENT (adj1));
     scale_set_default_values (GTK_SCALE (vscale));
     gtk_box_pack_start (GTK_BOX (box2), vscale, TRUE, TRUE, 0);
     gtk_widget_show (vscale);
@@ -121,7 +121,7 @@ static void create_range_controls( void )
     gtk_widget_show (box3);
 
     /* Reuse the same adjustment */
-    hscale = gtk_hscale_new (GTK_ADJUSTMENT (adj1));
+    hscale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adj1));
     gtk_widget_set_size_request (GTK_WIDGET (hscale), 200, -1);
     scale_set_default_values (GTK_SCALE (hscale));
     gtk_box_pack_start (GTK_BOX (box3), hscale, TRUE, TRUE, 0);
@@ -230,7 +230,7 @@ static void create_range_controls( void )
     adj2 = gtk_adjustment_new (1.0, 0.0, 5.0, 1.0, 1.0, 0.0);
     g_signal_connect (adj2, "value_changed",
                       G_CALLBACK (cb_digits_scale), NULL);
-    scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
+    scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
     gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
     gtk_widget_show (scale);
@@ -250,7 +250,7 @@ static void create_range_controls( void )
     adj2 = gtk_adjustment_new (1.0, 1.0, 101.0, 1.0, 1.0, 0.0);
     g_signal_connect (adj2, "value-changed",
                       G_CALLBACK (cb_page_size), (gpointer) adj1);
-    scale = gtk_hscale_new (GTK_ADJUSTMENT (adj2));
+    scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adj2));
     gtk_scale_set_digits (GTK_SCALE (scale), 0);
     gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
     gtk_widget_show (scale);

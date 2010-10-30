@@ -379,7 +379,7 @@ attach_widgets (GtkTextView *text_view)
         }
       else if (i == 2)
         {
-          widget = gtk_hscale_new (NULL);
+          widget = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, NULL);
           gtk_range_set_range (GTK_RANGE (widget), 0, 100);
           gtk_widget_set_size_request (widget, 70, -1);
         }

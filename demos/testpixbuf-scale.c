@@ -127,7 +127,7 @@ main(int argc, char **argv)
 	g_signal_connect (adjustment, "value_changed",
 			  G_CALLBACK (overall_changed_cb), NULL);
 	
-	hscale = gtk_hscale_new (adjustment);
+	hscale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjustment);
 	gtk_scale_set_digits (GTK_SCALE (hscale), 0);
 	gtk_box_pack_start (GTK_BOX (hbox), hscale, TRUE, TRUE, 0);
 
