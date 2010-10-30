@@ -76,7 +76,8 @@ test_slider_ranges (void)
 {
   GtkWidget *child;
   GtkWidget *window = gtk_test_create_simple_window ("Test Window", "Test: gtk_test_warp_slider");
-  GtkWidget *hscale = gtk_hscale_new_with_range (-50, +50, 5);
+  GtkWidget *hscale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
+                                                -50, +50, 5);
 
   child = gtk_bin_get_child (GTK_BIN (window));
   gtk_container_add (GTK_CONTAINER (child), hscale);
