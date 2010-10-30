@@ -267,7 +267,7 @@ gdk_rgba_equal (gconstpointer p1,
  * Returns: A newly allocated text string
  **/
 gchar *
-gdk_rgba_to_string (GdkRGBA *rgba)
+gdk_rgba_to_string (const GdkRGBA *rgba)
 {
   gchar red[G_ASCII_DTOSTR_BUF_SIZE];
   gchar green[G_ASCII_DTOSTR_BUF_SIZE];
