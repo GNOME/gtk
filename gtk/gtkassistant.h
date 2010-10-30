@@ -43,15 +43,18 @@ G_BEGIN_DECLS
 
 /**
  * GtkAssistantPageType:
- * @GTK_ASSISTANT_PAGE_CONTENT: The page has regular contents.
+ * @GTK_ASSISTANT_PAGE_CONTENT: The page has regular contents. Both the
+ *  Back and forward buttons will be shown.
  * @GTK_ASSISTANT_PAGE_INTRO: The page contains an introduction to the
- *  assistant task.
+ *  assistant task. Only the Forward button will be shown if there is a
+ *   next page.
  * @GTK_ASSISTANT_PAGE_CONFIRM: The page lets the user confirm or deny the
- *  changes.
+ *  changes. The Back and Apply buttons will be shown.
  * @GTK_ASSISTANT_PAGE_SUMMARY: The page informs the user of the changes
- *  done.
+ *  done. Only the Close button will be shown.
  * @GTK_ASSISTANT_PAGE_PROGRESS: Used for tasks that take a long time to
  *  complete, blocks the assistant until the page is marked as complete.
+ *   Only the back button will be shown.
  *
  * An enum for determining the page role inside the #GtkAssistant. It's
  * used to handle buttons sensitivity and visibility.
@@ -59,6 +62,9 @@ G_BEGIN_DECLS
  * Note that an assistant needs to end its page flow with a page of type
  * %GTK_ASSISTANT_PAGE_CONFIRM, %GTK_ASSISTANT_PAGE_SUMMARY or
  * %GTK_ASSISTANT_PAGE_PROGRESS to be correct.
+ *
+ * The Cancel button will only be shown if the page isn't "committed".
+ * See gtk_assistant_commit() for details.
  */
 typedef enum
 {
