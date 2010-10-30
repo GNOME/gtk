@@ -55,7 +55,7 @@ guint     gdk_rgba_hash  (gconstpointer p);
 gboolean  gdk_rgba_equal (gconstpointer p1,
                           gconstpointer p2);
 
-gchar *   gdk_rgba_to_string (GdkRGBA *rgba);
+gchar *   gdk_rgba_to_string (const GdkRGBA *rgba);
 
 GType     gdk_rgba_get_type (void) G_GNUC_CONST;
 
