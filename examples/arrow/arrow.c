@@ -44,7 +44,7 @@ int main( int   argc,
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   /* Create a box to hold the arrows/buttons */
-  box = gtk_hbox_new (FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (box), 2);
   gtk_container_add (GTK_CONTAINER (window), box);
 

@@ -222,7 +222,7 @@ create_radio (void)
   GtkWidget *radio;
   GtkWidget *align;
 
-  widget = gtk_vbox_new (FALSE, 3);
+  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   radio = gtk_radio_button_new_with_mnemonic (NULL, "Radio Button _One");
   gtk_box_pack_start (GTK_BOX (widget), radio, FALSE, FALSE, 0);
   radio = gtk_radio_button_new_with_mnemonic_from_widget (GTK_RADIO_BUTTON (radio), "Radio Button _Two");
@@ -261,7 +261,7 @@ create_accel_label (void)
   gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (widget), button);
   gtk_widget_set_no_show_all (button, TRUE);
 
-  box = gtk_vbox_new (FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (box), widget);
   gtk_container_add (GTK_CONTAINER (box), button);
 
@@ -424,7 +424,7 @@ create_icon_view (void)
 
   gtk_container_add (GTK_CONTAINER (widget), icon_view);
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, TRUE, TRUE, 0);
@@ -446,7 +446,7 @@ create_color_button (void)
   GtkWidget *align;
   GdkColor color;
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   color.red = 0x1e<<8;  /* Go Gagne! */
   color.green = 0x90<<8;
@@ -468,7 +468,7 @@ create_font_button (void)
   GtkWidget *picker;
   GtkWidget *align;
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   picker = gtk_font_button_new_with_font ("Sans Serif 10");
   gtk_container_add (GTK_CONTAINER (align), picker);
@@ -488,8 +488,8 @@ create_file_button (void)
   GtkWidget *picker;
   GtkWidget *align;
 
-  vbox = gtk_vbox_new (FALSE, 12);
-  vbox2 = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 12);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   picker = gtk_file_chooser_button_new ("File Chooser Button",
 		  			GTK_FILE_CHOOSER_ACTION_OPEN);
@@ -507,7 +507,7 @@ create_file_button (void)
 		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
 		      FALSE, FALSE, 0);
 
-  vbox2 = gtk_vbox_new (FALSE, 3);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   picker = gtk_file_chooser_button_new ("File Chooser Button",
 		  			GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
@@ -530,8 +530,8 @@ create_separator (void)
   GtkWidget *hbox;
   GtkWidget *vbox;
 
-  vbox = gtk_vbox_new (FALSE, 3);
-  hbox = gtk_hbox_new (TRUE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox),
 		      gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
 		      TRUE, TRUE, 0);
@@ -555,8 +555,8 @@ create_panes (void)
   GtkWidget *vbox;
   GtkWidget *pane;
 
-  vbox = gtk_vbox_new (FALSE, 3);
-  hbox = gtk_hbox_new (TRUE, 12);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 12);
   pane = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_paned_pack1 (GTK_PANED (pane),
 		   g_object_new (GTK_TYPE_FRAME,
@@ -788,7 +788,7 @@ create_menubar (void)
   item = gtk_menu_item_new_with_mnemonic ("_Help");
   gtk_menu_shell_append (GTK_MENU_SHELL (widget), item);
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
@@ -868,7 +868,7 @@ create_progressbar (void)
   widget = gtk_progress_bar_new ();
   gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (widget), 0.5);
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
@@ -901,7 +901,7 @@ create_spinbutton (void)
 
   widget = gtk_spin_button_new_with_range (0.0, 100.0, 1.0);
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
@@ -919,7 +919,7 @@ create_statusbar (void)
   GtkWidget *widget;
   GtkWidget *vbox, *align;
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), gtk_label_new ("Status Bar"));
   gtk_box_pack_start (GTK_BOX (vbox),
@@ -944,8 +944,8 @@ create_scales (void)
   GtkWidget *hbox;
   GtkWidget *vbox;
 
-  vbox = gtk_vbox_new (FALSE, 3);
-  hbox = gtk_hbox_new (TRUE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox),
 		      gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
                                                 0.0, 100.0, 1.0),
@@ -972,7 +972,7 @@ create_image (void)
   widget = gtk_image_new_from_stock (GTK_STOCK_DIALOG_WARNING, 
 				     GTK_ICON_SIZE_DND);
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
@@ -992,7 +992,7 @@ create_spinner (void)
   widget = gtk_spinner_new ();
   gtk_widget_set_size_request (widget, 24, 24);
 
-  vbox = gtk_vbox_new (FALSE, 3);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);
   gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);

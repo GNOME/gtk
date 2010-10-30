@@ -96,11 +96,11 @@ static void create_range_controls( void )
                       NULL);
     gtk_window_set_title (GTK_WINDOW (window), "range controls");
 
-    box1 = gtk_vbox_new (FALSE, 0);
+    box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), box1);
     gtk_widget_show (box1);
 
-    box2 = gtk_hbox_new (FALSE, 10);
+    box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
@@ -116,7 +116,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box2), vscale, TRUE, TRUE, 0);
     gtk_widget_show (vscale);
 
-    box3 = gtk_vbox_new (FALSE, 10);
+    box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 10);
     gtk_box_pack_start (GTK_BOX (box2), box3, TRUE, TRUE, 0);
     gtk_widget_show (box3);
 
@@ -136,7 +136,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box3), scrollbar, TRUE, TRUE, 0);
     gtk_widget_show (scrollbar);
 
-    box2 = gtk_hbox_new (FALSE, 10);
+    box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
@@ -149,7 +149,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
 
-    box2 = gtk_hbox_new (FALSE, 10);
+    box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
 
     /* An option menu to change the position of the value */
@@ -184,7 +184,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
-    box2 = gtk_hbox_new (FALSE, 10);
+    box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
 
     /* Yet another option menu, this time for the update policy of the
@@ -218,7 +218,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
-    box2 = gtk_hbox_new (FALSE, 10);
+    box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
 
     /* An HScale widget for adjusting the number of digits on the
@@ -238,7 +238,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
-    box2 = gtk_hbox_new (FALSE, 10);
+    box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
 
     /* And, one last HScale widget for adjusting the page size of the
@@ -262,7 +262,7 @@ static void create_range_controls( void )
     gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
     gtk_widget_show (separator);
 
-    box2 = gtk_vbox_new (FALSE, 10);
+    box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 10);
     gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
     gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
     gtk_widget_show (box2);

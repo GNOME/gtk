@@ -381,10 +381,10 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   priv->default_set = FALSE;
   priv->default_alpha_set = FALSE;
   
-  top_hbox = gtk_hbox_new (FALSE, 12);
+  top_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
   gtk_box_pack_start (GTK_BOX (colorsel), top_hbox, FALSE, FALSE, 0);
   
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   priv->triangle_colorsel = gtk_hsv_new ();
   g_signal_connect (priv->triangle_colorsel, "changed",
                     G_CALLBACK (hsv_changed), colorsel);
@@ -394,7 +394,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_widget_set_tooltip_text (priv->triangle_colorsel,
                         _("Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."));
   
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 6);
   gtk_box_pack_end (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   
   frame = gtk_frame_new (NULL);
@@ -418,7 +418,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_widget_set_tooltip_text (button,
                         _("Click the eyedropper, then click a color anywhere on your screen to select that color."));
   
-  top_right_vbox = gtk_vbox_new (FALSE, 6);
+  top_right_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   gtk_box_pack_start (GTK_BOX (top_hbox), top_right_vbox, FALSE, FALSE, 0);
   table = gtk_table_new (8, 6, FALSE);
   gtk_box_pack_start (GTK_BOX (top_right_vbox), table, FALSE, FALSE, 0);
@@ -507,7 +507,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
 	}
     }
   set_selected_palette (colorsel, 0, 0);
-  priv->palette_frame = gtk_vbox_new (FALSE, 6);
+  priv->palette_frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   label = gtk_label_new_with_mnemonic (_("_Palette:"));
   gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
   gtk_box_pack_start (GTK_BOX (priv->palette_frame), label, FALSE, FALSE, 0);
@@ -1029,7 +1029,7 @@ color_sample_new (GtkColorSelection *colorsel)
   
   priv = colorsel->private_data;
   
-  priv->sample_area = gtk_hbox_new (FALSE, 0);
+  priv->sample_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   priv->old_sample = gtk_drawing_area_new ();
   priv->cur_sample = gtk_drawing_area_new ();
 

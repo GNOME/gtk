@@ -417,7 +417,7 @@ do_stock_browser (GtkWidget *do_widget)
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
-      hbox = gtk_hbox_new (FALSE, 8);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
       gtk_container_add (GTK_CONTAINER (window), hbox);
 
       sw = gtk_scrolled_window_new (NULL, NULL);
@@ -486,7 +486,7 @@ do_stock_browser (GtkWidget *do_widget)
       frame = gtk_frame_new ("Selected Item");
       gtk_container_add (GTK_CONTAINER (align), frame);
 
-      vbox = gtk_vbox_new (FALSE, 8);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 4);
       gtk_container_add (GTK_CONTAINER (frame), vbox);
 

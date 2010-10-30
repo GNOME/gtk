@@ -73,7 +73,7 @@
  *
  *    GtkWidget *window, *radio1, *radio2, *box, *entry;
  *    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
- *    box = gtk_vbox_new (TRUE, 2);
+ *    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 2);
  *
  *    /&ast; Create a radio button with a GtkEntry widget &ast;/
  *    radio1 = gtk_radio_button_new (NULL);

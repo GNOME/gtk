@@ -1025,9 +1025,9 @@ gtk_button_construct_child (GtkButton *button)
 
       if (priv->image_position == GTK_POS_LEFT ||
 	  priv->image_position == GTK_POS_RIGHT)
-	box = gtk_hbox_new (FALSE, image_spacing);
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, image_spacing);
       else
-	box = gtk_vbox_new (FALSE, image_spacing);
+	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, image_spacing);
 
       if (priv->align_set)
 	align = gtk_alignment_new (priv->xalign, priv->yalign, 0.0, 0.0);

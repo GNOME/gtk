@@ -190,7 +190,7 @@ do_rotated_text (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 4 * RADIUS, 2 * RADIUS);
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
 
-      box = gtk_hbox_new (TRUE, 0);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 0);
       gtk_container_add (GTK_CONTAINER (window), box);
 
       /* Add a drawing area */

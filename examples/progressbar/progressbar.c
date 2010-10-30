@@ -116,7 +116,7 @@ int main( int   argc,
     gtk_window_set_title (GTK_WINDOW (pdata->window), "GtkProgressBar");
     gtk_container_set_border_width (GTK_CONTAINER (pdata->window), 0);
 
-    vbox = gtk_vbox_new (FALSE, 5);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 10);
     gtk_container_add (GTK_CONTAINER (pdata->window), vbox);
     gtk_widget_show (vbox);

@@ -221,7 +221,8 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   g_signal_connect_swapped (tooltip->window, "draw",
 			    G_CALLBACK (gtk_tooltip_paint_window), tooltip);
 
-  tooltip->box = gtk_hbox_new (FALSE, style->xthickness);
+  tooltip->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,
+                              FALSE, style->xthickness);
   gtk_container_add (GTK_CONTAINER (tooltip->alignment), tooltip->box);
   gtk_widget_show (tooltip->box);
 

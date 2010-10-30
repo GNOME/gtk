@@ -184,7 +184,7 @@ do_textscroll (GtkWidget *do_widget)
 			G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
       
-      hbox = gtk_hbox_new (TRUE, 6);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 6);
       gtk_container_add (GTK_CONTAINER (window), hbox);
 
       create_text_view (hbox, TRUE);

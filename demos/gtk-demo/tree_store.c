@@ -402,7 +402,7 @@ do_tree_store (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed), &window);
 
-      vbox = gtk_vbox_new (FALSE, 8);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 

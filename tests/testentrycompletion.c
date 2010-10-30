@@ -301,7 +301,7 @@ add_with_prop_edit_button (GtkWidget *vbox, GtkWidget *entry, GtkEntryCompletion
 {
 	GtkWidget *hbox, *button;
 
-	hbox = gtk_hbox_new (FALSE, 12);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
 	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
@@ -327,7 +327,7 @@ main (int argc, char *argv[])
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   g_signal_connect (window, "delete_event", gtk_main_quit, NULL);
   
-  vbox = gtk_vbox_new (FALSE, 2);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 2);
   gtk_container_add (GTK_CONTAINER (window), vbox);
     
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);

@@ -399,10 +399,10 @@ create_custom_widget (GtkPrintOperation *operation,
   GtkWidget *vbox, *hbox, *font, *label;
 
   gtk_print_operation_set_custom_tab_label (operation, "Other");
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
 
-  hbox = gtk_hbox_new (FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
 
@@ -566,9 +566,9 @@ preview_cb (GtkPrintOperation        *op,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_transient_for (GTK_WINDOW (window), 
 				GTK_WINDOW (main_window));
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox,
 		      FALSE, FALSE, 0);
   page = gtk_spin_button_new_with_range (1, 100, 1);

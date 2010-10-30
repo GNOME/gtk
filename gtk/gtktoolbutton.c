@@ -510,9 +510,9 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
     case GTK_TOOLBAR_BOTH:
       if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
-	box = gtk_vbox_new (FALSE, icon_spacing);
+	box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, icon_spacing);
       else
-	box = gtk_hbox_new (FALSE, icon_spacing);
+	box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, icon_spacing);
       if (icon)
 	gtk_box_pack_start (GTK_BOX (box), icon, TRUE, TRUE, 0);
       gtk_box_pack_end (GTK_BOX (box), label, FALSE, TRUE, 0);
@@ -522,7 +522,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
     case GTK_TOOLBAR_BOTH_HORIZ:
       if (text_orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  box = gtk_hbox_new (FALSE, icon_spacing);
+	  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, icon_spacing);
 	  if (icon)
 	    gtk_box_pack_start (GTK_BOX (box), icon, label? FALSE : TRUE, TRUE, 0);
 	  if (label)
@@ -530,7 +530,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 	}
       else
 	{
-	  box = gtk_vbox_new (FALSE, icon_spacing);
+	  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, icon_spacing);
 	  if (icon)
 	    gtk_box_pack_end (GTK_BOX (box), icon, label ? FALSE : TRUE, TRUE, 0);
 	  if (label)

@@ -1064,14 +1064,14 @@ main (int argc, char **argv)
         gtk_container_set_border_width (GTK_CONTAINER (window), 5);
         g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
-        mainbox = gtk_vbox_new (FALSE, 2);
+        mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 2);
         gtk_container_add (GTK_CONTAINER (window), mainbox);
 
         /* GtkCellView */
         tmp = gtk_frame_new ("GtkCellView");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1096,7 +1096,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("GtkComboBox (list)");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1138,7 +1138,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("GtkComboBox (dynamic list)");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1184,7 +1184,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("GtkComboBox (custom)");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1244,7 +1244,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("GtkComboBox (tree)");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1289,7 +1289,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("GtkComboBox (grid mode)");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1301,7 +1301,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("GtkComboBox with entry");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1314,7 +1314,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("What are you ?");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1339,7 +1339,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("Where are you ?");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 
@@ -1372,7 +1372,7 @@ main (int argc, char **argv)
         tmp = gtk_frame_new ("Unconstrained Menu");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
 
-        boom = gtk_vbox_new (FALSE, 0);
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
         gtk_container_add (GTK_CONTAINER (tmp), boom);
 

@@ -473,7 +473,7 @@ gtk_recent_chooser_default_constructor (GType                  type,
 		       GDK_ACTION_COPY);
   gtk_drag_source_add_uri_targets (impl->recent_view);
 
-  impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
+  impl->filter_combo_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
   
   impl->filter_combo = gtk_combo_box_text_new ();
   gtk_combo_box_set_focus_on_click (GTK_COMBO_BOX (impl->filter_combo), FALSE);

@@ -60,7 +60,7 @@ add_completion_test_page (GtkWidget   *assistant,
   GtkWidget *check;
   PageData *pdata;
 
-  page = gtk_vbox_new (0, FALSE);
+  page = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0, FALSE);
   check = gtk_check_button_new_with_label ("Complete");
 
   gtk_container_add (GTK_CONTAINER (page), gtk_label_new (text));
@@ -337,7 +337,7 @@ create_nonlinear_assistant (GtkWidget *widget)
 					   nonlinear_assistant_forward_page,
 					   NULL, NULL);
 
-      page = gtk_vbox_new (FALSE, 6);
+      page = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
 
       button = gtk_radio_button_new_with_label (NULL, "branch A");
       gtk_box_pack_start (GTK_BOX (page), button, FALSE, FALSE, 0);
@@ -574,7 +574,7 @@ main (int argc, gchar *argv[])
   g_signal_connect (G_OBJECT (window), "delete-event",
 		    G_CALLBACK (gtk_false), NULL);
 
-  box = gtk_vbox_new (FALSE, 6);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   gtk_container_add (GTK_CONTAINER (window), box);
 
   for (i = 0; i < G_N_ELEMENTS (buttons); i++)

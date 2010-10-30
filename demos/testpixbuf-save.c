@@ -365,7 +365,7 @@ main (int argc, char **argv)
         g_signal_connect (window, "destroy",   
 			  G_CALLBACK (close_app), NULL);
    
-        vbox = gtk_vbox_new (FALSE, 0);
+        vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_add (GTK_CONTAINER (window), vbox);  
    
         drawing_area = gtk_drawing_area_new ();

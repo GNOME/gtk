@@ -404,7 +404,7 @@ open_valigned_label_window (void)
   g_signal_connect (test_window, "delete-event",
                     G_CALLBACK (gtk_main_quit), test_window);
 
-  box = gtk_vbox_new (FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_widget_show (box);
   gtk_container_add (GTK_CONTAINER (window), box);
 

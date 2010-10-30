@@ -461,13 +461,13 @@ do_offscreen_window2 (GtkWidget *do_widget)
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-      vbox = gtk_vbox_new (0, FALSE);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0, FALSE);
 
       bin = gtk_mirror_bin_new ();
 
       group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
 
-      hbox = gtk_hbox_new (FALSE, 6);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 6);
       backbutton = gtk_button_new ();
       gtk_container_add (GTK_CONTAINER (backbutton),
                          gtk_image_new_from_stock (GTK_STOCK_GO_BACK, 4));

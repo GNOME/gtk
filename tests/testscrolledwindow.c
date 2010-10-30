@@ -39,8 +39,8 @@ scrollable_policy (void)
   GtkWidget *viewport, *label, *expander, *widget;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  hbox   = gtk_hbox_new (FALSE, 2);
-  vbox   = gtk_vbox_new (FALSE, 6);
+  hbox   = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
+  vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
 
   gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
@@ -81,14 +81,14 @@ scrollable_policy (void)
   /* Add controls here */
   expander = gtk_expander_new ("Controls");
   gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
-  cntl = gtk_vbox_new (FALSE, 2);
+  cntl = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 2);
   gtk_widget_show (cntl);
   gtk_widget_show (expander);
   gtk_container_add (GTK_CONTAINER (expander), cntl);
   gtk_box_pack_start (GTK_BOX (vbox), expander, FALSE, FALSE, 0);
 
   /* Add Horizontal policy control here */
-  hbox = gtk_hbox_new (FALSE, 2);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
   gtk_widget_show (hbox);
 
   widget = gtk_label_new ("hscroll-policy");
@@ -108,7 +108,7 @@ scrollable_policy (void)
                     G_CALLBACK (horizontal_policy_changed), viewport);
 
   /* Add Vertical policy control here */
-  hbox = gtk_hbox_new (FALSE, 2);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
   gtk_widget_show (hbox);
 
   widget = gtk_label_new ("vscroll-policy");
@@ -129,7 +129,7 @@ scrollable_policy (void)
 
 
   /* Add Label orientation control here */
-  hbox = gtk_hbox_new (FALSE, 2);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
   gtk_widget_show (hbox);
 
   widget = gtk_label_new ("label-flip");

@@ -101,7 +101,7 @@ int main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (window), "delete-event", gtk_main_quit, NULL);
 
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   frame = gtk_frame_new ("Testing");

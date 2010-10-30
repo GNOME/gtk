@@ -9066,7 +9066,7 @@ gtk_XParseGeometry (const char   *string,
  *   gtk_init (&argc, &argv);
  *   
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
- *   vbox = gtk_vbox_new (FALSE, 0);
+ *   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
  *   
  *   gtk_container_add (GTK_CONTAINER (window), vbox);
  *   fill_with_content (vbox);

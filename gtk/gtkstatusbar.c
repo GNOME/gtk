@@ -211,7 +211,7 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
   gtk_box_pack_start (box, priv->frame, TRUE, TRUE, 0);
   gtk_widget_show (priv->frame);
 
-  message_area = gtk_hbox_new (FALSE, 4);
+  message_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 4);
   gtk_container_add (GTK_CONTAINER (priv->frame), message_area);
   gtk_widget_show (message_area);
 

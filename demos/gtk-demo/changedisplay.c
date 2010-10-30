@@ -357,7 +357,7 @@ create_frame (ChangeDisplayInfo *info,
 
   *frame = gtk_frame_new (title);
 
-  hbox = gtk_hbox_new (FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
   gtk_container_add (GTK_CONTAINER (*frame), hbox);
 
@@ -375,7 +375,7 @@ create_frame (ChangeDisplayInfo *info,
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (*tree_view));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
 
-  *button_vbox = gtk_vbox_new (FALSE, 5);
+  *button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
   gtk_box_pack_start (GTK_BOX (hbox), *button_vbox, FALSE, FALSE, 0);
 
   if (!info->size_group)
@@ -624,7 +624,7 @@ do_changedisplay (GtkWidget *do_widget)
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (info->window));
 
-      vbox = gtk_vbox_new (FALSE, 5);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
       gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 

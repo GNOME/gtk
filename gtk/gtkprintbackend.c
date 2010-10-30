@@ -753,7 +753,7 @@ request_password (GtkPrintBackend  *backend,
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
-  main_box = gtk_hbox_new (FALSE, 0);
+  main_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
 
   /* Left */
   icon = gtk_image_new_from_stock (GTK_STOCK_DIALOG_AUTHENTICATION, GTK_ICON_SIZE_DIALOG);
@@ -762,7 +762,7 @@ request_password (GtkPrintBackend  *backend,
 
 
   /* Right */
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_widget_set_size_request (GTK_WIDGET (vbox), 320, -1);
 
   /* Right - 1. */
@@ -789,7 +789,7 @@ request_password (GtkPrintBackend  *backend,
       priv->auth_info[i] = g_strdup (ai_default[i]);
       if (ai_display[i] != NULL)
         {
-          box = gtk_hbox_new (TRUE, 0);
+          box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 0);
 
           label = gtk_label_new (ai_display[i]);
           gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
