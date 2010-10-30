@@ -23,6 +23,7 @@
 
 #include "gtkcelllayout.h"
 #include "gtkcellarea.h"
+#include "gtkcellareaiter.h"
 
 /* GObjectClass */
 static void      gtk_cell_area_dispose                             (GObject            *object);
@@ -481,6 +482,7 @@ gtk_cell_area_forall (GtkCellArea        *area,
 
 gint
 gtk_cell_area_event (GtkCellArea        *area,
+		     GtkCellAreaIter    *iter,
 		     GtkWidget          *widget,
 		     GdkEvent           *event,
 		     const GdkRectangle *cell_area)
@@ -488,6 +490,7 @@ gtk_cell_area_event (GtkCellArea        *area,
   GtkCellAreaClass *class;
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
+  g_return_val_if_fail (GTK_IS_CELL_AREA_ITER (iter), 0);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   g_return_val_if_fail (event != NULL, 0);
   g_return_val_if_fail (cell_area != NULL, 0);
@@ -495,7 +498,7 @@ gtk_cell_area_event (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->event)
-    return class->event (area, widget, event, cell_area);
+    return class->event (area, iter, widget, event, cell_area);
 
   g_warning ("GtkCellAreaClass::event not implemented for `%s'", 
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -504,21 +507,23 @@ gtk_cell_area_event (GtkCellArea        *area,
 
 void
 gtk_cell_area_render (GtkCellArea        *area,
-		      cairo_t            *cr,
+		      GtkCellAreaIter    *iter,
 		      GtkWidget          *widget,
+		      cairo_t            *cr,
 		      const GdkRectangle *cell_area)
 {
   GtkCellAreaClass *class;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (cr != NULL);
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cr != NULL);
   g_return_if_fail (cell_area != NULL);
 
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->render)
-    class->render (area, cr, widget, cell_area);
+    class->render (area, iter, widget, cr, cell_area);
   else
     g_warning ("GtkCellAreaClass::render not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));

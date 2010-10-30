@@ -51,12 +51,14 @@ static void      gtk_cell_area_box_forall                         (GtkCellArea  
 								   GtkCellCallback     callback,
 								   gpointer            callback_data);
 static gint      gtk_cell_area_box_event                          (GtkCellArea        *area,
+								   GtkCellAreaIter    *iter,
 								   GtkWidget          *widget,
 								   GdkEvent           *event,
 								   const GdkRectangle *cell_area);
 static void      gtk_cell_area_box_render                         (GtkCellArea        *area,
-								   cairo_t            *cr,
+								   GtkCellAreaIter    *iter,
 								   GtkWidget          *widget,
+								   cairo_t            *cr,
 								   const GdkRectangle *cell_area);
 
 static GtkCellAreaIter    *gtk_cell_area_box_create_iter          (GtkCellArea        *area);
@@ -418,8 +420,68 @@ gtk_cell_area_box_allocate (GtkCellAreaBox     *box,
 			    gint                size,
 			    gint               *n_allocs)
 {
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  CellGroup             *group;
+  GList                 *group_list;
+  GtkRequestedSize      *orientation_sizes;
+  gint                   n_groups, n_expand_groups, i;
+  gint                   avail_size = size;
+  gint                   extra_size, extra_extra;
+  gint                   position;
+  GtkCellAreaBoxAllocation *allocs;
 
+  n_expand_groups = count_expand_groups (box);
 
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    orientation_sizes = gtk_cell_area_box_iter_get_widths (iter, &n_groups);
+  else
+    orientation_sizes = gtk_cell_area_box_iter_get_heights (iter, &n_groups);
+
+  /* First start by naturally allocating space among groups of cells */
+  avail_size -= (n_groups - 1) * priv->spacing;
+  for (i = 0; i < n_groups; i++)
+    avail_size -= orientation_sizes[i].minimum_size;
+
+  avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, orientation_sizes);
+
+  /* Calculate/distribute expand for groups */
+  if (n_expand_groups > 0)
+    {
+      extra_size  = avail_size / n_expand_groups;
+      extra_extra = avail_size % n_expand_groups;
+    }
+  else
+    extra_size = extra_extra = 0;
+
+  allocs = g_new (GtkCellAreaBoxAllocation, n_groups);
+
+  for (position = 0, group_list = priv->groups; group_list; group_list = group_list->next)
+    {
+      group = group_list->data;
+
+      allocs[group->id].position = position;
+      allocs[group->id].size     = orientation_sizes[group->id].minimum_size;
+
+      if (group->expand)
+	{
+	  allocs[group->id].size += extra_size;
+	  if (extra_extra)
+	    {
+	      allocs[group->id].size++;
+	      extra_extra--;
+	    }
+	}
+
+      position += allocs[group->id].size;
+      position += priv->spacing;
+    }
+
+  g_free (orientation_sizes);
+
+  if (n_allocs)
+    *n_allocs = n_groups;
+
+  return allocs;
 }
 
 
@@ -546,6 +608,7 @@ gtk_cell_area_box_forall (GtkCellArea        *area,
 
 static gint
 gtk_cell_area_box_event (GtkCellArea        *area,
+			 GtkCellAreaIter    *iter,
 			 GtkWidget          *widget,
 			 GdkEvent           *event,
 			 const GdkRectangle *cell_area)
@@ -557,8 +620,9 @@ gtk_cell_area_box_event (GtkCellArea        *area,
 
 static void
 gtk_cell_area_box_render (GtkCellArea        *area,
-			  cairo_t            *cr,
+			  GtkCellAreaIter    *iter,
 			  GtkWidget          *widget,
+			  cairo_t            *cr,
 			  const GdkRectangle *cell_area)
 {
 

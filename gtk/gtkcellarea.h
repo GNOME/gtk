@@ -80,12 +80,14 @@ struct _GtkCellAreaClass
 							  GtkCellCallback          callback,
 							  gpointer                 callback_data);
   gint               (* event)                           (GtkCellArea             *area,
+							  GtkCellAreaIter         *iter,
 							  GtkWidget               *widget,
 							  GdkEvent                *event,
 							  const GdkRectangle      *cell_area);
   void               (* render)                          (GtkCellArea             *area,
-							  cairo_t                 *cr,
+							  GtkCellAreaIter         *iter,
 							  GtkWidget               *widget,
+							  cairo_t                 *cr,
 							  const GdkRectangle      *cell_area);
 
   /* Geometry */
@@ -137,12 +139,14 @@ void               gtk_cell_area_forall                         (GtkCellArea    
 								 GtkCellCallback     callback,
 								 gpointer            callback_data);
 gint               gtk_cell_area_event                          (GtkCellArea        *area,
+								 GtkCellAreaIter    *iter,
 								 GtkWidget          *widget,
 								 GdkEvent           *event,
 								 const GdkRectangle *cell_area);
 void               gtk_cell_area_render                         (GtkCellArea        *area,
-								 cairo_t            *cr,
+								 GtkCellAreaIter    *iter,
 								 GtkWidget          *widget,
+								 cairo_t            *cr,
 								 const GdkRectangle *cell_area);
 
 /* Geometry */
