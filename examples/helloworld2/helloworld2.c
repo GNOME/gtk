@@ -48,7 +48,7 @@ int main (int   argc,
     /* We create a box to pack widgets into.  This is described in detail
      * in the "packing" section. The box is not really visible, it
      * is just used as a tool to arrange widgets. */
-    box1 = gtk_hbox_new (FALSE, 0);
+    box1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
 
     /* Put the box into the main window. */
     gtk_container_add (GTK_CONTAINER (window), box1);

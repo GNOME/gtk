@@ -350,7 +350,7 @@ main (int argc, char **argv)
   g_signal_connect (window, "destroy",
                     G_CALLBACK (gtk_main_quit), NULL);
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
   tree = create_tree ();

@@ -266,7 +266,7 @@ do_search_entry (GtkWidget *do_widget)
 
       content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
-      vbox = gtk_vbox_new (FALSE, 5);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
       gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
@@ -274,7 +274,7 @@ do_search_entry (GtkWidget *do_widget)
       gtk_label_set_markup (GTK_LABEL (label), "Search entry demo");
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
-      hbox = gtk_hbox_new (FALSE, 10);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 0);
 

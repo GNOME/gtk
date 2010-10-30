@@ -68,7 +68,7 @@ create_flicker (void)
   gtk_paned_pack1 (GTK_PANED (hpaned1), vpaned2, FALSE, TRUE);
   gtk_paned_set_position (GTK_PANED (vpaned2), 100);
 
-  hbox2 = gtk_hbox_new (FALSE, 0);
+  hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_widget_show (hbox2);
   gtk_paned_pack1 (GTK_PANED (vpaned2), hbox2, FALSE, TRUE);
 
@@ -82,7 +82,7 @@ create_flicker (void)
   gtk_widget_show (spinbutton8);
   gtk_box_pack_start (GTK_BOX (hbox2), spinbutton8, TRUE, TRUE, 0);
 
-  vbox1 = gtk_vbox_new (FALSE, 0);
+  vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_widget_show (vbox1);
   gtk_paned_pack2 (GTK_PANED (vpaned2), vbox1, TRUE, TRUE);
 
@@ -131,7 +131,7 @@ create_flicker (void)
   gtk_paned_pack2 (GTK_PANED (hpaned1), vpaned1, TRUE, TRUE);
   gtk_paned_set_position (GTK_PANED (vpaned1), 0);
 
-  hbox1 = gtk_hbox_new (FALSE, 0);
+  hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_widget_show (hbox1);
   gtk_paned_pack1 (GTK_PANED (vpaned1), hbox1, FALSE, TRUE);
 
@@ -150,7 +150,7 @@ create_flicker (void)
   gtk_widget_show (spinbutton19);
   gtk_box_pack_start (GTK_BOX (hbox1), spinbutton19, TRUE, TRUE, 0);
 
-  vbox2 = gtk_vbox_new (FALSE, 0);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_widget_show (vbox2);
   gtk_paned_pack2 (GTK_PANED (vpaned1), vbox2, FALSE, FALSE);
 

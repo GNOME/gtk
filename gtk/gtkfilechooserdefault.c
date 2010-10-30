@@ -3706,7 +3706,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   GtkWidget *hbox;
   GtkWidget *widget;
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   gtk_widget_show (vbox);
 
   /* Shortcuts tree */
@@ -3716,7 +3716,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
 
   /* Box for buttons */
 
-  hbox = gtk_hbox_new (TRUE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 6);
   gtk_size_group_add_widget (size_group, hbox);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
@@ -4422,12 +4422,13 @@ file_pane_create (GtkFileChooserDefault *impl,
   GtkWidget *hbox;
   GtkWidget *widget;
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   gtk_widget_show (vbox);
 
   /* Box for lists and preview */
 
-  hbox = gtk_hbox_new (FALSE, PREVIEW_HBOX_SPACING);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL,
+                      FALSE, PREVIEW_HBOX_SPACING);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
@@ -4438,13 +4439,13 @@ file_pane_create (GtkFileChooserDefault *impl,
 
   /* Preview */
 
-  impl->preview_box = gtk_vbox_new (FALSE, 12);
+  impl->preview_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 12);
   gtk_box_pack_start (GTK_BOX (hbox), impl->preview_box, FALSE, FALSE, 0);
   /* Don't show preview box initially */
 
   /* Filter combo */
 
-  impl->filter_combo_hbox = gtk_hbox_new (FALSE, 12);
+  impl->filter_combo_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
 
   widget = filter_create (impl);
 
@@ -4632,7 +4633,7 @@ save_widgets_create (GtkFileChooserDefault *impl)
 
   location_switch_to_path_bar (impl);
 
-  vbox = gtk_vbox_new (FALSE, 12);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 12);
 
   table = gtk_table_new (2, 2, FALSE);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
@@ -4972,10 +4973,10 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   /* size group is used by the [+][-] buttons and the filter combo */
   size_group = gtk_size_group_new (GTK_SIZE_GROUP_VERTICAL);
-  vbox = gtk_vbox_new (FALSE, 12);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 12);
 
   /* Location widgets */
-  impl->browse_path_bar_hbox = gtk_hbox_new (FALSE, 12);
+  impl->browse_path_bar_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
   gtk_box_pack_start (GTK_BOX (vbox), impl->browse_path_bar_hbox, FALSE, FALSE, 0);
   gtk_widget_show (impl->browse_path_bar_hbox);
 
@@ -5005,7 +5006,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
 
   /* Box for the location label and entry */
 
-  impl->location_entry_box = gtk_hbox_new (FALSE, 12);
+  impl->location_entry_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
   gtk_box_pack_start (GTK_BOX (vbox), impl->location_entry_box, FALSE, FALSE, 0);
 
   impl->location_label = gtk_label_new_with_mnemonic (_("_Location:"));
@@ -8941,7 +8942,7 @@ search_setup_widgets (GtkFileChooserDefault *impl)
   GtkWidget *image;
   gchar *tmp;
 
-  impl->search_hbox = gtk_hbox_new (FALSE, 12);
+  impl->search_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
   
   /* Image */
 
@@ -9371,7 +9372,7 @@ recent_hide_entry (GtkFileChooserDefault *impl)
   GtkWidget *image;
   gchar *tmp;
 
-  impl->recent_hbox = gtk_hbox_new (FALSE, 12);
+  impl->recent_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
 
   /* Image */
   image = gtk_image_new_from_icon_name ("document-open-recent", GTK_ICON_SIZE_BUTTON);

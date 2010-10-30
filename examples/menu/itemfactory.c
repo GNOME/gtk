@@ -150,7 +150,7 @@ int main( int argc,
   gtk_widget_set_size_request (GTK_WIDGET(window), 300, 200);
  
   /* Make a vbox to put the three menus in */
-  main_vbox = gtk_vbox_new (FALSE, 1);
+  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 1);
   gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 1);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
  

@@ -67,7 +67,7 @@ counter (void *data)
   gtk_window_set_title (GTK_WINDOW (window), name);
   gtk_widget_set_size_request (window, 100, 50);
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
 
   g_signal_connect (window, "delete-event",
                     G_CALLBACK (delete_cb), &flag);

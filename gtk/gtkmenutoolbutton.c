@@ -77,12 +77,12 @@ gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      box = gtk_hbox_new (FALSE, 0);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
       gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_DOWN, GTK_SHADOW_NONE);
     }
   else
     {
-      box = gtk_vbox_new (FALSE, 0);
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
       gtk_arrow_set (GTK_ARROW (priv->arrow), GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
     }
 
@@ -398,7 +398,7 @@ gtk_menu_tool_button_init (GtkMenuToolButton *button)
 
   gtk_tool_item_set_homogeneous (GTK_TOOL_ITEM (button), FALSE);
 
-  box = gtk_hbox_new (FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
 
   real_button = gtk_bin_get_child (GTK_BIN (button));
   g_object_ref (real_button);

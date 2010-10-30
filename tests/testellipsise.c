@@ -133,7 +133,7 @@ main (int argc, char *argv[])
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   combo = gtk_combo_box_text_new ();

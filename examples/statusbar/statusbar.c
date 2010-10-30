@@ -41,7 +41,7 @@ int main( int   argc,
     g_signal_connect (window, "delete-event",
                       G_CALLBACK (exit), NULL);
 
-    vbox = gtk_vbox_new (FALSE, 1);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 1);
     gtk_container_add (GTK_CONTAINER (window), vbox);
     gtk_widget_show (vbox);
 

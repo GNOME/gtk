@@ -44,7 +44,7 @@ do_infobar (GtkWidget *do_widget)
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
-      vbox = gtk_vbox_new (FALSE, 0);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       bar = gtk_info_bar_new ();
@@ -81,7 +81,7 @@ do_infobar (GtkWidget *do_widget)
       frame = gtk_frame_new ("Info bars");
       gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 8);
 
-      vbox2 = gtk_vbox_new (FALSE, 8);
+      vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox2), 8);
       gtk_container_add (GTK_CONTAINER (frame), vbox2);
 

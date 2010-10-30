@@ -2158,8 +2158,8 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      if (toplevel != NULL)
 		gtk_window_set_transient_for (GTK_WINDOW (menu->tearoff_window),
 					      GTK_WINDOW (toplevel));
-	      
-	      menu->tearoff_hbox = gtk_hbox_new (FALSE, FALSE);
+
+	      menu->tearoff_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
 	      gtk_container_add (GTK_CONTAINER (menu->tearoff_window), menu->tearoff_hbox);
 
               height = gdk_window_get_height (gtk_widget_get_window (GTK_WIDGET (menu)));

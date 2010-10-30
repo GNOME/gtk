@@ -345,7 +345,7 @@ do_combobox (GtkWidget *do_widget)
     
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-    vbox = gtk_vbox_new (FALSE, 2);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 2);
     gtk_container_add (GTK_CONTAINER (window), vbox);
 
     /* A combobox demonstrating cell renderers, separators and
@@ -354,7 +354,7 @@ do_combobox (GtkWidget *do_widget)
     frame = gtk_frame_new ("Some stock icons");
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
     
-    box = gtk_vbox_new (FALSE, 0);
+    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
     
@@ -395,7 +395,7 @@ do_combobox (GtkWidget *do_widget)
     frame = gtk_frame_new ("Where are we ?");
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-    box = gtk_vbox_new (FALSE, 0);
+    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
     
@@ -424,7 +424,7 @@ do_combobox (GtkWidget *do_widget)
     frame = gtk_frame_new ("Editable");
     gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
     
-    box = gtk_vbox_new (FALSE, 0);
+    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 5);
     gtk_container_add (GTK_CONTAINER (frame), box);
     

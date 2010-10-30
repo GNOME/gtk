@@ -1610,49 +1610,49 @@ _init_data(void)
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Object";
   nbook_tabs[OBJECT] = the_tab;
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Action";
   nbook_tabs[ACTION] = the_tab;
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Component";
   nbook_tabs[COMPONENT] = the_tab;
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Image";
   nbook_tabs[IMAGE] = the_tab;
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Selection";
   nbook_tabs[SELECTION] = the_tab;
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Table";
   nbook_tabs[TABLE] = the_tab;
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Text";
   nbook_tabs[TEXT] = the_tab;
 
   the_tab = g_new0(TabInfo, 1);
   the_tab->page = NULL;
-  the_tab->main_box = gtk_vbox_new(FALSE, 20);
+  the_tab->main_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 20);
   the_tab->name = "Value";
   nbook_tabs[VALUE] = the_tab;
 }
@@ -1675,7 +1675,7 @@ _create_window (void)
         gtk_window_set_default_size (GTK_WINDOW (window), 333, 550);
         gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
-        vbox1 = gtk_vbox_new (FALSE, 0);
+        vbox1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
         gtk_container_add (GTK_CONTAINER (window), vbox1);
         gtk_widget_show (vbox1);
 
@@ -1875,7 +1875,7 @@ _get_group(TabInfo *tab, GroupId group_id, const gchar *groupname)
        gtk_container_set_border_width(GTK_CONTAINER(group->frame), 10);
 
        group->name = g_strdup(groupname);
-       group->group_vbox = GTK_VBOX(gtk_vbox_new(FALSE, 10));
+       group->group_vbox = GTK_VBOX(gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 10));
 
        if (group->is_scrolled)
          {
@@ -1971,9 +1971,9 @@ _get_name_value(GroupInfo *group, const gchar *label,
     if (!found)
       {
         name_value = (NameValue *)g_new0(NameValue, 1);
-        name_value->column1 = GTK_HBOX(gtk_hbox_new(FALSE, 10));
-        name_value->column2 = GTK_HBOX(gtk_hbox_new(FALSE, 10));
-        name_value->hbox = GTK_HBOX(gtk_hbox_new(FALSE, 5));
+        name_value->column1 = GTK_HBOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10));
+        name_value->column2 = GTK_HBOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 10));
+        name_value->hbox = GTK_HBOX(gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5));
         name_value->label = GTK_LABEL(gtk_label_new(label));
         name_value->string = gtk_label_new (NULL);
         name_value->boolean = gtk_check_button_new ();

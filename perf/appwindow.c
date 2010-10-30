@@ -214,7 +214,7 @@ appwindow_new (void)
   g_signal_connect_swapped (window, "destroy",
 			    G_CALLBACK (g_object_unref), ui);
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   widget = menubar_new (ui);

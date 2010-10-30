@@ -153,7 +153,7 @@ do_panes (GtkWidget *do_widget)
       gtk_window_set_title (GTK_WINDOW (window), "Panes");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
-      vbox = gtk_vbox_new (FALSE, 0);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
       gtk_container_add (GTK_CONTAINER (window), vbox);
       
       vpaned = gtk_paned_new (GTK_ORIENTATION_VERTICAL);

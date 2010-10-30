@@ -31,7 +31,7 @@ main (int argc, char **argv)
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         g_signal_connect (window, "delete_event", gtk_main_quit, NULL);
 
-        mainbox = gtk_vbox_new (FALSE, 2);
+        mainbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 2);
         gtk_container_add (GTK_CONTAINER (window), mainbox);
 
 	for (max = 9; max <= 999999999; max = max * 10 + 9) {
@@ -42,7 +42,7 @@ main (int argc, char **argv)
                                                          0.0);
 
 		GtkWidget *spin = gtk_spin_button_new (adj, 1.0, 0);
-		GtkWidget *hbox = gtk_hbox_new (FALSE, 2);
+		GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
 		
 		gtk_box_pack_start (GTK_BOX (hbox),
 				    spin,

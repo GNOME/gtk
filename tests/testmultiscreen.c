@@ -122,7 +122,7 @@ main (int argc, char *argv[])
       g_signal_connect (window[i], "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);
 
-      vbox[i] = gtk_vbox_new (TRUE, 0);
+      vbox[i] = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 0);
       gtk_container_add (GTK_CONTAINER (window[i]), vbox[i]);
 
       button = g_object_new (GTK_TYPE_BUTTON,
@@ -151,7 +151,7 @@ main (int argc, char *argv[])
     gtk_widget_show_all (window[i]);
   
   moving_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  moving_vbox = gtk_vbox_new (TRUE, 0);
+  moving_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 0);
   
   gtk_container_add (GTK_CONTAINER (moving_window), moving_vbox);
   moving_button = g_object_new (GTK_TYPE_BUTTON,

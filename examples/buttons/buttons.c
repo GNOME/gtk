@@ -13,7 +13,7 @@ static GtkWidget *xpm_label_box( gchar     *xpm_filename,
     GtkWidget *image;
 
     /* Create box for image and label */
-    box = gtk_hbox_new (FALSE, 0);
+    box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (box), 2);
 
     /* Now on to the image stuff */

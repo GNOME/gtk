@@ -626,7 +626,7 @@ main (int argc, char **argv)
   gtk_table_attach (GTK_TABLE (table), frame, 0,2, 1,2,
 		    GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
   
-  menu_box = gtk_vbox_new (FALSE, 0);
+  menu_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (menu_box), 2);
   gtk_container_add (GTK_CONTAINER (frame), menu_box);
 
@@ -667,7 +667,7 @@ main (int argc, char **argv)
   gtk_table_attach (GTK_TABLE (table), frame, 0,1, 0,1,
 		    GTK_FILL, GTK_FILL|GTK_EXPAND, 0, 0);
 
-  vbox = gtk_vbox_new (FALSE, 2);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 2);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 2);
   gtk_container_add (GTK_CONTAINER (frame), vbox);
 

@@ -19,8 +19,8 @@ int main( int   argc,
 		    NULL);
 
   gtk_window_set_title (GTK_WINDOW (window), "Label");
-  vbox = gtk_vbox_new (FALSE, 5);
-  hbox = gtk_hbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
   gtk_container_add (GTK_CONTAINER (window), hbox);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
@@ -50,7 +50,7 @@ int main( int   argc,
   gtk_container_add (GTK_CONTAINER (frame), label);
   gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
 
-  vbox = gtk_vbox_new (FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
   frame = gtk_frame_new ("Line wrapped label");
   label = gtk_label_new ("This is an example of a line-wrapped label.  It " \

@@ -164,7 +164,7 @@ main (int argc, char *argv[])
   accel_group = gtk_accel_group_new ();
   gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
   
-  box = gtk_vbox_new (FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_widget_show (box);
 

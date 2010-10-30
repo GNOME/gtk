@@ -812,11 +812,11 @@ main (int argc, char *argv[])
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL); 
   gtk_window_set_default_size (GTK_WINDOW (window), 500, 300);
-  vbox = gtk_vbox_new (FALSE, 8);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  hbox = gtk_hbox_new (FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
 
   /* Left Pane */
@@ -837,7 +837,7 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (hbox), swindow, TRUE, TRUE, 0);
 
   /* Middle Pane */
-  vbox2 = gtk_vbox_new (FALSE, 8);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, 0);
   
   bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
@@ -878,7 +878,7 @@ main (int argc, char *argv[])
 
   
   /* Right Pane */
-  vbox2 = gtk_vbox_new (FALSE, 8);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 0);
 
   swindow = gtk_scrolled_window_new (NULL, NULL);
@@ -946,7 +946,7 @@ main (int argc, char *argv[])
   gtk_box_pack_start (GTK_BOX (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL),
                       FALSE, FALSE, 0);
 
-  hbox = gtk_hbox_new (FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   button = gtk_button_new_with_mnemonic ("_Add new Column");
   g_signal_connect (button, "clicked", G_CALLBACK (add_clicked), left_tree_model);

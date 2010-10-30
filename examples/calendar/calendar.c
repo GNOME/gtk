@@ -277,14 +277,14 @@ static void create_calendar( void )
 		    NULL);
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-  vbox = gtk_vbox_new (FALSE, DEF_PAD);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, DEF_PAD);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   /*
    * The top part of the window, Calendar, flags and fontsel.
    */
 
-  hbox = gtk_hbox_new (FALSE, DEF_PAD);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, DEF_PAD);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, DEF_PAD);
   hbbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_box_pack_start (GTK_BOX (hbox), hbbox, FALSE, FALSE, DEF_PAD);
@@ -325,14 +325,14 @@ static void create_calendar( void )
   separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
   gtk_box_pack_start (GTK_BOX (hbox), separator, FALSE, TRUE, 0);
 
-  vbox2 = gtk_vbox_new (FALSE, DEF_PAD);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, DEF_PAD);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, FALSE, FALSE, DEF_PAD);
 
   /* Build the Right frame with the flags in */
 
   frame = gtk_frame_new ("Flags");
   gtk_box_pack_start (GTK_BOX (vbox2), frame, TRUE, TRUE, DEF_PAD);
-  vbox3 = gtk_vbox_new (TRUE, DEF_PAD_SMALL);
+  vbox3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, DEF_PAD_SMALL);
   gtk_container_add (GTK_CONTAINER (frame), vbox3);
 
   for (i = 0; i < 5; i++)
@@ -360,24 +360,24 @@ static void create_calendar( void )
   frame = gtk_frame_new ("Signal events");
   gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, DEF_PAD);
 
-  vbox2 = gtk_vbox_new (TRUE, DEF_PAD_SMALL);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, DEF_PAD_SMALL);
   gtk_container_add (GTK_CONTAINER (frame), vbox2);
 
-  hbox = gtk_hbox_new (FALSE, 3);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, TRUE, 0);
   label = gtk_label_new ("Signal:");
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
   calendar_data.last_sig = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hbox), calendar_data.last_sig, FALSE, TRUE, 0);
 
-  hbox = gtk_hbox_new (FALSE, 3);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, TRUE, 0);
   label = gtk_label_new ("Previous signal:");
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
   calendar_data.prev_sig = gtk_label_new ("");
   gtk_box_pack_start (GTK_BOX (hbox), calendar_data.prev_sig, FALSE, TRUE, 0);
 
-  hbox = gtk_hbox_new (FALSE, 3);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 3);
   gtk_box_pack_start (GTK_BOX (vbox2), hbox, FALSE, TRUE, 0);
   label = gtk_label_new ("Second previous signal:");
   gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);

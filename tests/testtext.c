@@ -261,7 +261,7 @@ msgbox_run (GtkWindow  *parent,
 
   /* Fill in the contents of the widget
    */
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (dialog), vbox);
   
   label = gtk_label_new (message);
@@ -1534,7 +1534,7 @@ do_rich_text (gpointer callback_data,
 
   gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), tv);
 
-  hbox = gtk_hbox_new (FALSE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 6);
   gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox), hbox,
                       FALSE, FALSE, 0);
 
@@ -2928,7 +2928,7 @@ create_view (Buffer *buffer)
 
   gtk_window_add_accel_group (GTK_WINDOW (view->window), view->accel_group);
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_add (GTK_CONTAINER (view->window), vbox);
 
   gtk_box_pack_start (GTK_BOX (vbox),

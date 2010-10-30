@@ -217,7 +217,7 @@ create_content (GtkWindow *window, gboolean local)
 
   frame = gtk_frame_new (local? "Local" : "Remote");
   gtk_container_set_border_width (GTK_CONTAINER (frame), 3);
-  vbox = gtk_vbox_new (TRUE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 3);
 
   gtk_container_add (GTK_CONTAINER (frame), vbox);

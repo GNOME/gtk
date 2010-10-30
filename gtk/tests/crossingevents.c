@@ -144,7 +144,7 @@ sensitivity_setup (CrossingTest *test,
   test->eventbox = gtk_event_box_new ();
   gtk_widget_set_name (test->eventbox, "E");
 
-  GtkWidget *vbox = gtk_vbox_new (FALSE, 10);
+  GtkWidget *vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 10);
   gtk_container_add (GTK_CONTAINER (test->window), frame);
   gtk_container_add (GTK_CONTAINER (frame), test->eventbox);
   gtk_container_add (GTK_CONTAINER (test->eventbox), vbox);

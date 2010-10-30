@@ -551,7 +551,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
     }    
       
 
-  vbox = gtk_vbox_new (FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
   gtk_widget_show (vbox);
   gtk_box_pack_start (GTK_BOX (fontsel), vbox, FALSE, TRUE, 0);
   
@@ -561,7 +561,7 @@ gtk_font_selection_init (GtkFontSelection *fontsel)
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, TRUE, 0);
   
-  text_box = gtk_hbox_new (FALSE, 0);
+  text_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_widget_show (text_box);
   gtk_box_pack_start (GTK_BOX (vbox), text_box, FALSE, TRUE, 0);
   

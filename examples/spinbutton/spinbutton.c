@@ -69,23 +69,23 @@ int main( int   argc,
 
   gtk_window_set_title (GTK_WINDOW (window), "Spin Button");
 
-  main_vbox = gtk_vbox_new (FALSE, 5);
+  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
   gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 10);
   gtk_container_add (GTK_CONTAINER (window), main_vbox);
 
   frame = gtk_frame_new ("Not accelerated");
   gtk_box_pack_start (GTK_BOX (main_vbox), frame, TRUE, TRUE, 0);
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   gtk_container_add (GTK_CONTAINER (frame), vbox);
 
   /* Day, month, year spinners */
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 5);
 
-  vbox2 = gtk_vbox_new (FALSE, 0);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
 
   label = gtk_label_new ("Day :");
@@ -97,7 +97,7 @@ int main( int   argc,
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
-  vbox2 = gtk_vbox_new (FALSE, 0);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
 
   label = gtk_label_new ("Month :");
@@ -109,7 +109,7 @@ int main( int   argc,
   gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner, FALSE, TRUE, 0);
 
-  vbox2 = gtk_vbox_new (FALSE, 0);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
 
   label = gtk_label_new ("Year :");
@@ -125,14 +125,14 @@ int main( int   argc,
   frame = gtk_frame_new ("Accelerated");
   gtk_box_pack_start (GTK_BOX (main_vbox), frame, TRUE, TRUE, 0);
 
-  vbox = gtk_vbox_new (FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   gtk_container_add (GTK_CONTAINER (frame), vbox);
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
-  vbox2 = gtk_vbox_new (FALSE, 0);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
 
   label = gtk_label_new ("Value :");
@@ -145,7 +145,7 @@ int main( int   argc,
   gtk_widget_set_size_request (spinner1, 100, -1);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner1, FALSE, TRUE, 0);
 
-  vbox2 = gtk_vbox_new (FALSE, 0);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), vbox2, TRUE, TRUE, 5);
 
   label = gtk_label_new ("Digits :");
@@ -160,7 +160,7 @@ int main( int   argc,
 		    spinner2);
   gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
 
   button = gtk_check_button_new_with_label ("Snap to 0.5-ticks");
@@ -179,7 +179,7 @@ int main( int   argc,
 
   val_label = gtk_label_new ("");
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 5);
   button = gtk_button_new_with_label ("Value as Int");
   g_object_set_data (G_OBJECT (button), "user_data", val_label);
@@ -198,7 +198,7 @@ int main( int   argc,
   gtk_box_pack_start (GTK_BOX (vbox), val_label, TRUE, TRUE, 0);
   gtk_label_set_text (GTK_LABEL (val_label), "0");
 
-  hbox = gtk_hbox_new (FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
 
   button = gtk_button_new_with_label ("Close");

@@ -72,7 +72,7 @@ int main( int   argc,
     gtk_menu_item_set_submenu (GTK_MENU_ITEM (root_menu), menu);
 
     /* A vbox to put a menu and a button in: */
-    vbox = gtk_vbox_new (FALSE, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
     gtk_container_add (GTK_CONTAINER (window), vbox);
     gtk_widget_show (vbox);
 

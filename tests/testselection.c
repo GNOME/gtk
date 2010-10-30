@@ -442,7 +442,7 @@ main (int argc, char *argv[])
   gtk_table_attach_defaults (GTK_TABLE (table), scrolled, 0, 1, 1, 2);
   gtk_widget_show (selection_text);
 
-  hbox = gtk_hbox_new (FALSE, 2);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
   gtk_table_attach (GTK_TABLE (table), hbox, 0, 2, 3, 4,
 		    GTK_EXPAND | GTK_FILL, 0, 0, 0);
   gtk_widget_show (hbox);

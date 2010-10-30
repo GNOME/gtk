@@ -263,7 +263,7 @@ main (int argc, char **argv)
 		    G_CALLBACK (gtk_main_quit), NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 12);
 
-  vbox = gtk_vbox_new (FALSE, 12);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 12);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   /* LTR */

@@ -332,7 +332,7 @@ do_editable_cells (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      vbox = gtk_vbox_new (FALSE, 5);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 
       gtk_box_pack_start (GTK_BOX (vbox),
@@ -365,7 +365,7 @@ do_editable_cells (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (sw), treeview);
 
       /* some buttons */
-      hbox = gtk_hbox_new (TRUE, 4);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 4);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Add item");
