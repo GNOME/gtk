@@ -75,8 +75,12 @@
  * #GtkBox:fill and #GtkBox:padding child properties.
  * Use gtk_box_query_child_packing() to query these fields.
  *
+ * <note>
+ * <para>
  * Note that a single-row or single-column #GtkGrid provides exactly the
  * same functionality as #GtkBox.
+ * </para>
+ * </note>
  */
 
 #include "config.h"
