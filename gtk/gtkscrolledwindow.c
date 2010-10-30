@@ -551,7 +551,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
   if (!priv->hscrollbar)
     {
       gtk_widget_push_composite_child ();
-      priv->hscrollbar = gtk_hscrollbar_new (hadjustment);
+      priv->hscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
       gtk_widget_set_composite_name (priv->hscrollbar, "hscrollbar");
       gtk_widget_pop_composite_child ();
 
@@ -614,7 +614,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   if (!priv->vscrollbar)
     {
       gtk_widget_push_composite_child ();
-      priv->vscrollbar = gtk_vscrollbar_new (vadjustment);
+      priv->vscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadjustment);
       gtk_widget_set_composite_name (priv->vscrollbar, "vscrollbar");
       gtk_widget_pop_composite_child ();
 

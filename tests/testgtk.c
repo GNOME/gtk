@@ -630,13 +630,13 @@ create_big_windows (GtkWidget *widget)
 
       gtk_container_add (GTK_CONTAINER (eventbox), darea);
 
-      scrollbar = gtk_hscrollbar_new (hadj);
+      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadj);
       gtk_table_attach (GTK_TABLE (table), scrollbar,
 			0, 1,                  1, 2,
 			GTK_FILL | GTK_EXPAND, GTK_FILL,
 			0,                     0);
 
-      scrollbar = gtk_vscrollbar_new (vadj);
+      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadj);
       gtk_table_attach (GTK_TABLE (table), scrollbar,
 			1, 2,                  0, 1,
 			GTK_FILL,              GTK_EXPAND | GTK_FILL,
@@ -5837,7 +5837,7 @@ create_range_controls (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
       gtk_widget_show (scale);
 
-      scrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (adjustment));
+      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adjustment));
       gtk_range_set_update_policy (GTK_RANGE (scrollbar), 
 				   GTK_UPDATE_CONTINUOUS);
       gtk_box_pack_start (GTK_BOX (box2), scrollbar, TRUE, TRUE, 0);
@@ -9206,7 +9206,7 @@ create_scroll_test (GtkWidget *widget)
       adj = gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0);
       scroll_test_pos = 0.0;
 
-      scrollbar = gtk_vscrollbar_new (adj);
+      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adj);
       gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
       gtk_widget_show (scrollbar);
 
