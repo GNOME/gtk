@@ -2107,7 +2107,8 @@ create_rotated_label (GtkWidget *widget)
       gtk_label_set_markup (GTK_LABEL (scale_label), "<i>Angle: </i>");
       gtk_box_pack_start (GTK_BOX (scale_hbox), scale_label, FALSE, FALSE, 0);
 
-      hscale = gtk_hscale_new_with_range (0, 360, 5);
+      hscale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
+                                         0, 360, 5);
       g_signal_connect (hscale, "value-changed",
 			G_CALLBACK (on_angle_scale_changed), label);
       

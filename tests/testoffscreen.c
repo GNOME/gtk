@@ -310,9 +310,8 @@ main (int   argc,
   vbox = gtk_vbox_new (0, FALSE);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
-  scale = gtk_hscale_new_with_range (0,
-				     G_PI * 2,
-				     0.01);
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
+                                    0, G_PI * 2, 0.01);
   gtk_box_pack_start (GTK_BOX (vbox), scale, FALSE, FALSE, 0);
 
   button = gtk_button_new_with_label ("Remove child 2");

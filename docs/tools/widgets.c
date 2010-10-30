@@ -947,10 +947,12 @@ create_scales (void)
   vbox = gtk_vbox_new (FALSE, 3);
   hbox = gtk_hbox_new (TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox),
-		      gtk_hscale_new_with_range (0.0, 100.0, 1.0),
+		      gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
+                                                0.0, 100.0, 1.0),
 		      TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (hbox),
-		      gtk_vscale_new_with_range (0.0, 100.0, 1.0),
+		      gtk_scale_new_with_range (GTK_ORIENTATION_VERTICAL,
+                                                0.0, 100.0, 1.0),
 		      TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox),
