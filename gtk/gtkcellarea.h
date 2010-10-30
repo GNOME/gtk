@@ -31,7 +31,6 @@
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtktreemodel.h>
-#include <gtk/gtkcellareaiter.h>
 
 G_BEGIN_DECLS
 
@@ -45,6 +44,7 @@ G_BEGIN_DECLS
 typedef struct _GtkCellArea              GtkCellArea;
 typedef struct _GtkCellAreaClass         GtkCellAreaClass;
 typedef struct _GtkCellAreaPrivate       GtkCellAreaPrivate;
+typedef struct _GtkCellAreaIter          GtkCellAreaIter;
 
 /**
  * GtkCellCallback:

@@ -25,12 +25,18 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkcellareaiter.h"
+#include "gtkprivate.h"
 
 /* GObjectClass */
 static void      gtk_cell_area_iter_finalize                       (GObject            *object);
+static void      gtk_cell_area_iter_dispose                        (GObject            *object);
 static void      gtk_cell_area_iter_get_property                   (GObject           *object,
 								   guint               prop_id,
 								   GValue             *value,
+								   GParamSpec         *pspec);
+static void      gtk_cell_area_iter_set_property                  (GObject            *object,
+								   guint               prop_id,
+								   const GValue       *value,
 								   GParamSpec         *pspec);
 
 /* GtkCellAreaIterClass */
@@ -52,17 +58,20 @@ static void        cached_size_free (CachedSize *size);
 
 struct _GtkCellAreaIterPrivate
 {
-  gint        min_width;
-  gint        nat_width;
-  gint        min_height;
-  gint        nat_height;
+  GtkCellArea *cell_area;
 
-  GHashTable *widths;
-  GHashTable *heights;
+  gint         min_width;
+  gint         nat_width;
+  gint         min_height;
+  gint         nat_height;
+
+  GHashTable  *widths;
+  GHashTable  *heights;
 };
 
 enum {
   PROP_0,
+  PROP_CELL_AREA,
   PROP_MIN_WIDTH,
   PROP_NAT_WIDTH,
   PROP_MIN_HEIGHT,
@@ -106,7 +115,9 @@ gtk_cell_area_iter_class_init (GtkCellAreaIterClass *class)
 
   /* GObjectClass */
   object_class->finalize     = gtk_cell_area_iter_finalize;
+  object_class->dispose      = gtk_cell_area_iter_dispose;
   object_class->get_property = gtk_cell_area_iter_get_property;
+  object_class->set_property = gtk_cell_area_iter_set_property;
 
   class->flush_preferred_width            = gtk_cell_area_iter_real_flush_preferred_width;
   class->flush_preferred_height_for_width = gtk_cell_area_iter_real_flush_preferred_height_for_width;
@@ -132,6 +143,14 @@ gtk_cell_area_iter_class_init (GtkCellAreaIterClass *class)
 		  _gtk_marshal_VOID__INT_INT_INT,
 		  G_TYPE_NONE, 3,
 		  G_TYPE_INT, G_TYPE_INT, G_TYPE_INT);
+
+  g_object_class_install_property (object_class,
+                                   PROP_CELL_AREA,
+                                   g_param_spec_object ("area",
+							P_("Area"),
+							P_("The Cell Area this iter was created for"),
+							GTK_TYPE_CELL_AREA,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   g_object_class_install_property (object_class,
                                    PROP_MIN_WIDTH,
@@ -215,6 +234,42 @@ gtk_cell_area_iter_finalize (GObject *object)
 }
 
 static void
+gtk_cell_area_iter_dispose (GObject *object)
+{
+  GtkCellAreaIter        *iter = GTK_CELL_AREA_ITER (object);
+  GtkCellAreaIterPrivate *priv = iter->priv;
+
+  if (priv->cell_area)
+    {
+      g_object_unref (priv->cell_area);
+
+      priv->cell_area = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_cell_area_iter_parent_class)->dispose (object);
+}
+
+static void
+gtk_cell_area_iter_set_property (GObject      *object,
+				 guint         prop_id,
+				 const GValue *value,
+				 GParamSpec   *pspec)
+{
+  GtkCellAreaIter        *iter = GTK_CELL_AREA_ITER (object);
+  GtkCellAreaIterPrivate *priv = iter->priv;
+
+  switch (prop_id)
+    {
+    case PROP_CELL_AREA:
+      priv->cell_area = g_value_dup_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_cell_area_iter_get_property (GObject     *object,
 				 guint        prop_id,
 				 GValue      *value,
@@ -225,6 +280,9 @@ gtk_cell_area_iter_get_property (GObject     *object,
 
   switch (prop_id)
     {
+    case PROP_CELL_AREA:
+      g_value_set_object (value, priv->cell_area);
+      break;
     case PROP_MIN_WIDTH:
       g_value_set_int (value, priv->min_width);
       break;
@@ -307,6 +365,17 @@ gtk_cell_area_iter_real_flush_preferred_width_for_height (GtkCellAreaIter *iter,
 /*************************************************************
  *                            API                            *
  *************************************************************/
+GtkCellArea *
+gtk_cell_area_iter_get_area (GtkCellAreaIter *iter)
+{
+  GtkCellAreaIterPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA_ITER (iter), NULL);
+
+  priv = iter->priv;
+
+  return priv->cell_area;
+}
 
 void
 gtk_cell_area_iter_get_preferred_width (GtkCellAreaIter *iter,
@@ -409,6 +478,106 @@ gtk_cell_area_iter_get_preferred_width_for_height (GtkCellAreaIter *iter,
 	*natural_width = -1;
     }
 }
+
+void
+gtk_cell_area_iter_sum_preferred_width (GtkCellAreaIter *iter)
+{
+  GtkCellAreaIterClass *class;
+
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  class = GTK_CELL_AREA_ITER_GET_CLASS (iter);
+
+  if (class->sum_preferred_width)
+    class->sum_preferred_width (iter);
+}
+
+void
+gtk_cell_area_iter_sum_preferred_height_for_width (GtkCellAreaIter *iter,
+						   gint             for_width)
+{
+  GtkCellAreaIterClass *class;
+
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  class = GTK_CELL_AREA_ITER_GET_CLASS (iter);
+
+  if (class->sum_preferred_height_for_width)
+    class->sum_preferred_height_for_width (iter, for_width);
+}
+
+void
+gtk_cell_area_iter_sum_preferred_height (GtkCellAreaIter *iter)
+{
+  GtkCellAreaIterClass *class;
+
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  class = GTK_CELL_AREA_ITER_GET_CLASS (iter);
+
+  if (class->sum_preferred_height)
+    class->sum_preferred_height (iter);
+}
+
+void
+gtk_cell_area_iter_sum_preferred_width_for_height (GtkCellAreaIter *iter,
+						   gint             for_height)
+{
+  GtkCellAreaIterClass *class;
+
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  class = GTK_CELL_AREA_ITER_GET_CLASS (iter);
+
+  if (class->sum_preferred_width_for_height)
+    class->sum_preferred_width_for_height (iter, for_height);
+}
+
+void
+gtk_cell_area_iter_flush (GtkCellAreaIter *iter)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  gtk_cell_area_iter_flush_preferred_width (iter);
+  gtk_cell_area_iter_flush_preferred_height_for_width (iter, -1);
+  gtk_cell_area_iter_flush_preferred_height (iter);
+  gtk_cell_area_iter_flush_preferred_width_for_height (iter, -1);
+}
+
+void
+gtk_cell_area_iter_flush_preferred_width (GtkCellAreaIter *iter)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_width (iter);
+}
+
+void
+gtk_cell_area_iter_flush_preferred_height_for_width (GtkCellAreaIter *iter,
+						     gint             for_width)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_height_for_width (iter, for_width);
+}
+
+void
+gtk_cell_area_iter_flush_preferred_height (GtkCellAreaIter *iter)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_height (iter);
+}
+
+void
+gtk_cell_area_iter_flush_preferred_width_for_height (GtkCellAreaIter *iter,
+						     gint             for_height)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+
+  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_width_for_height (iter, for_height);
+}
+
 
 
 void
@@ -557,49 +726,4 @@ gtk_cell_area_iter_push_preferred_width_for_height (GtkCellAreaIter *iter,
   if (changed)
     g_signal_emit (iter, cell_area_iter_signals[SIGNAL_WIDTH_CHANGED], 0, 
 		   for_height, size->min_size, size->nat_size);
-}
-
-void
-gtk_cell_area_iter_flush (GtkCellAreaIter *iter)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
-
-  gtk_cell_area_iter_flush_preferred_width (iter);
-  gtk_cell_area_iter_flush_preferred_height_for_width (iter, -1);
-  gtk_cell_area_iter_flush_preferred_height (iter);
-  gtk_cell_area_iter_flush_preferred_width_for_height (iter, -1);
-}
-
-void
-gtk_cell_area_iter_flush_preferred_width (GtkCellAreaIter *iter)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
-
-  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_width (iter);
-}
-
-void
-gtk_cell_area_iter_flush_preferred_height_for_width (GtkCellAreaIter *iter,
-						     gint             for_width)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
-
-  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_height_for_width (iter, for_width);
-}
-
-void
-gtk_cell_area_iter_flush_preferred_height (GtkCellAreaIter *iter)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
-
-  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_height (iter);
-}
-
-void
-gtk_cell_area_iter_flush_preferred_width_for_height (GtkCellAreaIter *iter,
-						     gint             for_height)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
-
-  GTK_CELL_AREA_ITER_GET_CLASS (iter)->flush_preferred_width_for_height (iter, for_height);
 }

@@ -28,7 +28,7 @@
 #ifndef __GTK_CELL_AREA_ITER_H__
 #define __GTK_CELL_AREA_ITER_H__
 
-#include <glib-object.h>
+#include <gtk/gtkcellarea.h>
 
 G_BEGIN_DECLS
 
@@ -39,7 +39,6 @@ G_BEGIN_DECLS
 #define GTK_IS_CELL_AREA_ITER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_AREA_ITER))
 #define GTK_CELL_AREA_ITER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_AREA_ITER, GtkCellAreaIterClass))
 
-typedef struct _GtkCellAreaIter              GtkCellAreaIter;
 typedef struct _GtkCellAreaIterPrivate       GtkCellAreaIterPrivate;
 typedef struct _GtkCellAreaIterClass         GtkCellAreaIterClass;
 
@@ -62,6 +61,16 @@ struct _GtkCellAreaIterClass
   void    (* flush_preferred_width_for_height)   (GtkCellAreaIter *iter,
 						  gint             height);
 
+  /* These must be invoked after a series of requests before consulting 
+   * the iter values, implementors use this to push the overall
+   * requests while acconting for any internal alignments */
+  void    (* sum_preferred_width)                (GtkCellAreaIter *iter);
+  void    (* sum_preferred_height_for_width)     (GtkCellAreaIter *iter,
+						  gint             width);
+  void    (* sum_preferred_height)               (GtkCellAreaIter *iter);
+  void    (* sum_preferred_width_for_height)     (GtkCellAreaIter *iter,
+						  gint             height);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -69,48 +78,59 @@ struct _GtkCellAreaIterClass
   void (*_gtk_reserved4) (void);
 };
 
-GType   gtk_cell_area_iter_get_type                           (void) G_GNUC_CONST;
+GType        gtk_cell_area_iter_get_type                         (void) G_GNUC_CONST;
+
+GtkCellArea *gtk_cell_area_iter_get_area                         (GtkCellAreaIter *iter);
 
 /* Apis for GtkCellArea clients to consult cached values for multiple GtkTreeModel rows */
-void    gtk_cell_area_iter_get_preferred_width                (GtkCellAreaIter *iter,
-							       gint            *minimum_width,
-							       gint            *natural_width);
-void    gtk_cell_area_iter_get_preferred_height_for_width     (GtkCellAreaIter *iter,
-							       gint             for_width,
-							       gint            *minimum_height,
-							       gint            *natural_height);
-void    gtk_cell_area_iter_get_preferred_height               (GtkCellAreaIter *iter,
-							       gint            *minimum_height,
-							       gint            *natural_height);
-void    gtk_cell_area_iter_get_preferred_width_for_height     (GtkCellAreaIter *iter,
-							       gint             for_height,
-							       gint            *minimum_width,
-							       gint            *natural_width);
+void         gtk_cell_area_iter_get_preferred_width              (GtkCellAreaIter *iter,
+								  gint            *minimum_width,
+								  gint            *natural_width);
+void         gtk_cell_area_iter_get_preferred_height_for_width   (GtkCellAreaIter *iter,
+								  gint             for_width,
+								  gint            *minimum_height,
+								  gint            *natural_height);
+void         gtk_cell_area_iter_get_preferred_height             (GtkCellAreaIter *iter,
+								  gint            *minimum_height,
+								  gint            *natural_height);
+void         gtk_cell_area_iter_get_preferred_width_for_height   (GtkCellAreaIter *iter,
+								  gint             for_height,
+								  gint            *minimum_width,
+								  gint            *natural_width);
 
-/* Apis for GtkCellArea implementations to update cached values for multiple GtkTreeModel rows */
-void    gtk_cell_area_iter_push_preferred_width               (GtkCellAreaIter *iter,
-							       gint             minimum_width,
-							       gint             natural_width);
-void    gtk_cell_area_iter_push_preferred_height_for_width    (GtkCellAreaIter *iter,
-							       gint             for_width,
-							       gint             minimum_height,
-							       gint             natural_height);
-void    gtk_cell_area_iter_push_preferred_height              (GtkCellAreaIter *iter,
-							       gint             minimum_height,
-							       gint             natural_height);
-void    gtk_cell_area_iter_push_preferred_width_for_height    (GtkCellAreaIter *iter,
-							       gint             for_height,
-							       gint             minimum_width,
-							       gint             natural_width);
+/* Apis for GtkCellArea clients to sum up the results of a series of requests, this
+ * call is required to reduce the processing while calculating the size of each row */
+void         gtk_cell_area_iter_sum_preferred_width              (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_sum_preferred_height_for_width   (GtkCellAreaIter *iter,
+								  gint             for_width);
+void         gtk_cell_area_iter_sum_preferred_height             (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_sum_preferred_width_for_height   (GtkCellAreaIter *iter,
+								  gint             for_height);
 
 /* Apis for GtkCellArea clients to flush the cache */
-void    gtk_cell_area_iter_flush                              (GtkCellAreaIter *iter);
-void    gtk_cell_area_iter_flush_preferred_width              (GtkCellAreaIter *iter);
-void    gtk_cell_area_iter_flush_preferred_height_for_width   (GtkCellAreaIter *iter,
-							       gint             for_width);
-void    gtk_cell_area_iter_flush_preferred_height             (GtkCellAreaIter *iter);
-void    gtk_cell_area_iter_flush_preferred_width_for_height   (GtkCellAreaIter *iter,
-							       gint             for_height);
+void         gtk_cell_area_iter_flush                            (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_flush_preferred_width            (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_flush_preferred_height_for_width (GtkCellAreaIter *iter,
+								  gint             for_width);
+void         gtk_cell_area_iter_flush_preferred_height           (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_flush_preferred_width_for_height (GtkCellAreaIter *iter,
+								  gint             for_height);
+
+/* Apis for GtkCellArea implementations to update cached values for multiple GtkTreeModel rows */
+void         gtk_cell_area_iter_push_preferred_width             (GtkCellAreaIter *iter,
+								  gint             minimum_width,
+								  gint             natural_width);
+void         gtk_cell_area_iter_push_preferred_height_for_width  (GtkCellAreaIter *iter,
+								  gint             for_width,
+								  gint             minimum_height,
+								  gint             natural_height);
+void         gtk_cell_area_iter_push_preferred_height            (GtkCellAreaIter *iter,
+								  gint             minimum_height,
+								  gint             natural_height);
+void         gtk_cell_area_iter_push_preferred_width_for_height  (GtkCellAreaIter *iter,
+								  gint             for_height,
+								  gint             minimum_width,
+								  gint             natural_width);
 
 G_END_DECLS
 

@@ -30,6 +30,7 @@
 
 #include <gtk/gtkcellareaiter.h>
 #include <gtk/gtkcellrenderer.h>
+#include <gtk/gtksizerequest.h>
 
 G_BEGIN_DECLS
 
@@ -57,54 +58,59 @@ struct _GtkCellAreaBoxIterClass
 
 };
 
-GType   gtk_cell_area_box_iter_get_type               (void) G_GNUC_CONST;
+GType   gtk_cell_area_box_iter_get_type                     (void) G_GNUC_CONST;
 
 
-/* Update cell alignments */
-void    gtk_cell_area_box_iter_push_cell_width             (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint                minimum_width,
-							    gint                natural_width);
+/* Update cell-group sizes */
+void    gtk_cell_area_box_iter_push_group_width             (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint                minimum_width,
+							     gint                natural_width);
 
-void    gtk_cell_area_box_iter_push_cell_height_for_width  (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint                for_width,
-							    gint                minimum_height,
-							    gint                natural_height);
+void    gtk_cell_area_box_iter_push_group_height_for_width  (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint                for_width,
+							     gint                minimum_height,
+							     gint                natural_height);
 
-void    gtk_cell_area_box_iter_push_cell_height            (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint                minimum_height,
-							    gint                natural_height);
+void    gtk_cell_area_box_iter_push_group_height            (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint                minimum_height,
+							     gint                natural_height);
 
-void    gtk_cell_area_box_iter_push_cell_width_for_height  (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint                for_height,
-							    gint                minimum_width,
-							    gint                natural_width);
+void    gtk_cell_area_box_iter_push_group_width_for_height  (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint                for_height,
+							     gint                minimum_width,
+							     gint                natural_width);
 
-/* Fetch cell alignments */
-void    gtk_cell_area_box_iter_get_cell_width              (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint               *minimum_width,
-							    gint               *natural_width);
+/* Fetch cell-group sizes */
+void    gtk_cell_area_box_iter_get_group_width              (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint               *minimum_width,
+							     gint               *natural_width);
 
-void    gtk_cell_area_box_iter_get_cell_height_for_width   (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint                for_width,
-							    gint               *minimum_height,
-							    gint               *natural_height);
+void    gtk_cell_area_box_iter_get_group_height_for_width   (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint                for_width,
+							     gint               *minimum_height,
+							     gint               *natural_height);
 
-void    gtk_cell_area_box_iter_get_cell_height             (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint               *minimum_height,
-							    gint               *natural_height);
+void    gtk_cell_area_box_iter_get_group_height             (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint               *minimum_height,
+							     gint               *natural_height);
 
-void    gtk_cell_area_box_iter_get_cell_width_for_height   (GtkCellAreaBoxIter *box_iter,
-							    GtkCellRenderer    *renderer,
-							    gint                for_height,
-							    gint               *minimum_width,
-							    gint               *natural_width);
+void    gtk_cell_area_box_iter_get_group_width_for_height   (GtkCellAreaBoxIter *box_iter,
+							     gint                group_id,
+							     gint                for_height,
+							     gint               *minimum_width,
+							     gint               *natural_width);
+
+GtkRequestedSize *gtk_cell_area_box_iter_get_widths         (GtkCellAreaBoxIter *box_iter,
+							     gint               *n_widths);
+GtkRequestedSize *gtk_cell_area_box_iter_get_heights        (GtkCellAreaBoxIter *box_iter,
+							     gint               *n_heights);
 
 G_END_DECLS
 
