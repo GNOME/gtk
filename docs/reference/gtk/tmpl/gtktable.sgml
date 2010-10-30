@@ -32,11 +32,13 @@ either side</emphasis> of the widget it belongs to.
 gtk_table_set_homogeneous(), can be used to set whether all cells in the
 table will resize themselves to the size of the largest widget in the table.
 </para>
+<note>
 <para>
 Note that #GtkGrid provides the same capabilities as GtkTable for arranging
 widgets in a rectangular grid, and additionally supports height-for-width
 geometry management.
 </para>
+</note>
 
 <!-- ##### SECTION See_Also ##### -->
 <para>
