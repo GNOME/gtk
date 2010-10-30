@@ -9567,7 +9567,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  * Here is a simple example:
  * |[
  *   gtk_widget_push_composite_child ();
- *   scrolled_window->hscrollbar = gtk_hscrollbar_new (hadjustment);
+ *   scrolled_window->hscrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
  *   gtk_widget_set_composite_name (scrolled_window->hscrollbar, "hscrollbar");
  *   gtk_widget_pop_composite_child ();
  *   gtk_widget_set_parent (scrolled_window->hscrollbar, 

@@ -2171,7 +2171,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	      g_object_connect (menu->tearoff_adjustment,
 				"signal::value-changed", gtk_menu_scrollbar_changed, menu,
 				NULL);
-	      menu->tearoff_scrollbar = gtk_vscrollbar_new (menu->tearoff_adjustment);
+	      menu->tearoff_scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, menu->tearoff_adjustment);
 
 	      gtk_box_pack_end (GTK_BOX (menu->tearoff_hbox),
 				menu->tearoff_scrollbar,

@@ -128,7 +128,7 @@ static void create_range_controls( void )
     gtk_widget_show (hscale);
 
     /* Reuse the same adjustment again */
-    scrollbar = gtk_hscrollbar_new (GTK_ADJUSTMENT (adj1));
+    scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adj1));
     /* Notice how this causes the scales to always be updated
      * continuously when the scrollbar is moved */
     gtk_range_set_update_policy (GTK_RANGE (scrollbar),
