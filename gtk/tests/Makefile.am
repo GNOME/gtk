@@ -80,6 +80,10 @@ TEST_PROGS			+= textbuffer
 textbuffer_SOURCES		 = textbuffer.c pixbuf-init.c
 textbuffer_LDADD		 = $(progs_ldadd)
 
+TEST_PROGS			+= textiter
+textiter_SOURCES		 = textiter.c
+textiter_LDADD			 = $(progs_ldadd)
+
 TEST_PROGS			+= filtermodel
 filtermodel_SOURCES		 = filtermodel.c
 filtermodel_LDADD		 = $(progs_ldadd)
