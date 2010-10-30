@@ -410,6 +410,19 @@ flush_iters (GtkCellAreaBox *box)
     }
 }
 
+
+/* XXX This guy makes an allocation to be stored and retrieved from the iter */
+GtkCellAreaBoxAllocation *
+gtk_cell_area_box_allocate (GtkCellAreaBox     *box,
+			    GtkCellAreaBoxIter *iter,
+			    gint                size,
+			    gint               *n_allocs)
+{
+
+
+}
+
+
 /*************************************************************
  *                      GObjectClass                         *
  *************************************************************/

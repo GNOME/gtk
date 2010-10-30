@@ -29,6 +29,7 @@
 #define __GTK_CELL_AREA_BOX_ITER_H__
 
 #include <gtk/gtkcellareaiter.h>
+#include <gtk/gtkcellareabox.h>
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtksizerequest.h>
 
@@ -111,6 +112,21 @@ GtkRequestedSize *gtk_cell_area_box_iter_get_widths         (GtkCellAreaBoxIter 
 							     gint               *n_widths);
 GtkRequestedSize *gtk_cell_area_box_iter_get_heights        (GtkCellAreaBoxIter *box_iter,
 							     gint               *n_heights);
+
+/* Private iter/area interaction */
+typedef struct {
+  gint position;
+  gint size;
+} GtkCellAreaBoxAllocation;
+
+GtkCellAreaBoxAllocation *gtk_cell_area_box_allocate (GtkCellAreaBox     *box,
+						      GtkCellAreaBoxIter *iter,
+						      gint                size,
+						      gint               *n_allocs);
+
+G_CONST_RETURN GtkCellAreaBoxAllocation *
+gtk_cell_area_box_iter_get_orientation_allocs (GtkCellAreaBoxIter *iter,
+					       gint               *n_allocs);
 
 G_END_DECLS
 

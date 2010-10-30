@@ -53,13 +53,14 @@ struct _GtkCellAreaIterClass
 {
   GObjectClass parent_class;
 
-  /* Subclasses can use this to flush their alignments */
+  /* Subclasses can use this to flush their alignments/allocations */
   void    (* flush_preferred_width)              (GtkCellAreaIter *iter);
   void    (* flush_preferred_height_for_width)   (GtkCellAreaIter *iter,
 						  gint             width);
   void    (* flush_preferred_height)             (GtkCellAreaIter *iter);
   void    (* flush_preferred_width_for_height)   (GtkCellAreaIter *iter,
 						  gint             height);
+  void    (* flush_allocation)                   (GtkCellAreaIter *iter);
 
   /* These must be invoked after a series of requests before consulting 
    * the iter values, implementors use this to push the overall
@@ -69,6 +70,13 @@ struct _GtkCellAreaIterClass
 						  gint             width);
   void    (* sum_preferred_height)               (GtkCellAreaIter *iter);
   void    (* sum_preferred_width_for_height)     (GtkCellAreaIter *iter,
+						  gint             height);
+
+  /* Store an allocation value for a GtkCellArea contextual to a range of
+   * treemodel rows */
+  void    (* allocate_width)                     (GtkCellAreaIter *iter,
+						  gint             width);
+  void    (* allocate_height)                    (GtkCellAreaIter *iter,
 						  gint             height);
 
   /* Padding for future expansion */
@@ -81,6 +89,32 @@ struct _GtkCellAreaIterClass
 GType        gtk_cell_area_iter_get_type                         (void) G_GNUC_CONST;
 
 GtkCellArea *gtk_cell_area_iter_get_area                         (GtkCellAreaIter *iter);
+
+/* Apis for GtkCellArea clients to flush the cache */
+void         gtk_cell_area_iter_flush                            (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_flush_preferred_width            (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_flush_preferred_height_for_width (GtkCellAreaIter *iter,
+								  gint             for_width);
+void         gtk_cell_area_iter_flush_preferred_height           (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_flush_preferred_width_for_height (GtkCellAreaIter *iter,
+								  gint             for_height);
+void         gtk_cell_area_iter_flush_allocation                 (GtkCellAreaIter *iter);
+
+/* Apis for GtkCellArea clients to sum up the results of a series of requests, this
+ * call is required to reduce the processing while calculating the size of each row */
+void         gtk_cell_area_iter_sum_preferred_width              (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_sum_preferred_height_for_width   (GtkCellAreaIter *iter,
+								  gint             for_width);
+void         gtk_cell_area_iter_sum_preferred_height             (GtkCellAreaIter *iter);
+void         gtk_cell_area_iter_sum_preferred_width_for_height   (GtkCellAreaIter *iter,
+								  gint             for_height);
+
+/* Apis to set an allocation size in one dimension or another, the subclass specific iter
+ * will store allocated positions/sizes for individual cells or groups of cells */
+void         gtk_cell_area_iter_allocate_width                   (GtkCellAreaIter *iter,
+								  gint             width);
+void         gtk_cell_area_iter_allocate_height                  (GtkCellAreaIter *iter,
+								  gint             height);
 
 /* Apis for GtkCellArea clients to consult cached values for multiple GtkTreeModel rows */
 void         gtk_cell_area_iter_get_preferred_width              (GtkCellAreaIter *iter,
@@ -97,24 +131,9 @@ void         gtk_cell_area_iter_get_preferred_width_for_height   (GtkCellAreaIte
 								  gint             for_height,
 								  gint            *minimum_width,
 								  gint            *natural_width);
-
-/* Apis for GtkCellArea clients to sum up the results of a series of requests, this
- * call is required to reduce the processing while calculating the size of each row */
-void         gtk_cell_area_iter_sum_preferred_width              (GtkCellAreaIter *iter);
-void         gtk_cell_area_iter_sum_preferred_height_for_width   (GtkCellAreaIter *iter,
-								  gint             for_width);
-void         gtk_cell_area_iter_sum_preferred_height             (GtkCellAreaIter *iter);
-void         gtk_cell_area_iter_sum_preferred_width_for_height   (GtkCellAreaIter *iter,
-								  gint             for_height);
-
-/* Apis for GtkCellArea clients to flush the cache */
-void         gtk_cell_area_iter_flush                            (GtkCellAreaIter *iter);
-void         gtk_cell_area_iter_flush_preferred_width            (GtkCellAreaIter *iter);
-void         gtk_cell_area_iter_flush_preferred_height_for_width (GtkCellAreaIter *iter,
-								  gint             for_width);
-void         gtk_cell_area_iter_flush_preferred_height           (GtkCellAreaIter *iter);
-void         gtk_cell_area_iter_flush_preferred_width_for_height (GtkCellAreaIter *iter,
-								  gint             for_height);
+void         gtk_cell_area_iter_get_allocation                   (GtkCellAreaIter *iter,
+								  gint            *width,
+								  gint            *height);
 
 /* Apis for GtkCellArea implementations to update cached values for multiple GtkTreeModel rows */
 void         gtk_cell_area_iter_push_preferred_width             (GtkCellAreaIter *iter,

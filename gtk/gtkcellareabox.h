@@ -54,7 +54,6 @@ struct _GtkCellAreaBoxClass
 {
   GtkCellAreaClass parent_class;
 
-
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -76,6 +75,7 @@ void               gtk_cell_area_box_pack_end        (GtkCellAreaBox  *box,
 gint               gtk_cell_area_box_get_spacing     (GtkCellAreaBox  *box);
 void               gtk_cell_area_box_set_spacing     (GtkCellAreaBox  *box,
 						      gint             spacing);
+
 
 G_END_DECLS
 
