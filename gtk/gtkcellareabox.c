@@ -97,7 +97,7 @@ static void      gtk_cell_area_box_layout_reorder                 (GtkCellLayout
 								   gint                position);
 
 
-/* CellInfo/CellGroup metadata handling */
+/* CellInfo/CellGroup metadata handling and convenience functions */
 typedef struct {
   GtkCellRenderer *renderer;
 
@@ -109,7 +109,7 @@ typedef struct {
 typedef struct {
   GList *cells;
 
-  guint  id : 16;
+  guint  id     : 16;
   guint  expand : 1;
 } CellGroup;
 
@@ -128,16 +128,20 @@ static GList     *list_consecutive_cells (GtkCellAreaBox  *box);
 static GList     *construct_cell_groups  (GtkCellAreaBox  *box);
 static gint       count_expand_groups    (GtkCellAreaBox  *box);
 static gint       count_expand_cells     (CellGroup       *group);
-
+static void       iter_weak_notify       (GtkCellAreaBox  *box,
+					  GtkCellAreaIter *dead_iter);
+static void       flush_iters            (GtkCellAreaBox  *box);
 
 struct _GtkCellAreaBoxPrivate
 {
-  GtkOrientation orientation;
+  GtkOrientation  orientation;
 
-  GList         *cells;
-  GList         *groups;
+  GList          *cells;
+  GList          *groups;
 
-  gint           spacing;
+  GSList         *iters;
+
+  gint            spacing;
 };
 
 enum {
@@ -168,6 +172,7 @@ gtk_cell_area_box_init (GtkCellAreaBox *box)
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->cells       = NULL;
   priv->groups      = NULL;
+  priv->iters       = NULL;
   priv->spacing     = 0;
 }
 
@@ -214,7 +219,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
 
 
 /*************************************************************
- *                CellInfo/CellGroup Basics                  *
+ *    CellInfo/CellGroup basics and convenience functions    *
  *************************************************************/
 static CellInfo *
 cell_info_new  (GtkCellRenderer *renderer, 
@@ -379,6 +384,31 @@ count_expand_cells (CellGroup *group)
   return expand_cells;
 }
 
+static void 
+iter_weak_notify (GtkCellAreaBox  *box,
+		  GtkCellAreaIter *dead_iter)
+{
+  GtkCellAreaBoxPrivate *priv = box->priv;
+
+  priv->iters = g_slist_remove (priv->iters, dead_iter);
+}
+
+static void
+flush_iters (GtkCellAreaBox *box)
+{
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GSList                *l;
+
+  /* When the box layout changes, iters need to
+   * be flushed and sizes for the box get requested again
+   */
+  for (l = priv->iters; l; l = l->next)
+    {
+      GtkCellAreaIter *iter = l->data;
+
+      gtk_cell_area_iter_flush (iter);
+    }
+}
 
 /*************************************************************
  *                      GObjectClass                         *
@@ -386,6 +416,15 @@ count_expand_cells (CellGroup *group)
 static void
 gtk_cell_area_box_finalize (GObject *object)
 {
+  GtkCellAreaBox        *box = GTK_CELL_AREA_BOX (object);
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GSList                *l;
+
+  for (l = priv->iters; l; l = l->next)
+    g_object_weak_unref (G_OBJECT (l->data), (GWeakNotify)iter_weak_notify, box);
+
+  g_slist_free (priv->iters);
+
   G_OBJECT_CLASS (gtk_cell_area_box_parent_class)->finalize (object);
 }
 
@@ -463,15 +502,13 @@ gtk_cell_area_box_remove (GtkCellArea        *area,
 
       priv->cells = g_list_delete_link (priv->cells, node);
 
-      /* Reconstruct cell groups
-       * XXX TODO: add a list of iters and weak_ref's on them, then
-       * flush the iters when we reconstruct groups, change spacing
-       * or child expand properties (i.e. notify size needs to be
-       * recalculated).
-       */
+      /* Reconstruct cell groups */
       g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
       g_list_free (priv->groups);
       priv->groups = construct_cell_groups (box);
+
+      /* Notify that size needs to be requested again */
+      flush_iters (box);
     }
   else
     g_warning ("Trying to remove a cell renderer that is not present GtkCellAreaBox");
@@ -517,7 +554,16 @@ gtk_cell_area_box_render (GtkCellArea        *area,
 static GtkCellAreaIter *
 gtk_cell_area_box_create_iter (GtkCellArea *area)
 {
-  return (GtkCellAreaIter *)g_object_new (GTK_TYPE_CELL_AREA_BOX_ITER, NULL);
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GtkCellAreaIter       *iter =
+    (GtkCellAreaIter *)g_object_new (GTK_TYPE_CELL_AREA_BOX_ITER, NULL);
+
+  priv->iters = g_slist_prepend (priv->iters, iter);
+
+  g_object_weak_ref (G_OBJECT (iter), (GWeakNotify)iter_weak_notify, box);
+
+  return iter;
 }
 
 static GtkSizeRequestMode 
@@ -1012,6 +1058,14 @@ gtk_cell_area_box_layout_reorder (GtkCellLayout      *cell_layout,
 
       priv->cells = g_list_delete_link (priv->cells, node);
       priv->cells = g_list_insert (priv->cells, info, position);
+
+      /* Reconstruct cell groups */
+      g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
+      g_list_free (priv->groups);
+      priv->groups = construct_cell_groups (box);
+      
+      /* Notify that size needs to be requested again */
+      flush_iters (box);
     }
 }
 
@@ -1049,10 +1103,13 @@ gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
 
   priv->cells = g_list_append (priv->cells, info);
 
-  /* Reconstruct cell groups (TODO, notify created iters that size needs renegotiation) */
+  /* Reconstruct cell groups */
   g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
   g_list_free (priv->groups);
   priv->groups = construct_cell_groups (box);
+
+  /* Notify that size needs to be requested again */
+  flush_iters (box);
 }
 
 void
@@ -1080,10 +1137,13 @@ gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
 
   priv->cells = g_list_append (priv->cells, info);
 
-  /* Reconstruct cell groups (TODO, notify created iters that size needs renegotiation) */
+  /* Reconstruct cell groups */
   g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
   g_list_free (priv->groups);
   priv->groups = construct_cell_groups (box);
+
+  /* Notify that size needs to be requested again */
+  flush_iters (box);
 }
 
 gint
@@ -1108,7 +1168,9 @@ gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
     {
       priv->spacing = spacing;
 
-      /* TODO, notify created iters that size needs renegotiation */
       g_object_notify (G_OBJECT (box), "spacing");
+
+      /* Notify that size needs to be requested again */
+      flush_iters (box);
     }
 }

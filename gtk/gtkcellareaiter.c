@@ -319,6 +319,18 @@ gtk_cell_area_iter_real_flush_preferred_width (GtkCellAreaIter *iter)
 }
 
 static void
+notify_invalid_height (gpointer         width_ptr,
+		       CachedSize      *size,
+		       GtkCellAreaIter *iter)
+{
+  gint width = GPOINTER_TO_INT (width_ptr);
+
+  /* Notify size invalidated */
+  g_signal_emit (iter, cell_area_iter_signals[SIGNAL_HEIGHT_CHANGED], 
+		 0, width, -1, -1);
+}
+
+static void
 gtk_cell_area_iter_real_flush_preferred_height_for_width (GtkCellAreaIter *iter,
 							  gint             width)
 {
@@ -326,11 +338,18 @@ gtk_cell_area_iter_real_flush_preferred_height_for_width (GtkCellAreaIter *iter,
 
   /* Flush all sizes for special -1 value */
   if (width < 0)
-    g_hash_table_remove_all (priv->heights);
+    {
+      g_hash_table_foreach (priv->heights, (GHFunc)notify_invalid_height, iter);
+      g_hash_table_remove_all (priv->heights);
+    }
   else
-    g_hash_table_remove (priv->heights, GINT_TO_POINTER (width));
+    {
+      g_hash_table_remove (priv->heights, GINT_TO_POINTER (width));
 
-  /* XXX Should we bother signalling removed values as "size-changed" signals ? */
+      /* Notify size invalidated */
+      g_signal_emit (iter, cell_area_iter_signals[SIGNAL_HEIGHT_CHANGED], 
+		     0, width, -1, -1);
+    }
 }
 
 static void
@@ -348,6 +367,18 @@ gtk_cell_area_iter_real_flush_preferred_height (GtkCellAreaIter *iter)
 }
 
 static void
+notify_invalid_width (gpointer         height_ptr,
+		      CachedSize      *size,
+		      GtkCellAreaIter *iter)
+{
+  gint height = GPOINTER_TO_INT (height_ptr);
+
+  /* Notify size invalidated */
+  g_signal_emit (iter, cell_area_iter_signals[SIGNAL_WIDTH_CHANGED], 
+		 0, height, -1, -1);
+}
+
+static void
 gtk_cell_area_iter_real_flush_preferred_width_for_height (GtkCellAreaIter *iter,
 							  gint             height)
 {
@@ -355,11 +386,18 @@ gtk_cell_area_iter_real_flush_preferred_width_for_height (GtkCellAreaIter *iter,
 
   /* Flush all sizes for special -1 value */
   if (height < 0)
-    g_hash_table_remove_all (priv->widths);
+    {
+      g_hash_table_foreach (priv->widths, (GHFunc)notify_invalid_width, iter);
+      g_hash_table_remove_all (priv->widths);
+    }
   else
-    g_hash_table_remove (priv->widths, GINT_TO_POINTER (height));
+    {
+      g_hash_table_remove (priv->widths, GINT_TO_POINTER (height));
 
-  /* XXX Should we bother signalling removed values as "size-changed" signals ? */
+      /* Notify size invalidated */
+      g_signal_emit (iter, cell_area_iter_signals[SIGNAL_WIDTH_CHANGED], 
+		     0, height, -1, -1);
+    }
 }
 
 /*************************************************************
