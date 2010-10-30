@@ -138,6 +138,17 @@ check_not_found (const gchar *haystack,
 }
 
 static void
+test_full_buffer (void)
+{
+  check_found_forward ("foo", "foo", 0, 0, 3, "foo");
+  check_found_backward ("foo", "foo", 0, 0, 3, "foo");
+  check_found_forward ("foo", "foo", GTK_TEXT_SEARCH_CASE_INSENSITIVE, 0, 3, "foo");
+  check_found_backward ("foo", "foo", GTK_TEXT_SEARCH_CASE_INSENSITIVE, 0, 3, "foo");
+  check_found_forward ("foo", "Foo", GTK_TEXT_SEARCH_CASE_INSENSITIVE, 0, 3, "foo");
+  check_found_backward ("foo", "Foo", GTK_TEXT_SEARCH_CASE_INSENSITIVE, 0, 3, "foo");
+}
+
+static void
 test_search (void)
 {
   /* simple match */
@@ -153,7 +164,7 @@ test_search (void)
   check_found_forward ("This is some\nfoo text", "foo", 0, 13, 16, "foo");
   check_found_backward ("This is some\nfoo text", "foo", 0, 13, 16, "foo");
   check_found_forward ("This is some foo\nfoo text", "foo", 0, 13, 16, "foo");
-  check_found_backward ("This is some foo\nfoo text", "foo", 0, 17, 20, "foo")
+  check_found_backward ("This is some foo\nfoo text", "foo", 0, 17, 20, "foo");
   check_not_found ("This is some\nfoo text", "Foo", 0);
 
   /* end of buffer */
@@ -167,13 +178,94 @@ test_search (void)
   check_not_found ("This is some foo\nfoo text", "Foo\nfoo", 0);
 }
 
+static void
+test_search_caseless (void)
+{
+  GtkTextSearchFlags flags;
+
+  flags = GTK_TEXT_SEARCH_CASE_INSENSITIVE;
+
+  /* simple match */
+  check_found_forward ("This is some foo text", "foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some foo text", "Foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some Foo text", "foo", flags, 13, 16, "Foo");
+  check_found_backward ("This is some foo text", "foo", flags, 13, 16, "foo");
+  check_found_backward ("This is some foo text", "Foo", flags, 13, 16, "foo");
+  check_found_backward ("This is some Foo text", "foo", flags, 13, 16, "Foo");
+
+  /* check also that different composition of utf8 characters
+     (e.g. accented letters) match */
+
+  /* different matches for forward and backward */
+  check_found_forward ("This is some foo foo text", "foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some foo foo text", "Foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some Foo foo text", "foo", flags, 13, 16, "Foo");
+  check_found_forward ("This is some \303\200 \303\240 text", "\303\240", flags, 13, 14, "\303\200");
+  check_found_forward ("This is some \303\200 \303\240 text", "\303\200", flags, 13, 14, "\303\200");
+  check_found_forward ("This is some \303\200 \303\240 text", "a\u0300", flags, 13, 14, "\303\200");
+  check_found_backward ("This is some foo foo text", "foo", flags, 17, 20, "foo");
+  check_found_backward ("This is some foo foo text", "Foo", flags, 17, 20, "foo");
+  check_found_backward ("This is some foo Foo text", "foo", flags, 17, 20, "Foo");
+  check_found_backward ("This is some \303\200 \303\240 text", "\303\240", flags, 15, 16, "\303\240");
+  check_found_backward ("This is some \303\200 \303\240 text", "\303\200", flags, 15, 16, "\303\240");
+  check_found_backward ("This is some \303\200 \303\240 text", "a\u0300", flags, 15, 16, "\303\240");
+
+  /* new lines in the haystack */
+  check_found_forward ("This is some\nfoo text", "foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some\nfoo text", "Foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some\nFoo text", "foo", flags, 13, 16, "Foo");
+  check_found_forward ("This is some\n\303\200 text", "\303\240", flags, 13, 14, "\303\200");
+  check_found_forward ("This is some\n\303\200 text", "a\u0300", flags, 13, 14, "\303\200");
+  check_found_backward ("This is some\nfoo text", "foo", flags, 13, 16, "foo");
+  check_found_backward ("This is some\nfoo text", "Foo", flags, 13, 16, "foo");
+  check_found_backward ("This is some\nFoo text", "foo", flags, 13, 16, "Foo");
+  check_found_backward ("This is some\n\303\200 text", "\303\240", flags, 13, 14, "\303\200");
+  check_found_backward ("This is some\n\303\200 text", "a\u0300", flags, 13, 14, "\303\200");
+  check_found_forward ("This is some foo\nfoo text", "foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some foo\nfoo text", "Foo", flags, 13, 16, "foo");
+  check_found_forward ("This is some Foo\nfoo text", "foo", flags, 13, 16, "Foo");
+  check_found_forward ("This is some \303\200\n\303\200 text", "\303\240", flags, 13, 14, "\303\200");
+  check_found_forward ("This is some \303\200\n\303\200 text", "a\u0300", flags, 13, 14, "\303\200");
+  check_found_backward ("This is some foo\nfoo text", "foo", flags, 17, 20, "foo");
+  check_found_backward ("This is some foo\nfoo text", "Foo", flags, 17, 20, "foo");
+  check_found_backward ("This is some foo\nFoo text", "foo", flags, 17, 20, "Foo");
+  check_found_backward ("This is some \303\200\n\303\200 text", "\303\240", flags, 15, 16, "\303\200");
+  check_found_backward ("This is some \303\200\n\303\200 text", "a\u0300", flags, 15, 16, "\303\200");
+
+  /* end of buffer */
+  check_found_forward ("This is some\ntext foo", "foo", flags, 18, 21, "foo");
+  check_found_forward ("This is some\ntext foo", "Foo", flags, 18, 21, "foo");
+  check_found_forward ("This is some\ntext Foo", "foo", flags, 18, 21, "Foo");
+  check_found_forward ("This is some\ntext \303\200", "\303\240", flags, 18, 19, "\303\200");
+  check_found_forward ("This is some\ntext \303\200", "a\u0300", flags, 18, 19, "\303\200");
+  check_found_backward ("This is some\ntext foo", "foo", flags, 18, 21, "foo");
+  check_found_backward ("This is some\ntext foo", "Foo", flags, 18, 21, "foo");
+  check_found_backward ("This is some\ntext Foo", "foo", flags, 18, 21, "Foo");
+  check_found_backward ("This is some\ntext \303\200", "\303\240", flags, 18, 19, "\303\200");
+  check_found_backward ("This is some\ntext \303\200", "a\u0300", flags, 18, 19, "\303\200");
+
+  /* multiple lines in the needle */
+  check_found_forward ("This is some foo\nfoo text", "foo\nfoo", flags, 13, 20, "foo\nfoo");
+  check_found_forward ("This is some foo\nfoo text", "Foo\nFoo", flags, 13, 20, "foo\nfoo");
+  check_found_forward ("This is some Foo\nFoo text", "foo\nfoo", flags, 13, 20, "Foo\nFoo");
+  check_found_forward ("This is some \303\200\n\303\200 text", "\303\240\n\303\240", flags, 13, 16, "\303\200\n\303\200");
+  check_found_forward ("This is some \303\200\n\303\200 text", "a\u0300\na\u0300", flags, 13, 16, "\303\200\n\303\200");
+  check_found_backward ("This is some foo\nfoo text", "foo\nfoo", flags, 13, 20, "foo\nfoo");
+  check_found_backward ("This is some foo\nfoo text", "Foo\nFoo", flags, 13, 20, "foo\nfoo");
+  check_found_backward ("This is some Foo\nFoo text", "foo\nfoo", flags, 13, 20, "Foo\nFoo");
+  check_found_backward ("This is some \303\200\n\303\200 text", "\303\240\n\303\240", flags, 13, 16, "\303\200\n\303\200");
+  check_found_backward ("This is some \303\200\n\303\200 text", "a\u0300\na\u0300", flags, 13, 16, "\303\200\n\303\200");
+}
+
 int
 main (int argc, char** argv)
 {
   gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/TextIter/Search Empty", test_empty_search);
+  g_test_add_func ("/TextIter/Search Full Buffer", test_full_buffer);
   g_test_add_func ("/TextIter/Search", test_search);
+  g_test_add_func ("/TextIter/Search Caseless", test_search_caseless);
 
   return g_test_run();
 }
