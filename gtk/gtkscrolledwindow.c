@@ -582,7 +582,7 @@ gtk_scrolled_window_set_hadjustment (GtkScrolledWindow *scrolled_window,
 
   child = gtk_bin_get_child (bin);
   if (GTK_IS_SCROLLABLE (child))
-    gtk_scrollable_set_vadjustment (GTK_SCROLLABLE (child), hadjustment);
+    gtk_scrollable_set_hadjustment (GTK_SCROLLABLE (child), hadjustment);
 
   g_object_notify (G_OBJECT (scrolled_window), "hadjustment");
 }
