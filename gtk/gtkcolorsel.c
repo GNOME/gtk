@@ -445,7 +445,7 @@ gtk_color_selection_init (GtkColorSelection *colorsel)
   gtk_table_attach_defaults (GTK_TABLE (table), priv->opacity_label, 0, 1, 4, 5); 
   adjust = gtk_adjustment_new (0.0, 0.0, 255.0, 1.0, 1.0, 0.0);
   g_object_set_data (G_OBJECT (adjust), I_("COLORSEL"), colorsel); 
-  priv->opacity_slider = gtk_hscale_new (adjust);
+  priv->opacity_slider = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, adjust);
   gtk_widget_set_tooltip_text (priv->opacity_slider,
                         _("Transparency of the color."));
   gtk_label_set_mnemonic_widget (GTK_LABEL (priv->opacity_label),
