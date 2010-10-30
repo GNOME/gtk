@@ -262,6 +262,8 @@ gtk_application_remove_window
 #if IN_FILE(__GTK_ASSISTANT_C__)
 gtk_assistant_get_type G_GNUC_CONST
 gtk_assistant_new
+gtk_assistant_next_page
+gtk_assistant_previous_page
 gtk_assistant_get_current_page
 gtk_assistant_set_current_page
 gtk_assistant_get_n_pages

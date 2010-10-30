@@ -55,6 +55,9 @@ G_BEGIN_DECLS
  * @GTK_ASSISTANT_PAGE_PROGRESS: Used for tasks that take a long time to
  *  complete, blocks the assistant until the page is marked as complete.
  *   Only the back button will be shown.
+ * @GTK_ASSISTANT_PAGE_CUSTOM: Used for when other page types are not
+ *  appropriate. No buttons will be shown, and the application must
+ *  add its own buttons through gtk_assistant_add_action_widget().
  *
  * An enum for determining the page role inside the #GtkAssistant. It's
  * used to handle buttons sensitivity and visibility.
@@ -72,7 +75,8 @@ typedef enum
   GTK_ASSISTANT_PAGE_INTRO,
   GTK_ASSISTANT_PAGE_CONFIRM,
   GTK_ASSISTANT_PAGE_SUMMARY,
-  GTK_ASSISTANT_PAGE_PROGRESS
+  GTK_ASSISTANT_PAGE_PROGRESS,
+  GTK_ASSISTANT_PAGE_CUSTOM
 } GtkAssistantPageType;
 
 typedef struct _GtkAssistant        GtkAssistant;
@@ -120,6 +124,8 @@ typedef gint (*GtkAssistantPageFunc) (gint current_page, gpointer data);
 
 GType                 gtk_assistant_get_type              (void) G_GNUC_CONST;
 GtkWidget            *gtk_assistant_new                   (void);
+void                  gtk_assistant_next_page             (GtkAssistant         *assistant);
+void                  gtk_assistant_previous_page         (GtkAssistant         *assistant);
 gint                  gtk_assistant_get_current_page      (GtkAssistant         *assistant);
 void                  gtk_assistant_set_current_page      (GtkAssistant         *assistant,
 							   gint                  page_num);
