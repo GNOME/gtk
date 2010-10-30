@@ -225,6 +225,8 @@ struct _GtkWidgetClass
 				GtkAllocation    *allocation);
   void (* state_changed)       (GtkWidget        *widget,
 				GtkStateType   	  previous_state);
+  void (* state_flags_changed) (GtkWidget        *widget,
+				GtkStateFlags  	  previous_state_flags);
   void (* parent_set)	       (GtkWidget        *widget,
 				GtkWidget        *previous_parent);
   void (* hierarchy_changed)   (GtkWidget        *widget,
@@ -577,6 +579,13 @@ G_CONST_RETURN gchar* gtk_widget_get_name               (GtkWidget    *widget);
 void                  gtk_widget_set_state              (GtkWidget    *widget,
 							 GtkStateType  state);
 GtkStateType          gtk_widget_get_state              (GtkWidget    *widget);
+
+void                  gtk_widget_set_state_flags        (GtkWidget     *widget,
+                                                         GtkStateFlags  flags,
+                                                         gboolean       clear);
+void                  gtk_widget_unset_state_flags      (GtkWidget     *widget,
+                                                         GtkStateFlags  flags);
+GtkStateFlags         gtk_widget_get_state_flags        (GtkWidget     *widget);
 
 void                  gtk_widget_set_sensitive          (GtkWidget    *widget,
 							 gboolean      sensitive);

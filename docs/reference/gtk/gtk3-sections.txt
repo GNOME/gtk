@@ -4933,6 +4933,9 @@ gtk_widget_is_sensitive
 gtk_widget_get_state
 gtk_widget_get_visible
 gtk_widget_set_visible
+gtk_widget_set_state_flags
+gtk_widget_unset_state_flags
+gtk_widget_get_state_flags
 gtk_widget_has_default
 gtk_widget_has_focus
 gtk_widget_has_grab

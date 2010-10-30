@@ -290,15 +290,7 @@ struct _GtkWidgetPrivate
    * 5 widget states (defined in "gtkenums.h")
    * so 3 bits.
    */
-  guint state : 3;
-
-  /* The saved state of the widget. When a widget's state
-   *  is changed to GTK_STATE_INSENSITIVE via
-   *  "gtk_widget_set_state" or "gtk_widget_set_sensitive"
-   *  the old state is kept around in this field. The state
-   *  will be restored once the widget gets sensitive again.
-   */
-  guint saved_state : 3;
+  guint state_flags : 6;
 
   guint direction             : 2;
 
@@ -389,6 +381,7 @@ enum {
   REALIZE,
   UNREALIZE,
   SIZE_ALLOCATE,
+  STATE_FLAGS_CHANGED,
   STATE_CHANGED,
   PARENT_SET,
   HIERARCHY_CHANGED,
@@ -494,10 +487,16 @@ enum {
 
 typedef	struct	_GtkStateData	 GtkStateData;
 
+enum {
+  STATE_CHANGE_REPLACE,
+  STATE_CHANGE_SET,
+  STATE_CHANGE_UNSET
+};
+
 struct _GtkStateData
 {
-  GtkStateType  state;
-  guint		state_restoration : 1;
+  guint         flags : 6;
+  guint         operation : 2;
   guint         parent_sensitive : 1;
   guint		use_forall : 1;
 };
@@ -1432,6 +1431,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    *
    * The ::state-changed signal is emitted when the widget state changes.
    * See gtk_widget_get_state().
+   *
+   * Deprecated: 3.0. Use #GtkWidget::state-flags-changed instead.
    */
   widget_signals[STATE_CHANGED] =
     g_signal_new (I_("state-changed"),
@@ -1442,6 +1443,26 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  _gtk_marshal_VOID__ENUM,
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STATE_TYPE);
+
+  /**
+   * GtkWidget::state-flags-changed:
+   * @widget: the object which received the signal.
+   * @flags: The previous state flags.
+   *
+   * The ::state-flags-changed signal is emitted when the widget state
+   * changes, see gtk_widget_get_state_flags().
+   *
+   * Since: 3.0
+   */
+  widget_signals[STATE_FLAGS_CHANGED] =
+    g_signal_new (I_("state-flags-changed"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkWidgetClass, state_flags_changed),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__FLAGS,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_STATE_FLAGS);
 
   /**
    * GtkWidget::parent-set:
@@ -3465,8 +3486,6 @@ gtk_widget_init (GtkWidget *widget)
   priv = widget->priv;
 
   priv->child_visible = TRUE;
-  priv->state = GTK_STATE_NORMAL;
-  priv->saved_state = GTK_STATE_NORMAL;
   priv->name = NULL;
   priv->allocation.x = -1;
   priv->allocation.y = -1;
@@ -6708,37 +6727,34 @@ gtk_widget_get_name (GtkWidget *widget)
   return G_OBJECT_TYPE_NAME (widget);
 }
 
-/**
- * gtk_widget_set_state:
- * @widget: a #GtkWidget
- * @state: new state for @widget
- *
- * This function is for use in widget implementations. Sets the state
- * of a widget (insensitive, prelighted, etc.) Usually you should set
- * the state using wrapper functions such as gtk_widget_set_sensitive().
- **/
-void
-gtk_widget_set_state (GtkWidget           *widget,
-		      GtkStateType         state)
+static void
+_gtk_widget_update_state_flags (GtkWidget     *widget,
+                                GtkStateFlags  flags,
+                                guint          operation)
 {
   GtkWidgetPrivate *priv;
 
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   priv = widget->priv;
 
-  if (state == gtk_widget_get_state (widget))
-    return;
+  /* Handle insensitive first, since it is propagated
+   * differently throughout the widget hierarchy.
+   */
+  if ((flags & GTK_STATE_FLAG_INSENSITIVE) !=
+      (priv->state_flags & GTK_STATE_FLAG_INSENSITIVE))
+    gtk_widget_set_sensitive (widget,
+                              operation != STATE_CHANGE_UNSET);
 
-  if (state == GTK_STATE_INSENSITIVE)
-    gtk_widget_set_sensitive (widget, FALSE);
-  else
+  flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+
+  if (flags != 0 ||
+      operation == STATE_CHANGE_REPLACE)
     {
       GtkStateData data;
 
-      data.state = state;
-      data.state_restoration = FALSE;
+      data.flags = flags;
+      data.operation = operation;
       data.use_forall = FALSE;
+
       if (priv->parent)
 	data.parent_sensitive = (gtk_widget_is_sensitive (priv->parent) != FALSE);
       else
@@ -6752,6 +6768,141 @@ gtk_widget_set_state (GtkWidget           *widget,
 }
 
 /**
+ * gtk_widget_set_state_flags:
+ * @widget: a #GtkWidget
+ * @flags: State flags to turn on
+ * @clear: Whether to clear state before turning on @flags
+ *
+ * This function is for use in widget implementations. Turns on flag
+ * values in the current widget state (insensitive, prelighted, etc.).
+ *
+ * It is worth mentioning that any other state than %GTK_STATE_FLAG_INSENSITIVE,
+ * will be propagated down to all non-internal children if @widget is a
+ * #GtkContainer, while %GTK_STATE_FLAG_INSENSITIVE itself will be propagated
+ * down to all #GtkContainer children by different means than turning on the
+ * state flag down the hierarchy, both gtk_widget_get_state_flags() and
+ * gtk_widget_is_sensitive() will make use of these.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_set_state_flags (GtkWidget     *widget,
+                            GtkStateFlags  flags,
+                            gboolean       clear)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if ((!clear && (widget->priv->state_flags & flags) == flags) ||
+      (clear && widget->priv->state_flags == flags))
+    return;
+
+  if (clear)
+    _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+  else
+    _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_SET);
+}
+
+/**
+ * gtk_widget_unset_state_flags:
+ * @widget: a #GtkWidget
+ * @flags: State flags to turn off
+ *
+ * This function is for use in widget implementations. Turns off flag
+ * values for the current widget state (insensitive, prelighted, etc.).
+ * See gtk_widget_set_state_flags().
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_unset_state_flags (GtkWidget     *widget,
+                              GtkStateFlags  flags)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if ((widget->priv->state_flags & flags) == 0)
+    return;
+
+  _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_UNSET);
+}
+
+/**
+ * gtk_widget_get_state_flags:
+ * @widget: a #GtkWidget
+ *
+ * Returns the widget state as a flag set. It is worth mentioning
+ * that the effective %GTK_STATE_FLAG_INSENSITIVE state will be
+ * returned, that is, also based on parent insensitivity, even if
+ * @widget itself is sensitive.
+ *
+ * Returns: The state flags for widget
+ *
+ * Since: 3.0
+ **/
+GtkStateFlags
+gtk_widget_get_state_flags (GtkWidget *widget)
+{
+  GtkStateFlags flags;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+
+  flags = widget->priv->state_flags;
+
+  if (!gtk_widget_is_sensitive (widget))
+    flags |= GTK_STATE_FLAG_INSENSITIVE;
+
+  return flags;
+}
+
+/**
+ * gtk_widget_set_state:
+ * @widget: a #GtkWidget
+ * @state: new state for @widget
+ *
+ * This function is for use in widget implementations. Sets the state
+ * of a widget (insensitive, prelighted, etc.) Usually you should set
+ * the state using wrapper functions such as gtk_widget_set_sensitive().
+ *
+ * Deprecated: 3.0. Use gtk_widget_set_state_flags() instead.
+ **/
+void
+gtk_widget_set_state (GtkWidget           *widget,
+		      GtkStateType         state)
+{
+  GtkStateFlags flags;
+
+  if (state == gtk_widget_get_state (widget))
+    return;
+
+  switch (state)
+    {
+    case GTK_STATE_ACTIVE:
+      flags = GTK_STATE_FLAG_ACTIVE;
+      break;
+    case GTK_STATE_PRELIGHT:
+      flags = GTK_STATE_FLAG_PRELIGHT;
+      break;
+    case GTK_STATE_SELECTED:
+      flags = GTK_STATE_FLAG_SELECTED;
+      break;
+    case GTK_STATE_INSENSITIVE:
+      flags = GTK_STATE_FLAG_INSENSITIVE;
+      break;
+    case GTK_STATE_INCONSISTENT:
+      flags = GTK_STATE_FLAG_INCONSISTENT;
+      break;
+    case GTK_STATE_FOCUSED:
+      flags = GTK_STATE_FLAG_FOCUSED;
+      break;
+    case GTK_STATE_NORMAL:
+    default:
+      flags = 0;
+      break;
+    }
+
+  _gtk_widget_update_state_flags (widget, flags, STATE_CHANGE_REPLACE);
+}
+
+/**
  * gtk_widget_get_state:
  * @widget: a #GtkWidget
  *
@@ -6760,13 +6911,32 @@ gtk_widget_set_state (GtkWidget           *widget,
  * Returns: the state of @widget.
  *
  * Since: 2.18
+ *
+ * Deprecated: 3.0. Use gtk_widget_get_state_flags() instead.
  */
 GtkStateType
 gtk_widget_get_state (GtkWidget *widget)
 {
+  GtkStateFlags flags;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_STATE_NORMAL);
 
-  return widget->priv->state;
+  flags = gtk_widget_get_state_flags (widget);
+
+  if (flags & GTK_STATE_FLAG_INSENSITIVE)
+    return GTK_STATE_INSENSITIVE;
+  else if (flags & GTK_STATE_FLAG_INCONSISTENT)
+    return GTK_STATE_INCONSISTENT;
+  else if (flags & GTK_STATE_FLAG_ACTIVE)
+    return GTK_STATE_ACTIVE;
+  else if (flags & GTK_STATE_FLAG_SELECTED)
+    return GTK_STATE_SELECTED;
+  else if (flags & GTK_STATE_FLAG_FOCUSED)
+    return GTK_STATE_FOCUSED;
+  else if (flags & GTK_STATE_FLAG_PRELIGHT)
+    return GTK_STATE_PRELIGHT;
+  else
+    return GTK_STATE_NORMAL;
 }
 
 /**
@@ -7173,17 +7343,19 @@ gtk_widget_set_sensitive (GtkWidget *widget,
   if (widget->priv->sensitive == sensitive)
     return;
 
+  data.flags = GTK_STATE_FLAG_INSENSITIVE;
+
   if (sensitive)
     {
       widget->priv->sensitive = TRUE;
-      data.state = priv->saved_state;
+      data.operation = STATE_CHANGE_UNSET;
     }
   else
     {
       widget->priv->sensitive = FALSE;
-      data.state = gtk_widget_get_state (widget);
+      data.operation = STATE_CHANGE_SET;
     }
-  data.state_restoration = TRUE;
+
   data.use_forall = TRUE;
 
   if (priv->parent)
@@ -7192,6 +7364,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     data.parent_sensitive = TRUE;
 
   gtk_widget_propagate_state (widget, &data);
+
   if (gtk_widget_is_drawable (widget))
     gtk_widget_queue_draw (widget);
 
@@ -7267,6 +7440,7 @@ void
 gtk_widget_set_parent (GtkWidget *widget,
 		       GtkWidget *parent)
 {
+  GtkStateFlags parent_flags;
   GtkWidgetPrivate *priv;
   GtkStateData data;
 
@@ -7293,14 +7467,17 @@ gtk_widget_set_parent (GtkWidget *widget,
   g_object_ref_sink (widget);
   priv->parent = parent;
 
-  if (gtk_widget_get_state (parent) != GTK_STATE_NORMAL)
-    data.state = gtk_widget_get_state (parent);
-  else
-    data.state = gtk_widget_get_state (widget);
-  data.state_restoration = FALSE;
+  parent_flags = gtk_widget_get_state_flags (parent);
+
+  /* Merge both old state and current parent state,
+   * We don't want the insensitive flag to propagate
+   * to the new child though */
+  data.flags = parent_flags & ~GTK_STATE_FLAG_INSENSITIVE;
+  data.flags |= priv->state_flags;
+
+  data.operation = STATE_CHANGE_REPLACE;
   data.parent_sensitive = (gtk_widget_is_sensitive (parent) != FALSE);
   data.use_forall = gtk_widget_is_sensitive (parent) != gtk_widget_is_sensitive (widget);
-
   gtk_widget_propagate_state (widget, &data);
 
   gtk_widget_reset_rc_styles (widget);
@@ -7900,7 +8077,8 @@ gtk_widget_real_style_set (GtkWidget *widget,
 
   if (gtk_widget_get_realized (widget) &&
       gtk_widget_get_has_window (widget))
-    gtk_style_set_background (priv->style, priv->window, priv->state);
+    gtk_style_set_background (priv->style, priv->window,
+                              gtk_widget_get_state (widget));
 }
 
 static void
@@ -10371,33 +10549,27 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
 {
   GtkWidgetPrivate *priv = widget->priv;
-  guint8 old_state = gtk_widget_get_state (widget);
-  guint8 old_saved_state = priv->saved_state;
+  GtkStateFlags old_flags = priv->state_flags;
+  GtkStateType old_state;
 
-  /* don't call this function with state==GTK_STATE_INSENSITIVE,
-   * parent_sensitive==TRUE on a sensitive widget
-   */
+  old_state = gtk_widget_get_state (widget);
 
+  if (!priv->parent_sensitive)
+    old_flags |= GTK_STATE_FLAG_INSENSITIVE;
 
   priv->parent_sensitive = data->parent_sensitive;
 
-  if (gtk_widget_is_sensitive (widget))
+  switch (data->operation)
     {
-      if (data->state_restoration)
-        priv->state = priv->saved_state;
-      else
-        priv->state = data->state;
-    }
-  else
-    {
-      if (!data->state_restoration)
-	{
-	  if (data->state != GTK_STATE_INSENSITIVE)
-	    priv->saved_state = data->state;
-	}
-      else if (gtk_widget_get_state (widget) != GTK_STATE_INSENSITIVE)
-	priv->saved_state = gtk_widget_get_state (widget);
-      priv->state = GTK_STATE_INSENSITIVE;
+    case STATE_CHANGE_REPLACE:
+      priv->state_flags = data->flags;
+      break;
+    case STATE_CHANGE_SET:
+      priv->state_flags |= data->flags;
+      break;
+    case STATE_CHANGE_UNSET:
+      priv->state_flags &= ~(data->flags);
+      break;
     }
 
   if (gtk_widget_is_focus (widget) && !gtk_widget_is_sensitive (widget))
@@ -10405,12 +10577,12 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       GtkWidget *window;
 
       window = gtk_widget_get_toplevel (widget);
+
       if (window && gtk_widget_is_toplevel (window))
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
-  if (old_state != gtk_widget_get_state (widget) ||
-      old_saved_state != priv->saved_state)
+  if (old_flags != gtk_widget_get_state_flags (widget))
     {
       g_object_ref (widget);
 
@@ -10418,6 +10590,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	gtk_grab_remove (widget);
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
+      g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
 
       if (!priv->shadowed)
         {
@@ -10444,7 +10617,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
               if (!gtk_widget_is_sensitive (widget))
                 _gtk_widget_synthesize_crossing (widget, NULL, d->data,
                                                  GDK_CROSSING_STATE_CHANGED);
-              else if (old_state == GTK_STATE_INSENSITIVE)
+              else if (old_flags & GTK_STATE_FLAG_INSENSITIVE)
                 _gtk_widget_synthesize_crossing (NULL, widget, d->data,
                                                  GDK_CROSSING_STATE_CHANGED);
 
@@ -10456,17 +10629,22 @@ gtk_widget_propagate_state (GtkWidget           *widget,
         }
 
       if (GTK_IS_CONTAINER (widget))
-	{
-	  data->parent_sensitive = (gtk_widget_is_sensitive (widget) != FALSE);
-	  if (data->use_forall)
-	    gtk_container_forall (GTK_CONTAINER (widget),
-				  (GtkCallback) gtk_widget_propagate_state,
-				  data);
-	  else
-	    gtk_container_foreach (GTK_CONTAINER (widget),
-				   (GtkCallback) gtk_widget_propagate_state,
-				   data);
-	}
+        {
+          data->parent_sensitive = gtk_widget_is_sensitive (widget);
+
+          /* Do not propagate insensitive state further */
+          data->flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+
+          if (data->use_forall)
+            gtk_container_forall (GTK_CONTAINER (widget),
+                                  (GtkCallback) gtk_widget_propagate_state,
+                                  data);
+          else
+            gtk_container_foreach (GTK_CONTAINER (widget),
+                                   (GtkCallback) gtk_widget_propagate_state,
+                                   data);
+        }
+
       g_object_unref (widget);
     }
 }
