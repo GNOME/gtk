@@ -31,6 +31,27 @@ label_flip_changed (GtkComboBox *combo_box,
     gtk_label_set_angle (label, 90.0);
 }
 
+static void
+content_width_changed (GtkSpinButton *spin_button,
+                       gpointer       data)
+{
+  GtkScrolledWindow *swindow = data;
+  gdouble value;
+
+  value = gtk_spin_button_get_value (spin_button);
+  gtk_scrolled_window_set_min_content_width (swindow, (gint)value);
+}
+
+static void
+content_height_changed (GtkSpinButton *spin_button,
+                        gpointer       data)
+{
+  GtkScrolledWindow *swindow = data;
+  gdouble value;
+
+  value = gtk_spin_button_get_value (spin_button);
+  gtk_scrolled_window_set_min_content_height (swindow, (gint)value);
+}
 
 static void
 scrollable_policy (void)
@@ -127,6 +148,36 @@ scrollable_policy (void)
   g_signal_connect (G_OBJECT (widget), "changed",
                     G_CALLBACK (vertical_policy_changed), viewport);
 
+  /* Content size controls */
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
+
+  widget = gtk_label_new ("min-content-width");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  widget = gtk_spin_button_new_with_range (100.0, 1000.0, 10.0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (cntl), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+  gtk_widget_show (hbox);
+
+  g_signal_connect (G_OBJECT (widget), "value-changed",
+                    G_CALLBACK (content_width_changed), swindow);
+
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
+
+  widget = gtk_label_new ("min-content-height");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+
+  widget = gtk_spin_button_new_with_range (100.0, 1000.0, 10.0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (cntl), hbox, FALSE, FALSE, 0);
+  gtk_widget_show (widget);
+  gtk_widget_show (hbox);
+
+  g_signal_connect (G_OBJECT (widget), "value-changed",
+                    G_CALLBACK (content_height_changed), swindow);
 
   /* Add Label orientation control here */
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
