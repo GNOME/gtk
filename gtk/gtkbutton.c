@@ -2291,7 +2291,7 @@ static void
 gtk_button_update_state (GtkButton *button)
 {
   GtkButtonPrivate *priv = button->priv;
-  GtkStateType new_state;
+  GtkStateFlags new_state = 0;
   gboolean depressed;
 
   if (priv->activate_timeout)
@@ -2299,13 +2299,14 @@ gtk_button_update_state (GtkButton *button)
   else
     depressed = priv->in_button && priv->button_down;
 
-  if (priv->in_button && (!priv->button_down || !depressed))
-    new_state = GTK_STATE_PRELIGHT;
-  else
-    new_state = depressed ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL;
+  if (priv->in_button)
+    new_state |= GTK_STATE_FLAG_PRELIGHT;
 
-  _gtk_button_set_depressed (button, depressed); 
-  gtk_widget_set_state (GTK_WIDGET (button), new_state);
+  if (priv->button_down || depressed)
+    new_state |= GTK_STATE_FLAG_ACTIVE;
+
+  _gtk_button_set_depressed (button, depressed);
+  gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
 }
 
 static void 
