@@ -1626,7 +1626,8 @@ gtk_real_menu_item_select (GtkMenuItem *menu_item)
       _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item), TRUE);
     }
 
-  gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_PRELIGHT);
+  gtk_widget_set_state_flags (GTK_WIDGET (menu_item),
+                              GTK_STATE_FLAG_PRELIGHT, FALSE);
   gtk_widget_queue_draw (GTK_WIDGET (menu_item));
 }
 
@@ -1636,7 +1637,8 @@ gtk_real_menu_item_deselect (GtkMenuItem *menu_item)
   if (menu_item->submenu)
     _gtk_menu_item_popdown_submenu (GTK_WIDGET (menu_item));
 
-  gtk_widget_set_state (GTK_WIDGET (menu_item), GTK_STATE_NORMAL);
+  gtk_widget_unset_state_flags (GTK_WIDGET (menu_item),
+                                GTK_STATE_FLAG_PRELIGHT);
   gtk_widget_queue_draw (GTK_WIDGET (menu_item));
 }
 
