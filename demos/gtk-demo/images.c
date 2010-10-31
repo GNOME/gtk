@@ -335,7 +335,7 @@ do_images (GtkWidget *do_widget)
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
       gtk_container_add (GTK_CONTAINER (window), vbox);
 

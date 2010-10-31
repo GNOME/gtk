@@ -870,7 +870,7 @@ create_radio_button (GSList      *group,
   image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_LARGE_TOOLBAR);
   gtk_stock_lookup (stock_id, &item);
   label = gtk_label_new (item.label);
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_container_add (GTK_CONTAINER (radio_button), hbox);
   gtk_container_add (GTK_CONTAINER (hbox), image);
   gtk_container_add (GTK_CONTAINER (hbox), label);

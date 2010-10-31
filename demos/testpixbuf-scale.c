@@ -98,7 +98,7 @@ main(int argc, char **argv)
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (gtk_main_quit), NULL);
 	
-	vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+	vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	gtk_container_add (GTK_CONTAINER (window), vbox);
 
         combo_box = gtk_combo_box_text_new ();
@@ -117,7 +117,7 @@ main(int argc, char **argv)
 	alignment = gtk_alignment_new (0.0, 0.0, 0.0, 0.5);
 	gtk_box_pack_start (GTK_BOX (vbox), alignment, FALSE, FALSE, 0);
 
-	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 4);
+	hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
 	gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
 	label = gtk_label_new ("Overall Alpha:");

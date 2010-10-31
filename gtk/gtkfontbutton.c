@@ -780,8 +780,8 @@ gtk_font_button_create_inside (GtkFontButton *font_button)
   
   gtk_widget_push_composite_child ();
 
-  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
-  
+  widget = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
   font_button->priv->font_label = gtk_label_new (_("Font"));
   
   gtk_label_set_justify (GTK_LABEL (font_button->priv->font_label), GTK_JUSTIFY_LEFT);

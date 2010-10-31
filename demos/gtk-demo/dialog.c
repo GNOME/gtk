@@ -54,7 +54,7 @@ interactive_dialog_clicked (GtkButton *button,
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 8);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, FALSE, FALSE, 0);
 
@@ -120,12 +120,12 @@ do_dialog (GtkWidget *do_widget)
       frame = gtk_frame_new ("Dialogs");
       gtk_container_add (GTK_CONTAINER (window), frame);
 
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
       gtk_container_add (GTK_CONTAINER (frame), vbox);
 
       /* Standard message dialog */
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
       button = gtk_button_new_with_mnemonic ("_Message Dialog");
       g_signal_connect (button, "clicked",
@@ -136,9 +136,9 @@ do_dialog (GtkWidget *do_widget)
                           FALSE, FALSE, 0);
 
       /* Interactive dialog*/
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-      vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+      vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
       button = gtk_button_new_with_mnemonic ("_Interactive Dialog");
       g_signal_connect (button, "clicked",

@@ -63,9 +63,9 @@ create_box_window (void)
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Boxes");
 
-  box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
-  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
-  box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   gtk_box_pack_start (GTK_BOX (box1),
                       gtk_label_new ("VBox 1 Top"),

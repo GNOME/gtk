@@ -438,7 +438,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 
       /* Add widgets to control the ToolPalette appearance: */
-      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_container_add (GTK_CONTAINER (window), box);
 
       /* Orientation combo box: */
@@ -507,7 +507,7 @@ do_toolpalette (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (box), combo_style, FALSE, FALSE, 0);
 
       /* Add hbox */
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
       gtk_box_pack_start (GTK_BOX (box), hbox, TRUE, TRUE, 0);
 
       /* Add and fill the ToolPalette: */

@@ -942,7 +942,7 @@ create_window (void)
   gint i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+  vbox   = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
 
   gtk_container_set_border_width (GTK_CONTAINER (window), 8);
 

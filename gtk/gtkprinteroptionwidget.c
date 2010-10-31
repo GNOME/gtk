@@ -739,7 +739,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
 
     case GTK_PRINTER_OPTION_TYPE_ALTERNATIVE:
       group = NULL;
-      priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
+      priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
       gtk_widget_show (priv->box);
       gtk_box_pack_start (GTK_BOX (widget), priv->box, TRUE, TRUE, 0);
       for (i = 0; i < source->num_choices; i++)

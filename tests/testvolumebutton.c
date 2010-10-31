@@ -88,7 +88,7 @@ main (int    argc,
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   button = gtk_volume_button_new ();
   button2 = gtk_volume_button_new ();
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
 
   g_signal_connect (G_OBJECT (button), "value-changed",
                     G_CALLBACK (value_changed),

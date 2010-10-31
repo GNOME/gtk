@@ -798,7 +798,7 @@ main (int argc, char **argv)
 
   g_signal_connect (G_OBJECT (window), "delete-event", gtk_main_quit, NULL);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_container_add (GTK_CONTAINER (window), hbox);
   gtk_widget_show (hbox);
 
@@ -823,9 +823,9 @@ main (int argc, char **argv)
   gtk_widget_show (darea);
   gtk_widget_modify_bg (darea, GTK_STATE_NORMAL,
 			&black);
-			
-  
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
+
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_box_pack_start (GTK_BOX (hbox),
 		      vbox,
 		      FALSE, FALSE,

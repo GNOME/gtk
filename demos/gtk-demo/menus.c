@@ -146,11 +146,11 @@ do_menus (GtkWidget *do_widget)
 
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box);
       gtk_widget_show (box);
 
-      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (box), box1);
       gtk_widget_show (box1);
 
@@ -176,7 +176,7 @@ do_menus (GtkWidget *do_widget)
       gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
       gtk_widget_show (menuitem);
 
-      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 10);
+      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       gtk_widget_show (box2);

@@ -178,7 +178,7 @@ main (int argc, char **argv)
   g_signal_connect (window, "delete-event", G_CALLBACK (gtk_main_quit), NULL);
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   /* Option menu contents */

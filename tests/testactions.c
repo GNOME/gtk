@@ -360,7 +360,7 @@ create_window (GtkActionGroup *action_group)
   g_signal_connect_swapped (window, "destroy", G_CALLBACK (g_object_unref), merge);
   g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), box);
   gtk_widget_show (box);
 
@@ -376,7 +376,7 @@ create_window (GtkActionGroup *action_group)
       g_error_free (error);
     }
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_end (GTK_BOX (box), hbox, FALSE, FALSE, 0);
   gtk_widget_show (hbox);
   

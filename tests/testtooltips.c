@@ -275,7 +275,7 @@ main (int argc, char *argv[])
   g_signal_connect (window, "delete_event",
 		    G_CALLBACK (gtk_main_quit), NULL);
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 3);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
   gtk_container_add (GTK_CONTAINER (window), box);
 
   /* A check button using the tooltip-markup property */

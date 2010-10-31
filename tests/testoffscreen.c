@@ -197,15 +197,15 @@ create_widgets (void)
   GtkWidget *vbox, *hbox, *label, *combo, *entry, *button, *cb;
   GtkWidget *sw, *text_view;
 
-  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0, FALSE);
+  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
-  main_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0, FALSE);
+  main_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (main_vbox), main_hbox, TRUE, TRUE, 0);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0, FALSE);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (main_hbox), vbox, TRUE, TRUE, 0);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0, FALSE);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new ("This label may be ellipsized\nto make it fit.");
@@ -307,7 +307,7 @@ main (int   argc,
                     G_CALLBACK (gtk_main_quit),
                     NULL);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0, FALSE);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
@@ -351,7 +351,7 @@ main (int   argc,
                         G_CALLBACK (scale_changed),
                         offscreen2);
 
-      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_offscreen_box_add2 (GTK_OFFSCREEN_BOX (offscreen2), box2);
 
       widget2 = gtk_button_new_with_label ("Offscreen in offscreen");

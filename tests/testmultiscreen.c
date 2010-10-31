@@ -122,7 +122,8 @@ main (int argc, char *argv[])
       g_signal_connect (window[i], "destroy",
 			G_CALLBACK (gtk_main_quit), NULL);
 
-      vbox[i] = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 0);
+      vbox[i] = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_box_set_homogeneous (GTK_BOX (vbox[i]), TRUE);
       gtk_container_add (GTK_CONTAINER (window[i]), vbox[i]);
 
       button = g_object_new (GTK_TYPE_BUTTON,
@@ -151,8 +152,9 @@ main (int argc, char *argv[])
     gtk_widget_show_all (window[i]);
   
   moving_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  moving_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 0);
-  
+  moving_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_box_set_homogeneous (GTK_BOX (moving_vbox), TRUE);
+
   gtk_container_add (GTK_CONTAINER (moving_window), moving_vbox);
   moving_button = g_object_new (GTK_TYPE_BUTTON,
 				  "label", "Move to Next Screen",

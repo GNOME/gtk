@@ -169,7 +169,7 @@ tests_button_clicked_cb (GtkButton *real_button,
       gtk_window_set_transient_for (GTK_WINDOW (tests),
 				    GTK_WINDOW (gtk_widget_get_toplevel (user_data)));
 
-      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (tests), box);
       gtk_widget_show (box);
 
@@ -291,7 +291,7 @@ main (int   argc,
   g_signal_connect (win, "style-set", G_CALLBACK (win_style_set_cb), NULL);
   g_signal_connect (win, "response", G_CALLBACK (gtk_main_quit), NULL);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 18);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   gtk_container_add (GTK_CONTAINER (gtk_dialog_get_content_area (GTK_DIALOG (win))), vbox);
 
   frame = gtk_frame_new ("<b>GtkFileChooserButton</b>");
@@ -305,11 +305,11 @@ main (int   argc,
   
   label_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   
-  group_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+  group_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (alignment), group_box);
 
   /* OPEN */
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic ("_Open:");
@@ -338,7 +338,7 @@ main (int   argc,
   gtk_box_pack_start (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
   /* SELECT_FOLDER */
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_box_pack_start (GTK_BOX (group_box), hbox, FALSE, FALSE, 0);
 
   label = gtk_label_new_with_mnemonic ("Select _Folder:");

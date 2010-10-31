@@ -560,7 +560,7 @@ do_offscreen_window (GtkWidget *do_widget)
       gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &black);
       gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0, FALSE);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
                                         0, G_PI/2, 0.01);
       gtk_scale_set_draw_value (GTK_SCALE (scale), FALSE);

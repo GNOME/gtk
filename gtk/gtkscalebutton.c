@@ -390,7 +390,7 @@ gtk_scale_button_init (GtkScaleButton *button)
   gtk_container_add (GTK_CONTAINER (priv->dock), frame);
 
   /* box for scale and +/- buttons */
-  priv->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  priv->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (frame), priv->box);
 
   /* + */

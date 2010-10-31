@@ -347,8 +347,8 @@ gtk_message_dialog_init (GtkMessageDialog *dialog)
   gtk_label_set_selectable (GTK_LABEL (priv->secondary_label), TRUE);
   gtk_misc_set_alignment   (GTK_MISC  (priv->secondary_label), 0.0, 0.0);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
-  priv->message_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 12);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+  priv->message_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
 
   gtk_box_pack_start (GTK_BOX (priv->message_area), priv->label,
                       FALSE, FALSE, 0);

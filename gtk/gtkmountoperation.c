@@ -498,7 +498,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
                                            -1);
 
   /* Build contents */
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
 
@@ -508,7 +508,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
   gtk_misc_set_alignment (GTK_MISC (icon), 0.5, 0.0);
   gtk_box_pack_start (GTK_BOX (hbox), icon, FALSE, FALSE, 0);
 
-  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 18);
+  main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   gtk_box_pack_start (GTK_BOX (hbox), main_vbox, TRUE, TRUE, 0);
 
   secondary = strstr (message, "\n");
@@ -539,7 +539,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
                           FALSE, FALSE, 0);
     }
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (main_vbox), vbox, FALSE, FALSE, 0);
 
   can_anonymous = flags & G_ASK_PASSWORD_ANONYMOUS_SUPPORTED;
@@ -551,7 +551,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
       GtkWidget *choice;
       GSList    *group;
 
-      anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+      anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_box_pack_start (GTK_BOX (vbox), anon_box,
                           FALSE, FALSE, 0);
 
@@ -625,7 +625,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
       GSList       *group;
       GPasswordSave password_save;
 
-      remember_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+      remember_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_box_pack_start (GTK_BOX (vbox), remember_box,
                           FALSE, FALSE, 0);
 
@@ -1218,7 +1218,7 @@ create_show_processes_dialog (GMountOperation *op,
   gtk_window_set_title (GTK_WINDOW (dialog), "");
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 12);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 12);
   gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 

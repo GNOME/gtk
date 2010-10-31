@@ -527,8 +527,8 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
 			     GTK_SHADOW_ETCHED_IN);
   gtk_widget_show (popup_frame);
   gtk_container_add (GTK_CONTAINER (priv->popup_window), popup_frame);
-  
-  priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+
+  priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (popup_frame), priv->vbox);
 
   gtk_container_add (GTK_CONTAINER (priv->scrolled_window), priv->tree_view);

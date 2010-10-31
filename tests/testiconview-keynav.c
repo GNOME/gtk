@@ -235,7 +235,7 @@ main (int argc, char *argv[])
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   views.header1 = g_object_new (GTK_TYPE_LABEL,

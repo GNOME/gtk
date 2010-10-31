@@ -441,7 +441,7 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   gtk_container_add (GTK_CONTAINER (button), priv->button);
   gtk_widget_show (priv->button);
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 4);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 4);
   gtk_container_add (GTK_CONTAINER (priv->button), box);
   gtk_widget_show (box);
 
