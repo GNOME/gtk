@@ -720,18 +720,18 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
       string_len = compute_double_length (priv->adjustment->upper,
                                           priv->digits);
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
-      *minimum = MAX (*minimum, w);
-      *natural = MAX (*natural, w);
+      width = MAX (width, w);
       string_len = compute_double_length (priv->adjustment->lower, priv->digits);
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
-      *minimum = MAX (*minimum, w);
-      *natural = MAX (*natural, w);
+      width = MAX (width, w);
 
       _gtk_entry_get_borders (entry, &xborder, &yborder);
       _gtk_entry_effective_inner_border (entry, &inner_border);
 
-      *minimum += xborder * 2 + inner_border.left + inner_border.right;
-      *natural += xborder * 2 + inner_border.left + inner_border.right;
+      width += xborder * 2 + inner_border.left + inner_border.right;
+
+      *minimum = width;
+      *natural = width;
     }
 
   *minimum += arrow_size + 2 * style->xthickness;
