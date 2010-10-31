@@ -149,7 +149,7 @@ scrollable_policy (void)
                     G_CALLBACK (vertical_policy_changed), viewport);
 
   /* Content size controls */
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 
   widget = gtk_label_new ("min-content-width");
   gtk_widget_show (widget);
@@ -164,7 +164,7 @@ scrollable_policy (void)
   g_signal_connect (G_OBJECT (widget), "value-changed",
                     G_CALLBACK (content_width_changed), swindow);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
 
   widget = gtk_label_new ("min-content-height");
   gtk_widget_show (widget);
