@@ -61,6 +61,17 @@ static void      gtk_cell_area_box_render                         (GtkCellArea  
 								   cairo_t            *cr,
 								   const GdkRectangle *cell_area);
 
+static void      gtk_cell_area_box_set_cell_property              (GtkCellArea        *area,
+								   GtkCellRenderer    *renderer,
+								   guint               prop_id,
+								   const GValue       *value,
+								   GParamSpec         *pspec);
+static void      gtk_cell_area_box_get_cell_property              (GtkCellArea        *area,
+								   GtkCellRenderer    *renderer,
+								   guint               prop_id,
+								   GValue             *value,
+								   GParamSpec         *pspec);
+
 static GtkCellAreaIter    *gtk_cell_area_box_create_iter          (GtkCellArea        *area);
 static GtkSizeRequestMode  gtk_cell_area_box_get_request_mode     (GtkCellArea        *area);
 static void      gtk_cell_area_box_get_preferred_width            (GtkCellArea        *area,
@@ -168,12 +179,17 @@ struct _GtkCellAreaBoxPrivate
   gint            spacing;
 };
 
-
-
 enum {
   PROP_0,
   PROP_ORIENTATION,
   PROP_SPACING
+};
+
+enum {
+  CELL_PROP_0,
+  CELL_PROP_EXPAND,
+  CELL_PROP_ALIGN,
+  CELL_PROP_PACK_TYPE
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellAreaBox, gtk_cell_area_box, GTK_TYPE_CELL_AREA,
@@ -215,11 +231,13 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   object_class->get_property = gtk_cell_area_box_get_property;
 
   /* GtkCellAreaClass */
-  area_class->add                            = gtk_cell_area_box_add;
-  area_class->remove                         = gtk_cell_area_box_remove;
-  area_class->forall                         = gtk_cell_area_box_forall;
-  area_class->event                          = gtk_cell_area_box_event;
-  area_class->render                         = gtk_cell_area_box_render;
+  area_class->add               = gtk_cell_area_box_add;
+  area_class->remove            = gtk_cell_area_box_remove;
+  area_class->forall            = gtk_cell_area_box_forall;
+  area_class->event             = gtk_cell_area_box_event;
+  area_class->render            = gtk_cell_area_box_render;
+  area_class->set_cell_property = gtk_cell_area_box_set_cell_property;
+  area_class->get_cell_property = gtk_cell_area_box_get_cell_property;
   
   area_class->create_iter                    = gtk_cell_area_box_create_iter;
   area_class->get_request_mode               = gtk_cell_area_box_get_request_mode;
@@ -228,6 +246,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->get_preferred_height_for_width = gtk_cell_area_box_get_preferred_height_for_width;
   area_class->get_preferred_width_for_height = gtk_cell_area_box_get_preferred_width_for_height;
 
+  /* Properties */
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   g_object_class_install_property (object_class,
@@ -239,6 +258,35 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
 						     G_MAXINT,
 						     0,
 						     GTK_PARAM_READWRITE));
+
+  /* Cell Properties */
+  gtk_cell_area_class_install_cell_property (area_class,
+					     CELL_PROP_EXPAND,
+					     g_param_spec_boolean 
+					     ("expand",
+					      P_("Expand"),
+					      P_("Whether the cell expands"),
+					      FALSE,
+					      GTK_PARAM_READWRITE));
+  
+  gtk_cell_area_class_install_cell_property (area_class,
+					     CELL_PROP_ALIGN,
+					     g_param_spec_boolean
+					     ("align",
+					      P_("Align"),
+					      P_("Whether cell should align with adjacent rows"),
+					      TRUE,
+					      GTK_PARAM_READWRITE));
+
+  gtk_cell_area_class_install_cell_property (area_class,
+					     CELL_PROP_PACK_TYPE,
+					     g_param_spec_enum
+					     ("pack-type",
+					      P_("Pack Type"),
+					      P_("A GtkPackType indicating whether the cell is packed with "
+						 "reference to the start or end of the cell area"),
+					      GTK_TYPE_PACK_TYPE, GTK_PACK_START,
+					      GTK_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (GtkCellAreaBoxPrivate));
 }
@@ -744,6 +792,121 @@ gtk_cell_area_box_render (GtkCellArea        *area,
   g_slist_foreach (allocated_cells, (GFunc)allocated_cell_free, NULL);
   g_slist_free (allocated_cells);
 }
+
+static void
+gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
+				     GtkCellRenderer    *renderer,
+				     guint               prop_id,
+				     const GValue       *value,
+				     GParamSpec         *pspec)
+{
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area); 
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GList                 *node;
+  CellInfo              *info;
+  gboolean               rebuild = FALSE;
+  gboolean               flush = FALSE;
+  gboolean               val;
+  GtkPackType            pack_type;
+
+  node = g_list_find_custom (priv->cells, renderer, 
+			     (GCompareFunc)cell_info_find);
+  if (!node)
+    return;
+
+  info = node->data;
+
+  switch (prop_id)
+    {
+    case CELL_PROP_EXPAND:
+      val = g_value_get_boolean (value);
+
+      if (info->expand != val)
+	{
+	  info->expand = val;
+	  flush        = TRUE;
+	}
+      break;
+
+    case CELL_PROP_ALIGN:
+      val = g_value_get_boolean (value);
+
+      if (info->align != val)
+	{
+	  info->align = val;
+	  flush       = TRUE;
+	}
+      break;
+
+    case CELL_PROP_PACK_TYPE:
+      pack_type = g_value_get_enum (value);
+
+      if (info->pack != pack_type)
+	{
+	  info->pack = pack_type;
+	  rebuild    = TRUE;
+	}
+      break;
+    default:
+      GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID (area, prop_id, pspec);
+      break;
+    }
+
+  /* Groups need to be rebuilt */
+  if (rebuild)
+    {
+      /* Reconstruct cell groups */
+      g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
+      g_list_free (priv->groups);
+      priv->groups = construct_cell_groups (box);
+      
+      /* Reinitialize groups on iters */
+      init_iter_groups (box);
+    }
+  else if (flush)
+    {
+      flush_iters (box);
+    }
+}
+
+static void
+gtk_cell_area_box_get_cell_property (GtkCellArea        *area,
+				     GtkCellRenderer    *renderer,
+				     guint               prop_id,
+				     GValue             *value,
+				     GParamSpec         *pspec)
+{
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area); 
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GList                 *node;
+  CellInfo              *info;
+
+  node = g_list_find_custom (priv->cells, renderer, 
+			     (GCompareFunc)cell_info_find);
+  if (!node)
+    return;
+
+  info = node->data;
+
+  switch (prop_id)
+    {
+    case CELL_PROP_EXPAND:
+      g_value_set_boolean (value, info->expand);
+      break;
+
+    case CELL_PROP_ALIGN:
+      g_value_set_boolean (value, info->align);
+      break;
+
+    case CELL_PROP_PACK_TYPE:
+      g_value_set_enum (value, info->pack);
+      break;
+    default:
+      GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID (area, prop_id, pspec);
+      break;
+    }
+}
+
 
 static GtkCellAreaIter *
 gtk_cell_area_box_create_iter (GtkCellArea *area)
