@@ -551,11 +551,14 @@ gtk_toggle_button_update_state (GtkButton *button)
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButtonPrivate *priv = toggle_button->priv;
   gboolean depressed, touchscreen;
-  GtkStateType new_state;
+  GtkStateFlags new_state = 0;
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (button)),
                 "gtk-touchscreen-mode", &touchscreen,
                 NULL);
+
+  if (priv->inconsistent)
+    new_state |= GTK_STATE_FLAG_INCONSISTENT;
 
   if (priv->inconsistent)
     depressed = FALSE;
@@ -565,10 +568,10 @@ gtk_toggle_button_update_state (GtkButton *button)
     depressed = priv->active;
 
   if (!touchscreen && button->priv->in_button && (!button->priv->button_down || priv->draw_indicator))
-    new_state = GTK_STATE_PRELIGHT;
-  else
-    new_state = depressed ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL;
+    new_state |= GTK_STATE_FLAG_PRELIGHT;
+  else if (depressed)
+    new_state |= GTK_STATE_FLAG_ACTIVE;
 
-  _gtk_button_set_depressed (button, depressed); 
-  gtk_widget_set_state (GTK_WIDGET (toggle_button), new_state);
+  _gtk_button_set_depressed (button, depressed);
+  gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), new_state, TRUE);
 }
