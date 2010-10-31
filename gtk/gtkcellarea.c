@@ -21,9 +21,18 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#include "config.h"
+
+#include <stdarg.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "gtkcelllayout.h"
 #include "gtkcellarea.h"
 #include "gtkcellareaiter.h"
+
+#include <gobject/gvaluecollector.h>
+
 
 /* GObjectClass */
 static void      gtk_cell_area_dispose                             (GObject            *object);
@@ -104,6 +113,14 @@ struct _GtkCellAreaPrivate
   GHashTable *cell_info;
 };
 
+/* Keep the paramspec pool internal, no need to deliver notifications
+ * on cells. at least no percieved need for now */
+static GParamSpecPool *cell_property_pool = NULL;
+
+#define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
+#define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
+
+
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_UNOWNED,
 				  G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 							 gtk_cell_area_cell_layout_init));
@@ -147,6 +164,10 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->get_preferred_height           = NULL;
   class->get_preferred_height_for_width = gtk_cell_area_real_get_preferred_height_for_width;
   class->get_preferred_width_for_height = gtk_cell_area_real_get_preferred_width_for_height;
+
+  /* Cell properties */
+  if (!cell_property_pool)
+    cell_property_pool = g_param_spec_pool_new (FALSE);
 
   g_type_class_add_private (object_class, sizeof (GtkCellAreaPrivate));
 }
@@ -419,7 +440,6 @@ gtk_cell_area_get_cells (GtkCellLayout *cell_layout)
 /*************************************************************
  *                            API                            *
  *************************************************************/
-
 void
 gtk_cell_area_add (GtkCellArea        *area,
 		   GtkCellRenderer    *renderer)
@@ -644,6 +664,7 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
   class->get_preferred_width_for_height (area, iter, widget, height, minimum_width, natural_width);
 }
 
+/* Attributes */
 void
 gtk_cell_area_attribute_connect (GtkCellArea        *area,
 				 GtkCellRenderer    *renderer,
@@ -776,3 +797,349 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
    * apply the data from the treemodel */
   g_hash_table_foreach (priv->cell_info, (GHFunc)apply_cell_attributes, &data);
 }
+
+/* Cell Properties */
+void
+gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
+					   guint               property_id,
+					   GParamSpec         *pspec)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA_CLASS (aclass));
+  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
+  if (pspec->flags & G_PARAM_WRITABLE)
+    g_return_if_fail (aclass->set_cell_property != NULL);
+  if (pspec->flags & G_PARAM_READABLE)
+    g_return_if_fail (aclass->get_cell_property != NULL);
+  g_return_if_fail (property_id > 0);
+  g_return_if_fail (PARAM_SPEC_PARAM_ID (pspec) == 0);  /* paranoid */
+  g_return_if_fail ((pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
+
+  if (g_param_spec_pool_lookup (cell_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (aclass), TRUE))
+    {
+      g_warning (G_STRLOC ": class `%s' already contains a cell property named `%s'",
+		 G_OBJECT_CLASS_NAME (aclass), pspec->name);
+      return;
+    }
+  g_param_spec_ref (pspec);
+  g_param_spec_sink (pspec);
+  PARAM_SPEC_SET_PARAM_ID (pspec, property_id);
+  g_param_spec_pool_insert (cell_property_pool, pspec, G_OBJECT_CLASS_TYPE (aclass));
+}
+
+GParamSpec*
+gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
+					const gchar        *property_name)
+{
+  g_return_val_if_fail (GTK_IS_CELL_AREA_CLASS (aclass), NULL);
+  g_return_val_if_fail (property_name != NULL, NULL);
+
+  return g_param_spec_pool_lookup (cell_property_pool,
+				   property_name,
+				   G_OBJECT_CLASS_TYPE (aclass),
+				   TRUE);
+}
+
+GParamSpec**
+gtk_cell_area_class_list_cell_properties (GtkCellAreaClass   *aclass,
+					  guint		    *n_properties)
+{
+  GParamSpec **pspecs;
+  guint n;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA_CLASS (aclass), NULL);
+
+  pspecs = g_param_spec_pool_list (cell_property_pool,
+				   G_OBJECT_CLASS_TYPE (aclass),
+				   &n);
+  if (n_properties)
+    *n_properties = n;
+
+  return pspecs;
+}
+
+void
+gtk_cell_area_add_with_properties (GtkCellArea        *area,
+				   GtkCellRenderer    *renderer,
+				   const gchar        *first_prop_name,
+				   ...)
+{
+  GtkCellAreaClass *class;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+
+  class = GTK_CELL_AREA_GET_CLASS (area);
+
+  if (class->add)
+    {
+      va_list var_args;
+
+      class->add (area, renderer);
+
+      va_start (var_args, first_prop_name);
+      gtk_cell_area_cell_set_valist (area, renderer, first_prop_name, var_args);
+      va_end (var_args);
+    }
+  else
+    g_warning ("GtkCellAreaClass::add not implemented for `%s'", 
+	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
+}
+
+void
+gtk_cell_area_cell_set (GtkCellArea        *area,
+			GtkCellRenderer    *renderer,
+			const gchar        *first_prop_name,
+			...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+
+  va_start (var_args, first_prop_name);
+  gtk_cell_area_cell_set_valist (area, renderer, first_prop_name, var_args);
+  va_end (var_args);
+}
+
+void
+gtk_cell_area_cell_get (GtkCellArea        *area,
+			GtkCellRenderer    *renderer,
+			const gchar        *first_prop_name,
+			...)
+{
+  va_list var_args;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+
+  va_start (var_args, first_prop_name);
+  gtk_cell_area_cell_get_valist (area, renderer, first_prop_name, var_args);
+  va_end (var_args);
+}
+
+static inline void
+area_get_cell_property (GtkCellArea     *area,
+			GtkCellRenderer *renderer,
+			GParamSpec      *pspec,
+			GValue          *value)
+{
+  GtkCellAreaClass *class = g_type_class_peek (pspec->owner_type);
+  
+  class->get_cell_property (area, renderer, PARAM_SPEC_PARAM_ID (pspec), value, pspec);
+}
+
+static inline void
+area_set_cell_property (GtkCellArea     *area,
+			GtkCellRenderer *renderer,
+			GParamSpec      *pspec,
+			const GValue    *value)
+{
+  GValue tmp_value = { 0, };
+  GtkCellAreaClass *class = g_type_class_peek (pspec->owner_type);
+
+  /* provide a copy to work from, convert (if necessary) and validate */
+  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+  if (!g_value_transform (value, &tmp_value))
+    g_warning ("unable to set cell property `%s' of type `%s' from value of type `%s'",
+	       pspec->name,
+	       g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+	       G_VALUE_TYPE_NAME (value));
+  else if (g_param_value_validate (pspec, &tmp_value) && !(pspec->flags & G_PARAM_LAX_VALIDATION))
+    {
+      gchar *contents = g_strdup_value_contents (value);
+
+      g_warning ("value \"%s\" of type `%s' is invalid for property `%s' of type `%s'",
+		 contents,
+		 G_VALUE_TYPE_NAME (value),
+		 pspec->name,
+		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+      g_free (contents);
+    }
+  else
+    {
+      class->set_cell_property (area, renderer, PARAM_SPEC_PARAM_ID (pspec), &tmp_value, pspec);
+    }
+  g_value_unset (&tmp_value);
+}
+
+void
+gtk_cell_area_cell_set_valist (GtkCellArea        *area,
+			       GtkCellRenderer    *renderer,
+			       const gchar        *first_property_name,
+			       va_list             var_args)
+{
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+
+  name = first_property_name;
+  while (name)
+    {
+      GValue value = { 0, };
+      gchar *error = NULL;
+      GParamSpec *pspec = 
+	g_param_spec_pool_lookup (cell_property_pool, name,
+				  G_OBJECT_TYPE (area), TRUE);
+      if (!pspec)
+	{
+	  g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+		     G_STRLOC, G_OBJECT_TYPE_NAME (area), name);
+	  break;
+	}
+      if (!(pspec->flags & G_PARAM_WRITABLE))
+	{
+	  g_warning ("%s: cell property `%s' of cell area class `%s' is not writable",
+		     G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
+	  break;
+	}
+
+      g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      G_VALUE_COLLECT (&value, var_args, 0, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+
+	  /* we purposely leak the value here, it might not be
+	   * in a sane state if an error condition occoured
+	   */
+	  break;
+	}
+      area_set_cell_property (area, renderer, pspec, &value);
+      g_value_unset (&value);
+      name = va_arg (var_args, gchar*);
+    }
+}
+
+void
+gtk_cell_area_cell_get_valist (GtkCellArea        *area,
+			       GtkCellRenderer    *renderer,
+			       const gchar        *first_property_name,
+			       va_list             var_args)
+{
+  const gchar *name;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+
+  name = first_property_name;
+  while (name)
+    {
+      GValue value = { 0, };
+      GParamSpec *pspec;
+      gchar *error;
+
+      pspec = g_param_spec_pool_lookup (cell_property_pool, name,
+					G_OBJECT_TYPE (area), TRUE);
+      if (!pspec)
+	{
+	  g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+		     G_STRLOC, G_OBJECT_TYPE_NAME (area), name);
+	  break;
+	}
+      if (!(pspec->flags & G_PARAM_READABLE))
+	{
+	  g_warning ("%s: cell property `%s' of cell area class `%s' is not readable",
+		     G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
+	  break;
+	}
+
+      g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      area_get_cell_property (area, renderer, pspec, &value);
+      G_VALUE_LCOPY (&value, var_args, 0, &error);
+      if (error)
+	{
+	  g_warning ("%s: %s", G_STRLOC, error);
+	  g_free (error);
+	  g_value_unset (&value);
+	  break;
+	}
+      g_value_unset (&value);
+      name = va_arg (var_args, gchar*);
+    }
+}
+
+void
+gtk_cell_area_cell_set_property (GtkCellArea        *area,
+				 GtkCellRenderer    *renderer,
+				 const gchar        *property_name,
+				 const GValue       *value)
+{
+  GParamSpec *pspec;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
+  
+  pspec = g_param_spec_pool_lookup (cell_property_pool, property_name,
+				    G_OBJECT_TYPE (area), TRUE);
+  if (!pspec)
+    g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+	       G_STRLOC, G_OBJECT_TYPE_NAME (area), property_name);
+  else if (!(pspec->flags & G_PARAM_WRITABLE))
+    g_warning ("%s: cell property `%s' of cell area class `%s' is not writable",
+	       G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
+  else
+    {
+      area_set_cell_property (area, renderer, pspec, value);
+    }
+}
+
+void
+gtk_cell_area_cell_get_property (GtkCellArea        *area,
+				 GtkCellRenderer    *renderer,
+				 const gchar        *property_name,
+				 GValue             *value)
+{
+  GParamSpec *pspec;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (property_name != NULL);
+  g_return_if_fail (G_IS_VALUE (value));
+  
+  pspec = g_param_spec_pool_lookup (cell_property_pool, property_name,
+				    G_OBJECT_TYPE (area), TRUE);
+  if (!pspec)
+    g_warning ("%s: cell area class `%s' has no cell property named `%s'",
+	       G_STRLOC, G_OBJECT_TYPE_NAME (area), property_name);
+  else if (!(pspec->flags & G_PARAM_READABLE))
+    g_warning ("%s: cell property `%s' of cell area class `%s' is not readable",
+	       G_STRLOC, pspec->name, G_OBJECT_TYPE_NAME (area));
+  else
+    {
+      GValue *prop_value, tmp_value = { 0, };
+
+      /* auto-conversion of the callers value type
+       */
+      if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
+	{
+	  g_value_reset (value);
+	  prop_value = value;
+	}
+      else if (!g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
+	{
+	  g_warning ("can't retrieve cell property `%s' of type `%s' as value of type `%s'",
+		     pspec->name,
+		     g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		     G_VALUE_TYPE_NAME (value));
+	  return;
+	}
+      else
+	{
+	  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+	  prop_value = &tmp_value;
+	}
+
+      area_get_cell_property (area, renderer, pspec, prop_value);
+
+      if (prop_value != value)
+	{
+	  g_value_transform (prop_value, value);
+	  g_value_unset (&tmp_value);
+	}
+    }
+}
+

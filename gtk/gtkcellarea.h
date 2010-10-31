@@ -116,6 +116,17 @@ struct _GtkCellAreaClass
                                                           gint                    *minimum_width,
                                                           gint                    *natural_width);
 
+  /* Cell Properties */
+  void               (* set_cell_property)               (GtkCellArea             *area,
+							  GtkCellRenderer         *renderer,
+							  guint                    property_id,
+							  const GValue            *value,
+							  GParamSpec              *pspec);
+  void               (* get_cell_property)               (GtkCellArea             *area,
+							  GtkCellRenderer         *renderer,
+							  guint                    property_id,
+							  GValue                  *value,
+							  GParamSpec              *pspec);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -175,8 +186,7 @@ void               gtk_cell_area_get_preferred_width_for_height (GtkCellArea    
 								 gint               *minimum_width,
 								 gint               *natural_width);
 
-
-/* Following apis are not class virtual methods */
+/* Attributes */
 void               gtk_cell_area_apply_attributes               (GtkCellArea        *area,
 								 GtkTreeModel       *tree_model,
 								 GtkTreeIter        *iter);
@@ -187,6 +197,43 @@ void               gtk_cell_area_attribute_connect              (GtkCellArea    
 void               gtk_cell_area_attribute_disconnect           (GtkCellArea        *area,
 								 GtkCellRenderer    *renderer,
 								 const gchar        *attribute);
+
+/* Cell Properties */
+void               gtk_cell_area_class_install_cell_property    (GtkCellAreaClass   *aclass,
+								 guint               property_id,
+								 GParamSpec         *pspec);
+GParamSpec*        gtk_cell_area_class_find_cell_property       (GtkCellAreaClass   *aclass,
+								 const gchar        *property_name);
+GParamSpec**       gtk_cell_area_class_list_cell_properties     (GtkCellAreaClass   *aclass,
+								 guint		    *n_properties);
+void               gtk_cell_area_add_with_properties            (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar	    *first_prop_name,
+								 ...) G_GNUC_NULL_TERMINATED;
+void               gtk_cell_area_cell_set                       (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *first_prop_name,
+								 ...) G_GNUC_NULL_TERMINATED;
+void               gtk_cell_area_cell_get                       (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *first_prop_name,
+								 ...) G_GNUC_NULL_TERMINATED;
+void               gtk_cell_area_cell_set_valist                (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *first_property_name,
+								 va_list             var_args);
+void               gtk_cell_area_cell_get_valist                (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *first_property_name,
+								 va_list             var_args);
+void               gtk_cell_area_cell_set_property              (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *property_name,
+								 const GValue       *value);
+void               gtk_cell_area_cell_get_property              (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 const gchar        *property_name,
+								 GValue             *value);
 
 
 G_END_DECLS
