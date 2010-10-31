@@ -217,7 +217,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
   priv->group = g_slist_prepend (NULL, radio_button);
 
   _gtk_button_set_depressed (GTK_BUTTON (radio_button), TRUE);
-  gtk_widget_set_state (GTK_WIDGET (radio_button), GTK_STATE_ACTIVE);
+  gtk_widget_set_state_flags (GTK_WIDGET (radio_button), GTK_STATE_FLAG_ACTIVE, TRUE);
 }
 
 static void
@@ -790,7 +790,7 @@ gtk_radio_button_clicked (GtkButton *button)
   GtkRadioButtonPrivate *priv = radio_button->priv;
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
-  GtkStateType new_state;
+  GtkStateFlags new_state = 0;
   GSList *tmp_list;
   gint toggled;
   gboolean depressed;
@@ -818,14 +818,19 @@ gtk_radio_button_clicked (GtkButton *button)
 
       if (!tmp_button)
 	{
-	  new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
+          if (button->priv->in_button)
+            new_state |= GTK_STATE_FLAG_PRELIGHT;
+
+	  new_state |= GTK_STATE_FLAG_ACTIVE;
 	}
       else
 	{
 	  toggled = TRUE;
           _gtk_toggle_button_set_active (toggle_button,
                                          !gtk_toggle_button_get_active (toggle_button));
-	  new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
+
+	  if (button->priv->in_button)
+	    new_state |= GTK_STATE_FLAG_PRELIGHT;
 	}
     }
   else
@@ -847,7 +852,10 @@ gtk_radio_button_clicked (GtkButton *button)
 	    }
 	}
 
-      new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
+      if (button->priv->in_button)
+        new_state |= GTK_STATE_FLAG_PRELIGHT;
+
+      new_state |= GTK_STATE_FLAG_ACTIVE;
     }
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
@@ -857,8 +865,8 @@ gtk_radio_button_clicked (GtkButton *button)
   else
     depressed = gtk_toggle_button_get_active (toggle_button);
 
-  if (gtk_widget_get_state (GTK_WIDGET (button)) != new_state)
-    gtk_widget_set_state (GTK_WIDGET (button), new_state);
+  if (gtk_widget_get_state_flags (GTK_WIDGET (button)) != new_state)
+    gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
 
   if (toggled)
     {
