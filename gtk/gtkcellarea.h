@@ -235,6 +235,9 @@ void               gtk_cell_area_cell_get_property              (GtkCellArea    
 								 const gchar        *property_name,
 								 GValue             *value);
 
+#define GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
+  G_OBJECT_WARN_INVALID_PSPEC ((object), "cell property id", (property_id), (pspec))
+
 
 G_END_DECLS
 
