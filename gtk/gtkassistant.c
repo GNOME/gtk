@@ -32,6 +32,13 @@
  * operation splitted in several steps, guiding the user through its pages
  * and controlling the page flow to collect the necessary data.
  *
+ * The design of GtkAssistant is that it controls what buttons to show and
+ * to make sensitive, based on what it knows about the page sequence and
+ * the <link linkend="GtkAssistantPageType">type</link> of each page, in
+ * addition to state information like the page
+ * <link linkend="gtk-assistant-set-page-complete">completion</link> and
+ * <link linkend="gtk-assistant-commit">committed</link> status.
+ *
  * <refsect2 id="GtkAssistant-BUILDER-UI">
  * <title>GtkAssistant as GtkBuildable</title>
  * <para>
