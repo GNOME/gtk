@@ -122,7 +122,7 @@ struct _GtkCellAreaPrivate
 {
   GHashTable *cell_info;
 
-  GtkBorder   border;
+  GtkBorder   cell_border;
 };
 
 /* Keep the paramspec pool internal, no need to deliver notifications
@@ -134,10 +134,10 @@ static GParamSpecPool *cell_property_pool = NULL;
 
 enum {
   PROP_0,
-  PROP_MARGIN_LEFT,
-  PROP_MARGIN_RIGHT,
-  PROP_MARGIN_TOP,
-  PROP_MARGIN_BOTTOM
+  PROP_CELL_MARGIN_LEFT,
+  PROP_CELL_MARGIN_RIGHT,
+  PROP_CELL_MARGIN_TOP,
+  PROP_CELL_MARGIN_BOTTOM
 };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_UNOWNED,
@@ -159,10 +159,10 @@ gtk_cell_area_init (GtkCellArea *area)
 					   NULL, 
 					   (GDestroyNotify)cell_info_free);
 
-  priv->border.left   = 0;
-  priv->border.right  = 0;
-  priv->border.top    = 0;
-  priv->border.bottom = 0;
+  priv->cell_border.left   = 0;
+  priv->cell_border.right  = 0;
+  priv->cell_border.top    = 0;
+  priv->cell_border.bottom = 0;
 }
 
 static void 
@@ -193,44 +193,48 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 
   /* Properties */
   g_object_class_install_property (object_class,
-                                   PROP_MARGIN_LEFT,
-                                   g_param_spec_int ("margin-left",
-                                                     P_("Margin on Left"),
-                                                     P_("Pixels of extra space on the left side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
+                                   PROP_CELL_MARGIN_LEFT,
+                                   g_param_spec_int
+				   ("cell-margin-left",
+				    P_("Margin on Left"),
+				    P_("Pixels of extra space on the left side of each cell"),
+				    0,
+				    G_MAXINT16,
+				    0,
+				    GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
-                                   PROP_MARGIN_RIGHT,
-                                   g_param_spec_int ("margin-right",
-                                                     P_("Margin on Right"),
-                                                     P_("Pixels of extra space on the right side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
+                                   PROP_CELL_MARGIN_RIGHT,
+                                   g_param_spec_int
+				   ("cell-margin-right",
+				    P_("Margin on Right"),
+				    P_("Pixels of extra space on the right side of each cell"),
+				    0,
+				    G_MAXINT16,
+				    0,
+				    GTK_PARAM_READWRITE));
+  
+  g_object_class_install_property (object_class,
+                                   PROP_CELL_MARGIN_TOP,
+                                   g_param_spec_int 
+				   ("cell-margin-top",
+				    P_("Margin on Top"),
+				    P_("Pixels of extra space on the top side of each cell"),
+				    0,
+				    G_MAXINT16,
+				    0,
+				    GTK_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
-                                   PROP_MARGIN_TOP,
-                                   g_param_spec_int ("margin-top",
-                                                     P_("Margin on Top"),
-                                                     P_("Pixels of extra space on the top side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class,
-                                   PROP_MARGIN_BOTTOM,
-                                   g_param_spec_int ("margin-bottom",
-                                                     P_("Margin on Bottom"),
-                                                     P_("Pixels of extra space on the bottom side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
+                                   PROP_CELL_MARGIN_BOTTOM,
+                                   g_param_spec_int
+				   ("cell-margin-bottom",
+				    P_("Margin on Bottom"),
+				    P_("Pixels of extra space on the bottom side of each cell"),
+				    0,
+				    G_MAXINT16,
+				    0,
+				    GTK_PARAM_READWRITE));
 
   /* Pool for Cell Properties */
   if (!cell_property_pool)
@@ -349,17 +353,17 @@ gtk_cell_area_set_property (GObject       *object,
 
   switch (prop_id)
     {
-    case PROP_MARGIN_LEFT:
-      gtk_cell_area_set_margin_left (area, g_value_get_int (value));
+    case PROP_CELL_MARGIN_LEFT:
+      gtk_cell_area_set_cell_margin_left (area, g_value_get_int (value));
       break;
-    case PROP_MARGIN_RIGHT:
-      gtk_cell_area_set_margin_right (area, g_value_get_int (value));
+    case PROP_CELL_MARGIN_RIGHT:
+      gtk_cell_area_set_cell_margin_right (area, g_value_get_int (value));
       break;
-    case PROP_MARGIN_TOP:
-      gtk_cell_area_set_margin_top (area, g_value_get_int (value));
+    case PROP_CELL_MARGIN_TOP:
+      gtk_cell_area_set_cell_margin_top (area, g_value_get_int (value));
       break;
-    case PROP_MARGIN_BOTTOM:
-      gtk_cell_area_set_margin_bottom (area, g_value_get_int (value));
+    case PROP_CELL_MARGIN_BOTTOM:
+      gtk_cell_area_set_cell_margin_bottom (area, g_value_get_int (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -378,17 +382,17 @@ gtk_cell_area_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_MARGIN_LEFT:
-      g_value_set_int (value, priv->border.left);
+    case PROP_CELL_MARGIN_LEFT:
+      g_value_set_int (value, priv->cell_border.left);
       break;
-    case PROP_MARGIN_RIGHT:
-      g_value_set_int (value, priv->border.right);
+    case PROP_CELL_MARGIN_RIGHT:
+      g_value_set_int (value, priv->cell_border.right);
       break;
-    case PROP_MARGIN_TOP:
-      g_value_set_int (value, priv->border.top);
+    case PROP_CELL_MARGIN_TOP:
+      g_value_set_int (value, priv->cell_border.top);
       break;
-    case PROP_MARGIN_BOTTOM:
-      g_value_set_int (value, priv->border.bottom);
+    case PROP_CELL_MARGIN_BOTTOM:
+      g_value_set_int (value, priv->cell_border.bottom);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1268,16 +1272,16 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
 
 /* Margins */
 gint
-gtk_cell_area_get_margin_left (GtkCellArea *area)
+gtk_cell_area_get_cell_margin_left (GtkCellArea *area)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
 
-  return area->priv->border.left;
+  return area->priv->cell_border.left;
 }
 
 void
-gtk_cell_area_set_margin_left (GtkCellArea *area,
-			       gint         margin)
+gtk_cell_area_set_cell_margin_left (GtkCellArea *area,
+				    gint         margin)
 {
   GtkCellAreaPrivate *priv;
 
@@ -1285,25 +1289,25 @@ gtk_cell_area_set_margin_left (GtkCellArea *area,
 
   priv = area->priv;
 
-  if (priv->border.left != margin)
+  if (priv->cell_border.left != margin)
     {
-      priv->border.left = margin;
+      priv->cell_border.left = margin;
 
       g_object_notify (G_OBJECT (area), "margin-left");
     }
 }
 
 gint
-gtk_cell_area_get_margin_right (GtkCellArea *area)
+gtk_cell_area_get_cell_margin_right (GtkCellArea *area)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
 
-  return area->priv->border.right;
+  return area->priv->cell_border.right;
 }
 
 void
-gtk_cell_area_set_margin_right (GtkCellArea *area,
-				gint         margin)
+gtk_cell_area_set_cell_margin_right (GtkCellArea *area,
+				     gint         margin)
 {
   GtkCellAreaPrivate *priv;
 
@@ -1311,25 +1315,25 @@ gtk_cell_area_set_margin_right (GtkCellArea *area,
 
   priv = area->priv;
 
-  if (priv->border.right != margin)
+  if (priv->cell_border.right != margin)
     {
-      priv->border.right = margin;
+      priv->cell_border.right = margin;
 
       g_object_notify (G_OBJECT (area), "margin-right");
     }
 }
 
 gint
-gtk_cell_area_get_margin_top (GtkCellArea *area)
+gtk_cell_area_get_cell_margin_top (GtkCellArea *area)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
 
-  return area->priv->border.top;
+  return area->priv->cell_border.top;
 }
 
 void
-gtk_cell_area_set_margin_top (GtkCellArea *area,
-			      gint         margin)
+gtk_cell_area_set_cell_margin_top (GtkCellArea *area,
+				   gint         margin)
 {
   GtkCellAreaPrivate *priv;
 
@@ -1337,25 +1341,25 @@ gtk_cell_area_set_margin_top (GtkCellArea *area,
 
   priv = area->priv;
 
-  if (priv->border.top != margin)
+  if (priv->cell_border.top != margin)
     {
-      priv->border.top = margin;
+      priv->cell_border.top = margin;
 
       g_object_notify (G_OBJECT (area), "margin-top");
     }
 }
 
 gint
-gtk_cell_area_get_margin_bottom (GtkCellArea *area)
+gtk_cell_area_get_cell_margin_bottom (GtkCellArea *area)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
 
-  return area->priv->border.bottom;
+  return area->priv->cell_border.bottom;
 }
 
 void
-gtk_cell_area_set_margin_bottom (GtkCellArea *area,
-				 gint         margin)
+gtk_cell_area_set_cell_margin_bottom (GtkCellArea *area,
+				      gint         margin)
 {
   GtkCellAreaPrivate *priv;
 
@@ -1363,9 +1367,9 @@ gtk_cell_area_set_margin_bottom (GtkCellArea *area,
 
   priv = area->priv;
 
-  if (priv->border.bottom != margin)
+  if (priv->cell_border.bottom != margin)
     {
-      priv->border.bottom = margin;
+      priv->cell_border.bottom = margin;
 
       g_object_notify (G_OBJECT (area), "margin-bottom");
     }
@@ -1373,9 +1377,9 @@ gtk_cell_area_set_margin_bottom (GtkCellArea *area,
 
 /* For convenience in area implementations */
 void
-gtk_cell_area_inner_area (GtkCellArea        *area,
-			  GdkRectangle       *background_area,
-			  GdkRectangle       *cell_area)
+gtk_cell_area_inner_cell_area (GtkCellArea        *area,
+			       GdkRectangle       *background_area,
+			       GdkRectangle       *cell_area)
 {
   GtkCellAreaPrivate *priv;
 
@@ -1387,8 +1391,59 @@ gtk_cell_area_inner_area (GtkCellArea        *area,
 
   *cell_area = *background_area;
 
-  cell_area->x      += priv->border.left;
-  cell_area->width  -= (priv->border.left + priv->border.right);
-  cell_area->y      += priv->border.top;
-  cell_area->height -= (priv->border.top + priv->border.bottom);
+  cell_area->x      += priv->cell_border.left;
+  cell_area->width  -= (priv->cell_border.left + priv->cell_border.right);
+  cell_area->y      += priv->cell_border.top;
+  cell_area->height -= (priv->cell_border.top + priv->cell_border.bottom);
+}
+
+void
+gtk_cell_area_request_renderer (GtkCellArea        *area,
+				GtkCellRenderer    *renderer,
+				GtkOrientation      orientation,
+				GtkWidget          *widget,
+				gint                for_size,
+				gint               *minimum_size,
+				gint               *natural_size)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (minimum_size != NULL);
+  g_return_if_fail (natural_size != NULL);
+
+  priv = area->priv;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      if (for_size < 0)
+	  gtk_cell_renderer_get_preferred_width (renderer, widget, minimum_size, natural_size);
+      else
+	{
+	  for_size = MAX (0, for_size - (priv->cell_border.top + priv->cell_border.bottom));
+
+	  gtk_cell_renderer_get_preferred_width_for_height (renderer, widget, for_size, 
+							    minimum_size, natural_size);
+	}
+
+      *minimum_size += (priv->cell_border.left + priv->cell_border.right);
+      *natural_size += (priv->cell_border.left + priv->cell_border.right);
+    }
+  else /* GTK_ORIENTATION_VERTICAL */
+    {
+      if (for_size < 0)
+	gtk_cell_renderer_get_preferred_height (renderer, widget, minimum_size, natural_size);
+      else
+	{
+	  for_size = MAX (0, for_size - (priv->cell_border.left + priv->cell_border.right));
+
+	  gtk_cell_renderer_get_preferred_height_for_width (renderer, widget, for_size, 
+							    minimum_size, natural_size);
+	}
+
+      *minimum_size += (priv->cell_border.top + priv->cell_border.bottom);
+      *natural_size += (priv->cell_border.top + priv->cell_border.bottom);
+    }
 }
