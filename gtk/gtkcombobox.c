@@ -284,9 +284,9 @@ static void     gtk_combo_box_style_set            (GtkWidget       *widget,
                                                     GtkStyle        *previous);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
                                                     gpointer         data);
-static void     gtk_combo_box_button_state_changed (GtkWidget       *widget,
-			                            GtkStateType     previous,
-						    gpointer         data);
+static void     gtk_combo_box_button_state_flags_changed (GtkWidget     *widget,
+                                                          GtkStateFlags  previous,
+                                                          gpointer       data);
 static void     gtk_combo_box_add                  (GtkContainer    *container,
                                                     GtkWidget       *widget);
 static void     gtk_combo_box_remove               (GtkContainer    *container,
@@ -1322,9 +1322,9 @@ gtk_combo_box_state_changed (GtkWidget    *widget,
 }
 
 static void
-gtk_combo_box_button_state_changed (GtkWidget    *widget,
-				    GtkStateType  previous,
-				    gpointer      data)
+gtk_combo_box_button_state_flags_changed (GtkWidget     *widget,
+                                          GtkStateFlags  previous,
+                                          gpointer       data)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (data);
   GtkComboBoxPrivate *priv = combo_box->priv;
@@ -1332,14 +1332,9 @@ gtk_combo_box_button_state_changed (GtkWidget    *widget,
   if (gtk_widget_get_realized (widget))
     {
       if (!priv->tree_view && priv->cell_view)
-	{
-	  if ((gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE) !=
-	      (gtk_widget_get_state (priv->cell_view) == GTK_STATE_INSENSITIVE))
-	    gtk_widget_set_sensitive (priv->cell_view, gtk_widget_get_sensitive (widget));
-	  
-	  gtk_widget_set_state (priv->cell_view, 
-				gtk_widget_get_state (widget));
-	}
+        gtk_widget_set_state_flags (priv->cell_view,
+                                    gtk_widget_get_state_flags (widget),
+                                    TRUE);
     }
 
   gtk_widget_queue_draw (widget);
@@ -3108,8 +3103,8 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
   g_signal_connect (priv->button, "button-press-event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
                     combo_box);
-  g_signal_connect (priv->button, "state-changed",
-		    G_CALLBACK (gtk_combo_box_button_state_changed), 
+  g_signal_connect (priv->button, "state-flags-changed",
+		    G_CALLBACK (gtk_combo_box_button_state_flags_changed), 
 		    combo_box);
 
   /* create our funky menu */
@@ -3274,7 +3269,7 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
   g_signal_handlers_disconnect_matched (priv->button,
                                         G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL,
-                                        gtk_combo_box_button_state_changed, combo_box);
+                                        gtk_combo_box_button_state_flags_changed, combo_box);
 
   /* unparent will remove our latest ref */
   gtk_widget_unparent (priv->button);
