@@ -612,7 +612,7 @@ gtk_info_bar_init (GtkInfoBar *info_bar)
                                                 GTK_TYPE_INFO_BAR,
                                                 GtkInfoBarPrivate);
 
-  content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  content_area = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_widget_show (content_area);
   gtk_box_pack_start (GTK_BOX (info_bar), content_area, TRUE, TRUE, 0);
 

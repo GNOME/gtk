@@ -97,7 +97,7 @@ create_socket (void)
   
   Socket *socket = g_new (Socket, 1);
   
-  socket->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  socket->box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 
   socket->socket = gtk_socket_new ();
   
@@ -321,7 +321,7 @@ main (int argc, char *argv[])
   gtk_window_set_title (GTK_WINDOW (window), "Socket Test");
   gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   menubar = gtk_menu_bar_new ();
@@ -375,13 +375,13 @@ main (int argc, char *argv[])
 		    G_CALLBACK (grab_window_toggled),
 		    window);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
 
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX(hbox), entry, FALSE, FALSE, 0);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   box = hbox;

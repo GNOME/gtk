@@ -3030,7 +3030,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
       gtk_widget_set_parent (priv->button,
                              gtk_widget_get_parent (child));
 
-      priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+      priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (priv->button), priv->box);
 
       priv->separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);

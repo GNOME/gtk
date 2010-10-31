@@ -801,8 +801,8 @@ gtk_assistant_init (GtkAssistant *assistant)
   gtk_widget_show (priv->sidebar_image);
 
   /* Action area  */
-  priv->action_area  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 6);
-  
+  priv->action_area  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+
   priv->close   = gtk_button_new_from_stock (GTK_STOCK_CLOSE);
   priv->apply   = gtk_button_new_from_stock (GTK_STOCK_APPLY);
   priv->forward = gtk_button_new_from_stock (GTK_STOCK_GO_FORWARD);

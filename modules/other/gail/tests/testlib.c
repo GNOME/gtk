@@ -586,7 +586,8 @@ _create_select_tests_window (AtkObject    *obj,
                          scrolledWindow);
       
       /* Setup Layout */
-      md[window_no]->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 0);
+      md[window_no]->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_box_set_homogeneous (GTK_BOX (md[window_no]->vbox), TRUE);
       md[window_no]->button = gtk_button_new_with_mnemonic ("_Run Tests");
       hbuttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_button_box_set_layout (GTK_BUTTON_BOX (hbuttonbox),
@@ -645,7 +646,7 @@ add_test (gint   window,
     return FALSE;
   else
     {
-      md[window]->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+      md[window]->hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_set_spacing (GTK_BOX (md[window]->hbox), 10);
       gtk_container_set_border_width (GTK_CONTAINER (md[window]->hbox), 10);
       gtk_container_add (GTK_CONTAINER (md[window]->vbox), md[window]->hbox);

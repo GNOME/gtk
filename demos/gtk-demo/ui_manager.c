@@ -196,7 +196,7 @@ do_ui_manager (GtkWidget *do_widget)
 	  g_error_free (error);
 	}
 
-      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
       
       gtk_box_pack_start (GTK_BOX (box1),
@@ -213,7 +213,7 @@ do_ui_manager (GtkWidget *do_widget)
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
 
 
-      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 10);
+      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
 

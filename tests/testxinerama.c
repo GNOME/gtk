@@ -109,7 +109,8 @@ main (int argc, char *argv[])
                              primary_monitor);
       gtk_label_set_markup (GTK_LABEL (label), str);
       g_free (str);
-      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 1);
+      vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 1);
+      gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
       gtk_container_add (GTK_CONTAINER (window), vbox);
       gtk_container_add (GTK_CONTAINER (vbox), label);
       button = gtk_button_new_with_label ("Query current monitor");

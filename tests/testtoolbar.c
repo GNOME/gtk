@@ -530,12 +530,12 @@ main (gint argc, gchar **argv)
   gtk_table_attach (GTK_TABLE (table), toolbar,
 		    0,2, 0,1, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
 
-  hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 3);
+  hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
   gtk_container_set_border_width (GTK_CONTAINER (hbox1), 5);
   gtk_table_attach (GTK_TABLE (table), hbox1,
 		    1,2, 1,2, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
 
-  hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 2);
+  hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_container_set_border_width (GTK_CONTAINER (hbox2), 5);
   gtk_table_attach (GTK_TABLE (table), hbox2,
 		    1,2, 2,3, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);
@@ -706,7 +706,7 @@ main (gint argc, gchar **argv)
   add_item_to_list (store, item, "Terminal");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_table_attach (GTK_TABLE (table), hbox,
 		    1,2, 4,5, GTK_FILL|GTK_EXPAND, GTK_FILL, 0, 0);

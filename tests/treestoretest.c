@@ -303,7 +303,7 @@ make_window (gint view_type)
       break;
     }
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 8);
   gtk_window_set_default_size (GTK_WINDOW (window), 300, 350);
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -351,7 +351,7 @@ make_window (gint view_type)
   gtk_widget_set_sensitive (button, FALSE);
 
   button = gtk_button_new_with_label ("gtk_tree_store_insert");
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -362,7 +362,7 @@ make_window (gint view_type)
                     tree_view);
   
   button = gtk_button_new_with_label ("gtk_tree_store_set");
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -373,7 +373,7 @@ make_window (gint view_type)
 		    tree_view);
 
   button = gtk_button_new_with_label ("gtk_tree_store_insert_with_values");
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 8);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 8);
   entry = gtk_entry_new ();
   gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);

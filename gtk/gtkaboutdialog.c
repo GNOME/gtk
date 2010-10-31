@@ -574,7 +574,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   /* Widgets */
   gtk_widget_push_composite_child ();
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 
@@ -597,7 +597,8 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_label_set_justify (GTK_LABEL (priv->copyright_label), GTK_JUSTIFY_CENTER);
   gtk_box_pack_start (GTK_BOX (vbox), priv->copyright_label, FALSE, FALSE, 0);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, TRUE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, FALSE, 0);
 
   priv->website_label = button = gtk_label_new ("");

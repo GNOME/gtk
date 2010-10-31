@@ -514,7 +514,7 @@ new_unit_widget (GtkCustomPaperUnixDialog *dialog,
   data = g_new0 (UnitWidget, 1);
   data->display_unit = unit;
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 6);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
   button = gtk_spin_button_new_with_range (0.0, 9999.0, 1);
   if (unit == GTK_UNIT_INCH)
@@ -943,7 +943,7 @@ wrap_in_frame (const gchar *label,
   gtk_label_set_markup (GTK_LABEL (label_widget), bold_text);
   g_free (bold_text);
 
-  frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+  frame = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (frame), label_widget, FALSE, FALSE, 0);
 
   alignment = gtk_alignment_new (0.0, 0.0, 1.0, 1.0);
@@ -981,12 +981,12 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
   gtk_box_set_spacing (GTK_BOX (action_area), 6);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 18);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 18);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
   gtk_widget_show (hbox);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 6);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
 
@@ -1022,7 +1022,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
   gtk_container_add (GTK_CONTAINER (scrolled), treeview);
   gtk_widget_show (treeview);
 
-  button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 6);
+  button_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
   gtk_box_pack_start (GTK_BOX (vbox), button_box, FALSE, FALSE, 0);
   gtk_widget_show (button_box);
 
@@ -1046,7 +1046,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 
   user_units = _gtk_print_get_default_user_units ();
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 18);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 18);
   priv->values_box = vbox;
   gtk_box_pack_start (GTK_BOX (hbox), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
@@ -1137,7 +1137,7 @@ populate_dialog (GtkCustomPaperUnixDialog *dialog)
 		    1, 2, 3, 4, GTK_FILL, 0, 0, 0);
   gtk_widget_show (widget);
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_table_attach (GTK_TABLE (table), hbox,
 		    0, 2, 4, 5, GTK_FILL | GTK_EXPAND, 0, 0, 0);
   gtk_widget_show (hbox);

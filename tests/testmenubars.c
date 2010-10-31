@@ -127,9 +127,9 @@ main (int argc, char **argv)
       gtk_window_set_title (GTK_WINDOW (window), "menus");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
       
-      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
-      box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
-      box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+      box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      box3 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       
       /* Rotation by 0 and 180 degrees is broken in Pango, #166832 */
       menubar1 = create_menubar (GTK_PACK_DIRECTION_LTR, GTK_PACK_DIRECTION_LTR, 0.01);
@@ -155,7 +155,7 @@ main (int argc, char **argv)
       gtk_box_pack_start (GTK_BOX (box1), separator, FALSE, TRUE, 0);
       gtk_widget_show (separator);
 
-      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 10);
+      box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
       gtk_container_set_border_width (GTK_CONTAINER (box2), 10);
       gtk_box_pack_start (GTK_BOX (box1), box2, FALSE, TRUE, 0);
       gtk_widget_show (box2);

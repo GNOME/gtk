@@ -1241,7 +1241,6 @@ gtk_box_get_preferred_height_for_width (GtkWidget *widget,
 /**
  * gtk_box_new:
  * @orientation: the box' orientation.
- * @homogeneous: %TRUE if all children are to be given equal space allocations.
  * @spacing: the number of pixels to place by default between children.
  *
  * Creates a new #GtkBox.
@@ -1252,13 +1251,11 @@ gtk_box_get_preferred_height_for_width (GtkWidget *widget,
  **/
 GtkWidget*
 gtk_box_new (GtkOrientation orientation,
-             gboolean       homogeneous,
              gint           spacing)
 {
   return g_object_new (GTK_TYPE_BOX,
                        "orientation", orientation,
                        "spacing",     spacing,
-                       "homogeneous", homogeneous ? TRUE : FALSE,
                        NULL);
 }
 

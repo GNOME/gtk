@@ -78,7 +78,7 @@ text_grid (void)
   paned1 = gtk_paned_new (GTK_ORIENTATION_HORIZONTAL);
   gtk_container_add (GTK_CONTAINER (window), paned1);
 
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_paned_pack1 (GTK_PANED (paned1), box, TRUE, FALSE);
   gtk_paned_pack2 (GTK_PANED (paned1), gtk_label_new ("Space"), TRUE, FALSE);
 
@@ -117,13 +117,13 @@ box_comparison (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Grid vs. Box");
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
   gtk_container_add (GTK_CONTAINER (vbox), gtk_label_new ("Above"));
   gtk_container_add (GTK_CONTAINER (vbox), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
-  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0, FALSE);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_container_add (GTK_CONTAINER (vbox), box);
 
   gtk_box_pack_start (GTK_BOX (box), test_widget ("1", "white"), FALSE, FALSE, 0);

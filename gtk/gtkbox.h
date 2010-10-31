@@ -72,7 +72,6 @@ struct _GtkBoxClass
 
 GType       gtk_box_get_type            (void) G_GNUC_CONST;
 GtkWidget*  gtk_box_new                 (GtkOrientation  orientation,
-                                         gboolean        homogeneous,
                                          gint            spacing);
 
 void        gtk_box_pack_start          (GtkBox         *box,

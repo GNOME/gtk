@@ -35,7 +35,7 @@ do_expander (GtkWidget *do_widget)
 
     content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
 
-    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
     gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 

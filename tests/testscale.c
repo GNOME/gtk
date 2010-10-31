@@ -46,7 +46,7 @@ int main (int argc, char *argv[])
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Ranges with marks");
-  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 5);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
 
   frame = gtk_frame_new ("No marks");
   scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
@@ -96,7 +96,7 @@ int main (int argc, char *argv[])
   gtk_container_add (GTK_CONTAINER (frame), scale);
   gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
 
-  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
+  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_box_pack_start (GTK_BOX (box), box2, TRUE, TRUE, 0);
 
   frame = gtk_frame_new ("No marks");

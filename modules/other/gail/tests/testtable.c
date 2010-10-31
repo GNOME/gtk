@@ -763,11 +763,12 @@ void test_choice_gui(AtkObject **obj)
   g_signal_connect(window, "destroy",
                    G_CALLBACK (destroy), &window);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
   gtk_box_set_spacing(GTK_BOX(vbox), 10);
 
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_spacing(GTK_BOX(hbox), 10);
   tc->tb_ref_selection = gtk_toggle_button_new_with_label("ref_selection");
   gtk_box_pack_start (GTK_BOX (hbox), tc->tb_ref_selection, TRUE, TRUE, 0);
@@ -778,7 +779,7 @@ void test_choice_gui(AtkObject **obj)
   gtk_box_pack_start (GTK_BOX (hbox), tc->index_entry, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0); 
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_spacing(GTK_BOX(hbox), 10);
   tc->tb_ref_at = gtk_toggle_button_new_with_label("ref_at");
   gtk_box_pack_start (GTK_BOX (hbox), tc->tb_ref_at, TRUE, TRUE, 0);
@@ -794,7 +795,7 @@ void test_choice_gui(AtkObject **obj)
   gtk_box_pack_start (GTK_BOX (hbox), tc->col_entry, TRUE, TRUE, 0);
   gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, TRUE, 0); 
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 0);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_spacing(GTK_BOX(hbox), 10);
   tc->tb_ref_accessible_child = gtk_toggle_button_new_with_label("ref_accessible_child");
   gtk_box_pack_start (GTK_BOX (hbox), tc->tb_ref_accessible_child, TRUE, TRUE, 0);

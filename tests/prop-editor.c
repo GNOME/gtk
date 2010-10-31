@@ -849,7 +849,7 @@ property_widget (GObject    *object,
 	GFlagsClass *fclass;
 	gint j;
 	
-	prop_edit = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+	prop_edit = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
 	
 	fclass = G_FLAGS_CLASS (g_type_class_ref (spec->value_type));
 	
@@ -898,7 +898,7 @@ property_widget (GObject    *object,
     {
       GtkWidget *label, *button;
 
-      prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
+      prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
       label = gtk_label_new ("");
       button = gtk_button_new_with_label ("Properties");
@@ -1020,7 +1020,7 @@ properties_from_type (GObject *object,
     }
 
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -1102,7 +1102,7 @@ child_properties_from_object (GObject *object)
       ++i;
     }
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -1148,7 +1148,7 @@ children_from_object (GObject *object)
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
 
-      prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
+      prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
       str = object_label (object, NULL);
       label = gtk_label_new (str);
@@ -1164,7 +1164,7 @@ children_from_object (GObject *object)
       gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
     }
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
@@ -1203,7 +1203,7 @@ cells_from_object (GObject *object)
       gtk_misc_set_alignment (GTK_MISC (label), 0.0, 0.5);
       gtk_table_attach_defaults (GTK_TABLE (table), label, 0, 1, i, i + 1);
 
-      prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 5);
+      prop_edit = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
 
       str = object_label (object, NULL);
       label = gtk_label_new (str);
@@ -1219,7 +1219,7 @@ cells_from_object (GObject *object)
       gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
     }
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_box_pack_start (GTK_BOX (vbox), table, FALSE, FALSE, 0);
 
   sw = gtk_scrolled_window_new (NULL, NULL);

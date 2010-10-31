@@ -257,8 +257,7 @@ gtk_dialog_init (GtkDialog *dialog)
                     G_CALLBACK (gtk_dialog_delete_event_handler),
                     NULL);
 
-  priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 0);
-
+  priv->vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add (GTK_CONTAINER (dialog), priv->vbox);
   gtk_widget_show (priv->vbox);
 

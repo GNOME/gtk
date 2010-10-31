@@ -260,11 +260,11 @@ main (int argc, char **argv)
 
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
 
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, FALSE, 12);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 12);
   gtk_box_pack_start (GTK_BOX (content_area), hbox, TRUE, TRUE, 0);
 
-  combo_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
+  combo_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_box_pack_start (GTK_BOX (hbox), combo_vbox, FALSE, FALSE, 0);
 
   label = gtk_label_new (NULL);
@@ -300,7 +300,7 @@ main (int argc, char **argv)
 
   gtk_container_add (GTK_CONTAINER (scrolled_window), text_view);
 
-  button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, FALSE, 8);
+  button_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
   gtk_box_pack_start (GTK_BOX (hbox), button_vbox, FALSE, FALSE, 0);
   
   gtk_window_set_default_size (GTK_WINDOW (dialog), 500, 300);
