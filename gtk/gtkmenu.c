@@ -233,7 +233,8 @@ static void     gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
 static void gtk_menu_deactivate	    (GtkMenuShell      *menu_shell);
 static void gtk_menu_show_all       (GtkWidget         *widget);
 static void gtk_menu_hide_all       (GtkWidget         *widget);
-static void gtk_menu_position       (GtkMenu           *menu);
+static void gtk_menu_position       (GtkMenu           *menu,
+                                     gboolean           set_scroll_offset);
 static void gtk_menu_reparent       (GtkMenu           *menu, 
 				     GtkWidget         *new_parent, 
 				     gboolean           unrealize);
@@ -1131,7 +1132,7 @@ menu_change_screen (GtkMenu   *menu,
   if (menu->torn_off)
     {
       gtk_window_set_screen (GTK_WINDOW (menu->tearoff_window), new_screen);
-      gtk_menu_position (menu);
+      gtk_menu_position (menu, TRUE);
     }
 
   gtk_window_set_screen (GTK_WINDOW (menu->toplevel), new_screen);
@@ -1564,7 +1565,7 @@ gtk_menu_popup (GtkMenu		    *menu,
 
   /* Position the menu, possibly changing the size request
    */
-  gtk_menu_position (menu);
+  gtk_menu_position (menu, TRUE);
 
   /* Compute the size of the toplevel and realize it so we
    * can scroll correctly.
@@ -1916,7 +1917,7 @@ gtk_menu_reposition (GtkMenu *menu)
   g_return_if_fail (GTK_IS_MENU (menu));
 
   if (!menu->torn_off && gtk_widget_is_drawable (GTK_WIDGET (menu)))
-    gtk_menu_position (menu);
+    gtk_menu_position (menu, FALSE);
 }
 
 static void
@@ -2094,7 +2095,7 @@ gtk_menu_set_tearoff_state (GtkMenu  *menu,
 	  gtk_menu_set_tearoff_hints (menu, width);
 	    
 	  gtk_widget_realize (menu->tearoff_window);
-	  gtk_menu_position (menu);
+	  gtk_menu_position (menu, TRUE);
 	  
 	  gtk_widget_show (GTK_WIDGET (menu));
 	  gtk_widget_show (menu->tearoff_window);
@@ -4176,7 +4177,8 @@ gtk_menu_deactivate (GtkMenuShell *menu_shell)
 }
 
 static void
-gtk_menu_position (GtkMenu *menu)
+gtk_menu_position (GtkMenu  *menu,
+                   gboolean  set_scroll_offset)
 {
   GtkWidget *widget;
   GtkRequisition requisition;
@@ -4406,8 +4408,9 @@ gtk_menu_position (GtkMenu *menu)
       gtk_window_resize (GTK_WINDOW (menu->tearoff_window),
 			 requisition.width, requisition.height);
     }
-  
-  menu->scroll_offset = scroll_offset;
+
+  if (set_scroll_offset)
+    menu->scroll_offset = scroll_offset;
 }
 
 static void

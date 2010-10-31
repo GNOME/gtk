@@ -48,7 +48,7 @@ create_menu (gint     depth,
       gtk_widget_show (menuitem);
     }
 
-  for (i = 0, j = 1; i < 5; i++, j++)
+  for (i = 0, j = 1; i < depth / 4 * 100 + 5; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
