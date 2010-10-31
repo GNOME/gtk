@@ -62,48 +62,53 @@ struct _GtkCellAreaBoxIterClass
 GType   gtk_cell_area_box_iter_get_type                     (void) G_GNUC_CONST;
 
 
+/* Initialize group array dimensions */
+void    gtk_cell_area_box_init_groups                       (GtkCellAreaBoxIter *box_iter,
+							     guint               n_groups,
+							     gboolean           *expand_groups);
+
 /* Update cell-group sizes */
 void    gtk_cell_area_box_iter_push_group_width             (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint                minimum_width,
 							     gint                natural_width);
 
 void    gtk_cell_area_box_iter_push_group_height_for_width  (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint                for_width,
 							     gint                minimum_height,
 							     gint                natural_height);
 
 void    gtk_cell_area_box_iter_push_group_height            (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint                minimum_height,
 							     gint                natural_height);
 
 void    gtk_cell_area_box_iter_push_group_width_for_height  (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint                for_height,
 							     gint                minimum_width,
 							     gint                natural_width);
 
 /* Fetch cell-group sizes */
 void    gtk_cell_area_box_iter_get_group_width              (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint               *minimum_width,
 							     gint               *natural_width);
 
 void    gtk_cell_area_box_iter_get_group_height_for_width   (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint                for_width,
 							     gint               *minimum_height,
 							     gint               *natural_height);
 
 void    gtk_cell_area_box_iter_get_group_height             (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint               *minimum_height,
 							     gint               *natural_height);
 
 void    gtk_cell_area_box_iter_get_group_width_for_height   (GtkCellAreaBoxIter *box_iter,
-							     gint                group_id,
+							     gint                group_idx,
 							     gint                for_height,
 							     gint               *minimum_width,
 							     gint               *natural_width);
@@ -118,11 +123,6 @@ typedef struct {
   gint position;
   gint size;
 } GtkCellAreaBoxAllocation;
-
-GtkCellAreaBoxAllocation *gtk_cell_area_box_allocate (GtkCellAreaBox     *box,
-						      GtkCellAreaBoxIter *iter,
-						      gint                size,
-						      gint               *n_allocs);
 
 G_CONST_RETURN GtkCellAreaBoxAllocation *
 gtk_cell_area_box_iter_get_orientation_allocs (GtkCellAreaBoxIter *iter,

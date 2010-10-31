@@ -115,24 +115,28 @@ typedef struct {
   guint  expand : 1;
 } CellGroup;
 
-static CellInfo  *cell_info_new          (GtkCellRenderer *renderer, 
-					  GtkPackType      pack,
-					  gboolean         expand,
-					  gboolean         align);
-static void       cell_info_free         (CellInfo        *info);
-static gint       cell_info_find         (CellInfo        *info,
-					  GtkCellRenderer *renderer);
+static CellInfo  *cell_info_new          (GtkCellRenderer    *renderer, 
+					  GtkPackType         pack,
+					  gboolean            expand,
+					  gboolean            align);
+static void       cell_info_free         (CellInfo           *info);
+static gint       cell_info_find         (CellInfo           *info,
+					  GtkCellRenderer    *renderer);
 
-static CellGroup *cell_group_new         (guint            id);
-static void       cell_group_free        (CellGroup       *group);
+static CellGroup *cell_group_new         (guint               id);
+static void       cell_group_free        (CellGroup          *group);
 
-static GList     *list_consecutive_cells (GtkCellAreaBox  *box);
-static GList     *construct_cell_groups  (GtkCellAreaBox  *box);
-static gint       count_expand_groups    (GtkCellAreaBox  *box);
-static gint       count_expand_cells     (CellGroup       *group);
-static void       iter_weak_notify       (GtkCellAreaBox  *box,
-					  GtkCellAreaIter *dead_iter);
-static void       flush_iters            (GtkCellAreaBox  *box);
+static GList     *list_consecutive_cells (GtkCellAreaBox     *box);
+static GList     *construct_cell_groups  (GtkCellAreaBox     *box);
+static gint       count_expand_groups    (GtkCellAreaBox     *box);
+static gint       count_expand_cells     (CellGroup          *group);
+static void       iter_weak_notify       (GtkCellAreaBox     *box,
+					  GtkCellAreaBoxIter *dead_iter);
+static void       flush_iters            (GtkCellAreaBox     *box);
+static void       init_iter_groups       (GtkCellAreaBox     *box);
+static void       init_iter_group        (GtkCellAreaBox     *box,
+					  GtkCellAreaBoxIter *iter);
+
 
 struct _GtkCellAreaBoxPrivate
 {
@@ -387,12 +391,51 @@ count_expand_cells (CellGroup *group)
 }
 
 static void 
-iter_weak_notify (GtkCellAreaBox  *box,
-		  GtkCellAreaIter *dead_iter)
+iter_weak_notify (GtkCellAreaBox     *box,
+		  GtkCellAreaBoxIter *dead_iter)
 {
   GtkCellAreaBoxPrivate *priv = box->priv;
 
   priv->iters = g_slist_remove (priv->iters, dead_iter);
+}
+
+static void
+init_iter_group (GtkCellAreaBox     *box,
+		 GtkCellAreaBoxIter *iter)
+{
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  gint                   n_groups, *expand_groups, i;
+  GList                 *l;
+
+  n_groups      = g_list_length (priv->groups);
+  expand_groups = g_new (gboolean, n_groups);
+
+  for (i = 0, l = priv->groups; l; l = l->next, i++)
+    {
+      CellGroup *group = l->data;
+
+      expand_groups[i] = group->expand;
+    }
+
+  gtk_cell_area_box_init_groups (iter, n_groups, expand_groups);
+  g_free (expand_groups);
+}
+
+static void
+init_iter_groups (GtkCellAreaBox *box)
+{
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GSList                *l;
+
+  /* When the box's groups are reconstructed, iters need to
+   * be reinitialized.
+   */
+  for (l = priv->iters; l; l = l->next)
+    {
+      GtkCellAreaBoxIter *iter = l->data;
+
+      init_iter_group (box, iter);
+    }
 }
 
 static void
@@ -411,79 +454,6 @@ flush_iters (GtkCellAreaBox *box)
       gtk_cell_area_iter_flush (iter);
     }
 }
-
-
-/* XXX This guy makes an allocation to be stored and retrieved from the iter */
-GtkCellAreaBoxAllocation *
-gtk_cell_area_box_allocate (GtkCellAreaBox     *box,
-			    GtkCellAreaBoxIter *iter,
-			    gint                size,
-			    gint               *n_allocs)
-{
-  GtkCellAreaBoxPrivate *priv = box->priv;
-  CellGroup             *group;
-  GList                 *group_list;
-  GtkRequestedSize      *orientation_sizes;
-  gint                   n_groups, n_expand_groups, i;
-  gint                   avail_size = size;
-  gint                   extra_size, extra_extra;
-  gint                   position;
-  GtkCellAreaBoxAllocation *allocs;
-
-  n_expand_groups = count_expand_groups (box);
-
-  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    orientation_sizes = gtk_cell_area_box_iter_get_widths (iter, &n_groups);
-  else
-    orientation_sizes = gtk_cell_area_box_iter_get_heights (iter, &n_groups);
-
-  /* First start by naturally allocating space among groups of cells */
-  avail_size -= (n_groups - 1) * priv->spacing;
-  for (i = 0; i < n_groups; i++)
-    avail_size -= orientation_sizes[i].minimum_size;
-
-  avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, orientation_sizes);
-
-  /* Calculate/distribute expand for groups */
-  if (n_expand_groups > 0)
-    {
-      extra_size  = avail_size / n_expand_groups;
-      extra_extra = avail_size % n_expand_groups;
-    }
-  else
-    extra_size = extra_extra = 0;
-
-  allocs = g_new (GtkCellAreaBoxAllocation, n_groups);
-
-  for (position = 0, group_list = priv->groups; group_list; group_list = group_list->next)
-    {
-      group = group_list->data;
-
-      allocs[group->id].position = position;
-      allocs[group->id].size     = orientation_sizes[group->id].minimum_size;
-
-      if (group->expand)
-	{
-	  allocs[group->id].size += extra_size;
-	  if (extra_extra)
-	    {
-	      allocs[group->id].size++;
-	      extra_extra--;
-	    }
-	}
-
-      position += allocs[group->id].size;
-      position += priv->spacing;
-    }
-
-  g_free (orientation_sizes);
-
-  if (n_allocs)
-    *n_allocs = n_groups;
-
-  return allocs;
-}
-
 
 /*************************************************************
  *                      GObjectClass                         *
@@ -519,6 +489,12 @@ gtk_cell_area_box_set_property (GObject       *object,
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      box->priv->orientation = g_value_get_enum (value);
+
+      /* Notify that size needs to be requested again */
+      flush_iters (box);
+      break;
     case PROP_SPACING:
       gtk_cell_area_box_set_spacing (box, g_value_get_int (value));
       break;
@@ -538,6 +514,9 @@ gtk_cell_area_box_get_property (GObject     *object,
 
   switch (prop_id)
     {
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, box->priv->orientation);
+      break;
     case PROP_SPACING:
       g_value_set_int (value, gtk_cell_area_box_get_spacing (box));
       break;
@@ -582,8 +561,8 @@ gtk_cell_area_box_remove (GtkCellArea        *area,
       g_list_free (priv->groups);
       priv->groups = construct_cell_groups (box);
 
-      /* Notify that size needs to be requested again */
-      flush_iters (box);
+      /* Reinitialize groups on iters */
+      init_iter_groups (box);
     }
   else
     g_warning ("Trying to remove a cell renderer that is not present GtkCellAreaBox");
@@ -639,6 +618,9 @@ gtk_cell_area_box_create_iter (GtkCellArea *area)
   priv->iters = g_slist_prepend (priv->iters, iter);
 
   g_object_weak_ref (G_OBJECT (iter), (GWeakNotify)iter_weak_notify, box);
+
+  /* Tell the new group about our cell layout */
+  init_iter_group (box, GTK_CELL_AREA_BOX_ITER (iter));
 
   return iter;
 }
@@ -1141,8 +1123,8 @@ gtk_cell_area_box_layout_reorder (GtkCellLayout      *cell_layout,
       g_list_free (priv->groups);
       priv->groups = construct_cell_groups (box);
       
-      /* Notify that size needs to be requested again */
-      flush_iters (box);
+      /* Reinitialize groups on iters */
+      init_iter_groups (box);
     }
 }
 
@@ -1185,8 +1167,8 @@ gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
   g_list_free (priv->groups);
   priv->groups = construct_cell_groups (box);
 
-  /* Notify that size needs to be requested again */
-  flush_iters (box);
+  /* Reinitialize groups on iters */
+  init_iter_groups (box);
 }
 
 void
@@ -1219,8 +1201,8 @@ gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
   g_list_free (priv->groups);
   priv->groups = construct_cell_groups (box);
 
-  /* Notify that size needs to be requested again */
-  flush_iters (box);
+  /* Reinitialize groups on iters */
+  init_iter_groups (box);
 }
 
 gint
