@@ -1192,9 +1192,9 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   g_object_set_data_full (G_OBJECT (attach_widget), I_(ATTACHED_MENUS), list,
                           (GDestroyNotify) g_list_free);
 
-  if (gtk_widget_get_state (GTK_WIDGET (menu)) != GTK_STATE_NORMAL)
-    gtk_widget_set_state (GTK_WIDGET (menu), GTK_STATE_NORMAL);
-  
+  if (gtk_widget_get_state_flags (GTK_WIDGET (menu)) != 0)
+    gtk_widget_set_state_flags (GTK_WIDGET (menu), 0, TRUE);
+
   /* we don't need to set the style here, since
    * we are a toplevel widget.
    */
