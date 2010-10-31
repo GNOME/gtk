@@ -27,9 +27,11 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include "gtkintl.h"
 #include "gtkcelllayout.h"
 #include "gtkcellarea.h"
 #include "gtkcellareaiter.h"
+#include "gtkprivate.h"
 
 #include <gobject/gvaluecollector.h>
 
@@ -37,6 +39,14 @@
 /* GObjectClass */
 static void      gtk_cell_area_dispose                             (GObject            *object);
 static void      gtk_cell_area_finalize                            (GObject            *object);
+static void      gtk_cell_area_set_property                        (GObject            *object,
+								    guint               prop_id,
+								    const GValue       *value,
+								    GParamSpec         *pspec);
+static void      gtk_cell_area_get_property                        (GObject            *object,
+								    guint               prop_id,
+								    GValue             *value,
+								    GParamSpec         *pspec);
 
 /* GtkCellAreaClass */
 static void      gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
@@ -111,6 +121,8 @@ typedef struct {
 struct _GtkCellAreaPrivate
 {
   GHashTable *cell_info;
+
+  GtkBorder   border;
 };
 
 /* Keep the paramspec pool internal, no need to deliver notifications
@@ -120,6 +132,13 @@ static GParamSpecPool *cell_property_pool = NULL;
 #define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
 #define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
 
+enum {
+  PROP_0,
+  PROP_MARGIN_LEFT,
+  PROP_MARGIN_RIGHT,
+  PROP_MARGIN_TOP,
+  PROP_MARGIN_BOTTOM
+};
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_UNOWNED,
 				  G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
@@ -139,6 +158,11 @@ gtk_cell_area_init (GtkCellArea *area)
 					   g_direct_equal,
 					   NULL, 
 					   (GDestroyNotify)cell_info_free);
+
+  priv->border.left   = 0;
+  priv->border.right  = 0;
+  priv->border.top    = 0;
+  priv->border.bottom = 0;
 }
 
 static void 
@@ -147,8 +171,10 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   
   /* GObjectClass */
-  object_class->dispose  = gtk_cell_area_dispose;
-  object_class->finalize = gtk_cell_area_finalize;
+  object_class->dispose      = gtk_cell_area_dispose;
+  object_class->finalize     = gtk_cell_area_finalize;
+  object_class->get_property = gtk_cell_area_get_property;
+  object_class->set_property = gtk_cell_area_set_property;
 
   /* general */
   class->add     = NULL;
@@ -165,7 +191,48 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->get_preferred_height_for_width = gtk_cell_area_real_get_preferred_height_for_width;
   class->get_preferred_width_for_height = gtk_cell_area_real_get_preferred_width_for_height;
 
-  /* Cell properties */
+  /* Properties */
+  g_object_class_install_property (object_class,
+                                   PROP_MARGIN_LEFT,
+                                   g_param_spec_int ("margin-left",
+                                                     P_("Margin on Left"),
+                                                     P_("Pixels of extra space on the left side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_MARGIN_RIGHT,
+                                   g_param_spec_int ("margin-right",
+                                                     P_("Margin on Right"),
+                                                     P_("Pixels of extra space on the right side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_MARGIN_TOP,
+                                   g_param_spec_int ("margin-top",
+                                                     P_("Margin on Top"),
+                                                     P_("Pixels of extra space on the top side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_MARGIN_BOTTOM,
+                                   g_param_spec_int ("margin-bottom",
+                                                     P_("Margin on Bottom"),
+                                                     P_("Pixels of extra space on the bottom side"),
+                                                     0,
+                                                     G_MAXINT16,
+                                                     0,
+                                                     GTK_PARAM_READWRITE));
+
+  /* Pool for Cell Properties */
   if (!cell_property_pool)
     cell_property_pool = g_param_spec_pool_new (FALSE);
 
@@ -272,6 +339,62 @@ gtk_cell_area_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->dispose (object);
 }
 
+static void
+gtk_cell_area_set_property (GObject       *object,
+			    guint          prop_id,
+			    const GValue  *value,
+			    GParamSpec    *pspec)
+{
+  GtkCellArea *area = GTK_CELL_AREA (object);
+
+  switch (prop_id)
+    {
+    case PROP_MARGIN_LEFT:
+      gtk_cell_area_set_margin_left (area, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_RIGHT:
+      gtk_cell_area_set_margin_right (area, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_TOP:
+      gtk_cell_area_set_margin_top (area, g_value_get_int (value));
+      break;
+    case PROP_MARGIN_BOTTOM:
+      gtk_cell_area_set_margin_bottom (area, g_value_get_int (value));
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_cell_area_get_property (GObject     *object,
+			    guint        prop_id,
+			    GValue      *value,
+			    GParamSpec  *pspec)
+{
+  GtkCellArea        *area = GTK_CELL_AREA (object);
+  GtkCellAreaPrivate *priv = area->priv;
+
+  switch (prop_id)
+    {
+    case PROP_MARGIN_LEFT:
+      g_value_set_int (value, priv->border.left);
+      break;
+    case PROP_MARGIN_RIGHT:
+      g_value_set_int (value, priv->border.right);
+      break;
+    case PROP_MARGIN_TOP:
+      g_value_set_int (value, priv->border.top);
+      break;
+    case PROP_MARGIN_BOTTOM:
+      g_value_set_int (value, priv->border.bottom);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 /*************************************************************
  *                    GtkCellAreaClass                       *
@@ -1143,3 +1266,129 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
     }
 }
 
+/* Margins */
+gint
+gtk_cell_area_get_margin_left (GtkCellArea *area)
+{
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
+
+  return area->priv->border.left;
+}
+
+void
+gtk_cell_area_set_margin_left (GtkCellArea *area,
+			       gint         margin)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  if (priv->border.left != margin)
+    {
+      priv->border.left = margin;
+
+      g_object_notify (G_OBJECT (area), "margin-left");
+    }
+}
+
+gint
+gtk_cell_area_get_margin_right (GtkCellArea *area)
+{
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
+
+  return area->priv->border.right;
+}
+
+void
+gtk_cell_area_set_margin_right (GtkCellArea *area,
+				gint         margin)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  if (priv->border.right != margin)
+    {
+      priv->border.right = margin;
+
+      g_object_notify (G_OBJECT (area), "margin-right");
+    }
+}
+
+gint
+gtk_cell_area_get_margin_top (GtkCellArea *area)
+{
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
+
+  return area->priv->border.top;
+}
+
+void
+gtk_cell_area_set_margin_top (GtkCellArea *area,
+			      gint         margin)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  if (priv->border.top != margin)
+    {
+      priv->border.top = margin;
+
+      g_object_notify (G_OBJECT (area), "margin-top");
+    }
+}
+
+gint
+gtk_cell_area_get_margin_bottom (GtkCellArea *area)
+{
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
+
+  return area->priv->border.bottom;
+}
+
+void
+gtk_cell_area_set_margin_bottom (GtkCellArea *area,
+				 gint         margin)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  if (priv->border.bottom != margin)
+    {
+      priv->border.bottom = margin;
+
+      g_object_notify (G_OBJECT (area), "margin-bottom");
+    }
+}
+
+/* For convenience in area implementations */
+void
+gtk_cell_area_inner_area (GtkCellArea        *area,
+			  GdkRectangle       *background_area,
+			  GdkRectangle       *cell_area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (background_area != NULL);
+  g_return_if_fail (cell_area != NULL);
+
+  priv = area->priv;
+
+  *cell_area = *background_area;
+
+  cell_area->x      += priv->border.left;
+  cell_area->width  -= (priv->border.left + priv->border.right);
+  cell_area->y      += priv->border.top;
+  cell_area->height -= (priv->border.top + priv->border.bottom);
+}

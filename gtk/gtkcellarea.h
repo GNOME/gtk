@@ -238,6 +238,24 @@ void               gtk_cell_area_cell_get_property              (GtkCellArea    
 #define GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
   G_OBJECT_WARN_INVALID_PSPEC ((object), "cell property id", (property_id), (pspec))
 
+/* Margins */
+gint               gtk_cell_area_get_margin_left                (GtkCellArea        *area);
+void               gtk_cell_area_set_margin_left                (GtkCellArea        *area,
+								 gint                margin);
+gint               gtk_cell_area_get_margin_right               (GtkCellArea        *area);
+void               gtk_cell_area_set_margin_right               (GtkCellArea        *area,
+								 gint                margin);
+gint               gtk_cell_area_get_margin_top                 (GtkCellArea        *area);
+void               gtk_cell_area_set_margin_top                 (GtkCellArea        *area,
+								 gint                margin);
+gint               gtk_cell_area_get_margin_bottom              (GtkCellArea        *area);
+void               gtk_cell_area_set_margin_bottom              (GtkCellArea        *area,
+								 gint                margin);
+
+/* For convenience in area implementations */
+void               gtk_cell_area_inner_area                     (GtkCellArea        *area,
+								 GdkRectangle       *background_area,
+								 GdkRectangle       *cell_area);
 
 G_END_DECLS
 
