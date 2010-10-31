@@ -4803,6 +4803,8 @@ lines_window_init (LinesWindow       *win,
         }
 
       win->lines[i] = line_text;
+      win->first_line_start = line_start;
+      win->first_line_end = line_end;
 
       line_end = line_start;
       gtk_text_iter_backward_line (&line_start);
