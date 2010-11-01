@@ -3323,284 +3323,83 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
                               gint            width,
                               gint            height)
 {
-  gint skip;
+  GtkStyleContext *context;
+  GtkStylePrivate *priv;
+  GtkStateFlags flags = 0;
+  GtkJunctionSides sides = 0;
 
-  cairo_rectangle (cr, x, y, width, height);
-  cairo_clip (cr);
+  if (widget)
+    context = gtk_widget_get_style_context (widget);
+  else
+    {
+      priv = GTK_STYLE_GET_PRIVATE (style);
+      context = priv->context;
+    }
 
-  cairo_set_line_width (cr, 1.0);
+  gtk_style_context_save (context);
 
-  skip = -1;
+  if (detail)
+    transform_detail_string (detail, context);
+
+  gtk_style_context_add_class (context, "grip");
+
+  switch (state_type)
+    {
+    case GTK_STATE_PRELIGHT:
+      flags |= GTK_STATE_FLAG_PRELIGHT;
+      break;
+    case GTK_STATE_SELECTED:
+      flags |= GTK_STATE_FLAG_SELECTED;
+      break;
+    case GTK_STATE_INSENSITIVE:
+      flags |= GTK_STATE_FLAG_INSENSITIVE;
+      break;
+    default:
+      break;
+    }
+
+  gtk_style_context_set_state (context, flags);
+
   switch (edge)
     {
     case GDK_WINDOW_EDGE_NORTH_WEST:
-      /* make it square */
-      if (width < height)
-	height = width;
-      else if (height < width)
-	width = height;
-      skip = 2;
+      sides = GTK_JUNCTION_TOP | GTK_JUNCTION_LEFT;
       break;
     case GDK_WINDOW_EDGE_NORTH:
-      if (width < height)
-	height = width;
+      sides = GTK_JUNCTION_TOP;
       break;
     case GDK_WINDOW_EDGE_NORTH_EAST:
-      /* make it square, aligning to top right */
-      if (width < height)
-	height = width;
-      else if (height < width)
-	{
-	  x += (width - height);
-	  width = height;
-	}
-      skip = 3;
+      sides = GTK_JUNCTION_TOP | GTK_JUNCTION_RIGHT;
       break;
     case GDK_WINDOW_EDGE_WEST:
-      if (height < width)
-	width = height;
+      sides = GTK_JUNCTION_LEFT;
       break;
     case GDK_WINDOW_EDGE_EAST:
-      /* aligning to right */
-      if (height < width)
-	{
-	  x += (width - height);
-	  width = height;
-	}
+      sides = GTK_JUNCTION_RIGHT;
       break;
     case GDK_WINDOW_EDGE_SOUTH_WEST:
-      /* make it square, aligning to bottom left */
-      if (width < height)
-	{
-	  y += (height - width);
-	  height = width;
-	}
-      else if (height < width)
-	width = height;
-      skip = 1;
+      sides = GTK_JUNCTION_BOTTOM | GTK_JUNCTION_LEFT;
       break;
     case GDK_WINDOW_EDGE_SOUTH:
-      /* align to bottom */
-      if (width < height)
-	{
-	  y += (height - width);
-	  height = width;
-	}
+      sides = GTK_JUNCTION_BOTTOM;
       break;
     case GDK_WINDOW_EDGE_SOUTH_EAST:
-      /* make it square, aligning to bottom right */
-      if (width < height)
-	{
-	  y += (height - width);
-	  height = width;
-	}
-      else if (height < width)
-	{
-	  x += (width - height);
-	  width = height;
-	}
-      skip = 0;
-      break;
-    default:
-      g_assert_not_reached ();
-    }
-  
-  switch (edge)
-    {
-    case GDK_WINDOW_EDGE_WEST:
-    case GDK_WINDOW_EDGE_EAST:
-      {
-	gint xi;
-
-	xi = x;
-
-	while (xi < x + width)
-	  {
-	    _cairo_draw_line (cr,
-			      &style->light[state_type],
-			      xi, y,
-			      xi, y + height);
-
-	    xi++;
-	    _cairo_draw_line (cr,
-			      &style->dark[state_type],
-			      xi, y,
-			      xi, y + height);
-
-	    xi += 2;
-	  }
-      }
-      break;
-    case GDK_WINDOW_EDGE_NORTH:
-    case GDK_WINDOW_EDGE_SOUTH:
-      {
-	gint yi;
-
-	yi = y;
-
-	while (yi < y + height)
-	  {
-	    _cairo_draw_line (cr,
-			      &style->light[state_type],
-			      x, yi,
-			      x + width, yi);
-
-	    yi++;
-	    _cairo_draw_line (cr,
-			      &style->dark[state_type],
-			      x, yi,
-			      x + width, yi);
-
-	    yi+= 2;
-	  }
-      }
-      break;
-    case GDK_WINDOW_EDGE_NORTH_WEST:
-      {
-	gint xi, yi;
-
-	xi = x + width;
-	yi = y + height;
-
-	while (xi > x + 3)
-	  {
-	    _cairo_draw_line (cr,
-			      &style->dark[state_type],
-			      xi, y,
-			      x, yi);
-
-	    --xi;
-	    --yi;
-
-	    _cairo_draw_line (cr,
-			      &style->dark[state_type],
-			      xi, y,
-			      x, yi);
-
-	    --xi;
-	    --yi;
-
-	    _cairo_draw_line (cr,
-			      &style->light[state_type],
-			      xi, y,
-			      x, yi);
-
-	    xi -= 3;
-	    yi -= 3;
-	    
-	  }
-      }
-      break;
-    case GDK_WINDOW_EDGE_NORTH_EAST:
-      {
-        gint xi, yi;
-
-        xi = x;
-        yi = y + height;
-
-        while (xi < (x + width - 3))
-          {
-            _cairo_draw_line (cr,
-                              &style->light[state_type],
-                              xi, y,
-                              x + width, yi);                           
-
-            ++xi;
-            --yi;
-            
-            _cairo_draw_line (cr,
-                              &style->dark[state_type],
-                              xi, y,
-                              x + width, yi);                           
-
-            ++xi;
-            --yi;
-            
-            _cairo_draw_line (cr,
-                              &style->dark[state_type],
-                              xi, y,
-                              x + width, yi);
-
-            xi += 3;
-            yi -= 3;
-          }
-      }
-      break;
-    case GDK_WINDOW_EDGE_SOUTH_WEST:
-      {
-	gint xi, yi;
-
-	xi = x + width;
-	yi = y;
-
-	while (xi > x + 3)
-	  {
-	    _cairo_draw_line (cr,
-			      &style->dark[state_type],
-			      x, yi,
-			      xi, y + height);
-
-	    --xi;
-	    ++yi;
-
-	    _cairo_draw_line (cr,
-			      &style->dark[state_type],
-			      x, yi,
-			      xi, y + height);
-
-	    --xi;
-	    ++yi;
-
-	    _cairo_draw_line (cr,
-			      &style->light[state_type],
-			      x, yi,
-			      xi, y + height);
-
-	    xi -= 3;
-	    yi += 3;
-	    
-	  }
-      }
-      break;
-    case GDK_WINDOW_EDGE_SOUTH_EAST:
-      {
-        gint xi, yi;
-
-        xi = x;
-        yi = y;
-
-        while (xi < (x + width - 3))
-          {
-            _cairo_draw_line (cr,
-                              &style->light[state_type],
-                              xi, y + height,
-                              x + width, yi);                           
-
-            ++xi;
-            ++yi;
-            
-            _cairo_draw_line (cr,
-                              &style->dark[state_type],
-                              xi, y + height,
-                              x + width, yi);                           
-
-            ++xi;
-            ++yi;
-            
-            _cairo_draw_line (cr,
-                              &style->dark[state_type],
-                              xi, y + height,
-                              x + width, yi);
-
-            xi += 3;
-            yi += 3;
-          }
-      }
-      break;
-    default:
-      g_assert_not_reached ();
+      sides = GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT;
       break;
     }
+
+  gtk_style_context_set_junction_sides (context, sides);
+
+  cairo_save (cr);
+
+  gtk_render_handle (context, cr,
+                     (gdouble) x,
+                     (gdouble) y,
+                     (gdouble) width,
+                     (gdouble) height);
+
+  cairo_restore (cr);
+  gtk_style_context_restore (context);
 }
 
 static void

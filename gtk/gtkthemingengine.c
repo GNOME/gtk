@@ -2426,7 +2426,272 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
 
-  if (gtk_theming_engine_has_class (engine, "paned"))
+  if (gtk_theming_engine_has_class (engine, "grip"))
+    {
+      GtkJunctionSides sides;
+      gint skip = -1;
+
+      cairo_save (cr);
+
+      cairo_set_line_width (cr, 1.0);
+      sides = gtk_theming_engine_get_junction_sides (engine);
+
+      /* reduce confusing values to a meaningful state */
+      if (sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT))
+        sides &= ~(GTK_JUNCTION_LEFT);
+
+      if (sides & (GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM))
+        sides &= ~(GTK_JUNCTION_TOP);
+
+      if (sides == 0)
+        sides = (GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT);
+
+      /* align drawing area to the connected side */
+      if (sides == GTK_JUNCTION_LEFT)
+        {
+          if (height < width)
+            width = height;
+        }
+      else if (sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_TOP))
+        {
+          if (width < height)
+            height = width;
+          else if (height < width)
+            width = height;
+
+          skip = 2;
+        }
+      else if (sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_BOTTOM))
+        {
+          /* make it square, aligning to bottom left */
+          if (width < height)
+            {
+              y += (height - width);
+              height = width;
+            }
+          else if (height < width)
+            width = height;
+
+          skip = 1;
+        }
+      if (sides == GTK_JUNCTION_RIGHT)
+        {
+          /* aligning to right */
+          if (height < width)
+            {
+              x += (width - height);
+              width = height;
+            }
+        }
+      else if (sides & (GTK_JUNCTION_RIGHT | GTK_JUNCTION_TOP))
+        {
+          if (width < height)
+            height = width;
+          else if (height < width)
+            {
+              x += (width - height);
+              width = height;
+            }
+
+          skip = 3;
+        }
+      else if (sides & (GTK_JUNCTION_RIGHT | GTK_JUNCTION_BOTTOM))
+        {
+          /* make it square, aligning to bottom right */
+          if (width < height)
+            {
+              y += (height - width);
+              height = width;
+            }
+          else if (height < width)
+            {
+              x += (width - height);
+              width = height;
+            }
+
+          skip = 0;
+        }
+      else if (sides == GTK_JUNCTION_TOP)
+        {
+          if (width < height)
+            height = width;
+        }
+      else if (sides == GTK_JUNCTION_BOTTOM)
+        {
+          /* align to bottom */
+          if (width < height)
+            {
+              y += (height - width);
+              height = width;
+            }
+        }
+      else
+        g_assert_not_reached ();
+
+      if (sides == GTK_JUNCTION_LEFT ||
+          sides == GTK_JUNCTION_RIGHT)
+        {
+          gint xi;
+
+          xi = x;
+
+          while (xi < x + width)
+            {
+              gdk_cairo_set_source_rgba (cr, &lighter);
+              add_path_line (cr, x, y, x, y + height);
+              cairo_stroke (cr);
+              xi++;
+
+              gdk_cairo_set_source_rgba (cr, &darker);
+              add_path_line (cr, xi, y, xi, y + height);
+              cairo_stroke (cr);
+              xi += 2;
+            }
+        }
+      else if (sides == GTK_JUNCTION_TOP ||
+               sides == GTK_JUNCTION_BOTTOM)
+        {
+          gint yi;
+
+          yi = y;
+
+          while (yi < y + height)
+            {
+              gdk_cairo_set_source_rgba (cr, &lighter);
+              add_path_line (cr, x, yi, x + width, yi);
+              cairo_stroke (cr);
+              yi++;
+
+              gdk_cairo_set_source_rgba (cr, &darker);
+              add_path_line (cr, x, yi, x + width, yi);
+              cairo_stroke (cr);
+              yi+= 2;
+            }
+        }
+      else if (sides == (GTK_JUNCTION_TOP | GTK_JUNCTION_LEFT))
+        {
+          gint xi, yi;
+
+          xi = x + width;
+          yi = y + height;
+
+          while (xi > x + 3)
+            {
+              gdk_cairo_set_source_rgba (cr, &darker);
+              add_path_line (cr, xi, y, x, yi);
+              cairo_stroke (cr);
+
+              --xi;
+              --yi;
+
+              add_path_line (cr, xi, y, x, yi);
+              cairo_stroke (cr);
+
+              --xi;
+              --yi;
+
+              gdk_cairo_set_source_rgba (cr, &lighter);
+              add_path_line (cr, xi, y, x, yi);
+              cairo_stroke (cr);
+
+              xi -= 3;
+              yi -= 3;
+            }
+        }
+      else if (sides == (GTK_JUNCTION_TOP | GTK_JUNCTION_RIGHT))
+        {
+          gint xi, yi;
+
+          xi = x;
+          yi = y + height;
+
+          while (xi < (x + width - 3))
+            {
+              gdk_cairo_set_source_rgba (cr, &lighter);
+              add_path_line (cr, xi, y, x + width, yi);
+              cairo_stroke (cr);
+
+              ++xi;
+              --yi;
+
+              gdk_cairo_set_source_rgba (cr, &darker);
+              add_path_line (cr, xi, y, x + width, yi);
+              cairo_stroke (cr);
+
+              ++xi;
+              --yi;
+
+              add_path_line (cr, xi, y, x + width, yi);
+              cairo_stroke (cr);
+
+              xi += 3;
+              yi -= 3;
+            }
+        }
+      else if (sides == (GTK_JUNCTION_BOTTOM | GTK_JUNCTION_LEFT))
+        {
+          gint xi, yi;
+
+          xi = x + width;
+          yi = y;
+
+          while (xi > x + 3)
+            {
+              gdk_cairo_set_source_rgba (cr, &darker);
+              add_path_line (cr, x, yi, xi, y + height);
+              cairo_stroke (cr);
+
+              --xi;
+              ++yi;
+
+              add_path_line (cr, x, yi, xi, y + height);
+              cairo_stroke (cr);
+
+              --xi;
+              ++yi;
+
+              gdk_cairo_set_source_rgba (cr, &lighter);
+              add_path_line (cr, x, yi, xi, y + height);
+              cairo_stroke (cr);
+
+              xi -= 3;
+              yi += 3;
+            }
+        }
+      else if (sides == (GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT))
+        {
+          gint xi, yi;
+
+          xi = x;
+          yi = y;
+
+          while (xi < (x + width - 3))
+            {
+              gdk_cairo_set_source_rgba (cr, &lighter);
+              add_path_line (cr, xi, y + height, x + width, yi);
+              cairo_stroke (cr);
+
+              ++xi;
+              ++yi;
+
+              gdk_cairo_set_source_rgba (cr, &darker);
+              add_path_line (cr, xi, y + height, x + width, yi);
+              cairo_stroke (cr);
+
+              ++xi;
+              ++yi;
+
+              add_path_line (cr, xi, y + height, x + width, yi);
+              cairo_stroke (cr);
+
+              xi += 3;
+              yi += 3;
+            }
+        }
+
+      cairo_restore (cr);
+    }
+  else if (gtk_theming_engine_has_class (engine, "paned"))
     {
       if (width > height)
         for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
