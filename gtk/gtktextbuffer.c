@@ -78,7 +78,6 @@ struct _ClipboardRequest
   GtkTextBuffer *buffer;
   guint interactive : 1;
   guint default_editable : 1;
-  guint is_clipboard : 1;
   guint replace_selection : 1;
 };
 
@@ -3784,7 +3783,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
 
   data->buffer = g_object_ref (buffer);
   data->interactive = TRUE;
-  data->default_editable = default_editable;
+  data->default_editable = !!default_editable;
 
   /* When pasting with the cursor inside the selection area, you
    * replace the selection with the new text, otherwise, you
