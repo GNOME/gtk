@@ -258,6 +258,7 @@ gtk_public_h_sources =          \
 	gtkprogressbar.h	\
 	gtkradioaction.h	\
 	gtkradiobutton.h	\
+	gtkradiogroup.h		\
 	gtkradiomenuitem.h	\
 	gtkradiotoolbutton.h	\
 	gtkrange.h		\
@@ -378,6 +379,7 @@ gtk_private_h_sources =		\
 	gtkprintoperation-private.h\
 	gtkprintutils.h		\
 	gtkprivate.h		\
+	gtkradiogroupprivate.h	\
 	gtkrbtree.h		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
@@ -530,6 +532,7 @@ gtk_base_c_sources =            \
 	gtkprogressbar.c	\
 	gtkradioaction.c	\
 	gtkradiobutton.c	\
+	gtkradiogroup.c		\
 	gtkradiomenuitem.c	\
 	gtkradiotoolbutton.c	\
 	gtkrange.c		\
