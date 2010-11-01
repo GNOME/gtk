@@ -106,22 +106,28 @@ main (int argc, char *argv[])
   <section><title>Commands and Messages</title>
     <para>
       libunique lets you send messages with commands to a running
-      instance using unique_app_send_message(). GApplication does not
-      have a direct equivalent for this feature at this time, but
-      some of the predefined libunique commands have equivalents in
-      GApplication. Instead of sending the %UNIQUE_ACTIVATE command,
-      call g_application_activate(), instead of sending the
+      instance using unique_app_send_message(). The commands can be either
+      predefined or custom. Some of the predefined libunique commands have
+      equivalents in GApplication. Instead of sending the %UNIQUE_ACTIVATE
+      command, call g_application_activate(), instead of sending the
       %UNIQUE_OPEN command, call g_application_open(). The
       %UNIQUE_NEW and %UNIQUE_CLOSE and user-defined commands don't
       have direct replacement at this time.
     </para>
 
     <para>
-      On the other hand, GApplication supports passing entire
-      commandlines to the running instance, which reduces the need
-      for user-defined commands. And GDBus makes it very easy to
-      implement D-Bus interfaces for communication between
-      application instances, see e.g. g_dbus_connection_register_object().
+      As a replacement for custom commands, GApplication implements the
+      #GActionGroup interface and lets you add a group of actions with
+      g_application_set_action_group(). The actions can then be invoked,
+      either by using the D-Bus interface for #GAction directly, or by
+      calling g_action_group_activate_action() from another instance of
+      the GApplication. The #GApplication documentation contains an
+      example for using GApplication with actions.
+    </para>
+
+    <para>
+      For more complex needs, GApplication supports passing entire
+      commandlines to the running instance.
     </para>
   </section>
 </chapter>
