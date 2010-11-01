@@ -91,13 +91,13 @@ gtk_radio_tool_button_set_property (GObject         *object,
     case PROP_GROUP:
       {
 	GtkRadioToolButton *arg;
-	GSList *slist = NULL;
-	if (G_VALUE_HOLDS_OBJECT (value)) 
+	GtkRadioGroup *group = NULL;
+	if (G_VALUE_HOLDS_OBJECT (value))
 	  {
 	    arg = GTK_RADIO_TOOL_BUTTON (g_value_get_object (value));
 	    if (arg)
-	      slist = gtk_radio_tool_button_get_group (arg);
-	    gtk_radio_tool_button_set_group (button, slist);
+	      group = gtk_radio_tool_button_get_group (arg);
+	    gtk_radio_tool_button_set_group (button, group);
 	  }
       }
       break;
@@ -118,7 +118,7 @@ gtk_radio_tool_button_set_property (GObject         *object,
  * Since: 2.4
  **/
 GtkToolItem *
-gtk_radio_tool_button_new (GSList *group)
+gtk_radio_tool_button_new (GtkRadioGroup *group)
 {
   GtkRadioToolButton *button;
   
@@ -144,7 +144,7 @@ gtk_radio_tool_button_new (GSList *group)
  * Since: 2.4
  **/
 GtkToolItem *
-gtk_radio_tool_button_new_from_stock (GSList      *group,
+gtk_radio_tool_button_new_from_stock (GtkRadioGroup *group,
 				      const gchar *stock_id)
 {
   GtkRadioToolButton *button;
@@ -174,14 +174,14 @@ gtk_radio_tool_button_new_from_stock (GSList      *group,
 GtkToolItem *
 gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
 {
-  GSList *list = NULL;
+  GtkRadioGroup *radio_group = NULL;
   
   g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (group), NULL);
 
   if (group)
-    list = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (group));
+    radio_group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (group));
   
-  return gtk_radio_tool_button_new (list);
+  return gtk_radio_tool_button_new (radio_group);
 }
 
 /**
@@ -201,14 +201,14 @@ GtkToolItem *
 gtk_radio_tool_button_new_with_stock_from_widget (GtkRadioToolButton *group,
 						  const gchar        *stock_id)
 {
-  GSList *list = NULL;
+  GtkRadioGroup *radio_group = NULL;
   
   g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (group), NULL);
 
   if (group)
-    list = gtk_radio_tool_button_get_group (group);
+    radio_group = gtk_radio_tool_button_get_group (group);
   
-  return gtk_radio_tool_button_new_from_stock (list, stock_id);
+  return gtk_radio_tool_button_new_from_stock (radio_group, stock_id);
 }
 
 static GtkRadioButton *
@@ -227,7 +227,7 @@ get_radio_button (GtkRadioToolButton *button)
  *
  * Since: 2.4
  */
-GSList *
+GtkRadioGroup *
 gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
 {
   g_return_val_if_fail (GTK_IS_RADIO_TOOL_BUTTON (button), NULL);
@@ -246,7 +246,7 @@ gtk_radio_tool_button_get_group (GtkRadioToolButton *button)
  **/
 void
 gtk_radio_tool_button_set_group (GtkRadioToolButton *button,
-				 GSList             *group)
+				 GtkRadioGroup      *group)
 {
   g_return_if_fail (GTK_IS_RADIO_TOOL_BUTTON (button));
 

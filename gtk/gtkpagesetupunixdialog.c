@@ -860,7 +860,7 @@ page_name_func (GtkCellLayout   *cell_layout,
 }
 
 static GtkWidget *
-create_radio_button (GSList      *group,
+create_radio_button (GtkRadioGroup *group,
 		     const gchar *stock_id)
 {
   GtkWidget *radio_button, *image, *label, *hbox;

@@ -38,7 +38,8 @@ struct _GailRadioButton
 {
   GailToggleButton parent;
 
-  GSList *old_group;
+  GtkRadioGroup *old_group;
+  guint old_group_size;
 };
 
 GType gail_radio_button_get_type (void);

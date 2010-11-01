@@ -515,8 +515,8 @@ main (gint argc, gchar **argv)
   GtkWidget *button;
   GtkWidget *label;
   GIcon *gicon;
-  GSList *group;
-  
+  GtkRadioGroup *group;
+
   gtk_init (&argc, &argv);
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -671,9 +671,9 @@ main (gint argc, gchar **argv)
   gtk_tool_item_set_expand (item, TRUE);
   gtk_separator_tool_item_set_draw (GTK_SEPARATOR_TOOL_ITEM (item), FALSE);
   g_assert (gtk_toolbar_get_nth_item (GTK_TOOLBAR (toolbar), 0) != 0);
-  
-  item = gtk_radio_tool_button_new_from_stock (NULL, GTK_STOCK_JUSTIFY_LEFT);
-  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
+
+  group = gtk_radio_group_new ();
+  item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_LEFT);
   add_item_to_list (store, item, "Left");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
   
@@ -681,7 +681,6 @@ main (gint argc, gchar **argv)
   item = gtk_radio_tool_button_new_from_stock (group, GTK_STOCK_JUSTIFY_CENTER);
   make_prop_editor (G_OBJECT (item));
 
-  group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
   add_item_to_list (store, item, "Center");
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 

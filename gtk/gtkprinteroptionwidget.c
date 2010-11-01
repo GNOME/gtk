@@ -645,12 +645,12 @@ alternative_set (GtkWidget   *box,
 			 (gpointer) value);
 }
 
-static GSList *
+static GtkRadioGroup *
 alternative_append (GtkWidget              *box,
 		    const gchar            *label,
                     const gchar            *value,
 		    GtkPrinterOptionWidget *widget,
-		    GSList                 *group)
+		    GtkRadioGroup          *group)
 {
   GtkWidget *button;
 
@@ -672,7 +672,7 @@ construct_widgets (GtkPrinterOptionWidget *widget)
   GtkPrinterOption *source;
   char *text;
   int i;
-  GSList *group;
+  GtkRadioGroup *group;
 
   source = priv->source;
   

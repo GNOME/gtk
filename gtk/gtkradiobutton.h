@@ -33,6 +33,7 @@
 
 
 #include <gtk/gtkcheckbutton.h>
+#include <gtk/gtkradiogroup.h>
 
 
 G_BEGIN_DECLS
@@ -74,21 +75,22 @@ struct _GtkRadioButtonClass
 
 GType	   gtk_radio_button_get_type	     (void) G_GNUC_CONST;
 
-GtkWidget* gtk_radio_button_new                           (GSList         *group);
-GtkWidget* gtk_radio_button_new_from_widget               (GtkRadioButton *radio_group_member);
-GtkWidget* gtk_radio_button_new_with_label                (GSList         *group,
-                                                           const gchar    *label);
-GtkWidget* gtk_radio_button_new_with_label_from_widget    (GtkRadioButton *radio_group_member,
-                                                           const gchar    *label);
-GtkWidget* gtk_radio_button_new_with_mnemonic             (GSList         *group,
-                                                           const gchar    *label);
-GtkWidget* gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,
-                                                           const gchar    *label);
-GSList*    gtk_radio_button_get_group                     (GtkRadioButton *radio_button);
-void       gtk_radio_button_set_group                     (GtkRadioButton *radio_button,
-                                                           GSList         *group);
-void            gtk_radio_button_join_group        (GtkRadioButton        *radio_button,
-                                                    GtkRadioButton        *group_source);
+GtkWidget*     gtk_radio_button_new                           (GtkRadioGroup  *group);
+GtkWidget*     gtk_radio_button_new_from_widget               (GtkRadioButton *radio_group_member);
+GtkWidget*     gtk_radio_button_new_with_label                (GtkRadioGroup  *group,
+							       const gchar    *label);
+GtkWidget*     gtk_radio_button_new_with_label_from_widget    (GtkRadioButton *radio_group_member,
+							       const gchar    *label);
+GtkWidget*     gtk_radio_button_new_with_mnemonic             (GtkRadioGroup  *group,
+							       const gchar    *label);
+GtkWidget*     gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,
+							       const gchar    *label);
+GtkRadioGroup *gtk_radio_button_get_group                     (GtkRadioButton *radio_button);
+void           gtk_radio_button_set_group                     (GtkRadioButton *radio_button,
+							       GtkRadioGroup  *group);
+void           gtk_radio_button_join_group                    (GtkRadioButton *radio_button,
+							       GtkRadioButton *group_source);
+
 G_END_DECLS
 
 #endif /* __GTK_RADIO_BUTTON_H__ */

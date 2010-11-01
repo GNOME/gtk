@@ -690,7 +690,7 @@ load_stock_items (GtkToolPalette *palette)
 static void
 load_toggle_items (GtkToolPalette *palette)
 {
-  GSList *toggle_group = NULL;
+  GtkRadioGroup *toggle_group;
   GtkToolItem *item;
   GtkWidget *group;
   char *label;
@@ -699,6 +699,7 @@ load_toggle_items (GtkToolPalette *palette)
   group = gtk_tool_item_group_new ("Radio Item");
   gtk_container_add (GTK_CONTAINER (palette), group);
 
+  toggle_group = gtk_radio_group_new ();
   for (i = 1; i <= 10; ++i)
     {
       label = g_strdup_printf ("#%d", i);
@@ -707,7 +708,6 @@ load_toggle_items (GtkToolPalette *palette)
       g_free (label);
 
       gtk_tool_item_group_insert (GTK_TOOL_ITEM_GROUP (group), item, -1);
-      toggle_group = gtk_radio_tool_button_get_group (GTK_RADIO_TOOL_BUTTON (item));
     }
 }
 

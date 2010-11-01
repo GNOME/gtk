@@ -18,7 +18,7 @@ int main( int   argc,
     GtkWidget *box2;
     GtkWidget *button;
     GtkWidget *separator;
-    GSList *group;
+    GtkRadioGroup *group;
 
     gtk_init (&argc, &argv);
 
@@ -40,11 +40,11 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (box1), box2, TRUE, TRUE, 0);
     gtk_widget_show (box2);
 
-    button = gtk_radio_button_new_with_label (NULL, "button1");
+    group = gtk_radio_group_new ();
+    button = gtk_radio_button_new_with_label (group, "button1");
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
 
-    group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
     button = gtk_radio_button_new_with_label (group, "button2");
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);

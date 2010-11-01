@@ -549,7 +549,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
     {
       GtkWidget *anon_box;
       GtkWidget *choice;
-      GSList    *group;
+      GtkRadioGroup *group;
 
       anon_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
       gtk_box_pack_start (GTK_BOX (vbox), anon_box,
@@ -622,7 +622,7 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
     {
       GtkWidget    *choice;
       GtkWidget    *remember_box;
-      GSList       *group;
+      GtkRadioGroup *group;
       GPasswordSave password_save;
 
       remember_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
@@ -650,7 +650,6 @@ gtk_mount_operation_ask_password (GMountOperation   *mount_op,
                         G_CALLBACK (remember_button_toggled), operation);
       gtk_box_pack_start (GTK_BOX (remember_box), choice, FALSE, FALSE, 0);
 
-      group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (choice));
       choice = gtk_radio_button_new_with_mnemonic (group, _("Remember _forever"));
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (choice),
                                     password_save == G_PASSWORD_SAVE_PERMANENTLY);
