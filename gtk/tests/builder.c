@@ -1026,7 +1026,8 @@ test_children (void)
   vbox = gtk_builder_get_object (builder, "dialog1-vbox");
   content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
   g_assert (vbox != NULL);
-  g_assert (GTK_IS_VBOX (vbox));
+  g_assert (GTK_IS_BOX (vbox));
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (vbox)) == GTK_ORIENTATION_VERTICAL);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (gtk_widget_get_parent (GTK_WIDGET (vbox)))), "dialog1") == 0);
   g_assert (gtk_container_get_border_width (GTK_CONTAINER (vbox)) == 10);
   g_assert (strcmp (gtk_buildable_get_name (GTK_BUILDABLE (content_area)), "dialog1-vbox") == 0);
@@ -1034,7 +1035,8 @@ test_children (void)
   action_area = gtk_builder_get_object (builder, "dialog1-action_area");
   dialog_action_area = gtk_dialog_get_action_area (GTK_DIALOG (dialog));
   g_assert (action_area != NULL);
-  g_assert (GTK_IS_HBUTTON_BOX (action_area));
+  g_assert (GTK_IS_BUTTON_BOX (action_area));
+  g_assert (gtk_orientable_get_orientation (GTK_ORIENTABLE (action_area)) == GTK_ORIENTATION_HORIZONTAL);
   g_assert (gtk_widget_get_parent (GTK_WIDGET (action_area)) != NULL);
   g_assert (gtk_container_get_border_width (GTK_CONTAINER (action_area)) == 20);
   g_assert (dialog_action_area != NULL);
