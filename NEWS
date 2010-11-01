@@ -1,3 +1,33 @@
+Overview of Changes from GTK+ 2.91.2 to 2.91.3
+==============================================
+
+* The scrollable interface has gained some extra properties
+  to influence scrolling behaviour: [hv]scroll-policy
+
+* The size_request vfunc and signal have been deprecated and
+  are no longer used inside GTK+ itself
+
+* GtkAssistant has added a custom page type that gives full
+  control of button visibility
+
+* The homogeneous parameter has been removed from gtk_box_new
+
+* Bugs fixed:
+ 576498 GtkAssistant seals members without adding accessors
+ 612611 auto-mnemonics breaks menu scrolling
+ 633050 need gtk_combo_box_new_with_model_and_entry
+ 633216 Make gdk_rgba_to_string() take a const GdkRGBA
+ 633274 Add error trap around call to XFixesChangeSaveSet()
+ 633374 Port tests to GtkScrollable API...
+ 633500 statusbar labels behind resize grip on startup
+
+* Updated translations:
+ Catalan (Valencian)
+ Estonian
+ Galician
+ Hebrew
+
+
 Overview of Changes from GTK+ 2.91.1 to 2.91.2
 ==============================================
 
