@@ -510,7 +510,7 @@ gtk_fixed_get_preferred_height (GtkWidget *widget,
           </programlisting></informalexample>
         </listitem>
         <listitem>Note that the get_preferred_width()/height() functions
-          only allow you do return one dimension at a time. If your
+          only allow you to deal with one dimension at a time. If your
           size_request() handler is doing things that involve both
           width and height at the same time (e.g. limiting the aspect
           ratio), you will have to implement get_preferred_height_for_width()
