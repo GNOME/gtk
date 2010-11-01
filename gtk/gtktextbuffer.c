@@ -76,10 +76,10 @@ typedef struct _ClipboardRequest ClipboardRequest;
 struct _ClipboardRequest
 {
   GtkTextBuffer *buffer;
-  gboolean interactive;
-  gboolean default_editable;
-  gboolean is_clipboard;
-  gboolean replace_selection;
+  guint interactive : 1;
+  guint default_editable : 1;
+  guint is_clipboard : 1;
+  guint replace_selection : 1;
 };
 
 enum {
