@@ -13,6 +13,7 @@ Overview of Changes from GTK+ 2.91.2 to 2.91.3
 * The homogeneous parameter has been removed from gtk_box_new
 
 * Bugs fixed:
+  61852 GtkTextBuffer needs a case insensitive search
  576498 GtkAssistant seals members without adding accessors
  612611 auto-mnemonics breaks menu scrolling
  633050 need gtk_combo_box_new_with_model_and_entry
