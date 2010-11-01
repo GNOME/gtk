@@ -31,6 +31,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcellarea.h"
 #include "gtkcellareaiter.h"
+#include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
 #include <gobject/gvaluecollector.h>
@@ -120,17 +121,14 @@ typedef struct {
 
 struct _GtkCellAreaPrivate
 {
-  GHashTable *cell_info;
+  GHashTable      *cell_info;
 
-  GtkBorder   cell_border;
+  GtkBorder        cell_border;
+
+  GtkCellRenderer *focus_cell;
+  guint            can_focus : 1;
+
 };
-
-/* Keep the paramspec pool internal, no need to deliver notifications
- * on cells. at least no percieved need for now */
-static GParamSpecPool *cell_property_pool = NULL;
-
-#define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
-#define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
 
 enum {
   PROP_0,
@@ -139,6 +137,20 @@ enum {
   PROP_CELL_MARGIN_TOP,
   PROP_CELL_MARGIN_BOTTOM
 };
+
+enum {
+  SIGNAL_FOCUS_LEAVE,
+  LAST_SIGNAL
+};
+
+/* Keep the paramspec pool internal, no need to deliver notifications
+ * on cells. at least no percieved need for now */
+static GParamSpecPool *cell_property_pool = NULL;
+static guint           cell_area_signals[LAST_SIGNAL] = { 0 };
+
+#define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
+#define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
+
 
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_UNOWNED,
 				  G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
@@ -163,6 +175,8 @@ gtk_cell_area_init (GtkCellArea *area)
   priv->cell_border.right  = 0;
   priv->cell_border.top    = 0;
   priv->cell_border.bottom = 0;
+
+  priv->focus_cell         = NULL;
 }
 
 static void 
@@ -190,6 +204,21 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->get_preferred_height           = NULL;
   class->get_preferred_height_for_width = gtk_cell_area_real_get_preferred_height_for_width;
   class->get_preferred_width_for_height = gtk_cell_area_real_get_preferred_width_for_height;
+
+  /* focus */
+  class->grab_focus = NULL;
+
+  /* Signals */
+  cell_area_signals[SIGNAL_FOCUS_LEAVE] =
+    g_signal_new (I_("focus-leave"),
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+		  0, /* Class offset (just a notification, no class handler) */
+		  NULL, NULL,
+		  _gtk_marshal_VOID__ENUM_STRING,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_DIRECTION_TYPE, G_TYPE_STRING);
+
 
   /* Properties */
   g_object_class_install_property (object_class,
@@ -339,6 +368,9 @@ gtk_cell_area_dispose (GObject *object)
    * at this point.
    */
   gtk_cell_layout_clear (GTK_CELL_LAYOUT (object));
+
+  /* Remove any ref to a focused cell */
+  gtk_cell_area_set_focus_cell (GTK_CELL_AREA (object), NULL);
 
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->dispose (object);
 }
@@ -678,7 +710,9 @@ gtk_cell_area_render (GtkCellArea          *area,
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
-/* Geometry */
+/*************************************************************
+ *                      API: Geometry                        *
+ *************************************************************/
 GtkCellAreaIter   *
 gtk_cell_area_create_iter (GtkCellArea *area)
 {
@@ -793,7 +827,9 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
   class->get_preferred_width_for_height (area, iter, widget, height, minimum_width, natural_width);
 }
 
-/* Attributes */
+/*************************************************************
+ *                      API: Attributes                      *
+ *************************************************************/
 void
 gtk_cell_area_attribute_connect (GtkCellArea        *area,
 				 GtkCellRenderer    *renderer,
@@ -927,7 +963,9 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
   g_hash_table_foreach (priv->cell_info, (GHFunc)apply_cell_attributes, &data);
 }
 
-/* Cell Properties */
+/*************************************************************
+ *                    API: Cell Properties                   *
+ *************************************************************/
 void
 gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
 					   guint               property_id,
@@ -1272,7 +1310,102 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
     }
 }
 
-/* Margins */
+/*************************************************************
+ *                         API: Focus                        *
+ *************************************************************/
+void
+gtk_cell_area_grab_focus (GtkCellArea      *area,
+			  GtkDirectionType  direction)
+{
+  GtkCellAreaClass *class;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  class = GTK_CELL_AREA_GET_CLASS (area);
+
+  if (class->grab_focus)
+    class->grab_focus (area, direction);
+  else
+    g_warning ("GtkCellAreaClass::grab_focus not implemented for `%s'", 
+	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
+}
+
+void
+gtk_cell_area_focus_leave (GtkCellArea        *area,
+			   GtkDirectionType    direction,
+			   const gchar        *path)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  g_signal_emit (area, cell_area_signals[SIGNAL_FOCUS_LEAVE], 0, direction, path);
+}
+
+void
+gtk_cell_area_set_can_focus (GtkCellArea *area,
+			     gboolean     can_focus)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  if (priv->can_focus != can_focus)
+    {
+      priv->can_focus = can_focus;
+    }
+}
+
+gboolean
+gtk_cell_area_get_can_focus (GtkCellArea *area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
+
+  priv = area->priv;
+
+  return priv->can_focus;
+}
+
+void
+gtk_cell_area_set_focus_cell (GtkCellArea     *area,
+			      GtkCellRenderer *renderer)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (renderer == NULL || GTK_IS_CELL_RENDERER (renderer));
+
+  priv = area->priv;
+
+  if (priv->focus_cell != renderer)
+    {
+      if (priv->focus_cell)
+	g_object_unref (priv->focus_cell);
+
+      priv->focus_cell = renderer;
+
+      if (priv->focus_cell)
+	g_object_ref (priv->focus_cell);
+    }
+}
+
+GtkCellRenderer *
+gtk_cell_area_get_focus_cell (GtkCellArea *area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+
+  priv = area->priv;
+
+  return priv->focus_cell;
+}
+
+/*************************************************************
+ *                        API: Margins                       *
+ *************************************************************/
 gint
 gtk_cell_area_get_cell_margin_left (GtkCellArea *area)
 {

@@ -130,6 +130,10 @@ struct _GtkCellAreaClass
 							  GValue                  *value,
 							  GParamSpec              *pspec);
 
+  /* Focus */
+  void               (* grab_focus)                      (GtkCellArea             *area,
+							  GtkDirectionType         direction);
+
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
@@ -241,6 +245,20 @@ void               gtk_cell_area_cell_get_property              (GtkCellArea    
 
 #define GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
   G_OBJECT_WARN_INVALID_PSPEC ((object), "cell property id", (property_id), (pspec))
+
+
+/* Focus */
+void               gtk_cell_area_grab_focus                     (GtkCellArea        *area,
+								 GtkDirectionType    direction);
+void               gtk_cell_area_focus_leave                    (GtkCellArea        *area,
+								 GtkDirectionType    direction,
+								 const gchar        *path);
+void               gtk_cell_area_set_can_focus                  (GtkCellArea        *area,
+								 gboolean            can_focus);
+gboolean           gtk_cell_area_get_can_focus                  (GtkCellArea        *area);
+void               gtk_cell_area_set_focus_cell                 (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer);
+GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea        *area);
 
 /* Margins */
 gint               gtk_cell_area_get_cell_margin_left           (GtkCellArea        *area);
