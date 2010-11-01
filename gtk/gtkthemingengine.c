@@ -162,6 +162,12 @@ static void gtk_theming_engine_render_handle    (GtkThemingEngine *engine,
                                                  gdouble           y,
                                                  gdouble           width,
                                                  gdouble           height);
+static void gtk_theming_engine_render_activity  (GtkThemingEngine *engine,
+                                                 cairo_t          *cr,
+                                                 gdouble           x,
+                                                 gdouble           y,
+                                                 gdouble           width,
+                                                 gdouble           height);
 
 G_DEFINE_TYPE (GtkThemingEngine, gtk_theming_engine, G_TYPE_OBJECT)
 
@@ -213,6 +219,7 @@ gtk_theming_engine_class_init (GtkThemingEngineClass *klass)
   klass->render_frame_gap = gtk_theming_engine_render_frame_gap;
   klass->render_extension = gtk_theming_engine_render_extension;
   klass->render_handle = gtk_theming_engine_render_handle;
+  klass->render_activity = gtk_theming_engine_render_activity;
 
   /**
    * GtkThemingEngine:name:
@@ -2713,4 +2720,90 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
+}
+
+static void
+gtk_theming_engine_render_activity (GtkThemingEngine *engine,
+                                    cairo_t          *cr,
+                                    gdouble           x,
+                                    gdouble           y,
+                                    gdouble           width,
+                                    gdouble           height)
+{
+  if (gtk_theming_engine_has_class (engine, "spinner"))
+    {
+      GtkStateFlags state;
+      guint num_steps, step;
+      GdkRGBA *color;
+      gdouble dx, dy;
+      gdouble progress;
+      gdouble radius;
+      gdouble half;
+      gint i;
+
+      gtk_theming_engine_get_style (engine,
+                                    "num-steps", &num_steps,
+                                    NULL);
+
+      state = gtk_theming_engine_get_state (engine);
+      gtk_theming_engine_get (engine, state,
+                              "color", &color,
+                              NULL);
+      if (num_steps == 0)
+        num_steps = 12;
+
+      if (gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress))
+        step = (guint) (progress * num_steps);
+      else
+        step = 0;
+
+      cairo_save (cr);
+
+      cairo_translate (cr, x, y);
+
+      /* draw clip region */
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+      dx = width / 2;
+      dy = height / 2;
+      radius = MIN (width / 2, height / 2);
+      half = num_steps / 2;
+
+      for (i = 0; i < num_steps; i++)
+        {
+          gint inset = 0.7 * radius;
+
+          /* transparency is a function of time and intial value */
+          gdouble t = (gdouble) ((i + num_steps - step)
+                                 % num_steps) / num_steps;
+
+          cairo_save (cr);
+
+          cairo_set_source_rgba (cr,
+                                 color->red,
+                                 color->green,
+                                 color->blue,
+                                 color->alpha * t);
+
+          cairo_set_line_width (cr, 2.0);
+          cairo_move_to (cr,
+                         dx + (radius - inset) * cos (i * G_PI / half),
+                         dy + (radius - inset) * sin (i * G_PI / half));
+          cairo_line_to (cr,
+                         dx + radius * cos (i * G_PI / half),
+                         dy + radius * sin (i * G_PI / half));
+          cairo_stroke (cr);
+
+          cairo_restore (cr);
+        }
+
+      cairo_restore (cr);
+
+      gdk_rgba_free (color);
+    }
+  else
+    {
+      gtk_theming_engine_render_background (engine, cr, x, y, width, height);
+      gtk_theming_engine_render_frame (engine, cr, x, y, width, height);
+    }
 }

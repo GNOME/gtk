@@ -3043,3 +3043,26 @@ gtk_render_handle (GtkStyleContext *context,
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_handle (priv->theming_engine, cr, x, y, width, height);
 }
+
+void
+gtk_render_activity (GtkStyleContext *context,
+                     cairo_t         *cr,
+                     gdouble          x,
+                     gdouble          y,
+                     gdouble          width,
+                     gdouble          height)
+{
+  GtkStyleContextPrivate *priv;
+  GtkThemingEngineClass *engine_class;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+
+  priv = context->priv;
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  store_animation_region (context, x, y, width, height);
+
+  _gtk_theming_engine_set_context (priv->theming_engine, context);
+  engine_class->render_activity (priv->theming_engine, cr, x, y, width, height);
+}

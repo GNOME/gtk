@@ -258,7 +258,7 @@ void gtk_render_handle    (GtkStyleContext *context,
                            gdouble          y,
                            gdouble          width,
                            gdouble          height);
-void gtk_render_progress  (GtkStyleContext *context,
+void gtk_render_activity  (GtkStyleContext *context,
                            cairo_t         *cr,
                            gdouble          x,
                            gdouble          y,
