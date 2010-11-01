@@ -10549,7 +10549,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 			    GtkStateData        *data)
 {
   GtkWidgetPrivate *priv = widget->priv;
-  GtkStateFlags old_flags = priv->state_flags;
+  GtkStateFlags new_flags, old_flags = priv->state_flags;
   GtkStateType old_state;
 
   old_state = gtk_widget_get_state (widget);
@@ -10582,7 +10582,9 @@ gtk_widget_propagate_state (GtkWidget           *widget,
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
-  if (old_flags != gtk_widget_get_state_flags (widget))
+  new_flags = gtk_widget_get_state_flags (widget);
+
+  if (old_flags != new_flags)
     {
       g_object_ref (widget);
 
@@ -10643,6 +10645,59 @@ gtk_widget_propagate_state (GtkWidget           *widget,
             gtk_container_foreach (GTK_CONTAINER (widget),
                                    (GtkCallback) gtk_widget_propagate_state,
                                    data);
+        }
+
+      /* Trigger state change transitions for the widget */
+      if (priv->context &&
+          gtk_widget_get_mapped (widget))
+        {
+          gint diff, flag = 1;
+          GdkWindow *window;
+
+          diff = old_flags ^ new_flags;
+          window = gtk_widget_get_window (widget);
+
+          while (diff != 0)
+            {
+              if ((diff & flag) != 0)
+                {
+                  GtkStateType state;
+                  gboolean target;
+
+                  switch (flag)
+                    {
+                    case GTK_STATE_FLAG_ACTIVE:
+                      state = GTK_STATE_ACTIVE;
+                      break;
+                    case GTK_STATE_FLAG_PRELIGHT:
+                      state = GTK_STATE_PRELIGHT;
+                      break;
+                    case GTK_STATE_FLAG_SELECTED:
+                      state = GTK_STATE_SELECTED;
+                      break;
+                    case GTK_STATE_FLAG_INSENSITIVE:
+                      state = GTK_STATE_INSENSITIVE;
+                      break;
+                    case GTK_STATE_FLAG_INCONSISTENT:
+                      state = GTK_STATE_INCONSISTENT;
+                      break;
+                    case GTK_STATE_FLAG_FOCUSED:
+                      state = GTK_STATE_FOCUSED;
+                      break;
+                    default:
+                      state = GTK_STATE_NORMAL;
+                      break;
+                    }
+
+                  target = ((new_flags & flag) != 0);
+                  gtk_style_context_notify_state_change (priv->context,
+                                                         window, NULL,
+                                                         state, target);
+                  diff &= ~flag;
+                }
+
+              flag <<= 1;
+            }
         }
 
       g_object_unref (widget);
