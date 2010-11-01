@@ -105,7 +105,7 @@ get_cached_size (SizeRequestCache  *cache,
 }
 
 
-extern guint size_request_signal_id;
+extern guint _size_request_signal_id;
 static void
 do_size_request (GtkWidget      *widget,
 		 GtkRequisition *requisition)
@@ -117,7 +117,7 @@ do_size_request (GtkWidget      *widget,
 	       "will be removed in the next release",
 	       G_OBJECT_TYPE_NAME (widget));
 
-  if (g_signal_has_handler_pending (widget, size_request_signal_id, 0, TRUE))
+  if (g_signal_has_handler_pending (widget, _size_request_signal_id, 0, TRUE))
     g_warning ("A %s (%p) has handler(s) connected to the GtkWidgetClass::size-request signal which is "
 	       "deprecated and will be removed in the next release",
 	       G_OBJECT_TYPE_NAME (widget), widget);
