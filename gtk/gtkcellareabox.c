@@ -62,7 +62,6 @@ static void      gtk_cell_area_box_render                         (GtkCellArea  
 								   cairo_t              *cr,
 								   const GdkRectangle   *cell_area,
 								   GtkCellRendererState  flags);
-
 static void      gtk_cell_area_box_set_cell_property              (GtkCellArea          *area,
 								   GtkCellRenderer      *renderer,
 								   guint                 prop_id,
@@ -73,7 +72,6 @@ static void      gtk_cell_area_box_get_cell_property              (GtkCellArea  
 								   guint                 prop_id,
 								   GValue               *value,
 								   GParamSpec           *pspec);
-
 static GtkCellAreaIter    *gtk_cell_area_box_create_iter          (GtkCellArea          *area);
 static GtkSizeRequestMode  gtk_cell_area_box_get_request_mode     (GtkCellArea          *area);
 static void      gtk_cell_area_box_get_preferred_width            (GtkCellArea          *area,
@@ -98,6 +96,8 @@ static void      gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea  
 								   gint                  height,
 								   gint                 *minimum_width,
 								   gint                 *natural_width);
+static void      gtk_cell_area_box_grab_focus                     (GtkCellArea          *area,
+								   GtkDirectionType      direction);
 
 /* GtkCellLayoutIface */
 static void      gtk_cell_area_box_cell_layout_init               (GtkCellLayoutIface *iface);
@@ -241,6 +241,8 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->get_preferred_height           = gtk_cell_area_box_get_preferred_height;
   area_class->get_preferred_height_for_width = gtk_cell_area_box_get_preferred_height_for_width;
   area_class->get_preferred_width_for_height = gtk_cell_area_box_get_preferred_width_for_height;
+
+  area_class->grab_focus = gtk_cell_area_box_grab_focus;
 
   /* Properties */
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
@@ -1368,6 +1370,71 @@ gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
 
   if (natural_width)
     *natural_width = nat_width;
+}
+
+static void
+gtk_cell_area_box_grab_focus (GtkCellArea      *area,
+			      GtkDirectionType  direction)
+{
+  GtkCellAreaBox        *box = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv;
+  gboolean               first_cell = FALSE;
+  GList                 *group_list, *cell_list;
+
+  priv = box->priv;
+
+  switch (direction)
+    {
+    case GTK_DIR_TAB_FORWARD:
+    case GTK_DIR_DOWN:
+    case GTK_DIR_RIGHT:
+      first_cell = TRUE;
+      break;
+
+    case GTK_DIR_TAB_BACKWARD:
+    case GTK_DIR_UP:
+    case GTK_DIR_LEFT:
+    default:
+      first_cell = FALSE;
+      break;
+    }
+
+  if (first_cell)
+    group_list = g_list_first (priv->groups);
+  else 
+    group_list = g_list_last (priv->groups);
+
+  for ( ; group_list; 
+	first_cell ? group_list = group_list->next :
+	  group_list = group_list->prev)
+    {
+      CellGroup *group = group_list->data;
+
+      if (first_cell)
+	cell_list = g_list_first (group->cells);
+      else 
+	cell_list = g_list_last (group->cells);
+
+      for ( ; cell_list; 
+	    first_cell ? cell_list = cell_list->next :
+	      cell_list = cell_list->prev)
+	{
+	  GtkCellRendererMode  mode;
+	  CellInfo            *info = cell_list->data;
+
+	  /* XXX This does not handle cases where the cell
+	   * is not visible as it is not row specific, 
+	   * that's a problem.
+	   */
+	  g_object_get (info->renderer, "mode", &mode, NULL);
+	  if (mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
+	      mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+	    {
+	      gtk_cell_area_set_focus_cell (area, info->renderer);
+	      break;
+	    }
+	}
+    }
 }
 
 
