@@ -2740,6 +2740,22 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 }
 
 /* Paint methods */
+
+/**
+ * gtk_render_check:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders a checkmark (as in a #GtkCheckButton), the %GTK_STATE_FLAG_ACTIVE
+ * state will determine whether the check is on or off, and
+ * %GTK_STATE_FLAG_INCONSISTENT whether it should be marked as undefined.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_check (GtkStyleContext *context,
                   cairo_t         *cr,
@@ -2764,6 +2780,21 @@ gtk_render_check (GtkStyleContext *context,
                               x, y, width, height);
 }
 
+/**
+ * gtk_render_option:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders an option mark (as in a #GtkRadioButton), the %GTK_STATE_FLAG_ACTIVE
+ * state will determine whether the option is on or off, and
+ * %GTK_STATE_FLAG_INCONSISTENT whether it should be marked as undefined.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_option (GtkStyleContext *context,
                    cairo_t         *cr,
@@ -2788,6 +2819,19 @@ gtk_render_option (GtkStyleContext *context,
                                x, y, width, height);
 }
 
+/**
+ * gtk_render_arrow:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @angle: arrow angle from 0 to 2 * %G_PI, being 0 the arrow pointing to the north
+ * @x: Center X for the render area
+ * @y: Center Y for the render area
+ * @size: square side for render area
+ *
+ * Renders an arrow pointing to @angle.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_arrow (GtkStyleContext *context,
                   cairo_t         *cr,
@@ -2812,6 +2856,19 @@ gtk_render_arrow (GtkStyleContext *context,
                               angle, x, y, size);
 }
 
+/**
+ * gtk_render_background:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders the background of an element.
+ *
+ * Since: 3.0.
+ **/
 void
 gtk_render_background (GtkStyleContext *context,
                        cairo_t         *cr,
@@ -2835,6 +2892,19 @@ gtk_render_background (GtkStyleContext *context,
   engine_class->render_background (priv->theming_engine, cr, x, y, width, height);
 }
 
+/**
+ * gtk_render_frame:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders a frame around the rectangle defined by @x, @y, @width, @height.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_frame (GtkStyleContext *context,
                   cairo_t         *cr,
@@ -2858,6 +2928,21 @@ gtk_render_frame (GtkStyleContext *context,
   engine_class->render_frame (priv->theming_engine, cr, x, y, width, height);
 }
 
+/**
+ * gtk_render_expander:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders an expander (as used in #GtkTreeView and #GtkExpander) in the area
+ * defined by @x, @y, @width, @height. The state %GTK_STATE_FLAG_ACTIVE determines
+ * whether the expander is collapsed or expanded.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_expander (GtkStyleContext *context,
                      cairo_t         *cr,
@@ -2881,6 +2966,19 @@ gtk_render_expander (GtkStyleContext *context,
   engine_class->render_expander (priv->theming_engine, cr, x, y, width, height);
 }
 
+/**
+ * gtk_render_focus:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders a focus indicator on the rectangle determined by @x, @y, @width, @height.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_focus (GtkStyleContext *context,
                   cairo_t         *cr,
@@ -2904,6 +3002,18 @@ gtk_render_focus (GtkStyleContext *context,
   engine_class->render_focus (priv->theming_engine, cr, x, y, width, height);
 }
 
+/**
+ * gtk_render_layout:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin
+ * @y: Y origin
+ * @layout: the #PangoLayout to render
+ *
+ * Renders @layout on the coordinates @x, @y
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_layout (GtkStyleContext *context,
                    cairo_t         *cr,
@@ -2924,6 +3034,19 @@ gtk_render_layout (GtkStyleContext *context,
   engine_class->render_layout (priv->theming_engine, cr, x, y, layout);
 }
 
+/**
+ * gtk_render_line:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x0: X coordinate for the origin of the line
+ * @y0: Y coordinate for the origin of the line
+ * @x1: X coordinate for the end of the line
+ * @y1: Y coordinate for the end of the line
+ *
+ * Renders a line from (x0, y0) to (x1, y1).
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_line (GtkStyleContext *context,
                  cairo_t         *cr,
@@ -2945,6 +3068,22 @@ gtk_render_line (GtkStyleContext *context,
   engine_class->render_line (priv->theming_engine, cr, x0, y0, x1, y1);
 }
 
+/**
+ * gtk_render_slider:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ * @orientation: orientation of the slider
+ *
+ * Renders a slider (as in #GtkScale) in the rectangle defined by @x, @y,
+ * @width, @height. @orientation defines whether the slider is vertical
+ * or horizontal.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_slider (GtkStyleContext *context,
                    cairo_t         *cr,
@@ -2969,6 +3108,25 @@ gtk_render_slider (GtkStyleContext *context,
   engine_class->render_slider (priv->theming_engine, cr, x, y, width, height, orientation);
 }
 
+/**
+ * gtk_render_frame_gap:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ * @gap_side: side where the gap is
+ * @xy0_gap: initial coordinate (X or Y depending on @gap_side) for the gap
+ * @xy1_gap: end coordinate (X or Y depending on @gap_side) for the gap
+ *
+ * Renders a frame around the rectangle defined by (@x, @y, @width, @height),
+ * leaving a gap on one side. @xy0_gap and @xy1_gap will mean X coordinates for
+ * %GTK_POS_TOP and %GTK_POS_BOTTOM gap sides, and Y coordinates for %GTK_POS_LEFT
+ * and %GTK_POS_RIGHT.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_frame_gap (GtkStyleContext *context,
                       cairo_t         *cr,
@@ -2997,6 +3155,22 @@ gtk_render_frame_gap (GtkStyleContext *context,
                                   xy0_gap, xy1_gap);
 }
 
+/**
+ * gtk_render_extension:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ * @gap_side: side where the gap is
+ *
+ * Renders a extension (as in a #GtkNotebook tab) in the rectangle
+ * defined by @x, @y, @width, @height. The side where the extension
+ * connects to is defined by @gap_side.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_extension (GtkStyleContext *context,
                       cairo_t         *cr,
@@ -3021,6 +3195,21 @@ gtk_render_extension (GtkStyleContext *context,
   engine_class->render_extension (priv->theming_engine, cr, x, y, width, height, gap_side);
 }
 
+/**
+ * gtk_render_handle:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders a handle (as in #GtkHandleBox, #GtkPaned and
+ * #GtkWindow<!-- -->'s resize grip), in the rectangle
+ * determined by @x, @y, @width, @height.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_handle (GtkStyleContext *context,
                    cairo_t         *cr,
@@ -3044,6 +3233,21 @@ gtk_render_handle (GtkStyleContext *context,
   engine_class->render_handle (priv->theming_engine, cr, x, y, width, height);
 }
 
+/**
+ * gtk_render_activity:
+ * @context: a #GtkStyleContext
+ * @cr: a #cairo_t
+ * @x: X origin of the rectangle
+ * @y: Y origin of the rectangle
+ * @width: rectangle width
+ * @height: rectangle height
+ *
+ * Renders an activity area (Such as in #GtkSpinner or the
+ * fill line in #GtkRange), the state %GTK_STATE_FLAG_ACTIVE
+ * determines whether there is activity going on.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_render_activity (GtkStyleContext *context,
                      cairo_t         *cr,
