@@ -628,11 +628,12 @@ gtk_cell_area_forall (GtkCellArea        *area,
 }
 
 gint
-gtk_cell_area_event (GtkCellArea        *area,
-		     GtkCellAreaIter    *iter,
-		     GtkWidget          *widget,
-		     GdkEvent           *event,
-		     const GdkRectangle *cell_area)
+gtk_cell_area_event (GtkCellArea          *area,
+		     GtkCellAreaIter      *iter,
+		     GtkWidget            *widget,
+		     GdkEvent             *event,
+		     const GdkRectangle   *cell_area,
+		     GtkCellRendererState  flags)
 {
   GtkCellAreaClass *class;
 
@@ -645,7 +646,7 @@ gtk_cell_area_event (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->event)
-    return class->event (area, iter, widget, event, cell_area);
+    return class->event (area, iter, widget, event, cell_area, flags);
 
   g_warning ("GtkCellAreaClass::event not implemented for `%s'", 
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -653,11 +654,12 @@ gtk_cell_area_event (GtkCellArea        *area,
 }
 
 void
-gtk_cell_area_render (GtkCellArea        *area,
-		      GtkCellAreaIter    *iter,
-		      GtkWidget          *widget,
-		      cairo_t            *cr,
-		      const GdkRectangle *cell_area)
+gtk_cell_area_render (GtkCellArea          *area,
+		      GtkCellAreaIter      *iter,
+		      GtkWidget            *widget,
+		      cairo_t              *cr,
+		      const GdkRectangle   *cell_area,
+		      GtkCellRendererState  flags)
 {
   GtkCellAreaClass *class;
 
@@ -670,7 +672,7 @@ gtk_cell_area_render (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->render)
-    class->render (area, iter, widget, cr, cell_area);
+    class->render (area, iter, widget, cr, cell_area, flags);
   else
     g_warning ("GtkCellAreaClass::render not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));

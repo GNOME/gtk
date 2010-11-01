@@ -83,12 +83,14 @@ struct _GtkCellAreaClass
 							  GtkCellAreaIter         *iter,
 							  GtkWidget               *widget,
 							  GdkEvent                *event,
-							  const GdkRectangle      *cell_area);
+							  const GdkRectangle      *cell_area,
+							  GtkCellRendererState     flags);
   void               (* render)                          (GtkCellArea             *area,
 							  GtkCellAreaIter         *iter,
 							  GtkWidget               *widget,
 							  cairo_t                 *cr,
-							  const GdkRectangle      *cell_area);
+							  const GdkRectangle      *cell_area,
+							  GtkCellRendererState     flags);
 
   /* Geometry */
   GtkCellAreaIter   *(* create_iter)                     (GtkCellArea             *area);
@@ -142,23 +144,25 @@ struct _GtkCellAreaClass
 GType              gtk_cell_area_get_type                       (void) G_GNUC_CONST;
 
 /* Basic methods */
-void               gtk_cell_area_add                            (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer);
-void               gtk_cell_area_remove                         (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer);
-void               gtk_cell_area_forall                         (GtkCellArea        *area,
-								 GtkCellCallback     callback,
-								 gpointer            callback_data);
-gint               gtk_cell_area_event                          (GtkCellArea        *area,
-								 GtkCellAreaIter    *iter,
-								 GtkWidget          *widget,
-								 GdkEvent           *event,
-								 const GdkRectangle *cell_area);
-void               gtk_cell_area_render                         (GtkCellArea        *area,
-								 GtkCellAreaIter    *iter,
-								 GtkWidget          *widget,
-								 cairo_t            *cr,
-								 const GdkRectangle *cell_area);
+void               gtk_cell_area_add                            (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer);
+void               gtk_cell_area_remove                         (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer);
+void               gtk_cell_area_forall                         (GtkCellArea          *area,
+								 GtkCellCallback       callback,
+								 gpointer              callback_data);
+gint               gtk_cell_area_event                          (GtkCellArea          *area,
+								 GtkCellAreaIter      *iter,
+								 GtkWidget            *widget,
+								 GdkEvent             *event,
+								 const GdkRectangle   *cell_area,
+								 GtkCellRendererState  flags);
+void               gtk_cell_area_render                         (GtkCellArea          *area,
+								 GtkCellAreaIter      *iter,
+								 GtkWidget            *widget,
+								 cairo_t              *cr,
+								 const GdkRectangle   *cell_area,
+								 GtkCellRendererState  flags);
 
 /* Geometry */
 GtkCellAreaIter   *gtk_cell_area_create_iter                    (GtkCellArea        *area);

@@ -31,71 +31,73 @@
 
 
 /* GObjectClass */
-static void      gtk_cell_area_box_finalize                       (GObject            *object);
-static void      gtk_cell_area_box_dispose                        (GObject            *object);
-static void      gtk_cell_area_box_set_property                   (GObject            *object,
-								   guint               prop_id,
-								   const GValue       *value,
-								   GParamSpec         *pspec);
-static void      gtk_cell_area_box_get_property                   (GObject            *object,
-								   guint               prop_id,
-								   GValue             *value,
-								   GParamSpec         *pspec);
+static void      gtk_cell_area_box_finalize                       (GObject              *object);
+static void      gtk_cell_area_box_dispose                        (GObject              *object);
+static void      gtk_cell_area_box_set_property                   (GObject              *object,
+								   guint                 prop_id,
+								   const GValue         *value,
+								   GParamSpec           *pspec);
+static void      gtk_cell_area_box_get_property                   (GObject              *object,
+								   guint                 prop_id,
+								   GValue               *value,
+								   GParamSpec           *pspec);
 
 /* GtkCellAreaClass */
-static void      gtk_cell_area_box_add                            (GtkCellArea        *area,
-								   GtkCellRenderer    *renderer);
-static void      gtk_cell_area_box_remove                         (GtkCellArea        *area,
-								   GtkCellRenderer    *renderer);
-static void      gtk_cell_area_box_forall                         (GtkCellArea        *area,
-								   GtkCellCallback     callback,
-								   gpointer            callback_data);
-static gint      gtk_cell_area_box_event                          (GtkCellArea        *area,
-								   GtkCellAreaIter    *iter,
-								   GtkWidget          *widget,
-								   GdkEvent           *event,
-								   const GdkRectangle *cell_area);
-static void      gtk_cell_area_box_render                         (GtkCellArea        *area,
-								   GtkCellAreaIter    *iter,
-								   GtkWidget          *widget,
-								   cairo_t            *cr,
-								   const GdkRectangle *cell_area);
+static void      gtk_cell_area_box_add                            (GtkCellArea          *area,
+								   GtkCellRenderer      *renderer);
+static void      gtk_cell_area_box_remove                         (GtkCellArea          *area,
+								   GtkCellRenderer      *renderer);
+static void      gtk_cell_area_box_forall                         (GtkCellArea          *area,
+								   GtkCellCallback       callback,
+								   gpointer              callback_data);
+static gint      gtk_cell_area_box_event                          (GtkCellArea          *area,
+								   GtkCellAreaIter      *iter,
+								   GtkWidget            *widget,
+								   GdkEvent             *event,
+								   const GdkRectangle   *cell_area,
+								   GtkCellRendererState  flags);
+static void      gtk_cell_area_box_render                         (GtkCellArea          *area,
+								   GtkCellAreaIter      *iter,
+								   GtkWidget            *widget,
+								   cairo_t              *cr,
+								   const GdkRectangle   *cell_area,
+								   GtkCellRendererState  flags);
 
-static void      gtk_cell_area_box_set_cell_property              (GtkCellArea        *area,
-								   GtkCellRenderer    *renderer,
-								   guint               prop_id,
-								   const GValue       *value,
-								   GParamSpec         *pspec);
-static void      gtk_cell_area_box_get_cell_property              (GtkCellArea        *area,
-								   GtkCellRenderer    *renderer,
-								   guint               prop_id,
-								   GValue             *value,
-								   GParamSpec         *pspec);
+static void      gtk_cell_area_box_set_cell_property              (GtkCellArea          *area,
+								   GtkCellRenderer      *renderer,
+								   guint                 prop_id,
+								   const GValue         *value,
+								   GParamSpec           *pspec);
+static void      gtk_cell_area_box_get_cell_property              (GtkCellArea          *area,
+								   GtkCellRenderer      *renderer,
+								   guint                 prop_id,
+								   GValue               *value,
+								   GParamSpec           *pspec);
 
-static GtkCellAreaIter    *gtk_cell_area_box_create_iter          (GtkCellArea        *area);
-static GtkSizeRequestMode  gtk_cell_area_box_get_request_mode     (GtkCellArea        *area);
-static void      gtk_cell_area_box_get_preferred_width            (GtkCellArea        *area,
-								   GtkCellAreaIter    *iter,
-								   GtkWidget          *widget,
-								   gint               *minimum_width,
-								   gint               *natural_width);
-static void      gtk_cell_area_box_get_preferred_height           (GtkCellArea        *area,
-								   GtkCellAreaIter    *iter,
-								   GtkWidget          *widget,
-								   gint               *minimum_height,
-								   gint               *natural_height);
-static void      gtk_cell_area_box_get_preferred_height_for_width (GtkCellArea        *area,
-								   GtkCellAreaIter    *iter,
-								   GtkWidget          *widget,
-								   gint                width,
-								   gint               *minimum_height,
-								   gint               *natural_height);
-static void      gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
-								   GtkCellAreaIter    *iter,
-								   GtkWidget          *widget,
-								   gint                height,
-								   gint               *minimum_width,
-								   gint               *natural_width);
+static GtkCellAreaIter    *gtk_cell_area_box_create_iter          (GtkCellArea          *area);
+static GtkSizeRequestMode  gtk_cell_area_box_get_request_mode     (GtkCellArea          *area);
+static void      gtk_cell_area_box_get_preferred_width            (GtkCellArea          *area,
+								   GtkCellAreaIter      *iter,
+								   GtkWidget            *widget,
+								   gint                 *minimum_width,
+								   gint                 *natural_width);
+static void      gtk_cell_area_box_get_preferred_height           (GtkCellArea          *area,
+								   GtkCellAreaIter      *iter,
+								   GtkWidget            *widget,
+								   gint                 *minimum_height,
+								   gint                 *natural_height);
+static void      gtk_cell_area_box_get_preferred_height_for_width (GtkCellArea          *area,
+								   GtkCellAreaIter      *iter,
+								   GtkWidget            *widget,
+								   gint                  width,
+								   gint                 *minimum_height,
+								   gint                 *natural_height);
+static void      gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea          *area,
+								   GtkCellAreaIter      *iter,
+								   GtkWidget            *widget,
+								   gint                  height,
+								   gint                 *minimum_width,
+								   gint                 *natural_width);
 
 /* GtkCellLayoutIface */
 static void      gtk_cell_area_box_cell_layout_init               (GtkCellLayoutIface *iface);
@@ -751,11 +753,12 @@ gtk_cell_area_box_forall (GtkCellArea        *area,
 }
 
 static gint
-gtk_cell_area_box_event (GtkCellArea        *area,
-			 GtkCellAreaIter    *iter,
-			 GtkWidget          *widget,
-			 GdkEvent           *event,
-			 const GdkRectangle *cell_area)
+gtk_cell_area_box_event (GtkCellArea          *area,
+			 GtkCellAreaIter      *iter,
+			 GtkWidget            *widget,
+			 GdkEvent             *event,
+			 const GdkRectangle   *cell_area,
+			 GtkCellRendererState  flags)
 {
 
 
@@ -763,11 +766,12 @@ gtk_cell_area_box_event (GtkCellArea        *area,
 }
 
 static void
-gtk_cell_area_box_render (GtkCellArea        *area,
-			  GtkCellAreaIter    *iter,
-			  GtkWidget          *widget,
-			  cairo_t            *cr,
-			  const GdkRectangle *cell_area)
+gtk_cell_area_box_render (GtkCellArea          *area,
+			  GtkCellAreaIter      *iter,
+			  GtkWidget            *widget,
+			  cairo_t              *cr,
+			  const GdkRectangle   *cell_area,
+			  GtkCellRendererState  flags)
 {
   GtkCellAreaBox        *box      = GTK_CELL_AREA_BOX (area);
   GtkCellAreaBoxPrivate *priv     = box->priv;
@@ -800,9 +804,11 @@ gtk_cell_area_box_render (GtkCellArea        *area,
        */
       gtk_cell_area_inner_cell_area (area, &background_area, &inner_area);
 
+      /* XXX We have to do some per-cell considerations for the 'flags'
+       * for focus handling */
       gtk_cell_renderer_render (cell->renderer, cr, widget,
 				&background_area, &inner_area,
-				/* flags */0);
+				flags);
 
     }
 
