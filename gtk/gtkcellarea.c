@@ -117,6 +117,8 @@ typedef struct {
   GtkCellArea  *area;
   GtkTreeModel *model;
   GtkTreeIter  *iter;
+  gboolean      is_expander;
+  gboolean      is_expanded;
 } AttributeData;
 
 struct _GtkCellAreaPrivate
@@ -926,6 +928,22 @@ apply_cell_attributes (GtkCellRenderer *renderer,
   CellAttribute *attribute;
   GSList        *list;
   GValue         value = { 0, };
+  gboolean       is_expander;
+  gboolean       is_expanded;
+
+  g_object_freeze_notify (G_OBJECT (renderer));
+
+  /* Whether a row expands or is presently expanded can only be 
+   * provided by the view (as these states can vary across views
+   * accessing the same model).
+   */
+  g_object_get (renderer, "is-expander", &is_expander, NULL);
+  if (is_expander != data->is_expander)
+    g_object_set (renderer, "is-expander", data->is_expander, NULL);
+  
+  g_object_get (renderer, "is-expanded", &is_expanded, NULL);
+  if (is_expanded != data->is_expanded)
+    g_object_set (renderer, "is-expanded", data->is_expanded, NULL);
 
   /* Apply the attributes directly to the renderer */
   for (list = info->attributes; list; list = list->next)
@@ -942,12 +960,16 @@ apply_cell_attributes (GtkCellRenderer *renderer,
   if (info->func)
     info->func (GTK_CELL_LAYOUT (data->area), renderer,
 		data->model, data->iter, info->data);
+
+  g_object_thaw_notify (G_OBJECT (renderer));
 }
 
 void
 gtk_cell_area_apply_attributes (GtkCellArea  *area,
 				GtkTreeModel *tree_model,
-				GtkTreeIter  *iter)
+				GtkTreeIter  *iter,
+				gboolean      is_expander,
+				gboolean      is_expanded)
 {
   GtkCellAreaPrivate *priv;
   AttributeData       data;
@@ -957,6 +979,13 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
   g_return_if_fail (iter != NULL);
 
   priv = area->priv;
+
+  /* Feed in data needed to apply to every renderer */
+  data.area        = area;
+  data.model       = tree_model;
+  data.iter        = iter;
+  data.is_expander = is_expander;
+  data.is_expanded = is_expanded;
 
   /* Go over any cells that have attributes or custom GtkCellLayoutDataFuncs and
    * apply the data from the treemodel */

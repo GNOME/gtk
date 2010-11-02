@@ -197,7 +197,9 @@ void               gtk_cell_area_get_preferred_width_for_height (GtkCellArea    
 /* Attributes */
 void               gtk_cell_area_apply_attributes               (GtkCellArea        *area,
 								 GtkTreeModel       *tree_model,
-								 GtkTreeIter        *iter);
+								 GtkTreeIter        *iter,
+								 gboolean            is_expander,
+								 gboolean            is_expanded);
 void               gtk_cell_area_attribute_connect              (GtkCellArea        *area,
 								 GtkCellRenderer    *renderer,
 								 const gchar        *attribute,
