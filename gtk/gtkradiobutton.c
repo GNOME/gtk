@@ -47,11 +47,10 @@
  * selected, all other radio buttons in the same group are deselected. A
  * #GtkRadioButton is one way of giving the user a choice from many options.
  *
- * Radio button widgets are created with gtk_radio_button_new(), passing %NULL
- * as the argument if this is the first radio button in a group. In subsequent
- * calls, the group you wish to add this button to should be passed as an
- * argument. Optionally, gtk_radio_button_new_with_label() can be used if you
- * want a text label on the radio button.
+ * Radio button widgets are created with gtk_radio_button_new(), passing in a
+ * #GtkRadioGroup created with gtk_radio_group_new() (or %NULL to automatically
+ * create a new group for the button). Optionally, gtk_radio_button_new_with_label()
+ * can be used if you want a text label on the radio button.
  *
  * Alternatively, when adding widgets to an existing group of radio buttons,
  * use gtk_radio_button_new_from_widget() with a #GtkRadioButton that already
@@ -73,18 +72,21 @@
  * void create_radio_buttons (void) {
  *
  *    GtkWidget *window, *radio1, *radio2, *box, *entry;
+ *    GtkRadioGroup *group;
+ *
  *    window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, TRUE, 2);
  *
  *    /&ast; Create a radio button with a GtkEntry widget &ast;/
- *    radio1 = gtk_radio_button_new (NULL);
+ *    group = gtk_radio_group_new ();
+ *    radio1 = gtk_radio_button_new (group);
  *    entry = gtk_entry_new (<!-- -->);
  *    gtk_container_add (GTK_CONTAINER (radio1), entry);
  *
  *
  *    /&ast; Create a radio button with a label &ast;/
- *    radio2 = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio1),
- *                                                          "I'm the second radio button.");
+ *    radio2 = gtk_radio_button_new_with_label (group,
+ *                                              "I'm the second radio button.");
  *
  *    /&ast; Pack them into a box, then show all the widgets &ast;/
  *    gtk_box_pack_start (GTK_BOX (box), radio1, TRUE, TRUE, 2);
@@ -101,6 +103,8 @@
  * selected button.
  * Inside the #GtkToggleButton::toggled handler, gtk_toggle_button_get_active()
  * can be used to determine if the button has been selected or deselected.
+ * Additionally the #GtkRadioGroup::active-changed signal is emitted whenever
+ * a button is toggled, with the current active button given as an argument.
  */
 
 
