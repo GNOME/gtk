@@ -14,23 +14,23 @@ test_color_parse (void)
   res = gdk_rgba_parse ("", &color);
   g_assert (!res);
 
+  expected.red = 100/255.;
+  expected.green = 90/255.;
+  expected.blue = 80/255.;
+  expected.alpha = 0.1;
+  res = gdk_rgba_parse ("rgba(100,90,80,0.1)", &color);
+  g_assert (res);
+  g_assert (gdk_rgba_equal (&color, &expected));
+
   expected.red = 0.4;
   expected.green = 0.3;
   expected.blue = 0.2;
   expected.alpha = 0.1;
-  res = gdk_rgba_parse ("rgba(0.4,0.3,0.2,0.1)", &color);
+  res = gdk_rgba_parse ("rgba(40%,30%,20%,0.1)", &color);
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  res = gdk_rgba_parse ("rgba ( 0.4 ,  0.3  ,   0.2 ,  0.1     )", &color);
-  g_assert (res);
-  g_assert (gdk_rgba_equal (&color, &expected));
-
-  expected.red = 0.4;
-  expected.green = 0.3;
-  expected.blue = 0.2;
-  expected.alpha = 1.0;
-  res = gdk_rgba_parse ("rgb(0.4,0.3,0.2)", &color);
+  res = gdk_rgba_parse ("rgba(  40 % ,  30 %  ,   20 % ,  0.1    )", &color);
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
 
@@ -61,10 +61,13 @@ test_color_to_string (void)
   gchar *res_en;
   gchar *orig;
 
+  /* Using /255. values for the r, g, b components should
+   * make sure they round-trip exactly without rounding
+   * from the double => integer => double conversions */
   rgba.red = 1.0;
-  rgba.green = 0.5;
-  rgba.blue = 0.1;
-  rgba.alpha = 1.0;
+  rgba.green = 128/255.;
+  rgba.blue = 64/255.;
+  rgba.alpha = 0.5;
 
   orig = g_strdup (setlocale (LC_ALL, NULL));
   res = gdk_rgba_to_string (&rgba);
