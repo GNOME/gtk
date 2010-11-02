@@ -143,14 +143,12 @@ static CellInfo      *cell_info_new          (GtkCellRenderer    *renderer,
 static void           cell_info_free         (CellInfo           *info);
 static gint           cell_info_find         (CellInfo           *info,
 					      GtkCellRenderer    *renderer);
-static CellGroup     *cell_group_new         (guint               id);
-static void           cell_group_free        (CellGroup          *group);
+
 static AllocatedCell *allocated_cell_new     (GtkCellRenderer    *renderer,
 					      gint                position,
 					      gint                size);
 static void           allocated_cell_free    (AllocatedCell      *cell);
 static GList         *list_consecutive_cells (GtkCellAreaBox     *box);
-static GList         *construct_cell_groups  (GtkCellAreaBox     *box);
 static gint           count_expand_groups    (GtkCellAreaBox     *box);
 static void           iter_weak_notify       (GtkCellAreaBox     *box,
 					      GtkCellAreaBoxIter *dead_iter);
@@ -168,7 +166,7 @@ struct _GtkCellAreaBoxPrivate
   GtkOrientation  orientation;
 
   GList          *cells;
-  GList          *groups;
+  GArray         *groups;
 
   GSList         *iters;
 
@@ -208,8 +206,8 @@ gtk_cell_area_box_init (GtkCellAreaBox *box)
   priv = box->priv;
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
+  priv->groups      = g_array_new (FALSE, TRUE, sizeof (CellGroup));
   priv->cells       = NULL;
-  priv->groups      = NULL;
   priv->iters       = NULL;
   priv->spacing     = 0;
 }
@@ -324,23 +322,6 @@ cell_info_find (CellInfo        *info,
   return (info->renderer == renderer) ? 0 : -1;
 }
 
-static CellGroup *
-cell_group_new (guint id)
-{
-  CellGroup *group = g_slice_new0 (CellGroup);
-
-  group->id = id;
-
-  return group;
-}
-
-static void
-cell_group_free (CellGroup *group)
-{
-  g_list_free (group->cells);
-  g_slice_free (CellGroup, group);  
-}
-
 static AllocatedCell *
 allocated_cell_new (GtkCellRenderer *renderer,
 		    gint             position,
@@ -393,21 +374,39 @@ list_consecutive_cells (GtkCellAreaBox *box)
   return consecutive_cells;
 }
 
-static GList *
-construct_cell_groups (GtkCellAreaBox  *box)
+static void
+cell_groups_clear (GtkCellAreaBox     *box)
 {
-  GtkCellAreaBoxPrivate *priv = box->priv;
-  CellGroup             *group;
+  GtkCellAreaBoxPrivate *priv  = box->priv;
+  gint                   i;
+
+  for (i = 0; i < priv->groups->len; i++)
+    {
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
+
+      g_list_free (group->cells);
+    }
+
+  g_array_set_size (priv->groups, 0);
+}
+
+static void
+cell_groups_rebuild (GtkCellAreaBox *box)
+{
+  GtkCellAreaBoxPrivate *priv  = box->priv;
+  CellGroup              group = { 0, };
   GList                 *cells, *l;
-  GList                 *groups = NULL;
   guint                  id = 0;
 
-  if (!priv->cells)
-    return NULL;
+  cell_groups_clear (box);
 
-  cells  = list_consecutive_cells (box);
-  group  = cell_group_new (id++);
-  groups = g_list_prepend (groups, group);
+  if (!priv->cells)
+    return;
+
+  cells = list_consecutive_cells (box);
+
+  /* First group is implied */
+  g_array_append_val (priv->groups, group);
 
   for (l = cells; l; l = l->next)
     {
@@ -416,39 +415,70 @@ construct_cell_groups (GtkCellAreaBox  *box)
       /* A new group starts with any aligned cell, the first group is implied */
       if (info->align && l != cells)
 	{
-	  group  = cell_group_new (id++);
-	  groups = g_list_prepend (groups, group);
+	  memset (&group, 0x0, sizeof (CellGroup));
+	  group.id = ++id;
+
+	  g_array_append_val (priv->groups, group);
 	}
 
-      group->cells = g_list_prepend (group->cells, info);
-      group->n_cells++;
+      group.cells = g_list_prepend (group.cells, info);
+      group.n_cells++;
 
       /* A group expands if it contains any expand cells */
       if (info->expand)
-	group->expand_cells ++;
+	group.expand_cells++;
     }
 
   g_list_free (cells);
 
-  for (l = cells; l; l = l->next)
+  for (id = 0; id < priv->groups->len; id++)
     {
-      group = l->data;
-      group->cells = g_list_reverse (group->cells);
+      CellGroup *group_ptr = &g_array_index (priv->groups, CellGroup, id);
+
+      group_ptr->cells = g_list_reverse (group_ptr->cells);
     }
 
-  return g_list_reverse (groups);
+  /* Iters need to be updated with the new grouping information */
+  init_iter_groups (box);
+}
+
+static gint
+count_visible_cells (CellGroup *group, 
+		     gint      *expand_cells)
+{
+  GList *l;
+  gint   visible_cells = 0;
+  gint   n_expand_cells = 0;
+
+  for (l = group->cells; l; l = l->next)
+    {
+      CellInfo *info = l->data;
+
+      if (gtk_cell_renderer_get_visible (info->renderer))
+	{
+	  visible_cells++;
+
+	  if (info->expand)
+	    n_expand_cells++;
+	}
+    }
+
+  if (expand_cells)
+    *expand_cells = n_expand_cells;
+
+  return visible_cells;
 }
 
 static gint
 count_expand_groups (GtkCellAreaBox  *box)
 {
   GtkCellAreaBoxPrivate *priv = box->priv;
-  GList                 *l;
+  gint                   i;
   gint                   expand_groups = 0;
 
-  for (l = priv->groups; l; l = l->next)
+  for (i = 0; i < priv->groups->len; i++)
     {
-      CellGroup *group = l->data;
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
 
       if (group->expand_cells > 0)
 	expand_groups++;
@@ -471,20 +501,19 @@ init_iter_group (GtkCellAreaBox     *box,
 		 GtkCellAreaBoxIter *iter)
 {
   GtkCellAreaBoxPrivate *priv = box->priv;
-  gint                   n_groups, *expand_groups, i;
-  GList                 *l;
+  gint                  *expand_groups, i;
 
-  n_groups      = g_list_length (priv->groups);
-  expand_groups = g_new (gboolean, n_groups);
+  expand_groups = g_new (gboolean, priv->groups->len);
 
-  for (i = 0, l = priv->groups; l; l = l->next, i++)
+  for (i = 0; i < priv->groups->len; i++)
     {
-      CellGroup *group = l->data;
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
 
       expand_groups[i] = (group->expand_cells > 0);
     }
 
-  gtk_cell_area_box_init_groups (iter, n_groups, expand_groups);
+  /* This call implies flushing the request info */
+  gtk_cell_area_box_init_groups (iter, priv->groups->len, expand_groups);
   g_free (expand_groups);
 }
 
@@ -534,7 +563,7 @@ get_allocated_cells (GtkCellAreaBox     *box,
   const GtkCellAreaBoxAllocation *group_allocs;
   GtkCellArea                    *area = GTK_CELL_AREA (box);
   GtkCellAreaBoxPrivate          *priv = box->priv;
-  GList                          *group_list, *cell_list;
+  GList                          *cell_list;
   GSList                         *allocated_cells = NULL;
   gint                            i, j, n_allocs;
 
@@ -547,9 +576,12 @@ get_allocated_cells (GtkCellAreaBox     *box,
       return NULL;
     }
 
-  for (i = 0, group_list = priv->groups; group_list; i++, group_list = group_list->next)
+  for (i = 0; i < n_allocs; i++)
     {
-      CellGroup *group = group_list->data;
+      /* We dont always allocate all groups, sometimes the requested group has only invisible
+       * cells for every row, hence the usage of group_allocs[i].group_idx here
+       */
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, group_allocs[i].group_idx);
 
       /* Exception for single cell groups */
       if (group->n_cells == 1)
@@ -562,14 +594,31 @@ get_allocated_cells (GtkCellAreaBox     *box,
 	}
       else
 	{
-	  GtkRequestedSize *sizes      = g_new (GtkRequestedSize, group->n_cells);
-	  gint              avail_size = group_allocs[i].size;
-	  gint              position   = group_allocs[i].position;
+	  GtkRequestedSize *sizes;
+	  gint              avail_size, position;
+	  gint              visible_cells, expand_cells;
 	  gint              extra_size, extra_extra;
 
-	  for (j = 0, cell_list = group->cells; cell_list; j++, cell_list = cell_list->next)
+	  visible_cells = count_visible_cells (group, &expand_cells);
+
+	  /* If this row has no visible cells in this group, just
+	   * skip the allocation */
+	  if (visible_cells == 0)
+	    continue;
+
+	  /* Offset the allocation to the group position and allocate into 
+	   * the group's available size */
+	  position   = group_allocs[i].position;
+	  avail_size = group_allocs[i].size;
+
+	  sizes = g_new (GtkRequestedSize, visible_cells);
+
+	  for (j = 0, cell_list = group->cells; cell_list; cell_list = cell_list->next)
 	    {
 	      CellInfo *info = cell_list->data;
+
+	      if (!gtk_cell_renderer_get_visible (info->renderer))
+		continue;
 
 	      gtk_cell_area_request_renderer (area, info->renderer,
 					      priv->orientation,
@@ -577,26 +626,29 @@ get_allocated_cells (GtkCellAreaBox     *box,
 					      &sizes[j].minimum_size,
 					      &sizes[j].natural_size);
 
-	      avail_size -= sizes[j].minimum_size;
+	      sizes[j].data = info;
+	      avail_size   -= sizes[j].minimum_size;
+
+	      j++;
 	    }
 
 	  /* Distribute cells naturally within the group */
-	  avail_size -= (group->n_cells - 1) * priv->spacing;
-	  avail_size = gtk_distribute_natural_allocation (avail_size, group->n_cells, sizes);
+	  avail_size -= (visible_cells - 1) * priv->spacing;
+	  avail_size = gtk_distribute_natural_allocation (avail_size, visible_cells, sizes);
 
 	  /* Calculate/distribute expand for cells */
-	  if (group->expand_cells > 0)
+	  if (expand_cells > 0)
 	    {
-	      extra_size  = avail_size / group->expand_cells;
-	      extra_extra = avail_size % group->expand_cells;
+	      extra_size  = avail_size / expand_cells;
+	      extra_extra = avail_size % expand_cells;
 	    }
 	  else
 	    extra_size = extra_extra = 0;
 
-	  /* Create the allocated cells */
-	  for (j = 0, cell_list = group->cells; cell_list; j++, cell_list = cell_list->next)
+	  /* Create the allocated cells (loop only over visible cells here) */
+	  for (j = 0; j < visible_cells; j++)
 	    {
-	      CellInfo      *info = cell_list->data;
+	      CellInfo      *info = sizes[j].data;
 	      AllocatedCell *cell;
 
 	      if (info->expand)
@@ -615,12 +667,16 @@ get_allocated_cells (GtkCellAreaBox     *box,
 	      
 	      position += sizes[j].minimum_size;
 	      position += priv->spacing;
+
+	      j++;
 	    }
 
 	  g_free (sizes);
 	}
     }
 
+  /* Note it might not be important to reverse the list here at all,
+   * we have the correct positions, no need to allocate from left to right */
   return g_slist_reverse (allocated_cells);
 }
 
@@ -634,11 +690,17 @@ gtk_cell_area_box_finalize (GObject *object)
   GtkCellAreaBoxPrivate *priv = box->priv;
   GSList                *l;
 
+  /* Unref/free the iter list */
   for (l = priv->iters; l; l = l->next)
     g_object_weak_unref (G_OBJECT (l->data), (GWeakNotify)iter_weak_notify, box);
 
   g_slist_free (priv->iters);
+  priv->iters = NULL;
 
+  /* Free the cell grouping info */
+  cell_groups_clear (box);
+  g_array_free (priv->groups, TRUE);
+  
   G_OBJECT_CLASS (gtk_cell_area_box_parent_class)->finalize (object);
 }
 
@@ -726,12 +788,7 @@ gtk_cell_area_box_remove (GtkCellArea        *area,
       priv->cells = g_list_delete_link (priv->cells, node);
 
       /* Reconstruct cell groups */
-      g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
-      g_list_free (priv->groups);
-      priv->groups = construct_cell_groups (box);
-
-      /* Reinitialize groups on iters */
-      init_iter_groups (box);
+      cell_groups_rebuild (box);
     }
   else
     g_warning ("Trying to remove a cell renderer that is not present GtkCellAreaBox");
@@ -880,13 +937,7 @@ gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
   /* Groups need to be rebuilt */
   if (rebuild)
     {
-      /* Reconstruct cell groups */
-      g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
-      g_list_free (priv->groups);
-      priv->groups = construct_cell_groups (box);
-      
-      /* Reinitialize groups on iters */
-      init_iter_groups (box);
+      cell_groups_rebuild (box);
     }
   else if (flush)
     {
@@ -973,24 +1024,24 @@ compute_size (GtkCellAreaBox     *box,
 {
   GtkCellAreaBoxPrivate *priv = box->priv;
   GtkCellArea           *area = GTK_CELL_AREA (box);
-  CellGroup             *group;
-  CellInfo              *info;
-  GList                 *cell_list, *group_list;
+  GList                 *list;
+  gint                   i;
   gint                   min_size = 0;
   gint                   nat_size = 0;
   
-  for (group_list = priv->groups; group_list; group_list = group_list->next)
+  for (i = 0; i < priv->groups->len; i++)
     {
-      gint group_min_size = 0;
-      gint group_nat_size = 0;
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
+      gint       group_min_size = 0;
+      gint       group_nat_size = 0;
 
-      group = group_list->data;
-
-      for (cell_list = group->cells; cell_list; cell_list = cell_list->next)
+      for (list = group->cells; list; list = list->next)
 	{
-	  gint renderer_min_size, renderer_nat_size;
-	  
-	  info = cell_list->data;
+	  CellInfo *info = list->data;
+	  gint      renderer_min_size, renderer_nat_size;
+
+	  if (!gtk_cell_renderer_get_visible (info->renderer))
+	    continue;
 	  
 	  gtk_cell_area_request_renderer (area, info->renderer, orientation, widget, for_size, 
 					  &renderer_min_size, &renderer_nat_size);
@@ -1056,12 +1107,15 @@ get_group_sizes (GtkCellArea    *area,
   GList            *l;
   gint              i;
 
-  *n_sizes = g_list_length (group->cells);
+  *n_sizes = count_visible_cells (group, NULL);
   sizes    = g_new (GtkRequestedSize, *n_sizes);
 
-  for (l = group->cells, i = 0; l; l = l->next, i++)
+  for (l = group->cells, i = 0; l; l = l->next)
     {
       CellInfo *info = l->data;
+
+      if (!gtk_cell_renderer_get_visible (info->renderer))
+	continue;
 
       sizes[i].data = info;
       
@@ -1069,6 +1123,8 @@ get_group_sizes (GtkCellArea    *area,
 				      orientation, widget, -1,
 				      &sizes[i].minimum_size,
 				      &sizes[i].natural_size);
+
+      i++;
     }
 
   return sizes;
@@ -1164,7 +1220,6 @@ compute_size_for_opposing_orientation (GtkCellAreaBox     *box,
 {
   GtkCellAreaBoxPrivate *priv = box->priv;
   CellGroup             *group;
-  GList                 *group_list;
   GtkRequestedSize      *orientation_sizes;
   gint                   n_groups, n_expand_groups, i;
   gint                   avail_size = for_size;
@@ -1198,25 +1253,26 @@ compute_size_for_opposing_orientation (GtkCellAreaBox     *box,
    * and push the height-for-width for each group accordingly while accumulating
    * the overall height-for-width for this row.
    */
-  for (group_list = priv->groups; group_list; group_list = group_list->next)
+  for (i = 0; i < n_groups; i++)
     {
       gint group_min, group_nat;
-
-      group = group_list->data;
+      gint group_idx = GPOINTER_TO_INT (orientation_sizes[i].data);
+      
+      group = &g_array_index (priv->groups, CellGroup, group_idx);
 
       if (group->expand_cells > 0)
 	{
-	  orientation_sizes[group->id].minimum_size += extra_size;
+	  orientation_sizes[i].minimum_size += extra_size;
 	  if (extra_extra)
 	    {
-	      orientation_sizes[group->id].minimum_size++;
+	      orientation_sizes[i].minimum_size++;
 	      extra_extra--;
 	    }
 	}
 
       /* Now we have the allocation for the group, request it's height-for-width */
       compute_group_size_for_opposing_orientation (box, group, widget,
-						   orientation_sizes[group->id].minimum_size,
+						   orientation_sizes[i].minimum_size,
 						   &group_min, &group_nat);
 
       min_size = MAX (min_size, group_min);
@@ -1224,12 +1280,12 @@ compute_size_for_opposing_orientation (GtkCellAreaBox     *box,
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  gtk_cell_area_box_iter_push_group_height_for_width (iter, group->id, for_size,
+	  gtk_cell_area_box_iter_push_group_height_for_width (iter, group_idx, for_size,
 							      group_min, group_nat);
 	}
       else
 	{
-	  gtk_cell_area_box_iter_push_group_width_for_height (iter, group->id, for_size,
+	  gtk_cell_area_box_iter_push_group_width_for_height (iter, group_idx, for_size,
 							      group_min, group_nat);
 	}
     }
@@ -1379,7 +1435,8 @@ gtk_cell_area_box_grab_focus (GtkCellArea      *area,
   GtkCellAreaBox        *box = GTK_CELL_AREA_BOX (area);
   GtkCellAreaBoxPrivate *priv;
   gboolean               first_cell = FALSE;
-  GList                 *group_list, *cell_list;
+  gint                   i;
+  GList                 *list;
 
   priv = box->priv;
 
@@ -1399,28 +1456,17 @@ gtk_cell_area_box_grab_focus (GtkCellArea      *area,
       break;
     }
 
-  if (first_cell)
-    group_list = g_list_first (priv->groups);
-  else 
-    group_list = g_list_last (priv->groups);
-
-  for ( ; group_list; 
-	first_cell ? group_list = group_list->next :
-	  group_list = group_list->prev)
+  for (i = first_cell ? 0 : priv->groups->len -1; 
+       i >= 0 && i < priv->groups->len;
+       i = first_cell ? i + 1 : i - 1)
     {
-      CellGroup *group = group_list->data;
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
 
-      if (first_cell)
-	cell_list = g_list_first (group->cells);
-      else 
-	cell_list = g_list_last (group->cells);
-
-      for ( ; cell_list; 
-	    first_cell ? cell_list = cell_list->next :
-	      cell_list = cell_list->prev)
+      for (list = first_cell ? g_list_first (group->cells) : g_list_last (group->cells); 
+	   list; list = first_cell ? list->next : list->prev)
 	{
 	  GtkCellRendererMode  mode;
-	  CellInfo            *info = cell_list->data;
+	  CellInfo            *info = list->data;
 
 	  /* XXX This does not handle cases where the cell
 	   * is not visible as it is not row specific, 
@@ -1485,13 +1531,7 @@ gtk_cell_area_box_layout_reorder (GtkCellLayout      *cell_layout,
       priv->cells = g_list_delete_link (priv->cells, node);
       priv->cells = g_list_insert (priv->cells, info, position);
 
-      /* Reconstruct cell groups */
-      g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
-      g_list_free (priv->groups);
-      priv->groups = construct_cell_groups (box);
-      
-      /* Reinitialize groups on iters */
-      init_iter_groups (box);
+      cell_groups_rebuild (box);
     }
 }
 
@@ -1529,13 +1569,7 @@ gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
 
   priv->cells = g_list_append (priv->cells, info);
 
-  /* Reconstruct cell groups */
-  g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
-  g_list_free (priv->groups);
-  priv->groups = construct_cell_groups (box);
-
-  /* Reinitialize groups on iters */
-  init_iter_groups (box);
+  cell_groups_rebuild (box);
 }
 
 void
@@ -1563,13 +1597,7 @@ gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
 
   priv->cells = g_list_append (priv->cells, info);
 
-  /* Reconstruct cell groups */
-  g_list_foreach (priv->groups, (GFunc)cell_group_free, NULL);
-  g_list_free (priv->groups);
-  priv->groups = construct_cell_groups (box);
-
-  /* Reinitialize groups on iters */
-  init_iter_groups (box);
+  cell_groups_rebuild (box);
 }
 
 gint

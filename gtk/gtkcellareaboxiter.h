@@ -120,8 +120,9 @@ GtkRequestedSize *gtk_cell_area_box_iter_get_heights        (GtkCellAreaBoxIter 
 
 /* Private iter/area interaction */
 typedef struct {
-  gint position;
-  gint size;
+  gint group_idx; /* Groups containing only invisible cells are not allocated */
+  gint position;  /* Relative group allocation position in the orientation of the box */
+  gint size;      /* Full allocated size of the cells in this group spacing inclusive */
 } GtkCellAreaBoxAllocation;
 
 G_CONST_RETURN GtkCellAreaBoxAllocation *

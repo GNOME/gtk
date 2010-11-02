@@ -263,7 +263,10 @@ gtk_cell_area_box_iter_sum_preferred_width (GtkCellAreaIter *iter)
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  if (min_size > 0)
+	  /* Dont add spacing for 0 size groups, they can be 0 size because
+	   * they contain only invisible cells for this round of requests 
+	   */
+	  if (min_size > 0 && size->nat_size > 0)
 	    {
 	      min_size += spacing;
 	      nat_size += spacing;
@@ -308,7 +311,10 @@ gtk_cell_area_box_iter_sum_preferred_height_for_width (GtkCellAreaIter *iter,
 	  
 	  if (orientation == GTK_ORIENTATION_VERTICAL)
 	    {
-	      if (min_size > 0)
+	      /* Dont add spacing for 0 size groups, they can be 0 size because
+	       * they contain only invisible cells for this round of requests 
+	       */
+	      if (min_size > 0 && size->nat_size > 0)
 		{
 		  min_size += spacing;
 		  nat_size += spacing;
@@ -348,7 +354,10 @@ gtk_cell_area_box_iter_sum_preferred_height (GtkCellAreaIter *iter)
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
 	{
-	  if (min_size > 0)
+	  /* Dont add spacing for 0 size groups, they can be 0 size because
+	   * they contain only invisible cells for this round of requests 
+	   */
+	  if (min_size > 0 && size->nat_size > 0)
 	    {
 	      min_size += spacing;
 	      nat_size += spacing;
@@ -393,7 +402,10 @@ gtk_cell_area_box_iter_sum_preferred_width_for_height (GtkCellAreaIter *iter,
 	  
 	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	    {
-	      if (min_size > 0)
+	      /* Dont add spacing for 0 size groups, they can be 0 size because
+	       * they contain only invisible cells for this round of requests 
+	       */
+	      if (min_size > 0 && size->nat_size > 0)
 		{
 		  min_size += spacing;
 		  nat_size += spacing;
@@ -413,6 +425,56 @@ gtk_cell_area_box_iter_sum_preferred_width_for_height (GtkCellAreaIter *iter,
     }
 }
 
+static GtkRequestedSize *
+gtk_cell_area_box_iter_get_requests (GtkCellAreaBoxIter *box_iter,
+				     GtkOrientation      orientation,
+				     gint               *n_requests)
+{
+  GtkCellAreaBoxIterPrivate *priv;
+  GtkRequestedSize          *requests;
+  GArray                    *base_array;
+  BaseSize                  *size;
+  gint                       visible_groups = 0;
+  gint                       i, j;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter), NULL);
+
+  priv = box_iter->priv;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    base_array = priv->base_widths;
+  else
+    base_array = priv->base_heights;
+
+  for (i = 0; i < base_array->len; i++)
+    {
+      size = &g_array_index (base_array, BaseSize, i);
+
+      if (size->nat_size > 0)
+	visible_groups++;
+    }
+
+  requests = g_new (GtkRequestedSize, visible_groups);
+
+  for (j = 0, i = 0; i < base_array->len; i++)
+    {
+      size = &g_array_index (base_array, BaseSize, i);
+
+      if (size->nat_size > 0)
+	{
+	  requests[j].data         = GINT_TO_POINTER (i);
+	  requests[j].minimum_size = size->min_size;
+	  requests[j].natural_size = size->nat_size;
+	  j++;
+	}
+    }
+
+  if (n_requests)
+    *n_requests = visible_groups;
+
+  return requests;
+}
+
 static GtkCellAreaBoxAllocation *
 allocate_for_orientation (GtkCellAreaBoxIter *iter,
 			  GtkOrientation      orientation,
@@ -427,15 +489,21 @@ allocate_for_orientation (GtkCellAreaBoxIter *iter,
   gint                       extra_size, extra_extra;
   gint                       avail_size = size;
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    orientation_sizes = gtk_cell_area_box_iter_get_widths (iter, &n_groups);
-  else
-    orientation_sizes = gtk_cell_area_box_iter_get_heights (iter, &n_groups);
+  orientation_sizes =
+    gtk_cell_area_box_iter_get_requests (iter, 
+					 GTK_ORIENTATION_HORIZONTAL, 
+					 &n_groups);
 
   /* Count groups that expand */
   for (i = 0; i < n_groups; i++)
     {
-      BaseSize *size = &g_array_index (priv->base_widths, BaseSize, i);
+      BaseSize *size;
+      gint      group_idx = GPOINTER_TO_INT (orientation_sizes[i].data);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	size = &g_array_index (priv->base_widths, BaseSize, group_idx);
+      else
+	size = &g_array_index (priv->base_heights, BaseSize, group_idx);
 
       if (size->expand)
 	n_expand_groups++;
@@ -463,8 +531,9 @@ allocate_for_orientation (GtkCellAreaBoxIter *iter,
     {
       BaseSize *base_size = &g_array_index (priv->base_widths, BaseSize, i);
 
-      allocs[i].position = position;
-      allocs[i].size     = orientation_sizes[i].minimum_size;
+      allocs[i].group_idx = GPOINTER_TO_INT (orientation_sizes[i].data);
+      allocs[i].position  = position;
+      allocs[i].size      = orientation_sizes[i].minimum_size;
 
       if (base_size->expand)
 	{
@@ -787,58 +856,14 @@ GtkRequestedSize *
 gtk_cell_area_box_iter_get_widths (GtkCellAreaBoxIter *box_iter,
 				   gint               *n_widths)
 {
-  GtkCellAreaBoxIterPrivate *priv;
-  GtkRequestedSize          *widths;
-  BaseSize                  *size;
-  gint                       i;
-
-  g_return_val_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter), NULL);
-
-  priv = box_iter->priv;
-
-  widths = g_new (GtkRequestedSize, priv->base_widths->len);
-
-  for (i = 0; i < priv->base_widths->len; i++)
-    {
-      size = &g_array_index (priv->base_widths, BaseSize, i);
-      widths[i].data         = GINT_TO_POINTER (i);
-      widths[i].minimum_size = size->min_size;
-      widths[i].natural_size = size->nat_size;
-    }
-
-  if (n_widths)
-    *n_widths = priv->base_widths->len;
-
-  return widths;
+  return gtk_cell_area_box_iter_get_requests (box_iter, GTK_ORIENTATION_HORIZONTAL, n_widths);
 }
 
 GtkRequestedSize *
 gtk_cell_area_box_iter_get_heights (GtkCellAreaBoxIter *box_iter,
 				    gint               *n_heights)
 {
-  GtkCellAreaBoxIterPrivate *priv;
-  GtkRequestedSize          *heights;
-  BaseSize                  *size;
-  gint                       i;
-
-  g_return_val_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter), NULL);
-
-  priv = box_iter->priv;
-
-  heights = g_new (GtkRequestedSize, priv->base_heights->len);
-
-  for (i = 0; i < priv->base_heights->len; i++)
-    {
-      size = &g_array_index (priv->base_heights, BaseSize, i);
-      heights[i].data         = GINT_TO_POINTER (i);
-      heights[i].minimum_size = size->min_size;
-      heights[i].natural_size = size->nat_size;
-    }
-
-  if (n_heights)
-    *n_heights = priv->base_heights->len;
-
-  return heights;
+  return gtk_cell_area_box_iter_get_requests (box_iter, GTK_ORIENTATION_VERTICAL, n_heights);
 }
 
 G_CONST_RETURN GtkCellAreaBoxAllocation *
