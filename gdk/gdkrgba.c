@@ -72,6 +72,43 @@ gdk_rgba_free (GdkRGBA *rgba)
   g_slice_free (GdkRGBA, rgba);
 }
 
+#define SKIP_WHITESPACES(s) while (*(s) == ' ') (s)++;
+
+/* Parses a single color component from a rgb() or rgba() specification
+ * according to CSS3 rules. Compared to exact CSS3 parsing we are liberal
+ * in what we accept as follows:
+ *
+ *  - For non-percentage values, we accept floats in the range 0-255
+ *    not just [0-9]+ integers
+ *  - For percentage values we accept any float, not just
+ *     [ 0-9]+ | [0-9]* '.' [0-9]+
+ *  - We accept mixed percentages and non-percentages in a single
+ *    rgb() or rgba() specification.
+ */
+static double
+parse_rgb_value (const char  *str,
+		 char       **endp)
+{
+  double number;
+  const char *p;
+
+  number = g_ascii_strtod (str, endp);
+
+  p = *endp;
+
+  SKIP_WHITESPACES (p);
+
+  if (*p == '%')
+    {
+      *endp = (char *)(p + 1);
+      return CLAMP(number / 100., 0., 1.);
+    }
+  else
+    {
+      return CLAMP(number / 255., 0., 1.);
+    }
+}
+
 /**
  * gdk_rgba_parse:
  * @spec: the string specifying the color
@@ -100,8 +137,9 @@ gdk_rgba_free (GdkRGBA *rgba)
  * </itemizedlist>
  *
  * Where 'r', 'g', 'b' and 'a' are respectively the red, green, blue and
- * alpha color values, parsed in the last 2 cases as double numbers in
- * the range [0..1], any other value out of that range will be clamped.
+ * alpha color values. In the last two cases, r g and b are either integers
+ * in the range 0 to 255 or precentage values in the range 0% to 100%, and
+ * a is a floating point value in the range 0 to 1.
  *
  * Returns: %TRUE if the parsing succeeded
  **/
@@ -112,8 +150,6 @@ gdk_rgba_parse (const gchar *spec,
   gboolean has_alpha;
   gdouble r, g, b, a;
   gchar *str = (gchar *) spec;
-
-#define SKIP_WHITESPACES(s) while (*(s) == ' ') (s)++;
 
   if (strncmp (str, "rgba", 4) == 0)
     {
@@ -157,7 +193,7 @@ gdk_rgba_parse (const gchar *spec,
 
   /* Parse red */
   SKIP_WHITESPACES (str);
-  r = g_ascii_strtod (str, &str);
+  r = parse_rgb_value (str, &str);
   SKIP_WHITESPACES (str);
 
   if (*str != ',')
@@ -167,7 +203,7 @@ gdk_rgba_parse (const gchar *spec,
 
   /* Parse green */
   SKIP_WHITESPACES (str);
-  g = g_ascii_strtod (str, &str);
+  g = parse_rgb_value (str, &str);
   SKIP_WHITESPACES (str);
 
   if (*str != ',')
@@ -177,7 +213,7 @@ gdk_rgba_parse (const gchar *spec,
 
   /* Parse blue */
   SKIP_WHITESPACES (str);
-  b = g_ascii_strtod (str, &str);
+  b = parse_rgb_value (str, &str);
   SKIP_WHITESPACES (str);
 
   if (has_alpha)
@@ -195,8 +231,6 @@ gdk_rgba_parse (const gchar *spec,
   if (*str != ')')
     return FALSE;
 
-#undef SKIP_WHITESPACES
-
   if (rgba)
     {
       rgba->red = CLAMP (r, 0, 1);
@@ -207,6 +241,8 @@ gdk_rgba_parse (const gchar *spec,
 
   return TRUE;
 }
+
+#undef SKIP_WHITESPACES
 
 /**
  * gdk_rgba_hash:
@@ -259,25 +295,36 @@ gdk_rgba_equal (gconstpointer p1,
  * gdk_rgba_to_string:
  * @rgba: a #GdkRGBA
  *
- * Returns a textual specification of @rgba in the form
- * <literal>rgba (r, g, b, a)</literal>, where 'r', 'g',
- * 'b' and 'a' represent the red, green, blue and alpha
- * values respectively.
+ * Returns a textual specification of @rgba in the form <literal>rgb
+ * (r, g, b)</literal> or <literal>rgba (r, g, b, a)</literal>,
+ * where 'r', 'g', 'b' and 'a' represent the red, green, blue and alpha values
+ * respectively. r, g, and b are integers in the range 0 to 255, and a
+ * is a floating point value in the range 0 to 1.
+ *
+ * (These string forms are string forms those supported by the CSS3 colors module)
  *
  * Returns: A newly allocated text string
  **/
 gchar *
 gdk_rgba_to_string (const GdkRGBA *rgba)
 {
-  gchar red[G_ASCII_DTOSTR_BUF_SIZE];
-  gchar green[G_ASCII_DTOSTR_BUF_SIZE];
-  gchar blue[G_ASCII_DTOSTR_BUF_SIZE];
-  gchar alpha[G_ASCII_DTOSTR_BUF_SIZE];
+  if (rgba->alpha > 0.999)
+    {
+      return g_strdup_printf ("rgb(%d,%d,%d)",
+			      (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+			      (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+			      (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
+    }
+  else
+    {
+      gchar alpha[G_ASCII_DTOSTR_BUF_SIZE];
 
-  g_ascii_dtostr (red, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->red, 0, 1));
-  g_ascii_dtostr (green, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->green, 0, 1));
-  g_ascii_dtostr (blue, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->blue, 0, 1));
-  g_ascii_dtostr (alpha, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->alpha, 0, 1));
+      g_ascii_dtostr (alpha, G_ASCII_DTOSTR_BUF_SIZE, CLAMP (rgba->alpha, 0, 1));
 
-  return g_strdup_printf ("rgba(%s,%s,%s,%s)", red, green, blue, alpha);
+      return g_strdup_printf ("rgba(%d,%d,%d,%s)",
+			      (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
+			      (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
+			      (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.),
+			      alpha);
+    }
 }
