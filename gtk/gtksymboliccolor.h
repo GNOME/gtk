@@ -34,7 +34,7 @@ typedef struct _GtkGradient GtkGradient;
 GType gtk_symbolic_color_get_type (void) G_GNUC_CONST;
 GType gtk_gradient_get_type (void) G_GNUC_CONST;
 
-GtkSymbolicColor * gtk_symbolic_color_new_literal (GdkRGBA          *color);
+GtkSymbolicColor * gtk_symbolic_color_new_literal (const GdkRGBA    *color);
 GtkSymbolicColor * gtk_symbolic_color_new_name    (const gchar      *name);
 GtkSymbolicColor * gtk_symbolic_color_new_shade   (GtkSymbolicColor *color,
                                                    gdouble           factor);

@@ -94,7 +94,7 @@ struct _GtkGradient
  * Since: 3.0
  **/
 GtkSymbolicColor *
-gtk_symbolic_color_new_literal (GdkRGBA *color)
+gtk_symbolic_color_new_literal (const GdkRGBA *color)
 {
   GtkSymbolicColor *symbolic_color;
 
