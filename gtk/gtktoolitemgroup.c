@@ -1798,10 +1798,8 @@ gtk_tool_item_group_set_header_relief (GtkToolItemGroup *group,
 static gint64
 gtk_tool_item_group_get_animation_timestamp (GtkToolItemGroup *group)
 {
-  GTimeSpec now;
-
-  g_source_get_time (group->priv->animation_timeout, &now);
-  return (now.tv_sec * G_USEC_PER_SEC + now.tv_nsec / 1000 - group->priv->animation_start) / 1000;
+  return (g_source_get_time (group->priv->animation_timeout) -
+          group->priv->animation_start) / 1000;
 }
 
 static void
@@ -1924,14 +1922,10 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
     {
       if (priv->animation)
         {
-          GTimeSpec now;
-
-          g_get_monotonic_time (&now);
-
           if (priv->animation_timeout)
             g_source_destroy (priv->animation_timeout);
 
-          priv->animation_start = (now.tv_sec * G_USEC_PER_SEC + now.tv_nsec / 1000);
+          priv->animation_start = g_get_monotonic_time ();
           priv->animation_timeout = g_timeout_source_new (ANIMATION_TIMEOUT);
 
           g_source_set_callback (priv->animation_timeout,
