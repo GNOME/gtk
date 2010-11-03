@@ -1330,7 +1330,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget:hexpand-set
    *
-   * Whether to use the GtkWidget:hexpand property. See gtk_widget_get_hexpand_set().
+   * Whether to use the #GtkWidget:hexpand property. See gtk_widget_get_hexpand_set().
    *
    * Since: 3.0
    */
@@ -1360,7 +1360,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget:vexpand-set
    *
-   * Whether to use the GtkWidget:vexpand property. See gtk_widget_get_vexpand_set().
+   * Whether to use the #GtkWidget:vexpand property. See gtk_widget_get_vexpand_set().
    *
    * Since: 3.0
    */
@@ -1375,7 +1375,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   /**
    * GtkWidget:expand
    *
-   * Whether to expand in both directions. Setting this sets both GtkWidget:hexpand and GtkWidget:vexpand
+   * Whether to expand in both directions. Setting this sets both #GtkWidget:hexpand and #GtkWidget:vexpand
    *
    * Since: 3.0
    */
@@ -4238,8 +4238,8 @@ _gtk_widget_enable_device_events (GtkWidget *widget)
  * isn't very useful otherwise. Many times when you think you might
  * need it, a better approach is to connect to a signal that will be
  * called after the widget is realized automatically, such as
- * GtkWidget::expose-event. Or simply g_signal_connect () to the
- * GtkWidget::realize signal.
+ * #GtkWidget::expose-event. Or simply g_signal_connect () to the
+ * #GtkWidget::realize signal.
  **/
 void
 gtk_widget_realize (GtkWidget *widget)
@@ -5446,7 +5446,7 @@ gtk_cairo_set_event (cairo_t        *cr,
  * @cr: a cairo context
  * @window: the window to check
  *
- * This function is supposed to be called in GtkWidget::draw
+ * This function is supposed to be called in #GtkWidget::draw
  * implementations for widgets that support multiple windows.
  * @cr must be untransformed from invoking of the draw function.
  * This function will return %TRUE if the contents of the given
@@ -5674,9 +5674,9 @@ gtk_widget_get_translation_to_window (GtkWidget      *widget,
  * modification will be applied.
  *
  * This is the inverse to the transformation GTK applies when
- * preparing an expose event to be emitted with the GtkWidget::draw
+ * preparing an expose event to be emitted with the #GtkWidget::draw
  * signal. It is intended to help porting multiwindow widgets from
- * GTK 2 to the rendering architecture of GTK 3.
+ * GTK+ 2 to the rendering architecture of GTK+ 3.
  **/
 void
 gtk_cairo_transform_to_window (cairo_t   *cr,
@@ -6882,7 +6882,7 @@ gtk_widget_get_visible (GtkWidget *widget)
  * (gtk_widget_get_window() never returns a %NULL window when a widget
  * is realized), but for many of them it's actually the #GdkWindow of
  * one of its parent widgets. Widgets that do not create a %window for
- * themselves in GtkWidget::realize() must announce this by
+ * themselves in #GtkWidget::realize must announce this by
  * calling this function with @has_window = %FALSE.
  *
  * This function should only be called by widget implementations,
@@ -9283,7 +9283,7 @@ gtk_widget_get_ancestor (GtkWidget *widget,
  * Sets the visual that should be used for by widget and its children for
  * creating #GdkWindows. The visual must be on the same #GdkScreen as
  * returned by gdk_widget_get_screen(), so handling the
- * GtkWidget::screen-changed signal is necessary.
+ * #GtkWidget::screen-changed signal is necessary.
  *
  * Setting a new @visual will not cause @widget to recreate its windows,
  * so you should call this function before @widget is realized.
@@ -12528,7 +12528,7 @@ gtk_widget_remove_mnemonic_label (GtkWidget *widget,
  * gtk_widget_get_no_show_all:
  * @widget: a #GtkWidget
  *
- * Returns the current value of the GtkWidget:no-show-all property,
+ * Returns the current value of the #GtkWidget:no-show-all property,
  * which determines whether calls to gtk_widget_show_all()
  * will affect this widget.
  *
@@ -12723,10 +12723,10 @@ gtk_widget_queue_tooltip_query (GtkWidget *widget)
  * @text: the contents of the tooltip for @widget
  *
  * Sets @text as the contents of the tooltip. This function will take
- * care of setting GtkWidget:has-tooltip to %TRUE and of the default
- * handler for the GtkWidget::query-tooltip signal.
+ * care of setting #GtkWidget:has-tooltip to %TRUE and of the default
+ * handler for the #GtkWidget::query-tooltip signal.
  *
- * See also the GtkWidget:tooltip-text property and gtk_tooltip_set_text().
+ * See also the #GtkWidget:tooltip-text property and gtk_tooltip_set_text().
  *
  * Since: 2.12
  */
@@ -12770,10 +12770,10 @@ gtk_widget_get_tooltip_text (GtkWidget *widget)
  * Sets @markup as the contents of the tooltip, which is marked up with
  *  the <link linkend="PangoMarkupFormat">Pango text markup language</link>.
  *
- * This function will take care of setting GtkWidget:has-tooltip to %TRUE
- * and of the default handler for the GtkWidget::query-tooltip signal.
+ * This function will take care of setting #GtkWidget:has-tooltip to %TRUE
+ * and of the default handler for the #GtkWidget::query-tooltip signal.
  *
- * See also the GtkWidget:tooltip-markup property and
+ * See also the #GtkWidget:tooltip-markup property and
  * gtk_tooltip_set_markup().
  *
  * Since: 2.12
@@ -12816,7 +12816,7 @@ gtk_widget_get_tooltip_markup (GtkWidget *widget)
  * @has_tooltip: whether or not @widget has a tooltip.
  *
  * Sets the has-tooltip property on @widget to @has_tooltip.  See
- * GtkWidget:has-tooltip for more information.
+ * #GtkWidget:has-tooltip for more information.
  *
  * Since: 2.12
  */
@@ -12834,7 +12834,7 @@ gtk_widget_set_has_tooltip (GtkWidget *widget,
  * @widget: a #GtkWidget
  *
  * Returns the current value of the has-tooltip property.  See
- * GtkWidget:has-tooltip for more information.
+ * #GtkWidget:has-tooltip for more information.
  *
  * Return value: current value of has-tooltip on @widget.
  *
@@ -12927,7 +12927,7 @@ gtk_widget_set_allocation (GtkWidget           *widget,
  *
  * Returns the width that has currently been allocated to @widget.
  * This function is intended to be used when implementing handlers
- * for the GtkWidget::draw function.
+ * for the #GtkWidget::draw function.
  *
  * Returns: the width of the @widget
  **/
@@ -12945,7 +12945,7 @@ gtk_widget_get_allocated_width (GtkWidget *widget)
  *
  * Returns the height that has currently been allocated to @widget.
  * This function is intended to be used when implementing handlers
- * for the GtkWidget::draw function.
+ * for the #GtkWidget::draw function.
  *
  * Returns: the height of the @widget
  **/
@@ -12993,7 +12993,7 @@ gtk_widget_get_requisition (GtkWidget      *widget,
  * @window: a #GdkWindow
  *
  * Sets a widget's window. This function should only be used in a
- * widget's GtkWidget::realize() implementation. The %window passed is
+ * widget's #GtkWidget::realize implementation. The %window passed is
  * usually either new window created with gdk_window_new(), or the
  * window of its parent widget as returned by
  * gtk_widget_get_parent_window().
