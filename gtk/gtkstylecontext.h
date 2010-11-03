@@ -49,6 +49,145 @@ struct _GtkStyleContextClass
   void (* changed) (GtkStyleContext *context);
 };
 
+/* Predefined set of CSS classes */
+
+/**
+ * GTK_STYLE_CLASS_CELL:
+ *
+ * A CSS class to match content rendered in cell views.
+ */
+#define GTK_STYLE_CLASS_CELL "cell"
+
+/**
+ * GTK_STYLE_CLASS_ENTRY:
+ *
+ * A CSS class to match text entries.
+ */
+#define GTK_STYLE_CLASS_ENTRY "entry"
+
+/**
+ * GTK_STYLE_CLASS_BUTTON:
+ *
+ * A CSS class to match buttons.
+ */
+#define GTK_STYLE_CLASS_BUTTON "button"
+
+/**
+ * GTK_STYLE_CLASS_CALENDAR:
+ *
+ * A CSS class to match calendars.
+ */
+#define GTK_STYLE_CLASS_CALENDAR "calendar"
+
+/**
+ * GTK_STYLE_CLASS_SLIDER:
+ *
+ * A CSS class to match sliders.
+ */
+#define GTK_STYLE_CLASS_SLIDER "slider"
+
+/**
+ * GTK_STYLE_CLASS_BACKGROUND:
+ *
+ * A CSS class to match the window background.
+ */
+#define GTK_STYLE_CLASS_BACKGROUND "background"
+
+/**
+ * GTK_STYLE_CLASS_RUBBERBAND:
+ *
+ * A CSS class to match the rubberband selection rectangle.
+ */
+#define GTK_STYLE_CLASS_RUBBERBAND "rubberband"
+
+/**
+ * GTK_STYLE_CLASS_TOOLTIP:
+ *
+ * A CSS class to match tooltip windows.
+ */
+#define GTK_STYLE_CLASS_TOOLTIP "tooltip"
+
+/**
+ * GTK_STYLE_CLASS_MENU:
+ *
+ * A CSS class to match popup menus.
+ */
+#define GTK_STYLE_CLASS_MENU "menu"
+
+/**
+ * GTK_STYLE_CLASS_RADIO:
+ *
+ * A CSS class to match radio buttons.
+ */
+#define GTK_STYLE_CLASS_RADIO "radio"
+
+/**
+ * GTK_STYLE_CLASS_CHECK:
+ *
+ * A CSS class to match check boxes.
+ */
+#define GTK_STYLE_CLASS_CHECK "check"
+
+/**
+ * GTK_STYLE_CLASS_DEFAULT:
+ *
+ * A CSS class to match the default widget.
+ */
+#define GTK_STYLE_CLASS_DEFAULT "default"
+
+/**
+ * GTK_STYLE_CLASS_TROUGH:
+ *
+ * A CSS class to match troughs, as in scrollbars and progressbars.
+ */
+#define GTK_STYLE_CLASS_TROUGH "trough"
+
+/**
+ * GTK_STYLE_CLASS_SCROLLBAR:
+ *
+ * A CSS class to match scrollbars.
+ */
+#define GTK_STYLE_CLASS_SCROLLBAR "scrollbar"
+
+/**
+ * GTK_STYLE_CLASS_HEADER:
+ *
+ * A CSS class to match a header element.
+ */
+#define GTK_STYLE_CLASS_HEADER "header"
+
+
+/* Predefined set of widget regions */
+
+/**
+ * GTK_STYLE_REGION_ROW:
+ *
+ * A widget region name to define a treeview row.
+ */
+#define GTK_STYLE_REGION_ROW "row"
+
+/**
+ * GTK_STYLE_REGION_COLUMN:
+ *
+ * A widget region name to define a treeview column.
+ */
+#define GTK_STYLE_REGION_COLUMN "column"
+
+/**
+ * GTK_STYLE_REGION_COLUMN_HEADER:
+ *
+ * A widget region name to define a treeview column header.
+ */
+#define GTK_STYLE_REGION_COLUMN_HEADER "column-header"
+
+/**
+ * GTK_STYLE_REGION_TAB:
+ *
+ * A widget region name to define a notebook tab.
+ */
+#define GTK_STYLE_REGION_TAB "tab"
+
+
 GType gtk_style_context_get_type (void) G_GNUC_CONST;
 
 GtkStyleContext * gtk_style_context_new (void);
