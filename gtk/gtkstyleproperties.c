@@ -1059,7 +1059,19 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
           data = &g_array_index (prop_to_merge->values, ValueData, i);
           value = property_data_get_value (prop, data->state);
 
-          if (replace || !G_IS_VALUE (value))
+          if (G_VALUE_TYPE (&data->value) == PANGO_TYPE_FONT_DESCRIPTION &&
+              G_IS_VALUE (value))
+            {
+              PangoFontDescription *font_desc;
+              PangoFontDescription *font_desc_to_merge;
+
+              /* Handle merging of font descriptions */
+              font_desc = g_value_get_boxed (value);
+              font_desc_to_merge = g_value_get_boxed (&data->value);
+
+              pango_font_description_merge (font_desc, font_desc_to_merge, replace);
+            }
+          else if (replace || !G_IS_VALUE (value))
             {
               if (!G_IS_VALUE (value))
                 g_value_init (value, G_VALUE_TYPE (&data->value));
