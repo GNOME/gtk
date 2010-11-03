@@ -3270,3 +3270,36 @@ gtk_render_activity (GtkStyleContext *context,
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_activity (priv->theming_engine, cr, x, y, width, height);
 }
+
+/**
+ * gtk_render_icon_pixbuf:
+ * @context: a #GtkStyleContext
+ * @source: the #GtkIconSource specifying the icon to render
+ * @size: (type int): the size to render the icon at. A size of (GtkIconSize) -1
+ *        means render at the size of the source and don't scale.
+ *
+ * Renders the icon specified by @source at the given @size, returning the result
+ * in a pixbuf.
+ *
+ * Returns: (transfer full): a newly-created #GdkPixbuf containing the rendered icon
+ *
+ * Since: 3.0
+ **/
+GdkPixbuf *
+gtk_render_icon_pixbuf (GtkStyleContext     *context,
+                        const GtkIconSource *source,
+                        GtkIconSize          size)
+{
+  GtkStyleContextPrivate *priv;
+  GtkThemingEngineClass *engine_class;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+  g_return_val_if_fail (size >= -1, NULL);
+  g_return_val_if_fail (source != NULL, NULL);
+
+  priv = context->priv;
+  engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  _gtk_theming_engine_set_context (priv->theming_engine, context);
+  return engine_class->render_icon_pixbuf (priv->theming_engine, source, size);
+}

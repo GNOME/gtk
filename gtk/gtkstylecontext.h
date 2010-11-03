@@ -404,6 +404,10 @@ void gtk_render_activity  (GtkStyleContext *context,
                            gdouble          width,
                            gdouble          height);
 
+GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
+                                    const GtkIconSource *source,
+                                    GtkIconSize          size);
+
 G_END_DECLS
 
 #endif /* __GTK_STYLE_CONTEXT_H__ */

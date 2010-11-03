@@ -327,6 +327,9 @@ static void hls_to_rgb			(gdouble	 *h,
 
 static void style_unrealize_cursors     (GtkStyle *style);
 
+static void transform_detail_string (const gchar     *detail,
+                                     GtkStyleContext *context);
+
 /*
  * Data for default check and radio buttons
  */
@@ -1608,54 +1611,6 @@ out:
 }
 
 static GdkPixbuf *
-scale_or_ref (GdkPixbuf *src,
-              gint       width,
-              gint       height)
-{
-  if (width == gdk_pixbuf_get_width (src) &&
-      height == gdk_pixbuf_get_height (src))
-    {
-      return g_object_ref (src);
-    }
-  else
-    {
-      return gdk_pixbuf_scale_simple (src,
-                                      width, height,
-                                      GDK_INTERP_BILINEAR);
-    }
-}
-
-static gboolean
-lookup_icon_size (GtkStyle    *style,
-		  GtkWidget   *widget,
-		  GtkIconSize  size,
-		  gint        *width,
-		  gint        *height)
-{
-  GdkScreen *screen;
-  GtkSettings *settings;
-
-  if (widget && gtk_widget_has_screen (widget))
-    {
-      screen = gtk_widget_get_screen (widget);
-      settings = gtk_settings_get_for_screen (screen);
-    }
-  else if (style && style->visual)
-    {
-      screen = gdk_visual_get_screen (style->visual);
-      settings = gtk_settings_get_for_screen (screen);
-    }
-  else
-    {
-      settings = gtk_settings_get_default ();
-      GTK_NOTE (MULTIHEAD,
-		g_warning ("Using the default screen for gtk_default_render_icon()"));
-    }
-
-  return gtk_icon_size_lookup_for_settings (settings, size, width, height);
-}
-
-static GdkPixbuf *
 gtk_default_render_icon (GtkStyle            *style,
                          const GtkIconSource *source,
                          GtkTextDirection     direction,
@@ -1664,65 +1619,31 @@ gtk_default_render_icon (GtkStyle            *style,
                          GtkWidget           *widget,
                          const gchar         *detail)
 {
-  gint width = 1;
-  gint height = 1;
-  GdkPixbuf *scaled;
-  GdkPixbuf *stated;
-  GdkPixbuf *base_pixbuf;
+  GtkStyleContext *context;
+  GtkStylePrivate *priv;
+  GdkPixbuf *pixbuf;
 
-  /* Oddly, style can be NULL in this function, because
-   * GtkIconSet can be used without a style and if so
-   * it uses this function.
-   */
-
-  base_pixbuf = gtk_icon_source_get_pixbuf (source);
-
-  g_return_val_if_fail (base_pixbuf != NULL, NULL);
-
-  if (size != (GtkIconSize) -1 && !lookup_icon_size(style, widget, size, &width, &height))
+  if (widget)
+    context = gtk_widget_get_style_context (widget);
+  else
     {
-      g_warning (G_STRLOC ": invalid icon size '%d'", size);
-      return NULL;
+      priv = GTK_STYLE_GET_PRIVATE (style);
+      context = priv->context;
     }
 
-  /* If the size was wildcarded, and we're allowed to scale, then scale; otherwise,
-   * leave it alone.
-   */
-  if (size != (GtkIconSize)-1 && gtk_icon_source_get_size_wildcarded (source))
-    scaled = scale_or_ref (base_pixbuf, width, height);
-  else
-    scaled = g_object_ref (base_pixbuf);
+  if (!context)
+    return NULL;
 
-  /* If the state was wildcarded, then generate a state. */
-  if (gtk_icon_source_get_state_wildcarded (source))
-    {
-      if (state == GTK_STATE_INSENSITIVE)
-        {
-          stated = gdk_pixbuf_copy (scaled);      
-          
-          gdk_pixbuf_saturate_and_pixelate (scaled, stated,
-                                            0.8, TRUE);
-          
-          g_object_unref (scaled);
-        }
-      else if (state == GTK_STATE_PRELIGHT)
-        {
-          stated = gdk_pixbuf_copy (scaled);      
-          
-          gdk_pixbuf_saturate_and_pixelate (scaled, stated,
-                                            1.2, FALSE);
-          
-          g_object_unref (scaled);
-        }
-      else
-        {
-          stated = scaled;
-        }
-    }
-  else
-    stated = scaled;
-  
-  return stated;
+  gtk_style_context_save (context);
+
+  if (detail)
+    transform_detail_string (detail, context);
+
+  pixbuf = gtk_render_icon_pixbuf (context, source, size);
+
+  gtk_style_context_restore (context);
+
+  return pixbuf;
 }
 
 static void

@@ -157,6 +157,10 @@ struct _GtkThemingEngineClass
                             gdouble           y,
                             gdouble           width,
                             gdouble           height);
+
+  GdkPixbuf * (* render_icon_pixbuf) (GtkThemingEngine    *engine,
+                                      const GtkIconSource *source,
+                                      GtkIconSize          size);
 };
 
 GType gtk_theming_engine_get_type (void) G_GNUC_CONST;
