@@ -5319,6 +5319,7 @@ gtk_symbolic_color_new_literal
 gtk_symbolic_color_new_mix
 gtk_symbolic_color_new_name
 gtk_symbolic_color_new_shade
+gtk_symbolic_color_new_alpha
 gtk_symbolic_color_resolve
 gtk_symbolic_color_ref
 gtk_symbolic_color_unref
@@ -5337,32 +5338,32 @@ gtk_gradient_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkstyleset</FILE>
-<TITLE>GtkStyleSet</TITLE>
-GtkStyleSet
-gtk_style_set_clear
-gtk_style_set_get
-gtk_style_set_get_property
-gtk_style_set_get_valist
-gtk_style_set_lookup_color
-gtk_style_set_lookup_property
-gtk_style_set_map_color
-gtk_style_set_merge
-gtk_style_set_new
-gtk_style_set_register_property
-gtk_style_set_set
-gtk_style_set_set_property
-gtk_style_set_set_valist
-gtk_style_set_unset_property
+<FILE>gtkstyleproperties</FILE>
+<TITLE>GtkStyleProperties</TITLE>
+GtkStyleProperties
+gtk_style_properties_clear
+gtk_style_properties_get
+gtk_style_properties_get_property
+gtk_style_properties_get_valist
+gtk_style_properties_lookup_color
+gtk_style_properties_lookup_property
+gtk_style_properties_map_color
+gtk_style_properties_merge
+gtk_style_properties_new
+gtk_style_properties_register_property
+gtk_style_properties_set
+gtk_style_properties_set_property
+gtk_style_properties_set_valist
+gtk_style_properties_unset_property
 <SUBSECTION Standard>
-GTK_TYPE_STYLE_SET
-GTK_IS_STYLE_SET
-GTK_IS_STYLE_SET_CLASS
-GTK_STYLE_SET
-GTK_STYLE_SET_CLASS
-GTK_STYLE_SET_GET_CLASS
+GTK_TYPE_STYLE_PROPERTIES
+GTK_IS_STYLE_PROPERTIES
+GTK_IS_STYLE_PROPERTIES_CLASS
+GTK_STYLE_PROPERTIES
+GTK_STYLE_PROPERTIES_CLASS
+GTK_STYLE_PROPERTIES_GET_CLASS
 <SUBSECTION Private>
-gtk_style_set_get_type
+gtk_style_properties_get_type
 </SECTION>
 
 <SECTION>
@@ -5427,6 +5428,7 @@ gtk_render_line
 gtk_render_option
 gtk_render_progress
 gtk_render_slider
+gtk_render_activity
 
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_CONTEXT
