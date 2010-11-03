@@ -2633,10 +2633,12 @@ settings_update_theme (GtkSettings *settings)
   if (new_provider != provider)
     {
       if (provider)
-        gtk_style_context_remove_provider_for_screen (settings->screen, provider);
+        gtk_style_context_remove_provider_for_screen (settings->screen,
+                                                      GTK_STYLE_PROVIDER (provider));
 
       if (new_provider)
-        gtk_style_context_add_provider_for_screen (settings->screen, new_provider,
+        gtk_style_context_add_provider_for_screen (settings->screen,
+                                                   GTK_STYLE_PROVIDER (new_provider),
                                                    GTK_STYLE_PROVIDER_PRIORITY_SETTINGS + 1);
 
       g_object_set_qdata_full (G_OBJECT (settings), quark_theme_name,
