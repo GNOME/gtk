@@ -79,6 +79,7 @@ typedef struct _GtkStylePrivate GtkStylePrivate;
 struct _GtkStylePrivate {
   GSList *color_hashes;
   GtkStyleContext *context;
+  gulong context_changed_id;
 };
 
 enum {
@@ -610,7 +611,12 @@ gtk_style_finalize (GObject *object)
     g_object_unref (style->rc_style);
 
   if (priv->context)
-    g_object_unref (priv->context);
+    {
+      if (priv->context_changed_id)
+        g_signal_handler_disconnect (priv->context, priv->context_changed_id);
+
+      g_object_unref (priv->context);
+    }
 
   G_OBJECT_CLASS (gtk_style_parent_class)->finalize (object);
 }
@@ -736,6 +742,13 @@ gtk_style_update_from_context (GtkStyle *style)
 }
 
 static void
+style_context_changed (GtkStyleContext *context,
+                       gpointer         user_data)
+{
+  gtk_style_update_from_context (GTK_STYLE (user_data));
+}
+
+static void
 gtk_style_constructed (GObject *object)
 {
   GtkStylePrivate *priv;
@@ -746,7 +759,8 @@ gtk_style_constructed (GObject *object)
     {
       gtk_style_update_from_context (GTK_STYLE (object));
 
-      /* FIXME: Listen to context changes */
+      priv->context_changed_id = g_signal_connect (priv->context, "changed",
+                                                   G_CALLBACK (style_context_changed), object);
     }
 }
 
