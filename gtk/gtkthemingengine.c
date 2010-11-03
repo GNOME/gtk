@@ -755,7 +755,7 @@ gtk_theming_module_load (GTypeModule *type_module)
 
   theming_module->module = module;
 
-  theming_module->init (theming_module);
+  theming_module->init (G_TYPE_MODULE (theming_module));
 
   return TRUE;
 }
