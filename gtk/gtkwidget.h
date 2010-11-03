@@ -758,6 +758,21 @@ gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
  */
 gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
+/* Functions to override widget styling */
+void         gtk_widget_override_color            (GtkWidget     *widget,
+                                                   GtkStateFlags  state,
+                                                   const GdkRGBA *color);
+void         gtk_widget_override_background_color (GtkWidget     *widget,
+                                                   GtkStateFlags  state,
+                                                   const GdkRGBA *color);
+
+void         gtk_widget_override_font (GtkWidget                  *widget,
+                                       const PangoFontDescription *font_desc);
+
+void         gtk_widget_override_symbolic_color (GtkWidget         *widget,
+                                                 const gchar       *name,
+                                                 const GdkRGBA     *color);
+
 /* Widget styles.
  */
 void        gtk_widget_style_attach       (GtkWidget            *widget);
@@ -788,9 +803,6 @@ void        gtk_widget_modify_cursor      (GtkWidget            *widget,
 					   const GdkColor       *secondary);
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
-void        gtk_widget_modify_symbolic_color (GtkWidget         *widget,
-                                           const gchar          *name,
-                                           const GdkColor       *color);
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
