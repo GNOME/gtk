@@ -741,7 +741,7 @@ find_next_candidate (GList *local,
       local_data = local->data;
       global_data = global->data;
 
-      if (local_data->priority >= global_data->priority)
+      if (local_data->priority < global_data->priority)
         return local;
       else
         return global;
