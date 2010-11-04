@@ -774,12 +774,18 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                 x = allocation->x;
                 secondary_x = x + primary_size + n_primaries * childspacing;
               }
-            else
+            else if (nvis_children == 1)
               {
-                /* one or zero children, just center */
+                /* one child, just center */
                 childspacing = width;
                 x = secondary_x = allocation->x
                                   + (allocation->width - widths[0]) / 2;
+              }
+            else
+              {
+                /* zero children, meh */
+                childspacing = width;
+                x = secondary_x = allocation->x + allocation->width / 2;
               }
           }
         else
@@ -790,12 +796,18 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
                 y = allocation->y;
                 secondary_y = y + primary_size + n_primaries * childspacing;
               }
-            else
+            else if (nvis_children == 1)
               {
-                /* one or zero children, just center */
+                /* one child, just center */
                 childspacing = height;
                 y = secondary_y = allocation->y
-                        + (allocation->height - heights[0]) / 2;
+                                     + (allocation->height - heights[0]) / 2;
+              }
+            else
+              {
+                /* zero children, meh */
+                childspacing = height;
+                y = secondary_y = allocation->y + allocation->height / 2;
               }
           }
 
