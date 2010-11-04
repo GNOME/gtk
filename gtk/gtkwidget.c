@@ -73,7 +73,7 @@
  * <title>Height-for-width Geometry Management</title>
  * <para>
  * GTK+ uses a height-for-width (and width-for-height) geometry management
- * system Height-for-width means that a widget can change how much
+ * system. Height-for-width means that a widget can change how much
  * vertical space it needs, depending on the amount of horizontal space
  * that it is given (and similar for width-for-height). The most common
  * example is a label that reflows to fill up the available width, wraps
@@ -85,8 +85,8 @@
  *    <varlistentry>
  *       <term>#GtkWidgetClass.get_request_mode()</term>
  *       <listitem>
- *          This allows a widget to tell it's parent container whether
- *          it preferrs to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
+ *          This allows a widget to tell its parent container whether
+ *          it prefers to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
  *          or %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
  *          %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to
  *          have #GtkWidgetClass.get_preferred_width() called and then
@@ -95,7 +95,7 @@
  *          However it's important to note (as described below) that any
  *          widget which trades height-for-width must respond properly to
  *          both #GtkSizeRequestModes since it might be queried in either
- *          orientation by it's parent container.
+ *          orientation by its parent container.
  *       </listitem>
  *    </varlistentry>
  *    <varlistentry>
@@ -103,12 +103,12 @@
  *       <listitem>
  *          This is called by containers to obtain the minimum and
  *          natural width of a widget. A widget will never be allocated
- *          a width less than it's minimum and will only ever be allocated
+ *          a width less than its minimum and will only ever be allocated
  *          a width greater than the natural width once all of the said
  *          widget's siblings have received their natural widths.
- *          Furthermore a widget will only ever be allocated a width greater
- *          than it's natural width if it was configured to receive extra
- *          expand space from it's parent container.
+ *          Furthermore, a widget will only ever be allocated a width greater
+ *          than its natural width if it was configured to receive extra
+ *          expand space from its parent container.
  *       </listitem>
  *    </varlistentry>
  *    <varlistentry>
@@ -128,7 +128,7 @@
  *          This is similar to #GtkWidgetClass.get_preferred_height() except
  *          that it is passed a contextual width to request height for. By
  *          implementing this virtual method it is possible for a #GtkLabel
- *          to tell it's parent how much height would be required if the
+ *          to tell its parent how much height would be required if the
  *          label were to be allocated a said width.
  *       </listitem>
  *    </varlistentry>
@@ -138,8 +138,8 @@
  *          This is analogous to #GtkWidgetClass.get_preferred_height_for_width()
  *          except that it operates in the oposite orientation. It's rare that
  *          a widget actually does %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT requests
- *          but can happen when for example; a widget or container gets additional
- *          columns to compensate for a smaller allocated height.
+ *          but this can happen when, for example, a widget or container gets
+ *          additional columns to compensate for a smaller allocated height.
  *       </listitem>
  *    </varlistentry>
  * </variablelist>
@@ -156,8 +156,8 @@
  * %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
  * First, the default minimum and natural width for each widget
  * in the interface will be computed using gtk_width_get_preferred_width().
- * Because the preferred widths for each container depends on the preferred
- * widths of thier children, this information propagates up the hierarchy,
+ * Because the preferred widths for each container depend on the preferred
+ * widths of their children, this information propagates up the hierarchy,
  * and finally a minimum and natural width is determined for the entire
  * toplevel. Next, the toplevel will use the minimum width to query for the
  * minimum height contextual to that width using
@@ -166,18 +166,18 @@
  * used to set the minimum size constraint on the toplevel
  * (unless gtk_window_set_geometry_hints() is explicitly used instead).
  *
- * After the toplevel window has initially requested it's size in both
+ * After the toplevel window has initially requested its size in both
  * dimensions it can go on to allocate itself a reasonable size (or a size
  * previously specified with gtk_window_set_default_size()). During the
  * recursive allocation process it's important to note that request cycles
  * will be recursively executed while container widgets allocate their children.
- * Each container widget, once allocated a size will go on to first share the
+ * Each container widget, once allocated a size, will go on to first share the
  * space in one orientation among its children and then request each child's
- * height for their target allocated width or width for allocated height
+ * height for its target allocated width or its width for allocated height,
  * depending. In this way a #GtkWidget will typically be requested its size
- * a number of times before actually being allocated a size, the size a
- * widget is finally allocated can of course differ from the size it
- * requested. For this reason; #GtkWidget caches a  small number of results
+ * a number of times before actually being allocated a size. The size a
+ * widget is finally allocated can of course differ from the size it has
+ * requested. For this reason, #GtkWidget caches a  small number of results
  * to avoid re-querying for the same sizes in one allocation cycle.
  *
  * See <link linkend="container-geometry-management">GtkContainer's
@@ -185,15 +185,15 @@
  * to learn more about how height-for-width allocations are performed
  * by container widgets.
  *
- * If a widget does move content around to smartly use up the
- * allocated size, then it must support the request in both
+ * If a widget does move content around to intelligently use up the
+ * allocated size then it must support the request in both
  * #GtkSizeRequestModes even if the widget in question only
  * trades sizes in a single orientation.
  *
  * For instance, a #GtkLabel that does height-for-width word wrapping
  * will not expect to have #GtkWidgetClass.get_preferred_height() called
  * because that call is specific to a width-for-height request. In this
- * case the label must return the heights required for it's own minimum
+ * case the label must return the height required for its own minimum
  * possible width. By following this rule any widget that handles
  * height-for-width or width-for-height requests will always be allocated
  * at least enough space to fit its own content.
@@ -215,7 +215,7 @@
  *      }
  *    else
  *      {
- *         ... some widgets do both, for instance if a GtkLabel is rotated to 90 degrees
+ *         ... some widgets do both. For instance, if a GtkLabel is rotated to 90 degrees
  *         it will return the minimum and natural height for the rotated label here.
  *      }
  * }
@@ -236,15 +236,15 @@
  *    else
  *      {
  *         ... again if a widget is sometimes operating in width-for-height mode
- *         (like a rotated GtkLabel) it can go ahead and do it's real width for
+ *         (like a rotated GtkLabel) it can go ahead and do its real width for
  *         height calculation here.
  *      }
  * }
  * ]]></programlisting>
  *
  * Often a widget needs to get its own request during size request or
- * allocation, for example when computing height it may need to also
- * compute width, or when deciding how to use an allocation the widget
+ * allocation. For example, when computing height it may need to also
+ * compute width. Or when deciding how to use an allocation, the widget
  * may need to know its natural size. In these cases, the widget should
  * be careful to call its virtual methods directly, like this:
  * <example>
@@ -256,7 +256,7 @@
  * </example>
  *
  * It will not work to use the wrapper functions, such as
- * gtk_widget_get_preferred_width(), inside your own size request
+ * gtk_widget_get_preferred_width() inside your own size request
  * implementation. These return a request adjusted by #GtkSizeGroup
  * and by the #GtkWidgetClass.adjust_size_request() virtual method. If a
  * widget used the wrappers inside its virtual method implementations,
@@ -266,8 +266,8 @@
  *
  * Of course if you are getting the size request for
  * <emphasis>another</emphasis> widget, such as a child of a
- * container, you <emphasis>must</emphasis> use the wrapper APIs;
- * otherwise, you would not properly consider widget margins,
+ * container, you <emphasis>must</emphasis> use the wrapper APIs.
+ * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
  * </para>
  * </refsect2>

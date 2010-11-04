@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -64,12 +64,12 @@
  * The first type of container widget has a single child widget and derives
  * from #GtkBin. These containers are <emphasis>decorators</emphasis>, which
  * add some kind of functionality to the child. For example, a #GtkButton makes
- * it's child into a clickable button; a #GtkFrame draws a frame around it's child
- * and a #GtkWindow places it's child widget inside a top-level window.
+ * its child into a clickable button; a #GtkFrame draws a frame around its child
+ * and a #GtkWindow places its child widget inside a top-level window.
  *
- * The second type of container can have more than one child; it's purpose is to
+ * The second type of container can have more than one child; its purpose is to
  * manage <emphasis>layout</emphasis>. This means that these containers assign
- * sizes and positions to their children. For example, a #GtkHBox arranges it's
+ * sizes and positions to their children. For example, a #GtkHBox arranges its
  * children in a horizontal row, and a #GtkTable arranges the widgets it contains
  * in a two-dimensional grid.
  *
@@ -82,25 +82,25 @@
  * width-for-height).
  *
  * There are some things to keep in mind when implementing container widgets
- * that make use of GTK+'s height for width geometry management system; first 
- * of all it's important to note that a container must prioritize one of it's
+ * that make use of GTK+'s height for width geometry management system. First,
+ * it's important to note that a container must prioritize one of its
  * dimensions, that is to say that a widget or container can only have a
- * #GtkSizeRequestMode that is %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or 
- * %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT. However, every widget and container 
- * must be able to respond to the APIs for both dimensions, i.e. even if a 
- * widget has a request mode that is height-for-width, it is possible that 
- * it's parent will request it's sizes using the width-for-height APIs.
+ * #GtkSizeRequestMode that is %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
+ * %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT. However, every widget and container
+ * must be able to respond to the APIs for both dimensions, i.e. even if a
+ * widget has a request mode that is height-for-width, it is possible that
+ * its parent will request its sizes using the width-for-height APIs.
  *
  * To ensure that everything works properly, here are some guidelines to follow
  * when implementing height-for-width (or width-for-height) containers.
  *
- * Each request mode has 2 virtual methods involved. Height-for-width apis run
+ * Each request mode involves 2 virtual methods. Height-for-width apis run
  * through gtk_widget_get_preferred_width() and then through gtk_widget_get_preferred_height_for_width().
  * When handling requests in the opposite #GtkSizeRequestMode it is important that
- * every widget request at least enough space to display all of it's content at all times.
+ * every widget request at least enough space to display all of its content at all times.
  *
  * When gtk_widget_get_preferred_height() is called on a container that is height-for-width,
- * the container must return the height for minimum width, this is easily achieved by
+ * the container must return the height for its minimum width. This is easily achieved by
  * simply calling the reverse apis implemented for itself as follows:
  *
  * <programlisting><![CDATA[
@@ -112,7 +112,7 @@
  *        gint min_width;
  *
  *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width, 
+ *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_height_for_width (widget, min_width,
  *                                                                       min_height, nat_height);
  *      }
  *    else
@@ -129,7 +129,7 @@
  *
  * <programlisting><![CDATA[
  * static void
- * foo_container_get_preferred_width_for_height (GtkWidget *widget, gint for_height, 
+ * foo_container_get_preferred_width_for_height (GtkWidget *widget, gint for_height,
  *                                               gint *min_width, gint *nat_width)
  * {
  *    if (i_am_in_height_for_width_mode)
@@ -138,19 +138,19 @@
  *      }
  *    else
  *      {
- *        ... execute the real width-for-height request here based on required width 
+ *        ... execute the real width-for-height request here based on the required width
  *        of the children collectively if the container were to be allocated the said height ...
  *      }
  * }
  * ]]></programlisting>
  *
  * Furthermore, in order to ensure correct height-for-width requests it is important
- * to check the input width against the real required minimum width, this can
+ * to check the input width against the real required minimum width. This can
  * easily be achieved as follows:
  *
  * <programlisting><![CDATA[
  * static void
- * foo_container_get_preferred_height_for_width (GtkWidget *widget, gint for_width, 
+ * foo_container_get_preferred_height_for_width (GtkWidget *widget, gint for_width,
  *                                               gint *min_height, gint *nat_height)
  * {
  *    if (i_am_in_height_for_width_mode)
@@ -175,16 +175,16 @@
  * would implement the <function>get_preferred_height_for_width()</function> virtual function by first calling
  * gtk_widget_get_preferred_width() for each of its children.
  *
- * For each potential group of children that are lined up horizontally the values returned by 
- * gtk_widget_get_preferred_width() should be collected in an array of #GtkRequestedSize structures; 
- * any child spacing should be removed from the input @for_width and then the collective size be 
- * allocated using the gtk_distribute_natural_allocation() convenience function
+ * For each potential group of children that are lined up horizontally, the values returned by
+ * gtk_widget_get_preferred_width() should be collected in an array of #GtkRequestedSize structures.
+ * Any child spacing should be removed from the input @for_width and then the collective size should be
+ * allocated using the gtk_distribute_natural_allocation() convenience function.
  *
- * The container will then move on to request the preferred height for each child by using 
+ * The container will then move on to request the preferred height for each child by using
  * gtk_widget_get_preferred_height_for_width() and using the sizes stored in the #GtkRequestedSize array.
  *
- * When it comes time to allocate a height-for-width container, it's again important
- * to consider that a container has to prioritize one dimension over the other. So if
+ * To allocate a height-for-width container, it's again important
+ * to consider that a container must prioritize one dimension over the other. So if
  * a container is a height-for-width container it must first allocate all widgets horizontally
  * using a #GtkRequestedSize array and gtk_distribute_natural_allocation() and then add any
  * extra space (if and where appropriate) for the widget to expand.
@@ -196,9 +196,9 @@
  * be generalized into the heights and widths of rows and columns).
  * The vertical space must then again be distributed using gtk_distribute_natural_allocation()
  * while this time considering the allocated height of the widget minus any vertical spacing
- * that the container adds. Then vertical expand space should be added where appropriate if available
- * and go on to actually allocating the child widgets.
- * 
+ * that the container adds. Then vertical expand space should be added where appropriate and available
+ * and the container should go on to actually allocating the child widgets.
+ *
  * See <link linkend="geometry-management">GtkWidget's geometry management section</link>
  * to learn more about implementing height-for-width geometry management for widgets.
  * </para>
@@ -396,7 +396,7 @@ gtk_container_get_type (void)
       };
 
       container_type =
-	g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"), 
+	g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
 				&container_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_interface_static (container_type,
@@ -443,7 +443,7 @@ gtk_container_class_init (GtkContainerClass *class)
 
   vadjustment_key_id = g_quark_from_static_string (vadjustment_key);
   hadjustment_key_id = g_quark_from_static_string (hadjustment_key);
-  
+
   gobject_class->set_property = gtk_container_set_property;
   gobject_class->get_property = gtk_container_get_property;
 
@@ -554,7 +554,7 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
       gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
     }
   else
-    g_warning ("Cannot add an object of type %s to a container of type %s", 
+    g_warning ("Cannot add an object of type %s to a container of type %s",
 	       g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
 }
 
@@ -568,7 +568,7 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GParamSpec *pspec;
   GValue gvalue = { 0, };
   GError *error = NULL;
-  
+
   pspec = gtk_container_class_find_child_property
     (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
@@ -652,12 +652,12 @@ attributes_text_element (GMarkupParseContext *context,
 
   if (!parser_data->child_prop_name)
     return;
-  
+
   if (parser_data->translatable && text_len)
     {
       const gchar* domain;
       domain = gtk_builder_get_translation_domain (parser_data->builder);
-      
+
       value = _gtk_builder_parser_translate (domain,
 					     parser_data->context,
 					     text);
@@ -739,13 +739,13 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
 }
 
 /**
- * gtk_container_child_type: 
+ * gtk_container_child_type:
  * @container: a #GtkContainer
  *
  * Returns the type of the children supported by the container.
  *
  * Note that this may return %G_TYPE_NONE to indicate that no more
- * children can be added, e.g. for a #GtkPaned which already has two 
+ * children can be added, e.g. for a #GtkPaned which already has two
  * children.
  *
  * Return value: a #GType.
@@ -775,7 +775,7 @@ container_get_child_property (GtkContainer *container,
 			      GValue       *value)
 {
   GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
-  
+
   class->get_child_property (container, child, PARAM_SPEC_PARAM_ID (pspec), value, pspec);
 }
 
@@ -820,9 +820,9 @@ container_set_child_property (GtkContainer       *container,
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
  * @first_property_name: the name of the first property to get
- * @var_args: return location for the first property, followed 
+ * @var_args: return location for the first property, followed
  *     optionally by more name/return location pairs, followed by %NULL
- * 
+ *
  * Gets the values of one or more child properties for @child and @container.
  **/
 void
@@ -891,7 +891,7 @@ gtk_container_child_get_valist (GtkContainer *container,
  * @child: a widget which is a child of @container
  * @property_name: the name of the property to get
  * @value: a location to return the value
- * 
+ *
  * Gets the value of a child property for @child and @container.
  **/
 void
@@ -907,7 +907,7 @@ gtk_container_child_get_property (GtkContainer *container,
   g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (container));
   g_return_if_fail (property_name != NULL);
   g_return_if_fail (G_IS_VALUE (value));
-  
+
   g_object_ref (container);
   g_object_ref (child);
   pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
@@ -966,7 +966,7 @@ gtk_container_child_get_property (GtkContainer *container,
  * @first_property_name: the name of the first property to set
  * @var_args: a %NULL-terminated list of property names and values, starting
  *           with @first_prop_name
- * 
+ *
  * Sets one or more child properties for @child and @container.
  **/
 void
@@ -1039,7 +1039,7 @@ gtk_container_child_set_valist (GtkContainer *container,
  * @child: a widget which is a child of @container
  * @property_name: the name of the property to set
  * @value: the value to set the property to
- * 
+ *
  * Sets a child property for @child and @container.
  **/
 void
@@ -1056,7 +1056,7 @@ gtk_container_child_set_property (GtkContainer *container,
   g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (container));
   g_return_if_fail (property_name != NULL);
   g_return_if_fail (G_IS_VALUE (value));
-  
+
   g_object_ref (container);
   g_object_ref (child);
 
@@ -1084,12 +1084,12 @@ gtk_container_child_set_property (GtkContainer *container,
 
 /**
  * gtk_container_add_with_properties:
- * @container: a #GtkContainer 
- * @widget: a widget to be placed inside @container 
- * @first_prop_name: the name of the first child property to set 
+ * @container: a #GtkContainer
+ * @widget: a widget to be placed inside @container
+ * @first_prop_name: the name of the first child property to set
  * @Varargs: a %NULL-terminated list of property names and values, starting
  *           with @first_prop_name
- * 
+ *
  * Adds @widget to @container, setting child properties at the same time.
  * See gtk_container_add() and gtk_container_child_set() for more details.
  **/
@@ -1129,7 +1129,7 @@ gtk_container_add_with_properties (GtkContainer *container,
  * @first_prop_name: the name of the first property to set
  * @Varargs: a %NULL-terminated list of property names and values, starting
  *           with @first_prop_name
- * 
+ *
  * Sets one or more child properties for @child and @container.
  **/
 void
@@ -1139,7 +1139,7 @@ gtk_container_child_set (GtkContainer      *container,
 			 ...)
 {
   va_list var_args;
-  
+
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (container));
@@ -1154,9 +1154,9 @@ gtk_container_child_set (GtkContainer      *container,
  * @container: a #GtkContainer
  * @child: a widget which is a child of @container
  * @first_prop_name: the name of the first property to get
- * @Varargs: return location for the first property, followed 
+ * @Varargs: return location for the first property, followed
  *     optionally by more name/return location pairs, followed by %NULL
- * 
+ *
  * Gets the values of one or more child properties for @child and @container.
  **/
 void
@@ -1166,7 +1166,7 @@ gtk_container_child_get (GtkContainer      *container,
 			 ...)
 {
   va_list var_args;
-  
+
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (container));
@@ -1181,8 +1181,8 @@ gtk_container_child_get (GtkContainer      *container,
  * @cclass: a #GtkContainerClass
  * @property_id: the id for the property
  * @pspec: the #GParamSpec for the property
- * 
- * Installs a child property on a container class. 
+ *
+ * Installs a child property on a container class.
  **/
 void
 gtk_container_class_install_child_property (GtkContainerClass *cclass,
@@ -1239,7 +1239,7 @@ gtk_container_class_find_child_property (GObjectClass *cclass,
  * gtk_container_class_list_child_properties:
  * @cclass: a #GtkContainerClass
  * @n_properties: location to return the number of child properties found
- * @returns: a newly allocated %NULL-terminated array of #GParamSpec*. 
+ * @returns: a newly allocated %NULL-terminated array of #GParamSpec*.
  *           The array must be freed with g_free().
  *
  * Returns all child properties of a container class.
@@ -1352,7 +1352,7 @@ gtk_container_get_property (GObject         *object,
 {
   GtkContainer *container = GTK_CONTAINER (object);
   GtkContainerPrivate *priv = container->priv;
-  
+
   switch (prop_id)
     {
     case PROP_BORDER_WIDTH:
@@ -1370,7 +1370,7 @@ gtk_container_get_property (GObject         *object,
 /**
  * gtk_container_set_border_width:
  * @container: a #GtkContainer
- * @border_width: amount of blank space to leave <emphasis>outside</emphasis> 
+ * @border_width: amount of blank space to leave <emphasis>outside</emphasis>
  *   the container. Valid values are in the range 0-65535 pixels.
  *
  * Sets the border width of the container.
@@ -1398,7 +1398,7 @@ gtk_container_set_border_width (GtkContainer *container,
     {
       priv->border_width = border_width;
       g_object_notify (G_OBJECT (container), "border-width");
-      
+
       if (gtk_widget_get_realized (GTK_WIDGET (container)))
 	gtk_widget_queue_resize (GTK_WIDGET (container));
     }
@@ -1407,7 +1407,7 @@ gtk_container_set_border_width (GtkContainer *container,
 /**
  * gtk_container_get_border_width:
  * @container: a #GtkContainer
- * 
+ *
  * Retrieves the border width of the container. See
  * gtk_container_set_border_width().
  *
@@ -1425,7 +1425,7 @@ gtk_container_get_border_width (GtkContainer *container)
  * gtk_container_add:
  * @container: a #GtkContainer
  * @widget: a widget to be placed inside @container
- * 
+ *
  * Adds @widget to @container. Typically used for simple containers
  * such as #GtkWindow, #GtkFrame, or #GtkButton; for more complicated
  * layout containers such as #GtkBox or #GtkTable, this function will
@@ -1464,7 +1464,7 @@ gtk_container_add (GtkContainer *container,
  * gtk_container_remove:
  * @container: a #GtkContainer
  * @widget: a current child of @container
- * 
+ *
  * Removes @widget from @container. @widget must be inside @container.
  * Note that @container will own a reference to @widget, and that this
  * may be the last reference held; so removing a widget from its
@@ -1500,10 +1500,10 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
  * gtk_container_set_resize_mode:
  * @container: a #GtkContainer
  * @resize_mode: the new resize mode
- * 
+ *
  * Sets the resize mode for the container.
  *
- * The resize mode of a container determines whether a resize request 
+ * The resize mode of a container determines whether a resize request
  * will be passed to the container's parent, queued for later execution
  * or executed immediately.
  **/
@@ -1517,17 +1517,17 @@ gtk_container_set_resize_mode (GtkContainer  *container,
   g_return_if_fail (resize_mode <= GTK_RESIZE_IMMEDIATE);
 
   priv = container->priv;
-  
+
   if (gtk_widget_is_toplevel (GTK_WIDGET (container)) &&
       resize_mode == GTK_RESIZE_PARENT)
     {
       resize_mode = GTK_RESIZE_QUEUE;
     }
-  
+
   if (priv->resize_mode != resize_mode)
     {
       priv->resize_mode = resize_mode;
-      
+
       gtk_widget_queue_resize (GTK_WIDGET (container));
       g_object_notify (G_OBJECT (container), "resize-mode");
     }
@@ -1536,7 +1536,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
 /**
  * gtk_container_get_resize_mode:
  * @container: a #GtkContainer
- * 
+ *
  * Returns the resize mode for the container. See
  * gtk_container_set_resize_mode ().
  *
@@ -1556,10 +1556,10 @@ gtk_container_get_resize_mode (GtkContainer *container)
  * @needs_redraws: the new value for the container's @reallocate_redraws flag
  *
  * Sets the @reallocate_redraws flag of the container to the given value.
- * 
+ *
  * Containers requesting reallocation redraws get automatically
- * redrawn if any of their children changed allocation. 
- **/ 
+ * redrawn if any of their children changed allocation.
+ **/
 void
 gtk_container_set_reallocate_redraws (GtkContainer *container,
 				      gboolean      needs_redraws)
@@ -1621,14 +1621,14 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
   GtkContainer *resize_container;
   GtkWidget *parent;
   GtkWidget *widget;
-  
+
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
   priv = container->priv;
   widget = GTK_WIDGET (container);
 
   resize_container = gtk_container_get_resize_container (container);
-  
+
   while (TRUE)
     {
       _gtk_widget_set_alloc_needed (widget, TRUE);
@@ -1641,7 +1641,7 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
 
       widget = parent;
     }
-      
+
   if (resize_container && !invalidate_only)
     {
       if (gtk_widget_get_visible (GTK_WIDGET (resize_container)) &&
@@ -1716,7 +1716,7 @@ void
 gtk_container_check_resize (GtkContainer *container)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
-  
+
   g_signal_emit (container, container_signals[CHECK_RESIZE], 0);
 }
 
@@ -1753,14 +1753,14 @@ gtk_container_real_check_resize (GtkContainer *container)
  *  is not sufficient for the requisition of some child.
  *  We've already performed a size request at this point,
  *  so we simply need to reallocate and let the allocation
- *  trickle down via GTK_WIDGET_ALLOC_NEEDED flags. 
+ *  trickle down via GTK_WIDGET_ALLOC_NEEDED flags.
  */
 void
 gtk_container_resize_children (GtkContainer *container)
 {
   GtkAllocation allocation;
   GtkWidget *widget;
-  
+
   /* resizing invariants:
    * toplevels have *always* resize_mode != GTK_RESIZE_PARENT set.
    * containers that have an idle sizer pending must be flagged with
@@ -1798,7 +1798,7 @@ gtk_container_adjust_size_request (GtkWidget         *widget,
   /* chain up last so gtk_widget_set_size_request() values
    * will have a chance to overwrite our border width.
    */
-  parent_class->adjust_size_request (widget, orientation, 
+  parent_class->adjust_size_request (widget, orientation,
                                      minimum_size, natural_size);
 }
 
@@ -1847,8 +1847,8 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
   /* Chain up to GtkWidgetClass *after* removing our border width from
    * the proposed allocation size. This is because it's possible that the
    * widget was allocated more space than it needs in a said orientation,
-   * if GtkWidgetClass does any alignments and thus limits the size to the 
-   * natural size... then we need that to be done *after* removing any margins 
+   * if GtkWidgetClass does any alignments and thus limits the size to the
+   * natural size... then we need that to be done *after* removing any margins
    * and padding values.
    */
   parent_class->adjust_size_allocation (widget, orientation,
@@ -1884,7 +1884,7 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
  * @container: a #GtkContainer
  * @callback: a callback
  * @callback_data: callback user data
- * 
+ *
  * Invokes @callback on each child of @container, including children
  * that are considered "internal" (implementation details of the
  * container). "Internal" children generally weren't added by the user
@@ -1913,7 +1913,7 @@ gtk_container_forall (GtkContainer *container,
  * @container: a #GtkContainer
  * @callback: (scope call):  a callback
  * @callback_data: callback user data
- * 
+ *
  * Invokes @callback on each non-internal child of @container. See
  * gtk_container_forall() for details on what constitutes an
  * "internal" child.  Most applications should use
@@ -1925,7 +1925,7 @@ gtk_container_foreach (GtkContainer *container,
 		       gpointer      callback_data)
 {
   GtkContainerClass *class;
-  
+
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (callback != NULL);
 
@@ -1984,7 +1984,7 @@ gtk_container_get_focus_child (GtkContainer *container)
 /**
  * gtk_container_get_children:
  * @container: a #GtkContainer
- * 
+ *
  * Returns the container's non-internal children. See
  * gtk_container_forall() for details on what constitutes an "internal" child.
  *
@@ -2035,7 +2035,7 @@ gtk_container_child_default_composite_name (GtkContainer *container,
   gtk_container_forall (container,
 			gtk_container_child_position_callback,
 			&data);
-  
+
   name = g_strdup_printf ("%s-%u",
 			  g_type_name (G_TYPE_FROM_INSTANCE (child)),
 			  data.index);
@@ -2076,7 +2076,7 @@ _gtk_container_child_composite_name (GtkContainer *container,
 
       return name;
     }
-  
+
   return NULL;
 }
 
@@ -2158,9 +2158,9 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
       GtkWidget *focus_child;
       gint x, y;
 
-      hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);   
+      hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
       vadj = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
-      if (hadj || vadj) 
+      if (hadj || vadj)
 	{
 
 	  focus_child = priv->focus_child;
@@ -2168,7 +2168,7 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
 	    {
 	      focus_child = gtk_container_get_focus_child (GTK_CONTAINER (focus_child));
 	    }
-	  
+
 	  gtk_widget_translate_coordinates (focus_child, priv->focus_child,
 					    0, 0, &x, &y);
 
@@ -2247,13 +2247,13 @@ gtk_container_focus (GtkWidget        *widget,
 	   direction == GTK_DIR_TAB_BACKWARD))
 	{
 	  sorted_children = g_list_copy (children);
-	  
+
 	  if (direction == GTK_DIR_TAB_BACKWARD)
 	    sorted_children = g_list_reverse (sorted_children);
 	}
       else
 	sorted_children = _gtk_container_focus_sort (container, children, direction, NULL);
-      
+
       return_val = gtk_container_focus_move (container, sorted_children, direction);
 
       g_list_free (sorted_children);
@@ -2284,7 +2284,7 @@ tab_compare (gconstpointer a,
       gint x1 = child1_allocation.x + child1_allocation.width / 2;
       gint x2 = child2_allocation.x + child2_allocation.width / 2;
 
-      if (text_direction == GTK_TEXT_DIR_RTL) 
+      if (text_direction == GTK_TEXT_DIR_RTL)
 	return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
       else
 	return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
@@ -2433,7 +2433,7 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 
   if (!old_focus)
       old_focus = find_old_focus (container, children);
-  
+
   if (old_focus && get_allocation_coords (container, old_focus, &old_allocation))
     {
       gint compare_x1;
@@ -2449,7 +2449,7 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 	compare_y = old_allocation.y;
       else
 	compare_y = old_allocation.y + old_allocation.height;
-      
+
       tmp_list = children;
       while (tmp_list)
 	{
@@ -2457,14 +2457,14 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 	  GList *next = tmp_list->next;
 	  gint child_x1, child_x2;
 	  GdkRectangle child_allocation;
-	  
+
 	  if (child != old_focus)
 	    {
 	      if (get_allocation_coords (container, child, &child_allocation))
 		{
 		  child_x1 = child_allocation.x;
 		  child_x2 = child_allocation.x + child_allocation.width;
-		  
+
 		  if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
 		      (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
 		      (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
@@ -2475,7 +2475,7 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 	      else
 		children = g_list_delete_link (children, tmp_list);
 	    }
-	  
+
 	  tmp_list = next;
 	}
 
@@ -2503,7 +2503,7 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 	  else
 	    compare.x = allocation.width / 2;
 	}
-      
+
       if (!gtk_widget_get_has_window (widget))
 	compare.y = (direction == GTK_DIR_DOWN) ? allocation.y : allocation.y + allocation.height;
       else
@@ -2563,13 +2563,13 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
 
   if (!old_focus)
     old_focus = find_old_focus (container, children);
-  
+
   if (old_focus && get_allocation_coords (container, old_focus, &old_allocation))
     {
       gint compare_y1;
       gint compare_y2;
       gint compare_x;
-      
+
       /* Delete widgets from list that don't match minimum criteria */
 
       compare_y1 = old_allocation.y;
@@ -2579,7 +2579,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
 	compare_x = old_allocation.x;
       else
 	compare_x = old_allocation.x + old_allocation.width;
-      
+
       tmp_list = children;
       while (tmp_list)
 	{
@@ -2587,14 +2587,14 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
 	  GList *next = tmp_list->next;
 	  gint child_y1, child_y2;
 	  GdkRectangle child_allocation;
-	  
+
 	  if (child != old_focus)
 	    {
 	      if (get_allocation_coords (container, child, &child_allocation))
 		{
 		  child_y1 = child_allocation.y;
 		  child_y2 = child_allocation.y + child_allocation.height;
-		  
+
 		  if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
 		      (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
 		      (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
@@ -2605,7 +2605,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
 	      else
 		children = g_list_delete_link (children, tmp_list);
 	    }
-	  
+
 	  tmp_list = next;
 	}
 
@@ -2633,7 +2633,7 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
 	  else
 	    compare.y = allocation.height / 2;
 	}
-      
+
       if (!gtk_widget_get_has_window (widget))
 	compare.x = (direction == GTK_DIR_RIGHT) ? allocation.x : allocation.x + allocation.width;
       else
@@ -2659,10 +2659,10 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  *             (Note, this argument isn't used for GTK_DIR_TAB_*,
  *              which is the only @direction we use currently,
  *              so perhaps this argument should be removed)
- * 
+ *
  * Sorts @children in the correct order for focusing with
  * direction type @direction.
- * 
+ *
  * Return value: a copy of @children, sorted in correct focusing order,
  *   with children that aren't suitable for focusing in this direction
  *   removed.
@@ -2681,7 +2681,7 @@ _gtk_container_focus_sort (GtkContainer     *container,
 	visible_children = g_list_prepend (visible_children, children->data);
       children = children->next;
     }
-  
+
   switch (direction)
     {
     case GTK_DIR_TAB_FORWARD:
@@ -2718,7 +2718,7 @@ gtk_container_focus_move (GtkContainer     *container,
 
       if (!child)
 	continue;
-      
+
       if (focus_child)
         {
           if (focus_child == child)
@@ -2757,7 +2757,7 @@ chain_widget_destroyed (GtkWidget *widget,
 {
   GtkContainer *container;
   GList *chain;
-  
+
   container = GTK_CONTAINER (user_data);
 
   chain = g_object_get_data (G_OBJECT (container),
@@ -2768,10 +2768,10 @@ chain_widget_destroyed (GtkWidget *widget,
   g_signal_handlers_disconnect_by_func (widget,
                                         chain_widget_destroyed,
                                         user_data);
-  
+
   g_object_set_data (G_OBJECT (container),
                      I_("gtk-container-focus-chain"),
-                     chain);  
+                     chain);
 }
 
 /**
@@ -2781,11 +2781,11 @@ chain_widget_destroyed (GtkWidget *widget,
  *     the new focus chain
  *
  * Sets a focus chain, overriding the one computed automatically by GTK+.
- * 
- * In principle each widget in the chain should be a descendant of the 
- * container, but this is not enforced by this method, since it's allowed 
- * to set the focus chain before you pack the widgets, or have a widget 
- * in the chain that isn't always packed. The necessary checks are done 
+ *
+ * In principle each widget in the chain should be a descendant of the
+ * container, but this is not enforced by this method, since it's allowed
+ * to set the focus chain before you pack the widgets, or have a widget
+ * in the chain that isn't always packed. The necessary checks are done
  * when the focus chain is actually traversed.
  **/
 void
@@ -2795,22 +2795,22 @@ gtk_container_set_focus_chain (GtkContainer *container,
   GList *chain;
   GList *tmp_list;
   GtkContainerPrivate *priv;
-  
+
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
   priv = container->priv;
-  
+
   if (priv->has_focus_chain)
     gtk_container_unset_focus_chain (container);
 
   priv->has_focus_chain = TRUE;
-  
+
   chain = NULL;
   tmp_list = focusable_widgets;
   while (tmp_list != NULL)
     {
       g_return_if_fail (GTK_IS_WIDGET (tmp_list->data));
-      
+
       /* In principle each widget in the chain should be a descendant
        * of the container, but we don't want to check that here, it's
        * expensive and also it's allowed to set the focus chain before
@@ -2824,12 +2824,12 @@ gtk_container_set_focus_chain (GtkContainer *container,
                         "destroy",
                         G_CALLBACK (chain_widget_destroyed),
                         container);
-      
+
       tmp_list = g_list_next (tmp_list);
     }
 
   chain = g_list_reverse (chain);
-  
+
   g_object_set_data (G_OBJECT (container),
                      I_("gtk-container-focus-chain"),
                      chain);
@@ -2844,14 +2844,14 @@ gtk_container_set_focus_chain (GtkContainer *container,
  *                     using g_list_free() when you are done with it, however
  *                     no additional reference count is added to the
  *                     individual widgets in the focus chain.
- * 
+ *
  * Retrieves the focus chain of the container, if one has been
  * set explicitly. If no focus chain has been explicitly
  * set, GTK+ computes the focus chain based on the positions
  * of the children. In that case, GTK+ stores %NULL in
  * @focusable_widgets and returns %FALSE.
  *
- * Return value: %TRUE if the focus chain of the container 
+ * Return value: %TRUE if the focus chain of the container
  * has been set explicitly.
  **/
 gboolean
@@ -2878,7 +2878,7 @@ gtk_container_get_focus_chain (GtkContainer *container,
 /**
  * gtk_container_unset_focus_chain:
  * @container: a #GtkContainer
- * 
+ *
  * Removes a focus chain explicitly set with gtk_container_set_focus_chain().
  **/
 void
@@ -2894,12 +2894,12 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
     {
       GList *chain;
       GList *tmp_list;
-      
+
       chain = get_focus_chain (container);
-      
+
       priv->has_focus_chain = FALSE;
-      
-      g_object_set_data (G_OBJECT (container), 
+
+      g_object_set_data (G_OBJECT (container),
                          I_("gtk-container-focus-chain"),
                          NULL);
 
@@ -2909,7 +2909,7 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
           g_signal_handlers_disconnect_by_func (tmp_list->data,
                                                 chain_widget_destroyed,
                                                 container);
-          
+
           tmp_list = g_list_next (tmp_list);
         }
 
@@ -2920,18 +2920,18 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
 /**
  * gtk_container_set_focus_vadjustment:
  * @container: a #GtkContainer
- * @adjustment: an adjustment which should be adjusted when the focus 
+ * @adjustment: an adjustment which should be adjusted when the focus
  *   is moved among the descendents of @container
- * 
- * Hooks up an adjustment to focus handling in a container, so when a 
- * child of the container is focused, the adjustment is scrolled to 
- * show that widget. This function sets the vertical alignment. See 
- * gtk_scrolled_window_get_vadjustment() for a typical way of obtaining 
+ *
+ * Hooks up an adjustment to focus handling in a container, so when a
+ * child of the container is focused, the adjustment is scrolled to
+ * show that widget. This function sets the vertical alignment. See
+ * gtk_scrolled_window_get_vadjustment() for a typical way of obtaining
  * the adjustment and gtk_container_set_focus_hadjustment() for setting
  * the horizontal adjustment.
  *
- * The adjustments have to be in pixel units and in the same coordinate 
- * system as the allocation for immediate children of the container. 
+ * The adjustments have to be in pixel units and in the same coordinate
+ * system as the allocation for immediate children of the container.
  */
 void
 gtk_container_set_focus_vadjustment (GtkContainer  *container,
@@ -2964,7 +2964,7 @@ GtkAdjustment *
 gtk_container_get_focus_vadjustment (GtkContainer *container)
 {
   GtkAdjustment *vadjustment;
-    
+
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
 
   vadjustment = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
@@ -2975,18 +2975,18 @@ gtk_container_get_focus_vadjustment (GtkContainer *container)
 /**
  * gtk_container_set_focus_hadjustment:
  * @container: a #GtkContainer
- * @adjustment: an adjustment which should be adjusted when the focus is 
+ * @adjustment: an adjustment which should be adjusted when the focus is
  *   moved among the descendents of @container
- * 
- * Hooks up an adjustment to focus handling in a container, so when a child 
- * of the container is focused, the adjustment is scrolled to show that 
- * widget. This function sets the horizontal alignment. 
- * See gtk_scrolled_window_get_hadjustment() for a typical way of obtaining 
+ *
+ * Hooks up an adjustment to focus handling in a container, so when a child
+ * of the container is focused, the adjustment is scrolled to show that
+ * widget. This function sets the horizontal alignment.
+ * See gtk_scrolled_window_get_hadjustment() for a typical way of obtaining
  * the adjustment and gtk_container_set_focus_vadjustment() for setting
  * the vertical adjustment.
  *
- * The adjustments have to be in pixel units and in the same coordinate 
- * system as the allocation for immediate children of the container. 
+ * The adjustments have to be in pixel units and in the same coordinate
+ * system as the allocation for immediate children of the container.
  */
 void
 gtk_container_set_focus_hadjustment (GtkContainer  *container,
@@ -3047,13 +3047,13 @@ gtk_container_draw_child (GtkWidget *child,
     GtkWidget *container;
     cairo_t *cr;
   } *data = client_data;
-  
+
   gtk_container_propagate_draw (GTK_CONTAINER (data->container),
 				child,
 				data->cr);
 }
 
-static gint 
+static gint
 gtk_container_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
@@ -3064,11 +3064,11 @@ gtk_container_draw (GtkWidget *widget,
 
   data.container = widget;
   data.cr = cr;
-  
+
   gtk_container_forall (GTK_CONTAINER (widget),
                         gtk_container_draw_child,
 			&data);
-  
+
   return FALSE;
 }
 
@@ -3113,7 +3113,7 @@ gtk_container_unmap (GtkWidget *widget)
  * @container: a #GtkContainer
  * @child: a child of @container
  * @cr: Cairo context as passed to the container. If you want to use @cr
- *   in container's draw function, consider using cairo_save() and 
+ *   in container's draw function, consider using cairo_save() and
  *   cairo_restore() before calling this function.
  *
  * When a container receives a call to the draw function, it must send
@@ -3127,9 +3127,9 @@ gtk_container_unmap (GtkWidget *widget)
  * and deciding whether the draw needs to be sent to the child. It is a
  * convenient and optimized way of getting the same effect as calling
  * gtk_widget_draw() on the child directly.
- * 
+ *
  * In most cases, a container can simply either inherit the
- * #GtkWidget::draw implementation from #GtkContainer, or do some drawing 
+ * #GtkWidget::draw implementation from #GtkContainer, or do some drawing
  * and then chain to the ::draw implementation from #GtkContainer.
  **/
 void
@@ -3172,7 +3172,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
     }
 
   window = gtk_widget_get_window (GTK_WIDGET (container));
-  
+
   for (w = gtk_widget_get_window (child); w && w != window; w = gdk_window_get_parent (w))
     {
       int wx, wy;

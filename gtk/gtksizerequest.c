@@ -247,7 +247,7 @@ compute_size_for_orientation (GtkWidget         *widget,
               int ignored_position = 0;
               int natural_height;
 
-	      /* Pull the base natural height from the cache as it's needed to adjust 
+	      /* Pull the base natural height from the cache as it's needed to adjust
 	       * the proposed 'for_size' */
 	      gtk_widget_get_preferred_height (widget, NULL, &natural_height);
 
@@ -279,7 +279,7 @@ compute_size_for_orientation (GtkWidget         *widget,
               int ignored_position = 0;
               int natural_width;
 
-	      /* Pull the base natural width from the cache as it's needed to adjust 
+	      /* Pull the base natural width from the cache as it's needed to adjust
 	       * the proposed 'for_size' */
 	      gtk_widget_get_preferred_width (widget, NULL, &natural_width);
 
@@ -353,7 +353,7 @@ compute_size_for_orientation (GtkWidget         *widget,
           cached_size->natural_size = adjusted_natural;
         }
 
-      /* Update size-groups with our request and update our cached requests 
+      /* Update size-groups with our request and update our cached requests
        * with the size-group values in a single pass.
        */
       _gtk_size_group_bump_requisition (widget,
@@ -426,7 +426,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup that have been applied. That is, the returned request
+ * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -454,7 +454,7 @@ gtk_widget_get_preferred_width (GtkWidget *widget,
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup that have been applied. That is, the returned request
+ * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -483,7 +483,7 @@ gtk_widget_get_preferred_height (GtkWidget *widget,
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup that have been applied. That is, the returned request
+ * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -511,7 +511,7 @@ gtk_widget_get_preferred_width_for_height (GtkWidget *widget,
  *
  * The returned request will be modified by the
  * GtkWidgetClass::adjust_size_request virtual method and by any
- * #GtkSizeGroup that have been applied. That is, the returned request
+ * #GtkSizeGroup<!-- -->s that have been applied. That is, the returned request
  * is the one that should be used for layout, not necessarily the one
  * returned by the widget itself.
  *
@@ -533,15 +533,15 @@ gtk_widget_get_preferred_height_for_width (GtkWidget *widget,
  * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
  * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
  *
- * Retrieves the minimum and natural size of a widget taking
+ * Retrieves the minimum and natural size of a widget, taking
  * into account the widget's preference for height-for-width management.
  *
  * This is used to retrieve a suitable size by container widgets which do
  * not impose any restrictions on the child placement. It can be used
  * to deduce toplevel window and menu sizes as well as child widgets in
- * free form containers such as GtkLayout.
+ * free-form containers such as GtkLayout.
  *
- * <note><para>Handle with care, note that the natural height of a height-for-width
+ * <note><para>Handle with care. Note that the natural height of a height-for-width
  * widget will generally be a smaller size than the minimum height, since the required
  * height for the natural width is generally smaller than the required height for
  * the minimum width.</para></note>
@@ -622,14 +622,14 @@ compare_gap (gconstpointer p1,
 }
 
 /**
- * gtk_distribute_natural_allocation: 
+ * gtk_distribute_natural_allocation:
  * @extra_space: Extra space to redistribute among children after subtracting
  *               minimum sizes and any child padding from the overall allocation
  * @n_requested_sizes: Number of requests to fit into the allocation
  * @sizes: An array of structs with a client pointer and a minimum/natural size
  *         in the orientation of the allocation.
  *
- * Distributes @extra_space to child @sizes by bringing up smaller
+ * Distributes @extra_space to child @sizes by bringing smaller
  * children up to natural size first.
  *
  * The remaining space will be added to the @minimum_size member of the
@@ -639,7 +639,7 @@ compare_gap (gconstpointer p1,
  * Returns: The remainder of @extra_space after redistributing space
  * to @sizes.
  */
-gint 
+gint
 gtk_distribute_natural_allocation (gint              extra_space,
 				   guint             n_requested_sizes,
 				   GtkRequestedSize *sizes)
@@ -670,12 +670,12 @@ gtk_distribute_natural_allocation (gint              extra_space,
    * The following code distributes the additional space by following
    * these rules.
    */
-  
+
   /* Sort descending by gap and position. */
   g_qsort_with_data (spreading,
 		     n_requested_sizes, sizeof (guint),
 		     compare_gap, sizes);
-  
+
   /* Distribute available space.
    * This master piece of a loop was conceived by Behdad Esfahbod.
    */
@@ -688,14 +688,13 @@ gtk_distribute_natural_allocation (gint              extra_space,
       gint glue = (extra_space + i) / (i + 1);
       gint gap = sizes[(spreading[i])].natural_size
 	- sizes[(spreading[i])].minimum_size;
-      
+
       gint extra = MIN (glue, gap);
-      
+
       sizes[spreading[i]].minimum_size += extra;
-      
+
       extra_space -= extra;
     }
 
   return extra_space;
 }
-
