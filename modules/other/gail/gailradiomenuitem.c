@@ -62,6 +62,7 @@ static void
 gail_radio_menu_item_init (GailRadioMenuItem *radio_menu_item)
 {
   radio_menu_item->old_group = NULL;
+  radio_menu_item->old_group_size = 0;
 }
 
 AtkRelationSet*
@@ -69,7 +70,9 @@ gail_radio_menu_item_ref_relation_set (AtkObject *obj)
 {
   GtkWidget *widget;
   AtkRelationSet *relation_set;
+  GtkRadioGroup *group;
   GSList *list;
+  guint list_length;
   GailRadioMenuItem *radio_menu_item;
 
   g_return_val_if_fail (GAIL_IS_RADIO_MENU_ITEM (obj), NULL);
@@ -89,9 +92,12 @@ gail_radio_menu_item_ref_relation_set (AtkObject *obj)
   /*
    * If the radio menu_item'group has changed remove the relation
    */
-  list = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (widget));
-  
-  if (radio_menu_item->old_group != list)
+  group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (widget));
+  list = gtk_radio_group_get_items (group);
+  list_length = g_slist_length (list);
+
+  if (radio_menu_item->old_group != group ||
+      radio_menu_item->old_group_size != list_length)
     {
       AtkRelation *relation;
 
@@ -105,15 +111,14 @@ gail_radio_menu_item_ref_relation_set (AtkObject *obj)
      * Get the members of the menu_item group
      */
 
-    radio_menu_item->old_group = list;
+    radio_menu_item->old_group = group;
+    radio_menu_item->old_group_size = list_length;
     if (list)
     {
       AtkObject **accessible_array;
-      guint list_length;
       AtkRelation* relation;
       gint i = 0;
 
-      list_length = g_slist_length (list);
       accessible_array = (AtkObject**) g_malloc (sizeof (AtkObject *) * 
                           list_length);
       while (list != NULL)
@@ -135,5 +140,6 @@ gail_radio_menu_item_ref_relation_set (AtkObject *obj)
       g_object_unref (relation);
     }
   }
+  g_slist_free (list);
   return relation_set;
 }

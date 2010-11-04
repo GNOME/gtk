@@ -35,7 +35,7 @@ create_menu (gint     depth,
 {
   GtkWidget *menu;
   GtkWidget *menuitem;
-  GSList *group;
+  GtkRadioGroup *group;
   char buf[32];
   int i, j;
 
@@ -52,11 +52,11 @@ create_menu (gint     depth,
       gtk_widget_show (menuitem);
     }
 
+  group = gtk_radio_group_new ();
   for (i = 0, j = 1; i < 5; i++, j++)
     {
       sprintf (buf, "item %2d - %d", depth, j);
       menuitem = gtk_radio_menu_item_new_with_label (group, buf);
-      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
 
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
       gtk_widget_show (menuitem);

@@ -28,6 +28,7 @@
 #include "gtkaccellabel.h"
 #include "gtkmarshalers.h"
 #include "gtkradiomenuitem.h"
+#include "gtkradiogroupprivate.h"
 #include "gtkactivatable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
@@ -35,7 +36,7 @@
 
 struct _GtkRadioMenuItemPrivate
 {
-  GSList *group;
+  GtkRadioGroup *group;
 };
 
 enum {
@@ -60,7 +61,7 @@ static guint group_changed_signal = 0;
 G_DEFINE_TYPE (GtkRadioMenuItem, gtk_radio_menu_item, GTK_TYPE_CHECK_MENU_ITEM)
 
 GtkWidget*
-gtk_radio_menu_item_new (GSList *group)
+gtk_radio_menu_item_new (GtkRadioGroup *group)
 {
   GtkRadioMenuItem *radio_menu_item;
 
@@ -83,14 +84,14 @@ gtk_radio_menu_item_set_property (GObject      *object,
 
   switch (prop_id)
     {
-      GSList *slist;
+      GtkRadioGroup *group;
 
     case PROP_GROUP:
       if (G_VALUE_HOLDS_OBJECT (value))
-	slist = gtk_radio_menu_item_get_group ((GtkRadioMenuItem*) g_value_get_object (value));
+	group = gtk_radio_menu_item_get_group ((GtkRadioMenuItem*) g_value_get_object (value));
       else
-	slist = NULL;
-      gtk_radio_menu_item_set_group (radio_menu_item, slist);
+	group = NULL;
+      gtk_radio_menu_item_set_group (radio_menu_item, group);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -114,60 +115,41 @@ gtk_radio_menu_item_get_property (GObject    *object,
 
 void
 gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
-			       GSList           *group)
+			       GtkRadioGroup           *group)
 {
   GtkRadioMenuItemPrivate *priv;
-  GtkWidget *old_group_singleton = NULL;
-  GtkWidget *new_group_singleton = NULL;
-  
+  GObject *old_group_singleton = NULL;
+  GObject *new_group_singleton;
+  GObject *old_group_active;
+  gboolean is_active;
+
   g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item));
-  g_return_if_fail (!g_slist_find (group, radio_menu_item));
 
   priv = radio_menu_item->priv;
 
+  if (priv->group == group)
+    return;
+
+  if (group == NULL)
+    group = gtk_radio_group_new ();
+
   if (priv->group)
     {
-      GSList *slist;
+      _gtk_radio_group_remove_item (priv->group, G_OBJECT (radio_menu_item));
+      old_group_singleton = _gtk_radio_group_get_singleton (priv->group);
 
-      priv->group = g_slist_remove (priv->group, radio_menu_item);
+      /* Ensure some widget is active in the old group */
+      old_group_active = gtk_radio_group_get_active_item (priv->group);
+      if (old_group_active)
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (old_group_active), TRUE);
 
-      if (priv->group && !priv->group->next)
-	old_group_singleton = g_object_ref (priv->group->data);
-
-      for (slist = priv->group; slist; slist = slist->next)
-	{
-	  GtkRadioMenuItem *tmp_item;
-	  
-	  tmp_item = slist->data;
-
-	  tmp_item->priv->group = priv->group;
-	}
+      g_object_unref (priv->group);
     }
-  
-  if (group && !group->next)
-    new_group_singleton = g_object_ref (group->data);
 
-  priv->group = g_slist_prepend (group, radio_menu_item);
+  priv->group = g_object_ref_sink (group);
+  new_group_singleton = _gtk_radio_group_get_singleton (group);
 
-  if (group)
-    {
-      GSList *slist;
-      
-      for (slist = group; slist; slist = slist->next)
-	{
-	  GtkRadioMenuItem *tmp_item;
-	  
-	  tmp_item = slist->data;
-
-	  tmp_item->priv->group = priv->group;
-	}
-    }
-  else
-    {
-      _gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (radio_menu_item), TRUE);
-      /* gtk_widget_set_state (GTK_WIDGET (radio_menu_item), GTK_STATE_ACTIVE);
-       */
-    }
+  _gtk_radio_group_add_item (group, G_OBJECT (radio_menu_item));
 
   g_object_ref (radio_menu_item);
 
@@ -184,13 +166,18 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
       g_object_unref (new_group_singleton);
     }
 
+  is_active = gtk_radio_group_get_active_item (group) == G_OBJECT (radio_menu_item);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (radio_menu_item), is_active);
+  if (is_active)
+    _gtk_radio_group_emit_active_changed (group);
+
   g_object_unref (radio_menu_item);
 }
 
 
 /**
  * gtk_radio_menu_item_new_with_label:
- * @group: (element-type GtkRadioMenuItem) (transfer full):
+ * @group: a #GtkRadioMenuItem or %NULL
  * @label: the text for the label
  *
  * Creates a new #GtkRadioMenuItem whose child is a simple #GtkLabel.
@@ -198,7 +185,7 @@ gtk_radio_menu_item_set_group (GtkRadioMenuItem *radio_menu_item,
  * Returns: (transfer none): A new #GtkRadioMenuItem
  */
 GtkWidget*
-gtk_radio_menu_item_new_with_label (GSList *group,
+gtk_radio_menu_item_new_with_label (GtkRadioGroup *group,
 				    const gchar *label)
 {
   GtkWidget *radio_menu_item;
@@ -227,7 +214,7 @@ gtk_radio_menu_item_new_with_label (GSList *group,
  * in @label indicate the mnemonic for the menu item.
  **/
 GtkWidget*
-gtk_radio_menu_item_new_with_mnemonic (GSList *group,
+gtk_radio_menu_item_new_with_mnemonic (GtkRadioGroup *group,
 				       const gchar *label)
 {
   GtkWidget *radio_menu_item;
@@ -258,14 +245,14 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 GtkWidget *
 gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
 {
-  GSList *list = NULL;
-  
+  GtkRadioGroup *radio_group = NULL;
+
   g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
 
   if (group)
-    list = gtk_radio_menu_item_get_group (group);
-  
-  return gtk_radio_menu_item_new (list);
+    radio_group = gtk_radio_menu_item_get_group (group);
+
+  return gtk_radio_menu_item_new (radio_group);
 }
 
 /**
@@ -288,14 +275,14 @@ GtkWidget *
 gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
 						   const gchar *label)
 {
-  GSList *list = NULL;
+  GtkRadioGroup *radio_group = NULL;
 
   g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
 
   if (group)
-    list = gtk_radio_menu_item_get_group (group);
+    radio_group = gtk_radio_menu_item_get_group (group);
 
-  return gtk_radio_menu_item_new_with_mnemonic (list, label);
+  return gtk_radio_menu_item_new_with_mnemonic (radio_group, label);
 }
 
 /**
@@ -314,29 +301,45 @@ GtkWidget *
 gtk_radio_menu_item_new_with_label_from_widget (GtkRadioMenuItem *group,
 						const gchar *label)
 {
-  GSList *list = NULL;
+  GtkRadioGroup *radio_group = NULL;
 
   g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
 
   if (group)
-    list = gtk_radio_menu_item_get_group (group);
+    radio_group = gtk_radio_menu_item_get_group (group);
 
-  return gtk_radio_menu_item_new_with_label (list, label);
+  return gtk_radio_menu_item_new_with_label (radio_group, label);
 }
+
+static void
+gtk_radio_menu_item_ensure_group (GtkRadioMenuItem *radio_menu_item)
+{
+  GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
+
+  if (priv->group == NULL)
+    {
+      priv->group = g_object_ref_sink (gtk_radio_group_new ());
+      _gtk_radio_group_add_item (priv->group, G_OBJECT (radio_menu_item));
+    }
+}
+
 
 /**
  * gtk_radio_menu_item_get_group:
  * @radio_menu_item: a #GtkRadioMenuItem
  *
- * Returns the group to which the radio menu item belongs, as a #GList of
- * #GtkRadioMenuItem. The list belongs to GTK+ and should not be freed.
+ * Retrieves the group to which the radio menu item belongs.
  *
- * Returns: (transfer none): the group of @radio_menu_item
+ * Return value: (transfer none): a #GtkRadioGroup
+ * containing all the radio menu items in the same group
+ * as @radio_menu_button.
  */
-GSList*
+GtkRadioGroup*
 gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)
 {
   g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item), NULL);
+
+  gtk_radio_menu_item_ensure_group (radio_menu_item);
 
   return radio_menu_item->priv->group;
 }
@@ -409,7 +412,7 @@ gtk_radio_menu_item_init (GtkRadioMenuItem *radio_menu_item)
                                                        GtkRadioMenuItemPrivate);
   priv = radio_menu_item->priv;
 
-  priv->group = g_slist_prepend (NULL, radio_menu_item);
+  priv->group = NULL;
   gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (radio_menu_item), TRUE);
 }
 
@@ -418,30 +421,20 @@ gtk_radio_menu_item_destroy (GtkWidget *widget)
 {
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (widget);
   GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
-  GtkWidget *old_group_singleton = NULL;
-  GtkRadioMenuItem *tmp_menu_item;
-  GSList *tmp_list;
-  gboolean was_in_group;
+  GObject *old_group_singleton = NULL;
+  gboolean was_in_group = FALSE;
 
-  was_in_group = priv->group && priv->group->next;
-
-  priv->group = g_slist_remove (priv->group, radio_menu_item);
-  if (priv->group && !priv->group->next)
-    old_group_singleton = priv->group->data;
-
-  tmp_list = priv->group;
-
-  while (tmp_list)
+  if (priv->group)
     {
-      tmp_menu_item = tmp_list->data;
-      tmp_list = tmp_list->next;
+      _gtk_radio_group_remove_item (priv->group, G_OBJECT (radio_menu_item));
+      was_in_group = !_gtk_radio_group_is_empty (priv->group);
+      old_group_singleton = _gtk_radio_group_get_singleton (priv->group);
 
-      tmp_menu_item->priv->group = priv->group;
+      /* this menu item is no longer in the group */
+      g_object_unref (priv->group);
+      priv->group = NULL;
     }
 
-  /* this radio menu item is no longer in the group */
-  priv->group = NULL;
-  
   if (old_group_singleton)
     g_signal_emit (old_group_singleton, group_changed_signal, 0);
   if (was_in_group)
@@ -456,11 +449,12 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   GtkRadioMenuItem *radio_menu_item = GTK_RADIO_MENU_ITEM (menu_item);
   GtkRadioMenuItemPrivate *priv = radio_menu_item->priv;
   GtkCheckMenuItem *check_menu_item = GTK_CHECK_MENU_ITEM (menu_item);
-  GtkCheckMenuItem *tmp_menu_item;
   GtkAction        *action;
-  GSList *tmp_list;
+  GObject *active_item;
   gboolean active;
   gint toggled;
+
+  gtk_radio_menu_item_ensure_group (radio_menu_item);
 
   action = gtk_activatable_get_related_action (GTK_ACTIVATABLE (menu_item));
   if (action && gtk_menu_item_get_submenu (menu_item) == NULL)
@@ -471,22 +465,9 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
   active = gtk_check_menu_item_get_active (check_menu_item);
   if (active)
     {
-      tmp_menu_item = NULL;
-      tmp_list = priv->group;
+      active_item = gtk_radio_group_get_active_item (priv->group);
 
-      while (tmp_list)
-	{
-	  tmp_menu_item = tmp_list->data;
-	  tmp_list = tmp_list->next;
-
-          if (gtk_check_menu_item_get_active (tmp_menu_item) &&
-              tmp_menu_item != check_menu_item)
-	    break;
-
-	  tmp_menu_item = NULL;
-	}
-
-      if (tmp_menu_item)
+      if (active_item != G_OBJECT (menu_item))
 	{
 	  toggled = TRUE;
           _gtk_check_menu_item_set_active (check_menu_item, !active);
@@ -497,24 +478,17 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
       toggled = TRUE;
       _gtk_check_menu_item_set_active (check_menu_item, !active);
 
-      tmp_list = priv->group;
-      while (tmp_list)
-	{
-	  tmp_menu_item = tmp_list->data;
-	  tmp_list = tmp_list->next;
-
-          if (gtk_check_menu_item_get_active (tmp_menu_item) &&
-              tmp_menu_item != check_menu_item)
-	    {
-              gtk_menu_item_activate (GTK_MENU_ITEM (tmp_menu_item));
-	      break;
-	    }
-	}
+      active_item = gtk_radio_group_get_active_item (priv->group);
+      _gtk_radio_group_set_active_item (priv->group, G_OBJECT (menu_item));
+      if (active_item != G_OBJECT (menu_item))
+	gtk_menu_item_activate (GTK_MENU_ITEM (active_item));
     }
 
   if (toggled)
     {
       gtk_check_menu_item_toggled (check_menu_item);
+      if (gtk_check_menu_item_get_active (check_menu_item))
+	_gtk_radio_group_emit_active_changed (priv->group);
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (radio_menu_item));

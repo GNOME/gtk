@@ -38,7 +38,8 @@ struct _GailRadioMenuItem
 {
   GailCheckMenuItem parent;
 
-  GSList *old_group;
+  GtkRadioGroup *old_group;
+  guint old_group_size;
 };
 
 GType gail_radio_menu_item_get_type (void);
