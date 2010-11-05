@@ -3412,6 +3412,8 @@ gtk_window_realize_icon (GtkWindow *window)
     }
 
   info->realized = TRUE;
+
+  gdk_window_set_icon_list (gtk_widget_get_window (widget), icon_list);
   
   if (info->using_themed_icon) 
     {
