@@ -80,11 +80,13 @@ GtkWidget*     gtk_radio_menu_item_new_with_label                (GtkRadioGroup 
 								  const gchar      *label);
 GtkWidget*     gtk_radio_menu_item_new_with_mnemonic             (GtkRadioGroup    *group,
 								  const gchar      *label);
+#ifndef GTK_DISABLE_DEPRECATED
 GtkWidget*     gtk_radio_menu_item_new_from_widget               (GtkRadioMenuItem *group);
 GtkWidget *    gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
 								  const gchar      *label);
 GtkWidget *    gtk_radio_menu_item_new_with_label_from_widget    (GtkRadioMenuItem *group,
 								  const gchar      *label);
+#endif
 GtkRadioGroup* gtk_radio_menu_item_get_group                     (GtkRadioMenuItem *radio_menu_item);
 void           gtk_radio_menu_item_set_group                     (GtkRadioMenuItem *radio_menu_item,
 								  GtkRadioGroup    *group);

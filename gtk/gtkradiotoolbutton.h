@@ -63,9 +63,11 @@ GType        gtk_radio_tool_button_get_type       (void) G_GNUC_CONST;
 GtkToolItem *  gtk_radio_tool_button_new                        (GtkRadioGroup      *group);
 GtkToolItem *  gtk_radio_tool_button_new_from_stock             (GtkRadioGroup      *group,
 								 const gchar        *stock_id);
+#ifndef GTK_DISABLE_DEPRECATED
 GtkToolItem *  gtk_radio_tool_button_new_from_widget            (GtkRadioToolButton *group);
 GtkToolItem *  gtk_radio_tool_button_new_with_stock_from_widget (GtkRadioToolButton *group,
 								 const gchar        *stock_id);
+#endif
 GtkRadioGroup *gtk_radio_tool_button_get_group                  (GtkRadioToolButton *button);
 void           gtk_radio_tool_button_set_group                  (GtkRadioToolButton *button,
 								 GtkRadioGroup      *group);
