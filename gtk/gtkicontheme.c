@@ -3722,7 +3722,8 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
           for (l = list; l; l = l->next)
             {
               emblem = g_emblem_get_icon (G_EMBLEM (l->data));
-              emblem_info = gtk_icon_theme_lookup_by_gicon (icon_theme, emblem, size / 2, flags);
+	      /* always force size for emblems */
+              emblem_info = gtk_icon_theme_lookup_by_gicon (icon_theme, emblem, size / 2, flags | GTK_ICON_LOOKUP_FORCE_SIZE);
               if (emblem_info)
                 info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
             }
