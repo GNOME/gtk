@@ -143,6 +143,7 @@ struct _GtkIconInfo
   GdkPixbuf *pixbuf;
   GError *load_error;
   gdouble scale;
+  gboolean emblems_applied;
 
   guint ref_count;
 };
@@ -2784,6 +2785,9 @@ apply_emblems (GtkIconInfo *info)
   if (info->emblem_infos == NULL)
     return;
 
+  if (info->emblems_applied)
+    return;
+
   w = gdk_pixbuf_get_width (info->pixbuf);
   h = gdk_pixbuf_get_height (info->pixbuf);
 
@@ -2846,6 +2850,8 @@ apply_emblems (GtkIconInfo *info)
       g_object_unref (info->pixbuf);
       info->pixbuf = icon;
     }
+
+  info->emblems_applied = TRUE;
 }
 
 /* This function contains the complicated logic for deciding
@@ -2867,7 +2873,10 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
     return TRUE;
 
   if (icon_info->pixbuf)
-    return TRUE;
+    {
+      apply_emblems (icon_info);
+      return TRUE;
+    }
 
   if (icon_info->load_error)
     return FALSE;
@@ -3496,6 +3505,39 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
                 info->emblem_infos = g_slist_prepend (info->emblem_infos, emblem_info);
             }
         }
+
+      return info;
+    }
+  else if (GDK_IS_PIXBUF (icon))
+    {
+      GdkPixbuf *pixbuf;
+
+      pixbuf = GDK_PIXBUF (icon);
+
+      if ((flags & GTK_ICON_LOOKUP_FORCE_SIZE) != 0)
+	{
+	  gint width, height, max;
+	  gdouble scale;
+	  GdkPixbuf *scaled;
+
+	  width = gdk_pixbuf_get_width (pixbuf);
+	  height = gdk_pixbuf_get_height (pixbuf);
+	  max = MAX (width, height);
+	  scale = (gdouble) size / (gdouble) max;
+
+	  scaled = gdk_pixbuf_scale_simple (pixbuf,
+					    0.5 + width * scale,
+					    0.5 + height * scale,
+					    GDK_INTERP_BILINEAR);
+
+	  info = gtk_icon_info_new_for_pixbuf (icon_theme, scaled);
+
+	  g_object_unref (scaled);
+	}
+      else
+	{
+	  info = gtk_icon_info_new_for_pixbuf (icon_theme, pixbuf);
+	}
 
       return info;
     }
