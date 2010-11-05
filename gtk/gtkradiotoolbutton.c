@@ -36,6 +36,10 @@ static void gtk_radio_tool_button_set_property (GObject         *object,
 						guint            prop_id,
 						const GValue    *value,
 						GParamSpec      *pspec);
+static void gtk_radio_tool_button_get_property (GObject    *object,
+						guint       prop_id,
+						GValue     *value,
+						GParamSpec *pspec);
 
 G_DEFINE_TYPE (GtkRadioToolButton, gtk_radio_tool_button, GTK_TYPE_TOGGLE_TOOL_BUTTON)
 
@@ -49,7 +53,8 @@ gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass)
   toolbutton_class = (GtkToolButtonClass *)klass;
 
   object_class->set_property = gtk_radio_tool_button_set_property;
-  
+  object_class->get_property = gtk_radio_tool_button_get_property;
+
   toolbutton_class->button_type = GTK_TYPE_RADIO_BUTTON;  
 
   /**
@@ -63,9 +68,9 @@ gtk_radio_tool_button_class_init (GtkRadioToolButtonClass *klass)
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
 							P_("Group"),
-							P_("The radio tool button whose group this button belongs to."),
-							GTK_TYPE_RADIO_TOOL_BUTTON,
-							GTK_PARAM_WRITABLE));
+							P_("The radio group this tool button belongs to."),
+							GTK_TYPE_RADIO_GROUP,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
 }
 
@@ -90,16 +95,32 @@ gtk_radio_tool_button_set_property (GObject         *object,
     {
     case PROP_GROUP:
       {
-	GtkRadioToolButton *arg;
-	GtkRadioGroup *group = NULL;
-	if (G_VALUE_HOLDS_OBJECT (value))
-	  {
-	    arg = GTK_RADIO_TOOL_BUTTON (g_value_get_object (value));
-	    if (arg)
-	      group = gtk_radio_tool_button_get_group (arg);
-	    gtk_radio_tool_button_set_group (button, group);
-	  }
+	GtkRadioGroup *group;
+
+	group = g_value_get_object (value);
+	gtk_radio_tool_button_set_group (button, group);
       }
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_radio_tool_button_get_property (GObject    *object,
+				    guint       prop_id,
+				    GValue     *value,
+				    GParamSpec *pspec)
+{
+  GtkRadioToolButton *button;
+
+  button = GTK_RADIO_TOOL_BUTTON (object);
+
+  switch (prop_id)
+    {
+    case PROP_GROUP:
+      g_value_set_object (value, gtk_radio_tool_button_get_group (button));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -121,12 +142,11 @@ GtkToolItem *
 gtk_radio_tool_button_new (GtkRadioGroup *group)
 {
   GtkRadioToolButton *button;
-  
+
   button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON,
+			 "group", group,
 			 NULL);
 
-  gtk_radio_tool_button_set_group (button, group);
-  
   return GTK_TOOL_ITEM (button);
 }
 
@@ -150,14 +170,12 @@ gtk_radio_tool_button_new_from_stock (GtkRadioGroup *group,
   GtkRadioToolButton *button;
 
   g_return_val_if_fail (stock_id != NULL, NULL);
-  
+
   button = g_object_new (GTK_TYPE_RADIO_TOOL_BUTTON,
+			 "group", group,
 			 "stock-id", stock_id,
 			 NULL);
 
-
-  gtk_radio_tool_button_set_group (button, group);
-  
   return GTK_TOOL_ITEM (button);
 }
 

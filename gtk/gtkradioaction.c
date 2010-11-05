@@ -134,9 +134,9 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
 							P_("Group"),
-							P_("The radio action whose group this action belongs to."),
-							GTK_TYPE_RADIO_ACTION,
-							GTK_PARAM_WRITABLE));
+							P_("The radio group this action belongs to."),
+							GTK_TYPE_RADIO_GROUP,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   /**
    * GtkRadioAction:current-value:
@@ -263,18 +263,12 @@ gtk_radio_action_set_property (GObject         *object,
     case PROP_VALUE:
       radio_action->private_data->value = g_value_get_int (value);
       break;
-    case PROP_GROUP: 
+    case PROP_GROUP:
       {
-	GtkRadioAction *arg;
-	GtkRadioGroup *group = NULL;
+	GtkRadioGroup *group;
 
-	if (G_VALUE_HOLDS_OBJECT (value))
-	  {
-	    arg = GTK_RADIO_ACTION (g_value_get_object (value));
-	    if (arg)
-	      group = gtk_radio_action_get_group (arg);
-	    gtk_radio_action_set_group (radio_action, group);
-	  }
+	group = g_value_get_object (value);
+	gtk_radio_action_set_group (radio_action, group);
       }
       break;
     case PROP_CURRENT_VALUE:
@@ -299,6 +293,9 @@ gtk_radio_action_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_GROUP:
+      g_value_set_object (value, gtk_radio_action_get_group (radio_action));
+      break;
     case PROP_VALUE:
       g_value_set_int (value, radio_action->private_data->value);
       break;

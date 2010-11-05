@@ -163,9 +163,9 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 				   PROP_GROUP,
 				   g_param_spec_object ("group",
 							P_("Group"),
-							P_("The radio button whose group this widget belongs to."),
-							GTK_TYPE_RADIO_BUTTON,
-							GTK_PARAM_WRITABLE));
+							P_("The radio group this button belongs to."),
+							GTK_TYPE_RADIO_GROUP,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
   widget_class->destroy = gtk_radio_button_destroy;
   widget_class->focus = gtk_radio_button_focus;
 
@@ -235,15 +235,9 @@ gtk_radio_button_set_property (GObject      *object,
   switch (prop_id)
     {
       GtkRadioGroup *group;
-      GtkRadioButton *button;
 
     case PROP_GROUP:
-        button = g_value_get_object (value);
-
-      if (button)
-	group = gtk_radio_button_get_group (button);
-      else
-	group = NULL;
+      group = g_value_get_object (value);
       gtk_radio_button_set_group (radio_button, group);
       break;
     default:
@@ -258,8 +252,15 @@ gtk_radio_button_get_property (GObject    *object,
 			       GValue     *value,
 			       GParamSpec *pspec)
 {
+  GtkRadioButton *radio_button;
+
+  radio_button = GTK_RADIO_BUTTON (object);
+
   switch (prop_id)
     {
+    case PROP_GROUP:
+      g_value_set_object (value, gtk_radio_button_get_group (radio_button));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -365,10 +366,7 @@ gtk_radio_button_new (GtkRadioGroup *group)
 {
   GtkRadioButton *radio_button;
 
-  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, NULL);
-
-  if (group)
-    gtk_radio_button_set_group (radio_button, group);
+  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, "group", group, NULL);
 
   return GTK_WIDGET (radio_button);
 }
@@ -389,11 +387,7 @@ gtk_radio_button_new_with_label (GtkRadioGroup *group,
 {
   GtkWidget *radio_button;
 
-  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, "label", label, NULL) ;
-
-  if (group)
-    gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_button), group);
-
+  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, "group", group, "label", label, NULL) ;
   return radio_button;
 }
 
@@ -417,13 +411,11 @@ gtk_radio_button_new_with_mnemonic (GtkRadioGroup *group,
 {
   GtkWidget *radio_button;
 
-  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, 
-			       "label", label, 
-			       "use-underline", TRUE, 
+  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON,
+			       "group", group,
+			       "label", label,
+			       "use-underline", TRUE,
 			       NULL);
-
-  if (group)
-    gtk_radio_button_set_group (GTK_RADIO_BUTTON (radio_button), group);
 
   return radio_button;
 }

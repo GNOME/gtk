@@ -858,9 +858,9 @@ static GtkWidget *
 create_widget_grid (GType widget_type)
 {
   GtkWidget *table;
-  GtkWidget *group_widget = NULL;
+  GtkRadioGroup *group = NULL;
   gint i, j;
-  
+
   table = gtk_table_new (FALSE, 3, 3);
   
   for (i = 0; i < 5; i++)
@@ -892,10 +892,9 @@ create_widget_grid (GType widget_type)
 	      
 	      if (g_type_is_a (widget_type, GTK_TYPE_RADIO_BUTTON))
 		{
-		  if (!group_widget)
-		    group_widget = widget;
-		  else
-		    g_object_set (widget, "group", group_widget, NULL);
+		  if (!group)
+		    group = gtk_radio_group_new ();
+		  g_object_set (widget, "group", group, NULL);
 		}
 	    }
 	  
