@@ -34,10 +34,10 @@ main (int argc,
 
   pixbuf = gdk_pixbuf_new_from_file ("apple-red.png", NULL);
   toplevel = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12, FALSE);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
   gtk_container_add (GTK_CONTAINER (toplevel), hbox);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12, FALSE);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
 
   image = gtk_image_new_from_gicon (G_ICON (pixbuf), GTK_ICON_SIZE_DIALOG);
@@ -52,7 +52,7 @@ main (int argc,
   emblem = g_emblem_new (G_ICON (otherpix));
   emblemed = g_emblemed_icon_new (G_ICON (pixbuf), emblem);
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12, FALSE);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
   
   image2 = gtk_image_new_from_gicon (emblemed, GTK_ICON_SIZE_DIALOG);
