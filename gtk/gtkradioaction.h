@@ -81,8 +81,6 @@ GtkRadioAction *gtk_radio_action_new               (const gchar           *name,
 GtkRadioGroup  *gtk_radio_action_get_group         (GtkRadioAction        *action);
 void            gtk_radio_action_set_group         (GtkRadioAction        *action,
                                                     GtkRadioGroup         *group);
-void            gtk_radio_action_join_group        (GtkRadioAction        *action,
-                                                    GtkRadioAction        *group_source);
 gint            gtk_radio_action_get_current_value (GtkRadioAction        *action);
 void            gtk_radio_action_set_current_value (GtkRadioAction        *action,
                                                     gint                   current_value);

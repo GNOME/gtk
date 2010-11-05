@@ -352,52 +352,6 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 }
 
 /**
- * gtk_radio_button_join_group:
- * @radio_button: the #GtkRadioButton object
- * @group_source: (allow-none): a radio button object whos group we are 
- *   joining, or %NULL to remove the radio button from its group
- *
- * Joins a #GtkRadioButton object to the group of another #GtkRadioButton object
- *
- * Use this in language bindings instead of the gtk_radio_button_get_group() 
- * and gtk_radio_button_set_group() methods
- *
- * A common way to set up a group of radio buttons is the following:
- * |[
- *   GtkRadioButton *radio_button;
- *   GtkRadioButton *last_button;
- *
- *   while (/&ast; more buttons to add &ast;/)
- *     {
- *        radio_button = gtk_radio_button_new (...);
- *
- *        gtk_radio_button_join_group (radio_button, last_button);
- *        last_button = radio_button;
- *     }
- * ]|
- *
- * Since: 3.0
- */
-void
-gtk_radio_button_join_group (GtkRadioButton *radio_button, 
-			     GtkRadioButton *group_source)
-{
-  g_return_if_fail (GTK_IS_RADIO_BUTTON (radio_button));
-  g_return_if_fail (group_source == NULL || GTK_IS_RADIO_BUTTON (group_source));
-
-  if (group_source)
-    {
-      GtkRadioGroup *group;
-      group = gtk_radio_button_get_group (group_source);
-      gtk_radio_button_set_group (radio_button, group);
-    }
-  else
-    {
-      gtk_radio_button_set_group (radio_button, NULL);
-    }
-}
-
-/**
  * gtk_radio_button_new:
  * @group: an existing radio button group, or %NULL if you are creating a new group.
  *

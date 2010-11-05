@@ -456,61 +456,6 @@ gtk_radio_action_set_group (GtkRadioAction *action,
 }
 
 /**
- * gtk_radio_action_join_group:
- * @action: the action object
- * @group_source: (allow-none): a radio action object whos group we are 
- *   joining, or %NULL to remove the radio action from its group
- *
- * Joins a radio action object to the group of another radio action object.
- *
- * Use this in language bindings instead of the gtk_radio_action_get_group() 
- * and gtk_radio_action_set_group() methods
- *
- * A common way to set up a group of radio actions is the following:
- * |[
- *   GtkRadioAction *action;
- *   GtkRadioAction *last_action;
- *  
- *   while (/&ast; more actions to add &ast;/)
- *     {
- *        action = gtk_radio_action_new (...);
- *        
- *        gtk_radio_action_join_group (action, last_action);
- *        last_action = action;
- *     }
- * ]|
- * 
- * Since: 3.0
- */
-void
-gtk_radio_action_join_group (GtkRadioAction *action, 
-			     GtkRadioAction *group_source)
-{
-  g_return_if_fail (GTK_IS_RADIO_ACTION (action));
-  g_return_if_fail (group_source == NULL || GTK_IS_RADIO_ACTION (group_source));  
-
-  if (group_source)
-    {
-      GtkRadioGroup *group;
-      group = gtk_radio_action_get_group (group_source);
-
-      if (!group)
-        {
-          /* if we are not already part of a group we need to set up a new one
-             and then get the newly created group */
-          gtk_radio_action_set_group (group_source, NULL);
-          group = gtk_radio_action_get_group (group_source);
-        }
-
-      gtk_radio_action_set_group (action, group);
-    }
-  else
-    {
-      gtk_radio_action_set_group (action, NULL);
-    }
-}
-
-/**
  * gtk_radio_action_get_current_value:
  * @action: a #GtkRadioAction
  * 
