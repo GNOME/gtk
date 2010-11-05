@@ -1058,6 +1058,32 @@ gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
   return cell->priv->sensitive;
 }
 
+
+/**
+ * gtk_cell_renderer_can_focus:
+ * @cell: A #GtkCellRenderer
+ *
+ * Checks whether the cell renderer can receive focus.
+ *
+ * Returns: %TRUE if the cell renderer can do anything with keyboard focus
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_cell_renderer_can_focus (GtkCellRenderer *cell)
+{
+  GtkCellRendererPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (cell), FALSE);
+
+  priv = cell->priv;
+
+  return (cell->priv->visible &&
+	  (cell->priv->mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
+	   cell->priv->mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE));
+}
+
+
 /**
  * gtk_cell_renderer_stop_editing:
  * @cell: A #GtkCellRenderer

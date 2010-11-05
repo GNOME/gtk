@@ -1465,16 +1465,9 @@ gtk_cell_area_box_grab_focus (GtkCellArea      *area,
       for (list = first_cell ? g_list_first (group->cells) : g_list_last (group->cells); 
 	   list; list = first_cell ? list->next : list->prev)
 	{
-	  GtkCellRendererMode  mode;
-	  CellInfo            *info = list->data;
-
-	  /* XXX This does not handle cases where the cell
-	   * is not visible as it is not row specific, 
-	   * that's a problem.
-	   */
-	  g_object_get (info->renderer, "mode", &mode, NULL);
-	  if (mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
-	      mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+	  CellInfo *info = list->data;
+	  
+	  if (gtk_cell_renderer_can_focus (info->renderer))
 	    {
 	      gtk_cell_area_set_focus_cell (area, info->renderer);
 	      break;

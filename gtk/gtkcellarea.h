@@ -133,6 +133,7 @@ struct _GtkCellAreaClass
   /* Focus */
   void               (* grab_focus)                      (GtkCellArea             *area,
 							  GtkDirectionType         direction);
+  void               (* update_focus)                    (GtkCellArea             *area);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -255,12 +256,15 @@ void               gtk_cell_area_grab_focus                     (GtkCellArea    
 void               gtk_cell_area_focus_leave                    (GtkCellArea        *area,
 								 GtkDirectionType    direction,
 								 const gchar        *path);
+void               gtk_cell_area_update_focus                   (GtkCellArea        *area);
 void               gtk_cell_area_set_can_focus                  (GtkCellArea        *area,
 								 gboolean            can_focus);
 gboolean           gtk_cell_area_get_can_focus                  (GtkCellArea        *area);
 void               gtk_cell_area_set_focus_cell                 (GtkCellArea        *area,
 								 GtkCellRenderer    *renderer);
 GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea        *area);
+
+
 
 /* Margins */
 gint               gtk_cell_area_get_cell_margin_left           (GtkCellArea        *area);
