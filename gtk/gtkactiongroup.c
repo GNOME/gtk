@@ -1304,11 +1304,12 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
    * gtk_action_group_add_..._actions_full() functions.
    */
   guint i;
-  GSList *group = NULL;
+  GtkRadioGroup *radio_group = NULL;
   GtkRadioAction *first_action = NULL;
 
   g_return_if_fail (GTK_IS_ACTION_GROUP (action_group));
 
+  radio_group = gtk_radio_group_new ();
   for (i = 0; i < n_entries; i++)
     {
       GtkRadioAction *action;
@@ -1338,8 +1339,7 @@ gtk_action_group_add_radio_actions_full (GtkActionGroup            *action_group
       if (i == 0) 
 	first_action = action;
 
-      gtk_radio_action_set_group (action, group);
-      group = gtk_radio_action_get_group (action);
+      gtk_radio_action_set_group (action, radio_group);
 
       if (value == entries[i].value)
 	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);

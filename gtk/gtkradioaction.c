@@ -32,6 +32,7 @@
 
 #include "gtkradioaction.h"
 #include "gtkradiomenuitem.h"
+#include "gtkradiogroupprivate.h"
 #include "gtktoggletoolbutton.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -49,7 +50,7 @@
 
 struct _GtkRadioActionPrivate 
 {
-  GSList *group;
+  GtkRadioGroup *group;
   gint    value;
 };
 
@@ -184,7 +185,7 @@ gtk_radio_action_init (GtkRadioAction *action)
                                                       GTK_TYPE_RADIO_ACTION,
                                                       GtkRadioActionPrivate);
 
-  action->private_data->group = g_slist_prepend (NULL, action);
+  action->private_data->group = NULL;
   action->private_data->value = 0;
 
   gtk_toggle_action_set_draw_as_radio (GTK_TOGGLE_ACTION (action), TRUE);
@@ -230,20 +231,18 @@ static void
 gtk_radio_action_finalize (GObject *object)
 {
   GtkRadioAction *action;
-  GSList *tmp_list;
+  GtkRadioActionPrivate *priv;
 
   action = GTK_RADIO_ACTION (object);
+  priv = action->private_data;
 
-  action->private_data->group = g_slist_remove (action->private_data->group, action);
-
-  tmp_list = action->private_data->group;
-
-  while (tmp_list)
+  if (priv->group)
     {
-      GtkRadioAction *tmp_action = tmp_list->data;
+      _gtk_radio_group_remove_item (priv->group, object);
 
-      tmp_list = tmp_list->next;
-      tmp_action->private_data->group = action->private_data->group;
+      /* this action is no longer in the group */
+      g_object_unref (priv->group);
+      priv->group = NULL;
     }
 
   G_OBJECT_CLASS (gtk_radio_action_parent_class)->finalize (object);
@@ -267,14 +266,14 @@ gtk_radio_action_set_property (GObject         *object,
     case PROP_GROUP: 
       {
 	GtkRadioAction *arg;
-	GSList *slist = NULL;
-	
-	if (G_VALUE_HOLDS_OBJECT (value)) 
+	GtkRadioGroup *group = NULL;
+
+	if (G_VALUE_HOLDS_OBJECT (value))
 	  {
 	    arg = GTK_RADIO_ACTION (g_value_get_object (value));
 	    if (arg)
-	      slist = gtk_radio_action_get_group (arg);
-	    gtk_radio_action_set_group (radio_action, slist);
+	      group = gtk_radio_action_get_group (arg);
+	    gtk_radio_action_set_group (radio_action, group);
 	  }
       }
       break;
@@ -314,69 +313,77 @@ gtk_radio_action_get_property (GObject    *object,
 }
 
 static void
+gtk_radio_action_ensure_group (GtkRadioAction *radio_action)
+{
+  GtkRadioActionPrivate *priv = radio_action->private_data;
+
+  if (priv->group == NULL)
+    {
+      priv->group = g_object_ref_sink (gtk_radio_group_new ());
+      _gtk_radio_group_add_item (priv->group, G_OBJECT (radio_action));
+    }
+}
+
+
+static void
 gtk_radio_action_activate (GtkAction *action)
 {
   GtkRadioAction *radio_action;
   GtkToggleAction *toggle_action;
+  GtkRadioActionPrivate *priv;
   GtkToggleAction *tmp_action;
-  GSList *tmp_list;
+  GObject *active_item;
+  GSList *list, *l;
   gboolean active;
+  gint toggled;
 
   radio_action = GTK_RADIO_ACTION (action);
   toggle_action = GTK_TOGGLE_ACTION (action);
 
+  priv = radio_action->private_data;
+
+  gtk_radio_action_ensure_group (radio_action);
+
+  toggled = FALSE;
+
   active = gtk_toggle_action_get_active (toggle_action);
   if (active)
     {
-      tmp_list = radio_action->private_data->group;
+      active_item = gtk_radio_group_get_active_item (priv->group);
 
-      while (tmp_list)
+      if (action != GTK_ACTION (active_item))
 	{
-	  tmp_action = tmp_list->data;
-	  tmp_list = tmp_list->next;
-
-	  if (gtk_toggle_action_get_active (tmp_action) &&
-              (tmp_action != toggle_action))
-	    {
-              _gtk_toggle_action_set_active (toggle_action, !active);
-
-	      break;
-	    }
+	  toggled = TRUE;
+	  _gtk_toggle_action_set_active (toggle_action, !active);
 	}
       g_object_notify (G_OBJECT (action), "active");
     }
   else
     {
+      toggled = TRUE;
       _gtk_toggle_action_set_active (toggle_action, !active);
       g_object_notify (G_OBJECT (action), "active");
 
-      tmp_list = radio_action->private_data->group;
-      while (tmp_list)
-	{
-	  tmp_action = tmp_list->data;
-	  tmp_list = tmp_list->next;
+      active_item = gtk_radio_group_get_active_item (priv->group);
+      _gtk_radio_group_set_active_item (priv->group, G_OBJECT (action));
+      if (active_item != G_OBJECT (action))
+	_gtk_action_emit_activate (GTK_ACTION (active_item));
 
-          if (gtk_toggle_action_get_active (tmp_action) &&
-              (tmp_action != toggle_action))
-	    {
-	      _gtk_action_emit_activate (GTK_ACTION (tmp_action));
-	      break;
-	    }
-	}
-
-      tmp_list = radio_action->private_data->group;
-      while (tmp_list)
+      list = gtk_radio_group_get_items (priv->group);
+      for (l = list; l != NULL; l = l->next)
 	{
-	  tmp_action = tmp_list->data;
-	  tmp_list = tmp_list->next;
-	  
-          g_object_notify (G_OBJECT (tmp_action), "current-value");
+	  tmp_action = l->data;
+
+	  g_object_notify (G_OBJECT (tmp_action), "current-value");
 
 	  g_signal_emit (tmp_action, radio_action_signals[CHANGED], 0, radio_action);
 	}
+      g_slist_free (list);
+      _gtk_radio_group_emit_active_changed (priv->group);
     }
 
-  gtk_toggle_action_toggled (toggle_action);
+  if (toggled)
+    gtk_toggle_action_toggled (toggle_action);
 }
 
 static GtkWidget *
@@ -391,32 +398,20 @@ create_menu_item (GtkAction *action)
  * gtk_radio_action_get_group:
  * @action: the action object
  *
- * Returns the list representing the radio group for this object.
- * Note that the returned list is only valid until the next change
- * to the group. 
+ * Retrieves the radio group this object is part of.
  *
- * A common way to set up a group of radio group is the following:
- * |[
- *   GSList *group = NULL;
- *   GtkRadioAction *action;
- *  
- *   while (/&ast; more actions to add &ast;/)
- *     {
- *        action = gtk_radio_action_new (...);
- *        
- *        gtk_radio_action_set_group (action, group);
- *        group = gtk_radio_action_get_group (action);
- *     }
- * ]|
- *
- * Returns:  (element-type GtkRadioAction) (transfer none): the list representing the radio group for this object
+ * Return value: (transfer none): a #GtkRadioGroup
+ * containing all the radio buttons in the same group
+ * as @radio_action.
  *
  * Since: 2.4
  */
-GSList *
+GtkRadioGroup *
 gtk_radio_action_get_group (GtkRadioAction *action)
 {
   g_return_val_if_fail (GTK_IS_RADIO_ACTION (action), NULL);
+
+  gtk_radio_action_ensure_group (action);
 
   return action->private_data->group;
 }
@@ -424,50 +419,40 @@ gtk_radio_action_get_group (GtkRadioAction *action)
 /**
  * gtk_radio_action_set_group:
  * @action: the action object
- * @group: (element-type GtkRadioAction): a list representing a radio group
+ * @group: (allow-none): an existing #GtkRadioGroup or %NULL
+ *     to remove the radio button from its current group
  *
  * Sets the radio group for the radio action object.
  *
  * Since: 2.4
  */
 void
-gtk_radio_action_set_group (GtkRadioAction *action, 
-			    GSList         *group)
+gtk_radio_action_set_group (GtkRadioAction *action,
+			    GtkRadioGroup  *group)
 {
+  GtkRadioActionPrivate *priv;
+  gboolean is_active;
+
   g_return_if_fail (GTK_IS_RADIO_ACTION (action));
-  g_return_if_fail (!g_slist_find (group, action));
 
-  if (action->private_data->group)
-    {
-      GSList *slist;
+  priv = action->private_data;
 
-      action->private_data->group = g_slist_remove (action->private_data->group, action);
+  if (priv->group == group)
+    return;
 
-      for (slist = action->private_data->group; slist; slist = slist->next)
-	{
-	  GtkRadioAction *tmp_action = slist->data;
+  if (group == NULL)
+    group = gtk_radio_group_new ();
 
-	  tmp_action->private_data->group = action->private_data->group;
-	}
-    }
+  if (priv->group)
+    _gtk_radio_group_remove_item (priv->group, G_OBJECT (action));
 
-  action->private_data->group = g_slist_prepend (group, action);
+  priv->group = g_object_ref_sink (group);
+  _gtk_radio_group_add_item (group, G_OBJECT (action));
 
-  if (group)
-    {
-      GSList *slist;
-
-      for (slist = action->private_data->group; slist; slist = slist->next)
-	{
-	  GtkRadioAction *tmp_action = slist->data;
-
-	  tmp_action->private_data->group = action->private_data->group;
-	}
-    }
-  else
-    {
-      gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), TRUE);
-    }
+  is_active = gtk_radio_group_get_active_item (group) == G_OBJECT (action);
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (action), is_active);
+  if (is_active)
+    _gtk_radio_group_emit_active_changed (group);
 }
 
 /**
@@ -506,13 +491,13 @@ gtk_radio_action_join_group (GtkRadioAction *action,
 
   if (group_source)
     {
-      GSList *group;
+      GtkRadioGroup *group;
       group = gtk_radio_action_get_group (group_source);
-      
+
       if (!group)
         {
           /* if we are not already part of a group we need to set up a new one
-             and then get the newly created group */  
+             and then get the newly created group */
           gtk_radio_action_set_group (group_source, NULL);
           group = gtk_radio_action_get_group (group_source);
         }
@@ -539,22 +524,15 @@ gtk_radio_action_join_group (GtkRadioAction *action,
 gint
 gtk_radio_action_get_current_value (GtkRadioAction *action)
 {
-  GSList *slist;
+  GObject *active_action;
 
   g_return_val_if_fail (GTK_IS_RADIO_ACTION (action), 0);
 
-  if (action->private_data->group)
-    {
-      for (slist = action->private_data->group; slist; slist = slist->next)
-	{
-	  GtkToggleAction *toggle_action = slist->data;
+  gtk_radio_action_ensure_group (action);
 
-	  if (gtk_toggle_action_get_active (toggle_action))
-	    return GTK_RADIO_ACTION (toggle_action)->private_data->value;
-	}
-    }
+  active_action = gtk_radio_group_get_active_item (action->private_data->group);
 
-  return action->private_data->value;
+  return GTK_RADIO_ACTION (active_action)->private_data->value;
 }
 
 /**
@@ -571,15 +549,16 @@ void
 gtk_radio_action_set_current_value (GtkRadioAction *action,
                                     gint            current_value)
 {
-  GSList *slist;
+  GSList *slist, *l;
 
   g_return_if_fail (GTK_IS_RADIO_ACTION (action));
 
   if (action->private_data->group)
     {
-      for (slist = action->private_data->group; slist; slist = slist->next)
+      slist = gtk_radio_group_get_items (action->private_data->group);
+      for (l = slist; l; l = l->next)
 	{
-	  GtkRadioAction *radio_action = slist->data;
+	  GtkRadioAction *radio_action = l->data;
 
 	  if (radio_action->private_data->value == current_value)
             {
@@ -588,6 +567,7 @@ gtk_radio_action_set_current_value (GtkRadioAction *action,
               return;
             }
 	}
+      g_slist_free (slist);
     }
 
   if (action->private_data->value == current_value)
