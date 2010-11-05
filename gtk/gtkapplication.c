@@ -46,9 +46,8 @@
  *
  * Currently, GtkApplication handles GTK+ initialization, application
  * uniqueness, provides some basic scriptability by exporting 'actions',
- * implements some standard actions itself (such as 'Quit') and manages
- * a list of toplevel windows whose life-cycle is automatically tied to
- * the life-cycle of your application.
+ * and manages a list of toplevel windows whose life-cycle is automatically
+ * tied to the life-cycle of your application.
  *
  * <example id="gtkapplication"><title>A simple application</title>
  * <programlisting>
