@@ -221,13 +221,15 @@ create_radio (void)
   GtkWidget *widget;
   GtkWidget *radio;
   GtkWidget *align;
+  GtkRadioGroup *group;
 
   widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
-  radio = gtk_radio_button_new_with_mnemonic (NULL, "Radio Button _One");
+  group = gtk_radio_group_new ();
+  radio = gtk_radio_button_new_with_mnemonic (group, "Radio Button _One");
   gtk_box_pack_start (GTK_BOX (widget), radio, FALSE, FALSE, 0);
-  radio = gtk_radio_button_new_with_mnemonic_from_widget (GTK_RADIO_BUTTON (radio), "Radio Button _Two");
+  radio = gtk_radio_button_new_with_mnemonic (group, "Radio Button _Two");
   gtk_box_pack_start (GTK_BOX (widget), radio, FALSE, FALSE, 0);
-  radio = gtk_radio_button_new_with_mnemonic_from_widget (GTK_RADIO_BUTTON (radio), "Radio Button T_hree");
+  radio = gtk_radio_button_new_with_mnemonic (group, "Radio Button T_hree");
   gtk_box_pack_start (GTK_BOX (widget), radio, FALSE, FALSE, 0);
   align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_container_add (GTK_CONTAINER (align), widget);

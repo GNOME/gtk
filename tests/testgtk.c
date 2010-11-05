@@ -174,24 +174,26 @@ build_alpha_widgets (void)
   GtkWidget *hbox;
   GtkWidget *label;
   GtkWidget *entry;
+  GtkRadioGroup *group;
 
   table = gtk_table_new (1, 1, FALSE);
 
-  radio_button = gtk_radio_button_new_with_label (NULL, "Red");
+  group = gtk_radio_group_new ();
+  radio_button = gtk_radio_button_new_with_label (group, "Red");
   gtk_table_attach (GTK_TABLE (table),
 		    radio_button,
 		    0, 1,                  0, 1,
 		    GTK_EXPAND | GTK_FILL, 0,
 		    0,                     0);
 
-  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Green");
+  radio_button = gtk_radio_button_new_with_label (group, "Green");
   gtk_table_attach (GTK_TABLE (table),
 		    radio_button,
 		    0, 1,                  1, 2,
 		    GTK_EXPAND | GTK_FILL, 0,
 		    0,                     0);
 
-  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Blue"),
+  radio_button = gtk_radio_button_new_with_label (group, "Blue"),
   gtk_table_attach (GTK_TABLE (table),
 		    radio_button,
 		    0, 1,                  2, 3,
@@ -214,14 +216,14 @@ build_alpha_widgets (void)
 		    GTK_EXPAND | GTK_FILL, 0,
 		    0,                     0);
 
-  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Green");
+  radio_button = gtk_radio_button_new_with_label (group, "Green");
   gtk_table_attach (GTK_TABLE (table),
 		    radio_button,
 		    0, 1,                  1, 2,
 		    GTK_EXPAND | GTK_FILL, 0,
 		    0,                     0);
 
-  radio_button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_button), "Blue"),
+  radio_button = gtk_radio_button_new_with_label (group, "Blue"),
   gtk_table_attach (GTK_TABLE (table),
 		    radio_button,
 		    0, 1,                  2, 3,

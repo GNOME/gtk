@@ -50,8 +50,7 @@ int main( int   argc,
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
 
-    button = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (button),
-	                                                  "button3");
+    button = gtk_radio_button_new_with_label (group, "button3");
     gtk_box_pack_start (GTK_BOX (box2), button, TRUE, TRUE, 0);
     gtk_widget_show (button);
 
