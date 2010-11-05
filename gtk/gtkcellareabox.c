@@ -50,6 +50,12 @@ static void      gtk_cell_area_box_remove                         (GtkCellArea  
 static void      gtk_cell_area_box_forall                         (GtkCellArea          *area,
 								   GtkCellCallback       callback,
 								   gpointer              callback_data);
+static void      gtk_cell_area_box_get_cell_allocation            (GtkCellArea          *area,
+								   GtkCellAreaIter      *iter,	
+								   GtkWidget            *widget,
+								   GtkCellRenderer      *renderer,
+								   const GdkRectangle   *cell_area,
+								   GdkRectangle         *allocation);
 static gint      gtk_cell_area_box_event                          (GtkCellArea          *area,
 								   GtkCellAreaIter      *iter,
 								   GtkWidget            *widget,
@@ -225,13 +231,14 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   object_class->get_property = gtk_cell_area_box_get_property;
 
   /* GtkCellAreaClass */
-  area_class->add               = gtk_cell_area_box_add;
-  area_class->remove            = gtk_cell_area_box_remove;
-  area_class->forall            = gtk_cell_area_box_forall;
-  area_class->event             = gtk_cell_area_box_event;
-  area_class->render            = gtk_cell_area_box_render;
-  area_class->set_cell_property = gtk_cell_area_box_set_cell_property;
-  area_class->get_cell_property = gtk_cell_area_box_get_cell_property;
+  area_class->add                 = gtk_cell_area_box_add;
+  area_class->remove              = gtk_cell_area_box_remove;
+  area_class->forall              = gtk_cell_area_box_forall;
+  area_class->get_cell_allocation = gtk_cell_area_box_get_cell_allocation;
+  area_class->event               = gtk_cell_area_box_event;
+  area_class->render              = gtk_cell_area_box_render;
+  area_class->set_cell_property   = gtk_cell_area_box_set_cell_property;
+  area_class->get_cell_property   = gtk_cell_area_box_get_cell_property;
   
   area_class->create_iter                    = gtk_cell_area_box_create_iter;
   area_class->get_request_mode               = gtk_cell_area_box_get_request_mode;
@@ -811,6 +818,50 @@ gtk_cell_area_box_forall (GtkCellArea        *area,
     }
 }
 
+static void
+gtk_cell_area_box_get_cell_allocation (GtkCellArea          *area,
+				       GtkCellAreaIter      *iter,	
+				       GtkWidget            *widget,
+				       GtkCellRenderer      *renderer,
+				       const GdkRectangle   *cell_area,
+				       GdkRectangle         *allocation)
+{
+  GtkCellAreaBox        *box      = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv     = box->priv;
+  GtkCellAreaBoxIter    *box_iter = GTK_CELL_AREA_BOX_ITER (iter);
+  GSList                *allocated_cells, *l;
+
+  *allocation = *cell_area;
+
+  /* Get a list of cells with allocation sizes decided regardless
+   * of alignments and pack order etc. */
+  allocated_cells = get_allocated_cells (box, box_iter, widget);
+
+  for (l = allocated_cells; l; l = l->next)
+    {
+      AllocatedCell *cell = l->data;
+
+      if (cell->renderer == renderer)
+	{
+	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	    {
+	      allocation->x     = cell_area->x + cell->position;
+	      allocation->width = cell->size;
+	    }
+	  else
+	    {
+	      allocation->y      = cell_area->y + cell->position;
+	      allocation->height = cell->size;
+	    }
+
+	  break;
+	}
+    }
+
+  g_slist_foreach (allocated_cells, (GFunc)allocated_cell_free, NULL);
+  g_slist_free (allocated_cells);
+}
+
 static gint
 gtk_cell_area_box_event (GtkCellArea          *area,
 			 GtkCellAreaIter      *iter,
@@ -819,6 +870,27 @@ gtk_cell_area_box_event (GtkCellArea          *area,
 			 const GdkRectangle   *cell_area,
 			 GtkCellRendererState  flags)
 {
+  gint retval;
+
+  /* First let the parent class handle activation of cells via keystrokes */
+  retval = 
+    GTK_CELL_AREA_CLASS (gtk_cell_area_box_parent_class)->event (area, iter, widget,
+								 event, cell_area, flags);
+  
+  if (retval)
+    return retval;
+
+  /* Now detect keystrokes that move focus directionally inside the area
+   * or signal that focus should leave the area in a given direction.
+   *
+   * To navigate focus we only need to loop through the groups and 
+   * observe the orientation and push focus along to the next cell
+   * or signal that focus should leave the area.
+   */
+
+  /* Also detect mouse events, for mouse events we need to allocate the renderers
+   * and find which renderer needs to be activated.
+   */
 
 
   return 0;

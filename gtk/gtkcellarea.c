@@ -130,10 +130,21 @@ typedef struct {
 
 struct _GtkCellAreaPrivate
 {
+  /* The GtkCellArea bookkeeps any connected 
+   * attributes in this hash table.
+   */
   GHashTable      *cell_info;
 
+  /* The cell border decides how much space to reserve
+   * around each cell for the background_area
+   */
   GtkBorder        cell_border;
 
+  /* Current path is saved as a side-effect
+   * of gtk_cell_area_apply_attributes() */
+  gchar           *current_path;
+
+  GtkCellRenderer *edited_cell;
   GtkCellRenderer *focus_cell;
   guint            can_focus : 1;
 
@@ -144,11 +155,14 @@ enum {
   PROP_CELL_MARGIN_LEFT,
   PROP_CELL_MARGIN_RIGHT,
   PROP_CELL_MARGIN_TOP,
-  PROP_CELL_MARGIN_BOTTOM
+  PROP_CELL_MARGIN_BOTTOM,
+  PROP_FOCUS_CELL,
+  PROP_EDITED_CELL
 };
 
 enum {
   SIGNAL_FOCUS_LEAVE,
+  SIGNAL_EDITING_STARTED,
   LAST_SIGNAL
 };
 
@@ -229,6 +243,17 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_DIRECTION_TYPE, G_TYPE_STRING);
 
+  cell_area_signals[SIGNAL_EDITING_STARTED] =
+    g_signal_new (I_("editing-started"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  0, /* No class closure here */
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT_STRING,
+		  G_TYPE_NONE, 3,
+		  GTK_TYPE_CELL_RENDERER,
+		  GTK_TYPE_CELL_EDITABLE,
+		  G_TYPE_STRING);
 
   /* Properties */
   g_object_class_install_property (object_class,
@@ -273,6 +298,24 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 				    0,
 				    G_MAXINT16,
 				    0,
+				    GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_FOCUS_CELL,
+                                   g_param_spec_object
+				   ("focus-cell",
+				    P_("Focus Cell"),
+				    P_("The cell which currently has focus"),
+				    GTK_TYPE_CELL_RENDERER,
+				    GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_EDITED_CELL,
+                                   g_param_spec_object
+				   ("edited-cell",
+				    P_("Edited Cell"),
+				    P_("The cell which is currently being edited"),
+				    GTK_TYPE_CELL_RENDERER,
 				    GTK_PARAM_READWRITE));
 
   /* Pool for Cell Properties */
@@ -366,6 +409,8 @@ gtk_cell_area_finalize (GObject *object)
    */
   g_hash_table_destroy (priv->cell_info);
 
+  g_free (priv->current_path);
+
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->finalize (object);
 }
 
@@ -379,8 +424,9 @@ gtk_cell_area_dispose (GObject *object)
    */
   gtk_cell_layout_clear (GTK_CELL_LAYOUT (object));
 
-  /* Remove any ref to a focused cell */
+  /* Remove any ref to a focused/edited cell */
   gtk_cell_area_set_focus_cell (GTK_CELL_AREA (object), NULL);
+  gtk_cell_area_set_edited_cell (GTK_CELL_AREA (object), NULL);
 
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->dispose (object);
 }
@@ -406,6 +452,9 @@ gtk_cell_area_set_property (GObject       *object,
       break;
     case PROP_CELL_MARGIN_BOTTOM:
       gtk_cell_area_set_cell_margin_bottom (area, g_value_get_int (value));
+      break;
+    case PROP_FOCUS_CELL:
+      gtk_cell_area_set_focus_cell (area, (GtkCellRenderer *)g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -436,6 +485,9 @@ gtk_cell_area_get_property (GObject     *object,
     case PROP_CELL_MARGIN_BOTTOM:
       g_value_set_int (value, priv->cell_border.bottom);
       break;
+    case PROP_FOCUS_CELL:
+      g_value_set_object (value, priv->focus_cell);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -453,16 +505,73 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 			  const GdkRectangle   *cell_area,
 			  GtkCellRendererState  flags)
 {
-  if (event->type == GDK_KEY_PRESS)
+  if (event->type == GDK_KEY_PRESS && (flags & GTK_CELL_RENDERER_FOCUSED) != 0)
     {
+      GdkEventKey        *key_event = (GdkEventKey *)event;
       GtkCellAreaPrivate *priv = area->priv;
 
-      if (priv->focus_cell)
+      if (priv->focus_cell && 
+	  (key_event->keyval == GDK_KEY_space ||
+	   key_event->keyval == GDK_KEY_KP_Space ||
+	   key_event->keyval == GDK_KEY_Return ||
+	   key_event->keyval == GDK_KEY_ISO_Enter ||
+	   key_event->keyval == GDK_KEY_KP_Enter))
 	{
-	  /* Activate of Edit the currently focused cell */
+	  /* Activate or Edit the currently focused cell */
+	  GtkCellRendererMode mode;
+	  GdkRectangle        background_area;
+	  GdkRectangle        inner_area;
 
+	  /* Get the allocation of the focused cell.
+	   */
+	  gtk_cell_area_get_cell_allocation (area, iter, widget, priv->focus_cell,
+					     cell_area, &background_area);
 
-	  return TRUE;
+	  /* Remove margins from the background area to produce the cell area.
+	   */
+	  gtk_cell_area_inner_cell_area (area, &background_area, &inner_area);
+
+	  /* XXX Need to do some extra right-to-left casing either here 
+	   * or inside the above called apis.
+	   */
+
+	  g_object_get (priv->focus_cell, "mode", &mode, NULL);
+
+	  if (mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+	    {
+	      if (gtk_cell_renderer_activate (priv->focus_cell,
+					      event, widget,
+					      priv->current_path,
+					      &background_area,
+					      &inner_area,
+					      flags))
+		  return TRUE;
+	    }
+	  else if (mode == GTK_CELL_RENDERER_MODE_EDITABLE)
+	    {
+	      GtkCellEditable *editable_widget;
+
+	      editable_widget =
+		gtk_cell_renderer_start_editing (priv->focus_cell,
+						 event, widget,
+						 priv->current_path,
+						 &background_area,
+						 &inner_area,
+						 flags);
+
+	      if (editable_widget != NULL)
+		{
+		  g_return_val_if_fail (GTK_IS_CELL_EDITABLE (editable_widget), FALSE);
+
+		  gtk_cell_area_set_edited_cell (area, priv->focus_cell);
+
+		  /* Signal that editing started so that callers can get 
+		   * a handle on the editable_widget */
+		  gtk_cell_area_editing_started (area, priv->focus_cell, editable_widget);
+		  
+		  return TRUE;
+		}
+	    }
 	}
     }
 
@@ -662,6 +771,14 @@ gtk_cell_area_get_cells (GtkCellLayout *cell_layout)
 /*************************************************************
  *                            API                            *
  *************************************************************/
+
+/**
+ * gtk_cell_area_add:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer to add to @area
+ *
+ * Adds @renderer to @area with the default child cell properties.
+ */
 void
 gtk_cell_area_add (GtkCellArea        *area,
 		   GtkCellRenderer    *renderer)
@@ -680,6 +797,13 @@ gtk_cell_area_add (GtkCellArea        *area,
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
+/**
+ * gtk_cell_area_remove:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer to add to @area
+ *
+ * Removes @renderer from @area.
+ */
 void
 gtk_cell_area_remove (GtkCellArea        *area,
 		      GtkCellRenderer    *renderer)
@@ -703,6 +827,14 @@ gtk_cell_area_remove (GtkCellArea        *area,
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
+/**
+ * gtk_cell_area_forall
+ * @area: a #GtkCellArea
+ * @callback: the #GtkCellCallback to call
+ * @callback_data: user provided data pointer
+ *
+ * Calls @callback for every #GtkCellRenderer in @area.
+ */
 void
 gtk_cell_area_forall (GtkCellArea        *area,
 		      GtkCellCallback     callback,
@@ -719,6 +851,45 @@ gtk_cell_area_forall (GtkCellArea        *area,
     class->forall (area, callback, callback_data);
   else
     g_warning ("GtkCellAreaClass::forall not implemented for `%s'", 
+	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
+}
+
+/**
+ * gtk_cell_area_get_cell_allocation:
+ * @area: a #GtkCellArea
+ * @iter: the #GtkCellAreaIter used to hold sizes for @area.
+ * @widget: the #GtkWidget that @area is rendering on
+ * @renderer: the #GtkCellRenderer to get the allocation for
+ * @cell_area: the whole allocated area for @area in @widget
+ *             for this row
+ * @allocation: where to store the allocation for @renderer
+ *
+ * Derives the allocation of @renderer inside @area if @area
+ * were to be renderered in @cell_area.
+ */
+void
+gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
+				   GtkCellAreaIter      *iter,	
+				   GtkWidget            *widget,
+				   GtkCellRenderer      *renderer,
+				   const GdkRectangle   *cell_area,
+				   GdkRectangle         *allocation)
+{
+  GtkCellAreaClass *class;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (cell_area != NULL);
+  g_return_if_fail (allocation != NULL);
+
+  class = GTK_CELL_AREA_GET_CLASS (area);
+
+  if (class->get_cell_allocation)
+    class->get_cell_allocation (area, iter, widget, renderer, cell_area, allocation);
+  else
+    g_warning ("GtkCellAreaClass::get_cell_allocation not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
@@ -893,6 +1064,17 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
 /*************************************************************
  *                      API: Attributes                      *
  *************************************************************/
+
+/**
+ * gtk_cell_area_attribute_connect:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer to connect an attribute for
+ * @attribute: the attribute name
+ * @column: the #GtkTreeModel column to fetch attribute values from
+ *
+ * Connects an @attribute to apply values from @column for the
+ * #GtkTreeModel in use.
+ */
 void
 gtk_cell_area_attribute_connect (GtkCellArea        *area,
 				 GtkCellRenderer    *renderer,
@@ -949,6 +1131,16 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
   info->attributes = g_slist_prepend (info->attributes, cell_attribute);
 }
 
+/**
+ * gtk_cell_area_attribute_disconnect:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer to disconnect an attribute for
+ * @attribute: the attribute name
+ *
+ * Disconnects @attribute for the @renderer in @area so that
+ * attribute will no longer be updated with values from the
+ * model.
+ */
 void 
 gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
 				    GtkCellRenderer    *renderer,
@@ -1025,6 +1217,18 @@ apply_cell_attributes (GtkCellRenderer *renderer,
   g_object_thaw_notify (G_OBJECT (renderer));
 }
 
+/**
+ * gtk_cell_area_apply_attributes
+ * @area: a #GtkCellArea
+ * @tree_model: a #GtkTreeModel to pull values from
+ * @iter: the #GtkTreeIter in @tree_model to apply values for
+ * @is_expander: whether @iter has children
+ * @is_expanded: whether @iter is expanded in the view and
+ *               children are visible
+ *
+ * Applies any connected attributes to the renderers in 
+ * @area by pulling the values from @tree_model.
+ */
 void
 gtk_cell_area_apply_attributes (GtkCellArea  *area,
 				GtkTreeModel *tree_model,
@@ -1034,6 +1238,7 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
 {
   GtkCellAreaPrivate *priv;
   AttributeData       data;
+  GtkTreePath        *path;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
@@ -1051,7 +1256,36 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
   /* Go over any cells that have attributes or custom GtkCellLayoutDataFuncs and
    * apply the data from the treemodel */
   g_hash_table_foreach (priv->cell_info, (GHFunc)apply_cell_attributes, &data);
+
+  /* Update the currently applied path */
+  g_free (priv->current_path);
+  path               = gtk_tree_model_get_path (tree_model, iter);
+  priv->current_path = gtk_tree_path_to_string (path);
+  gtk_tree_path_free (path);
 }
+
+/**
+ * gtk_cell_area_get_current_path_string:
+ * @area: a #GtkCellArea
+ *
+ * Gets the current #GtkTreePath string for the currently
+ * applied #GtkTreeIter, this is implicitly updated when
+ * gtk_cell_area_apply_attributes() is called and can be
+ * used to interact with renderers from #GtkCellArea
+ * subclasses.
+ */
+const gchar *
+gtk_cell_area_get_current_path_string (GtkCellArea *area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+
+  priv = area->priv;
+
+  return priv->current_path;
+}
+
 
 /*************************************************************
  *                    API: Cell Properties                   *
@@ -1566,6 +1800,8 @@ gtk_cell_area_set_focus_cell (GtkCellArea     *area,
 
       if (priv->focus_cell)
 	g_object_ref (priv->focus_cell);
+
+      g_object_notify (G_OBJECT (area), "focus-cell");
     }
 }
 
@@ -1587,6 +1823,43 @@ gtk_cell_area_get_focus_cell (GtkCellArea *area)
   priv = area->priv;
 
   return priv->focus_cell;
+}
+
+void
+gtk_cell_area_set_edited_cell (GtkCellArea     *area,
+			       GtkCellRenderer *renderer)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (renderer == NULL || GTK_IS_CELL_RENDERER (renderer));
+
+  priv = area->priv;
+
+  if (priv->edited_cell != renderer)
+    {
+      if (priv->edited_cell)
+	g_object_unref (priv->edited_cell);
+
+      priv->edited_cell = renderer;
+
+      if (priv->edited_cell)
+	g_object_ref (priv->edited_cell);
+
+      g_object_notify (G_OBJECT (area), "edited-cell");
+    }
+}
+
+GtkCellRenderer   *
+gtk_cell_area_get_edited_cell (GtkCellArea *area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+
+  priv = area->priv;
+
+  return priv->edited_cell;
 }
 
 /*************************************************************
@@ -1697,6 +1970,21 @@ gtk_cell_area_set_cell_margin_bottom (GtkCellArea *area,
 }
 
 /* For convenience in area implementations */
+void
+gtk_cell_area_editing_started (GtkCellArea        *area,
+			       GtkCellRenderer    *renderer,
+			       GtkCellEditable    *editable)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_STARTED], 0, 
+		 renderer, editable, priv->current_path);
+}
+
 void
 gtk_cell_area_inner_cell_area (GtkCellArea        *area,
 			       GdkRectangle       *background_area,

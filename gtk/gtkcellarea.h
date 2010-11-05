@@ -79,6 +79,12 @@ struct _GtkCellAreaClass
   void               (* forall)                          (GtkCellArea             *area,
 							  GtkCellCallback          callback,
 							  gpointer                 callback_data);
+  void               (* get_cell_allocation)             (GtkCellArea             *area,
+							  GtkCellAreaIter         *iter,
+							  GtkWidget               *widget,
+							  GtkCellRenderer         *renderer,
+							  const GdkRectangle      *cell_area,
+							  GdkRectangle            *allocation);
   gint               (* event)                           (GtkCellArea             *area,
 							  GtkCellAreaIter         *iter,
 							  GtkWidget               *widget,
@@ -156,6 +162,12 @@ void               gtk_cell_area_remove                         (GtkCellArea    
 void               gtk_cell_area_forall                         (GtkCellArea          *area,
 								 GtkCellCallback       callback,
 								 gpointer              callback_data);
+void               gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,
+								 GtkCellAreaIter      *iter,
+								 GtkWidget            *widget,
+								 GtkCellRenderer      *renderer,
+								 const GdkRectangle   *cell_area,
+								 GdkRectangle         *allocation);
 gint               gtk_cell_area_event                          (GtkCellArea          *area,
 								 GtkCellAreaIter      *iter,
 								 GtkWidget            *widget,
@@ -194,6 +206,8 @@ void               gtk_cell_area_get_preferred_width_for_height (GtkCellArea    
 								 gint                height,
 								 gint               *minimum_width,
 								 gint               *natural_width);
+G_CONST_RETURN gchar *gtk_cell_area_get_current_path_string     (GtkCellArea        *area);
+
 
 /* Attributes */
 void               gtk_cell_area_apply_attributes               (GtkCellArea        *area,
@@ -263,6 +277,9 @@ gboolean           gtk_cell_area_get_can_focus                  (GtkCellArea    
 void               gtk_cell_area_set_focus_cell                 (GtkCellArea        *area,
 								 GtkCellRenderer    *renderer);
 GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea        *area);
+void               gtk_cell_area_set_edited_cell                (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer);
+GtkCellRenderer   *gtk_cell_area_get_edited_cell                (GtkCellArea        *area);
 
 
 
@@ -281,6 +298,11 @@ void               gtk_cell_area_set_cell_margin_bottom         (GtkCellArea    
 								 gint                margin);
 
 /* Functions for area implementations */
+
+/* Signal that editing started on the area (fires the "editing-started" signal) */
+void               gtk_cell_area_editing_started                (GtkCellArea        *area,
+								 GtkCellRenderer    *renderer,
+								 GtkCellEditable    *editable);
 
 /* Distinguish the inner cell area from the whole requested area including margins */
 void               gtk_cell_area_inner_cell_area                (GtkCellArea        *area,
