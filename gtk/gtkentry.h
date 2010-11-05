@@ -54,6 +54,15 @@ G_BEGIN_DECLS
 #define GTK_IS_ENTRY_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_ENTRY))
 #define GTK_ENTRY_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ENTRY, GtkEntryClass))
 
+/**
+ * GtkEntryIconPosition:
+ * @GTK_ENTRY_ICON_PRIMARY: At the beginning of the entry (depending on the text direction).
+ * @GTK_ENTRY_ICON_SECONDARY: At the end of the entry (depending on the text direction).
+ *
+ * Specifies the side of the entry at which an icon is placed.
+ *
+ * Since: 2.16
+ */
 typedef enum
 {
   GTK_ENTRY_ICON_PRIMARY,
