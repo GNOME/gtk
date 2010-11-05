@@ -6384,7 +6384,6 @@ gtk_grid_set_column_spacing
 gtk_grid_get_column_spacing
 
 <SUBSECTION Standard>
-GtkGrid
 GtkGridClass
 GTK_TYPE_GRID
 GTK_GRID
