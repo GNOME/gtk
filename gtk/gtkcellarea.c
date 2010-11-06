@@ -117,6 +117,20 @@ static void            cell_attribute_free (CellAttribute         *attribute);
 static gint            cell_attribute_find (CellAttribute         *cell_attribute,
 					    const gchar           *attribute);
 
+/* Internal signal emissions */
+static void            gtk_cell_area_editing_started  (GtkCellArea        *area,
+						       GtkCellRenderer    *renderer,
+						       GtkCellEditable    *editable);
+static void            gtk_cell_area_editing_canceled (GtkCellArea        *area,
+						       GtkCellRenderer    *renderer);
+static void            gtk_cell_area_editing_done     (GtkCellArea        *area,
+						       GtkCellRenderer    *renderer,
+						       GtkCellEditable    *editable);
+static void            gtk_cell_area_remove_editable  (GtkCellArea        *area,
+						       GtkCellRenderer    *renderer,
+						       GtkCellEditable    *editable);
+
+
 /* Struct to pass data along while looping over 
  * cell renderers to apply attributes
  */
@@ -144,7 +158,15 @@ struct _GtkCellAreaPrivate
    * of gtk_cell_area_apply_attributes() */
   gchar           *current_path;
 
+  /* Current cell being edited and editable widget used */
+  GtkCellEditable *edit_widget;
   GtkCellRenderer *edited_cell;
+
+  /* Signal connections to the editable widget */
+  gulong           editing_done_id;
+  gulong           remove_widget_id;
+
+  /* Currently focused cell */
   GtkCellRenderer *focus_cell;
   guint            can_focus : 1;
 
@@ -157,12 +179,16 @@ enum {
   PROP_CELL_MARGIN_TOP,
   PROP_CELL_MARGIN_BOTTOM,
   PROP_FOCUS_CELL,
-  PROP_EDITED_CELL
+  PROP_EDITED_CELL,
+  PROP_EDIT_WIDGET
 };
 
 enum {
   SIGNAL_FOCUS_LEAVE,
   SIGNAL_EDITING_STARTED,
+  SIGNAL_EDITING_CANCELED,
+  SIGNAL_EDITING_DONE,
+  SIGNAL_REMOVE_EDITABLE,
   LAST_SIGNAL
 };
 
@@ -200,6 +226,12 @@ gtk_cell_area_init (GtkCellArea *area)
   priv->cell_border.bottom = 0;
 
   priv->focus_cell         = NULL;
+  priv->edited_cell        = NULL;
+  priv->edit_widget        = NULL;
+  priv->can_focus          = FALSE;
+
+  priv->editing_done_id    = 0;
+  priv->remove_widget_id   = 0;
 }
 
 static void 
@@ -254,6 +286,38 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 		  GTK_TYPE_CELL_RENDERER,
 		  GTK_TYPE_CELL_EDITABLE,
 		  G_TYPE_STRING);
+
+  cell_area_signals[SIGNAL_EDITING_CANCELED] =
+    g_signal_new (I_("editing-canceled"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  0, /* No class closure here */
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT,
+		  G_TYPE_NONE, 1,
+		  GTK_TYPE_CELL_RENDERER);
+
+  cell_area_signals[SIGNAL_EDITING_DONE] =
+    g_signal_new (I_("editing-done"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  0, /* No class closure here */
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_CELL_RENDERER,
+		  GTK_TYPE_CELL_EDITABLE);
+
+  cell_area_signals[SIGNAL_REMOVE_EDITABLE] =
+    g_signal_new (I_("remove-editable"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  0, /* No class closure here */
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_CELL_RENDERER,
+		  GTK_TYPE_CELL_EDITABLE);
 
   /* Properties */
   g_object_class_install_property (object_class,
@@ -315,6 +379,15 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 				   ("edited-cell",
 				    P_("Edited Cell"),
 				    P_("The cell which is currently being edited"),
+				    GTK_TYPE_CELL_RENDERER,
+				    GTK_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+                                   PROP_EDIT_WIDGET,
+                                   g_param_spec_object
+				   ("edit-widget",
+				    P_("Edit Widget"),
+				    P_("The widget currently editing the edited cell"),
 				    GTK_TYPE_CELL_RENDERER,
 				    GTK_PARAM_READWRITE));
 
@@ -427,6 +500,7 @@ gtk_cell_area_dispose (GObject *object)
   /* Remove any ref to a focused/edited cell */
   gtk_cell_area_set_focus_cell (GTK_CELL_AREA (object), NULL);
   gtk_cell_area_set_edited_cell (GTK_CELL_AREA (object), NULL);
+  gtk_cell_area_set_edit_widget (GTK_CELL_AREA (object), NULL);
 
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->dispose (object);
 }
@@ -455,6 +529,12 @@ gtk_cell_area_set_property (GObject       *object,
       break;
     case PROP_FOCUS_CELL:
       gtk_cell_area_set_focus_cell (area, (GtkCellRenderer *)g_value_get_object (value));
+      break;
+    case PROP_EDITED_CELL:
+      gtk_cell_area_set_edited_cell (area, (GtkCellRenderer *)g_value_get_object (value));
+      break;
+    case PROP_EDIT_WIDGET:
+      gtk_cell_area_set_edit_widget (area, (GtkCellEditable *)g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -488,6 +568,12 @@ gtk_cell_area_get_property (GObject     *object,
     case PROP_FOCUS_CELL:
       g_value_set_object (value, priv->focus_cell);
       break;
+    case PROP_EDITED_CELL:
+      g_value_set_object (value, priv->edited_cell);
+      break;
+    case PROP_EDIT_WIDGET:
+      g_value_set_object (value, priv->edit_widget);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -517,61 +603,30 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 	   key_event->keyval == GDK_KEY_ISO_Enter ||
 	   key_event->keyval == GDK_KEY_KP_Enter))
 	{
-	  /* Activate or Edit the currently focused cell */
-	  GtkCellRendererMode mode;
-	  GdkRectangle        background_area;
-	  GdkRectangle        inner_area;
+	  GdkRectangle background_area;
 
 	  /* Get the allocation of the focused cell.
 	   */
 	  gtk_cell_area_get_cell_allocation (area, iter, widget, priv->focus_cell,
 					     cell_area, &background_area);
 
-	  /* Remove margins from the background area to produce the cell area.
-	   */
-	  gtk_cell_area_inner_cell_area (area, &background_area, &inner_area);
+	  /* Activate or Edit the currently focused cell */
+	  if (gtk_cell_area_activate_cell (area, widget, priv->focus_cell, event,
+					   &background_area, flags))
+	    return TRUE;
+	}
+      else if (priv->edited_cell &&
+	       (key_event->keyval == GDK_KEY_Escape))
+	{
+	  /* Cancel editing of the cell renderer */
+	  gtk_cell_renderer_stop_editing (priv->edited_cell, TRUE);
 
-	  /* XXX Need to do some extra right-to-left casing either here 
-	   * or inside the above called apis.
-	   */
+	  /* Signal that editing has been canceled */
+	  gtk_cell_area_editing_canceled (area, priv->edited_cell);	
 
-	  g_object_get (priv->focus_cell, "mode", &mode, NULL);
-
-	  if (mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
-	    {
-	      if (gtk_cell_renderer_activate (priv->focus_cell,
-					      event, widget,
-					      priv->current_path,
-					      &background_area,
-					      &inner_area,
-					      flags))
-		  return TRUE;
-	    }
-	  else if (mode == GTK_CELL_RENDERER_MODE_EDITABLE)
-	    {
-	      GtkCellEditable *editable_widget;
-
-	      editable_widget =
-		gtk_cell_renderer_start_editing (priv->focus_cell,
-						 event, widget,
-						 priv->current_path,
-						 &background_area,
-						 &inner_area,
-						 flags);
-
-	      if (editable_widget != NULL)
-		{
-		  g_return_val_if_fail (GTK_IS_CELL_EDITABLE (editable_widget), FALSE);
-
-		  gtk_cell_area_set_edited_cell (area, priv->focus_cell);
-
-		  /* Signal that editing started so that callers can get 
-		   * a handle on the editable_widget */
-		  gtk_cell_area_editing_started (area, priv->focus_cell, editable_widget);
-		  
-		  return TRUE;
-		}
-	    }
+	  /* Remove any references to the editable widget */
+	  gtk_cell_area_set_edited_cell (area, NULL);
+	  gtk_cell_area_set_edit_widget (area, NULL);
 	}
     }
 
@@ -1825,6 +1880,71 @@ gtk_cell_area_get_focus_cell (GtkCellArea *area)
   return priv->focus_cell;
 }
 
+
+/*************************************************************
+ *              API: Cell Activation/Editing                 *
+ *************************************************************/
+static void
+gtk_cell_area_editing_started (GtkCellArea        *area,
+			       GtkCellRenderer    *renderer,
+			       GtkCellEditable    *editable)
+{
+  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_STARTED], 0, 
+		 renderer, editable, area->priv->current_path);
+}
+
+static void
+gtk_cell_area_editing_canceled (GtkCellArea        *area,
+				GtkCellRenderer    *renderer)
+{
+  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_CANCELED], 0, renderer);
+}
+
+static void
+gtk_cell_area_editing_done (GtkCellArea        *area,
+			    GtkCellRenderer    *renderer,
+			    GtkCellEditable    *editable)
+{
+  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_DONE], 0, renderer, editable);
+}
+
+static void
+gtk_cell_area_remove_editable  (GtkCellArea        *area,
+				GtkCellRenderer    *renderer,
+				GtkCellEditable    *editable)
+{
+  g_signal_emit (area, cell_area_signals[SIGNAL_REMOVE_EDITABLE], 0, renderer, editable);
+}
+
+static void
+cell_area_editing_done_cb (GtkCellEditable *editable,
+			   GtkCellArea     *area)
+{
+  GtkCellAreaPrivate *priv = area->priv;
+
+  g_assert (priv->edit_widget == editable);
+  g_assert (priv->edited_cell != NULL);
+
+  gtk_cell_area_editing_done (area, priv->edited_cell, priv->edit_widget);
+}
+
+static void
+cell_area_remove_widget_cb (GtkCellEditable *editable,
+			    GtkCellArea     *area)
+{
+  GtkCellAreaPrivate *priv = area->priv;
+
+  g_assert (priv->edit_widget == editable);
+  g_assert (priv->edited_cell != NULL);
+
+  gtk_cell_area_remove_editable (area, priv->edited_cell, priv->edit_widget);
+
+  /* Now that we're done with editing the widget and it can be removed,
+   * remove our references to the widget and disconnect handlers */
+  gtk_cell_area_set_edited_cell (area, NULL);
+  gtk_cell_area_set_edit_widget (area, NULL);
+}
+
 void
 gtk_cell_area_set_edited_cell (GtkCellArea     *area,
 			       GtkCellRenderer *renderer)
@@ -1861,6 +1981,126 @@ gtk_cell_area_get_edited_cell (GtkCellArea *area)
 
   return priv->edited_cell;
 }
+
+void
+gtk_cell_area_set_edit_widget (GtkCellArea     *area,
+			       GtkCellEditable *editable)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (editable == NULL || GTK_IS_CELL_EDITABLE (editable));
+
+  priv = area->priv;
+
+  if (priv->edit_widget != editable)
+    {
+      if (priv->edit_widget)
+	{
+	  g_signal_handler_disconnect (priv->edit_widget, priv->editing_done_id);
+	  g_signal_handler_disconnect (priv->edit_widget, priv->remove_widget_id);
+
+	  g_object_unref (priv->edit_widget);
+	}
+
+      priv->edit_widget = editable;
+
+      if (priv->edit_widget)
+	{
+	  priv->editing_done_id =
+	    g_signal_connect (priv->edit_widget, "editing-done",
+			      G_CALLBACK (cell_area_editing_done_cb), area);
+	  priv->remove_widget_id =
+	    g_signal_connect (priv->edit_widget, "remove-widget",
+			      G_CALLBACK (cell_area_remove_widget_cb), area);
+
+	  g_object_ref (priv->edit_widget);
+	}
+
+      g_object_notify (G_OBJECT (area), "edit-widget");
+    }
+}
+
+GtkCellEditable *
+gtk_cell_area_get_edit_widget (GtkCellArea *area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+
+  priv = area->priv;
+
+  return priv->edit_widget;
+}
+
+gboolean
+gtk_cell_area_activate_cell (GtkCellArea          *area,
+			     GtkWidget            *widget,
+			     GtkCellRenderer      *renderer,
+			     GdkEvent             *event,
+			     const GdkRectangle   *cell_area,
+			     GtkCellRendererState  flags)
+{
+  GtkCellRendererMode mode;
+  GdkRectangle        inner_area;
+  GtkCellAreaPrivate *priv;
+  
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+  g_return_val_if_fail (cell_area != NULL, FALSE);
+
+  priv = area->priv;
+
+  /* Remove margins from the background area to produce the cell area.
+   *
+   * XXX Maybe have to do some rtl mode treatment here...
+   */
+  gtk_cell_area_inner_cell_area (area, cell_area, &inner_area);
+
+  g_object_get (renderer, "mode", &mode, NULL);
+
+  if (mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
+    {
+      if (gtk_cell_renderer_activate (renderer,
+				      event, widget,
+				      priv->current_path,
+				      cell_area,
+				      &inner_area,
+				      flags))
+	return TRUE;
+    }
+  else if (mode == GTK_CELL_RENDERER_MODE_EDITABLE)
+    {
+      GtkCellEditable *editable_widget;
+      
+      editable_widget =
+	gtk_cell_renderer_start_editing (renderer,
+					 event, widget,
+					 priv->current_path,
+					 cell_area,
+					 &inner_area,
+					 flags);
+      
+      if (editable_widget != NULL)
+	{
+	  g_return_val_if_fail (GTK_IS_CELL_EDITABLE (editable_widget), FALSE);
+	  
+	  gtk_cell_area_set_edited_cell (area, renderer);
+	  gtk_cell_area_set_edit_widget (area, editable_widget);
+	  
+	  /* Signal that editing started so that callers can get 
+	   * a handle on the editable_widget */
+	  gtk_cell_area_editing_started (area, priv->focus_cell, editable_widget);
+	  
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
+
 
 /*************************************************************
  *                        API: Margins                       *
@@ -1969,25 +2209,9 @@ gtk_cell_area_set_cell_margin_bottom (GtkCellArea *area,
     }
 }
 
-/* For convenience in area implementations */
-void
-gtk_cell_area_editing_started (GtkCellArea        *area,
-			       GtkCellRenderer    *renderer,
-			       GtkCellEditable    *editable)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_STARTED], 0, 
-		 renderer, editable, priv->current_path);
-}
-
 void
 gtk_cell_area_inner_cell_area (GtkCellArea        *area,
-			       GdkRectangle       *background_area,
+			       const GdkRectangle *background_area,
 			       GdkRectangle       *cell_area)
 {
   GtkCellAreaPrivate *priv;

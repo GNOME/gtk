@@ -277,11 +277,21 @@ gboolean           gtk_cell_area_get_can_focus                  (GtkCellArea    
 void               gtk_cell_area_set_focus_cell                 (GtkCellArea        *area,
 								 GtkCellRenderer    *renderer);
 GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea        *area);
-void               gtk_cell_area_set_edited_cell                (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer);
-GtkCellRenderer   *gtk_cell_area_get_edited_cell                (GtkCellArea        *area);
 
 
+/* Cell Activation/Editing */
+void               gtk_cell_area_set_edited_cell                (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer);
+GtkCellRenderer   *gtk_cell_area_get_edited_cell                (GtkCellArea          *area);
+void               gtk_cell_area_set_edit_widget                (GtkCellArea          *area,
+								 GtkCellEditable      *editable);
+GtkCellEditable   *gtk_cell_area_get_edit_widget                (GtkCellArea          *area);
+gboolean           gtk_cell_area_activate_cell                  (GtkCellArea          *area,
+								 GtkWidget            *widget,
+								 GtkCellRenderer      *renderer,
+								 GdkEvent             *event,
+								 const GdkRectangle   *cell_area,
+								 GtkCellRendererState  flags);
 
 /* Margins */
 gint               gtk_cell_area_get_cell_margin_left           (GtkCellArea        *area);
@@ -299,14 +309,9 @@ void               gtk_cell_area_set_cell_margin_bottom         (GtkCellArea    
 
 /* Functions for area implementations */
 
-/* Signal that editing started on the area (fires the "editing-started" signal) */
-void               gtk_cell_area_editing_started                (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 GtkCellEditable    *editable);
-
 /* Distinguish the inner cell area from the whole requested area including margins */
 void               gtk_cell_area_inner_cell_area                (GtkCellArea        *area,
-								 GdkRectangle       *cell_area,
+								 const GdkRectangle *cell_area,
 								 GdkRectangle       *inner_cell_area);
 
 /* Request the size of a cell while respecting the cell margins (requests are margin inclusive) */
