@@ -160,7 +160,7 @@ gtk_symbolic_color_new_shade (GtkSymbolicColor *color,
   symbolic_color = g_slice_new0 (GtkSymbolicColor);
   symbolic_color->type = COLOR_TYPE_SHADE;
   symbolic_color->shade.color = gtk_symbolic_color_ref (color);
-  symbolic_color->shade.factor = CLAMP (factor, 0, 1);
+  symbolic_color->shade.factor = factor;
   symbolic_color->ref_count = 1;
 
   return symbolic_color;
@@ -191,7 +191,7 @@ gtk_symbolic_color_new_alpha (GtkSymbolicColor *color,
   symbolic_color = g_slice_new0 (GtkSymbolicColor);
   symbolic_color->type = COLOR_TYPE_ALPHA;
   symbolic_color->alpha.color = gtk_symbolic_color_ref (color);
-  symbolic_color->alpha.factor = CLAMP (factor, 0, 1);
+  symbolic_color->alpha.factor = factor;
   symbolic_color->ref_count = 1;
 
   return symbolic_color;
@@ -225,7 +225,7 @@ gtk_symbolic_color_new_mix (GtkSymbolicColor *color1,
   symbolic_color->type = COLOR_TYPE_MIX;
   symbolic_color->mix.color1 = gtk_symbolic_color_ref (color1);
   symbolic_color->mix.color2 = gtk_symbolic_color_ref (color2);
-  symbolic_color->mix.factor = CLAMP (factor, 0, 1);
+  symbolic_color->mix.factor = factor;
   symbolic_color->ref_count = 1;
 
   return symbolic_color;
