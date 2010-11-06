@@ -32,7 +32,15 @@
 
 G_BEGIN_DECLS
 
-
+/**
+ * GtkTreeViewDropPosition:
+ * @GTK_TREE_VIEW_DROP_BEFORE: dropped row is inserted before
+ * @GTK_TREE_VIEW_DROP_AFTER: dropped row is inserted after
+ * @GTK_TREE_VIEW_DROP_INTO_OR_BEFORE: dropped row becomes a child or is inserted before
+ * @GTK_TREE_VIEW_DROP_INTO_OR_AFTER: dropped row becomes a child or is inserted after
+ *
+ * An enum for determining where a dropped row goes.
+ */
 typedef enum
 {
   /* drop before/after this row */
@@ -115,20 +123,78 @@ struct _GtkTreeViewClass
   void (*_gtk_reserved8) (void);
 };
 
-
+/**
+ * GtkTreeViewColumnDropFunc:
+ * @tree_view: A #GtkTreeView
+ * @column: The #GtkTreeViewColumn being dragged
+ * @prev_column: A #GtkTreeViewColumn on one side of @column
+ * @next_column: A #GtkTreeViewColumn on the other side of @column
+ * @data: user data
+ *
+ * Function type for determining whether @column can be dropped in a
+ * particular spot (as determined by @prev_column and @next_column).  In
+ * left to right locales, @prev_column is on the left of the potential drop
+ * spot, and @next_column is on the right.  In right to left mode, this is
+ * reversed.  This function should return %TRUE if the spot is a valid drop
+ * spot.  Please note that returning %TRUE does not actually indicate that
+ * the column drop was made, but is meant only to indicate a possible drop
+ * spot to the user.
+ *
+ * Returns: %TRUE, if @column can be dropped in this spot
+ */
 typedef gboolean (* GtkTreeViewColumnDropFunc) (GtkTreeView             *tree_view,
 						GtkTreeViewColumn       *column,
 						GtkTreeViewColumn       *prev_column,
 						GtkTreeViewColumn       *next_column,
 						gpointer                 data);
+
+/**
+ * GtkTreeViewMappingFunc:
+ * @tree_view: A #GtkTreeView
+ * @path: The path that's expanded
+ * @user_data: user data
+ *
+ * Function used for gtk_tree_view_map_expanded_rows().
+ */
 typedef void     (* GtkTreeViewMappingFunc)    (GtkTreeView             *tree_view,
 						GtkTreePath             *path,
 						gpointer                 user_data);
+
+/**
+ * GtkTreeViewSearchEqualFunc:
+ * @model: the #GtkTreeModel being searched
+ * @column: the search column set by gtk_tree_view_set_search_column()
+ * @key: the key string to compare with
+ * @iter: a #GtkTreeIter pointing the row of @model that should be compared
+ *  with @key.
+ * @search_data: user data from gtk_tree_view_set_search_equal_func()
+ *
+ * A function used for checking whether a row in @model matches
+ * a search key string entered by the user. Note the return value
+ * is reversed from what you would normally expect, though it
+ * has some similarity to strcmp() returning 0 for equal strings.
+ *
+ * Returns: %FALSE if the row matches, %TRUE otherwise.
+ */
 typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 						gint                     column,
 						const gchar             *key,
 						GtkTreeIter             *iter,
 						gpointer                 search_data);
+
+/**
+ * GtkTreeViewRowSeparatorFunc:
+ * @model: the #GtkTreeModel
+ * @iter: a #GtkTreeIter pointing at a row in @model
+ * @data: user data
+ *
+ * Function type for determining whether the row pointed to by @iter should
+ * be rendered as a separator. A common way to implement this is to have a
+ * boolean column in the model, whose values the #GtkTreeViewRowSeparatorFunc
+ * returns.
+ *
+ * Returns: %TRUE if the row is a separator
+ */
 typedef gboolean (*GtkTreeViewRowSeparatorFunc) (GtkTreeModel      *model,
 						 GtkTreeIter       *iter,
 						 gpointer           data);

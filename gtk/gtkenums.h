@@ -509,6 +509,15 @@ typedef enum
   GTK_UNIT_MM
 } GtkUnit;
 
+/**
+ * GtkTreeViewGridLines:
+ * @GTK_TREE_VIEW_GRID_LINES_NONE: No grid lines.
+ * @GTK_TREE_VIEW_GRID_LINES_HORIZONTAL: Horizontal grid lines.
+ * @GTK_TREE_VIEW_GRID_LINES_VERTICAL: Vertical grid lines.
+ * @GTK_TREE_VIEW_GRID_LINES_BOTH: Horizontal and vertical grid lines.
+ *
+ * Used to indicate which grid lines to draw in a tree view.
+ */
 typedef enum
 {
   GTK_TREE_VIEW_GRID_LINES_NONE,

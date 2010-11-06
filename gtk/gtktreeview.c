@@ -48,6 +48,90 @@
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
+
+/**
+ * SECTION:gtktreeview
+ * @Short_description: A widget for displaying both trees and lists
+ * @Title: GtkTreeView
+ * @See_also: #GtkTreeViewColumn, #GtkTreeSelection, #GtkTreeDnd, #GtkTreeMode,
+ *   #GtkTreeSortable, #GtkTreeModelSort, #GtkListStore, #GtkTreeStore,
+ *   #GtkCellRenderer, #GtkCellEditable, #GtkCellRendererPixbuf,
+ *   #GtkCellRendererText, #GtkCellRendererToggle
+ *
+ * Widget that displays any object that implements the #GtkTreeModel interface.
+ *
+ * Please refer to the <link linkend="TreeWidget">tree widget conceptual
+ * overview</link> for an overview of all the objects and data types related
+ * to the tree widget and how they work together.
+ *
+ * Several different coordinate systems are exposed in the GtkTreeView API.
+ * These are:
+ *
+ * <inlinegraphic fileref="tree-view-coordinates.png" format="PNG"></inlinegraphic>
+ * <variablelist><title>Coordinate systems in GtkTreeView API</title>
+ * <varlistentry><term>Widget coordinates</term>
+ * <listitem>
+ * <para>
+ * Coordinates relative to the widget (usually <literal>widget->window</literal>).
+ * </para>
+ * </listitem>
+ * </varlistentry>
+ * <varlistentry><term>Bin window coordinates</term>
+ * <listitem>
+ * <para>
+ * Coordinates relative to the window that GtkTreeView renders to.
+ * </para>
+ * </listitem>
+ * </varlistentry>
+ * <varlistentry><term>Tree coordinates</term>
+ * <listitem>
+ * <para>
+ * Coordinates relative to the entire scrollable area of GtkTreeView. These
+ * coordinates start at (0, 0) for row 0 of the tree.
+ * </para>
+ * </listitem>
+ * </varlistentry>
+ * </variablelist>
+ *
+ * Several functions are available for converting between the different
+ * coordinate systems.  The most common translations are between widget and bin
+ * window coordinates and between bin window and tree coordinates. For the
+ * former you can use gtk_tree_view_convert_widget_to_bin_window_coords()
+ * (and vice versa), for the latter gtk_tree_view_convert_bin_window_to_tree_coords()
+ * (and vice versa).
+ * <refsect2 id="GtkTreeView-BUILDER-UI">
+ * <title>GtkTreeView as GtkBuildable</title>
+ * The GtkTreeView implementation of the GtkBuildable interface accepts
+ * #GtkTreeViewColumn objects as &lt;child&gt; elements and exposes the
+ * internal #GtkTreeSelection in UI definitions.
+ * <example>
+ * <title>A UI definition fragment with GtkTreeView</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkTreeView" id="treeview">
+ *   <property name="model">liststore1</property>
+ *   <child>
+ *     <object class="GtkTreeViewColumn" id="test-column">
+ *       <property name="title">Test</property>
+ *       <child>
+ *         <object class="GtkCellRendererText" id="test-renderer"/>
+ *         <attributes>
+ *           <attribute name="text">1</attribute>
+ *         </attributes>
+ *       </child>
+ *     </object>
+ *   </child>
+ *   <child internal-child="selection">
+ *     <object class="GtkTreeSelection" id="selection">
+ *       <signal name="changed" handler="on_treeview_selection_changed"/>
+ *     </object>
+ *   </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </refsect2>
+ */
+
+
 #define GTK_TREE_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
 #define GTK_TREE_VIEW_PRIORITY_SCROLL_SYNC (GTK_TREE_VIEW_PRIORITY_VALIDATE + 2)
 #define GTK_TREE_VIEW_TIME_MS_PER_IDLE 30
