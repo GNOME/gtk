@@ -51,6 +51,15 @@ typedef struct _GtkColorSelectionClass  GtkColorSelectionClass;
 
 typedef void (* GtkColorSelectionChangePaletteFunc) (const GdkColor    *colors,
                                                      gint               n_colors);
+
+/**
+ * GtkColorSelectionChangePaletteWithScreenFunc:
+ * @screen:
+ * @colors:
+ * @n_colors:
+ *
+ * Since: 2.2
+ */
 typedef void (* GtkColorSelectionChangePaletteWithScreenFunc) (GdkScreen         *screen,
 							       const GdkColor    *colors,
 							       gint               n_colors);

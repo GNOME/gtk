@@ -63,6 +63,20 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+
+/**
+ * SECTION:gtkcolorsel
+ * @Short_description: A widget used to select a color
+ * @Title: GtkColorSelection
+ *
+ * The #GtkColorSelection is a widget that is used to select
+ * a color.  It consists of a color wheel and number of sliders
+ * and entry boxes for color parameters such as hue, saturation,
+ * value, red, green, blue, and opacity.  It is found on the standard
+ * color selection dialog box #GtkColorSelectionDialog.
+ */
+
+
 /* Keep it in sync with gtksettings.c:default_color_palette */
 #define DEFAULT_COLOR_PALETTE   "black:white:gray50:red:purple:blue:light blue:green:yellow:orange:lavender:brown:goldenrod4:dodger blue:pink:light green:gray10:gray30:gray75:gray90"
 
@@ -349,6 +363,13 @@ gtk_color_selection_class_init (GtkColorSelectionClass *klass)
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
+  /**
+   * GtkColorSelection::color-changed:
+   * @colorselection: the object which received the signal.
+   *
+   * This signal is emitted when the color changes in the #GtkColorSelection
+   * according to its update policy.
+   */
   color_selection_signals[COLOR_CHANGED] =
     g_signal_new (I_("color-changed"),
 		  G_OBJECT_CLASS_TYPE (gobject_class),
