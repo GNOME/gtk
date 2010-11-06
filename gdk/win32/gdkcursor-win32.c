@@ -170,14 +170,6 @@ gdk_cursor_new_for_display (GdkDisplay   *display,
   return cursor_new_from_hcursor (hcursor, cursor_type);
 }
 
-static gboolean
-color_is_white (const GdkColor *color)
-{
-  return (color->red == 0xFFFF
-	  && color->green == 0xFFFF
-	  && color->blue == 0xFFFF);
-}
-
 /* FIXME: The named cursors below are presumably not really useful, as
  * the names are Win32-specific. No GTK+ application developed on Unix
  * (and most cross-platform GTK+ apps are developed on Unix) is going
