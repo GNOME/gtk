@@ -268,8 +268,7 @@ void               gtk_cell_area_cell_get_property              (GtkCellArea    
 void               gtk_cell_area_grab_focus                     (GtkCellArea        *area,
 								 GtkDirectionType    direction);
 void               gtk_cell_area_focus_leave                    (GtkCellArea        *area,
-								 GtkDirectionType    direction,
-								 const gchar        *path);
+								 GtkDirectionType    direction);
 void               gtk_cell_area_update_focus                   (GtkCellArea        *area);
 void               gtk_cell_area_set_can_focus                  (GtkCellArea        *area,
 								 gboolean            can_focus);

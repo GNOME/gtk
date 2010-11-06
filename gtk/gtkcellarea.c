@@ -1725,8 +1725,6 @@ gtk_cell_area_grab_focus (GtkCellArea      *area,
  * @area: a #GtkCellArea
  * @direction: the #GtkDirectionType in which focus
  *             is to leave @area
- * @path: the current #GtkTreePath string for the 
- *        event which was handled by @area
  *
  * Notifies that focus is to leave @area in the
  * given @direction.
@@ -1740,12 +1738,15 @@ gtk_cell_area_grab_focus (GtkCellArea      *area,
  */
 void
 gtk_cell_area_focus_leave (GtkCellArea        *area,
-			   GtkDirectionType    direction,
-			   const gchar        *path)
+			   GtkDirectionType    direction)
 {
+  GtkCellAreaPrivate *priv;
+
   g_return_if_fail (GTK_IS_CELL_AREA (area));
 
-  g_signal_emit (area, cell_area_signals[SIGNAL_FOCUS_LEAVE], 0, direction, path);
+  priv = area->priv;
+
+  g_signal_emit (area, cell_area_signals[SIGNAL_FOCUS_LEAVE], 0, direction, priv->current_path);
 }
 
 /**

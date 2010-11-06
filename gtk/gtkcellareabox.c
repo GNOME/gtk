@@ -862,6 +862,97 @@ gtk_cell_area_box_get_cell_allocation (GtkCellArea          *area,
   g_slist_free (allocated_cells);
 }
 
+enum {
+  FOCUS_NONE,
+  FOCUS_PREV,
+  FOCUS_NEXT
+};
+
+static void
+gtk_cell_area_cycle_focus (GtkCellAreaBox   *box,
+			   GtkCellRenderer  *focus_cell,
+			   GtkDirectionType  direction)
+{
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GtkCellArea           *area = GTK_CELL_AREA (box);
+  gint                   cycle = FOCUS_NONE;
+
+  switch (direction)
+    {
+    case GTK_DIR_TAB_FORWARD:
+      cycle = FOCUS_NEXT;
+      break;
+    case GTK_DIR_TAB_BACKWARD:
+      cycle = FOCUS_PREV;
+      break;
+    case GTK_DIR_UP: 
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	gtk_cell_area_focus_leave (area, direction);
+      else
+	cycle = FOCUS_PREV;
+      break;
+    case GTK_DIR_DOWN:
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	gtk_cell_area_focus_leave (area, direction);
+      else
+	cycle = FOCUS_NEXT;
+      break;
+    case GTK_DIR_LEFT:
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+	gtk_cell_area_focus_leave (area, direction);
+      else
+	cycle = FOCUS_PREV;
+      break;
+    case GTK_DIR_RIGHT:
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+	gtk_cell_area_focus_leave (area, direction);
+      else
+	cycle = FOCUS_NEXT;
+      break;
+    default:
+      break;
+    }
+
+  if (cycle != FOCUS_NONE)
+    {
+      gboolean  found_cell = FALSE;
+      gboolean  cycled_focus = FALSE;
+      GList    *list;
+      gint      i;
+
+      for (i = (cycle == FOCUS_NEXT) ? 0 : priv->groups->len -1; 
+	   i >= 0 && i < priv->groups->len;
+	   i = (cycle == FOCUS_NEXT) ? i + 1 : i - 1)
+	{
+	  CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
+	  
+	  for (list = (cycle == FOCUS_NEXT) ? g_list_first (group->cells) : g_list_last (group->cells); 
+	       list; list = (cycle == FOCUS_NEXT) ? list->next : list->prev)
+	    {
+	      CellInfo *info = list->data;
+
+	      if (!found_cell && info->renderer == focus_cell)
+		found_cell = TRUE;
+	      else if (found_cell)
+		{
+		  if (gtk_cell_renderer_can_focus (info->renderer))
+		    {
+		      gtk_cell_area_set_focus_cell (area, info->renderer);
+
+		      cycled_focus = TRUE;
+		      break;
+		    }
+		}
+	    }
+	}
+      
+      /* We cycled right out of the area, signal the parent we
+       * need to focus out of the area */
+      if (!cycled_focus)
+	gtk_cell_area_focus_leave (area, direction);
+    }
+}
+
 static gint
 gtk_cell_area_box_event (GtkCellArea          *area,
 			 GtkCellAreaIter      *iter,
@@ -887,6 +978,53 @@ gtk_cell_area_box_event (GtkCellArea          *area,
    * observe the orientation and push focus along to the next cell
    * or signal that focus should leave the area.
    */
+  if (event->type == GDK_KEY_PRESS && (flags & GTK_CELL_RENDERER_FOCUSED) != 0)
+    {
+      GdkEventKey        *key_event = (GdkEventKey *)event;
+      GtkCellRenderer    *focus_cell;
+
+      focus_cell = gtk_cell_area_get_focus_cell (area);
+
+      if (focus_cell)
+	{
+	  GtkCellAreaBox        *box            = GTK_CELL_AREA_BOX (area);
+	  GtkDirectionType       direction      = GTK_DIR_TAB_FORWARD;
+	  gboolean               have_direction = FALSE;
+
+	  /* Check modifiers and TAB keys ! */
+	  switch (key_event->keyval)
+	    {
+	    case GDK_KEY_KP_Up:
+	    case GDK_KEY_Up:
+	      direction = GTK_DIR_UP;
+	      have_direction = TRUE;
+	      break;
+	    case GDK_KEY_KP_Down:
+	    case GDK_KEY_Down:
+	      direction = GTK_DIR_DOWN;
+	      have_direction = TRUE;
+	      break;
+	    case GDK_KEY_KP_Left:
+	    case GDK_KEY_Left:
+	      direction = GTK_DIR_LEFT;
+	      have_direction = TRUE;
+	      break;
+	    case GDK_KEY_KP_Right:
+	    case GDK_KEY_Right:
+	      direction = GTK_DIR_RIGHT;
+	      have_direction = TRUE;
+	      break;
+	    default:
+	      break;
+	    }
+
+	  if (have_direction)
+	    {
+	      gtk_cell_area_cycle_focus (box, focus_cell, direction);
+	      return TRUE;
+	    }
+	}
+    }
 
   /* Also detect mouse events, for mouse events we need to allocate the renderers
    * and find which renderer needs to be activated.
