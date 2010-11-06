@@ -377,7 +377,7 @@ gtk_theming_engine_register_property (GtkThemingEngine       *engine,
   g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
   g_return_if_fail (property_name != NULL);
   g_return_if_fail (type != G_TYPE_INVALID);
-  g_return_if_fail (default_value != NULL && G_IS_VALUE (default_value));
+  g_return_if_fail (default_value == NULL || G_IS_VALUE (default_value));
 
   priv = engine->priv;
 
