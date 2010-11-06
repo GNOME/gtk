@@ -16,6 +16,7 @@
  * Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+
 #define PANGO_ENABLE_BACKEND /* for pango_fc_font_map_cache_clear() */
 
 #include "config.h"
@@ -34,6 +35,41 @@
 #include "x11/gdkx.h"
 #include <pango/pangofc-fontmap.h>
 #endif
+
+
+/**
+ * SECTION:gtksettings
+ * @Short_description: Sharing settings between applications
+ * @Title: Settings
+ *
+ * GtkSettings provide a mechanism to share global settings between applications.
+ * On the X window system, this sharing is realized by an
+ * <ulink url="http://www.freedesktop.org/wiki/Specifications/xsettings-spec">XSettings</ulink>
+ * manager that is usually part of the desktop environment, along with utilities
+ * that let the user change these settings. In the absence of an Xsettings manager,
+ * settings can also be specified in RC files.
+ *
+ * Applications can override system-wide settings with gtk_settings_set_string_property(),
+ * gtk_settings_set_long_property(), etc. This should be restricted to special
+ * cases though; GtkSettings are not meant as an application configuration
+ * facility. When doing so, you need to be aware that settings that are specific
+ * to individual widgets may not be available before the widget type has been
+ * realized at least once. The following example demonstrates a way to do this:
+ * <informalexample><programlisting>
+ *   gtk_init (&argc, &argv);
+ *
+ *   /&ast; make sure the type is realized &ast;/
+ *   g_type_class_unref (g_type_class_ref (GTK_TYPE_IMAGE_MENU_ITEM));
+ *
+ *   g_object_set (gtk_settings_get_default (), "gtk-menu-images", FALSE, NULL);
+ * </programlisting></informalexample>
+ *
+ * There is one GtkSettings instance per screen. It can be obtained with
+ * gtk_settings_get_for_screen(), but in many cases, it is more convenient
+ * to use gtk_widget_get_settings(). gtk_settings_get_default() returns the
+ * GtkSettings instance for the default screen.
+ */
+
 
 #ifdef GDK_WINDOWING_QUARTZ
 #define DEFAULT_KEY_THEME "Mac"
