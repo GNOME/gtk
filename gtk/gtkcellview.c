@@ -30,6 +30,19 @@
 #include "gtkbuildable.h"
 
 
+/**
+ * SECTION:gtkcellview
+ * @Short_description: A widget displaying a single row of a GtkTreeModel
+ * @Title: GtkCellView
+ *
+ * A #GtkCellView displays a single row of a #GtkTreeModel, using
+ * cell renderers just like #GtkTreeView. #GtkCellView doesn't support
+ * some of the more complex features of #GtkTreeView, like cell editing
+ * and drag and drop.
+ */
+
+
+
 typedef struct _GtkCellViewCellInfo GtkCellViewCellInfo;
 struct _GtkCellViewCellInfo
 {
