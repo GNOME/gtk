@@ -52,6 +52,18 @@
 #include "gtkscrollable.h"
 
 
+/**
+ * SECTION:gtktextview
+ * @Short_description: Widget that displays a GtkTextBuffer
+ * @Title: GtkTextView
+ * @See_also: #GtkTextBuffer, #GtkTextIter
+ *
+ * You may wish to begin by reading the <link linkend="TextWidget">text widget
+ * conceptual overview</link> which gives an overview of all the objects and data
+ * types related to the text widget and how they work together.
+ */
+
+
 /* How scrolling, validation, exposes, etc. work.
  *
  * The expose_event handler has the invariant that the onscreen lines

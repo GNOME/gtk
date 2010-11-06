@@ -56,6 +56,12 @@ typedef enum
   GTK_TEXT_WINDOW_BOTTOM
 } GtkTextWindowType;
 
+/**
+ * GTK_TEXT_VIEW_PRIORITY_VALIDATE:
+ *
+ * The priority at which the text view validates onscreen lines
+ * in an idle job in the background.
+ */
 #define GTK_TEXT_VIEW_PRIORITY_VALIDATE (GDK_PRIORITY_REDRAW + 5)
 
 typedef struct _GtkTextView        GtkTextView;
