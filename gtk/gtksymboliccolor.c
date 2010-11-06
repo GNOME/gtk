@@ -488,7 +488,6 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
                             GdkRGBA            *resolved_color)
 {
   g_return_val_if_fail (color != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
   g_return_val_if_fail (resolved_color != NULL, FALSE);
 
   switch (color->type)
@@ -499,6 +498,8 @@ gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
     case COLOR_TYPE_NAME:
       {
         GtkSymbolicColor *named_color;
+
+        g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
 
         named_color = gtk_style_properties_lookup_color (props, color->name);
 
