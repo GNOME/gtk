@@ -45,6 +45,19 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+
+/**
+ * SECTION:gtkcolorbutton
+ * @Short_description: A button to launch a color selection dialog
+ * @Title: GtkColorButton
+ * @See_also: #GtkColorSelectionDialog, #GtkFontButton
+ *
+ * The #GtkColorButton is a button which displays the currently selected color
+ * an allows to open a color selection dialog to change the color. It is suitable
+ * widget for selecting a color in a preference dialog.
+ */
+
+
 /* Size of checks and gray levels for alpha compositing checkerboard */
 #define CHECK_SIZE  4
 #define CHECK_DARK  (1.0 / 3.0)
