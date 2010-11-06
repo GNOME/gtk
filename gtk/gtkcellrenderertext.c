@@ -32,6 +32,20 @@
 #include "gtktreeprivate.h"
 
 
+/**
+ * SECTION:gtkcellrenderertext
+ * @Short_description: Renders text in a cell
+ * @Title: GtkCellRendererText
+ *
+ * A #GtkCellRendererText renders a given text in its cell, using the font, color and
+ * style information provided by its properties. The text will be ellipsized if it is
+ * too long and the #GtkCellRendererText:ellipsize property allows it.
+ *
+ * If the #GtkCellRenderer:mode is %GTK_CELL_RENDERER_MODE_EDITABLE,
+ * the #GtkCellRendererText allows to edit its text using an entry.
+ */
+
+
 static void gtk_cell_renderer_text_finalize   (GObject                  *object);
 
 static void gtk_cell_renderer_text_get_property  (GObject                  *object,
