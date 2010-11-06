@@ -1,3 +1,20 @@
+Overview of Changes from GTK+ 2.23.0 to 2.23.1
+==============================================
+
+* New deprecations:
+ - gtk_widget_hide_all
+
+* New APIs added to aid migration to GTK+ 3:
+ - gtk_combo_box_new_with_model_and_entry
+
+* Bugs fixed:
+ 624025 gdk_draw_rectangle bogged down by ColorSync
+ 632381 gtk_combo_box_text_new_with_entry() adds two...
+ 632539 Do not install gtkprivate.h
+ 633050 need gtk_combo_box_new_with_model_and_entry
+ 634060 Support for GIcon pixbufs
+
+
 Overview of Changes from GTK+ 2.22.0 to 2.23.0
 ==============================================
 
