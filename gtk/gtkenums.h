@@ -587,7 +587,6 @@ typedef enum
  * @GTK_REGION_ODD: Region has an odd number within a set.
  * @GTK_REGION_FIRST: Region is the first one within a set.
  * @GTK_REGION_LAST: Region is the last one within a set.
- * @GTK_REGION_DEFAULT: Region is the default option.
  * @GTK_REGION_SORTED: Region is part of a sorted area.
  *
  * Describes a region within a widget.
@@ -597,7 +596,6 @@ typedef enum {
   GTK_REGION_ODD     = 1 << 1,
   GTK_REGION_FIRST   = 1 << 2,
   GTK_REGION_LAST    = 1 << 3,
-  GTK_REGION_DEFAULT = 1 << 4,
   GTK_REGION_SORTED  = 1 << 5
 } GtkRegionFlags;
 
