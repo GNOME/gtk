@@ -1235,10 +1235,14 @@ color_shade (const GdkRGBA *color,
              gdouble        factor,
              GdkRGBA       *color_return)
 {
-  color_return->red = CLAMP (color->red * factor, 0, 1);
-  color_return->green = CLAMP (color->green * factor, 0, 1);
-  color_return->blue = CLAMP (color->blue * factor, 0, 1);
-  color_return->alpha = color->alpha;
+  GtkSymbolicColor *literal, *shade;
+
+  literal = gtk_symbolic_color_new_literal (color);
+  shade = gtk_symbolic_color_new_shade (literal, factor);
+  gtk_symbolic_color_unref (literal);
+
+  gtk_symbolic_color_resolve (shade, NULL, color_return);
+  gtk_symbolic_color_unref (shade);
 }
 
 static void
