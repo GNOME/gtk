@@ -1739,7 +1739,7 @@ draw_box (GtkStyle *style,
       HDC dc;
       int cx;
 
-      border = (GTK_TOGGLE_BUTTON (widget)->active ? DFCS_PUSHED | DFCS_FLAT : 0);
+      border = (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget)) ? DFCS_PUSHED | DFCS_FLAT : 0);
 
       dc = get_window_dc (style, cr, state_type, &dc_info, x, y, width, height, &rect);
       DrawFrameControl (dc, &rect, DFC_SCROLL, DFCS_SCROLLDOWN | border);
@@ -2430,11 +2430,11 @@ draw_themed_tab_button (GtkStyle *style,
     }
   else
     {
+/* FIXME: poop */
+#if 0
       GdkPixbuf *pixbuf;
       GdkPixbuf *rotated;
 
-/* FIXME: poop */
-#if 0
       if (gap_side == GTK_POS_LEFT || gap_side == GTK_POS_RIGHT)
 	{
 	  pixmap = gdk_pixmap_new (cr, draw_rect.height, draw_rect.width, -1);
