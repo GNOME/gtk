@@ -292,6 +292,8 @@ gboolean           gtk_cell_area_activate_cell                  (GtkCellArea    
 								 GdkEvent             *event,
 								 const GdkRectangle   *cell_area,
 								 GtkCellRendererState  flags);
+void               gtk_cell_area_stop_editing                   (GtkCellArea          *area,
+								 gboolean              canceled);
 
 /* Margins */
 gint               gtk_cell_area_get_cell_margin_left           (GtkCellArea        *area);

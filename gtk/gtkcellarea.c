@@ -618,15 +618,8 @@ gtk_cell_area_real_event (GtkCellArea          *area,
       else if (priv->edited_cell &&
 	       (key_event->keyval == GDK_KEY_Escape))
 	{
-	  /* Cancel editing of the cell renderer */
-	  gtk_cell_renderer_stop_editing (priv->edited_cell, TRUE);
-
-	  /* Signal that editing has been canceled */
-	  gtk_cell_area_editing_canceled (area, priv->edited_cell);	
-
-	  /* Remove any references to the editable widget */
-	  gtk_cell_area_set_edited_cell (area, NULL);
-	  gtk_cell_area_set_edit_widget (area, NULL);
+	  gtk_cell_area_stop_editing (area, TRUE);
+	  return TRUE;
 	}
     }
 
@@ -2101,6 +2094,30 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
   return FALSE;
 }
 
+void
+gtk_cell_area_stop_editing (GtkCellArea *area,
+			    gboolean     canceled)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  if (priv->edited_cell)
+    {
+      /* Stop editing of the cell renderer */
+      gtk_cell_renderer_stop_editing (priv->edited_cell, canceled);
+      
+      /* Signal that editing has been canceled */
+      if (canceled)
+	gtk_cell_area_editing_canceled (area, priv->edited_cell);	
+      
+      /* Remove any references to the editable widget */
+      gtk_cell_area_set_edited_cell (area, NULL);
+      gtk_cell_area_set_edit_widget (area, NULL);
+    }
+}
 
 /*************************************************************
  *                        API: Margins                       *
