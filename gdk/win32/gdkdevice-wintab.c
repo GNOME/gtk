@@ -145,7 +145,7 @@ gdk_device_wintab_get_state (GdkDevice       *device,
     }
 
   if (device_wintab->last_axis_data)
-    _gdk_device_wintab_translate_axes (device, window, axes, NULL, NULL);
+    _gdk_device_wintab_translate_axes (device_wintab, window, axes, NULL, NULL);
 }
 
 static void
