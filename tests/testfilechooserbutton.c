@@ -327,7 +327,7 @@ main (int   argc,
   g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
   g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), chooser);
+  gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
 
   button = gtk_button_new_from_stock (GTK_STOCK_PROPERTIES);
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
@@ -357,7 +357,7 @@ main (int   argc,
   g_signal_connect (chooser, "selection-changed", G_CALLBACK (chooser_selection_changed_cb), NULL);
   g_signal_connect (chooser, "file-activated", G_CALLBACK (chooser_file_activated_cb), NULL);
   g_signal_connect (chooser, "update-preview", G_CALLBACK (chooser_update_preview_cb), NULL);
-  gtk_container_add (GTK_CONTAINER (hbox), chooser);
+  gtk_box_pack_start (GTK_BOX (hbox), chooser, TRUE, TRUE, 0);
 
   button = gtk_button_new_from_stock (GTK_STOCK_PROPERTIES);
   g_signal_connect (button, "clicked", G_CALLBACK (properties_button_clicked_cb), chooser);
