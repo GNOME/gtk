@@ -452,7 +452,8 @@ gtk_file_chooser_button_init (GtkFileChooserButton *button)
   priv->label = gtk_label_new (_(FALLBACK_DISPLAY_NAME));
   gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
   gtk_misc_set_alignment (GTK_MISC (priv->label), 0.0, 0.5);
-  gtk_container_add (GTK_CONTAINER (box), priv->label);
+  gtk_box_pack_start (GTK_BOX (box), priv->label, TRUE, TRUE, 0);
+  //gtk_container_add (GTK_CONTAINER (box), priv->label);
   gtk_widget_show (priv->label);
 
   sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
