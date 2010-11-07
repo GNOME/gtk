@@ -14,10 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
-"2b&component=general\n"
-"POT-Creation-Date: 2010-08-22 14:07+0000\n"
-"PO-Revision-Date: 2010-10-10 18:48+0300\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
+"%2b&component=general\n"
+"POT-Creation-Date: 2010-11-03 02:36+0000\n"
+"PO-Revision-Date: 2010-11-05 09:08+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -253,10 +253,6 @@ msgstr "Paleti suurus 8-bitises režiimis"
 msgid "COLORS"
 msgstr "VÄRVID"
 
-#. Description of --sync in --help output
-msgid "Make X calls synchronous"
-msgstr "X'i kutsungid sünkroonseks"
-
 #, c-format
 msgid "Starting %s"
 msgstr "Käivitamine: %s"
@@ -271,15 +267,16 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Avamine: %d kirje"
 msgstr[1] "Avamine: %d kirjet"
 
+#. Description of --sync in --help output
+msgid "Make X calls synchronous"
+msgstr "X'i kutsungid sünkroonseks"
+
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
 msgstr "See programm on ILMA IGASUGUSE GARANTIITA. Üksikasjade kohta vaata %s"
-
-msgid "Could not show link"
-msgstr "Linki pole võimalik kuvada"
 
 msgid "License"
 msgstr "Litsents"
@@ -294,6 +291,9 @@ msgstr "_Autorid"
 #. Add the license button
 msgid "_License"
 msgstr "_Litsents"
+
+msgid "Could not show link"
+msgstr "Linki pole võimalik kuvada"
 
 #, c-format
 msgid "About %s"
@@ -711,6 +711,13 @@ msgstr ""
 "kataloogile määrata mõni muu nimi või nimeta fail enne kataloogi loomist "
 "ümber."
 
+msgid ""
+"You may only select folders.  The item that you selected is not a folder; "
+"try using a different item."
+msgstr ""
+"Sul on võimalik valida ainult katalooge.  Sinu poolt valitud kirje ei ole "
+"kataloog."
+
 msgid "Invalid file name"
 msgstr "Vigane failinimi"
 
@@ -937,10 +944,6 @@ msgstr "Lõpetamata hostinimi; lõpeta see kaldkriipsuga '/'"
 #. * and then hits Tab
 msgid "Path does not exist"
 msgstr "Asukohta pole olemas"
-
-#, c-format
-msgid "Error creating folder '%s': %s"
-msgstr "Viga kataloogi '%s' loomisel: %s"
 
 #. The pointers we return for a GtkFileSystemVolume are opaque tokens; they are
 #. * really pointers to GDrive, GVolume or GMount objects.  We need an extra
@@ -1640,6 +1643,10 @@ msgstr "%d. %s"
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "URI-ga '%s' pole võimalik leida ühtegi kirjet"
+
+#, c-format
+msgid "No registered application with name '%s' for item with URI '%s' found"
+msgstr ""
 
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
@@ -3029,10 +3036,6 @@ msgid "Password:"
 msgstr "Parool:"
 
 #, c-format
-msgid "Authentication is required to get a file from %s"
-msgstr "Faili tõmbamiseks %s-st on vaja eelnevalt autentida"
-
-#, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
 msgstr "Dokumendi '%s' printimiseks printerisse %s on vaja eelnevalt autentida"
 
@@ -3061,6 +3064,10 @@ msgstr "Vaikimisi printeri hankimiseks %s-st on vaja eelnevalt autentida"
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Printerite hankimiseks %s-st on vaja eelnevalt autentida"
+
+#, c-format
+msgid "Authentication is required to get a file from %s"
+msgstr "Faili tõmbamiseks %s-st on vaja eelnevalt autentida"
 
 #, c-format
 msgid "Authentication is required on %s"
@@ -3368,422 +3375,3 @@ msgid ""
 msgstr ""
 "Tõrge pildifaili '%s' laadimisel: põhjus teadmata, arvatavasti on pildifail "
 "rikutud"
-
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "Pildifaili '%s' ei sisalda andmeid"
-
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "Tõrge animatsiooni '%s' laadimisel: põhjus teadmata, arvatavasti on "
-#~ "animatsioonifail rikutud"
-
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "Piltide laadimise moodulit pole võimalik laadida: %s: %s"
-
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "Pildilaadimismoodul '%s' ei väljasta korralikku liidest. Võib-olla on "
-#~ "tegemist erinevate GTK versioonidega?"
-
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "'%s' pilditüüp pole toetatud"
-
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "Pildifaili '%s' vormingut pole võimalik ära tunda"
-
-#~ msgid "Unrecognized image file format"
-#~ msgstr "Pildifaili vorming pole äratuntav"
-
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "Tõrge pildi '%s' laadimisel: %s"
-
-#~ msgid "Error writing to image file: %s"
-#~ msgstr "Viga pildifaili kirjutamisel: %s"
-
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr "See gdk-pixbuf'i variant ei toeta %s pildivormingu salvestamist"
-
-#~ msgid "Insufficient memory to save image to callback"
-#~ msgstr "Pildi väljakutsesse salvestamiseks pole piisavalt mälu"
-
-#~ msgid "Failed to open temporary file"
-#~ msgstr "Tõrge ajutise faili avamisel"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "Tõrge ajutisest failist lugemisel"
-
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "Tõrge faili '%s' kirjutamiseks avamisel: %s"
-
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr ""
-#~ "Tõrge faili '%s' sulgemisel, kõik andmeid ei pruugi olla salvestatud: %s"
-
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "Pildi puhvrisse salvestamiseks pole piisavalt mälu"
-
-#~ msgid "Error writing to image stream"
-#~ msgstr "Viga pildifaili voogu kirjutamisel"
-
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "Sisemine viga: pildilaadimismooduli '%s' tõrge toimingu läbiviimisel, "
-#~ "moodul ei andud tõrke põhjuse kohta andmeid"
-
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "Osade kaupa laadimine pole %s pilditüübi puhul toetatud"
-
-#~ msgid "Image header corrupt"
-#~ msgstr "Pildi päis on rikutud"
-
-#~ msgid "Image format unknown"
-#~ msgstr "Pildi vorming on tundmatu"
-
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "Pildi piksliandmed on rikutud"
-
-#~ msgid "failed to allocate image buffer of %u byte"
-#~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "Tõrge pildipuhvrile %u baidi eraldamisel"
-#~ msgstr[1] "Tõrge pildipuhvrile %u baidi eraldamisel"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "Animatsioonis on ootamatu ikoonitükk"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "Animatsioonitüüp pole toetatud"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "Vigane päis animatsioonis"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "Animatsiooni laadimiseks pole piisavalt mälu"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "Animatsioonis on vigaselt vormindatud tükk"
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "Rasterpildi laadimiseks pole piisavalt mälu"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "Faili lõpp tuli enneaegselt"
-
-#~ msgid "Stack overflow"
-#~ msgstr "Pinu ületäituvus"
-
-#~ msgid "Bad code encountered"
-#~ msgstr "Avastati vigane kood"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "Vigane päis ikoonis"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "Ikooni laadimiseks pole piisavalt mälu"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "Ikoonil on null-laius"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "Ikoonil on null-kõrgus"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "Pakitud ikoonid pole toetatud"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "Toetamata ikoonitüüp"
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "Kursori tulipunkt jääb pildist välja"
-
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "Voo jaoks pole võimalik mälu eraldada"
-
-#~ msgid "Couldn't decode image"
-#~ msgstr "Pilti pole võimalik dekodeerida"
-
-#~ msgid "Image type currently not supported"
-#~ msgstr "Pilditüüp pole hetkel toetatud"
-
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "Värviprofiilile pole võimalik mälu eraldada"
-
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "Pildi andmete puhverdamiseks pole võimalik mälu eraldada"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "Pildifaili laadimiseks pole piisavalt mälu. Mälu vabastamiseks võid sa "
-#~ "proovida sulgeda mõned rakendused"
-
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "Päise jaoks pole võimalik mälu eraldada"
-
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "Kontekstipuhvri jaoks pole võimalik mälu eraldada"
-
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "Pildil on vigane laius ja/või kõrgus"
-
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "Pildil on toetamata värvisügavus"
-
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "Pildil on toetamata hulk %d-bitiseid tasandeid"
-
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "Uut pixbuf'i pole võimalik luua"
-
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "Joone andmetele pole võimalik mälu eraldada"
-
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "Paleti andmetele pole võimalik mälu eraldada"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "%ldx%ld suurusega pildi salvestamiseks pole piisavalt mälu. Mälukasutuse "
-#~ "vähendamiseks võid sa proovida mõnede rakenduste sulgemist"
-
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "Värvusprofiilil on vigane pikkus %d."
-
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "Sisendfaili deskriptor on NULL."
-
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "Tõrge faililugemispuhvrile %d baidi eraldamisel"
-
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "Tõrge seek() abil järgnevast %d baidist ülehüppamisel."
-
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "Pildi andmeaatomi leidmine nurjus."
-
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "IOBuffer struktuuri jaoks pole võimalik mälu eraldada"
-
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "IOBuffer andmete jaoks pole võimalik mälu eraldada"
-
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "IO-puhvri andmeid pole võimalik ümber paigutada"
-
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "IOBuffer andmetele pole võimalik mälu eraldada"
-
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "Uut pixbuf'i pole võimalik eraldada"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "Tõmmis pole täielik või on tükeldatud"
-
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "Värvikaardi struktuurile pole võimalik mälu eraldada"
-
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "Värvikaardi kirjetele pole võimalik mälu eraldada"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "Ootamatu bitisügavus värvikaardi kirjetele"
-
-#~ msgid "Excess data in file"
-#~ msgstr "Failis on liigsed andmed"
-
-#~ msgid "Image has zero width"
-#~ msgstr "Pildi laius on null"
-
-#~ msgid "Image has zero height"
-#~ msgstr "Pildi kõrgus on null"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "Pildi laadimiseks pole piisavalt mälu"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "Ülejäänut pole võimalik salvestada"
-
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "Mälu pole võimalik eraldada: %s"
-
-#~ msgid "Could not create stream: %s"
-#~ msgstr "Voogu pole võimalik luua: %s"
-
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "Voos pole võimalik asukohta vahetada: %s"
-
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "Voost pole võimalik lugeda: %s"
-
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "Rastergraafikat pole võimalik laadida"
-
-#~ msgid "Couldn't load metafile"
-#~ msgstr "Metafaili pole võimalik laadida"
-
-#~ msgid "Couldn't save"
-#~ msgstr "Salvestamine pole võimalik"
-
-#~ msgid "\"Deepness\" of the color."
-#~ msgstr "Värvi \"sügavus\"."
-
-#~ msgid "Error printing"
-#~ msgstr "Viga printimisel"
-
-#~ msgid "Printer '%s' may not be connected."
-#~ msgstr "Printer '%s' ei pruugi ühendatud olla."
-
-#~ msgid "Folders"
-#~ msgstr "Kataloogid"
-
-#~ msgid "Fol_ders"
-#~ msgstr "_Kataloogid"
-
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "Kataloog on loetamatu: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "Fail \"%s\" asub teises arvutis (mille nimi on %s) ning ei pruugi "
-#~ "seetõttu sellele programmile kättesaadav olla.\n"
-#~ "Kas sa tahad kindlasti seda faili valida?"
-
-#~ msgid "_New Folder"
-#~ msgstr "_Uus kataloog"
-
-#~ msgid "De_lete File"
-#~ msgstr "_Kustuta fail"
-
-#~ msgid "_Rename File"
-#~ msgstr "Muuda faili _nime"
-
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Kataloogi \"%s\" nimi sisaldab failinimedes keelatud märke"
-
-#~ msgid "New Folder"
-#~ msgstr "Uus kataloog"
-
-#~ msgid "_Folder name:"
-#~ msgstr "_Kataloogi nimi:"
-
-#~ msgid "C_reate"
-#~ msgstr "_Loo"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Failinimi \"%s\" sisaldab failinimedes keelatud märke"
-
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "Viga faili '%s' kustutamisel: %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Kas kustutadata fail \"%s\"?"
-
-#~ msgid "Delete File"
-#~ msgstr "Faili kustutamine"
-
-#~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr "Viga faili ümbernimetamisel nimega \"%s\": %s"
-
-#~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr "Viga faili \"%s\" ümbernimetamisel: %s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "Viga faili \"%s\" ümbernimetamisel \"%s\"-ks: %s"
-
-#~ msgid "Rename File"
-#~ msgstr "Faili ümbernimetamine"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Faili \"%s\" ümbernimetamine:"
-
-#~ msgid "_Rename"
-#~ msgstr "Muuda _nime"
-
-#~ msgid "_Selection: "
-#~ msgstr "_Valik: "
-
-#~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-#~ "environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr ""
-#~ "Failinime \"%s\" pole võimalik UTF-8'sse teisendada (proovi "
-#~ "keskkonnamuutuja G_FILENAME_ENCODING seadmist): %s"
-
-#~ msgid "Invalid UTF-8"
-#~ msgstr "Vigane UTF-8"
-
-#~ msgid "Name too long"
-#~ msgstr "Nimi on liiga pikk"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "Failinime pole võimalik teisendada"
-
-#~ msgid "Gamma"
-#~ msgstr "Gamma"
-
-#~ msgid "_Gamma value"
-#~ msgstr "_Gamma väärtus"
-
-#~ msgid "Input"
-#~ msgstr "Sisend"
-
-#~ msgid "No extended input devices"
-#~ msgstr "Laiendatud sisendseadmeid ei ole"
-
-#~ msgid "_Device:"
-#~ msgstr "_Seade:"
-
-#~ msgid "Disabled"
-#~ msgstr "Välja lülitatud"
-
-#~ msgid "Screen"
-#~ msgstr "Ekraan"
-
-#~ msgid "Window"
-#~ msgstr "Aken"
-
-#~ msgid "_Mode:"
-#~ msgstr "_Režiim:"
-
-#~ msgid "Axes"
-#~ msgstr "Teljed"
-
-#~ msgid "Keys"
-#~ msgstr "Klahvid"
-
-#~ msgid "_Pressure:"
-#~ msgstr "Su_rve:"
-
-#~ msgid "X _tilt:"
-#~ msgstr "X-_kalle:"
-
-#~ msgid "Y t_ilt:"
-#~ msgstr "Y-k_alle:"
-
-#~ msgid "_Wheel:"
-#~ msgstr "_Ratas:"
-
-#~ msgid "(disabled)"
-#~ msgstr "(välja lülitatud)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(tundmatu)"
-
-#~ msgid "Cl_ear"
-#~ msgstr "_Tühjenda"
