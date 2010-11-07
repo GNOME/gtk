@@ -195,6 +195,7 @@ gtk_OBJECTS = \
 	gtkcolorseldialog.obj \
 	gtkcombobox.obj	\
 	gtkcomboboxentry.obj \
+	gtkcomboboxtext.obj \
 	gtkcontainer.obj \
 	gtkcurve.obj \
 	gtkdialog.obj \
@@ -372,6 +373,7 @@ gtk_public_h_sources =		\
 	gtkcombo.h		\
 	gtkcombobox.h		\
 	gtkcomboboxentry.h	\
+	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
 	gtkctree.h		\
 	gtkcurve.h		\
