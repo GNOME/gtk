@@ -197,7 +197,8 @@ void
 gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (display == gdk_display_get_default());
-  Beep(1000, 50);
+  if (!MessageBeep (-1))
+    Beep (1000, 50);
 }
 
 void
