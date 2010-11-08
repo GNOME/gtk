@@ -33,6 +33,34 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkprogressbar
+ * @Short_description: A widget which indicates progress visually
+ * @Title: GtkProgressBar
+ *
+ * The #GtkProgressBar is typically used to display the progress of a long
+ * running operation.  It provides a visual clue that processing
+ * is underway.  The #GtkProgressBar can be used in two different
+ * modes: percentage mode and activity mode.
+ *
+ * When an application can determine how much work needs to take place
+ * (e.g. read a fixed number of bytes from a file) and can monitor its
+ * progress, it can use the #GtkProgressBar in percentage mode and the user
+ * sees a growing bar indicating the percentage of the work that has
+ * been completed.  In this mode, the application is required to call
+ * gtk_progress_bar_set_fraction() periodically to update the progress bar.
+ *
+ * When an application has no accurate way of knowing the amount of work
+ * to do, it can use the #GtkProgressBar in activity mode, which shows
+ * activity by a block moving back and forth within the progress area. In
+ * this mode, the application is required to call gtk_progress_bar_pulse()
+ * periodically to update the progress bar.
+ *
+ * There is quite a bit of flexibility provided to control the appearance
+ * of the #GtkProgressBar.  Functions are provided to control the
+ * orientation of the bar, optional text can be displayed along with
+ * the bar, and the step size used in activity mode can be set.
+ */
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150
 #define MIN_HORIZONTAL_BAR_HEIGHT  20
@@ -356,6 +384,13 @@ gtk_progress_bar_get_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_progress_bar_new:
+ *
+ * Creates a new #GtkProgressBar.
+ *
+ * Returns: a #GtkProgressBar.
+ */
 GtkWidget*
 gtk_progress_bar_new (void)
 {
