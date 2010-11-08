@@ -115,6 +115,20 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_MENU "menu"
 
 /**
+ * GTK_STYLE_CLASS_MENUBAR:
+ *
+ * A CSS class to menubars.
+ */
+#define GTK_STYLE_CLASS_MENUBAR "menubar"
+
+/**
+ * GTK_STYLE_CLASS_MENUITEM:
+ *
+ * A CSS class to match menu items.
+ */
+#define GTK_STYLE_CLASS_MENUITEM "menuitem"
+
+/**
  * GTK_STYLE_CLASS_RADIO:
  *
  * A CSS class to match radio buttons.
@@ -156,6 +170,26 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_HEADER "header"
 
+/**
+ * GTK_STYLE_CLASS_ACCELERATOR:
+ *
+ * A CSS class to match an accelerator.
+ */
+#define GTK_STYLE_CLASS_ACCELERATOR "accelerator"
+
+/**
+ * GTK_STYLE_CLASS_GRIP:
+ *
+ * A widget class defining a resize grip
+ */
+#define GTK_STYLE_CLASS_GRIP "grip"
+
+/**
+ * GTK_STYLE_CLASS_PROGRESSBAR:
+ *
+ * A widget class defining a resize grip
+ */
+#define GTK_STYLE_CLASS_PROGRESSBAR "progressbar"
 
 /* Predefined set of widget regions */
 
