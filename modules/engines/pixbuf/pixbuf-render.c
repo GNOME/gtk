@@ -25,7 +25,7 @@
 #include "pixbuf.h"
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
-static GCache *pixbuf_cache = NULL;
+static GHashTable *pixbuf_cache = NULL;
 
 static GdkPixbuf *
 bilinear_gradient (GdkPixbuf    *src,
@@ -504,7 +504,7 @@ theme_pixbuf_set_filename (ThemePixbuf *theme_pb,
 {
   if (theme_pb->pixbuf)
     {
-      g_cache_remove (pixbuf_cache, theme_pb->pixbuf);
+      g_object_unref (theme_pb->pixbuf);
       theme_pb->pixbuf = NULL;
     }
 
@@ -678,20 +678,11 @@ theme_pixbuf_set_stretch (ThemePixbuf *theme_pb,
     theme_pixbuf_compute_hints (theme_pb);
 }
 
-static GdkPixbuf *
-pixbuf_cache_value_new (gchar *filename)
+void
+theme_pixbuf_uncache (gpointer  data,
+                      GObject  *where_the_object_was)
 {
-  GError *err = NULL;
-    
-  GdkPixbuf *result = gdk_pixbuf_new_from_file (filename, &err);
-  if (!result)
-    {
-      g_warning ("Pixbuf theme: Cannot load pixmap file %s: %s\n",
-		 filename, err->message);
-      g_error_free (err);
-    }
-
-  return result;
+  g_hash_table_remove (pixbuf_cache, data);
 }
 
 GdkPixbuf *
@@ -699,14 +690,46 @@ theme_pixbuf_get_pixbuf (ThemePixbuf *theme_pb)
 {
   if (!theme_pb->pixbuf)
     {
+      gpointer pixbuf;
+
       if (!pixbuf_cache)
-	pixbuf_cache = g_cache_new ((GCacheNewFunc)pixbuf_cache_value_new,
-				    (GCacheDestroyFunc)g_object_unref,
-				    (GCacheDupFunc)g_strdup,
-				    (GCacheDestroyFunc)g_free,
-				    g_str_hash, g_direct_hash, g_str_equal);
-      
-      theme_pb->pixbuf = g_cache_insert (pixbuf_cache, theme_pb->filename);
+        /* Hash table does not hold its own reference to the GdkPixbuf */
+        pixbuf_cache = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                              g_free, NULL);
+
+      /* Do an extended lookup because we store NULL in the hash table
+       * (below) to indicate that we failed to load the given filename.
+       */
+      if (!g_hash_table_lookup_extended (pixbuf_cache, theme_pb->filename,
+                                         NULL, &pixbuf))
+        /* Not in the cache.  Add it and take the first ref. */
+        {
+          gchar *key = g_strdup (theme_pb->filename);
+          GError *error = NULL;
+
+          pixbuf = gdk_pixbuf_new_from_file (key, &error);
+
+          if (pixbuf != NULL)
+            {
+              /* Drop the pixbuf from the cache when we lose the last ref. */
+              g_object_weak_ref (G_OBJECT (pixbuf), theme_pixbuf_uncache, key);
+            }
+          else
+            {
+              /* Never drop a negative from the cache. */
+              g_warning ("Pixbuf theme: Cannot load pixmap file %s: %s\n",
+                         theme_pb->filename, error->message);
+              g_error_free (error);
+            }
+
+          /* Always insert, even if we failed to create the pixbuf. */
+          g_hash_table_insert (pixbuf_cache, key, pixbuf);
+          theme_pb->pixbuf = pixbuf;
+        }
+
+      else
+        /* In the cache.  Take an additional ref. */
+        theme_pb->pixbuf = g_object_ref (pixbuf);
 
       if (theme_pb->stretch)
 	theme_pixbuf_compute_hints (theme_pb);
