@@ -1579,25 +1579,15 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   else
     gdk_cairo_set_source_rgba (cr, bg_color);
 
-  if (gtk_theming_engine_has_class (engine, "tooltip"))
-    {
-      cairo_fill_preserve (cr);
-
-      cairo_set_source_rgb (cr, 0, 0, 0);
-      cairo_stroke (cr);
-    }
+  if (alpha == 1)
+    cairo_fill (cr);
   else
     {
-      if (alpha == 1)
-        cairo_fill (cr);
-      else
-        {
-          cairo_pattern_t *mask;
+      cairo_pattern_t *mask;
 
-          mask = cairo_pattern_create_rgba (1, 1, 1, alpha);
-          cairo_mask (cr, mask);
-          cairo_pattern_destroy (mask);
-        }
+      mask = cairo_pattern_create_rgba (1, 1, 1, alpha);
+      cairo_mask (cr, mask);
+      cairo_pattern_destroy (mask);
     }
 
   cairo_restore (cr);
