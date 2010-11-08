@@ -1663,6 +1663,13 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
               width -= border_width;
               height -= border_width;
             }
+          else if (border_width == 1)
+            {
+              x += 0.5;
+              y += 0.5;
+              width -= 1;
+              height -= 1;
+            }
 
           _cairo_round_rectangle_sides (cr, (gdouble) radius, x, y, width, height,
                                         SIDE_ALL, junction);
@@ -1675,12 +1682,15 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
           cairo_set_line_width (cr, border_width);
           cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
 
-          d1 = d2 = 0;
-
           if (border_width > 1)
             {
               d1 = (gdouble) border_width / 2;
               d2 = (gdouble) (border_width - (gint) d1) + 1;
+            }
+          else
+            {
+              d1 = 0.5;
+              d2 = 1;
             }
 
 	  cairo_save (cr);
