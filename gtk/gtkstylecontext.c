@@ -222,6 +222,7 @@ struct GtkStyleInfo
   GArray *style_classes;
   GArray *regions;
   GtkJunctionSides junction_sides;
+  GtkStateFlags state_flags;
 };
 
 struct StyleData
@@ -255,8 +256,6 @@ struct GtkStyleContextPrivate
   GHashTable *style_data;
   GSList *info_stack;
   StyleData *current_data;
-
-  GtkStateFlags state_flags;
 
   GSList *animation_regions;
   GSList *animations;
@@ -1275,11 +1274,13 @@ gtk_style_context_set_state (GtkStyleContext *context,
                              GtkStateFlags    flags)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleInfo *info;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
-  priv->state_flags = flags;
+  info = priv->info_stack->data;
+  info->state_flags = flags;
 }
 
 /**
@@ -1296,11 +1297,14 @@ GtkStateFlags
 gtk_style_context_get_state (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleInfo *info;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
   priv = context->priv;
-  return priv->state_flags;
+  info = priv->info_stack->data;
+
+  return info->state_flags;
 }
 
 static gboolean
