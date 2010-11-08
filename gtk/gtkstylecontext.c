@@ -3298,7 +3298,7 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
   GtkThemingEngineClass *engine_class;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-  g_return_val_if_fail (size >= -1, NULL);
+  g_return_val_if_fail (size == -1 || size <= GTK_ICON_SIZE_DIALOG, NULL);
   g_return_val_if_fail (source != NULL, NULL);
 
   priv = context->priv;
