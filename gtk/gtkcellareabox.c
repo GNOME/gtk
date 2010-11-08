@@ -586,8 +586,6 @@ get_allocated_cells (GtkCellAreaBox     *box,
       return NULL;
     }
 
-  g_print ("Allocating cells for rendering, group allocs %d\n", n_allocs);
-
   for (i = 0; i < n_allocs; i++)
     {
       /* We dont always allocate all groups, sometimes the requested group has only invisible
@@ -679,8 +677,6 @@ get_allocated_cells (GtkCellAreaBox     *box,
 	      
 	      position += sizes[j].minimum_size;
 	      position += priv->spacing;
-
-	      j++;
 	    }
 
 	  g_free (sizes);
@@ -1059,9 +1055,6 @@ gtk_cell_area_box_render (GtkCellArea          *area,
    * of alignments and pack order etc. */
   allocated_cells = get_allocated_cells (box, box_iter, widget);
 
-  g_print ("Rendering an area with allocated cells %d\n",
-	   g_slist_length (allocated_cells));
-
   for (l = allocated_cells; l; l = l->next)
     {
       AllocatedCell *cell = l->data;
@@ -1083,9 +1076,6 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 
       /* XXX We have to do some per-cell considerations for the 'flags'
        * for focus handling */
-      g_print ("Rendering a cell at x: %d y: %d width %d height %d\n",
-	       inner_area.x, inner_area.y, inner_area.width, inner_area.height);
-      
       gtk_cell_renderer_render (cell->renderer, cr, widget,
 				&background_area, &inner_area,
 				flags);
