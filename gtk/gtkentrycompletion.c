@@ -1449,7 +1449,9 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     width = -1;
 
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (completion->priv->tree_view));
-  gtk_widget_set_size_request (completion->priv->tree_view, width, items * height);
+  gtk_scrolled_window_set_min_content_width (GTK_SCROLLED_WINDOW (completion->priv->scrolled_window), width);
+  gtk_widget_set_size_request (completion->priv->scrolled_window, width, -1);
+  gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (completion->priv->scrolled_window), items * height);
 
   if (actions)
     {
