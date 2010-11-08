@@ -1790,6 +1790,8 @@ transform_detail_string (const gchar     *detail,
     gtk_style_context_add_class (context, "accelerator");
   else if (strcmp (detail, "menubar") == 0)
     gtk_style_context_add_class (context, "menubar");
+  else if (strcmp (detail, "base") == 0)
+    gtk_style_context_add_class (context, "background");
   else if (g_str_has_prefix (detail, "cell"))
     {
       GtkRegionFlags row, col;
