@@ -5139,10 +5139,7 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
 	  int width, height;
 	  GdkDrawable *source;
 
-	  /* It would be nice if we had some cairo support here so we
-	     could set the clip rect on the cairo surface */
-	  width = private->abs_x + private->width;
-	  height = private->abs_y + private->height;
+          gdk_drawable_get_size (private->impl_window, &width, &height);
 
 	  source = _gdk_drawable_get_source_drawable (drawable);
 
