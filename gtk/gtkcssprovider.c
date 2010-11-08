@@ -1363,6 +1363,7 @@ parse_classes (SelectorPath   *path,
 
   if ((pos = strchr (str, '.')) != NULL)
     {
+      /* Leave the last class to the call after the loop */
       while (pos)
         {
           *pos = '\0';
@@ -1372,8 +1373,8 @@ parse_classes (SelectorPath   *path,
           pos = strchr (str, '.');
         }
     }
-  else
-    selector_path_prepend_class (path, str);
+
+  selector_path_prepend_class (path, str);
 }
 
 static GTokenType
