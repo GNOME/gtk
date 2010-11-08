@@ -1654,6 +1654,7 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
           break;
         case GTK_BORDER_STYLE_SOLID:
           cairo_set_line_width (cr, border_width);
+          cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
 
           if (border_width > 1)
             {
