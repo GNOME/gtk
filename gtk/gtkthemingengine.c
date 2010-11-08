@@ -1354,7 +1354,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   gboolean running;
   gdouble progress, alpha = 1;
   GtkJunctionSides junction;
-  gint radius;
+  gint radius, border_width;
 
   flags = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
@@ -1372,10 +1372,23 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
                           "background-color", &bg_color,
+                          "border-width", &border_width,
                           "border-radius", &radius,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+
+  if (border_width > 0)
+    {
+      x += border_width;
+      y += border_width;
+      width -= 2 * border_width;
+      height -= 2 * border_width;
+      radius -= 2 * border_width;
+
+      if (radius < 0)
+        radius = 0;
+    }
 
   _cairo_round_rectangle_sides (cr, (gdouble) radius,
                                 x, y, width, height,
