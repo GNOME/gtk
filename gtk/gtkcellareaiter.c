@@ -126,22 +126,20 @@ gtk_cell_area_iter_class_init (GtkCellAreaIterClass *class)
   object_class->get_property = gtk_cell_area_iter_get_property;
   object_class->set_property = gtk_cell_area_iter_set_property;
 
+  /* GtkCellAreaIterClass */
   class->flush_preferred_width            = gtk_cell_area_iter_real_flush_preferred_width;
   class->flush_preferred_height_for_width = gtk_cell_area_iter_real_flush_preferred_height_for_width;
   class->flush_preferred_height           = gtk_cell_area_iter_real_flush_preferred_height;
   class->flush_preferred_width_for_height = gtk_cell_area_iter_real_flush_preferred_width_for_height;
   class->flush_allocation                 = gtk_cell_area_iter_real_flush_allocation;
 
-  class->allocate_width  = gtk_cell_area_iter_real_allocate_width;
-  class->allocate_height = gtk_cell_area_iter_real_allocate_height;
-
   class->sum_preferred_width            = NULL;
   class->sum_preferred_height_for_width = NULL;
   class->sum_preferred_height           = NULL;
   class->sum_preferred_width_for_height = NULL;
 
-  class->allocate_width  = NULL;
-  class->allocate_height = NULL;
+  class->allocate_width  = gtk_cell_area_iter_real_allocate_width;
+  class->allocate_height = gtk_cell_area_iter_real_allocate_height;
 
   cell_area_iter_signals[SIGNAL_HEIGHT_CHANGED] =
     g_signal_new (I_("height-changed"),

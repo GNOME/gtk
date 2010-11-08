@@ -175,7 +175,7 @@ gtk_cell_area_box_iter_flush_preferred_width (GtkCellAreaIter *iter)
       size->nat_size = 0;
     }
 
-  GTK_CELL_AREA_ITER_GET_CLASS
+  GTK_CELL_AREA_ITER_CLASS
     (gtk_cell_area_box_iter_parent_class)->flush_preferred_width (iter);
 }
 
@@ -192,7 +192,7 @@ gtk_cell_area_box_iter_flush_preferred_height_for_width (GtkCellAreaIter *iter,
   else
     g_hash_table_remove (priv->heights, GINT_TO_POINTER (width));
 
-  GTK_CELL_AREA_ITER_GET_CLASS
+  GTK_CELL_AREA_ITER_CLASS
     (gtk_cell_area_box_iter_parent_class)->flush_preferred_height_for_width (iter, width);
 }
 
@@ -211,7 +211,7 @@ gtk_cell_area_box_iter_flush_preferred_height (GtkCellAreaIter *iter)
       size->nat_size = 0;
     }
 
-  GTK_CELL_AREA_ITER_GET_CLASS
+  GTK_CELL_AREA_ITER_CLASS
     (gtk_cell_area_box_iter_parent_class)->flush_preferred_height (iter);
 }
 
@@ -228,7 +228,7 @@ gtk_cell_area_box_iter_flush_preferred_width_for_height (GtkCellAreaIter *iter,
   else
     g_hash_table_remove (priv->widths, GINT_TO_POINTER (height));
 
-  GTK_CELL_AREA_ITER_GET_CLASS
+  GTK_CELL_AREA_ITER_CLASS
     (gtk_cell_area_box_iter_parent_class)->flush_preferred_width_for_height (iter, height);
 }
 
@@ -479,7 +479,8 @@ static GtkCellAreaBoxAllocation *
 allocate_for_orientation (GtkCellAreaBoxIter *iter,
 			  GtkOrientation      orientation,
 			  gint                spacing,
-			  gint                size)
+			  gint                size,
+			  gint               *n_allocs)
 {
   GtkCellAreaBoxIterPrivate *priv = iter->priv;
   GtkRequestedSize          *orientation_sizes;
@@ -549,6 +550,9 @@ allocate_for_orientation (GtkCellAreaBoxIter *iter,
       position += spacing;
     }
 
+  if (n_allocs)
+    *n_allocs = n_groups;
+
   g_free (orientation_sizes);
 
   return allocs;
@@ -571,10 +575,11 @@ gtk_cell_area_box_iter_allocate_width (GtkCellAreaIter *iter,
       gint spacing = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
 
       g_free (priv->orientation_allocs);
-      priv->orientation_allocs = allocate_for_orientation (box_iter, orientation, spacing, width);
+      priv->orientation_allocs = allocate_for_orientation (box_iter, orientation, spacing, width,
+							   &priv->n_orientation_allocs);
     }
 
-  GTK_CELL_AREA_ITER_GET_CLASS (iter)->allocate_width (iter, width);
+  GTK_CELL_AREA_ITER_CLASS (gtk_cell_area_box_iter_parent_class)->allocate_width (iter, width);
 }
 
 static void
@@ -594,10 +599,11 @@ gtk_cell_area_box_iter_allocate_height (GtkCellAreaIter *iter,
       gint spacing = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
 
       g_free (priv->orientation_allocs);
-      priv->orientation_allocs = allocate_for_orientation (box_iter, orientation, spacing, height);
+      priv->orientation_allocs = allocate_for_orientation (box_iter, orientation, spacing, height,
+							   &priv->n_orientation_allocs);
     }
 
-  GTK_CELL_AREA_ITER_GET_CLASS (iter)->allocate_height (iter, height);
+  GTK_CELL_AREA_ITER_CLASS (gtk_cell_area_box_iter_parent_class)->allocate_height (iter, height);
 }
 
 /*************************************************************
@@ -612,7 +618,7 @@ gtk_cell_area_box_init_groups (GtkCellAreaBoxIter *box_iter,
   gint                       i;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_ITER (box_iter));
-  g_return_if_fail (n_groups > 0 || expand_groups != NULL);
+  g_return_if_fail (n_groups == 0 || expand_groups != NULL);
 
   /* When the group dimensions change, all info must be flushed 
    * Note this already clears the min/nat values on the BaseSizes
