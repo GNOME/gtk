@@ -59,16 +59,13 @@ simple_list_model (void)
   return (GtkTreeModel *)store;
 }
 
-static void
-simple_cell_area (void)
+static GtkWidget *
+simple_scaffold (void)
 {
-  GtkWidget *window;
   GtkTreeModel *model;
-  GtkWidget *scaffold, *frame, *label, *box;
+  GtkWidget *scaffold;
   GtkCellArea *area;
   GtkCellRenderer *renderer;
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   scaffold = cell_area_scaffold_new ();
   gtk_widget_show (scaffold);
@@ -96,18 +93,57 @@ simple_cell_area (void)
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "text", SIMPLE_COLUMN_DESCRIPTION);
 
-  box   = gtk_vbox_new (FALSE, 4);
-  frame = gtk_frame_new (NULL);
-  label = gtk_label_new ("GtkCellArea below");
-  gtk_widget_show (box);
-  gtk_widget_show (frame);
-  gtk_widget_show (label);
+  return scaffold;
+}
 
-  gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
+static void
+orientation_changed (GtkComboBox      *combo,
+		     CellAreaScaffold *scaffold)
+{
+  GtkOrientation orientation = gtk_combo_box_get_active (combo);
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (scaffold), orientation);
+}
+
+static void
+simple_cell_area (void)
+{
+  GtkWidget *window, *widget;
+  GtkWidget *scaffold, *frame, *vbox, *hbox;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  scaffold = simple_scaffold ();
+
+  hbox  = gtk_hbox_new (FALSE, 4);
+  frame = gtk_frame_new (NULL);
+  gtk_widget_show (hbox);
+  gtk_widget_show (frame);
+
+  gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
 
   gtk_container_add (GTK_CONTAINER (frame), scaffold);
-  gtk_container_add (GTK_CONTAINER (window), box);
+
+  gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
+
+  /* Now add some controls */
+  vbox  = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (vbox);
+  gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
+
+  widget = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "changed",
+                    G_CALLBACK (orientation_changed), scaffold);
+
+
+  gtk_container_add (GTK_CONTAINER (window), hbox);
 
   gtk_widget_show (window);
 }

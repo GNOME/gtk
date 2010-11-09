@@ -187,6 +187,7 @@ cell_area_scaffold_set_property (GObject      *object,
     case PROP_ORIENTATION:
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->area), 
 				      g_value_get_enum (value));
+      gtk_widget_queue_resize (GTK_WIDGET (scaffold));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
