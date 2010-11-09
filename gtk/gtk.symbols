@@ -602,7 +602,6 @@ gtk_cell_renderer_set_sensitive
 gtk_cell_renderer_set_visible
 gtk_cell_renderer_start_editing
 gtk_cell_renderer_stop_editing
-_gtk_cell_renderer_calc_offset
 #endif
 #endif
 
