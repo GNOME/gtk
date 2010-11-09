@@ -1446,7 +1446,7 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
     }
 }
 
-void
+static void
 gtk_scrolled_window_allocate_child (GtkScrolledWindow *swindow,
 				    GtkAllocation     *relative_allocation)
 {
