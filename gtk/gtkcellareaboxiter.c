@@ -491,9 +491,7 @@ allocate_for_orientation (GtkCellAreaBoxIter *iter,
   gint                       avail_size = size;
 
   orientation_sizes =
-    gtk_cell_area_box_iter_get_requests (iter, 
-					 GTK_ORIENTATION_HORIZONTAL, 
-					 &n_groups);
+    gtk_cell_area_box_iter_get_requests (iter, orientation, &n_groups);
 
   /* Count groups that expand */
   for (i = 0; i < n_groups; i++)
