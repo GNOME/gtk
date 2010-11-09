@@ -73,6 +73,8 @@ struct _CellAreaScaffoldPrivate {
 
   /* Cache some info about rows (hieghts etc) */
   GArray          *row_data;
+
+  gulong           size_changed_id;
 };
 
 
@@ -88,6 +90,18 @@ G_DEFINE_TYPE_WITH_CODE (CellAreaScaffold, cell_area_scaffold, GTK_TYPE_WIDGET,
 
 
 static void
+size_changed_cb (GtkCellAreaIter  *iter,
+		 GParamSpec       *pspec,
+		 CellAreaScaffold *scaffold)
+{
+  if (!strcmp (pspec->name, "minimum-width") ||
+      !strcmp (pspec->name, "natural-width") ||
+      !strcmp (pspec->name, "minimum-height") ||
+      !strcmp (pspec->name, "natural-height"))
+    gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+static void
 cell_area_scaffold_init (CellAreaScaffold *scaffold)
 {
   CellAreaScaffoldPrivate *priv;
@@ -99,6 +113,10 @@ cell_area_scaffold_init (CellAreaScaffold *scaffold)
 
   priv->area = gtk_cell_area_box_new ();
   priv->iter = gtk_cell_area_create_iter (priv->area);
+
+  priv->size_changed_id = 
+    g_signal_connect (priv->iter, "notify",
+		      G_CALLBACK (size_changed_cb), scaffold);
 
   priv->row_data = g_array_new (FALSE, FALSE, sizeof (RowData));
 
@@ -158,8 +176,12 @@ cell_area_scaffold_dispose (GObject *object)
 
   if (priv->iter)
     {
+      /* Disconnect signals */
+      g_signal_handler_disconnect (priv->iter, priv->size_changed_id);
+
       g_object_unref (priv->iter);
       priv->iter = NULL;
+      priv->size_changed_id = 0;
     }
 
   if (priv->area)
@@ -187,7 +209,6 @@ cell_area_scaffold_set_property (GObject      *object,
     case PROP_ORIENTATION:
       gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->area), 
 				      g_value_get_enum (value));
-      gtk_widget_queue_resize (GTK_WIDGET (scaffold));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -294,6 +315,8 @@ request_all_base (CellAreaScaffold *scaffold)
   if (!priv->model)
     return;
 
+  g_signal_handler_block (priv->iter, priv->size_changed_id);
+
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (priv->area));
 
   valid = gtk_tree_model_get_iter_first (priv->model, &iter);
@@ -315,6 +338,8 @@ request_all_base (CellAreaScaffold *scaffold)
     gtk_cell_area_iter_sum_preferred_width (priv->iter);
   else
     gtk_cell_area_iter_sum_preferred_height (priv->iter);
+
+  g_signal_handler_unblock (priv->iter, priv->size_changed_id);
 }
 
 static void 
@@ -606,8 +631,6 @@ cell_area_scaffold_set_model (CellAreaScaffold *scaffold,
 	}
 
       gtk_cell_area_iter_flush (priv->iter);
-
-      gtk_widget_queue_resize (GTK_WIDGET (scaffold));
     }
 }
 

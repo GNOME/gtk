@@ -115,7 +115,6 @@ align_cell_2_toggled (GtkToggleButton  *toggle,
   gboolean     align = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_2, "align", align, NULL);
-  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
 }
 
 static void
@@ -126,7 +125,6 @@ align_cell_3_toggled (GtkToggleButton  *toggle,
   gboolean     align = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_3, "align", align, NULL);
-  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
 }
 
 static void
@@ -137,7 +135,6 @@ expand_cell_1_toggled (GtkToggleButton  *toggle,
   gboolean     expand = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_1, "expand", expand, NULL);
-  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
 }
 
 static void
@@ -148,7 +145,6 @@ expand_cell_2_toggled (GtkToggleButton  *toggle,
   gboolean     expand = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_2, "expand", expand, NULL);
-  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
 }
 
 static void
@@ -159,7 +155,6 @@ expand_cell_3_toggled (GtkToggleButton  *toggle,
   gboolean     expand = gtk_toggle_button_get_active (toggle);
 
   gtk_cell_area_cell_set (area, cell_3, "expand", expand, NULL);
-  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
 }
 
 static void
