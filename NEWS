@@ -1,3 +1,23 @@
+Overview of Changes from GTK+ 2.91.3 to 2.91.4
+==============================================
+
+* Bugs fixed:
+ 609622 disappearing statusicon
+ 631331 window icons don't work anymore
+ 632894 Only show Desktop in file chooser button if there is one
+ 633670 Child minimum/natural size is not respected by GtkScrolledWindow
+ 633762 Correctly convert colors to CSS and deal with librsvg limitations
+ 633915 gtk_button_box_child_requisition() mishandles size allocations
+ 634060 Support for GIcon pixbufs
+ 634338 Move GtkPaned documentation to inline comments
+ 634339 Move GtkProgressBar documentation to inline comments
+ 634340 Move GtkPageSetup documentation to inline comments
+
+* Translation updates
+ Japanese
+ Estonian
+
+
 Overview of Changes from GTK+ 2.91.2 to 2.91.3
 ==============================================
 
