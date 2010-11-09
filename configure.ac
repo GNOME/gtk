@@ -20,7 +20,7 @@ AC_CONFIG_MACRO_DIR([m4])
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [91])
-m4_define([gtk_micro_version], [4])
+m4_define([gtk_micro_version], [5])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
