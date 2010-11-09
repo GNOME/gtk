@@ -62,6 +62,9 @@ struct _GtkThemingEngine
  * @render_layout: Renders a #PangoLayout
  * @render_slider: Renders a slider control, as in #GtkScale.
  * @render_handle: Renders a handle to drag UI elements, as in #GtkPaned.
+ * @render_activity: Renders an area displaying activity, such as in #GtkSpinner,
+ *                   or #GtkProgressBar.
+ * @render_icon_pixbuf: Renders an icon as a #GdkPixbuf.
  *
  * Base class for theming engines.
  */
