@@ -129,6 +129,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_MENUITEM "menuitem"
 
 /**
+ * GTK_STYLE_CLASS_TOOLBAR:
+ *
+ * A CSS class to match toolbars.
+ */
+#define GTK_STYLE_CLASS_TOOLBAR "toolbar"
+
+/**
  * GTK_STYLE_CLASS_RADIO:
  *
  * A CSS class to match radio buttons.
@@ -183,6 +190,13 @@ struct _GtkStyleContextClass
  * A widget class defining a resize grip
  */
 #define GTK_STYLE_CLASS_GRIP "grip"
+
+/**
+ * GTK_STYLE_CLASS_DOCK:
+ *
+ * A widget class defining a dock area
+ */
+#define GTK_STYLE_CLASS_DOCK "dock"
 
 /**
  * GTK_STYLE_CLASS_PROGRESSBAR:
