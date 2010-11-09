@@ -99,6 +99,7 @@
  * former you can use gtk_tree_view_convert_widget_to_bin_window_coords()
  * (and vice versa), for the latter gtk_tree_view_convert_bin_window_to_tree_coords()
  * (and vice versa).
+ *
  * <refsect2 id="GtkTreeView-BUILDER-UI">
  * <title>GtkTreeView as GtkBuildable</title>
  * The GtkTreeView implementation of the GtkBuildable interface accepts
