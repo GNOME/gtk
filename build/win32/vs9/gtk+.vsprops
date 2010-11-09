@@ -8,13 +8,13 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\pango-1.0"
+		AdditionalIncludeDirectories="..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\GdkPixbuf-2.0"
 		PreprocessorDefinitions="HAVE_CONFIG_H;G_DISABLE_DEPRECATED;G_DISABLE_SINGLE_INCLUDES;ATK_DISABLE_SINGLE_INCLUDES;GDK_PIXBUF_DISABLE_SINGLE_INCLUDES;GTK_DISABLE_SINGLE_INCLUDES"
 		ForcedIncludeFiles="msvc_recommended_pragmas.h"
 	/>
 	<Tool
 		Name="VCLinkerTool"
-		AdditionalDependencies="gio-2.0.lib gmodule-2.0.lib gobject-2.0.lib glib-2.0.lib intl.lib"
+		AdditionalDependencies="gdk_pixbuf-2.0.lib gio-2.0.lib gmodule-2.0.lib gobject-2.0.lib glib-2.0.lib intl.lib"
 		AdditionalLibraryDirectories="$(GlibEtcInstallRoot)\lib"
 	/>
 	<Tool
@@ -31,7 +31,7 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 	/>
 	<UserMacro
 		Name="GtkApiVersion"
-		Value="3.0"
+		Value="2.0"
 	/>
 	<UserMacro
 		Name="GtkBinaryVersion"
@@ -44,18 +44,6 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 	<UserMacro
 		Name="GtkPrefixDefine"
 		Value="GTK_PREFIX=\&quot;$(GtkDummyPrefix)\&quot;"
-	/>
-	<UserMacro
-		Name="GdkPixbufIncludedLoaderDefines"
-		Value="INCLUDE_ani;INCLUDE_icns;INCLUDE_pcx;INCLUDE_ras;INCLUDE_tga;INCLUDE_png;INCLUDE_pnm;INCLUDE_wbmp;INCLUDE_xbm;INCLUDE_xpm;INCLUDE_gdiplus"
-	/>
-	<UserMacro
-		Name="GdkPixbufDefines"
-		Value="GDK_PIXBUF_COMPILATION;GDK_PIXBUF_ENABLE_BACKEND;$(GtkPrefixDefine);$(GdkPixbufIncludedLoaderDefines)"
-	/>
-	<UserMacro
-		Name="GdkPixbufLibdirDefine"
-		Value="PIXBUF_LIBDIR=\&quot;$(GtkDummyPrefix)/lib/gtk-$(GtkApiVersion)/$(GtkBinaryVersion)/loaders\&quot;"
 	/>
 	<UserMacro
 		Name="GdkDefines"
@@ -75,23 +63,19 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 echo on&#x0D;&#x0A;
 mkdir $(OutDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*.dll $(OutDir)\bin&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\*.exe $(OutDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.exe $(OutDir)\bin&#x0D;&#x0A;
+
+mkdir $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.exe $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.c $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.h $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.gif $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.jpg $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.png $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.ui $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
 
 mkdir $(OutDir)\lib&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\lib&#x0D;&#x0A;
-
-mkdir $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-animation.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-core.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-enum-types.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-features.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-io.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-loader.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-marshal.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-simple-anim.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf-transform.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixbuf.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
-copy ..\..\..\gdk-pixbuf\gdk-pixdata.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk-pixbuf&#x0D;&#x0A;
 
 mkdir $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdk.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
@@ -108,9 +92,11 @@ copy ..\..\..\gdk\gdkevents.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#
 copy ..\..\..\gdk\gdkfont.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkgc.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdki18n.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkimage.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkinput.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeys.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeysyms.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkkeysyms-compat.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkpango.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkpixbuf.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkpixmap.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
@@ -158,6 +144,7 @@ copy ..\..\..\gtk\gtkcellrenderercombo.h $(OutDir)\include\gtk-$(GtkApiVersion)\
 copy ..\..\..\gtk\gtkcellrendererpixbuf.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcellrendererprogress.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcellrendererspin.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkcellrendererspinner.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcellrenderertext.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcellrenderertoggle.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcellview.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -239,6 +226,7 @@ copy ..\..\..\gtk\gtkmodules.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&
 copy ..\..\..\gtk\gtkmountoperation.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtknotebook.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkobject.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkoffscreenwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkoldeditable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkoptionmenu.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkorientable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -282,6 +270,7 @@ copy ..\..\..\gtk\gtkshow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0
 copy ..\..\..\gtk\gtksignal.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksizegroup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksocket.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkspinner.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkspinbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusbar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusicon.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -308,6 +297,8 @@ copy ..\..\..\gtk\gtktoggletoolbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\g
 copy ..\..\..\gtk\gtktoolbar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoolbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoolitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtktoolitemgroup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtktoolpalette.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoolshell.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktooltip.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktooltips.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -343,10 +334,6 @@ copy ..\..\..\gdk\gdkconfig.h $(OutDir)\lib\gtk-$(GtkApiVersion)\include&#x0D;&#
 
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\lib&#x0D;&#x0A;
 "
-	/>
-	<UserMacro
-		Name="GtkGenerateGdkPixbufDef"
-		Value="echo EXPORTS &gt;&quot;$(IntDir)\gdk-pixbuf.def&quot; &amp;&amp; cl /EP -DG_OS_WIN32 -DINCLUDE_VARIABLES -DALL_FILES -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= ..\..\..\gdk-pixbuf\gdk-pixbuf.symbols &gt;&gt;&quot;$(IntDir)\gdk-pixbuf.def&quot;"
 	/>
 	<UserMacro
 		Name="GtkGenerateGdkDef"
