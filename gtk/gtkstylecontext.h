@@ -362,6 +362,9 @@ void gtk_style_context_state_transition_stop   (GtkStyleContext *context,
 void gtk_style_context_invalidate (GtkStyleContext *context);
 void gtk_style_context_reset_widgets (GdkScreen *screen);
 
+void gtk_style_context_set_background (GtkStyleContext *context,
+                                       GdkWindow       *window);
+
 /* Paint methods */
 void gtk_render_check (GtkStyleContext *context,
                        cairo_t         *cr,

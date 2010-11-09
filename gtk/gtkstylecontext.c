@@ -2743,6 +2743,48 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   priv->invalidating_context = FALSE;
 }
 
+/**
+ * gtk_style_context_set_background:
+ * @context: a #GtkStyleContext
+ * @window: a #GdkWindow
+ *
+ * Sets the background of @window to the background pattern or
+ * color specified in @context for its current state.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_set_background (GtkStyleContext *context,
+                                  GdkWindow       *window)
+{
+  GtkStateFlags state;
+  cairo_pattern_t *pattern;
+  GdkRGBA *color;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get (context, state,
+                         "background-image", &pattern,
+                         NULL);
+  if (pattern)
+    {
+      gdk_window_set_background_pattern (window, pattern);
+      cairo_pattern_destroy (pattern);
+      return;
+    }
+
+  gtk_style_context_get (context, state,
+                         "background-color", &color,
+                         NULL);
+  if (color)
+    {
+      gdk_window_set_background_rgba (window, color);
+      gdk_rgba_free (color);
+    }
+}
+
 /* Paint methods */
 
 /**
