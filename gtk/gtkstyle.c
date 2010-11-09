@@ -1792,6 +1792,14 @@ transform_detail_string (const gchar     *detail,
     gtk_style_context_add_class (context, "menubar");
   else if (strcmp (detail, "base") == 0)
     gtk_style_context_add_class (context, "background");
+  else if (strcmp (detail, "bar") == 0)
+    gtk_style_context_add_class (context, "progressbar");
+  else if (strcmp (detail, "toolbar") == 0)
+    gtk_style_context_add_class (context, "toolbar");
+  else if (strcmp (detail, "handlebox_bin") == 0)
+    gtk_style_context_add_class (context, "dock");
+  else if (strcmp (detail, "notebook") == 0)
+    gtk_style_context_add_class (context, "notebook");
   else if (g_str_has_prefix (detail, "cell"))
     {
       GtkRegionFlags row, col;
