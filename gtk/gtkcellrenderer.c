@@ -646,7 +646,7 @@ gtk_cell_renderer_get_size (GtkCellRenderer    *cell,
 
   if (cell_area)
     _gtk_cell_renderer_calc_offset (cell, cell_area, gtk_widget_get_direction (widget),
-				    request.width, request.height, x_offset, y_offset);
+                                    request.width, request.height, x_offset, y_offset);
 }
 
 /**

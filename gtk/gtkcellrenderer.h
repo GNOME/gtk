@@ -244,12 +244,12 @@ void             gtk_cell_renderer_stop_editing   (GtkCellRenderer      *cell,
 
 
 void            _gtk_cell_renderer_calc_offset    (GtkCellRenderer      *cell,
-						   const GdkRectangle   *cell_area,
-						   GtkTextDirection      direction,
-						   gint                  width,
-						   gint                  height,
-						   gint                 *x_offset,
-						   gint                 *y_offset);
+                                                   const GdkRectangle   *cell_area,
+                                                   GtkTextDirection      direction,
+                                                   gint                  width,
+                                                   gint                  height,
+                                                   gint                 *x_offset,
+                                                   gint                 *y_offset);
 
 G_END_DECLS
 
