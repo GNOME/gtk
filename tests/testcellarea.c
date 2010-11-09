@@ -8,6 +8,8 @@ enum {
   N_SIMPLE_COLUMNS
 };
 
+static GtkCellRenderer *cell_1 = NULL, *cell_2 = NULL, *cell_3 = NULL;
+
 static GtkTreeModel *
 simple_list_model (void)
 {
@@ -76,16 +78,16 @@ simple_scaffold (void)
 
   area = cell_area_scaffold_get_area (CELL_AREA_SCAFFOLD (scaffold));
 
-  renderer = gtk_cell_renderer_text_new ();
+  cell_1 = renderer = gtk_cell_renderer_text_new ();
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "text", SIMPLE_COLUMN_NAME);
 
-  renderer = gtk_cell_renderer_pixbuf_new ();
+  cell_2 = renderer = gtk_cell_renderer_pixbuf_new ();
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, TRUE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "stock-id", SIMPLE_COLUMN_ICON);
 
-  renderer = gtk_cell_renderer_text_new ();
+  cell_3 = renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 
 		"wrap-mode", PANGO_WRAP_WORD,
 		"wrap-width", 215,
@@ -106,6 +108,61 @@ orientation_changed (GtkComboBox      *combo,
 }
 
 static void
+align_cell_2_toggled (GtkToggleButton  *toggle,
+		      CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gboolean     align = gtk_toggle_button_get_active (toggle);
+
+  gtk_cell_area_cell_set (area, cell_2, "align", align, NULL);
+  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+static void
+align_cell_3_toggled (GtkToggleButton  *toggle,
+		      CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gboolean     align = gtk_toggle_button_get_active (toggle);
+
+  gtk_cell_area_cell_set (area, cell_3, "align", align, NULL);
+  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+static void
+expand_cell_1_toggled (GtkToggleButton  *toggle,
+		       CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gboolean     expand = gtk_toggle_button_get_active (toggle);
+
+  gtk_cell_area_cell_set (area, cell_1, "expand", expand, NULL);
+  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+static void
+expand_cell_2_toggled (GtkToggleButton  *toggle,
+		       CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gboolean     expand = gtk_toggle_button_get_active (toggle);
+
+  gtk_cell_area_cell_set (area, cell_2, "expand", expand, NULL);
+  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+static void
+expand_cell_3_toggled (GtkToggleButton  *toggle,
+		       CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gboolean     expand = gtk_toggle_button_get_active (toggle);
+
+  gtk_cell_area_cell_set (area, cell_3, "expand", expand, NULL);
+  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+static void
 simple_cell_area (void)
 {
   GtkWidget *window, *widget;
@@ -121,7 +178,7 @@ simple_cell_area (void)
   gtk_widget_show (frame);
 
   gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
-  gtk_widget_set_halign (frame, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
 
   gtk_container_add (GTK_CONTAINER (frame), scaffold);
 
@@ -142,6 +199,46 @@ simple_cell_area (void)
   g_signal_connect (G_OBJECT (widget), "changed",
                     G_CALLBACK (orientation_changed), scaffold);
 
+  widget = gtk_check_button_new_with_label ("Align 2nd Cell");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (align_cell_2_toggled), scaffold);
+
+  widget = gtk_check_button_new_with_label ("Align 3rd Cell");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (align_cell_3_toggled), scaffold);
+
+
+  widget = gtk_check_button_new_with_label ("Expand 1st Cell");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (expand_cell_1_toggled), scaffold);
+
+  widget = gtk_check_button_new_with_label ("Expand 2nd Cell");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (expand_cell_2_toggled), scaffold);
+
+  widget = gtk_check_button_new_with_label ("Expand 3rd Cell");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (expand_cell_3_toggled), scaffold);
 
   gtk_container_add (GTK_CONTAINER (window), hbox);
 
