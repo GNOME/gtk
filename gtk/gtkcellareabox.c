@@ -1098,7 +1098,6 @@ gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
   GList                 *node;
   CellInfo              *info;
   gboolean               rebuild = FALSE;
-  gboolean               flush = FALSE;
   gboolean               val;
   GtkPackType            pack_type;
 
@@ -1117,7 +1116,7 @@ gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
       if (info->expand != val)
 	{
 	  info->expand = val;
-	  flush        = TRUE;
+	  rebuild      = TRUE;
 	}
       break;
 
@@ -1127,7 +1126,7 @@ gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
       if (info->align != val)
 	{
 	  info->align = val;
-	  flush       = TRUE;
+	  rebuild     = TRUE;
 	}
       break;
 
@@ -1147,13 +1146,7 @@ gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
 
   /* Groups need to be rebuilt */
   if (rebuild)
-    {
-      cell_groups_rebuild (box);
-    }
-  else if (flush)
-    {
-      flush_iters (box);
-    }
+    cell_groups_rebuild (box);
 }
 
 static void
