@@ -265,18 +265,6 @@ Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL.
 @Returns: 
 
 
-<!-- ##### FUNCTION gdk_keyval_name ##### -->
-<para>
-Converts a key value into a symbolic name.
-The names are the same as those in the <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
-but without the leading "GDK_KEY_".
-</para>
-
-@keyval: a key value.
-@Returns: a string containing the name of the key, or %NULL if @keyval is not
-a valid key. The string should not be modified.
-
-
 <!-- ##### FUNCTION gdk_keyval_from_name ##### -->
 <para>
 Converts a key name to a key value.
