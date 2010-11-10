@@ -1412,7 +1412,7 @@ gtk_dialog_get_action_area (GtkDialog *dialog)
  *
  * Returns the content area of @dialog.
  *
- * Returns: (transfer none): the content area #GtkVBox.
+ * Returns: (transfer none): the content area #GtkBox.
  *
  * Since: 2.14
  **/
