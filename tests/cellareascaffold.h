@@ -52,6 +52,7 @@ struct _CellAreaScaffoldClass
 {
   GtkWidgetClass parent_class;
 
+  void  (* activate) (CellAreaScaffold *scaffold);
 };
 
 

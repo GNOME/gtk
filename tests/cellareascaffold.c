@@ -59,12 +59,30 @@ static void      cell_area_scaffold_get_preferred_width_for_height (GtkWidget   
 								    gint            *natural_size);
 static gint      cell_area_scaffold_focus                          (GtkWidget       *widget,
 								    GtkDirectionType direction);
-static void      cell_area_scaffold_grab_focus                     (GtkWidget       *widget);
 
-/* CellArea callbacks */
+/* CellAreaScaffoldClass */
+static void      cell_area_scaffold_activate                       (CellAreaScaffold *scaffold);
+
+/* CellArea/GtkTreeModel callbacks */
 static void      size_changed_cb                                   (GtkCellAreaIter *iter,
 								    GParamSpec       *pspec,
 								    CellAreaScaffold *scaffold);
+static void      row_changed_cb                                    (GtkTreeModel     *model,
+								    GtkTreePath      *path,
+								    GtkTreeIter      *iter,
+								    CellAreaScaffold *scaffold);
+static void      row_inserted_cb                                    (GtkTreeModel     *model,
+								     GtkTreePath      *path,
+								     GtkTreeIter      *iter,
+								     CellAreaScaffold *scaffold);
+static void      row_deleted_cb                                     (GtkTreeModel     *model,
+								     GtkTreePath      *path,
+								     CellAreaScaffold *scaffold);
+static void      rows_reordered_cb                                  (GtkTreeModel     *model,
+								     GtkTreePath      *parent,
+								     GtkTreeIter      *iter,
+								     gint             *new_order,
+								     CellAreaScaffold *scaffold);
 
 typedef struct {
   gint    size; /* The size of the row in the scaffold's opposing orientation */
@@ -77,6 +95,10 @@ struct _CellAreaScaffoldPrivate {
 
   /* The model we're showing data for */
   GtkTreeModel    *model;
+  gulong           row_changed_id;
+  gulong           row_inserted_id;
+  gulong           row_deleted_id;
+  gulong           rows_reordered_id;
 
   /* The area rendering the data and a global iter */
   GtkCellArea     *area;
@@ -91,12 +113,21 @@ struct _CellAreaScaffoldPrivate {
   /* Check when the underlying area changes the size and
    * we need to queue a redraw */
   gulong           size_changed_id;
+
+
 };
 
 enum {
   PROP_0,
   PROP_ORIENTATION
 };
+
+enum {
+  ACTIVATE,
+  N_SIGNALS
+};
+
+static guint scaffold_signals[N_SIGNALS] = { 0 };
 
 #define ROW_SPACING  2
 
@@ -157,9 +188,21 @@ cell_area_scaffold_class_init (CellAreaScaffoldClass *class)
   widget_class->get_preferred_height = cell_area_scaffold_get_preferred_height;
   widget_class->get_preferred_width_for_height = cell_area_scaffold_get_preferred_width_for_height;
   widget_class->focus = cell_area_scaffold_focus;
-  widget_class->grab_focus = cell_area_scaffold_grab_focus;
+
+  class->activate = cell_area_scaffold_activate;
 
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+
+  scaffold_signals[ACTIVATE] =
+    g_signal_new ("activate",
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (CellAreaScaffoldClass, activate),
+		  NULL, NULL,
+		  g_cclosure_marshal_VOID__VOID,
+		  G_TYPE_NONE, 0);
+  widget_class->activate_signal = scaffold_signals[ACTIVATE];
+
 
   g_type_class_add_private (gobject_class, sizeof (CellAreaScaffoldPrivate));
 }
@@ -659,61 +702,165 @@ static gint
 cell_area_scaffold_focus (GtkWidget       *widget,
 			  GtkDirectionType direction)
 {
-  g_print ("cell_area_scaffold_focus called for direction %s\n", 
-	   DIRECTION_STR (direction));
-
-  /* Grab focus on ourself if we dont already have focus */
-  if (!gtk_widget_has_focus (widget))
-    {
-      gtk_widget_grab_focus (widget);
-      return TRUE;
-    }
-  return TRUE;
-}
-
-static void
-cell_area_scaffold_grab_focus (GtkWidget       *widget)
-{
   CellAreaScaffold        *scaffold = CELL_AREA_SCAFFOLD (widget);
   CellAreaScaffoldPrivate *priv     = scaffold->priv;
   GtkTreeIter              iter;
   gboolean                 valid;
-  gint                     i = -1;
+  gint                     focus_row;
+  GtkOrientation           orientation;
 
-  /* Actually take the focus */
-  GTK_WIDGET_CLASS (cell_area_scaffold_parent_class)->grab_focus (widget);
+  /* Grab focus on ourself if we dont already have focus */
+  if (!gtk_widget_has_focus (widget))
+    gtk_widget_grab_focus (widget);
 
-  if (!priv->model)
-    return;
+  /* Move focus from cell to cell and row to row */
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (priv->area));
+  
+  focus_row = priv->focus_row;
+  
+  valid = gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, priv->focus_row);
+  while (valid)
+    {
+      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
+      
+      /* If focus stays in the area we dont need to do any more */
+      if (gtk_cell_area_focus (priv->area, direction))
+	{
+	  GtkCellRenderer *renderer = gtk_cell_area_get_focus_cell (priv->area);
+	  
+	  priv->focus_row = focus_row;
+	  
+	  g_print ("focusing in direction %s: focus set on a %s in row %d\n", 
+		   DIRECTION_STR (direction), G_OBJECT_TYPE_NAME (renderer), priv->focus_row);
+	  
+	  return TRUE;
+	}
+      else
+	{
+	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	    {
+	      if (direction == GTK_DIR_RIGHT ||
+		  direction == GTK_DIR_LEFT)
+		break;
+	      else if (direction == GTK_DIR_UP ||
+		       direction == GTK_DIR_TAB_BACKWARD)
+		{
+		  if (focus_row == 0)
+		    break;
+		  else
+		    {
+		      /* XXX A real implementation should check if the
+		       * previous row can focus with it's attributes setup */
+		      focus_row--;
+		      valid = gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, focus_row);
+		    }
+		}
+	      else /* direction == GTK_DIR_DOWN || GTK_DIR_TAB_FORWARD */
+		{
+		  if (focus_row == priv->row_data->len - 1)
+		    break;
+		  else
+		    {
+		      /* XXX A real implementation should check if the
+		       * previous row can focus with it's attributes setup */
+		      focus_row++;
+		      valid = gtk_tree_model_iter_next (priv->model, &iter);
+		    }
+		}
+	    }
+	  else  /* (orientation == GTK_ORIENTATION_HORIZONTAL) */
+	    {
+	      if (direction == GTK_DIR_UP ||
+		  direction == GTK_DIR_DOWN)
+		break;
+	      else if (direction == GTK_DIR_LEFT ||
+		       direction == GTK_DIR_TAB_BACKWARD)
+		{
+		  if (focus_row == 0)
+		    break;
+		  else
+		    {
+		      /* XXX A real implementation should check if the
+		       * previous row can focus with it's attributes setup */
+		      focus_row--;
+		      valid = gtk_tree_model_iter_nth_child (priv->model, &iter, NULL, focus_row);
+		    }
+		}
+	      else /* direction == GTK_DIR_RIGHT || GTK_DIR_TAB_FORWARD */
+		{
+		  if (focus_row == priv->row_data->len - 1)
+		    break;
+		  else
+		    {
+		      /* XXX A real implementation should check if the
+		       * previous row can focus with it's attributes setup */
+		      focus_row++;
+		      valid = gtk_tree_model_iter_next (priv->model, &iter);
+		    }
+		}
+	    }
+	}
+    }
 
-  /* Find the first row that can focus and give it focus */
+  g_print ("focus leaving with no cells in focus (direction %s, focus_row %d)\n",
+	   DIRECTION_STR (direction), priv->focus_row);
+
+  return FALSE;
+}
+
+/*********************************************************
+ *                CellAreaScaffoldClass                  *
+ *********************************************************/
+static void
+cell_area_scaffold_activate (CellAreaScaffold *scaffold)
+{
+  CellAreaScaffoldPrivate *priv     = scaffold->priv;
+  GtkWidget               *widget   = GTK_WIDGET (scaffold);
+  GtkAllocation            allocation;
+  GtkOrientation           orientation;
+  GdkRectangle             cell_area;
+  GtkTreeIter              iter;
+  gboolean                 valid;
+  gint                     i = 0;
+
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (priv->area));
+  gtk_widget_get_allocation (widget, &allocation);
+
+  cell_area.x = 0;
+  cell_area.y = 0;
+  cell_area.width  = allocation.width;
+  cell_area.height = allocation.height;
+
   valid = gtk_tree_model_get_iter_first (priv->model, &iter);
   while (valid)
     {
-      i++;
+      RowData *data = &g_array_index (priv->row_data, RowData, i);
 
-      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
-
-      if (gtk_cell_area_can_focus (priv->area))
+      if (i == priv->focus_row)
 	{
-	  gtk_cell_area_focus (priv->area, GTK_DIR_RIGHT);
+	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	    cell_area.height = data->size;
+	  else
+	    cell_area.width = data->size;
+
+	  gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
+	  gtk_cell_area_activate (priv->area, priv->iter, widget, &cell_area, GTK_CELL_RENDERER_FOCUSED);
+
 	  break;
 	}
 
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	cell_area.y += data->size + ROW_SPACING;
+      else
+	cell_area.x += data->size + ROW_SPACING;
+
+      i++;
       valid = gtk_tree_model_iter_next (priv->model, &iter);
-    }
-
-  if (valid && i >= 0)
-    {
-      g_print ("Grab focus called, setting focus on row %d\n", i);
-
-      priv->focus_row = i;
-      gtk_widget_queue_draw (widget);
     }
 }
 
 /*********************************************************
- *                  CellArea callbacks                   *
+ *           CellArea/GtkTreeModel callbacks             *
  *********************************************************/
 static void
 size_changed_cb (GtkCellAreaIter  *iter,
@@ -725,6 +872,64 @@ size_changed_cb (GtkCellAreaIter  *iter,
       !strcmp (pspec->name, "minimum-height") ||
       !strcmp (pspec->name, "natural-height"))
     gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+static void 
+rebuild_and_flush_internals (CellAreaScaffold *scaffold)
+{
+  CellAreaScaffoldPrivate *priv = scaffold->priv;
+  gint n_rows;
+
+  if (priv->model)
+    {
+      n_rows = gtk_tree_model_iter_n_children (priv->model, NULL);
+
+      /* Clear/reset the array */
+      g_array_set_size (priv->row_data, n_rows);
+      memset (priv->row_data->data, 0x0, n_rows * sizeof (RowData));
+    }
+  else
+    g_array_set_size (priv->row_data, 0);
+
+  /* Data changed, lets flush the iter and consequently queue resize and
+   * start everything over again (note this is definitly far from optimized) */
+  gtk_cell_area_iter_flush (priv->iter);
+}
+
+static void
+row_changed_cb (GtkTreeModel     *model,
+		GtkTreePath      *path,
+		GtkTreeIter      *iter,
+		CellAreaScaffold *scaffold)
+{
+  rebuild_and_flush_internals (scaffold);
+}
+
+static void
+row_inserted_cb (GtkTreeModel     *model,
+		 GtkTreePath      *path,
+		 GtkTreeIter      *iter,
+		 CellAreaScaffold *scaffold)
+{
+  rebuild_and_flush_internals (scaffold);
+}
+
+static void
+row_deleted_cb (GtkTreeModel     *model,
+		GtkTreePath      *path,
+		CellAreaScaffold *scaffold)
+{
+  rebuild_and_flush_internals (scaffold);
+}
+
+static void
+rows_reordered_cb (GtkTreeModel     *model,
+		   GtkTreePath      *parent,
+		   GtkTreeIter      *iter,
+		   gint             *new_order,
+		   CellAreaScaffold *scaffold)
+{
+  rebuild_and_flush_internals (scaffold);
 }
 
 /*********************************************************
@@ -762,7 +967,11 @@ cell_area_scaffold_set_model (CellAreaScaffold *scaffold,
     {
       if (priv->model)
 	{
-	  /* XXX disconnect signals */
+	  g_signal_handler_disconnect (priv->model, priv->row_changed_id);
+	  g_signal_handler_disconnect (priv->model, priv->row_inserted_id);
+	  g_signal_handler_disconnect (priv->model, priv->row_deleted_id);
+	  g_signal_handler_disconnect (priv->model, priv->rows_reordered_id);
+
 	  g_object_unref (priv->model);
 	}
 
@@ -770,23 +979,26 @@ cell_area_scaffold_set_model (CellAreaScaffold *scaffold,
 
       if (priv->model)
 	{
-	  gint n_rows;
-
-	  /* XXX connect signals */
 	  g_object_ref (priv->model);
 
-	  n_rows = gtk_tree_model_iter_n_children (priv->model, NULL);
+	  priv->row_changed_id = 
+	    g_signal_connect (priv->model, "row-changed",
+			      G_CALLBACK (row_changed_cb), scaffold);
 
-	  /* Clear/reset the array */
-	  g_array_set_size (priv->row_data, n_rows);
-	  memset (priv->row_data->data, 0x0, n_rows * sizeof (RowData));
-	}
-      else
-	{
-	  g_array_set_size (priv->row_data, 0);
+	  priv->row_inserted_id = 
+	    g_signal_connect (priv->model, "row-inserted",
+			      G_CALLBACK (row_inserted_cb), scaffold);
+
+	  priv->row_deleted_id = 
+	    g_signal_connect (priv->model, "row-deleted",
+			      G_CALLBACK (row_deleted_cb), scaffold);
+
+	  priv->rows_reordered_id = 
+	    g_signal_connect (priv->model, "rows-reordered",
+			      G_CALLBACK (rows_reordered_cb), scaffold);
 	}
 
-      gtk_cell_area_iter_flush (priv->iter);
+      rebuild_and_flush_internals (scaffold);
     }
 }
 

@@ -287,6 +287,24 @@ focus_list_model (void)
   return (GtkTreeModel *)store;
 }
 
+static void
+cell_toggled (GtkCellRendererToggle *cell_renderer,
+	      gchar                 *path,
+	      CellAreaScaffold      *scaffold)
+{
+  GtkTreeModel *model = cell_area_scaffold_get_model (scaffold);
+  GtkTreeIter   iter;
+  gboolean      active;
+
+  g_print ("Cell toggled !\n");
+
+  if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
+    return;
+
+  gtk_tree_model_get (model, &iter, FOCUS_COLUMN_CHECK, &active, -1);
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, FOCUS_COLUMN_CHECK, !active, -1);
+}
+
 static GtkWidget *
 focus_scaffold (void)
 {
@@ -315,6 +333,9 @@ focus_scaffold (void)
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "active", FOCUS_COLUMN_CHECK);
 
+  g_signal_connect (G_OBJECT (renderer), "toggled",
+		    G_CALLBACK (cell_toggled), scaffold);
+
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 
 		"wrap-mode", PANGO_WRAP_WORD,
@@ -334,6 +355,8 @@ focus_cell_area (void)
   GtkWidget *scaffold, *frame, *vbox, *hbox;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  hbox  = gtk_hbox_new (FALSE, 4);
+  gtk_widget_show (hbox);
 
   scaffold = focus_scaffold ();
 
@@ -345,7 +368,18 @@ focus_cell_area (void)
 
   gtk_container_add (GTK_CONTAINER (frame), scaffold);
 
-  gtk_container_add (GTK_CONTAINER (window), frame);
+  gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
+
+  /* Now add some controls */
+  vbox  = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (vbox);
+  gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
+
+  widget = gtk_check_button_new_with_label ("check button");
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  gtk_container_add (GTK_CONTAINER (window), hbox);
 
   gtk_widget_show (window);
 }

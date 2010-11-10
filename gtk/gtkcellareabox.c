@@ -939,11 +939,7 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 	}
 
       if (cell->renderer == focus_cell)
-	{
-	  g_print ("Rendering a cell with the focus flag !\n");
-	  
-	  cell_fields |= GTK_CELL_RENDERER_FOCUSED;
-	}
+	cell_fields |= GTK_CELL_RENDERER_FOCUSED;
 
       /* Remove margins from the background area to produce the cell area
        */
@@ -1528,27 +1524,19 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
       cycle = FOCUS_PREV;
       break;
     case GTK_DIR_UP: 
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	return FALSE;
-      else
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL || !focus_cell)
 	cycle = FOCUS_PREV;
       break;
     case GTK_DIR_DOWN:
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	return FALSE;
-      else
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL || !focus_cell)
 	cycle = FOCUS_NEXT;
       break;
     case GTK_DIR_LEFT:
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-	return FALSE;
-      else
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !focus_cell)
 	cycle = FOCUS_PREV;
       break;
     case GTK_DIR_RIGHT:
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-	return FALSE;
-      else
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !focus_cell)
 	cycle = FOCUS_NEXT;
       break;
     default:
@@ -1561,12 +1549,12 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
       GList    *list;
       gint      i;
 
-      /* If there is no focused cell, focus on the first one in the list */
+      /* If there is no focused cell, focus on the first (or last) one in the list */
       if (!focus_cell)
 	found_cell = TRUE;
 
       for (i = (cycle == FOCUS_NEXT) ? 0 : priv->groups->len -1; 
-	   i >= 0 && i < priv->groups->len;
+	   cycled_focus == FALSE && i >= 0 && i < priv->groups->len;
 	   i = (cycle == FOCUS_NEXT) ? i + 1 : i - 1)
 	{
 	  CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
@@ -1576,7 +1564,7 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
 	    {
 	      CellInfo *info = list->data;
 
-	      if (!found_cell && info->renderer == focus_cell)
+	      if (info->renderer == focus_cell)
 		found_cell = TRUE;
 	      else if (found_cell)
 		{
@@ -1591,6 +1579,10 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
 	    }
 	}
     }
+
+  if (!cycled_focus)
+    gtk_cell_area_set_focus_cell (area, NULL);
+
   return cycled_focus;
 }
 

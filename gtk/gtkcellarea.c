@@ -675,6 +675,7 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
 				       &background_area, flags))
 	return TRUE;
     }
+
   return FALSE;
 }
 
