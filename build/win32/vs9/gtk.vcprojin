@@ -208,6 +208,7 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File RelativePath="..\..\..\gtk\gtk-win32.rc" />
 		</Filter>
 		<Filter
 			Name="Source Files"
