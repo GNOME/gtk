@@ -68,7 +68,12 @@ static void      gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea 
 								    gint                   height,
 								    gint                  *minimum_width,
 								    gint                  *natural_width);
-static void      gtk_cell_area_real_update_focus                   (GtkCellArea           *area);
+static gboolean  gtk_cell_area_real_can_focus                      (GtkCellArea           *area);
+static gboolean  gtk_cell_area_real_activate                       (GtkCellArea           *area,
+								    GtkCellAreaIter       *iter,
+								    GtkWidget             *widget,
+								    const GdkRectangle    *cell_area,
+								    GtkCellRendererState   flags);
 
 /* GtkCellLayoutIface */
 static void      gtk_cell_area_cell_layout_init              (GtkCellLayoutIface    *iface);
@@ -168,8 +173,6 @@ struct _GtkCellAreaPrivate
 
   /* Currently focused cell */
   GtkCellRenderer *focus_cell;
-  guint            can_focus : 1;
-
 };
 
 enum {
@@ -184,7 +187,6 @@ enum {
 };
 
 enum {
-  SIGNAL_FOCUS_LEAVE,
   SIGNAL_EDITING_STARTED,
   SIGNAL_EDITING_CANCELED,
   SIGNAL_EDITING_DONE,
@@ -228,7 +230,6 @@ gtk_cell_area_init (GtkCellArea *area)
   priv->focus_cell         = NULL;
   priv->edited_cell        = NULL;
   priv->edit_widget        = NULL;
-  priv->can_focus          = FALSE;
 
   priv->editing_done_id    = 0;
   priv->remove_widget_id   = 0;
@@ -261,20 +262,11 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->get_preferred_width_for_height = gtk_cell_area_real_get_preferred_width_for_height;
 
   /* focus */
-  class->grab_focus = NULL;
-  class->update_focus = gtk_cell_area_real_update_focus;
+  class->can_focus  = gtk_cell_area_real_can_focus;
+  class->focus      = NULL;
+  class->activate   = gtk_cell_area_real_activate;
 
   /* Signals */
-  cell_area_signals[SIGNAL_FOCUS_LEAVE] =
-    g_signal_new (I_("focus-leave"),
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  0, /* Class offset (just a notification, no class handler) */
-		  NULL, NULL,
-		  _gtk_marshal_VOID__ENUM_STRING,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_DIRECTION_TYPE, G_TYPE_STRING);
-
   cell_area_signals[SIGNAL_EDITING_STARTED] =
     g_signal_new (I_("editing-started"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -591,32 +583,14 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 			  const GdkRectangle   *cell_area,
 			  GtkCellRendererState  flags)
 {
+  GtkCellAreaPrivate *priv = area->priv;
+
   if (event->type == GDK_KEY_PRESS && (flags & GTK_CELL_RENDERER_FOCUSED) != 0)
     {
-      GdkEventKey        *key_event = (GdkEventKey *)event;
-      GtkCellAreaPrivate *priv = area->priv;
+      GdkEventKey *key_event = (GdkEventKey *)event;
 
-      if (priv->focus_cell && 
-	  (key_event->keyval == GDK_KEY_space ||
-	   key_event->keyval == GDK_KEY_KP_Space ||
-	   key_event->keyval == GDK_KEY_Return ||
-	   key_event->keyval == GDK_KEY_ISO_Enter ||
-	   key_event->keyval == GDK_KEY_KP_Enter))
-	{
-	  GdkRectangle background_area;
-
-	  /* Get the allocation of the focused cell.
-	   */
-	  gtk_cell_area_get_cell_allocation (area, iter, widget, priv->focus_cell,
-					     cell_area, &background_area);
-
-	  /* Activate or Edit the currently focused cell */
-	  if (gtk_cell_area_activate_cell (area, widget, priv->focus_cell, event,
-					   &background_area, flags))
-	    return TRUE;
-	}
-      else if (priv->edited_cell &&
-	       (key_event->keyval == GDK_KEY_Escape))
+      /* Cancel any edits in progress */
+      if (priv->edited_cell && (key_event->keyval == GDK_KEY_Escape))
 	{
 	  gtk_cell_area_stop_editing (area, TRUE);
 	  return TRUE;
@@ -651,32 +625,57 @@ gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
 }
 
 static void
-update_can_focus (GtkCellRenderer *renderer,
-		  gboolean        *can_focus)
+get_can_focus (GtkCellRenderer *renderer,
+	       gboolean        *can_focus)
 {
 
   if (gtk_cell_renderer_can_focus (renderer))
     *can_focus = TRUE;
 }
 
-static void
-gtk_cell_area_real_update_focus (GtkCellArea *area)
+static gboolean
+gtk_cell_area_real_can_focus (GtkCellArea *area)
 {
   gboolean can_focus = FALSE;
 
-  /* Update the area's can focus flag, if any of the renderers can
-   * focus then the area can focus.
+  /* Checks if any renderer can focus for the currently applied
+   * attributes.
    *
    * Subclasses can override this in the case that they are also
    * rendering widgets as well as renderers.
    */
-  gtk_cell_area_forall (area, (GtkCellCallback)update_can_focus, &can_focus);
-  gtk_cell_area_set_can_focus (area, can_focus);
+  gtk_cell_area_forall (area, (GtkCellCallback)get_can_focus, &can_focus);
 
-  /* Unset the currently focused cell if the area can not receive
-   * focus for the given row data */
-  if (!can_focus)
-    gtk_cell_area_set_focus_cell (area, NULL);
+  return can_focus;
+}
+
+static gboolean
+gtk_cell_area_real_activate (GtkCellArea         *area,
+			     GtkCellAreaIter     *iter,
+			     GtkWidget           *widget,
+			     const GdkRectangle  *cell_area,
+			     GtkCellRendererState flags)
+{
+  GtkCellAreaPrivate *priv = area->priv;
+  GdkRectangle        background_area;
+
+  if (priv->focus_cell)
+    {
+      /* Get the allocation of the focused cell.
+       */
+      gtk_cell_area_get_cell_allocation (area, iter, widget, priv->focus_cell,
+					 cell_area, &background_area);
+      
+      /* Activate or Edit the currently focused cell 
+       *
+       * Currently just not sending an event, renderers afaics dont use
+       * the event argument anyway, worst case is we can synthesize one.
+       */
+      if (gtk_cell_area_activate_cell (area, widget, priv->focus_cell, NULL,
+				       &background_area, flags))
+	return TRUE;
+    }
+  return FALSE;
 }
 
 /*************************************************************
@@ -1687,134 +1686,80 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
  *************************************************************/
 
 /**
- * gtk_cell_area_grab_focus:
- * @area: a #GtkCellArea
- * @direction: the #GtkDirectionType from which focus came
- *
- * This should be called by the @area's owning layout widget
- * when focus should be passed to @area for a given row data.
- *
- * Note that after applying new attributes for @area that
- * gtk_cell_area_update_focus() should be called and
- * gtk_cell_area_can_focus() should be checked before trying
- * to pass focus to @area.
- *
- * Implementing #GtkCellArea classes should implement this
- * method to receive focus in it's own way particular to
- * how it lays out cells.
- */
-void
-gtk_cell_area_grab_focus (GtkCellArea      *area,
-			  GtkDirectionType  direction)
-{
-  GtkCellAreaClass *class;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  class = GTK_CELL_AREA_GET_CLASS (area);
-
-  if (class->grab_focus)
-    class->grab_focus (area, direction);
-  else
-    g_warning ("GtkCellAreaClass::grab_focus not implemented for `%s'", 
-	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
-}
-
-/**
- * gtk_cell_area_focus_leave:
- * @area: a #GtkCellArea
- * @direction: the #GtkDirectionType in which focus
- *             is to leave @area
- *
- * Notifies that focus is to leave @area in the
- * given @direction.
- *
- * This is called by #GtkCellArea implementations upon
- * handling a key event that caused focus to leave the
- * cell. The resulting signal can be handled by the
- * owning layouting widget to decide which new @area
- * to pass focus to and from what @direction. Or to
- * pass focus along to an entirely new data row.
- */
-void
-gtk_cell_area_focus_leave (GtkCellArea        *area,
-			   GtkDirectionType    direction)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  g_signal_emit (area, cell_area_signals[SIGNAL_FOCUS_LEAVE], 0, direction, priv->current_path);
-}
-
-/**
- * gtk_cell_area_update_focus:
- * @area: a #GtkCellArea
- *
- * Updates focus information on @area for a given 
- * row of data.
- *
- * After calling gtk_cell_area_apply_attributes() to
- * the @area this method should be called to update
- * information about whether the @area can focus and
- * which is the cell currently in focus.
- */
-void
-gtk_cell_area_update_focus (GtkCellArea *area)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  GTK_CELL_AREA_GET_CLASS (area)->update_focus (area);
-}
-
-/**
- * gtk_cell_area_set_can_focus:
- * @area: a #GtkCellArea
- * @can_focus: whether @area can receive focus
- *
- * This is generally called from GtkCellArea::update_focus() 
- * implementations to update if the @area can focus after
- * applying new row data attributes.
- */
-void
-gtk_cell_area_set_can_focus (GtkCellArea *area,
-			     gboolean     can_focus)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  if (priv->can_focus != can_focus)
-    {
-      priv->can_focus = can_focus;
-    }
-}
-
-/**
- * gtk_cell_area_get_can_focus:
+ * gtk_cell_area_can_focus:
  * @area: a #GtkCellArea
  *
  * Returns whether the area can receive keyboard focus,
- * after applying new attributes to @area, 
- * gtk_cell_area_update_focus() needs to be called before
- * calling this method.
+ * after applying new attributes to @area.
  *
  * Returns: whether @area can receive focus.
  */
 gboolean
-gtk_cell_area_get_can_focus (GtkCellArea *area)
+gtk_cell_area_can_focus (GtkCellArea *area)
 {
-  GtkCellAreaPrivate *priv;
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
+
+  return GTK_CELL_AREA_GET_CLASS (area)->can_focus (area);
+}
+
+/**
+ * gtk_cell_area_focus:
+ * @area: a #GtkCellArea
+ * @direction: the #GtkDirectionType
+ *
+ * This should be called by the @area's owning layout widget
+ * when focus is to be passed to @area, or moved within @area
+ * for a given @direction and row data.
+ *
+ * Implementing #GtkCellArea classes should implement this
+ * method to receive and navigate focus in it's own way particular
+ * to how it lays out cells.
+ *
+ * Returns: %TRUE if focus remains inside @area as a result of this call.
+ */
+gboolean
+gtk_cell_area_focus (GtkCellArea      *area,
+		     GtkDirectionType  direction)
+{
+  GtkCellAreaClass *class;
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
 
-  priv = area->priv;
+  class = GTK_CELL_AREA_GET_CLASS (area);
 
-  return priv->can_focus;
+  if (class->focus)
+    return class->focus (area, direction);
+
+  g_warning ("GtkCellAreaClass::focus not implemented for `%s'", 
+	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
+
+  return FALSE;
+}
+
+/**
+ * gtk_cell_area_activate:
+ * @area: a #GtkCellArea
+ * @iter: the #GtkCellAreaIter in context with the current row data
+ * @widget: the #GtkWidget that @area is rendering on
+ * @cell_area: the size and location of @area relative to @widget's allocation
+ * @flags: the #GtkCellRendererState flags for @area for this row of data.
+ *
+ * Activates @area, usually by activating the currently focused
+ * cell, however some subclasses which embed widgets in the area
+ * can also activate a widget if it currently has the focus.
+ *
+ * Returns: Whether @area was successfully activated.
+ */
+gboolean
+gtk_cell_area_activate (GtkCellArea         *area,
+			GtkCellAreaIter     *iter,
+			GtkWidget           *widget,
+			const GdkRectangle  *cell_area,
+			GtkCellRendererState flags)
+{
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
+
+  return GTK_CELL_AREA_GET_CLASS (area)->activate (area, iter, widget, cell_area, flags);
 }
 
 
@@ -2042,7 +1987,6 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
   g_return_val_if_fail (cell_area != NULL, FALSE);
 
   priv = area->priv;

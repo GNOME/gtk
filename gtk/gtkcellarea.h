@@ -137,9 +137,15 @@ struct _GtkCellAreaClass
 							  GParamSpec              *pspec);
 
   /* Focus */
-  void               (* grab_focus)                      (GtkCellArea             *area,
+  gboolean           (* can_focus)                       (GtkCellArea             *area);
+  gboolean           (* focus)                           (GtkCellArea             *area,
 							  GtkDirectionType         direction);
-  void               (* update_focus)                    (GtkCellArea             *area);
+  gboolean           (* activate)                        (GtkCellArea             *area,
+							  GtkCellAreaIter         *iter,
+							  GtkWidget               *widget,
+							  const GdkRectangle      *cell_area,
+							  GtkCellRendererState     flags);
+
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -265,18 +271,17 @@ void               gtk_cell_area_cell_get_property              (GtkCellArea    
 
 
 /* Focus */
-void               gtk_cell_area_grab_focus                     (GtkCellArea        *area,
-								 GtkDirectionType    direction);
-void               gtk_cell_area_focus_leave                    (GtkCellArea        *area,
-								 GtkDirectionType    direction);
-void               gtk_cell_area_update_focus                   (GtkCellArea        *area);
-void               gtk_cell_area_set_can_focus                  (GtkCellArea        *area,
-								 gboolean            can_focus);
-gboolean           gtk_cell_area_get_can_focus                  (GtkCellArea        *area);
-void               gtk_cell_area_set_focus_cell                 (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer);
-GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea        *area);
-
+gboolean           gtk_cell_area_can_focus                      (GtkCellArea         *area);
+gboolean           gtk_cell_area_focus                          (GtkCellArea         *area,
+								 GtkDirectionType     direction);
+gboolean           gtk_cell_area_activate                       (GtkCellArea         *area,
+								 GtkCellAreaIter     *iter,
+								 GtkWidget           *widget,
+								 const GdkRectangle  *cell_area,
+								 GtkCellRendererState flags);
+void               gtk_cell_area_set_focus_cell                 (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer);
+GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea          *area);
 
 /* Cell Activation/Editing */
 void               gtk_cell_area_set_edited_cell                (GtkCellArea          *area,

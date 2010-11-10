@@ -1,6 +1,9 @@
 #include <gtk/gtk.h>
 #include "cellareascaffold.h"
 
+/*******************************************************
+ *                      Simple Test                    *
+ *******************************************************/
 enum {
   SIMPLE_COLUMN_NAME,
   SIMPLE_COLUMN_ICON,
@@ -240,12 +243,121 @@ simple_cell_area (void)
   gtk_widget_show (window);
 }
 
+/*******************************************************
+ *                      Focus Test                     *
+ *******************************************************/
+enum {
+  FOCUS_COLUMN_NAME,
+  FOCUS_COLUMN_CHECK,
+  FOCUS_COLUMN_STATIC_TEXT,
+  N_FOCUS_COLUMNS
+};
+
+static GtkTreeModel *
+focus_list_model (void)
+{
+  GtkTreeIter   iter;
+  GtkListStore *store = 
+    gtk_list_store_new (N_FOCUS_COLUMNS,
+			G_TYPE_STRING,  /* name text */
+			G_TYPE_BOOLEAN, /* check */
+			G_TYPE_STRING); /* static text */
+
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 
+		      FOCUS_COLUMN_NAME, "Enter a string",
+		      FOCUS_COLUMN_CHECK, TRUE,
+		      FOCUS_COLUMN_STATIC_TEXT, "Does it fly ?",
+		      -1);
+
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 
+		      FOCUS_COLUMN_NAME, "Enter a string",
+		      FOCUS_COLUMN_CHECK, FALSE,
+		      FOCUS_COLUMN_STATIC_TEXT, "Would you put it in a toaster ?",
+		      -1);
+
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 
+		      FOCUS_COLUMN_NAME, "Type something",
+		      FOCUS_COLUMN_CHECK, FALSE,
+		      FOCUS_COLUMN_STATIC_TEXT, "Does it feed on cute kittens ?",
+		      -1);
+
+  return (GtkTreeModel *)store;
+}
+
+static GtkWidget *
+focus_scaffold (void)
+{
+  GtkTreeModel *model;
+  GtkWidget *scaffold;
+  GtkCellArea *area;
+  GtkCellRenderer *renderer;
+
+  scaffold = cell_area_scaffold_new ();
+  gtk_widget_show (scaffold);
+
+  model = focus_list_model ();
+
+  cell_area_scaffold_set_model (CELL_AREA_SCAFFOLD (scaffold), model);
+
+  area = cell_area_scaffold_get_area (CELL_AREA_SCAFFOLD (scaffold));
+
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (G_OBJECT (renderer), "editable", TRUE, NULL);
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, TRUE, FALSE);
+  gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_NAME);
+
+  /* Catch signal ... */
+  renderer = gtk_cell_renderer_toggle_new ();
+  g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
+  gtk_cell_area_attribute_connect (area, renderer, "active", FOCUS_COLUMN_CHECK);
+
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (G_OBJECT (renderer), 
+		"wrap-mode", PANGO_WRAP_WORD,
+		"wrap-width", 150,
+		NULL);
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
+  gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_STATIC_TEXT);
+
+  return scaffold;
+}
+
+
+static void
+focus_cell_area (void)
+{
+  GtkWidget *window, *widget;
+  GtkWidget *scaffold, *frame, *vbox, *hbox;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+
+  scaffold = focus_scaffold ();
+
+  frame = gtk_frame_new (NULL);
+  gtk_widget_show (frame);
+
+  gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
+
+  gtk_container_add (GTK_CONTAINER (frame), scaffold);
+
+  gtk_container_add (GTK_CONTAINER (window), frame);
+
+  gtk_widget_show (window);
+}
+
+
 int
 main (int argc, char *argv[])
 {
   gtk_init (NULL, NULL);
 
   simple_cell_area ();
+  focus_cell_area ();
 
   gtk_main ();
 

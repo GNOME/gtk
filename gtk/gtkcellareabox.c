@@ -102,7 +102,7 @@ static void      gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea  
 								   gint                  height,
 								   gint                 *minimum_width,
 								   gint                 *natural_width);
-static void      gtk_cell_area_box_grab_focus                     (GtkCellArea          *area,
+static gboolean  gtk_cell_area_box_focus                          (GtkCellArea          *area,
 								   GtkDirectionType      direction);
 
 /* GtkCellLayoutIface */
@@ -247,7 +247,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->get_preferred_height_for_width = gtk_cell_area_box_get_preferred_height_for_width;
   area_class->get_preferred_width_for_height = gtk_cell_area_box_get_preferred_width_for_height;
 
-  area_class->grab_focus = gtk_cell_area_box_grab_focus;
+  area_class->focus = gtk_cell_area_box_focus;
 
   /* Properties */
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
@@ -869,91 +869,6 @@ enum {
   FOCUS_NEXT
 };
 
-static void
-gtk_cell_area_cycle_focus (GtkCellAreaBox   *box,
-			   GtkCellRenderer  *focus_cell,
-			   GtkDirectionType  direction)
-{
-  GtkCellAreaBoxPrivate *priv = box->priv;
-  GtkCellArea           *area = GTK_CELL_AREA (box);
-  gint                   cycle = FOCUS_NONE;
-
-  switch (direction)
-    {
-    case GTK_DIR_TAB_FORWARD:
-      cycle = FOCUS_NEXT;
-      break;
-    case GTK_DIR_TAB_BACKWARD:
-      cycle = FOCUS_PREV;
-      break;
-    case GTK_DIR_UP: 
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_cell_area_focus_leave (area, direction);
-      else
-	cycle = FOCUS_PREV;
-      break;
-    case GTK_DIR_DOWN:
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_cell_area_focus_leave (area, direction);
-      else
-	cycle = FOCUS_NEXT;
-      break;
-    case GTK_DIR_LEFT:
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-	gtk_cell_area_focus_leave (area, direction);
-      else
-	cycle = FOCUS_PREV;
-      break;
-    case GTK_DIR_RIGHT:
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-	gtk_cell_area_focus_leave (area, direction);
-      else
-	cycle = FOCUS_NEXT;
-      break;
-    default:
-      break;
-    }
-
-  if (cycle != FOCUS_NONE)
-    {
-      gboolean  found_cell = FALSE;
-      gboolean  cycled_focus = FALSE;
-      GList    *list;
-      gint      i;
-
-      for (i = (cycle == FOCUS_NEXT) ? 0 : priv->groups->len -1; 
-	   i >= 0 && i < priv->groups->len;
-	   i = (cycle == FOCUS_NEXT) ? i + 1 : i - 1)
-	{
-	  CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
-	  
-	  for (list = (cycle == FOCUS_NEXT) ? g_list_first (group->cells) : g_list_last (group->cells); 
-	       list; list = (cycle == FOCUS_NEXT) ? list->next : list->prev)
-	    {
-	      CellInfo *info = list->data;
-
-	      if (!found_cell && info->renderer == focus_cell)
-		found_cell = TRUE;
-	      else if (found_cell)
-		{
-		  if (gtk_cell_renderer_can_focus (info->renderer))
-		    {
-		      gtk_cell_area_set_focus_cell (area, info->renderer);
-
-		      cycled_focus = TRUE;
-		      break;
-		    }
-		}
-	    }
-	}
-      
-      /* We cycled right out of the area, signal the parent we
-       * need to focus out of the area */
-      if (!cycled_focus)
-	gtk_cell_area_focus_leave (area, direction);
-    }
-}
-
 static gint
 gtk_cell_area_box_event (GtkCellArea          *area,
 			 GtkCellAreaIter      *iter,
@@ -971,61 +886,6 @@ gtk_cell_area_box_event (GtkCellArea          *area,
   
   if (retval)
     return retval;
-
-  /* Now detect keystrokes that move focus directionally inside the area
-   * or signal that focus should leave the area in a given direction.
-   *
-   * To navigate focus we only need to loop through the groups and 
-   * observe the orientation and push focus along to the next cell
-   * or signal that focus should leave the area.
-   */
-  if (event->type == GDK_KEY_PRESS && (flags & GTK_CELL_RENDERER_FOCUSED) != 0)
-    {
-      GdkEventKey        *key_event = (GdkEventKey *)event;
-      GtkCellRenderer    *focus_cell;
-
-      focus_cell = gtk_cell_area_get_focus_cell (area);
-
-      if (focus_cell)
-	{
-	  GtkCellAreaBox        *box            = GTK_CELL_AREA_BOX (area);
-	  GtkDirectionType       direction      = GTK_DIR_TAB_FORWARD;
-	  gboolean               have_direction = FALSE;
-
-	  /* Check modifiers and TAB keys ! */
-	  switch (key_event->keyval)
-	    {
-	    case GDK_KEY_KP_Up:
-	    case GDK_KEY_Up:
-	      direction = GTK_DIR_UP;
-	      have_direction = TRUE;
-	      break;
-	    case GDK_KEY_KP_Down:
-	    case GDK_KEY_Down:
-	      direction = GTK_DIR_DOWN;
-	      have_direction = TRUE;
-	      break;
-	    case GDK_KEY_KP_Left:
-	    case GDK_KEY_Left:
-	      direction = GTK_DIR_LEFT;
-	      have_direction = TRUE;
-	      break;
-	    case GDK_KEY_KP_Right:
-	    case GDK_KEY_Right:
-	      direction = GTK_DIR_RIGHT;
-	      have_direction = TRUE;
-	      break;
-	    default:
-	      break;
-	    }
-
-	  if (have_direction)
-	    {
-	      gtk_cell_area_cycle_focus (box, focus_cell, direction);
-	      return TRUE;
-	    }
-	}
-    }
 
   /* Also detect mouse events, for mouse events we need to allocate the renderers
    * and find which renderer needs to be activated.
@@ -1048,6 +908,13 @@ gtk_cell_area_box_render (GtkCellArea          *area,
   GtkCellAreaBoxIter    *box_iter = GTK_CELL_AREA_BOX_ITER (iter);
   GSList                *allocated_cells, *l;
   GdkRectangle           background_area, inner_area;
+  GtkCellRenderer       *focus_cell = NULL;
+
+  if (flags & GTK_CELL_RENDERER_FOCUSED)
+    {
+      focus_cell = gtk_cell_area_get_focus_cell (area);
+      flags &= ~GTK_CELL_RENDERER_FOCUSED;
+    }
 
   background_area = *cell_area;
 
@@ -1057,7 +924,8 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 
   for (l = allocated_cells; l; l = l->next)
     {
-      AllocatedCell *cell = l->data;
+      AllocatedCell       *cell = l->data;
+      GtkCellRendererState cell_fields = 0;
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
@@ -1070,16 +938,22 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 	  background_area.height = cell->size;
 	}
 
+      if (cell->renderer == focus_cell)
+	{
+	  g_print ("Rendering a cell with the focus flag !\n");
+	  
+	  cell_fields |= GTK_CELL_RENDERER_FOCUSED;
+	}
+
       /* Remove margins from the background area to produce the cell area
        */
       gtk_cell_area_inner_cell_area (area, &background_area, &inner_area);
 
-      /* XXX We have to do some per-cell considerations for the 'flags'
+      /* We have to do some per-cell considerations for the 'flags'
        * for focus handling */
       gtk_cell_renderer_render (cell->renderer, cr, widget,
 				&background_area, &inner_area,
-				flags);
-
+				flags | cell_fields);
     }
 
   g_slist_foreach (allocated_cells, (GFunc)allocated_cell_free, NULL);
@@ -1633,52 +1507,91 @@ gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
     *natural_width = nat_width;
 }
 
-static void
-gtk_cell_area_box_grab_focus (GtkCellArea      *area,
-			      GtkDirectionType  direction)
+static gboolean
+gtk_cell_area_box_focus (GtkCellArea      *area,
+			 GtkDirectionType  direction)
 {
-  GtkCellAreaBox        *box = GTK_CELL_AREA_BOX (area);
-  GtkCellAreaBoxPrivate *priv;
-  gboolean               first_cell = FALSE;
-  gint                   i;
-  GList                 *list;
+  GtkCellAreaBox        *box   = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv  = box->priv;
+  gint                   cycle = FOCUS_NONE;
+  gboolean               cycled_focus = FALSE;
+  GtkCellRenderer       *focus_cell;
 
-  priv = box->priv;
+  focus_cell = gtk_cell_area_get_focus_cell (area);
 
   switch (direction)
     {
     case GTK_DIR_TAB_FORWARD:
-    case GTK_DIR_DOWN:
-    case GTK_DIR_RIGHT:
-      first_cell = TRUE;
+      cycle = FOCUS_NEXT;
       break;
-
     case GTK_DIR_TAB_BACKWARD:
-    case GTK_DIR_UP:
+      cycle = FOCUS_PREV;
+      break;
+    case GTK_DIR_UP: 
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	return FALSE;
+      else
+	cycle = FOCUS_PREV;
+      break;
+    case GTK_DIR_DOWN:
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	return FALSE;
+      else
+	cycle = FOCUS_NEXT;
+      break;
     case GTK_DIR_LEFT:
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+	return FALSE;
+      else
+	cycle = FOCUS_PREV;
+      break;
+    case GTK_DIR_RIGHT:
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+	return FALSE;
+      else
+	cycle = FOCUS_NEXT;
+      break;
     default:
-      first_cell = FALSE;
       break;
     }
 
-  for (i = first_cell ? 0 : priv->groups->len -1; 
-       i >= 0 && i < priv->groups->len;
-       i = first_cell ? i + 1 : i - 1)
+  if (cycle != FOCUS_NONE)
     {
-      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
+      gboolean  found_cell = FALSE;
+      GList    *list;
+      gint      i;
 
-      for (list = first_cell ? g_list_first (group->cells) : g_list_last (group->cells); 
-	   list; list = first_cell ? list->next : list->prev)
+      /* If there is no focused cell, focus on the first one in the list */
+      if (!focus_cell)
+	found_cell = TRUE;
+
+      for (i = (cycle == FOCUS_NEXT) ? 0 : priv->groups->len -1; 
+	   i >= 0 && i < priv->groups->len;
+	   i = (cycle == FOCUS_NEXT) ? i + 1 : i - 1)
 	{
-	  CellInfo *info = list->data;
+	  CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
 	  
-	  if (gtk_cell_renderer_can_focus (info->renderer))
+	  for (list = (cycle == FOCUS_NEXT) ? g_list_first (group->cells) : g_list_last (group->cells); 
+	       list; list = (cycle == FOCUS_NEXT) ? list->next : list->prev)
 	    {
-	      gtk_cell_area_set_focus_cell (area, info->renderer);
-	      break;
+	      CellInfo *info = list->data;
+
+	      if (!found_cell && info->renderer == focus_cell)
+		found_cell = TRUE;
+	      else if (found_cell)
+		{
+		  if (gtk_cell_renderer_can_focus (info->renderer))
+		    {
+		      gtk_cell_area_set_focus_cell (area, info->renderer);
+
+		      cycled_focus = TRUE;
+		      break;
+		    }
+		}
 	    }
 	}
     }
+  return cycled_focus;
 }
 
 

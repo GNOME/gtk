@@ -37,6 +37,8 @@ static void      cell_area_scaffold_get_property                   (GObject     
 								    GParamSpec           *pspec);
 
 /* GtkWidgetClass */
+static void      cell_area_scaffold_realize                        (GtkWidget       *widget);
+static void      cell_area_scaffold_unrealize                      (GtkWidget       *widget);
 static gboolean  cell_area_scaffold_draw                           (GtkWidget       *widget,
 								    cairo_t         *cr);
 static void      cell_area_scaffold_size_allocate                  (GtkWidget       *widget,
@@ -55,14 +57,23 @@ static void      cell_area_scaffold_get_preferred_width_for_height (GtkWidget   
 								    gint             for_size,
 								    gint            *minimum_size,
 								    gint            *natural_size);
+static gint      cell_area_scaffold_focus                          (GtkWidget       *widget,
+								    GtkDirectionType direction);
+static void      cell_area_scaffold_grab_focus                     (GtkWidget       *widget);
 
-
+/* CellArea callbacks */
+static void      size_changed_cb                                   (GtkCellAreaIter *iter,
+								    GParamSpec       *pspec,
+								    CellAreaScaffold *scaffold);
 
 typedef struct {
   gint    size; /* The size of the row in the scaffold's opposing orientation */
 } RowData;
 
 struct _CellAreaScaffoldPrivate {
+
+  /* Window for catching events and dispatching them to the cell area */
+  GdkWindow       *event_window;
 
   /* The model we're showing data for */
   GtkTreeModel    *model;
@@ -74,32 +85,32 @@ struct _CellAreaScaffoldPrivate {
   /* Cache some info about rows (hieghts etc) */
   GArray          *row_data;
 
+  /* Focus handling */
+  gint             focus_row;
+
+  /* Check when the underlying area changes the size and
+   * we need to queue a redraw */
   gulong           size_changed_id;
 };
-
-
-#define ROW_SPACING  2
 
 enum {
   PROP_0,
   PROP_ORIENTATION
 };
 
+#define ROW_SPACING  2
+
+#define DIRECTION_STR(dir)				\
+  ((dir) == GTK_DIR_TAB_FORWARD  ? "tab forward" :	\
+   (dir) == GTK_DIR_TAB_BACKWARD ? "tab backward" :	\
+   (dir) == GTK_DIR_UP           ? "up" :		\
+   (dir) == GTK_DIR_DOWN         ? "down" :		\
+   (dir) == GTK_DIR_LEFT         ? "left" :		\
+   (dir) == GTK_DIR_RIGHT        ? "right" : "invalid")
+
 G_DEFINE_TYPE_WITH_CODE (CellAreaScaffold, cell_area_scaffold, GTK_TYPE_WIDGET,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
 
-
-static void
-size_changed_cb (GtkCellAreaIter  *iter,
-		 GParamSpec       *pspec,
-		 CellAreaScaffold *scaffold)
-{
-  if (!strcmp (pspec->name, "minimum-width") ||
-      !strcmp (pspec->name, "natural-width") ||
-      !strcmp (pspec->name, "minimum-height") ||
-      !strcmp (pspec->name, "natural-height"))
-    gtk_widget_queue_resize (GTK_WIDGET (scaffold));
-}
 
 static void
 cell_area_scaffold_init (CellAreaScaffold *scaffold)
@@ -114,13 +125,14 @@ cell_area_scaffold_init (CellAreaScaffold *scaffold)
   priv->area = gtk_cell_area_box_new ();
   priv->iter = gtk_cell_area_create_iter (priv->area);
 
-  priv->size_changed_id = 
-    g_signal_connect (priv->iter, "notify",
-		      G_CALLBACK (size_changed_cb), scaffold);
-
   priv->row_data = g_array_new (FALSE, FALSE, sizeof (RowData));
 
   gtk_widget_set_has_window (GTK_WIDGET (scaffold), FALSE);
+  gtk_widget_set_can_focus (GTK_WIDGET (scaffold), TRUE);
+
+  priv->size_changed_id = 
+    g_signal_connect (priv->iter, "notify",
+		      G_CALLBACK (size_changed_cb), scaffold);
 }
 
 static void
@@ -136,12 +148,16 @@ cell_area_scaffold_class_init (CellAreaScaffoldClass *class)
   gobject_class->set_property = cell_area_scaffold_set_property;
 
   widget_class = GTK_WIDGET_CLASS(class);
+  widget_class->realize = cell_area_scaffold_realize;
+  widget_class->unrealize = cell_area_scaffold_unrealize;
   widget_class->draw = cell_area_scaffold_draw;
   widget_class->size_allocate = cell_area_scaffold_size_allocate;
   widget_class->get_preferred_width = cell_area_scaffold_get_preferred_width;
   widget_class->get_preferred_height_for_width = cell_area_scaffold_get_preferred_height_for_width;
   widget_class->get_preferred_height = cell_area_scaffold_get_preferred_height;
   widget_class->get_preferred_width_for_height = cell_area_scaffold_get_preferred_width_for_height;
+  widget_class->focus = cell_area_scaffold_focus;
+  widget_class->grab_focus = cell_area_scaffold_grab_focus;
 
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
@@ -186,6 +202,7 @@ cell_area_scaffold_dispose (GObject *object)
 
   if (priv->area)
     {
+      /* Disconnect signals */
       g_object_unref (priv->area);
       priv->area = NULL;
     }
@@ -239,10 +256,64 @@ cell_area_scaffold_get_property (GObject    *object,
     }
 }
 
-
 /*********************************************************
  *                    GtkWidgetClass                     *
  *********************************************************/
+static void
+cell_area_scaffold_realize (GtkWidget *widget)
+{
+  CellAreaScaffold        *scaffold = CELL_AREA_SCAFFOLD (widget);
+  CellAreaScaffoldPrivate *priv     = scaffold->priv;
+  GtkAllocation            allocation;
+  GdkWindow               *window;
+  GdkWindowAttr            attributes;
+  gint                     attributes_mask;
+
+  gtk_widget_get_allocation (widget, &allocation);
+
+  gtk_widget_set_realized (widget, TRUE);
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
+  attributes.wclass = GDK_INPUT_ONLY;
+  attributes.event_mask = gtk_widget_get_events (widget);
+  attributes.event_mask |= (GDK_BUTTON_PRESS_MASK |
+			    GDK_BUTTON_RELEASE_MASK |
+			    GDK_KEY_PRESS_MASK |
+			    GDK_KEY_RELEASE_MASK);
+
+  attributes_mask = GDK_WA_X | GDK_WA_Y;
+
+  window = gtk_widget_get_parent_window (widget);
+  gtk_widget_set_window (widget, window);
+  g_object_ref (window);
+
+  priv->event_window = gdk_window_new (window,
+				       &attributes, attributes_mask);
+  gdk_window_set_user_data (priv->event_window, widget);
+
+  gtk_widget_style_attach (widget);
+}
+
+static void
+cell_area_scaffold_unrealize (GtkWidget *widget)
+{
+  CellAreaScaffold        *scaffold = CELL_AREA_SCAFFOLD (widget);
+  CellAreaScaffoldPrivate *priv     = scaffold->priv;
+
+  if (priv->event_window)
+    {
+      gdk_window_set_user_data (priv->event_window, NULL);
+      gdk_window_destroy (priv->event_window);
+      priv->event_window = NULL;
+    }
+  
+  GTK_WIDGET_CLASS (cell_area_scaffold_parent_class)->unrealize (widget);
+}
+
 static gboolean
 cell_area_scaffold_draw (GtkWidget       *widget,
 			 cairo_t         *cr)
@@ -255,10 +326,13 @@ cell_area_scaffold_draw (GtkWidget       *widget,
   GdkRectangle             render_area;
   GtkAllocation            allocation;
   gint                     i = 0;
+  gboolean                 have_focus;
+  GtkCellRendererState     flags;
 
   if (!priv->model)
     return FALSE;
 
+  have_focus  = gtk_widget_has_focus (widget);
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (priv->area));
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -273,6 +347,11 @@ cell_area_scaffold_draw (GtkWidget       *widget,
     {
       RowData *data = &g_array_index (priv->row_data, RowData, i);
 
+      if (have_focus && i == priv->focus_row)
+	flags = GTK_CELL_RENDERER_FOCUSED;
+      else
+	flags = 0;
+
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  render_area.height = data->size;
@@ -283,7 +362,7 @@ cell_area_scaffold_draw (GtkWidget       *widget,
 	}
 
       gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
-      gtk_cell_area_render (priv->area, priv->iter, widget, cr, &render_area, 0);
+      gtk_cell_area_render (priv->area, priv->iter, widget, cr, &render_area, flags);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
@@ -390,6 +469,13 @@ cell_area_scaffold_size_allocate (GtkWidget           *widget,
     return;
 
   gtk_widget_set_allocation (widget, allocation);
+
+  if (gtk_widget_get_realized (widget))
+    gdk_window_move_resize (priv->event_window,
+                            allocation->x,
+                            allocation->y,
+                            allocation->width,
+                            allocation->height);
 
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (priv->area));
 
@@ -569,7 +655,77 @@ cell_area_scaffold_get_preferred_width_for_height (GtkWidget       *widget,
     }
 }
 
+static gint
+cell_area_scaffold_focus (GtkWidget       *widget,
+			  GtkDirectionType direction)
+{
+  g_print ("cell_area_scaffold_focus called for direction %s\n", 
+	   DIRECTION_STR (direction));
 
+  /* Grab focus on ourself if we dont already have focus */
+  if (!gtk_widget_has_focus (widget))
+    {
+      gtk_widget_grab_focus (widget);
+      return TRUE;
+    }
+  return TRUE;
+}
+
+static void
+cell_area_scaffold_grab_focus (GtkWidget       *widget)
+{
+  CellAreaScaffold        *scaffold = CELL_AREA_SCAFFOLD (widget);
+  CellAreaScaffoldPrivate *priv     = scaffold->priv;
+  GtkTreeIter              iter;
+  gboolean                 valid;
+  gint                     i = -1;
+
+  /* Actually take the focus */
+  GTK_WIDGET_CLASS (cell_area_scaffold_parent_class)->grab_focus (widget);
+
+  if (!priv->model)
+    return;
+
+  /* Find the first row that can focus and give it focus */
+  valid = gtk_tree_model_get_iter_first (priv->model, &iter);
+  while (valid)
+    {
+      i++;
+
+      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
+
+      if (gtk_cell_area_can_focus (priv->area))
+	{
+	  gtk_cell_area_focus (priv->area, GTK_DIR_RIGHT);
+	  break;
+	}
+
+      valid = gtk_tree_model_iter_next (priv->model, &iter);
+    }
+
+  if (valid && i >= 0)
+    {
+      g_print ("Grab focus called, setting focus on row %d\n", i);
+
+      priv->focus_row = i;
+      gtk_widget_queue_draw (widget);
+    }
+}
+
+/*********************************************************
+ *                  CellArea callbacks                   *
+ *********************************************************/
+static void
+size_changed_cb (GtkCellAreaIter  *iter,
+		 GParamSpec       *pspec,
+		 CellAreaScaffold *scaffold)
+{
+  if (!strcmp (pspec->name, "minimum-width") ||
+      !strcmp (pspec->name, "natural-width") ||
+      !strcmp (pspec->name, "minimum-height") ||
+      !strcmp (pspec->name, "natural-height"))
+    gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
 
 /*********************************************************
  *                         API                           *
