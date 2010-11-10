@@ -2272,12 +2272,13 @@ tab_compare (gconstpointer a,
   const GtkWidget *child1 = a;
   const GtkWidget *child2 = b;
   GtkTextDirection text_direction = GPOINTER_TO_INT (data);
+  gint y1, y2;
 
   gtk_widget_get_allocation ((GtkWidget *) child1, &child1_allocation);
   gtk_widget_get_allocation ((GtkWidget *) child2, &child2_allocation);
 
-  gint y1 = child1_allocation.y + child1_allocation.height / 2;
-  gint y2 = child2_allocation.y + child2_allocation.height / 2;
+  y1 = child1_allocation.y + child1_allocation.height / 2;
+  y2 = child2_allocation.y + child2_allocation.height / 2;
 
   if (y1 == y2)
     {

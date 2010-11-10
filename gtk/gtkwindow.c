@@ -7565,10 +7565,11 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
 
   if (gtk_widget_get_realized (widget) && priv->frame)
     {
-      gtk_widget_get_allocation (widget, &allocation);
+	  gint width, height;
+	  gtk_widget_get_allocation (widget, &allocation);
 
-      gint width = allocation.width + left + right;
-      gint height = allocation.height + top + bottom;
+      width = allocation.width + left + right;
+      height = allocation.height + top + bottom;
       gdk_window_resize (priv->frame, width, height);
       gtk_decorated_window_move_resize_window (window,
 					       left, top,
