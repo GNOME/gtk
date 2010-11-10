@@ -8,7 +8,7 @@
 	>
 	<Tool
 		Name="VCCLCompilerTool"
-		AdditionalIncludeDirectories="..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\pango-1.0;$(GlibEtcInstallRoot)\include\GdkPixbuf-2.0"
+		AdditionalIncludeDirectories="..\..\..;$(GlibEtcInstallRoot)\lib\glib-2.0\include;$(GlibEtcInstallRoot)\include\glib-2.0;$(GlibEtcInstallRoot)\include;$(GlibEtcInstallRoot)\include\cairo;$(GlibEtcInstallRoot)\include\atk-1.0;$(GlibEtcInstallRoot)\include\pango-1.0"
 		PreprocessorDefinitions="HAVE_CONFIG_H;G_DISABLE_DEPRECATED;G_DISABLE_SINGLE_INCLUDES;ATK_DISABLE_SINGLE_INCLUDES;GDK_PIXBUF_DISABLE_SINGLE_INCLUDES;GTK_DISABLE_SINGLE_INCLUDES"
 		ForcedIncludeFiles="msvc_recommended_pragmas.h"
 	/>
@@ -31,7 +31,7 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 	/>
 	<UserMacro
 		Name="GtkApiVersion"
-		Value="2.0"
+		Value="3.0"
 	/>
 	<UserMacro
 		Name="GtkBinaryVersion"
@@ -63,16 +63,15 @@ copy ..\..\..\gdk\gdkconfig.h.win32 ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 echo on&#x0D;&#x0A;
 mkdir $(OutDir)\bin&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*.dll $(OutDir)\bin&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\gtk-update-icon-cache.exe $(OutDir)\bin&#x0D;&#x0A;
 
-mkdir $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.exe $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.c $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.h $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.gif $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.jpg $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.png $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
-copy ..\..\..\demos\gtk-demo\*.ui $(OutDir)\bin\gtk-demo&#x0D;&#x0A;
+mkdir $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\*.exe $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.c $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.h $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.ui $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.jpg $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.png $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
+copy ..\..\..\demos\gtk-demo\*.gif $(OutDir)\bin\gtk3-demo&#x0D;&#x0A;
 
 mkdir $(OutDir)\lib&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\lib&#x0D;&#x0A;
@@ -83,31 +82,29 @@ copy ..\..\..\gdk\gdkapplaunchcontext.h $(OutDir)\include\gtk-$(GtkApiVersion)\g
 copy ..\..\..\gdk\gdkcairo.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkcolor.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkcursor.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkdevice.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkdevicemanager.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkdisplay.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkdisplaymanager.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkdnd.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkdrawable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkenumtypes.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkevents.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkfont.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkgc.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdki18n.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkimage.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkinput.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeys.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeysyms.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkkeysyms-compat.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkmain.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkpango.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkpixbuf.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkpixmap.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkprivate.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkproperty.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkregion.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
-copy ..\..\..\gdk\gdkrgb.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkrectangle.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkrgba.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkscreen.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkselection.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkspawn.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdktestutils.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkthreads.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdktypes.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkvisual.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32.h $(OutDir)\include\gtk-$(GtkApiVersion)\gdk&#x0D;&#x0A;
@@ -117,6 +114,7 @@ mkdir $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtk.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaboutdialog.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaccelgroup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkaccelgroupprivate.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaccellabel.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaccelmap.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaccessible.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -125,6 +123,7 @@ copy ..\..\..\gtk\gtkactiongroup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x
 copy ..\..\..\gtk\gtkactivatable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkadjustment.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkalignment.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkapplication.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkarrow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaspectframe.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkassistant.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -151,16 +150,12 @@ copy ..\..\..\gtk\gtkcellview.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;
 copy ..\..\..\gtk\gtkcheckbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcheckmenuitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkclipboard.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkclist.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcolorbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcolorsel.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcolorseldialog.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkcombo.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcombobox.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkcomboboxentry.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkcomboboxtext.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkcontainer.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkctree.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkcurve.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkdebug.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkdialog.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkdnd.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -177,13 +172,11 @@ copy ..\..\..\gtk\gtkfilechooserbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\
 copy ..\..\..\gtk\gtkfilechooserdialog.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfilechooserwidget.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfilefilter.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkfilesel.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfixed.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfontbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkfontsel.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkframe.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkgamma.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkgc.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkgrid.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkhandlebox.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkhbbox.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkhbox.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -203,18 +196,12 @@ copy ..\..\..\gtk\gtkimcontextsimple.h $(OutDir)\include\gtk-$(GtkApiVersion)\gt
 copy ..\..\..\gtk\gtkimmodule.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkimmulticontext.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkinfobar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkinputdialog.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkinvisible.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkitemfactory.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtklabel.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtklayout.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtklinkbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtklist.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtklistitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkliststore.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmain.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkmarshal.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmenu.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmenubar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmenuitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -225,23 +212,17 @@ copy ..\..\..\gtk\gtkmisc.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0
 copy ..\..\..\gtk\gtkmodules.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmountoperation.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtknotebook.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkobject.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkoffscreenwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkoldeditable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkoptionmenu.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkorientable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpagesetup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpaned.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpapersize.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkpixmap.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkplug.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkpreview.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintcontext.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintoperation.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintoperationpreview.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintsettings.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprivate.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkprogress.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprogressbar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkradioaction.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkradiobutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -259,6 +240,7 @@ copy ..\..\..\gtk\gtkrecentmanager.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&
 copy ..\..\..\gtk\gtkruler.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscale.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscalebutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkscrollable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscrollbar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscrolledwindow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkselection.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -267,11 +249,11 @@ copy ..\..\..\gtk\gtkseparatormenuitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\
 copy ..\..\..\gtk\gtkseparatortoolitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksettings.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkshow.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtksignal.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksizegroup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtksizerequest.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksocket.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkspinner.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkspinbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkspinner.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusbar.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusicon.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstock.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -279,7 +261,6 @@ copy ..\..\..\gtk\gtkstyle.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x
 copy ..\..\..\gtk\gtktable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktearoffmenuitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktestutils.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtktext.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktextbuffer.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktextbufferrichtext.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktextchild.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -290,7 +271,6 @@ copy ..\..\..\gtk\gtktextmark.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;
 copy ..\..\..\gtk\gtktexttag.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktexttagtable.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktextview.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtktipsquery.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoggleaction.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktogglebutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoggletoolbutton.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -301,10 +281,7 @@ copy ..\..\..\gtk\gtktoolitemgroup.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&
 copy ..\..\..\gtk\gtktoolpalette.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktoolshell.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktooltip.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtktooltips.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtktree.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktreednd.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
-copy ..\..\..\gtk\gtktreeitem.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktreemodel.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktreemodelfilter.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktreemodelsort.h $(OutDir)\include\gtk-$(GtkApiVersion)\gtk&#x0D;&#x0A;
@@ -357,17 +334,17 @@ copy $(ConfigurationName)\$(PlatformName)\bin\*-$(GtkApiVersion).lib $(OutDir)\l
 	/>
 	<UserMacro
 		Name="GtkSeparateVS9DllSuffix"
-		Value="-2-vs9"
+		Value="-3-vs9"
 	/>
 	<!-- Change these two to GtkLibtoolCompatibleDllPrefix and
 	GtkLibtoolCompatibleDllSuffix if that is what you want -->
 	<UserMacro
 		Name="GtkDllPrefix"
-		Value="$(GtkLibtoolCompatibleDllPrefix)"
+		Value="$(GtkSeparateVS9DllPrefix)"
 	/>
 	<UserMacro
 		Name="GtkDllSuffix"
-		Value="$(GtkLibtoolCompatibleDllSuffix)"
+		Value="$(GtkSeparateVS9DllSuffix)"
 	/>
 	<UserMacro
 		Name="GlibEtcInstallRoot"
