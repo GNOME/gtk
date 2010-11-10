@@ -51,6 +51,24 @@
 #include "gtktooltip.h"
 #include "gtkprivate.h"
 
+/*rint() is only available in GCC and/or C99*/
+#if (__STDC_VERSION__ < 199901L && !defined __GNUC__)
+double rint(double x)
+{
+	if (ceil(x+0.5) == floor(x+0.5))
+	{
+		int a = (int)ceil(x);
+		if (a%2 == 0)
+			return ceil(x);
+		else
+			return floor(x);
+	}
+	else
+		return floor(x+0.5);
+}
+#endif
+
+
 
 struct _GtkLabelPrivate
 {
