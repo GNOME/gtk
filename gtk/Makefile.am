@@ -924,7 +924,7 @@ Gtk_3_0_gir_CFLAGS = \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 Gtk_3_0_gir_LIBS = $(gtktargetlib)
 if USE_X11
-Gtk_3_0_gir_LIBS += $(top_builddir)/gdk/x11/libgdk-x11.la
+Gtk_3_0_gir_LIBS += $(top_builddir)/gdk/libgdk-x11-3.0.la
 endif
 Gtk_3_0_gir_FILES = $(introspection_files)
 INTROSPECTION_GIRS += Gtk-3.0.gir
