@@ -1064,7 +1064,7 @@ gtk_drag_finish (GdkDragContext *context,
 
   if (target != GDK_NONE)
     {
-      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_screen (gdk_drawable_get_screen (context->source_window));
+      GtkWidget *selection_widget = gtk_drag_get_ipc_widget_for_screen (gdk_window_get_screen (context->source_window));
 
       g_object_ref (context);
       
@@ -1115,7 +1115,8 @@ gtk_drag_highlight_expose (GtkWidget      *widget,
 	{
 	  x = 0;
 	  y = 0;
-	  gdk_drawable_get_size (widget->window, &width, &height);
+          width = gdk_window_get_width (widget->window);
+          height = gdk_window_get_height (widget->window);
 	}
       
       gtk_paint_shadow (widget->style, widget->window,
@@ -2129,7 +2130,7 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 	{
 	  gdk_drag_find_window_for_screen (info->proxy_source->context,
 					   NULL,
-					   gdk_drawable_get_screen (current_event->dnd.window),
+					   gdk_window_get_screen (current_event->dnd.window),
 					   current_event->dnd.x_root, 
 					   current_event->dnd.y_root,
 					   &dest_window, &proto);
@@ -2251,7 +2252,7 @@ gtk_drag_dest_drop (GtkWidget	     *widget,
 	    {
 	      gdk_drag_find_window_for_screen (info->proxy_source->context,
 					       NULL,
-					       gdk_drawable_get_screen (current_event->dnd.window),
+					       gdk_window_get_screen (current_event->dnd.window),
 					       current_event->dnd.x_root, 
 					       current_event->dnd.y_root,
 					       &dest_window, &proto);
@@ -3130,7 +3131,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   g_return_if_fail (pixbuf != NULL || stock_id != NULL);
   g_return_if_fail (pixbuf == NULL || stock_id == NULL);
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
 
   /* Push a NULL colormap to guard against gtk_widget_push_colormap() */
   gtk_widget_push_colormap (NULL);
@@ -3159,7 +3160,7 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
   else
     g_object_ref (pixbuf);
 
-  display = gdk_drawable_get_display (context->source_window);
+  display = gdk_window_get_display (context->source_window);
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
 
@@ -3273,10 +3274,11 @@ gtk_drag_set_icon_pixmap (GdkDragContext    *context,
 
   screen = gdk_colormap_get_screen (colormap);
   
-  g_return_if_fail (gdk_drawable_get_screen (pixmap) == screen);
-  g_return_if_fail (!mask || gdk_drawable_get_screen (mask) == screen);
+  g_return_if_fail (gdk_window_get_screen (pixmap) == screen);
+  g_return_if_fail (!mask || gdk_window_get_screen (mask) == screen);
   
-  gdk_drawable_get_size (pixmap, &width, &height);
+  width = gdk_window_get_width (pixmap);
+  height = gdk_window_get_height (pixmap);
 
   gtk_widget_push_colormap (colormap);
 
@@ -3332,7 +3334,7 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   g_return_if_fail (context->is_source);
   g_return_if_fail (icon_name != NULL);
 
-  screen = gdk_drawable_get_screen (context->source_window);
+  screen = gdk_window_get_screen (context->source_window);
   g_return_if_fail (screen != NULL);
 
   settings = gtk_settings_get_for_screen (screen);

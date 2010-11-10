@@ -115,7 +115,7 @@ static void
 xembed_set_info (GdkWindow     *window,
 		 unsigned long  flags)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   unsigned long buffer[2];
 
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO");
@@ -202,7 +202,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 				 GdkEvent  *event,
 				 gpointer   data)
 {
-  GdkScreen *screen = gdk_drawable_get_screen (event->any.window);
+  GdkScreen *screen = gdk_window_get_screen (event->any.window);
   GdkDisplay *display = gdk_screen_get_display (screen);
   GtkPlug *plug = GTK_PLUG (data);
   XEvent *xevent = (XEvent *)gdk_xevent;

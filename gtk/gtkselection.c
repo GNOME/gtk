@@ -2524,7 +2524,7 @@ _gtk_selection_incr_event (GdkWindow	   *window,
   g_message ("PropertyDelete, property %ld", event->atom);
 #endif
 
-  selection_max_size = GTK_SELECTION_MAX_SIZE (gdk_drawable_get_display (window));  
+  selection_max_size = GTK_SELECTION_MAX_SIZE (gdk_window_get_display (window));
 
   /* Now find the appropriate ongoing INCR */
   tmp_list = current_incrs;

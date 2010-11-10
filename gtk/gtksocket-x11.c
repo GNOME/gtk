@@ -128,7 +128,7 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 				      gboolean   mask_key_presses)
 {
   XKeyEvent xkey;
-  GdkScreen *screen = gdk_drawable_get_screen (socket->plug_window);
+  GdkScreen *screen = gdk_window_get_screen (socket->plug_window);
 
   memset (&xkey, 0, sizeof (xkey));
   xkey.type = (gdk_event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
@@ -294,7 +294,7 @@ xembed_get_info (GdkWindow     *window,
 		 unsigned long *version,
 		 unsigned long *flags)
 {
-  GdkDisplay *display = gdk_drawable_get_display (window);
+  GdkDisplay *display = gdk_window_get_display (window);
   Atom xembed_info_atom = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED_INFO");
   Atom type;
   int format;

@@ -1908,7 +1908,7 @@ _gtk_clipboard_handle_event (GdkEventOwnerChange *event)
   GdkDisplay *display;
   GtkClipboard *clipboard;
   
-  display = gdk_drawable_get_display (event->window);
+  display = gdk_window_get_display (event->window);
   clipboard = clipboard_peek (display, event->selection, TRUE);
       
   if (clipboard)
