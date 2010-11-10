@@ -1,3 +1,11 @@
+Overview of Changes from GTK+ 2.23.1 to 2.23.2
+==============================================
+
+* Fix a branch messup
+* Readd the gtk_private_flags_get_type symbol
+* Fix crashes on 64-bit
+* Allow building with libtool 2.4
+
 Overview of Changes from GTK+ 2.23.0 to 2.23.1
 ==============================================
 
