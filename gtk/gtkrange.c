@@ -1911,6 +1911,7 @@ draw_stepper (GtkRange     *range,
   gint arrow_y;
   gint arrow_width;
   gint arrow_height;
+  gboolean arrow_sensitive;
 
   switch (stepper)
     {
@@ -1930,7 +1931,7 @@ draw_stepper (GtkRange     *range,
       g_assert_not_reached ();
     };
 
-  gboolean arrow_sensitive = TRUE;
+  arrow_sensitive = TRUE;
 
   gtk_widget_get_allocation (widget, &allocation);
 

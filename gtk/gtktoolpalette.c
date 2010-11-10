@@ -482,9 +482,10 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   gint x;
 
   gint *group_sizes = g_newa (gint, palette->priv->groups->len);
+  GtkTextDirection direction;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  GtkTextDirection direction = gtk_widget_get_direction (widget);
+  direction = gtk_widget_get_direction (widget);
 
   GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->size_allocate (widget, allocation);
 

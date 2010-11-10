@@ -885,10 +885,11 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
   gint n_columns, n_rows = 1;
   gint min_rows;
   guint border_width;
+  GtkTextDirection direction;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  GtkTextDirection direction = gtk_widget_get_direction (widget);
+  direction = gtk_widget_get_direction (widget);
 
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
   style = gtk_tool_shell_get_style (GTK_TOOL_SHELL (group));
