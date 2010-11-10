@@ -125,10 +125,10 @@ gtk_dialog_class_init (GtkDialogClass *class)
    * GtkDialog::response:
    * @dialog: the object on which the signal is emitted
    * @response_id: the response ID
-   * 
-   * Emitted when an action widget is clicked, the dialog receives a 
-   * delete event, or the application programmer calls gtk_dialog_response(). 
-   * On a delete event, the response ID is #GTK_RESPONSE_DELETE_EVENT. 
+   *
+   * Emitted when an action widget is clicked, the dialog receives a
+   * delete event, or the application programmer calls gtk_dialog_response().
+   * On a delete event, the response ID is #GTK_RESPONSE_DELETE_EVENT.
    * Otherwise, it depends on which action widget was clicked.
    */
   dialog_signals[RESPONSE] =
@@ -144,13 +144,13 @@ gtk_dialog_class_init (GtkDialogClass *class)
   /**
    * GtkDialog::close:
    *
-   * The ::close signal is a 
+   * The ::close signal is a
    * <link linkend="keybinding-signals">keybinding signal</link>
    * which gets emitted when the user uses a keybinding to close
    * the dialog.
    *
    * The default binding for this signal is the Escape key.
-   */ 
+   */
   dialog_signals[CLOSE] =
     g_signal_new (I_("close"),
 		  G_OBJECT_CLASS_TYPE (class),
@@ -159,7 +159,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-  
+
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("content-area-border",
                                                              P_("Content area border"),
@@ -194,7 +194,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              G_MAXINT,
                                                              6,
                                                              GTK_PARAM_READABLE));
-  
+
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("action-area-border",
                                                              P_("Action area border"),
@@ -205,7 +205,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              GTK_PARAM_READABLE));
 
   binding_set = gtk_binding_set_by_class (class);
-  
+
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0, "close", 0);
 }
 
@@ -331,7 +331,7 @@ gtk_dialog_map (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkDialog *dialog = GTK_DIALOG (widget);
   GtkDialogPrivate *priv = dialog->priv;
-  
+
   GTK_WIDGET_CLASS (gtk_dialog_parent_class)->map (widget);
 
   focus = gtk_window_get_focus (window);
@@ -373,10 +373,10 @@ gtk_dialog_map (GtkWidget *widget)
 	      gtk_widget_grab_focus (default_widget);
 	      break;
 	    }
-	  
+
 	  tmp_list = tmp_list->next;
 	}
-      
+
       g_list_free (children);
     }
 }
@@ -395,13 +395,13 @@ dialog_find_button (GtkDialog *dialog,
   GtkDialogPrivate *priv = dialog->priv;
   GtkWidget *child = NULL;
   GList *children, *tmp_list;
-      
+
   children = gtk_container_get_children (GTK_CONTAINER (priv->action_area));
 
   for (tmp_list = children; tmp_list; tmp_list = tmp_list->next)
     {
       ResponseData *rd = get_response_data (tmp_list->data, FALSE);
-      
+
       if (rd && rd->response_id == response_id)
 	{
 	  child = tmp_list->data;
@@ -418,7 +418,7 @@ static void
 gtk_dialog_close (GtkDialog *dialog)
 {
   /* Synthesize delete_event to close dialog. */
-  
+
   GtkWidget *widget = GTK_WIDGET (dialog);
   GdkEvent *event;
 
@@ -426,7 +426,7 @@ gtk_dialog_close (GtkDialog *dialog)
 
   event->any.window = g_object_ref (gtk_widget_get_window (widget));
   event->any.send_event = TRUE;
-  
+
   gtk_main_do_event (event);
   gdk_event_free (event);
 }
@@ -481,10 +481,10 @@ gtk_dialog_new_empty (const gchar     *title,
  * any positive number, or one of the values in the #GtkResponseType
  * enumeration. If the user clicks one of these dialog buttons,
  * #GtkDialog will emit the #GtkDialog::response signal with the corresponding
- * response ID. If a #GtkDialog receives the #GtkWidget::delete-event signal, 
+ * response ID. If a #GtkDialog receives the #GtkWidget::delete-event signal,
  * it will emit ::response with a response ID of #GTK_RESPONSE_DELETE_EVENT.
  * However, destroying a dialog does not emit the ::response signal;
- * so be careful relying on ::response when using the 
+ * so be careful relying on ::response when using the
  * #GTK_DIALOG_DESTROY_WITH_PARENT flag. Buttons are from left to right,
  * so the first button in the list will be the leftmost button in the dialog.
  *
@@ -499,7 +499,7 @@ gtk_dialog_new_empty (const gchar     *title,
  *                                                   GTK_RESPONSE_REJECT,
  *                                                   NULL);
  * ]|
- * 
+ *
  * Return value: a new #GtkDialog
  **/
 GtkWidget*
@@ -511,7 +511,7 @@ gtk_dialog_new_with_buttons (const gchar    *title,
 {
   GtkDialog *dialog;
   va_list args;
-  
+
   dialog = GTK_DIALOG (gtk_dialog_new_empty (title, parent, flags));
 
   va_start (args, first_button_text);
@@ -519,13 +519,13 @@ gtk_dialog_new_with_buttons (const gchar    *title,
   gtk_dialog_add_buttons_valist (dialog,
                                  first_button_text,
                                  args);
-  
+
   va_end (args);
 
   return GTK_WIDGET (dialog);
 }
 
-static void 
+static void
 response_data_free (gpointer data)
 {
   g_slice_free (ResponseData, data);
@@ -541,7 +541,7 @@ get_response_data (GtkWidget *widget,
   if (ad == NULL && create)
     {
       ad = g_slice_new (ResponseData);
-      
+
       g_object_set_data_full (G_OBJECT (widget),
                               I_("gtk-dialog-response-data"),
                               ad,
@@ -555,7 +555,7 @@ static void
 action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
 {
   gint response_id;
-  
+
   response_id = gtk_dialog_get_response_for_widget (dialog, widget);
 
   gtk_dialog_response (dialog, response_id);
@@ -566,12 +566,12 @@ action_widget_activated (GtkWidget *widget, GtkDialog *dialog)
  * @dialog: a #GtkDialog
  * @child: an activatable widget
  * @response_id: response ID for @child
- * 
+ *
  * Adds an activatable widget to the action area of a #GtkDialog,
- * connecting a signal handler that will emit the #GtkDialog::response 
- * signal on the dialog when the widget is activated. The widget is 
+ * connecting a signal handler that will emit the #GtkDialog::response
+ * signal on the dialog when the widget is activated. The widget is
  * appended to the end of the dialog's action area. If you want to add a
- * non-activatable widget, simply pack it into the @action_area field 
+ * non-activatable widget, simply pack it into the @action_area field
  * of the #GtkDialog struct.
  **/
 void
@@ -582,7 +582,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
   GtkDialogPrivate *priv;
   ResponseData *ad;
   guint signal_id;
-  
+
   g_return_if_fail (GTK_IS_DIALOG (dialog));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
@@ -615,7 +615,7 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
   gtk_box_pack_end (GTK_BOX (priv->action_area),
                     child,
                     FALSE, TRUE, 0);
-  
+
   if (response_id == GTK_RESPONSE_HELP)
     gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (priv->action_area), child, TRUE);
 }
@@ -625,11 +625,11 @@ gtk_dialog_add_action_widget (GtkDialog *dialog,
  * @dialog: a #GtkDialog
  * @button_text: text of button, or stock ID
  * @response_id: response ID for the button
- * 
+ *
  * Adds a button with the given text (or a stock button, if @button_text is a
  * stock ID) and sets things up so that clicking the button will emit the
- * #GtkDialog::response signal with the given @response_id. The button is 
- * appended to the end of the dialog's action area. The button widget is 
+ * #GtkDialog::response signal with the given @response_id. The button is
+ * appended to the end of the dialog's action area. The button widget is
  * returned, but usually you don't need it.
  *
  * Return value: (transfer full): the button widget that was added
@@ -640,16 +640,16 @@ gtk_dialog_add_button (GtkDialog   *dialog,
                        gint         response_id)
 {
   GtkWidget *button;
-  
+
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), NULL);
   g_return_val_if_fail (button_text != NULL, NULL);
 
   button = gtk_button_new_from_stock (button_text);
 
   gtk_widget_set_can_default (button, TRUE);
-  
+
   gtk_widget_show (button);
-  
+
   gtk_dialog_add_action_widget (dialog,
                                 button,
                                 response_id);
@@ -666,10 +666,10 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
   gint response_id;
 
   g_return_if_fail (GTK_IS_DIALOG (dialog));
-  
+
   if (first_button_text == NULL)
     return;
-  
+
   text = first_button_text;
   response_id = va_arg (args, gint);
 
@@ -689,7 +689,7 @@ gtk_dialog_add_buttons_valist (GtkDialog      *dialog,
  * @dialog: a #GtkDialog
  * @first_button_text: button text or stock ID
  * @Varargs: response ID for first button, then more text-response_id pairs
- * 
+ *
  * Adds more buttons, same as calling gtk_dialog_add_button()
  * repeatedly.  The variable argument list should be %NULL-terminated
  * as with gtk_dialog_new_with_buttons(). Each button must have both
@@ -699,7 +699,7 @@ void
 gtk_dialog_add_buttons (GtkDialog   *dialog,
                         const gchar *first_button_text,
                         ...)
-{  
+{
   va_list args;
 
   va_start (args, first_button_text);
@@ -707,7 +707,7 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
   gtk_dialog_add_buttons_valist (dialog,
                                  first_button_text,
                                  args);
-  
+
   va_end (args);
 }
 
@@ -717,7 +717,7 @@ gtk_dialog_add_buttons (GtkDialog   *dialog,
  * @response_id: a response ID
  * @setting: %TRUE for sensitive
  *
- * Calls <literal>gtk_widget_set_sensitive (widget, @setting)</literal> 
+ * Calls <literal>gtk_widget_set_sensitive (widget, @setting)</literal>
  * for each widget in the dialog's action area with the given @response_id.
  * A convenient way to sensitize/desensitize dialog buttons.
  **/
@@ -755,7 +755,7 @@ gtk_dialog_set_response_sensitive (GtkDialog *dialog,
  * gtk_dialog_set_default_response:
  * @dialog: a #GtkDialog
  * @response_id: a response ID
- * 
+ *
  * Sets the last widget in the dialog's action area with the given @response_id
  * as the default widget for the dialog. Pressing "Enter" normally activates
  * the default widget.
@@ -782,7 +782,7 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
 
       if (rd && rd->response_id == response_id)
 	gtk_widget_grab_default (widget);
-	    
+
       tmp_list = g_list_next (tmp_list);
     }
 
@@ -792,9 +792,9 @@ gtk_dialog_set_default_response (GtkDialog *dialog,
 /**
  * gtk_dialog_response:
  * @dialog: a #GtkDialog
- * @response_id: response ID 
- * 
- * Emits the #GtkDialog::response signal with the given response ID. 
+ * @response_id: response ID
+ *
+ * Emits the #GtkDialog::response signal with the given response ID.
  * Used to indicate that the user has responded to the dialog in some way;
  * typically either you or gtk_dialog_run() will be monitoring the
  * ::response signal and take appropriate action.
@@ -854,9 +854,9 @@ run_delete_handler (GtkDialog *dialog,
                     gpointer data)
 {
   RunInfo *ri = data;
-    
+
   shutdown_loop (ri);
-  
+
   return TRUE; /* Do not destroy */
 }
 
@@ -866,31 +866,31 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
   RunInfo *ri = data;
 
   /* shutdown_loop will be called by run_unmap_handler */
-  
+
   ri->destroyed = TRUE;
 }
 
 /**
  * gtk_dialog_run:
  * @dialog: a #GtkDialog
- * 
+ *
  * Blocks in a recursive main loop until the @dialog either emits the
- * #GtkDialog::response signal, or is destroyed. If the dialog is 
- * destroyed during the call to gtk_dialog_run(), gtk_dialog_run() returns 
- * #GTK_RESPONSE_NONE. Otherwise, it returns the response ID from the 
+ * #GtkDialog::response signal, or is destroyed. If the dialog is
+ * destroyed during the call to gtk_dialog_run(), gtk_dialog_run() returns
+ * #GTK_RESPONSE_NONE. Otherwise, it returns the response ID from the
  * ::response signal emission.
  *
  * Before entering the recursive main loop, gtk_dialog_run() calls
  * gtk_widget_show() on the dialog for you. Note that you still
  * need to show any children of the dialog yourself.
  *
- * During gtk_dialog_run(), the default behavior of #GtkWidget::delete-event 
+ * During gtk_dialog_run(), the default behavior of #GtkWidget::delete-event
  * is disabled; if the dialog receives ::delete_event, it will not be
  * destroyed as windows usually are, and gtk_dialog_run() will return
- * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog 
+ * #GTK_RESPONSE_DELETE_EVENT. Also, during gtk_dialog_run() the dialog
  * will be modal. You can force gtk_dialog_run() to return at any time by
- * calling gtk_dialog_response() to emit the ::response signal. Destroying 
- * the dialog during gtk_dialog_run() is a very bad idea, because your 
+ * calling gtk_dialog_response() to emit the ::response signal. Destroying
+ * the dialog during gtk_dialog_run() is a very bad idea, because your
  * post-run code won't know whether the dialog was destroyed or not.
  *
  * After gtk_dialog_run() returns, you are responsible for hiding or
@@ -910,13 +910,13 @@ run_destroy_handler (GtkDialog *dialog, gpointer data)
  *     }
  *   gtk_widget_destroy (dialog);
  * ]|
- * 
+ *
  * Note that even though the recursive main loop gives the effect of a
- * modal dialog (it prevents the user from interacting with other 
- * windows in the same window group while the dialog is run), callbacks 
- * such as timeouts, IO channel watches, DND drops, etc, <emphasis>will</emphasis> 
+ * modal dialog (it prevents the user from interacting with other
+ * windows in the same window group while the dialog is run), callbacks
+ * such as timeouts, IO channel watches, DND drops, etc, <emphasis>will</emphasis>
  * be triggered during a gtk_dialog_run() call.
- * 
+ *
  * Return value: response ID
  **/
 gint
@@ -928,7 +928,7 @@ gtk_dialog_run (GtkDialog *dialog)
   gulong unmap_handler;
   gulong destroy_handler;
   gulong delete_handler;
-  
+
   g_return_val_if_fail (GTK_IS_DIALOG (dialog), -1);
 
   g_object_ref (dialog);
@@ -939,46 +939,46 @@ gtk_dialog_run (GtkDialog *dialog)
 
   if (!gtk_widget_get_visible (GTK_WIDGET (dialog)))
     gtk_widget_show (GTK_WIDGET (dialog));
-  
+
   response_handler =
     g_signal_connect (dialog,
                       "response",
                       G_CALLBACK (run_response_handler),
                       &ri);
-  
+
   unmap_handler =
     g_signal_connect (dialog,
                       "unmap",
                       G_CALLBACK (run_unmap_handler),
                       &ri);
-  
+
   delete_handler =
     g_signal_connect (dialog,
                       "delete-event",
                       G_CALLBACK (run_delete_handler),
                       &ri);
-  
+
   destroy_handler =
     g_signal_connect (dialog,
                       "destroy",
                       G_CALLBACK (run_destroy_handler),
                       &ri);
-  
+
   ri.loop = g_main_loop_new (NULL, FALSE);
 
-  GDK_THREADS_LEAVE ();  
+  GDK_THREADS_LEAVE ();
   g_main_loop_run (ri.loop);
-  GDK_THREADS_ENTER ();  
+  GDK_THREADS_ENTER ();
 
   g_main_loop_unref (ri.loop);
 
   ri.loop = NULL;
-  
+
   if (!ri.destroyed)
     {
       if (!was_modal)
         gtk_window_set_modal (GTK_WINDOW(dialog), FALSE);
-      
+
       g_signal_handler_disconnect (dialog, response_handler);
       g_signal_handler_disconnect (dialog, unmap_handler);
       g_signal_handler_disconnect (dialog, delete_handler);
@@ -1069,18 +1069,18 @@ gtk_dialog_get_response_for_widget (GtkDialog *dialog,
  * Returns %TRUE if dialogs are expected to use an alternative
  * button order on the screen @screen. See
  * gtk_dialog_set_alternative_button_order() for more details
- * about alternative button order. 
+ * about alternative button order.
  *
  * If you need to use this function, you should probably connect
  * to the ::notify:gtk-alternative-button-order signal on the
- * #GtkSettings object associated to @screen, in order to be 
+ * #GtkSettings object associated to @screen, in order to be
  * notified if the button order setting changes.
  *
  * Returns: Whether the alternative button order should be used
  *
  * Since: 2.6
  */
-gboolean 
+gboolean
 gtk_alternative_dialog_button_order (GdkScreen *screen)
 {
   GtkSettings *settings;
@@ -1090,7 +1090,7 @@ gtk_alternative_dialog_button_order (GdkScreen *screen)
     settings = gtk_settings_get_for_screen (screen);
   else
     settings = gtk_settings_get_default ();
-  
+
   g_object_get (settings,
 		"gtk-alternative-button-order", &result, NULL);
 
@@ -1126,52 +1126,52 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
  * @first_response_id: a response id used by one @dialog's buttons
  * @Varargs: a list of more response ids of @dialog's buttons, terminated by -1
  *
- * Sets an alternative button order. If the 
- * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE, 
- * the dialog buttons are reordered according to the order of the 
+ * Sets an alternative button order. If the
+ * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE,
+ * the dialog buttons are reordered according to the order of the
  * response ids passed to this function.
  *
- * By default, GTK+ dialogs use the button order advocated by the Gnome 
- * <ulink url="http://developer.gnome.org/projects/gup/hig/2.0/">Human 
- * Interface Guidelines</ulink> with the affirmative button at the far 
+ * By default, GTK+ dialogs use the button order advocated by the Gnome
+ * <ulink url="http://developer.gnome.org/projects/gup/hig/2.0/">Human
+ * Interface Guidelines</ulink> with the affirmative button at the far
  * right, and the cancel button left of it. But the builtin GTK+ dialogs
  * and #GtkMessageDialog<!-- -->s do provide an alternative button order,
  * which is more suitable on some platforms, e.g. Windows.
  *
- * Use this function after adding all the buttons to your dialog, as the 
+ * Use this function after adding all the buttons to your dialog, as the
  * following example shows:
  * |[
  * cancel_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
  *                                        GTK_STOCK_CANCEL,
  *                                        GTK_RESPONSE_CANCEL);
- *  
+ *
  * ok_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
  *                                    GTK_STOCK_OK,
  *                                    GTK_RESPONSE_OK);
- *   
+ *
  * gtk_widget_grab_default (ok_button);
- *   
+ *
  * help_button = gtk_dialog_add_button (GTK_DIALOG (dialog),
  *                                      GTK_STOCK_HELP,
  *                                      GTK_RESPONSE_HELP);
- *  
+ *
  * gtk_dialog_set_alternative_button_order (GTK_DIALOG (dialog),
  *                                          GTK_RESPONSE_OK,
  *                                          GTK_RESPONSE_CANCEL,
  *                                          GTK_RESPONSE_HELP,
  *                                          -1);
  * ]|
- * 
+ *
  * Since: 2.6
  */
-void 
+void
 gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
 					 gint       first_response_id,
 					 ...)
 {
   GdkScreen *screen;
   va_list args;
-  
+
   g_return_if_fail (GTK_IS_DIALOG (dialog));
 
   screen = gtk_widget_get_screen (GTK_WIDGET (dialog));
@@ -1191,18 +1191,18 @@ gtk_dialog_set_alternative_button_order (GtkDialog *dialog,
  * @n_params: the number of response ids in @new_order
  * @new_order: an array of response ids of @dialog's buttons
  *
- * Sets an alternative button order. If the 
- * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE, 
- * the dialog buttons are reordered according to the order of the 
+ * Sets an alternative button order. If the
+ * #GtkSettings:gtk-alternative-button-order setting is set to %TRUE,
+ * the dialog buttons are reordered according to the order of the
  * response ids in @new_order.
  *
  * See gtk_dialog_set_alternative_button_order() for more information.
  *
  * This function is for use by language bindings.
- * 
+ *
  * Since: 2.6
  */
-void 
+void
 gtk_dialog_set_alternative_button_order_from_array (GtkDialog *dialog,
                                                     gint       n_params,
                                                     gint      *new_order)
@@ -1331,7 +1331,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
   GObject *object;
   ResponseData *ad;
   guint signal_id;
-  
+
   if (strcmp (tagname, "action-widgets"))
     {
     parent_buildable_iface->custom_finished (buildable, builder, child,
@@ -1362,11 +1362,11 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
 	signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);
       else
 	signal_id = GTK_WIDGET_GET_CLASS (object)->activate_signal;
-      
+
       if (signal_id)
 	{
 	  GClosure *closure;
-	  
+
 	  closure = g_cclosure_new_object (G_CALLBACK (action_widget_activated),
 					   G_OBJECT (dialog));
 	  g_signal_connect_closure_by_id (object,
