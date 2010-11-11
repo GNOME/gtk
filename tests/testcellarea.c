@@ -246,6 +246,8 @@ simple_cell_area (void)
 /*******************************************************
  *                      Focus Test                     *
  *******************************************************/
+static GtkCellRenderer *focus_renderer, *sibling_renderer;
+
 enum {
   FOCUS_COLUMN_NAME,
   FOCUS_COLUMN_CHECK,
@@ -328,7 +330,7 @@ focus_scaffold (void)
   gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_NAME);
 
   /* Catch signal ... */
-  renderer = gtk_cell_renderer_toggle_new ();
+  focus_renderer = renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "active", FOCUS_COLUMN_CHECK);
@@ -336,7 +338,7 @@ focus_scaffold (void)
   g_signal_connect (G_OBJECT (renderer), "toggled",
 		    G_CALLBACK (cell_toggled), scaffold);
 
-  renderer = gtk_cell_renderer_text_new ();
+  sibling_renderer = renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 
 		"wrap-mode", PANGO_WRAP_WORD,
 		"wrap-width", 150,
@@ -345,6 +347,21 @@ focus_scaffold (void)
   gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_STATIC_TEXT);
 
   return scaffold;
+}
+
+static void
+focus_sibling_toggled (GtkToggleButton  *toggle,
+		       CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gboolean     active = gtk_toggle_button_get_active (toggle);
+
+  if (active)
+    gtk_cell_area_add_focus_sibling (area, focus_renderer, sibling_renderer);
+  else
+    gtk_cell_area_remove_focus_sibling (area, focus_renderer, sibling_renderer);
+
+  gtk_widget_queue_draw (GTK_WIDGET (scaffold));
 }
 
 
@@ -375,9 +392,12 @@ focus_cell_area (void)
   gtk_widget_show (vbox);
   gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
 
-  widget = gtk_check_button_new_with_label ("check button");
+  widget = gtk_check_button_new_with_label ("Focus Sibling");
   gtk_widget_show (widget);
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (focus_sibling_toggled), scaffold);
 
   gtk_container_add (GTK_CONTAINER (window), hbox);
 

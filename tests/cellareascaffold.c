@@ -405,7 +405,9 @@ cell_area_scaffold_draw (GtkWidget       *widget,
 	}
 
       gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
-      gtk_cell_area_render (priv->area, priv->iter, widget, cr, &render_area, flags);
+      gtk_cell_area_render (priv->area, priv->iter, widget, cr, 
+			    &render_area, &render_area, flags,
+			    (have_focus && i == priv->focus_row));
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
@@ -726,13 +728,11 @@ cell_area_scaffold_focus (GtkWidget       *widget,
       /* If focus stays in the area we dont need to do any more */
       if (gtk_cell_area_focus (priv->area, direction))
 	{
-	  GtkCellRenderer *renderer = gtk_cell_area_get_focus_cell (priv->area);
-	  
 	  priv->focus_row = focus_row;
-	  
-	  g_print ("focusing in direction %s: focus set on a %s in row %d\n", 
-		   DIRECTION_STR (direction), G_OBJECT_TYPE_NAME (renderer), priv->focus_row);
-	  
+
+	  /* XXX A smarter implementation would only invalidate the rectangles where
+	   * focus was removed from and new focus was placed */
+	  gtk_widget_queue_draw (widget);
 	  return TRUE;
 	}
       else
@@ -802,8 +802,9 @@ cell_area_scaffold_focus (GtkWidget       *widget,
 	}
     }
 
-  g_print ("focus leaving with no cells in focus (direction %s, focus_row %d)\n",
-	   DIRECTION_STR (direction), priv->focus_row);
+  /* XXX A smarter implementation would only invalidate the rectangles where
+   * focus was removed from and new focus was placed */
+  gtk_widget_queue_draw (widget);
 
   return FALSE;
 }

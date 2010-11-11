@@ -97,6 +97,13 @@ static void      gtk_cell_area_reorder                       (GtkCellLayout     
 							      gint                   position);
 static GList    *gtk_cell_area_get_cells                     (GtkCellLayout         *cell_layout);
 
+
+/* Used in forall loop to check if a child renderer is present */
+typedef struct {
+  GtkCellRenderer *renderer;
+  gboolean         has_renderer;
+} HasRendererCheck;
+
 /* Attribute/Cell metadata */
 typedef struct {
   const gchar *attribute;
@@ -153,6 +160,9 @@ struct _GtkCellAreaPrivate
    * attributes in this hash table.
    */
   GHashTable      *cell_info;
+
+  /* Tracking which cells are focus siblings of focusable cells */
+  GHashTable      *focus_siblings;
 
   /* The cell border decides how much space to reserve
    * around each cell for the background_area
@@ -221,6 +231,11 @@ gtk_cell_area_init (GtkCellArea *area)
 					   g_direct_equal,
 					   NULL, 
 					   (GDestroyNotify)cell_info_free);
+
+  priv->focus_siblings = g_hash_table_new_full (g_direct_hash, 
+						g_direct_equal,
+						NULL, 
+						(GDestroyNotify)g_list_free);
 
   priv->cell_border.left   = 0;
   priv->cell_border.right  = 0;
@@ -470,9 +485,10 @@ gtk_cell_area_finalize (GObject *object)
   GtkCellAreaPrivate *priv   = area->priv;
 
   /* All cell renderers should already be removed at this point,
-   * just kill our hash table here. 
+   * just kill our (empty) hash tables here. 
    */
   g_hash_table_destroy (priv->cell_info);
+  g_hash_table_destroy (priv->focus_siblings);
 
   g_free (priv->current_path);
 
@@ -858,6 +874,7 @@ gtk_cell_area_remove (GtkCellArea        *area,
 {
   GtkCellAreaClass   *class;
   GtkCellAreaPrivate *priv;
+  GList              *renderers, *l;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -868,11 +885,52 @@ gtk_cell_area_remove (GtkCellArea        *area,
   /* Remove any custom attributes and custom cell data func here first */
   g_hash_table_remove (priv->cell_info, renderer);
 
+  /* Remove focus siblings of this renderer */
+  g_hash_table_remove (priv->focus_siblings, renderer);
+
+  /* Remove this renderer from any focus renderer's sibling list */ 
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+
+  for (l = renderers; l; l = l->next)
+    {
+      GtkCellRenderer *focus_renderer = l->data;
+
+      if (gtk_cell_area_is_focus_sibling (area, focus_renderer, renderer))
+	{
+	  gtk_cell_area_remove_focus_sibling (area, focus_renderer, renderer);
+	  break;
+	}
+    }
+
+  g_list_free (renderers);
+
   if (class->remove)
     class->remove (area, renderer);
   else
     g_warning ("GtkCellAreaClass::remove not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
+}
+
+static void
+get_has_renderer (GtkCellRenderer  *renderer,
+		  HasRendererCheck *check)
+{
+  if (renderer == check->renderer)
+    check->has_renderer = TRUE;
+}
+
+gboolean
+gtk_cell_area_has_renderer (GtkCellArea     *area,
+			    GtkCellRenderer *renderer)
+{
+  HasRendererCheck check = { renderer, FALSE };
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), FALSE);
+
+  gtk_cell_area_forall (area, (GtkCellCallback)get_has_renderer, &check);
+
+  return check.has_renderer;
 }
 
 /**
@@ -972,8 +1030,10 @@ gtk_cell_area_render (GtkCellArea          *area,
 		      GtkCellAreaIter      *iter,
 		      GtkWidget            *widget,
 		      cairo_t              *cr,
+		      const GdkRectangle   *background_area,
 		      const GdkRectangle   *cell_area,
-		      GtkCellRendererState  flags)
+		      GtkCellRendererState  flags,
+		      gboolean              paint_focus)
 {
   GtkCellAreaClass *class;
 
@@ -981,12 +1041,13 @@ gtk_cell_area_render (GtkCellArea          *area,
   g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (background_area != NULL);
   g_return_if_fail (cell_area != NULL);
 
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->render)
-    class->render (area, iter, widget, cr, cell_area, flags);
+    class->render (area, iter, widget, cr, background_area, cell_area, flags, paint_focus);
   else
     g_warning ("GtkCellAreaClass::render not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1136,6 +1197,7 @@ gtk_cell_area_attribute_connect (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (attribute != NULL);
+  g_return_if_fail (gtk_cell_area_has_renderer (area, renderer));
 
   priv = area->priv;
   info = g_hash_table_lookup (priv->cell_info, renderer);
@@ -1202,6 +1264,7 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (attribute != NULL);
+  g_return_if_fail (gtk_cell_area_has_renderer (area, renderer));
 
   priv = area->priv;
   info = g_hash_table_lookup (priv->cell_info, renderer);
@@ -1820,6 +1883,110 @@ gtk_cell_area_get_focus_cell (GtkCellArea *area)
   return priv->focus_cell;
 }
 
+
+/*************************************************************
+ *                    API: Focus Siblings                    *
+ *************************************************************/
+void
+gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
+				 GtkCellRenderer *renderer,
+				 GtkCellRenderer *sibling)
+{
+  GtkCellAreaPrivate *priv;
+  GList              *siblings;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (sibling));
+  g_return_if_fail (renderer != sibling);
+  g_return_if_fail (gtk_cell_area_has_renderer (area, renderer));
+  g_return_if_fail (gtk_cell_area_has_renderer (area, sibling));
+  g_return_if_fail (!gtk_cell_area_is_focus_sibling (area, renderer, sibling));
+
+  /* XXX We should also check that sibling is not in any other renderer's sibling
+   * list already, a renderer can be sibling of only one focusable renderer
+   * at a time.
+   */
+
+  priv = area->priv;
+
+  siblings = g_hash_table_lookup (priv->focus_siblings, renderer);
+
+  if (siblings)
+    siblings = g_list_append (siblings, sibling);
+  else
+    {
+      siblings = g_list_append (siblings, sibling);
+      g_hash_table_insert (priv->focus_siblings, renderer, siblings);
+    }
+}
+
+void
+gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
+				    GtkCellRenderer *renderer,
+				    GtkCellRenderer *sibling)
+{
+  GtkCellAreaPrivate *priv;
+  GList              *siblings;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (sibling));
+  g_return_if_fail (gtk_cell_area_is_focus_sibling (area, renderer, sibling));
+
+  priv = area->priv;
+
+  siblings = g_hash_table_lookup (priv->focus_siblings, renderer);
+
+  siblings = g_list_copy (siblings);
+  siblings = g_list_remove (siblings, sibling);
+
+  if (!siblings)
+    g_hash_table_remove (priv->focus_siblings, renderer);
+  else
+    g_hash_table_insert (priv->focus_siblings, renderer, siblings);
+}
+
+gboolean
+gtk_cell_area_is_focus_sibling (GtkCellArea     *area,
+				GtkCellRenderer *renderer,
+				GtkCellRenderer *sibling)
+{
+  GtkCellAreaPrivate *priv;
+  GList              *siblings, *l;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), FALSE);
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (sibling), FALSE);
+
+  priv = area->priv;
+
+  siblings = g_hash_table_lookup (priv->focus_siblings, renderer);
+
+  for (l = siblings; l; l = l->next)
+    {
+      GtkCellRenderer *a_sibling = l->data;
+
+      if (a_sibling == sibling)
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+const GList *
+gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
+				  GtkCellRenderer *renderer)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), NULL);
+
+  priv = area->priv;
+
+  return g_hash_table_lookup (priv->focus_siblings, renderer);  
+}
 
 /*************************************************************
  *              API: Cell Activation/Editing                 *

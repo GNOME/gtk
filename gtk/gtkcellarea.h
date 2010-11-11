@@ -95,8 +95,10 @@ struct _GtkCellAreaClass
 							  GtkCellAreaIter         *iter,
 							  GtkWidget               *widget,
 							  cairo_t                 *cr,
+							  const GdkRectangle      *background_area,
 							  const GdkRectangle      *cell_area,
-							  GtkCellRendererState     flags);
+							  GtkCellRendererState     flags,
+							  gboolean                 paint_focus);
 
   /* Geometry */
   GtkCellAreaIter   *(* create_iter)                     (GtkCellArea             *area);
@@ -165,6 +167,8 @@ void               gtk_cell_area_add                            (GtkCellArea    
 								 GtkCellRenderer      *renderer);
 void               gtk_cell_area_remove                         (GtkCellArea          *area,
 								 GtkCellRenderer      *renderer);
+gboolean           gtk_cell_area_has_renderer                   (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer);
 void               gtk_cell_area_forall                         (GtkCellArea          *area,
 								 GtkCellCallback       callback,
 								 gpointer              callback_data);
@@ -184,8 +188,10 @@ void               gtk_cell_area_render                         (GtkCellArea    
 								 GtkCellAreaIter      *iter,
 								 GtkWidget            *widget,
 								 cairo_t              *cr,
+								 const GdkRectangle   *background_area,
 								 const GdkRectangle   *cell_area,
-								 GtkCellRendererState  flags);
+								 GtkCellRendererState  flags,
+								 gboolean              paint_focus);
 
 /* Geometry */
 GtkCellAreaIter   *gtk_cell_area_create_iter                    (GtkCellArea        *area);
@@ -282,6 +288,21 @@ gboolean           gtk_cell_area_activate                       (GtkCellArea    
 void               gtk_cell_area_set_focus_cell                 (GtkCellArea          *area,
 								 GtkCellRenderer      *renderer);
 GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea          *area);
+
+
+/* Focus siblings */
+void               gtk_cell_area_add_focus_sibling              (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer,
+								 GtkCellRenderer      *sibling);
+void               gtk_cell_area_remove_focus_sibling           (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer,
+								 GtkCellRenderer      *sibling);
+gboolean           gtk_cell_area_is_focus_sibling               (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer,
+								 GtkCellRenderer      *sibling);
+G_CONST_RETURN GList *gtk_cell_area_get_focus_siblings          (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer);
+
 
 /* Cell Activation/Editing */
 void               gtk_cell_area_set_edited_cell                (GtkCellArea          *area,
