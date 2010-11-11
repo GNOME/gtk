@@ -572,6 +572,7 @@ gail_text_cell_get_character_extents (AtkText          *text,
   PangoRectangle char_rect;
   PangoLayout *layout;
   gchar *renderer_text;
+  gfloat xalign, yalign;
   gint x_offset, y_offset, index;
   gint xpad, ypad;
 
@@ -609,15 +610,16 @@ gail_text_cell_get_character_extents (AtkText          *text,
                                         widget,
                                         &min_size, NULL);
 
-  gtk_cell_renderer_calc_offset (GTK_CELL_RENDERER (gtk_renderer), &rendered_rect,
-                                 gtk_widget_get_direction (widget),
-                                 min_size.width, min_size.height,
-                                 &x_offset, &y_offset);
+  gtk_cell_renderer_get_alignment (GTK_CELL_RENDERER (gtk_renderer), &xalign, &yalign);
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    xalign = 1.0 - xalign;
+  x_offset = MAX (0, xalign * (rendered_rect.width - min_size.width));
+  y_offset = MAX (0, yalign * (rendered_rect.height - min_size.height));
 
   layout = create_pango_layout (gtk_renderer, widget);
 
   index = g_utf8_offset_to_pointer (renderer_text, offset) - renderer_text;
-  pango_layout_index_to_pos (layout, index, &char_rect); 
+  pango_layout_index_to_pos (layout, index, &char_rect);
 
   gtk_cell_renderer_get_padding (gail_renderer->renderer, &xpad, &ypad);
   gail_misc_get_extents_from_pango_rectangle (widget,
@@ -646,7 +648,6 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   GdkRectangle rendered_rect;
   PangoLayout *layout;
   gchar *renderer_text;
-  gint width, height;
   gfloat xalign, yalign;
   gint x_offset, y_offset, index;
   gint xpad, ypad;
@@ -677,12 +678,11 @@ gail_text_cell_get_offset_at_point (AtkText          *text,
   gtk_cell_renderer_get_preferred_size (GTK_CELL_RENDERER (gtk_renderer),
                                         widget,
                                         &min_size, NULL);
-  gtk_cell_renderer_get_fixed_size (GTK_CELL_RENDERER (gtk_renderer), &width, &height);
   gtk_cell_renderer_get_alignment (GTK_CELL_RENDERER (gtk_renderer), &xalign, &yalign);
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     xalign = 1.0 - xalign;
-  x_offset = MAX (0, xalign * (width - min_size.width));
-  y_offset = MAX (0, yalign * (height - min_size.height));
+  x_offset = MAX (0, xalign * (rendered_rect.width - min_size.width));
+  y_offset = MAX (0, yalign * (rendered_rect.height - min_size.height));
 
   layout = create_pango_layout (gtk_renderer, widget);
 
