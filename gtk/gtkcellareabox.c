@@ -892,9 +892,102 @@ gtk_cell_area_box_event (GtkCellArea          *area,
   /* Also detect mouse events, for mouse events we need to allocate the renderers
    * and find which renderer needs to be activated.
    */
+  if (event->type == GDK_BUTTON_PRESS)
+    {
+      GdkEventButton *button_event = (GdkEventButton *)event;
 
+      if (button_event->button == 1)
+	{
+	  GtkCellAreaBox        *box      = GTK_CELL_AREA_BOX (area);
+	  GtkCellAreaBoxPrivate *priv     = box->priv;
+	  GtkCellAreaBoxIter    *box_iter = GTK_CELL_AREA_BOX_ITER (iter);
+	  GSList                *allocated_cells, *l;
+	  GdkRectangle           cell_background, inner_area;
+	  GtkAllocation          allocation;
+	  gint                   event_x, event_y;
 
-  return 0;
+	  gtk_widget_get_allocation (widget, &allocation);
+
+	  /* We may need some semantics to tell us the offset of the event
+	   * window we are handling events for (i.e. GtkTreeView has a bin_window) */
+	  event_x = button_event->x;
+	  event_y = button_event->y;
+
+	  cell_background = *cell_area;
+
+	  /* Get a list of cells with allocation sizes decided regardless
+	   * of alignments and pack order etc. */
+	  allocated_cells = get_allocated_cells (box, box_iter, widget);
+
+	  for (l = allocated_cells; l; l = l->next)
+	    {
+	      AllocatedCell *cell = l->data;
+
+	      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+		{
+		  cell_background.x     = cell_area->x + cell->position;
+		  cell_background.width = cell->size;
+		}
+	      else
+		{
+		  cell_background.y      = cell_area->y + cell->position;
+		  cell_background.height = cell->size;
+		}
+	      
+	      /* Remove margins from the background area to produce the cell area
+	       */
+	      gtk_cell_area_inner_cell_area (area, &cell_background, &inner_area);
+	      
+	      if (event_x >= inner_area.x && event_x <= inner_area.x + inner_area.width &&
+		  event_y >= inner_area.y && event_y <= inner_area.y + inner_area.height)
+		{
+		  GtkCellRenderer *event_renderer = NULL;
+
+		  if (gtk_cell_renderer_can_focus (cell->renderer))
+		    event_renderer = cell->renderer;
+		  else 
+		    {
+		      GtkCellRenderer *focus_renderer;
+		      
+		      /* A renderer can have focus siblings but that renderer might not be
+		       * focusable for every row... so we go on to check can_focus here. */
+		      focus_renderer = gtk_cell_area_get_focus_from_sibling (area, cell->renderer);
+
+		      if (focus_renderer && gtk_cell_renderer_can_focus (focus_renderer))
+			event_renderer = focus_renderer;
+		    } 
+
+		  if (event_renderer)
+		    {
+		      if (gtk_cell_area_get_edited_cell (area))
+			{
+			  /* XXX Was it really canceled in this case ? */
+			  gtk_cell_area_stop_editing (area, TRUE);
+			  gtk_cell_area_set_focus_cell (area, event_renderer);
+			  retval = TRUE;
+			}
+		      else
+			{
+			  /* If we are activating via a focus sibling, we need to fix the
+			   * cell area */
+			  if (event_renderer != cell->renderer)
+			    gtk_cell_area_inner_cell_area (area, cell_area, &cell_background);
+
+			  gtk_cell_area_set_focus_cell (area, event_renderer);
+
+			  retval = gtk_cell_area_activate_cell (area, widget, event_renderer,
+								event, &cell_background, flags);
+			}
+		      break;
+		    }
+		}
+	    }
+	  g_slist_foreach (allocated_cells, (GFunc)allocated_cell_free, NULL);
+	  g_slist_free (allocated_cells);
+	}
+    }
+
+  return retval;
 }
 
 static void
@@ -947,6 +1040,9 @@ gtk_cell_area_box_render (GtkCellArea          *area,
       /* Remove margins from the background area to produce the cell area
        */
       gtk_cell_area_inner_cell_area (area, &cell_background, &inner_area);
+
+      /* XXX TODO Here after getting the inner area of the cell background,
+       * add portions of the background area to the cell background */
 
       if (focus_cell && 
 	  (cell->renderer == focus_cell || 

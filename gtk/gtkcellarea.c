@@ -201,6 +201,7 @@ enum {
   SIGNAL_EDITING_CANCELED,
   SIGNAL_EDITING_DONE,
   SIGNAL_REMOVE_EDITABLE,
+  SIGNAL_FOCUS_CHANGED,
   LAST_SIGNAL
 };
 
@@ -325,6 +326,17 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_CELL_RENDERER,
 		  GTK_TYPE_CELL_EDITABLE);
+
+  cell_area_signals[SIGNAL_FOCUS_CHANGED] =
+    g_signal_new (I_("focus-changed"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  0, /* No class closure here */
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_STRING,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_CELL_RENDERER,
+		  G_TYPE_STRING);
 
   /* Properties */
   g_object_class_install_property (object_class,
@@ -1861,6 +1873,13 @@ gtk_cell_area_set_focus_cell (GtkCellArea     *area,
 
       g_object_notify (G_OBJECT (area), "focus-cell");
     }
+
+  /* Signal that the current focus renderer for this path changed
+   * (it may be that the focus cell did not change, but the row
+   * may have changed so we need to signal it) */
+  g_signal_emit (area, cell_area_signals[SIGNAL_FOCUS_CHANGED], 0, 
+		 priv->focus_cell, priv->current_path);
+
 }
 
 /**
@@ -1986,6 +2005,40 @@ gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
   priv = area->priv;
 
   return g_hash_table_lookup (priv->focus_siblings, renderer);  
+}
+
+GtkCellRenderer *
+gtk_cell_area_get_focus_from_sibling (GtkCellArea          *area,
+				      GtkCellRenderer      *renderer)
+{
+  GtkCellRenderer *ret_renderer = NULL;
+  GList           *renderers, *l;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+  g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), NULL);
+
+  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+
+  for (l = renderers; l; l = l->next)
+    {
+      GtkCellRenderer *a_renderer = l->data;
+      const GList     *list;
+
+      for (list = gtk_cell_area_get_focus_siblings (area, a_renderer); 
+	   list; list = list->next)
+	{
+	  GtkCellRenderer *sibling_renderer = list->data;
+
+	  if (sibling_renderer == renderer)
+	    {
+	      ret_renderer = a_renderer;
+	      break;
+	    }
+	}
+    }
+  g_list_free (renderers);
+
+  return ret_renderer;
 }
 
 /*************************************************************

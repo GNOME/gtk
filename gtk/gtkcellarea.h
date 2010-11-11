@@ -302,7 +302,8 @@ gboolean           gtk_cell_area_is_focus_sibling               (GtkCellArea    
 								 GtkCellRenderer      *sibling);
 G_CONST_RETURN GList *gtk_cell_area_get_focus_siblings          (GtkCellArea          *area,
 								 GtkCellRenderer      *renderer);
-
+GtkCellRenderer   *gtk_cell_area_get_focus_from_sibling         (GtkCellArea          *area,
+								 GtkCellRenderer      *renderer);
 
 /* Cell Activation/Editing */
 void               gtk_cell_area_set_edited_cell                (GtkCellArea          *area,
