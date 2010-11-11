@@ -4,9 +4,6 @@ EXTRA_DIST += \
 	README.txt \
 	gtk+.sln \
 	gtk+.vsprops \
-	gdk-pixbuf.vcproj \
-	gdk-pixbuf-csource.vcproj \
-	gdk-pixbuf-query-loaders.vcproj \
 	gdk-win32.vcproj \
 	gdk.vcproj \
 	gdk.vcprojin \
