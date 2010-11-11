@@ -33,8 +33,12 @@ static void gtk_dial_class_init               (GtkDialClass     *klass);
 static void gtk_dial_init                     (GtkDial          *dial);
 static void gtk_dial_destroy                  (GtkWidget        *widget);
 static void gtk_dial_realize                  (GtkWidget        *widget);
-static void gtk_dial_size_request             (GtkWidget        *widget,
-                                               GtkRequisition   *requisition);
+static void gtk_dial_get_preferred_width      (GtkWidget        *widget,
+                                               gint             *minimum,
+                                               gint             *natural);
+static void gtk_dial_get_preferred_heigh      (GtkWidget        *widget,
+                                               gint             *minimum,
+                                               gint             *natural);
 static void gtk_dial_size_allocate            (GtkWidget        *widget,
                                                GtkAllocation    *allocation);
 static gboolean gtk_dial_expose               (GtkWidget        *widget,
@@ -96,7 +100,8 @@ gtk_dial_class_init (GtkDialClass *class)
   widget_class->destroy = gtk_dial_destroy;
   widget_class->realize = gtk_dial_realize;
   widget_class->expose_event = gtk_dial_expose;
-  widget_class->size_request = gtk_dial_size_request;
+  widget_class->get_preferred_width = gtk_dial_get_preferred_width;
+  widget_class->get_preferred_height = gtk_dial_get_preferred_height;
   widget_class->size_allocate = gtk_dial_size_allocate;
   widget_class->button_press_event = gtk_dial_button_press;
   widget_class->button_release_event = gtk_dial_button_release;
@@ -237,12 +242,20 @@ gtk_dial_realize (GtkWidget *widget)
   gtk_style_set_background (widget->style, widget->window, GTK_STATE_ACTIVE);
 }
 
-static void 
-gtk_dial_size_request (GtkWidget      *widget,
-		       GtkRequisition *requisition)
+static void
+gtk_dial_get_preferred_width (GtkWidget *widget,
+                              gint      *minimum,
+                              gint      *natural);
 {
-  requisition->width = DIAL_DEFAULT_SIZE;
-  requisition->height = DIAL_DEFAULT_SIZE;
+  *minimum = *natural = DIAL_DEFAULT_SIZE;
+}
+
+static void
+gtk_dial_get_preferred_heigh (GtkWidget *widget,
+                              gint      *minimum,
+                              gint      *natural);
+{
+  *minimum = *natural = DIAL_DEFAULT_SIZE;
 }
 
 static void
