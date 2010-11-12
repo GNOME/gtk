@@ -161,9 +161,6 @@ struct _GtkCellAreaPrivate
    */
   GHashTable      *cell_info;
 
-  /* Tracking which cells are focus siblings of focusable cells */
-  GHashTable      *focus_siblings;
-
   /* The cell border decides how much space to reserve
    * around each cell for the background_area
    */
@@ -183,6 +180,12 @@ struct _GtkCellAreaPrivate
 
   /* Currently focused cell */
   GtkCellRenderer *focus_cell;
+
+  /* Tracking which cells are focus siblings of focusable cells */
+  GHashTable      *focus_siblings;
+
+  /* Detail string to pass to gtk_paint_*() functions */
+  gchar           *style_detail;
 };
 
 enum {
@@ -1063,6 +1066,35 @@ gtk_cell_area_render (GtkCellArea          *area,
   else
     g_warning ("GtkCellAreaClass::render not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
+}
+
+void
+gtk_cell_area_set_style_detail (GtkCellArea *area,
+				const gchar *detail)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+
+  priv = area->priv;
+
+  if (g_strcmp0 (priv->style_detail, detail) != 0)
+    {
+      g_free (priv->style_detail);
+      priv->style_detail = g_strdup (detail);
+    }
+}
+
+G_CONST_RETURN gchar *
+gtk_cell_area_get_style_detail (GtkCellArea *area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+
+  priv = area->priv;
+
+  return priv->style_detail;
 }
 
 /*************************************************************

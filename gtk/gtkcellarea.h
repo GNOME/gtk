@@ -160,196 +160,199 @@ struct _GtkCellAreaClass
   void (*_gtk_reserved8) (void);
 };
 
-GType              gtk_cell_area_get_type                       (void) G_GNUC_CONST;
+GType                 gtk_cell_area_get_type                       (void) G_GNUC_CONST;
 
 /* Basic methods */
-void               gtk_cell_area_add                            (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer);
-void               gtk_cell_area_remove                         (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer);
-gboolean           gtk_cell_area_has_renderer                   (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer);
-void               gtk_cell_area_forall                         (GtkCellArea          *area,
-								 GtkCellCallback       callback,
-								 gpointer              callback_data);
-void               gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,
-								 GtkCellAreaIter      *iter,
-								 GtkWidget            *widget,
-								 GtkCellRenderer      *renderer,
-								 const GdkRectangle   *cell_area,
-								 GdkRectangle         *allocation);
-gint               gtk_cell_area_event                          (GtkCellArea          *area,
-								 GtkCellAreaIter      *iter,
-								 GtkWidget            *widget,
-								 GdkEvent             *event,
-								 const GdkRectangle   *cell_area,
-								 GtkCellRendererState  flags);
-void               gtk_cell_area_render                         (GtkCellArea          *area,
-								 GtkCellAreaIter      *iter,
-								 GtkWidget            *widget,
-								 cairo_t              *cr,
-								 const GdkRectangle   *background_area,
-								 const GdkRectangle   *cell_area,
-								 GtkCellRendererState  flags,
-								 gboolean              paint_focus);
+void                  gtk_cell_area_add                            (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer);
+void                  gtk_cell_area_remove                         (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer);
+gboolean              gtk_cell_area_has_renderer                   (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer);
+void                  gtk_cell_area_forall                         (GtkCellArea          *area,
+								    GtkCellCallback       callback,
+								    gpointer              callback_data);
+void                  gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,
+								    GtkCellAreaIter      *iter,
+								    GtkWidget            *widget,
+								    GtkCellRenderer      *renderer,
+								    const GdkRectangle   *cell_area,
+								    GdkRectangle         *allocation);
+gint                  gtk_cell_area_event                          (GtkCellArea          *area,
+								    GtkCellAreaIter      *iter,
+								    GtkWidget            *widget,
+								    GdkEvent             *event,
+								    const GdkRectangle   *cell_area,
+								    GtkCellRendererState  flags);
+void                  gtk_cell_area_render                         (GtkCellArea          *area,
+								    GtkCellAreaIter      *iter,
+								    GtkWidget            *widget,
+								    cairo_t              *cr,
+								    const GdkRectangle   *background_area,
+								    const GdkRectangle   *cell_area,
+								    GtkCellRendererState  flags,
+								    gboolean              paint_focus);
+void                  gtk_cell_area_set_style_detail               (GtkCellArea          *area,
+								    const gchar          *detail);
+G_CONST_RETURN gchar *gtk_cell_area_get_style_detail               (GtkCellArea          *area);
 
 /* Geometry */
-GtkCellAreaIter   *gtk_cell_area_create_iter                    (GtkCellArea        *area);
-GtkSizeRequestMode gtk_cell_area_get_request_mode               (GtkCellArea        *area);
-void               gtk_cell_area_get_preferred_width            (GtkCellArea        *area,
-								 GtkCellAreaIter    *iter,
-								 GtkWidget          *widget,
-								 gint               *minimum_size,
-								 gint               *natural_size);
-void               gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
-								 GtkCellAreaIter    *iter,
-								 GtkWidget          *widget,
-								 gint                width,
-								 gint               *minimum_height,
-								 gint               *natural_height);
-void               gtk_cell_area_get_preferred_height           (GtkCellArea        *area,
-								 GtkCellAreaIter    *iter,
-								 GtkWidget          *widget,
-								 gint               *minimum_size,
-								 gint               *natural_size);
-void               gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
-								 GtkCellAreaIter    *iter,
-								 GtkWidget          *widget,
-								 gint                height,
-								 gint               *minimum_width,
-								 gint               *natural_width);
-G_CONST_RETURN gchar *gtk_cell_area_get_current_path_string     (GtkCellArea        *area);
+GtkCellAreaIter      *gtk_cell_area_create_iter                    (GtkCellArea        *area);
+GtkSizeRequestMode    gtk_cell_area_get_request_mode               (GtkCellArea        *area);
+void                  gtk_cell_area_get_preferred_width            (GtkCellArea        *area,
+								    GtkCellAreaIter    *iter,
+								    GtkWidget          *widget,
+								    gint               *minimum_size,
+								    gint               *natural_size);
+void                  gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
+								    GtkCellAreaIter    *iter,
+								    GtkWidget          *widget,
+								    gint                width,
+								    gint               *minimum_height,
+								    gint               *natural_height);
+void                  gtk_cell_area_get_preferred_height           (GtkCellArea        *area,
+								    GtkCellAreaIter    *iter,
+								    GtkWidget          *widget,
+								    gint               *minimum_size,
+								    gint               *natural_size);
+void                  gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
+								    GtkCellAreaIter    *iter,
+								    GtkWidget          *widget,
+								    gint                height,
+								    gint               *minimum_width,
+								    gint               *natural_width);
+G_CONST_RETURN gchar *gtk_cell_area_get_current_path_string        (GtkCellArea        *area);
 
 
 /* Attributes */
-void               gtk_cell_area_apply_attributes               (GtkCellArea        *area,
-								 GtkTreeModel       *tree_model,
-								 GtkTreeIter        *iter,
-								 gboolean            is_expander,
-								 gboolean            is_expanded);
-void               gtk_cell_area_attribute_connect              (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *attribute,
-								 gint                column); 
-void               gtk_cell_area_attribute_disconnect           (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *attribute);
+void                  gtk_cell_area_apply_attributes               (GtkCellArea        *area,
+								    GtkTreeModel       *tree_model,
+								    GtkTreeIter        *iter,
+								    gboolean            is_expander,
+								    gboolean            is_expanded);
+void                  gtk_cell_area_attribute_connect              (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *attribute,
+								    gint                column); 
+void                  gtk_cell_area_attribute_disconnect           (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *attribute);
 
 /* Cell Properties */
-void               gtk_cell_area_class_install_cell_property    (GtkCellAreaClass   *aclass,
-								 guint               property_id,
-								 GParamSpec         *pspec);
-GParamSpec*        gtk_cell_area_class_find_cell_property       (GtkCellAreaClass   *aclass,
-								 const gchar        *property_name);
-GParamSpec**       gtk_cell_area_class_list_cell_properties     (GtkCellAreaClass   *aclass,
-								 guint		    *n_properties);
-void               gtk_cell_area_add_with_properties            (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar	    *first_prop_name,
-								 ...) G_GNUC_NULL_TERMINATED;
-void               gtk_cell_area_cell_set                       (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *first_prop_name,
-								 ...) G_GNUC_NULL_TERMINATED;
-void               gtk_cell_area_cell_get                       (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *first_prop_name,
-								 ...) G_GNUC_NULL_TERMINATED;
-void               gtk_cell_area_cell_set_valist                (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *first_property_name,
-								 va_list             var_args);
-void               gtk_cell_area_cell_get_valist                (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *first_property_name,
-								 va_list             var_args);
-void               gtk_cell_area_cell_set_property              (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *property_name,
-								 const GValue       *value);
-void               gtk_cell_area_cell_get_property              (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 const gchar        *property_name,
-								 GValue             *value);
+void                  gtk_cell_area_class_install_cell_property    (GtkCellAreaClass   *aclass,
+								    guint               property_id,
+								    GParamSpec         *pspec);
+GParamSpec*           gtk_cell_area_class_find_cell_property       (GtkCellAreaClass   *aclass,
+								    const gchar        *property_name);
+GParamSpec**          gtk_cell_area_class_list_cell_properties     (GtkCellAreaClass   *aclass,
+								    guint		    *n_properties);
+void                  gtk_cell_area_add_with_properties            (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar	    *first_prop_name,
+								    ...) G_GNUC_NULL_TERMINATED;
+void                  gtk_cell_area_cell_set                       (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *first_prop_name,
+								    ...) G_GNUC_NULL_TERMINATED;
+void                  gtk_cell_area_cell_get                       (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *first_prop_name,
+								    ...) G_GNUC_NULL_TERMINATED;
+void                  gtk_cell_area_cell_set_valist                (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *first_property_name,
+								    va_list             var_args);
+void                  gtk_cell_area_cell_get_valist                (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *first_property_name,
+								    va_list             var_args);
+void                  gtk_cell_area_cell_set_property              (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *property_name,
+								    const GValue       *value);
+void                  gtk_cell_area_cell_get_property              (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    const gchar        *property_name,
+								    GValue             *value);
 
 #define GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID(object, property_id, pspec) \
   G_OBJECT_WARN_INVALID_PSPEC ((object), "cell property id", (property_id), (pspec))
 
 
 /* Focus */
-gboolean           gtk_cell_area_can_focus                      (GtkCellArea         *area);
-gboolean           gtk_cell_area_focus                          (GtkCellArea         *area,
-								 GtkDirectionType     direction);
-gboolean           gtk_cell_area_activate                       (GtkCellArea         *area,
-								 GtkCellAreaIter     *iter,
-								 GtkWidget           *widget,
-								 const GdkRectangle  *cell_area,
-								 GtkCellRendererState flags);
-void               gtk_cell_area_set_focus_cell                 (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer);
-GtkCellRenderer   *gtk_cell_area_get_focus_cell                 (GtkCellArea          *area);
+gboolean              gtk_cell_area_can_focus                      (GtkCellArea         *area);
+gboolean              gtk_cell_area_focus                          (GtkCellArea         *area,
+								    GtkDirectionType     direction);
+gboolean              gtk_cell_area_activate                       (GtkCellArea         *area,
+								    GtkCellAreaIter     *iter,
+								    GtkWidget           *widget,
+								    const GdkRectangle  *cell_area,
+								    GtkCellRendererState flags);
+void                  gtk_cell_area_set_focus_cell                 (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer);
+GtkCellRenderer      *gtk_cell_area_get_focus_cell                 (GtkCellArea          *area);
 
 
 /* Focus siblings */
-void               gtk_cell_area_add_focus_sibling              (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer,
-								 GtkCellRenderer      *sibling);
-void               gtk_cell_area_remove_focus_sibling           (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer,
-								 GtkCellRenderer      *sibling);
-gboolean           gtk_cell_area_is_focus_sibling               (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer,
-								 GtkCellRenderer      *sibling);
-G_CONST_RETURN GList *gtk_cell_area_get_focus_siblings          (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer);
-GtkCellRenderer   *gtk_cell_area_get_focus_from_sibling         (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer);
+void                  gtk_cell_area_add_focus_sibling              (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer,
+								    GtkCellRenderer      *sibling);
+void                  gtk_cell_area_remove_focus_sibling           (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer,
+								    GtkCellRenderer      *sibling);
+gboolean              gtk_cell_area_is_focus_sibling               (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer,
+								    GtkCellRenderer      *sibling);
+G_CONST_RETURN GList *gtk_cell_area_get_focus_siblings             (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer);
+GtkCellRenderer      *gtk_cell_area_get_focus_from_sibling         (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer);
 
 /* Cell Activation/Editing */
-void               gtk_cell_area_set_edited_cell                (GtkCellArea          *area,
-								 GtkCellRenderer      *renderer);
-GtkCellRenderer   *gtk_cell_area_get_edited_cell                (GtkCellArea          *area);
-void               gtk_cell_area_set_edit_widget                (GtkCellArea          *area,
-								 GtkCellEditable      *editable);
-GtkCellEditable   *gtk_cell_area_get_edit_widget                (GtkCellArea          *area);
-gboolean           gtk_cell_area_activate_cell                  (GtkCellArea          *area,
-								 GtkWidget            *widget,
-								 GtkCellRenderer      *renderer,
-								 GdkEvent             *event,
-								 const GdkRectangle   *cell_area,
-								 GtkCellRendererState  flags);
-void               gtk_cell_area_stop_editing                   (GtkCellArea          *area,
-								 gboolean              canceled);
+void                  gtk_cell_area_set_edited_cell                (GtkCellArea          *area,
+								    GtkCellRenderer      *renderer);
+GtkCellRenderer      *gtk_cell_area_get_edited_cell                (GtkCellArea          *area);
+void                  gtk_cell_area_set_edit_widget                (GtkCellArea          *area,
+								    GtkCellEditable      *editable);
+GtkCellEditable      *gtk_cell_area_get_edit_widget                (GtkCellArea          *area);
+gboolean              gtk_cell_area_activate_cell                  (GtkCellArea          *area,
+								    GtkWidget            *widget,
+								    GtkCellRenderer      *renderer,
+								    GdkEvent             *event,
+								    const GdkRectangle   *cell_area,
+								    GtkCellRendererState  flags);
+void                  gtk_cell_area_stop_editing                   (GtkCellArea          *area,
+								    gboolean              canceled);
 
 /* Margins */
-gint               gtk_cell_area_get_cell_margin_left           (GtkCellArea        *area);
-void               gtk_cell_area_set_cell_margin_left           (GtkCellArea        *area,
-								 gint                margin);
-gint               gtk_cell_area_get_cell_margin_right          (GtkCellArea        *area);
-void               gtk_cell_area_set_cell_margin_right          (GtkCellArea        *area,
-								 gint                margin);
-gint               gtk_cell_area_get_cell_margin_top            (GtkCellArea        *area);
-void               gtk_cell_area_set_cell_margin_top            (GtkCellArea        *area,
-								 gint                margin);
-gint               gtk_cell_area_get_cell_margin_bottom         (GtkCellArea        *area);
-void               gtk_cell_area_set_cell_margin_bottom         (GtkCellArea        *area,
-								 gint                margin);
+gint                  gtk_cell_area_get_cell_margin_left           (GtkCellArea        *area);
+void                  gtk_cell_area_set_cell_margin_left           (GtkCellArea        *area,
+								    gint                margin);
+gint                  gtk_cell_area_get_cell_margin_right          (GtkCellArea        *area);
+void                  gtk_cell_area_set_cell_margin_right          (GtkCellArea        *area,
+								    gint                margin);
+gint                  gtk_cell_area_get_cell_margin_top            (GtkCellArea        *area);
+void                  gtk_cell_area_set_cell_margin_top            (GtkCellArea        *area,
+								    gint                margin);
+gint                  gtk_cell_area_get_cell_margin_bottom         (GtkCellArea        *area);
+void                  gtk_cell_area_set_cell_margin_bottom         (GtkCellArea        *area,
+								    gint                margin);
 
 /* Functions for area implementations */
 
 /* Distinguish the inner cell area from the whole requested area including margins */
-void               gtk_cell_area_inner_cell_area                (GtkCellArea        *area,
-								 const GdkRectangle *cell_area,
-								 GdkRectangle       *inner_cell_area);
+void                  gtk_cell_area_inner_cell_area                (GtkCellArea        *area,
+								    const GdkRectangle *cell_area,
+								    GdkRectangle       *inner_cell_area);
 
 /* Request the size of a cell while respecting the cell margins (requests are margin inclusive) */
-void               gtk_cell_area_request_renderer               (GtkCellArea        *area,
-								 GtkCellRenderer    *renderer,
-								 GtkOrientation      orientation,
-								 GtkWidget          *widget,
-								 gint                for_size,
-								 gint               *minimum_size,
-								 gint               *natural_size);
+void                  gtk_cell_area_request_renderer               (GtkCellArea        *area,
+								    GtkCellRenderer    *renderer,
+								    GtkOrientation      orientation,
+								    GtkWidget          *widget,
+								    gint                for_size,
+								    gint               *minimum_size,
+								    gint               *natural_size);
 
 G_END_DECLS
 

@@ -1041,8 +1041,38 @@ gtk_cell_area_box_render (GtkCellArea          *area,
        */
       gtk_cell_area_inner_cell_area (area, &cell_background, &inner_area);
 
-      /* XXX TODO Here after getting the inner area of the cell background,
+      /* Here after getting the inner area of the cell background,
        * add portions of the background area to the cell background */
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  if (l == allocated_cells)
+	    {
+	      cell_background.width += cell_background.x - background_area->x;
+	      cell_background.x      = background_area->x;
+	    }
+
+	  if (l->next == NULL)
+	      cell_background.width = 
+		background_area->width - (cell_background.x - background_area->x);
+
+	  cell_background.y      = background_area->y;
+	  cell_background.height = background_area->height;
+	}
+      else
+	{
+	  if (l == allocated_cells)
+	    {
+	      cell_background.height += cell_background.y - background_area->y;
+	      cell_background.y       = background_area->y;
+	    }
+
+	  if (l->next == NULL)
+	      cell_background.height = 
+		background_area->height - (cell_background.y - background_area->y);
+
+	  cell_background.x     = background_area->x;
+	  cell_background.width = background_area->width;
+	}
 
       if (focus_cell && 
 	  (cell->renderer == focus_cell || 
@@ -1108,15 +1138,11 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 	(flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
 	 (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
 
-      gtk_paint_focus (gtk_widget_get_style (widget),
-		       cr, renderer_state,
-		       widget,
-		       /* XXX This hint should be a property on GtkCellArea I suppose */
-		       "treeview",
-		       focus_rect.x,
-		       focus_rect.y,
-		       focus_rect.width,
-		       focus_rect.height);
+      gtk_paint_focus (gtk_widget_get_style (widget), cr, 
+		       renderer_state, widget,
+		       gtk_cell_area_get_style_detail (area),
+		       focus_rect.x,     focus_rect.y,
+		       focus_rect.width, focus_rect.height);
     }
 
 
