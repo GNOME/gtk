@@ -9,7 +9,7 @@ INTROSPECTION_COMPILER_ARGS = \
    --includedir=.
 
 SUBDIRS = $(gdktarget) . tests
-DIST_SUBDIRS = win32 x11 quartz tests
+DIST_SUBDIRS = win32 x11 quartz broadway tests
 
 CLEANFILES =
 
@@ -158,6 +158,10 @@ common_sources = 		\
 	gdkmarshalers.c		\
 	gdkmarshalers.h
 
+libgdk_broadway_3_0_la_SOURCES = $(common_sources)
+libgdk_broadway_3_0_la_LIBADD = broadway/libgdk-broadway.la $(GDK_DEP_LIBS)
+libgdk_broadway_3_0_la_LDFLAGS = $(LDADD)
+
 libgdk_x11_3_0_la_SOURCES = $(common_sources)
 libgdk_x11_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
 libgdk_x11_3_0_la_LDFLAGS = $(LDADD)
@@ -288,7 +292,7 @@ endif
 
 lib_LTLIBRARIES = $(gdktargetlib)
 
-EXTRA_LTLIBRARIES = libgdk-x11-3.0.la libgdk-win32-3.0.la libgdk-quartz-3.0.la
+EXTRA_LTLIBRARIES = libgdk-broadway-3.0.la libgdk-x11-3.0.la libgdk-win32-3.0.la libgdk-quartz-3.0.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += $(gdk_built_sources)
