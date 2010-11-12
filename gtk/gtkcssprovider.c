@@ -1582,6 +1582,52 @@ symbolic_color_parse_str (const gchar  *string,
 
       *end_ptr = (gchar *) end;
     }
+  else if (g_str_has_prefix (str, "lighter") ||
+           g_str_has_prefix (str, "darker"))
+    {
+      GtkSymbolicColor *param_color;
+      gboolean is_lighter = FALSE;
+
+      is_lighter = g_str_has_prefix (str, "lighter");
+
+      if (is_lighter)
+        str += strlen ("lighter");
+      else
+        str += strlen ("darker");
+
+      SKIP_SPACES (str);
+
+      if (*str != '(')
+        {
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+      param_color = symbolic_color_parse_str (str, end_ptr);
+
+      if (!param_color)
+        return NULL;
+
+      str = *end_ptr;
+      SKIP_SPACES (str);
+      *end_ptr = (gchar *) str;
+
+      if (*str != ')')
+        {
+          gtk_symbolic_color_unref (param_color);
+          return NULL;
+        }
+
+      if (is_lighter)
+        symbolic_color = gtk_symbolic_color_new_shade (param_color, 1.3);
+      else
+        symbolic_color = gtk_symbolic_color_new_shade (param_color, 0.7);
+
+      gtk_symbolic_color_unref (param_color);
+      (*end_ptr)++;
+    }
   else if (g_str_has_prefix (str, "shade") ||
            g_str_has_prefix (str, "alpha"))
     {
