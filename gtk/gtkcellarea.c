@@ -2359,7 +2359,7 @@ gtk_cell_area_set_cell_margin_left (GtkCellArea *area,
     {
       priv->cell_border.left = margin;
 
-      g_object_notify (G_OBJECT (area), "margin-left");
+      g_object_notify (G_OBJECT (area), "cell-margin-left");
     }
 }
 
@@ -2385,7 +2385,7 @@ gtk_cell_area_set_cell_margin_right (GtkCellArea *area,
     {
       priv->cell_border.right = margin;
 
-      g_object_notify (G_OBJECT (area), "margin-right");
+      g_object_notify (G_OBJECT (area), "cell-margin-right");
     }
 }
 
@@ -2411,7 +2411,7 @@ gtk_cell_area_set_cell_margin_top (GtkCellArea *area,
     {
       priv->cell_border.top = margin;
 
-      g_object_notify (G_OBJECT (area), "margin-top");
+      g_object_notify (G_OBJECT (area), "cell-margin-top");
     }
 }
 
@@ -2437,7 +2437,7 @@ gtk_cell_area_set_cell_margin_bottom (GtkCellArea *area,
     {
       priv->cell_border.bottom = margin;
 
-      g_object_notify (G_OBJECT (area), "margin-bottom");
+      g_object_notify (G_OBJECT (area), "cell-margin-bottom");
     }
 }
 

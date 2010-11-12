@@ -56,13 +56,23 @@ struct _CellAreaScaffoldClass
 };
 
 
-GType         cell_area_scaffold_get_type   (void) G_GNUC_CONST;
-GtkWidget    *cell_area_scaffold_new        (void);
+GType         cell_area_scaffold_get_type              (void) G_GNUC_CONST;
+GtkWidget    *cell_area_scaffold_new                   (void);
 
-GtkCellArea  *cell_area_scaffold_get_area   (CellAreaScaffold *scaffold);
-void          cell_area_scaffold_set_model  (CellAreaScaffold *scaffold,
-					     GtkTreeModel     *model);
-GtkTreeModel *cell_area_scaffold_get_model  (CellAreaScaffold *scaffold);
+GtkCellArea  *cell_area_scaffold_get_area              (CellAreaScaffold *scaffold);
+void          cell_area_scaffold_set_model             (CellAreaScaffold *scaffold,
+							GtkTreeModel     *model);
+GtkTreeModel *cell_area_scaffold_get_model             (CellAreaScaffold *scaffold);
+
+void          cell_area_scaffold_set_row_spacing       (CellAreaScaffold *scaffold,
+							gint              spacing);
+gint          cell_area_scaffold_get_row_spacing       (CellAreaScaffold *scaffold);
+
+void          cell_area_scaffold_set_indentation       (CellAreaScaffold *scaffold,
+							gint              indent);
+gint          cell_area_scaffold_get_indentation       (CellAreaScaffold *scaffold);
+
+
 
 G_END_DECLS
 

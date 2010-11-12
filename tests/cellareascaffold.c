@@ -152,6 +152,10 @@ struct _CellAreaScaffoldPrivate {
   GdkRectangle     edit_rect;
   gulong           editing_started_id;
   gulong           remove_editable_id;
+
+
+  gint             row_spacing;
+  gint             indent;
 };
 
 enum {
@@ -165,8 +169,6 @@ enum {
 };
 
 static guint scaffold_signals[N_SIGNALS] = { 0 };
-
-#define ROW_SPACING  2
 
 #define DIRECTION_STR(dir)				\
   ((dir) == GTK_DIR_TAB_FORWARD  ? "tab forward" :	\
@@ -213,8 +215,6 @@ cell_area_scaffold_init (CellAreaScaffold *scaffold)
   priv->remove_editable_id =
     g_signal_connect (priv->area, "remove-editable",
 		      G_CALLBACK (remove_editable_cb), scaffold);
-
-
 }
 
 static void
@@ -429,6 +429,7 @@ cell_area_scaffold_draw (GtkWidget       *widget,
   GtkOrientation           orientation;
   GtkTreeIter              iter;
   gboolean                 valid;
+  GdkRectangle             background_area;
   GdkRectangle             render_area;
   GtkAllocation            allocation;
   gint                     i = 0;
@@ -448,6 +449,19 @@ cell_area_scaffold_draw (GtkWidget       *widget,
   render_area.width  = allocation.width;
   render_area.height = allocation.height;
 
+  background_area = render_area;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      render_area.x      = priv->indent;
+      render_area.width -= priv->indent;
+    }
+  else
+    {
+      render_area.y       = priv->indent;
+      render_area.height -= priv->indent;
+    }
+
   valid = gtk_tree_model_get_iter_first (priv->model, &iter);
   while (valid)
     {
@@ -460,27 +474,65 @@ cell_area_scaffold_draw (GtkWidget       *widget,
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  render_area.height = data->size;
+	  render_area.height     = data->size;
+
+	  background_area.height = render_area.height;
+	  background_area.y      = render_area.y;
+
+	  if (i == 0)
+	    {
+	      background_area.height += priv->row_spacing / 2;
+	      background_area.height += priv->row_spacing % 2;
+	    }
+	  else if (i == priv->row_data->len - 1)
+	    {
+	      background_area.y      -= priv->row_spacing / 2;
+	      background_area.height += priv->row_spacing / 2;
+	    }
+	  else
+	    {
+	      background_area.y      -= priv->row_spacing / 2;
+	      background_area.height += priv->row_spacing;
+	    }
 	}
-      else
+      else /* GTK_ORIENTATION_VERTICAL */
 	{
-	  render_area.width = data->size;
+	  render_area.width     = data->size;
+
+	  background_area.width = render_area.height;
+	  background_area.x     = render_area.x;
+
+	  if (i == 0)
+	    {
+	      background_area.width += priv->row_spacing / 2;
+	      background_area.width += priv->row_spacing % 2;
+	    }
+	  else if (i == priv->row_data->len - 1)
+	    {
+	      background_area.x     -= priv->row_spacing / 2;
+	      background_area.width += priv->row_spacing / 2;
+	    }
+	  else
+	    {
+	      background_area.x     -= priv->row_spacing / 2;
+	      background_area.width += priv->row_spacing;
+	    }
 	}
 
       gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
       gtk_cell_area_render (priv->area, priv->iter, widget, cr, 
-			    &render_area, &render_area, flags,
+			    &background_area, &render_area, flags,
 			    (have_focus && i == priv->focus_row));
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  render_area.y += data->size;
-	  render_area.y += ROW_SPACING;
+	  render_area.y += priv->row_spacing;
 	}
       else
 	{
 	  render_area.x += data->size;
-	  render_area.x += ROW_SPACING;
+	  render_area.x += priv->row_spacing;
 	}
 
       i++;
@@ -627,6 +679,9 @@ cell_area_scaffold_get_preferred_width (GtkWidget       *widget,
       request_all_base (scaffold);
 
       gtk_cell_area_iter_get_preferred_width (priv->iter, minimum_size, natural_size);
+
+      *minimum_size += priv->indent;
+      *natural_size += priv->indent;
     }
   else
     {
@@ -666,7 +721,7 @@ cell_area_scaffold_get_preferred_height_for_width (GtkWidget       *widget,
       memset (request_array->data, 0x0, n_rows * sizeof (RowData));
 
       /* Gather each contextual size into the request array */
-      get_row_sizes (scaffold, request_array, for_size);
+      get_row_sizes (scaffold, request_array, for_size - priv->indent);
 
       /* Sum up the size and add some row spacing */
       for (i = 0; i < n_rows; i++)
@@ -676,7 +731,7 @@ cell_area_scaffold_get_preferred_height_for_width (GtkWidget       *widget,
 	  full_size += data->size;
 	}
 
-      full_size += MAX (0, n_rows -1) * ROW_SPACING;
+      full_size += MAX (0, n_rows -1) * priv->row_spacing;
 
       g_array_free (request_array, TRUE);
 
@@ -708,6 +763,9 @@ cell_area_scaffold_get_preferred_height (GtkWidget       *widget,
       request_all_base (scaffold);
 
       gtk_cell_area_iter_get_preferred_height (priv->iter, minimum_size, natural_size);
+
+      *minimum_size += priv->indent;
+      *natural_size += priv->indent;
     }
   else
     {
@@ -747,7 +805,7 @@ cell_area_scaffold_get_preferred_width_for_height (GtkWidget       *widget,
       memset (request_array->data, 0x0, n_rows * sizeof (RowData));
 
       /* Gather each contextual size into the request array */
-      get_row_sizes (scaffold, request_array, for_size);
+      get_row_sizes (scaffold, request_array, for_size - priv->indent);
 
       /* Sum up the size and add some row spacing */
       for (i = 0; i < n_rows; i++)
@@ -757,7 +815,7 @@ cell_area_scaffold_get_preferred_width_for_height (GtkWidget       *widget,
 	  full_size += data->size;
 	}
 
-      full_size += MAX (0, n_rows -1) * ROW_SPACING;
+      full_size += MAX (0, n_rows -1) * priv->row_spacing;
 
       g_array_free (request_array, TRUE);
 
@@ -934,6 +992,17 @@ cell_area_scaffold_button_press (GtkWidget       *widget,
   event_area.width  = allocation.width;
   event_area.height = allocation.height;
 
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      event_area.x      = priv->indent;
+      event_area.width -= priv->indent;
+    }
+  else
+    {
+      event_area.y       = priv->indent;
+      event_area.height -= priv->indent;
+    }
+
   valid = gtk_tree_model_get_iter_first (priv->model, &iter);
   while (valid)
     {
@@ -954,7 +1023,7 @@ cell_area_scaffold_button_press (GtkWidget       *widget,
 	    }
 
 	  event_area.y += data->size;
-	  event_area.y += ROW_SPACING;
+	  event_area.y += priv->row_spacing;
 	}
       else
 	{
@@ -971,7 +1040,7 @@ cell_area_scaffold_button_press (GtkWidget       *widget,
 	    }
 
 	  event_area.x += data->size;
-	  event_area.x += ROW_SPACING;
+	  event_area.x += priv->row_spacing;
 	}
 
       i++;
@@ -1053,6 +1122,17 @@ cell_area_scaffold_activate (CellAreaScaffold *scaffold)
   cell_area.width  = allocation.width;
   cell_area.height = allocation.height;
 
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      cell_area.x      = priv->indent;
+      cell_area.width -= priv->indent;
+    }
+  else
+    {
+      cell_area.y       = priv->indent;
+      cell_area.height -= priv->indent;
+    }
+
   valid = gtk_tree_model_get_iter_first (priv->model, &iter);
   while (valid)
     {
@@ -1072,9 +1152,9 @@ cell_area_scaffold_activate (CellAreaScaffold *scaffold)
 	}
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	cell_area.y += data->size + ROW_SPACING;
+	cell_area.y += data->size + priv->row_spacing;
       else
-	cell_area.x += data->size + ROW_SPACING;
+	cell_area.x += data->size + priv->row_spacing;
 
       i++;
       valid = gtk_tree_model_iter_next (priv->model, &iter);
@@ -1298,3 +1378,64 @@ cell_area_scaffold_get_model (CellAreaScaffold *scaffold)
 
   return priv->model;
 }
+
+
+void
+cell_area_scaffold_set_row_spacing (CellAreaScaffold *scaffold,
+				    gint              spacing)
+{
+  CellAreaScaffoldPrivate *priv;
+  
+  g_return_if_fail (IS_CELL_AREA_SCAFFOLD (scaffold));
+
+  priv = scaffold->priv;
+
+  if (priv->row_spacing != spacing)
+    {
+      priv->row_spacing = spacing;
+      gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+    }
+}
+
+gint
+cell_area_scaffold_get_row_spacing (CellAreaScaffold *scaffold)
+{
+  CellAreaScaffoldPrivate *priv;
+  
+  g_return_val_if_fail (IS_CELL_AREA_SCAFFOLD (scaffold), 0);
+
+  priv = scaffold->priv;
+
+  return priv->row_spacing;
+}
+
+void
+cell_area_scaffold_set_indentation (CellAreaScaffold *scaffold,
+				    gint              indent)
+{
+  CellAreaScaffoldPrivate *priv;
+  
+  g_return_if_fail (IS_CELL_AREA_SCAFFOLD (scaffold));
+
+  priv = scaffold->priv;
+
+  if (priv->indent != indent)
+    {
+      priv->indent = indent;
+      gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+    }
+}
+
+gint
+cell_area_scaffold_get_indentation (CellAreaScaffold *scaffold)
+{
+  CellAreaScaffoldPrivate *priv;
+  
+  g_return_val_if_fail (IS_CELL_AREA_SCAFFOLD (scaffold), 0);
+
+  priv = scaffold->priv;
+
+  return priv->indent;
+}
+
+

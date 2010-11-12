@@ -168,6 +168,8 @@ simple_cell_area (void)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
+  gtk_window_set_title (GTK_WINDOW (window), "CellArea expand and alignments");
+
   scaffold = simple_scaffold ();
 
   hbox  = gtk_hbox_new (FALSE, 4);
@@ -325,7 +327,7 @@ cell_edited (GtkCellRendererToggle *cell_renderer,
 }
 
 static GtkWidget *
-focus_scaffold (void)
+focus_scaffold (gboolean color_bg)
 {
   GtkTreeModel *model;
   GtkWidget *scaffold;
@@ -346,6 +348,9 @@ focus_scaffold (void)
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, TRUE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_NAME);
 
+  if (color_bg)
+    g_object_set (G_OBJECT (renderer), "cell-background", "red", NULL);
+
   g_signal_connect (G_OBJECT (renderer), "edited",
 		    G_CALLBACK (cell_edited), scaffold);
 
@@ -353,6 +358,9 @@ focus_scaffold (void)
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "active", FOCUS_COLUMN_CHECK);
+
+  if (color_bg)
+    g_object_set (G_OBJECT (renderer), "cell-background", "green", NULL);
 
   g_signal_connect (G_OBJECT (renderer), "toggled",
 		    G_CALLBACK (cell_toggled), scaffold);
@@ -362,8 +370,14 @@ focus_scaffold (void)
 		"wrap-mode", PANGO_WRAP_WORD,
 		"wrap-width", 150,
 		NULL);
+
+  if (color_bg)
+    g_object_set (G_OBJECT (renderer), "cell-background", "blue", NULL);
+
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_STATIC_TEXT);
+
+  gtk_cell_area_add_focus_sibling (area, focus_renderer, sibling_renderer);
 
   return scaffold;
 }
@@ -394,7 +408,9 @@ focus_cell_area (void)
   hbox  = gtk_hbox_new (FALSE, 4);
   gtk_widget_show (hbox);
 
-  scaffold = focus_scaffold ();
+  gtk_window_set_title (GTK_WINDOW (window), "Focus and editable cells");
+
+  scaffold = focus_scaffold (FALSE);
 
   frame = gtk_frame_new (NULL);
   gtk_widget_show (frame);
@@ -422,6 +438,7 @@ focus_cell_area (void)
                     G_CALLBACK (orientation_changed), scaffold);
 
   widget = gtk_check_button_new_with_label ("Focus Sibling");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
   gtk_widget_show (widget);
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
 
@@ -434,6 +451,175 @@ focus_cell_area (void)
 }
 
 
+
+/*******************************************************
+ *                  Background Area                    *
+ *******************************************************/
+static void
+cell_spacing_changed (GtkSpinButton    *spin_button,
+		      CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gint        value;
+
+  value = (gint)gtk_spin_button_get_value (spin_button);
+
+  gtk_cell_area_box_set_spacing (GTK_CELL_AREA_BOX (area), value);
+}
+
+static void
+row_spacing_changed (GtkSpinButton    *spin_button,
+		     CellAreaScaffold *scaffold)
+{
+  gint value;
+
+  value = (gint)gtk_spin_button_get_value (spin_button);
+
+  cell_area_scaffold_set_row_spacing (scaffold, value);
+}
+
+static void
+cell_margins_changed (GtkSpinButton    *spin_button,
+		      CellAreaScaffold *scaffold)
+{
+  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
+  gint        value;
+
+  value = (gint)gtk_spin_button_get_value (spin_button);
+
+  gtk_cell_area_set_cell_margin_left (area, value);
+  gtk_cell_area_set_cell_margin_right (area, value);
+  gtk_cell_area_set_cell_margin_top (area, value);
+  gtk_cell_area_set_cell_margin_bottom (area, value);
+
+  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
+}
+
+
+static void
+indentation_changed (GtkSpinButton    *spin_button,
+		     CellAreaScaffold *scaffold)
+{
+  gint value;
+
+  value = (gint)gtk_spin_button_get_value (spin_button);
+
+  cell_area_scaffold_set_indentation (scaffold, value);
+}
+
+static void
+background_area (void)
+{
+  GtkWidget *window, *widget, *label, *main_vbox;
+  GtkWidget *scaffold, *frame, *vbox, *hbox;
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  hbox  = gtk_hbox_new (FALSE, 4);
+  main_vbox  = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (hbox);
+  gtk_widget_show (main_vbox);
+  gtk_container_add (GTK_CONTAINER (window), main_vbox);
+
+  gtk_window_set_title (GTK_WINDOW (window), "Background Area");
+
+  label = gtk_label_new ("In this example, row spacing gets devided into the background area, "
+			 "column spacing is added between each background area, indentation is "
+			 "prepended space distributed to the background area, individual cell margins "
+			 "are also distributed to the background area for every cell.");
+  gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
+  gtk_label_set_width_chars  (GTK_LABEL (label), 40);
+  gtk_widget_show (label);
+  gtk_box_pack_start (GTK_BOX (main_vbox), label, FALSE, FALSE, 0);
+
+  scaffold = focus_scaffold (TRUE);
+
+  frame = gtk_frame_new (NULL);
+  gtk_widget_show (frame);
+
+  gtk_widget_set_valign (frame, GTK_ALIGN_CENTER);
+  gtk_widget_set_halign (frame, GTK_ALIGN_FILL);
+
+  gtk_container_add (GTK_CONTAINER (frame), scaffold);
+
+  gtk_box_pack_end (GTK_BOX (hbox), frame, TRUE, TRUE, 0);
+
+  /* Now add some controls */
+  vbox  = gtk_vbox_new (FALSE, 4);
+  gtk_widget_show (vbox);
+  gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, FALSE, 0);
+
+  widget = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "changed",
+                    G_CALLBACK (orientation_changed), scaffold);
+
+  widget = gtk_spin_button_new_with_range (0, 10, 1);
+  label = gtk_label_new ("Cell spacing");
+  hbox = gtk_hbox_new (FALSE, 4);
+  gtk_widget_show (hbox);
+  gtk_widget_show (label);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "value-changed",
+                    G_CALLBACK (cell_spacing_changed), scaffold);
+
+
+  widget = gtk_spin_button_new_with_range (0, 10, 1);
+  label = gtk_label_new ("Row spacing");
+  hbox = gtk_hbox_new (FALSE, 4);
+  gtk_widget_show (hbox);
+  gtk_widget_show (label);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "value-changed",
+                    G_CALLBACK (row_spacing_changed), scaffold);
+
+  widget = gtk_spin_button_new_with_range (0, 10, 1);
+  label = gtk_label_new ("Cell Margins");
+  hbox = gtk_hbox_new (FALSE, 4);
+  gtk_widget_show (hbox);
+  gtk_widget_show (label);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "value-changed",
+                    G_CALLBACK (cell_margins_changed), scaffold);
+
+  widget = gtk_spin_button_new_with_range (0, 30, 1);
+  label = gtk_label_new ("Intentation");
+  hbox = gtk_hbox_new (FALSE, 4);
+  gtk_widget_show (hbox);
+  gtk_widget_show (label);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "value-changed",
+                    G_CALLBACK (indentation_changed), scaffold);
+
+  gtk_widget_show (window);
+}
+
+
+
+
+
+
 int
 main (int argc, char *argv[])
 {
@@ -441,6 +627,7 @@ main (int argc, char *argv[])
 
   simple_cell_area ();
   focus_cell_area ();
+  background_area ();
 
   gtk_main ();
 
