@@ -43,14 +43,14 @@ typedef struct _CellAreaScaffoldPrivate  CellAreaScaffoldPrivate;
 
 struct _CellAreaScaffold
 {
-  GtkWidget widget;
+  GtkContainer widget;
 
   CellAreaScaffoldPrivate *priv;
 };
 
 struct _CellAreaScaffoldClass
 {
-  GtkWidgetClass parent_class;
+  GtkContainerClass parent_class;
 
   void  (* activate) (CellAreaScaffold *scaffold);
 };

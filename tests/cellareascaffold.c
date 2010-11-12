@@ -64,6 +64,19 @@ static gint      cell_area_scaffold_focus                          (GtkWidget   
 static gboolean  cell_area_scaffold_button_press                   (GtkWidget       *widget,
 								    GdkEventButton  *event);
 
+/* GtkContainerClass */
+static void      cell_area_scaffold_forall                         (GtkContainer    *container,
+								    gboolean         include_internals,
+								    GtkCallback      callback,
+								    gpointer         callback_data);
+static void      cell_area_scaffold_remove                         (GtkContainer    *container,
+								    GtkWidget       *child);
+static void      cell_area_scaffold_put_edit_widget                (CellAreaScaffold *scaffold,
+								    GtkWidget        *edit_widget,
+								    gint              x,
+								    gint              y,
+								    gint              width,
+								    gint              height);
 
 /* CellAreaScaffoldClass */
 static void      cell_area_scaffold_activate                       (CellAreaScaffold *scaffold);
@@ -76,22 +89,32 @@ static void      focus_changed_cb                                  (GtkCellArea 
 								    GtkCellRenderer  *renderer,
 								    const gchar      *path,
 								    CellAreaScaffold *scaffold);
+static void      editing_started_cb                                (GtkCellArea      *area,
+								    GtkCellRenderer  *renderer,
+								    GtkCellEditable  *edit_widget,
+								    GdkRectangle     *cell_area,
+								    const gchar      *path,
+								    CellAreaScaffold *scaffold);
+static void      remove_editable_cb                                (GtkCellArea      *area,
+								    GtkCellRenderer  *renderer,
+								    GtkCellEditable  *edit_widget,
+								    CellAreaScaffold *scaffold);
 static void      row_changed_cb                                    (GtkTreeModel     *model,
 								    GtkTreePath      *path,
 								    GtkTreeIter      *iter,
 								    CellAreaScaffold *scaffold);
-static void      row_inserted_cb                                    (GtkTreeModel     *model,
-								     GtkTreePath      *path,
-								     GtkTreeIter      *iter,
-								     CellAreaScaffold *scaffold);
-static void      row_deleted_cb                                     (GtkTreeModel     *model,
-								     GtkTreePath      *path,
-								     CellAreaScaffold *scaffold);
-static void      rows_reordered_cb                                  (GtkTreeModel     *model,
-								     GtkTreePath      *parent,
-								     GtkTreeIter      *iter,
-								     gint             *new_order,
-								     CellAreaScaffold *scaffold);
+static void      row_inserted_cb                                   (GtkTreeModel     *model,
+								    GtkTreePath      *path,
+								    GtkTreeIter      *iter,
+								    CellAreaScaffold *scaffold);
+static void      row_deleted_cb                                    (GtkTreeModel     *model,
+								    GtkTreePath      *path,
+								    CellAreaScaffold *scaffold);
+static void      rows_reordered_cb                                 (GtkTreeModel     *model,
+								    GtkTreePath      *parent,
+								    GtkTreeIter      *iter,
+								    gint             *new_order,
+								    CellAreaScaffold *scaffold);
 
 typedef struct {
   gint    size; /* The size of the row in the scaffold's opposing orientation */
@@ -124,7 +147,11 @@ struct _CellAreaScaffoldPrivate {
    * we need to queue a redraw */
   gulong           size_changed_id;
 
-
+  /* Currently edited widget */
+  GtkWidget       *edit_widget;
+  GdkRectangle     edit_rect;
+  gulong           editing_started_id;
+  gulong           remove_editable_id;
 };
 
 enum {
@@ -149,7 +176,7 @@ static guint scaffold_signals[N_SIGNALS] = { 0 };
    (dir) == GTK_DIR_LEFT         ? "left" :		\
    (dir) == GTK_DIR_RIGHT        ? "right" : "invalid")
 
-G_DEFINE_TYPE_WITH_CODE (CellAreaScaffold, cell_area_scaffold, GTK_TYPE_WIDGET,
+G_DEFINE_TYPE_WITH_CODE (CellAreaScaffold, cell_area_scaffold, GTK_TYPE_CONTAINER,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
 
 
@@ -171,28 +198,39 @@ cell_area_scaffold_init (CellAreaScaffold *scaffold)
   gtk_widget_set_has_window (GTK_WIDGET (scaffold), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (scaffold), TRUE);
 
+  priv->size_changed_id = 
+    g_signal_connect (priv->iter, "notify",
+		      G_CALLBACK (size_changed_cb), scaffold);
+
   priv->focus_changed_id =
     g_signal_connect (priv->area, "focus-changed",
 		      G_CALLBACK (focus_changed_cb), scaffold);
 
-  priv->size_changed_id = 
-    g_signal_connect (priv->iter, "notify",
-		      G_CALLBACK (size_changed_cb), scaffold);
+  priv->editing_started_id =
+    g_signal_connect (priv->area, "editing-started",
+		      G_CALLBACK (editing_started_cb), scaffold);
+
+  priv->remove_editable_id =
+    g_signal_connect (priv->area, "remove-editable",
+		      G_CALLBACK (remove_editable_cb), scaffold);
+
+
 }
 
 static void
 cell_area_scaffold_class_init (CellAreaScaffoldClass *class)
 {
-  GObjectClass   *gobject_class;
-  GtkWidgetClass *widget_class;
+  GObjectClass      *gobject_class;
+  GtkWidgetClass    *widget_class;
+  GtkContainerClass *container_class;
 
-  gobject_class = G_OBJECT_CLASS(class);
+  gobject_class = G_OBJECT_CLASS (class);
   gobject_class->dispose = cell_area_scaffold_dispose;
   gobject_class->finalize = cell_area_scaffold_finalize;
   gobject_class->get_property = cell_area_scaffold_get_property;
   gobject_class->set_property = cell_area_scaffold_set_property;
 
-  widget_class = GTK_WIDGET_CLASS(class);
+  widget_class = GTK_WIDGET_CLASS (class);
   widget_class->realize = cell_area_scaffold_realize;
   widget_class->unrealize = cell_area_scaffold_unrealize;
   widget_class->draw = cell_area_scaffold_draw;
@@ -205,6 +243,10 @@ cell_area_scaffold_class_init (CellAreaScaffoldClass *class)
   widget_class->unmap = cell_area_scaffold_unmap;
   widget_class->focus = cell_area_scaffold_focus;
   widget_class->button_press_event = cell_area_scaffold_button_press;
+
+  container_class = GTK_CONTAINER_CLASS (class);
+  container_class->forall = cell_area_scaffold_forall;
+  container_class->remove = cell_area_scaffold_remove;
 
   class->activate = cell_area_scaffold_activate;
 
@@ -264,6 +306,8 @@ cell_area_scaffold_dispose (GObject *object)
     {
       /* Disconnect signals */
       g_signal_handler_disconnect (priv->area, priv->focus_changed_id);
+      g_signal_handler_disconnect (priv->area, priv->editing_started_id);
+      g_signal_handler_disconnect (priv->area, priv->remove_editable_id);
 
       g_object_unref (priv->area);
       priv->area = NULL;
@@ -443,6 +487,9 @@ cell_area_scaffold_draw (GtkWidget       *widget,
       valid = gtk_tree_model_iter_next (priv->model, &iter);
     }
 
+  /* Draw the edit widget after drawing everything else */
+  GTK_WIDGET_CLASS (cell_area_scaffold_parent_class)->draw (widget, cr);
+
   return FALSE;
 }
 
@@ -538,6 +585,10 @@ cell_area_scaffold_size_allocate (GtkWidget           *widget,
                             allocation->width,
                             allocation->height);
 
+  /* Allocate the child GtkCellEditable widget if one is currently editing a row */
+  if (priv->edit_widget)
+    gtk_widget_size_allocate (priv->edit_widget, &priv->edit_rect);
+
   if (!priv->model)
     return;
 
@@ -546,13 +597,13 @@ cell_area_scaffold_size_allocate (GtkWidget           *widget,
   /* Cache the per-row sizes and allocate the iter */
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      get_row_sizes (scaffold, priv->row_data, allocation->width);
       gtk_cell_area_iter_allocate_width (priv->iter, allocation->width);
+      get_row_sizes (scaffold, priv->row_data, allocation->width);
     }
   else
     {
-      get_row_sizes (scaffold, priv->row_data, allocation->height);
       gtk_cell_area_iter_allocate_height (priv->iter, allocation->height);
+      get_row_sizes (scaffold, priv->row_data, allocation->height);
     }
 }
 
@@ -892,8 +943,8 @@ cell_area_scaffold_button_press (GtkWidget       *widget,
 	{
 	  event_area.height = data->size;
 
-	  if (event->y >= allocation.y + event_area.y && 
-	      event->y <= allocation.y + event_area.y + event_area.height)
+	  if (event->y >= event_area.y && 
+	      event->y <= event_area.y + event_area.height)
 	    {
 	      /* XXX A real implementation would assemble GtkCellRendererState flags here */
 	      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
@@ -909,8 +960,8 @@ cell_area_scaffold_button_press (GtkWidget       *widget,
 	{
 	  event_area.width = data->size;
 
-	  if (event->x >= allocation.x + event_area.x && 
-	      event->x <= allocation.x + event_area.x + event_area.width)
+	  if (event->x >= event_area.x && 
+	      event->x <= event_area.x + event_area.width)
 	    {
 	      /* XXX A real implementation would assemble GtkCellRendererState flags here */
 	      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
@@ -928,6 +979,55 @@ cell_area_scaffold_button_press (GtkWidget       *widget,
     }
 
   return handled;
+}
+
+
+/*********************************************************
+ *                   GtkContainerClass                   *
+ *********************************************************/
+static void
+cell_area_scaffold_put_edit_widget (CellAreaScaffold *scaffold,
+				    GtkWidget        *edit_widget,
+				    gint              x,
+				    gint              y,
+				    gint              width,
+				    gint              height)
+{
+  CellAreaScaffoldPrivate *priv = scaffold->priv;
+
+  priv->edit_rect.x      = x;
+  priv->edit_rect.y      = y;
+  priv->edit_rect.width  = width;
+  priv->edit_rect.height = height;
+  priv->edit_widget      = edit_widget;
+
+  gtk_widget_set_parent (edit_widget, GTK_WIDGET (scaffold));
+}
+
+static void
+cell_area_scaffold_forall (GtkContainer    *container,
+			   gboolean         include_internals,
+			   GtkCallback      callback,
+			   gpointer         callback_data)
+{
+  CellAreaScaffold        *scaffold = CELL_AREA_SCAFFOLD (container);
+  CellAreaScaffoldPrivate *priv     = scaffold->priv;
+
+  if (priv->edit_widget)
+    (* callback) (priv->edit_widget, callback_data);
+}
+
+static void
+cell_area_scaffold_remove (GtkContainer    *container,
+			   GtkWidget       *child)
+{
+  CellAreaScaffold        *scaffold = CELL_AREA_SCAFFOLD (container);
+  CellAreaScaffoldPrivate *priv     = scaffold->priv;
+
+  g_return_if_fail (child == priv->edit_widget);
+
+  gtk_widget_unparent (priv->edit_widget);
+  priv->edit_widget = NULL;
 }
 
 /*********************************************************
@@ -1005,7 +1105,6 @@ focus_changed_cb (GtkCellArea      *area,
   CellAreaScaffoldPrivate *priv = scaffold->priv;
   GtkWidget               *widget = GTK_WIDGET (scaffold);
   GtkTreePath             *treepath;
-  gboolean                 found = FALSE;
   gint                    *indices;
 
   if (!priv->model)
@@ -1023,13 +1122,41 @@ focus_changed_cb (GtkCellArea      *area,
 
   gtk_tree_path_free (treepath);
 
-  g_print ("Focus changed signal, new focus row %d\n", priv->focus_row);
-
   /* Make sure we have focus now */
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
 
   gtk_widget_queue_draw (widget);
+}
+
+static void
+editing_started_cb (GtkCellArea      *area,
+		    GtkCellRenderer  *renderer,
+		    GtkCellEditable  *edit_widget,
+		    GdkRectangle     *cell_area,
+		    const gchar      *path,
+		    CellAreaScaffold *scaffold)
+{
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (GTK_WIDGET (scaffold), &allocation);
+
+  cell_area_scaffold_put_edit_widget (scaffold, GTK_WIDGET (edit_widget),
+				      allocation.x + cell_area->x, 
+				      allocation.y + cell_area->y, 
+				      cell_area->width, cell_area->height);
+
+  gtk_cell_editable_start_editing (edit_widget, NULL);
+  gtk_widget_grab_focus (GTK_WIDGET (edit_widget));
+}
+
+static void
+remove_editable_cb (GtkCellArea      *area,
+		    GtkCellRenderer  *renderer,
+		    GtkCellEditable  *edit_widget,
+		    CellAreaScaffold *scaffold)
+{
+  gtk_container_remove (GTK_CONTAINER (scaffold), GTK_WIDGET (edit_widget));
 }
 
 static void 

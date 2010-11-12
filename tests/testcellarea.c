@@ -291,7 +291,7 @@ focus_list_model (void)
 
 static void
 cell_toggled (GtkCellRendererToggle *cell_renderer,
-	      gchar                 *path,
+	      const gchar           *path,
 	      CellAreaScaffold      *scaffold)
 {
   GtkTreeModel *model = cell_area_scaffold_get_model (scaffold);
@@ -305,6 +305,23 @@ cell_toggled (GtkCellRendererToggle *cell_renderer,
 
   gtk_tree_model_get (model, &iter, FOCUS_COLUMN_CHECK, &active, -1);
   gtk_list_store_set (GTK_LIST_STORE (model), &iter, FOCUS_COLUMN_CHECK, !active, -1);
+}
+
+static void
+cell_edited (GtkCellRendererToggle *cell_renderer,
+	     const gchar           *path,
+	     const gchar           *new_text,
+	     CellAreaScaffold      *scaffold)
+{
+  GtkTreeModel *model = cell_area_scaffold_get_model (scaffold);
+  GtkTreeIter   iter;
+
+  g_print ("Cell edited with new text '%s' !\n", new_text);
+
+  if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
+    return;
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter, FOCUS_COLUMN_NAME, new_text, -1);
 }
 
 static GtkWidget *
@@ -329,7 +346,9 @@ focus_scaffold (void)
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, TRUE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_NAME);
 
-  /* Catch signal ... */
+  g_signal_connect (G_OBJECT (renderer), "edited",
+		    G_CALLBACK (cell_edited), scaffold);
+
   focus_renderer = renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);

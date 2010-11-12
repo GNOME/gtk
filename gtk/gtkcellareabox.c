@@ -903,10 +903,7 @@ gtk_cell_area_box_event (GtkCellArea          *area,
 	  GtkCellAreaBoxIter    *box_iter = GTK_CELL_AREA_BOX_ITER (iter);
 	  GSList                *allocated_cells, *l;
 	  GdkRectangle           cell_background, inner_area;
-	  GtkAllocation          allocation;
 	  gint                   event_x, event_y;
-
-	  gtk_widget_get_allocation (widget, &allocation);
 
 	  /* We may need some semantics to tell us the offset of the event
 	   * window we are handling events for (i.e. GtkTreeView has a bin_window) */
@@ -1025,6 +1022,7 @@ gtk_cell_area_box_render (GtkCellArea          *area,
     {
       AllocatedCell       *cell = l->data;
       GtkCellRendererState cell_fields = 0;
+      GdkRectangle         render_background;
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
@@ -1041,37 +1039,39 @@ gtk_cell_area_box_render (GtkCellArea          *area,
        */
       gtk_cell_area_inner_cell_area (area, &cell_background, &inner_area);
 
-      /* Here after getting the inner area of the cell background,
-       * add portions of the background area to the cell background */
+      /* Add portions of the background_area to the cell_background
+       * to create the render_background */
+      render_background = cell_background;
+
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  if (l == allocated_cells)
 	    {
-	      cell_background.width += cell_background.x - background_area->x;
-	      cell_background.x      = background_area->x;
+	      render_background.width += render_background.x - background_area->x;
+	      render_background.x      = background_area->x;
 	    }
 
 	  if (l->next == NULL)
-	      cell_background.width = 
-		background_area->width - (cell_background.x - background_area->x);
+	      render_background.width = 
+		background_area->width - (render_background.x - background_area->x);
 
-	  cell_background.y      = background_area->y;
-	  cell_background.height = background_area->height;
+	  render_background.y      = background_area->y;
+	  render_background.height = background_area->height;
 	}
       else
 	{
 	  if (l == allocated_cells)
 	    {
-	      cell_background.height += cell_background.y - background_area->y;
-	      cell_background.y       = background_area->y;
+	      render_background.height += render_background.y - background_area->y;
+	      render_background.y       = background_area->y;
 	    }
 
 	  if (l->next == NULL)
-	      cell_background.height = 
-		background_area->height - (cell_background.y - background_area->y);
+	      render_background.height = 
+		background_area->height - (render_background.y - background_area->y);
 
-	  cell_background.x     = background_area->x;
-	  cell_background.width = background_area->width;
+	  render_background.x     = background_area->x;
+	  render_background.width = background_area->width;
 	}
 
       if (focus_cell && 
@@ -1083,35 +1083,8 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 	  if (paint_focus)
 	    {
 	      GdkRectangle cell_focus;
-	      gint         opposite_size, x_offset, y_offset;
 
-	      cell_focus = inner_area;
-
-	      /* Trim up the focus size */
-	      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-		{
-		  gtk_cell_renderer_get_preferred_height_for_width (cell->renderer, widget, 
-								    cell_focus.width, 
-								    NULL, &opposite_size);
-
-		  cell_focus.height = MIN (opposite_size, cell_focus.height);
-		}
-	      else
-		{
-		  gtk_cell_renderer_get_preferred_width_for_height (cell->renderer, widget, 
-								    cell_focus.height, 
-								    NULL, &opposite_size);
-
-		  cell_focus.width = MIN (opposite_size, cell_focus.width);
-		}
-
-	      /* offset the cell position */
-	      _gtk_cell_renderer_calc_offset (cell->renderer, &inner_area, GTK_TEXT_DIR_LTR,
-					      cell_focus.width, cell_focus.height,
-					      &x_offset, &y_offset);
-
-	      cell_focus.x += x_offset;
-	      cell_focus.y += y_offset;
+	      gtk_cell_area_aligned_cell_area (area, widget, cell->renderer, &inner_area, &cell_focus);
 
 	      /* Accumulate the focus rectangle for all focus siblings */
 	      if (first_focus_cell)
@@ -1127,7 +1100,7 @@ gtk_cell_area_box_render (GtkCellArea          *area,
       /* We have to do some per-cell considerations for the 'flags'
        * for focus handling */
       gtk_cell_renderer_render (cell->renderer, cr, widget,
-				&cell_background, &inner_area,
+				&render_background, &inner_area,
 				flags | cell_fields);
     }
 

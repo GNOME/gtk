@@ -132,7 +132,8 @@ static gint            cell_attribute_find (CellAttribute         *cell_attribut
 /* Internal signal emissions */
 static void            gtk_cell_area_editing_started  (GtkCellArea        *area,
 						       GtkCellRenderer    *renderer,
-						       GtkCellEditable    *editable);
+						       GtkCellEditable    *editable,
+						       GdkRectangle       *cell_area);
 static void            gtk_cell_area_editing_canceled (GtkCellArea        *area,
 						       GtkCellRenderer    *renderer);
 static void            gtk_cell_area_editing_done     (GtkCellArea        *area,
@@ -292,10 +293,11 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 		  G_SIGNAL_RUN_FIRST,
 		  0, /* No class closure here */
 		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_OBJECT_STRING,
-		  G_TYPE_NONE, 3,
+		  _gtk_marshal_VOID__OBJECT_OBJECT_BOXED_STRING,
+		  G_TYPE_NONE, 4,
 		  GTK_TYPE_CELL_RENDERER,
 		  GTK_TYPE_CELL_EDITABLE,
+		  GDK_TYPE_RECTANGLE,
 		  G_TYPE_STRING);
 
   cell_area_signals[SIGNAL_EDITING_CANCELED] =
@@ -2079,10 +2081,11 @@ gtk_cell_area_get_focus_from_sibling (GtkCellArea          *area,
 static void
 gtk_cell_area_editing_started (GtkCellArea        *area,
 			       GtkCellRenderer    *renderer,
-			       GtkCellEditable    *editable)
+			       GtkCellEditable    *editable,
+			       GdkRectangle       *cell_area)
 {
   g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_STARTED], 0, 
-		 renderer, editable, area->priv->current_path);
+		 renderer, editable, cell_area, area->priv->current_path);
 }
 
 static void
@@ -2276,14 +2279,18 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
       
       if (editable_widget != NULL)
 	{
+	  GdkRectangle edit_area;
+
 	  g_return_val_if_fail (GTK_IS_CELL_EDITABLE (editable_widget), FALSE);
 	  
 	  gtk_cell_area_set_edited_cell (area, renderer);
 	  gtk_cell_area_set_edit_widget (area, editable_widget);
+
+	  gtk_cell_area_aligned_cell_area (area, widget, renderer, &inner_area, &edit_area);
 	  
 	  /* Signal that editing started so that callers can get 
 	   * a handle on the editable_widget */
-	  gtk_cell_area_editing_started (area, priv->focus_cell, editable_widget);
+	  gtk_cell_area_editing_started (area, priv->focus_cell, editable_widget, &edit_area);
 	  
 	  return TRUE;
 	}
@@ -2304,9 +2311,12 @@ gtk_cell_area_stop_editing (GtkCellArea *area,
 
   if (priv->edited_cell)
     {
+      GtkCellEditable *edit_widget = g_object_ref (priv->edit_widget);
+      GtkCellRenderer *edit_cell   = g_object_ref (priv->edited_cell);
+
       /* Stop editing of the cell renderer */
       gtk_cell_renderer_stop_editing (priv->edited_cell, canceled);
-      
+
       /* Signal that editing has been canceled */
       if (canceled)
 	gtk_cell_area_editing_canceled (area, priv->edited_cell);	
@@ -2314,6 +2324,13 @@ gtk_cell_area_stop_editing (GtkCellArea *area,
       /* Remove any references to the editable widget */
       gtk_cell_area_set_edited_cell (area, NULL);
       gtk_cell_area_set_edit_widget (area, NULL);
+
+      /* Send the remove-widget signal explicitly (this is done after setting
+       * the edit cell/widget NULL to avoid feedback)
+       */
+      gtk_cell_area_remove_editable (area, edit_cell, edit_widget);
+      g_object_unref (edit_cell);
+      g_object_unref (edit_widget);
     }
 }
 
@@ -2426,23 +2443,72 @@ gtk_cell_area_set_cell_margin_bottom (GtkCellArea *area,
 
 void
 gtk_cell_area_inner_cell_area (GtkCellArea        *area,
-			       const GdkRectangle *background_area,
-			       GdkRectangle       *cell_area)
+			       const GdkRectangle *cell_area,
+			       GdkRectangle       *inner_area)
 {
   GtkCellAreaPrivate *priv;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (background_area != NULL);
   g_return_if_fail (cell_area != NULL);
+  g_return_if_fail (inner_area != NULL);
 
   priv = area->priv;
 
-  *cell_area = *background_area;
+  *inner_area = *cell_area;
 
-  cell_area->x      += priv->cell_border.left;
-  cell_area->width  -= (priv->cell_border.left + priv->cell_border.right);
-  cell_area->y      += priv->cell_border.top;
-  cell_area->height -= (priv->cell_border.top + priv->cell_border.bottom);
+  inner_area->x      += priv->cell_border.left;
+  inner_area->width  -= (priv->cell_border.left + priv->cell_border.right);
+  inner_area->y      += priv->cell_border.top;
+  inner_area->height -= (priv->cell_border.top + priv->cell_border.bottom);
+}
+
+void
+gtk_cell_area_aligned_cell_area (GtkCellArea        *area,
+				 GtkWidget          *widget,
+				 GtkCellRenderer    *renderer,
+				 const GdkRectangle *cell_area,
+				 GdkRectangle       *aligned_area)
+{
+  GtkCellAreaPrivate *priv;
+  gint                opposite_size, x_offset, y_offset;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cell_area != NULL);
+  g_return_if_fail (aligned_area != NULL);
+
+  priv = area->priv;
+
+  *aligned_area = *cell_area;
+
+  /* Trim up the aligned size */
+  if (gtk_cell_renderer_get_request_mode (renderer) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+    {
+      gtk_cell_renderer_get_preferred_height_for_width (renderer, widget, 
+							aligned_area->width, 
+							NULL, &opposite_size);
+
+      aligned_area->height = MIN (opposite_size, aligned_area->height);
+    }
+  else
+    {
+      gtk_cell_renderer_get_preferred_width_for_height (renderer, widget, 
+							aligned_area->height, 
+							NULL, &opposite_size);
+
+      aligned_area->width = MIN (opposite_size, aligned_area->width);
+    }
+
+  /* offset the cell position */
+  _gtk_cell_renderer_calc_offset (renderer, cell_area, 
+				  gtk_widget_get_direction (widget),
+				  aligned_area->width, 
+				  aligned_area->height,
+				  &x_offset, &y_offset);
+
+  aligned_area->x += x_offset;
+  aligned_area->y += y_offset;
 }
 
 void

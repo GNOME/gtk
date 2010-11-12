@@ -343,7 +343,15 @@ void                  gtk_cell_area_set_cell_margin_bottom         (GtkCellArea 
 /* Distinguish the inner cell area from the whole requested area including margins */
 void                  gtk_cell_area_inner_cell_area                (GtkCellArea        *area,
 								    const GdkRectangle *cell_area,
-								    GdkRectangle       *inner_cell_area);
+								    GdkRectangle       *inner_area);
+
+/* Aligns a cell renderer into cell_area by requesting it's size ... used for focus and cell edit areas */
+void                  gtk_cell_area_aligned_cell_area              (GtkCellArea        *area,
+								    GtkWidget          *widget,
+								    GtkCellRenderer    *renderer,
+								    const GdkRectangle *cell_area,
+								    GdkRectangle       *aligned_area);
+
 
 /* Request the size of a cell while respecting the cell margins (requests are margin inclusive) */
 void                  gtk_cell_area_request_renderer               (GtkCellArea        *area,
