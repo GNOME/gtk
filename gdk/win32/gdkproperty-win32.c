@@ -322,6 +322,7 @@ gdk_property_delete (GdkWindow *window,
   "Gtk/ButtonImages\0"        "gtk-button-images\0"
   "Gtk/MenuImages\0"          "gtk-menu-images\0"
   "Gtk/MenuBarAccel\0"        "gtk-menu-bar-accel\0"
+  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0"
   "Gtk/CursorThemeName\0"     "gtk-cursor-theme-name\0"
   "Gtk/CursorThemeSize\0"     "gtk-cursor-theme-size\0"
   "Gtk/ShowInputMethodMenu\0" "gtk-show-input-method-menu\0"
