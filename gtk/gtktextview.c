@@ -3031,10 +3031,11 @@ gtk_text_view_finalize (GObject *object)
   text_view = GTK_TEXT_VIEW (object);
   priv = text_view->priv;
 
-  g_assert (priv->buffer == NULL);
-
   gtk_text_view_destroy_layout (text_view);
   gtk_text_view_set_buffer (text_view, NULL);
+
+  /* at this point, no "notify::buffer" handler should recreate the buffer. */
+  g_assert (priv->buffer == NULL);
   
   cancel_pending_scroll (text_view);
 
