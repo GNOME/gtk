@@ -5455,6 +5455,7 @@ gtk_render_option
 gtk_render_progress
 gtk_render_slider
 gtk_render_activity
+gtk_render_icon_pixbuf
 
 <SUBSECTION Standard>
 GTK_TYPE_STYLE_CONTEXT
