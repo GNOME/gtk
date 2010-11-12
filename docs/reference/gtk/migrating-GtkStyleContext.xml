@@ -1,0 +1,544 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<chapter id="gtk-migrating-GtkStyleContext">
+  <title>Migrating from GtkStyle to GtkStyleContext</title>
+
+  <para>
+    In GTK+ 3.0, GTK+ was added GtkStyleContext to replace GtkStyle and
+    the theming infrastructure available in 2.x. GtkStyleContext is an
+    object similar in spirit to GtkStyle, as it contains theming information,
+    although in a more complete and tokenized fashion. Moving to #GtkStyleContext
+    is twofold, there is themes and theming engines on one
+    side, and applications, widgets and libraries on the other.
+  </para>
+
+  <refsect2 id="gtk-migrating-GtkStyleContext-themes">
+    <title>Migrating themes</title>
+
+    <para>
+      From GTK+ 3.0 on, theme engines must implement #GtkThemingEngine and be installed
+      in <literal>$(libdir)/gtk+-3.0/$(GTK_VERSION)/theming-engines</literal>, and
+      the files containing style information must be written in the CSS format as
+      parsed by #GtkCssProvider. For a theme named "Clearlooks", the CSS file parsed
+      by default would be <literal>$(sharedir)/themes/Clearlooks/gtk-3.0/gtk.css</literal>,
+      with possible variants such as the dark theme being named as "gtk-dark.css" in
+      the same directory.
+    </para>
+  </refsect2>
+
+  <refsect2 id="gtk-migrating-theme-GtkStyleContext-engines">
+    <title>Migrating theme engines</title>
+
+    <para>
+      Migrating a #GtkStyle based engine to a #GtkThemingEngine based one should
+      be straightforward for most of the vmethods. Besides a cleanup in the available
+      paint methods and a cleanup in the parameters passed (in favor of #GtkStyleContext
+      containing all the information), the available render methods should resemble
+      those of #GtkStyle quite evidently, with some differences worth to point out:
+    </para>
+
+    <orderedlist>
+      <listitem>
+	All variations of <literal>draw_box()</literal>, <literal>draw_flat_box()</literal>,
+	<literal>draw_shadow()</literal>, <literal>draw_box_gap()</literal> and
+	<literal>draw_shadow_gap()</literal> become replaced by <literal>render_background()</literal>,
+	<literal>render_frame()</literal> and <literal>render_frame_gap()</literal>, where
+	the first would render frameless backgrounds and the last two would render all frame
+	variants.
+      </listitem>
+      <listitem>
+	<literal>draw_resize_grip()</literal> disappears in favor of
+	<literal>render_handle()</literal> with a #GTK_STYLE_CLASS_GRIP class set in the
+	style context.
+      </listitem>
+      <listitem>
+	<literal>draw_spinner()</literal> disappears in favor of <literal>render_activity()</literal>
+	with a #GTK_STYLE_CLASS_SPINNER class set in the style context.
+      </listitem>
+    </orderedlist>
+
+    <para>
+      The available list of render methods is:
+    </para>
+
+    <simplelist>
+      <member>gtk_render_background(): Renders a widget/area background.</member>
+      <member>
+	gtk_render_frame(): Renders a frame border around the given rectangle. Usually
+	the detail of the border depends on the theme information, plus the current widget
+	state.
+      </member>
+      <member>gtk_render_layout(): Renders a #PangoLayout</member>
+      <member>gtk_render_frame_gap(): Renders a frame border with a gap on one side.</member>
+      <member>
+	gtk_render_handle(): Renders all kind of handles and resize grips,
+	usually depending the rendering on the CSS class.
+      </member>
+      <member>
+	gtk_render_check() and gtk_render_option(): Respectively render checkboxes and
+	radiobuttons.
+      </member>
+      <member>
+	gtk_render_arrow(): Renders an arrow pointing to a direction
+      </member>
+      <member>
+	gtk_render_expander(): Renders an expander indicator, such as in #GtkExpander
+      </member>
+      <member>
+	gtk_render_focus(): Renders the indication that a widget has the keyboard focus
+      </member>
+      <member>
+	gtk_render_line(): Renders a line from one coordinate to another.
+      </member>
+      <member>
+	gtk_render_slider(): Renders a slider indicator, such as in #GtkScale
+      </member>
+      <member>
+	gtk_render_extension(): Renders and extension to an UI element, such as a
+	notebook tab.
+      </member>
+      <member>
+	gtk_render_activity(): Renders an area displaying activity, be it a progressbar
+	or a spinner.
+      </member>
+      <member>
+	gtk_render_icon_pixbuf(): Renders an icon into a #GdkPixbuf.
+      </member>
+    </simplelist>
+
+    <para>
+      One of the main differences to #GtkStyle engines is that the rendered widget is
+      totally isolated from the theme engine, all style information is meant to be
+      retrieved from the #GtkThemingEngine API, or from the #GtkWidgetPath obtained
+      from gtk_theming_engine_get_path(), which fully represents the rendered widget's
+      hierarchy from a styling point of view.
+    </para>
+
+    <para>
+      The detail string available in the old engines is now essentially replaced by
+      widget regions and CSS classes and widget regions. Regions are a way for
+      container/complex widgets to classify and add ordering hints to its children.
+      CSS classes identify are a way to label some content being rendered, both regions
+      and classes can be identified both in CSS files and theming engines. There are
+      several predefined classes and regions such as %GTK_STYLE_CLASS_BUTTON or
+      %GTK_STYLE_REGION_TAB in gtkstylecontext.h, although custom widgets may define
+      their own, which themes may attempt at handling.
+    </para>
+  </refsect2>
+
+  <refsect2 id="gtk-migrating-GtkStyleContext-parser-extensions">
+    <title>Extending the CSS parser</title>
+
+    <para>
+      If there is a need for extending the default CSS parser, #GtkRCStyle has been
+      replaced by gtk_theming_engine_register_property(), where the theming engine
+      may register new properties that map to a #GType, even if there is builtin
+      support for most basic types, it is possible to hook a custom parser for the
+      property.
+    </para>
+
+    <para>
+      The installed properties depend on the #GtkThemeEngine::name property, so they
+      should be added in the <literal>constructed()</literal> handler. For example,
+      if an engine with the name "Clearlooks" installs a "focus-color" property, the
+      property <literal>-Clearlooks-focus-color</literal> will be registered and
+      accepted in CSS.
+    </para>
+
+    <para>
+      Widget style properties also follow a similar syntax, with the widget type
+      name used as a prefix, so for example the #GtkWidget:focus-line-width style property
+      could be modified in CSS as <literal>-GtkWidget-focus-line-width</literal>.
+    </para>
+  </refsect2>
+
+  <refsect2 id="gtk-migrating-GtkStyleContext-css">
+    <title>Using the CSS file format</title>
+
+    <para>
+      The difference in syntax between the RC and CSS file formats is evident, it
+      actually seems shorter to highlight the similarities, although anyone familiar
+      with CSS3 should get an idea soon of the new format, to make a more or less
+      comprehensive example, the following RC data:
+    </para>
+
+    <example>
+      <title>Sample RC code</title>
+      <programlisting>
+	style "default" {
+		xthickness = 1
+		ythickness = 1
+
+		GtkButton::child-displacement-x = 1
+		GtkButton::child-displacement-y = 1
+		GtkCheckButton::indicator-size = 14
+
+		bg[NORMAL]        = @bg_color
+		bg[PRELIGHT]      = shade (1.02, @bg_color)
+		bg[SELECTED]      = @selected_bg_color
+		bg[INSENSITIVE]   = @bg_color
+		bg[ACTIVE]        = shade (0.9, @bg_color)
+
+		fg[NORMAL]        = @fg_color
+		fg[PRELIGHT]      = @fg_color
+		fg[SELECTED]      = @selected_fg_color
+		fg[INSENSITIVE]   = darker (@bg_color)
+		fg[ACTIVE]        = @fg_color
+
+		text[NORMAL]      = @text_color
+		text[PRELIGHT]    = @text_color
+		text[SELECTED]    = @selected_fg_color
+		text[INSENSITIVE] = darker (@bg_color)
+		text[ACTIVE]      = @selected_fg_color
+
+		base[NORMAL]      = @base_color
+		base[PRELIGHT]    = shade (0.95, @bg_color)
+		base[SELECTED]    = @selected_bg_color
+		base[INSENSITIVE] = @bg_color
+		base[ACTIVE]      = shade (0.9, @selected_bg_color)
+
+		engine "clearlooks" {
+			colorize_scrollbar = TRUE
+			style = CLASSIC
+		}
+	}
+
+	style "tooltips" {
+		xthickness = 4
+		ythickness = 4
+
+		bg[NORMAL]        = @tooltip_bg_color
+		fg[NORMAL]        = @tooltip_fg_color
+	}
+
+	style "button" {
+		xthickness = 3
+		ythickness = 3
+
+		bg[NORMAL]        = shade (1.04, @bg_color)
+		bg[PRELIGHT]      = shade (1.06, @bg_color)
+		bg[ACTIVE]        = shade (0.85, @bg_color)
+	}
+
+	style "entry" {
+		xthickness = 3
+		ythickness = 3
+
+		bg[SELECTED] = mix (0.4, @selected_bg_color, @base_color)
+		fg[SELECTED] = @text_color
+
+		engine "clearlooks" {
+			focus_color = shade (0.65, @selected_bg_color)
+		}
+	}
+
+	style "other" {
+		bg[NORMAL] = &num;fff;
+	}
+
+	class "GtkWidget" style "default"
+	class "GtkEntry" style "entry"
+	widget_class "*&lt;GtkButton&gt;" style "button"
+	widget "gtk-tooltip*" style "tooltips"
+	widget_class "window-name.*.GtkButton" style "other"
+      </programlisting>
+    </example>
+
+    <para>
+      would roughly translate to this CSS:
+    </para>
+
+    <example>
+      <title>CSS translation</title>
+      <programlisting>
+	* {
+	  padding: 1;
+	  -GtkButton-child-displacement-x: 1;
+	  -GtkButton-child-displacement-y: 1;
+	  -GtkCheckButton-indicator-size: 14;
+
+	  background-color: @bg_color;
+	  color: @fg_color;
+
+	  -Clearlooks-colorize-scrollbar: true;
+	  -Clearlooks-style: classic;
+	}
+
+	*:hover {
+	  background-color: shade (@bg_color, 1.02);
+	}
+
+	*:selected {
+	  background-color: @selected_bg_color;
+	  color: @selected_fg_color;
+	}
+
+	*:insensitive {
+	  color: shade (@bg_color, 0.7);
+	}
+
+	*:active {
+	  background-color: shade (@bg_color, 0.9);
+	}
+
+	.tooltip {
+	  padding: 4;
+
+	  background-color: @tooltip_bg_color;
+	  color: @tooltip_fg_color;
+	}
+
+	.button {
+	  padding: 3;
+	  background-color: shade (@bg_color, 1.04);
+	}
+
+	.button:hover {
+	  background-color: shade (@bg_color, 1.06);
+	}
+
+	.button:active {
+	  background-color: shade (@bg_color, 0.85);
+	}
+
+	.entry {
+	  padding: 3;
+
+	  background-color: @base_color;
+	  color: @text_color;
+	}
+
+	.entry:selected {
+	  background-color: mix (@selected_bg_color, @base_color, 0.4);
+	  -Clearlooks-focus-color: shade (0.65, @selected_bg_color)
+	}
+
+	/* The latter selector is an specification of the first,
+	   since any widget may use the same classes or names */
+	&num;window-name .button,
+	GtkWindow&num;window-name GtkButton.button {
+	  background-color: &num;fff;
+	}
+      </programlisting>
+    </example>
+
+    <para>
+      One notable difference is the reduction from fg/bg/text/base colors to only
+      foreground/background, in exchange the widget is able to render its various
+      elements with different CSS classes, so they would be themed independently.
+    </para>
+
+    <para>
+      It is worth mentioning that the new file format doesn't support custom
+      keybindings nor stock icon mappings as the RC format did.
+    </para>
+  </refsect2>
+
+  <refsect2 id="gtk-migrating-GtkStyleContext-checklist">
+    <title>A checklist for widgets</title>
+
+    <para>
+      When porting your widgets to use #GtkStyleContext, this is usually
+      the checklist to follow:
+    </para>
+
+    <orderedlist>
+      <listitem>
+	Replace <literal>style_set()</literal> calls with <literal>style_updated()</literal>.
+      </listitem>
+
+      <listitem>
+	<para>
+	  Try to identify the role of what you're rendering with any number of classes, this will
+	  replace the detail string, there is a predefined set of CSS classes. Note that complex
+	  widgets will probably need rendering different elements with different applying CSS
+	  classes in order to have them styled separatedly. This could result in code like
+	  (simplified examples):
+	</para>
+
+	<example>
+	  <title>Setting a permanent CSS class</title>
+	  <programlisting>
+	    static void
+	    gtk_button_init (GtkButton *button)
+	    {
+	      GtkStyleContext *context;
+
+	      ...
+
+	      context = gtk_widget_get_style_context (GTK_WIDGET (button));
+
+	      /* Set the "button" class */
+	      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+	    }
+	  </programlisting>
+	</example>
+
+	<para>
+	  Or
+	</para>
+
+	<example>
+	  <title>Using dynamic CSS classes for different elements</title>
+	  <programlisting>
+	    static gboolean
+	    gtk_spin_button_draw (GtkSpinButton *spin,
+	                          cairo_t       *cr)
+	    {
+	      GtkStyleContext *context;
+
+	      ...
+
+	      context = gtk_widget_get_style_context (GTK_WIDGET (spin));
+
+	      gtk_style_context_save (context);
+	      gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
+
+	      /* Call to entry draw impl with "entry" class */
+	      parent_class->draw (spin, cr);
+
+	      gtk_style_context_restore (context);
+	      gtk_style_context_save (context);
+
+	      /* Render up/down buttons with the "button" class */
+	      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
+	      draw_up_button (spin, cr);
+	      draw_down_button (spin, cr);
+
+	      gtk_style_context_restore (context);
+
+	      ...
+	    }
+	  </programlisting>
+	</example>
+
+	<para>
+	  Note that #GtkStyleContext only provides fg/bg colors, so text/base is done through
+	  distinctive theming of the different classes. For example, An entry would usually
+	  be black on white while a button would usually be black on light grey.
+	</para>
+      </listitem>
+
+      <listitem>
+	Replace all <literal>gtk_paint_*()</literal> calls to use <literal>gtk_render_*()</literal>,
+	the most distinctive changes are the use of #GtkStateFlags to represent the widget state and
+	the lack of #GtkShadowType. For gtk_render_check() and gtk_render_option(), the
+	<literal>shadow_type</literal> parameter is replaced by the #GTK_STATE_FLAG_ACTIVE and
+	#GTK_STATE_FLAG_INCONSISTENT state flags. For things such as pressed/unpressed button states,
+	#GTK_STATE_FLAG_ACTIVE is used, so the CSS may style normal/active states differently to render
+	outset/inset borders respectively.
+      </listitem>
+
+      <listitem>
+	Replace all uses of xthickness/ythickness, #GtkStyleContext uses the CSS box model, so
+	there is the border-width/padding/margin properties to replace the different applications
+	of X and Y thickness. Note that all of this is merely a guideline to use, which widgets
+	may choose to obey or not.
+      </listitem>
+    </orderedlist>
+  </refsect2>
+
+  <refsect2 id="gtk-migrating-GtkStyleContext-parsing">
+    <title>Parsing from custom resources</title>
+    <para>
+      As a consequence of the RC format going away, calling gtk_rc_parse() or gtk_rc_parse_string()
+      won't be doing anything to the widget styling, the way to replace these calls is using the CSS
+      format, which is loaded through a #GtkCssProvider, and inserted as a style resource to an
+      individual widget through gtk_style_context_add_provider() or to all widgets in a screen through
+      gtk_style_context_add_provider_for_screen().
+    </para>
+
+    <para>
+      Notice that you can also get style information from custom resources by implementing a
+      #GtkStyleProvider, where it would be translated to something the widget understands. Although
+      this is an advanced feature that should be rarely used.
+    </para>
+  </refsect2>
+
+  <refsect2 id="gtk-migrating-GtkStyleContext-bonus-points">
+    <title>Bonus points</title>
+
+    <para>
+      There are some features in #GtkStyleContext that weren't available in
+      #GtkStyle, or were made available over time for certain widgets through
+      extending the detail string in obscure ways. UI elements being rendered
+      may be provided now a lot more information, so going through this list
+      you'll ensure your widget is the perfect citizen in a fully themable UI
+    </para>
+
+    <orderedlist>
+      <listitem>
+	If your widget renders a series of similar elements, such as tabs
+	in a #GtkNotebook or rows/column in a #GtkTreeView, consider adding
+	regions through gtk_style_context_add_region(), these regions can be
+	referenced in CSS and the :nth-child pseudoclass may be used to match
+	the elements depending on the flags passed.
+
+	<example>
+	  <title>Theming widget regions</title>
+	  <programlisting>
+	    GtkNotebook tab {
+	      background-color: &num;f3329d;
+	    }
+
+	    GtkTreeView row::nth-child (even) {
+	      background-color: &num;dddddd;
+	    }
+	  </programlisting>
+	</example>
+      </listitem>
+
+      <listitem>
+	<para>
+	  If your container renders child widgets within different regions, make it implement
+	  <literal>GtkContainer::get_path_for_child()</literal>, This function lets containers
+	  assign special #GtkWidgetPath<!-- -->s to child widgets depending on its role/region,
+	  this is necessary to extend the concept above throughout the widget hierarchy.
+	</para>
+
+	<para>
+	  For example, a #GtkNotebook would modify the tab labels' #GtkWidgetPath so the
+	  "tab" region is added, doing this so would allow the tab label to be themed through:
+	</para>
+
+	<example>
+	  <title>Theming a widget within a parent container region</title>
+	  <programlisting>
+	    GtkNotebook tab GtkLabel {
+	      font: Sans 8;
+	    }
+	  </programlisting>
+	</example>
+
+      </listitem>
+
+      <listitem>
+	If you intend several visual elements to look interconnected, make sure you specify
+	rendered elements' connection areas through gtk_style_context_set_junction_sides()
+      </listitem>
+
+      <listitem>
+	<para>
+	  #GtkStyleContext supports implicit animations on state changes for the most simple
+	  cases, widgets with one single animatable area, which are changed state through
+	  gtk_widget_set_state_flags() or gtk_widget_unset_state_flags(). These functions
+	  trigger the animations for the affected state flags.
+	</para>
+	<para>
+	  If your widget consists of more than a simple area (such as buttons or entries),
+	  and these different areas may be rendered with different states, make sure to
+	  mark the rendered areas through gtk_style_context_push_animatable_region() and
+	  gtk_style_context_pop_animatable_region().
+	</para>
+
+	<para>
+	  gtk_style_context_notify_state_change() may be used to trigger a transition for
+	  a given state, the region ID will determine the animatable region that becomes
+	  affected by this transition.
+	</para>
+      </listitem>
+    </orderedlist>
+  </refsect2>
+</chapter>
