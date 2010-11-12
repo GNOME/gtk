@@ -33,8 +33,6 @@ libgdk_broadway_la_SOURCES =		\
 	gdkdrawable-broadway.h	\
 	gdkeventsource.c	\
 	gdkeventsource.h	\
-	gdkeventtranslator.c	\
-	gdkeventtranslator.h	\
 	gdkgeometry-broadway.c	\
 	gdkglobals-broadway.c	\
 	gdkim-broadway.c	\

@@ -20,7 +20,6 @@
 #ifndef __GDK_EVENT_SOURCE_H__
 #define __GDK_EVENT_SOURCE_H__
 
-#include "gdkeventtranslator.h"
 #include "gdkprivate-broadway.h"
 
 G_BEGIN_DECLS
@@ -29,10 +28,6 @@ typedef struct _GdkEventSource GdkEventSource;
 
 G_GNUC_INTERNAL
 GSource * gdk_event_source_new            (GdkDisplay *display);
-
-G_GNUC_INTERNAL
-void      gdk_event_source_add_translator (GdkEventSource     *source,
-                                           GdkEventTranslator *translator);
 
 G_GNUC_INTERNAL
 void      gdk_event_source_select_events  (GdkEventSource *source,

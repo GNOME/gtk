@@ -42,7 +42,6 @@ struct _GdkEventSource
 
   GdkDisplay *display;
   GPollFD event_poll_fd;
-  GList *translators;
 };
 
 static GSourceFuncs event_funcs = {
@@ -133,7 +132,6 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
                                   XEvent         *xevent)
 {
   GdkEvent *event = gdk_event_new (GDK_NOTHING);
-  GList *list = event_source->translators;
   GdkFilterReturn result;
   GdkWindow *filter_window;
 
@@ -181,16 +179,6 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
 
   gdk_event_free (event);
   event = NULL;
-
-  while (list && !event)
-    {
-      GdkEventTranslator *translator = list->data;
-
-      list = list->next;
-      event = gdk_event_translator_translate (translator,
-                                              event_source->display,
-                                              xevent);
-    }
 
   if (event &&
       (event->type == GDK_ENTER_NOTIFY ||
@@ -315,9 +303,6 @@ gdk_event_source_finalize (GSource *source)
 {
   GdkEventSource *event_source = (GdkEventSource *)source;
 
-  g_list_free (event_source->translators);
-  event_source->translators = NULL;
-
   event_sources = g_list_remove (event_sources, source);
 }
 
@@ -355,42 +340,13 @@ gdk_event_source_new (GdkDisplay *display)
 }
 
 void
-gdk_event_source_add_translator (GdkEventSource     *source,
-                                 GdkEventTranslator *translator)
-{
-  g_return_if_fail (GDK_IS_EVENT_TRANSLATOR (translator));
-
-  source->translators = g_list_append (source->translators, translator);
-}
-
-void
 gdk_event_source_select_events (GdkEventSource *source,
                                 Window          window,
                                 GdkEventMask    event_mask,
                                 unsigned int    extra_x_mask)
 {
   unsigned int xmask = extra_x_mask;
-  GList *list;
   gint i;
-
-  list = source->translators;
-
-  while (list)
-    {
-      GdkEventTranslator *translator = list->data;
-      GdkEventMask translator_mask, mask;
-
-      translator_mask = gdk_event_translator_get_handled_events (translator);
-      mask = event_mask & translator_mask;
-
-      if (mask != 0)
-        {
-          gdk_event_translator_select_window_events (translator, window, mask);
-          event_mask &= ~mask;
-        }
-
-      list = list->next;
-    }
 
   for (i = 0; i < _gdk_nenvent_masks; i++)
     {
