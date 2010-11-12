@@ -332,7 +332,7 @@ focus_scaffold (gboolean color_bg)
   GtkTreeModel *model;
   GtkWidget *scaffold;
   GtkCellArea *area;
-  GtkCellRenderer *renderer;
+  GtkCellRenderer *renderer, *toggle;
 
   scaffold = cell_area_scaffold_new ();
   gtk_widget_show (scaffold);
@@ -354,18 +354,20 @@ focus_scaffold (gboolean color_bg)
   g_signal_connect (G_OBJECT (renderer), "edited",
 		    G_CALLBACK (cell_edited), scaffold);
 
-  focus_renderer = renderer = gtk_cell_renderer_toggle_new ();
+  toggle = renderer = gtk_cell_renderer_toggle_new ();
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "active", FOCUS_COLUMN_CHECK);
 
   if (color_bg)
     g_object_set (G_OBJECT (renderer), "cell-background", "green", NULL);
+  else
+    focus_renderer = renderer;
 
   g_signal_connect (G_OBJECT (renderer), "toggled",
 		    G_CALLBACK (cell_toggled), scaffold);
 
-  sibling_renderer = renderer = gtk_cell_renderer_text_new ();
+  renderer = gtk_cell_renderer_text_new ();
   g_object_set (G_OBJECT (renderer), 
 		"wrap-mode", PANGO_WRAP_WORD,
 		"wrap-width", 150,
@@ -373,11 +375,13 @@ focus_scaffold (gboolean color_bg)
 
   if (color_bg)
     g_object_set (G_OBJECT (renderer), "cell-background", "blue", NULL);
+  else
+    sibling_renderer = renderer;
 
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_STATIC_TEXT);
 
-  gtk_cell_area_add_focus_sibling (area, focus_renderer, sibling_renderer);
+  gtk_cell_area_add_focus_sibling (area, toggle, renderer);
 
   return scaffold;
 }
