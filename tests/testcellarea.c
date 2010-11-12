@@ -411,6 +411,16 @@ focus_cell_area (void)
   gtk_widget_show (vbox);
   gtk_box_pack_end (GTK_BOX (hbox), vbox, FALSE, FALSE, 0);
 
+  widget = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  g_signal_connect (G_OBJECT (widget), "changed",
+                    G_CALLBACK (orientation_changed), scaffold);
+
   widget = gtk_check_button_new_with_label ("Focus Sibling");
   gtk_widget_show (widget);
   gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
