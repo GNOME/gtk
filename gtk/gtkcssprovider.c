@@ -24,7 +24,7 @@
 #include <gtk/gtk.h>
 #include <gtkstyleprovider.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#include <cairo/cairo-gobject.h>
+#include <cairo-gobject.h>
 
 #include "gtkanimationdescription.h"
 #include "gtk9slice.h"

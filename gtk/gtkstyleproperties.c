@@ -21,7 +21,7 @@
 
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
-#include <cairo/cairo-gobject.h>
+#include <cairo-gobject.h>
 
 #include "gtktypebuiltins.h"
 #include "gtkstyleprovider.h"
