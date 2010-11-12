@@ -1564,39 +1564,7 @@ symbolic_color_parse_str (const gchar  *string,
   str = (gchar *) string;
   *end_ptr = str;
 
-  if (str[0] == '#' || str[0] == 'r')
-    {
-      GdkRGBA color;
-      gchar *color_str;
-      const gchar *end;
-
-      end = str + 1;
-
-      if (str[0] == '#')
-        while (g_ascii_isxdigit (*end))
-          end++;
-      else
-        {
-          while (*end != ')' && *end != '\0')
-            end++;
-
-          if (*end == ')')
-            end++;
-        }
-
-      color_str = g_strndup (str, end - str);
-      *end_ptr = (gchar *) end;
-
-      if (!gdk_rgba_parse (&color, color_str))
-        {
-          g_free (color_str);
-          return NULL;
-        }
-
-      symbolic_color = gtk_symbolic_color_new_literal (&color);
-      g_free (color_str);
-    }
-  else if (str[0] == '@')
+  if (str[0] == '@')
     {
       const gchar *end;
       gchar *name;
@@ -1746,6 +1714,48 @@ symbolic_color_parse_str (const gchar  *string,
       gtk_symbolic_color_unref (color1);
       gtk_symbolic_color_unref (color2);
       (*end_ptr)++;
+    }
+  else
+    {
+      GdkRGBA color;
+      gchar *color_str;
+      const gchar *end;
+
+      end = str + 1;
+
+      if (str[0] == '#')
+        {
+          /* Color in hex format */
+          while (g_ascii_isxdigit (*end))
+            end++;
+        }
+      else if (g_str_has_prefix (str, "rgb"))
+        {
+          /* color in rgb/rgba format */
+          while (*end != ')' && *end != '\0')
+            end++;
+
+          if (*end == ')')
+            end++;
+        }
+      else
+        {
+          /* color name? parse until first whitespace */
+          while (*end != ' ' && *end != '\0')
+            end++;
+        }
+
+      color_str = g_strndup (str, end - str);
+      *end_ptr = (gchar *) end;
+
+      if (!gdk_rgba_parse (&color, color_str))
+        {
+          g_free (color_str);
+          return NULL;
+        }
+
+      symbolic_color = gtk_symbolic_color_new_literal (&color);
+      g_free (color_str);
     }
 
   return symbolic_color;
