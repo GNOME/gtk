@@ -460,7 +460,7 @@ enum ParserScope {
  */
 enum ParserSymbol {
   /* Scope: pseudo-class */
-  SYMBOL_NTH_CHILD = GTK_STATE_LAST,
+  SYMBOL_NTH_CHILD = GTK_STATE_FOCUSED + 1,
   SYMBOL_FIRST_CHILD,
   SYMBOL_LAST_CHILD,
   SYMBOL_SORTED_CHILD,

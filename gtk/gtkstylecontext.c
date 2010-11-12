@@ -2464,7 +2464,7 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_WINDOW (window));
-  g_return_if_fail (state < GTK_STATE_LAST);
+  g_return_if_fail (state > GTK_STATE_NORMAL && state <= GTK_STATE_FOCUSED);
 
   priv = context->priv;
   g_return_if_fail (priv->widget_path != NULL);
