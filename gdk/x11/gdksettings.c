@@ -73,7 +73,8 @@ static const char gdk_settings_names[] =
   "Fontconfig/Timestamp\0"    "gtk-fontconfig-timestamp\0"
   "Net/SoundThemeName\0"      "gtk-sound-theme-name\0"
   "Net/EnableInputFeedbackSounds\0" "gtk-enable-input-feedback-sounds\0"
-  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0";
+  "Net/EnableEventSounds\0"  "gtk-enable-event-sounds\0"
+  "Gtk/CursorBlinkTimeout\0"  "gtk-cursor-blink-timeout\0";
 
 
 static const struct
@@ -124,5 +125,6 @@ static const struct
   { 1487, 1508 },
   { 1533, 1552 },
   { 1573, 1603 },
-  { 1636, 1658 }
+  { 1636, 1658 },
+  { 1682, 1705 },
 };
