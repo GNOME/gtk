@@ -361,6 +361,27 @@ typedef enum
 } GtkShadowType;
 
 /* Widget states */
+
+/**
+ * GtkStateType:
+ *
+ * This type indicates the current state of a widget; the state determines how
+ * the widget is drawn. The #GtkStateType enumeration is also used to
+ * identify different colors in a #GtkStyle for drawing, so states can be
+ * used for subparts of a widget as well as entire widgets.
+ *
+ * @GTK_STATE_NORMAL: State during normal operation.
+ * @GTK_STATE_ACTIVE: State of a currently active widget, such as a depressed button.
+ * @GTK_STATE_PRELIGHT: State indicating that the mouse pointer is over
+ *                      the widget and the widget will respond to mouse clicks.
+ * @GTK_STATE_SELECTED: State of a selected item, such the selected row in a list.
+ * @GTK_STATE_INSENSITIVE: State indicating that the widget is
+ *                         unresponsive to user actions.
+ * @GTK_STATE_INCONSISTENT: The widget is inconsistent, such as checkbuttons
+ *                          or radiobuttons that aren't either set to %TRUE nor %FALSE,
+ *                          or buttons requiring the user attention.
+ * @GTK_STATE_FOCUSED: The widget has the keyboard focus.
+ */
 typedef enum
 {
   GTK_STATE_NORMAL,
