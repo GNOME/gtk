@@ -575,10 +575,13 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
       return;
     }
 
-  if (node->property_type == GDK_TYPE_RGBA)
+  if (node->property_type == GDK_TYPE_RGBA ||
+      node->property_type == GDK_TYPE_COLOR)
     {
       /* Allow GtkSymbolicColor as well */
-      g_return_if_fail (value_type == GDK_TYPE_RGBA || value_type == GTK_TYPE_SYMBOLIC_COLOR);
+      g_return_if_fail (value_type == GDK_TYPE_RGBA ||
+                        value_type == GDK_TYPE_COLOR ||
+                        value_type == GTK_TYPE_SYMBOLIC_COLOR);
     }
   else if (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
@@ -728,6 +731,27 @@ resolve_color (GtkStyleProperties *props,
 }
 
 static gboolean
+resolve_color_rgb (GtkStyleProperties *props,
+                   GValue             *value)
+{
+  GdkColor color = { 0 };
+  GdkRGBA rgba;
+
+  if (!gtk_symbolic_color_resolve (g_value_get_boxed (value), props, &rgba))
+    return FALSE;
+
+  color.red = rgba.red * 65535. + 0.5;
+  color.green = rgba.green * 65535. + 0.5;
+  color.blue = rgba.blue * 65535. + 0.5;
+
+  g_value_unset (value);
+  g_value_init (value, GDK_TYPE_COLOR);
+  g_value_set_boxed (value, &color);
+
+  return TRUE;
+}
+
+static gboolean
 resolve_gradient (GtkStyleProperties *props,
                   GValue             *value)
 {
@@ -799,9 +823,17 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
 
   if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
     {
-      g_return_val_if_fail (node->property_type == GDK_TYPE_RGBA, FALSE);
-
-      if (!resolve_color (props, val))
+      if (node->property_type == GDK_TYPE_RGBA)
+        {
+          if (!resolve_color (props, val))
+            return FALSE;
+        }
+      else if (node->property_type == GDK_TYPE_COLOR)
+        {
+          if (!resolve_color_rgb (props, val))
+            return FALSE;
+        }
+      else
         return FALSE;
     }
   else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
@@ -866,9 +898,16 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
 
       if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
         {
-          g_return_if_fail (node->property_type == GDK_TYPE_RGBA);
+          gboolean resolved;
 
-          if (!resolve_color (props, val))
+          if (node->property_type == GDK_TYPE_RGBA)
+            resolved = resolve_color (props, val);
+          else if (node->property_type == GDK_TYPE_COLOR)
+            resolved = resolve_color_rgb (props, val);
+          else
+            resolved = FALSE;
+
+          if (!resolved)
             val = &node->default_value;
         }
       else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
