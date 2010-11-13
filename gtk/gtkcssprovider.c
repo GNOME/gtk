@@ -2514,14 +2514,22 @@ css_provider_parse_value (GtkCssProvider *css_provider,
     }
   else if (G_TYPE_IS_ENUM (type))
     {
-      GEnumClass *class;
+      GEnumClass *enum_class;
       GEnumValue *enum_value;
 
-      class = g_type_class_ref (type);
-      enum_value = g_enum_get_value_by_nick (class, value_str);
+      enum_class = g_type_class_ref (type);
+      enum_value = g_enum_get_value_by_nick (enum_class, value_str);
 
-      g_value_set_enum (value, enum_value->value);
-      g_type_class_unref (class);
+      if (!enum_value)
+        {
+          g_warning ("Unknown value '%s' for enum type '%s'",
+                     value_str, g_type_name (type));
+          parsed = FALSE;
+        }
+      else
+        g_value_set_enum (value, enum_value->value);
+
+      g_type_class_unref (enum_class);
     }
   else if (G_TYPE_IS_FLAGS (type))
     {
@@ -2535,7 +2543,7 @@ css_provider_parse_value (GtkCssProvider *css_provider,
       /* Parse comma separated values */
       ptr = strchr (value_str, ',');
 
-      while (ptr)
+      while (ptr && parsed)
         {
           gchar *flag_str;
 
@@ -2547,8 +2555,11 @@ css_provider_parse_value (GtkCssProvider *css_provider,
                                                   g_strstrip (flag_str));
 
           if (!flag_value)
-            g_warning ("Unknown flag '%s' for type '%s'",
-                       value_str, g_type_name (type));
+            {
+              g_warning ("Unknown flag '%s' for type '%s'",
+                         value_str, g_type_name (type));
+              parsed = FALSE;
+            }
           else
             flags |= flag_value->value;
 
@@ -2560,13 +2571,17 @@ css_provider_parse_value (GtkCssProvider *css_provider,
       flag_value = g_flags_get_value_by_nick (flags_class, value_str);
 
       if (!flag_value)
-        g_warning ("Unknown flag '%s' for type '%s'",
-                   value_str, g_type_name (type));
+        {
+          g_warning ("Unknown flag '%s' for type '%s'",
+                     value_str, g_type_name (type));
+          parsed = FALSE;
+        }
       else
         flags |= flag_value->value;
 
-      /* Set parsed flags */
-      g_value_set_enum (value, flags);
+      if (parsed)
+        g_value_set_enum (value, flags);
+
       g_type_class_unref (flags_class);
     }
   else if (type == GTK_TYPE_9SLICE)
