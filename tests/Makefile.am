@@ -396,8 +396,8 @@ testswitch_SOURCES = testswitch.c
 EXTRA_DIST += 			\
 	prop-editor.h		\
 	testgtk.1 		\
-	testgtkrc 		\
-	testgtkrc2 		\
+	testgtk.css		\
+	testgtk2.css		\
 	3DRings.xpm		\
 	FilesQueue.xpm		\
 	Modeller.xpm		\

@@ -9985,7 +9985,7 @@ create_main_window (void)
   int i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_name (window, "main window");
+  gtk_widget_set_name (window, "main_window");
   gtk_window_move (GTK_WINDOW (window), 50, 20);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
@@ -10188,6 +10188,9 @@ usage (void)
 int
 main (int argc, char *argv[])
 {
+  GtkCssProvider *provider, *memory_provider;
+  GdkDisplay *display;
+  GdkScreen *screen;
   GtkBindingSet *binding_set;
   int i;
   gboolean done_benchmarks = FALSE;
@@ -10196,19 +10199,28 @@ main (int argc, char *argv[])
 
   test_init ();
 
-  /* Check to see if we are being run from the correct
-   * directory.
-   */
-  if (file_exists ("testgtkrc"))
-    gtk_rc_add_default_file ("testgtkrc");
-  else if (file_exists ("tests/testgtkrc"))
-    gtk_rc_add_default_file ("tests/testgtkrc");
-  else
-    g_warning ("Couldn't find file \"testgtkrc\".");
-
   g_set_application_name ("GTK+ Test Program");
 
   gtk_init (&argc, &argv);
+
+  provider = gtk_css_provider_new ();
+
+  /* Check to see if we are being run from the correct
+   * directory.
+   */
+  if (file_exists ("testgtk.css"))
+    gtk_css_provider_load_from_path (provider, "testgtk.css", NULL);
+  else if (file_exists ("tests/testgtkrc"))
+    gtk_css_provider_load_from_path (provider, "tests/testgtk.css", NULL);
+  else
+    g_warning ("Couldn't find file \"testgtk.css\".");
+
+  display = gdk_display_get_default ();
+  screen = gdk_display_get_default_screen (display);
+
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref (provider);
 
   gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
 					GDK_CONTROL_MASK |
@@ -10268,17 +10280,17 @@ main (int argc, char *argv[])
 				"debug_msg",
 				1,
 				G_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
-  
-  /* We use gtk_rc_parse_string() here so we can make sure it works across theme
-   * changes
-   */
 
-  gtk_rc_parse_string ("style \"testgtk-version-label\" { "
-		       "   fg[NORMAL] = \"#ff0000\"\n"
-		       "   font = \"Sans 18\"\n"
-		       "}\n"
-		       "widget \"*.testgtk-version-label\" style \"testgtk-version-label\"");
-  
+  memory_provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (memory_provider,
+                                   "#testgtk-version-label {\n"
+                                   "  color: #f00;\n"
+                                   "  font: Sans 18;\n"
+                                   "}",
+                                   -1, NULL);
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (memory_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
+
   create_main_window ();
 
   gtk_main ();
