@@ -10210,7 +10210,7 @@ main (int argc, char *argv[])
    */
   if (file_exists ("testgtk.css"))
     gtk_css_provider_load_from_path (provider, "testgtk.css", NULL);
-  else if (file_exists ("tests/testgtkrc"))
+  else if (file_exists ("tests/testgtk.css"))
     gtk_css_provider_load_from_path (provider, "tests/testgtk.css", NULL);
   else
     g_warning ("Couldn't find file \"testgtk.css\".");
