@@ -2303,6 +2303,120 @@ slice_parse (GtkCssProvider *css_provider,
   return slice;
 }
 
+static gdouble
+unit_parse_str (const gchar     *str,
+                gchar          **end_str)
+{
+  gdouble unit;
+
+  SKIP_SPACES (str);
+  unit = g_strtod (str, end_str);
+  str = *end_str;
+
+  /* Now parse the unit type, if any. We
+   * don't admit spaces between these.
+   */
+  if (*str != ' ' && *str != '\0')
+    {
+      while (**end_str != ' ' && **end_str != '\0')
+        (*end_str)++;
+
+      /* Only handle pixels at the moment */
+      if (strncmp (str, "px", 2) != 0)
+        {
+          gchar *type;
+
+          type = g_strndup (str, *end_str - str);
+          g_warning ("Unknown unit '%s', only pixel units are "
+                     "currently supported in CSS style", type);
+          g_free (type);
+        }
+    }
+
+  return unit;
+}
+
+static GtkBorder *
+border_parse_str (const gchar  *str,
+                  gchar       **end_str)
+{
+  gdouble first, second, third, fourth;
+  GtkBorder *border;
+
+  border = gtk_border_new ();
+
+  SKIP_SPACES (str);
+  if (!g_ascii_isdigit (*str))
+    return border;
+
+  first = unit_parse_str (str, end_str);
+  str = *end_str;
+  SKIP_SPACES (str);
+
+  if (!g_ascii_isdigit (*str))
+    {
+      border->left = border->right = border->top = border->bottom = (gint) first;
+      *end_str = (gchar *) str;
+      return border;
+    }
+
+  second = unit_parse_str (str, end_str);
+  str = *end_str;
+  SKIP_SPACES (str);
+
+  if (!g_ascii_isdigit (*str))
+    {
+      border->top = border->bottom = (gint) first;
+      border->left = border->right = (gint) second;
+      *end_str = (gchar *) str;
+      return border;
+    }
+
+  third = unit_parse_str (str, end_str);
+  str = *end_str;
+  SKIP_SPACES (str);
+
+  if (!g_ascii_isdigit (*str))
+    {
+      border->top = (gint) first;
+      border->left = border->right = (gint) second;
+      border->bottom = (gint) third;
+      *end_str = (gchar *) str;
+      return border;
+    }
+
+  fourth = unit_parse_str (str, end_str);
+
+  border->top = (gint) first;
+  border->right = (gint) second;
+  border->bottom = (gint) third;
+  border->left = (gint) fourth;
+
+  return border;
+}
+
+static GtkBorder *
+border_parse (const gchar *str)
+{
+  GtkBorder *border;
+  gchar *end;
+
+  border = border_parse_str (str, &end);
+
+  if (*end != '\0')
+    {
+      g_warning ("Error parsing border \"%s\", stopped at char %ld : '%c'",
+                 str, end - str, *end);
+
+      if (border)
+        gtk_border_free (border);
+
+      return NULL;
+    }
+
+  return border;
+}
+
 static gboolean
 css_provider_parse_value (GtkCssProvider *css_provider,
                           const gchar    *value_str,
@@ -2378,40 +2492,10 @@ css_provider_parse_value (GtkCssProvider *css_provider,
     }
   else if (type == GTK_TYPE_BORDER)
     {
-      guint first, second, third, fourth;
-      GtkBorder border;
+      GtkBorder *border;
 
-      /* FIXME: no unit support */
-      if (sscanf (value_str, "%d %d %d %d",
-                  &first, &second, &third, &fourth) == 4)
-        {
-          border.top = first;
-          border.right = second;
-          border.bottom = third;
-          border.left = fourth;
-        }
-      else if (sscanf (value_str, "%d %d %d",
-                       &first, &second, &third) == 3)
-        {
-          border.top = first;
-          border.left = border.right = second;
-          border.bottom = third;
-        }
-      else if (sscanf (value_str, "%d %d", &first, &second) == 2)
-        {
-          border.top = border.bottom = first;
-          border.left = border.right = second;
-        }
-      else if (sscanf (value_str, "%d", &first) == 1)
-        {
-          border.top = border.bottom = first;
-          border.left = border.right = first;
-        }
-      else
-        parsed = FALSE;
-
-      if (parsed)
-        g_value_set_boxed (value, &border);
+      border = border_parse (value_str);
+      g_value_take_boxed (value, border);
     }
   else if (type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
