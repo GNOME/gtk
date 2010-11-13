@@ -278,14 +278,16 @@ gdk_x11_window_create_pixmap_surface (GdkWindow *window,
 {
   cairo_surface_t *surface;
   Pixmap pixmap;
+  GdkVisual *visual;
 
+  visual = gdk_window_get_visual (window);
   pixmap = XCreatePixmap (GDK_WINDOW_XDISPLAY (window),
                           GDK_WINDOW_XID (window),
                           width, height,
-                          DefaultDepthOfScreen (GDK_SCREEN_XSCREEN (GDK_WINDOW_SCREEN (window))));
+                          gdk_visual_get_depth (visual));
   surface = cairo_xlib_surface_create (GDK_WINDOW_XDISPLAY (window),
                                        pixmap,
-                                       GDK_VISUAL_XVISUAL (gdk_window_get_visual (window)),
+                                       GDK_VISUAL_XVISUAL (visual),
                                        width, height);
   attach_free_pixmap_handler (surface, GDK_WINDOW_DISPLAY (window), pixmap);
 
