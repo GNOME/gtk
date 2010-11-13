@@ -1354,14 +1354,11 @@ settings_init_style (GtkSettings *settings)
   if (G_UNLIKELY (!css_provider))
     {
       GFile *home_dir, *css_file;
-      gchar *filename;
 
       css_provider = gtk_css_provider_new ();
-      home_dir = g_file_new_for_path (g_get_home_dir ());
 
-      filename = g_strdup_printf (".gtk-%d.0.css", GTK_MAJOR_VERSION);
-      css_file = g_file_get_child (home_dir, filename);
-      g_free (filename);
+      home_dir = g_file_new_for_path (g_get_home_dir ());
+      css_file = g_file_get_child (home_dir, ".gtk-3.0.css");
 
       if (g_file_query_exists (css_file, NULL))
         gtk_css_provider_load_from_file (css_provider, css_file, NULL);

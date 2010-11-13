@@ -3221,9 +3221,9 @@ gtk_css_provider_get_named (const gchar *name,
       gchar *subpath, *path = NULL;
 
       if (variant)
-        subpath = g_strdup_printf ("gtk-%d.0" G_DIR_SEPARATOR_S "gtk-%s.css", GTK_MAJOR_VERSION, variant);
+        subpath = g_strdup_printf ("gtk-3.0" G_DIR_SEPARATOR_S "gtk-%s.css", variant);
       else
-        subpath = g_strdup_printf ("gtk-%d.0" G_DIR_SEPARATOR_S "gtk.css", GTK_MAJOR_VERSION);
+        subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
 
       /* First look in the users home directory
        */
