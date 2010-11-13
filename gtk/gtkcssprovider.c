@@ -364,12 +364,12 @@
  *       </row>
  *       <row>
  *         <entry>transition</entry>
- *         <entry><programlisting>duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out]</programlisting></entry>
+ *         <entry><programlisting>duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?</programlisting></entry>
  *         <entry></entry>
  *         <entry>
  *           <programlisting>
  * transition: 150ms ease-in-out;
- * transition: 1s linear;</programlisting>
+ * transition: 1s linear loop;</programlisting>
  *         </entry>
  *       </row>
  *     </tbody>

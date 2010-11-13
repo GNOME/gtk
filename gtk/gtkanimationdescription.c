@@ -25,19 +25,21 @@ struct GtkAnimationDescription
 {
   GtkTimelineProgressType progress_type;
   gdouble duration;
-
+  guint loop : 1;
   guint ref_count;
 };
 
 GtkAnimationDescription *
 gtk_animation_description_new (gdouble                 duration,
-                               GtkTimelineProgressType progress_type)
+                               GtkTimelineProgressType progress_type,
+                               gboolean                loop)
 {
   GtkAnimationDescription *desc;
 
   desc = g_slice_new (GtkAnimationDescription);
   desc->duration = duration;
   desc->progress_type = progress_type;
+  desc->loop = loop;
   desc->ref_count = 1;
 
   return desc;
@@ -53,6 +55,12 @@ GtkTimelineProgressType
 gtk_animation_description_get_progress_type (GtkAnimationDescription *desc)
 {
   return desc->progress_type;
+}
+
+gboolean
+gtk_animation_description_get_loop (GtkAnimationDescription *desc)
+{
+  return (desc->loop != 0);
 }
 
 GtkAnimationDescription *
@@ -75,18 +83,23 @@ GtkAnimationDescription *
 gtk_animation_description_from_string (const gchar *str)
 {
   gchar timing_function[16] = { 0, };
-  gchar duration_measurement[3] = { 0, };
+  gchar duration_unit[3] = { 0, };
   GtkTimelineProgressType progress_type;
   guint duration = 0;
+  gboolean loop;
 
-  if (sscanf (str, "%d%2s %15s", &duration, duration_measurement, timing_function) != 3)
+  if (sscanf (str, "%d%2s %15s loop", &duration, duration_unit, timing_function) == 3)
+    loop = TRUE;
+  else if (sscanf (str, "%d%2s %15s", &duration, duration_unit, timing_function) == 3)
+    loop = FALSE;
+  else
     return NULL;
 
-  if (strcmp (duration_measurement, "s") == 0)
+  if (strcmp (duration_unit, "s") == 0)
     duration *= 1000;
-  else if (strcmp (duration_measurement, "ms") != 0)
+  else if (strcmp (duration_unit, "ms") != 0)
     {
-      g_warning ("Unknown duration measurement: %s\n", duration_measurement);
+      g_warning ("Unknown duration unit: %s\n", duration_unit);
       return NULL;
     }
 
@@ -106,7 +119,7 @@ gtk_animation_description_from_string (const gchar *str)
       return NULL;
     }
 
-  return gtk_animation_description_new ((gdouble) duration, progress_type);
+  return gtk_animation_description_new ((gdouble) duration, progress_type, loop);
 }
 
 GType

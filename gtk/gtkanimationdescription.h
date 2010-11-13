@@ -32,10 +32,12 @@ typedef struct GtkAnimationDescription GtkAnimationDescription;
 GType gtk_animation_description_get_type (void) G_GNUC_CONST;
 
 GtkAnimationDescription * gtk_animation_description_new (gdouble                 duration,
-                                                         GtkTimelineProgressType progress_type);
+                                                         GtkTimelineProgressType progress_type,
+                                                         gboolean                loop);
 
 gdouble                   gtk_animation_description_get_duration      (GtkAnimationDescription *desc);
 GtkTimelineProgressType   gtk_animation_description_get_progress_type (GtkAnimationDescription *desc);
+gboolean                  gtk_animation_description_get_loop          (GtkAnimationDescription *desc);
 
 GtkAnimationDescription * gtk_animation_description_ref   (GtkAnimationDescription *desc);
 void                      gtk_animation_description_unref (GtkAnimationDescription *desc);

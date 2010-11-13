@@ -584,6 +584,7 @@ animation_info_new (GtkStyleContext         *context,
                     gpointer                 region_id,
                     gdouble                  duration,
                     GtkTimelineProgressType  progress_type,
+                    gboolean                 loop,
                     GtkStateType             state,
                     gboolean                 target_value,
                     GdkWindow               *window)
@@ -600,8 +601,9 @@ animation_info_new (GtkStyleContext         *context,
   info->region_id = region_id;
 
   gtk_timeline_set_progress_type (info->timeline, progress_type);
+  gtk_timeline_set_loop (info->timeline, loop);
 
-  if (!target_value)
+  if (!loop && !target_value)
     {
       gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
       gtk_timeline_rewind (info->timeline);
@@ -2551,11 +2553,13 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
 
   info = animation_info_lookup (context, region_id, state);
 
-  if (info)
+  if (info &&
+      info->target_value != state_value)
     {
-      /* Reverse the animation if target values are the opposite */
-      if (info->target_value != state_value)
+      /* Target values are the opposite */
+      if (!gtk_timeline_get_loop (info->timeline))
         {
+          /* Reverse the animation */
           if (gtk_timeline_get_direction (info->timeline) == GTK_TIMELINE_DIRECTION_FORWARD)
             gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
           else
@@ -2563,12 +2567,18 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
 
           info->target_value = state_value;
         }
+      else
+        {
+          /* Take it out of its looping state */
+          gtk_timeline_set_loop (info->timeline, FALSE);
+        }
     }
-  else
+  else if (!info)
     {
       info = animation_info_new (context, region_id,
                                  gtk_animation_description_get_duration (desc),
                                  gtk_animation_description_get_progress_type (desc),
+                                 gtk_animation_description_get_loop (desc),
                                  state, state_value, window);
 
       priv->animations = g_slist_prepend (priv->animations, info);

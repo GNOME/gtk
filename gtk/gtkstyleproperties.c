@@ -102,10 +102,7 @@ gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
   gtk_style_properties_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val, NULL);
   g_value_unset (&val);
 
-  g_value_init (&val, GTK_TYPE_ANIMATION_DESCRIPTION);
-  g_value_take_boxed (&val, gtk_animation_description_new (0, GTK_TIMELINE_PROGRESS_LINEAR));
-  gtk_style_properties_register_property ("transition", GTK_TYPE_ANIMATION_DESCRIPTION, &val, NULL);
-  g_value_unset (&val);
+  gtk_style_properties_register_property ("transition", GTK_TYPE_ANIMATION_DESCRIPTION, NULL, NULL);
 
   g_type_class_add_private (object_class, sizeof (GtkStylePropertiesPrivate));
 }
