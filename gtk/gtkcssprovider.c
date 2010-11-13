@@ -339,7 +339,7 @@
  *         <entry>
  *           <programlisting>
  * -gtk-gradient (linear,
- *                top left, top right,
+ *                left top, right top,
  *                from (&num;fff), to (&num;000));
  * -gtk-gradient (linear, 0.0 0.5, 0.5 1.0,
  *                from (&num;fff),
