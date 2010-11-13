@@ -27,15 +27,11 @@ simple_list_model (void)
   gtk_list_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "Alice in wonderland",
 		      SIMPLE_COLUMN_ICON, "gtk-execute",
-		      SIMPLE_COLUMN_DESCRIPTION, "One pill makes you smaller and the other pill makes you tall",
-		      -1);
-
-  gtk_list_store_append (store, &iter);
-  gtk_list_store_set (store, &iter, 
-		      SIMPLE_COLUMN_NAME, "Highschool Principal",
-		      SIMPLE_COLUMN_ICON, "gtk-help",
 		      SIMPLE_COLUMN_DESCRIPTION, 
-		      "Will make you copy the dictionary if you dont like your math teacher",
+		      "Twas brillig, and the slithy toves "
+		      "did gyre and gimble in the wabe; "
+		      "all mimsy were the borogoves, "
+		      "and the mome raths outgrabe",
 		      -1);
 
   gtk_list_store_append (store, &iter);
@@ -49,8 +45,8 @@ simple_list_model (void)
   gtk_list_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "George Bush",
 		      SIMPLE_COLUMN_ICON, "gtk-dialog-warning",
-		      SIMPLE_COLUMN_DESCRIPTION, "Please hide your nuclear weapons when inviting "
-		      "him to dinner",
+		      SIMPLE_COLUMN_DESCRIPTION, "It's a very good question, very direct, "
+		      "and I'm not going to answer it",
 		      -1);
 
   gtk_list_store_append (store, &iter);
@@ -60,6 +56,24 @@ simple_list_model (void)
 		      SIMPLE_COLUMN_DESCRIPTION, "The most wonderful thing about tiggers, "
 		      "is tiggers are wonderful things",
 		      -1);
+
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Aleister Crowley",
+		      SIMPLE_COLUMN_ICON, "gtk-about",
+		      SIMPLE_COLUMN_DESCRIPTION, 
+		      "Thou shalt do what thou wilt shall be the whole of the law",
+		      -1);
+
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Mark Twain",
+		      SIMPLE_COLUMN_ICON, "gtk-quit",
+		      SIMPLE_COLUMN_DESCRIPTION, 
+		      "Giving up smoking is the easiest thing in the world. "
+		      "I know because I've done it thousands of times.",
+		      -1);
+
 
   return (GtkTreeModel *)store;
 }
@@ -327,7 +341,7 @@ cell_edited (GtkCellRendererToggle *cell_renderer,
 }
 
 static GtkWidget *
-focus_scaffold (gboolean color_bg)
+focus_scaffold (gboolean color_bg, GtkCellRenderer **focus, GtkCellRenderer **sibling)
 {
   GtkTreeModel *model;
   GtkWidget *scaffold;
@@ -361,8 +375,9 @@ focus_scaffold (gboolean color_bg)
 
   if (color_bg)
     g_object_set (G_OBJECT (renderer), "cell-background", "green", NULL);
-  else
-    focus_renderer = renderer;
+
+  if (focus)
+    *focus = renderer;
 
   g_signal_connect (G_OBJECT (renderer), "toggled",
 		    G_CALLBACK (cell_toggled), scaffold);
@@ -375,8 +390,9 @@ focus_scaffold (gboolean color_bg)
 
   if (color_bg)
     g_object_set (G_OBJECT (renderer), "cell-background", "blue", NULL);
-  else
-    sibling_renderer = renderer;
+
+  if (sibling)
+    *sibling = renderer;
 
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "text", FOCUS_COLUMN_STATIC_TEXT);
@@ -414,7 +430,7 @@ focus_cell_area (void)
 
   gtk_window_set_title (GTK_WINDOW (window), "Focus and editable cells");
 
-  scaffold = focus_scaffold (FALSE);
+  scaffold = focus_scaffold (FALSE, &focus_renderer, &sibling_renderer);
 
   frame = gtk_frame_new (NULL);
   gtk_widget_show (frame);
@@ -535,7 +551,7 @@ background_area (void)
   gtk_widget_show (label);
   gtk_box_pack_start (GTK_BOX (main_vbox), label, FALSE, FALSE, 0);
 
-  scaffold = focus_scaffold (TRUE);
+  scaffold = focus_scaffold (TRUE, NULL, NULL);
 
   frame = gtk_frame_new (NULL);
   gtk_widget_show (frame);

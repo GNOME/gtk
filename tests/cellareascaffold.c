@@ -499,7 +499,7 @@ cell_area_scaffold_draw (GtkWidget       *widget,
 	{
 	  render_area.width     = data->size;
 
-	  background_area.width = render_area.height;
+	  background_area.width = render_area.width;
 	  background_area.x     = render_area.x;
 
 	  if (i == 0)
@@ -649,13 +649,13 @@ cell_area_scaffold_size_allocate (GtkWidget           *widget,
   /* Cache the per-row sizes and allocate the iter */
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_cell_area_iter_allocate_width (priv->iter, allocation->width);
-      get_row_sizes (scaffold, priv->row_data, allocation->width);
+      gtk_cell_area_iter_allocate_width (priv->iter, allocation->width - priv->indent);
+      get_row_sizes (scaffold, priv->row_data, allocation->width - priv->indent);
     }
   else
     {
-      gtk_cell_area_iter_allocate_height (priv->iter, allocation->height);
-      get_row_sizes (scaffold, priv->row_data, allocation->height);
+      gtk_cell_area_iter_allocate_height (priv->iter, allocation->height - priv->indent);
+      get_row_sizes (scaffold, priv->row_data, allocation->height - priv->indent);
     }
 }
 
