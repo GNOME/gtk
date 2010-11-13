@@ -2018,13 +2018,48 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
     {
       for (list = priv->providers_last; list; list = list->prev)
         {
-          GtkStyleProviderData *data;
+          GtkStyleProviderData *provider_data;
 
-          data = list->data;
+          provider_data = list->data;
 
-          if (gtk_style_provider_get_style_property (data->provider, priv->widget_path,
+          if (gtk_style_provider_get_style_property (provider_data->provider, priv->widget_path,
                                                      pspec->name, &pcache->value))
-            return &pcache->value;
+            {
+              /* Resolve symbolic colors to GdkColor/GdkRGBA */
+              if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)
+                {
+                  GtkSymbolicColor *color;
+                  GdkRGBA rgba;
+
+                  color = g_value_get_boxed (&pcache->value);
+
+                  if (gtk_symbolic_color_resolve (color, data->store, &rgba))
+                    {
+                      g_value_unset (&pcache->value);
+
+                      if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
+                        {
+                          g_value_init (&pcache->value, GDK_TYPE_RGBA);
+                          g_value_set_boxed (&pcache->value, &rgba);
+                        }
+                      else
+                        {
+                          GdkColor rgb;
+
+                          rgb.red = rgba.red * 65535. + 0.5;
+                          rgb.green = rgba.green * 65535. + 0.5;
+                          rgb.blue = rgba.blue * 65535. + 0.5;
+
+                          g_value_init (&pcache->value, GDK_TYPE_COLOR);
+                          g_value_set_boxed (&pcache->value, &rgb);
+                        }
+                    }
+                  else
+                    g_param_value_set_default (pspec, &pcache->value);
+                }
+
+              return &pcache->value;
+            }
         }
     }
 
