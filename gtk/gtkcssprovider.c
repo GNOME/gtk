@@ -2644,7 +2644,12 @@ parse_rule (GtkCssProvider *css_provider,
           val = g_slice_new0 (GValue);
           g_value_init (val, prop_type);
 
-          if (prop_type == G_TYPE_STRING)
+          if (strcmp (value_str, "none") == 0)
+            {
+              /* Remove/unset the current value */
+              g_hash_table_remove (priv->cur_properties, prop);
+            }
+          else if (prop_type == G_TYPE_STRING)
             {
               g_value_set_string (val, value_str);
               g_hash_table_insert (priv->cur_properties, prop, val);
