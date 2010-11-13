@@ -3254,7 +3254,6 @@ gtk_css_provider_get_named (const gchar *name,
 
       if (path)
         {
-          GtkCssProvider *provider;
           GError *error = NULL;
 
           provider = gtk_css_provider_new ();
