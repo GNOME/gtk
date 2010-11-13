@@ -796,7 +796,6 @@ do_post_parse_initialization (int    *argc,
   g_type_init ();
 
   _gtk_accel_map_init ();
-  _gtk_rc_init ();
 
   /* Set the 'initialized' flag.
    */

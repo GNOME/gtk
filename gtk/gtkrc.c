@@ -926,6 +926,7 @@ gtk_rc_parse_string (const gchar *rc_string)
       
   g_return_if_fail (rc_string != NULL);
 
+#if 0
   rc_file = g_new (GtkRcFile, 1);
   rc_file->is_string = TRUE;
   rc_file->name = g_strdup (rc_string);
@@ -938,6 +939,7 @@ gtk_rc_parse_string (const gchar *rc_string)
 
   for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
     gtk_rc_context_parse_string (tmp_list->data, rc_string);
+#endif
 }
 
 static GtkRcFile *
@@ -1117,10 +1119,12 @@ gtk_rc_parse (const gchar *filename)
   
   g_return_if_fail (filename != NULL);
 
+#if 0
   add_to_rc_file_list (&global_rc_files, filename, TRUE);
   
   for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
     gtk_rc_context_parse_file (tmp_list->data, filename, GTK_PATH_PRIO_RC, TRUE);
+#endif
 }
 
 /* Handling of RC styles */
@@ -2183,6 +2187,7 @@ gtk_rc_parse_any (GtkRcContext *context,
   guint	   i;
   gboolean done;
 
+#if 0
   scanner = gtk_rc_scanner_new ();
   
   if (input_fd >= 0)
@@ -2264,6 +2269,7 @@ gtk_rc_parse_any (GtkRcContext *context,
     }
   
   g_scanner_destroy (scanner);
+#endif
 }
 
 static guint	   
