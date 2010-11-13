@@ -1135,7 +1135,7 @@ scanner_apply_scope (GScanner    *scanner,
   if (scope == SCOPE_VALUE)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z "@#-_0123456789" G_CSET_A_2_Z;
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.\t\n" G_CSET_A_2_Z;
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.%\t\n" G_CSET_A_2_Z;
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
