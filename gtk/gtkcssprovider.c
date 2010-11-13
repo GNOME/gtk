@@ -2313,12 +2313,18 @@ css_provider_parse_value (GtkCssProvider *css_provider,
 
   type = G_VALUE_TYPE (value);
 
-  if (type == GDK_TYPE_RGBA)
+  if (type == GDK_TYPE_RGBA ||
+      type == GDK_TYPE_COLOR)
     {
       GdkRGBA color;
+      GdkColor rgb;
 
-      if (gdk_rgba_parse (&color, value_str) == TRUE)
+      if (type == GDK_TYPE_RGBA &&
+          gdk_rgba_parse (&color, value_str))
         g_value_set_boxed (value, &color);
+      else if (type == GDK_TYPE_COLOR &&
+               gdk_color_parse (value_str, &rgb))
+        g_value_set_boxed (value, &rgb);
       else
         {
           GtkSymbolicColor *symbolic_color;
