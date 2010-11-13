@@ -1,0 +1,134 @@
+/* gtkcellareaboxcontext.h
+ *
+ * Copyright (C) 2010 Openismus GmbH
+ *
+ * Authors:
+ *      Tristan Van Berkom <tristanvb@openismus.com>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#ifndef __GTK_CELL_AREA_BOX_CONTEXT_H__
+#define __GTK_CELL_AREA_BOX_CONTEXT_H__
+
+#include <gtk/gtkcellareacontext.h>
+#include <gtk/gtkcellareabox.h>
+#include <gtk/gtkcellrenderer.h>
+#include <gtk/gtksizerequest.h>
+
+G_BEGIN_DECLS
+
+#define GTK_TYPE_CELL_AREA_BOX_CONTEXT		  (gtk_cell_area_box_context_get_type ())
+#define GTK_CELL_AREA_BOX_CONTEXT(obj)		  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_AREA_BOX_CONTEXT, GtkCellAreaBoxContext))
+#define GTK_CELL_AREA_BOX_CONTEXT_CLASS(klass)	  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_AREA_BOX_CONTEXT, GtkCellAreaBoxContextClass))
+#define GTK_IS_CELL_AREA_BOX_CONTEXT(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_AREA_BOX_CONTEXT))
+#define GTK_IS_CELL_AREA_BOX_CONTEXT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_AREA_BOX_CONTEXT))
+#define GTK_CELL_AREA_BOX_CONTEXT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_AREA_BOX_CONTEXT, GtkCellAreaBoxContextClass))
+
+typedef struct _GtkCellAreaBoxContext              GtkCellAreaBoxContext;
+typedef struct _GtkCellAreaBoxContextClass         GtkCellAreaBoxContextClass;
+typedef struct _GtkCellAreaBoxContextPrivate       GtkCellAreaBoxContextPrivate;
+
+struct _GtkCellAreaBoxContext
+{
+  GtkCellAreaContext parent_instance;
+
+  GtkCellAreaBoxContextPrivate *priv;
+};
+
+struct _GtkCellAreaBoxContextClass
+{
+  GtkCellAreaContextClass parent_class;
+
+};
+
+GType   gtk_cell_area_box_context_get_type                     (void) G_GNUC_CONST;
+
+
+/* Initialize group array dimensions */
+void    gtk_cell_area_box_init_groups                          (GtkCellAreaBoxContext *box_context,
+								guint                  n_groups,
+								gboolean              *expand_groups);
+
+/* Update cell-group sizes */
+void    gtk_cell_area_box_context_push_group_width             (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                   minimum_width,
+								gint                   natural_width);
+
+void    gtk_cell_area_box_context_push_group_height_for_width  (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                   for_width,
+								gint                   minimum_height,
+								gint                   natural_height);
+
+void    gtk_cell_area_box_context_push_group_height            (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                   minimum_height,
+								gint                   natural_height);
+
+void    gtk_cell_area_box_context_push_group_width_for_height  (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                   for_height,
+								gint                   minimum_width,
+								gint                   natural_width);
+
+/* Fetch cell-group sizes */
+void    gtk_cell_area_box_context_get_group_width              (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                  *minimum_width,
+								gint                  *natural_width);
+
+void    gtk_cell_area_box_context_get_group_height_for_width   (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                   for_width,
+								gint                  *minimum_height,
+								gint                  *natural_height);
+
+void    gtk_cell_area_box_context_get_group_height             (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                  *minimum_height,
+								gint                  *natural_height);
+
+void    gtk_cell_area_box_context_get_group_width_for_height   (GtkCellAreaBoxContext *box_context,
+								gint                   group_idx,
+								gint                   for_height,
+								gint                  *minimum_width,
+								gint                  *natural_width);
+
+GtkRequestedSize *gtk_cell_area_box_context_get_widths         (GtkCellAreaBoxContext *box_context,
+								gint                  *n_widths);
+GtkRequestedSize *gtk_cell_area_box_context_get_heights        (GtkCellAreaBoxContext *box_context,
+								gint                  *n_heights);
+
+/* Private context/area interaction */
+typedef struct {
+  gint group_idx; /* Groups containing only invisible cells are not allocated */
+  gint position;  /* Relative group allocation position in the orientation of the box */
+  gint size;      /* Full allocated size of the cells in this group spacing inclusive */
+} GtkCellAreaBoxAllocation;
+
+G_CONST_RETURN GtkCellAreaBoxAllocation *
+gtk_cell_area_box_context_get_orientation_allocs (GtkCellAreaBoxContext *context,
+						  gint                  *n_allocs);
+
+G_END_DECLS
+
+#endif /* __GTK_CELL_AREA_BOX_CONTEXT_H__ */

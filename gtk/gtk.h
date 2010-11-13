@@ -54,7 +54,7 @@
 #include <gtk/gtkcalendar.h>
 #include <gtk/gtkcellarea.h>
 #include <gtk/gtkcellareabox.h>
-#include <gtk/gtkcellareaiter.h>
+#include <gtk/gtkcellareacontext.h>
 #include <gtk/gtkcelleditable.h>
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtkcellrenderer.h>

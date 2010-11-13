@@ -30,7 +30,7 @@
 #include "gtkintl.h"
 #include "gtkcelllayout.h"
 #include "gtkcellarea.h"
-#include "gtkcellareaiter.h"
+#include "gtkcellareacontext.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 
@@ -51,26 +51,26 @@ static void      gtk_cell_area_get_property                        (GObject     
 
 /* GtkCellAreaClass */
 static gint      gtk_cell_area_real_event                          (GtkCellArea          *area,
-								    GtkCellAreaIter      *iter,
+								    GtkCellAreaContext   *context,
 								    GtkWidget            *widget,
 								    GdkEvent             *event,
 								    const GdkRectangle   *cell_area,
 								    GtkCellRendererState  flags);
 static void      gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea           *area,
-								    GtkCellAreaIter       *iter,
+								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
 								    gint                   width,
 								    gint                  *minimum_height,
 								    gint                  *natural_height);
 static void      gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea           *area,
-								    GtkCellAreaIter       *iter,
+								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
 								    gint                   height,
 								    gint                  *minimum_width,
 								    gint                  *natural_width);
 static gboolean  gtk_cell_area_real_can_focus                      (GtkCellArea           *area);
 static gboolean  gtk_cell_area_real_activate                       (GtkCellArea           *area,
-								    GtkCellAreaIter       *iter,
+								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
 								    const GdkRectangle    *cell_area,
 								    GtkCellRendererState   flags);
@@ -274,7 +274,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->render  = NULL;
 
   /* geometry */
-  class->create_iter                    = NULL;
+  class->create_context                 = NULL;
   class->get_request_mode               = NULL;
   class->get_preferred_width            = NULL;
   class->get_preferred_height           = NULL;
@@ -610,7 +610,7 @@ gtk_cell_area_get_property (GObject     *object,
  *************************************************************/
 static gint
 gtk_cell_area_real_event (GtkCellArea          *area,
-			  GtkCellAreaIter      *iter,
+			  GtkCellAreaContext   *context,
 			  GtkWidget            *widget,
 			  GdkEvent             *event,
 			  const GdkRectangle   *cell_area,
@@ -635,26 +635,26 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 
 static void
 gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea        *area,
-						   GtkCellAreaIter    *iter,
+						   GtkCellAreaContext *context,
 						   GtkWidget          *widget,
 						   gint                width,
 						   gint               *minimum_height,
 						   gint               *natural_height)
 {
   /* If the area doesnt do height-for-width, fallback on base preferred height */
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, iter, widget, minimum_height, natural_height);
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, context, widget, minimum_height, natural_height);
 }
 
 static void
 gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
-						   GtkCellAreaIter    *iter,
+						   GtkCellAreaContext *context,
 						   GtkWidget          *widget,
 						   gint                height,
 						   gint               *minimum_width,
 						   gint               *natural_width)
 {
   /* If the area doesnt do width-for-height, fallback on base preferred width */
-  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, iter, widget, minimum_width, natural_width);
+  GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, context, widget, minimum_width, natural_width);
 }
 
 static void
@@ -684,7 +684,7 @@ gtk_cell_area_real_can_focus (GtkCellArea *area)
 
 static gboolean
 gtk_cell_area_real_activate (GtkCellArea         *area,
-			     GtkCellAreaIter     *iter,
+			     GtkCellAreaContext  *context,
 			     GtkWidget           *widget,
 			     const GdkRectangle  *cell_area,
 			     GtkCellRendererState flags)
@@ -696,7 +696,7 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
     {
       /* Get the allocation of the focused cell.
        */
-      gtk_cell_area_get_cell_allocation (area, iter, widget, priv->focus_cell,
+      gtk_cell_area_get_cell_allocation (area, context, widget, priv->focus_cell,
 					 cell_area, &background_area);
       
       /* Activate or Edit the currently focused cell 
@@ -980,7 +980,7 @@ gtk_cell_area_forall (GtkCellArea        *area,
 /**
  * gtk_cell_area_get_cell_allocation:
  * @area: a #GtkCellArea
- * @iter: the #GtkCellAreaIter used to hold sizes for @area.
+ * @context: the #GtkCellAreaContext used to hold sizes for @area.
  * @widget: the #GtkWidget that @area is rendering on
  * @renderer: the #GtkCellRenderer to get the allocation for
  * @cell_area: the whole allocated area for @area in @widget
@@ -992,7 +992,7 @@ gtk_cell_area_forall (GtkCellArea        *area,
  */
 void
 gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
-				   GtkCellAreaIter      *iter,	
+				   GtkCellAreaContext   *context,	
 				   GtkWidget            *widget,
 				   GtkCellRenderer      *renderer,
 				   const GdkRectangle   *cell_area,
@@ -1001,7 +1001,7 @@ gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
   GtkCellAreaClass *class;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (cell_area != NULL);
@@ -1010,7 +1010,7 @@ gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->get_cell_allocation)
-    class->get_cell_allocation (area, iter, widget, renderer, cell_area, allocation);
+    class->get_cell_allocation (area, context, widget, renderer, cell_area, allocation);
   else
     g_warning ("GtkCellAreaClass::get_cell_allocation not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1018,7 +1018,7 @@ gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
 
 gint
 gtk_cell_area_event (GtkCellArea          *area,
-		     GtkCellAreaIter      *iter,
+		     GtkCellAreaContext   *context,
 		     GtkWidget            *widget,
 		     GdkEvent             *event,
 		     const GdkRectangle   *cell_area,
@@ -1027,7 +1027,7 @@ gtk_cell_area_event (GtkCellArea          *area,
   GtkCellAreaClass *class;
 
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
-  g_return_val_if_fail (GTK_IS_CELL_AREA_ITER (iter), 0);
+  g_return_val_if_fail (GTK_IS_CELL_AREA_CONTEXT (context), 0);
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
   g_return_val_if_fail (event != NULL, 0);
   g_return_val_if_fail (cell_area != NULL, 0);
@@ -1035,7 +1035,7 @@ gtk_cell_area_event (GtkCellArea          *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->event)
-    return class->event (area, iter, widget, event, cell_area, flags);
+    return class->event (area, context, widget, event, cell_area, flags);
 
   g_warning ("GtkCellAreaClass::event not implemented for `%s'", 
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1044,7 +1044,7 @@ gtk_cell_area_event (GtkCellArea          *area,
 
 void
 gtk_cell_area_render (GtkCellArea          *area,
-		      GtkCellAreaIter      *iter,
+		      GtkCellAreaContext   *context,
 		      GtkWidget            *widget,
 		      cairo_t              *cr,
 		      const GdkRectangle   *background_area,
@@ -1055,7 +1055,7 @@ gtk_cell_area_render (GtkCellArea          *area,
   GtkCellAreaClass *class;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (GTK_IS_CELL_AREA_ITER (iter));
+  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cr != NULL);
   g_return_if_fail (background_area != NULL);
@@ -1064,7 +1064,7 @@ gtk_cell_area_render (GtkCellArea          *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->render)
-    class->render (area, iter, widget, cr, background_area, cell_area, flags, paint_focus);
+    class->render (area, context, widget, cr, background_area, cell_area, flags, paint_focus);
   else
     g_warning ("GtkCellAreaClass::render not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1102,8 +1102,8 @@ gtk_cell_area_get_style_detail (GtkCellArea *area)
 /*************************************************************
  *                      API: Geometry                        *
  *************************************************************/
-GtkCellAreaIter   *
-gtk_cell_area_create_iter (GtkCellArea *area)
+GtkCellAreaContext   *
+gtk_cell_area_create_context (GtkCellArea *area)
 {
   GtkCellAreaClass *class;
 
@@ -1111,10 +1111,10 @@ gtk_cell_area_create_iter (GtkCellArea *area)
 
   class = GTK_CELL_AREA_GET_CLASS (area);
 
-  if (class->create_iter)
-    return class->create_iter (area);
+  if (class->create_context)
+    return class->create_context (area);
 
-  g_warning ("GtkCellAreaClass::create_iter not implemented for `%s'", 
+  g_warning ("GtkCellAreaClass::create_context not implemented for `%s'", 
 	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
   
   return NULL;
@@ -1142,7 +1142,7 @@ gtk_cell_area_get_request_mode (GtkCellArea *area)
 
 void
 gtk_cell_area_get_preferred_width (GtkCellArea        *area,
-				   GtkCellAreaIter    *iter,
+				   GtkCellAreaContext *context,
 				   GtkWidget          *widget,
 				   gint               *minimum_size,
 				   gint               *natural_size)
@@ -1155,7 +1155,7 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->get_preferred_width)
-    class->get_preferred_width (area, iter, widget, minimum_size, natural_size);
+    class->get_preferred_width (area, context, widget, minimum_size, natural_size);
   else
     g_warning ("GtkCellAreaClass::get_preferred_width not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1163,7 +1163,7 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
 
 void
 gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
-					      GtkCellAreaIter    *iter,
+					      GtkCellAreaContext *context,
 					      GtkWidget          *widget,
 					      gint                width,
 					      gint               *minimum_height,
@@ -1175,12 +1175,12 @@ gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   class = GTK_CELL_AREA_GET_CLASS (area);
-  class->get_preferred_height_for_width (area, iter, widget, width, minimum_height, natural_height);
+  class->get_preferred_height_for_width (area, context, widget, width, minimum_height, natural_height);
 }
 
 void
 gtk_cell_area_get_preferred_height (GtkCellArea        *area,
-				    GtkCellAreaIter    *iter,
+				    GtkCellAreaContext *context,
 				    GtkWidget          *widget,
 				    gint               *minimum_size,
 				    gint               *natural_size)
@@ -1193,7 +1193,7 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->get_preferred_height)
-    class->get_preferred_height (area, iter, widget, minimum_size, natural_size);
+    class->get_preferred_height (area, context, widget, minimum_size, natural_size);
   else
     g_warning ("GtkCellAreaClass::get_preferred_height not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1201,7 +1201,7 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
 
 void
 gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
-					      GtkCellAreaIter    *iter,
+					      GtkCellAreaContext *context,
 					      GtkWidget          *widget,
 					      gint                height,
 					      gint               *minimum_width,
@@ -1213,7 +1213,7 @@ gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   class = GTK_CELL_AREA_GET_CLASS (area);
-  class->get_preferred_width_for_height (area, iter, widget, height, minimum_width, natural_width);
+  class->get_preferred_width_for_height (area, context, widget, height, minimum_width, natural_width);
 }
 
 /*************************************************************
@@ -1849,7 +1849,7 @@ gtk_cell_area_focus (GtkCellArea      *area,
 /**
  * gtk_cell_area_activate:
  * @area: a #GtkCellArea
- * @iter: the #GtkCellAreaIter in context with the current row data
+ * @context: the #GtkCellAreaContext in context with the current row data
  * @widget: the #GtkWidget that @area is rendering on
  * @cell_area: the size and location of @area relative to @widget's allocation
  * @flags: the #GtkCellRendererState flags for @area for this row of data.
@@ -1862,14 +1862,14 @@ gtk_cell_area_focus (GtkCellArea      *area,
  */
 gboolean
 gtk_cell_area_activate (GtkCellArea         *area,
-			GtkCellAreaIter     *iter,
+			GtkCellAreaContext  *context,
 			GtkWidget           *widget,
 			const GdkRectangle  *cell_area,
 			GtkCellRendererState flags)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
 
-  return GTK_CELL_AREA_GET_CLASS (area)->activate (area, iter, widget, cell_area, flags);
+  return GTK_CELL_AREA_GET_CLASS (area)->activate (area, context, widget, cell_area, flags);
 }
 
 
