@@ -1379,6 +1379,8 @@ settings_init_style (GtkSettings *settings)
   gtk_style_context_add_provider_for_screen (settings->screen,
                                              GTK_STYLE_PROVIDER (settings),
                                              GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+
+  settings_update_theme (settings);
 }
 
 /**
