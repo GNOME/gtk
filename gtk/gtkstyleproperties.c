@@ -40,8 +40,7 @@ typedef struct ValueData ValueData;
 struct PropertyNode
 {
   GQuark property_quark;
-  GType property_type;
-  GValue default_value;
+  GParamSpec *pspec;
   GtkStylePropertyParser parse_func;
 };
 
@@ -76,33 +75,78 @@ static void
 gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GValue val = { 0 };
 
   object_class->finalize = gtk_style_properties_finalize;
 
   /* Initialize default property set */
-  gtk_style_properties_register_property ("color", GDK_TYPE_RGBA, NULL, NULL);
-  gtk_style_properties_register_property ("background-color", GDK_TYPE_RGBA, NULL, NULL);
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("color",
+                                                              "Foreground color",
+                                                              "Foreground color",
+                                                              GDK_TYPE_RGBA, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("background-color",
+                                                              "Background color",
+                                                              "Background color",
+                                                              GDK_TYPE_RGBA, 0));
 
-  gtk_style_properties_register_property ("font", PANGO_TYPE_FONT_DESCRIPTION, NULL, NULL);
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("font",
+                                                              "Font Description",
+                                                              "Font Description",
+                                                              PANGO_TYPE_FONT_DESCRIPTION, 0));
 
-  gtk_style_properties_register_property ("margin", GTK_TYPE_BORDER, NULL, NULL);
-  gtk_style_properties_register_property ("padding", GTK_TYPE_BORDER, NULL, NULL);
-
-  gtk_style_properties_register_property ("border-width", G_TYPE_INT, NULL, NULL);
-  gtk_style_properties_register_property ("border-radius", G_TYPE_INT, NULL, NULL);
-  gtk_style_properties_register_property ("border-style", GTK_TYPE_BORDER_STYLE, NULL, NULL);
-  gtk_style_properties_register_property ("border-color", GDK_TYPE_RGBA, NULL, NULL);
-
-  gtk_style_properties_register_property ("background-image", CAIRO_GOBJECT_TYPE_PATTERN, NULL, NULL);
-  gtk_style_properties_register_property ("border-image", GTK_TYPE_9SLICE, NULL, NULL);
-
-  g_value_init (&val, GTK_TYPE_THEMING_ENGINE);
-  g_value_set_object (&val, (GObject *) gtk_theming_engine_load (NULL));
-  gtk_style_properties_register_property ("engine", GTK_TYPE_THEMING_ENGINE, &val, NULL);
-  g_value_unset (&val);
-
-  gtk_style_properties_register_property ("transition", GTK_TYPE_ANIMATION_DESCRIPTION, NULL, NULL);
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("margin",
+                                                              "Margin",
+                                                              "Margin",
+                                                              GTK_TYPE_BORDER, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("padding",
+                                                              "Padding",
+                                                              "Padding",
+                                                              GTK_TYPE_BORDER, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("border-width",
+                                                            "Border width",
+                                                            "Border width, in pixels",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_int ("border-radius",
+                                                            "Border radius",
+                                                            "Border radius, in pixels",
+                                                            0, G_MAXINT, 0, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_enum ("border-style",
+                                                             "Border style",
+                                                             "Border style",
+                                                             GTK_TYPE_BORDER_STYLE,
+                                                             GTK_BORDER_STYLE_NONE, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-color",
+                                                              "Border color",
+                                                              "Border color",
+                                                              GDK_TYPE_RGBA, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("background-image",
+                                                              "Background Image",
+                                                              "Background Image",
+                                                              CAIRO_GOBJECT_TYPE_PATTERN, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("border-image",
+                                                              "Border Image",
+                                                              "Border Image",
+                                                              GTK_TYPE_9SLICE, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_object ("engine",
+                                                               "Theming Engine",
+                                                               "Theming Engine",
+                                                               GTK_TYPE_THEMING_ENGINE, 0));
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("transition",
+                                                              "Transition animation description",
+                                                              "Transition animation description",
+                                                              GTK_TYPE_ANIMATION_DESCRIPTION, 0));
 
   g_type_class_add_private (object_class, sizeof (GtkStylePropertiesPrivate));
 }
@@ -198,7 +242,6 @@ property_data_get_value (PropertyData  *data,
     {
       ValueData new = { 0 };
 
-      //val_data = &g_array_index (data->values, ValueData, pos);
       new.state = state;
       g_array_insert_val (data->values, pos, new);
     }
@@ -333,10 +376,8 @@ property_node_lookup (GQuark quark)
 
 /**
  * gtk_style_properties_register_property:
- * @property_name: property name to register
- * @type: #GType the property will hold
- * @default_value: default value for this property
  * @parse_func: parsing function to use, or %NULL
+ * @pspec: the #GParamSpec for the new property
  *
  * Registers a property so it can be used in the CSS file format.
  * This function is the low-level equivalent of
@@ -346,42 +387,29 @@ property_node_lookup (GQuark quark)
  * Since: 3.0
  **/
 void
-gtk_style_properties_register_property (const gchar            *property_name,
-                                        GType                   type,
-                                        const GValue           *default_value,
-                                        GtkStylePropertyParser  parse_func)
+gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
+                                        GParamSpec             *pspec)
 {
   PropertyNode *node, new = { 0 };
   GQuark quark;
   gint i;
 
-  g_return_if_fail (property_name != NULL);
-  g_return_if_fail (type != 0);
+  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   if (G_UNLIKELY (!properties))
     properties = g_array_new (FALSE, TRUE, sizeof (PropertyNode));
 
-  quark = g_quark_try_string (property_name);
+  quark = g_quark_from_string (pspec->name);
 
   if ((node = property_node_lookup (quark)) != NULL)
     {
       g_warning ("Property \"%s\" was already registered with type %s",
-                 property_name, g_type_name (node->property_type));
+                 pspec->name, g_type_name (node->pspec->value_type));
       return;
     }
 
-  quark = g_quark_from_string (property_name);
-
   new.property_quark = quark;
-  new.property_type = type;
-
-  if (default_value)
-    {
-      g_value_init (&new.default_value, G_VALUE_TYPE (default_value));
-      g_value_copy (default_value, &new.default_value);
-    }
-  else
-    g_value_init (&new.default_value, type);
+  new.pspec = pspec;
 
   if (parse_func)
     new.parse_func = parse_func;
@@ -400,11 +428,11 @@ gtk_style_properties_register_property (const gchar            *property_name,
 /**
  * gtk_style_properties_lookup_property:
  * @property_name: property name to look up
- * @type: (out): return location for the looked up property type
- * @parse_func: (out): return value for the parse function
+ * @parse_func: (out): return location for the parse function
+ * @pspec: (out): return location for the #GParamSpec
  *
- * Returns %TRUE if a property has been registered, if @type or
- * @parse_func are not %NULL, the property #GType and parsing function
+ * Returns %TRUE if a property has been registered, if @pspec or
+ * @parse_func are not %NULL, the #GParamSpec and parsing function
  * will be respectively returned.
  *
  * Returns: %TRUE if the property is registered, %FALSE otherwise
@@ -412,9 +440,9 @@ gtk_style_properties_register_property (const gchar            *property_name,
  * Since: 3.0
  **/
 gboolean
-gtk_style_properties_lookup_property (const gchar            *property_name,
-                                      GType                  *type,
-                                      GtkStylePropertyParser *parse_func)
+gtk_style_properties_lookup_property (const gchar             *property_name,
+                                      GtkStylePropertyParser  *parse_func,
+                                      GParamSpec             **pspec)
 {
   PropertyNode *node;
   GtkStylePropertiesClass *klass;
@@ -439,8 +467,8 @@ gtk_style_properties_lookup_property (const gchar            *property_name,
 
       if (node->property_quark == quark)
         {
-          if (type)
-            *type = node->property_type;
+          if (pspec)
+            *pspec = node->pspec;
 
           if (parse_func)
             *parse_func = node->parse_func;
@@ -572,22 +600,22 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
       return;
     }
 
-  if (node->property_type == GDK_TYPE_RGBA ||
-      node->property_type == GDK_TYPE_COLOR)
+  if (node->pspec->value_type == GDK_TYPE_RGBA ||
+      node->pspec->value_type == GDK_TYPE_COLOR)
     {
       /* Allow GtkSymbolicColor as well */
       g_return_if_fail (value_type == GDK_TYPE_RGBA ||
                         value_type == GDK_TYPE_COLOR ||
                         value_type == GTK_TYPE_SYMBOLIC_COLOR);
     }
-  else if (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN)
+  else if (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN)
     {
       /* Allow GtkGradient as a substitute */
       g_return_if_fail (value_type == CAIRO_GOBJECT_TYPE_PATTERN ||
                         value_type == GTK_TYPE_GRADIENT);
     }
   else
-    g_return_if_fail (node->property_type == value_type);
+    g_return_if_fail (node->pspec->value_type == value_type);
 
   priv = props->priv;
   prop = g_hash_table_lookup (priv->properties,
@@ -670,7 +698,7 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
       if (G_IS_VALUE (val))
         g_value_unset (val);
 
-      g_value_init (val, node->property_type);
+      g_value_init (val, node->pspec->value_type);
       G_VALUE_COLLECT (val, args, 0, &error);
 
       if (error)
@@ -765,6 +793,18 @@ resolve_gradient (GtkStyleProperties *props,
   return TRUE;
 }
 
+static void
+lookup_default_value (PropertyNode *node,
+                      GValue       *value)
+{
+  g_value_init (value, node->pspec->value_type);
+
+  if (node->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
+    g_value_set_object (value, gtk_theming_engine_load (NULL));
+  else
+    g_param_value_set_default (node->pspec, value);
+}
+
 /**
  * gtk_style_properties_get_property:
  * @props: a #GtkStyleProperties
@@ -809,23 +849,18 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
   if (!prop)
     return FALSE;
 
-  g_value_init (value, node->property_type);
+  g_value_init (value, node->pspec->value_type);
 
   val = property_data_match_state (prop, state);
 
-  if (!val)
-    val = &node->default_value;
-
-  g_return_val_if_fail (G_IS_VALUE (val), FALSE);
-
-  if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
+  if (val && G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
     {
-      if (node->property_type == GDK_TYPE_RGBA)
+      if (node->pspec->value_type == GDK_TYPE_RGBA)
         {
           if (!resolve_color (props, val))
             return FALSE;
         }
-      else if (node->property_type == GDK_TYPE_COLOR)
+      else if (node->pspec->value_type == GDK_TYPE_COLOR)
         {
           if (!resolve_color_rgb (props, val))
             return FALSE;
@@ -833,15 +868,27 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
       else
         return FALSE;
     }
-  else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
+  else if (val && G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
     {
-      g_return_val_if_fail (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
+      g_return_val_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
 
       if (!resolve_gradient (props, val))
         return FALSE;
     }
 
-  g_value_copy (val, value);
+  if (val)
+    {
+      g_param_value_validate (node->pspec, val);
+      g_value_copy (val, value);
+    }
+  else
+    {
+      GValue default_value = { 0 };
+
+      lookup_default_value (node, &default_value);
+      g_value_copy (&default_value, value);
+      g_value_unset (&default_value);
+    }
 
   return TRUE;
 }
@@ -890,32 +937,41 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
       if (prop)
         val = property_data_match_state (prop, state);
 
-      if (!val)
-        val = &node->default_value;
-
-      if (G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
+      if (val && G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
         {
           gboolean resolved;
 
-          if (node->property_type == GDK_TYPE_RGBA)
+          if (node->pspec->value_type == GDK_TYPE_RGBA)
             resolved = resolve_color (props, val);
-          else if (node->property_type == GDK_TYPE_COLOR)
+          else if (node->pspec->value_type == GDK_TYPE_COLOR)
             resolved = resolve_color_rgb (props, val);
           else
             resolved = FALSE;
 
           if (!resolved)
-            val = &node->default_value;
+            val = NULL;
         }
-      else if (G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
+      else if (val && G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
         {
-          g_return_if_fail (node->property_type == CAIRO_GOBJECT_TYPE_PATTERN);
+          g_return_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN);
 
           if (!resolve_gradient (props, val))
-            val = &node->default_value;
+            val = NULL;
         }
 
-      G_VALUE_LCOPY (val, args, 0, &error);
+      if (val)
+        {
+          g_param_value_validate (node->pspec, val);
+          G_VALUE_LCOPY (val, args, 0, &error);
+        }
+      else
+        {
+          GValue default_value = { 0 };
+
+          lookup_default_value (node, &default_value);
+          G_VALUE_LCOPY (&default_value, args, 0, &error);
+          g_value_unset (&default_value);
+        }
 
       if (error)
         {

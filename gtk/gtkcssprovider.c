@@ -2758,7 +2758,7 @@ parse_rule (GtkCssProvider *css_provider,
     {
       const gchar *value_str = NULL;
       GtkStylePropertyParser parse_func = NULL;
-      GType prop_type;
+      GParamSpec *pspec;
       GError *error = NULL;
       gchar *prop;
 
@@ -2782,19 +2782,19 @@ parse_rule (GtkCssProvider *css_provider,
 
       value_str = g_strstrip (scanner->value.v_identifier);
 
-      if (gtk_style_properties_lookup_property (prop, &prop_type, &parse_func))
+      if (gtk_style_properties_lookup_property (prop, &parse_func, &pspec))
         {
           GValue *val;
 
           val = g_slice_new0 (GValue);
-          g_value_init (val, prop_type);
+          g_value_init (val, pspec->value_type);
 
           if (strcmp (value_str, "none") == 0)
             {
               /* Remove/unset the current value */
               g_hash_table_remove (priv->cur_properties, prop);
             }
-          else if (prop_type == G_TYPE_STRING)
+          else if (pspec->value_type == G_TYPE_STRING)
             {
               g_value_set_string (val, value_str);
               g_hash_table_insert (priv->cur_properties, prop, val);

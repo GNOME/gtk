@@ -327,16 +327,15 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
 /**
  * gtk_theming_engine_register_property:
  * @engine: a #GtkThemingEngine
- * @property_name: property name to register
- * @type: #GType the property will hold
- * @default_value: default value for this property
+ * @namespace: namespace for the property name
  * @parse_func: parsing function to use, or %NULL
+ * @pspec: the #GParamSpec for the new property
  *
  * Registers a property so it can be used in the CSS file format,
  * on the CSS file the property will look like
- * "-${engine-object-name}-${@property_name}". being
- * ${engine-object-name} either the GtkThemingEngine:name property
- * or G_OBJECT_TYPE_NAME(engine) if the property is unset.
+ * "-${@namespace}-${property_name}". being
+ * ${property_name} the given to @pspec. @namespace will usually
+ * be the theme engine name.
  *
  * For any type a @parse_func may be provided, being this function
  * used for turning any property value (between ':' and ';') in
@@ -345,18 +344,21 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
  * cases.
  *
  * <note>
- * This function needs to be called only once during theming
- * engine object initialization.
+ * Engines must ensure property registration happens exactly once,
+ * usually GTK+ deals with theming engines as singletons, so this
+ * should be guaranteed to happen once, but bear this in mind
+ * when creating #GtkThemeEngine<!-- -->s yourself.
  * </note>
  *
  * <note>
  * In order to make use of the custom registered properties in
- * the CSS file, make sure the engine is loaded first either in
- * a previous rule or within the same one.
+ * the CSS file, make sure the engine is loaded first by specifying
+ * the engine property, either in a previous rule or within the same
+ * one.
  * <programlisting>
  * &ast; {
  *     engine: someengine;
- *     SomeEngine-custom-property: 2;
+ *     -SomeEngine-custom-property: 2;
  * }
  * </programlisting>
  * </note>
@@ -364,31 +366,22 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
  * Since: 3.0
  **/
 void
-gtk_theming_engine_register_property (GtkThemingEngine       *engine,
-                                      const gchar            *property_name,
-                                      GType                   type,
-                                      const GValue           *default_value,
-                                      GtkStylePropertyParser  parse_func)
+gtk_theming_engine_register_property (const gchar            *namespace,
+                                      GtkStylePropertyParser  parse_func,
+                                      GParamSpec             *pspec)
 {
-  GtkThemingEnginePrivate *priv;
-  const gchar *engine_name;
   gchar *name;
 
-  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
-  g_return_if_fail (property_name != NULL);
-  g_return_if_fail (type != G_TYPE_INVALID);
-  g_return_if_fail (default_value == NULL || G_IS_VALUE (default_value));
+  g_return_if_fail (namespace != NULL);
+  g_return_if_fail (strchr (namespace, ' ') == NULL);
+  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
-  priv = engine->priv;
+  /* FIXME: hack hack hack, replacing pspec->name to include namespace */
+  name = g_strdup_printf ("-%s-%s", namespace, pspec->name);
+  g_free (pspec->name);
+  pspec->name = name;
 
-  if (priv->name)
-    engine_name = priv->name;
-  else
-    engine_name = G_OBJECT_TYPE_NAME (engine);
-
-  name = g_strdup_printf ("-%s-%s", engine_name, property_name);
-  gtk_style_properties_register_property (name, type, default_value, parse_func);
-  g_free (name);
+  gtk_style_properties_register_property (parse_func, pspec);
 }
 
 /**
