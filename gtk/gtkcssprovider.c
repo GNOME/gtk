@@ -2523,6 +2523,52 @@ css_provider_parse_value (GtkCssProvider *css_provider,
       g_value_set_enum (value, enum_value->value);
       g_type_class_unref (class);
     }
+  else if (G_TYPE_IS_FLAGS (type))
+    {
+      GFlagsClass *flags_class;
+      GFlagsValue *flag_value;
+      guint flags = 0;
+      gchar *ptr;
+
+      flags_class = g_type_class_ref (type);
+
+      /* Parse comma separated values */
+      ptr = strchr (value_str, ',');
+
+      while (ptr)
+        {
+          gchar *flag_str;
+
+          *ptr = '\0';
+          ptr++;
+
+          flag_str = (gchar *) value_str;
+          flag_value = g_flags_get_value_by_nick (flags_class,
+                                                  g_strstrip (flag_str));
+
+          if (!flag_value)
+            g_warning ("Unknown flag '%s' for type '%s'",
+                       value_str, g_type_name (type));
+          else
+            flags |= flag_value->value;
+
+          value_str = ptr;
+          ptr = strchr (value_str, ',');
+        }
+
+      /* Store last/only value */
+      flag_value = g_flags_get_value_by_nick (flags_class, value_str);
+
+      if (!flag_value)
+        g_warning ("Unknown flag '%s' for type '%s'",
+                   value_str, g_type_name (type));
+      else
+        flags |= flag_value->value;
+
+      /* Set parsed flags */
+      g_value_set_enum (value, flags);
+      g_type_class_unref (flags_class);
+    }
   else if (type == GTK_TYPE_9SLICE)
     {
       Gtk9Slice *slice;
