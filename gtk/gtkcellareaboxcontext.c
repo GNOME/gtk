@@ -412,7 +412,10 @@ allocate_for_orientation (GtkCellAreaBoxContext *context,
   for (i = 0; i < n_groups; i++)
     avail_size -= sizes[i].minimum_size;
 
-  avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, sizes);
+  if (avail_size > 0)
+    avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, sizes);
+  else
+    avail_size = 0;
 
   /* Calculate/distribute expand for groups */
   if (n_expand_groups > 0)

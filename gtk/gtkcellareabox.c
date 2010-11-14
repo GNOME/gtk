@@ -770,7 +770,10 @@ get_allocated_cells (GtkCellAreaBox        *box,
 
 	  /* Distribute cells naturally within the group */
 	  avail_size -= (visible_cells - 1) * priv->spacing;
-	  avail_size = gtk_distribute_natural_allocation (avail_size, visible_cells, sizes);
+          if (avail_size > 0)
+            avail_size = gtk_distribute_natural_allocation (avail_size, visible_cells, sizes);
+          else
+            avail_size = 0;
 
 	  /* Calculate/distribute expand for cells */
 	  if (expand_cells > 0)
@@ -1535,7 +1538,10 @@ compute_group_size_for_opposing_orientation (GtkCellAreaBox     *box,
       for (i = 0; i < n_sizes; i++)
 	avail_size -= orientation_sizes[i].minimum_size;
 
-      avail_size = gtk_distribute_natural_allocation (avail_size, n_sizes, orientation_sizes);
+      if (avail_size > 0)
+        avail_size = gtk_distribute_natural_allocation (avail_size, n_sizes, orientation_sizes);
+      else
+        avail_size = 0;
 
       /* Calculate/distribute expand for cells */
       if (group->expand_cells > 0)
@@ -1607,7 +1613,10 @@ compute_size_for_opposing_orientation (GtkCellAreaBox        *box,
   for (i = 0; i < n_groups; i++)
     avail_size -= orientation_sizes[i].minimum_size;
 
-  avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, orientation_sizes);
+  if (avail_size > 0)
+    avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, orientation_sizes);
+  else
+    avail_size = 0;
 
   /* Calculate/distribute expand for groups */
   if (n_expand_groups > 0)
