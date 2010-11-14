@@ -327,14 +327,14 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
 /**
  * gtk_theming_engine_register_property:
  * @engine: a #GtkThemingEngine
- * @namespace: namespace for the property name
+ * @name_space: namespace for the property name
  * @parse_func: parsing function to use, or %NULL
  * @pspec: the #GParamSpec for the new property
  *
  * Registers a property so it can be used in the CSS file format,
  * on the CSS file the property will look like
- * "-${@namespace}-${property_name}". being
- * ${property_name} the given to @pspec. @namespace will usually
+ * "-${@name_space}-${property_name}". being
+ * ${property_name} the given to @pspec. @name_space will usually
  * be the theme engine name.
  *
  * For any type a @parse_func may be provided, being this function
@@ -366,18 +366,18 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
  * Since: 3.0
  **/
 void
-gtk_theming_engine_register_property (const gchar            *namespace,
+gtk_theming_engine_register_property (const gchar            *name_space,
                                       GtkStylePropertyParser  parse_func,
                                       GParamSpec             *pspec)
 {
   gchar *name;
 
-  g_return_if_fail (namespace != NULL);
-  g_return_if_fail (strchr (namespace, ' ') == NULL);
+  g_return_if_fail (name_space != NULL);
+  g_return_if_fail (strchr (name_space, ' ') == NULL);
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
 
   /* FIXME: hack hack hack, replacing pspec->name to include namespace */
-  name = g_strdup_printf ("-%s-%s", namespace, pspec->name);
+  name = g_strdup_printf ("-%s-%s", name_space, pspec->name);
   g_free (pspec->name);
   pspec->name = name;
 
