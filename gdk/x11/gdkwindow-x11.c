@@ -271,16 +271,17 @@ _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
   return surface;
 }
 
+/* Create a surface backed with a pixmap without alpha on the same screen as window */
 static cairo_surface_t *
 gdk_x11_window_create_pixmap_surface (GdkWindow *window,
                                       int        width,
                                       int        height)
 {
+  GdkScreen *screen = gdk_window_get_screen (window);
+  GdkVisual *visual = gdk_screen_get_system_visual (screen);
   cairo_surface_t *surface;
   Pixmap pixmap;
-  GdkVisual *visual;
 
-  visual = gdk_window_get_visual (window);
   pixmap = XCreatePixmap (GDK_WINDOW_XDISPLAY (window),
                           GDK_WINDOW_XID (window),
                           width, height,
