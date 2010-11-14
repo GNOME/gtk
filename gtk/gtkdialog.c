@@ -1132,7 +1132,7 @@ gtk_dialog_set_alternative_button_order_valist (GtkDialog *dialog,
  * response ids passed to this function.
  *
  * By default, GTK+ dialogs use the button order advocated by the Gnome
- * <ulink url="http://developer.gnome.org/projects/gup/hig/2.0/">Human
+ * <ulink url="http://library.gnome.org/devel/hig-book/stable/">Human
  * Interface Guidelines</ulink> with the affirmative button at the far
  * right, and the cancel button left of it. But the builtin GTK+ dialogs
  * and #GtkMessageDialog<!-- -->s do provide an alternative button order,

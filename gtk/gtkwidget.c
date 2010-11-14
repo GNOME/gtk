@@ -11100,7 +11100,8 @@ G_DEFINE_BOXED_TYPE (GtkRequisition, gtk_requisition,
  * instance in question, it will inherit an #AtkObject implementation from the
  * first ancestor class for which such an implementation is defined.
  *
- * The documentation of the <ulink url="http://developer.gnome.org/doc/API/2.0/atk/index.html">ATK</ulink>
+ * The documentation of the
+ * <ulink url="http://library.gnome.org/devel/atk/stable/">ATK</ulink>
  * library contains more information about accessible objects and their uses.
  *
  * Returns: (transfer none): the #AtkObject associated with @widget
