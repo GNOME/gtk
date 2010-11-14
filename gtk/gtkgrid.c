@@ -151,8 +151,11 @@ enum
   PROP_COLUMN_SPACING,
   PROP_ROW_HOMOGENEOUS,
   PROP_COLUMN_HOMOGENEOUS,
-  PROP_BASELINE_ROW
+  PROP_BASELINE_ROW,
+  N_PROPERTIES
 };
+
+static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
 
 enum
 {
@@ -1727,33 +1730,37 @@ gtk_grid_class_init (GtkGridClass *class)
 
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
-  g_object_class_install_property (object_class, PROP_ROW_SPACING,
+  obj_properties [PROP_ROW_SPACING] =
     g_param_spec_int ("row-spacing",
                       P_("Row spacing"),
                       P_("The amount of space between two consecutive rows"),
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE));
+                      GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class, PROP_COLUMN_SPACING,
+  obj_properties [PROP_COLUMN_SPACING] =
     g_param_spec_int ("column-spacing",
                       P_("Column spacing"),
                       P_("The amount of space between two consecutive columns"),
                       0, G_MAXINT16, 0,
-                      GTK_PARAM_READWRITE));
+                      GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class, PROP_ROW_HOMOGENEOUS,
+  obj_properties [PROP_ROW_HOMOGENEOUS] =
     g_param_spec_boolean ("row-homogeneous",
                           P_("Row Homogeneous"),
                           P_("If TRUE, the rows are all the same height"),
                           FALSE,
-                          GTK_PARAM_READWRITE));
+                          GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class, PROP_COLUMN_HOMOGENEOUS,
+  obj_properties [PROP_COLUMN_HOMOGENEOUS] =
     g_param_spec_boolean ("column-homogeneous",
                           P_("Column Homogeneous"),
                           P_("If TRUE, the columns are all the same width"),
                           FALSE,
-                          GTK_PARAM_READWRITE));
+                          GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class,
+                                     N_PROPERTIES,
+                                     obj_properties);
 
   g_object_class_install_property (object_class, PROP_BASELINE_ROW,
     g_param_spec_int ("baseline-row",
@@ -2244,7 +2251,7 @@ gtk_grid_set_row_homogeneous (GtkGrid  *grid,
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
 
-      g_object_notify (G_OBJECT (grid), "row-homogeneous");
+      g_object_notify_by_pspec (G_OBJECT (grid), obj_properties [PROP_ROW_HOMOGENEOUS]);
     }
 }
 
@@ -2291,7 +2298,7 @@ gtk_grid_set_column_homogeneous (GtkGrid  *grid,
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
 
-      g_object_notify (G_OBJECT (grid), "column-homogeneous");
+      g_object_notify_by_pspec (G_OBJECT (grid), obj_properties [PROP_COLUMN_HOMOGENEOUS]);
     }
 }
 
@@ -2338,7 +2345,7 @@ gtk_grid_set_row_spacing (GtkGrid *grid,
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
 
-      g_object_notify (G_OBJECT (grid), "row-spacing");
+      g_object_notify_by_pspec (G_OBJECT (grid), obj_properties [PROP_ROW_SPACING]);
     }
 }
 
@@ -2385,7 +2392,7 @@ gtk_grid_set_column_spacing (GtkGrid *grid,
       if (gtk_widget_get_visible (GTK_WIDGET (grid)))
         gtk_widget_queue_resize (GTK_WIDGET (grid));
 
-      g_object_notify (G_OBJECT (grid), "column-spacing");
+      g_object_notify_by_pspec (G_OBJECT (grid), obj_properties [PROP_COLUMN_SPACING]);
     }
 }
 
