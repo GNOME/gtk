@@ -3766,7 +3766,7 @@ msgstr "La GtkVBox que conté les etiquetes primària i secundària del diàleg"
 
 #: ../gtk/gtkmisc.c:91
 msgid "Y align"
-msgstr "Alineació X"
+msgstr "Alineació Y"
 
 #: ../gtk/gtkmisc.c:92
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
