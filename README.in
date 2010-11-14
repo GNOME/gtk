@@ -254,7 +254,7 @@ Release notes for 2.10
   GTK_OBJECT_IS_FLOATING() will still work, but direct checking
   of the GTK_FLOATING flag will no longer detect the floating 
   reference. Details about floating references can be found in the docs:
-  http://developer.gnome.org/doc/API/2.0/gobject/gobject-The-Base-Object-Type.html#floating-ref
+  http://library.gnome.org/devel/gobject/unstable/gobject-The-Base-Object-Type.html#floating-ref
 
 * Accelerators like (_F) are now stripped from labels when they are 
   displayed in toolbars. If this is not wanted, the feature can be 

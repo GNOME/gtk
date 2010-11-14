@@ -467,7 +467,7 @@ msw_style_setup_system_settings (void)
   setup_menu_settings (settings);
 
   /*
-     http://developer.gnome.org/doc/API/2.0/gtk/GtkSettings.html
+     http://library.gnome.org/devel/gtk/stable/GtkSettings.html
      http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/systemparametersinfo.asp
      http://msdn.microsoft.com/library/default.asp?url=/library/en-us/sysinfo/base/getsystemmetrics.asp */
 }
