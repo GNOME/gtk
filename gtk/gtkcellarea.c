@@ -129,19 +129,18 @@ static void            cell_attribute_free (CellAttribute         *attribute);
 static gint            cell_attribute_find (CellAttribute         *cell_attribute,
 					    const gchar           *attribute);
 
-/* Internal signal emissions */
-static void            gtk_cell_area_editing_started  (GtkCellArea        *area,
+/* Internal functions/signal emissions */
+static void            gtk_cell_area_add_editable     (GtkCellArea        *area,
 						       GtkCellRenderer    *renderer,
 						       GtkCellEditable    *editable,
 						       GdkRectangle       *cell_area);
-static void            gtk_cell_area_editing_canceled (GtkCellArea        *area,
-						       GtkCellRenderer    *renderer);
-static void            gtk_cell_area_editing_done     (GtkCellArea        *area,
-						       GtkCellRenderer    *renderer,
-						       GtkCellEditable    *editable);
 static void            gtk_cell_area_remove_editable  (GtkCellArea        *area,
 						       GtkCellRenderer    *renderer,
 						       GtkCellEditable    *editable);
+static void            gtk_cell_area_set_edit_widget  (GtkCellArea        *area,
+						       GtkCellEditable    *editable);
+static void            gtk_cell_area_set_edited_cell  (GtkCellArea        *area,
+						       GtkCellRenderer    *renderer);
 
 
 /* Struct to pass data along while looping over 
@@ -176,7 +175,6 @@ struct _GtkCellAreaPrivate
   GtkCellRenderer *edited_cell;
 
   /* Signal connections to the editable widget */
-  gulong           editing_done_id;
   gulong           remove_widget_id;
 
   /* Currently focused cell */
@@ -201,9 +199,7 @@ enum {
 };
 
 enum {
-  SIGNAL_EDITING_STARTED,
-  SIGNAL_EDITING_CANCELED,
-  SIGNAL_EDITING_DONE,
+  SIGNAL_ADD_EDITABLE,
   SIGNAL_REMOVE_EDITABLE,
   SIGNAL_FOCUS_CHANGED,
   LAST_SIGNAL
@@ -251,7 +247,6 @@ gtk_cell_area_init (GtkCellArea *area)
   priv->edited_cell        = NULL;
   priv->edit_widget        = NULL;
 
-  priv->editing_done_id    = 0;
   priv->remove_widget_id   = 0;
 }
 
@@ -287,8 +282,8 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->activate   = gtk_cell_area_real_activate;
 
   /* Signals */
-  cell_area_signals[SIGNAL_EDITING_STARTED] =
-    g_signal_new (I_("editing-started"),
+  cell_area_signals[SIGNAL_ADD_EDITABLE] =
+    g_signal_new (I_("add-editable"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
 		  0, /* No class closure here */
@@ -299,27 +294,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 		  GTK_TYPE_CELL_EDITABLE,
 		  GDK_TYPE_RECTANGLE,
 		  G_TYPE_STRING);
-
-  cell_area_signals[SIGNAL_EDITING_CANCELED] =
-    g_signal_new (I_("editing-canceled"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  0, /* No class closure here */
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_CELL_RENDERER);
-
-  cell_area_signals[SIGNAL_EDITING_DONE] =
-    g_signal_new (I_("editing-done"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  0, /* No class closure here */
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT_OBJECT,
-		  G_TYPE_NONE, 2,
-		  GTK_TYPE_CELL_RENDERER,
-		  GTK_TYPE_CELL_EDITABLE);
 
   cell_area_signals[SIGNAL_REMOVE_EDITABLE] =
     g_signal_new (I_("remove-editable"),
@@ -404,7 +378,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 				    P_("Edited Cell"),
 				    P_("The cell which is currently being edited"),
 				    GTK_TYPE_CELL_RENDERER,
-				    GTK_PARAM_READWRITE));
+				    G_PARAM_READABLE));
 
   g_object_class_install_property (object_class,
                                    PROP_EDIT_WIDGET,
@@ -413,7 +387,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 				    P_("Edit Widget"),
 				    P_("The widget currently editing the edited cell"),
 				    GTK_TYPE_CELL_RENDERER,
-				    GTK_PARAM_READWRITE));
+				    G_PARAM_READABLE));
 
   /* Pool for Cell Properties */
   if (!cell_property_pool)
@@ -554,12 +528,6 @@ gtk_cell_area_set_property (GObject       *object,
       break;
     case PROP_FOCUS_CELL:
       gtk_cell_area_set_focus_cell (area, (GtkCellRenderer *)g_value_get_object (value));
-      break;
-    case PROP_EDITED_CELL:
-      gtk_cell_area_set_edited_cell (area, (GtkCellRenderer *)g_value_get_object (value));
-      break;
-    case PROP_EDIT_WIDGET:
-      gtk_cell_area_set_edit_widget (area, (GtkCellEditable *)g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -936,6 +904,15 @@ get_has_renderer (GtkCellRenderer  *renderer,
     check->has_renderer = TRUE;
 }
 
+/**
+ * gtk_cell_area_has_renderer:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer to check
+ *
+ * Checks if @area contains @renderer.
+ *
+ * Returns: %TRUE if @renderer is in the @area.
+ */
 gboolean
 gtk_cell_area_has_renderer (GtkCellArea     *area,
 			    GtkCellRenderer *renderer)
@@ -1016,6 +993,19 @@ gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
+/**
+ * gtk_cell_area_event:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext for this row of data.
+ * @widget: the #GtkWidget that @area is rendering to
+ * @event: the #GdkEvent to handle
+ * @cell_area: the @widget relative coordinates for @area
+ * @flags: the #GtkCellRendererState for @area in this row.
+ *
+ * Delegates event handling to a #GtkCellArea.
+ *
+ * Returns: %TRUE if the event was handled by @area.
+ */
 gint
 gtk_cell_area_event (GtkCellArea          *area,
 		     GtkCellAreaContext   *context,
@@ -1042,6 +1032,20 @@ gtk_cell_area_event (GtkCellArea          *area,
   return 0;
 }
 
+/**
+ * gtk_cell_area_render:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext for this row of data.
+ * @widget: the #GtkWidget that @area is rendering to
+ * @cr: the #cairo_t to render with
+ * @background_area: the @widget relative coordinates for @area's background
+ * @cell_area: the @widget relative coordinates for @area
+ * @flags: the #GtkCellRendererState for @area in this row.
+ * @paint_focus: whether @area should paint focus on focused cells for focused rows or not.
+ *
+ * Renders @area's cells according to @area's layout onto @widget at
+ * the given coordinates.
+ */
 void
 gtk_cell_area_render (GtkCellArea          *area,
 		      GtkCellAreaContext   *context,
@@ -1070,6 +1074,14 @@ gtk_cell_area_render (GtkCellArea          *area,
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
+/**
+ * gtk_cell_area_set_style_detail:
+ * @area: a #GtkCellArea
+ * @detail: the #GtkStyle detail string to set
+ *
+ * Sets the detail string used in any gtk_paint_*() functions
+ * used by @area.
+ */
 void
 gtk_cell_area_set_style_detail (GtkCellArea *area,
 				const gchar *detail)
@@ -1087,6 +1099,15 @@ gtk_cell_area_set_style_detail (GtkCellArea *area,
     }
 }
 
+/**
+ * gtk_cell_area_get_style_detail:
+ * @area: a #GtkCellArea
+ *
+ * Gets the detail string used in any gtk_paint_*() functions
+ * used by @area.
+ *
+ * Returns: the detail string.
+ */
 G_CONST_RETURN gchar *
 gtk_cell_area_get_style_detail (GtkCellArea *area)
 {
@@ -1102,7 +1123,20 @@ gtk_cell_area_get_style_detail (GtkCellArea *area)
 /*************************************************************
  *                      API: Geometry                        *
  *************************************************************/
-GtkCellAreaContext   *
+/**
+ * gtk_cell_area_create_context:
+ * @area: a #GtkCellArea
+ *
+ * Creates a #GtkCellAreaContext to be used with @area for
+ * all purposes. #GtkCellAreaContext stores geometry information
+ * for rows for which it was operated on, it is important to use
+ * the same context for the same row of data at all times (i.e.
+ * one should render and handle events with the same #GtkCellAreaContext
+ * which was used to request the size of those rows of data).
+ *
+ * Returns: a newly created #GtkCellAreaContext which can be used with @area.
+ */
+GtkCellAreaContext *
 gtk_cell_area_create_context (GtkCellArea *area)
 {
   GtkCellAreaClass *class;
@@ -1447,6 +1481,14 @@ gtk_cell_area_get_current_path_string (GtkCellArea *area)
 /*************************************************************
  *                    API: Cell Properties                   *
  *************************************************************/
+/**
+ * gtk_cell_area_class_install_cell_property:
+ * @aclass: a #GtkCellAreaClass
+ * @property_id: the id for the property
+ * @pspec: the #GParamSpec for the property
+ *
+ * Installs a cell property on a cell area class.
+ */
 void
 gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
 					   guint               property_id,
@@ -1474,6 +1516,15 @@ gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
   g_param_spec_pool_insert (cell_property_pool, pspec, G_OBJECT_CLASS_TYPE (aclass));
 }
 
+/**
+ * gtk_cell_area_class_find_cell_property:
+ * @aclass: a #GtkCellAreaClass
+ * @property_name: the name of the child property to find
+ * @returns: (allow-none): the #GParamSpec of the child property or %NULL if @aclass has no
+ *   child property with that name.
+ *
+ * Finds a cell property of a cell area class by name.
+ */
 GParamSpec*
 gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
 					const gchar        *property_name)
@@ -1487,8 +1538,17 @@ gtk_cell_area_class_find_cell_property (GtkCellAreaClass   *aclass,
 				   TRUE);
 }
 
+/**
+ * gtk_cell_area_class_list_cell_properties:
+ * @aclass: a #GtkCellAreaClass
+ * @n_properties: location to return the number of cell properties found
+ * @returns: a newly allocated %NULL-terminated array of #GParamSpec*.
+ *           The array must be freed with g_free().
+ *
+ * Returns all cell properties of a cell area class.
+ */
 GParamSpec**
-gtk_cell_area_class_list_cell_properties (GtkCellAreaClass   *aclass,
+gtk_cell_area_class_list_cell_properties (GtkCellAreaClass  *aclass,
 					  guint		    *n_properties)
 {
   GParamSpec **pspecs;
@@ -1505,6 +1565,17 @@ gtk_cell_area_class_list_cell_properties (GtkCellAreaClass   *aclass,
   return pspecs;
 }
 
+/**
+ * gtk_cell_area_add_with_properties:
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer to be placed inside @area
+ * @first_prop_name: the name of the first cell property to set
+ * @Varargs: a %NULL-terminated list of property names and values, starting
+ *           with @first_prop_name
+ *
+ * Adds @renderer to @area, setting cell properties at the same time.
+ * See gtk_cell_area_add() and gtk_cell_area_child_set() for more details.
+ **/
 void
 gtk_cell_area_add_with_properties (GtkCellArea        *area,
 				   GtkCellRenderer    *renderer,
@@ -1533,6 +1604,16 @@ gtk_cell_area_add_with_properties (GtkCellArea        *area,
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
+/**
+ * gtk_cell_area_cell_set:
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer which is a cell inside @area
+ * @first_prop_name: the name of the first cell property to set
+ * @Varargs: a %NULL-terminated list of property names and values, starting
+ *           with @first_prop_name
+ *
+ * Sets one or more cell properties for @cell in @area.
+ **/
 void
 gtk_cell_area_cell_set (GtkCellArea        *area,
 			GtkCellRenderer    *renderer,
@@ -1549,6 +1630,16 @@ gtk_cell_area_cell_set (GtkCellArea        *area,
   va_end (var_args);
 }
 
+/**
+ * gtk_cell_area_cell_get:
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer which is inside @area
+ * @first_prop_name: the name of the first cell property to get
+ * @Varargs: return location for the first cell property, followed
+ *     optionally by more name/return location pairs, followed by %NULL
+ *
+ * Gets the values of one or more cell properties for @renderer in @area.
+ **/
 void
 gtk_cell_area_cell_get (GtkCellArea        *area,
 			GtkCellRenderer    *renderer,
@@ -1610,6 +1701,16 @@ area_set_cell_property (GtkCellArea     *area,
   g_value_unset (&tmp_value);
 }
 
+/**
+ * gtk_cell_area_cell_set_valist:
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer which inside @area
+ * @first_property_name: the name of the first cell property to set
+ * @var_args: a %NULL-terminated list of property names and values, starting
+ *           with @first_prop_name
+ *
+ * Sets one or more cell properties for @renderer in @area.
+ **/
 void
 gtk_cell_area_cell_set_valist (GtkCellArea        *area,
 			       GtkCellRenderer    *renderer,
@@ -1660,6 +1761,16 @@ gtk_cell_area_cell_set_valist (GtkCellArea        *area,
     }
 }
 
+/**
+ * gtk_cell_area_cell_get_valist:
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer inside @area
+ * @first_property_name: the name of the first property to get
+ * @var_args: return location for the first property, followed
+ *     optionally by more name/return location pairs, followed by %NULL
+ *
+ * Gets the values of one or more cell properties for @renderer in @area.
+ **/
 void
 gtk_cell_area_cell_get_valist (GtkCellArea        *area,
 			       GtkCellRenderer    *renderer,
@@ -1708,6 +1819,15 @@ gtk_cell_area_cell_get_valist (GtkCellArea        *area,
     }
 }
 
+/**
+ * gtk_cell_area_cell_set_property:
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer inside @area
+ * @property_name: the name of the cell property to set
+ * @value: the value to set the cell property to
+ *
+ * Sets a cell property for @renderer in @area.
+ **/
 void
 gtk_cell_area_cell_set_property (GtkCellArea        *area,
 				 GtkCellRenderer    *renderer,
@@ -1735,6 +1855,15 @@ gtk_cell_area_cell_set_property (GtkCellArea        *area,
     }
 }
 
+/**
+ * gtk_cell_area_cell_get_property:
+ * @area: a #GtkCellArea
+ * @renderer: a #GtkCellRenderer inside @area
+ * @property_name: the name of the property to get
+ * @value: a location to return the value
+ *
+ * Gets the value of a cell property for @renderer in @area.
+ **/
 void
 gtk_cell_area_cell_get_property (GtkCellArea        *area,
 				 GtkCellRenderer    *renderer,
@@ -1940,6 +2069,20 @@ gtk_cell_area_get_focus_cell (GtkCellArea *area)
 /*************************************************************
  *                    API: Focus Siblings                    *
  *************************************************************/
+
+/**
+ * gtk_cell_area_add_focus_sibling:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer expected to have focus
+ * @sibling: the #GtkCellRenderer to add to @renderer's focus area
+ *
+ * Adds @sibling to @renderer's focusable area, focus will be drawn
+ * around @renderer and all of it's siblings if @renderer can 
+ * focus for a given row.
+ *
+ * Events handled by focus siblings can also activate the given
+ * focusable @renderer.
+ */
 void
 gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
 				 GtkCellRenderer *renderer,
@@ -1974,6 +2117,15 @@ gtk_cell_area_add_focus_sibling (GtkCellArea     *area,
     }
 }
 
+/**
+ * gtk_cell_area_remove_focus_sibling:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer expected to have focus
+ * @sibling: the #GtkCellRenderer to remove from @renderer's focus area
+ * 
+ * Removes @sibling from @renderer's focus sibling list 
+ * (see gtk_cell_area_add_focus_sibling()).
+ */
 void
 gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
 				    GtkCellRenderer *renderer,
@@ -2000,6 +2152,15 @@ gtk_cell_area_remove_focus_sibling (GtkCellArea     *area,
     g_hash_table_insert (priv->focus_siblings, renderer, siblings);
 }
 
+/**
+ * gtk_cell_area_is_focus_sibling:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer expected to have focus
+ * @sibling: the #GtkCellRenderer to check against @renderer's sibling list
+ * 
+ * Returns %TRUE if @sibling is one of @renderer's focus siblings
+ * (see gtk_cell_area_add_focus_sibling()).
+ */
 gboolean
 gtk_cell_area_is_focus_sibling (GtkCellArea     *area,
 				GtkCellRenderer *renderer,
@@ -2027,6 +2188,15 @@ gtk_cell_area_is_focus_sibling (GtkCellArea     *area,
   return FALSE;
 }
 
+/**
+ * gtk_cell_area_get_focus_siblings:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer expected to have focus
+ *
+ * Gets the focus sibling cell renderers for @renderer.
+ *
+ * Returns: A #GList of #GtkCellRenderers. The returned list is internal and should not be freed.
+ */
 const GList *
 gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
 				  GtkCellRenderer *renderer)
@@ -2041,6 +2211,21 @@ gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
   return g_hash_table_lookup (priv->focus_siblings, renderer);  
 }
 
+/**
+ * gtk_cell_area_get_focus_from_sibling:
+ * @area: a #GtkCellArea
+ * @renderer: the #GtkCellRenderer
+ *
+ * Gets the #GtkCellRenderer which is expected to be focusable
+ * for which @renderer is, or may be a sibling.
+ *
+ * This is handy for #GtkCellArea subclasses when handling events,
+ * after determining the renderer at the event location it can
+ * then chose to activate the focus cell for which the event
+ * cell may have been a sibling.
+ *
+ * Returns: the #GtkCellRenderer for which @renderer is a sibling, or %NULL.
+ */
 GtkCellRenderer *
 gtk_cell_area_get_focus_from_sibling (GtkCellArea          *area,
 				      GtkCellRenderer      *renderer)
@@ -2079,28 +2264,13 @@ gtk_cell_area_get_focus_from_sibling (GtkCellArea          *area,
  *              API: Cell Activation/Editing                 *
  *************************************************************/
 static void
-gtk_cell_area_editing_started (GtkCellArea        *area,
-			       GtkCellRenderer    *renderer,
-			       GtkCellEditable    *editable,
-			       GdkRectangle       *cell_area)
-{
-  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_STARTED], 0, 
-		 renderer, editable, cell_area, area->priv->current_path);
-}
-
-static void
-gtk_cell_area_editing_canceled (GtkCellArea        *area,
-				GtkCellRenderer    *renderer)
-{
-  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_CANCELED], 0, renderer);
-}
-
-static void
-gtk_cell_area_editing_done (GtkCellArea        *area,
+gtk_cell_area_add_editable (GtkCellArea        *area,
 			    GtkCellRenderer    *renderer,
-			    GtkCellEditable    *editable)
+			    GtkCellEditable    *editable,
+			    GdkRectangle       *cell_area)
 {
-  g_signal_emit (area, cell_area_signals[SIGNAL_EDITING_DONE], 0, renderer, editable);
+  g_signal_emit (area, cell_area_signals[SIGNAL_ADD_EDITABLE], 0, 
+		 renderer, editable, cell_area, area->priv->current_path);
 }
 
 static void
@@ -2109,18 +2279,6 @@ gtk_cell_area_remove_editable  (GtkCellArea        *area,
 				GtkCellEditable    *editable)
 {
   g_signal_emit (area, cell_area_signals[SIGNAL_REMOVE_EDITABLE], 0, renderer, editable);
-}
-
-static void
-cell_area_editing_done_cb (GtkCellEditable *editable,
-			   GtkCellArea     *area)
-{
-  GtkCellAreaPrivate *priv = area->priv;
-
-  g_assert (priv->edit_widget == editable);
-  g_assert (priv->edited_cell != NULL);
-
-  gtk_cell_area_editing_done (area, priv->edited_cell, priv->edit_widget);
 }
 
 static void
@@ -2140,7 +2298,7 @@ cell_area_remove_widget_cb (GtkCellEditable *editable,
   gtk_cell_area_set_edit_widget (area, NULL);
 }
 
-void
+static void
 gtk_cell_area_set_edited_cell (GtkCellArea     *area,
 			       GtkCellRenderer *renderer)
 {
@@ -2165,19 +2323,7 @@ gtk_cell_area_set_edited_cell (GtkCellArea     *area,
     }
 }
 
-GtkCellRenderer   *
-gtk_cell_area_get_edited_cell (GtkCellArea *area)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
-
-  priv = area->priv;
-
-  return priv->edited_cell;
-}
-
-void
+static void
 gtk_cell_area_set_edit_widget (GtkCellArea     *area,
 			       GtkCellEditable *editable)
 {
@@ -2192,7 +2338,6 @@ gtk_cell_area_set_edit_widget (GtkCellArea     *area,
     {
       if (priv->edit_widget)
 	{
-	  g_signal_handler_disconnect (priv->edit_widget, priv->editing_done_id);
 	  g_signal_handler_disconnect (priv->edit_widget, priv->remove_widget_id);
 
 	  g_object_unref (priv->edit_widget);
@@ -2202,9 +2347,6 @@ gtk_cell_area_set_edit_widget (GtkCellArea     *area,
 
       if (priv->edit_widget)
 	{
-	  priv->editing_done_id =
-	    g_signal_connect (priv->edit_widget, "editing-done",
-			      G_CALLBACK (cell_area_editing_done_cb), area);
 	  priv->remove_widget_id =
 	    g_signal_connect (priv->edit_widget, "remove-widget",
 			      G_CALLBACK (cell_area_remove_widget_cb), area);
@@ -2216,6 +2358,36 @@ gtk_cell_area_set_edit_widget (GtkCellArea     *area,
     }
 }
 
+/**
+ * gtk_cell_area_get_edited_cell:
+ * @area: a #GtkCellArea
+ *
+ * Gets the #GtkCellRenderer in @area that is currently
+ * being edited.
+ *
+ * Returns: The currently edited #GtkCellRenderer
+ */
+GtkCellRenderer   *
+gtk_cell_area_get_edited_cell (GtkCellArea *area)
+{
+  GtkCellAreaPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+
+  priv = area->priv;
+
+  return priv->edited_cell;
+}
+
+/**
+ * gtk_cell_area_get_edit_widget:
+ * @area: a #GtkCellArea
+ *
+ * Gets the #GtkCellEditable widget currently used
+ * to edit the currently edited cell.
+ *
+ * Returns: The currently active #GtkCellEditable widget
+ */
 GtkCellEditable *
 gtk_cell_area_get_edit_widget (GtkCellArea *area)
 {
@@ -2228,6 +2400,23 @@ gtk_cell_area_get_edit_widget (GtkCellArea *area)
   return priv->edit_widget;
 }
 
+/**
+ * gtk_cell_area_activate_cell:
+ * @area: a #GtkCellArea
+ * @widget: the #GtkWidget that @area is rendering onto
+ * @renderer: the #GtkCellRenderer in @area to activate
+ * @event: the #GdkEvent for which cell activation should occur
+ * @cell_area: the #GdkRectangle in @widget relative coordinates
+ *             of @renderer for the current row.
+ * @flags: the #GtkCellRendererState for @renderer
+ *
+ * This is used by #GtkCellArea subclasses when handling events
+ * to activate cells, the base #GtkCellArea class activates cells
+ * for keyboard events for free in it's own GtkCellArea->activate()
+ * implementation.
+ *
+ * Returns: whether cell activation was successful
+ */
 gboolean
 gtk_cell_area_activate_cell (GtkCellArea          *area,
 			     GtkWidget            *widget,
@@ -2290,7 +2479,22 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 	  
 	  /* Signal that editing started so that callers can get 
 	   * a handle on the editable_widget */
-	  gtk_cell_area_editing_started (area, priv->focus_cell, editable_widget, &edit_area);
+	  gtk_cell_area_add_editable (area, priv->focus_cell, editable_widget, &edit_area);
+
+	  /* If the signal was successfully handled start the editing */
+	  if (gtk_widget_get_parent (GTK_WIDGET (editable_widget)))
+	    {
+	      gtk_cell_editable_start_editing (editable_widget, NULL);
+	      gtk_widget_grab_focus (GTK_WIDGET (editable_widget));
+	    }
+	  else
+	    {
+	      /* Otherwise clear the editing state and fire a warning */
+	      gtk_cell_area_set_edited_cell (area, NULL);
+	      gtk_cell_area_set_edit_widget (area, NULL);
+
+	      g_warning ("GtkCellArea::add-editable fired in the dark, no cell editing was started.");
+	    }
 	  
 	  return TRUE;
 	}
@@ -2299,6 +2503,17 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
   return FALSE;
 }
 
+/**
+ * gtk_cell_area_stop_editing:
+ * @area: a #GtkCellArea
+ * @canceled: whether editing was canceled.
+ *
+ * Explicitly stops the editing of the currently
+ * edited cell (see gtk_cell_area_get_edited_cell()).
+ *
+ * If @canceled is %TRUE, the cell renderer will emit
+ * the ::editing-canceled signal.
+ */
 void
 gtk_cell_area_stop_editing (GtkCellArea *area,
 			    gboolean     canceled)
@@ -2316,10 +2531,6 @@ gtk_cell_area_stop_editing (GtkCellArea *area,
 
       /* Stop editing of the cell renderer */
       gtk_cell_renderer_stop_editing (priv->edited_cell, canceled);
-
-      /* Signal that editing has been canceled */
-      if (canceled)
-	gtk_cell_area_editing_canceled (area, priv->edited_cell);	
       
       /* Remove any references to the editable widget */
       gtk_cell_area_set_edited_cell (area, NULL);

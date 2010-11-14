@@ -309,11 +309,7 @@ GtkCellRenderer      *gtk_cell_area_get_focus_from_sibling         (GtkCellArea 
 								    GtkCellRenderer      *renderer);
 
 /* Cell Activation/Editing */
-void                  gtk_cell_area_set_edited_cell                (GtkCellArea          *area,
-								    GtkCellRenderer      *renderer);
 GtkCellRenderer      *gtk_cell_area_get_edited_cell                (GtkCellArea          *area);
-void                  gtk_cell_area_set_edit_widget                (GtkCellArea          *area,
-								    GtkCellEditable      *editable);
 GtkCellEditable      *gtk_cell_area_get_edit_widget                (GtkCellArea          *area);
 gboolean              gtk_cell_area_activate_cell                  (GtkCellArea          *area,
 								    GtkWidget            *widget,

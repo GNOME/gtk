@@ -89,7 +89,7 @@ static void      focus_changed_cb                                  (GtkCellArea 
 								    GtkCellRenderer  *renderer,
 								    const gchar      *path,
 								    CellAreaScaffold *scaffold);
-static void      editing_started_cb                                (GtkCellArea      *area,
+static void      add_editable_cb                                   (GtkCellArea      *area,
 								    GtkCellRenderer  *renderer,
 								    GtkCellEditable  *edit_widget,
 								    GdkRectangle     *cell_area,
@@ -150,7 +150,7 @@ struct _CellAreaScaffoldPrivate {
   /* Currently edited widget */
   GtkWidget       *edit_widget;
   GdkRectangle     edit_rect;
-  gulong           editing_started_id;
+  gulong           add_editable_id;
   gulong           remove_editable_id;
 
 
@@ -208,9 +208,9 @@ cell_area_scaffold_init (CellAreaScaffold *scaffold)
     g_signal_connect (priv->area, "focus-changed",
 		      G_CALLBACK (focus_changed_cb), scaffold);
 
-  priv->editing_started_id =
-    g_signal_connect (priv->area, "editing-started",
-		      G_CALLBACK (editing_started_cb), scaffold);
+  priv->add_editable_id =
+    g_signal_connect (priv->area, "add-editable",
+		      G_CALLBACK (add_editable_cb), scaffold);
 
   priv->remove_editable_id =
     g_signal_connect (priv->area, "remove-editable",
@@ -306,7 +306,7 @@ cell_area_scaffold_dispose (GObject *object)
     {
       /* Disconnect signals */
       g_signal_handler_disconnect (priv->area, priv->focus_changed_id);
-      g_signal_handler_disconnect (priv->area, priv->editing_started_id);
+      g_signal_handler_disconnect (priv->area, priv->add_editable_id);
       g_signal_handler_disconnect (priv->area, priv->remove_editable_id);
 
       g_object_unref (priv->area);
@@ -1210,12 +1210,12 @@ focus_changed_cb (GtkCellArea      *area,
 }
 
 static void
-editing_started_cb (GtkCellArea      *area,
-		    GtkCellRenderer  *renderer,
-		    GtkCellEditable  *edit_widget,
-		    GdkRectangle     *cell_area,
-		    const gchar      *path,
-		    CellAreaScaffold *scaffold)
+add_editable_cb (GtkCellArea      *area,
+		 GtkCellRenderer  *renderer,
+		 GtkCellEditable  *edit_widget,
+		 GdkRectangle     *cell_area,
+		 const gchar      *path,
+		 CellAreaScaffold *scaffold)
 {
   GtkAllocation allocation;
 
@@ -1225,9 +1225,6 @@ editing_started_cb (GtkCellArea      *area,
 				      allocation.x + cell_area->x, 
 				      allocation.y + cell_area->y, 
 				      cell_area->width, cell_area->height);
-
-  gtk_cell_editable_start_editing (edit_widget, NULL);
-  gtk_widget_grab_focus (GTK_WIDGET (edit_widget));
 }
 
 static void
@@ -1237,6 +1234,8 @@ remove_editable_cb (GtkCellArea      *area,
 		    CellAreaScaffold *scaffold)
 {
   gtk_container_remove (GTK_CONTAINER (scaffold), GTK_WIDGET (edit_widget));
+
+  gtk_widget_grab_focus (GTK_WIDGET (scaffold));
 }
 
 static void 
