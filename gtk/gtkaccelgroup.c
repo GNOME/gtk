@@ -80,14 +80,17 @@ static guint  default_accel_mod_mask     = (GDK_SHIFT_MASK   |
                                             GDK_HYPER_MASK   |
                                             GDK_META_MASK);
 
-
 enum {
   PROP_0,
   PROP_IS_LOCKED,
   PROP_MODIFIER_MASK,
+  N_PROPERTIES
 };
 
+static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkAccelGroup, gtk_accel_group, G_TYPE_OBJECT)
+
 
 /* --- functions --- */
 static void
@@ -102,22 +105,24 @@ gtk_accel_group_class_init (GtkAccelGroupClass *class)
 
   class->accel_changed = NULL;
 
-  g_object_class_install_property (object_class,
-                                   PROP_IS_LOCKED,
-                                   g_param_spec_boolean ("is-locked",
-                                                         "Is locked",
-                                                         "Is the accel group locked",
-                                                         FALSE,
-                                                         G_PARAM_READABLE));
+  obj_properties [PROP_IS_LOCKED] =
+    g_param_spec_boolean ("is-locked",
+                          "Is locked",
+                          "Is the accel group locked",
+                          FALSE,
+                          G_PARAM_READABLE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_MODIFIER_MASK,
-                                   g_param_spec_flags ("modifier-mask",
-                                                       "Modifier Mask",
-                                                       "Modifier Mask",
-                                                       GDK_TYPE_MODIFIER_TYPE,
-                                                       default_accel_mod_mask,
-                                                       G_PARAM_READABLE));
+  obj_properties [PROP_MODIFIER_MASK] =
+    g_param_spec_flags ("modifier-mask",
+                        "Modifier Mask",
+                        "Modifier Mask",
+                        GDK_TYPE_MODIFIER_TYPE,
+                        default_accel_mod_mask,
+                        G_PARAM_READABLE);
+
+   g_object_class_install_properties (object_class,
+                                      N_PROPERTIES,
+                                      obj_properties);
 
   /**
    * GtkAccelGroup::accel-activate:
@@ -429,7 +434,7 @@ gtk_accel_group_lock (GtkAccelGroup *accel_group)
 
   if (accel_group->priv->lock_count == 1) {
     /* State change from unlocked to locked */
-    g_object_notify (G_OBJECT (accel_group), "is-locked");
+    g_object_notify_by_pspec (G_OBJECT (accel_group), obj_properties[PROP_IS_LOCKED]);
   }
 }
 
@@ -449,7 +454,7 @@ gtk_accel_group_unlock (GtkAccelGroup *accel_group)
 
   if (accel_group->priv->lock_count < 1) {
     /* State change from locked to unlocked */
-    g_object_notify (G_OBJECT (accel_group), "is-locked");
+    g_object_notify_by_pspec (G_OBJECT (accel_group), obj_properties[PROP_IS_LOCKED]);
   }
 }
 
