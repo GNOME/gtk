@@ -469,9 +469,9 @@ Do not use the deprecated #GdkFont and gdk_draw_text().
 </para>
 
 <para>
-See also the "Text Handling in GTK 2" section of 
-<ulink url="http://developer.gnome.org/dotplan/porting/">Porting applications 
-to the GNOME 2.0 platform</ulink>.
+See also the
+<ulink url="http://library.gnome.org/devel/pango/stable/pango-Cairo-Rendering.html">Cairo Rendering</ulink>
+section of <ulink url="http://library.gnome.org/devel/pango/stable/">Pango manual</ulink>.
 </para>
 </answer>
 
@@ -502,9 +502,9 @@ Do not use the deprecated function gdk_text_width().
 </para>
 
 <para>
-See also the "Text Handling in GTK 2" section of 
-<ulink url="http://developer.gnome.org/dotplan/porting/">Porting applications 
-to the GNOME 2.0 platform</ulink>.
+See also the
+<ulink url="http://library.gnome.org/devel/pango/stable/pango-Layout-Objects.html">Layout Objects</ulink>
+section of <ulink url="http://library.gnome.org/devel/pango/stable/">Pango manual</ulink>.
 </para>
 </answer>
 </qandaentry>
