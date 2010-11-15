@@ -34,6 +34,32 @@
 #include <glib.h>
 #include <math.h>
 
+
+/**
+ * SECTION:gdkdisplay
+ * @Short_description: Controls the keyboard/mouse pointer grabs and a set of <type>GdkScreen</type>s
+ * @Title: GdkDisplay
+ *
+ * #GdkDisplay objects purpose are two fold:
+ * <itemizedlist>
+ * <listitem><para>
+ *   To grab/ungrab keyboard focus and mouse pointer
+ * </para></listitem>
+ * <listitem><para>
+ *   To manage and provide information about the #GdkScreen(s)
+ *   available for this #GdkDisplay
+ * </para></listitem>
+ * </itemizedlist>
+ *
+ * #GdkDisplay objects are the GDK representation of the X Display which can be
+ * described as <emphasis>a workstation consisting of a keyboard a pointing
+ * device (such as a mouse) and one or more screens</emphasis>.
+ * It is used to open and keep track of various #GdkScreen objects currently
+ * instanciated by the application. It is also used to grab and release the keyboard
+ * and the mouse pointer.
+ */
+
+
 enum {
   OPENED,
   CLOSED,

@@ -132,6 +132,28 @@ struct _GdkDisplayClass
 		  gboolean    is_error);
 };
 
+/**
+ * GdkDisplayPointerHooks:
+ * @get_pointer: Obtains the current pointer position and modifier state.
+ *  The position is given in coordinates relative to the screen containing
+ *  the pointer, which is returned in @screen.
+ * @window_get_pointer: Obtains the window underneath the mouse pointer.
+ *  Current pointer position and modifier state are returned in @x, @y and
+ *  @mask. The position is given in coordinates relative to @window.
+ * @window_at_pointer: Obtains the window underneath the mouse pointer,
+ *  returning the location of that window in @win_x, @win_y. Returns %NULL
+ *  if the window under the mouse pointer is not known to GDK (for example,
+ *  belongs to another application).
+ *
+ * A table of pointers to functions for getting quantities related to
+ * the current pointer position. Each #GdkDisplay has a table of this type,
+ * which can be set using gdk_display_set_pointer_hooks().
+ *
+ * This is only useful for such low-level tools as an event recorder.
+ * Applications should never have any reason to use this facility
+ *
+ * Since: 2.2
+ */
 struct _GdkDisplayPointerHooks
 {
   void (*get_pointer)              (GdkDisplay      *display,
