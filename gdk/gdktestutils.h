@@ -29,6 +29,17 @@
 
 G_BEGIN_DECLS
 
+
+/**
+ * SECTION:gdktesting
+ * @Short_description: Test utilities
+ * @Title: Testing
+ *
+ * The functions in this section are intended to be used in test programs.
+ * They allow to simulate some user input.
+ */
+
+
 /* --- Gdk Test Utility API --- */
 void            gdk_test_render_sync            (GdkWindow      *window);
 gboolean        gdk_test_simulate_key           (GdkWindow      *window,
