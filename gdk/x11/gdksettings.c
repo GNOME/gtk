@@ -29,6 +29,10 @@
 #define GDK_SETTINGS_X_NAME(nth)        (gdk_settings_names + gdk_settings_map[nth].xsettings_offset)
 #define GDK_SETTINGS_GDK_NAME(nth)      (gdk_settings_names + gdk_settings_map[nth].gdk_offset)
 
+/* WARNING:
+ * You will need to update gdk_settings_map when adding a
+ * new setting, and make sure that checksettings does not
+ * fail before committing */
 static const char gdk_settings_names[] =
   "Net/DoubleClickTime\0"     "gtk-double-click-time\0"
   "Net/DoubleClickDistance\0" "gtk-double-click-distance\0"
