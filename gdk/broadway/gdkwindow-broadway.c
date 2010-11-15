@@ -1026,7 +1026,38 @@ _gdk_x11_window_translate (GdkWindow      *window,
                            gint            dx,
                            gint            dy)
 {
-  /* TODO: copy region */
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
+  cairo_surface_t *surface;
+
+  private = (GdkWindowObject *)window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+
+  surface = GDK_DRAWABLE_IMPL_X11 (impl)->surface;
+  if (surface)
+    {
+      cairo_t *cr;
+
+      cr = cairo_create (surface);
+
+      area = cairo_region_copy (area);
+
+      gdk_cairo_region (cr, area);
+      cairo_clip (cr);
+
+      /* NB: This is a self-copy and Cairo doesn't support that yet.
+       * So we do a litle trick.
+       */
+      cairo_push_group (cr);
+
+      cairo_set_source_surface (cr, surface, dx, dy);
+      cairo_paint (cr);
+
+      cairo_pop_group_to_source (cr);
+      cairo_paint (cr);
+
+      cairo_destroy (cr);
+    }
 }
 
 static void
