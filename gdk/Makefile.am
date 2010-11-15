@@ -36,6 +36,7 @@ INCLUDES =                              \
 	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DGDK_COMPILATION		\
 	-I$(top_srcdir)			\
+	-I$(top_builddir)		\
 	-I$(top_builddir)/gdk		\
 	$(GTK_DEBUG_FLAGS) 		\
 	$(GDK_DEP_CFLAGS)
@@ -191,7 +192,7 @@ libgdk_win32_2_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(src
 if HAVE_INTROSPECTION
 
 introspection_files = 		\
-	$(filter-out gdkkeysyms-compat.h, $(gdk_public_h_sources))	\
+	$(filter-out gtkmarshal.h gdkkeysyms-compat.h, $(gdk_public_h_sources))	\
 	$(gdk_c_sources)	\
         gdkenumtypes.c		\
         gdkenumtypes.h
@@ -242,7 +243,7 @@ GdkX11_2_0_gir_SCANNERFLAGS = --warn-all --strip-prefix=Gdk
 GdkX11_2_0_gir_INCLUDES = Gio-2.0 Gdk-2.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
 GdkX11_2_0_gir_LIBS = $(gdktargetlib)
 GdkX11_2_0_gir_FILES = $(x11_introspection_files)
-GdkX11_2_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
+GdkX11_2_0_gir_CFLAGS = $(INCLUDES) -I$(top_srcdir)/gdk -L$(top_builddir)/gdk
 INTROSPECTION_GIRS += GdkX11-2.0.gir
 
 introspection_files += $(filter-out x11/gdkx.h, $(x11_introspection_files))
