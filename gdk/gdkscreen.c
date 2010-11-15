@@ -30,6 +30,22 @@
 #include "gdkintl.h"
 
 
+/**
+ * SECTION:gdkscreen
+ * @Short_description: Object representing a physical screen
+ * @Title: GdkScreen
+ *
+ * #GdkScreen objects are the GDK representation of a physical screen. It is used
+ * throughout GDK and GTK+ to specify which screen the top level windows
+ * are to be displayed on.
+ * It is also used to query the screen specification and default settings such as
+ * the screen width (gdk_screen_get_width()), etc.
+ *
+ * Note that a screen may consist of multiple monitors which are merged to
+ * form a large screen area.
+ */
+
+
 static void gdk_screen_finalize     (GObject        *object);
 static void gdk_screen_set_property (GObject        *object,
 				     guint           prop_id,
