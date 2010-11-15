@@ -73,9 +73,29 @@ typedef struct _GdkPoint	      GdkPoint;
  */
 typedef cairo_rectangle_int_t	      GdkRectangle;
 
+/**
+ * GdkAtom:
+ *
+ * An opaque type representing a string as an index into a table
+ * of strings on the X server.
+ */
 typedef struct _GdkAtom            *GdkAtom;
 
+/**
+ * GDK_ATOM_TO_POINTER:
+ * @atom: a #GdkAtom.
+ *
+ * Converts a #GdkAtom into a pointer type.
+ */
 #define GDK_ATOM_TO_POINTER(atom) (atom)
+
+/**
+ * GDK_POINTER_TO_ATOM:
+ * @ptr: a pointer containing a #GdkAtom.
+ *
+ * Extracts a #GdkAtom from a pointer. The #GdkAtom must have been
+ * stored in the pointer with GDK_ATOM_TO_POINTER().
+ */
 #define GDK_POINTER_TO_ATOM(ptr)  ((GdkAtom)(ptr))
 
 #ifdef GDK_NATIVE_WINDOW_POINTER
@@ -85,6 +105,13 @@ typedef struct _GdkAtom            *GdkAtom;
 #endif
 
 #define _GDK_MAKE_ATOM(val) ((GdkAtom)GUINT_TO_POINTER(val))
+
+/**
+ * GDK_NONE:
+ *
+ * A null value for #GdkAtom, used in a similar way as
+ * <literal>None</literal> in the Xlib API.
+ */
 #define GDK_NONE            _GDK_MAKE_ATOM (0)
 
 #ifdef GDK_NATIVE_WINDOW_POINTER

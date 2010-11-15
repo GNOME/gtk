@@ -41,6 +41,41 @@
 #include <string.h>
 
 
+/**
+ * SECTION:properties
+ * @Short_description: Functions to manipulate properties on windows
+ * @Title: Properties and Atoms
+ *
+ * Each window under X can have any number of associated
+ * <firstterm>properties</firstterm> attached to it.
+ * Properties are arbitrary chunks of data identified by
+ * <firstterm>atom</firstterm>s. (An <firstterm>atom</firstterm>
+ * is a numeric index into a string table on the X server. They are used
+ * to transfer strings efficiently between clients without
+ * having to transfer the entire string.) A property
+ * has an associated type, which is also identified
+ * using an atom.
+ *
+ * A property has an associated <firstterm>format</firstterm>,
+ * an integer describing how many bits are in each unit
+ * of data inside the property. It must be 8, 16, or 32.
+ * When data is transferred between the server and client,
+ * if they are of different endianesses it will be byteswapped
+ * as necessary according to the format of the property.
+ * Note that on the client side, properties of format 32
+ * will be stored with one unit per <emphasis>long</emphasis>,
+ * even if a long integer has more than 32 bits on the platform.
+ * (This decision was apparently made for Xlib to maintain
+ * compatibility with programs that assumed longs were 32
+ * bits, at the expense of programs that knew better.)
+ *
+ * The functions in this section are used to add, remove
+ * and change properties on windows, to convert atoms
+ * to and from strings and to manipulate some types of
+ * data commonly stored in X window properties.
+ */
+
+
 static GPtrArray *virtual_atom_array;
 static GHashTable *virtual_atom_hash;
 
@@ -395,6 +430,18 @@ intern_atom (const gchar *atom_name,
   return result;
 }
 
+/**
+ * gdk_atom_intern:
+ * @atom_name: a string.
+ * @only_if_exists: if %TRUE, GDK is allowed to not create a new atom, but
+ *   just return %GDK_NONE if the requested atom doesn't already
+ *   exists. Currently, the flag is ignored, since checking the
+ *   existance of an atom is as expensive as creating it.
+ *
+ * Finds or creates an atom corresponding to a given string.
+ *
+ * Returns: the atom corresponding to @atom_name.
+ */
 GdkAtom
 gdk_atom_intern (const gchar *atom_name, 
 		 gboolean     only_if_exists)
@@ -438,6 +485,16 @@ get_atom_name (GdkAtom atom)
     return NULL;
 }
 
+/**
+ * gdk_atom_name:
+ * @atom: a #GdkAtom.
+ *
+ * Determines the string corresponding to an atom.
+ *
+ * Returns: a newly-allocated string containing the string
+ *   corresponding to @atom. When you are done with the
+ *   return value, you should free it using g_free().
+ */
 gchar *
 gdk_atom_name (GdkAtom atom)
 {
@@ -526,6 +583,59 @@ gdk_x11_get_xatom_name (Atom xatom)
   return get_atom_name (gdk_x11_xatom_to_atom (xatom));
 }
 
+/**
+ * gdk_property_get:
+ * @window: a #GdkWindow.
+ * @property: the property to retrieve.
+ * @type: the desired property type, or %GDK_NONE, if any type of data
+ *   is acceptable. If this does not match the actual
+ *   type, then @actual_format and @actual_length will
+ *   be filled in, a warning will be printed to stderr
+ *   and no data will be returned.
+ * @offset: the offset into the property at which to begin
+ *   retrieving data, in 4 byte units.
+ * @length: the length of the data to retrieve in bytes.  Data is
+ *   considered to be retrieved in 4 byte chunks, so @length
+ *   will be rounded up to the next highest 4 byte boundary
+ *   (so be careful not to pass a value that might overflow
+ *   when rounded up).
+ * @pdelete: if %TRUE, delete the property after retrieving the
+ *   data.
+ * @actual_property_type: location to store the actual type of
+ *   the property.
+ * @actual_format: location to store the actual return format of the
+ *   data; either 8, 16 or 32 bits.
+ * @actual_length: location to store the length of the retrieved data, in
+ *   bytes.  Data returned in the 32 bit format is stored
+ *   in a long variable, so the actual number of 32 bit
+ *   elements should be be calculated via
+ *   @actual_length / sizeof(glong) to ensure portability to
+ *   64 bit systems.
+ * @data: location to store a pointer to the data. The retrieved
+ *   data should be freed with g_free() when you are finished
+ *   using it.
+ *
+ * Retrieves a portion of the contents of a property. If the
+ * property does not exist, then the function returns %FALSE,
+ * and %GDK_NONE will be stored in @actual_property_type.
+ *
+ * <note>
+ * <para>
+ * The XGetWindowProperty() function that gdk_property_get()
+ * uses has a very confusing and complicated set of semantics.
+ * Unfortunately, gdk_property_get() makes the situation
+ * worse instead of better (the semantics should be considered
+ * undefined), and also prints warnings to stderr in cases where it
+ * should return a useful error to the program. You are advised to use
+ * XGetWindowProperty() directly until a replacement function for
+ * gdk_property_get()
+ * is provided.
+ * </para>
+ * </note>
+ *
+ * Returns: %TRUE if data was successfully received and stored
+ *   in @data, otherwise %FALSE.
+ */
 gboolean
 gdk_property_get (GdkWindow   *window,
 		  GdkAtom      property,
@@ -672,6 +782,26 @@ gdk_property_get (GdkWindow   *window,
   return TRUE;
 }
 
+/**
+ * gdk_property_change:
+ * @window: a #GdkWindow.
+ * @property: the property to change.
+ * @type: the new type for the property. If @mode is
+ *   %GDK_PROP_MODE_PREPEND or %GDK_PROP_MODE_APPEND, then this
+ *   must match the existing type or an error will occur.
+ * @format: the new format for the property. If @mode is
+ *   %GDK_PROP_MODE_PREPEND or %GDK_PROP_MODE_APPEND, then this
+ *   must match the existing format or an error will occur.
+ * @mode: a value describing how the new data is to be combined
+ *   with the current data.
+ * @data: the data (a <literal>guchar *</literal>
+ *   <literal>gushort *</literal>, or <literal>gulong *</literal>,
+ *   depending on @format), cast to a <literal>guchar *</literal>.
+ * @nelements: the number of elements of size determined by the format,
+ *   contained in @data.
+ *
+ * Changes the contents of a property on a window.
+ */
 void
 gdk_property_change (GdkWindow    *window,
 		     GdkAtom       property,
@@ -735,6 +865,13 @@ gdk_property_change (GdkWindow    *window,
 		     xtype, format, mode, (guchar *)data, nelements);
 }
 
+/**
+ * gdk_property_delete:
+ * @window: a #GdkWindow.
+ * @property: the property to delete.
+ *
+ * Deletes a property from a window.
+ */
 void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)

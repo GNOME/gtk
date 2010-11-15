@@ -480,6 +480,14 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
     }
 }
 
+/**
+ * gdk_free_text_list:
+ * @list: the value stored in the @list parameter by
+ *   a call to gdk_text_property_to_text_list().
+ *
+ * Frees the array of strings created by
+ * gdk_text_property_to_text_list().
+ */
 void
 gdk_free_text_list (gchar **list)
 {
@@ -884,6 +892,13 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
   return result;
 }
 
+/**
+ * gdk_free_compound_text:
+ * @ctext: The pointer stored in @ctext from a call to
+ *   gdk_string_to_compound_text().
+ *
+ * Frees the data returned from gdk_string_to_compound_text().
+ */
 void gdk_free_compound_text (guchar *ctext)
 {
   if (ctext)
