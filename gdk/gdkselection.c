@@ -32,6 +32,54 @@
 #include "gdkdisplay.h"
 
 
+/**
+ * SECTION:selections
+ * @Short_description: Functions for transfering data via the X selection mechanism
+ * @Title: Selections
+ *
+ * The X selection mechanism provides a way to transfer arbitrary chunks of
+ * data between programs. A <firstterm>selection</firstterm> is a essentially
+ * a named clipboard, identified by a string interned as a #GdkAtom. By
+ * claiming ownership of a selection, an application indicates that it will
+ * be responsible for supplying its contents. The most common selections are
+ * <literal>PRIMARY</literal> and <literal>CLIPBOARD</literal>.
+ *
+ * The contents of a selection can be represented in a number of formats,
+ * called <firstterm>targets</firstterm>. Each target is identified by an atom.
+ * A list of all possible targets supported by the selection owner can be
+ * retrieved by requesting the special target <literal>TARGETS</literal>. When
+ * a selection is retrieved, the data is accompanied by a type (an atom), and
+ * a format (an integer, representing the number of bits per item).
+ * See <link linkend="gdk-Properties-and-Atoms">Properties and Atoms</link>
+ * for more information.
+ *
+ * The functions in this section only contain the lowlevel parts of the
+ * selection protocol. A considerably more complicated implementation is needed
+ * on top of this. GTK+ contains such an implementation in the functions in
+ * <literal>gtkselection.h</literal> and programmers should use those functions
+ * instead of the ones presented here. If you plan to implement selection
+ * handling directly on top of the functions here, you should refer to the
+ * X Inter-client Communication Conventions Manual (ICCCM).
+ */
+
+/**
+ * gdk_selection_owner_set:
+ * @owner: a #GdkWindow or %NULL to indicate that the
+ *   the owner for the given should be unset.
+ * @selection: an atom identifying a selection.
+ * @time_: timestamp to use when setting the selection.
+ *   If this is older than the timestamp given last
+ *   time the owner was set for the given selection, the
+ *   request will be ignored.
+ * @send_event: if %TRUE, and the new owner is different
+ *   from the current owner, the current owner
+ *   will be sent a SelectionClear event.
+ *
+ * Sets the owner of the given selection.
+ *
+ * Returns: %TRUE if the selection owner was successfully
+ *   changed to @owner, otherwise %FALSE.
+ */
 gboolean
 gdk_selection_owner_set (GdkWindow *owner,
 			 GdkAtom    selection,
@@ -43,6 +91,21 @@ gdk_selection_owner_set (GdkWindow *owner,
 					      time, send_event);
 }
 
+/**
+ * gdk_selection_owner_get:
+ * @selection: an atom indentifying a selection.
+ *
+ * Determines the owner of the given selection.
+ *
+ * Returns: if there is a selection owner for this window,
+ *   and it is a window known to the current process,
+ *   the #GdkWindow that owns the selection, otherwise
+ *   %NULL. Note that the return value may be owned
+ *   by a different process if a foreign window
+ *   was previously created for that window, but
+ *   a new foreign window will never be created by
+ *   this call.
+ */
 GdkWindow*
 gdk_selection_owner_get (GdkAtom selection)
 {
@@ -50,6 +113,18 @@ gdk_selection_owner_get (GdkAtom selection)
 					      selection);
 }
 
+/**
+ * gdk_selection_send_notify:
+ * @requestor: window to which to deliver response.
+ * @selection: selection that was requested.
+ * @target: target that was selected.
+ * @property: property in which the selection owner stored the
+ *   data, or %GDK_NONE to indicate that the request
+ *   was rejected.
+ * @time_: timestamp.
+ *
+ * Sends a response to SelectionRequest event.
+ */
 void
 gdk_selection_send_notify (GdkNativeWindow requestor,
 			   GdkAtom         selection,
