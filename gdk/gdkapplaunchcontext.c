@@ -29,6 +29,34 @@
 #include "gdkintl.h"
 
 
+/**
+ * SECTION:gdkapplaunchcontext
+ * @Short_description: Startup notification for applications
+ * @Title: Application launching
+ *
+ * GdkAppLaunchContext is an implementation of #GAppLaunchContext that
+ * handles launching an application in a graphical context. It provides
+ * startup notification and allows to launch applications on a specific
+ * screen or workspace.
+ * <example>
+ * <title>Launching an application</title>
+ * <programlisting>
+ * GdkAppLaunchContext *context;
+ *
+ * context = gdk_app_launch_context_new (<!-- -->);
+ *
+ * gdk_app_launch_context_set_screen (my_screen);
+ * gdk_app_launch_context_set_timestamp (event->time);
+ *
+ * if (!g_app_info_launch_default_for_uri ("http://www.gtk.org", context, &error))
+ *   g_warning ("Launching failed: %s\n", error->message);
+ *
+ * g_object_unref (context);
+ * </programlisting>
+ * </example>
+ */
+
+
 static void    gdk_app_launch_context_finalize    (GObject           *object);
 static gchar * gdk_app_launch_context_get_display (GAppLaunchContext *context,
                                                    GAppInfo          *info,
