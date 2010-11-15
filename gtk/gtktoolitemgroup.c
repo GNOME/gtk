@@ -1754,10 +1754,8 @@ gtk_tool_item_group_set_header_relief (GtkToolItemGroup *group,
 static gint64
 gtk_tool_item_group_get_animation_timestamp (GtkToolItemGroup *group)
 {
-  GTimeVal now;
-
-  g_source_get_current_time (group->priv->animation_timeout, &now);
-  return (now.tv_sec * G_USEC_PER_SEC + now.tv_usec - group->priv->animation_start) / 1000;
+  return (g_source_get_time (group->priv->animation_timeout) -
+          group->priv->animation_start) / 1000;
 }
 
 static void
