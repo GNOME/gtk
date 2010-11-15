@@ -47,6 +47,12 @@ typedef struct _GdkDrawableClass GdkDrawableClass;
 #define GDK_IS_DRAWABLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAWABLE))
 #define GDK_DRAWABLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAWABLE, GdkDrawableClass))
 
+/**
+ * GdkDrawable:
+ *
+ * An opaque structure representing an object that can be
+ * drawn onto.
+ */
 struct _GdkDrawable
 {
   GObject parent_instance;
