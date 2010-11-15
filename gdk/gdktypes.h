@@ -120,6 +120,12 @@ typedef struct _GdkAtom            *GdkAtom;
  */
 #define GDK_NONE            _GDK_MAKE_ATOM (0)
 
+/**
+ * GdkNativeWindow:
+ *
+ * Used to represent native windows (<type>Window</type>s for the X11
+ * backend, <type>HWND</type>s for Win32).
+ */
 #ifdef GDK_NATIVE_WINDOW_POINTER
 typedef gpointer GdkNativeWindow;
 #else
