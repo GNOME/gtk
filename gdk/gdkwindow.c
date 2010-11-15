@@ -8864,8 +8864,7 @@ _gdk_display_set_window_under_pointer (GdkDisplay *display,
  * Pointer grabs are used for operations which need complete control over mouse
  * events, even if the mouse leaves the application.
  * For example in GTK+ it is used for Drag and Drop, for dragging the handle in
- * the #GtkHPaned and #GtkVPaned widgets, and for resizing columns in #GtkCList
- * widgets.
+ * the #GtkHPaned and #GtkVPaned widgets.
  *
  * Note that if the event mask of an X window has selected both button press and
  * button release events, then a button press event will cause an automatic
@@ -8982,13 +8981,13 @@ gdk_pointer_grab (GdkWindow *	  window,
  * gdk_keyboard_grab:
  * @window: the #GdkWindow which will own the grab (the grab window).
  * @owner_events: if %FALSE then all keyboard events are reported with respect to
- *                @window. If %TRUE then keyboard events for this application are
- *                reported as normal, but keyboard events outside this application
- *                are reported with respect to @window. Both key press and key
- *                release events are always reported, independant of the event mask
- *                set by the application.
- * @time: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
-available.
+ *   @window. If %TRUE then keyboard events for this application are
+ *   reported as normal, but keyboard events outside this application
+ *   are reported with respect to @window. Both key press and key
+ *   release events are always reported, independant of the event mask
+ *   set by the application.
+ * @time_: a timestamp from a #GdkEvent, or %GDK_CURRENT_TIME if no timestamp is
+ *   available.
  *
  * Grabs the keyboard so that all events are passed to this
  * application until the keyboard is ungrabbed with gdk_keyboard_ungrab().
