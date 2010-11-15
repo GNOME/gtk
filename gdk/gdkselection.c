@@ -137,6 +137,27 @@ gdk_selection_send_notify (GdkNativeWindow requestor,
 					 target, property, time);
 }
 
+/**
+ * gdk_text_property_to_text_list:
+ * @encoding: an atom representing the encoding. The most common
+ *   values for this are <literal>STRING</literal>,
+ *   or <literal>COMPOUND_TEXT</literal>. This is
+ *   value used as the type for the property.
+ * @format: the format of the property.
+ * @text: the text data.
+ * @length: the length of the property, in items.
+ * @list: location to store a terminated array of strings
+ *   in the encoding of the current locale. This
+ *   array should be freed using gdk_free_text_list().
+ *
+ * Converts a text string from the encoding as it is stored in
+ * a property into an array of strings in the encoding of
+ * the current local. (The elements of the array represent
+ * the nul-separated elements of the original text string.)
+ *
+ * Returns: the number of strings stored in @list, or 0,
+ *   if the conversion failed.
+ */
 gint
 gdk_text_property_to_text_list (GdkAtom       encoding,
 				gint          format, 
@@ -174,6 +195,20 @@ gdk_text_property_to_utf8_list (GdkAtom        encoding,
 						     encoding, format, text, length, list);
 }
 
+/**
+ * gdk_string_to_compound_text:
+ * @str: a nul-terminated string.
+ * @encoding: location to store the encoding atom (to be used as
+ *   the type for the property).
+ * @format: location to store the format for the property.
+ * @ctext: location to store newly allocated data for the property.
+ * @length: location to store the length of @ctext in items.
+ *
+ * Converts a string from the encoding of the current locale
+ * into a form suitable for storing in a window property.
+ *
+ * Returns: 0 upon sucess, non-zero upon failure.
+ */
 gint
 gdk_string_to_compound_text (const gchar *str,
 			     GdkAtom     *encoding,

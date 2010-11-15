@@ -35,6 +35,16 @@
 
 G_BEGIN_DECLS
 
+
+/**
+ * GdkPropMode:
+ * @GDK_PROP_MODE_REPLACE: the new data replaces the existing data.
+ * @GDK_PROP_MODE_PREPEND: the new data is prepended to the existing data.
+ * @GDK_PROP_MODE_APPEND: the new data is appended to the existing data.
+ *
+ * Describes how existing data is combined with new data when
+ * using gdk_property_change().
+ */
 typedef enum
 {
   GDK_PROP_MODE_REPLACE,
@@ -42,10 +52,12 @@ typedef enum
   GDK_PROP_MODE_APPEND
 } GdkPropMode;
 
+
 GdkAtom gdk_atom_intern (const gchar *atom_name,
 			 gboolean     only_if_exists);
 GdkAtom gdk_atom_intern_static_string (const gchar *atom_name);
 gchar*  gdk_atom_name   (GdkAtom      atom);
+
 
 gboolean gdk_property_get    (GdkWindow     *window,
 			      GdkAtom        property,
@@ -66,6 +78,7 @@ void     gdk_property_change (GdkWindow     *window,
 			      gint           nelements);
 void     gdk_property_delete (GdkWindow     *window,
 			      GdkAtom        property);
+
 #ifndef GDK_MULTIHEAD_SAFE
 gint gdk_text_property_to_text_list (GdkAtom        encoding,
 				     gint           format,
@@ -87,7 +100,7 @@ gint gdk_string_to_compound_text    (const gchar   *str,
 				     gint          *format,
 				     guchar       **ctext,
 				     gint          *length);
-#endif
+#endif /* GDK_MULTIHEAD_SAFE */
 
 gint gdk_text_property_to_text_list_for_display (GdkDisplay     *display,
 						 GdkAtom         encoding,
