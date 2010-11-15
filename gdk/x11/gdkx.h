@@ -33,6 +33,28 @@
 
 G_BEGIN_DECLS
 
+
+/**
+ * SECTION:x_interaction
+ * @Short_description: X backend-specific functions
+ * @Title: X Window System Interaction
+ *
+ * The functions in this section are specific to the GDK X11 backend.
+ * To use them, you need to include the <literal>&lt;gdk/gdkx.h&gt;</literal>
+ * header and use the X11-specific pkg-config files to build your
+ * application (either <literal>gdk-x11-3.0</literal> or
+ * <literal>gtk+-x11-3.0</literal>).
+ *
+ * To make your code compile with other GDK backends, guard backend-specific
+ * calls by an ifdef as follows:
+ * <informalexample><programlisting>
+ * #ifdef GDK_WINDOWING_X11
+ *   /<!---->* X11-specific calls here... *<!---->/
+ * #endif
+ * </programlisting></informalexample>
+ */
+
+
 Display *gdk_x11_drawable_get_xdisplay    (GdkDrawable *drawable);
 XID      gdk_x11_drawable_get_xid         (GdkDrawable *drawable);
 GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
@@ -54,21 +76,89 @@ Display *gdk_x11_get_default_xdisplay     (void);
 gint     gdk_x11_get_default_screen       (void);
 #endif
 
+/**
+ * GDK_CURSOR_XDISPLAY:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the display of a #GdkCursor.
+ *
+ * Returns: an Xlib <type>Display*</type>.
+ */
 #define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
+
+/**
+ * GDK_CURSOR_XCURSOR:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the X cursor belonging to a #GdkCursor.
+ *
+ * Returns: an Xlib <type>Cursor</type>.
+ */
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
+
 
 #ifdef GDK_COMPILATION
 
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 
+/**
+ * GDK_DISPLAY_XDISPLAY:
+ * @display: a #GdkDisplay.
+ *
+ * Returns the display of a #GdkDisplay.
+ */
 #define GDK_DISPLAY_XDISPLAY(display) (GDK_DISPLAY_X11(display)->xdisplay)
 
+/**
+ * GDK_WINDOW_XDISPLAY:
+ * @win: a #GdkWindow.
+ *
+ * Returns the display of a #GdkWindow.
+ *
+ * Returns: an Xlib <type>Display*</type>.
+ */
 #define GDK_WINDOW_XDISPLAY(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xdisplay)
 #define GDK_WINDOW_XID(win)           (GDK_DRAWABLE_IMPL_X11(((GdkWindowObject *)win)->impl)->xid)
+
+/**
+ * GDK_DRAWABLE_XDISPLAY:
+ * @win: a #GdkDrawable.
+ *
+ * Returns the display of a #GdkDrawable.
+ *
+ * Returns: an Xlib <type>Display*</type>.
+ */
 #define GDK_DRAWABLE_XDISPLAY(win)    (GDK_WINDOW_XDISPLAY (win))
+
+/**
+ * GDK_DRAWABLE_XID:
+ * @win: a #GdkDrawable.
+ *
+ * Returns the X resource (window or pixmap) belonging to a #GdkDrawable.
+ *
+ * Returns: the ID of @win's X resource.
+ */
 #define GDK_DRAWABLE_XID(win)         (GDK_WINDOW_XID (win))
+
+/**
+ * GDK_SCREEN_XDISPLAY:
+ * @screen: a #GdkScreen.
+ *
+ * Returns the display of a #GdkScreen.
+ *
+ * Returns: an Xlib <type>Display*</type>.
+ */
 #define GDK_SCREEN_XDISPLAY(screen)   (GDK_SCREEN_X11 (screen)->xdisplay)
+
+/**
+ * GDK_SCREEN_XSCREEN:
+ * @screen: a #GdkScreen
+ *
+ * Returns the screen of a #GdkScreen.
+ *
+ * Returns: an Xlib <type>Screen*</type>.
+ */
 #define GDK_SCREEN_XSCREEN(screen)    (GDK_SCREEN_X11 (screen)->xscreen)
 #define GDK_SCREEN_XNUMBER(screen)    (GDK_SCREEN_X11 (screen)->screen_num) 
 #define GDK_WINDOW_XWINDOW	      GDK_DRAWABLE_XID
@@ -76,18 +166,48 @@ gint     gdk_x11_get_default_screen       (void);
 #else /* GDK_COMPILATION */
 
 #ifndef GDK_MULTIHEAD_SAFE
+/**
+ * GDK_ROOT_WINDOW:
+ *
+ * Obtains the Xlib window id of the root window of the current screen.
+ */
 #define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
 #endif
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
 #define GDK_WINDOW_XDISPLAY(win)      (gdk_x11_drawable_get_xdisplay (gdk_x11_window_get_drawable_impl (win)))
+
+/**
+ * GDK_WINDOW_XID:
+ * @win: a #GdkWindow.
+ *
+ * Returns the X window belonging to a #GdkWindow.
+ *
+ * Returns: the Xlib <type>Window</type> of @win.
+ */
 #define GDK_WINDOW_XID(win)           (gdk_x11_drawable_get_xid (win))
+
+/**
+ * GDK_WINDOW_XWINDOW:
+ *
+ * Another name for GDK_DRAWABLE_XID().
+ */
 #define GDK_WINDOW_XWINDOW(win)       (gdk_x11_drawable_get_xid (win))
 #define GDK_DRAWABLE_XDISPLAY(win)    (gdk_x11_drawable_get_xdisplay (win))
 #define GDK_DRAWABLE_XID(win)         (gdk_x11_drawable_get_xid (win))
 #define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
 #define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
+
+/**
+ * GDK_SCREEN_XNUMBER:
+ * @screen: a #GdkScreen
+ *
+ * Returns the index of a #GdkScreen.
+ *
+ * Returns: the position of @screen among the screens of
+ *  its display.
+ */
 #define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
 
 #endif /* GDK_COMPILATION */
