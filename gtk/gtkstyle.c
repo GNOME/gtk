@@ -1800,6 +1800,11 @@ transform_detail_string (const gchar     *detail,
     gtk_style_context_add_class (context, "dock");
   else if (strcmp (detail, "notebook") == 0)
     gtk_style_context_add_class (context, "notebook");
+  else if (strcmp (detail, "tab") == 0)
+    {
+      gtk_style_context_add_class (context, "notebook");
+      gtk_style_context_add_region (context, GTK_STYLE_REGION_TAB, 0);
+    }
   else if (g_str_has_prefix (detail, "cell"))
     {
       GtkRegionFlags row, col;
