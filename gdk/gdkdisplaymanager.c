@@ -35,14 +35,19 @@
 #include "gdkintl.h"
 
 
-struct _GdkDisplayManager
-{
-  GObject parent_instance;
-};
+/**
+ * SECTION:gdkdisplaymanager
+ * @Short_description: Maintains a list of all open GdkDisplays
+ * @Title: GdkDisplayManager
+ *
+ * The purpose of the #GdkDisplayManager singleton object is to offer
+ * notification when displays appear or disappear or the default display
+ * changes.
+ */
+
 
 enum {
   PROP_0,
-
   PROP_DEFAULT_DISPLAY
 };
 
