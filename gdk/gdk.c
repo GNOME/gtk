@@ -38,6 +38,17 @@
 #include <string.h>
 #include <stdlib.h>
 
+
+/**
+ * SECTION:general
+ * @Short_description: Library initialization and miscellaneous functions
+ * @Title: General
+ *
+ * This section describes the GDK initialization functions and miscellaneous
+ * utility functions.
+ */
+
+
 typedef struct _GdkPredicate  GdkPredicate;
 
 struct _GdkPredicate
@@ -338,25 +349,19 @@ gdk_display_open_default_libgtk_only (void)
 
 /**
  * gdk_init_check:
- * @argc: (inout):
- * @argv: (array length=argc) (inout):
+ * @argc: (inout): the number of command line arguments.
+ * @argv: (array length=argc) (inout): the array of command line arguments.
  *
- *   Initialize the library for use.
+ * Initializes the GDK library and connects to the X server, returning %TRUE on
+ * success.
  *
- * Arguments:
- *   "argc" is the number of arguments.
- *   "argv" is an array of strings.
+ * Any arguments used by GDK are removed from the array and @argc and @argv are
+ * updated accordingly.
  *
- * Results:
- *   "argc" and "argv" are modified to reflect any arguments
- *   which were not handled. (Such arguments should either
- *   be handled by the application or dismissed). If initialization
- *   fails, returns FALSE, otherwise TRUE.
+ * GTK+ initializes GDK in gtk_init() and so this function is not usually needed
+ * by GTK+ applications.
  *
- * Side effects:
- *   The library is initialized.
- *
- *--------------------------------------------------------------
+ * Returns: %TRUE if initialization succeeded.
  */
 gboolean
 gdk_init_check (int    *argc,
@@ -370,8 +375,18 @@ gdk_init_check (int    *argc,
 
 /**
  * gdk_init:
- * @argc: (inout):
- * @argv: (array length=argc) (inout):
+ * @argc: (inout): the number of command line arguments.
+ * @argv: (array length=argc) (inout): the array of command line arguments.
+ *
+ * Initializes the GDK library and connects to the X server.
+ * If initialization fails, a warning message is output and the application
+ * terminates with a call to <literal>exit(1)</literal>.
+ *
+ * Any arguments used by GDK are removed from the array and @argc and @argv are
+ * updated accordingly.
+ *
+ * GTK+ initializes GDK in gtk_init() and so this function is not usually needed
+ * by GTK+ applications.
  */
 void
 gdk_init (int *argc, char ***argv)
@@ -772,13 +787,30 @@ gdk_threads_add_timeout_seconds (guint       interval,
                                                interval, function, data, NULL);
 }
 
-
+/**
+ * gdk_get_program_class:
+ *
+ * Gets the program class. Unless the program class has explicitly
+ * been set with gdk_set_program_class() or with the <option>--class</option>
+ * commandline option, the default value is the program name (determined
+ * with g_get_prgname()) with the first character converted to uppercase.
+ *
+ * Returns: the program class.
+ */
 G_CONST_RETURN char *
 gdk_get_program_class (void)
 {
   return gdk_progclass;
 }
 
+/**
+ * gdk_set_program_class:
+ * @program_class: a string.
+ *
+ * Sets the program class. The X11 backend uses the program class to set
+ * the class name part of the <literal>WM_CLASS</literal> property on
+ * toplevel windows; see the ICCCM.
+ */
 void
 gdk_set_program_class (const char *program_class)
 {

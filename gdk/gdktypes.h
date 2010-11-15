@@ -196,9 +196,18 @@ typedef enum
   GDK_ERROR_MEM	  = -4
 } GdkStatus;
 
-/* We define specific numeric values for these constants,
- * since old application code may depend on them matching the X values
- * We don't actually depend on the matchup ourselves.
+/**
+ * GdkGrabStatus:
+ * @GDK_GRAB_SUCCESS: the resource was successfully grabbed.
+ * @GDK_GRAB_ALREADY_GRABBED: the resource is actively grabbed by another client.
+ * @GDK_GRAB_INVALID_TIME: the resource was grabbed more recently than the
+ *  specified time.
+ * @GDK_GRAB_NOT_VIEWABLE: the grab window or the @confine_to window are not
+ *  viewable.
+ * @GDK_GRAB_FROZEN: the resource is frozen by an active grab of another client.
+ *
+ * Returned by gdk_pointer_grab() and gdk_keyboard_grab() to indicate
+ * success or the reason for the failure of the grab attempt.
  */
 typedef enum
 {
