@@ -106,8 +106,8 @@ struct _GtkCellAreaClass
   void               (* get_preferred_width)             (GtkCellArea             *area,
 							  GtkCellAreaContext      *context,
                                                           GtkWidget               *widget,
-                                                          gint                    *minimum_size,
-                                                          gint                    *natural_size);
+                                                          gint                    *minimum_width,
+                                                          gint                    *natural_width);
   void               (* get_preferred_height_for_width)  (GtkCellArea             *area,
 							  GtkCellAreaContext      *context,
                                                           GtkWidget               *widget,
@@ -117,8 +117,8 @@ struct _GtkCellAreaClass
   void               (* get_preferred_height)            (GtkCellArea             *area,
 							  GtkCellAreaContext      *context,
                                                           GtkWidget               *widget,
-                                                          gint                    *minimum_size,
-                                                          gint                    *natural_size);
+                                                          gint                    *minimum_height,
+                                                          gint                    *natural_height);
   void               (* get_preferred_width_for_height)  (GtkCellArea             *area,
 							  GtkCellAreaContext      *context,
                                                           GtkWidget               *widget,

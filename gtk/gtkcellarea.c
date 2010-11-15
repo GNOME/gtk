@@ -282,6 +282,19 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->activate   = gtk_cell_area_real_activate;
 
   /* Signals */
+
+  /**
+   * GtkCellArea::add-editable:
+   * @area: the #GtkCellArea where editing started
+   * @renderer: the #GtkCellRenderer that started the edited
+   * @editable: the #GtkCellEditable widget to add
+   * @cell_area: the #GtkWidget relative #GdkRectangle coordinates
+   *             where @editable should be added
+   * @path:      the #GtkTreePath string this edit was initiated for
+   *
+   * Indicates that editing has started on @renderer and that @editable
+   * should be added to the owning cell layouting widget at @cell_area.
+   */
   cell_area_signals[SIGNAL_ADD_EDITABLE] =
     g_signal_new (I_("add-editable"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -295,6 +308,16 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 		  GDK_TYPE_RECTANGLE,
 		  G_TYPE_STRING);
 
+
+  /**
+   * GtkCellArea::remove-editable:
+   * @area: the #GtkCellArea where editing finished
+   * @renderer: the #GtkCellRenderer that finished editeding
+   * @editable: the #GtkCellEditable widget to remove
+   *
+   * Indicates that editing finished on @renderer and that @editable
+   * should be removed from the owning cell layouting widget.
+   */
   cell_area_signals[SIGNAL_REMOVE_EDITABLE] =
     g_signal_new (I_("remove-editable"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -306,6 +329,21 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 		  GTK_TYPE_CELL_RENDERER,
 		  GTK_TYPE_CELL_EDITABLE);
 
+  /**
+   * GtkCellArea::focus-changed:
+   * @area: the #GtkCellArea where focus changed
+   * @renderer: the #GtkCellRenderer that has focus
+   * @path: the current #GtkTreePath string set for @area
+   *
+   * Indicates that focus changed on this @area. This signal
+   * is emitted either as a result of focus handling or event
+   * handling.
+   *
+   * It's possible that the signal is emitted even if the
+   * currently focused renderer did not change, this is
+   * because focus may change to the same renderer in the
+   * same cell area for a different row of data.
+   */
   cell_area_signals[SIGNAL_FOCUS_CHANGED] =
     g_signal_new (I_("focus-changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
@@ -1155,6 +1193,17 @@ gtk_cell_area_create_context (GtkCellArea *area)
 }
 
 
+/**
+ * gtk_cell_area_get_request_mode:
+ * @area: a #GtkCellArea
+ *
+ * Gets whether the area prefers a height-for-width layout
+ * or a width-for-height layout.
+ *
+ * Returns: The #GtkSizeRequestMode preferred by @area.
+ *
+ * Since: 3.0
+ */
 GtkSizeRequestMode 
 gtk_cell_area_get_request_mode (GtkCellArea *area)
 {
@@ -1174,12 +1223,31 @@ gtk_cell_area_get_request_mode (GtkCellArea *area)
   return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
+/**
+ * gtk_cell_area_get_preferred_width:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext to perform this request with
+ * @widget: the #GtkWidget where @area will be rendering
+ * @minimum_width: (out) (allow-none): location to store the minimum width, or %NULL
+ * @natural_width: (out) (allow-none): location to store the natural width, or %NULL
+ *
+ * Retrieves a cell area's initial minimum and natural width.
+ *
+ * @area will store some geometrical information in @context along the way,
+ * when requesting sizes over an arbitrary number of rows, its not important
+ * to check the @minimum_width and @natural_width of this call but rather to
+ * call gtk_cell_area_context_sum_preferred_width() and then consult 
+ * gtk_cell_area_context_get_preferred_width().
+ *
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_area_get_preferred_width (GtkCellArea        *area,
 				   GtkCellAreaContext *context,
 				   GtkWidget          *widget,
-				   gint               *minimum_size,
-				   gint               *natural_size)
+				   gint               *minimum_width,
+				   gint               *natural_width)
 {
   GtkCellAreaClass *class;
 
@@ -1189,12 +1257,39 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->get_preferred_width)
-    class->get_preferred_width (area, context, widget, minimum_size, natural_size);
+    class->get_preferred_width (area, context, widget, minimum_width, natural_width);
   else
     g_warning ("GtkCellAreaClass::get_preferred_width not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
+/**
+ * gtk_cell_area_get_preferred_height_for_width:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext which has already been requested for widths.
+ * @widget: the #GtkWidget where @area will be rendering
+ * @width: the width for which to check the height of this area
+ * @minimum_height: (out) (allow-none): location to store the minimum height, or %NULL
+ * @natural_height: (out) (allow-none): location to store the natural height, or %NULL
+ *
+ * Retrieves a cell area's minimum and natural height if it would be given
+ * the specified @width.
+ *
+ * @area stores some geometrical information in @context along the way
+ * while calling gtk_cell_area_get_preferred_width(), it's important to
+ * perform a series of gtk_cell_area_get_preferred_width() requests with
+ * @context first and then call gtk_cell_area_get_preferred_height_for_width()
+ * on each cell area individually to get the height for width of each
+ * fully requested row.
+ *
+ * If at some point, the width of a single row changes, it should be
+ * requested with gtk_cell_area_get_preferred_width() again and then
+ * the full with of the requested rows checked again after calling
+ * gtk_cell_area_context_sum_preferred_width(), and then the height
+ * for width of each row needs to be requested again.
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
 					      GtkCellAreaContext *context,
@@ -1212,12 +1307,31 @@ gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
   class->get_preferred_height_for_width (area, context, widget, width, minimum_height, natural_height);
 }
 
+
+/**
+ * gtk_cell_area_get_preferred_height:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext to perform this request with
+ * @widget: the #GtkWidget where @area will be rendering
+ * @minimum_height: (out) (allow-none): location to store the minimum height, or %NULL
+ * @natural_height: (out) (allow-none): location to store the natural height, or %NULL
+ *
+ * Retrieves a cell area's initial minimum and natural height.
+ *
+ * @area will store some geometrical information in @context along the way,
+ * when requesting sizes over an arbitrary number of rows, its not important
+ * to check the @minimum_height and @natural_height of this call but rather to
+ * call gtk_cell_area_context_sum_preferred_height() and then consult 
+ * gtk_cell_area_context_get_preferred_height().
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_area_get_preferred_height (GtkCellArea        *area,
 				    GtkCellAreaContext *context,
 				    GtkWidget          *widget,
-				    gint               *minimum_size,
-				    gint               *natural_size)
+				    gint               *minimum_height,
+				    gint               *natural_height)
 {
   GtkCellAreaClass *class;
 
@@ -1227,12 +1341,39 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->get_preferred_height)
-    class->get_preferred_height (area, context, widget, minimum_size, natural_size);
+    class->get_preferred_height (area, context, widget, minimum_height, natural_height);
   else
     g_warning ("GtkCellAreaClass::get_preferred_height not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
+/**
+ * gtk_cell_area_get_preferred_width_for_height:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext which has already been requested for widths.
+ * @widget: the #GtkWidget where @area will be rendering
+ * @height: the height for which to check the width of this area
+ * @minimum_width: (out) (allow-none): location to store the minimum width, or %NULL
+ * @natural_width: (out) (allow-none): location to store the natural width, or %NULL
+ *
+ * Retrieves a cell area's minimum and natural width if it would be given
+ * the specified @height.
+ *
+ * @area stores some geometrical information in @context along the way
+ * while calling gtk_cell_area_get_preferred_height(), it's important to
+ * perform a series of gtk_cell_area_get_preferred_height() requests with
+ * @context first and then call gtk_cell_area_get_preferred_width_for_height()
+ * on each cell area individually to get the height for width of each
+ * fully requested row.
+ *
+ * If at some point, the width of a single row changes, it should be
+ * requested with gtk_cell_area_get_preferred_width() again and then
+ * the full with of the requested rows checked again after calling
+ * gtk_cell_area_context_sum_preferred_width(), and then the height
+ * for width of each row needs to be requested again.
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_area_get_preferred_width_for_height (GtkCellArea        *area,
 					      GtkCellAreaContext *context,
