@@ -32,6 +32,28 @@
 #include "gdkinternals.h"
 
 
+/**
+ * SECTION:cursors
+ * @Short_description: Standard and pixmap cursors
+ * @Title: Cursors
+ *
+ * These functions are used to create and destroy cursors.
+ * There is a number of standard cursors, but it is also
+ * possible to construct new cursors from pixbufs. There
+ * may be limitations as to what kinds of cursors can be
+ * constructed on a given display, see
+ * gdk_display_supports_cursor_alpha(),
+ * gdk_display_supports_cursor_color(),
+ * gdk_display_get_default_cursor_size() and
+ * gdk_display_get_maximal_cursor_size().
+ *
+ * Cursors by themselves are not very interesting, they must be be
+ * bound to a window for users to see them. This is done with
+ * gdk_window_set_cursor() or by setting the cursor member of the
+ * #GdkWindowAttr struct passed to gdk_window_new().
+ */
+
+
 G_DEFINE_BOXED_TYPE (GdkCursor, gdk_cursor,
                      gdk_cursor_ref,
                      gdk_cursor_unref)
@@ -106,5 +128,6 @@ GdkCursorType
 gdk_cursor_get_cursor_type (GdkCursor *cursor)
 {
   g_return_val_if_fail (cursor != NULL, GDK_BLANK_CURSOR);
+
   return cursor->type;
 }
