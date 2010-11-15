@@ -64,7 +64,24 @@ guint    gdk_threads_add_timeout_seconds      (guint          interval,
                                                GSourceFunc    function,
                                                gpointer       data);
 
+/**
+ * GDK_THREADS_ENTER:
+ *
+ * This macro marks the beginning of a critical section in which GDK and
+ * GTK+ functions can be called safely and without causing race
+ * conditions.  Only one thread at a time can be in such a critial
+ * section. The macro expands to a no-op if #G_THREADS_ENABLED has not
+ * been defined. Typically gdk_threads_enter() should be used instead of
+ * this macro.
+ */
 #define GDK_THREADS_ENTER() gdk_threads_enter()
+
+/**
+ * GDK_THREADS_LEAVE:
+ *
+ * This macro marks the end of a critical section
+ * begun with #GDK_THREADS_ENTER.
+ */
 #define GDK_THREADS_LEAVE() gdk_threads_leave()
 
 G_END_DECLS
