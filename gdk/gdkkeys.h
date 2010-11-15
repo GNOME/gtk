@@ -35,9 +35,26 @@
 
 G_BEGIN_DECLS
 
+
 typedef struct _GdkKeymapKey GdkKeymapKey;
 
-/* GdkKeymapKey is a hardware key that can be mapped to a keyval */
+/**
+ * GdkKeymapKey:
+ * @keycode: the hardware keycode. This is an identifying number for a
+ *   physical key.
+ * @group: indicates movement in a horizontal direction. Usually groups are used
+ *   for two different languages. In group 0, a key might have two English
+ *   characters, and in group 1 it might have two Hebrew characters. The Hebrew
+ *   characters will be printed on the key next to the English characters.
+ * @level: indicates which symbol on the key will be used, in a vertical direction.
+ *   So on a standard US keyboard, the key with the number "1" on it also has the
+ *   exclamation point ("!") character on it. The level indicates whether to use
+ *   the "1" or the "!" symbol. The letter keys are considered to have a lowercase
+ *   letter at level 0, and an uppercase letter at level 1, though only the
+ *   uppercase letter is printed.
+ *
+ * A #GdkKeymapKey is a hardware key that can be mapped to a keyval.
+ */
 struct _GdkKeymapKey
 {
   guint keycode;
@@ -45,16 +62,6 @@ struct _GdkKeymapKey
   gint  level;
 };
 
-/* A GdkKeymap defines the translation from keyboard state
- * (including a hardware key, a modifier mask, and active keyboard group)
- * to a keyval. This translation has two phases. The first phase is
- * to determine the effective keyboard group and level for the keyboard
- * state; the second phase is to look up the keycode/group/level triplet
- * in the keymap and see what keyval it corresponds to.
- */
-
-typedef struct _GdkKeymap      GdkKeymap;
-typedef struct _GdkKeymapClass GdkKeymapClass;
 
 #define GDK_TYPE_KEYMAP              (gdk_keymap_get_type ())
 #define GDK_KEYMAP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_KEYMAP, GdkKeymap))
@@ -63,6 +70,19 @@ typedef struct _GdkKeymapClass GdkKeymapClass;
 #define GDK_IS_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_KEYMAP))
 #define GDK_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_KEYMAP, GdkKeymapClass))
 
+typedef struct _GdkKeymap      GdkKeymap;
+typedef struct _GdkKeymapClass GdkKeymapClass;
+
+/**
+ * GdkKeymap:
+ *
+ * A #GdkKeymap defines the translation from keyboard state
+ * (including a hardware key, a modifier mask, and active keyboard group)
+ * to a keyval. This translation has two phases. The first phase is
+ * to determine the effective keyboard group and level for the keyboard
+ * state; the second phase is to look up the keycode/group/level triplet
+ * in the keymap and see what keyval it corresponds to.
+ */
 struct _GdkKeymap
 {
   GObject     parent_instance;
@@ -105,6 +125,16 @@ gboolean       gdk_keymap_get_entries_for_keycode  (GdkKeymap           *keymap,
 						    GdkKeymapKey       **keys,
 						    guint              **keyvals,
 						    gint                *n_entries);
+
+/**
+ * gdk_keymap_get_direction:
+ * @keymap: a #GdkKeymap or %NULL to use the default keymap.
+ *
+ * Returns the direction of the keymap.
+ *
+ * Returns: the direction of the keymap, %PANGO_DIRECTION_LTR or
+ *   %PANGO_DIRECTION_RTL.
+ */
 PangoDirection gdk_keymap_get_direction            (GdkKeymap           *keymap);
 gboolean       gdk_keymap_have_bidi_layouts        (GdkKeymap           *keymap);
 gboolean       gdk_keymap_get_caps_lock_state      (GdkKeymap           *keymap);
@@ -117,6 +147,16 @@ gboolean       gdk_keymap_map_virtual_modifiers    (GdkKeymap           *keymap,
 /* Key values
  */
 gchar*   gdk_keyval_name         (guint        keyval) G_GNUC_CONST;
+
+/**
+ * gdk_keyval_from_name:
+ * @keyval_name: a key name.
+ *
+ * Converts a key name to a key value.
+ *
+ * Returns: the corresponding key value, or %GDK_VoidSymbol if the key name is
+ *  not a valid key.
+ */
 guint    gdk_keyval_from_name    (const gchar *keyval_name);
 void     gdk_keyval_convert_case (guint        symbol,
 				  guint       *lower,
