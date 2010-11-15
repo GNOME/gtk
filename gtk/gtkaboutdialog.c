@@ -1401,7 +1401,7 @@ update_credits_button_visibility (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_authors:
  * @about: a #GtkAboutDialog
- * @authors: a %NULL-terminated array of strings
+ * @authors: (array zero-terminated=1): a %NULL-terminated array of strings
  *
  * Sets the strings which are displayed in the authors tab
  * of the secondary credits dialog.
@@ -1456,7 +1456,7 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_documenters:
  * @about: a #GtkAboutDialog
- * @documenters: a %NULL-terminated array of strings
+ * @documenters: (array zero-terminated=1): a %NULL-terminated array of strings
  *
  * Sets the strings which are displayed in the documenters tab
  * of the secondary credits dialog.
@@ -1511,7 +1511,7 @@ gtk_about_dialog_get_artists (GtkAboutDialog *about)
 /**
  * gtk_about_dialog_set_artists:
  * @about: a #GtkAboutDialog
- * @artists: a %NULL-terminated array of strings
+ * @artists: (array zero-terminated=1): a %NULL-terminated array of strings
  *
  * Sets the strings which are displayed in the artists tab
  * of the secondary credits dialog.
