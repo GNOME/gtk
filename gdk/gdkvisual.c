@@ -29,6 +29,33 @@
 
 
 /**
+ * SECTION:visuals
+ * @Short_description: Low-level display hardware information
+ * @Title: Visuals
+ *
+ * A #GdkVisual describes a particular video hardware display format. It includes
+ * information about the number of bits used for each color, the way the bits are
+ * translated into an RGB value for display, and the way the bits are stored in
+ * memory. For example, a piece of display hardware might support 24-bit color,
+ * 16-bit color, or 8-bit color; meaning 24/16/8-bit pixel sizes. For a given
+ * pixel size, pixels can be in different formats; for example the "red" element
+ * of an RGB pixel may be in the top 8 bits of the pixel, or may be in the lower
+ * 4 bits.
+ *
+ * There are several standard visuals. The visual returned by
+ * gdk_screen_get_system_visual() is the system's default visual.
+ *
+ * A number of functions are provided for determining the "best" available visual.
+ * For the purposes of making this determination, higher bit depths are considered
+ * better, and for visuals of the same bit depth, %GDK_VISUAL_PSEUDO_COLOR is
+ * preferred at 8bpp, otherwise, the visual types are ranked in the order of
+ * (highest to lowest) %GDK_VISUAL_DIRECT_COLOR, %GDK_VISUAL_TRUE_COLOR,
+ * %GDK_VISUAL_PSEUDO_COLOR, %GDK_VISUAL_STATIC_COLOR, %GDK_VISUAL_GRAYSCALE,
+ * then %GDK_VISUAL_STATIC_GRAY.
+ */
+
+
+/**
  * gdk_list_visuals:
  * 
  * Lists the available visuals for the default screen.
