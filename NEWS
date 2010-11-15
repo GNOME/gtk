@@ -1,3 +1,39 @@
+Overview of Changes from GTK+ 2.22.0 to 2.22.1
+==============================================
+
+* Bugs fixed
+ 563002 Doesn't call 'update-preview' on set_filename
+ 609622 disappearing statusicon
+ 613728 Rationalize GtkTreeView focus
+ 624025 gdk_draw_rectangle bogged down by ColorSync
+ 629722 save_entry_get_info_cb() doesn't behave correctly
+ 630962 double click isn't catched
+ 631332 gdk_pixmap_create_from_data();
+ 631473 Fix GTK+3 documentation
+ 631872 Please ship modules/input/README.multipress in tarballs
+ 632894 Only show Desktop in file chooser button if there is one
+
+* Translation updates
+ British English
+ Bulgarian
+ Catalan
+ Catalan (Valencian)
+ Czech
+ Estonian
+ Galician
+ Greek
+ Hungarian
+ Japanese
+ Kikongo
+ Lithuanian
+ Luganda
+ Polish
+ Russian
+ Slovenian
+ Telugu
+ Traditional Chinese
+
+
 Overview of Changes from GTK+ 2.21.8 to 2.22.0
 ==============================================
 
