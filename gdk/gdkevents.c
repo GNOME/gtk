@@ -31,6 +31,23 @@
 #include <string.h>
 #include <math.h>
 
+
+/**
+ * SECTION:events
+ * @Short_description: Functions for handling events from the window system
+ * @Title: Events
+ * @See_also: <link linkend="gdk-Event-Structures">Event Structures</link>
+ *
+ * This section describes functions dealing with events from the window
+ * system.
+ *
+ * In GTK+ applications the events are handled automatically in
+ * gtk_main_do_event() and passed on to the appropriate widgets, so these
+ * functions are rarely needed. Though some of the fields in the
+ * <link linkend="gdk-Event-Structures">Event Structures</link> are useful.
+ */
+
+
 typedef struct _GdkIOClosure GdkIOClosure;
 
 struct _GdkIOClosure

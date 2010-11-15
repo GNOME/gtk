@@ -46,6 +46,12 @@
 #include <gdkconfig.h>
 
 /* some common magic values */
+
+/**
+ * GDK_CURRENT_TIME:
+ *
+ * Represents the current time, and can be used anywhere a time is expected.
+ */
 #define GDK_CURRENT_TIME     0L
 
 /**
@@ -272,9 +278,46 @@ typedef enum
   GDK_OWNERSHIP_APPLICATION
 } GdkGrabOwnership;
 
-/* Event masks. (Used to select what types of events a window
- *  *  will receive).
- *   */
+/**
+ * GdkEventMask:
+ * @GDK_EXPOSURE_MASK: receive expose events
+ * @GDK_POINTER_MOTION_MASK: receive all pointer motion events
+ * @GDK_POINTER_MOTION_HINT_MASK: see the explanation above
+ * @GDK_BUTTON_MOTION_MASK: receive pointer motion events while any button is pressed
+ * @GDK_BUTTON1_MOTION_MASK: receive pointer motion events while 1 button is pressed
+ * @GDK_BUTTON2_MOTION_MASK: receive pointer motion events while 2 button is pressed
+ * @GDK_BUTTON3_MOTION_MASK: receive pointer motion events while 3 button is pressed
+ * @GDK_BUTTON_PRESS_MASK: receive button press events
+ * @GDK_BUTTON_RELEASE_MASK: receive button release events
+ * @GDK_KEY_PRESS_MASK: receive key press events
+ * @GDK_KEY_RELEASE_MASK: receive key release events
+ * @GDK_ENTER_NOTIFY_MASK: receive window enter events
+ * @GDK_LEAVE_NOTIFY_MASK: receive window leave events
+ * @GDK_FOCUS_CHANGE_MASK: receive focus change events
+ * @GDK_STRUCTURE_MASK: receive events about window configuration change
+ * @GDK_PROPERTY_CHANGE_MASK: receive property change events
+ * @GDK_VISIBILITY_NOTIFY_MASK: receive visibility change events
+ * @GDK_PROXIMITY_IN_MASK: receive proximity in events
+ * @GDK_PROXIMITY_OUT_MASK: receive proximity out events
+ * @GDK_SUBSTRUCTURE_MASK: receive events about window configuration changes of
+ *   child windows
+ * @GDK_SCROLL_MASK: receive scroll events
+ * @GDK_ALL_EVENTS_MASK: the combination of all the above event masks.
+ *
+ * A set of bit-flags to indicate which events a window is to receive.
+ * Most of these masks map onto one or more of the #GdkEventType event types
+ * above.
+ *
+ * %GDK_POINTER_MOTION_HINT_MASK is a special mask which is used to reduce the
+ * number of %GDK_MOTION_NOTIFY events received. Normally a %GDK_MOTION_NOTIFY
+ * event is received each time the mouse moves. However, if the application
+ * spends a lot of time processing the event (updating the display, for example),
+ * it can lag behind the position of the mouse. When using
+ * %GDK_POINTER_MOTION_HINT_MASK, fewer %GDK_MOTION_NOTIFY events will be sent,
+ * some of which are marked as a hint (the is_hint member is %TRUE).
+ * To receive more motion events after a motion hint event, the application
+ * needs to asks for more, by calling gdk_event_request_motions().
+ */
 typedef enum
 {
   GDK_EXPOSURE_MASK             = 1 << 1,

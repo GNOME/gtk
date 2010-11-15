@@ -2,6 +2,7 @@ cairo_interaction.sgml
 colors.sgml
 cursors.sgml
 dnd.sgml
+events.sgml
 gdkapplaunchcontext.sgml
 gdkdisplay.sgml
 gdkdisplaymanager.sgml

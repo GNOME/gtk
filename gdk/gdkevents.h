@@ -40,7 +40,21 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_EVENT          (gdk_event_get_type ())
 
+/**
+ * GDK_PRIORITY_EVENTS:
+ *
+ * This is the priority that events from the X server are given in the
+ * <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
+ */
 #define GDK_PRIORITY_EVENTS	(G_PRIORITY_DEFAULT)
+
+/**
+ * GDK_PRIORITY_REDRAW:
+ *
+ * This is the priority that the idle handler processing window updates
+ * is given in the
+ * <link linkend="glib-The-Main-Event-Loop">GLib Main Loop</link>.
+ */
 #define GDK_PRIORITY_REDRAW     (G_PRIORITY_HIGH_IDLE + 20)
 
 
@@ -67,6 +81,15 @@ typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
 
 typedef union  _GdkEvent	    GdkEvent;
 
+/**
+ * GdkEventFunc:
+ * @event: the #GdkEvent to process.
+ * @data: user data set when the event handler was installed with
+ *   gdk_event_handler_set().
+ *
+ * Specifies the type of function passed to gdk_event_handler_set() to
+ * handle all GDK events.
+ */
 typedef void (*GdkEventFunc) (GdkEvent *event,
 			      gpointer	data);
 
@@ -121,28 +144,69 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
 					  gpointer  data);
 
 
-/* Event types.
- *   Nothing: No event occurred.
- *   Delete: A window delete event was sent by the window manager.
- *	     The specified window should be deleted.
- *   Destroy: A window has been destroyed.
- *   Expose: Part of a window has been uncovered.
- *   NoExpose: Same as expose, but no expose event was generated.
- *   VisibilityNotify: A window has become fully/partially/not obscured.
- *   MotionNotify: The mouse has moved.
- *   ButtonPress: A mouse button was pressed.
- *   ButtonRelease: A mouse button was release.
- *   KeyPress: A key was pressed.
- *   KeyRelease: A key was released.
- *   EnterNotify: A window was entered.
- *   LeaveNotify: A window was exited.
- *   FocusChange: The focus window has changed. (The focus window gets
- *		  keyboard events).
- *   Resize: A window has been resized.
- *   Map: A window has been mapped. (It is now visible on the screen).
- *   Unmap: A window has been unmapped. (It is no longer visible on
- *	    the screen).
- *   Scroll: A mouse wheel was scrolled either up or down.
+/**
+ * GdkEventType:
+ * @GDK_NOTHING: a special code to indicate a null event.
+ * @GDK_DELETE: the window manager has requested that the toplevel window be
+ *   hidden or destroyed, usually when the user clicks on a special icon in the
+ *   title bar.
+ * @GDK_DESTROY: the window has been destroyed.
+ * @GDK_EXPOSE: all or part of the window has become visible and needs to be
+ *   redrawn.
+ * @GDK_MOTION_NOTIFY: the pointer (usually a mouse) has moved.
+ * @GDK_BUTTON_PRESS: a mouse button has been pressed.
+ * @GDK_2BUTTON_PRESS: a mouse button has been double-clicked (clicked twice
+ *   within a short period of time). Note that each click also generates a
+ *   %GDK_BUTTON_PRESS event.
+ * @GDK_3BUTTON_PRESS: a mouse button has been clicked 3 times in a short period
+ *   of time. Note that each click also generates a %GDK_BUTTON_PRESS event.
+ * @GDK_BUTTON_RELEASE: a mouse button has been released.
+ * @GDK_KEY_PRESS: a key has been pressed.
+ * @GDK_KEY_RELEASE: a key has been released.
+ * @GDK_ENTER_NOTIFY: the pointer has entered the window.
+ * @GDK_LEAVE_NOTIFY: the pointer has left the window.
+ * @GDK_FOCUS_CHANGE: the keyboard focus has entered or left the window.
+ * @GDK_CONFIGURE: the size, position or stacking order of the window has changed.
+ *   Note that GTK+ discards these events for %GDK_WINDOW_CHILD windows.
+ * @GDK_MAP: the window has been mapped.
+ * @GDK_UNMAP: the window has been unmapped.
+ * @GDK_PROPERTY_NOTIFY: a property on the window has been changed or deleted.
+ * @GDK_SELECTION_CLEAR: the application has lost ownership of a selection.
+ * @GDK_SELECTION_REQUEST: another application has requested a selection.
+ * @GDK_SELECTION_NOTIFY: a selection has been received.
+ * @GDK_PROXIMITY_IN: an input device has moved into contact with a sensing
+ *   surface (e.g. a touchscreen or graphics tablet).
+ * @GDK_PROXIMITY_OUT: an input device has moved out of contact with a sensing
+ *   surface.
+ * @GDK_DRAG_ENTER: the mouse has entered the window while a drag is in progress.
+ * @GDK_DRAG_LEAVE: the mouse has left the window while a drag is in progress.
+ * @GDK_DRAG_MOTION: the mouse has moved in the window while a drag is in
+ *   progress.
+ * @GDK_DRAG_STATUS: the status of the drag operation initiated by the window
+ *   has changed.
+ * @GDK_DROP_START: a drop operation onto the window has started.
+ * @GDK_DROP_FINISHED: the drop operation initiated by the window has completed.
+ * @GDK_CLIENT_EVENT: a message has been received from another application.
+ * @GDK_VISIBILITY_NOTIFY: the window visibility status has changed.
+ * @GDK_NO_EXPOSE: indicates that the source region was completely available
+ *   when parts of a drawable were copied. This is not very useful.
+ * @GDK_SCROLL: the scroll wheel was turned
+ * @GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
+ *   for the possible window states
+ * @GDK_SETTING: a setting has been modified.
+ * @GDK_OWNER_CHANGE: the owner of a selection has changed. This event type
+ *   was added in 2.6
+ * @GDK_GRAB_BROKEN: a pointer or keyboard grab was broken. This event type
+ *   was added in 2.8.
+ * @GDK_DAMAGE: the content of the window has been changed. This event type
+ *   was added in 2.14.
+ * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
+ *
+ * Specifies the type of the event.
+ *
+ * Do not confuse these events with the signals that GTK+ widgets emit.
+ * Although many of these events result in corresponding signals being emitted,
+ * the events are often transformed or filtered along the way.
  */
 typedef enum
 {
