@@ -74,6 +74,8 @@ G_DEFINE_TYPE_WITH_CODE (GdkWindowImplX11,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_WINDOW_IMPL,
                                                 gdk_window_impl_iface_init));
 
+static GList *all_windows;
+
 GType
 _gdk_window_impl_get_type (void)
 {
@@ -83,6 +85,7 @@ _gdk_window_impl_get_type (void)
 static void
 gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {
+  all_windows = g_list_prepend (all_windows, impl);
   impl->toplevel_window_type = -1;
   impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
                                                (GDestroyNotify) gdk_cursor_unref);
@@ -114,6 +117,8 @@ gdk_window_impl_x11_finalize (GObject *object)
     gdk_cursor_unref (window_impl->cursor);
 
   g_hash_table_destroy (window_impl->device_cursor);
+
+  all_windows = g_list_remove (all_windows, window_impl);
 
   G_OBJECT_CLASS (gdk_window_impl_x11_parent_class)->finalize (object);
 }
