@@ -50,10 +50,12 @@ struct _GdkWindowImplX11
 {
   GdkDrawableImplX11 parent_instance;
 
+  int id;
   GdkCursor *cursor;
   GHashTable *device_cursor;
 
   gint8 toplevel_window_type;
+  gboolean dirty;
 
 };
 

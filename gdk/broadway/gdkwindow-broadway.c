@@ -85,6 +85,9 @@ _gdk_window_impl_get_type (void)
 static void
 gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {
+  static int current_id = 1; /* 0 is the root window */
+
+  impl->id = current_id++;
   all_windows = g_list_prepend (all_windows, impl);
   impl->toplevel_window_type = -1;
   impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
@@ -978,7 +981,14 @@ void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
                                                cairo_region_t *region)
 {
+  GdkWindowObject *private;
+  GdkWindowImplX11 *impl;
+
   _gdk_window_process_updates_recurse (window, region);
+
+  private = (GdkWindowObject *)window;
+  impl = GDK_WINDOW_IMPL_X11 (private->impl);
+  impl->dirty = TRUE;
 }
 
 void
@@ -989,6 +999,18 @@ _gdk_windowing_before_process_all_updates (void)
 void
 _gdk_windowing_after_process_all_updates (void)
 {
+  GList *l;
+
+  for (l = all_windows; l != NULL; l = l->next)
+    {
+      GdkWindowImplX11 *impl = l->data;
+
+      if (impl->dirty)
+	{
+	  /* TODO: Flush dirty windows */
+	  impl->dirty = FALSE;
+	}
+    }
 }
 
 gboolean
