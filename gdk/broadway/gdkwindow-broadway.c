@@ -268,6 +268,16 @@ gdk_window_destroy_notify (GdkWindow *window)
 static void
 gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
 {
+  GdkWindowObject *private;
+
+  private = (GdkWindowObject*) window;
+
+  if (private->event_mask & GDK_STRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
+
+  if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
+
   /* TODO */
 }
 
@@ -277,6 +287,12 @@ gdk_window_x11_hide (GdkWindow *window)
   GdkWindowObject *private;
 
   private = (GdkWindowObject*) window;
+
+  if (private->event_mask & GDK_STRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
+
+  if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
 
   _gdk_window_clear_update_area (window);
 }
