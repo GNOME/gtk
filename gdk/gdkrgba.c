@@ -45,6 +45,8 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * through gdk_rgba_free().
  *
  * Returns: A newly allocated #GdkRGBA
+ *
+ * Since: 3.0
  **/
 GdkRGBA *
 gdk_rgba_copy (GdkRGBA *rgba)
@@ -65,6 +67,8 @@ gdk_rgba_copy (GdkRGBA *rgba)
  * @rgba: a #GdkRGBA
  *
  * Frees a #GdkRGBA struct created with gdk_rgba_copy()
+ *
+ * Since: 3.0
  **/
 void
 gdk_rgba_free (GdkRGBA *rgba)
@@ -142,6 +146,8 @@ parse_rgb_value (const char  *str,
  * a is a floating point value in the range 0 to 1.
  *
  * Returns: %TRUE if the parsing succeeded
+ *
+ * Since: 3.0
  **/
 gboolean
 gdk_rgba_parse (const gchar *spec,
@@ -252,6 +258,8 @@ gdk_rgba_parse (const gchar *spec,
  * table that stores #GdkRGBA<!-- -->s.
  *
  * Return value: The hash function applied to @p
+ *
+ * Since: 3.0
  **/
 guint
 gdk_rgba_hash (gconstpointer p)
@@ -272,6 +280,8 @@ gdk_rgba_hash (gconstpointer p)
  * Compares two RGBA colors.
  *
  * Return value: %TRUE if the two colors compare equal
+ *
+ * Since: 3.0
  **/
 gboolean
 gdk_rgba_equal (gconstpointer p1,
@@ -304,6 +314,8 @@ gdk_rgba_equal (gconstpointer p1,
  * (These string forms are string forms those supported by the CSS3 colors module)
  *
  * Returns: A newly allocated text string
+ *
+ * Since: 3.0
  **/
 gchar *
 gdk_rgba_to_string (const GdkRGBA *rgba)
