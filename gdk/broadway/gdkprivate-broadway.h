@@ -43,10 +43,7 @@ typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 struct _GdkCursorPrivate
 {
   GdkCursor cursor;
-  Cursor xcursor;
   GdkDisplay *display;
-  gchar *name;
-  guint serial;
 };
 
 void _gdk_x11_error_handler_push (void);

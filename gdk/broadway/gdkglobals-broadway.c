@@ -31,7 +31,5 @@
 
 #include <stdio.h>
 
-
-gboolean          _gdk_use_xshm = TRUE;  /* used as a cmd line arg */
 GdkAtom           _gdk_selection_property;
 gboolean          _gdk_synchronize = FALSE;

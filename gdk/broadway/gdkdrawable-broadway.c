@@ -28,22 +28,16 @@
 
 #include "gdkdrawable-broadway.h"
 
-#include "gdkx.h"
 #include "gdkprivate-broadway.h"
 #include "gdkscreen-broadway.h"
 #include "gdkdisplay-broadway.h"
-
-#include <cairo-xlib.h>
 
 #include <stdlib.h>
 #include <string.h>
 
 
 static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);
-static cairo_surface_t *gdk_x11_create_cairo_surface (GdkDrawable *drawable,
-                                                      int          width,
-                                                      int          height);
-     
+
 static const cairo_user_data_key_t gdk_x11_cairo_key;
 
 G_DEFINE_TYPE (GdkDrawableImplX11, _gdk_drawable_impl_x11, GDK_TYPE_DRAWABLE)
@@ -52,9 +46,9 @@ static void
 _gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
-  
+
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
-  drawable_class->create_cairo_surface = gdk_x11_create_cairo_surface;
+  drawable_class->create_cairo_surface = NULL;
 }
 
 static void
@@ -72,19 +66,20 @@ void
 _gdk_x11_drawable_finish (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  
-  if (impl->cairo_surface)
+
+  if (impl->surface)
     {
-      cairo_surface_finish (impl->cairo_surface);
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-				   NULL, NULL);
+      cairo_surface_finish (impl->surface);
+      impl->surface = NULL;
+      cairo_surface_finish (impl->last_surface);
+      impl->last_surface = NULL;
     }
 }
 
 /**
  * _gdk_x11_drawable_update_size:
  * @drawable: a #GdkDrawableImplX11.
- * 
+ *
  * Updates the state of the drawable (in particular the drawable's
  * cairo surface) when its size has changed.
  **/
@@ -92,12 +87,24 @@ void
 _gdk_x11_drawable_update_size (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  
-  if (impl->cairo_surface)
+  cairo_surface_t *old, *last_old;
+
+  if (impl->surface)
     {
-      cairo_xlib_surface_set_size (impl->cairo_surface,
-                                   gdk_window_get_width (impl->wrapper),
-                                   gdk_window_get_height (impl->wrapper));
+      old = impl->surface;
+      last_old = impl->last_surface;
+
+      impl->surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
+						  gdk_window_get_width (impl->wrapper),
+						  gdk_window_get_height (impl->wrapper));
+      impl->last_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
+						       gdk_window_get_width (impl->wrapper),
+						       gdk_window_get_height (impl->wrapper));
+
+      /* TODO: copy old contents */
+
+      cairo_surface_finish (old);
+      cairo_surface_finish (last_old);
     }
 }
 
@@ -105,131 +112,36 @@ _gdk_x11_drawable_update_size (GdkDrawable *drawable)
  * X11 specific implementations of generic functions *
  *****************************************************/
 
-static GdkDrawable *
-get_impl_drawable (GdkDrawable *drawable)
-{
-  if (GDK_IS_WINDOW (drawable))
-    return ((GdkWindowObject *)drawable)->impl;
-  else
-    {
-      g_warning (G_STRLOC " drawable is not a window");
-      return NULL;
-    }
-}
-
-/**
- * gdk_x11_drawable_get_xdisplay:
- * @drawable: a #GdkDrawable.
- * 
- * Returns the display of a #GdkDrawable.
- * 
- * Return value: an Xlib <type>Display*</type>.
- **/
-Display *
-gdk_x11_drawable_get_xdisplay (GdkDrawable *drawable)
-{
-  if (GDK_IS_DRAWABLE_IMPL_X11 (drawable))
-    return GDK_SCREEN_XDISPLAY (GDK_DRAWABLE_IMPL_X11 (drawable)->screen);
-  else
-    return GDK_SCREEN_XDISPLAY (GDK_DRAWABLE_IMPL_X11 (get_impl_drawable (drawable))->screen);
-}
-
-/**
- * gdk_x11_drawable_get_xid:
- * @drawable: a #GdkDrawable.
- * 
- * Returns the X resource (window) belonging to a #GdkDrawable.
- * 
- * Return value: the ID of @drawable's X resource.
- **/
-XID
-gdk_x11_drawable_get_xid (GdkDrawable *drawable)
-{
-  GdkDrawable *impl;
-  
-  if (GDK_IS_WINDOW (drawable))
-    {
-      GdkWindow *window = (GdkWindow *)drawable;
-      
-      /* Try to ensure the window has a native window */
-      if (!_gdk_window_has_impl (window))
-	{
-	  gdk_window_ensure_native (window);
-
-	  /* We sync here to ensure the window is created in the Xserver when
-	   * this function returns. This is required because the returned XID
-	   * for this window must be valid immediately, even with another
-	   * connection to the Xserver */
-	  gdk_display_sync (gdk_window_get_display (window));
-	}
-      
-      if (!GDK_WINDOW_IS_X11 (window))
-        {
-          g_warning (G_STRLOC " drawable is not a native X11 window");
-          return None;
-        }
-      
-      impl = ((GdkWindowObject *)drawable)->impl;
-    }
-  else
-    {
-      g_warning (G_STRLOC " drawable is not a window");
-      return None;
-    }
-
-  return ((GdkDrawableImplX11 *)impl)->xid;
-}
-
-GdkDrawable *
-gdk_x11_window_get_drawable_impl (GdkWindow *window)
-{
-  return ((GdkWindowObject *)window)->impl;
-}
-
-static void
-gdk_x11_cairo_surface_destroy (void *data)
-{
-  GdkDrawableImplX11 *impl = data;
-
-  impl->cairo_surface = NULL;
-}
-
-static cairo_surface_t *
-gdk_x11_create_cairo_surface (GdkDrawable *drawable,
-			      int width,
-			      int height)
-{
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
-  GdkVisual *visual;
-    
-  visual = gdk_window_get_visual (impl->wrapper);
-  return cairo_xlib_surface_create (GDK_SCREEN_XDISPLAY (impl->screen),
-                                    impl->xid,
-                                    GDK_VISUAL_XVISUAL (visual),
-                                    width, height);
-}
-
 static cairo_surface_t *
 gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
 {
   GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  cairo_t *cr;
+  int w, h;
 
   if (GDK_IS_WINDOW_IMPL_X11 (drawable) &&
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
 
-  if (!impl->cairo_surface)
+  if (!impl->surface)
     {
-      impl->cairo_surface = gdk_x11_create_cairo_surface (drawable,
-                                                          gdk_window_get_width (impl->wrapper),
-                                                          gdk_window_get_height (impl->wrapper));
-      
-      if (impl->cairo_surface)
-	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-				     drawable, gdk_x11_cairo_surface_destroy);
-    }
-  else
-    cairo_surface_reference (impl->cairo_surface);
+      w = gdk_window_get_width (impl->wrapper);
+      h = gdk_window_get_height (impl->wrapper);
+      impl->surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
+      impl->last_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
 
-  return impl->cairo_surface;
+      cr = cairo_create (impl->surface);
+      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+      cairo_rectangle (cr, 0, 0, w, h);
+      cairo_fill (cr);
+      cairo_destroy (cr);
+
+      cr = cairo_create (impl->last_surface);
+      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+      cairo_rectangle (cr, 0, 0, w, h);
+      cairo_fill (cr);
+      cairo_destroy (cr);
+    }
+
+  return cairo_surface_reference (impl->surface);
 }

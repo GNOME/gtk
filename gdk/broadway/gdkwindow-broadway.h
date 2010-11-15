@@ -29,14 +29,6 @@
 
 #include <gdk/broadway/gdkdrawable-broadway.h>
 
-#ifdef HAVE_XDAMAGE
-#include <X11/extensions/Xdamage.h>
-#endif
-
-#ifdef HAVE_XSYNC
-#include <X11/extensions/sync.h>
-#endif
-
 G_BEGIN_DECLS
 
 typedef struct _GdkToplevelX11 GdkToplevelX11;
@@ -58,104 +50,19 @@ struct _GdkWindowImplX11
 {
   GdkDrawableImplX11 parent_instance;
 
-  GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
   GHashTable *device_cursor;
 
   gint8 toplevel_window_type;
-  guint no_bg : 1;	        /* Set when the window background is temporarily
-				 * unset during resizing and scaling */
-  guint override_redirect : 1;
-  guint use_synchronized_configure : 1;
 
-#if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
-  Damage damage;
-#endif
 };
- 
-struct _GdkWindowImplX11Class 
+
+struct _GdkWindowImplX11Class
 {
   GdkDrawableImplX11Class parent_class;
 };
 
-struct _GdkToplevelX11
-{
-
-  /* Set if the window, or any descendent of it, is the server's focus window
-   */
-  guint has_focus_window : 1;
-
-  /* Set if window->has_focus_window and the focus isn't grabbed elsewhere.
-   */
-  guint has_focus : 1;
-
-  /* Set if the pointer is inside this window. (This is needed for
-   * for focus tracking)
-   */
-  guint has_pointer : 1;
-  
-  /* Set if the window is a descendent of the focus window and the pointer is
-   * inside it. (This is the case where the window will receive keystroke
-   * events even window->has_focus_window is FALSE)
-   */
-  guint has_pointer_focus : 1;
-
-  /* Set if we are requesting these hints */
-  guint skip_taskbar_hint : 1;
-  guint skip_pager_hint : 1;
-  guint urgency_hint : 1;
-
-  guint on_all_desktops : 1;   /* _NET_WM_STICKY == 0xFFFFFFFF */
-
-  guint have_sticky : 1;	/* _NET_WM_STATE_STICKY */
-  guint have_maxvert : 1;       /* _NET_WM_STATE_MAXIMIZED_VERT */
-  guint have_maxhorz : 1;       /* _NET_WM_STATE_MAXIMIZED_HORZ */
-  guint have_fullscreen : 1;    /* _NET_WM_STATE_FULLSCREEN */
-
-  guint is_leader : 1;
-  
-  gulong map_serial;	/* Serial of last transition from unmapped */
-  
-  cairo_surface_t *icon_pixmap;
-  cairo_surface_t *icon_mask;
-  GdkWindow *group_leader;
-
-  /* Time of most recent user interaction. */
-  gulong user_time;
-
-  /* We use an extra X window for toplevel windows that we XSetInputFocus()
-   * to in order to avoid getting keyboard events redirected to subwindows
-   * that might not even be part of this app
-   */
-  Window focus_window;
- 
-#ifdef HAVE_XSYNC
-  XID update_counter;
-  XSyncValue pending_counter_value; /* latest _NET_WM_SYNC_REQUEST value received */
-  XSyncValue current_counter_value; /* Latest _NET_WM_SYNC_REQUEST value received
-				     * where we have also seen the corresponding
-				     * ConfigureNotify
-				     */
-#endif
-};
-
 GType gdk_window_impl_x11_get_type (void);
-
-void            gdk_x11_window_set_user_time        (GdkWindow *window,
-						     guint32    timestamp);
-
-GdkToplevelX11 *_gdk_x11_window_get_toplevel        (GdkWindow *window);
-void            _gdk_x11_window_tmp_unset_bg        (GdkWindow *window,
-						     gboolean   recurse);
-void            _gdk_x11_window_tmp_reset_bg        (GdkWindow *window,
-						     gboolean   recurse);
-void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window);
-void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window);
-
-GdkCursor      *_gdk_x11_window_get_cursor    (GdkWindow *window);
-void            _gdk_x11_window_get_offsets   (GdkWindow *window,
-                                               gint      *x_offset,
-                                               gint      *y_offset);
 
 G_END_DECLS
 

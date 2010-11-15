@@ -34,46 +34,17 @@ typedef struct {
   gpointer user_data;
 } UserChildSetup;
 
-/*
- * Set the DISPLAY variable, and then call the user-specified child setup
- * function.  This is required so that applications can use gdk_spawn_* and 
- * call putenv() in their child_setup functions.
- */
 static void
 set_environment (gpointer user_data)
 {
   UserChildSetup *setup = user_data;
-  
+
   g_setenv ("DISPLAY", setup->display, TRUE);
-  
+
   if (setup->child_setup)
     setup->child_setup (setup->user_data);
 }
 
-/**
- * gdk_spawn_on_screen:
- * @screen: a #GdkScreen
- * @working_directory: child's current working directory, or %NULL to 
- *   inherit parent's
- * @argv: child's argument vector
- * @envp: child's environment, or %NULL to inherit parent's
- * @flags: flags from #GSpawnFlags
- * @child_setup: function to run in the child just before exec()
- * @user_data: user data for @child_setup
- * @child_pid: return location for child process ID, or %NULL
- * @error: return location for error
- *
- * Like g_spawn_async(), except the child process is spawned in such
- * an environment that on calling gdk_display_open() it would be
- * returned a #GdkDisplay with @screen as the default screen.
- *
- * This is useful for applications which wish to launch an application
- * on a specific screen.
- *
- * Return value: %TRUE on success, %FALSE if error is set
- *
- * Since: 2.4
- **/
 gboolean
 gdk_spawn_on_screen (GdkScreen             *screen,
 		     const gchar           *working_directory,
@@ -103,37 +74,6 @@ gdk_spawn_on_screen (GdkScreen             *screen,
 			  error);
 }
 
-/**
- * gdk_spawn_on_screen_with_pipes:
- * @screen: a #GdkScreen
- * @working_directory: child's current working directory, or %NULL to 
- *   inherit parent's
- * @argv: child's argument vector
- * @envp: child's environment, or %NULL to inherit parent's
- * @flags: flags from #GSpawnFlags
- * @child_setup: function to run in the child just before exec()
- * @user_data: user data for @child_setup
- * @child_pid: return location for child process ID, or %NULL
- * @standard_input: return location for file descriptor to write to 
- *   child's stdin, or %NULL
- * @standard_output: return location for file descriptor to read child's 
- *   stdout, or %NULL
- * @standard_error: return location for file descriptor to read child's 
- *   stderr, or %NULL
- * @error: return location for error
- *
- * Like g_spawn_async_with_pipes(), except the child process is
- * spawned in such an environment that on calling gdk_display_open()
- * it would be returned a #GdkDisplay with @screen as the default
- * screen.
- *
- * This is useful for applications which wish to launch an application
- * on a specific screen.
- *
- * Return value: %TRUE on success, %FALSE if an error was set
- *
- * Since: 2.4
- **/
 gboolean
 gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
 				const gchar          *working_directory,
@@ -170,24 +110,6 @@ gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
 
 }
 
-/**
- * gdk_spawn_command_line_on_screen:
- * @screen: a #GdkScreen
- * @command_line: a command line
- * @error: return location for errors
- *
- * Like g_spawn_command_line_async(), except the child process is
- * spawned in such an environment that on calling gdk_display_open()
- * it would be returned a #GdkDisplay with @screen as the default
- * screen.
- *
- * This is useful for applications which wish to launch an application
- * on a specific screen.
- *
- * Return value: %TRUE on success, %FALSE if error is set.
- *
- * Since: 2.4
- **/
 gboolean
 gdk_spawn_command_line_on_screen (GdkScreen    *screen,
 				  const gchar  *command_line,

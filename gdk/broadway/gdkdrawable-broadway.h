@@ -28,7 +28,6 @@
 #define __GDK_DRAWABLE_BROADWAY_H__
 
 #include <gdk/gdkdrawable.h>
-#include <X11/Xlib.h>
 
 G_BEGIN_DECLS
 
@@ -50,14 +49,13 @@ struct _GdkDrawableImplX11
   GdkDrawable parent_instance;
 
   GdkDrawable *wrapper;
-  
-  Window xid;
-  GdkScreen *screen;
 
-  cairo_surface_t *cairo_surface;
+  GdkScreen *screen;
+  cairo_surface_t *surface;
+  cairo_surface_t *last_surface;
 };
- 
-struct _GdkDrawableImplX11Class 
+
+struct _GdkDrawableImplX11Class
 {
   GdkDrawableClass parent_class;
 

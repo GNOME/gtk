@@ -27,12 +27,9 @@
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkvisual.h>
 #include "gdkprivate-broadway.h"
-#include "xsettings-client.h"
-#include <X11/X.h>
-#include <X11/Xlib.h>
 
 G_BEGIN_DECLS
-  
+
 typedef struct _GdkScreenX11 GdkScreenX11;
 typedef struct _GdkScreenX11Class GdkScreenX11Class;
 
@@ -48,64 +45,24 @@ typedef struct _GdkX11Monitor GdkX11Monitor;
 struct _GdkScreenX11
 {
   GdkScreen parent_instance;
-  
+
   GdkDisplay *display;
-  Display *xdisplay;
-  Screen *xscreen;
-  gint screen_num;
-  Window xroot_window;
   GdkWindow *root_window;
 
-  /* Window manager */
-  long last_wmspec_check_time;
-  Window wmspec_check_window;
-  char *window_manager_name;
-  /* TRUE if wmspec_check_window has changed since last
-   * fetch of _NET_SUPPORTED
-   */
-  guint need_refetch_net_supported : 1;
-  /* TRUE if wmspec_check_window has changed since last
-   * fetch of window manager name
-   */
-  guint need_refetch_wm_name : 1;
-  
+  int width;
+  int height;
+
   /* Visual Part */
-  GdkVisual *system_visual;
   GdkVisual **visuals;
   gint nvisuals;
+  GdkVisual *system_visual;
+  GdkVisual *rgba_visual;
   gint available_depths[7];
   gint navailable_depths;
   GdkVisualType available_types[6];
   gint navailable_types;
-  GHashTable *visual_hash;
-  GdkVisual *rgba_visual;
-  
-  /* X settings */
-  XSettingsClient *xsettings_client;
-  guint xsettings_in_init : 1;
-  
-  /* Xinerama/RandR 1.2 */
-  gint		 n_monitors;
-  GdkX11Monitor	*monitors;
-  gint           primary_monitor;
-
-  /* cache for window->translate vfunc */
-  GC subwindow_gcs[32];
-
-  /* Xft resources for the display, used for default values for
-   * the Xft/ XSETTINGS
-   */
-  gboolean xft_init;		/* Whether we've intialized these values yet */
-  gboolean xft_antialias;
-  gboolean xft_hinting;
-  gint xft_hintstyle;
-  gint xft_rgba;
-  gint xft_dpi;
-
-  GdkAtom cm_selection_atom;
-  gboolean is_composited;
 };
-  
+
 struct _GdkScreenX11Class
 {
   GdkScreenClass parent_class;
