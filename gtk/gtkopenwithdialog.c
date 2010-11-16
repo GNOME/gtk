@@ -334,11 +334,15 @@ gtk_open_with_dialog_response (GtkDialog *dialog,
 		      gtk_tree_model_get (model, &iter,
 					  COLUMN_APP_INFO, &info,
 					  -1);
-		      if (g_app_info_equal (selected, info))
+		      if (info != NULL && g_app_info_equal (selected, info))
 			{
 			  gtk_list_store_remove (self->priv->program_list_store, &iter);
+			  g_object_unref (info);
 			  break;
 			}
+
+		      if (info != NULL)
+			g_object_unref (info);
 		    }
 		  while (gtk_tree_model_iter_next (model, &iter));
 		}
