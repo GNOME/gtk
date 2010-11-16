@@ -1120,43 +1120,55 @@ _gdk_broadway_window_queue_antiexpose (GdkWindow *window,
   return TRUE;
 }
 
+static void
+copy_region (cairo_surface_t *surface,
+	     cairo_region_t *area,
+	     gint            dx,
+	     gint            dy)
+{
+  cairo_t *cr;
+
+  cr = cairo_create (surface);
+
+  area = cairo_region_copy (area);
+
+  gdk_cairo_region (cr, area);
+  cairo_clip (cr);
+
+  /* NB: This is a self-copy and Cairo doesn't support that yet.
+   * So we do a litle trick.
+   */
+  cairo_push_group (cr);
+
+  cairo_set_source_surface (cr, surface, dx, dy);
+  cairo_paint (cr);
+
+  cairo_pop_group_to_source (cr);
+  cairo_paint (cr);
+
+  cairo_destroy (cr);
+}
+
 void
 _gdk_broadway_window_translate (GdkWindow      *window,
-                           cairo_region_t *area,
-                           gint            dx,
-                           gint            dy)
+				cairo_region_t *area,
+				gint            dx,
+				gint            dy)
 {
   GdkWindowObject *private;
-  GdkWindowImplBroadway *impl;
-  cairo_surface_t *surface;
+  GdkDrawableImplBroadway *impl;
 
   private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  impl = GDK_DRAWABLE_IMPL_BROADWAY (private->impl);
 
-  surface = GDK_DRAWABLE_IMPL_BROADWAY (impl)->surface;
-  if (surface)
+  if (impl->surface)
     {
-      cairo_t *cr;
-
-      cr = cairo_create (surface);
-
-      area = cairo_region_copy (area);
-
-      gdk_cairo_region (cr, area);
-      cairo_clip (cr);
-
-      /* NB: This is a self-copy and Cairo doesn't support that yet.
-       * So we do a litle trick.
-       */
-      cairo_push_group (cr);
-
-      cairo_set_source_surface (cr, surface, dx, dy);
-      cairo_paint (cr);
-
-      cairo_pop_group_to_source (cr);
-      cairo_paint (cr);
-
-      cairo_destroy (cr);
+      copy_region (impl->surface, area, dx, dy);
+      if (GDK_WINDOW_IMPL_BROADWAY (impl)->last_synced)
+	{
+	  copy_region (impl->last_surface, area, dx, dy);
+	  /* TODO: Send copy-rects */
+	}
     }
 }
 
