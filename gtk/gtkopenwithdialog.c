@@ -1141,7 +1141,7 @@ gtk_open_with_dialog_init (GtkOpenWithDialog *self)
   gtk_box_pack_start (GTK_BOX (vbox), vbox2, TRUE, TRUE, 0);
 
   self->priv->label = gtk_label_new ("");
-  gtk_misc_set_alignment (GTK_MISC (self->priv->label), 0.0, 0.5);
+  gtk_widget_set_halign (self->priv->label, GTK_ALIGN_START);
   gtk_label_set_line_wrap (GTK_LABEL (self->priv->label), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), self->priv->label,
 		      FALSE, FALSE, 0);
@@ -1161,7 +1161,7 @@ gtk_open_with_dialog_init (GtkOpenWithDialog *self)
   gtk_box_pack_start (GTK_BOX (vbox2), scrolled_window, TRUE, TRUE, 0);
 
   self->priv->desc_label = gtk_label_new (_("Select an application to view its description."));
-  gtk_misc_set_alignment (GTK_MISC (self->priv->desc_label), 0.0, 0.5);
+  gtk_widget_set_halign (self->priv->desc_label, GTK_ALIGN_START);
   gtk_label_set_justify (GTK_LABEL (self->priv->desc_label), GTK_JUSTIFY_LEFT);
   gtk_label_set_line_wrap (GTK_LABEL (self->priv->desc_label), TRUE);
   gtk_label_set_single_line_mode (GTK_LABEL (self->priv->desc_label), FALSE);
