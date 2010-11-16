@@ -75,4 +75,14 @@ GtkWidget * gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 						       GtkDialogFlags flags,
 						       const gchar *content_type);
 
+void gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
+						       gboolean show_other_applications);
+gboolean gtk_open_with_get_show_other_applications (GtkOpenWithDialog *self);
+
+void gtk_open_with_dialog_set_show_set_as_default_button (GtkOpenWithDialog *self,
+							  gboolean show_button);
+gboolean gtk_open_with_get_show_set_as_default_button (GtkOpenWithDialog *self);
+
+GAppInfo * gtk_open_with_dialog_get_selected_application (GtkOpenWithDialog *self);
+
 #endif /* __GTK_OPEN_WITH_DIALOG_H__ */

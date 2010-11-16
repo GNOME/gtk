@@ -44,6 +44,7 @@ struct _GtkOpenWithDialogPrivate {
   GFile *gfile;
   GtkOpenWithDialogMode mode;
   gboolean show_other_applications;
+  gboolean show_set_as_default_button;
 
   GtkWidget *label;
   GtkWidget *entry;
@@ -56,6 +57,8 @@ struct _GtkOpenWithDialogPrivate {
   GtkWidget *program_list;
   GtkListStore *program_list_store;
   gint add_items_idle_id;
+
+  GtkCellRenderer *padding_renderer;
 };
 
 enum {
@@ -71,22 +74,17 @@ enum {
 };
 
 enum {
-  APPLICATION_SELECTED,
-  LAST_SIGNAL
-};
-
-enum {
   PROP_GFILE = 1,
   PROP_CONTENT_TYPE,
   PROP_MODE,
   PROP_SHOW_OTHER_APPLICATIONS,
+  PROP_SHOW_SET_AS_DEFAULT,
   N_PROPERTIES
 };
 
 #define RESPONSE_REMOVE 1
 
 static GParamSpec *properties[N_PROPERTIES] = { NULL, };
-static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GtkOpenWithDialog, gtk_open_with_dialog, GTK_TYPE_DIALOG); 
 
@@ -233,7 +231,8 @@ add_or_find_application (GtkOpenWithDialog *self)
 
   if (app == NULL)
     {
-      message = g_strdup_printf (_("Could not add application to the application database: %s"), error->message);
+      message = g_strdup_printf (_("Could not add application to the application database: %s"),
+				 error->message);
       show_error_dialog (_("Could not add application"),
 			 message,
 			 GTK_WINDOW (self));
@@ -245,6 +244,7 @@ add_or_find_application (GtkOpenWithDialog *self)
   should_set_default =
     (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT) ||
     (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_OPEN_FILE &&
+     gtk_widget_get_visible (self->priv->checkbox) &&
      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->priv->checkbox)));
   success = TRUE;
 
@@ -272,7 +272,8 @@ add_or_find_application (GtkOpenWithDialog *self)
 
   if (!success && should_set_default)
     {
-      message = g_strdup_printf (_("Could not set application as the default: %s"), error->message);
+      message = g_strdup_printf (_("Could not set application as the default: %s"),
+				 error->message);
       show_error_dialog (_("Could not set as default application"),
 			 message,
 			 GTK_WINDOW (self));
@@ -281,14 +282,6 @@ add_or_find_application (GtkOpenWithDialog *self)
     }
 
   return app;
-}
-
-static void
-emit_application_selected (GtkOpenWithDialog *self,
-			   GAppInfo *application)
-{
-	g_signal_emit (self, signals[APPLICATION_SELECTED], 0,
-		       application);
 }
 
 static void
@@ -306,11 +299,10 @@ gtk_open_with_dialog_response (GtkDialog *dialog,
 	{
 	  application = add_or_find_application (self);
 
-	  if (application)
-	    {
-	      emit_application_selected (self, application);
-	      g_object_unref (application);
-	    }
+	  if (self->priv->selected_app_info != NULL)
+	    g_object_unref (self->priv->selected_app_info);
+
+	  self->priv->selected_app_info = g_object_ref (application);
 	}
 
       break;
@@ -428,8 +420,8 @@ entry_changed_cb (GtkWidget *entry,
   /* We are writing in the entry, so we are not using a known appinfo anymore */
   if (self->priv->selected_app_info != NULL)
     {
-    g_object_unref (self->priv->selected_app_info);
-    self->priv->selected_app_info = NULL;
+      g_object_unref (self->priv->selected_app_info);
+      self->priv->selected_app_info = NULL;
     }
 
   if (gtk_entry_get_text (GTK_ENTRY (self->priv->entry))[0] == '\000')
@@ -633,28 +625,12 @@ compare_apps_func (gconstpointer a,
   return !g_app_info_equal (G_APP_INFO (a), G_APP_INFO (b));
 }
 
-static gboolean
-gtk_open_with_dialog_add_items_idle (gpointer user_data)
+static void
+gtk_open_with_dialog_real_add_items (GtkOpenWithDialog *self)
 {
-  GtkOpenWithDialog *self = user_data;
-  GtkCellRenderer *renderer;
-  GtkTreeViewColumn *column;
-  GtkTreeModel *sort;
-  GList *all_applications, *content_type_apps;
-  GList *l;
+  GList *all_applications, *content_type_apps, *l;
   gboolean heading_added;
 
-  /* create list store */
-  self->priv->program_list_store = gtk_list_store_new (NUM_COLUMNS,
-						       G_TYPE_APP_INFO,
-						       G_TYPE_ICON,
-						       G_TYPE_STRING,
-						       G_TYPE_STRING,
-						       G_TYPE_STRING,
-						       G_TYPE_BOOLEAN,
-						       G_TYPE_STRING,
-						       G_TYPE_BOOLEAN);
-  sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (self->priv->program_list_store));
   content_type_apps = g_app_info_get_all_for_type (self->priv->content_type);
   all_applications = g_app_info_get_all ();
 
@@ -735,6 +711,30 @@ gtk_open_with_dialog_add_items_idle (gpointer user_data)
 
   g_list_free_full (content_type_apps, g_object_unref);
   g_list_free_full (all_applications, g_object_unref);
+}
+
+static gboolean
+gtk_open_with_dialog_add_items_idle (gpointer user_data)
+{
+  GtkOpenWithDialog *self = user_data;
+  GtkCellRenderer *renderer;
+  GtkTreeViewColumn *column;
+  GtkTreeModel *sort;
+
+  /* create list store */
+  self->priv->program_list_store = gtk_list_store_new (NUM_COLUMNS,
+						       G_TYPE_APP_INFO,
+						       G_TYPE_ICON,
+						       G_TYPE_STRING,
+						       G_TYPE_STRING,
+						       G_TYPE_STRING,
+						       G_TYPE_BOOLEAN,
+						       G_TYPE_STRING,
+						       G_TYPE_BOOLEAN);
+  sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (self->priv->program_list_store));
+
+  /* populate the dialog */
+  gtk_open_with_dialog_real_add_items (self);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->program_list), 
 			   GTK_TREE_MODEL (sort));
@@ -755,8 +755,9 @@ gtk_open_with_dialog_add_items_idle (gpointer user_data)
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   g_object_set (renderer,
-		"xpad", 6,
+		"xpad", self->priv->show_other_applications ? 6 : 0,
 		NULL);
+  self->priv->padding_renderer = renderer;
 
   /* heading text renderer */
   renderer = gtk_cell_renderer_text_new ();
@@ -939,6 +940,9 @@ set_dialog_properties (GtkOpenWithDialog *self)
 
       gtk_button_set_label (GTK_BUTTON (self->priv->checkbox), checkbox_text);
       g_free (checkbox_text);
+
+      if (self->priv->show_set_as_default_button)
+	gtk_widget_show (self->priv->checkbox);
     }
   else
     {
@@ -1032,7 +1036,12 @@ gtk_open_with_dialog_set_property (GObject *object,
       self->priv->mode = g_value_get_enum (value);
       break;
     case PROP_SHOW_OTHER_APPLICATIONS:
-      self->priv->show_other_applications = g_value_get_boolean (value);
+      gtk_open_with_dialog_set_show_other_applications (self,
+							g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_SET_AS_DEFAULT:
+      gtk_open_with_dialog_set_show_set_as_default_button (self,
+							   g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1062,6 +1071,9 @@ gtk_open_with_dialog_get_property (GObject *object,
       break;
     case PROP_SHOW_OTHER_APPLICATIONS:
       g_value_set_boolean (value, self->priv->show_other_applications);
+      break;
+    case PROP_SHOW_SET_AS_DEFAULT:
+      g_value_set_boolean (value, self->priv->show_set_as_default_button);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -1109,20 +1121,16 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 			  TRUE,
 			  G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
 			  G_PARAM_STATIC_STRINGS);
+  properties[PROP_SHOW_SET_AS_DEFAULT] =
+    g_param_spec_boolean ("show-set-as-default",
+			  P_("Whether to show the set as default button"),
+			  P_("Whether the dialog should show a button to set the application as default"),
+			  TRUE,
+			  G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
+			  G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPERTIES,
 				     properties);
-
-  signals[APPLICATION_SELECTED] =
-    g_signal_new ("application_selected",
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkOpenWithDialogClass,
-				   application_selected),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__OBJECT,
-		  G_TYPE_NONE,
-		  1, G_TYPE_APP_INFO);
 
   g_type_class_add_private (klass, sizeof (GtkOpenWithDialogPrivate));
 }
@@ -1143,7 +1151,6 @@ gtk_open_with_dialog_init (GtkOpenWithDialog *self)
 					    GtkOpenWithDialogPrivate);
 
   gtk_container_set_border_width (GTK_CONTAINER (self), 5);
-  gtk_window_set_resizable (GTK_WINDOW (self), FALSE);
 
   vbox = gtk_vbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
@@ -1163,7 +1170,7 @@ gtk_open_with_dialog_init (GtkOpenWithDialog *self)
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
 				       GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
-				  GTK_POLICY_AUTOMATIC,
+				  GTK_POLICY_NEVER,
 				  GTK_POLICY_AUTOMATIC);
   self->priv->program_list = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self->priv->program_list),
@@ -1221,7 +1228,6 @@ gtk_open_with_dialog_init (GtkOpenWithDialog *self)
   self->priv->checkbox = gtk_check_button_new ();
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (self->priv->checkbox), TRUE);
   gtk_button_set_use_underline (GTK_BUTTON (self->priv->checkbox), TRUE);
-  gtk_widget_show (GTK_WIDGET (self->priv->checkbox));
   gtk_box_pack_start (GTK_BOX (vbox), self->priv->checkbox, FALSE, FALSE, 0);
 
   gtk_dialog_add_button (GTK_DIALOG (self),
@@ -1284,6 +1290,25 @@ set_parent_and_flags (GtkWidget *dialog,
     gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
 }
 
+static void
+gtk_open_with_dialog_refilter (GtkOpenWithDialog *self)
+{
+  /* if the store is NULL it means the idle handler hasn't run
+   * yet, and it will take care of using the right setting itself.
+   */
+  if (self->priv->program_list_store != NULL)
+    {
+      gtk_list_store_clear (self->priv->program_list_store);
+
+      /* don't add additional xpad if we don't have headings */
+      g_object_set (self->priv->padding_renderer,
+		    "visible", self->priv->show_other_applications,
+		    NULL);
+
+      gtk_open_with_dialog_real_add_items (self);
+    }
+}
+
 GtkWidget *
 gtk_open_with_dialog_new (GtkWindow *parent,
 			  GtkDialogFlags flags,
@@ -1333,6 +1358,8 @@ gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
     {
       self->priv->show_other_applications = show_other_applications;
       g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_OTHER_APPLICATIONS]);
+
+      gtk_open_with_dialog_refilter (self);
     }
 }
 
@@ -1343,3 +1370,41 @@ gtk_open_with_get_show_other_applications (GtkOpenWithDialog *self)
 
   return self->priv->show_other_applications;
 }
+
+GAppInfo *
+gtk_open_with_dialog_get_selected_application (GtkOpenWithDialog *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_DIALOG (self), NULL);
+
+  if (self->priv->selected_app_info != NULL)
+    return g_object_ref (self->priv->selected_app_info);
+
+  return NULL;
+}
+
+void
+gtk_open_with_dialog_set_show_set_as_default_button (GtkOpenWithDialog *self,
+						     gboolean show_button)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_DIALOG (self));
+
+  if (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT)
+    return;
+  
+  if (self->priv->show_set_as_default_button != show_button)
+    {
+      self->priv->show_set_as_default_button = show_button;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_SET_AS_DEFAULT]);
+
+      gtk_widget_set_visible (self->priv->checkbox, show_button);
+    }
+}
+
+gboolean
+gtk_open_with_dialog_get_show_set_as_default_button (GtkOpenWithDialog *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_DIALOG (self), FALSE);
+
+  return self->priv->show_set_as_default_button;
+}
+
