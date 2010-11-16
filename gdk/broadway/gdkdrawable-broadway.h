@@ -53,6 +53,7 @@ struct _GdkDrawableImplBroadway
   GdkScreen *screen;
   cairo_surface_t *surface;
   cairo_surface_t *last_surface;
+  cairo_surface_t *ref_surface;
 };
 
 struct _GdkDrawableImplBroadwayClass

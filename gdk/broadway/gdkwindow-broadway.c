@@ -230,9 +230,9 @@ _gdk_broadway_window_destroy (GdkWindow *window,
 
 static cairo_surface_t *
 gdk_window_broadway_resize_cairo_surface (GdkWindow       *window,
-                                     cairo_surface_t *surface,
-                                     gint             width,
-                                     gint             height)
+					  cairo_surface_t *surface,
+					  gint             width,
+					  gint             height)
 {
   /* Image surfaces cannot be resized */
   cairo_surface_destroy (surface);

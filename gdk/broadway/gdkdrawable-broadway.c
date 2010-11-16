@@ -67,11 +67,18 @@ _gdk_broadway_drawable_finish (GdkDrawable *drawable)
 {
   GdkDrawableImplBroadway *impl = GDK_DRAWABLE_IMPL_BROADWAY (drawable);
 
+  if (impl->ref_surface)
+    {
+      cairo_surface_finish (impl->ref_surface);
+      cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
+				   NULL, NULL);
+    }
+
   if (impl->surface)
     {
-      cairo_surface_finish (impl->surface);
+      cairo_surface_destroy (impl->surface);
       impl->surface = NULL;
-      cairo_surface_finish (impl->last_surface);
+      cairo_surface_destroy (impl->last_surface);
       impl->last_surface = NULL;
     }
 }
@@ -103,14 +110,22 @@ _gdk_broadway_drawable_update_size (GdkDrawable *drawable)
 
       /* TODO: copy old contents */
 
-      cairo_surface_finish (old);
-      cairo_surface_finish (last_old);
+      cairo_surface_destroy (old);
+      cairo_surface_destroy (last_old);
     }
 }
 
 /*****************************************************
  * Broadway specific implementations of generic functions *
  *****************************************************/
+
+static void
+gdk_broadway_cairo_surface_destroy (void *data)
+{
+  GdkDrawableImplBroadway *impl = data;
+
+  impl->ref_surface = NULL;
+}
 
 static cairo_surface_t *
 gdk_broadway_ref_cairo_surface (GdkDrawable *drawable)
@@ -123,10 +138,12 @@ gdk_broadway_ref_cairo_surface (GdkDrawable *drawable)
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
 
+  w = gdk_window_get_width (impl->wrapper);
+  h = gdk_window_get_height (impl->wrapper);
+
+  /* Create actual backing store if missing */
   if (!impl->surface)
     {
-      w = gdk_window_get_width (impl->wrapper);
-      h = gdk_window_get_height (impl->wrapper);
       impl->surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
       impl->last_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
 
@@ -143,5 +160,19 @@ gdk_broadway_ref_cairo_surface (GdkDrawable *drawable)
       cairo_destroy (cr);
     }
 
-  return cairo_surface_reference (impl->surface);
+  /* Create a destroyable surface referencing the real one */
+  if (!impl->ref_surface)
+    {
+      impl->ref_surface =
+	cairo_surface_create_for_rectangle (impl->surface,
+					    0, 0,
+					    w, h);
+      if (impl->ref_surface)
+	cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
+				     drawable, gdk_broadway_cairo_surface_destroy);
+    }
+  else
+    cairo_surface_reference (impl->ref_surface);
+
+  return impl->ref_surface;
 }
