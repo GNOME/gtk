@@ -14,7 +14,11 @@ INCLUDES =			\
 
 LDADDS = $(GDK_DEP_LIBS)
 
-noinst_LTLIBRARIES = libgdk-broadway.la
+noinst_LTLIBRARIES = libbroadway.la libgdk-broadway.la
+
+libbroadway_la_SOURCES =		\
+	broadway.h			\
+	broadway.c
 
 libgdk_broadway_la_SOURCES =		\
 	gdkapplaunchcontext-broadway.c \
@@ -45,5 +49,10 @@ libgdk_broadway_la_SOURCES =		\
 	gdkwindow-broadway.c	\
 	gdkwindow-broadway.h	\
 	gdkprivate-broadway.h
+
+libgdk_broadway_la_LIBADD = libbroadway.la
+
+noinst_PROGRAMS = broadway-demo
+broadway_demo_LDADD = -lz -lcairo libbroadway.la
 
 -include $(top_srcdir)/git.mk
