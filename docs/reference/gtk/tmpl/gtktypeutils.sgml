@@ -179,6 +179,7 @@ Defines a function pointer.
 
 @data: #gpointer
 @Returns: #gint
+@Deprecated: 2.24: Use GSourceFunc() instead.
 
 
 <!-- ##### USER_FUNCTION GtkDestroyNotify ##### -->
@@ -198,6 +199,7 @@ Defines a function pointer.
 @data: #gpointer
 @n_args: #guint
 @args: #GtkArg*
+@Deprecated: 2.24:
 
 
 <!-- ##### TYPEDEF GtkSignalMarshaller ##### -->

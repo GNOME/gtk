@@ -47,11 +47,13 @@ GType gtk_identifier_get_type (void) G_GNUC_CONST;
  */
 typedef struct _GtkArg	       	     GtkArg;
 typedef struct _GtkObject   	     GtkObject; /* object forward declaration */
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 typedef gboolean (*GtkFunction)	    (gpointer      data);
 typedef void (*GtkCallbackMarshal)  (GtkObject    *object,
 				     gpointer      data,
 				     guint         n_args,
 				     GtkArg       *args);
+#endif
 
 /* This used to be defined in gtkitemfactory.h, but moved over here after
  * the complete deprecation of that header
