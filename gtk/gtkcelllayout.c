@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <errno.h>
 #include "gtkcelllayout.h"
+#include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 
 
@@ -291,6 +292,34 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
   return NULL;
 }
 
+/**
+ * gtk_cell_layout_get_area:
+ * @cell_layout: a #GtkCellLayout
+ * 
+ * Returns the underlying #GtkCellArea which might be @cell_layout if called on a #GtkCellArea or
+ * might be %NULL if no #GtkCellArea is used by @cell_layout.
+ *
+ * Return value: (transfer none): a list of cell renderers. The list, but not the
+ *   renderers has been newly allocated and should be freed with
+ *   g_list_free() when no longer needed.
+ *
+ * Since: 3.0
+ */
+GtkCellArea *
+gtk_cell_layout_get_area (GtkCellLayout *cell_layout)
+{
+  GtkCellLayoutIface *iface;
+
+  g_return_val_if_fail (GTK_IS_CELL_LAYOUT (cell_layout), NULL);
+
+  iface = GTK_CELL_LAYOUT_GET_IFACE (cell_layout);  
+  if (iface->get_area)
+    return iface->get_area (cell_layout);
+
+  return NULL;
+}
+
+/* Attribute parsing */
 typedef struct {
   GtkCellLayout   *cell_layout;
   GtkCellRenderer *renderer;
@@ -364,6 +393,147 @@ static const GMarkupParser attributes_parser =
     attributes_text_element,
   };
 
+
+/* Cell packing parsing */
+static void
+gtk_cell_layout_buildable_set_cell_property (GtkCellArea     *area,
+					     GtkBuilder      *builder,
+					     GtkCellRenderer *cell,
+					     gchar           *name,
+					     const gchar     *value)
+{
+  GParamSpec *pspec;
+  GValue gvalue = { 0, };
+  GError *error = NULL;
+
+  pspec = gtk_cell_area_class_find_cell_property (GTK_CELL_AREA_GET_CLASS (area), name);
+  if (!pspec)
+    {
+      g_warning ("%s does not have a property called %s",
+		 g_type_name (G_OBJECT_TYPE (area)), name);
+      return;
+    }
+
+  if (!gtk_builder_value_from_string (builder, pspec, value, &gvalue, &error))
+    {
+      g_warning ("Could not read property %s:%s with value %s of type %s: %s",
+		 g_type_name (G_OBJECT_TYPE (area)),
+		 name,
+		 value,
+		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+		 error->message);
+      g_error_free (error);
+      return;
+    }
+
+  gtk_cell_area_cell_set_property (area, cell, name, &gvalue);
+  g_value_unset (&gvalue);
+}
+
+typedef struct {
+  GtkBuilder      *builder;
+  GtkCellLayout   *cell_layout;
+  GtkCellRenderer *renderer;
+  gchar           *cell_prop_name;
+  gchar           *context;
+  gboolean         translatable;
+} CellPackingSubParserData;
+
+static void
+cell_packing_start_element (GMarkupParseContext *context,
+			    const gchar         *element_name,
+			    const gchar        **names,
+			    const gchar        **values,
+			    gpointer             user_data,
+			    GError             **error)
+{
+  CellPackingSubParserData *parser_data = (CellPackingSubParserData*)user_data;
+  guint i;
+
+  if (strcmp (element_name, "property") == 0)
+    {
+      for (i = 0; names[i]; i++)
+	if (strcmp (names[i], "name") == 0)
+	  parser_data->cell_prop_name = g_strdup (values[i]);
+	else if (strcmp (names[i], "translatable") == 0)
+	  {
+	    if (!_gtk_builder_boolean_from_string (values[i],
+						   &parser_data->translatable,
+						   error))
+	      return;
+	  }
+	else if (strcmp (names[i], "comments") == 0)
+	  ; /* for translators */
+	else if (strcmp (names[i], "context") == 0)
+	  parser_data->context = g_strdup (values[i]);
+	else
+	  g_warning ("Unsupported attribute for GtkCellLayout Cell "
+		     "property: %s\n", names[i]);
+    }
+  else if (strcmp (element_name, "cell-packing") == 0)
+    return;
+  else
+    g_warning ("Unsupported tag for GtkCellLayout: %s\n", element_name);
+}
+
+static void
+cell_packing_text_element (GMarkupParseContext *context,
+			   const gchar         *text,
+			   gsize                text_len,
+			   gpointer             user_data,
+			   GError             **error)
+{
+  CellPackingSubParserData *parser_data = (CellPackingSubParserData*)user_data;
+  GtkCellArea *area;
+  gchar* value;
+
+  if (!parser_data->cell_prop_name)
+    return;
+
+  if (parser_data->translatable && text_len)
+    {
+      const gchar* domain;
+      domain = gtk_builder_get_translation_domain (parser_data->builder);
+
+      value = _gtk_builder_parser_translate (domain,
+					     parser_data->context,
+					     text);
+    }
+  else
+    {
+      value = g_strdup (text);
+    }
+
+  area = gtk_cell_layout_get_area (parser_data->cell_layout);
+
+  if (!area)
+    {
+      g_warning ("%s does not have an internal GtkCellArea class and cannot apply child cell properties",
+		 g_type_name (G_OBJECT_TYPE (parser_data->cell_layout)));
+      return;
+    }
+
+  gtk_cell_layout_buildable_set_cell_property (area, 
+					       parser_data->builder,
+					       parser_data->renderer,
+					       parser_data->cell_prop_name,
+					       value);
+
+  g_free (parser_data->cell_prop_name);
+  g_free (parser_data->context);
+  g_free (value);
+  parser_data->cell_prop_name = NULL;
+  parser_data->context = NULL;
+  parser_data->translatable = FALSE;
+}
+
+static const GMarkupParser cell_packing_parser =
+  {
+    cell_packing_start_element,
+    NULL,
+    cell_packing_text_element,
+  };
+
 gboolean
 _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
 					     GtkBuilder    *builder,
@@ -372,20 +542,32 @@ _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
 					     GMarkupParser *parser,
 					     gpointer      *data)
 {
-  AttributesSubParserData *parser_data;
+  AttributesSubParserData  *attr_data;
+  CellPackingSubParserData *packing_data;
 
   if (!child)
     return FALSE;
 
   if (strcmp (tagname, "attributes") == 0)
     {
-      parser_data = g_slice_new0 (AttributesSubParserData);
-      parser_data->cell_layout = GTK_CELL_LAYOUT (buildable);
-      parser_data->renderer = GTK_CELL_RENDERER (child);
-      parser_data->attr_name = NULL;
+      attr_data = g_slice_new0 (AttributesSubParserData);
+      attr_data->cell_layout = GTK_CELL_LAYOUT (buildable);
+      attr_data->renderer = GTK_CELL_RENDERER (child);
+      attr_data->attr_name = NULL;
 
       *parser = attributes_parser;
-      *data = parser_data;
+      *data = attr_data;
+      return TRUE;
+    }
+  else if (strcmp (tagname, "cell-packing") == 0)
+    {
+      packing_data = g_slice_new0 (CellPackingSubParserData);
+      packing_data->builder = builder;
+      packing_data->cell_layout = GTK_CELL_LAYOUT (buildable);
+      packing_data->renderer = GTK_CELL_RENDERER (child);
+
+      *parser = cell_packing_parser;
+      *data = packing_data;
       return TRUE;
     }
 
@@ -399,11 +581,20 @@ _gtk_cell_layout_buildable_custom_tag_end (GtkBuildable *buildable,
 					   const gchar  *tagname,
 					   gpointer     *data)
 {
-  AttributesSubParserData *parser_data;
+  AttributesSubParserData *attr_data;
 
-  parser_data = (AttributesSubParserData*)data;
-  g_assert (!parser_data->attr_name);
-  g_slice_free (AttributesSubParserData, parser_data);
+  if (strcmp (tagname, "attributes") == 0)
+    {
+      attr_data = (AttributesSubParserData*)data;
+      g_assert (!attr_data->attr_name);
+      g_slice_free (AttributesSubParserData, attr_data);
+      return;
+    }
+  else if (strcmp (tagname, "cell-packing") == 0)
+    {
+      g_slice_free (CellPackingSubParserData, (gpointer)data);
+      return;
+    }
 }
 
 void

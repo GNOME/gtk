@@ -25,6 +25,7 @@
 #define __GTK_CELL_LAYOUT_H__
 
 #include <gtk/gtkcellrenderer.h>
+#include <gtk/gtkcellarea.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
@@ -73,6 +74,8 @@ struct _GtkCellLayoutIface
                                GtkCellRenderer       *cell,
                                gint                   position);
   GList* (* get_cells)        (GtkCellLayout         *cell_layout);
+
+  GtkCellArea *(* get_area)   (GtkCellLayout         *cell_layout);
 };
 
 GType gtk_cell_layout_get_type           (void) G_GNUC_CONST;
@@ -101,6 +104,8 @@ void  gtk_cell_layout_clear_attributes   (GtkCellLayout         *cell_layout,
 void  gtk_cell_layout_reorder            (GtkCellLayout         *cell_layout,
                                           GtkCellRenderer       *cell,
                                           gint                   position);
+GtkCellArea *gtk_cell_layout_get_area    (GtkCellLayout         *cell_layout);
+
 gboolean _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
 						      GtkBuilder    *builder,
 						      GObject       *child,
