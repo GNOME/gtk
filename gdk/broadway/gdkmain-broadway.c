@@ -57,7 +57,7 @@ const GOptionEntry _gdk_windowing_args[] = {
 void
 _gdk_windowing_init (void)
 {
-  _gdk_x11_initialize_locale ();
+  _gdk_broadway_initialize_locale ();
 
   _gdk_selection_property = gdk_atom_intern_static_string ("GDK_SELECTION");
 }

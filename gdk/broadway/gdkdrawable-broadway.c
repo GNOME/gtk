@@ -36,36 +36,36 @@
 #include <string.h>
 
 
-static cairo_surface_t *gdk_x11_ref_cairo_surface (GdkDrawable *drawable);
+static cairo_surface_t *gdk_broadway_ref_cairo_surface (GdkDrawable *drawable);
 
-static const cairo_user_data_key_t gdk_x11_cairo_key;
+static const cairo_user_data_key_t gdk_broadway_cairo_key;
 
-G_DEFINE_TYPE (GdkDrawableImplX11, _gdk_drawable_impl_x11, GDK_TYPE_DRAWABLE)
+G_DEFINE_TYPE (GdkDrawableImplBroadway, _gdk_drawable_impl_broadway, GDK_TYPE_DRAWABLE)
 
 static void
-_gdk_drawable_impl_x11_class_init (GdkDrawableImplX11Class *klass)
+_gdk_drawable_impl_broadway_class_init (GdkDrawableImplBroadwayClass *klass)
 {
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
 
-  drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
+  drawable_class->ref_cairo_surface = gdk_broadway_ref_cairo_surface;
   drawable_class->create_cairo_surface = NULL;
 }
 
 static void
-_gdk_drawable_impl_x11_init (GdkDrawableImplX11 *impl)
+_gdk_drawable_impl_broadway_init (GdkDrawableImplBroadway *impl)
 {
 }
 
 /**
- * _gdk_x11_drawable_finish:
- * @drawable: a #GdkDrawableImplX11.
+ * _gdk_broadway_drawable_finish:
+ * @drawable: a #GdkDrawableImplBroadway.
  * 
  * Performs necessary cleanup prior to destroying a window.
  **/
 void
-_gdk_x11_drawable_finish (GdkDrawable *drawable)
+_gdk_broadway_drawable_finish (GdkDrawable *drawable)
 {
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  GdkDrawableImplBroadway *impl = GDK_DRAWABLE_IMPL_BROADWAY (drawable);
 
   if (impl->surface)
     {
@@ -77,16 +77,16 @@ _gdk_x11_drawable_finish (GdkDrawable *drawable)
 }
 
 /**
- * _gdk_x11_drawable_update_size:
- * @drawable: a #GdkDrawableImplX11.
+ * _gdk_broadway_drawable_update_size:
+ * @drawable: a #GdkDrawableImplBroadway.
  *
  * Updates the state of the drawable (in particular the drawable's
  * cairo surface) when its size has changed.
  **/
 void
-_gdk_x11_drawable_update_size (GdkDrawable *drawable)
+_gdk_broadway_drawable_update_size (GdkDrawable *drawable)
 {
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  GdkDrawableImplBroadway *impl = GDK_DRAWABLE_IMPL_BROADWAY (drawable);
   cairo_surface_t *old, *last_old;
 
   if (impl->surface)
@@ -109,17 +109,17 @@ _gdk_x11_drawable_update_size (GdkDrawable *drawable)
 }
 
 /*****************************************************
- * X11 specific implementations of generic functions *
+ * Broadway specific implementations of generic functions *
  *****************************************************/
 
 static cairo_surface_t *
-gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
+gdk_broadway_ref_cairo_surface (GdkDrawable *drawable)
 {
-  GdkDrawableImplX11 *impl = GDK_DRAWABLE_IMPL_X11 (drawable);
+  GdkDrawableImplBroadway *impl = GDK_DRAWABLE_IMPL_BROADWAY (drawable);
   cairo_t *cr;
   int w, h;
 
-  if (GDK_IS_WINDOW_IMPL_X11 (drawable) &&
+  if (GDK_IS_WINDOW_IMPL_BROADWAY (drawable) &&
       GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
 

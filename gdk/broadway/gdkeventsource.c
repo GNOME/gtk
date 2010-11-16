@@ -132,7 +132,7 @@ gdk_event_source_new (GdkDisplay *display)
   char *name;
 
   source = g_source_new (&event_funcs, sizeof (GdkEventSource));
-  name = g_strdup_printf ("GDK X11 Event source (%s)",
+  name = g_strdup_printf ("GDK Broadway Event source (%s)",
 			  gdk_display_get_name (display));
   g_source_set_name (source, name);
   g_free (name);

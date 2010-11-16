@@ -37,16 +37,16 @@
 
 #include <string.h>
 
-typedef struct _GdkDragContextPrivateX11 GdkDragContextPrivateX11;
+typedef struct _GdkDragContextPrivateBroadway GdkDragContextPrivateBroadway;
 
 /* Structure that holds information about a drag in progress.
  * this is used on both source and destination sides.
  */
-struct _GdkDragContextPrivateX11 {
+struct _GdkDragContextPrivateBroadway {
   GdkDragContext context;
 };
 
-#define PRIVATE_DATA(context) ((GdkDragContextPrivateX11 *) GDK_DRAG_CONTEXT (context)->windowing_data)
+#define PRIVATE_DATA(context) ((GdkDragContextPrivateBroadway *) GDK_DRAG_CONTEXT (context)->windowing_data)
 
 static void gdk_drag_context_finalize (GObject *object);
 
@@ -57,11 +57,11 @@ G_DEFINE_TYPE (GdkDragContext, gdk_drag_context, G_TYPE_OBJECT)
 static void
 gdk_drag_context_init (GdkDragContext *dragcontext)
 {
-  GdkDragContextPrivateX11 *private;
+  GdkDragContextPrivateBroadway *private;
 
   private = G_TYPE_INSTANCE_GET_PRIVATE (dragcontext,
 					 GDK_TYPE_DRAG_CONTEXT,
-					 GdkDragContextPrivateX11);
+					 GdkDragContextPrivateBroadway);
 
   dragcontext->windowing_data = private;
 
@@ -75,7 +75,7 @@ gdk_drag_context_class_init (GdkDragContextClass *klass)
 
   object_class->finalize = gdk_drag_context_finalize;
 
-  g_type_class_add_private (object_class, sizeof (GdkDragContextPrivateX11));
+  g_type_class_add_private (object_class, sizeof (GdkDragContextPrivateBroadway));
 }
 
 static void
@@ -119,7 +119,7 @@ gdk_drag_begin (GdkWindow     *window,
   GdkDragContext *new_context;
 
   g_return_val_if_fail (window != NULL, NULL);
-  g_return_val_if_fail (GDK_WINDOW_IS_X11 (window), NULL);
+  g_return_val_if_fail (GDK_WINDOW_IS_BROADWAY (window), NULL);
 
   new_context = gdk_drag_context_new ();
 
@@ -157,7 +157,7 @@ gdk_drag_motion (GdkDragContext *context,
 		 guint32         time)
 {
   g_return_val_if_fail (context != NULL, FALSE);
-  g_return_val_if_fail (dest_window == NULL || GDK_WINDOW_IS_X11 (dest_window), FALSE);
+  g_return_val_if_fail (dest_window == NULL || GDK_WINDOW_IS_BROADWAY (dest_window), FALSE);
 
   return FALSE;
 }

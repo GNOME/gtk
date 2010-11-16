@@ -34,22 +34,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-static void         gdk_screen_x11_dispose     (GObject		  *object);
-static void         gdk_screen_x11_finalize    (GObject		  *object);
+static void         gdk_screen_broadway_dispose     (GObject		  *object);
+static void         gdk_screen_broadway_finalize    (GObject		  *object);
 
-G_DEFINE_TYPE (GdkScreenX11, _gdk_screen_x11, GDK_TYPE_SCREEN)
+G_DEFINE_TYPE (GdkScreenBroadway, _gdk_screen_broadway, GDK_TYPE_SCREEN)
 
 static void
-_gdk_screen_x11_class_init (GdkScreenX11Class *klass)
+_gdk_screen_broadway_class_init (GdkScreenBroadwayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->dispose = gdk_screen_x11_dispose;
-  object_class->finalize = gdk_screen_x11_finalize;
+  object_class->dispose = gdk_screen_broadway_dispose;
+  object_class->finalize = gdk_screen_broadway_finalize;
 }
 
 static void
-_gdk_screen_x11_init (GdkScreenX11 *screen)
+_gdk_screen_broadway_init (GdkScreenBroadway *screen)
 {
   screen->width = 1024;
   screen->height = 768;
@@ -60,7 +60,7 @@ gdk_screen_get_display (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  return GDK_SCREEN_X11 (screen)->display;
+  return GDK_SCREEN_BROADWAY (screen)->display;
 }
 
 gint
@@ -68,7 +68,7 @@ gdk_screen_get_width (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  return GDK_SCREEN_X11 (screen)->width;
+  return GDK_SCREEN_BROADWAY (screen)->width;
 }
 
 gint
@@ -76,7 +76,7 @@ gdk_screen_get_height (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
-  return GDK_SCREEN_X11 (screen)->height;
+  return GDK_SCREEN_BROADWAY (screen)->height;
 }
 
 gint
@@ -108,35 +108,35 @@ gdk_screen_get_root_window (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  return GDK_SCREEN_X11 (screen)->root_window;
+  return GDK_SCREEN_BROADWAY (screen)->root_window;
 }
 
 static void
-gdk_screen_x11_dispose (GObject *object)
+gdk_screen_broadway_dispose (GObject *object)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
+  GdkScreenBroadway *screen_broadway = GDK_SCREEN_BROADWAY (object);
 
-  if (screen_x11->root_window)
-    _gdk_window_destroy (screen_x11->root_window, TRUE);
+  if (screen_broadway->root_window)
+    _gdk_window_destroy (screen_broadway->root_window, TRUE);
 
-  G_OBJECT_CLASS (_gdk_screen_x11_parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gdk_screen_broadway_parent_class)->dispose (object);
 }
 
 static void
-gdk_screen_x11_finalize (GObject *object)
+gdk_screen_broadway_finalize (GObject *object)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (object);
+  GdkScreenBroadway *screen_broadway = GDK_SCREEN_BROADWAY (object);
   gint          i;
 
-  if (screen_x11->root_window)
-    g_object_unref (screen_x11->root_window);
+  if (screen_broadway->root_window)
+    g_object_unref (screen_broadway->root_window);
 
   /* Visual Part */
-  for (i = 0; i < screen_x11->nvisuals; i++)
-    g_object_unref (screen_x11->visuals[i]);
-  g_free (screen_x11->visuals);
+  for (i = 0; i < screen_broadway->nvisuals; i++)
+    g_object_unref (screen_broadway->visuals[i]);
+  g_free (screen_broadway->visuals);
 
-  G_OBJECT_CLASS (_gdk_screen_x11_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_screen_broadway_parent_class)->finalize (object);
 }
 
 gint
@@ -204,7 +204,7 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 				 gint          monitor_num,
 				 GdkRectangle *dest)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  GdkScreenBroadway *screen_broadway = GDK_SCREEN_BROADWAY (screen);
 
   g_return_if_fail (GDK_IS_SCREEN (screen));
   g_return_if_fail (monitor_num == 0);
@@ -213,34 +213,34 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
     {
       dest->x = 0;
       dest->y = 0;
-      dest->width = screen_x11->width;
-      dest->height = screen_x11->height;
+      dest->width = screen_broadway->width;
+      dest->height = screen_broadway->height;
     }
 }
 
 GdkVisual *
 gdk_screen_get_rgba_visual (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11;
+  GdkScreenBroadway *screen_broadway;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  screen_x11 = GDK_SCREEN_X11 (screen);
+  screen_broadway = GDK_SCREEN_BROADWAY (screen);
 
-  return screen_x11->rgba_visual;
+  return screen_broadway->rgba_visual;
 }
 
 GdkScreen *
-_gdk_x11_screen_new (GdkDisplay *display,
+_gdk_broadway_screen_new (GdkDisplay *display,
 		     gint	 screen_number)
 {
   GdkScreen *screen;
-  GdkScreenX11 *screen_x11;
+  GdkScreenBroadway *screen_broadway;
 
-  screen = g_object_new (GDK_TYPE_SCREEN_X11, NULL);
+  screen = g_object_new (GDK_TYPE_SCREEN_BROADWAY, NULL);
 
-  screen_x11 = GDK_SCREEN_X11 (screen);
-  screen_x11->display = display;
+  screen_broadway = GDK_SCREEN_BROADWAY (screen);
+  screen_broadway->display = display;
   _gdk_visual_init (screen);
   _gdk_windowing_window_init (screen);
 
@@ -253,18 +253,18 @@ _gdk_x11_screen_new (GdkDisplay *display,
  * is_composited to avoid a race condition here.
  */
 void
-_gdk_x11_screen_setup (GdkScreen *screen)
+_gdk_broadway_screen_setup (GdkScreen *screen)
 {
 }
 
 gboolean
 gdk_screen_is_composited (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11;
+  GdkScreenBroadway *screen_broadway;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
-  screen_x11 = GDK_SCREEN_X11 (screen);
+  screen_broadway = GDK_SCREEN_BROADWAY (screen);
 
   return FALSE;
 }
@@ -311,7 +311,7 @@ gdk_net_wm_supports (GdkAtom property)
 }
 
 void
-_gdk_screen_x11_events_init (GdkScreen *screen)
+_gdk_screen_broadway_events_init (GdkScreen *screen)
 {
 }
 

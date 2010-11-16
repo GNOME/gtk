@@ -35,7 +35,7 @@
 #include <string.h>
 
 void
-_gdk_x11_initialize_locale (void)
+_gdk_broadway_initialize_locale (void)
 {
 }
 

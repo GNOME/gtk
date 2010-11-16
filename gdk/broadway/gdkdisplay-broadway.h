@@ -1,5 +1,5 @@
 /*
- * gdkdisplay-x11.h
+ * gdkdisplay-broadway.h
  * 
  * Copyright 2001 Sun Microsystems Inc. 
  *
@@ -21,8 +21,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_DISPLAY_X11__
-#define __GDK_DISPLAY_X11__
+#ifndef __GDK_DISPLAY_BROADWAY__
+#define __GDK_DISPLAY_BROADWAY__
 
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkkeys.h>
@@ -32,17 +32,17 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkDisplayX11 GdkDisplayX11;
-typedef struct _GdkDisplayX11Class GdkDisplayX11Class;
+typedef struct _GdkDisplayBroadway GdkDisplayBroadway;
+typedef struct _GdkDisplayBroadwayClass GdkDisplayBroadwayClass;
 
-#define GDK_TYPE_DISPLAY_X11              (_gdk_display_x11_get_type())
-#define GDK_DISPLAY_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_X11, GdkDisplayX11))
-#define GDK_DISPLAY_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_X11, GdkDisplayX11Class))
-#define GDK_IS_DISPLAY_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_X11))
-#define GDK_IS_DISPLAY_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_X11))
-#define GDK_DISPLAY_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_X11, GdkDisplayX11Class))
+#define GDK_TYPE_DISPLAY_BROADWAY              (_gdk_display_broadway_get_type())
+#define GDK_DISPLAY_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_BROADWAY, GdkDisplayBroadway))
+#define GDK_DISPLAY_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_BROADWAY, GdkDisplayBroadwayClass))
+#define GDK_IS_DISPLAY_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_BROADWAY))
+#define GDK_IS_DISPLAY_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_BROADWAY))
+#define GDK_DISPLAY_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_BROADWAY, GdkDisplayBroadwayClass))
 
-struct _GdkDisplayX11
+struct _GdkDisplayBroadway
 {
   GdkDisplay parent_instance;
   GdkScreen *default_screen;
@@ -74,13 +74,13 @@ struct _GdkDisplayX11
   GdkWindow *active_offscreen_window;
 };
 
-struct _GdkDisplayX11Class
+struct _GdkDisplayBroadwayClass
 {
   GdkDisplayClass parent_class;
 };
 
-GType      _gdk_display_x11_get_type            (void);
+GType      _gdk_display_broadway_get_type            (void);
 
 G_END_DECLS
 
-#endif				/* __GDK_DISPLAY_X11__ */
+#endif				/* __GDK_DISPLAY_BROADWAY__ */

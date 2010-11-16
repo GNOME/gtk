@@ -1,5 +1,5 @@
 /* GDK - The GIMP Drawing Kit
- * gdkdisplay-x11.c
+ * gdkdisplay-broadway.c
  * 
  * Copyright 2001 Sun Microsystems Inc.
  * Copyright (C) 2004 Nokia Corporation
@@ -41,44 +41,44 @@
 #include <errno.h>
 #include <unistd.h>
 
-static void   gdk_display_x11_dispose            (GObject            *object);
-static void   gdk_display_x11_finalize           (GObject            *object);
+static void   gdk_display_broadway_dispose            (GObject            *object);
+static void   gdk_display_broadway_finalize           (GObject            *object);
 
-G_DEFINE_TYPE (GdkDisplayX11, _gdk_display_x11, GDK_TYPE_DISPLAY)
+G_DEFINE_TYPE (GdkDisplayBroadway, _gdk_display_broadway, GDK_TYPE_DISPLAY)
 
 
 static void
-_gdk_display_x11_class_init (GdkDisplayX11Class * class)
+_gdk_display_broadway_class_init (GdkDisplayBroadwayClass * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->dispose = gdk_display_x11_dispose;
-  object_class->finalize = gdk_display_x11_finalize;
+  object_class->dispose = gdk_display_broadway_dispose;
+  object_class->finalize = gdk_display_broadway_finalize;
 }
 
 static void
-_gdk_display_x11_init (GdkDisplayX11 *display)
+_gdk_display_broadway_init (GdkDisplayBroadway *display)
 {
 }
 
 static void
 _gdk_event_init (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkDisplayBroadway *display_broadway;
 
-  display_x11 = GDK_DISPLAY_X11 (display);
-  display_x11->event_source = gdk_event_source_new (display);
+  display_broadway = GDK_DISPLAY_BROADWAY (display);
+  display_broadway->event_source = gdk_event_source_new (display);
 }
 
 static void
 _gdk_input_init (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkDisplayBroadway *display_broadway;
   GdkDeviceManager *device_manager;
   GdkDevice *device;
   GList *list, *l;
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_broadway = GDK_DISPLAY_BROADWAY (display);
   device_manager = gdk_display_get_device_manager (display);
 
   /* For backwards compatibility, just add
@@ -93,7 +93,7 @@ _gdk_input_init (GdkDisplay *display)
       if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
         continue;
 
-      display_x11->input_devices = g_list_prepend (display_x11->input_devices,
+      display_broadway->input_devices = g_list_prepend (display_broadway->input_devices,
                                                    g_object_ref (l->data));
     }
 
@@ -116,7 +116,7 @@ _gdk_input_init (GdkDisplay *display)
     }
 
   /* Add the core pointer to the devices list */
-  display_x11->input_devices = g_list_prepend (display_x11->input_devices,
+  display_broadway->input_devices = g_list_prepend (display_broadway->input_devices,
                                                g_object_ref (display->core_pointer));
 
   g_list_free (list);
@@ -126,23 +126,23 @@ GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
   GdkDisplay *display;
-  GdkDisplayX11 *display_x11;
+  GdkDisplayBroadway *display_broadway;
   const char *sm_client_id;
 
-  display = g_object_new (GDK_TYPE_DISPLAY_X11, NULL);
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display = g_object_new (GDK_TYPE_DISPLAY_BROADWAY, NULL);
+  display_broadway = GDK_DISPLAY_BROADWAY (display);
 
   /* initialize the display's screens */
-  display_x11->screens = g_new (GdkScreen *, 1);
-  display_x11->screens[0] = _gdk_x11_screen_new (display, 0);
+  display_broadway->screens = g_new (GdkScreen *, 1);
+  display_broadway->screens[0] = _gdk_broadway_screen_new (display, 0);
 
   /* We need to initialize events after we have the screen
    * structures in places
    */
-  _gdk_screen_x11_events_init (display_x11->screens[0]);
+  _gdk_screen_broadway_events_init (display_broadway->screens[0]);
 
   /*set the default screen */
-  display_x11->default_screen = display_x11->screens[0];
+  display_broadway->default_screen = display_broadway->screens[0];
 
   display->device_manager = _gdk_device_manager_new (display);
 
@@ -155,7 +155,7 @@ gdk_display_open (const gchar *display_name)
   _gdk_input_init (display);
   _gdk_dnd_init (display);
 
-  _gdk_x11_screen_setup (display_x11->screens[0]);
+  _gdk_broadway_screen_setup (display_broadway->screens[0]);
 
   g_signal_emit_by_name (display, "opened");
   g_signal_emit_by_name (gdk_display_manager_get (), "display-opened", display);
@@ -187,7 +187,7 @@ gdk_display_get_screen (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (screen_num == 0, NULL);
 
-  return GDK_DISPLAY_X11 (display)->screens[screen_num];
+  return GDK_DISPLAY_BROADWAY (display)->screens[screen_num];
 }
 
 GdkScreen *
@@ -195,7 +195,7 @@ gdk_display_get_default_screen (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_X11 (display)->default_screen;
+  return GDK_DISPLAY_BROADWAY (display)->default_screen;
 }
 
 void
@@ -233,57 +233,57 @@ gdk_display_get_default_group (GdkDisplay *display)
 }
 
 void
-gdk_x11_display_grab (GdkDisplay *display)
+gdk_broadway_display_grab (GdkDisplay *display)
 {
 }
 
 void
-gdk_x11_display_ungrab (GdkDisplay *display)
+gdk_broadway_display_ungrab (GdkDisplay *display)
 {
 }
 
 static void
-gdk_display_x11_dispose (GObject *object)
+gdk_display_broadway_dispose (GObject *object)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
+  GdkDisplayBroadway *display_broadway = GDK_DISPLAY_BROADWAY (object);
 
-  g_list_foreach (display_x11->input_devices, (GFunc) g_object_run_dispose, NULL);
+  g_list_foreach (display_broadway->input_devices, (GFunc) g_object_run_dispose, NULL);
 
-  _gdk_screen_close (display_x11->screens[0]);
+  _gdk_screen_close (display_broadway->screens[0]);
 
-  if (display_x11->event_source)
+  if (display_broadway->event_source)
     {
-      g_source_destroy (display_x11->event_source);
-      g_source_unref (display_x11->event_source);
-      display_x11->event_source = NULL;
+      g_source_destroy (display_broadway->event_source);
+      g_source_unref (display_broadway->event_source);
+      display_broadway->event_source = NULL;
     }
 
-  G_OBJECT_CLASS (_gdk_display_x11_parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gdk_display_broadway_parent_class)->dispose (object);
 }
 
 static void
-gdk_display_x11_finalize (GObject *object)
+gdk_display_broadway_finalize (GObject *object)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
+  GdkDisplayBroadway *display_broadway = GDK_DISPLAY_BROADWAY (object);
 
   /* Keymap */
-  if (display_x11->keymap)
-    g_object_unref (display_x11->keymap);
+  if (display_broadway->keymap)
+    g_object_unref (display_broadway->keymap);
 
-  _gdk_x11_cursor_display_finalize (GDK_DISPLAY_OBJECT(display_x11));
+  _gdk_broadway_cursor_display_finalize (GDK_DISPLAY_OBJECT(display_broadway));
 
   /* Atom Hashtable */
-  g_hash_table_destroy (display_x11->atom_from_virtual);
-  g_hash_table_destroy (display_x11->atom_to_virtual);
+  g_hash_table_destroy (display_broadway->atom_from_virtual);
+  g_hash_table_destroy (display_broadway->atom_to_virtual);
 
   /* input GdkDevice list */
-  g_list_foreach (display_x11->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (display_x11->input_devices);
+  g_list_foreach (display_broadway->input_devices, (GFunc) g_object_unref, NULL);
+  g_list_free (display_broadway->input_devices);
   /* Free all GdkScreens */
-  g_object_unref (display_x11->screens[0]);
-  g_free (display_x11->screens);
+  g_object_unref (display_broadway->screens[0]);
+  g_free (display_broadway->screens);
 
-  G_OBJECT_CLASS (_gdk_display_x11_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_display_broadway_parent_class)->finalize (object);
 }
 
 void
@@ -331,9 +331,9 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 }
 
 guint32
-gdk_x11_display_get_user_time (GdkDisplay *display)
+gdk_broadway_display_get_user_time (GdkDisplay *display)
 {
-  return GDK_DISPLAY_X11 (display)->user_time;
+  return GDK_DISPLAY_BROADWAY (display)->user_time;
 }
 
 gboolean
@@ -348,21 +348,6 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
   return FALSE;
 }
 
-
-/**
- * gdk_display_supports_composite:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if gdk_window_set_composited() can be used
- * to redirect drawing on the window using compositing.
- *
- * Currently this only works on X11 with XComposite and
- * XDamage extensions available.
- *
- * Returns: %TRUE if windows may be composited.
- *
- * Since: 2.12
- */
 gboolean
 gdk_display_supports_composite (GdkDisplay *display)
 {
@@ -374,7 +359,7 @@ gdk_display_list_devices (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_X11 (display)->input_devices;
+  return GDK_DISPLAY_BROADWAY (display)->input_devices;
 }
 
 gboolean

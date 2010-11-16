@@ -31,20 +31,20 @@
 
 G_BEGIN_DECLS
 
-/* Drawable implementation for X11
+/* Drawable implementation for Broadway
  */
 
-typedef struct _GdkDrawableImplX11 GdkDrawableImplX11;
-typedef struct _GdkDrawableImplX11Class GdkDrawableImplX11Class;
+typedef struct _GdkDrawableImplBroadway GdkDrawableImplBroadway;
+typedef struct _GdkDrawableImplBroadwayClass GdkDrawableImplBroadwayClass;
 
-#define GDK_TYPE_DRAWABLE_IMPL_X11              (_gdk_drawable_impl_x11_get_type ())
-#define GDK_DRAWABLE_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE_IMPL_X11, GdkDrawableImplX11))
-#define GDK_DRAWABLE_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAWABLE_IMPL_X11, GdkDrawableImplX11Class))
-#define GDK_IS_DRAWABLE_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL_X11))
-#define GDK_IS_DRAWABLE_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAWABLE_IMPL_X11))
-#define GDK_DRAWABLE_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAWABLE_IMPL_X11, GdkDrawableImplX11Class))
+#define GDK_TYPE_DRAWABLE_IMPL_BROADWAY              (_gdk_drawable_impl_broadway_get_type ())
+#define GDK_DRAWABLE_IMPL_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAWABLE_IMPL_BROADWAY, GdkDrawableImplBroadway))
+#define GDK_DRAWABLE_IMPL_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAWABLE_IMPL_BROADWAY, GdkDrawableImplBroadwayClass))
+#define GDK_IS_DRAWABLE_IMPL_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAWABLE_IMPL_BROADWAY))
+#define GDK_IS_DRAWABLE_IMPL_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAWABLE_IMPL_BROADWAY))
+#define GDK_DRAWABLE_IMPL_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAWABLE_IMPL_BROADWAY, GdkDrawableImplBroadwayClass))
 
-struct _GdkDrawableImplX11
+struct _GdkDrawableImplBroadway
 {
   GdkDrawable parent_instance;
 
@@ -55,18 +55,18 @@ struct _GdkDrawableImplX11
   cairo_surface_t *last_surface;
 };
 
-struct _GdkDrawableImplX11Class
+struct _GdkDrawableImplBroadwayClass
 {
   GdkDrawableClass parent_class;
 
 };
 
-GType _gdk_drawable_impl_x11_get_type (void);
+GType _gdk_drawable_impl_broadway_get_type (void);
 
-/* Note that the following take GdkDrawableImplX11, not the wrapper drawable */
-void _gdk_x11_drawable_finish           (GdkDrawable  *drawable);
-void _gdk_x11_drawable_update_size      (GdkDrawable  *drawable);
-GdkDrawable *gdk_x11_window_get_drawable_impl (GdkWindow *window);
+/* Note that the following take GdkDrawableImplBroadway, not the wrapper drawable */
+void _gdk_broadway_drawable_finish           (GdkDrawable  *drawable);
+void _gdk_broadway_drawable_update_size      (GdkDrawable  *drawable);
+GdkDrawable *gdk_broadway_window_get_drawable_impl (GdkWindow *window);
 
 G_END_DECLS
 

@@ -38,33 +38,33 @@
 #include <limits.h>
 #include <errno.h>
 
-typedef struct _GdkKeymapX11   GdkKeymapX11;
-typedef struct _GdkKeymapClass GdkKeymapX11Class;
+typedef struct _GdkKeymapBroadway   GdkKeymapBroadway;
+typedef struct _GdkKeymapClass GdkKeymapBroadwayClass;
 
-#define GDK_TYPE_KEYMAP_X11          (gdk_keymap_x11_get_type ())
-#define GDK_KEYMAP_X11(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_KEYMAP_X11, GdkKeymapX11))
-#define GDK_IS_KEYMAP_X11(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_KEYMAP_X11))
+#define GDK_TYPE_KEYMAP_BROADWAY          (gdk_keymap_broadway_get_type ())
+#define GDK_KEYMAP_BROADWAY(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_KEYMAP_BROADWAY, GdkKeymapBroadway))
+#define GDK_IS_KEYMAP_BROADWAY(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_KEYMAP_BROADWAY))
 
 typedef struct _DirectionCacheEntry DirectionCacheEntry;
 
-struct _GdkKeymapX11
+struct _GdkKeymapBroadway
 {
   GdkKeymap     parent_instance;
 
 };
 
-#define KEYMAP_USE_XKB(keymap) GDK_DISPLAY_X11 ((keymap)->display)->use_xkb
+#define KEYMAP_USE_XKB(keymap) GDK_DISPLAY_BROADWAY ((keymap)->display)->use_xkb
 #define KEYMAP_XDISPLAY(keymap) GDK_DISPLAY_XDISPLAY ((keymap)->display)
 
-static GType gdk_keymap_x11_get_type   (void);
-static void  gdk_keymap_x11_class_init (GdkKeymapX11Class *klass);
-static void  gdk_keymap_x11_init       (GdkKeymapX11      *keymap);
-static void  gdk_keymap_x11_finalize   (GObject           *object);
+static GType gdk_keymap_broadway_get_type   (void);
+static void  gdk_keymap_broadway_class_init (GdkKeymapBroadwayClass *klass);
+static void  gdk_keymap_broadway_init       (GdkKeymapBroadway      *keymap);
+static void  gdk_keymap_broadway_finalize   (GObject           *object);
 
 static GdkKeymapClass *parent_class = NULL;
 
 static GType
-gdk_keymap_x11_get_type (void)
+gdk_keymap_broadway_get_type (void)
 {
   static GType object_type = 0;
 
@@ -75,16 +75,16 @@ gdk_keymap_x11_get_type (void)
 	  sizeof (GdkKeymapClass),
 	  (GBaseInitFunc) NULL,
 	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gdk_keymap_x11_class_init,
+	  (GClassInitFunc) gdk_keymap_broadway_class_init,
 	  NULL,           /* class_finalize */
 	  NULL,           /* class_data */
-	  sizeof (GdkKeymapX11),
+	  sizeof (GdkKeymapBroadway),
 	  0,              /* n_preallocs */
-	  (GInstanceInitFunc) gdk_keymap_x11_init,
+	  (GInstanceInitFunc) gdk_keymap_broadway_init,
 	};
       
       object_type = g_type_register_static (GDK_TYPE_KEYMAP,
-                                            g_intern_static_string ("GdkKeymapX11"),
+                                            g_intern_static_string ("GdkKeymapBroadway"),
                                             &object_info, 0);
     }
   
@@ -92,22 +92,22 @@ gdk_keymap_x11_get_type (void)
 }
 
 static void
-gdk_keymap_x11_class_init (GdkKeymapX11Class *klass)
+gdk_keymap_broadway_class_init (GdkKeymapBroadwayClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
 
-  object_class->finalize = gdk_keymap_x11_finalize;
+  object_class->finalize = gdk_keymap_broadway_finalize;
 }
 
 static void
-gdk_keymap_x11_init (GdkKeymapX11 *keymap)
+gdk_keymap_broadway_init (GdkKeymapBroadway *keymap)
 {
 }
 
 static void
-gdk_keymap_x11_finalize (GObject *object)
+gdk_keymap_broadway_finalize (GObject *object)
 {
   G_OBJECT_CLASS (parent_class)->finalize (object);
 }
@@ -115,17 +115,17 @@ gdk_keymap_x11_finalize (GObject *object)
 GdkKeymap*
 gdk_keymap_get_for_display (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkDisplayBroadway *display_broadway;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_broadway = GDK_DISPLAY_BROADWAY (display);
 
-  if (!display_x11->keymap)
-    display_x11->keymap = g_object_new (gdk_keymap_x11_get_type (), NULL);
+  if (!display_broadway->keymap)
+    display_broadway->keymap = g_object_new (gdk_keymap_broadway_get_type (), NULL);
 
-  display_x11->keymap->display = display;
+  display_broadway->keymap->display = display;
 
-  return display_x11->keymap;
+  return display_broadway->keymap;
 }
 
 PangoDirection

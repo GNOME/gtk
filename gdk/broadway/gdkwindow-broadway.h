@@ -31,24 +31,22 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkToplevelX11 GdkToplevelX11;
-typedef struct _GdkWindowImplX11 GdkWindowImplX11;
-typedef struct _GdkWindowImplX11Class GdkWindowImplX11Class;
-typedef struct _GdkXPositionInfo GdkXPositionInfo;
+typedef struct _GdkWindowImplBroadway GdkWindowImplBroadway;
+typedef struct _GdkWindowImplBroadwayClass GdkWindowImplBroadwayClass;
 
-/* Window implementation for X11
+/* Window implementation for Broadway
  */
 
-#define GDK_TYPE_WINDOW_IMPL_X11              (gdk_window_impl_x11_get_type ())
-#define GDK_WINDOW_IMPL_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11))
-#define GDK_WINDOW_IMPL_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11Class))
-#define GDK_IS_WINDOW_IMPL_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_X11))
-#define GDK_IS_WINDOW_IMPL_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_X11))
-#define GDK_WINDOW_IMPL_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_X11, GdkWindowImplX11Class))
+#define GDK_TYPE_WINDOW_IMPL_BROADWAY              (gdk_window_impl_broadway_get_type ())
+#define GDK_WINDOW_IMPL_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_BROADWAY, GdkWindowImplBroadway))
+#define GDK_WINDOW_IMPL_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_BROADWAY, GdkWindowImplBroadwayClass))
+#define GDK_IS_WINDOW_IMPL_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_BROADWAY))
+#define GDK_IS_WINDOW_IMPL_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_BROADWAY))
+#define GDK_WINDOW_IMPL_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_BROADWAY, GdkWindowImplBroadwayClass))
 
-struct _GdkWindowImplX11
+struct _GdkWindowImplBroadway
 {
-  GdkDrawableImplX11 parent_instance;
+  GdkDrawableImplBroadway parent_instance;
 
   int id;
   GdkCursor *cursor;
@@ -59,12 +57,12 @@ struct _GdkWindowImplX11
 
 };
 
-struct _GdkWindowImplX11Class
+struct _GdkWindowImplBroadwayClass
 {
-  GdkDrawableImplX11Class parent_class;
+  GdkDrawableImplBroadwayClass parent_class;
 };
 
-GType gdk_window_impl_x11_get_type (void);
+GType gdk_window_impl_broadway_get_type (void);
 
 G_END_DECLS
 

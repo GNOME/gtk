@@ -86,12 +86,12 @@ gdk_property_change (GdkWindow    *window,
 		     const guchar *data,
 		     gint          nelements)
 {
-  g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
+  g_return_if_fail (!window || GDK_WINDOW_IS_BROADWAY (window));
 }
 
 void
 gdk_property_delete (GdkWindow *window,
 		     GdkAtom    property)
 {
-  g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
+  g_return_if_fail (!window || GDK_WINDOW_IS_BROADWAY (window));
 }

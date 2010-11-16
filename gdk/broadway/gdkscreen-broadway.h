@@ -30,19 +30,19 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkScreenX11 GdkScreenX11;
-typedef struct _GdkScreenX11Class GdkScreenX11Class;
+typedef struct _GdkScreenBroadway GdkScreenBroadway;
+typedef struct _GdkScreenBroadwayClass GdkScreenBroadwayClass;
 
-#define GDK_TYPE_SCREEN_X11              (_gdk_screen_x11_get_type ())
-#define GDK_SCREEN_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_X11, GdkScreenX11))
-#define GDK_SCREEN_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN_X11, GdkScreenX11Class))
-#define GDK_IS_SCREEN_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN_X11))
-#define GDK_IS_SCREEN_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN_X11))
-#define GDK_SCREEN_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN_X11, GdkScreenX11Class))
+#define GDK_TYPE_SCREEN_BROADWAY              (_gdk_screen_broadway_get_type ())
+#define GDK_SCREEN_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_BROADWAY, GdkScreenBroadway))
+#define GDK_SCREEN_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN_BROADWAY, GdkScreenBroadwayClass))
+#define GDK_IS_SCREEN_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN_BROADWAY))
+#define GDK_IS_SCREEN_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN_BROADWAY))
+#define GDK_SCREEN_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN_BROADWAY, GdkScreenBroadwayClass))
 
-typedef struct _GdkX11Monitor GdkX11Monitor;
+typedef struct _GdkBroadwayMonitor GdkBroadwayMonitor;
 
-struct _GdkScreenX11
+struct _GdkScreenBroadway
 {
   GdkScreen parent_instance;
 
@@ -63,22 +63,22 @@ struct _GdkScreenX11
   gint navailable_types;
 };
 
-struct _GdkScreenX11Class
+struct _GdkScreenBroadwayClass
 {
   GdkScreenClass parent_class;
 
-  void (* window_manager_changed) (GdkScreenX11 *screen_x11);
+  void (* window_manager_changed) (GdkScreenBroadway *screen_broadway);
 };
 
-GType       _gdk_screen_x11_get_type (void);
-GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
+GType       _gdk_screen_broadway_get_type (void);
+GdkScreen * _gdk_broadway_screen_new      (GdkDisplay *display,
 				      gint	  screen_number);
 
-void _gdk_x11_screen_setup                  (GdkScreen *screen);
-void _gdk_x11_screen_window_manager_changed (GdkScreen *screen);
-void _gdk_x11_screen_size_changed           (GdkScreen *screen,
+void _gdk_broadway_screen_setup                  (GdkScreen *screen);
+void _gdk_broadway_screen_window_manager_changed (GdkScreen *screen);
+void _gdk_broadway_screen_size_changed           (GdkScreen *screen,
 					     XEvent    *event);
-void _gdk_x11_screen_process_owner_change   (GdkScreen *screen,
+void _gdk_broadway_screen_process_owner_change   (GdkScreen *screen,
 					     XEvent    *event);
 
 G_END_DECLS

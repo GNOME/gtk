@@ -39,11 +39,11 @@
 #include <errno.h>
 
 
-/* Called by gdk_display_x11_finalize to flush any cached cursors
+/* Called by gdk_display_broadway_finalize to flush any cached cursors
  * for a dead display.
  */
 void
-_gdk_x11_cursor_display_finalize (GdkDisplay *display)
+_gdk_broadway_cursor_display_finalize (GdkDisplay *display)
 {
 }
 
@@ -108,7 +108,7 @@ gdk_cursor_get_image (GdkCursor *cursor)
 }
 
 void
-gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
+gdk_broadway_display_set_cursor_theme (GdkDisplay  *display,
 				  const gchar *theme,
 				  const gint   size)
 {
@@ -116,7 +116,7 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 }
 
 void
-_gdk_x11_cursor_update_theme (GdkCursor *cursor)
+_gdk_broadway_cursor_update_theme (GdkCursor *cursor)
 {
   g_return_if_fail (cursor != NULL);
 }
