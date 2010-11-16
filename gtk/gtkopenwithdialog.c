@@ -293,7 +293,8 @@ emit_application_selected (GtkOpenWithDialog *self,
 
 static void
 gtk_open_with_dialog_response (GtkDialog *dialog,
-			       gint response_id)
+			       gint response_id,
+			       gpointer user_data)
 {
   GAppInfo *application;
   GtkOpenWithDialog *self = GTK_OPEN_WITH_DIALOG (dialog);
@@ -345,6 +346,9 @@ gtk_open_with_dialog_response (GtkDialog *dialog,
 	      g_object_unref (selected);
 	    }
 	}
+
+      /* don't forward this signal to other clients in this case */
+      g_signal_stop_emission_by_name (self, "response");
 
       break;
     default :
@@ -1058,16 +1062,12 @@ static void
 gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 {
   GObjectClass *gobject_class;
-  GtkDialogClass *dialog_class;
 
   gobject_class = G_OBJECT_CLASS (klass);
   gobject_class->finalize = gtk_open_with_dialog_finalize;
   gobject_class->set_property = gtk_open_with_dialog_set_property;
   gobject_class->get_property = gtk_open_with_dialog_get_property;
   gobject_class->constructed = gtk_open_with_dialog_constructed;
-
-  dialog_class = GTK_DIALOG_CLASS (klass);
-  dialog_class->response = gtk_open_with_dialog_response;
 
   properties[PROP_GFILE] =
     g_param_spec_object ("gfile",
@@ -1249,6 +1249,12 @@ gtk_open_with_dialog_init (GtkOpenWithDialog *self)
 
   gtk_dialog_set_default_response (GTK_DIALOG (self),
 				   GTK_RESPONSE_OK);
+
+  /* we can't override the class signal handler here, as it's a RUN_LAST;
+   * we want our signal handler instead to be executed before any user code.
+   */
+  g_signal_connect (self, "response",
+		    G_CALLBACK (gtk_open_with_dialog_response), NULL);
 }
 
 static void
