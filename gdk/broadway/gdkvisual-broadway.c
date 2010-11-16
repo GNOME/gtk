@@ -84,7 +84,7 @@ _gdk_visual_init (GdkScreen *screen)
   g_return_if_fail (GDK_IS_SCREEN (screen));
   screen_broadway = GDK_SCREEN_BROADWAY (screen);
 
-  nvisuals = 1;
+  nvisuals = 2;
   visuals = g_new (GdkVisual *, nvisuals);
 
   visuals[0] = g_object_new (GDK_TYPE_VISUAL, NULL);
@@ -138,6 +138,7 @@ _gdk_visual_init (GdkScreen *screen)
   screen_broadway->available_types[0] = GDK_VISUAL_TRUE_COLOR;
 
   screen_broadway->visuals = visuals;
+  screen_broadway->nvisuals = nvisuals;
 }
 
 gint
