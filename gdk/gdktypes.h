@@ -172,6 +172,7 @@ typedef enum
  * @GDK_BUTTON3_MASK: the third mouse button.
  * @GDK_BUTTON4_MASK: the fourth mouse button.
  * @GDK_BUTTON5_MASK: the fifth mouse button.
+ * @GDK_MODIFIER_RESERVED_13_MASK: A reserved bit flag; do not use in your own code
  * @GDK_SUPER_MASK: the Super modifier. Since 2.10
  * @GDK_HYPER_MASK: the Hyper modifier. Since 2.10
  * @GDK_META_MASK: the Meta modifier. Since 2.10
@@ -188,6 +189,11 @@ typedef enum
  * Since 2.10, GDK recognizes which of the Meta, Super or Hyper keys are mapped
  * to Mod2 - Mod5, and indicates this by setting %GDK_SUPER_MASK,
  * %GDK_HYPER_MASK or %GDK_META_MASK in the state field of key events.
+ *
+ * Note that GDK may add internal values to events which include
+ * reserved values such as %GDK_MODIFIER_RESERVED_13_MASK.  Your code
+ * should preserve and ignore them.  You can use %GDK_MODIFIER_MASK to
+ * remove all reserved values.
  */
 typedef enum
 {
@@ -205,6 +211,20 @@ typedef enum
   GDK_BUTTON4_MASK  = 1 << 11,
   GDK_BUTTON5_MASK  = 1 << 12,
 
+  GDK_MODIFIER_RESERVED_13_MASK  = 1 << 13,
+  GDK_MODIFIER_RESERVED_14_MASK  = 1 << 14,
+  GDK_MODIFIER_RESERVED_15_MASK  = 1 << 15,
+  GDK_MODIFIER_RESERVED_16_MASK  = 1 << 16,
+  GDK_MODIFIER_RESERVED_17_MASK  = 1 << 17,
+  GDK_MODIFIER_RESERVED_18_MASK  = 1 << 18,
+  GDK_MODIFIER_RESERVED_19_MASK  = 1 << 19,
+  GDK_MODIFIER_RESERVED_20_MASK  = 1 << 20,
+  GDK_MODIFIER_RESERVED_21_MASK  = 1 << 21,
+  GDK_MODIFIER_RESERVED_22_MASK  = 1 << 22,
+  GDK_MODIFIER_RESERVED_23_MASK  = 1 << 23,
+  GDK_MODIFIER_RESERVED_24_MASK  = 1 << 24,
+  GDK_MODIFIER_RESERVED_25_MASK  = 1 << 25,
+
   /* The next few modifiers are used by XKB, so we skip to the end.
    * Bits 15 - 25 are currently unused. Bit 29 is used internally.
    */
@@ -213,8 +233,12 @@ typedef enum
   GDK_HYPER_MASK    = 1 << 27,
   GDK_META_MASK     = 1 << 28,
   
+  GDK_MODIFIER_RESERVED_29_MASK  = 1 << 29,
+
   GDK_RELEASE_MASK  = 1 << 30,
 
+  /* Combination of GDK_SHIFT_MASK..GDK_BUTTON5_MASK + GDK_SUPER_MASK
+     + GDK_HYPER_MASK + GDK_META_MASK + GDK_RELEASE_MASK */
   GDK_MODIFIER_MASK = 0x5c001fff
 } GdkModifierType;
 
