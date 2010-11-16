@@ -54,7 +54,7 @@ struct _GdkWindowImplBroadway
 
   gint8 toplevel_window_type;
   gboolean dirty;
-
+  gboolean last_synced;
 };
 
 struct _GdkWindowImplBroadwayClass
