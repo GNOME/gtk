@@ -246,6 +246,7 @@ gtk_public_h_sources =          \
 	gtkmountoperation.h     \
 	gtknotebook.h		\
 	gtkoffscreenwindow.h	\
+	gtkopenwithdialog.h	\
 	gtkorientable.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
@@ -516,6 +517,7 @@ gtk_base_c_sources =            \
 	gtkmountoperation.c     \
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
+	gtkopenwithdialog.c	\
 	gtkorientable.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\

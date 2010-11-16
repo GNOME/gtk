@@ -66,6 +66,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testoffscreen			\
 	testoffscreenwindow		\
 	testorientable			\
+	testopenwith			\
 	testprint			\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
@@ -153,6 +154,7 @@ testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
+testopenwith_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
@@ -225,6 +227,7 @@ testnotebookdnd_LDADD = $(LDADDS)
 testnouiprint_LDADD = $(LDADDS)
 testoffscreen_LDADD = $(LDADDS)
 testoffscreenwindow_LDADD = $(LDADDS)
+testopenwith_LDADD = $(LDADDS)
 testorientable_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
@@ -374,6 +377,9 @@ testoffscreen_SOURCES = 	\
 
 testoffscreenwindow_SOURCES =	\
 	testoffscreenwindow.c
+
+testopenwith_SOURCES = \
+	testopenwith.c
 
 testwindows_SOURCES = 	\
 	testwindows.c
