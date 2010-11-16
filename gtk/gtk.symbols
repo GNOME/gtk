@@ -4560,3 +4560,17 @@ gtk_grid_set_column_spacing
 gtk_grid_get_column_spacing
 #endif
 #endif
+
+#if IN_HEADER(__GTK_OPEN_WITH_DIALOG_H__)
+#if IN_FILE(__GTK_OPEN_WITH_DIALOG_C__)
+gtk_open_with_dialog_get_type G_GNUC_CONST
+gtk_open_with_dialog_new
+gtk_open_with_dialog_new_for_content_type
+gtk_open_with_dialog_get_mode
+gtk_open_with_dialog_get_selected_application
+gtk_open_with_dialog_set_show_set_as_default_button
+gtk_open_with_dialog_get_show_set_as_default_button
+gtk_open_with_dialog_set_show_other_applications
+gtk_open_with_dialog_get_show_other_applications
+#endif
+#endif

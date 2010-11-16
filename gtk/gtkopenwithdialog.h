@@ -24,6 +24,10 @@
  *          Cosimo Cecchi <ccecchi@redhat.com>
  */
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #ifndef __GTK_OPEN_WITH_DIALOG_H__
 #define __GTK_OPEN_WITH_DIALOG_H__
 
@@ -38,6 +42,11 @@
   (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_OPEN_WITH_DIALOG, GtkOpenWithDialogClass))
 #define GTK_IS_OPEN_WITH_DIALOG(obj)\
   (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_OPEN_WITH_DIALOG))
+#define GTK_IS_OPEN_WITH_DIALOG_CLASS(klass)\
+  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_OPEN_WITH_DIALOG))
+#define GTK_OPEN_WITH_DIALOG_GET_CLASS(obj)\
+  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_OPEN_WITH_DIALOG, GtkOpenWithDialogClass))
+
 
 typedef struct _GtkOpenWithDialog        GtkOpenWithDialog;
 typedef struct _GtkOpenWithDialogClass   GtkOpenWithDialogClass;
@@ -60,12 +69,19 @@ struct _GtkOpenWithDialogClass {
   gpointer padding[16];
 };
 
+/**
+ * GtkOpenWithDialogMode:
+ * @GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE: the dialog is used for a single file
+ * or content type; a checkbox can be used to remember the selection for all similar items.
+ * @GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT: the dialog is used to set a default
+ * application for a given file, or content type.
+ */
 typedef enum {
-  GTK_OPEN_WITH_DIALOG_MODE_OPEN_FILE = 0,
+  GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
   GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT
 } GtkOpenWithDialogMode;
 
-GType      gtk_open_with_dialog_get_type (void);
+GType      gtk_open_with_dialog_get_type (void) G_GNUC_CONST;
 
 GtkWidget * gtk_open_with_dialog_new (GtkWindow *parent,
 				      GtkDialogFlags flags,

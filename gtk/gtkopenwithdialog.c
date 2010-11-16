@@ -1111,6 +1111,12 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
   gobject_class->get_property = gtk_open_with_dialog_get_property;
   gobject_class->constructed = gtk_open_with_dialog_constructed;
 
+  /**
+   * GtkOpenWithDialog:gfile:
+   *
+   * The #GFile for this dialog, or %NULL in case the dialog has
+   * been constructed for a content type.
+   **/
   properties[PROP_GFILE] =
     g_param_spec_object ("gfile",
 			 P_("A GFile object"),
@@ -1118,6 +1124,12 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 			 G_TYPE_FILE,
 			 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 			 G_PARAM_STATIC_STRINGS);
+  /**
+   * GtkOpenWithDialog:content-type:
+   *
+   * The content type string for this dialog, or %NULL in case
+   * the dialog has been created for a #GFile.
+   **/
   properties[PROP_CONTENT_TYPE] =
     g_param_spec_string ("content-type",
 			 P_("A content type string"),
@@ -1125,6 +1137,11 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 			 NULL,
 			 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 			 G_PARAM_STATIC_STRINGS);
+  /**
+   * GtkOpenWithDialog:mode:
+   *
+   * The #GtkOpenWithDialogMode for this dialog.
+   **/
   properties[PROP_MODE] =
     g_param_spec_enum ("mode",
 		       P_("The dialog mode"),
@@ -1133,6 +1150,12 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 		       GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
 		       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 		       G_PARAM_STATIC_STRINGS);
+  /**
+   * GtkOpenWithDialog::show-other-applications:
+   *
+   * Whether the dialog should show a list of all the possible applications or
+   * only the recommended list.
+   **/
   properties[PROP_SHOW_OTHER_APPLICATIONS] =
     g_param_spec_boolean ("show-other-applications",
 			  P_("Whether to show other applications"),
@@ -1140,6 +1163,12 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 			  TRUE,
 			  G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
 			  G_PARAM_STATIC_STRINGS);
+  /**
+   * GtkOpenWithDialog:show-set-as-default:
+   *
+   * Whether the dialog in #GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE mode should show
+   * a button to remember the choice for the future.
+   **/
   properties[PROP_SHOW_SET_AS_DEFAULT] =
     g_param_spec_boolean ("show-set-as-default",
 			  P_("Whether to show the set as default button"),
@@ -1328,6 +1357,28 @@ gtk_open_with_dialog_refilter (GtkOpenWithDialog *self)
     }
 }
 
+/**
+ * gtk_open_with_dialog_new:
+ * @parent: (allow-none): a #GtkWindow, or %NULL
+ * @flags: flags for this dialog
+ * @mode: a #GtkOpenWithDialogMode for this dialog
+ * @file: a #GFile
+ *
+ * Creates a new #GtkOpenWithDialog for the provided #GFile, to allow
+ * the user to select a default application for it.
+ * The @mode specifies the kind of interaction with the dialog:
+ * - in #GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE mode, the dialog is intended to
+ *   be used to select an application for a single file, and it will provide an
+ *   optional button to remember the selection for all files of that kind.
+ * - in #GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT mode, the dialog is intended
+ *   to be used to select an application for the content type of a file, similar
+ *   to #gtk_open_with_dialog_new_for_content_type. In this case, the file
+ *   is used both as a hint for the content type and to give feedback in the UI elements.
+ *
+ * Returns: a newly created #GtkOpenWithDialog
+ *
+ * Since: 3.0
+ **/
 GtkWidget *
 gtk_open_with_dialog_new (GtkWindow *parent,
 			  GtkDialogFlags flags,
@@ -1348,6 +1399,21 @@ gtk_open_with_dialog_new (GtkWindow *parent,
   return retval;
 }
 
+/**
+ * gtk_open_with_dialog_new_for_content_type:
+ * @parent: (allow-none): a #GtkWindow, or %NULL
+ * @flags: flags for this dialog
+ * @mode: a #GtkOpenWithDialogMode for this dialog
+ * @content_type: a content type string
+ *
+ * Creates a new #GtkOpenWithDialog for the provided content type, to allow
+ * the user to select a default application for it; see #gtk_open_with_dialog_new
+ * for more information.
+ *
+ * Returns: a newly created #GtkOpenWithDialog
+ *
+ * Since: 3.0
+ **/
 GtkWidget *
 gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 					   GtkDialogFlags flags,
@@ -1368,6 +1434,16 @@ gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
   return retval;
 }
 
+/**
+ * gtk_open_with_dialog_set_show_other_applications:
+ * @self: a #GtkOpenWithDialogMode
+ * @show_other_applications: whether to show all the applications
+ *
+ * Sets whether the dialog should show all the possible applications or only
+ * the recommended list, i.e. those returned by #g_app_info_get_all_for_type
+ *
+ * Since: 3.0
+ **/
 void
 gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
 						  gboolean show_other_applications)
@@ -1383,6 +1459,17 @@ gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
     }
 }
 
+/**
+ * gtk_open_with_dialog_get_show_other_applications:
+ * @self: a #GtkOpenWithDialog
+ *
+ * Returns whether the dialog shows all the possible applications or
+ * only the recommended list, i.e. those returned by #g_app_info_get_all_for_type
+ *
+ * Returns: %TRUE if the dialog shows all the possible applications
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_open_with_dialog_get_show_other_applications (GtkOpenWithDialog *self)
 {
@@ -1391,6 +1478,17 @@ gtk_open_with_dialog_get_show_other_applications (GtkOpenWithDialog *self)
   return self->priv->show_other_applications;
 }
 
+/**
+ * gtk_open_with_dialog_get_selected_application:
+ * @self: a #GtkOpenWithDialog
+ *
+ * Returns a #GAppInfo for the currently selected application in the dialog,
+ * or %NULL if there are none.
+ *
+ * Returns: (transfer full): a #GAppInfo
+ *
+ * Since: 3.0
+ **/
 GAppInfo *
 gtk_open_with_dialog_get_selected_application (GtkOpenWithDialog *self)
 {
@@ -1402,6 +1500,16 @@ gtk_open_with_dialog_get_selected_application (GtkOpenWithDialog *self)
   return NULL;
 }
 
+/**
+ * gtk_open_with_dialog_set_show_set_as_default_button:
+ * @self: a #GtkOpenWithDialog
+ * @show_button: whether the button should be visible or not
+ *
+ * If the dialog is in #GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE mode,
+ * shows a button to set the selected application as default.
+ *
+ * Since: 3.0
+ **/
 void
 gtk_open_with_dialog_set_show_set_as_default_button (GtkOpenWithDialog *self,
 						     gboolean show_button)
@@ -1420,6 +1528,19 @@ gtk_open_with_dialog_set_show_set_as_default_button (GtkOpenWithDialog *self,
     }
 }
 
+/**
+ * gtk_open_with_dialog_get_show_set_as_default_button:
+ * @self: a #GtkOpenWithDialog
+ *
+ * Returns whether the dialog is showing a button to set the selected
+ * application as the default for the provided content type. Note that
+ * this always returns %FALSE if the dialog is in #GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT
+ * mode.
+ *
+ * Returns: %TRUE if the button is visible.
+ *
+ * Since: 3.0
+ **/
 gboolean
 gtk_open_with_dialog_get_show_set_as_default_button (GtkOpenWithDialog *self)
 {

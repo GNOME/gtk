@@ -6397,3 +6397,31 @@ GTK_GRID_GET_CLASS
 GtkGridPrivate
 gtk_grid_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkopenwithdialog</FILE>
+<TITLE>GtkOpenWithDialog</TITLE>
+GtkOpenWithDialog
+GtkOpenWithDialogMode
+gtk_open_with_dialog_new
+gtk_open_with_dialog_new_for_content_type
+gtk_open_with_dialog_get_mode
+gtk_open_with_dialog_get_selected_application
+gtk_open_with_dialog_set_show_set_as_default_button
+gtk_open_with_dialog_get_show_set_as_default_button
+gtk_open_with_dialog_set_show_other_applications
+gtk_open_with_dialog_get_show_other_applications
+
+<SUBSECTION Standard>
+GtkOpenWithDialogClass
+GTK_TYPE_OPEN_WITH_DIALOG
+GTK_OPEN_WITH_DIALOG
+GTK_OPEN_WITH_DIALOG_CLASS
+GTK_IS_OPEN_WITH_DIALOG
+GTK_IS_OPEN_WITH_DIALOG_CLASS
+GTK_OPEN_WITH_DIALOG_GET_CLASS
+
+<SUBSECTION Private>
+GtkOpenWithDialogPrivate
+gtk_open_with_dialog_get_type
+</SECTION>

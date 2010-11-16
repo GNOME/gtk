@@ -95,6 +95,7 @@ gtk_misc_get_type
 gtk_mount_operation_get_type
 gtk_notebook_get_type
 gtk_offscreen_window_get_type
+gtk_open_with_dialog_get_type
 gtk_orientable_get_type
 gtk_page_setup_get_type
 gtk_page_setup_unix_dialog_get_type
