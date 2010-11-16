@@ -77,11 +77,13 @@ typedef void (*GtkCallbackMarshal)  (GObject      *object,
 typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
 				     gpointer      func_data);
 
-#if defined (GTK_COMPILATION)
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /**
  * GtkArg:
  *
  * This is a structure that we use to pass in typed values (and names).
+ *
+ * Deprecated: 2.2:
  */
 struct _GtkArg
 {
