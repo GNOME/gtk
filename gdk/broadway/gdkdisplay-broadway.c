@@ -128,9 +128,15 @@ gdk_display_open (const gchar *display_name)
   GdkDisplay *display;
   GdkDisplayBroadway *display_broadway;
   const char *sm_client_id;
+  int fd;
+
+  fd = dup(STDOUT_FILENO);
+  dup2(STDERR_FILENO, STDOUT_FILENO);
 
   display = g_object_new (GDK_TYPE_DISPLAY_BROADWAY, NULL);
   display_broadway = GDK_DISPLAY_BROADWAY (display);
+
+  display_broadway->connection = broadway_client_new (fd);
 
   /* initialize the display's screens */
   display_broadway->screens = g_new (GdkScreen *, 1);

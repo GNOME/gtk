@@ -29,6 +29,7 @@
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkinternals.h>
 #include <gdk/gdkmain.h>
+#include "broadway.h"
 
 G_BEGIN_DECLS
 
@@ -72,6 +73,8 @@ struct _GdkDisplayBroadway
 
   /* The offscreen window that has the pointer in it (if any) */
   GdkWindow *active_offscreen_window;
+
+  BroadwayClient *connection;
 };
 
 struct _GdkDisplayBroadwayClass
