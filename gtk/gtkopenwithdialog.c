@@ -751,6 +751,13 @@ gtk_open_with_dialog_add_items_idle (gpointer user_data)
 
   column = gtk_tree_view_column_new ();
 
+  /* initial padding */
+  renderer = gtk_cell_renderer_text_new ();
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  g_object_set (renderer,
+		"xpad", 6,
+		NULL);
+
   /* heading text renderer */
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
