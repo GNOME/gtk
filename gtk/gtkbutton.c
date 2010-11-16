@@ -2143,7 +2143,7 @@ gtk_button_get_focus_on_click (GtkButton *button)
  *   1.0 is bottom aligned
  *
  * Sets the alignment of the child. This property has no effect unless 
- * the child is a #GtkMisc or a #GtkAligment.
+ * the child is a #GtkMisc or a #GtkAlignment.
  *
  * Since: 2.4
  */
