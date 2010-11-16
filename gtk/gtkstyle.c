@@ -3187,7 +3187,9 @@ gtk_default_draw_expander (GtkStyle        *style,
       break;
     }
 
-  if (widget)
+  if (widget &&
+      gtk_widget_class_find_style_property (GTK_WIDGET_GET_CLASS (widget),
+                                            "expander-size"))
     gtk_widget_style_get (widget, "expander-size", &size, NULL);
   else
     size = 12;
