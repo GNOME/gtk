@@ -49,8 +49,8 @@ G_BEGIN_DECLS
  * Controls how a widget deals with extra space in a single (x or y)
  * dimension.
  *
- * Alignment only matters if the widget receives a "too large"
- * allocation, for example if you packed the widget with the "expand"
+ * Alignment only matters if the widget receives a "too large" allocation,
+ * for example if you packed the widget with the #GtkWidget:expand
  * flag inside a #GtkBox, then the widget might get extra space.  If
  * you have for example a 16x16 icon inside a 32x32 space, the icon
  * could be scaled and stretched, it could be centered, or it could be
