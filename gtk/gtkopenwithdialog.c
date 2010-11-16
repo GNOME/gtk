@@ -243,7 +243,7 @@ add_or_find_application (GtkOpenWithDialog *self)
 
   should_set_default =
     (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT) ||
-    (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_OPEN_FILE &&
+    (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE &&
      gtk_widget_get_visible (self->priv->checkbox) &&
      gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (self->priv->checkbox)));
   success = TRUE;
@@ -921,22 +921,41 @@ set_dialog_properties (GtkOpenWithDialog *self)
 
   description = g_content_type_get_description (self->priv->content_type);
 
-  if (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_OPEN_FILE)
+  if (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE)
     {
-      /* we have the GFile, its content type and its name and extension. */
-      gtk_window_set_title (GTK_WINDOW (self), _("Open With"));
-
-      /* Translators: %s is a filename */
-      label = g_strdup_printf (_("Open %s with:"), emname);
-
-      if (g_content_type_is_unknown (self->priv->content_type))
-	/* Translators: the %s is the extension of the file */
-	checkbox_text = g_strdup_printf (_("_Remember this application for %s documents"), 
-					 extension);
+      if (self->priv->gfile != NULL)
+	gtk_window_set_title (GTK_WINDOW (self), _("Open With"));
       else
-	/* Translators: %s is a file type description */
-	checkbox_text = g_strdup_printf (_("_Remember this application for \"%s\" files"),
-					 description);
+	gtk_window_set_title (GTK_WINDOW (self), _("Select Application"));
+
+      if (emname != NULL)
+	{
+	  /* Translators: %s is a filename */
+	  label = g_strdup_printf (_("Open %s with:"), emname);
+
+	  if (g_content_type_is_unknown (self->priv->content_type))
+	    /* Translators: the %s is the extension of the file */
+	    checkbox_text = g_strdup_printf (_("_Remember this application for %s documents"), 
+					     extension);
+	  else
+	    /* Translators: %s is a file type description */
+	    checkbox_text = g_strdup_printf (_("_Remember this application for \"%s\" files"),
+					     description);
+	}
+      else
+	{
+	  /* we're in the content_type + SELECT_ONE case */
+
+	  /* Translators: %s is a file type description */
+	  label = g_strdup_printf (_("Select an application for \"%s\" files:"),
+				   g_content_type_is_unknown (self->priv->content_type) ?
+				   self->priv->content_type : description);
+
+	  /* Translators: %s is a file type description */
+	  checkbox_text = g_strdup_printf (_("_Remember this application for \"%s\" files"),
+					   g_content_type_is_unknown (self->priv->content_type) ?
+					   self->priv->content_type : description);
+	}
 
       gtk_button_set_label (GTK_BUTTON (self->priv->checkbox), checkbox_text);
       g_free (checkbox_text);
@@ -952,8 +971,8 @@ set_dialog_properties (GtkOpenWithDialog *self)
 	    /* Translators: first %s is a filename and second %s is a file extension */
 	    label = g_strdup_printf (_("Open %s and other %s document with:"),
 				     emname, extension);
-	  else;
-	    /* TODO: content type is unknown and no file provided?? */
+	  else
+	    label = g_strdup_printf (_("Open all \"%s\" files with:"), self->priv->content_type);
 	}
       else
 	{
@@ -1111,7 +1130,7 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 		       P_("The dialog mode"),
 		       P_("The operation mode for this dialog"),
 		       GTK_TYPE_OPEN_WITH_DIALOG_MODE,
-		       GTK_OPEN_WITH_DIALOG_MODE_OPEN_FILE,
+		       GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
 		       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 		       G_PARAM_STATIC_STRINGS);
   properties[PROP_SHOW_OTHER_APPLICATIONS] =
@@ -1332,6 +1351,7 @@ gtk_open_with_dialog_new (GtkWindow *parent,
 GtkWidget *
 gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 					   GtkDialogFlags flags,
+					   GtkOpenWithDialogMode mode,
 					   const gchar *content_type)
 {
   GtkWidget *retval;
@@ -1340,7 +1360,7 @@ gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 
   retval = g_object_new (GTK_TYPE_OPEN_WITH_DIALOG,
 			 "content-type", content_type,
-			 "mode", GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT,
+			 "mode", mode,
 			 NULL);
 
   set_parent_and_flags (retval, parent, flags);

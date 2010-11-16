@@ -26,7 +26,7 @@
 static GtkWidget *toplevel;
 static GFile *file;
 static GtkWidget *grid, *file_l, *open, *show_all, *show_set_as_default;
-static GtkWidget *radio_file, *radio_content_from_file, *radio_content, *dialog;
+static GtkWidget *radio_file, *radio_file_default, *radio_content, *radio_content_default, *dialog;
 
 static void
 dialog_response (GtkDialog *d,
@@ -55,25 +55,41 @@ display_dialog (GtkButton *b,
 		gpointer user_data)
 {
   gboolean use_file = FALSE;
-  gboolean use_content = FALSE;
+  gboolean default_mode = FALSE;
   gchar *content_type = NULL;
 
-  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_content_from_file)))
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_file)))
     {
       use_file = TRUE;
-      use_content = TRUE;
+      default_mode = FALSE;
     }
-  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_file)))
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_file_default)))
     {
       use_file = TRUE;
-      use_content = FALSE;
+      default_mode = TRUE;
     }
   else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_content)))
     {
-      GFileInfo *info;
-
       use_file = FALSE;
-      use_content = TRUE;
+      default_mode = FALSE;
+    }
+  else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_content_default)))
+    {
+      use_file = FALSE;
+      default_mode = TRUE;
+    }
+
+  if (use_file)
+    {
+      dialog = gtk_open_with_dialog_new (GTK_WINDOW (toplevel),
+					 0, default_mode ?
+					 GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT :
+					 GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
+					 file);
+    }
+  else
+    {
+      GFileInfo *info;
 
       info = g_file_query_info (file,
 				G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
@@ -81,20 +97,12 @@ display_dialog (GtkButton *b,
       content_type = g_strdup (g_file_info_get_content_type (info));
 
       g_object_unref (info);
-    } 
 
-  if (use_file)
-    {
-      dialog = gtk_open_with_dialog_new (GTK_WINDOW (toplevel),
-					 0, use_content ?
-					 GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT :
-					 GTK_OPEN_WITH_DIALOG_MODE_OPEN_FILE,
-					 file);
-    }
-  else
-    {
       dialog = gtk_open_with_dialog_new_for_content_type (GTK_WINDOW (toplevel),
-							  0, content_type);
+							  0, default_mode ?
+							  GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT :
+							  GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
+							  content_type);
     }
 
   gtk_open_with_dialog_set_show_other_applications (GTK_OPEN_WITH_DIALOG (dialog),
@@ -189,22 +197,26 @@ main (int argc,
   g_signal_connect (file_l, "clicked",
 		    G_CALLBACK (button_clicked), NULL);
 
-  radio_file = gtk_radio_button_new_with_label (NULL, "Use GFile");
-  radio_content_from_file = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_file),
-									 "Use content type and GFile");
+  radio_file = gtk_radio_button_new_with_label (NULL, "Use GFile and select one");
+  radio_file_default = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_file),
+								    "Use GFile and select default");
   radio_content = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_file),
-							       "Use content type only");
+							       "Use content type and select one");
+  radio_content_default = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_file),
+								       "Use content type and select default");
 
   gtk_grid_attach (GTK_GRID (grid), radio_file,
 		   0, 1, 1, 1);
-  gtk_grid_attach_next_to (GTK_GRID (grid), radio_content_from_file,
+  gtk_grid_attach_next_to (GTK_GRID (grid), radio_file_default,
 			   radio_file, GTK_POS_BOTTOM, 1, 1);
   gtk_grid_attach_next_to (GTK_GRID (grid), radio_content,
-			   radio_content_from_file, GTK_POS_BOTTOM, 1, 1);
+			   radio_file_default, GTK_POS_BOTTOM, 1, 1);
+  gtk_grid_attach_next_to (GTK_GRID (grid), radio_content_default,
+			   radio_content, GTK_POS_BOTTOM, 1, 1);
 
   open = gtk_button_new_with_label ("Trigger Open With dialog");
   gtk_grid_attach_next_to (GTK_GRID (grid), open,
-			   radio_content, GTK_POS_BOTTOM, 1, 1);
+			   radio_content_default, GTK_POS_BOTTOM, 1, 1);
   gtk_widget_set_sensitive (open, FALSE);
   g_signal_connect (open, "clicked",
 		    G_CALLBACK (display_dialog), NULL);
