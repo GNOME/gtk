@@ -272,6 +272,8 @@ struct _GtkFileChooserDefault
   gulong settings_signal_id;
   int icon_size;
 
+  GSource *focus_entry_idle;
+
   gulong toplevel_set_focus_id;
   GtkWidget *toplevel_last_focus_widget;
 
