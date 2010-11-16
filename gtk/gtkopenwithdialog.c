@@ -43,6 +43,7 @@ struct _GtkOpenWithDialogPrivate {
   char *content_type;
   GFile *gfile;
   GtkOpenWithDialogMode mode;
+  gboolean show_other_applications;
 
   GtkWidget *label;
   GtkWidget *entry;
@@ -78,6 +79,7 @@ enum {
   PROP_GFILE = 1,
   PROP_CONTENT_TYPE,
   PROP_MODE,
+  PROP_SHOW_OTHER_APPLICATIONS,
   N_PROPERTIES
 };
 
@@ -659,7 +661,8 @@ gtk_open_with_dialog_add_items_idle (gpointer user_data)
 	  !g_app_info_supports_files (app))
 	continue;
 
-      if (!heading_added)
+      /* hide the heading if we don't show other applications */
+      if (!heading_added && self->priv->show_other_applications)
 	{
 	  gtk_list_store_append (self->priv->program_list_store, &iter);
 	  gtk_list_store_set (self->priv->program_list_store, &iter,
@@ -685,7 +688,7 @@ gtk_open_with_dialog_add_items_idle (gpointer user_data)
 
   heading_added = FALSE;
 
-  for (l = all_applications; l != NULL; l = l->next)
+  for (l = all_applications; l != NULL && self->priv->show_other_applications; l = l->next)
     {
       GAppInfo *app = l->data;
       GtkTreeIter iter;
@@ -1013,6 +1016,9 @@ gtk_open_with_dialog_set_property (GObject *object,
     case PROP_MODE:
       self->priv->mode = g_value_get_enum (value);
       break;
+    case PROP_SHOW_OTHER_APPLICATIONS:
+      self->priv->show_other_applications = g_value_get_boolean (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -1038,7 +1044,10 @@ gtk_open_with_dialog_get_property (GObject *object,
       break;
     case PROP_MODE:
       g_value_set_enum (value, self->priv->mode);
-      break;;
+      break;
+    case PROP_SHOW_OTHER_APPLICATIONS:
+      g_value_set_boolean (value, self->priv->show_other_applications);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -1082,6 +1091,13 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 		       GTK_OPEN_WITH_DIALOG_MODE_OPEN_FILE,
 		       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 		       G_PARAM_STATIC_STRINGS);
+  properties[PROP_SHOW_OTHER_APPLICATIONS] =
+    g_param_spec_boolean ("show-other-applications",
+			  P_("Whether to show other applications"),
+			  P_("Whether the dialog should show applications other than the recommended list"),
+			  TRUE,
+			  G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
+			  G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPERTIES,
 				     properties);
@@ -1288,4 +1304,25 @@ gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
   set_parent_and_flags (retval, parent, flags);
 
   return retval;
+}
+
+void
+gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
+						  gboolean show_other_applications)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_DIALOG (self));
+
+  if (self->priv->show_other_applications != show_other_applications)
+    {
+      self->priv->show_other_applications = show_other_applications;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_OTHER_APPLICATIONS]);
+    }
+}
+
+gboolean
+gtk_open_with_get_show_other_applications (GtkOpenWithDialog *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_DIALOG (self), FALSE);
+
+  return self->priv->show_other_applications;
 }
