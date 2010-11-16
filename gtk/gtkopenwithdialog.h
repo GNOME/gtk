@@ -86,4 +86,6 @@ gboolean gtk_open_with_get_show_set_as_default_button (GtkOpenWithDialog *self);
 
 GAppInfo * gtk_open_with_dialog_get_selected_application (GtkOpenWithDialog *self);
 
+GtkOpenWithDialogMode gtk_open_with_dialog_get_mode (GtkOpenWithDialog *self);
+
 #endif /* __GTK_OPEN_WITH_DIALOG_H__ */

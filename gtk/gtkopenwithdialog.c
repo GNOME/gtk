@@ -1384,7 +1384,7 @@ gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
 }
 
 gboolean
-gtk_open_with_get_show_other_applications (GtkOpenWithDialog *self)
+gtk_open_with_dialog_get_show_other_applications (GtkOpenWithDialog *self)
 {
   g_return_val_if_fail (GTK_IS_OPEN_WITH_DIALOG (self), FALSE);
 
@@ -1428,3 +1428,20 @@ gtk_open_with_dialog_get_show_set_as_default_button (GtkOpenWithDialog *self)
   return self->priv->show_set_as_default_button;
 }
 
+/**
+ * gtk_open_with_dialog_get_mode:
+ * @self: a #GtkOpenWithDialog
+ *
+ * Returns the current mode of the dialog
+ *
+ * Returns: the current mode of the dialog
+ *
+ * Since: 3.0
+ */
+GtkOpenWithDialogMode
+gtk_open_with_dialog_get_mode (GtkOpenWithDialog *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_DIALOG (self), -1);
+
+  return self->priv->mode;
+}
