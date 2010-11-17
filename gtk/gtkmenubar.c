@@ -313,7 +313,6 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	    {
               gint toggle_size;
 
-	      GTK_MENU_ITEM (child)->priv->show_submenu_indicator = FALSE;
               gtk_widget_get_preferred_size (child, &child_requisition, NULL);
               gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
                                                  &toggle_size);

@@ -3033,7 +3033,6 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
        * case the toggle size request depends on the size
        * request of a child of the child (e.g. for ImageMenuItem)
        */
-       GTK_MENU_ITEM (child)->priv->show_submenu_indicator = TRUE;
        gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
        gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
