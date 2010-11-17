@@ -1411,7 +1411,7 @@ gtk_binding_parse_signal (GScanner       *scanner,
       else
 	expected_token = ')';
       g_scanner_get_next_token (scanner);
-      switch (scanner->token)
+      switch ((guint) scanner->token)
 	{
 	  GtkBindingArg *arg;
 
@@ -1538,12 +1538,12 @@ gtk_binding_parse_bind (GScanner       *scanner,
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
   
   g_scanner_get_next_token (scanner);
-  if (scanner->token != GTK_RC_TOKEN_BIND &&
-      scanner->token != GTK_RC_TOKEN_UNBIND)
+  if (scanner->token != (guint) GTK_RC_TOKEN_BIND &&
+      scanner->token != (guint) GTK_RC_TOKEN_UNBIND)
     return GTK_RC_TOKEN_BIND;
-  unbind = scanner->token == GTK_RC_TOKEN_UNBIND;
+  unbind = scanner->token == (guint) GTK_RC_TOKEN_UNBIND;
   g_scanner_get_next_token (scanner);
-  if (scanner->token != G_TOKEN_STRING)
+  if (scanner->token != (guint) G_TOKEN_STRING)
     return G_TOKEN_STRING;
   gtk_accelerator_parse (scanner->value.v_string, &keyval, &modifiers);
   modifiers &= BINDING_MOD_MASK ();
@@ -1614,10 +1614,10 @@ _gtk_binding_parse_binding (GScanner *scanner)
   g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
 
   g_scanner_get_next_token (scanner);
-  if (scanner->token != GTK_RC_TOKEN_BINDING)
+  if (scanner->token != (guint) GTK_RC_TOKEN_BINDING)
     return GTK_RC_TOKEN_BINDING;
   g_scanner_get_next_token (scanner);
-  if (scanner->token != G_TOKEN_STRING)
+  if (scanner->token != (guint) G_TOKEN_STRING)
     return G_TOKEN_STRING;
   name = g_strdup (scanner->value.v_string);
 
@@ -1639,7 +1639,7 @@ _gtk_binding_parse_binding (GScanner *scanner)
   g_scanner_peek_next_token (scanner);
   while (scanner->next_token != '}')
     {
-      switch (scanner->next_token)
+      switch ((guint) scanner->next_token)
 	{
 	  guint expected_token;
 
