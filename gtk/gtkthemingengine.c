@@ -1015,7 +1015,6 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 		 0, 2 * G_PI);
 
       gdk_cairo_set_source_rgba (cr, bg_color);
-g_print ("filling the arc with %f %f %f %f\n", bg_color->red, bg_color->green, bg_color->blue, bg_color->alpha);
       cairo_fill_preserve (cr);
 
       gdk_cairo_set_source_rgba (cr, fg_color);
