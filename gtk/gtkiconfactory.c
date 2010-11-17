@@ -1445,17 +1445,19 @@ render_icon_name_pixbuf (GtkIconSource    *icon_source,
   if (icon_source->direction != GTK_TEXT_DIR_NONE)
     {
       gchar *suffix[3] = { NULL, "-ltr", "-rtl" };
-      gchar *names[3];
+      const gchar *names[3];
+      gchar *name_with_dir;
       GtkIconInfo *info;
 
-      names[0] = g_strconcat (icon_source->source.icon_name, suffix[icon_source->direction], NULL);
+      name_with_dir = g_strconcat (icon_source->source.icon_name, suffix[icon_source->direction], NULL);
+      names[0] = name_with_dir;
       names[1] = icon_source->source.icon_name;
       names[2] = NULL;
 
       info = gtk_icon_theme_choose_icon (icon_theme,
-                                               names,
-                                               pixel_size, GTK_ICON_LOOKUP_USE_BUILTIN);
-      g_free (names[0]);
+                                         names,
+                                         pixel_size, GTK_ICON_LOOKUP_USE_BUILTIN);
+      g_free (name_with_dir);
       if (info)
         {
           tmp_pixbuf = gtk_icon_info_load_icon (info, &error);
