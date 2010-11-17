@@ -58,25 +58,6 @@ activate_radio_action (GtkAction *action, GtkRadioAction *current)
 }
 
 static void
-activate_email (GtkAboutDialog *about,
-		const gchar    *link,
-		gpointer        data)
-{
-  gchar *text;
-  text = g_strdup_printf ("send mail to %s", link);
-  g_print ("%s\n", text);
-  g_free (text);
-}
-
-static void
-activate_url (GtkAboutDialog *about,
-	      const gchar    *link,
-	      gpointer        data)
-{
-  g_print ("show url %s\n", link);
-}
-
-static void
 about_cb (GtkAction *action,
 	  GtkWidget *window)
 {
