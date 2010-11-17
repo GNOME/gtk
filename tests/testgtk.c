@@ -113,7 +113,6 @@ build_option_menu (gchar           *items[],
 {
   GtkWidget *omenu;
   GtkWidget *menu;
-  GtkWidget *menu_item;
   GSList *group;
   gint i;
 
@@ -6045,13 +6044,6 @@ list_remove (GtkWidget *widget,
     gtk_list_select_child (list, GTK_WIDGET(sel_row->data));
 }
 
-static void
-list_clear (GtkWidget *widget,
-	    GtkWidget *list)
-{
-  gtk_list_clear_items (GTK_LIST (list), 0, -1);
-}
-
 static gchar *selection_mode_items[] =
 {
   "Single",
@@ -6087,17 +6079,8 @@ static void
 create_list (GtkWidget *widget)
 {
   static GtkWidget *window = NULL;
-  GtkWidget *box1;
-  GtkWidget *box2;
-  GtkWidget *hbox;
-  GtkWidget *has_frame_check;
-  GtkWidget *sensitive_check;
-  GtkWidget *progress_check;
-  GtkWidget *entry;
   GtkComboBoxText *cb;
   GtkWidget *cb_entry;
-  GtkWidget *button;
-  GtkWidget *separator;
 
   if (!window)
     {
@@ -6192,7 +6175,7 @@ create_list (GtkWidget *widget)
       cb_entry = gtk_bin_get_child (GTK_BIN (cb));
       gtk_entry_set_text (GTK_ENTRY (cb_entry), "hello world \n\n\n foo");
       gtk_editable_select_region (GTK_EDITABLE (cb_entry), 0, -1);
-      gtk_box_pack_start (GTK_BOX (box2), GTK_WIDGET (cb), TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (hbox), GTK_WIDGET (cb), TRUE, TRUE, 0);
 
       button = gtk_button_new_with_label ("Remove Selection");
       gtk_box_pack_start (GTK_BOX (hbox), button, TRUE, TRUE, 0);
@@ -8355,13 +8338,6 @@ typedef struct
   GtkWidget *combo;
   GList *valid_display_list;
 } ScreenDisplaySelection;
-
-static gint
-display_name_cmp (gconstpointer a,
-		  gconstpointer b)
-{
-  return g_ascii_strcasecmp (a,b);
-}
 
 static void
 screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
@@ -10964,7 +10940,6 @@ window_controls (GtkWidget *window)
   GtkAdjustment *adj;
   GtkWidget *entry;
   GtkWidget *om;
-  GtkWidget *menu;
   gint i;
   
   control_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
@@ -11127,7 +11102,6 @@ window_controls (GtkWidget *window)
   i = 0;
   while (i < 10)
     {
-      GtkWidget *mi;
       static gchar *names[] = {
         "GDK_GRAVITY_NORTH_WEST",
         "GDK_GRAVITY_NORTH",
@@ -11148,12 +11122,6 @@ window_controls (GtkWidget *window)
       ++i;
     }
   
-  gtk_widget_show_all (menu);
-  
-  om = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
-  
-
   g_signal_connect (om,
 		    "changed",
 		    G_CALLBACK (gravity_selected),
@@ -11166,7 +11134,6 @@ window_controls (GtkWidget *window)
   i = 0;
   while (i < 5)
     {
-      GtkWidget *mi;
       static gchar *names[] = {
         "GTK_WIN_POS_NONE",
         "GTK_WIN_POS_CENTER",
@@ -11182,12 +11149,6 @@ window_controls (GtkWidget *window)
       ++i;
     }
   
-  gtk_widget_show_all (menu);
-  
-  om = gtk_option_menu_new ();
-  gtk_option_menu_set_menu (GTK_OPTION_MENU (om), menu);
-  
-
   g_signal_connect (om,
 		    "changed",
 		    G_CALLBACK (pos_selected),
