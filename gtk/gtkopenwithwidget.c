@@ -916,7 +916,7 @@ gtk_open_with_widget_init (GtkOpenWithWidget *self)
 				GTK_ICON_SIZE_BUTTON);
 
   gtk_button_set_image (GTK_BUTTON (button), w);
-  gtk_box_pack_start (GTK_BOX (self), button, TRUE, TRUE, 6);
+  gtk_box_pack_start (GTK_BOX (self), button, FALSE, FALSE, 6);
 
   g_signal_connect (button, "clicked",
 		    G_CALLBACK (show_more_button_clicked_cb), self);

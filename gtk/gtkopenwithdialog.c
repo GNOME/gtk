@@ -46,7 +46,6 @@ struct _GtkOpenWithDialogPrivate {
   GtkWidget *label;
   GtkWidget *button;
 
-  GtkWidget *desc_label;
   GtkWidget *open_label;
 
   GtkWidget *open_with_widget;
@@ -57,8 +56,6 @@ enum {
   PROP_CONTENT_TYPE,
   N_PROPERTIES
 };
-
-#define RESPONSE_REMOVE 1
 
 static void gtk_open_with_dialog_iface_init (GtkOpenWithIface *iface);
 G_DEFINE_TYPE_WITH_CODE (GtkOpenWithDialog, gtk_open_with_dialog, GTK_TYPE_DIALOG,
@@ -191,25 +188,6 @@ gtk_open_with_dialog_response (GtkDialog *dialog,
     case GTK_RESPONSE_OK:
       add_or_find_application (self);
       break;
-    case RESPONSE_REMOVE:
-      {
-	GAppInfo *info;
-
-	info = gtk_open_with_get_app_info (GTK_OPEN_WITH (self->priv->open_with_widget));
-
-	if (info != NULL)
-	  {
-	    g_app_info_delete (info);
-	    g_object_unref (info);
-	  }
-	
-	_gtk_open_with_widget_refilter (GTK_OPEN_WITH_WIDGET (self->priv->open_with_widget));
-      }
-
-      /* don't forward this signal to other clients in this case */
-      g_signal_stop_emission_by_name (self, "response");
-
-      break;
     default :
       break;
     }
@@ -222,12 +200,7 @@ widget_application_selected_cb (GtkOpenWithWidget *widget,
 {
   GtkOpenWithDialog *self = user_data;
 
-  gtk_label_set_text (GTK_LABEL (self->priv->desc_label),
-		      sure_string (g_app_info_get_description (app_info)));
   gtk_widget_set_sensitive (self->priv->button, TRUE);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (self),
-				     RESPONSE_REMOVE,
-				     g_app_info_can_delete (app_info));
 }
 
 static void
@@ -305,12 +278,12 @@ build_dialog_ui (GtkOpenWithDialog *self)
 
   gtk_container_set_border_width (GTK_CONTAINER (self), 5);
 
-  vbox = gtk_vbox_new (FALSE, 12);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self))), vbox, TRUE, TRUE, 0);
   gtk_widget_show (vbox);
   
-  vbox2 = gtk_vbox_new (FALSE, 6);
+  vbox2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_box_pack_start (GTK_BOX (vbox), vbox2, TRUE, TRUE, 0);
   gtk_widget_show (vbox2);
 
@@ -329,20 +302,6 @@ build_dialog_ui (GtkOpenWithDialog *self)
 		    G_CALLBACK (widget_application_activated_cb), self);
   gtk_box_pack_start (GTK_BOX (vbox2), self->priv->open_with_widget, TRUE, TRUE, 0);
   gtk_widget_show (self->priv->open_with_widget);
-
-  self->priv->desc_label = gtk_label_new (_("Select an application to view its description."));
-  gtk_widget_set_halign (self->priv->desc_label, GTK_ALIGN_START);
-  gtk_label_set_justify (GTK_LABEL (self->priv->desc_label), GTK_JUSTIFY_LEFT);
-  gtk_label_set_line_wrap (GTK_LABEL (self->priv->desc_label), TRUE);
-  gtk_label_set_single_line_mode (GTK_LABEL (self->priv->desc_label), FALSE);
-  gtk_box_pack_start (GTK_BOX (vbox2), self->priv->desc_label, FALSE, FALSE, 0);
-
-  gtk_dialog_add_button (GTK_DIALOG (self),
-			 GTK_STOCK_REMOVE,
-			 RESPONSE_REMOVE);
-  gtk_dialog_set_response_sensitive (GTK_DIALOG (self),
-				     RESPONSE_REMOVE,
-				     FALSE);
 
   gtk_dialog_add_button (GTK_DIALOG (self),
 			 GTK_STOCK_CANCEL,
