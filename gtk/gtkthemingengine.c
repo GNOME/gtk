@@ -2149,7 +2149,7 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
                                      gdouble           xy0_gap,
                                      gdouble           xy1_gap)
 {
-  GtkJunctionSides junction;
+  GtkJunctionSides junction = 0;
   GtkStateFlags state;
   gint border_width;
   GdkRGBA *bg_color;
@@ -2227,9 +2227,9 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                                      gdouble           height,
                                      GtkPositionType   gap_side)
 {
-  GtkJunctionSides junction;
+  GtkJunctionSides junction = 0;
   GtkStateFlags state;
-  guint hidden_side;
+  guint hidden_side = 0;
   GdkRGBA *bg_color;
   gint radius;
 
