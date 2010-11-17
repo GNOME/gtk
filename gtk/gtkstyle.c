@@ -1735,6 +1735,10 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "check");
       gtk_style_context_add_class (context, "menu");
     }
+  else if (strcmp (detail, "radiobutton") == 0)
+    {
+      gtk_style_context_add_class (context, "radio");
+    }
   else if (strcmp (detail, "option") == 0)
     {
       gtk_style_context_add_class (context, "radio");
