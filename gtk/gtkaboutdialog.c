@@ -553,30 +553,6 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 }
 
 static gboolean
-website_clicked (GtkLabel       *label,
-                 const gchar    *uri,
-                 GtkAboutDialog *about)
-{
-  GtkAboutDialogActivateLinkFunc url_hook;
-  gpointer url_hook_data;
-
-  if (activate_url_hook_set)
-    {
-      url_hook = activate_url_hook;
-      url_hook_data = activate_url_hook_data;
-    }
-  else
-    {
-      url_hook = default_url_hook;
-      url_hook_data = NULL;
-    }
-
-  url_hook (about, uri, url_hook_data);
-
-  return TRUE;
-}
-
-static gboolean
 emit_activate_link (GtkAboutDialog *about,
                     const gchar    *uri)
 {
