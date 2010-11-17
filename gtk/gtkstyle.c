@@ -1793,6 +1793,11 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "menuitem");
       gtk_style_context_add_class (context, "menu");
     }
+  else if (strcmp (detail, "menu") == 0)
+    {
+      gtk_style_context_add_class (context, "popup");
+      gtk_style_context_add_class (context, "menu");
+    }
   else if (strcmp (detail, "accellabel") == 0)
     gtk_style_context_add_class (context, "accelerator");
   else if (strcmp (detail, "menubar") == 0)
