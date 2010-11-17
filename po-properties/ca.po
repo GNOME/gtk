@@ -7323,7 +7323,7 @@ msgstr "Si el focus d'entrada és en aquest GtkWindow"
 
 #: ../gtk/gtkwindow.c:752
 msgid "Type hint"
-msgstr "Tecleja pista"
+msgstr "Pista de tipus"
 
 #: ../gtk/gtkwindow.c:753
 msgid ""
