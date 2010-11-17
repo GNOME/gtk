@@ -124,6 +124,23 @@ refresh_and_emit_app_selected (GtkOpenWithWidget *self,
 		   self->priv->selected_app_info);
 }
 
+static gboolean
+path_is_heading (GtkTreeView *view,
+		 GtkTreePath *path)
+{
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  gboolean res;
+
+  model = gtk_tree_view_get_model (view);
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter,
+		      COLUMN_HEADING, &res,
+		      -1);
+
+  return res;
+}
+
 static void
 program_list_selection_activated (GtkTreeView *view,
 				  GtkTreePath *path,
@@ -133,12 +150,120 @@ program_list_selection_activated (GtkTreeView *view,
   GtkOpenWithWidget *self = user_data;
   GtkTreeSelection *selection;
 
+  if (path_is_heading (view, path))
+    return;
+
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->priv->program_list));
 
   refresh_and_emit_app_selected (self, selection);
 
   g_signal_emit (self, signals[SIGNAL_APPLICATION_ACTIVATED], 0,
 		 self->priv->selected_app_info);
+}
+
+static void
+item_forget_association_cb (GtkMenuItem *item,
+			    gpointer user_data)
+{
+  GtkOpenWithWidget *self = user_data;
+  GtkTreePath *path = NULL;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  GAppInfo *info;
+
+  gtk_tree_view_get_cursor (GTK_TREE_VIEW (self->priv->program_list), &path, NULL);
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->priv->program_list));
+
+  if (path != NULL)
+    {
+      gtk_tree_model_get_iter (model, &iter, path);
+      gtk_tree_model_get (model, &iter,
+			  COLUMN_APP_INFO, &info,
+			  -1);
+
+      if (info != NULL && g_app_info_can_remove_supports_type (info))
+	g_app_info_remove_supports_type (info, self->priv->content_type, NULL);
+    }
+
+  _gtk_open_with_widget_refilter (self);
+}
+
+static GtkWidget *
+gtk_open_with_widget_build_popup_menu (GtkOpenWithWidget *self)
+{
+  GtkWidget *menu;
+  GtkWidget *item;
+
+  menu = gtk_menu_new ();
+
+  item = gtk_menu_item_new_with_label (_("Forget association"));
+  g_signal_connect (item, "activate",
+		    G_CALLBACK (item_forget_association_cb), self);
+  gtk_widget_show (item);
+
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+  return menu;
+}
+
+static gboolean
+should_show_menu (GtkOpenWithWidget *self,
+		  GdkEventButton *event)
+{
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkTreeModel *model;
+  gboolean recommended, retval;
+  GAppInfo *info;
+
+  gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self->priv->program_list),
+				 event->x, event->y,
+				 &path, NULL, NULL, NULL);
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->priv->program_list));
+  gtk_tree_model_get_iter (model, &iter, path);
+
+  gtk_tree_model_get (model, &iter,
+		      COLUMN_RECOMMENDED, &recommended,
+		      COLUMN_APP_INFO, &info,
+		      -1);
+
+  retval = recommended && (info != NULL);
+
+  gtk_tree_path_free (path);
+
+  if (info != NULL)
+    g_object_unref (info);
+
+  return retval;
+}
+
+static void
+do_popup_menu (GtkOpenWithWidget *self,
+	       GdkEventButton *event)
+{
+  GtkWidget *menu;
+
+  if (!should_show_menu (self, event))
+    return;
+
+  menu = gtk_open_with_widget_build_popup_menu (self);
+  gtk_menu_attach_to_widget (GTK_MENU (menu), self->priv->program_list, NULL);
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+		  event->button, event->time);
+}
+
+static gboolean
+program_list_button_press_event_cb (GtkWidget *treeview,
+				    GdkEventButton *event,
+				    gpointer user_data)
+{
+  GtkOpenWithWidget *self = user_data;
+
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    do_popup_menu (self, event);
+
+  return FALSE;
 }
 
 static gboolean
@@ -218,6 +343,7 @@ gtk_open_with_sort_func (GtkTreeModel *model,
 			 gpointer user_data)
 {
   gboolean a_recommended, b_recommended;
+  gboolean a_heading, b_heading;
   gchar *a_name, *b_name, *a_casefold, *b_casefold;
   gint retval;
 
@@ -230,11 +356,13 @@ gtk_open_with_sort_func (GtkTreeModel *model,
   gtk_tree_model_get (model, a,
 		      COLUMN_NAME, &a_name,
 		      COLUMN_RECOMMENDED, &a_recommended,
+		      COLUMN_HEADING, &a_heading,
 		      -1);
 
   gtk_tree_model_get (model, b,
 		      COLUMN_NAME, &b_name,
 		      COLUMN_RECOMMENDED, &b_recommended,
+		      COLUMN_HEADING, &b_heading,
 		      -1);
 
   /* the recommended one always wins */
@@ -247,6 +375,19 @@ gtk_open_with_sort_func (GtkTreeModel *model,
   if (b_recommended && !a_recommended)
     {
       retval = 1;
+      goto out;
+    }
+
+  /* they're both recommended or not, so if one is a heading, wins */
+  if (a_heading)
+    {
+      return -1;
+      goto out;
+    }
+
+  if (b_heading)
+    {
+      return 1;
       goto out;
     }
 
@@ -704,6 +845,9 @@ gtk_open_with_widget_init (GtkOpenWithWidget *self)
 			    self);
   g_signal_connect (self->priv->program_list, "row-activated",
 		    G_CALLBACK (program_list_selection_activated),
+		    self);
+  g_signal_connect (self->priv->program_list, "button-press-event",
+		    G_CALLBACK (program_list_button_press_event_cb),
 		    self);
 }
 
