@@ -43,7 +43,7 @@ struct _GtkOpenWithDialogPrivate {
   char *content_type;
   GFile *gfile;
   GtkOpenWithDialogMode mode;
-  gboolean show_other_applications;
+  GtkOpenWithDialogShowMode show_mode;
   gboolean show_set_as_default_button;
 
   GtkWidget *label;
@@ -77,7 +77,7 @@ enum {
   PROP_GFILE = 1,
   PROP_CONTENT_TYPE,
   PROP_MODE,
-  PROP_SHOW_OTHER_APPLICATIONS,
+  PROP_SHOW_MODE,
   PROP_SHOW_SET_AS_DEFAULT,
   N_PROPERTIES
 };
@@ -628,11 +628,34 @@ compare_apps_func (gconstpointer a,
 static void
 gtk_open_with_dialog_real_add_items (GtkOpenWithDialog *self)
 {
-  GList *all_applications, *content_type_apps, *l;
+  GList *all_applications = NULL, *content_type_apps = NULL, *l;
   gboolean heading_added;
+  gboolean show_recommended, show_headings, show_all;
 
-  content_type_apps = g_app_info_get_all_for_type (self->priv->content_type);
-  all_applications = g_app_info_get_all ();
+  if (self->priv->show_mode == GTK_OPEN_WITH_DIALOG_SHOW_MODE_RECOMMENDED)
+    {
+      show_all = FALSE;
+      show_headings = FALSE;
+      show_recommended = TRUE;
+    }
+  else if (self->priv->show_mode == GTK_OPEN_WITH_DIALOG_SHOW_MODE_ALL)
+    {
+      show_all = TRUE;
+      show_headings = FALSE;
+      show_recommended = FALSE;
+    }
+  else
+    {
+      show_all = TRUE;
+      show_headings = TRUE;
+      show_recommended = TRUE;
+    }
+
+  if (show_recommended)
+    content_type_apps = g_app_info_get_all_for_type (self->priv->content_type);
+
+  if (show_all)
+    all_applications = g_app_info_get_all ();
 
   heading_added = FALSE;
   
@@ -645,8 +668,7 @@ gtk_open_with_dialog_real_add_items (GtkOpenWithDialog *self)
 	  !g_app_info_supports_files (app))
 	continue;
 
-      /* hide the heading if we don't show other applications */
-      if (!heading_added && self->priv->show_other_applications)
+      if (!heading_added && show_headings)
 	{
 	  gtk_list_store_append (self->priv->program_list_store, &iter);
 	  gtk_list_store_set (self->priv->program_list_store, &iter,
@@ -672,7 +694,7 @@ gtk_open_with_dialog_real_add_items (GtkOpenWithDialog *self)
 
   heading_added = FALSE;
 
-  for (l = all_applications; l != NULL && self->priv->show_other_applications; l = l->next)
+  for (l = all_applications; l != NULL && show_all; l = l->next)
     {
       GAppInfo *app = l->data;
       GtkTreeIter iter;
@@ -681,11 +703,12 @@ gtk_open_with_dialog_real_add_items (GtkOpenWithDialog *self)
 	  !g_app_info_supports_files (app))
 	continue;
 
-      if (g_list_find_custom (content_type_apps, app,
+      if (content_type_apps != NULL &&
+	  g_list_find_custom (content_type_apps, app,
 			      (GCompareFunc) compare_apps_func))
 	continue;
 
-      if (!heading_added)
+      if (!heading_added && show_headings)
 	{
 	  gtk_list_store_append (self->priv->program_list_store, &iter);
 	  gtk_list_store_set (self->priv->program_list_store, &iter,
@@ -709,8 +732,11 @@ gtk_open_with_dialog_real_add_items (GtkOpenWithDialog *self)
 			  -1);
     }
 
-  g_list_free_full (content_type_apps, g_object_unref);
-  g_list_free_full (all_applications, g_object_unref);
+  if (content_type_apps != NULL)
+    g_list_free_full (content_type_apps, g_object_unref);
+
+  if (all_applications != NULL)
+    g_list_free_full (all_applications, g_object_unref);
 }
 
 static gboolean
@@ -755,7 +781,7 @@ gtk_open_with_dialog_add_items_idle (gpointer user_data)
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   g_object_set (renderer,
-		"xpad", self->priv->show_other_applications ? 6 : 0,
+		"xpad", (self->priv->show_mode == GTK_OPEN_WITH_DIALOG_SHOW_MODE_HEADINGS) ? 6 : 0,
 		NULL);
   self->priv->padding_renderer = renderer;
 
@@ -1054,9 +1080,9 @@ gtk_open_with_dialog_set_property (GObject *object,
     case PROP_MODE:
       self->priv->mode = g_value_get_enum (value);
       break;
-    case PROP_SHOW_OTHER_APPLICATIONS:
-      gtk_open_with_dialog_set_show_other_applications (self,
-							g_value_get_boolean (value));
+    case PROP_SHOW_MODE:
+      gtk_open_with_dialog_set_show_mode (self,
+					  g_value_get_enum (value));
       break;
     case PROP_SHOW_SET_AS_DEFAULT:
       gtk_open_with_dialog_set_show_set_as_default_button (self,
@@ -1088,8 +1114,8 @@ gtk_open_with_dialog_get_property (GObject *object,
     case PROP_MODE:
       g_value_set_enum (value, self->priv->mode);
       break;
-    case PROP_SHOW_OTHER_APPLICATIONS:
-      g_value_set_boolean (value, self->priv->show_other_applications);
+    case PROP_SHOW_MODE:
+      g_value_set_enum (value, self->priv->show_mode);
       break;
     case PROP_SHOW_SET_AS_DEFAULT:
       g_value_set_boolean (value, self->priv->show_set_as_default_button);
@@ -1151,18 +1177,18 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
 		       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
 		       G_PARAM_STATIC_STRINGS);
   /**
-   * GtkOpenWithDialog::show-other-applications:
+   * GtkOpenWithDialog::show-mode:
    *
-   * Whether the dialog should show a list of all the possible applications or
-   * only the recommended list.
+   * The #GtkOpenWithDialogShowMode for this dialog.
    **/
-  properties[PROP_SHOW_OTHER_APPLICATIONS] =
-    g_param_spec_boolean ("show-other-applications",
-			  P_("Whether to show other applications"),
-			  P_("Whether the dialog should show applications other than the recommended list"),
-			  TRUE,
-			  G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
-			  G_PARAM_STATIC_STRINGS);
+  properties[PROP_SHOW_MODE] =
+    g_param_spec_enum ("show-mode",
+		       P_("The dialog show mode"),
+		       P_("The show mode for this dialog"),
+		       GTK_TYPE_OPEN_WITH_DIALOG_SHOW_MODE,
+		       GTK_OPEN_WITH_DIALOG_SHOW_MODE_HEADINGS,
+		       G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
+		       G_PARAM_STATIC_STRINGS);
   /**
    * GtkOpenWithDialog:show-set-as-default:
    *
@@ -1350,7 +1376,7 @@ gtk_open_with_dialog_refilter (GtkOpenWithDialog *self)
 
       /* don't add additional xpad if we don't have headings */
       g_object_set (self->priv->padding_renderer,
-		    "visible", self->priv->show_other_applications,
+		    "visible", self->priv->show_mode == GTK_OPEN_WITH_DIALOG_SHOW_MODE_HEADINGS,
 		    NULL);
 
       gtk_open_with_dialog_real_add_items (self);
@@ -1435,47 +1461,47 @@ gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 }
 
 /**
- * gtk_open_with_dialog_set_show_other_applications:
- * @self: a #GtkOpenWithDialogMode
- * @show_other_applications: whether to show all the applications
+ * gtk_open_with_dialog_set_show_mode:
+ * @self: a #GtkOpenWithDialog
+ * @show_mode: the new show mode for this dialog
  *
- * Sets whether the dialog should show all the possible applications or only
- * the recommended list, i.e. those returned by #g_app_info_get_all_for_type
+ * Sets the mode for the dialog to show the list of applications.
+ * See #GtkOpenWithDialogShowMode for more details.
  *
  * Since: 3.0
  **/
 void
-gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
-						  gboolean show_other_applications)
+gtk_open_with_dialog_set_show_mode (GtkOpenWithDialog *self,
+				    GtkOpenWithDialogShowMode show_mode)
 {
   g_return_if_fail (GTK_IS_OPEN_WITH_DIALOG (self));
 
-  if (self->priv->show_other_applications != show_other_applications)
+  if (self->priv->show_mode != show_mode)
     {
-      self->priv->show_other_applications = show_other_applications;
-      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_OTHER_APPLICATIONS]);
+      self->priv->show_mode = show_mode;
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_MODE]);
 
       gtk_open_with_dialog_refilter (self);
     }
 }
 
 /**
- * gtk_open_with_dialog_get_show_other_applications:
+ * gtk_open_with_dialog_get_show_mode:
  * @self: a #GtkOpenWithDialog
  *
- * Returns whether the dialog shows all the possible applications or
- * only the recommended list, i.e. those returned by #g_app_info_get_all_for_type
+ * Returns the current mode for the dialog to show the list of applications.
+ * See #GtkOpenWithDialogShowMode for mode details.
  *
- * Returns: %TRUE if the dialog shows all the possible applications
+ * Returns: a #GtkOpenWithDialogShowMode
  *
  * Since: 3.0
  **/
-gboolean
-gtk_open_with_dialog_get_show_other_applications (GtkOpenWithDialog *self)
+GtkOpenWithDialogShowMode
+gtk_open_with_dialog_get_show_mode (GtkOpenWithDialog *self)
 {
   g_return_val_if_fail (GTK_IS_OPEN_WITH_DIALOG (self), FALSE);
 
-  return self->priv->show_other_applications;
+  return self->priv->show_mode;
 }
 
 /**

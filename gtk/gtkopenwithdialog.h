@@ -78,8 +78,15 @@ struct _GtkOpenWithDialogClass {
  */
 typedef enum {
   GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
-  GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT
+  GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT,
+  GTK_OPEN_WITH_DIALOG_MODE_RADIO,
 } GtkOpenWithDialogMode;
+
+typedef enum {
+  GTK_OPEN_WITH_DIALOG_SHOW_MODE_RECOMMENDED,
+  GTK_OPEN_WITH_DIALOG_SHOW_MODE_ALL,
+  GTK_OPEN_WITH_DIALOG_SHOW_MODE_HEADINGS
+} GtkOpenWithDialogShowMode;
 
 GType      gtk_open_with_dialog_get_type (void) G_GNUC_CONST;
 
@@ -92,9 +99,9 @@ GtkWidget * gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 						       GtkOpenWithDialogMode mode,
 						       const gchar *content_type);
 
-void gtk_open_with_dialog_set_show_other_applications (GtkOpenWithDialog *self,
-						       gboolean show_other_applications);
-gboolean gtk_open_with_dialog_get_show_other_applications (GtkOpenWithDialog *self);
+void gtk_open_with_dialog_set_show_mode (GtkOpenWithDialog *self,
+					 GtkOpenWithDialogShowMode show_mode);
+GtkOpenWithDialogShowMode gtk_open_with_dialog_get_show_mode (GtkOpenWithDialog *self);
 
 void gtk_open_with_dialog_set_show_set_as_default_button (GtkOpenWithDialog *self,
 							  gboolean show_button);
