@@ -54,7 +54,7 @@ enum {
   COLUMN_APP_INFO,
   COLUMN_GICON,
   COLUMN_NAME,
-  COLUMN_COMMENT,
+  COLUMN_DESC,
   COLUMN_EXEC,
   COLUMN_HEADING,
   COLUMN_HEADING_TEXT,
@@ -481,7 +481,9 @@ static void
 gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 {
   GList *all_applications = NULL, *content_type_apps = NULL, *l;
-  gboolean heading_added;
+  gchar *app_string;
+  GIcon *icon;
+  gboolean heading_added, unref_icon;
   gboolean show_recommended, show_headings, show_all;
 
   if (self->priv->show_mode == GTK_OPEN_WITH_WIDGET_SHOW_MODE_RECOMMENDED)
@@ -532,16 +534,35 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 	  heading_added = TRUE;
 	}
 
+      app_string = g_strdup_printf ("<b>%s</b>\n<i>%s</i>",
+				    g_app_info_get_display_name (app) != NULL ?
+				    g_app_info_get_display_name (app) : "",
+				    g_app_info_get_description (app) != NULL ?
+				    g_app_info_get_description (app) : "");
+
+      icon = g_app_info_get_icon (app);
+      if (icon == NULL)
+	{
+	  icon = g_themed_icon_new ("application-x-executable");
+	  unref_icon = TRUE;
+	}
+
       gtk_list_store_append (self->priv->program_list_store, &iter);
       gtk_list_store_set (self->priv->program_list_store, &iter,
 			  COLUMN_APP_INFO, app,
-			  COLUMN_GICON, g_app_info_get_icon (app),
+			  COLUMN_GICON, icon,
 			  COLUMN_NAME, g_app_info_get_display_name (app),
-			  COLUMN_COMMENT, g_app_info_get_description (app),
-			  COLUMN_EXEC, g_app_info_get_executable,
+			  COLUMN_DESC, app_string,
+			  COLUMN_EXEC, g_app_info_get_executable (app),
 			  COLUMN_HEADING, FALSE,
 			  COLUMN_RECOMMENDED, TRUE,
 			  -1);
+
+      g_free (app_string);
+      if (unref_icon)
+	g_object_unref (icon);
+
+      unref_icon = FALSE;
     }
 
   heading_added = FALSE;
@@ -572,16 +593,35 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 	  heading_added = TRUE;
 	}
 
+      app_string = g_strdup_printf ("<b>%s</b>\n<i>%s</i>",
+				    g_app_info_get_display_name (app) != NULL ?
+				    g_app_info_get_display_name (app) : "",
+				    g_app_info_get_description (app) != NULL ?
+				    g_app_info_get_description (app) : "");
+
+      icon = g_app_info_get_icon (app);
+      if (icon == NULL)
+	{
+	  icon = g_themed_icon_new ("application-x-executable");
+	  unref_icon = TRUE;
+	}
+
       gtk_list_store_append (self->priv->program_list_store, &iter);
       gtk_list_store_set (self->priv->program_list_store, &iter,
 			  COLUMN_APP_INFO, app,
-			  COLUMN_GICON, g_app_info_get_icon (app),
+			  COLUMN_GICON, icon,
 			  COLUMN_NAME, g_app_info_get_display_name (app),
-			  COLUMN_COMMENT, g_app_info_get_description (app),
-			  COLUMN_EXEC, g_app_info_get_executable,
+			  COLUMN_DESC, app_string,
+			  COLUMN_EXEC, g_app_info_get_executable (app),
 			  COLUMN_HEADING, FALSE,
 			  COLUMN_RECOMMENDED, FALSE,
 			  -1);
+
+      g_free (app_string);
+      if (unref_icon)
+	g_object_unref (icon);
+
+      unref_icon = FALSE;
     }
 
   if (content_type_apps != NULL)
@@ -665,13 +705,21 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "gicon", COLUMN_GICON,
 				       NULL);
+  g_object_set (renderer,
+		"stock-size", GTK_ICON_SIZE_DIALOG,
+		NULL);
 
   /* app name renderer */
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "text", COLUMN_NAME,
+				       "markup", COLUMN_DESC,
 				       NULL);
+  g_object_set (renderer,
+		"ellipsize", PANGO_ELLIPSIZE_END,
+		"ellipsize-set", TRUE,
+		NULL);
+  
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
   gtk_tree_view_append_column (GTK_TREE_VIEW (self->priv->program_list), column);
 }
@@ -829,12 +877,14 @@ gtk_open_with_widget_init (GtkOpenWithWidget *self)
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
 				  GTK_POLICY_NEVER,
 				  GTK_POLICY_AUTOMATIC);
+  gtk_widget_show (scrolled_window);
 
   self->priv->program_list = gtk_tree_view_new ();
   gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (self->priv->program_list),
 				     FALSE);
   gtk_container_add (GTK_CONTAINER (scrolled_window), self->priv->program_list);
   gtk_box_pack_start (GTK_BOX (self), scrolled_window, TRUE, TRUE, 0);
+  gtk_widget_show (self->priv->program_list);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->priv->program_list));
   gtk_tree_selection_set_mode (selection, GTK_SELECTION_SINGLE);
