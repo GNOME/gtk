@@ -825,8 +825,7 @@ filter_func (GdkXEvent *gdkxevent,
 
           if (window)
             {
-              screen_n = gdk_screen_get_number (
-                  gdk_drawable_get_screen (GDK_DRAWABLE (window)));
+              screen_n = gdk_screen_get_number (gdk_window_get_screen (window));
 
               gail_screens [screen_n].update_stacked_windows = TRUE;
               if (!gail_screens [screen_n].update_handler)
@@ -963,8 +962,7 @@ get_window_zorder (GdkWindow *window)
 
   gail_return_val_if_fail (GDK_IS_WINDOW (window), -1);
 
-  info = get_screen_info (
-		gdk_drawable_get_screen (GDK_DRAWABLE (window)));
+  info = get_screen_info (gdk_window_get_screen (window));
 
   gail_return_val_if_fail (info->stacked_windows != NULL, -1);
 
