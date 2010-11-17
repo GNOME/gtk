@@ -1785,7 +1785,10 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "scrollbar");
     }
   else if (strcmp (detail, "menuitem") == 0)
-    gtk_style_context_add_class (context, "menu");
+    {
+      gtk_style_context_add_class (context, "menuitem");
+      gtk_style_context_add_class (context, "menu");
+    }
   else if (strcmp (detail, "accellabel") == 0)
     gtk_style_context_add_class (context, "accelerator");
   else if (strcmp (detail, "menubar") == 0)
