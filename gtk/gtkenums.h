@@ -565,6 +565,13 @@ typedef enum
 } GtkScrollablePolicy;
 
 
+typedef enum
+{
+  GTK_OPEN_WITH_WIDGET_SHOW_MODE_RECOMMENDED,
+  GTK_OPEN_WITH_WIDGET_SHOW_MODE_ALL,
+  GTK_OPEN_WITH_WIDGET_SHOW_MODE_HEADINGS
+} GtkOpenWithWidgetShowMode;
+
 G_END_DECLS
 
 

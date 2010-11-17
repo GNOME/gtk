@@ -25,7 +25,7 @@
 
 static GtkWidget *toplevel;
 static GFile *file;
-static GtkWidget *grid, *file_l, *open, *show_mode, *show_set_as_default;
+static GtkWidget *grid, *file_l, *open, *show_mode;
 static GtkWidget *radio_file, *radio_file_default, *radio_content, *radio_content_default, *dialog;
 
 static void
@@ -40,7 +40,7 @@ dialog_response (GtkDialog *d,
 
   if (response_id == GTK_RESPONSE_OK)
     {
-      app_info = gtk_open_with_dialog_get_selected_application (GTK_OPEN_WITH_DIALOG (d));
+      app_info = gtk_open_with_get_app_info (GTK_OPEN_WITH (d));
       name = g_app_info_get_name (app_info);
       g_print ("Application selected: %s\n", name);
 
@@ -57,6 +57,7 @@ display_dialog (GtkButton *b,
   gboolean use_file = FALSE;
   gboolean default_mode = FALSE;
   gchar *content_type = NULL;
+  GtkWidget *open_with_widget;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_file)))
     {
@@ -105,11 +106,10 @@ display_dialog (GtkButton *b,
 							  content_type);
     }
 
-  gtk_open_with_dialog_set_show_mode (GTK_OPEN_WITH_DIALOG (dialog),
+  open_with_widget = gtk_open_with_dialog_get_widget (GTK_OPEN_WITH_DIALOG (dialog));
+  gtk_open_with_widget_set_show_mode (GTK_OPEN_WITH_WIDGET (open_with_widget),
 				      gtk_combo_box_get_active (GTK_COMBO_BOX (show_mode)));
 
-  gtk_open_with_dialog_set_show_set_as_default_button (GTK_OPEN_WITH_DIALOG (dialog),
-						       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_set_as_default)));
   gtk_widget_show (dialog);
 
   g_signal_connect (dialog, "response",
@@ -127,23 +127,8 @@ show_mode_changed (GtkComboBox *b,
       gint active;
 
       active = gtk_combo_box_get_active (b);
-      gtk_open_with_dialog_set_show_mode (GTK_OPEN_WITH_DIALOG (dialog),
+      gtk_open_with_widget_set_show_mode (GTK_OPEN_WITH_WIDGET (gtk_open_with_dialog_get_widget (GTK_OPEN_WITH_DIALOG (dialog))),
 					  active);
-    }
-}
-
-static void
-show_set_as_default_toggled (GtkToggleButton *b,
-		  gpointer user_data)
-{
-  if (dialog != NULL)
-    {
-      gboolean toggled;
-
-      toggled = gtk_toggle_button_get_active (b);
-
-      gtk_open_with_dialog_set_show_set_as_default_button (GTK_OPEN_WITH_DIALOG (dialog),
-							   toggled);
     }
 }
 
@@ -230,13 +215,6 @@ main (int argc,
   gtk_combo_box_set_active (GTK_COMBO_BOX (show_mode), 2);
   g_signal_connect (show_mode, "changed",
 		    G_CALLBACK (show_mode_changed), NULL);
-
-  show_set_as_default = gtk_check_button_new_with_label ("Show set as default");
-  gtk_grid_attach_next_to (GTK_GRID (grid), show_set_as_default,
-			   show_mode, GTK_POS_BOTTOM, 1, 1);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (show_set_as_default), TRUE);
-  g_signal_connect (show_set_as_default, "toggled",
-		    G_CALLBACK (show_set_as_default_toggled), NULL);
 
   gtk_container_add (GTK_CONTAINER (toplevel), grid);
 
