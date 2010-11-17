@@ -2277,11 +2277,11 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
       sides = gtk_theming_engine_get_junction_sides (engine);
 
       /* reduce confusing values to a meaningful state */
-      if (sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT))
-        sides &= ~(GTK_JUNCTION_LEFT);
+      if ((sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT)) == (GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT))
+        sides &= ~GTK_JUNCTION_LEFT;
 
-      if (sides & (GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM))
-        sides &= ~(GTK_JUNCTION_TOP);
+      if ((sides & (GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM)) == (GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM))
+        sides &= ~GTK_JUNCTION_TOP;
 
       if (sides == 0)
         sides = (GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT);
@@ -2292,7 +2292,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
           if (height < width)
             width = height;
         }
-      else if (sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_TOP))
+      else if (sides == (GTK_JUNCTION_LEFT | GTK_JUNCTION_TOP))
         {
           if (width < height)
             height = width;
@@ -2301,7 +2301,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
           skip = 2;
         }
-      else if (sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_BOTTOM))
+      else if (sides == (GTK_JUNCTION_LEFT | GTK_JUNCTION_BOTTOM))
         {
           /* make it square, aligning to bottom left */
           if (width < height)
@@ -2314,7 +2314,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
           skip = 1;
         }
-      if (sides == GTK_JUNCTION_RIGHT)
+      else if (sides == GTK_JUNCTION_RIGHT)
         {
           /* aligning to right */
           if (height < width)
@@ -2323,7 +2323,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               width = height;
             }
         }
-      else if (sides & (GTK_JUNCTION_RIGHT | GTK_JUNCTION_TOP))
+      else if (sides == (GTK_JUNCTION_RIGHT | GTK_JUNCTION_TOP))
         {
           if (width < height)
             height = width;
@@ -2335,7 +2335,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
           skip = 3;
         }
-      else if (sides & (GTK_JUNCTION_RIGHT | GTK_JUNCTION_BOTTOM))
+      else if (sides == (GTK_JUNCTION_RIGHT | GTK_JUNCTION_BOTTOM))
         {
           /* make it square, aligning to bottom right */
           if (width < height)
