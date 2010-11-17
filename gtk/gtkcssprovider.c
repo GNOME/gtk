@@ -2467,8 +2467,12 @@ css_provider_parse_value (GtkCssProvider *css_provider,
     }
   else if (type == G_TYPE_INT)
     g_value_set_int (value, atoi (value_str));
+  else if (type == G_TYPE_UINT)
+    g_value_set_uint (value, (guint) atoi (value_str));
   else if (type == G_TYPE_DOUBLE)
     g_value_set_double (value, g_ascii_strtod (value_str, NULL));
+  else if (type == G_TYPE_FLOAT)
+    g_value_set_float (value, (gfloat) g_ascii_strtod (value_str, NULL));
   else if (type == GTK_TYPE_THEMING_ENGINE)
     {
       GtkThemingEngine *engine;
