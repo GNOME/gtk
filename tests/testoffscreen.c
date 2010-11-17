@@ -192,7 +192,6 @@ create_widgets (void)
   GtkWidget *main_hbox, *main_vbox;
   GtkWidget *vbox, *hbox, *label, *combo, *entry, *button, *cb;
   GtkWidget *sw, *text_view;
-  GList *cbitems = NULL;
 
   main_vbox = gtk_vbox_new (0, FALSE);
 
