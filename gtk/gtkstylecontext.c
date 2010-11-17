@@ -1982,8 +1982,8 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   PropertyValue *pcache, key = { 0 };
+  GList *global_list = NULL;
   StyleData *data;
-  GList *list;
   guint i;
 
   priv = context->priv;
@@ -2016,13 +2016,29 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
   g_param_spec_ref (pcache->pspec);
   g_value_init (&pcache->value, G_PARAM_SPEC_VALUE_TYPE (pspec));
 
+  if (priv->screen)
+    {
+      global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
+      global_list = g_list_last (global_list);
+    }
+
   if (priv->widget_path)
     {
-      for (list = priv->providers_last; list; list = list->prev)
+      GList *list, *global, *elem;
+
+      list = priv->providers_last;
+      global = global_list;
+
+      while ((elem = find_next_candidate (list, global)) != NULL)
         {
           GtkStyleProviderData *provider_data;
 
-          provider_data = list->data;
+          provider_data = elem->data;
+
+          if (elem == list)
+            list = list->prev;
+          else
+            global = global->prev;
 
           if (gtk_style_provider_get_style_property (provider_data->provider, priv->widget_path,
                                                      pspec->name, &pcache->value))
