@@ -54,7 +54,7 @@
  * #GdkScreen and RTL/LTR information set, the style context will be also
  * updated automatically if any of these settings change on the widget.
  *
- * If you using are the theming layer standalone, you will need to set a
+ * If you are using are the theming layer standalone, you will need to set a
  * widget path and a screen yourself to the created style context through
  * gtk_style_context_set_path() and gtk_style_context_set_screen(), as well
  * as updating the context yourself using gtk_style_context_invalidate()
