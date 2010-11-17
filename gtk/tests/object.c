@@ -276,26 +276,12 @@ widget_test_properties (GtkWidget   *widget,
 }
 
 static void
-widget_fixups (GtkWidget *widget)
-{
-  /* post-constructor for widgets that need additional settings to work correctly */
-  if (GTK_IS_COMBO_BOX (widget))
-    {
-      GtkListStore *store = gtk_list_store_new (1, G_TYPE_STRING);
-      g_object_set (widget, "model", store, NULL);
-      g_object_unref (store);
-      gtk_combo_box_append_text (GTK_COMBO_BOX (widget), "test text");
-    }
-}
-
-static void
 widget_property_tests (gconstpointer test_data)
 {
   GType wtype = (GType) test_data;
   /* create widget */
   GtkWidget *widget = gtk_widget_new (wtype, NULL);
   g_object_ref_sink (widget);
-  widget_fixups (widget);
   /* test property values */
   widget_test_properties (widget,  +2); /* test default_value */
   widget_test_properties (widget,   0); /* test minimum */
