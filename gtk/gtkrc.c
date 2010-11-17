@@ -2284,8 +2284,8 @@ gtk_rc_parse_any (GtkRcContext *context,
 			msg = g_strconcat ("e.g. `", sym, "'", NULL);
 		    }
 
-		  if (scanner->token > GTK_RC_TOKEN_INVALID &&
-		      scanner->token < GTK_RC_TOKEN_LAST)
+		  if (scanner->token > (guint) GTK_RC_TOKEN_INVALID &&
+		      scanner->token < (guint) GTK_RC_TOKEN_LAST)
 		    {
 		      symbol_name = "???";
 		      for (i = 0; i < G_N_ELEMENTS (symbols); i++)
@@ -3371,7 +3371,7 @@ static guint
 gtk_rc_parse_xthickness (GScanner   *scanner,
 			 GtkRcStyle *style)
 {
-  if (g_scanner_get_next_token (scanner) != GTK_RC_TOKEN_XTHICKNESS)
+  if (g_scanner_get_next_token (scanner) != (guint) GTK_RC_TOKEN_XTHICKNESS)
     return GTK_RC_TOKEN_XTHICKNESS;
 
   if (g_scanner_get_next_token (scanner) != G_TOKEN_EQUAL_SIGN)
@@ -3389,7 +3389,7 @@ static guint
 gtk_rc_parse_ythickness (GScanner   *scanner,
 			 GtkRcStyle *style)
 {
-  if (g_scanner_get_next_token (scanner) != GTK_RC_TOKEN_YTHICKNESS)
+  if (g_scanner_get_next_token (scanner) != (guint) GTK_RC_TOKEN_YTHICKNESS)
     return GTK_RC_TOKEN_YTHICKNESS;
 
   if (g_scanner_get_next_token (scanner) != G_TOKEN_EQUAL_SIGN)
