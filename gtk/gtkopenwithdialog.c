@@ -42,9 +42,6 @@
 struct _GtkOpenWithDialogPrivate {
   char *content_type;
   GFile *gfile;
-  GtkOpenWithDialogMode mode;
-
-  gboolean use_custom;
 
   GtkWidget *label;
   GtkWidget *button;
@@ -58,7 +55,6 @@ struct _GtkOpenWithDialogPrivate {
 enum {
   PROP_GFILE = 1,
   PROP_CONTENT_TYPE,
-  PROP_MODE,
   N_PROPERTIES
 };
 
@@ -232,8 +228,6 @@ widget_application_selected_cb (GtkOpenWithWidget *widget,
   gtk_dialog_set_response_sensitive (GTK_DIALOG (self),
 				     RESPONSE_REMOVE,
 				     g_app_info_can_delete (app_info));
-
-  self->priv->use_custom = FALSE;
 }
 
 static void
@@ -242,8 +236,6 @@ widget_application_activated_cb (GtkOpenWithWidget *widget,
 				 gpointer user_data)
 {
   GtkOpenWithDialog *self = user_data;
-
-  g_print ("app activated\n");
 
   gtk_dialog_response (GTK_DIALOG (self), GTK_RESPONSE_OK);
 }
@@ -280,56 +272,19 @@ set_dialog_properties (GtkOpenWithDialog *self)
     }
 
   description = g_content_type_get_description (self->priv->content_type);
+  gtk_window_set_title (GTK_WINDOW (self), _("Choose an Application"));
 
-  if (self->priv->mode == GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE)
+  if (emname != NULL)
     {
-      if (self->priv->gfile != NULL)
-	gtk_window_set_title (GTK_WINDOW (self), _("Open With"));
-      else
-	gtk_window_set_title (GTK_WINDOW (self), _("Select Application"));
-
-      if (emname != NULL)
-	{
-	  /* Translators: %s is a filename */
-	  label = g_strdup_printf (_("Open %s with:"), emname);
-	}
-      else
-	{
-	  /* we're in the content_type + SELECT_ONE case */
-
-	  /* Translators: %s is a file type description */
-	  label = g_strdup_printf (_("Select an application for \"%s\" files:"),
-				   g_content_type_is_unknown (self->priv->content_type) ?
-				   self->priv->content_type : description);
-	}
+      /* Translators: %s is a filename */
+      label = g_strdup_printf (_("Open %s with:"), emname);
     }
   else
     {
-      if (g_content_type_is_unknown (self->priv->content_type))
-	{
-	  if (extension != NULL)
-	    /* Translators: first %s is a filename and second %s is a file extension */
-	    label = g_strdup_printf (_("Open %s and other %s document with:"),
-				     emname, extension);
-	  else
-	    label = g_strdup_printf (_("Open all \"%s\" files with:"), self->priv->content_type);
-	}
-      else
-	{
-	  if (name != NULL)
-	    /* Translators: first %s is a filename, second is a description
-	     * of the type, eg "plain text document" */
-	    label = g_strdup_printf (_("Open %s and other \"%s\" files with:"), 
-				     emname, description);
-	  else
-	    /* Translators: %s is a description of the file type,
-	     * e.g. "plain text document" */
-	    label = g_strdup_printf (_("Open all \"%s\" files with:"), description);
-	}
-
-      gtk_label_set_text_with_mnemonic (GTK_LABEL (self->priv->open_label),
-					_("_Select"));
-      gtk_window_set_title (GTK_WINDOW (self), _("Select default application"));
+      /* Translators: %s is a file type description */
+      label = g_strdup_printf (_("Select an application for \"%s\" files:"),
+			       g_content_type_is_unknown (self->priv->content_type) ?
+			       self->priv->content_type : description);
     }
 
   gtk_label_set_markup (GTK_LABEL (self->priv->label), label);
@@ -492,9 +447,6 @@ gtk_open_with_dialog_set_property (GObject *object,
       if (self->priv->content_type == NULL)
 	self->priv->content_type = g_value_dup_string (value);
       break;
-    case PROP_MODE:
-      self->priv->mode = g_value_get_enum (value);
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -517,9 +469,6 @@ gtk_open_with_dialog_get_property (GObject *object,
       break;
     case PROP_CONTENT_TYPE:
       g_value_set_string (value, self->priv->content_type);
-      break;
-    case PROP_MODE:
-      g_value_set_enum (value, self->priv->mode);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -546,21 +495,6 @@ gtk_open_with_dialog_class_init (GtkOpenWithDialogClass *klass)
   gobject_class->constructed = gtk_open_with_dialog_constructed;
 
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
-
-  /**
-   * GtkOpenWithDialog:mode:
-   *
-   * The #GtkOpenWithDialogMode for this dialog.
-   **/
-  pspec =
-    g_param_spec_enum ("mode",
-		       P_("The dialog mode"),
-		       P_("The operation mode for this dialog"),
-		       GTK_TYPE_OPEN_WITH_DIALOG_MODE,
-		       GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
-		       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
-		       G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (gobject_class, PROP_MODE, pspec);
 
   pspec = g_param_spec_object ("gfile",
 			       P_("GFile"),
@@ -606,19 +540,10 @@ set_parent_and_flags (GtkWidget *dialog,
  * gtk_open_with_dialog_new:
  * @parent: (allow-none): a #GtkWindow, or %NULL
  * @flags: flags for this dialog
- * @mode: a #GtkOpenWithDialogMode for this dialog
  * @file: a #GFile
  *
  * Creates a new #GtkOpenWithDialog for the provided #GFile, to allow
- * the user to select a default application for it.
- * The @mode specifies the kind of interaction with the dialog:
- * - in #GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE mode, the dialog is intended to
- *   be used to select an application for a single file, and it will provide an
- *   optional button to remember the selection for all files of that kind.
- * - in #GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT mode, the dialog is intended
- *   to be used to select an application for the content type of a file, similar
- *   to #gtk_open_with_dialog_new_for_content_type. In this case, the file
- *   is used both as a hint for the content type and to give feedback in the UI elements.
+ * the user to select an application for it.
  *
  * Returns: a newly created #GtkOpenWithDialog
  *
@@ -627,7 +552,6 @@ set_parent_and_flags (GtkWidget *dialog,
 GtkWidget *
 gtk_open_with_dialog_new (GtkWindow *parent,
 			  GtkDialogFlags flags,
-			  GtkOpenWithDialogMode mode,
 			  GFile *file)
 {
   GtkWidget *retval;
@@ -636,7 +560,6 @@ gtk_open_with_dialog_new (GtkWindow *parent,
 
   retval = g_object_new (GTK_TYPE_OPEN_WITH_DIALOG,
 			 "gfile", file,
-			 "mode", mode,
 			 NULL);
 
   set_parent_and_flags (retval, parent, flags);
@@ -648,12 +571,10 @@ gtk_open_with_dialog_new (GtkWindow *parent,
  * gtk_open_with_dialog_new_for_content_type:
  * @parent: (allow-none): a #GtkWindow, or %NULL
  * @flags: flags for this dialog
- * @mode: a #GtkOpenWithDialogMode for this dialog
  * @content_type: a content type string
  *
  * Creates a new #GtkOpenWithDialog for the provided content type, to allow
- * the user to select a default application for it; see #gtk_open_with_dialog_new
- * for more information.
+ * the user to select an application for it.
  *
  * Returns: a newly created #GtkOpenWithDialog
  *
@@ -662,7 +583,6 @@ gtk_open_with_dialog_new (GtkWindow *parent,
 GtkWidget *
 gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 					   GtkDialogFlags flags,
-					   GtkOpenWithDialogMode mode,
 					   const gchar *content_type)
 {
   GtkWidget *retval;
@@ -671,7 +591,6 @@ gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 
   retval = g_object_new (GTK_TYPE_OPEN_WITH_DIALOG,
 			 "content-type", content_type,
-			 "mode", mode,
 			 NULL);
 
   set_parent_and_flags (retval, parent, flags);
