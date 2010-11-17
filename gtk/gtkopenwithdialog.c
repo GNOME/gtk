@@ -307,9 +307,12 @@ build_dialog_ui (GtkOpenWithDialog *self)
 
   vbox = gtk_vbox_new (FALSE, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
-
+  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self))), vbox, TRUE, TRUE, 0);
+  gtk_widget_show (vbox);
+  
   vbox2 = gtk_vbox_new (FALSE, 6);
   gtk_box_pack_start (GTK_BOX (vbox), vbox2, TRUE, TRUE, 0);
+  gtk_widget_show (vbox2);
 
   self->priv->label = gtk_label_new ("");
   gtk_widget_set_halign (self->priv->label, GTK_ALIGN_START);
@@ -333,9 +336,6 @@ build_dialog_ui (GtkOpenWithDialog *self)
   gtk_label_set_line_wrap (GTK_LABEL (self->priv->desc_label), TRUE);
   gtk_label_set_single_line_mode (GTK_LABEL (self->priv->desc_label), FALSE);
   gtk_box_pack_start (GTK_BOX (vbox2), self->priv->desc_label, FALSE, FALSE, 0);
-
-  gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (self))), vbox, TRUE, TRUE, 0);
-  gtk_widget_show_all (vbox);
 
   gtk_dialog_add_button (GTK_DIALOG (self),
 			 GTK_STOCK_REMOVE,
