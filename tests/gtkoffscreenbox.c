@@ -598,8 +598,6 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 
 	  if (offscreen_box->child2 && gtk_widget_get_visible (offscreen_box->child2))
 	    {
-              gint w, h;
-
 	      pixmap = gdk_offscreen_window_get_pixmap (offscreen_box->offscreen_window2);
               child_area = offscreen_box->child2->allocation;
 
@@ -610,11 +608,6 @@ gtk_offscreen_box_expose (GtkWidget      *widget,
 	      cairo_translate (cr, child_area.width / 2, child_area.height / 2);
 	      cairo_rotate (cr, offscreen_box->angle);
 	      cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
-
-              /* clip */
-              gdk_drawable_get_size (pixmap, &w, &h);
-              cairo_rectangle (cr, 0, 0, w, h);
-              cairo_clip (cr);
 
               /* paint */
 	      gdk_cairo_set_source_pixmap (cr, pixmap, 0, 0);
