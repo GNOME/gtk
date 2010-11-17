@@ -57,7 +57,7 @@ struct _GtkStyleProviderIface
 
   gboolean (* get_style_property) (GtkStyleProvider *provider,
                                    GtkWidgetPath    *path,
-                                   const gchar      *property_name,
+                                   GParamSpec       *pspec,
                                    GValue           *value);
 
   GtkIconFactory * (* get_icon_factory) (GtkStyleProvider *provider,
@@ -71,7 +71,7 @@ GtkStyleProperties *gtk_style_provider_get_style (GtkStyleProvider *provider,
 
 gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                                 GtkWidgetPath    *path,
-                                                const gchar      *property_name,
+                                                GParamSpec       *pspec,
                                                 GValue           *value);
 
 GtkIconFactory * gtk_style_provider_get_icon_factory (GtkStyleProvider *provider,

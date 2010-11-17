@@ -86,25 +86,26 @@ gtk_style_provider_get_style (GtkStyleProvider *provider,
  * gtk_style_provider_get_style_property:
  * @provider: a #GtkStyleProvider
  * @path: #GtkWidgetPath to query
- * @property_name: the property name
+ * @pspec: The #GParamSpec to query
  * @value: (out): return location for the property value
  *
  * Looks up a widget style property as defined by @provider for
- * the widget represented by @widget_path.
+ * the widget represented by @path.
  *
  * Returns: %TRUE if the property was found and has a value, %FALSE otherwise
  **/
 gboolean
 gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                        GtkWidgetPath    *path,
-                                       const gchar      *property_name,
+                                       GParamSpec       *pspec,
                                        GValue           *value)
 {
   GtkStyleProviderIface *iface;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), FALSE);
+  g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (property_name != NULL, FALSE);
+  g_return_val_if_fail (g_type_is_a (gtk_widget_path_get_widget_type (path), pspec->owner_type), FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
   iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);
@@ -112,7 +113,7 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
   if (!iface->get_style_property)
     return FALSE;
 
-  return iface->get_style_property (provider, path, property_name, value);
+  return iface->get_style_property (provider, path, pspec, value);
 }
 
 /**

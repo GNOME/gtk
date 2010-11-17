@@ -2040,8 +2040,9 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
           else
             global = global->prev;
 
-          if (gtk_style_provider_get_style_property (provider_data->provider, priv->widget_path,
-                                                     pspec->name, &pcache->value))
+          if (gtk_style_provider_get_style_property (provider_data->provider,
+                                                     priv->widget_path, pspec,
+                                                     &pcache->value))
             {
               /* Resolve symbolic colors to GdkColor/GdkRGBA */
               if (G_VALUE_TYPE (&pcache->value) == GTK_TYPE_SYMBOLIC_COLOR)

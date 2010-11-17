@@ -1031,20 +1031,17 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 static gboolean
 gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                      GtkWidgetPath    *path,
-                                     const gchar      *property_name,
+                                     GParamSpec       *pspec,
                                      GValue           *value)
 {
   GArray *priority_info;
   gboolean found = FALSE;
   gchar *prop_name;
-  GType path_type;
   gint i;
 
-  path_type = gtk_widget_path_get_widget_type (path);
-
   prop_name = g_strdup_printf ("-%s-%s",
-                               g_type_name (path_type),
-                               property_name);
+                               g_type_name (pspec->owner_type),
+                               pspec->name);
 
   priority_info = css_provider_get_selectors (GTK_CSS_PROVIDER (provider), path);
 
