@@ -25,7 +25,7 @@
 
 static GtkWidget *toplevel;
 static GFile *file;
-static GtkWidget *grid, *file_l, *open, *show_all, *show_set_as_default;
+static GtkWidget *grid, *file_l, *open, *show_mode, *show_set_as_default;
 static GtkWidget *radio_file, *radio_file_default, *radio_content, *radio_content_default, *dialog;
 
 static void
@@ -105,8 +105,9 @@ display_dialog (GtkButton *b,
 							  content_type);
     }
 
-  gtk_open_with_dialog_set_show_other_applications (GTK_OPEN_WITH_DIALOG (dialog),
-						    gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_all)));
+  gtk_open_with_dialog_set_show_mode (GTK_OPEN_WITH_DIALOG (dialog),
+				      gtk_combo_box_get_active (GTK_COMBO_BOX (show_mode)));
+
   gtk_open_with_dialog_set_show_set_as_default_button (GTK_OPEN_WITH_DIALOG (dialog),
 						       gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (show_set_as_default)));
   gtk_widget_show (dialog);
@@ -118,17 +119,16 @@ display_dialog (GtkButton *b,
 }
 
 static void
-show_all_toggled (GtkToggleButton *b,
-		  gpointer user_data)
+show_mode_changed (GtkComboBox *b,
+		   gpointer user_data)
 {
   if (dialog != NULL)
     {
-      gboolean toggled;
+      gint active;
 
-      toggled = gtk_toggle_button_get_active (b);
-
-      gtk_open_with_dialog_set_show_other_applications (GTK_OPEN_WITH_DIALOG (dialog),
-							toggled);
+      active = gtk_combo_box_get_active (b);
+      gtk_open_with_dialog_set_show_mode (GTK_OPEN_WITH_DIALOG (dialog),
+					  active);
     }
 }
 
@@ -221,16 +221,19 @@ main (int argc,
   g_signal_connect (open, "clicked",
 		    G_CALLBACK (display_dialog), NULL);
 
-  show_all = gtk_check_button_new_with_label ("Show all applications");
-  gtk_grid_attach_next_to (GTK_GRID (grid), show_all,
+  show_mode = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (show_mode), "Recommended only");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (show_mode), "All applications");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (show_mode), "Headings");
+  gtk_grid_attach_next_to (GTK_GRID (grid), show_mode,
 			   open, GTK_POS_BOTTOM, 1, 1);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (show_all), TRUE);
-  g_signal_connect (show_all, "toggled",
-		    G_CALLBACK (show_all_toggled), NULL);
+  gtk_combo_box_set_active (GTK_COMBO_BOX (show_mode), 2);
+  g_signal_connect (show_mode, "changed",
+		    G_CALLBACK (show_mode_changed), NULL);
 
   show_set_as_default = gtk_check_button_new_with_label ("Show set as default");
   gtk_grid_attach_next_to (GTK_GRID (grid), show_set_as_default,
-			   show_all, GTK_POS_BOTTOM, 1, 1);
+			   show_mode, GTK_POS_BOTTOM, 1, 1);
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (show_set_as_default), TRUE);
   g_signal_connect (show_set_as_default, "toggled",
 		    G_CALLBACK (show_set_as_default_toggled), NULL);
