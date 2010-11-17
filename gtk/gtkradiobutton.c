@@ -947,7 +947,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
+  if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT)
     {
       gtk_paint_flat_box (style, cr,
                           GTK_STATE_PRELIGHT,
