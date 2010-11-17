@@ -870,12 +870,10 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
                                  gdouble           height)
 {
   GdkRGBA *fg_color, *bg_color;
-  const GtkWidgetPath *path;
   GtkStateFlags flags;
   gint exterior_size, interior_size, thickness, pad;
 
   flags = gtk_theming_engine_get_state (engine);
-  path = gtk_theming_engine_get_path (engine);
   cairo_save (cr);
 
   gtk_theming_engine_get (engine, flags,
@@ -911,7 +909,6 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
       cairo_fill_preserve (cr);
 
       gdk_cairo_set_source_rgba (cr, fg_color);
-
       cairo_stroke (cr);
     }
 
@@ -974,6 +971,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_rgba_free (fg_color);
+  gdk_rgba_free (bg_color);
 }
 
 static void
@@ -986,12 +984,10 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 {
   GtkStateFlags flags;
   GdkRGBA *fg_color, *bg_color;
-  const GtkWidgetPath *path;
   gint exterior_size, interior_size, pad, thickness;
   gdouble radius;
 
   flags = gtk_theming_engine_get_state (engine);
-  path = gtk_theming_engine_get_path (engine);
   radius = MIN (width, height) / 2 - 0.5;
 
   cairo_save (cr);
@@ -1011,19 +1007,18 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 
   if (!gtk_theming_engine_has_class (engine, "menu"))
     {
-      gdk_cairo_set_source_rgba (cr, bg_color);
-
+      cairo_set_line_width (cr, 1.);
       cairo_arc (cr,
 		 x + exterior_size / 2.,
 		 y + exterior_size / 2.,
 		 (exterior_size - 1) / 2.,
 		 0, 2 * G_PI);
 
+      gdk_cairo_set_source_rgba (cr, bg_color);
+g_print ("filling the arc with %f %f %f %f\n", bg_color->red, bg_color->green, bg_color->blue, bg_color->alpha);
       cairo_fill_preserve (cr);
 
       gdk_cairo_set_source_rgba (cr, fg_color);
-
-      cairo_set_line_width (cr, 1.);
       cairo_stroke (cr);
     }
 
