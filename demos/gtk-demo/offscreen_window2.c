@@ -381,7 +381,7 @@ gtk_mirror_bin_expose (GtkWidget      *widget,
           if (bin->child && gtk_widget_get_visible (bin->child))
             {
               pixmap = gdk_offscreen_window_get_pixmap (bin->offscreen_window);
-              gdk_drawable_get_size (pixmap, &width, &height);
+              gdk_pixmap_get_size (pixmap, &width, &height);
 
               cr = gdk_cairo_create (widget->window);
 

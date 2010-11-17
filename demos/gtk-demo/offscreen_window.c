@@ -493,7 +493,7 @@ gtk_rotated_bin_expose (GtkWidget      *widget,
               cairo_translate (cr, -child_area.width / 2, -child_area.height / 2);
 
               /* clip */
-              gdk_drawable_get_size (pixmap, &width, &height);
+              gdk_pixmap_get_size (pixmap, &width, &height);
               cairo_rectangle (cr, 0, 0, width, height);
               cairo_clip (cr);
               /* paint */
