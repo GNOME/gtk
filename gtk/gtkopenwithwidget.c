@@ -412,24 +412,6 @@ gtk_open_with_sort_func (GtkTreeModel *model,
 }
 
 static void
-heading_cell_renderer_func (GtkTreeViewColumn *column,
-			    GtkCellRenderer *cell,
-			    GtkTreeModel *model,
-			    GtkTreeIter *iter,
-			    gpointer _user_data)
-{
-  gboolean heading;
-
-  gtk_tree_model_get (model, iter,
-		      COLUMN_HEADING, &heading,
-		      -1);
-
-  g_object_set  (cell,
-		 "visible", heading,
-		 NULL);
-}
-
-static void
 padding_cell_renderer_func (GtkTreeViewColumn *column,
 			    GtkCellRenderer *cell,
 			    GtkTreeModel *model,
@@ -684,6 +666,7 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", COLUMN_HEADING_TEXT,
+				       "visible", COLUMN_HEADING,
 				       NULL);
   g_object_set (renderer,
 		"weight", PANGO_WEIGHT_BOLD,
@@ -691,9 +674,6 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
 		"ypad", 6,
 		"xpad", 0,
 		NULL);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
-					   heading_cell_renderer_func,
-					   NULL, NULL);
 
   /* padding renderer for non-heading cells */
   renderer = gtk_cell_renderer_text_new ();
