@@ -571,7 +571,7 @@ add_no_applications_label (GtkOpenWithWidget *self)
 
   string = g_strdup_printf ("<big><b>%s</b></big>\n<i>%s</i>",
 			    string2,
-			    _("Click on \"Show more applications\" for a list of fallback options"));
+			    _("Click \"Show other applications\" for more options"));
 
   gtk_list_store_append (self->priv->program_list_store, &iter);
   gtk_list_store_set (self->priv->program_list_store, &iter,
@@ -939,7 +939,7 @@ gtk_open_with_widget_init (GtkOpenWithWidget *self)
 		    G_CALLBACK (program_list_button_press_event_cb),
 		    self);
 
-  button = gtk_button_new_with_label (_("Show more applications..."));
+  button = gtk_button_new_with_label (_("Show other applications"));
   w = gtk_image_new_from_stock (GTK_STOCK_ADD,
 				GTK_ICON_SIZE_BUTTON);
 
