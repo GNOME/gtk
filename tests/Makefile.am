@@ -98,9 +98,11 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testexpander			\
 	testvolumebutton		\
 	testscrolledwindow		\
+	testswitch			\
 	testcellarea			\
 	testswitch			\
-	styleexamples
+	styleexamples			\
+	testtreemenu
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -189,6 +191,7 @@ testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 testscrolledwindow_DEPENDENCIES = $(TEST_DEPS)
 testcellarea_DEPENDENCIES = $(TEST_DEPS)
+testtreemenu_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
@@ -268,6 +271,7 @@ testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 testscrolledwindow_LDADD = $(LDADDS)
 testcellarea_LDADD = $(LDADDS)
+testtreemenu_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
 testexpand_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
@@ -382,6 +386,9 @@ testcellarea_SOURCES =		\
 	testcellarea.c		\
 	cellareascaffold.c	\
 	cellareascaffold.h
+
+testtreemenu_SOURCES =		\
+	testtreemenu.c
 
 testoffscreen_SOURCES = 	\
 	gtkoffscreenbox.c	\
