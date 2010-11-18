@@ -42,6 +42,7 @@ struct _GtkMenuItemPrivate
   guint timer_from_keypress    : 1;
   guint from_menubar           : 1;
   guint use_action_appearance  : 1;
+  guint reserve_indicator      : 1;
 
   guint timer;
 
