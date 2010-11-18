@@ -524,7 +524,7 @@ gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
 	  heading_added = TRUE;
 	}
 
-      app_string = g_strdup_printf ("<b>%s</b>\n<i>%s</i>",
+      app_string = g_strdup_printf ("<b>%s</b>\n%s",
 				    g_app_info_get_display_name (app) != NULL ?
 				    g_app_info_get_display_name (app) : "",
 				    g_app_info_get_description (app) != NULL ?
@@ -569,7 +569,7 @@ add_no_applications_label (GtkOpenWithWidget *self)
   string2 = g_strdup_printf (_("No applications available to open \"%s\""),
 			     desc);
 
-  string = g_strdup_printf ("<big><b>%s</b></big>\n<i>%s</i>",
+  string = g_strdup_printf ("<big><b>%s</b></big>\n%s",
 			    string2,
 			    _("Click \"Show other applications\" for more options"));
 
