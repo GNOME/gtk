@@ -4386,6 +4386,11 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * be called when a widget for some reason has a new size request.
  * For example, when you change the text in a #GtkLabel, #GtkLabel
  * queues a resize to ensure there's enough space for the new text.
+ *
+ * <note><para>You cannot call gtk_widget_queue_resize() on a widget
+ * from inside it's implementation of the GtkWidgetClass::size_allocate 
+ * virtual method. Calls to gtk_widget_queue_resize() from inside
+ * GtkWidgetClass::size_allocate will be silently ignored.</para></note>
  **/
 void
 gtk_widget_queue_resize (GtkWidget *widget)
@@ -4670,6 +4675,11 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     return;
 
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
+
+  /* Size allocation is god... after consulting god, no further requests or allocations are needed */
+  priv->width_request_needed  = FALSE;
+  priv->height_request_needed = FALSE;
+  priv->alloc_needed          = FALSE;
 
   if (gtk_widget_get_mapped (widget))
     {
