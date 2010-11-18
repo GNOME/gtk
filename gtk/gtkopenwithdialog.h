@@ -65,18 +65,6 @@ struct _GtkOpenWithDialogClass {
   gpointer padding[16];
 };
 
-/**
- * GtkOpenWithDialogMode:
- * @GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE: the dialog is used for a single file
- * or content type; a checkbox can be used to remember the selection for all similar items.
- * @GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT: the dialog is used to set a default
- * application for a given file, or content type.
- */
-typedef enum {
-  GTK_OPEN_WITH_DIALOG_MODE_SELECT_ONE,
-  GTK_OPEN_WITH_DIALOG_MODE_SELECT_DEFAULT
-} GtkOpenWithDialogMode;
-
 GType      gtk_open_with_dialog_get_type (void) G_GNUC_CONST;
 
 GtkWidget * gtk_open_with_dialog_new (GtkWindow *parent,
@@ -85,10 +73,6 @@ GtkWidget * gtk_open_with_dialog_new (GtkWindow *parent,
 GtkWidget * gtk_open_with_dialog_new_for_content_type (GtkWindow *parent,
 						       GtkDialogFlags flags,
 						       const gchar *content_type);
-
-void gtk_open_with_dialog_set_show_set_as_default_button (GtkOpenWithDialog *self,
-							  gboolean show_button);
-gboolean gtk_open_with_get_show_set_as_default_button (GtkOpenWithDialog *self);
 
 GtkWidget * gtk_open_with_dialog_get_widget (GtkOpenWithDialog *self);
 
