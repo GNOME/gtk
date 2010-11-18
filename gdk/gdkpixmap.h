@@ -103,6 +103,10 @@ GdkPixmap* gdk_pixmap_colormap_create_from_xpm_d (GdkDrawable    *drawable,
 						  gchar         **data);
 #endif
 
+void          gdk_pixmap_get_size                (GdkPixmap      *pixmap,
+                                                  gint	         *width,
+                                                  gint  	 *height);
+
 /* Functions to create/lookup pixmaps from their native equivalents
  */
 #ifndef GDK_MULTIHEAD_SAFE

@@ -1006,6 +1006,7 @@ gdk_pixmap_create_from_data
 gdk_pixmap_create_from_xpm
 gdk_pixmap_colormap_create_from_xpm_d
 gdk_pixmap_create_from_xpm_d
+gdk_pixmap_get_size
 gdk_pixmap_get_type G_GNUC_CONST
 gdk_pixmap_new
 #endif

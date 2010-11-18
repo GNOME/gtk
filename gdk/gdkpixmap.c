@@ -843,5 +843,27 @@ gdk_pixmap_real_get_screen (GdkDrawable *drawable)
     return gdk_drawable_get_screen (GDK_PIXMAP_OBJECT (drawable)->impl);
 }
 
+/**
+ * gdk_pixmap_get_size:
+ * @pixmap: a #GdkPixmap
+ * @width: (out) (allow-none): location to store @pixmap's width, or %NULL
+ * @height: (out) (allow-none): location to store @pixmap's height, or %NULL
+ *
+ * This function is purely to make it possible to query the size of pixmaps
+ * even when compiling without deprecated symbols and you must use pixmaps.
+ * It is identical to gdk_drawable_get_size(), but for pixmaps.
+ *
+ * Since: 2.24
+ **/
+void
+gdk_pixmap_get_size (GdkPixmap *pixmap,
+                     gint      *width,
+                     gint      *height)
+{
+    g_return_if_fail (GDK_IS_PIXMAP (pixmap));
+
+    gdk_drawable_get_size (pixmap, width, height);
+}
+
 #define __GDK_PIXMAP_C__
 #include "gdkaliasdef.c"

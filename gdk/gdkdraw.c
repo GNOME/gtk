@@ -152,7 +152,8 @@ gdk_drawable_get_data (GdkDrawable   *drawable,
  * size is the size reported in the most-recently-processed configure
  * event, rather than the current size on the X server.
  *
- * Deprecated: 2.24: Use gdk_window_get_width() and gdk_window_get_height()
+ * Deprecated: 2.24: Use gdk_window_get_width() and gdk_window_get_height() for
+ *             #GdkWindows. Use gdk_pixmap_get_size() for #GdkPixmaps.
  */
 void
 gdk_drawable_get_size (GdkDrawable *drawable,
