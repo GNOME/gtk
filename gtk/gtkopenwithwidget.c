@@ -566,7 +566,7 @@ add_no_applications_label (GtkOpenWithWidget *self)
   GtkTreeIter iter;
 
   desc = g_content_type_get_description (self->priv->content_type);
-  string2 = g_strdup_printf (_("Cannot find any compatible application for \"%s\""),
+  string2 = g_strdup_printf (_("No applications available to open \"%s\""),
 			     desc);
 
   string = g_strdup_printf ("<big><b>%s</b></big>\n<i>%s</i>",
