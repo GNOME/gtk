@@ -197,7 +197,7 @@
  * <example>
  * <title>Using the &commat;import rule</title>
  * <programlisting>
- * &commat;import url (path/to/common.css)
+ * &commat;import url ("path/to/common.css")
  * </programlisting>
  * </example>
  * <para>
@@ -358,8 +358,8 @@
  *         <entry></entry>
  *         <entry>
  *           <programlisting>
- * border-image: url (/path/to/image.png) 3 4 3 4 stretch;
- * border-image: url (/path/to/image.png) 3 4 4 3 repeat stretch;</programlisting>
+ * border-image: url ("/path/to/image.png") 3 4 3 4 stretch;
+ * border-image: url ("/path/to/image.png") 3 4 4 3 repeat stretch;</programlisting>
  *         </entry>
  *       </row>
  *       <row>
@@ -1558,6 +1558,7 @@ parse_selector (GtkCssProvider  *css_provider,
 }
 
 #define SKIP_SPACES(s) while (s[0] == ' ' || s[0] == '\t' || s[0] == '\n') s++;
+#define SKIP_SPACES_BACK(s) while (s[0] == ' ' || s[0] == '\t' || s[0] == '\n') s--;
 
 static GtkSymbolicColor *
 symbolic_color_parse_str (const gchar  *string,
@@ -2099,36 +2100,59 @@ path_parse_str (GtkCssProvider  *css_provider,
 {
   gchar *path, *chr;
 
-  if (!g_str_has_prefix (str, "url"))
+  if (g_str_has_prefix (str, "url"))
     {
-      *end_ptr = (gchar *) str;
-      return NULL;
+      str += strlen ("url");
+      SKIP_SPACES (str);
+
+      if (*str != '(')
+        {
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      chr = strrchr (str, ')');
+
+      if (!chr)
+        {
+          *end_ptr = (gchar *) str;
+          return NULL;
+        }
+
+      str++;
+      SKIP_SPACES (str);
+
+      if (*str == '"' || *str == '\'')
+        {
+          gchar *p;
+          p = str;
+          str++;
+
+          SKIP_SPACES_BACK (chr);
+
+          if (*chr != *p)
+            {
+              *end_ptr = str;
+              return NULL;
+            }
+          chr--;
+        }
+      else
+        {
+          *end_ptr = str;
+          return NULL;
+        }
+
+      path = g_strndup (str, chr - str);
+      g_strstrip (path);
+
+      *end_ptr = chr + 1;
     }
-
-  str += strlen ("url");
-  SKIP_SPACES (str);
-
-  if (*str != '(')
+  else
     {
-      *end_ptr = (gchar *) str;
-      return NULL;
+      path = g_strdup (str);
+      *end_ptr = str + strlen (str);
     }
-
-  chr = strchr (str, ')');
-
-  if (!chr)
-    {
-      *end_ptr = (gchar *) str;
-      return NULL;
-    }
-
-  str++;
-  SKIP_SPACES (str);
-
-  path = g_strndup (str, chr - str);
-  g_strstrip (path);
-
-  *end_ptr = chr + 1;
 
   /* Always return an absolute path */
   if (!g_path_is_absolute (path))
@@ -2678,13 +2702,13 @@ parse_rule (GtkCssProvider *css_provider,
           css_provider_push_scope (css_provider, SCOPE_VALUE);
           g_scanner_get_next_token (scanner);
 
-          if (scanner->token != G_TOKEN_IDENTIFIER)
-            return G_TOKEN_IDENTIFIER;
-
-          path = path_parse (css_provider,
-                             g_strstrip (scanner->value.v_identifier));
-
-          if (!path)
+          if (scanner->token == G_TOKEN_IDENTIFIER)
+            path = path_parse (css_provider,
+                               g_strstrip (scanner->value.v_identifier));
+          else if (scanner->token == G_TOKEN_STRING)
+            path = path_parse (css_provider,
+                               g_strstrip (scanner->value.v_string));
+          else
             return G_TOKEN_IDENTIFIER;
 
           css_provider_pop_scope (css_provider);
