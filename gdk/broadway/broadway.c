@@ -670,6 +670,7 @@ broadway_client_write_header (BroadwayClient *client)
   char *header;
 
   header =
+    "HTTP/1.1 200 OK\r\n"
     "Content-type: multipart/x-mixed-replace;boundary=x\r\n"
     "Content-Encoding: gzip\r\n"
     "\r\n";

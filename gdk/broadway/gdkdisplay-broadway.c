@@ -138,6 +138,44 @@ http_request_free (HttpRequest *request)
   g_free (request);
 }
 
+#include <unistd.h>
+#include <fcntl.h>
+static void
+set_fd_blocking (int fd)
+{
+  glong arg;
+
+  if ((arg = fcntl (fd, F_GETFL, NULL)) < 0)
+    arg = 0;
+
+  arg = arg & ~O_NONBLOCK;
+
+  fcntl (fd, F_SETFL, arg);
+}
+
+static void
+start_output (HttpRequest *request)
+{
+  GSocket *socket;
+  GdkDisplayBroadway *display_broadway;
+  int fd;
+
+  g_print ("start_output\n");
+
+  socket = g_socket_connection_get_socket (request->connection);
+
+  display_broadway = GDK_DISPLAY_BROADWAY (request->display);
+  fd = g_socket_get_fd (socket);
+  set_fd_blocking (fd);
+  display_broadway->output = broadway_client_new (fd);
+  _gdk_broadway_resync_windows ();
+
+  /* TODO: This leaks the connection since we just keep the fd,
+     we want to avoid using the fd at all here */
+  g_object_ref (request->connection);
+  http_request_free (request);
+}
+
 static void
 send_error (HttpRequest *request,
 	    int error_code,
@@ -216,6 +254,8 @@ got_request (HttpRequest *request)
     send_data (request, "text/html", client_html, G_N_ELEMENTS(client_html) - 1);
   else if (strcmp (escaped, "/broadway.js") == 0)
     send_data (request, "text/javascript", broadway_js, G_N_ELEMENTS(broadway_js) - 1);
+  else if (strcmp (escaped, "/output") == 0)
+    start_output (request);
   else
     send_error (request, 404, "File not found");
 }
@@ -269,6 +309,7 @@ handle_incoming_connection (GSocketService    *service,
   in = g_io_stream_get_input_stream (G_IO_STREAM (connection));
 
   request->data = g_data_input_stream_new (in);
+  g_filter_input_stream_set_close_base_stream (G_FILTER_INPUT_STREAM (request->data), FALSE);
   /* Be tolerant of input */
   g_data_input_stream_set_newline_type (request->data, G_DATA_STREAM_NEWLINE_TYPE_ANY);
 
@@ -283,16 +324,12 @@ gdk_display_open (const gchar *display_name)
   GdkDisplay *display;
   GdkDisplayBroadway *display_broadway;
   const char *sm_client_id;
-  int fd;
   GError *error;
-
-  fd = dup(STDOUT_FILENO);
-  dup2(STDERR_FILENO, STDOUT_FILENO);
 
   display = g_object_new (GDK_TYPE_DISPLAY_BROADWAY, NULL);
   display_broadway = GDK_DISPLAY_BROADWAY (display);
 
-  display_broadway->connection = broadway_client_new (fd);
+  display_broadway->output = NULL;
 
   /* initialize the display's screens */
   display_broadway->screens = g_new (GdkScreen *, 1);

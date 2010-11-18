@@ -280,7 +280,7 @@ function handleLoad(event)
   }
 }
 
-function connect(app)
+function connect()
 {
   var xhr = createXHR();
   if (xhr) {
@@ -290,13 +290,8 @@ function connect(app)
     }
 
     xhr.multipart = true;
-    xhr.open("GET", "/cgi-bin/" + app, true);
+    xhr.open("GET", "/output", true);
     xhr.onload = handleLoad;
     xhr.send(null);
   }
-}
-
-function startClient(app)
-{
-  connect(app);
 }

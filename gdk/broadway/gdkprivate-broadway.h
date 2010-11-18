@@ -40,6 +40,8 @@
 
 typedef struct _GdkCursorPrivate       GdkCursorPrivate;
 
+void _gdk_broadway_resync_windows (void);
+
 struct _GdkCursorPrivate
 {
   GdkCursor cursor;

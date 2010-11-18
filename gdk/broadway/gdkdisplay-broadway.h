@@ -75,7 +75,7 @@ struct _GdkDisplayBroadway
   GdkWindow *active_offscreen_window;
 
   GSocketService *service;
-  BroadwayClient *connection;
+  BroadwayClient *output;
 };
 
 struct _GdkDisplayBroadwayClass
