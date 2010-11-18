@@ -21,7 +21,6 @@
 #include <string.h>
 #include "gtkcellview.h"
 #include "gtkcelllayout.h"
-#include "gtkcellareacontext.h"
 #include "gtkcellareabox.h"
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
@@ -665,6 +664,34 @@ gtk_cell_view_new (void)
   cellview = g_object_new (gtk_cell_view_get_type (), NULL);
 
   return GTK_WIDGET (cellview);
+}
+
+
+/**
+ * gtk_cell_view_new_with_context:
+ * @area: the #GtkCellArea to layout cells
+ * @context: the #GtkCellAreaContext in which to calculate cell geometry
+ *
+ * Creates a new #GtkCellView widget with a specific #GtkCellArea
+ * to layout cells and a specific #GtkCellAreaContext.
+ *
+ * Specifying the same context for a handfull of cells lets
+ * the underlying area synchronize the geometry for those cells,
+ * in this way alignments with cellviews for other rows are
+ * possible.
+ *
+ * Return value: A newly created #GtkCellView widget.
+ *
+ * Since: 2.6
+ */
+GtkWidget *
+gtk_cell_view_new_with_context (GtkCellArea        *area,
+				GtkCellAreaContext *context)
+{
+  return (GtkWidget *)g_object_new (GTK_TYPE_CELL_VIEW, 
+				    "cell-area", area,
+				    "cell-area-context", context,
+				    NULL);
 }
 
 /**

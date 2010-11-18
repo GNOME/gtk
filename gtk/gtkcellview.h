@@ -26,6 +26,8 @@
 
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkcellrenderer.h>
+#include <gtk/gtkcellarea.h>
+#include <gtk/gtkcellareacontext.h>
 #include <gtk/gtktreemodel.h>
 
 G_BEGIN_DECLS
@@ -62,6 +64,8 @@ struct _GtkCellViewClass
 
 GType             gtk_cell_view_get_type               (void) G_GNUC_CONST;
 GtkWidget        *gtk_cell_view_new                    (void);
+GtkWidget        *gtk_cell_view_new_with_context       (GtkCellArea        *area,
+							GtkCellAreaContext *context);
 GtkWidget        *gtk_cell_view_new_with_text          (const gchar     *text);
 GtkWidget        *gtk_cell_view_new_with_markup        (const gchar     *markup);
 GtkWidget        *gtk_cell_view_new_with_pixbuf        (GdkPixbuf       *pixbuf);
