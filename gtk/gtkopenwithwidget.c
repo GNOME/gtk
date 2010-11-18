@@ -909,8 +909,6 @@ gtk_open_with_widget_init (GtkOpenWithWidget *self)
 					    GtkOpenWithWidgetPrivate);
   gtk_orientable_set_orientation (GTK_ORIENTABLE (self), GTK_ORIENTATION_VERTICAL);
 
-  gtk_container_set_border_width (GTK_CONTAINER (self), 5);
-
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_widget_set_size_request (scrolled_window, 400, 300);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window),
