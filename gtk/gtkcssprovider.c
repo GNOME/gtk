@@ -486,6 +486,12 @@ static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_p
                                                           GError         **error);
 
 
+GQuark
+gtk_css_provider_error_quark (void)
+{
+  return g_quark_from_static_string ("gtk-css-provider-error-quark");
+}
+
 G_DEFINE_TYPE_EXTENDED (GtkCssProvider, gtk_css_provider, G_TYPE_OBJECT, 0,
                         G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
                                                gtk_css_style_provider_iface_init));
@@ -1095,8 +1101,10 @@ gtk_css_provider_finalize (GObject *object)
   g_slist_foreach (priv->cur_selectors, (GFunc) selector_path_unref, NULL);
   g_slist_free (priv->cur_selectors);
 
-  g_hash_table_unref (priv->cur_properties);
-  g_hash_table_destroy (priv->symbolic_colors);
+  if (priv->cur_properties)
+    g_hash_table_unref (priv->cur_properties);
+  if (priv->symbolic_colors)
+    g_hash_table_destroy (priv->symbolic_colors);
 
   G_OBJECT_CLASS (gtk_css_provider_parent_class)->finalize (object);
 }
@@ -2849,8 +2857,22 @@ parse_rule (GtkCssProvider *css_provider,
   return G_TOKEN_NONE;
 }
 
+static void
+scanner_msg (GScanner *scanner,
+             gchar    *message,
+             gboolean  is_error)
+{
+  GError **error = scanner->user_data;
+
+  g_set_error_literal (error,
+                       GTK_CSS_PROVIDER_ERROR,
+                       GTK_CSS_PROVIDER_ERROR_FAILED,
+                       message);
+}
+
 static gboolean
-parse_stylesheet (GtkCssProvider *css_provider)
+parse_stylesheet (GtkCssProvider  *css_provider,
+                  GError         **error)
 {
   GtkCssProviderPrivate *priv;
 
@@ -2866,9 +2888,23 @@ parse_stylesheet (GtkCssProvider *css_provider)
 
       if (expected_token != G_TOKEN_NONE)
         {
+          if (error != NULL)
+            {
+              priv->scanner->msg_handler = scanner_msg;
+              priv->scanner->user_data = error;
+            }
+
           g_scanner_unexp_token (priv->scanner, expected_token,
                                  NULL, NULL, NULL,
                                  "Error parsing style resource", FALSE);
+
+          if (error != NULL)
+            {
+              priv->scanner->msg_handler = NULL;
+              priv->scanner->user_data = NULL;
+
+              return FALSE;
+            }
 
           while (!g_scanner_eof (priv->scanner) &&
                  priv->scanner->token != G_TOKEN_RIGHT_CURLY)
@@ -2920,9 +2956,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
   g_free (priv->filename);
   priv->filename = NULL;
 
-  parse_stylesheet (css_provider);
-
-  return TRUE;
+  return parse_stylesheet (css_provider, error);
 }
 
 /**
@@ -2945,6 +2979,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   GError *internal_error = NULL;
   gchar *data;
   gsize length;
+  gboolean ret;
 
   g_return_val_if_fail (GTK_IS_CSS_PROVIDER (css_provider), FALSE);
   g_return_val_if_fail (G_IS_FILE (file), FALSE);
@@ -2968,11 +3003,11 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
   priv->scanner->input_name = priv->filename;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
-  parse_stylesheet (css_provider);
+  ret = parse_stylesheet (css_provider, error);
 
   g_free (data);
 
-  return TRUE;
+  return ret;
 }
 
 static gboolean
@@ -2986,6 +3021,7 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   GMappedFile *mapped_file;
   const gchar *data;
   gsize length;
+  gboolean ret;
 
   priv = css_provider->priv;
 
@@ -3000,9 +3036,8 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   length = g_mapped_file_get_length (mapped_file);
   data = g_mapped_file_get_contents (mapped_file);
 
-  /* FIXME: Set error */
   if (!data)
-    return FALSE;
+    data = "";
 
   if (reset)
     {
@@ -3016,11 +3051,11 @@ gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_provider,
   priv->scanner->input_name = priv->filename;
   g_scanner_input_text (priv->scanner, data, (guint) length);
 
-  parse_stylesheet (css_provider);
+  ret = parse_stylesheet (css_provider, error);
 
   g_mapped_file_unref (mapped_file);
 
-  return TRUE;
+  return ret;
 }
 
 /**
