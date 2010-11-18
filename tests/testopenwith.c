@@ -140,6 +140,7 @@ main (int argc,
       char **argv)
 {
   GtkWidget *w;
+  gchar *path;
 
   g_type_init ();
   gtk_init (&argc, &argv);
@@ -152,7 +153,12 @@ main (int argc,
   gtk_grid_attach (GTK_GRID (grid),
 		   w, 0, 0, 1, 1);
 
-  file_l = gtk_button_new_with_label ("Select");
+  file_l = gtk_button_new ();
+  path = g_build_filename (g_get_current_dir (), "apple-red.png", NULL);
+  file = g_file_new_for_path (path);
+  gtk_button_set_label (GTK_BUTTON (file_l), path);
+  g_free (path);
+
   gtk_widget_set_halign (file_l, GTK_ALIGN_START);
   gtk_grid_attach_next_to (GTK_GRID (grid), file_l,
 			   w, GTK_POS_RIGHT, 1, 1);
@@ -171,7 +177,7 @@ main (int argc,
   open = gtk_button_new_with_label ("Trigger Open With dialog");
   gtk_grid_attach_next_to (GTK_GRID (grid), open,
 			   radio_content, GTK_POS_BOTTOM, 1, 1);
-  gtk_widget_set_sensitive (open, FALSE);
+
   g_signal_connect (open, "clicked",
 		    G_CALLBACK (display_dialog), NULL);
 
