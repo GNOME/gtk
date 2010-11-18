@@ -229,28 +229,27 @@ get_extension (const char *basename)
 static void
 set_dialog_properties (GtkOpenWithDialog *self)
 {
-  char *label, *emname, *name, *extension, *description;
+  char *label, *name, *extension, *description;
+  PangoFontDescription *font_desc;
 
   name = NULL;
   extension = NULL;
   label = NULL;
-  emname = NULL;
   description = NULL;
 
   if (self->priv->gfile != NULL)
     {
       name = g_file_get_basename (self->priv->gfile);
-      emname = g_strdup_printf ("<i>%s</i>", name);
       extension = get_extension (name);
     }
 
   description = g_content_type_get_description (self->priv->content_type);
-  gtk_window_set_title (GTK_WINDOW (self), _("Choose an Application"));
+  gtk_window_set_title (GTK_WINDOW (self), "");
 
-  if (emname != NULL)
+  if (name != NULL)
     {
       /* Translators: %s is a filename */
-      label = g_strdup_printf (_("Open %s with:"), emname);
+      label = g_strdup_printf (_("Select an application to open \"%s\":"), name);
     }
   else
     {
@@ -260,13 +259,17 @@ set_dialog_properties (GtkOpenWithDialog *self)
 			       self->priv->content_type : description);
     }
 
+  font_desc = pango_font_description_new ();
+  pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
+  gtk_widget_modify_font (self->priv->label, font_desc);
+  pango_font_description_free (font_desc);
+
   gtk_label_set_markup (GTK_LABEL (self->priv->label), label);
 
   g_free (label);
   g_free (name);
   g_free (extension);
   g_free (description);
-  g_free (emname);
 }
 
 static void
