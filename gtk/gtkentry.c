@@ -3370,10 +3370,10 @@ gtk_entry_draw_frame (GtkWidget      *widget,
                       widget, "entry_bg",
                       x, y, width, height);
 
-  gtk_paint_shadow (style, cr,
-                    state, priv->shadow_type,
-                    widget, "entry", x, y, width, height);
-
+  if (GTK_ENTRY (widget)->has_frame)
+    gtk_paint_shadow (style, cr,
+                      state, priv->shadow_type,
+                      widget, "entry", x, y, width, height);
 
   gtk_entry_draw_progress (widget, cr);
 
