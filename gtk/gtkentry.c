@@ -3394,58 +3394,36 @@ gtk_entry_draw_frame (GtkWidget      *widget,
 }
 
 static void
-gtk_entry_get_progress_border (GtkWidget *widget,
-                               GtkBorder *progress_border)
-{
-  GtkBorder *tmp_border;
-  GtkStyle *style;
-
-  gtk_widget_style_get (widget, "progress-border", &tmp_border, NULL);
-  if (tmp_border)
-    {
-      *progress_border = *tmp_border;
-      gtk_border_free (tmp_border);
-    }
-  else
-    {
-      style = gtk_widget_get_style (widget);
-
-      progress_border->left = style->xthickness;
-      progress_border->right = style->xthickness;
-      progress_border->top = style->ythickness;
-      progress_border->bottom = style->ythickness;
-    }
-}
-
-static void
 get_progress_area (GtkWidget *widget,
-                  gint       *x,
-                  gint       *y,
-                  gint       *width,
-                  gint       *height)
+                   gint       *x,
+                   gint       *y,
+                   gint       *width,
+                   gint       *height)
 {
   GtkEntryPrivate *private = GTK_ENTRY_GET_PRIVATE (widget);
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkBorder progress_border;
-  gint frame_width, frame_height;
+  GtkBorder *progress_border;
 
-  get_frame_size (entry, NULL, NULL, &frame_width, &frame_height);
-  gtk_entry_get_progress_border (widget, &progress_border);
+  get_text_area_size (entry, x, y, width, height);
 
-  *x = progress_border.left;
-  *y = progress_border.top;
-
-  *width = frame_width
-           - progress_border.left - progress_border.right;
-  *height = frame_height
-            - progress_border.top - progress_border.bottom;
-
-  if (gtk_widget_has_focus (widget) && !private->interior_focus)
+  if (!private->interior_focus)
     {
-      *x += private->focus_width;
-      *y += private->focus_width;
-      *width -= 2 * private->focus_width;
-      *height -= 2 * private->focus_width;
+      *x -= private->focus_width;
+      *y -= private->focus_width;
+      *width += 2 * private->focus_width;
+      *height += 2 * private->focus_width;
+    }
+
+  gtk_widget_style_get (widget, "progress-border", &progress_border, NULL);
+
+  if (progress_border)
+    {
+      *x += progress_border->left;
+      *y += progress_border->top;
+      *width -= progress_border->left + progress_border->right;
+      *height -= progress_border->top + progress_border->bottom;
+
+      gtk_border_free (progress_border);
     }
 
   if (private->progress_pulse_mode)
