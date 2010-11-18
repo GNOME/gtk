@@ -20,7 +20,22 @@ libbroadway_la_SOURCES =		\
 	broadway.h			\
 	broadway.c
 
+clienthtml.h: client.html
+	$(PERL) ./toarray.pl client.html client_html > $@
+
+broadwayjs.h: broadway.js
+	$(PERL) ./toarray.pl broadway.js broadway_js > $@
+
+# built headers that don't get installed
+broadway_built_private_headers =	\
+	clienthtml.h			\
+	broadwayjs.h
+
+broadway_built_sources =		\
+	${broadway_built_private_headers}
+
 libgdk_broadway_la_SOURCES =		\
+	${broadway_built_private_headers}\
 	gdkapplaunchcontext-broadway.c \
 	gdkcursor-broadway.c	\
 	gdkdevice-broadway.h	\
@@ -51,6 +66,11 @@ libgdk_broadway_la_SOURCES =		\
 	gdkprivate-broadway.h
 
 libgdk_broadway_la_LIBADD = libbroadway.la
+
+MAINTAINERCLEANFILES = $(broadway_built_sources)
+EXTRA_DIST += $(broadway_built_sources)
+
+BUILT_SOURCES = $(broadway_built_sources)
 
 noinst_PROGRAMS = broadway-demo
 broadway_demo_LDADD = -lz -lcairo libbroadway.la
