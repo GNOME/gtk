@@ -50,24 +50,25 @@
  * <programlisting>
  * /&ast; Theme labels that are descendants of a window &ast;/
  * GtkWindow GtkLabel {
- *     background-color: &num;898989;
+ *     background-color: &num;898989
  * }
  *
  * /&ast; Theme notebooks, and anything that's within these &ast;/
  * GtkNotebook {
- *     background-color: &num;a939f0;
+ *     background-color: &num;a939f0
  * }
  *
  * /&ast; Theme combo boxes, and entries that
  *  are direct children of a notebook &ast;/
  * GtkComboBox,
  * GtkNotebook > GtkEntry {
- *     background-color: &num;1209a2;
+ *     color: @fg_color;
+ *     background-color: &num;1209a2
  * }
  *
  * /&ast; Theme any widget within a GtkBin &ast;/
  * GtkBin * {
- *     font-name: Sans 20;
+ *     font-name: Sans 20
  * }
  * </programlisting>
  * </example>
@@ -79,12 +80,12 @@
  * <programlisting>
  * /&ast; Theme a label named title-label &ast;/
  * GtkLabel&num;title-label {
- *     font-name: Sans 15;
+ *     font-name: Sans 15
  * }
  *
  * /&ast; Theme any widget named main-entry &ast;/
  * &num;main-entry {
- *     background-color: &num;f0a810;
+ *     background-color: &num;f0a810
  * }
  * </programlisting>
  * </example>
@@ -102,7 +103,7 @@
  *
  * /&ast; Theme spinbuttons' entry &ast;/
  * GtkSpinButton.entry {
- *     color: &num;900185;
+ *     color: &num;900185
  * }
  * </programlisting>
  * </example>
@@ -197,7 +198,7 @@
  * <example>
  * <title>Using the &commat;import rule</title>
  * <programlisting>
- * &commat;import url ("path/to/common.css")
+ * &commat;import url ("path/to/common.css");
  * </programlisting>
  * </example>
  * <para>
@@ -254,7 +255,7 @@
  * example in common CSS it is fine to define a font through
  * the different @font-family, @font-style, @font-size
  * properties, meanwhile in GTK+'s CSS only the canonical
- * @font property would be supported.
+ * @font property is supported.
  * </para>
  * <para>
  * The currently supported properties are:
@@ -1578,8 +1579,7 @@ symbolic_color_parse_str (const gchar  *string,
       str++;
       end = str;
 
-      while (*end == '-' || *end == '_' ||
-             g_ascii_isalpha (*end))
+      while (*end == '-' || *end == '_' || g_ascii_isalpha (*end))
         end++;
 
       name = g_strndup (str, end - str);
@@ -2015,7 +2015,7 @@ gradient_parse_str (const gchar  *str,
               str++;
               SKIP_SPACES (str);
 
-              position = g_strtod (str, &end);
+              position = g_ascii_strtod (str, &end);
 
               str = end;
               SKIP_SPACES (str);
@@ -2875,7 +2875,7 @@ parse_rule (GtkCssProvider *css_provider,
       g_scanner_get_next_token (scanner);
 
       if (scanner->token != ';')
-        return ';';
+        break;
 
       g_scanner_get_next_token (scanner);
     }
