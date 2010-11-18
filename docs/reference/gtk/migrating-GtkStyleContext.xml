@@ -41,20 +41,18 @@
 
     <orderedlist>
       <listitem>
-	All variations of <literal>draw_box()</literal>, <literal>draw_flat_box()</literal>,
-	<literal>draw_shadow()</literal>, <literal>draw_box_gap()</literal> and
-	<literal>draw_shadow_gap()</literal> become replaced by <literal>render_background()</literal>,
-	<literal>render_frame()</literal> and <literal>render_frame_gap()</literal>, where
-	the first would render frameless backgrounds and the last two would render all frame
-	variants.
+	All variations of <literal>gtk_paint_box()</literal>, <literal>gtk_paint_flat_box()</literal>,
+	<literal>gtk_paint_shadow()</literal>, <literal>gtk_paint_box_gap()</literal> and
+	<literal>gtk_paint_shadow_gap()</literal> become replaced by gtk_render_background(),
+	gtk_render_frame() and gtk_render_frame_gap(), where the first would render frameless
+	backgrounds and the last two would render all frame variants.
       </listitem>
       <listitem>
-	<literal>draw_resize_grip()</literal> disappears in favor of
-	<literal>render_handle()</literal> with a #GTK_STYLE_CLASS_GRIP class set in the
-	style context.
+	<literal>gtk_paint_resize_grip()</literal> disappears in favor of gtk_render_handle()
+	with a #GTK_STYLE_CLASS_GRIP class set in the style context.
       </listitem>
       <listitem>
-	<literal>draw_spinner()</literal> disappears in favor of <literal>render_activity()</literal>
+	<literal>gtk_paint_spinner()</literal> disappears in favor of gtk_render_activity()
 	with a #GTK_STYLE_CLASS_SPINNER class set in the style context.
       </listitem>
     </orderedlist>
