@@ -1140,7 +1140,7 @@ scanner_apply_scope (GScanner    *scanner,
   if (scope == SCOPE_VALUE)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z "@#-_0123456789" G_CSET_A_2_Z;
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.%\t\n" G_CSET_A_2_Z;
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.%\t\n'\"" G_CSET_A_2_Z;
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
@@ -1823,7 +1823,7 @@ symbolic_color_parse (const gchar *str)
 
   if (*end != '\0')
     {
-      g_warning ("Error parsing symbolic color \"%s\", stopped at char %ld : '%c'",
+      g_message ("Error parsing symbolic color \"%s\", stopped at char %ld : '%c'",
                  str, end - str, *end);
 
       if (color)
@@ -2080,7 +2080,7 @@ gradient_parse (const gchar *str)
 
   if (*end != '\0')
     {
-      g_warning ("Error parsing pattern \"%s\", stopped at char %ld : '%c'",
+      g_message ("Error parsing pattern \"%s\", stopped at char %ld : '%c'",
                  str, end - str, *end);
 
       if (gradient)
@@ -2128,14 +2128,14 @@ path_parse_str (GtkCssProvider  *css_provider,
           p = str;
           str++;
 
+          chr--;
           SKIP_SPACES_BACK (chr);
 
-          if (*chr != *p)
+          if (*chr != *p || chr == p)
             {
               *end_ptr = str;
               return NULL;
             }
-          chr--;
         }
       else
         {
@@ -2146,7 +2146,7 @@ path_parse_str (GtkCssProvider  *css_provider,
       path = g_strndup (str, chr - str);
       g_strstrip (path);
 
-      *end_ptr = chr + 1;
+      *end_ptr = str + strlen (str);
     }
   else
     {
@@ -2163,7 +2163,10 @@ path_parse_str (GtkCssProvider  *css_provider,
       priv = css_provider->priv;
 
       /* Use relative path to the current CSS file path, if any */
-      dirname = g_path_get_dirname (priv->filename);
+      if (priv->filename)
+        dirname = g_path_get_dirname (priv->filename);
+      else
+        dirname = g_get_current_dir ();
 
       full_path = g_build_filename (dirname, path, NULL);
       g_free (path);
@@ -2192,7 +2195,7 @@ path_parse (GtkCssProvider *css_provider,
 
   if (*end != '\0')
     {
-      g_warning ("Error parsing file path \"%s\", stopped at char %ld : '%c'",
+      g_message ("Error parsing file path \"%s\", stopped at char %ld : '%c'",
                  str, end - str, *end);
 
       if (path)
@@ -2319,7 +2322,7 @@ slice_parse (GtkCssProvider *css_provider,
 
   if (*end != '\0')
     {
-      g_warning ("Error parsing sliced image \"%s\", stopped at char %ld : '%c'",
+      g_message ("Error parsing sliced image \"%s\", stopped at char %ld : '%c'",
                  str, end - str, *end);
 
       if (slice)
@@ -2434,7 +2437,7 @@ border_parse (const gchar *str)
 
   if (*end != '\0')
     {
-      g_warning ("Error parsing border \"%s\", stopped at char %ld : '%c'",
+      g_message ("Error parsing border \"%s\", stopped at char %ld : '%c'",
                  str, end - str, *end);
 
       if (border)
@@ -2702,13 +2705,17 @@ parse_rule (GtkCssProvider *css_provider,
           css_provider_push_scope (css_provider, SCOPE_VALUE);
           g_scanner_get_next_token (scanner);
 
-          if (scanner->token == G_TOKEN_IDENTIFIER)
+          if (scanner->token == G_TOKEN_IDENTIFIER &&
+              g_str_has_prefix (scanner->value.v_identifier, "url"))
             path = path_parse (css_provider,
                                g_strstrip (scanner->value.v_identifier));
           else if (scanner->token == G_TOKEN_STRING)
             path = path_parse (css_provider,
                                g_strstrip (scanner->value.v_string));
           else
+            return G_TOKEN_IDENTIFIER;
+
+          if (path == NULL)
             return G_TOKEN_IDENTIFIER;
 
           css_provider_pop_scope (css_provider);
@@ -2839,7 +2846,7 @@ parse_rule (GtkCssProvider *css_provider,
             {
               if (error)
                 {
-                  g_warning ("Error parsing property value: %s\n", error->message);
+                  g_message ("Error parsing property value: %s\n", error->message);
                   g_error_free (error);
                 }
 
