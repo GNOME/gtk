@@ -249,12 +249,12 @@ set_dialog_properties (GtkOpenWithDialog *self)
   if (name != NULL)
     {
       /* Translators: %s is a filename */
-      label = g_strdup_printf (_("Select an application to open \"%s\":"), name);
+      label = g_strdup_printf (_("Select an application to open \"%s\""), name);
     }
   else
     {
       /* Translators: %s is a file type description */
-      label = g_strdup_printf (_("Select an application for \"%s\" files:"),
+      label = g_strdup_printf (_("Select an application for \"%s\" files"),
 			       g_content_type_is_unknown (self->priv->content_type) ?
 			       self->priv->content_type : description);
     }
