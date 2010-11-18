@@ -47,8 +47,8 @@ struct _GtkCellViewPrivate
   GtkTreeModel        *model;
   GtkTreeRowReference *displayed_row;
 
-  GtkCellArea         *cell_area;
-  GtkCellAreaContext  *cell_area_context;
+  GtkCellArea         *area;
+  GtkCellAreaContext  *context;
 
   GdkRGBA              background;
   gboolean             background_set;
@@ -157,7 +157,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GObjectClass   *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   gobject_class->constructor = gtk_cell_view_constructor;
@@ -242,7 +242,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    * since 3.0
    */
    g_object_class_install_property (gobject_class,
-                                    PROP_CELL_AREA,
+                                    PROP_CELL_AREA_CONTEXT,
                                     g_param_spec_object ("cell-area-context",
 							 P_("Cell Area Context"),
 							 P_("The GtkCellAreaContext used to "
@@ -298,15 +298,15 @@ gtk_cell_view_constructor (GType                  type,
   view = GTK_CELL_VIEW (object);
   priv = view->priv;
 
-  if (!priv->cell_area)
+  if (!priv->area)
     {
       GtkCellArea *area = gtk_cell_area_box_new ();
 
-      priv->cell_area = g_object_ref_sink (area);
+      priv->area = g_object_ref_sink (area);
     }
 
-  if (!priv->cell_area_context)
-    priv->cell_area_context = gtk_cell_area_create_context (priv->cell_area);
+  if (!priv->context)
+    priv->context = gtk_cell_area_create_context (priv->area);
 
   return object;
 }
@@ -343,10 +343,10 @@ gtk_cell_view_get_property (GObject    *object,
 	g_value_set_object (value, view->priv->model);
 	break;
       case PROP_CELL_AREA:
-	g_value_set_object (value, view->priv->cell_area);
+	g_value_set_object (value, view->priv->area);
 	break;
       case PROP_CELL_AREA_CONTEXT:
-	g_value_set_object (value, view->priv->cell_area_context);
+	g_value_set_object (value, view->priv->context);
 	break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -397,14 +397,14 @@ gtk_cell_view_set_property (GObject      *object,
       area = g_value_get_object (value);
 
       if (area)
-	view->priv->cell_area = g_object_ref_sink (area);
+	view->priv->area = g_object_ref_sink (area);
       break;
     case PROP_CELL_AREA_CONTEXT:
       /* Construct-only, can only be assigned once */
       context = g_value_get_object (value);
 
       if (context)
-	view->priv->cell_area_context = g_object_ref (context);
+	view->priv->context = g_object_ref (context);
       break;
 
     default:
@@ -450,16 +450,16 @@ gtk_cell_view_dispose (GObject *object)
       cellview->priv->model = NULL;
     }
 
-  if (cellview->priv->cell_area)
+  if (cellview->priv->area)
     {
-      g_object_unref (cellview->priv->cell_area);
-      cellview->priv->cell_area = NULL;
+      g_object_unref (cellview->priv->area);
+      cellview->priv->area = NULL;
     }
 
-  if (cellview->priv->cell_area_context)
+  if (cellview->priv->context)
     {
-      g_object_unref (cellview->priv->cell_area_context);
-      cellview->priv->cell_area_context = NULL;
+      g_object_unref (cellview->priv->context);
+      cellview->priv->context = NULL;
     }
 
   G_OBJECT_CLASS (gtk_cell_view_parent_class)->dispose (object);
@@ -475,16 +475,14 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  gtk_cell_area_context_get_allocation (priv->cell_area_context, &alloc_width, &alloc_height);
+  gtk_cell_area_context_get_allocation (priv->context, &alloc_width, &alloc_height);
 
-  /* Only allocate the GtkCellAreaContext if it has not been done for us by
-   * another widget (i.e. GtkTreeMenu)... in this case we assume that
-   * we own our GtkCellArea and GtkCellAreaContext and they are not shared with
-   * other cell views. */
+  /* The first cell view in context is responsible for allocating the context at allocate time 
+   * (or the cellview has its own context and is not grouped with any other cell views) */
   if (alloc_width <= 0 && alloc_height <= 0)
     {
-      gtk_cell_area_context_allocate_width (priv->cell_area_context, allocation->width);
-      gtk_cell_area_context_allocate_height (priv->cell_area_context, allocation->height);
+      gtk_cell_area_context_allocate_width (priv->context, allocation->width);
+      gtk_cell_area_context_allocate_height (priv->context, allocation->height);
     }
 }
 
@@ -526,7 +524,7 @@ gtk_cell_view_draw (GtkWidget *widget,
     state = 0;
       
   /* Render the cells */
-  gtk_cell_area_render (cellview->priv->cell_area, cellview->priv->cell_area_context, 
+  gtk_cell_area_render (cellview->priv->area, cellview->priv->context, 
 			widget, cr, &area, &area, state, FALSE);
 
   return FALSE;
@@ -547,7 +545,7 @@ gtk_cell_view_set_cell_data (GtkCellView *cell_view)
   gtk_tree_model_get_iter (cell_view->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
-  gtk_cell_area_apply_attributes (cell_view->priv->cell_area, 
+  gtk_cell_area_apply_attributes (cell_view->priv->area, 
 				  cell_view->priv->model, 
 				  &iter, FALSE, FALSE);
 }
@@ -560,7 +558,7 @@ gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview->priv->cell_area), renderer, expand);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview->priv->area), renderer, expand);
 
   gtk_widget_queue_resize (GTK_WIDGET (cellview));
 }
@@ -572,7 +570,7 @@ gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (cellview->priv->cell_area), renderer, expand);
+  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (cellview->priv->area), renderer, expand);
 
   gtk_widget_queue_resize (GTK_WIDGET (cellview));
 }
@@ -585,7 +583,7 @@ gtk_cell_view_cell_layout_add_attribute (GtkCellLayout   *layout,
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (cellview->priv->cell_area), renderer, 
+  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (cellview->priv->area), renderer, 
 				 attribute, column);
 }
 
@@ -594,8 +592,8 @@ gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  if (cellview->priv->cell_area)
-    gtk_cell_layout_clear (GTK_CELL_LAYOUT (cellview->priv->cell_area));
+  if (cellview->priv->area)
+    gtk_cell_layout_clear (GTK_CELL_LAYOUT (cellview->priv->area));
 }
 
 static void
@@ -607,7 +605,7 @@ gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (cellview->priv->cell_area),
+  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (cellview->priv->area),
 				      cell, func, func_data, destroy);
 }
 
@@ -617,7 +615,7 @@ gtk_cell_view_cell_layout_clear_attributes (GtkCellLayout   *layout,
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (cellview->priv->cell_area), renderer);
+  gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (cellview->priv->area), renderer);
 }
 
 static void
@@ -627,7 +625,7 @@ gtk_cell_view_cell_layout_reorder (GtkCellLayout   *layout,
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  gtk_cell_layout_reorder (GTK_CELL_LAYOUT (cellview->priv->cell_area), cell, position);
+  gtk_cell_layout_reorder (GTK_CELL_LAYOUT (cellview->priv->area), cell, position);
 }
 
 
@@ -636,7 +634,7 @@ gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cellview->priv->cell_area));
+  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cellview->priv->area));
 }
 
 static GtkCellArea *
@@ -644,7 +642,7 @@ gtk_cell_view_cell_layout_get_area (GtkCellLayout   *layout)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  return cellview->priv->cell_area;
+  return cellview->priv->area;
 }
 
 /**
@@ -688,6 +686,9 @@ GtkWidget *
 gtk_cell_view_new_with_context (GtkCellArea        *area,
 				GtkCellAreaContext *context)
 {
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+  g_return_val_if_fail (context == NULL || GTK_IS_CELL_AREA_CONTEXT (context), NULL);
+
   return (GtkWidget *)g_object_new (GTK_TYPE_CELL_VIEW, 
 				    "cell-area", area,
 				    "cell-area-context", context,
@@ -1166,9 +1167,9 @@ gtk_cell_view_get_preferred_width  (GtkWidget *widget,
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
 
-  gtk_cell_area_get_preferred_width (priv->cell_area, priv->cell_area_context, widget, NULL, NULL);
-  gtk_cell_area_context_sum_preferred_width (priv->cell_area_context);
-  gtk_cell_area_context_get_preferred_width (priv->cell_area_context, minimum_size, natural_size);
+  gtk_cell_area_get_preferred_width (priv->area, priv->context, widget, NULL, NULL);
+  gtk_cell_area_context_sum_preferred_width (priv->context);
+  gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
 }
 
 static void       
@@ -1182,9 +1183,9 @@ gtk_cell_view_get_preferred_height (GtkWidget *widget,
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
 
-  gtk_cell_area_get_preferred_height (priv->cell_area, priv->cell_area_context, widget, NULL, NULL);
-  gtk_cell_area_context_sum_preferred_height (priv->cell_area_context);
-  gtk_cell_area_context_get_preferred_height (priv->cell_area_context, minimum_size, natural_size);
+  gtk_cell_area_get_preferred_height (priv->area, priv->context, widget, NULL, NULL);
+  gtk_cell_area_context_sum_preferred_height (priv->context);
+  gtk_cell_area_context_get_preferred_height (priv->context, minimum_size, natural_size);
 }
 
 static void       
@@ -1199,7 +1200,7 @@ gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
 
-  gtk_cell_area_get_preferred_width_for_height (priv->cell_area, priv->cell_area_context, widget, 
+  gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, widget, 
 						for_size, minimum_size, natural_size);
 }
 
@@ -1215,6 +1216,6 @@ gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
 
-  gtk_cell_area_get_preferred_height_for_width (priv->cell_area, priv->cell_area_context, widget, 
+  gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, widget, 
 						for_size, minimum_size, natural_size);
 }
