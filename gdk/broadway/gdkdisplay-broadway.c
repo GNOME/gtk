@@ -159,10 +159,65 @@ send_error (HttpRequest *request,
 }
 
 static void
+send_data (HttpRequest *request,
+	     const char *mimetype,
+	     const char *data, gsize len)
+{
+  char *res;
+
+  res = g_strdup_printf ("HTTP/1.0 200 OK\r\n"
+			 "Content-Type: %s\r\n"
+			 "Content-Length: %"G_GSIZE_FORMAT"\r\n"
+			 "\r\n",
+			 mimetype, len);
+  /* TODO: This should really be async */
+  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+			     res, strlen (res), NULL, NULL, NULL);
+  g_free (res);
+  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+			     data, len, NULL, NULL, NULL);
+  http_request_free (request);
+}
+
+#include "clienthtml.h"
+#include "broadwayjs.h"
+
+static void
 got_request (HttpRequest *request)
 {
-  g_print ("got request:\n%s", request->request->str);
-  send_error (request, 404, "Not implemented yet");
+  char *start, *escaped, *tmp, *version;
+
+  if (!g_str_has_prefix (request->request->str, "GET "))
+    {
+      send_error (request, 501, "Only GET implemented");
+      return;
+    }
+
+  start = request->request->str + 4; /* Skip "GET " */
+
+  while (*start == ' ')
+    start++;
+
+  for (tmp = start; *tmp != 0 && *tmp != ' ' && *tmp != '\n'; tmp++)
+    ;
+  escaped = g_strndup (start, tmp - start);
+  version = NULL;
+  if (*tmp == ' ')
+    {
+      start = tmp;
+      while (*start == ' ')
+	start++;
+      for (tmp = start; *tmp != 0 && *tmp != ' ' && *tmp != '\n'; tmp++)
+	;
+      version = g_strndup (start, tmp - start);
+    }
+
+  if (strcmp (escaped, "/client.html") == 0)
+    send_data (request, "text/html", client_html, G_N_ELEMENTS(client_html) - 1);
+  else if (strcmp (escaped, "/broadway.js") == 0)
+    send_data (request, "text/javascript", broadway_js, G_N_ELEMENTS(broadway_js) - 1);
+  else
+    send_error (request, 404, "File not found");
 }
 
 static void
