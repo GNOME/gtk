@@ -74,6 +74,7 @@ struct _GdkDisplayBroadway
   /* The offscreen window that has the pointer in it (if any) */
   GdkWindow *active_offscreen_window;
 
+  GSocketService *service;
   BroadwayClient *connection;
 };
 

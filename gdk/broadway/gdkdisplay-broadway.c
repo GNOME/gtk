@@ -122,6 +122,106 @@ _gdk_input_init (GdkDisplay *display)
   g_list_free (list);
 }
 
+typedef struct {
+  GdkDisplay *display;
+  GSocketConnection *connection;
+  GDataInputStream *data;
+  GString *request;
+} HttpRequest;
+
+static void
+http_request_free (HttpRequest *request)
+{
+  g_object_unref (request->connection);
+  g_object_unref (request->data);
+  g_string_free (request->request, TRUE);
+  g_free (request);
+}
+
+static void
+send_error (HttpRequest *request,
+	    int error_code,
+	    const char *reason)
+{
+  char *res;
+
+  res = g_strdup_printf ("HTTP/1.0 %d %s\r\n\r\n"
+			 "<html><head><title>%d %s</title></head>"
+			 "<body>%s</body></html>",
+			 error_code, reason,
+			 error_code, reason,
+			 reason);
+  /* TODO: This should really be async */
+  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+			     res, strlen (res), NULL, NULL, NULL);
+  g_free (res);
+  http_request_free (request);
+}
+
+static void
+got_request (HttpRequest *request)
+{
+  g_print ("got request:\n%s", request->request->str);
+  send_error (request, 404, "Not implemented yet");
+}
+
+static void
+got_http_request_line (GOutputStream *stream,
+		       GAsyncResult *result,
+		       HttpRequest *request)
+{
+  char *line;
+
+  line = g_data_input_stream_read_line_finish (G_DATA_INPUT_STREAM (stream), result, NULL, NULL);
+  if (line == NULL)
+    {
+      http_request_free (request);
+      g_printerr ("Error reading request lines\n");
+      return;
+    }
+  if (strlen (line) == 0)
+    got_request (request);
+  else
+    {
+      /* Protect against overflow in request length */
+      if (request->request->len > 1024 * 5)
+	{
+	  send_error (request, 400, "Request to long");
+	}
+      else
+	{
+	  g_string_append_printf (request->request, "%s\n", line);
+	  g_data_input_stream_read_line_async (request->data, 0, NULL,
+					       (GAsyncReadyCallback)got_http_request_line, request);
+	}
+    }
+  g_free (line);
+}
+
+static gboolean
+handle_incoming_connection (GSocketService    *service,
+			    GSocketConnection *connection,
+			    GObject           *source_object)
+{
+  HttpRequest *request;
+  GInputStream *in;
+
+  request = g_new0 (HttpRequest, 1);
+  request->connection = g_object_ref (connection);
+  request->display = (GdkDisplay *) source_object;
+  request->request = g_string_new ("");
+
+  in = g_io_stream_get_input_stream (G_IO_STREAM (connection));
+
+  request->data = g_data_input_stream_new (in);
+  /* Be tolerant of input */
+  g_data_input_stream_set_newline_type (request->data, G_DATA_STREAM_NEWLINE_TYPE_ANY);
+
+  g_data_input_stream_read_line_async (request->data, 0, NULL,
+				       (GAsyncReadyCallback)got_http_request_line, request);
+  return TRUE;
+}
+
 GdkDisplay *
 gdk_display_open (const gchar *display_name)
 {
@@ -129,6 +229,7 @@ gdk_display_open (const gchar *display_name)
   GdkDisplayBroadway *display_broadway;
   const char *sm_client_id;
   int fd;
+  GError *error;
 
   fd = dup(STDOUT_FILENO);
   dup2(STDERR_FILENO, STDOUT_FILENO);
@@ -162,6 +263,18 @@ gdk_display_open (const gchar *display_name)
   _gdk_dnd_init (display);
 
   _gdk_broadway_screen_setup (display_broadway->screens[0]);
+
+  display_broadway->service = g_socket_service_new ();
+  if (!g_socket_listener_add_inet_port (G_SOCKET_LISTENER (display_broadway->service),
+					8080,
+					G_OBJECT (display),
+					&error))
+    {
+      g_printerr ("Unable to listen to port %d: %s\n", 8080, error->message);
+      g_error_free (error);
+      return NULL;
+    }
+  g_signal_connect (display_broadway->service, "incoming", G_CALLBACK (handle_incoming_connection), NULL);
 
   g_signal_emit_by_name (display, "opened");
   g_signal_emit_by_name (gdk_display_manager_get (), "display-opened", display);
