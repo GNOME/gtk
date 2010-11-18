@@ -631,7 +631,7 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
     }
 
   if (show_all)
-    gtk_open_with_widget_add_section (self, _("Fallback Applications"),
+    gtk_open_with_widget_add_section (self, _("Related Applications"),
 				      show_headings, FALSE, TRUE, fallback_apps, recommended_apps);
 
   if (show_all)
