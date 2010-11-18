@@ -62,6 +62,7 @@ enum {
   COLUMN_HEADING,
   COLUMN_HEADING_TEXT,
   COLUMN_RECOMMENDED,
+  COLUMN_FALLBACK,
   NUM_COLUMNS
 };
 
@@ -346,6 +347,7 @@ gtk_open_with_sort_func (GtkTreeModel *model,
 			 gpointer user_data)
 {
   gboolean a_recommended, b_recommended;
+  gboolean a_fallback, b_fallback;
   gboolean a_heading, b_heading;
   gchar *a_name, *b_name, *a_casefold, *b_casefold;
   gint retval;
@@ -359,12 +361,14 @@ gtk_open_with_sort_func (GtkTreeModel *model,
   gtk_tree_model_get (model, a,
 		      COLUMN_NAME, &a_name,
 		      COLUMN_RECOMMENDED, &a_recommended,
+		      COLUMN_FALLBACK, &a_fallback,
 		      COLUMN_HEADING, &a_heading,
 		      -1);
 
   gtk_tree_model_get (model, b,
 		      COLUMN_NAME, &b_name,
 		      COLUMN_RECOMMENDED, &b_recommended,
+		      COLUMN_FALLBACK, &b_fallback,
 		      COLUMN_HEADING, &b_heading,
 		      -1);
 
@@ -381,7 +385,20 @@ gtk_open_with_sort_func (GtkTreeModel *model,
       goto out;
     }
 
-  /* they're both recommended or not, so if one is a heading, wins */
+  /* the recommended one always wins */
+  if (a_fallback && !b_fallback)
+    {
+      retval = -1;
+      goto out;
+    }
+
+  if (b_fallback && !a_fallback)
+    {
+      retval = 1;
+      goto out;
+    }
+
+  /* they're both recommended/falback or not, so if one is a heading, wins */
   if (a_heading)
     {
       return -1;
@@ -463,12 +480,115 @@ compare_apps_func (gconstpointer a,
 }
 
 static void
+gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
+				  const gchar *heading_title,
+				  gboolean show_headings,
+				  gboolean recommended,
+				  gboolean fallback,
+				  GList *applications,
+				  GList *exclude_apps)
+{
+  gboolean heading_added, unref_icon;
+  GtkTreeIter iter;
+  GAppInfo *app;
+  gchar *app_string, *bold_string;
+  GIcon *icon;
+  GList *l;
+
+  heading_added = FALSE;
+  bold_string = g_strdup_printf ("<b>%s</b>", heading_title);
+  
+  for (l = applications; l != NULL; l = l->next)
+    {
+      app = l->data;
+
+      if (!g_app_info_supports_uris (app) &&
+	  !g_app_info_supports_files (app))
+	continue;
+
+      if (exclude_apps != NULL &&
+	  g_list_find_custom (exclude_apps, app,
+			      (GCompareFunc) compare_apps_func))
+	continue;
+
+      if (!heading_added && show_headings)
+	{
+	  gtk_list_store_append (self->priv->program_list_store, &iter);
+	  gtk_list_store_set (self->priv->program_list_store, &iter,
+			      COLUMN_HEADING_TEXT, bold_string,
+			      COLUMN_HEADING, TRUE,
+			      COLUMN_RECOMMENDED, recommended,
+			      COLUMN_FALLBACK, fallback,
+			      -1);
+
+	  heading_added = TRUE;
+	}
+
+      app_string = g_strdup_printf ("<b>%s</b>\n<i>%s</i>",
+				    g_app_info_get_display_name (app) != NULL ?
+				    g_app_info_get_display_name (app) : "",
+				    g_app_info_get_description (app) != NULL ?
+				    g_app_info_get_description (app) : "");
+
+      icon = g_app_info_get_icon (app);
+      if (icon == NULL)
+	{
+	  icon = g_themed_icon_new ("application-x-executable");
+	  unref_icon = TRUE;
+	}
+
+      gtk_list_store_append (self->priv->program_list_store, &iter);
+      gtk_list_store_set (self->priv->program_list_store, &iter,
+			  COLUMN_APP_INFO, app,
+			  COLUMN_GICON, icon,
+			  COLUMN_NAME, g_app_info_get_display_name (app),
+			  COLUMN_DESC, app_string,
+			  COLUMN_EXEC, g_app_info_get_executable (app),
+			  COLUMN_HEADING, FALSE,
+			  COLUMN_RECOMMENDED, recommended,
+			  COLUMN_FALLBACK, fallback,
+			  -1);
+
+      g_free (app_string);
+      if (unref_icon)
+	g_object_unref (icon);
+
+      unref_icon = FALSE;
+    }
+
+  g_free (bold_string);
+}
+
+static void
+add_no_applications_label (GtkOpenWithWidget *self)
+{
+  gchar *string, *string2, *desc;
+  GtkTreeIter iter;
+
+  desc = g_content_type_get_description (self->priv->content_type);
+  string2 = g_strdup_printf (_("Cannot find any compatible application for \"%s\""),
+			     desc);
+
+  string = g_strdup_printf ("<big><b>%s</b></big>\n<i>%s</i>",
+			    string2,
+			    _("Click on \"Show more applications\" for a list of fallback options"));
+
+  gtk_list_store_append (self->priv->program_list_store, &iter);
+  gtk_list_store_set (self->priv->program_list_store, &iter,
+		      COLUMN_HEADING_TEXT, string,
+		      COLUMN_HEADING, TRUE,
+		      COLUMN_RECOMMENDED, TRUE,
+		      -1);
+
+  g_free (string);
+  g_free (string2); 
+  g_free (desc); 
+}
+
+static void
 gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 {
-  GList *all_applications = NULL, *content_type_apps = NULL, *l;
-  gchar *app_string;
-  GIcon *icon;
-  gboolean heading_added, unref_icon;
+  GList *all_applications = NULL, *content_type_apps = NULL, *recommended_apps = NULL, *fallback_apps = NULL;
   gboolean show_recommended, show_headings, show_all;
 
   if (self->priv->show_mode == GTK_OPEN_WITH_WIDGET_SHOW_MODE_RECOMMENDED)
@@ -491,123 +611,32 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
     }
 
   if (show_recommended)
-    content_type_apps = g_app_info_get_all_for_type (self->priv->content_type);
+    {
+      recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
+      fallback_apps = g_app_info_get_fallback_for_type (self->priv->content_type);
+      content_type_apps = g_list_concat (g_list_copy (recommended_apps),
+					 g_list_copy (fallback_apps));
+    }
 
   if (show_all)
     all_applications = g_app_info_get_all ();
 
-  heading_added = FALSE;
-  
-  for (l = content_type_apps; l != NULL; l = l->next)
+  if (show_recommended)
     {
-      GAppInfo *app = l->data;
-      GtkTreeIter iter;
-
-      if (!g_app_info_supports_uris (app) &&
-	  !g_app_info_supports_files (app))
-	continue;
-
-      if (!heading_added && show_headings)
-	{
-	  gtk_list_store_append (self->priv->program_list_store, &iter);
-	  gtk_list_store_set (self->priv->program_list_store, &iter,
-			      COLUMN_HEADING_TEXT, _("Recommended Applications"),
-			      COLUMN_HEADING, TRUE,
-			      COLUMN_RECOMMENDED, TRUE,
-			      -1);
-
-	  heading_added = TRUE;
-	}
-
-      app_string = g_strdup_printf ("<b>%s</b>\n<i>%s</i>",
-				    g_app_info_get_display_name (app) != NULL ?
-				    g_app_info_get_display_name (app) : "",
-				    g_app_info_get_description (app) != NULL ?
-				    g_app_info_get_description (app) : "");
-
-      icon = g_app_info_get_icon (app);
-      if (icon == NULL)
-	{
-	  icon = g_themed_icon_new ("application-x-executable");
-	  unref_icon = TRUE;
-	}
-
-      gtk_list_store_append (self->priv->program_list_store, &iter);
-      gtk_list_store_set (self->priv->program_list_store, &iter,
-			  COLUMN_APP_INFO, app,
-			  COLUMN_GICON, icon,
-			  COLUMN_NAME, g_app_info_get_display_name (app),
-			  COLUMN_DESC, app_string,
-			  COLUMN_EXEC, g_app_info_get_executable (app),
-			  COLUMN_HEADING, FALSE,
-			  COLUMN_RECOMMENDED, TRUE,
-			  -1);
-
-      g_free (app_string);
-      if (unref_icon)
-	g_object_unref (icon);
-
-      unref_icon = FALSE;
+      if (recommended_apps != NULL)
+	gtk_open_with_widget_add_section (self, _("Recommended Applications"),
+					  show_headings, TRUE, FALSE, recommended_apps, NULL);
+      else if (!self->priv->show_more_clicked)
+	add_no_applications_label (self);
     }
 
-  heading_added = FALSE;
+  if (show_all)
+    gtk_open_with_widget_add_section (self, _("Fallback Applications"),
+				      show_headings, FALSE, TRUE, fallback_apps, recommended_apps);
 
-  for (l = all_applications; l != NULL && show_all; l = l->next)
-    {
-      GAppInfo *app = l->data;
-      GtkTreeIter iter;
-
-      if (!g_app_info_supports_uris (app) &&
-	  !g_app_info_supports_files (app))
-	continue;
-
-      if (content_type_apps != NULL &&
-	  g_list_find_custom (content_type_apps, app,
-			      (GCompareFunc) compare_apps_func))
-	continue;
-
-      if (!heading_added && show_headings)
-	{
-	  gtk_list_store_append (self->priv->program_list_store, &iter);
-	  gtk_list_store_set (self->priv->program_list_store, &iter,
-			      COLUMN_HEADING_TEXT, _("Other Applications"),
-			      COLUMN_HEADING, TRUE,
-			      COLUMN_RECOMMENDED, FALSE,
-			      -1);
-
-	  heading_added = TRUE;
-	}
-
-      app_string = g_strdup_printf ("<b>%s</b>\n<i>%s</i>",
-				    g_app_info_get_display_name (app) != NULL ?
-				    g_app_info_get_display_name (app) : "",
-				    g_app_info_get_description (app) != NULL ?
-				    g_app_info_get_description (app) : "");
-
-      icon = g_app_info_get_icon (app);
-      if (icon == NULL)
-	{
-	  icon = g_themed_icon_new ("application-x-executable");
-	  unref_icon = TRUE;
-	}
-
-      gtk_list_store_append (self->priv->program_list_store, &iter);
-      gtk_list_store_set (self->priv->program_list_store, &iter,
-			  COLUMN_APP_INFO, app,
-			  COLUMN_GICON, icon,
-			  COLUMN_NAME, g_app_info_get_display_name (app),
-			  COLUMN_DESC, app_string,
-			  COLUMN_EXEC, g_app_info_get_executable (app),
-			  COLUMN_HEADING, FALSE,
-			  COLUMN_RECOMMENDED, FALSE,
-			  -1);
-
-      g_free (app_string);
-      if (unref_icon)
-	g_object_unref (icon);
-
-      unref_icon = FALSE;
-    }
+  if (show_all)
+    gtk_open_with_widget_add_section (self, _("Other Applications"),
+				      show_headings, FALSE, FALSE, all_applications, content_type_apps);
 
   if (content_type_apps != NULL)
     g_list_free_full (content_type_apps, g_object_unref);
@@ -632,6 +661,7 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
 						       G_TYPE_STRING,
 						       G_TYPE_BOOLEAN,
 						       G_TYPE_STRING,
+						       G_TYPE_BOOLEAN,
 						       G_TYPE_BOOLEAN);
   sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (self->priv->program_list_store));
 
@@ -665,14 +695,14 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "text", COLUMN_HEADING_TEXT,
+				       "markup", COLUMN_HEADING_TEXT,
 				       "visible", COLUMN_HEADING,
 				       NULL);
   g_object_set (renderer,
-		"weight", PANGO_WEIGHT_BOLD,
-		"weight-set", TRUE,
 		"ypad", 6,
 		"xpad", 0,
+		"wrap-width", 350,
+		"wrap-mode", PANGO_WRAP_WORD,
 		NULL);
 
   /* padding renderer for non-heading cells */
