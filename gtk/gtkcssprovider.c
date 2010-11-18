@@ -2896,10 +2896,10 @@ parse_stylesheet (GtkCssProvider *css_provider)
  * Returns: %TRUE if the data could be loaded.
  **/
 gboolean
-gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
-                                 const gchar    *data,
-                                 gssize          length,
-                                 GError         *error)
+gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
+                                 const gchar     *data,
+                                 gssize           length,
+                                 GError         **error)
 {
   GtkCssProviderPrivate *priv;
 

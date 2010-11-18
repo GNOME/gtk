@@ -49,10 +49,10 @@ GType gtk_css_provider_get_type (void) G_GNUC_CONST;
 
 GtkCssProvider * gtk_css_provider_new (void);
 
-gboolean         gtk_css_provider_load_from_data (GtkCssProvider *css_provider,
-                                                  const gchar    *data,
-                                                  gssize          length,
-                                                  GError         *error);
+gboolean         gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
+                                                  const gchar     *data,
+                                                  gssize           length,
+                                                  GError         **error);
 gboolean         gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
                                                   GFile           *file,
                                                   GError         **error);
