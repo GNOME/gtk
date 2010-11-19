@@ -369,6 +369,7 @@ style_info_copy (const GtkStyleInfo *info)
                        info->regions->len);
 
   copy->junction_sides = info->junction_sides;
+  copy->state_flags = info->state_flags;
 
   return copy;
 }
