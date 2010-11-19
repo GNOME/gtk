@@ -16,20 +16,42 @@ static GtkCellRenderer *cell_1 = NULL, *cell_2 = NULL, *cell_3 = NULL;
 static GtkTreeModel *
 simple_tree_model (void)
 {
-  GtkTreeIter   iter;
+  GtkTreeIter   iter, parent;
   GtkTreeStore *store = 
     gtk_tree_store_new (N_SIMPLE_COLUMNS,
 			G_TYPE_STRING,  /* name text */
 			G_TYPE_STRING,  /* icon name */
 			G_TYPE_STRING); /* description text */
 
-  gtk_tree_store_append (store, &iter, NULL);
-  gtk_tree_store_set (store, &iter, 
+
+  gtk_tree_store_append (store, &parent, NULL);
+  gtk_tree_store_set (store, &parent, 
 		      SIMPLE_COLUMN_NAME, "Alice in wonderland",
 		      SIMPLE_COLUMN_ICON, "gtk-execute",
 		      SIMPLE_COLUMN_DESCRIPTION, 
 		      "Twas brillig, and the slithy toves "
 		      "did gyre and gimble in the wabe",
+		      -1);
+
+  gtk_tree_store_append (store, &iter, &parent);
+  gtk_tree_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Go ask",
+		      SIMPLE_COLUMN_ICON, "gtk-zoom-out",
+		      SIMPLE_COLUMN_DESCRIPTION, "One pill makes you shorter",
+		      -1);
+
+  gtk_tree_store_append (store, &iter, &parent);
+  gtk_tree_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Alice",
+		      SIMPLE_COLUMN_ICON, "gtk-zoom-in",
+		      SIMPLE_COLUMN_DESCRIPTION, "Another one makes you tall",
+		      -1);
+
+  gtk_tree_store_append (store, &iter, &parent);
+  gtk_tree_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Jefferson Airplane",
+		      SIMPLE_COLUMN_ICON, "gtk-zoom-fit",
+		      SIMPLE_COLUMN_DESCRIPTION, "The one's that mother gives you dont do anything at all",
 		      -1);
 
   gtk_tree_store_append (store, &iter, NULL);
@@ -42,7 +64,7 @@ simple_tree_model (void)
   gtk_tree_store_append (store, &iter, NULL);
   gtk_tree_store_set (store, &iter, 
 		      SIMPLE_COLUMN_NAME, "George Bush",
-		      SIMPLE_COLUMN_ICON, "gtk-dialog-warning",
+		      SIMPLE_COLUMN_ICON, "gtk-dialog-question",
 		      SIMPLE_COLUMN_DESCRIPTION, "It's a very good question, very direct, "
 		      "and I'm not going to answer it",
 		      -1);
@@ -88,6 +110,7 @@ simple_tree_menu (void)
 
   menu = gtk_tree_menu_new ();
   gtk_tree_menu_set_model (GTK_TREE_MENU (menu), model);
+  gtk_tree_menu_set_root (GTK_TREE_MENU (menu), NULL);
 
   area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (menu));
 
