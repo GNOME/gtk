@@ -207,6 +207,9 @@ _gdk_broadway_resync_windows (void)
 
       private = (GdkWindowObject*) GDK_DRAWABLE_IMPL_BROADWAY (impl)->wrapper;
 
+      if (impl->id == 0)
+	continue; /* Skip root */
+
       impl->dirty = FALSE;
       impl->last_synced = FALSE;
       g_print ("creating new window %d at %d,%d %dx%d\n",
