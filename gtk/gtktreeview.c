@@ -13501,7 +13501,7 @@ unset_reorderable (GtkTreeView *tree_view)
  * gtk_tree_view_enable_model_drag_source:
  * @tree_view: a #GtkTreeView
  * @start_button_mask: Mask of allowed buttons to start drag
- * @targets: the table of targets that the drag will support
+ * @targets: (array): the table of targets that the drag will support
  * @n_targets: the number of items in @targets
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
@@ -13538,7 +13538,7 @@ gtk_tree_view_enable_model_drag_source (GtkTreeView              *tree_view,
 /**
  * gtk_tree_view_enable_model_drag_dest:
  * @tree_view: a #GtkTreeView
- * @targets: the table of targets that the drag will support
+ * @targets: (array): the table of targets that the drag will support
  * @n_targets: the number of items in @targets
  * @actions: the bitmask of possible actions for a drag from this
  *    widget
