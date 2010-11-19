@@ -69,12 +69,40 @@ simple_tree_model (void)
 		      "and I'm not going to answer it",
 		      -1);
 
-  gtk_tree_store_append (store, &iter, NULL);
-  gtk_tree_store_set (store, &iter, 
+  gtk_tree_store_append (store, &parent, NULL);
+  gtk_tree_store_set (store, &parent, 
 		      SIMPLE_COLUMN_NAME, "Whinnie the pooh",
 		      SIMPLE_COLUMN_ICON, "gtk-stop",
 		      SIMPLE_COLUMN_DESCRIPTION, "The most wonderful thing about tiggers, "
 		      "is tiggers are wonderful things",
+		      -1);
+
+  gtk_tree_store_append (store, &iter, &parent);
+  gtk_tree_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Tigger",
+		      SIMPLE_COLUMN_ICON, "gtk-yes",
+		      SIMPLE_COLUMN_DESCRIPTION, "Eager",
+		      -1);
+
+  gtk_tree_store_append (store, &iter, &parent);
+  gtk_tree_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Owl",
+		      SIMPLE_COLUMN_ICON, "gtk-stop",
+		      SIMPLE_COLUMN_DESCRIPTION, "Wise",
+		      -1);
+
+  gtk_tree_store_append (store, &iter, &parent);
+  gtk_tree_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Eor",
+		      SIMPLE_COLUMN_ICON, "gtk-no",
+		      SIMPLE_COLUMN_DESCRIPTION, "Depressed",
+		      -1);
+
+  gtk_tree_store_append (store, &iter, &parent);
+  gtk_tree_store_set (store, &iter, 
+		      SIMPLE_COLUMN_NAME, "Piglet",
+		      SIMPLE_COLUMN_ICON, "gtk-media-play",
+		      SIMPLE_COLUMN_DESCRIPTION, "Insecure",
 		      -1);
 
   gtk_tree_store_append (store, &iter, NULL);
