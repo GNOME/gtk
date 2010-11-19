@@ -153,14 +153,166 @@ set_fd_blocking (int fd)
   fcntl (fd, F_SETFL, arg);
 }
 
+static char *
+parse_line (char *line, char *key)
+{
+  char *p;
+
+  if (!g_str_has_prefix (line, key))
+    return NULL;
+  p = line + strlen (key);
+  if (*p != ':')
+    return NULL;
+  p++;
+  /* Skip optional initial space */
+  if (*p == ' ')
+    p++;
+  return p;
+}
+
+static void
+got_input (GInputStream *stream,
+	   GAsyncResult *result,
+	   HttpRequest *request)
+{
+  char *message;
+  gsize len;
+  GError *error = NULL;
+
+  message = g_data_input_stream_read_upto_finish (G_DATA_INPUT_STREAM (stream), result, &len, &error);
+  if (message == NULL)
+    {
+      g_print (error->message);
+      g_error_free (error);
+      exit (1);
+    }
+  g_assert (message[0] == 0);
+  g_print ("message: %s\n", message+1);
+  /* Skip past ending 0xff */
+  g_data_input_stream_read_byte (request->data, NULL, NULL);
+  g_data_input_stream_read_upto_async (request->data, "\xff", 1, 0, NULL,
+				       (GAsyncReadyCallback)got_input, request);
+}
+
+static void
+start_input (HttpRequest *request)
+{
+  char **lines;
+  char *p;
+  int num_key1, num_key2;
+  guint64 key1, key2;
+  int num_space;
+  int i;
+  guint8 challenge[16];
+  char *res;
+  gsize len;
+  GChecksum *checksum;
+  char *origin, *host;
+
+  lines = g_strsplit (request->request->str, "\n", 0);
+
+  num_key1 = 0;
+  num_key2 = 0;
+  key1 = 0;
+  key2 = 0;
+  origin = NULL;
+  host = NULL;
+  for (i = 0; lines[i] != NULL; i++)
+    {
+      if ((p = parse_line (lines[i], "Sec-WebSocket-Key1")))
+	{
+	  num_space = 0;
+	  while (*p != 0)
+	    {
+	      if (g_ascii_isdigit (*p))
+		key1 = key1 * 10 + g_ascii_digit_value (*p);
+	      else if (*p == ' ')
+		num_space++;
+
+	      p++;
+	    }
+	  key1 /= num_space;
+	  num_key1++;
+	}
+      else if ((p = parse_line (lines[i], "Sec-WebSocket-Key2")))
+	{
+	  num_space = 0;
+	  while (*p != 0)
+	    {
+	      if (g_ascii_isdigit (*p))
+		key2 = key2 * 10 + g_ascii_digit_value (*p);
+	      else if (*p == ' ')
+		num_space++;
+
+	      p++;
+	    }
+	  key2 /= num_space;
+	  num_key2++;
+	}
+      else if ((p = parse_line (lines[i], "Origin")))
+	{
+	  origin = p;
+	}
+      else if ((p = parse_line (lines[i], "Host")))
+	{
+	  host = p;
+	}
+    }
+
+
+  if (num_key1 != 1 || num_key2 != 1 || origin == NULL || host == NULL)
+    {
+      g_print ("error");
+      exit (1);
+    }
+
+  challenge[0] = (key1 >> 24) & 0xff;
+  challenge[1] = (key1 >> 16) & 0xff;
+  challenge[2] = (key1 >>  8) & 0xff;
+  challenge[3] = (key1 >>  0) & 0xff;
+  challenge[4] = (key2 >> 24) & 0xff;
+  challenge[5] = (key2 >> 16) & 0xff;
+  challenge[6] = (key2 >>  8) & 0xff;
+  challenge[7] = (key2 >>  0) & 0xff;
+
+  if (!g_input_stream_read_all (G_INPUT_STREAM (request->data), challenge+8, 8, NULL, NULL, NULL))
+    {
+      g_print ("error");
+      exit (1);
+    }
+
+  checksum = g_checksum_new (G_CHECKSUM_MD5);
+  g_checksum_update (checksum, challenge, 16);
+  len = 16;
+  g_checksum_get_digest (checksum, challenge, &len);
+  g_checksum_free (checksum);
+
+  res = g_strdup_printf ("HTTP/1.1 101 WebSocket Protocol Handshake\r\n"
+			 "Upgrade: WebSocket\r\n"
+			 "Connection: Upgrade\r\n"
+			 "Sec-WebSocket-Origin: %s\r\n"
+			 "Sec-WebSocket-Location: ws://%s/input\r\n"
+			 "Sec-WebSocket-Protocol: broadway\r\n"
+			 "\r\n",
+			 origin, host);
+
+  /* TODO: This should really be async */
+  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+			     res, strlen (res), NULL, NULL, NULL);
+  g_free (res);
+  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+			     challenge, 16, NULL, NULL, NULL);
+
+  g_data_input_stream_read_upto_async (request->data, "\xff", 1, 0, NULL,
+				       (GAsyncReadyCallback)got_input, request);
+}
+
 static void
 start_output (HttpRequest *request)
 {
   GSocket *socket;
   GdkDisplayBroadway *display_broadway;
   int fd;
-
-  g_print ("start_output\n");
 
   socket = g_socket_connection_get_socket (request->connection);
 
@@ -256,12 +408,14 @@ got_request (HttpRequest *request)
     send_data (request, "text/javascript", broadway_js, G_N_ELEMENTS(broadway_js) - 1);
   else if (strcmp (escaped, "/output") == 0)
     start_output (request);
+  else if (strcmp (escaped, "/input") == 0)
+    start_input (request);
   else
     send_error (request, 404, "File not found");
 }
 
 static void
-got_http_request_line (GOutputStream *stream,
+got_http_request_line (GInputStream *stream,
 		       GAsyncResult *result,
 		       HttpRequest *request)
 {

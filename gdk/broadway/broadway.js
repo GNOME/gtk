@@ -278,6 +278,21 @@ function handleLoad(event)
   if (outstanding_commands.length == 1) {
     handleOutstanding()
   }
+
+  if ("WebSocket" in window) {
+    var loc = window.location.toString().replace("http:", "ws:");
+    loc = loc.substr(0, loc.lastIndexOf('/')) + "/input";
+    var ws = new WebSocket(loc, "broadway");
+    ws.onopen = function() {
+      ws.send("Message to send1");
+      ws.send("Message to send2");
+    };
+    ws.onmessage = function (evt) { var msg = evt.data;
+    };
+    ws.onclose = function() { };
+  } else {
+     alert("WebSocket not supported, input will not work!");
+  }
 }
 
 function connect()
