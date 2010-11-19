@@ -1355,7 +1355,6 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
   if (child)
     {
       GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
-      GtkRequisition child_requisition;
       GtkStyle *style;
       guint horizontal_padding;
       guint border_width;
@@ -1396,12 +1395,20 @@ gtk_menu_item_size_allocate (GtkWidget     *widget,
       child_allocation.x += allocation->x;
       child_allocation.y += allocation->y;
 
-      gtk_widget_get_preferred_size (child, &child_requisition, NULL);
       if ((menu_item->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
 	{
+	  guint arrow_spacing;
+	  gint  arrow_size;
+
+	  gtk_widget_style_get (widget,
+				"arrow-spacing", &arrow_spacing,
+				NULL);
+
+	  get_arrow_size (widget, child, &arrow_size);
+
 	  if (direction == GTK_TEXT_DIR_RTL)
-	    child_allocation.x += child_requisition.height;
-	  child_allocation.width -= child_requisition.height;
+	    child_allocation.x += arrow_size + arrow_spacing;
+	  child_allocation.width -= arrow_size + arrow_spacing;
 	}
       
       if (child_allocation.width < 1)
