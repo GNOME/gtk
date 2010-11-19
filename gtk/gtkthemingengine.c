@@ -873,9 +873,11 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
                                  gdouble           width,
                                  gdouble           height)
 {
-  GdkRGBA *fg_color, *bg_color;
+  GdkRGBA *fg_color, *bg_color, *border_color;
   GtkStateFlags flags;
   gint exterior_size, interior_size, thickness, pad;
+  GtkBorderStyle border_style;
+  gint border_width;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -883,6 +885,9 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "color", &fg_color,
                           "background-color", &bg_color,
+                          "border-color", &border_color,
+                          "border-style", &border_style,
+                          "border-width", &border_width,
                           NULL);
 
   exterior_size = MIN (width, height);
@@ -904,15 +909,19 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   x -= (1 + exterior_size - (gint) width) / 2;
   y -= (1 + exterior_size - (gint) height) / 2;
 
-  if (!gtk_theming_engine_has_class (engine, "menu"))
+  if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      cairo_set_line_width (cr, 1.0);
+      cairo_set_line_width (cr, border_width);
 
       cairo_rectangle (cr, x + 0.5, y + 0.5, exterior_size - 1, exterior_size - 1);
       gdk_cairo_set_source_rgba (cr, bg_color);
       cairo_fill_preserve (cr);
 
-      gdk_cairo_set_source_rgba (cr, fg_color);
+      if (border_color)
+        gdk_cairo_set_source_rgba (cr, border_color);
+      else
+        gdk_cairo_set_source_rgba (cr, fg_color);
+
       cairo_stroke (cr);
     }
 
@@ -976,6 +985,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
 
   gdk_rgba_free (fg_color);
   gdk_rgba_free (bg_color);
+  gdk_rgba_free (border_color);
 }
 
 static void
