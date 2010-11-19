@@ -524,7 +524,7 @@ got_request (HttpRequest *request)
       version = g_strndup (start, tmp - start);
     }
 
-  if (strcmp (escaped, "/client.html") == 0)
+  if (strcmp (escaped, "/client.html") == 0 || strcmp (escaped, "/") == 0)
     send_data (request, "text/html", client_html, G_N_ELEMENTS(client_html) - 1);
   else if (strcmp (escaped, "/broadway.js") == 0)
     send_data (request, "text/javascript", broadway_js, G_N_ELEMENTS(broadway_js) - 1);
