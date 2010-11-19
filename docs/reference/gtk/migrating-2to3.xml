@@ -355,9 +355,11 @@ cairo_destroy (cr);
       #GtkWidgetClass. The replacement for size_request() can
       take several levels of sophistication:
       <itemizedlist>
-        <listitem>As a minimal replacement to keep current functionality,
-        you can simply implement the get_preferred_width() and
-        get_preferred_height() vfuncs by calling your existing
+        <listitem>
+        <para>
+        As a minimal replacement to keep current functionality,
+        you can simply implement the #GtkWidgetClass.get_preferred_width() and
+        #GtkWidgetClass.get_preferred_height() vfuncs by calling your existing
         size_request() function. So you go from
         <informalexample><programlisting>
 static void
@@ -372,7 +374,9 @@ my_widget_class_init (MyWidgetClass *class)
   /* ... */
 }
         </programlisting></informalexample>
+        <para>
         to something that looks more like this:
+        </para>
         <informalexample><programlisting>
 static void
 my_widget_get_preferred_width (GtkWidget *widget,
@@ -414,9 +418,11 @@ my_widget_class_init (MyWidgetClass *class)
 
 }
         </programlisting></informalexample>
+          <para>
           Sometimes you can make things a little more streamlined
           by replacing your existing size_request() implementation by
           one that takes an orientation parameter:
+          </para>
           <informalexample><programlisting>
 static void
 my_widget_get_preferred_size (GtkWidget      *widget,
@@ -465,11 +471,14 @@ my_widget_get_preferred_height (GtkWidget *widget,
 
  /* ... */
           </programlisting></informalexample>
+          </para>
         </listitem>
-        <listitem>If your widget can cope with a small size,
+        <listitem>
+          <para>If your widget can cope with a small size,
           but would appreciate getting some more space (a common
           example would be that it contains ellipsizable labels),
-          you can do that by making your get_preferred_width()/height()
+          you can do that by making your #GtkWidgetClass.get_preferred_width() /
+          #GtkWidgetClass.get_preferred_height()
           functions return a smaller value for @minimal than for @natural.
           For @minimal, you probably want to return the same value
           that your size_request() function returned before (since
@@ -508,19 +517,28 @@ gtk_fixed_get_preferred_height (GtkWidget *widget,
     }
 }
           </programlisting></informalexample>
+          </para>
         </listitem>
-        <listitem>Note that the get_preferred_width()/height() functions
+        <listitem>
+          <para>
+          Note that the #GtkWidgetClass.get_preferred_width() /
+          #GtkWidgetClass.get_preferred_height() functions
           only allow you to deal with one dimension at a time. If your
           size_request() handler is doing things that involve both
           width and height at the same time (e.g. limiting the aspect
-          ratio), you will have to implement get_preferred_height_for_width()
-          and get_preferred_width_for_height().
+          ratio), you will have to implement
+          #GtkWidgetClass.get_preferred_height_for_width()
+          and #GtkWidgetClass.get_preferred_width_for_height().
+          </para>
         </listitem>
-        <listitem>To make full use of the new capabilities of the
+        <listitem>
+          <para>
+          To make full use of the new capabilities of the
           height-for-width geometry management, you need to additionally
-          implement the get_preferred_height_for_width() and
-          get_preferred_width_for_height(). For details on these functions,
-          see <xref linkend="geometry-management"/>.
+          implement the #GtkWidgetClass.get_preferred_height_for_width() and
+          #GtkWidgetClass.get_preferred_width_for_height(). For details on
+          these functions, see <xref linkend="geometry-management"/>.
+          </para>
         </listitem>
       </itemizedlist>
     </para>
