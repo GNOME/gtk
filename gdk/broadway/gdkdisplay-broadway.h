@@ -50,6 +50,7 @@ struct _GdkDisplayBroadway
   GdkScreen **screens;
 
   GSource *event_source;
+  GdkWindow *mouse_in_toplevel;
 
   gint grab_count;
 
