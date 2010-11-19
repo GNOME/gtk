@@ -1217,8 +1217,6 @@ copy_region (cairo_surface_t *surface,
 
   cr = cairo_create (surface);
 
-  area = cairo_region_copy (area);
-
   gdk_cairo_region (cr, area);
   cairo_clip (cr);
 
