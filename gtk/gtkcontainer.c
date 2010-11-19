@@ -2215,7 +2215,28 @@ static GtkWidgetPath *
 gtk_container_real_get_path_for_child (GtkContainer *container,
                                        GtkWidget    *child)
 {
-  return gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+  GtkStyleContext *context;
+  GtkWidgetPath *path;
+  GList *classes;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (container));
+  path = gtk_widget_path_copy (gtk_widget_get_path (GTK_WIDGET (container)));
+
+  /* Copy any permanent classes to the path */
+  classes = gtk_style_context_list_classes (context);
+
+  while (classes)
+    {
+      GList *cur;
+
+      cur = classes;
+      classes = classes->next;
+
+      gtk_widget_path_iter_add_class (path, -1, cur->data);
+      g_list_free_1 (cur);
+    }
+
+  return path;
 }
 
 static gboolean
