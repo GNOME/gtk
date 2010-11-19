@@ -160,6 +160,12 @@ gtk_widget_path_copy (const GtkWidgetPath *path)
             g_hash_table_insert (new.regions, key, value);
         }
 
+      if (elem->classes)
+        {
+          new.classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
+          g_array_append_vals (new.classes, elem->classes->data, elem->classes->len);
+        }
+
       g_array_append_val (new_path->elems, new);
     }
 
