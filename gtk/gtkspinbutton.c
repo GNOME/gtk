@@ -755,10 +755,11 @@ gtk_spin_button_expose (GtkWidget      *widget,
               width = gdk_window_get_width (spin->panel);
               height = gdk_window_get_height (spin->panel);
 
-	      gtk_paint_box (widget->style, spin->panel,
-			     state, shadow_type,
-			     &event->area, widget, "spinbutton",
-			     0, 0, width, height);
+              if (gtk_entry_get_has_frame (GTK_ENTRY (spin)))
+                gtk_paint_box (widget->style, spin->panel,
+                               state, shadow_type,
+                               &event->area, widget, "spinbutton",
+                               0, 0, width, height);
 	    }
 
 	  gtk_spin_button_draw_arrow (spin, &event->area, GTK_ARROW_UP);
