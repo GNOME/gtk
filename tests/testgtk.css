@@ -1,5 +1,5 @@
 /* testgtk2.css sets all the buttons in the main window to blue by default */
-@import url(testgtk2.css);
+@import url("testgtk2.css");
 
 * {
     -GtkButton-child-displacement-x: 1;
