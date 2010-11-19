@@ -93,18 +93,9 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
 static void
 gtk_check_button_init (GtkCheckButton *check_button)
 {
-  GtkStyleContext *context;
-
   gtk_widget_set_has_window (GTK_WIDGET (check_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
   gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (check_button), TRUE);
-
-  /* Remove the "button" class added in GtkButton constructor,
-   * since this widget implementation doesn't look like a button
-   * at all.
-   */
-  context = gtk_widget_get_style_context (GTK_WIDGET (check_button));
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BUTTON);
 }
 
 GtkWidget*

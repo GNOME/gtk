@@ -329,6 +329,8 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 
   if (priv->draw_indicator != draw_indicator)
     {
+      GtkStyleContext *context;
+
       priv->draw_indicator = draw_indicator;
       GTK_BUTTON (toggle_button)->priv->depress_on_activate = !draw_indicator;
 
@@ -336,6 +338,16 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
 
       g_object_notify (G_OBJECT (toggle_button), "draw-indicator");
+
+      /* Make toggle buttons conditionally have the "button"
+       * class depending on draw_indicator.
+       */
+      context = gtk_widget_get_style_context (GTK_WIDGET (toggle_button));
+
+      if (draw_indicator)
+        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BUTTON);
+      else
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
     }
 }
 
