@@ -230,23 +230,19 @@ gtk_widget_path_length (const GtkWidgetPath *path)
  *
  * Prepends a widget type to the widget hierachy represented by @path.
  *
- * Returns: the position where the element was inserted
- *
  * Since: 3.0
  **/
-guint
+void
 gtk_widget_path_prepend_type (GtkWidgetPath *path,
                               GType          type)
 {
   GtkPathElement new = { 0 };
 
-  g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), 0);
+  g_return_if_fail (path != NULL);
+  g_return_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET));
 
   new.type = type;
   g_array_prepend_val (path->elems, new);
-
-  return 0;
 }
 
 /**
