@@ -651,31 +651,50 @@ set_color (GtkStyle        *style,
            GtkStateType     state,
            GtkRcFlags       prop)
 {
+  GtkStateFlags flags;
   GdkRGBA *color = NULL;
   GdkColor *dest = { 0 }; /* Shut up gcc */
+
+  switch (state)
+    {
+    case GTK_STATE_ACTIVE:
+      flags = GTK_STATE_FLAG_ACTIVE;
+      break;
+    case GTK_STATE_PRELIGHT:
+      flags = GTK_STATE_FLAG_PRELIGHT;
+      break;
+    case GTK_STATE_SELECTED:
+      flags = GTK_STATE_FLAG_SELECTED;
+      break;
+    case GTK_STATE_INSENSITIVE:
+      flags = GTK_STATE_FLAG_INSENSITIVE;
+      break;
+    default:
+      flags = 0;
+    }
 
   switch (prop)
     {
     case GTK_RC_BG:
-      gtk_style_context_get (context, state,
+      gtk_style_context_get (context, flags,
                              "background-color", &color,
                              NULL);
       dest = &style->bg[state];
       break;
     case GTK_RC_FG:
-      gtk_style_context_get (context, state,
+      gtk_style_context_get (context, flags,
                              "color", &color,
                              NULL);
       dest = &style->fg[state];
       break;
     case GTK_RC_TEXT:
-      gtk_style_context_get (context, state,
+      gtk_style_context_get (context, flags,
                              "color", &color,
                              NULL);
       dest = &style->text[state];
       break;
     case GTK_RC_BASE:
-      gtk_style_context_get (context, state,
+      gtk_style_context_get (context, flags,
                              "background-color", &color,
                              NULL);
       dest = &style->base[state];
