@@ -30,6 +30,7 @@
 
 #include "gtkintl.h"
 #include "gtkopenwith.h"
+#include "gtkopenwithonline.h"
 #include "gtkopenwithprivate.h"
 
 #include <string.h>
@@ -45,6 +46,7 @@ struct _GtkOpenWithDialogPrivate {
 
   GtkWidget *label;
   GtkWidget *button;
+  GtkWidget *online_button;
 
   GtkWidget *open_label;
 
@@ -83,6 +85,47 @@ show_error_dialog (const gchar *primary,
 
   g_signal_connect (message_dialog, "response",
 		    G_CALLBACK (gtk_widget_destroy), NULL);
+}
+
+static void
+search_for_mimetype_ready_cb (GObject *source,
+			      GAsyncResult *res,
+			      gpointer user_data)
+{
+  GtkOpenWithOnline *online = GTK_OPEN_WITH_ONLINE (source);
+  GtkOpenWithDialog *self = user_data;
+  GError *error = NULL;
+
+  gtk_open_with_online_search_for_mimetype_finish (online, res, &error);
+
+  if (error != NULL)
+    {
+      show_error_dialog (_("Failed to look for applications online"),
+			 error->message, GTK_WINDOW (self));
+      g_error_free (error);
+    }
+  else
+    {
+      _gtk_open_with_widget_refilter (GTK_OPEN_WITH_WIDGET (self->priv->open_with_widget));
+    }
+
+  g_object_unref (online);
+}
+
+static void
+online_button_clicked_cb (GtkButton *b,
+			  gpointer user_data)
+{
+  GtkOpenWithOnline *online;
+  GtkOpenWithDialog *self = user_data;
+
+  online = gtk_open_with_online_get_default ();
+
+  gtk_open_with_online_search_for_mimetype_async (online,
+						  self->priv->content_type,
+						  GTK_WINDOW (self),
+						  search_for_mimetype_ready_cb,
+						  self);
 }
 
 /* An application is valid if:
@@ -278,6 +321,7 @@ build_dialog_ui (GtkOpenWithDialog *self)
   GtkWidget *vbox;
   GtkWidget *vbox2;
   GtkWidget *label;
+  GtkWidget *action_area;
 
   gtk_container_set_border_width (GTK_CONTAINER (self), 5);
 
@@ -327,6 +371,16 @@ build_dialog_ui (GtkOpenWithDialog *self)
 
   gtk_dialog_add_action_widget (GTK_DIALOG (self),
 				self->priv->button, GTK_RESPONSE_OK);
+
+  action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
+  self->priv->online_button = gtk_button_new_with_label (_("Find applications online"));
+  gtk_box_pack_start (GTK_BOX (action_area), self->priv->online_button,
+		      FALSE, FALSE, 0);
+  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), self->priv->online_button,
+				      TRUE);
+  gtk_widget_show (self->priv->online_button);
+  g_signal_connect (self->priv->online_button, "clicked",
+		    G_CALLBACK (online_button_clicked_cb), self);
 
   gtk_dialog_set_default_response (GTK_DIALOG (self),
 				   GTK_RESPONSE_OK);
