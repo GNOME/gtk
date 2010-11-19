@@ -4091,23 +4091,29 @@ set_option_from_settings (GtkPrinterOption *option,
 	gtk_printer_option_set (option, cups_value);
       else
 	{
-	  int res = gtk_print_settings_get_resolution (settings);
-	  int res_x = gtk_print_settings_get_resolution_x (settings);
-	  int res_y = gtk_print_settings_get_resolution_y (settings);
-
-          if (res_x != res_y)
-            {
-	      value = g_strdup_printf ("%dx%ddpi", res_x, res_y);
-	      gtk_printer_option_set (option, value);
-	      g_free (value);
-            }
-          else if (res != 0)
+	  if (gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION, -1) != -1 ||
+	      gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_X, -1) != -1 ||
+	      gtk_print_settings_get_int_with_default (settings, GTK_PRINT_SETTINGS_RESOLUTION_Y, -1) != -1 ||
+	      option->value == NULL || option->value[0] == '\0')
 	    {
-	      value = g_strdup_printf ("%ddpi", res);
-	      gtk_printer_option_set (option, value);
-	      g_free (value);
-	    }
-	}
+              int res = gtk_print_settings_get_resolution (settings);
+              int res_x = gtk_print_settings_get_resolution_x (settings);
+              int res_y = gtk_print_settings_get_resolution_y (settings);
+
+              if (res_x != res_y)
+                {
+                  value = g_strdup_printf ("%dx%ddpi", res_x, res_y);
+                  gtk_printer_option_set (option, value);
+                  g_free (value);
+                }
+              else if (res != 0)
+                {
+                  value = g_strdup_printf ("%ddpi", res);
+                  gtk_printer_option_set (option, value);
+                  g_free (value);
+                }
+            }
+        }
     }
   else if (strcmp (option->name, "gtk-paper-type") == 0)
     map_settings_to_option (option, media_type_map, G_N_ELEMENTS (media_type_map),
