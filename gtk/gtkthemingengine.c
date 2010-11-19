@@ -997,8 +997,9 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
                                   gdouble           height)
 {
   GtkStateFlags flags;
-  GdkRGBA *fg_color, *bg_color;
-  gint exterior_size, interior_size, pad, thickness;
+  GdkRGBA *fg_color, *bg_color, *border_color;
+  gint exterior_size, interior_size, pad, thickness, border_width;
+  GtkBorderStyle border_style;
   gdouble radius;
 
   flags = gtk_theming_engine_get_state (engine);
@@ -1009,6 +1010,9 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "color", &fg_color,
                           "background-color", &bg_color,
+                          "border-color", &border_color,
+                          "border-style", &border_style,
+                          "border-width", &border_width,
                           NULL);
 
   exterior_size = MIN (width, height);
@@ -1019,9 +1023,9 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   x -= (1 + exterior_size - width) / 2;
   y -= (1 + exterior_size - height) / 2;
 
-  if (!gtk_theming_engine_has_class (engine, "menu"))
+  if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      cairo_set_line_width (cr, 1.);
+      cairo_set_line_width (cr, border_width);
       cairo_arc (cr,
 		 x + exterior_size / 2.,
 		 y + exterior_size / 2.,
@@ -1031,7 +1035,11 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
       gdk_cairo_set_source_rgba (cr, bg_color);
       cairo_fill_preserve (cr);
 
-      gdk_cairo_set_source_rgba (cr, fg_color);
+      if (border_color)
+        gdk_cairo_set_source_rgba (cr, border_color);
+      else
+        gdk_cairo_set_source_rgba (cr, fg_color);
+
       cairo_stroke (cr);
     }
 
@@ -1085,6 +1093,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 
   gdk_rgba_free (fg_color);
   gdk_rgba_free (bg_color);
+  gdk_rgba_free (border_color);
 }
 
 static void
