@@ -681,6 +681,8 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
 				   COLUMN_NAME,
 				   gtk_open_with_sort_func,
 				   self, NULL);
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (self->priv->program_list),
+				   COLUMN_NAME);
   gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (self->priv->program_list),
   				       gtk_open_with_search_equal_func,
   				       NULL, NULL);
