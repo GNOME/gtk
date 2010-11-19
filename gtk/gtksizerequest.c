@@ -105,29 +105,6 @@ get_cached_size (SizeRequestCache  *cache,
 }
 
 
-extern guint _size_request_signal_id;
-static void
-do_size_request (GtkWidget      *widget,
-		 GtkRequisition *requisition)
-{
-  GtkWidgetClass *widget_class = g_type_class_peek (GTK_TYPE_WIDGET);
-
-  if (GTK_WIDGET_GET_CLASS (widget)->size_request != widget_class->size_request)
-    g_warning ("%s implements GtkWidgetClass::size_request which is deprecated and "
-	       "will be removed in the next release",
-	       G_OBJECT_TYPE_NAME (widget));
-
-  if (g_signal_has_handler_pending (widget, _size_request_signal_id, 0, TRUE))
-    g_warning ("A %s (%p) has handler(s) connected to the GtkWidgetClass::size-request signal which is "
-	       "deprecated and will be removed in the next release",
-	       G_OBJECT_TYPE_NAME (widget), widget);
-
-  /* Now we dont bother caching the deprecated "size-request" returns,
-   * just unconditionally invoke here just in case we run into legacy stuff */
-  gtk_widget_ensure_style (widget);
-  g_signal_emit_by_name (widget, "size-request", requisition);
-}
-
 #ifndef G_DISABLE_CHECKS
 static GQuark recursion_check_quark = 0;
 #endif /* G_DISABLE_CHECKS */
@@ -225,17 +202,13 @@ compute_size_for_orientation (GtkWidget         *widget,
 
   if (!found_in_cache)
     {
-      GtkRequisition requisition = { 0, 0 };
-      gint min_size = 0, nat_size = 0;
-      gint requisition_size;
+      gint min_size = 0;
+      gint nat_size = 0;
 
-      /* Unconditional size request runs but is often unhandled. */
-      do_size_request (widget, &requisition);
+      gtk_widget_ensure_style (widget);
 
       if (orientation == GTK_SIZE_GROUP_HORIZONTAL)
         {
-          requisition_size = requisition.width;
-
           if (for_size < 0)
             {
 	      push_recursion_check (widget, orientation, for_size);
@@ -266,8 +239,6 @@ compute_size_for_orientation (GtkWidget         *widget,
         }
       else
         {
-          requisition_size = requisition.height;
-
           if (for_size < 0)
             {
 	      push_recursion_check (widget, orientation, for_size);
@@ -302,12 +273,6 @@ compute_size_for_orientation (GtkWidget         *widget,
           g_warning ("%s %p reported min size %d and natural size %d; natural size must be >= min size",
                      G_OBJECT_TYPE_NAME (widget), widget, min_size, nat_size);
         }
-
-      /* Support for dangling "size-request" signal implementations on
-       * legacy widgets
-       */
-      min_size = MAX (min_size, requisition_size);
-      nat_size = MAX (nat_size, requisition_size);
 
       cached_size->minimum_size = min_size;
       cached_size->natural_size = nat_size;

@@ -381,7 +381,6 @@ enum {
   UNMAP,
   REALIZE,
   UNREALIZE,
-  SIZE_REQUEST,
   SIZE_ALLOCATE,
   STATE_CHANGED,
   PARENT_SET,
@@ -517,8 +516,6 @@ static void	gtk_widget_real_map		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unmap		 (GtkWidget	    *widget);
 static void	gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
-static void	gtk_widget_real_size_request	 (GtkWidget	    *widget,
-						  GtkRequisition    *requisition);
 static void	gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
                                                   GtkAllocation	    *allocation);
 static void	gtk_widget_real_style_set        (GtkWidget         *widget,
@@ -654,9 +651,6 @@ static GtkStyle        *gtk_default_style = NULL;
 static guint            composite_child_stack = 0;
 static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
-
-/* XXX Temporarily here to fire warnings from gtksizerequest.c */
-guint _size_request_signal_id = 0;
 
 static GQuark		quark_property_parser = 0;
 static GQuark		quark_aux_info = 0;
@@ -813,7 +807,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unmap = gtk_widget_real_unmap;
   klass->realize = gtk_widget_real_realize;
   klass->unrealize = gtk_widget_real_unrealize;
-  klass->size_request = gtk_widget_real_size_request;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->get_preferred_width = gtk_widget_real_get_width;
   klass->get_preferred_height = gtk_widget_real_get_height;
@@ -1409,25 +1402,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkWidget::size-request:
-   * @widget: the object which received the signal.
-   * @requisition:
-   *
-   * Deprecated: 3.0: Either implement
-   * <link linkend="geometry-management">height-for-width geometry management</link> or
-   * use gtk_widget_set_size_request() instead of handling this signal.
-   */
-  _size_request_signal_id = widget_signals[SIZE_REQUEST] =
-    g_signal_new (I_("size-request"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, size_request),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * GtkWidget::size-allocate:
@@ -9879,14 +9853,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   gtk_selection_remove_all (widget);
 
   gtk_widget_set_realized (widget, FALSE);
-}
-
-static void
-gtk_widget_real_size_request (GtkWidget         *widget,
-			      GtkRequisition    *requisition)
-{
-  requisition->width  = 0;
-  requisition->height = 0;
 }
 
 static void

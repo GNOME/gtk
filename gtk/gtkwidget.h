@@ -219,8 +219,6 @@ struct _GtkWidgetClass
   void (* unmap)	       (GtkWidget        *widget);
   void (* realize)	       (GtkWidget        *widget);
   void (* unrealize)	       (GtkWidget        *widget);
-  void (* size_request)	       (GtkWidget        *widget,
-				GtkRequisition   *requisition);
   void (* size_allocate)       (GtkWidget        *widget,
 				GtkAllocation    *allocation);
   void (* state_changed)       (GtkWidget        *widget,
