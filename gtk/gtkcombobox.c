@@ -4327,7 +4327,7 @@ gtk_combo_box_list_select_func (GtkTreeSelection *selection,
       GtkTreeIter iter;
       GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN (list->data);
 
-      if (!column->visible)
+      if (!gtk_tree_view_column_get_visible (column))
 	continue;
 
       gtk_tree_model_get_iter (model, &iter, path);

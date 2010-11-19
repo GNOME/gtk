@@ -2367,7 +2367,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        list = (rtl ? list->prev : list->next)) 
     {
       gint real_requested_width = 0;
-      gint old_width, width;
+      gint old_width, column_width;
 
       column = list->data;
       old_width = gtk_tree_view_column_get_width (column);
@@ -2425,11 +2425,11 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 
       g_object_notify (G_OBJECT (column), "width");
 
-      width = gtk_tree_view_column_get_width (column);
-      allocation.width = width;
-      width += width;
+      column_width = gtk_tree_view_column_get_width (column);
+      allocation.width = column_width;
+      width += column_width;
 
-      if (column->width > old_width)
+      if (column_width > old_width)
         column_changed = TRUE;
 
       gtk_widget_size_allocate (column->button, &allocation);
@@ -5510,7 +5510,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
               column->resized_width += 2;
 
               max_width = gtk_tree_view_column_get_max_width (column);
-              if (column != -1)
+              if (max_width != -1)
                 column->resized_width = MIN (column->resized_width, max_width);
 
               column->use_resized_width = TRUE;
@@ -10641,7 +10641,7 @@ gtk_tree_view_new_column_width (GtkTreeView *tree_view,
     width = MAX (min_width, width);
 
   max_width = gtk_tree_view_column_get_max_width (column);
-  if (column != -1)
+  if (max_width != -1)
     width = MIN (width, max_width);
 
   *x = rtl ? (allocation.x + allocation.width - width) : (allocation.x + width);
