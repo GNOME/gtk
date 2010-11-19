@@ -335,7 +335,7 @@ build_dialog_ui (GtkOpenWithDialog *self)
   gtk_widget_show (vbox2);
 
   self->priv->label = gtk_label_new ("");
-  gtk_widget_set_halign (self->priv->label, GTK_ALIGN_START);
+  gtk_misc_set_alignment (GTK_MISC (self->priv->label), 0, 0.5);
   gtk_label_set_line_wrap (GTK_LABEL (self->priv->label), TRUE);
   gtk_box_pack_start (GTK_BOX (vbox2), self->priv->label,
 		      FALSE, FALSE, 0);
