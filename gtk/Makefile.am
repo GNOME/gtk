@@ -249,6 +249,7 @@ gtk_public_h_sources =          \
 	gtkopenwith.h		\
 	gtkopenwithdialog.h	\
 	gtkopenwithwidget.h	\
+	gtkopenwithonline.h	\
 	gtkorientable.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
@@ -352,6 +353,18 @@ endif
 gtk_semi_private_h_sources =    \
 	gtktextlayout.h
 
+if ENABLE_PACKAGEKIT
+gtk_openwith_impl_h_sources = \
+	gtkopenwithonlinepk.h \
+	$(NULL)
+endif
+
+if ENABLE_PACKAGEKIT
+gtk_openwith_impl_c_sources = \
+	gtkopenwithonlinepk.c \
+	$(NULL)
+endif
+
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
 	gtkbuttonprivate.h	\
@@ -377,6 +390,8 @@ gtk_private_h_sources =		\
 	gtkmnemonichash.h	\
 	gtkmountoperationprivate.h \
 	gtkopenwithprivate.h	\
+	gtkopenwithmodule.h 	\
+	gtkopenwithonlinedummy.h \
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
@@ -404,7 +419,8 @@ gtk_private_h_sources =		\
 	gtktreeprivate.h	\
 	gtkwindow-decorate.h	\
 	gtkwidgetprivate.h	\
-	$(gtk_clipboard_dnd_h_sources)
+	$(gtk_clipboard_dnd_h_sources) \
+	$(gtk_openwith_impl_h_sources)
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources =            \
@@ -523,6 +539,9 @@ gtk_base_c_sources =            \
 	gtkopenwith.c		\
 	gtkopenwithwidget.c	\
 	gtkopenwithdialog.c	\
+	gtkopenwithmodule.c	\
+	gtkopenwithonline.c	\
+	gtkopenwithonlinedummy.c \
 	gtkorientable.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
@@ -627,7 +646,8 @@ gtk_base_c_sources =            \
 	gtkwidget.c		\
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
-	$(gtk_clipboard_dnd_c_sources)
+	$(gtk_clipboard_dnd_c_sources) \
+	$(gtk_openwith_impl_c_sources)
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)

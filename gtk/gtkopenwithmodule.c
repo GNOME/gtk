@@ -1,0 +1,62 @@
+/*
+ * gtkopenwithmodule.c: an extension point for online integration
+ *
+ * Copyright (C) 2010 Red Hat, Inc.
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with the Gnome Library; see the file COPYING.LIB.  If not,
+ * write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ *
+ * Authors: Cosimo Cecchi <ccecchi@redhat.com>
+ */
+
+#include <config.h>
+
+#include "gtkopenwithmodule.h"
+
+#include <gio/gio.h>
+
+#include "gtkopenwithonline.h"
+#include "gtkopenwithonlinedummy.h"
+
+#ifdef ENABLE_PACKAGEKIT
+#include "gtkopenwithonlinepk.h"
+#endif
+
+G_LOCK_DEFINE_STATIC (registered_ep);
+
+void
+_gtk_open_with_module_ensure (void)
+{
+  static gboolean registered_ep = FALSE;
+  GIOExtensionPoint *ep;
+
+  G_LOCK (registered_ep);
+
+  if (!registered_ep)
+  {
+    registered_ep = TRUE;
+
+    ep = g_io_extension_point_register ("gtkopenwith-online");
+    g_io_extension_point_set_required_type (ep, GTK_TYPE_OPEN_WITH_ONLINE);
+
+    _gtk_open_with_online_dummy_get_type ();
+
+#ifdef ENABLE_PACKAGEKIT
+    _gtk_open_with_online_pk_get_type ();
+#endif
+  }
+
+  G_UNLOCK (registered_ep);
+}
