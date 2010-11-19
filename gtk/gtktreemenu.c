@@ -138,6 +138,8 @@ gtk_tree_menu_init (GtkTreeMenu *menu)
 					    GTK_TYPE_TREE_MENU,
 					    GtkTreeMenuPrivate);
   priv = menu->priv;
+
+  gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
 }
 
 static void 
@@ -170,7 +172,7 @@ gtk_tree_menu_class_init (GtkTreeMenuClass *class)
 						       P_("TreeMenu root row"),
 						       P_("The TreeMenu will display children of the "
 							  "specified root"),
-						       GTK_TYPE_TREE_ROW_REFERENCE,
+						       GTK_TYPE_TREE_PATH,
 						       GTK_PARAM_READWRITE));
 
    g_object_class_install_property (object_class,
@@ -751,10 +753,7 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
 	      GtkWidget           *submenu;
 	      
 	      row_path = gtk_tree_model_get_path (priv->model, &iter);
-	      submenu  = gtk_tree_menu_new_with_area (priv->area);
-
-	      gtk_tree_menu_set_model (GTK_TREE_MENU (submenu), priv->model);
-	      gtk_tree_menu_set_root  (GTK_TREE_MENU (submenu), row_path);
+	      submenu  = gtk_tree_menu_new_full (priv->area, priv->model, row_path);
 
 	      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), submenu);
 
@@ -781,7 +780,19 @@ GtkWidget *
 gtk_tree_menu_new_with_area (GtkCellArea    *area)
 {
   return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, 
-				    "area", area, 
+				    "cell-area", area, 
+				    NULL);
+}
+
+GtkWidget *
+gtk_tree_menu_new_full (GtkCellArea         *area,
+			GtkTreeModel        *model,
+			GtkTreePath         *root)
+{
+  return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, 
+				    "cell-area", area, 
+				    "model", model,
+				    "root", root,
 				    NULL);
 }
 
@@ -813,12 +824,6 @@ gtk_tree_menu_set_model (GtkTreeMenu  *menu,
 
 	  g_object_ref (priv->model);
 	}
-
-      /* Changing the model in any way invalidates the currently set root, 
-       * so we implicitly reset it to NULL here */
-      gtk_tree_menu_set_root (menu, NULL);
-
-      g_object_notify (G_OBJECT (menu), "model");
     }
 }
 
@@ -841,7 +846,7 @@ gtk_tree_menu_set_root (GtkTreeMenu         *menu,
   GtkTreeMenuPrivate *priv;
 
   g_return_if_fail (GTK_IS_TREE_MENU (menu));
-  g_return_if_fail (path == NULL || menu->priv->model != NULL);
+  g_return_if_fail (menu->priv->model != NULL || path == NULL);
 
   priv = menu->priv;
 
@@ -858,7 +863,10 @@ gtk_tree_menu_set_root (GtkTreeMenu         *menu,
 			 (GtkCallback) gtk_widget_destroy, NULL);
   
   /* Populate for the new root */
-  gtk_tree_menu_populate (menu);
+  if (priv->model)
+    gtk_tree_menu_populate (menu);
+
+  gtk_widget_queue_resize (GTK_WIDGET (menu));
 }
 
 GtkTreePath *

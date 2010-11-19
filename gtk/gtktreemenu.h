@@ -73,6 +73,9 @@ GType                 gtk_tree_menu_get_type                       (void) G_GNUC
 
 GtkWidget            *gtk_tree_menu_new                            (void);
 GtkWidget            *gtk_tree_menu_new_with_area                  (GtkCellArea         *area);
+GtkWidget            *gtk_tree_menu_new_full                       (GtkCellArea         *area,
+								    GtkTreeModel        *model,
+								    GtkTreePath         *root);
 void                  gtk_tree_menu_set_model                      (GtkTreeMenu         *menu,
 								    GtkTreeModel        *model);
 GtkTreeModel         *gtk_tree_menu_get_model                      (GtkTreeMenu         *menu);
