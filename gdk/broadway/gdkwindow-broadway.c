@@ -212,12 +212,6 @@ _gdk_broadway_resync_windows (void)
 
       impl->dirty = FALSE;
       impl->last_synced = FALSE;
-      g_print ("creating new window %d at %d,%d %dx%d\n",
-	       impl->id,
-	       private->x,
-	       private->y,
-	       private->width,
-	       private->height);
       broadway_client_new_surface (display->output,
 				   impl->id,
 				   private->x,
@@ -226,9 +220,7 @@ _gdk_broadway_resync_windows (void)
 				   private->height);
       if (GDK_WINDOW_IS_MAPPED (private))
 	{
-	  g_print ("showing window\n");
 	  broadway_client_show_surface (display->output, impl->id);
-	  g_print ("sending window data\n");
 	  window_data_send (display->output, impl);
 	}
     }
