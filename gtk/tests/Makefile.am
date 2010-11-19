@@ -50,8 +50,8 @@ floating_SOURCES		 = floating.c
 floating_LDADD			 = $(progs_ldadd)
 
 #TEST_PROGS			+= object
-object_SOURCES			 = object.c pixbuf-init.c
-object_LDADD			 = $(progs_ldadd)
+#object_SOURCES			 = object.c pixbuf-init.c
+#object_LDADD			 = $(progs_ldadd)
 
 # this doesn't work in make distcheck, since running
 # on a naked X server creates slightly different event
@@ -103,7 +103,7 @@ gtk_example_application_LDADD	= $(progs_ldadd)
 TEST_PROGS			+= stylecontext
 stylecontext_SOURCES		 = stylecontext.c
 stylecontext_LDADD		 = $(progs_ldadd)
-EXTRA_DIST += test.css
+EXTRA_DIST += test.css test.png
 
 
 EXTRA_DIST +=				\
