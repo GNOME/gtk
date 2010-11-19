@@ -950,6 +950,10 @@ broadway_client_put_delta_rgb (BroadwayClient *client,  int id, int dest_x, int 
   rgb_autocrop (data,
 		byte_stride,
 		&src_x, &src_y, &w, &h);
+
+  if (w == 0 || h == 0)
+    return;
+
   data = (uint8_t *)data + src_x * 4 + src_y * byte_stride;
 
   buf[0] = 'D';
