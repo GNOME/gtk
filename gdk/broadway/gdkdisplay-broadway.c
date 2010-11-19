@@ -300,7 +300,7 @@ got_input (GInputStream *stream,
 	event->button.y = y - GDK_WINDOW_OBJECT (window)->y;
 	event->button.x_root = x;
 	event->button.y_root = y;
-	event->button.button = button;
+	event->button.button = button + 1;
 	gdk_event_set_device (event, request->display->core_pointer);
 
 	node = _gdk_event_queue_append (request->display, event);
