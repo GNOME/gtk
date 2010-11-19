@@ -704,7 +704,7 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
     min_width += 2 * horizontal_padding;
 
   nat_width = min_width;
-
+	  
   child = gtk_bin_get_child (bin);
 
   if (child != NULL && gtk_widget_get_visible (child))
@@ -714,7 +714,7 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
 
       gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
-      if ((menu_item->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator);
+      if ((menu_item->submenu && !GTK_IS_MENU_BAR (parent)) || priv->reserve_indicator)
 	{
 	  guint arrow_spacing;
 	  gint  arrow_size;
