@@ -66,6 +66,7 @@ function createXHR()
 
 var surfaces = {};
 var outstanding_commands = new Array();
+var input_socket = null;
 
 function apply_delta(id, img, x, y)
 {
@@ -102,6 +103,7 @@ function initContext(canvas, x, y)
   context.globalCompositeOperation = "copy"
   context.fillRect(0, 0, canvas.width, canvas.height);
   document.body.appendChild(canvas)
+
   return context
 }
 
@@ -284,14 +286,31 @@ function handleLoad(event)
     loc = loc.substr(0, loc.lastIndexOf('/')) + "/input";
     var ws = new WebSocket(loc, "broadway");
     ws.onopen = function() {
-      ws.send("Message to send1");
-      ws.send("Message to send2");
+      input_socket = ws;
     };
-    ws.onmessage = function (evt) { var msg = evt.data;
+    ws.onclose = function() {
+      input_socket = null;
     };
-    ws.onclose = function() { };
   } else {
      alert("WebSocket not supported, input will not work!");
+  }
+}
+
+function on_mouse_move (ev) {
+  if (input_socket != null) {
+    input_socket.send("m" + ev.pageX + "," + ev.pageY);
+  }
+}
+
+function on_mouse_down (ev) {
+  if (input_socket != null) {
+    input_socket.send("b" + ev.pageX + "," + ev.pageY + "," + ev.button);
+  }
+}
+
+function on_mouse_up (ev) {
+  if (input_socket != null) {
+    input_socket.send("B" + ev.pageX + "," + ev.pageY + "," + ev.button);
   }
 }
 
@@ -309,4 +328,8 @@ function connect()
     xhr.onload = handleLoad;
     xhr.send(null);
   }
+
+  document.onmousemove = on_mouse_move;
+  document.onmousedown = on_mouse_down;
+  document.onmouseup = on_mouse_up;
 }
