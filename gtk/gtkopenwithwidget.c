@@ -350,7 +350,7 @@ gtk_open_with_sort_func (GtkTreeModel *model,
   gboolean a_fallback, b_fallback;
   gboolean a_heading, b_heading;
   gchar *a_name, *b_name, *a_casefold, *b_casefold;
-  gint retval;
+  gint retval = 0;
 
   /* this returns:
    * - <0 if a should show before b
@@ -411,15 +411,19 @@ gtk_open_with_sort_func (GtkTreeModel *model,
       goto out;
     }
 
-  a_casefold = a_name != NULL ?
-    g_utf8_casefold (a_name, -1) : NULL;
-  b_casefold = b_name != NULL ?
-    g_utf8_casefold (b_name, -1) : NULL;
+  /* don't order by name recommended applications, but use GLib's ordering */
+  if (!a_recommended)
+    {
+      a_casefold = a_name != NULL ?
+	g_utf8_casefold (a_name, -1) : NULL;
+      b_casefold = b_name != NULL ?
+	g_utf8_casefold (b_name, -1) : NULL;
 
-  retval = g_strcmp0 (a_casefold, b_casefold);
+      retval = g_strcmp0 (a_casefold, b_casefold);
 
-  g_free (a_casefold);
-  g_free (b_casefold);
+      g_free (a_casefold);
+      g_free (b_casefold);
+    }
 
  out:
   g_free (a_name);
