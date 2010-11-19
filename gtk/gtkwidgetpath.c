@@ -215,7 +215,7 @@ gtk_widget_path_free (GtkWidgetPath *path)
  *
  * Since: 3.0
  **/
-guint
+gint
 gtk_widget_path_length (const GtkWidgetPath *path)
 {
   g_return_val_if_fail (path != NULL, 0);
@@ -256,7 +256,7 @@ gtk_widget_path_prepend_type (GtkWidgetPath *path,
  *
  * Since: 3.0
  **/
-guint
+gint
 gtk_widget_path_append_type (GtkWidgetPath *path,
                              GType          type)
 {
@@ -274,7 +274,7 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_get_widget_type:
  * @path: a #GtkWidgetPath
- * @pos: position to get the widget type for
+ * @pos: position to get the widget type for, -1 for the path head
  *
  * Returns the widget #GType that is at position @pos in the widget
  * hierarchy defined in @path.
@@ -285,12 +285,15 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
  **/
 GType
 gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
-                                      guint                pos)
+                                      gint                 pos)
 {
   GtkPathElement *elem;
 
   g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
-  g_return_val_if_fail (pos < path->elems->len, G_TYPE_INVALID);
+  g_return_val_if_fail (path->elems->len != 0, G_TYPE_INVALID);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
   return elem->type;
@@ -299,7 +302,7 @@ gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_set_widget_type:
  * @path: a #GtkWidgetPath
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  * @type: widget type to set
  *
  * Sets the widget type for a given position in the widget hierarchy
@@ -309,14 +312,17 @@ gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
  **/
 void
 gtk_widget_path_iter_set_widget_type (GtkWidgetPath *path,
-                                      guint          pos,
+                                      gint           pos,
                                       GType          type)
 {
   GtkPathElement *elem;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
   g_return_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET));
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
   elem->type = type;
@@ -325,7 +331,7 @@ gtk_widget_path_iter_set_widget_type (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_get_name:
  * @path: a #GtkWidgetPath
- * @pos: position to get the widget name for
+ * @pos: position to get the widget name for, -1 for the path head
  *
  * Returns the name corresponding to the widget found at
  * the position @pos in the widget hierarchy defined by
@@ -335,12 +341,15 @@ gtk_widget_path_iter_set_widget_type (GtkWidgetPath *path,
  **/
 G_CONST_RETURN gchar *
 gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
-                               guint                pos)
+                               gint                 pos)
 {
   GtkPathElement *elem;
 
   g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (pos < path->elems->len, NULL);
+  g_return_val_if_fail (path->elems->len != 0, NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
   return g_quark_to_string (elem->name);
@@ -349,7 +358,7 @@ gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_set_name:
  * @path: a #GtkWidgetPath
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  * @name: widget name
  *
  * Sets the widget name for the widget found at position @pos
@@ -359,14 +368,17 @@ gtk_widget_path_iter_get_name (const GtkWidgetPath *path,
  **/
 void
 gtk_widget_path_iter_set_name (GtkWidgetPath *path,
-                               guint          pos,
+                               gint           pos,
                                const gchar   *name)
 {
   GtkPathElement *elem;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
   g_return_if_fail (name != NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -376,7 +388,7 @@ gtk_widget_path_iter_set_name (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_has_qname:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  * @qname: widget name as a #GQuark
  *
  * See gtk_widget_path_iter_has_name(). This is a version
@@ -388,14 +400,17 @@ gtk_widget_path_iter_set_name (GtkWidgetPath *path,
  **/
 gboolean
 gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
-                                guint                pos,
+                                gint                 pos,
                                 GQuark               qname)
 {
   GtkPathElement *elem;
 
   g_return_val_if_fail (path != NULL, FALSE);
+  g_return_val_if_fail (path->elems->len != 0, FALSE);
   g_return_val_if_fail (qname != 0, FALSE);
-  g_return_val_if_fail (pos < path->elems->len, FALSE);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -405,7 +420,7 @@ gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_has_name:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  * @name: a widget name
  *
  * Returns %TRUE if the widget at position @pos has the name @name,
@@ -417,14 +432,16 @@ gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
  **/
 gboolean
 gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
-                               guint                pos,
+                               gint                 pos,
                                const gchar         *name)
 {
   GQuark qname;
 
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (name != NULL, FALSE);
-  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (path->elems->len != 0, FALSE);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   qname = g_quark_try_string (name);
 
@@ -437,7 +454,7 @@ gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_add_class:
  * @path: a #GtkWidget
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  * @name: a class name
  *
  * Adds the class @name to the widget at position @pos in
@@ -448,7 +465,7 @@ gtk_widget_path_iter_has_name (const GtkWidgetPath *path,
  **/
 void
 gtk_widget_path_iter_add_class (GtkWidgetPath *path,
-                                guint          pos,
+                                gint           pos,
                                 const gchar   *name)
 {
   GtkPathElement *elem;
@@ -457,8 +474,11 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
   guint i;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
   g_return_if_fail (name != NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
   qname = g_quark_from_string (name);
@@ -493,7 +513,7 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_remove_class:
  * @path: a #GtkWidgetPath
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  * @name: class name
  *
  * Removes the class @name from the widget at position @pos in
@@ -503,7 +523,7 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
  **/
 void
 gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
-                                   guint          pos,
+                                   gint           pos,
                                    const gchar   *name)
 {
   GtkPathElement *elem;
@@ -511,8 +531,11 @@ gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
   guint i;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
   g_return_if_fail (name != NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   qname = g_quark_try_string (name);
 
@@ -543,7 +566,7 @@ gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_clear_classes:
  * @path: a #GtkWidget
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  *
  * Removes all classes from the widget at position @pos in the
  * hierarchy defined in @path.
@@ -552,12 +575,15 @@ gtk_widget_path_iter_remove_class (GtkWidgetPath *path,
  **/
 void
 gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
-                                    guint          pos)
+                                    gint           pos)
 {
   GtkPathElement *elem;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -571,7 +597,7 @@ gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_list_classes:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  *
  * Returns a list with all the class names defined for the widget
  * at position @pos in the hierarchy defined in @path.
@@ -585,14 +611,17 @@ gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
  **/
 GSList *
 gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
-                                   guint                pos)
+                                   gint                 pos)
 {
   GtkPathElement *elem;
   GSList *list = NULL;
   guint i;
 
   g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (pos < path->elems->len, NULL);
+  g_return_val_if_fail (path->elems->len != 0, NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -613,7 +642,7 @@ gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_has_qclass:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  * @qname: class name as a #GQuark
  *
  * See gtk_widget_path_iter_has_class(). This is a version that operates
@@ -625,15 +654,18 @@ gtk_widget_path_iter_list_classes (const GtkWidgetPath *path,
  **/
 gboolean
 gtk_widget_path_iter_has_qclass (const GtkWidgetPath *path,
-                                 guint                pos,
+                                 gint                 pos,
                                  GQuark               qname)
 {
   GtkPathElement *elem;
   guint i;
 
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (path->elems->len != 0, FALSE);
   g_return_val_if_fail (qname != 0, FALSE);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -658,7 +690,7 @@ gtk_widget_path_iter_has_qclass (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_has_class:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  * @name: class name
  *
  * Returns %TRUE if the widget at position @pos has the class @name
@@ -670,14 +702,17 @@ gtk_widget_path_iter_has_qclass (const GtkWidgetPath *path,
  **/
 gboolean
 gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
-                                guint                pos,
+                                gint                 pos,
                                 const gchar         *name)
 {
   GQuark qname;
 
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (path->elems->len != 0, FALSE);
   g_return_val_if_fail (name != NULL, FALSE);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   qname = g_quark_try_string (name);
 
@@ -690,7 +725,7 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_add_region:
  * @path: a #GtkWidgetPath
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  * @name: region name
  * @flags: flags affecting the region
  *
@@ -702,7 +737,7 @@ gtk_widget_path_iter_has_class (const GtkWidgetPath *path,
  **/
 void
 gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
-                                 guint           pos,
+                                 gint            pos,
                                  const gchar    *name,
                                  GtkRegionFlags  flags)
 {
@@ -710,8 +745,11 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
   GQuark qname;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
   g_return_if_fail (name != NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
   qname = g_quark_from_string (name);
@@ -727,7 +765,7 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
 /**
  * gtk_widget_path_iter_remove_region:
  * @path: a #GtkWidgetPath
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  * @name: region name
  *
  * Removes the region @name from the widget at position @pos in
@@ -737,15 +775,18 @@ gtk_widget_path_iter_add_region (GtkWidgetPath  *path,
  **/
 void
 gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
-                                    guint          pos,
+                                    gint           pos,
                                     const gchar   *name)
 {
   GtkPathElement *elem;
   GQuark qname;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
   g_return_if_fail (name != NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   qname = g_quark_try_string (name);
 
@@ -761,7 +802,7 @@ gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_clear_regions:
  * @path: a #GtkWidgetPath
- * @pos: position to modify
+ * @pos: position to modify, -1 for the path head
  *
  * Removes all regions from the widget at position @pos in the
  * hierarchy defined in @path.
@@ -770,12 +811,15 @@ gtk_widget_path_iter_remove_region (GtkWidgetPath *path,
  **/
 void
 gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
-                                    guint          pos)
+                                    gint           pos)
 {
   GtkPathElement *elem;
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (pos < path->elems->len);
+  g_return_if_fail (path->elems->len != 0);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -786,7 +830,7 @@ gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_list_regions:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  *
  * Returns a list with all the region names defined for the widget
  * at position @pos in the hierarchy defined in @path.
@@ -800,7 +844,7 @@ gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
  **/
 GSList *
 gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
-                                   guint                pos)
+                                   gint                 pos)
 {
   GtkPathElement *elem;
   GHashTableIter iter;
@@ -808,7 +852,10 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
   gpointer key;
 
   g_return_val_if_fail (path != NULL, NULL);
-  g_return_val_if_fail (pos < path->elems->len, NULL);
+  g_return_val_if_fail (path->elems->len != 0, NULL);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -831,7 +878,7 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_has_qregion:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  * @qname: region name as a #GQuark
  * @flags: (out): return location for the region flags
  *
@@ -844,7 +891,7 @@ gtk_widget_path_iter_list_regions (const GtkWidgetPath *path,
  **/
 gboolean
 gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
-                                  guint                pos,
+                                  gint                 pos,
                                   GQuark               qname,
                                   GtkRegionFlags      *flags)
 {
@@ -852,8 +899,11 @@ gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
   gpointer value;
 
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (path->elems->len != 0, FALSE);
   g_return_val_if_fail (qname != 0, FALSE);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
 
@@ -874,7 +924,7 @@ gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
 /**
  * gtk_widget_path_iter_has_region:
  * @path: a #GtkWidgetPath
- * @pos: position to query
+ * @pos: position to query, -1 for the path head
  * @name: region name
  * @flags: (out): return location for the region flags
  *
@@ -887,15 +937,18 @@ gtk_widget_path_iter_has_qregion (const GtkWidgetPath *path,
  **/
 gboolean
 gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
-                                 guint                pos,
+                                 gint                 pos,
                                  const gchar         *name,
                                  GtkRegionFlags      *flags)
 {
   GQuark qname;
 
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (pos < path->elems->len, FALSE);
+  g_return_val_if_fail (path->elems->len != 0, FALSE);
   g_return_val_if_fail (name != NULL, FALSE);
+
+  if (pos < 0 || pos > path->elems->len)
+    pos = path->elems->len - 1;
 
   qname = g_quark_try_string (name);
 

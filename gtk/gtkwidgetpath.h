@@ -33,67 +33,67 @@ GtkWidgetPath * gtk_widget_path_new (void);
 GtkWidgetPath * gtk_widget_path_copy                (const GtkWidgetPath *path);
 void            gtk_widget_path_free                (GtkWidgetPath       *path);
 
-guint           gtk_widget_path_length              (const GtkWidgetPath *path);
+gint            gtk_widget_path_length              (const GtkWidgetPath *path);
 
-guint           gtk_widget_path_append_type         (GtkWidgetPath       *path,
+gint            gtk_widget_path_append_type         (GtkWidgetPath       *path,
                                                      GType                type);
 void            gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
                                                      GType                type);
 
 GType               gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
-                                                          guint                pos);
+                                                          gint                 pos);
 void                gtk_widget_path_iter_set_widget_type (GtkWidgetPath       *path,
-                                                          guint                pos,
+                                                          gint                 pos,
                                                           GType                type);
 
 G_CONST_RETURN gchar * gtk_widget_path_iter_get_name  (const GtkWidgetPath *path,
-                                                       guint                pos);
+                                                       gint                 pos);
 void                   gtk_widget_path_iter_set_name  (GtkWidgetPath       *path,
-                                                       guint                pos,
+                                                       gint                 pos,
                                                        const gchar         *name);
 gboolean               gtk_widget_path_iter_has_name  (const GtkWidgetPath *path,
-                                                       guint                pos,
+                                                       gint                 pos,
                                                        const gchar         *name);
 gboolean               gtk_widget_path_iter_has_qname (const GtkWidgetPath *path,
-                                                       guint                pos,
+                                                       gint                 pos,
                                                        GQuark               qname);
 
 void     gtk_widget_path_iter_add_class     (GtkWidgetPath       *path,
-                                             guint                pos,
+                                             gint                 pos,
                                              const gchar         *name);
 void     gtk_widget_path_iter_remove_class  (GtkWidgetPath       *path,
-                                             guint                pos,
+                                             gint                 pos,
                                              const gchar         *name);
 void     gtk_widget_path_iter_clear_classes (GtkWidgetPath       *path,
-                                             guint                pos);
+                                             gint                 pos);
 GSList * gtk_widget_path_iter_list_classes  (const GtkWidgetPath *path,
-                                             guint                pos);
+                                             gint                 pos);
 gboolean gtk_widget_path_iter_has_class     (const GtkWidgetPath *path,
-                                             guint                pos,
+                                             gint                 pos,
                                              const gchar         *name);
 gboolean gtk_widget_path_iter_has_qclass    (const GtkWidgetPath *path,
-                                             guint                pos,
+                                             gint                 pos,
                                              GQuark               qname);
 
 void     gtk_widget_path_iter_add_region    (GtkWidgetPath      *path,
-                                             guint               pos,
+                                             gint                pos,
                                              const gchar        *name,
                                              GtkRegionFlags     flags);
 void     gtk_widget_path_iter_remove_region (GtkWidgetPath      *path,
-                                             guint               pos,
+                                             gint                pos,
                                              const gchar        *name);
 void     gtk_widget_path_iter_clear_regions (GtkWidgetPath      *path,
-                                             guint               pos);
+                                             gint                pos);
 
 GSList * gtk_widget_path_iter_list_regions  (const GtkWidgetPath *path,
-                                             guint                pos);
+                                             gint                 pos);
 
 gboolean gtk_widget_path_iter_has_region    (const GtkWidgetPath *path,
-                                             guint                pos,
+                                             gint                 pos,
                                              const gchar         *name,
                                              GtkRegionFlags      *flags);
 gboolean gtk_widget_path_iter_has_qregion   (const GtkWidgetPath *path,
-                                             guint                pos,
+                                             gint                 pos,
                                              GQuark               qname,
                                              GtkRegionFlags      *flags);
 
