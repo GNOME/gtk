@@ -98,7 +98,10 @@ install_mime_types_ready_cb (GObject *source,
   variant = g_dbus_proxy_call_finish (proxy, res, &error);
 
   if (variant == NULL) {
-    g_simple_async_result_set_from_error (self->priv->result, error);
+    /* don't show errors if the user cancelled the installation explicitely */
+    if (g_strcmp0 (g_dbus_error_get_remote_error (error), "org.freedesktop.PackageKit.Modify.Cancelled") != 0)
+      g_simple_async_result_set_from_error (self->priv->result, error);
+
     g_error_free (error);
   }
 
