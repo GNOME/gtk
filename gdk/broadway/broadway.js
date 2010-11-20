@@ -93,8 +93,9 @@ function apply_delta(id, img, x, y)
   delete tmp_surface
 }
 
-function initContext(canvas, x, y)
+function initContext(canvas, x, y, id)
 {
+  canvas.surface_id = id;
   canvas.style["position"] = "absolute"
   canvas.style["top"] = x + "px"
   canvas.style["left"] = y + "px"
@@ -130,7 +131,7 @@ function handleCommands(cmd_obj)
         var surface = document.createElement("canvas");
 	surface.width = w;
 	surface.height = h;
-	surfaces[id] = initContext(surface, x, y);
+	surfaces[id] = initContext(surface, x, y, id);
         break;
 
       /* show a surface */
@@ -296,6 +297,13 @@ function handleLoad(event)
   }
 }
 
+function get_surface_id(ev) {
+  var id = ev.target.surface_id;
+  if (id != undefined)
+    return id;
+  return 0;
+}
+
 function send_input(cmd, args)
 {
   if (input_socket != null) {
@@ -304,15 +312,15 @@ function send_input(cmd, args)
 }
 
 function on_mouse_move (ev) {
-  send_input ("m", [ev.pageX, ev.pageY, ev.timeStamp])
+  send_input ("m", [get_surface_id(ev), ev.pageX, ev.pageY, ev.timeStamp])
 }
 
 function on_mouse_down (ev) {
-  send_input ("b", [ev.pageX, ev.pageY, ev.button, ev.timeStamp])
+  send_input ("b", [get_surface_id(ev), ev.pageX, ev.pageY, ev.button, ev.timeStamp])
 }
 
 function on_mouse_up (ev) {
-  send_input ("B", [ev.pageX, ev.pageY, ev.button, ev.timeStamp])
+  send_input ("B", [get_surface_id(ev), ev.pageX, ev.pageY, ev.button, ev.timeStamp])
 }
 
 function connect()

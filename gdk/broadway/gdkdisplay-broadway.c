@@ -181,7 +181,7 @@ got_input (GInputStream *stream,
   char *message, *p;
   gsize len;
   GError *error = NULL;
-  int x, y, button;
+  int x, y, button, id;
   guint64 time;
   GdkEvent *event = NULL;
   char cmd;
@@ -204,13 +204,15 @@ got_input (GInputStream *stream,
   cmd = *p++;
   switch (cmd) {
   case 'm':
+    id = strtol(p, &p, 10);
+    p++; /* Skip , */
     x = strtol(p, &p, 10);
     p++; /* Skip , */
     y = strtol(p, &p, 10);
     p++; /* Skip , */
     time = strtol(p, &p, 10);
 
-    window = _gdk_window_find_child_at (root, x, y);
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (id));
 
     if (display_broadway->mouse_in_toplevel != window)
       {
@@ -287,6 +289,8 @@ got_input (GInputStream *stream,
     break;
   case 'b':
   case 'B':
+    id = strtol(p, &p, 10);
+    p++; /* Skip , */
     x = strtol(p, &p, 10);
     p++; /* Skip , */
     y = strtol(p, &p, 10);
@@ -295,7 +299,7 @@ got_input (GInputStream *stream,
     p++; /* Skip , */
     time = strtol(p, &p, 10);
 
-    window = _gdk_window_find_child_at (root, x, y);
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (id));
 
     if (window)
       {
