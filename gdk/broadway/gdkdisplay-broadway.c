@@ -217,7 +217,7 @@ got_input (GInputStream *stream,
 	  {
 	    event = gdk_event_new (GDK_LEAVE_NOTIFY);
 	    event->crossing.window = g_object_ref (display_broadway->mouse_in_toplevel);
-	    event->crossing.time = g_get_monotonic_time () / 1000;
+	    event->crossing.time = time;
 	    event->crossing.x = x - GDK_WINDOW_OBJECT (display_broadway->mouse_in_toplevel)->x;
 	    event->crossing.y = y - GDK_WINDOW_OBJECT (display_broadway->mouse_in_toplevel)->y;
 	    event->crossing.x_root = x;
