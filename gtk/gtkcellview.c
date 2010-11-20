@@ -52,6 +52,8 @@ struct _GtkCellViewPrivate
 
   GdkRGBA              background;
   gboolean             background_set;
+
+  gulong               size_changed_id;
 };
 
 
@@ -132,6 +134,11 @@ static void       gtk_cell_view_get_preferred_height_for_width (GtkWidget       
 								gint                   avail_size,
 								gint                  *minimum_size,
 								gint                  *natural_size);
+
+static void       context_size_changed_cb                      (GtkCellAreaContext   *context,
+								GParamSpec           *pspec,
+								GtkWidget            *view);
+
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -308,6 +315,10 @@ gtk_cell_view_constructor (GType                  type,
   if (!priv->context)
     priv->context = gtk_cell_area_create_context (priv->area);
 
+  priv->size_changed_id = 
+    g_signal_connect (priv->context, "notify",
+		      G_CALLBACK (context_size_changed_cb), view);
+
   return object;
 }
 
@@ -442,8 +453,6 @@ gtk_cell_view_dispose (GObject *object)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (object);
 
-  gtk_cell_view_cell_layout_clear (GTK_CELL_LAYOUT (cellview));
-
   if (cellview->priv->model)
     {
       g_object_unref (cellview->priv->model);
@@ -458,8 +467,11 @@ gtk_cell_view_dispose (GObject *object)
 
   if (cellview->priv->context)
     {
+      g_signal_handler_disconnect (cellview->priv->context, cellview->priv->size_changed_id);
+
       g_object_unref (cellview->priv->context);
       cellview->priv->context = NULL;
+      cellview->priv->size_changed_id = 0;
     }
 
   G_OBJECT_CLASS (gtk_cell_view_parent_class)->dispose (object);
@@ -644,6 +656,19 @@ gtk_cell_view_cell_layout_get_area (GtkCellLayout   *layout)
 
   return cellview->priv->area;
 }
+
+static void
+context_size_changed_cb (GtkCellAreaContext  *context,
+			 GParamSpec          *pspec,
+			 GtkWidget           *view)
+{
+  if (!strcmp (pspec->name, "minimum-width") ||
+      !strcmp (pspec->name, "natural-width") ||
+      !strcmp (pspec->name, "minimum-height") ||
+      !strcmp (pspec->name, "natural-height"))
+    gtk_widget_queue_resize (view);
+}
+
 
 /**
  * gtk_cell_view_new:
@@ -1164,12 +1189,16 @@ gtk_cell_view_get_preferred_width  (GtkWidget *widget,
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = cellview->priv;
 
+  g_signal_handler_block (priv->context, priv->size_changed_id);
+
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
 
   gtk_cell_area_get_preferred_width (priv->area, priv->context, widget, NULL, NULL);
   gtk_cell_area_context_sum_preferred_width (priv->context);
   gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
+
+  g_signal_handler_unblock (priv->context, priv->size_changed_id);
 }
 
 static void       
@@ -1180,12 +1209,16 @@ gtk_cell_view_get_preferred_height (GtkWidget *widget,
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = cellview->priv;
 
+  g_signal_handler_block (priv->context, priv->size_changed_id);
+
   if (cellview->priv->displayed_row)
     gtk_cell_view_set_cell_data (cellview);
 
   gtk_cell_area_get_preferred_height (priv->area, priv->context, widget, NULL, NULL);
   gtk_cell_area_context_sum_preferred_height (priv->context);
   gtk_cell_area_context_get_preferred_height (priv->context, minimum_size, natural_size);
+
+  g_signal_handler_unblock (priv->context, priv->size_changed_id);
 }
 
 static void       
