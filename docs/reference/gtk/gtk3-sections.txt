@@ -371,6 +371,8 @@ gtk_assistant_add_action_widget
 gtk_assistant_remove_action_widget
 gtk_assistant_update_buttons_state
 gtk_assistant_commit
+gtk_assistant_next_page
+gtk_assistant_previous_page
 
 <SUBSECTION Standard>
 GtkAssistantClass
