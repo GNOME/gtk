@@ -2577,13 +2577,18 @@ gdk_window_add_filter (GdkWindow     *window,
     {
       filter = (GdkEventFilter *)tmp_list->data;
       if ((filter->function == function) && (filter->data == data))
-	return;
+        {
+          filter->ref_count++;
+          return;
+        }
       tmp_list = tmp_list->next;
     }
 
   filter = g_new (GdkEventFilter, 1);
   filter->function = function;
   filter->data = data;
+  filter->ref_count = 1;
+  filter->flags = 0;
 
   if (private)
     private->filters = g_list_append (private->filters, filter);
@@ -2626,6 +2631,11 @@ gdk_window_remove_filter (GdkWindow     *window,
 
       if ((filter->function == function) && (filter->data == data))
 	{
+          filter->flags |= GDK_EVENT_FILTER_REMOVED;
+          filter->ref_count--;
+          if (filter->ref_count != 0)
+            return;
+
 	  if (private)
 	    private->filters = g_list_remove_link (private->filters, node);
 	  else
