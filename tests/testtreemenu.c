@@ -16,7 +16,7 @@ static GtkCellRenderer *cell_1 = NULL, *cell_2 = NULL, *cell_3 = NULL;
 static GtkTreeModel *
 simple_tree_model (void)
 {
-  GtkTreeIter   iter, parent;
+  GtkTreeIter   iter, parent, child;
   GtkTreeStore *store = 
     gtk_tree_store_new (N_SIMPLE_COLUMNS,
 			G_TYPE_STRING,  /* name text */
@@ -82,6 +82,27 @@ simple_tree_model (void)
 		      SIMPLE_COLUMN_NAME, "Tigger",
 		      SIMPLE_COLUMN_ICON, "gtk-yes",
 		      SIMPLE_COLUMN_DESCRIPTION, "Eager",
+		      -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 
+		      SIMPLE_COLUMN_NAME, "Jump",
+		      SIMPLE_COLUMN_ICON, "gtk-yes",
+		      SIMPLE_COLUMN_DESCRIPTION, "Very High",
+		      -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 
+		      SIMPLE_COLUMN_NAME, "Pounce",
+		      SIMPLE_COLUMN_ICON, "gtk-no",
+		      SIMPLE_COLUMN_DESCRIPTION, "On Pooh",
+		      -1);
+
+  gtk_tree_store_append (store, &child, &iter);
+  gtk_tree_store_set (store, &child, 
+		      SIMPLE_COLUMN_NAME, "Bounce",
+		      SIMPLE_COLUMN_ICON, "gtk-cancel",
+		      SIMPLE_COLUMN_DESCRIPTION, "Around",
 		      -1);
 
   gtk_tree_store_append (store, &iter, &parent);
@@ -213,6 +234,44 @@ expand_cell_3_toggled (GtkToggleButton  *toggle,
 }
 
 static void
+menu_activated_cb (GtkTreeMenu *menu,
+		   const gchar *path,
+		   gpointer     unused)
+{
+  GtkTreeModel *model = gtk_tree_menu_get_model (menu);
+  GtkTreeIter   iter;
+  gchar        *row_name;
+
+  if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
+    return;
+
+  gtk_tree_model_get (model, &iter, SIMPLE_COLUMN_NAME, &row_name, -1);
+
+  g_print ("Item activated: %s\n", row_name);
+
+  g_free (row_name);
+}
+
+gboolean 
+enable_submenu_headers (GtkTreeModel      *model,
+			GtkTreeIter       *iter,
+			gpointer           data)
+{
+  return TRUE;
+}
+
+
+static void
+submenu_headers_toggled (GtkToggleButton  *toggle,
+			 GtkTreeMenu      *menu)
+{
+  if (gtk_toggle_button_get_active (toggle))
+    gtk_tree_menu_set_header_func (menu, enable_submenu_headers, NULL, NULL);
+  else
+    gtk_tree_menu_set_header_func (menu, NULL, NULL, NULL);
+}
+
+static void
 tree_menu (void)
 {
   GtkWidget *window, *widget;
@@ -223,6 +282,8 @@ tree_menu (void)
   gtk_window_set_title (GTK_WINDOW (window), "GtkTreeMenu");
 
   menu = simple_tree_menu ();
+
+  g_signal_connect (menu, "menu-activate", G_CALLBACK (menu_activated_cb), NULL);
 
   vbox  = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (vbox);
@@ -277,6 +338,15 @@ tree_menu (void)
   
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_3_toggled), menu);
+
+  widget = gtk_check_button_new_with_label ("Submenu Headers");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (submenu_headers_toggled), menu);
+
 
   gtk_container_add (GTK_CONTAINER (window), vbox);
 

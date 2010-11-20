@@ -46,6 +46,9 @@ typedef struct _GtkTreeMenu              GtkTreeMenu;
 typedef struct _GtkTreeMenuClass         GtkTreeMenuClass;
 typedef struct _GtkTreeMenuPrivate       GtkTreeMenuPrivate;
 
+typedef gboolean (*GtkTreeMenuHeaderFunc) (GtkTreeModel      *model,
+					   GtkTreeIter       *iter,
+					   gpointer           data);
 
 struct _GtkTreeMenu
 {
@@ -88,6 +91,12 @@ void                        gtk_tree_menu_set_row_separator_func   (GtkTreeMenu 
 								    gpointer              data,
 								    GDestroyNotify        destroy);
 GtkTreeViewRowSeparatorFunc gtk_tree_menu_get_row_separator_func   (GtkTreeMenu          *menu);
+
+void                  gtk_tree_menu_set_header_func                (GtkTreeMenu          *menu,
+								    GtkTreeMenuHeaderFunc func,
+								    gpointer              data,
+								    GDestroyNotify        destroy);
+GtkTreeMenuHeaderFunc gtk_tree_menu_get_header_func                (GtkTreeMenu          *menu);
 
 G_END_DECLS
 
