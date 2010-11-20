@@ -296,22 +296,23 @@ function handleLoad(event)
   }
 }
 
-function on_mouse_move (ev) {
+function send_input(cmd, args)
+{
   if (input_socket != null) {
-    input_socket.send("m" + ev.pageX + "," + ev.pageY + "," + ev.timeStamp);
+      input_socket.send(cmd + args.join(","));
   }
+}
+
+function on_mouse_move (ev) {
+  send_input ("m", [ev.pageX, ev.pageY, ev.timeStamp])
 }
 
 function on_mouse_down (ev) {
-  if (input_socket != null) {
-    input_socket.send("b" + ev.pageX + "," + ev.pageY + "," + ev.button + "," + ev.timeStamp);
-  }
+  send_input ("b", [ev.pageX, ev.pageY, ev.button, ev.timeStamp])
 }
 
 function on_mouse_up (ev) {
-  if (input_socket != null) {
-    input_socket.send("B" + ev.pageX + "," + ev.pageY + "," + ev.button + "," + ev.timeStamp);
-  }
+  send_input ("B", [ev.pageX, ev.pageY, ev.button, ev.timeStamp])
 }
 
 function connect()
