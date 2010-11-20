@@ -59,6 +59,7 @@ _gdk_display_broadway_class_init (GdkDisplayBroadwayClass * class)
 static void
 _gdk_display_broadway_init (GdkDisplayBroadway *display)
 {
+  display->id_ht = g_hash_table_new (NULL, NULL);
 }
 
 static void
