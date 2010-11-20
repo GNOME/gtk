@@ -181,6 +181,7 @@ got_input (GInputStream *stream,
   gsize len;
   GError *error = NULL;
   int x, y, button;
+  guint64 time;
   GdkEvent *event = NULL;
   char cmd;
   GList *node;
@@ -205,6 +206,8 @@ got_input (GInputStream *stream,
     x = strtol(p, &p, 10);
     p++; /* Skip , */
     y = strtol(p, &p, 10);
+    p++; /* Skip , */
+    time = strtol(p, &p, 10);
 
     window = _gdk_window_find_child_at (root, x, y);
 
@@ -242,7 +245,7 @@ got_input (GInputStream *stream,
 	  {
 	    event = gdk_event_new (GDK_ENTER_NOTIFY);
 	    event->crossing.window = g_object_ref (window);
-	    event->crossing.time = g_get_monotonic_time () / 1000;
+	    event->crossing.time = time;
 	    event->crossing.x = x - GDK_WINDOW_OBJECT (window)->x;
 	    event->crossing.y = y - GDK_WINDOW_OBJECT (window)->y;
 	    event->crossing.x_root = x;
@@ -269,7 +272,7 @@ got_input (GInputStream *stream,
       {
 	event = gdk_event_new (GDK_MOTION_NOTIFY);
 	event->motion.window = g_object_ref (window);
-	event->motion.time = g_get_monotonic_time () / 1000;
+	event->motion.time = time;
 	event->motion.x = x - GDK_WINDOW_OBJECT (window)->x;
 	event->motion.y = y - GDK_WINDOW_OBJECT (window)->y;
 	event->motion.x_root = x;
@@ -288,6 +291,8 @@ got_input (GInputStream *stream,
     y = strtol(p, &p, 10);
     p++; /* Skip , */
     button = strtol(p, &p, 10);
+    p++; /* Skip , */
+    time = strtol(p, &p, 10);
 
     window = _gdk_window_find_child_at (root, x, y);
 
@@ -295,7 +300,7 @@ got_input (GInputStream *stream,
       {
 	event = gdk_event_new (cmd == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
 	event->button.window = g_object_ref (window);
-	event->button.time = g_get_monotonic_time () / 1000;
+	event->button.time = time;
 	event->button.x = x - GDK_WINDOW_OBJECT (window)->x;
 	event->button.y = y - GDK_WINDOW_OBJECT (window)->y;
 	event->button.x_root = x;
