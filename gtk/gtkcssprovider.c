@@ -37,17 +37,81 @@
  * @See_also: #GtkStyleContext, #GtkStyleProvider
  *
  * #GtkCssProvider is an object implementing #GtkStyleProvider, it is able
- * to parse CSS-like input in order to style widgets.
+ * to parse <ulink url="http://www.w3.org/TR/CSS2">CSS</ulink>-like input
+ * in order to style widgets.
  *
- * <refsect2 id="gtkcssprovider-selectors">
- * <title>Widget selectors</title>
+ * <refsect2 id="gtkcssprovider-files">
+ * <title>Default files</title>
  * <para>
- * Selectors work in a really similar way than in common CSS, widget object
- * names act as HTML tags:
+ * An application can cause GTK+ to parse a specific CSS style sheet by
+ * calling gtk_css_provider_load_from_file() and adding the provider with
+ * gtk_style_context_add_provider() or gtk_style_context_add_provider_for_screen().
+ * In addition, certain files will be read when GTK+ is initialized. First,
+ * the file <filename><replaceable>HOME</replaceable>/.gtk-3.0.css</filename>
+ * is loaded if it exists. Then, GTK+ tries to load
+ * <filename><replaceable>HOME</replaceable>/.themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css</filename>,
+ * falling back to
+ * <filename><replaceable>GTK_DATA_PREFIX</replaceable>/share/themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css</filename>,
+ * where <replaceable>theme-name</replaceable> is the name of the current theme
+ * (see the #GtkSettings:gtk-theme-name setting) and <replaceable>GTK_DATA_PREFIX</replaceable>
+ * is the prefix configured when GTK+ was compiled, unless overridden by the
+ * <envar>GTK_DATA_PREFIX</envar> environment variable.
+ * </para>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-stylesheets">
+ * <title>Style sheets</title>
+ * <para>
+ * The basic structure of the style sheets understood by this provider is
+ * a series of statements, which are either rule sets or '@-rules', separated
+ * by whitespace.
+ * </para>
+ * <para>
+ * A rule set consists of a selector and a declaration block, which is
+ * a series of declarations enclosed in curly braces ({ and }). The
+ * declarations are separated by semicolons (;). Multiple selectors can
+ * share the same declaration block, by putting all the separators in
+ * front of the block, separated by commas.
+ * </para>
+ * <example><title>A rule set with two selectors</title>
+ * <programlisting language="text">
+ * GtkButton, GtkEntry {
+ *     color: &num;ff00ea;
+ *     font: Comic Sans 12
+ * }
+ * </programlisting>
+ * </example>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-selectors">
+ * <title>Selectors</title>
+ * <para>
+ * Selectors work very similar to the way they do in CSS, with widget class
+ * names taking the role of element names, and widget names taking the role
+ * of IDs. When used in a selector, widget names must be prefixed with a
+ * '&num;' character. The '*' character represents the so-called universal
+ * selector, which matches any widget.
+ * </para>
+ * <para>
+ * To express more complicated situations, selectors can be combined in
+ * various ways:
+ * <itemizedlist>
+ * <listitem><para>To require that a widget satisfies several conditions,
+ *   combine several selectors into one by concatenating them. E.g.
+ *   <literal>GtkButton&num;button1</literal> matches a GtkButton widget
+ *   with the name button1.</para></listitem>
+ * <listitem><para>To only match a widget when it occurs inside some other
+ *   widget, write the two selectors after each other, separated by whitespace.
+ *   E.g. <literal>GtkToolBar GtkButton</literal> matches GtkButton widgets
+ *   that occur inside a GtkToolBar.</para></listitem>
+ * <listitem><para>In the previous example, the GtkButton is matched even
+ *   if it occurs deeply nested inside the toolbar. To restrict the match
+ *   to direct children of the parent widget, insert a '>' character between
+ *   the two selectors. E.g. <literal>GtkNotebook > GtkLabel</literal> matches
+ *   GtkLabel widgets that are direct children of a GtkNotebook.</para></listitem>
+ * </itemizedlist>
  * </para>
  * <example>
- * <title>Widgets in selectors</title>
- * <programlisting>
+ * <title>Widget classes and names in selectors</title>
+ * <programlisting language="text">
  * /&ast; Theme labels that are descendants of a window &ast;/
  * GtkWindow GtkLabel {
  *     background-color: &num;898989
@@ -70,14 +134,7 @@
  * GtkBin * {
  *     font-name: Sans 20
  * }
- * </programlisting>
- * </example>
- * <para>
- * Widget names may be matched in CSS as well:
- * </para>
- * <example>
- * <title>Widget names in selectors</title>
- * <programlisting>
+ *
  * /&ast; Theme a label named title-label &ast;/
  * GtkLabel&num;title-label {
  *     font-name: Sans 15
@@ -90,12 +147,17 @@
  * </programlisting>
  * </example>
  * <para>
- * Widgets may also define different classes, so these can be matched
- * in CSS:
+ * Widgets may also define style classes, which can be used for matching.
+ * When used in a selector, style classes must be prefixed with a '.'
+ * character.
+ * </para>
+ * <para>
+ * Refer to the documentation of individual widgets to learn which
+ * style classes they define.
  * </para>
  * <example>
- * <title>Widget names in selectors</title>
- * <programlisting>
+ * <title>Style classes in selectors</title>
+ * <programlisting language="text">
  * /&ast; Theme all widgets defining the class entry &ast;/
  * .entry {
  *     color: &num;39f1f9;
@@ -108,21 +170,33 @@
  * </programlisting>
  * </example>
  * <para>
- * Container widgets may define regions, these region names may be
- * referenced in CSS, it's also possible to apply :nth-child
- * pseudo-class information if the widget implementation provides
- * such data.
+ * In complicated widgets like e.g. a GtkNotebook, it may be desirable
+ * to style different parts of the widget differently. To make this
+ * possible, container widgets may define regions, whose names
+ * may be used for matching in selectors.
+ * </para>
+ * <para>
+ * Some containers allow to further differentiate between regions by
+ * applying so-called pseudo-classes to the region. For example, the
+ * tab region in GtkNotebook allows to single out the first or last
+ * tab by using the :first-child or :last-child pseudo-class.
+ * When used in selectors, pseudo-classes must be prefixed with a
+ * ':' character.
+ * </para>
+ * <para>
+ * Refer to the documentation of individual widgets to learn which
+ * regions and pseudo-classes they define.
  * </para>
  * <example>
- * <title>Region names in containers</title>
- * <programlisting>
+ * <title>Regions in selectors</title>
+ * <programlisting language="text">
  * /&ast; Theme any label within a notebook &ast;/
  * GtkNotebook GtkLabel {
  *     color: &num;f90192;
  * }
  *
  * /&ast; Theme labels within notebook tabs &ast;/
- * GtkNotebook tab:nth-child GtkLabel {
+ * GtkNotebook tab GtkLabel {
  *     color: &num;703910;
  * }
  *
@@ -135,20 +209,22 @@
  * </programlisting>
  * </example>
  * <para>
- * Widget states may be matched as pseudoclasses.
- * Given the needed widget states differ from the
- * offered pseudoclasses in CSS, some are unsupported,
- * and some custom ones have been added.
+ * Another use of pseudo-classes is to match widgets depending on their
+ * state. This is conceptually similar to the :hover, :active or :focus
+ * pseudo-classes in CSS. The available pseudo-classes for widget states
+ * are :active, :prelight (or :hover), :insensitive, :selected, :focused
+ * and :inconsistent.
  * </para>
  * <example>
  * <title>Styling specific widget states</title>
- * <programlisting>
+ * <programlisting language="text">
  * /&ast; Theme active (pressed) buttons &ast;/
  * GtkButton:active {
  *     background-color: &num;0274d9;
  * }
  *
- * /&ast; Theme buttons with the mouse pointer on it &ast;/
+ * /&ast; Theme buttons with the mouse pointer on it,
+ *    both are equivalent &ast;/
  * GtkButton:hover,
  * GtkButton:prelight {
  *     background-color: &num;3085a9;
@@ -177,38 +253,37 @@
  * </programlisting>
  * </example>
  * <para>
- * Widget state pseudoclasses may only apply to the
- * last element in a selector.
+ * Widget state pseudoclasses may only apply to the last element
+ * in a selector.
  * </para>
  * <para>
- * All the mentioned elements may be combined to create
- * complex selectors that match specific widget paths.
- * As in CSS, rules apply by specificity, so the selectors
- * describing the best a widget path will take precedence
+ * To determine the effective style for a widget, all the matching rule
+ * sets are merged. As in CSS, rules apply by specificity, so the rules
+ * whose selectors more closely match a widget path will take precedence
  * over the others.
  * </para>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-rules">
- * <title>&commat; rules</title>
+ * <title>&commat; Rules</title>
  * <para>
- * GTK+'s CSS supports the &commat;import rule, in order
- * to load another CSS file in addition to the currently
- * parsed one.
+ * GTK+'s CSS supports the &commat;import rule, in order to load another
+ * CSS style sheet in addition to the currently parsed one.
  * </para>
  * <example>
  * <title>Using the &commat;import rule</title>
- * <programlisting>
+ * <programlisting language="text">
  * &commat;import url ("path/to/common.css");
  * </programlisting>
  * </example>
  * <para>
- * GTK+ also supports an additional &commat;define-color
- * rule, in order to define a color name which may be used
- * instead of color numeric representations.
+ * GTK+ also supports an additional &commat;define-color rule, in order
+ * to define a color name which may be used instead of color numeric
+ * representations. Also see the #GtkSettings:gtk-color-scheme setting
+ * for a way to override the values of these named colors.
  * </para>
  * <example>
  * <title>Defining colors</title>
- * <programlisting>
+ * <programlisting language="text">
  * &commat;define-color bg_color &num;f9a039;
  *
  * &ast; {
@@ -220,14 +295,14 @@
  * <refsect2 id="gtkcssprovider-symbolic-colors">
  * <title>Symbolic colors</title>
  * <para>
- * Besides being able to define color names, the CSS
- * parser is also able to read different color modifiers,
- * which can also be nested, providing a rich language
- * to define colors starting from other colors.
+ * Besides being able to define color names, the CSS parser is also able
+ * to read different color expressions, which can also be nested, providing
+ * a rich language to define colors which are derived from a set of base
+ * colors.
  * </para>
  * <example>
  * <title>Using symbolic colors</title>
- * <programlisting>
+ * <programlisting language="text">
  * &commat;define-color entry-color shade (&commat;bg_color, 0.7);
  *
  * GtkEntry {
@@ -241,6 +316,63 @@
  * }
  * </programlisting>
  * </example>
+ * <para>
+ *   The various ways to express colors in GTK+ CSS are:
+ * </para>
+ * <informaltable>
+ *   <tgroup cols="3">
+ *     <thead>
+ *       <row>
+ *         <entry>Syntax</entry>
+ *         <entry>Explanation</entry>
+ *         <entry>Examples</entry>
+ *       </row>
+ *     </thead>
+ *     <tbody>
+ *       <row>
+ *         <entry>rgb(@r, @g, @b)</entry>
+ *         <entry>An opaque color; @r, @g, @b can be either integers between 0 and 255 or percentages</entry>
+ *         <entry>rgb(128, 10, 54)
+ *                rgb(20%, 30%, 0%)</entry>
+ *       </row>
+ *       <row>
+ *         <entry>rgba(@r, @g, @b, @a)</entry>
+ *         <entry>A translucent color; @r, @g, @b are as in the previous row, @a is a floating point number between 0 and 1</entry>
+ *         <entry>rgba(255, 255, 0, 0.5)</entry>
+ *       </row>
+ *       <row>
+ *         <entry>&num;@xxyyzz</entry>
+ *         <entry>An opaque color; @xx, @yy, @zz are hexadecimal numbers specifying @r, @g, @b
+ *                variants with between 1 and 4 hexadecimal digits per component are allowed</entry>
+ *         <entry>&num;ff12ab
+ *                &num;f0c</entry>
+ *       </row>
+ *       <row>
+ *         <entry>&commat;name</entry>
+ *         <entry>Reference to a color that has been defined with &commat;define-color</entry>
+ *         <entry>&commat;bg_color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>mix(@color1, @color2, @f)</entry>
+ *         <entry>A linear combination of @color1 and @color2. @f is a floating point number between 0 and 1.</entry>
+ *         <entry>mix(&num;ff1e0a, &commat;bg_color, 0.8)</entry>
+ *       </row>
+ *       <row>
+ *         <entry>shade(@color, @f)</entry>
+ *         <entry>A lighter or darker variant of @color. @f is a floating point number.</entry>
+ *         <entry>shade(&commat;fg_color, 0.5)</entry>
+ *       </row>
+ *       <row>
+ *         <entry>lighter(@color)</entry>
+ *         <entry>A lighter variant of @color</entry>
+ *       </row>
+ *       <row>
+ *         <entry>darker(@color)</entry>
+ *         <entry>A darker variant of @color</entry>
+ *       </row>
+ *     </tbody>
+ *   </tgroup>
+ * </informaltable>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-properties">
  * <title>Supported properties</title>
@@ -693,6 +825,7 @@ create_scanner (void)
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "insensitive", GUINT_TO_POINTER (GTK_STATE_INSENSITIVE));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "inconsistent", GUINT_TO_POINTER (GTK_STATE_INCONSISTENT));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "focused", GUINT_TO_POINTER (GTK_STATE_FOCUSED));
+  g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "focus", GUINT_TO_POINTER (GTK_STATE_FOCUSED));
 
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "nth-child", GUINT_TO_POINTER (SYMBOL_NTH_CHILD));
   g_scanner_scope_add_symbol (scanner, SCOPE_PSEUDO_CLASS, "first-child", GUINT_TO_POINTER (SYMBOL_FIRST_CHILD));

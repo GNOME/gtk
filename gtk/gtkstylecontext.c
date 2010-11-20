@@ -43,11 +43,11 @@
  * a widget defined by #GtkWidgetPath.
  *
  * In order to construct the final style information, #GtkStyleContext
- * queries information to all attached #GtkStyleProvider<!-- -->s, either
- * to the context specifically through gtk_style_context_add_provider(), or
- * to the screen through gtk_style_context_add_provider_for_screen(). The
- * resulting style is a combination of all provider's information in priority
- * order.
+ * queries information from all attached #GtkStyleProviders. Style providers
+ * can be either attached explicitly to the context through
+ * gtk_style_context_add_provider(), or to the screen through
+ * gtk_style_context_add_provider_for_screen(). The resulting style is a
+ * combination of all provider's information in priority order.
  *
  * For GTK+ widgets, any #GtkStyleContext returned by
  * gtk_widget_get_style_context() will already have a #GtkWidgetPath, a

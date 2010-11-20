@@ -25,11 +25,11 @@
 
 /**
  * SECTION:gtkstyleprovider
- * @Short_description: Interface to provide style information to #GtkStyleContext
+ * @Short_description: Interface to provide style information to GtkStyleContext
  * @Title: GtkStyleProvider
  * @See_also: #GtkStyleContext, #GtkCssProvider
  *
- * #GtkStyleProvider is an interface used to provide style information to a #GtkStyleContext,
+ * GtkStyleProvider is an interface used to provide style information to a #GtkStyleContext,
  * see gtk_style_context_add_provider() and gtk_style_context_add_provider_for_screen().
  */
 
