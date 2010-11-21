@@ -264,8 +264,8 @@ gdk_window_impl_broadway_finalize (GObject *object)
 
   wrapper = (GdkWindowObject*) draw_impl->wrapper;
 
-  display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (wrapper));
-  g_hash_table_remove (display_broadway->id_ht, window_impl->id);
+  display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (draw_impl->wrapper));
+  g_hash_table_remove (display_broadway->id_ht, GINT_TO_POINTER(window_impl->id));
 
   if (window_impl->cursor)
     gdk_cursor_unref (window_impl->cursor);
@@ -338,7 +338,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl = (GdkDrawable *)impl;
   impl->id = current_id++;
-  g_hash_table_insert (display_broadway->id_ht, impl->id, window);
+  g_hash_table_insert (display_broadway->id_ht, GINT_TO_POINTER(impl->id), window);
   draw_impl = GDK_DRAWABLE_IMPL_BROADWAY (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
 

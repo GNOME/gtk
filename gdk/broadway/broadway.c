@@ -947,11 +947,9 @@ broadway_client_put_rgba (BroadwayClient *client,  int id, int x, int y,
   crop_x = 0;
   crop_y = 0;
 
-  printf ("pre crop: %dx%d\n", w, h);
   rgba_autocrop (data,
 		 byte_stride,
 		 &crop_x, &crop_y, &w, &h);
-  printf ("post crop: %dx%d %d,%d\n", w, h, crop_x, crop_y);
 
   if (w == 0 || h == 0)
     return;
