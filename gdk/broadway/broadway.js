@@ -179,6 +179,10 @@ function handleCommands(cmd_obj)
 	var context = surfaces[id];
 	context.save();
 
+	var minx;
+	var miny;
+	var maxx;
+	var maxy;
 	for (var r = 0; r < nrects; r++) {
 	  var x = base64_16(cmd, i);
           i = i + 3;
@@ -189,6 +193,22 @@ function handleCommands(cmd_obj)
           var h = base64_16(cmd, i);
           i = i + 3;
 	  context.rect(x, y, w, h);
+
+	  if (r == 0) {
+	      minx = x;
+	      miny = y;
+	      maxx = x + w;
+	      maxy = y + h;
+	  } else {
+	      if (x < minx)
+		  minx = x;
+	      if (y < miny)
+		  miny = y;
+	      if (x + w > maxx)
+		  maxx = x + w;
+	      if (y + h > maxy)
+		  maxy = y + h;
+	  }
 	}
 
 	context.clip()
@@ -198,7 +218,9 @@ function handleCommands(cmd_obj)
         var dy = base64_16s(cmd, i);
         i = i + 3;
 
-        context.drawImage(context.canvas, dx, dy, context.canvas.width, context.canvas.height);
+        context.drawImage(context.canvas,
+			  minx - dx, miny - dy, maxx - minx, maxy - miny,
+			  minx, miny, maxx - minx, maxy - miny);
 
 	context.restore();
         break;
