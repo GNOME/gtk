@@ -32,6 +32,25 @@
 #include "gtk9slice.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkstyleproperties
+ * @Short_description: Store for style property information
+ * @Title: GtkStyleProperties
+ *
+ * GtkStyleProperties provides the storage for style information
+ * that is used by #GtkStyleContext and other #GtkStyleProvider
+ * implementations.
+ *
+ * Before style properties can be stored in GtkStyleProperties, they
+ * must be registered with gtk_style_properties_register_property().
+ *
+ * Unless you are writing a #GtkStyleProvider implementation, you
+ * are unlikely to use this API directly, as gtk_style_context_get()
+ * and its variants are the preferred way to access styling information
+ * from widget implementations and theming engine implementations
+ * should use the APIs provided by #GtkThemingEngine instead.
+ */
+
 typedef struct GtkStylePropertiesPrivate GtkStylePropertiesPrivate;
 typedef struct PropertyData PropertyData;
 typedef struct PropertyNode PropertyNode;

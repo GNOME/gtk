@@ -313,6 +313,19 @@ Used to change the appearance of an outline typically provided by a #GtkFrame.
 @GTK_SHADOW_ETCHED_IN: The outline has a sunken 3d appearance.
 @GTK_SHADOW_ETCHED_OUT: The outline has a raised 3d appearance
 
+<!-- ##### ENUM GtkStateType ##### -->
+<para>
+
+</para>
+
+@GTK_STATE_NORMAL: 
+@GTK_STATE_ACTIVE: 
+@GTK_STATE_PRELIGHT: 
+@GTK_STATE_SELECTED: 
+@GTK_STATE_INSENSITIVE: 
+@GTK_STATE_INCONSISTENT: 
+@GTK_STATE_FOCUSED: 
+
 <!-- ##### ENUM GtkToolbarStyle ##### -->
 <para>
 Used to customize the appearance of a #GtkToolbar. Note that 
