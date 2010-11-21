@@ -53,6 +53,7 @@ struct _GdkDisplayBroadway
 
   GSource *event_source;
   GdkWindow *mouse_in_toplevel;
+  int last_x, last_y;
 
   gint grab_count;
 

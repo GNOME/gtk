@@ -211,6 +211,8 @@ got_input (GInputStream *stream,
     y = strtol(p, &p, 10);
     p++; /* Skip , */
     time = strtol(p, &p, 10);
+    display_broadway->last_x = x;
+    display_broadway->last_y = y;
 
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (id));
 
@@ -298,6 +300,8 @@ got_input (GInputStream *stream,
     button = strtol(p, &p, 10);
     p++; /* Skip , */
     time = strtol(p, &p, 10);
+    display_broadway->last_x = x;
+    display_broadway->last_y = y;
 
     window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (id));
 
