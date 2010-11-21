@@ -32,6 +32,18 @@ bw_malloc(size_t size)
 }
 
 static void *
+bw_realloc(void *old_ptr, size_t size)
+{
+  void *ptr;
+
+  ptr = realloc(old_ptr, size);
+  if (ptr == NULL && size != 0)
+    exit(1);
+
+  return ptr;
+}
+
+static void *
 bw_malloc0(size_t size)
 {
   void *ptr;
@@ -44,6 +56,7 @@ bw_malloc0(size_t size)
 }
 
 #define bw_new(struct_type, n_structs) (bw_malloc(sizeof(struct_type) * (n_structs)))
+#define bw_renew(ptr, struct_type, n_structs) (bw_realloc(ptr, sizeof(struct_type) * (n_structs)))
 #define bw_new0(struct_type, n_structs) (bw_malloc0(sizeof(struct_type) * (n_structs)))
 
 /************************************************************************
