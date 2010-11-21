@@ -846,106 +846,197 @@ broadway_client_put_rgb (BroadwayClient *client,  int id, int x, int y,
   free (url);
 }
 
+typedef struct  {
+  int x1, y1;
+  int x2, y2;
+} BroadwayBox;
+
+static int
+is_set (unsigned char *data,
+	int x, int y,
+	int byte_stride)
+{
+  return (*(uint32_t *)(data + y * byte_stride + x * 4)) != 0;
+}
+
+static int
+extend_x_range (unsigned char *data,
+		int box_x1, int box_y1,
+		int box_x2, int box_y2,
+		int *x1, int *x2, int y,
+		int byte_stride)
+{
+  int extended = 0;
+
+  if (*x1 > box_x1 && is_set (data, *x1, y, byte_stride))
+    {
+      while (*x1 > box_x1 && is_set (data, *x1 - 1, y, byte_stride))
+	{
+	  (*x1)--;
+	  extended = 1;
+	}
+    }
+
+  if (*x2 < box_x2 && is_set (data, *x2 - 1, y, byte_stride))
+    {
+      while (*x2 < box_x2 && is_set (data, *x2, y, byte_stride))
+	{
+	  (*x2)++;
+	  extended = 1;
+	}
+    }
+
+  return extended;
+}
+
+static int
+extend_y_range (unsigned char *data,
+		int box_x1, int box_y1,
+		int box_x2, int box_y2,
+		int x1, int x2, int *y,
+		int byte_stride)
+{
+  int x;
+  int extended = 0;
+  int found_set;
+
+  while (*y < box_y2)
+    {
+      found_set = 0;
+      for (x = x1; x < x2; x++)
+	{
+	  if (is_set (data, x, (*y) + 1, byte_stride))
+	    {
+	      found_set = 1;
+	      break;
+	    }
+	}
+      if (!found_set)
+	break;
+      (*y)++;
+      extended = 1;
+    }
+
+  return extended;
+}
+
+
 static void
-rgba_autocrop (unsigned char *data,
-	       int byte_stride,
-	       int *x_arg, int *y_arg,
-	       int *w_arg, int *h_arg)
+rgba_find_rects_extents (unsigned char *data,
+			 int box_x1, int box_y1,
+			 int box_x2, int box_y2,
+			 int x, int y,
+			 BroadwayBox *rect,
+			 int byte_stride)
+{
+  int x1, x2, y1, y2, yy;
+  int extended;
+
+  x1 = x;
+  x2 = x + 1;
+  y1 = y;
+  y2 = y + 1;
+
+  do
+    {
+      /* Expand maximally for all known rows */
+      do
+	{
+	  extended = 0;
+
+	  for (yy = y1; yy < y2; yy++)
+	    extended |= extend_x_range (data,
+					box_x1, box_y1,
+					box_x2, box_y2,
+					&x1, &x2, yy,
+					byte_stride);
+	}
+      while (extended);
+    }
+  while (extend_y_range(data,
+			box_x1, box_y1,
+			box_x2, box_y2,
+			x1, x2, &y2,
+			byte_stride));
+
+  rect->x1 = x1;
+  rect->x2 = x2;
+  rect->y1 = y1;
+  rect->y2 = y2;
+}
+
+static void
+rgba_find_rects_sub (unsigned char *data,
+		     int box_x1, int box_y1,
+		     int box_x2, int box_y2,
+		     int byte_stride,
+		     BroadwayBox **rects,
+		     int *n_rects, int *alloc_rects)
 {
   uint32_t *line;
-  int w, h;
-  int x, y, xx, yy;
-  boolean non_zero;
+  BroadwayBox rect;
+  int x, y;
 
-  x = *x_arg;
-  y = *y_arg;
-  w = *w_arg;
-  h = *h_arg;
+  if (box_x1 == box_x2 || box_y1 == box_y2)
+    return;
 
-  while (h > 0)
+  for (y = box_y1; y < box_y2; y++)
     {
-      line = (uint32_t *)(data + y * byte_stride + x * 4);
+      line = (uint32_t *)(data + y * byte_stride + box_x1 * 4);
 
-      non_zero = FALSE;
-      for (xx = 0; xx < w; xx++)
+      for (x = box_x1; x < box_x2; x++)
 	{
-	  if (*line != 0) {
-	    non_zero = TRUE;
-	    break;
-	  }
+	  if (*line != 0)
+	    {
+	      rgba_find_rects_extents (data,
+				       box_x1, box_y1, box_x2, box_y2,
+				       x, y, &rect, byte_stride);
+	      if (*n_rects == *alloc_rects)
+		{
+		  (*alloc_rects) *= 2;
+		  *rects = bw_renew(*rects, BroadwayBox, *alloc_rects);
+		}
+	      (*rects)[*n_rects] = rect;
+	      (*n_rects)++;
+	      rgba_find_rects_sub (data,
+				   box_x1, rect.y1,
+				   rect.x1, rect.y2,
+				   byte_stride,
+				   rects, n_rects, alloc_rects);
+	      rgba_find_rects_sub (data,
+				   rect.x2, rect.y1,
+				   box_x2, rect.y2,
+				   byte_stride,
+				   rects, n_rects, alloc_rects);
+	      rgba_find_rects_sub (data,
+				   box_x1, rect.y2,
+				   box_x2, box_y2,
+				   byte_stride,
+				   rects, n_rects, alloc_rects);
+	      return;
+	    }
 	  line++;
 	}
-
-      if (non_zero)
-	break;
-
-      y++;
-      h--;
     }
+}
 
-  while (h > 0)
-    {
-      line = (uint32_t *)(data + (y + h - 1) * byte_stride + x * 4);
+static BroadwayBox *
+rgba_find_rects (unsigned char *data,
+		 int w, int h, int byte_stride,
+		 int *n_rects)
+{
+  BroadwayBox *rects;
+  int alloc_rects;
 
-      non_zero = FALSE;
-      for (xx = 0; xx < w; xx++)
-	{
-	  if (*line != 0) {
-	    non_zero = TRUE;
-	    break;
-	  }
-	  line++;
-	}
+  alloc_rects = 20;
+  rects = bw_new (BroadwayBox, alloc_rects);
 
-      if (non_zero)
-	break;
-      h--;
-    }
+  *n_rects = 0;
+  rgba_find_rects_sub (data,
+		       0, 0, w, h, byte_stride,
+		       &rects, n_rects, &alloc_rects);
 
-  while (w > 0)
-    {
-      line = (uint32_t *)(data + y * byte_stride + x * 4);
-
-      non_zero = FALSE;
-      for (yy = 0; yy < h; yy++)
-	{
-	  if (*line != 0) {
-	    non_zero = TRUE;
-	    break;
-	  }
-	  line += byte_stride / 4;
-	}
-
-      if (non_zero)
-	break;
-
-      x++;
-      w--;
-    }
-
-  while (w > 0)
-    {
-      line = (uint32_t *)(data + y * byte_stride + (x + w - 1) * 4);
-
-      non_zero = FALSE;
-      for (yy = 0; yy < h; yy++)
-	{
-	  if (*line != 0) {
-	    non_zero = TRUE;
-	    break;
-	  }
-	  line += byte_stride / 4;
-	}
-
-      if (non_zero)
-	break;
-      w--;
-    }
-
-    *x_arg = x;
-    *y_arg = y;
-    *w_arg = w;
-    *h_arg = h;
+  return rects;
 }
 
 void
@@ -955,34 +1046,35 @@ broadway_client_put_rgba (BroadwayClient *client,  int id, int x, int y,
   char buf[16];
   size_t len;
   char *url;
-  int crop_x, crop_y;
+  BroadwayBox *rects;
+  int i, n_rects;
+  uint8_t *subdata;
 
-  crop_x = 0;
-  crop_y = 0;
+  rects = rgba_find_rects (data, w, h, byte_stride, &n_rects);
 
-  rgba_autocrop (data,
-		 byte_stride,
-		 &crop_x, &crop_y, &w, &h);
+  for (i = 0; i < n_rects; i++)
+    {
+      subdata = (uint8_t *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
 
-  if (w == 0 || h == 0)
-    return;
+      buf[0] = 'i';
+      base64_uint16(id, &buf[1]);
+      base64_uint16(x + rects[i].x1, &buf[4]);
+      base64_uint16(y + rects[i].y1, &buf[7]);
 
-  data = (uint8_t *)data + crop_x * 4 + crop_y * byte_stride;
+      url = to_png_rgba (rects[i].x2 - rects[i].x1,
+			 rects[i].y2 - rects[i].y1,
+			 byte_stride, (uint32_t*)subdata);
+      len = strlen (url);
+      base64_uint32(len, &buf[10]);
 
-  buf[0] = 'i';
-  base64_uint16(id, &buf[1]);
-  base64_uint16(x + crop_x, &buf[4]);
-  base64_uint16(y + crop_y, &buf[7]);
+      broadway_client_write (client, buf, 16);
 
-  url = to_png_rgba (w, h, byte_stride, (uint32_t*)data);
-  len = strlen (url);
-  base64_uint32(len, &buf[10]);
+      broadway_client_write (client, url, len);
 
-  broadway_client_write (client, buf, 16);
+      free (url);
+    }
 
-  broadway_client_write (client, url, len);
-
-  free (url);
+  free (rects);
 }
 
 #if 0
