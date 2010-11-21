@@ -841,7 +841,25 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
                                           GdkModifierType *mask,
                                           gboolean         get_toplevel)
 {
-  return NULL;
+  GdkWindow *window;
+  GdkWindowObject *private;
+  GdkDisplayBroadway *display_broadway;
+  GdkScreen *screen;
+
+  display_broadway = GDK_DISPLAY_BROADWAY (display);
+  screen = gdk_display_get_screen (display, 0);
+  window = _gdk_window_find_child_at (gdk_screen_get_root_window (screen),
+				      display_broadway->last_x,
+				      display_broadway->last_y);
+
+  if (window != NULL)
+    {
+      private = (GdkWindowObject *)window;
+      *win_x = display_broadway->last_x - private->x;
+      *win_y = display_broadway->last_y - private->y;
+    }
+
+  return window;
 }
 
 static GdkEventMask
