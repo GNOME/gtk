@@ -494,82 +494,45 @@ gdk_window_broadway_withdraw (GdkWindow *window)
   gdk_window_broadway_hide (window);
 }
 
-static inline void
-window_broadway_move (GdkWindow *window,
-                 gint       x,
-                 gint       y)
-{
-  GdkWindowObject *private = (GdkWindowObject *) window;
-
-  // XMoveWindow (GDK_WINDOW_XDISPLAY (window),  GDK_WINDOW_XID (window),  x, y);
-  private->x = x;
-  private->y = y;
-}
-
-static inline void
-window_broadway_resize (GdkWindow *window,
-                   gint       width,
-                   gint       height)
-{
-  GdkWindowObject *private = (GdkWindowObject *) window;
-
-  if (width < 1)
-    width = 1;
-
-  if (height < 1)
-    height = 1;
-
-  //XResizeWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window), width, height);
-
-  private->width = width;
-  private->height = height;
-  _gdk_broadway_drawable_update_size (private->impl);
-
-  _gdk_broadway_drawable_update_size (private->impl);
-}
-
-static inline void
-window_broadway_move_resize (GdkWindow *window,
-                        gint       x,
-                        gint       y,
-                        gint       width,
-                        gint       height)
-{
-  GdkWindowObject *private = (GdkWindowObject *) window;;
-
-  if (width < 1)
-    width = 1;
-
-  if (height < 1)
-    height = 1;
-
-  //XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window), x, y, width, height);
-
-  private->x = x;
-  private->y = y;
-
-  private->width = width;
-  private->height = height;
-
-  _gdk_broadway_drawable_update_size (private->impl);
-}
-
 static void
 gdk_window_broadway_move_resize (GdkWindow *window,
-                            gboolean   with_move,
-                            gint       x,
-                            gint       y,
-                            gint       width,
-                            gint       height)
+				 gboolean   with_move,
+				 gint       x,
+				 gint       y,
+				 gint       width,
+				 gint       height)
 {
-  if (with_move && (width < 0 && height < 0))
-    window_broadway_move (window, x, y);
-  else
+  GdkWindowObject *private = (GdkWindowObject *) window;;
+  GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  GdkDisplayBroadway *display_broadway;
+
+  display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (window));
+  if (with_move)
     {
-      if (with_move)
-        window_broadway_move_resize (window, x, y, width, height);
-      else
-        window_broadway_resize (window, width, height);
+      private->x = x;
+      private->y = y;
+      if (display_broadway->output != NULL)
+	{
+	  broadway_client_move_surface (display_broadway->output,
+					impl->id, x, y);
+	  queue_dirty_flush (display_broadway);
+	}
+    }
+
+
+  if (width > 0 || height > 0)
+    {
+      if (width < 1)
+	width = 1;
+
+      if (height < 1)
+	height = 1;
+
+      g_print ("TODO: Ignoring resize of window %p\n", window);
+
+      private->width = width;
+      private->height = height;
+      _gdk_broadway_drawable_update_size (private->impl);
     }
 }
 
