@@ -1,4 +1,3 @@
-
 var base64_val = [
   255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
   255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,255,
@@ -72,8 +71,8 @@ function initContext(canvas, x, y, id)
 {
   canvas.surface_id = id;
   canvas.style["position"] = "absolute"
-  canvas.style["top"] = x + "px"
-  canvas.style["left"] = y + "px"
+  canvas.style["left"] = x + "px"
+  canvas.style["top"] = y + "px"
   canvas.style["display"] = "none"
   context = canvas.getContext("2d")
   context.globalCompositeOperation = "src-over"
