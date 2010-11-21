@@ -87,7 +87,7 @@ diff_surfaces (cairo_surface_t *surface,
 	       cairo_surface_t *old_surface)
 {
   guint8 *data, *old_data;
-  guint8 *line, *old_line;
+  guint32 *line, *old_line;
   int w, h, stride, old_stride;
   int x, y;
 
@@ -102,16 +102,17 @@ diff_surfaces (cairo_surface_t *surface,
 
   for (y = 0; y < h; y++)
     {
-      line = data;
-      old_line = old_data;
+      line = (guint32 *)data;
+      old_line = (guint32 *)old_data;
 
       for (x = 0; x < w; x++)
 	{
-	  int j;
-	  for (j = 0; j < 4; j++)
-	    old_line[j] = line[j] - old_line[j];
-	  line += 4;
-	  old_line += 4;
+	  if ((*line & 0xffffff) == (*old_line & 0xffffff))
+	    *old_line = 0;
+	  else
+	    *old_line = *line | 0xff000000;
+	  line ++;
+	  old_line ++;
 	}
 
       data += stride;
@@ -127,15 +128,18 @@ window_data_send (BroadwayClient *client, GdkWindowImplBroadway *impl)
   GdkDrawableImplBroadway *drawable_impl = GDK_DRAWABLE_IMPL_BROADWAY (impl);
   cairo_t *cr;
 
+  if (drawable_impl->surface == NULL)
+    return;
+
   if (impl->last_synced)
     {
       diff_surfaces (drawable_impl->surface,
 		     drawable_impl->last_surface);
-      broadway_client_put_delta_rgb (client, impl->id, 0, 0,
-				     cairo_image_surface_get_width (drawable_impl->last_surface),
-				     cairo_image_surface_get_height (drawable_impl->last_surface),
-				     cairo_image_surface_get_stride (drawable_impl->last_surface),
-				     cairo_image_surface_get_data (drawable_impl->last_surface));
+      broadway_client_put_rgba (client, impl->id, 0, 0,
+				cairo_image_surface_get_width (drawable_impl->last_surface),
+				cairo_image_surface_get_height (drawable_impl->last_surface),
+				cairo_image_surface_get_stride (drawable_impl->last_surface),
+				cairo_image_surface_get_data (drawable_impl->last_surface));
     }
   else
     {

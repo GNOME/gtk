@@ -68,31 +68,6 @@ var surfaces = {};
 var outstanding_commands = new Array();
 var input_socket = null;
 
-function apply_delta(id, img, x, y)
-{
-  var tmp_surface = document.createElement("canvas");
-  var w = img.width;
-  var h = img.height;
-  tmp_surface.width = w;
-  tmp_surface.height = h;
-
-  tmp_context = tmp_surface.getContext("2d");
-  tmp_context.drawImage(img, 0, 0);
-
-  var data = surfaces[id].getImageData(x, y, w, h);
-  var d = data.data
-  var delta = tmp_context.getImageData(0, 0, w, h).data;
-  var imax = w * h * 4;
-  for (var i = 0; i < imax; i += 4) {
-    d[i  ] = (d[i  ] + delta[i  ]) & 0xff;
-    d[i+1] = (d[i+1] + delta[i+1]) & 0xff;
-    d[i+2] = (d[i+2] + delta[i+2]) & 0xff;
-    d[i+3] = 255;
-  }
-  surfaces[id].putImageData(data, x, y);
-  delete tmp_surface
-}
-
 function initContext(canvas, x, y, id)
 {
   canvas.surface_id = id;
@@ -101,7 +76,7 @@ function initContext(canvas, x, y, id)
   canvas.style["left"] = y + "px"
   canvas.style["display"] = "none"
   context = canvas.getContext("2d")
-  context.globalCompositeOperation = "copy"
+  context.globalCompositeOperation = "src-over"
   context.fillRect(0, 0, canvas.width, canvas.height);
   document.body.appendChild(canvas)
 
@@ -189,30 +164,6 @@ function handleCommands(cmd_obj)
 	} else {
 	  cmd_obj.pos = i;
 	  img.onload = function() { surfaces[id].drawImage(img, x, y); handleOutstanding(); }
-	  return false
-	}
-
-        break;
-
-      /* put delta image data surface */
-      case 'D':
-        var id = base64_16(cmd, i);
-        i = i + 3;
-        var x = base64_16(cmd, i);
-        i = i + 3;
-        var y = base64_16(cmd, i);
-        i = i + 3;
-        var size = base64_32(cmd, i);
-        i = i + 6;
-	var url = cmd.slice(i, i + size);
-	i = i + size;
-        var img = new Image();
-	img.src = url
-	if (img.complete) {
-	  apply_delta(id, img, x, y);
-	} else {
-	  cmd_obj.pos = i;
-          img.onload = function() { apply_delta(id, img, x, y); handleOutstanding(); }
 	  return false
 	}
 

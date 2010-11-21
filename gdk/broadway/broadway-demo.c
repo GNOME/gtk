@@ -5,14 +5,15 @@
 #include "broadway.h"
 #include <math.h>
 #include <unistd.h>
+#include <stdint.h>
 #include <cairo.h>
 
 static void
 diff_surfaces (cairo_surface_t *surface,
 	       cairo_surface_t *old_surface)
 {
-  unsigned char *data, *old_data;
-  unsigned char *line, *old_line;
+  uint8_t *data, *old_data;
+  uint32_t *line, *old_line;
   int w, h, stride, old_stride;
   int x, y;
 
@@ -27,16 +28,17 @@ diff_surfaces (cairo_surface_t *surface,
 
   for (y = 0; y < h; y++)
     {
-      line = data;
-      old_line = old_data;
+      line = (uint32_t *)data;
+      old_line = (uint32_t *)old_data;
 
       for (x = 0; x < w; x++)
 	{
-	  int j;
-	  for (j = 0; j < 4; j++)
-	    old_line[j] = line[j] - old_line[j];
-	  line += 4;
-	  old_line += 4;
+	  if (*line & 0xffffff == *old_line & 0xffffff)
+	    *old_line = 0;
+	  else
+	    *old_line = *line | 0xff000000;
+	  line ++;
+	  old_line ++;
 	}
 
       data += stride;
@@ -181,8 +183,8 @@ demo2 (BroadwayClient *client)
 	{
 	  diff_surfaces (surface,
 			 old_surface);
-	  broadway_client_put_delta_rgb (client, 0, 0, 0, 800, 600, 800*4,
-					 cairo_image_surface_get_data(old_surface));
+	  broadway_client_put_rgba (client, 0, 0, 0, 800, 600, 800*4,
+				    cairo_image_surface_get_data(old_surface));
 	}
       broadway_client_move_surface (client, 0, 100 + i, 100 + i);
 

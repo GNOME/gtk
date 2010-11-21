@@ -834,12 +834,12 @@ broadway_client_put_rgb (BroadwayClient *client,  int id, int x, int y,
 }
 
 static void
-rgb_autocrop (unsigned char *data,
-	      int byte_stride,
-	      int *x_arg, int *y_arg,
-	      int *w_arg, int *h_arg)
+rgba_autocrop (unsigned char *data,
+	       int byte_stride,
+	       int *x_arg, int *y_arg,
+	       int *w_arg, int *h_arg)
 {
-  unsigned char *line;
+  uint32_t *line;
   int w, h;
   int x, y, xx, yy;
   boolean non_zero;
@@ -851,16 +851,16 @@ rgb_autocrop (unsigned char *data,
 
   while (h > 0)
     {
-      line = data + y * byte_stride + x * 4;
+      line = (uint32_t *)(data + y * byte_stride + x * 4);
 
       non_zero = FALSE;
       for (xx = 0; xx < w; xx++)
 	{
-	  if (line[1] != 0 || line[2] != 0 || line[3] != 0) {
+	  if (*line != 0) {
 	    non_zero = TRUE;
 	    break;
 	  }
-	  line += 4;
+	  line++;
 	}
 
       if (non_zero)
@@ -872,16 +872,16 @@ rgb_autocrop (unsigned char *data,
 
   while (h > 0)
     {
-      line = data + (y + h - 1) * byte_stride + x * 4;
+      line = (uint32_t *)(data + (y + h - 1) * byte_stride + x * 4);
 
       non_zero = FALSE;
       for (xx = 0; xx < w; xx++)
 	{
-	  if (line[1] != 0 || line[2] != 0 || line[3] != 0) {
+	  if (*line != 0) {
 	    non_zero = TRUE;
 	    break;
 	  }
-	  line += 4;
+	  line++;
 	}
 
       if (non_zero)
@@ -891,16 +891,16 @@ rgb_autocrop (unsigned char *data,
 
   while (w > 0)
     {
-      line = data + y * byte_stride + x * 4;
+      line = (uint32_t *)(data + y * byte_stride + x * 4);
 
       non_zero = FALSE;
       for (yy = 0; yy < h; yy++)
 	{
-	  if (line[1] != 0 || line[2] != 0 || line[3] != 0) {
+	  if (*line != 0) {
 	    non_zero = TRUE;
 	    break;
 	  }
-	  line += byte_stride;
+	  line += byte_stride / 4;
 	}
 
       if (non_zero)
@@ -912,16 +912,16 @@ rgb_autocrop (unsigned char *data,
 
   while (w > 0)
     {
-      line = data + y * byte_stride + (x + w - 1) * 4;
+      line = (uint32_t *)(data + y * byte_stride + (x + w - 1) * 4);
 
       non_zero = FALSE;
       for (yy = 0; yy < h; yy++)
 	{
-	  if (line[1] != 0 || line[2] != 0 || line[3] != 0) {
+	  if (*line != 0) {
 	    non_zero = TRUE;
 	    break;
 	  }
-	  line += byte_stride;
+	  line += byte_stride / 4;
 	}
 
       if (non_zero)
@@ -936,54 +936,32 @@ rgb_autocrop (unsigned char *data,
 }
 
 void
-broadway_client_put_delta_rgb (BroadwayClient *client,  int id, int dest_x, int dest_y,
-			       int w, int h, int byte_stride, void *data)
-{
-  char buf[16];
-  size_t len;
-  char *url;
-  int src_x, src_y;
-
-  src_x = 0;
-  src_y = 0;
-
-  rgb_autocrop (data,
-		byte_stride,
-		&src_x, &src_y, &w, &h);
-
-  if (w == 0 || h == 0)
-    return;
-
-  data = (uint8_t *)data + src_x * 4 + src_y * byte_stride;
-
-  buf[0] = 'D';
-  base64_uint16(id, &buf[1]);
-  base64_uint16(dest_x + src_x, &buf[4]);
-  base64_uint16(dest_y + src_y, &buf[7]);
-
-  url = to_png_rgb (w, h, byte_stride, (uint32_t*)data);
-  len = strlen (url);
-  base64_uint32(len, &buf[10]);
-
-  broadway_client_write (client, buf, 16);
-
-  broadway_client_write (client, url, len);
-
-  free (url);
-}
-
-void
 broadway_client_put_rgba (BroadwayClient *client,  int id, int x, int y,
 			  int w, int h, int byte_stride, void *data)
 {
   char buf[16];
   size_t len;
   char *url;
+  int crop_x, crop_y;
+
+  crop_x = 0;
+  crop_y = 0;
+
+  printf ("pre crop: %dx%d\n", w, h);
+  rgba_autocrop (data,
+		 byte_stride,
+		 &crop_x, &crop_y, &w, &h);
+  printf ("post crop: %dx%d %d,%d\n", w, h, crop_x, crop_y);
+
+  if (w == 0 || h == 0)
+    return;
+
+  data = (uint8_t *)data + crop_x * 4 + crop_y * byte_stride;
 
   buf[0] = 'i';
   base64_uint16(id, &buf[1]);
-  base64_uint16(x, &buf[4]);
-  base64_uint16(y, &buf[7]);
+  base64_uint16(x + crop_x, &buf[4]);
+  base64_uint16(y + crop_y, &buf[7]);
 
   url = to_png_rgba (w, h, byte_stride, (uint32_t*)data);
   len = strlen (url);
