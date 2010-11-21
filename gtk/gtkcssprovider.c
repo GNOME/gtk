@@ -2964,8 +2964,11 @@ parse_rule (GtkCssProvider *css_provider,
 
           if (strcmp (value_str, "none") == 0)
             {
-              /* Remove/unset the current value */
-              g_hash_table_remove (priv->cur_properties, prop);
+              /* Insert the default value, so it has an opportunity
+               * to override other style providers when merged
+               */
+              g_param_value_set_default (pspec, val);
+              g_hash_table_insert (priv->cur_properties, prop, val);
             }
           else if (pspec->value_type == G_TYPE_STRING)
             {
