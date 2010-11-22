@@ -146,7 +146,7 @@ typedef struct _GdkDrawable           GdkDrawable;
  *
  * An opaque structure representing an onscreen drawable.
  */
-typedef struct _GdkDrawable           GdkWindow;
+typedef struct _GdkWindow             GdkWindow;
 typedef struct _GdkDisplay	      GdkDisplay;
 typedef struct _GdkScreen	      GdkScreen;
 
