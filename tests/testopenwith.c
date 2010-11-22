@@ -25,8 +25,10 @@
 
 static GtkWidget *toplevel;
 static GFile *file;
-static GtkWidget *grid, *file_l, *open, *show_mode;
+static GtkWidget *grid, *file_l, *open;
 static GtkWidget *radio_file, *radio_content, *dialog;
+static GtkWidget *open_with_widget;
+static GtkWidget *recommended, *fallback, *other, *all, *radio;
 
 static void
 dialog_response (GtkDialog *d,
@@ -48,15 +50,34 @@ dialog_response (GtkDialog *d,
     }
 
   gtk_widget_destroy (GTK_WIDGET (d));
+  dialog = NULL;
 }
 
 static void
-display_dialog (GtkButton *b,
-		gpointer user_data)
+bind_props (void)
+{
+  g_object_bind_property (recommended, "active",
+			  open_with_widget, "show-recommended",
+			  G_BINDING_SYNC_CREATE);
+  g_object_bind_property (fallback, "active",
+			  open_with_widget, "show-fallback",
+			  G_BINDING_SYNC_CREATE);
+  g_object_bind_property (other, "active",
+			  open_with_widget, "show-other",
+			  G_BINDING_SYNC_CREATE);
+  g_object_bind_property (all, "active",
+			  open_with_widget, "show-all",
+			  G_BINDING_SYNC_CREATE);
+  g_object_bind_property (radio, "active",
+			  open_with_widget, "radio-mode",
+			  G_BINDING_SYNC_CREATE);
+}
+
+static void
+prepare_dialog (void)
 {
   gboolean use_file = FALSE;
   gchar *content_type = NULL;
-  GtkWidget *open_with_widget;
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio_file)))
     use_file = TRUE;
@@ -83,30 +104,22 @@ display_dialog (GtkButton *b,
 							  0, content_type);
     }
 
-  open_with_widget = gtk_open_with_dialog_get_widget (GTK_OPEN_WITH_DIALOG (dialog));
-  gtk_open_with_widget_set_show_mode (GTK_OPEN_WITH_WIDGET (open_with_widget),
-				      gtk_combo_box_get_active (GTK_COMBO_BOX (show_mode)));
-
-  gtk_widget_show (dialog);
-
   g_signal_connect (dialog, "response",
 		    G_CALLBACK (dialog_response), NULL);
 
   g_free (content_type);
+
+  open_with_widget = gtk_open_with_dialog_get_widget (GTK_OPEN_WITH_DIALOG (dialog));
+  bind_props ();
 }
 
 static void
-show_mode_changed (GtkComboBox *b,
-		   gpointer user_data)
+display_dialog (void)
 {
-  if (dialog != NULL)
-    {
-      gint active;
-
-      active = gtk_combo_box_get_active (b);
-      gtk_open_with_widget_set_show_mode (GTK_OPEN_WITH_WIDGET (gtk_open_with_dialog_get_widget (GTK_OPEN_WITH_DIALOG (dialog))),
-					  active);
-    }
+  if (dialog == NULL)
+    prepare_dialog ();
+  
+  gtk_widget_show (dialog);
 }
 
 static void
@@ -139,7 +152,7 @@ int
 main (int argc,
       char **argv)
 {
-  GtkWidget *w;
+  GtkWidget *w1;
   gchar *path;
 
   g_type_init ();
@@ -149,10 +162,10 @@ main (int argc,
   gtk_container_set_border_width (GTK_CONTAINER (toplevel), 12);
   grid = gtk_grid_new ();
 
-  w = gtk_label_new ("File:");
-  gtk_widget_set_halign (w, GTK_ALIGN_START);
+  w1 = gtk_label_new ("File:");
+  gtk_widget_set_halign (w1, GTK_ALIGN_START);
   gtk_grid_attach (GTK_GRID (grid),
-		   w, 0, 0, 1, 1);
+		   w1, 0, 0, 1, 1);
 
   file_l = gtk_button_new ();
   path = g_build_filename (g_get_current_dir (), "apple-red.png", NULL);
@@ -162,7 +175,7 @@ main (int argc,
 
   gtk_widget_set_halign (file_l, GTK_ALIGN_START);
   gtk_grid_attach_next_to (GTK_GRID (grid), file_l,
-			   w, GTK_POS_RIGHT, 1, 1);
+			   w1, GTK_POS_RIGHT, 1, 1);
   g_signal_connect (file_l, "clicked",
 		    G_CALLBACK (button_clicked), NULL);
 
@@ -179,18 +192,30 @@ main (int argc,
   gtk_grid_attach_next_to (GTK_GRID (grid), open,
 			   radio_content, GTK_POS_BOTTOM, 1, 1);
 
+  recommended = gtk_check_button_new_with_label ("Show recommended");
+  gtk_grid_attach_next_to (GTK_GRID (grid), recommended,
+			   open, GTK_POS_BOTTOM, 1, 1);
+  g_object_set (recommended, "active", TRUE, NULL);
+
+  fallback = gtk_check_button_new_with_label ("Show fallback");
+  gtk_grid_attach_next_to (GTK_GRID (grid), fallback,
+			   recommended, GTK_POS_RIGHT, 1, 1);
+
+  other = gtk_check_button_new_with_label ("Show other");
+  gtk_grid_attach_next_to (GTK_GRID (grid), other,
+			   fallback, GTK_POS_RIGHT, 1, 1);
+
+  all = gtk_check_button_new_with_label ("Show all");
+  gtk_grid_attach_next_to (GTK_GRID (grid), all,
+			   other, GTK_POS_RIGHT, 1, 1);
+
+  radio = gtk_check_button_new_with_label ("Radio mode");
+  gtk_grid_attach_next_to (GTK_GRID (grid), radio,
+			   all, GTK_POS_BOTTOM, 1, 1);
+
+  prepare_dialog ();
   g_signal_connect (open, "clicked",
 		    G_CALLBACK (display_dialog), NULL);
-
-  show_mode = gtk_combo_box_text_new ();
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (show_mode), "Recommended only");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (show_mode), "All applications");
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (show_mode), "Headings");
-  gtk_grid_attach_next_to (GTK_GRID (grid), show_mode,
-			   open, GTK_POS_BOTTOM, 1, 1);
-  gtk_combo_box_set_active (GTK_COMBO_BOX (show_mode), 2);
-  g_signal_connect (show_mode, "changed",
-		    G_CALLBACK (show_mode_changed), NULL);
 
   gtk_container_add (GTK_CONTAINER (toplevel), grid);
 
