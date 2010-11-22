@@ -90,7 +90,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
   /* Top /left corner */
   slice->surfaces[BORDER_LEFT][BORDER_TOP] = cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
                                                                            distance_left, distance_top);
-  cairo_create (slice->surfaces[BORDER_LEFT][BORDER_TOP]);
+  cr = cairo_create (slice->surfaces[BORDER_LEFT][BORDER_TOP]);
 
   cairo_set_source_surface (cr, surface, 0, 0);
   cairo_paint (cr);
@@ -100,7 +100,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
   /* Top/right corner */
   slice->surfaces[BORDER_RIGHT][BORDER_TOP] = cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
                                                                             distance_right, distance_top);
-  cairo_create (slice->surfaces[BORDER_RIGHT][BORDER_TOP]);
+  cr = cairo_create (slice->surfaces[BORDER_RIGHT][BORDER_TOP]);
 
   cairo_set_source_surface (cr, surface, - width + distance_right, 0);
   cairo_paint (cr);
@@ -110,7 +110,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
   /* Bottom/left corner */
   slice->surfaces[BORDER_LEFT][BORDER_BOTTOM] = cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
                                                                               distance_left, distance_bottom);
-  cairo_create (slice->surfaces[BORDER_LEFT][BORDER_BOTTOM]);
+  cr = cairo_create (slice->surfaces[BORDER_LEFT][BORDER_BOTTOM]);
 
   cairo_set_source_surface (cr, surface, 0, - height + distance_bottom);
   cairo_paint (cr);
@@ -120,7 +120,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
   /* Bottom/right corner */
   slice->surfaces[BORDER_RIGHT][BORDER_BOTTOM] = cairo_surface_create_similar (surface, CAIRO_CONTENT_COLOR_ALPHA,
                                                                                distance_right, distance_bottom);
-  cairo_create (slice->surfaces[BORDER_RIGHT][BORDER_BOTTOM]);
+  cr = cairo_create (slice->surfaces[BORDER_RIGHT][BORDER_BOTTOM]);
 
   cairo_set_source_surface (cr, surface, - width + distance_right, - height + distance_bottom);
   cairo_paint (cr);
@@ -132,7 +132,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
                                                                              CAIRO_CONTENT_COLOR_ALPHA,
                                                                              width - distance_left - distance_right,
                                                                              distance_top);
-  cairo_create (slice->surfaces[BORDER_MIDDLE][BORDER_TOP]);
+  cr = cairo_create (slice->surfaces[BORDER_MIDDLE][BORDER_TOP]);
   cairo_set_source_surface (cr, surface, - distance_left, 0);
   cairo_paint (cr);
   cairo_destroy (cr);
@@ -142,7 +142,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
                                                                                 CAIRO_CONTENT_COLOR_ALPHA,
                                                                                 width - distance_left - distance_right,
                                                                                 distance_bottom);
-  cairo_create (slice->surfaces[BORDER_MIDDLE][BORDER_BOTTOM]);
+  cr = cairo_create (slice->surfaces[BORDER_MIDDLE][BORDER_BOTTOM]);
   cairo_set_source_surface (cr, surface, - distance_left, - height + distance_bottom);
   cairo_paint (cr);
   cairo_destroy (cr);
@@ -152,7 +152,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
                                                                               CAIRO_CONTENT_COLOR_ALPHA,
                                                                               distance_left,
                                                                               height - distance_top - distance_bottom);
-  cairo_create (slice->surfaces[BORDER_LEFT][BORDER_MIDDLE]);
+  cr = cairo_create (slice->surfaces[BORDER_LEFT][BORDER_MIDDLE]);
   cairo_set_source_surface (cr, surface, 0, - distance_top);
   cairo_paint (cr);
   cairo_destroy (cr);
@@ -162,7 +162,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
                                                                                CAIRO_CONTENT_COLOR_ALPHA,
                                                                                distance_right,
                                                                                height - distance_top - distance_bottom);
-  cairo_create (slice->surfaces[BORDER_RIGHT][BORDER_MIDDLE]);
+  cr = cairo_create (slice->surfaces[BORDER_RIGHT][BORDER_MIDDLE]);
   cairo_set_source_surface (cr, surface, - width + distance_right, - distance_top);
   cairo_paint (cr);
   cairo_destroy (cr);
@@ -172,7 +172,7 @@ gtk_9slice_new (GdkPixbuf            *pixbuf,
                                                                                 CAIRO_CONTENT_COLOR_ALPHA,
                                                                                 width - distance_left - distance_right,
                                                                                 height - distance_top - distance_bottom);
-  cairo_create (slice->surfaces[BORDER_MIDDLE][BORDER_MIDDLE]);
+  cr = cairo_create (slice->surfaces[BORDER_MIDDLE][BORDER_MIDDLE]);
   cairo_set_source_surface (cr, surface, - distance_left, - distance_top);
   cairo_paint (cr);
   cairo_destroy (cr);
