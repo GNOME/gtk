@@ -59,7 +59,7 @@
  * gtk_style_context_set_path() and gtk_style_context_set_screen(), as well
  * as updating the context yourself using gtk_style_context_invalidate()
  * whenever any of the conditions change, such as a change in the
- * #GtkSettings:gtk-theme-name property or a hierarchy change in the rendered
+ * #GtkSettings:gtk-theme-name setting or a hierarchy change in the rendered
  * widget.
  *
  * <refsect2 id="gtkstylecontext-animations">
@@ -67,22 +67,23 @@
  * <para>
  * #GtkStyleContext has built-in support for state change transitions.
  * </para>
- * <note>
+ * <para>
  * For simple widgets where state changes affect the whole widget area,
- * calling gtk_style_context_notify_state_change() with a %NULL identifier
- * would be sufficient.
- * </note>
+ * calling gtk_style_context_notify_state_change() with a %NULL region
+ * is sufficient.
+ * </para>
  * <para>
  * If a widget needs to declare several animatable regions (i.e. not
  * affecting the whole widget area), its #GtkWidget::draw signal handler
- * needs to wrap the render operations for the different regions around
- * gtk_style_context_push_animatable_region() and
+ * needs to wrap the render operations for the different regions with
+ * calls to gtk_style_context_push_animatable_region() and
  * gtk_style_context_pop_animatable_region(). These functions take an
- * unique identifier within the style context, for simple widgets with
- * little animatable regions, an enum may be used:
+ * identifier for the region which must be unique within the style context.
+ * For simple widgets with a fixed set of animatable regions, using an
+ * enumeration works well:
  * </para>
  * <example>
- * <title>Using an enum as animatable region identifier</title>
+ * <title>Using an enumeration to identify  animatable regions</title>
  * <programlisting>
  * enum {
  *   REGION_ENTRY,
@@ -114,11 +115,12 @@
  * </example>
  * <para>
  * For complex widgets with an arbitrary number of animatable regions, it
- * is up to the implementation to come up with a way to univocally identify
- * an animatable region, pointers to internal structs would suffice.
+ * is up to the implementation to come up with a way to uniquely identify
+ * each animatable region. Using pointers to internal structs is one way
+ * to achieve this:
  * </para>
  * <example>
- * <title>Using an arbitrary pointer as animatable region identifier</title>
+ * <title>Using struct pointers to identify animatable regions</title>
  * <programlisting>
  * void
  * notebook_draw_tab (GtkWidget    *widget,
@@ -1113,6 +1115,9 @@ gtk_style_context_reset_widgets (GdkScreen *screen)
  * Adds a global style provider to @screen, which will be used
  * in style construction for all #GtkStyleContext<!-- -->s under
  * @screen.
+ *
+ * GTK+ uses this to make styling information from #GtkSettings
+ * available.
  *
  * Since: 3.0
  **/
@@ -2468,7 +2473,8 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  *
  * Notifies a state change on @context, so if the current style makes use
  * of transition animations, one will be started so all rendered elements
- * under @region_id are animated for state @state being set to value @state_value.
+ * under @region_id are animated for state @state being set to value
+ * @state_value.
  *
  * The @window parameter is used in order to invalidate the rendered area
  * as the animation runs, so make sure it is the same window that is being
@@ -2482,23 +2488,24 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * <programlisting>
  * gtk_style_context_notify_state_change (context,
  *                                        gtk_widget_get_window (widget),
- *                                        NULL, GTK_STATE_PRELIGHT,
+ *                                        NULL,
+ *                                        GTK_STATE_PRELIGHT,
  *                                        button->in_button);
  * </programlisting>
  *
- * Could be handled in the CSS file like this:
+ * Can be handled in the CSS file like this:
  * <programlisting>
  * GtkButton {
- *     background-color: #f00;
+ *     background-color: &num;f00
  * }
  *
  * GtkButton:hover {
- *     background-color: #fff;
- *     transition: 200ms linear;
+ *     background-color: &num;fff;
+ *     transition: 200ms linear
  * }
  * </programlisting>
  *
- * This combination would animate the button background from red to white
+ * This combination will animate the button background from red to white
  * if a pointer enters the button, and back to red if the pointer leaves
  * the button.
  *
@@ -2612,13 +2619,14 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
  * @region_id: unique identifier for the animatable region
  *
  * Pushes an animatable region, so all further gtk_render_*() calls between
- * this call and the following gtk_style_context_pop_animatable_region() will
- * potentially show transition animations for if gtk_style_context_notify_state_change()
- * is called for a given state, and the theme/style used contemplates the use of
- * transition animations for state changes.
+ * this call and the following gtk_style_context_pop_animatable_region()
+ * will potentially show transition animations for if
+ * gtk_style_context_notify_state_change() is called for a given state,
+ * and the theme/style used contemplates the use of transition animations
+ * for state changes.
  *
- * The @region_id used must be unique in @context so the theming engine may
- * univocally identify rendered elements subject to a state transition.
+ * The @region_id used must be unique in @context so the theming engine
+ * can uniquely identify rendered elements subject to a state transition.
  *
  * Since: 3.0
  **/
@@ -2639,7 +2647,8 @@ gtk_style_context_push_animatable_region (GtkStyleContext *context,
  * gtk_style_context_pop_animatable_region:
  * @context: a #GtkStyleContext
  *
- * Pops an animatable region from @context. See gtk_style_context_push_animatable_region().
+ * Pops an animatable region from @context.
+ * See gtk_style_context_push_animatable_region().
  *
  * Since: 3.0
  **/
@@ -2715,7 +2724,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
 
       info->invalidation_region = cairo_region_create ();
 
-      for (i = 0; i <info->rectangles->len; i++)
+      for (i = 0; i < info->rectangles->len; i++)
         {
           cairo_rectangle_int_t *rect;
 
@@ -2753,7 +2762,7 @@ store_animation_region (GtkStyleContext *context,
 
       info = l->data;
 
-      /* The animation doesn't need updatring
+      /* The animation doesn't need updating
        * the invalidation area, bail out.
        */
       if (info->invalidation_region)
