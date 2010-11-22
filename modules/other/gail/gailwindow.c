@@ -723,7 +723,7 @@ get_stacked_windows (GailScreenInfo *info)
   gdk_error_trap_push ();
   ret_type = None;
   result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-                               GDK_WINDOW_XWINDOW (info->root_window),
+                               GDK_WINDOW_XID (info->root_window),
                                _net_client_list_stacking,
                                0, G_MAXLONG,
                                False, XA_WINDOW, &ret_type, &format, &nitems,
@@ -920,11 +920,11 @@ init_gail_screen (GdkScreen *screen,
   get_stacked_windows (&gail_screens [screen_n]);
 
   XGetWindowAttributes (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-			GDK_WINDOW_XWINDOW (gail_screens [screen_n].root_window),
+			GDK_WINDOW_XID (gail_screens [screen_n].root_window),
 			&attrs); 
 
   XSelectInput (GDK_DISPLAY_XDISPLAY (gdk_display_get_default ()),
-		GDK_WINDOW_XWINDOW (gail_screens [screen_n].root_window),
+		GDK_WINDOW_XID (gail_screens [screen_n].root_window),
 		attrs.your_event_mask | PropertyChangeMask);
            
   gail_screens [screen_n].screen_initialized = TRUE;

@@ -228,7 +228,7 @@ gdk_device_core_warp (GdkDevice *device,
   Window dest;
 
   xdisplay = GDK_DISPLAY_XDISPLAY (gdk_device_get_display (device));
-  dest = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
+  dest = GDK_WINDOW_XID (gdk_screen_get_root_window (screen));
 
   XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0, x, y);
 }
@@ -497,6 +497,6 @@ gdk_device_core_select_window_events (GdkDevice    *device,
     xmask |= StructureNotifyMask | PropertyChangeMask;
 
   XSelectInput (GDK_WINDOW_XDISPLAY (window),
-                GDK_WINDOW_XWINDOW (window),
+                GDK_WINDOW_XID (window),
                 xmask);
 }

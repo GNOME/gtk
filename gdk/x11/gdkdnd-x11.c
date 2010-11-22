@@ -547,7 +547,7 @@ gdk_window_cache_new (GdkScreen *screen)
   result->child_hash = g_hash_table_new (g_direct_hash, NULL);
   result->screen = screen;
 
-  XGetWindowAttributes (xdisplay, GDK_WINDOW_XWINDOW (root_window), &xwa);
+  XGetWindowAttributes (xdisplay, GDK_WINDOW_XID (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
 
   if (G_UNLIKELY (!GDK_DISPLAY_X11 (GDK_SCREEN_X11 (screen)->display)->trusted_client)) 
@@ -568,13 +568,13 @@ gdk_window_cache_new (GdkScreen *screen)
       return result;
     }
 
-  XSelectInput (xdisplay, GDK_WINDOW_XWINDOW (root_window),
+  XSelectInput (xdisplay, GDK_WINDOW_XID (root_window),
 		result->old_event_mask | SubstructureNotifyMask);
   gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
   gdk_window_add_filter (NULL, gdk_window_cache_shape_filter, result);
 
   if (!_gdk_x11_get_window_child_info (gdk_screen_get_display (screen),
-				       GDK_WINDOW_XWINDOW (root_window),
+				       GDK_WINDOW_XID (root_window),
 				       FALSE, NULL,
 				       &children, &nchildren))
     return result;
@@ -598,9 +598,9 @@ gdk_window_cache_new (GdkScreen *screen)
    */
   if (gdk_screen_is_composited (screen))
     {
-      cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XWINDOW (root_window));
+      cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
       gdk_window_cache_add (result, cow, 0, 0, gdk_screen_get_width (screen), gdk_screen_get_height (screen), TRUE);
-      XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XWINDOW (root_window));
+      XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
     }
 #endif
 
@@ -613,7 +613,7 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
   GdkWindow *root_window = gdk_screen_get_root_window (cache->screen);
 
   XSelectInput (GDK_WINDOW_XDISPLAY (root_window),
-		GDK_WINDOW_XWINDOW (root_window),
+		GDK_WINDOW_XID (root_window),
 		cache->old_event_mask);
   gdk_window_remove_filter (root_window, gdk_window_cache_filter, cache);
   gdk_window_remove_filter (NULL, gdk_window_cache_shape_filter, cache);
@@ -774,7 +774,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   if (retval)
     return retval;
   else
-    return GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (cache->screen));
+    return GDK_WINDOW_XID (gdk_screen_get_root_window (cache->screen));
 }
 
 /*************************************************************
@@ -2397,7 +2397,7 @@ xdnd_send_xevent (GdkDragContext *context,
 	}
     }
 
-  xwindow = GDK_WINDOW_XWINDOW (window);
+  xwindow = GDK_WINDOW_XID (window);
   
   if (_gdk_x11_display_is_root_window (display, xwindow))
     event_mask = ButtonPressMask;

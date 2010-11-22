@@ -975,7 +975,6 @@ GDK_SCREEN_XNUMBER
 GDK_SCREEN_XSCREEN
 GDK_CURSOR_XCURSOR
 GDK_CURSOR_XDISPLAY
-GDK_WINDOW_XWINDOW
 gdkx_visual_get
 gdk_window_foreign_new
 gdk_window_foreign_new_for_display

@@ -878,7 +878,7 @@ _gdk_window_impl_new (GdkWindow     *window,
     gdk_window_set_type_hint (window, attributes->type_hint);
 
   gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                  GDK_WINDOW_XWINDOW (window), event_mask,
+                                  GDK_WINDOW_XID (window), event_mask,
                                   StructureNotifyMask | PropertyChangeMask);
 }
 
@@ -1826,7 +1826,7 @@ move_to_current_desktop (GdkWindow *window)
           xclient.type = ClientMessage;
           xclient.serial = 0;
           xclient.send_event = True;
-          xclient.window = GDK_WINDOW_XWINDOW (window);
+          xclient.window = GDK_WINDOW_XID (window);
 	  xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP");
           xclient.format = 32;
 
@@ -1877,7 +1877,7 @@ gdk_window_focus (GdkWindow *window,
 
       memset (&xclient, 0, sizeof (xclient));
       xclient.type = ClientMessage;
-      xclient.window = GDK_WINDOW_XWINDOW (window);
+      xclient.window = GDK_WINDOW_XID (window);
       xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display,
 									"_NET_ACTIVE_WINDOW");
       xclient.format = 32;
@@ -3305,7 +3305,7 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
 	toplevels = gdk_screen_get_toplevel_windows (screen);
 	for (list = toplevels; list != NULL; list = g_list_next (list)) {
 	  window = GDK_WINDOW (list->data);
-	  xwindow = GDK_WINDOW_XWINDOW (window);
+	  xwindow = GDK_WINDOW_XID (window);
 	  gdk_error_trap_push ();
 	  XQueryPointer (xdisplay, xwindow,
 			 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
@@ -3407,7 +3407,7 @@ gdk_window_x11_set_events (GdkWindow    *window,
 
       display_x11 = GDK_DISPLAY_X11 (gdk_window_get_display (window));
       gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                      GDK_WINDOW_XWINDOW (window), event_mask,
+                                      GDK_WINDOW_XID (window), event_mask,
                                       xevent_mask);
     }
 }
@@ -3986,7 +3986,7 @@ gdk_window_iconify (GdkWindow *window)
   if (GDK_WINDOW_IS_MAPPED (window))
     {  
       XIconifyWindow (GDK_WINDOW_XDISPLAY (window),
-		      GDK_WINDOW_XWINDOW (window),
+		      GDK_WINDOW_XID (window),
 		      gdk_screen_get_number (GDK_WINDOW_SCREEN (window)));
     }
   else
@@ -4067,7 +4067,7 @@ gdk_window_stick (GdkWindow *window)
       /* Request desktop 0xFFFFFFFF */
       memset (&xclient, 0, sizeof (xclient));
       xclient.type = ClientMessage;
-      xclient.window = GDK_WINDOW_XWINDOW (window);
+      xclient.window = GDK_WINDOW_XID (window);
       xclient.display = GDK_WINDOW_XDISPLAY (window);
       xclient.message_type = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window), 
 									"_NET_WM_DESKTOP");
@@ -5541,7 +5541,7 @@ _gdk_windowing_window_set_composited (GdkWindow *window,
 
   display = gdk_window_get_display (window);
   dpy = GDK_DISPLAY_XDISPLAY (display);
-  xid = GDK_WINDOW_XWINDOW (private);
+  xid = GDK_WINDOW_XID (private);
 
   if (composited)
     {
@@ -5642,7 +5642,7 @@ gdk_x11_get_server_time (GdkWindow *window)
   g_return_val_if_fail (!GDK_WINDOW_DESTROYED (window), 0);
 
   xdisplay = GDK_WINDOW_XDISPLAY (window);
-  xwindow = GDK_WINDOW_XWINDOW (window);
+  xwindow = GDK_WINDOW_XID (window);
   timestamp_prop_atom =
     gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
 					   "GDK_TIMESTAMP_PROP");

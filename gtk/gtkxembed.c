@@ -153,7 +153,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 	    g_message ("Sending %s", _gtk_xembed_message_name (message)));
 
   memset (&xclient, 0, sizeof (xclient));
-  xclient.window = GDK_WINDOW_XWINDOW (recipient);
+  xclient.window = GDK_WINDOW_XID (recipient);
   xclient.type = ClientMessage;
   xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_XEMBED");
   xclient.format = 32;
@@ -165,7 +165,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
 
   gdk_error_trap_push ();
   XSendEvent (GDK_WINDOW_XDISPLAY(recipient),
-	      GDK_WINDOW_XWINDOW (recipient),
+	      GDK_WINDOW_XID (recipient),
 	      False, NoEventMask, (XEvent *)&xclient);
   gdk_error_trap_pop_ignored ();
 }

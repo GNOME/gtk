@@ -258,13 +258,13 @@ gdk_device_xi2_set_window_cursor (GdkDevice *device,
 
       XIDefineCursor (GDK_WINDOW_XDISPLAY (window),
                       priv->device_id,
-                      GDK_WINDOW_XWINDOW (window),
+                      GDK_WINDOW_XID (window),
                       cursor_private->xcursor);
     }
   else
     XIUndefineCursor (GDK_WINDOW_XDISPLAY (window),
                       priv->device_id,
-                      GDK_WINDOW_XWINDOW (window));
+                      GDK_WINDOW_XID (window));
 }
 
 static void
@@ -277,7 +277,7 @@ gdk_device_xi2_warp (GdkDevice *device,
   Window dest;
 
   priv = GDK_DEVICE_XI2 (device)->priv;
-  dest = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
+  dest = GDK_WINDOW_XID (gdk_screen_get_root_window (screen));
 
   XIWarpPointer (GDK_SCREEN_XDISPLAY (screen),
                  priv->device_id,
@@ -512,7 +512,7 @@ gdk_device_xi2_select_window_events (GdkDevice    *device,
   evmask.mask = gdk_device_xi2_translate_event_mask (event_mask, &evmask.mask_len);
 
   XISelectEvents (GDK_WINDOW_XDISPLAY (window),
-                  GDK_WINDOW_XWINDOW (window),
+                  GDK_WINDOW_XID (window),
                   &evmask, 1);
 
   g_free (evmask.mask);

@@ -2567,7 +2567,7 @@ _gtk_selection_incr_event (GdkWindow	   *window,
 #ifdef DEBUG_SELECTION
 	  g_message ("INCR: put %d bytes (offset = %d) into window 0x%lx , property %ld",
 		     num_bytes, info->conversions[i].offset, 
-		     GDK_WINDOW_XWINDOW(info->requestor), event->atom);
+		     GDK_WINDOW_XID(info->requestor), event->atom);
 #endif
 
 	  bytes_per_item = gtk_selection_bytes_per_item (info->conversions[i].data.format);
