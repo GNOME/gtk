@@ -188,55 +188,6 @@ check_application (GtkOpenWithDialog *self,
 }
 
 static void
-add_or_find_application (GtkOpenWithDialog *self)
-{
-  GAppInfo *app;
-  GList *applications;
-
-  app = gtk_open_with_get_app_info (GTK_OPEN_WITH (self));
-  
-  if (app == NULL)
-    {
-      /* TODO: better error? */
-      show_error_dialog (_("Could not add application"),
-			 NULL,
-			 GTK_WINDOW (self));
-      return;
-    }
-
-  applications = g_app_info_get_all_for_type (self->priv->content_type);
-  if (self->priv->content_type != NULL && applications != NULL)
-    {
-      /* we don't care about reporting errors here */
-      g_app_info_add_supports_type (app,
-				    self->priv->content_type,
-				    NULL);
-    }
-
-  if (applications != NULL)
-    g_list_free_full (applications, g_object_unref);
-
-  g_object_unref (app);
-}
-
-static void
-gtk_open_with_dialog_response (GtkDialog *dialog,
-			       gint response_id,
-			       gpointer user_data)
-{
-  GtkOpenWithDialog *self = GTK_OPEN_WITH_DIALOG (dialog);
-
-  switch (response_id)
-    {
-    case GTK_RESPONSE_OK:
-      add_or_find_application (self);
-      break;
-    default :
-      break;
-    }
-}
-
-static void
 widget_application_selected_cb (GtkOpenWithWidget *widget,
 				GAppInfo *app_info,
 				gpointer user_data)
@@ -537,12 +488,6 @@ gtk_open_with_dialog_init (GtkOpenWithDialog *self)
 {
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_OPEN_WITH_DIALOG,
 					    GtkOpenWithDialogPrivate);
-
-  /* we can't override the class signal handler here, as it's a RUN_LAST;
-   * we want our signal handler instead to be executed before any user code.
-   */
-  g_signal_connect (self, "response",
-		    G_CALLBACK (gtk_open_with_dialog_response), NULL);
 }
 
 static void
