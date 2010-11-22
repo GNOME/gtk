@@ -35,10 +35,10 @@
  * path abstraction is used in #GtkStyleContext on behalf of the real
  * widget in order to query style information.
  *
- * If you are using GTK+ widgets, there are many chances you don't
- * need this API directly, as there is gtk_widget_get_path(), and the
- * style context returned by gtk_widget_get_style_context() will be
- * automatically updated on widget hierarchy changes.
+ * If you are using GTK+ widgets, you probably will not need to use
+ * this API directly, as there is gtk_widget_get_path(), and the style
+ * context returned by gtk_widget_get_style_context() will be automatically
+ * updated on widget hierarchy changes.
  *
  * The widget path generation is generally simple:
  * <example>
