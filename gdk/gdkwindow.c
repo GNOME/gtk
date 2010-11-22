@@ -219,10 +219,6 @@ typedef struct {
 
 /* Global info */
 
-static cairo_surface_t *gdk_window_ref_cairo_surface (GdkDrawable *drawable);
-static cairo_surface_t *gdk_window_create_cairo_surface (GdkDrawable *drawable,
-							 int width,
-							 int height);
 static void             gdk_window_drop_cairo_surface (GdkWindowObject *private);
 
 static void gdk_window_free_paint_stack (GdkWindow *window);
@@ -370,16 +366,12 @@ static void
 gdk_window_class_init (GdkWindowObjectClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
 
   parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_window_finalize;
   object_class->set_property = gdk_window_set_property;
   object_class->get_property = gdk_window_get_property;
-
-  drawable_class->ref_cairo_surface = gdk_window_ref_cairo_surface;
-  drawable_class->create_cairo_surface = gdk_window_create_cairo_surface;
 
   klass->create_surface = _gdk_offscreen_window_create_surface;
 
@@ -2748,7 +2740,7 @@ gdk_window_get_content (GdkWindow *window)
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
 
-  surface = _gdk_drawable_ref_cairo_surface (window);
+  surface = _gdk_window_ref_cairo_surface (window);
   content = cairo_surface_get_content (surface);
   cairo_surface_destroy (surface);
 
@@ -3647,7 +3639,7 @@ gdk_window_clear_backing_region_direct (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  paint.surface = _gdk_drawable_ref_cairo_surface (window);
+  paint.surface = _gdk_window_ref_cairo_surface (window);
 
   cr = setup_backing_rect (window, &paint, 0, 0);
 
@@ -3698,14 +3690,14 @@ gdk_window_cairo_surface_destroy (void *data)
 }
 
 static cairo_surface_t *
-gdk_window_create_cairo_surface (GdkDrawable *drawable,
+gdk_window_create_cairo_surface (GdkWindow *window,
 				 int width,
 				 int height)
 {
-  GdkWindowObject *private = GDK_WINDOW_OBJECT(drawable);
+  GdkWindowObject *private = GDK_WINDOW_OBJECT (window);
   cairo_surface_t *surface, *subsurface;
   
-  surface =_gdk_drawable_ref_cairo_surface (private->impl);
+  surface = _gdk_drawable_ref_cairo_surface (private->impl);
   if (gdk_window_has_impl (private))
     return surface;
 
@@ -3719,11 +3711,15 @@ gdk_window_create_cairo_surface (GdkDrawable *drawable,
 }
 
 
-static cairo_surface_t *
-gdk_window_ref_cairo_surface (GdkDrawable *drawable)
+cairo_surface_t *
+_gdk_window_ref_cairo_surface (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject*) drawable;
+  GdkWindowObject *private;
   cairo_surface_t *surface;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+
+  private = (GdkWindowObject*) window;
 
   if (private->paint_stack)
     {
@@ -3736,18 +3732,18 @@ gdk_window_ref_cairo_surface (GdkDrawable *drawable)
     {
 
       /* This will be drawing directly to the window, so flush implicit paint */
-      gdk_window_flush ((GdkWindow *)drawable);
+      gdk_window_flush (window);
 
       if (!private->cairo_surface)
 	{
-	  private->cairo_surface = _gdk_drawable_create_cairo_surface (drawable,
-                                                                       private->width,
-                                                                       private->height);
+	  private->cairo_surface = gdk_window_create_cairo_surface (window,
+                                                                    private->width,
+                                                                    private->height);
 
 	  if (private->cairo_surface)
 	    {
 	      cairo_surface_set_user_data (private->cairo_surface, &gdk_window_cairo_key,
-					   drawable, gdk_window_cairo_surface_destroy);
+					   window, gdk_window_cairo_surface_destroy);
 	    }
 	}
       else
@@ -3786,7 +3782,7 @@ gdk_cairo_create (GdkWindow *window)
 
   private = (GdkWindowObject*) window;
 
-  surface = _gdk_drawable_ref_cairo_surface (window);
+  surface = _gdk_window_ref_cairo_surface (window);
   cr = cairo_create (surface);
 
   if (!private->paint_stack)
@@ -10056,7 +10052,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   
-  window_surface = _gdk_drawable_ref_cairo_surface (window);
+  window_surface = _gdk_window_ref_cairo_surface (window);
 
   surface = cairo_surface_create_similar (window_surface,
                                           content,

@@ -299,7 +299,7 @@ gdk_cairo_set_source_window (cairo_t   *cr,
   g_return_if_fail (cr != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  surface = _gdk_drawable_ref_cairo_surface (GDK_DRAWABLE (window));
+  surface = _gdk_window_ref_cairo_surface (window);
   cairo_set_source_surface (cr, surface, x, y);
   cairo_surface_destroy (surface);
 }

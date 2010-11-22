@@ -160,7 +160,7 @@ _gdk_offscreen_window_create_surface (GdkWindow *offscreen,
 
   g_return_val_if_fail (GDK_IS_OFFSCREEN_WINDOW (private->impl), NULL);
 
-  similar = _gdk_drawable_ref_cairo_surface ((GdkWindow *)private->parent);
+  similar = _gdk_window_ref_cairo_surface ((GdkWindow *)private->parent);
 
   if (gdk_window_get_visual (offscreen) ==
       gdk_screen_get_rgba_visual (gdk_window_get_screen (offscreen)))
