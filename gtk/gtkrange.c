@@ -1280,7 +1280,7 @@ gtk_range_set_range (GtkRange *range,
   gdouble value;
   
   g_return_if_fail (GTK_IS_RANGE (range));
-  g_return_if_fail (min < max);
+  g_return_if_fail (min <= max);
 
   priv = range->priv;
 
@@ -2016,10 +2016,15 @@ gtk_range_draw (GtkWidget      *widget,
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
+  gboolean draw_trough = TRUE;
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
                 NULL);
+
+  if (GTK_IS_SCALE (widget) &&
+      priv->adjustment->upper == priv->adjustment->lower)
+    draw_trough = FALSE;
 
   style = gtk_widget_get_style (widget);
   if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
@@ -2112,6 +2117,7 @@ gtk_range_draw (GtkWidget      *widget,
             }
 	}
 
+      if (draw_trough)
         {
 	  gint trough_change_pos_x = width;
 	  gint trough_change_pos_y = height;
@@ -2146,6 +2152,17 @@ gtk_range_draw (GtkWidget      *widget,
                          x + trough_change_pos_x, y + trough_change_pos_y,
                          width - trough_change_pos_x,
                          height - trough_change_pos_y);
+        }
+      else
+        {
+          gtk_paint_box (style, cr,
+                         sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
+                         GTK_SHADOW_IN,
+                         GTK_WIDGET (range),
+                         "trough-upper",
+                         x, y,
+                         width,
+                         height);
         }
 
       if (priv->show_fill_level &&
@@ -2236,6 +2253,7 @@ gtk_range_draw (GtkWidget      *widget,
   gdk_cairo_rectangle (cr, &priv->slider);
   cairo_clip (cr);
 
+  if (draw_trough)
     {
       gtk_paint_slider (style,
                         cr,

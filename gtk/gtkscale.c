@@ -55,6 +55,11 @@
  * To detect changes to the value, you would normally use the
  * #GtkRange::value-changed signal.
  *
+ * Note that using the same upper and lower bounds for the #GtkScale (through
+ * the #GtkRange methods) will hide the slider itself. This is useful for
+ * applications that want to show an undeterminate value on the scale, without
+ * changing the layout of the application (such as movie or music players).
+ *
  * <refsect2 id="GtkScale-BUILDER-UI"><title>GtkScale as GtkBuildable</title>
  * GtkScale supports a custom &lt;marks&gt; element, which
  * can contain multiple &lt;mark&gt; elements. The "value" and "position"
