@@ -3472,7 +3472,7 @@ gdk_window_flush_if_exposing (GdkWindow *window)
 
 static void
 gdk_window_flush_recursive_helper (GdkWindowObject *window,
-				   GdkWindow *impl)
+				   GdkDrawable *impl)
 {
   GdkWindowObject *child;
   GList *l;
@@ -6194,7 +6194,7 @@ move_native_children (GdkWindowObject *private)
 
 static gboolean
 collect_native_child_region_helper (GdkWindowObject *window,
-				    GdkWindow *impl,
+				    GdkDrawable *impl,
 				    cairo_region_t **region,
 				    int x_offset,
 				    int y_offset)
