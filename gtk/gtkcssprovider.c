@@ -2318,7 +2318,9 @@ path_parse_str (GtkCssProvider  *css_provider,
 		const gchar     *str,
 		gchar          **end_ptr)
 {
-  gchar *path, *chr;
+  gchar *path, *chr, *start, *end;
+
+  start = str;
 
   if (g_str_has_prefix (str, "url"))
     {
@@ -2331,13 +2333,14 @@ path_parse_str (GtkCssProvider  *css_provider,
           return NULL;
         }
 
-      chr = strrchr (str, ')');
-
+      chr = strchr (str, ')');
       if (!chr)
         {
           *end_ptr = (gchar *) str;
           return NULL;
         }
+
+      end = chr + 1;
 
       str++;
       SKIP_SPACES (str);
@@ -2366,7 +2369,7 @@ path_parse_str (GtkCssProvider  *css_provider,
       path = g_strndup (str, chr - str);
       g_strstrip (path);
 
-      *end_ptr = str + strlen (str);
+      *end_ptr = end;
     }
   else
     {
@@ -2400,6 +2403,7 @@ path_parse_str (GtkCssProvider  *css_provider,
       g_warning ("File doesn't exist: %s\n", path);
       g_free (path);
       path = NULL;
+      *end_ptr = start;
     }
 
   return path;
@@ -2454,22 +2458,22 @@ slice_parse_str (GtkCssProvider  *css_provider,
   SKIP_SPACES (str);
 
   /* Parse top/left/bottom/right distances */
-  distance_top = g_strtod (str, end_ptr);
+  distance_top = g_ascii_strtod (str, end_ptr);
 
   str = *end_ptr;
   SKIP_SPACES (str);
 
-  distance_right = g_strtod (str, end_ptr);
+  distance_right = g_ascii_strtod (str, end_ptr);
 
   str = *end_ptr;
   SKIP_SPACES (str);
 
-  distance_bottom = g_strtod (str, end_ptr);
+  distance_bottom = g_ascii_strtod (str, end_ptr);
 
   str = *end_ptr;
   SKIP_SPACES (str);
 
-  distance_left = g_strtod (str, end_ptr);
+  distance_left = g_ascii_strtod (str, end_ptr);
 
   str = *end_ptr;
   SKIP_SPACES (str);
@@ -2562,7 +2566,7 @@ unit_parse_str (const gchar     *str,
   gdouble unit;
 
   SKIP_SPACES (str);
-  unit = g_strtod (str, end_str);
+  unit = g_ascii_strtod (str, end_str);
   str = *end_str;
 
   /* Now parse the unit type, if any. We
