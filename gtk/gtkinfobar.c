@@ -495,19 +495,21 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
 {
   GtkWidget *widget = GTK_WIDGET (info_bar);
   GtkInfoBarPrivate *priv = info_bar->priv;
-  GdkColor info_default_border_color     = { 0, 0xb800, 0xad00, 0x9d00 };
-  GdkColor info_default_fill_color       = { 0, 0xff00, 0xff00, 0xbf00 };
-  GdkColor warning_default_border_color  = { 0, 0xb000, 0x7a00, 0x2b00 };
-  GdkColor warning_default_fill_color    = { 0, 0xfc00, 0xaf00, 0x3e00 };
-  GdkColor question_default_border_color = { 0, 0x6200, 0x7b00, 0xd960 };
-  GdkColor question_default_fill_color   = { 0, 0x8c00, 0xb000, 0xd700 };
-  GdkColor error_default_border_color    = { 0, 0xa800, 0x2700, 0x2700 };
-  GdkColor error_default_fill_color      = { 0, 0xf000, 0x3800, 0x3800 };
-  GdkColor other_default_border_color    = { 0, 0xb800, 0xad00, 0x9d00 };
-  GdkColor other_default_fill_color      = { 0, 0xff00, 0xff00, 0xbf00 };
-  GdkColor *fg, *bg;
-  GdkColor sym_fg, sym_bg;
-  GtkStyle *style;
+  GdkRGBA info_default_border_color     = { 0.71, 0.67, 0.61, 1.0 };
+  GdkRGBA info_default_fill_color       = { 0.99, 0.99, 0.74, 1.0 };
+  GdkRGBA warning_default_border_color  = { 0.68, 0.47, 0.16, 1.0 };
+  GdkRGBA warning_default_fill_color    = { 0.98, 0.68, 0.24, 1.0 };
+  GdkRGBA question_default_border_color = { 0.38, 0.48, 0.84, 1.0 };
+  GdkRGBA question_default_fill_color   = { 0.54, 0.68, 0.83, 1.0 };
+  GdkRGBA error_default_border_color    = { 0.65, 0.15, 0.15, 1.0 };
+  GdkRGBA error_default_fill_color      = { 0.93, 0.21, 0.21, 1.0 };
+  GdkRGBA other_default_border_color    = { 0.71, 0.67, 0.61, 1.0 };
+  GdkRGBA other_default_fill_color      = { 0.99, 0.99, 0.74, 1.0 };
+  GdkRGBA *fg, *bg;
+  GdkRGBA sym_fg, sym_bg;
+  GdkRGBA *color, *bg_color;
+  GtkStyleContext *context;
+
   const char* fg_color_name[] = {
     "info_fg_color",
     "warning_fg_color",
@@ -523,10 +525,10 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
     "other_bg_color"
   };
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
 
-  if (gtk_style_lookup_color (style, fg_color_name[priv->message_type], &sym_fg) &&
-      gtk_style_lookup_color (style, bg_color_name[priv->message_type], &sym_bg))
+  if (gtk_style_context_lookup_color (context, fg_color_name[priv->message_type], &sym_fg) &&
+      gtk_style_context_lookup_color (context, bg_color_name[priv->message_type], &sym_bg))
     {
       fg = &sym_fg;
       bg = &sym_bg;
@@ -567,10 +569,17 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
         }
     }
 
-  if (!gdk_color_equal (bg, &style->bg[GTK_STATE_NORMAL]))
-    gtk_widget_modify_bg (widget, GTK_STATE_NORMAL, bg);
-  if (!gdk_color_equal (fg, &style->fg[GTK_STATE_NORMAL]))
-    gtk_widget_modify_fg (widget, GTK_STATE_NORMAL, fg);
+  gtk_style_context_get (context, 0,
+                         "color", &color,
+                         "background-color", &bg_color,
+                         NULL);
+  if (!gdk_rgba_equal (bg_color, bg))
+    gtk_widget_override_background_color (widget, 0, bg);
+  if (!gdk_rgba_equal (color, fg))
+    gtk_widget_override_color (widget, 0, fg);
+
+  gdk_rgba_free (color);
+  gdk_rgba_free (bg_color);
 }
 
 static void
