@@ -645,6 +645,15 @@ typedef enum {
   GTK_JUNCTION_RIGHT  = (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMRIGHT)
 } GtkJunctionSides;
 
+/**
+ * GtkBorderStyle:
+ * @GTK_BORDER_STYLE_NONE: No visible border
+ * @GTK_BORDER_STYLE_SOLID: A solid border
+ * @GTK_BORDER_STYLE_INSET: An inset border
+ * @GTK_BORDER_STYLE_OUTSET: An outset border
+ *
+ * Describes how the border of a UI element should be rendered.
+ */
 typedef enum {
   GTK_BORDER_STYLE_NONE,
   GTK_BORDER_STYLE_SOLID,

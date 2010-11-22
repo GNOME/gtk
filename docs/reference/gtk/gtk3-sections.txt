@@ -5843,12 +5843,16 @@ GtkScrollType
 GtkSelectionMode
 GtkShadowType
 GtkStateType
+GtkStateFlags
 GtkToolbarStyle
 GtkUpdateType
 GtkWindowPosition
 GtkWindowType
 GtkSortType
 GtkDragResult
+GtkJunctionSides
+GtkBorderStyle
+GtkRegionFlags
 
 <SUBSECTION Private>
 GTK_PATH_PRIO_MASK
