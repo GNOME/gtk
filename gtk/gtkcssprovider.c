@@ -3572,6 +3572,10 @@ gtk_css_provider_get_default (void)
         ".menu .radio:active {\n"
         "  border-style: none;\n"
         "}\n"
+        "\n"
+        "GtkSpinButton.button {\n"
+        "  border-width: 1;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
