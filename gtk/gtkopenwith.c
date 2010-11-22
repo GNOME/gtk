@@ -66,3 +66,9 @@ gtk_open_with_get_app_info (GtkOpenWith *self)
 {
   return GTK_OPEN_WITH_GET_IFACE (self)->get_app_info (self);
 }
+
+void
+gtk_open_with_refresh (GtkOpenWith *self)
+{
+  GTK_OPEN_WITH_GET_IFACE (self)->refresh (self);
+}

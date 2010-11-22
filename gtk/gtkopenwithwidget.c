@@ -197,7 +197,7 @@ item_forget_association_cb (GtkMenuItem *item,
 	g_app_info_remove_supports_type (info, self->priv->content_type, NULL);
     }
 
-  _gtk_open_with_widget_refilter (self);
+  gtk_open_with_refresh (GTK_OPEN_WITH (self));
 }
 
 static GtkWidget *
@@ -1061,16 +1061,9 @@ gtk_open_with_widget_get_app_info (GtkOpenWith *object)
 }
 
 static void
-gtk_open_with_widget_iface_init (GtkOpenWithIface *iface)
+gtk_open_with_widget_refresh (GtkOpenWith *object)
 {
-  iface->get_app_info = gtk_open_with_widget_get_app_info;
-}
-
-void
-_gtk_open_with_widget_refilter (GtkOpenWithWidget *self)
-{
-
-  gtk_open_with_widget_ensure_show_more_button (self);
+  GtkOpenWithWidget *self = GTK_OPEN_WITH_WIDGET (object);
 
   if (self->priv->program_list_store != NULL)
     {
@@ -1083,6 +1076,13 @@ _gtk_open_with_widget_refilter (GtkOpenWithWidget *self)
 
       gtk_open_with_widget_real_add_items (self);
     }
+}
+
+static void
+gtk_open_with_widget_iface_init (GtkOpenWithIface *iface)
+{
+  iface->get_app_info = gtk_open_with_widget_get_app_info;
+  iface->refresh = gtk_open_with_widget_refresh;
 }
 
 GtkWidget *

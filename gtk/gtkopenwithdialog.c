@@ -106,7 +106,7 @@ search_for_mimetype_ready_cb (GObject *source,
     }
   else
     {
-      _gtk_open_with_widget_refilter (GTK_OPEN_WITH_WIDGET (self->priv->open_with_widget));
+      gtk_open_with_refresh (GTK_OPEN_WITH (self->priv->open_with_widget));
     }
 
   g_object_unref (online);
@@ -418,6 +418,14 @@ gtk_open_with_dialog_get_app_info (GtkOpenWith *object)
 }
 
 static void
+gtk_open_with_dialog_refresh (GtkOpenWith *object)
+{
+  GtkOpenWithDialog *self = GTK_OPEN_WITH_DIALOG (object);
+
+  gtk_open_with_refresh (GTK_OPEN_WITH (self->priv->open_with_widget));
+}
+
+static void
 gtk_open_with_dialog_constructed (GObject *object)
 {
   GtkOpenWithDialog *self = GTK_OPEN_WITH_DIALOG (object);
@@ -496,6 +504,7 @@ static void
 gtk_open_with_dialog_iface_init (GtkOpenWithIface *iface)
 {
   iface->get_app_info = gtk_open_with_dialog_get_app_info;
+  iface->refresh = gtk_open_with_dialog_refresh;
 }
 
 static void

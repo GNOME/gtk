@@ -39,8 +39,7 @@ struct _GtkOpenWithIface {
   GTypeInterface base_iface;
 
   GAppInfo * (* get_app_info) (GtkOpenWith *object);
+  void       (* refresh)      (GtkOpenWith *object);
 };
-
-void _gtk_open_with_widget_refilter (GtkOpenWithWidget *self);
 
 #endif /* __GTK_OPEN_WITH_PRIVATE_H__ */

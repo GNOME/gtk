@@ -46,6 +46,7 @@ GType gtk_open_with_get_type () G_GNUC_CONST;
 
 GAppInfo * gtk_open_with_get_app_info (GtkOpenWith *self);
 gchar * gtk_open_with_get_content_type (GtkOpenWith *self);
+void gtk_open_with_refresh (GtkOpenWith *self);
 
 G_END_DECLS
 
