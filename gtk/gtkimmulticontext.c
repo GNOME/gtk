@@ -297,7 +297,7 @@ gtk_im_multicontext_set_client_window (GtkIMContext *context,
 
   if (window)
     {
-      screen = gdk_window_get_screen (GDK_DRAWABLE (window));
+      screen = gdk_window_get_screen (window);
       settings = gtk_settings_get_for_screen (screen);
 
       connected = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
