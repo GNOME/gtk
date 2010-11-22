@@ -21,7 +21,6 @@ EXTRA_DIST +=			\
 	gdkkeysyms-update.pl	\
 	gdk.def 		\
 	gdkmarshalers.list	\
-	gdkmedialib.h		\
 	gdkwindowimpl.h		\
 	makeenums.pl		\
 	makefile.msc		\
@@ -54,13 +53,6 @@ LDADD = \
 	-rpath $(libdir) 						\
 	$(no_undefined)							\
 	$(LIBTOOL_EXPORT_OPTIONS)
-
-if USE_MEDIALIB
-medialib_sources =  \
-    gdkmedialib.c
-else
-medialib_sources =
-endif
 
 #
 # setup source file variables
@@ -111,7 +103,6 @@ gdk_private_headers =				\
 	gdkpoly-generic.h
 
 gdk_c_sources =                 \
-	$(medialib_sources)     \
 	gdk.c			\
 	gdkapplaunchcontext.c	\
 	gdkcairo.c		\

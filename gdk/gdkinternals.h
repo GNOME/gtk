@@ -33,9 +33,6 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkwindow.h>
 #include <gdk/gdkprivate.h>
-#ifdef USE_MEDIALIB
-#include <gdk/gdkmedialib.h>
-#endif
 
 G_BEGIN_DECLS
 
