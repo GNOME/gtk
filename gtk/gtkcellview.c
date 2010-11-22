@@ -54,6 +54,7 @@ struct _GtkCellViewPrivate
   gboolean             background_set;
 
   gulong               size_changed_id;
+  gulong               row_changed_id;
 };
 
 
@@ -138,7 +139,10 @@ static void       gtk_cell_view_get_preferred_height_for_width (GtkWidget       
 static void       context_size_changed_cb                      (GtkCellAreaContext   *context,
 								GParamSpec           *pspec,
 								GtkWidget            *view);
-
+static void       row_changed_cb                               (GtkTreeModel         *model,
+								GtkTreePath          *path,
+								GtkTreeIter          *iter,
+								GtkCellView          *view);
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -669,6 +673,24 @@ context_size_changed_cb (GtkCellAreaContext  *context,
     gtk_widget_queue_resize (view);
 }
 
+static void
+row_changed_cb (GtkTreeModel         *model,
+		GtkTreePath          *path,
+		GtkTreeIter          *iter,
+		GtkCellView          *view)
+{
+  GtkTreePath *row_path;
+
+  if (view->priv->displayed_row)
+    {
+      row_path = 
+	gtk_tree_row_reference_get_path (view->priv->displayed_row);
+
+      /* Resize everything in our context if our row changed */
+      if (gtk_tree_path_compare (row_path, path) == 0)
+	gtk_cell_area_context_flush (view->priv->context);
+    }
+}
 
 /**
  * gtk_cell_view_new:
@@ -863,6 +885,10 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
 
   if (cell_view->priv->model)
     {
+      g_signal_handler_disconnect (cell_view->priv->model, 
+				   cell_view->priv->row_changed_id);
+      cell_view->priv->row_changed_id = 0;
+
       if (cell_view->priv->displayed_row)
         gtk_tree_row_reference_free (cell_view->priv->displayed_row);
       cell_view->priv->displayed_row = NULL;
@@ -874,7 +900,13 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
   cell_view->priv->model = model;
 
   if (cell_view->priv->model)
-    g_object_ref (cell_view->priv->model);
+    {
+      g_object_ref (cell_view->priv->model);
+
+      cell_view->priv->row_changed_id = 
+	g_signal_connect (cell_view->priv->model, "row-changed",
+			  G_CALLBACK (row_changed_cb), cell_view);
+    }
 }
 
 /**
