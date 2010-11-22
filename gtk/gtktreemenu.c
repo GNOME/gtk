@@ -61,28 +61,6 @@ static void      gtk_tree_menu_size_allocate                  (GtkWidget        
 
 /* GtkCellLayoutIface */
 static void      gtk_tree_menu_cell_layout_init               (GtkCellLayoutIface  *iface);
-static void      gtk_tree_menu_cell_layout_pack_start         (GtkCellLayout       *layout,
-							       GtkCellRenderer     *cell,
-							       gboolean             expand);
-static void      gtk_tree_menu_cell_layout_pack_end           (GtkCellLayout        *layout,
-							       GtkCellRenderer      *cell,
-							       gboolean              expand);
-static GList    *gtk_tree_menu_cell_layout_get_cells          (GtkCellLayout        *layout);
-static void      gtk_tree_menu_cell_layout_clear              (GtkCellLayout        *layout);
-static void      gtk_tree_menu_cell_layout_add_attribute      (GtkCellLayout        *layout,
-							       GtkCellRenderer      *cell,
-							       const gchar          *attribute,
-							       gint                  column);
-static void      gtk_tree_menu_cell_layout_set_cell_data_func (GtkCellLayout        *layout,
-							       GtkCellRenderer      *cell,
-							       GtkCellLayoutDataFunc func,
-							       gpointer              func_data,
-							       GDestroyNotify        destroy);
-static void      gtk_tree_menu_cell_layout_clear_attributes   (GtkCellLayout        *layout,
-							       GtkCellRenderer      *cell);
-static void      gtk_tree_menu_cell_layout_reorder            (GtkCellLayout        *layout,
-							       GtkCellRenderer      *cell,
-							       gint                  position);
 static GtkCellArea *gtk_tree_menu_cell_layout_get_area        (GtkCellLayout        *layout);
 
 
@@ -456,107 +434,10 @@ gtk_tree_menu_size_allocate (GtkWidget           *widget,
 /****************************************************************
  *                      GtkCellLayoutIface                      *
  ****************************************************************/
-/* Just forward all the GtkCellLayoutIface methods to the 
- * underlying GtkCellArea
- */
 static void
 gtk_tree_menu_cell_layout_init (GtkCellLayoutIface  *iface)
 {
-  iface->pack_start         = gtk_tree_menu_cell_layout_pack_start;
-  iface->pack_end           = gtk_tree_menu_cell_layout_pack_end;
-  iface->get_cells          = gtk_tree_menu_cell_layout_get_cells;
-  iface->clear              = gtk_tree_menu_cell_layout_clear;
-  iface->add_attribute      = gtk_tree_menu_cell_layout_add_attribute;
-  iface->set_cell_data_func = gtk_tree_menu_cell_layout_set_cell_data_func;
-  iface->clear_attributes   = gtk_tree_menu_cell_layout_clear_attributes;
-  iface->reorder            = gtk_tree_menu_cell_layout_reorder;
-  iface->get_area           = gtk_tree_menu_cell_layout_get_area;
-}
-
-static void
-gtk_tree_menu_cell_layout_pack_start (GtkCellLayout       *layout,
-				      GtkCellRenderer     *cell,
-				      gboolean             expand)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (priv->area), cell, expand);
-}
-
-static void
-gtk_tree_menu_cell_layout_pack_end (GtkCellLayout        *layout,
-				    GtkCellRenderer      *cell,
-				    gboolean              expand)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (priv->area), cell, expand);
-}
-
-static GList *
-gtk_tree_menu_cell_layout_get_cells (GtkCellLayout *layout)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->area));
-}
-
-static void
-gtk_tree_menu_cell_layout_clear (GtkCellLayout *layout)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  gtk_cell_layout_clear (GTK_CELL_LAYOUT (priv->area));
-}
-
-static void
-gtk_tree_menu_cell_layout_add_attribute (GtkCellLayout        *layout,
-					 GtkCellRenderer      *cell,
-					 const gchar          *attribute,
-					 gint                  column)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (priv->area), cell, attribute, column);
-}
-
-static void
-gtk_tree_menu_cell_layout_set_cell_data_func (GtkCellLayout        *layout,
-					      GtkCellRenderer      *cell,
-					      GtkCellLayoutDataFunc func,
-					      gpointer              func_data,
-					      GDestroyNotify        destroy)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->area), cell, func, func_data, destroy);
-}
-
-static void
-gtk_tree_menu_cell_layout_clear_attributes (GtkCellLayout        *layout,
-					    GtkCellRenderer      *cell)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (priv->area), cell);
-}
-
-static void
-gtk_tree_menu_cell_layout_reorder (GtkCellLayout        *layout,
-				   GtkCellRenderer      *cell,
-				   gint                  position)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (layout);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  gtk_cell_layout_reorder (GTK_CELL_LAYOUT (priv->area), cell, position);
+  iface->get_area = gtk_tree_menu_cell_layout_get_area;
 }
 
 static GtkCellArea *
