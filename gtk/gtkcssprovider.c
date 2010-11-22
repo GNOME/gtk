@@ -3565,6 +3565,13 @@ gtk_css_provider_get_default (void)
         "  background-color: @selected_bg_color;\n"
         "  color: @selected_fg_color;\n"
         "}\n"
+        "\n"
+        ".menu .check,\n"
+        ".menu .radio,\n"
+        ".menu .check:active,\n"
+        ".menu .radio:active {\n"
+        "  border-style: none;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
