@@ -84,11 +84,12 @@ gtk_animation_description_from_string (const gchar *str)
 {
   gchar timing_function[16] = { 0, };
   gchar duration_unit[3] = { 0, };
+  gchar loop_str[5] = { 0, };
   GtkTimelineProgressType progress_type;
   guint duration = 0;
   gboolean loop;
 
-  if (sscanf (str, "%d%2s %15s loop", &duration, duration_unit, timing_function) == 3)
+  if (sscanf (str, "%d%2s %15s %5s", &duration, duration_unit, timing_function, loop_str) == 4)
     loop = TRUE;
   else if (sscanf (str, "%d%2s %15s", &duration, duration_unit, timing_function) == 3)
     loop = FALSE;
