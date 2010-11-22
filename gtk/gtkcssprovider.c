@@ -331,35 +331,43 @@
  *     <tbody>
  *       <row>
  *         <entry>rgb(@r, @g, @b)</entry>
- *         <entry>An opaque color; @r, @g, @b can be either integers between 0 and 255 or percentages</entry>
- *         <entry>rgb(128, 10, 54)
- *                rgb(20%, 30%, 0%)</entry>
+ *         <entry>An opaque color; @r, @g, @b can be either integers between
+ *                0 and 255 or percentages</entry>
+ *         <entry><literallayout>rgb(128, 10, 54)
+ * rgb(20%, 30%, 0%)</literallayout></entry>
  *       </row>
  *       <row>
  *         <entry>rgba(@r, @g, @b, @a)</entry>
- *         <entry>A translucent color; @r, @g, @b are as in the previous row, @a is a floating point number between 0 and 1</entry>
- *         <entry>rgba(255, 255, 0, 0.5)</entry>
+ *         <entry>A translucent color; @r, @g, @b are as in the previous row,
+ *                @a is a floating point number between 0 and 1</entry>
+ *         <entry><literallayout>rgba(255, 255, 0, 0.5)</literallayout></entry>
  *       </row>
  *       <row>
  *         <entry>&num;@xxyyzz</entry>
- *         <entry>An opaque color; @xx, @yy, @zz are hexadecimal numbers specifying @r, @g, @b
- *                variants with between 1 and 4 hexadecimal digits per component are allowed</entry>
- *         <entry>&num;ff12ab
- *                &num;f0c</entry>
+ *         <entry>An opaque color; @xx, @yy, @zz are hexadecimal numbers
+ *                specifying @r, @g, @b variants with between 1 and 4
+ *                hexadecimal digits per component are allowed</entry>
+ *         <entry><literallayout>&num;ff12ab
+ * &num;f0c</literallayout></entry>
  *       </row>
  *       <row>
  *         <entry>&commat;name</entry>
- *         <entry>Reference to a color that has been defined with &commat;define-color</entry>
+ *         <entry>Reference to a color that has been defined with
+ *                &commat;define-color
+ *         </entry>
  *         <entry>&commat;bg_color</entry>
  *       </row>
  *       <row>
  *         <entry>mix(@color1, @color2, @f)</entry>
- *         <entry>A linear combination of @color1 and @color2. @f is a floating point number between 0 and 1.</entry>
- *         <entry>mix(&num;ff1e0a, &commat;bg_color, 0.8)</entry>
+ *         <entry>A linear combination of @color1 and @color2. @f is a
+ *                floating point number between 0 and 1.</entry>
+ *         <entry><literallayout>mix(&num;ff1e0a, &commat;bg_color, 0.8)</literallayout></entry>
  *       </row>
  *       <row>
  *         <entry>shade(@color, @f)</entry>
- *         <entry>A lighter or darker variant of @color. @f is a floating point number.</entry>
+ *         <entry>A lighter or darker variant of @color. @f is a
+ *                floating point number.
+ *         </entry>
  *         <entry>shade(&commat;fg_color, 0.5)</entry>
  *       </row>
  *       <row>
@@ -373,6 +381,80 @@
  *     </tbody>
  *   </tgroup>
  * </informaltable>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-gradients">
+ * <title>Gradients</title>
+ * <para>
+ * Linear or radial Gradients can be used as background images.
+ * </para>
+ * <para>
+ * A linear gradient along the line from (@start-x, @start-y) to
+ * (@end-x, @end-y) is specified using the syntax
+ * <literallayout>-gtk-gradient (linear,
+ *               @start-x @start-y, @end-x @end-y,
+ *               color-stop (@position, @color),
+ *               ...)</literallayout>
+ * where @start-x and @end-x can be either a floating point number between
+ * 0 and 1 or one of the special values 'left', 'right' or 'center', @start-y
+ * and @end-y can be either a floating point number between 0 and 1 or one
+ * of the special values 'top', 'bottom' or 'center', @position is a floating
+ * point number between 0 and 1 and @color is a color expression (see above).
+ * The color-stop can be repeated multiple times to add more than one color
+ * stop. 'from (@color)' and 'to (@color)' can be used as abbreviations for
+ * color stops with position 0 and 1, respectively.
+ * </para>
+ * <example>
+ * <title>A linear gradient</title>
+ * <inlinegraphic fileref="gradient1.png" format="PNG"/>
+ * <para>This gradient was specified with
+ * <literallayout>-gtk-gradient (linear,
+ *                left top, right bottom,
+ *                from(&commat;yellow), to(&commat;blue))</literallayout></para>
+ * </example>
+ * <example>
+ * <title>Another linear gradient</title>
+ * <inlinegraphic fileref="gradient2.png" format="PNG"/>
+ * <para>This gradient was specified with
+ * <literallayout>-gtk-gradient (linear,
+ *                0 0, 0 1,
+ *                color-stop(0, &commat;yellow),
+ *                color-stop(0.2, &commat;blue),
+ *                color-stop(1, &num;0f0))</literallayout></para>
+ * </example>
+ * <para>
+ * A radial gradient along the two circles defined by (@start-x, @start-y,
+ * @start-radius) and (@end-x, @end-y, @end-radius) is specified using the
+ * syntax
+ * <literallayout>-gtk-gradient (radial,
+ *                @start-x @start-y, @start-radius,
+ *                @end-x @end-y, @end-radius,
+ *                color-stop (@position, @color),
+ *                ...)</literallayout>
+ * where @start-radius and @end-radius are floating point numbers and
+ * the other parameters are as before.
+ * </para>
+ * <example>
+ * <title>A radial gradient</title>
+ * <inlinegraphic fileref="gradient3.png" format="PNG"/>
+ * <para>This gradient was specified with
+ * <literallayout>-gtk-gradient (radial,
+ *                center center, 0,
+ *                center center, 1,
+ *                from(&commat;yellow), to(&commat;green))</literallayout></para>
+ * </example>
+ * <example>
+ * <title>Another radial gradient</title>
+ * <inlinegraphic fileref="gradient4.png" format="PNG"/>
+ * <para>This gradient was specified with
+ * <literallayout>
+ * -gtk-gradient (radial,
+ *                0.4 0.4, 0.1,
+ *                0.6 0.6, 0.7,
+ *                color-stop (0, &num;f00),
+ *                color-stop (0.1, &num;a0f),
+ *                color-stop (0.2, &commat;yellow),
+ *                color-stop (1, &commat;green))</literallayout></para>
+ * </example>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-properties">
  * <title>Supported properties</title>
@@ -405,48 +487,44 @@
  *     <tbody>
  *       <row>
  *         <entry>engine</entry>
- *         <entry><programlisting>engine-name</programlisting></entry>
+ *         <entry>engine-name</entry>
  *         <entry>#GtkThemingEngine</entry>
- *         <entry><programlisting>engine: clearlooks;</programlisting></entry>
+ *         <entry>engine: clearlooks;</entry>
  *       </row>
  *       <row>
  *         <entry>background-color</entry>
- *         <entry morerows="1"><programlisting>color</programlisting></entry>
- *         <entry morerows="1">#GdkRGBA</entry>
- *         <entry morerows="1">
- *           <programlisting>
- * background-color: &num;fff;
+ *         <entry morerows="2">color (see above)</entry>
+ *         <entry morerows="2">#GdkRGBA</entry>
+ *         <entry morerows="2"><literallayout>background-color: &num;fff;
  * color: @color-name;
  * background-color: shade (@color-name, 0.5);
- * color: mix (@color-name, &num;f0f, 0.8);</programlisting>
+ * color: mix (@color-name, &num;f0f, 0.8);</literallayout>
  *         </entry>
  *       </row>
  *       <row>
  *         <entry>color</entry>
  *       </row>
  *       <row>
+ *         <entry>border-color</entry>
+ *       </row>
+ *       <row>
  *         <entry>font</entry>
- *         <entry><programlisting>family [style] [size]</programlisting></entry>
+ *         <entry>family [style] [size]</entry>
  *         <entry>#PangoFontDescription</entry>
- *         <entry><programlisting>font: Sans 15;</programlisting></entry>
+ *         <entry>font: Sans 15;</entry>
  *       </row>
  *       <row>
  *         <entry>margin</entry>
- *         <entry morerows="1">
- *           <programlisting>
- * width
+ *         <entry morerows="1"><literallayout>width
  * vertical-width horizontal-width
  * top-width horizontal-width bottom-width
- * top-width right-width bottom-width left-width
- *           </programlisting>
+ * top-width right-width bottom-width left-width</literallayout>
  *         </entry>
  *         <entry morerows="1">#GtkBorder</entry>
- *         <entry morerows="1">
- *           <programlisting>
- * margin: 5;
+ *         <entry morerows="1"><literallayout>margin: 5;
  * margin: 5 10;
  * margin: 5 10 3;
- * margin: 5 10 3 5;</programlisting>
+ * margin: 5 10 3 5;</literallayout>
  *         </entry>
  *       </row>
  *       <row>
@@ -454,24 +532,19 @@
  *       </row>
  *       <row>
  *         <entry>background-image</entry>
- *         <entry>
- *           <programlisting>
- * -gtk-gradient (linear,
+ *         <entry><literallayout>-gtk-gradient (linear,
  *                starting-x-position starting-y-position,
  *                ending-x-position ending-y-position,
  *                [ [from|to] (color) |
  *                  color-stop (percentage, color) ] )
- *
  * -gtk-gradient (radial,
  *                starting-x-position starting-y-position, starting-radius,
  *                ending-x-position ending-y-position, ending-radius,
  *                [ [from|to] (color) |
- *                  color-stop (percentage, color) ]* )</programlisting>
+ *                  color-stop (percentage, color) ]* )</literallayout>
  *         </entry>
  *         <entry>#cairo_pattern_t</entry>
- *         <entry>
- *           <programlisting>
- * -gtk-gradient (linear,
+ *         <entry><literallayout>-gtk-gradient (linear,
  *                left top, right top,
  *                from (&num;fff), to (&num;000));
  * -gtk-gradient (linear, 0.0 0.5, 0.5 1.0,
@@ -482,27 +555,41 @@
  *                center center, 0.2,
  *                center center, 0.8,
  *                color-stop (0.0, &num;fff),
- *                color-stop (1.0, &num;000));</programlisting>
+ *                color-stop (1.0, &num;000));</literallayout>
  *         </entry>
  *       </row>
  *       <row>
+ *         <entry>border-width</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>border-width: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-radius</entry>
+ *         <entry>integer</entry>
+ *         <entry>#gint</entry>
+ *         <entry>border-radius: 5;</entry>
+ *       </row>
+ *       <row>
+ *         <entry>border-style</entry>
+ *         <entry>[none|solid|inset|outset]</entry>
+ *         <entry>#GtkBorderStyle</entry>
+ *         <entry>border-style: solid;</entry>
+ *       </row>
+ *       <row>
  *         <entry>border-image</entry>
- *         <entry><programlisting>url([path]) top-distance right-distance bottom-distance left-distance horizontal-option vertical-option</programlisting></entry>
+ *         <entry><literallayout>url([path]) top right bottom left [repeat|stretch]? [repeat|stretch]?</literallayout></entry>
  *         <entry></entry>
- *         <entry>
- *           <programlisting>
- * border-image: url ("/path/to/image.png") 3 4 3 4 stretch;
- * border-image: url ("/path/to/image.png") 3 4 4 3 repeat stretch;</programlisting>
+ *         <entry><literallayout>border-image: url("/path/to/image.png") 3 4 3 4 stretch;
+ * border-image: url("/path/to/image.png") 3 4 4 3 repeat stretch;</literallayout>
  *         </entry>
  *       </row>
  *       <row>
  *         <entry>transition</entry>
- *         <entry><programlisting>duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?</programlisting></entry>
+ *         <entry><literallayout>duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?</literallayout></entry>
  *         <entry></entry>
- *         <entry>
- *           <programlisting>
- * transition: 150ms ease-in-out;
- * transition: 1s linear loop;</programlisting>
+ *         <entry><literallayout>transition: 150ms ease-in-out;
+ * transition: 1s linear loop;</literallayout>
  *         </entry>
  *       </row>
  *     </tbody>

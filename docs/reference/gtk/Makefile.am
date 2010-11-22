@@ -329,6 +329,15 @@ HTML_IMAGES = \
 	$(srcdir)/images/window-default.png				\
 	$(srcdir)/images/hello-world.png				\
 	$(srcdir)/images/switch.png
+	$(srcdir)/images/linear.png					\
+	$(srcdir)/images/ease.png					\
+	$(srcdir)/images/ease-in-out.png				\
+	$(srcdir)/images/ease-in.png					\
+	$(srcdir)/images/ease-out.png					\
+	$(srcdir)/images/gradient1.png					\
+	$(srcdir)/images/gradient2.png					\
+	$(srcdir)/images/gradient3.png					\
+	$(srcdir)/images/gradient4.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \

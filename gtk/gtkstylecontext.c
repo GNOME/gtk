@@ -163,6 +163,24 @@
  * special value, in this case, the whole widget area will be updated
  * by the animation.
  * </para>
+ * <para>
+ * Transition animations can use several pre-defined transition functions:
+ * <figure><title>Linear transition</title>
+ * <graphic fileref="linear.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease transition</title>
+ * <graphic fileref="ease.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease-in-out transition</title>
+ * <graphic fileref="ease-in-out.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease-in transition</title>
+ * <graphic fileref="ease-in.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease-out transition</title>
+ * <graphic fileref="ease-out.png" format="PNG"/>
+ * </figure>
+ * </para>
  * </refsect2>
  *
  * <refsect2 id="gtkstylecontext-custom-styling">
