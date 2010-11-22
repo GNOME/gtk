@@ -66,6 +66,8 @@
  * <title>Transition animations</title>
  * <para>
  * #GtkStyleContext has built-in support for state change transitions.
+ * Note that these animations respect the #GtkSettings:gtk-enable-animations
+ * setting.
  * </para>
  * <para>
  * For simple widgets where state changes affect the whole widget area,
@@ -164,25 +166,7 @@
  * by the animation.
  * </para>
  * <para>
- * Transition animations can use several pre-defined transition functions:
- * <figure><title>Linear transition</title>
- * <graphic fileref="linear.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease transition</title>
- * <graphic fileref="ease.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease-in-out transition</title>
- * <graphic fileref="ease-in-out.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease-in transition</title>
- * <graphic fileref="ease-in.png" format="PNG"/>
- * </figure>
- * <figure><title>Ease-out transition</title>
- * <graphic fileref="ease-out.png" format="PNG"/>
- * </figure>
- * </para>
  * </refsect2>
- *
  * <refsect2 id="gtkstylecontext-custom-styling">
  * <title>Custom styling in UI libraries and applications</title>
  * <para>
@@ -2487,7 +2471,8 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * @region_id: (allow-none): animatable region to notify on, or %NULL.
  *             See gtk_style_context_push_animatable_region()
  * @state: state to trigger transition for
- * @state_value: target value of @state
+ * @state_value: %TRUE if @state is the state we are changing to, %FALSE if
+ *   we are changing away from it
  *
  * Notifies a state change on @context, so if the current style makes use
  * of transition animations, one will be started so all rendered elements
@@ -2526,6 +2511,9 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * This combination will animate the button background from red to white
  * if a pointer enters the button, and back to red if the pointer leaves
  * the button.
+ *
+ * Note that @state is used when finding the transition parameters, which
+ * is why the style places the transition under the :hover pseudo-class.
  *
  * Since: 3.0
  **/

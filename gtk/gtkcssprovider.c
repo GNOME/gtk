@@ -492,6 +492,33 @@
  * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout></para>
  * </example>
  * </refsect2>
+ * <refsect2 id="gtkcssprovider-transitions">
+ * <para>Styles can specify transitions that will be used to create a gradual
+ * change in the appearance when a widget state changes. The following
+ * syntax is used to specify transitions:
+ * <literallayout>@duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?</literallayout>
+ * The @duration is the amount of time that the animation will take for
+ * a complete cycle from start to end. If the loop option is given, the
+ * animation will be repated until the state changes again.
+ * The option after the duration determines the transition function from a
+ * small set of predefined functions.
+ * <figure><title>Linear transition</title>
+ * <graphic fileref="linear.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease transition</title>
+ * <graphic fileref="ease.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease-in-out transition</title>
+ * <graphic fileref="ease-in-out.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease-in transition</title>
+ * <graphic fileref="ease-in.png" format="PNG"/>
+ * </figure>
+ * <figure><title>Ease-out transition</title>
+ * <graphic fileref="ease-out.png" format="PNG"/>
+ * </figure>
+ * </para>
+ * </refsect2>
  * <refsect2 id="gtkcssprovider-properties">
  * <title>Supported properties</title>
  * <para>
@@ -612,7 +639,7 @@
  *       </row>
  *       <row>
  *         <entry>transition</entry>
- *         <entry><literallayout>duration [s|ms] [linear|ease|ease-in|ease-out|ease-in-out] [loop]?</literallayout></entry>
+ *         <entry>transition (see above)</entry>
  *         <entry></entry>
  *         <entry><literallayout>transition: 150ms ease-in-out;
  * transition: 1s linear loop;</literallayout>
