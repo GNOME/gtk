@@ -852,12 +852,42 @@ typedef struct  {
 } BroadwayBox;
 
 static int
-is_set (unsigned char *data,
-	int x, int y,
-	int byte_stride)
+is_any_x_set (unsigned char *data,
+	      int box_x1, int box_x2,
+	      int x1, int x2, int y, int *x_set,
+	      int byte_stride)
 {
-  return (*(uint32_t *)(data + y * byte_stride + x * 4)) != 0;
+  int w ;
+  uint32_t *ptr;
+
+  if (x1 < box_x1)
+    x1 = box_x1;
+
+  if (x2 > box_x2)
+    x2 = box_x2;
+
+  w = x2 - x1;
+  if (w > 0)
+    {
+      ptr = (uint32_t *)(data + y * byte_stride + x1 * 4);
+      while (w-- > 0)
+	{
+	  if (*ptr != 0)
+	    {
+	      if (x_set)
+		*x_set = x1;
+	      return 1;
+	    }
+	  ptr++;
+	  x1++;
+	}
+    }
+  return 0;
 }
+
+
+#define EXTEND_X_FUZZ 10
+#define EXTEND_Y_FUZZ 10
 
 static int
 extend_x_range (unsigned char *data,
@@ -867,23 +897,18 @@ extend_x_range (unsigned char *data,
 		int byte_stride)
 {
   int extended = 0;
+  int new_x;
 
-  if (*x1 > box_x1 && is_set (data, *x1, y, byte_stride))
+  while (is_any_x_set (data, box_x1, box_x2, *x1 - EXTEND_X_FUZZ, *x1, y, &new_x, byte_stride))
     {
-      while (*x1 > box_x1 && is_set (data, *x1 - 1, y, byte_stride))
-	{
-	  (*x1)--;
-	  extended = 1;
-	}
+      *x1 = new_x;
+      extended = 1;
     }
 
-  if (*x2 < box_x2 && is_set (data, *x2 - 1, y, byte_stride))
+  while (is_any_x_set (data, box_x1, box_x2, *x2, *x2 + EXTEND_X_FUZZ, y, &new_x, byte_stride))
     {
-      while (*x2 < box_x2 && is_set (data, *x2, y, byte_stride))
-	{
-	  (*x2)++;
-	  extended = 1;
-	}
+      *x2 = new_x + 1;
+      extended = 1;
     }
 
   return extended;
@@ -896,16 +921,21 @@ extend_y_range (unsigned char *data,
 		int x1, int x2, int *y,
 		int byte_stride)
 {
-  int x;
   int extended = 0;
   int found_set;
+  int yy, y2;
 
   while (*y < box_y2)
     {
       found_set = 0;
-      for (x = x1; x < x2; x++)
+
+      y2 = *y + EXTEND_Y_FUZZ;
+      if (y2 > box_y2)
+	y2 = box_y2;
+
+      for (yy = y2; yy > *y + 1; yy--)
 	{
-	  if (is_set (data, x, (*y) + 1, byte_stride))
+	  if (is_any_x_set (data, box_x1, box_x2, x1, x2, yy - 1, NULL, byte_stride))
 	    {
 	      found_set = 1;
 	      break;
@@ -913,7 +943,7 @@ extend_y_range (unsigned char *data,
 	}
       if (!found_set)
 	break;
-      (*y)++;
+      *y = yy;
       extended = 1;
     }
 
