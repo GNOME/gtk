@@ -106,11 +106,11 @@ impl_coord_in_window (GdkWindow *window,
 		      int        impl_y)
 {
   if (impl_x < window->abs_x ||
-      impl_x > window->abs_x + window->width)
+      impl_x >= window->abs_x + window->width)
     return FALSE;
 
   if (impl_y < window->abs_y ||
-      impl_y > window->abs_y + window->height)
+      impl_y >= window->abs_y + window->height)
     return FALSE;
 
   return TRUE;
