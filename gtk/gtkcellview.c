@@ -58,7 +58,6 @@ struct _GtkCellViewPrivate
 };
 
 
-static void        gtk_cell_view_cell_layout_init         (GtkCellLayoutIface *iface);
 static GObject    *gtk_cell_view_constructor              (GType                  type,
 							   guint                  n_construct_properties,
 							   GObjectConstructParam *construct_properties);
@@ -82,30 +81,10 @@ static void        gtk_cell_view_set_value                (GtkCellView     *cell
                                                            GValue          *value);
 static void        gtk_cell_view_set_cell_data            (GtkCellView      *cell_view);
 
-
-static void        gtk_cell_view_cell_layout_pack_start        (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer,
-                                                                gboolean               expand);
-static void        gtk_cell_view_cell_layout_pack_end          (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer,
-                                                                gboolean               expand);
-static void        gtk_cell_view_cell_layout_add_attribute     (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer,
-                                                                const gchar           *attribute,
-                                                                gint                   column);
-static void       gtk_cell_view_cell_layout_clear              (GtkCellLayout         *layout);
-static void       gtk_cell_view_cell_layout_clear_attributes   (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer);
-static void       gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *cell,
-                                                                GtkCellLayoutDataFunc  func,
-                                                                gpointer               func_data,
-                                                                GDestroyNotify         destroy);
-static void       gtk_cell_view_cell_layout_reorder            (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *cell,
-                                                                gint                   position);
-static GList *    gtk_cell_view_cell_layout_get_cells          (GtkCellLayout         *layout);
+/* celllayout */
+static void        gtk_cell_view_cell_layout_init         (GtkCellLayoutIface *iface);
 static GtkCellArea *gtk_cell_view_cell_layout_get_area         (GtkCellLayout         *layout);
+
 
 /* buildable */
 static void       gtk_cell_view_buildable_init                 (GtkBuildableIface     *iface);
@@ -283,14 +262,6 @@ gtk_cell_view_buildable_init (GtkBuildableIface *iface)
 static void
 gtk_cell_view_cell_layout_init (GtkCellLayoutIface *iface)
 {
-  iface->pack_start = gtk_cell_view_cell_layout_pack_start;
-  iface->pack_end = gtk_cell_view_cell_layout_pack_end;
-  iface->clear = gtk_cell_view_cell_layout_clear;
-  iface->add_attribute = gtk_cell_view_cell_layout_add_attribute;
-  iface->set_cell_data_func = gtk_cell_view_cell_layout_set_cell_data_func;
-  iface->clear_attributes = gtk_cell_view_cell_layout_clear_attributes;
-  iface->reorder = gtk_cell_view_cell_layout_reorder;
-  iface->get_cells = gtk_cell_view_cell_layout_get_cells;
   iface->get_area = gtk_cell_view_cell_layout_get_area;
 }
 
@@ -567,92 +538,6 @@ gtk_cell_view_set_cell_data (GtkCellView *cell_view)
 }
 
 /* GtkCellLayout implementation */
-static void
-gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
-                                      GtkCellRenderer *renderer,
-                                      gboolean         expand)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview->priv->area), renderer, expand);
-
-  gtk_widget_queue_resize (GTK_WIDGET (cellview));
-}
-
-static void
-gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
-                                    GtkCellRenderer *renderer,
-                                    gboolean         expand)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (cellview->priv->area), renderer, expand);
-
-  gtk_widget_queue_resize (GTK_WIDGET (cellview));
-}
-
-static void
-gtk_cell_view_cell_layout_add_attribute (GtkCellLayout   *layout,
-                                         GtkCellRenderer *renderer,
-                                         const gchar     *attribute,
-                                         gint             column)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (cellview->priv->area), renderer, 
-				 attribute, column);
-}
-
-static void
-gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  if (cellview->priv->area)
-    gtk_cell_layout_clear (GTK_CELL_LAYOUT (cellview->priv->area));
-}
-
-static void
-gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
-                                              GtkCellRenderer       *cell,
-                                              GtkCellLayoutDataFunc  func,
-                                              gpointer               func_data,
-                                              GDestroyNotify         destroy)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (cellview->priv->area),
-				      cell, func, func_data, destroy);
-}
-
-static void
-gtk_cell_view_cell_layout_clear_attributes (GtkCellLayout   *layout,
-                                            GtkCellRenderer *renderer)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (cellview->priv->area), renderer);
-}
-
-static void
-gtk_cell_view_cell_layout_reorder (GtkCellLayout   *layout,
-                                   GtkCellRenderer *cell,
-                                   gint             position)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  gtk_cell_layout_reorder (GTK_CELL_LAYOUT (cellview->priv->area), cell, position);
-}
-
-
-static GList *
-gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cellview->priv->area));
-}
-
 static GtkCellArea *
 gtk_cell_view_cell_layout_get_area (GtkCellLayout   *layout)
 {
@@ -763,8 +648,8 @@ gtk_cell_view_new_with_text (const gchar *text)
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
   renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_view_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
-                                        renderer, TRUE);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+			      renderer, TRUE);
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, text);
@@ -797,8 +682,8 @@ gtk_cell_view_new_with_markup (const gchar *markup)
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
   renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_view_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
-                                        renderer, TRUE);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+			      renderer, TRUE);
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, markup);
@@ -829,8 +714,8 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
   renderer = gtk_cell_renderer_pixbuf_new ();
-  gtk_cell_view_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
-                                        renderer, TRUE);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+			      renderer, TRUE);
 
   g_value_init (&value, GDK_TYPE_PIXBUF);
   g_value_set_object (&value, pixbuf);
