@@ -3278,7 +3278,7 @@ gtk_css_provider_get_default (void)
         "GtkTreeView > GtkButton {\n"
         "  background-color: @bg_color;\n"
         "  color: @fg_color;\n"
-        "  border-color: shade (@bg_color, 0.7);\n"
+        "  border-color: shade (@bg_color, 0.6);\n"
         "  padding: 2 2; \n"
         "}\n"
         "\n"
