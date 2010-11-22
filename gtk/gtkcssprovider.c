@@ -3576,6 +3576,12 @@ gtk_css_provider_get_default (void)
         "GtkSpinButton.button {\n"
         "  border-width: 1;\n"
         "}\n"
+        "\n"
+        ".scale.slider:hover,\n"
+        "GtkSpinButton.button:hover {\n"
+        "  background-color: shade (@bg_color, 1.05);\n"
+        "  border-color: shade (@bg_color, 0.8);\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
