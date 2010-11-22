@@ -456,7 +456,7 @@
  * </example>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-slices">
- * <title>Image slices</title>
+ * <title>Border images</title>
  * <para>
  * Images can be used in 'slices' for the purpose of creating scalable
  * borders.
