@@ -940,7 +940,7 @@ gdk_window_real_window_get_device_position (GdkDisplay       *display,
 
   private = (GdkWindowObject *) window;
 
-  normal_child = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_device_state (window,
+  normal_child = GDK_WINDOW_IMPL_GET_CLASS (private->impl)->get_device_state (window,
                                                                               device,
                                                                               &tmpx, &tmpy,
                                                                               &tmp_mask);

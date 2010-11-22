@@ -31,11 +31,15 @@
 #include "gdkinternals.h"
 
 
-typedef GdkWindowImplIface GdkWindowImplInterface;
-G_DEFINE_INTERFACE (GdkWindowImpl, gdk_window_impl, G_TYPE_OBJECT);
+G_DEFINE_TYPE (GdkWindowImpl, gdk_window_impl, GDK_TYPE_DRAWABLE);
 
 
 static void
-gdk_window_impl_default_init (GdkWindowImplInterface *iface)
+gdk_window_impl_class_init (GdkWindowImplClass *klass)
+{
+}
+
+static void
+gdk_window_impl_init (GdkWindowImpl *impl)
 {
 }

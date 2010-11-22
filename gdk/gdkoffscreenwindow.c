@@ -44,7 +44,7 @@ typedef struct _GdkOffscreenWindowClass GdkOffscreenWindowClass;
 
 struct _GdkOffscreenWindow
 {
-  GdkDrawable parent_instance;
+  GdkWindowImpl parent_instance;
 
   GdkWindow *wrapper;
 
@@ -54,7 +54,7 @@ struct _GdkOffscreenWindow
 
 struct _GdkOffscreenWindowClass
 {
-  GdkDrawableClass parent_class;
+  GdkWindowImplClass parent_class;
 };
 
 #define GDK_TYPE_OFFSCREEN_WINDOW            (gdk_offscreen_window_get_type())
@@ -64,14 +64,9 @@ struct _GdkOffscreenWindowClass
 #define GDK_IS_OFFSCREEN_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_OFFSCREEN_WINDOW))
 #define GDK_OFFSCREEN_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_OFFSCREEN_WINDOW, GdkOffscreenWindowClass))
 
-static void       gdk_offscreen_window_impl_iface_init    (GdkWindowImplIface         *iface);
 static void       gdk_offscreen_window_hide               (GdkWindow                  *window);
 
-G_DEFINE_TYPE_WITH_CODE (GdkOffscreenWindow,
-			 gdk_offscreen_window,
-			 GDK_TYPE_DRAWABLE,
-			 G_IMPLEMENT_INTERFACE (GDK_TYPE_WINDOW_IMPL,
-						gdk_offscreen_window_impl_iface_init));
+G_DEFINE_TYPE (GdkOffscreenWindow, gdk_offscreen_window, GDK_TYPE_WINDOW_IMPL)
 
 
 static void
@@ -727,35 +722,32 @@ gdk_offscreen_window_get_embedder (GdkWindow *window)
 static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
+  GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
   GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_offscreen_window_finalize;
 
   drawable_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
-}
 
-static void
-gdk_offscreen_window_impl_iface_init (GdkWindowImplIface *iface)
-{
-  iface->show = gdk_offscreen_window_show;
-  iface->hide = gdk_offscreen_window_hide;
-  iface->withdraw = gdk_offscreen_window_withdraw;
-  iface->raise = gdk_offscreen_window_raise;
-  iface->lower = gdk_offscreen_window_lower;
-  iface->move_resize = gdk_offscreen_window_move_resize;
-  iface->set_background = gdk_offscreen_window_set_background;
-  iface->get_events = gdk_offscreen_window_get_events;
-  iface->set_events = gdk_offscreen_window_set_events;
-  iface->reparent = gdk_offscreen_window_reparent;
-  iface->get_geometry = gdk_offscreen_window_get_geometry;
-  iface->shape_combine_region = gdk_offscreen_window_shape_combine_region;
-  iface->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
-  iface->set_static_gravities = gdk_offscreen_window_set_static_gravities;
-  iface->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
-  iface->translate = gdk_offscreen_window_translate;
-  iface->get_root_coords = gdk_offscreen_window_get_root_coords;
-  iface->get_device_state = gdk_offscreen_window_get_device_state;
-  iface->destroy = gdk_offscreen_window_destroy;
-  iface->resize_cairo_surface = gdk_offscreen_window_resize_cairo_surface;
+  impl_class->show = gdk_offscreen_window_show;
+  impl_class->hide = gdk_offscreen_window_hide;
+  impl_class->withdraw = gdk_offscreen_window_withdraw;
+  impl_class->raise = gdk_offscreen_window_raise;
+  impl_class->lower = gdk_offscreen_window_lower;
+  impl_class->move_resize = gdk_offscreen_window_move_resize;
+  impl_class->set_background = gdk_offscreen_window_set_background;
+  impl_class->get_events = gdk_offscreen_window_get_events;
+  impl_class->set_events = gdk_offscreen_window_set_events;
+  impl_class->reparent = gdk_offscreen_window_reparent;
+  impl_class->get_geometry = gdk_offscreen_window_get_geometry;
+  impl_class->shape_combine_region = gdk_offscreen_window_shape_combine_region;
+  impl_class->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
+  impl_class->set_static_gravities = gdk_offscreen_window_set_static_gravities;
+  impl_class->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
+  impl_class->translate = gdk_offscreen_window_translate;
+  impl_class->get_root_coords = gdk_offscreen_window_get_root_coords;
+  impl_class->get_device_state = gdk_offscreen_window_get_device_state;
+  impl_class->destroy = gdk_offscreen_window_destroy;
+  impl_class->resize_cairo_surface = gdk_offscreen_window_resize_cairo_surface;
 }

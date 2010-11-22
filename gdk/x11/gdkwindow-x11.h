@@ -28,6 +28,7 @@
 #define __GDK_WINDOW_X11_H__
 
 #include "gdk/x11/gdkprivate-x11.h"
+#include "gdk/gdkwindowimpl.h"
 
 #ifdef HAVE_XDAMAGE
 #include <X11/extensions/Xdamage.h>
@@ -56,7 +57,7 @@ typedef struct _GdkXPositionInfo GdkXPositionInfo;
 
 struct _GdkWindowImplX11
 {
-  GdkDrawable parent_instance;
+  GdkWindowImpl parent_instance;
 
   GdkWindow *wrapper;
 
@@ -81,7 +82,7 @@ struct _GdkWindowImplX11
  
 struct _GdkWindowImplX11Class 
 {
-  GdkDrawableClass parent_class;
+  GdkWindowImplClass parent_class;
 };
 
 struct _GdkToplevelX11
