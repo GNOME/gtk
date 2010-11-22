@@ -3215,6 +3215,8 @@ gtk_default_draw_expander (GtkStyle        *style,
   if (detail)
     transform_detail_string (detail, context);
 
+  gtk_style_context_add_class (context, "expander");
+
   switch (state_type)
     {
     case GTK_STATE_PRELIGHT:

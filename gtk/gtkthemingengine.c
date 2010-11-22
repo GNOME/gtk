@@ -1748,7 +1748,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
                                     gdouble           height)
 {
   GtkStateFlags flags;
-  GdkRGBA *bg_color, *fg_color;
+  GdkRGBA *outline_color, *fg_color;
   double vertical_overshoot;
   int diameter;
   double radius;
@@ -1764,7 +1764,9 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
 
   gtk_theming_engine_get (engine, flags,
                           "color", &fg_color,
-                          "background-color", &bg_color,
+                          NULL);
+  gtk_theming_engine_get (engine, 0,
+                          "color", &outline_color,
                           NULL);
 
   line_width = 1;
@@ -1834,13 +1836,13 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
 
   cairo_fill_preserve (cr);
 
-  gdk_cairo_set_source_rgba (cr, fg_color);
+  gdk_cairo_set_source_rgba (cr, outline_color);
   cairo_stroke (cr);
 
   cairo_restore (cr);
 
   gdk_rgba_free (fg_color);
-  gdk_rgba_free (bg_color);
+  gdk_rgba_free (outline_color);
 }
 
 static void
