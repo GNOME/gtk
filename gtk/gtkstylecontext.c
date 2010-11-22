@@ -583,7 +583,7 @@ timeline_finished_cb (GtkTimeline *timeline,
 static AnimationInfo *
 animation_info_new (GtkStyleContext         *context,
                     gpointer                 region_id,
-                    gdouble                  duration,
+                    guint                    duration,
                     GtkTimelineProgressType  progress_type,
                     gboolean                 loop,
                     GtkStateType             state,
