@@ -337,7 +337,11 @@ HTML_IMAGES = \
 	$(srcdir)/images/gradient1.png					\
 	$(srcdir)/images/gradient2.png					\
 	$(srcdir)/images/gradient3.png					\
-	$(srcdir)/images/gradient4.png
+	$(srcdir)/images/gradient4.png					\
+	$(srcdir)/images/border1.png					\
+	$(srcdir)/images/border2.png					\
+	$(srcdir)/images/border3.png					\
+	$(srcdir)/images/slices.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \

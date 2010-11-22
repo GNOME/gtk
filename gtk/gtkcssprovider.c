@@ -446,14 +446,50 @@
  * <title>Another radial gradient</title>
  * <inlinegraphic fileref="gradient4.png" format="PNG"/>
  * <para>This gradient was specified with
- * <literallayout>
- * -gtk-gradient (radial,
+ * <literallayout>-gtk-gradient (radial,
  *                0.4 0.4, 0.1,
  *                0.6 0.6, 0.7,
  *                color-stop (0, &num;f00),
  *                color-stop (0.1, &num;a0f),
  *                color-stop (0.2, &commat;yellow),
  *                color-stop (1, &commat;green))</literallayout></para>
+ * </example>
+ * </refsect2>
+ * <refsect2 id="gtkcssprovider-slices">
+ * <title>Image slices</title>
+ * <para>
+ * Images can be used in 'slices' for the purpose of creating scalable
+ * borders.
+ * </para>
+ * <inlinegraphic fileref="slices.png" format="PNG"/>
+ * <para>
+ * The syntax for specifying border images of this kind is:
+ * <literallayout>url(@path) @top @right @bottom @left [repeat|stretch]? [repeat|stretch]?</literallayout>
+ * The sizes of the 'cut off' portions are specified
+ * with the @top, @right, @bottom and @left parameters.
+ * The 'middle' sections can be repeated or stretched to create
+ * the desired effect, by adding the 'repeat' or 'stretch' options after
+ * the dimensions. If two options are specified, the first one affects
+ * the horizontal behaviour and the second one the vertical behaviour.
+ * If only one option is specified, it affects both.
+ * </para>
+ * <example>
+ * <title>A border image</title>
+ * <para>This border image was specified with
+ * <inlinegraphic fileref="border1.png" format="PNG"/>
+ * <literallayout>url("gradient1.png") 10 10 10 10</literallayout></para>
+ * </example>
+ * <example>
+ * <title>A repeating border image</title>
+ * <para>This border image was specified with
+ * <inlinegraphic fileref="border2.png" format="PNG"/>
+ * <literallayout>url("gradient1.png") 10 10 10 10 repeat</literallayout></para>
+ * </example>
+ * <example>
+ * <title>A stretched border image</title>
+ * <para>This border image was specified with
+ * <inlinegraphic fileref="border3.png" format="PNG"/>
+ * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout></para>
  * </example>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-properties">
@@ -509,16 +545,16 @@
  *       </row>
  *       <row>
  *         <entry>font</entry>
- *         <entry>family [style] [size]</entry>
+ *         <entry>@family [@style] [@size]</entry>
  *         <entry>#PangoFontDescription</entry>
  *         <entry>font: Sans 15;</entry>
  *       </row>
  *       <row>
  *         <entry>margin</entry>
- *         <entry morerows="1"><literallayout>width
- * vertical-width horizontal-width
- * top-width horizontal-width bottom-width
- * top-width right-width bottom-width left-width</literallayout>
+ *         <entry morerows="1"><literallayout>@width
+ * @vertical-width @horizontal-width
+ * @top-width @horizontal-width @bottom-width
+ * @top-width @right-width @bottom-width @left-width</literallayout>
  *         </entry>
  *         <entry morerows="1">#GtkBorder</entry>
  *         <entry morerows="1"><literallayout>margin: 5;
@@ -532,17 +568,7 @@
  *       </row>
  *       <row>
  *         <entry>background-image</entry>
- *         <entry><literallayout>-gtk-gradient (linear,
- *                starting-x-position starting-y-position,
- *                ending-x-position ending-y-position,
- *                [ [from|to] (color) |
- *                  color-stop (percentage, color) ] )
- * -gtk-gradient (radial,
- *                starting-x-position starting-y-position, starting-radius,
- *                ending-x-position ending-y-position, ending-radius,
- *                [ [from|to] (color) |
- *                  color-stop (percentage, color) ]* )</literallayout>
- *         </entry>
+ *         <entry>gradient (see above)</entry>
  *         <entry>#cairo_pattern_t</entry>
  *         <entry><literallayout>-gtk-gradient (linear,
  *                left top, right top,
@@ -578,7 +604,7 @@
  *       </row>
  *       <row>
  *         <entry>border-image</entry>
- *         <entry><literallayout>url([path]) top right bottom left [repeat|stretch]? [repeat|stretch]?</literallayout></entry>
+ *         <entry><literallayout>border image (see above)</literallayout></entry>
  *         <entry></entry>
  *         <entry><literallayout>border-image: url("/path/to/image.png") 3 4 3 4 stretch;
  * border-image: url("/path/to/image.png") 3 4 4 3 repeat stretch;</literallayout>
