@@ -3582,6 +3582,13 @@ gtk_css_provider_get_default (void)
         "  background-color: shade (@bg_color, 1.05);\n"
         "  border-color: shade (@bg_color, 0.8);\n"
         "}\n"
+        "\n"
+        "GtkToggleButton.button:inconsistent {\n"
+        "  border-style: outset;\n"
+        "  border-width: 1px;\n"
+        "  background-color: shade (@bg_color, 0.9);\n"
+        "  border-color: shade (@bg_color, 0.7);\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
