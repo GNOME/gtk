@@ -139,8 +139,6 @@ typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkCursor	      GdkCursor;
 typedef struct _GdkVisual             GdkVisual;
 
-typedef struct _GdkDrawable           GdkDrawable;
-
 /**
  * GdkWindow:
  *

@@ -24,10 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
-#error "Only <gdk/gdk.h> can be included directly."
-#endif
-
 #ifndef __GDK_DRAWABLE_H__
 #define __GDK_DRAWABLE_H__
 
@@ -38,6 +34,7 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkDrawable      GdkDrawable;
 typedef struct _GdkDrawableClass GdkDrawableClass;
 
 #define GDK_TYPE_DRAWABLE              (gdk_drawable_get_type ())
