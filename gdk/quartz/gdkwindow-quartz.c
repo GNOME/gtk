@@ -1087,7 +1087,7 @@ _gdk_quartz_window_destroy (GdkWindow *window,
 }
 
 static cairo_surface_t *
-gdk_window_quartz_resize_cairo_surface (GdkWindow       *window,
+gdk_window_quartz_resize_cairo_surface (GdkDrawable     *drawable,
                                         cairo_surface_t *surface,
                                         gint             width,
                                         gint             height)

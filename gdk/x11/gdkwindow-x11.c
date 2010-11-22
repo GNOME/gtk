@@ -1102,7 +1102,7 @@ _gdk_x11_window_destroy (GdkWindow *window,
 }
 
 static cairo_surface_t *
-gdk_window_x11_resize_cairo_surface (GdkWindow       *window,
+gdk_window_x11_resize_cairo_surface (GdkDrawable     *window,
                                      cairo_surface_t *surface,
                                      gint             width,
                                      gint             height)
