@@ -1807,6 +1807,12 @@ transform_detail_string (const gchar     *detail,
       gtk_style_context_add_class (context, "slider");
       gtk_style_context_add_class (context, "scrollbar");
     }
+  else if (strcmp (detail, "vscale") == 0 ||
+           strcmp (detail, "hscale") == 0)
+    {
+      gtk_style_context_add_class (context, "slider");
+      gtk_style_context_add_class (context, "scale");
+    }
   else if (strcmp (detail, "menuitem") == 0)
     {
       gtk_style_context_add_class (context, "menuitem");
@@ -1823,7 +1829,8 @@ transform_detail_string (const gchar     *detail,
     gtk_style_context_add_class (context, "menubar");
   else if (strcmp (detail, "base") == 0)
     gtk_style_context_add_class (context, "background");
-  else if (strcmp (detail, "bar") == 0)
+  else if (strcmp (detail, "bar") == 0 ||
+           strcmp (detail, "progressbar") == 0)
     gtk_style_context_add_class (context, "progressbar");
   else if (strcmp (detail, "toolbar") == 0)
     gtk_style_context_add_class (context, "toolbar");
