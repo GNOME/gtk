@@ -70,10 +70,6 @@ serialize_value (GValue *value)
 
       return g_strdup_printf ("%x:%x:%x", color->red, color->green, color->blue);
     }
-  else if (g_type_is_a (value->g_type, GDK_TYPE_DRAWABLE))
-    {
-      /* Don't do anything */
-    }
   else
     {
       g_warning ("Type %s is not serializable\n", g_type_name (value->g_type));
