@@ -87,17 +87,21 @@ static GtkCellArea *gtk_tree_menu_cell_layout_get_area        (GtkCellLayout    
 
 
 /* TreeModel/DrawingArea callbacks and building menus/submenus */
-static void      gtk_tree_menu_populate                       (GtkTreeMenu          *menu);
+static void       gtk_tree_menu_populate                      (GtkTreeMenu          *menu);
 static GtkWidget *gtk_tree_menu_create_item                   (GtkTreeMenu          *menu,
-							       GtkTreeIter          *iter);
-static void      gtk_tree_menu_set_area                       (GtkTreeMenu          *menu,
+							       GtkTreeIter          *iter,
+							       gboolean              header_item);
+static void       gtk_tree_menu_set_area                      (GtkTreeMenu          *menu,
 							       GtkCellArea          *area);
-static void      context_size_changed_cb                      (GtkCellAreaContext   *context,
+static GtkWidget *gtk_tree_menu_get_path_item                 (GtkTreeMenu          *menu,
+							       GtkTreePath          *path);
+
+static void       context_size_changed_cb                     (GtkCellAreaContext   *context,
 							       GParamSpec           *pspec,
 							       GtkWidget            *menu);
-static void      item_activated_cb                            (GtkMenuItem          *item,
+static void       item_activated_cb                           (GtkMenuItem          *item,
 							       GtkTreeMenu          *menu);
-static void      submenu_activated_cb                         (GtkTreeMenu          *submenu,
+static void       submenu_activated_cb                        (GtkTreeMenu          *submenu,
 							       const gchar          *path,
 							       GtkTreeMenu          *menu);
 
@@ -110,12 +114,12 @@ struct _GtkTreeMenuPrivate
   /* CellArea and context for this menu */
   GtkCellArea         *area;
   GtkCellAreaContext  *context;
-
-  gint                 last_alloc_width;
-  gint                 last_alloc_height;
   
   /* Signals */
   gulong               size_changed_id;
+  gulong               row_inserted_id;
+  gulong               row_deleted_id;
+  gulong               row_reordered_id;
 
   /* Row separators */
   GtkTreeViewRowSeparatorFunc row_separator_func;
@@ -126,6 +130,8 @@ struct _GtkTreeMenuPrivate
   GtkTreeMenuHeaderFunc header_func;
   gpointer              header_data;
   GDestroyNotify        header_destroy;
+
+  guint32               menu_with_header : 1;
 };
 
 enum {
@@ -140,7 +146,8 @@ enum {
   N_SIGNALS
 };
 
-static guint tree_menu_signals[N_SIGNALS] = { 0 };
+static guint   tree_menu_signals[N_SIGNALS] = { 0 };
+static GQuark  tree_menu_path_quark = 0;
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeMenu, gtk_tree_menu, GTK_TYPE_MENU,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
@@ -164,6 +171,8 @@ gtk_tree_menu_class_init (GtkTreeMenuClass *class)
 {
   GObjectClass   *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+
+  tree_menu_path_quark = g_quark_from_static_string ("gtk-tree-menu-path");
 
   object_class->constructor  = gtk_tree_menu_constructor;
   object_class->dispose      = gtk_tree_menu_dispose;
@@ -392,63 +401,22 @@ gtk_tree_menu_get_preferred_width (GtkWidget           *widget,
 {
   GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
   GtkTreeMenuPrivate *priv = menu->priv;
-  GtkTreePath        *path = NULL;
-  GtkTreeIter         iter;
-  gboolean            valid = FALSE;
 
+  /* We leave the requesting work up to the cellviews which operate in the same
+   * context, reserving space for the submenu indicator if any of the items have
+   * submenus ensures that every cellview will receive the same allocated width.
+   *
+   * Since GtkMenu does hieght-for-width correctly, we know that the width of
+   * every cell will be requested before the height-for-widths are requested.
+   */
   g_signal_handler_block (priv->context, priv->size_changed_id);
 
-  /* Before chaining up to the parent class and requesting the 
-   * menu item/cell view sizes, we need to request the size of
-   * each row for this menu and make sure all the cellviews 
-   * request enough space 
-   */
+  sync_reserve_submenu_size (menu);
   gtk_cell_area_context_flush_preferred_width (priv->context);
 
-  sync_reserve_submenu_size (menu);
-
-  if (priv->model)
-    {
-      if (priv->root)
-	path = gtk_tree_row_reference_get_path (priv->root);
-      
-      if (path)
-	{
-	  GtkTreeIter parent;
-
-	  if (gtk_tree_model_get_iter (priv->model, &parent, path))
-	    valid = gtk_tree_model_iter_children (priv->model, &iter, &parent);
-	  
-	  gtk_tree_path_free (path);
-	}
-      else
-	valid = gtk_tree_model_iter_children (priv->model, &iter, NULL);
-      
-      while (valid)
-	{
-	  gboolean is_separator = FALSE;
-	  
-	  if (priv->row_separator_func)
-	    is_separator = 
-	      priv->row_separator_func (priv->model, &iter, priv->row_separator_data);
-
-	  if (!is_separator)
-	    {
-	      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
-	      gtk_cell_area_get_preferred_width (priv->area, priv->context, widget, NULL, NULL);
-	    }
-	  
-	  valid = gtk_tree_model_iter_next (priv->model, &iter);
-	}
-    }
-
-  gtk_cell_area_context_sum_preferred_width (priv->context);
+  GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->get_preferred_width (widget, minimum_size, natural_size);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
-
-  /* Now that we've requested all the row's and updated priv->context properly, we can go ahead
-   * and calculate the sizes by requesting the menu items and thier cell views */
-  GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->get_preferred_width (widget, minimum_size, natural_size);
 }
 
 static void
@@ -458,63 +426,15 @@ gtk_tree_menu_get_preferred_height (GtkWidget           *widget,
 {
   GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
   GtkTreeMenuPrivate *priv = menu->priv;
-  GtkTreePath        *path = NULL;
-  GtkTreeIter         iter;
-  gboolean            valid = FALSE;
 
   g_signal_handler_block (priv->context, priv->size_changed_id);
 
-  /* Before chaining up to the parent class and requesting the 
-   * menu item/cell view sizes, we need to request the size of
-   * each row for this menu and make sure all the cellviews 
-   * request enough space 
-   */
+  sync_reserve_submenu_size (menu);
   gtk_cell_area_context_flush_preferred_height (priv->context);
 
-  sync_reserve_submenu_size (menu);
-
-  if (priv->model)
-    {
-      if (priv->root)
-	path = gtk_tree_row_reference_get_path (priv->root);
-      
-      if (path)
-	{
-	  GtkTreeIter parent;
-
-	  if (gtk_tree_model_get_iter (priv->model, &parent, path))
-	    valid = gtk_tree_model_iter_children (priv->model, &iter, &parent);
-	  
-	  gtk_tree_path_free (path);
-	}
-      else
-	valid = gtk_tree_model_iter_children (priv->model, &iter, NULL);
-      
-      while (valid)
-	{
-	  gboolean is_separator = FALSE;
-	  
-	  if (priv->row_separator_func)
-	    is_separator = 
-	      priv->row_separator_func (priv->model, &iter, priv->row_separator_data);
-
-	  if (!is_separator)
-	    {
-	      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
-	      gtk_cell_area_get_preferred_height (priv->area, priv->context, widget, NULL, NULL);
-	    }
-	  
-	  valid = gtk_tree_model_iter_next (priv->model, &iter);
-	}
-    }
-
-  gtk_cell_area_context_sum_preferred_height (priv->context);
+  GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->get_preferred_height (widget, minimum_size, natural_size);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
-
-  /* Now that we've requested all the row's and updated priv->context properly, we can go ahead
-   * and calculate the sizes by requesting the menu items and thier cell views */
-  GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->get_preferred_height (widget, minimum_size, natural_size);
 }
 
 static void
@@ -523,29 +443,14 @@ gtk_tree_menu_size_allocate (GtkWidget           *widget,
 {
   GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
   GtkTreeMenuPrivate *priv = menu->priv;
-  gint                new_width, new_height;
 
   /* flush the context allocation */
   gtk_cell_area_context_flush_allocation (priv->context);
 
   /* Leave it to the first cell area to allocate the size of priv->context, since
-   * we configure the menu to allocate all children the same width this should work fine */
+   * we configure the menu to allocate all children the same width this works fine
+   */
   GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->size_allocate (widget, allocation);
-
-  /* In alot of cases the menu gets allocated while the children dont need
-   * any reallocation, in this case we need to restore the context allocation */
-  gtk_cell_area_context_get_allocation (priv->context, &new_width, &new_height);
-
-  if (new_width <= 0 && new_height <= 0)
-    {
-      gtk_cell_area_context_allocate_width (priv->context, priv->last_alloc_width);
-      gtk_cell_area_context_allocate_height (priv->context, priv->last_alloc_height);
-    }
-
-  /* Save the allocation for the next round */
-  gtk_cell_area_context_get_allocation (priv->context, 
-					&priv->last_alloc_width, 
-					&priv->last_alloc_height);
 }
 
 /****************************************************************
@@ -667,6 +572,176 @@ gtk_tree_menu_cell_layout_get_area (GtkCellLayout *layout)
 /****************************************************************
  *             TreeModel callbacks/populating menus             *
  ****************************************************************/
+static GtkWidget *
+gtk_tree_menu_get_path_item (GtkTreeMenu          *menu,
+			     GtkTreePath          *search)
+{
+  GtkWidget *item = NULL;
+  GList     *children, *l;
+
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+
+  for (l = children; item == NULL && l != NULL; l = l->next)
+    {
+      GtkWidget   *child = l->data;
+      GtkTreePath *path  = NULL;
+
+      if (GTK_IS_SEPARATOR_MENU_ITEM (child))
+	{
+	  GtkTreeRowReference *row =
+	    g_object_get_qdata (G_OBJECT (child), tree_menu_path_quark);
+
+	  if (row && gtk_tree_row_reference_valid (row))
+	    path = gtk_tree_row_reference_get_path (row);
+	}
+      else
+	{
+	  GtkWidget *view = gtk_bin_get_child (GTK_BIN (child));
+
+	  /* It's always a cellview */
+	  if (GTK_IS_CELL_VIEW (view))
+	    path = gtk_cell_view_get_displayed_row (GTK_CELL_VIEW (view));
+	}
+
+      if (path)
+	{
+	  if (gtk_tree_path_compare (search, path) == 0)
+	    item = child;
+
+	  gtk_tree_path_free (path);
+	}
+    }
+
+  g_list_free (children);
+
+  return item;
+}
+
+static void
+row_inserted_cb (GtkTreeModel     *model,
+		 GtkTreePath      *path,
+		 GtkTreeIter      *iter,
+		 GtkTreeMenu      *menu)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+  GtkTreePath        *parent_path;
+  gboolean            this_menu = FALSE;
+  gint               *indices, index, depth;
+
+  parent_path = gtk_tree_path_copy (path);
+
+  /* Check if the menu and the added iter are in root of the model */
+  if (!gtk_tree_path_up (parent_path))
+    {
+      if (!priv->root)
+	this_menu = TRUE;
+    }
+  /* If we are a submenu, compare the path */
+  else if (priv->root)
+    {
+      GtkTreePath *root_path =
+	gtk_tree_row_reference_get_path (priv->root);
+
+      if (gtk_tree_path_compare (root_path, parent_path) == 0)
+	this_menu = TRUE;
+
+      gtk_tree_path_free (root_path);
+    }
+
+  gtk_tree_path_free (parent_path);
+
+  /* If the iter should be in this menu then go ahead and insert it */
+  if (this_menu)
+    {
+      GtkWidget *item;
+
+      /* Get the index of the path for this depth */
+      indices = gtk_tree_path_get_indices (path);
+      depth   = gtk_tree_path_get_depth (path);
+      index   = indices[depth -1];
+
+      /* Menus with a header include a menuitem for it's root node
+       * and a separator menu item */
+      if (priv->menu_with_header)
+	index += 2;
+
+      item = gtk_tree_menu_create_item (menu, iter, FALSE);
+      gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, index);
+
+      /* Resize everything */
+      gtk_cell_area_context_flush (menu->priv->context);
+    }
+}
+
+static void
+row_deleted_cb (GtkTreeModel     *model,
+		GtkTreePath      *path,
+		GtkTreeMenu      *menu)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+  GtkTreePath        *root_path;
+  GtkWidget          *item;
+
+  /* If it's the root node we leave it to the parent menu to remove us
+   * from its menu */
+  if (priv->root)
+    {
+      root_path = gtk_tree_row_reference_get_path (priv->root);
+
+      if (gtk_tree_path_compare (root_path, path) == 0)
+	{
+	  gtk_tree_path_free (root_path);
+	  return;
+	}
+    }
+
+  /* Get rid of the deleted item */
+  item = gtk_tree_menu_get_path_item (menu, path);
+  if (item)
+    {
+      gtk_widget_destroy (item);
+
+      /* Resize everything */
+      gtk_cell_area_context_flush (menu->priv->context);
+    }
+}
+
+static void
+row_reordered_cb (GtkTreeModel    *model,
+		  GtkTreePath     *path,
+		  GtkTreeIter     *iter,
+		  gint            *new_order,
+		  GtkTreeMenu     *menu)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+  gboolean            this_menu = FALSE;
+
+  if (iter == NULL && priv->root == NULL)
+    this_menu = TRUE;
+  else if (priv->root)
+    {
+      GtkTreePath *root_path =
+	gtk_tree_row_reference_get_path (priv->root);
+
+      if (gtk_tree_path_compare (root_path, path) == 0)
+	this_menu = TRUE;
+
+      gtk_tree_path_free (root_path);
+    }
+
+  if (this_menu)
+    {
+      /* Destroy and repopulate the menu at the level where the order changed */
+      gtk_container_foreach (GTK_CONTAINER (menu), 
+			     (GtkCallback) gtk_widget_destroy, NULL);
+
+      gtk_tree_menu_populate (menu);
+
+      /* Resize everything */
+      gtk_cell_area_context_flush (menu->priv->context);
+    }
+}
+
 static void
 context_size_changed_cb (GtkCellAreaContext  *context,
 			 GParamSpec          *pspec,
@@ -696,28 +771,73 @@ gtk_tree_menu_set_area (GtkTreeMenu *menu,
 
 static GtkWidget *
 gtk_tree_menu_create_item (GtkTreeMenu *menu,
-			   GtkTreeIter *iter)
+			   GtkTreeIter *iter,
+			   gboolean     header_item)
 {
   GtkTreeMenuPrivate *priv = menu->priv;
   GtkWidget          *item, *view;
   GtkTreePath        *path;
-
-  view = gtk_cell_view_new_with_context (priv->area, priv->context);
-  item = gtk_menu_item_new ();
-  gtk_widget_show (view);
-  gtk_widget_show (item);
+  gboolean            is_separator = FALSE;
 
   path = gtk_tree_model_get_path (priv->model, iter);
 
-  gtk_cell_view_set_model (GTK_CELL_VIEW (view), priv->model);
-  gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (view), path);
+  if (priv->row_separator_func)
+    is_separator = 
+      priv->row_separator_func (priv->model, iter,
+				priv->row_separator_data);
+
+  if (is_separator)
+    {
+      item = gtk_separator_menu_item_new ();
+
+      g_object_set_qdata_full (G_OBJECT (item),
+			       tree_menu_path_quark,
+			       gtk_tree_row_reference_new (priv->model, path),
+			       (GDestroyNotify)gtk_tree_row_reference_free);
+    }
+  else
+    {
+      view = gtk_cell_view_new_with_context (priv->area, priv->context);
+      item = gtk_menu_item_new ();
+      gtk_widget_show (view);
+      gtk_widget_show (item);
+      
+      gtk_cell_view_set_model (GTK_CELL_VIEW (view), priv->model);
+      gtk_cell_view_set_displayed_row (GTK_CELL_VIEW (view), path);
+      
+      gtk_widget_show (view);
+      gtk_container_add (GTK_CONTAINER (item), view);
+      
+      g_signal_connect (item, "activate", G_CALLBACK (item_activated_cb), menu);
+
+      /* Add a GtkTreeMenu submenu to render the children of this row */
+      if (header_item == FALSE &&
+	  gtk_tree_model_iter_has_child (priv->model, iter))
+	{
+	  GtkWidget           *submenu;
+
+	  submenu = gtk_tree_menu_new_with_area (priv->area);
+
+	  gtk_tree_menu_set_row_separator_func (GTK_TREE_MENU (submenu), 
+						priv->row_separator_func,
+						priv->row_separator_data,
+						priv->row_separator_destroy);
+	  gtk_tree_menu_set_header_func (GTK_TREE_MENU (submenu), 
+					 priv->header_func,
+					 priv->header_data,
+					 priv->header_destroy);
+
+	  gtk_tree_menu_set_model (GTK_TREE_MENU (submenu), priv->model);
+	  gtk_tree_menu_set_root (GTK_TREE_MENU (submenu), path);
+
+	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
+
+	  g_signal_connect (submenu, "menu-activate", 
+			    G_CALLBACK (submenu_activated_cb), menu);
+	}
+    }
 
   gtk_tree_path_free (path);
-
-  gtk_widget_show (view);
-  gtk_container_add (GTK_CONTAINER (item), view);
-
-  g_signal_connect (item, "activate", G_CALLBACK (item_activated_cb), menu);
 
   return item;
 }
@@ -750,12 +870,14 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
 	      /* Add a submenu header for rows which desire one, used for
 	       * combo boxes to allow all rows to be activatable/selectable 
 	       */
-	      menu_item = gtk_tree_menu_create_item (menu, &parent);
+	      menu_item = gtk_tree_menu_create_item (menu, &parent, TRUE);
 	      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 	      
 	      menu_item = gtk_separator_menu_item_new ();
 	      gtk_widget_show (menu_item);
 	      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+
+	      priv->menu_with_header = TRUE;
 	    }
 	}
       gtk_tree_path_free (path);
@@ -767,49 +889,7 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
    * submenu for iters/items that have children */
   while (valid)
     {
-      gboolean is_separator = FALSE;
-
-      if (priv->row_separator_func)
-	is_separator = 
-	  priv->row_separator_func (priv->model, &iter, 
-				    priv->row_separator_data);
-
-      if (is_separator)
-	menu_item = gtk_separator_menu_item_new ();
-      else
-	{
-	  menu_item = gtk_tree_menu_create_item (menu, &iter);
-
-	  /* Add a GtkTreeMenu submenu to render the children of this row */
-	  if (gtk_tree_model_iter_has_child (priv->model, &iter))
-	    {
-	      GtkTreePath         *row_path;
-	      GtkWidget           *submenu;
-	      
-	      row_path = gtk_tree_model_get_path (priv->model, &iter);
-	      submenu  = gtk_tree_menu_new_with_area (priv->area);
-
-	      gtk_tree_menu_set_row_separator_func (GTK_TREE_MENU (submenu), 
-						    priv->row_separator_func,
-						    priv->row_separator_data,
-						    priv->row_separator_destroy);
-	      gtk_tree_menu_set_header_func (GTK_TREE_MENU (submenu), 
-					     priv->header_func,
-					     priv->header_data,
-					     priv->header_destroy);
-
-	      gtk_tree_menu_set_model (GTK_TREE_MENU (submenu), priv->model);
-	      gtk_tree_menu_set_root (GTK_TREE_MENU (submenu), row_path);
-
-	      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), submenu);
-
-	      gtk_tree_path_free (row_path);
-
-	      g_signal_connect (submenu, "menu-activate", 
-				G_CALLBACK (submenu_activated_cb), menu);
-	    }
-	}
-
+      menu_item = gtk_tree_menu_create_item (menu, &iter, FALSE);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
       valid = gtk_tree_model_iter_next (priv->model, &iter);
@@ -891,6 +971,15 @@ gtk_tree_menu_set_model (GtkTreeMenu  *menu,
       if (priv->model)
 	{
 	  /* Disconnect signals */
+	  g_signal_handler_disconnect (priv->model,
+				       priv->row_inserted_id);
+	  g_signal_handler_disconnect (priv->model,
+				       priv->row_deleted_id);
+	  g_signal_handler_disconnect (priv->model,
+				       priv->row_reordered_id);
+	  priv->row_inserted_id  = 0;
+	  priv->row_deleted_id   = 0;
+	  priv->row_reordered_id = 0;
 
 	  g_object_unref (priv->model);
 	}
@@ -899,9 +988,15 @@ gtk_tree_menu_set_model (GtkTreeMenu  *menu,
 
       if (priv->model)
 	{
-	  /* Connect signals */
-
 	  g_object_ref (priv->model);
+
+	  /* Connect signals */
+	  priv->row_inserted_id  = g_signal_connect (priv->model, "row-inserted",
+						     G_CALLBACK (row_inserted_cb), menu);
+	  priv->row_deleted_id   = g_signal_connect (priv->model, "row-deleted",
+						     G_CALLBACK (row_deleted_cb), menu);
+	  priv->row_reordered_id = g_signal_connect (priv->model, "rows-reordered",
+						     G_CALLBACK (row_reordered_cb), menu);
 	}
     }
 }
