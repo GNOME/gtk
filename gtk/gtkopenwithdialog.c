@@ -51,6 +51,7 @@ struct _GtkOpenWithDialogPrivate {
   GtkWidget *open_label;
 
   GtkWidget *open_with_widget;
+  GtkWidget *show_more_button;
 };
 
 enum {
@@ -267,12 +268,26 @@ set_dialog_properties (GtkOpenWithDialog *self)
 }
 
 static void
+show_more_button_clicked_cb (GtkButton *button,
+			     gpointer user_data)
+{
+  GtkOpenWithDialog *self = user_data;
+
+  g_object_set (self->priv->open_with_widget,
+		"show-fallback", TRUE,
+		"show-other", TRUE,
+		NULL);
+
+  gtk_widget_hide (self->priv->show_more_button);
+}
+
+static void
 build_dialog_ui (GtkOpenWithDialog *self)
 {
   GtkWidget *vbox;
   GtkWidget *vbox2;
   GtkWidget *label;
-  GtkWidget *action_area;
+  GtkWidget *action_area, *button, *w;
 
   gtk_container_set_border_width (GTK_CONTAINER (self), 5);
 
@@ -300,6 +315,17 @@ build_dialog_ui (GtkOpenWithDialog *self)
 		    G_CALLBACK (widget_application_activated_cb), self);
   gtk_box_pack_start (GTK_BOX (vbox2), self->priv->open_with_widget, TRUE, TRUE, 0);
   gtk_widget_show (self->priv->open_with_widget);
+
+  button = gtk_button_new_with_label (_("Show other applications"));
+  self->priv->show_more_button = button;
+  w = gtk_image_new_from_stock (GTK_STOCK_ADD,
+				GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), w);
+  gtk_box_pack_start (GTK_BOX (self->priv->open_with_widget), button, FALSE, FALSE, 6);
+  gtk_widget_show_all (button);
+
+  g_signal_connect (button, "clicked",
+		    G_CALLBACK (show_more_button_clicked_cb), self);
 
   gtk_dialog_add_button (GTK_DIALOG (self),
 			 GTK_STOCK_CANCEL,

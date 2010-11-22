@@ -49,12 +49,9 @@ struct _GtkOpenWithWidgetPrivate {
   gboolean radio_mode;
 
   GtkWidget *program_list;
-  GtkWidget *show_more;
   GtkListStore *program_list_store;
 
   GtkCellRenderer *padding_renderer;
-
-  gboolean show_more_clicked;
 };
 
 enum {
@@ -860,32 +857,6 @@ gtk_open_with_widget_get_property (GObject *object,
 }
 
 static void
-show_more_button_clicked_cb (GtkButton *button,
-			     gpointer user_data)
-{
-  GtkOpenWithWidget *self = user_data;
-
-  self->priv->show_more_clicked = TRUE;
-  gtk_widget_hide (GTK_WIDGET (button));
-
-  _gtk_open_with_widget_refilter (self);
-}
-
-static void
-gtk_open_with_widget_ensure_show_more_button (GtkOpenWithWidget *self)
-{
-  if (self->priv->show_mode == GTK_OPEN_WITH_WIDGET_SHOW_MODE_HEADINGS)
-    {
-      if (!self->priv->show_more_clicked)
-	gtk_widget_show (self->priv->show_more);
-    }
-  else
-    {
-      gtk_widget_hide (self->priv->show_more);
-    }
-}
-
-static void
 gtk_open_with_widget_constructed (GObject *object)
 {
   GtkOpenWithWidget *self = GTK_OPEN_WITH_WIDGET (object);
@@ -895,7 +866,6 @@ gtk_open_with_widget_constructed (GObject *object)
   if (G_OBJECT_CLASS (gtk_open_with_widget_parent_class)->constructed != NULL)
     G_OBJECT_CLASS (gtk_open_with_widget_parent_class)->constructed (object);
 
-  gtk_open_with_widget_ensure_show_more_button (self);
   gtk_open_with_widget_add_items (self);
 }
 
@@ -999,7 +969,7 @@ gtk_open_with_widget_class_init (GtkOpenWithWidgetClass *klass)
 static void
 gtk_open_with_widget_init (GtkOpenWithWidget *self)
 {
-  GtkWidget *scrolled_window, *button, *w;
+  GtkWidget *scrolled_window;
   GtkTreeSelection *selection;
 
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_OPEN_WITH_WIDGET,
@@ -1035,18 +1005,6 @@ gtk_open_with_widget_init (GtkOpenWithWidget *self)
   g_signal_connect (self->priv->program_list, "button-press-event",
 		    G_CALLBACK (program_list_button_press_event_cb),
 		    self);
-
-  button = gtk_button_new_with_label (_("Show other applications"));
-  w = gtk_image_new_from_stock (GTK_STOCK_ADD,
-				GTK_ICON_SIZE_BUTTON);
-
-  gtk_button_set_image (GTK_BUTTON (button), w);
-  gtk_box_pack_start (GTK_BOX (self), button, FALSE, FALSE, 6);
-
-  g_signal_connect (button, "clicked",
-		    G_CALLBACK (show_more_button_clicked_cb), self);
-
-  self->priv->show_more = button;
 }
 
 static GAppInfo *
