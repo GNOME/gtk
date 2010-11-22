@@ -175,25 +175,20 @@ typedef struct
 } GdkDeviceGrabInfo;
 
 typedef struct _GdkInputWindow GdkInputWindow;
+typedef struct _GdkWindowPaint GdkWindowPaint;
 
 typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
                                                GdkDevice            *device,
                                                GdkPointerWindowInfo *device_info,
                                                gpointer              user_data);
 
-/* Private version of GdkWindowObject. The initial part of this strucuture
-   is public for historical reasons. Don't change that part */
-typedef struct _GdkWindowPaint             GdkWindowPaint;
-
-#define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
-
-struct _GdkWindowObject
+struct _GdkWindow
 {
   GdkDrawable parent_instance;
 
   GdkDrawable *impl; /* window-system-specific delegate object */  
   
-  GdkWindowObject *parent;
+  GdkWindow *parent;
   GdkVisual *visual;
 
   gpointer user_data;
@@ -235,10 +230,10 @@ struct _GdkWindowObject
 
   guint update_and_descendants_freeze_count;
 
-  /* The GdkWindowObject that has the impl, ref:ed if another window.
+  /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
    * for as long as any GdkWindow references the impl. */
-  GdkWindowObject *impl_window; 
+  GdkWindow *impl_window; 
   int abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
   guint32 clip_tag;
@@ -269,8 +264,8 @@ struct _GdkWindowObject
   GHashTable *device_events;
 };
 
-#define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
-#define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
+#define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
+#define GDK_WINDOW_DESTROYED(d) (GDK_WINDOW (d)->destroyed)
 
 extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
 extern gpointer       _gdk_event_data;
@@ -406,7 +401,7 @@ gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
 					gint        depth);
 
 
-#define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
+#define GDK_WINDOW_IS_MAPPED(window) (((window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
 
 /* Called when gdk_window_destroy() is called on a foreign window

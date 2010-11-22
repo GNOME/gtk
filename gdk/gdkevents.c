@@ -1435,7 +1435,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
   temp_event.window_state.type = GDK_WINDOW_STATE;
   temp_event.window_state.send_event = FALSE;
   
-  old = ((GdkWindowObject*) temp_event.window_state.window)->state;
+  old = temp_event.window_state.window->state;
   
   temp_event.window_state.new_window_state = old;
   temp_event.window_state.new_window_state |= set_flags;
@@ -1450,7 +1450,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
    * inconsistent state to the user.
    */
   
-  ((GdkWindowObject*) window)->state = temp_event.window_state.new_window_state;
+  window->state = temp_event.window_state.new_window_state;
 
   if (temp_event.window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
     _gdk_window_update_viewable (window);
@@ -1460,7 +1460,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
    * Non-toplevels do use the GDK_WINDOW_STATE_WITHDRAWN flag
    * internally so we needed to update window->state.
    */
-  switch (((GdkWindowObject*) window)->window_type)
+  switch (window->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */
