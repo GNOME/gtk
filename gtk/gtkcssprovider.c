@@ -3552,6 +3552,13 @@ gtk_css_provider_get_default (void)
         "  border-style: inset;\n"
         "  border-width: 1;\n"
         "}\n"
+        "\n"
+        ".menu,\n"
+        ".menubar,\n"
+        ".toolbar {\n"
+        "  border-style: outset;\n"
+        "  border-width: 1;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
