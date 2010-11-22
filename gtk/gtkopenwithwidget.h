@@ -71,12 +71,36 @@ struct _GtkOpenWithWidgetClass {
   gpointer padding[16];
 };
 
+typedef enum {
+  GTK_OPEN_WITH_WIDGET_SHOW_RECOMMENDED = 1 << 0,
+  GTK_OPEN_WITH_WIDGET_SHOW_FALLBACK = 1 << 1,
+  GTK_OPEN_WITH_WIDGET_SHOW_OTHER = 1 << 2,
+  GTK_OPEN_WITH_WIDGET_SHOW_ALL = 1 << 3,
+} GtkOpenWithWidgetShowFlags;
+
 GType      gtk_open_with_widget_get_type (void) G_GNUC_CONST;
 
 GtkWidget * gtk_open_with_widget_new (const gchar *content_type);
 
-void gtk_open_with_widget_set_show_mode (GtkOpenWithWidget *self,
-					 GtkOpenWithWidgetShowMode show_mode);
-GtkOpenWithWidgetShowMode gtk_open_with_widget_get_show_mode (GtkOpenWithWidget *self);
+void gtk_open_with_widget_set_show_recommended (GtkOpenWithWidget *self,
+						gboolean setting);
+gboolean gtk_open_with_widget_get_show_recommended (GtkOpenWithWidget *self);
+
+void gtk_open_with_widget_set_show_fallback (GtkOpenWithWidget *self,
+					     gboolean setting);
+gboolean gtk_open_with_widget_get_show_fallback (GtkOpenWithWidget *self);
+
+void gtk_open_with_widget_set_show_other (GtkOpenWithWidget *self,
+					  gboolean setting);
+gboolean gtk_open_with_widget_get_show_other (GtkOpenWithWidget *self);
+
+void gtk_open_with_widget_set_show_all (GtkOpenWithWidget *self,
+					gboolean show_all);
+gboolean gtk_open_with_widget_get_show_all (GtkOpenWithWidget *self);
+
+void gtk_open_with_widget_set_radio_mode (GtkOpenWithWidget *self,
+					  gboolean setting);
+gboolean gtk_open_with_widget_get_radio_mode (GtkOpenWithWidget *self);
+
 
 #endif /* __GTK_OPEN_WITH_WIDGET_H__ */

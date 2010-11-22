@@ -42,7 +42,11 @@ struct _GtkOpenWithWidgetPrivate {
   GAppInfo *selected_app_info;
 
   char *content_type;
-  GtkOpenWithWidgetShowMode show_mode;
+  gboolean show_recommended;
+  gboolean show_fallback;
+  gboolean show_other;
+  gboolean show_all;
+  gboolean radio_mode;
 
   GtkWidget *program_list;
   GtkWidget *show_more;
@@ -70,7 +74,11 @@ enum {
 enum {
   PROP_CONTENT_TYPE = 1,
   PROP_GFILE,
-  PROP_SHOW_MODE,
+  PROP_SHOW_RECOMMENDED,
+  PROP_SHOW_FALLBACK,
+  PROP_SHOW_OTHER,
+  PROP_SHOW_ALL,
+  PROP_RADIO_MODE,
   N_PROPERTIES
 };
 
@@ -433,6 +441,25 @@ gtk_open_with_sort_func (GtkTreeModel *model,
 }
 
 static void
+radio_cell_renderer_func (GtkTreeViewColumn *column,
+			  GtkCellRenderer *cell,
+			  GtkTreeModel *model,
+			  GtkTreeIter *iter,
+			  gpointer user_data)
+{
+  GtkOpenWithWidget *self = user_data;
+  gboolean heading;
+
+  gtk_tree_model_get (model, iter,
+		      COLUMN_HEADING, &heading,
+		      -1);
+
+  g_object_set (cell,
+		"visible", !heading && self->priv->radio_mode,
+		NULL);
+}
+
+static void
 padding_cell_renderer_func (GtkTreeViewColumn *column,
 			    GtkCellRenderer *cell,
 			    GtkTreeModel *model,
@@ -483,7 +510,7 @@ compare_apps_func (gconstpointer a,
   return !g_app_info_equal (G_APP_INFO (a), G_APP_INFO (b));
 }
 
-static void
+static gboolean
 gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
 				  const gchar *heading_title,
 				  gboolean show_headings,
@@ -498,7 +525,9 @@ gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
   gchar *app_string, *bold_string;
   GIcon *icon;
   GList *l;
+  gboolean retval;
 
+  retval = FALSE;
   heading_added = FALSE;
   bold_string = g_strdup_printf ("<b>%s</b>", heading_title);
   
@@ -553,6 +582,8 @@ gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
 			  COLUMN_FALLBACK, fallback,
 			  -1);
 
+      retval = TRUE;
+
       g_free (app_string);
       if (unref_icon)
 	g_object_unref (icon);
@@ -561,6 +592,8 @@ gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
     }
 
   g_free (bold_string);
+
+  return retval;
 }
 
 static void
@@ -593,60 +626,64 @@ static void
 gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 {
   GList *all_applications = NULL, *content_type_apps = NULL, *recommended_apps = NULL, *fallback_apps = NULL;
-  gboolean show_recommended, show_headings, show_all;
+  gboolean show_headings;
+  gboolean apps_added;
 
-  if (self->priv->show_mode == GTK_OPEN_WITH_WIDGET_SHOW_MODE_RECOMMENDED)
-    {
-      show_all = FALSE;
-      show_headings = FALSE;
-      show_recommended = TRUE;
-    }
-  else if (self->priv->show_mode == GTK_OPEN_WITH_WIDGET_SHOW_MODE_ALL)
-    {
-      show_all = TRUE;
-      show_headings = FALSE;
-      show_recommended = FALSE;
-    }
-  else
-    {
-      show_all = self->priv->show_more_clicked;
-      show_headings = TRUE;
-      show_recommended = TRUE;
-    }
+  show_headings = TRUE;
+  apps_added = FALSE;
 
-  if (show_recommended)
+  if (self->priv->show_all)
+    show_headings = FALSE;
+
+  if (self->priv->show_recommended || self->priv->show_all)
     {
       recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
+
+      apps_added |= gtk_open_with_widget_add_section (self, _("Recommended Applications"),
+						      show_headings,
+						      !self->priv->show_all, /* mark as recommended */
+						      FALSE, /* mark as fallback */
+						      recommended_apps, NULL);
+    }
+
+  if (self->priv->show_fallback || self->priv->show_all)
+    {
       fallback_apps = g_app_info_get_fallback_for_type (self->priv->content_type);
+
+      apps_added |= gtk_open_with_widget_add_section (self, _("Related Applications"),
+						      show_headings,
+						      FALSE, /* mark as recommended */
+						      !self->priv->show_all, /* mark as fallback */
+						      fallback_apps, recommended_apps);
+    }
+
+  if (self->priv->show_other || self->priv->show_all)
+    {
       content_type_apps = g_list_concat (g_list_copy (recommended_apps),
 					 g_list_copy (fallback_apps));
+      all_applications = g_app_info_get_all ();
+
+      apps_added |= gtk_open_with_widget_add_section (self, _("Other Applications"),
+						      show_headings,
+						      FALSE,
+						      FALSE,
+						      all_applications, content_type_apps);
     }
 
-  if (show_all)
-    all_applications = g_app_info_get_all ();
-
-  if (show_recommended)
-    {
-      if (recommended_apps != NULL)
-	gtk_open_with_widget_add_section (self, _("Recommended Applications"),
-					  show_headings, TRUE, FALSE, recommended_apps, NULL);
-      else if (!self->priv->show_more_clicked)
-	add_no_applications_label (self);
-    }
-
-  if (show_all)
-    gtk_open_with_widget_add_section (self, _("Related Applications"),
-				      show_headings, FALSE, TRUE, fallback_apps, recommended_apps);
-
-  if (show_all)
-    gtk_open_with_widget_add_section (self, _("Other Applications"),
-				      show_headings, FALSE, FALSE, all_applications, content_type_apps);
-
-  if (content_type_apps != NULL)
-    g_list_free_full (content_type_apps, g_object_unref);
+  if (!apps_added)
+    add_no_applications_label (self);
 
   if (all_applications != NULL)
     g_list_free_full (all_applications, g_object_unref);
+
+  if (recommended_apps != NULL)
+    g_list_free_full (recommended_apps, g_object_unref);
+
+  if (fallback_apps != NULL)
+    g_list_free_full (fallback_apps, g_object_unref);
+
+  if (content_type_apps != NULL)
+    g_list_free (content_type_apps);
 }
 
 static void
@@ -693,7 +730,7 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
   renderer = gtk_cell_renderer_text_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   g_object_set (renderer,
-		"xpad", (self->priv->show_mode == GTK_OPEN_WITH_WIDGET_SHOW_MODE_HEADINGS) ? 6 : 0,
+		"xpad", self->priv->show_all ? 0 : 6,
 		NULL);
   self->priv->padding_renderer = renderer;
 
@@ -717,6 +754,17 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
   gtk_tree_view_column_set_cell_data_func (column, renderer,
 					   padding_cell_renderer_func,
 					   NULL, NULL);
+
+  /* radio renderer */
+  renderer = gtk_cell_renderer_toggle_new ();
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+					   radio_cell_renderer_func,
+					   self, NULL);
+  g_object_set (renderer,
+		"xpad", 6,
+		"radio", TRUE,
+		NULL);
 
   /* app icon renderer */
   renderer = gtk_cell_renderer_pixbuf_new ();
@@ -756,9 +804,20 @@ gtk_open_with_widget_set_property (GObject *object,
     case PROP_CONTENT_TYPE:
       self->priv->content_type = g_value_dup_string (value);
       break;
-    case PROP_SHOW_MODE:
-      gtk_open_with_widget_set_show_mode (self,
-					  g_value_get_enum (value));
+    case PROP_SHOW_RECOMMENDED:
+      gtk_open_with_widget_set_show_recommended (self, g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_FALLBACK:
+      gtk_open_with_widget_set_show_fallback (self, g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_OTHER:
+      gtk_open_with_widget_set_show_other (self, g_value_get_boolean (value));
+      break;
+    case PROP_SHOW_ALL:
+      gtk_open_with_widget_set_show_all (self, g_value_get_boolean (value));
+      break;
+    case PROP_RADIO_MODE:
+      gtk_open_with_widget_set_radio_mode (self, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -779,8 +838,20 @@ gtk_open_with_widget_get_property (GObject *object,
     case PROP_CONTENT_TYPE:
       g_value_set_string (value, self->priv->content_type);
       break;
-    case PROP_SHOW_MODE:
-      g_value_set_enum (value, self->priv->show_mode);
+    case PROP_SHOW_RECOMMENDED:
+      g_value_set_boolean (value, self->priv->show_recommended);
+      break;
+    case PROP_SHOW_FALLBACK:
+      g_value_set_boolean (value, self->priv->show_fallback);
+      break;
+    case PROP_SHOW_OTHER:
+      g_value_set_boolean (value, self->priv->show_other);
+      break;
+    case PROP_SHOW_ALL:
+      g_value_set_boolean (value, self->priv->show_all);
+      break;
+    case PROP_RADIO_MODE:
+      g_value_set_boolean (value, self->priv->radio_mode);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -867,20 +938,40 @@ gtk_open_with_widget_class_init (GtkOpenWithWidgetClass *klass)
 
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 
-  /**
-   * GtkOpenWithWidget::show-mode:
-   *
-   * The #GtkOpenWithWidgetShowMode for this widget.
-   **/
-  pspec =
-    g_param_spec_enum ("show-mode",
-		       P_("The widget show mode"),
-		       P_("The show mode for this widget"),
-		       GTK_TYPE_OPEN_WITH_WIDGET_SHOW_MODE,
-		       GTK_OPEN_WITH_WIDGET_SHOW_MODE_HEADINGS,
-		       G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
-		       G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (gobject_class, PROP_SHOW_MODE, pspec);
+  pspec = g_param_spec_boolean ("show-recommended",
+				P_("Show recommended apps"),
+				P_("Whether the widget should show recommended applications"),
+				TRUE,
+				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_SHOW_RECOMMENDED, pspec);
+
+  pspec = g_param_spec_boolean ("show-fallback",
+				P_("Show fallback apps"),
+				P_("Whether the widget should show fallback applications"),
+				FALSE,
+				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_SHOW_FALLBACK, pspec);
+
+  pspec = g_param_spec_boolean ("show-other",
+				P_("Show other apps"),
+				P_("Whether the widget should show other applications"),
+				FALSE,
+				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_SHOW_OTHER, pspec);
+
+  pspec = g_param_spec_boolean ("show-all",
+				P_("Show all apps"),
+				P_("Whether the widget should show all applications"),
+				FALSE,
+				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
+
+  pspec = g_param_spec_boolean ("radio-mode",
+				P_("Show radio buttons"),
+				P_("Show radio buttons for selected application"),
+				FALSE,
+				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_RADIO_MODE, pspec);
 
   signals[SIGNAL_APPLICATION_SELECTED] =
     g_signal_new ("application-selected",
@@ -987,7 +1078,7 @@ _gtk_open_with_widget_refilter (GtkOpenWithWidget *self)
 
       /* don't add additional xpad if we don't have headings */
       g_object_set (self->priv->padding_renderer,
-		    "visible", self->priv->show_mode == GTK_OPEN_WITH_WIDGET_SHOW_MODE_HEADINGS,
+		    "visible", !self->priv->show_all,
 		    NULL);
 
       gtk_open_with_widget_real_add_items (self);
@@ -1002,47 +1093,121 @@ gtk_open_with_widget_new (const gchar *content_type)
 		       NULL);
 }
 
-/**
- * gtk_open_with_widget_set_show_mode:
- * @self: a #GtkOpenWithWidget
- * @show_mode: the new show mode for this widget
- *
- * Sets the mode for the widget to show the list of applications.
- * See #GtkOpenWithWidgetShowMode for more details.
- *
- * Since: 3.0
- **/
 void
-gtk_open_with_widget_set_show_mode (GtkOpenWithWidget *self,
-				    GtkOpenWithWidgetShowMode show_mode)
+gtk_open_with_widget_set_show_recommended (GtkOpenWithWidget *self,
+					   gboolean setting)
 {
   g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
 
-  if (self->priv->show_mode != show_mode)
+  if (self->priv->show_recommended != setting)
     {
-      self->priv->show_mode = show_mode;
-      g_object_notify (G_OBJECT (self), "show-mode");
+      self->priv->show_recommended = setting;
 
-      self->priv->show_more_clicked = FALSE;
-      _gtk_open_with_widget_refilter (self);
+      g_object_notify (G_OBJECT (self), "show-recommended");
+
+      gtk_open_with_refresh (GTK_OPEN_WITH (self));
     }
 }
 
-/**
- * gtk_open_with_widget_get_show_mode:
- * @self: a #GtkOpenWithWidget
- *
- * Returns the current mode for the widget to show the list of applications.
- * See #GtkOpenWithWidgetShowMode for mode details.
- *
- * Returns: a #GtkOpenWithWidgetShowMode
- *
- * Since: 3.0
- **/
-GtkOpenWithWidgetShowMode
-gtk_open_with_widget_get_show_mode (GtkOpenWithWidget *self)
+gboolean
+gtk_open_with_widget_get_show_recommended (GtkOpenWithWidget *self)
 {
   g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
 
-  return self->priv->show_mode;
+  return self->priv->show_recommended;
+}
+
+void
+gtk_open_with_widget_set_show_fallback (GtkOpenWithWidget *self,
+					gboolean setting)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
+
+  if (self->priv->show_fallback != setting)
+    {
+      self->priv->show_fallback = setting;
+
+      g_object_notify (G_OBJECT (self), "show-fallback");
+
+      gtk_open_with_refresh (GTK_OPEN_WITH (self));
+    }
+}
+
+gboolean
+gtk_open_with_widget_get_show_fallback (GtkOpenWithWidget *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
+
+  return self->priv->show_fallback;
+}
+
+void
+gtk_open_with_widget_set_show_other (GtkOpenWithWidget *self,
+				     gboolean setting)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
+
+  if (self->priv->show_other != setting)
+    {
+      self->priv->show_other = setting;
+
+      g_object_notify (G_OBJECT (self), "show-other");
+
+      gtk_open_with_refresh (GTK_OPEN_WITH (self));
+    }
+}
+
+gboolean gtk_open_with_widget_get_show_other (GtkOpenWithWidget *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
+
+  return self->priv->show_other;
+}
+
+void
+gtk_open_with_widget_set_show_all (GtkOpenWithWidget *self,
+				   gboolean setting)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
+
+  if (self->priv->show_all != setting)
+    {
+      self->priv->show_all = setting;
+
+      g_object_notify (G_OBJECT (self), "show-all");
+
+      gtk_open_with_refresh (GTK_OPEN_WITH (self));
+    }
+}
+
+gboolean
+gtk_open_with_widget_get_show_all (GtkOpenWithWidget *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
+
+  return self->priv->show_all;  
+}
+
+void
+gtk_open_with_widget_set_radio_mode (GtkOpenWithWidget *self,
+				     gboolean setting)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
+
+  if (self->priv->radio_mode != setting)
+    {
+      self->priv->radio_mode = setting;
+
+      g_object_notify (G_OBJECT (self), "radio-mode");
+
+      gtk_open_with_refresh (GTK_OPEN_WITH (self));
+    }
+}
+
+gboolean
+gtk_open_with_widget_get_radio_mode (GtkOpenWithWidget *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
+
+  return self->priv->radio_mode;
 }
