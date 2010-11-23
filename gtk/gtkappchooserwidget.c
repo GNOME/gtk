@@ -449,11 +449,11 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
 	  heading_added = TRUE;
 	}
 
-      app_string = g_strdup_printf ("<b>%s</b>\n%s",
-				    g_app_info_get_display_name (app) != NULL ?
-				    g_app_info_get_display_name (app) : "",
-				    g_app_info_get_description (app) != NULL ?
-				    g_app_info_get_description (app) : "");
+      app_string = g_markup_printf_escaped ("<b>%s</b>\n%s",
+					    g_app_info_get_display_name (app) != NULL ?
+					    g_app_info_get_display_name (app) : "",
+					    g_app_info_get_description (app) != NULL ?
+					    g_app_info_get_description (app) : "");
 
       icon = g_app_info_get_icon (app);
       if (icon == NULL)
@@ -510,11 +510,11 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
 
   g_free (string);
 
-  string = g_strdup_printf ("<b>%s</b>\n%s",
-			    g_app_info_get_display_name (app) != NULL ?
-			    g_app_info_get_display_name (app) : "",
-			    g_app_info_get_description (app) != NULL ?
-			    g_app_info_get_description (app) : "");
+  string = g_markup_printf_escaped ("<b>%s</b>\n%s",
+				    g_app_info_get_display_name (app) != NULL ?
+				    g_app_info_get_display_name (app) : "",
+				    g_app_info_get_description (app) != NULL ?
+				    g_app_info_get_description (app) : "");
 
   icon = g_app_info_get_icon (app);
   if (icon == NULL)
