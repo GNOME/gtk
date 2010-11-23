@@ -2985,6 +2985,11 @@ gtk_render_option (GtkStyleContext *context,
  *
  * Renders an arrow pointing to @angle.
  *
+ * <example>
+ * <title>Typical arrow renderings at 0, 1&solidus;2 &pi;, &pi; and 3&solidus;2 &pi;</title>
+ * <inlinegraphic fileref="arrows.png" format="PNG"/>
+ * </example>
+ *
  * Since: 3.0
  **/
 void
@@ -3093,8 +3098,13 @@ gtk_render_frame (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders an expander (as used in #GtkTreeView and #GtkExpander) in the area
- * defined by @x, @y, @width, @height. The state %GTK_STATE_FLAG_ACTIVE determines
- * whether the expander is collapsed or expanded.
+ * defined by @x, @y, @width, @height. The state %GTK_STATE_FLAG_ACTIVE
+ * determines whether the expander is collapsed or expanded.
+ *
+ * <example>
+ * <title>Typical expander renderings</title>
+ * <inlinegraphic fileref="expanders.png" format="PNG"/>
+ * </example>
  *
  * Since: 3.0
  **/
