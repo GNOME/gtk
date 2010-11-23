@@ -1052,7 +1052,7 @@ recompute_visible_regions_internal (GdkWindow *private,
     {
       GdkWindowImplClass *iface = GDK_WINDOW_IMPL_GET_CLASS (private->impl);
 
-      private->cairo_surface = iface->resize_cairo_surface (private->impl,
+      private->cairo_surface = iface->resize_cairo_surface (private,
                                                             private->cairo_surface,
                                                             private->width,
                                                             private->height);

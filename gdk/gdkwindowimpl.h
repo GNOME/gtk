@@ -152,7 +152,7 @@ struct _GdkWindowImplClass
 					 gboolean         recursing,
 					 gboolean         foreign_destroy);
 
-  cairo_surface_t * (* resize_cairo_surface) (GdkDrawable     *window,
+  cairo_surface_t * (* resize_cairo_surface) (GdkWindow       *window,
                                               cairo_surface_t *surface,
                                               gint             width,
                                               gint             height);

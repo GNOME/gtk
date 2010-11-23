@@ -611,7 +611,7 @@ gdk_offscreen_window_translate (GdkWindow      *window,
 }
 
 static cairo_surface_t *
-gdk_offscreen_window_resize_cairo_surface (GdkDrawable     *window,
+gdk_offscreen_window_resize_cairo_surface (GdkWindow       *window,
                                            cairo_surface_t *surface,
                                            gint             width,
                                            gint             height)
