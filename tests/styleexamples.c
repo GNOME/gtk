@@ -132,13 +132,40 @@ draw_cb_frame (GtkWidget *widget, cairo_t *cr)
 
   provider = (GtkStyleProvider *)gtk_css_provider_new ();
   gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   ".frame {\n"
+                                   ".frame1 {\n"
                                    "   border-image: url('gradient1.png') 10 10 10 10 stretch;\n"
-                                   "   border-style; solid\n"
-                                   "}\n", -1, NULL);
+                                   "}\n"
+                                   ".frame2 {\n"
+                                   "   border-style: solid;\n"
+                                   "   border-color: rgb(255,0,0);\n"
+                                   "   border-width: 10;\n"
+                                   "   border-radius: 10;\n"
+                                   "}\n"
+                                   ".frame3 {\n"
+                                   "   border-style: solid;\n"
+                                   "   border-color: rgb(0,0,0);\n"
+                                   "   border-width: 2;\n"
+                                   "   border-radius: 10;\n"
+                                   "}\n",
+                                   -1, NULL);
   gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  gtk_style_context_add_class (context, "frame1");
   gtk_style_context_set_junction_sides (context, 0);
-  gtk_render_frame (context, cr, 12, 12, 25, 25);
+  gtk_render_frame (context, cr, 12, 12, 50, 50);
+  gtk_style_context_remove_class (context, "frame1");
+
+  gtk_style_context_add_class (context, "frame2");
+  gtk_render_frame (context, cr, 74, 12, 50, 50);
+  gtk_style_context_remove_class (context, "frame2");
+
+  gtk_style_context_add_class (context, "frame3");
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_RIGHT);
+  gtk_render_frame (context, cr, 12, 74, 56, 50);
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_LEFT);
+  gtk_render_frame (context, cr, 68, 74, 56, 50);
+  gtk_style_context_remove_class (context, "frame3");
+
   gtk_style_context_remove_provider (context, provider);
   gtk_style_context_restore (context);
 

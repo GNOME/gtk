@@ -2986,7 +2986,7 @@ gtk_render_option (GtkStyleContext *context,
  * Renders an arrow pointing to @angle.
  *
  * <example>
- * <title>Typical arrow renderings at 0, 1&solidus;2 &pi;, &pi; and 3&solidus;2 &pi;</title>
+ * <title>Typical arrow rendering at 0, 1&solidus;2 &pi;, &pi; and 3&solidus;2 &pi;</title>
  * <inlinegraphic fileref="arrows.png" format="PNG"/>
  * </example>
  *
@@ -3029,7 +3029,9 @@ gtk_render_arrow (GtkStyleContext *context,
  *
  * <example>
  * <title>Typical background rendering, showing the effect of
- * @border-image, @border-width and @border-radius</title>
+ * <parameter>background-image</parameter>,
+ * <parameter>border-width</parameter and
+ * <parameter>border-radius</parameter></title>
  * <inlinegraphic fileref="background.png" format="PNG"/>
  * </example>
  *
@@ -3068,6 +3070,16 @@ gtk_render_background (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders a frame around the rectangle defined by @x, @y, @width, @height.
+ *
+ * <example>
+ * <title>Examples of frame rendering, showing the effect of
+ * <parameter>border-image</parameter>,
+ * <parameter>border-color</parameter>,
+ * <parameter>border-width</parameter>,
+ * <parameter>border-radius</parameter> and
+ * junctions</title>
+ * <inlinegraphic fileref="frames.png" format="PNG"/>
+ * </example>
  *
  * Since: 3.0
  **/
@@ -3108,7 +3120,7 @@ gtk_render_frame (GtkStyleContext *context,
  * determines whether the expander is collapsed or expanded.
  *
  * <example>
- * <title>Typical expander renderings</title>
+ * <title>Typical expander rendering</title>
  * <inlinegraphic fileref="expanders.png" format="PNG"/>
  * </example>
  *
