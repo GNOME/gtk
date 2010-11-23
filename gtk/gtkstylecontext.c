@@ -3159,6 +3159,10 @@ gtk_render_expander (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders a focus indicator on the rectangle determined by @x, @y, @width, @height.
+ * <example>
+ * <title>Typical focus rendering</title>
+ * <inlinegraphic fileref="focus.png" format="PNG"/>
+ * </example>
  *
  * Since: 3.0
  **/
@@ -3356,6 +3360,11 @@ gtk_render_frame_gap (GtkStyleContext *context,
  * Renders a extension (as in a #GtkNotebook tab) in the rectangle
  * defined by @x, @y, @width, @height. The side where the extension
  * connects to is defined by @gap_side.
+ *
+ * <example>
+ * <title>Typical extension rendering</title>
+ * <inlinegraphic fileref="extensions.png" format="PNG"/>
+ * </example>
  *
  * Since: 3.0
  **/
