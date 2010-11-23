@@ -278,12 +278,12 @@ new_region_tag (void)
 }
 
 GType
-gdk_window_object_get_type (void)
+gdk_window_get_type (void)
 {
   static GType object_type = 0;
 
   if (!object_type)
-    object_type = g_type_register_static_simple (GDK_TYPE_DRAWABLE,
+    object_type = g_type_register_static_simple (G_TYPE_OBJECT,
 						 "GdkWindow",
 						 sizeof (GdkWindowObjectClass),
 						 (GClassInitFunc) gdk_window_class_init,

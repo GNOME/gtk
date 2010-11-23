@@ -184,7 +184,7 @@ typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
 
 struct _GdkWindow
 {
-  GdkDrawable parent_instance;
+  GObject parent_instance;
 
   GdkDrawable *impl; /* window-system-specific delegate object */  
   
