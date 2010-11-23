@@ -23,6 +23,10 @@ void            broadway_client_move_surface    (BroadwayClient *client,
 						 int             id,
 						 int             x,
 						 int             y);
+void            broadway_client_resize_surface  (BroadwayClient *client,
+						 int             id,
+						 int             w,
+						 int             h);
 void            broadway_client_put_rgb         (BroadwayClient *client,
 						 int             id,
 						 int             x,

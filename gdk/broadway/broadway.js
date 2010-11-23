@@ -144,6 +144,18 @@ function handleCommands(cmd_obj)
 	surfaces[id].canvas.style["top"] = y + "px";
         break;
 
+      /* resize a surface */
+      case 'r':
+        var id = base64_16(cmd, i);
+        i = i + 3;
+        var w = base64_16(cmd, i);
+        i = i + 3;
+        var h = base64_16(cmd, i);
+        i = i + 3;
+	surfaces[id].canvas.width = w;
+	surfaces[id].canvas.height = h;
+        break;
+
       /* put image data surface */
       case 'i':
         var id = base64_16(cmd, i);

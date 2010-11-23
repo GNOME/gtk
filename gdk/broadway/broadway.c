@@ -823,6 +823,19 @@ broadway_client_move_surface(BroadwayClient *client,  int id, int x, int y)
 }
 
 void
+broadway_client_resize_surface(BroadwayClient *client,  int id, int w, int h)
+{
+  char buf[10];
+
+  buf[0] = 'r';
+  base64_uint16(id, &buf[1]);
+  base64_uint16(w, &buf[4]);
+  base64_uint16(h, &buf[7]);
+
+  broadway_client_write (client, buf, 10);
+}
+
+void
 broadway_client_put_rgb (BroadwayClient *client,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {
