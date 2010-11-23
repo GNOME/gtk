@@ -892,7 +892,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkButton *button;
   GtkToggleButton *toggle_button;
   GtkStyleContext *context;
-  GtkStateFlags state;
+  GtkStateFlags state = 0;
   GdkWindow *window;
   gint x, y;
   gint indicator_size, indicator_spacing;
@@ -943,6 +943,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
+  gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
 
   if (state & GTK_STATE_FLAG_PRELIGHT)
@@ -951,7 +952,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
                            allocation.width - (2 * border_width),
                            allocation.height - (2 * border_width));
 
-  gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
 
   gtk_render_option (context, cr,
