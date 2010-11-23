@@ -43,6 +43,7 @@ struct _GtkOpenWithWidgetPrivate {
 
   gchar *content_type;
   gchar *default_text;
+  gboolean show_default;
   gboolean show_recommended;
   gboolean show_fallback;
   gboolean show_other;
@@ -60,6 +61,7 @@ enum {
   COLUMN_NAME,
   COLUMN_DESC,
   COLUMN_EXEC,
+  COLUMN_DEFAULT,
   COLUMN_HEADING,
   COLUMN_HEADING_TEXT,
   COLUMN_RECOMMENDED,
@@ -71,6 +73,7 @@ enum {
 enum {
   PROP_CONTENT_TYPE = 1,
   PROP_GFILE,
+  PROP_SHOW_DEFAULT,
   PROP_SHOW_RECOMMENDED,
   PROP_SHOW_FALLBACK,
   PROP_SHOW_OTHER,
@@ -249,6 +252,7 @@ gtk_open_with_sort_func (GtkTreeModel *model,
   gboolean a_recommended, b_recommended;
   gboolean a_fallback, b_fallback;
   gboolean a_heading, b_heading;
+  gboolean a_default, b_default;
   gchar *a_name, *b_name, *a_casefold, *b_casefold;
   gint retval = 0;
 
@@ -263,6 +267,7 @@ gtk_open_with_sort_func (GtkTreeModel *model,
 		      COLUMN_RECOMMENDED, &a_recommended,
 		      COLUMN_FALLBACK, &a_fallback,
 		      COLUMN_HEADING, &a_heading,
+		      COLUMN_DEFAULT, &a_default,
 		      -1);
 
   gtk_tree_model_get (model, b,
@@ -270,8 +275,22 @@ gtk_open_with_sort_func (GtkTreeModel *model,
 		      COLUMN_RECOMMENDED, &b_recommended,
 		      COLUMN_FALLBACK, &b_fallback,
 		      COLUMN_HEADING, &b_heading,
+		      COLUMN_DEFAULT, &b_default,
 		      -1);
 
+  /* the default one always wins */
+  if (a_default && !b_default)
+    {
+      retval = -1;
+      goto out;
+    }
+
+  if (b_default && !a_default)
+    {
+      retval = 1;
+      goto out;
+    }
+  
   /* the recommended one always wins */
   if (a_recommended && !b_recommended)
     {
@@ -469,6 +488,58 @@ gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
   return retval;
 }
 
+
+static void
+gtk_open_with_add_default (GtkOpenWithWidget *self,
+			   GAppInfo *app)
+{
+  GtkTreeIter iter;
+  GIcon *icon;
+  gchar *string;
+  gboolean unref_icon;
+
+  unref_icon = FALSE;
+  string = g_strdup_printf ("<b>%s</b>", _("Default Application"));
+
+  gtk_list_store_append (self->priv->program_list_store, &iter);
+  gtk_list_store_set (self->priv->program_list_store, &iter,
+		      COLUMN_HEADING_TEXT, string,
+		      COLUMN_HEADING, TRUE,
+		      COLUMN_DEFAULT, TRUE,
+		      -1);
+
+  g_free (string);
+
+  string = g_strdup_printf ("<b>%s</b>\n%s",
+			    g_app_info_get_display_name (app) != NULL ?
+			    g_app_info_get_display_name (app) : "",
+			    g_app_info_get_description (app) != NULL ?
+			    g_app_info_get_description (app) : "");
+
+  icon = g_app_info_get_icon (app);
+  if (icon == NULL)
+    {
+      icon = g_themed_icon_new ("application-x-executable");
+      unref_icon = TRUE;
+    }
+
+  gtk_list_store_append (self->priv->program_list_store, &iter);
+  gtk_list_store_set (self->priv->program_list_store, &iter,
+		      COLUMN_APP_INFO, app,
+		      COLUMN_GICON, icon,
+		      COLUMN_NAME, g_app_info_get_display_name (app),
+		      COLUMN_DESC, string,
+		      COLUMN_EXEC, g_app_info_get_executable (app),
+		      COLUMN_HEADING, FALSE,
+		      COLUMN_DEFAULT, TRUE,
+		      -1);
+
+  g_free (string);
+
+  if (unref_icon)
+    g_object_unref (icon);
+}
+
 static void
 add_no_applications_label (GtkOpenWithWidget *self)
 {
@@ -492,16 +563,51 @@ add_no_applications_label (GtkOpenWithWidget *self)
   gtk_list_store_set (self->priv->program_list_store, &iter,
 		      COLUMN_HEADING_TEXT, string,
 		      COLUMN_HEADING, TRUE,
-		      COLUMN_RECOMMENDED, TRUE,
 		      -1);
 
   g_free (text); 
 }
 
 static void
+gtk_open_with_widget_select_first (GtkOpenWithWidget *self)
+{
+  GtkTreeIter iter;
+  GAppInfo *info = NULL;
+  GtkTreeModel *model;
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->priv->program_list));
+  gtk_tree_model_get_iter_first (model, &iter);
+
+  while (info == NULL)
+    {
+      gtk_tree_model_get (model, &iter,
+			  COLUMN_APP_INFO, &info,
+			  -1);
+
+      if (info != NULL)
+	break;
+
+      if (!gtk_tree_model_iter_next (model, &iter))
+	break;
+    }
+
+  if (info != NULL)
+    {
+      GtkTreeSelection *selection;
+
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (self->priv->program_list));
+      gtk_tree_selection_select_iter (selection, &iter);
+
+      g_object_unref (info);
+    }
+}
+
+static void
 gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 {
-  GList *all_applications = NULL, *content_type_apps = NULL, *recommended_apps = NULL, *fallback_apps = NULL;
+  GList *all_applications = NULL, *recommended_apps = NULL, *fallback_apps = NULL;
+  GList *exclude_apps = NULL;
+  GAppInfo *default_app = NULL;
   gboolean show_headings;
   gboolean apps_added;
 
@@ -511,6 +617,18 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
   if (self->priv->show_all)
     show_headings = FALSE;
 
+  if (self->priv->show_default)
+    {
+      default_app = g_app_info_get_default_for_type (self->priv->content_type, FALSE);
+
+      if (default_app != NULL)
+	{
+	  gtk_open_with_add_default (self, default_app);
+	  apps_added = TRUE;
+	  exclude_apps = g_list_prepend (exclude_apps, default_app);
+	}
+    }
+
   if (self->priv->show_recommended || self->priv->show_all)
     {
       recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
@@ -519,7 +637,10 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 						      show_headings,
 						      !self->priv->show_all, /* mark as recommended */
 						      FALSE, /* mark as fallback */
-						      recommended_apps, NULL);
+						      recommended_apps, exclude_apps);
+
+      exclude_apps = g_list_concat (exclude_apps,
+				    g_list_copy (recommended_apps));
     }
 
   if (self->priv->show_fallback || self->priv->show_all)
@@ -530,24 +651,29 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
 						      show_headings,
 						      FALSE, /* mark as recommended */
 						      !self->priv->show_all, /* mark as fallback */
-						      fallback_apps, recommended_apps);
+						      fallback_apps, exclude_apps);
+      exclude_apps = g_list_concat (exclude_apps,
+				    g_list_copy (fallback_apps));
     }
 
   if (self->priv->show_other || self->priv->show_all)
     {
-      content_type_apps = g_list_concat (g_list_copy (recommended_apps),
-					 g_list_copy (fallback_apps));
       all_applications = g_app_info_get_all ();
 
       apps_added |= gtk_open_with_widget_add_section (self, _("Other Applications"),
 						      show_headings,
 						      FALSE,
 						      FALSE,
-						      all_applications, content_type_apps);
+						      all_applications, exclude_apps);
     }
 
   if (!apps_added)
     add_no_applications_label (self);
+
+  gtk_open_with_widget_select_first (self);
+
+  if (default_app != NULL)
+    g_object_unref (default_app);
 
   if (all_applications != NULL)
     g_list_free_full (all_applications, g_object_unref);
@@ -558,8 +684,8 @@ gtk_open_with_widget_real_add_items (GtkOpenWithWidget *self)
   if (fallback_apps != NULL)
     g_list_free_full (fallback_apps, g_object_unref);
 
-  if (content_type_apps != NULL)
-    g_list_free (content_type_apps);
+  if (exclude_apps != NULL)
+    g_list_free (exclude_apps);
 }
 
 static void
@@ -577,13 +703,11 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
 						       G_TYPE_STRING,
 						       G_TYPE_STRING,
 						       G_TYPE_BOOLEAN,
+						       G_TYPE_BOOLEAN,
 						       G_TYPE_STRING,
 						       G_TYPE_BOOLEAN,
 						       G_TYPE_BOOLEAN);
   sort = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL (self->priv->program_list_store));
-
-  /* populate the widget */
-  gtk_open_with_widget_real_add_items (self);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (self->priv->program_list), 
 			   GTK_TREE_MODEL (sort));
@@ -654,6 +778,9 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
   
   gtk_tree_view_column_set_sort_column_id (column, COLUMN_NAME);
   gtk_tree_view_append_column (GTK_TREE_VIEW (self->priv->program_list), column);
+
+  /* populate the widget */
+  gtk_open_with_widget_real_add_items (self);
 }
 
 static void
@@ -668,6 +795,9 @@ gtk_open_with_widget_set_property (GObject *object,
     {
     case PROP_CONTENT_TYPE:
       self->priv->content_type = g_value_dup_string (value);
+      break;
+    case PROP_SHOW_DEFAULT:
+      gtk_open_with_widget_set_show_default (self, g_value_get_boolean (value));
       break;
     case PROP_SHOW_RECOMMENDED:
       gtk_open_with_widget_set_show_recommended (self, g_value_get_boolean (value));
@@ -702,6 +832,9 @@ gtk_open_with_widget_get_property (GObject *object,
     {
     case PROP_CONTENT_TYPE:
       g_value_set_string (value, self->priv->content_type);
+      break;
+    case PROP_SHOW_DEFAULT:
+      g_value_set_boolean (value, self->priv->show_default);
       break;
     case PROP_SHOW_RECOMMENDED:
       g_value_set_boolean (value, self->priv->show_recommended);
@@ -776,6 +909,13 @@ gtk_open_with_widget_class_init (GtkOpenWithWidgetClass *klass)
   gobject_class->constructed = gtk_open_with_widget_constructed;
 
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
+
+  pspec = g_param_spec_boolean ("show-default",
+				P_("Show default app"),
+				P_("Whether the widget should show the default application"),
+				FALSE,
+				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_SHOW_DEFAULT, pspec);
 
   pspec = g_param_spec_boolean ("show-recommended",
 				P_("Show recommended apps"),
@@ -915,6 +1055,30 @@ gtk_open_with_widget_new (const gchar *content_type)
   return g_object_new (GTK_TYPE_OPEN_WITH_WIDGET,
 		       "content-type", content_type,
 		       NULL);
+}
+
+void
+gtk_open_with_widget_set_show_default (GtkOpenWithWidget *self,
+				       gboolean setting)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
+
+  if (self->priv->show_default != setting)
+    {
+      self->priv->show_default = setting;
+
+      g_object_notify (G_OBJECT (self), "show-default");
+
+      gtk_open_with_refresh (GTK_OPEN_WITH (self));
+    }
+}
+
+gboolean
+gtk_open_with_widget_get_show_default (GtkOpenWithWidget *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
+
+  return self->priv->show_default;
 }
 
 void

@@ -82,6 +82,10 @@ GType      gtk_open_with_widget_get_type (void) G_GNUC_CONST;
 
 GtkWidget * gtk_open_with_widget_new (const gchar *content_type);
 
+void gtk_open_with_widget_set_show_default (GtkOpenWithWidget *self,
+					    gboolean setting);
+gboolean gtk_open_with_widget_get_show_default (GtkOpenWithWidget *self);
+
 void gtk_open_with_widget_set_show_recommended (GtkOpenWithWidget *self,
 						gboolean setting);
 gboolean gtk_open_with_widget_get_show_recommended (GtkOpenWithWidget *self);
