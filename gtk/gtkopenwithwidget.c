@@ -115,7 +115,7 @@ refresh_and_emit_app_selected (GtkOpenWithWidget *self,
   if (info == NULL)
     return;
 
-  if (self->priv->selected_app_info)
+  if (self->priv->selected_app_info != NULL)
     {
       if (!g_app_info_equal (self->priv->selected_app_info, info))
 	{
@@ -426,10 +426,6 @@ gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
   for (l = applications; l != NULL; l = l->next)
     {
       app = l->data;
-
-      if (!g_app_info_supports_uris (app) &&
-	  !g_app_info_supports_files (app))
-	continue;
 
       if (exclude_apps != NULL &&
 	  g_list_find_custom (exclude_apps, app,
