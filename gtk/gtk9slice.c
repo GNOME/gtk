@@ -213,6 +213,7 @@ render_border (cairo_t              *cr,
       cairo_pattern_destroy (pattern);
 
       cairo_rectangle (cr, x, y, width, height);
+      cairo_fill (cr);
     }
   else
     {
@@ -222,23 +223,21 @@ render_border (cairo_t              *cr,
         {
           d = cairo_image_surface_get_width (surface);
 
-          cairo_translate (cr, x + (width / 2), y);
-          cairo_scale (cr, width / d, 1);
-          cairo_set_source_surface (cr, surface, - d / 2, 0);
-          cairo_rectangle (cr, - width / 2, 0, width, height);
+          cairo_translate (cr, x, y);
+          cairo_scale (cr, width / d, 1.0);
+          cairo_set_source_surface (cr, surface, 0.0, 0.0);
+          cairo_paint (cr);
         }
       else
         {
           d = cairo_image_surface_get_height (surface);
 
-          cairo_translate (cr, x, y + (height / 2));
-          cairo_scale (cr, 1, height / d);
-          cairo_set_source_surface (cr, surface, 0, - d / 2);
-          cairo_rectangle (cr, 0, - height / 2, width, height);
+          cairo_translate (cr, x, y);
+          cairo_scale (cr, 1.0, height / d);
+          cairo_set_source_surface (cr, surface, 0.0, 0.0);
+          cairo_paint (cr);
         }
     }
-
-  cairo_fill (cr);
 
   cairo_restore (cr);
 }
@@ -282,7 +281,7 @@ gtk_9slice_render (Gtk9Slice *slice,
 
   render_border (cr, surface, SIDE_TOP,
                  x + slice->distances[SIDE_LEFT], y,
-                 (gdouble) width - slice->distances[SIDE_LEFT] - slice->distances[SIDE_RIGHT],
+                 width - slice->distances[SIDE_LEFT] - slice->distances[SIDE_RIGHT],
                  (gdouble) img_height,
                  slice->modifiers[SIDE_TOP]);
 
@@ -292,7 +291,7 @@ gtk_9slice_render (Gtk9Slice *slice,
 
   render_border (cr, surface, SIDE_BOTTOM,
                  x + slice->distances[SIDE_LEFT], y + height - img_height,
-                 (gdouble) width - slice->distances[SIDE_LEFT] - slice->distances[SIDE_RIGHT],
+                 width - slice->distances[SIDE_LEFT] - slice->distances[SIDE_RIGHT],
                  (gdouble) img_height,
                  slice->modifiers[SIDE_BOTTOM]);
 
@@ -303,7 +302,7 @@ gtk_9slice_render (Gtk9Slice *slice,
   render_border (cr, surface, SIDE_LEFT,
                  x, y + slice->distances[SIDE_TOP],
                  (gdouble) img_width,
-                 (gdouble) height - slice->distances[SIDE_TOP] - slice->distances[SIDE_BOTTOM],
+                 height - slice->distances[SIDE_TOP] - slice->distances[SIDE_BOTTOM],
                  slice->modifiers[SIDE_LEFT]);
 
   /* Right side */
@@ -312,7 +311,8 @@ gtk_9slice_render (Gtk9Slice *slice,
 
   render_border (cr, surface, SIDE_RIGHT,
                  x + width - img_width, y + slice->distances[SIDE_TOP],
-                 (gdouble) img_width, height - slice->distances[SIDE_TOP] - slice->distances[SIDE_BOTTOM],
+                 (gdouble) img_width,
+                 height - slice->distances[SIDE_TOP] - slice->distances[SIDE_BOTTOM],
                  slice->modifiers[SIDE_RIGHT]);
 
   /* Top/Left corner */
