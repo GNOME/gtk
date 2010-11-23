@@ -72,7 +72,9 @@
  * <para>
  * For simple widgets where state changes affect the whole widget area,
  * calling gtk_style_context_notify_state_change() with a %NULL region
- * is sufficient.
+ * is sufficient to trigger the transition animation. And GTK+ already
+ * does that when gtk_widget_set_state() or gtk_widget_set_state_flags()
+ * are called.
  * </para>
  * <para>
  * If a widget needs to declare several animatable regions (i.e. not
@@ -165,7 +167,6 @@
  * special value, in this case, the whole widget area will be updated
  * by the animation.
  * </para>
- * <para>
  * </refsect2>
  * <refsect2 id="gtkstylecontext-custom-styling">
  * <title>Custom styling in UI libraries and applications</title>
