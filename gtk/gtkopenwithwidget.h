@@ -98,10 +98,6 @@ void gtk_open_with_widget_set_show_all (GtkOpenWithWidget *self,
 					gboolean show_all);
 gboolean gtk_open_with_widget_get_show_all (GtkOpenWithWidget *self);
 
-void gtk_open_with_widget_set_radio_mode (GtkOpenWithWidget *self,
-					  gboolean setting);
-gboolean gtk_open_with_widget_get_radio_mode (GtkOpenWithWidget *self);
-
 void gtk_open_with_widget_set_default_text (GtkOpenWithWidget *self,
 					    const gchar *text);
 const gchar * gtk_open_with_widget_get_default_text (GtkOpenWithWidget *self);

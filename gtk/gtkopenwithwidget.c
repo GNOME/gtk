@@ -47,7 +47,6 @@ struct _GtkOpenWithWidgetPrivate {
   gboolean show_fallback;
   gboolean show_other;
   gboolean show_all;
-  gboolean radio_mode;
 
   GtkWidget *program_list;
   GtkListStore *program_list_store;
@@ -76,7 +75,6 @@ enum {
   PROP_SHOW_FALLBACK,
   PROP_SHOW_OTHER,
   PROP_SHOW_ALL,
-  PROP_RADIO_MODE,
   PROP_DEFAULT_TEXT,
   N_PROPERTIES
 };
@@ -440,25 +438,6 @@ gtk_open_with_sort_func (GtkTreeModel *model,
 }
 
 static void
-radio_cell_renderer_func (GtkTreeViewColumn *column,
-			  GtkCellRenderer *cell,
-			  GtkTreeModel *model,
-			  GtkTreeIter *iter,
-			  gpointer user_data)
-{
-  GtkOpenWithWidget *self = user_data;
-  gboolean heading;
-
-  gtk_tree_model_get (model, iter,
-		      COLUMN_HEADING, &heading,
-		      -1);
-
-  g_object_set (cell,
-		"visible", !heading && self->priv->radio_mode,
-		NULL);
-}
-
-static void
 padding_cell_renderer_func (GtkTreeViewColumn *column,
 			    GtkCellRenderer *cell,
 			    GtkTreeModel *model,
@@ -757,17 +736,6 @@ gtk_open_with_widget_add_items (GtkOpenWithWidget *self)
 					   padding_cell_renderer_func,
 					   NULL, NULL);
 
-  /* radio renderer */
-  renderer = gtk_cell_renderer_toggle_new ();
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  gtk_tree_view_column_set_cell_data_func (column, renderer,
-					   radio_cell_renderer_func,
-					   self, NULL);
-  g_object_set (renderer,
-		"xpad", 6,
-		"radio", TRUE,
-		NULL);
-
   /* app icon renderer */
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
@@ -818,9 +786,6 @@ gtk_open_with_widget_set_property (GObject *object,
     case PROP_SHOW_ALL:
       gtk_open_with_widget_set_show_all (self, g_value_get_boolean (value));
       break;
-    case PROP_RADIO_MODE:
-      gtk_open_with_widget_set_radio_mode (self, g_value_get_boolean (value));
-      break;
     case PROP_DEFAULT_TEXT:
       gtk_open_with_widget_set_default_text (self, g_value_get_string (value));
       break;
@@ -854,9 +819,6 @@ gtk_open_with_widget_get_property (GObject *object,
       break;
     case PROP_SHOW_ALL:
       g_value_set_boolean (value, self->priv->show_all);
-      break;
-    case PROP_RADIO_MODE:
-      g_value_set_boolean (value, self->priv->radio_mode);
       break;
     case PROP_DEFAULT_TEXT:
       g_value_set_string (value, self->priv->default_text);
@@ -947,13 +909,6 @@ gtk_open_with_widget_class_init (GtkOpenWithWidgetClass *klass)
 				FALSE,
 				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
-
-  pspec = g_param_spec_boolean ("radio-mode",
-				P_("Show radio buttons"),
-				P_("Show radio buttons for selected application"),
-				FALSE,
-				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (gobject_class, PROP_RADIO_MODE, pspec);
 
   pspec = g_param_spec_string ("default-text",
 			       P_("Widget's default text"),
@@ -1163,30 +1118,6 @@ gtk_open_with_widget_get_show_all (GtkOpenWithWidget *self)
   g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
 
   return self->priv->show_all;  
-}
-
-void
-gtk_open_with_widget_set_radio_mode (GtkOpenWithWidget *self,
-				     gboolean setting)
-{
-  g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
-
-  if (self->priv->radio_mode != setting)
-    {
-      self->priv->radio_mode = setting;
-
-      g_object_notify (G_OBJECT (self), "radio-mode");
-
-      gtk_open_with_refresh (GTK_OPEN_WITH (self));
-    }
-}
-
-gboolean
-gtk_open_with_widget_get_radio_mode (GtkOpenWithWidget *self)
-{
-  g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
-
-  return self->priv->radio_mode;
 }
 
 void
