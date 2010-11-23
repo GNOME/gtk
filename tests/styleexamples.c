@@ -172,6 +172,27 @@ draw_cb_frame (GtkWidget *widget, cairo_t *cr)
   return TRUE;
 }
 
+/* FIXME: this doesn't work */
+static gboolean
+draw_cb_activity (GtkWidget *widget, cairo_t *cr)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+
+  gtk_style_context_add_class (context, "spinner");
+  gtk_style_context_set_state (context, 0);
+  gtk_render_activity (context, cr, 12, 12, 12, 12);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_INSENSITIVE);
+  gtk_render_activity (context, cr, 36, 12, 12, 12);
+
+  gtk_style_context_restore (context);
+
+  return TRUE;
+}
+
+
 static char *what;
 
 static gboolean
@@ -189,6 +210,8 @@ draw_cb (GtkWidget *widget, cairo_t *cr)
     return draw_cb_background (widget, cr);
   else if (strcmp (what, "frame") == 0)
     return draw_cb_frame (widget, cr);
+  else if (strcmp (what, "activity") == 0)
+    return draw_cb_activity (widget, cr);
 
   return FALSE;
 }
