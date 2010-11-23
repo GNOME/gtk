@@ -157,12 +157,6 @@ gint     gdk_x11_get_default_screen       (void);
  */
 #define GDK_WINDOW_XID(win)           (gdk_x11_window_get_xid (win))
 
-/**
- * GDK_WINDOW_XID:
- *
- * Another name for GDK_DRAWABLE_XID().
- */
-#define GDK_WINDOW_XID(win)       (gdk_x11_window_get_xid (win))
 #define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
 #define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
 
