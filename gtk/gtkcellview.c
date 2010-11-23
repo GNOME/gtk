@@ -428,11 +428,7 @@ gtk_cell_view_dispose (GObject *object)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (object);
 
-  if (cellview->priv->model)
-    {
-      g_object_unref (cellview->priv->model);
-      cellview->priv->model = NULL;
-    }
+  gtk_cell_view_set_model (cellview, NULL);
 
   if (cellview->priv->area)
     {
