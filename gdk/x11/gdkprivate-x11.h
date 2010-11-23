@@ -143,7 +143,6 @@ cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
                                                          int        width,
                                                          int        height);
 
-extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;
 extern const int         _gdk_nenvent_masks;
 extern const int         _gdk_event_mask_table[];
