@@ -85,21 +85,30 @@ GtkTreeModel         *gtk_tree_menu_get_model                      (GtkTreeMenu 
 void                  gtk_tree_menu_set_root                       (GtkTreeMenu         *menu,
 								    GtkTreePath         *path);
 GtkTreePath          *gtk_tree_menu_get_root                       (GtkTreeMenu         *menu);
-gboolean              gtk_tree_menu_get_tearoff                    (GtkTreeMenu          *menu);
-void                  gtk_tree_menu_set_tearoff                    (GtkTreeMenu          *menu,
-								    gboolean              tearoff);
+gboolean              gtk_tree_menu_get_tearoff                    (GtkTreeMenu         *menu);
+void                  gtk_tree_menu_set_tearoff                    (GtkTreeMenu         *menu,
+								    gboolean             tearoff);
+gint                  gtk_tree_menu_get_wrap_width                 (GtkTreeMenu         *menu);
+void                  gtk_tree_menu_set_wrap_width                 (GtkTreeMenu         *menu,
+								    gint                 width);
+gint                  gtk_tree_menu_get_row_span_column            (GtkTreeMenu         *menu);
+void                  gtk_tree_menu_set_row_span_column            (GtkTreeMenu         *menu,
+								    gint                 row_span);
+gint                  gtk_tree_menu_get_column_span_column         (GtkTreeMenu         *menu);
+void                  gtk_tree_menu_set_column_span_column         (GtkTreeMenu         *menu,
+								    gint                 column_span);
 
+GtkTreeViewRowSeparatorFunc gtk_tree_menu_get_row_separator_func   (GtkTreeMenu          *menu);
 void                        gtk_tree_menu_set_row_separator_func   (GtkTreeMenu          *menu,
 								    GtkTreeViewRowSeparatorFunc func,
 								    gpointer              data,
 								    GDestroyNotify        destroy);
-GtkTreeViewRowSeparatorFunc gtk_tree_menu_get_row_separator_func   (GtkTreeMenu          *menu);
 
+GtkTreeMenuHeaderFunc gtk_tree_menu_get_header_func                (GtkTreeMenu          *menu);
 void                  gtk_tree_menu_set_header_func                (GtkTreeMenu          *menu,
 								    GtkTreeMenuHeaderFunc func,
 								    gpointer              data,
 								    GDestroyNotify        destroy);
-GtkTreeMenuHeaderFunc gtk_tree_menu_get_header_func                (GtkTreeMenu          *menu);
 
 G_END_DECLS
 

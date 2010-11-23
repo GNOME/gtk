@@ -64,6 +64,16 @@ static GtkCellArea *gtk_tree_menu_cell_layout_get_area        (GtkCellLayout    
 
 
 /* TreeModel/DrawingArea callbacks and building menus/submenus */
+static inline void rebuild_menu                               (GtkTreeMenu          *menu);
+static gboolean   menu_occupied                               (GtkTreeMenu          *menu,
+							       guint                 left_attach,
+							       guint                 right_attach,
+							       guint                 top_attach,
+							       guint                 bottom_attach);
+static void       relayout_item                               (GtkTreeMenu          *menu,
+							       GtkWidget            *item,
+							       GtkTreeIter          *iter,
+							       GtkWidget            *prev);
 static void       gtk_tree_menu_populate                      (GtkTreeMenu          *menu);
 static GtkWidget *gtk_tree_menu_create_item                   (GtkTreeMenu          *menu,
 							       GtkTreeIter          *iter,
@@ -72,6 +82,22 @@ static void       gtk_tree_menu_set_area                      (GtkTreeMenu      
 							       GtkCellArea          *area);
 static GtkWidget *gtk_tree_menu_get_path_item                 (GtkTreeMenu          *menu,
 							       GtkTreePath          *path);
+static void       row_inserted_cb                             (GtkTreeModel         *model,
+							       GtkTreePath          *path,
+							       GtkTreeIter          *iter,
+							       GtkTreeMenu          *menu);
+static void       row_deleted_cb                              (GtkTreeModel         *model,
+							       GtkTreePath          *path,
+							       GtkTreeMenu          *menu);
+static void       row_reordered_cb                            (GtkTreeModel         *model,
+							       GtkTreePath          *path,
+							       GtkTreeIter          *iter,
+							       gint                 *new_order,
+							       GtkTreeMenu          *menu);
+static void       row_changed_cb                              (GtkTreeModel         *model,
+							       GtkTreePath          *path,
+							       GtkTreeIter          *iter,
+							       GtkTreeMenu          *menu);
 
 static void       context_size_changed_cb                     (GtkCellAreaContext   *context,
 							       GParamSpec           *pspec,
@@ -81,6 +107,8 @@ static void       item_activated_cb                           (GtkMenuItem      
 static void       submenu_activated_cb                        (GtkTreeMenu          *submenu,
 							       const gchar          *path,
 							       GtkTreeMenu          *menu);
+
+
 
 struct _GtkTreeMenuPrivate
 {
@@ -97,6 +125,16 @@ struct _GtkTreeMenuPrivate
   gulong               row_inserted_id;
   gulong               row_deleted_id;
   gulong               row_reordered_id;
+  gulong               row_changed_id;
+
+  /* Grid menu mode */
+  gint                 wrap_width;
+  gint                 row_span_col;
+  gint                 col_span_col;
+
+  /* Flags */
+  guint32              menu_with_header : 1;
+  guint32              tearoff     : 1;
 
   /* Row separators */
   GtkTreeViewRowSeparatorFunc row_separator_func;
@@ -107,9 +145,6 @@ struct _GtkTreeMenuPrivate
   GtkTreeMenuHeaderFunc header_func;
   gpointer              header_data;
   GDestroyNotify        header_destroy;
-
-  guint32               menu_with_header : 1;
-  guint32               tearoff     : 1;
 };
 
 enum {
@@ -117,7 +152,10 @@ enum {
   PROP_MODEL,
   PROP_ROOT,
   PROP_CELL_AREA,
-  PROP_TEAROFF
+  PROP_TEAROFF,
+  PROP_WRAP_WIDTH,
+  PROP_ROW_SPAN_COL,
+  PROP_COL_SPAN_COL
 };
 
 enum {
@@ -141,6 +179,32 @@ gtk_tree_menu_init (GtkTreeMenu *menu)
 					    GTK_TYPE_TREE_MENU,
 					    GtkTreeMenuPrivate);
   priv = menu->priv;
+
+  priv->model     = NULL;
+  priv->root      = NULL;
+  priv->area      = NULL;
+  priv->context   = NULL;
+
+  priv->size_changed_id  = 0;
+  priv->row_inserted_id  = 0;
+  priv->row_deleted_id   = 0;
+  priv->row_reordered_id = 0;
+  priv->row_changed_id   = 0;
+
+  priv->wrap_width   = 0;
+  priv->row_span_col = -1;
+  priv->col_span_col = -1;
+
+  priv->menu_with_header = FALSE;
+  priv->tearoff          = FALSE;
+
+  priv->row_separator_func    = NULL;
+  priv->row_separator_data    = NULL;
+  priv->row_separator_destroy = NULL;
+
+  priv->header_func    = NULL;
+  priv->header_data    = NULL;
+  priv->header_destroy = NULL;
 
   gtk_menu_set_reserve_toggle_size (GTK_MENU (menu), FALSE);
 }
@@ -188,24 +252,85 @@ gtk_tree_menu_class_init (GtkTreeMenuClass *class)
 						       GTK_TYPE_TREE_PATH,
 						       GTK_PARAM_READWRITE));
 
-   g_object_class_install_property (object_class,
-                                    PROP_CELL_AREA,
-                                    g_param_spec_object ("cell-area",
-							 P_("Cell Area"),
-							 P_("The GtkCellArea used to layout cells"),
-							 GTK_TYPE_CELL_AREA,
-							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+				   PROP_CELL_AREA,
+				   g_param_spec_object ("cell-area",
+							P_("Cell Area"),
+							P_("The GtkCellArea used to layout cells"),
+							GTK_TYPE_CELL_AREA,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-   g_object_class_install_property (object_class,
-                                    PROP_TEAROFF,
-                                    g_param_spec_boolean ("tearoff",
-							  P_("Tearoff"),
-							  P_("Whether the menu has a tearoff item"),
-							  FALSE,
-							  GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class,
+				   PROP_TEAROFF,
+				   g_param_spec_boolean ("tearoff",
+							 P_("Tearoff"),
+							 P_("Whether the menu has a tearoff item"),
+							 FALSE,
+							 GTK_PARAM_READWRITE));
 
+  /**
+   * GtkTreeMenu:wrap-width:
+   *
+   * If wrap-width is set to a positive value, the list will be
+   * displayed in multiple columns, the number of columns is
+   * determined by wrap-width.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+				   PROP_WRAP_WIDTH,
+				   g_param_spec_int ("wrap-width",
+						     P_("Wrap Width"),
+						     P_("Wrap width for laying out items in a grid"),
+						     0,
+						     G_MAXINT,
+						     0,
+						     GTK_PARAM_READWRITE));
 
-   g_type_class_add_private (object_class, sizeof (GtkTreeMenuPrivate));
+  /**
+   * GtkTreeMenu:row-span-column:
+   *
+   * If this is set to a non-negative value, it must be the index of a column 
+   * of type %G_TYPE_INT in the model. 
+   *
+   * The values of that column are used to determine how many rows a value in 
+   * the list will span. Therefore, the values in the model column pointed to 
+   * by this property must be greater than zero and not larger than wrap-width.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+				   PROP_ROW_SPAN_COL,
+				   g_param_spec_int ("row-span-column",
+						     P_("Row span column"),
+						     P_("TreeModel column containing the row span values"),
+						     -1,
+						     G_MAXINT,
+						     -1,
+						     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTreeMenu:column-span-column:
+   *
+   * If this is set to a non-negative value, it must be the index of a column 
+   * of type %G_TYPE_INT in the model. 
+   *
+   * The values of that column are used to determine how many columns a value 
+   * in the list will span. 
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+				   PROP_COL_SPAN_COL,
+				   g_param_spec_int ("column-span-column",
+						     P_("Column span column"),
+						     P_("TreeModel column containing the column span values"),
+						     -1,
+						     G_MAXINT,
+						     -1,
+						     GTK_PARAM_READWRITE));
+
+  g_type_class_add_private (object_class, sizeof (GtkTreeMenuPrivate));
 }
 
 /****************************************************************
@@ -310,6 +435,18 @@ gtk_tree_menu_set_property (GObject            *object,
 
     case PROP_TEAROFF:
       gtk_tree_menu_set_tearoff (menu, g_value_get_boolean (value));
+      break;
+
+    case PROP_WRAP_WIDTH:
+      gtk_tree_menu_set_wrap_width (menu, g_value_get_int (value));
+      break;
+
+     case PROP_ROW_SPAN_COL:
+      gtk_tree_menu_set_row_span_column (menu, g_value_get_int (value));
+      break;
+
+     case PROP_COL_SPAN_COL:
+      gtk_tree_menu_set_column_span_column (menu, g_value_get_int (value));
       break;
 
     default:
@@ -510,7 +647,7 @@ row_inserted_cb (GtkTreeModel     *model,
   parent_path = gtk_tree_path_copy (path);
 
   /* Check if the menu and the added iter are in root of the model */
-  if (!gtk_tree_path_up (parent_path))
+  if (gtk_tree_path_get_depth (parent_path) <= 1)
     {
       if (!priv->root)
 	this_menu = TRUE;
@@ -534,27 +671,32 @@ row_inserted_cb (GtkTreeModel     *model,
     {
       GtkWidget *item;
 
-      /* Get the index of the path for this depth */
-      indices = gtk_tree_path_get_indices (path);
-      depth   = gtk_tree_path_get_depth (path);
-      index   = indices[depth -1];
-
-      /* Menus with a header include a menuitem for it's root node
-       * and a separator menu item */
-      if (priv->menu_with_header)
-	index += 2;
-
-      /* Index after the tearoff item for the root menu if
-       * there is a tearoff item
-       */
-      if (priv->root == NULL && priv->tearoff)
-	index += 1;
-
-      item = gtk_tree_menu_create_item (menu, iter, FALSE);
-      gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, index);
-
-      /* Resize everything */
-      gtk_cell_area_context_flush (menu->priv->context);
+      if (priv->wrap_width > 0)
+	rebuild_menu (menu);
+      else
+	{
+	  /* Get the index of the path for this depth */
+	  indices = gtk_tree_path_get_indices (path);
+	  depth   = gtk_tree_path_get_depth (path);
+	  index   = indices[depth -1];
+	  
+	  /* Menus with a header include a menuitem for it's root node
+	   * and a separator menu item */
+	  if (priv->menu_with_header)
+	    index += 2;
+	  
+	  /* Index after the tearoff item for the root menu if
+	   * there is a tearoff item
+	   */
+	  if (priv->root == NULL && priv->tearoff)
+	    index += 1;
+	  
+	  item = gtk_tree_menu_create_item (menu, iter, FALSE);
+	  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, index);
+	  
+	  /* Resize everything */
+	  gtk_cell_area_context_flush (menu->priv->context);
+	}
     }
 }
 
@@ -580,14 +722,19 @@ row_deleted_cb (GtkTreeModel     *model,
 	}
     }
 
-  /* Get rid of the deleted item */
   item = gtk_tree_menu_get_path_item (menu, path);
   if (item)
     {
-      gtk_widget_destroy (item);
-
-      /* Resize everything */
-      gtk_cell_area_context_flush (menu->priv->context);
+      if (priv->wrap_width > 0)
+	rebuild_menu (menu);
+      else
+	{
+	  /* Get rid of the deleted item */
+	  gtk_widget_destroy (item);
+      
+	  /* Resize everything */
+	  gtk_cell_area_context_flush (menu->priv->context);
+	}
     }
 }
 
@@ -615,15 +762,102 @@ row_reordered_cb (GtkTreeModel    *model,
     }
 
   if (this_menu)
+    rebuild_menu (menu);
+}
+
+static gint 
+menu_item_position (GtkTreeMenu *menu,
+		    GtkWidget   *item)
+{
+  GList *children, *l;
+  gint   position;
+
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+  for (position = 0, l = children; l; position++, l = l->next)
     {
-      /* Destroy and repopulate the menu at the level where the order changed */
-      gtk_container_foreach (GTK_CONTAINER (menu), 
-			     (GtkCallback) gtk_widget_destroy, NULL);
+      GtkWidget *iitem = l->data;
 
-      gtk_tree_menu_populate (menu);
+      if (item == iitem)
+	break;
+    }
 
-      /* Resize everything */
-      gtk_cell_area_context_flush (menu->priv->context);
+  g_list_free (children);
+
+  return position;
+}
+
+static void
+row_changed_cb (GtkTreeModel         *model,
+		GtkTreePath          *path,
+		GtkTreeIter          *iter,
+		GtkTreeMenu          *menu)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+  gboolean            is_separator = FALSE;
+  gboolean            has_header = FALSE;
+  GtkWidget          *item;
+
+  item = gtk_tree_menu_get_path_item (menu, path);
+
+  if (priv->root)
+    {
+      GtkTreePath *root_path =
+	gtk_tree_row_reference_get_path (priv->root);
+      
+      if (gtk_tree_path_compare (root_path, path) == 0)
+	{
+	  if (priv->header_func)
+	    has_header = 
+	      priv->header_func (priv->model, iter, priv->header_data);
+	  
+	  if (has_header && !item)
+	    {
+	      item = gtk_separator_menu_item_new ();
+	      gtk_widget_show (item);
+	      gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+
+	      item = gtk_tree_menu_create_item (menu, iter, TRUE);
+	      gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+
+	      priv->menu_with_header = TRUE;
+	    }
+	  else if (!has_header && item)
+	    {
+	      /* Destroy the header item and the following separator */
+	      gtk_widget_destroy (item);
+	      gtk_widget_destroy (GTK_MENU_SHELL (menu)->children->data);
+
+	      priv->menu_with_header = FALSE;
+	    }
+	}
+      
+      gtk_tree_path_free (root_path);
+    }
+  
+  if (item)
+    {
+      if (priv->wrap_width > 0)
+	/* Ugly, we need to rebuild the menu here if
+	 * the row-span/row-column values change 
+	 */
+	rebuild_menu (menu);
+      else
+	{
+	  if (priv->row_separator_func)
+	    is_separator = 
+	      priv->row_separator_func (model, iter,
+					priv->row_separator_data);
+
+
+	  if (is_separator != GTK_IS_SEPARATOR_MENU_ITEM (item))
+	    {
+	      gint position = menu_item_position (menu, item);
+
+	      gtk_widget_destroy (item);
+	      item = gtk_tree_menu_create_item (menu, iter, FALSE);
+	      gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, position);
+	    }
+	}
     }
 }
 
@@ -652,6 +886,93 @@ gtk_tree_menu_set_area (GtkTreeMenu *menu,
 
   if (priv->area)
     g_object_ref_sink (priv->area);
+}
+
+static gboolean
+menu_occupied (GtkTreeMenu *menu,
+               guint        left_attach,
+               guint        right_attach,
+               guint        top_attach,
+               guint        bottom_attach)
+{
+  GList *i;
+
+  for (i = GTK_MENU_SHELL (menu)->children; i; i = i->next)
+    {
+      guint l, r, b, t;
+
+      gtk_container_child_get (GTK_CONTAINER (menu), 
+			       i->data,
+                               "left-attach", &l,
+                               "right-attach", &r,
+                               "bottom-attach", &b,
+                               "top-attach", &t,
+                               NULL);
+
+      /* look if this item intersects with the given coordinates */
+      if (right_attach > l && left_attach < r && bottom_attach > t && top_attach < b)
+	return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+relayout_item (GtkTreeMenu *menu,
+	       GtkWidget   *item,
+	       GtkTreeIter *iter,
+	       GtkWidget   *prev)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+  gint                current_col = 0, current_row = 0;
+  gint                rows = 1, cols = 1;
+  
+  if (priv->col_span_col == -1 &&
+      priv->row_span_col == -1 &&
+      prev)
+    {
+      gtk_container_child_get (GTK_CONTAINER (menu), prev,
+			       "right-attach", &current_col,
+			       "top-attach", &current_row,
+			       NULL);
+      if (current_col + cols > priv->wrap_width)
+	{
+	  current_col = 0;
+	  current_row++;
+	}
+    }
+  else
+    {
+      if (priv->col_span_col != -1)
+	gtk_tree_model_get (priv->model, iter,
+			    priv->col_span_col, &cols,
+			    -1);
+      if (priv->row_span_col != -1)
+	gtk_tree_model_get (priv->model, iter,
+			    priv->row_span_col, &rows,
+			    -1);
+
+      while (1)
+	{
+	  if (current_col + cols > priv->wrap_width)
+	    {
+	      current_col = 0;
+	      current_row++;
+	    }
+	  
+	  if (!menu_occupied (menu, 
+			      current_col, current_col + cols,
+			      current_row, current_row + rows))
+	    break;
+
+	  current_col++;
+	}
+    }
+
+  /* set attach props */
+  gtk_menu_attach (GTK_MENU (menu), item,
+                   current_col, current_col + cols,
+                   current_row, current_row + rows);
 }
 
 static GtkWidget *
@@ -727,6 +1048,21 @@ gtk_tree_menu_create_item (GtkTreeMenu *menu,
   return item;
 }
 
+static inline void 
+rebuild_menu (GtkTreeMenu *menu)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+
+  /* Destroy all the menu items */
+  gtk_container_foreach (GTK_CONTAINER (menu), 
+			 (GtkCallback) gtk_widget_destroy, NULL);
+  
+  /* Populate */
+  if (priv->model)
+    gtk_tree_menu_populate (menu);
+}
+
+
 static void
 gtk_tree_menu_populate (GtkTreeMenu *menu)
 {
@@ -735,7 +1071,7 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
   GtkTreeIter         parent;
   GtkTreeIter         iter;
   gboolean            valid = FALSE;
-  GtkWidget          *menu_item;
+  GtkWidget          *menu_item, *prev = NULL;
 
   if (!priv->model)
     return;
@@ -762,6 +1098,7 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
 	      gtk_widget_show (menu_item);
 	      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
+	      prev = menu_item;
 	      priv->menu_with_header = TRUE;
 	    }
 	}
@@ -775,11 +1112,13 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
 	  menu_item = gtk_tearoff_menu_item_new ();
 	  gtk_widget_show (menu_item);
 
-	  /* Here if wrap_width > 0 then we need to attach the menu
-	   * item to span the entire first row of the grid menu */
-	  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-	}
+	  if (priv->wrap_width > 0)
+	    gtk_menu_attach (GTK_MENU (menu), menu_item, 0, priv->wrap_width, 0, 1);
+	  else
+	    gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
+	  prev = menu_item;
+	}
 
       valid = gtk_tree_model_iter_children (priv->model, &iter, NULL);
     }
@@ -789,8 +1128,13 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
   while (valid)
     {
       menu_item = gtk_tree_menu_create_item (menu, &iter, FALSE);
+
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
 
+      if (priv->wrap_width > 0)
+	relayout_item (menu, menu_item, &iter, prev);
+
+      prev  = menu_item;
       valid = gtk_tree_model_iter_next (priv->model, &iter);
     }
 }
@@ -876,9 +1220,12 @@ gtk_tree_menu_set_model (GtkTreeMenu  *menu,
 				       priv->row_deleted_id);
 	  g_signal_handler_disconnect (priv->model,
 				       priv->row_reordered_id);
+	  g_signal_handler_disconnect (priv->model,
+				       priv->row_changed_id);
 	  priv->row_inserted_id  = 0;
 	  priv->row_deleted_id   = 0;
 	  priv->row_reordered_id = 0;
+	  priv->row_changed_id = 0;
 
 	  g_object_unref (priv->model);
 	}
@@ -896,6 +1243,8 @@ gtk_tree_menu_set_model (GtkTreeMenu  *menu,
 						     G_CALLBACK (row_deleted_cb), menu);
 	  priv->row_reordered_id = g_signal_connect (priv->model, "rows-reordered",
 						     G_CALLBACK (row_reordered_cb), menu);
+	  priv->row_changed_id   = g_signal_connect (priv->model, "row-changed",
+						     G_CALLBACK (row_changed_cb), menu);
 	}
     }
 }
@@ -931,13 +1280,7 @@ gtk_tree_menu_set_root (GtkTreeMenu         *menu,
   else
     priv->root = NULL;
 
-  /* Destroy all the menu items for the previous root */
-  gtk_container_foreach (GTK_CONTAINER (menu), 
-			 (GtkCallback) gtk_widget_destroy, NULL);
-  
-  /* Populate for the new root */
-  if (priv->model)
-    gtk_tree_menu_populate (menu);
+  rebuild_menu (menu);
 }
 
 GtkTreePath *
@@ -981,18 +1324,122 @@ gtk_tree_menu_set_tearoff (GtkTreeMenu *menu,
     {
       priv->tearoff = tearoff;
 
-      /* Destroy all the menu items */
-      gtk_container_foreach (GTK_CONTAINER (menu), 
-			     (GtkCallback) gtk_widget_destroy, NULL);
-      
-      /* Populate again */
-      if (priv->model)
-	gtk_tree_menu_populate (menu);
+      rebuild_menu (menu);
 
       g_object_notify (G_OBJECT (menu), "tearoff");
     }
 }
 
+gint
+gtk_tree_menu_get_wrap_width (GtkTreeMenu *menu)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), FALSE);
+
+  priv = menu->priv;
+
+  return priv->wrap_width;
+}
+
+void
+gtk_tree_menu_set_wrap_width (GtkTreeMenu *menu,
+			      gint         width)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_if_fail (GTK_IS_TREE_MENU (menu));
+  g_return_if_fail (width >= 0);
+
+  priv = menu->priv;
+
+  if (priv->wrap_width != width)
+    {
+      priv->wrap_width = width;
+
+      rebuild_menu (menu);
+
+      g_object_notify (G_OBJECT (menu), "wrap-width");
+    }
+}
+
+gint
+gtk_tree_menu_get_row_span_column (GtkTreeMenu *menu)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), FALSE);
+
+  priv = menu->priv;
+
+  return priv->row_span_col;
+}
+
+void
+gtk_tree_menu_set_row_span_column (GtkTreeMenu *menu,
+				   gint         row_span)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_if_fail (GTK_IS_TREE_MENU (menu));
+
+  priv = menu->priv;
+
+  if (priv->row_span_col != row_span)
+    {
+      priv->row_span_col = row_span;
+
+      if (priv->wrap_width > 0)
+	rebuild_menu (menu);
+
+      g_object_notify (G_OBJECT (menu), "row-span-column");
+    }
+}
+
+gint
+gtk_tree_menu_get_column_span_column (GtkTreeMenu *menu)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), FALSE);
+
+  priv = menu->priv;
+
+  return priv->col_span_col;
+}
+
+void
+gtk_tree_menu_set_column_span_column (GtkTreeMenu *menu,
+				      gint         column_span)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_if_fail (GTK_IS_TREE_MENU (menu));
+
+  priv = menu->priv;
+
+  if (priv->col_span_col != column_span)
+    {
+      priv->col_span_col = column_span;
+
+      if (priv->wrap_width > 0)
+	rebuild_menu (menu);
+
+      g_object_notify (G_OBJECT (menu), "column-span-column");
+    }
+}
+
+GtkTreeViewRowSeparatorFunc
+gtk_tree_menu_get_row_separator_func (GtkTreeMenu *menu)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), NULL);
+
+  priv = menu->priv;
+
+  return priv->row_separator_func;
+}
 
 void
 gtk_tree_menu_set_row_separator_func (GtkTreeMenu          *menu,
@@ -1013,17 +1460,11 @@ gtk_tree_menu_set_row_separator_func (GtkTreeMenu          *menu,
   priv->row_separator_data    = data;
   priv->row_separator_destroy = destroy;
 
-  /* Destroy all the menu items */
-  gtk_container_foreach (GTK_CONTAINER (menu), 
-			 (GtkCallback) gtk_widget_destroy, NULL);
-  
-  /* Populate again */
-  if (priv->model)
-    gtk_tree_menu_populate (menu);
+  rebuild_menu (menu);
 }
 
-GtkTreeViewRowSeparatorFunc
-gtk_tree_menu_get_row_separator_func (GtkTreeMenu *menu)
+GtkTreeMenuHeaderFunc
+gtk_tree_menu_get_header_func (GtkTreeMenu *menu)
 {
   GtkTreeMenuPrivate *priv;
 
@@ -1031,7 +1472,7 @@ gtk_tree_menu_get_row_separator_func (GtkTreeMenu *menu)
 
   priv = menu->priv;
 
-  return priv->row_separator_func;
+  return priv->header_func;
 }
 
 void
@@ -1053,23 +1494,5 @@ gtk_tree_menu_set_header_func (GtkTreeMenu          *menu,
   priv->header_data    = data;
   priv->header_destroy = destroy;
 
-  /* Destroy all the menu items */
-  gtk_container_foreach (GTK_CONTAINER (menu), 
-			 (GtkCallback) gtk_widget_destroy, NULL);
-  
-  /* Populate again */
-  if (priv->model)
-    gtk_tree_menu_populate (menu);
-}
-
-GtkTreeMenuHeaderFunc
-gtk_tree_menu_get_header_func (GtkTreeMenu *menu)
-{
-  GtkTreeMenuPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), NULL);
-
-  priv = menu->priv;
-
-  return priv->header_func;
+  rebuild_menu (menu);
 }

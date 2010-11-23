@@ -1,6 +1,132 @@
 #include <gtk/gtk.h>
 #include "cellareascaffold.h"
 
+
+/*******************************************************
+ *                       Grid Test                     *
+ *******************************************************/
+static GdkPixbuf *
+create_color_pixbuf (const char *color)
+{
+  GdkPixbuf *pixbuf;
+  GdkColor col;
+
+  int x;
+  int num;
+  int rowstride;
+  guchar *pixels, *p;
+  
+  if (!gdk_color_parse (color, &col))
+    return NULL;
+  
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+			   FALSE, 8,
+			   16, 16);
+  
+  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+  p = pixels = gdk_pixbuf_get_pixels (pixbuf);
+  
+  num = gdk_pixbuf_get_width (pixbuf) *
+    gdk_pixbuf_get_height (pixbuf);
+  
+  for (x = 0; x < num; x++) {
+    p[0] = col.red / 65535 * 255;
+    p[1] = col.green / 65535 * 255;
+    p[2] = col.blue / 65535 * 255;
+    p += 3;
+  }
+  
+  return pixbuf;
+}
+
+static GtkWidget *
+create_menu_grid_demo (void)
+{
+  GtkWidget *menu;
+  GtkTreeIter iter;
+  GdkPixbuf *pixbuf;
+  GtkCellRenderer *cell = gtk_cell_renderer_pixbuf_new ();
+  GtkListStore *store;
+  
+  store = gtk_list_store_new (1, GDK_TYPE_PIXBUF);
+
+  menu = gtk_tree_menu_new_full (NULL, GTK_TREE_MODEL (store), NULL);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (menu), cell, TRUE);
+  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (menu), cell, "pixbuf", 0, NULL);
+  
+  gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (menu), 3);
+
+  /* first row */
+  pixbuf = create_color_pixbuf ("red");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  pixbuf = create_color_pixbuf ("green");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  pixbuf = create_color_pixbuf ("blue");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  /* second row */
+  pixbuf = create_color_pixbuf ("yellow");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  pixbuf = create_color_pixbuf ("black");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  pixbuf = create_color_pixbuf ("white");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  /* third row */
+  pixbuf = create_color_pixbuf ("gray");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  pixbuf = create_color_pixbuf ("snow");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+  
+  pixbuf = create_color_pixbuf ("magenta");
+  gtk_list_store_append (store, &iter);
+  gtk_list_store_set (store, &iter,
+		      0, pixbuf,
+		      -1);
+  g_object_unref (pixbuf);
+
+  g_object_unref (store);
+  
+  return menu;
+}
+
 /*******************************************************
  *                      Simple Test                    *
  *******************************************************/
@@ -288,20 +414,31 @@ tree_menu (void)
 
   gtk_window_set_title (GTK_WINDOW (window), "GtkTreeMenu");
 
-  menu = simple_tree_menu ();
-
-  g_signal_connect (menu, "menu-activate", G_CALLBACK (menu_activated_cb), NULL);
-
   vbox  = gtk_vbox_new (FALSE, 4);
   gtk_widget_show (vbox);
 
   menubar = gtk_menu_bar_new ();
-  menuitem = gtk_menu_item_new_with_label ("Tree");
-  gtk_widget_show (menu);
   gtk_widget_show (menubar);
+
+#if 1
+
+  menuitem = gtk_menu_item_new_with_label ("Grid");
+  menu = create_menu_grid_demo ();
+  gtk_widget_show (menu);
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+
+#endif
+
+  menuitem = gtk_menu_item_new_with_label ("Tree");
+  menu = simple_tree_menu ();
+  gtk_widget_show (menu);
+  gtk_widget_show (menuitem);
+  gtk_menu_shell_prepend (GTK_MENU_SHELL (menubar), menuitem);
+  gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
+
+  g_signal_connect (menu, "menu-activate", G_CALLBACK (menu_activated_cb), NULL);
 
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
 
@@ -361,7 +498,6 @@ tree_menu (void)
   
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (tearoff_toggled), menu);
-
 
   gtk_container_add (GTK_CONTAINER (window), vbox);
 
