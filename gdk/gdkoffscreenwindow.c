@@ -135,9 +135,9 @@ is_parent_of (GdkWindow *parent,
 }
 
 static cairo_surface_t *
-gdk_offscreen_window_ref_cairo_surface (GdkDrawable *drawable)
+gdk_offscreen_window_ref_cairo_surface (GdkWindow *window)
 {
-  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (drawable);
+  GdkOffscreenWindow *offscreen = GDK_OFFSCREEN_WINDOW (window->impl);
 
   return cairo_surface_reference (get_surface (offscreen));
 }
@@ -694,13 +694,11 @@ static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
   GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
-  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gdk_offscreen_window_finalize;
 
-  drawable_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
-
+  impl_class->ref_cairo_surface = gdk_offscreen_window_ref_cairo_surface;
   impl_class->show = gdk_offscreen_window_show;
   impl_class->hide = gdk_offscreen_window_hide;
   impl_class->withdraw = gdk_offscreen_window_withdraw;

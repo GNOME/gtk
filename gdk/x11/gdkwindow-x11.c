@@ -188,11 +188,10 @@ gdk_x11_cairo_surface_destroy (void *data)
 }
 
 static cairo_surface_t *
-gdk_x11_create_cairo_surface (GdkDrawable *drawable,
+gdk_x11_create_cairo_surface (GdkWindowImplX11 *impl,
 			      int width,
 			      int height)
 {
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (drawable);
   GdkVisual *visual;
     
   visual = gdk_window_get_visual (impl->wrapper);
@@ -203,23 +202,22 @@ gdk_x11_create_cairo_surface (GdkDrawable *drawable,
 }
 
 static cairo_surface_t *
-gdk_x11_ref_cairo_surface (GdkDrawable *drawable)
+gdk_x11_ref_cairo_surface (GdkWindow *window)
 {
-  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (drawable);
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
 
-  if (GDK_IS_WINDOW_IMPL_X11 (drawable) &&
-      GDK_WINDOW_DESTROYED (impl->wrapper))
+  if (GDK_WINDOW_DESTROYED (window))
     return NULL;
 
   if (!impl->cairo_surface)
     {
-      impl->cairo_surface = gdk_x11_create_cairo_surface (drawable,
-                                                          gdk_window_get_width (impl->wrapper),
-                                                          gdk_window_get_height (impl->wrapper));
+      impl->cairo_surface = gdk_x11_create_cairo_surface (impl,
+                                                          gdk_window_get_width (window),
+                                                          gdk_window_get_height (window));
       
       if (impl->cairo_surface)
 	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-				     drawable, gdk_x11_cairo_surface_destroy);
+				     impl, gdk_x11_cairo_surface_destroy);
     }
   else
     cairo_surface_reference (impl->cairo_surface);
@@ -5567,13 +5565,11 @@ static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  GdkDrawableClass *drawable_class = GDK_DRAWABLE_CLASS (klass);
   GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
   
   object_class->finalize = gdk_window_impl_x11_finalize;
   
-  drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
-
+  impl_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
   impl_class->show = gdk_window_x11_show;
   impl_class->hide = gdk_window_x11_hide;
   impl_class->withdraw = gdk_window_x11_withdraw;

@@ -2736,7 +2736,7 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
 static cairo_surface_t *
 gdk_window_ref_impl_surface (GdkWindow *window)
 {
-  return GDK_DRAWABLE_GET_CLASS (window->impl)->ref_cairo_surface (window->impl);
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->ref_cairo_surface (window);
 }
 
 static cairo_t *

@@ -50,6 +50,9 @@ struct _GdkWindowImplClass
 {
   GdkDrawableClass parent_class;
 
+  cairo_surface_t *
+               (* ref_cairo_surface)    (GdkWindow       *window);
+
   void         (* show)                 (GdkWindow       *window,
 					 gboolean         already_mapped);
   void         (* hide)                 (GdkWindow       *window);

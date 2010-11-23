@@ -59,8 +59,6 @@ struct _GdkDrawableClass
 {
   GObjectClass parent_class;
   
-  cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
-
   /* Padding for future expansion */
   void         (*_gdk_reserved7)  (void);
   void         (*_gdk_reserved9)  (void);
