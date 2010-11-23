@@ -347,7 +347,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/arrows.png					\
 	$(srcdir)/images/expanders.png					\
 	$(srcdir)/images/background.png					\
-	$(srcdir)/images/frames.png
+	$(srcdir)/images/frames.png					\
+	$(srcdir)/images/sliders.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \

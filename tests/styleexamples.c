@@ -177,20 +177,55 @@ static gboolean
 draw_cb_activity (GtkWidget *widget, cairo_t *cr)
 {
   GtkStyleContext *context;
+  GtkWidgetPath *path;
 
   context = gtk_widget_get_style_context (widget);
+  gtk_style_context_notify_state_change (context,
+                                         gtk_widget_get_window (widget),
+                                         NULL,
+                                         GTK_STATE_FLAG_ACTIVE,
+                                         TRUE);
+
   gtk_style_context_save (context);
 
-  gtk_style_context_add_class (context, "spinner");
-  gtk_style_context_set_state (context, 0);
+  path = gtk_widget_path_new ();
+  gtk_widget_path_append_type (path, GTK_TYPE_SPINNER);
+  gtk_widget_path_iter_add_class (path, 0, "spinner");
+  gtk_style_context_set_path (context, path);
+  gtk_widget_path_free (path);
+
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_ACTIVE);
   gtk_render_activity (context, cr, 12, 12, 12, 12);
-  gtk_style_context_set_state (context, GTK_STATE_FLAG_INSENSITIVE);
-  gtk_render_activity (context, cr, 36, 12, 12, 12);
 
   gtk_style_context_restore (context);
 
   return TRUE;
 }
+
+static gboolean
+draw_cb_slider (GtkWidget *widget, cairo_t *cr)
+{
+  GtkStyleContext *context;
+  GtkWidgetPath *path;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+
+  path = gtk_widget_path_new ();
+  gtk_widget_path_append_type (path, GTK_TYPE_SCALE);
+  gtk_widget_path_iter_add_class (path, 0, "slider");
+  gtk_widget_path_iter_add_class (path, 0, "scale");
+  gtk_style_context_set_path (context, path);
+  gtk_widget_path_free (path);
+
+  gtk_render_slider (context, cr, 12, 22, 30, 10, GTK_ORIENTATION_HORIZONTAL);
+  gtk_render_slider (context, cr, 54, 12, 10, 30, GTK_ORIENTATION_VERTICAL);
+
+  gtk_style_context_restore (context);
+
+  return TRUE;
+}
+
 
 
 static char *what;
@@ -212,6 +247,8 @@ draw_cb (GtkWidget *widget, cairo_t *cr)
     return draw_cb_frame (widget, cr);
   else if (strcmp (what, "activity") == 0)
     return draw_cb_activity (widget, cr);
+  else if (strcmp (what, "slider") == 0)
+    return draw_cb_slider (widget, cr);
 
   return FALSE;
 }

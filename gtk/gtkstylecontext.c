@@ -3265,6 +3265,11 @@ gtk_render_line (GtkStyleContext *context,
  * @width, @height. @orientation defines whether the slider is vertical
  * or horizontal.
  *
+ * <example>
+ * <title>Typical slider rendering</title>
+ * <inlinegraphic fileref="sliders.png" format="PNG"/>
+ * </example>
+ *
  * Since: 3.0
  **/
 void
