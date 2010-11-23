@@ -499,24 +499,6 @@ row_spacing_changed (GtkSpinButton    *spin_button,
 }
 
 static void
-cell_margins_changed (GtkSpinButton    *spin_button,
-		      CellAreaScaffold *scaffold)
-{
-  GtkCellArea *area = cell_area_scaffold_get_area (scaffold);
-  gint        value;
-
-  value = (gint)gtk_spin_button_get_value (spin_button);
-
-  gtk_cell_area_set_cell_margin_left (area, value);
-  gtk_cell_area_set_cell_margin_right (area, value);
-  gtk_cell_area_set_cell_margin_top (area, value);
-  gtk_cell_area_set_cell_margin_bottom (area, value);
-
-  gtk_widget_queue_resize (GTK_WIDGET (scaffold));
-}
-
-
-static void
 indentation_changed (GtkSpinButton    *spin_button,
 		     CellAreaScaffold *scaffold)
 {
@@ -544,8 +526,7 @@ background_area (void)
 
   label = gtk_label_new ("In this example, row spacing gets devided into the background area, "
 			 "column spacing is added between each background area, indentation is "
-			 "prepended space distributed to the background area, individual cell margins "
-			 "are also distributed to the background area for every cell.");
+			 "prepended space distributed to the background area.");
   gtk_label_set_line_wrap  (GTK_LABEL (label), TRUE);
   gtk_label_set_width_chars  (GTK_LABEL (label), 40);
   gtk_widget_show (label);
@@ -605,19 +586,6 @@ background_area (void)
 
   g_signal_connect (G_OBJECT (widget), "value-changed",
                     G_CALLBACK (row_spacing_changed), scaffold);
-
-  widget = gtk_spin_button_new_with_range (0, 10, 1);
-  label = gtk_label_new ("Cell Margins");
-  hbox = gtk_hbox_new (FALSE, 4);
-  gtk_widget_show (hbox);
-  gtk_widget_show (label);
-  gtk_widget_show (widget);
-  gtk_box_pack_start (GTK_BOX (hbox), label, TRUE, TRUE, 0);
-  gtk_box_pack_start (GTK_BOX (hbox), widget, FALSE, FALSE, 0);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
-
-  g_signal_connect (G_OBJECT (widget), "value-changed",
-                    G_CALLBACK (cell_margins_changed), scaffold);
 
   widget = gtk_spin_button_new_with_range (0, 30, 1);
   label = gtk_label_new ("Intentation");

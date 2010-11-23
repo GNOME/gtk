@@ -933,7 +933,7 @@ gtk_cell_area_box_event (GtkCellArea          *area,
 	      
 	      /* Remove margins from the background area to produce the cell area
 	       */
-	      gtk_cell_area_inner_cell_area (area, &cell_background, &inner_area);
+	      gtk_cell_area_inner_cell_area (area, widget, &cell_background, &inner_area);
 	      
 	      if (event_x >= inner_area.x && event_x <= inner_area.x + inner_area.width &&
 		  event_y >= inner_area.y && event_y <= inner_area.y + inner_area.height)
@@ -968,7 +968,7 @@ gtk_cell_area_box_event (GtkCellArea          *area,
 			  /* If we are activating via a focus sibling, we need to fix the
 			   * cell area */
 			  if (event_renderer != cell->renderer)
-			    gtk_cell_area_inner_cell_area (area, cell_area, &cell_background);
+			    gtk_cell_area_inner_cell_area (area, widget, cell_area, &cell_background);
 
 			  gtk_cell_area_set_focus_cell (area, event_renderer);
 
@@ -1037,7 +1037,7 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 
       /* Remove margins from the background area to produce the cell area
        */
-      gtk_cell_area_inner_cell_area (area, &cell_background, &inner_area);
+      gtk_cell_area_inner_cell_area (area, widget, &cell_background, &inner_area);
 
       /* Add portions of the background_area to the cell_background
        * to create the render_background */

@@ -111,7 +111,7 @@ typedef struct {
 } CellAttribute;
 
 typedef struct {
-  GSList                *attributes;
+  GSList          *attributes;
 
   GtkCellLayoutDataFunc  func;
   gpointer               data;
@@ -161,11 +161,6 @@ struct _GtkCellAreaPrivate
    */
   GHashTable      *cell_info;
 
-  /* The cell border decides how much space to reserve
-   * around each cell for the background_area
-   */
-  GtkBorder        cell_border;
-
   /* Current path is saved as a side-effect
    * of gtk_cell_area_apply_attributes() */
   gchar           *current_path;
@@ -189,10 +184,6 @@ struct _GtkCellAreaPrivate
 
 enum {
   PROP_0,
-  PROP_CELL_MARGIN_LEFT,
-  PROP_CELL_MARGIN_RIGHT,
-  PROP_CELL_MARGIN_TOP,
-  PROP_CELL_MARGIN_BOTTOM,
   PROP_FOCUS_CELL,
   PROP_EDITED_CELL,
   PROP_EDIT_WIDGET
@@ -237,11 +228,6 @@ gtk_cell_area_init (GtkCellArea *area)
 						g_direct_equal,
 						NULL, 
 						(GDestroyNotify)g_list_free);
-
-  priv->cell_border.left   = 0;
-  priv->cell_border.right  = 0;
-  priv->cell_border.top    = 0;
-  priv->cell_border.bottom = 0;
 
   priv->focus_cell         = NULL;
   priv->edited_cell        = NULL;
@@ -357,50 +343,6 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
 
   /* Properties */
   g_object_class_install_property (object_class,
-                                   PROP_CELL_MARGIN_LEFT,
-                                   g_param_spec_int
-				   ("cell-margin-left",
-				    P_("Margin on Left"),
-				    P_("Pixels of extra space on the left side of each cell"),
-				    0,
-				    G_MAXINT16,
-				    0,
-				    GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class,
-                                   PROP_CELL_MARGIN_RIGHT,
-                                   g_param_spec_int
-				   ("cell-margin-right",
-				    P_("Margin on Right"),
-				    P_("Pixels of extra space on the right side of each cell"),
-				    0,
-				    G_MAXINT16,
-				    0,
-				    GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (object_class,
-                                   PROP_CELL_MARGIN_TOP,
-                                   g_param_spec_int 
-				   ("cell-margin-top",
-				    P_("Margin on Top"),
-				    P_("Pixels of extra space on the top side of each cell"),
-				    0,
-				    G_MAXINT16,
-				    0,
-				    GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class,
-                                   PROP_CELL_MARGIN_BOTTOM,
-                                   g_param_spec_int
-				   ("cell-margin-bottom",
-				    P_("Margin on Bottom"),
-				    P_("Pixels of extra space on the bottom side of each cell"),
-				    0,
-				    G_MAXINT16,
-				    0,
-				    GTK_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class,
                                    PROP_FOCUS_CELL,
                                    g_param_spec_object
 				   ("focus-cell",
@@ -442,12 +384,11 @@ cell_info_new (GtkCellLayoutDataFunc  func,
 	       gpointer               data,
 	       GDestroyNotify         destroy)
 {
-  CellInfo *info = g_slice_new (CellInfo);
-  
-  info->attributes = NULL;
-  info->func       = func;
-  info->data       = data;
-  info->destroy    = destroy;
+  CellInfo *info = g_slice_new0 (CellInfo);
+
+  info->func     = func;
+  info->data     = data;
+  info->destroy  = destroy;
 
   return info;
 }
@@ -552,18 +493,6 @@ gtk_cell_area_set_property (GObject       *object,
 
   switch (prop_id)
     {
-    case PROP_CELL_MARGIN_LEFT:
-      gtk_cell_area_set_cell_margin_left (area, g_value_get_int (value));
-      break;
-    case PROP_CELL_MARGIN_RIGHT:
-      gtk_cell_area_set_cell_margin_right (area, g_value_get_int (value));
-      break;
-    case PROP_CELL_MARGIN_TOP:
-      gtk_cell_area_set_cell_margin_top (area, g_value_get_int (value));
-      break;
-    case PROP_CELL_MARGIN_BOTTOM:
-      gtk_cell_area_set_cell_margin_bottom (area, g_value_get_int (value));
-      break;
     case PROP_FOCUS_CELL:
       gtk_cell_area_set_focus_cell (area, (GtkCellRenderer *)g_value_get_object (value));
       break;
@@ -584,18 +513,6 @@ gtk_cell_area_get_property (GObject     *object,
 
   switch (prop_id)
     {
-    case PROP_CELL_MARGIN_LEFT:
-      g_value_set_int (value, priv->cell_border.left);
-      break;
-    case PROP_CELL_MARGIN_RIGHT:
-      g_value_set_int (value, priv->cell_border.right);
-      break;
-    case PROP_CELL_MARGIN_TOP:
-      g_value_set_int (value, priv->cell_border.top);
-      break;
-    case PROP_CELL_MARGIN_BOTTOM:
-      g_value_set_int (value, priv->cell_border.bottom);
-      break;
     case PROP_FOCUS_CELL:
       g_value_set_object (value, priv->focus_cell);
       break;
@@ -2581,7 +2498,7 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
    *
    * XXX Maybe have to do some rtl mode treatment here...
    */
-  gtk_cell_area_inner_cell_area (area, cell_area, &inner_area);
+  gtk_cell_area_inner_cell_area (area, widget, cell_area, &inner_area);
 
   g_object_get (renderer, "mode", &mode, NULL);
 
@@ -2687,131 +2604,30 @@ gtk_cell_area_stop_editing (GtkCellArea *area,
 }
 
 /*************************************************************
- *                        API: Margins                       *
+ *         API: Convenience for area implementations         *
  *************************************************************/
-gint
-gtk_cell_area_get_cell_margin_left (GtkCellArea *area)
-{
-  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
-
-  return area->priv->cell_border.left;
-}
-
-void
-gtk_cell_area_set_cell_margin_left (GtkCellArea *area,
-				    gint         margin)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  if (priv->cell_border.left != margin)
-    {
-      priv->cell_border.left = margin;
-
-      g_object_notify (G_OBJECT (area), "cell-margin-left");
-    }
-}
-
-gint
-gtk_cell_area_get_cell_margin_right (GtkCellArea *area)
-{
-  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
-
-  return area->priv->cell_border.right;
-}
-
-void
-gtk_cell_area_set_cell_margin_right (GtkCellArea *area,
-				     gint         margin)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  if (priv->cell_border.right != margin)
-    {
-      priv->cell_border.right = margin;
-
-      g_object_notify (G_OBJECT (area), "cell-margin-right");
-    }
-}
-
-gint
-gtk_cell_area_get_cell_margin_top (GtkCellArea *area)
-{
-  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
-
-  return area->priv->cell_border.top;
-}
-
-void
-gtk_cell_area_set_cell_margin_top (GtkCellArea *area,
-				   gint         margin)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  if (priv->cell_border.top != margin)
-    {
-      priv->cell_border.top = margin;
-
-      g_object_notify (G_OBJECT (area), "cell-margin-top");
-    }
-}
-
-gint
-gtk_cell_area_get_cell_margin_bottom (GtkCellArea *area)
-{
-  g_return_val_if_fail (GTK_IS_CELL_AREA (area), 0);
-
-  return area->priv->cell_border.bottom;
-}
-
-void
-gtk_cell_area_set_cell_margin_bottom (GtkCellArea *area,
-				      gint         margin)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  if (priv->cell_border.bottom != margin)
-    {
-      priv->cell_border.bottom = margin;
-
-      g_object_notify (G_OBJECT (area), "cell-margin-bottom");
-    }
-}
 
 void
 gtk_cell_area_inner_cell_area (GtkCellArea        *area,
+			       GtkWidget          *widget,
 			       const GdkRectangle *cell_area,
 			       GdkRectangle       *inner_area)
 {
-  GtkCellAreaPrivate *priv;
+  gint focus_line_width;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cell_area != NULL);
   g_return_if_fail (inner_area != NULL);
 
-  priv = area->priv;
+  gtk_widget_style_get (widget, "focus-line-width", &focus_line_width, NULL);
 
   *inner_area = *cell_area;
 
-  inner_area->x      += priv->cell_border.left;
-  inner_area->width  -= (priv->cell_border.left + priv->cell_border.right);
-  inner_area->y      += priv->cell_border.top;
-  inner_area->height -= (priv->cell_border.top + priv->cell_border.bottom);
+  inner_area->x      += focus_line_width;
+  inner_area->width  -= focus_line_width * 2;
+  inner_area->y      += focus_line_width;
+  inner_area->height -= focus_line_width * 2;
 }
 
 void
@@ -2873,6 +2689,7 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
 				gint               *natural_size)
 {
   GtkCellAreaPrivate *priv;
+  gint                focus_line_width;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
@@ -2882,20 +2699,21 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
 
   priv = area->priv;
 
+  gtk_widget_style_get (widget, "focus-line-width", &focus_line_width, NULL);
+
+  focus_line_width *= 2;
+
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (for_size < 0)
 	  gtk_cell_renderer_get_preferred_width (renderer, widget, minimum_size, natural_size);
       else
 	{
-	  for_size = MAX (0, for_size - (priv->cell_border.top + priv->cell_border.bottom));
+	  for_size = MAX (0, for_size - focus_line_width);
 
 	  gtk_cell_renderer_get_preferred_width_for_height (renderer, widget, for_size, 
 							    minimum_size, natural_size);
 	}
-
-      *minimum_size += (priv->cell_border.left + priv->cell_border.right);
-      *natural_size += (priv->cell_border.left + priv->cell_border.right);
     }
   else /* GTK_ORIENTATION_VERTICAL */
     {
@@ -2903,13 +2721,13 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
 	gtk_cell_renderer_get_preferred_height (renderer, widget, minimum_size, natural_size);
       else
 	{
-	  for_size = MAX (0, for_size - (priv->cell_border.left + priv->cell_border.right));
+	  for_size = MAX (0, for_size - focus_line_width);
 
 	  gtk_cell_renderer_get_preferred_height_for_width (renderer, widget, for_size, 
 							    minimum_size, natural_size);
 	}
-
-      *minimum_size += (priv->cell_border.top + priv->cell_border.bottom);
-      *natural_size += (priv->cell_border.top + priv->cell_border.bottom);
     }
+
+  *minimum_size += focus_line_width;
+  *natural_size += focus_line_width;
 }

@@ -320,24 +320,11 @@ gboolean              gtk_cell_area_activate_cell                  (GtkCellArea 
 void                  gtk_cell_area_stop_editing                   (GtkCellArea          *area,
 								    gboolean              canceled);
 
-/* Margins */
-gint                  gtk_cell_area_get_cell_margin_left           (GtkCellArea        *area);
-void                  gtk_cell_area_set_cell_margin_left           (GtkCellArea        *area,
-								    gint                margin);
-gint                  gtk_cell_area_get_cell_margin_right          (GtkCellArea        *area);
-void                  gtk_cell_area_set_cell_margin_right          (GtkCellArea        *area,
-								    gint                margin);
-gint                  gtk_cell_area_get_cell_margin_top            (GtkCellArea        *area);
-void                  gtk_cell_area_set_cell_margin_top            (GtkCellArea        *area,
-								    gint                margin);
-gint                  gtk_cell_area_get_cell_margin_bottom         (GtkCellArea        *area);
-void                  gtk_cell_area_set_cell_margin_bottom         (GtkCellArea        *area,
-								    gint                margin);
-
 /* Functions for area implementations */
 
 /* Distinguish the inner cell area from the whole requested area including margins */
 void                  gtk_cell_area_inner_cell_area                (GtkCellArea        *area,
+								    GtkWidget          *widget,
 								    const GdkRectangle *cell_area,
 								    GdkRectangle       *inner_area);
 
