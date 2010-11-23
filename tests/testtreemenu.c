@@ -272,6 +272,13 @@ submenu_headers_toggled (GtkToggleButton  *toggle,
 }
 
 static void
+tearoff_toggled (GtkToggleButton *toggle,
+		 GtkTreeMenu     *menu)
+{
+  gtk_tree_menu_set_tearoff (menu, gtk_toggle_button_get_active (toggle));
+}
+
+static void
 tree_menu (void)
 {
   GtkWidget *window, *widget;
@@ -346,6 +353,14 @@ tree_menu (void)
   
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (submenu_headers_toggled), menu);
+
+  widget = gtk_check_button_new_with_label ("Tearoff menu");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+  
+  g_signal_connect (G_OBJECT (widget), "toggled",
+                    G_CALLBACK (tearoff_toggled), menu);
 
 
   gtk_container_add (GTK_CONTAINER (window), vbox);

@@ -85,6 +85,9 @@ GtkTreeModel         *gtk_tree_menu_get_model                      (GtkTreeMenu 
 void                  gtk_tree_menu_set_root                       (GtkTreeMenu         *menu,
 								    GtkTreePath         *path);
 GtkTreePath          *gtk_tree_menu_get_root                       (GtkTreeMenu         *menu);
+gboolean              gtk_tree_menu_get_tearoff                    (GtkTreeMenu          *menu);
+void                  gtk_tree_menu_set_tearoff                    (GtkTreeMenu          *menu,
+								    gboolean              tearoff);
 
 void                        gtk_tree_menu_set_row_separator_func   (GtkTreeMenu          *menu,
 								    GtkTreeViewRowSeparatorFunc func,

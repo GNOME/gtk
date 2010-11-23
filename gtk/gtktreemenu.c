@@ -26,6 +26,7 @@
 #include "gtktreemenu.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
+#include "gtktearoffmenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareacontext.h"
@@ -56,8 +57,6 @@ static void      gtk_tree_menu_get_preferred_width            (GtkWidget        
 static void      gtk_tree_menu_get_preferred_height           (GtkWidget           *widget,
 							       gint                *minimum_size,
 							       gint                *natural_size);
-static void      gtk_tree_menu_size_allocate                  (GtkWidget           *widget,
-							       GtkAllocation       *allocation);
 
 /* GtkCellLayoutIface */
 static void      gtk_tree_menu_cell_layout_init               (GtkCellLayoutIface  *iface);
@@ -110,13 +109,15 @@ struct _GtkTreeMenuPrivate
   GDestroyNotify        header_destroy;
 
   guint32               menu_with_header : 1;
+  guint32               tearoff     : 1;
 };
 
 enum {
   PROP_0,
   PROP_MODEL,
   PROP_ROOT,
-  PROP_CELL_AREA
+  PROP_CELL_AREA,
+  PROP_TEAROFF
 };
 
 enum {
@@ -160,7 +161,6 @@ gtk_tree_menu_class_init (GtkTreeMenuClass *class)
 
   widget_class->get_preferred_width            = gtk_tree_menu_get_preferred_width;
   widget_class->get_preferred_height           = gtk_tree_menu_get_preferred_height;
-  widget_class->size_allocate                  = gtk_tree_menu_size_allocate;
 
   tree_menu_signals[SIGNAL_MENU_ACTIVATE] =
     g_signal_new (I_("menu-activate"),
@@ -195,6 +195,14 @@ gtk_tree_menu_class_init (GtkTreeMenuClass *class)
 							 P_("The GtkCellArea used to layout cells"),
 							 GTK_TYPE_CELL_AREA,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+   g_object_class_install_property (object_class,
+                                    PROP_TEAROFF,
+                                    g_param_spec_boolean ("tearoff",
+							  P_("Tearoff"),
+							  P_("Whether the menu has a tearoff item"),
+							  FALSE,
+							  GTK_PARAM_READWRITE));
 
 
    g_type_class_add_private (object_class, sizeof (GtkTreeMenuPrivate));
@@ -300,6 +308,10 @@ gtk_tree_menu_set_property (GObject            *object,
       gtk_tree_menu_set_area (menu, (GtkCellArea *)g_value_get_object (value));
       break;
 
+    case PROP_TEAROFF:
+      gtk_tree_menu_set_tearoff (menu, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -317,21 +329,25 @@ gtk_tree_menu_get_property (GObject            *object,
 
   switch (prop_id)
     {
-      case PROP_MODEL:
-        g_value_set_object (value, priv->model);
-        break;
+    case PROP_MODEL:
+      g_value_set_object (value, priv->model);
+      break;
+      
+    case PROP_ROOT:
+      g_value_set_boxed (value, priv->root);
+      break;
+      
+    case PROP_CELL_AREA:
+      g_value_set_object (value, priv->area);
+      break;
 
-      case PROP_ROOT:
-        g_value_set_boxed (value, priv->root);
-        break;
+    case PROP_TEAROFF:
+      g_value_set_boolean (value, priv->tearoff);
+      break;
 
-      case PROP_CELL_AREA:
-	g_value_set_object (value, priv->area);
-	break;
-
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-        break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
     }
 }
 
@@ -390,7 +406,6 @@ gtk_tree_menu_get_preferred_width (GtkWidget           *widget,
   g_signal_handler_block (priv->context, priv->size_changed_id);
 
   sync_reserve_submenu_size (menu);
-  gtk_cell_area_context_flush_preferred_width (priv->context);
 
   GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->get_preferred_width (widget, minimum_size, natural_size);
 
@@ -408,27 +423,10 @@ gtk_tree_menu_get_preferred_height (GtkWidget           *widget,
   g_signal_handler_block (priv->context, priv->size_changed_id);
 
   sync_reserve_submenu_size (menu);
-  gtk_cell_area_context_flush_preferred_height (priv->context);
 
   GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->get_preferred_height (widget, minimum_size, natural_size);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
-}
-
-static void
-gtk_tree_menu_size_allocate (GtkWidget           *widget,
-			     GtkAllocation       *allocation)
-{
-  GtkTreeMenu        *menu = GTK_TREE_MENU (widget);
-  GtkTreeMenuPrivate *priv = menu->priv;
-
-  /* flush the context allocation */
-  gtk_cell_area_context_flush_allocation (priv->context);
-
-  /* Leave it to the first cell area to allocate the size of priv->context, since
-   * we configure the menu to allocate all children the same width this works fine
-   */
-  GTK_WIDGET_CLASS (gtk_tree_menu_parent_class)->size_allocate (widget, allocation);
 }
 
 /****************************************************************
@@ -545,6 +543,12 @@ row_inserted_cb (GtkTreeModel     *model,
        * and a separator menu item */
       if (priv->menu_with_header)
 	index += 2;
+
+      /* Index after the tearoff item for the root menu if
+       * there is a tearoff item
+       */
+      if (priv->root == NULL && priv->tearoff)
+	index += 1;
 
       item = gtk_tree_menu_create_item (menu, iter, FALSE);
       gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, index);
@@ -764,7 +768,21 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
       gtk_tree_path_free (path);
     }
   else
-    valid = gtk_tree_model_iter_children (priv->model, &iter, NULL);
+    {
+      /* Tearoff menu items only go in the root menu */
+      if (priv->tearoff)
+	{
+	  menu_item = gtk_tearoff_menu_item_new ();
+	  gtk_widget_show (menu_item);
+
+	  /* Here if wrap_width > 0 then we need to attach the menu
+	   * item to span the entire first row of the grid menu */
+	  gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+	}
+
+
+      valid = gtk_tree_model_iter_children (priv->model, &iter, NULL);
+    }
 
   /* Create a menu item for every row at the current depth, add a GtkTreeMenu
    * submenu for iters/items that have children */
@@ -936,6 +954,45 @@ gtk_tree_menu_get_root (GtkTreeMenu *menu)
 
   return NULL;
 }
+
+gboolean
+gtk_tree_menu_get_tearoff (GtkTreeMenu *menu)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), FALSE);
+
+  priv = menu->priv;
+
+  return priv->tearoff;
+}
+
+void
+gtk_tree_menu_set_tearoff (GtkTreeMenu *menu,
+			   gboolean     tearoff)
+{
+  GtkTreeMenuPrivate *priv;
+
+  g_return_if_fail (GTK_IS_TREE_MENU (menu));
+
+  priv = menu->priv;
+
+  if (priv->tearoff != tearoff)
+    {
+      priv->tearoff = tearoff;
+
+      /* Destroy all the menu items */
+      gtk_container_foreach (GTK_CONTAINER (menu), 
+			     (GtkCallback) gtk_widget_destroy, NULL);
+      
+      /* Populate again */
+      if (priv->model)
+	gtk_tree_menu_populate (menu);
+
+      g_object_notify (G_OBJECT (menu), "tearoff");
+    }
+}
+
 
 void
 gtk_tree_menu_set_row_separator_func (GtkTreeMenu          *menu,
