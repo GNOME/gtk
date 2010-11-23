@@ -1437,22 +1437,22 @@ scanner_apply_scope (GScanner    *scanner,
 
   if (scope == SCOPE_VALUE)
     {
-      scanner->config->cset_identifier_first = G_CSET_a_2_z "@#-_0123456789" G_CSET_A_2_Z;
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z "@#-_ 0123456789(),.%\t\n'/\"" G_CSET_A_2_Z;
+      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ (),.%\t\n'/\"";
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "*@";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z "-_#." G_CSET_A_2_Z;
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_#.";
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_PSEUDO_CLASS ||
            scope == SCOPE_NTH_CHILD ||
            scope == SCOPE_DECLARATION)
     {
-      scanner->config->cset_identifier_first = G_CSET_a_2_z "-" G_CSET_A_2_Z;
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z "-" G_CSET_A_2_Z;
+      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z "-_";
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_";
       scanner->config->scan_identifier_1char = FALSE;
     }
   else
