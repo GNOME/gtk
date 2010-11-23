@@ -5117,9 +5117,9 @@ static GtkJunctionSides
 get_grip_junction (GtkWidget *widget)
 {
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-    return GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT;
+    return GTK_JUNCTION_CORNER_BOTTOMRIGHT;
   else
-    return GTK_JUNCTION_BOTTOM | GTK_JUNCTION_LEFT;
+    return GTK_JUNCTION_CORNER_BOTTOMLEFT;
 }
 
 static gboolean
@@ -5232,7 +5232,7 @@ set_grip_shape (GtkWindow *window)
   cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.0);
   cairo_paint (cr);
   cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
-  if (get_grip_junction (GTK_WIDGET (window)) & GTK_JUNCTION_RIGHT)
+  if (get_grip_junction (GTK_WIDGET (window)) & GTK_JUNCTION_CORNER_BOTTOMRIGHT)
     {
       cairo_move_to (cr, width, 0.0);
       cairo_line_to (cr, width, height);

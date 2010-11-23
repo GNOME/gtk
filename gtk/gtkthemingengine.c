@@ -2302,14 +2302,14 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
       sides = gtk_theming_engine_get_junction_sides (engine);
 
       /* reduce confusing values to a meaningful state */
-      if ((sides & (GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT)) == (GTK_JUNCTION_LEFT | GTK_JUNCTION_RIGHT))
-        sides &= ~GTK_JUNCTION_LEFT;
+      if ((sides & (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT)) == (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT))
+        sides &= ~GTK_JUNCTION_CORNER_TOPLEFT;
 
-      if ((sides & (GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM)) == (GTK_JUNCTION_TOP | GTK_JUNCTION_BOTTOM))
-        sides &= ~GTK_JUNCTION_TOP;
+      if ((sides & (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMLEFT)) == (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMLEFT))
+        sides &= ~GTK_JUNCTION_CORNER_TOPRIGHT;
 
       if (sides == 0)
-        sides = (GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT);
+        sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
 
       /* align drawing area to the connected side */
       if (sides == GTK_JUNCTION_LEFT)
@@ -2317,7 +2317,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
           if (height < width)
             width = height;
         }
-      else if (sides == (GTK_JUNCTION_LEFT | GTK_JUNCTION_TOP))
+      else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
         {
           if (width < height)
             height = width;
@@ -2326,7 +2326,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
           skip = 2;
         }
-      else if (sides == (GTK_JUNCTION_LEFT | GTK_JUNCTION_BOTTOM))
+      else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
         {
           /* make it square, aligning to bottom left */
           if (width < height)
@@ -2348,7 +2348,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               width = height;
             }
         }
-      else if (sides == (GTK_JUNCTION_RIGHT | GTK_JUNCTION_TOP))
+      else if (sides == GTK_JUNCTION_CORNER_TOPRIGHT)
         {
           if (width < height)
             height = width;
@@ -2360,7 +2360,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
           skip = 3;
         }
-      else if (sides == (GTK_JUNCTION_RIGHT | GTK_JUNCTION_BOTTOM))
+      else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
         {
           /* make it square, aligning to bottom right */
           if (width < height)
@@ -2433,7 +2433,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               yi+= 2;
             }
         }
-      else if (sides == (GTK_JUNCTION_TOP | GTK_JUNCTION_LEFT))
+      else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
         {
           gint xi, yi;
 
@@ -2463,7 +2463,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               yi -= 3;
             }
         }
-      else if (sides == (GTK_JUNCTION_TOP | GTK_JUNCTION_RIGHT))
+      else if (sides == GTK_JUNCTION_CORNER_TOPRIGHT)
         {
           gint xi, yi;
 
@@ -2493,7 +2493,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               yi -= 3;
             }
         }
-      else if (sides == (GTK_JUNCTION_BOTTOM | GTK_JUNCTION_LEFT))
+      else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
         {
           gint xi, yi;
 
@@ -2523,7 +2523,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               yi += 3;
             }
         }
-      else if (sides == (GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT))
+      else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
         {
           gint xi, yi;
 

@@ -3367,13 +3367,13 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
   switch (edge)
     {
     case GDK_WINDOW_EDGE_NORTH_WEST:
-      sides = GTK_JUNCTION_TOP | GTK_JUNCTION_LEFT;
+      sides = GTK_JUNCTION_CORNER_TOPLEFT;
       break;
     case GDK_WINDOW_EDGE_NORTH:
       sides = GTK_JUNCTION_TOP;
       break;
     case GDK_WINDOW_EDGE_NORTH_EAST:
-      sides = GTK_JUNCTION_TOP | GTK_JUNCTION_RIGHT;
+      sides = GTK_JUNCTION_CORNER_TOPRIGHT;
       break;
     case GDK_WINDOW_EDGE_WEST:
       sides = GTK_JUNCTION_LEFT;
@@ -3382,13 +3382,13 @@ gtk_default_draw_resize_grip (GtkStyle       *style,
       sides = GTK_JUNCTION_RIGHT;
       break;
     case GDK_WINDOW_EDGE_SOUTH_WEST:
-      sides = GTK_JUNCTION_BOTTOM | GTK_JUNCTION_LEFT;
+      sides = GTK_JUNCTION_CORNER_BOTTOMLEFT;
       break;
     case GDK_WINDOW_EDGE_SOUTH:
       sides = GTK_JUNCTION_BOTTOM;
       break;
     case GDK_WINDOW_EDGE_SOUTH_EAST:
-      sides = GTK_JUNCTION_BOTTOM | GTK_JUNCTION_RIGHT;
+      sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
       break;
     }
 
