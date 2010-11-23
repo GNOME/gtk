@@ -113,6 +113,13 @@ _gdk_broadway_drawable_update_size (GdkDrawable *drawable)
       cairo_surface_destroy (old);
       cairo_surface_destroy (last_old);
     }
+
+  if (impl->ref_surface)
+    {
+      cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
+				   NULL, NULL);
+      impl->ref_surface = NULL;
+    }
 }
 
 /*****************************************************
