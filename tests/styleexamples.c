@@ -94,6 +94,57 @@ draw_cb_expanders (GtkWidget *widget, cairo_t *cr)
   return TRUE;
 }
 
+static gboolean
+draw_cb_background (GtkWidget *widget, cairo_t *cr)
+{
+  GtkStyleProvider *provider;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+
+  provider = (GtkStyleProvider *)gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
+                                   "* {\n"
+                                   "   border-radius: 10;\n"
+                                   "   border-width: 0;\n"
+                                   "   background-image: -gtk-gradient (linear, left top, right bottom, from(#ff00ff), to(#aabbcc));\n"
+                                   "}\n", -1, NULL);
+  gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_set_junction_sides (context, 0);
+  gtk_render_background (context, cr, 12, 12, 100, 100);
+  gtk_style_context_remove_provider (context, provider);
+  gtk_style_context_restore (context);
+
+  return TRUE;
+}
+
+static gboolean
+draw_cb_frame (GtkWidget *widget, cairo_t *cr)
+{
+  GtkStyleProvider *provider;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+
+  provider = (GtkStyleProvider *)gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
+                                   ".frame {\n"
+                                   "   border-image: url('gradient1.png') 10 10 10 10 stretch;\n"
+                                   "   border-style; solid\n"
+                                   "}\n", -1, NULL);
+  gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_set_junction_sides (context, 0);
+  gtk_render_frame (context, cr, 12, 12, 25, 25);
+  gtk_style_context_remove_provider (context, provider);
+  gtk_style_context_restore (context);
+
+  return TRUE;
+}
+
 static char *what;
 
 static gboolean
@@ -106,7 +157,11 @@ draw_cb (GtkWidget *widget, cairo_t *cr)
   else if (strcmp (what, "arrow") == 0)
     return draw_cb_arrows (widget, cr);
   else if (strcmp (what, "expander") == 0)
-    return draw_cb_expanders (widget ,cr);
+    return draw_cb_expanders (widget, cr);
+  else if (strcmp (what, "background") == 0)
+    return draw_cb_background (widget, cr);
+  else if (strcmp (what, "frame") == 0)
+    return draw_cb_frame (widget, cr);
 
   return FALSE;
 }

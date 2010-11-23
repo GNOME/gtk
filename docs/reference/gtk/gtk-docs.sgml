@@ -3,6 +3,8 @@
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 <!ENTITY version SYSTEM "version.xml">
+<!ENTITY pi "&#960;">
+<!ENTITY solidus "&#8260;">
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>

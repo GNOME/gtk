@@ -3027,6 +3027,12 @@ gtk_render_arrow (GtkStyleContext *context,
  *
  * Renders the background of an element.
  *
+ * <example>
+ * <title>Typical background rendering, showing the effect of
+ * @border-image, @border-width and @border-radius</title>
+ * <inlinegraphic fileref="background.png" format="PNG"/>
+ * </example>
+ *
  * Since: 3.0.
  **/
 void
