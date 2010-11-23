@@ -5573,7 +5573,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   object_class->finalize = gdk_window_impl_x11_finalize;
   
   drawable_class->ref_cairo_surface = gdk_x11_ref_cairo_surface;
-  drawable_class->create_cairo_surface = gdk_x11_create_cairo_surface;
 
   impl_class->show = gdk_window_x11_show;
   impl_class->hide = gdk_window_x11_hide;

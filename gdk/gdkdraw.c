@@ -69,13 +69,3 @@ _gdk_drawable_ref_cairo_surface (GdkDrawable *drawable)
   return GDK_DRAWABLE_GET_CLASS (drawable)->ref_cairo_surface (drawable);
 }
 
-/************************************************************************/
-
-cairo_surface_t *
-_gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
-				    int width,
-				    int height)
-{
-  return GDK_DRAWABLE_GET_CLASS (drawable)->create_cairo_surface (drawable,
-								  width, height);
-}

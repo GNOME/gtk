@@ -61,10 +61,6 @@ struct _GdkDrawableClass
   
   cairo_surface_t *(*ref_cairo_surface) (GdkDrawable *drawable);
 
-  cairo_surface_t * (*create_cairo_surface) (GdkDrawable *drawable,
-					     int width,
-					     int height);
-
   /* Padding for future expansion */
   void         (*_gdk_reserved7)  (void);
   void         (*_gdk_reserved9)  (void);
