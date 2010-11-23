@@ -99,6 +99,11 @@ struct _GtkCellAreaClass
 							  const GdkRectangle      *cell_area,
 							  GtkCellRendererState     flags,
 							  gboolean                 paint_focus);
+  void               (* apply_attributes)                (GtkCellArea             *area,
+							  GtkTreeModel            *tree_model,
+							  GtkTreeIter             *iter,
+							  gboolean                 is_expander,
+							  gboolean                 is_expanded);
 
   /* Geometry */
   GtkCellAreaContext *(* create_context)                 (GtkCellArea             *area);

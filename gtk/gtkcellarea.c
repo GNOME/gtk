@@ -56,6 +56,11 @@ static gint      gtk_cell_area_real_event                          (GtkCellArea 
 								    GdkEvent             *event,
 								    const GdkRectangle   *cell_area,
 								    GtkCellRendererState  flags);
+static void      gtk_cell_area_real_apply_attributes               (GtkCellArea           *area,
+								    GtkTreeModel          *tree_model,
+								    GtkTreeIter           *iter,
+								    gboolean               is_expander,
+								    gboolean               is_expanded);
 static void      gtk_cell_area_real_get_preferred_height_for_width (GtkCellArea           *area,
 								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
@@ -190,6 +195,7 @@ enum {
 };
 
 enum {
+  SIGNAL_APPLY_ATTRIBUTES,
   SIGNAL_ADD_EDITABLE,
   SIGNAL_REMOVE_EDITABLE,
   SIGNAL_FOCUS_CHANGED,
@@ -248,11 +254,12 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   object_class->set_property = gtk_cell_area_set_property;
 
   /* general */
-  class->add     = NULL;
-  class->remove  = NULL;
-  class->forall  = NULL;
-  class->event   = gtk_cell_area_real_event;
-  class->render  = NULL;
+  class->add              = NULL;
+  class->remove           = NULL;
+  class->forall           = NULL;
+  class->event            = gtk_cell_area_real_event;
+  class->render           = NULL;
+  class->apply_attributes = gtk_cell_area_real_apply_attributes;
 
   /* geometry */
   class->create_context                 = NULL;
@@ -268,6 +275,29 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->activate   = gtk_cell_area_real_activate;
 
   /* Signals */
+
+  /**
+   * GtkCellArea::apply-attributes:
+   * @area: the #GtkCellArea to apply the attributes to
+   * @model: the #GtkTreeModel to apply the attributes from
+   * @iter: the #GtkTreeIter indicating which row to apply the attributes of
+   * @is_expander: whether the view shows children for this row
+   * @is_expanded: whether the view is currently showing the children of this row
+   *
+   * This signal is emitted whenever applying attributes to @area from @model
+   */
+  cell_area_signals[SIGNAL_APPLY_ATTRIBUTES] =
+    g_signal_new (I_("apply-attributes"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkCellAreaClass, apply_attributes),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_BOXED_BOOLEAN_BOOLEAN,
+		  G_TYPE_NONE, 4,
+		  GTK_TYPE_TREE_MODEL,
+		  GTK_TYPE_TREE_ITER,
+		  G_TYPE_BOOLEAN,
+		  G_TYPE_BOOLEAN);
 
   /**
    * GtkCellArea::add-editable:
@@ -554,6 +584,82 @@ gtk_cell_area_real_event (GtkCellArea          *area,
     }
 
   return FALSE;
+}
+
+static void
+apply_cell_attributes (GtkCellRenderer *renderer,
+		       CellInfo        *info,
+		       AttributeData   *data)
+{
+  CellAttribute *attribute;
+  GSList        *list;
+  GValue         value = { 0, };
+  gboolean       is_expander;
+  gboolean       is_expanded;
+
+  g_object_freeze_notify (G_OBJECT (renderer));
+
+  /* Whether a row expands or is presently expanded can only be 
+   * provided by the view (as these states can vary across views
+   * accessing the same model).
+   */
+  g_object_get (renderer, "is-expander", &is_expander, NULL);
+  if (is_expander != data->is_expander)
+    g_object_set (renderer, "is-expander", data->is_expander, NULL);
+  
+  g_object_get (renderer, "is-expanded", &is_expanded, NULL);
+  if (is_expanded != data->is_expanded)
+    g_object_set (renderer, "is-expanded", data->is_expanded, NULL);
+
+  /* Apply the attributes directly to the renderer */
+  for (list = info->attributes; list; list = list->next)
+    {
+      attribute = list->data;
+
+      gtk_tree_model_get_value (data->model, data->iter, attribute->column, &value);
+      g_object_set_property (G_OBJECT (renderer), attribute->attribute, &value);
+      g_value_unset (&value);
+    }
+
+  /* Call any GtkCellLayoutDataFunc that may have been set by the user
+   */
+  if (info->func)
+    info->func (GTK_CELL_LAYOUT (data->area), renderer,
+		data->model, data->iter, info->data);
+
+  g_object_thaw_notify (G_OBJECT (renderer));
+}
+
+static void
+gtk_cell_area_real_apply_attributes (GtkCellArea           *area,
+				     GtkTreeModel          *tree_model,
+				     GtkTreeIter           *iter,
+				     gboolean               is_expander,
+				     gboolean               is_expanded)
+{
+
+  GtkCellAreaPrivate *priv;
+  AttributeData       data;
+  GtkTreePath        *path;
+
+  priv = area->priv;
+
+  /* Feed in data needed to apply to every renderer */
+  data.area        = area;
+  data.model       = tree_model;
+  data.iter        = iter;
+  data.is_expander = is_expander;
+  data.is_expanded = is_expanded;
+
+  /* Go over any cells that have attributes or custom GtkCellLayoutDataFuncs and
+   * apply the data from the treemodel */
+  g_hash_table_foreach (priv->cell_info, (GHFunc)apply_cell_attributes, &data);
+
+  /* Update the currently applied path */
+  g_free (priv->current_path);
+  path               = gtk_tree_model_get_path (tree_model, iter);
+  priv->current_path = gtk_tree_path_to_string (path);
+  gtk_tree_path_free (path);
 }
 
 static void
@@ -1422,50 +1528,6 @@ gtk_cell_area_attribute_disconnect (GtkCellArea        *area,
     }
 }
 
-static void
-apply_cell_attributes (GtkCellRenderer *renderer,
-		       CellInfo        *info,
-		       AttributeData   *data)
-{
-  CellAttribute *attribute;
-  GSList        *list;
-  GValue         value = { 0, };
-  gboolean       is_expander;
-  gboolean       is_expanded;
-
-  g_object_freeze_notify (G_OBJECT (renderer));
-
-  /* Whether a row expands or is presently expanded can only be 
-   * provided by the view (as these states can vary across views
-   * accessing the same model).
-   */
-  g_object_get (renderer, "is-expander", &is_expander, NULL);
-  if (is_expander != data->is_expander)
-    g_object_set (renderer, "is-expander", data->is_expander, NULL);
-  
-  g_object_get (renderer, "is-expanded", &is_expanded, NULL);
-  if (is_expanded != data->is_expanded)
-    g_object_set (renderer, "is-expanded", data->is_expanded, NULL);
-
-  /* Apply the attributes directly to the renderer */
-  for (list = info->attributes; list; list = list->next)
-    {
-      attribute = list->data;
-
-      gtk_tree_model_get_value (data->model, data->iter, attribute->column, &value);
-      g_object_set_property (G_OBJECT (renderer), attribute->attribute, &value);
-      g_value_unset (&value);
-    }
-
-  /* Call any GtkCellLayoutDataFunc that may have been set by the user
-   */
-  if (info->func)
-    info->func (GTK_CELL_LAYOUT (data->area), renderer,
-		data->model, data->iter, info->data);
-
-  g_object_thaw_notify (G_OBJECT (renderer));
-}
-
 /**
  * gtk_cell_area_apply_attributes
  * @area: a #GtkCellArea
@@ -1485,32 +1547,12 @@ gtk_cell_area_apply_attributes (GtkCellArea  *area,
 				gboolean      is_expander,
 				gboolean      is_expanded)
 {
-  GtkCellAreaPrivate *priv;
-  AttributeData       data;
-  GtkTreePath        *path;
-
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_TREE_MODEL (tree_model));
   g_return_if_fail (iter != NULL);
 
-  priv = area->priv;
-
-  /* Feed in data needed to apply to every renderer */
-  data.area        = area;
-  data.model       = tree_model;
-  data.iter        = iter;
-  data.is_expander = is_expander;
-  data.is_expanded = is_expanded;
-
-  /* Go over any cells that have attributes or custom GtkCellLayoutDataFuncs and
-   * apply the data from the treemodel */
-  g_hash_table_foreach (priv->cell_info, (GHFunc)apply_cell_attributes, &data);
-
-  /* Update the currently applied path */
-  g_free (priv->current_path);
-  path               = gtk_tree_model_get_path (tree_model, iter);
-  priv->current_path = gtk_tree_path_to_string (path);
-  gtk_tree_path_free (path);
+  g_signal_emit (area, cell_area_signals[SIGNAL_APPLY_ATTRIBUTES], 0, 
+		 tree_model, iter, is_expander, is_expanded);
 }
 
 /**
