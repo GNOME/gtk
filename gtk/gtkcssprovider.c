@@ -635,7 +635,7 @@
  *       <row>
  *         <entry>border-image</entry>
  *         <entry><literallayout>border image (see above)</literallayout></entry>
- *         <entry></entry>
+ *         <entry>internal use only</entry>
  *         <entry><literallayout>border-image: url("/path/to/image.png") 3 4 3 4 stretch;
  * border-image: url("/path/to/image.png") 3 4 4 3 repeat stretch;</literallayout>
  *         </entry>
@@ -643,7 +643,7 @@
  *       <row>
  *         <entry>transition</entry>
  *         <entry>transition (see above)</entry>
- *         <entry></entry>
+ *         <entry>internal use only</entry>
  *         <entry><literallayout>transition: 150ms ease-in-out;
  * transition: 1s linear loop;</literallayout>
  *         </entry>
