@@ -8589,7 +8589,7 @@ send_crossing_event (GdkDisplay                 *display,
         }
 
       if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER &&
-          device->mode != GDK_MODE_DISABLED &&
+          gdk_device_get_mode (device) != GDK_MODE_DISABLED &&
           !g_list_find (window->devices_inside, device))
         window->devices_inside = g_list_prepend (window->devices_inside, device);
     }
@@ -8955,7 +8955,7 @@ gdk_pointer_grab (GdkWindow *	  window,
     {
       device = dev->data;
 
-      if (device->source != GDK_SOURCE_MOUSE)
+      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
         continue;
 
       res = _gdk_windowing_device_grab (device,
@@ -9060,7 +9060,7 @@ gdk_keyboard_grab (GdkWindow *window,
     {
       device = dev->data;
 
-      if (device->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
         continue;
 
       res = _gdk_windowing_device_grab (device,
@@ -9448,7 +9448,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 	  event->motion.is_hint = is_hint;
 	  event->motion.device = source_event->motion.device;
           event->motion.axes = g_memdup (source_event->motion.axes,
-                                         sizeof (gdouble) * source_event->motion.device->num_axes);
+                                         sizeof (gdouble) * gdk_device_get_n_axes (source_event->motion.device));
 	}
     }
 
@@ -9557,7 +9557,7 @@ proxy_button_event (GdkEvent *source_event,
       event->button.state = state;
       event->button.device = source_event->button.device;
       event->button.axes = g_memdup (source_event->button.axes,
-                                     sizeof (gdouble) * source_event->button.device->num_axes);
+                                     sizeof (gdouble) * gdk_device_get_n_axes (source_event->button.device));
 
       if (type == GDK_BUTTON_PRESS)
 	_gdk_event_button_generate (display, event);

@@ -499,17 +499,16 @@ gdk_event_copy (const GdkEvent *event)
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       if (event->button.axes) 
-	new_event->button.axes = g_memdup (event->button.axes, 
-					     sizeof (gdouble) * event->button.device->num_axes);
+	new_event->button.axes = g_memdup (event->button.axes,
+                                           sizeof (gdouble) * gdk_device_get_n_axes (event->button.device));
       break;
 
     case GDK_MOTION_NOTIFY:
       if (event->motion.axes) 
-	new_event->motion.axes = g_memdup (event->motion.axes, 
-					   sizeof (gdouble) * event->motion.device->num_axes);
-      
+	new_event->motion.axes = g_memdup (event->motion.axes,
+					   sizeof (gdouble) * gdk_device_get_n_axes (event->motion.device));
       break;
-      
+
     default:
       break;
     }

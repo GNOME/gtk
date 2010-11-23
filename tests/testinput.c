@@ -46,7 +46,7 @@ static void
 update_cursor (GtkWidget *widget,  gdouble x, gdouble y)
 {
   static gint cursor_present = 0;
-  gint state = !current_device->has_cursor && cursor_proximity;
+  gint state = !gdk_device_get_has_cursor (current_device) && cursor_proximity;
 
   if (surface != NULL)
     {
@@ -167,9 +167,9 @@ print_axes (GdkDevice *device, gdouble *axes)
   
   if (axes)
     {
-      g_print ("%s ", device->name);
-      
-      for (i=0; i<device->num_axes; i++)
+      g_print ("%s ", gdk_device_get_name (device));
+
+      for (i = 0; i < gdk_device_get_n_axes (device); i++)
 	g_print ("%g ", axes[i]);
 
       g_print ("\n");
@@ -188,8 +188,9 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
 
       print_axes (event->device, event->axes);
       gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
-      draw_brush (widget, event->device->source, event->x, event->y, pressure);
-      
+      draw_brush (widget, gdk_device_get_source (event->device),
+                  event->x, event->y, pressure);
+
       motion_time = event->time;
     }
 
@@ -232,7 +233,8 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_X, &x);
 	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_Y, &y);
 	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_PRESSURE, &pressure);
-	      draw_brush (widget,  event->device->source, x, y, pressure);
+	      draw_brush (widget, gdk_device_get_source (event->device),
+                          x, y, pressure);
 
 	      print_axes (event->device, events[i]->axes);
 	    }
@@ -244,7 +246,8 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 
 	  gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
 
-	  draw_brush (widget,  event->device->source, event->x, event->y, pressure);
+	  draw_brush (widget, gdk_device_get_source (event->device),
+                      event->x, event->y, pressure);
 	}
       motion_time = event->time;
     }

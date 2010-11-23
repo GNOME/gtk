@@ -616,7 +616,7 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   if (!device)
     return NULL;
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       keyb = device;
       pointer = gdk_device_get_associated_device (device);

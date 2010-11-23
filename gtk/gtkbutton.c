@@ -1827,10 +1827,10 @@ gtk_real_button_activate (GtkButton *button)
 
   device = gtk_get_current_event_device ();
 
-  if (device && device->source != GDK_SOURCE_KEYBOARD)
+  if (device && gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     device = gdk_device_get_associated_device (device);
 
-  g_return_if_fail (device && device->source == GDK_SOURCE_KEYBOARD);
+  g_return_if_fail (device && gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD);
 
   if (gtk_widget_get_realized (widget) && !priv->activate_timeout)
     {

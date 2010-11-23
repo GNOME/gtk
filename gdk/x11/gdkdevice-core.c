@@ -313,7 +313,7 @@ gdk_device_core_grab (GdkDevice    *device,
   else
     xconfine_to = GDK_WINDOW_XID (confine_to);
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       /* Device is a keyboard */
       status = XGrabKeyboard (GDK_DISPLAY_XDISPLAY (display),
@@ -371,7 +371,7 @@ gdk_device_core_ungrab (GdkDevice *device,
 
   display = gdk_device_get_display (device);
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time_);
   else
     XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time_);

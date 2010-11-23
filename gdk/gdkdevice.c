@@ -43,6 +43,12 @@ struct _GdkAxisInfo
 
 struct _GdkDevicePrivate
 {
+  gchar *name;
+  GdkInputSource source;
+  GdkInputMode mode;
+  gboolean has_cursor;
+  gint num_keys;
+  GdkDeviceKey *keys;
   GdkDeviceManager *device_manager;
   GdkDisplay *display;
   GdkDevice *associated;
@@ -261,13 +267,11 @@ gdk_device_dispose (GObject *object)
       priv->axes = NULL;
     }
 
-  g_free (device->name);
-  g_free (device->keys);
-  g_free (device->axes);
+  g_free (priv->name);
+  g_free (priv->keys);
 
-  device->name = NULL;
-  device->keys = NULL;
-  device->axes = NULL;
+  priv->name = NULL;
+  priv->keys = NULL;
 
   G_OBJECT_CLASS (gdk_device_parent_class)->dispose (object);
 }
@@ -290,22 +294,22 @@ gdk_device_set_property (GObject      *object,
       priv->device_manager = g_value_get_object (value);
       break;
     case PROP_NAME:
-      if (device->name)
-        g_free (device->name);
+      if (priv->name)
+        g_free (priv->name);
 
-      device->name = g_value_dup_string (value);
+      priv->name = g_value_dup_string (value);
       break;
     case PROP_TYPE:
       priv->type = g_value_get_enum (value);
       break;
     case PROP_INPUT_SOURCE:
-      device->source = g_value_get_enum (value);
+      priv->source = g_value_get_enum (value);
       break;
     case PROP_INPUT_MODE:
       gdk_device_set_mode (device, g_value_get_enum (value));
       break;
     case PROP_HAS_CURSOR:
-      device->has_cursor = g_value_get_boolean (value);
+      priv->has_cursor = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -334,21 +338,19 @@ gdk_device_get_property (GObject    *object,
       g_value_set_object (value, priv->associated);
       break;
     case PROP_NAME:
-      g_value_set_string (value,
-                          device->name);
+      g_value_set_string (value, priv->name);
       break;
     case PROP_TYPE:
       g_value_set_enum (value, priv->type);
       break;
     case PROP_INPUT_SOURCE:
-      g_value_set_enum (value, device->source);
+      g_value_set_enum (value, priv->source);
       break;
     case PROP_INPUT_MODE:
-      g_value_set_enum (value, device->mode);
+      g_value_set_enum (value, priv->mode);
       break;
     case PROP_HAS_CURSOR:
-      g_value_set_boolean (value,
-                           device->has_cursor);
+      g_value_set_boolean (value, priv->has_cursor);
       break;
     case PROP_N_AXES:
       g_value_set_uint (value, priv->axes->len);
@@ -438,7 +440,7 @@ _gdk_device_allocate_history (GdkDevice *device,
 
   for (i = 0; i < n_events; i++)
     result[i] = g_malloc (sizeof (GdkTimeCoord) -
-			  sizeof (double) * (GDK_MAX_TIMECOORD_AXES - device->num_axes));
+			  sizeof (double) * (GDK_MAX_TIMECOORD_AXES - device->priv->axes->len));
   return result;
 }
 
@@ -476,7 +478,7 @@ gdk_device_get_name (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
-  return device->name;
+  return device->priv->name;
 }
 
 /**
@@ -494,7 +496,7 @@ gdk_device_get_has_cursor (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
 
-  return device->has_cursor;
+  return device->priv->has_cursor;
 }
 
 /**
@@ -512,7 +514,7 @@ gdk_device_get_source (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
-  return device->source;
+  return device->priv->source;
 }
 
 /**
@@ -528,7 +530,8 @@ gdk_device_set_source (GdkDevice      *device,
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
 
-  device->source = source;
+  device->priv->source = source;
+  g_object_notify (G_OBJECT (device), "input-source");
 }
 
 /**
@@ -546,7 +549,7 @@ gdk_device_get_mode (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
-  return device->mode;
+  return device->priv->mode;
 }
 
 /**
@@ -566,7 +569,7 @@ gdk_device_set_mode (GdkDevice    *device,
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
 
-  if (device->mode == mode)
+  if (device->priv->mode == mode)
     return TRUE;
 
   if (mode == GDK_MODE_DISABLED &&
@@ -575,13 +578,31 @@ gdk_device_set_mode (GdkDevice    *device,
 
   /* FIXME: setting has_cursor when mode is window? */
 
-  device->mode = mode;
+  device->priv->mode = mode;
   g_object_notify (G_OBJECT (device), "input-mode");
 
   if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER)
     _gdk_input_check_extension_events (device);
 
   return TRUE;
+}
+
+/**
+ * gdk_device_get_n_keys:
+ * @device: a #GdkDevice
+ *
+ * Returns the number of keys the device currently has.
+ *
+ * Returns: the number of keys.
+ *
+ * Since: 3.0
+ **/
+gint
+gdk_device_get_n_keys (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->priv->num_keys;
 }
 
 /**
@@ -605,17 +626,17 @@ gdk_device_get_key (GdkDevice       *device,
                     GdkModifierType *modifiers)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (index_ < device->num_keys, FALSE);
+  g_return_val_if_fail (index_ < device->priv->num_keys, FALSE);
 
-  if (!device->keys[index_].keyval &&
-      !device->keys[index_].modifiers)
+  if (!device->priv->keys[index_].keyval &&
+      !device->priv->keys[index_].modifiers)
     return FALSE;
 
   if (keyval)
-    *keyval = device->keys[index_].keyval;
+    *keyval = device->priv->keys[index_].keyval;
 
   if (modifiers)
-    *modifiers = device->keys[index_].modifiers;
+    *modifiers = device->priv->keys[index_].modifiers;
 
   return TRUE;
 }
@@ -637,10 +658,10 @@ gdk_device_set_key (GdkDevice      *device,
 		    GdkModifierType modifiers)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (index_ < device->num_keys);
+  g_return_if_fail (index_ < device->priv->num_keys);
 
-  device->keys[index_].keyval = keyval;
-  device->keys[index_].modifiers = modifiers;
+  device->priv->keys[index_].keyval = keyval;
+  device->priv->keys[index_].modifiers = modifiers;
 }
 
 /**
@@ -658,10 +679,14 @@ GdkAxisUse
 gdk_device_get_axis_use (GdkDevice *device,
                          guint      index_)
 {
-  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
-  g_return_val_if_fail (index_ < device->num_axes, GDK_AXIS_IGNORE);
+  GdkAxisInfo *info;
 
-  return device->axes[index_].use;
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
+  g_return_val_if_fail (index_ < device->priv->axes->len, GDK_AXIS_IGNORE);
+
+  info = &g_array_index (device->priv->axes, GdkAxisInfo, index_);
+
+  return info->use;
 }
 
 /**
@@ -681,29 +706,27 @@ gdk_device_set_axis_use (GdkDevice   *device,
   GdkAxisInfo *info;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (index_ < device->num_axes);
+  g_return_if_fail (index_ < device->priv->axes->len);
 
   priv = device->priv;
   info = &g_array_index (priv->axes, GdkAxisInfo, index_);
   info->use = use;
 
-  device->axes[index_].use = use;
-
   switch (use)
     {
     case GDK_AXIS_X:
     case GDK_AXIS_Y:
-      device->axes[index_].min = info->min_axis = 0;
-      device->axes[index_].max = info->max_axis = 0;
+      info->min_axis = 0;
+      info->max_axis = 0;
       break;
     case GDK_AXIS_XTILT:
     case GDK_AXIS_YTILT:
-      device->axes[index_].min = info->min_axis = -1;
-      device->axes[index_].max = info->max_axis = 1;
+      info->min_axis = -1;
+      info->max_axis = 1;
       break;
     default:
-      device->axes[index_].min = info->min_axis = 0;
-      device->axes[index_].max = info->max_axis = 1;
+      info->min_axis = 0;
+      info->max_axis = 1;
       break;
     }
 }
@@ -817,12 +840,12 @@ gdk_device_get_device_type (GdkDevice *device)
  *
  * Since: 3.0
  **/
-guint
+gint
 gdk_device_get_n_axes (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
-  return device->num_axes;
+  return device->priv->axes->len;
 }
 
 /**
@@ -1093,10 +1116,6 @@ _gdk_device_reset_axes (GdkDevice *device)
     g_array_remove_index (priv->axes, i);
 
   g_object_notify (G_OBJECT (device), "n-axes");
-
-  /* This is done for backwards compatibility */
-  g_free (device->axes);
-  device->axes = NULL;
 }
 
 guint
@@ -1138,16 +1157,7 @@ _gdk_device_add_axis (GdkDevice   *device,
     }
 
   priv->axes = g_array_append_val (priv->axes, axis_info);
-  device->num_axes = priv->axes->len;
-  pos = device->num_axes - 1;
-
-  /* This is done for backwards compatibility, since the public
-   * struct doesn't actually store the device data.
-   */
-  device->axes = g_realloc (device->axes, sizeof (GdkDeviceAxis) * priv->axes->len);
-  device->axes[pos].use = axis_info.use;
-  device->axes[pos].min = axis_info.min_axis;
-  device->axes[pos].max = axis_info.max_axis;
+  pos = device->priv->axes->len - 1;
 
   g_object_notify (G_OBJECT (device), "n-axes");
 
@@ -1158,11 +1168,11 @@ void
 _gdk_device_set_keys (GdkDevice *device,
                       guint      num_keys)
 {
-  if (device->keys)
-    g_free (device->keys);
+  if (device->priv->keys)
+    g_free (device->priv->keys);
 
-  device->num_keys = num_keys;
-  device->keys = g_new0 (GdkDeviceKey, num_keys);
+  device->priv->num_keys = num_keys;
+  device->priv->keys = g_new0 (GdkDeviceKey, num_keys);
 }
 
 static GdkAxisInfo *
@@ -1321,15 +1331,13 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
                                     gdouble    value,
                                     gdouble   *axis_value)
 {
-  GdkDevicePrivate *priv;
+  GdkDevicePrivate *priv = device->priv;
   GdkAxisInfo axis_info;
   gdouble axis_width, scale, offset;
   GdkWindowObject *window_private;
 
-  if (device->mode != GDK_MODE_SCREEN)
+  if (priv->mode != GDK_MODE_SCREEN)
     return FALSE;
-
-  priv = device->priv;
 
   if (index_ >= priv->axes->len)
     return FALSE;

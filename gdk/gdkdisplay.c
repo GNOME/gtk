@@ -494,7 +494,7 @@ gdk_display_pointer_ungrab (GdkDisplay *display,
     {
       device = dev->data;
 
-      if (device->source != GDK_SOURCE_MOUSE)
+      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
         continue;
 
       gdk_device_ungrab (device, time_);
@@ -570,7 +570,7 @@ gdk_display_keyboard_ungrab (GdkDisplay *display,
     {
       device = dev->data;
 
-      if (device->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
         continue;
 
       gdk_device_ungrab (device, time);
@@ -1209,7 +1209,7 @@ generate_grab_broken_event (GdkWindow *window,
       event->grab_broken.implicit = implicit;
       event->grab_broken.grab_window = grab_window;
       gdk_event_set_device (event, device);
-      event->grab_broken.keyboard = (device->source == GDK_SOURCE_KEYBOARD) ? TRUE : FALSE;
+      event->grab_broken.keyboard = (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD) ? TRUE : FALSE;
 
       gdk_event_put (event);
       gdk_event_free (event);
@@ -1538,7 +1538,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
 
 	  if (!current_grab->activated)
             {
-              if (device->source != GDK_SOURCE_KEYBOARD)
+              if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
                 switch_to_pointer_grab (display, device, current_grab, NULL, time, current_serial);
             }
 
@@ -1566,7 +1566,7 @@ _gdk_display_device_grab_update (GdkDisplay *display,
       grabs = g_list_delete_link (grabs, grabs);
       g_hash_table_insert (display->device_grabs, device, grabs);
 
-      if (device->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
         switch_to_pointer_grab (display, device,
                                 next_grab, current_grab,
                                 time, current_serial);
@@ -1663,7 +1663,7 @@ _gdk_display_check_grab_ownership (GdkDisplay *display,
 
   g_hash_table_iter_init (&iter, display->device_grabs);
   higher_ownership = device_ownership = GDK_OWNERSHIP_NONE;
-  device_is_keyboard = (device->source == GDK_SOURCE_KEYBOARD);
+  device_is_keyboard = (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -1679,8 +1679,8 @@ _gdk_display_check_grab_ownership (GdkDisplay *display,
         continue;
 
       /* Discard device if it's not of the same type */
-      if ((device_is_keyboard && dev->source != GDK_SOURCE_KEYBOARD) ||
-          (!device_is_keyboard && dev->source == GDK_SOURCE_KEYBOARD))
+      if ((device_is_keyboard && gdk_device_get_source (dev) != GDK_SOURCE_KEYBOARD) ||
+          (!device_is_keyboard && gdk_device_get_source (dev) == GDK_SOURCE_KEYBOARD))
         continue;
 
       grab = grabs->data;
@@ -1813,7 +1813,7 @@ gdk_display_pointer_is_grabbed (GdkDisplay *display)
     {
       device = dev->data;
 
-      if (device->source == GDK_SOURCE_MOUSE &&
+      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE &&
           gdk_display_device_is_grabbed (display, device))
         return TRUE;
     }

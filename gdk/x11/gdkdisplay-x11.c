@@ -1152,7 +1152,7 @@ _gdk_input_init (GdkDisplay *display)
     {
       device = l->data;
 
-      if (device->source == GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
         continue;
 
       display_x11->input_devices = g_list_prepend (display_x11->input_devices,
@@ -1170,7 +1170,7 @@ _gdk_input_init (GdkDisplay *display)
     {
       device = list->data;
 
-      if (device->source != GDK_SOURCE_MOUSE)
+      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
         continue;
 
       display->core_pointer = device;

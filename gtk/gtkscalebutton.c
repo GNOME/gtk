@@ -1027,7 +1027,7 @@ gtk_scale_popup (GtkWidget *widget,
 
   device = gdk_event_get_device (event);
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       keyboard = device;
       pointer = gdk_device_get_associated_device (device);

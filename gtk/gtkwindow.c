@@ -5923,7 +5923,7 @@ do_focus_change (GtkWidget *widget,
       GdkDevice *dev = d->data;
       GdkEvent *fevent;
 
-      if (dev->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (dev) != GDK_SOURCE_KEYBOARD)
         continue;
 
       /* Skip non-master keyboards that haven't

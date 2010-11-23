@@ -1807,7 +1807,7 @@ _gtk_menu_shell_set_grab_device (GtkMenuShell *menu_shell,
 
   if (!device)
     priv->grab_pointer = NULL;
-  else if (device->source == GDK_SOURCE_KEYBOARD)
+  else if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     priv->grab_pointer = gdk_device_get_associated_device (device);
   else
     priv->grab_pointer = device;

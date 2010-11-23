@@ -1469,7 +1469,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   menu_shell = GTK_MENU_SHELL (menu);
   priv = gtk_menu_get_private (menu);
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       keyboard = device;
       pointer = gdk_device_get_associated_device (device);

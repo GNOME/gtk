@@ -1912,7 +1912,7 @@ get_screen_color (GtkWidget *button)
 
   device = gtk_get_current_event_device ();
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       keyb_device = device;
       pointer_device = gdk_device_get_associated_device (device);

@@ -2199,7 +2199,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
 
   time = gtk_get_current_event_time ();
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       keyboard = device;
       pointer = gdk_device_get_associated_device (device);
