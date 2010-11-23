@@ -313,23 +313,23 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
 
   signals[CHANGED] =
     g_signal_new (I_("changed"),
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkStyleContextClass, changed),
-		  NULL, NULL,
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkStyleContextClass, changed),
+                  NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
   g_object_class_install_property (object_class,
-				   PROP_SCREEN,
-				   g_param_spec_object ("screen",
+                                   PROP_SCREEN,
+                                   g_param_spec_object ("screen",
                                                         P_("Screen"),
                                                         P_("The associated GdkScreen"),
                                                         GDK_TYPE_SCREEN,
                                                         GTK_PARAM_READWRITE));
   g_object_class_install_property (object_class,
-				   PROP_DIRECTION,
-				   g_param_spec_enum ("direction",
+                                   PROP_DIRECTION,
+                                   g_param_spec_enum ("direction",
                                                       P_("Direction"),
                                                       P_("Text direction"),
                                                       GTK_TYPE_TEXT_DIRECTION,
@@ -829,7 +829,7 @@ build_icon_factories (GtkStyleContext *context,
       factory = gtk_style_provider_get_icon_factory (data->provider, path);
 
       if (factory)
-	style_data->icon_factories = g_slist_prepend (style_data->icon_factories, factory);
+        style_data->icon_factories = g_slist_prepend (style_data->icon_factories, factory);
     }
 }
 
@@ -1183,10 +1183,12 @@ gtk_style_context_remove_provider_for_screen (GdkScreen        *screen,
  * @context: a #GtkStyleContext
  * @property: style property name
  * @state: state to retrieve the property value for
- * @value: (out) (transfer full):  return location for the style property value.
+ * @value: (out) (transfer full):  return location for the style property value
  *
- * Gets a style property from @context for the given state. When done with @value,
- * g_value_unset() needs to be called to free any allocated memory.
+ * Gets a style property from @context for the given state.
+ *
+ * When @value is no longer needed, g_value_unset() must be called
+ * to free any allocated memory.
  *
  * Since: 3.0
  **/
@@ -1275,8 +1277,8 @@ gtk_style_context_get (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @flags: state to represent
  *
- * Sets the style to be used when rendering with any
- * of the "gtk_render_" prefixed functions.
+ * Sets the state to be used when rendering with any
+ * of the gtk_render_*() functions.
  *
  * Since: 3.0
  **/
@@ -1298,7 +1300,7 @@ gtk_style_context_set_state (GtkStyleContext *context,
  * gtk_style_context_get_state:
  * @context: a #GtkStyleContext
  *
- * returns the state used when rendering.
+ * Returns the state used when rendering.
  *
  * Returns: the state flags
  *
@@ -1352,10 +1354,10 @@ context_has_animatable_region (GtkStyleContext *context,
  * current region (see gtk_style_context_push_animatable_region()).
  *
  * If @progress is not %NULL, the animation progress will be returned
- * there, 0.0 means the state is closest to being %FALSE, while 1.0 means
- * it's closest to being %TRUE. This means transition animations will
- * run from 0 to 1 when @state is being set to %TRUE and from 1 to 0 when
- * it's being set to %FALSE.
+ * there, 0.0 means the state is closest to being unset, while 1.0 means
+ * it's closest to being set. This means transition animation will
+ * run from 0 to 1 when @state is being set and from 1 to 0 when
+ * it's being unset.
  *
  * Returns: %TRUE if there is a running transition animation for @state.
  *
@@ -1398,9 +1400,11 @@ gtk_style_context_state_is_running (GtkStyleContext *context,
  *
  * Sets the #GtkWidgetPath used for style matching. As a
  * consequence, the style will be regenerated to match
- * the new given path. If you are using a #GtkStyleContext
- * returned from gtk_widget_get_style_context(), you do
- * not need to call this yourself.
+ * the new given path.
+ *
+ * If you are using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to call
+ * this yourself.
  *
  * Since: 3.0
  **/
@@ -1478,8 +1482,8 @@ gtk_style_context_save (GtkStyleContext *context)
  * gtk_style_context_restore:
  * @context: a #GtkStyleContext
  *
- * Restores @context state to a previous stage. See
- * gtk_style_context_save().
+ * Restores @context state to a previous stage.
+ * See gtk_style_context_save().
  *
  * Since: 3.0
  **/
@@ -1609,8 +1613,8 @@ region_find (GArray *array,
  * @context: a #GtkStyleContext
  * @class_name: class name to use in styling
  *
- * Sets a class name to @context, so posterior calls to
- * gtk_style_context_get() or any of the gtk_render_*
+ * Adds a style class to @context, so posterior calls to
+ * gtk_style_context_get() or any of the gtk_render_*()
  * functions will make use of this new class for styling.
  *
  * In the CSS file format, a #GtkEntry defining an "entry"
@@ -1777,7 +1781,6 @@ gtk_style_context_list_classes (GtkStyleContext *context)
  * gtk_style_context_list_regions:
  * @context: a #GtkStyleContext
  *
- *
  * Returns the list of regions currently defined in @context.
  *
  * Returns: (transfer container) (element-type utf8): a #GList of
@@ -1822,8 +1825,8 @@ gtk_style_context_list_regions (GtkStyleContext *context)
  * @region_name: region name to use in styling
  * @flags: flags that apply to the region
  *
- * Sets a region to @context, so posterior calls to
- * gtk_style_context_get() or any of the gtk_render_*
+ * Adds a region to @context, so posterior calls to
+ * gtk_style_context_get() or any of the gtk_render_*()
  * functions will make use of this new region for styling.
  *
  * In the CSS file format, a #GtkTreeView defining a "row"
@@ -1833,7 +1836,7 @@ gtk_style_context_list_regions (GtkStyleContext *context)
  * GtkTreeView row { ... }
  * </programlisting>
  *
- * pseudo-classes are used for matching @flags, so the two
+ * Pseudo-classes are used for matching @flags, so the two
  * following rules:
  * <programlisting>
  * GtkTreeView row:nth-child (even) { ... }
@@ -1882,7 +1885,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @region_name: region name to unset
  *
- * Removes a region from @context
+ * Removes a region from @context.
  *
  * Since: 3.0
  **/
@@ -1923,8 +1926,9 @@ gtk_style_context_remove_region (GtkStyleContext *context,
  * @region_name: a region name
  * @flags_return: (out) (allow-none): return location for region flags
  *
- * Returns %TRUE if @context has the region defined. If @flags_return is
- * not %NULL, it is set to the flags affecting the region.
+ * Returns %TRUE if @context has the region defined.
+ * If @flags_return is not %NULL, it is set to the flags
+ * affecting the region.
  *
  * Returns: %TRUE if region is defined
  *
@@ -1973,7 +1977,7 @@ gtk_style_context_has_region (GtkStyleContext *context,
 
 static gint
 style_property_values_cmp (gconstpointer bsearch_node1,
-			   gconstpointer bsearch_node2)
+                           gconstpointer bsearch_node2)
 {
   const PropertyValue *val1 = bsearch_node1;
   const PropertyValue *val2 = bsearch_node2;
@@ -2015,7 +2019,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
   i = 0;
   while (i < data->property_cache->len &&
-	 style_property_values_cmp (&key, &g_array_index (data->property_cache, PropertyValue, i)) >= 0)
+         style_property_values_cmp (&key, &g_array_index (data->property_cache, PropertyValue, i)) >= 0)
     i++;
 
   g_array_insert_val (data->property_cache, i, key);
@@ -2101,10 +2105,12 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
  * gtk_style_context_get_style_property:
  * @context: a #GtkStyleContext
  * @property_name: the name of the widget style property
- * @value: (out) (transfer full): Return location for the property value, free with
- *         g_value_unset() after use.
+ * @value: (out) (transfer full): Return location for the property value
  *
  * Gets the value for a widget style property.
+ *
+ * When @value is no longer needed, g_value_unset() must be called
+ * to free any allocated memory.
  **/
 void
 gtk_style_context_get_style_property (GtkStyleContext *context,
@@ -2260,7 +2266,7 @@ gtk_style_context_get_style (GtkStyleContext *context,
  **/
 GtkIconSet *
 gtk_style_context_lookup_icon_set (GtkStyleContext *context,
-				   const gchar     *stock_id)
+                                   const gchar     *stock_id)
 {
   GtkStyleContextPrivate *priv;
   StyleData *data;
@@ -2283,7 +2289,7 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
       icon_set = gtk_icon_factory_lookup (factory, stock_id);
 
       if (icon_set)
-	return icon_set;
+        return icon_set;
     }
 
   return gtk_icon_factory_lookup_default (stock_id);
@@ -2294,10 +2300,14 @@ gtk_style_context_lookup_icon_set (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @screen: a #GdkScreen
  *
- * Sets the screen to which @context will be attached to, @screen
- * is used in order to reconstruct style based on the global providers
- * list. If you are using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to call this yourself.
+ * Attaches @context to the given screen.
+ *
+ * The screen is used to add style information from 'global' style
+ * providers, such as the screens #GtkSettings instance.
+ *
+ * If you are using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to
+ * call this yourself.
  *
  * Since: 3.0
  **/
@@ -2321,7 +2331,7 @@ gtk_style_context_set_screen (GtkStyleContext *context,
  * gtk_style_context_get_screen:
  * @context: a #GtkStyleContext
  *
- * Returns the #GdkScreen to which @context is attached to.
+ * Returns the #GdkScreen to which @context is attached.
  *
  * Returns: a #GdkScreen, or %NULL.
  **/
@@ -2341,9 +2351,11 @@ gtk_style_context_get_screen (GtkStyleContext *context)
  * @context: a #GtkStyleContext
  * @direction: the new direction.
  *
- * Sets the reading direction for rendering purposes. If you are
- * using a #GtkStyleContext returned from gtk_widget_get_style_context(),
- * you do not need to call this yourself.
+ * Sets the reading direction for rendering purposes.
+ *
+ * If you are using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to
+ * call this yourself.
  *
  * Since: 3.0
  **/
@@ -2385,17 +2397,20 @@ gtk_style_context_get_direction (GtkStyleContext *context)
 /**
  * gtk_style_context_set_junction_sides:
  * @context: a #GtkStyleContext
- * @sides: sides where rendered elements are visually connected to other elements.
+ * @sides: sides where rendered elements are visually connected to
+ *     other elements
  *
- * Sets the sides where rendered elements (mostly through gtk_render_frame()) will
- * visually connect with other visual elements. This is merely a guideline that may
- * be honored or not in theming engines.
+ * Sets the sides where rendered elements (mostly through
+ * gtk_render_frame()) will visually connect with other visual elements.
+ *
+ * This is merely a hint that may or may not be honored
+ * by theming engines.
  *
  * Since: 3.0
  **/
 void
 gtk_style_context_set_junction_sides (GtkStyleContext  *context,
-				      GtkJunctionSides  sides)
+                                      GtkJunctionSides  sides)
 {
   GtkStyleContextPrivate *priv;
   GtkStyleInfo *info;
@@ -2470,10 +2485,10 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  * @context: a #GtkStyleContext
  * @window: a #GdkWindow
  * @region_id: (allow-none): animatable region to notify on, or %NULL.
- *             See gtk_style_context_push_animatable_region()
+ *     See gtk_style_context_push_animatable_region()
  * @state: state to trigger transition for
- * @state_value: %TRUE if @state is the state we are changing to, %FALSE if
- *   we are changing away from it
+ * @state_value: %TRUE if @state is the state we are changing to,
+ *     %FALSE if we are changing away from it
  *
  * Notifies a state change on @context, so if the current style makes use
  * of transition animations, one will be started so all rendered elements
@@ -2482,7 +2497,7 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
  *
  * The @window parameter is used in order to invalidate the rendered area
  * as the animation runs, so make sure it is the same window that is being
- * rendered on by the gtk_render_*() methods.
+ * rendered on by the gtk_render_*() functions.
  *
  * If @region_id is %NULL, all rendered elements using @context will be
  * affected by this state transition.
@@ -2627,10 +2642,10 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
  *
  * Pushes an animatable region, so all further gtk_render_*() calls between
  * this call and the following gtk_style_context_pop_animatable_region()
- * will potentially show transition animations for if
+ * will potentially show transition animations for this region if
  * gtk_style_context_notify_state_change() is called for a given state,
- * and the theme/style used contemplates the use of transition animations
- * for state changes.
+ * and the current theme/style defines transition animations for state
+ * changes.
  *
  * The @region_id used must be unique in @context so the theming engine
  * can uniquely identify rendered elements subject to a state transition.
@@ -2794,8 +2809,11 @@ store_animation_region (GtkStyleContext *context,
  * @context: a #GtkStyleContext.
  *
  * Invalidates @context style information, so it will be reconstructed
- * again. If you're using a #GtkStyleContext returned from
- * gtk_widget_get_style_context(), you do not need to call this yourself.
+ * again.
+ *
+ * If you're using a #GtkStyleContext returned from
+ * gtk_widget_get_style_context(), you do not need to
+ * call this yourself.
  *
  * Since: 3.0
  **/
@@ -2875,9 +2893,16 @@ gtk_style_context_set_background (GtkStyleContext *context,
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders a checkmark (as in a #GtkCheckButton), the %GTK_STATE_FLAG_ACTIVE
- * state will determine whether the check is on or off, and
- * %GTK_STATE_FLAG_INCONSISTENT whether it should be marked as undefined.
+ * Renders a checkmark (as in a #GtkCheckButton).
+ *
+ * The %GTK_STATE_FLAG_ACTIVE state determines whether the check is
+ * on or off, and %GTK_STATE_FLAG_INCONSISTENT determines whether it
+ * should be marked as undefined.
+ *
+ * <example>
+ * <title>Typical checkmark rendering</title>
+ * <inlinegraphic fileref="checks.png" format="PNG"/>
+ * </example>
  *
  * Since: 3.0
  **/
@@ -2917,6 +2942,11 @@ gtk_render_check (GtkStyleContext *context,
  * Renders an option mark (as in a #GtkRadioButton), the %GTK_STATE_FLAG_ACTIVE
  * state will determine whether the option is on or off, and
  * %GTK_STATE_FLAG_INCONSISTENT whether it should be marked as undefined.
+ *
+ * <example>
+ * <title>Typical option mark rendering</title>
+ * <inlinegraphic fileref="options.png" format="PNG"/>
+ * </example>
  *
  * Since: 3.0
  **/

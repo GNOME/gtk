@@ -388,15 +388,15 @@
  * Linear or radial Gradients can be used as background images.
  * </para>
  * <para>
- * A linear gradient along the line from (@start-x, @start-y) to
- * (@end-x, @end-y) is specified using the syntax
+ * A linear gradient along the line from (@start_x, @start_y) to
+ * (@end_x, @end_y) is specified using the syntax
  * <literallayout>-gtk-gradient (linear,
- *               @start-x @start-y, @end-x @end-y,
+ *               @start_x @start_y, @end_x @end_y,
  *               color-stop (@position, @color),
  *               ...)</literallayout>
- * where @start-x and @end-x can be either a floating point number between
- * 0 and 1 or one of the special values 'left', 'right' or 'center', @start-y
- * and @end-y can be either a floating point number between 0 and 1 or one
+ * where @start_x and @end_x can be either a floating point number between
+ * 0 and 1 or one of the special values 'left', 'right' or 'center', @start_y
+ * and @end_y can be either a floating point number between 0 and 1 or one
  * of the special values 'top', 'bottom' or 'center', @position is a floating
  * point number between 0 and 1 and @color is a color expression (see above).
  * The color-stop can be repeated multiple times to add more than one color
@@ -422,15 +422,15 @@
  *                color-stop(1, &num;0f0))</literallayout></para>
  * </example>
  * <para>
- * A radial gradient along the two circles defined by (@start-x, @start-y,
- * @start-radius) and (@end-x, @end-y, @end-radius) is specified using the
+ * A radial gradient along the two circles defined by (@start_x, @start_y,
+ * @start_radius) and (@end_x, @end_y, @end_radius) is specified using the
  * syntax
  * <literallayout>-gtk-gradient (radial,
- *                @start-x @start-y, @start-radius,
- *                @end-x @end-y, @end-radius,
+ *                @start_x @start_y, @start_radius,
+ *                @end_x @end_y, @end_radius,
  *                color-stop (@position, @color),
  *                ...)</literallayout>
- * where @start-radius and @end-radius are floating point numbers and
+ * where @start_radius and @end_radius are floating point numbers and
  * the other parameters are as before.
  * </para>
  * <example>
@@ -475,21 +475,24 @@
  * </para>
  * <example>
  * <title>A border image</title>
- * <para>This border image was specified with
  * <inlinegraphic fileref="border1.png" format="PNG"/>
- * <literallayout>url("gradient1.png") 10 10 10 10</literallayout></para>
+ * <para>This border image was specified with
+ * <literallayout>url("gradient1.png") 10 10 10 10</literallayout>
+ * </para>
  * </example>
  * <example>
  * <title>A repeating border image</title>
- * <para>This border image was specified with
  * <inlinegraphic fileref="border2.png" format="PNG"/>
- * <literallayout>url("gradient1.png") 10 10 10 10 repeat</literallayout></para>
+ * <para>This border image was specified with
+ * <literallayout>url("gradient1.png") 10 10 10 10 repeat</literallayout>
+ * </para>
  * </example>
  * <example>
  * <title>A stretched border image</title>
- * <para>This border image was specified with
  * <inlinegraphic fileref="border3.png" format="PNG"/>
- * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout></para>
+ * <para>This border image was specified with
+ * <literallayout>url("gradient1.png") 10 10 10 10 stretch</literallayout>
+ * </para>
  * </example>
  * </refsect2>
  * <refsect2 id="gtkcssprovider-transitions">
@@ -559,9 +562,9 @@
  *         <entry morerows="2">color (see above)</entry>
  *         <entry morerows="2">#GdkRGBA</entry>
  *         <entry morerows="2"><literallayout>background-color: &num;fff;
- * color: @color-name;
- * background-color: shade (@color-name, 0.5);
- * color: mix (@color-name, &num;f0f, 0.8);</literallayout>
+ * color: &amp;color1;
+ * background-color: shade (&amp;color1, 0.5);
+ * color: mix (&amp;color1, &num;f0f, 0.8);</literallayout>
  *         </entry>
  *       </row>
  *       <row>
@@ -579,9 +582,9 @@
  *       <row>
  *         <entry>margin</entry>
  *         <entry morerows="1"><literallayout>@width
- * @vertical-width @horizontal-width
- * @top-width @horizontal-width @bottom-width
- * @top-width @right-width @bottom-width @left-width</literallayout>
+ * @vertical_width @horizontal_width
+ * @top_width @horizontal_width @bottom_width
+ * @top_width @right_width @bottom_width @left_width</literallayout>
  *         </entry>
  *         <entry morerows="1">#GtkBorder</entry>
  *         <entry morerows="1"><literallayout>margin: 5;
@@ -648,6 +651,27 @@
  *     </tbody>
  *   </tgroup>
  * </informaltable>
+ * <para>
+ * GtkThemingEngines can register their own, engine-specific style properties
+ * with the function gtk_theming_engine_register_property(). These properties
+ * can be set in CSS like other properties, using a name of the form
+ * <literallayout>-<replaceable>namespace</replaceable>-<replaceable>name</replaceable></literallayout>, where <replaceable>namespace</replaceable> is typically
+ * the name of the theming engine, and <replaceable>name</replaceable> is the
+ * name of the property. Style properties that have been registered by widgets
+ * using gtk_widget_class_install_style_property() can also be set in this
+ * way, using the widget class name for <replaceable>namespace</replaceable>.
+ * </para>
+ * <example>
+ * <title>Using engine-specific style properties</title>
+ * <programlisting>
+ * * {
+ *     engine: clearlooks;
+ *     border-radius: 4;
+ *     -GtkPaned-handle-size: 6;
+ *     -clearlooks-colorize-scrollbar: false;
+ * }
+ * </programlisting>
+ * </example>
  * </refsect2>
  */
 
