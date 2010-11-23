@@ -3419,8 +3419,7 @@ gtk_entry_draw_frame (GtkWidget      *widget,
     }
 
   style = gtk_widget_get_style (widget);
-  state = gtk_widget_has_focus (widget) ?
-    GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
+  state = gtk_widget_get_state (widget);
 
   gtk_paint_flat_box (style, cr,
                       state, GTK_SHADOW_NONE,
