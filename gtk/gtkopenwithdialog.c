@@ -224,7 +224,7 @@ get_extension (const char *basename)
 static void
 set_dialog_properties (GtkOpenWithDialog *self)
 {
-  char *label, *name, *extension, *description;
+  char *label, *name, *extension, *description, *default_text, *string;
   PangoFontDescription *font_desc;
 
   name = NULL;
@@ -245,11 +245,16 @@ set_dialog_properties (GtkOpenWithDialog *self)
     {
       /* Translators: %s is a filename */
       label = g_strdup_printf (_("Select an application to open \"%s\""), name);
+      string = g_strdup_printf (_("No applications available to open \"%s\""),
+				name);
     }
   else
     {
       /* Translators: %s is a file type description */
       label = g_strdup_printf (_("Select an application for \"%s\" files"),
+			       g_content_type_is_unknown (self->priv->content_type) ?
+			       self->priv->content_type : description);
+      string = g_strdup_printf (_("No applications available to open \"%s\" files"),
 			       g_content_type_is_unknown (self->priv->content_type) ?
 			       self->priv->content_type : description);
     }
@@ -261,10 +266,20 @@ set_dialog_properties (GtkOpenWithDialog *self)
 
   gtk_label_set_markup (GTK_LABEL (self->priv->label), label);
 
+  default_text = g_strdup_printf ("<big><b>%s</b></big>\n%s",
+				  string,
+				  _("Click \"Show other applications\", for more options, or "
+				    "\"Find applications online\" to install a new application"));
+
+  gtk_open_with_widget_set_default_text (GTK_OPEN_WITH_WIDGET (self->priv->open_with_widget),
+					 default_text);
+
   g_free (label);
   g_free (name);
   g_free (extension);
   g_free (description);
+  g_free (string);
+  g_free (default_text);
 }
 
 static void
