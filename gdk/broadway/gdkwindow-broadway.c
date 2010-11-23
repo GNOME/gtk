@@ -348,6 +348,14 @@ _gdk_window_impl_new (GdkWindow     *window,
 	    private->window_type == GDK_WINDOW_TEMP);
   g_assert (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT);
 
+  /* Instead of window manager placement we have this mini hack
+     so that the main/first window is not covered in the demos. */
+  if (impl->id > 1)
+    {
+      private->x = 100;
+      private->y = 20;
+    }
+
   if (display_broadway->output)
     broadway_client_new_surface (display_broadway->output,
 				 impl->id,
