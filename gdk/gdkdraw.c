@@ -50,22 +50,3 @@ gdk_drawable_init (GdkDrawable *drawable)
 {
 }
 
-/**
- * _gdk_drawable_ref_cairo_surface:
- * @drawable: a #GdkDrawable
- * 
- * Obtains a #cairo_surface_t for the given drawable. If a
- * #cairo_surface_t for the drawable already exists, it will be
- * referenced, otherwise a new surface will be created.
- * 
- * Return value: a newly referenced #cairo_surface_t that points
- *  to @drawable. Unref with cairo_surface_destroy()
- **/
-cairo_surface_t *
-_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable)
-{
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  return GDK_DRAWABLE_GET_CLASS (drawable)->ref_cairo_surface (drawable);
-}
-

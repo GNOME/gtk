@@ -2733,13 +2733,19 @@ gdk_window_begin_implicit_paint (GdkWindow *window, GdkRectangle *rect)
   return TRUE;
 }
 
+static cairo_surface_t *
+gdk_window_ref_impl_surface (GdkWindow *window)
+{
+  return GDK_DRAWABLE_GET_CLASS (window->impl)->ref_cairo_surface (window->impl);
+}
+
 static cairo_t *
 gdk_cairo_create_for_impl (GdkWindow *window)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
 
-  surface = _gdk_drawable_ref_cairo_surface (window->impl);
+  surface = gdk_window_ref_impl_surface (window);
   cr = cairo_create (surface);
 
   cairo_surface_destroy (surface);
@@ -3604,7 +3610,7 @@ gdk_window_create_cairo_surface (GdkWindow *window,
 {
   cairo_surface_t *surface, *subsurface;
   
-  surface = _gdk_drawable_ref_cairo_surface (window->impl);
+  surface = gdk_window_ref_impl_surface (window);
   if (gdk_window_has_impl (window))
     return surface;
 

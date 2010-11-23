@@ -309,8 +309,6 @@ GdkDeviceManager * _gdk_device_manager_new (GdkDisplay *display);
 gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
                                      GdkRectangle *extents);
 
-cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
-
 /*************************************
  * Interfaces used by windowing code *
  *************************************/
