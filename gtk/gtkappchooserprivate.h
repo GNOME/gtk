@@ -1,5 +1,5 @@
 /*
- * gtkopenwith.h: open-with interface
+ * gtkappchooserprivate.h: app-chooser interface
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -21,34 +21,25 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
-#endif
-
-#ifndef __GTK_OPEN_WITH_H__
-#define __GTK_OPEN_WITH_H__
+#ifndef __GTK_APP_CHOOSER_PRIVATE_H__
+#define __GTK_APP_CHOOSER_PRIVATE_H__
 
 #include <glib.h>
 #include <gio/gio.h>
 
-G_BEGIN_DECLS
+#include "gtkappchooserwidget.h"
 
-#define GTK_TYPE_OPEN_WITH\
-  (gtk_open_with_get_type ())
-#define GTK_OPEN_WITH(obj)\
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_OPEN_WITH, GtkOpenWith))
-#define GTK_IS_OPEN_WITH(obj)\
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_OPEN_WITH))
+typedef struct _GtkAppChooserIface GtkAppChooserIface;
+typedef GtkAppChooserIface GtkAppChooserInterface;
 
-typedef struct _GtkOpenWith GtkOpenWith;
+#define GTK_APP_CHOOSER_GET_IFACE(inst)\
+  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_APP_CHOOSER, GtkAppChooserIface))
 
-GType gtk_open_with_get_type () G_GNUC_CONST;
+struct _GtkAppChooserIface {
+  GTypeInterface base_iface;
 
-GAppInfo * gtk_open_with_get_app_info (GtkOpenWith *self);
-gchar * gtk_open_with_get_content_type (GtkOpenWith *self);
-void gtk_open_with_refresh (GtkOpenWith *self);
+  GAppInfo * (* get_app_info) (GtkAppChooser *object);
+  void       (* refresh)      (GtkAppChooser *object);
+};
 
-G_END_DECLS
-
-#endif /* __GTK_OPEN_WITH_H__ */
-
+#endif /* __GTK_APP_CHOOSER_PRIVATE_H__ */

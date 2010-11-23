@@ -1,5 +1,5 @@
 /*
- * gtkopenwith.c: open-with interface
+ * gtkappchoosermodule.c: an extension point for online integration
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -21,25 +21,42 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#ifndef __GTK_OPEN_WITH_PRIVATE_H__
-#define __GTK_OPEN_WITH_PRIVATE_H__
+#include <config.h>
 
-#include <glib.h>
+#include "gtkappchoosermodule.h"
+
 #include <gio/gio.h>
 
-#include "gtkopenwithwidget.h"
+#include "gtkappchooseronline.h"
+#include "gtkappchooseronlinedummy.h"
 
-typedef struct _GtkOpenWithIface GtkOpenWithIface;
-typedef GtkOpenWithIface GtkOpenWithInterface;
+#ifdef ENABLE_PACKAGEKIT
+#include "gtkappchooseronlinepk.h"
+#endif
 
-#define GTK_OPEN_WITH_GET_IFACE(inst)\
-  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_OPEN_WITH, GtkOpenWithIface))
+G_LOCK_DEFINE_STATIC (registered_ep);
 
-struct _GtkOpenWithIface {
-  GTypeInterface base_iface;
+void
+_gtk_app_chooser_module_ensure (void)
+{
+  static gboolean registered_ep = FALSE;
+  GIOExtensionPoint *ep;
 
-  GAppInfo * (* get_app_info) (GtkOpenWith *object);
-  void       (* refresh)      (GtkOpenWith *object);
-};
+  G_LOCK (registered_ep);
 
-#endif /* __GTK_OPEN_WITH_PRIVATE_H__ */
+  if (!registered_ep)
+  {
+    registered_ep = TRUE;
+
+    ep = g_io_extension_point_register ("gtkappchooser-online");
+    g_io_extension_point_set_required_type (ep, GTK_TYPE_APP_CHOOSER_ONLINE);
+
+    _gtk_app_chooser_online_dummy_get_type ();
+
+#ifdef ENABLE_PACKAGEKIT
+    _gtk_app_chooser_online_pk_get_type ();
+#endif
+  }
+
+  G_UNLOCK (registered_ep);
+}

@@ -246,10 +246,10 @@ gtk_public_h_sources =          \
 	gtkmountoperation.h     \
 	gtknotebook.h		\
 	gtkoffscreenwindow.h	\
-	gtkopenwith.h		\
-	gtkopenwithdialog.h	\
-	gtkopenwithwidget.h	\
-	gtkopenwithonline.h	\
+	gtkappchooser.h		\
+	gtkappchooserdialog.h	\
+	gtkappchooserwidget.h	\
+	gtkappchooseronline.h	\
 	gtkorientable.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
@@ -354,14 +354,14 @@ gtk_semi_private_h_sources =    \
 	gtktextlayout.h
 
 if ENABLE_PACKAGEKIT
-gtk_openwith_impl_h_sources = \
-	gtkopenwithonlinepk.h \
+gtk_appchooser_impl_h_sources = \
+	gtkappchooseronlinepk.h \
 	$(NULL)
 endif
 
 if ENABLE_PACKAGEKIT
-gtk_openwith_impl_c_sources = \
-	gtkopenwithonlinepk.c \
+gtk_appchooser_impl_c_sources = \
+	gtkappchooseronlinepk.c \
 	$(NULL)
 endif
 
@@ -389,9 +389,9 @@ gtk_private_h_sources =		\
 	gtkmenuprivate.h	\
 	gtkmnemonichash.h	\
 	gtkmountoperationprivate.h \
-	gtkopenwithprivate.h	\
-	gtkopenwithmodule.h 	\
-	gtkopenwithonlinedummy.h \
+	gtkappchooserprivate.h	\
+	gtkappchoosermodule.h 	\
+	gtkappchooseronlinedummy.h \
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
@@ -420,7 +420,7 @@ gtk_private_h_sources =		\
 	gtkwindow-decorate.h	\
 	gtkwidgetprivate.h	\
 	$(gtk_clipboard_dnd_h_sources) \
-	$(gtk_openwith_impl_h_sources)
+	$(gtk_appchooser_impl_h_sources)
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources =            \
@@ -536,12 +536,12 @@ gtk_base_c_sources =            \
 	gtkmountoperation.c     \
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
-	gtkopenwith.c		\
-	gtkopenwithwidget.c	\
-	gtkopenwithdialog.c	\
-	gtkopenwithmodule.c	\
-	gtkopenwithonline.c	\
-	gtkopenwithonlinedummy.c \
+	gtkappchooser.c		\
+	gtkappchooserwidget.c	\
+	gtkappchooserdialog.c	\
+	gtkappchoosermodule.c	\
+	gtkappchooseronline.c	\
+	gtkappchooseronlinedummy.c \
 	gtkorientable.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
@@ -647,7 +647,7 @@ gtk_base_c_sources =            \
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
 	$(gtk_clipboard_dnd_c_sources) \
-	$(gtk_openwith_impl_c_sources)
+	$(gtk_appchooser_impl_c_sources)
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)

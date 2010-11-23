@@ -129,9 +129,9 @@
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkoffscreenwindow.h>
-#include <gtk/gtkopenwith.h>
-#include <gtk/gtkopenwithdialog.h>
-#include <gtk/gtkopenwithwidget.h>
+#include <gtk/gtkappchooser.h>
+#include <gtk/gtkappchooserdialog.h>
+#include <gtk/gtkappchooserwidget.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>

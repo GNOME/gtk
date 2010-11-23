@@ -1,5 +1,5 @@
 /*
- * gtkopenwith.c: open-with interface
+ * gtkappchooser.c: app-chooser interface
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -23,18 +23,18 @@
 
 #include <config.h>
 
-#include "gtkopenwith.h"
+#include "gtkappchooser.h"
 
 #include "gtkintl.h"
-#include "gtkopenwithprivate.h"
+#include "gtkappchooserprivate.h"
 #include "gtkwidget.h"
 
 #include <glib.h>
 
-G_DEFINE_INTERFACE (GtkOpenWith, gtk_open_with, GTK_TYPE_WIDGET);
+G_DEFINE_INTERFACE (GtkAppChooser, gtk_app_chooser, GTK_TYPE_WIDGET);
 
 static void
-gtk_open_with_default_init (GtkOpenWithIface *iface)
+gtk_app_chooser_default_init (GtkAppChooserIface *iface)
 {
   GParamSpec *pspec;
 
@@ -48,11 +48,11 @@ gtk_open_with_default_init (GtkOpenWithIface *iface)
 }
 
 gchar *
-gtk_open_with_get_content_type (GtkOpenWith *self)
+gtk_app_chooser_get_content_type (GtkAppChooser *self)
 {
   gchar *retval = NULL;
 
-  g_return_val_if_fail (GTK_IS_OPEN_WITH (self), NULL);
+  g_return_val_if_fail (GTK_IS_APP_CHOOSER (self), NULL);
 
   g_object_get (self,
 		"content-type", &retval,
@@ -62,13 +62,13 @@ gtk_open_with_get_content_type (GtkOpenWith *self)
 }
 
 GAppInfo *
-gtk_open_with_get_app_info (GtkOpenWith *self)
+gtk_app_chooser_get_app_info (GtkAppChooser *self)
 {
-  return GTK_OPEN_WITH_GET_IFACE (self)->get_app_info (self);
+  return GTK_APP_CHOOSER_GET_IFACE (self)->get_app_info (self);
 }
 
 void
-gtk_open_with_refresh (GtkOpenWith *self)
+gtk_app_chooser_refresh (GtkAppChooser *self)
 {
-  GTK_OPEN_WITH_GET_IFACE (self)->refresh (self);
+  GTK_APP_CHOOSER_GET_IFACE (self)->refresh (self);
 }

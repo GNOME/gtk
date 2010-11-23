@@ -1,5 +1,5 @@
 /*
- * gtkopenwithonline.h: an extension point for online integration
+ * gtkappchooseronline.h: an extension point for online integration
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -23,32 +23,32 @@
 
 #include <config.h>
 
-#include "gtkopenwithonline.h"
+#include "gtkappchooseronline.h"
 
-#include "gtkopenwithonlinedummy.h"
-#include "gtkopenwithmodule.h"
+#include "gtkappchooseronlinedummy.h"
+#include "gtkappchoosermodule.h"
 
 #include <gio/gio.h>
 
-G_DEFINE_INTERFACE (GtkOpenWithOnline, gtk_open_with_online, G_TYPE_OBJECT);
+G_DEFINE_INTERFACE (GtkAppChooserOnline, gtk_app_chooser_online, G_TYPE_OBJECT);
 
 static void
-gtk_open_with_online_default_init (GtkOpenWithOnlineInterface *iface)
+gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface)
 {
   /* do nothing */
 }
 
-GtkOpenWithOnline *
-gtk_open_with_online_get_default (void)
+GtkAppChooserOnline *
+gtk_app_chooser_online_get_default (void)
 {
   GIOExtensionPoint *ep;
   GIOExtension *extension;
   GList *extensions;
-  GtkOpenWithOnline *retval;
+  GtkAppChooserOnline *retval;
 
-  _gtk_open_with_module_ensure ();
+  _gtk_app_chooser_module_ensure ();
 
-  ep = g_io_extension_point_lookup ("gtkopenwith-online");
+  ep = g_io_extension_point_lookup ("gtkappchooser-online");
   extensions = g_io_extension_point_get_extensions (ep);
 
   if (extensions != NULL)
@@ -60,7 +60,7 @@ gtk_open_with_online_get_default (void)
     }
   else
     {
-      retval = g_object_new (GTK_TYPE_OPEN_WITH_ONLINE_DUMMY,
+      retval = g_object_new (GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY,
 			     NULL);
     }
 
@@ -68,31 +68,31 @@ gtk_open_with_online_get_default (void)
 }
 
 void
-gtk_open_with_online_search_for_mimetype_async (GtkOpenWithOnline *self,
-						const gchar *content_type,
-						GtkWindow *parent,
-						GAsyncReadyCallback callback,
-						gpointer user_data)
+gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
+						  const gchar *content_type,
+						  GtkWindow *parent,
+						  GAsyncReadyCallback callback,
+						  gpointer user_data)
 {
-  GtkOpenWithOnlineInterface *iface;
+  GtkAppChooserOnlineInterface *iface;
 
-  g_return_if_fail (GTK_IS_OPEN_WITH_ONLINE (self));
+  g_return_if_fail (GTK_IS_APP_CHOOSER_ONLINE (self));
 
-  iface = GTK_OPEN_WITH_ONLINE_GET_IFACE (self);
+  iface = GTK_APP_CHOOSER_ONLINE_GET_IFACE (self);
 
   (* iface->search_for_mimetype_async) (self, content_type, parent, callback, user_data);
 }
 
 gboolean
-gtk_open_with_online_search_for_mimetype_finish (GtkOpenWithOnline *self,
-						 GAsyncResult *res,
-						 GError **error)
+gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline *self,
+						   GAsyncResult *res,
+						   GError **error)
 {
-  GtkOpenWithOnlineInterface *iface;
+  GtkAppChooserOnlineInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_OPEN_WITH_ONLINE (self), FALSE);
+  g_return_val_if_fail (GTK_IS_APP_CHOOSER_ONLINE (self), FALSE);
 
-  iface = GTK_OPEN_WITH_ONLINE_GET_IFACE (self);
+  iface = GTK_APP_CHOOSER_ONLINE_GET_IFACE (self);
 
   return ((* iface->search_for_mimetype_finish) (self, res, error));
 }

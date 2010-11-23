@@ -1,5 +1,5 @@
 /*
- * gtkopenwithmodule.h: an extension point for PackageKit integration
+ * gtkappchoosermodule.h: an extension point for online integration
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -21,15 +21,15 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#ifndef __GTK_OPEN_WITH_MODULE_H__
-#define __GTK_OPEN_WITH_MODULE_H__
+#ifndef __GTK_APP_CHOOSER_MODULE_H__
+#define __GTK_APP_CHOOSER_MODULE_H__
 
 #include <glib.h>
 
 G_BEGIN_DECLS
 
-void _gtk_open_with_module_ensure (void);
+void _gtk_app_chooser_module_ensure (void);
 
 G_END_DECLS
 
-#endif /* __GTK_OPEN_WITH_MODULE_H__ */
+#endif /* __GTK_APP_CHOOSER_MODULE_H__ */

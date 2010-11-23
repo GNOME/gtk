@@ -1,5 +1,5 @@
 /*
- * gtkopenwithonlinedummy.c: an extension point for online integration
+ * gtkappchooseronlinedummy.c: an extension point for online integration
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -23,38 +23,38 @@
 
 #include <config.h>
 
-#include "gtkopenwithonlinedummy.h"
+#include "gtkappchooseronlinedummy.h"
 
 #include "gtkintl.h"
-#include "gtkopenwithonline.h"
+#include "gtkappchooseronline.h"
 
 #include <gio/gio.h>
 
-#define gtk_open_with_online_dummy_get_type _gtk_open_with_online_dummy_get_type
-static void open_with_online_iface_init (GtkOpenWithOnlineInterface *iface);
+#define gtk_app_chooser_online_dummy_get_type _gtk_app_chooser_online_dummy_get_type
+static void app_chooser_online_iface_init (GtkAppChooserOnlineInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkOpenWithOnlineDummy, gtk_open_with_online_dummy,
+G_DEFINE_TYPE_WITH_CODE (GtkAppChooserOnlineDummy, gtk_app_chooser_online_dummy,
 			 G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_OPEN_WITH_ONLINE,
-						open_with_online_iface_init)
-			 g_io_extension_point_implement ("gtkopenwith-online",
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER_ONLINE,
+						app_chooser_online_iface_init)
+			 g_io_extension_point_implement ("gtkappchooser-online",
 							 g_define_type_id,
 							 "dummy", 0));
 
 static void
-gtk_open_with_online_dummy_class_init (GtkOpenWithOnlineDummyClass *klass)
+gtk_app_chooser_online_dummy_class_init (GtkAppChooserOnlineDummyClass *klass)
 {
   /* do nothing */
 }
 
 static void
-gtk_open_with_online_dummy_init (GtkOpenWithOnlineDummy *self)
+gtk_app_chooser_online_dummy_init (GtkAppChooserOnlineDummy *self)
 {
   /* do nothing */
 }
 
 static gboolean
-dummy_search_mime_finish (GtkOpenWithOnline *obj,
+dummy_search_mime_finish (GtkAppChooserOnline *obj,
 			  GAsyncResult *res,
 			  GError **error)
 {
@@ -64,7 +64,7 @@ dummy_search_mime_finish (GtkOpenWithOnline *obj,
 }
 
 static void
-dummy_search_mime_async (GtkOpenWithOnline *obj,
+dummy_search_mime_async (GtkAppChooserOnline *obj,
 			 const gchar *content_type,
 			 GtkWindow *parent,
 			 GAsyncReadyCallback callback,
@@ -79,7 +79,7 @@ dummy_search_mime_async (GtkOpenWithOnline *obj,
 }
 
 static void
-open_with_online_iface_init (GtkOpenWithOnlineInterface *iface)
+app_chooser_online_iface_init (GtkAppChooserOnlineInterface *iface)
 {
   iface->search_for_mimetype_async = dummy_search_mime_async;
   iface->search_for_mimetype_finish = dummy_search_mime_finish;

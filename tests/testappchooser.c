@@ -1,4 +1,4 @@
-/* testopenwith.c
+/* testappchooser.c
  * Copyright (C) 2010 Red Hat, Inc.
  * Authors: Cosimo Cecchi
  *
@@ -27,7 +27,7 @@ static GtkWidget *toplevel;
 static GFile *file;
 static GtkWidget *grid, *file_l, *open;
 static GtkWidget *radio_file, *radio_content, *dialog;
-static GtkWidget *open_with_widget;
+static GtkWidget *app_chooser_widget;
 static GtkWidget *recommended, *fallback, *other, *all, *radio;
 
 static void
@@ -42,7 +42,7 @@ dialog_response (GtkDialog *d,
 
   if (response_id == GTK_RESPONSE_OK)
     {
-      app_info = gtk_open_with_get_app_info (GTK_OPEN_WITH (d));
+      app_info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (d));
       name = g_app_info_get_name (app_info);
       g_print ("Application selected: %s\n", name);
 
@@ -57,19 +57,19 @@ static void
 bind_props (void)
 {
   g_object_bind_property (recommended, "active",
-			  open_with_widget, "show-recommended",
+			  app_chooser_widget, "show-recommended",
 			  G_BINDING_SYNC_CREATE);
   g_object_bind_property (fallback, "active",
-			  open_with_widget, "show-fallback",
+			  app_chooser_widget, "show-fallback",
 			  G_BINDING_SYNC_CREATE);
   g_object_bind_property (other, "active",
-			  open_with_widget, "show-other",
+			  app_chooser_widget, "show-other",
 			  G_BINDING_SYNC_CREATE);
   g_object_bind_property (all, "active",
-			  open_with_widget, "show-all",
+			  app_chooser_widget, "show-all",
 			  G_BINDING_SYNC_CREATE);
   g_object_bind_property (radio, "active",
-			  open_with_widget, "radio-mode",
+			  app_chooser_widget, "radio-mode",
 			  G_BINDING_SYNC_CREATE);
 }
 
@@ -86,7 +86,7 @@ prepare_dialog (void)
 
   if (use_file)
     {
-      dialog = gtk_open_with_dialog_new (GTK_WINDOW (toplevel),
+      dialog = gtk_app_chooser_dialog_new (GTK_WINDOW (toplevel),
 					 0, file);
     }
   else
@@ -100,7 +100,7 @@ prepare_dialog (void)
 
       g_object_unref (info);
 
-      dialog = gtk_open_with_dialog_new_for_content_type (GTK_WINDOW (toplevel),
+      dialog = gtk_app_chooser_dialog_new_for_content_type (GTK_WINDOW (toplevel),
 							  0, content_type);
     }
 
@@ -109,7 +109,7 @@ prepare_dialog (void)
 
   g_free (content_type);
 
-  open_with_widget = gtk_open_with_dialog_get_widget (GTK_OPEN_WITH_DIALOG (dialog));
+  app_chooser_widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
   bind_props ();
 }
 
@@ -188,7 +188,7 @@ main (int argc,
   gtk_grid_attach_next_to (GTK_GRID (grid), radio_content,
 			   radio_file, GTK_POS_BOTTOM, 1, 1);
 
-  open = gtk_button_new_with_label ("Trigger Open With dialog");
+  open = gtk_button_new_with_label ("Trigger App Chooser dialog");
   gtk_grid_attach_next_to (GTK_GRID (grid), open,
 			   radio_content, GTK_POS_BOTTOM, 1, 1);
 

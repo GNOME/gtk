@@ -1,5 +1,5 @@
 /*
- * gtkopenwithonlinepk.c: packagekit module for open with
+ * gtkappchooseronlinepk.c: packagekit module for app-chooser
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -23,60 +23,60 @@
 
 #include <config.h>
 
-#include "gtkopenwithonlinepk.h"
+#include "gtkappchooseronlinepk.h"
 
-#include "gtkopenwithonline.h"
+#include "gtkappchooseronline.h"
 #include "x11/gdkx.h"
 
 #include <gio/gio.h>
 
-#define gtk_open_with_online_pk_get_type _gtk_open_with_online_pk_get_type
-static void open_with_online_iface_init (GtkOpenWithOnlineInterface *iface);
+#define gtk_app_chooser_online_pk_get_type _gtk_app_chooser_online_pk_get_type
+static void app_chooser_online_iface_init (GtkAppChooserOnlineInterface *iface);
 
-G_DEFINE_TYPE_WITH_CODE (GtkOpenWithOnlinePk, gtk_open_with_online_pk,
+G_DEFINE_TYPE_WITH_CODE (GtkAppChooserOnlinePk, gtk_app_chooser_online_pk,
 			 G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_OPEN_WITH_ONLINE,
-						open_with_online_iface_init)
-			 g_io_extension_point_implement ("gtkopenwith-online",
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER_ONLINE,
+						app_chooser_online_iface_init)
+			 g_io_extension_point_implement ("gtkappchooser-online",
 							 g_define_type_id,
 							 "packagekit", 10));
 
-struct _GtkOpenWithOnlinePkPrivate {
+struct _GtkAppChooserOnlinePkPrivate {
   GSimpleAsyncResult *result;
   GtkWindow *parent;
   gchar *content_type;
 };
 
 static void
-gtk_open_with_online_pk_finalize (GObject *obj)
+gtk_app_chooser_online_pk_finalize (GObject *obj)
 {
-  GtkOpenWithOnlinePk *self = GTK_OPEN_WITH_ONLINE_PK (obj);
+  GtkAppChooserOnlinePk *self = GTK_APP_CHOOSER_ONLINE_PK (obj);
 
   g_free (self->priv->content_type);
   g_clear_object (&self->priv->result);
 
-  G_OBJECT_CLASS (gtk_open_with_online_pk_parent_class)->finalize (obj);
+  G_OBJECT_CLASS (gtk_app_chooser_online_pk_parent_class)->finalize (obj);
 }
 
 static void
-gtk_open_with_online_pk_class_init (GtkOpenWithOnlinePkClass *klass)
+gtk_app_chooser_online_pk_class_init (GtkAppChooserOnlinePkClass *klass)
 {
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
 
-  oclass->finalize = gtk_open_with_online_pk_finalize;
+  oclass->finalize = gtk_app_chooser_online_pk_finalize;
 
-  g_type_class_add_private (klass, sizeof (GtkOpenWithOnlinePkPrivate));
+  g_type_class_add_private (klass, sizeof (GtkAppChooserOnlinePkPrivate));
 }
 
 static void
-gtk_open_with_online_pk_init (GtkOpenWithOnlinePk *self)
+gtk_app_chooser_online_pk_init (GtkAppChooserOnlinePk *self)
 {
-  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_OPEN_WITH_ONLINE_PK,
-					    GtkOpenWithOnlinePkPrivate);
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_ONLINE_PK,
+					    GtkAppChooserOnlinePkPrivate);
 }
 
 static gboolean
-pk_search_mime_finish (GtkOpenWithOnline *obj,
+pk_search_mime_finish (GtkAppChooserOnline *obj,
 		       GAsyncResult *res,
 		       GError **error)
 {
@@ -90,7 +90,7 @@ install_mime_types_ready_cb (GObject *source,
 			     GAsyncResult *res,
 			     gpointer user_data)
 {
-  GtkOpenWithOnlinePk *self = user_data;
+  GtkAppChooserOnlinePk *self = user_data;
   GDBusProxy *proxy = G_DBUS_PROXY (source);
   GError *error = NULL;
   GVariant *variant;
@@ -116,7 +116,7 @@ pk_proxy_appeared_cb (GObject *source,
 		      GAsyncResult *res,
 		      gpointer user_data)
 {
-  GtkOpenWithOnlinePk *self = user_data;
+  GtkAppChooserOnlinePk *self = user_data;
   GDBusProxy *proxy;
   GError *error = NULL;
   guint xid = 0;
@@ -154,17 +154,17 @@ pk_proxy_appeared_cb (GObject *source,
 }
 
 static void
-pk_search_mime_async (GtkOpenWithOnline *obj,
+pk_search_mime_async (GtkAppChooserOnline *obj,
 		      const gchar *content_type,
 		      GtkWindow *parent,
 		      GAsyncReadyCallback callback,
 		      gpointer user_data)
 {
-  GtkOpenWithOnlinePk *self = GTK_OPEN_WITH_ONLINE_PK (obj);
+  GtkAppChooserOnlinePk *self = GTK_APP_CHOOSER_ONLINE_PK (obj);
 
   self->priv->result = g_simple_async_result_new (G_OBJECT (self),
 						  callback, user_data,
-						  gtk_open_with_online_search_for_mimetype_async);
+						  gtk_app_chooser_online_search_for_mimetype_async);
   self->priv->parent = parent;
   self->priv->content_type = g_strdup (content_type);
 
@@ -180,7 +180,7 @@ pk_search_mime_async (GtkOpenWithOnline *obj,
 }
 
 static void
-open_with_online_iface_init (GtkOpenWithOnlineInterface *iface)
+app_chooser_online_iface_init (GtkAppChooserOnlineInterface *iface)
 {
   iface->search_for_mimetype_async = pk_search_mime_async;
   iface->search_for_mimetype_finish = pk_search_mime_finish;

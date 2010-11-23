@@ -1,5 +1,5 @@
 /*
- * gtkopenwithmodule.c: an extension point for online integration
+ * gtkappchooser.h: app-chooser interface
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -21,42 +21,34 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#include <config.h>
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
 
-#include "gtkopenwithmodule.h"
+#ifndef __GTK_APP_CHOOSER_H__
+#define __GTK_APP_CHOOSER_H__
 
+#include <glib.h>
 #include <gio/gio.h>
 
-#include "gtkopenwithonline.h"
-#include "gtkopenwithonlinedummy.h"
+G_BEGIN_DECLS
 
-#ifdef ENABLE_PACKAGEKIT
-#include "gtkopenwithonlinepk.h"
-#endif
+#define GTK_TYPE_APP_CHOOSER\
+  (gtk_app_chooser_get_type ())
+#define GTK_APP_CHOOSER(obj)\
+  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER, GtkAppChooser))
+#define GTK_IS_APP_CHOOSER(obj)\
+  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER))
 
-G_LOCK_DEFINE_STATIC (registered_ep);
+typedef struct _GtkAppChooser GtkAppChooser;
 
-void
-_gtk_open_with_module_ensure (void)
-{
-  static gboolean registered_ep = FALSE;
-  GIOExtensionPoint *ep;
+GType gtk_app_chooser_get_type () G_GNUC_CONST;
 
-  G_LOCK (registered_ep);
+GAppInfo * gtk_app_chooser_get_app_info (GtkAppChooser *self);
+gchar * gtk_app_chooser_get_content_type (GtkAppChooser *self);
+void gtk_app_chooser_refresh (GtkAppChooser *self);
 
-  if (!registered_ep)
-  {
-    registered_ep = TRUE;
+G_END_DECLS
 
-    ep = g_io_extension_point_register ("gtkopenwith-online");
-    g_io_extension_point_set_required_type (ep, GTK_TYPE_OPEN_WITH_ONLINE);
+#endif /* __GTK_APP_CHOOSER_H__ */
 
-    _gtk_open_with_online_dummy_get_type ();
-
-#ifdef ENABLE_PACKAGEKIT
-    _gtk_open_with_online_pk_get_type ();
-#endif
-  }
-
-  G_UNLOCK (registered_ep);
-}
