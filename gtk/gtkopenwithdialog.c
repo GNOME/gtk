@@ -52,6 +52,8 @@ struct _GtkOpenWithDialogPrivate {
 
   GtkWidget *open_with_widget;
   GtkWidget *show_more_button;
+
+  gboolean show_more_clicked;
 };
 
 enum {
@@ -289,11 +291,29 @@ show_more_button_clicked_cb (GtkButton *button,
   GtkOpenWithDialog *self = user_data;
 
   g_object_set (self->priv->open_with_widget,
+		"show-recommended", TRUE,
 		"show-fallback", TRUE,
 		"show-other", TRUE,
 		NULL);
 
   gtk_widget_hide (self->priv->show_more_button);
+  self->priv->show_more_clicked = TRUE;
+}
+
+static void
+widget_notify_for_button_cb (GObject *source,
+			     GParamSpec *pspec,
+			     gpointer user_data)
+{
+  GtkOpenWithDialog *self = user_data;
+  GtkOpenWithWidget *widget = GTK_OPEN_WITH_WIDGET (source);
+  gboolean should_hide;
+
+  should_hide = gtk_open_with_widget_get_show_all (widget) ||
+    self->priv->show_more_clicked;
+
+  if (should_hide)
+    gtk_widget_hide (self->priv->show_more_button);
 }
 
 static void
@@ -324,12 +344,15 @@ build_dialog_ui (GtkOpenWithDialog *self)
 
   self->priv->open_with_widget =
     gtk_open_with_widget_new (self->priv->content_type);
+  gtk_box_pack_start (GTK_BOX (vbox2), self->priv->open_with_widget, TRUE, TRUE, 0);
+  gtk_widget_show (self->priv->open_with_widget);
+
   g_signal_connect (self->priv->open_with_widget, "application-selected",
 		    G_CALLBACK (widget_application_selected_cb), self);
   g_signal_connect (self->priv->open_with_widget, "application-activated",
 		    G_CALLBACK (widget_application_activated_cb), self);
-  gtk_box_pack_start (GTK_BOX (vbox2), self->priv->open_with_widget, TRUE, TRUE, 0);
-  gtk_widget_show (self->priv->open_with_widget);
+  g_signal_connect (self->priv->open_with_widget, "notify::show-all",
+		    G_CALLBACK (widget_notify_for_button_cb), self);
 
   button = gtk_button_new_with_label (_("Show other applications"));
   self->priv->show_more_button = button;
