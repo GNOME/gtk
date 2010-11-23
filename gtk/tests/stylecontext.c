@@ -43,6 +43,7 @@ test_parse_at (void)
     "@define-color color red;",
     "@define-color color mix(shade (#121212, 0.5), mix (rgb(10%,20%,100%), @blue,0.5), 0.2);",
     "@define-color blue @blue;",
+    "@define-color blue123_a-b #123;",
     NULL
   };
 
@@ -66,6 +67,7 @@ test_parse_at (void)
     "@define-color color mix();",
     "@define-color color rgba(50%, 50%, 50%);",
     "@define-color color rgb(50%, a);",
+    "@define-color 1col rgb(50%, a);",
     "@three-dee { some other crap };",
     NULL
   };
@@ -132,6 +134,7 @@ test_parse_selectors (void)
     "E, F {}",
     "E, F /* comment here */ {}",
     "E,/* comment here */ F {}",
+    "E1.e1_2 #T3_4 {}",
     NULL
   };
 
@@ -150,6 +153,7 @@ test_parse_selectors (void)
      * the last element
      */
     "E:focused tab {}",
+    "E..bla {}",
      NULL
   };
 
