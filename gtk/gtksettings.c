@@ -2639,7 +2639,7 @@ settings_update_theme (GtkSettings *settings)
         {
           gtk_style_context_add_provider_for_screen (settings->screen,
                                                      GTK_STYLE_PROVIDER (new_provider),
-                                                     GTK_STYLE_PROVIDER_PRIORITY_SETTINGS - 1);
+                                                     GTK_STYLE_PROVIDER_PRIORITY_THEME);
           g_object_ref (new_provider);
         }
 

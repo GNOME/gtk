@@ -33,10 +33,50 @@ G_BEGIN_DECLS
 #define GTK_IS_STYLE_PROVIDER(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_STYLE_PROVIDER))
 #define GTK_STYLE_PROVIDER_GET_IFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GTK_TYPE_STYLE_PROVIDER, GtkStyleProviderIface))
 
+/**
+ * GTK_STYLE_PROVIDER_PRIORITY_FALLBACK:
+ *
+ * The priority used for default style information
+ * that is used in the absence of themes.
+ */
 #define GTK_STYLE_PROVIDER_PRIORITY_FALLBACK      1
-#define GTK_STYLE_PROVIDER_PRIORITY_DEFAULT     200
+
+/**
+ * GTK_STYLE_PROVIDER_PRIORITY_DEFAULT:
+ *
+ * The priority used for style information provided
+ * by themes.
+ */
+#define GTK_STYLE_PROVIDER_PRIORITY_THEME     200
+
+/**
+ * GTK_STYLE_PROVIDER_PRIORITY_SETTINGS:
+ *
+ * The priority used for style information provided
+ * via #GtkSettings.
+ *
+ * This priority is higher than #GTK_STYLE_PROVIDER_PRIORITY_THEME
+ * to let settings override themes.
+ */
 #define GTK_STYLE_PROVIDER_PRIORITY_SETTINGS    400
+
+/**
+ * GTK_STYLE_PROVIDER_PRIORITY_APPLICATION:
+ *
+ * A priority that can be used when adding a #GtkStyleProvider
+ * for application-specific style information.
+ */
 #define GTK_STYLE_PROVIDER_PRIORITY_APPLICATION 600
+
+/**
+ * GTK_STYLE_PROVIDER_PRIORITY_USER:
+ *
+ * The priority used for the style information from
+ * <filename>~/.gtk-3.0.css</filename>.
+ *
+ * You should not use priorities higher than this, to
+ * give the user the last word.
+ */
 #define GTK_STYLE_PROVIDER_PRIORITY_USER        800
 
 typedef struct _GtkStyleProviderIface GtkStyleProviderIface;
