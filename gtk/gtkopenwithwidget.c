@@ -41,7 +41,8 @@
 struct _GtkOpenWithWidgetPrivate {
   GAppInfo *selected_app_info;
 
-  char *content_type;
+  gchar *content_type;
+  gchar *default_text;
   gboolean show_recommended;
   gboolean show_fallback;
   gboolean show_other;
@@ -76,6 +77,7 @@ enum {
   PROP_SHOW_OTHER,
   PROP_SHOW_ALL,
   PROP_RADIO_MODE,
+  PROP_DEFAULT_TEXT,
   N_PROPERTIES
 };
 
@@ -596,16 +598,21 @@ gtk_open_with_widget_add_section (GtkOpenWithWidget *self,
 static void
 add_no_applications_label (GtkOpenWithWidget *self)
 {
-  gchar *string, *string2, *desc;
+  gchar *text = NULL, *desc;
+  const gchar *string;
   GtkTreeIter iter;
 
-  desc = g_content_type_get_description (self->priv->content_type);
-  string2 = g_strdup_printf (_("No applications available to open \"%s\""),
-			     desc);
-
-  string = g_strdup_printf ("<big><b>%s</b></big>\n%s",
-			    string2,
-			    _("Click \"Show other applications\" for more options"));
+  if (self->priv->default_text == NULL)
+    {
+      desc = g_content_type_get_description (self->priv->content_type);
+      string = text = g_strdup_printf (_("No applications available to open \"%s\""),
+				       desc);
+      g_free (desc);
+    }
+  else
+    {
+      string = self->priv->default_text;
+    }
 
   gtk_list_store_append (self->priv->program_list_store, &iter);
   gtk_list_store_set (self->priv->program_list_store, &iter,
@@ -614,9 +621,7 @@ add_no_applications_label (GtkOpenWithWidget *self)
 		      COLUMN_RECOMMENDED, TRUE,
 		      -1);
 
-  g_free (string);
-  g_free (string2); 
-  g_free (desc); 
+  g_free (text); 
 }
 
 static void
@@ -816,6 +821,9 @@ gtk_open_with_widget_set_property (GObject *object,
     case PROP_RADIO_MODE:
       gtk_open_with_widget_set_radio_mode (self, g_value_get_boolean (value));
       break;
+    case PROP_DEFAULT_TEXT:
+      gtk_open_with_widget_set_default_text (self, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -850,6 +858,9 @@ gtk_open_with_widget_get_property (GObject *object,
     case PROP_RADIO_MODE:
       g_value_set_boolean (value, self->priv->radio_mode);
       break;
+    case PROP_DEFAULT_TEXT:
+      g_value_set_string (value, self->priv->default_text);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -875,6 +886,7 @@ gtk_open_with_widget_finalize (GObject *object)
   GtkOpenWithWidget *self = GTK_OPEN_WITH_WIDGET (object);
 
   g_free (self->priv->content_type);
+  g_free (self->priv->default_text);
 
   G_OBJECT_CLASS (gtk_open_with_widget_parent_class)->finalize (object);
 }
@@ -942,6 +954,13 @@ gtk_open_with_widget_class_init (GtkOpenWithWidgetClass *klass)
 				FALSE,
 				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (gobject_class, PROP_RADIO_MODE, pspec);
+
+  pspec = g_param_spec_string ("default-text",
+			       P_("Widget's default text"),
+			       P_("The default text appearing when there are no applications"),
+			       NULL,
+			       G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (gobject_class, PROP_DEFAULT_TEXT, pspec);
 
   signals[SIGNAL_APPLICATION_SELECTED] =
     g_signal_new ("application-selected",
@@ -1168,4 +1187,29 @@ gtk_open_with_widget_get_radio_mode (GtkOpenWithWidget *self)
   g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), FALSE);
 
   return self->priv->radio_mode;
+}
+
+void
+gtk_open_with_widget_set_default_text (GtkOpenWithWidget *self,
+				       const gchar *text)
+{
+  g_return_if_fail (GTK_IS_OPEN_WITH_WIDGET (self));
+
+  if (g_strcmp0 (text, self->priv->default_text) != 0)
+    {
+      g_free (self->priv->default_text);
+      self->priv->default_text = g_strdup (text);
+
+      g_object_notify (G_OBJECT (self), "default-text");
+
+      gtk_open_with_refresh (GTK_OPEN_WITH (self));
+    }
+}
+
+const gchar *
+gtk_open_with_widget_get_default_text (GtkOpenWithWidget *self)
+{
+  g_return_val_if_fail (GTK_IS_OPEN_WITH_WIDGET (self), NULL);
+
+  return self->priv->default_text;
 }
