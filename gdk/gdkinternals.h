@@ -437,9 +437,6 @@ struct _GdkPaintableIface
 
 GType _gdk_paintable_get_type (void) G_GNUC_CONST;
 
-/* Implementation types */
-GType _gdk_window_impl_get_type (void) G_GNUC_CONST;
-
 struct GdkAppLaunchContextPrivate
 {
   GdkDisplay *display;

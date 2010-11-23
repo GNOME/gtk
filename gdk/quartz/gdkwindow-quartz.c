@@ -473,12 +473,6 @@ _gdk_window_impl_quartz_get_type (void)
   return object_type;
 }
 
-GType
-_gdk_window_impl_get_type (void)
-{
-  return _gdk_window_impl_quartz_get_type ();
-}
-
 static const gchar *
 get_default_title (void)
 {
@@ -834,7 +828,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   private = (GdkWindowObject *)window;
 
-  impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  impl = g_object_new (GDK_TYPE_WINDOW_IMPL_QUARTZ, NULL);
   private->impl = (GdkDrawable *)impl;
   draw_impl = GDK_DRAWABLE_IMPL_QUARTZ (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);

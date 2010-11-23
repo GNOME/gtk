@@ -129,12 +129,6 @@ static void        gdk_window_impl_x11_finalize   (GObject            *object);
 
 G_DEFINE_TYPE (GdkWindowImplX11, gdk_window_impl_x11, GDK_TYPE_WINDOW_IMPL)
 
-GType
-_gdk_window_impl_get_type (void)
-{
-  return gdk_window_impl_x11_get_type ();
-}
-
 static void
 gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {  
@@ -469,7 +463,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   window = screen_x11->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
 
-  window->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl_window = window;
   window->visual = gdk_screen_get_system_visual (screen);
 
@@ -709,7 +703,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   xparent = GDK_WINDOW_XID (real_parent);
   display_x11 = GDK_DISPLAY_X11 (GDK_SCREEN_DISPLAY (screen));
   
-  impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl = (GdkDrawable *)impl;
   impl->wrapper = GDK_WINDOW (window);
   
@@ -913,7 +907,7 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
 
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
 
-  window->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl_window = window;
   window->visual = gdk_x11_screen_lookup_visual (screen,
                                                   XVisualIDFromVisual (attrs.visual));

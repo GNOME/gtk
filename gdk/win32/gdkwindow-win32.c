@@ -99,12 +99,6 @@ _gdk_window_impl_win32_get_type (void)
   return object_type;
 }
 
-GType
-_gdk_window_impl_get_type (void)
-{
-  return _gdk_window_impl_win32_get_type ();
-}
-
 static void
 gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
 {
@@ -211,7 +205,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   
   _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)_gdk_root;
-  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   private->impl_window = private;
   private->visual = gdk_screen_get_system_visual (screen);
 
@@ -435,7 +429,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
-  impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   private->impl = (GdkDrawable *)impl;
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
@@ -641,7 +635,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
   private->visual = gdk_screen_get_system_visual (_gdk_screen);
-  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
