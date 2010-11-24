@@ -2117,12 +2117,11 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   GtkJunctionSides junction = 0;
   GtkStateFlags state;
   gint border_width;
-  GdkRGBA *bg_color;
+  gdouble x0, y0, x1, y1, xc, yc, wc, hc;
 
   state = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get (engine, state,
                           "border-width", &border_width,
-                          "background-color", &bg_color,
                           NULL);
 
   cairo_save (cr);
@@ -2130,57 +2129,47 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   switch (gap_side)
     {
     case GTK_POS_TOP:
+      xc = x + xy0_gap + border_width;
+      yc = y;
+      wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
+      hc = border_width;
       junction = GTK_JUNCTION_TOP;
       break;
     case GTK_POS_BOTTOM:
+      xc = x + xy0_gap + border_width;
+      yc = y + height - border_width;
+      wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
+      hc = border_width;
       junction = GTK_JUNCTION_BOTTOM;
       break;
     case GTK_POS_LEFT:
+      xc = x;
+      yc = y + xy0_gap + border_width;
+      wc = border_width;
+      hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       junction = GTK_JUNCTION_LEFT;
       break;
     case GTK_POS_RIGHT:
+      xc = x + width - border_width;
+      yc = y + xy0_gap + border_width;
+      wc = border_width;
+      hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       junction = GTK_JUNCTION_RIGHT;
       break;
     }
 
+  cairo_clip_extents (cr, &x0, &y0, &x1, &y1);
+  cairo_rectangle (cr, x0, y0, x1 - x0, yc - y0);
+  cairo_rectangle (cr, x0, yc, xc - x0, hc);
+  cairo_rectangle (cr, xc + wc, yc, x1 - (xc + wc), hc);
+  cairo_rectangle (cr, x0, yc + hc, x1 - x0, y1 - (yc + hc));
+  cairo_clip (cr);
+
   render_frame_internal (engine, cr,
                          x, y, width, height,
                          0, junction);
-  switch (gap_side)
-    {
-    case GTK_POS_TOP:
-      cairo_rectangle (cr,
-                       x + xy0_gap + border_width, y,
-                       xy1_gap - xy0_gap - 2 * border_width,
-                       border_width);
-      break;
-    case GTK_POS_BOTTOM:
-      cairo_rectangle (cr,
-                       x + xy0_gap + border_width,
-                       y + height - border_width,
-                       xy1_gap - xy0_gap - 2 * border_width,
-                       border_width);
-      break;
-    case GTK_POS_LEFT:
-      cairo_rectangle (cr,
-                       x, y + xy0_gap + border_width, border_width,
-                       xy1_gap - xy0_gap - 2 * border_width);
-      break;
-    case GTK_POS_RIGHT:
-      cairo_rectangle (cr,
-                       x + width - border_width,
-                       y + xy0_gap + border_width, border_width,
-                       xy1_gap - xy0_gap - 2 * border_width);
-      break;
-    }
-
-  gdk_cairo_set_source_rgba (cr, bg_color);
-  cairo_fill (cr);
 
   cairo_restore (cr);
-
-  if (bg_color)
-    gdk_rgba_free (bg_color);
 }
 
 static void
