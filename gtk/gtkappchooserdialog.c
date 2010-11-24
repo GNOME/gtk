@@ -191,6 +191,38 @@ check_application (GtkAppChooserDialog *self,
 }
 
 static void
+add_or_find_application (GtkAppChooserDialog *self)
+{
+  GAppInfo *app;
+
+  app = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self));
+
+  /* we don't care about reporting errors here */
+  g_app_info_add_supports_type (app,
+				self->priv->content_type,
+				NULL);
+
+  g_object_unref (app);
+}
+
+static void
+gtk_app_chooser_dialog_response (GtkDialog *dialog,
+			       gint response_id,
+			       gpointer user_data)
+{
+  GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (dialog);
+
+  switch (response_id)
+    {
+    case GTK_RESPONSE_OK:
+      add_or_find_application (self);
+      break;
+    default :
+      break;
+    }
+}
+
+static void
 widget_application_selected_cb (GtkAppChooserWidget *widget,
 				GAppInfo *app_info,
 				gpointer user_data)
@@ -552,6 +584,12 @@ gtk_app_chooser_dialog_init (GtkAppChooserDialog *self)
 {
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_DIALOG,
 					    GtkAppChooserDialogPrivate);
+
+  /* we can't override the class signal handler here, as it's a RUN_LAST;
+   * we want our signal handler instead to be executed before any user code.
+   */
+  g_signal_connect (self, "response",
+		    G_CALLBACK (gtk_app_chooser_dialog_response), NULL);
 }
 
 static void
