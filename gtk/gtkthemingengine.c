@@ -1682,27 +1682,32 @@ render_frame_internal (GtkThemingEngine *engine,
                                     junction);
       cairo_stroke (cr);
 
-      if (radius == 0 &&
-          border_width > 1)
+      if (border_width > 1)
         {
           /* overprint top/right and bottom/left corner
-           * triangles, to give the box a 3D-like appearance
+           * triangles if there are square corners there,
+           * to give the box a 3D-like appearance.
            */
+          cairo_save (cr);
+
           if (border_style == GTK_BORDER_STYLE_INSET)
             gdk_cairo_set_source_rgba (cr, &lighter);
           else
             gdk_cairo_set_source_rgba (cr, border_color);
 
-          cairo_save (cr);
-
           cairo_set_line_width (cr, 1);
 
-          _cairo_corner_triangle (cr,
-                                  x + width - border_width, y,
-                                  border_width);
-          _cairo_corner_triangle (cr,
-                                  x, y + height - border_width,
-                                  border_width);
+          if (radius == 0 ||
+              (junction & GTK_JUNCTION_CORNER_TOPRIGHT) != 0)
+            _cairo_corner_triangle (cr,
+                                    x + width - border_width, y,
+                                    border_width);
+
+          if (radius == 0 ||
+              (junction & GTK_JUNCTION_CORNER_BOTTOMLEFT) != 0)
+            _cairo_corner_triangle (cr,
+                                    x, y + height - border_width,
+                                    border_width);
           cairo_stroke (cr);
           cairo_restore (cr);
         }
