@@ -533,14 +533,13 @@ gtk_cell_renderer_pixbuf_create_themed_pixbuf (GtkCellRendererPixbuf *cellpixbuf
 
   if (info)
     {
-      GtkStyle *style;
+      GtkStyleContext *context;
 
-      style = gtk_widget_get_style (GTK_WIDGET (widget));
-      priv->pixbuf = gtk_icon_info_load_symbolic_for_style (info,
-                                                            style,
-                                                            GTK_STATE_NORMAL,
-                                                            NULL,
-                                                            NULL);
+      context = gtk_widget_get_style_context (GTK_WIDGET (widget));
+      priv->pixbuf = gtk_icon_info_load_symbolic_for_context (info,
+                                                              context,
+                                                              NULL,
+                                                              NULL);
       gtk_icon_info_free (info);
     }
 
@@ -603,12 +602,13 @@ create_symbolic_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
 
   if (info)
     {
-      GtkStyle *style;
+      GtkStyleContext *context;
 
-      style = gtk_widget_get_style (GTK_WIDGET (widget));
-      pixbuf = gtk_icon_info_load_symbolic_for_style (info,
-                                                      style, state,
-                                                      NULL, NULL);
+      context = gtk_widget_get_style_context (GTK_WIDGET (widget));
+      pixbuf = gtk_icon_info_load_symbolic_for_context (info,
+                                                        context,
+                                                        NULL,
+                                                        NULL);
       gtk_icon_info_free (info);
       return pixbuf;
     }
