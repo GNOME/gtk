@@ -3622,6 +3622,16 @@ gtk_css_provider_get_default (void)
         "  background-color: shade (@bg_color, 0.9);\n"
         "  border-color: shade (@bg_color, 0.7);\n"
         "}\n"
+        "\n"
+        "GtkLabel:selected {\n"
+        "  background-color: shade (@bg_color, 0.9);\n"
+        "  color: @fg_color;\n"
+        "}\n"
+        "\n"
+        "GtkLabel:selected:focused {\n"
+        "  background-color: @selected_bg_color;\n"
+        "  color: @selected_fg_color;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
