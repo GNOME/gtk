@@ -388,6 +388,7 @@ gdk_device_get_key
 gdk_device_get_mode
 gdk_device_get_name
 gdk_device_get_n_axes
+gdk_device_get_n_keys
 gdk_device_get_source
 gdk_device_get_type G_GNUC_CONST
 gdk_device_set_axis_use

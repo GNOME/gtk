@@ -199,6 +199,14 @@ gdk_device_get_axis_use (GdkDevice *device,
 }
 
 gint
+gdk_device_get_n_keys (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->num_keys;
+}
+
+gint
 gdk_device_get_n_axes (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);

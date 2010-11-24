@@ -318,6 +318,24 @@ gdk_device_get_axis_use (GdkDevice *device,
 }
 
 /**
+ * gdk_device_get_n_keys:
+ * @device: a #GdkDevice.
+ *
+ * Gets the number of keys of a device.
+ *
+ * Returns: the number of keys of @device
+ *
+ * Since: 2.24
+ **/
+gint
+gdk_device_get_n_keys (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->num_keys;
+}
+
+/**
  * gdk_device_get_n_axes:
  * @device: a #GdkDevice.
  *
