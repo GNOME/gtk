@@ -1092,7 +1092,6 @@ main (int argc, char **argv)
         g_object_set (renderer, "text", "la la la", NULL);
         gtk_container_add (GTK_CONTAINER (boom), cellview);
 
-#if 0
         /* GtkComboBox list */
         tmp = gtk_frame_new ("GtkComboBox (list)");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
@@ -1334,7 +1333,6 @@ main (int argc, char **argv)
                                         NULL);
 	
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
-#endif
 
         /* Capitals */
         tmp = gtk_frame_new ("Where are you ?");
@@ -1369,7 +1367,6 @@ main (int argc, char **argv)
 	gdk_threads_add_timeout (1000, (GSourceFunc) capital_animation, model);
 #endif
 
-#if 0
 	/* Ellipsizing growing combos */
         tmp = gtk_frame_new ("Unconstrained Menu");
         gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
@@ -1390,7 +1387,7 @@ main (int argc, char **argv)
                                         "text", 0, NULL);
         gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 	gtk_combo_box_set_popup_fixed_width (GTK_COMBO_BOX (combobox), FALSE);
-#endif
+
         gtk_widget_show_all (window);
 
         gtk_main ();
