@@ -1473,11 +1473,11 @@ is_parent_of (GdkWindow *parent,
 static void
 change_impl (GdkWindow *private,
 	     GdkWindow *impl_window,
-	     GdkDrawable *new)
+	     GdkWindowImpl *new)
 {
   GList *l;
   GdkWindow *child;
-  GdkDrawable *old_impl;
+  GdkWindowImpl *old_impl;
   GdkWindow *old_impl_window;
 
   old_impl = private->impl;
@@ -1777,7 +1777,7 @@ gboolean
 gdk_window_ensure_native (GdkWindow *window)
 {
   GdkWindow *impl_window;
-  GdkDrawable *new_impl, *old_impl;
+  GdkWindowImpl *new_impl, *old_impl;
   GdkScreen *screen;
   GdkWindow *above;
   GList listhead;
@@ -3398,7 +3398,7 @@ gdk_window_flush_if_exposing (GdkWindow *window)
 
 static void
 gdk_window_flush_recursive_helper (GdkWindow *window,
-				   GdkDrawable *impl)
+				   GdkWindowImpl *impl)
 {
   GdkWindow *child;
   GList *l;
@@ -6054,7 +6054,7 @@ move_native_children (GdkWindow *private)
 
 static gboolean
 collect_native_child_region_helper (GdkWindow *window,
-				    GdkDrawable *impl,
+				    GdkWindowImpl *impl,
 				    cairo_region_t **region,
 				    int x_offset,
 				    int y_offset)

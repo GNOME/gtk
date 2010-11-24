@@ -32,6 +32,7 @@
 #include <gio/gio.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkwindow.h>
+#include <gdk/gdkwindowimpl.h>
 #include <gdk/gdkprivate.h>
 
 G_BEGIN_DECLS
@@ -186,7 +187,7 @@ struct _GdkWindow
 {
   GObject parent_instance;
 
-  GdkDrawable *impl; /* window-system-specific delegate object */  
+  GdkWindowImpl *impl; /* window-system-specific delegate object */  
   
   GdkWindow *parent;
   GdkVisual *visual;

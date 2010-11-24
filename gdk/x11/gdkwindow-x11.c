@@ -702,7 +702,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   display_x11 = GDK_DISPLAY_X11 (GDK_SCREEN_DISPLAY (screen));
   
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
-  window->impl = (GdkDrawable *)impl;
+  window->impl = GDK_WINDOW_IMPL (impl);
   impl->wrapper = GDK_WINDOW (window);
   
   xdisplay = screen_x11->xdisplay;
@@ -5536,8 +5536,6 @@ gdk_x11_get_server_time (GdkWindow *window)
 XID
 gdk_x11_window_get_xid (GdkWindow *window)
 {
-  GdkDrawable *impl;
-      
   /* Try to ensure the window has a native window */
   if (!_gdk_window_has_impl (window))
     {
@@ -5556,9 +5554,7 @@ gdk_x11_window_get_xid (GdkWindow *window)
       return None;
     }
   
-  impl = window->impl;
-
-  return ((GdkWindowImplX11 *)impl)->xid;
+  return GDK_WINDOW_IMPL_X11 (window->impl)->xid;
 }
 
 static void
