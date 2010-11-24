@@ -32,6 +32,7 @@
 #define __GTK_APP_CHOOSER_WIDGET_H__
 
 #include <gtk/gtkbox.h>
+#include <gtk/gtkmenu.h>
 #include <gio/gio.h>
 
 #define GTK_TYPE_APP_CHOOSER_WIDGET\
@@ -66,6 +67,10 @@ struct _GtkAppChooserWidgetClass {
 
   void (* application_activated) (GtkAppChooserWidget *self,
 				  GAppInfo *app_info);
+
+  void (* populate_popup) (GtkAppChooserWidget *self,
+			   GtkMenu *menu,
+			   GAppInfo *app_info);
 
   /* padding for future class expansion */
   gpointer padding[16];

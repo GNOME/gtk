@@ -85,6 +85,7 @@ enum {
 enum {
   SIGNAL_APPLICATION_SELECTED,
   SIGNAL_APPLICATION_ACTIVATED,
+  SIGNAL_POPULATE_POPUP,
   N_SIGNALS
 };
 
@@ -134,6 +135,86 @@ refresh_and_emit_app_selected (GtkAppChooserWidget *self,
   if (should_emit)
     g_signal_emit (self, signals[SIGNAL_APPLICATION_SELECTED], 0,
 		   self->priv->selected_app_info);
+}
+
+static GAppInfo *
+get_app_info_for_event (GtkAppChooserWidget *self,
+			GdkEventButton *event)
+{
+  GtkTreePath *path = NULL;
+  GtkTreeIter iter;
+  GtkTreeModel *model;
+  GAppInfo *info;
+  gboolean recommended;
+
+  if (!gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (self->priv->program_list),
+				      event->x, event->y,
+				      &path,
+				      NULL, NULL, NULL))
+    return NULL;
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (self->priv->program_list));
+
+  if (!gtk_tree_model_get_iter (model, &iter, path))
+    {
+      gtk_tree_path_free (path);
+      return NULL;
+    }
+
+  /* we only allow interaction with recommended applications */
+  gtk_tree_model_get (model, &iter,
+		      COLUMN_APP_INFO, &info,
+		      COLUMN_RECOMMENDED, &recommended,
+		      -1);
+
+  if (!recommended)
+    g_clear_object (&info);
+
+  return info;
+}
+
+static gboolean
+widget_button_press_event_cb (GtkWidget *widget,
+			      GdkEventButton *event,
+			      gpointer user_data)
+{
+  GtkAppChooserWidget *self = user_data;
+
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+      GAppInfo *info;
+      GtkWidget *menu;
+      GList *children;
+      gint n_children;
+
+      info = get_app_info_for_event (self, event);
+
+      if (info == NULL)
+	return FALSE;
+
+      menu = gtk_menu_new ();
+
+      g_signal_emit (self, signals[SIGNAL_POPULATE_POPUP], 0,
+		     menu, info);
+
+      g_object_unref (info);
+
+      /* see if clients added menu items to this container */
+      children = gtk_container_get_children (GTK_CONTAINER (menu));
+      n_children = g_list_length (children);
+
+      if (n_children > 0)
+	{
+	  /* actually popup the menu */
+	  gtk_menu_attach_to_widget (GTK_MENU (menu), self->priv->program_list, NULL);
+	  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+			  event->button, event->time);
+	}
+
+      g_list_free (children);
+    }
+
+  return FALSE;
 }
 
 static gboolean
@@ -972,6 +1053,16 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
 		  G_TYPE_NONE,
 		  1, G_TYPE_APP_INFO);
 
+  signals[SIGNAL_POPULATE_POPUP] =
+    g_signal_new ("populate-popup",
+		  GTK_TYPE_APP_CHOOSER_WIDGET,
+		  G_SIGNAL_RUN_FIRST,
+		  G_STRUCT_OFFSET (GtkAppChooserWidgetClass, populate_popup),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE,
+		  2, GTK_TYPE_MENU, G_TYPE_APP_INFO);
+
   g_type_class_add_private (klass, sizeof (GtkAppChooserWidgetPrivate));
 }
 
@@ -1010,6 +1101,9 @@ gtk_app_chooser_widget_init (GtkAppChooserWidget *self)
 			    self);
   g_signal_connect (self->priv->program_list, "row-activated",
 		    G_CALLBACK (program_list_selection_activated),
+		    self);
+  g_signal_connect (self->priv->program_list, "button-press-event",
+		    G_CALLBACK (widget_button_press_event_cb),
 		    self);
 }
 
