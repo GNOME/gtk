@@ -422,7 +422,6 @@ enum {
   PROXIMITY_IN_EVENT,
   PROXIMITY_OUT_EVENT,
   CLIENT_EVENT,
-  NO_EXPOSE_EVENT,
   VISIBILITY_NOTIFY_EVENT,
   WINDOW_STATE_EVENT,
   DAMAGE_EVENT,
@@ -864,8 +863,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /* Accessibility support */
   klass->get_accessible = gtk_widget_real_get_accessible;
-
-  klass->no_expose_event = NULL;
 
   klass->adjust_size_request = gtk_widget_real_adjust_size_request;
   klass->adjust_size_allocation = gtk_widget_real_adjust_size_allocation;
@@ -2698,30 +2695,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_FROM_CLASS (klass),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkWidgetClass, client_event),
-		  _gtk_boolean_handled_accumulator, NULL,
-		  _gtk_marshal_BOOLEAN__BOXED,
-		  G_TYPE_BOOLEAN, 1,
-		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
-
-  /**
-   * GtkWidget::no-expose-event:
-   * @widget: the object which received the signal
-   * @event: (type Gdk.EventNoExpose): the #GdkEventNoExpose which triggered
-   *   this signal.
-   *
-   * The ::no-expose-event will be emitted when the @widget's window is
-   * drawn as a copy of another #GdkDrawable which was completely unobscured.
-   * If the source window was partially obscured #GdkEventExpose events will
-   * be generated for those areas.
-   *
-   * Returns: %TRUE to stop other handlers from being invoked for the event.
-   *   %FALSE to propagate the event further.
-   */
-  widget_signals[NO_EXPOSE_EVENT] =
-    g_signal_new (I_("no-expose-event"),
-		  G_TYPE_FROM_CLASS (klass),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, no_expose_event),
 		  _gtk_boolean_handled_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__BOXED,
 		  G_TYPE_BOOLEAN, 1,
@@ -5816,9 +5789,6 @@ gtk_widget_event_internal (GtkWidget *widget,
 	  break;
 	case GDK_PROXIMITY_OUT:
 	  signal_num = PROXIMITY_OUT_EVENT;
-	  break;
-	case GDK_NO_EXPOSE:
-	  signal_num = NO_EXPOSE_EVENT;
 	  break;
 	case GDK_CLIENT_EVENT:
 	  signal_num = CLIENT_EVENT;

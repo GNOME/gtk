@@ -523,16 +523,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
       }
       break;
 
-    case NoExpose:
-      GDK_NOTE (EVENTS,
-		g_message ("no expose:\t\tdrawable: %ld",
-			   xevent->xnoexpose.drawable));
-
-      event->no_expose.type = GDK_NO_EXPOSE;
-      event->no_expose.window = window;
-
-      break;
-
     case VisibilityNotify:
 #ifdef G_ENABLE_DEBUG
       if (_gdk_debug_flags & GDK_DEBUG_EVENTS)

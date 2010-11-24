@@ -756,7 +756,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_DROP_FINISHED);
     CASE (GDK_CLIENT_EVENT);
     CASE (GDK_VISIBILITY_NOTIFY);
-    CASE (GDK_NO_EXPOSE);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
     CASE (GDK_SETTING);

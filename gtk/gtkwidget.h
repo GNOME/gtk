@@ -320,8 +320,6 @@ struct _GtkWidgetClass
 					 GdkEventVisibility  *event);
   gboolean (* client_event)		(GtkWidget	     *widget,
 					 GdkEventClient	     *event);
-  gboolean (* no_expose_event)		(GtkWidget	     *widget,
-					 GdkEventAny	     *event);
   gboolean (* window_state_event)	(GtkWidget	     *widget,
 					 GdkEventWindowState *event);
   gboolean (* damage_event)             (GtkWidget           *widget,

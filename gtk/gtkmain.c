@@ -1667,7 +1667,6 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_PROPERTY_NOTIFY:
-    case GDK_NO_EXPOSE:
     case GDK_FOCUS_CHANGE:
     case GDK_CONFIGURE:
     case GDK_MAP:

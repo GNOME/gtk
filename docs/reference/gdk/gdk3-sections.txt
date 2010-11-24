@@ -861,7 +861,6 @@ GdkNativeWindow
 GdkEventDND
 GdkEventProximity
 GdkEventClient
-GdkEventNoExpose
 GdkEventWindowState
 GdkEventSetting
 GdkEventOwnerChange

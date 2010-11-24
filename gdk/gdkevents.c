@@ -636,7 +636,6 @@ gdk_event_get_time (const GdkEvent *event)
 	return event->dnd.time;
       case GDK_CLIENT_EVENT:
       case GDK_VISIBILITY_NOTIFY:
-      case GDK_NO_EXPOSE:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
@@ -704,7 +703,6 @@ gdk_event_get_state (const GdkEvent        *event,
         return TRUE;
       case GDK_VISIBILITY_NOTIFY:
       case GDK_CLIENT_EVENT:
-      case GDK_NO_EXPOSE:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_SELECTION_CLEAR:
