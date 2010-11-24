@@ -132,6 +132,7 @@
 #include <gtk/gtkappchooser.h>
 #include <gtk/gtkappchooserdialog.h>
 #include <gtk/gtkappchooserwidget.h>
+#include <gtk/gtkappchoosercombobox.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
