@@ -964,8 +964,6 @@ gtk_hbutton_box_get_type G_GNUC_CONST
 gtk_hbutton_box_new
 gtk_hpaned_get_type G_GNUC_CONST
 gtk_hpaned_new
-gtk_hruler_get_type G_GNUC_CONST
-gtk_hruler_new
 gtk_hscale_get_type G_GNUC_CONST
 gtk_hscale_new
 gtk_hscale_new_with_range
@@ -2029,12 +2027,6 @@ gtk_requisition_new G_GNUC_MALLOC
 gtk_resize_mode_get_type G_GNUC_CONST
 gtk_response_type_get_type G_GNUC_CONST
 gtk_rgb_to_hsv
-gtk_ruler_get_metric
-gtk_ruler_get_range
-gtk_ruler_get_type G_GNUC_CONST
-gtk_ruler_new
-gtk_ruler_set_metric
-gtk_ruler_set_range
 gtk_scale_add_mark
 gtk_scale_button_get_adjustment
 gtk_scale_button_get_minus_button
@@ -3113,8 +3105,6 @@ gtk_volume_button_get_type G_GNUC_CONST
 gtk_volume_button_new
 gtk_vpaned_get_type G_GNUC_CONST
 gtk_vpaned_new
-gtk_vruler_get_type G_GNUC_CONST
-gtk_vruler_new
 gtk_vscale_get_type G_GNUC_CONST
 gtk_vscale_new
 gtk_vscale_new_with_range

@@ -1559,22 +1559,6 @@ gtk_hpaned_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkhruler</FILE>
-<TITLE>GtkHRuler</TITLE>
-GtkHRuler
-gtk_hruler_new
-<SUBSECTION Standard>
-GTK_HRULER
-GTK_IS_HRULER
-GTK_TYPE_HRULER
-GTK_HRULER_CLASS
-GTK_IS_HRULER_CLASS
-GTK_HRULER_GET_CLASS
-<SUBSECTION Private>
-gtk_hruler_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkhscale</FILE>
 <TITLE>GtkHScale</TITLE>
 GtkHScale
@@ -2709,28 +2693,6 @@ GTK_RECENT_ACTION_GET_CLASS
 <SUBSECTION Private>
 GtkRecentActionPrivate
 gtk_recent_action_get_type
-</SECTION>
-
-<SECTION>
-<FILE>gtkruler</FILE>
-<TITLE>GtkRuler</TITLE>
-GtkRuler
-GtkRulerMetric
-gtk_ruler_new
-gtk_ruler_set_metric
-gtk_ruler_set_range
-gtk_ruler_get_metric
-gtk_ruler_get_range
-<SUBSECTION Standard>
-GTK_RULER
-GTK_IS_RULER
-GTK_TYPE_RULER
-GTK_RULER_CLASS
-GTK_IS_RULER_CLASS
-GTK_RULER_GET_CLASS
-<SUBSECTION Private>
-GtkRulerPrivate
-gtk_ruler_get_type
 </SECTION>
 
 <SECTION>
@@ -4747,22 +4709,6 @@ GtkPanedPrivate
 </SECTION>
 
 <SECTION>
-<FILE>gtkvruler</FILE>
-<TITLE>GtkVRuler</TITLE>
-GtkVRuler
-gtk_vruler_new
-<SUBSECTION Standard>
-GTK_VRULER
-GTK_IS_VRULER
-GTK_TYPE_VRULER
-GTK_VRULER_CLASS
-GTK_IS_VRULER_CLASS
-GTK_VRULER_GET_CLASS
-<SUBSECTION Private>
-gtk_vruler_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkvscale</FILE>
 <TITLE>GtkVScale</TITLE>
 GtkVScale
@@ -5589,7 +5535,6 @@ GtkExpanderStyle
 GtkIMPreeditStyle
 GtkIMStatusStyle
 GtkJustification
-GtkMetricType
 GtkMovementStep
 GtkOrientation
 GtkPackType

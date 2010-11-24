@@ -214,7 +214,6 @@ gtk_public_h_sources =          \
 	gtkhbbox.h		\
 	gtkhbox.h		\
 	gtkhpaned.h		\
-	gtkhruler.h		\
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
@@ -269,7 +268,6 @@ gtk_public_h_sources =          \
 	gtkrecentchooserwidget.h \
 	gtkrecentfilter.h 	\
 	gtkrecentmanager.h 	\
-	gtkruler.h		\
 	gtkscale.h		\
 	gtkscalebutton.h	\
 	gtkscrollable.h         \
@@ -328,7 +326,6 @@ gtk_public_h_sources =          \
 	gtkviewport.h		\
 	gtkvolumebutton.h	\
 	gtkvpaned.h		\
-	gtkvruler.h		\
 	gtkvscale.h		\
 	gtkvscrollbar.h		\
 	gtkvseparator.h		\
@@ -479,7 +476,6 @@ gtk_base_c_sources =            \
 	gtkhbbox.c		\
 	gtkhbox.c		\
 	gtkhpaned.c		\
-	gtkhruler.c		\
 	gtkhscale.c		\
 	gtkhscrollbar.c		\
 	gtkhseparator.c		\
@@ -545,7 +541,6 @@ gtk_base_c_sources =            \
 	gtkrecentchooser.c 	\
 	gtkrecentfilter.c 	\
 	gtkrecentmanager.c 	\
-	gtkruler.c		\
 	gtkscale.c		\
 	gtkscalebutton.c	\
 	gtkscrollable.c         \
@@ -613,7 +608,6 @@ gtk_base_c_sources =            \
 	gtkvolumebutton.c	\
 	gtkviewport.c		\
 	gtkvpaned.c		\
-	gtkvruler.c		\
 	gtkvscale.c		\
 	gtkvscrollbar.c		\
 	gtkvseparator.c		\

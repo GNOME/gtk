@@ -208,13 +208,6 @@ typedef enum
   GTK_MESSAGE_OTHER
 } GtkMessageType;
 
-typedef enum
-{
-  GTK_PIXELS,
-  GTK_INCHES,
-  GTK_CENTIMETERS
-} GtkMetricType;
-
 /**
  * GtkMovementStep:
  * @GTK_MOVEMENT_LOGICAL_POSITIONS: Move forward or back by graphemes
