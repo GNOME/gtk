@@ -595,7 +595,7 @@ gdk_device_set_mode (GdkDevice    *device,
  *
  * Returns: the number of keys.
  *
- * Since: 3.0
+ * Since: 2.24
  **/
 gint
 gdk_device_get_n_keys (GdkDevice *device)
