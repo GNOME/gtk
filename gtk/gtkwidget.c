@@ -13772,6 +13772,18 @@ gtk_widget_get_path (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
+  /* As strange as it may seem, this may happen on object construction.
+   * init() implementations of parent types may eventually call this function,
+   * each with its corresponding GType, which could leave a child
+   * implementation with a wrong widget type in the widget path
+   */
+  if (widget->priv->path &&
+      G_OBJECT_TYPE (widget) != gtk_widget_path_get_widget_type (widget->priv->path))
+    {
+      gtk_widget_path_free (widget->priv->path);
+      widget->priv->path = NULL;
+    }
+
   if (!widget->priv->path)
     {
       GtkWidget *parent;
@@ -13795,6 +13807,10 @@ gtk_widget_get_path (GtkWidget *widget)
 
       if (widget->priv->name)
         gtk_widget_path_iter_set_name (widget->priv->path, pos, widget->priv->name);
+
+      if (widget->priv->context)
+        gtk_style_context_set_path (widget->priv->context,
+                                    widget->priv->path);
     }
 
   return widget->priv->path;
@@ -13838,6 +13854,13 @@ gtk_widget_get_style_context (GtkWidget *widget)
       _gtk_widget_update_path (widget);
       gtk_style_context_set_path (widget->priv->context,
                                   widget->priv->path);
+    }
+  else
+    {
+      /* Force widget path regeneration if needed, the
+       * context will be updated within this function.
+       */
+      gtk_widget_get_path (widget);
     }
 
   return widget->priv->context;
