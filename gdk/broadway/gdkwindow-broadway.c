@@ -74,8 +74,6 @@ G_DEFINE_TYPE_WITH_CODE (GdkWindowImplBroadway,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_WINDOW_IMPL,
                                                 gdk_window_impl_iface_init));
 
-static GList *all_windows;
-
 GType
 _gdk_window_impl_get_type (void)
 {
@@ -171,7 +169,7 @@ dirty_flush_idle (gpointer data)
   if (client == NULL)
     return FALSE;
 
-  for (l = all_windows; l != NULL; l = l->next)
+  for (l = display->toplevels; l != NULL; l = l->next)
     {
       GdkWindowImplBroadway *impl = l->data;
 
@@ -204,7 +202,7 @@ _gdk_broadway_resync_windows (void)
 
   display = GDK_DISPLAY_BROADWAY (gdk_display_get_default ());
 
-  for (l = all_windows; l != NULL; l = l->next)
+  for (l = display->toplevels; l != NULL; l = l->next)
     {
       GdkWindowImplBroadway *impl = l->data;
       GdkWindowObject *private;
@@ -235,7 +233,6 @@ _gdk_broadway_resync_windows (void)
 static void
 gdk_window_impl_broadway_init (GdkWindowImplBroadway *impl)
 {
-  all_windows = g_list_prepend (all_windows, impl);
   impl->toplevel_window_type = -1;
   impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
                                                (GDestroyNotify) gdk_cursor_unref);
@@ -272,7 +269,7 @@ gdk_window_impl_broadway_finalize (GObject *object)
 
   g_hash_table_destroy (window_impl->device_cursor);
 
-  all_windows = g_list_remove (all_windows, window_impl);
+  display_broadway->toplevels = g_list_remove (display_broadway->toplevels, window_impl);
 
   G_OBJECT_CLASS (gdk_window_impl_broadway_parent_class)->finalize (object);
 }
@@ -334,7 +331,6 @@ _gdk_window_impl_new (GdkWindow     *window,
   screen_broadway = GDK_SCREEN_BROADWAY (screen);
   display_broadway = GDK_DISPLAY_BROADWAY (GDK_SCREEN_DISPLAY (screen));
 
-
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
   private->impl = (GdkDrawable *)impl;
   impl->id = current_id++;
@@ -347,6 +343,8 @@ _gdk_window_impl_new (GdkWindow     *window,
   g_assert (private->window_type == GDK_WINDOW_TOPLEVEL ||
 	    private->window_type == GDK_WINDOW_TEMP);
   g_assert (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT);
+
+  display_broadway->toplevels = g_list_prepend (display_broadway->toplevels, impl);
 
   /* Instead of window manager placement we have this mini hack
      so that the main/first window is not covered in the demos. */

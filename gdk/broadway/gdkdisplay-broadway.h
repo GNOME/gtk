@@ -50,6 +50,7 @@ struct _GdkDisplayBroadway
   GdkScreen **screens;
 
   GHashTable *id_ht;
+  GList *toplevels;
 
   GSource *event_source;
   GdkWindow *mouse_in_toplevel;
