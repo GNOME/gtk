@@ -349,6 +349,56 @@ widget_notify_for_button_cb (GObject *source,
 }
 
 static void
+forget_menu_item_activate_cb (GtkMenuItem *item,
+			      gpointer user_data)
+{
+  GtkAppChooserDialog *self = user_data;
+  GAppInfo *info;
+
+  info = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self));
+
+  if (info != NULL)
+    {
+      g_app_info_remove_supports_type (info, self->priv->content_type,
+				       NULL);
+
+      gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
+
+      g_object_unref (info);
+    }
+}
+
+static GtkWidget *
+build_forget_menu_item (GtkAppChooserDialog *self)
+{
+  GtkWidget *retval;
+
+  retval = gtk_menu_item_new_with_label (_("Forget association"));
+  gtk_widget_show (retval);
+
+  g_signal_connect (retval, "activate",
+		    G_CALLBACK (forget_menu_item_activate_cb), self);
+
+  return retval;
+}
+
+static void
+widget_populate_popup_cb (GtkAppChooserWidget *widget,
+			  GtkMenu *menu,
+			  GAppInfo *info,
+			  gpointer user_data)
+{
+  GtkAppChooserDialog *self = user_data;
+  GtkWidget *menu_item;
+
+  if (g_app_info_can_remove_supports_type (info))
+    {
+      menu_item = build_forget_menu_item (self);
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+    }
+}
+
+static void
 build_dialog_ui (GtkAppChooserDialog *self)
 {
   GtkWidget *vbox;
@@ -385,6 +435,8 @@ build_dialog_ui (GtkAppChooserDialog *self)
 		    G_CALLBACK (widget_application_activated_cb), self);
   g_signal_connect (self->priv->app_chooser_widget, "notify::show-all",
 		    G_CALLBACK (widget_notify_for_button_cb), self);
+  g_signal_connect (self->priv->app_chooser_widget, "populate-popup",
+		    G_CALLBACK (widget_populate_popup_cb), self);
 
   button = gtk_button_new_with_label (_("Show other applications"));
   self->priv->show_more_button = button;
