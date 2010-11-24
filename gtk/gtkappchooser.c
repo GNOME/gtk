@@ -21,7 +21,7 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "gtkappchooser.h"
 
@@ -39,11 +39,11 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
   GParamSpec *pspec;
 
   pspec = g_param_spec_string ("content-type",
-			       P_("Content type"),
-			       P_("The content type used by the open with object"),
-			       NULL,
-			       G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
-			       G_PARAM_STATIC_STRINGS);
+                               P_("Content type"),
+                               P_("The content type used by the open with object"),
+                               NULL,
+                               G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
+                               G_PARAM_STATIC_STRINGS);
   g_object_interface_install_property (iface, pspec);
 }
 
@@ -55,18 +55,37 @@ gtk_app_chooser_get_content_type (GtkAppChooser *self)
   g_return_val_if_fail (GTK_IS_APP_CHOOSER (self), NULL);
 
   g_object_get (self,
-		"content-type", &retval,
-		NULL);
+                "content-type", &retval,
+                NULL);
 
   return retval;
 }
 
+/**
+ * gtk_app_chooser_get_app_info:
+ * @self: a #GtkAppChooser
+ *
+ * Returns the currently selected application.
+ *
+ * Returns: (transfer full): a #GAppInfo for the currently selected
+ *     application, or %NULL if none is selected. Free with g_object_unref().
+ *
+ * Since: 3.0
+ */
 GAppInfo *
 gtk_app_chooser_get_app_info (GtkAppChooser *self)
 {
   return GTK_APP_CHOOSER_GET_IFACE (self)->get_app_info (self);
 }
 
+/**
+ * gtk_app_chooser_refresh:
+ * @self: a #GtkAppChooser
+ *
+ * Reload the list of applications.
+ *
+ * Since: 3.0
+ */
 void
 gtk_app_chooser_refresh (GtkAppChooser *self)
 {

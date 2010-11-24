@@ -27,18 +27,12 @@
 #include <gtk/gtkappchooseronline.h>
 #include <glib.h>
 
-#define GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY\
-  (_gtk_app_chooser_online_dummy_get_type ())
-#define GTK_APP_CHOOSER_ONLINE_DUMMY(obj)\
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, GtkAppChooserOnlineDummy))
-#define GTK_APP_CHOOSER_ONLINE_DUMMY_CLASS(klass)\
-  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, GtkAppChooserOnlineDummyClass))
-#define GTK_IS_APP_CHOOSER_ONLINE_DUMMY(obj)\
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY))
-#define GTK_IS_APP_CHOOSER_ONLINE_DUMMY_CLASS(klass)\
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY))
-#define GTK_APP_CHOOSER_ONLINE_DUMMY_GET_CLASS(obj)\
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, GtkAppChooserOnlineDummyClass))
+#define GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY            (_gtk_app_chooser_online_dummy_get_type ())
+#define GTK_APP_CHOOSER_ONLINE_DUMMY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, GtkAppChooserOnlineDummy))
+#define GTK_APP_CHOOSER_ONLINE_DUMMY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, GtkAppChooserOnlineDummyClass))
+#define GTK_IS_APP_CHOOSER_ONLINE_DUMMY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY))
+#define GTK_IS_APP_CHOOSER_ONLINE_DUMMY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY))
+#define GTK_APP_CHOOSER_ONLINE_DUMMY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, GtkAppChooserOnlineDummyClass))
 
 typedef struct _GtkAppChooserOnlineDummy        GtkAppChooserOnlineDummy;
 typedef struct _GtkAppChooserOnlineDummyClass   GtkAppChooserOnlineDummyClass;

@@ -21,12 +21,14 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "gtkappchooseronlinepk.h"
 
 #include "gtkappchooseronline.h"
+#ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
+#endif
 
 #include <gio/gio.h>
 
@@ -34,12 +36,12 @@
 static void app_chooser_online_iface_init (GtkAppChooserOnlineInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserOnlinePk, gtk_app_chooser_online_pk,
-			 G_TYPE_OBJECT,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER_ONLINE,
-						app_chooser_online_iface_init)
-			 g_io_extension_point_implement ("gtkappchooser-online",
-							 g_define_type_id,
-							 "packagekit", 10));
+                         G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER_ONLINE,
+                                                app_chooser_online_iface_init)
+                         g_io_extension_point_implement ("gtkappchooser-online",
+                                                         g_define_type_id,
+                                                         "packagekit", 10));
 
 struct _GtkAppChooserOnlinePkPrivate {
   GSimpleAsyncResult *result;
@@ -72,13 +74,13 @@ static void
 gtk_app_chooser_online_pk_init (GtkAppChooserOnlinePk *self)
 {
   self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_ONLINE_PK,
-					    GtkAppChooserOnlinePkPrivate);
+                                            GtkAppChooserOnlinePkPrivate);
 }
 
 static gboolean
 pk_search_mime_finish (GtkAppChooserOnline *obj,
-		       GAsyncResult *res,
-		       GError **error)
+                       GAsyncResult *res,
+                       GError **error)
 {
   GSimpleAsyncResult *simple = G_SIMPLE_ASYNC_RESULT (res);
 
@@ -86,9 +88,9 @@ pk_search_mime_finish (GtkAppChooserOnline *obj,
 }
 
 static void
-install_mime_types_ready_cb (GObject *source,
-			     GAsyncResult *res,
-			     gpointer user_data)
+install_mime_types_ready_cb (GObject      *source,
+                             GAsyncResult *res,
+                             gpointer      user_data)
 {
   GtkAppChooserOnlinePk *self = user_data;
   GDBusProxy *proxy = G_DBUS_PROXY (source);
@@ -97,24 +99,25 @@ install_mime_types_ready_cb (GObject *source,
 
   variant = g_dbus_proxy_call_finish (proxy, res, &error);
 
-  if (variant == NULL) {
-    /* don't show errors if the user cancelled the installation explicitely
-     * or if PK wasn't able to find any apps
-     */
-    if (g_strcmp0 (g_dbus_error_get_remote_error (error), "org.freedesktop.PackageKit.Modify.Cancelled") != 0 &&
-	g_strcmp0 (g_dbus_error_get_remote_error (error), "org.freedesktop.PackageKit.Modify.NoPackagesFound") != 0)
-      g_simple_async_result_set_from_error (self->priv->result, error);
+  if (variant == NULL)
+    {
+      /* don't show errors if the user cancelled the installation explicitely
+       * or if PK wasn't able to find any apps
+       */
+      if (g_strcmp0 (g_dbus_error_get_remote_error (error), "org.freedesktop.PackageKit.Modify.Cancelled") != 0 &&
+          g_strcmp0 (g_dbus_error_get_remote_error (error), "org.freedesktop.PackageKit.Modify.NoPackagesFound") != 0)
+        g_simple_async_result_set_from_error (self->priv->result, error);
 
-    g_error_free (error);
-  }
+      g_error_free (error);
+    }
 
   g_simple_async_result_complete (self->priv->result);
 }
 
 static void
-pk_proxy_appeared_cb (GObject *source,
-		      GAsyncResult *res,
-		      gpointer user_data)
+pk_proxy_appeared_cb (GObject      *source,
+                      GAsyncResult *res,
+                      gpointer      user_data)
 {
   GtkAppChooserOnlinePk *self = user_data;
   GDBusProxy *proxy;
@@ -125,58 +128,63 @@ pk_proxy_appeared_cb (GObject *source,
 
   proxy = g_dbus_proxy_new_for_bus_finish (res, &error);
 
-  if (error != NULL) {
-    g_simple_async_result_set_from_error (self->priv->result, error);
-    g_error_free (error);
+  if (error != NULL)
+    {
+      g_simple_async_result_set_from_error (self->priv->result, error);
+      g_error_free (error);
 
-    g_simple_async_result_complete (self->priv->result);
+      g_simple_async_result_complete (self->priv->result);
 
-    return;
-  }
+      return;
+    }
 
+#ifdef GDK_WINDOWING_X11
   window = gtk_widget_get_window (GTK_WIDGET (self->priv->parent));
   xid = GDK_WINDOW_XID (window);
+#else
+  xid = 0;
+#endif
 
   mime_types[0] = self->priv->content_type;
   mime_types[1] = NULL;
 
   g_dbus_proxy_call (proxy,
-		     "InstallMimeTypes",
-		     g_variant_new ("(u^ass)",
-				    xid,
-				    mime_types,
-				    "hide-confirm-search"),
-		     G_DBUS_CALL_FLAGS_NONE,
-		     G_MAXINT, /* no timeout */
-		     NULL,
-		     install_mime_types_ready_cb,
-		     self);
+                     "InstallMimeTypes",
+                     g_variant_new ("(u^ass)",
+                                    xid,
+                                    mime_types,
+                                    "hide-confirm-search"),
+                     G_DBUS_CALL_FLAGS_NONE,
+                     G_MAXINT, /* no timeout */
+                     NULL,
+                     install_mime_types_ready_cb,
+                     self);
 }
 
 static void
 pk_search_mime_async (GtkAppChooserOnline *obj,
-		      const gchar *content_type,
-		      GtkWindow *parent,
-		      GAsyncReadyCallback callback,
-		      gpointer user_data)
+                      const gchar         *content_type,
+                      GtkWindow           *parent,
+                      GAsyncReadyCallback  callback,
+                      gpointer             user_data)
 {
   GtkAppChooserOnlinePk *self = GTK_APP_CHOOSER_ONLINE_PK (obj);
 
   self->priv->result = g_simple_async_result_new (G_OBJECT (self),
-						  callback, user_data,
-						  gtk_app_chooser_online_search_for_mimetype_async);
+                                                  callback, user_data,
+                                                  gtk_app_chooser_online_search_for_mimetype_async);
   self->priv->parent = parent;
   self->priv->content_type = g_strdup (content_type);
 
   g_dbus_proxy_new_for_bus (G_BUS_TYPE_SESSION,
-			    G_DBUS_PROXY_FLAGS_NONE,
-			    NULL,
-			    "org.freedesktop.PackageKit",
-			    "/org/freedesktop/PackageKit",
-			    "org.freedesktop.PackageKit.Modify",
-			    NULL,
-			    pk_proxy_appeared_cb,
-			    self);
+                            G_DBUS_PROXY_FLAGS_NONE,
+                            NULL,
+                            "org.freedesktop.PackageKit",
+                            "/org/freedesktop/PackageKit",
+                            "org.freedesktop.PackageKit.Modify",
+                            NULL,
+                            pk_proxy_appeared_cb,
+                            self);
 }
 
 static void

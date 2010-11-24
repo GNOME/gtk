@@ -33,20 +33,17 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_APP_CHOOSER\
-  (gtk_app_chooser_get_type ())
-#define GTK_APP_CHOOSER(obj)\
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER, GtkAppChooser))
-#define GTK_IS_APP_CHOOSER(obj)\
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER))
+#define GTK_TYPE_APP_CHOOSER    (gtk_app_chooser_get_type ())
+#define GTK_APP_CHOOSER(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER, GtkAppChooser))
+#define GTK_IS_APP_CHOOSER(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER))
 
 typedef struct _GtkAppChooser GtkAppChooser;
 
-GType gtk_app_chooser_get_type () G_GNUC_CONST;
+GType      gtk_app_chooser_get_type         (void) G_GNUC_CONST;
 
-GAppInfo * gtk_app_chooser_get_app_info (GtkAppChooser *self);
-gchar * gtk_app_chooser_get_content_type (GtkAppChooser *self);
-void gtk_app_chooser_refresh (GtkAppChooser *self);
+GAppInfo * gtk_app_chooser_get_app_info     (GtkAppChooser *self);
+gchar *    gtk_app_chooser_get_content_type (GtkAppChooser *self);
+void       gtk_app_chooser_refresh          (GtkAppChooser *self);
 
 G_END_DECLS
 

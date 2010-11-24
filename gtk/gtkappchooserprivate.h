@@ -27,13 +27,13 @@
 #include <glib.h>
 #include <gio/gio.h>
 
+#include "gtkappchooser.h"
 #include "gtkappchooserwidget.h"
 
 typedef struct _GtkAppChooserIface GtkAppChooserIface;
 typedef GtkAppChooserIface GtkAppChooserInterface;
 
-#define GTK_APP_CHOOSER_GET_IFACE(inst)\
-  (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_APP_CHOOSER, GtkAppChooserIface))
+#define GTK_APP_CHOOSER_GET_IFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GTK_TYPE_APP_CHOOSER, GtkAppChooserIface))
 
 struct _GtkAppChooserIface {
   GTypeInterface base_iface;

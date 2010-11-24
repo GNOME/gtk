@@ -18,7 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
@@ -28,7 +27,7 @@ static GtkWidget *sel_image, *sel_name;
 
 static void
 combo_changed_cb (GtkComboBox *cb,
-		  gpointer user_data)
+                  gpointer     user_data)
 {
   GAppInfo *app_info;
 
@@ -38,7 +37,7 @@ combo_changed_cb (GtkComboBox *cb,
     return;
 
   gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_app_info_get_icon (app_info),
-			    GTK_ICON_SIZE_DIALOG);
+                            GTK_ICON_SIZE_DIALOG);
   gtk_label_set_text (GTK_LABEL (sel_name), g_app_info_get_display_name (app_info));
 
   g_object_unref (app_info);
@@ -46,11 +45,11 @@ combo_changed_cb (GtkComboBox *cb,
 
 static void
 special_item_activated_cb (GtkAppChooserComboBox *cb,
-			   gpointer user_data)
+                           gpointer user_data)
 {
   gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"),
-			    GTK_ICON_SIZE_DIALOG);
-  gtk_label_set_text (GTK_LABEL (sel_name), "Special Item");  
+                            GTK_ICON_SIZE_DIALOG);
+  gtk_label_set_text (GTK_LABEL (sel_name), "Special Item");
 }
 
 int
@@ -72,7 +71,7 @@ main (int argc,
   gtk_box_pack_start (GTK_BOX (box), combobox, TRUE, TRUE, 0);
 
   g_signal_connect (combobox, "changed",
-		    G_CALLBACK (combo_changed_cb), NULL);
+                    G_CALLBACK (combo_changed_cb), NULL);
 
   w = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (w), "<b>Selected app info</b>");
@@ -88,10 +87,10 @@ main (int argc,
 
   gtk_app_chooser_combo_box_append_separator (GTK_APP_CHOOSER_COMBO_BOX (combobox));
   gtk_app_chooser_combo_box_append_custom_item (GTK_APP_CHOOSER_COMBO_BOX (combobox),
-						"Hey, I'm special!",
-						g_themed_icon_new ("face-smile"),
-						special_item_activated_cb,
-						NULL);
+                                                "Hey, I'm special!",
+                                                g_themed_icon_new ("face-smile"),
+                                                special_item_activated_cb,
+                                                NULL);
 
   /* test refresh on a combo */
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (combobox));
@@ -99,7 +98,7 @@ main (int argc,
   gtk_widget_show_all (toplevel);
 
   g_signal_connect (toplevel, "delete-event",
-		    G_CALLBACK (gtk_main_quit), NULL);
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_main ();
 

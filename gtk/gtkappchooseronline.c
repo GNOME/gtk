@@ -21,7 +21,7 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "gtkappchooseronline.h"
 
@@ -55,13 +55,11 @@ gtk_app_chooser_online_get_default (void)
     {
       /* pick the first */
       extension = extensions->data;
-      retval = g_object_new (g_io_extension_get_type (extension),
-			     NULL);
+      retval = g_object_new (g_io_extension_get_type (extension), NULL);
     }
   else
     {
-      retval = g_object_new (GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY,
-			     NULL);
+      retval = g_object_new (GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, NULL);
     }
 
   return retval;
@@ -69,10 +67,10 @@ gtk_app_chooser_online_get_default (void)
 
 void
 gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
-						  const gchar *content_type,
-						  GtkWindow *parent,
-						  GAsyncReadyCallback callback,
-						  gpointer user_data)
+                                                  const gchar         *content_type,
+                                                  GtkWindow           *parent,
+                                                  GAsyncReadyCallback  callback,
+                                                  gpointer             user_data)
 {
   GtkAppChooserOnlineInterface *iface;
 
@@ -84,9 +82,9 @@ gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
 }
 
 gboolean
-gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline *self,
-						   GAsyncResult *res,
-						   GError **error)
+gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline  *self,
+                                                   GAsyncResult         *res,
+                                                   GError              **error)
 {
   GtkAppChooserOnlineInterface *iface;
 

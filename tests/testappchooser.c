@@ -81,8 +81,7 @@ prepare_dialog (void)
 
   if (use_file)
     {
-      dialog = gtk_app_chooser_dialog_new (GTK_WINDOW (toplevel),
-                                         0, file);
+      dialog = gtk_app_chooser_dialog_new (GTK_WINDOW (toplevel), 0, file);
     }
   else
     {

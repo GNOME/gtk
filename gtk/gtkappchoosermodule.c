@@ -21,7 +21,7 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "gtkappchoosermodule.h"
 
@@ -45,7 +45,7 @@ _gtk_app_chooser_module_ensure (void)
   G_LOCK (registered_ep);
 
   if (!registered_ep)
-  {
+{
     registered_ep = TRUE;
 
     ep = g_io_extension_point_register ("gtkappchooser-online");

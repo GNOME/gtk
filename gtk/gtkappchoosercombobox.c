@@ -21,7 +21,7 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include "gtkappchoosercombobox.h"
 
@@ -73,14 +73,14 @@ custom_app_data_free (gpointer boxed)
 
 #define CUSTOM_COMBO_DATA_TYPE custom_app_combo_data_get_type()
 G_DEFINE_BOXED_TYPE (CustomAppComboData, custom_app_combo_data,
-		     custom_app_data_copy,
-		     custom_app_data_free);
+                     custom_app_data_copy,
+                     custom_app_data_free);
 
 static void app_chooser_iface_init (GtkAppChooserIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkAppChooserComboBox, gtk_app_chooser_combo_box, GTK_TYPE_COMBO_BOX,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
-						app_chooser_iface_init));
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_APP_CHOOSER,
+                                                app_chooser_iface_init));
 
 struct _GtkAppChooserComboBoxPrivate {
   gchar *content_type;
@@ -89,21 +89,21 @@ struct _GtkAppChooserComboBoxPrivate {
 
 static gboolean
 row_separator_func (GtkTreeModel *model,
-		    GtkTreeIter *iter,
-		    gpointer user_data)
+                    GtkTreeIter  *iter,
+                    gpointer      user_data)
 {
   gboolean separator;
 
   gtk_tree_model_get (model, iter,
-		      COLUMN_SEPARATOR, &separator,
-		      -1);
+                      COLUMN_SEPARATOR, &separator,
+                      -1);
 
   return separator;
 }
 
 static void
 get_first_iter (GtkListStore *store,
-		GtkTreeIter *iter)
+                GtkTreeIter  *iter)
 {
   GtkTreeIter iter2;
 
@@ -138,27 +138,27 @@ gtk_app_chooser_combo_box_populate (GtkAppChooserComboBox *self)
       icon = g_app_info_get_icon (app);
 
       if (icon == NULL)
-	icon = g_themed_icon_new ("x-application/executable");
+        icon = g_themed_icon_new ("application-x-executable");
       else
-	g_object_ref (icon);
+        g_object_ref (icon);
 
       if (first)
-	{
-	  get_first_iter (self->priv->store, &iter);
-	  first = FALSE;
-	}
+        {
+          get_first_iter (self->priv->store, &iter);
+          first = FALSE;
+        }
       else
-	{
-	  gtk_list_store_insert_after (self->priv->store, &iter2, &iter);
-	  iter = iter2;
-	}
+        {
+          gtk_list_store_insert_after (self->priv->store, &iter2, &iter);
+          iter = iter2;
+        }
 
       gtk_list_store_set (self->priv->store, &iter,
-			  COLUMN_APP_INFO, app,
-			  COLUMN_NAME, g_app_info_get_display_name (app),
-			  COLUMN_ICON, icon,
-			  COLUMN_CUSTOM, FALSE,
-			  -1);
+                          COLUMN_APP_INFO, app,
+                          COLUMN_NAME, g_app_info_get_display_name (app),
+                          COLUMN_ICON, icon,
+                          COLUMN_CUSTOM, FALSE,
+                          -1);
 
       g_object_unref (icon);
     }
@@ -172,30 +172,30 @@ gtk_app_chooser_combo_box_build_ui (GtkAppChooserComboBox *self)
   GtkCellRenderer *cell;
 
   self->priv->store = gtk_list_store_new (NUM_COLUMNS,
-					  G_TYPE_APP_INFO,
-					  G_TYPE_STRING,
-					  G_TYPE_ICON,
-					  G_TYPE_BOOLEAN,
-					  G_TYPE_BOOLEAN,
-					  CUSTOM_COMBO_DATA_TYPE);
+                                          G_TYPE_APP_INFO,
+                                          G_TYPE_STRING,
+                                          G_TYPE_ICON,
+                                          G_TYPE_BOOLEAN,
+                                          G_TYPE_BOOLEAN,
+                                          CUSTOM_COMBO_DATA_TYPE);
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (self),
-			   GTK_TREE_MODEL (self->priv->store));
+                           GTK_TREE_MODEL (self->priv->store));
 
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (self),
-					row_separator_func, NULL, NULL);
+                                        row_separator_func, NULL, NULL);
 
   cell = gtk_cell_renderer_pixbuf_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self), cell, FALSE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (self), cell,
-				  "gicon", COLUMN_ICON,
-				  NULL);
+                                  "gicon", COLUMN_ICON,
+                                  NULL);
 
   cell = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self), cell, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (self), cell,
-				  "text", COLUMN_NAME,
-				  NULL);
+                                  "text", COLUMN_NAME,
+                                  NULL);
 
   gtk_app_chooser_combo_box_populate (self);
 }
@@ -207,15 +207,15 @@ gtk_app_chooser_combo_box_remove_non_custom (GtkAppChooserComboBox *self)
   GtkTreeIter iter;
   gboolean custom, res;
 
-  model = GTK_TREE_MODEL (self->priv->store);  
+  model = GTK_TREE_MODEL (self->priv->store);
 
   if (!gtk_tree_model_get_iter_first (model, &iter))
     return;
 
   do {
     gtk_tree_model_get (model, &iter,
-			COLUMN_CUSTOM, &custom,
-			-1);
+                        COLUMN_CUSTOM, &custom,
+                        -1);
     if (custom)
       res = gtk_tree_model_iter_next (model, &iter);
     else
@@ -235,10 +235,10 @@ gtk_app_chooser_combo_box_changed (GtkComboBox *object)
     return;
 
   gtk_tree_model_get (GTK_TREE_MODEL (self->priv->store), &iter,
-		      COLUMN_CUSTOM, &custom,
-		      COLUMN_SEPARATOR, &separator,
-		      COLUMN_CALLBACK, &custom_data,
-		      -1);
+                      COLUMN_CUSTOM, &custom,
+                      COLUMN_SEPARATOR, &separator,
+                      COLUMN_CALLBACK, &custom_data,
+                      -1);
 
   if (custom && !separator &&
       custom_data != NULL && custom_data->func != NULL)
@@ -265,8 +265,8 @@ gtk_app_chooser_combo_box_get_app_info (GtkAppChooser *object)
     return NULL;
 
   gtk_tree_model_get (GTK_TREE_MODEL (self->priv->store), &iter,
-		      COLUMN_APP_INFO, &info,
-		      -1);
+                      COLUMN_APP_INFO, &info,
+                      -1);
 
   return info;
 }
@@ -285,10 +285,10 @@ gtk_app_chooser_combo_box_constructed (GObject *obj)
 }
 
 static void
-gtk_app_chooser_combo_box_set_property (GObject *obj,
-					guint property_id,
-					const GValue *value,
-					GParamSpec *pspec)
+gtk_app_chooser_combo_box_set_property (GObject      *obj,
+                                        guint         property_id,
+                                        const GValue *value,
+                                        GParamSpec   *pspec)
 {
   GtkAppChooserComboBox *self = GTK_APP_CHOOSER_COMBO_BOX (obj);
 
@@ -304,10 +304,10 @@ gtk_app_chooser_combo_box_set_property (GObject *obj,
 }
 
 static void
-gtk_app_chooser_combo_box_get_property (GObject *obj,
-					guint property_id,
-					GValue *value,
-					GParamSpec *pspec)
+gtk_app_chooser_combo_box_get_property (GObject    *obj,
+                                        guint       property_id,
+                                        GValue     *value,
+                                        GParamSpec *pspec)
 {
   GtkAppChooserComboBox *self = GTK_APP_CHOOSER_COMBO_BOX (obj);
 
@@ -360,21 +360,40 @@ gtk_app_chooser_combo_box_class_init (GtkAppChooserComboBoxClass *klass)
 static void
 gtk_app_chooser_combo_box_init (GtkAppChooserComboBox *self)
 {
-  self->priv =
-    G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_COMBO_BOX,
-				 GtkAppChooserComboBoxPrivate);
+  self->priv = G_TYPE_INSTANCE_GET_PRIVATE (self, GTK_TYPE_APP_CHOOSER_COMBO_BOX,
+                                            GtkAppChooserComboBoxPrivate);
 }
 
+/**
+ * gtk_app_chooser_combo_box_new:
+ * @content_type: the content type to show applications for
+ *
+ * Creates a new #GtkAppChooserComboBox for applications
+ * that can handle content of the given type.
+ *
+ * Returns: a newly created #GtkAppChooserComboBox
+ *
+ * Since: 3.0
+ */
 GtkWidget *
 gtk_app_chooser_combo_box_new (const gchar *content_type)
 {
   g_return_val_if_fail (content_type != NULL, NULL);
 
   return g_object_new (GTK_TYPE_APP_CHOOSER_COMBO_BOX,
-		       "content-type", content_type,
-		       NULL);
+                       "content-type", content_type,
+                       NULL);
 }
 
+/**
+ * gtk_app_chooser_combo_box_append_separator:
+ * @self: a #GtkAppChooserComboBox
+ *
+ * Appends a separator to the list of applications that is shown
+ * in the popup.
+ *
+ * Since: 3.0
+ */
 void
 gtk_app_chooser_combo_box_append_separator (GtkAppChooserComboBox *self)
 {
@@ -384,17 +403,30 @@ gtk_app_chooser_combo_box_append_separator (GtkAppChooserComboBox *self)
 
   gtk_list_store_append (self->priv->store, &iter);
   gtk_list_store_set (self->priv->store, &iter,
-		      COLUMN_CUSTOM, TRUE,
-		      COLUMN_SEPARATOR, TRUE,
-		      -1);
+                      COLUMN_CUSTOM, TRUE,
+                      COLUMN_SEPARATOR, TRUE,
+                      -1);
 }
 
+/**
+ * gtk_app_chooser_combo_box_append_custom_item:
+ * @self: a #GtkAppChooserComboBox
+ * @label: the label for the custom item
+ * @icon: the icon for the custom item
+ * @func: callback to call if the item is activated
+ * @user_data: user data for @func
+ *
+ * Appends a custom item to the list of applications that is shown
+ * in the popup. See also gtk_app_chooser_combo_box_append_separator().
+ *
+ * Since: 3.0
+ */
 void
-gtk_app_chooser_combo_box_append_custom_item (GtkAppChooserComboBox *self,
-					      const gchar *label,
-					      GIcon *icon,
-					      GtkAppChooserComboBoxItemFunc func,
-					      gpointer user_data)
+gtk_app_chooser_combo_box_append_custom_item (GtkAppChooserComboBox         *self,
+                                              const gchar                   *label,
+                                              GIcon                         *icon,
+                                              GtkAppChooserComboBoxItemFunc  func,
+                                              gpointer                       user_data)
 {
   GtkTreeIter iter;
   CustomAppComboData *data;
@@ -405,10 +437,10 @@ gtk_app_chooser_combo_box_append_custom_item (GtkAppChooserComboBox *self,
 
   gtk_list_store_append (self->priv->store, &iter);
   gtk_list_store_set (self->priv->store, &iter,
-		      COLUMN_NAME, label,
-		      COLUMN_ICON, icon,
-		      COLUMN_CALLBACK, data,
-		      COLUMN_CUSTOM, TRUE,
-		      COLUMN_SEPARATOR, FALSE,
-		      -1);
+                      COLUMN_NAME, label,
+                      COLUMN_ICON, icon,
+                      COLUMN_CALLBACK, data,
+                      COLUMN_CUSTOM, TRUE,
+                      COLUMN_SEPARATOR, FALSE,
+                      -1);
 }

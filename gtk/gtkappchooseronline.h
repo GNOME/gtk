@@ -31,14 +31,10 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_APP_CHOOSER_ONLINE\
-  (gtk_app_chooser_online_get_type ())
-#define GTK_APP_CHOOSER_ONLINE(o)\
-  (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_APP_CHOOSER_ONLINE, GtkAppChooserOnline))
-#define GTK_IS_APP_CHOOSER_ONLINE(o)\
-  (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_APP_CHOOSER_ONLINE))
-#define GTK_APP_CHOOSER_ONLINE_GET_IFACE(obj)\
-  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_APP_CHOOSER_ONLINE, GtkAppChooserOnlineInterface))
+#define GTK_TYPE_APP_CHOOSER_ONLINE           (gtk_app_chooser_online_get_type ())
+#define GTK_APP_CHOOSER_ONLINE(o)             (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_APP_CHOOSER_ONLINE, GtkAppChooserOnline))
+#define GTK_IS_APP_CHOOSER_ONLINE(o)          (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_APP_CHOOSER_ONLINE))
+#define GTK_APP_CHOOSER_ONLINE_GET_IFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GTK_TYPE_APP_CHOOSER_ONLINE, GtkAppChooserOnlineInterface))
 
 typedef struct _GtkAppChooserOnline GtkAppChooserOnline;
 typedef struct _GtkAppChooserOnlineInterface GtkAppChooserOnlineInterface;
@@ -47,27 +43,27 @@ struct _GtkAppChooserOnlineInterface {
   GTypeInterface g_iface;
 
   /* Methods */
-  void (*search_for_mimetype_async) (GtkAppChooserOnline *self,
-				     const gchar *content_type,
-				     GtkWindow *parent,
-				     GAsyncReadyCallback callback,
-				     gpointer user_data);
+  void (*search_for_mimetype_async)      (GtkAppChooserOnline  *self,
+                                          const gchar          *content_type,
+                                          GtkWindow            *parent,
+                                          GAsyncReadyCallback   callback,
+                                          gpointer              user_data);
 
-  gboolean (*search_for_mimetype_finish) (GtkAppChooserOnline *self,
-					  GAsyncResult *res,
-					  GError **error);
+  gboolean (*search_for_mimetype_finish) (GtkAppChooserOnline  *self,
+                                          GAsyncResult         *res,
+                                          GError              **error);
 };
 
-GType gtk_app_chooser_online_get_type (void) G_GNUC_CONST;
-void  gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
-							const gchar *content_type,
-							GtkWindow *parent,
-							GAsyncReadyCallback callback,
-							gpointer user_data);
-gboolean gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline *self,
-							    GAsyncResult *res,
-							    GError **error);
+GType                 gtk_app_chooser_online_get_type                   (void) G_GNUC_CONST;
+void                  gtk_app_chooser_online_search_for_mimetype_async  (GtkAppChooserOnline  *self,
+                                                                         const gchar          *content_type,
+                                                                         GtkWindow            *parent,
+                                                                         GAsyncReadyCallback   callback,
+                                                                         gpointer              user_data);
+gboolean              gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline  *self,
+                                                                         GAsyncResult         *res,
+                                                                         GError              **error);
 
-GtkAppChooserOnline * gtk_app_chooser_online_get_default (void);
+GtkAppChooserOnline * gtk_app_chooser_online_get_default                (void);
 
 #endif /* __GTK_APP_CHOOSER_ONLINE_H__ */

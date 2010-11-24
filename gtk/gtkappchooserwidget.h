@@ -35,18 +35,12 @@
 #include <gtk/gtkmenu.h>
 #include <gio/gio.h>
 
-#define GTK_TYPE_APP_CHOOSER_WIDGET\
-  (gtk_app_chooser_widget_get_type ())
-#define GTK_APP_CHOOSER_WIDGET(obj)\
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidget))
-#define GTK_APP_CHOOSER_WIDGET_CLASS(klass)\
-  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidgetClass))
-#define GTK_IS_APP_CHOOSER_WIDGET(obj)\
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_WIDGET))
-#define GTK_IS_APP_CHOOSER_WIDGET_CLASS(klass)\
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_WIDGET))
-#define GTK_APP_CHOOSER_WIDGET_GET_CLASS(obj)\
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidgetClass))
+#define GTK_TYPE_APP_CHOOSER_WIDGET            (gtk_app_chooser_widget_get_type ())
+#define GTK_APP_CHOOSER_WIDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidget))
+#define GTK_APP_CHOOSER_WIDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidgetClass))
+#define GTK_IS_APP_CHOOSER_WIDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_WIDGET))
+#define GTK_IS_APP_CHOOSER_WIDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_WIDGET))
+#define GTK_APP_CHOOSER_WIDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_WIDGET, GtkAppChooserWidgetClass))
 
 typedef struct _GtkAppChooserWidget        GtkAppChooserWidget;
 typedef struct _GtkAppChooserWidgetClass   GtkAppChooserWidgetClass;
@@ -62,53 +56,46 @@ struct _GtkAppChooserWidget {
 struct _GtkAppChooserWidgetClass {
   GtkBoxClass parent_class;
 
-  void (* application_selected) (GtkAppChooserWidget *self,
-				 GAppInfo *app_info);
+  void (* application_selected)  (GtkAppChooserWidget *self,
+                                  GAppInfo            *app_info);
 
   void (* application_activated) (GtkAppChooserWidget *self,
-				  GAppInfo *app_info);
+                                  GAppInfo            *app_info);
 
-  void (* populate_popup) (GtkAppChooserWidget *self,
-			   GtkMenu *menu,
-			   GAppInfo *app_info);
+  void (* populate_popup)        (GtkAppChooserWidget *self,
+                                  GtkMenu             *menu,
+                                  GAppInfo            *app_info);
 
   /* padding for future class expansion */
   gpointer padding[16];
 };
 
-typedef enum {
-  GTK_APP_CHOOSER_WIDGET_SHOW_RECOMMENDED = 1 << 0,
-  GTK_APP_CHOOSER_WIDGET_SHOW_FALLBACK = 1 << 1,
-  GTK_APP_CHOOSER_WIDGET_SHOW_OTHER = 1 << 2,
-  GTK_APP_CHOOSER_WIDGET_SHOW_ALL = 1 << 3,
-} GtkAppChooserWidgetShowFlags;
+GType         gtk_app_chooser_widget_get_type             (void) G_GNUC_CONST;
 
-GType      gtk_app_chooser_widget_get_type (void) G_GNUC_CONST;
+GtkWidget *   gtk_app_chooser_widget_new                  (const gchar         *content_type);
 
-GtkWidget * gtk_app_chooser_widget_new (const gchar *content_type);
+void          gtk_app_chooser_widget_set_show_default     (GtkAppChooserWidget *self,
+                                                           gboolean             setting);
+gboolean      gtk_app_chooser_widget_get_show_default     (GtkAppChooserWidget *self);
 
-void gtk_app_chooser_widget_set_show_default (GtkAppChooserWidget *self,
-					      gboolean setting);
-gboolean gtk_app_chooser_widget_get_show_default (GtkAppChooserWidget *self);
+void          gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
+                                                           gboolean             setting);
+gboolean      gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self);
 
-void gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
-						  gboolean setting);
-gboolean gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self);
+void          gtk_app_chooser_widget_set_show_fallback    (GtkAppChooserWidget *self,
+                                                           gboolean             setting);
+gboolean      gtk_app_chooser_widget_get_show_fallback    (GtkAppChooserWidget *self);
 
-void gtk_app_chooser_widget_set_show_fallback (GtkAppChooserWidget *self,
-					       gboolean setting);
-gboolean gtk_app_chooser_widget_get_show_fallback (GtkAppChooserWidget *self);
+void          gtk_app_chooser_widget_set_show_other       (GtkAppChooserWidget *self,
+                                                           gboolean             setting);
+gboolean      gtk_app_chooser_widget_get_show_other       (GtkAppChooserWidget *self);
 
-void gtk_app_chooser_widget_set_show_other (GtkAppChooserWidget *self,
-					    gboolean setting);
-gboolean gtk_app_chooser_widget_get_show_other (GtkAppChooserWidget *self);
+void          gtk_app_chooser_widget_set_show_all         (GtkAppChooserWidget *self,
+                                                           gboolean             show_all);
+gboolean      gtk_app_chooser_widget_get_show_all         (GtkAppChooserWidget *self);
 
-void gtk_app_chooser_widget_set_show_all (GtkAppChooserWidget *self,
-					  gboolean show_all);
-gboolean gtk_app_chooser_widget_get_show_all (GtkAppChooserWidget *self);
-
-void gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
-					      const gchar *text);
-const gchar * gtk_app_chooser_widget_get_default_text (GtkAppChooserWidget *self);
+void          gtk_app_chooser_widget_set_default_text     (GtkAppChooserWidget *self,
+                                                           const gchar         *text);
+const gchar * gtk_app_chooser_widget_get_default_text     (GtkAppChooserWidget *self);
 
 #endif /* __GTK_APP_CHOOSER_WIDGET_H__ */

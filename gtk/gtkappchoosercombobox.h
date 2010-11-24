@@ -31,25 +31,19 @@
 #include <gtk/gtkcombobox.h>
 #include <gio/gio.h>
 
-#define GTK_TYPE_APP_CHOOSER_COMBO_BOX\
-  (gtk_app_chooser_combo_box_get_type ())
-#define GTK_APP_CHOOSER_COMBO_BOX(obj)\
-  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_COMBO_BOX, GtkAppChooserComboBox))
-#define GTK_APP_CHOOSER_COMBO_BOX_CLASS(klass)\
-  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_COMBO_BOX, GtkAppChooserComboBoxClass))
-#define GTK_IS_APP_CHOOSER_COMBO_BOX(obj)\
-  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_COMBO_BOX))
-#define GTK_IS_APP_CHOOSER_COMBO_BOX_CLASS(klass)\
-  (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_COMBO_BOX))
-#define GTK_APP_CHOOSER_COMBO_BOX_GET_CLASS(obj)\
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_COMBO_BOX, GtkAppChooserComboBoxClass))
+#define GTK_TYPE_APP_CHOOSER_COMBO_BOX            (gtk_app_chooser_combo_box_get_type ())
+#define GTK_APP_CHOOSER_COMBO_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_APP_CHOOSER_COMBO_BOX, GtkAppChooserComboBox))
+#define GTK_APP_CHOOSER_COMBO_BOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_APP_CHOOSER_COMBO_BOX, GtkAppChooserComboBoxClass))
+#define GTK_IS_APP_CHOOSER_COMBO_BOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_APP_CHOOSER_COMBO_BOX))
+#define GTK_IS_APP_CHOOSER_COMBO_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_APP_CHOOSER_COMBO_BOX))
+#define GTK_APP_CHOOSER_COMBO_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_APP_CHOOSER_COMBO_BOX, GtkAppChooserComboBoxClass))
 
 typedef struct _GtkAppChooserComboBox        GtkAppChooserComboBox;
 typedef struct _GtkAppChooserComboBoxClass   GtkAppChooserComboBoxClass;
 typedef struct _GtkAppChooserComboBoxPrivate GtkAppChooserComboBoxPrivate;
 
 typedef void (* GtkAppChooserComboBoxItemFunc) (GtkAppChooserComboBox *self,
-						gpointer user_data);
+                                                gpointer               user_data);
 
 struct _GtkAppChooserComboBox {
   GtkComboBox parent;
@@ -65,15 +59,15 @@ struct _GtkAppChooserComboBoxClass {
   gpointer padding[16];
 };
 
-GType      gtk_app_chooser_combo_box_get_type (void) G_GNUC_CONST;
+GType       gtk_app_chooser_combo_box_get_type           (void) G_GNUC_CONST;
 
-GtkWidget * gtk_app_chooser_combo_box_new (const gchar *content_type);
+GtkWidget * gtk_app_chooser_combo_box_new                (const gchar                   *content_type);
 
-void gtk_app_chooser_combo_box_append_separator (GtkAppChooserComboBox *self);
-void gtk_app_chooser_combo_box_append_custom_item (GtkAppChooserComboBox *self,
-						   const gchar *label,
-						   GIcon *icon,
-						   GtkAppChooserComboBoxItemFunc func,
-						   gpointer user_data);
+void        gtk_app_chooser_combo_box_append_separator   (GtkAppChooserComboBox         *self);
+void        gtk_app_chooser_combo_box_append_custom_item (GtkAppChooserComboBox         *self,
+                                                          const gchar                   *label,
+                                                          GIcon                         *icon,
+                                                          GtkAppChooserComboBoxItemFunc  func,
+                                                          gpointer                       user_data);
 
 #endif /* __GTK_APP_CHOOSER_COMBO_BOX_H__ */
