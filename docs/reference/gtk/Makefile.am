@@ -351,6 +351,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/frame-gap.png					\
 	$(srcdir)/images/sliders.png					\
 	$(srcdir)/images/focus.png					\
+	$(srcdir)/images/handles.png					\
 	$(srcdir)/images/extensions.png
 
 # Extra options to supply to gtkdoc-fixref

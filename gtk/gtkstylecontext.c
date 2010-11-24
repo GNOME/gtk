@@ -3421,6 +3421,11 @@ gtk_render_extension (GtkStyleContext *context,
  * #GtkWindow<!-- -->'s resize grip), in the rectangle
  * determined by @x, @y, @width, @height.
  *
+ * <example>
+ * <title>Handles rendered for the paned and grip classes</title>
+ * <inlinegraphic fileref="handles.png" format="PNG"/>
+ * </example>
+ *
  * Since: 3.0
  **/
 void

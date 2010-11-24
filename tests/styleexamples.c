@@ -297,6 +297,31 @@ draw_cb_frame_gap (GtkWidget *widget, cairo_t *cr)
   return TRUE;
 }
 
+static gboolean
+draw_cb_handles (GtkWidget *widget, cairo_t *cr)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+
+  gtk_style_context_add_class (context, "paned");
+  gtk_render_handle (context, cr, 12, 22, 20, 10);
+  gtk_render_handle (context, cr, 44, 12, 10, 20);
+  gtk_style_context_remove_class (context, "paned");
+
+  gtk_style_context_add_class (context, "grip");
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_CORNER_BOTTOMLEFT);
+  gtk_render_handle (context, cr, 12, 48, 12, 12);
+
+  gtk_style_context_set_junction_sides (context, GTK_JUNCTION_CORNER_BOTTOMRIGHT);
+  gtk_render_handle (context, cr, 40, 48, 12, 12);
+
+  gtk_style_context_restore (context);
+
+  return TRUE;
+}
+
 static char *what;
 
 static gboolean
@@ -324,6 +349,8 @@ draw_cb (GtkWidget *widget, cairo_t *cr)
     return draw_cb_extension (widget, cr);
   else if (strcmp (what, "frame-gap") == 0)
     return draw_cb_frame_gap (widget, cr);
+  else if (strcmp (what, "handle") == 0)
+    return draw_cb_handles (widget, cr);
 
   return FALSE;
 }
