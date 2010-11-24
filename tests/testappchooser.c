@@ -28,7 +28,7 @@ static GFile *file;
 static GtkWidget *grid, *file_l, *open;
 static GtkWidget *radio_file, *radio_content, *dialog;
 static GtkWidget *app_chooser_widget;
-static GtkWidget *recommended, *fallback, *other, *all, *radio;
+static GtkWidget *recommended, *fallback, *other, *all;
 
 static void
 dialog_response (GtkDialog *d,
@@ -67,9 +67,6 @@ bind_props (void)
 			  G_BINDING_SYNC_CREATE);
   g_object_bind_property (all, "active",
 			  app_chooser_widget, "show-all",
-			  G_BINDING_SYNC_CREATE);
-  g_object_bind_property (radio, "active",
-			  app_chooser_widget, "radio-mode",
 			  G_BINDING_SYNC_CREATE);
 }
 
@@ -208,10 +205,6 @@ main (int argc,
   all = gtk_check_button_new_with_label ("Show all");
   gtk_grid_attach_next_to (GTK_GRID (grid), all,
 			   other, GTK_POS_RIGHT, 1, 1);
-
-  radio = gtk_check_button_new_with_label ("Radio mode");
-  gtk_grid_attach_next_to (GTK_GRID (grid), radio,
-			   all, GTK_POS_BOTTOM, 1, 1);
 
   prepare_dialog ();
   g_signal_connect (open, "clicked",
