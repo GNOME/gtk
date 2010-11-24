@@ -954,8 +954,10 @@ void
 gtk_style_detach (GtkStyle *style)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (style->attach_count > 0);
-  
+
+  if (style->attach_count == 0)
+    return;
+
   style->attach_count -= 1;
   if (style->attach_count == 0)
     {
