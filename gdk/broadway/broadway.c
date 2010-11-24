@@ -449,7 +449,8 @@ to_png_a (int w, int h, int byte_stride, guint8 *data)
 struct BroadwayOutput {
   int fd;
   gzFile *zfd;
-} ;
+  int error;
+};
 
 static void
 broadway_output_write_raw (BroadwayOutput *output,
@@ -459,6 +460,9 @@ broadway_output_write_raw (BroadwayOutput *output,
   int errsave;
   const char *ptr = (const char *)buf;
 
+  if (output->error)
+    return;
+
   while (count > 0)
     {
       res = write(output->fd, ptr, count);
@@ -467,13 +471,13 @@ broadway_output_write_raw (BroadwayOutput *output,
 	  errsave = errno;
 	  if (errsave == EINTR)
 	    continue;
-	  fprintf(stderr, "Error on write_raw to output %d\n", errsave);
-	  exit(1);
+	  output->error = TRUE;
+	  return;
 	}
       if (res == 0)
 	{
-	  fprintf(stderr, "Short write_raw to output\n");
-	  exit(1);
+	  output->error = TRUE;
+	  return;
 	}
       count -= res;
       ptr += res;
@@ -487,18 +491,21 @@ broadway_output_write (BroadwayOutput *output,
   gssize res;
   const char *ptr = (const char *)buf;
 
+  if (output->error)
+    return;
+
   while (count > 0)
     {
       res = gzwrite(output->zfd, ptr, count);
       if (res == -1)
 	{
-	  fprintf(stderr, "Error on write to output\n");
-	  exit(1);
+	  output->error = TRUE;
+	  return;
 	}
       if (res == 0)
 	{
-	  fprintf(stderr, "Short write to output\n");
-	  exit(1);
+	  output->error = TRUE;
+	  return;
 	}
       count -= res;
       ptr += res;
@@ -549,10 +556,21 @@ broadway_output_new(int fd)
 }
 
 void
+broadway_output_free (BroadwayOutput *output)
+{
+  if (output->zfd)
+    gzclose (output->zfd);
+  else
+    close (output->fd);
+  free (output);
+}
+
+int
 broadway_output_flush (BroadwayOutput *output)
 {
   send_boundary (output);
   gzflush (output->zfd, Z_SYNC_FLUSH);
+  return !output->error;
 }
 
 

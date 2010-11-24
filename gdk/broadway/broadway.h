@@ -6,7 +6,9 @@ typedef struct  {
 } BroadwayRect;
 
 BroadwayOutput *broadway_output_new             (int             fd);
-void            broadway_output_flush           (BroadwayOutput *output);
+void            broadway_output_free            (BroadwayOutput *output);
+int             broadway_output_flush           (BroadwayOutput *output);
+int             broadway_output_has_error       (BroadwayOutput *output);
 void            broadway_output_new_surface     (BroadwayOutput *output,
 						 int             id,
 						 int             x,
