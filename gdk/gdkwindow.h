@@ -31,7 +31,6 @@
 #ifndef __GDK_WINDOW_H__
 #define __GDK_WINDOW_H__
 
-#include <gdk/gdkdrawable.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
 

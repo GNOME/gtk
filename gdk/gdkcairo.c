@@ -21,7 +21,6 @@
 
 #include "gdkcairo.h"
 
-#include "gdkdrawable.h"
 #include "gdkinternals.h"
 
 #include <math.h>

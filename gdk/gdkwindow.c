@@ -40,7 +40,6 @@
 #include "gdkintl.h"
 #include "gdkscreen.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdrawable.h"
 #include "gdkmarshalers.h"
 #include "gdkscreen.h"
 #include "gdkwindowimpl.h"
