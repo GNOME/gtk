@@ -169,7 +169,6 @@ testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
-#testtext_DEPENDENCIES = $(TEST_DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -254,7 +253,6 @@ testtreeflow_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 testtreecolumnsizing_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
-#testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 testxinerama_LDADD = $(LDADDS)
 testmerge_LDADD = $(LDADDS)
@@ -300,10 +298,6 @@ testtreemodel_SOURCES = \
 testtreeview_SOURCES =	\
 	prop-editor.c	\
 	testtreeview.c
-
-#testtext_SOURCES =	\
-#	prop-editor.c	\
-#	testtext.c
 
 testtoolbar_SOURCES =	\
 	testtoolbar.c	\
