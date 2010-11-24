@@ -706,12 +706,8 @@ _gtk_cell_layout_buildable_add_child (GtkBuildable      *buildable,
 				      GObject           *child,
 				      const gchar       *type)
 {
-  GtkCellLayoutIface *iface;
-  
   g_return_if_fail (GTK_IS_CELL_LAYOUT (buildable));
   g_return_if_fail (GTK_IS_CELL_RENDERER (child));
 
-  iface = GTK_CELL_LAYOUT_GET_IFACE (buildable);
-  g_return_if_fail (iface->pack_start != NULL);
-  iface->pack_start (GTK_CELL_LAYOUT (buildable), GTK_CELL_RENDERER (child), FALSE);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (buildable), GTK_CELL_RENDERER (child), FALSE);
 }
