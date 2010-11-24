@@ -516,8 +516,12 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
   gtk_cell_area_context_get_allocation (priv->context, &alloc_width, &alloc_height);
 
   /* The first cell view in context is responsible for allocating the context at allocate time 
-   * (or the cellview has its own context and is not grouped with any other cell views) */
-  if (alloc_width <= 0 && alloc_height <= 0)
+   * (or the cellview has its own context and is not grouped with any other cell views) 
+   *
+   * If the cellview is in "fit model" mode, we assume its not in context and needs to
+   * allocate every time.
+   */
+  if ((alloc_width <= 0 && alloc_height <= 0) || priv->fit_model)
     {
       gtk_cell_area_context_allocate_width (priv->context, allocation->width);
       gtk_cell_area_context_allocate_height (priv->context, allocation->height);
