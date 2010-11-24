@@ -1615,7 +1615,11 @@ render_frame_internal (GtkThemingEngine *engine,
     case GTK_BORDER_STYLE_INSET:
     case GTK_BORDER_STYLE_OUTSET:
       cairo_set_line_width (cr, border_width);
-      cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+
+      if (radius == 0)
+        cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
+      else
+        cairo_set_line_cap (cr, CAIRO_LINE_CAP_BUTT);
 
       if (border_width > 1)
         {
