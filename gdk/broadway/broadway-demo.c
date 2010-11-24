@@ -138,7 +138,7 @@ snippet(cairo_t *cr, int i)
 }
 
 static void
-demo2 (BroadwayClient *client)
+demo2 (BroadwayOutput *output)
 {
   cairo_t *cr;
   cairo_surface_t *surface, *old_surface;
@@ -146,7 +146,7 @@ demo2 (BroadwayClient *client)
   double da = 0;
   int i;
 
-  broadway_client_new_surface(client,  0, 100, 100, 800, 600);
+  broadway_output_new_surface(output,  0, 100, 100, 800, 600);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					800, 600);
@@ -174,19 +174,19 @@ demo2 (BroadwayClient *client)
 
       if (i == 0)
 	{
-	  broadway_client_put_rgb (client, 0, 0, 0, 800, 600, 800*4,
+	  broadway_output_put_rgb (output, 0, 0, 0, 800, 600, 800*4,
 				   cairo_image_surface_get_data(surface)
 				   );
-	  broadway_client_show_surface (client,  0);
+	  broadway_output_show_surface (output,  0);
 	}
       else
 	{
 	  diff_surfaces (surface,
 			 old_surface);
-	  broadway_client_put_rgba (client, 0, 0, 0, 800, 600, 800*4,
+	  broadway_output_put_rgba (output, 0, 0, 0, 800, 600, 800*4,
 				    cairo_image_surface_get_data(old_surface));
 	}
-      broadway_client_move_surface (client, 0, 100 + i, 100 + i);
+      broadway_output_move_surface (output, 0, 100 + i, 100 + i);
 
       rects[0].x = 500;
       rects[0].y = 0;
@@ -196,12 +196,12 @@ demo2 (BroadwayClient *client)
       rects[1].y = 100;
       rects[1].width = 100;
       rects[1].height = 100;
-      broadway_client_copy_rectangles (client,
+      broadway_output_copy_rectangles (output,
 				       0,
 				       rects, 2,
 				       400, 0);
 
-      broadway_client_flush (client);
+      broadway_output_flush (output);
 
       cr = cairo_create (old_surface);
       cairo_set_source_surface (cr, surface, 0, 0);
@@ -214,17 +214,17 @@ demo2 (BroadwayClient *client)
 
 
   cairo_surface_destroy (surface);
-  broadway_client_destroy_surface(client,  0);
-  broadway_client_flush (client);
+  broadway_output_destroy_surface(output,  0);
+  broadway_output_flush (output);
 }
 
 int
 main (int argc, char *argv[])
 {
-  BroadwayClient *client;
+  BroadwayOutput *output;
 
-  client = broadway_client_new (STDOUT_FILENO);
-  demo2(client);
+  output = broadway_output_new (STDOUT_FILENO);
+  demo2(output);
 
   return 0;
 }

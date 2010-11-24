@@ -455,7 +455,7 @@ start_output (HttpRequest *request)
   display_broadway = GDK_DISPLAY_BROADWAY (request->display);
   fd = g_socket_get_fd (socket);
   set_fd_blocking (fd);
-  display_broadway->output = broadway_client_new (fd);
+  display_broadway->output = broadway_output_new (fd);
   _gdk_broadway_resync_windows ();
 
   /* TODO: This leaks the connection since we just keep the fd,

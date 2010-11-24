@@ -1,33 +1,33 @@
-typedef struct BroadwayClient BroadwayClient;
+typedef struct BroadwayOutput BroadwayOutput;
 
 typedef struct  {
     int x, y;
     int width, height;
 } BroadwayRect;
 
-BroadwayClient *broadway_client_new             (int             fd);
-void            broadway_client_flush           (BroadwayClient *client);
-void            broadway_client_new_surface     (BroadwayClient *client,
+BroadwayOutput *broadway_output_new             (int             fd);
+void            broadway_output_flush           (BroadwayOutput *output);
+void            broadway_output_new_surface     (BroadwayOutput *output,
 						 int             id,
 						 int             x,
 						 int             y,
 						 int             w,
 						 int             h);
-void            broadway_client_show_surface    (BroadwayClient *client,
+void            broadway_output_show_surface    (BroadwayOutput *output,
 						 int             id);
-void            broadway_client_hide_surface    (BroadwayClient *client,
+void            broadway_output_hide_surface    (BroadwayOutput *output,
 						 int             id);
-void            broadway_client_destroy_surface (BroadwayClient *client,
+void            broadway_output_destroy_surface (BroadwayOutput *output,
 						 int             id);
-void            broadway_client_move_surface    (BroadwayClient *client,
+void            broadway_output_move_surface    (BroadwayOutput *output,
 						 int             id,
 						 int             x,
 						 int             y);
-void            broadway_client_resize_surface  (BroadwayClient *client,
+void            broadway_output_resize_surface  (BroadwayOutput *output,
 						 int             id,
 						 int             w,
 						 int             h);
-void            broadway_client_put_rgb         (BroadwayClient *client,
+void            broadway_output_put_rgb         (BroadwayOutput *output,
 						 int             id,
 						 int             x,
 						 int             y,
@@ -35,7 +35,7 @@ void            broadway_client_put_rgb         (BroadwayClient *client,
 						 int             h,
 						 int             byte_stride,
 						 void           *data);
-void            broadway_client_put_rgba        (BroadwayClient *client,
+void            broadway_output_put_rgba        (BroadwayOutput *output,
 						 int             id,
 						 int             x,
 						 int             y,
@@ -43,7 +43,7 @@ void            broadway_client_put_rgba        (BroadwayClient *client,
 						 int             h,
 						 int             byte_stride,
 						 void           *data);
-void            broadway_client_copy_rectangles (BroadwayClient *client,
+void            broadway_output_copy_rectangles (BroadwayOutput *output,
 						 int             id,
 						 BroadwayRect   *rects,
 						 int             n_rects,

@@ -80,7 +80,7 @@ struct _GdkDisplayBroadway
   GdkWindow *active_offscreen_window;
 
   GSocketService *service;
-  BroadwayClient *output;
+  BroadwayOutput *output;
 };
 
 struct _GdkDisplayBroadwayClass

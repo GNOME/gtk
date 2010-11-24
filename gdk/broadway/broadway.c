@@ -618,13 +618,13 @@ to_png_a (int w, int h, int byte_stride, uint8_t *data)
  *                Basic I/O primitives                                  *
  ************************************************************************/
 
-struct BroadwayClient {
+struct BroadwayOutput {
   int fd;
   gzFile *zfd;
 } ;
 
 static void
-broadway_client_write_raw (BroadwayClient *client,
+broadway_output_write_raw (BroadwayOutput *output,
 			   const void *buf, size_t count)
 {
   ssize_t res;
@@ -633,18 +633,18 @@ broadway_client_write_raw (BroadwayClient *client,
 
   while (count > 0)
     {
-      res = write(client->fd, ptr, count);
+      res = write(output->fd, ptr, count);
       if (res == -1)
 	{
 	  errsave = errno;
 	  if (errsave == EINTR)
 	    continue;
-	  fprintf(stderr, "Error on write_raw to client %d\n", errsave);
+	  fprintf(stderr, "Error on write_raw to output %d\n", errsave);
 	  exit(1);
 	}
       if (res == 0)
 	{
-	  fprintf(stderr, "Short write_raw to client\n");
+	  fprintf(stderr, "Short write_raw to output\n");
 	  exit(1);
 	}
       count -= res;
@@ -653,7 +653,7 @@ broadway_client_write_raw (BroadwayClient *client,
 }
 
 static void
-broadway_client_write (BroadwayClient *client,
+broadway_output_write (BroadwayOutput *output,
 		       const void *buf, size_t count)
 {
   ssize_t res;
@@ -661,15 +661,15 @@ broadway_client_write (BroadwayClient *client,
 
   while (count > 0)
     {
-      res = gzwrite(client->zfd, ptr, count);
+      res = gzwrite(output->zfd, ptr, count);
       if (res == -1)
 	{
-	  fprintf(stderr, "Error on write to client\n");
+	  fprintf(stderr, "Error on write to output\n");
 	  exit(1);
 	}
       if (res == 0)
 	{
-	  fprintf(stderr, "Short write to client\n");
+	  fprintf(stderr, "Short write to output\n");
 	  exit(1);
 	}
       count -= res;
@@ -678,7 +678,7 @@ broadway_client_write (BroadwayClient *client,
 }
 
 static void
-broadway_client_write_header (BroadwayClient *client)
+broadway_output_write_header (BroadwayOutput *output)
 {
   char *header;
 
@@ -687,44 +687,44 @@ broadway_client_write_header (BroadwayClient *client)
     "Content-type: multipart/x-mixed-replace;boundary=x\r\n"
     "Content-Encoding: gzip\r\n"
     "\r\n";
-  broadway_client_write_raw (client,
+  broadway_output_write_raw (output,
 			     header, strlen (header));
 }
 
 static void
-send_boundary (BroadwayClient *client)
+send_boundary (BroadwayOutput *output)
 {
   char *boundary =
     "--x\r\n"
     "\r\n";
 
-  broadway_client_write (client, boundary, strlen (boundary));
+  broadway_output_write (output, boundary, strlen (boundary));
 }
 
-BroadwayClient *
-broadway_client_new(int fd)
+BroadwayOutput *
+broadway_output_new(int fd)
 {
-  BroadwayClient *client;
+  BroadwayOutput *output;
 
-  client = bw_new0 (BroadwayClient, 1);
+  output = bw_new0 (BroadwayOutput, 1);
 
-  client->fd = fd;
+  output->fd = fd;
 
-  broadway_client_write_header (client);
+  broadway_output_write_header (output);
 
-  client->zfd = gzdopen(fd, "wb");
+  output->zfd = gzdopen(fd, "wb");
 
   /* Need an initial multipart boundary */
-  send_boundary (client);
+  send_boundary (output);
 
-  return client;
+  return output;
 }
 
 void
-broadway_client_flush (BroadwayClient *client)
+broadway_output_flush (BroadwayOutput *output)
 {
-  send_boundary (client);
-  gzflush (client->zfd, Z_SYNC_FLUSH);
+  send_boundary (output);
+  gzflush (output->zfd, Z_SYNC_FLUSH);
 }
 
 
@@ -733,7 +733,7 @@ broadway_client_flush (BroadwayClient *client)
  ************************************************************************/
 
 void
-broadway_client_copy_rectangles (BroadwayClient *client,  int id,
+broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
 				 BroadwayRect *rects, int n_rects,
 				 int dx, int dy)
 {
@@ -757,12 +757,12 @@ broadway_client_copy_rectangles (BroadwayClient *client,  int id,
   base64_uint16(dx, &buf[p]); p +=3;
   base64_uint16(dy, &buf[p]); p +=3;
 
-  broadway_client_write (client, buf, len);
+  broadway_output_write (output, buf, len);
   free (buf);
 }
 
 void
-broadway_client_new_surface(BroadwayClient *client,  int id, int x, int y, int w, int h)
+broadway_output_new_surface(BroadwayOutput *output,  int id, int x, int y, int w, int h)
 {
   char buf[16];
 
@@ -773,44 +773,44 @@ broadway_client_new_surface(BroadwayClient *client,  int id, int x, int y, int w
   base64_uint16(w, &buf[10]);
   base64_uint16(h, &buf[13]);
 
-  broadway_client_write (client, buf, 16);
+  broadway_output_write (output, buf, 16);
 }
 
 void
-broadway_client_show_surface(BroadwayClient *client,  int id)
+broadway_output_show_surface(BroadwayOutput *output,  int id)
 {
   char buf[4];
 
   buf[0] = 'S';
   base64_uint16(id, &buf[1]);
 
-  broadway_client_write (client, buf, 4);
+  broadway_output_write (output, buf, 4);
 }
 
 void
-broadway_client_hide_surface(BroadwayClient *client,  int id)
+broadway_output_hide_surface(BroadwayOutput *output,  int id)
 {
   char buf[4];
 
   buf[0] = 'H';
   base64_uint16(id, &buf[1]);
 
-  broadway_client_write (client, buf, 4);
+  broadway_output_write (output, buf, 4);
 }
 
 void
-broadway_client_destroy_surface(BroadwayClient *client,  int id)
+broadway_output_destroy_surface(BroadwayOutput *output,  int id)
 {
   char buf[4];
 
   buf[0] = 'd';
   base64_uint16(id, &buf[1]);
 
-  broadway_client_write (client, buf, 4);
+  broadway_output_write (output, buf, 4);
 }
 
 void
-broadway_client_move_surface(BroadwayClient *client,  int id, int x, int y)
+broadway_output_move_surface(BroadwayOutput *output,  int id, int x, int y)
 {
   char buf[10];
 
@@ -819,11 +819,11 @@ broadway_client_move_surface(BroadwayClient *client,  int id, int x, int y)
   base64_uint16(x, &buf[4]);
   base64_uint16(y, &buf[7]);
 
-  broadway_client_write (client, buf, 10);
+  broadway_output_write (output, buf, 10);
 }
 
 void
-broadway_client_resize_surface(BroadwayClient *client,  int id, int w, int h)
+broadway_output_resize_surface(BroadwayOutput *output,  int id, int w, int h)
 {
   char buf[10];
 
@@ -832,11 +832,11 @@ broadway_client_resize_surface(BroadwayClient *client,  int id, int w, int h)
   base64_uint16(w, &buf[4]);
   base64_uint16(h, &buf[7]);
 
-  broadway_client_write (client, buf, 10);
+  broadway_output_write (output, buf, 10);
 }
 
 void
-broadway_client_put_rgb (BroadwayClient *client,  int id, int x, int y,
+broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {
   char buf[16];
@@ -852,9 +852,9 @@ broadway_client_put_rgb (BroadwayClient *client,  int id, int x, int y,
   len = strlen (url);
   base64_uint32(len, &buf[10]);
 
-  broadway_client_write (client, buf, 16);
+  broadway_output_write (output, buf, 16);
 
-  broadway_client_write (client, url, len);
+  broadway_output_write (output, url, len);
 
   free (url);
 }
@@ -1083,7 +1083,7 @@ rgba_find_rects (unsigned char *data,
 }
 
 void
-broadway_client_put_rgba (BroadwayClient *client,  int id, int x, int y,
+broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 			  int w, int h, int byte_stride, void *data)
 {
   char buf[16];
@@ -1110,9 +1110,9 @@ broadway_client_put_rgba (BroadwayClient *client,  int id, int x, int y,
       len = strlen (url);
       base64_uint32(len, &buf[10]);
 
-      broadway_client_write (client, buf, 16);
+      broadway_output_write (output, buf, 16);
 
-      broadway_client_write (client, url, len);
+      broadway_output_write (output, url, len);
 
       free (url);
     }
@@ -1122,7 +1122,7 @@ broadway_client_put_rgba (BroadwayClient *client,  int id, int x, int y,
 
 #if 0
 static void
-send_image_a (BroadwayClient *client,  int id, int x, int y,
+send_image_a (BroadwayOutput *output,  int id, int x, int y,
 	      int w, int h, int byte_stride, uint8_t *data)
 {
   char buf[16];
@@ -1138,9 +1138,9 @@ send_image_a (BroadwayClient *client,  int id, int x, int y,
   len = strlen (url);
   base64_uint32(len, &buf[10]);
 
-  broadway_client_write (client, buf, 16);
+  broadway_output_write (output, buf, 16);
 
-  broadway_client_write (client, url, len);
+  broadway_output_write (output, url, len);
 
   free (url);
 }
