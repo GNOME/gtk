@@ -35,9 +35,6 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDevice GdkDevice;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
-
-typedef struct _GdkDeviceKey GdkDeviceKey;
-typedef struct _GdkDeviceAxis GdkDeviceAxis;
 typedef struct _GdkTimeCoord GdkTimeCoord;
 
 /**
@@ -140,37 +137,6 @@ typedef enum {
   GDK_DEVICE_TYPE_SLAVE,
   GDK_DEVICE_TYPE_FLOATING
 } GdkDeviceType;
-
-/**
- * GdkDeviceKey:
- * @keyval: the keyval to generate when the macro button is pressed.
- *          If this is 0, no keypress will be generated.
- * @modifiers: the modifiers set for the generated key event.
- *
- * The <structname>GdkDeviceKey</structname> structure contains information
- * about the mapping of one device macro button onto a normal X key event.
- */
-struct _GdkDeviceKey
-{
-  guint keyval;
-  GdkModifierType modifiers;
-};
-
-/**
- * GdkDeviceAxis:
- * @use: specifies how the axis is used.
- * @min: the minimal value that will be reported by this axis.
- * @max: the maximal value that will be reported by this axis.
- *
- * The <structname>GdkDeviceAxis</structname> structure contains information
- * about the range and mapping of a device axis.
- */
-struct _GdkDeviceAxis
-{
-  GdkAxisUse use;
-  gdouble    min;
-  gdouble    max;
-};
 
 /* We don't allocate each coordinate this big, but we use it to
  * be ANSI compliant and avoid accessing past the defined limits.

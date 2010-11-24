@@ -26,6 +26,14 @@
 #include "gdkinternals.h"
 
 
+typedef struct _GdkDeviceKey GdkDeviceKey;
+
+struct _GdkDeviceKey
+{
+  guint keyval;
+  GdkModifierType modifiers;
+};
+
 typedef struct _GdkAxisInfo GdkAxisInfo;
 
 struct _GdkAxisInfo
