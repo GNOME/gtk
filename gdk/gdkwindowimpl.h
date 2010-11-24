@@ -43,12 +43,12 @@ typedef struct _GdkWindowImplClass  GdkWindowImplClass;
 
 struct _GdkWindowImpl
 {
-  GdkDrawable  parent;
+  GObject parent;
 };
 
 struct _GdkWindowImplClass
 {
-  GdkDrawableClass parent_class;
+  GObjectClass parent_class;
 
   cairo_surface_t *
                (* ref_cairo_surface)    (GdkWindow       *window);

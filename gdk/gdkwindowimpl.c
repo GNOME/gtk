@@ -31,7 +31,7 @@
 #include "gdkinternals.h"
 
 
-G_DEFINE_TYPE (GdkWindowImpl, gdk_window_impl, GDK_TYPE_DRAWABLE);
+G_DEFINE_TYPE (GdkWindowImpl, gdk_window_impl, G_TYPE_OBJECT);
 
 
 static void
