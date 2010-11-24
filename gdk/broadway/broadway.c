@@ -1,195 +1,23 @@
+#include <glib.h>
 #include <string.h>
-#include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <errno.h>
-#include <arpa/inet.h>
 #include <zlib.h>
 
 #include "broadway.h"
 
 /************************************************************************
- *                Basic helpers                                         *
- ************************************************************************/
-
-#define TRUE 1
-#define FALSE 0
-
-typedef unsigned char uchar;
-typedef int boolean;
-
-static void *
-bw_malloc(size_t size)
-{
-  void *ptr;
-
-  ptr = malloc(size);
-  if (ptr == NULL)
-    exit(1);
-
-  return ptr;
-}
-
-static void *
-bw_realloc(void *old_ptr, size_t size)
-{
-  void *ptr;
-
-  ptr = realloc(old_ptr, size);
-  if (ptr == NULL && size != 0)
-    exit(1);
-
-  return ptr;
-}
-
-static void *
-bw_malloc0(size_t size)
-{
-  void *ptr;
-
-  ptr = calloc(size, 1);
-  if (ptr == NULL)
-    exit(1);
-
-  return ptr;
-}
-
-#define bw_new(struct_type, n_structs) (bw_malloc(sizeof(struct_type) * (n_structs)))
-#define bw_renew(ptr, struct_type, n_structs) (bw_realloc(ptr, sizeof(struct_type) * (n_structs)))
-#define bw_new0(struct_type, n_structs) (bw_malloc0(sizeof(struct_type) * (n_structs)))
-
-/************************************************************************
- *                Base64 implementation, from glib                      *
+ *                Base64 functions                                      *
  ************************************************************************/
 
 static const char base64_alphabet[] =
 	"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-static size_t
-bw_base64_encode_step (const uchar *in,
-		       size_t         len,
-		       boolean      break_lines,
-		       char        *out,
-		       int         *state,
-		       int         *save)
-{
-  char *outptr;
-  const uchar *inptr;
-
-  if (len <= 0)
-    return 0;
-
-  inptr = in;
-  outptr = out;
-
-  if (len + ((char *) save) [0] > 2)
-    {
-      const uchar *inend = in+len-2;
-      int c1, c2, c3;
-      int already;
-
-      already = *state;
-
-      switch (((char *) save) [0])
-        {
-        case 1:
-          c1 = ((unsigned char *) save) [1];
-          goto skip1;
-        case 2:
-          c1 = ((unsigned char *) save) [1];
-          c2 = ((unsigned char *) save) [2];
-          goto skip2;
-        }
-
-      /*
-       * yes, we jump into the loop, no i'm not going to change it,
-       * it's beautiful!
-       */
-      while (inptr < inend)
-        {
-          c1 = *inptr++;
-        skip1:
-          c2 = *inptr++;
-        skip2:
-          c3 = *inptr++;
-          *outptr++ = base64_alphabet [ c1 >> 2 ];
-          *outptr++ = base64_alphabet [ c2 >> 4 |
-                                        ((c1&0x3) << 4) ];
-          *outptr++ = base64_alphabet [ ((c2 &0x0f) << 2) |
-                                        (c3 >> 6) ];
-          *outptr++ = base64_alphabet [ c3 & 0x3f ];
-          /* this is a bit ugly ... */
-          if (break_lines && (++already) >= 19)
-            {
-              *outptr++ = '\n';
-              already = 0;
-            }
-        }
-
-      ((char *)save)[0] = 0;
-      len = 2 - (inptr - inend);
-      *state = already;
-    }
-
-  if (len>0)
-    {
-      char *saveout;
-
-      /* points to the slot for the next char to save */
-      saveout = & (((char *)save)[1]) + ((char *)save)[0];
-
-      /* len can only be 0 1 or 2 */
-      switch(len)
-        {
-        case 2: *saveout++ = *inptr++;
-        case 1: *saveout++ = *inptr++;
-        }
-      ((char *)save)[0] += len;
-    }
-
-  return outptr - out;
-}
-
-static size_t
-bw_base64_encode_close (boolean  break_lines,
-			char    *out,
-			int     *state,
-			int     *save)
-{
-  int c1, c2;
-  char *outptr = out;
-
-  c1 = ((unsigned char *) save) [1];
-  c2 = ((unsigned char *) save) [2];
-
-  switch (((char *) save) [0])
-    {
-    case 2:
-      outptr [2] = base64_alphabet[ ( (c2 &0x0f) << 2 ) ];
-      assert (outptr [2] != 0);
-      goto skip;
-    case 1:
-      outptr[2] = '=';
-    skip:
-      outptr [0] = base64_alphabet [ c1 >> 2 ];
-      outptr [1] = base64_alphabet [ c2 >> 4 | ( (c1&0x3) << 4 )];
-      outptr [3] = '=';
-      outptr += 4;
-      break;
-    }
-  if (break_lines)
-    *outptr++ = '\n';
-
-  *save = 0;
-  *state = 0;
-
-  return outptr - out;
-}
-
 #if 0
 static void
-base64_uint8 (uint8_t v, char *c)
+base64_uint8 (guint8 v, char *c)
 {
   c[0] = base64_alphabet[(v >> 0) & 0x3f];
   c[1] = base64_alphabet[(v >> 6) & 0x3];
@@ -197,7 +25,7 @@ base64_uint8 (uint8_t v, char *c)
 #endif
 
 static void
-base64_uint16 (uint32_t v, char *c)
+base64_uint16 (guint32 v, char *c)
 {
   c[0] = base64_alphabet[(v >> 0) & 0x3f];
   c[1] = base64_alphabet[(v >> 6) & 0x3f];
@@ -206,7 +34,7 @@ base64_uint16 (uint32_t v, char *c)
 
 #if 0
 static void
-base64_uint24 (uint32_t v, char *c)
+base64_uint24 (guint32 v, char *c)
 {
   c[0] = base64_alphabet[(v >> 0) & 0x3f];
   c[1] = base64_alphabet[(v >> 6) & 0x3f];
@@ -216,7 +44,7 @@ base64_uint24 (uint32_t v, char *c)
 #endif
 
 static void
-base64_uint32 (uint32_t v, char *c)
+base64_uint32 (guint32 v, char *c)
 {
   c[0] = base64_alphabet[(v >> 0) & 0x3f];
   c[1] = base64_alphabet[(v >> 6) & 0x3f];
@@ -292,30 +120,30 @@ update_adler32(unsigned long adler, unsigned char *buf, int len)
 }
 
 static char *
-to_png_rgb (int w, int h, int byte_stride, uint32_t *data)
+to_png_rgb (int w, int h, int byte_stride, guint32 *data)
 {
-  uchar header[] = {137, 80, 78, 71, 13, 10, 26, 10};
-  uchar ihdr[13+12] = {0, 0, 0, 13, 'I', 'H', 'D', 'R',
+  guchar header[] = {137, 80, 78, 71, 13, 10, 26, 10};
+  guchar ihdr[13+12] = {0, 0, 0, 13, 'I', 'H', 'D', 'R',
 			/* w: */ 0, 0, 0, 0, /* h: */ 0,0,0,0,
 			/* bpp: */ 8, /* color type: */ 2,
 			0, 0, 0};
-  uchar idat_start[8] = { /* len: */0, 0, 0, 0,   'I', 'D', 'A', 'T' };
-  uchar iend[12] = {0, 0, 0, 0, 'I', 'E', 'N', 'D', 0xae, 0x42, 0x60, 0x82};
-  size_t data_size, row_size;
+  guchar idat_start[8] = { /* len: */0, 0, 0, 0,   'I', 'D', 'A', 'T' };
+  guchar iend[12] = {0, 0, 0, 0, 'I', 'E', 'N', 'D', 0xae, 0x42, 0x60, 0x82};
+  gsize data_size, row_size;
   char row_header[6];
-  uint8_t *png, *p, *p_row, *p_idat;
-  uint32_t *row;
+  guint8 *png, *p, *p_row, *p_idat;
+  guint32 *row;
   unsigned long adler;
-  uint32_t pixel;
-  size_t png_size;
+  guint32 pixel;
+  gsize png_size;
   int x, y;
   char *url, *url_base64;
   int state = 0, outlen;
   int save = 0;
 
-  *(uint32_t *)&ihdr[8] = htonl(w);
-  *(uint32_t *)&ihdr[12] = htonl(h);
-  *(uint32_t *)&ihdr[21] = htonl(crc(&ihdr[4], 13 + 4));
+  *(guint32 *)&ihdr[8] = GUINT32_TO_BE(w);
+  *(guint32 *)&ihdr[12] = GUINT32_TO_BE(h);
+  *(guint32 *)&ihdr[21] = GUINT32_TO_BE(crc(&ihdr[4], 13 + 4));
 
   row_size = 1 + w * 3;
   row_header[0] = 0;
@@ -327,10 +155,10 @@ to_png_rgb (int w, int h, int byte_stride, uint32_t *data)
 
   data_size = 2 + (6 + w * 3) * h + 4;
 
-  *(uint32_t *)&idat_start[0] = htonl(data_size);
+  *(guint32 *)&idat_start[0] = GUINT32_TO_BE(data_size);
 
   png_size = sizeof(header) + sizeof(ihdr) + 12 + data_size + sizeof(iend);
-  png = bw_malloc (png_size);
+  png = g_malloc (png_size);
 
   p = png;
   memcpy (p, header, sizeof(header));
@@ -374,9 +202,9 @@ to_png_rgb (int w, int h, int byte_stride, uint32_t *data)
   }
 
   /* adler32 */
-  *(uint32_t *)p = htonl(adler);
+  *(guint32 *)p = GUINT32_TO_BE(adler);
   p += 4;
-  *(uint32_t *)p = htonl(crc(p_idat, p - p_idat));
+  *(guint32 *)p = GUINT32_TO_BE(crc(p_idat, p - p_idat));
   p += 4;
 
   memcpy (p, iend, sizeof(iend));
@@ -384,13 +212,13 @@ to_png_rgb (int w, int h, int byte_stride, uint32_t *data)
 
   assert(p - png == png_size);
 
-  url = bw_malloc (strlen("data:image/png;base64,") +
+  url = g_malloc (strlen("data:image/png;base64,") +
 		   ((png_size / 3 + 1) * 4 + 4) + 1);
   strcpy (url, "data:image/png;base64,");
 
   url_base64 = url + strlen("data:image/png;base64,");
-  outlen = bw_base64_encode_step (png, png_size, FALSE, url_base64, &state, &save);
-  outlen += bw_base64_encode_close (FALSE, url_base64 + outlen, &state, &save);
+  outlen = g_base64_encode_step (png, png_size, FALSE, url_base64, &state, &save);
+  outlen += g_base64_encode_close (FALSE, url_base64 + outlen, &state, &save);
   url_base64[outlen] = 0;
 
   free (png);
@@ -399,30 +227,30 @@ to_png_rgb (int w, int h, int byte_stride, uint32_t *data)
 }
 
 static char *
-to_png_rgba (int w, int h, int byte_stride, uint32_t *data)
+to_png_rgba (int w, int h, int byte_stride, guint32 *data)
 {
-  uchar header[] = {137, 80, 78, 71, 13, 10, 26, 10};
-  uchar ihdr[13+12] = {0, 0, 0, 13, 'I', 'H', 'D', 'R',
+  guchar header[] = {137, 80, 78, 71, 13, 10, 26, 10};
+  guchar ihdr[13+12] = {0, 0, 0, 13, 'I', 'H', 'D', 'R',
 			/* w: */ 0, 0, 0, 0, /* h: */ 0,0,0,0,
 			/* bpp: */ 8, /* color type: */ 6,
 			0, 0, 0};
-  uchar idat_start[8] = { /* len: */0, 0, 0, 0,   'I', 'D', 'A', 'T' };
-  uchar iend[12] = {0, 0, 0, 0, 'I', 'E', 'N', 'D', 0xae, 0x42, 0x60, 0x82};
-  size_t data_size, row_size;
+  guchar idat_start[8] = { /* len: */0, 0, 0, 0,   'I', 'D', 'A', 'T' };
+  guchar iend[12] = {0, 0, 0, 0, 'I', 'E', 'N', 'D', 0xae, 0x42, 0x60, 0x82};
+  gsize data_size, row_size;
   char row_header[6];
-  uint8_t *png, *p, *p_row, *p_idat;
-  uint32_t *row;
+  guint8 *png, *p, *p_row, *p_idat;
+  guint32 *row;
   unsigned long adler;
-  uint32_t pixel;
-  size_t png_size;
+  guint32 pixel;
+  gsize png_size;
   int x, y;
   char *url, *url_base64;
   int state = 0, outlen;
   int save = 0;
 
-  *(uint32_t *)&ihdr[8] = htonl(w);
-  *(uint32_t *)&ihdr[12] = htonl(h);
-  *(uint32_t *)&ihdr[21] = htonl(crc(&ihdr[4], 13 + 4));
+  *(guint32 *)&ihdr[8] = GUINT32_TO_BE(w);
+  *(guint32 *)&ihdr[12] = GUINT32_TO_BE(h);
+  *(guint32 *)&ihdr[21] = GUINT32_TO_BE(crc(&ihdr[4], 13 + 4));
 
   row_size = 1 + w * 4;
   row_header[0] = 0;
@@ -434,10 +262,10 @@ to_png_rgba (int w, int h, int byte_stride, uint32_t *data)
 
   data_size = 2 + (6 + w * 4) * h + 4;
 
-  *(uint32_t *)&idat_start[0] = htonl(data_size);
+  *(guint32 *)&idat_start[0] = GUINT32_TO_BE(data_size);
 
   png_size = sizeof(header) + sizeof(ihdr) + 12 + data_size + sizeof(iend);
-  png = bw_malloc (png_size);
+  png = g_malloc (png_size);
 
   p = png;
   memcpy (p, header, sizeof(header));
@@ -482,9 +310,9 @@ to_png_rgba (int w, int h, int byte_stride, uint32_t *data)
   }
 
   /* adler32 */
-  *(uint32_t *)p = htonl(adler);
+  *(guint32 *)p = GUINT32_TO_BE(adler);
   p += 4;
-  *(uint32_t *)p = htonl(crc(p_idat, p - p_idat));
+  *(guint32 *)p = GUINT32_TO_BE(crc(p_idat, p - p_idat));
   p += 4;
 
   memcpy (p, iend, sizeof(iend));
@@ -492,13 +320,13 @@ to_png_rgba (int w, int h, int byte_stride, uint32_t *data)
 
   assert(p - png == png_size);
 
-  url = bw_malloc (strlen("data:image/png;base64,") +
+  url = g_malloc (strlen("data:image/png;base64,") +
 		   ((png_size / 3 + 1) * 4 + 4) + 1);
   strcpy (url, "data:image/png;base64,");
 
   url_base64 = url + strlen("data:image/png;base64,");
-  outlen = bw_base64_encode_step (png, png_size, FALSE, url_base64, &state, &save);
-  outlen += bw_base64_encode_close (FALSE, url_base64 + outlen, &state, &save);
+  outlen = g_base64_encode_step (png, png_size, FALSE, url_base64, &state, &save);
+  outlen += g_base64_encode_close (FALSE, url_base64 + outlen, &state, &save);
   url_base64[outlen] = 0;
 
   free (png);
@@ -508,30 +336,30 @@ to_png_rgba (int w, int h, int byte_stride, uint32_t *data)
 
 #if 0
 static char *
-to_png_a (int w, int h, int byte_stride, uint8_t *data)
+to_png_a (int w, int h, int byte_stride, guint8 *data)
 {
-  uchar header[] = {137, 80, 78, 71, 13, 10, 26, 10};
-  uchar ihdr[13+12] = {0, 0, 0, 13, 'I', 'H', 'D', 'R',
+  guchar header[] = {137, 80, 78, 71, 13, 10, 26, 10};
+  guchar ihdr[13+12] = {0, 0, 0, 13, 'I', 'H', 'D', 'R',
 			/* w: */ 0, 0, 0, 0, /* h: */ 0,0,0,0,
 			/* bpp: */ 8, /* color type: */ 4,
 			0, 0, 0};
-  uchar idat_start[8] = { /* len: */0, 0, 0, 0,   'I', 'D', 'A', 'T' };
-  uchar iend[12] = {0, 0, 0, 0, 'I', 'E', 'N', 'D', 0xae, 0x42, 0x60, 0x82};
-  size_t data_size, row_size;
+  guchar idat_start[8] = { /* len: */0, 0, 0, 0,   'I', 'D', 'A', 'T' };
+  guchar iend[12] = {0, 0, 0, 0, 'I', 'E', 'N', 'D', 0xae, 0x42, 0x60, 0x82};
+  gsize data_size, row_size;
   char row_header[6];
-  uint8_t *png, *p, *p_row, *p_idat;
-  uint8_t *row;
+  guint8 *png, *p, *p_row, *p_idat;
+  guint8 *row;
   unsigned long adler;
-  uint32_t pixel;
-  size_t png_size;
+  guint32 pixel;
+  gsize png_size;
   int x, y;
   char *url, *url_base64;
   int state = 0, outlen;
   int save = 0;
 
-  *(uint32_t *)&ihdr[8] = htonl(w);
-  *(uint32_t *)&ihdr[12] = htonl(h);
-  *(uint32_t *)&ihdr[21] = htonl(crc(&ihdr[4], 13 + 4));
+  *(guint32 *)&ihdr[8] = GUINT32_TO_BE(w);
+  *(guint32 *)&ihdr[12] = GUINT32_TO_BE(h);
+  *(guint32 *)&ihdr[21] = GUINT32_TO_BE(crc(&ihdr[4], 13 + 4));
 
   row_size = 1 + w * 2;
   row_header[0] = 0;
@@ -543,10 +371,10 @@ to_png_a (int w, int h, int byte_stride, uint8_t *data)
 
   data_size = 2 + (6 + w * 2) * h + 4;
 
-  *(uint32_t *)&idat_start[0] = htonl(data_size);
+  *(guint32 *)&idat_start[0] = GUINT32_TO_BE(data_size);
 
   png_size = sizeof(header) + sizeof(ihdr) + 12 + data_size + sizeof(iend);
-  png = bw_malloc (png_size);
+  png = g_malloc (png_size);
 
   p = png;
   memcpy (p, header, sizeof(header));
@@ -589,9 +417,9 @@ to_png_a (int w, int h, int byte_stride, uint8_t *data)
   }
 
   /* adler32 */
-  *(uint32_t *)p = htonl(adler);
+  *(guint32 *)p = GUINT32_TO_BE(adler);
   p += 4;
-  *(uint32_t *)p = htonl(crc(p_idat, p - p_idat));
+  *(guint32 *)p = GUINT32_TO_BE(crc(p_idat, p - p_idat));
   p += 4;
 
   memcpy (p, iend, sizeof(iend));
@@ -599,13 +427,13 @@ to_png_a (int w, int h, int byte_stride, uint8_t *data)
 
   assert(p - png == png_size);
 
-  url = bw_malloc (strlen("data:image/png;base64,") +
+  url = g_malloc (strlen("data:image/png;base64,") +
 		  ((png_size / 3 + 1) * 4 + 4) + 1);
   strcpy (url, "data:image/png;base64,");
 
   url_base64 = url + strlen("data:image/png;base64,");
-  outlen = bw_base64_encode_step (png, png_size, FALSE, url_base64, &state, &save);
-  outlen += bw_base64_encode_close (FALSE, url_base64 + outlen, &state, &save);
+  outlen = g_base64_encode_step (png, png_size, FALSE, url_base64, &state, &save);
+  outlen += g_base64_encode_close (FALSE, url_base64 + outlen, &state, &save);
   url_base64[outlen] = 0;
 
   free (png);
@@ -625,9 +453,9 @@ struct BroadwayOutput {
 
 static void
 broadway_output_write_raw (BroadwayOutput *output,
-			   const void *buf, size_t count)
+			   const void *buf, gsize count)
 {
-  ssize_t res;
+  gssize res;
   int errsave;
   const char *ptr = (const char *)buf;
 
@@ -654,9 +482,9 @@ broadway_output_write_raw (BroadwayOutput *output,
 
 static void
 broadway_output_write (BroadwayOutput *output,
-		       const void *buf, size_t count)
+		       const void *buf, gsize count)
 {
-  ssize_t res;
+  gssize res;
   const char *ptr = (const char *)buf;
 
   while (count > 0)
@@ -706,7 +534,7 @@ broadway_output_new(int fd)
 {
   BroadwayOutput *output;
 
-  output = bw_new0 (BroadwayOutput, 1);
+  output = g_new0 (BroadwayOutput, 1);
 
   output->fd = fd;
 
@@ -742,7 +570,7 @@ broadway_output_copy_rectangles (BroadwayOutput *output,  int id,
 
   len = 1 + 3 + 3 + 3*4*n_rects + 3 + 3;
 
-  buf = bw_malloc (len);
+  buf = g_malloc (len);
   p = 0;
   buf[p++] = 'b';
   base64_uint16(id, &buf[p]); p +=3;
@@ -840,7 +668,7 @@ broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
 			 int w, int h, int byte_stride, void *data)
 {
   char buf[16];
-  size_t len;
+  gsize len;
   char *url;
 
   buf[0] = 'i';
@@ -848,7 +676,7 @@ broadway_output_put_rgb (BroadwayOutput *output,  int id, int x, int y,
   base64_uint16(x, &buf[4]);
   base64_uint16(y, &buf[7]);
 
-  url = to_png_rgb (w, h, byte_stride, (uint32_t*)data);
+  url = to_png_rgb (w, h, byte_stride, (guint32*)data);
   len = strlen (url);
   base64_uint32(len, &buf[10]);
 
@@ -871,7 +699,7 @@ is_any_x_set (unsigned char *data,
 	      int byte_stride)
 {
   int w ;
-  uint32_t *ptr;
+  guint32 *ptr;
 
   if (x1 < box_x1)
     x1 = box_x1;
@@ -882,7 +710,7 @@ is_any_x_set (unsigned char *data,
   w = x2 - x1;
   if (w > 0)
     {
-      ptr = (uint32_t *)(data + y * byte_stride + x1 * 4);
+      ptr = (guint32 *)(data + y * byte_stride + x1 * 4);
       while (w-- > 0)
 	{
 	  if (*ptr != 0)
@@ -1016,7 +844,7 @@ rgba_find_rects_sub (unsigned char *data,
 		     BroadwayBox **rects,
 		     int *n_rects, int *alloc_rects)
 {
-  uint32_t *line;
+  guint32 *line;
   BroadwayBox rect;
   int x, y;
 
@@ -1025,7 +853,7 @@ rgba_find_rects_sub (unsigned char *data,
 
   for (y = box_y1; y < box_y2; y++)
     {
-      line = (uint32_t *)(data + y * byte_stride + box_x1 * 4);
+      line = (guint32 *)(data + y * byte_stride + box_x1 * 4);
 
       for (x = box_x1; x < box_x2; x++)
 	{
@@ -1037,7 +865,7 @@ rgba_find_rects_sub (unsigned char *data,
 	      if (*n_rects == *alloc_rects)
 		{
 		  (*alloc_rects) *= 2;
-		  *rects = bw_renew(*rects, BroadwayBox, *alloc_rects);
+		  *rects = g_renew (BroadwayBox, *rects, *alloc_rects);
 		}
 	      (*rects)[*n_rects] = rect;
 	      (*n_rects)++;
@@ -1072,7 +900,7 @@ rgba_find_rects (unsigned char *data,
   int alloc_rects;
 
   alloc_rects = 20;
-  rects = bw_new (BroadwayBox, alloc_rects);
+  rects = g_new (BroadwayBox, alloc_rects);
 
   *n_rects = 0;
   rgba_find_rects_sub (data,
@@ -1087,17 +915,17 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 			  int w, int h, int byte_stride, void *data)
 {
   char buf[16];
-  size_t len;
+  gsize len;
   char *url;
   BroadwayBox *rects;
   int i, n_rects;
-  uint8_t *subdata;
+  guint8 *subdata;
 
   rects = rgba_find_rects (data, w, h, byte_stride, &n_rects);
 
   for (i = 0; i < n_rects; i++)
     {
-      subdata = (uint8_t *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
+      subdata = (guint8 *)data + rects[i].x1 * 4 + rects[i].y1 * byte_stride;
 
       buf[0] = 'i';
       base64_uint16(id, &buf[1]);
@@ -1106,7 +934,7 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 
       url = to_png_rgba (rects[i].x2 - rects[i].x1,
 			 rects[i].y2 - rects[i].y1,
-			 byte_stride, (uint32_t*)subdata);
+			 byte_stride, (guint32*)subdata);
       len = strlen (url);
       base64_uint32(len, &buf[10]);
 
@@ -1123,10 +951,10 @@ broadway_output_put_rgba (BroadwayOutput *output,  int id, int x, int y,
 #if 0
 static void
 send_image_a (BroadwayOutput *output,  int id, int x, int y,
-	      int w, int h, int byte_stride, uint8_t *data)
+	      int w, int h, int byte_stride, guint8 *data)
 {
   char buf[16];
-  size_t len;
+  gsize len;
   char *url;
 
   buf[0] = 'i';
