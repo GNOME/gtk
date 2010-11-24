@@ -3037,7 +3037,7 @@ gtk_render_arrow (GtkStyleContext *context,
  * <example>
  * <title>Typical background rendering, showing the effect of
  * <parameter>background-image</parameter>,
- * <parameter>border-width</parameter and
+ * <parameter>border-width</parameter> and
  * <parameter>border-radius</parameter></title>
  * <inlinegraphic fileref="background.png" format="PNG"/>
  * </example>
@@ -3320,9 +3320,14 @@ gtk_render_slider (GtkStyleContext *context,
  * @xy1_gap: end coordinate (X or Y depending on @gap_side) for the gap
  *
  * Renders a frame around the rectangle defined by (@x, @y, @width, @height),
- * leaving a gap on one side. @xy0_gap and @xy1_gap will mean X coordinates for
- * %GTK_POS_TOP and %GTK_POS_BOTTOM gap sides, and Y coordinates for %GTK_POS_LEFT
- * and %GTK_POS_RIGHT.
+ * leaving a gap on one side. @xy0_gap and @xy1_gap will mean X coordinates
+ * for %GTK_POS_TOP and %GTK_POS_BOTTOM gap sides, and Y coordinates for
+ * %GTK_POS_LEFT and %GTK_POS_RIGHT.
+ *
+ * <example>
+ * <title>Typical rendering of a frame with a gap</title>
+ * <inlinegraphic fileref="frame-gap.png" format="PNG"/>
+ * </example>
  *
  * Since: 3.0
  **/

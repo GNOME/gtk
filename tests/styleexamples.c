@@ -265,6 +265,38 @@ draw_cb_extension (GtkWidget *widget, cairo_t *cr)
   return TRUE;
 }
 
+static gboolean
+draw_cb_frame_gap (GtkWidget *widget, cairo_t *cr)
+{
+  GtkStyleContext *context;
+  GtkStyleProvider *provider;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+
+  provider = (GtkStyleProvider *)gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
+                                   ".frame {\n"
+                                   "   border-style: solid;\n"
+                                   "   border-width: 1;\n"
+                                   "   border-radius: 0;\n"
+                                   "}\n",
+                                   -1, NULL);
+  gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  gtk_style_context_add_class (context, "frame");
+  gtk_style_context_set_junction_sides (context, 0);
+  gtk_render_frame_gap (context, cr, 12, 12, 50, 50, GTK_POS_TOP, 15, 35);
+  gtk_style_context_remove_class (context, "frame");
+
+  gtk_style_context_remove_provider (context, provider);
+
+  gtk_style_context_restore (context);
+
+  return TRUE;
+}
+
 static char *what;
 
 static gboolean
@@ -290,6 +322,8 @@ draw_cb (GtkWidget *widget, cairo_t *cr)
     return draw_cb_focus (widget, cr);
   else if (strcmp (what, "extension") == 0)
     return draw_cb_extension (widget, cr);
+  else if (strcmp (what, "frame-gap") == 0)
+    return draw_cb_frame_gap (widget, cr);
 
   return FALSE;
 }

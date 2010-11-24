@@ -348,6 +348,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/expanders.png					\
 	$(srcdir)/images/background.png					\
 	$(srcdir)/images/frames.png					\
+	$(srcdir)/images/frame-gap.png					\
 	$(srcdir)/images/sliders.png					\
 	$(srcdir)/images/focus.png					\
 	$(srcdir)/images/extensions.png
