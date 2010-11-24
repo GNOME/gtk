@@ -2728,21 +2728,28 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
   if (!priv->animations_invalidated)
     return;
 
-  for (l = priv->animations; l; l = l->next)
+  l = priv->animations;
+
+  while (l)
     {
       AnimationInfo *info;
+      GSList *cur;
       guint i;
 
-      info = l->data;
+      cur = l;
+      info = cur->data;
+      l = l->next;
 
       if (info->invalidation_region)
         continue;
 
-      /* FIXME: If this happens there's not much
-       * point in keeping the animation running.
-       */
+      /* There's not much point in keeping the animation running */
       if (info->rectangles->len == 0)
-        continue;
+        {
+          priv->animations = g_slist_remove (priv->animations, info);
+          animation_info_free (info);
+          continue;
+        }
 
       info->invalidation_region = cairo_region_create ();
 
