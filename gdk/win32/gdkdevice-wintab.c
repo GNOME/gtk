@@ -322,7 +322,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
   if (!_gdk_device_wintab_get_window_coords (impl_window, &root_x, &root_y))
     return;
 
-  for (i = 0; i < device->num_axes; i++)
+  for (i = 0; i < gdk_device_get_n_axes (device); i++)
     {
       GdkAxisUse use;
 
