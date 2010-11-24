@@ -536,14 +536,50 @@ animation_info_free (AnimationInfo *info)
   g_slice_free (AnimationInfo, info);
 }
 
+static AnimationInfo *
+animation_info_lookup_by_timeline (GtkStyleContext *context,
+                                   GtkTimeline     *timeline)
+{
+  GtkStyleContextPrivate *priv;
+  AnimationInfo *info;
+  GSList *l;
+
+  priv = context->priv;
+
+  for (l = priv->animations; l; l = l->next)
+    {
+      info = l->data;
+
+      if (info->timeline == timeline)
+        return info;
+    }
+
+  return NULL;
+}
+
 static void
 timeline_frame_cb (GtkTimeline *timeline,
                    gdouble      progress,
                    gpointer     user_data)
 {
+  GtkStyleContextPrivate *priv;
+  GtkStyleContext *context;
   AnimationInfo *info;
 
-  info = user_data;
+  context = user_data;
+  priv = context->priv;
+  info = animation_info_lookup_by_timeline (context, timeline);
+
+  g_assert (info != NULL);
+
+  /* Cancel transition if window is gone */
+  if (gdk_window_is_destroyed (info->window) ||
+      !gdk_window_is_visible (info->window))
+    {
+      priv->animations = g_slist_remove (priv->animations, info);
+      animation_info_free (info);
+      return;
+    }
 
   if (info->invalidation_region &&
       !cairo_region_is_empty (info->invalidation_region))
@@ -559,30 +595,23 @@ timeline_finished_cb (GtkTimeline *timeline,
   GtkStyleContextPrivate *priv;
   GtkStyleContext *context;
   AnimationInfo *info;
-  GSList *l;
 
   context = user_data;
   priv = context->priv;
+  info = animation_info_lookup_by_timeline (context, timeline);
 
-  for (l = priv->animations; l; l = l->next)
-    {
-      info = l->data;
+  g_assert (info != NULL);
 
-      if (info->timeline == timeline)
-        {
-          priv->animations = g_slist_delete_link (priv->animations, l);
+  priv->animations = g_slist_remove (priv->animations, info);
 
-          /* Invalidate one last time the area, so the final content is painted */
-          if (info->invalidation_region &&
-              !cairo_region_is_empty (info->invalidation_region))
-            gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
-          else
-            gdk_window_invalidate_rect (info->window, NULL, TRUE);
+  /* Invalidate one last time the area, so the final content is painted */
+  if (info->invalidation_region &&
+      !cairo_region_is_empty (info->invalidation_region))
+    gdk_window_invalidate_region (info->window, info->invalidation_region, TRUE);
+  else
+    gdk_window_invalidate_rect (info->window, NULL, TRUE);
 
-          animation_info_free (info);
-          break;
-        }
-    }
+  animation_info_free (info);
 }
 
 static AnimationInfo *
@@ -616,7 +645,7 @@ animation_info_new (GtkStyleContext         *context,
     }
 
   g_signal_connect (info->timeline, "frame",
-                    G_CALLBACK (timeline_frame_cb), info);
+                    G_CALLBACK (timeline_frame_cb), context);
   g_signal_connect (info->timeline, "finished",
                     G_CALLBACK (timeline_finished_cb), context);
 
