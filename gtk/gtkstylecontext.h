@@ -283,6 +283,13 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_PROGRESSBAR "progressbar"
 
+/**
+ * GTK_STYLE_CLASS_SPINNER:
+ *
+ * A widget class defining a spinner
+ */
+#define GTK_STYLE_CLASS_SPINNER "spinner"
+
 /* Predefined set of widget regions */
 
 /**

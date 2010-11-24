@@ -2612,7 +2612,7 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
                                     gdouble           width,
                                     gdouble           height)
 {
-  if (gtk_theming_engine_has_class (engine, "spinner"))
+  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_SPINNER))
     {
       GtkStateFlags state;
       guint num_steps, step;
