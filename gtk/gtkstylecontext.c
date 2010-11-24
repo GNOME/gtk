@@ -2406,6 +2406,10 @@ gtk_style_context_get_direction (GtkStyleContext *context)
  * This is merely a hint that may or may not be honored
  * by theming engines.
  *
+ * Container widgets are expected to set junction hints as appropriate
+ * for their children, so it should not normally be necessary to call
+ * this function manually.
+ *
  * Since: 3.0
  **/
 void
