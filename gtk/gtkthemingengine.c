@@ -2019,6 +2019,8 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   GdkRGBA *fg_color;
   GtkStateFlags flags;
   GdkScreen *screen;
+  gdouble progress;
+  gboolean running;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -2029,6 +2031,33 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
 
   screen = gtk_theming_engine_get_screen (engine);
   matrix = pango_context_get_matrix (pango_layout_get_context (layout));
+
+  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+
+  if (running)
+    {
+      GtkStateFlags other_flags;
+      GdkRGBA *other_fg;
+
+      if (flags & GTK_STATE_FLAG_PRELIGHT)
+        {
+          other_flags = flags & ~(GTK_STATE_FLAG_PRELIGHT);
+          progress = 1 - progress;
+        }
+      else
+        other_flags = flags | GTK_STATE_FLAG_PRELIGHT;
+
+      gtk_theming_engine_get (engine, other_flags,
+                              "color", &other_fg,
+                              NULL);
+
+      fg_color->red = CLAMP (fg_color->red + ((other_fg->red - fg_color->red) * progress), 0, 1);
+      fg_color->green = CLAMP (fg_color->green + ((other_fg->green - fg_color->green) * progress), 0, 1);
+      fg_color->blue = CLAMP (fg_color->blue + ((other_fg->blue - fg_color->blue) * progress), 0, 1);
+      fg_color->alpha = CLAMP (fg_color->alpha + ((other_fg->alpha - fg_color->alpha) * progress), 0, 1);
+
+      gdk_rgba_free (other_fg);
+    }
 
   if (matrix)
     {
