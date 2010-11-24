@@ -537,6 +537,7 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
 					    g_app_info_get_description (app) : "");
 
       icon = g_app_info_get_icon (app);
+      unref_icon = FALSE;
       if (icon == NULL)
 	{
 	  icon = g_themed_icon_new ("application-x-executable");
@@ -560,8 +561,6 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
       g_free (app_string);
       if (unref_icon)
 	g_object_unref (icon);
-
-      unref_icon = FALSE;
     }
 
   g_free (bold_string);
