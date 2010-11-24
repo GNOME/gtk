@@ -81,6 +81,7 @@ struct _GdkDisplayBroadway
 
   GSocketService *service;
   BroadwayOutput *output;
+  GSocketConnection *output_connection;
 };
 
 struct _GdkDisplayBroadwayClass

@@ -458,9 +458,8 @@ start_output (HttpRequest *request)
   display_broadway->output = broadway_output_new (fd);
   _gdk_broadway_resync_windows ();
 
-  /* TODO: This leaks the connection since we just keep the fd,
-     we want to avoid using the fd at all here */
-  g_object_ref (request->connection);
+  /* Keep connection alive */
+  display_broadway->output_connection = g_object_ref (request->connection);
   http_request_free (request);
 }
 
