@@ -33,7 +33,7 @@ diff_surfaces (cairo_surface_t *surface,
 
       for (x = 0; x < w; x++)
 	{
-	  if (*line & 0xffffff == *old_line & 0xffffff)
+	  if ((*line & 0xffffff) == (*old_line & 0xffffff))
 	    *old_line = 0;
 	  else
 	    *old_line = *line | 0xff000000;
