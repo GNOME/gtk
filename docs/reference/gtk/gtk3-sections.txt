@@ -5384,7 +5384,6 @@ GTK_STYLE_PROPERTY_BORDER_RADIUS
 GTK_STYLE_PROPERTY_BORDER_STYLE
 GTK_STYLE_PROPERTY_BORDER_COLOR
 GTK_STYLE_PROPERTY_BACKGROUND_IMAGE
-</SUBSECTION>
 <SUBSECTION>
 GTK_STYLE_CLASS_BACKGROUND
 GTK_STYLE_CLASS_BUTTON
@@ -5464,7 +5463,6 @@ gtk_render_handle
 gtk_render_layout
 gtk_render_line
 gtk_render_option
-gtk_render_progress
 gtk_render_slider
 gtk_render_activity
 gtk_render_icon_pixbuf
