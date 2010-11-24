@@ -573,7 +573,7 @@ gtk_extra_sources = \
 
 gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES \
+	cl /EP -DG_OS_WIN32 \
 		-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= \
 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gtk.symbols >> gtk.def
 
