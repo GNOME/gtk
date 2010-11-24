@@ -275,24 +275,6 @@ GDK_TYPE_RGBA
 </SECTION>
 
 <SECTION>
-<TITLE>Drawing Primitives</TITLE>
-<FILE>drawing</FILE>
-GdkDrawable
-gdk_drawable_get_visible_region
-
-<SUBSECTION Standard>
-GDK_DRAWABLE
-GDK_DRAWABLE_GET_CLASS
-GDK_TYPE_DRAWABLE
-GDK_IS_DRAWABLE
-GDK_DRAWABLE_CLASS
-GDK_IS_DRAWABLE_CLASS
-
-<SUBSECTION Private>
-GdkDrawableClass
-</SECTION>
-
-<SECTION>
 <TITLE>Visuals</TITLE>
 <FILE>visuals</FILE>
 GdkVisual

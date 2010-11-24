@@ -71,7 +71,6 @@ gdk_public_h_sources =				\
 	gdkdisplay.h				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
-	gdkdrawable.h				\
 	gdkevents.h				\
 	gdkinput.h				\
 	gdkkeys.h				\
@@ -113,7 +112,6 @@ gdk_c_sources =                 \
 	gdkdisplay.c		\
 	gdkdisplaymanager.c	\
 	gdkdnd.c		\
-	gdkdraw.c		\
 	gdkevents.c     	\
 	gdkglobals.c		\
 	gdkkeys.c		\

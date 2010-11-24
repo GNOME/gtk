@@ -154,8 +154,6 @@ gdk_drag_get_selection
 gdk_drag_motion
 gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_drag_status
-gdk_drawable_get_type G_GNUC_CONST
-gdk_drawable_get_visible_region
 gdk_drop_finish
 gdk_drop_reply
 gdk_enable_multidevice
