@@ -66,7 +66,7 @@ GtkStyleProperties * gtk_style_properties_new (void);
 void               gtk_style_properties_map_color    (GtkStyleProperties *props,
                                                       const gchar        *name,
                                                       GtkSymbolicColor   *color);
-GtkSymbolicColor * gtk_style_properties_lookup_color (GtkStyleProperties *set,
+GtkSymbolicColor * gtk_style_properties_lookup_color (GtkStyleProperties *props,
                                                       const gchar        *name);
 
 void     gtk_style_properties_set_property (GtkStyleProperties *props,
