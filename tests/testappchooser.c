@@ -18,8 +18,6 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#include <config.h>
-
 #include <stdlib.h>
 #include <gtk/gtk.h>
 
@@ -32,8 +30,8 @@ static GtkWidget *recommended, *fallback, *other, *all;
 
 static void
 dialog_response (GtkDialog *d,
-		 gint response_id,
-		 gpointer user_data)
+                 gint       response_id,
+                 gpointer   user_data)
 {
   GAppInfo *app_info;
   const gchar *name;
@@ -57,17 +55,17 @@ static void
 bind_props (void)
 {
   g_object_bind_property (recommended, "active",
-			  app_chooser_widget, "show-recommended",
-			  G_BINDING_SYNC_CREATE);
+                          app_chooser_widget, "show-recommended",
+                          G_BINDING_SYNC_CREATE);
   g_object_bind_property (fallback, "active",
-			  app_chooser_widget, "show-fallback",
-			  G_BINDING_SYNC_CREATE);
+                          app_chooser_widget, "show-fallback",
+                          G_BINDING_SYNC_CREATE);
   g_object_bind_property (other, "active",
-			  app_chooser_widget, "show-other",
-			  G_BINDING_SYNC_CREATE);
+                          app_chooser_widget, "show-other",
+                          G_BINDING_SYNC_CREATE);
   g_object_bind_property (all, "active",
-			  app_chooser_widget, "show-all",
-			  G_BINDING_SYNC_CREATE);
+                          app_chooser_widget, "show-all",
+                          G_BINDING_SYNC_CREATE);
 }
 
 static void
@@ -84,25 +82,25 @@ prepare_dialog (void)
   if (use_file)
     {
       dialog = gtk_app_chooser_dialog_new (GTK_WINDOW (toplevel),
-					 0, file);
+                                         0, file);
     }
   else
     {
       GFileInfo *info;
 
       info = g_file_query_info (file,
-				G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
-				0, NULL, NULL);
+                                G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+                                0, NULL, NULL);
       content_type = g_strdup (g_file_info_get_content_type (info));
 
       g_object_unref (info);
 
       dialog = gtk_app_chooser_dialog_new_for_content_type (GTK_WINDOW (toplevel),
-							  0, content_type);
+                                                          0, content_type);
     }
 
   g_signal_connect (dialog, "response",
-		    G_CALLBACK (dialog_response), NULL);
+                    G_CALLBACK (dialog_response), NULL);
 
   g_free (content_type);
 
@@ -115,23 +113,23 @@ display_dialog (void)
 {
   if (dialog == NULL)
     prepare_dialog ();
-  
+
   gtk_widget_show (dialog);
 }
 
 static void
 button_clicked (GtkButton *b,
-		gpointer user_data)
+                gpointer   user_data)
 {
   GtkWidget *w;
   gchar *path;
 
   w = gtk_file_chooser_dialog_new ("Select file",
-				   GTK_WINDOW (toplevel),
-				   GTK_FILE_CHOOSER_ACTION_OPEN,
-				   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				   GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-				   NULL);
+                                   GTK_WINDOW (toplevel),
+                                   GTK_FILE_CHOOSER_ACTION_OPEN,
+                                   GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                                   GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+                                   NULL);
 
   gtk_dialog_run (GTK_DIALOG (w));
   file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (w));
@@ -146,8 +144,7 @@ button_clicked (GtkButton *b,
 }
 
 int
-main (int argc,
-      char **argv)
+main (int argc, char **argv)
 {
   GtkWidget *w1;
   gchar *path;
@@ -162,7 +159,7 @@ main (int argc,
   w1 = gtk_label_new ("File:");
   gtk_widget_set_halign (w1, GTK_ALIGN_START);
   gtk_grid_attach (GTK_GRID (grid),
-		   w1, 0, 0, 1, 1);
+                   w1, 0, 0, 1, 1);
 
   file_l = gtk_button_new ();
   path = g_build_filename (g_get_current_dir (), "apple-red.png", NULL);
@@ -172,49 +169,49 @@ main (int argc,
 
   gtk_widget_set_halign (file_l, GTK_ALIGN_START);
   gtk_grid_attach_next_to (GTK_GRID (grid), file_l,
-			   w1, GTK_POS_RIGHT, 3, 1);
+                           w1, GTK_POS_RIGHT, 3, 1);
   g_signal_connect (file_l, "clicked",
-		    G_CALLBACK (button_clicked), NULL);
+                    G_CALLBACK (button_clicked), NULL);
 
   radio_file = gtk_radio_button_new_with_label (NULL, "Use GFile");
   radio_content = gtk_radio_button_new_with_label_from_widget (GTK_RADIO_BUTTON (radio_file),
-							       "Use content type");
+                                                               "Use content type");
 
   gtk_grid_attach (GTK_GRID (grid), radio_file,
-		   0, 1, 1, 1);
+                   0, 1, 1, 1);
   gtk_grid_attach_next_to (GTK_GRID (grid), radio_content,
-			   radio_file, GTK_POS_BOTTOM, 1, 1);
+                           radio_file, GTK_POS_BOTTOM, 1, 1);
 
   open = gtk_button_new_with_label ("Trigger App Chooser dialog");
   gtk_grid_attach_next_to (GTK_GRID (grid), open,
-			   radio_content, GTK_POS_BOTTOM, 1, 1);
+                           radio_content, GTK_POS_BOTTOM, 1, 1);
 
   recommended = gtk_check_button_new_with_label ("Show recommended");
   gtk_grid_attach_next_to (GTK_GRID (grid), recommended,
-			   open, GTK_POS_BOTTOM, 1, 1);
+                           open, GTK_POS_BOTTOM, 1, 1);
   g_object_set (recommended, "active", TRUE, NULL);
 
   fallback = gtk_check_button_new_with_label ("Show fallback");
   gtk_grid_attach_next_to (GTK_GRID (grid), fallback,
-			   recommended, GTK_POS_RIGHT, 1, 1);
+                           recommended, GTK_POS_RIGHT, 1, 1);
 
   other = gtk_check_button_new_with_label ("Show other");
   gtk_grid_attach_next_to (GTK_GRID (grid), other,
-			   fallback, GTK_POS_RIGHT, 1, 1);
+                           fallback, GTK_POS_RIGHT, 1, 1);
 
   all = gtk_check_button_new_with_label ("Show all");
   gtk_grid_attach_next_to (GTK_GRID (grid), all,
-			   other, GTK_POS_RIGHT, 1, 1);
+                           other, GTK_POS_RIGHT, 1, 1);
 
   prepare_dialog ();
   g_signal_connect (open, "clicked",
-		    G_CALLBACK (display_dialog), NULL);
+                    G_CALLBACK (display_dialog), NULL);
 
   gtk_container_add (GTK_CONTAINER (toplevel), grid);
 
   gtk_widget_show_all (toplevel);
   g_signal_connect (toplevel, "delete-event",
-		    G_CALLBACK (gtk_main_quit), NULL);
+                    G_CALLBACK (gtk_main_quit), NULL);
 
   gtk_main ();
 
