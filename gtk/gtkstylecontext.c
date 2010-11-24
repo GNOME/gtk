@@ -3252,12 +3252,21 @@ gtk_render_layout (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   GtkThemingEngineClass *engine_class;
+  PangoRectangle extents;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  pango_layout_get_extents (layout, &extents, NULL);
+
+  store_animation_region (context,
+                          x + extents.x,
+                          y + extents.y,
+                          extents.width,
+                          extents.height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_layout (priv->theming_engine, cr, x, y, layout);
