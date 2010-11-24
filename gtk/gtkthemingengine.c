@@ -330,7 +330,6 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
 
 /**
  * gtk_theming_engine_register_property:
- * @engine: a #GtkThemingEngine
  * @name_space: namespace for the property name
  * @parse_func: parsing function to use, or %NULL
  * @pspec: the #GParamSpec for the new property
@@ -2609,6 +2608,8 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
       gdouble radius;
       gdouble half;
       gint i;
+
+      num_steps = 0;
 
       gtk_theming_engine_get_style (engine,
                                     "num-steps", &num_steps,
