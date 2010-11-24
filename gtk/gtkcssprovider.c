@@ -3465,6 +3465,7 @@ gtk_css_provider_get_default (void)
         "}\n"
         "\n"
         "*:insensitive {\n"
+        "  border-color: shade (@bg_color, 0.7);\n"
         "  background-color: shade (@bg_color, 0.9);\n"
         "  color: shade (@bg_color, 0.7);\n"
         "}\n"
