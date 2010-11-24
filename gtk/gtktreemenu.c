@@ -633,7 +633,7 @@ gtk_tree_menu_get_path_item (GtkTreeMenu          *menu,
 		item = child;
 	    }
 	}
-      else
+      else if (!GTK_IS_TEAROFF_MENU_ITEM (child))
 	{
 	  GtkWidget *view = gtk_bin_get_child (GTK_BIN (child));
 
@@ -676,10 +676,7 @@ gtk_tree_menu_path_in_menu (GtkTreeMenu  *menu,
   if (gtk_tree_path_get_depth (path) == 1)
     {
       if (!priv->root)
-	{
-	  g_print ("gtk_tree_menu_path_in_menu: Found in root menu !\n");
-	  in_menu = TRUE;
-	}
+	in_menu = TRUE;
     }
   /* If we are a submenu, compare the parent path */
   else if (priv->root && gtk_tree_path_get_depth (path) > 1)
@@ -689,18 +686,17 @@ gtk_tree_menu_path_in_menu (GtkTreeMenu  *menu,
 
       gtk_tree_path_up (parent_path);
 
-      if (gtk_tree_path_compare (root_path, parent_path) == 0)
+      if (root_path)
 	{
-	  in_menu = TRUE;
-	  g_print ("gtk_tree_menu_path_in_menu: Found in this menu !\n");
-	}
-
-      if (!in_menu && priv->menu_with_header && 
-	  gtk_tree_path_compare (root_path, path) == 0)
-	{
-	  g_print ("gtk_tree_menu_path_in_menu: Found as menu header !\n");
-	  in_menu   = TRUE;
-	  is_header = TRUE;
+	  if (gtk_tree_path_compare (root_path, parent_path) == 0)
+	    in_menu = TRUE;
+	  
+	  if (!in_menu && priv->menu_with_header && 
+	      gtk_tree_path_compare (root_path, path) == 0)
+	    {
+	      in_menu   = TRUE;
+	      is_header = TRUE;
+	    }
 	}
       gtk_tree_path_free (root_path);
       gtk_tree_path_free (parent_path);
@@ -760,6 +756,47 @@ gtk_tree_menu_path_needs_submenu (GtkTreeMenu *menu,
   return item;
 }
 
+static GtkWidget *
+find_empty_submenu (GtkTreeMenu  *menu)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+  GList              *children, *l;
+  GtkWidget          *submenu = NULL;
+
+  children = gtk_container_get_children (GTK_CONTAINER (menu));
+
+  for (l = children; submenu == NULL && l != NULL; l = l->next)
+    {
+      GtkWidget   *child = l->data;
+      GtkTreePath *path  = NULL;
+      GtkTreeIter  iter;
+
+      /* Separators dont get submenus, if it already has a submenu then let
+       * the submenu handle inserted rows */
+      if (!GTK_IS_SEPARATOR_MENU_ITEM (child) && !GTK_IS_TEAROFF_MENU_ITEM (child))
+	{
+	  GtkWidget *view = gtk_bin_get_child (GTK_BIN (child));
+
+	  /* It's always a cellview */
+	  if (GTK_IS_CELL_VIEW (view))
+	    path = gtk_cell_view_get_displayed_row (GTK_CELL_VIEW (view));
+	}
+
+      if (path)
+	{
+	  if (gtk_tree_model_get_iter (priv->model, &iter, path) &&
+	      !gtk_tree_model_iter_has_child (priv->model, &iter))
+	    submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (child));
+
+	  gtk_tree_path_free (path);
+	}
+    }
+
+  g_list_free (children);
+
+  return submenu;
+}
+
 static void
 row_inserted_cb (GtkTreeModel     *model,
 		 GtkTreePath      *path,
@@ -773,7 +810,6 @@ row_inserted_cb (GtkTreeModel     *model,
   /* If the iter should be in this menu then go ahead and insert it */
   if (gtk_tree_menu_path_in_menu (menu, path, NULL))
     {
-
       if (priv->wrap_width > 0)
 	rebuild_menu (menu);
       else
@@ -829,8 +865,6 @@ row_deleted_cb (GtkTreeModel     *model,
    */
   item = gtk_tree_menu_get_path_item (menu, path);
 
-  g_print ("Deleting item %p\n", item);
-
   if (item)
     {
       if (priv->wrap_width > 0)
@@ -843,6 +877,14 @@ row_deleted_cb (GtkTreeModel     *model,
 	  /* Resize everything */
 	  gtk_cell_area_context_flush (menu->priv->context);
 	}
+    }
+  else 
+    {
+      /* It's up to the parent menu to destroy a child menu that becomes empty
+       * since the topmost menu belongs to the user and is allowed to have no contents */
+      GtkWidget *submenu = find_empty_submenu (menu);
+      if (submenu)
+	gtk_widget_destroy (submenu);
     }
 }
 
