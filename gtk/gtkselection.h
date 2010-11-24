@@ -66,10 +66,11 @@ struct _GtkSelectionData
   GdkDisplay   *GSEAL (display);
 };
 
-struct _GtkTargetEntry {
-  gchar *target;
-  guint  flags;
-  guint  info;
+struct _GtkTargetEntry
+{
+  const gchar *target;
+  guint        flags;
+  guint        info;
 };
 
 /* These structures not public, and are here only for the convenience of
