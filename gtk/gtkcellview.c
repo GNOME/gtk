@@ -829,9 +829,14 @@ row_changed_cb (GtkTreeModel         *model,
       row_path = 
 	gtk_tree_row_reference_get_path (view->priv->displayed_row);
 
-      /* Resize everything in our context if our row changed */
-      if (gtk_tree_path_compare (row_path, path) == 0)
-	gtk_cell_area_context_flush (view->priv->context);
+      if (row_path)
+	{
+	  /* Resize everything in our context if our row changed */
+	  if (gtk_tree_path_compare (row_path, path) == 0)
+	    gtk_cell_area_context_flush (view->priv->context);
+
+	  gtk_tree_path_free (row_path);
+	}
     }
 }
 

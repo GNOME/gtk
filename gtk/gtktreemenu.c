@@ -115,6 +115,8 @@ static void       item_activated_cb                           (GtkMenuItem      
 static void       submenu_activated_cb                        (GtkTreeMenu          *submenu,
 							       const gchar          *path,
 							       GtkTreeMenu          *menu);
+static void       gtk_tree_menu_set_model_internal            (GtkTreeMenu          *menu,
+							       GtkTreeModel         *model);
 
 
 
@@ -828,7 +830,7 @@ row_changed_cb (GtkTreeModel         *model,
       GtkTreePath *root_path =
 	gtk_tree_row_reference_get_path (priv->root);
       
-      if (gtk_tree_path_compare (root_path, path) == 0)
+      if (root_path && gtk_tree_path_compare (root_path, path) == 0)
 	{
 	  if (priv->header_func)
 	    has_header = 
@@ -853,9 +855,9 @@ row_changed_cb (GtkTreeModel         *model,
 
 	      priv->menu_with_header = FALSE;
 	    }
+
+	  gtk_tree_path_free (root_path);
 	}
-      
-      gtk_tree_path_free (root_path);
     }
   
   if (item)
@@ -940,7 +942,7 @@ area_apply_attributes_cb (GtkCellArea          *area,
 
       /* If there is no submenu, go ahead and update item sensitivity,
        * items with submenus are always sensitive */
-      if (!gtk_menu_item_get_submenu (GTK_MENU_ITEM (item)))
+      if (item && !gtk_menu_item_get_submenu (GTK_MENU_ITEM (item)))
 	{
 	  sensitive = area_is_sensitive (priv->area);
 
@@ -1100,6 +1102,7 @@ gtk_tree_menu_create_item (GtkTreeMenu *menu,
   if (is_separator)
     {
       item = gtk_separator_menu_item_new ();
+      gtk_widget_show (item);
 
       g_object_set_qdata_full (G_OBJECT (item),
 			       tree_menu_path_quark,
@@ -1138,9 +1141,8 @@ gtk_tree_menu_create_item (GtkTreeMenu *menu,
 					 priv->header_data,
 					 priv->header_destroy);
 
-	  gtk_tree_menu_set_model (GTK_TREE_MENU (submenu), priv->model);
+	  gtk_tree_menu_set_model_internal (GTK_TREE_MENU (submenu), priv->model);
 	  gtk_tree_menu_set_root (GTK_TREE_MENU (submenu), path);
-
 	  gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
 
 	  g_signal_connect (submenu, "menu-activate", 
@@ -1274,43 +1276,14 @@ submenu_activated_cb (GtkTreeMenu          *submenu,
   g_signal_emit (menu, tree_menu_signals[SIGNAL_MENU_ACTIVATE], 0, path);
 }
 
-/****************************************************************
- *                            API                               *
- ****************************************************************/
-GtkWidget *
-gtk_tree_menu_new (void)
-{
-  return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, NULL);
-}
-
-GtkWidget *
-gtk_tree_menu_new_with_area (GtkCellArea    *area)
-{
-  return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, 
-				    "cell-area", area, 
-				    NULL);
-}
-
-GtkWidget *
-gtk_tree_menu_new_full (GtkCellArea         *area,
-			GtkTreeModel        *model,
-			GtkTreePath         *root)
-{
-  return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, 
-				    "cell-area", area, 
-				    "model", model,
-				    "root", root,
-				    NULL);
-}
-
-void
-gtk_tree_menu_set_model (GtkTreeMenu  *menu,
-			 GtkTreeModel *model)
+/* Sets the model without rebuilding the menu, prevents
+ * infinite recursion while building submenus (we wait
+ * until the root is set and then build the menu) */
+static void
+gtk_tree_menu_set_model_internal (GtkTreeMenu  *menu,
+				  GtkTreeModel *model)
 {
   GtkTreeMenuPrivate *priv;
-
-  g_return_if_fail (GTK_IS_TREE_MENU (menu));
-  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
 
   priv = menu->priv;
 
@@ -1352,6 +1325,47 @@ gtk_tree_menu_set_model (GtkTreeMenu  *menu,
 						     G_CALLBACK (row_changed_cb), menu);
 	}
     }
+}
+
+/****************************************************************
+ *                            API                               *
+ ****************************************************************/
+GtkWidget *
+gtk_tree_menu_new (void)
+{
+  return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, NULL);
+}
+
+GtkWidget *
+gtk_tree_menu_new_with_area (GtkCellArea    *area)
+{
+  return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, 
+				    "cell-area", area, 
+				    NULL);
+}
+
+GtkWidget *
+gtk_tree_menu_new_full (GtkCellArea         *area,
+			GtkTreeModel        *model,
+			GtkTreePath         *root)
+{
+  return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, 
+				    "cell-area", area, 
+				    "model", model,
+				    "root", root,
+				    NULL);
+}
+
+void
+gtk_tree_menu_set_model (GtkTreeMenu  *menu,
+			 GtkTreeModel *model)
+{
+  g_return_if_fail (GTK_IS_TREE_MENU (menu));
+  g_return_if_fail (model == NULL || GTK_IS_TREE_MODEL (model));
+
+  gtk_tree_menu_set_model_internal (menu, model);
+
+  rebuild_menu (menu);
 }
 
 GtkTreeModel *
