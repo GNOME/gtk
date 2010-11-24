@@ -1588,7 +1588,8 @@ render_frame_internal (GtkThemingEngine *engine,
   GdkRGBA *border_color;
   GtkBorderStyle border_style;
   gint border_width, radius;
-  gdouble d1, d2, m;
+  gdouble progress, d1, d2, m;
+  gboolean running;
 
   state = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get (engine, state,
@@ -1597,6 +1598,33 @@ render_frame_internal (GtkThemingEngine *engine,
                           "border-width", &border_width,
                           "border-radius", &radius,
                           NULL);
+
+  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+
+  if (running)
+    {
+      GtkStateFlags other_state;
+      GdkRGBA *other_color;
+
+      if (state & GTK_STATE_FLAG_PRELIGHT)
+        {
+          other_state = state & ~(GTK_STATE_FLAG_PRELIGHT);
+          progress = 1 - progress;
+        }
+      else
+        other_state = state | GTK_STATE_FLAG_PRELIGHT;
+
+      gtk_theming_engine_get (engine, other_state,
+                              "border-color", &other_color,
+                              NULL);
+
+      border_color->red = CLAMP (border_color->red + ((other_color->red - border_color->red) * progress), 0, 1);
+      border_color->green = CLAMP (border_color->green + ((other_color->green - border_color->green) * progress), 0, 1);
+      border_color->blue = CLAMP (border_color->blue + ((other_color->blue - border_color->blue) * progress), 0, 1);
+      border_color->alpha = CLAMP (border_color->alpha + ((other_color->alpha - border_color->alpha) * progress), 0, 1);
+
+      gdk_rgba_free (other_color);
+    }
 
   cairo_save (cr);
 
