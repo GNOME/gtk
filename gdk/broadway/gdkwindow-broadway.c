@@ -796,15 +796,22 @@ _gdk_windowing_get_device_state (GdkDisplay       *display,
   if (display->closed)
     return;
 
+  screen = gdk_display_get_default_screen (display);
+  *x = 0;
+  *y = 0;
+  *mask = 0;
 }
 
 static gboolean
 gdk_window_broadway_get_device_state (GdkWindow       *window,
-                                 GdkDevice       *device,
-                                 gint            *x,
-                                 gint            *y,
-                                 GdkModifierType *mask)
+				      GdkDevice       *device,
+				      gint            *x,
+				      gint            *y,
+				      GdkModifierType *mask)
 {
+  *x = 0;
+  *y = 0;
+  *mask = 0;
   return FALSE;
 }
 
@@ -862,6 +869,7 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
       private = (GdkWindowObject *)window;
       *win_x = display_broadway->last_x - private->x;
       *win_y = display_broadway->last_y - private->y;
+      *mask = 0;
     }
 
   return window;
