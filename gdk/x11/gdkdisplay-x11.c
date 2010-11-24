@@ -1187,10 +1187,11 @@ _gdk_input_init (GdkDisplay *display)
 /**
  * gdk_display_open:
  * @display_name: the name of the display to open
- * @returns: a #GdkDisplay, or %NULL if the display
- *  could not be opened.
  *
  * Opens a display.
+ *
+ * Return value: (transfer none): a #GdkDisplay, or %NULL if the display
+ *               could not be opened.
  *
  * Since: 2.2
  */
@@ -1581,7 +1582,7 @@ gdk_display_get_n_screens (GdkDisplay *display)
  *
  * Returns a screen object for one of the screens of the display.
  *
- * Returns: the #GdkScreen object
+ * Returns: (transfer none): the #GdkScreen object
  *
  * Since: 2.2
  */
@@ -1601,7 +1602,7 @@ gdk_display_get_screen (GdkDisplay *display,
  *
  * Get the default #GdkScreen for @display.
  * 
- * Returns: the default #GdkScreen object for @display
+ * Returns: (transfer none): the default #GdkScreen object for @display
  *
  * Since: 2.2
  */
@@ -1771,7 +1772,8 @@ gdk_display_flush (GdkDisplay *display)
  * on @display. This window is implicitly created by GDK. 
  * See gdk_window_set_group().
  * 
- * Return value: The default group leader window for @display
+ * Return value: (transfer none): The default group leader window
+ * for @display
  *
  * Since: 2.4
  **/
@@ -1935,7 +1937,7 @@ gdk_display_x11_finalize (GObject *object)
  * 
  * Find the #GdkDisplay corresponding to @display, if any exists.
  * 
- * Return value: the #GdkDisplay, if found, otherwise %NULL.
+ * Return value: (transfer none): the #GdkDisplay, if found, otherwise %NULL.
  *
  * Since: 2.2
  **/

@@ -2212,7 +2212,7 @@ gdk_window_get_window_type (GdkWindow *window)
  * 
  * Gets the #GdkVisual describing the pixel format of @window.
  * 
- * Return value: a #GdkVisual
+ * Return value: (transfer none): a #GdkVisual
  *
  * Since: 2.24
  **/
@@ -2234,7 +2234,7 @@ gdk_window_get_visual (GdkWindow *window)
  * 
  * Gets the #GdkScreen associated with a #GdkWindow.
  * 
- * Return value: the #GdkScreen associated with @window
+ * Return value: (transfer none): the #GdkScreen associated with @window
  *
  * Since: 2.24
  **/
@@ -2256,7 +2256,7 @@ gdk_window_get_screen (GdkWindow *window)
  * 
  * Gets the #GdkDisplay associated with a #GdkWindow.
  * 
- * Return value: the #GdkDisplay associated with @window
+ * Return value: (transfer none): the #GdkDisplay associated with @window
  *
  * Since: 2.24
  **/
@@ -5130,7 +5130,7 @@ gdk_window_at_pointer (gint *win_x,
  * Obtains the root window (parent all other windows are inside)
  * for the default display and screen.
  *
- * Return value: the default root window
+ * Return value: (transfer none): the default root window
  **/
 GdkWindow *
 gdk_get_default_root_window (void)
@@ -5148,8 +5148,8 @@ gdk_get_default_root_window (void)
  * For example in the X backend, a native window handle is an Xlib
  * <type>XID</type>.
  *
- * Return value: the newly-created #GdkWindow wrapper for the
- *    native window or %NULL if the window has been destroyed.
+ * Return value: (transfer full): the newly-created #GdkWindow wrapper
+ *    for the native window, or %NULL if the window has been destroyed.
  **/
 GdkWindow *
 gdk_window_foreign_new (GdkNativeWindow anid)

@@ -654,8 +654,8 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
  * 
  * Returns the core pointer device for the default display.
  * 
- * Return value: the core pointer device; this is owned by the
- *   display and should not be freed.
+ * Return value: (transfer none): the core pointer device; this is owned
+ *   by the display and should not be freed.
  *
  * Deprecated: 3.0: Use gdk_device_manager_get_client_pointer() instead, or
  *             gdk_event_get_device() if a #GdkEvent with pointer device
@@ -673,7 +673,7 @@ gdk_device_get_core_pointer (void)
  * 
  * Returns the core pointer device for the given display
  * 
- * Return value: the core pointer device; this is owned by the
+ * Return value: (transfer none): the core pointer device; this is owned by the
  *   display and should not be freed.
  *
  * Since: 2.2
@@ -810,7 +810,7 @@ gdk_display_get_device_state (GdkDisplay       *display,
  * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
  * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
  *
- * Returns: the #GdkWindow under the device position, or %NULL.
+ * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
  *
  * Since: 3.0
  **/
@@ -846,7 +846,7 @@ gdk_display_get_window_at_device_position (GdkDisplay *display,
  * #GdkDevice on a particular #GdkDisplay. This is only useful for such low-level tools as
  * an event recorder. Applications should never have any reason to use this facility.
  *
- * Returns: The previous device hook table.
+ * Returns: (transfer none): The previous device hook table.
  *
  * Since: 3.0
  **/
@@ -1067,7 +1067,7 @@ multihead_default_window_at_pointer (GdkDisplay *display,
  * event recorder. Applications should never have any
  * reason to use this facility.
  *
- * Return value: the previous pointer hook table
+ * Return value: (transfer none): the previous pointer hook table
  *
  * Since: 2.2
  *
@@ -1853,7 +1853,7 @@ gdk_display_device_is_grabbed (GdkDisplay *display,
  *
  * Returns the #GdkDeviceManager associated to @display.
  *
- * Returns: A #GdkDeviceManager, or %NULL. This memory is
+ * Returns: (transfer none): A #GdkDeviceManager, or %NULL. This memory is
  *          owned by GDK and must not be freed or unreferenced.
  *
  * Since: 3.0

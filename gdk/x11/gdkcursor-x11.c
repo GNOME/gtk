@@ -362,7 +362,7 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
  *
  * Returns the display on which the #GdkCursor is defined.
  *
- * Returns: the #GdkDisplay associated to @cursor
+ * Returns: (transfer none): the #GdkDisplay associated to @cursor
  *
  * Since: 2.2
  */
@@ -387,7 +387,7 @@ gdk_cursor_get_display (GdkCursor *cursor)
  * on the cursor, GDK may not be able to obtain the image data. In this 
  * case, %NULL is returned.
  *
- * Returns: a #GdkPixbuf representing @cursor, or %NULL
+ * Returns: (transfer full): a #GdkPixbuf representing @cursor, or %NULL
  *
  * Since: 2.8
  */

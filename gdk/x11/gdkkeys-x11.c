@@ -289,9 +289,10 @@ get_xkb (GdkKeymapX11 *keymap_x11)
 /** 
  * gdk_keymap_get_for_display:
  * @display: the #GdkDisplay.
- * @returns: the #GdkKeymap attached to @display.
  *
  * Returns the #GdkKeymap attached to @display.
+ *
+ * Return value: (transfer none): the #GdkKeymap attached to @display.
  *
  * Since: 2.2
  **/

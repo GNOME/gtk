@@ -1277,7 +1277,7 @@ gdk_event_set_screen (GdkEvent  *event,
  * to which <literal>event->motion.x_root</literal> and
  * <literal>event->motion.y_root</literal> are relative.
  * 
- * Return value: the screen for the event
+ * Return value: (transfer none): the screen for the event
  *
  * Since: 2.2
  **/
