@@ -60,6 +60,7 @@
 #include "gtksizerequest.h"
 #include "gtkstylecontext.h"
 #include "gtkcssprovider.h"
+#include "gtkanimationdescription.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
 
@@ -4028,6 +4029,82 @@ gtk_widget_show_all (GtkWidget *widget)
     class->show_all (widget);
 }
 
+static void
+_gtk_widget_notify_state_change (GtkWidget     *widget,
+                                 GtkStateFlags  flag,
+                                 gboolean       target)
+{
+  GtkStateType state;
+
+  switch (flag)
+    {
+    case GTK_STATE_FLAG_ACTIVE:
+      state = GTK_STATE_ACTIVE;
+      break;
+    case GTK_STATE_FLAG_PRELIGHT:
+      state = GTK_STATE_PRELIGHT;
+      break;
+    case GTK_STATE_FLAG_SELECTED:
+      state = GTK_STATE_SELECTED;
+      break;
+    case GTK_STATE_FLAG_INSENSITIVE:
+      state = GTK_STATE_INSENSITIVE;
+      break;
+    case GTK_STATE_FLAG_INCONSISTENT:
+      state = GTK_STATE_INCONSISTENT;
+      break;
+    case GTK_STATE_FLAG_FOCUSED:
+      state = GTK_STATE_FOCUSED;
+      break;
+    default:
+      return;
+    }
+
+  gtk_style_context_notify_state_change (widget->priv->context,
+                                         gtk_widget_get_window (widget),
+                                         NULL, state, target);
+}
+
+/* Initializes state transitions for those states that
+ * were enabled before mapping and have a looping animation.
+ */
+static void
+_gtk_widget_start_state_transitions (GtkWidget *widget)
+{
+  GtkStateFlags state, flag;
+
+  if (!widget->priv->context)
+    return;
+
+  state = gtk_widget_get_state_flags (widget);
+  flag = GTK_STATE_FLAG_FOCUSED;
+
+  while (flag)
+    {
+      GtkAnimationDescription *animation_desc;
+
+      if ((state & flag) == 0)
+        {
+          flag >>= 1;
+          continue;
+        }
+
+      gtk_style_context_get (widget->priv->context, state,
+                             "transition", &animation_desc,
+                             NULL);
+
+      if (animation_desc)
+        {
+          if (gtk_animation_description_get_loop (animation_desc))
+            _gtk_widget_notify_state_change (widget, flag, TRUE);
+
+          gtk_animation_description_unref (animation_desc);
+        }
+
+      flag >>= 1;
+    }
+}
+
 /**
  * gtk_widget_map:
  * @widget: a #GtkWidget
@@ -4055,6 +4132,8 @@ gtk_widget_map (GtkWidget *widget)
 
       if (!gtk_widget_get_has_window (widget))
 	gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
+
+      _gtk_widget_start_state_transitions (widget);
     }
 }
 
@@ -10903,38 +10982,11 @@ gtk_widget_propagate_state (GtkWidget           *widget,
             {
               if ((diff & flag) != 0)
                 {
-                  GtkStateType state;
                   gboolean target;
 
-                  switch (flag)
-                    {
-                    case GTK_STATE_FLAG_ACTIVE:
-                      state = GTK_STATE_ACTIVE;
-                      break;
-                    case GTK_STATE_FLAG_PRELIGHT:
-                      state = GTK_STATE_PRELIGHT;
-                      break;
-                    case GTK_STATE_FLAG_SELECTED:
-                      state = GTK_STATE_SELECTED;
-                      break;
-                    case GTK_STATE_FLAG_INSENSITIVE:
-                      state = GTK_STATE_INSENSITIVE;
-                      break;
-                    case GTK_STATE_FLAG_INCONSISTENT:
-                      state = GTK_STATE_INCONSISTENT;
-                      break;
-                    case GTK_STATE_FLAG_FOCUSED:
-                      state = GTK_STATE_FOCUSED;
-                      break;
-                    default:
-                      state = GTK_STATE_NORMAL;
-                      break;
-                    }
-
                   target = ((new_flags & flag) != 0);
-                  gtk_style_context_notify_state_change (priv->context,
-                                                         window, NULL,
-                                                         state, target);
+                  _gtk_widget_notify_state_change (widget, flag, target);
+
                   diff &= ~flag;
                 }
 
