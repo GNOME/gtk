@@ -26,6 +26,8 @@
 
 #include "config.h"
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include "gtkorientable.h"
 #include "gtkvruler.h"
 #include "gtkalias.h"
@@ -37,12 +39,10 @@
  *
  * <note>
  *  This widget is considered too specialized/little-used for
- *  GTK+, and will in the future be moved to some other package.  If
- *  your application needs this widget, feel free to use it, as the
- *  widget does work and is useful in some applications; it's just not
- *  of general interest. However, we are not accepting new features for
- *  the widget, and it will eventually move out of the GTK+
- *  distribution.
+ *  GTK+, and will be removed in GTK 3.  If your application needs this widget,
+ *  feel free to use it, as the widget is useful in some applications; it's just
+ *  not of general interest. However, we are not accepting new features for the
+ *  widget, and it will move out of the GTK+ distribution.
  * </note>
  *
  * The VRuler widget is a widget arranged vertically creating a ruler that is
@@ -72,6 +72,9 @@ gtk_vruler_init (GtkVRuler *vruler)
  * Creates a new vertical ruler
  *
  * Returns: a new #GtkVRuler.
+ *
+ * @Deprecated: 2.24: #GtkRuler has been removed from GTK 3 for being
+ *              unmaintained and too specialized. There is no replacement.
  */
 GtkWidget *
 gtk_vruler_new (void)
