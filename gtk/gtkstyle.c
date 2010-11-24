@@ -1007,7 +1007,10 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
 
   priv = GTK_STYLE_GET_PRIVATE (style);
 
-  return gtk_style_context_lookup_icon_set (priv->context, stock_id);
+  if (priv->context)
+    return gtk_style_context_lookup_icon_set (priv->context, stock_id);
+
+  return gtk_icon_factory_lookup_default (stock_id);
 }
 
 /**
