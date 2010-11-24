@@ -82,6 +82,9 @@ static void       gtk_tree_menu_set_area                      (GtkTreeMenu      
 							       GtkCellArea          *area);
 static GtkWidget *gtk_tree_menu_get_path_item                 (GtkTreeMenu          *menu,
 							       GtkTreePath          *path);
+static gboolean   gtk_tree_menu_path_in_menu                  (GtkTreeMenu          *menu,
+							       GtkTreePath          *path,
+							       gboolean             *header_item);
 static void       row_inserted_cb                             (GtkTreeModel         *model,
 							       GtkTreePath          *path,
 							       GtkTreeIter          *iter,
@@ -98,10 +101,15 @@ static void       row_changed_cb                              (GtkTreeModel     
 							       GtkTreePath          *path,
 							       GtkTreeIter          *iter,
 							       GtkTreeMenu          *menu);
-
 static void       context_size_changed_cb                     (GtkCellAreaContext   *context,
 							       GParamSpec           *pspec,
 							       GtkWidget            *menu);
+static void       area_apply_attributes_cb                    (GtkCellArea          *area,
+							       GtkTreeModel         *tree_model,
+							       GtkTreeIter          *iter,
+							       gboolean              is_expander,
+							       gboolean              is_expanded,
+							       GtkTreeMenu          *menu);
 static void       item_activated_cb                           (GtkMenuItem          *item,
 							       GtkTreeMenu          *menu);
 static void       submenu_activated_cb                        (GtkTreeMenu          *submenu,
@@ -122,6 +130,7 @@ struct _GtkTreeMenuPrivate
   
   /* Signals */
   gulong               size_changed_id;
+  gulong               apply_attributes_id;
   gulong               row_inserted_id;
   gulong               row_deleted_id;
   gulong               row_reordered_id;
@@ -223,8 +232,8 @@ gtk_tree_menu_class_init (GtkTreeMenuClass *class)
   object_class->set_property = gtk_tree_menu_set_property;
   object_class->get_property = gtk_tree_menu_get_property;
 
-  widget_class->get_preferred_width            = gtk_tree_menu_get_preferred_width;
-  widget_class->get_preferred_height           = gtk_tree_menu_get_preferred_height;
+  widget_class->get_preferred_width  = gtk_tree_menu_get_preferred_width;
+  widget_class->get_preferred_height = gtk_tree_menu_get_preferred_height;
 
   tree_menu_signals[SIGNAL_MENU_ACTIVATE] =
     g_signal_new (I_("menu-activate"),
@@ -359,10 +368,10 @@ gtk_tree_menu_constructor (GType                  type,
     }
 
   priv->context = gtk_cell_area_create_context (priv->area);
+
   priv->size_changed_id = 
     g_signal_connect (priv->context, "notify",
 		      G_CALLBACK (context_size_changed_cb), menu);
-
 
   return object;
 }
@@ -633,6 +642,49 @@ gtk_tree_menu_get_path_item (GtkTreeMenu          *menu,
   return item;
 }
 
+static gboolean
+gtk_tree_menu_path_in_menu (GtkTreeMenu  *menu,
+			    GtkTreePath  *path,
+			    gboolean     *header_item)
+{
+  GtkTreeMenuPrivate *priv = menu->priv;
+  GtkTreePath        *parent_path = gtk_tree_path_copy (path);
+  gboolean            in_menu = FALSE;
+  gboolean            is_header = FALSE;
+
+  /* Check if the is in root of the model */
+  if (gtk_tree_path_get_depth (parent_path) == 1)
+    {
+      if (!priv->root)
+	in_menu = TRUE;
+    }
+  /* If we are a submenu, compare the parent path */
+  else if (priv->root && gtk_tree_path_up (parent_path))
+    {
+      GtkTreePath *root_path =
+	gtk_tree_row_reference_get_path (priv->root);
+
+      if (gtk_tree_path_compare (root_path, parent_path) == 0)
+	in_menu = TRUE;
+
+      if (!in_menu && priv->menu_with_header && 
+	  gtk_tree_path_compare (root_path, path) == 0)
+	{
+	  in_menu   = TRUE;
+	  is_header = TRUE;
+	}
+
+      gtk_tree_path_free (root_path);
+    }
+
+  gtk_tree_path_free (parent_path);
+
+  if (header_item)
+    *header_item = is_header;
+
+  return in_menu;
+}
+
 static void
 row_inserted_cb (GtkTreeModel     *model,
 		 GtkTreePath      *path,
@@ -640,34 +692,10 @@ row_inserted_cb (GtkTreeModel     *model,
 		 GtkTreeMenu      *menu)
 {
   GtkTreeMenuPrivate *priv = menu->priv;
-  GtkTreePath        *parent_path;
-  gboolean            this_menu = FALSE;
   gint               *indices, index, depth;
 
-  parent_path = gtk_tree_path_copy (path);
-
-  /* Check if the menu and the added iter are in root of the model */
-  if (gtk_tree_path_get_depth (parent_path) <= 1)
-    {
-      if (!priv->root)
-	this_menu = TRUE;
-    }
-  /* If we are a submenu, compare the path */
-  else if (priv->root)
-    {
-      GtkTreePath *root_path =
-	gtk_tree_row_reference_get_path (priv->root);
-
-      if (gtk_tree_path_compare (root_path, parent_path) == 0)
-	this_menu = TRUE;
-
-      gtk_tree_path_free (root_path);
-    }
-
-  gtk_tree_path_free (parent_path);
-
   /* If the iter should be in this menu then go ahead and insert it */
-  if (this_menu)
+  if (gtk_tree_menu_path_in_menu (menu, path, NULL))
     {
       GtkWidget *item;
 
@@ -706,34 +734,30 @@ row_deleted_cb (GtkTreeModel     *model,
 		GtkTreeMenu      *menu)
 {
   GtkTreeMenuPrivate *priv = menu->priv;
-  GtkTreePath        *root_path;
   GtkWidget          *item;
+  gboolean            header_item;
+  gboolean            in_menu;
 
-  /* If it's the root node we leave it to the parent menu to remove us
-   * from its menu */
-  if (priv->root)
+  in_menu = gtk_tree_menu_path_in_menu (menu, path, &header_item);
+
+  /* If it's the header item we leave it to the parent menu 
+   * to remove us from its menu
+   */
+  if (!header_item && in_menu)
     {
-      root_path = gtk_tree_row_reference_get_path (priv->root);
-
-      if (gtk_tree_path_compare (root_path, path) == 0)
+      item = gtk_tree_menu_get_path_item (menu, path);
+      if (item)
 	{
-	  gtk_tree_path_free (root_path);
-	  return;
-	}
-    }
-
-  item = gtk_tree_menu_get_path_item (menu, path);
-  if (item)
-    {
-      if (priv->wrap_width > 0)
-	rebuild_menu (menu);
-      else
-	{
-	  /* Get rid of the deleted item */
-	  gtk_widget_destroy (item);
-      
-	  /* Resize everything */
-	  gtk_cell_area_context_flush (menu->priv->context);
+	  if (priv->wrap_width > 0)
+	    rebuild_menu (menu);
+	  else
+	    {
+	      /* Get rid of the deleted item */
+	      gtk_widget_destroy (item);
+	      
+	      /* Resize everything */
+	      gtk_cell_area_context_flush (menu->priv->context);
+	    }
 	}
     }
 }
@@ -748,7 +772,7 @@ row_reordered_cb (GtkTreeModel    *model,
   GtkTreeMenuPrivate *priv = menu->priv;
   gboolean            this_menu = FALSE;
 
-  if (iter == NULL && priv->root == NULL)
+  if (path == NULL && priv->root == NULL)
     this_menu = TRUE;
   else if (priv->root)
     {
@@ -823,7 +847,7 @@ row_changed_cb (GtkTreeModel         *model,
 	    }
 	  else if (!has_header && item)
 	    {
-	      /* Destroy the header item and the following separator */
+	      /* Destroy the header item and then the following separator */
 	      gtk_widget_destroy (item);
 	      gtk_widget_destroy (GTK_MENU_SHELL (menu)->children->data);
 
@@ -873,6 +897,75 @@ context_size_changed_cb (GtkCellAreaContext  *context,
     gtk_widget_queue_resize (menu);
 }
 
+static gboolean
+area_is_sensitive (GtkCellArea *area)
+{
+  GList    *cells, *list;
+  gboolean  sensitive = FALSE;
+  
+  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+
+  for (list = cells; list; list = list->next)
+    {
+      g_object_get (list->data, "sensitive", &sensitive, NULL);
+      
+      if (sensitive)
+	break;
+    }
+  g_list_free (cells);
+
+  return sensitive;
+}
+
+static void
+area_apply_attributes_cb (GtkCellArea          *area,
+			  GtkTreeModel         *tree_model,
+			  GtkTreeIter          *iter,
+			  gboolean              is_expander,
+			  gboolean              is_expanded,
+			  GtkTreeMenu          *menu)
+{
+  /* If the menu for this iter has a submenu */
+  GtkTreeMenuPrivate *priv = menu->priv;
+  GtkTreePath        *path;
+  GtkWidget          *item;
+  gboolean            is_header;
+  gboolean            sensitive;
+
+  path = gtk_tree_model_get_path (tree_model, iter);
+
+  if (gtk_tree_menu_path_in_menu (menu, path, &is_header))
+    {
+      item = gtk_tree_menu_get_path_item (menu, path);
+
+      /* If there is no submenu, go ahead and update item sensitivity,
+       * items with submenus are always sensitive */
+      if (!gtk_menu_item_get_submenu (GTK_MENU_ITEM (item)))
+	{
+	  sensitive = area_is_sensitive (priv->area);
+
+	  gtk_widget_set_sensitive (item, sensitive);
+
+	  if (is_header)
+	    {
+	      /* For header items we need to set the sensitivity
+	       * of the following separator item 
+	       */
+	      if (GTK_MENU_SHELL (menu)->children && 
+		  GTK_MENU_SHELL (menu)->children->next)
+		{
+		  GtkWidget *separator = 
+		    GTK_MENU_SHELL (menu)->children->next->data;
+
+		  gtk_widget_set_sensitive (separator, sensitive);
+		}
+	    }
+	}
+    }
+
+  gtk_tree_path_free (path);
+}
+
 static void
 gtk_tree_menu_set_area (GtkTreeMenu *menu,
 			GtkCellArea *area)
@@ -880,12 +973,24 @@ gtk_tree_menu_set_area (GtkTreeMenu *menu,
   GtkTreeMenuPrivate *priv = menu->priv;
 
   if (priv->area)
-    g_object_unref (priv->area);
+    {
+      g_signal_handler_disconnect (priv->area,
+				   priv->apply_attributes_id);
+      priv->apply_attributes_id = 0;
+
+      g_object_unref (priv->area);
+    }
 
   priv->area = area;
 
   if (priv->area)
-    g_object_ref_sink (priv->area);
+    {
+      g_object_ref_sink (priv->area);
+
+      priv->apply_attributes_id =
+	g_signal_connect (priv->area, "apply-attributes",
+			  G_CALLBACK (area_apply_attributes_cb), menu);
+    }
 }
 
 static gboolean
