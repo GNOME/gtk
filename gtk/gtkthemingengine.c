@@ -1620,7 +1620,7 @@ render_frame_internal (GtkThemingEngine *engine,
       if (border_width > 1)
         {
           d1 = (gdouble) border_width / 2;
-          d2 = (gdouble) (border_width - (gint) d1) + 1;
+          d2 = border_width;
         }
       else
         {
