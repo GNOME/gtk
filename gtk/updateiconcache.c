@@ -1441,8 +1441,10 @@ safe_fclose (FILE *f)
   g_assert (fd >= 0);
   if (fflush (f) == EOF)
     return FALSE;
+#ifndef G_OS_WIN32
   if (fsync (fd) < 0)
     return FALSE;
+#endif
   if (fclose (f) == EOF)
     return FALSE;
   return TRUE;
