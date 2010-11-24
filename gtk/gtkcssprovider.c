@@ -3632,6 +3632,10 @@ gtk_css_provider_get_default (void)
         "  background-color: @selected_bg_color;\n"
         "  color: @selected_fg_color;\n"
         "}\n"
+        "\n"
+        ".spinner:active {\n"
+        "  transition: 750ms linear loop;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
