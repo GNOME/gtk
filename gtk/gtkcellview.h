@@ -76,11 +76,25 @@ GtkTreeModel     *gtk_cell_view_get_model               (GtkCellView     *cell_v
 void              gtk_cell_view_set_displayed_row       (GtkCellView     *cell_view,
                                                          GtkTreePath     *path);
 GtkTreePath      *gtk_cell_view_get_displayed_row       (GtkCellView     *cell_view);
+void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
+                                                         const GdkColor  *color);
+void              gtk_cell_view_set_background_rgba     (GtkCellView     *cell_view,
+                                                         const GdkRGBA   *rgba);
+gboolean          gtk_cell_view_get_draw_sensitive      (GtkCellView     *cell_view);
+void              gtk_cell_view_set_draw_sensitive      (GtkCellView     *cell_view,
+							 gboolean         draw_sensitive);
+gboolean          gtk_cell_view_get_fit_model           (GtkCellView     *cell_view);
+void              gtk_cell_view_set_fit_model           (GtkCellView     *cell_view,
+							 gboolean         fit_model);
+
 #ifndef GTK_DISABLE_DEPRECATED
 gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_view,
                                                          GtkTreePath     *path,
                                                          GtkRequisition  *requisition);
 #endif
+
+
+/* XXX These 2 are going away... */
 void              gtk_cell_view_get_desired_width_of_row(GtkCellView     *cell_view,
                                                          GtkTreePath     *path,
                                                          gint            *minimum_size,
@@ -90,11 +104,6 @@ void              gtk_cell_view_get_desired_height_for_width_of_row(GtkCellView 
 								    gint             avail_size,
 								    gint            *minimum_size,
 								    gint            *natural_size);
-
-void              gtk_cell_view_set_background_color    (GtkCellView     *cell_view,
-                                                         const GdkColor  *color);
-void              gtk_cell_view_set_background_rgba     (GtkCellView     *cell_view,
-                                                         const GdkRGBA   *rgba);
 
 G_END_DECLS
 

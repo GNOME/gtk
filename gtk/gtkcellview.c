@@ -42,22 +42,6 @@
  * and drag and drop.
  */
 
-struct _GtkCellViewPrivate
-{
-  GtkTreeModel        *model;
-  GtkTreeRowReference *displayed_row;
-
-  GtkCellArea         *area;
-  GtkCellAreaContext  *context;
-
-  GdkRGBA              background;
-  gboolean             background_set;
-
-  gulong               size_changed_id;
-  gulong               row_changed_id;
-};
-
-
 static GObject    *gtk_cell_view_constructor              (GType                  type,
 							   guint                  n_construct_properties,
 							   GObjectConstructParam *construct_properties);
@@ -123,6 +107,25 @@ static void       row_changed_cb                               (GtkTreeModel    
 								GtkTreeIter          *iter,
 								GtkCellView          *view);
 
+
+struct _GtkCellViewPrivate
+{
+  GtkTreeModel        *model;
+  GtkTreeRowReference *displayed_row;
+
+  GtkCellArea         *area;
+  GtkCellAreaContext  *context;
+
+  GdkRGBA              background;
+  gboolean             background_set;
+
+  gulong               size_changed_id;
+  gulong               row_changed_id;
+
+  guint32              draw_sensitive : 1;
+  guint32              fit_model      : 1;
+};
+
 static GtkBuildableIface *parent_buildable_iface;
 
 enum
@@ -134,7 +137,9 @@ enum
   PROP_BACKGROUND_SET,
   PROP_MODEL,
   PROP_CELL_AREA,
-  PROP_CELL_AREA_CONTEXT
+  PROP_CELL_AREA_CONTEXT,
+  PROP_DRAW_SENSITIVE,
+  PROP_FIT_MODEL
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET, 
@@ -142,7 +147,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,
 						gtk_cell_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_cell_view_buildable_init))
-
 
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
@@ -240,6 +244,43 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							 GTK_TYPE_CELL_AREA_CONTEXT,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * GtkCellView:draw-sensitive
+   *
+   * Whether all cells should be draw as sensitive for this view regardless
+   * of the actual cell properties (used to make menus with submenus appear
+   * sensitive when the items in submenus might be insensitive).
+   *
+   * since 3.0
+   */
+   g_object_class_install_property (gobject_class,
+                                    PROP_DRAW_SENSITIVE,
+                                    g_param_spec_boolean ("draw-sensitive",
+							  P_("Draw Sensitive"),
+							  P_("Whether to force cells to be drawn in a "
+							     "sensitive state"),
+							  FALSE,
+							  GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCellView:fit-model
+   *
+   * Whether the view should request enough space to always fit
+   * the size of every row in the model (used by the combo box to
+   * ensure the combo box size doesnt change when different items
+   * are selected).
+   *
+   * since 3.0
+   */
+   g_object_class_install_property (gobject_class,
+                                    PROP_FIT_MODEL,
+                                    g_param_spec_boolean ("fit-model",
+							  P_("Fit Model"),
+							  P_("Whether to request enough space for "
+							     "every row in the model"),
+							  FALSE,
+							  GTK_PARAM_READWRITE));
+
   
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
 
@@ -307,36 +348,42 @@ gtk_cell_view_get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_BACKGROUND_GDK:
-        {
-          GdkColor color;
-
-          color.red = (guint) (view->priv->background.red * 65535);
-          color.green = (guint) (view->priv->background.green * 65535);
-          color.blue = (guint) (view->priv->background.blue * 65535);
-          color.pixel = 0;
-
-          g_value_set_boxed (value, &color);
-        }
-        break;
-      case PROP_BACKGROUND_RGBA:
-        g_value_set_boxed (value, &view->priv->background);
-        break;
-      case PROP_BACKGROUND_SET:
-        g_value_set_boolean (value, view->priv->background_set);
-        break;
-      case PROP_MODEL:
-	g_value_set_object (value, view->priv->model);
-	break;
-      case PROP_CELL_AREA:
-	g_value_set_object (value, view->priv->area);
-	break;
-      case PROP_CELL_AREA_CONTEXT:
-	g_value_set_object (value, view->priv->context);
-	break;
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
+    case PROP_BACKGROUND_GDK:
+      {
+	GdkColor color;
+	
+	color.red = (guint) (view->priv->background.red * 65535);
+	color.green = (guint) (view->priv->background.green * 65535);
+	color.blue = (guint) (view->priv->background.blue * 65535);
+	color.pixel = 0;
+	
+	g_value_set_boxed (value, &color);
+      }
+      break;
+    case PROP_BACKGROUND_RGBA:
+      g_value_set_boxed (value, &view->priv->background);
+      break;
+    case PROP_BACKGROUND_SET:
+      g_value_set_boolean (value, view->priv->background_set);
+      break;
+    case PROP_MODEL:
+      g_value_set_object (value, view->priv->model);
+      break;
+    case PROP_CELL_AREA:
+      g_value_set_object (value, view->priv->area);
+      break;
+    case PROP_CELL_AREA_CONTEXT:
+      g_value_set_object (value, view->priv->context);
+      break;
+    case PROP_DRAW_SENSITIVE:
+      g_value_set_boolean (value, view->priv->draw_sensitive);
+      break;
+    case PROP_FIT_MODEL:
+      g_value_set_boolean (value, view->priv->fit_model);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
     }
 }
 
@@ -352,45 +399,53 @@ gtk_cell_view_set_property (GObject      *object,
 
   switch (param_id)
     {
-      case PROP_BACKGROUND:
-        {
-          GdkColor color;
-
-          if (!g_value_get_string (value))
-            gtk_cell_view_set_background_color (view, NULL);
-          else if (gdk_color_parse (g_value_get_string (value), &color))
-            gtk_cell_view_set_background_color (view, &color);
-          else
-            g_warning ("Don't know color `%s'", g_value_get_string (value));
-
-          g_object_notify (object, "background-gdk");
-        }
-        break;
-      case PROP_BACKGROUND_GDK:
-        gtk_cell_view_set_background_color (view, g_value_get_boxed (value));
-        break;
-      case PROP_BACKGROUND_RGBA:
-        gtk_cell_view_set_background_rgba (view, g_value_get_boxed (value));
-        break;
-      case PROP_BACKGROUND_SET:
-        view->priv->background_set = g_value_get_boolean (value);
-        break;
-      case PROP_MODEL:
-	gtk_cell_view_set_model (view, g_value_get_object (value));
-	break;
+    case PROP_BACKGROUND:
+      {
+	GdkColor color;
+	
+	if (!g_value_get_string (value))
+	  gtk_cell_view_set_background_color (view, NULL);
+	else if (gdk_color_parse (g_value_get_string (value), &color))
+	  gtk_cell_view_set_background_color (view, &color);
+	else
+	  g_warning ("Don't know color `%s'", g_value_get_string (value));
+	
+	g_object_notify (object, "background-gdk");
+      }
+      break;
+    case PROP_BACKGROUND_GDK:
+      gtk_cell_view_set_background_color (view, g_value_get_boxed (value));
+      break;
+    case PROP_BACKGROUND_RGBA:
+      gtk_cell_view_set_background_rgba (view, g_value_get_boxed (value));
+      break;
+    case PROP_BACKGROUND_SET:
+      view->priv->background_set = g_value_get_boolean (value);
+      break;
+    case PROP_MODEL:
+      gtk_cell_view_set_model (view, g_value_get_object (value));
+      break;
     case PROP_CELL_AREA:
       /* Construct-only, can only be assigned once */
       area = g_value_get_object (value);
-
+      
       if (area)
 	view->priv->area = g_object_ref_sink (area);
       break;
     case PROP_CELL_AREA_CONTEXT:
       /* Construct-only, can only be assigned once */
       context = g_value_get_object (value);
-
+      
       if (context)
 	view->priv->context = g_object_ref (context);
+      break;
+
+    case PROP_DRAW_SENSITIVE:
+      gtk_cell_view_set_draw_sensitive (view, g_value_get_boolean (value));
+      break;
+
+    case PROP_FIT_MODEL:
+      gtk_cell_view_set_fit_model (view, g_value_get_boolean (value));
       break;
 
     default:
@@ -469,6 +524,166 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
     }
 }
 
+static void
+gtk_cell_view_request_model (GtkCellView        *cellview,
+			     GtkTreeIter        *parent,
+			     GtkOrientation      orientation,
+			     gint                for_size,
+			     gint               *minimum_size,
+			     gint               *natural_size)
+{
+  GtkCellViewPrivate *priv = cellview->priv;
+  GtkTreeIter         iter;
+  gboolean            valid;
+
+  valid = gtk_tree_model_iter_children (priv->model, &iter, parent);
+  while (valid)
+    {
+      gint min, nat;
+
+      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  if (for_size < 0)
+	    gtk_cell_area_get_preferred_width (priv->area, priv->context, 
+					       GTK_WIDGET (cellview), &min, &nat);
+	  else
+	    gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, 
+							  GTK_WIDGET (cellview), for_size, &min, &nat);
+	}
+      else
+	{
+	  if (for_size < 0)
+	    gtk_cell_area_get_preferred_height (priv->area, priv->context, 
+						GTK_WIDGET (cellview), &min, &nat);
+	  else
+	    gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, 
+							  GTK_WIDGET (cellview), for_size, &min, &nat);
+	}
+
+      *minimum_size = MAX (min, *minimum_size);
+      *natural_size = MAX (nat, *natural_size);
+
+      /* Recurse into children when they exist */
+      gtk_cell_view_request_model (cellview, &iter, orientation, for_size, minimum_size, natural_size);
+
+      valid = gtk_tree_model_iter_next (priv->model, &iter);
+    }
+}
+
+static void
+gtk_cell_view_get_preferred_width  (GtkWidget *widget,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  g_signal_handler_block (priv->context, priv->size_changed_id);
+
+  if (priv->fit_model)
+    {
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_HORIZONTAL, -1, &min, &nat);
+    }
+  else
+    {
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
+
+      gtk_cell_area_get_preferred_width (priv->area, priv->context, widget, NULL, NULL);
+    }
+
+  gtk_cell_area_context_sum_preferred_width (priv->context);
+  gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
+
+  g_signal_handler_unblock (priv->context, priv->size_changed_id);
+}
+
+static void       
+gtk_cell_view_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  g_signal_handler_block (priv->context, priv->size_changed_id);
+
+  if (priv->fit_model)
+    {
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_VERTICAL, -1, &min, &nat);
+    }
+  else
+    {
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
+      
+      gtk_cell_area_get_preferred_height (priv->area, priv->context, widget, NULL, NULL);
+    }
+
+  gtk_cell_area_context_sum_preferred_height (priv->context);
+  gtk_cell_area_context_get_preferred_height (priv->context, minimum_size, natural_size);
+
+  g_signal_handler_unblock (priv->context, priv->size_changed_id);
+}
+
+static void       
+gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  if (priv->fit_model)
+    {
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_HORIZONTAL, for_size, &min, &nat);
+
+      *minimum_size = min;
+      *natural_size = nat;
+    }
+  else
+    {
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
+
+      gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, widget, 
+						    for_size, minimum_size, natural_size);
+    }
+}
+
+static void       
+gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  if (priv->fit_model)
+    {
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_VERTICAL, for_size, &min, &nat);
+
+      *minimum_size = min;
+      *natural_size = nat;
+    }
+  else
+    {
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
+
+      gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, widget, 
+						    for_size, minimum_size, natural_size);
+    }
+}
+
 static gboolean
 gtk_cell_view_draw (GtkWidget *widget,
                     cairo_t   *cr)
@@ -531,6 +746,20 @@ gtk_cell_view_set_cell_data (GtkCellView *cell_view)
   gtk_cell_area_apply_attributes (cell_view->priv->area, 
 				  cell_view->priv->model, 
 				  &iter, FALSE, FALSE);
+
+  if (cell_view->priv->draw_sensitive)
+    {
+      GList *l, *cells = 
+	gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view->priv->area));
+
+      for (l = cells; l; l = l->next)
+	{
+	  GObject *renderer = l->data;
+
+	  g_object_set (renderer, "sensitive", TRUE, NULL);
+	}
+      g_list_free (cells);
+    }
 }
 
 /* GtkCellLayout implementation */
@@ -540,6 +769,39 @@ gtk_cell_view_cell_layout_get_area (GtkCellLayout   *layout)
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
   return cellview->priv->area;
+}
+
+/* GtkBuildable implementation */
+static gboolean
+gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  GMarkupParser *parser,
+					  gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start &&
+      parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
+
+  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
+						      tagname, parser, data);
+}
+
+static void
+gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
+{
+  if (strcmp (tagname, "attributes") == 0 || strcmp (tagname, "cell-packing") == 0)
+    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
+					       data);
+  else if (parent_buildable_iface->custom_tag_end)
+    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
+					    data);
 }
 
 static void
@@ -1062,106 +1324,64 @@ gtk_cell_view_set_background_rgba (GtkCellView   *cell_view,
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
-static gboolean
-gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
-					  GtkBuilder    *builder,
-					  GObject       *child,
-					  const gchar   *tagname,
-					  GMarkupParser *parser,
-					  gpointer      *data)
+gboolean
+gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
 {
-  if (parent_buildable_iface->custom_tag_start &&
-      parent_buildable_iface->custom_tag_start (buildable, builder, child,
-						tagname, parser, data))
-    return TRUE;
+  GtkCellViewPrivate *priv;
 
-  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
-						      tagname, parser, data);
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
+
+  priv = cell_view->priv;
+
+  return priv->draw_sensitive;
 }
 
-static void
-gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
-					GtkBuilder   *builder,
-					GObject      *child,
-					const gchar  *tagname,
-					gpointer     *data)
+void
+gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
+				  gboolean         draw_sensitive)
 {
-  if (strcmp (tagname, "attributes") == 0)
-    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
-					       data);
-  else if (parent_buildable_iface->custom_tag_end)
-    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
-					    data);
+  GtkCellViewPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
+
+  priv = cell_view->priv;
+
+  if (priv->draw_sensitive != draw_sensitive)
+    {
+      priv->draw_sensitive = draw_sensitive;
+
+      g_object_notify (G_OBJECT (cell_view), "draw-sensitive");
+    }
 }
 
-static void
-gtk_cell_view_get_preferred_width  (GtkWidget *widget,
-                                    gint      *minimum_size,
-                                    gint      *natural_size)
+gboolean
+gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
 {
-  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
-  GtkCellViewPrivate *priv = cellview->priv;
+  GtkCellViewPrivate *priv;
 
-  g_signal_handler_block (priv->context, priv->size_changed_id);
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
 
-  if (cellview->priv->displayed_row)
-    gtk_cell_view_set_cell_data (cellview);
+  priv = cell_view->priv;
 
-  gtk_cell_area_get_preferred_width (priv->area, priv->context, widget, NULL, NULL);
-  gtk_cell_area_context_sum_preferred_width (priv->context);
-  gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
-
-  g_signal_handler_unblock (priv->context, priv->size_changed_id);
+  return priv->fit_model;
 }
 
-static void       
-gtk_cell_view_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum_size,
-                                    gint      *natural_size)
+void
+gtk_cell_view_set_fit_model (GtkCellView     *cell_view,
+			     gboolean         fit_model)
 {
-  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
-  GtkCellViewPrivate *priv = cellview->priv;
+  GtkCellViewPrivate *priv;
 
-  g_signal_handler_block (priv->context, priv->size_changed_id);
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
 
-  if (cellview->priv->displayed_row)
-    gtk_cell_view_set_cell_data (cellview);
+  priv = cell_view->priv;
 
-  gtk_cell_area_get_preferred_height (priv->area, priv->context, widget, NULL, NULL);
-  gtk_cell_area_context_sum_preferred_height (priv->context);
-  gtk_cell_area_context_get_preferred_height (priv->context, minimum_size, natural_size);
+  if (priv->fit_model != fit_model)
+    {
+      priv->fit_model = fit_model;
 
-  g_signal_handler_unblock (priv->context, priv->size_changed_id);
-}
+      gtk_cell_area_context_flush (cell_view->priv->context);
 
-static void       
-gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
-                                              gint       for_size,
-                                              gint      *minimum_size,
-                                              gint      *natural_size)
-{
-  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
-  GtkCellViewPrivate *priv = cellview->priv;
-
-  if (cellview->priv->displayed_row)
-    gtk_cell_view_set_cell_data (cellview);
-
-  gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, widget, 
-						for_size, minimum_size, natural_size);
-}
-
-static void       
-gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
-                                              gint       for_size,
-                                              gint      *minimum_size,
-                                              gint      *natural_size)
-{
-  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
-  GtkCellViewPrivate *priv = cellview->priv;
-
-  if (cellview->priv->displayed_row)
-    gtk_cell_view_set_cell_data (cellview);
-
-  gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, widget, 
-						for_size, minimum_size, natural_size);
+      g_object_notify (G_OBJECT (cell_view), "fit-model");
+    }
 }
