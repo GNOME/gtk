@@ -180,7 +180,11 @@ dirty_flush_idle (gpointer data)
 	}
     }
 
-  broadway_output_flush (output);
+  if (!broadway_output_flush (display->output))
+    {
+      broadway_output_free (display->output);
+      display->output = NULL;
+    }
 
   return FALSE;
 }

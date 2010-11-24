@@ -455,11 +455,9 @@ start_output (HttpRequest *request)
   display_broadway = GDK_DISPLAY_BROADWAY (request->display);
   fd = g_socket_get_fd (socket);
   set_fd_blocking (fd);
-  display_broadway->output = broadway_output_new (fd);
+  /* We dup this because otherwise it'll be closed with the request SocketConnection */
+  display_broadway->output = broadway_output_new (dup(fd));
   _gdk_broadway_resync_windows ();
-
-  /* Keep connection alive */
-  display_broadway->output_connection = g_object_ref (request->connection);
   http_request_free (request);
 }
 
