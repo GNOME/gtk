@@ -2653,7 +2653,9 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
           gtk_timeline_set_loop (info->timeline, FALSE);
         }
     }
-  else if (!info)
+  else if (!info &&
+           (!gtk_animation_description_get_loop (desc) ||
+            state_value))
     {
       info = animation_info_new (context, region_id,
                                  gtk_animation_description_get_duration (desc),
