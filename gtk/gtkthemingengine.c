@@ -2114,14 +2114,16 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
                                      gdouble           xy0_gap,
                                      gdouble           xy1_gap)
 {
-  GtkJunctionSides junction = 0;
+  GtkJunctionSides junction;
   GtkStateFlags state;
-  gint border_width;
+  gint border_width, radius;
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
 
   state = gtk_theming_engine_get_state (engine);
+  junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get (engine, state,
                           "border-width", &border_width,
+                          "border-radius", &radius,
                           NULL);
 
   cairo_save (cr);
@@ -2133,28 +2135,51 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
       yc = y;
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
-      junction = GTK_JUNCTION_TOP;
+
+      if (xy0_gap < radius)
+        junction |= GTK_JUNCTION_CORNER_TOPLEFT;
+
+      if (xy1_gap > width - radius)
+        junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
       break;
     case GTK_POS_BOTTOM:
       xc = x + xy0_gap + border_width;
       yc = y + height - border_width;
       wc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
       hc = border_width;
-      junction = GTK_JUNCTION_BOTTOM;
+
+      if (xy0_gap < radius)
+        junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
+
+      if (xy1_gap > width - radius)
+        junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
+
       break;
     case GTK_POS_LEFT:
       xc = x;
       yc = y + xy0_gap + border_width;
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
-      junction = GTK_JUNCTION_LEFT;
+
+      if (xy0_gap < radius)
+        junction |= GTK_JUNCTION_CORNER_TOPLEFT;
+
+      if (xy1_gap > height - radius)
+        junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
+
       break;
     case GTK_POS_RIGHT:
       xc = x + width - border_width;
       yc = y + xy0_gap + border_width;
       wc = border_width;
       hc = MAX (xy1_gap - xy0_gap - 2 * border_width, 0);
-      junction = GTK_JUNCTION_RIGHT;
+
+      if (xy0_gap < radius)
+        junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
+
+      if (xy1_gap > height - radius)
+        junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
+
       break;
     }
 
