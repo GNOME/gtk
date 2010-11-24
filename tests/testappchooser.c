@@ -172,7 +172,7 @@ main (int argc,
 
   gtk_widget_set_halign (file_l, GTK_ALIGN_START);
   gtk_grid_attach_next_to (GTK_GRID (grid), file_l,
-			   w1, GTK_POS_RIGHT, 1, 1);
+			   w1, GTK_POS_RIGHT, 3, 1);
   g_signal_connect (file_l, "clicked",
 		    G_CALLBACK (button_clicked), NULL);
 
