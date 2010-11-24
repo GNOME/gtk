@@ -571,7 +571,7 @@ find_toplevel_for_keyboard_event (NSEvent *nsevent)
       GdkDeviceGrabInfo *grab;
       GdkDevice *device = l->data;
 
-      if (device->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source(device) != GDK_SOURCE_KEYBOARD)
         continue;
 
       grab = _gdk_display_get_last_device_grab (display, device);

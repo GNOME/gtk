@@ -228,7 +228,7 @@ _gdk_input_init (void)
     {
       GdkDevice *device = l->data;
 
-      if (device->source == GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source(device) == GDK_SOURCE_KEYBOARD)
         continue;
 
       _gdk_input_devices = g_list_prepend (_gdk_input_devices, l->data);
@@ -245,7 +245,7 @@ _gdk_input_init (void)
     {
       GdkDevice *device = list->data;
 
-      if (device->source != GDK_SOURCE_MOUSE)
+      if (gdk_device_get_source(device) != GDK_SOURCE_MOUSE)
         continue;
 
       _gdk_display->core_pointer = device;
@@ -273,11 +273,7 @@ _gdk_input_exit (void)
       if (gdkdev != (GdkDevicePrivate *)_gdk_core_pointer)
 	{
 	  gdk_device_set_mode ((GdkDevice *)gdkdev, GDK_MODE_DISABLED);
-
-	  g_free (gdkdev->info.name);
-	  g_free (gdkdev->info.axes);
-	  g_free (gdkdev->info.keys);
-	  g_free (gdkdev);
+	  g_object_unref(gdkdev);
 	}
     }
 
