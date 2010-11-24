@@ -1552,6 +1552,28 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   gdk_rgba_free (bg_color);
 }
 
+/* Renders the small triangle on corners so
+ * frames with 0 radius have a 3D-like effect
+ */
+static void
+_cairo_corner_triangle (cairo_t *cr,
+                        gdouble  x,
+                        gdouble  y,
+                        gint     size)
+{
+  gint i;
+
+  cairo_move_to (cr, x + 0.5, y + size - 0.5);
+  cairo_line_to (cr, x + size - 0.5, y + size - 0.5);
+  cairo_line_to (cr, x + size - 0.5, y + 0.5);
+
+  for (i = 1; i < size - 1; i++)
+    {
+      cairo_move_to (cr, x + size - 0.5, y + i + 0.5);
+      cairo_line_to (cr, x + (size - i) - 0.5, y + i + 0.5);
+    }
+}
+
 static void
 render_frame_internal (GtkThemingEngine *engine,
                        cairo_t          *cr,
@@ -1637,22 +1659,6 @@ render_frame_internal (GtkThemingEngine *engine,
       m = MIN (width, height);
       m /= 2;
 
-      /* Only needed for square frames to have a 3D-like
-       * feeling, for rounded ones, the arc will ensure
-       * the stroke is painted to end at 45°.
-       */
-      if (radius == 0)
-        {
-          cairo_move_to (cr, x, y + height);
-          cairo_line_to (cr, x + m, y + height - m);
-          cairo_line_to (cr, x + width - m, y + m);
-          cairo_line_to (cr, x + width, y);
-          cairo_line_to (cr, x + width, y + height);
-          cairo_close_path (cr);
-
-          cairo_clip (cr);
-        }
-
       if (border_style == GTK_BORDER_STYLE_INSET)
         gdk_cairo_set_source_rgba (cr, &lighter);
       else
@@ -1665,22 +1671,6 @@ render_frame_internal (GtkThemingEngine *engine,
                                     junction);
       cairo_stroke (cr);
 
-      cairo_restore (cr);
-
-      cairo_save (cr);
-
-      if (radius == 0)
-        {
-          cairo_move_to (cr, x, y + height);
-          cairo_line_to (cr, x + m, y + height - m);
-          cairo_line_to (cr, x + width - m, y + m);
-          cairo_line_to (cr, x + width, y);
-          cairo_line_to (cr, x, y);
-          cairo_close_path (cr);
-
-          cairo_clip (cr);
-        }
-
       if (border_style == GTK_BORDER_STYLE_INSET)
         gdk_cairo_set_source_rgba (cr, border_color);
       else
@@ -1692,6 +1682,31 @@ render_frame_internal (GtkThemingEngine *engine,
                                     (SIDE_TOP | SIDE_LEFT) & ~(hidden_side),
                                     junction);
       cairo_stroke (cr);
+
+      if (radius == 0 &&
+          border_width > 1)
+        {
+          /* overprint top/right and bottom/left corner
+           * triangles, to give the box a 3D-like appearance
+           */
+          if (border_style == GTK_BORDER_STYLE_INSET)
+            gdk_cairo_set_source_rgba (cr, &lighter);
+          else
+            gdk_cairo_set_source_rgba (cr, border_color);
+
+          cairo_save (cr);
+
+          cairo_set_line_width (cr, 1);
+
+          _cairo_corner_triangle (cr,
+                                  x + width - border_width, y,
+                                  border_width);
+          _cairo_corner_triangle (cr,
+                                  x, y + height - border_width,
+                                  border_width);
+          cairo_stroke (cr);
+          cairo_restore (cr);
+        }
 
       cairo_restore (cr);
       break;
