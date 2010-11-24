@@ -102,14 +102,34 @@ row_separator_func (GtkTreeModel *model,
 }
 
 static void
+get_first_iter (GtkListStore *store,
+		GtkTreeIter *iter)
+{
+  GtkTreeIter iter2;
+
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), iter))
+    {
+      /* the model is empty, append */
+      gtk_list_store_append (store, iter);
+    }
+  else
+    {
+      gtk_list_store_insert_before (store, &iter2, iter);
+      *iter = iter2;
+    }
+}
+
+static void
 gtk_app_chooser_combo_box_populate (GtkAppChooserComboBox *self)
 {
   GList *recommended_apps = NULL, *l;
   GAppInfo *app;
-  GtkTreeIter iter;
+  GtkTreeIter iter, iter2;
   GIcon *icon;
+  gboolean first;
 
   recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
+  first = TRUE;
 
   for (l = recommended_apps; l != NULL; l = l->next)
     {
@@ -122,7 +142,17 @@ gtk_app_chooser_combo_box_populate (GtkAppChooserComboBox *self)
       else
 	g_object_ref (icon);
 
-      gtk_list_store_append (self->priv->store, &iter);
+      if (first)
+	{
+	  get_first_iter (self->priv->store, &iter);
+	  first = FALSE;
+	}
+      else
+	{
+	  gtk_list_store_insert_after (self->priv->store, &iter2, &iter);
+	  iter = iter2;
+	}
+
       gtk_list_store_set (self->priv->store, &iter,
 			  COLUMN_APP_INFO, app,
 			  COLUMN_NAME, g_app_info_get_display_name (app),
@@ -177,7 +207,7 @@ gtk_app_chooser_combo_box_remove_non_custom (GtkAppChooserComboBox *self)
   GtkTreeIter iter;
   gboolean custom, res;
 
-  model = GTK_TREE_MODEL (self->priv->store);
+  model = GTK_TREE_MODEL (self->priv->store);  
 
   if (!gtk_tree_model_get_iter_first (model, &iter))
     return;
@@ -187,9 +217,9 @@ gtk_app_chooser_combo_box_remove_non_custom (GtkAppChooserComboBox *self)
 			COLUMN_CUSTOM, &custom,
 			-1);
     if (custom)
-      res = gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
-    else
       res = gtk_tree_model_iter_next (model, &iter);
+    else
+      res = gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
   } while (res);
 }
 
@@ -201,7 +231,8 @@ gtk_app_chooser_combo_box_changed (GtkComboBox *object)
   gboolean custom, separator;
   CustomAppComboData *custom_data = NULL;
 
-  gtk_combo_box_get_active_iter (object, &iter);
+  if (!gtk_combo_box_get_active_iter (object, &iter))
+    return;
 
   gtk_tree_model_get (GTK_TREE_MODEL (self->priv->store), &iter,
 		      COLUMN_CUSTOM, &custom,
