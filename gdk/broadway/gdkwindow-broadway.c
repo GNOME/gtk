@@ -872,7 +872,8 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
       private = (GdkWindowObject *)window;
       *win_x = display_broadway->last_x - private->x;
       *win_y = display_broadway->last_y - private->y;
-      *mask = 0;
+      if (mask)
+	*mask = 0;
     }
 
   return window;
