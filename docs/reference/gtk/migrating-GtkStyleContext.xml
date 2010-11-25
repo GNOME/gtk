@@ -140,6 +140,7 @@
       although custom widgets may define their own, which themes may
       attempt to handle.
     </para>
+
   </refsect2>
 
   <refsect2 id="gtk-migrating-GtkStyleContext-parser-extensions">
@@ -355,6 +356,37 @@
       to only foreground/background, in exchange the widget is able to render
       its various elements with different CSS classes, which can be themed
       independently.
+    </para>
+
+    <para>
+      Access to colors has also changed a bit. With #GtkStyle, the common
+      way to access colors is:
+      <informalexample><programlisting>
+      GdkColor *color1;
+      GdkColor color2;
+
+      color1 = &amp;style->bg[GTK_STATE_PRELIGHT];
+      gtk_style_lookup_color (style, "focus_color", &amp;color2);
+      </programlisting></informalexample>
+      With #GtkStyleContext, you generally use #GdkRGBA instead of #GdkColor
+      and the code looks like this:
+      <informalexample><programlisting>
+      GdkRGBA *color1;
+      GdkRGBA  color2;
+
+      gtk_style_context_get (context, GTK_STATE_FLAG_PRELIGHT,
+                             "background-color", &amp;color1,
+                             NULL);
+      gtk_style_context_lookup_color (context, "focus_color", &amp;color2);
+
+      ...
+
+      gdk_rgba_free (color1);
+      </programlisting></informalexample>
+      Note that the memory handling here is different: gtk_style_context_get()
+      expects the address of a GdkRGBA* and returns a newly allocated struct,
+      gtk_style_context_lookup_color() expects the address of an existing
+      struct, and fills it.
     </para>
 
     <para>
