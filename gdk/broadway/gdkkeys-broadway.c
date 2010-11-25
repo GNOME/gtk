@@ -158,6 +158,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    GdkKeymapKey **keys,
                                    gint          *n_keys)
 {
+  *n_keys = 0;
   return FALSE;
 }
 
@@ -168,6 +169,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     guint        **keyvals,
                                     gint          *n_entries)
 {
+  *n_entries = 0;
   return FALSE;
 }
 
