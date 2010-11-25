@@ -59,9 +59,15 @@ struct _GdkColorInfo
   guint ref_count;
 };
 
+typedef enum {
+  GDK_EVENT_FILTER_REMOVED = 1 << 0
+} GdkEventFilterFlags;
+
 struct _GdkEventFilter {
   GdkFilterFunc function;
   gpointer data;
+  GdkEventFilterFlags flags;
+  guint ref_count;
 };
 
 struct _GdkClientFilter {

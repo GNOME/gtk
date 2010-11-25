@@ -117,7 +117,7 @@ _gdk_screen_x11_init (GdkScreenX11 *screen)
  *
  * Gets the display to which the @screen belongs.
  * 
- * Returns: the display to which @screen belongs
+ * Returns: (transfer none): the display to which @screen belongs
  *
  * Since: 2.2
  **/
@@ -1229,7 +1229,7 @@ gdk_screen_make_display_name (GdkScreen *screen)
 }
 
 /**
- * gdk_screen_get_active_window
+ * gdk_screen_get_active_window:
  * @screen: a #GdkScreen
  *
  * Returns the screen's currently active window.
@@ -1247,7 +1247,7 @@ gdk_screen_make_display_name (GdkScreen *screen)
  * The returned window should be unrefed using g_object_unref() when
  * no longer needed.
  *
- * Return value: the currently active window, or %NULL.
+ * Return value: (transfer full): the currently active window, or %NULL.
  *
  * Since: 2.10
  **/

@@ -134,7 +134,6 @@ struct _GtkScrolledWindowPrivate
   guint    vscrollbar_visible     : 1;
   guint    window_placement       : 2;
   guint    focus_out              : 1;   /* Flag used by ::move-focus-out implementation */
-  guint    inside_allocate        : 1;
 
   gint     min_content_width;
   gint     min_content_height;
@@ -1449,10 +1448,9 @@ static void
 gtk_scrolled_window_allocate_child (GtkScrolledWindow *swindow,
 				    GtkAllocation     *relative_allocation)
 {
-  GtkScrolledWindowPrivate *priv = swindow->priv;
-  GtkWidget                *widget = GTK_WIDGET (swindow), *child;
-  GtkAllocation             allocation;
-  GtkAllocation             child_allocation;
+  GtkWidget     *widget = GTK_WIDGET (swindow), *child;
+  GtkAllocation  allocation;
+  GtkAllocation  child_allocation;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
@@ -1464,9 +1462,7 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow *swindow,
   child_allocation.width = relative_allocation->width;
   child_allocation.height = relative_allocation->height;
 
-  priv->inside_allocate = TRUE;
   gtk_widget_size_allocate (child, &child_allocation);
-  priv->inside_allocate = FALSE;
 }
 
 static void
@@ -1654,12 +1650,27 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	  previous_vvis = priv->vscrollbar_visible;
 	  gtk_scrolled_window_allocate_child (scrolled_window, &relative_allocation);
 
-	  /* If, after the first iteration, the hscrollbar and the
-	   * vscrollbar flip visiblity, then we need both.
+	  /* Explicitly force scrollbar visibility checks.
+	   *
+	   * Since we make a guess above, the child might not decide to update the adjustments 
+	   * if they logically did not change since the last configuration
 	   */
-	  if (count &&
-	      previous_hvis != priv->hscrollbar_visible &&
-	      previous_vvis != priv->vscrollbar_visible)
+	  if (priv->hscrollbar)
+	    gtk_scrolled_window_adjustment_changed 
+	      (gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)), scrolled_window);
+
+	  if (priv->vscrollbar)
+	    gtk_scrolled_window_adjustment_changed 
+	      (gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)), scrolled_window);
+
+	  /* If, after the first iteration, the hscrollbar and the
+	   * vscrollbar flip visiblity... or if one of the scrollbars flip
+	   * on each itteration indefinitly/infinitely, then we just need both 
+	   * at this size.
+	   */
+	  if ((count &&
+	       previous_hvis != priv->hscrollbar_visible &&
+	       previous_vvis != priv->vscrollbar_visible) || count > 3)
 	    {
 	      priv->hscrollbar_visible = TRUE;
 	      priv->vscrollbar_visible = TRUE;
@@ -1870,7 +1881,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  visible = priv->hscrollbar_visible;
 	  priv->hscrollbar_visible = (adjustment->upper - adjustment->lower >
 					      adjustment->page_size);
-	  if (!priv->inside_allocate && priv->hscrollbar_visible != visible)
+
+	  if (priv->hscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 	}
     }
@@ -1884,7 +1896,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  visible = priv->vscrollbar_visible;
 	  priv->vscrollbar_visible = (adjustment->upper - adjustment->lower >
 					      adjustment->page_size);
-	  if (!priv->inside_allocate && priv->vscrollbar_visible != visible)
+
+	  if (priv->vscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
 	}
     }

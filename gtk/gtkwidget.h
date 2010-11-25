@@ -131,6 +131,41 @@ struct _GtkWidget
  * @activate_signal: The signal to emit when a widget of this class is
  *   activated, gtk_widget_activate() handles the emission.
  *   Implementation of this signal is optional.
+ * @get_request_mode: This allows a widget to tell its parent container whether
+ *   it prefers to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or
+ *   %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
+ *   %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to have
+ *   #GtkWidgetClass.get_preferred_width() called and then
+ *   #GtkWidgetClass.get_preferred_height_for_width() and is the default
+ *   return for unimplemented cases.
+ *   However it's important to note (as described below) that any widget
+ *   which trades height-for-width must respond properly to both
+ *   #GtkSizeRequestModes since it might be queried in either orientation
+ *   by its parent container.
+ * @get_preferred_height: This is called by containers to obtain the minimum
+ *   and natural height of a widget. A widget that does not actually trade
+ *   any height for width or width for height only has to implement these
+ *   two virtual methods (#GtkWidgetClass.get_preferred_width() and
+ *   #GtkWidgetClass.get_preferred_height()).
+ * @get_preferred_width_for_height: This is analogous to
+ *   #GtkWidgetClass.get_preferred_height_for_width() except that it
+ *   operates in the oposite orientation. It's rare that a widget actually
+ *   does %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT requests but this can happen
+ *   when, for example, a widget or container gets additional columns to
+ *   compensate for a smaller allocated height.
+ * @get_preferred_width: This is called by containers to obtain the minimum
+ *   and natural width of a widget. A widget will never be allocated a width
+ *   less than its minimum and will only ever be allocated a width greater
+ *   than the natural width once all of the said widget's siblings have
+ *   received their natural widths.
+ *   Furthermore, a widget will only ever be allocated a width greater than
+ *   its natural width if it was configured to receive extra expand space
+ *   from its parent container.
+ * @get_preferred_height_for_width: This is similar to
+ *   #GtkWidgetClass.get_preferred_height() except that it is passed a
+ *   contextual width to request height for. By implementing this virtual
+ *   method it is possible for a #GtkLabel to tell its parent how much height
+ *   would be required if the label were to be allocated a said width.
  * @adjust_size_request: Convert an initial size request from a widget's
  *   #GtkSizeRequest virtual method implementations into a size request to
  *   be used by parent containers in laying out the widget.
@@ -184,8 +219,6 @@ struct _GtkWidgetClass
   void (* unmap)	       (GtkWidget        *widget);
   void (* realize)	       (GtkWidget        *widget);
   void (* unrealize)	       (GtkWidget        *widget);
-  void (* size_request)	       (GtkWidget        *widget,
-				GtkRequisition   *requisition);
   void (* size_allocate)       (GtkWidget        *widget,
 				GtkAllocation    *allocation);
   void (* state_changed)       (GtkWidget        *widget,

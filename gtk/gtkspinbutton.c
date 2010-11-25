@@ -801,12 +801,13 @@ gtk_spin_button_draw (GtkWidget      *widget,
 
   gtk_cairo_transform_to_window (cr, widget, priv->panel);
 
-  gtk_paint_box (gtk_widget_get_style (widget), cr,
-                 state, shadow_type,
-                 widget, "spinbutton",
-                 0, 0,
-                 gdk_window_get_width (priv->panel),
-                 gdk_window_get_height (priv->panel));
+  if (gtk_entry_get_has_frame (GTK_ENTRY (widget)))
+    gtk_paint_box (gtk_widget_get_style (widget), cr,
+                   state, shadow_type,
+                   widget, "spinbutton",
+                   0, 0,
+                   gdk_window_get_width (priv->panel),
+                   gdk_window_get_height (priv->panel));
 
   gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_UP);
   gtk_spin_button_draw_arrow (spin, cr, GTK_ARROW_DOWN);

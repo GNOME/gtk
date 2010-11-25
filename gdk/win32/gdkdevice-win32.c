@@ -319,7 +319,7 @@ gdk_device_win32_grab (GdkDevice    *device,
                        GdkCursor    *cursor,
                        guint32       time_)
 {
-  if (device->source != GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     SetCapture (GDK_WINDOW_HWND (window));
 
   return GDK_GRAB_SUCCESS;
@@ -333,7 +333,7 @@ gdk_device_win32_ungrab (GdkDevice *device,
 
   display = gdk_device_get_display (device);
 
-  if (device->source != GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     ReleaseCapture ();
 }
 

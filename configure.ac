@@ -1,14 +1,4 @@
 # Process this file with autoconf to produce a configure script.
-# require autoconf 2.54
-AC_PREREQ([2.62])
-
-AC_INIT([gtk+], [gtk_version],
-        [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
-        [gtk+])
-
-AC_CONFIG_HEADER([config.h])
-AC_CONFIG_SRCDIR([gdk/gdktypes.h])
-AC_CONFIG_MACRO_DIR([m4])
 
 # Making releases:
 #   GTK_MICRO_VERSION += 1;
@@ -28,6 +18,15 @@ m4_define([gtk_version],
           [gtk_major_version.gtk_minor_version.gtk_micro_version])
 # This is the X.Y used in -lgtk-FOO-X.Y
 m4_define([gtk_api_version], [3.0])
+
+AC_PREREQ([2.64])
+AC_INIT([gtk+], [gtk_version],
+        [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
+        [gtk+])
+
+AC_CONFIG_HEADER([config.h])
+AC_CONFIG_SRCDIR([gdk/gdktypes.h])
+AC_CONFIG_MACRO_DIR([m4])
 
 # Define a string for the earliest version that this release has
 # backwards binary compatibility with for all interfaces a module

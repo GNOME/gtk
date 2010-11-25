@@ -2329,7 +2329,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
 
       pointer = gdk_event_get_device (event);
 
-      if (pointer->source == GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (pointer) == GDK_SOURCE_KEYBOARD)
         {
           keyboard = pointer;
           pointer = gdk_device_get_associated_device (keyboard);

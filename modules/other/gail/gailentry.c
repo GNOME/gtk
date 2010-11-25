@@ -209,6 +209,7 @@ gail_entry_real_initialize (AtkObject *obj,
 {
   GtkEntry *entry;
   GailEntry *gail_entry;
+  gint start_pos, end_pos;
 
   ATK_OBJECT_CLASS (gail_entry_parent_class)->initialize (obj, data);
 
@@ -219,8 +220,10 @@ gail_entry_real_initialize (AtkObject *obj,
 
   entry = GTK_ENTRY (data);
   text_setup (gail_entry, entry);
-  gail_entry->cursor_position = entry->current_pos;
-  gail_entry->selection_bound = entry->selection_bound;
+  gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
+                                     &start_pos, &end_pos);
+  gail_entry->cursor_position = end_pos;
+  gail_entry->selection_bound = start_pos;
 
   /* Set up signal callbacks */
   g_signal_connect (data, "insert-text",
@@ -617,6 +620,7 @@ gail_entry_get_character_extents (AtkText *text,
   PangoRectangle char_rect;
   gint index, cursor_index, x_layout, y_layout;
   const gchar *entry_text;
+  gint start_pos, end_pos;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -625,12 +629,17 @@ gail_entry_get_character_extents (AtkText *text,
 
   entry = GTK_ENTRY (widget);
 
+  gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
+                                     &start_pos, &end_pos);
   gtk_entry_get_layout_offsets (entry, &x_layout, &y_layout);
   entry_text = gtk_entry_get_text (entry);
+
   index = g_utf8_offset_to_pointer (entry_text, offset) - entry_text;
-  cursor_index = g_utf8_offset_to_pointer (entry_text, entry->current_pos) - entry_text;
+  cursor_index = g_utf8_offset_to_pointer (entry_text, end_pos) - entry_text;
+  /* FIXME: entry->preedit cannot be accessed directly
   if (index > cursor_index)
     index += entry->preedit_length;
+  */
   pango_layout_index_to_pos (gtk_entry_get_layout(entry), index, &char_rect);
  
   gail_misc_get_extents_from_pango_rectangle (widget, &char_rect, 
@@ -669,7 +678,12 @@ gail_entry_get_offset_at_point (AtkText *text,
     }
   else
     {
-      cursor_index = g_utf8_offset_to_pointer (entry_text, entry->current_pos) - entry_text;
+      gint start_pos, end_pos;
+
+      gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
+                                         &start_pos, &end_pos);
+      cursor_index = g_utf8_offset_to_pointer (entry_text, end_pos) - entry_text;
+      /* FIXME: entry->preedit_length cannot be accessed directly
       if (index >= cursor_index && entry->preedit_length)
         {
           if (index >= cursor_index + entry->preedit_length)
@@ -677,6 +691,7 @@ gail_entry_get_offset_at_point (AtkText *text,
           else
             index = cursor_index;
         }
+      */
       return g_utf8_pointer_to_offset (entry_text, entry_text + index);
     }
 }
@@ -1158,12 +1173,15 @@ static gboolean
 check_for_selection_change (GailEntry   *entry,
                             GtkEntry    *gtk_entry)
 {
-  gboolean ret_val = FALSE;
- 
-  if (gtk_entry->current_pos != gtk_entry->selection_bound)
+  gboolean selected, ret_val = FALSE;
+  gint start_pos, end_pos;
+
+  selected = gtk_editable_get_selection_bounds (GTK_EDITABLE (gtk_entry),
+                                                &start_pos, &end_pos);
+  if (selected)
     {
-      if (gtk_entry->current_pos != entry->cursor_position ||
-          gtk_entry->selection_bound != entry->selection_bound)
+      if (end_pos != entry->cursor_position ||
+          start_pos != entry->selection_bound)
         /*
          * This check is here as this function can be called
          * for notification of selection_bound and current_pos.
@@ -1178,8 +1196,8 @@ check_for_selection_change (GailEntry   *entry,
       /* We had a selection */
       ret_val = (entry->cursor_position != entry->selection_bound);
     }
-  entry->cursor_position = gtk_entry->current_pos;
-  entry->selection_bound = gtk_entry->selection_bound;
+  entry->cursor_position = end_pos;
+  entry->selection_bound = start_pos;
 
   return ret_val;
 }

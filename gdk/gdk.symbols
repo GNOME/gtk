@@ -1,34 +1,167 @@
 /* This file lists all exported symbols. It is used to generate
- * the gdk.def file used to control exports on Windows and the
- * gdkalias.h/gdkaliasdef.c files used to avoid PLT entries for
- * internal uses of exported functions (see makegdkalias.pl).
- *
- * Every symbol must be included in the right
- * #ifdef IN_HEADER(sym) #endif and
- * #ifdef IN_FILE(sym) #endif sections.
- *
- * gdkalias.h must be included *after* all other gdk headers
- * in each source file, gdkaliasdef.c must be included at the
- * very bottom, after a line defining the right symbol.
- *
- * (This would be much easier if there was a rational 1-1
- *  relation between headers and source files.)
+ * the gdk.def file used to control exports on Windows.
  */
-#ifdef ALL_FILES
-#define IN_FILE(x) 1
-#define IN_HEADER(x) 1
-#endif
-
-#if IN_HEADER(__GDK_TEST_UTILS_H__)
-#if IN_FILE(__GDK_TEST_UTILS_X11_C__)
-gdk_test_simulate_button
-gdk_test_simulate_key
-gdk_test_render_sync
-#endif
-#endif
-
-#if IN_HEADER(__GDK_EVENTS_H__)
-#if IN_FILE(__GDK_EVENTS_C__)
+gdk_add_client_message_filter
+gdk_add_option_entries_libgtk_only
+gdk_app_launch_context_get_type G_GNUC_CONST
+gdk_app_launch_context_new
+gdk_app_launch_context_set_desktop
+gdk_app_launch_context_set_display
+gdk_app_launch_context_set_icon
+gdk_app_launch_context_set_icon_name
+gdk_app_launch_context_set_screen
+gdk_app_launch_context_set_timestamp
+gdk_atom_intern
+gdk_atom_intern_static_string
+gdk_atom_name
+gdk_axis_use_get_type G_GNUC_CONST
+gdk_beep
+gdk_byte_order_get_type G_GNUC_CONST
+gdk_cairo_create
+gdk_cairo_get_clip_rectangle
+gdk_cairo_rectangle
+gdk_cairo_region
+gdk_cairo_region_create_from_surface
+gdk_cairo_reset_clip
+gdk_cairo_set_source_color
+gdk_cairo_set_source_pixbuf
+gdk_cairo_set_source_rgba
+gdk_cairo_set_source_window
+gdk_color_copy
+gdk_color_equal
+gdk_color_free
+gdk_color_get_type G_GNUC_CONST
+gdk_color_hash
+gdk_color_parse
+gdk_color_to_string
+gdk_crossing_mode_get_type G_GNUC_CONST
+gdk_cursor_get_cursor_type
+gdk_cursor_get_display
+gdk_cursor_get_image
+gdk_cursor_get_type G_GNUC_CONST
+gdk_cursor_new
+gdk_cursor_new_for_display
+gdk_cursor_new_from_name
+gdk_cursor_new_from_pixbuf
+gdk_cursor_ref
+gdk_cursor_type_get_type G_GNUC_CONST
+gdk_cursor_unref
+gdk_device_free_history
+gdk_device_get_associated_device
+gdk_device_get_axis
+gdk_device_get_axis_use
+gdk_device_get_axis_value
+gdk_device_get_core_pointer
+gdk_device_get_device_type
+gdk_device_get_display
+gdk_device_get_has_cursor
+gdk_device_get_history
+gdk_device_get_key
+gdk_device_get_mode
+gdk_device_get_name
+gdk_device_get_n_axes
+gdk_device_get_source
+gdk_device_get_state
+gdk_device_get_type G_GNUC_CONST
+gdk_device_grab
+gdk_device_grab_info_libgtk_only
+gdk_device_list_axes
+gdk_device_manager_core_get_type
+gdk_device_manager_get_client_pointer
+gdk_device_manager_get_display
+gdk_device_manager_get_type G_GNUC_CONST
+gdk_device_manager_list_devices
+gdk_device_manager_xi2_get_type
+gdk_device_manager_xi_get_type
+gdk_device_set_axis_use
+gdk_device_set_key
+gdk_device_set_mode
+gdk_device_set_source
+gdk_devices_list
+gdk_device_type_get_type G_GNUC_CONST
+gdk_device_ungrab
+gdk_display_add_client_message_filter
+gdk_display_beep
+gdk_display_close
+gdk_display_device_is_grabbed
+gdk_display_flush
+gdk_display_get_core_pointer
+gdk_display_get_default
+gdk_display_get_default_cursor_size
+gdk_display_get_default_group
+gdk_display_get_default_screen
+gdk_display_get_device_manager
+gdk_display_get_device_state
+gdk_display_get_event
+gdk_display_get_maximal_cursor_size
+gdk_display_get_name
+gdk_display_get_n_screens
+gdk_display_get_pointer
+gdk_display_get_screen
+gdk_display_get_type G_GNUC_CONST
+gdk_display_get_window_at_device_position
+gdk_display_get_window_at_pointer
+gdk_display_is_closed
+gdk_display_keyboard_ungrab
+gdk_display_list_devices
+gdk_display_manager_get
+gdk_display_manager_get_default_display
+gdk_display_manager_get_type G_GNUC_CONST
+gdk_display_manager_list_displays
+gdk_display_manager_set_default_display
+gdk_display_open
+gdk_display_open_default_libgtk_only
+gdk_display_peek_event
+gdk_display_pointer_is_grabbed
+gdk_display_pointer_ungrab
+gdk_display_put_event
+gdk_display_request_selection_notification
+gdk_display_set_device_hooks
+gdk_display_set_double_click_distance
+gdk_display_set_double_click_time
+gdk_display_set_pointer_hooks
+gdk_display_store_clipboard
+gdk_display_supports_clipboard_persistence
+gdk_display_supports_composite
+gdk_display_supports_cursor_alpha
+gdk_display_supports_cursor_color
+gdk_display_supports_input_shapes
+gdk_display_supports_selection_notification
+gdk_display_supports_shapes
+gdk_display_sync
+gdk_display_warp_device
+gdk_display_warp_pointer
+gdk_drag_abort
+gdk_drag_action_get_type G_GNUC_CONST
+gdk_drag_begin
+gdk_drag_context_get_actions
+gdk_drag_context_get_device
+gdk_drag_context_get_selected_action
+gdk_drag_context_get_source_window
+gdk_drag_context_get_suggested_action
+gdk_drag_context_get_type G_GNUC_CONST
+gdk_drag_context_list_targets
+gdk_drag_context_new
+gdk_drag_context_set_device
+gdk_drag_drop
+gdk_drag_drop_succeeded
+gdk_drag_find_window
+gdk_drag_find_window_for_screen
+gdk_drag_get_protocol
+gdk_drag_get_protocol_for_display
+gdk_drag_get_selection
+gdk_drag_motion
+gdk_drag_protocol_get_type G_GNUC_CONST
+gdk_drag_status
+gdk_drawable_get_clip_region
+gdk_drawable_get_type G_GNUC_CONST
+gdk_drawable_get_visible_region
+gdk_drop_finish
+gdk_drop_reply
+gdk_enable_multidevice
+gdk_error_trap_pop
+gdk_error_trap_pop_ignored
+gdk_error_trap_push
 gdk_event_copy
 gdk_event_free
 gdk_event_get
@@ -41,278 +174,98 @@ gdk_event_get_state
 gdk_event_get_time
 gdk_event_get_type G_GNUC_CONST
 gdk_event_handler_set
+gdk_event_mask_get_type G_GNUC_CONST
 gdk_event_new
 gdk_event_peek
 gdk_event_put
 gdk_event_request_motions
+gdk_event_send_client_message
+gdk_event_send_client_message_for_display
+gdk_event_send_clientmessage_toall
 gdk_event_set_device
 gdk_event_set_screen
-gdk_events_get_distance
 gdk_events_get_angle
 gdk_events_get_center
-gdk_get_show_events
-gdk_set_show_events
-gdk_setting_get
-#endif
-#endif
-
-#if IN_HEADER(__GDK_EVENTS_H__)
-#if IN_FILE(__GDK_DISPLAY_X11_C__)
-gdk_add_client_message_filter
-#endif
-#endif
-
-#if IN_HEADER(__GDK_EVENTS_H__)
-#if IN_FILE(__GDK_EVENT_SOURCE_C__)
+gdk_events_get_distance
 gdk_events_pending
-#endif
-#endif
-
-#if IN_HEADER(__GDK_EVENT_TRANSLATOR_H__)
-#if IN_FILE(__GDK_EVENT_TRANSLATOR_C__)
-#ifdef GDK_WINDOWING_X11
-gdk_event_translator_get_type G_GNUC_CONST
-gdk_event_translator_translate
 gdk_event_translator_get_handled_events
+gdk_event_translator_get_type G_GNUC_CONST
 gdk_event_translator_select_window_events
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DEVICE_MANAGER_CORE_H__)
-#if IN_FILE(__GDK_DEVICE_MANAGER_CORE_C__)
-#ifdef GDK_WINDOWING_X11
-gdk_device_manager_core_get_type
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DEVICE_MANAGER_XI2_H__)
-#if IN_FILE(__GDK_DEVICE_MANAGER_XI2_C__)
-#ifdef GDK_WINDOWING_X11
-#ifdef XINPUT_2
-gdk_device_manager_xi2_get_type
-#endif
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DEVICE_MANAGER_XI_H__)
-#if IN_FILE(__GDK_DEVICE_MANAGER_XI_C__)
-#ifdef GDK_WINDOWING_X11
-#ifdef XINPUT_XFREE
-gdk_device_manager_xi_get_type
-#endif
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_MAIN_X11_C__)
-gdk_error_trap_push
-gdk_error_trap_pop
-gdk_error_trap_pop_ignored
-gdk_get_display
-#endif
-#endif
-
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_DISPLAY_C__)
-gdk_beep
-#ifndef GDK_MULTIDEVICE_SAFE
-#ifndef GDK_DISABLE_DEPRECATED
-#ifndef GDK_MULTIHEAD_SAFE
-gdk_device_get_core_pointer
-gdk_set_pointer_hooks
-#endif
-#endif
-gdk_keyboard_ungrab
-gdk_pointer_is_grabbed
-gdk_pointer_ungrab
-#endif
-gdk_event_send_client_message
-gdk_event_send_clientmessage_toall
-#ifndef GDK_MULTIDEVICE_SAFE
-gdk_display_pointer_is_grabbed
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_IM_X11_C__)
-gdk_set_locale
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_DISPLAY_X11_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_display_list_devices
-#endif
-gdk_event_send_client_message_for_display
+gdk_event_translator_translate
+gdk_event_type_get_type G_GNUC_CONST
+gdk_extension_mode_get_type G_GNUC_CONST
+gdk_filter_return_get_type G_GNUC_CONST
 gdk_flush
-gdk_notify_startup_complete
-gdk_notify_startup_complete_with_id
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_RECTANGLE_C__)
-gdk_rectangle_get_type
-gdk_rectangle_intersect
-gdk_rectangle_union
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_EVENTS_C__)
-gdk_set_double_click_time
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_C__)
-gdk_add_option_entries_libgtk_only
-gdk_get_display_arg_name
-gdk_get_program_class
-gdk_init
-gdk_init_check
-gdk_enable_multidevice
-gdk_pre_parse_libgtk_only
-gdk_parse_args
-gdk_set_program_class
-gdk_threads_enter
-gdk_threads_init
-gdk_threads_leave
-gdk_threads_set_lock_functions
-gdk_threads_add_idle
-gdk_threads_add_idle_full
-gdk_threads_add_timeout
-gdk_threads_add_timeout_full
-gdk_threads_add_timeout_seconds
-gdk_threads_add_timeout_seconds_full
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_SCREEN_C__)
-gdk_screen_width G_GNUC_CONST
-gdk_screen_width_mm G_GNUC_CONST
-gdk_screen_height G_GNUC_CONST
-gdk_screen_height_mm G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_H__)
-#if IN_FILE(__GDK_WINDOW_C__)
-#ifndef GDK_MULTIDEVICE_SAFE
-gdk_keyboard_grab
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PROPERTY_H__)
-#if IN_FILE(__GDK_SELECTION_C__)
-gdk_string_to_compound_text
-gdk_text_property_to_text_list
-gdk_text_property_to_utf8_list
-gdk_utf8_to_compound_text
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PROPERTY_H__)
-#if IN_FILE(__GDK_PROPERTY_X11_C__)
-gdk_atom_intern
-gdk_atom_intern_static_string
-gdk_atom_name
-gdk_property_change
-gdk_property_delete
-gdk_property_get
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PROPERTY_H__)
-#if IN_FILE(__GDK_SELECTION_X11_C__)
 gdk_free_compound_text
 gdk_free_text_list
-gdk_string_to_compound_text_for_display
-gdk_text_property_to_text_list_for_display
-gdk_text_property_to_utf8_list_for_display
-gdk_utf8_to_string_target
-gdk_utf8_to_compound_text_for_display
-#endif
-#endif
-
-#if IN_HEADER(__GDK_ENUM_TYPES_H__)
-#if IN_FILE(__GDK_ENUM_TYPES_C__)
-gdk_drag_protocol_get_type G_GNUC_CONST
-gdk_input_source_get_type G_GNUC_CONST
-gdk_input_mode_get_type G_GNUC_CONST
-gdk_axis_use_get_type G_GNUC_CONST
-gdk_byte_order_get_type G_GNUC_CONST
-gdk_crossing_mode_get_type G_GNUC_CONST
-gdk_device_type_get_type G_GNUC_CONST
-gdk_extension_mode_get_type G_GNUC_CONST
-gdk_event_mask_get_type G_GNUC_CONST
-gdk_event_type_get_type G_GNUC_CONST
-gdk_filter_return_get_type G_GNUC_CONST
+gdk_get_default_root_window
+gdk_get_display
+gdk_get_display_arg_name
+gdk_get_program_class
+gdk_get_show_events
 gdk_grab_ownership_get_type G_GNUC_CONST
 gdk_grab_status_get_type G_GNUC_CONST
 gdk_gravity_get_type G_GNUC_CONST
+gdk_init
+gdk_init_check
+gdk_input_mode_get_type G_GNUC_CONST
+gdk_input_set_extension_events
+gdk_input_source_get_type G_GNUC_CONST
+gdk_keyboard_grab
+gdk_keyboard_ungrab
+gdk_keymap_add_virtual_modifiers
+gdk_keymap_get_caps_lock_state
+gdk_keymap_get_default
+gdk_keymap_get_direction
+gdk_keymap_get_entries_for_keycode
+gdk_keymap_get_entries_for_keyval
+gdk_keymap_get_for_display
+gdk_keymap_get_num_lock_state
+gdk_keymap_get_type G_GNUC_CONST
+gdk_keymap_have_bidi_layouts
+gdk_keymap_lookup_key
+gdk_keymap_map_virtual_modifiers
+gdk_keymap_translate_keyboard_state
+gdk_keyval_convert_case
+gdk_keyval_from_name
+gdk_keyval_is_lower G_GNUC_CONST
+gdk_keyval_is_upper G_GNUC_CONST
+gdk_keyval_name G_GNUC_CONST
+gdk_keyval_to_lower G_GNUC_CONST
+gdk_keyval_to_unicode G_GNUC_CONST
+gdk_keyval_to_upper G_GNUC_CONST
+gdk_list_visuals
 gdk_modifier_type_get_type G_GNUC_CONST
+gdk_net_wm_supports
+gdk_notify_startup_complete
+gdk_notify_startup_complete_with_id
 gdk_notify_type_get_type G_GNUC_CONST
+gdk_offscreen_window_get_embedder
+gdk_offscreen_window_get_surface
+gdk_offscreen_window_get_type G_GNUC_CONST
+gdk_offscreen_window_set_embedder
 gdk_owner_change_get_type G_GNUC_CONST
+gdk_pango_context_get
+gdk_pango_context_get_for_screen
+gdk_pango_layout_get_clip_region
+gdk_pango_layout_line_get_clip_region
+gdk_parse_args
+gdk_pixbuf_get_from_surface
+gdk_pixbuf_get_from_window
+gdk_pointer_grab
+gdk_pointer_is_grabbed
+gdk_pointer_ungrab
+gdk_pre_parse_libgtk_only
+gdk_property_change
+gdk_property_delete
+gdk_property_get
 gdk_property_state_get_type G_GNUC_CONST
 gdk_prop_mode_get_type G_GNUC_CONST
-gdk_scroll_direction_get_type G_GNUC_CONST
-gdk_setting_action_get_type G_GNUC_CONST
-gdk_status_get_type G_GNUC_CONST
-gdk_visibility_state_get_type G_GNUC_CONST
-gdk_wm_decoration_get_type G_GNUC_CONST
-gdk_wm_function_get_type G_GNUC_CONST
-gdk_cursor_type_get_type G_GNUC_CONST
-gdk_drag_action_get_type G_GNUC_CONST
-gdk_window_attributes_type_get_type G_GNUC_CONST
-gdk_window_class_get_type G_GNUC_CONST
-gdk_window_edge_get_type G_GNUC_CONST
-gdk_window_hints_get_type G_GNUC_CONST
-gdk_window_state_get_type G_GNUC_CONST
-gdk_window_type_get_type G_GNUC_CONST
-gdk_window_type_hint_get_type G_GNUC_CONST
-gdk_visual_type_get_type G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_CAIRO_H__)
-#if IN_FILE(__GDK_CAIRO_C__)
-gdk_cairo_create
-gdk_cairo_reset_clip
-gdk_cairo_get_clip_rectangle
-gdk_cairo_set_source_color
-gdk_cairo_set_source_rgba
-gdk_cairo_set_source_pixbuf
-gdk_cairo_set_source_window
-gdk_cairo_rectangle
-gdk_cairo_region
-gdk_cairo_region_create_from_surface
-#endif
-#endif
-
-#if IN_HEADER(__GDK_COLOR_H__)
-#if IN_FILE(__GDK_COLOR_C__)
-gdk_color_copy
-gdk_color_equal
-gdk_color_free
-gdk_color_get_type G_GNUC_CONST
-gdk_color_hash
-gdk_color_parse
-gdk_color_to_string
-#endif
-#endif
-
-#if IN_HEADER(__GDK_RGBA_H__)
-#if IN_FILE(__GDK_RGBA_H__)
+gdk_query_depths
+gdk_query_visual_types
+gdk_rectangle_get_type
+gdk_rectangle_intersect
+gdk_rectangle_union
 gdk_rgba_copy
 gdk_rgba_equal
 gdk_rgba_free
@@ -320,309 +273,183 @@ gdk_rgba_get_type
 gdk_rgba_hash
 gdk_rgba_parse
 gdk_rgba_to_string
-#endif
-#endif
-
-#if IN_HEADER(__GDK_CURSOR_H__)
-#if IN_FILE(__GDK_CURSOR_C__)
-gdk_cursor_get_type G_GNUC_CONST
-gdk_cursor_get_cursor_type
-gdk_cursor_new
-gdk_cursor_ref
-gdk_cursor_unref
-#endif
-#endif
-
-#if IN_HEADER(__GDK_CURSOR_H__)
-#if IN_FILE(__GDK_CURSOR_X11_C__)
-gdk_cursor_get_display
-gdk_cursor_new_for_display
-gdk_cursor_new_from_pixbuf
-gdk_cursor_new_from_name
-gdk_cursor_get_image
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DEVICE_MANAGER_H__)
-#if IN_FILE(__GDK_DEVICE_MANAGER_C__)
-gdk_device_manager_get_display
-gdk_device_manager_get_type G_GNUC_CONST
-gdk_device_manager_list_devices
-gdk_device_manager_get_client_pointer
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DEVICE_H__)
-#if IN_FILE(__GDK_DEVICE_C__)
-gdk_device_free_history
-gdk_device_get_associated_device
-gdk_device_get_axis
-gdk_device_get_axis_use
-gdk_device_get_axis_value
-gdk_device_get_device_type
-gdk_device_get_display
-gdk_device_get_has_cursor
-gdk_device_get_history
-gdk_device_get_key
-gdk_device_get_mode
-gdk_device_get_n_axes
-gdk_device_get_name
-gdk_device_get_source
-gdk_device_get_type G_GNUC_CONST
-gdk_device_get_state
-gdk_device_list_axes
-gdk_device_set_axis_use
-gdk_device_set_key
-gdk_device_set_mode
-gdk_device_set_source
-gdk_device_grab
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DEVICE_H__)
-#if IN_FILE(__GDK_DISPLAY_X11_C__)
-gdk_device_ungrab
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DEVICE_H__)
-#if IN_FILE(__GDK_DISPLAY_C__)
-gdk_device_grab_info_libgtk_only
-#endif
-#endif
-
-#if IN_HEADER(__GDK_INPUT_H__)
-#if IN_FILE(__GDK_INPUT_C__)
-#ifndef GDK_DISABLE_DEPRECATED
-#ifndef GDK_MULTIDEVICE_SAFE
-#ifndef GDK_MULTIHEAD_SAFE
-gdk_devices_list
-#endif
-gdk_input_set_extension_events
-#endif
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_DISPLAY_C__)
-gdk_display_close
-gdk_display_is_closed
-gdk_display_get_event
-gdk_display_get_device_manager
-gdk_display_get_device_state
-gdk_display_get_type G_GNUC_CONST
-gdk_display_get_window_at_device_position
-gdk_display_peek_event
-gdk_display_put_event
-#ifndef GDK_MULTIDEVICE_SAFE
-gdk_display_get_pointer
-gdk_display_get_window_at_pointer
-gdk_display_keyboard_ungrab
-gdk_display_pointer_ungrab
-gdk_display_set_pointer_hooks
-gdk_display_set_device_hooks
-gdk_display_device_is_grabbed
-#ifndef GDK_DISABLE_DEPRECATED
-gdk_display_get_core_pointer
-#endif
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_WINDOW_X11_C__)
-gdk_display_warp_device
-#ifndef GDK_MULTIDEVICE_SAFE
-gdk_display_warp_pointer
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_DISPLAY_MANAGER_C__)
-gdk_display_get_default
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_CURSOR_X11_C__)
-gdk_display_get_default_cursor_size
-gdk_display_get_maximal_cursor_size
-gdk_display_supports_cursor_alpha
-gdk_display_supports_cursor_color
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_DISPLAY_X11_C__)
-gdk_display_add_client_message_filter
-gdk_display_beep
-gdk_display_sync
-gdk_display_flush
-gdk_display_get_default_group
-gdk_display_get_default_screen
-gdk_display_get_name
-gdk_display_get_n_screens
-gdk_display_get_screen
-gdk_display_open
-gdk_display_request_selection_notification
-gdk_display_store_clipboard
-gdk_display_supports_clipboard_persistence
-gdk_display_supports_selection_notification
-gdk_display_supports_shapes
-gdk_display_supports_input_shapes
-gdk_display_supports_composite
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_C__)
-gdk_display_open_default_libgtk_only
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_H__)
-#if IN_FILE(__GDK_EVENTS_C__)
-gdk_display_set_double_click_distance
-gdk_display_set_double_click_time
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DISPLAY_MANAGER_H__)
-#if IN_FILE(__GDK_DISPLAY_MANAGER_C__)
-gdk_display_manager_get
-gdk_display_manager_get_type G_GNUC_CONST
-gdk_display_manager_list_displays
-gdk_display_manager_set_default_display
-gdk_display_manager_get_default_display
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DND_H__)
-#if IN_FILE(__GDK_DND_X11_C__)
-gdk_drag_abort
-gdk_drag_begin
-gdk_drag_context_get_type G_GNUC_CONST
-gdk_drag_context_new
-gdk_drag_context_get_device
-gdk_drag_context_set_device
-gdk_drag_drop
-gdk_drag_drop_succeeded
-gdk_drag_find_window_for_screen
-gdk_drag_get_protocol_for_display
-gdk_drag_get_selection
-gdk_drag_motion
-gdk_drag_status
-gdk_drop_finish
-gdk_drop_reply
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DND_H__)
-#if IN_FILE(__GDK_DND_C__)
-gdk_drag_context_get_actions
-gdk_drag_context_get_selected_action
-gdk_drag_context_get_suggested_action
-gdk_drag_context_list_targets
-gdk_drag_context_get_source_window
-gdk_drag_find_window
-gdk_drag_get_protocol
-#endif
-#endif
-
-#if IN_HEADER(__GDK_DRAWABLE_H__)
-#if IN_FILE(__GDK_DRAW_C__)
-gdk_drawable_get_clip_region
-gdk_drawable_get_type G_GNUC_CONST
-gdk_drawable_get_visible_region
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_X11_H__)
-#if IN_FILE(__GDK_WINDOW_X11_C__)
-#ifdef GDK_WINDOWING_X11
-gdk_window_impl_x11_get_type G_GNUC_CONST
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_H__)
-#if IN_FILE(__GDK_WINDOW_C__)
-gdk_get_default_root_window
-gdk_window_new
-gdk_window_show_unraised
-gdk_window_show
-gdk_window_hide
-gdk_window_withdraw
-gdk_window_get_events
-gdk_window_set_events
-gdk_window_raise
-gdk_window_lower
-gdk_window_restack
-gdk_window_move
-gdk_window_resize
-gdk_window_move_resize
-gdk_window_scroll
-gdk_window_move_region
-gdk_window_get_accept_focus
-gdk_window_get_background_pattern
-gdk_window_get_composited
-gdk_window_get_cursor
-gdk_window_get_display
-gdk_window_get_focus_on_map
-gdk_window_get_geometry
-gdk_window_get_height
-gdk_window_get_modal_hint
-gdk_window_get_origin
-gdk_window_get_root_coords
-gdk_window_set_support_multidevice
-gdk_window_get_support_multidevice
-gdk_window_get_screen
-gdk_window_get_visual
-gdk_window_get_width
-gdk_window_has_native
-gdk_window_set_background
-gdk_window_set_background_pattern
-gdk_window_set_background_rgba
-gdk_window_set_cursor
-gdk_window_shape_combine_region
-gdk_window_set_child_shapes
-gdk_window_merge_child_shapes
-gdk_window_input_shape_combine_region
-gdk_window_set_child_input_shapes
-gdk_window_merge_child_input_shapes
-gdk_window_set_static_gravities
-gdk_window_reparent
+gdk_screen_broadcast_client_message
+gdk_screen_get_active_window
+gdk_screen_get_default
+gdk_screen_get_display
+gdk_screen_get_font_options
+gdk_screen_get_height
+gdk_screen_get_height_mm
+gdk_screen_get_monitor_at_point
+gdk_screen_get_monitor_at_window
+gdk_screen_get_monitor_geometry
+gdk_screen_get_monitor_height_mm
+gdk_screen_get_monitor_plug_name
+gdk_screen_get_monitor_width_mm
+gdk_screen_get_n_monitors
+gdk_screen_get_number
+gdk_screen_get_primary_monitor
+gdk_screen_get_resolution
+gdk_screen_get_rgba_visual
+gdk_screen_get_root_window
+gdk_screen_get_setting
+gdk_screen_get_system_visual
+gdk_screen_get_toplevel_windows
+gdk_screen_get_type G_GNUC_CONST
+gdk_screen_get_width
+gdk_screen_get_width_mm
+gdk_screen_get_window_stack
+gdk_screen_height G_GNUC_CONST
+gdk_screen_height_mm G_GNUC_CONST
+gdk_screen_is_composited
+gdk_screen_list_visuals
+gdk_screen_make_display_name
+gdk_screen_set_font_options
+gdk_screen_set_resolution
+gdk_screen_width G_GNUC_CONST
+gdk_screen_width_mm G_GNUC_CONST
+gdk_scroll_direction_get_type G_GNUC_CONST
+gdk_selection_convert
+gdk_selection_owner_get
+gdk_selection_owner_get_for_display
+gdk_selection_owner_set
+gdk_selection_owner_set_for_display
+gdk_selection_property_get
+gdk_selection_send_notify
+gdk_selection_send_notify_for_display
+gdk_set_double_click_time
+gdk_set_locale
+gdk_set_pointer_hooks
+gdk_set_program_class
+gdk_set_show_events
+gdk_set_sm_client_id
+gdk_setting_action_get_type G_GNUC_CONST
+gdk_setting_get
+gdk_spawn_command_line_on_screen
+gdk_spawn_on_screen
+gdk_spawn_on_screen_with_pipes
+gdk_status_get_type G_GNUC_CONST
+gdk_string_to_compound_text
+gdk_string_to_compound_text_for_display
+gdk_synthesize_window_state
+gdk_test_render_sync
+gdk_test_simulate_button
+gdk_test_simulate_key
+gdk_text_property_to_text_list
+gdk_text_property_to_text_list_for_display
+gdk_text_property_to_utf8_list
+gdk_text_property_to_utf8_list_for_display
+gdk_threads_add_idle
+gdk_threads_add_idle_full
+gdk_threads_add_timeout
+gdk_threads_add_timeout_full
+gdk_threads_add_timeout_seconds
+gdk_threads_add_timeout_seconds_full
+gdk_threads_enter
+gdk_threads_init
+gdk_threads_leave
+gdk_threads_set_lock_functions
+gdk_unicode_to_keyval G_GNUC_CONST
+gdk_utf8_to_compound_text
+gdk_utf8_to_compound_text_for_display
+gdk_utf8_to_string_target
+gdk_visibility_state_get_type G_GNUC_CONST
+gdk_visual_get_best
+gdk_visual_get_best_depth
+gdk_visual_get_best_type
+gdk_visual_get_best_with_both
+gdk_visual_get_best_with_depth
+gdk_visual_get_best_with_type
+gdk_visual_get_bits_per_rgb
+gdk_visual_get_blue_pixel_details
+gdk_visual_get_byte_order
+gdk_visual_get_colormap_size
+gdk_visual_get_depth
+gdk_visual_get_green_pixel_details
+gdk_visual_get_red_pixel_details
+gdk_visual_get_screen
+gdk_visual_get_system
+gdk_visual_get_type G_GNUC_CONST
+gdk_visual_get_visual_type
+gdk_visual_type_get_type G_GNUC_CONST
+gdk_win32_drawable_get_handle
+gdk_win32_handle_table_lookup
+gdk_win32_icon_to_pixbuf_libgtk_only
+gdk_win32_pixbuf_to_hicon_libgtk_only
+gdk_win32_selection_add_targets
+gdk_win32_set_modal_dialog_libgtk_only
+gdk_win32_window_is_win32
 gdk_window_add_filter
-#ifndef GDK_MULTIDEVICE_SAFE
 gdk_window_at_pointer
-#endif
+gdk_window_attributes_type_get_type G_GNUC_CONST
+gdk_window_beep
+gdk_window_begin_move_drag
 gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
+gdk_window_begin_resize_drag
+gdk_window_class_get_type G_GNUC_CONST
+gdk_window_configure_finished
 gdk_window_constrain_size
 gdk_window_coords_from_parent
 gdk_window_coords_to_parent
 gdk_window_create_similar_surface
+gdk_window_deiconify
 gdk_window_destroy
+gdk_window_destroy_notify
+gdk_window_edge_get_type G_GNUC_CONST
+gdk_window_enable_synchronized_configure
 gdk_window_end_paint
+gdk_window_ensure_native
 gdk_window_flush
+gdk_window_focus
 gdk_window_foreign_new
+gdk_window_foreign_new_for_display
 gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_freeze_updates
+gdk_window_fullscreen
+gdk_window_geometry_changed
+gdk_window_get_accept_focus
+gdk_window_get_background_pattern
 gdk_window_get_children
-gdk_window_get_parent
+gdk_window_get_composited
+gdk_window_get_cursor
+gdk_window_get_decorations
+gdk_window_get_device_cursor
+gdk_window_get_device_events
+gdk_window_get_device_position
+gdk_window_get_display
 gdk_window_get_effective_parent
-#ifndef GDK_MULTIDEVICE_SAFE
-gdk_window_get_pointer
-#endif
-gdk_window_get_position
-gdk_window_get_state
-gdk_window_get_toplevel
 gdk_window_get_effective_toplevel
+gdk_window_get_events
+gdk_window_get_focus_on_map
+gdk_window_get_frame_extents
+gdk_window_get_geometry
+gdk_window_get_group
+gdk_window_get_height
+gdk_window_get_modal_hint
+gdk_window_get_origin
+gdk_window_get_parent
+gdk_window_get_pointer
+gdk_window_get_position
+gdk_window_get_root_coords
+gdk_window_get_root_origin
+gdk_window_get_screen
+gdk_window_get_state
+gdk_window_get_support_multidevice
+gdk_window_get_toplevel
+gdk_window_get_type_hint
 gdk_window_get_update_area
 gdk_window_get_user_data
+gdk_window_get_visual
+gdk_window_get_width
 gdk_window_get_window_type
+gdk_window_has_native
+gdk_window_hide
+gdk_window_hints_get_type G_GNUC_CONST
+gdk_window_iconify
+gdk_window_impl_get_type G_GNUC_CONST
+gdk_window_impl_x11_get_type G_GNUC_CONST
+gdk_window_input_shape_combine_region
 gdk_window_invalidate_maybe_recurse
 gdk_window_invalidate_rect
 gdk_window_invalidate_region
@@ -631,410 +458,118 @@ gdk_window_is_input_only
 gdk_window_is_shaped
 gdk_window_is_viewable
 gdk_window_is_visible
+gdk_window_lookup
+gdk_window_lookup_for_display
+gdk_window_lower
+gdk_window_maximize
+gdk_window_merge_child_input_shapes
+gdk_window_merge_child_shapes
+gdk_window_move
+gdk_window_move_region
+gdk_window_move_resize
+gdk_window_new
 gdk_window_object_get_type G_GNUC_CONST
 gdk_window_peek_children
 gdk_window_process_all_updates
 gdk_window_process_updates
-gdk_window_remove_filter
-gdk_window_set_debug_updates
-gdk_window_set_user_data
-gdk_window_thaw_toplevel_updates_libgtk_only
-gdk_window_thaw_updates
-gdk_window_set_composited
-#ifndef GDK_MULTIDEVICE_SAFE
-gdk_pointer_grab
-#endif
-gdk_window_beep
-gdk_window_geometry_changed
-gdk_window_ensure_native
-gdk_window_set_device_events
-gdk_window_get_device_events
-gdk_window_set_device_cursor
-gdk_window_get_device_cursor
-gdk_window_get_device_position
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_H__)
-#if IN_FILE(__GDK_OFFSCREEN_WINDOW_C__)
-gdk_offscreen_window_get_surface
-gdk_offscreen_window_set_embedder
-gdk_offscreen_window_get_embedder
-#endif
-#endif
-
-#if IN_HEADER(__GDK_INTERNALS_H__)
-#if IN_FILE(__GDK_OFFSCREEN_WINDOW_C__)
-gdk_offscreen_window_get_type G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_H__)
-#if IN_FILE(__GDK_DND_X11_C__)
+gdk_window_raise
 gdk_window_register_dnd
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_H__)
-#if IN_FILE(__GDK_WINDOW_X11_C__)
-gdk_window_foreign_new_for_display
-gdk_window_focus
-gdk_window_lookup
-gdk_window_lookup_for_display
-gdk_window_get_type_hint
-gdk_window_set_type_hint
-gdk_window_set_modal_hint
-gdk_window_set_skip_taskbar_hint
-gdk_window_set_skip_pager_hint
-gdk_window_set_urgency_hint
-gdk_window_set_geometry_hints
-gdk_window_set_title
-gdk_window_set_role
-gdk_window_set_startup_id
-gdk_window_set_transient_for
-gdk_window_get_root_origin
-gdk_window_get_frame_extents
-gdk_window_set_override_redirect
+gdk_window_remove_filter
+gdk_window_reparent
+gdk_window_resize
+gdk_window_restack
+gdk_window_scroll
 gdk_window_set_accept_focus
+gdk_window_set_background
+gdk_window_set_background_pattern
+gdk_window_set_background_rgba
+gdk_window_set_child_input_shapes
+gdk_window_set_child_shapes
+gdk_window_set_composited
+gdk_window_set_cursor
+gdk_window_set_debug_updates
+gdk_window_set_decorations
+gdk_window_set_device_cursor
+gdk_window_set_device_events
+gdk_window_set_events
 gdk_window_set_focus_on_map
+gdk_window_set_functions
+gdk_window_set_geometry_hints
+gdk_window_set_group
 gdk_window_set_icon_list
 gdk_window_set_icon_name
-gdk_window_set_opacity
-gdk_window_iconify
-gdk_window_deiconify
-gdk_window_stick
-gdk_window_unstick
-gdk_window_maximize
-gdk_window_unmaximize
-gdk_window_fullscreen
-gdk_window_unfullscreen
 gdk_window_set_keep_above
 gdk_window_set_keep_below
-gdk_window_get_group
-gdk_window_set_group
-gdk_window_get_decorations
-gdk_window_set_decorations
-gdk_window_set_functions
-gdk_window_begin_move_drag
-gdk_window_begin_resize_drag
-gdk_window_enable_synchronized_configure
-gdk_window_configure_finished
-#endif
-#endif
-
-#if IN_HEADER(__GDK_KEYS_H__)
-#if IN_FILE(__GDK_KEYS_C__)
-gdk_keymap_get_default
-gdk_keymap_get_type G_GNUC_CONST
-gdk_keyval_is_lower G_GNUC_CONST
-gdk_keyval_is_upper G_GNUC_CONST
-gdk_keyval_to_lower G_GNUC_CONST
-gdk_keyval_to_upper G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_KEYS_H__)
-#if IN_FILE(__GDK_KEYUNI_C__)
-gdk_keyval_to_unicode G_GNUC_CONST
-gdk_unicode_to_keyval G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_KEYS_H__)
-#if IN_FILE(__GDK_KEYS_X11_C__)
-gdk_keymap_get_direction
-gdk_keymap_get_entries_for_keycode
-gdk_keymap_get_entries_for_keyval
-gdk_keymap_get_for_display
-gdk_keymap_have_bidi_layouts
-gdk_keymap_get_caps_lock_state
-gdk_keymap_get_num_lock_state
-gdk_keymap_lookup_key
-gdk_keymap_translate_keyboard_state
-gdk_keymap_add_virtual_modifiers
-gdk_keymap_map_virtual_modifiers
-gdk_keyval_convert_case
-gdk_keyval_from_name
-gdk_keyval_name G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_VISUAL_H__)
-#if IN_FILE(__GDK_VISUAL_C__)
-gdk_list_visuals
-gdk_visual_get_bits_per_rgb
-gdk_visual_get_blue_pixel_details
-gdk_visual_get_byte_order
-gdk_visual_get_colormap_size
-gdk_visual_get_depth
-gdk_visual_get_green_pixel_details
-gdk_visual_get_red_pixel_details
-gdk_visual_get_system
-gdk_visual_get_visual_type
-#endif
-#endif
-
-#if IN_HEADER(__GDK_VISUAL_H__)
-#if IN_FILE(__GDK_VISUAL_X11_C__)
-gdk_query_depths
-gdk_query_visual_types
-gdk_visual_get_best
-gdk_visual_get_best_depth
-gdk_visual_get_best_type
-gdk_visual_get_best_with_both
-gdk_visual_get_best_with_depth
-gdk_visual_get_best_with_type
-gdk_visual_get_screen
-gdk_visual_get_type G_GNUC_CONST
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PANGO_H__)
-#if IN_FILE(__GDK_PANGO_C__)
-gdk_pango_context_get
-gdk_pango_context_get_for_screen
-gdk_pango_layout_get_clip_region
-gdk_pango_layout_line_get_clip_region
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PIXBUF_H__)
-#if IN_FILE(__GDK_PIXBUF_DRAWABLE_C__)
-gdk_pixbuf_get_from_window
-gdk_pixbuf_get_from_surface
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_SCREEN_C__)
-gdk_screen_get_type G_GNUC_CONST
-gdk_screen_get_monitor_at_point
-gdk_screen_get_monitor_at_window
-gdk_screen_set_font_options
-gdk_screen_get_font_options
-gdk_screen_set_resolution
-gdk_screen_get_resolution
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_DISPLAY_MANAGER_C__)
-gdk_screen_get_default
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_VISUAL_X11_C__)
-gdk_screen_get_system_visual
-gdk_screen_list_visuals
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_WINDOW_C__)
-gdk_screen_get_toplevel_windows
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SCREEN_H__)
-#if IN_FILE(__GDK_SCREEN_X11_C__)
-gdk_screen_broadcast_client_message
-gdk_screen_get_display
-gdk_screen_get_width
-gdk_screen_get_width_mm
-gdk_screen_get_height
-gdk_screen_get_height_mm
-gdk_screen_get_number
-gdk_screen_get_primary_monitor
-gdk_screen_get_root_window
-gdk_screen_get_setting
-gdk_screen_get_n_monitors
-gdk_screen_get_monitor_geometry
-gdk_screen_get_monitor_width_mm
-gdk_screen_get_monitor_height_mm
-gdk_screen_get_monitor_plug_name
-gdk_screen_get_rgba_visual
-gdk_screen_get_active_window
-gdk_screen_get_window_stack
-gdk_screen_is_composited
-gdk_screen_make_display_name
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SELECTION_H__)
-#if IN_FILE(__GDK_SELECTION_C__)
-gdk_selection_owner_set
-gdk_selection_owner_get
-gdk_selection_send_notify
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SELECTION_H__)
-#if IN_FILE(__GDK_SELECTION_X11_C__)
-gdk_selection_convert
-gdk_selection_owner_get_for_display
-gdk_selection_owner_set_for_display
-gdk_selection_property_get
-gdk_selection_send_notify_for_display
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_H__)
-#if IN_FILE(__GDK_DISPLAY_C__)
-gdk_set_sm_client_id
-#endif
-#endif
-
-#if IN_HEADER(__GDK_SPAWN_H__)
-#if IN_FILE(__GDK_SPAWN_X11_C__)
-gdk_spawn_command_line_on_screen
-gdk_spawn_on_screen
-gdk_spawn_on_screen_with_pipes
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PRIVATE_H__)
-#if IN_FILE(__GDK_EVENTS_C__)
-gdk_synthesize_window_state
-#endif
-#endif
-
-#if IN_HEADER(__GDK_PRIVATE_H__)
-#if IN_FILE(__GDK_WINDOW_X11_C__)
-gdk_window_destroy_notify
-#endif
-#endif
-
-#ifdef GDK_WINDOWING_WIN32
-#if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_WINDOW_WIN32_C__)
-gdk_win32_window_is_win32
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_WIN32ID_C__)
-gdk_win32_handle_table_lookup
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_CURSOR_WIN32_C__)
-gdk_win32_icon_to_pixbuf_libgtk_only
-gdk_win32_pixbuf_to_hicon_libgtk_only
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_DRAWABLE_WIN32_C__)
-gdk_win32_drawable_get_handle
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_EVENTS_WIN32_C__)
-gdk_win32_set_modal_dialog_libgtk_only
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WIN32_H__)
-#if IN_FILE(__GDK_SELECTION_WIN32_C__)
-gdk_win32_selection_add_targets
-#endif
-#endif
-#endif
-
-#ifdef GDK_WINDOWING_X11
-#if IN_HEADER(__GDK_X_H__)
-#if IN_FILE(__GDK_PROPERTY_X11_C__)
+gdk_window_set_modal_hint
+gdk_window_set_opacity
+gdk_window_set_override_redirect
+gdk_window_set_role
+gdk_window_set_skip_pager_hint
+gdk_window_set_skip_taskbar_hint
+gdk_window_set_startup_id
+gdk_window_set_static_gravities
+gdk_window_set_support_multidevice
+gdk_window_set_title
+gdk_window_set_transient_for
+gdk_window_set_type_hint
+gdk_window_set_urgency_hint
+gdk_window_set_user_data
+gdk_window_shape_combine_region
+gdk_window_show
+gdk_window_show_unraised
+gdk_window_state_get_type G_GNUC_CONST
+gdk_window_stick
+gdk_window_thaw_toplevel_updates_libgtk_only
+gdk_window_thaw_updates
+gdk_window_type_get_type G_GNUC_CONST
+gdk_window_type_hint_get_type G_GNUC_CONST
+gdk_window_unfullscreen
+gdk_window_unmaximize
+gdk_window_unstick
+gdk_window_withdraw
+gdk_wm_decoration_get_type G_GNUC_CONST
+gdk_wm_function_get_type G_GNUC_CONST
 gdk_x11_atom_to_xatom
 gdk_x11_atom_to_xatom_for_display
+gdk_x11_cursor_get_xcursor
+gdk_x11_cursor_get_xdisplay
+gdk_x11_display_broadcast_startup_message
+gdk_x11_display_error_trap_pop
+gdk_x11_display_error_trap_pop_ignored
+gdk_x11_display_error_trap_push
+gdk_x11_display_get_startup_notification_id
+gdk_x11_display_get_user_time
+gdk_x11_display_get_xdisplay
+gdk_x11_display_grab
+gdk_x11_display_set_cursor_theme
+gdk_x11_display_set_startup_notification_id
+gdk_x11_display_ungrab
+gdk_x11_drawable_get_xdisplay
+gdk_x11_drawable_get_xid
+gdk_x11_get_default_root_xwindow
+gdk_x11_get_default_screen
+gdk_x11_get_default_xdisplay
+gdk_x11_get_server_time
 gdk_x11_get_xatom_by_name
 gdk_x11_get_xatom_by_name_for_display
 gdk_x11_get_xatom_name
 gdk_x11_get_xatom_name_for_display
-gdk_x11_xatom_to_atom
-gdk_x11_xatom_to_atom_for_display
-#endif
-
-#if IN_FILE(__GDK_CURSOR_X11_C__)
-gdk_x11_cursor_get_xcursor
-gdk_x11_cursor_get_xdisplay
-gdk_x11_display_set_cursor_theme
-#endif
-
-#if IN_FILE(__GDK_DISPLAY_X11_C__)
-gdk_x11_display_get_user_time
-gdk_x11_display_get_xdisplay
-gdk_x11_display_grab
-gdk_x11_display_ungrab
-gdk_x11_lookup_xdisplay
-gdk_x11_display_broadcast_startup_message
-gdk_x11_display_get_startup_notification_id
-gdk_x11_display_set_startup_notification_id
-gdk_x11_register_standard_event_type
-gdk_x11_display_error_trap_push
-gdk_x11_display_error_trap_pop
-gdk_x11_display_error_trap_pop_ignored
-#endif
-
-#if IN_FILE(__GDK_DRAWABLE_X11_C__)
-gdk_x11_drawable_get_xdisplay
-gdk_x11_drawable_get_xid
-gdk_x11_window_get_drawable_impl
-#endif
-
-#if IN_FILE(__GDK_MAIN_X11_C__)
-gdk_x11_get_default_root_xwindow
-gdk_x11_get_default_screen
-gdk_x11_get_default_xdisplay
 gdk_x11_grab_server
-gdk_x11_ungrab_server
-#endif
-
-#if IN_FILE(__GDK_SCREEN_X11_C__)
-gdk_net_wm_supports
+gdk_x11_lookup_xdisplay
+gdk_x11_register_standard_event_type
+gdk_x11_screen_get_monitor_output
 gdk_x11_screen_get_screen_number
 gdk_x11_screen_get_window_manager_name
 gdk_x11_screen_get_xscreen
-gdk_x11_screen_get_monitor_output
-gdk_x11_screen_supports_net_wm_hint
-#endif
-
-#if IN_FILE(__GDK_VISUAL_X11_C__)
 gdk_x11_screen_lookup_visual
+gdk_x11_screen_supports_net_wm_hint
+gdk_x11_ungrab_server
 gdk_x11_visual_get_xvisual
-gdkx_visual_get
-#endif
-
-#if IN_FILE(__GDK_WINDOW_X11_C__)
-gdk_x11_get_server_time
-gdk_x11_window_set_user_time
+gdk_x11_window_get_drawable_impl
 gdk_x11_window_move_to_current_desktop
-#endif
-
-#if IN_FILE(__GDK_XID_C__)
+gdk_x11_window_set_user_time
+gdk_x11_xatom_to_atom
+gdk_x11_xatom_to_atom_for_display
 gdk_xid_table_lookup
 gdk_xid_table_lookup_for_display
-#endif
-#endif
-#endif
-
-#if IN_HEADER(__GDK_APP_LAUNCH_CONTEXT_H__)
-#if IN_FILE(__GDK_APP_LAUNCH_CONTEXT_C__)
-gdk_app_launch_context_get_type G_GNUC_CONST
-gdk_app_launch_context_new
-gdk_app_launch_context_set_display
-gdk_app_launch_context_set_screen
-gdk_app_launch_context_set_desktop
-gdk_app_launch_context_set_timestamp
-gdk_app_launch_context_set_icon
-gdk_app_launch_context_set_icon_name
-#endif
-#endif
-
-#if IN_HEADER(__GDK_WINDOW_IMPL_H__)
-#if IN_FILE(__GDK_WINDOW_IMPL_C__)
-gdk_window_impl_get_type G_GNUC_CONST
-#endif
-#endif
+gdkx_visual_get

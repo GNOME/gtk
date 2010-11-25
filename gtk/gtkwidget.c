@@ -81,68 +81,13 @@
  *
  * Height-for-width geometry management is implemented in GTK+ by way
  * of five virtual methods:
- * <variablelist>
- *    <varlistentry>
- *       <term>#GtkWidgetClass.get_request_mode()</term>
- *       <listitem>
- *          This allows a widget to tell its parent container whether
- *          it prefers to be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH
- *          or %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
- *          %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH means the widget prefers to
- *          have #GtkWidgetClass.get_preferred_width() called and then
- *          #GtkWidgetClass.get_preferred_height_for_width() and is the
- *          default return for unimplemented cases.
- *          However it's important to note (as described below) that any
- *          widget which trades height-for-width must respond properly to
- *          both #GtkSizeRequestModes since it might be queried in either
- *          orientation by its parent container.
- *       </listitem>
- *    </varlistentry>
- *    <varlistentry>
- *       <term>#GtkWidgetClass.get_preferred_width()</term>
- *       <listitem>
- *          This is called by containers to obtain the minimum and
- *          natural width of a widget. A widget will never be allocated
- *          a width less than its minimum and will only ever be allocated
- *          a width greater than the natural width once all of the said
- *          widget's siblings have received their natural widths.
- *          Furthermore, a widget will only ever be allocated a width greater
- *          than its natural width if it was configured to receive extra
- *          expand space from its parent container.
- *       </listitem>
- *    </varlistentry>
- *    <varlistentry>
- *       <term>#GtkWidgetClass.get_preferred_height()</term>
- *       <listitem>
- *          This is called by containers to obtain the minimum and
- *          natural height of a widget.
- *          A widget that does not actually trade any height for width
- *          or width for height only has to implement these two virtual
- *          methods (#GtkWidgetClass.get_preferred_width() and
- *          #GtkWidgetClass.get_preferred_height()).
- *       </listitem>
- *    </varlistentry>
- *    <varlistentry>
- *       <term>#GtkWidgetClass.get_preferred_height_for_width()</term>
- *       <listitem>
- *          This is similar to #GtkWidgetClass.get_preferred_height() except
- *          that it is passed a contextual width to request height for. By
- *          implementing this virtual method it is possible for a #GtkLabel
- *          to tell its parent how much height would be required if the
- *          label were to be allocated a said width.
- *       </listitem>
- *    </varlistentry>
- *    <varlistentry>
- *       <term>#GtkWidgetClass.get_preferred_width_for_height()</term>
- *       <listitem>
- *          This is analogous to #GtkWidgetClass.get_preferred_height_for_width()
- *          except that it operates in the oposite orientation. It's rare that
- *          a widget actually does %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT requests
- *          but this can happen when, for example, a widget or container gets
- *          additional columns to compensate for a smaller allocated height.
- *       </listitem>
- *    </varlistentry>
- * </variablelist>
+ * <itemizedlist>
+ *   <listitem>#GtkWidgetClass.get_request_mode()</listitem>
+ *   <listitem>#GtkWidgetClass.get_preferred_width()</listitem>
+ *   <listitem>#GtkWidgetClass.get_preferred_height()</listitem>
+ *   <listitem>#GtkWidgetClass.get_preferred_height_for_width()</listitem>
+ *   <listitem>#GtkWidgetClass.get_preferred_width_for_height()</listitem>
+ * </itemizedlist>
  *
  * There are some important things to keep in mind when implementing
  * height-for-width and when using it in container implementations.
@@ -436,7 +381,6 @@ enum {
   UNMAP,
   REALIZE,
   UNREALIZE,
-  SIZE_REQUEST,
   SIZE_ALLOCATE,
   STATE_CHANGED,
   PARENT_SET,
@@ -572,8 +516,6 @@ static void	gtk_widget_real_map		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unmap		 (GtkWidget	    *widget);
 static void	gtk_widget_real_realize		 (GtkWidget	    *widget);
 static void	gtk_widget_real_unrealize	 (GtkWidget	    *widget);
-static void	gtk_widget_real_size_request	 (GtkWidget	    *widget,
-						  GtkRequisition    *requisition);
 static void	gtk_widget_real_size_allocate	 (GtkWidget	    *widget,
                                                   GtkAllocation	    *allocation);
 static void	gtk_widget_real_style_set        (GtkWidget         *widget,
@@ -709,9 +651,6 @@ static GtkStyle        *gtk_default_style = NULL;
 static guint            composite_child_stack = 0;
 static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
-
-/* XXX Temporarily here to fire warnings from gtksizerequest.c */
-guint _size_request_signal_id = 0;
 
 static GQuark		quark_property_parser = 0;
 static GQuark		quark_aux_info = 0;
@@ -868,7 +807,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->unmap = gtk_widget_real_unmap;
   klass->realize = gtk_widget_real_realize;
   klass->unrealize = gtk_widget_real_unrealize;
-  klass->size_request = gtk_widget_real_size_request;
   klass->size_allocate = gtk_widget_real_size_allocate;
   klass->get_preferred_width = gtk_widget_real_get_width;
   klass->get_preferred_height = gtk_widget_real_get_height;
@@ -1464,25 +1402,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
-
-  /**
-   * GtkWidget::size-request:
-   * @widget: the object which received the signal.
-   * @requisition:
-   *
-   * Deprecated: 3.0: Either implement
-   * <link linkend="geometry-management">height-for-width geometry management</link> or
-   * use gtk_widget_set_size_request() instead of handling this signal.
-   */
-  _size_request_signal_id = widget_signals[SIZE_REQUEST] =
-    g_signal_new (I_("size-request"),
-		  G_TYPE_FROM_CLASS (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkWidgetClass, size_request),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__BOXED,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_REQUISITION | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /**
    * GtkWidget::size-allocate:
@@ -4441,6 +4360,11 @@ gtk_widget_queue_draw (GtkWidget *widget)
  * be called when a widget for some reason has a new size request.
  * For example, when you change the text in a #GtkLabel, #GtkLabel
  * queues a resize to ensure there's enough space for the new text.
+ *
+ * <note><para>You cannot call gtk_widget_queue_resize() on a widget
+ * from inside it's implementation of the GtkWidgetClass::size_allocate 
+ * virtual method. Calls to gtk_widget_queue_resize() from inside
+ * GtkWidgetClass::size_allocate will be silently ignored.</para></note>
  **/
 void
 gtk_widget_queue_resize (GtkWidget *widget)
@@ -4725,6 +4649,11 @@ gtk_widget_size_allocate (GtkWidget	*widget,
     return;
 
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
+
+  /* Size allocation is god... after consulting god, no further requests or allocations are needed */
+  priv->width_request_needed  = FALSE;
+  priv->height_request_needed = FALSE;
+  priv->alloc_needed          = FALSE;
 
   if (gtk_widget_get_mapped (widget))
     {
@@ -9924,14 +9853,6 @@ gtk_widget_real_unrealize (GtkWidget *widget)
   gtk_selection_remove_all (widget);
 
   gtk_widget_set_realized (widget, FALSE);
-}
-
-static void
-gtk_widget_real_size_request (GtkWidget         *widget,
-			      GtkRequisition    *requisition)
-{
-  requisition->width  = 0;
-  requisition->height = 0;
 }
 
 static void

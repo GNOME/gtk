@@ -257,7 +257,7 @@ gdk_drag_context_set_device (GdkDragContext *context,
  *
  * Returns the #GdkDevice associated to the drag context.
  *
- * Returns: The #GdkDevice associated to @context.
+ * Returns: (transfer none): The #GdkDevice associated to @context.
  **/
 GdkDevice *
 gdk_drag_context_get_device (GdkDragContext *context)
@@ -3162,7 +3162,7 @@ gdk_drag_do_leave (GdkDragContext *context, guint32 time)
  *
  * This function is called by the drag source.
  * 
- * Return value: a newly created #GdkDragContext.
+ * Return value: (transfer full): a newly created #GdkDragContext.
  **/
 GdkDragContext * 
 gdk_drag_begin (GdkWindow     *window,

@@ -274,17 +274,13 @@ gtk_box_class_init (GtkBoxClass *class)
    * GtkBox:fill:
    *
    * Whether the child should receive extra space when the parent grows.
-   *
-   * Note that the default value for this property is %FALSE for GtkBox,
-   * but #GtkHBox, #GtkVBox and other subclasses use the old default
-   * of %TRUE.
    */
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_FILL,
 					      g_param_spec_boolean ("fill",
 								    P_("Fill"),
 								    P_("Whether extra space given to the child should be allocated to the child or used as padding"),
-								    FALSE,
+								    TRUE,
 								    GTK_PARAM_READWRITE));
 
   gtk_container_class_install_child_property (container_class,
@@ -1648,7 +1644,7 @@ gtk_box_add (GtkContainer *container,
 
   gtk_box_pack_start (GTK_BOX (container), widget,
                       priv->default_expand,
-                      priv->default_expand,
+                      TRUE,
                       0);
 }
 

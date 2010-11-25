@@ -378,7 +378,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
           {
             GdkDevice *device = d->data;
 
-            if (device->source == GDK_SOURCE_KEYBOARD)
+            if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
               keyboard = device;
           }
 

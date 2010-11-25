@@ -45,28 +45,16 @@ G_BEGIN_DECLS
 #define GTK_IS_BUTTON_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_BUTTON))
 #define GTK_BUTTON_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_BUTTON, GtkButtonClass))
 
-typedef struct _GtkButton        GtkButton;
-typedef struct _GtkButtonClass   GtkButtonClass;
+typedef struct _GtkButton             GtkButton;
+typedef struct _GtkButtonPrivate      GtkButtonPrivate;
+typedef struct _GtkButtonClass        GtkButtonClass;
 
 struct _GtkButton
 {
+  /*< private >*/
   GtkBin bin;
 
-  GdkWindow *GSEAL (event_window);
-
-  gchar *GSEAL (label_text);
-
-  guint GSEAL (activate_timeout);
-
-  guint GSEAL (constructed) : 1;
-  guint GSEAL (in_button) : 1;
-  guint GSEAL (button_down) : 1;
-  guint GSEAL (relief) : 2;
-  guint GSEAL (use_underline) : 1;
-  guint GSEAL (use_stock) : 1;
-  guint GSEAL (depressed) : 1;
-  guint GSEAL (depress_on_activate) : 1;
-  guint GSEAL (focus_on_click) : 1;
+  GtkButtonPrivate *priv;
 };
 
 struct _GtkButtonClass

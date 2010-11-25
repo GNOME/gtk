@@ -101,7 +101,6 @@
 #include <gtk/gtkhbbox.h>
 #include <gtk/gtkhbox.h>
 #include <gtk/gtkhpaned.h>
-#include <gtk/gtkhruler.h>
 #include <gtk/gtkhscale.h>
 #include <gtk/gtkhscrollbar.h>
 #include <gtk/gtkhseparator.h>
@@ -155,7 +154,6 @@
 #include <gtk/gtkrecentchooserwidget.h>
 #include <gtk/gtkrecentfilter.h>
 #include <gtk/gtkrecentmanager.h>
-#include <gtk/gtkruler.h>
 #include <gtk/gtkscale.h>
 #include <gtk/gtkscalebutton.h>
 #include <gtk/gtkscrollable.h>
@@ -214,7 +212,6 @@
 #include <gtk/gtkviewport.h>
 #include <gtk/gtkvolumebutton.h>
 #include <gtk/gtkvpaned.h>
-#include <gtk/gtkvruler.h>
 #include <gtk/gtkvscale.h>
 #include <gtk/gtkvscrollbar.h>
 #include <gtk/gtkvseparator.h>

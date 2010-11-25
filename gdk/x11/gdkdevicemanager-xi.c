@@ -441,7 +441,7 @@ gdk_device_manager_xi_translate_event (GdkEventTranslator *translator,
       event->button.x_root = (gdouble) xdbe->x_root;
       event->button.y_root = (gdouble) xdbe->y_root;
 
-      event->button.axes = g_new0 (gdouble, device->num_axes);
+      event->button.axes = g_new0 (gdouble, gdk_device_get_n_axes (device));
       gdk_device_xi_update_axes (device, xdbe->axes_count,
                                  xdbe->first_axis, xdbe->axis_data);
       gdk_device_xi_translate_axes (device, window,
@@ -487,13 +487,15 @@ gdk_device_manager_xi_translate_event (GdkEventTranslator *translator,
 		 xdke->keycode));
 
       if (xdke->keycode < device_xi->min_keycode ||
-	  xdke->keycode >= device_xi->min_keycode + device->num_keys)
+	  xdke->keycode >= device_xi->min_keycode + gdk_device_get_n_keys (device))
 	{
 	  g_warning ("Invalid device key code received");
 	  return FALSE;
 	}
 
-      event->key.keyval = device->keys[xdke->keycode - device_xi->min_keycode].keyval;
+      gdk_device_get_key (device, xdke->keycode - device_xi->min_keycode,
+                          &event->key.keyval,
+                          &event->key.state);
 
       if (event->key.keyval == 0)
 	{
@@ -509,8 +511,7 @@ gdk_device_manager_xi_translate_event (GdkEventTranslator *translator,
       event->key.window = g_object_ref (window);
       event->key.time = xdke->time;
 
-      event->key.state = translate_state (xdke->state, xdke->device_state)
-	| device->keys[xdke->keycode - device_xi->min_keycode].modifiers;
+      event->key.state |= translate_state (xdke->state, xdke->device_state);
 
       /* Add a string translation for the key event */
       if ((event->key.keyval >= 0x20) && (event->key.keyval <= 0xFF))
@@ -552,7 +553,7 @@ gdk_device_manager_xi_translate_event (GdkEventTranslator *translator,
       event->motion.x_root = (gdouble) xdme->x_root;
       event->motion.y_root = (gdouble) xdme->y_root;
 
-      event->motion.axes = g_new0 (gdouble, device->num_axes);
+      event->motion.axes = g_new0 (gdouble, gdk_device_get_n_axes (device));
       gdk_device_xi_update_axes (device, xdme->axes_count,
                                  xdme->first_axis, xdme->axis_data);
       gdk_device_xi_translate_axes (device, window,
@@ -626,7 +627,7 @@ gdk_device_manager_xi_translate_event (GdkEventTranslator *translator,
       for (i = 0; i < xdse->num_classes; i++)
         {
           if (input_class->class == ValuatorClass)
-            gdk_device_xi_update_axes (device, device->num_axes, 0,
+            gdk_device_xi_update_axes (device, gdk_device_get_n_axes (device), 0,
                                        ((XValuatorState *)input_class)->valuators);
 
           input_class = (XInputClass *)(((char *)input_class)+input_class->length);

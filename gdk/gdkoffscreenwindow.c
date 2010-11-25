@@ -703,8 +703,8 @@ gdk_offscreen_window_set_embedder (GdkWindow     *window,
  *
  * Gets the window that @window is embedded in.
  *
- * Returns: the embedding #GdkWindow, or %NULL if @window is not an
- *     embedded offscreen window
+ * Returns: (transfer none): the embedding #GdkWindow, or %NULL
+ *     if @window is not an mbedded offscreen window
  *
  * Since: 2.18
  */

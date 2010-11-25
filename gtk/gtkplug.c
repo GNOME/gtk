@@ -663,7 +663,7 @@ gtk_plug_realize (GtkWidget *widget)
 
   attributes_mask = GDK_WA_VISUAL;
   attributes_mask |= (title ? GDK_WA_TITLE : 0);
-  attributes_mask |= (g_strdup (g_get_prgname ()) ? GDK_WA_WMCLASS : 0);
+  attributes_mask |= (wmclass_name ? GDK_WA_WMCLASS : 0);
 
   if (gtk_widget_is_toplevel (widget))
     {

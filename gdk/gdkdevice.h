@@ -35,9 +35,6 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDevice GdkDevice;
 typedef struct _GdkDevicePrivate GdkDevicePrivate;
-
-typedef struct _GdkDeviceKey GdkDeviceKey;
-typedef struct _GdkDeviceAxis GdkDeviceAxis;
 typedef struct _GdkTimeCoord GdkTimeCoord;
 
 /**
@@ -141,37 +138,6 @@ typedef enum {
   GDK_DEVICE_TYPE_FLOATING
 } GdkDeviceType;
 
-/**
- * GdkDeviceKey:
- * @keyval: the keyval to generate when the macro button is pressed.
- *          If this is 0, no keypress will be generated.
- * @modifiers: the modifiers set for the generated key event.
- *
- * The <structname>GdkDeviceKey</structname> structure contains information
- * about the mapping of one device macro button onto a normal X key event.
- */
-struct _GdkDeviceKey
-{
-  guint keyval;
-  GdkModifierType modifiers;
-};
-
-/**
- * GdkDeviceAxis:
- * @use: specifies how the axis is used.
- * @min: the minimal value that will be reported by this axis.
- * @max: the maximal value that will be reported by this axis.
- *
- * The <structname>GdkDeviceAxis</structname> structure contains information
- * about the range and mapping of a device axis.
- */
-struct _GdkDeviceAxis
-{
-  GdkAxisUse use;
-  gdouble    min;
-  gdouble    max;
-};
-
 /* We don't allocate each coordinate this big, but we use it to
  * be ANSI compliant and avoid accessing past the defined limits.
  */
@@ -194,18 +160,6 @@ struct _GdkDevice
 {
   GObject parent_instance;
 
-  /* All fields are read-only */
-  gchar *GSEAL (name);
-  GdkInputSource GSEAL (source);
-  GdkInputMode GSEAL (mode);
-  gboolean GSEAL (has_cursor);	     /* TRUE if a X pointer follows device motion */
-
-  gint GSEAL (num_axes);
-  GdkDeviceAxis *GSEAL (axes);
-
-  gint GSEAL (num_keys);
-  GdkDeviceKey *GSEAL (keys);
-
   /*< private >*/
   GdkDevicePrivate *priv;
 };
@@ -224,6 +178,7 @@ GdkInputMode   gdk_device_get_mode      (GdkDevice      *device);
 gboolean       gdk_device_set_mode      (GdkDevice      *device,
 					 GdkInputMode    mode);
 
+gint           gdk_device_get_n_keys    (GdkDevice       *device);
 gboolean       gdk_device_get_key       (GdkDevice       *device,
                                          guint            index_,
                                          guint           *keyval,
@@ -253,7 +208,7 @@ gboolean gdk_device_get_history  (GdkDevice         *device,
 void     gdk_device_free_history (GdkTimeCoord     **events,
 				  gint               n_events);
 
-guint    gdk_device_get_n_axes     (GdkDevice       *device);
+gint     gdk_device_get_n_axes     (GdkDevice       *device);
 GList *  gdk_device_list_axes      (GdkDevice       *device);
 gboolean gdk_device_get_axis_value (GdkDevice       *device,
                                     gdouble         *axes,
