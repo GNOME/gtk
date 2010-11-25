@@ -31,11 +31,6 @@
 
 G_BEGIN_DECLS
 
-#ifndef GDK_COMPILATION
-#define GDK_WINDOW_TYPE(d) (gdk_window_get_window_type (GDK_WINDOW (d)))
-#define GDK_WINDOW_DESTROYED(d) (gdk_window_is_destroyed (GDK_WINDOW (d)))
-#endif
-
 void gdk_window_destroy_notify	     (GdkWindow *window);
 
 void gdk_synthesize_window_state (GdkWindow     *window,
