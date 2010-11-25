@@ -236,6 +236,12 @@ start_input (HttpRequest *request)
 
   display_broadway = GDK_DISPLAY_BROADWAY (request->display);
 
+  if (display_broadway->input != NULL)
+    {
+      send_error (request, 409, "Input already handled");
+      return;
+    }
+
   lines = g_strsplit (request->request->str, "\n", 0);
 
   num_key1 = 0;
