@@ -184,10 +184,11 @@ got_input (GInputStream *stream,
   message = g_data_input_stream_read_upto_finish (G_DATA_INPUT_STREAM (stream), result, &len, &error);
   if (message == NULL)
     {
-      g_print (error->message);
-      g_error_free (error);
-      exit (1);
+      GDK_DISPLAY_BROADWAY (request->display)->input = NULL;
+      http_request_free (request);
+      return;
     }
+
   g_assert (message[0] == 0);
   _gdk_events_got_input (request->display, message + 1);
 
@@ -285,11 +286,11 @@ start_input (HttpRequest *request)
 	}
     }
 
-
   if (num_key1 != 1 || num_key2 != 1 || origin == NULL || host == NULL)
     {
-      g_print ("error");
-      exit (1);
+      g_strfreev (lines);
+      send_error (request, 400, "Bad websocket request");
+      return;
     }
 
   challenge[0] = (key1 >> 24) & 0xff;
@@ -303,8 +304,9 @@ start_input (HttpRequest *request)
 
   if (!g_input_stream_read_all (G_INPUT_STREAM (request->data), challenge+8, 8, NULL, NULL, NULL))
     {
-      g_print ("error");
-      exit (1);
+      g_strfreev (lines);
+      send_error (request, 400, "Bad websocket request");
+      return;
     }
 
   checksum = g_checksum_new (G_CHECKSUM_MD5);
@@ -333,6 +335,8 @@ start_input (HttpRequest *request)
 
   g_data_input_stream_read_upto_async (request->data, "\xff", 1, 0, NULL,
 				       (GAsyncReadyCallback)got_input, request);
+
+  g_strfreev (lines);
 }
 
 static void
