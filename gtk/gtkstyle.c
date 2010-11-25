@@ -59,6 +59,8 @@
  *
  * Usually applications should not need to use or modify the #GtkStyle of their
  * widgets.
+ *
+ * In GTK+ 3.0, GtkStyle has been deprecated and replaced by #GtkStyleContext.
  */
 
 
