@@ -321,6 +321,7 @@ function connect()
   } else {
      alert("WebSocket not supported, input will not work!");
   }
+  document.oncontextmenu = function () { return false; }
   document.onmousemove = on_mouse_move;
   document.onmousedown = on_mouse_down;
   document.onmouseup = on_mouse_up;
