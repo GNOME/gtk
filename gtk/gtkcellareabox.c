@@ -1284,8 +1284,7 @@ compute_size (GtkCellAreaBox        *box,
   for (i = 0; i < priv->groups->len; i++)
     {
       CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
-      gint       group_min_size = 0;
-      gint       group_nat_size = 0;
+      gint       group_min = 0, group_nat = 0;
 
       for (list = group->cells; list; list = list->next)
 	{
@@ -1305,42 +1304,33 @@ compute_size (GtkCellAreaBox        *box,
 		  min_size += priv->spacing;
 		  nat_size += priv->spacing;
 		}
-	      
-	      if (group_min_size > 0)
+
+	      if (group_min > 0)
 		{
-		  group_min_size += priv->spacing;
-		  group_nat_size += priv->spacing;
+		  group_min += priv->spacing;
+		  group_nat += priv->spacing;
 		}
-	      
-	      min_size       += renderer_min_size;
-	      nat_size       += renderer_nat_size;
-	      group_min_size += renderer_min_size;
-	      group_nat_size += renderer_nat_size;
+
+	      min_size  += renderer_min_size;
+	      nat_size  += renderer_nat_size;
+	      group_min += renderer_min_size;
+	      group_nat += renderer_nat_size;
 	    }
 	  else
 	    {
-	      min_size       = MAX (min_size, renderer_min_size);
-	      nat_size       = MAX (nat_size, renderer_nat_size);
-	      group_min_size = MAX (group_min_size, renderer_min_size);
-	      group_nat_size = MAX (group_nat_size, renderer_nat_size);
+	      min_size  = MAX (min_size, renderer_min_size);
+	      nat_size  = MAX (nat_size, renderer_nat_size);
+	      group_min = MAX (group_min, renderer_min_size);
+	      group_nat = MAX (group_nat, renderer_nat_size);
 	    }
 	}
 
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (for_size < 0)
 	{
-	  if (for_size < 0)
-	    gtk_cell_area_box_context_push_group_width (context, group->id, group_min_size, group_nat_size);
+	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	    gtk_cell_area_box_context_push_group_width (context, group->id, group_min, group_nat);
 	  else
-	    gtk_cell_area_box_context_push_group_width_for_height (context, group->id, for_size,
-								   group_min_size, group_nat_size);
-	}
-      else
-	{
-	  if (for_size < 0)
-	    gtk_cell_area_box_context_push_group_height (context, group->id, group_min_size, group_nat_size);
-	  else
-	    gtk_cell_area_box_context_push_group_height_for_width (context, group->id, for_size,
-								   group_min_size, group_nat_size);
+	    gtk_cell_area_box_context_push_group_height (context, group->id, group_min, group_nat);
 	}
     }
 
@@ -1529,17 +1519,6 @@ compute_size_for_opposing_orientation (GtkCellAreaBox        *box,
 
       min_size = MAX (min_size, group_min);
       nat_size = MAX (nat_size, group_nat);
-
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	{
-	  gtk_cell_area_box_context_push_group_height_for_width (context, group_idx, for_size,
-								 group_min, group_nat);
-	}
-      else
-	{
-	  gtk_cell_area_box_context_push_group_width_for_height (context, group_idx, for_size,
-								 group_min, group_nat);
-	}
     }
 
   *minimum_size = min_size;

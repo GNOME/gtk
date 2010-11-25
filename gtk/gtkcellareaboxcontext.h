@@ -72,47 +72,20 @@ void    gtk_cell_area_box_context_push_group_width             (GtkCellAreaBoxCo
 								gint                   group_idx,
 								gint                   minimum_width,
 								gint                   natural_width);
-
-void    gtk_cell_area_box_context_push_group_height_for_width  (GtkCellAreaBoxContext *box_context,
-								gint                   group_idx,
-								gint                   for_width,
-								gint                   minimum_height,
-								gint                   natural_height);
-
 void    gtk_cell_area_box_context_push_group_height            (GtkCellAreaBoxContext *box_context,
 								gint                   group_idx,
 								gint                   minimum_height,
 								gint                   natural_height);
-
-void    gtk_cell_area_box_context_push_group_width_for_height  (GtkCellAreaBoxContext *box_context,
-								gint                   group_idx,
-								gint                   for_height,
-								gint                   minimum_width,
-								gint                   natural_width);
 
 /* Fetch cell-group sizes */
 void    gtk_cell_area_box_context_get_group_width              (GtkCellAreaBoxContext *box_context,
 								gint                   group_idx,
 								gint                  *minimum_width,
 								gint                  *natural_width);
-
-void    gtk_cell_area_box_context_get_group_height_for_width   (GtkCellAreaBoxContext *box_context,
-								gint                   group_idx,
-								gint                   for_width,
-								gint                  *minimum_height,
-								gint                  *natural_height);
-
 void    gtk_cell_area_box_context_get_group_height             (GtkCellAreaBoxContext *box_context,
 								gint                   group_idx,
 								gint                  *minimum_height,
 								gint                  *natural_height);
-
-void    gtk_cell_area_box_context_get_group_width_for_height   (GtkCellAreaBoxContext *box_context,
-								gint                   group_idx,
-								gint                   for_height,
-								gint                  *minimum_width,
-								gint                  *natural_width);
-
 GtkRequestedSize *gtk_cell_area_box_context_get_widths         (GtkCellAreaBoxContext *box_context,
 								gint                  *n_widths);
 GtkRequestedSize *gtk_cell_area_box_context_get_heights        (GtkCellAreaBoxContext *box_context,
