@@ -293,6 +293,31 @@ function on_mouse_up (ev) {
   send_input ("B", [get_surface_id(ev), ev.pageX, ev.pageY, ev.button, ev.timeStamp])
 }
 
+function cancel_event(ev)
+{
+  ev = ev ? ev : window.event;
+  if (ev.stopPropagation)
+    ev.stopPropagation();
+  if (ev.preventDefault)
+    ev.preventDefault();
+  ev.cancelBubble = true;
+  ev.cancel = true;
+  ev.returnValue = false;
+  return false;
+}
+
+function on_mouse_wheel(ev)
+{
+  ev = ev ? ev : window.event;
+  var offset = ev.detail ? ev.detail : ev.wheelDelta;
+  var dir = 0
+  if (offset > 0)
+    dir = 1;
+  send_input ("s", [get_surface_id(ev), ev.pageX, ev.pageY, dir, ev.timeStamp])
+
+  return cancel_event(ev);
+}
+
 function connect()
 {
   var xhr = createXHR();
@@ -325,4 +350,12 @@ function connect()
   document.onmousemove = on_mouse_move;
   document.onmousedown = on_mouse_down;
   document.onmouseup = on_mouse_up;
+
+  if (document.addEventListener) {
+    document.addEventListener('DOMMouseScroll', on_mouse_wheel, false);
+    document.addEventListener('mousewheel', on_mouse_wheel, false);
+  } else if (document.attachEvent) {
+    element.attachEvent("onmousewheel", on_mouse_wheel);
+  }
+
 }
