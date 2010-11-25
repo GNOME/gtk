@@ -1760,8 +1760,11 @@ gtk_menu_popdown (GtkMenu *menu)
   
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
-  gtk_widget_hide (menu->toplevel);
-  gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel), NULL);
+  if (menu->toplevel)
+    {
+      gtk_widget_hide (menu->toplevel);
+      gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel), NULL);
+    }
 
   pointer = _gtk_menu_shell_get_grab_device (menu_shell);
 

@@ -153,6 +153,7 @@ static void gtk_menu_shell_get_property      (GObject           *object,
                                               GParamSpec        *pspec);
 static void gtk_menu_shell_realize           (GtkWidget         *widget);
 static void gtk_menu_shell_finalize          (GObject           *object);
+static void gtk_menu_shell_dispose           (GObject           *object);
 static gint gtk_menu_shell_button_press      (GtkWidget         *widget,
 					      GdkEventButton    *event);
 static gint gtk_menu_shell_button_release    (GtkWidget         *widget,
@@ -222,6 +223,7 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   object_class->set_property = gtk_menu_shell_set_property;
   object_class->get_property = gtk_menu_shell_get_property;
   object_class->finalize = gtk_menu_shell_finalize;
+  object_class->dispose = gtk_menu_shell_dispose;
 
   widget_class->realize = gtk_menu_shell_realize;
   widget_class->button_press_event = gtk_menu_shell_button_press;
@@ -462,6 +464,16 @@ gtk_menu_shell_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_menu_shell_parent_class)->finalize (object);
 }
 
+
+static void 
+gtk_menu_shell_dispose (GObject           *object)
+{
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL (object);
+
+  gtk_menu_shell_deactivate (menu_shell);
+
+  G_OBJECT_CLASS (gtk_menu_shell_parent_class)->dispose (object);
+}
 
 void
 gtk_menu_shell_append (GtkMenuShell *menu_shell,
