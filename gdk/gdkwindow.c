@@ -718,7 +718,7 @@ remove_child_area (GdkWindow *private,
 	}
       else if (private->window_type == GDK_WINDOW_FOREIGN)
 	{
-	  shape = _gdk_windowing_window_get_shape ((GdkWindow *)child);
+	  shape = GDK_WINDOW_IMPL_GET_CLASS (child)->get_shape (child);
 	  if (shape)
 	    {
 	      cairo_region_intersect (child_region, shape);
@@ -732,7 +732,7 @@ remove_child_area (GdkWindow *private,
 	    cairo_region_intersect (child_region, child->input_shape);
 	  else if (private->window_type == GDK_WINDOW_FOREIGN)
 	    {
-	      shape = _gdk_windowing_window_get_input_shape ((GdkWindow *)child);
+	      shape = GDK_WINDOW_IMPL_GET_CLASS (child)->get_input_shape (child);
 	      if (shape)
 		{
 		  cairo_region_intersect (child_region, shape);

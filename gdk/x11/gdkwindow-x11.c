@@ -4570,8 +4570,8 @@ _xwindow_get_shape (Display *xdisplay,
 }
 
 
-cairo_region_t *
-_gdk_windowing_window_get_shape (GdkWindow *window)
+static cairo_region_t *
+gdk_x11_window_get_shape (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
@@ -4581,8 +4581,8 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
   return NULL;
 }
 
-cairo_region_t *
-_gdk_windowing_window_get_input_shape (GdkWindow *window)
+static cairo_region_t *
+gdk_x11_window_get_input_shape (GdkWindow *window)
 {
 #if defined(ShapeInput)
   if (!GDK_WINDOW_DESTROYED (window) &&
@@ -5589,5 +5589,7 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->translate = _gdk_x11_window_translate;
   impl_class->destroy = _gdk_x11_window_destroy;
   impl_class->resize_cairo_surface = gdk_window_x11_resize_cairo_surface;
+  impl_class->get_shape = gdk_x11_window_get_shape;
+  impl_class->get_input_shape = gdk_x11_window_get_input_shape;
 }
 

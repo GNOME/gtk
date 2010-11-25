@@ -2954,15 +2954,15 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
 }
 
-cairo_region_t *
-_gdk_windowing_window_get_shape (GdkWindow *window)
+static cairo_region_t *
+gdk_quartz_window_get_shape (GdkWindow *window)
 {
   /* FIXME: implement */
   return NULL;
 }
 
-cairo_region_t *
-_gdk_windowing_window_get_input_shape (GdkWindow *window)
+static cairo_region_t *
+gdk_quartz_window_get_input_shape (GdkWindow *window)
 {
   /* FIXME: implement */
   return NULL;
@@ -2993,6 +2993,8 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->translate = _gdk_quartz_window_translate;
   iface->destroy = _gdk_quartz_window_destroy;
   iface->resize_cairo_surface = gdk_window_quartz_resize_cairo_surface;
+  iface->get_shape = gdk_quartz_window_get_shape;
+  iface->get_input_shape = gdk_quartz_window_get_input_shape;
 }
 
 

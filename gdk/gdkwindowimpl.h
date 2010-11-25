@@ -104,6 +104,8 @@ struct _GdkWindowImplClass
                                          gint            *y,
                                          GdkModifierType *mask);
 
+  cairo_region_t * (* get_shape)        (GdkWindow       *window);
+  cairo_region_t * (* get_input_shape)  (GdkWindow       *window);
   void         (* shape_combine_region) (GdkWindow       *window,
                                          const cairo_region_t *shape_region,
                                          gint             offset_x,
