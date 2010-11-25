@@ -46,10 +46,10 @@ query_tooltip_custom_cb (GtkWidget  *widget,
 			 GtkTooltip *tooltip,
 			 gpointer    data)
 {
-  GdkColor color = { 0, 0, 65535 };
+  GdkRGBA color = { 0, 0, 1, 1 };
   GtkWindow *window = gtk_widget_get_tooltip_window (widget);
 
-  gtk_widget_modify_bg (GTK_WIDGET (window), GTK_STATE_NORMAL, &color);
+  gtk_widget_override_background_color (GTK_WIDGET (window), 0, &color);
 
   return TRUE;
 }
