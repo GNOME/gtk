@@ -43,6 +43,8 @@ typedef struct _GdkDisplayBroadwayClass GdkDisplayBroadwayClass;
 #define GDK_IS_DISPLAY_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_BROADWAY))
 #define GDK_DISPLAY_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_BROADWAY, GdkDisplayBroadwayClass))
 
+typedef  struct HttpRequest HttpRequest;
+
 struct _GdkDisplayBroadway
 {
   GdkDisplay parent_instance;
@@ -81,6 +83,7 @@ struct _GdkDisplayBroadway
 
   GSocketService *service;
   BroadwayOutput *output;
+  HttpRequest *input;
 };
 
 struct _GdkDisplayBroadwayClass

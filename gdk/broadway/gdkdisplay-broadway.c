@@ -123,12 +123,12 @@ _gdk_input_init (GdkDisplay *display)
   g_list_free (list);
 }
 
-typedef struct {
+struct HttpRequest {
   GdkDisplay *display;
   GSocketConnection *connection;
   GDataInputStream *data;
   GString *request;
-} HttpRequest;
+};
 
 static void
 http_request_free (HttpRequest *request)
@@ -211,6 +211,9 @@ start_input (HttpRequest *request)
   gsize len;
   GChecksum *checksum;
   char *origin, *host;
+  GdkDisplayBroadway *display_broadway;
+
+  display_broadway = GDK_DISPLAY_BROADWAY (request->display);
 
   lines = g_strsplit (request->request->str, "\n", 0);
 
@@ -305,6 +308,8 @@ start_input (HttpRequest *request)
   g_free (res);
   g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
 			     challenge, 16, NULL, NULL, NULL);
+
+  display_broadway->input = request;
 
   g_data_input_stream_read_upto_async (request->data, "\xff", 1, 0, NULL,
 				       (GAsyncReadyCallback)got_input, request);
