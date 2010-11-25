@@ -281,18 +281,18 @@ G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,
 static void
 mask_entry_set_background (MaskEntry *entry)
 {
-  static const GdkColor error_color = { 0, 65535, 60000, 60000 };
+  static const GdkRGBA error_color = { 1.0, 0.9, 0.9, 1.0 };
 
   if (entry->mask)
     {
       if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
 	{
-	  gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
+	  gtk_widget_override_color (GTK_WIDGET (entry), 0, &error_color);
 	  return;
 	}
     }
 
-  gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, NULL);
+  gtk_widget_override_color (GTK_WIDGET (entry), 0, NULL);
 }
 
 

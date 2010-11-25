@@ -751,7 +751,7 @@ create_text (GtkTextBuffer **buffer,
   if (is_source)
     {
       font_desc = pango_font_description_from_string ("monospace");
-      gtk_widget_modify_font (text_view, font_desc);
+      gtk_widget_override_font (text_view, font_desc);
       pango_font_description_free (font_desc);
 
       gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view),
