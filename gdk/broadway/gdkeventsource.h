@@ -29,13 +29,6 @@ typedef struct _GdkEventSource GdkEventSource;
 G_GNUC_INTERNAL
 GSource * gdk_event_source_new            (GdkDisplay *display);
 
-G_GNUC_INTERNAL
-void      gdk_event_source_select_events  (GdkEventSource *source,
-                                           Window          window,
-                                           GdkEventMask    event_mask,
-                                           unsigned int    extra_x_mask);
-
-
 G_END_DECLS
 
 #endif /* __GDK_EVENT_SOURCE_H__ */

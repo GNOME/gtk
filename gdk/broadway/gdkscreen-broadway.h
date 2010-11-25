@@ -72,14 +72,8 @@ struct _GdkScreenBroadwayClass
 
 GType       _gdk_screen_broadway_get_type (void);
 GdkScreen * _gdk_broadway_screen_new      (GdkDisplay *display,
-				      gint	  screen_number);
-
+					   gint	  screen_number);
 void _gdk_broadway_screen_setup                  (GdkScreen *screen);
-void _gdk_broadway_screen_window_manager_changed (GdkScreen *screen);
-void _gdk_broadway_screen_size_changed           (GdkScreen *screen,
-					     XEvent    *event);
-void _gdk_broadway_screen_process_owner_change   (GdkScreen *screen,
-					     XEvent    *event);
 
 G_END_DECLS
 

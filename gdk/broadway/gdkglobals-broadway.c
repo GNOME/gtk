@@ -31,5 +31,3 @@
 
 #include <stdio.h>
 
-GdkAtom           _gdk_selection_property;
-gboolean          _gdk_synchronize = FALSE;

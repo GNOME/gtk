@@ -295,14 +295,6 @@ gdk_event_source_new (GdkDisplay *display)
   return source;
 }
 
-void
-gdk_event_source_select_events (GdkEventSource *source,
-                                Window          window,
-                                GdkEventMask    event_mask,
-                                unsigned int    extra_x_mask)
-{
-}
-
 gboolean
 gdk_events_pending (void)
 {
