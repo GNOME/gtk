@@ -198,6 +198,26 @@ got_input (GInputStream *stream,
 }
 
 static void
+send_error (HttpRequest *request,
+	    int error_code,
+	    const char *reason)
+{
+  char *res;
+
+  res = g_strdup_printf ("HTTP/1.0 %d %s\r\n\r\n"
+			 "<html><head><title>%d %s</title></head>"
+			 "<body>%s</body></html>",
+			 error_code, reason,
+			 error_code, reason,
+			 reason);
+  /* TODO: This should really be async */
+  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+			     res, strlen (res), NULL, NULL, NULL);
+  g_free (res);
+  http_request_free (request);
+}
+
+static void
 start_input (HttpRequest *request)
 {
   char **lines;
@@ -330,26 +350,6 @@ start_output (HttpRequest *request)
   /* We dup this because otherwise it'll be closed with the request SocketConnection */
   display_broadway->output = broadway_output_new (dup(fd));
   _gdk_broadway_resync_windows ();
-  http_request_free (request);
-}
-
-static void
-send_error (HttpRequest *request,
-	    int error_code,
-	    const char *reason)
-{
-  char *res;
-
-  res = g_strdup_printf ("HTTP/1.0 %d %s\r\n\r\n"
-			 "<html><head><title>%d %s</title></head>"
-			 "<body>%s</body></html>",
-			 error_code, reason,
-			 error_code, reason,
-			 reason);
-  /* TODO: This should really be async */
-  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-			     res, strlen (res), NULL, NULL, NULL);
-  g_free (res);
   http_request_free (request);
 }
 
