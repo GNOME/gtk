@@ -96,7 +96,7 @@ _gdk_events_got_input (GdkDisplay *display,
   GdkScreen *screen;
   GdkWindow *root, *window;
   char *p;
-  int x, y, button, id;
+  int x, y, button, id, dir,key;
   guint64 time;
   GdkEvent *event = NULL;
   char cmd;
@@ -220,6 +220,60 @@ _gdk_events_got_input (GdkDisplay *display,
 	event->button.x_root = x;
 	event->button.y_root = y;
 	event->button.button = button + 1;
+	gdk_event_set_device (event, display->core_pointer);
+
+	node = _gdk_event_queue_append (display, event);
+	_gdk_windowing_got_event (display, node, event, 0);
+      }
+
+    break;
+  case 's':
+    id = strtol(p, &p, 10);
+    p++; /* Skip , */
+    x = strtol(p, &p, 10);
+    p++; /* Skip , */
+    y = strtol(p, &p, 10);
+    p++; /* Skip , */
+    dir = strtol(p, &p, 10);
+    p++; /* Skip , */
+    time = strtol(p, &p, 10);
+    display_broadway->last_x = x;
+    display_broadway->last_y = y;
+
+    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (id));
+
+    if (window)
+      {
+	event = gdk_event_new (GDK_SCROLL);
+	event->scroll.window = g_object_ref (window);
+	event->scroll.time = time;
+	event->scroll.x = x - GDK_WINDOW_OBJECT (window)->x;
+	event->scroll.y = y - GDK_WINDOW_OBJECT (window)->y;
+	event->scroll.x_root = x;
+	event->scroll.y_root = y;
+	event->scroll.direction = dir == 0 ? GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+	gdk_event_set_device (event, display->core_pointer);
+
+	node = _gdk_event_queue_append (display, event);
+	_gdk_windowing_got_event (display, node, event, 0);
+      }
+
+    break;
+  case 'k':
+  case 'K':
+    key = strtol(p, &p, 10);
+    p++; /* Skip , */
+    time = strtol(p, &p, 10);
+
+    window = display_broadway->mouse_in_toplevel;
+
+    if (window)
+      {
+	event = gdk_event_new (cmd == 'k' ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+	event->key.window = g_object_ref (window);
+	event->key.time = time;
+	event->key.keyval = key;
+	event->key.length = 0;
 	gdk_event_set_device (event, display->core_pointer);
 
 	node = _gdk_event_queue_append (display, event);

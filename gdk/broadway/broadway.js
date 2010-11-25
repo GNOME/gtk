@@ -293,6 +293,21 @@ function on_mouse_up (ev) {
   send_input ("B", [get_surface_id(ev), ev.pageX, ev.pageY, ev.button, ev.timeStamp])
 }
 
+var last_key_down = 0;
+function on_key_down (ev) {
+  var key_code = ev.keyCode;
+  if (key_code != last_key_down) {
+    send_input ("k", [key_code, ev.timeStamp]);
+    last_key_down = key_code;
+  }
+}
+
+function on_key_up (ev) {
+  var key_code = ev.keyCode;
+  send_input ("K", [key_code, ev.timeStamp]);
+  last_key_down = 0;
+}
+
 function cancel_event(ev)
 {
   ev = ev ? ev : window.event;
@@ -350,6 +365,8 @@ function connect()
   document.onmousemove = on_mouse_move;
   document.onmousedown = on_mouse_down;
   document.onmouseup = on_mouse_up;
+  document.onkeydown = on_key_down;
+  document.onkeyup = on_key_up;
 
   if (document.addEventListener) {
     document.addEventListener('DOMMouseScroll', on_mouse_wheel, false);
