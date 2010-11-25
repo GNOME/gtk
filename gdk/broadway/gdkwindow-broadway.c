@@ -514,7 +514,6 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 {
   GdkWindowObject *private = (GdkWindowObject *) window;;
   GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
-  GdkDrawableImplBroadway *drawable = GDK_DRAWABLE_IMPL_BROADWAY (impl);
   GdkDisplayBroadway *display_broadway;
   gboolean changed;
 
