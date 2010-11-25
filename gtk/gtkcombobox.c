@@ -5495,7 +5495,7 @@ gtk_combo_box_remove_text (GtkComboBox *combo_box,
  * gtk_combo_box_text_get_active_text() instead. Or if you used this with a
  * #GtkComboBoxEntry then you should now use #GtkComboBox with 
  * #GtkComboBox:has-entry as %TRUE and use
- * gtk_label_get_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (combobox))).
+ * gtk_entry_get_text (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (combobox))).
  */
 gchar *
 gtk_combo_box_get_active_text (GtkComboBox *combo_box)
