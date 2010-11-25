@@ -266,6 +266,13 @@ gdk_window_impl_broadway_finalize (GObject *object)
   wrapper = (GdkWindowObject*) draw_impl->wrapper;
 
   display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (draw_impl->wrapper));
+
+  if (display_broadway->mouse_in_toplevel == GDK_WINDOW (wrapper))
+    {
+      /* TODO: Send leave + enter event, update cursors, etc */
+      display_broadway->mouse_in_toplevel = NULL;
+    }
+
   g_hash_table_remove (display_broadway->id_ht, GINT_TO_POINTER(window_impl->id));
 
   if (window_impl->cursor)
@@ -493,6 +500,12 @@ gdk_window_broadway_hide (GdkWindow *window)
     {
       broadway_output_hide_surface (display_broadway->output, impl->id);
       queue_dirty_flush (display_broadway);
+    }
+
+  if (display_broadway->mouse_in_toplevel == window)
+    {
+      /* TODO: Send leave + enter event, update cursors, etc */
+      display_broadway->mouse_in_toplevel = NULL;
     }
 
   _gdk_window_clear_update_area (window);
