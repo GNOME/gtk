@@ -3273,7 +3273,7 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
                                          GError          **error)
 {
   GdkPixbuf *pixbuf;
-  GdkRGBA *color;
+  GdkRGBA *color = NULL;
   gchar *css_fg, *css_success;
   gchar *css_warning, *css_error;
 
@@ -3348,6 +3348,8 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
  * Return value: (transfer full): a #GdkPixbuf representing the loaded icon
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.0: Use gtk_icon_info_load_symbolic_for_context() instead
  **/
 GdkPixbuf *
 gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,

@@ -1469,15 +1469,15 @@ ensure_pixbuf_for_icon_name (GtkImage     *image,
                                          MIN (width, height), flags);
       if (info)
         {
-          GtkStyle *style;
+          GtkStyleContext *context;
           gboolean was_symbolic;
 
-          style = gtk_widget_get_style (GTK_WIDGET (image));
+          context = gtk_widget_get_style_context (GTK_WIDGET (image));
           priv->data.name.pixbuf =
-            gtk_icon_info_load_symbolic_for_style (info,
-                                                   style, state,
-                                                   &was_symbolic,
-                                                   NULL);
+            gtk_icon_info_load_symbolic_for_context (info,
+                                                     context,
+                                                     &was_symbolic,
+                                                     NULL);
           priv->was_symbolic = was_symbolic;
           gtk_icon_info_free (info);
         }
@@ -1544,15 +1544,15 @@ ensure_pixbuf_for_gicon (GtkImage     *image,
 					     MIN (width, height), flags);
       if (info)
         {
-          GtkStyle *style;
+          GtkStyleContext *context;
           gboolean was_symbolic;
 
-          style = gtk_widget_get_style (GTK_WIDGET (image));
+          context = gtk_widget_get_style_context (GTK_WIDGET (image));
           priv->data.gicon.pixbuf =
-            gtk_icon_info_load_symbolic_for_style (info,
-                                                   style, state,
-                                                   &was_symbolic,
-                                                   NULL);
+            gtk_icon_info_load_symbolic_for_context (info,
+                                                     context,
+                                                     &was_symbolic,
+                                                     NULL);
           priv->was_symbolic = was_symbolic;
           gtk_icon_info_free (info);
         }
