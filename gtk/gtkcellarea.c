@@ -2575,7 +2575,7 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 	  gtk_cell_area_set_edited_cell (area, renderer);
 	  gtk_cell_area_set_edit_widget (area, editable_widget);
 
-	  gtk_cell_area_aligned_cell_area (area, widget, renderer, &inner_area, &edit_area);
+	  gtk_cell_renderer_get_aligned_area (renderer, widget, flags, &inner_area, &edit_area);
 	  
 	  /* Signal that editing started so that callers can get 
 	   * a handle on the editable_widget */
@@ -2670,55 +2670,6 @@ gtk_cell_area_inner_cell_area (GtkCellArea        *area,
   inner_area->width  -= focus_line_width * 2;
   inner_area->y      += focus_line_width;
   inner_area->height -= focus_line_width * 2;
-}
-
-void
-gtk_cell_area_aligned_cell_area (GtkCellArea        *area,
-				 GtkWidget          *widget,
-				 GtkCellRenderer    *renderer,
-				 const GdkRectangle *cell_area,
-				 GdkRectangle       *aligned_area)
-{
-  GtkCellAreaPrivate *priv;
-  gint                opposite_size, x_offset, y_offset;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-  g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (cell_area != NULL);
-  g_return_if_fail (aligned_area != NULL);
-
-  priv = area->priv;
-
-  *aligned_area = *cell_area;
-
-  /* Trim up the aligned size */
-  if (gtk_cell_renderer_get_request_mode (renderer) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
-    {
-      gtk_cell_renderer_get_preferred_height_for_width (renderer, widget, 
-							aligned_area->width, 
-							NULL, &opposite_size);
-
-      aligned_area->height = MIN (opposite_size, aligned_area->height);
-    }
-  else
-    {
-      gtk_cell_renderer_get_preferred_width_for_height (renderer, widget, 
-							aligned_area->height, 
-							NULL, &opposite_size);
-
-      aligned_area->width = MIN (opposite_size, aligned_area->width);
-    }
-
-  /* offset the cell position */
-  _gtk_cell_renderer_calc_offset (renderer, cell_area, 
-				  gtk_widget_get_direction (widget),
-				  aligned_area->width, 
-				  aligned_area->height,
-				  &x_offset, &y_offset);
-
-  aligned_area->x += x_offset;
-  aligned_area->y += y_offset;
 }
 
 void

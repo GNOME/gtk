@@ -333,14 +333,6 @@ void                  gtk_cell_area_inner_cell_area                (GtkCellArea 
 								    const GdkRectangle *cell_area,
 								    GdkRectangle       *inner_area);
 
-/* Aligns a cell renderer into cell_area by requesting it's size ... used for focus and cell edit areas */
-void                  gtk_cell_area_aligned_cell_area              (GtkCellArea        *area,
-								    GtkWidget          *widget,
-								    GtkCellRenderer    *renderer,
-								    const GdkRectangle *cell_area,
-								    GdkRectangle       *aligned_area);
-
-
 /* Request the size of a cell while respecting the cell margins (requests are margin inclusive) */
 void                  gtk_cell_area_request_renderer               (GtkCellArea        *area,
 								    GtkCellRenderer    *renderer,

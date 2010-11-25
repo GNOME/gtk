@@ -111,6 +111,11 @@ struct _GtkCellRendererClass
                                                           gint                  height,
                                                           gint                 *minimum_width,
                                                           gint                 *natural_width);
+  void               (* get_aligned_area)                (GtkCellRenderer      *cell,
+                                                          GtkWidget            *widget,
+							  GtkCellRendererState  flags,
+                                                          const GdkRectangle   *cell_area,
+                                                          GdkRectangle         *aligned_area);
   void               (* get_size)                        (GtkCellRenderer      *cell,
                                                           GtkWidget            *widget,
                                                           const GdkRectangle   *cell_area,
@@ -177,6 +182,12 @@ void               gtk_cell_renderer_get_preferred_size             (GtkCellRend
                                                                      GtkWidget          *widget,
                                                                      GtkRequisition     *minimum_size,
                                                                      GtkRequisition     *natural_size);
+void               gtk_cell_renderer_get_aligned_area               (GtkCellRenderer    *cell,
+								     GtkWidget          *widget,
+								     GtkCellRendererState flags,
+								     const GdkRectangle *cell_area,
+								     GdkRectangle       *aligned_area);
+
 #ifndef GTK_DISABLE_DEPRECATED
 void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
 						   GtkWidget            *widget,

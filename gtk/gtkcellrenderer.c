@@ -97,7 +97,11 @@ static void gtk_cell_renderer_real_get_preferred_width_for_height(GtkCellRendere
                                                                   gint                     height,
                                                                   gint                    *minimum_width,
                                                                   gint                    *natural_width);
-
+static void gtk_cell_renderer_real_get_aligned_area              (GtkCellRenderer         *cell,
+								  GtkWidget               *widget,
+								  GtkCellRendererState     flags,
+								  const GdkRectangle      *cell_area,
+								  GdkRectangle            *aligned_area);
 
 
 struct _GtkCellRendererPrivate
@@ -192,6 +196,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
   class->get_preferred_height           = gtk_cell_renderer_real_get_preferred_height;
   class->get_preferred_width_for_height = gtk_cell_renderer_real_get_preferred_width_for_height;
   class->get_preferred_height_for_width = gtk_cell_renderer_real_get_preferred_height_for_width;
+  class->get_aligned_area               = gtk_cell_renderer_real_get_aligned_area;
 
   /**
    * GtkCellRenderer::editing-canceled:
@@ -1236,6 +1241,67 @@ gtk_cell_renderer_real_get_preferred_width_for_height (GtkCellRenderer *cell,
   gtk_cell_renderer_get_preferred_width (cell, widget, minimum_width, natural_width);
 }
 
+
+/* Default implementation assumes that a cell renderer will never use more
+ * space than it's natural size (this is fine for toggles and pixbufs etc
+ * but needs to be overridden from wrapping/ellipsizing text renderers) */
+static void
+gtk_cell_renderer_real_get_aligned_area (GtkCellRenderer         *cell,
+					 GtkWidget               *widget,
+					 GtkCellRendererState     flags,
+					 const GdkRectangle      *cell_area,
+					 GdkRectangle            *aligned_area)
+{
+  gint opposite_size, x_offset, y_offset;
+  gint natural_size;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cell_area != NULL);
+  g_return_if_fail (aligned_area != NULL);
+
+  *aligned_area = *cell_area;
+
+  /* Trim up the aligned size */
+  if (gtk_cell_renderer_get_request_mode (cell) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
+    {
+      gtk_cell_renderer_get_preferred_width (cell, widget, 
+					     NULL, &natural_size);
+
+      aligned_area->width = MIN (aligned_area->width, natural_size);
+
+      gtk_cell_renderer_get_preferred_height_for_width (cell, widget, 
+							aligned_area->width, 
+							NULL, &opposite_size);
+
+      aligned_area->height = MIN (opposite_size, aligned_area->height);
+    }
+  else
+    {
+      gtk_cell_renderer_get_preferred_height (cell, widget, 
+					      NULL, &natural_size);
+
+      aligned_area->height = MIN (aligned_area->width, natural_size);
+
+      gtk_cell_renderer_get_preferred_width_for_height (cell, widget, 
+							aligned_area->height, 
+							NULL, &opposite_size);
+
+      aligned_area->width = MIN (opposite_size, aligned_area->width);
+    }
+
+  /* offset the cell position */
+  _gtk_cell_renderer_calc_offset (cell, cell_area, 
+				  gtk_widget_get_direction (widget),
+				  aligned_area->width, 
+				  aligned_area->height,
+				  &x_offset, &y_offset);
+
+  aligned_area->x += x_offset;
+  aligned_area->y += y_offset;
+}
+
+
 /* An internal convenience function for some containers to peek at the
  * cell alignment in a target allocation (used to draw focus and align
  * cells in the icon view).
@@ -1560,4 +1626,36 @@ gtk_cell_renderer_get_preferred_size (GtkCellRenderer *cell,
                                                             NULL, &natural_size->width);
 	}
     }
+}
+
+/**
+ * gtk_cell_renderer_get_aligned_area:
+ * @cell: a #GtkCellRenderer instance
+ * @widget: the #GtkWidget this cell will be rendering to
+ * @flags: render flags
+ * @cell_area: cell area which would be passed to gtk_cell_renderer_render()
+ * @aligned_area: the return location for the space inside @cell_area that
+ *                would acually be used to render.
+ *
+ * Gets the aligned area used by @cell inside @cell_area. Used for finding
+ * the appropriate edit and focus rectangle.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_renderer_get_aligned_area (GtkCellRenderer      *cell,
+				    GtkWidget            *widget,
+				    GtkCellRendererState  flags,
+				    const GdkRectangle   *cell_area,
+				    GdkRectangle         *aligned_area)
+{
+  GtkCellRendererClass *klass;
+
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (cell_area != NULL);
+  g_return_if_fail (aligned_area != NULL);
+
+  klass = GTK_CELL_RENDERER_GET_CLASS (cell);
+  klass->get_aligned_area (cell, widget, flags, cell_area, aligned_area);
 }

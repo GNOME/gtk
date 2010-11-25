@@ -1094,7 +1094,7 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 	    {
 	      GdkRectangle cell_focus;
 
-	      gtk_cell_area_aligned_cell_area (area, widget, cell->renderer, &inner_area, &cell_focus);
+	      gtk_cell_renderer_get_aligned_area (cell->renderer, widget, flags, &inner_area, &cell_focus);
 
 	      /* Accumulate the focus rectangle for all focus siblings */
 	      if (first_focus_cell)
