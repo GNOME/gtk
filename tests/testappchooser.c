@@ -95,7 +95,7 @@ prepare_dialog (void)
       g_object_unref (info);
 
       dialog = gtk_app_chooser_dialog_new_for_content_type (GTK_WINDOW (toplevel),
-                                                          0, content_type);
+                                                            0, content_type);
     }
 
   g_signal_connect (dialog, "response",
