@@ -265,20 +265,6 @@ function handleLoad(event)
   if (outstanding_commands.length == 1) {
     handleOutstanding()
   }
-
-  if ("WebSocket" in window) {
-    var loc = window.location.toString().replace("http:", "ws:");
-    loc = loc.substr(0, loc.lastIndexOf('/')) + "/input";
-    var ws = new WebSocket(loc, "broadway");
-    ws.onopen = function() {
-      input_socket = ws;
-    };
-    ws.onclose = function() {
-      input_socket = null;
-    };
-  } else {
-     alert("WebSocket not supported, input will not work!");
-  }
 }
 
 function get_surface_id(ev) {
@@ -322,6 +308,19 @@ function connect()
     xhr.send(null);
   }
 
+  if ("WebSocket" in window) {
+    var loc = window.location.toString().replace("http:", "ws:");
+    loc = loc.substr(0, loc.lastIndexOf('/')) + "/input";
+    var ws = new WebSocket(loc, "broadway");
+    ws.onopen = function() {
+      input_socket = ws;
+    };
+    ws.onclose = function() {
+      input_socket = null;
+    };
+  } else {
+     alert("WebSocket not supported, input will not work!");
+  }
   document.onmousemove = on_mouse_move;
   document.onmousedown = on_mouse_down;
   document.onmouseup = on_mouse_up;
