@@ -562,8 +562,8 @@ gtk_cell_area_box_context_allocate_width (GtkCellAreaContext *context,
 {
   GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
   GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
-  GtkCellArea               *area;
-  GtkOrientation             orientation;
+  GtkCellArea                  *area;
+  GtkOrientation                orientation;
 
   area        = gtk_cell_area_context_get_area (context);
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
@@ -603,6 +603,7 @@ gtk_cell_area_box_context_allocate_height (GtkCellAreaContext *context,
 
   GTK_CELL_AREA_CONTEXT_CLASS (gtk_cell_area_box_context_parent_class)->allocate_height (context, height);
 }
+
 
 /*************************************************************
  *                            API                            *
@@ -870,7 +871,7 @@ gtk_cell_area_box_context_get_heights (GtkCellAreaBoxContext *box_context,
   return gtk_cell_area_box_context_get_requests (box_context, GTK_ORIENTATION_VERTICAL, n_heights);
 }
 
-G_CONST_RETURN GtkCellAreaBoxAllocation *
+GtkCellAreaBoxAllocation *
 gtk_cell_area_box_context_get_orientation_allocs (GtkCellAreaBoxContext *context,
 						  gint                  *n_allocs)
 {
@@ -883,4 +884,21 @@ gtk_cell_area_box_context_get_orientation_allocs (GtkCellAreaBoxContext *context
   *n_allocs = priv->n_orientation_allocs;
 
   return priv->orientation_allocs;
+
+}
+
+GtkCellAreaBoxAllocation *
+gtk_cell_area_box_context_allocate (GtkCellAreaBoxContext *context,
+				    gint                   orientation_size,
+				    gint                  *n_allocs)
+{
+  GtkCellArea    *area;
+  GtkOrientation  orientation;
+  gint            spacing;
+
+  area        = gtk_cell_area_context_get_area (GTK_CELL_AREA_CONTEXT (context));
+  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
+  spacing     = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
+
+  return allocate_for_orientation (context, orientation, spacing, orientation_size, n_allocs);
 }

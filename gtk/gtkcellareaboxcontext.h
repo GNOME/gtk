@@ -125,9 +125,14 @@ typedef struct {
   gint size;      /* Full allocated size of the cells in this group spacing inclusive */
 } GtkCellAreaBoxAllocation;
 
-G_CONST_RETURN GtkCellAreaBoxAllocation *
+GtkCellAreaBoxAllocation *
 gtk_cell_area_box_context_get_orientation_allocs (GtkCellAreaBoxContext *context,
 						  gint                  *n_allocs);
+
+GtkCellAreaBoxAllocation *
+gtk_cell_area_box_context_allocate (GtkCellAreaBoxContext *context,
+				    gint                   orientation_size,
+				    gint                  *n_allocs);
 
 G_END_DECLS
 
