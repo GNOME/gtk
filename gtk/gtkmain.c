@@ -66,8 +66,6 @@
 #include "gtkmenu.h"
 #include "gdk/gdkkeysyms.h"
 
-#include "gdk/gdkprivate.h" /* for GDK_WINDOW_DESTROYED */
-
 #ifdef G_OS_WIN32
 
 static HMODULE gtk_dll;
@@ -2383,7 +2381,7 @@ gtk_get_event_widget (GdkEvent *event)
 
   widget = NULL;
   if (event && event->any.window && 
-      (event->type == GDK_DESTROY || !GDK_WINDOW_DESTROYED (event->any.window)))
+      (event->type == GDK_DESTROY || !gdk_window_is_destroyed (event->any.window)))
     {
       gdk_window_get_user_data (event->any.window, &widget_ptr);
       widget = widget_ptr;
