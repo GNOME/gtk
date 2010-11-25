@@ -176,18 +176,11 @@ got_input (GInputStream *stream,
 	   GAsyncResult *result,
 	   HttpRequest *request)
 {
-  GdkScreen *screen;
-  GdkWindow *root, *window;
-  char *message, *p;
+  GError *error;
+  char *message;
   gsize len;
-  GError *error = NULL;
-  int x, y, button, id;
-  guint64 time;
-  GdkEvent *event = NULL;
-  char cmd;
-  GList *node;
-  GdkDisplayBroadway *display_broadway = GDK_DISPLAY_BROADWAY (request->display);
 
+  error = NULL;
   message = g_data_input_stream_read_upto_finish (G_DATA_INPUT_STREAM (stream), result, &len, &error);
   if (message == NULL)
     {
@@ -196,133 +189,7 @@ got_input (GInputStream *stream,
       exit (1);
     }
   g_assert (message[0] == 0);
-
-  screen = gdk_display_get_default_screen (request->display);
-  root = gdk_screen_get_root_window (screen);
-
-  p = message + 1;
-  cmd = *p++;
-  switch (cmd) {
-  case 'm':
-    id = strtol(p, &p, 10);
-    p++; /* Skip , */
-    x = strtol(p, &p, 10);
-    p++; /* Skip , */
-    y = strtol(p, &p, 10);
-    p++; /* Skip , */
-    time = strtol(p, &p, 10);
-    display_broadway->last_x = x;
-    display_broadway->last_y = y;
-
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (id));
-
-    if (display_broadway->mouse_in_toplevel != window)
-      {
-	if (display_broadway->mouse_in_toplevel != NULL)
-	  {
-	    event = gdk_event_new (GDK_LEAVE_NOTIFY);
-	    event->crossing.window = g_object_ref (display_broadway->mouse_in_toplevel);
-	    event->crossing.time = time;
-	    event->crossing.x = x - GDK_WINDOW_OBJECT (display_broadway->mouse_in_toplevel)->x;
-	    event->crossing.y = y - GDK_WINDOW_OBJECT (display_broadway->mouse_in_toplevel)->y;
-	    event->crossing.x_root = x;
-	    event->crossing.y_root = y;
-	    event->crossing.mode = GDK_CROSSING_NORMAL;
-	    event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-	    gdk_event_set_device (event, request->display->core_pointer);
-
-	    node = _gdk_event_queue_append (request->display, event);
-	    _gdk_windowing_got_event (request->display, node, event, 0);
-
-	    event = gdk_event_new (GDK_FOCUS_CHANGE);
-	    event->focus_change.window = g_object_ref (display_broadway->mouse_in_toplevel);
-	    event->focus_change.in = FALSE;
-	    gdk_event_set_device (event, request->display->core_pointer);
-
-	    node = _gdk_event_queue_append (request->display, event);
-	    _gdk_windowing_got_event (request->display, node, event, 0);
-	  }
-
-	/* TODO: Unset when it dies */
-	display_broadway->mouse_in_toplevel = window;
-
-	if (window)
-	  {
-	    event = gdk_event_new (GDK_ENTER_NOTIFY);
-	    event->crossing.window = g_object_ref (window);
-	    event->crossing.time = time;
-	    event->crossing.x = x - GDK_WINDOW_OBJECT (window)->x;
-	    event->crossing.y = y - GDK_WINDOW_OBJECT (window)->y;
-	    event->crossing.x_root = x;
-	    event->crossing.y_root = y;
-	    event->crossing.mode = GDK_CROSSING_NORMAL;
-	    event->crossing.detail = GDK_NOTIFY_ANCESTOR;
-	    gdk_event_set_device (event, request->display->core_pointer);
-
-	    node = _gdk_event_queue_append (request->display, event);
-	    _gdk_windowing_got_event (request->display, node, event, 0);
-
-	    event = gdk_event_new (GDK_FOCUS_CHANGE);
-	    event->focus_change.window = g_object_ref (window);
-	    event->focus_change.in = TRUE;
-	    gdk_event_set_device (event, request->display->core_pointer);
-
-	    node = _gdk_event_queue_append (request->display, event);
-	    _gdk_windowing_got_event (request->display, node, event, 0);
-
-	  }
-      }
-
-    if (window)
-      {
-	event = gdk_event_new (GDK_MOTION_NOTIFY);
-	event->motion.window = g_object_ref (window);
-	event->motion.time = time;
-	event->motion.x = x - GDK_WINDOW_OBJECT (window)->x;
-	event->motion.y = y - GDK_WINDOW_OBJECT (window)->y;
-	event->motion.x_root = x;
-	event->motion.y_root = y;
-	gdk_event_set_device (event, request->display->core_pointer);
-
-	node = _gdk_event_queue_append (request->display, event);
-	_gdk_windowing_got_event (request->display, node, event, 0);
-      }
-
-    break;
-  case 'b':
-  case 'B':
-    id = strtol(p, &p, 10);
-    p++; /* Skip , */
-    x = strtol(p, &p, 10);
-    p++; /* Skip , */
-    y = strtol(p, &p, 10);
-    p++; /* Skip , */
-    button = strtol(p, &p, 10);
-    p++; /* Skip , */
-    time = strtol(p, &p, 10);
-    display_broadway->last_x = x;
-    display_broadway->last_y = y;
-
-    window = g_hash_table_lookup (display_broadway->id_ht, GINT_TO_POINTER (id));
-
-    if (window)
-      {
-	event = gdk_event_new (cmd == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
-	event->button.window = g_object_ref (window);
-	event->button.time = time;
-	event->button.x = x - GDK_WINDOW_OBJECT (window)->x;
-	event->button.y = y - GDK_WINDOW_OBJECT (window)->y;
-	event->button.x_root = x;
-	event->button.y_root = y;
-	event->button.button = button + 1;
-	gdk_event_set_device (event, request->display->core_pointer);
-
-	node = _gdk_event_queue_append (request->display, event);
-	_gdk_windowing_got_event (request->display, node, event, 0);
-      }
-
-    break;
-  }
+  _gdk_events_got_input (request->display, message + 1);
 
   /* Skip past ending 0xff */
   g_data_input_stream_read_byte (request->data, NULL, NULL);

@@ -125,6 +125,9 @@ void _gdk_screen_broadway_events_init   (GdkScreen *screen);
 
 void _gdk_events_init           (GdkDisplay *display);
 void _gdk_events_uninit         (GdkDisplay *display);
+void _gdk_events_got_input      (GdkDisplay *display,
+				 const char *message);
+
 void _gdk_windowing_window_init (GdkScreen *screen);
 void _gdk_visual_init           (GdkScreen *screen);
 void _gdk_dnd_init		(GdkDisplay *display);
