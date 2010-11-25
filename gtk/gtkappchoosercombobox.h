@@ -70,4 +70,8 @@ void        gtk_app_chooser_combo_box_append_custom_item (GtkAppChooserComboBox 
                                                           GtkAppChooserComboBoxItemFunc  func,
                                                           gpointer                       user_data);
 
+void gtk_app_chooser_combo_box_set_show_dialog_item (GtkAppChooserComboBox *self,
+						     gboolean setting);
+gboolean gtk_app_chooser_combo_box_get_show_dialog_item (GtkAppChooserComboBox *self);
+
 #endif /* __GTK_APP_CHOOSER_COMBO_BOX_H__ */

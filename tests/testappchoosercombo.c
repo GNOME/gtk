@@ -92,6 +92,9 @@ main (int argc,
                                                 special_item_activated_cb,
                                                 NULL);
 
+  gtk_app_chooser_combo_box_set_show_dialog_item (GTK_APP_CHOOSER_COMBO_BOX (combobox),
+  						  TRUE);
+
   /* test refresh on a combo */
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (combobox));
 
