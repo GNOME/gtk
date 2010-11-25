@@ -5350,24 +5350,25 @@ gdk_window_configure_finished (GdkWindow *window)
 #endif
 }
 
-void
-_gdk_windowing_window_beep (GdkWindow *window)
+static gboolean
+gdk_x11_window_beep (GdkWindow *window)
 {
   GdkDisplay *display;
-
-  g_return_if_fail (GDK_IS_WINDOW (window));
 
   display = GDK_WINDOW_DISPLAY (window);
 
 #ifdef HAVE_XKB
   if (GDK_DISPLAY_X11 (display)->use_xkb)
-    XkbBell (GDK_DISPLAY_XDISPLAY (display),
-	     GDK_WINDOW_XID (window),
-	     0,
-	     None);
-  else
+    {
+      XkbBell (GDK_DISPLAY_XDISPLAY (display),
+               GDK_WINDOW_XID (window),
+               0,
+               None);
+      return TRUE;
+    }
 #endif
-    gdk_display_beep (display);
+
+  return FALSE;
 }
 
 /**
@@ -5591,5 +5592,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->resize_cairo_surface = gdk_window_x11_resize_cairo_surface;
   impl_class->get_shape = gdk_x11_window_get_shape;
   impl_class->get_input_shape = gdk_x11_window_get_input_shape;
+  impl_class->beep = gdk_x11_window_beep;
 }
 

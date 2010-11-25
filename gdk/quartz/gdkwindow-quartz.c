@@ -2919,14 +2919,6 @@ gdk_window_destroy_notify (GdkWindow *window)
   check_grab_destroy (window);
 }
 
-void 
-_gdk_windowing_window_beep (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  gdk_display_beep (_gdk_display);
-}
-
 void
 gdk_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)

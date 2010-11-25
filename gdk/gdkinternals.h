@@ -356,7 +356,6 @@ gulong   _gdk_windowing_window_get_next_serial  (GdkDisplay *display);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
-void     _gdk_windowing_window_beep             (GdkWindow *window);
 
 
 void       _gdk_windowing_get_device_state   (GdkDisplay       *display,

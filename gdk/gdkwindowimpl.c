@@ -33,10 +33,18 @@
 
 G_DEFINE_TYPE (GdkWindowImpl, gdk_window_impl, G_TYPE_OBJECT);
 
+static gboolean
+gdk_window_impl_beep (GdkWindow *window)
+{
+  /* FALSE means windows can't beep, so the display will be
+   * made to beep instead. */
+  return FALSE;
+}
 
 static void
-gdk_window_impl_class_init (GdkWindowImplClass *klass)
+gdk_window_impl_class_init (GdkWindowImplClass *impl_class)
 {
+  impl_class->beep = gdk_window_impl_beep;
 }
 
 static void

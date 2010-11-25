@@ -3122,12 +3122,6 @@ gdk_window_configure_finished (GdkWindow *window)
 }
 
 void
-_gdk_windowing_window_beep (GdkWindow *window)
-{
-  gdk_display_beep (_gdk_display);
-}
-
-void
 gdk_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)
 {

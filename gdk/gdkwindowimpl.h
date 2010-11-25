@@ -158,6 +158,9 @@ struct _GdkWindowImplClass
                                               cairo_surface_t *surface,
                                               gint             width,
                                               gint             height);
+
+  /* optional */
+  gboolean     (* beep)                 (GdkWindow       *window);
 };
 
 /* Interface Functions */

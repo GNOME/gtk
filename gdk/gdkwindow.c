@@ -8065,10 +8065,14 @@ gdk_window_beep (GdkWindow *window)
   toplevel = get_event_toplevel (window);
   display = gdk_window_get_display (window);
 
-  if (toplevel && !gdk_window_is_offscreen (toplevel))
-    _gdk_windowing_window_beep (toplevel);
-  else
-    gdk_display_beep (display);
+  if (toplevel)
+    {
+      if (GDK_WINDOW_IMPL_CLASS (toplevel)->beep (window))
+        return;
+    }
+  
+  /* If windows fail to beep, we beep the display. */
+  gdk_display_beep (display);
 }
 
 /**
