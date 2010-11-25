@@ -3274,8 +3274,10 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
 {
   GdkPixbuf *pixbuf;
   GdkRGBA *color = NULL;
+  GdkRGBA rgba;
   gchar *css_fg, *css_success;
   gchar *css_warning, *css_error;
+  GtkStateFlags state;
 
   if (!icon_info->filename ||
       !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
@@ -3288,7 +3290,9 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   if (was_symbolic)
     *was_symbolic = TRUE;
 
-  if (gtk_style_context_lookup_color (context, "color", color))
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get (context, state, "color", &color, NULL);
+  if (color)
     {
       css_fg = gdk_rgba_to_css (color);
       gdk_rgba_free (color);
@@ -3296,23 +3300,14 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
 
   css_success = css_warning = css_error = NULL;
 
-  if (gtk_style_context_lookup_color (context, "success_color", color))
-    {
-      css_success = gdk_rgba_to_css (color);
-      gdk_rgba_free (color);
-    }
+  if (gtk_style_context_lookup_color (context, "success_color", &rgba))
+    css_success = gdk_rgba_to_css (&rgba);
 
-  if (gtk_style_context_lookup_color (context, "warning_color", color))
-    {
-      css_warning = gdk_rgba_to_css (color);
-      gdk_rgba_free (color);
-    }
+  if (gtk_style_context_lookup_color (context, "warning_color", &rgba))
+    css_warning = gdk_rgba_to_css (&rgba);
 
-  if (gtk_style_context_lookup_color (context, "error_color", color))
-    {
-      css_error = gdk_rgba_to_css (color);
-      gdk_rgba_free (color);
-    }
+  if (gtk_style_context_lookup_color (context, "error_color", &rgba))
+    css_error = gdk_rgba_to_css (&rgba);
 
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
                                                   css_fg, css_success,
