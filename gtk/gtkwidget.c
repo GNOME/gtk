@@ -7673,6 +7673,8 @@ gtk_widget_style_attach (GtkWidget *widget)
  *   mechanism, %FALSE otherwise.
  *
  * Since: 2.20
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  **/
 gboolean
 gtk_widget_has_rc_style (GtkWidget *widget)
@@ -7692,6 +7694,8 @@ gtk_widget_has_rc_style (GtkWidget *widget)
  * want to use this function; it interacts badly with themes, because
  * themes work by replacing the #GtkStyle. Instead, use
  * gtk_widget_modify_style().
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  **/
 void
 gtk_widget_set_style (GtkWidget *widget,
@@ -7725,6 +7729,8 @@ gtk_widget_set_style (GtkWidget *widget,
  * function; most of the time, if you want the style, the widget is
  * realized, and realized widgets are guaranteed to have a style
  * already.
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  **/
 void
 gtk_widget_ensure_style (GtkWidget *widget)
@@ -7781,6 +7787,8 @@ gtk_widget_reset_rc_style (GtkWidget *widget)
  * Simply an accessor function that returns @widget->style.
  *
  * Return value: (transfer none): the widget's #GtkStyle
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  **/
 GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
@@ -7812,6 +7820,8 @@ gtk_widget_get_style (GtkWidget *widget)
  * if you first call gtk_widget_modify_style(), subsequent calls
  * to such functions gtk_widget_modify_fg() will have a cumulative
  * effect with the initial modifications.
+ *
+ * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
  **/
 void
 gtk_widget_modify_style (GtkWidget      *widget,
@@ -7850,12 +7860,15 @@ gtk_widget_modify_style (GtkWidget      *widget,
  * thus dropping any reference to the old modifier style. Add a reference
  * to the modifier style if you want to keep it alive.
  *
- * Return value: (transfer none): the modifier style for the widget. This rc style is
- *   owned by the widget. If you want to keep a pointer to value this
- *   around, you must add a refcount using g_object_ref().
+ * Return value: (transfer none): the modifier style for the widget.
+ *     This rc style is owned by the widget. If you want to keep a
+ *     pointer to value this around, you must add a refcount using
+ *     g_object_ref().
+ *
+ * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
  **/
 GtkRcStyle *
-gtk_widget_get_modifier_style (GtkWidget      *widget)
+gtk_widget_get_modifier_style (GtkWidget *widget)
 {
   GtkRcStyle *rc_style;
 
@@ -8083,7 +8096,8 @@ gtk_widget_override_font (GtkWidget                  *widget,
  *         gtk_widget_override_symbolic_color().
  *
  * Sets a symbolic color for a widget, All other style values are left
- * untouched. See gtk_widget_override_color().
+ * untouched. See gtk_widget_override_color() for overriding the foreground
+ * or background color.
  *
  * Since: 3.0
  **/
@@ -8126,6 +8140,8 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
  * Sets the foreground color for a widget in a particular state.
  * All other style values are left untouched. See also
  * gtk_widget_modify_style().
+ *
+ * Deprecated:3.0: Use gtk_widget_override_color() instead
  **/
 void
 gtk_widget_modify_fg (GtkWidget      *widget,
@@ -8189,6 +8205,8 @@ gtk_widget_modify_fg (GtkWidget      *widget,
  * on their parent; if you want to set the background of a rectangular
  * area around a label, try placing the label in a #GtkEventBox widget
  * and setting the background color on that.
+ *
+ * Deprecated:3.0: Use gtk_widget_override_background_color() instead
  **/
 void
 gtk_widget_modify_bg (GtkWidget      *widget,
@@ -8246,6 +8264,8 @@ gtk_widget_modify_bg (GtkWidget      *widget,
  * color used along with the base color (see gtk_widget_modify_base())
  * for widgets such as #GtkEntry and #GtkTextView. See also
  * gtk_widget_modify_style().
+ *
+ * Deprecated:3.0: Use gtk_widget_override_color() instead
  **/
 void
 gtk_widget_modify_text (GtkWidget      *widget,
@@ -8279,6 +8299,8 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * parent; if you want to set the background of a rectangular area around
  * a label, try placing the label in a #GtkEventBox widget and setting
  * the base color on that.
+ *
+ * Deprecated:3.0: Use gtk_widget_override_background_color() instead
  **/
 void
 gtk_widget_modify_base (GtkWidget      *widget,
@@ -8363,6 +8385,8 @@ gtk_widget_modify_cursor (GtkWidget      *widget,
  *
  * Sets the font to use for a widget.  All other style values are left
  * untouched. See also gtk_widget_modify_style().
+ *
+ * Deprecated:3.0: Use gtk_widget_override_font() instead
  **/
 void
 gtk_widget_modify_font (GtkWidget            *widget,
@@ -8669,6 +8693,8 @@ gtk_widget_reset_style (GtkWidget *widget)
  * for the currently loaded RC file settings.
  *
  * This function is not useful for applications.
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  */
 void
 gtk_widget_reset_rc_styles (GtkWidget *widget)
@@ -8683,8 +8709,10 @@ gtk_widget_reset_rc_styles (GtkWidget *widget)
  *
  * Returns the default style used by all widgets initially.
  *
- * Returns: (transfer none): the default style. This #GtkStyle object is owned
- *          by GTK+ and should not be modified or freed.
+ * Returns: (transfer none): the default style. This #GtkStyle
+ *     object is owned by GTK+ and should not be modified or freed.
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  */
 GtkStyle*
 gtk_widget_get_default_style (void)
@@ -11443,9 +11471,12 @@ gtk_widget_style_get (GtkWidget   *widget,
 /**
  * gtk_widget_path:
  * @widget: a #GtkWidget
- * @path_length: (out) (allow-none): location to store length of the path, or %NULL
- * @path: (out) (allow-none):  location to store allocated path string, or %NULL
- * @path_reversed: (out) (allow-none):  location to store allocated reverse path string, or %NULL
+ * @path_length: (out) (allow-none): location to store length of the path,
+ *     or %NULL
+ * @path: (out) (allow-none): location to store allocated path string,
+ *     or %NULL
+ * @path_reversed: (out) (allow-none): location to store allocated reverse
+ *     path string, or %NULL
  *
  * Obtains the full path to @widget. The path is simply the name of a
  * widget and all its parents in the container hierarchy, separated by
@@ -11459,6 +11490,8 @@ gtk_widget_style_get (GtkWidget   *widget,
  * file. @path_reversed_p fills in the path in reverse order,
  * i.e. starting with @widget's name instead of starting with the name
  * of @widget's outermost ancestor.
+ *
+ * Deprecated:3.0: Use gtk_widget_get_path() instead
  **/
 void
 gtk_widget_path (GtkWidget *widget,
@@ -11516,14 +11549,17 @@ gtk_widget_path (GtkWidget *widget,
 /**
  * gtk_widget_class_path:
  * @widget: a #GtkWidget
- * @path_length: (out) (allow-none): location to store the length of the class path, or %NULL
- * @path: (out) (allow-none): location to store the class path as an allocated string, or %NULL
- * @path_reversed: (out) (allow-none): location to store the reverse class path as an allocated
- *    string, or %NULL
+ * @path_length: (out) (allow-none): location to store the length of the
+ *     class path, or %NULL
+ * @path: (out) (allow-none): location to store the class path as an
+ *     allocated string, or %NULL
+ * @path_reversed: (out) (allow-none): location to store the reverse
+ *     class path as an allocated string, or %NULL
  *
  * Same as gtk_widget_path(), but always uses the name of a widget's type,
  * never uses a custom name set with gtk_widget_set_name().
  *
+ * Deprecated:3.0: Use gtk_widget_get_path() instead
  **/
 void
 gtk_widget_class_path (GtkWidget *widget,

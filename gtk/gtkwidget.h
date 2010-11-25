@@ -773,10 +773,12 @@ void         gtk_widget_override_symbolic_color (GtkWidget         *widget,
                                                  const gchar       *name,
                                                  const GdkRGBA     *color);
 
-/* Widget styles.
- */
 void        gtk_widget_style_attach       (GtkWidget            *widget);
 
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
+
+/* Widget styles.
+ */
 gboolean    gtk_widget_has_rc_style       (GtkWidget            *widget);
 void	    gtk_widget_set_style          (GtkWidget            *widget,
                                            GtkStyle             *style);
@@ -804,6 +806,27 @@ void        gtk_widget_modify_cursor      (GtkWidget            *widget,
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
 
+/* Descend recursively and set rc-style on all widgets without user styles */
+void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
+void       gtk_widget_reset_style       (GtkWidget      *widget);
+
+/* Set certain default values to be used at widget creation time  */
+GtkStyle*    gtk_widget_get_default_style    (void);
+
+/* Compute a widget's path in the form "GtkWindow.MyLabel", and
+ * return newly alocated strings.
+ */
+void	     gtk_widget_path		   (GtkWidget *widget,
+					    guint     *path_length,
+					    gchar    **path,
+					    gchar    **path_reversed);
+void	     gtk_widget_class_path	   (GtkWidget *widget,
+					    guint     *path_length,
+					    gchar    **path,
+					    gchar    **path_reversed);
+
+#endif  /* GTK_DISABLE_DEPRECATED */
+
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
@@ -821,11 +844,6 @@ void   gtk_widget_set_composite_name	(GtkWidget	*widget,
 					 const gchar   	*name);
 gchar* gtk_widget_get_composite_name	(GtkWidget	*widget);
      
-/* Descend recursively and set rc-style on all widgets without user styles */
-void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
-
-void       gtk_widget_reset_style       (GtkWidget      *widget);
-
 /* Push/pop pairs, to change default values upon a widget's creation.
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
@@ -854,13 +872,7 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
 				    const gchar    *first_property_name,
 				    ...) G_GNUC_NULL_TERMINATED;
 
-
-/* Set certain default values to be used at widget creation time.
- */
-GtkStyle*    gtk_widget_get_default_style    (void);
-
-/* Functions for setting directionality for widgets
- */
+/* Functions for setting directionality for widgets */
 
 void             gtk_widget_set_direction         (GtkWidget        *widget,
 						   GtkTextDirection  dir);
@@ -881,18 +893,6 @@ void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
 
 /* internal function */
 void	     gtk_widget_reset_shapes	   (GtkWidget *widget);
-
-/* Compute a widget's path in the form "GtkWindow.MyLabel", and
- * return newly alocated strings.
- */
-void	     gtk_widget_path		   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
-void	     gtk_widget_class_path	   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
 
 GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,

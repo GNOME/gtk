@@ -401,6 +401,13 @@ struct _GtkBorder
   gint16 bottom;
 };
 
+GType      gtk_border_get_type (void) G_GNUC_CONST;
+GtkBorder *gtk_border_new      (void) G_GNUC_MALLOC;
+GtkBorder *gtk_border_copy     (const GtkBorder *border_);
+void       gtk_border_free     (GtkBorder       *border_);
+
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
+
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GtkStyle* gtk_style_new			     (void);
 GtkStyle* gtk_style_copy		     (GtkStyle	   *style);
@@ -637,12 +644,6 @@ void gtk_paint_spinner           (GtkStyle           *style,
                                   gint                width,
                                   gint                height);
 
-
-GType      gtk_border_get_type (void) G_GNUC_CONST;
-GtkBorder *gtk_border_new      (void) G_GNUC_MALLOC;
-GtkBorder *gtk_border_copy     (const GtkBorder *border_);
-void       gtk_border_free     (GtkBorder       *border_);
-
 void gtk_style_get_style_property (GtkStyle    *style,
                                    GType        widget_type,
                                    const gchar *property_name,
@@ -655,6 +656,8 @@ void gtk_style_get                (GtkStyle    *style,
                                    GType        widget_type,
                                    const gchar *first_property_name,
                                    ...) G_GNUC_NULL_TERMINATED;
+
+#endif
 
 /* --- private API --- */
 const GValue* _gtk_style_peek_property_value (GtkStyle           *style,

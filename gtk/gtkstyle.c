@@ -793,6 +793,8 @@ gtk_style_constructed (GObject *object)
  * Creates a copy of the passed in #GtkStyle object.
  *
  * Returns: (transfer full): a copy of @style
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  */
 GtkStyle*
 gtk_style_copy (GtkStyle *style)
@@ -832,6 +834,8 @@ gtk_style_duplicate (GtkStyle *style)
  * @returns: a new #GtkStyle.
  *
  * Creates a new #GtkStyle.
+ *
+ * Deprecated: 3.0: Use #GtkStyleContext
  **/
 GtkStyle*
 gtk_style_new (void)
@@ -872,6 +876,8 @@ gtk_style_has_context (GtkStyle *style)
  *   If the style is newly created, the style parameter
  *   will be unref'ed, and the new style will have
  *   a reference count belonging to the caller.
+ *
+ * Deprecated:3.0: Use gtk_widget_style_attach() instead
  */
 GtkStyle*
 gtk_style_attach (GtkStyle  *style,
@@ -948,7 +954,8 @@ gtk_style_attach (GtkStyle  *style,
  *
  * Detaches a style from a window. If the style is not attached
  * to any windows anymore, it is unrealized. See gtk_style_attach().
- * 
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  */
 void
 gtk_style_detach (GtkStyle *style)
@@ -995,6 +1002,8 @@ gtk_style_realize (GtkStyle  *style,
  * otherwise %NULL.
  *
  * Return value: icon set of @stock_id
+ *
+ * Deprecated:3.0: Use gtk_style_context_lookup_icon_set() instead
  */
 GtkIconSet*
 gtk_style_lookup_icon_set (GtkStyle   *style,
@@ -1028,6 +1037,8 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
  * Return value: %TRUE if the mapping was found.
  *
  * Since: 2.10
+ *
+ * Deprecated:3.0: Use gtk_style_context_lookup_color() instead
  **/
 gboolean
 gtk_style_lookup_color (GtkStyle   *style,
@@ -1068,6 +1079,8 @@ gtk_style_lookup_color (GtkStyle   *style,
  * 
  * Sets the background of @window to the background color or pixmap
  * specified by @style for the given state.
+ *
+ * Deprecated:3.0: Use gtk_style_context_set_background() instead
  */
 void
 gtk_style_set_background (GtkStyle    *style,
@@ -1556,6 +1569,8 @@ gtk_style_real_set_background (GtkStyle    *style,
  *
  * Return value: (transfer full): a newly-created #GdkPixbuf
  *     containing the rendered icon
+ *
+ * Deprecated:3.0: Use gtk_render_icon_pixbuf() instead
  */
 GdkPixbuf *
 gtk_style_render_icon (GtkStyle            *style,
@@ -1593,6 +1608,8 @@ gtk_style_render_icon (GtkStyle            *style,
  * @y:
  * @width:
  * @height:
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  */
 void
 gtk_style_apply_default_background (GtkStyle          *style,
@@ -3678,8 +3695,10 @@ hls_to_rgb (gdouble *h,
  *
  * Draws a horizontal line from (@x1, @y) to (@x2, @y) in @cr
  * using the given style and state.
- **/ 
-void 
+ *
+ * Deprecated:3.0: Use gtk_render_line() instead
+ **/
+void
 gtk_paint_hline (GtkStyle           *style,
                  cairo_t            *cr,
                  GtkStateType        state_type,
@@ -3715,6 +3734,8 @@ gtk_paint_hline (GtkStyle           *style,
  *
  * Draws a vertical line from (@x, @y1_) to (@x, @y2_) in @cr
  * using the given style and state.
+ *
+ * Deprecated:3.0: Use gtk_render_line() instead
  */
 void
 gtk_paint_vline (GtkStyle           *style,
@@ -3752,8 +3773,10 @@ gtk_paint_vline (GtkStyle           *style,
  * @width: width of the rectangle
  * @height: width of the rectangle
  *
- * Draws a shadow around the given rectangle in @cr 
+ * Draws a shadow around the given rectangle in @cr
  * using the given style and state and shadow type.
+ *
+ * Deprecated:3.0: Use gtk_render_frame() instead
  */
 void
 gtk_paint_shadow (GtkStyle           *style,
@@ -3796,9 +3819,11 @@ gtk_paint_shadow (GtkStyle           *style,
  * @y: y origin of the rectangle to draw the arrow in
  * @width: width of the rectangle to draw the arrow in
  * @height: height of the rectangle to draw the arrow in
- * 
- * Draws an arrow in the given rectangle on @cr using the given 
+ *
+ * Draws an arrow in the given rectangle on @cr using the given
  * parameters. @arrow_type determines the direction of the arrow.
+ *
+ * Deprecated:3.0: Use gtk_render_arrow() instead
  */
 void
 gtk_paint_arrow (GtkStyle           *style,
@@ -3844,6 +3869,8 @@ gtk_paint_arrow (GtkStyle           *style,
  *
  * Draws a diamond in the given rectangle on @window using the given
  * parameters.
+ *
+ * Deprecated:3.0: Use cairo instead
  */
 void
 gtk_paint_diamond (GtkStyle           *style,
@@ -3884,8 +3911,10 @@ gtk_paint_diamond (GtkStyle           *style,
  * @y: y origin of the box
  * @width: the width of the box
  * @height: the height of the box
- * 
+ *
  * Draws a box on @cr with the given parameters.
+ *
+ * Deprecated:3.0: Use gtk_render_frame() and gtk_render_background() instead
  */
 void
 gtk_paint_box (GtkStyle           *style,
@@ -3926,8 +3955,10 @@ gtk_paint_box (GtkStyle           *style,
  * @y: y origin of the box
  * @width: the width of the box
  * @height: the height of the box
- * 
+ *
  * Draws a flat box on @cr with the given parameters.
+ *
+ * Deprecated:3.0: Use gtk_render_frame() and gtk_render_background() instead
  */
 void
 gtk_paint_flat_box (GtkStyle           *style,
@@ -3968,9 +3999,11 @@ gtk_paint_flat_box (GtkStyle           *style,
  * @y: y origin of the rectangle to draw the check in
  * @width: the width of the rectangle to draw the check in
  * @height: the height of the rectangle to draw the check in
- * 
- * Draws a check button indicator in the given rectangle on @cr with 
+ *
+ * Draws a check button indicator in the given rectangle on @cr with
  * the given parameters.
+ *
+ * Deprecated:3.0: Use gtk_render_check() instead
  */
 void
 gtk_paint_check (GtkStyle           *style,
@@ -4010,8 +4043,10 @@ gtk_paint_check (GtkStyle           *style,
  * @width: the width of the rectangle to draw the option in
  * @height: the height of the rectangle to draw the option in
  *
- * Draws a radio button indicator in the given rectangle on @cr with 
+ * Draws a radio button indicator in the given rectangle on @cr with
  * the given parameters.
+ *
+ * Deprecated:3.0: Use gtk_render_option() instead
  */
 void
 gtk_paint_option (GtkStyle           *style,
@@ -4053,7 +4088,9 @@ gtk_paint_option (GtkStyle           *style,
  *
  * Draws an option menu tab (i.e. the up and down pointing arrows)
  * in the given rectangle on @cr using the given parameters.
- */ 
+ *
+ * Deprecated:3.0: Use cairo instead
+ */
 void
 gtk_paint_tab (GtkStyle           *style,
                cairo_t            *cr,
@@ -4096,9 +4133,11 @@ gtk_paint_tab (GtkStyle           *style,
  * @gap_width: width of the gap
  *
  * Draws a shadow around the given rectangle in @cr
- * using the given style and state and shadow type, leaving a 
+ * using the given style and state and shadow type, leaving a
  * gap in one side.
-*/
+ *
+ * Deprecated:3.0: Use gtk_render_frame_gap() instead
+ */
 void
 gtk_paint_shadow_gap (GtkStyle           *style,
                       cairo_t            *cr,
@@ -4145,8 +4184,10 @@ gtk_paint_shadow_gap (GtkStyle           *style,
  * @gap_x: starting position of the gap
  * @gap_width: width of the gap
  *
- * Draws a box in @cr using the given style and state and shadow type, 
+ * Draws a box in @cr using the given style and state and shadow type,
  * leaving a gap in one side.
+ *
+ * Deprecated:3.0: Use gtk_render_frame_gap() instead
  */
 void
 gtk_paint_box_gap (GtkStyle           *style,
@@ -4179,7 +4220,7 @@ gtk_paint_box_gap (GtkStyle           *style,
 }
 
 /**
- * gtk_paint_extension: 
+ * gtk_paint_extension:
  * @style: a #GtkStyle
  * @cr: a #cairo_t
  * @state_type: a state
@@ -4191,8 +4232,10 @@ gtk_paint_box_gap (GtkStyle           *style,
  * @width: width of the extension
  * @height: width of the extension
  * @gap_side: the side on to which the extension is attached
- * 
+ *
  * Draws an extension, i.e. a notebook tab.
+ *
+ * Deprecated:3.0: Use gtk_render_extension() instead
  **/
 void
 gtk_paint_extension (GtkStyle           *style,
@@ -4236,6 +4279,8 @@ gtk_paint_extension (GtkStyle           *style,
  *
  * Draws a focus indicator around the given rectangle on @cr using the
  * given style.
+ *
+ * Deprecated:3.0: Use gtk_render_focus() instead
  */
 void
 gtk_paint_focus (GtkStyle           *style,
@@ -4279,6 +4324,8 @@ gtk_paint_focus (GtkStyle           *style,
  *
  * Draws a slider in the given rectangle on @cr using the
  * given style and orientation.
+ *
+ * Deprecated:3.0: Use gtk_render_slider() instead
  **/
 void
 gtk_paint_slider (GtkStyle           *style,
@@ -4321,8 +4368,10 @@ gtk_paint_slider (GtkStyle           *style,
  * @width: with of the handle
  * @height: height of the handle
  * @orientation: the orientation of the handle
- * 
+ *
  * Draws a handle as used in #GtkHandleBox and #GtkPaned.
+ *
+ * Deprecated:3.0: Use gtk_render_handle() instead
  **/
 void
 gtk_paint_handle (GtkStyle           *style,
@@ -4364,7 +4413,7 @@ gtk_paint_handle (GtkStyle           *style,
  * @expander_style: the style to draw the expander in; determines
  *   whether the expander is collapsed, expanded, or in an
  *   intermediate state.
- * 
+ *
  * Draws an expander as used in #GtkTreeView. @x and @y specify the
  * center the expander. The size of the expander is determined by the
  * "expander-size" style property of @widget.  (If widget is not
@@ -4374,6 +4423,8 @@ gtk_paint_handle (GtkStyle           *style,
  * likely not useful.) The expander is expander_size pixels tall
  * in the collapsed position and expander_size pixels wide in the
  * expanded position.
+ *
+ * Deprecated:3.0: Use gtk_render_expander() instead
  **/
 void
 gtk_paint_expander (GtkStyle           *style,
@@ -4412,6 +4463,8 @@ gtk_paint_expander (GtkStyle           *style,
  * @layout: the layout to draw
  *
  * Draws a layout on @cr using the given parameters.
+ *
+ * Deprecated:3.0: Use gtk_render_layout() instead
  **/
 void
 gtk_paint_layout (GtkStyle           *style,
@@ -4451,7 +4504,9 @@ gtk_paint_layout (GtkStyle           *style,
  * @height: the height of the rectangle in which to draw the resize grip
  *
  * Draws a resize grip in the given rectangle on @cr using the given
- * parameters. 
+ * parameters.
+ *
+ * Deprecated:3.0: Use gtk_render_handle() instead
  */
 void
 gtk_paint_resize_grip (GtkStyle           *style,
@@ -4491,6 +4546,8 @@ gtk_paint_resize_grip (GtkStyle           *style,
  * @height: the height of the rectangle in which to draw the spinner
  *
  * Draws a spinner on @window using the given parameters.
+ *
+ * Deprecated:3.0: Use gtk_render_activity() instead
  */
 void
 gtk_paint_spinner (GtkStyle           *style,
@@ -4521,8 +4578,8 @@ gtk_paint_spinner (GtkStyle           *style,
  * gtk_border_new:
  *
  * Allocates a new #GtkBorder structure and initializes its elements to zero.
- * 
- * Returns: a new empty #GtkBorder. The newly allocated #GtkBorder should be 
+ *
+ * Returns: a new empty #GtkBorder. The newly allocated #GtkBorder should be
  *     freed with gtk_border_free()
  *
  * Since: 2.14
@@ -4677,7 +4734,7 @@ _gtk_widget_get_cursor_color (GtkWidget *widget,
  *             right-to-left. Should never be #GTK_TEXT_DIR_NONE
  * @draw_arrow: %TRUE to draw a directional arrow on the
  *        cursor. Should be %FALSE unless the cursor is split.
- * 
+ *
  * Draws a text caret on @cr at @location. This is not a style function
  * but merely a convenience function for drawing the standard cursor shape.
  *
