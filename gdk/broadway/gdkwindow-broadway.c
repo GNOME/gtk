@@ -359,7 +359,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   /* Instead of window manager placement we have this mini hack
      so that the main/first window is not covered in the demos. */
-  if (impl->id > 1)
+  if (impl->id > 1 && private->window_type == GDK_WINDOW_TOPLEVEL)
     {
       private->x = 100;
       private->y = 20;
