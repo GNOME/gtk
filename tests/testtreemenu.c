@@ -310,6 +310,15 @@ simple_tree_menu (void)
 }
 
 static void
+orientation_changed (GtkComboBox  *combo,
+		     GtkCellArea  *area)
+{
+  GtkOrientation orientation = gtk_combo_box_get_active (combo);
+
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (area), orientation);
+}
+
+static void
 align_cell_2_toggled (GtkToggleButton  *toggle,
 		      GtkTreeMenu    *menu)
 {
@@ -409,6 +418,7 @@ tree_menu (void)
 {
   GtkWidget *window, *widget;
   GtkWidget *menu, *menubar, *vbox, *menuitem;
+  GtkCellArea *area;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -420,16 +430,12 @@ tree_menu (void)
   menubar = gtk_menu_bar_new ();
   gtk_widget_show (menubar);
 
-#if 1
-
   menuitem = gtk_menu_item_new_with_label ("Grid");
   menu = create_menu_grid_demo ();
   gtk_widget_show (menu);
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (GTK_MENU_SHELL (menubar), menuitem);
   gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), menu);
-
-#endif
 
   menuitem = gtk_menu_item_new_with_label ("Tree");
   menu = simple_tree_menu ();
@@ -443,6 +449,17 @@ tree_menu (void)
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
 
   /* Now add some controls */
+  widget = gtk_combo_box_text_new ();
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Horizontal");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Vertical");
+  gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
+  gtk_widget_show (widget);
+  gtk_box_pack_start (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
+
+  area = gtk_tree_menu_get_area (GTK_TREE_MENU (menu));
+  g_signal_connect (G_OBJECT (widget), "changed",
+                    G_CALLBACK (orientation_changed), area);
+
   widget = gtk_check_button_new_with_label ("Align 2nd Cell");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
   gtk_widget_show (widget);
