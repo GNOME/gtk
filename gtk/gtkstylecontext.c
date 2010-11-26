@@ -706,6 +706,8 @@ gtk_style_context_init (GtkStyleContext *style_context)
 
   priv->direction = GTK_TEXT_DIR_RTL;
 
+  priv->screen = gdk_screen_get_default ();
+
   /* Create default info store */
   info = style_info_new ();
   priv->info_stack = g_slist_prepend (priv->info_stack, info);
@@ -1232,9 +1234,8 @@ style_provider_remove (GList            **list,
  * gtk_style_context_new:
  *
  * Creates a standalone #GtkStyleContext, this style context
- * won't be attached to any widget nor screen, so you may want
- * to call gtk_style_context_set_path() and
- * gtk_style_context_set_screen() yourself.
+ * won't be attached to any widget, so you may want
+ * to call gtk_style_context_set_path() yourself.
  *
  * <note>
  * This function is only useful when using the theming layer
