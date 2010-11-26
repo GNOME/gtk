@@ -2575,7 +2575,7 @@ gtk_style_context_set_screen (GtkStyleContext *context,
  *
  * Returns the #GdkScreen to which @context is attached.
  *
- * Returns: a #GdkScreen, or %NULL.
+ * Returns: a #GdkScreen.
  **/
 GdkScreen *
 gtk_style_context_get_screen (GtkStyleContext *context)
