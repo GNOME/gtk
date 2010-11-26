@@ -649,12 +649,12 @@ cell_area_scaffold_size_allocate (GtkWidget           *widget,
   /* Cache the per-row sizes and allocate the context */
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      gtk_cell_area_context_allocate_width (priv->context, allocation->width - priv->indent);
+      gtk_cell_area_context_allocate (priv->context, allocation->width - priv->indent, -1);
       get_row_sizes (scaffold, priv->row_data, allocation->width - priv->indent);
     }
   else
     {
-      gtk_cell_area_context_allocate_height (priv->context, allocation->height - priv->indent);
+      gtk_cell_area_context_allocate (priv->context, -1, allocation->height - priv->indent);
       get_row_sizes (scaffold, priv->row_data, allocation->height - priv->indent);
     }
 }
