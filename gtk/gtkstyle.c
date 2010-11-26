@@ -1805,10 +1805,7 @@ transform_detail_string (const gchar     *detail,
 	   strcmp (detail, "viewportbin") == 0)
     gtk_style_context_add_class (context, "viewport");
   else if (strncmp (detail, "trough", 6) == 0)
-    {
-      gtk_style_context_add_class (context, "scrollbar");
-      gtk_style_context_add_class (context, "trough");
-    }
+    gtk_style_context_add_class (context, "trough");
   else if (strcmp (detail, "spinbutton") == 0)
     gtk_style_context_add_class (context, "spinbutton");
   else if (strcmp (detail, "spinbutton_up") == 0)

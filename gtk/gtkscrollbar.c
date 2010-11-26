@@ -118,6 +118,10 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 static void
 gtk_scrollbar_init (GtkScrollbar *scrollbar)
 {
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scrollbar));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCROLLBAR);
 }
 
 static void
