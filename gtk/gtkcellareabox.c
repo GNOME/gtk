@@ -583,7 +583,8 @@ allocate_cells_manually (GtkCellAreaBox        *box,
   gint                      i;
   gint                      nvisible = 0, nexpand = 0, group_expand;
   gint                      avail_size, extra_size, extra_extra;
-  gint                      position = 0;
+  gint                      position = 0, for_size;
+
 
   if (!priv->cells)
     return NULL;
@@ -606,9 +607,15 @@ allocate_cells_manually (GtkCellAreaBox        *box,
     }
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    avail_size = width;
+    {
+      avail_size = width;
+      for_size   = height;
+    }
   else
-    avail_size = height;
+    {
+      avail_size = height;
+      for_size   = width;
+    }
 
   /* Go ahead and collect the requests on the fly */
   sizes = g_new0 (GtkRequestedSize, nvisible);
@@ -619,14 +626,11 @@ allocate_cells_manually (GtkCellAreaBox        *box,
       if (!gtk_cell_renderer_get_visible (info->renderer))
 	continue;
 
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	gtk_cell_renderer_get_preferred_width_for_height (info->renderer, widget, height, 
-							  &sizes[i].minimum_size,
-							  &sizes[i].natural_size);
-      else
-	gtk_cell_renderer_get_preferred_height_for_width (info->renderer, widget, width, 
-							  &sizes[i].minimum_size,
-							  &sizes[i].natural_size);
+      gtk_cell_area_request_renderer (GTK_CELL_AREA (box), info->renderer,
+				      priv->orientation,
+				      widget, for_size,
+				      &sizes[i].minimum_size,
+				      &sizes[i].natural_size);
 
       avail_size -= sizes[i].minimum_size;
 
@@ -697,10 +701,16 @@ get_allocated_cells (GtkCellAreaBox        *box,
   GList                    *cell_list;
   GSList                   *allocated_cells = NULL;
   gint                      i, j, n_allocs;
+  gint                      for_size;
 
   group_allocs = gtk_cell_area_box_context_get_orientation_allocs (context, &n_allocs);
   if (!group_allocs)
     return allocate_cells_manually (box, widget, width, height);
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    for_size = height;
+  else
+    for_size = width;
 
   for (i = 0; i < n_allocs; i++)
     {
@@ -748,7 +758,7 @@ get_allocated_cells (GtkCellAreaBox        *box,
 
 	      gtk_cell_area_request_renderer (area, info->renderer,
 					      priv->orientation,
-					      widget, -1,
+					      widget, for_size,
 					      &sizes[j].minimum_size,
 					      &sizes[j].natural_size);
 

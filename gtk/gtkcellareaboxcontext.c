@@ -492,21 +492,19 @@ gtk_cell_area_box_context_allocate (GtkCellAreaContext *context,
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
   spacing     = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL && width > 0)
-    {
-      g_free (priv->orientation_allocs);
-      priv->orientation_allocs = allocate_for_orientation (box_context, orientation, 
-							   spacing, width, height,
-							   &priv->n_orientation_allocs);
-    }
-  else if (orientation == GTK_ORIENTATION_VERTICAL && height > 0)
-    {
-      g_free (priv->orientation_allocs);
-      priv->orientation_allocs = allocate_for_orientation (box_context, orientation, 
-							   spacing, height, width,
-							   &priv->n_orientation_allocs);
-    }
+  g_free (priv->orientation_allocs);
+  priv->orientation_allocs   = NULL;
+  priv->n_orientation_allocs = 0;
 
+  if (orientation == GTK_ORIENTATION_HORIZONTAL && width > 0)
+    priv->orientation_allocs = allocate_for_orientation (box_context, orientation, 
+							 spacing, width, height,
+							 &priv->n_orientation_allocs);
+  else if (orientation == GTK_ORIENTATION_VERTICAL && height > 0)
+    priv->orientation_allocs = allocate_for_orientation (box_context, orientation, 
+							 spacing, height, width,
+							 &priv->n_orientation_allocs);
+  
   GTK_CELL_AREA_CONTEXT_CLASS (gtk_cell_area_box_context_parent_class)->allocate (context, width, height);
 }
 
