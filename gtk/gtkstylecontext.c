@@ -168,6 +168,214 @@
  * by the animation.
  * </para>
  * </refsect2>
+ * <refsect2 id="gtkstylecontext-classes">
+ * <title>Style classes and regions</title>
+ * <para>
+ * Widgets can add style classes to their context, which can be used
+ * to associate different styles by class (see <xref linkend="gtkcssprovider-selectors"/>). Theme engines can also use style classes to vary their
+ * rendering. GTK+ has a number of predefined style classes:
+ * <informaltable>
+ *   <tgroup cols="3">
+ *     <thead>
+ *       <row>
+ *         <entry>Style class</entry>
+ *         <entry>Macro</entry>
+ *         <entry>Used by</entry>
+ *       </row>
+ *     </thead>
+ *     <tbody>
+ *       <row>
+ *         <entry>button</entry>
+ *         <entry>GTK_STYLE_CLASS_BUTTON</entry>
+ *         <entry>#GtkButton, #GtkToggleButton, #GtkRadioButton, #GtkCheckButton</entry>
+ *       </row>
+ *       <row>
+ *         <entry>default</entry>
+ *         <entry>GTK_STYLE_CLASS_DEFAULT</entry>
+ *         <entry>#GtkButton</entry>
+ *       </row>
+ *       <row>
+ *         <entry>check</entry>
+ *         <entry>GTK_STYLE_CLASS_CHECK</entry>
+ *         <entry>#GtkCheckButton, #GtkCheckMenuItem, #GtkCellRendererToggle</entry>
+ *       </row>
+ *       <row>
+ *         <entry>radio</entry>
+ *         <entry>GTK_STYLE_CLASS_RADIO</entry>
+ *         <entry>#GtkRadioButton, #GtkRadioMenuItem, #GtkCellRendererToggle</entry>
+ *       </row>
+ *       <row>
+ *         <entry>arrow</entry>
+ *         <entry>GTK_STYLE_CLASS_ARROW</entry>
+ *         <entry>#GtkArrow</entry>
+ *       </row>
+ *       <row>
+ *         <entry>calendar</entry>
+ *         <entry>GTK_STYLE_CLASS_CALENDAR</entry>
+ *         <entry>#GtkCalendar</entry>
+ *       </row>
+ *       <row>
+ *         <entry>entry</entry>
+ *         <entry>GTK_STYLE_CLASS_ENTRY</entry>
+ *         <entry>#GtkEntry</entry>
+ *       </row>
+ *       <row>
+ *         <entry>cell</entry>
+ *         <entry>GTK_STYLE_CLASS_CELL</entry>
+ *         <entry>#GtkCellRendererToggle</entry>
+ *       </row>
+ *       <row>
+ *         <entry>menu</entry>
+ *         <entry>GTK_STYLE_CLASS_MENU</entry>
+ *         <entry>#GtkMenu, #GtkMenuItem, #GtkCheckMenuItem, #GtkRadioMenuItem</entry>
+ *       </row>
+ *       <row>
+ *         <entry>expander</entry>
+ *         <entry>GTK_STYLE_CLASS_EXPANDER</entry>
+ *         <entry>#GtkExpander</entry>
+ *       </row>
+ *       <row>
+ *         <entry>tooltip</entry>
+ *         <entry>GTK_STYLE_CLASS_TOOLTIP</entry>
+ *         <entry>#GtkTooltip</entry>
+ *       </row>
+ *       <row>
+ *         <entry>frame</entry>
+ *         <entry>GTK_STYLE_CLASS_FRAME</entry>
+ *         <entry>#GtkFrame</entry>
+ *       </row>
+ *       <row>
+ *         <entry>scrolled-window</entry>
+ *         <entry></entry>
+ *         <entry>#GtkScrolledWindow</entry>
+ *       </row>
+ *       <row>
+ *         <entry>viewport</entry>
+ *         <entry></entry>
+ *         <entry>#GtkViewport</entry>
+ *       </row>
+ *       <row>
+ *         <entry>trough</entry>
+ *         <entry>GTK_STYLE_CLASS_TROUGH</entry>
+ *         <entry>#GtkScrollbar, #GtkProgressBar, #GtkScale</entry>
+ *       </row>
+ *       <row>
+ *         <entry>progressbar</entry>
+ *         <entry>GTK_STYLE_CLASS_PROGRESSBAR</entry>
+ *         <entry>#GtkProgressBar, #GtkCellRendererProgress</entry>
+ *       </row>
+ *       <row>
+ *         <entry>slider</entry>
+ *         <entry>GTK_STYLE_CLASS_SLIDER</entry>
+ *         <entry>#GtkScrollbar, #GtkScale</entry>
+ *       </row>
+ *       <row>
+ *         <entry>menuitem</entry>
+ *         <entry>GTK_STYLE_CLASS_MENUITEM</entry>
+ *         <entry>#GtkMenuItem</entry>
+ *       </row>
+ *       <row>
+ *         <entry>popup</entry>
+ *         <entry></entry>
+ *         <entry>#GtkMenu</entry>
+ *       </row>
+ *       <row>
+ *         <entry>accelerator</entry>
+ *         <entry>GTK_STYLE_CLASS_ACCELERATOR</entry>
+ *         <entry>#GtkAccelLabel</entry>
+ *       </row>
+ *       <row>
+ *         <entry>menubar</entry>
+ *         <entry>GTK_STYLE_CLASS_MENUBAR</entry>
+ *         <entry>#GtkMenuBar</entry>
+ *       </row>
+ *       <row>
+ *         <entry>toolbar</entry>
+ *         <entry>GTK_STYLE_CLASS_TOOLBAR</entry>
+ *         <entry>#GtkToolbar</entry>
+ *       </row>
+ *       <row>
+ *         <entry>dock</entry>
+ *         <entry>GTK_STYLE_CLASS_DOCK</entry>
+ *         <entry>#GtkHandleBox</entry>
+ *       </row>
+ *       <row>
+ *         <entry>notebook</entry>
+ *         <entry></entry>
+ *         <entry>#GtkNotebook</entry>
+ *       </row>
+ *       <row>
+ *         <entry>background</entry>
+ *         <entry>GTK_STYLE_CLASS_BACKGROUND</entry>
+ *         <entry>#GtkWindow</entry>
+ *       </row>
+ *       <row>
+ *         <entry>rubberband</entry>
+ *         <entry>GTK_STYLE_CLASS_RUBBERBAND</entry>
+ *         <entry></entry>
+ *       </row>
+ *       <row>
+ *         <entry>header</entry>
+ *         <entry>GTK_STYLE_CLASS_HEADER</entry>
+ *         <entry></entry>
+ *       </row>
+ *       <row>
+ *         <entry>grip</entry>
+ *         <entry>GTK_STYLE_CLASS_GRIP</entry>
+ *         <entry>#GtkWindow</entry>
+ *       </row>
+ *       <row>
+ *         <entry>spinner</entry>
+ *         <entry>GTK_STYLE_CLASS_SPINNER</entry>
+ *         <entry>#GtkSpinner</entry>
+ *       </row>
+ *     </tbody>
+ *   </tgroup>
+ * </informaltable>
+ * </para>
+ * <para>
+ * Widgets can also add regions with flags to their context.
+ * The regions used by GTK+ widgets are:
+ * <informaltable>
+ *   <tgroup cols="4">
+ *     <thead>
+ *       <row>
+ *         <entry>Region</entry>
+ *         <entry>Flags</entry>
+ *         <entry>Macro</entry>
+ *         <entry>Used by</entry>
+ *       </row>
+ *     </thead>
+ *     <tbody>
+ *       <row>
+ *         <entry>row</entry>
+ *         <entry>even, odd</entry>
+ *         <entry>GTK_STYLE_REGION_ROW</entry>
+ *         <entry>#GtkTreeView</entry>
+ *       </row>
+ *       <row>
+ *         <entry>column</entry>
+ *         <entry>first, last, sorted</entry>
+ *         <entry>GTK_STYLE_REGION_COLUMN</entry>
+ *         <entry>#GtkTreeView</entry>
+ *       </row>
+ *       <row>
+ *         <entry>column-header</entry>
+ *         <entry></entry>
+ *         <entry>GTK_STYLE_REGION_COLUMN_HEADER</entry>
+ *         <entry></entry>
+ *       </row>
+ *       <row>
+ *         <entry>tab</entry>
+ *         <entry>even, odd, first, last</entry>
+ *         <entry>GTK_STYLE_REGION_TAB</entry>
+ *         <entry>#GtkNotebook</entry>
+ *       </row>
+ *     </tbody>
+ *   </tgroup>
+ * </informaltable>
+ * </para>
+ * </refsect2>
  * <refsect2 id="gtkstylecontext-custom-styling">
  * <title>Custom styling in UI libraries and applications</title>
  * <para>

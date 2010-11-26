@@ -186,7 +186,9 @@
  * </para>
  * <para>
  * Refer to the documentation of individual widgets to learn which
- * regions and pseudo-classes they define.
+ * regions and pseudo-classes they define and see
+ * <xref linkend="gtkstylecontext-classes"/> for a list of all regions
+ * used by GTK+ widgets.
  * </para>
  * <example>
  * <title>Regions in selectors</title>
