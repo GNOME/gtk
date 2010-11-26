@@ -167,7 +167,8 @@ static void           init_context_group     (GtkCellAreaBox        *box,
 static GSList        *get_allocated_cells    (GtkCellAreaBox        *box,
 					      GtkCellAreaBoxContext *context,
 					      GtkWidget             *widget,
-					      gint                   orientation_size);
+					      gint                   width,
+					      gint                   height);
 
 
 struct _GtkCellAreaBoxPrivate
@@ -564,6 +565,121 @@ flush_contexts (GtkCellAreaBox *box)
     }
 }
 
+/* Fall back on a completely unaligned dynamic allocation of cells
+ * when not allocated for the said orientation, alignment of cells
+ * is not done when each area gets a different size in the orientation
+ * of the box.
+ */
+static GSList *
+allocate_cells_manually (GtkCellAreaBox        *box,
+			 GtkWidget             *widget,
+			 gint                   width,
+			 gint                   height)
+{
+  GtkCellAreaBoxPrivate    *priv = box->priv;
+  GList                    *cells, *l;
+  GSList                   *allocated_cells = NULL;
+  GtkRequestedSize         *sizes;
+  gint                      i;
+  gint                      nvisible = 0, nexpand = 0, group_expand;
+  gint                      avail_size, extra_size, extra_extra;
+  gint                      position = 0;
+
+  if (!priv->cells)
+    return NULL;
+
+  cells = list_consecutive_cells (box);
+
+  /* Count the visible and expand cells */
+  for (i = 0; i < priv->groups->len; i++)
+    {
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
+
+      nvisible += count_visible_cells (group, &group_expand);
+      nexpand  += group_expand;
+    }
+
+  if (nvisible <= 0)
+    {
+      g_list_free (cells);
+      return NULL;
+    }
+
+  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    avail_size = width;
+  else
+    avail_size = height;
+
+  /* Go ahead and collect the requests on the fly */
+  sizes = g_new0 (GtkRequestedSize, nvisible);
+  for (l = cells, i = 0; l; l = l->next)
+    {
+      CellInfo *info = l->data;
+
+      if (!gtk_cell_renderer_get_visible (info->renderer))
+	continue;
+
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+	gtk_cell_renderer_get_preferred_width_for_height (info->renderer, widget, height, 
+							  &sizes[i].minimum_size,
+							  &sizes[i].natural_size);
+      else
+	gtk_cell_renderer_get_preferred_height_for_width (info->renderer, widget, width, 
+							  &sizes[i].minimum_size,
+							  &sizes[i].natural_size);
+
+      avail_size -= sizes[i].minimum_size;
+
+      sizes[i].data = info;
+
+      i++;
+    }
+
+  /* Naturally distribute the allocation */
+  avail_size -= (nvisible - 1) * priv->spacing;
+  avail_size = gtk_distribute_natural_allocation (avail_size, nvisible, sizes);
+
+  /* Calculate/distribute expand for cells */
+  if (nexpand > 0)
+    {
+      extra_size  = avail_size / nexpand;
+      extra_extra = avail_size % nexpand;
+    }
+  else
+    extra_size = extra_extra = 0;
+
+  /* Create the allocated cells */
+  for (i = 0; i < nvisible; i++)
+    {
+      CellInfo      *info = sizes[i].data;
+      AllocatedCell *cell;
+
+      if (info->expand)
+	{
+	  sizes[i].minimum_size += extra_size;
+	  if (extra_extra)
+	    {
+	      sizes[i].minimum_size++;
+	      extra_extra--;
+	    }
+	}
+      
+      cell = allocated_cell_new (info->renderer, position, sizes[i].minimum_size);
+
+      allocated_cells = g_slist_prepend (allocated_cells, cell);
+	      
+      position += sizes[i].minimum_size;
+      position += priv->spacing;
+    }
+
+  g_free (sizes);
+  g_list_free (cells);
+
+  /* Note it might not be important to reverse the list here at all,
+   * we have the correct positions, no need to allocate from left to right */
+  return g_slist_reverse (allocated_cells);
+}
+
 /* Returns an allocation for each cell in the orientation of the box,
  * used in ->render()/->event() implementations to get a straight-forward
  * list of allocated cells to operate on.
@@ -572,7 +688,8 @@ static GSList *
 get_allocated_cells (GtkCellAreaBox        *box,
 		     GtkCellAreaBoxContext *context,
 		     GtkWidget             *widget,
-		     gint                   orientation_size)
+		     gint                   width,
+		     gint                   height)
 {
   GtkCellAreaBoxAllocation *group_allocs;
   GtkCellArea              *area = GTK_CELL_AREA (box);
@@ -580,14 +697,10 @@ get_allocated_cells (GtkCellAreaBox        *box,
   GList                    *cell_list;
   GSList                   *allocated_cells = NULL;
   gint                      i, j, n_allocs;
-  gboolean                  free_allocs = FALSE;
 
   group_allocs = gtk_cell_area_box_context_get_orientation_allocs (context, &n_allocs);
   if (!group_allocs)
-    {
-      group_allocs = gtk_cell_area_box_context_allocate (context, orientation_size, &n_allocs);
-      free_allocs  = TRUE;
-    }
+    return allocate_cells_manually (box, widget, width, height);
 
   for (i = 0; i < n_allocs; i++)
     {
@@ -685,9 +798,6 @@ get_allocated_cells (GtkCellAreaBox        *box,
 	  g_free (sizes);
 	}
     }
-
-  if (free_allocs)
-    g_free (group_allocs);
 
   /* Note it might not be important to reverse the list here at all,
    * we have the correct positions, no need to allocate from left to right */
@@ -843,8 +953,7 @@ gtk_cell_area_box_get_cell_allocation (GtkCellArea          *area,
   /* Get a list of cells with allocation sizes decided regardless
    * of alignments and pack order etc. */
   allocated_cells = get_allocated_cells (box, box_context, widget, 
-					 priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
-					 cell_area->width : cell_area->height);
+					 cell_area->width, cell_area->height);
 
   for (l = allocated_cells; l; l = l->next)
     {
@@ -921,8 +1030,7 @@ gtk_cell_area_box_event (GtkCellArea          *area,
 	  /* Get a list of cells with allocation sizes decided regardless
 	   * of alignments and pack order etc. */
 	  allocated_cells = get_allocated_cells (box, box_context, widget, 
-						 priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
-						 cell_area->width : cell_area->height);
+						 cell_area->width, cell_area->height);
 
 	  for (l = allocated_cells; l; l = l->next)
 	    {
@@ -1025,8 +1133,7 @@ gtk_cell_area_box_render (GtkCellArea          *area,
   /* Get a list of cells with allocation sizes decided regardless
    * of alignments and pack order etc. */
   allocated_cells = get_allocated_cells (box, box_context, widget, 
-					 priv->orientation == GTK_ORIENTATION_HORIZONTAL ?
-					 cell_area->width : cell_area->height);
+					 cell_area->width, cell_area->height);
 
   for (l = allocated_cells; l; l = l->next)
     {

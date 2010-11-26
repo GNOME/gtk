@@ -74,9 +74,8 @@ struct _GtkCellAreaContextClass
 
   /* Store an allocation value for a GtkCellArea contextual to a range of
    * treemodel rows */
-  void    (* allocate_width)                     (GtkCellAreaContext *context,
-						  gint                width);
-  void    (* allocate_height)                    (GtkCellAreaContext *context,
+  void    (* allocate)                           (GtkCellAreaContext *context,
+						  gint                width,
 						  gint                height);
 
   /* Padding for future expansion */
@@ -93,44 +92,27 @@ GtkCellArea *gtk_cell_area_context_get_area                         (GtkCellArea
 /* Apis for GtkCellArea clients to flush the cache */
 void         gtk_cell_area_context_flush                            (GtkCellAreaContext *context);
 void         gtk_cell_area_context_flush_preferred_width            (GtkCellAreaContext *context);
-void         gtk_cell_area_context_flush_preferred_height_for_width (GtkCellAreaContext *context,
-								     gint                for_width);
 void         gtk_cell_area_context_flush_preferred_height           (GtkCellAreaContext *context);
-void         gtk_cell_area_context_flush_preferred_width_for_height (GtkCellAreaContext *context,
-								     gint                for_height);
 void         gtk_cell_area_context_flush_allocation                 (GtkCellAreaContext *context);
 
 /* Apis for GtkCellArea clients to sum up the results of a series of requests, this
  * call is required to reduce the processing while calculating the size of each row */
 void         gtk_cell_area_context_sum_preferred_width              (GtkCellAreaContext *context);
-void         gtk_cell_area_context_sum_preferred_height_for_width   (GtkCellAreaContext *context,
-								     gint                for_width);
 void         gtk_cell_area_context_sum_preferred_height             (GtkCellAreaContext *context);
-void         gtk_cell_area_context_sum_preferred_width_for_height   (GtkCellAreaContext *context,
-								     gint                for_height);
 
 /* Apis to set an allocation size in one dimension or another, the subclass specific context
  * will store allocated positions/sizes for individual cells or groups of cells */
-void         gtk_cell_area_context_allocate_width                   (GtkCellAreaContext *context,
-								     gint                width);
-void         gtk_cell_area_context_allocate_height                  (GtkCellAreaContext *context,
+void         gtk_cell_area_context_allocate                         (GtkCellAreaContext *context,
+								     gint                width,
 								     gint                height);
 
 /* Apis for GtkCellArea clients to consult cached values for multiple GtkTreeModel rows */
 void         gtk_cell_area_context_get_preferred_width              (GtkCellAreaContext *context,
 								     gint               *minimum_width,
 								     gint               *natural_width);
-void         gtk_cell_area_context_get_preferred_height_for_width   (GtkCellAreaContext *context,
-								     gint                for_width,
-								     gint               *minimum_height,
-								     gint               *natural_height);
 void         gtk_cell_area_context_get_preferred_height             (GtkCellAreaContext *context,
 								     gint               *minimum_height,
 								     gint               *natural_height);
-void         gtk_cell_area_context_get_preferred_width_for_height   (GtkCellAreaContext *context,
-								     gint                for_height,
-								     gint               *minimum_width,
-								     gint               *natural_width);
 void         gtk_cell_area_context_get_allocation                   (GtkCellAreaContext *context,
 								     gint               *width,
 								     gint               *height);
@@ -139,17 +121,9 @@ void         gtk_cell_area_context_get_allocation                   (GtkCellArea
 void         gtk_cell_area_context_push_preferred_width             (GtkCellAreaContext *context,
 								     gint                minimum_width,
 								     gint                natural_width);
-void         gtk_cell_area_context_push_preferred_height_for_width  (GtkCellAreaContext *context,
-								     gint                for_width,
-								     gint                minimum_height,
-								     gint                natural_height);
 void         gtk_cell_area_context_push_preferred_height            (GtkCellAreaContext *context,
 								     gint                minimum_height,
 								     gint                natural_height);
-void         gtk_cell_area_context_push_preferred_width_for_height  (GtkCellAreaContext *context,
-								     gint                for_height,
-								     gint                minimum_width,
-								     gint                natural_width);
 
 G_END_DECLS
 

@@ -32,36 +32,29 @@ static void      gtk_cell_area_box_context_finalize                         (GOb
 
 /* GtkCellAreaContextClass */
 static void      gtk_cell_area_box_context_flush_preferred_width            (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_flush_preferred_height_for_width (GtkCellAreaContext *context,
-									     gint                width);
 static void      gtk_cell_area_box_context_flush_preferred_height           (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_flush_preferred_width_for_height (GtkCellAreaContext *context,
-									     gint                height);
 static void      gtk_cell_area_box_context_flush_allocation                 (GtkCellAreaContext *context);
 static void      gtk_cell_area_box_context_sum_preferred_width              (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_sum_preferred_height_for_width   (GtkCellAreaContext *context,
-									     gint                width);
 static void      gtk_cell_area_box_context_sum_preferred_height             (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_sum_preferred_width_for_height   (GtkCellAreaContext *context,
-									     gint                height);
-static void      gtk_cell_area_box_context_allocate_width                   (GtkCellAreaContext *context,
-									     gint                width);
-static void      gtk_cell_area_box_context_allocate_height                  (GtkCellAreaContext *context,
+static void      gtk_cell_area_box_context_allocate                         (GtkCellAreaContext *context,
+									     gint                width,
 									     gint                height);
 
-static void      free_cache_array                                           (GArray          *array);
+static void      free_cache_array    (GArray                *array);
+static GArray   *group_array_new     (GtkCellAreaBoxContext *context);
+static GArray   *get_array           (GtkCellAreaBoxContext *context,
+				      GtkOrientation         orientation,
+				      gint                   for_size);
+static gboolean  group_expands       (GtkCellAreaBoxContext *context,
+				      gint                   group_idx);
+static gint      count_expand_groups (GtkCellAreaBoxContext *context);
+
 
 /* CachedSize management */
 typedef struct {
   gint     min_size;
   gint     nat_size;
 } CachedSize;
-
-typedef struct {
-  gint     min_size;
-  gint     nat_size;
-  gboolean expand;
-} BaseSize;
 
 struct _GtkCellAreaBoxContextPrivate
 {
@@ -72,6 +65,9 @@ struct _GtkCellAreaBoxContextPrivate
   /* Table of per height/width hash tables of per renderer CachedSizes */
   GHashTable *widths;
   GHashTable *heights;
+
+  /* Whether each group expands */
+  gboolean  *expand;
 
   /* Allocation info for this context if any */
   gint                      alloc_width;
@@ -88,6 +84,80 @@ free_cache_array (GArray *array)
   g_array_free (array, TRUE);
 }
 
+static GArray *
+group_array_new (GtkCellAreaBoxContext *context)
+{
+  GtkCellAreaBoxContextPrivate *priv = context->priv;
+  GArray *group_array;
+
+  group_array = g_array_new (FALSE, TRUE, sizeof (CachedSize));
+  g_array_set_size (group_array, priv->base_widths->len);
+
+  return group_array;
+}
+
+static GArray *
+get_array (GtkCellAreaBoxContext *context,
+	   GtkOrientation         orientation,
+	   gint                   for_size)
+{
+  GtkCellAreaBoxContextPrivate *priv = context->priv;
+  GArray                       *array;
+
+  if (for_size < 0)
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	array = priv->base_widths;
+      else
+	array = priv->base_heights;
+    }
+  else
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  array = g_hash_table_lookup (priv->widths, GINT_TO_POINTER (for_size));
+
+	  if (!array)
+	    array = priv->base_widths;
+	}
+      else
+	{
+	  array = g_hash_table_lookup (priv->heights, GINT_TO_POINTER (for_size));
+
+	  if (!array)
+	    array = priv->base_heights;
+	}
+    }
+
+  return array;
+}
+
+static gboolean 
+group_expands (GtkCellAreaBoxContext *context,
+	       gint                   group_idx)
+{
+  GtkCellAreaBoxContextPrivate *priv = context->priv;
+
+  g_assert (group_idx >= 0 && group_idx < priv->base_widths->len);
+
+  return priv->expand[group_idx];
+}
+
+static gint
+count_expand_groups (GtkCellAreaBoxContext *context)
+{
+  GtkCellAreaBoxContextPrivate *priv = context->priv;
+  gint i, expand = 0;
+
+  for (i = 0; i < priv->base_widths->len; i++)
+    {
+      if (priv->expand[i])
+	expand++;
+    }
+  
+  return expand;
+}
+
 static void
 gtk_cell_area_box_context_init (GtkCellAreaBoxContext *box_context)
 {
@@ -98,8 +168,8 @@ gtk_cell_area_box_context_init (GtkCellAreaBoxContext *box_context)
 						   GtkCellAreaBoxContextPrivate);
   priv = box_context->priv;
 
-  priv->base_widths  = g_array_new (FALSE, TRUE, sizeof (BaseSize));
-  priv->base_heights = g_array_new (FALSE, TRUE, sizeof (BaseSize));
+  priv->base_widths  = g_array_new (FALSE, TRUE, sizeof (CachedSize));
+  priv->base_heights = g_array_new (FALSE, TRUE, sizeof (CachedSize));
 
   priv->widths       = g_hash_table_new_full (g_direct_hash, g_direct_equal,
 					      NULL, (GDestroyNotify)free_cache_array);
@@ -121,19 +191,13 @@ gtk_cell_area_box_context_class_init (GtkCellAreaBoxContextClass *class)
   /* GObjectClass */
   object_class->finalize = gtk_cell_area_box_context_finalize;
 
-  context_class->flush_preferred_width            = gtk_cell_area_box_context_flush_preferred_width;
-  context_class->flush_preferred_height_for_width = gtk_cell_area_box_context_flush_preferred_height_for_width;
-  context_class->flush_preferred_height           = gtk_cell_area_box_context_flush_preferred_height;
-  context_class->flush_preferred_width_for_height = gtk_cell_area_box_context_flush_preferred_width_for_height;
-  context_class->flush_allocation                 = gtk_cell_area_box_context_flush_allocation;
+  context_class->flush_preferred_width   = gtk_cell_area_box_context_flush_preferred_width;
+  context_class->flush_preferred_height  = gtk_cell_area_box_context_flush_preferred_height;
+  context_class->flush_allocation        = gtk_cell_area_box_context_flush_allocation;
+  context_class->sum_preferred_width     = gtk_cell_area_box_context_sum_preferred_width;
+  context_class->sum_preferred_height    = gtk_cell_area_box_context_sum_preferred_height;
 
-  context_class->sum_preferred_width            = gtk_cell_area_box_context_sum_preferred_width;
-  context_class->sum_preferred_height_for_width = gtk_cell_area_box_context_sum_preferred_height_for_width;
-  context_class->sum_preferred_height           = gtk_cell_area_box_context_sum_preferred_height;
-  context_class->sum_preferred_width_for_height = gtk_cell_area_box_context_sum_preferred_width_for_height;
-
-  context_class->allocate_width  = gtk_cell_area_box_context_allocate_width;
-  context_class->allocate_height = gtk_cell_area_box_context_allocate_height;
+  context_class->allocate  = gtk_cell_area_box_context_allocate;
 
   g_type_class_add_private (object_class, sizeof (GtkCellAreaBoxContextPrivate));
 }
@@ -153,6 +217,7 @@ gtk_cell_area_box_context_finalize (GObject *object)
   g_hash_table_destroy (priv->heights);
 
   g_free (priv->orientation_allocs);
+  g_free (priv->expand);
 
   G_OBJECT_CLASS (gtk_cell_area_box_context_parent_class)->finalize (object);
 }
@@ -169,31 +234,17 @@ gtk_cell_area_box_context_flush_preferred_width (GtkCellAreaContext *context)
 
   for (i = 0; i < priv->base_widths->len; i++)
     {
-      BaseSize *size = &g_array_index (priv->base_widths, BaseSize, i);
+      CachedSize *size = &g_array_index (priv->base_widths, CachedSize, i);
 
       size->min_size = 0;
       size->nat_size = 0;
     }
 
+  /* Flush context widths as well */
+  g_hash_table_remove_all (priv->widths);
+
   GTK_CELL_AREA_CONTEXT_CLASS
     (gtk_cell_area_box_context_parent_class)->flush_preferred_width (context);
-}
-
-static void
-gtk_cell_area_box_context_flush_preferred_height_for_width (GtkCellAreaContext *context,
-							    gint                width)
-{
-  GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-  GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
-
-  /* Flush all sizes for special -1 value */
-  if (width < 0)
-    g_hash_table_remove_all (priv->heights);
-  else
-    g_hash_table_remove (priv->heights, GINT_TO_POINTER (width));
-
-  GTK_CELL_AREA_CONTEXT_CLASS
-    (gtk_cell_area_box_context_parent_class)->flush_preferred_height_for_width (context, width);
 }
 
 static void
@@ -205,31 +256,17 @@ gtk_cell_area_box_context_flush_preferred_height (GtkCellAreaContext *context)
 
   for (i = 0; i < priv->base_heights->len; i++)
     {
-      BaseSize *size = &g_array_index (priv->base_heights, BaseSize, i);
+      CachedSize *size = &g_array_index (priv->base_heights, CachedSize, i);
 
       size->min_size = 0;
       size->nat_size = 0;
     }
 
+  /* Flush context heights as well */
+  g_hash_table_remove_all (priv->heights);
+
   GTK_CELL_AREA_CONTEXT_CLASS
     (gtk_cell_area_box_context_parent_class)->flush_preferred_height (context);
-}
-
-static void
-gtk_cell_area_box_context_flush_preferred_width_for_height (GtkCellAreaContext *context,
-							    gint                height)
-{
-  GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-  GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
-
-  /* Flush all sizes for special -1 value */
-  if (height < 0)
-    g_hash_table_remove_all (priv->widths);
-  else
-    g_hash_table_remove (priv->widths, GINT_TO_POINTER (height));
-
-  GTK_CELL_AREA_CONTEXT_CLASS
-    (gtk_cell_area_box_context_parent_class)->flush_preferred_width_for_height (context, height);
 }
 
 static void
@@ -259,7 +296,7 @@ gtk_cell_area_box_context_sum_preferred_width (GtkCellAreaContext *context)
 
   for (i = 0; i < priv->base_widths->len; i++)
     {
-      BaseSize *size = &g_array_index (priv->base_widths, BaseSize, i);
+      CachedSize *size = &g_array_index (priv->base_widths, CachedSize, i);
 
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
@@ -286,55 +323,6 @@ gtk_cell_area_box_context_sum_preferred_width (GtkCellAreaContext *context)
 }
 
 static void
-gtk_cell_area_box_context_sum_preferred_height_for_width (GtkCellAreaContext *context,
-							  gint                width)
-{
-  GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-  GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
-  GArray                    *group_array;
-  GtkCellArea               *area;
-  GtkOrientation             orientation;
-  gint                       spacing, i;
-  gint                       min_size = 0, nat_size = 0;
-
-  group_array = g_hash_table_lookup (priv->heights, GINT_TO_POINTER (width));
-
-  if (group_array)
-    {
-      area        = gtk_cell_area_context_get_area (context);
-      spacing     = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
-      orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
-      
-      for (i = 0; i < group_array->len; i++)
-	{
-	  CachedSize *size = &g_array_index (group_array, CachedSize, i);
-	  
-	  if (orientation == GTK_ORIENTATION_VERTICAL)
-	    {
-	      /* Dont add spacing for 0 size groups, they can be 0 size because
-	       * they contain only invisible cells for this round of requests 
-	       */
-	      if (min_size > 0 && size->nat_size > 0)
-		{
-		  min_size += spacing;
-		  nat_size += spacing;
-		}
-	      
-	      min_size += size->min_size;
-	      nat_size += size->nat_size;
-	    }
-	  else
-	    {
-	      min_size = MAX (min_size, size->min_size);
-	      nat_size = MAX (nat_size, size->nat_size);
-	    }
-	}
-
-      gtk_cell_area_context_push_preferred_height_for_width (context, width, min_size, nat_size);
-    }
-}
-
-static void
 gtk_cell_area_box_context_sum_preferred_height (GtkCellAreaContext *context)
 {
   GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
@@ -350,7 +338,7 @@ gtk_cell_area_box_context_sum_preferred_height (GtkCellAreaContext *context)
 
   for (i = 0; i < priv->base_heights->len; i++)
     {
-      BaseSize *size = &g_array_index (priv->base_heights, BaseSize, i);
+      CachedSize *size = &g_array_index (priv->base_heights, CachedSize, i);
 
       if (orientation == GTK_ORIENTATION_VERTICAL)
 	{
@@ -376,79 +364,27 @@ gtk_cell_area_box_context_sum_preferred_height (GtkCellAreaContext *context)
   gtk_cell_area_context_push_preferred_height (context, min_size, nat_size);
 }
 
-static void
-gtk_cell_area_box_context_sum_preferred_width_for_height (GtkCellAreaContext *context,
-							  gint                height)
-{
-  GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-  GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
-  GArray                    *group_array;
-  GtkCellArea               *area;
-  GtkOrientation             orientation;
-  gint                       spacing, i;
-  gint                       min_size = 0, nat_size = 0;
-
-  group_array = g_hash_table_lookup (priv->widths, GINT_TO_POINTER (height));
-
-  if (group_array)
-    {
-      area        = gtk_cell_area_context_get_area (context);
-      spacing     = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
-      orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
-      
-      for (i = 0; i < group_array->len; i++)
-	{
-	  CachedSize *size = &g_array_index (group_array, CachedSize, i);
-	  
-	  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	    {
-	      /* Dont add spacing for 0 size groups, they can be 0 size because
-	       * they contain only invisible cells for this round of requests 
-	       */
-	      if (min_size > 0 && size->nat_size > 0)
-		{
-		  min_size += spacing;
-		  nat_size += spacing;
-		}
-	      
-	      min_size += size->min_size;
-	      nat_size += size->nat_size;
-	    }
-	  else
-	    {
-	      min_size = MAX (min_size, size->min_size);
-	      nat_size = MAX (nat_size, size->nat_size);
-	    }
-	}
-
-      gtk_cell_area_context_push_preferred_width_for_height (context, height, min_size, nat_size);
-    }
-}
-
 static GtkRequestedSize *
 gtk_cell_area_box_context_get_requests (GtkCellAreaBoxContext *box_context,
 					GtkOrientation         orientation,
+					gint                   for_size,
 					gint                  *n_requests)
 {
   GtkCellAreaBoxContextPrivate *priv;
   GtkRequestedSize             *requests;
-  GArray                       *base_array;
-  BaseSize                     *size;
+  GArray                       *array;
+  CachedSize                   *size;
   gint                          visible_groups = 0;
   gint                          i, j;
 
   g_return_val_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context), NULL);
 
-  priv = box_context->priv;
+  priv  = box_context->priv;
+  array = get_array (box_context, orientation, for_size);
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    base_array = priv->base_widths;
-  else
-    base_array = priv->base_heights;
-
-  for (i = 0; i < base_array->len; i++)
+  for (i = 0; i < array->len; i++)
     {
-      size = &g_array_index (base_array, BaseSize, i);
+      size = &g_array_index (array, CachedSize, i);
 
       if (size->nat_size > 0)
 	visible_groups++;
@@ -456,9 +392,9 @@ gtk_cell_area_box_context_get_requests (GtkCellAreaBoxContext *box_context,
 
   requests = g_new (GtkRequestedSize, visible_groups);
 
-  for (j = 0, i = 0; i < base_array->len; i++)
+  for (j = 0, i = 0; i < array->len; i++)
     {
-      size = &g_array_index (base_array, BaseSize, i);
+      size = &g_array_index (array, CachedSize, i);
 
       if (size->nat_size > 0)
 	{
@@ -480,40 +416,27 @@ allocate_for_orientation (GtkCellAreaBoxContext *context,
 			  GtkOrientation         orientation,
 			  gint                   spacing,
 			  gint                   size,
+			  gint                   for_size,
 			  gint                  *n_allocs)
 {
-  GtkCellAreaBoxContextPrivate *priv = context->priv;
-  GtkRequestedSize             *orientation_sizes;
   GtkCellAreaBoxAllocation     *allocs;
+  GtkRequestedSize             *sizes;
+  GArray                       *array;
   gint                          n_expand_groups = 0;
   gint                          i, n_groups, position;
   gint                          extra_size, extra_extra;
   gint                          avail_size = size;
 
-  orientation_sizes =
-    gtk_cell_area_box_context_get_requests (context, orientation, &n_groups);
-
-  /* Count groups that expand */
-  for (i = 0; i < n_groups; i++)
-    {
-      BaseSize *size;
-      gint      group_idx = GPOINTER_TO_INT (orientation_sizes[i].data);
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-	size = &g_array_index (priv->base_widths, BaseSize, group_idx);
-      else
-	size = &g_array_index (priv->base_heights, BaseSize, group_idx);
-
-      if (size->expand)
-	n_expand_groups++;
-    }
+  sizes           = gtk_cell_area_box_context_get_requests (context, orientation, for_size, &n_groups);
+  array           = get_array (context, orientation, for_size);
+  n_expand_groups = count_expand_groups (context);
 
   /* First start by naturally allocating space among groups */
   avail_size -= (n_groups - 1) * spacing;
   for (i = 0; i < n_groups; i++)
-    avail_size -= orientation_sizes[i].minimum_size;
+    avail_size -= sizes[i].minimum_size;
 
-  avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, orientation_sizes);
+  avail_size = gtk_distribute_natural_allocation (avail_size, n_groups, sizes);
 
   /* Calculate/distribute expand for groups */
   if (n_expand_groups > 0)
@@ -528,13 +451,11 @@ allocate_for_orientation (GtkCellAreaBoxContext *context,
 
   for (position = 0, i = 0; i < n_groups; i++)
     {
-      BaseSize *base_size = &g_array_index (priv->base_widths, BaseSize, i);
-
-      allocs[i].group_idx = GPOINTER_TO_INT (orientation_sizes[i].data);
+      allocs[i].group_idx = GPOINTER_TO_INT (sizes[i].data);
       allocs[i].position  = position;
-      allocs[i].size      = orientation_sizes[i].minimum_size;
+      allocs[i].size      = sizes[i].minimum_size;
 
-      if (base_size->expand)
+      if (group_expands (context, allocs[i].group_idx))
 	{
 	  allocs[i].size += extra_size;
 	  if (extra_extra)
@@ -551,57 +472,42 @@ allocate_for_orientation (GtkCellAreaBoxContext *context,
   if (n_allocs)
     *n_allocs = n_groups;
 
-  g_free (orientation_sizes);
+  g_free (sizes);
 
   return allocs;
 }
 
 static void
-gtk_cell_area_box_context_allocate_width (GtkCellAreaContext *context,
-					  gint                width)
+gtk_cell_area_box_context_allocate (GtkCellAreaContext *context,
+				    gint                width,
+				    gint                height)
 {
   GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
   GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
   GtkCellArea                  *area;
   GtkOrientation                orientation;
+  gint                          spacing;
 
   area        = gtk_cell_area_context_get_area (context);
   orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
+  spacing     = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+  if (orientation == GTK_ORIENTATION_HORIZONTAL && width > 0)
     {
-      gint spacing = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
-
       g_free (priv->orientation_allocs);
-      priv->orientation_allocs = allocate_for_orientation (box_context, orientation, spacing, width,
+      priv->orientation_allocs = allocate_for_orientation (box_context, orientation, 
+							   spacing, width, height,
+							   &priv->n_orientation_allocs);
+    }
+  else if (orientation == GTK_ORIENTATION_VERTICAL && height > 0)
+    {
+      g_free (priv->orientation_allocs);
+      priv->orientation_allocs = allocate_for_orientation (box_context, orientation, 
+							   spacing, height, width,
 							   &priv->n_orientation_allocs);
     }
 
-  GTK_CELL_AREA_CONTEXT_CLASS (gtk_cell_area_box_context_parent_class)->allocate_width (context, width);
-}
-
-static void
-gtk_cell_area_box_context_allocate_height (GtkCellAreaContext *context,
-					   gint                height)
-{
-  GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-  GtkCellAreaBoxContextPrivate *priv     = box_context->priv;
-  GtkCellArea                  *area;
-  GtkOrientation                orientation;
-
-  area        = gtk_cell_area_context_get_area (context);
-  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
-
-  if (orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      gint spacing = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
-
-      g_free (priv->orientation_allocs);
-      priv->orientation_allocs = allocate_for_orientation (box_context, orientation, spacing, height,
-							   &priv->n_orientation_allocs);
-    }
-
-  GTK_CELL_AREA_CONTEXT_CLASS (gtk_cell_area_box_context_parent_class)->allocate_height (context, height);
+  GTK_CELL_AREA_CONTEXT_CLASS (gtk_cell_area_box_context_parent_class)->allocate (context, width, height);
 }
 
 
@@ -614,13 +520,12 @@ gtk_cell_area_box_init_groups (GtkCellAreaBoxContext *box_context,
 			       gboolean              *expand_groups)
 {
   GtkCellAreaBoxContextPrivate *priv;
-  gint                          i;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
   g_return_if_fail (n_groups == 0 || expand_groups != NULL);
 
   /* When the group dimensions change, all info must be flushed 
-   * Note this already clears the min/nat values on the BaseSizes
+   * Note this already clears the min/nat values on the CachedSizes
    */
   gtk_cell_area_context_flush (GTK_CELL_AREA_CONTEXT (box_context));
 
@@ -628,15 +533,8 @@ gtk_cell_area_box_init_groups (GtkCellAreaBoxContext *box_context,
   g_array_set_size (priv->base_widths,  n_groups);
   g_array_set_size (priv->base_heights, n_groups);
 
-  /* Now set the expand info */
-  for (i = 0; i < n_groups; i++)
-    {
-      BaseSize *base_width  = &g_array_index (priv->base_widths,  BaseSize, i);
-      BaseSize *base_height = &g_array_index (priv->base_heights, BaseSize, i);
-
-      base_width->expand  = expand_groups[i];
-      base_height->expand = expand_groups[i];
-    }
+  g_free (priv->expand);
+  priv->expand = g_memdup (expand_groups, n_groups * sizeof (gboolean));
 }
 
 void
@@ -646,14 +544,14 @@ gtk_cell_area_box_context_push_group_width (GtkCellAreaBoxContext *box_context,
 					    gint                   natural_width)
 {
   GtkCellAreaBoxContextPrivate *priv;
-  BaseSize                     *size;
+  CachedSize                   *size;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
 
   priv = box_context->priv;
   g_return_if_fail (group_idx < priv->base_widths->len);
 
-  size = &g_array_index (priv->base_widths, BaseSize, group_idx);
+  size = &g_array_index (priv->base_widths, CachedSize, group_idx);
   size->min_size = MAX (size->min_size, minimum_width);
   size->nat_size = MAX (size->nat_size, natural_width);
 }
@@ -677,9 +575,7 @@ gtk_cell_area_box_context_push_group_height_for_width  (GtkCellAreaBoxContext *b
   group_array = g_hash_table_lookup (priv->heights, GINT_TO_POINTER (for_width));
   if (!group_array)
     {
-      group_array = g_array_new (FALSE, TRUE, sizeof (CachedSize));
-      g_array_set_size (group_array, priv->base_heights->len);
-
+      group_array = group_array_new (box_context);
       g_hash_table_insert (priv->heights, GINT_TO_POINTER (for_width), group_array);
     }
 
@@ -695,14 +591,14 @@ gtk_cell_area_box_context_push_group_height (GtkCellAreaBoxContext *box_context,
 					     gint                   natural_height)
 {
   GtkCellAreaBoxContextPrivate *priv;
-  BaseSize                     *size;
+  CachedSize                   *size;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
 
   priv = box_context->priv;
   g_return_if_fail (group_idx < priv->base_heights->len);
 
-  size = &g_array_index (priv->base_heights, BaseSize, group_idx);
+  size = &g_array_index (priv->base_heights, CachedSize, group_idx);
   size->min_size = MAX (size->min_size, minimum_height);
   size->nat_size = MAX (size->nat_size, natural_height);
 }
@@ -715,8 +611,8 @@ gtk_cell_area_box_context_push_group_width_for_height (GtkCellAreaBoxContext *bo
 						       gint                   natural_width)
 {
   GtkCellAreaBoxContextPrivate *priv;
-  GArray                    *group_array;
-  CachedSize                *size;
+  GArray                       *group_array;
+  CachedSize                   *size;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
 
@@ -726,9 +622,7 @@ gtk_cell_area_box_context_push_group_width_for_height (GtkCellAreaBoxContext *bo
   group_array = g_hash_table_lookup (priv->widths, GINT_TO_POINTER (for_height));
   if (!group_array)
     {
-      group_array = g_array_new (FALSE, TRUE, sizeof (CachedSize));
-      g_array_set_size (group_array, priv->base_heights->len);
-
+      group_array = group_array_new (box_context);
       g_hash_table_insert (priv->widths, GINT_TO_POINTER (for_height), group_array);
     }
 
@@ -744,14 +638,14 @@ gtk_cell_area_box_context_get_group_width (GtkCellAreaBoxContext *box_context,
 					   gint                  *natural_width)
 {
   GtkCellAreaBoxContextPrivate *priv;
-  BaseSize                     *size;
+  CachedSize                   *size;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
 
   priv = box_context->priv;
   g_return_if_fail (group_idx < priv->base_widths->len);
 
-  size = &g_array_index (priv->base_widths, BaseSize, group_idx);
+  size = &g_array_index (priv->base_widths, CachedSize, group_idx);
 
   if (minimum_width)
     *minimum_width = size->min_size;
@@ -804,14 +698,14 @@ gtk_cell_area_box_context_get_group_height (GtkCellAreaBoxContext *box_context,
 					    gint                  *natural_height)
 {
   GtkCellAreaBoxContextPrivate *priv;
-  BaseSize                     *size;
+  CachedSize                   *size;
 
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
 
   priv = box_context->priv;
   g_return_if_fail (group_idx < priv->base_heights->len);
 
-  size = &g_array_index (priv->base_heights, BaseSize, group_idx);
+  size = &g_array_index (priv->base_heights, CachedSize, group_idx);
 
   if (minimum_height)
     *minimum_height = size->min_size;
@@ -861,14 +755,14 @@ GtkRequestedSize *
 gtk_cell_area_box_context_get_widths (GtkCellAreaBoxContext *box_context,
 				      gint                  *n_widths)
 {
-  return gtk_cell_area_box_context_get_requests (box_context, GTK_ORIENTATION_HORIZONTAL, n_widths);
+  return gtk_cell_area_box_context_get_requests (box_context, GTK_ORIENTATION_HORIZONTAL, -1, n_widths);
 }
 
 GtkRequestedSize *
 gtk_cell_area_box_context_get_heights (GtkCellAreaBoxContext *box_context,
 				       gint                  *n_heights)
 {
-  return gtk_cell_area_box_context_get_requests (box_context, GTK_ORIENTATION_VERTICAL, n_heights);
+  return gtk_cell_area_box_context_get_requests (box_context, GTK_ORIENTATION_VERTICAL, -1, n_heights);
 }
 
 GtkCellAreaBoxAllocation *
@@ -884,21 +778,4 @@ gtk_cell_area_box_context_get_orientation_allocs (GtkCellAreaBoxContext *context
   *n_allocs = priv->n_orientation_allocs;
 
   return priv->orientation_allocs;
-
-}
-
-GtkCellAreaBoxAllocation *
-gtk_cell_area_box_context_allocate (GtkCellAreaBoxContext *context,
-				    gint                   orientation_size,
-				    gint                  *n_allocs)
-{
-  GtkCellArea    *area;
-  GtkOrientation  orientation;
-  gint            spacing;
-
-  area        = gtk_cell_area_context_get_area (GTK_CELL_AREA_CONTEXT (context));
-  orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (area));
-  spacing     = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
-
-  return allocate_for_orientation (context, orientation, spacing, orientation_size, n_allocs);
 }
