@@ -167,6 +167,7 @@ gtk_public_h_sources =          \
 	gtkbbox.h		\
 	gtkbin.h		\
 	gtkbindings.h		\
+	gtkborder.h		\
 	gtkbox.h		\
 	gtkbuilder.h		\
 	gtkbuildable.h		\
@@ -179,7 +180,7 @@ gtk_public_h_sources =          \
 	gtkcellrenderercombo.h	\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
-	gtkcellrendererspin.h   \
+	gtkcellrendererspin.h	\
 	gtkcellrendererspinner.h\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
@@ -194,26 +195,27 @@ gtk_public_h_sources =          \
 	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
 	gtkcssprovider.h	\
-	gtkdebug.h              \
+	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
 	gtkdrawingarea.h	\
-	gtkeditable.h           \
+	gtkeditable.h		\
 	gtkentry.h		\
 	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
-	gtkfilechooser.h        \
-	gtkfilechooserbutton.h  \
-	gtkfilechooserdialog.h  \
-	gtkfilechooserwidget.h  \
+	gtkfilechooser.h	\
+	gtkfilechooserbutton.h	\
+	gtkfilechooserdialog.h	\
+	gtkfilechooserwidget.h	\
 	gtkfilefilter.h		\
 	gtkfixed.h		\
 	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
+	gtkgradient.h		\
 	gtkgrid.h		\
 	gtkhandlebox.h		\
 	gtkhbbox.h		\
@@ -235,7 +237,7 @@ gtk_public_h_sources =          \
 	gtkinfobar.h		\
 	gtkinvisible.h		\
 	gtklabel.h		\
-	gtklayout.h             \
+	gtklayout.h		\
 	gtklinkbutton.h		\
 	gtkliststore.h		\
 	gtkmain.h		\
@@ -247,7 +249,7 @@ gtk_public_h_sources =          \
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtkmodules.h		\
-	gtkmountoperation.h     \
+	gtkmountoperation.h	\
 	gtknotebook.h		\
 	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
@@ -257,7 +259,7 @@ gtk_public_h_sources =          \
 	gtkplug.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
-	gtkprintoperationpreview.h	\
+	gtkprintoperationpreview.h \
 	gtkprintsettings.h	\
 	gtkprogressbar.h	\
 	gtkradioaction.h	\
@@ -269,13 +271,13 @@ gtk_public_h_sources =          \
 	gtkrecentaction.h	\
 	gtkrecentchooser.h 	\
 	gtkrecentchooserdialog.h \
-	gtkrecentchoosermenu.h 	\
+	gtkrecentchoosermenu.h	\
 	gtkrecentchooserwidget.h \
-	gtkrecentfilter.h 	\
+	gtkrecentfilter.h	\
 	gtkrecentmanager.h 	\
 	gtkscale.h		\
 	gtkscalebutton.h	\
-	gtkscrollable.h         \
+	gtkscrollable.h		\
 	gtkscrollbar.h		\
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
@@ -299,7 +301,7 @@ gtk_public_h_sources =          \
 	gtkswitch.h		\
 	gtksymboliccolor.h	\
 	gtktable.h		\
-	gtktearoffmenuitem.h    \
+	gtktearoffmenuitem.h	\
 	gtktestutils.h		\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
@@ -461,6 +463,7 @@ gtk_base_c_sources =            \
 	gtkbbox.c		\
 	gtkbin.c		\
 	gtkbindings.c		\
+	gtkborder.c		\
 	gtkbox.c		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
@@ -490,7 +493,7 @@ gtk_base_c_sources =            \
 	gtkcssprovider.c	\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
-	gtkeditable.c           \
+	gtkeditable.c		\
 	gtkentry.c		\
 	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
@@ -508,9 +511,10 @@ gtk_base_c_sources =            \
 	gtkfilesystem.c		\
 	gtkfilesystemmodel.c	\
 	gtkfixed.c		\
-	gtkfontbutton.c         \
-	gtkfontsel.c            \
+	gtkfontbutton.c		\
+	gtkfontsel.c		\
 	gtkframe.c		\
+	gtkgradient.c		\
 	gtkgrid.c		\
 	gtkhandlebox.c		\
 	gtkhbbox.c		\
@@ -549,7 +553,7 @@ gtk_base_c_sources =            \
 	gtkmisc.c		\
 	gtkmnemonichash.c	\
 	gtkmodules.c		\
-	gtkmountoperation.c     \
+	gtkmountoperation.c	\
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
 	gtkorientable.c		\
@@ -561,7 +565,7 @@ gtk_base_c_sources =            \
 	gtkplug.c		\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
-	gtkprintoperationpreview.c	\
+	gtkprintoperationpreview.c \
 	gtkprintsettings.c	\
 	gtkprintutils.c		\
 	gtkprogressbar.c	\
@@ -570,20 +574,20 @@ gtk_base_c_sources =            \
 	gtkradiomenuitem.c	\
 	gtkradiotoolbutton.c	\
 	gtkrange.c		\
-	gtkrbtree.c 		\
+	gtkrbtree.c		\
 	gtkrc.c			\
 	gtkrecentaction.c	\
 	gtkrecentchooserdefault.c \
-	gtkrecentchooserdialog.c \
-	gtkrecentchoosermenu.c 	\
-	gtkrecentchooserwidget.c \
+	gtkrecentchooserdialog.c\
+	gtkrecentchoosermenu.c	\
+	gtkrecentchooserwidget.c\
 	gtkrecentchooserutils.c \
 	gtkrecentchooser.c 	\
 	gtkrecentfilter.c 	\
 	gtkrecentmanager.c 	\
 	gtkscale.c		\
 	gtkscalebutton.c	\
-	gtkscrollable.c         \
+	gtkscrollable.c		\
 	gtkscrollbar.c		\
 	gtkscrolledwindow.c	\
 	gtkselection.c		\
@@ -607,7 +611,7 @@ gtk_base_c_sources =            \
 	gtkswitch.c		\
 	gtksymboliccolor.c	\
 	gtktable.c		\
-	gtktearoffmenuitem.c    \
+	gtktearoffmenuitem.c	\
 	gtktestutils.c		\
 	gtktextbtree.c		\
 	gtktextbuffer.c		\
@@ -633,7 +637,7 @@ gtk_base_c_sources =            \
 	gtktoolbar.c		\
 	gtktoolbutton.c		\
 	gtktoolitem.c		\
-	gtktoolitemgroup.c		\
+	gtktoolitemgroup.c	\
 	gtktoolpalette.c	\
 	gtktoolshell.c		\
 	gtktooltip.c		\
@@ -660,7 +664,7 @@ gtk_base_c_sources =            \
 	gtkvseparator.c		\
 	gtkwidget.c		\
 	gtkwidgetpath.c		\
-	gtkwindow-decorate.c    \
+	gtkwindow-decorate.c	\
 	gtkwindow.c		\
 	$(gtk_clipboard_dnd_c_sources) \
 	$(gtk_appchooser_impl_c_sources)

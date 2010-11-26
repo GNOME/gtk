@@ -35,6 +35,7 @@
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkstylecontext.h>
 #include <gtk/gtkwidgetpath.h>

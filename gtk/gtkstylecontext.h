@@ -430,20 +430,6 @@ void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *c
                                                               gint             rel_x,
                                                               gint             rel_y);
 
-/* Animation for state changes */
-void gtk_style_context_state_transition_start  (GtkStyleContext *context,
-                                                gpointer         identifier,
-                                                GtkWidget       *widget,
-                                                GtkStateType     state,
-                                                gboolean         value,
-                                                GdkRectangle    *rect);
-void gtk_style_context_state_transition_update (GtkStyleContext *context,
-                                                gpointer         identifier,
-                                                GdkRectangle    *rect,
-                                                GtkStateType     state);
-void gtk_style_context_state_transition_stop   (GtkStyleContext *context,
-                                                gpointer         identifier);
-
 void gtk_style_context_invalidate (GtkStyleContext *context);
 void gtk_style_context_reset_widgets (GdkScreen *screen);
 

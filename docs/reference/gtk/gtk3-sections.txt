@@ -5315,33 +5315,6 @@ gtk_style_provider_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtksymboliccolor</FILE>
-<TITLE>GtkSymbolicColor</TITLE>
-GtkSymbolicColor
-GtkGradient
-gtk_symbolic_color_new_literal
-gtk_symbolic_color_new_mix
-gtk_symbolic_color_new_name
-gtk_symbolic_color_new_shade
-gtk_symbolic_color_new_alpha
-gtk_symbolic_color_resolve
-gtk_symbolic_color_ref
-gtk_symbolic_color_unref
-gtk_gradient_new_linear
-gtk_gradient_new_radial
-gtk_gradient_add_color_stop
-gtk_gradient_resolve
-gtk_gradient_ref
-gtk_gradient_unref
-<SUBSECTION Standard>
-GTK_TYPE_GRADIENT
-GTK_TYPE_SYMBOLIC_COLOR
-<SUBSECTION Private>
-gtk_symbolic_color_get_type
-gtk_gradient_get_type
-</SECTION>
-
-<SECTION>
 <FILE>gtkstyleproperties</FILE>
 <TITLE>GtkStyleProperties</TITLE>
 GtkStyleProperties
@@ -5446,9 +5419,12 @@ gtk_style_context_has_region
 gtk_style_context_list_regions
 gtk_style_context_set_screen
 gtk_style_context_set_state
-gtk_style_context_state_transition_start
-gtk_style_context_state_transition_stop
-gtk_style_context_state_transition_update
+
+<SUBSECTION>
+GtkBorder
+gtk_border_new
+gtk_border_copy
+gtk_border_free
 
 <SUBSECTION>
 gtk_render_arrow
@@ -5474,8 +5450,11 @@ GTK_STYLE_CONTEXT_CLASS
 GTK_STYLE_CONTEXT_GET_CLASS
 GTK_IS_STYLE_CONTEXT
 GTK_IS_STYLE_CONTEXT_CLASS
+GTK_TYPE_BORDER
+
 <SUBSECTION Private>
 gtk_style_context_get_type
+gtk_border_get_type
 </SECTION>
 
 <SECTION>
@@ -5532,6 +5511,43 @@ gtk_theming_engine_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtksymboliccolor</FILE>
+<TITLE>GtkSymbolicColor</TITLE>
+GtkSymbolicColor
+gtk_symbolic_color_new_literal
+gtk_symbolic_color_new_name
+gtk_symbolic_color_new_shade
+gtk_symbolic_color_new_alpha
+gtk_symbolic_color_new_mix
+gtk_symbolic_color_ref
+gtk_symbolic_color_unref
+gtk_symbolic_color_resolve
+
+<SUBSECTION Standard>
+GTK_TYPE_SYMBOLIC_COLOR
+
+<SUBSECTION Private>
+gtk_symbolic_color_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkgradient</FILE>
+<TITLE>GtkGradient</TITLE>
+GtkGradient
+gtk_gradient_new_linear
+gtk_gradient_new_radial
+gtk_gradient_add_color_stop
+gtk_gradient_ref
+gtk_gradient_unref
+gtk_gradient_resolve
+
+<SUBSECTION Standard>
+GTK_TYPE_GRADIENT
+
+gtk_gradient_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkstyle</FILE>
 <TITLE>GtkStyle</TITLE>
 GTK_STYLE_ATTACHED
@@ -5571,12 +5587,6 @@ gtk_paint_resize_grip
 gtk_draw_insertion_cursor
 
 <SUBSECTION>
-GtkBorder
-gtk_border_new
-gtk_border_copy
-gtk_border_free
-
-<SUBSECTION>
 GtkRcProperty
 GtkRcPropertyParser
 
@@ -5588,10 +5598,8 @@ GTK_TYPE_STYLE
 GTK_STYLE_CLASS
 GTK_IS_STYLE_CLASS
 GTK_STYLE_GET_CLASS
-GTK_TYPE_BORDER
-<SUBSECTION Private>
+
 gtk_style_get_type
-gtk_border_get_type
 GtkThemeEngine
 </SECTION>
 
@@ -6012,6 +6020,7 @@ gtk_icon_info_get_builtin_pixbuf
 gtk_icon_info_load_icon
 gtk_icon_info_load_symbolic
 gtk_icon_info_load_symbolic_for_style
+gtk_icon_info_load_symbolic_for_context
 gtk_icon_info_set_raw_coordinates
 gtk_icon_info_get_embedded_rect
 gtk_icon_info_get_attach_points

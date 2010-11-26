@@ -21,49 +21,30 @@
 #define __GTK_SYMBOLIC_COLOR_H__
 
 #include <gdk/gdk.h>
+#include <gtk/gtkstyleproperties.h>
 
 G_BEGIN_DECLS
 
-/* Dummy typedefs */
-typedef struct _GtkSymbolicColor GtkSymbolicColor;
-typedef struct _GtkGradient GtkGradient;
-
 #define GTK_TYPE_SYMBOLIC_COLOR (gtk_symbolic_color_get_type ())
-#define GTK_TYPE_GRADIENT (gtk_gradient_get_type ())
 
-GType gtk_symbolic_color_get_type (void) G_GNUC_CONST;
-GType gtk_gradient_get_type (void) G_GNUC_CONST;
+GType              gtk_symbolic_color_get_type    (void) G_GNUC_CONST;
 
-GtkSymbolicColor * gtk_symbolic_color_new_literal (const GdkRGBA    *color);
-GtkSymbolicColor * gtk_symbolic_color_new_name    (const gchar      *name);
-GtkSymbolicColor * gtk_symbolic_color_new_shade   (GtkSymbolicColor *color,
-                                                   gdouble           factor);
-GtkSymbolicColor * gtk_symbolic_color_new_alpha   (GtkSymbolicColor *color,
-                                                   gdouble           factor);
-GtkSymbolicColor * gtk_symbolic_color_new_mix     (GtkSymbolicColor *color1,
-                                                   GtkSymbolicColor *color2,
-                                                   gdouble           factor);
+GtkSymbolicColor * gtk_symbolic_color_new_literal (const GdkRGBA      *color);
+GtkSymbolicColor * gtk_symbolic_color_new_name    (const gchar        *name);
+GtkSymbolicColor * gtk_symbolic_color_new_shade   (GtkSymbolicColor   *color,
+                                                   gdouble             factor);
+GtkSymbolicColor * gtk_symbolic_color_new_alpha   (GtkSymbolicColor   *color,
+                                                   gdouble             factor);
+GtkSymbolicColor * gtk_symbolic_color_new_mix     (GtkSymbolicColor   *color1,
+                                                   GtkSymbolicColor   *color2,
+                                                   gdouble             factor);
 
-GtkSymbolicColor * gtk_symbolic_color_ref   (GtkSymbolicColor *color);
-void               gtk_symbolic_color_unref (GtkSymbolicColor *color);
+GtkSymbolicColor * gtk_symbolic_color_ref         (GtkSymbolicColor   *color);
+void               gtk_symbolic_color_unref       (GtkSymbolicColor   *color);
 
-GtkGradient * gtk_gradient_new_linear (gdouble x0,
-                                       gdouble y0,
-                                       gdouble x1,
-                                       gdouble y1);
-GtkGradient * gtk_gradient_new_radial (gdouble x0,
-				       gdouble y0,
-				       gdouble radius0,
-				       gdouble x1,
-				       gdouble y1,
-				       gdouble radius1);
-
-void gtk_gradient_add_color_stop (GtkGradient      *gradient,
-                                  gdouble           offset,
-                                  GtkSymbolicColor *color);
-
-GtkGradient * gtk_gradient_ref   (GtkGradient *gradient);
-void          gtk_gradient_unref (GtkGradient *gradient);
+gboolean           gtk_symbolic_color_resolve     (GtkSymbolicColor   *color,
+                                                   GtkStyleProperties *props,
+                                                   GdkRGBA            *resolved_color);
 
 G_END_DECLS
 

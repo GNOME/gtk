@@ -41,6 +41,7 @@
 #include "gtkintl.h"
 #include "gtkdebug.h"
 #include "gtkspinner.h"
+#include "gtkborder.h"
 
 
 /**
@@ -60,7 +61,9 @@
  * Usually applications should not need to use or modify the #GtkStyle of their
  * widgets.
  *
+ * <warning>
  * In GTK+ 3.0, GtkStyle has been deprecated and replaced by #GtkStyleContext.
+ * </warning>
  */
 
 
@@ -4575,53 +4578,6 @@ gtk_paint_spinner (GtkStyle           *style,
 
   cairo_restore (cr);
 }
-
-/**
- * gtk_border_new:
- *
- * Allocates a new #GtkBorder structure and initializes its elements to zero.
- *
- * Returns: a new empty #GtkBorder. The newly allocated #GtkBorder should be
- *     freed with gtk_border_free()
- *
- * Since: 2.14
- **/
-GtkBorder *
-gtk_border_new (void)
-{
-  return g_slice_new0 (GtkBorder);
-}
-
-/**
- * gtk_border_copy:
- * @border_: a #GtkBorder.
- * @returns: a copy of @border_.
- *
- * Copies a #GtkBorder structure.
- **/
-GtkBorder *
-gtk_border_copy (const GtkBorder *border)
-{
-  g_return_val_if_fail (border != NULL, NULL);
-
-  return g_slice_dup (GtkBorder, border);
-}
-
-/**
- * gtk_border_free:
- * @border_: a #GtkBorder.
- * 
- * Frees a #GtkBorder structure.
- **/
-void
-gtk_border_free (GtkBorder *border)
-{
-  g_slice_free (GtkBorder, border);
-}
-
-G_DEFINE_BOXED_TYPE (GtkBorder, gtk_border,
-                     gtk_border_copy,
-                     gtk_border_free)
 
 typedef struct _CursorInfo CursorInfo;
 

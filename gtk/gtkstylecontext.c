@@ -30,14 +30,14 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gtksymboliccolor.h"
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
 
 /**
  * SECTION:gtkstylecontext
- * @Short_description: rendering UI elements
+ * @Short_description: Rendering UI elements
  * @Title: GtkStyleContext
- * @See_also:
  *
  * #GtkStyleContext is an object that stores styling information affecting
  * a widget defined by #GtkWidgetPath.

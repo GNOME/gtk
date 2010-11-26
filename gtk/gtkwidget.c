@@ -59,6 +59,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtksizerequest.h"
 #include "gtkstylecontext.h"
+#include "gtksymboliccolor.h"
 #include "gtkcssprovider.h"
 #include "gtkanimationdescription.h"
 #include "gtkversion.h"

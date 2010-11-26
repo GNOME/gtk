@@ -19,16 +19,20 @@
 
 #include "config.h"
 
+#include "gtkstyleproperties.h"
+
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
 #include <cairo-gobject.h>
 
 #include "gtktypebuiltins.h"
 #include "gtkstyleprovider.h"
-#include "gtkstyleproperties.h"
+#include "gtksymboliccolor.h"
 #include "gtkprivate.h"
 #include "gtkthemingengine.h"
 #include "gtkanimationdescription.h"
+#include "gtkborder.h"
+#include "gtkgradient.h"
 #include "gtk9slice.h"
 #include "gtkintl.h"
 

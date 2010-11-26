@@ -31,6 +31,7 @@
 #include "gtktypeutils.h"
 #include "gtkprivate.h"
 #include "gtkcssprovider.h"
+#include "gtksymboliccolor.h"
 #include "gtkversion.h"
 
 #ifdef GDK_WINDOWING_X11

@@ -51,6 +51,7 @@
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbin.h>
 #include <gtk/gtkbindings.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
@@ -98,6 +99,7 @@
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
+#include <gtk/gtkgradient.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkhandlebox.h>
 #include <gtk/gtkhbbox.h>

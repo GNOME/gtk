@@ -36,9 +36,9 @@
  * @Title: GtkCssProvider
  * @See_also: #GtkStyleContext, #GtkStyleProvider
  *
- * #GtkCssProvider is an object implementing #GtkStyleProvider, it is able
- * to parse <ulink url="http://www.w3.org/TR/CSS2">CSS</ulink>-like input
- * in order to style widgets.
+ * GtkCssProvider is an object implementing the #GtkStyleProvider interface.
+ * It is able to parse <ulink url="http://www.w3.org/TR/CSS2">CSS</ulink>-like
+ * input in order to style widgets.
  *
  * <refsect2 id="gtkcssprovider-files">
  * <title>Default files</title>

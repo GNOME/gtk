@@ -40,14 +40,10 @@
     <xi:include href="xml/gtkaccelmap.xml" />
     <xi:include href="xml/gtkclipboard.xml" />
     <xi:include href="xml/gtkdnd.xml" />
-    <xi:include href="xml/gtkicontheme.xml" />
     <xi:include href="xml/gtkstock.xml" />
-    <xi:include href="xml/gtkiconfactory.xml" />
-    <xi:include href="xml/gtkrc.xml" />
     <xi:include href="xml/gtksettings.xml" />
     <xi:include href="xml/gtkbindings.xml" />
     <xi:include href="xml/gtkenums.xml" />
-    <xi:include href="xml/gtkstyle.xml" />
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
@@ -55,12 +51,18 @@
 
   <part id="theming">
     <title>Theming in GTK+</title>
-    <xi:include href="xml/gtkwidgetpath.xml" />
-    <xi:include href="xml/gtkstyleprovider.xml" />
-    <xi:include href="xml/gtkstyleproperties.xml" />
     <xi:include href="xml/gtkstylecontext.xml" />
     <xi:include href="xml/gtkcssprovider.xml" />
+    <xi:include href="xml/gtkstyleprovider.xml" />
+    <xi:include href="xml/gtkstyleproperties.xml" />
     <xi:include href="xml/gtkthemingengine.xml" />
+    <xi:include href="xml/gtkwidgetpath.xml" />
+    <xi:include href="xml/gtksymboliccolor.xml" />
+    <xi:include href="xml/gtkgradient.xml" />
+    <xi:include href="xml/gtkicontheme.xml" />
+    <xi:include href="xml/gtkiconfactory.xml" />
+    <xi:include href="xml/gtkrc.xml" />
+    <xi:include href="xml/gtkstyle.xml" />
   </part>
 
   <part id="gtkobjects">

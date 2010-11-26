@@ -22,8 +22,7 @@
 
 #include <glib-object.h>
 #include <gdk/gdk.h>
-#include "gtkenums.h"
-#include "gtksymboliccolor.h"
+#include <gtk/gtkenums.h>
 
 G_BEGIN_DECLS
 
@@ -36,6 +35,9 @@ G_BEGIN_DECLS
 
 typedef struct _GtkStyleProperties GtkStyleProperties;
 typedef struct _GtkStylePropertiesClass GtkStylePropertiesClass;
+
+typedef struct _GtkSymbolicColor GtkSymbolicColor;
+typedef struct _GtkGradient GtkGradient;
 
 struct _GtkStyleProperties
 {
@@ -100,13 +102,6 @@ void     gtk_style_properties_clear          (GtkStyleProperties  *props);
 void     gtk_style_properties_merge          (GtkStyleProperties       *props,
                                               const GtkStyleProperties *props_to_merge,
                                               gboolean                  replace);
-
-gboolean gtk_symbolic_color_resolve (GtkSymbolicColor    *color,
-				     GtkStyleProperties  *props,
-                                     GdkRGBA             *resolved_color);
-gboolean gtk_gradient_resolve (GtkGradient         *gradient,
-                               GtkStyleProperties  *props,
-                               cairo_pattern_t    **resolved_gradient);
 
 G_END_DECLS
 
