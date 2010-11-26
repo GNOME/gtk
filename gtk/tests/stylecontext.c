@@ -153,7 +153,6 @@ test_parse_selectors (void)
      * the last element
      */
     "E:focused tab {}",
-    "E..bla {}",
      NULL
   };
 
@@ -459,6 +458,56 @@ test_match (void)
   g_object_unref (context);
 }
 
+static void
+test_style_property (void)
+{
+  GtkStyleContext *context;
+  GtkWidgetPath *path;
+  GtkCssProvider *provider;
+  GError *error;
+  const gchar *data;
+  gint x;
+  GdkRGBA *color;
+  GdkRGBA expected;
+
+  error = NULL;
+  provider = gtk_css_provider_new ();
+
+  context = gtk_style_context_new ();
+
+  path = gtk_widget_path_new ();
+  gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
+  gtk_widget_path_append_type (path, GTK_TYPE_BOX);
+  gtk_widget_path_append_type (path, GTK_TYPE_BUTTON);
+  gtk_style_context_set_path (context, path);
+  gtk_widget_path_free (path);
+  gtk_style_context_set_state (context, GTK_STATE_FLAG_PRELIGHT);
+
+  data = "GtkButton:insensitive { color: #001; -GtkButton-child-displacement-x: 1 }\n"
+         "GtkBox GtkButton:selected { color: #002; -GtkButton-child-displacement-x: 2 }\n"
+         "GtkButton:prelight { color: #003; -GtkButton-child-displacement-x: 3 }\n"
+         "GtkButton:focused { color: #004; -GtkButton-child-displacement-x: 4 }\n";
+  gtk_css_provider_load_from_data (provider, data, -1, &error);
+  g_assert_no_error (error);
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  gtk_style_context_invalidate (context);
+
+  gtk_style_context_get (context, GTK_STATE_FLAG_PRELIGHT, "color", &color, NULL);
+  gdk_rgba_parse (&expected, "#003");
+  g_assert (gdk_rgba_equal (color, &expected));
+  gdk_rgba_free (color);
+
+  gtk_style_context_get_style (context, "child-displacement-x", &x, NULL);
+
+  g_assert_cmpint (x, ==, 3);
+
+  g_object_unref (provider);
+  g_object_unref (context);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -471,6 +520,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/parse/declarations", test_parse_declarations);
   g_test_add_func ("/style/path", test_path);
   g_test_add_func ("/style/match", test_match);
+  g_test_add_func ("/style/style-property", test_style_property);
 
   return g_test_run ();
 }
