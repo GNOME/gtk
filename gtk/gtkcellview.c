@@ -546,14 +546,11 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
    * allocate every time.
    */
   if (priv->fit_model)
-    {
-      gtk_cell_area_context_allocate_width (priv->context, allocation->width);
-      gtk_cell_area_context_allocate_height (priv->context, allocation->height);
-    }
+    gtk_cell_area_context_allocate (priv->context, allocation->width, allocation->height);
   else if (alloc_width <= 0 && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_cell_area_context_allocate_width (priv->context, allocation->width);
+    gtk_cell_area_context_allocate (priv->context, allocation->width, -1);
   else if (alloc_height <= 0 && priv->orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_cell_area_context_allocate_height (priv->context, allocation->height);
+    gtk_cell_area_context_allocate (priv->context, -1, allocation->height);
 }
 
 static void
