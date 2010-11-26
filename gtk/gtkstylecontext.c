@@ -2556,8 +2556,12 @@ gtk_style_context_set_screen (GtkStyleContext *context,
   GtkStyleContextPrivate *priv;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
 
   priv = context->priv;
+  if (priv->screen == screen)
+    return;
+
   priv->screen = screen;
 
   g_object_notify (G_OBJECT (context), "screen");
