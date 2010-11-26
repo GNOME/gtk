@@ -601,7 +601,8 @@
  *       </row>
  *       <row>
  *         <entry>background-image</entry>
- *         <entry>gradient (see above)</entry>
+ *         <entry><literallayout>gradient (see above) or
+ * url(@path)</literallayout></entry>
  *         <entry>#cairo_pattern_t</entry>
  *         <entry><literallayout>-gtk-gradient (linear,
  *                left top, right top,
@@ -614,7 +615,8 @@
  *                center center, 0.2,
  *                center center, 0.8,
  *                color-stop (0.0, &num;fff),
- *                color-stop (1.0, &num;000));</literallayout>
+ *                color-stop (1.0, &num;000));
+ * url ('background.png');</literallayout>
  *         </entry>
  *       </row>
  *       <row>
@@ -2852,7 +2854,49 @@ css_provider_parse_value (GtkCssProvider *css_provider,
           g_value_take_boxed (value, gradient);
         }
       else
-        parsed = FALSE;
+        {
+          gchar *path;
+          GdkPixbuf *pixbuf;
+
+          path = path_parse (css_provider, value_str);
+
+          if (path)
+            {
+              pixbuf = gdk_pixbuf_new_from_file (path, NULL);
+              g_free (path);
+
+              if (pixbuf)
+                {
+                  cairo_surface_t *surface;
+                  cairo_pattern_t *pattern;
+                  cairo_t *cr;
+                  cairo_matrix_t matrix;
+
+                  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                        gdk_pixbuf_get_width (pixbuf),
+                                                        gdk_pixbuf_get_height (pixbuf));
+                  cr = cairo_create (surface);
+                  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+                  cairo_paint (cr);
+                  pattern = cairo_pattern_create_for_surface (surface);
+
+                  cairo_matrix_init_scale (&matrix,
+                                           gdk_pixbuf_get_width (pixbuf),
+                                           gdk_pixbuf_get_height (pixbuf));
+                  cairo_pattern_set_matrix (pattern, &matrix);
+
+                  cairo_surface_destroy (surface);
+                  cairo_destroy (cr);
+                  g_object_unref (pixbuf);
+
+                  g_value_take_boxed (value, pattern);
+                }
+              else
+                parsed = FALSE;
+            }
+          else
+            parsed = FALSE;
+        }
     }
   else if (G_TYPE_IS_ENUM (type))
     {
