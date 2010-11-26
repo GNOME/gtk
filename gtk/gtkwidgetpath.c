@@ -30,7 +30,7 @@
  * @Title: GtkWidgetPath
  * @See_also: #GtkStyleContext
  *
- * #GtkWidgetPath is a boxed type that represents a widget hierarchy from
+ * GtkWidgetPath is a boxed type that represents a widget hierarchy from
  * the topmost widget, typically a toplevel, to any child. This widget
  * path abstraction is used in #GtkStyleContext on behalf of the real
  * widget in order to query style information.

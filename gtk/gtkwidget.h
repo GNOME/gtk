@@ -767,14 +767,14 @@ void         gtk_widget_override_background_color (GtkWidget     *widget,
                                                    GtkStateFlags  state,
                                                    const GdkRGBA *color);
 
-void         gtk_widget_override_font (GtkWidget                  *widget,
-                                       const PangoFontDescription *font_desc);
+void         gtk_widget_override_font             (GtkWidget                  *widget,
+                                                   const PangoFontDescription *font_desc);
 
-void         gtk_widget_override_symbolic_color (GtkWidget         *widget,
-                                                 const gchar       *name,
-                                                 const GdkRGBA     *color);
+void         gtk_widget_override_symbolic_color   (GtkWidget     *widget,
+                                                   const gchar   *name,
+                                                   const GdkRGBA *color);
 
-void        gtk_widget_style_attach       (GtkWidget            *widget);
+void        gtk_widget_style_attach               (GtkWidget     *widget);
 
 #if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 

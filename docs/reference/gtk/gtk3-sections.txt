@@ -4858,7 +4858,6 @@ gtk_widget_modify_text
 gtk_widget_modify_base
 gtk_widget_modify_font
 gtk_widget_modify_cursor
-gtk_widget_modify_symbolic_color
 gtk_widget_create_pango_context
 gtk_widget_get_pango_context
 gtk_widget_create_pango_layout
@@ -5327,6 +5326,7 @@ gtk_style_properties_lookup_property
 gtk_style_properties_map_color
 gtk_style_properties_merge
 gtk_style_properties_new
+GtkStylePropertyParser
 gtk_style_properties_register_property
 gtk_style_properties_set
 gtk_style_properties_set_property
@@ -5373,6 +5373,14 @@ GTK_STYLE_CLASS_SCROLLBAR
 GTK_STYLE_CLASS_SLIDER
 GTK_STYLE_CLASS_TOOLTIP
 GTK_STYLE_CLASS_TROUGH
+GTK_STYLE_CLASS_ACCELERATOR
+GTK_STYLE_CLASS_DOCK
+GTK_STYLE_CLASS_GRIP
+GTK_STYLE_CLASS_MENUBAR
+GTK_STYLE_CLASS_MENUITEM
+GTK_STYLE_CLASS_PROGRESSBAR
+GTK_STYLE_CLASS_SPINNER
+GTK_STYLE_CLASS_TOOLBAR
 GTK_STYLE_REGION_COLUMN
 GTK_STYLE_REGION_COLUMN_HEADER
 GTK_STYLE_REGION_ROW
@@ -5467,6 +5475,8 @@ gtk_css_provider_load_from_data
 gtk_css_provider_load_from_file
 gtk_css_provider_load_from_path
 gtk_css_provider_new
+GTK_CSS_PROVIDER_ERROR
+GtkCssProviderError
 <SUBSECTION Standard>
 GTK_TYPE_CSS_PROVIDER
 GTK_CSS_PROVIDER
@@ -5476,6 +5486,7 @@ GTK_IS_CSS_PROVIDER
 GTK_IS_CSS_PROVIDER_CLASS
 <SUBSECTION Private>
 gtk_css_provider_get_type
+gtk_css_provider_error_quark
 </SECTION>
 
 <SECTION>
