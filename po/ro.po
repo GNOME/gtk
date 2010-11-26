@@ -5,15 +5,17 @@
 # Mișu Moldovan <dumol@gnome.ro>, 2003 - 2010.
 # Lucian Adrian Grijincu <lucian.grijincu@gmail.com>, 2009, 2010.
 # Cristian Secară <cristi AT secarica DOT ro>, 2010.
+# Eu93 <spoiala.marian@yahoo.com>, 2010.
+# Spoiala Marian <spoiala.marian@yahoo.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
 "2b&component=general\n"
 "POT-Creation-Date: 2010-11-24 12:37+0000\n"
-"PO-Revision-Date: 2010-08-04 17:26+0300\n"
-"Last-Translator: Lucian Adrian Grijincu <lucian.grijincu@gmail.com>\n"
-"Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
+"PO-Revision-Date: 2010-11-26 13:33+0300\n"
+"Last-Translator: Spoiala Marian <spoiala.marian@yahoo.com>\n"
+"Language-Team: Romania\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -30,12 +32,12 @@ msgstr "Eroare la analizarea opțiunii --gtk-debug"
 #: ../gdk/gdk.c:135
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr "Eroare la analizarea opțiunii --gtk-debug"
+msgstr "Eroare la analizarea opțiunii --gtk-no-debug"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:163
 msgid "Program class as used by the window manager"
-msgstr "Clasa programului folosită de administratorul de ferestre"
+msgstr "Clasa programului așa cum este folosită de administratorul de ferestre"
 
 #. Placeholder in --class=CLASS in --help output
 #: ../gdk/gdk.c:164
@@ -45,7 +47,7 @@ msgstr "CLASĂ"
 #. Description of --name=NAME in --help output
 #: ../gdk/gdk.c:166
 msgid "Program name as used by the window manager"
-msgstr "Numele programului așa cum este denumit de administratorul de ferestre"
+msgstr "Numele programului așa cum este folosit de administratorul de ferestre"
 
 #. Placeholder in --name=NAME in --help output
 #: ../gdk/gdk.c:167
@@ -74,9 +76,8 @@ msgstr "ECRAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: ../gdk/gdk.c:176
-#, fuzzy
 msgid "GDK debugging flags to set"
-msgstr "Fanioane de depanare GTK+ de activat"
+msgstr "Fanioane de depanare GTK+ de selectat"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -88,9 +89,8 @@ msgstr "FANIOANE"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: ../gdk/gdk.c:179
-#, fuzzy
 msgid "GDK debugging flags to unset"
-msgstr "Fanioane de depanare GTK+ de dezactivat"
+msgstr "Fanioane de depanare GTK+ de deselectat"
 
 #: ../gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -140,22 +140,22 @@ msgstr "Home"
 #: ../gdk/keyname-table.h:3949
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "La stânga"
+msgstr "Stânga"
 
 #: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
 msgid "Up"
-msgstr "În sus"
+msgstr "Sus"
 
 #: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "La dreapta"
+msgstr "Dreapta"
 
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
 msgid "Down"
-msgstr "În jos"
+msgstr "Jos"
 
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
@@ -328,7 +328,7 @@ msgstr[2] "Se deschid %d de elemente"
 #. Description of --sync in --help output
 #: ../gdk/x11/gdkmain-x11.c:94
 msgid "Make X calls synchronous"
-msgstr "Cereri X sincrone"
+msgstr "Fă apeluri X sincrone"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -337,6 +337,7 @@ msgstr "Cereri X sincrone"
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
 msgstr ""
+"Acest program vine fără ABSOLUT NICIO GARANŢIE; pentru detalii, vizitați %s"
 
 #: ../gtk/gtkaboutdialog.c:339 ../gtk/gtkaboutdialog.c:2233
 msgid "License"
@@ -461,7 +462,7 @@ msgid "Invalid type function on line %d: '%s'"
 msgstr "Tip nevalid pentru funcția de la linia %d: „%s”"
 
 #: ../gtk/gtkbuilderparser.c:407
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "ID obiect duplicat „%s” la linia %d (precedent la linia %d)"
 
@@ -606,7 +607,7 @@ msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
 msgstr ""
-"Faceți clic pe creion, apoi alegeți o culoare oriunde pe ecran pentru a o "
+"Faceți clic pe pipetă, apoi alegeți o culoare oriunde pe ecran pentru a o "
 "selecta."
 
 #: ../gtk/gtkcolorsel.c:449
@@ -615,7 +616,7 @@ msgstr "_Nuanță:"
 
 #: ../gtk/gtkcolorsel.c:450
 msgid "Position on the color wheel."
-msgstr "Poziția în cercul culorilor"
+msgstr "Poziția în cercul culorilor."
 
 #: ../gtk/gtkcolorsel.c:452
 msgid "_Saturation:"
@@ -691,8 +692,8 @@ msgid ""
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"Culoarea selectată anterior, pentru comparație cu culoarea curent selectată. "
-"Puteți trage această culoare peste o intrare paletă sau selectați-o ca fiind "
+"Culoarea selectată anterior, pentru comparație cu cea selectată acum. Puteți "
+"trage această culoare peste o intrare paletă sau selectați-o ca fiind "
 "culoarea curentă trăgând-o peste bucata de culoare de alături."
 
 #: ../gtk/gtkcolorsel.c:1034
@@ -724,7 +725,7 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Dați click pe această intrare paletă pentru a o face culoarea curentă. "
+"Dați click pe această intrare din paletă pentru a o face culoarea curentă. "
 "Pentru a schimba această intrare, trageți o bucată de culoare aici sau "
 "faceți clic dreapta pe ea și selectați „Salvează aici culoarea.”"
 
@@ -868,6 +869,8 @@ msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
 msgstr ""
+"Puteți selecta numai dosare. Elementul care a fost selectat nu este un "
+"dosar; încercați să folosiți un element diferit."
 
 #: ../gtk/gtkfilechooserdefault.c:1016
 msgid "Invalid file name"
@@ -1026,7 +1029,7 @@ msgstr "Nu s-a putut citi conținutul %s"
 
 #: ../gtk/gtkfilechooserdefault.c:6294
 msgid "Could not read the contents of the folder"
-msgstr "Nu s-a putut citi conținutul directorului"
+msgstr "Nu s-a putut citi conținutul dosarului"
 
 #: ../gtk/gtkfilechooserdefault.c:6387 ../gtk/gtkfilechooserdefault.c:6455
 #: ../gtk/gtkfilechooserdefault.c:6600
@@ -1073,14 +1076,14 @@ msgstr "În_locuiește"
 
 #: ../gtk/gtkfilechooserdefault.c:8755
 msgid "Could not start the search process"
-msgstr "Nu s-a putut pornit procesul de căutare"
+msgstr "Nu s-a putut porni procesul de căutare"
 
 #: ../gtk/gtkfilechooserdefault.c:8756
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
-"Programul nu a putut crea o conexiune la demonul de indexare. Asigurați-vă "
+"Programul nu a putut crea o conexiune la serviciul de indexare. Asigurați-vă "
 "că este pornit."
 
 #: ../gtk/gtkfilechooserdefault.c:8770
@@ -1281,7 +1284,7 @@ msgstr "MODULE"
 #. Description of --g-fatal-warnings in --help output
 #: ../gtk/gtkmain.c:521
 msgid "Make all warnings fatal"
-msgstr "Orice atenționare e fatală"
+msgstr "Fă ca orice avertisment să fie fatală"
 
 #. Description of --gtk-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:524
@@ -1352,7 +1355,7 @@ msgid "Remember _forever"
 msgstr "Reține parola pentru _totdeauna"
 
 #: ../gtk/gtkmountoperation.c:883
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "Aplicație necunoscută (pid %d)"
 
@@ -1365,7 +1368,7 @@ msgid "_End Process"
 msgstr "T_ermină procesul"
 
 #: ../gtk/gtkmountoperation-stub.c:64
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
 "Nu se poate termina forțat procesul cu pid-ul %d. Operațiunea nu este "
@@ -1393,7 +1396,7 @@ msgid "Z Shell"
 msgstr "Z Shell"
 
 #: ../gtk/gtkmountoperation-x11.c:963
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nu se poate termina procesul cu pid-ul %d: %s"
 
@@ -1838,7 +1841,7 @@ msgstr "Peisaj inversat"
 
 #: ../gtk/gtkprintunixdialog.c:3550
 msgid "Job Details"
-msgstr "Detalii"
+msgstr "Detalii sarcină"
 
 #: ../gtk/gtkprintunixdialog.c:3556
 msgid "Pri_ority:"
@@ -1987,7 +1990,7 @@ msgstr "_Scoate din listă"
 
 #: ../gtk/gtkrecentchooserdefault.c:1800
 msgid "_Clear List"
-msgstr "Gol_ește lista"
+msgstr "_Golește lista"
 
 #: ../gtk/gtkrecentchooserdefault.c:1814
 msgid "Show _Private Resources"
@@ -2053,6 +2056,8 @@ msgstr "Nu s-a putut găsi un element cu URI-ul „%s”"
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
+"Nu a fost găsită nicio aplicație înregistrată cu numele „%s” pentru elementul cu URI-ul „%s”"
+
 
 #: ../gtk/gtkspinner.c:456
 msgctxt "throbbing progress animation widget"
@@ -2113,10 +2118,9 @@ msgid "_Cancel"
 msgstr "_Renunță"
 
 #: ../gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
-msgstr "_CD-Rom"
+msgstr "_CD-ROM"
 
 #: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
@@ -2252,10 +2256,9 @@ msgid "_Up"
 msgstr "_Sus"
 
 #: ../gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
-msgstr "_Disc"
+msgstr "_Hard disc"
 
 #: ../gtk/gtkstock.c:361
 msgctxt "Stock label"
@@ -2590,9 +2593,9 @@ msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Atributul „%s” a fost găsit duplicat în elementul <%s>"
 
 #: ../gtk/gtktextbufferserialize.c:855
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "Elementul <%s> are un id incorect „%s”"
+msgstr "Elementul <%s> are un ID incorect „%s”"
 
 #: ../gtk/gtktextbufferserialize.c:865
 #, c-format
@@ -2616,12 +2619,12 @@ msgstr "Eticheta „%s” nu a fost definită."
 
 #: ../gtk/gtktextbufferserialize.c:1046
 msgid "Anonymous tag found and tags can not be created."
-msgstr "S-a găsit o etichetă anonimă, nu se pot crea etichete."
+msgstr "S-a găsit o etichetă anonimă şi nu se pot crea etichete."
 
 #: ../gtk/gtktextbufferserialize.c:1057
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
-msgstr "Eticheta „%s” nu există în buffer, nu se pot crea etichete."
+msgstr "Eticheta „%s” nu există în buffer şi nu se pot crea etichete."
 
 #: ../gtk/gtktextbufferserialize.c:1156 ../gtk/gtktextbufferserialize.c:1231
 #: ../gtk/gtktextbufferserialize.c:1336 ../gtk/gtktextbufferserialize.c:1410
@@ -3718,7 +3721,7 @@ msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"Nu s-a găsit un fișier index în „%s”.\n"
+"Niciun fișier index de temă în „%s”.\n"
 "Dacă chiar doriți să creați aici un cache pentru iconițe, utilizați --ignore-"
 "theme-index.\n"
 
@@ -3916,7 +3919,7 @@ msgid "Printer '%s' is out of paper."
 msgstr "Imprimanta „%s” nu mai are hârtie."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1686
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "Imprimanta „%s” este momentan deconectată."
 
@@ -3988,7 +3991,7 @@ msgstr "Auto-selectare"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2809
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3305
 msgid "Printer Default"
-msgstr "După opțiunile imprimantei"
+msgstr "Opțiunile implicite ale imprimantei"
 
 #. Translators: this is an option of "GhostScript"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2811
@@ -4130,7 +4133,7 @@ msgstr "Personalizat %sx%s"
 #: ../modules/printbackends/file/gtkprintbackendfile.c:250
 #, c-format
 msgid "output.%s"
-msgstr "tipar.%s"
+msgstr "ieșire.%s"
 
 #: ../modules/printbackends/file/gtkprintbackendfile.c:501
 msgid "Print to File"
@@ -4202,7 +4205,7 @@ msgstr "necunoscut"
 #: ../modules/printbackends/test/gtkprintbackendtest.c:234
 #, c-format
 msgid "test-output.%s"
-msgstr "test-tipar.%s"
+msgstr "test-ieșire.%s"
 
 #: ../modules/printbackends/test/gtkprintbackendtest.c:467
 msgid "Print to Test Printer"
