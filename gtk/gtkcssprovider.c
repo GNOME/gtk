@@ -153,7 +153,8 @@
  * </para>
  * <para>
  * Refer to the documentation of individual widgets to learn which
- * style classes they define.
+ * style classes they define and see <xref linkend="gtkstylecontext-classes"/>
+ * for a list of all style classes used by GTK+ widgets.
  * </para>
  * <example>
  * <title>Style classes in selectors</title>
@@ -2392,10 +2393,11 @@ gradient_parse (const gchar *str)
 
 static gchar *
 path_parse_str (GtkCssProvider  *css_provider,
-		const gchar     *str,
-		gchar          **end_ptr)
+                const gchar     *str,
+                gchar          **end_ptr)
 {
-  gchar *path, *chr, *start, *end;
+  gchar *path, *chr;
+  const gchar *start, *end;
 
   start = str;
 
@@ -2424,7 +2426,7 @@ path_parse_str (GtkCssProvider  *css_provider,
 
       if (*str == '"' || *str == '\'')
         {
-          gchar *p;
+          const gchar *p;
           p = str;
           str++;
 
@@ -2433,25 +2435,25 @@ path_parse_str (GtkCssProvider  *css_provider,
 
           if (*chr != *p || chr == p)
             {
-              *end_ptr = str;
+              *end_ptr = (gchar *)str;
               return NULL;
             }
         }
       else
         {
-          *end_ptr = str;
+          *end_ptr = (gchar *)str;
           return NULL;
         }
 
       path = g_strndup (str, chr - str);
       g_strstrip (path);
 
-      *end_ptr = end;
+      *end_ptr = (gchar *)end;
     }
   else
     {
       path = g_strdup (str);
-      *end_ptr = str + strlen (str);
+      *end_ptr = (gchar *)str + strlen (str);
     }
 
   /* Always return an absolute path */
@@ -2480,7 +2482,7 @@ path_parse_str (GtkCssProvider  *css_provider,
       g_warning ("File doesn't exist: %s\n", path);
       g_free (path);
       path = NULL;
-      *end_ptr = start;
+      *end_ptr = (gchar *)start;
     }
 
   return path;
@@ -2490,7 +2492,8 @@ static gchar *
 path_parse (GtkCssProvider *css_provider,
             const gchar    *str)
 {
-  gchar *path, *end;
+  gchar *path;
+  gchar *end;
 
   path = path_parse_str (css_provider, str, &end);
 
