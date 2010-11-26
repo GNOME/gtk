@@ -93,18 +93,6 @@ gboolean          gtk_cell_view_get_size_of_row         (GtkCellView     *cell_v
                                                          GtkRequisition  *requisition);
 #endif
 
-
-/* XXX These 2 are going away... */
-void              gtk_cell_view_get_desired_width_of_row(GtkCellView     *cell_view,
-                                                         GtkTreePath     *path,
-                                                         gint            *minimum_size,
-                                                         gint            *natural_size);
-void              gtk_cell_view_get_desired_height_for_width_of_row(GtkCellView     *cell_view,
-								    GtkTreePath     *path,
-								    gint             avail_size,
-								    gint            *minimum_size,
-								    gint            *natural_size);
-
 G_END_DECLS
 
 #endif /* __GTK_CELL_VIEW_H__ */

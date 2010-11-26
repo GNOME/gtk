@@ -1153,107 +1153,36 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  *
  * Since: 2.6
  * 
- * Deprecated: 3.0: Use gtk_cell_view_get_desired_width_of_row() and
- * gtk_cell_view_get_desired_height_for_width_of_row() instead.
+ * Deprecated: 3.0: Combo box formerly used this to calculate the
+ * sizes for cellviews, now you can achieve this by either using
+ * the #GtkCellView:fit-model property or by setting the currently
+ * displayed row of the #GtkCellView and using gtk_widget_get_preferred_size().
  */
 gboolean
 gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
                                GtkTreePath    *path,
                                GtkRequisition *requisition)
 {
+  GtkTreeRowReference *tmp;
   GtkRequisition req;
 
   g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  /* Return the minimum height for the minimum width */
-  gtk_cell_view_get_desired_width_of_row (cell_view, path, &req.width, NULL);
-  gtk_cell_view_get_desired_height_for_width_of_row (cell_view, path, req.width, &req.height, NULL);
+  tmp = cell_view->priv->displayed_row;
+  cell_view->priv->displayed_row =
+    gtk_tree_row_reference_new (cell_view->priv->model, path);
+
+  gtk_widget_get_preferred_width (GTK_WIDGET (cell_view), &req.width, NULL);
+  gtk_widget_get_preferred_height_for_width (GTK_WIDGET (cell_view), req.width, &req.height, NULL);
+
+  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
+  cell_view->priv->displayed_row = tmp;
 
   if (requisition)
     *requisition = req;
 
   return TRUE;
-}
-
-
-/**
- * gtk_cell_view_get_desired_width_of_row:
- * @cell_view: a #GtkCellView
- * @path: a #GtkTreePath 
- * @minimum_size: location to store the minimum size 
- * @natural_size: location to store the natural size 
- *
- * Sets @minimum_size and @natural_size to the width desired by @cell_view 
- * to display the model row pointed to by @path.
- * 
- * Since: 3.0
- */
-void
-gtk_cell_view_get_desired_width_of_row (GtkCellView     *cell_view,
-					GtkTreePath     *path,
-					gint            *minimum_size,
-					gint            *natural_size)
-{
-  GtkTreeRowReference *tmp;
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (minimum_size != NULL || natural_size != NULL);
-
-  tmp = cell_view->priv->displayed_row;
-  cell_view->priv->displayed_row =
-    gtk_tree_row_reference_new (cell_view->priv->model, path);
-
-  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), minimum_size, natural_size);
-
-  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
-  cell_view->priv->displayed_row = tmp;
-
-  /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
-  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), NULL, NULL);
-}
-
-
-/**
- * gtk_cell_view_get_desired_height_for_width_of_row:
- * @cell_view: a #GtkCellView
- * @path: a #GtkTreePath 
- * @avail_size: available width
- * @minimum_size: location to store the minimum height 
- * @natural_size: location to store the natural height
- *
- * Sets @minimum_size and @natural_size to the height desired by @cell_view 
- * if it were allocated a width of @avail_size to display the model row 
- * pointed to by @path.
- * 
- * Since: 3.0
- */
-void
-gtk_cell_view_get_desired_height_for_width_of_row (GtkCellView     *cell_view,
-						   GtkTreePath     *path,
-						   gint             avail_size,
-						   gint            *minimum_size,
-						   gint            *natural_size)
-{
-  GtkTreeRowReference *tmp;
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (minimum_size != NULL || natural_size != NULL);
-
-  tmp = cell_view->priv->displayed_row;
-  cell_view->priv->displayed_row =
-    gtk_tree_row_reference_new (cell_view->priv->model, path);
-
-  /* Then get the collective height_for_width based on the cached values */
-  gtk_cell_view_get_preferred_height_for_width (GTK_WIDGET (cell_view), avail_size, minimum_size, natural_size);
-
-  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
-  cell_view->priv->displayed_row = tmp;
-
-  /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
-  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), NULL, NULL);
 }
 
 /**
