@@ -62,14 +62,13 @@ struct _GtkCellViewClass
   void (*_gtk_reserved4) (void);
 };
 
-GType             gtk_cell_view_get_type               (void) G_GNUC_CONST;
-GtkWidget        *gtk_cell_view_new                    (void);
-GtkWidget        *gtk_cell_view_new_with_context       (GtkCellArea        *area,
-							GtkCellAreaContext *context);
-GtkWidget        *gtk_cell_view_new_with_text          (const gchar     *text);
-GtkWidget        *gtk_cell_view_new_with_markup        (const gchar     *markup);
-GtkWidget        *gtk_cell_view_new_with_pixbuf        (GdkPixbuf       *pixbuf);
-
+GType             gtk_cell_view_get_type                (void) G_GNUC_CONST;
+GtkWidget        *gtk_cell_view_new                     (void);
+GtkWidget        *gtk_cell_view_new_with_context        (GtkCellArea        *area,
+							 GtkCellAreaContext *context);
+GtkWidget        *gtk_cell_view_new_with_text           (const gchar     *text);
+GtkWidget        *gtk_cell_view_new_with_markup         (const gchar     *markup);
+GtkWidget        *gtk_cell_view_new_with_pixbuf         (GdkPixbuf       *pixbuf);
 void              gtk_cell_view_set_model               (GtkCellView     *cell_view,
                                                          GtkTreeModel    *model);
 GtkTreeModel     *gtk_cell_view_get_model               (GtkCellView     *cell_view);
