@@ -754,7 +754,7 @@ gtk_style_update_from_context (GtkStyle *style)
   if (style->font_desc)
     pango_font_description_free (style->font_desc);
 
-  gtk_style_context_get (priv->context, state,
+  gtk_style_context_get (priv->context, 0,
                          "font", &style->font_desc,
                          "padding", &padding,
                          NULL);
@@ -2869,7 +2869,7 @@ gtk_default_draw_shadow_gap (GtkStyle       *style,
   switch (state_type)
     {
     case GTK_STATE_ACTIVE:
-      flags |= GTK_STATE_ACTIVE;
+      flags |= GTK_STATE_FLAG_ACTIVE;
       break;
     case GTK_STATE_PRELIGHT:
       flags |= GTK_STATE_FLAG_PRELIGHT;
@@ -2935,7 +2935,7 @@ gtk_default_draw_box_gap (GtkStyle       *style,
   switch (state_type)
     {
     case GTK_STATE_ACTIVE:
-      flags |= GTK_STATE_ACTIVE;
+      flags |= GTK_STATE_FLAG_ACTIVE;
       break;
     case GTK_STATE_PRELIGHT:
       flags |= GTK_STATE_FLAG_PRELIGHT;
@@ -3005,7 +3005,7 @@ gtk_default_draw_extension (GtkStyle       *style,
   switch (state_type)
     {
     case GTK_STATE_ACTIVE:
-      flags |= GTK_STATE_ACTIVE;
+      flags |= GTK_STATE_FLAG_ACTIVE;
       break;
     case GTK_STATE_PRELIGHT:
       flags |= GTK_STATE_FLAG_PRELIGHT;
