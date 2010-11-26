@@ -26,7 +26,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkprivate.h"
-#include "gtksizerequest.h"
+#include "gtkorientable.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
 
@@ -36,10 +36,18 @@
  * @Short_description: A widget displaying a single row of a GtkTreeModel
  * @Title: GtkCellView
  *
- * A #GtkCellView displays a single row of a #GtkTreeModel, using
- * cell renderers just like #GtkTreeView. #GtkCellView doesn't support
- * some of the more complex features of #GtkTreeView, like cell editing
- * and drag and drop.
+ * A #GtkCellView displays a single row of a #GtkTreeModel using a #GtkCellArea
+ * and #GtkCellAreaContext. A #GtkCellAreaContext can be provided to the 
+ * #GtkCellView at construction time in order to keep the cellview in context
+ * of a group of cell views, this ensures that the renderers displayed will
+ * be properly aligned with eachother (like the aligned cells of #GtkTreeMenu).
+ *
+ * #GtkCellView is #GtkOrientable in order to decide in which orientation
+ * the underlying #GtkCellAreaContext should be allocated. Taking the #GtkTreeMenu
+ * as an example, cellviews should be oriented horizontally if the menus are
+ * listed top-to-bottom and thus all share the same width but may have separate
+ * individual heights (left-to-right menus should be allocated vertically since
+ * they all share the same height but may have variable widths).
  */
 
 static GObject    *gtk_cell_view_constructor              (GType                  type,
@@ -116,6 +124,8 @@ struct _GtkCellViewPrivate
   GtkCellArea         *area;
   GtkCellAreaContext  *context;
 
+  GtkOrientation       orientation;
+
   GdkRGBA              background;
   gboolean             background_set;
 
@@ -131,6 +141,7 @@ static GtkBuildableIface *parent_buildable_iface;
 enum
 {
   PROP_0,
+  PROP_ORIENTATION,
   PROP_BACKGROUND,
   PROP_BACKGROUND_GDK,
   PROP_BACKGROUND_RGBA,
@@ -146,7 +157,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET,
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_cell_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_cell_view_buildable_init))
+						gtk_cell_view_buildable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
 
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
@@ -168,6 +180,8 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   widget_class->get_preferred_height_for_width = gtk_cell_view_get_preferred_height_for_width;
 
   /* properties */
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+
   g_object_class_install_property (gobject_class,
                                    PROP_BACKGROUND,
                                    g_param_spec_string ("background",
@@ -348,6 +362,9 @@ gtk_cell_view_get_property (GObject    *object,
 
   switch (param_id)
     {
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, view->priv->orientation);
+      break;
     case PROP_BACKGROUND_GDK:
       {
 	GdkColor color;
@@ -399,6 +416,11 @@ gtk_cell_view_set_property (GObject      *object,
 
   switch (param_id)
     {
+    case PROP_ORIENTATION:
+      view->priv->orientation = g_value_get_enum (value);
+      if (view->priv->context)
+	gtk_cell_area_context_flush (view->priv->context);
+      break;
     case PROP_BACKGROUND:
       {
 	GdkColor color;
@@ -465,6 +487,8 @@ gtk_cell_view_init (GtkCellView *cellview)
   priv = cellview->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
+
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 }
 
 static void
@@ -521,11 +545,15 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
    * If the cellview is in "fit model" mode, we assume its not in context and needs to
    * allocate every time.
    */
-  if ((alloc_width <= 0 && alloc_height <= 0) || priv->fit_model)
+  if (priv->fit_model)
     {
       gtk_cell_area_context_allocate_width (priv->context, allocation->width);
       gtk_cell_area_context_allocate_height (priv->context, allocation->height);
     }
+  else if (alloc_width <= 0 && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_cell_area_context_allocate_width (priv->context, allocation->width);
+  else if (alloc_height <= 0 && priv->orientation == GTK_ORIENTATION_VERTICAL)
+    gtk_cell_area_context_allocate_height (priv->context, allocation->height);
 }
 
 static void
