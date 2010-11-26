@@ -95,7 +95,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testexpand			\
 	testexpander			\
 	testvolumebutton		\
-	testscrolledwindow
+	testscrolledwindow		\
+	testswitch
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -184,6 +185,7 @@ testscrolledwindow_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
+testswitch_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -258,6 +260,7 @@ testscrolledwindow_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
 testexpand_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
+testswitch_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
@@ -381,6 +384,8 @@ testwindows_SOURCES = 	\
 testexpand_SOURCES = testexpand.c
 
 testexpander_SOURCES = testexpander.c
+
+testswitch_SOURCES = testswitch.c
 
 EXTRA_DIST += 			\
 	prop-editor.h		\
