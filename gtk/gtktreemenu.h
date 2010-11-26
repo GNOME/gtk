@@ -79,7 +79,6 @@ GtkWidget            *gtk_tree_menu_new_with_area                  (GtkCellArea 
 GtkWidget            *gtk_tree_menu_new_full                       (GtkCellArea         *area,
 								    GtkTreeModel        *model,
 								    GtkTreePath         *root);
-GtkCellArea          *gtk_tree_menu_get_area                       (GtkTreeMenu         *menu);
 void                  gtk_tree_menu_set_model                      (GtkTreeMenu         *menu,
 								    GtkTreeModel        *model);
 GtkTreeModel         *gtk_tree_menu_get_model                      (GtkTreeMenu         *menu);

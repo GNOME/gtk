@@ -1495,14 +1495,6 @@ gtk_tree_menu_new_full (GtkCellArea         *area,
 				    NULL);
 }
 
-GtkCellArea *
-gtk_tree_menu_get_area (GtkTreeMenu *menu)
-{
-  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), NULL);
-
-  return menu->priv->area;
-}
-
 void
 gtk_tree_menu_set_model (GtkTreeMenu  *menu,
 			 GtkTreeModel *model)
