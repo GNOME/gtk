@@ -483,6 +483,14 @@ test_style_property (void)
   gtk_widget_path_free (path);
   gtk_style_context_set_state (context, GTK_STATE_FLAG_PRELIGHT);
 
+  /* Since we set the prelight state on the context, we expect
+   * only the third selector to match, even though the second one
+   * has higher specificity, and the fourth one comes later.
+   *
+   * In particular, we want to verify that widget style properties and
+   * CSS properties follow the same matching rules, ie we expect
+   * color to be #003 and child-displacement-x to be 3.
+   */
   data = "GtkButton:insensitive { color: #001; -GtkButton-child-displacement-x: 1 }\n"
          "GtkBox GtkButton:selected { color: #002; -GtkButton-child-displacement-x: 2 }\n"
          "GtkButton:prelight { color: #003; -GtkButton-child-displacement-x: 3 }\n"
