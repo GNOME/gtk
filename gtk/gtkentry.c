@@ -10216,3 +10216,21 @@ keymap_state_changed (GdkKeymap *keymap,
   else
     remove_capslock_feedback (entry);
 }
+
+/*
+ * _gtk_entry_set_is_cell_renderer:
+ * @entry: a #GtkEntry
+ * @is_cell_renderer: new value
+ *
+ * This is a helper function for GtkComboBox. A GtkEntry in a GtkComboBox
+ * is supposed to behave like a GtkCellEditable when placed in a combo box.
+ *
+ * I.e take up it's allocation and get GtkEntry->is_cell_renderer = TRUE.
+ *
+ */
+void
+_gtk_entry_set_is_cell_renderer (GtkEntry *entry,
+                                 gboolean  is_cell_renderer)
+{
+  entry->priv->is_cell_renderer = is_cell_renderer;
+}
