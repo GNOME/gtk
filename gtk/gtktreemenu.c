@@ -834,7 +834,7 @@ row_inserted_cb (GtkTreeModel     *model,
 	  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), item, index);
 	  
 	  /* Resize everything */
-	  gtk_cell_area_context_flush (menu->priv->context);
+	  gtk_cell_area_context_reset (menu->priv->context);
 	}
     }
   else
@@ -875,7 +875,7 @@ row_deleted_cb (GtkTreeModel     *model,
 	  gtk_widget_destroy (item);
 	  
 	  /* Resize everything */
-	  gtk_cell_area_context_flush (menu->priv->context);
+	  gtk_cell_area_context_reset (menu->priv->context);
 	}
     }
   else 

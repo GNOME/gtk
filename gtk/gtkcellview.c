@@ -419,7 +419,7 @@ gtk_cell_view_set_property (GObject      *object,
     case PROP_ORIENTATION:
       view->priv->orientation = g_value_get_enum (value);
       if (view->priv->context)
-	gtk_cell_area_context_flush (view->priv->context);
+	gtk_cell_area_context_reset (view->priv->context);
       break;
     case PROP_BACKGROUND:
       {
@@ -547,9 +547,9 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
    */
   if (priv->fit_model)
     gtk_cell_area_context_allocate (priv->context, allocation->width, allocation->height);
-  else if (alloc_width <= 0 && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+  else if (alloc_width != allocation->width && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_cell_area_context_allocate (priv->context, allocation->width, -1);
-  else if (alloc_height <= 0 && priv->orientation == GTK_ORIENTATION_VERTICAL)
+  else if (alloc_height != allocation->height && priv->orientation == GTK_ORIENTATION_VERTICAL)
     gtk_cell_area_context_allocate (priv->context, -1, allocation->height);
 }
 
@@ -862,7 +862,7 @@ row_changed_cb (GtkTreeModel         *model,
 	{
 	  /* Resize everything in our context if our row changed */
 	  if (gtk_tree_path_compare (row_path, path) == 0)
-	    gtk_cell_area_context_flush (view->priv->context);
+	    gtk_cell_area_context_reset (view->priv->context);
 
 	  gtk_tree_path_free (row_path);
 	}
@@ -1343,7 +1343,7 @@ gtk_cell_view_set_fit_model (GtkCellView     *cell_view,
     {
       priv->fit_model = fit_model;
 
-      gtk_cell_area_context_flush (cell_view->priv->context);
+      gtk_cell_area_context_reset (cell_view->priv->context);
 
       g_object_notify (G_OBJECT (cell_view), "fit-model");
     }
