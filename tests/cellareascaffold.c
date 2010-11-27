@@ -1239,7 +1239,7 @@ remove_editable_cb (GtkCellArea      *area,
 }
 
 static void 
-rebuild_and_flush_internals (CellAreaScaffold *scaffold)
+rebuild_and_reset_internals (CellAreaScaffold *scaffold)
 {
   CellAreaScaffoldPrivate *priv = scaffold->priv;
   gint n_rows;
@@ -1255,9 +1255,9 @@ rebuild_and_flush_internals (CellAreaScaffold *scaffold)
   else
     g_array_set_size (priv->row_data, 0);
 
-  /* Data changed, lets flush the context and consequently queue resize and
+  /* Data changed, lets reset the context and consequently queue resize and
    * start everything over again (note this is definitly far from optimized) */
-  gtk_cell_area_context_flush (priv->context);
+  gtk_cell_area_context_reset (priv->context);
 }
 
 static void
@@ -1266,7 +1266,7 @@ row_changed_cb (GtkTreeModel     *model,
 		GtkTreeIter      *iter,
 		CellAreaScaffold *scaffold)
 {
-  rebuild_and_flush_internals (scaffold);
+  rebuild_and_reset_internals (scaffold);
 }
 
 static void
@@ -1275,7 +1275,7 @@ row_inserted_cb (GtkTreeModel     *model,
 		 GtkTreeIter      *iter,
 		 CellAreaScaffold *scaffold)
 {
-  rebuild_and_flush_internals (scaffold);
+  rebuild_and_reset_internals (scaffold);
 }
 
 static void
@@ -1283,7 +1283,7 @@ row_deleted_cb (GtkTreeModel     *model,
 		GtkTreePath      *path,
 		CellAreaScaffold *scaffold)
 {
-  rebuild_and_flush_internals (scaffold);
+  rebuild_and_reset_internals (scaffold);
 }
 
 static void
@@ -1293,7 +1293,7 @@ rows_reordered_cb (GtkTreeModel     *model,
 		   gint             *new_order,
 		   CellAreaScaffold *scaffold)
 {
-  rebuild_and_flush_internals (scaffold);
+  rebuild_and_reset_internals (scaffold);
 }
 
 /*********************************************************
@@ -1362,7 +1362,7 @@ cell_area_scaffold_set_model (CellAreaScaffold *scaffold,
 			      G_CALLBACK (rows_reordered_cb), scaffold);
 	}
 
-      rebuild_and_flush_internals (scaffold);
+      rebuild_and_reset_internals (scaffold);
     }
 }
 

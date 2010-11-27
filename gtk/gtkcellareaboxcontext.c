@@ -28,26 +28,25 @@
 #include "gtkorientable.h"
 
 /* GObjectClass */
-static void      gtk_cell_area_box_context_finalize                         (GObject            *object);
+static void      gtk_cell_area_box_context_finalize              (GObject               *object);
 
 /* GtkCellAreaContextClass */
-static void      gtk_cell_area_box_context_flush_preferred_width            (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_flush_preferred_height           (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_flush_allocation                 (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_sum_preferred_width              (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_sum_preferred_height             (GtkCellAreaContext *context);
-static void      gtk_cell_area_box_context_allocate                         (GtkCellAreaContext *context,
-									     gint                width,
-									     gint                height);
+static void      gtk_cell_area_box_context_reset                 (GtkCellAreaContext    *context);
+static void      gtk_cell_area_box_context_sum_preferred_width   (GtkCellAreaContext    *context);
+static void      gtk_cell_area_box_context_sum_preferred_height  (GtkCellAreaContext    *context);
+static void      gtk_cell_area_box_context_allocate              (GtkCellAreaContext    *context,
+								  gint                   width,
+								  gint                   height);
 
-static void      free_cache_array    (GArray                *array);
-static GArray   *group_array_new     (GtkCellAreaBoxContext *context);
-static GArray   *get_array           (GtkCellAreaBoxContext *context,
-				      GtkOrientation         orientation,
-				      gint                   for_size);
-static gboolean  group_expands       (GtkCellAreaBoxContext *context,
-				      gint                   group_idx);
-static gint      count_expand_groups (GtkCellAreaBoxContext *context);
+/* Internal functions */
+static void      free_cache_array                                (GArray                *array);
+static GArray   *group_array_new                                 (GtkCellAreaBoxContext *context);
+static GArray   *get_array                                       (GtkCellAreaBoxContext *context,
+								  GtkOrientation         orientation,
+								  gint                   for_size);
+static gboolean  group_expands                                   (GtkCellAreaBoxContext *context,
+								  gint                   group_idx);
+static gint      count_expand_groups                             (GtkCellAreaBoxContext *context);
 
 
 /* CachedSize management */
@@ -191,11 +190,9 @@ gtk_cell_area_box_context_class_init (GtkCellAreaBoxContextClass *class)
   /* GObjectClass */
   object_class->finalize = gtk_cell_area_box_context_finalize;
 
-  context_class->flush_preferred_width   = gtk_cell_area_box_context_flush_preferred_width;
-  context_class->flush_preferred_height  = gtk_cell_area_box_context_flush_preferred_height;
-  context_class->flush_allocation        = gtk_cell_area_box_context_flush_allocation;
-  context_class->sum_preferred_width     = gtk_cell_area_box_context_sum_preferred_width;
-  context_class->sum_preferred_height    = gtk_cell_area_box_context_sum_preferred_height;
+  context_class->reset                = gtk_cell_area_box_context_reset;
+  context_class->sum_preferred_width  = gtk_cell_area_box_context_sum_preferred_width;
+  context_class->sum_preferred_height = gtk_cell_area_box_context_sum_preferred_height;
 
   context_class->allocate  = gtk_cell_area_box_context_allocate;
 
@@ -226,58 +223,37 @@ gtk_cell_area_box_context_finalize (GObject *object)
  *                    GtkCellAreaContextClass                   *
  *************************************************************/
 static void
-gtk_cell_area_box_context_flush_preferred_width (GtkCellAreaContext *context)
+gtk_cell_area_box_context_reset (GtkCellAreaContext *context)
 {
   GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
   GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
+  CachedSize                   *size;
   gint                          i;
 
   for (i = 0; i < priv->base_widths->len; i++)
     {
-      CachedSize *size = &g_array_index (priv->base_widths, CachedSize, i);
+      size = &g_array_index (priv->base_widths, CachedSize, i);
+
+      size->min_size = 0;
+      size->nat_size = 0;
+
+      size = &g_array_index (priv->base_heights, CachedSize, i);
 
       size->min_size = 0;
       size->nat_size = 0;
     }
 
-  /* Flush context widths as well */
+  /* Reset context sizes as well */
   g_hash_table_remove_all (priv->widths);
-
-  GTK_CELL_AREA_CONTEXT_CLASS
-    (gtk_cell_area_box_context_parent_class)->flush_preferred_width (context);
-}
-
-static void
-gtk_cell_area_box_context_flush_preferred_height (GtkCellAreaContext *context)
-{
-  GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-  GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
-  gint                          i;
-
-  for (i = 0; i < priv->base_heights->len; i++)
-    {
-      CachedSize *size = &g_array_index (priv->base_heights, CachedSize, i);
-
-      size->min_size = 0;
-      size->nat_size = 0;
-    }
-
-  /* Flush context heights as well */
   g_hash_table_remove_all (priv->heights);
 
-  GTK_CELL_AREA_CONTEXT_CLASS
-    (gtk_cell_area_box_context_parent_class)->flush_preferred_height (context);
-}
-
-static void
-gtk_cell_area_box_context_flush_allocation (GtkCellAreaContext *context)
-{
-  GtkCellAreaBoxContext        *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-  GtkCellAreaBoxContextPrivate *priv        = box_context->priv;
-
+  /* Clear the allocation */
   g_free (priv->orientation_allocs);
   priv->orientation_allocs   = NULL;
   priv->n_orientation_allocs = 0;
+
+  GTK_CELL_AREA_CONTEXT_CLASS
+    (gtk_cell_area_box_context_parent_class)->reset (context);
 }
 
 static void
@@ -522,10 +498,10 @@ gtk_cell_area_box_init_groups (GtkCellAreaBoxContext *box_context,
   g_return_if_fail (GTK_IS_CELL_AREA_BOX_CONTEXT (box_context));
   g_return_if_fail (n_groups == 0 || expand_groups != NULL);
 
-  /* When the group dimensions change, all info must be flushed 
+  /* When the group dimensions change, all info must be reset 
    * Note this already clears the min/nat values on the CachedSizes
    */
-  gtk_cell_area_context_flush (GTK_CELL_AREA_CONTEXT (box_context));
+  gtk_cell_area_context_reset (GTK_CELL_AREA_CONTEXT (box_context));
 
   priv = box_context->priv;
   g_array_set_size (priv->base_widths,  n_groups);

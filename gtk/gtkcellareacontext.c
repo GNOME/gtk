@@ -28,23 +28,21 @@
 #include "gtkprivate.h"
 
 /* GObjectClass */
-static void      gtk_cell_area_context_dispose                        (GObject            *object);
-static void      gtk_cell_area_context_get_property                   (GObject            *object,
-								       guint               prop_id,
-								       GValue             *value,
-								       GParamSpec         *pspec);
-static void      gtk_cell_area_context_set_property                   (GObject            *object,
-								       guint               prop_id,
-								       const GValue       *value,
-								       GParamSpec         *pspec);
+static void      gtk_cell_area_context_dispose         (GObject            *object);
+static void      gtk_cell_area_context_get_property    (GObject            *object,
+							guint               prop_id,
+							GValue             *value,
+							GParamSpec         *pspec);
+static void      gtk_cell_area_context_set_property    (GObject            *object,
+							guint               prop_id,
+							const GValue       *value,
+							GParamSpec         *pspec);
 
 /* GtkCellAreaContextClass */
-static void      gtk_cell_area_context_real_flush_preferred_width            (GtkCellAreaContext *context);
-static void      gtk_cell_area_context_real_flush_preferred_height           (GtkCellAreaContext *context);
-static void      gtk_cell_area_context_real_flush_allocation                 (GtkCellAreaContext *context);
-static void      gtk_cell_area_context_real_allocate                         (GtkCellAreaContext *context,
-							 		      gint                width,
-									      gint                height);
+static void      gtk_cell_area_context_real_reset      (GtkCellAreaContext *context);
+static void      gtk_cell_area_context_real_allocate   (GtkCellAreaContext *context,
+							gint                width,
+							gint                height);
 
 struct _GtkCellAreaContextPrivate
 {
@@ -96,9 +94,7 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
   object_class->set_property = gtk_cell_area_context_set_property;
 
   /* GtkCellAreaContextClass */
-  class->flush_preferred_width   = gtk_cell_area_context_real_flush_preferred_width;
-  class->flush_preferred_height  = gtk_cell_area_context_real_flush_preferred_height;
-  class->flush_allocation        = gtk_cell_area_context_real_flush_allocation;
+  class->reset                   = gtk_cell_area_context_real_reset;
   class->sum_preferred_width     = NULL;
   class->sum_preferred_height    = NULL;
   class->allocate                = gtk_cell_area_context_real_allocate;
@@ -229,40 +225,23 @@ gtk_cell_area_context_get_property (GObject     *object,
  *                    GtkCellAreaContextClass                   *
  *************************************************************/
 static void
-gtk_cell_area_context_real_flush_preferred_width (GtkCellAreaContext *context)
+gtk_cell_area_context_real_reset (GtkCellAreaContext *context)
 {
   GtkCellAreaContextPrivate *priv = context->priv;
   
-  priv->min_width = -1;
-  priv->nat_width = -1;
+  priv->min_width    = -1;
+  priv->nat_width    = -1;
+  priv->min_height   = -1;
+  priv->nat_height   = -1;
+  priv->alloc_width  = 0;
+  priv->alloc_height = 0;
 
   g_object_freeze_notify (G_OBJECT (context));
   g_object_notify (G_OBJECT (context), "minimum-width");
   g_object_notify (G_OBJECT (context), "natural-width");
-  g_object_thaw_notify (G_OBJECT (context));
-}
-
-static void
-gtk_cell_area_context_real_flush_preferred_height (GtkCellAreaContext *context)
-{
-  GtkCellAreaContextPrivate *priv = context->priv;
-  
-  priv->min_height = -1;
-  priv->nat_height = -1;
-
-  g_object_freeze_notify (G_OBJECT (context));
   g_object_notify (G_OBJECT (context), "minimum-height");
   g_object_notify (G_OBJECT (context), "natural-height");
   g_object_thaw_notify (G_OBJECT (context));
-}
-
-static void
-gtk_cell_area_context_real_flush_allocation (GtkCellAreaContext *context)
-{
-  GtkCellAreaContextPrivate *priv = context->priv;
-
-  priv->alloc_width  = 0;
-  priv->alloc_height = 0;
 }
 
 static void
@@ -292,37 +271,11 @@ gtk_cell_area_context_get_area (GtkCellAreaContext *context)
 }
 
 void
-gtk_cell_area_context_flush (GtkCellAreaContext *context)
+gtk_cell_area_context_reset (GtkCellAreaContext *context)
 {
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
 
-  gtk_cell_area_context_flush_preferred_width (context);
-  gtk_cell_area_context_flush_preferred_height (context);
-  gtk_cell_area_context_flush_allocation (context);
-}
-
-void
-gtk_cell_area_context_flush_preferred_width (GtkCellAreaContext *context)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->flush_preferred_width (context);
-}
-
-void
-gtk_cell_area_context_flush_preferred_height (GtkCellAreaContext *context)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->flush_preferred_height (context);
-}
-
-void
-gtk_cell_area_context_flush_allocation (GtkCellAreaContext *context)
-{
-  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->flush_allocation (context);
+  GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->reset (context);
 }
 
 void

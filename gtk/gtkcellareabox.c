@@ -160,7 +160,7 @@ static GList         *list_consecutive_cells (GtkCellAreaBox        *box);
 static gint           count_expand_groups    (GtkCellAreaBox        *box);
 static void           context_weak_notify    (GtkCellAreaBox        *box,
 					      GtkCellAreaBoxContext *dead_context);
-static void           flush_contexts         (GtkCellAreaBox        *box);
+static void           reset_contexts         (GtkCellAreaBox        *box);
 static void           init_context_groups    (GtkCellAreaBox        *box);
 static void           init_context_group     (GtkCellAreaBox        *box,
 					      GtkCellAreaBoxContext *context);
@@ -526,7 +526,7 @@ init_context_group (GtkCellAreaBox        *box,
       expand_groups[i] = (group->expand_cells > 0);
     }
 
-  /* This call implies flushing the request info */
+  /* This call implies reseting the request info */
   gtk_cell_area_box_init_groups (context, priv->groups->len, expand_groups);
   g_free (expand_groups);
 }
@@ -549,19 +549,19 @@ init_context_groups (GtkCellAreaBox *box)
 }
 
 static void
-flush_contexts (GtkCellAreaBox *box)
+reset_contexts (GtkCellAreaBox *box)
 {
   GtkCellAreaBoxPrivate *priv = box->priv;
   GSList                *l;
 
   /* When the box layout changes, contexts need to
-   * be flushed and sizes for the box get requested again
+   * be reset and sizes for the box get requested again
    */
   for (l = priv->contexts; l; l = l->next)
     {
       GtkCellAreaContext *context = l->data;
 
-      gtk_cell_area_context_flush (context);
+      gtk_cell_area_context_reset (context);
     }
 }
 
@@ -858,7 +858,7 @@ gtk_cell_area_box_set_property (GObject       *object,
       box->priv->orientation = g_value_get_enum (value);
 
       /* Notify that size needs to be requested again */
-      flush_contexts (box);
+      reset_contexts (box);
       break;
     case PROP_SPACING:
       gtk_cell_area_box_set_spacing (box, g_value_get_int (value));
@@ -2022,6 +2022,6 @@ gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
       g_object_notify (G_OBJECT (box), "spacing");
 
       /* Notify that size needs to be requested again */
-      flush_contexts (box);
+      reset_contexts (box);
     }
 }

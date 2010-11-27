@@ -53,22 +53,12 @@ struct _GtkCellAreaContextClass
 {
   GObjectClass parent_class;
 
-  /* Subclasses can use this to flush their alignments/allocations */
-  void    (* flush_preferred_width)              (GtkCellAreaContext *context);
-  void    (* flush_preferred_height)             (GtkCellAreaContext *context);
-  void    (* flush_allocation)                   (GtkCellAreaContext *context);
-
-  /* These must be invoked after a series of requests before consulting 
-   * the context values, implementors use this to push the overall
-   * requests while acconting for any internal alignments */
-  void    (* sum_preferred_width)                (GtkCellAreaContext *context);
-  void    (* sum_preferred_height)               (GtkCellAreaContext *context);
-
-  /* Store an allocation value for a GtkCellArea contextual to a range of
-   * treemodel rows */
-  void    (* allocate)                           (GtkCellAreaContext *context,
-						  gint                width,
-						  gint                height);
+  void    (* sum_preferred_width)    (GtkCellAreaContext *context);
+  void    (* sum_preferred_height)   (GtkCellAreaContext *context);
+  void    (* allocate)               (GtkCellAreaContext *context,
+				      gint                width,
+				      gint                height);
+  void    (* reset)                  (GtkCellAreaContext *context);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -77,45 +67,35 @@ struct _GtkCellAreaContextClass
   void (*_gtk_reserved4) (void);
 };
 
-GType        gtk_cell_area_context_get_type                         (void) G_GNUC_CONST;
+GType        gtk_cell_area_context_get_type              (void) G_GNUC_CONST;
 
-GtkCellArea *gtk_cell_area_context_get_area                         (GtkCellAreaContext *context);
+/* Main apis */
+GtkCellArea *gtk_cell_area_context_get_area              (GtkCellAreaContext *context);
+void         gtk_cell_area_context_sum_preferred_width   (GtkCellAreaContext *context);
+void         gtk_cell_area_context_sum_preferred_height  (GtkCellAreaContext *context);
+void         gtk_cell_area_context_allocate              (GtkCellAreaContext *context,
+							  gint                width,
+							  gint                height);
+void         gtk_cell_area_context_reset                 (GtkCellAreaContext *context);
 
-/* Apis for GtkCellArea clients to flush the cache */
-void         gtk_cell_area_context_flush                            (GtkCellAreaContext *context);
-void         gtk_cell_area_context_flush_preferred_width            (GtkCellAreaContext *context);
-void         gtk_cell_area_context_flush_preferred_height           (GtkCellAreaContext *context);
-void         gtk_cell_area_context_flush_allocation                 (GtkCellAreaContext *context);
-
-/* Apis for GtkCellArea clients to sum up the results of a series of requests, this
- * call is required to reduce the processing while calculating the size of each row */
-void         gtk_cell_area_context_sum_preferred_width              (GtkCellAreaContext *context);
-void         gtk_cell_area_context_sum_preferred_height             (GtkCellAreaContext *context);
-
-/* Apis to set an allocation size in one dimension or another, the subclass specific context
- * will store allocated positions/sizes for individual cells or groups of cells */
-void         gtk_cell_area_context_allocate                         (GtkCellAreaContext *context,
-								     gint                width,
-								     gint                height);
-
-/* Apis for GtkCellArea clients to consult cached values for multiple GtkTreeModel rows */
-void         gtk_cell_area_context_get_preferred_width              (GtkCellAreaContext *context,
-								     gint               *minimum_width,
-								     gint               *natural_width);
-void         gtk_cell_area_context_get_preferred_height             (GtkCellAreaContext *context,
-								     gint               *minimum_height,
-								     gint               *natural_height);
-void         gtk_cell_area_context_get_allocation                   (GtkCellAreaContext *context,
-								     gint               *width,
-								     gint               *height);
+/* Apis for GtkCellArea clients to consult cached values for a series of GtkTreeModel rows */
+void         gtk_cell_area_context_get_preferred_width   (GtkCellAreaContext *context,
+							  gint               *minimum_width,
+							  gint               *natural_width);
+void         gtk_cell_area_context_get_preferred_height  (GtkCellAreaContext *context,
+							  gint               *minimum_height,
+							  gint               *natural_height);
+void         gtk_cell_area_context_get_allocation        (GtkCellAreaContext *context,
+							  gint               *width,
+							  gint               *height);
 
 /* Apis for GtkCellArea implementations to update cached values for multiple GtkTreeModel rows */
-void         gtk_cell_area_context_push_preferred_width             (GtkCellAreaContext *context,
-								     gint                minimum_width,
-								     gint                natural_width);
-void         gtk_cell_area_context_push_preferred_height            (GtkCellAreaContext *context,
-								     gint                minimum_height,
-								     gint                natural_height);
+void         gtk_cell_area_context_push_preferred_width  (GtkCellAreaContext *context,
+							  gint                minimum_width,
+							  gint                natural_width);
+void         gtk_cell_area_context_push_preferred_height (GtkCellAreaContext *context,
+							  gint                minimum_height,
+							  gint                natural_height);
 
 G_END_DECLS
 
