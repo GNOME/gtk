@@ -55,22 +55,14 @@ struct _GtkCellAreaContextClass
 
   /* Subclasses can use this to flush their alignments/allocations */
   void    (* flush_preferred_width)              (GtkCellAreaContext *context);
-  void    (* flush_preferred_height_for_width)   (GtkCellAreaContext *context,
-						  gint                width);
   void    (* flush_preferred_height)             (GtkCellAreaContext *context);
-  void    (* flush_preferred_width_for_height)   (GtkCellAreaContext *context,
-						  gint                height);
   void    (* flush_allocation)                   (GtkCellAreaContext *context);
 
   /* These must be invoked after a series of requests before consulting 
    * the context values, implementors use this to push the overall
    * requests while acconting for any internal alignments */
   void    (* sum_preferred_width)                (GtkCellAreaContext *context);
-  void    (* sum_preferred_height_for_width)     (GtkCellAreaContext *context,
-						  gint                width);
   void    (* sum_preferred_height)               (GtkCellAreaContext *context);
-  void    (* sum_preferred_width_for_height)     (GtkCellAreaContext *context,
-						  gint                height);
 
   /* Store an allocation value for a GtkCellArea contextual to a range of
    * treemodel rows */
