@@ -405,6 +405,47 @@ create_list_long (void)
         return GTK_TREE_MODEL (store);
 }
 
+static GtkTreeModel *
+create_food_list (void)
+{
+        GtkTreeIter iter;
+        GtkListStore *store;
+
+        store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
+        gtk_list_store_append (store, &iter);
+        gtk_list_store_set (store, &iter,
+                            0, "Pepperoni",
+                            1, "Pizza",
+                            -1);
+
+        gtk_list_store_append (store, &iter);			       
+        gtk_list_store_set (store, &iter,
+                            0, "Cheese",
+                            1, "Burger",
+                            -1);
+
+        gtk_list_store_append (store, &iter);			       
+        gtk_list_store_set (store, &iter,
+                            0, "Pineapple",
+                            1, "Milkshake",
+                            -1);
+
+        gtk_list_store_append (store, &iter);			       
+        gtk_list_store_set (store, &iter,
+                            0, "Orange",
+                            1, "Soda",
+                            -1);
+
+        gtk_list_store_append (store, &iter);			       
+        gtk_list_store_set (store, &iter,
+                            0, "Club",
+                            1, "Sandwich",
+                            -1);
+
+        return GTK_TREE_MODEL (store);
+}
+
+
 /* blaat */
 static GtkTreeModel *
 create_phylogenetic_tree (void)
@@ -1054,6 +1095,7 @@ main (int argc, char **argv)
 	GtkTreePath *path;
 	GtkTreeIter iter;
         GdkColor color;
+	GtkCellArea *area;
 
         gtk_init (&argc, &argv);
 
@@ -1366,6 +1408,41 @@ main (int argc, char **argv)
 #if 1
 	gdk_threads_add_timeout (1000, (GSourceFunc) capital_animation, model);
 #endif
+
+        /* Aligned Food */
+        tmp = gtk_frame_new ("Hungry ?");
+        gtk_box_pack_start (GTK_BOX (mainbox), tmp, FALSE, FALSE, 0);
+
+        boom = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+        gtk_container_set_border_width (GTK_CONTAINER (boom), 5);
+        gtk_container_add (GTK_CONTAINER (tmp), boom);
+
+        model = create_food_list ();
+	combobox = gtk_combo_box_new_with_model (model);
+        g_object_unref (model);
+        gtk_container_add (GTK_CONTAINER (boom), combobox);
+
+	area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (combobox));
+
+        renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_area_add_with_properties (area, renderer, 
+					   "align", TRUE, 
+					   "expand", TRUE, 
+					   NULL);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
+                                        "text", 0,
+                                        NULL);
+
+        renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_area_add_with_properties (area, renderer, 
+					   "align", TRUE, 
+					   "expand", TRUE, 
+					   NULL);
+        gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combobox), renderer,
+                                        "text", 1,
+                                        NULL);
+
+        gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 
 	/* Ellipsizing growing combos */
         tmp = gtk_frame_new ("Unconstrained Menu");
