@@ -624,7 +624,6 @@ gtk_cell_view_get_preferred_width  (GtkWidget *widget,
       gtk_cell_area_get_preferred_width (priv->area, priv->context, widget, NULL, NULL);
     }
 
-  gtk_cell_area_context_sum_preferred_width (priv->context);
   gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
@@ -653,7 +652,6 @@ gtk_cell_view_get_preferred_height (GtkWidget *widget,
       gtk_cell_area_get_preferred_height (priv->area, priv->context, widget, NULL, NULL);
     }
 
-  gtk_cell_area_context_sum_preferred_height (priv->context);
   gtk_cell_area_context_get_preferred_height (priv->context, minimum_size, natural_size);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
