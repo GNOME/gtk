@@ -5780,7 +5780,6 @@ validate_row (GtkTreeView *tree_view,
   gint height = 0;
   gint horizontal_separator;
   gint vertical_separator;
-  gint focus_line_width;
   gint depth = gtk_tree_path_get_depth (path);
   gboolean retval = FALSE;
   gboolean is_separator = FALSE;
@@ -5799,7 +5798,6 @@ validate_row (GtkTreeView *tree_view,
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
 			"focus-padding", &focus_pad,
-			"focus-line-width", &focus_line_width,
 			"horizontal-separator", &horizontal_separator,
 			"vertical-separator", &vertical_separator,
 			"grid-line-width", &grid_line_width,
