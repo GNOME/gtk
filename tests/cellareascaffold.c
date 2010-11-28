@@ -576,11 +576,6 @@ request_all_base (CellAreaScaffold *scaffold)
       valid = gtk_tree_model_iter_next (priv->model, &iter);
     }
 
-  if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_cell_area_context_sum_preferred_width (priv->context);
-  else
-    gtk_cell_area_context_sum_preferred_height (priv->context);
-
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
 }
 

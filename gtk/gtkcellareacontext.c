@@ -94,10 +94,8 @@ gtk_cell_area_context_class_init (GtkCellAreaContextClass *class)
   object_class->set_property = gtk_cell_area_context_set_property;
 
   /* GtkCellAreaContextClass */
-  class->reset                   = gtk_cell_area_context_real_reset;
-  class->sum_preferred_width     = NULL;
-  class->sum_preferred_height    = NULL;
-  class->allocate                = gtk_cell_area_context_real_allocate;
+  class->reset    = gtk_cell_area_context_real_reset;
+  class->allocate = gtk_cell_area_context_real_allocate;
 
   g_object_class_install_property (object_class,
                                    PROP_CELL_AREA,
@@ -279,43 +277,13 @@ gtk_cell_area_context_reset (GtkCellAreaContext *context)
 }
 
 void
-gtk_cell_area_context_sum_preferred_width (GtkCellAreaContext *context)
-{
-  GtkCellAreaContextClass *class;
-
-  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  class = GTK_CELL_AREA_CONTEXT_GET_CLASS (context);
-
-  if (class->sum_preferred_width)
-    class->sum_preferred_width (context);
-}
-
-void
-gtk_cell_area_context_sum_preferred_height (GtkCellAreaContext *context)
-{
-  GtkCellAreaContextClass *class;
-
-  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
-
-  class = GTK_CELL_AREA_CONTEXT_GET_CLASS (context);
-
-  if (class->sum_preferred_height)
-    class->sum_preferred_height (context);
-}
-
-void
 gtk_cell_area_context_allocate (GtkCellAreaContext *context,
 				gint                width,
 				gint                height)
 {
-  GtkCellAreaContextClass *class;
-
   g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
 
-  class = GTK_CELL_AREA_CONTEXT_GET_CLASS (context);
-
-  class->allocate (context, width, height);
+  GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->allocate (context, width, height);
 }
 
 void

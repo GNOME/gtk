@@ -53,8 +53,6 @@ struct _GtkCellAreaContextClass
 {
   GObjectClass parent_class;
 
-  void    (* sum_preferred_width)    (GtkCellAreaContext *context);
-  void    (* sum_preferred_height)   (GtkCellAreaContext *context);
   void    (* allocate)               (GtkCellAreaContext *context,
 				      gint                width,
 				      gint                height);
@@ -71,8 +69,6 @@ GType        gtk_cell_area_context_get_type              (void) G_GNUC_CONST;
 
 /* Main apis */
 GtkCellArea *gtk_cell_area_context_get_area              (GtkCellAreaContext *context);
-void         gtk_cell_area_context_sum_preferred_width   (GtkCellAreaContext *context);
-void         gtk_cell_area_context_sum_preferred_height  (GtkCellAreaContext *context);
 void         gtk_cell_area_context_allocate              (GtkCellAreaContext *context,
 							  gint                width,
 							  gint                height);
