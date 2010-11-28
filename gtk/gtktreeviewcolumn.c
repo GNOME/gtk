@@ -1276,16 +1276,10 @@ void
 _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
 				     GtkTreeView       *tree_view)
 {
-  int focus_line_width;
-
   g_assert (column->tree_view == NULL);
 
   column->tree_view = GTK_WIDGET (tree_view);
   gtk_tree_view_column_create_button (column);
-
-  gtk_widget_style_get (GTK_WIDGET (tree_view),
-                        "focus-line-width", &focus_line_width,
-                        NULL);
 
   column->add_editable_signal =
       g_signal_connect (column->cell_area, "add-editable",
