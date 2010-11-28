@@ -6382,3 +6382,24 @@ GTK_GRID_GET_CLASS
 GtkGridPrivate
 gtk_grid_get_type
 </SECTION>
+
+<SECTION>
+<FILE>gtkswitch</FILE>
+GtkSwitch
+gtk_switch_new
+gtk_switch_set_active
+gtk_switch_get_active
+
+<SUBSECTION Standard>
+GtkSwitchClass
+GTK_TYPE_SWITCH
+GTK_SWITCH
+GTK_SWITCH_CLASS
+GTK_IS_SWITCH
+GTK_IS_SWITCH_CLASS
+GTK_SWITCH_GET_CLASS
+
+<SUBSECTION Private>
+GtkSwitchPrivate
+gtk_switch_get_type
+</SECTION>

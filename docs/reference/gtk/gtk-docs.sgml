@@ -97,6 +97,7 @@
       <xi:include href="xml/gtklinkbutton.xml" />
       <xi:include href="xml/gtkscalebutton.xml" />
       <xi:include href="xml/gtkvolumebutton.xml" />
+      <xi:include href="xml/gtkswitch.xml" />
     </chapter>
 
     <chapter id="NumericEntry">
