@@ -48,8 +48,8 @@ struct _GdkRGBA
 GdkRGBA * gdk_rgba_copy (GdkRGBA *rgba);
 void      gdk_rgba_free (GdkRGBA *rgba);
 
-gboolean  gdk_rgba_parse (const gchar *spec,
-                          GdkRGBA     *rgba);
+gboolean  gdk_rgba_parse (GdkRGBA     *rgba,
+                          const gchar *spec);
 
 guint     gdk_rgba_hash  (gconstpointer p);
 gboolean  gdk_rgba_equal (gconstpointer p1,

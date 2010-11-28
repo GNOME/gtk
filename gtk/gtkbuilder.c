@@ -1563,7 +1563,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         {
           GdkRGBA rgba = { 0 };
 
-          if (gdk_rgba_parse (string, &rgba))
+          if (gdk_rgba_parse (&rgba, string))
             g_value_set_boxed (value, &rgba);
           else
             {

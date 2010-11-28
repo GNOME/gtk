@@ -534,7 +534,7 @@ gtk_cell_renderer_set_property (GObject      *object,
 
         if (!g_value_get_string (value))
           set_cell_bg_color (cell, NULL);
-        else if (gdk_rgba_parse (g_value_get_string (value), &rgba))
+        else if (gdk_rgba_parse (&rgba, g_value_get_string (value)))
           set_cell_bg_color (cell, &rgba);
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
