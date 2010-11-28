@@ -369,7 +369,6 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->button = NULL;
   tree_column->xalign = 0.0;
   tree_column->width = 0;
-//  tree_column->spacing = 0;
   tree_column->requested_width = -1;
   tree_column->min_width = -1;
   tree_column->max_width = -1;
