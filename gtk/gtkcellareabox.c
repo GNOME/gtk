@@ -1068,20 +1068,15 @@ gtk_cell_area_box_event (GtkCellArea          *area,
 		  event_y >= inner_area.y && event_y <= inner_area.y + inner_area.height)
 		{
 		  GtkCellRenderer *event_renderer = NULL;
+                  GtkCellRenderer *focus_renderer;
 
-		  if (gtk_cell_renderer_can_focus (cell->renderer))
-		    event_renderer = cell->renderer;
-		  else 
-		    {
-		      GtkCellRenderer *focus_renderer;
-		      
-		      /* A renderer can have focus siblings but that renderer might not be
-		       * focusable for every row... so we go on to check can_focus here. */
-		      focus_renderer = gtk_cell_area_get_focus_from_sibling (area, cell->renderer);
+                  focus_renderer = gtk_cell_area_get_focus_from_sibling (area, cell->renderer);
+                  if (focus_renderer)
+                    event_renderer = focus_renderer;
+                  else
+                    event_renderer = cell->renderer;
 
-		      if (focus_renderer && gtk_cell_renderer_can_focus (focus_renderer))
-			event_renderer = focus_renderer;
-		    } 
+                  event_renderer = cell->renderer;
 
 		  if (event_renderer)
 		    {
@@ -1871,13 +1866,9 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
 		found_cell = TRUE;
 	      else if (found_cell)
 		{
-		  if (gtk_cell_renderer_can_focus (info->renderer))
-		    {
-		      gtk_cell_area_set_focus_cell (area, info->renderer);
+                  gtk_cell_area_set_focus_cell (area, info->renderer);
 
-		      cycled_focus = TRUE;
-		      break;
-		    }
+                  cycled_focus = TRUE;
 		}
 	    }
 	}
