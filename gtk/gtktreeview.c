@@ -472,7 +472,7 @@ static void     gtk_tree_view_real_set_cursor                (GtkTreeView       
 							      GtkTreePath        *path,
 							      gboolean            clear_and_select,
 							      gboolean            clamp_node);
-static gboolean gtk_tree_view_has_special_cell               (GtkTreeView        *tree_view);
+static gboolean gtk_tree_view_has_can_focus_cell             (GtkTreeView        *tree_view);
 static void     column_sizing_notify                         (GObject            *object,
                                                               GParamSpec         *pspec,
                                                               gpointer            data);
@@ -543,13 +543,6 @@ static void     gtk_tree_view_put                       (GtkTreeView      *tree_
 							 gint              height);
 static gboolean gtk_tree_view_start_editing             (GtkTreeView      *tree_view,
 							 GtkTreePath      *cursor_path);
-static void gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
-					      GtkTreeViewColumn *column,
-					      GtkTreePath       *path,
-					      GtkCellEditable   *cell_editable,
-					      GdkRectangle      *cell_area,
-					      GdkEvent          *event,
-					      guint              flags);
 static void gtk_tree_view_stop_editing                  (GtkTreeView *tree_view,
 							 gboolean     cancel_editing);
 static gboolean gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
@@ -2394,7 +2387,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       real_requested_width = gtk_tree_view_get_real_requested_width_from_column (tree_view, column);
 
       allocation.x = width;
-      column->width = real_requested_width;
+      _gtk_tree_view_column_set_width (column, real_requested_width);
 
       if (gtk_tree_view_column_get_expand (column))
 	{
@@ -2698,14 +2691,12 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       GtkRBNode *node;
       GtkRBTree *tree;
       GtkTreePath *path;
-      gchar *path_string;
       gint depth;
       gint new_y;
       gint y_offset;
       gint dval;
       gint pre_val, aft_val;
       GtkTreeViewColumn *column = NULL;
-      GtkCellRenderer *focus_cell = NULL;
       gint column_handled_click = FALSE;
       gboolean row_double_click = FALSE;
       gboolean rtl;
@@ -2844,41 +2835,23 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      /* FIXME: get the right flags */
 	      guint flags = 0;
 
-	      path_string = gtk_tree_path_to_string (path);
-
 	      if (_gtk_tree_view_column_cell_event (column,
-						    &cell_editable,
+                                                    NULL,
 						    (GdkEvent *)event,
-						    path_string,
+						    NULL,
 						    &background_area,
 						    &cell_area, flags))
 		{
+                  cell_editable = gtk_cell_area_get_edit_widget (column->cell_area);
+
 		  if (cell_editable != NULL)
 		    {
-		      gint left, right;
-		      GdkRectangle area;
-
-		      area = cell_area;
-		      _gtk_tree_view_column_get_neighbor_sizes (column,	_gtk_tree_view_column_get_edited_cell (column), &left, &right);
-
-		      area.x += left;
-		      area.width -= right + left;
-
-		      gtk_tree_view_real_start_editing (tree_view,
-							column,
-							path,
-							cell_editable,
-							&area,
-							(GdkEvent *)event,
-							flags);
-		      g_free (path_string);
 		      gtk_tree_path_free (path);
 		      gtk_tree_path_free (anchor);
 		      return TRUE;
 		    }
 		  column_handled_click = TRUE;
 		}
-	      g_free (path_string);
 	    }
 	  if (anchor)
 	    gtk_tree_path_free (anchor);
@@ -2896,10 +2869,6 @@ gtk_tree_view_button_press (GtkWidget      *widget,
             tree_view->priv->ctrl_pressed = TRUE;
           if ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
             tree_view->priv->shift_pressed = TRUE;
-
-          focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
-          if (focus_cell)
-            gtk_tree_view_column_focus_cell (column, focus_cell);
 
           if (event->state & GDK_CONTROL_MASK)
             {
@@ -3413,7 +3382,7 @@ prelight_or_select (GtkTreeView *tree_view,
   if (tree_view->priv->hover_selection &&
       (mode == GTK_SELECTION_SINGLE || mode == GTK_SELECTION_BROWSE) &&
       !(tree_view->priv->edited_column &&
-	tree_view->priv->edited_column->editable_widget))
+	gtk_cell_area_get_edit_widget (tree_view->priv->edited_column->cell_area)))
     {
       if (node)
 	{
@@ -4476,7 +4445,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   gint horizontal_separator;
   gint focus_line_width;
   gboolean allow_rules;
-  gboolean has_special_cell;
+  gboolean has_can_focus_cell;
   gboolean rtl;
   gint n_visible_columns;
   gint pointer_x, pointer_y;
@@ -4623,7 +4592,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
       parity = _gtk_rbtree_node_find_parity (tree, node);
 
       /* we *need* to set cell data on all cells before the call
-       * to _has_special_cell, else _has_special_cell() does not
+       * to _has_can_focus_cell, else _has_can_focus_cell() does not
        * return a correct value.
        */
       for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
@@ -4638,7 +4607,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 						   node->children?TRUE:FALSE);
         }
 
-      has_special_cell = gtk_tree_view_has_special_cell (tree_view);
+      has_can_focus_cell = gtk_tree_view_has_can_focus_cell (tree_view);
 
       for (list = (rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns));
 	   list;
@@ -4649,6 +4618,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  gchar new_detail[128];
           gint width;
 	  GtkStateType state;
+          gboolean draw_focus;
 
 	  if (!gtk_tree_view_column_get_visible (column))
             continue;
@@ -4767,6 +4737,15 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	  else
 	    state = GTK_STATE_NORMAL;
 
+	  if (node == cursor && has_can_focus_cell
+              && ((column == tree_view->priv->focus_column
+                   && GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS) &&
+                   gtk_widget_has_focus (widget))
+                  || (column == tree_view->priv->edited_column)))
+            draw_focus = TRUE;
+          else
+            draw_focus = FALSE;
+
 	  /* Draw background */
 	  is_first = (rtl ? !list->next : !list->prev);
 	  is_last = (rtl ? !list->prev : !list->next);
@@ -4828,7 +4807,8 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 						   cr,
 						   &background_area,
 						   &cell_area,
-						   flags);
+						   flags,
+                                                   draw_focus);
 	      if (TREE_VIEW_DRAW_EXPANDERS(tree_view)
 		  && (node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
 		{
@@ -4862,7 +4842,8 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 						   cr,
 						   &background_area,
 						   &cell_area,
-						   flags);
+						   flags,
+                                                   draw_focus);
 	    }
 
 	  if (draw_hgrid_lines)
@@ -4954,19 +4935,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 		}
 	    }
 
-	  if (node == cursor && has_special_cell &&
-	      ((column == tree_view->priv->focus_column &&
-		GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS) &&
-		gtk_widget_has_focus (widget)) ||
-	       (column == tree_view->priv->edited_column)))
-	    {
-	      _gtk_tree_view_column_cell_draw_focus (column,
-						     cr,
-						     &background_area,
-						     &cell_area,
-						     flags);
-	    }
-
 	  cell_offset += gtk_tree_view_column_get_width (column);
 	}
 
@@ -5024,7 +4992,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
         }
 
       /* draw the big row-spanning focus rectangle, if needed */
-      if (!has_special_cell && node == cursor &&
+      if (!has_can_focus_cell && node == cursor &&
 	  GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_DRAW_KEYFOCUS) &&
 	  gtk_widget_has_focus (widget))
         {
@@ -7823,19 +7791,22 @@ gtk_tree_view_forall (GtkContainer *container,
     }
 }
 
-/* Returns TRUE if the treeview contains no "special" (editable or activatable)
- * cells. If so we draw one big row-spanning focus rectangle.
+/* Returns TRUE is any of the columns contains a cell that can-focus.
+ * If this is not the case, a column-spanning focus rectangle will be
+ * drawn.
  */
 static gboolean
-gtk_tree_view_has_special_cell (GtkTreeView *tree_view)
+gtk_tree_view_has_can_focus_cell (GtkTreeView *tree_view)
 {
   GList *list;
 
   for (list = tree_view->priv->columns; list; list = list->next)
     {
-      if (!gtk_tree_view_column_get_visible (GTK_TREE_VIEW_COLUMN (list->data)))
+      GtkTreeViewColumn *column = list->data;
+
+      if (!gtk_tree_view_column_get_visible (column))
 	continue;
-      if (_gtk_tree_view_column_count_special_cells (list->data))
+      if (gtk_cell_area_can_focus (column->cell_area))
 	return TRUE;
     }
 
@@ -9032,7 +9003,7 @@ gtk_tree_view_clamp_column_visible (GtkTreeView       *tree_view,
        * make sure the left-hand side of the column is visible.
        */
 
-      if (focus_to_cell && gtk_tree_view_has_special_cell (tree_view))
+      if (focus_to_cell && gtk_tree_view_has_can_focus_cell (tree_view))
         {
 	  GtkTreePath *cursor_path;
 	  GdkRectangle background_area, cell_area, focus_area;
@@ -9970,6 +9941,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
   GList *list;
   gboolean found_column = FALSE;
   gboolean rtl;
+  GtkDirectionType direction;
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
@@ -10001,6 +9973,17 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 	}
     }
 
+  switch (count)
+    {
+      case -1:
+        direction = rtl ? GTK_DIR_RIGHT : GTK_DIR_LEFT;
+        break;
+
+      case 1:
+        direction = rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
+        break;
+    }
+
   while (list)
     {
       gboolean left, right;
@@ -10024,8 +10007,8 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
         {
 	  left = list->prev ? TRUE : FALSE;
 	  right = list->next ? TRUE : FALSE;
-        }
 
+        }
       if (_gtk_tree_view_column_cell_focus (column, count, left, right))
 	{
 	  tree_view->priv->focus_column = column;
@@ -10041,7 +10024,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 
   if (found_column)
     {
-      if (!gtk_tree_view_has_special_cell (tree_view))
+      if (!gtk_tree_view_has_can_focus_cell (tree_view))
 	_gtk_tree_view_queue_draw_node (tree_view,
 				        cursor_tree,
 				        cursor_node,
@@ -10746,25 +10729,27 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
                            tree_view->priv->event_last_x,
                            tree_view->priv->event_last_y - dy);
 
-	  if (tree_view->priv->edited_column &&
-              GTK_IS_WIDGET (tree_view->priv->edited_column->editable_widget))
+	  if (tree_view->priv->edited_column)
 	    {
 	      GList *list;
-	      GtkWidget *widget;
 	      GtkTreeViewChild *child = NULL;
+              GtkCellEditable *edit_widget;
 
-	      widget = GTK_WIDGET (tree_view->priv->edited_column->editable_widget);
-	      adjust_allocation (widget, 0, dy); 
-	      
-	      for (list = tree_view->priv->children; list; list = list->next)
-		{
-		  child = (GtkTreeViewChild *)list->data;
-		  if (child->widget == widget)
-		    {
-		      child->y += dy;
-		      break;
-		    }
-		}
+              edit_widget = gtk_cell_area_get_edit_widget (tree_view->priv->edited_column->cell_area);
+              if (GTK_IS_WIDGET (edit_widget))
+                {
+                  adjust_allocation (GTK_WIDGET (edit_widget), 0, dy);
+
+                  for (list = tree_view->priv->children; list; list = list->next)
+                    {
+                      child = (GtkTreeViewChild *)list->data;
+                      if (child->widget == GTK_WIDGET (edit_widget))
+                        {
+                          child->y += dy;
+                          break;
+                        }
+                    }
+                }
 	    }
 	}
       gdk_window_scroll (tree_view->priv->bin_window, 0, dy);
@@ -12890,7 +12875,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
 
   /* cancel the current editing, if it exists */
   if (tree_view->priv->edited_column &&
-      tree_view->priv->edited_column->editable_widget)
+      gtk_cell_area_get_edit_widget (tree_view->priv->edited_column->cell_area))
     gtk_tree_view_stop_editing (tree_view, TRUE);
 
   gtk_tree_view_real_set_cursor (tree_view, path, TRUE, TRUE);
@@ -13979,7 +13964,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
                                                cr,
 					       &background_area,
 					       &cell_area,
-					       0);
+					       0, FALSE);
 	}
       cell_offset += gtk_tree_view_column_get_width (column);
     }
@@ -14855,25 +14840,23 @@ gtk_tree_view_search_init (GtkWidget   *entry,
     tree_view->priv->selected_iter = 1;
 }
 
-static void
-gtk_tree_view_remove_widget (GtkCellEditable *cell_editable,
-			     GtkTreeView     *tree_view)
+void
+_gtk_tree_view_remove_editable (GtkTreeView       *tree_view,
+                                GtkTreeViewColumn *column,
+                                GtkCellEditable   *cell_editable)
 {
   if (tree_view->priv->edited_column == NULL)
     return;
 
-  _gtk_tree_view_column_stop_editing (tree_view->priv->edited_column);
+  g_return_if_fail (column == tree_view->priv->edited_column);
+
   tree_view->priv->edited_column = NULL;
 
   if (gtk_widget_has_focus (GTK_WIDGET (cell_editable)))
     gtk_widget_grab_focus (GTK_WIDGET (tree_view));
 
-  g_signal_handlers_disconnect_by_func (cell_editable,
-					gtk_tree_view_remove_widget,
-					tree_view);
-
   gtk_container_remove (GTK_CONTAINER (tree_view),
-			GTK_WIDGET (cell_editable));  
+                        GTK_WIDGET (cell_editable));
 
   /* FIXME should only redraw a single node */
   gtk_widget_queue_draw (GTK_WIDGET (tree_view));
@@ -14886,7 +14869,7 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
   GtkTreeIter iter;
   GdkRectangle background_area;
   GdkRectangle cell_area;
-  GtkCellEditable *editable_widget = NULL;
+  GtkTreeViewColumn *focus_column;
   gchar *path_string;
   guint flags = 0; /* can be 0, as the flags are primarily for rendering */
   gint retval = FALSE;
@@ -14894,6 +14877,7 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
   GtkRBNode *cursor_node;
 
   g_assert (tree_view->priv->focus_column);
+  focus_column = tree_view->priv->focus_column;
 
   if (!gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     return FALSE;
@@ -14907,71 +14891,41 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
 
   validate_row (tree_view, cursor_tree, cursor_node, &iter, cursor_path);
 
-  gtk_tree_view_column_cell_set_cell_data (tree_view->priv->focus_column,
+  gtk_tree_view_column_cell_set_cell_data (focus_column,
 					   tree_view->priv->model,
 					   &iter,
 					   GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
 					   cursor_node->children?TRUE:FALSE);
   gtk_tree_view_get_background_area (tree_view,
 				     cursor_path,
-				     tree_view->priv->focus_column,
+				     focus_column,
 				     &background_area);
   gtk_tree_view_get_cell_area (tree_view,
 			       cursor_path,
-			       tree_view->priv->focus_column,
+			       focus_column,
 			       &cell_area);
 
-  if (_gtk_tree_view_column_cell_event (tree_view->priv->focus_column,
-					&editable_widget,
-					NULL,
-					path_string,
-					&background_area,
-					&cell_area,
-					flags))
-    {
-      retval = TRUE;
-      if (editable_widget != NULL)
-	{
-	  gint left, right;
-	  GdkRectangle area;
-	  GtkCellRenderer *cell;
+  if (gtk_cell_area_activate (focus_column->cell_area,
+                              focus_column->cell_area_context,
+                              GTK_WIDGET (tree_view),
+                              &cell_area,
+                              flags))
+    retval = TRUE;
 
-	  area = cell_area;
-	  cell = _gtk_tree_view_column_get_edited_cell (tree_view->priv->focus_column);
-
-	  _gtk_tree_view_column_get_neighbor_sizes (tree_view->priv->focus_column, cell, &left, &right);
-
-	  area.x += left;
-	  area.width -= right + left;
-
-	  gtk_tree_view_real_start_editing (tree_view,
-					    tree_view->priv->focus_column,
-					    cursor_path,
-					    editable_widget,
-					    &area,
-					    NULL,
-					    flags);
-	}
-
-    }
-  g_free (path_string);
   return retval;
 }
 
-static void
-gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
-				  GtkTreeViewColumn *column,
-				  GtkTreePath       *path,
-				  GtkCellEditable   *cell_editable,
-				  GdkRectangle      *cell_area,
-				  GdkEvent          *event,
-				  guint              flags)
+void
+_gtk_tree_view_add_editable (GtkTreeView       *tree_view,
+                             GtkTreeViewColumn *column,
+                             GtkTreePath       *path,
+                             GtkCellEditable   *cell_editable,
+                             GdkRectangle      *cell_area)
 {
   gint pre_val = tree_view->priv->vadjustment->value;
   GtkRequisition requisition;
 
   tree_view->priv->edited_column = column;
-  _gtk_tree_view_column_start_editing (column, GTK_CELL_EDITABLE (cell_editable));
 
   gtk_tree_view_real_set_cursor (tree_view, path, FALSE, TRUE);
   cell_area->y += pre_val - (int)tree_view->priv->vadjustment->value;
@@ -14996,13 +14950,6 @@ gtk_tree_view_real_start_editing (GtkTreeView       *tree_view,
 			 cell_area->x, cell_area->y,
 			 cell_area->width, cell_area->height);
     }
-
-  gtk_cell_editable_start_editing (GTK_CELL_EDITABLE (cell_editable),
-				   (GdkEvent *)event);
-
-  gtk_widget_grab_focus (GTK_WIDGET (cell_editable));
-  g_signal_connect (cell_editable, "remove-widget",
-		    G_CALLBACK (gtk_tree_view_remove_widget), tree_view);
 }
 
 static void
@@ -15010,7 +14957,6 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
 			    gboolean     cancel_editing)
 {
   GtkTreeViewColumn *column;
-  GtkCellRenderer *cell;
 
   if (tree_view->priv->edited_column == NULL)
     return;
@@ -15026,17 +14972,8 @@ gtk_tree_view_stop_editing (GtkTreeView *tree_view,
    */
 
   column = tree_view->priv->edited_column;
+  gtk_cell_area_stop_editing (column->cell_area, cancel_editing);
   tree_view->priv->edited_column = NULL;
-
-  cell = _gtk_tree_view_column_get_edited_cell (column);
-  gtk_cell_renderer_stop_editing (cell, cancel_editing);
-
-  if (!cancel_editing)
-    gtk_cell_editable_editing_done (column->editable_widget);
-
-  tree_view->priv->edited_column = column;
-
-  gtk_cell_editable_remove_widget (column->editable_widget);
 }
 
 

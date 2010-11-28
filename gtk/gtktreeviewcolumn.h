@@ -27,6 +27,7 @@
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
+#include <gtk/gtkcellarea.h>
 
 
 G_BEGIN_DECLS
@@ -91,10 +92,8 @@ struct _GtkTreeViewColumn
   GtkWidget *GSEAL (arrow);
   GtkWidget *GSEAL (alignment);
   GdkWindow *GSEAL (window);
-  GtkCellEditable *GSEAL (editable_widget);
   gfloat GSEAL (xalign);
   gulong GSEAL (property_changed_signal);
-  gint GSEAL (spacing);
 
   /* Sizing fields */
   /* see gtk+/doc/tree-column-sizing.txt for more information on them */
@@ -112,13 +111,19 @@ struct _GtkTreeViewColumn
   gint GSEAL (drag_y);
 
   gchar *GSEAL (title);
-  GList *GSEAL (cell_list);
 
   /* Sorting */
   gulong GSEAL (sort_clicked_signal);
   gulong GSEAL (sort_column_changed_signal);
   gint GSEAL (sort_column_id);
   GtkSortType GSEAL (sort_order);
+
+  /* Cell area */
+  GtkCellArea *cell_area;
+  GtkCellAreaContext *cell_area_context;
+
+  gulong add_editable_signal;
+  gulong remove_editable_signal;
 
   /* Flags */
   guint GSEAL (visible)             : 1;

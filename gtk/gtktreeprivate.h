@@ -405,15 +405,24 @@ void         _gtk_tree_view_queue_draw_node           (GtkTreeView       *tree_v
 						       GtkRBNode         *node,
 						       const GdkRectangle *clip_rect);
 
+void         _gtk_tree_view_add_editable              (GtkTreeView       *tree_view,
+                                                       GtkTreeViewColumn *column,
+                                                       GtkTreePath       *path,
+                                                       GtkCellEditable   *cell_editable,
+                                                       GdkRectangle      *cell_area);
+void         _gtk_tree_view_remove_editable           (GtkTreeView       *tree_view,
+                                                       GtkTreeViewColumn *column,
+                                                       GtkCellEditable   *cell_editable);
+
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 					     GtkTreeView       *tree_view);
+void _gtk_tree_view_column_set_width        (GtkTreeViewColumn *column,
+                                             int                width);
 void _gtk_tree_view_column_unset_model      (GtkTreeViewColumn *column,
 					     GtkTreeModel      *old_model);
 void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);
-void _gtk_tree_view_column_set_width        (GtkTreeViewColumn *column,
-					     gint               width);
 void _gtk_tree_view_column_start_drag       (GtkTreeView       *tree_view,
 					     GtkTreeViewColumn *column,
                                              GdkDevice         *device);
@@ -424,16 +433,12 @@ gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 					     const GdkRectangle *background_area,
 					     const GdkRectangle *cell_area,
 					     guint               flags);
-void _gtk_tree_view_column_start_editing (GtkTreeViewColumn *tree_column,
-					  GtkCellEditable   *editable_widget);
-void _gtk_tree_view_column_stop_editing  (GtkTreeViewColumn *tree_column);
 void _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);
 void             _gtk_tree_view_column_autosize          (GtkTreeView       *tree_view,
 							  GtkTreeViewColumn *column);
 
 gboolean         _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column);
 GtkCellRenderer *_gtk_tree_view_column_get_edited_cell   (GtkTreeViewColumn *column);
-gint             _gtk_tree_view_column_count_special_cells (GtkTreeViewColumn *column);
 GtkCellRenderer *_gtk_tree_view_column_get_cell_at_pos   (GtkTreeViewColumn *column,
 							  gint               x);
 
@@ -449,27 +454,18 @@ void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
 							  cairo_t            *cr,
 							  const GdkRectangle *background_area,
 							  const GdkRectangle *cell_area,
-							  guint               flags);
+							  guint               flags,
+                                                          gboolean            draw_focus);
 void		  _gtk_tree_view_column_get_focus_area   (GtkTreeViewColumn  *tree_column,
 							  const GdkRectangle *background_area,
 							  const GdkRectangle *cell_area,
 							  GdkRectangle       *focus_area);
 gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn  *tree_column,
-							  gint                direction,
+							  gint                count,
 							  gboolean            left,
 							  gboolean            right);
-void		  _gtk_tree_view_column_cell_draw_focus  (GtkTreeViewColumn  *tree_column,
-							  cairo_t            *cr,
-							  const GdkRectangle *background_area,
-							  const GdkRectangle *cell_area,
-							  guint               flags);
 void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
 							  gboolean            install_handler);
-void              _gtk_tree_view_column_get_neighbor_sizes (GtkTreeViewColumn *column,
-							    GtkCellRenderer   *cell,
-							    gint              *left,
-							    gint              *right);
-
 
 G_END_DECLS
 
