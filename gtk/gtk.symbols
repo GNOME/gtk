@@ -1386,7 +1386,6 @@ gtk_message_dialog_new_with_markup G_GNUC_PRINTF(5,6)
 gtk_message_dialog_set_image
 gtk_message_dialog_set_markup
 gtk_message_type_get_type G_GNUC_CONST
-gtk_metric_type_get_type G_GNUC_CONST
 gtk_misc_get_alignment
 gtk_misc_get_padding
 gtk_misc_get_type G_GNUC_CONST
@@ -1699,8 +1698,6 @@ gtk_print_operation_set_use_full_page
 gtk_print_pages_get_type G_GNUC_CONST
 gtk_print_quality_get_type G_GNUC_CONST
 gtk_print_run_page_setup_dialog
-gtk_print_run_page_setup_dialog
-gtk_print_run_page_setup_dialog_async
 gtk_print_run_page_setup_dialog_async
 gtk_print_settings_copy
 gtk_print_settings_foreach
