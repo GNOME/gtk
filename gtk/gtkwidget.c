@@ -8002,9 +8002,12 @@ gtk_widget_override_color (GtkWidget     *widget,
 
   properties = _gtk_widget_get_modifier_properties (widget);
 
-  gtk_style_properties_set (properties, state,
-                            "color", color,
-                            NULL);
+  if (color)
+    gtk_style_properties_set (properties, state,
+                              "color", color,
+                              NULL);
+  else
+    gtk_style_properties_unset_property (properties, "color", state);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_invalidate (context);
@@ -8039,9 +8042,14 @@ gtk_widget_override_background_color (GtkWidget     *widget,
 
   properties = _gtk_widget_get_modifier_properties (widget);
 
-  gtk_style_properties_set (properties, state,
-                            "background-color", color,
-                            NULL);
+  if (color)
+    gtk_style_properties_set (properties, state,
+                              "background-color", color,
+                              NULL);
+  else
+    gtk_style_properties_unset_property (properties,
+                                         "background-color",
+                                         state);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_invalidate (context);
@@ -8075,9 +8083,12 @@ gtk_widget_override_font (GtkWidget                  *widget,
 
   properties = _gtk_widget_get_modifier_properties (widget);
 
-  gtk_style_properties_set (properties, 0,
-                            "font", font_desc,
-                            NULL);
+  if (font_desc)
+    gtk_style_properties_set (properties, 0,
+                              "font", font_desc,
+                              NULL);
+  else
+    gtk_style_properties_unset_property (properties, "font", 0);
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_invalidate (context);
