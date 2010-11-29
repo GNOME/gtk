@@ -4879,6 +4879,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 
 /**
  * gtk_combo_box_new_with_model_and_entry:
+ * @model: A #GtkTreeModel
  *
  * Creates a new empty #GtkComboBox with an entry
  * and with the model initialized to @model.
