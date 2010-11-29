@@ -1104,17 +1104,17 @@ gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
 
 
 /**
- * gtk_cell_renderer_can_focus:
+ * gtk_cell_renderer_is_activatable:
  * @cell: A #GtkCellRenderer
  *
- * Checks whether the cell renderer can receive focus.
+ * Checks whether the cell renderer can do something when activated.
  *
- * Returns: %TRUE if the cell renderer can do anything with keyboard focus
+ * Returns: %TRUE if the cell renderer can do anything when activated.
  *
  * Since: 3.0
  */
 gboolean
-gtk_cell_renderer_can_focus (GtkCellRenderer *cell)
+gtk_cell_renderer_is_activatable (GtkCellRenderer *cell)
 {
   GtkCellRendererPrivate *priv;
 

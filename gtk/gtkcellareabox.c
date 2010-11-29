@@ -1138,7 +1138,7 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 
       /* If no cell can activate but the caller wants focus painted,
        * then we paint focus around all cells */
-      if (paint_focus && !gtk_cell_area_can_focus (area))
+      if (paint_focus && !gtk_cell_area_is_activatable (area))
 	focus_all = TRUE;
     }
 

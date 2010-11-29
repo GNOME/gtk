@@ -356,7 +356,7 @@ static void      gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea 
 								    gint                   height,
 								    gint                  *minimum_width,
 								    gint                  *natural_width);
-static gboolean  gtk_cell_area_real_can_focus                      (GtkCellArea           *area);
+static gboolean  gtk_cell_area_real_is_activatable                 (GtkCellArea           *area);
 static gboolean  gtk_cell_area_real_activate                       (GtkCellArea           *area,
 								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
@@ -553,9 +553,9 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->get_preferred_width_for_height = gtk_cell_area_real_get_preferred_width_for_height;
 
   /* focus */
-  class->can_focus  = gtk_cell_area_real_can_focus;
-  class->focus      = NULL;
-  class->activate   = gtk_cell_area_real_activate;
+  class->is_activatable = gtk_cell_area_real_is_activatable;
+  class->activate       = gtk_cell_area_real_activate;
+  class->focus          = NULL;
 
   /* Signals */
   /**
@@ -990,18 +990,18 @@ gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
 }
 
 static void
-get_can_focus (GtkCellRenderer *renderer,
-	       gboolean        *can_focus)
+get_is_activatable (GtkCellRenderer *renderer,
+		    gboolean        *activatable)
 {
 
-  if (gtk_cell_renderer_can_focus (renderer))
-    *can_focus = TRUE;
+  if (gtk_cell_renderer_is_activatable (renderer))
+    *activatable = TRUE;
 }
 
 static gboolean
-gtk_cell_area_real_can_focus (GtkCellArea *area)
+gtk_cell_area_real_is_activatable (GtkCellArea *area)
 {
-  gboolean can_focus = FALSE;
+  gboolean activatable = FALSE;
 
   /* Checks if any renderer can focus for the currently applied
    * attributes.
@@ -1009,9 +1009,9 @@ gtk_cell_area_real_can_focus (GtkCellArea *area)
    * Subclasses can override this in the case that they are also
    * rendering widgets as well as renderers.
    */
-  gtk_cell_area_forall (area, (GtkCellCallback)get_can_focus, &can_focus);
+  gtk_cell_area_forall (area, (GtkCellCallback)get_is_activatable, &activatable);
 
-  return can_focus;
+  return activatable;
 }
 
 static gboolean
@@ -2326,20 +2326,20 @@ gtk_cell_area_cell_get_property (GtkCellArea        *area,
  *************************************************************/
 
 /**
- * gtk_cell_area_can_focus:
+ * gtk_cell_area_is_activatable:
  * @area: a #GtkCellArea
  *
- * Returns whether the area can receive keyboard focus,
+ * Returns whether the area can do anything when activated,
  * after applying new attributes to @area.
  *
- * Returns: whether @area can receive focus.
+ * Returns: whether @area can do anything when activated.
  */
 gboolean
-gtk_cell_area_can_focus (GtkCellArea *area)
+gtk_cell_area_is_activatable (GtkCellArea *area)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
 
-  return GTK_CELL_AREA_GET_CLASS (area)->can_focus (area);
+  return GTK_CELL_AREA_GET_CLASS (area)->is_activatable (area);
 }
 
 /**

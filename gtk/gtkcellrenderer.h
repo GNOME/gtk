@@ -247,7 +247,7 @@ void             gtk_cell_renderer_set_sensitive  (GtkCellRenderer      *cell,
                                                    gboolean              sensitive);
 gboolean         gtk_cell_renderer_get_sensitive  (GtkCellRenderer      *cell);
 
-gboolean         gtk_cell_renderer_can_focus      (GtkCellRenderer      *cell);
+gboolean         gtk_cell_renderer_is_activatable (GtkCellRenderer      *cell);
 
 /* For use by cell renderer implementations only */
 void             gtk_cell_renderer_stop_editing   (GtkCellRenderer      *cell,

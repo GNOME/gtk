@@ -144,7 +144,7 @@ struct _GtkCellAreaClass
 							  GParamSpec              *pspec);
 
   /* Focus */
-  gboolean           (* can_focus)                       (GtkCellArea             *area);
+  gboolean           (* is_activatable)                  (GtkCellArea             *area);
   gboolean           (* focus)                           (GtkCellArea             *area,
 							  GtkDirectionType         direction);
   gboolean           (* activate)                        (GtkCellArea             *area,
@@ -285,14 +285,14 @@ void                  gtk_cell_area_cell_get_property              (GtkCellArea 
 
 
 /* Focus */
-gboolean              gtk_cell_area_can_focus                      (GtkCellArea         *area);
-gboolean              gtk_cell_area_focus                          (GtkCellArea         *area,
-								    GtkDirectionType     direction);
+gboolean              gtk_cell_area_is_activatable                 (GtkCellArea         *area);
 gboolean              gtk_cell_area_activate                       (GtkCellArea         *area,
 								    GtkCellAreaContext  *context,
 								    GtkWidget           *widget,
 								    const GdkRectangle  *cell_area,
 								    GtkCellRendererState flags);
+gboolean              gtk_cell_area_focus                          (GtkCellArea         *area,
+								    GtkDirectionType     direction);
 void                  gtk_cell_area_set_focus_cell                 (GtkCellArea          *area,
 								    GtkCellRenderer      *renderer);
 GtkCellRenderer      *gtk_cell_area_get_focus_cell                 (GtkCellArea          *area);

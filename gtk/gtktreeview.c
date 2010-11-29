@@ -7804,7 +7804,7 @@ gtk_tree_view_has_can_focus_cell (GtkTreeView *tree_view)
 
       if (!gtk_tree_view_column_get_visible (column))
 	continue;
-      if (gtk_cell_area_can_focus (column->cell_area))
+      if (gtk_cell_area_is_activatable (column->cell_area))
 	return TRUE;
     }
 
