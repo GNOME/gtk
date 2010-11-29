@@ -1129,11 +1129,17 @@ gtk_cell_area_box_render (GtkCellArea          *area,
   GtkCellRenderer       *focus_cell = NULL;
   GdkRectangle           focus_rect = { 0, };
   gboolean               first_focus_cell = TRUE;
+  gboolean               focus_all = FALSE;
 
   if (flags & GTK_CELL_RENDERER_FOCUSED)
     {
       focus_cell = gtk_cell_area_get_focus_cell (area);
       flags &= ~GTK_CELL_RENDERER_FOCUSED;
+
+      /* If no cell can activate but the caller wants focus painted,
+       * then we paint focus around all cells */
+      if (paint_focus && !gtk_cell_area_can_focus (area))
+	focus_all = TRUE;
     }
 
   cell_background = *cell_area;
@@ -1199,9 +1205,10 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 	  render_background.width = background_area->width;
 	}
 
-      if (focus_cell && 
-	  (cell->renderer == focus_cell || 
-	   gtk_cell_area_is_focus_sibling (area, focus_cell, cell->renderer)))
+      if (focus_all || 
+	  (focus_cell && 
+	   (cell->renderer == focus_cell || 
+	    gtk_cell_area_is_focus_sibling (area, focus_cell, cell->renderer))))
 	{
 	  cell_fields |= GTK_CELL_RENDERER_FOCUSED;
 
