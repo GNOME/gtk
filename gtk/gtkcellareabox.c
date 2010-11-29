@@ -1871,10 +1871,10 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
 
 	      if (info->renderer == focus_cell)
 		found_cell = TRUE;
-	      else if (found_cell)
+	      else if (found_cell && /* Dont give focus to cells that are siblings to a focus cell */
+		       gtk_cell_area_get_focus_from_sibling (area, info->renderer) == NULL)
 		{
                   gtk_cell_area_set_focus_cell (area, info->renderer);
-
                   cycled_focus = TRUE;
 		}
 	    }
