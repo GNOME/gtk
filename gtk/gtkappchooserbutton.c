@@ -62,14 +62,14 @@ static void app_chooser_iface_init (GtkAppChooserIface *iface);
 
 static void real_insert_custom_item (GtkAppChooserButton *self,
                                      const gchar *name,
-				     const gchar *label,
-				     GIcon *icon,
-				     gboolean custom,
-				     GtkTreeIter *iter);
+                                     const gchar *label,
+                                     GIcon *icon,
+                                     gboolean custom,
+                                     GtkTreeIter *iter);
 
 static void real_insert_separator (GtkAppChooserButton *self,
-				   gboolean custom,
-				   GtkTreeIter *iter);
+                                   gboolean custom,
+                                   GtkTreeIter *iter);
 
 static guint signals[NUM_SIGNALS] = { 0, };
 
@@ -135,18 +135,18 @@ select_app_data_free (SelectAppData *data)
 
 static gboolean
 select_application_func_cb (GtkTreeModel *model,
-			    GtkTreePath *path,
-			    GtkTreeIter *iter,
-			    gpointer user_data)
+                            GtkTreePath *path,
+                            GtkTreeIter *iter,
+                            gpointer user_data)
 {
   SelectAppData *data = user_data;
   GAppInfo *app_to_match = data->info, *app = NULL;
   gboolean custom;
 
   gtk_tree_model_get (model, iter,
-		      COLUMN_APP_INFO, &app,
-		      COLUMN_CUSTOM, &custom,
-		      -1);
+                      COLUMN_APP_INFO, &app,
+                      COLUMN_CUSTOM, &custom,
+                      -1);
 
   /* cutsom items are always after GAppInfos, so iterating further here
    * is just useless.
@@ -174,15 +174,15 @@ gtk_app_chooser_button_select_application (GtkAppChooserButton *self,
   data->info = g_object_ref (info);
 
   gtk_tree_model_foreach (GTK_TREE_MODEL (self->priv->store),
-			  select_application_func_cb, data);
+                          select_application_func_cb, data);
 
   select_app_data_free (data);
 }
 
 static void
 other_application_dialog_response_cb (GtkDialog *dialog,
-				      gint response_id,
-				      gpointer user_data)
+                                      gint response_id,
+                                      gpointer user_data)
 {
   GtkAppChooserButton *self = user_data;
   GAppInfo *info;
@@ -214,16 +214,16 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
 
   toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self)));
   dialog = gtk_app_chooser_dialog_new_for_content_type (toplevel, GTK_DIALOG_DESTROY_WITH_PARENT,
-							self->priv->content_type);
+                                                        self->priv->content_type);
   widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
   g_object_set (widget,
-		"show-fallback", TRUE,
-		"show-other", TRUE,
-		NULL);
+                "show-fallback", TRUE,
+                "show-other", TRUE,
+                NULL);
   gtk_widget_show (dialog);
 
   g_signal_connect (dialog, "response",
-		    G_CALLBACK (other_application_dialog_response_cb), self);
+                    G_CALLBACK (other_application_dialog_response_cb), self);
 }
 
 static void
@@ -244,7 +244,7 @@ gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
 
   gtk_list_store_insert_after (self->priv->store, &iter, prev_iter);
   real_insert_custom_item (self, CUSTOM_ITEM_OTHER_APP,
-			   _("Other application..."), icon,
+                           _("Other application..."), icon,
                            FALSE, &iter);
 
   g_object_unref (icon);
@@ -515,11 +515,12 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * The ::show-dialog-item property determines whether the dropdown menu
    * should show an item that triggers a #GtkAppChooserDialog when clicked.
    */
-  pspec = g_param_spec_boolean ("show-dialog-item",
-				P_("Include an 'Other...' item"),
-				P_("Whether the combobox should include an item that triggers a GtkAppChooserDialog"),
-				FALSE,
-				G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
+  pspec =
+    g_param_spec_boolean ("show-dialog-item",
+                          P_("Include an 'Other...' item"),
+                          P_("Whether the combobox should include an item that triggers a GtkAppChooserDialog"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (oclass, PROP_SHOW_DIALOG_ITEM, pspec);
 
   signals[SIGNAL_CUSTOM_ITEM_ACTIVATED] =
@@ -568,12 +569,12 @@ real_insert_custom_item (GtkAppChooserButton *self,
     }
 
   gtk_list_store_set (self->priv->store, iter,
-		      COLUMN_NAME, name,
+                      COLUMN_NAME, name,
                       COLUMN_LABEL, label,
-		      COLUMN_ICON, icon,
-		      COLUMN_CUSTOM, custom,
-		      COLUMN_SEPARATOR, FALSE,
-		      -1);
+                      COLUMN_ICON, icon,
+                      COLUMN_CUSTOM, custom,
+                      COLUMN_SEPARATOR, FALSE,
+                      -1);
 }
 
 static void
