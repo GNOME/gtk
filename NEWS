@@ -13,7 +13,6 @@ Overview of Changes from GTK+ 2.91.4 to 2.91.5
   back to TRUE
 
 * Bugs fixed:
- 565665 GtkTargetEntry member target should be const char *
  613942 Deprecate GtkRuler, GtkVruler and GtkHRuler
  629955 Deprecate / remove gtk_main and gtk_init_add / remove* API
  633324 Stop invoking size-request completely
