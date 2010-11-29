@@ -322,7 +322,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-tblr.png				\
 	$(srcdir)/images/layout-tbrl.png				\
 	$(srcdir)/images/window-default.png				\
-	$(srcdir)/images/hello-world.png
+	$(srcdir)/images/hello-world.png				\
+	$(srcdir)/images/switch.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \

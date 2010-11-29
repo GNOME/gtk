@@ -115,6 +115,7 @@ new_widget_info (const char *name,
   else
     {
       info->window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_has_resize_grip (GTK_WINDOW (info->window), FALSE);
       info->include_decorations = FALSE;
       gtk_widget_show_all (widget);
       gtk_container_add (GTK_CONTAINER (info->window), widget);
@@ -157,6 +158,26 @@ create_button (void)
   gtk_container_add (GTK_CONTAINER (align), widget);
 
   return new_widget_info ("button", align, SMALL);
+}
+
+static WidgetInfo *
+create_switch (void)
+{
+  GtkWidget *widget;
+  GtkWidget *align;
+  GtkWidget *sw;
+
+  widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  sw = gtk_switch_new ();
+  gtk_switch_set_active (GTK_SWITCH (sw), TRUE);
+  gtk_box_pack_start (GTK_BOX (widget), sw, TRUE, TRUE, 0);
+  sw = gtk_switch_new ();
+  gtk_box_pack_start (GTK_BOX (widget), sw, TRUE, TRUE, 0);
+
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  gtk_container_add (GTK_CONTAINER (align), widget);
+
+  return new_widget_info ("switch", align, SMALL);
 }
 
 static WidgetInfo *
@@ -1095,6 +1116,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_page_setup_dialog ());
   retval = g_list_prepend (retval, create_print_dialog ());
   retval = g_list_prepend (retval, create_volume_button ());
+  retval = g_list_prepend (retval, create_switch ());
 
   return retval;
 }
