@@ -511,6 +511,12 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
 
   g_object_class_override_property (oclass, PROP_CONTENT_TYPE, "content-type");
 
+  /**
+   * GtkAppChooserButton:show-dialog-item:
+   *
+   * The ::show-dialog-item property determines whether the dropdown menu
+   * should show an item that triggers a #GtkAppChooserDialog when clicked.
+   */
   pspec = g_param_spec_boolean ("show-dialog-item",
 				P_("Include an 'Other...' item"),
 				P_("Whether the combobox should include an item that triggers a GtkAppChooserDialog"),
@@ -633,6 +639,17 @@ gtk_app_chooser_button_append_custom_item (GtkAppChooserButton         *self,
                            func, user_data, TRUE, &iter);
 }
 
+/**
+ * gtk_app_chooser_button_get_show_dialog_item:
+ * @self: a #GtkAppChooserButton
+ *
+ * Returns the current value of the #GtkAppChooserButton:show-dialog-item
+ * property.
+ *
+ * Returns: the value of #GtkAppChooserButton:show-dialog-item
+ *
+ * Since: 3.0
+ */
 gboolean
 gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
 {
@@ -641,6 +658,16 @@ gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
   return self->priv->show_dialog_item;
 }
 
+/**
+ * gtk_app_chooser_button_get_show_dialog_item:
+ * @self: a #GtkAppChooserButton
+ * @setting: the new value for #GtkAppChooserButton:show-dialog-item
+ *
+ * Sets whether the dropdown menu of this button should show an
+ * entry to trigger a #GtkAppChooserDialog.
+ *
+ * Since: 3.0
+ */
 void
 gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
                                              gboolean setting)
