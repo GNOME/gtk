@@ -60,6 +60,8 @@ struct _GtkAppChooserDialogPrivate {
   GtkWidget *app_chooser_widget;
   GtkWidget *show_more_button;
 
+  GtkAppChooserOnline *online;
+
   gboolean show_more_clicked;
 };
 
@@ -118,24 +120,51 @@ search_for_mimetype_ready_cb (GObject      *source,
     {
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self->priv->app_chooser_widget));
     }
-
-  g_object_unref (online);
 }
 
 static void
 online_button_clicked_cb (GtkButton *b,
                           gpointer   user_data)
 {
-  GtkAppChooserOnline *online;
   GtkAppChooserDialog *self = user_data;
 
-  online = gtk_app_chooser_online_get_default ();
-
-  gtk_app_chooser_online_search_for_mimetype_async (online,
+  gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
                                                     self->priv->content_type,
                                                     GTK_WINDOW (self),
                                                     search_for_mimetype_ready_cb,
                                                     self);
+}
+
+static void
+app_chooser_online_get_default_ready_cb (GObject *source,
+                                         GAsyncResult *res,
+                                         gpointer user_data)
+{
+  GtkAppChooserDialog *self = user_data;
+
+  self->priv->online = gtk_app_chooser_online_get_default_finish (source, res);
+
+  if (self->priv->online != NULL)
+    {
+      GtkWidget *action_area;
+
+      action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
+      self->priv->online_button = gtk_button_new_with_label (_("Find applications online"));
+      gtk_box_pack_start (GTK_BOX (action_area), self->priv->online_button,
+                          FALSE, FALSE, 0);
+      gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), self->priv->online_button,
+                                          TRUE);
+      g_signal_connect (self->priv->online_button, "clicked",
+                        G_CALLBACK (online_button_clicked_cb), self);
+
+      gtk_widget_show (self->priv->online_button);
+    }
+}
+
+static void
+ensure_online_button (GtkAppChooserDialog *self)
+{
+  gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb, self);
 }
 
 /* An application is valid if:
@@ -415,7 +444,7 @@ build_dialog_ui (GtkAppChooserDialog *self)
   GtkWidget *vbox;
   GtkWidget *vbox2;
   GtkWidget *label;
-  GtkWidget *action_area, *button, *w;
+  GtkWidget *button, *w;
 
   gtk_container_set_border_width (GTK_CONTAINER (self), 5);
 
@@ -482,16 +511,6 @@ build_dialog_ui (GtkAppChooserDialog *self)
   gtk_dialog_add_action_widget (GTK_DIALOG (self),
                                 self->priv->button, GTK_RESPONSE_OK);
 
-  action_area = gtk_dialog_get_action_area (GTK_DIALOG (self));
-  self->priv->online_button = gtk_button_new_with_label (_("Find applications online"));
-  gtk_box_pack_start (GTK_BOX (action_area), self->priv->online_button,
-                      FALSE, FALSE, 0);
-  gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), self->priv->online_button,
-                                      TRUE);
-  gtk_widget_show (self->priv->online_button);
-  g_signal_connect (self->priv->online_button, "clicked",
-                    G_CALLBACK (online_button_clicked_cb), self);
-
   gtk_dialog_set_default_response (GTK_DIALOG (self),
                                    GTK_RESPONSE_OK);
 }
@@ -548,15 +567,24 @@ gtk_app_chooser_dialog_constructed (GObject *object)
 
   build_dialog_ui (self);
   set_dialog_properties (self);
+  ensure_online_button (self);
+}
+
+static void
+gtk_app_chooser_dialog_dispose (GObject *object)
+{
+  GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
+  
+  g_clear_object (&self->priv->gfile);
+  g_clear_object (&self->priv->online);
+
+  G_OBJECT_CLASS (gtk_app_chooser_dialog_parent_class)->dispose (object);
 }
 
 static void
 gtk_app_chooser_dialog_finalize (GObject *object)
 {
   GtkAppChooserDialog *self = GTK_APP_CHOOSER_DIALOG (object);
-
-  if (self->priv->gfile)
-    g_object_unref (self->priv->gfile);
 
   g_free (self->priv->content_type);
 
@@ -624,6 +652,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   GParamSpec *pspec;
 
   gobject_class = G_OBJECT_CLASS (klass);
+  gobject_class->dispose = gtk_app_chooser_dialog_dispose;
   gobject_class->finalize = gtk_app_chooser_dialog_finalize;
   gobject_class->set_property = gtk_app_chooser_dialog_set_property;
   gobject_class->get_property = gtk_app_chooser_dialog_get_property;

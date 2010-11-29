@@ -28,7 +28,6 @@
 #include <gio/gio.h>
 
 #include "gtkappchooseronline.h"
-#include "gtkappchooseronlinedummy.h"
 
 #ifdef ENABLE_PACKAGEKIT
 #include "gtkappchooseronlinepk.h"
@@ -45,18 +44,16 @@ _gtk_app_chooser_module_ensure (void)
   G_LOCK (registered_ep);
 
   if (!registered_ep)
-{
-    registered_ep = TRUE;
+    {
+      registered_ep = TRUE;
 
-    ep = g_io_extension_point_register ("gtkappchooser-online");
-    g_io_extension_point_set_required_type (ep, GTK_TYPE_APP_CHOOSER_ONLINE);
-
-    _gtk_app_chooser_online_dummy_get_type ();
+      ep = g_io_extension_point_register ("gtkappchooser-online");
+      g_io_extension_point_set_required_type (ep, GTK_TYPE_APP_CHOOSER_ONLINE);
 
 #ifdef ENABLE_PACKAGEKIT
-    _gtk_app_chooser_online_pk_get_type ();
+      _gtk_app_chooser_online_pk_get_type ();
 #endif
-  }
+    }
 
   G_UNLOCK (registered_ep);
 }

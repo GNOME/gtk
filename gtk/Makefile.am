@@ -392,7 +392,6 @@ gtk_private_h_sources =		\
 	gtkmountoperationprivate.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h 	\
-	gtkappchooseronlinedummy.h \
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
@@ -543,7 +542,6 @@ gtk_base_c_sources =            \
 	gtkappchooserdialog.c	\
 	gtkappchoosermodule.c	\
 	gtkappchooseronline.c	\
-	gtkappchooseronlinedummy.c \
 	gtkorientable.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\

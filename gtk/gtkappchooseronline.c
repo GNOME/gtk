@@ -25,12 +25,15 @@
 
 #include "gtkappchooseronline.h"
 
-#include "gtkappchooseronlinedummy.h"
 #include "gtkappchoosermodule.h"
+#include "gtkintl.h"
 
 #include <gio/gio.h>
 
-G_DEFINE_INTERFACE (GtkAppChooserOnline, gtk_app_chooser_online, G_TYPE_OBJECT);
+#define gtk_app_chooser_online_get_type _gtk_app_chooser_online_get_type
+static void gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface);
+G_DEFINE_INTERFACE_WITH_CODE (GtkAppChooserOnline, gtk_app_chooser_online, G_TYPE_OBJECT,
+                              g_type_interface_add_prerequisite (g_define_type_id, G_TYPE_ASYNC_INITABLE);)
 
 static void
 gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface)
@@ -39,12 +42,24 @@ gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface)
 }
 
 GtkAppChooserOnline *
-gtk_app_chooser_online_get_default (void)
+gtk_app_chooser_online_get_default_finish (GObject *source,
+                                           GAsyncResult *result)
+{
+  GtkAppChooserOnline *retval;
+
+  retval = GTK_APP_CHOOSER_ONLINE (g_async_initable_new_finish (G_ASYNC_INITABLE (source),
+                                                                result, NULL));
+
+  return retval;
+}  
+
+void
+gtk_app_chooser_online_get_default_async (GAsyncReadyCallback callback,
+                                          gpointer user_data)
 {
   GIOExtensionPoint *ep;
   GIOExtension *extension;
   GList *extensions;
-  GtkAppChooserOnline *retval;
 
   _gtk_app_chooser_module_ensure ();
 
@@ -55,14 +70,9 @@ gtk_app_chooser_online_get_default (void)
     {
       /* pick the first */
       extension = extensions->data;
-      retval = g_object_new (g_io_extension_get_type (extension), NULL);
+      g_async_initable_new_async (g_io_extension_get_type (extension), G_PRIORITY_DEFAULT,
+                                  NULL, callback, user_data, NULL);
     }
-  else
-    {
-      retval = g_object_new (GTK_TYPE_APP_CHOOSER_ONLINE_DUMMY, NULL);
-    }
-
-  return retval;
 }
 
 void
