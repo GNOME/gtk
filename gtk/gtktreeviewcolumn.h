@@ -124,6 +124,7 @@ struct _GtkTreeViewColumn
 
   gulong add_editable_signal;
   gulong remove_editable_signal;
+  gulong context_changed_signal;
 
   /* Flags */
   guint GSEAL (visible)             : 1;
