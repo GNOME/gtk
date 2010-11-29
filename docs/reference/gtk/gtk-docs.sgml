@@ -287,13 +287,6 @@
       <xi:include href="xml/gtksocket.xml" />
     </chapter>
 
-    <chapter id="SpecialObjects">
-      <title>Special-purpose features</title>
-      <xi:include href="xml/gtkruler.xml" />
-      <xi:include href="xml/gtkhruler.xml" />
-      <xi:include href="xml/gtkvruler.xml" />
-    </chapter>
-
     <chapter id="RecentDocuments">
       <title>Recently Used Documents</title>
       <xi:include href="xml/gtkrecentmanager.xml" />
