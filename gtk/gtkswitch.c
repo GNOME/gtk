@@ -914,7 +914,7 @@ gtk_switch_activatable_interface_init (GtkActivatableIface *iface)
 typedef struct _GtkSwitchAccessible             GtkSwitchAccessible;
 typedef struct _GtkSwitchAccessibleClass        GtkSwitchAccessibleClass;
 
-ATK_DEFINE_TYPE (GtkSwitchAccessible, gtk_switch_accessible, GTK_TYPE_WIDGET);
+ATK_DEFINE_TYPE (GtkSwitchAccessible, _gtk_switch_accessible, GTK_TYPE_WIDGET);
 
 static AtkStateSet *
 gtk_switch_accessible_ref_state_set (AtkObject *accessible)
@@ -922,7 +922,7 @@ gtk_switch_accessible_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (_gtk_switch_accessible_parent_class)->ref_state_set (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -935,10 +935,10 @@ gtk_switch_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-gtk_switch_accessible_initialize (AtkObject *accessible,
-                                  gpointer   widget)
+_gtk_switch_accessible_initialize (AtkObject *accessible,
+                                   gpointer   widget)
 {
-  ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->initialize (accessible, widget);
+  ATK_OBJECT_CLASS (_gtk_switch_accessible_parent_class)->initialize (accessible, widget);
 
   atk_object_set_role (accessible, ATK_ROLE_TOGGLE_BUTTON);
   atk_object_set_name (accessible, C_("light switch widget", "Switch"));
@@ -946,16 +946,16 @@ gtk_switch_accessible_initialize (AtkObject *accessible,
 }
 
 static void
-gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
+_gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
-  atk_class->initialize = gtk_switch_accessible_initialize;
+  atk_class->initialize = _gtk_switch_accessible_initialize;
   atk_class->ref_state_set = gtk_switch_accessible_ref_state_set;
 }
 
 static void
-gtk_switch_accessible_init (GtkSwitchAccessible *self)
+_gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
 }
 
@@ -971,7 +971,7 @@ G_DEFINE_TYPE (GtkSwitchAccessibleFactory,
 static GType
 gtk_switch_accessible_factory_get_accessible_type (void)
 {
-  return gtk_switch_accessible_get_type ();
+  return _gtk_switch_accessible_get_type ();
 }
 
 static AtkObject *
@@ -979,7 +979,7 @@ gtk_switch_accessible_factory_create_accessible (GObject *obj)
 {
   AtkObject *accessible;
 
-  accessible = g_object_new (gtk_switch_accessible_get_type (), NULL);
+  accessible = g_object_new (_gtk_switch_accessible_get_type (), NULL);
   atk_object_initialize (accessible, obj);
 
   return accessible;
