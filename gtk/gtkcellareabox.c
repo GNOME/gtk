@@ -1131,6 +1131,12 @@ gtk_cell_area_box_render (GtkCellArea          *area,
   gboolean               first_focus_cell = TRUE;
   gboolean               focus_all = FALSE;
 
+  /* Make sure we dont paint a focus rectangle while there
+   * is an editable widget in play 
+   */
+  if (gtk_cell_area_get_edited_cell (area))
+    paint_focus = FALSE;
+
   if (flags & GTK_CELL_RENDERER_FOCUSED)
     {
       focus_cell = gtk_cell_area_get_focus_cell (area);
