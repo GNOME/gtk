@@ -164,6 +164,7 @@ gtk/gtkstatusbar.c
 gtk/gtkstatusicon.c
 gtk/gtkstock.c
 gtk/gtkstyle.c
+gtk/gtkswitch.c
 gtk/gtktable.c
 gtk/gtktearoffmenuitem.c
 gtk/gtktextbuffer.c
