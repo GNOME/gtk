@@ -1,4 +1,4 @@
-/* testappchoosercombo.c
+/* testappchooserbutton.c
  * Copyright (C) 2010 Red Hat, Inc.
  * Authors: Cosimo Cecchi
  *
@@ -44,7 +44,7 @@ combo_changed_cb (GtkComboBox *cb,
 }
 
 static void
-special_item_activated_cb (GtkAppChooserComboBox *cb,
+special_item_activated_cb (GtkAppChooserButton *b,
                            gpointer user_data)
 {
   gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"),
@@ -67,7 +67,7 @@ main (int argc,
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
   gtk_container_add (GTK_CONTAINER (toplevel), box);
 
-  combobox = gtk_app_chooser_combo_box_new ("image/jpeg");
+  combobox = gtk_app_chooser_button_new ("image/jpeg");
   gtk_box_pack_start (GTK_BOX (box), combobox, TRUE, TRUE, 0);
 
   g_signal_connect (combobox, "changed",
@@ -85,15 +85,15 @@ main (int argc,
   sel_name = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (w), sel_name, TRUE, TRUE, 0);
 
-  gtk_app_chooser_combo_box_append_separator (GTK_APP_CHOOSER_COMBO_BOX (combobox));
-  gtk_app_chooser_combo_box_append_custom_item (GTK_APP_CHOOSER_COMBO_BOX (combobox),
-                                                "Hey, I'm special!",
-                                                g_themed_icon_new ("face-smile"),
-                                                special_item_activated_cb,
-                                                NULL);
+  gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (combobox));
+  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
+                                             "Hey, I'm special!",
+                                             g_themed_icon_new ("face-smile"),
+                                             special_item_activated_cb,
+                                             NULL);
 
-  gtk_app_chooser_combo_box_set_show_dialog_item (GTK_APP_CHOOSER_COMBO_BOX (combobox),
-  						  TRUE);
+  gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (combobox),
+                                               TRUE);
 
   /* test refresh on a combo */
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (combobox));

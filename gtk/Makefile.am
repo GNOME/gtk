@@ -248,7 +248,7 @@ gtk_public_h_sources =          \
 	gtkoffscreenwindow.h	\
 	gtkappchooser.h		\
 	gtkappchooserdialog.h	\
-	gtkappchoosercombobox.h \
+	gtkappchooserbutton.h   \
 	gtkappchooserwidget.h	\
 	gtkappchooseronline.h	\
 	gtkorientable.h		\
@@ -539,7 +539,7 @@ gtk_base_c_sources =            \
 	gtkoffscreenwindow.c	\
 	gtkappchooser.c		\
 	gtkappchooserwidget.c	\
-	gtkappchoosercombobox.c \
+	gtkappchooserbutton.c   \
 	gtkappchooserdialog.c	\
 	gtkappchoosermodule.c	\
 	gtkappchooseronline.c	\

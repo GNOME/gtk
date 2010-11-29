@@ -67,7 +67,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testoffscreenwindow		\
 	testorientable			\
 	testappchooser			\
-	testappchoosercombo		\
+	testappchooserbutton		\
 	testprint			\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
@@ -156,7 +156,7 @@ testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
-testappchoosercombo_DEPENDENCIES = $(TEST_DEPS)
+testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
@@ -230,7 +230,7 @@ testnouiprint_LDADD = $(LDADDS)
 testoffscreen_LDADD = $(LDADDS)
 testoffscreenwindow_LDADD = $(LDADDS)
 testappchooser_LDADD = $(LDADDS)
-testappchoosercombo_LDADD = $(LDADDS)
+testappchooserbutton_LDADD = $(LDADDS)
 testorientable_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
@@ -384,8 +384,8 @@ testoffscreenwindow_SOURCES =	\
 testappchooser_SOURCES = \
 	testappchooser.c
 
-testappchoosercombo_SOURCES = \
-	testappchoosercombo.c
+testappchooserbutton_SOURCES = \
+	testappchooserbutton.c
 
 testwindows_SOURCES = 	\
 	testwindows.c
