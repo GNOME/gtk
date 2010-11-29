@@ -2869,18 +2869,14 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
       
       if (editable_widget != NULL)
 	{
-	  GdkRectangle edit_area;
-
 	  g_return_val_if_fail (GTK_IS_CELL_EDITABLE (editable_widget), FALSE);
 	  
 	  gtk_cell_area_set_edited_cell (area, renderer);
 	  gtk_cell_area_set_edit_widget (area, editable_widget);
-
-	  gtk_cell_renderer_get_aligned_area (renderer, widget, flags, &inner_area, &edit_area);
 	  
 	  /* Signal that editing started so that callers can get 
 	   * a handle on the editable_widget */
-	  gtk_cell_area_add_editable (area, priv->focus_cell, editable_widget, &edit_area);
+	  gtk_cell_area_add_editable (area, priv->focus_cell, editable_widget, &inner_area);
 
 	  /* If the signal was successfully handled start the editing */
 	  if (gtk_widget_get_parent (GTK_WIDGET (editable_widget)))
