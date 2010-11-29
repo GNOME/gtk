@@ -1562,8 +1562,8 @@ gtk_cell_area_get_request_mode (GtkCellArea *area)
  * @area will store some geometrical information in @context along the way,
  * when requesting sizes over an arbitrary number of rows, its not important
  * to check the @minimum_width and @natural_width of this call but rather to
- * call gtk_cell_area_context_sum_preferred_width() and then consult 
- * gtk_cell_area_context_get_preferred_width().
+ * consult gtk_cell_area_context_get_preferred_width() after a series of
+ * requests.
  *
  *
  * Since: 3.0
@@ -1610,9 +1610,8 @@ gtk_cell_area_get_preferred_width (GtkCellArea        *area,
  *
  * If at some point, the width of a single row changes, it should be
  * requested with gtk_cell_area_get_preferred_width() again and then
- * the full with of the requested rows checked again after calling
- * gtk_cell_area_context_sum_preferred_width(), and then the height
- * for width of each row needs to be requested again.
+ * the full width of the requested rows checked again with
+ * gtk_cell_area_context_get_preferred_width().
  *
  * Since: 3.0
  */
@@ -1647,8 +1646,8 @@ gtk_cell_area_get_preferred_height_for_width (GtkCellArea        *area,
  * @area will store some geometrical information in @context along the way,
  * when requesting sizes over an arbitrary number of rows, its not important
  * to check the @minimum_height and @natural_height of this call but rather to
- * call gtk_cell_area_context_sum_preferred_height() and then consult 
- * gtk_cell_area_context_get_preferred_height().
+ * consult gtk_cell_area_context_get_preferred_height() after a series of
+ * requests.
  *
  * Since: 3.0
  */
@@ -1692,11 +1691,10 @@ gtk_cell_area_get_preferred_height (GtkCellArea        *area,
  * on each cell area individually to get the height for width of each
  * fully requested row.
  *
- * If at some point, the width of a single row changes, it should be
- * requested with gtk_cell_area_get_preferred_width() again and then
- * the full with of the requested rows checked again after calling
- * gtk_cell_area_context_sum_preferred_width(), and then the height
- * for width of each row needs to be requested again.
+ * If at some point, the height of a single row changes, it should be
+ * requested with gtk_cell_area_get_preferred_height() again and then
+ * the full height of the requested rows checked again with
+ * gtk_cell_area_context_get_preferred_height().
  *
  * Since: 3.0
  */
