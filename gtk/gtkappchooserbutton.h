@@ -55,23 +55,25 @@ struct _GtkAppChooserButton {
 struct _GtkAppChooserButtonClass {
   GtkComboBoxClass parent_class;
 
+  void (* custom_item_activated) (GtkAppChooserButton *self,
+                                  const gchar *item_name);
+
   /* padding for future class expansion */
   gpointer padding[16];
 };
 
 GType       gtk_app_chooser_button_get_type           (void) G_GNUC_CONST;
 
-GtkWidget * gtk_app_chooser_button_new                (const gchar                 *content_type);
+GtkWidget * gtk_app_chooser_button_new                (const gchar         *content_type);
 
-void        gtk_app_chooser_button_append_separator   (GtkAppChooserButton         *self);
-void        gtk_app_chooser_button_append_custom_item (GtkAppChooserButton         *self,
-                                                       const gchar                 *label,
-                                                       GIcon                       *icon,
-                                                       GtkAppChooserButtonItemFunc func,
-                                                       gpointer                    user_data);
+void        gtk_app_chooser_button_append_separator   (GtkAppChooserButton *self);
+void        gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
+                                                       const gchar         *name,
+                                                       const gchar         *label,
+                                                       GIcon               *icon);
 
-void gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
-                                                  gboolean setting);
-gboolean gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self);
+void     gtk_app_chooser_button_set_show_dialog_item  (GtkAppChooserButton *self,
+                                                       gboolean             setting);
+gboolean gtk_app_chooser_button_get_show_dialog_item  (GtkAppChooserButton *self);
 
 #endif /* __GTK_APP_CHOOSER_BUTTON_H__ */

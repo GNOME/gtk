@@ -22,6 +22,8 @@
 
 #include <gtk/gtk.h>
 
+#define CUSTOM_ITEM "custom-item"
+
 static GtkWidget *toplevel, *combobox, *box;
 static GtkWidget *sel_image, *sel_name;
 
@@ -45,11 +47,20 @@ combo_changed_cb (GtkComboBox *cb,
 
 static void
 special_item_activated_cb (GtkAppChooserButton *b,
+                           const gchar *item_name,
                            gpointer user_data)
 {
   gtk_image_set_from_gicon (GTK_IMAGE (sel_image), g_themed_icon_new ("face-smile"),
                             GTK_ICON_SIZE_DIALOG);
   gtk_label_set_text (GTK_LABEL (sel_name), "Special Item");
+}
+
+static void
+action_cb (GtkAppChooserButton *b,
+           const gchar *item_name,
+           gpointer user_data)
+{
+  g_print ("Activated custom item %s\n", item_name);
 }
 
 int
@@ -87,13 +98,26 @@ main (int argc,
 
   gtk_app_chooser_button_append_separator (GTK_APP_CHOOSER_BUTTON (combobox));
   gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
+                                             CUSTOM_ITEM,
                                              "Hey, I'm special!",
-                                             g_themed_icon_new ("face-smile"),
-                                             special_item_activated_cb,
-                                             NULL);
+                                             g_themed_icon_new ("face-smile"));
+
+  /* this one will trigger a warning, and will not be added */
+  gtk_app_chooser_button_append_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
+                                             CUSTOM_ITEM,
+                                             "Hey, I'm fake!",
+                                             g_themed_icon_new ("face-evil"));
 
   gtk_app_chooser_button_set_show_dialog_item (GTK_APP_CHOOSER_BUTTON (combobox),
                                                TRUE);
+
+  /* connect to the detailed signal */
+  g_signal_connect (combobox, "custom-item-activated::" CUSTOM_ITEM,
+                    G_CALLBACK (special_item_activated_cb), NULL);
+
+  /* connect to the generic signal too */
+  g_signal_connect (combobox, "custom-item-activated",
+                    G_CALLBACK (action_cb), NULL);
 
   /* test refresh on a combo */
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (combobox));
