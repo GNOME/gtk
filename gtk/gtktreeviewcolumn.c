@@ -1729,12 +1729,15 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
 
 void
 _gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
-                                 int                width)
+                                 int                width,
+				 int                internal_width)
 {
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
-  gtk_cell_area_context_allocate (tree_column->cell_area_context, width, -1);
+  gtk_cell_area_context_allocate (tree_column->cell_area_context, internal_width, -1);
   tree_column->width = width;
+
+  g_object_notify (G_OBJECT (tree_column), "width");
 }
 
 /**

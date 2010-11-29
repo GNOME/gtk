@@ -2360,6 +2360,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        list = (rtl ? list->prev : list->next)) 
     {
       gint real_requested_width = 0;
+      gint internal_column_width = 0;
       gint old_width, column_width;
 
       column = list->data;
@@ -2387,7 +2388,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       real_requested_width = gtk_tree_view_get_real_requested_width_from_column (tree_view, column);
 
       allocation.x = width;
-      _gtk_tree_view_column_set_width (column, real_requested_width);
 
       if (gtk_tree_view_column_get_expand (column))
 	{
@@ -2395,11 +2395,11 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	    {
 	      /* We add the remander to the last column as
 	       * */
-	      column->width += extra;
+	      real_requested_width += extra;
 	    }
 	  else
 	    {
-	      column->width += extra_per_column;
+	      real_requested_width += extra_per_column;
 	      extra -= extra_per_column;
 	      number_of_expand_columns --;
 	    }
@@ -2407,16 +2407,21 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       else if (number_of_expand_columns == 0 &&
 	       list == last_column)
 	{
-	  column->width += extra;
+	  real_requested_width += extra;
 	}
 
       /* In addition to expand, the last column can get even more
        * extra space so all available space is filled up.
        */
       if (extra_for_last > 0 && list == last_column)
-	column->width += extra_for_last;
+	real_requested_width += extra_for_last;
 
-      g_object_notify (G_OBJECT (column), "width");
+      /* XXX This needs to account the real allocated space for
+       * the internal GtkCellArea
+       */
+      internal_column_width = real_requested_width /* - all the stuff treeview adds around the area */;
+
+      _gtk_tree_view_column_set_width (column, real_requested_width, internal_column_width);
 
       column_width = gtk_tree_view_column_get_width (column);
       allocation.width = column_width;
