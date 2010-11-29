@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-01 15:41-0400\n"
-"PO-Revision-Date: 2010-04-06 15:08+0700\n"
+"PO-Revision-Date: 2010-11-29 18:55+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -70,9 +70,8 @@ msgstr "SCREEN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:164
-#, fuzzy
 msgid "GDK debugging flags to set"
-msgstr "แฟล็กการดีบักของ GTK+ ที่จะเปิดใช้"
+msgstr "แฟล็กการดีบั๊กของ GDK ที่จะเปิดใช้"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -84,9 +83,8 @@ msgstr "FLAGS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:167
-#, fuzzy
 msgid "GDK debugging flags to unset"
-msgstr "แฟล็กการดีบักของ GTK+ ที่จะปิด"
+msgstr "แฟล็กการดีบั๊กของ GDK ที่จะปิด"
 
 #: gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -330,7 +328,7 @@ msgstr "เรียกใช้ X แบบประสานเวลา"
 #: gtk/gtkaboutdialog.c:101
 #, c-format
 msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
-msgstr ""
+msgstr "โปรแกรมนี้ไม่มีการรับประกันใดๆ ดูรายละเอียดเพิ่มเติมได้ที่ %s"
 
 #: gtk/gtkaboutdialog.c:339 gtk/gtkaboutdialog.c:2235
 msgid "License"
@@ -455,9 +453,9 @@ msgid "Invalid type function on line %d: '%s'"
 msgstr "ฟังก์ชันถามชนิดใช้ไม่ได้ที่บรรทัด %d: '%s'"
 
 #: gtk/gtkbuilderparser.c:407
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr "id ของอ็อบเจกต์ '%s' ซ้ำที่บรรทัด %d (ใช้แล้วที่บรรทัด %d)"
+msgstr "ID ของอ็อบเจกต์ '%s' ซ้ำที่บรรทัด %d (ใช้แล้วที่บรรทัด %d)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -612,9 +610,8 @@ msgid "_Saturation:"
 msgstr "ความส_ด:"
 
 #: gtk/gtkcolorsel.c:421
-#, fuzzy
 msgid "Intensity of the color."
-msgstr "ความโปร่งแสงของสี"
+msgstr "ความเข้มของสี"
 
 #: gtk/gtkcolorsel.c:422
 msgid "_Value:"
@@ -789,12 +786,11 @@ msgstr "แ_ทรกอักขระควบคุมของยูนิ�
 
 #: gtk/gtkentry.c:10015
 msgid "Caps Lock and Num Lock are on"
-msgstr ""
+msgstr "ปุ่ม Caps Lock และ Num Lock ติดอยู่"
 
 #: gtk/gtkentry.c:10017
-#, fuzzy
 msgid "Num Lock is on"
-msgstr "ปุ่ม Caps Lock ติดอยู่"
+msgstr "ปุ่ม Num Lock ติดอยู่"
 
 #: gtk/gtkentry.c:10019
 msgid "Caps Lock is on"
@@ -1267,12 +1263,12 @@ msgstr "ให้ความสำคัญกับคำเตือนปร
 #. Description of --gtk-debug=FLAGS in --help output
 #: gtk/gtkmain.c:532
 msgid "GTK+ debugging flags to set"
-msgstr "แฟล็กการดีบักของ GTK+ ที่จะเปิดใช้"
+msgstr "แฟล็กการดีบั๊กของ GTK+ ที่จะเปิดใช้"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: gtk/gtkmain.c:535
 msgid "GTK+ debugging flags to unset"
-msgstr "แฟล็กการดีบักของ GTK+ ที่จะปิด"
+msgstr "แฟล็กการดีบั๊กของ GTK+ ที่จะปิด"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -1333,9 +1329,9 @@ msgid "Remember _forever"
 msgstr "จำรหัสผ่านไว้_ตลอดไป"
 
 #: gtk/gtkmountoperation.c:883
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Application (PID %d)"
-msgstr "โปรแกรมไม่ทราบชื่อ (pid %d)"
+msgstr "โปรแกรมไม่ทราบชื่อ (PID %d)"
 
 #: gtk/gtkmountoperation.c:1066
 #, c-format
@@ -1347,9 +1343,9 @@ msgid "_End Process"
 msgstr "_จบโพรเซส"
 
 #: gtk/gtkmountoperation-stub.c:64
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr "ไม่สามารถฆ่าโพรเซสที่มี pid %d ได้ เนื่องจากยังไม่ได้ทำปฏิบัติการนี้"
+msgstr "ไม่สามารถฆ่าโพรเซสที่มี PID %d ได้ เนื่องจากยังไม่ได้พัฒนาปฏิบัติการนี้"
 
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:862
@@ -1373,9 +1369,9 @@ msgid "Z Shell"
 msgstr "Z Shell"
 
 #: gtk/gtkmountoperation-x11.c:963
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr "ไม่สามารถจบโพรเซสที่มี pid %d ได้: %s"
+msgstr "ไม่สามารถจบโพรเซสที่มี PID %d ได้: %s"
 
 #: gtk/gtknotebook.c:4619 gtk/gtknotebook.c:7170
 #, c-format
@@ -1450,9 +1446,8 @@ msgid "Not available"
 msgstr "ไม่มี"
 
 #: gtk/gtkprinteroptionwidget.c:794
-#, fuzzy
 msgid "Select a folder"
-msgstr "เลือกแฟ้ม"
+msgstr "เลือกโฟลเดอร์"
 
 #: gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
@@ -2091,10 +2086,9 @@ msgid "_Cancel"
 msgstr "_ยกเลิก"
 
 #: gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
-msgstr "_ซีดีรอม"
+msgstr "ซีดี_รอม"
 
 #: gtk/gtkstock.c:327
 msgctxt "Stock label"
@@ -2152,7 +2146,6 @@ msgid "_Edit"
 msgstr "แ_ก้ไข"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
 msgstr "แ_ฟ้ม"
@@ -2231,7 +2224,6 @@ msgid "_Up"
 msgstr "_ขึ้น"
 
 #: gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "ฮาร์_ดดิสก์"
@@ -2569,9 +2561,9 @@ msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "พบแอตทริบิวต์ \"%s\" ซ้ำในอิลิเมนต์ <%s>"
 
 #: gtk/gtktextbufferserialize.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "อิลิเมนต์ <%s> มี id \"%s\" ซึ่งไม่ถูกต้อง"
+msgstr "อิลิเมนต์ <%s> มี ID \"%s\" ซึ่งไม่ถูกต้อง"
 
 #: gtk/gtktextbufferserialize.c:855
 #, c-format
@@ -3886,7 +3878,7 @@ msgid "Printer '%s' is out of paper."
 msgstr "เครื่องพิมพ์ '%s' กระดาษหมด"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1686
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently offline."
 msgstr "เครื่องพิมพ์ '%s' ออฟไลน์อยู่"
 
@@ -4195,10 +4187,10 @@ msgid ""
 msgstr "เปิดแฟ้มรูปภาพ '%s' ไม่สำเร็จ: ไม่แน่ใจว่าเพราะอะไร แต่อาจเป็นเพราะแฟ้มเสียหาย"
 
 #~ msgid "Gdk debugging flags to set"
-#~ msgstr "แฟล็กการดีบักของ GDK ที่จะเปิดใช้"
+#~ msgstr "แฟล็กการดีบั๊กของ GDK ที่จะเปิดใช้"
 
 #~ msgid "Gdk debugging flags to unset"
-#~ msgstr "แฟล็กการดีบักของ GDK ที่จะปิด"
+#~ msgstr "แฟล็กการดีบั๊กของ GDK ที่จะปิด"
 
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "แฟ้มรูปภาพ '%s' ไม่มีข้อมูล"
