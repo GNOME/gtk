@@ -965,7 +965,7 @@ gtk_switch_accessible_get_type (void)
        * for GtkWidget; if Gail is being used then this means GailWidget.
        */
       factory = atk_registry_get_factory (atk_get_default_registry (), GTK_TYPE_WIDGET);
-      if (factory == G_TYPE_INVALID)
+      if (factory == NULL)
         return G_TYPE_INVALID;
 
       parent_atk_type = atk_object_factory_get_accessible_type (factory);
