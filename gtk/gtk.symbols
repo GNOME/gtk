@@ -1200,9 +1200,11 @@ gtk_info_bar_set_default_response
 gtk_info_bar_set_message_type
 gtk_info_bar_set_response_sensitive
 gtk_init
-gtk_init_abi_check
 gtk_init_check
+#ifdef GDK_WINDOWING_WIN32
+gtk_init_abi_check
 gtk_init_check_abi_check
+#endif
 gtk_init_with_args
 gtk_invisible_get_screen
 gtk_invisible_get_type G_GNUC_CONST
@@ -1794,10 +1796,12 @@ gtk_print_unix_dialog_set_manual_capabilities
 gtk_print_unix_dialog_set_page_setup
 gtk_print_unix_dialog_set_settings
 gtk_print_unix_dialog_set_support_selection
+#ifdef GDK_WINDOWING_WIN32
 gtk_print_win32_devnames_free
 gtk_print_win32_devnames_from_printer_name
 gtk_print_win32_devnames_from_win32
 gtk_print_win32_devnames_to_win32
+#endif
 gtk_progress_bar_get_ellipsize
 gtk_progress_bar_get_fraction
 gtk_progress_bar_get_inverted
@@ -3314,7 +3318,9 @@ gtk_widget_trigger_tooltip_query
 gtk_widget_unmap
 gtk_widget_unparent
 gtk_widget_unrealize
+#ifdef GDK_WINDOWING_WIN32
 gtk_win32_embed_widget_get_type G_GNUC_CONST
+#endif
 gtk_window_activate_default
 gtk_window_activate_focus
 gtk_window_activate_key

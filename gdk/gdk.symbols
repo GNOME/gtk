@@ -373,6 +373,7 @@ gdk_visual_get_system
 gdk_visual_get_type G_GNUC_CONST
 gdk_visual_get_visual_type
 gdk_visual_type_get_type G_GNUC_CONST
+#ifdef GDK_WINDOWING_WIN32
 gdk_win32_drawable_get_handle
 gdk_win32_handle_table_lookup
 gdk_win32_icon_to_pixbuf_libgtk_only
@@ -380,6 +381,7 @@ gdk_win32_pixbuf_to_hicon_libgtk_only
 gdk_win32_selection_add_targets
 gdk_win32_set_modal_dialog_libgtk_only
 gdk_win32_window_is_win32
+#endif
 gdk_window_add_filter
 gdk_window_at_pointer
 gdk_window_attributes_type_get_type G_GNUC_CONST
