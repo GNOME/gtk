@@ -792,6 +792,8 @@ gtk_switch_init (GtkSwitch *self)
  * Creates a new #GtkSwitch widget.
  *
  * Return value: the newly created #GtkSwitch instance
+ *
+ * Since: 3.0
  */
 GtkWidget *
 gtk_switch_new (void)
@@ -805,6 +807,8 @@ gtk_switch_new (void)
  * @is_active: %TRUE if @sw should be active, and %FALSE otherwise
  *
  * Changes the state of @sw to the desired one.
+ *
+ * Since: 3.0
  */
 void
 gtk_switch_set_active (GtkSwitch *sw,
@@ -843,6 +847,8 @@ gtk_switch_set_active (GtkSwitch *sw,
  * Gets whether the #GtkSwitch is in its "on" or "off" state.
  *
  * Return value: %TRUE if the #GtkSwitch is active, and %FALSE otherwise
+ *
+ * Since: 3.0
  */
 gboolean
 gtk_switch_get_active (GtkSwitch *sw)
