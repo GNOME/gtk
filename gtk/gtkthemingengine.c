@@ -2303,32 +2303,45 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
     case GTK_POS_LEFT:
       junction = GTK_JUNCTION_LEFT;
       hidden_side = SIDE_LEFT;
+
+      cairo_translate (cr, x + width, y);
+      cairo_rotate (cr, G_PI / 2);
       break;
     case GTK_POS_RIGHT:
       junction = GTK_JUNCTION_RIGHT;
       hidden_side = SIDE_RIGHT;
+
+      cairo_translate (cr, x, y + height);
+      cairo_rotate (cr, - G_PI / 2);
       break;
     case GTK_POS_TOP:
       junction = GTK_JUNCTION_TOP;
       hidden_side = SIDE_TOP;
+
+      cairo_translate (cr, x + width, y + height);
+      cairo_rotate (cr, G_PI);
       break;
     case GTK_POS_BOTTOM:
       junction = GTK_JUNCTION_BOTTOM;
       hidden_side = SIDE_BOTTOM;
+
+      cairo_translate (cr, x, y);
       break;
     }
 
-  state = gtk_theming_engine_get_state (engine);
-  gtk_theming_engine_get (engine, state,
-                          "background-color", &bg_color,
-                          "border-radius", &radius,
-                          NULL);
+  if (gap_side == GTK_POS_TOP ||
+      gap_side == GTK_POS_BOTTOM)
+    render_background_internal (engine, cr,
+                                0, 0, width, height,
+                                junction);
+  else
+    render_background_internal (engine, cr,
+                                0, 0, height, width,
+                                junction);
 
-  _cairo_round_rectangle_sides (cr, radius,
-                                x, y, width, height,
-                                SIDE_ALL, junction);
-  gdk_cairo_set_source_rgba (cr, bg_color);
-  cairo_fill (cr);
+  cairo_restore (cr);
+
+  cairo_save (cr);
 
   render_frame_internal (engine, cr,
                          x, y, width, height,
