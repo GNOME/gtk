@@ -904,7 +904,11 @@ gtk_switch_activatable_interface_init (GtkActivatableIface *iface)
 
 /* accessibility: object */
 
-static AtkObjectClass *a11y_parent_class = NULL;
+/* dummy typedefs */
+typedef struct _GtkSwitchAccessible             GtkSwitchAccessible;
+typedef struct _GtkSwitchAccessibleClass        GtkSwitchAccessibleClass;
+
+ATK_DEFINE_TYPE (GtkSwitchAccessible, gtk_switch_accessible, GTK_TYPE_WIDGET);
 
 static AtkStateSet *
 gtk_switch_accessible_ref_state_set (AtkObject *accessible)
@@ -912,7 +916,7 @@ gtk_switch_accessible_ref_state_set (AtkObject *accessible)
   AtkStateSet *state_set;
   GtkWidget *widget;
 
-  state_set = a11y_parent_class->ref_state_set (accessible);
+  state_set = ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->ref_state_set (accessible);
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
   if (widget == NULL)
@@ -928,7 +932,7 @@ static void
 gtk_switch_accessible_initialize (AtkObject *accessible,
                                   gpointer   widget)
 {
-  a11y_parent_class->initialize (accessible, widget);
+  ATK_OBJECT_CLASS (gtk_switch_accessible_parent_class)->initialize (accessible, widget);
 
   atk_object_set_role (accessible, ATK_ROLE_TOGGLE_BUTTON);
   atk_object_set_name (accessible, C_("light switch widget", "Switch"));
@@ -936,55 +940,19 @@ gtk_switch_accessible_initialize (AtkObject *accessible,
 }
 
 static void
-gtk_switch_accessible_class_init (AtkObjectClass *klass)
+gtk_switch_accessible_class_init (GtkSwitchAccessibleClass *klass)
 {
-  a11y_parent_class = g_type_class_peek_parent (klass);
+  AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
-  klass->initialize = gtk_switch_accessible_initialize;
-  klass->ref_state_set = gtk_switch_accessible_ref_state_set;
+  atk_class->initialize = gtk_switch_accessible_initialize;
+  atk_class->ref_state_set = gtk_switch_accessible_ref_state_set;
 }
 
-static GType
-gtk_switch_accessible_get_type (void)
+static void
+gtk_switch_accessible_init (GtkSwitchAccessible *self)
 {
-  static GType type = 0;
-
-  /* Action interface
-     Name etc. ... */
-  if (G_UNLIKELY (type == 0))
-    {
-      GType parent_atk_type;
-      GTypeInfo tinfo = { 0 };
-      GTypeQuery query;
-      AtkObjectFactory *factory;
-
-      if ((type = g_type_from_name ("GtkSwitchAccessible")) != G_TYPE_INVALID)
-        return type;
-
-      /* we inherit from the same ATK factory that provides support
-       * for GtkWidget; if Gail is being used then this means GailWidget.
-       */
-      factory = atk_registry_get_factory (atk_get_default_registry (), GTK_TYPE_WIDGET);
-      if (factory == NULL)
-        return G_TYPE_INVALID;
-
-      parent_atk_type = atk_object_factory_get_accessible_type (factory);
-      if (parent_atk_type == G_TYPE_INVALID)
-        return G_TYPE_INVALID;
-
-      g_type_query (parent_atk_type, &query);
-
-      tinfo.class_init    = (GClassInitFunc) gtk_switch_accessible_class_init;
-      tinfo.class_size    = query.class_size;
-      tinfo.instance_size = query.instance_size;
-
-      type = g_type_register_static (parent_atk_type,
-                                     I_("GtkSwitchAccessible"),
-                                     &tinfo, 0);
-    }
-
-  return type;
 }
+
 /* accessibility: factory */
 
 typedef AtkObjectFactoryClass   GtkSwitchAccessibleFactoryClass;
