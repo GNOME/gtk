@@ -1284,33 +1284,23 @@ _cairo_round_rectangle_sides (cairo_t          *cr,
 }
 
 static void
-gtk_theming_engine_render_background (GtkThemingEngine *engine,
-                                      cairo_t          *cr,
-                                      gdouble           x,
-                                      gdouble           y,
-                                      gdouble           width,
-                                      gdouble           height)
+render_background_internal (GtkThemingEngine *engine,
+                            cairo_t          *cr,
+                            gdouble           x,
+                            gdouble           y,
+                            gdouble           width,
+                            gdouble           height,
+                            GtkJunctionSides  junction)
 {
   GdkRGBA *bg_color;
   cairo_pattern_t *pattern;
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
-  GtkJunctionSides junction;
   gint radius, border_width;
 
   flags = gtk_theming_engine_get_state (engine);
-  junction = gtk_theming_engine_get_junction_sides (engine);
   cairo_save (cr);
-
-  if (gtk_theming_engine_has_class (engine, "spinbutton") &&
-      gtk_theming_engine_has_class (engine, "button"))
-    {
-      x += 2;
-      y += 2;
-      width -= 4;
-      height -= 4;
-    }
 
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
@@ -1320,18 +1310,6 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-
-  if (border_width > 0)
-    {
-      x += border_width;
-      y += border_width;
-      width -= 2 * border_width;
-      height -= 2 * border_width;
-      radius -= 2 * border_width;
-
-      if (radius < 0)
-        radius = 0;
-    }
 
   _cairo_round_rectangle_sides (cr, (gdouble) radius,
                                 x, y, width, height,
@@ -1502,8 +1480,8 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
           const GdkRGBA *color, *other_color;
 
           /* Merge just colors */
-	  color = bg_color;
-	  other_color = other_bg;
+          color = bg_color;
+          other_color = other_bg;
 
           new_pattern = cairo_pattern_create_rgba (CLAMP (color->red + ((other_color->red - color->red) * progress), 0, 1),
                                                    CLAMP (color->green + ((other_color->green - color->green) * progress), 0, 1),
@@ -1549,6 +1527,50 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
+}
+
+static void
+gtk_theming_engine_render_background (GtkThemingEngine *engine,
+                                      cairo_t          *cr,
+                                      gdouble           x,
+                                      gdouble           y,
+                                      gdouble           width,
+                                      gdouble           height)
+{
+  GdkRGBA *bg_color;
+  cairo_pattern_t *pattern;
+  GtkStateFlags flags;
+  gboolean running;
+  gdouble progress, alpha = 1;
+  GtkJunctionSides junction;
+  gint radius, border_width;
+
+  junction = gtk_theming_engine_get_junction_sides (engine);
+
+  if (gtk_theming_engine_has_class (engine, "spinbutton") &&
+      gtk_theming_engine_has_class (engine, "button"))
+    {
+      x += 2;
+      y += 2;
+      width -= 4;
+      height -= 4;
+    }
+
+  gtk_theming_engine_get (engine, flags,
+                          "border-width", &border_width,
+                          NULL);
+
+  if (border_width > 0)
+    {
+      x += border_width;
+      y += border_width;
+      width -= 2 * border_width;
+      height -= 2 * border_width;
+    }
+
+  render_background_internal (engine, cr,
+                              x, y, width, height,
+                              junction);
 }
 
 /* Renders the small triangle on corners so
