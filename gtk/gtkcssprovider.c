@@ -1364,8 +1364,10 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
       val = g_hash_table_lookup (info->style, prop_name);
 
       if (val &&
-          (info->state & state) != 0 &&
-          (info->state & ~(state)) == 0)
+          (info->state == 0 ||
+           info->state == state ||
+           (info->state & state) != 0 &&
+           (info->state & ~(state)) == 0))
         {
           const gchar *val_str;
 
