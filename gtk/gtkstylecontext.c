@@ -977,8 +977,9 @@ gtk_style_context_impl_get_property (GObject    *object,
 }
 
 static GList *
-find_next_candidate (GList *local,
-                     GList *global)
+find_next_candidate (GList    *local,
+                     GList    *global,
+                     gboolean  ascending)
 {
   if (local && global)
     {
@@ -988,9 +989,9 @@ find_next_candidate (GList *local,
       global_data = global->data;
 
       if (local_data->priority < global_data->priority)
-        return local;
+        return (ascending) ? local : global;
       else
-        return global;
+        return (ascending) ? global : local;
     }
   else if (local)
     return local;
@@ -1014,7 +1015,7 @@ build_properties (GtkStyleContext *context,
   if (priv->screen)
     global_list = g_object_get_qdata (G_OBJECT (priv->screen), provider_list_quark);
 
-  while ((elem = find_next_candidate (list, global_list)) != NULL)
+  while ((elem = find_next_candidate (list, global_list, TRUE)) != NULL)
     {
       GtkStyleProviderData *data;
       GtkStyleProperties *provider_style;
@@ -1053,7 +1054,7 @@ build_icon_factories (GtkStyleContext *context,
       global_list = g_list_last (global_list);
     }
 
-  while ((elem = find_next_candidate (list, global_list)) != NULL)
+  while ((elem = find_next_candidate (list, global_list, FALSE)) != NULL)
     {
       GtkIconFactory *factory;
       GtkStyleProviderData *data;
@@ -2280,7 +2281,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
       list = priv->providers_last;
       global = global_list;
 
-      while ((elem = find_next_candidate (list, global)) != NULL)
+      while ((elem = find_next_candidate (list, global, FALSE)) != NULL)
         {
           GtkStyleProviderData *provider_data;
 
