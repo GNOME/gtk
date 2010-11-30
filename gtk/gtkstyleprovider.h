@@ -42,7 +42,7 @@ G_BEGIN_DECLS
 #define GTK_STYLE_PROVIDER_PRIORITY_FALLBACK      1
 
 /**
- * GTK_STYLE_PROVIDER_PRIORITY_DEFAULT:
+ * GTK_STYLE_PROVIDER_PRIORITY_THEME:
  *
  * The priority used for style information provided
  * by themes.
