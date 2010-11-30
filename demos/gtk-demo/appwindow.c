@@ -384,6 +384,15 @@ mark_set_callback (GtkTextBuffer     *buffer,
   update_statusbar (buffer, GTK_STATUSBAR (data));
 }
 
+static void
+group_value_changed (GObject    *object,
+                     GParamSpec *pspec,
+                     gpointer    data)
+{
+  g_print ("GtkRadioGroup active-value changed to: %s\n",
+           gtk_radio_group_get_active_value (GTK_RADIO_GROUP (object)));
+}
+
 GtkWidget *
 do_appwindow (GtkWidget *do_widget)
 {
@@ -448,6 +457,9 @@ do_appwindow (GtkWidget *do_widget)
 					  SHAPE_SQUARE,
 					  G_CALLBACK (activate_radio_action),
 					  NULL);
+
+      g_signal_connect (gtk_radio_action_get_group (GTK_RADIO_ACTION (gtk_action_group_get_action (action_group, "Red"))),
+                        "notify::active-value", G_CALLBACK (group_value_changed), NULL);
 
       merge = gtk_ui_manager_new ();
       g_object_set_data_full (G_OBJECT (window), "ui-manager", merge,
