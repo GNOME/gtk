@@ -32,50 +32,10 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-  GTK_TREE_VIEW_IS_LIST = 1 << 0,
-  GTK_TREE_VIEW_SHOW_EXPANDERS = 1 << 1,
-  GTK_TREE_VIEW_IN_COLUMN_RESIZE = 1 << 2,
-  GTK_TREE_VIEW_ARROW_PRELIT = 1 << 3,
-  GTK_TREE_VIEW_HEADERS_VISIBLE = 1 << 4,
-  GTK_TREE_VIEW_DRAW_KEYFOCUS = 1 << 5,
-  GTK_TREE_VIEW_MODEL_SETUP = 1 << 6,
-  GTK_TREE_VIEW_IN_COLUMN_DRAG = 1 << 7
-} GtkTreeViewFlags;
-
-typedef enum
-{
   GTK_TREE_SELECT_MODE_TOGGLE = 1 << 0,
   GTK_TREE_SELECT_MODE_EXTEND = 1 << 1
 }
 GtkTreeSelectMode;
-
-enum
-{
-  DRAG_COLUMN_WINDOW_STATE_UNSET = 0,
-  DRAG_COLUMN_WINDOW_STATE_ORIGINAL = 1,
-  DRAG_COLUMN_WINDOW_STATE_ARROW = 2,
-  DRAG_COLUMN_WINDOW_STATE_ARROW_LEFT = 3,
-  DRAG_COLUMN_WINDOW_STATE_ARROW_RIGHT = 4
-};
-
-enum
-{
-  RUBBER_BAND_OFF = 0,
-  RUBBER_BAND_MAYBE_START = 1,
-  RUBBER_BAND_ACTIVE = 2
-};
-
-#define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
-#define GTK_TREE_VIEW_UNSET_FLAG(tree_view, flag) G_STMT_START{ (tree_view->priv->flags&=~(flag)); }G_STMT_END
-#define GTK_TREE_VIEW_FLAG_SET(tree_view, flag)   ((tree_view->priv->flags&flag)==flag)
-#define TREE_VIEW_HEADER_HEIGHT(tree_view)        (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE)?tree_view->priv->header_height:0)
-#define TREE_VIEW_COLUMN_REQUESTED_WIDTH(column)  (CLAMP (column->requested_width, (column->min_width!=-1)?column->min_width:column->requested_width, (column->max_width!=-1)?column->max_width:column->requested_width))
-#define TREE_VIEW_DRAW_EXPANDERS(tree_view)       (!GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST)&&GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS))
-
- /* This lovely little value is used to determine how far away from the title bar
-  * you can move the mouse and still have a column drag work.
-  */
-#define TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER(tree_view) (10*TREE_VIEW_HEADER_HEIGHT(tree_view))
 
 typedef struct _GtkTreeViewColumnReorder GtkTreeViewColumnReorder;
 struct _GtkTreeViewColumnReorder
@@ -309,76 +269,6 @@ struct _GtkTreeViewPrivate
   guint vscroll_policy : 1;
 };
 
-#ifdef __GNUC__
-
-#define TREE_VIEW_INTERNAL_ASSERT(expr, ret)     G_STMT_START{          \
-     if (!(expr))                                                       \
-       {                                                                \
-         g_log (G_LOG_DOMAIN,                                           \
-                G_LOG_LEVEL_CRITICAL,                                   \
-		"%s (%s): assertion `%s' failed.\n"                     \
-	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
-		"and the GtkTreeModel.  This generally means that the model has changed\n"\
-		"without letting the view know.  Any display from now on is likely to\n"  \
-		"be incorrect.\n",                                                        \
-                G_STRLOC,                                               \
-                G_STRFUNC,                                              \
-                #expr);                                                 \
-         return ret;                                                    \
-       };                               }G_STMT_END
-
-#define TREE_VIEW_INTERNAL_ASSERT_VOID(expr)     G_STMT_START{          \
-     if (!(expr))                                                       \
-       {                                                                \
-         g_log (G_LOG_DOMAIN,                                           \
-                G_LOG_LEVEL_CRITICAL,                                   \
-		"%s (%s): assertion `%s' failed.\n"                     \
-	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
-		"and the GtkTreeModel.  This generally means that the model has changed\n"\
-		"without letting the view know.  Any display from now on is likely to\n"  \
-		"be incorrect.\n",                                                        \
-                G_STRLOC,                                               \
-                G_STRFUNC,                                              \
-                #expr);                                                 \
-         return;                                                        \
-       };                               }G_STMT_END
-
-#else
-
-#define TREE_VIEW_INTERNAL_ASSERT(expr, ret)     G_STMT_START{          \
-     if (!(expr))                                                       \
-       {                                                                \
-         g_log (G_LOG_DOMAIN,                                           \
-                G_LOG_LEVEL_CRITICAL,                                   \
-		"file %s: line %d: assertion `%s' failed.\n"       \
-	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
-		"and the GtkTreeModel.  This generally means that the model has changed\n"\
-		"without letting the view know.  Any display from now on is likely to\n"  \
-		"be incorrect.\n",                                                        \
-                __FILE__,                                               \
-                __LINE__,                                               \
-                #expr);                                                 \
-         return ret;                                                    \
-       };                               }G_STMT_END
-
-#define TREE_VIEW_INTERNAL_ASSERT_VOID(expr)     G_STMT_START{          \
-     if (!(expr))                                                       \
-       {                                                                \
-         g_log (G_LOG_DOMAIN,                                           \
-                G_LOG_LEVEL_CRITICAL,                                   \
-		"file %s: line %d: assertion '%s' failed.\n"            \
-	        "There is a disparity between the internal view of the GtkTreeView,\n"    \
-		"and the GtkTreeModel.  This generally means that the model has changed\n"\
-		"without letting the view know.  Any display from now on is likely to\n"  \
-		"be incorrect.\n",                                                        \
-                __FILE__,                                               \
-                __LINE__,                                               \
-                #expr);                                                 \
-         return;                                                        \
-       };                               }G_STMT_END
-#endif
-
-
 /* functions that shouldn't be exported */
 void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *selection,
 						       GtkRBNode         *node,
@@ -415,9 +305,9 @@ void         _gtk_tree_view_remove_editable           (GtkTreeView       *tree_v
                                                        GtkCellEditable   *cell_editable);
 
 void       _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);
-void             _gtk_tree_view_column_autosize          (GtkTreeView       *tree_view,
-							  GtkTreeViewColumn *column);
-
+void         _gtk_tree_view_column_autosize           (GtkTreeView       *tree_view,
+						       GtkTreeViewColumn *column);
+gint         _gtk_tree_view_get_header_height         (GtkTreeView       *tree_view);
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

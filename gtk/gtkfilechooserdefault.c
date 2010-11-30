@@ -2998,14 +2998,18 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
   GdkRectangle cell;
   int row;
   int bookmarks_index;
+  int header_height = 0;
 
   tree_view = GTK_TREE_VIEW (impl->browse_shortcuts_tree_view);
+
+  if (gtk_tree_view_get_headers_visible (tree_view))
+    header_height = _gtk_tree_view_get_header_height (tree_view);
 
   bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
                                       x,
-				      y - TREE_VIEW_HEADER_HEIGHT (tree_view),
+				      y - header_height,
                                       path,
                                       &column,
                                       NULL,
