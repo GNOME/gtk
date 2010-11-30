@@ -293,6 +293,7 @@ gtk_spinner_add_timeout (GtkSpinner *spinner)
 
   priv = spinner->priv;
 
+  g_assert (priv->timeout == 0);
   priv->timeout = gdk_threads_add_timeout ((guint) priv->cycle_duration / priv->num_steps, gtk_spinner_timeout, spinner);
 }
 
@@ -315,7 +316,7 @@ gtk_spinner_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_spinner_parent_class)->map (widget);
 
-  if (priv->active)
+  if (priv->active && priv->timeout == 0)
     gtk_spinner_add_timeout (spinner);
 }
 
