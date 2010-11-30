@@ -42,9 +42,6 @@ typedef struct _GtkAppChooserButton        GtkAppChooserButton;
 typedef struct _GtkAppChooserButtonClass   GtkAppChooserButtonClass;
 typedef struct _GtkAppChooserButtonPrivate GtkAppChooserButtonPrivate;
 
-typedef void (* GtkAppChooserButtonItemFunc) (GtkAppChooserButton *self,
-                                              gpointer             user_data);
-
 struct _GtkAppChooserButton {
   GtkComboBox parent;
 
