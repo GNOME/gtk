@@ -38,6 +38,11 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
 {
   GParamSpec *pspec;
 
+  /**
+   * GtkAppChooser:content-type:
+   *
+   * The content type of the #GtkAppChooser object.
+   */
   pspec = g_param_spec_string ("content-type",
                                P_("Content type"),
                                P_("The content type used by the open with object"),
@@ -47,6 +52,17 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
   g_object_interface_install_property (iface, pspec);
 }
 
+
+/**
+ * gtk_app_chooser_get_content_type:
+ * @self: a #GtkAppChooser
+ *
+ * Returns the current value of the #GtkAppChooser:content-type property.
+ *
+ * Returns: the content type of @self. Free with g_free()
+ *
+ * Since: 3.0
+ */
 gchar *
 gtk_app_chooser_get_content_type (GtkAppChooser *self)
 {
@@ -68,7 +84,7 @@ gtk_app_chooser_get_content_type (GtkAppChooser *self)
  * Returns the currently selected application.
  *
  * Returns: (transfer full): a #GAppInfo for the currently selected
- *     application, or %NULL if none is selected. Free with g_object_unref().
+ *     application, or %NULL if none is selected. Free with g_object_unref()
  *
  * Since: 3.0
  */
@@ -82,7 +98,7 @@ gtk_app_chooser_get_app_info (GtkAppChooser *self)
  * gtk_app_chooser_refresh:
  * @self: a #GtkAppChooser
  *
- * Reload the list of applications.
+ * Reloads the list of applications.
  *
  * Since: 3.0
  */

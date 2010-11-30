@@ -523,6 +523,15 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (oclass, PROP_SHOW_DIALOG_ITEM, pspec);
 
+  /**
+   * GtkAppChooserButton::custom-item-activated:
+   * @self: the object which received the signal
+   * @item_name: the name of the activated item
+   *
+   * Emitted when a custom item, previously added with
+   * gtk_app_chooser_button_append_custom_item(), is activated from the
+   * dropdown menu.
+   */
   signals[SIGNAL_CUSTOM_ITEM_ACTIVATED] =
     g_signal_new ("custom-item-activated",
                   GTK_TYPE_APP_CHOOSER_BUTTON,

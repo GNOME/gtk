@@ -1069,6 +1069,13 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (gobject_class, PROP_DEFAULT_TEXT, pspec);
 
+  /**
+   * GtkAppChooserWidget::application-selected:
+   * @self: the object which received the signal
+   * @application: the selected #GAppInfo
+   *
+   * Emitted when an application item is selected from the widget's list.
+   */
   signals[SIGNAL_APPLICATION_SELECTED] =
     g_signal_new ("application-selected",
                   GTK_TYPE_APP_CHOOSER_WIDGET,
@@ -1079,6 +1086,16 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                   G_TYPE_NONE,
                   1, G_TYPE_APP_INFO);
 
+  /**
+   * GtkAppChooserWidget::application-activated:
+   * @self: the object which received the signal
+   * @application: the activated #GAppInfo
+   *
+   * Emitted when an application item is activated from the widget's list.
+   * This usually happens when the user double clicks an item, or an item
+   * is selected and the user presses one of the keys Space, Shift+Space,
+   * Return or Enter.
+   */
   signals[SIGNAL_APPLICATION_ACTIVATED] =
     g_signal_new ("application-activated",
                   GTK_TYPE_APP_CHOOSER_WIDGET,
@@ -1089,6 +1106,17 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                   G_TYPE_NONE,
                   1, G_TYPE_APP_INFO);
 
+  /**
+   * GtkAppChooserWidget::populate-popup:
+   * @self: the object which received the signal
+   * @menu: the #GtkMenu to populate
+   * @application: the current #GAppInfo
+   *
+   * Emitted when a context menu is about to popup over an application item.
+   * Clients can insert menu items into the provided #GtkMenu object in the
+   * callback of this signal; the context menu will be shown over the item if
+   * at least one item has been added to the menu.
+   */
   signals[SIGNAL_POPULATE_POPUP] =
     g_signal_new ("populate-popup",
                   GTK_TYPE_APP_CHOOSER_WIDGET,
