@@ -52,6 +52,7 @@ struct _GtkRadioActionPrivate
 {
   GtkRadioGroup *group;
   gint    value;
+  gchar  *string_value;
 };
 
 enum 
@@ -64,6 +65,7 @@ enum
 {
   PROP_0,
   PROP_VALUE,
+  PROP_STRING_VALUE,
   PROP_GROUP,
   PROP_CURRENT_VALUE
 };
@@ -106,12 +108,14 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
    * GtkRadioAction:value:
    *
    * The value is an arbitrary integer which can be used as a
-   * convenient way to determine which action in the group is 
+   * convenient way to determine which action in the group is
    * currently active in an ::activate or ::changed signal handler.
    * See gtk_radio_action_get_current_value() and #GtkRadioActionEntry
    * for convenient ways to get and set this property.
    *
    * Since: 2.4
+   *
+   * Deprecated:3.0: Use #GtkRadioAction:string-value instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_VALUE,
@@ -121,7 +125,14 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 						     G_MININT,
 						     G_MAXINT,
 						     0,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
+
+  g_object_class_install_property (gobject_class, PROP_STRING_VALUE,
+    g_param_spec_string ("string-value",
+                         P_("The value"),
+                         P_("The value to use for binding."),
+                         "",
+                         GTK_PARAM_READWRITE));
 
   /**
    * GtkRadioAction:group:
@@ -142,9 +153,11 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
    * GtkRadioAction:current-value:
    *
    * The value property of the currently active member of the group to which
-   * this action belongs. 
+   * this action belongs.
    *
    * Since: 2.10
+   *
+   * Deprecated: 3.0: Use #GtkRadioGroup instead
    */
   g_object_class_install_property (gobject_class,
 				   PROP_CURRENT_VALUE,
@@ -154,7 +167,7 @@ gtk_radio_action_class_init (GtkRadioActionClass *klass)
 						     G_MININT,
 						     G_MAXINT,
 						     0,
-						     GTK_PARAM_READWRITE));
+						     GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   /**
    * GtkRadioAction::changed:
@@ -187,6 +200,7 @@ gtk_radio_action_init (GtkRadioAction *action)
 
   action->private_data->group = NULL;
   action->private_data->value = 0;
+  action->private_data->string_value = g_strdup ("0");
 
   gtk_toggle_action_set_draw_as_radio (GTK_TOGGLE_ACTION (action), TRUE);
 }
@@ -236,6 +250,8 @@ gtk_radio_action_finalize (GObject *object)
   action = GTK_RADIO_ACTION (object);
   priv = action->private_data;
 
+  g_free (action->private_data->string_value);
+
   if (priv->group)
     {
       _gtk_radio_group_remove_item (priv->group, object);
@@ -262,6 +278,11 @@ gtk_radio_action_set_property (GObject         *object,
     {
     case PROP_VALUE:
       radio_action->private_data->value = g_value_get_int (value);
+      g_free (radio_action->private_data->string_value);
+      radio_action->private_data->string_value = g_strdup_printf ("%d", radio_action->private_data->value);
+      break;
+    case PROP_STRING_VALUE:
+      gtk_radio_action_set_string_value (radio_action, g_value_get_string (value));
       break;
     case PROP_GROUP:
       {
@@ -298,6 +319,9 @@ gtk_radio_action_get_property (GObject    *object,
       break;
     case PROP_VALUE:
       g_value_set_int (value, radio_action->private_data->value);
+      break;
+    case PROP_STRING_VALUE:
+      g_value_set_string (value, radio_action->private_data->string_value);
       break;
     case PROP_CURRENT_VALUE:
       g_value_set_int (value,
@@ -462,6 +486,8 @@ gtk_radio_action_set_group (GtkRadioAction *action,
  * Return value: The value of the currently active group member
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.0: Use #GtkRadioGroup
  **/
 gint
 gtk_radio_action_get_current_value (GtkRadioAction *action)
@@ -486,6 +512,8 @@ gtk_radio_action_get_current_value (GtkRadioAction *action)
  * property @current_value.
  *
  * Since: 2.10
+ *
+ * Deprecated: 3.0: Use #GtkRadioGroup
  **/
 void
 gtk_radio_action_set_current_value (GtkRadioAction *action,
@@ -517,4 +545,33 @@ gtk_radio_action_set_current_value (GtkRadioAction *action,
   else
     g_warning ("Radio group does not contain an action with value '%d'",
 	       current_value);
+}
+
+void
+gtk_radio_action_set_string_value (GtkRadioAction *action,
+                                   const gchar    *value)
+{
+  gchar *end;
+  gint val;
+
+  g_return_if_fail (GTK_IS_RADIO_ACTION (action));
+
+  val = g_ascii_strtoll (value, &end, 10);
+  if (end && *end != '\0')
+    val = -1;
+
+  g_free (action->private_data->string_value);
+  action->private_data->string_value = g_strdup (value);
+  action->private_data->value = val;
+
+  g_object_notify (G_OBJECT (action), "string-value");
+  g_object_notify (G_OBJECT (action), "value");
+}
+
+const gchar *
+gtk_radio_action_get_string_value (GtkRadioAction *action)
+{
+  g_return_val_if_fail (GTK_IS_RADIO_ACTION (action), NULL);
+
+  return action->private_data->string_value;
 }
