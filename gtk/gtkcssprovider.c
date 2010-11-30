@@ -1340,6 +1340,7 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
 static gboolean
 gtk_css_provider_get_style_property (GtkStyleProvider *provider,
                                      GtkWidgetPath    *path,
+                                     GtkStateFlags     state,
                                      GParamSpec       *pspec,
                                      GValue           *value)
 {
@@ -1362,7 +1363,9 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
       info = &g_array_index (priority_info, StylePriorityInfo, i);
       val = g_hash_table_lookup (info->style, prop_name);
 
-      if (val)
+      if (val &&
+          (info->state & state) != 0 &&
+          (info->state & ~(state)) == 0)
         {
           const gchar *val_str;
 

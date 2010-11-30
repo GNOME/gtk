@@ -424,6 +424,7 @@ void gtk_style_context_pop_animatable_region  (GtkStyleContext *context);
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                        GType            widget_type,
+                                                       GtkStateFlags    state,
                                                        GParamSpec      *pspec);
 void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);
 void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,

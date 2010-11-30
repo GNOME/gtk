@@ -11372,11 +11372,14 @@ gtk_widget_style_get_property (GtkWidget   *widget,
     {
       GtkStyleContext *context;
       const GValue *peek_value;
+      GtkStateFlags state;
 
       context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
       peek_value = _gtk_style_context_peek_style_property (context,
                                                            G_OBJECT_TYPE (widget),
-                                                           pspec);
+                                                           state, pspec);
 
       /* auto-conversion of the caller's value type
        */
@@ -11410,12 +11413,14 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
 			     va_list      var_args)
 {
   GtkStyleContext *context;
+  GtkStateFlags state;
   const gchar *name;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   g_object_ref (widget);
   context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   name = first_property_name;
   while (name)
@@ -11440,7 +11445,7 @@ gtk_widget_style_get_valist (GtkWidget   *widget,
 
       peek_value = _gtk_style_context_peek_style_property (context,
                                                            G_OBJECT_TYPE (widget),
-                                                           pspec);
+                                                           state, pspec);
 
       G_VALUE_LCOPY (peek_value, var_args, 0, &error);
       if (error)

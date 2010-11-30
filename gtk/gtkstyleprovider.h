@@ -97,6 +97,7 @@ struct _GtkStyleProviderIface
 
   gboolean (* get_style_property) (GtkStyleProvider *provider,
                                    GtkWidgetPath    *path,
+                                   GtkStateFlags     state,
                                    GParamSpec       *pspec,
                                    GValue           *value);
 
@@ -111,6 +112,7 @@ GtkStyleProperties *gtk_style_provider_get_style (GtkStyleProvider *provider,
 
 gboolean gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                                 GtkWidgetPath    *path,
+                                                GtkStateFlags     state,
                                                 GParamSpec       *pspec,
                                                 GValue           *value);
 

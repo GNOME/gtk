@@ -86,6 +86,7 @@ gtk_style_provider_get_style (GtkStyleProvider *provider,
  * gtk_style_provider_get_style_property:
  * @provider: a #GtkStyleProvider
  * @path: #GtkWidgetPath to query
+ * @state: state to query the style property for
  * @pspec: The #GParamSpec to query
  * @value: (out): return location for the property value
  *
@@ -97,6 +98,7 @@ gtk_style_provider_get_style (GtkStyleProvider *provider,
 gboolean
 gtk_style_provider_get_style_property (GtkStyleProvider *provider,
                                        GtkWidgetPath    *path,
+                                       GtkStateFlags     state,
                                        GParamSpec       *pspec,
                                        GValue           *value)
 {
@@ -113,7 +115,7 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
   if (!iface->get_style_property)
     return FALSE;
 
-  return iface->get_style_property (provider, path, pspec, value);
+  return iface->get_style_property (provider, path, state, pspec, value);
 }
 
 /**
