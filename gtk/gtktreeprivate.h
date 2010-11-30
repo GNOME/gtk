@@ -37,238 +37,6 @@ typedef enum
 }
 GtkTreeSelectMode;
 
-typedef struct _GtkTreeViewColumnReorder GtkTreeViewColumnReorder;
-struct _GtkTreeViewColumnReorder
-{
-  gint left_align;
-  gint right_align;
-  GtkTreeViewColumn *left_column;
-  GtkTreeViewColumn *right_column;
-};
-
-struct _GtkTreeViewPrivate
-{
-  GtkTreeModel *model;
-
-  guint flags;
-  /* tree information */
-  GtkRBTree *tree;
-
-  /* Container info */
-  GList *children;
-  gint width;
-  gint height;
-
-  /* Adjustments */
-  GtkAdjustment *hadjustment;
-  GtkAdjustment *vadjustment;
-  gint           min_display_width;
-  gint           min_display_height;
-
-  /* Sub windows */
-  GdkWindow *bin_window;
-  GdkWindow *header_window;
-
-  /* Scroll position state keeping */
-  GtkTreeRowReference *top_row;
-  gint top_row_dy;
-  /* dy == y pos of top_row + top_row_dy */
-  /* we cache it for simplicity of the code */
-  gint dy;
-
-  guint presize_handler_timer;
-  guint validate_rows_timer;
-  guint scroll_sync_timer;
-
-  /* Indentation and expander layout */
-  gint expander_size;
-  GtkTreeViewColumn *expander_column;
-
-  gint level_indentation;
-
-  /* Key navigation (focus), selection */
-  gint cursor_offset;
-
-  GtkTreeRowReference *anchor;
-  GtkTreeRowReference *cursor;
-
-  GtkTreeViewColumn *focus_column;
-
-  /* Current pressed node, previously pressed, prelight */
-  GtkRBNode *button_pressed_node;
-  GtkRBTree *button_pressed_tree;
-
-  gint pressed_button;
-  gint press_start_x;
-  gint press_start_y;
-
-  gint event_last_x;
-  gint event_last_y;
-
-  guint last_button_time;
-  gint last_button_x;
-  gint last_button_y;
-
-  GtkRBNode *prelight_node;
-  GtkRBTree *prelight_tree;
-
-  /* Cell Editing */
-  GtkTreeViewColumn *edited_column;
-
-  /* The node that's currently being collapsed or expanded */
-  GtkRBNode *expanded_collapsed_node;
-  GtkRBTree *expanded_collapsed_tree;
-  guint expand_collapse_timeout;
-
-  /* Auto expand/collapse timeout in hover mode */
-  guint auto_expand_timeout;
-
-  /* Selection information */
-  GtkTreeSelection *selection;
-
-  /* Header information */
-  gint n_columns;
-  GList *columns;
-  gint header_height;
-
-  GtkTreeViewColumnDropFunc column_drop_func;
-  gpointer column_drop_func_data;
-  GDestroyNotify column_drop_func_data_destroy;
-  GList *column_drag_info;
-  GtkTreeViewColumnReorder *cur_reorder;
-
-  gint prev_width_before_expander;
-
-  /* Interactive Header reordering */
-  GdkWindow *drag_window;
-  GdkWindow *drag_highlight_window;
-  GtkTreeViewColumn *drag_column;
-  gint drag_column_x;
-
-  /* Interactive Header Resizing */
-  gint drag_pos;
-  gint x_drag;
-
-  /* Non-interactive Header Resizing, expand flag support */
-  gint prev_width;
-
-  gint last_extra_space;
-  gint last_extra_space_per_column;
-  gint last_number_of_expand_columns;
-
-  /* ATK Hack */
-  GtkTreeDestroyCountFunc destroy_count_func;
-  gpointer destroy_count_data;
-  GDestroyNotify destroy_count_destroy;
-
-  /* Scroll timeout (e.g. during dnd, rubber banding) */
-  guint scroll_timeout;
-
-  /* Row drag-and-drop */
-  GtkTreeRowReference *drag_dest_row;
-  GtkTreeViewDropPosition drag_dest_pos;
-  guint open_dest_timeout;
-
-  /* Rubber banding */
-  gint rubber_band_status;
-  gint rubber_band_x;
-  gint rubber_band_y;
-  gint rubber_band_shift;
-  gint rubber_band_ctrl;
-
-  GtkRBNode *rubber_band_start_node;
-  GtkRBTree *rubber_band_start_tree;
-
-  GtkRBNode *rubber_band_end_node;
-  GtkRBTree *rubber_band_end_tree;
-
-  /* fixed height */
-  gint fixed_height;
-
-  /* Scroll-to functionality when unrealized */
-  GtkTreeRowReference *scroll_to_path;
-  GtkTreeViewColumn *scroll_to_column;
-  gfloat scroll_to_row_align;
-  gfloat scroll_to_col_align;
-
-  /* Interactive search */
-  gint selected_iter;
-  gint search_column;
-  GtkTreeViewSearchPositionFunc search_position_func;
-  GtkTreeViewSearchEqualFunc search_equal_func;
-  gpointer search_user_data;
-  GDestroyNotify search_destroy;
-  gpointer search_position_user_data;
-  GDestroyNotify search_position_destroy;
-  GtkWidget *search_window;
-  GtkWidget *search_entry;
-  gulong search_entry_changed_id;
-  guint typeselect_flush_timeout;
-
-  /* Grid and tree lines */
-  GtkTreeViewGridLines grid_lines;
-  double grid_line_dashes[2];
-  int grid_line_width;
-
-  gboolean tree_lines_enabled;
-  double tree_line_dashes[2];
-  int tree_line_width;
-
-  /* Row separators */
-  GtkTreeViewRowSeparatorFunc row_separator_func;
-  gpointer row_separator_data;
-  GDestroyNotify row_separator_destroy;
-
-  /* Tooltip support */
-  gint tooltip_column;
-
-  /* Here comes the bitfield */
-  guint scroll_to_use_align : 1;
-
-  guint fixed_height_mode : 1;
-  guint fixed_height_check : 1;
-
-  guint reorderable : 1;
-  guint header_has_focus : 1;
-  guint drag_column_window_state : 3;
-  /* hint to display rows in alternating colors */
-  guint has_rules : 1;
-  guint mark_rows_col_dirty : 1;
-
-  /* for DnD */
-  guint empty_view_drop : 1;
-
-  guint ctrl_pressed : 1;
-  guint shift_pressed : 1;
-
-  guint init_hadjust_value : 1;
-
-  guint in_top_row_to_dy : 1;
-
-  /* interactive search */
-  guint enable_search : 1;
-  guint disable_popdown : 1;
-  guint search_custom_entry_set : 1;
-  
-  guint hover_selection : 1;
-  guint hover_expand : 1;
-  guint imcontext_changed : 1;
-
-  guint rubber_banding_enable : 1;
-
-  guint in_grab : 1;
-
-  guint post_validation_flag : 1;
-
-  /* Whether our key press handler is to avoid sending an unhandled binding to the search entry */
-  guint search_entry_avoid_unhandled_binding : 1;
-
-  /* GtkScrollablePolicy needs to be checked when
-   * driving the scrollable adjustment values */
-  guint hscroll_policy : 1;
-  guint vscroll_policy : 1;
-};
-
 /* functions that shouldn't be exported */
 void         _gtk_tree_selection_internal_select_node (GtkTreeSelection  *selection,
 						       GtkRBNode         *node,
@@ -304,10 +72,25 @@ void         _gtk_tree_view_remove_editable           (GtkTreeView       *tree_v
                                                        GtkTreeViewColumn *column,
                                                        GtkCellEditable   *cell_editable);
 
-void       _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);
+void       _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view,
+						       gboolean     install_handler);
 void         _gtk_tree_view_column_autosize           (GtkTreeView       *tree_view,
 						       GtkTreeViewColumn *column);
 gint         _gtk_tree_view_get_header_height         (GtkTreeView       *tree_view);
+
+void         _gtk_tree_view_get_row_separator_func    (GtkTreeView                 *tree_view,
+						       GtkTreeViewRowSeparatorFunc *func,
+						       gpointer                    *data);
+GtkTreePath *_gtk_tree_view_get_anchor_path           (GtkTreeView                 *tree_view);
+void         _gtk_tree_view_set_anchor_path           (GtkTreeView                 *tree_view,
+						       GtkTreePath                 *anchor_path);
+GtkRBTree *  _gtk_tree_view_get_rbtree                (GtkTreeView                 *tree_view);
+
+GtkTreeViewColumn *_gtk_tree_view_get_focus_column    (GtkTreeView                 *tree_view);
+void               _gtk_tree_view_set_focus_column    (GtkTreeView                 *tree_view,
+						       GtkTreeViewColumn           *column);
+GdkWindow         *_gtk_tree_view_get_header_window   (GtkTreeView                 *tree_view);
+
 
 GtkTreeSelection* _gtk_tree_selection_new                (void);
 GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);

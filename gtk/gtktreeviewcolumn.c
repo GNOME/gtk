@@ -757,8 +757,9 @@ gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
   gtk_widget_pop_composite_child ();
 
   /* make sure we own a reference to it as well. */
-  if (tree_view->priv->header_window)
-    gtk_widget_set_parent_window (priv->button, tree_view->priv->header_window);
+  if (_gtk_tree_view_get_header_window (tree_view))
+    gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
+
   gtk_widget_set_parent (priv->button, GTK_WIDGET (tree_view));
 
   g_signal_connect (priv->button, "event",
@@ -1057,8 +1058,7 @@ gtk_tree_view_column_mnemonic_activate (GtkWidget *widget,
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW_COLUMN (column), FALSE);
 
-  /* XXX Direct access to treeview */
-  GTK_TREE_VIEW (priv->tree_view)->priv->focus_column = column;
+  _gtk_tree_view_set_focus_column (GTK_TREE_VIEW (priv->tree_view), column);
 
   if (priv->clickable)
     gtk_button_clicked (GTK_BUTTON (priv->button));
@@ -1262,9 +1262,8 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
   g_return_if_fail (gtk_widget_get_realized (priv->tree_view));
   g_return_if_fail (priv->button != NULL);
 
-  /* XXX Access to GtkTreeView->priv */
-  g_return_if_fail (tree_view->priv->header_window != NULL);
-  gtk_widget_set_parent_window (priv->button, tree_view->priv->header_window);
+  g_return_if_fail (_gtk_tree_view_get_header_window (tree_view) != NULL);
+  gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
 
   if (priv->visible)
     gtk_widget_show (priv->button);
@@ -1279,16 +1278,16 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 		     GDK_POINTER_MOTION_HINT_MASK |
 		     GDK_KEY_PRESS_MASK);
   attributes_mask = GDK_WA_CURSOR | GDK_WA_X | GDK_WA_Y;
-  attr.cursor = gdk_cursor_new_for_display (gdk_window_get_display (tree_view->priv->header_window),
-					    GDK_SB_H_DOUBLE_ARROW);
+  attr.cursor = gdk_cursor_new_for_display 
+    (gdk_window_get_display (_gtk_tree_view_get_header_window (tree_view)), GDK_SB_H_DOUBLE_ARROW);
   attr.y = 0;
   attr.width = TREE_VIEW_DRAG_WIDTH;
-  attr.height = tree_view->priv->header_height;
+  attr.height = _gtk_tree_view_get_header_height (tree_view);
 
   gtk_widget_get_allocation (priv->button, &allocation);
   attr.x       = (allocation.x + (rtl ? 0 : allocation.width)) - TREE_VIEW_DRAG_WIDTH / 2;
-  priv->window = gdk_window_new (tree_view->priv->header_window,
-				   &attr, attributes_mask);
+  priv->window = gdk_window_new (_gtk_tree_view_get_header_window (tree_view),
+				 &attr, attributes_mask);
   gdk_window_set_user_data (priv->window, tree_view);
 
   gtk_tree_view_column_update_button (column);
@@ -2764,9 +2763,7 @@ _gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
   /* if we are the current focus column and have multiple editable cells,
    * try to select the next one, else move the focus to the next column
    */
-
-  /* XXX Access to GtkTreeViewPrivate */
-  if (GTK_TREE_VIEW (priv->tree_view)->priv->focus_column == tree_column)
+  if (_gtk_tree_view_get_focus_column (GTK_TREE_VIEW (priv->tree_view)) == tree_column)
     {
       if (gtk_cell_area_focus (priv->cell_area, direction))
         /* Focus stays in this column, so we are done */
@@ -2859,11 +2856,7 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
   if (priv->tree_view &&
       gtk_widget_get_realized (priv->tree_view))
     {
-      if (install_handler)
-	_gtk_tree_view_install_mark_rows_col_dirty (GTK_TREE_VIEW (priv->tree_view));
-      else
-	/* XXX Access to GtkTreeViewPrivate */
-	GTK_TREE_VIEW (priv->tree_view)->priv->mark_rows_col_dirty = TRUE;
+      _gtk_tree_view_install_mark_rows_col_dirty (GTK_TREE_VIEW (priv->tree_view), install_handler);
       gtk_widget_queue_resize (priv->tree_view);
     }
 }

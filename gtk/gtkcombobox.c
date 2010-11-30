@@ -4415,10 +4415,12 @@ gtk_combo_box_list_select_func (GtkTreeSelection *selection,
 				gboolean          path_currently_selected,
 				gpointer          data)
 {
-  GList *list;
+  GList *list, *columns;
   gboolean sensitive = FALSE;
 
-  for (list = selection->tree_view->priv->columns; list && !sensitive; list = list->next)
+  columns = gtk_tree_view_get_columns (selection->tree_view);
+
+  for (list = columns; list && !sensitive; list = list->next)
     {
       GList *cells, *cell;
       gboolean cell_sensitive, cell_visible;
@@ -4449,6 +4451,8 @@ gtk_combo_box_list_select_func (GtkTreeSelection *selection,
 
       sensitive = cell_sensitive;
     }
+
+  g_list_free (columns);
 
   return sensitive;
 }
