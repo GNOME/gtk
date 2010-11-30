@@ -4651,7 +4651,7 @@ get_header_from_column (GtkTreeViewColumn *tv_col)
       /* If the user has not set a header object, grab the column */
       /* header object defined by the GtkTreeView */
 
-      header_widget = tv_col->button;
+      header_widget = gtk_tree_view_column_get_button (tv_col);
 
       if (header_widget)
         {

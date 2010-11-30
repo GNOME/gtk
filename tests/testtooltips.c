@@ -359,7 +359,7 @@ main (int argc, char *argv[])
   /* Set a tooltip on the column */
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (tree_view), 0);
   gtk_tree_view_column_set_clickable (column, TRUE);
-  g_object_set (column->button, "tooltip-text", "Header", NULL);
+  g_object_set (gtk_tree_view_column_get_button (column), "tooltip-text", "Header", NULL);
 
   gtk_box_pack_start (GTK_BOX (box), tree_view, FALSE, FALSE, 2);
 

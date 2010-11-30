@@ -414,6 +414,20 @@ void         _gtk_tree_view_remove_editable           (GtkTreeView       *tree_v
                                                        GtkTreeViewColumn *column,
                                                        GtkCellEditable   *cell_editable);
 
+void       _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);
+void             _gtk_tree_view_column_autosize          (GtkTreeView       *tree_view,
+							  GtkTreeViewColumn *column);
+
+
+GtkTreeSelection* _gtk_tree_selection_new                (void);
+GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);
+void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
+                                                          GtkTreeView      *tree_view);
+gboolean          _gtk_tree_selection_row_is_selectable  (GtkTreeSelection *selection,
+							  GtkRBNode        *node,
+							  GtkTreePath      *path);
+
+
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
@@ -434,22 +448,10 @@ gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 					     const GdkRectangle *background_area,
 					     const GdkRectangle *cell_area,
 					     guint               flags);
-void _gtk_tree_view_install_mark_rows_col_dirty (GtkTreeView *tree_view);
-void             _gtk_tree_view_column_autosize          (GtkTreeView       *tree_view,
-							  GtkTreeViewColumn *column);
-
-gboolean         _gtk_tree_view_column_has_editable_cell (GtkTreeViewColumn *column);
-GtkCellRenderer *_gtk_tree_view_column_get_edited_cell   (GtkTreeViewColumn *column);
-GtkCellRenderer *_gtk_tree_view_column_get_cell_at_pos   (GtkTreeViewColumn *column,
-							  gint               x);
-
-GtkTreeSelection* _gtk_tree_selection_new                (void);
-GtkTreeSelection* _gtk_tree_selection_new_with_tree_view (GtkTreeView      *tree_view);
-void              _gtk_tree_selection_set_tree_view      (GtkTreeSelection *selection,
-                                                          GtkTreeView      *tree_view);
-gboolean          _gtk_tree_selection_row_is_selectable  (GtkTreeSelection *selection,
-							  GtkRBNode        *node,
-							  GtkTreePath      *path);
+gboolean          _gtk_tree_view_column_has_editable_cell(GtkTreeViewColumn  *column);
+GtkCellRenderer  *_gtk_tree_view_column_get_edited_cell  (GtkTreeViewColumn  *column);
+GtkCellRenderer  *_gtk_tree_view_column_get_cell_at_pos  (GtkTreeViewColumn  *column,
+							  gint                x);
 
 void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
 							  cairo_t            *cr,
@@ -467,6 +469,20 @@ gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn  *tree_colu
 							  gboolean            right);
 void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
 							  gboolean            install_handler);
+gboolean          _gtk_tree_view_column_cell_get_dirty   (GtkTreeViewColumn  *tree_column);
+GdkWindow        *_gtk_tree_view_column_get_window       (GtkTreeViewColumn  *column);
+
+void              _gtk_tree_view_column_set_requested_width   (GtkTreeViewColumn  *column,
+							       gint                width);
+gint              _gtk_tree_view_column_get_requested_width   (GtkTreeViewColumn  *column);
+void              _gtk_tree_view_column_set_resized_width     (GtkTreeViewColumn  *column,
+							       gint                width);
+gint              _gtk_tree_view_column_get_resized_width     (GtkTreeViewColumn  *column);
+void              _gtk_tree_view_column_set_use_resized_width (GtkTreeViewColumn  *column,
+							       gboolean            use_resized_width);
+gboolean          _gtk_tree_view_column_get_use_resized_width (GtkTreeViewColumn  *column);
+gint              _gtk_tree_view_column_get_drag_x            (GtkTreeViewColumn  *column);
+GtkCellAreaContext *_gtk_tree_view_column_get_context         (GtkTreeViewColumn  *column);
 
 G_END_DECLS
 
