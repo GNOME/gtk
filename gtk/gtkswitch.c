@@ -22,8 +22,7 @@
  *      Emmanuele Bassi <ebassi@linux.intel.com>
  *      Matthias Clasen <mclasen@redhat.com>
  *
- * Based on similar code from:
- *      Thomas Wood <thos@linux.intel.com>
+ * Based on similar code from Mx.
  */
 
 /**
