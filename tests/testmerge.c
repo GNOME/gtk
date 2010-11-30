@@ -592,6 +592,7 @@ main (int argc, char **argv)
   GtkUIManager *merge;
   GtkWidget *window, *table, *frame, *menu_box, *vbox, *view;
   GtkWidget *button, *area, *statusbar;
+  GtkWidget *box;
   gint i;
   
   gtk_init (&argc, &argv);
@@ -651,6 +652,15 @@ main (int argc, char **argv)
   gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
 			    gtk_action_group_get_action (action_group, "BoldAction"));
   gtk_widget_show (button);
+
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+  gtk_box_pack_end (GTK_BOX (menu_box), box, FALSE, FALSE, 0);
+  gtk_container_add (GTK_CONTAINER (box), gtk_label_new ("Bold:"));
+  button = gtk_switch_new ();
+  gtk_container_add (GTK_CONTAINER (box), button);
+  gtk_activatable_set_related_action (GTK_ACTIVATABLE (button),
+                            gtk_action_group_get_action (action_group, "BoldAction"));
+  gtk_widget_show_all (box);
 
   merge = gtk_ui_manager_new ();
 

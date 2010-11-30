@@ -260,8 +260,9 @@ gdk_device_manager_get_property (GObject      *object,
  *
  * Gets the #GdkDisplay associated to @device_manager.
  *
- * Returns: the #GdkDisplay to which @device_manager is
- *          associated to, or #NULL.
+ * Returns: (transfer none): the #GdkDisplay to which @device_manager is
+ *          associated to, or #NULL. This memory is owned by GDK and
+ *          must not be freed or unreferenced.
  *
  * Since: 3.0
  **/
@@ -312,7 +313,8 @@ gdk_device_manager_list_devices (GdkDeviceManager *device_manager,
  * You should use this function sheldomly, only in code that isn't triggered by a #GdkEvent
  * and there aren't other means to get a meaningful #GdkDevice to operate on.
  *
- * Returns: The client pointer.
+ * Returns: (transfer none): The client pointer. This memory is
+ *          owned by GDK and must not be freed or unreferenced.
  *
  * Since: 3.0
  **/

@@ -1469,7 +1469,7 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   menu_shell = GTK_MENU_SHELL (menu);
   priv = gtk_menu_get_private (menu);
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       keyboard = device;
       pointer = gdk_device_get_associated_device (device);
@@ -1760,8 +1760,11 @@ gtk_menu_popdown (GtkMenu *menu)
   
   /* The X Grab, if present, will automatically be removed when we hide
    * the window */
-  gtk_widget_hide (menu->toplevel);
-  gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel), NULL);
+  if (menu->toplevel)
+    {
+      gtk_widget_hide (menu->toplevel);
+      gtk_window_set_transient_for (GTK_WINDOW (menu->toplevel), NULL);
+    }
 
   pointer = _gtk_menu_shell_get_grab_device (menu_shell);
 

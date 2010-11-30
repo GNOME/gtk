@@ -66,7 +66,6 @@ gtk_handle_box_get_type
 gtk_hbox_get_type
 gtk_hbutton_box_get_type
 gtk_hpaned_get_type
-gtk_hruler_get_type
 gtk_hscale_get_type
 gtk_hscrollbar_get_type
 gtk_hseparator_get_type
@@ -122,7 +121,6 @@ gtk_recent_chooser_dialog_get_type
 gtk_recent_chooser_menu_get_type
 gtk_recent_chooser_widget_get_type
 gtk_recent_manager_get_type
-gtk_ruler_get_type
 gtk_scale_button_get_type
 gtk_scale_get_type
 gtk_scrollable_get_type
@@ -138,6 +136,7 @@ gtk_spin_button_get_type
 gtk_spinner_get_type
 gtk_statusbar_get_type
 gtk_status_icon_get_type
+gtk_switch_get_type
 gtk_style_get_type
 gtk_table_get_type
 gtk_tearoff_menu_item_get_type
@@ -172,7 +171,6 @@ gtk_vbutton_box_get_type
 gtk_viewport_get_type
 gtk_volume_button_get_type
 gtk_vpaned_get_type
-gtk_vruler_get_type
 gtk_vscale_get_type
 gtk_vscrollbar_get_type
 gtk_vseparator_get_type

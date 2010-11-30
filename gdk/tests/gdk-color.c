@@ -8,17 +8,17 @@ test_color_parse (void)
   GdkRGBA expected;
   gboolean res;
 
-  res = gdk_rgba_parse ("foo", &color);
+  res = gdk_rgba_parse (&color, "foo");
   g_assert (!res);
 
-  res = gdk_rgba_parse ("", &color);
+  res = gdk_rgba_parse (&color, "");
   g_assert (!res);
 
   expected.red = 100/255.;
   expected.green = 90/255.;
   expected.blue = 80/255.;
   expected.alpha = 0.1;
-  res = gdk_rgba_parse ("rgba(100,90,80,0.1)", &color);
+  res = gdk_rgba_parse (&color, "rgba(100,90,80,0.1)");
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
 
@@ -26,11 +26,11 @@ test_color_parse (void)
   expected.green = 0.3;
   expected.blue = 0.2;
   expected.alpha = 0.1;
-  res = gdk_rgba_parse ("rgba(40%,30%,20%,0.1)", &color);
+  res = gdk_rgba_parse (&color, "rgba(40%,30%,20%,0.1)");
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
 
-  res = gdk_rgba_parse ("rgba(  40 % ,  30 %  ,   20 % ,  0.1    )", &color);
+  res = gdk_rgba_parse (&color, "rgba(  40 % ,  30 %  ,   20 % ,  0.1    )");
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
 
@@ -38,7 +38,7 @@ test_color_parse (void)
   expected.green = 0.0;
   expected.blue = 0.0;
   expected.alpha = 1.0;
-  res = gdk_rgba_parse ("red", &color);
+  res = gdk_rgba_parse (&color, "red");
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
 
@@ -46,7 +46,7 @@ test_color_parse (void)
   expected.green = 0x8080 / 65535.;
   expected.blue = 1.0;
   expected.alpha = 1.0;
-  res = gdk_rgba_parse ("#0080ff", &color);
+  res = gdk_rgba_parse (&color, "#0080ff");
   g_assert (res);
   g_assert (gdk_rgba_equal (&color, &expected));
 }
@@ -71,7 +71,7 @@ test_color_to_string (void)
 
   orig = g_strdup (setlocale (LC_ALL, NULL));
   res = gdk_rgba_to_string (&rgba);
-  gdk_rgba_parse (res, &out);
+  gdk_rgba_parse (&out, res);
   g_assert (gdk_rgba_equal (&rgba, &out));
 
   setlocale (LC_ALL, "de_DE.utf-8");

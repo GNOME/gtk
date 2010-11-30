@@ -155,15 +155,6 @@ Used for justifying the text inside a #GtkLabel widget. (See also
 @GTK_JUSTIFY_CENTER: The text is placed in the center of the label.
 @GTK_JUSTIFY_FILL: The text is placed is distributed across the label.
 
-<!-- ##### ENUM GtkMetricType ##### -->
-<para>
-Used to indicate which metric is used by a #GtkRuler.
-</para>
-
-@GTK_PIXELS: Pixels.
-@GTK_INCHES: Inches.
-@GTK_CENTIMETERS: Centimeters.
-
 <!-- ##### ENUM GtkMovementStep ##### -->
 <para>
 

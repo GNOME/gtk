@@ -841,9 +841,9 @@ x_event_mask_to_gdk_event_mask (long mask)
  * For example in the X backend, a native window handle is an Xlib
  * <type>XID</type>.
  * 
- * Return value: a #GdkWindow wrapper for the native window or 
- *   %NULL if the window has been destroyed. The wrapper will be
- *   newly created, if one doesn't exist already.
+ * Return value: (transfer full): a #GdkWindow wrapper for the native
+ *   window, or %NULL if the window has been destroyed. The wrapper
+ *   will be newly created, if one doesn't exist already.
  *
  * Since: 2.2
  **/
@@ -945,8 +945,8 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
  * For example in the X backend, a native window handle is an Xlib
  * <type>XID</type>.
  *
- * Return value: the #GdkWindow wrapper for the native window, 
- *    or %NULL if there is none.
+ * Return value: (transfer none): the #GdkWindow wrapper for the native
+ *    window, or %NULL if there is none.
  *
  * Since: 2.2
  **/
@@ -965,8 +965,8 @@ gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
  * For example in the X backend, a native window handle is an Xlib
  * <type>XID</type>.
  *
- * Return value: the #GdkWindow wrapper for the native window, 
- *    or %NULL if there is none.
+ * Return value: (transfer none): the #GdkWindow wrapper for the native
+ *    window, or %NULL if there is none.
  **/
 GdkWindow *
 gdk_window_lookup (GdkNativeWindow anid)

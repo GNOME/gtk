@@ -2212,7 +2212,7 @@ gdk_window_get_window_type (GdkWindow *window)
  * 
  * Gets the #GdkVisual describing the pixel format of @window.
  * 
- * Return value: a #GdkVisual
+ * Return value: (transfer none): a #GdkVisual
  *
  * Since: 2.24
  **/
@@ -2234,7 +2234,7 @@ gdk_window_get_visual (GdkWindow *window)
  * 
  * Gets the #GdkScreen associated with a #GdkWindow.
  * 
- * Return value: the #GdkScreen associated with @window
+ * Return value: (transfer none): the #GdkScreen associated with @window
  *
  * Since: 2.24
  **/
@@ -2256,7 +2256,7 @@ gdk_window_get_screen (GdkWindow *window)
  * 
  * Gets the #GdkDisplay associated with a #GdkWindow.
  * 
- * Return value: the #GdkDisplay associated with @window
+ * Return value: (transfer none): the #GdkDisplay associated with @window
  *
  * Since: 2.24
  **/
@@ -2577,13 +2577,18 @@ gdk_window_add_filter (GdkWindow     *window,
     {
       filter = (GdkEventFilter *)tmp_list->data;
       if ((filter->function == function) && (filter->data == data))
-	return;
+        {
+          filter->ref_count++;
+          return;
+        }
       tmp_list = tmp_list->next;
     }
 
   filter = g_new (GdkEventFilter, 1);
   filter->function = function;
   filter->data = data;
+  filter->ref_count = 1;
+  filter->flags = 0;
 
   if (private)
     private->filters = g_list_append (private->filters, filter);
@@ -2626,6 +2631,11 @@ gdk_window_remove_filter (GdkWindow     *window,
 
       if ((filter->function == function) && (filter->data == data))
 	{
+          filter->flags |= GDK_EVENT_FILTER_REMOVED;
+          filter->ref_count--;
+          if (filter->ref_count != 0)
+            return;
+
 	  if (private)
 	    private->filters = g_list_remove_link (private->filters, node);
 	  else
@@ -5120,7 +5130,7 @@ gdk_window_at_pointer (gint *win_x,
  * Obtains the root window (parent all other windows are inside)
  * for the default display and screen.
  *
- * Return value: the default root window
+ * Return value: (transfer none): the default root window
  **/
 GdkWindow *
 gdk_get_default_root_window (void)
@@ -5138,8 +5148,8 @@ gdk_get_default_root_window (void)
  * For example in the X backend, a native window handle is an Xlib
  * <type>XID</type>.
  *
- * Return value: the newly-created #GdkWindow wrapper for the
- *    native window or %NULL if the window has been destroyed.
+ * Return value: (transfer full): the newly-created #GdkWindow wrapper
+ *    for the native window, or %NULL if the window has been destroyed.
  **/
 GdkWindow *
 gdk_window_foreign_new (GdkNativeWindow anid)
@@ -8579,7 +8589,7 @@ send_crossing_event (GdkDisplay                 *display,
         }
 
       if (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER &&
-          device->mode != GDK_MODE_DISABLED &&
+          gdk_device_get_mode (device) != GDK_MODE_DISABLED &&
           !g_list_find (window->devices_inside, device))
         window->devices_inside = g_list_prepend (window->devices_inside, device);
     }
@@ -8945,7 +8955,7 @@ gdk_pointer_grab (GdkWindow *	  window,
     {
       device = dev->data;
 
-      if (device->source != GDK_SOURCE_MOUSE)
+      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
         continue;
 
       res = _gdk_windowing_device_grab (device,
@@ -9050,7 +9060,7 @@ gdk_keyboard_grab (GdkWindow *window,
     {
       device = dev->data;
 
-      if (device->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
         continue;
 
       res = _gdk_windowing_device_grab (device,
@@ -9438,7 +9448,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 	  event->motion.is_hint = is_hint;
 	  event->motion.device = source_event->motion.device;
           event->motion.axes = g_memdup (source_event->motion.axes,
-                                         sizeof (gdouble) * source_event->motion.device->num_axes);
+                                         sizeof (gdouble) * gdk_device_get_n_axes (source_event->motion.device));
 	}
     }
 
@@ -9547,7 +9557,7 @@ proxy_button_event (GdkEvent *source_event,
       event->button.state = state;
       event->button.device = source_event->button.device;
       event->button.axes = g_memdup (source_event->button.axes,
-                                     sizeof (gdouble) * source_event->button.device->num_axes);
+                                     sizeof (gdouble) * gdk_device_get_n_axes (source_event->button.device));
 
       if (type == GDK_BUTTON_PRESS)
 	_gdk_event_button_generate (display, event);

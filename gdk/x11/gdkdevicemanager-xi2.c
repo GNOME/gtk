@@ -268,7 +268,7 @@ add_device (GdkDeviceManagerXI2 *device_manager,
   else if (dev->use == XIFloatingSlave)
     device_manager->floating_devices = g_list_append (device_manager->floating_devices, device);
   else
-    g_warning ("Unhandled device: %s\n", device->name);
+    g_warning ("Unhandled device: %s\n", gdk_device_get_name (device));
 
   if (emit_signal)
     g_signal_emit_by_name (device_manager, "device-added", device);
@@ -755,7 +755,7 @@ translate_axes (GdkDevice       *device,
         {
         case GDK_AXIS_X:
         case GDK_AXIS_Y:
-          if (device->mode == GDK_MODE_WINDOW)
+          if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
             _gdk_device_translate_window_coord (device, window, i, val, &axes[i]);
           else
             {
@@ -1010,7 +1010,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                  event->button.window,
                                                  &xev->valuators);
 
-            if (event->button.device->mode == GDK_MODE_WINDOW)
+            if (gdk_device_get_mode (event->button.device) == GDK_MODE_WINDOW)
               {
                 GdkDevice *device = event->button.device;
 
@@ -1061,7 +1061,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              event->motion.window,
                                              &xev->valuators);
 
-        if (event->motion.device->mode == GDK_MODE_WINDOW)
+        if (gdk_device_get_mode (event->motion.device) == GDK_MODE_WINDOW)
           {
             GdkDevice *device = event->motion.device;
 

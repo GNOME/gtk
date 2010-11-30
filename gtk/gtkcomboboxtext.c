@@ -72,7 +72,7 @@ gtk_combo_box_text_init (GtkComboBoxText *combo_box)
 {
   GtkListStore *store;
 
-  store = gtk_list_store_new (1, G_TYPE_STRING);
+  store = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_STRING);
   gtk_combo_box_set_model (GTK_COMBO_BOX (combo_box), GTK_TREE_MODEL (store));
   g_object_unref (store);
 }
@@ -102,6 +102,7 @@ gtk_combo_box_text_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
                        "entry-text-column", 0,
+                       "id-column", 1,
                        NULL);
 }
 
@@ -121,6 +122,7 @@ gtk_combo_box_text_new_with_entry (void)
   return g_object_new (GTK_TYPE_COMBO_BOX_TEXT,
                        "has-entry", TRUE,
                        "entry-text-column", 0,
+                       "id-column", 1,
                        NULL);
 }
 
@@ -131,13 +133,16 @@ gtk_combo_box_text_new_with_entry (void)
  *
  * Appends @text to the list of strings stored in @combo_box.
  *
+ * This is the same as calling gtk_combo_box_text_insert_text() with a
+ * position of -1.
+ *
  * Since: 2.24
  */
 void
 gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
                                 const gchar     *text)
 {
-  gtk_combo_box_text_insert_text (combo_box, G_MAXINT, text);
+  gtk_combo_box_text_insert (combo_box, -1, NULL, text);
 }
 
 /**
@@ -147,13 +152,16 @@ gtk_combo_box_text_append_text (GtkComboBoxText *combo_box,
  *
  * Prepends @text to the list of strings stored in @combo_box.
  *
+ * This is the same as calling gtk_combo_box_text_insert_text() with a
+ * position of 0.
+ *
  * Since: 2.24
  */
 void
 gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
                                  const gchar     *text)
 {
-  gtk_combo_box_text_insert_text (combo_box, 0, text);
+  gtk_combo_box_text_insert (combo_box, 0, NULL, text);
 }
 
 /**
@@ -164,6 +172,11 @@ gtk_combo_box_text_prepend_text (GtkComboBoxText *combo_box,
  *
  * Inserts @text at @position in the list of strings stored in @combo_box.
  *
+ * If @position is negative then @text is appended.
+ *
+ * This is the same as calling gtk_combo_box_text_insert() with a %NULL
+ * ID string.
+ *
  * Since: 2.24
  */
 void
@@ -171,14 +184,83 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
                                 gint             position,
                                 const gchar     *text)
 {
+  gtk_combo_box_text_insert (combo_box, position, NULL, text);
+}
+
+/**
+ * gtk_combo_box_text_append:
+ * @combo_box: A #GtkComboBoxText
+ * @text: A string
+ *
+ * Appends @text to the list of strings stored in @combo_box.  If @id is
+ * non-%NULL then it is used as the ID of the row.
+ *
+ * This is the same as calling gtk_combo_box_text_insert() with a
+ * position of -1.
+ *
+ * Since: 2.24
+ */
+void
+gtk_combo_box_text_append (GtkComboBoxText *combo_box,
+                           const gchar     *id,
+                           const gchar     *text)
+{
+  gtk_combo_box_text_insert (combo_box, -1, id, text);
+}
+
+/**
+ * gtk_combo_box_text_prepend:
+ * @combo_box: A #GtkComboBox
+ * @text: A string
+ *
+ * Prepends @text to the list of strings stored in @combo_box.  If @id
+ * is non-%NULL then it is used as the ID of the row.
+ *
+ * This is the same as calling gtk_combo_box_text_insert() with a
+ * position of 0.
+ *
+ * Since: 2.24
+ */
+void
+gtk_combo_box_text_prepend (GtkComboBoxText *combo_box,
+                            const gchar     *id,
+                            const gchar     *text)
+{
+  gtk_combo_box_text_insert (combo_box, 0, id, text);
+}
+
+
+/**
+ * gtk_combo_box_text_insert:
+ * @combo_box: A #GtkComboBoxText
+ * @position: An index to insert @text
+ * @id: a string ID for this value, or %NULL
+ * @text: A string to display
+ *
+ * Inserts @text at @position in the list of strings stored in @combo_box.
+ * If @id is non-%NULL then it is used as the ID of the row.  See
+ * #GtkComboBox::id-column.
+ *
+ * If @position is negative then @text is appended.
+ *
+ * Since: 3.0
+ */
+void
+gtk_combo_box_text_insert (GtkComboBoxText *combo_box,
+                           gint             position,
+                           const gchar     *id,
+                           const gchar     *text)
+{
   GtkListStore *store;
   GtkTreeIter iter;
   gint text_column;
   gint column_type;
 
   g_return_if_fail (GTK_IS_COMBO_BOX_TEXT (combo_box));
-  g_return_if_fail (position >= 0);
   g_return_if_fail (text != NULL);
+
+  if (position < 0)
+    position = G_MAXINT;
 
   store = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box)));
   g_return_if_fail (GTK_IS_LIST_STORE (store));
@@ -188,6 +270,17 @@ gtk_combo_box_text_insert_text (GtkComboBoxText *combo_box,
 
   gtk_list_store_insert (store, &iter, position);
   gtk_list_store_set (store, &iter, text_column, text, -1);
+
+  if (id != NULL)
+    {
+      gint id_column;
+
+      id_column = gtk_combo_box_get_id_column (GTK_COMBO_BOX (combo_box));
+      column_type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), id_column);
+      g_return_if_fail (column_type == G_TYPE_STRING);
+
+      gtk_list_store_set (store, &iter, id_column, id, -1);
+    }
 }
 
 /**

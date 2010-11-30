@@ -316,8 +316,8 @@ gdk_get_display_arg_name (void)
  * display has previously been set, simply returns that. An internal
  * function that should not be used by applications.
  * 
- * Return value: the default display, if it could be opened,
- *   otherwise %NULL.
+ * Return value: (transfer none): the default display, if it could be
+ *   opened, otherwise %NULL.
  **/
 GdkDisplay *
 gdk_display_open_default_libgtk_only (void)

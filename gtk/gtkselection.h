@@ -66,7 +66,8 @@ struct _GtkSelectionData
   GdkDisplay   *GSEAL (display);
 };
 
-struct _GtkTargetEntry {
+struct _GtkTargetEntry
+{
   gchar *target;
   guint  flags;
   guint  info;

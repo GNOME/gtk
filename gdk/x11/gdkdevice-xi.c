@@ -155,7 +155,8 @@ gdk_device_xi_constructed (GObject *object)
                                  device->device_id);
 
   if (gdk_error_trap_pop ())
-    g_warning ("Device %s can't be opened", GDK_DEVICE (device)->name);
+    g_warning ("Device %s can't be opened",
+               gdk_device_get_name (GDK_DEVICE (device)));
 
   if (G_OBJECT_CLASS (gdk_device_xi_parent_class)->constructed)
     G_OBJECT_CLASS (gdk_device_xi_parent_class)->constructed (object);
@@ -556,10 +557,11 @@ gdk_device_xi_update_axes (GdkDevice *device,
   int i;
 
   device_xi = GDK_DEVICE_XI (device);
-  g_return_if_fail (first_axis >= 0 && first_axis + axes_count <= device->num_axes);
+  g_return_if_fail (first_axis >= 0 &&
+                    first_axis + axes_count <= gdk_device_get_n_axes (device));
 
   if (!device_xi->axis_data)
-    device_xi->axis_data = g_new0 (gint, device->num_axes);
+    device_xi->axis_data = g_new0 (gint, gdk_device_get_n_axes (device));
 
   for (i = 0; i < axes_count; i++)
     device_xi->axis_data[first_axis + i] = axis_data[i];
@@ -577,6 +579,7 @@ gdk_device_xi_translate_axes (GdkDevice *device,
   GdkWindow *impl_window;
   gdouble root_x, root_y;
   gdouble temp_x, temp_y;
+  gint n_axes;
   gint i;
 
   device_xi = GDK_DEVICE_XI (device);
@@ -586,7 +589,9 @@ gdk_device_xi_translate_axes (GdkDevice *device,
   if (!gdk_device_xi_get_window_info (impl_window, &root_x, &root_y))
     return;
 
-  for (i = 0; i < device->num_axes; i++)
+  n_axes = gdk_device_get_n_axes (device);
+
+  for (i = 0; i < n_axes; i++)
     {
       GdkAxisUse use;
 
@@ -596,7 +601,7 @@ gdk_device_xi_translate_axes (GdkDevice *device,
         {
         case GDK_AXIS_X:
         case GDK_AXIS_Y:
-          if (device->mode == GDK_MODE_WINDOW)
+          if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
             _gdk_device_translate_window_coord (device, window,
                                                 i, axis_data[i],
                                                 &axes[i]);

@@ -248,7 +248,6 @@ gtk_OBJECTS = \
 	gtkhbbox.obj \
 	gtkhbox.obj \
 	gtkhpaned.obj \
-	gtkhruler.obj \
 	gtkhscale.obj \
 	gtkhscrollbar.obj \
 	gtkhseparator.obj \
@@ -305,7 +304,6 @@ gtk_OBJECTS = \
 	gtkrange.obj \
 	gtkrbtree.obj \
 	gtkrc.obj \
-	gtkruler.obj \
 	gtkscale.obj \
 	gtkscalebutton.obj \
 	gtkscrollbar.obj \
@@ -347,7 +345,6 @@ gtk_OBJECTS = \
 	gtkviewport.obj \
 	gtkvolumebutton.obj \
 	gtkvpaned.obj \
-	gtkvruler.obj \
 	gtkvscale.obj \
 	gtkvscrollbar.obj \
 	gtkvseparator.obj \
@@ -433,7 +430,6 @@ gtk_public_h_sources =		\
 	gtkhbbox.h		\
 	gtkhbox.h		\
 	gtkhpaned.h		\
-	gtkhruler.h		\
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
@@ -496,7 +492,6 @@ gtk_public_h_sources =		\
 	gtkrecentchooserwidget.h \
 	gtkrecentfilter.h 	\
 	gtkrecentmanager.h 	\
-	gtkruler.h		\
 	gtkscale.h		\
 	gtkscalebutton.h	\
 	gtkscrollbar.h		\
@@ -555,7 +550,6 @@ gtk_public_h_sources =		\
 	gtkviewport.h		\
 	gtkvolumebutton.h	\
 	gtkvpaned.h		\
-	gtkvruler.h		\
 	gtkvscale.h		\
 	gtkvscrollbar.h		\
 	gtkvseparator.h		\
@@ -573,7 +567,7 @@ gtk_extra_sources = \
 
 gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DALL_FILES \
+	cl /EP -DG_OS_WIN32 \
 		-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= \
 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gtk.symbols >> gtk.def
 

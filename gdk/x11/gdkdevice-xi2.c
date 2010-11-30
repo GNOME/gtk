@@ -205,7 +205,7 @@ gdk_device_xi2_get_state (GdkDevice       *device,
             case GDK_AXIS_X:
             case GDK_AXIS_Y:
             case GDK_AXIS_IGNORE:
-              if (device->mode == GDK_MODE_WINDOW)
+              if (gdk_device_get_mode (device) == GDK_MODE_WINDOW)
                 _gdk_device_translate_window_coord (device, window, j, value, &axes[j]);
               else
                 {

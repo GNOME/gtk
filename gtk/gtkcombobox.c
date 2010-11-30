@@ -143,6 +143,8 @@ struct _GtkComboBoxPrivate
   gint  text_column;
   GtkCellRenderer *text_renderer;
 
+  gint id_column;
+
   GSList *cells;
 
   guint popup_in_progress : 1;
@@ -245,7 +247,9 @@ enum {
   PROP_EDITING_CANCELED,
   PROP_HAS_ENTRY,
   PROP_ENTRY_TEXT_COLUMN,
-  PROP_POPUP_FIXED_WIDTH
+  PROP_POPUP_FIXED_WIDTH,
+  PROP_ID_COLUMN,
+  PROP_ACTIVE_ID
 };
 
 static guint combo_box_signals[LAST_SIGNAL] = {0,};
@@ -949,6 +953,38 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 						      GTK_PARAM_READWRITE));
 
    /**
+    * GtkComboBox:id-column:
+    *
+    * The column in the combo box's model that provides string
+    * IDs for the values in the model, if != -1.
+    *
+    * Since: 3.0
+    */
+   g_object_class_install_property (object_class,
+                                    PROP_ID_COLUMN,
+                                    g_param_spec_int ("id-column",
+                                                      P_("ID Column"),
+                                                      P_("The column in the combo box's model that provides "
+                                                      "string IDs for the values in the model"),
+                                                      -1, G_MAXINT, -1,
+                                                      GTK_PARAM_READWRITE));
+
+   /**
+    * GtkComboBox:active-id:
+    *
+    * The value of the ID column of the active row.
+    *
+    * Since: 3.0
+    */
+   g_object_class_install_property (object_class,
+                                    PROP_ACTIVE_ID,
+                                    g_param_spec_string ("active-id",
+                                                         P_("Active id"),
+                                                         P_("The value of the id column "
+                                                         "for the active row"),
+                                                         NULL, GTK_PARAM_READWRITE));
+
+   /**
     * GtkComboBox:popup-fixed-width:
     *
     * Whether the popup's width should be a fixed width matching the
@@ -1077,6 +1113,7 @@ gtk_combo_box_init (GtkComboBox *combo_box)
 
   priv->text_column = -1;
   priv->text_renderer = NULL;
+  priv->id_column = -1;
 
   gtk_combo_box_check_appearance (combo_box);
 }
@@ -1168,6 +1205,14 @@ gtk_combo_box_set_property (GObject      *object,
       gtk_combo_box_set_entry_text_column (combo_box, g_value_get_int (value));
       break;
 
+    case PROP_ID_COLUMN:
+      gtk_combo_box_set_id_column (combo_box, g_value_get_int (value));
+      break;
+
+    case PROP_ACTIVE_ID:
+      gtk_combo_box_set_active_id (combo_box, g_value_get_string (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1244,6 +1289,14 @@ gtk_combo_box_get_property (GObject    *object,
       case PROP_ENTRY_TEXT_COLUMN:
 	g_value_set_int (value, priv->text_column);
 	break;
+
+      case PROP_ID_COLUMN:
+        g_value_set_int (value, priv->id_column);
+        break;
+
+      case PROP_ACTIVE_ID:
+        g_value_set_string (value, gtk_combo_box_get_active_id (combo_box));
+        break;
 
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2199,7 +2252,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
 
   time = gtk_get_current_event_time ();
 
-  if (device->source == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       keyboard = device;
       pointer = gdk_device_get_associated_device (device);
@@ -4879,6 +4932,7 @@ gtk_combo_box_new_with_model (GtkTreeModel *model)
 
 /**
  * gtk_combo_box_new_with_model_and_entry:
+ * @model: A #GtkTreeModel
  *
  * Creates a new empty #GtkComboBox with an entry
  * and with the model initialized to @model.
@@ -5199,6 +5253,8 @@ gtk_combo_box_set_active_internal (GtkComboBox *combo_box,
 
   g_signal_emit (combo_box, combo_box_signals[CHANGED], 0);
   g_object_notify (G_OBJECT (combo_box), "active");
+  if (combo_box->priv->id_column >= 0)
+    g_object_notify (G_OBJECT (combo_box), "active-id");
 }
 
 
@@ -6586,4 +6642,158 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
 
   if (natural_size)
     *natural_size = nat_height;
+}
+
+/**
+ * gtk_combo_box_set_id_column:
+ * @combo_box: A #GtkComboBox
+ * @id_column: A column in @model to get string IDs for values from
+ *
+ * Sets the model column which @combo_box should use to get string IDs
+ * for values from. The column @id_column in the model of @combo_box
+ * must be of type %G_TYPE_STRING.
+ *
+ * Since: 3.0
+ */
+void
+gtk_combo_box_set_id_column (GtkComboBox *combo_box,
+                             gint         id_column)
+{
+  GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkTreeModel *model;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  if (id_column != priv->id_column)
+    {
+      model = gtk_combo_box_get_model (combo_box);
+
+      g_return_if_fail (id_column >= 0);
+      g_return_if_fail (model == NULL ||
+                        id_column < gtk_tree_model_get_n_columns (model));
+
+      priv->id_column = id_column;
+
+      g_object_notify (G_OBJECT (combo_box), "id-column");
+      g_object_notify (G_OBJECT (combo_box), "active-id");
+    }
+}
+
+/**
+ * gtk_combo_box_get_id_column:
+ * @combo_box: A #GtkComboBox
+ *
+ * Returns the column which @combo_box is using to get string IDs
+ * for values from.
+ *
+ * Return value: A column in the data source model of @combo_box.
+ *
+ * Since: 3.0
+ */
+gint
+gtk_combo_box_get_id_column (GtkComboBox *combo_box)
+{
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), 0);
+
+  return combo_box->priv->id_column;
+}
+
+/**
+ * gtk_combo_box_get_active_id:
+ * @combo_box: a #GtkComboBox
+ *
+ * Returns the ID of the active row of @combo_box.  This value is taken
+ * from the active row and the column specified by the 'id-column'
+ * property of @combo_box (see gtk_combo_box_set_id_column()).
+ *
+ * The returned value is an interned string which means that you can
+ * compare the pointer by value to other interned strings and that you
+ * must not free it.
+ *
+ * If the 'id-column' property of @combo_box is not set or if no row is
+ * selected then %NULL is returned.
+ *
+ * Return value: the ID of the active row, or %NULL
+ *
+ * Since: 3.0
+ **/
+const gchar *
+gtk_combo_box_get_active_id (GtkComboBox *combo_box)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint column;
+
+  g_return_val_if_fail (GTK_IS_COMBO_BOX (combo_box), 0);
+
+  column = combo_box->priv->id_column;
+
+  if (column < 0)
+    return NULL;
+
+  model = gtk_combo_box_get_model (combo_box);
+  g_return_val_if_fail (gtk_tree_model_get_column_type (model, column) ==
+                        G_TYPE_STRING, NULL);
+
+  if (gtk_combo_box_get_active_iter (combo_box, &iter))
+    {
+      const gchar *interned;
+      gchar *id;
+
+      gtk_tree_model_get (model, &iter, column, &id, -1);
+      interned = g_intern_string (id);
+      g_free (id);
+
+      return interned;
+    }
+
+  return NULL;
+}
+
+/**
+ * gtk_combo_box_set_active_id:
+ * @combo_box: a #GtkComboBox
+ * @active_id: the ID of the row to select
+ *
+ * Changes the active row of @combo_box to the one that has an ID equal to @id.
+ *
+ * If the 'id-column' property of @combo_box is unset or if no row has
+ * the given ID then nothing happens.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_combo_box_set_active_id (GtkComboBox *combo_box,
+                             const gchar *active_id)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gint column;
+
+  g_return_if_fail (GTK_IS_COMBO_BOX (combo_box));
+
+  column = combo_box->priv->id_column;
+
+  if (column < 0)
+    return;
+
+  model = gtk_combo_box_get_model (combo_box);
+  g_return_if_fail (gtk_tree_model_get_column_type (model, column) ==
+                    G_TYPE_STRING);
+
+  if (gtk_tree_model_get_iter_first (model, &iter))
+    do {
+      gboolean match;
+      gchar *id;
+
+      gtk_tree_model_get (model, &iter, column, &id, -1);
+      match = strcmp (id, active_id) == 0;
+      g_free (id);
+
+      if (match)
+        {
+          gtk_combo_box_set_active_iter (combo_box, &iter);
+          break;
+        }
+    } while (gtk_tree_model_iter_next (model, &iter));
 }

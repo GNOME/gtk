@@ -5910,74 +5910,6 @@ create_range_controls (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
-/*
- * GtkRulers
- */
-
-void
-create_rulers (GtkWidget *widget)
-{
-  static GtkWidget *window = NULL;
-  GtkWidget *table;
-  GtkWidget *ruler;
-
-  if (!window)
-    {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-
-      gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (widget));
-
-      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-
-      g_signal_connect (window, "destroy",
-			G_CALLBACK (gtk_widget_destroyed),
-			&window);
-
-      gtk_window_set_title (GTK_WINDOW (window), "rulers");
-      gtk_widget_set_size_request (window, 300, 300);
-      gtk_widget_set_events (window, 
-			     GDK_POINTER_MOTION_MASK 
-			     | GDK_POINTER_MOTION_HINT_MASK);
-      gtk_container_set_border_width (GTK_CONTAINER (window), 0);
-
-      table = gtk_table_new (2, 2, FALSE);
-      gtk_container_add (GTK_CONTAINER (window), table);
-      gtk_widget_show (table);
-
-      ruler = gtk_ruler_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_ruler_set_metric (GTK_RULER (ruler), GTK_CENTIMETERS);
-      gtk_ruler_set_range (GTK_RULER (ruler), 100, 0, 0, 20);
-
-      g_signal_connect_swapped (window, 
-			        "motion_notify_event",
-				G_CALLBACK (GTK_WIDGET_GET_CLASS (ruler)->motion_notify_event),
-			        ruler);
-      
-      gtk_table_attach (GTK_TABLE (table), ruler, 1, 2, 0, 1,
-			GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
-      gtk_widget_show (ruler);
-
-
-      ruler = gtk_ruler_new (GTK_ORIENTATION_VERTICAL);
-      gtk_ruler_set_range (GTK_RULER (ruler), 5, 15, 0, 20);
-
-      g_signal_connect_swapped (window, 
-			        "motion_notify_event",
-			        G_CALLBACK (GTK_WIDGET_GET_CLASS (ruler)->motion_notify_event),
-			        ruler);
-      
-      gtk_table_attach (GTK_TABLE (table), ruler, 0, 1, 1, 2,
-			GTK_FILL, GTK_EXPAND | GTK_FILL, 0, 0);
-      gtk_widget_show (ruler);
-    }
-
-  if (!gtk_widget_get_visible (window))
-    gtk_widget_show (window);
-  else
-    gtk_widget_destroy (window);
-}
-
 struct {
   GdkColor color;
   gchar *name;
@@ -10016,7 +9948,6 @@ struct {
   { "resize grips", create_resize_grips },
   { "rotated label", create_rotated_label },
   { "rotated text", create_rotated_text },
-  { "rulers", create_rulers },
   { "saved position", create_saved_position },
   { "scrolled windows", create_scrolled_windows },
   { "shapes", create_shapes },

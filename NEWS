@@ -1,3 +1,50 @@
+Overview of Changes from GTK+ 2.91.4 to 2.91.5
+==============================================
+
+* GtkSwitch: a new widget that provides switch-like on/off functionality
+
+* Deprecations and cleanups:
+ - GtkCallbackMarshal and GtkFunction have been deprecated
+ - gtk_init_add has been removed
+ - The ::size-request signal has been removed
+ - GtkRuler has been removed
+
+* The default value for the GtkBox::fill property has been changed
+  back to TRUE
+
+* Bugs fixed:
+ 613942 Deprecate GtkRuler, GtkVruler and GtkHRuler
+ 629955 Deprecate / remove gtk_main and gtk_init_add / remove* API
+ 633324 Stop invoking size-request completely
+ 633896 Printing: Use XDG_DOCUMENTS_DIR as the default location...
+ 634474 infinite loop in gtk_icon_view_accessible_set_adjustment
+ 634558 Selecting "Search" should focus text box for keyboard entry
+ 634592 GtkNotebook doesn't expand (in a typical GtkDialog)
+ 634697 gdk: Add XSetting for "gtk-cursor-blink-timeout"
+ 634821 Fix a BadMatch when create an icon pixmap for an ARGB visual
+ 634987 add a switch widget
+ 635175 Leak in gtk_plug_realize
+ 635253 GtkRadioButton constructors don't mark group as "allow-none"
+ 635307 iconcache: Ensure we don't lose data on power loss
+ 635380 gdk_event_apply_filters is unsafe against changes in filter list
+ 635588 clicking URL to be opened freezes the application for 3-5 seconds
+ 635693 Bad pointer grab bug with GtkMenu/GtkComboBox
+ 635879 Change the gdk_rgba_parse() function to be usable from bindings
+
+* Updated translations:
+ Arabic
+ British English
+ Catalan
+ Czech
+ German
+ Hungarian
+ Indonesian
+ Norwegian bokmål
+ Romanian
+ Thai
+ Uyghur
+
+
 Overview of Changes from GTK+ 2.91.3 to 2.91.4
 ==============================================
 

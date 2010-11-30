@@ -317,7 +317,7 @@ static void                 gtk_icon_view_set_hadjustment                (GtkIco
                                                                           GtkAdjustment          *adjustment);
 static void                 gtk_icon_view_set_vadjustment                (GtkIconView            *icon_view,
                                                                           GtkAdjustment          *adjustment);
-static void                 gtk_icon_view_accessible_set_adjustment      (GtkIconView            *icon_view,
+static void                 gtk_icon_view_accessible_set_adjustment      (AtkObject              *accessible,
                                                                           GtkOrientation          orientation,
                                                                           GtkAdjustment          *adjustment);
 static void                 gtk_icon_view_adjustment_changed             (GtkAdjustment          *adjustment,
@@ -2707,6 +2707,7 @@ gtk_icon_view_set_hadjustment (GtkIconView   *icon_view,
                                GtkAdjustment *adjustment)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
+  AtkObject *atk_obj;
 
   if (adjustment && priv->hadjustment == adjustment)
     return;
@@ -2728,9 +2729,10 @@ gtk_icon_view_set_hadjustment (GtkIconView   *icon_view,
   priv->hadjustment = g_object_ref_sink (adjustment);
   gtk_icon_view_set_hadjustment_values (icon_view);
 
-  gtk_icon_view_accessible_set_adjustment (icon_view,
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
+  gtk_icon_view_accessible_set_adjustment (atk_obj,
                                            GTK_ORIENTATION_HORIZONTAL,
-                                           priv->hadjustment);
+                                           adjustment);
 
   g_object_notify (G_OBJECT (icon_view), "hadjustment");
 }
@@ -2740,6 +2742,7 @@ gtk_icon_view_set_vadjustment (GtkIconView   *icon_view,
                                GtkAdjustment *adjustment)
 {
   GtkIconViewPrivate *priv = icon_view->priv;
+  AtkObject *atk_obj;
 
   if (adjustment && priv->vadjustment == adjustment)
     return;
@@ -2761,9 +2764,10 @@ gtk_icon_view_set_vadjustment (GtkIconView   *icon_view,
   priv->vadjustment = g_object_ref_sink (adjustment);
   gtk_icon_view_set_vadjustment_values (icon_view);
 
-  gtk_icon_view_accessible_set_adjustment (icon_view,
+  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
+  gtk_icon_view_accessible_set_adjustment (atk_obj,
                                            GTK_ORIENTATION_VERTICAL,
-                                           priv->vadjustment);
+                                           adjustment);
 
   g_object_notify (G_OBJECT (icon_view), "vadjustment");
 }
@@ -9207,32 +9211,21 @@ gtk_icon_view_accessible_traverse_items (GtkIconViewAccessible *view,
 }
 
 static void
-gtk_icon_view_accessible_adjustment_changed (GtkAdjustment *adjustment,
-                                             GtkIconView   *icon_view)
+gtk_icon_view_accessible_adjustment_changed (GtkAdjustment         *adjustment,
+                                             GtkIconViewAccessible *view)
 {
-  AtkObject *obj;
-  GtkIconViewAccessible *view;
-
-  /*
-   * The scrollbars have changed
-   */
-  obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
-  view = GTK_ICON_VIEW_ACCESSIBLE (obj);
-
   gtk_icon_view_accessible_traverse_items (view, NULL);
 }
 
 static void
-gtk_icon_view_accessible_set_adjustment (GtkIconView    *icon_view,
+gtk_icon_view_accessible_set_adjustment (AtkObject      *accessible,
                                          GtkOrientation  orientation,
                                          GtkAdjustment  *adjustment)
 {
-  AtkObject *atk_obj;
   GtkIconViewAccessiblePrivate *priv;
   GtkAdjustment **old_adj_ptr;
 
-  atk_obj = gtk_widget_get_accessible (GTK_WIDGET (icon_view));
-  priv = gtk_icon_view_accessible_get_priv (atk_obj);
+  priv = gtk_icon_view_accessible_get_priv (accessible);
 
   /* Adjustments are set for the first time in constructor and priv is not
    * initialized at that time, so skip this first setting. */
@@ -9261,7 +9254,7 @@ gtk_icon_view_accessible_set_adjustment (GtkIconView    *icon_view,
                                     (gpointer *)&priv->old_hadj);
       g_signal_handlers_disconnect_by_func (*old_adj_ptr,
                                             gtk_icon_view_accessible_adjustment_changed,
-                                            icon_view);
+                                            accessible);
     }
 
   /* Connect signal */
@@ -9269,7 +9262,7 @@ gtk_icon_view_accessible_set_adjustment (GtkIconView    *icon_view,
   g_object_add_weak_pointer (G_OBJECT (adjustment), (gpointer *)old_adj_ptr);
   g_signal_connect (adjustment, "value-changed",
                     G_CALLBACK (gtk_icon_view_accessible_adjustment_changed),
-                    icon_view);
+                    accessible);
 }
 
 static void
@@ -9572,11 +9565,11 @@ gtk_icon_view_accessible_initialize (AtkObject *accessible,
 
   icon_view = GTK_ICON_VIEW (data);
   if (icon_view->priv->hadjustment)
-    gtk_icon_view_accessible_set_adjustment (icon_view,
+    gtk_icon_view_accessible_set_adjustment (accessible,
 					     GTK_ORIENTATION_HORIZONTAL,
 					     icon_view->priv->hadjustment);
   if (icon_view->priv->vadjustment)
-    gtk_icon_view_accessible_set_adjustment (icon_view,
+    gtk_icon_view_accessible_set_adjustment (accessible,
 					     GTK_ORIENTATION_VERTICAL,
 					     icon_view->priv->vadjustment);
   g_signal_connect (data,
@@ -9623,7 +9616,7 @@ gtk_icon_view_accessible_destroyed (GtkWidget *widget,
           
       g_signal_handlers_disconnect_by_func (priv->old_hadj,
                                             (gpointer) gtk_icon_view_accessible_adjustment_changed,
-                                            widget);
+                                            accessible);
       priv->old_hadj = NULL;
     }
   if (priv->old_vadj)
@@ -9633,7 +9626,7 @@ gtk_icon_view_accessible_destroyed (GtkWidget *widget,
           
       g_signal_handlers_disconnect_by_func (priv->old_vadj,
                                             (gpointer) gtk_icon_view_accessible_adjustment_changed,
-                                            widget);
+                                            accessible);
       priv->old_vadj = NULL;
     }
 }

@@ -97,6 +97,7 @@
       <xi:include href="xml/gtklinkbutton.xml" />
       <xi:include href="xml/gtkscalebutton.xml" />
       <xi:include href="xml/gtkvolumebutton.xml" />
+      <xi:include href="xml/gtkswitch.xml" />
     </chapter>
 
     <chapter id="NumericEntry">
@@ -285,13 +286,6 @@
       <title>Cross-process Embedding</title>
       <xi:include href="xml/gtkplug.xml" />
       <xi:include href="xml/gtksocket.xml" />
-    </chapter>
-
-    <chapter id="SpecialObjects">
-      <title>Special-purpose features</title>
-      <xi:include href="xml/gtkruler.xml" />
-      <xi:include href="xml/gtkhruler.xml" />
-      <xi:include href="xml/gtkvruler.xml" />
     </chapter>
 
     <chapter id="RecentDocuments">

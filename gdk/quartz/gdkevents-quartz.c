@@ -171,19 +171,40 @@ append_event (GdkEvent *event,
 static gint
 gdk_event_apply_filters (NSEvent *nsevent,
 			 GdkEvent *event,
-			 GList *filters)
+			 GList **filters)
 {
   GList *tmp_list;
   GdkFilterReturn result;
   
-  tmp_list = filters;
+  tmp_list = *filters;
 
   while (tmp_list)
     {
       GdkEventFilter *filter = (GdkEventFilter*) tmp_list->data;
-      
-      tmp_list = tmp_list->next;
+      GList *node;
+
+      if ((filter->flags & GDK_EVENT_FILTER_REMOVED) != 0)
+        {
+          tmp_list = tmp_list->next;
+          continue;
+        }
+
+      filter->ref_count++;
       result = filter->function (nsevent, event, filter->data);
+
+      /* get the next node after running the function since the
+         function may add or remove a next node */
+      node = tmp_list;
+      tmp_list = tmp_list->next;
+
+      filter->ref_count--;
+      if (filter->ref_count == 0)
+        {
+          *filters = g_list_remove_link (*filters, node);
+          g_list_free_1 (node);
+          g_free (filter);
+        }
+
       if (result !=  GDK_FILTER_CONTINUE)
 	return result;
     }
@@ -550,7 +571,7 @@ find_toplevel_for_keyboard_event (NSEvent *nsevent)
       GdkDeviceGrabInfo *grab;
       GdkDevice *device = l->data;
 
-      if (device->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source(device) != GDK_SOURCE_KEYBOARD)
         continue;
 
       grab = _gdk_display_get_last_device_grab (display, device);
@@ -1165,7 +1186,7 @@ gdk_event_translate (GdkEvent *event,
       /* Apply global filters */
       GdkFilterReturn result;
 
-      result = gdk_event_apply_filters (nsevent, event, _gdk_default_filters);
+      result = gdk_event_apply_filters (nsevent, event, &_gdk_default_filters);
       if (result != GDK_FILTER_CONTINUE)
         {
           return_val = (result == GDK_FILTER_TRANSLATE) ? TRUE : FALSE;
@@ -1206,7 +1227,7 @@ gdk_event_translate (GdkEvent *event,
 	{
 	  g_object_ref (window);
 
-	  result = gdk_event_apply_filters (nsevent, event, filter_private->filters);
+	  result = gdk_event_apply_filters (nsevent, event, &filter_private->filters);
 
 	  g_object_unref (window);
 

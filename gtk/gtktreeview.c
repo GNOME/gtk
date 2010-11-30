@@ -10407,7 +10407,7 @@ send_focus_change (GtkWidget *widget,
       GdkEvent *fevent;
       GdkWindow *window;
 
-      if (dev->source != GDK_SOURCE_KEYBOARD)
+      if (gdk_device_get_source (dev) != GDK_SOURCE_KEYBOARD)
         continue;
 
       window = gtk_widget_get_window (widget);

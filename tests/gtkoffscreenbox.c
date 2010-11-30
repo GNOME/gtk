@@ -13,10 +13,10 @@ static void        gtk_offscreen_box_realize       (GtkWidget       *widget);
 static void        gtk_offscreen_box_unrealize     (GtkWidget       *widget);
 static void        gtk_offscreen_box_get_preferred_width  (GtkWidget *widget,
                                                            gint      *minimum,
-                                                           gint      *maximum);
+                                                           gint      *natural);
 static void        gtk_offscreen_box_get_preferred_height (GtkWidget *widget,
                                                            gint      *minimum,
-                                                           gint      *maximum);
+                                                           gint      *natural);
 static void        gtk_offscreen_box_size_allocate (GtkWidget       *widget,
                                                     GtkAllocation   *allocation);
 static gboolean    gtk_offscreen_box_damage        (GtkWidget       *widget,

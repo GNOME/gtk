@@ -132,7 +132,7 @@ gdkconfig.h : gdkconfig.h.win32
 
 gdk.def: gdk.symbols
 	echo EXPORTS > gdk.def
-	cl /EP -DINCLUDE_VARIABLES -DG_OS_WIN32 -DGDK_WINDOWING_WIN32 -DALL_FILES \
+	cl /EP -DG_OS_WIN32 -DGDK_WINDOWING_WIN32 \
 		-DG_GNUC_CONST= \
 		gdk.symbols >> gdk.def
 

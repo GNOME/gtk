@@ -317,7 +317,7 @@ gdk_pango_layout_get_clip_region (PangoLayout *layout,
  * is more convenient if you want to keep a context around and track
  * changes to the screen's font rendering settings.
  *
- * Return value: a new #PangoContext for the default display
+ * Return value: (transfer full): a new #PangoContext for the default display
  **/
 PangoContext *
 gdk_pango_context_get (void)
@@ -343,7 +343,7 @@ gdk_pango_context_get (void)
  * is more convenient if you want to keep a context around and track
  * changes to the screen's font rendering settings.
  * 
- * Return value: a new #PangoContext for @screen
+ * Return value: (transfer full): a new #PangoContext for @screen
  *
  * Since: 2.2
  **/

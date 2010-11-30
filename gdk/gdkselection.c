@@ -97,9 +97,9 @@ gdk_selection_owner_set (GdkWindow *owner,
  *
  * Determines the owner of the given selection.
  *
- * Returns: if there is a selection owner for this window,
- *   and it is a window known to the current process,
- *   the #GdkWindow that owns the selection, otherwise
+ * Returns: (transfer none): if there is a selection owner for
+ *   this window, and it is a window known to the current
+ *   process, the #GdkWindow that owns the selection, otherwise
  *   %NULL. Note that the return value may be owned
  *   by a different process if a foreign window
  *   was previously created for that window, but
