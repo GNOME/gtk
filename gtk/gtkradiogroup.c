@@ -26,6 +26,7 @@
 
 #include "config.h"
 #include "gtkradiogroupprivate.h"
+#include "gtkradioaction.h"
 #include "gtkprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
@@ -56,7 +57,8 @@ struct _GtkRadioGroupPrivate
 
 enum {
   PROP_0,
-  PROP_ACTIVE_ITEM
+  PROP_ACTIVE_ITEM,
+  PROP_ACTIVE_VALUE
 };
 
 
@@ -101,6 +103,14 @@ gtk_radio_group_class_init (GtkRadioGroupClass *class)
 							G_TYPE_OBJECT,
 							GTK_PARAM_READABLE));
   class->active_changed = NULL;
+
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTIVE_VALUE,
+                                   g_param_spec_string ("active-value",
+                                                        P_("Active value"),
+                                                        P_("The value of the active item in the radio group"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
 
   /**
    * GtkRadioGroup::active-changed:
@@ -147,6 +157,9 @@ gtk_radio_group_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVE_VALUE:
+      gtk_radio_group_set_active_value (radio_group, g_value_get_string (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -167,6 +180,9 @@ gtk_radio_group_get_property (GObject    *object,
     {
     case PROP_ACTIVE_ITEM:
       g_value_set_object (value, radio_group->priv->active);
+      break;
+    case PROP_ACTIVE_VALUE:
+      g_value_set_string (value, gtk_radio_group_get_active_value (radio_group));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -302,5 +318,42 @@ void
 _gtk_radio_group_emit_active_changed (GtkRadioGroup *radio_group)
 {
   g_object_notify (G_OBJECT (radio_group), "active-item");
+  g_object_notify (G_OBJECT (radio_group), "active-value");
   g_signal_emit (radio_group, signals[ACTIVE_CHANGED], 0, radio_group->priv->active);
+}
+
+void
+gtk_radio_group_set_active_value (GtkRadioGroup *radio_group,
+                                  const gchar   *value)
+{
+  GSList *l;
+
+  for (l = radio_group->priv->items; l; l = l->next)
+    {
+      GObject *item = l->data;
+
+      if (GTK_IS_RADIO_ACTION (item))
+        {
+          const gchar *s;
+
+          s = gtk_radio_action_get_string_value (GTK_RADIO_ACTION (item));
+
+          if (strcmp (value, s) == 0)
+            {
+              _gtk_radio_group_set_active_item (radio_group, item);
+              _gtk_radio_group_emit_active_changed (radio_group);
+
+              break;
+            }
+        }
+    }
+}
+
+const gchar *
+gtk_radio_group_get_active_value (GtkRadioGroup *radio_group)
+{
+  if (GTK_IS_RADIO_ACTION (radio_group->priv->active))
+    return gtk_radio_action_get_string_value (GTK_RADIO_ACTION (radio_group->priv->active));
+  else
+    return NULL;
 }

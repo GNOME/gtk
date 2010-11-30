@@ -70,11 +70,14 @@ struct _GtkRadioGroupClass
 };
 
 
-GType	   gtk_radio_group_get_type	     (void) G_GNUC_CONST;
+GType	   gtk_radio_group_get_type	        (void) G_GNUC_CONST;
 
-GtkRadioGroup* gtk_radio_group_new             (void);
-GSList *       gtk_radio_group_get_items       (GtkRadioGroup *radio_group);
-GObject *      gtk_radio_group_get_active_item (GtkRadioGroup *radio_group);
+GtkRadioGroup* gtk_radio_group_new              (void);
+GSList *       gtk_radio_group_get_items        (GtkRadioGroup *radio_group);
+GObject *      gtk_radio_group_get_active_item  (GtkRadioGroup *radio_group);
+void           gtk_radio_group_set_active_value (GtkRadioGroup *radio_group,
+                                                 const gchar   *value);
+const gchar *  gtk_radio_group_get_active_value (GtkRadioGroup *radio_group);
 
 G_END_DECLS
 
