@@ -6412,6 +6412,23 @@ gtk_switch_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkappchooser</FILE>
+<TITLE>GtkAppChooser</TITLE>
+GtkAppChooser
+gtk_app_chooser_get_app_info
+gtk_app_chooser_get_content_type
+gtk_app_chooser_refresh
+
+<SUBSECTION Standard>
+GTK_TYPE_APP_CHOOSER
+GTK_APP_CHOOSER
+GTK_IS_APP_CHOOSER
+
+<SUBSECTION Private>
+gtk_app_chooser_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkappchooserbutton</FILE>
 <TITLE>GtkAppChooserButton</TITLE>
 GtkAppChooserButton

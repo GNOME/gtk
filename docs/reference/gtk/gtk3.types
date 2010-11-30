@@ -11,6 +11,10 @@ gtk_action_group_get_type
 gtk_activatable_get_type
 gtk_adjustment_get_type
 gtk_alignment_get_type
+gtk_app_chooser_get_type
+gtk_app_chooser_button_get_type
+gtk_app_chooser_dialog_get_type
+gtk_app_chooser_widget_get_type
 gtk_application_get_type
 gtk_arrow_get_type
 gtk_aspect_frame_get_type
@@ -94,7 +98,6 @@ gtk_misc_get_type
 gtk_mount_operation_get_type
 gtk_notebook_get_type
 gtk_offscreen_window_get_type
-gtk_open_with_dialog_get_type
 gtk_orientable_get_type
 gtk_page_setup_get_type
 gtk_page_setup_unix_dialog_get_type

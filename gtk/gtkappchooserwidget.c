@@ -1010,7 +1010,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-recommended:
    *
-   * The ::show-recommended property determines whether the app chooser
+   * The #GtkAppChooserWidget:show-recommended property determines whether the app chooser
    * should show a section for recommended applications. If %FALSE, the
    * recommended applications are listed among the other applications.
    */
@@ -1024,7 +1024,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-fallback:
    *
-   * The ::show-fallback property determines whether the app chooser
+   * The #GtkAppChooserWidget:show-fallback property determines whether the app chooser
    * should show a section for related applications. If %FALSE, the
    * related applications are listed among the other applications.
    */
@@ -1038,7 +1038,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-other:
    *
-   * The ::show-other property determines whether the app chooser
+   * The #GtkAppChooserWidget:show-other property determines whether the app chooser
    * should show a section for other applications.
    */
   pspec = g_param_spec_boolean ("show-other",
@@ -1051,7 +1051,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   /**
    * GtkAppChooserWidget:show-all:
    *
-   * If the ::show-all property is %TRUE, the app chooser presents
+   * If the #GtkAppChooserWidget:show-all property is %TRUE, the app chooser presents
    * all applications in a single list, without subsections for
    * default, recommended or related applications.
    */
@@ -1062,6 +1062,13 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
                                 G_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
 
+  /**
+   * GtkAppChooserWidget:default-text:
+   *
+   * The #GtkAppChooserWidget:default-text property determines the text that appears
+   * in the widget when there are no applications for the given content type.
+   * See also gtk_app_chooser_widget_set_default_text().
+   */
   pspec = g_param_spec_string ("default-text",
                                P_("Widget's default text"),
                                P_("The default text appearing when there are no applications"),

@@ -512,7 +512,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
   /**
    * GtkAppChooserButton:show-dialog-item:
    *
-   * The ::show-dialog-item property determines whether the dropdown menu
+   * The #GtkAppChooserButton:show-dialog-item property determines whether the dropdown menu
    * should show an item that triggers a #GtkAppChooserDialog when clicked.
    */
   pspec =
@@ -689,7 +689,7 @@ gtk_app_chooser_button_get_show_dialog_item (GtkAppChooserButton *self)
 }
 
 /**
- * gtk_app_chooser_button_get_show_dialog_item:
+ * gtk_app_chooser_button_set_show_dialog_item:
  * @self: a #GtkAppChooserButton
  * @setting: the new value for #GtkAppChooserButton:show-dialog-item
  *

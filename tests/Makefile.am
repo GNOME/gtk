@@ -31,6 +31,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	print-editor			\
 	testaccel			\
 	testadjustsize			\
+	testappchooser			\
+	testappchooserbutton		\
 	testassistant			\
 	testbbox			\
 	testbuttons			\
@@ -66,8 +68,6 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testoffscreen			\
 	testoffscreenwindow		\
 	testorientable			\
-	testappchooser			\
-	testappchooserbutton		\
 	testprint			\
 	testrecentchooser 		\
 	testrecentchoosermenu		\

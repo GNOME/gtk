@@ -91,7 +91,7 @@ void          gtk_app_chooser_widget_set_show_other       (GtkAppChooserWidget *
 gboolean      gtk_app_chooser_widget_get_show_other       (GtkAppChooserWidget *self);
 
 void          gtk_app_chooser_widget_set_show_all         (GtkAppChooserWidget *self,
-                                                           gboolean             show_all);
+                                                           gboolean             setting);
 gboolean      gtk_app_chooser_widget_get_show_all         (GtkAppChooserWidget *self);
 
 void          gtk_app_chooser_widget_set_default_text     (GtkAppChooserWidget *self,

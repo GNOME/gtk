@@ -774,7 +774,7 @@ gtk_app_chooser_dialog_new_for_content_type (GtkWindow      *parent,
  *
  * Returns the #GtkAppChooserWidget of this dialog.
  *
- * Returns: the #GtkAppChooserWidget of @self
+ * Returns: (transfer none): the #GtkAppChooserWidget of @self
  *
  * Since: 3.0
  */
