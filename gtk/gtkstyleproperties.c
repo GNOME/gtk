@@ -130,10 +130,10 @@ gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
                                                               "Padding",
                                                               GTK_TYPE_BORDER, 0));
   gtk_style_properties_register_property (NULL,
-                                          g_param_spec_int ("border-width",
-                                                            "Border width",
-                                                            "Border width, in pixels",
-                                                            0, G_MAXINT, 0, 0));
+                                          g_param_spec_boxed ("border-width",
+                                                              "Border width",
+                                                              "Border width, in pixels",
+                                                              GTK_TYPE_BORDER, 0));
   gtk_style_properties_register_property (NULL,
                                           g_param_spec_int ("border-radius",
                                                             "Border radius",

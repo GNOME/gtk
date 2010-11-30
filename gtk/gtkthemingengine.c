@@ -876,6 +876,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gint exterior_size, interior_size, thickness, pad;
   GtkBorderStyle border_style;
+  GtkBorder *border;
   gint border_width;
 
   flags = gtk_theming_engine_get_state (engine);
@@ -886,9 +887,11 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
                           "background-color", &bg_color,
                           "border-color", &border_color,
                           "border-style", &border_style,
-                          "border-width", &border_width,
+                          "border-width", &border,
                           NULL);
 
+  border_width = MIN (MIN (border->top, border->bottom),
+                      MIN (border->left, border->right));
   exterior_size = MIN (width, height);
 
   if (exterior_size % 2 == 0) /* Ensure odd */
@@ -985,6 +988,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
   gdk_rgba_free (fg_color);
   gdk_rgba_free (bg_color);
   gdk_rgba_free (border_color);
+  gtk_border_free (border);
 }
 
 static void
@@ -999,6 +1003,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   GdkRGBA *fg_color, *bg_color, *border_color;
   gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
+  GtkBorder *border;
   gdouble radius;
 
   flags = gtk_theming_engine_get_state (engine);
@@ -1011,10 +1016,12 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
                           "background-color", &bg_color,
                           "border-color", &border_color,
                           "border-style", &border_style,
-                          "border-width", &border_width,
+                          "border-width", &border,
                           NULL);
 
   exterior_size = MIN (width, height);
+  border_width = MIN (MIN (border->top, border->bottom),
+                      MIN (border->left, border->right));
 
   if (exterior_size % 2 == 0) /* Ensure odd */
     exterior_size -= 1;
@@ -1093,6 +1100,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gdk_rgba_free (fg_color);
   gdk_rgba_free (bg_color);
   gdk_rgba_free (border_color);
+  gtk_border_free (border);
 }
 
 static void
@@ -1298,6 +1306,7 @@ render_background_internal (GtkThemingEngine *engine,
   gboolean running;
   gdouble progress, alpha = 1;
   gint radius, border_width;
+  GtkBorder *border;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1305,11 +1314,13 @@ render_background_internal (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
                           "background-color", &bg_color,
-                          "border-width", &border_width,
+                          "border-width", &border,
                           "border-radius", &radius,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+  border_width = MIN (MIN (border->top, border->bottom),
+                      MIN (border->left, border->right));
 
   _cairo_round_rectangle_sides (cr, (gdouble) radius,
                                 x, y, width, height,
@@ -1527,6 +1538,7 @@ render_background_internal (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
+  gtk_border_free (border);
 }
 
 static void
@@ -1543,7 +1555,8 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   gboolean running;
   gdouble progress, alpha = 1;
   GtkJunctionSides junction;
-  gint radius, border_width;
+  GtkBorder *border;
+  gint radius;
 
   junction = gtk_theming_engine_get_junction_sides (engine);
 
@@ -1557,20 +1570,19 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
     }
 
   gtk_theming_engine_get (engine, flags,
-                          "border-width", &border_width,
+                          "border-width", &border,
                           NULL);
 
-  if (border_width > 0)
-    {
-      x += border_width;
-      y += border_width;
-      width -= 2 * border_width;
-      height -= 2 * border_width;
-    }
+  x += border->left;
+  y += border->top;
+  width -= border->left + border->right;
+  height -= border->top + border->bottom;
 
   render_background_internal (engine, cr,
                               x, y, width, height,
                               junction);
+
+  gtk_border_free (border);
 }
 
 /* Renders the small triangle on corners so
@@ -1612,16 +1624,19 @@ render_frame_internal (GtkThemingEngine *engine,
   gint border_width, radius;
   gdouble progress, d1, d2, m;
   gboolean running;
+  GtkBorder *border;
 
   state = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get (engine, state,
                           "border-color", &border_color,
                           "border-style", &border_style,
-                          "border-width", &border_width,
+                          "border-width", &border,
                           "border-radius", &radius,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
+  border_width = MIN (MIN (border->top, border->bottom),
+                      MIN (border->left, border->right));
 
   if (running)
     {
@@ -1770,6 +1785,8 @@ render_frame_internal (GtkThemingEngine *engine,
 
   if (border_color)
     gdk_rgba_free (border_color);
+
+  gtk_border_free (border);
 }
 
 static void
@@ -2202,13 +2219,17 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   GtkStateFlags state;
   gint border_width, radius;
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
+  GtkBorder *border;
 
   state = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get (engine, state,
-                          "border-width", &border_width,
+                          "border-width", &border,
                           "border-radius", &radius,
                           NULL);
+
+  border_width = MIN (MIN (border->top, border->bottom),
+                      MIN (border->left, border->right));
 
   cairo_save (cr);
 
@@ -2279,6 +2300,8 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
                          0, junction);
 
   cairo_restore (cr);
+
+  gtk_border_free (border);
 }
 
 static void

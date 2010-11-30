@@ -351,16 +351,17 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
           GtkStyleContext *context;
-          gint border_width;
+          GtkBorder *border;
 
           context = gtk_widget_get_style_context (widget);
 
           gtk_style_context_get (context, 0,
-                                 "border-width", &border_width,
+                                 "border-width", &border,
                                  NULL);
 
-	  requisition->width += border_width * 2;
-	  requisition->height += border_width * 2;
+	  requisition->width += border->left + border->right;
+	  requisition->height += border->top + border->bottom;
+          gtk_border_free (border);
 	}
     }
 }
@@ -436,15 +437,17 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
           GtkStyleContext *context;
-          gint border_width;
+          GtkBorder *border;
 
           context = gtk_widget_get_style_context (widget);
           gtk_style_context_get (context, 0,
-                                 "border-width", &border_width,
+                                 "border-width", &border,
                                  NULL);
 
-          child_allocation.x += border_width;
-          child_allocation.y += border_width;
+          child_allocation.x += border->left;
+          child_allocation.y += border->top;
+
+          gtk_border_free (border);
 	}
       
       if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||

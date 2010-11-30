@@ -1448,21 +1448,17 @@ gtk_button_size_allocate (GtkWidget     *widget,
   GtkStateFlags state;
   GtkWidget *child;
 
-  gint xthickness, ythickness;
   GtkBorder default_border;
-  GtkBorder inner_border;
-  gint focus_width, border_width;
+  GtkBorder inner_border, *border;
+  gint focus_width;
   gint focus_pad;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_get (context, state,
-                         "border-width", &border_width,
+                         "border-width", &border,
                          NULL);
-
-  xthickness = border_width;
-  ythickness = border_width;
 
   gtk_button_get_props (button, &default_border, NULL, &inner_border, NULL);
   gtk_widget_style_get (GTK_WIDGET (widget),
@@ -1482,18 +1478,18 @@ gtk_button_size_allocate (GtkWidget     *widget,
   child = gtk_bin_get_child (GTK_BIN (button));
   if (child && gtk_widget_get_visible (child))
     {
-      child_allocation.x = allocation->x + inner_border.left + xthickness;
-      child_allocation.y = allocation->y + inner_border.top + ythickness;
+      child_allocation.x = allocation->x + inner_border.left + border->left;
+      child_allocation.y = allocation->y + inner_border.top + border->top;
 
       child_allocation.width =
 	allocation->width -
-	xthickness * 2 -
+	(border->left + border->right) -
 	inner_border.left -
 	inner_border.right;
 
       child_allocation.height = 
 	allocation->height -
-	ythickness * 2 -
+	(border->top + border->bottom) -
 	inner_border.top -
 	inner_border.bottom;
 
@@ -1531,6 +1527,8 @@ gtk_button_size_allocate (GtkWidget     *widget,
 
       gtk_widget_size_allocate (child, &child_allocation);
     }
+
+  gtk_border_free (border);
 }
 
 void
@@ -1614,7 +1612,7 @@ _gtk_button_paint (GtkButton          *button,
       gint child_displacement_x;
       gint child_displacement_y;
       gboolean displace_focus;
-      gint border_width;
+      GtkBorder *border;
 
       gtk_widget_style_get (widget,
                             "child-displacement-y", &child_displacement_y,
@@ -1623,15 +1621,15 @@ _gtk_button_paint (GtkButton          *button,
                             NULL);
 
       gtk_style_context_get (context, state,
-			     "border-width", &border_width,
+			     "border-width", &border,
 			     NULL);
 
       if (interior_focus)
         {
-          x += border_width + focus_pad;
-          y += border_width + focus_pad;
-          width -= 2 * (border_width + focus_pad);
-          height -=  2 * (border_width + focus_pad);
+          x += border->left + focus_pad;
+          y += border->top + focus_pad;
+          width -= (2 * focus_pad) + border->left + border->right;
+          height -=  (2 * focus_pad) + border->top + border->bottom;
         }
       else
         {
@@ -1649,6 +1647,8 @@ _gtk_button_paint (GtkButton          *button,
 
       gtk_render_focus (context, cr,
 			x, y, width, height);
+
+      gtk_border_free (border);
     }
 }
 
@@ -1910,7 +1910,8 @@ gtk_button_get_size (GtkWidget      *widget,
   GtkBorder default_border;
   GtkBorder inner_border;
   GtkStateFlags state;
-  gint focus_width, border_width;
+  GtkBorder *border;
+  gint focus_width;
   gint focus_pad;
   gint minimum, natural;
 
@@ -1924,12 +1925,12 @@ gtk_button_get_size (GtkWidget      *widget,
   state = gtk_widget_get_state_flags (GTK_WIDGET (widget));
 
   gtk_style_context_get (context, state,
-                         "border-width", &border_width,
+                         "border-width", &border,
                          NULL);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      minimum = (border_width * 2 +
+      minimum = (border->left + border->right +
 		 inner_border.left + inner_border.right);
 
       if (gtk_widget_get_can_default (GTK_WIDGET (widget)))
@@ -1937,7 +1938,7 @@ gtk_button_get_size (GtkWidget      *widget,
     }
   else
     {
-      minimum = (border_width * 2 +
+      minimum = (border->top + border->bottom +
 		 inner_border.top + inner_border.bottom);
 
       if (gtk_widget_get_can_default (GTK_WIDGET (widget)))
@@ -1966,6 +1967,8 @@ gtk_button_get_size (GtkWidget      *widget,
 
   if (natural_size)
     *natural_size = natural;
+
+  gtk_border_free (border);
 }
 
 static void 
