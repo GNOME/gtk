@@ -39,7 +39,8 @@
 #include "gtkdnd.h"
 #include "gtkdebug.h"
 
-#include "x11/gdkx.h"
+#include "gdk/x11/gdkx.h"
+#include "gdk/gdkprivate.h"
 
 #ifdef HAVE_XFIXES
 #include <X11/extensions/Xfixes.h>
