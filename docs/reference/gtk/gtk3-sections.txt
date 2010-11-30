@@ -6412,6 +6412,30 @@ gtk_switch_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkappchooserbutton</FILE>
+<TITLE>GtkAppChooserButton</TITLE>
+GtkAppChooserButton
+gtk_app_chooser_button_new
+gtk_app_chooser_button_append_custom_item
+gtk_app_chooser_button_append_separator
+gtk_app_chooser_button_get_show_dialog_item
+gtk_app_chooser_button_set_show_dialog_item
+
+<SUBSECTION Standard>
+GtkAppChooserButtonClass
+GTK_TYPE_APP_CHOOSER_BUTTON
+GTK_APP_CHOOSER_BUTTON
+GTK_APP_CHOOSER_BUTTON_CLASS
+GTK_IS_APP_CHOOSER_BUTTON
+GTK_IS_APP_CHOOSER_BUTTON_CLASS
+GTK_APP_CHOOSER_BUTTON_GET_CLASS
+
+<SUBSECTION Private>
+GtkAppChooserButtonPrivate
+gtk_app_chooser_button_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkappchooserdialog</FILE>
 <TITLE>GtkAppChooserDialog</TITLE>
 GtkAppChooserDialog
