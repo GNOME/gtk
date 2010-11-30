@@ -40,6 +40,10 @@
 #include <gtk/gtkactivatable.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
+#include <gtk/gtkappchooser.h>
+#include <gtk/gtkappchooserdialog.h>
+#include <gtk/gtkappchooserwidget.h>
+#include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>
@@ -129,10 +133,6 @@
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkoffscreenwindow.h>
-#include <gtk/gtkappchooser.h>
-#include <gtk/gtkappchooserdialog.h>
-#include <gtk/gtkappchooserwidget.h>
-#include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>

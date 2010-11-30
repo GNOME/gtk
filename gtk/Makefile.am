@@ -156,7 +156,11 @@ gtk_public_h_sources =          \
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
-	gtkapplication.h    \
+	gtkappchooser.h		\
+	gtkappchooserdialog.h	\
+	gtkappchooserbutton.h   \
+	gtkappchooserwidget.h	\
+	gtkapplication.h    	\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkassistant.h		\
@@ -246,11 +250,6 @@ gtk_public_h_sources =          \
 	gtkmountoperation.h     \
 	gtknotebook.h		\
 	gtkoffscreenwindow.h	\
-	gtkappchooser.h		\
-	gtkappchooserdialog.h	\
-	gtkappchooserbutton.h   \
-	gtkappchooserwidget.h	\
-	gtkappchooseronline.h	\
 	gtkorientable.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
@@ -392,6 +391,7 @@ gtk_private_h_sources =		\
 	gtkmountoperationprivate.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h 	\
+	gtkappchooseronline.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
@@ -438,7 +438,13 @@ gtk_base_c_sources =            \
 	gtkactivatable.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\
-	gtkapplication.c \
+	gtkappchooser.c		\
+	gtkappchooserwidget.c	\
+	gtkappchooserbutton.c   \
+	gtkappchooserdialog.c	\
+	gtkappchoosermodule.c	\
+	gtkappchooseronline.c	\
+	gtkapplication.c 	\
 	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkassistant.c		\
@@ -536,12 +542,6 @@ gtk_base_c_sources =            \
 	gtkmountoperation.c     \
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
-	gtkappchooser.c		\
-	gtkappchooserwidget.c	\
-	gtkappchooserbutton.c   \
-	gtkappchooserdialog.c	\
-	gtkappchoosermodule.c	\
-	gtkappchooseronline.c	\
 	gtkorientable.c		\
 	gtkpagesetup.c		\
 	gtkpaned.c		\
