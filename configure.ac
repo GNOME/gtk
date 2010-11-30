@@ -1489,6 +1489,25 @@ GLIB_GSETTINGS
 GOBJECT_INTROSPECTION_CHECK([0.9.3])
 
 ##################################################
+# Packagekit module
+#################################################
+
+AC_ARG_ENABLE(packagekit,
+	      AC_HELP_STRING([--disable-packagekit],
+			     [build packagekit open with module]))
+
+ENABLE_PACKAGEKIT=
+if test "os_win32" != "yes"; then
+   	if test "x$enable_packagekit" != "xno"; then
+	   	ENABLE_PACKAGEKIT=1
+      	   	AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
+	fi
+fi
+
+AC_SUBST(ENABLE_PACKAGEKIT)
+AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$ENABLE_PACKAGEKIT" = "x1")
+
+##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
 

@@ -40,6 +40,10 @@
 #include <gtk/gtkactivatable.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
+#include <gtk/gtkappchooser.h>
+#include <gtk/gtkappchooserdialog.h>
+#include <gtk/gtkappchooserwidget.h>
+#include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>

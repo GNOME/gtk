@@ -297,6 +297,14 @@
       <xi:include href="xml/gtkrecentfilter.xml" />
     </chapter>
 
+    <chapter id="ApplicationChoosing">
+      <title>Choosing from installed applications</title>
+      <xi:include href="xml/gtkappchooser.xml" />
+      <xi:include href="xml/gtkappchooserbutton.xml" />
+      <xi:include href="xml/gtkappchooserdialog.xml" />
+      <xi:include href="xml/gtkappchooserwidget.xml" />
+    </chapter>
+
     <chapter id="Builder">
       <title>Interface builder</title>
       <xi:include href="xml/gtkbuildable.xml" />

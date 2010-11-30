@@ -557,7 +557,6 @@ typedef enum
   GTK_SCROLL_NATURAL
 } GtkScrollablePolicy;
 
-
 G_END_DECLS
 
 
