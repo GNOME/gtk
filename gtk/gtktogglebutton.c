@@ -474,9 +474,6 @@ gtk_toggle_button_get_preferred_width (GtkWidget *widget,
                                        gint      *minimum,
                                        gint      *natural)
 {
-  GtkToggleButton *button = GTK_TOGGLE_BUTTON (widget);
-  GtkToggleButtonPrivate *priv = button->priv;
-
   if (gtk_button_get_indicator_style (GTK_BUTTON (widget)) != GTK_INDICATOR_STYLE_PLAIN)
     {
       GtkWidget *child;
@@ -520,9 +517,6 @@ gtk_toggle_button_get_preferred_height (GtkWidget *widget,
                                         gint      *minimum,
                                         gint      *natural)
 {
-  GtkToggleButton *button = GTK_TOGGLE_BUTTON (widget);
-  GtkToggleButtonPrivate *priv = button->priv;
-
   if (gtk_button_get_indicator_style (GTK_BUTTON (widget)) != GTK_INDICATOR_STYLE_PLAIN)
     {
       GtkWidget *child;
@@ -568,8 +562,6 @@ static void
 gtk_toggle_button_size_allocate (GtkWidget     *widget,
                                  GtkAllocation *allocation)
 {
-  GtkToggleButton *button = GTK_TOGGLE_BUTTON (widget);
-  GtkToggleButtonPrivate *priv = button->priv;
   GtkAllocation child_allocation;
 
   if (gtk_button_get_indicator_style (GTK_BUTTON (widget)) != GTK_INDICATOR_STYLE_PLAIN)
