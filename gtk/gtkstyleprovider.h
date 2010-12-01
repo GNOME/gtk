@@ -72,7 +72,7 @@ G_BEGIN_DECLS
  * GTK_STYLE_PROVIDER_PRIORITY_USER:
  *
  * The priority used for the style information from
- * <filename>~/.gtk-3.0.css</filename>.
+ * <filename><replaceable>XDG_CONFIG_HOME</replaceable>/gtk-3.0/gtk.css</filename>
  *
  * You should not use priorities higher than this, to
  * give the user the last word.

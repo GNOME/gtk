@@ -1354,18 +1354,19 @@ settings_init_style (GtkSettings *settings)
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
     {
-      GFile *home_dir, *css_file;
+      gchar *css_path;
 
       css_provider = gtk_css_provider_new ();
+      css_path = g_build_filename (g_get_user_config_dir (),
+                                   "gtk-3.0",
+                                   "gtk.css",
+                                   NULL);
 
-      home_dir = g_file_new_for_path (g_get_home_dir ());
-      css_file = g_file_get_child (home_dir, ".gtk-3.0.css");
+      if (g_file_test (css_path,
+                       G_FILE_TEST_IS_REGULAR))
+        gtk_css_provider_load_from_path (css_provider, css_path, NULL);
 
-      if (g_file_query_exists (css_file, NULL))
-        gtk_css_provider_load_from_file (css_provider, css_file, NULL);
-
-      g_object_unref (home_dir);
-      g_object_unref (css_file);
+      g_free (css_path);
     }
 
   gtk_style_context_add_provider_for_screen (settings->screen,

@@ -47,7 +47,7 @@
  * calling gtk_css_provider_load_from_file() and adding the provider with
  * gtk_style_context_add_provider() or gtk_style_context_add_provider_for_screen().
  * In addition, certain files will be read when GTK+ is initialized. First,
- * the file <filename><replaceable>HOME</replaceable>/.gtk-3.0.css</filename>
+ * the file <filename><replaceable>XDG_CONFIG_HOME</replaceable>/gtk-3.0/gtk.css</filename>
  * is loaded if it exists. Then, GTK+ tries to load
  * <filename><replaceable>HOME</replaceable>/.themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css</filename>,
  * falling back to

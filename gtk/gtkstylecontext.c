@@ -390,7 +390,8 @@
  * If you are using custom styling on an applications, you probably want then
  * to make your style information prevail to the theme's, so you must use
  * a #GtkStyleProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
- * priority, keep in mind that the user settings in $HOME/.gtk-3.0.css will
+ * priority, keep in mind that the user settings in
+ * <filename><replaceable>XDG_CONFIG_HOME</replaceable>/gtk-3.0/gtk.css</filename> will
  * still take precedence over your changes, as it uses the
  * %GTK_STYLE_PROVIDER_PRIORITY_USER priority.
  * </para>
