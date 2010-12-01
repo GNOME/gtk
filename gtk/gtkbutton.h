@@ -68,13 +68,13 @@ struct _GtkButtonClass
   void (* enter)    (GtkButton *button);
   void (* leave)    (GtkButton *button);
   void (* activate) (GtkButton *button);
+  void (* toggled)  (GtkButton *button);
   
   /* Padding for future expansion */
-  void (* action_state_changed) (GtkButton *button,
-                                 GVariant  *state);
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 
@@ -125,6 +125,13 @@ GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
 void                  gtk_button_set_action         (GtkButton      *button,
                                                      GAction        *action);
 GAction *             gtk_button_get_action         (GtkButton      *button);
+gboolean              gtk_button_get_active         (GtkButton      *button);
+void                  gtk_button_set_active         (GtkButton      *button,
+                                                     gboolean        active);
+gboolean              gtk_button_get_inconsistent         (GtkButton      *button);
+void                  gtk_button_set_inconsistent         (GtkButton      *button,
+                                                     gboolean        active);
+
 
 void                  gtk_button_set_indicator_style (GtkButton         *button,
                                                       GtkIndicatorStyle  style);
@@ -139,7 +146,8 @@ void _gtk_button_paint                     (GtkButton          *button,
 					    GtkShadowType       shadow_type,
 					    const gchar        *main_detail,
 					    const gchar        *default_detail);
-
+void _gtk_button_set_active (GtkButton *, gboolean);
+void gtk_button_toggled (GtkButton *);
 
 G_END_DECLS
 
