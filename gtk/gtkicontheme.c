@@ -3275,7 +3275,7 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
   GdkPixbuf *pixbuf;
   GdkRGBA *color = NULL;
   GdkRGBA rgba;
-  gchar *css_fg, *css_success;
+  gchar *css_fg = NULL, *css_success;
   gchar *css_warning, *css_error;
   GtkStateFlags state;
 

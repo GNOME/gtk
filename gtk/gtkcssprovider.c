@@ -1366,8 +1366,8 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
       if (val &&
           (info->state == 0 ||
            info->state == state ||
-           (info->state & state) != 0 &&
-           (info->state & ~(state)) == 0))
+           ((info->state & state) != 0 &&
+	    (info->state & ~(state)) == 0)))
         {
           const gchar *val_str;
 
