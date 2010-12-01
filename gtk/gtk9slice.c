@@ -192,6 +192,7 @@ render_border (cairo_t              *cr,
                gdouble               height,
                GtkSliceSideModifier  modifier)
 {
+  cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
 
   cairo_save (cr);
@@ -199,47 +200,47 @@ render_border (cairo_t              *cr,
   cairo_rectangle (cr, x, y, width, height);
   cairo_clip (cr);
 
+  pattern = cairo_pattern_create_for_surface (surface);
+
   if (modifier == GTK_SLICE_REPEAT)
     {
-      cairo_pattern_t *pattern;
-
-      pattern = cairo_pattern_create_for_surface (surface);
-
       cairo_matrix_init_translate (&matrix, - x, - y);
       cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
       cairo_pattern_set_matrix (pattern, &matrix);
       cairo_set_source (cr, pattern);
-      cairo_pattern_destroy (pattern);
 
       cairo_rectangle (cr, x, y, width, height);
       cairo_fill (cr);
     }
   else
     {
-      gint d;
+      /* Use nearest filter so borders aren't blurred */
+      cairo_pattern_set_filter (pattern, CAIRO_FILTER_NEAREST);
 
       if (side == SIDE_TOP || side == SIDE_BOTTOM)
         {
-          d = cairo_image_surface_get_width (surface);
+          gint w = cairo_image_surface_get_width (surface);
 
           cairo_translate (cr, x, y);
-          cairo_scale (cr, width / d, 1.0);
-          cairo_set_source_surface (cr, surface, 0.0, 0.0);
-          cairo_paint (cr);
+          cairo_scale (cr, width / w, 1.0);
         }
       else
         {
-          d = cairo_image_surface_get_height (surface);
+          gint h = cairo_image_surface_get_height (surface);
 
           cairo_translate (cr, x, y);
-          cairo_scale (cr, 1.0, height / d);
-          cairo_set_source_surface (cr, surface, 0.0, 0.0);
-          cairo_paint (cr);
+          cairo_scale (cr, 1.0, height / h);
         }
+
+      cairo_set_source (cr, pattern);
+      cairo_rectangle (cr, x, y, width, height);
+      cairo_paint (cr);
     }
 
   cairo_restore (cr);
+
+  cairo_pattern_destroy (pattern);
 }
 
 static void
