@@ -556,6 +556,37 @@ gtk_app_chooser_button_init (GtkAppChooserButton *self)
                            g_free, NULL);
 }
 
+static gboolean
+app_chooser_button_iter_from_custom_name (GtkAppChooserButton *self,
+                                          const gchar *name,
+                                          GtkTreeIter *set_me)
+{
+  GtkTreeIter iter;
+  gchar *custom_name = NULL;
+
+  if (!gtk_tree_model_get_iter_first
+      (GTK_TREE_MODEL (self->priv->store), &iter))
+    return FALSE;
+
+  do {
+    gtk_tree_model_get (GTK_TREE_MODEL (self->priv->store), &iter,
+                        COLUMN_NAME, &custom_name,
+                        -1);
+
+    if (g_strcmp0 (custom_name, name) == 0)
+      {
+        g_free (custom_name);
+        *set_me = iter;
+
+        return TRUE;
+      }
+
+    g_free (custom_name);
+  } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (self->priv->store), &iter));
+
+  return FALSE;
+}
+
 static void
 real_insert_custom_item (GtkAppChooserButton *self,
                          const gchar *name,
@@ -668,6 +699,36 @@ gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self,
 
   gtk_list_store_append (self->priv->store, &iter);
   real_insert_custom_item (self, name, label, icon, TRUE, &iter);
+}
+
+/**
+ * gtk_app_chooser_button_select_custom_item:
+ * @self: a #GtkAppChooserButton
+ * @name: the name of the custom item
+ *
+ * Selects a custom item previously added with
+ * gtk_app_chooser_button_append_custom_item().
+ *
+ * Since: 3.0
+ */
+void
+gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
+                                               const gchar         *name)
+{
+  GtkTreeIter iter;
+
+  g_return_if_fail (GTK_IS_APP_CHOOSER_BUTTON (self));
+  g_return_if_fail (name != NULL);
+
+  if (g_hash_table_lookup (self->priv->custom_item_names, name) == NULL ||
+      !app_chooser_button_iter_from_custom_name (self, name, &iter))
+    {
+      g_warning ("Can't find the item named %s in the app chooser.",
+                 name);
+      return;
+    }
+
+  gtk_combo_box_set_active_iter (GTK_COMBO_BOX (self), &iter);
 }
 
 /**

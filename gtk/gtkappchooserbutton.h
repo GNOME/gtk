@@ -68,6 +68,8 @@ void        gtk_app_chooser_button_append_custom_item (GtkAppChooserButton *self
                                                        const gchar         *name,
                                                        const gchar         *label,
                                                        GIcon               *icon);
+void     gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
+                                                        const gchar         *name);
 
 void     gtk_app_chooser_button_set_show_dialog_item  (GtkAppChooserButton *self,
                                                        gboolean             setting);

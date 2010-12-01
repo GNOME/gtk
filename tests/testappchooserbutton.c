@@ -122,6 +122,9 @@ main (int argc,
   /* test refresh on a combo */
   gtk_app_chooser_refresh (GTK_APP_CHOOSER (combobox));
 
+  gtk_app_chooser_button_set_active_custom_item (GTK_APP_CHOOSER_BUTTON (combobox),
+                                                 CUSTOM_ITEM);
+
   gtk_widget_show_all (toplevel);
 
   g_signal_connect (toplevel, "delete-event",
