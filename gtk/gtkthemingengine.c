@@ -543,6 +543,31 @@ gtk_theming_engine_get_style (GtkThemingEngine *engine,
 }
 
 /**
+ * gtk_theming_engine_lookup_color:
+ * @engine: a #GtkThemingEngine
+ * @color_name: color name to lookup
+ * @color: (out) (transfer full): Return location for the looked up color
+ *
+ * Looks up and resolves a color name in the current style's color map.
+ * The returned color must be freed with gdk_rgba_free().
+ *
+ * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
+ **/
+gboolean
+gtk_theming_engine_lookup_color (GtkThemingEngine  *engine,
+                                 const gchar       *color_name,
+                                 GdkRGBA          **color)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
+  g_return_val_if_fail (color_name != NULL, FALSE);
+
+  priv = engine->priv;
+  return gtk_style_context_lookup_color (priv->context, color_name, color);
+}
+
+/**
  * gtk_theming_engine_get_state:
  * @engine: a #GtkThemingEngine
  *
