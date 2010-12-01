@@ -92,6 +92,7 @@ enum {
   PROP_IMAGE_POSITION,
   PROP_IS_TOGGLE,
   PROP_ACTION,
+  PROP_INDICATOR_STYLE,
 
   /* activatable properties */
   PROP_ACTIVATABLE_RELATED_ACTION,
@@ -364,6 +365,14 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                         G_TYPE_ACTION,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
+  g_object_class_install_property (gobject_class, PROP_INDICATOR_STYLE,
+    g_param_spec_enum ("indicator-style",
+                       P_("Indicator style"),
+                       P_("Whether the button looks like a plain button, check or radio button"),
+                       GTK_TYPE_INDICATOR_STYLE,
+                       GTK_INDICATOR_STYLE_PLAIN,
+                       GTK_PARAM_READWRITE));
+
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
 
@@ -560,6 +569,20 @@ gtk_button_class_init (GtkButtonClass *klass)
 							     2,
 							     GTK_PARAM_READABLE));
 
+  gtk_widget_class_install_style_property (widget_class,
+    g_param_spec_int ("indicator-size",
+                      P_("Indicator Size"),
+                      P_("Size of check or radio indicator"),
+                      0, G_MAXINT, 13,
+                      GTK_PARAM_READABLE));
+
+  gtk_widget_class_install_style_property (widget_class,
+    g_param_spec_int ("indicator-spacing",
+                      P_("Indicator Spacing"),
+                      P_("Spacing around check or radio indicator"),
+                      0, G_MAXINT, 2,
+                      GTK_PARAM_READABLE));
+
   g_type_class_add_private (gobject_class, sizeof (GtkButtonPrivate));
 }
 
@@ -595,6 +618,7 @@ gtk_button_init (GtkButton *button)
   priv->image_is_stock = TRUE;
   priv->image_position = GTK_POS_LEFT;
   priv->use_action_appearance = TRUE;
+  priv->indicator_style = GTK_INDICATOR_STYLE_PLAIN;
 }
 
 static void
@@ -853,6 +877,9 @@ gtk_button_set_property (GObject         *object,
       if (g_value_get_object (value) != NULL)
         gtk_button_set_action (button, g_value_get_object (value));
       break;
+    case PROP_INDICATOR_STYLE:
+      gtk_button_set_indicator_style (button, g_value_get_enum (value));
+      break;
     case PROP_ACTIVATABLE_RELATED_ACTION:
       gtk_button_set_related_action (button, g_value_get_object (value));
       break;
@@ -905,6 +932,9 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_ACTION:
       g_value_set_object (value, priv->g_action);
+      break;
+    case PROP_INDICATOR_STYLE:
+      g_value_set_enum (value, priv->indicator_style);
       break;
     case PROP_ACTIVATABLE_RELATED_ACTION:
       g_value_set_object (value, priv->action);
@@ -2689,4 +2719,32 @@ gtk_button_get_event_window (GtkButton *button)
   g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
 
   return button->priv->event_window;
+}
+
+void
+gtk_button_set_indicator_style (GtkButton         *button,
+                                GtkIndicatorStyle  style)
+{
+  GtkButtonPrivate *priv;
+
+  g_return_if_fail (GTK_IS_BUTTON (button));
+
+  priv = button->priv;
+
+  if (priv->indicator_style != style)
+    {
+      priv->indicator_style = style;
+
+      gtk_widget_queue_resize (GTK_WIDGET (button));
+
+      g_object_notify (G_OBJECT (button), "indicator-style");
+    }
+}
+
+GtkIndicatorStyle
+gtk_button_get_indicator_style (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), GTK_INDICATOR_STYLE_PLAIN);
+
+  return button->priv->indicator_style;
 }

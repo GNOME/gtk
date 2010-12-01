@@ -56,26 +56,13 @@ struct _GtkCheckButton
 struct _GtkCheckButtonClass
 {
   GtkToggleButtonClass parent_class;
-
-  void (* draw_indicator) (GtkCheckButton *check_button,
-			   cairo_t        *cr);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 
-GType      gtk_check_button_get_type       (void) G_GNUC_CONST;
+GType      gtk_check_button_get_type          (void) G_GNUC_CONST;
 GtkWidget* gtk_check_button_new               (void);
 GtkWidget* gtk_check_button_new_with_label    (const gchar *label);
 GtkWidget* gtk_check_button_new_with_mnemonic (const gchar *label);
-
-void _gtk_check_button_get_props (GtkCheckButton *check_button,
-				  gint           *indicator_size,
-				  gint           *indicator_spacing);
 
 G_END_DECLS
 

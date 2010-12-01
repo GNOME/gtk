@@ -121,8 +121,6 @@ static void     gtk_radio_button_destroy        (GtkWidget           *widget);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
 						 GtkDirectionType     direction);
 static void     gtk_radio_button_clicked        (GtkButton           *button);
-static void     gtk_radio_button_draw_indicator (GtkCheckButton      *check_button,
-						 cairo_t             *cr);
 static void     gtk_radio_button_set_property   (GObject             *object,
 						 guint                prop_id,
 						 const GValue        *value,
@@ -169,8 +167,6 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 
   button_class->clicked = gtk_radio_button_clicked;
 
-  check_button_class->draw_indicator = gtk_radio_button_draw_indicator;
-
   class->group_changed = NULL;
 
   /**
@@ -209,8 +205,9 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
 
   gtk_widget_set_has_window (GTK_WIDGET (radio_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (radio_button), FALSE);
-
   _gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (radio_button), TRUE);
+  gtk_button_set_indicator_style (GTK_BUTTON (radio_button),
+                                  GTK_INDICATOR_STYLE_RADIO);
 
   GTK_BUTTON (radio_button)->priv->depress_on_activate = FALSE;
 
@@ -660,7 +657,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
   /* Radio buttons with draw_indicator unset focus "normally", since
    * they look like buttons to the user.
    */
-  if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
+  if (gtk_button_get_indicator_style (GTK_BUTTON (widget)) == GTK_INDICATOR_STYLE_PLAIN)
     return GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->focus (widget, direction);
   
   if (gtk_widget_is_focus (widget))
@@ -876,86 +873,4 @@ gtk_radio_button_clicked (GtkButton *button)
   gtk_widget_queue_draw (GTK_WIDGET (button));
 
   g_object_unref (button);
-}
-
-static void
-gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
-				 cairo_t        *cr)
-{
-  GtkAllocation allocation;
-  GtkWidget *widget;
-  GtkWidget *child;
-  GtkButton *button;
-  GtkToggleButton *toggle_button;
-  GtkStateType state_type;
-  GtkShadowType shadow_type;
-  GtkStyle *style;
-  GdkWindow *window;
-  gint x, y;
-  gint indicator_size, indicator_spacing;
-  gint focus_width;
-  gint focus_pad;
-  guint border_width;
-  gboolean interior_focus;
-
-  widget = GTK_WIDGET (check_button);
-  button = GTK_BUTTON (check_button);
-  toggle_button = GTK_TOGGLE_BUTTON (check_button);
-
-  border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-
-  style = gtk_widget_get_style (widget);
-  gtk_widget_style_get (widget,
-                        "interior-focus", &interior_focus,
-                        "focus-line-width", &focus_width,
-                        "focus-padding", &focus_pad,
-                        NULL);
-
-  window = gtk_widget_get_window (widget);
-
-  _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
-
-  gtk_widget_get_allocation (widget, &allocation);
-
-  x = indicator_spacing + border_width;
-  y = (allocation.height - indicator_size) / 2;
-
-  child = gtk_bin_get_child (GTK_BIN (check_button));
-  if (!interior_focus || !(child && gtk_widget_get_visible (child)))
-    x += focus_width + focus_pad;      
-
-  if (gtk_toggle_button_get_inconsistent (toggle_button))
-    shadow_type = GTK_SHADOW_ETCHED_IN;
-  else if (gtk_toggle_button_get_active (toggle_button))
-    shadow_type = GTK_SHADOW_IN;
-  else
-    shadow_type = GTK_SHADOW_OUT;
-
-  if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
-    state_type = GTK_STATE_ACTIVE;
-  else if (button->priv->in_button)
-    state_type = GTK_STATE_PRELIGHT;
-  else if (!gtk_widget_is_sensitive (widget))
-    state_type = GTK_STATE_INSENSITIVE;
-  else
-    state_type = GTK_STATE_NORMAL;
-
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    x = allocation.width - (indicator_size + x);
-
-  if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
-    {
-      gtk_paint_flat_box (style, cr,
-                          GTK_STATE_PRELIGHT,
-                          GTK_SHADOW_ETCHED_OUT, 
-                          widget, "checkbutton",
-                          border_width, border_width,
-                          allocation.width - (2 * border_width),
-                          allocation.height - (2 * border_width));
-    }
-
-  gtk_paint_option (style, cr,
-                    state_type, shadow_type,
-                    widget, "radiobutton",
-                    x, y, indicator_size, indicator_size);
 }

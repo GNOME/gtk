@@ -73,7 +73,8 @@ static void
 gtk_radio_tool_button_init (GtkRadioToolButton *button)
 {
   GtkToolButton *tool_button = GTK_TOOL_BUTTON (button);
-  gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (_gtk_tool_button_get_button (tool_button)), FALSE);
+  gtk_button_set_indicator_style (GTK_BUTTON (_gtk_tool_button_get_button (tool_button)),
+                                  GTK_INDICATOR_STYLE_PLAIN);
 }
 
 static void

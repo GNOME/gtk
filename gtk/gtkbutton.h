@@ -34,6 +34,7 @@
 
 #include <gtk/gtkbin.h>
 #include <gtk/gtkimage.h>
+#include <gtk/gtkenums.h>
 
 
 G_BEGIN_DECLS
@@ -125,6 +126,9 @@ void                  gtk_button_set_action         (GtkButton      *button,
                                                      GAction        *action);
 GAction *             gtk_button_get_action         (GtkButton      *button);
 
+void                  gtk_button_set_indicator_style (GtkButton         *button,
+                                                      GtkIndicatorStyle  style);
+GtkIndicatorStyle     gtk_button_get_indicator_style (GtkButton         *button);
 void _gtk_button_set_depressed             (GtkButton          *button,
 					    gboolean            depressed);
 void _gtk_button_paint                     (GtkButton          *button,

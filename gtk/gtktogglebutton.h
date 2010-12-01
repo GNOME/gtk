@@ -60,7 +60,7 @@ struct _GtkToggleButtonClass
 {
   GtkButtonClass parent_class;
 
-  void (* toggled) (GtkToggleButton *toggle_button);
+  void (* toggled)       (GtkToggleButton *toggle_button);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -70,24 +70,26 @@ struct _GtkToggleButtonClass
 };
 
 
-GType      gtk_toggle_button_get_type          (void) G_GNUC_CONST;
+GType          gtk_toggle_button_get_type          (void) G_GNUC_CONST;
 
-GtkWidget* gtk_toggle_button_new               (void);
-GtkWidget* gtk_toggle_button_new_with_label    (const gchar     *label);
-GtkWidget* gtk_toggle_button_new_with_mnemonic (const gchar     *label);
-void       gtk_toggle_button_set_mode          (GtkToggleButton *toggle_button,
-                                                gboolean         draw_indicator);
-gboolean   gtk_toggle_button_get_mode          (GtkToggleButton *toggle_button);
-void       gtk_toggle_button_set_active        (GtkToggleButton *toggle_button,
-                                                gboolean         is_active);
-gboolean   gtk_toggle_button_get_active        (GtkToggleButton *toggle_button);
-void       gtk_toggle_button_toggled           (GtkToggleButton *toggle_button);
-void       gtk_toggle_button_set_inconsistent  (GtkToggleButton *toggle_button,
-                                                gboolean         setting);
-gboolean   gtk_toggle_button_get_inconsistent  (GtkToggleButton *toggle_button);
+GtkWidget*     gtk_toggle_button_new               (void);
+GtkWidget*     gtk_toggle_button_new_with_label    (const gchar     *label);
+GtkWidget*     gtk_toggle_button_new_with_mnemonic (const gchar     *label);
+#ifndef GTK_DISABLE_DEPRECATED
+void           gtk_toggle_button_set_mode          (GtkToggleButton *button,
+                                                    gboolean         mode);
+gboolean       gtk_toggle_button_get_mode          (GtkToggleButton *button);
+#endif
+void           gtk_toggle_button_set_active        (GtkToggleButton *button,
+                                                    gboolean         is_active);
+gboolean       gtk_toggle_button_get_active        (GtkToggleButton *button);
+void           gtk_toggle_button_set_inconsistent  (GtkToggleButton *button,
+                                                    gboolean         is_inconsistent);
+gboolean       gtk_toggle_button_get_inconsistent  (GtkToggleButton *button);
+void           gtk_toggle_button_toggled           (GtkToggleButton *button);
 
-void       _gtk_toggle_button_set_active       (GtkToggleButton *toggle_button,
-                                                gboolean         is_active);
+void           _gtk_toggle_button_set_active       (GtkToggleButton *button,
+                                                    gboolean         is_active);
 
 
 G_END_DECLS
