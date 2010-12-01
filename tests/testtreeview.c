@@ -351,7 +351,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       gtk_tree_view_set_rules_hint (tree_view, TRUE);
       
       rend = gtk_cell_renderer_text_new ();
-      
+
       col = gtk_tree_view_column_new_with_attributes ("Column 1",
                                                       rend,
                                                       "text", 1,

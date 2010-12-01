@@ -1172,6 +1172,38 @@ gtk_cell_area_box_render (GtkCellArea          *area,
 	  cell_background.height = cell->size;
 	}
 
+      /* Stop rendering cells if they flow out of the render area,
+       * this can happen because the render area can actually be
+       * smaller than the requested area (treeview columns can
+       * be user resizable and can be resized to be smaller than
+       * the actual requested area). */
+      if (cell_background.x > cell_area->x + cell_area->width ||
+	  cell_background.y > cell_area->y + cell_area->height)
+	break;
+
+      /* Special case for the last cell... let the last cell consume the remaining
+       * space in the area (the last cell is allowed to consume the remaining space if
+       * the space given for rendering is actually larger than allocation, this can
+       * happen in the expander GtkTreeViewColumn where only the deepest depth column
+       * receives the allocation... shallow columns recieve more width). */
+      if (!l->next)
+	{
+	  cell_background.width  = cell_area->x + cell_area->width  - cell_background.x;
+	  cell_background.height = cell_area->y + cell_area->height - cell_background.y;
+	}
+      else
+	{
+	  /* If the cell we are rendering doesnt fit into the remaining space, clip it
+	   * so that the underlying renderer has a chance to deal with it (for instance
+	   * text renderers get a chance to ellipsize).
+	   */
+	  if (cell_background.x + cell_background.width > cell_area->x + cell_area->width)
+	    cell_background.width = cell_area->x + cell_area->width - cell_background.x;
+
+	  if (cell_background.y + cell_background.height > cell_area->y + cell_area->height)
+	    cell_background.height = cell_area->y + cell_area->height - cell_background.y;
+	}
+
       /* Remove margins from the background area to produce the cell area
        */
       gtk_cell_area_inner_cell_area (area, widget, &cell_background, &inner_area);
