@@ -1549,14 +1549,9 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
                                       gdouble           width,
                                       gdouble           height)
 {
-  GdkRGBA *bg_color;
-  cairo_pattern_t *pattern;
-  GtkStateFlags flags;
-  gboolean running;
-  gdouble progress, alpha = 1;
   GtkJunctionSides junction;
+  GtkStateFlags flags;
   GtkBorder *border;
-  gint radius;
 
   junction = gtk_theming_engine_get_junction_sides (engine);
 
@@ -1569,6 +1564,7 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
       height -= 4;
     }
 
+  flags = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get (engine, flags,
                           "border-width", &border,
                           NULL);
@@ -2221,6 +2217,7 @@ gtk_theming_engine_render_frame_gap (GtkThemingEngine *engine,
   gdouble x0, y0, x1, y1, xc, yc, wc, hc;
   GtkBorder *border;
 
+  xc = yc = wc = hc = 0;
   state = gtk_theming_engine_get_state (engine);
   junction = gtk_theming_engine_get_junction_sides (engine);
   gtk_theming_engine_get (engine, state,
@@ -2314,10 +2311,7 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                                      GtkPositionType   gap_side)
 {
   GtkJunctionSides junction = 0;
-  GtkStateFlags state;
   guint hidden_side = 0;
-  GdkRGBA *bg_color;
-  gint radius;
 
   cairo_save (cr);
 
@@ -2371,9 +2365,6 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
                          hidden_side, junction);
 
   cairo_restore (cr);
-
-  if (bg_color)
-    gdk_rgba_free (bg_color);
 }
 
 static void
