@@ -24,6 +24,10 @@
 struct _GtkButtonPrivate
 {
   GtkAction             *action;
+  GAction               *g_action;
+  guint                  state_id;
+  GVariant              *state;
+
   GtkPositionType        image_position;
   GtkWidget             *image;
 
@@ -50,6 +54,7 @@ struct _GtkButtonPrivate
   guint          use_action_appearance : 1;
   guint          use_stock             : 1;
   guint          use_underline         : 1;
+  guint          is_toggle             : 1;
 };
 
 #endif /* __GTK_BUTTON_PRIVATE_H__ */

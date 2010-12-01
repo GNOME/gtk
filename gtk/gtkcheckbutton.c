@@ -101,14 +101,17 @@ gtk_check_button_init (GtkCheckButton *check_button)
 GtkWidget*
 gtk_check_button_new (void)
 {
-  return g_object_new (GTK_TYPE_CHECK_BUTTON, NULL);
+  return g_object_new (GTK_TYPE_CHECK_BUTTON, "is-toggle", TRUE, NULL);
 }
 
 
 GtkWidget*
 gtk_check_button_new_with_label (const gchar *label)
 {
-  return g_object_new (GTK_TYPE_CHECK_BUTTON, "label", label, NULL);
+  return g_object_new (GTK_TYPE_CHECK_BUTTON,
+                       "is-toggle", TRUE,
+                       "label", label,
+                       NULL);
 }
 
 /**
@@ -125,6 +128,7 @@ GtkWidget*
 gtk_check_button_new_with_mnemonic (const gchar *label)
 {
   return g_object_new (GTK_TYPE_CHECK_BUTTON, 
+                       "is-toggle", TRUE,
                        "label", label, 
                        "use-underline", TRUE, 
                        NULL);

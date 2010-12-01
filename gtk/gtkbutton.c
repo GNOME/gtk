@@ -90,6 +90,8 @@ enum {
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_IMAGE_POSITION,
+  PROP_IS_TOGGLE,
+  PROP_ACTION,
 
   /* activatable properties */
   PROP_ACTIVATABLE_RELATED_ACTION,
@@ -99,6 +101,7 @@ enum {
 
 static void gtk_button_destroy        (GtkWidget          *widget);
 static void gtk_button_dispose        (GObject            *object);
+static void gtk_button_finalize       (GObject            *object);
 static void gtk_button_set_property   (GObject            *object,
                                        guint               prop_id,
                                        const GValue       *value,
@@ -188,6 +191,7 @@ gtk_button_class_init (GtkButtonClass *klass)
   gobject_class->dispose      = gtk_button_dispose;
   gobject_class->set_property = gtk_button_set_property;
   gobject_class->get_property = gtk_button_get_property;
+  gobject_class->finalize     = gtk_button_finalize;
 
   widget_class->get_preferred_width  = gtk_button_get_preferred_width;
   widget_class->get_preferred_height = gtk_button_get_preferred_height;
@@ -329,6 +333,36 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                       GTK_TYPE_POSITION_TYPE,
                                                       GTK_POS_LEFT,
                                                       GTK_PARAM_READWRITE));
+
+  /**
+   * GtkButton:is-toggle:
+   *
+   * Determines if the default action added to the button has a boolean
+   * state or not.  This property is only used at construct time.
+   * 
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_IS_TOGGLE,
+                                   g_param_spec_boolean ("is-toggle",
+                                                         P_("Is toggle"),
+                                                         P_("If the default action should be stateful"),
+                                                         FALSE, GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
+
+  /**
+   * GtkButton:action:
+   *
+   * The #GAction that the button activates.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ACTION,
+                                   g_param_spec_object ("action",
+                                                        P_("Action"),
+                                                        P_("The GAction that the button activates."),
+                                                        G_TYPE_ACTION,
+                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
@@ -578,6 +612,81 @@ gtk_button_destroy (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_button_parent_class)->destroy (widget);
 }
 
+static void
+gtk_button_action_state_changed (GAction    *action,
+                                 GParamSpec *pspec,
+                                 gpointer    user_data)
+{
+  GtkButton *button = GTK_BUTTON (user_data);
+  GVariant *state;
+
+  state = g_action_get_state (action);
+
+  if (!g_variant_equal (state, button->priv->state))
+    {
+      g_variant_unref (button->priv->state);
+      button->priv->state = g_variant_ref (state);
+
+      GTK_BUTTON_GET_CLASS (button)
+        ->action_state_changed (button, state);
+    }
+
+  g_variant_unref (state);
+}
+
+static void
+gtk_button_release_action (GtkButton *button)
+{
+  if (button->priv->state_id)
+    g_signal_handler_disconnect (button->priv->g_action,
+                                 button->priv->state_id);
+
+  g_object_unref (button->priv->g_action);
+  button->priv->state_id = 0;
+}
+
+static void
+gtk_button_setup_action (GtkButton *button)
+{
+  GVariant *state;
+
+  state = g_action_get_state (button->priv->g_action);
+
+  if (state != NULL)
+    button->priv->state_id =
+      g_signal_connect (button->priv->g_action, "notify::state",
+                        G_CALLBACK (gtk_button_action_state_changed), button);
+
+  if (state != button->priv->state)
+    {
+      if (state == NULL ||
+          button->priv->state == NULL ||
+          !g_variant_equal (state, button->priv->state))
+        {
+          if (button->priv->state != NULL)
+            g_variant_unref (button->priv->state);
+
+          button->priv->state = NULL;
+
+          if (state != NULL)
+            button->priv->state = g_variant_ref (state);
+
+          GTK_BUTTON_GET_CLASS (button)
+            ->action_state_changed (button, state);
+        }
+    }
+
+  if (state)
+    g_variant_unref (state);
+}
+
+static void
+action_activated (GAction  *action,
+                  gpointer  user_data)
+{
+  g_action_set_state (action, g_variant_new_boolean (!g_variant_get_boolean (g_action_get_state (action))));
+}
+
 static GObject*
 gtk_button_constructor (GType                  type,
 			guint                  n_construct_properties,
@@ -596,9 +705,31 @@ gtk_button_constructor (GType                  type,
 
   priv->constructed = TRUE;
 
+  if (priv->g_action == NULL)
+    {
+      if (priv->is_toggle)
+        {
+          priv->g_action = G_ACTION (g_simple_action_new_stateful ("anonymous", NULL,
+                                                                   g_variant_new_boolean (FALSE)));
+          g_signal_connect (priv->g_action, "activate",
+                            G_CALLBACK (action_activated), NULL);
+        }
+      else
+        priv->g_action = G_ACTION (g_simple_action_new ("anonymous", NULL));
+
+      gtk_button_setup_action (button);
+    }
+
   if (priv->label_text != NULL)
     gtk_button_construct_child (button);
-  
+
+   /* This should be a default handler, but for compatibility reasons
+   * we need to support derived classes that don't chain up their
+   * clicked handler.
+   */
+  g_signal_connect_after (button, "clicked",
+                          G_CALLBACK (gtk_real_button_clicked), NULL);
+ 
   return object;
 }
 
@@ -662,7 +793,19 @@ gtk_button_dispose (GObject *object)
       gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), NULL);
       priv->action = NULL;
     }
+
   G_OBJECT_CLASS (gtk_button_parent_class)->dispose (object);
+}
+
+static void
+gtk_button_finalize (GObject *object)
+{
+  GtkButton *button = GTK_BUTTON (object);
+
+  gtk_button_release_action (button);
+
+  G_OBJECT_CLASS (gtk_button_parent_class)
+    ->finalize (object);
 }
 
 static void
@@ -702,6 +845,13 @@ gtk_button_set_property (GObject         *object,
       break;
     case PROP_IMAGE_POSITION:
       gtk_button_set_image_position (button, g_value_get_enum (value));
+      break;
+    case PROP_IS_TOGGLE:
+      priv->is_toggle = g_value_get_boolean (value);
+      break;
+    case PROP_ACTION:
+      if (g_value_get_object (value) != NULL)
+        gtk_button_set_action (button, g_value_get_object (value));
       break;
     case PROP_ACTIVATABLE_RELATED_ACTION:
       gtk_button_set_related_action (button, g_value_get_object (value));
@@ -752,6 +902,9 @@ gtk_button_get_property (GObject         *object,
       break;
     case PROP_IMAGE_POSITION:
       g_value_set_enum (value, priv->image_position);
+      break;
+    case PROP_ACTION:
+      g_value_set_object (value, priv->g_action);
       break;
     case PROP_ACTIVATABLE_RELATED_ACTION:
       g_value_set_object (value, priv->action);
@@ -893,6 +1046,32 @@ gtk_button_sync_action_properties (GtkActivatable *activatable,
     }
 }
 
+GAction *
+gtk_button_get_action (GtkButton *button)
+{
+  g_return_val_if_fail (GTK_IS_BUTTON (button), NULL);
+
+  return button->priv->g_action;
+}
+
+void
+gtk_button_set_action (GtkButton *button,
+                       GAction   *action)
+{
+  g_return_if_fail (GTK_IS_BUTTON (button));
+  g_return_if_fail (G_IS_ACTION (action));
+
+  if (button->priv->g_action != action)
+    {
+      g_object_freeze_notify (G_OBJECT (button));
+      gtk_button_release_action (button);
+      button->priv->g_action = g_object_ref (action);
+      gtk_button_setup_action (button);
+      g_object_notify (G_OBJECT (button), "action");
+      g_object_thaw_notify (G_OBJECT (button));
+    }
+}
+
 static void
 gtk_button_set_related_action (GtkButton *button,
 			       GtkAction *action)
@@ -901,15 +1080,6 @@ gtk_button_set_related_action (GtkButton *button,
 
   if (priv->action == action)
     return;
-
-  /* This should be a default handler, but for compatibility reasons
-   * we need to support derived classes that don't chain up their
-   * clicked handler.
-   */
-  g_signal_handlers_disconnect_by_func (button, gtk_real_button_clicked, NULL);
-  if (action)
-    g_signal_connect_after (button, "clicked",
-                            G_CALLBACK (gtk_real_button_clicked), NULL);
 
   gtk_activatable_do_set_related_action (GTK_ACTIVATABLE (button), action);
 
@@ -1807,6 +1977,9 @@ gtk_real_button_clicked (GtkButton *button)
 
   if (priv->action)
     gtk_action_activate (priv->action);
+
+  if (priv->g_action)
+    g_action_activate (priv->g_action, NULL);
 }
 
 static gboolean

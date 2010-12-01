@@ -69,10 +69,11 @@ struct _GtkButtonClass
   void (* activate) (GtkButton *button);
   
   /* Padding for future expansion */
+  void (* action_state_changed) (GtkButton *button,
+                                 GVariant  *state);
   void (*_gtk_reserved1) (void);
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
 };
 
 
@@ -120,6 +121,9 @@ void                  gtk_button_set_image_position (GtkButton      *button,
 GtkPositionType       gtk_button_get_image_position (GtkButton      *button);
 
 GdkWindow*            gtk_button_get_event_window   (GtkButton      *button);
+void                  gtk_button_set_action         (GtkButton      *button,
+                                                     GAction        *action);
+GAction *             gtk_button_get_action         (GtkButton      *button);
 
 void _gtk_button_set_depressed             (GtkButton          *button,
 					    gboolean            depressed);
@@ -131,6 +135,7 @@ void _gtk_button_paint                     (GtkButton          *button,
 					    GtkShadowType       shadow_type,
 					    const gchar        *main_detail,
 					    const gchar        *default_detail);
+
 
 G_END_DECLS
 
