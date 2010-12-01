@@ -1826,6 +1826,16 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
 
   focus_cell = gtk_cell_area_get_focus_cell (area);
 
+  /* Special case, when there is no activatable cell, focus
+   * is painted around the entire area... in this case we
+   * let focus leave the area directly.
+   */
+  if (focus_cell && !gtk_cell_area_is_activatable (area))
+    {
+      gtk_cell_area_set_focus_cell (area, NULL);
+      return FALSE;
+    }
+
   switch (direction)
     {
     case GTK_DIR_TAB_FORWARD:
