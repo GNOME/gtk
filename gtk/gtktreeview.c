@@ -381,6 +381,7 @@ struct _GtkTreeViewPrivate
   GtkRBNode *expanded_collapsed_node;
   GtkRBTree *expanded_collapsed_tree;
   guint expand_collapse_timeout;
+  gint  deepest_depth;
 
   /* Auto expand/collapse timeout in hover mode */
   guint auto_expand_timeout;
@@ -1768,6 +1769,8 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
 
+  tree_view->priv->deepest_depth = 1;
+
   gtk_tree_view_set_vadjustment (tree_view, NULL);
   gtk_tree_view_set_hadjustment (tree_view, NULL);
 }
@@ -2558,17 +2561,6 @@ gtk_tree_view_column_is_edge (GtkTreeView       *tree_view,
   return (column == first_column || column == last_column);
 }
 
-static void
-gtk_tree_view_deepest_expanded_depth (GtkTreeView  *tree_view,
-				      GtkTreePath  *path,
-				      gint         *deepest)
-{
-  gint children_depth = gtk_tree_path_get_depth (path) + 1;
-
-  if (children_depth > *deepest)
-    *deepest = children_depth;
-}
-
 /* Gets the space in a column that is not actually distributed to 
  * the internal cell area, i.e. total indentation expander size
  * grid line widths and horizontal separators */
@@ -2579,22 +2571,18 @@ gtk_tree_view_get_column_padding (GtkTreeView       *tree_view,
   gint padding;
   gint grid_line_width;
   gint horizontal_separator;
-  gint depth = 1;
 
   /* Get the deepest depth */
-  gtk_tree_view_map_expanded_rows (tree_view, 
-				   (GtkTreeViewMappingFunc)gtk_tree_view_deepest_expanded_depth,
-				   &depth);
 
   gtk_widget_style_get (GTK_WIDGET (tree_view),
 			"horizontal-separator", &horizontal_separator,
 			"grid-line-width", &grid_line_width,
 			NULL);
 
-  padding = horizontal_separator + (depth - 1) * tree_view->priv->level_indentation;
+  padding = horizontal_separator + (tree_view->priv->deepest_depth - 1) * tree_view->priv->level_indentation;
 
   if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
-    padding += depth * tree_view->priv->expander_size;
+    padding += tree_view->priv->deepest_depth * tree_view->priv->expander_size;
 
   if (tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL ||
       tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH)
@@ -12756,6 +12744,10 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			    gtk_tree_path_get_depth (path) + 1,
 			    open_all);
 
+  /* Update the deepest expanded row depth */
+  if (tree_view->priv->deepest_depth < gtk_tree_path_get_depth (path) + 1)
+    tree_view->priv->deepest_depth = gtk_tree_path_get_depth (path) + 1;
+
   remove_expand_collapse_timeout (tree_view);
 
   if (animate)
@@ -12808,6 +12800,17 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
     return gtk_tree_view_real_expand_row (tree_view, path, tree, node, open_all, FALSE);
   else
     return FALSE;
+}
+
+static void
+gtk_tree_view_deepest_expanded_depth (GtkTreeView  *tree_view,
+				      GtkTreePath  *path,
+				      gint         *deepest)
+{
+  gint children_depth = gtk_tree_path_get_depth (path) + 1;
+
+  if (children_depth > *deepest)
+    *deepest = children_depth;
 }
 
 static gboolean
@@ -12935,7 +12938,7 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
     }
 
   g_signal_emit (tree_view, tree_view_signals[ROW_COLLAPSED], 0, &iter, path);
-
+  
   if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
     {
       /* now that we've collapsed all rows, we want to try to set the prelight
@@ -12960,6 +12963,17 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 	   * more than just event.x and event.y. */
 	  gtk_tree_view_motion_bin_window (GTK_WIDGET (tree_view), &event);
 	}
+    }
+
+  /* If we're collapsing one of the deepest expanded rows, 
+   * we need to recalculate the deepest_depth
+   */
+  if (tree_view->priv->deepest_depth == gtk_tree_path_get_depth (path) + 1)
+    {
+      tree_view->priv->deepest_depth = 1;
+      gtk_tree_view_map_expanded_rows (tree_view, 
+				       (GtkTreeViewMappingFunc)gtk_tree_view_deepest_expanded_depth,
+				       &tree_view->priv->deepest_depth);
     }
 
   return TRUE;
