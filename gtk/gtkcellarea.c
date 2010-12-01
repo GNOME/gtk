@@ -1023,20 +1023,42 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
 {
   GtkCellAreaPrivate *priv = area->priv;
   GdkRectangle        background_area;
+  GtkCellRenderer    *activate_cell = NULL;
 
   if (priv->focus_cell)
+    activate_cell = priv->focus_cell;
+  else
+    {
+      GList *cells, *l;
+
+      /* GtkTreeView sometimes wants to activate a cell when no
+       * cells are in focus.
+       */
+      cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+      for (l = cells; l && !activate_cell; l = l->next)
+	{
+	  GtkCellRenderer *renderer = l->data;
+
+	  if (gtk_cell_renderer_is_activatable (renderer))
+	    activate_cell = renderer;
+	}
+      g_list_free (cells);
+    }
+  
+
+  if (activate_cell)
     {
       /* Get the allocation of the focused cell.
        */
-      gtk_cell_area_get_cell_allocation (area, context, widget, priv->focus_cell,
+      gtk_cell_area_get_cell_allocation (area, context, widget, activate_cell,
 					 cell_area, &background_area);
       
-      /* Activate or Edit the currently focused cell 
+      /* Activate or Edit the cell
        *
        * Currently just not sending an event, renderers afaics dont use
        * the event argument anyway, worst case is we can synthesize one.
        */
-      if (gtk_cell_area_activate_cell (area, widget, priv->focus_cell, NULL,
+      if (gtk_cell_area_activate_cell (area, widget, activate_cell, NULL,
 				       &background_area, flags))
 	return TRUE;
     }
