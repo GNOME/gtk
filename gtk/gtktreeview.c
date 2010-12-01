@@ -2631,7 +2631,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
   GtkTreeView *tree_view;
   GList *list, *first_column, *last_column;
   GtkTreeViewColumn *column;
-  GtkAllocation allocation;
   GtkAllocation widget_allocation;
   gint width = 0;
   gint extra, extra_per_column, extra_for_last;
@@ -2656,9 +2655,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        !(gtk_tree_view_column_get_visible (GTK_TREE_VIEW_COLUMN (first_column->data)));
        first_column = first_column->next)
     ;
-
-  allocation.y = 0;
-  allocation.height = tree_view->priv->header_height;
 
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
@@ -2719,7 +2715,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
     {
       GtkWidget *button;
       GdkWindow *window;
-      gint real_requested_width = 0;
       gint internal_column_width = 0;
       gint old_width, column_width;
 
@@ -2747,9 +2742,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	  continue;
 	}
 
-      real_requested_width = gtk_tree_view_get_real_requested_width_from_column (tree_view, column);
-
-      allocation.x = width;
+      column_width = gtk_tree_view_get_real_requested_width_from_column (tree_view, column);
 
       if (gtk_tree_view_column_get_expand (column))
 	{
@@ -2757,11 +2750,11 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
 	    {
 	      /* We add the remander to the last column as
 	       * */
-	      real_requested_width += extra;
+	      column_width += extra;
 	    }
 	  else
 	    {
-	      real_requested_width += extra_per_column;
+	      column_width += extra_per_column;
 	      extra -= extra_per_column;
 	      number_of_expand_columns --;
 	    }
@@ -2769,39 +2762,26 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       else if (number_of_expand_columns == 0 &&
 	       list == last_column)
 	{
-	  real_requested_width += extra;
+	  column_width += extra;
 	}
 
       /* In addition to expand, the last column can get even more
        * extra space so all available space is filled up.
        */
       if (extra_for_last > 0 && list == last_column)
-	real_requested_width += extra_for_last;
+	column_width += extra_for_last;
 
       /* XXX This needs to account the real allocated space for
        * the internal GtkCellArea
        */
-      internal_column_width = real_requested_width /* - all the stuff treeview adds around the area */;
+      internal_column_width = column_width /* - all the stuff treeview adds around the area */;
 
-      _gtk_tree_view_column_set_width (column, real_requested_width, internal_column_width);
+      _gtk_tree_view_column_allocate (column, width, column_width, internal_column_width);
 
-      column_width = gtk_tree_view_column_get_width (column);
-      allocation.width = column_width;
       width += column_width;
 
       if (column_width > old_width)
         column_changed = TRUE;
-
-      button = gtk_tree_view_column_get_button (column);
-      window = _gtk_tree_view_column_get_window (column);
-
-      gtk_widget_size_allocate (button, &allocation);
-
-      if (window)
-	gdk_window_move_resize (window,
-                                allocation.x + (rtl ? 0 : allocation.width) - TREE_VIEW_DRAG_WIDTH/2,
-				allocation.y,
-                                TREE_VIEW_DRAG_WIDTH, allocation.height);
     }
 
   /* We change the width here.  The user might have been resizing columns,

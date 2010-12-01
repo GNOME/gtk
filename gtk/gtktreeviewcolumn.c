@@ -1870,18 +1870,38 @@ gtk_tree_view_column_get_width (GtkTreeViewColumn *tree_column)
 }
 
 void
-_gtk_tree_view_column_set_width (GtkTreeViewColumn *tree_column,
-                                 int                width,
-				 int                internal_width)
+_gtk_tree_view_column_allocate (GtkTreeViewColumn *tree_column,
+				int                x_offset,
+				int                width,
+				int                cell_width)
 {
   GtkTreeViewColumnPrivate *priv;
+  GtkAllocation             allocation;
+  gboolean                  rtl;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   priv = tree_column->priv;
 
-  gtk_cell_area_context_allocate (priv->cell_area_context, internal_width, -1);
   priv->width = width;
+
+  gtk_cell_area_context_allocate (priv->cell_area_context, cell_width, -1);
+
+  allocation.x      = x_offset;
+  allocation.y      = 0;
+  allocation.width  = width;
+  allocation.height = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (priv->tree_view));
+
+  gtk_widget_size_allocate (priv->button, &allocation);
+
+  if (priv->window)
+    {
+      rtl = (gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_RTL);
+      gdk_window_move_resize (priv->window,
+			      allocation.x + (rtl ? 0 : allocation.width) - TREE_VIEW_DRAG_WIDTH/2,
+			      allocation.y,
+			      TREE_VIEW_DRAG_WIDTH, allocation.height);
+    }
 
   g_object_notify (G_OBJECT (tree_column), "width");
 }

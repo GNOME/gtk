@@ -103,11 +103,13 @@ gboolean          _gtk_tree_selection_row_is_selectable  (GtkTreeSelection *sele
 
 void _gtk_tree_view_column_realize_button   (GtkTreeViewColumn *column);
 void _gtk_tree_view_column_unrealize_button (GtkTreeViewColumn *column);
+ 
 void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 					     GtkTreeView       *tree_view);
-void _gtk_tree_view_column_set_width        (GtkTreeViewColumn *column,
-                                             int                width,
-					     int                internal_width);
+void _gtk_tree_view_column_allocate         (GtkTreeViewColumn *tree_column,
+					     int                x_offset,
+					     int                width,
+					     int                cell_width);
 void _gtk_tree_view_column_unset_model      (GtkTreeViewColumn *column,
 					     GtkTreeModel      *old_model);
 void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);
