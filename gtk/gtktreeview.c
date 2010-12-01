@@ -2579,10 +2579,15 @@ gtk_tree_view_get_column_padding (GtkTreeView       *tree_view,
 			"grid-line-width", &grid_line_width,
 			NULL);
 
-  padding = horizontal_separator + (tree_view->priv->deepest_depth - 1) * tree_view->priv->level_indentation;
+  padding = horizontal_separator;
 
-  if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
-    padding += tree_view->priv->deepest_depth * tree_view->priv->expander_size;
+  if (gtk_tree_view_is_expander_column (tree_view, column))
+    {
+      padding += (tree_view->priv->deepest_depth - 1) * tree_view->priv->level_indentation;
+
+      if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
+	padding += tree_view->priv->deepest_depth * tree_view->priv->expander_size;
+    }
 
   if (tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL ||
       tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH)
