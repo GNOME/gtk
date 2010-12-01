@@ -54,7 +54,6 @@ struct _GtkButtonPrivate
   guint          use_action_appearance : 1;
   guint          use_stock             : 1;
   guint          use_underline         : 1;
-  guint          is_toggle             : 1;
   guint          indicator_style       : 2;
 };
 

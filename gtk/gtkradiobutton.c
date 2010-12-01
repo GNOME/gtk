@@ -413,7 +413,7 @@ gtk_radio_button_new (GSList *group)
 {
   GtkRadioButton *radio_button;
 
-  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, "is-toggle", TRUE, NULL);
+  radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, NULL);
 
   if (group)
     gtk_radio_button_set_group (radio_button, group);
@@ -438,7 +438,6 @@ gtk_radio_button_new_with_label (GSList      *group,
   GtkWidget *radio_button;
 
   radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON,
-                               "is-toggle", TRUE,
                                "label", label,
                                NULL);
 
@@ -469,7 +468,6 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
   GtkWidget *radio_button;
 
   radio_button = g_object_new (GTK_TYPE_RADIO_BUTTON, 
-                               "is-toggle", TRUE,
 			       "label", label, 
 			       "use-underline", TRUE, 
 			       NULL);

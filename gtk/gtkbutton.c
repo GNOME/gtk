@@ -90,7 +90,6 @@ enum {
   PROP_XALIGN,
   PROP_YALIGN,
   PROP_IMAGE_POSITION,
-  PROP_IS_TOGGLE,
   PROP_ACTION,
   PROP_INDICATOR_STYLE,
 
@@ -334,21 +333,6 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                       GTK_TYPE_POSITION_TYPE,
                                                       GTK_POS_LEFT,
                                                       GTK_PARAM_READWRITE));
-
-  /**
-   * GtkButton:is-toggle:
-   *
-   * Determines if the default action added to the button has a boolean
-   * state or not.  This property is only used at construct time.
-   * 
-   * Since: 3.0
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_IS_TOGGLE,
-                                   g_param_spec_boolean ("is-toggle",
-                                                         P_("Is toggle"),
-                                                         P_("If the default action should be stateful"),
-                                                         FALSE, GTK_PARAM_WRITABLE | G_PARAM_CONSTRUCT_ONLY));
 
   /**
    * GtkButton:action:
@@ -665,7 +649,9 @@ gtk_button_release_action (GtkButton *button)
     g_signal_handler_disconnect (button->priv->g_action,
                                  button->priv->state_id);
 
-  g_object_unref (button->priv->g_action);
+  if (button->priv->g_action)
+    g_object_unref (button->priv->g_action);
+
   button->priv->state_id = 0;
 }
 
@@ -704,13 +690,6 @@ gtk_button_setup_action (GtkButton *button)
     g_variant_unref (state);
 }
 
-static void
-action_activated (GAction  *action,
-                  gpointer  user_data)
-{
-  g_action_set_state (action, g_variant_new_boolean (!g_variant_get_boolean (g_action_get_state (action))));
-}
-
 static GObject*
 gtk_button_constructor (GType                  type,
 			guint                  n_construct_properties,
@@ -731,16 +710,7 @@ gtk_button_constructor (GType                  type,
 
   if (priv->g_action == NULL)
     {
-      if (priv->is_toggle)
-        {
-          priv->g_action = G_ACTION (g_simple_action_new_stateful ("anonymous", NULL,
-                                                                   g_variant_new_boolean (FALSE)));
-          g_signal_connect (priv->g_action, "activate",
-                            G_CALLBACK (action_activated), NULL);
-        }
-      else
-        priv->g_action = G_ACTION (g_simple_action_new ("anonymous", NULL));
-
+      priv->g_action = G_ACTION (g_simple_action_new ("anonymous", NULL));
       gtk_button_setup_action (button);
     }
 
@@ -869,9 +839,6 @@ gtk_button_set_property (GObject         *object,
       break;
     case PROP_IMAGE_POSITION:
       gtk_button_set_image_position (button, g_value_get_enum (value));
-      break;
-    case PROP_IS_TOGGLE:
-      priv->is_toggle = g_value_get_boolean (value);
       break;
     case PROP_ACTION:
       if (g_value_get_object (value) != NULL)
