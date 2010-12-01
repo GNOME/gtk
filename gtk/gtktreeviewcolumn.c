@@ -98,6 +98,9 @@ static void gtk_tree_view_column_get_property                  (GObject         
 								GParamSpec              *pspec);
 static void gtk_tree_view_column_finalize                      (GObject                 *object);
 static void gtk_tree_view_column_dispose                       (GObject                 *object);
+static GObject *gtk_tree_view_column_constructor               (GType                    type,
+								guint                    n_construct_properties,
+								GObjectConstructParam   *construct_properties);
 
 /* GtkCellLayout implementation */
 static GtkCellArea *gtk_tree_view_column_cell_layout_get_area  (GtkCellLayout           *cell_layout);
@@ -164,6 +167,7 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
 
   class->clicked = NULL;
 
+  object_class->constructor = gtk_tree_view_column_constructor;
   object_class->finalize = gtk_tree_view_column_finalize;
   object_class->dispose = gtk_tree_view_column_dispose;
   object_class->set_property = gtk_tree_view_column_set_property;
@@ -336,6 +340,22 @@ gtk_tree_view_column_class_init (GtkTreeViewColumnClass *class)
                                                      G_MAXINT,
                                                      -1,
                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTreeViewColumn:cell-area:
+   *
+   * The #GtkCellArea used to layout cell renderers for this column.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+				   PROP_CELL_AREA,
+				   g_param_spec_object ("cell-area",
+							P_("Cell Area"),
+							P_("The GtkCellArea used to layout cells"),
+							GTK_TYPE_CELL_AREA,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
 }
 
 static void
@@ -379,15 +399,45 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   tree_column->fixed_width = 1;
   tree_column->use_resized_width = FALSE;
   tree_column->title = g_strdup ("");
+}
 
-  tree_column->cell_area = gtk_cell_area_box_new ();
+static GObject *
+gtk_tree_view_column_constructor (GType                    type,
+				  guint                    n_construct_properties,
+				  GObjectConstructParam   *construct_properties)
+{
+  GtkTreeViewColumn        *tree_column;
+  GObject                  *object;
+
+  object = G_OBJECT_CLASS (gtk_tree_view_column_parent_class)->constructor
+    (type, n_construct_properties, construct_properties);
+
+  tree_column = (GtkTreeViewColumn *) object;
+
+  if (!tree_column->cell_area)
+    {
+      tree_column->cell_area = gtk_cell_area_box_new ();
+      g_object_ref_sink (tree_column->cell_area);
+    }
+
   gtk_cell_area_set_style_detail (tree_column->cell_area, "treeview");
+
+  tree_column->add_editable_signal =
+    g_signal_connect (tree_column->cell_area, "add-editable",
+		      G_CALLBACK (gtk_tree_view_column_add_editable_callback),
+		      tree_column);
+  tree_column->remove_editable_signal =
+    g_signal_connect (tree_column->cell_area, "remove-editable",
+		      G_CALLBACK (gtk_tree_view_column_remove_editable_callback),
+		      tree_column);
+
   tree_column->cell_area_context = gtk_cell_area_create_context (tree_column->cell_area);
 
   tree_column->context_changed_signal =
-    g_signal_connect (tree_column->cell_area_context, "notify",
+    g_signal_connect (priv->cell_area_context, "notify",
 		      G_CALLBACK (gtk_tree_view_column_context_changed), tree_column);
 
+  return object;
 }
 
 static void
@@ -408,8 +458,15 @@ gtk_tree_view_column_dispose (GObject *object)
 
   if (tree_column->cell_area)
     {
+      g_signal_handler_disconnect (tree_column->cell_area,
+				   tree_column->add_editable_signal);
+      g_signal_handler_disconnect (tree_column->cell_area,
+				   tree_column->remove_editable_signal);
+      
       g_object_unref (tree_column->cell_area);
       tree_column->cell_area = NULL;
+      tree_column->add_editable_signal = 0;
+      tree_column->remove_editable_signal = 0;
     }
 
   if (tree_column->child)
@@ -438,6 +495,7 @@ gtk_tree_view_column_set_property (GObject         *object,
                                    GParamSpec      *pspec)
 {
   GtkTreeViewColumn *tree_column;
+  GtkCellArea       *area;
 
   tree_column = GTK_TREE_VIEW_COLUMN (object);
 
@@ -521,6 +579,14 @@ gtk_tree_view_column_set_property (GObject         *object,
     case PROP_SORT_COLUMN_ID:
       gtk_tree_view_column_set_sort_column_id (tree_column,
                                                g_value_get_int (value));
+      break;
+
+    case PROP_CELL_AREA:
+      /* Construct-only, can only be assigned once */
+      area = g_value_get_object (value);
+
+      if (area)
+	tree_column->cell_area = g_object_ref_sink (area);
       break;
       
     default:
@@ -624,6 +690,10 @@ gtk_tree_view_column_get_property (GObject         *object,
     case PROP_SORT_COLUMN_ID:
       g_value_set_int (value,
                        gtk_tree_view_column_get_sort_column_id (tree_column));
+      break;
+
+    case PROP_CELL_AREA:
+      g_value_set_object (value, tree_column->priv->cell_area);
       break;
       
     default:
@@ -1111,15 +1181,18 @@ gtk_tree_view_column_add_editable_callback (GtkCellArea       *area,
   GtkTreePath *path;
   GtkTreeViewColumn *column = user_data;
 
-  path = gtk_tree_path_new_from_string (path_string);
-
-  _gtk_tree_view_add_editable (GTK_TREE_VIEW (column->tree_view),
-                               column,
-                               path,
-                               edit_widget,
-                               cell_area);
-
-  gtk_tree_path_free (path);
+  if (column->tree_view)
+    {
+      path = gtk_tree_path_new_from_string (path_string);
+      
+      _gtk_tree_view_add_editable (GTK_TREE_VIEW (column->tree_view),
+				   column,
+				   path,
+				   edit_widget,
+				   cell_area);
+      
+      gtk_tree_path_free (path);
+    }
 }
 
 static void
@@ -1130,9 +1203,10 @@ gtk_tree_view_column_remove_editable_callback (GtkCellArea     *area,
 {
   GtkTreeViewColumn *column = user_data;
 
-  _gtk_tree_view_remove_editable (GTK_TREE_VIEW (column->tree_view),
-                                  column,
-                                  edit_widget);
+  if (column->tree_view)
+    _gtk_tree_view_remove_editable (GTK_TREE_VIEW (column->tree_view),
+				    column,
+				    edit_widget);
 }
 
 /* Exported Private Functions.
@@ -1221,20 +1295,11 @@ _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
   column->tree_view = GTK_WIDGET (tree_view);
   gtk_tree_view_column_create_button (column);
 
-  column->add_editable_signal =
-      g_signal_connect (column->cell_area, "add-editable",
-                        G_CALLBACK (gtk_tree_view_column_add_editable_callback),
-                        column);
-  column->remove_editable_signal =
-      g_signal_connect (column->cell_area, "remove-editable",
-                        G_CALLBACK (gtk_tree_view_column_remove_editable_callback),
-                        column);
-
   column->property_changed_signal =
-	  g_signal_connect_swapped (tree_view,
-				    "notify::model",
-				    G_CALLBACK (gtk_tree_view_column_setup_sort_column_id_callback),
-				    column);
+    g_signal_connect_swapped (tree_view,
+			      "notify::model",
+			      G_CALLBACK (gtk_tree_view_column_setup_sort_column_id_callback),
+			      column);
 
   gtk_tree_view_column_setup_sort_column_id_callback (column);
 }
