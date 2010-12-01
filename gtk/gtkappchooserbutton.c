@@ -262,6 +262,8 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
   recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
   first = TRUE;
 
+  get_first_iter (self->priv->store, &iter);
+
   for (l = recommended_apps; l != NULL; l = l->next)
     {
       app = l->data;
@@ -275,7 +277,6 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
 
       if (first)
         {
-          get_first_iter (self->priv->store, &iter);
           first = FALSE;
         }
       else
