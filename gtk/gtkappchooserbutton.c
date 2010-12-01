@@ -231,18 +231,22 @@ gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
                                            GtkTreeIter *prev_iter)
 {
   GIcon *icon;
-  GtkTreeIter iter;
+  GtkTreeIter iter, iter2;
 
   if (!self->priv->show_dialog_item)
     return;
 
   icon = g_themed_icon_new ("application-x-executable");
 
-  gtk_list_store_insert_after (self->priv->store, &iter, prev_iter);
-  real_insert_separator (self, FALSE, &iter);
-  *prev_iter = iter;
+  if (prev_iter == NULL)
+    gtk_list_store_append (self->priv->store, &iter);
+  else
+    gtk_list_store_insert_after (self->priv->store, &iter, prev_iter);
 
-  gtk_list_store_insert_after (self->priv->store, &iter, prev_iter);
+  real_insert_separator (self, FALSE, &iter);
+  iter2 = iter;
+
+  gtk_list_store_insert_after (self->priv->store, &iter, &iter2);
   real_insert_custom_item (self, CUSTOM_ITEM_OTHER_APP,
                            _("Other application..."), icon,
                            FALSE, &iter);
@@ -257,12 +261,10 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
   GAppInfo *app;
   GtkTreeIter iter, iter2;
   GIcon *icon;
-  gboolean first;
+  gboolean cycled_recommended;
 
   recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
-  first = TRUE;
-
-  get_first_iter (self->priv->store, &iter);
+  cycled_recommended = FALSE;
 
   for (l = recommended_apps; l != NULL; l = l->next)
     {
@@ -275,14 +277,15 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
       else
         g_object_ref (icon);
 
-      if (first)
-        {
-          first = FALSE;
-        }
-      else
+      if (cycled_recommended)
         {
           gtk_list_store_insert_after (self->priv->store, &iter2, &iter);
           iter = iter2;
+        }
+      else
+        {
+          get_first_iter (self->priv->store, &iter);
+          cycled_recommended = TRUE;
         }
 
       gtk_list_store_set (self->priv->store, &iter,
@@ -295,7 +298,11 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
       g_object_unref (icon);
     }
 
-  gtk_app_chooser_button_ensure_dialog_item (self, &iter);
+  if (!cycled_recommended)
+    gtk_app_chooser_button_ensure_dialog_item (self, NULL);
+  else
+    gtk_app_chooser_button_ensure_dialog_item (self, &iter);
+
   gtk_combo_box_set_active (GTK_COMBO_BOX (self), 0);
 }
 
