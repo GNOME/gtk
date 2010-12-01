@@ -2548,6 +2548,66 @@ invalidate_last_column (GtkTreeView *tree_view)
     }
 }
 
+static gboolean 
+gtk_tree_view_column_is_edge (GtkTreeView       *tree_view,
+			      GtkTreeViewColumn *column)
+{
+  GtkTreeViewColumn *first_column = tree_view->priv->columns->data;
+  GtkTreeViewColumn *last_column  = g_list_last (tree_view->priv->columns)->data;
+
+  return (column == first_column || column == last_column);
+}
+
+static void
+gtk_tree_view_deepest_expanded_depth (GtkTreeView  *tree_view,
+				      GtkTreePath  *path,
+				      gint         *deepest)
+{
+  gint children_depth = gtk_tree_path_get_depth (path) + 1;
+
+  if (children_depth > *deepest)
+    *deepest = children_depth;
+}
+
+/* Gets the space in a column that is not actually distributed to 
+ * the internal cell area, i.e. total indentation expander size
+ * grid line widths and horizontal separators */
+static gint
+gtk_tree_view_get_column_padding (GtkTreeView       *tree_view,
+				  GtkTreeViewColumn *column)
+{
+  gint padding;
+  gint grid_line_width;
+  gint horizontal_separator;
+  gint depth = 1;
+
+  /* Get the deepest depth */
+  gtk_tree_view_map_expanded_rows (tree_view, 
+				   (GtkTreeViewMappingFunc)gtk_tree_view_deepest_expanded_depth,
+				   &depth);
+
+  gtk_widget_style_get (GTK_WIDGET (tree_view),
+			"horizontal-separator", &horizontal_separator,
+			"grid-line-width", &grid_line_width,
+			NULL);
+
+  padding = horizontal_separator + (depth - 1) * tree_view->priv->level_indentation;
+
+  if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
+    padding += depth * tree_view->priv->expander_size;
+
+  if (tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL ||
+      tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH)
+    {
+      if (gtk_tree_view_column_is_edge (tree_view, column))
+	padding += grid_line_width / 2.0;
+      else
+	padding += grid_line_width;
+    }
+
+  return padding;
+}
+
 /* GtkWidget::size_allocate helper */
 static void
 gtk_tree_view_size_allocate_columns (GtkWidget *widget,
@@ -2638,7 +2698,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        list != (rtl ? first_column->prev : last_column->next);
        list = (rtl ? list->prev : list->next)) 
     {
-      gint internal_column_width = 0;
+      gint column_cell_width = 0;
       gint old_width, column_width;
 
       column = list->data;
@@ -2694,12 +2754,13 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       if (extra_for_last > 0 && list == last_column)
 	column_width += extra_for_last;
 
-      /* XXX This needs to account the real allocated space for
-       * the internal GtkCellArea
+      /* Remove any padding that we add to the column around the cell area
+       * and give the correct internal cell area to the column.
        */
-      internal_column_width = column_width /* - all the stuff treeview adds around the area */;
+      column_cell_width = 
+	column_width - gtk_tree_view_get_column_padding (tree_view, column);
 
-      _gtk_tree_view_column_allocate (column, width, column_width, internal_column_width);
+      _gtk_tree_view_column_allocate (column, width, column_width, column_cell_width);
 
       width += column_width;
 
@@ -9147,6 +9208,7 @@ gtk_tree_view_get_background_xrange (GtkTreeView       *tree_view,
         *x2 = total_width; /* width of 0 */
     }
 }
+
 static void
 gtk_tree_view_get_arrow_xrange (GtkTreeView *tree_view,
 				GtkRBTree   *tree,
