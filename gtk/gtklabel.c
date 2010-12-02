@@ -5509,8 +5509,9 @@ gtk_label_get_selection_bounds (GtkLabel  *label,
  * Gets the #PangoLayout used to display the label.
  * The layout is useful to e.g. convert text positions to
  * pixel positions, in combination with gtk_label_get_layout_offsets().
- * The returned layout is owned by the label so need not be
- * freed by the caller.
+ * The returned layout is owned by the @label so need not be
+ * freed by the caller. The @label is free to recreate its layout at
+ * any time, so it should be considered read-only.
  *
  * Return value: (transfer none): the #PangoLayout for this label
  **/
