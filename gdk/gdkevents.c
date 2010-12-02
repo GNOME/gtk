@@ -59,9 +59,16 @@ struct _GdkIOClosure
 /* Private variable declarations
  */
 
-GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
-gpointer       _gdk_event_data = NULL;
-GDestroyNotify _gdk_event_notify = NULL;
+static GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
+static gpointer       _gdk_event_data = NULL;
+static GDestroyNotify _gdk_event_notify = NULL;
+
+void
+_gdk_event_emit (GdkEvent *event)
+{
+  if (_gdk_event_func)
+    (*_gdk_event_func) (event, _gdk_event_data);
+}
 
 /*********************************************
  * Functions for maintaining the event queue *

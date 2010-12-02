@@ -478,7 +478,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
 
-  (*_gdk_event_func) (event, _gdk_event_data);
+  _gdk_event_emit (event);
 
   gdk_event_free (event);
 
@@ -508,7 +508,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
 
-  (*_gdk_event_func) (event, _gdk_event_data);
+  _gdk_event_emit (event);
 
   gdk_event_free (event);
   
@@ -536,7 +536,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
 
-  (*_gdk_event_func) (event, _gdk_event_data);
+  _gdk_event_emit (event);
 
   gdk_event_free (event);
 
@@ -563,7 +563,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   gdk_event_set_device (event, gdk_drag_context_get_device (current_context));
 
-  (*_gdk_event_func) (event, _gdk_event_data);
+  _gdk_event_emit (event);
 
   gdk_event_free (event);
 
@@ -592,7 +592,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   gdk_event_set_device (event,
                         gdk_drag_context_get_device (_gdk_quartz_drag_source_context));
 
-  (*_gdk_event_func) (event, _gdk_event_data);
+  _gdk_event_emit (event);
 
   gdk_event_free (event);
 

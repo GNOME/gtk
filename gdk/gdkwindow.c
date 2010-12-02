@@ -3944,7 +3944,7 @@ _gdk_window_process_updates_recurse (GdkWindow *window,
 	  event.expose.region = expose_region;
 	  cairo_region_get_extents (expose_region, &event.expose.area);
 
-	  (*_gdk_event_func) (&event, _gdk_event_data);
+          _gdk_event_emit (&event);
 
 	  g_object_unref (window);
 	}
@@ -3994,7 +3994,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
       cairo_region_t *update_area = window->update_area;
       window->update_area = NULL;
 
-      if (_gdk_event_func && gdk_window_is_viewable (window))
+      if (gdk_window_is_viewable (window))
 	{
 	  cairo_region_t *expose_region;
 	  gboolean end_implicit;

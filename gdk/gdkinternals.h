@@ -268,10 +268,6 @@ struct _GdkWindow
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
 #define GDK_WINDOW_DESTROYED(d) (GDK_WINDOW (d)->destroyed)
 
-extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
-extern gpointer       _gdk_event_data;
-extern GDestroyNotify _gdk_event_notify;
-
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;
@@ -281,6 +277,7 @@ extern gboolean   _gdk_enable_multidevice;
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
+void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
 void   _gdk_event_queue_remove_link  (GdkDisplay *display,
 				      GList      *node);

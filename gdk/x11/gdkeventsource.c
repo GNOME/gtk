@@ -318,8 +318,7 @@ gdk_event_source_dispatch (GSource     *source,
 
   if (event)
     {
-      if (_gdk_event_func)
-	(*_gdk_event_func) (event, _gdk_event_data);
+      _gdk_event_emit (event);
 
       gdk_event_free (event);
     }
