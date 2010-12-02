@@ -397,6 +397,7 @@ gtk_private_h_sources =		\
 	gtkkeyhash.h		\
 	gtkmenuprivate.h	\
 	gtkmnemonichash.h	\
+	gtkmodifierstyle.h	\
 	gtkmountoperationprivate.h \
 	gtkappchooserprivate.h	\
 	gtkappchoosermodule.h 	\
@@ -552,6 +553,7 @@ gtk_base_c_sources =            \
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
 	gtkmnemonichash.c	\
+	gtkmodifierstyle.c	\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
 	gtknotebook.c		\

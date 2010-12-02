@@ -62,6 +62,7 @@
 #include "gtksymboliccolor.h"
 #include "gtkcssprovider.h"
 #include "gtkanimationdescription.h"
+#include "gtkmodifierstyle.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
 
@@ -7925,31 +7926,44 @@ gtk_widget_modify_color_component (GtkWidget      *widget,
   gtk_widget_modify_style (widget, rc_style);
 }
 
-static GtkStyleProperties *
+static void
+modifier_style_changed (GtkModifierStyle *style,
+                        GtkWidget        *widget)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_invalidate (context);
+}
+
+static GtkModifierStyle *
 _gtk_widget_get_modifier_properties (GtkWidget *widget)
 {
-  GtkStyleProperties *properties;
+  GtkModifierStyle *style;
 
-  properties = g_object_get_qdata (G_OBJECT (widget), quark_modifier_style);
+  style = g_object_get_qdata (G_OBJECT (widget), quark_modifier_style);
 
-  if (G_UNLIKELY (!properties))
+  if (G_UNLIKELY (!style))
     {
       GtkStyleContext *context;
 
-      properties = gtk_style_properties_new ();
+      style = gtk_modifier_style_new ();
       g_object_set_qdata_full (G_OBJECT (widget),
                                quark_modifier_style,
-                               properties,
+                               style,
                                (GDestroyNotify) g_object_unref);
+
+      g_signal_connect (style, "changed",
+                        G_CALLBACK (modifier_style_changed), widget);
 
       context = gtk_widget_get_style_context (widget);
 
       gtk_style_context_add_provider (context,
-                                      GTK_STYLE_PROVIDER (properties),
+                                      GTK_STYLE_PROVIDER (style),
                                       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
     }
 
-  return properties;
+  return style;
 }
 
 /**
@@ -7995,27 +8009,12 @@ gtk_widget_override_color (GtkWidget     *widget,
                            GtkStateFlags  state,
                            const GdkRGBA *color)
 {
-  GtkStyleProperties *properties;
-  GtkStyleContext *context;
+  GtkModifierStyle *style;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  properties = _gtk_widget_get_modifier_properties (widget);
-
-  if (color)
-    gtk_style_properties_set (properties, state,
-                              "color", color,
-                              NULL);
-  else
-    gtk_style_properties_unset_property (properties, "color", state);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_invalidate (context);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
+  style = _gtk_widget_get_modifier_properties (widget);
+  gtk_modifier_style_set_color (style, state, color);
 }
 
 /**
@@ -8035,29 +8034,12 @@ gtk_widget_override_background_color (GtkWidget     *widget,
                                       GtkStateFlags  state,
                                       const GdkRGBA *color)
 {
-  GtkStyleProperties *properties;
-  GtkStyleContext *context;
+  GtkModifierStyle *style;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  properties = _gtk_widget_get_modifier_properties (widget);
-
-  if (color)
-    gtk_style_properties_set (properties, state,
-                              "background-color", color,
-                              NULL);
-  else
-    gtk_style_properties_unset_property (properties,
-                                         "background-color",
-                                         state);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_invalidate (context);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
+  style = _gtk_widget_get_modifier_properties (widget);
+  gtk_modifier_style_set_background_color (style, state, color);
 }
 
 /**
@@ -8076,27 +8058,12 @@ void
 gtk_widget_override_font (GtkWidget                  *widget,
                           const PangoFontDescription *font_desc)
 {
-  GtkStyleProperties *properties;
-  GtkStyleContext *context;
+  GtkModifierStyle *style;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  properties = _gtk_widget_get_modifier_properties (widget);
-
-  if (font_desc)
-    gtk_style_properties_set (properties, 0,
-                              "font", font_desc,
-                              NULL);
-  else
-    gtk_style_properties_unset_property (properties, "font", 0);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_invalidate (context);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
+  style = _gtk_widget_get_modifier_properties (widget);
+  gtk_modifier_style_set_font (style, font_desc);
 }
 
 /**
@@ -8118,27 +8085,12 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
                                     const gchar   *name,
                                     const GdkRGBA *color)
 {
-  GtkStyleProperties *properties;
-  GtkStyleContext *context;
-  GtkSymbolicColor *symbolic_color;
+  GtkModifierStyle *style;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  properties = _gtk_widget_get_modifier_properties (widget);
-  symbolic_color = gtk_symbolic_color_new_literal (color);
-
-  gtk_style_properties_map_color (properties,
-                                  name, symbolic_color);
-
-  gtk_symbolic_color_unref (symbolic_color);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_invalidate (context);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
+  style = _gtk_widget_get_modifier_properties (widget);
+  gtk_modifier_style_map_color (style, name, color);
 }
 
 /**
@@ -8196,6 +8148,11 @@ gtk_widget_modify_fg (GtkWidget      *widget,
     }
   else
     gtk_widget_override_color (widget, state, NULL);
+
+  g_signal_emit (widget,
+                 widget_signals[STYLE_SET],
+                 0,
+                 widget->priv->style);
 }
 
 /**
@@ -8261,6 +8218,11 @@ gtk_widget_modify_bg (GtkWidget      *widget,
     }
   else
     gtk_widget_override_background_color (widget, state, NULL);
+
+  g_signal_emit (widget,
+                 widget_signals[STYLE_SET],
+                 0,
+                 widget->priv->style);
 }
 
 /**
@@ -8407,6 +8369,11 @@ gtk_widget_modify_font (GtkWidget            *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_widget_override_font (widget, font_desc);
+
+  g_signal_emit (widget,
+                 widget_signals[STYLE_SET],
+                 0,
+                 widget->priv->style);
 }
 
 static void
