@@ -215,6 +215,28 @@ GtkTextDirection gtk_theming_engine_get_direction (GtkThemingEngine *engine);
 
 GtkJunctionSides gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine);
 
+/* Helper functions */
+void gtk_theming_engine_get_color            (GtkThemingEngine *engine,
+                                              GtkStateFlags     state,
+                                              GdkRGBA          *color);
+void gtk_theming_engine_get_background_color (GtkThemingEngine *engine,
+                                              GtkStateFlags     state,
+                                              GdkRGBA          *color);
+void gtk_theming_engine_get_border_color     (GtkThemingEngine *engine,
+                                              GtkStateFlags     state,
+                                              GdkRGBA          *color);
+
+void gtk_theming_engine_get_border  (GtkThemingEngine *engine,
+                                     GtkStateFlags     state,
+                                     GtkBorder        *border);
+void gtk_theming_engine_get_padding (GtkThemingEngine *engine,
+                                     GtkStateFlags     state,
+                                     GtkBorder        *padding);
+void gtk_theming_engine_get_margin  (GtkThemingEngine *engine,
+                                     GtkStateFlags     state,
+                                     GtkBorder        *margin);
+
+
 GtkThemingEngine * gtk_theming_engine_load (const gchar *name);
 
 GdkScreen * gtk_theming_engine_get_screen (GtkThemingEngine *engine);

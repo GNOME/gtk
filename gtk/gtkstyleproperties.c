@@ -857,6 +857,43 @@ lookup_default_value (PropertyNode *node,
     g_param_value_set_default (node->pspec, value);
 }
 
+const GValue *
+_gtk_style_properties_peek_property (GtkStyleProperties *props,
+                                     const gchar        *prop_name,
+                                     GtkStateFlags       state)
+{
+  GtkStylePropertiesPrivate *priv;
+  PropertyNode *node;
+  PropertyData *prop;
+  GValue *val;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), NULL);
+  g_return_val_if_fail (prop_name != NULL, NULL);
+
+  node = property_node_lookup (g_quark_try_string (prop_name));
+
+  if (!node)
+    {
+      g_warning ("Style property \"%s\" is not registered", prop_name);
+      return NULL;
+    }
+
+  priv = props->priv;
+  prop = g_hash_table_lookup (priv->properties,
+                              GINT_TO_POINTER (node->property_quark));
+
+  if (!prop)
+    return NULL;
+
+  val = property_data_match_state (prop, state);
+
+  if (val &&
+      !style_properties_resolve_type (props, node, val))
+    return NULL;
+
+  return val;
+}
+
 /**
  * gtk_style_properties_get_property:
  * @props: a #GtkStyleProperties

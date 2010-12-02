@@ -3151,6 +3151,198 @@ gtk_style_context_set_background (GtkStyleContext *context,
     }
 }
 
+/**
+ * gtk_style_context_get_color:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the color for
+ * @color: (out): return value for the foreground color
+ *
+ * Gets the foreground color for a given state.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_get_color (GtkStyleContext *context,
+                             GtkStateFlags    state,
+                             GdkRGBA         *color)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+  GdkRGBA *c;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store,
+                                               "color", state);
+  c = g_value_get_boxed (value);
+  *color = *c;
+}
+
+/**
+ * gtk_style_context_get_background_color:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the color for
+ * @color: (out): return value for the background color
+ *
+ * Gets the background color for a given state.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_get_background_color (GtkStyleContext *context,
+                                        GtkStateFlags    state,
+                                        GdkRGBA         *color)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+  GdkRGBA *c;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store,
+                                               "background-color", state);
+  c = g_value_get_boxed (value);
+  *color = *c;
+}
+
+/**
+ * gtk_style_context_get_border_color:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the color for
+ * @color: (out): return value for the border color
+ *
+ * Gets the border color for a given state.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_get_border_color (GtkStyleContext *context,
+                                    GtkStateFlags    state,
+                                    GdkRGBA         *color)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+  GdkRGBA *c;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store,
+                                               "border-color", state);
+  c = g_value_get_boxed (value);
+  *color = *c;
+}
+
+/**
+ * gtk_style_context_get_border:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the border for
+ * @color: (out): return value for the border settings
+ *
+ * Gets the border for a given state as a #GtkBorder.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_get_border (GtkStyleContext *context,
+                              GtkStateFlags    state,
+                              GtkBorder       *border)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+  GtkBorder *b;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store,
+                                               "border-width", state);
+  b = g_value_get_boxed (value);
+  *border = *b;
+}
+
+/**
+ * gtk_style_context_get_padding:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the padding for
+ * @color: (out): return value for the padding settings
+ *
+ * Gets the padding for a given state as a #GtkBorder.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_get_padding (GtkStyleContext *context,
+                               GtkStateFlags    state,
+                               GtkBorder       *padding)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+  GtkBorder *b;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store,
+                                               "padding", state);
+  b = g_value_get_boxed (value);
+  *padding = *b;
+}
+
+/**
+ * gtk_style_context_get_margin:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the border for
+ * @color: (out): return value for the margin settings
+ *
+ * Gets the margin for a given state as a #GtkBorder.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_get_margin (GtkStyleContext *context,
+                              GtkStateFlags    state,
+                              GtkBorder       *margin)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+  GtkBorder *b;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  g_return_if_fail (priv->widget_path != NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store,
+                                               "margin", state);
+  b = g_value_get_boxed (value);
+  *margin = *b;
+}
+
 /* Paint methods */
 
 /**

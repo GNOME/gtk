@@ -737,6 +737,145 @@ gtk_theming_engine_get_junction_sides (GtkThemingEngine *engine)
   return gtk_style_context_get_junction_sides (priv->context);
 }
 
+/**
+ * gtk_theming_engine_get_color:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve the color for
+ * @color: (out): return value for the foreground color
+ *
+ * Gets the foreground color for a given state.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_theming_engine_get_color (GtkThemingEngine *engine,
+                              GtkStateFlags     state,
+                              GdkRGBA          *color)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+  gtk_style_context_get_color (priv->context, state, color);
+}
+
+/**
+ * gtk_theming_engine_get_background_color:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve the color for
+ * @color: (out): return value for the background color
+ *
+ * Gets the background color for a given state.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_theming_engine_get_background_color (GtkThemingEngine *engine,
+                                         GtkStateFlags     state,
+                                         GdkRGBA          *color)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+  gtk_style_context_get_background_color (priv->context, state, color);
+}
+
+/**
+ * gtk_theming_engine_get_border_color:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve the color for
+ * @color: (out): return value for the border color
+ *
+ * Gets the border color for a given state.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_theming_engine_get_border_color (GtkThemingEngine *engine,
+                                     GtkStateFlags     state,
+                                     GdkRGBA          *color)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+  gtk_style_context_get_border_color (priv->context, state, color);
+}
+
+/**
+ * gtk_theming_engine_get_border:
+ * @engine: a #GtkthemingEngine
+ * @state: state to retrieve the border for
+ * @color: (out): return value for the border settings
+ *
+ * Gets the border for a given state as a #GtkBorder.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_theming_engine_get_border (GtkThemingEngine *engine,
+                               GtkStateFlags     state,
+                               GtkBorder        *border)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+  gtk_style_context_get_border (priv->context, state, border);
+}
+
+/**
+ * gtk_theming_engine_get_padding:
+ * @engine: a #GtkthemingEngine
+ * @state: state to retrieve the padding for
+ * @color: (out): return value for the padding settings
+ *
+ * Gets the padding for a given state as a #GtkBorder.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_theming_engine_get_padding (GtkThemingEngine *engine,
+                                GtkStateFlags     state,
+                                GtkBorder        *padding)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+  gtk_style_context_get_padding (priv->context, state, padding);
+}
+
+/**
+ * gtk_theming_engine_get_margin:
+ * @engien: a #GtkThemingEngine
+ * @state: state to retrieve the border for
+ * @color: (out): return value for the margin settings
+ *
+ * Gets the margin for a given state as a #GtkBorder.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_theming_engine_get_margin (GtkThemingEngine *engine,
+                               GtkStateFlags     state,
+                               GtkBorder        *margin)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
+
+  priv = engine->priv;
+  gtk_style_context_get_margin (priv->context, state, margin);
+}
+
+
 /* GtkThemingModule */
 
 static gboolean

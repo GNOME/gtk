@@ -23,6 +23,7 @@
 #include <glib-object.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkwidgetpath.h>
+#include <gtk/gtkborder.h>
 
 G_BEGIN_DECLS
 
@@ -420,6 +421,26 @@ void gtk_style_context_push_animatable_region (GtkStyleContext *context,
                                                gpointer         region_id);
 void gtk_style_context_pop_animatable_region  (GtkStyleContext *context);
 
+/* Some helper functions to retrieve most common properties */
+void gtk_style_context_get_color            (GtkStyleContext *context,
+                                             GtkStateFlags    state,
+                                             GdkRGBA         *color);
+void gtk_style_context_get_background_color (GtkStyleContext *context,
+                                             GtkStateFlags    state,
+                                             GdkRGBA         *color);
+void gtk_style_context_get_border_color     (GtkStyleContext *context,
+                                             GtkStateFlags    state,
+                                             GdkRGBA         *color);
+
+void gtk_style_context_get_border           (GtkStyleContext *context,
+                                             GtkStateFlags    state,
+                                             GtkBorder       *border);
+void gtk_style_context_get_padding          (GtkStyleContext *context,
+                                             GtkStateFlags    state,
+                                             GtkBorder       *padding);
+void gtk_style_context_get_margin           (GtkStyleContext *context,
+                                             GtkStateFlags    state,
+                                             GtkBorder       *margin);
 
 /* Semi-private API */
 const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
