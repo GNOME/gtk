@@ -3125,8 +3125,12 @@ gtk_toolbar_finalize (GObject *object)
   g_timer_destroy (priv->timer);
   
   if (priv->menu)
-    gtk_widget_destroy (GTK_WIDGET (priv->menu));
-  
+    {
+      g_signal_handlers_disconnect_by_func (priv->menu,
+                                            menu_deactivated, toolbar);
+      gtk_widget_destroy (GTK_WIDGET (priv->menu));
+    }
+
   if (priv->idle_id)
     g_source_remove (priv->idle_id);
 
