@@ -31,6 +31,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	print-editor			\
 	testaccel			\
 	testadjustsize			\
+	testappchooser			\
+	testappchooserbutton		\
 	testassistant			\
 	testbbox			\
 	testbuttons			\
@@ -96,7 +98,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testexpander			\
 	testvolumebutton		\
 	testscrolledwindow		\
-	testcellarea
+	testcellarea			\
+	testswitch
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -154,6 +157,8 @@ testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
+testappchooser_DEPENDENCIES = $(TEST_DEPS)
+testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
@@ -186,6 +191,7 @@ testcellarea_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
+testswitch_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -227,6 +233,8 @@ testnotebookdnd_LDADD = $(LDADDS)
 testnouiprint_LDADD = $(LDADDS)
 testoffscreen_LDADD = $(LDADDS)
 testoffscreenwindow_LDADD = $(LDADDS)
+testappchooser_LDADD = $(LDADDS)
+testappchooserbutton_LDADD = $(LDADDS)
 testorientable_LDADD = $(LDADDS)
 testprint_LDADD = $(LDADDS)
 testrecentchooser_LDADD = $(LDADDS)
@@ -261,6 +269,7 @@ testcellarea_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
 testexpand_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
+testswitch_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
@@ -383,12 +392,20 @@ testoffscreen_SOURCES = 	\
 testoffscreenwindow_SOURCES =	\
 	testoffscreenwindow.c
 
+testappchooser_SOURCES = \
+	testappchooser.c
+
+testappchooserbutton_SOURCES = \
+	testappchooserbutton.c
+
 testwindows_SOURCES = 	\
 	testwindows.c
 
 testexpand_SOURCES = testexpand.c
 
 testexpander_SOURCES = testexpander.c
+
+testswitch_SOURCES = testswitch.c
 
 EXTRA_DIST += 			\
 	prop-editor.h		\

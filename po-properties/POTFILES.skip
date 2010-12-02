@@ -1,10 +1,1 @@
 demos/gtk-demo/demo.ui
-gdk-pixbuf/io-gdip-bmp.c
-gdk-pixbuf/io-gdip-emf.c
-gdk-pixbuf/io-gdip-gif.c
-gdk-pixbuf/io-gdip-ico.c
-gdk-pixbuf/io-gdip-jpeg.c
-gdk-pixbuf/io-gdip-png.c
-gdk-pixbuf/io-gdip-utils.c
-gdk-pixbuf/io-gdip-wmf.c
-

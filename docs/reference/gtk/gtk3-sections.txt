@@ -801,6 +801,10 @@ gtk_combo_box_get_active
 gtk_combo_box_set_active
 gtk_combo_box_get_active_iter
 gtk_combo_box_set_active_iter
+gtk_combo_box_get_id_column
+gtk_combo_box_set_id_column
+gtk_combo_box_get_active_id
+gtk_combo_box_set_active_id
 gtk_combo_box_get_model
 gtk_combo_box_set_model
 gtk_combo_box_popup_for_device
@@ -840,9 +844,12 @@ gtk_combo_box_get_type
 GtkComboBoxText
 gtk_combo_box_text_new
 gtk_combo_box_text_new_with_entry
+gtk_combo_box_text_append
+gtk_combo_box_text_prepend
+gtk_combo_box_text_insert
 gtk_combo_box_text_append_text
-gtk_combo_box_text_insert_text
 gtk_combo_box_text_prepend_text
+gtk_combo_box_text_insert_text
 gtk_combo_box_text_remove
 gtk_combo_box_text_remove_all
 gtk_combo_box_text_get_active_text
@@ -6381,4 +6388,121 @@ GTK_GRID_GET_CLASS
 <SUBSECTION Private>
 GtkGridPrivate
 gtk_grid_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkswitch</FILE>
+GtkSwitch
+gtk_switch_new
+gtk_switch_set_active
+gtk_switch_get_active
+
+<SUBSECTION Standard>
+GtkSwitchClass
+GTK_TYPE_SWITCH
+GTK_SWITCH
+GTK_SWITCH_CLASS
+GTK_IS_SWITCH
+GTK_IS_SWITCH_CLASS
+GTK_SWITCH_GET_CLASS
+
+<SUBSECTION Private>
+GtkSwitchPrivate
+gtk_switch_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkappchooser</FILE>
+<TITLE>GtkAppChooser</TITLE>
+GtkAppChooser
+gtk_app_chooser_get_app_info
+gtk_app_chooser_get_content_type
+gtk_app_chooser_refresh
+
+<SUBSECTION Standard>
+GTK_TYPE_APP_CHOOSER
+GTK_APP_CHOOSER
+GTK_IS_APP_CHOOSER
+
+<SUBSECTION Private>
+gtk_app_chooser_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkappchooserbutton</FILE>
+<TITLE>GtkAppChooserButton</TITLE>
+GtkAppChooserButton
+gtk_app_chooser_button_new
+gtk_app_chooser_button_append_custom_item
+gtk_app_chooser_button_append_separator
+gtk_app_chooser_button_set_active_custom_item
+gtk_app_chooser_button_get_show_dialog_item
+gtk_app_chooser_button_set_show_dialog_item
+
+<SUBSECTION Standard>
+GtkAppChooserButtonClass
+GTK_TYPE_APP_CHOOSER_BUTTON
+GTK_APP_CHOOSER_BUTTON
+GTK_APP_CHOOSER_BUTTON_CLASS
+GTK_IS_APP_CHOOSER_BUTTON
+GTK_IS_APP_CHOOSER_BUTTON_CLASS
+GTK_APP_CHOOSER_BUTTON_GET_CLASS
+
+<SUBSECTION Private>
+GtkAppChooserButtonPrivate
+gtk_app_chooser_button_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkappchooserdialog</FILE>
+<TITLE>GtkAppChooserDialog</TITLE>
+GtkAppChooserDialog
+gtk_app_chooser_dialog_new
+gtk_app_chooser_dialog_new_for_content_type
+gtk_app_chooser_dialog_get_widget
+
+<SUBSECTION Standard>
+GtkAppChooserDialogClass
+GTK_TYPE_APP_CHOOSER_DIALOG
+GTK_APP_CHOOSER_DIALOG
+GTK_APP_CHOOSER_DIALOG_CLASS
+GTK_IS_APP_CHOOSER_DIALOG
+GTK_IS_APP_CHOOSER_DIALOG_CLASS
+GTK_APP_CHOOSER_DIALOG_GET_CLASS
+
+<SUBSECTION Private>
+GtkAppChooserDialogPrivate
+gtk_app_chooser_dialog_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkappchooserwidget</FILE>
+<TITLE>GtkAppChooserWidget</TITLE>
+GtkAppChooserWidget
+gtk_app_chooser_widget_new
+gtk_app_chooser_widget_set_show_default
+gtk_app_chooser_widget_get_show_default
+gtk_app_chooser_widget_set_show_recommended
+gtk_app_chooser_widget_get_show_recommended
+gtk_app_chooser_widget_set_show_fallback
+gtk_app_chooser_widget_get_show_fallback
+gtk_app_chooser_widget_set_show_other
+gtk_app_chooser_widget_get_show_other
+gtk_app_chooser_widget_set_show_all
+gtk_app_chooser_widget_get_show_all
+gtk_app_chooser_widget_set_default_text
+gtk_app_chooser_widget_get_default_text
+
+<SUBSECTION Standard>
+GtkAppChooserWidgetClass
+GTK_TYPE_APP_CHOOSER_WIDGET
+GTK_APP_CHOOSER_WIDGET
+GTK_APP_CHOOSER_WIDGET_CLASS
+GTK_IS_APP_CHOOSER_WIDGET
+GTK_IS_APP_CHOOSER_WIDGET_CLASS
+GTK_APP_CHOOSER_WIDGET_GET_CLASS
+
+<SUBSECTION Private>
+GtkAppChooserWidgetPrivate
+gtk_app_chooser_widget_get_type
 </SECTION>

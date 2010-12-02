@@ -97,6 +97,7 @@
       <xi:include href="xml/gtklinkbutton.xml" />
       <xi:include href="xml/gtkscalebutton.xml" />
       <xi:include href="xml/gtkvolumebutton.xml" />
+      <xi:include href="xml/gtkswitch.xml" />
     </chapter>
 
     <chapter id="NumericEntry">
@@ -286,13 +287,6 @@
       <xi:include href="xml/gtksocket.xml" />
     </chapter>
 
-    <chapter id="SpecialObjects">
-      <title>Special-purpose features</title>
-      <xi:include href="xml/gtkruler.xml" />
-      <xi:include href="xml/gtkhruler.xml" />
-      <xi:include href="xml/gtkvruler.xml" />
-    </chapter>
-
     <chapter id="RecentDocuments">
       <title>Recently Used Documents</title>
       <xi:include href="xml/gtkrecentmanager.xml" />
@@ -301,6 +295,14 @@
       <xi:include href="xml/gtkrecentchoosermenu.xml" />
       <xi:include href="xml/gtkrecentchooserwidget.xml" />
       <xi:include href="xml/gtkrecentfilter.xml" />
+    </chapter>
+
+    <chapter id="ApplicationChoosing">
+      <title>Choosing from installed applications</title>
+      <xi:include href="xml/gtkappchooser.xml" />
+      <xi:include href="xml/gtkappchooserbutton.xml" />
+      <xi:include href="xml/gtkappchooserdialog.xml" />
+      <xi:include href="xml/gtkappchooserwidget.xml" />
     </chapter>
 
     <chapter id="Builder">

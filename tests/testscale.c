@@ -20,6 +20,16 @@
 
 #include <gtk/gtk.h>
 
+static void
+show_trough_toggled (GtkToggleButton *button,
+                     GtkScale        *scale)
+{
+  gboolean value;
+
+  value = gtk_toggle_button_get_active (button);
+  gtk_range_set_range (GTK_RANGE (scale), 0., value ? 100.0 : 0.);
+}
+
 int main (int argc, char *argv[])
 {
   GtkWidget *window;
@@ -27,6 +37,7 @@ int main (int argc, char *argv[])
   GtkWidget *box2;
   GtkWidget *frame;
   GtkWidget *scale;
+  GtkWidget *toggle;
   gdouble marks[3] = { 0.0, 50.0, 100.0 };
   const gchar *labels[3] = { 
     "<small>Left</small>", 
@@ -94,6 +105,19 @@ int main (int argc, char *argv[])
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[2], GTK_POS_BOTTOM, bath_labels[2]);
   gtk_scale_add_mark (GTK_SCALE (scale), bath_marks[3], GTK_POS_TOP, bath_labels[3]);
   gtk_container_add (GTK_CONTAINER (frame), scale);
+  gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
+
+  frame = gtk_frame_new ("Show/hide trough");
+  box2 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+  scale = gtk_scale_new_with_range (GTK_ORIENTATION_HORIZONTAL,
+                                    0, 100, 1);
+  gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
+  toggle = gtk_toggle_button_new_with_label ("Show slider trough");
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), TRUE);
+  g_signal_connect (G_OBJECT (toggle), "toggled",
+                    G_CALLBACK (show_trough_toggled), scale);
+  gtk_box_pack_start (GTK_BOX (box2), toggle, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), box2);
   gtk_box_pack_start (GTK_BOX (box), frame, FALSE, FALSE, 0);
 
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);

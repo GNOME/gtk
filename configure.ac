@@ -10,7 +10,7 @@
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [91])
-m4_define([gtk_micro_version], [5])
+m4_define([gtk_micro_version], [6])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -61,8 +61,8 @@ cflags_set=${CFLAGS+set}
 AM_INIT_AUTOMAKE([1.10 no-define -Wno-portability dist-bzip2])
 AM_MAINTAINER_MODE([enable])
 
-# Support silent build rules, requires at least automake-1.11. Enable
-# by either passing --enable-silent-rules to configure or passing V=0
+# Support silent build rules, requires at least automake-1.11. Disable
+# by either passing --disable-silent-rules to configure or passing V=1
 # to make
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -1487,6 +1487,25 @@ GLIB_GSETTINGS
 ##################################################
 
 GOBJECT_INTROSPECTION_CHECK([0.9.3])
+
+##################################################
+# Packagekit module
+#################################################
+
+AC_ARG_ENABLE(packagekit,
+	      AC_HELP_STRING([--disable-packagekit],
+			     [build packagekit open with module]))
+
+ENABLE_PACKAGEKIT=
+if test "os_win32" != "yes"; then
+   	if test "x$enable_packagekit" != "xno"; then
+	   	ENABLE_PACKAGEKIT=1
+      	   	AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
+	fi
+fi
+
+AC_SUBST(ENABLE_PACKAGEKIT)
+AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$ENABLE_PACKAGEKIT" = "x1")
 
 ##################################################
 # Checks for gtk-doc and docbook-tools

@@ -68,9 +68,9 @@ struct _GtkSelectionData
 
 struct _GtkTargetEntry
 {
-  const gchar *target;
-  guint        flags;
-  guint        info;
+  gchar *target;
+  guint  flags;
+  guint  info;
 };
 
 /* These structures not public, and are here only for the convenience of

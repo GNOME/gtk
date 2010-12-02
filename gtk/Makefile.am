@@ -156,7 +156,11 @@ gtk_public_h_sources =          \
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
-	gtkapplication.h    \
+	gtkappchooser.h		\
+	gtkappchooserdialog.h	\
+	gtkappchooserbutton.h   \
+	gtkappchooserwidget.h	\
+	gtkapplication.h    	\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkassistant.h		\
@@ -292,6 +296,7 @@ gtk_public_h_sources =          \
 	gtkstatusicon.h		\
 	gtkstock.h		\
 	gtkstyle.h		\
+	gtkswitch.h		\
 	gtktable.h		\
 	gtktearoffmenuitem.h    \
 	gtktestutils.h		\
@@ -350,6 +355,18 @@ endif
 gtk_semi_private_h_sources =    \
 	gtktextlayout.h
 
+if ENABLE_PACKAGEKIT
+gtk_appchooser_impl_h_sources = \
+	gtkappchooseronlinepk.h \
+	$(NULL)
+endif
+
+if ENABLE_PACKAGEKIT
+gtk_appchooser_impl_c_sources = \
+	gtkappchooseronlinepk.c \
+	$(NULL)
+endif
+
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
 	gtkbuttonprivate.h	\
@@ -374,6 +391,9 @@ gtk_private_h_sources =		\
 	gtkmenuprivate.h	\
 	gtkmnemonichash.h	\
 	gtkmountoperationprivate.h \
+	gtkappchooserprivate.h	\
+	gtkappchoosermodule.h 	\
+	gtkappchooseronline.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
@@ -401,7 +421,8 @@ gtk_private_h_sources =		\
 	gtktreeprivate.h	\
 	gtkwindow-decorate.h	\
 	gtkwidgetprivate.h	\
-	$(gtk_clipboard_dnd_h_sources)
+	$(gtk_clipboard_dnd_h_sources) \
+	$(gtk_appchooser_impl_h_sources)
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources =            \
@@ -419,7 +440,13 @@ gtk_base_c_sources =            \
 	gtkactivatable.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\
-	gtkapplication.c \
+	gtkappchooser.c		\
+	gtkappchooserwidget.c	\
+	gtkappchooserbutton.c   \
+	gtkappchooserdialog.c	\
+	gtkappchoosermodule.c	\
+	gtkappchooseronline.c	\
+	gtkapplication.c 	\
 	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkassistant.c		\
@@ -569,6 +596,7 @@ gtk_base_c_sources =            \
 	gtkstatusicon.c		\
 	gtkstock.c		\
 	gtkstyle.c		\
+	gtkswitch.c		\
 	gtktable.c		\
 	gtktearoffmenuitem.c    \
 	gtktestutils.c		\
@@ -622,7 +650,8 @@ gtk_base_c_sources =            \
 	gtkwidget.c		\
 	gtkwindow-decorate.c    \
 	gtkwindow.c		\
-	$(gtk_clipboard_dnd_c_sources)
+	$(gtk_clipboard_dnd_c_sources) \
+	$(gtk_appchooser_impl_c_sources)
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)

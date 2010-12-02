@@ -115,8 +115,8 @@ parse_rgb_value (const char  *str,
 
 /**
  * gdk_rgba_parse:
- * @spec: the string specifying the color
  * @rgba: the #GdkRGBA struct to fill in
+ * @spec: the string specifying the color
  *
  * Parses a textual representation of a color, filling in
  * the <structfield>red</structfield>, <structfield>green</structfield>,
@@ -150,8 +150,8 @@ parse_rgb_value (const char  *str,
  * Since: 3.0
  **/
 gboolean
-gdk_rgba_parse (const gchar *spec,
-                GdkRGBA     *rgba)
+gdk_rgba_parse (GdkRGBA     *rgba,
+                const gchar *spec)
 {
   gboolean has_alpha;
   gdouble r, g, b, a;
