@@ -506,7 +506,7 @@ GDK_TYPE_WM_DECORATION
 GDK_TYPE_WM_FUNCTION
 
 <SUBSECTION Private>
-gdk_window_object_get_type
+gdk_window_get_type
 gdk_drawable_get_type
 GdkWindowObject
 GdkWindowObjectClass
