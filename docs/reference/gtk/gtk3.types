@@ -26,6 +26,9 @@ gtk_buildable_get_type
 gtk_button_box_get_type
 gtk_button_get_type
 gtk_calendar_get_type
+gtk_cell_area_get_type
+gtk_cell_area_box_get_type
+gtk_cell_area_context_get_type
 gtk_cell_editable_get_type
 gtk_cell_layout_get_type
 gtk_cell_renderer_accel_get_type

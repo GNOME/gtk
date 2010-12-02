@@ -137,6 +137,9 @@
       <xi:include href="xml/gtktreemodelsort.xml" />
       <xi:include href="xml/gtktreemodelfilter.xml" />
       <xi:include href="xml/gtkcelllayout.xml" />
+      <xi:include href="xml/gtkcellarea.xml" />
+      <xi:include href="xml/gtkcellareabox.xml" />
+      <xi:include href="xml/gtkcellareacontext.xml" />
       <xi:include href="xml/gtkcellrenderer.xml" />
       <xi:include href="xml/gtkcelleditable.xml" />
       <xi:include href="xml/gtkcellrendereraccel.xml" />
