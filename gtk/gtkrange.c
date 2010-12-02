@@ -2956,7 +2956,9 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
       gtk_widget_queue_draw (GTK_WIDGET (range));
       /* setup a timer to ensure the range isn't lagging too much behind the scroll position */
       if (!priv->repaint_id)
-        priv->repaint_id = gdk_threads_add_timeout_full (GDK_PRIORITY_EVENTS, 181, force_repaint, range, NULL);
+        priv->repaint_id = gdk_threads_add_timeout_full (GDK_PRIORITY_EVENTS,
+                                                         181, force_repaint,
+                                                         range, NULL);
     }
   
   /* Note that we don't round off to priv->round_digits here.
@@ -4076,8 +4078,8 @@ initial_timeout (gpointer data)
   g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
   priv->timer->timeout_id = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
-                                            second_timeout,
-                                            range);
+                                                     second_timeout,
+                                                     range);
   /* remove self */
   return FALSE;
 }
@@ -4099,8 +4101,8 @@ gtk_range_add_step_timer (GtkRange      *range,
   priv->timer = g_new (GtkRangeStepTimer, 1);
 
   priv->timer->timeout_id = gdk_threads_add_timeout (timeout,
-                                            initial_timeout,
-                                            range);
+                                                     initial_timeout,
+                                                     range);
   priv->timer->step = step;
 
   gtk_range_scroll (range, priv->timer->step);
@@ -4143,8 +4145,8 @@ gtk_range_reset_update_timer (GtkRange *range)
   gtk_range_remove_update_timer (range);
 
   priv->update_timeout_id = gdk_threads_add_timeout (UPDATE_DELAY,
-                                            update_timeout,
-                                            range);
+                                                     update_timeout,
+                                                     range);
 }
 
 static void
