@@ -4850,6 +4850,7 @@ gtk_widget_override_background_color
 gtk_widget_override_color
 gtk_widget_override_font
 gtk_widget_override_symbolic_color
+gtk_widget_override_cursor
 gtk_widget_modify_style
 gtk_widget_get_modifier_style
 gtk_widget_modify_fg

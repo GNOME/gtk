@@ -8094,6 +8094,42 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
 }
 
 /**
+ * gtk_widget_override_cursor:
+ * @widget: a #GtkWidget
+ * @primary: the color to use for primary cursor (does not need to be
+ *           allocated), or %NULL to undo the effect of previous calls to
+ *           of gtk_widget_override_cursor().
+ * @secondary: the color to use for secondary cursor (does not need to be
+ *             allocated), or %NULL to undo the effect of previous calls to
+ *             of gtk_widget_override_cursor().
+ *
+ * Sets the cursor color to use in a widget, overriding the
+ * #GtkWidget:cursor-color and #GtkWidget:secondary-cursor-color
+ * style properties. All other style values are left untouched.
+ * See also gtk_widget_modify_style().
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_override_cursor (GtkWidget       *widget,
+                            const GdkColor  *cursor,
+                            const GdkColor  *secondary_cursor)
+{
+  GtkModifierStyle *style;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  style = _gtk_widget_get_modifier_properties (widget);
+  gtk_modifier_style_set_color_property (style,
+                                         GTK_TYPE_WIDGET,
+                                         "cursor-color", cursor);
+  gtk_modifier_style_set_color_property (style,
+                                         GTK_TYPE_WIDGET,
+                                         "secondary-cursor-color",
+                                         secondary_cursor);
+}
+
+/**
  * gtk_widget_modify_fg:
  * @widget: a #GtkWidget
  * @state: the state for which to set the foreground color
@@ -8333,22 +8369,22 @@ modify_color_property (GtkWidget      *widget,
  * See also gtk_widget_modify_style().
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.0. Use gtk_widget_override_cursor() instead.
  **/
 void
 gtk_widget_modify_cursor (GtkWidget      *widget,
 			  const GdkColor *primary,
 			  const GdkColor *secondary)
 {
-  GtkRcStyle *rc_style;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  rc_style = gtk_widget_get_modifier_style (widget);
+  gtk_widget_override_cursor (widget, primary, secondary);
 
-  modify_color_property (widget, rc_style, "cursor-color", primary);
-  modify_color_property (widget, rc_style, "secondary-cursor-color", secondary);
-
-  gtk_widget_modify_style (widget, rc_style);
+  g_signal_emit (widget,
+                 widget_signals[STYLE_SET],
+                 0,
+                 widget->priv->style);
 }
 
 /**
