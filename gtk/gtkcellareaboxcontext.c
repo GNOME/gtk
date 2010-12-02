@@ -418,9 +418,9 @@ gtk_cell_area_box_context_sum (GtkCellAreaBoxContext *context,
 
   for (i = 0; i < array->len; i++)
     {
-      CachedSize *size = &g_array_index (priv->base_widths, CachedSize, i);
+      CachedSize *size = &g_array_index (array, CachedSize, i);
 
-      if (box_orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (box_orientation == orientation)
 	{
 	  /* Dont add spacing for 0 size groups, they can be 0 size because
 	   * they contain only invisible cells for this round of requests 
