@@ -119,9 +119,10 @@ static void
 orientation_changed (GtkComboBox      *combo,
 		     CellAreaScaffold *scaffold)
 {
+  GtkCellArea   *area = cell_area_scaffold_get_area (scaffold);
   GtkOrientation orientation = gtk_combo_box_get_active (combo);
 
-  gtk_orientable_set_orientation (GTK_ORIENTABLE (scaffold), orientation);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (area), orientation);
 }
 
 static void
