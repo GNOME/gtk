@@ -94,7 +94,6 @@ int
 main (int argc, char *argv[])
 {
         g_test_init (&argc, &argv, NULL);
-        gdk_init (&argc, &argv);
 
         g_test_add_func ("/color/parse", test_color_parse);
         g_test_add_func ("/color/to-string", test_color_to_string);
