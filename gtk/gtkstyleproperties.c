@@ -816,12 +816,41 @@ resolve_gradient (GtkStyleProperties *props,
   return TRUE;
 }
 
+static gboolean
+style_properties_resolve_type (GtkStyleProperties *props,
+                               PropertyNode       *node,
+                               GValue             *val)
+{
+  if (val && G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
+    {
+      if (node->pspec->value_type == GDK_TYPE_RGBA)
+        {
+          if (!resolve_color (props, val))
+            return FALSE;
+        }
+      else if (node->pspec->value_type == GDK_TYPE_COLOR)
+        {
+          if (!resolve_color_rgb (props, val))
+            return FALSE;
+        }
+      else
+        return FALSE;
+    }
+  else if (val && G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
+    {
+      g_return_val_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
+
+      if (!resolve_gradient (props, val))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 lookup_default_value (PropertyNode *node,
                       GValue       *value)
 {
-  g_value_init (value, node->pspec->value_type);
-
   if (node->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
     g_value_set_object (value, gtk_theming_engine_load (NULL));
   else
@@ -873,31 +902,11 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
     return FALSE;
 
   g_value_init (value, node->pspec->value_type);
-
   val = property_data_match_state (prop, state);
 
-  if (val && G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
-    {
-      if (node->pspec->value_type == GDK_TYPE_RGBA)
-        {
-          if (!resolve_color (props, val))
-            return FALSE;
-        }
-      else if (node->pspec->value_type == GDK_TYPE_COLOR)
-        {
-          if (!resolve_color_rgb (props, val))
-            return FALSE;
-        }
-      else
-        return FALSE;
-    }
-  else if (val && G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
-    {
-      g_return_val_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN, FALSE);
-
-      if (!resolve_gradient (props, val))
-        return FALSE;
-    }
+  if (val &&
+      !style_properties_resolve_type (props, node, val))
+    return FALSE;
 
   if (val)
     {
@@ -905,13 +914,7 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
       g_value_copy (val, value);
     }
   else
-    {
-      GValue default_value = { 0 };
-
-      lookup_default_value (node, &default_value);
-      g_value_copy (&default_value, value);
-      g_value_unset (&default_value);
-    }
+    lookup_default_value (node, value);
 
   return TRUE;
 }
@@ -960,27 +963,9 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
       if (prop)
         val = property_data_match_state (prop, state);
 
-      if (val && G_VALUE_TYPE (val) == GTK_TYPE_SYMBOLIC_COLOR)
-        {
-          gboolean resolved;
-
-          if (node->pspec->value_type == GDK_TYPE_RGBA)
-            resolved = resolve_color (props, val);
-          else if (node->pspec->value_type == GDK_TYPE_COLOR)
-            resolved = resolve_color_rgb (props, val);
-          else
-            resolved = FALSE;
-
-          if (!resolved)
-            val = NULL;
-        }
-      else if (val && G_VALUE_TYPE (val) == GTK_TYPE_GRADIENT)
-        {
-          g_return_if_fail (node->pspec->value_type == CAIRO_GOBJECT_TYPE_PATTERN);
-
-          if (!resolve_gradient (props, val))
-            val = NULL;
-        }
+      if (val &&
+          !style_properties_resolve_type (props, node, val))
+        val = NULL;
 
       if (val)
         {
@@ -991,6 +976,7 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
         {
           GValue default_value = { 0 };
 
+          g_value_init (&default_value, node->pspec->value_type);
           lookup_default_value (node, &default_value);
           G_VALUE_LCOPY (&default_value, args, 0, &error);
           g_value_unset (&default_value);
