@@ -3693,15 +3693,7 @@ gdk_cairo_create (GdkWindow *window)
 
   if (!window->paint_stack)
     {
-      cairo_reset_clip (cr);
-
-      cairo_save (cr);
-      cairo_identity_matrix (cr);
-
-      cairo_new_path (cr);
       gdk_cairo_region (cr, window->clip_region_with_children);
-
-      cairo_restore (cr);
       cairo_clip (cr);
     }
   else
@@ -3710,16 +3702,9 @@ gdk_cairo_create (GdkWindow *window)
 
       /* Only needs to clip to region if piggybacking
 	 on an implicit paint */
-      cairo_reset_clip (cr);
       if (paint->uses_implicit)
 	{
-	  cairo_save (cr);
-	  cairo_identity_matrix (cr);
-
-	  cairo_new_path (cr);
 	  gdk_cairo_region (cr, paint->region);
-	  cairo_restore (cr);
-
 	  cairo_clip (cr);
 	}
     }
