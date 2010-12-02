@@ -396,17 +396,20 @@ gtk_tree_view_column_dispose (GObject *object)
   GtkTreeViewColumn *tree_column = (GtkTreeViewColumn *) object;
 
   if (tree_column->cell_area_context)
-    {
-      g_object_unref (tree_column->cell_area_context);
-
+    { 
       g_signal_handler_disconnect (tree_column->cell_area_context,
 				   tree_column->context_changed_signal);
+
+      g_object_unref (tree_column->cell_area_context);
+
+      tree_column->cell_area_context = NULL;
       tree_column->context_changed_signal = 0;
     }
 
   if (tree_column->cell_area)
     {
       g_object_unref (tree_column->cell_area);
+      tree_column->cell_area = NULL;
     }
 
   if (tree_column->child)
