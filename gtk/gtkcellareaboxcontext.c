@@ -404,12 +404,11 @@ static void
 gtk_cell_area_box_context_sum (GtkCellAreaBoxContext *context,
 			       GtkOrientation         orientation)
 {
-  GtkCellAreaBoxContextPrivate *priv = context->priv;
-  GtkCellArea                  *area;
-  GtkOrientation                box_orientation;
-  GArray                       *array;
-  gint                          spacing, i;
-  gint                          min_size = 0, nat_size = 0;
+  GtkCellArea    *area;
+  GtkOrientation  box_orientation;
+  GArray         *array;
+  gint            spacing, i;
+  gint            min_size = 0, nat_size = 0;
 
   area            = gtk_cell_area_context_get_area (GTK_CELL_AREA_CONTEXT (context));
   spacing         = gtk_cell_area_box_get_spacing (GTK_CELL_AREA_BOX (area));
