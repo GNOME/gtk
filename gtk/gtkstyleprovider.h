@@ -17,6 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #ifndef __GTK_STYLE_PROVIDER_H__
 #define __GTK_STYLE_PROVIDER_H__
 
@@ -72,7 +76,7 @@ G_BEGIN_DECLS
  * GTK_STYLE_PROVIDER_PRIORITY_USER:
  *
  * The priority used for the style information from
- * <filename><replaceable>XDG_CONFIG_HOME</replaceable>/gtk-3.0/gtk.css</filename>
+ * <filename>~/.gtk-3.0.css</filename>.
  *
  * You should not use priorities higher than this, to
  * give the user the last word.

@@ -17,6 +17,10 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #ifndef __GTK_THEMING_ENGINE_H__
 #define __GTK_THEMING_ENGINE_H__
 
