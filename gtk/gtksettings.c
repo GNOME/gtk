@@ -2880,3 +2880,9 @@ get_color_scheme (GtkSettings *settings)
 
   return g_string_free (string, FALSE);
 }
+
+GdkScreen *
+_gtk_settings_get_screen (GtkSettings *settings)
+{
+  return settings->screen;
+}
