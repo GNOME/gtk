@@ -60,6 +60,7 @@ typedef void    (*GtkCellCallback)     (GtkCellRenderer  *renderer,
 
 struct _GtkCellArea
 {
+  /*< private >*/
   GInitiallyUnowned parent_instance;
 
   GtkCellAreaPrivate *priv;

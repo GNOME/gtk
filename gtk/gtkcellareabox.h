@@ -45,6 +45,7 @@ typedef struct _GtkCellAreaBoxPrivate       GtkCellAreaBoxPrivate;
 
 struct _GtkCellAreaBox
 {
+  /*< private >*/
   GtkCellArea parent_instance;
 
   GtkCellAreaBoxPrivate *priv;
@@ -52,6 +53,7 @@ struct _GtkCellAreaBox
 
 struct _GtkCellAreaBoxClass
 {
+  /*< private >*/
   GtkCellAreaClass parent_class;
 
   /* Padding for future expansion */

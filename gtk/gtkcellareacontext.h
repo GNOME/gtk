@@ -44,6 +44,7 @@ typedef struct _GtkCellAreaContextClass         GtkCellAreaContextClass;
 
 struct _GtkCellAreaContext
 {
+  /*< private >*/
   GObject parent_instance;
 
   GtkCellAreaContextPrivate *priv;
