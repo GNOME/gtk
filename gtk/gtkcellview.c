@@ -247,6 +247,15 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    *
    * The #GtkCellAreaContext used to compute the geometry of the cell view.
    *
+   * A group of cell views can be assigned the same context in order to
+   * ensure the sizes and cell alignments match across all the views with
+   * the same context.
+   *
+   * #GtkTreeMenu uses this to assign the same context to all cell views
+   * in the menu items for a single menu (each submenu creates it's own
+   * context since the size of each submenu does not depend on parent
+   * or sibling menus).
+   *
    * since 3.0
    */
    g_object_class_install_property (gobject_class,
