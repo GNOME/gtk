@@ -796,7 +796,7 @@ icon_size_settings_changed (GtkSettings  *settings,
 {
   icon_size_set_all_from_settings (settings);
 
-  gtk_rc_reset_styles (settings);
+  gtk_style_context_reset_widgets (_gtk_settings_get_screen (settings));
 }
 
 static void

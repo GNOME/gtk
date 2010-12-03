@@ -1572,18 +1572,18 @@ gtk_settings_notify (GObject    *object,
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
        */
-      gtk_rc_reset_styles (GTK_SETTINGS (object));
+      gtk_style_context_reset_widgets (settings->screen);
       break;
     case PROP_XFT_ANTIALIAS:
     case PROP_XFT_HINTING:
     case PROP_XFT_HINTSTYLE:
     case PROP_XFT_RGBA:
       settings_update_font_options (settings);
-      gtk_rc_reset_styles (GTK_SETTINGS (object));
+      gtk_style_context_reset_widgets (settings->screen);
       break;
     case PROP_FONTCONFIG_TIMESTAMP:
       if (settings_update_fontconfig (settings))
-	gtk_rc_reset_styles (GTK_SETTINGS (object));
+        gtk_style_context_reset_widgets (settings->screen);
       break;
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:

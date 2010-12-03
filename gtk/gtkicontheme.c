@@ -606,10 +606,7 @@ reset_styles_idle (gpointer user_data)
   priv = icon_theme->priv;
 
   if (priv->screen && priv->is_screen_singleton)
-    {
-      GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
-      gtk_rc_reset_styles (settings);
-    }
+    gtk_style_context_reset_widgets (priv->screen);
 
   priv->reset_styles_idle = 0;
 
