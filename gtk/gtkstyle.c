@@ -1693,6 +1693,7 @@ gtk_default_render_icon (GtkStyle            *style,
 {
   GtkStyleContext *context;
   GtkStylePrivate *priv;
+  GtkStateFlags flags = 0;
   GdkPixbuf *pixbuf;
 
   if (widget)
@@ -1710,6 +1711,20 @@ gtk_default_render_icon (GtkStyle            *style,
 
   if (detail)
     transform_detail_string (detail, context);
+
+  switch (state)
+    {
+    case GTK_STATE_PRELIGHT:
+      flags |= GTK_STATE_FLAG_PRELIGHT;
+      break;
+    case GTK_STATE_INSENSITIVE:
+      flags |= GTK_STATE_FLAG_INSENSITIVE;
+      break;
+    default:
+      break;
+    }
+
+  gtk_style_context_set_state (context, flags);
 
   pixbuf = gtk_render_icon_pixbuf (context, source, size);
 
