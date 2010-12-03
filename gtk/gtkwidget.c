@@ -6342,6 +6342,7 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 {
   if (widget->priv->context)
     gtk_style_context_invalidate (widget->priv->context);
+  gtk_widget_queue_resize (widget);
 }
 
 static gboolean
