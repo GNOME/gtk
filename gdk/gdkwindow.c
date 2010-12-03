@@ -223,7 +223,7 @@ static void             gdk_window_drop_cairo_surface (GdkWindow *private);
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
 static void gdk_window_init       (GdkWindow            *window);
-static void gdk_window_class_init (GdkWindowObjectClass *klass);
+static void gdk_window_class_init (GdkWindowClass *klass);
 static void gdk_window_finalize   (GObject              *object);
 
 static void gdk_window_set_property (GObject      *object,
@@ -284,7 +284,7 @@ gdk_window_get_type (void)
   if (!object_type)
     object_type = g_type_register_static_simple (G_TYPE_OBJECT,
 						 "GdkWindow",
-						 sizeof (GdkWindowObjectClass),
+						 sizeof (GdkWindowClass),
 						 (GClassInitFunc) gdk_window_class_init,
 						 sizeof (GdkWindow),
 						 (GInstanceInitFunc) gdk_window_init,
@@ -362,7 +362,7 @@ create_surface_accumulator (GSignalInvocationHint *ihint,
 static GQuark quark_pointer_window = 0;
 
 static void
-gdk_window_class_init (GdkWindowObjectClass *klass)
+gdk_window_class_init (GdkWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
@@ -412,7 +412,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
     g_signal_new (g_intern_static_string ("pick-embedded-child"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowObjectClass, pick_embedded_child),
+                  G_STRUCT_OFFSET (GdkWindowClass, pick_embedded_child),
 		  accumulate_get_window, NULL,
 		  _gdk_marshal_OBJECT__DOUBLE_DOUBLE,
 		  GDK_TYPE_WINDOW,
@@ -439,7 +439,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
     g_signal_new (g_intern_static_string ("to-embedder"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowObjectClass, to_embedder),
+                  G_STRUCT_OFFSET (GdkWindowClass, to_embedder),
 		  NULL, NULL,
 		  _gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTER,
 		  G_TYPE_NONE,
@@ -468,7 +468,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
     g_signal_new (g_intern_static_string ("from-embedder"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowObjectClass, from_embedder),
+                  G_STRUCT_OFFSET (GdkWindowClass, from_embedder),
 		  NULL, NULL,
 		  _gdk_marshal_VOID__DOUBLE_DOUBLE_POINTER_POINTER,
 		  G_TYPE_NONE,
@@ -503,7 +503,7 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
     g_signal_new (g_intern_static_string ("create-surface"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkWindowObjectClass, create_surface),
+                  G_STRUCT_OFFSET (GdkWindowClass, create_surface),
                   create_surface_accumulator, NULL,
                   _gdk_marshal_BOXED__INT_INT,
                   CAIRO_GOBJECT_TYPE_SURFACE,
