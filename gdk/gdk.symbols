@@ -22,7 +22,6 @@ gdk_cairo_get_clip_rectangle
 gdk_cairo_rectangle
 gdk_cairo_region
 gdk_cairo_region_create_from_surface
-gdk_cairo_reset_clip
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_rgba
@@ -438,9 +437,11 @@ gdk_window_get_screen
 gdk_window_get_state
 gdk_window_get_support_multidevice
 gdk_window_get_toplevel
+gdk_window_get_type
 gdk_window_get_type_hint
 gdk_window_get_update_area
 gdk_window_get_user_data
+gdk_window_get_visible_region
 gdk_window_get_visual
 gdk_window_get_width
 gdk_window_get_window_type
