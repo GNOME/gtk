@@ -257,6 +257,8 @@ gdk_color_to_string
 <SUBSECTION Standard>
 GDK_TYPE_COLOR
 
+<SUBSECTION Private>
+gdk_color_get_type
 </SECTION>
 
 <SECTION>
@@ -272,6 +274,9 @@ gdk_rgba_to_string
 
 <SUBSECTION Standard>
 GDK_TYPE_RGBA
+
+<SUBSECTION Private>
+gdk_rgba_get_type
 </SECTION>
 
 <SECTION>
@@ -312,6 +317,7 @@ GDK_VISUAL_GET_CLASS
 
 <SUBSECTION Private>
 GdkVisualClass
+GdkVisualPrivate
 gdk_visual_get_type
 </SECTION>
 
@@ -382,6 +388,7 @@ gdk_window_get_clip_region
 gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
 gdk_window_end_paint
+gdk_window_get_visible_region
 
 <SUBSECTION>
 gdk_window_invalidate_rect
@@ -511,7 +518,7 @@ gdk_drawable_get_type
 GdkWindowObject
 GdkWindowObjectClass
 GdkWindowImpl
-GdkWindowImplIface
+GdkWindowImplClass
 GdkWindowRedirect
 gdk_window_impl_get_type
 gdk_window_freeze_toplevel_updates_libgtk_only
@@ -714,6 +721,7 @@ gdk_device_get_device_type
 gdk_device_get_display
 gdk_device_get_has_cursor
 gdk_device_get_n_axes
+gdk_device_get_n_keys
 
 <SUBSECTION>
 gdk_device_grab
@@ -946,11 +954,8 @@ gdk_drag_context_get_type
 <TITLE>X Window System Interaction</TITLE>
 <FILE>x_interaction</FILE>
 GDK_ROOT_WINDOW
-GDK_WINDOW_XDISPLAY
 GDK_WINDOW_XID
 GDK_DISPLAY_XDISPLAY
-GDK_DRAWABLE_XDISPLAY
-GDK_DRAWABLE_XID
 GDK_SCREEN_XDISPLAY
 GDK_SCREEN_XNUMBER
 GDK_SCREEN_XSCREEN
@@ -977,6 +982,7 @@ gdk_x11_cursor_get_xcursor
 gdk_x11_cursor_get_xdisplay
 gdk_x11_display_broadcast_startup_message
 gdk_x11_display_get_startup_notification_id
+gdk_x11_display_set_startup_notification_id
 gdk_x11_display_get_xdisplay
 gdk_x11_display_grab
 gdk_x11_display_ungrab

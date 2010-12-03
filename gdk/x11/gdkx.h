@@ -106,6 +106,8 @@ gint     gdk_x11_get_default_screen       (void);
  * @display: a #GdkDisplay.
  *
  * Returns the display of a #GdkDisplay.
+ *
+ * Returns: an Xlib <type>Display*</type>
  */
 #define GDK_DISPLAY_XDISPLAY(display) (GDK_DISPLAY_X11(display)->xdisplay)
 

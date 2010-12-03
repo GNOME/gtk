@@ -84,7 +84,7 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
  * gdk_cairo_set_source_color:
  * @cr: a #cairo_t
  * @color: a #GdkColor
- * 
+ *
  * Sets the specified #GdkColor as the source color of @cr.
  *
  * Since: 2.8
@@ -102,6 +102,15 @@ gdk_cairo_set_source_color (cairo_t        *cr,
 			color->blue / 65535.);
 }
 
+/**
+ * gdk_cairo_set_source_rgba:
+ * @cr: a #cairo_t
+ * @rgba: a #GdkRGBA
+ *
+ * Sets the specified #GdkRGBA as the source color of @cr.
+ *
+ * Since: 3.0
+ **/
 void
 gdk_cairo_set_source_rgba (cairo_t       *cr,
                            const GdkRGBA *rgba)

@@ -3666,7 +3666,7 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
 
 /**
  * gdk_cairo_create:
- * @drawable: a #GdkWindow
+ * @window: a #GdkWindow
  * 
  * Creates a Cairo context for drawing to @window.
  *
