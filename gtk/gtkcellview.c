@@ -1285,6 +1285,18 @@ gtk_cell_view_set_background_rgba (GtkCellView   *cell_view,
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
+/**
+ * gtk_cell_view_get_draw_sensitive:
+ * @cell_view: a #GtkCellView
+ *
+ * Gets whether @cell_view is configured to draw all of it's
+ * cells in a sensitive state.
+ *
+ * Return value: whether @cell_view draws all of it's
+ * cells in a sensitive state
+ *
+ * Since: 3.0
+ */
 gboolean
 gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
 {
@@ -1297,6 +1309,18 @@ gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
   return priv->draw_sensitive;
 }
 
+/**
+ * gtk_cell_view_set_draw_sensitive:
+ * @cell_view: a #GtkCellView
+ * @draw_sensitive: whether to draw all cells in a sensitive state.
+ *
+ * Sets whether @cell_view should draw all of it's
+ * cells in a sensitive state, this is used by #GtkTreeMenu
+ * to ensure that rows with insensitive cells that contain
+ * children appear sensitive in the parent menu item.
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
 				  gboolean         draw_sensitive)
@@ -1315,6 +1339,18 @@ gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
     }
 }
 
+/**
+ * gtk_cell_view_get_fit_model:
+ * @cell_view: a #GtkCellView
+ *
+ * Gets whether @cell_view is configured to request space
+ * to fit the entire #GtkTreeModel.
+ *
+ * Return value: whether @cell_view requests space to fit
+ * the entire #GtkTreeModel.
+ *
+ * Since: 3.0
+ */
 gboolean
 gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
 {
@@ -1327,6 +1363,19 @@ gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
   return priv->fit_model;
 }
 
+/**
+ * gtk_cell_view_set_fit_model:
+ * @cell_view: a #GtkCellView
+ * @fit_model: whether @cell_view should request space for the whole model.
+ *
+ * Sets whether @cell_view should request space to fit the entire #GtkTreeModel.
+ *
+ * This is used by #GtkComboBox to ensure that the cell view displayed on
+ * the combo box's button always gets enough space and does not resize
+ * when selection changes.
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_view_set_fit_model (GtkCellView     *cell_view,
 			     gboolean         fit_model)
