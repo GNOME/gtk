@@ -21,6 +21,30 @@
  * Boston, MA 02111-1307, USA.
  */
 
+
+/**
+ * SECTION:gtkcellareabox
+ * @Short_Description: A cell area that renders #GtkCellRenderers into a row or a column
+ * @Title: GtkCellAreaBox
+ *
+ * The #GtkCellAreaBox renders cell renderers into a row or a column depending on
+ * its #GtkOrientation.
+ *
+ * GtkCellAreaBox uses a notion of <emphasis>packing</emphasis>. Packing
+ * refers to adding cell renderers with reference to a particular position 
+ * in a #GtkCellAreaBox. There are two reference positions: the
+ * <emphasis>start</emphasis> and the <emphasis>end</emphasis> of the box.
+ * When the #GtkCellAreaBox is oriented in the %GTK_ORIENTATION_VERTICAL orientation, 
+ * the start is defined as the top of the box and the end is defined as the bottom.
+ * In the %GTK_ORIENTATION_HORIZONTAL orientation start is defined as the
+ * left side and the end is defined as the right side.
+ *
+ * Alignments of #GtkCellRenderers rendered in adjacent rows can be configured
+ * by configuring the #GtkCellAreaBox:align child cell property with
+ * gtk_cell_area_cell_set_property() or by specifying the "align" argument
+ * to gtk_cell_area_box_pack_start() and gtk_cell_area_box_pack_end().
+ */
+
 #include "config.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
@@ -256,6 +280,13 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   /* Properties */
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
+  /**
+   * GtkCellAreaBox:spacing:
+   *
+   * The amount of space to reserve between cells.
+   *
+   * Since: 3.0
+   */
   g_object_class_install_property (object_class,
                                    PROP_SPACING,
                                    g_param_spec_int ("spacing",
@@ -267,6 +298,14 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
 						     GTK_PARAM_READWRITE));
 
   /* Cell Properties */
+  /**
+   * GtkCellAreaBox:expand:
+   *
+   * Whether the cell renderer should receive extra space when the area receives
+   * more than its natural size.
+   *
+   * Since: 3.0
+   */
   gtk_cell_area_class_install_cell_property (area_class,
 					     CELL_PROP_EXPAND,
 					     g_param_spec_boolean 
@@ -276,6 +315,13 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
 					      FALSE,
 					      GTK_PARAM_READWRITE));
   
+  /**
+   * GtkCellAreaBox:align:
+   *
+   * Whether the cell renderer should be aligned in adjacent rows.
+   *
+   * Since: 3.0
+   */
   gtk_cell_area_class_install_cell_property (area_class,
 					     CELL_PROP_ALIGN,
 					     g_param_spec_boolean
@@ -285,6 +331,14 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
 					      TRUE,
 					      GTK_PARAM_READWRITE));
 
+  /**
+   * GtkCellAreaBox:pack-type:
+   *
+   * A GtkPackType indicating whether the cell renderer is packed with reference to the 
+   * start or end of the area.
+   *
+   * Since: 3.0
+   */
   gtk_cell_area_class_install_cell_property (area_class,
 					     CELL_PROP_PACK_TYPE,
 					     g_param_spec_enum
@@ -1990,12 +2044,34 @@ gtk_cell_area_box_layout_reorder (GtkCellLayout      *cell_layout,
 /*************************************************************
  *                            API                            *
  *************************************************************/
+/**
+ * gtk_cell_area_box_new:
+ * 
+ * Creates a new #GtkCellAreaBox.
+ *
+ * Return value: a newly created #GtkCellAreaBox
+ */
 GtkCellArea *
 gtk_cell_area_box_new (void)
 {
   return (GtkCellArea *)g_object_new (GTK_TYPE_CELL_AREA_BOX, NULL);
 }
 
+/**
+ * gtk_cell_area_box_pack_start:
+ * @box: a #GtkCellAreaBox
+ * @renderer: the #GtkCellRenderer to add
+ * @expand: whether @renderer should receive extra space when the area receives
+ * more than its natural size
+ * @align: whether @renderer should be aligned in adjacent rows.
+ *
+ * Adds @renderer to @box, packed with reference to the start of @box.
+ *
+ * The @renderer is packed after any other #GtkCellRenderer packed with reference
+ * to the start of @box.
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
 			       GtkCellRenderer *renderer,
@@ -2024,6 +2100,21 @@ gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
   cell_groups_rebuild (box);
 }
 
+/**
+ * gtk_cell_area_box_pack_end:
+ * @box: a #GtkCellAreaBox
+ * @renderer: the #GtkCellRenderer to add
+ * @expand: whether @renderer should receive extra space when the area receives
+ * more than its natural size
+ * @align: whether @renderer should be aligned in adjacent rows.
+ *
+ * Adds @renderer to @box, packed with reference to the end of @box.
+ *
+ * The @renderer is packed after (away from end of) any other #GtkCellRenderer
+ * packed with reference to the end of @box.
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
 			    GtkCellRenderer *renderer,
@@ -2052,6 +2143,16 @@ gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
   cell_groups_rebuild (box);
 }
 
+/**
+ * gtk_cell_area_box_get_spacing:
+ * @box: a #GtkCellAreaBox
+ *
+ * Gets the spacing added between cell renderers.
+ *
+ * Return value: the space added between cell renderers in @box.
+ *
+ * Since: 3.0
+ */
 gint
 gtk_cell_area_box_get_spacing (GtkCellAreaBox  *box)
 {
@@ -2060,6 +2161,15 @@ gtk_cell_area_box_get_spacing (GtkCellAreaBox  *box)
   return box->priv->spacing;
 }
 
+/**
+ * gtk_cell_area_box_set_spacing:
+ * @box: a #GtkCellAreaBox
+ * @spacing: the space to add between #GtkCellRenderers
+ *
+ * Sets the spacing to add between cell renderers in @box.
+ *
+ * Since: 3.0
+ */
 void
 gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
 			       gint             spacing)
