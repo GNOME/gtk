@@ -33,6 +33,7 @@
 #include "gtksymboliccolor.h"
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
+#include "gtkiconfactory.h"
 
 /**
  * SECTION:gtkstylecontext
@@ -1331,6 +1332,8 @@ void
 gtk_style_context_reset_widgets (GdkScreen *screen)
 {
   GList *list, *toplevels;
+
+  _gtk_icon_set_invalidate_caches ();
 
   toplevels = gtk_window_list_toplevels ();
   g_list_foreach (toplevels, (GFunc) g_object_ref, NULL);
