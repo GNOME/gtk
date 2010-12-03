@@ -437,7 +437,7 @@ gdk_window_get_screen
 gdk_window_get_state
 gdk_window_get_support_multidevice
 gdk_window_get_toplevel
-gdk_window_get_type
+gdk_window_get_type G_GNUC_CONST
 gdk_window_get_type_hint
 gdk_window_get_update_area
 gdk_window_get_user_data
@@ -470,7 +470,6 @@ gdk_window_move
 gdk_window_move_region
 gdk_window_move_resize
 gdk_window_new
-gdk_window_object_get_type G_GNUC_CONST
 gdk_window_peek_children
 gdk_window_process_all_updates
 gdk_window_process_updates
