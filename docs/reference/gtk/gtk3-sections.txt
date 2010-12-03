@@ -6087,6 +6087,7 @@ gtk_icon_set_new
 gtk_icon_set_new_from_pixbuf
 gtk_icon_set_ref
 gtk_icon_set_render_icon
+gtk_icon_set_render_icon_pixbuf
 gtk_icon_set_unref
 gtk_icon_size_lookup
 gtk_icon_size_lookup_for_settings

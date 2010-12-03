@@ -399,6 +399,9 @@ void gtk_style_context_get_style          (GtkStyleContext *context,
 
 GtkIconSet * gtk_style_context_lookup_icon_set (GtkStyleContext *context,
 						const gchar     *stock_id);
+GdkPixbuf  * gtk_icon_set_render_icon_pixbuf   (GtkIconSet      *icon_set,
+                                                GtkStyleContext *context,
+                                                GtkIconSize      size);
 
 void        gtk_style_context_set_screen (GtkStyleContext *context,
                                           GdkScreen       *screen);
