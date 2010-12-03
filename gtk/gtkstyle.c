@@ -99,6 +99,10 @@ static void      gtk_style_set_property         (GObject        *object,
                                                  guint           prop_id,
                                                  const GValue   *value,
                                                  GParamSpec     *pspec);
+static void      gtk_style_get_property         (GObject        *object,
+                                                 guint           prop_id,
+                                                 GValue         *value,
+                                                 GParamSpec     *pspec);
 
 static void	 gtk_style_realize		(GtkStyle	*style,
 						 GdkVisual      *visual);
@@ -472,6 +476,7 @@ gtk_style_class_init (GtkStyleClass *klass)
   
   object_class->finalize = gtk_style_finalize;
   object_class->set_property = gtk_style_set_property;
+  object_class->get_property = gtk_style_get_property;
   object_class->constructed = gtk_style_constructed;
 
   klass->clone = gtk_style_real_clone;
@@ -511,7 +516,7 @@ gtk_style_class_init (GtkStyleClass *klass)
  							P_("Style context"),
 							P_("GtkStyleContext to get style from"),
                                                         GTK_TYPE_STYLE_CONTEXT,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_WRITABLE));
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 
   /**
    * GtkStyle::realize:
@@ -643,6 +648,27 @@ gtk_style_set_property (GObject      *object,
     {
     case PROP_CONTEXT:
       priv->context = g_value_dup_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_style_get_property (GObject      *object,
+                        guint         prop_id,
+                        GValue       *value,
+                        GParamSpec   *pspec)
+{
+  GtkStylePrivate *priv;
+
+  priv = GTK_STYLE_GET_PRIVATE (object);
+
+  switch (prop_id)
+    {
+    case PROP_CONTEXT:
+      g_value_set_object (value, priv->context);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
