@@ -1635,10 +1635,10 @@ gtk_tree_menu_get_model (GtkTreeMenu *menu)
 /**
  * gtk_tree_menu_set_root:
  * @menu: a #GtkTreeMenu
- * @root: (allow-none): the #GtkTreePath which is the root of @menu, or %NULL.
+ * @path: (allow-none): the #GtkTreePath which is the root of @menu, or %NULL.
  *
- * Sets the @root path for @menu's hierarchy. @menu must already
- * have a model set and @root must point to a valid path inside the model.
+ * Sets the root of a @menu's hierarchy to be @path. @menu must already
+ * have a model set and @path must point to a valid path inside the model.
  *
  * Since: 3.0
  */
