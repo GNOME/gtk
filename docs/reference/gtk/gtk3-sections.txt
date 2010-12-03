@@ -4472,7 +4472,6 @@ GtkCellAreaContextPrivate
 <TITLE>GtkCellAreaBox</TITLE>
 GtkCellAreaBox
 GtkCellAreaBoxClass
-GtkCellAreaBoxPrivate
 gtk_cell_area_box_new
 gtk_cell_area_box_pack_start
 gtk_cell_area_box_pack_end
@@ -4486,6 +4485,7 @@ gtk_cell_area_box_get_type
 GTK_CELL_AREA_BOX_CLASS
 GTK_IS_CELL_AREA_BOX_CLASS
 GTK_CELL_AREA_BOX_GET_CLASS
+GtkCellAreaBoxPrivate
 </SECTION>
 
 <SECTION>
