@@ -8901,6 +8901,53 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
 }
 
 /**
+ * gtk_widget_render_icon_pixbuf:
+ * @widget: a #GtkWidget
+ * @stock_id: a stock ID
+ * @size: (type int): a stock size. A size of (GtkIconSize)-1 means
+ *     render at the size of the source and don't scale (if there are
+ *     multiple source sizes, GTK+ picks one of the available sizes).
+ *
+ * A convenience function that uses the theme engine and style
+ * settings for @widget to look up @stock_id and render it to
+ * a pixbuf. @stock_id should be a stock icon ID such as
+ * #GTK_STOCK_OPEN or #GTK_STOCK_OK. @size should be a size
+ * such as #GTK_ICON_SIZE_MENU.
+ *
+ * The pixels in the returned #GdkPixbuf are shared with the rest of
+ * the application and should not be modified. The pixbuf should be freed
+ * after use with g_object_unref().
+ *
+ * Return value: (transfer full): a new pixbuf, or %NULL if the
+ *     stock ID wasn't known
+ *
+ * Since: 3.0
+ **/
+GdkPixbuf*
+gtk_widget_render_icon_pixbuf (GtkWidget   *widget,
+                               const gchar *stock_id,
+                               GtkIconSize  size)
+{
+  GtkWidgetPrivate *priv;
+  GtkIconSet *icon_set;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (stock_id != NULL, NULL);
+  g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == -1, NULL);
+
+  priv = widget->priv;
+
+  gtk_widget_ensure_style (widget);
+
+  icon_set = gtk_style_context_lookup_icon_set (priv->context, stock_id);
+
+  if (icon_set == NULL)
+    return NULL;
+
+  return gtk_icon_set_render_icon_pixbuf (icon_set, priv->context, size);
+}
+
+/**
  * gtk_widget_render_icon:
  * @widget: a #GtkWidget
  * @stock_id: a stock ID
@@ -8923,6 +8970,8 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  *
  * Return value: (transfer full): a new pixbuf, or %NULL if the
  *     stock ID wasn't known
+ *
+ * Deprecated: 3.0: Use gtk_widget_render_icon_pixbuf() instead.
  **/
 GdkPixbuf*
 gtk_widget_render_icon (GtkWidget      *widget,
@@ -8930,32 +8979,7 @@ gtk_widget_render_icon (GtkWidget      *widget,
                         GtkIconSize     size,
                         const gchar    *detail)
 {
-  GtkWidgetPrivate *priv;
-  GtkIconSet *icon_set;
-  GdkPixbuf *retval;
-
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  g_return_val_if_fail (stock_id != NULL, NULL);
-  g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == -1, NULL);
-
-  priv = widget->priv;
-
-  gtk_widget_ensure_style (widget);
-
-  icon_set = gtk_style_lookup_icon_set (priv->style, stock_id);
-
-  if (icon_set == NULL)
-    return NULL;
-
-  retval = gtk_icon_set_render_icon (icon_set,
-                                     priv->style,
-                                     gtk_widget_get_direction (widget),
-                                     gtk_widget_get_state (widget),
-                                     size,
-                                     widget,
-                                     detail);
-
-  return retval;
+  return gtk_widget_render_icon_pixbuf (widget, stock_id, size);
 }
 
 /**

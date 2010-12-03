@@ -3293,6 +3293,7 @@ gtk_widget_region_intersect
 gtk_widget_remove_accelerator
 gtk_widget_remove_mnemonic_label
 gtk_widget_render_icon
+gtk_widget_render_icon_pixbuf
 gtk_widget_reparent
 gtk_widget_reset_rc_styles
 gtk_widget_reset_shapes
