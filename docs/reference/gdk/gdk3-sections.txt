@@ -326,7 +326,7 @@ gdk_visual_get_type
 <FILE>windows</FILE>
 GdkWindow
 GdkWindowType
-GdkWindowClass
+GdkWindowWindowClass
 GdkWindowHints
 GdkGeometry
 GdkGravity

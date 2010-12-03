@@ -42,7 +42,7 @@ typedef struct _GdkPointerHooks      GdkPointerHooks;
 typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
 /**
- * GdkWindowClass:
+ * GdkWindowWindowClass:
  * @GDK_INPUT_OUTPUT: window for graphics and events
  * @GDK_INPUT_ONLY: window for events only
  *
@@ -56,7 +56,7 @@ typedef enum
 {
   GDK_INPUT_OUTPUT,
   GDK_INPUT_ONLY
-} GdkWindowClass;
+} GdkWindowWindowClass;
 
 /**
  * GdkWindowType:
@@ -345,7 +345,7 @@ struct _GdkWindowAttr
   gint x, y;
   gint width;
   gint height;
-  GdkWindowClass wclass;
+  GdkWindowWindowClass wclass;
   GdkVisual *visual;
   GdkWindowType window_type;
   GdkCursor *cursor;
