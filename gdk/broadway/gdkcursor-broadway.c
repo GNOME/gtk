@@ -108,14 +108,6 @@ gdk_cursor_get_image (GdkCursor *cursor)
 }
 
 void
-gdk_broadway_display_set_cursor_theme (GdkDisplay  *display,
-				  const gchar *theme,
-				  const gint   size)
-{
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-}
-
-void
 _gdk_broadway_cursor_update_theme (GdkCursor *cursor)
 {
   g_return_if_fail (cursor != NULL);

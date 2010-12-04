@@ -612,16 +612,6 @@ gdk_display_get_default_group (GdkDisplay *display)
   return NULL;
 }
 
-void
-gdk_broadway_display_grab (GdkDisplay *display)
-{
-}
-
-void
-gdk_broadway_display_ungrab (GdkDisplay *display)
-{
-}
-
 static void
 gdk_display_broadway_dispose (GObject *object)
 {
@@ -708,12 +698,6 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 			     const GdkAtom *targets,
 			     gint           n_targets)
 {
-}
-
-guint32
-gdk_broadway_display_get_user_time (GdkDisplay *display)
-{
-  return GDK_DISPLAY_BROADWAY (display)->user_time;
 }
 
 gboolean
