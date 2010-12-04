@@ -1283,7 +1283,7 @@ gtk_cell_area_add (GtkCellArea        *area,
 /**
  * gtk_cell_area_remove:
  * @area: a #GtkCellArea
- * @renderer: the #GtkCellRenderer to add to @area
+ * @renderer: the #GtkCellRenderer to remove from @area
  *
  * Removes @renderer from @area.
  *
