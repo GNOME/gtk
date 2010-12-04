@@ -2103,7 +2103,7 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   PangoContext               *context;
   PangoFontMetrics           *metrics;
   PangoRectangle              rect;
-  gint char_width, digit_width, char_pixels, text_width, ellipsize_chars, guess_width, xpad;
+  gint char_width, digit_width, char_pixels, text_width, ellipsize_chars, xpad;
   gint min_width, nat_width;
 
   /* "width-chars" Hard-coded minimum width:
@@ -2123,10 +2123,6 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   gtk_cell_renderer_get_padding (cell, &xpad, NULL);
 
   layout = get_layout (celltext, widget, NULL, 0);
-
-  /* Get the layout with the text possibly wrapping at wrap_width */
-  pango_layout_get_pixel_extents (layout, NULL, &rect);
-  guess_width = rect.width;
 
   /* Fetch the length of the complete unwrapped text */
   pango_layout_set_width (layout, -1);
@@ -2168,6 +2164,7 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   else
     nat_width = xpad * 2 + PANGO_PIXELS (text_width);
 
+
   nat_width = MAX (nat_width, min_width);
   
   if (priv->max_width_chars > 0)
@@ -2183,7 +2180,6 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
 
   if (natural_size)
     *natural_size = nat_width;
-
 }
 
 static void
