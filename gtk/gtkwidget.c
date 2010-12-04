@@ -8381,9 +8381,21 @@ gtk_widget_modify_cursor (GtkWidget      *widget,
 			  const GdkColor *primary,
 			  const GdkColor *secondary)
 {
+  GdkRGBA primary_rgba, secondary_rgba;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  gtk_widget_override_cursor (widget, primary, secondary);
+  primary_rgba.red = primary->red / 65535.;
+  primary_rgba.green = primary->green / 65535.;
+  primary_rgba.blue = primary->blue / 65535.;
+  primary_rgba.alpha = 1;
+
+  secondary_rgba.red = secondary->red / 65535.;
+  secondary_rgba.green = secondary->green / 65535.;
+  secondary_rgba.blue = secondary->blue / 65535.;
+  secondary_rgba.alpha = 1;
+
+  gtk_widget_override_cursor (widget, &primary_rgba, &secondary_rgba);
 
   g_signal_emit (widget,
                  widget_signals[STYLE_SET],
