@@ -17,6 +17,74 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gtkcelllayout
+ * @Short_Description: An interface for packing cells
+ * @Title: GtkCellLayout
+ *
+ * #GtkCellLayout is an interface to be implemented by all objects which
+ * want to provide a #GtkTreeViewColumn-like API for packing cells, setting
+ * attributes and data funcs. 
+ *
+ * One of the notable features provided by implementations of GtkCellLayout
+ * are <emphasis>attributes</emphasis>. Attributes let you set the properties
+ * in flexible ways. They can just be set to constant values like regular
+ * properties. But they can also be mapped to a column of the underlying 
+ * tree model with gtk_cell_layout_set_attributes(), which means that the value 
+ * of the attribute can change from cell to cell as they are rendered by the 
+ * cell renderer. Finally, it is possible to specify a function with 
+ * gtk_cell_layout_set_cell_data_func() that is called to determine the value 
+ * of the attribute for each cell that is rendered.
+ *
+ * <refsect2 id="GtkCellLayout-BUILDER-UI">
+ * <title>GtkCellLayouts as GtkBuildable</title>
+ * <para>
+ * Implementations of GtkCellLayout which also implement the GtkBuildable 
+ * interface (#GtkCellView, #GtkIconView, #GtkComboBox, #GtkComboBoxEntry, 
+ * #GtkEntryCompletion, #GtkTreeViewColumn) accept GtkCellRenderer objects
+ * as &lt;child&gt; elements in UI definitions. They support a custom 
+ * &lt;attributes&gt; element for their children, which can contain 
+ * multiple &lt;attribute&gt; elements. Each &lt;attribute&gt; element has 
+ * a name attribute which specifies a property of the cell renderer; the 
+ * content of the element is the attribute value.
+ * 
+ * <example>
+ * <title>A UI definition fragment specifying attributes</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkCellView">
+ *   <child>
+ *     <object class="GtkCellRendererText"/>
+ *     <attributes>
+ *       <attribute name="text">0</attribute>
+ *     </attributes>
+ *   </child>"
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ *
+ * Furthermore for implementations of GtkCellLayout that use a #GtkCellArea
+ * to lay out cells (most, of not all GtkCellLayouts in GTK+ use a GtkCellArea)
+ * <link linkend="cell-properties">cell properties</link> can also be defined
+ * in the format by specifying the custom &lt;cell-packing&gt; attribute which
+ * can contain multiple &lt;property&gt; elements defined in the normal way.
+ * <example>
+ * <title>A UI definition fragment specifying cell properties</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkTreeViewColumn">
+ *   <child>
+ *     <object class="GtkCellRendererText"/>
+ *     <cell-packing>
+ *       <property name="align">True</property>
+ *       <property name="expand">False</property>
+ *     </cell-packing>
+ *   </child>"
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </para>
+ * </refsect2>
+ */
+
 #include "config.h"
 #include <string.h>
 #include <stdlib.h>
