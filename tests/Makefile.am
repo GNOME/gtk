@@ -87,6 +87,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtreecolumns			\
 	testtreecolumnsizing		\
 	testtreesort			\
+	testverticalcells			\
 	treestoretest			\
 	testxinerama			\
 	testwindows			\
@@ -179,6 +180,7 @@ testtreeflow_DEPENDENCIES = $(DEPS)
 testtreecolumns_DEPENDENCIES = $(DEPS)
 testtreecolumnsizing_DEPENDENCIES = $(DEPS)
 testtreesort_DEPENDENCIES = $(DEPS)
+testverticalcells_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
 testxinerama_DEPENDENCIES = $(TEST_DEPS)
 testmerge_DEPENDENCIES = $(TEST_DEPS)
@@ -257,6 +259,7 @@ testtreeflow_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 testtreecolumnsizing_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
+testverticalcells_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 testxinerama_LDADD = $(LDADDS)
 testmerge_LDADD = $(LDADDS)
