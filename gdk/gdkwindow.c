@@ -2276,8 +2276,8 @@ gdk_window_has_native (GdkWindow *window)
 /**
  * gdk_window_get_position:
  * @window: a #GdkWindow
- * @x: X coordinate of window
- * @y: Y coordinate of window
+ * @x: (out) (allow-none): X coordinate of window
+ * @y: (out) (allow-none): Y coordinate of window
  *
  * Obtains the position of the window as reported in the
  * most-recently-processed #GdkEventConfigure. Contrast with
@@ -6805,11 +6805,11 @@ gdk_window_set_device_cursor (GdkWindow *window,
 /**
  * gdk_window_get_geometry:
  * @window: a #GdkWindow
- * @x: return location for X coordinate of window (relative to its parent)
- * @y: return location for Y coordinate of window (relative to its parent)
- * @width: return location for width of window
- * @height: return location for height of window
- * @depth: return location for bit depth of window
+ * @x: (out) (allow-none): return location for X coordinate of window (relative to its parent)
+ * @y: (out) (allow-none): return location for Y coordinate of window (relative to its parent)
+ * @width: (out) (allow-none): return location for width of window
+ * @height: (out) (allow-none): return location for height of window
+ * @depth: (out) (allow-none): return location for bit depth of window
  *
  * Any of the return location arguments to this function may be %NULL,
  * if you aren't interested in getting the value of that field.
@@ -6937,8 +6937,8 @@ gdk_window_get_height (GdkWindow *window)
 /**
  * gdk_window_get_origin:
  * @window: a #GdkWindow
- * @x: return location for X coordinate
- * @y: return location for Y coordinate
+ * @x: (out) (allow-none): return location for X coordinate
+ * @y: (out) (allow-none): return location for Y coordinate
  *
  * Obtains the position of a window in root window coordinates.
  * (Compare with gdk_window_get_position() and
