@@ -8109,12 +8109,15 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
  * style properties. All other style values are left untouched.
  * See also gtk_widget_modify_style().
  *
+ * Note that the underlying properties have the #GdkColor type,
+ * so the alpha value in @primary and @secondary will be ignored.
+ *
  * Since: 3.0
  **/
 void
-gtk_widget_override_cursor (GtkWidget       *widget,
-                            const GdkColor  *cursor,
-                            const GdkColor  *secondary_cursor)
+gtk_widget_override_cursor (GtkWidget     *widget,
+                            const GdkRGBA *cursor,
+                            const GdkRGBA *secondary_cursor)
 {
   GtkModifierStyle *style;
 

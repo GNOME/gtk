@@ -67,7 +67,7 @@ void gtk_modifier_style_map_color            (GtkModifierStyle *style,
 void gtk_modifier_style_set_color_property  (GtkModifierStyle *style,
                                              GType             widget_type,
                                              const gchar      *prop_name,
-                                             const GdkColor   *color);
+                                             const GdkRGBA    *color);
 
 G_END_DECLS
 

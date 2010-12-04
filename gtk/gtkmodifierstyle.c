@@ -98,7 +98,8 @@ gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
                                        GValue           *value)
 {
   GtkModifierStylePrivate *priv;
-  GdkColor *color;
+  GdkRGBA *rgba;
+  GdkColor color;
   gchar *str;
 
   /* Reject non-color types for now */
@@ -110,13 +111,17 @@ gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
                          g_type_name (pspec->owner_type),
                          pspec->name);
 
-  color = g_hash_table_lookup (priv->color_properties, str);
+  rgba = g_hash_table_lookup (priv->color_properties, str);
   g_free (str);
 
-  if (!color)
+  if (!rgba)
     return FALSE;
 
-  g_value_set_boxed (value, color);
+  color.red = (guint) (rgba->red * 65535.) + 0.5;
+  color.green = (guint) (rgba->green * 65535.) + 0.5;
+  color.blue = (guint) (rgba->blue * 65535.) + 0.5;
+
+  g_value_set_boxed (value, &color);
   return TRUE;
 }
 
@@ -254,10 +259,10 @@ void
 gtk_modifier_style_set_color_property (GtkModifierStyle *style,
                                        GType             widget_type,
                                        const gchar      *prop_name,
-                                       const GdkColor   *color)
+                                       const GdkRGBA    *color)
 {
   GtkModifierStylePrivate *priv;
-  const GdkColor *old_color;
+  const GdkRGBA *old_color;
   gchar *str;
 
   g_return_if_fail (GTK_IS_MODIFIER_STYLE (style));
@@ -270,7 +275,7 @@ gtk_modifier_style_set_color_property (GtkModifierStyle *style,
   old_color = g_hash_table_lookup (priv->color_properties, str);
 
   if ((!color && !old_color) ||
-      (color && old_color && gdk_color_equal (color, old_color)))
+      (color && old_color && gdk_rgba_equal (color, old_color)))
     {
       g_free (str);
       return;
@@ -278,7 +283,7 @@ gtk_modifier_style_set_color_property (GtkModifierStyle *style,
 
   if (color)
     g_hash_table_insert (priv->color_properties, str,
-                         gdk_color_copy (color));
+                         gdk_rgba_copy (color));
   else
     g_hash_table_remove (priv->color_properties, str);
 
