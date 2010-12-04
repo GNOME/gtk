@@ -4386,6 +4386,7 @@ gtk_cell_layout_get_type
 GtkCellArea
 GtkCellAreaClass
 GtkCellCallback
+GTK_CELL_AREA_WARN_INVALID_CELL_PROPERTY_ID
 gtk_cell_area_add
 gtk_cell_area_remove
 gtk_cell_area_has_renderer
@@ -4415,7 +4416,6 @@ gtk_cell_area_cell_set_valist
 gtk_cell_area_cell_get_valist
 gtk_cell_area_cell_set_property
 gtk_cell_area_cell_get_property
-GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID
 gtk_cell_area_is_activatable
 gtk_cell_area_activate
 gtk_cell_area_focus

@@ -1401,7 +1401,7 @@ gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
 	}
       break;
     default:
-      GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID (area, prop_id, pspec);
+      GTK_CELL_AREA_WARN_INVALID_CELL_PROPERTY_ID (area, prop_id, pspec);
       break;
     }
 
@@ -1443,7 +1443,7 @@ gtk_cell_area_box_get_cell_property (GtkCellArea        *area,
       g_value_set_enum (value, info->pack);
       break;
     default:
-      GTK_CELL_AREA_WARN_INVALID_CHILD_PROPERTY_ID (area, prop_id, pspec);
+      GTK_CELL_AREA_WARN_INVALID_CELL_PROPERTY_ID (area, prop_id, pspec);
       break;
     }
 }
