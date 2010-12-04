@@ -1967,7 +1967,7 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
 	  CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
 	  
 	  for (list = (cycle == FOCUS_NEXT) ? g_list_first (group->cells) : g_list_last (group->cells); 
-	       list; list = (cycle == FOCUS_NEXT) ? list->next : list->prev)
+	       cycled_focus == FALSE && list; list = (cycle == FOCUS_NEXT) ? list->next : list->prev)
 	    {
 	      CellInfo *info = list->data;
 
