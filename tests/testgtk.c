@@ -411,7 +411,7 @@ create_composited_window (GtkWidget *widget)
                         &window);
 
       /* put a red background on the window */
-      gdk_rgba_parse ("red", &red);
+      gdk_rgba_parse (&red, "red");
       gtk_widget_override_background_color (window, 0, &red);
 
       /* set our event box to have a fully-transparent background
