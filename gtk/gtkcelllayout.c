@@ -745,7 +745,7 @@ _gtk_cell_layout_buildable_custom_tag_start (GtkBuildable  *buildable,
   return FALSE;
 }
 
-void
+gboolean
 _gtk_cell_layout_buildable_custom_tag_end (GtkBuildable *buildable,
 					   GtkBuilder   *builder,
 					   GObject      *child,
@@ -759,13 +759,14 @@ _gtk_cell_layout_buildable_custom_tag_end (GtkBuildable *buildable,
       attr_data = (AttributesSubParserData*)data;
       g_assert (!attr_data->attr_name);
       g_slice_free (AttributesSubParserData, attr_data);
-      return;
+      return TRUE;
     }
   else if (strcmp (tagname, "cell-packing") == 0)
     {
       g_slice_free (CellPackingSubParserData, (gpointer)data);
-      return;
+      return TRUE;
     }
+  return FALSE;
 }
 
 void
