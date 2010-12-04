@@ -2702,15 +2702,11 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
 				    gint               *height)
 {
   GtkTreeViewColumnPrivate *priv;
+  gint min_width = 0, min_height = 0;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
   priv = tree_column->priv;
-
-  if (height)
-    * height = 0;
-  if (width)
-    * width = 0;
 
   g_signal_handler_block (priv->cell_area_context, 
 			  priv->context_changed_signal);
@@ -2720,13 +2716,13 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
                                      priv->tree_view,
                                      NULL, NULL);
 
-  gtk_cell_area_context_get_preferred_width (priv->cell_area_context, width, NULL);
+  gtk_cell_area_context_get_preferred_width (priv->cell_area_context, &min_width, NULL);
 
   gtk_cell_area_get_preferred_height_for_width (priv->cell_area,
                                                 priv->cell_area_context,
                                                 priv->tree_view,
-                                                *width,
-                                                height,
+                                                min_width,
+                                                &min_height,
                                                 NULL);
 
   g_signal_handler_unblock (priv->cell_area_context, 
