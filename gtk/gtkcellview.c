@@ -832,9 +832,9 @@ gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
 					const gchar  *tagname,
 					gpointer     *data)
 {
-  if (strcmp (tagname, "attributes") == 0 || strcmp (tagname, "cell-packing") == 0)
-    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
-					       data);
+  if (_gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
+						 data))
+    return;
   else if (parent_buildable_iface->custom_tag_end)
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
