@@ -60,12 +60,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
 			       gint       width,
 			       gint       height)
 {
-  GdkWindowObject *obj;
-
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
-
-  obj = GDK_WINDOW_OBJECT (window);
 
   if (width > 65535 ||
       height > 65535)
@@ -78,10 +74,10 @@ _gdk_window_move_resize_child (GdkWindow *window,
 	height = 65535;
     }
 
-  obj->x = x;
-  obj->y = y;
-  obj->width = width;
-  obj->height = height;
+  window->x = x;
+  window->y = y;
+  window->width = width;
+  window->height = height;
 
   /* We don't really care about origin overflow, because on overflow
      the window won't be visible anyway and thus it will be shaped
@@ -91,8 +87,8 @@ _gdk_window_move_resize_child (GdkWindow *window,
   _gdk_x11_window_tmp_unset_bg (window, TRUE);
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
 		     GDK_WINDOW_XID (window),
-		     obj->x + obj->parent->abs_x,
-		     obj->y + obj->parent->abs_y,
+		     window->x + window->parent->abs_x,
+		     window->y + window->parent->abs_y,
 		     width, height);
   _gdk_x11_window_tmp_reset_parent_bg (window);
   _gdk_x11_window_tmp_reset_bg (window, TRUE);
@@ -227,15 +223,15 @@ gdk_window_queue (GdkWindow          *window,
 }
 
 static GC
-_get_scratch_gc (GdkWindowObject *window, cairo_region_t *clip_region)
+_get_scratch_gc (GdkWindow *window, cairo_region_t *clip_region)
 {
   GdkScreenX11 *screen;
   XRectangle *rectangles;
   gint n_rects;
   gint depth;
 
-  screen = GDK_SCREEN_X11 (gdk_window_get_screen (GDK_WINDOW (window)));
-  depth = gdk_visual_get_depth (gdk_window_get_visual (GDK_WINDOW (window))) - 1;
+  screen = GDK_SCREEN_X11 (gdk_window_get_screen (window));
+  depth = gdk_visual_get_depth (gdk_window_get_visual (window)) - 1;
 
   if (!screen->subwindow_gcs[depth])
     {
@@ -276,7 +272,7 @@ _gdk_x11_window_translate (GdkWindow      *window,
   GdkWindowQueueItem *item;
   GC xgc;
   GdkRectangle extents;
-  GdkWindowObject *private, *impl;
+  GdkWindow *parent;
   int px, py;
 
   /* We need to get data from subwindows here, because we might have
@@ -285,19 +281,19 @@ _gdk_x11_window_translate (GdkWindow      *window,
    * from overlapping native window that are not children of this window,
    * so we copy from the toplevel with INCLUDE_INFERIORS.
    */
-  private = impl = (GdkWindowObject *) window;
+  parent = window;
   px = py = 0;
-  while (private->parent != NULL &&
-         private->parent->window_type != GDK_WINDOW_ROOT)
+  while (parent->parent != NULL &&
+         parent->parent->window_type != GDK_WINDOW_ROOT)
     {
-      dx -= private->parent->abs_x + private->x;
-      dy -= private->parent->abs_y + private->y;
-      private = (GdkWindowObject *) _gdk_window_get_impl_window ((GdkWindow *) private->parent);
+      dx -= parent->parent->abs_x + parent->x;
+      dy -= parent->parent->abs_y + parent->y;
+      parent = _gdk_window_get_impl_window (parent->parent);
     }
 
   cairo_region_get_extents (area, &extents);
 
-  xgc = _get_scratch_gc (impl, area);
+  xgc = _get_scratch_gc (window, area);
 
   cairo_region_translate (area, -dx, -dy); /* Move to source region */
 
@@ -308,9 +304,9 @@ _gdk_x11_window_translate (GdkWindow      *window,
   item->u.translate.dy = dy;
   gdk_window_queue (window, item);
 
-  XCopyArea (GDK_WINDOW_XDISPLAY (impl),
-             GDK_DRAWABLE_IMPL_X11 (private->impl)->xid,
-             GDK_DRAWABLE_IMPL_X11 (impl->impl)->xid,
+  XCopyArea (GDK_WINDOW_XDISPLAY (window),
+             GDK_WINDOW_XID (parent),
+             GDK_WINDOW_XID (window),
              xgc,
              extents.x - dx, extents.y - dy,
              extents.width, extents.height,

@@ -40,6 +40,10 @@
 #include <gtk/gtkactivatable.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkalignment.h>
+#include <gtk/gtkappchooser.h>
+#include <gtk/gtkappchooserdialog.h>
+#include <gtk/gtkappchooserwidget.h>
+#include <gtk/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkarrow.h>
 #include <gtk/gtkaspectframe.h>
@@ -47,6 +51,7 @@
 #include <gtk/gtkbbox.h>
 #include <gtk/gtkbin.h>
 #include <gtk/gtkbindings.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtkbox.h>
 #include <gtk/gtkbuildable.h>
 #include <gtk/gtkbuilder.h>
@@ -73,6 +78,7 @@
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxtext.h>
 #include <gtk/gtkcontainer.h>
+#include <gtk/gtkcssprovider.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>
@@ -93,6 +99,7 @@
 #include <gtk/gtkfontbutton.h>
 #include <gtk/gtkfontsel.h>
 #include <gtk/gtkframe.h>
+#include <gtk/gtkgradient.h>
 #include <gtk/gtkgrid.h>
 #include <gtk/gtkhandlebox.h>
 #include <gtk/gtkhbbox.h>
@@ -170,7 +177,12 @@
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstatusicon.h>
 #include <gtk/gtkstock.h>
+#include <gtk/gtkstylecontext.h>
+#include <gtk/gtkstyleproperties.h>
+#include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkstyle.h>
+#include <gtk/gtkswitch.h>
+#include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktearoffmenuitem.h>
 #include <gtk/gtktextbuffer.h>
@@ -181,6 +193,7 @@
 #include <gtk/gtktexttag.h>
 #include <gtk/gtktexttagtable.h>
 #include <gtk/gtktextview.h>
+#include <gtk/gtkthemingengine.h>
 #include <gtk/gtktoggleaction.h>
 #include <gtk/gtktogglebutton.h>
 #include <gtk/gtktoggletoolbutton.h>
@@ -213,6 +226,7 @@
 #include <gtk/gtkvscrollbar.h>
 #include <gtk/gtkvseparator.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkwidgetpath.h>
 #include <gtk/gtkwindow.h>
 
 #undef __GTK_H_INSIDE__

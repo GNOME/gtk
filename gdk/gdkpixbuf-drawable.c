@@ -91,7 +91,7 @@ gdk_pixbuf_get_from_window (GdkWindow   *src,
   g_return_val_if_fail (GDK_IS_WINDOW (src), NULL);
   g_return_val_if_fail (gdk_window_is_viewable (src), NULL);
 
-  surface = _gdk_drawable_ref_cairo_surface (src);
+  surface = _gdk_window_ref_cairo_surface (src);
   dest = gdk_pixbuf_get_from_surface (surface,
                                       src_x, src_y,
                                       width, height);

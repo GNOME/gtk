@@ -473,12 +473,6 @@ _gdk_window_impl_quartz_get_type (void)
   return object_type;
 }
 
-GType
-_gdk_window_impl_get_type (void)
-{
-  return _gdk_window_impl_quartz_get_type ();
-}
-
 static const gchar *
 get_default_title (void)
 {
@@ -834,7 +828,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   private = (GdkWindowObject *)window;
 
-  impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  impl = g_object_new (GDK_TYPE_WINDOW_IMPL_QUARTZ, NULL);
   private->impl = (GdkDrawable *)impl;
   draw_impl = GDK_DRAWABLE_IMPL_QUARTZ (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
@@ -2925,14 +2919,6 @@ gdk_window_destroy_notify (GdkWindow *window)
   check_grab_destroy (window);
 }
 
-void 
-_gdk_windowing_window_beep (GdkWindow *window)
-{
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  gdk_display_beep (_gdk_display);
-}
-
 void
 gdk_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)
@@ -2960,15 +2946,15 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
 }
 
-cairo_region_t *
-_gdk_windowing_window_get_shape (GdkWindow *window)
+static cairo_region_t *
+gdk_quartz_window_get_shape (GdkWindow *window)
 {
   /* FIXME: implement */
   return NULL;
 }
 
-cairo_region_t *
-_gdk_windowing_window_get_input_shape (GdkWindow *window)
+static cairo_region_t *
+gdk_quartz_window_get_input_shape (GdkWindow *window)
 {
   /* FIXME: implement */
   return NULL;
@@ -2999,6 +2985,8 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->translate = _gdk_quartz_window_translate;
   iface->destroy = _gdk_quartz_window_destroy;
   iface->resize_cairo_surface = gdk_window_quartz_resize_cairo_surface;
+  iface->get_shape = gdk_quartz_window_get_shape;
+  iface->get_input_shape = gdk_quartz_window_get_input_shape;
 }
 
 

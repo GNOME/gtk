@@ -123,4 +123,7 @@
   <link linkend="GtkFileChooserDialog">
     <inlinegraphic fileref="filechooser.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkSwitch">
+    <inlinegraphic fileref="switch.png" format="PNG"></inlinegraphic>
+  </link>
 </para>

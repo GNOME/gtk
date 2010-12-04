@@ -35,7 +35,10 @@
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkadjustment.h>
 #include <gtk/gtkstyle.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtksettings.h>
+#include <gtk/gtkstylecontext.h>
+#include <gtk/gtkwidgetpath.h>
 #include <atk/atk.h>
 
 G_BEGIN_DECLS
@@ -223,6 +226,8 @@ struct _GtkWidgetClass
 				GtkAllocation    *allocation);
   void (* state_changed)       (GtkWidget        *widget,
 				GtkStateType   	  previous_state);
+  void (* state_flags_changed) (GtkWidget        *widget,
+				GtkStateFlags  	  previous_state_flags);
   void (* parent_set)	       (GtkWidget        *widget,
 				GtkWidget        *previous_parent);
   void (* hierarchy_changed)   (GtkWidget        *widget,
@@ -320,8 +325,6 @@ struct _GtkWidgetClass
 					 GdkEventVisibility  *event);
   gboolean (* client_event)		(GtkWidget	     *widget,
 					 GdkEventClient	     *event);
-  gboolean (* no_expose_event)		(GtkWidget	     *widget,
-					 GdkEventAny	     *event);
   gboolean (* window_state_event)	(GtkWidget	     *widget,
 					 GdkEventWindowState *event);
   gboolean (* damage_event)             (GtkWidget           *widget,
@@ -415,6 +418,8 @@ struct _GtkWidgetClass
                                            gint              *natural_size,
                                            gint              *allocated_pos,
                                            gint              *allocated_size);
+
+  void         (* style_updated)          (GtkWidget *widget);
 
   /*< private >*/
 
@@ -575,6 +580,13 @@ G_CONST_RETURN gchar* gtk_widget_get_name               (GtkWidget    *widget);
 void                  gtk_widget_set_state              (GtkWidget    *widget,
 							 GtkStateType  state);
 GtkStateType          gtk_widget_get_state              (GtkWidget    *widget);
+
+void                  gtk_widget_set_state_flags        (GtkWidget     *widget,
+                                                         GtkStateFlags  flags,
+                                                         gboolean       clear);
+void                  gtk_widget_unset_state_flags      (GtkWidget     *widget,
+                                                         GtkStateFlags  flags);
+GtkStateFlags         gtk_widget_get_state_flags        (GtkWidget     *widget);
 
 void                  gtk_widget_set_sensitive          (GtkWidget    *widget,
 							 gboolean      sensitive);
@@ -747,10 +759,31 @@ gboolean     gtk_widget_translate_coordinates (GtkWidget  *src_widget,
  */
 gboolean     gtk_widget_hide_on_delete	(GtkWidget	*widget);
 
+/* Functions to override widget styling */
+void         gtk_widget_override_color            (GtkWidget     *widget,
+                                                   GtkStateFlags  state,
+                                                   const GdkRGBA *color);
+void         gtk_widget_override_background_color (GtkWidget     *widget,
+                                                   GtkStateFlags  state,
+                                                   const GdkRGBA *color);
+
+void         gtk_widget_override_font             (GtkWidget                  *widget,
+                                                   const PangoFontDescription *font_desc);
+
+void         gtk_widget_override_symbolic_color   (GtkWidget     *widget,
+                                                   const gchar   *name,
+                                                   const GdkRGBA *color);
+void         gtk_widget_override_cursor           (GtkWidget       *widget,
+                                                   const GdkRGBA   *cursor,
+                                                   const GdkRGBA   *secondary_cursor);
+
+
+void        gtk_widget_style_attach               (GtkWidget     *widget);
+
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
+
 /* Widget styles.
  */
-void        gtk_widget_style_attach       (GtkWidget            *widget);
-
 gboolean    gtk_widget_has_rc_style       (GtkWidget            *widget);
 void	    gtk_widget_set_style          (GtkWidget            *widget,
                                            GtkStyle             *style);
@@ -777,9 +810,27 @@ void        gtk_widget_modify_cursor      (GtkWidget            *widget,
 					   const GdkColor       *secondary);
 void        gtk_widget_modify_font        (GtkWidget            *widget,
 					   PangoFontDescription *font_desc);
-void        gtk_widget_modify_symbolic_color (GtkWidget         *widget,
-                                           const gchar          *name,
-                                           const GdkColor       *color);
+
+/* Descend recursively and set rc-style on all widgets without user styles */
+void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
+void       gtk_widget_reset_style       (GtkWidget      *widget);
+
+/* Set certain default values to be used at widget creation time  */
+GtkStyle*    gtk_widget_get_default_style    (void);
+
+/* Compute a widget's path in the form "GtkWindow.MyLabel", and
+ * return newly alocated strings.
+ */
+void	     gtk_widget_path		   (GtkWidget *widget,
+					    guint     *path_length,
+					    gchar    **path,
+					    gchar    **path_reversed);
+void	     gtk_widget_class_path	   (GtkWidget *widget,
+					    guint     *path_length,
+					    gchar    **path,
+					    gchar    **path_reversed);
+
+#endif  /* GTK_DISABLE_DEPRECATED */
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
 PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
@@ -798,9 +849,6 @@ void   gtk_widget_set_composite_name	(GtkWidget	*widget,
 					 const gchar   	*name);
 gchar* gtk_widget_get_composite_name	(GtkWidget	*widget);
      
-/* Descend recursively and set rc-style on all widgets without user styles */
-void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
-
 /* Push/pop pairs, to change default values upon a widget's creation.
  * This will override the values that got set by the
  * gtk_widget_set_default_* () functions.
@@ -829,13 +877,7 @@ void gtk_widget_style_get          (GtkWidget	     *widget,
 				    const gchar    *first_property_name,
 				    ...) G_GNUC_NULL_TERMINATED;
 
-
-/* Set certain default values to be used at widget creation time.
- */
-GtkStyle*    gtk_widget_get_default_style    (void);
-
-/* Functions for setting directionality for widgets
- */
+/* Functions for setting directionality for widgets */
 
 void             gtk_widget_set_direction         (GtkWidget        *widget,
 						   GtkTextDirection  dir);
@@ -856,18 +898,6 @@ void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
 
 /* internal function */
 void	     gtk_widget_reset_shapes	   (GtkWidget *widget);
-
-/* Compute a widget's path in the form "GtkWindow.MyLabel", and
- * return newly alocated strings.
- */
-void	     gtk_widget_path		   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
-void	     gtk_widget_class_path	   (GtkWidget *widget,
-					    guint     *path_length,
-					    gchar    **path,
-					    gchar    **path_reversed);
 
 GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
@@ -942,6 +972,11 @@ void         _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
 						       gpointer   user_data);
 
 gboolean     gtk_widget_in_destruction (GtkWidget *widget);
+
+GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
+
+GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
+
 
 G_END_DECLS
 

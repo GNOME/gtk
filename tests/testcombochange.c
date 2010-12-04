@@ -94,16 +94,9 @@ create_combo (const char *name,
 {
   GtkCellRenderer *cell_renderer;
   GtkWidget *combo;
-  char *rc_string;
-  
-  rc_string = g_strdup_printf ("style \"%s-style\" {\n"
-			       "  GtkComboBox::appears-as-list = %d\n"
-			       "}\n"
-			       "\n"
-			       "widget \"*.%s\" style \"%s-style\"",
-			       name, is_list, name, name);
-  gtk_rc_parse_string (rc_string);
-  g_free (rc_string);
+  GtkCssProvider *provider;
+  GtkStyleContext *context;
+  gchar *css_data;
 
   combo = gtk_combo_box_new_with_model (GTK_TREE_MODEL (model));
   cell_renderer = gtk_cell_renderer_text_new ();
@@ -112,7 +105,19 @@ create_combo (const char *name,
 				  "text", 0, NULL);
 
   gtk_widget_set_name (combo, name);
-  
+
+  context = gtk_widget_get_style_context (combo);
+
+  provider = gtk_css_provider_new ();
+  css_data = g_strdup_printf ("#%s { -GtkComboBox-appears-as-list: %s }",
+                              name, is_list ? "true" : "false");
+  gtk_css_provider_load_from_data (provider, css_data, -1, NULL);
+  g_free (css_data);
+
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
   return combo;
 }
 

@@ -88,7 +88,7 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
       if (gdk_window_get_display (info->owner) == display &&
 	  info->selection == gdk_x11_xatom_to_atom_for_display (display, event->selection))
 	{
-	  if ((GDK_DRAWABLE_XID (info->owner) == event->window &&
+	  if ((GDK_WINDOW_XID (info->owner) == event->window &&
 	       event->serial >= info->serial))
 	    {
 	      owner_list = g_slist_remove (owner_list, info);
@@ -296,8 +296,8 @@ gdk_selection_property_get (GdkWindow  *requestor,
      protocol, in which case the client has to make sure they'll be
      notified of PropertyChange events _before_ the property is deleted.
      Otherwise there's no guarantee we'll win the race ... */
-  if (XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (requestor),
-			  GDK_DRAWABLE_XID (requestor),
+  if (XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
+			  GDK_WINDOW_XID (requestor),
 			  gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property),
 			  0, 0x1FFFFFFF /* MAXINT32 / 4 */, False, 
 			  AnyPropertyType, &prop_type, &prop_format,

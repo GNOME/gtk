@@ -10,7 +10,7 @@
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [91])
-m4_define([gtk_micro_version], [5])
+m4_define([gtk_micro_version], [6])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -61,8 +61,8 @@ cflags_set=${CFLAGS+set}
 AM_INIT_AUTOMAKE([1.10 no-define -Wno-portability dist-bzip2])
 AM_MAINTAINER_MODE([enable])
 
-# Support silent build rules, requires at least automake-1.11. Enable
-# by either passing --enable-silent-rules to configure or passing V=0
+# Support silent build rules, requires at least automake-1.11. Disable
+# by either passing --disable-silent-rules to configure or passing V=1
 # to make
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
@@ -861,28 +861,6 @@ AC_CHECK_HEADER(sys/sysinfo.h,
                 AC_DEFINE(HAVE_SYS_SYSINFO_H, 1,
                           [Define to 1 if sys/sysinfo.h is available]))
 
-AC_MSG_CHECKING(for mediaLib 2.3)
-use_mlib25=no
-# Check for a mediaLib 2.3 function since that is what the GTK+ mediaLib
-# patch requires.
-AC_CHECK_LIB(mlib, mlib_ImageSetStruct, use_mlib=yes, use_mlib=no)
-if test $use_mlib = yes; then
-    AC_DEFINE(USE_MEDIALIB, 1,
-              [Define to 1 if medialib is available and should be used])
-    MEDIA_LIB=-lmlib
-
-    AC_MSG_CHECKING(for mediaLib 2.5)
-    # Check for a mediaLib 2.5 function since that is what is needed for
-    # gdk_rgb_convert integration.
-    AC_CHECK_LIB(mlib, mlib_VideoColorRGBint_to_BGRAint, use_mlib25=yes, use_mlib25=no)
-    if test $use_mlib25 = yes; then
-        AC_DEFINE(USE_MEDIALIB25, 1,
-                  [Define to 1 if medialib 2.5 is available])
-    fi
-fi
-AM_CONDITIONAL(USE_MEDIALIB, test $use_mlib = yes)
-AM_CONDITIONAL(USE_MEDIALIB25, test $use_mlib25 = yes)
-
 dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
@@ -1494,6 +1472,25 @@ GLIB_GSETTINGS
 ##################################################
 
 GOBJECT_INTROSPECTION_CHECK([0.9.3])
+
+##################################################
+# Packagekit module
+#################################################
+
+AC_ARG_ENABLE(packagekit,
+	      AC_HELP_STRING([--disable-packagekit],
+			     [build packagekit open with module]))
+
+ENABLE_PACKAGEKIT=
+if test "os_win32" != "yes"; then
+   	if test "x$enable_packagekit" != "xno"; then
+	   	ENABLE_PACKAGEKIT=1
+      	   	AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
+	fi
+fi
+
+AC_SUBST(ENABLE_PACKAGEKIT)
+AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$ENABLE_PACKAGEKIT" = "x1")
 
 ##################################################
 # Checks for gtk-doc and docbook-tools

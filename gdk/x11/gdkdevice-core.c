@@ -21,6 +21,7 @@
 
 #include "gdkdevice-core.h"
 
+#include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkprivate-x11.h"
 #include "gdkx.h"
@@ -104,14 +105,12 @@ impl_coord_in_window (GdkWindow *window,
 		      int        impl_x,
 		      int        impl_y)
 {
-  GdkWindowObject *priv = (GdkWindowObject *) window;
-
-  if (impl_x < priv->abs_x ||
-      impl_x > priv->abs_x + priv->width)
+  if (impl_x < window->abs_x ||
+      impl_x >= window->abs_x + window->width)
     return FALSE;
 
-  if (impl_y < priv->abs_y ||
-      impl_y > priv->abs_y + priv->height)
+  if (impl_y < window->abs_y ||
+      impl_y >= window->abs_y + window->height)
     return FALSE;
 
   return TRUE;
@@ -125,7 +124,6 @@ gdk_device_core_get_history (GdkDevice      *device,
                              GdkTimeCoord ***events,
                              gint           *n_events)
 {
-  GdkWindowObject *priv;
   XTimeCoord *xcoords;
   GdkTimeCoord **coords;
   GdkWindow *impl_window;
@@ -133,13 +131,12 @@ gdk_device_core_get_history (GdkDevice      *device,
   int i, j;
 
   impl_window = _gdk_window_get_impl_window (window);
-  xcoords = XGetMotionEvents (GDK_DRAWABLE_XDISPLAY (window),
-                              GDK_DRAWABLE_XID (impl_window),
+  xcoords = XGetMotionEvents (GDK_WINDOW_XDISPLAY (window),
+                              GDK_WINDOW_XID (impl_window),
                               start, stop, &tmp_n_events);
   if (!xcoords)
     return FALSE;
 
-  priv = (GdkWindowObject *) window;
   coords = _gdk_device_allocate_history (device, tmp_n_events);
 
   for (i = 0, j = 0; i < tmp_n_events; i++)
@@ -147,8 +144,8 @@ gdk_device_core_get_history (GdkDevice      *device,
       if (impl_coord_in_window (window, xcoords[i].x, xcoords[i].y))
         {
           coords[j]->time = xcoords[i].time;
-          coords[j]->axes[0] = xcoords[i].x - priv->abs_x;
-          coords[j]->axes[1] = xcoords[i].y - priv->abs_y;
+          coords[j]->axes[0] = xcoords[i].x - window->abs_x;
+          coords[j]->axes[1] = xcoords[i].y - window->abs_y;
           j++;
         }
     }
@@ -228,7 +225,7 @@ gdk_device_core_warp (GdkDevice *device,
   Window dest;
 
   xdisplay = GDK_DISPLAY_XDISPLAY (gdk_device_get_display (device));
-  dest = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
+  dest = GDK_WINDOW_XID (gdk_screen_get_root_window (screen));
 
   XWarpPointer (xdisplay, None, dest, 0, 0, 0, 0, x, y);
 }
@@ -428,7 +425,7 @@ gdk_device_core_window_at_position (GdkDevice       *device,
 
       if (get_toplevel && last != root &&
           (window = gdk_window_lookup_for_display (display, last)) != NULL &&
-          GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
+          window->window_type != GDK_WINDOW_FOREIGN)
         {
           xwindow = last;
           break;
@@ -497,6 +494,6 @@ gdk_device_core_select_window_events (GdkDevice    *device,
     xmask |= StructureNotifyMask | PropertyChangeMask;
 
   XSelectInput (GDK_WINDOW_XDISPLAY (window),
-                GDK_WINDOW_XWINDOW (window),
+                GDK_WINDOW_XID (window),
                 xmask);
 }

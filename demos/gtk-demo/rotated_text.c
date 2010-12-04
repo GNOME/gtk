@@ -18,17 +18,17 @@ const char text[] = "I ♥ GTK+";
 
 static void
 fancy_shape_renderer (cairo_t        *cr,
-		      PangoAttrShape *attr,
-		      gboolean        do_path,
-		      gpointer        data)
+                      PangoAttrShape *attr,
+                      gboolean        do_path,
+                      gpointer        data)
 {
   double x, y;
   cairo_get_current_point (cr, &x, &y);
   cairo_translate (cr, x, y);
 
   cairo_scale (cr,
-	       (double) attr->ink_rect.width  / PANGO_SCALE,
-	       (double) attr->ink_rect.height / PANGO_SCALE);
+               (double) attr->ink_rect.width  / PANGO_SCALE,
+               (double) attr->ink_rect.height / PANGO_SCALE);
 
   switch (GPOINTER_TO_UINT (attr->data))
     {
@@ -36,9 +36,9 @@ fancy_shape_renderer (cairo_t        *cr,
       {
         cairo_move_to (cr, .5, .0);
         cairo_line_to (cr, .9, -.4);
-	cairo_curve_to (cr, 1.1, -.8, .5, -.9, .5, -.5);
-	cairo_curve_to (cr, .5, -.9, -.1, -.8, .1, -.4);
-	cairo_close_path (cr);
+        cairo_curve_to (cr, 1.1, -.8, .5, -.9, .5, -.5);
+        cairo_curve_to (cr, .5, -.9, -.1, -.8, .1, -.4);
+        cairo_close_path (cr);
       }
       break;
     }
@@ -60,8 +60,8 @@ create_fancy_attr_list_for_layout (PangoLayout *layout)
 
   /* Get font metrics and prepare fancy shape size */
   metrics = pango_context_get_metrics (pango_layout_get_context (layout),
-				       pango_layout_get_font_description (layout),
-				       NULL);
+                                       pango_layout_get_font_description (layout),
+                                       NULL);
   ascent = pango_font_metrics_get_ascent (metrics);
   logical_rect.x = 0;
   logical_rect.width = ascent;
@@ -77,9 +77,9 @@ create_fancy_attr_list_for_layout (PangoLayout *layout)
       PangoAttribute *attr;
       
       attr = pango_attr_shape_new_with_data (&ink_rect,
-					     &logical_rect,
-					     GUINT_TO_POINTER (g_utf8_get_char (p)),
-					     NULL, NULL);
+                                             &logical_rect,
+                                             GUINT_TO_POINTER (g_utf8_get_char (p)),
+                                             NULL, NULL);
 
       attr->start_index = p - text;
       attr->end_index = attr->start_index + strlen (HEART);
@@ -93,7 +93,7 @@ create_fancy_attr_list_for_layout (PangoLayout *layout)
 static gboolean
 rotated_text_draw (GtkWidget *widget,
                    cairo_t   *cr,
-		   gpointer   data)
+                   gpointer   data)
 {
 #define RADIUS 150
 #define N_WORDS 5
@@ -119,8 +119,8 @@ rotated_text_draw (GtkWidget *widget,
   height = gtk_widget_get_allocated_height (widget);
   device_radius = MIN (width, height) / 2.;
   cairo_translate (cr,
-		   device_radius + (width - 2 * device_radius) / 2,
-		   device_radius + (height - 2 * device_radius) / 2);
+                   device_radius + (width - 2 * device_radius) / 2,
+                   device_radius + (height - 2 * device_radius) / 2);
   cairo_scale (cr, device_radius / RADIUS, device_radius / RADIUS);
 
   /* Create and a subtle gradient source and use it. */
@@ -132,8 +132,8 @@ rotated_text_draw (GtkWidget *widget,
   /* Create a PangoContext and set up our shape renderer */
   context = gtk_widget_create_pango_context (widget);
   pango_cairo_context_set_shape_renderer (context,
-					  fancy_shape_renderer,
-					  NULL, NULL);
+                                          fancy_shape_renderer,
+                                          NULL, NULL);
 
   /* Create a PangoLayout, set the text, font, and attributes */
   layout = pango_layout_new (context);
@@ -181,11 +181,11 @@ do_rotated_text (GtkWidget *do_widget)
       PangoLayout *layout;
       PangoAttrList *attrs;
 
-      const GdkColor white = { 0, 0xffff, 0xffff, 0xffff };
-      
+      const GdkRGBA white = { 1.0, 1.0, 1.0, 1.0 };
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
-			     gtk_widget_get_screen (do_widget));
+                             gtk_widget_get_screen (do_widget));
       gtk_window_set_title (GTK_WINDOW (window), "Rotated Text");
       gtk_window_set_default_size (GTK_WINDOW (window), 4 * RADIUS, 2 * RADIUS);
       g_signal_connect (window, "destroy", G_CALLBACK (gtk_widget_destroyed), &window);
@@ -200,10 +200,10 @@ do_rotated_text (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (box), drawing_area);
 
       /* This overrides the background color from the theme */
-      gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &white);
+      gtk_widget_override_background_color (drawing_area, 0, &white);
 
       g_signal_connect (drawing_area, "draw",
-			G_CALLBACK (rotated_text_draw), NULL);
+                        G_CALLBACK (rotated_text_draw), NULL);
 
       /* And a label */
 
@@ -215,8 +215,8 @@ do_rotated_text (GtkWidget *do_widget)
       /* Set up fancy stuff on the label */
       layout = gtk_label_get_layout (GTK_LABEL (label));
       pango_cairo_context_set_shape_renderer (pango_layout_get_context (layout),
-					      fancy_shape_renderer,
-					      NULL, NULL);
+                                              fancy_shape_renderer,
+                                              NULL, NULL);
       attrs = create_fancy_attr_list_for_layout (layout);
       gtk_label_set_attributes (GTK_LABEL (label), attrs);
       pango_attr_list_unref (attrs);

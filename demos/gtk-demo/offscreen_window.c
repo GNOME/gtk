@@ -230,7 +230,7 @@ gtk_rotated_bin_realize (GtkWidget *widget)
 {
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
   GtkAllocation allocation;
-  GtkStyle *style;
+  GtkStyleContext *context;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -291,9 +291,9 @@ gtk_rotated_bin_realize (GtkWidget *widget)
                     G_CALLBACK (offscreen_window_from_parent), bin);
 
   gtk_widget_style_attach (widget);
-  style = gtk_widget_get_style (widget);
-  gtk_style_set_background (style, window, GTK_STATE_NORMAL);
-  gtk_style_set_background (style, bin->offscreen_window, GTK_STATE_NORMAL);
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_set_background (context, window);
+  gtk_style_context_set_background (context, bin->offscreen_window);
   gdk_window_show (bin->offscreen_window);
 }
 
@@ -542,12 +542,11 @@ gtk_rotated_bin_draw (GtkWidget *widget,
     }
   if (gtk_cairo_should_draw_window (cr, bin->offscreen_window))
     {
-      gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
-                          GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                          widget, "blah",
-                          0, 0,
-                          gdk_window_get_width (bin->offscreen_window),
-                          gdk_window_get_height (bin->offscreen_window));
+      gtk_render_background (gtk_widget_get_style_context (widget),
+                             cr,
+                             0, 0,
+                             gdk_window_get_width (bin->offscreen_window),
+                             gdk_window_get_height (bin->offscreen_window));
 
       if (bin->child)
         gtk_container_propagate_draw (GTK_CONTAINER (widget),
@@ -575,7 +574,7 @@ do_offscreen_window (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *bin, *vbox, *scale, *button;
-      GdkColor black;
+      GdkRGBA black;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -585,8 +584,8 @@ do_offscreen_window (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      gdk_color_parse ("black", &black);
-      gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &black);
+      gdk_rgba_parse (&black, "black");
+      gtk_widget_override_background_color (window, 0, &black);
       gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

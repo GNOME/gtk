@@ -329,6 +329,8 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 
   if (priv->draw_indicator != draw_indicator)
     {
+      GtkStyleContext *context;
+
       priv->draw_indicator = draw_indicator;
       GTK_BUTTON (toggle_button)->priv->depress_on_activate = !draw_indicator;
 
@@ -336,6 +338,16 @@ gtk_toggle_button_set_mode (GtkToggleButton *toggle_button,
 	gtk_widget_queue_resize (GTK_WIDGET (toggle_button));
 
       g_object_notify (G_OBJECT (toggle_button), "draw-indicator");
+
+      /* Make toggle buttons conditionally have the "button"
+       * class depending on draw_indicator.
+       */
+      context = gtk_widget_get_style_context (GTK_WIDGET (toggle_button));
+
+      if (draw_indicator)
+        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BUTTON);
+      else
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_BUTTON);
     }
 }
 
@@ -551,11 +563,14 @@ gtk_toggle_button_update_state (GtkButton *button)
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButtonPrivate *priv = toggle_button->priv;
   gboolean depressed, touchscreen;
-  GtkStateType new_state;
+  GtkStateFlags new_state = 0;
 
   g_object_get (gtk_widget_get_settings (GTK_WIDGET (button)),
                 "gtk-touchscreen-mode", &touchscreen,
                 NULL);
+
+  if (priv->inconsistent)
+    new_state |= GTK_STATE_FLAG_INCONSISTENT;
 
   if (priv->inconsistent)
     depressed = FALSE;
@@ -565,10 +580,11 @@ gtk_toggle_button_update_state (GtkButton *button)
     depressed = priv->active;
 
   if (!touchscreen && button->priv->in_button && (!button->priv->button_down || priv->draw_indicator))
-    new_state = GTK_STATE_PRELIGHT;
-  else
-    new_state = depressed ? GTK_STATE_ACTIVE : GTK_STATE_NORMAL;
+    new_state |= GTK_STATE_FLAG_PRELIGHT;
 
-  _gtk_button_set_depressed (button, depressed); 
-  gtk_widget_set_state (GTK_WIDGET (toggle_button), new_state);
+  if (depressed)
+    new_state |= GTK_STATE_FLAG_ACTIVE;
+
+  _gtk_button_set_depressed (button, depressed);
+  gtk_widget_set_state_flags (GTK_WIDGET (toggle_button), new_state, TRUE);
 }

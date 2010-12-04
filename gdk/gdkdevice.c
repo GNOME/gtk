@@ -1067,7 +1067,7 @@ gdk_device_grab (GdkDevice        *device,
   else
     native = gdk_window_get_toplevel (window);
 
-  while (((GdkWindowObject *) native)->window_type == GDK_WINDOW_OFFSCREEN)
+  while (native->window_type == GDK_WINDOW_OFFSCREEN)
     {
       native = gdk_offscreen_window_get_embedder (native);
 
@@ -1231,7 +1231,6 @@ _gdk_device_translate_window_coord (GdkDevice *device,
   gdouble x_resolution, y_resolution;
   gdouble device_aspect;
   gint window_width, window_height;
-  GdkWindowObject *window_private;
 
   priv = device->priv;
 
@@ -1274,7 +1273,6 @@ _gdk_device_translate_window_coord (GdkDevice *device,
       y_min = 0;
     }
 
-  window_private = (GdkWindowObject *) window;
   window_width = gdk_window_get_width (window);
   window_height = gdk_window_get_height (window);
 
@@ -1342,7 +1340,6 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
   GdkDevicePrivate *priv = device->priv;
   GdkAxisInfo axis_info;
   gdouble axis_width, scale, offset;
-  GdkWindowObject *window_private;
 
   if (priv->mode != GDK_MODE_SCREEN)
     return FALSE;
@@ -1357,7 +1354,6 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
     return FALSE;
 
   axis_width = axis_info.max_value - axis_info.min_value;
-  window_private = (GdkWindowObject *) window;
 
   if (axis_info.use == GDK_AXIS_X)
     {
@@ -1366,7 +1362,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - window_root_x - window_private->abs_x;
+      offset = - window_root_x - window->abs_x;
     }
   else
     {
@@ -1375,7 +1371,7 @@ _gdk_device_translate_screen_coord (GdkDevice *device,
       else
         scale = 1;
 
-      offset = - window_root_y - window_private->abs_y;
+      offset = - window_root_y - window->abs_y;
     }
 
   if (axis_value)

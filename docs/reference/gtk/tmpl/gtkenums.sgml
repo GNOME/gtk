@@ -315,19 +315,28 @@ Used to change the appearance of an outline typically provided by a #GtkFrame.
 
 <!-- ##### ENUM GtkStateType ##### -->
 <para>
-This type indicates the current state of a widget; the state determines how
-the widget is drawn. The #GtkStateType enumeration is also used to
-identify different colors in a #GtkStyle for drawing, so states can be
-used for subparts of a widget as well as entire widgets.
+
 </para>
 
-@GTK_STATE_NORMAL: State during normal operation.
-@GTK_STATE_ACTIVE: State of a currently active widget, such as a depressed button.
-@GTK_STATE_PRELIGHT: State indicating that the mouse pointer is over
-the widget and the widget will respond to mouse clicks.
-@GTK_STATE_SELECTED: State of a selected item, such the selected row in a list.
-@GTK_STATE_INSENSITIVE: State indicating that the widget is
-unresponsive to user actions.
+@GTK_STATE_NORMAL: 
+@GTK_STATE_ACTIVE: 
+@GTK_STATE_PRELIGHT: 
+@GTK_STATE_SELECTED: 
+@GTK_STATE_INSENSITIVE: 
+@GTK_STATE_INCONSISTENT: 
+@GTK_STATE_FOCUSED: 
+
+<!-- ##### ENUM GtkStateFlags ##### -->
+<para>
+
+</para>
+
+@GTK_STATE_FLAG_ACTIVE: 
+@GTK_STATE_FLAG_PRELIGHT: 
+@GTK_STATE_FLAG_SELECTED: 
+@GTK_STATE_FLAG_INSENSITIVE: 
+@GTK_STATE_FLAG_INCONSISTENT: 
+@GTK_STATE_FLAG_FOCUSED: 
 
 <!-- ##### ENUM GtkToolbarStyle ##### -->
 <para>
@@ -410,4 +419,40 @@ The value can by obtained by connecting to the
    for the drag operation was broken
 @GTK_DRAG_RESULT_ERROR: The drag operation failed due to some 
    unspecified error
+
+<!-- ##### ENUM GtkJunctionSides ##### -->
+<para>
+
+</para>
+
+@GTK_JUNCTION_NONE: 
+@GTK_JUNCTION_CORNER_TOPLEFT: 
+@GTK_JUNCTION_CORNER_TOPRIGHT: 
+@GTK_JUNCTION_CORNER_BOTTOMLEFT: 
+@GTK_JUNCTION_CORNER_BOTTOMRIGHT: 
+@GTK_JUNCTION_TOP: 
+@GTK_JUNCTION_BOTTOM: 
+@GTK_JUNCTION_LEFT: 
+@GTK_JUNCTION_RIGHT: 
+
+<!-- ##### ENUM GtkBorderStyle ##### -->
+<para>
+
+</para>
+
+@GTK_BORDER_STYLE_NONE: 
+@GTK_BORDER_STYLE_SOLID: 
+@GTK_BORDER_STYLE_INSET: 
+@GTK_BORDER_STYLE_OUTSET: 
+
+<!-- ##### ENUM GtkRegionFlags ##### -->
+<para>
+
+</para>
+
+@GTK_REGION_EVEN: 
+@GTK_REGION_ODD: 
+@GTK_REGION_FIRST: 
+@GTK_REGION_LAST: 
+@GTK_REGION_SORTED: 
 

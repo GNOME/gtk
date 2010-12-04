@@ -66,8 +66,6 @@
 #include "gtkmenu.h"
 #include "gdk/gdkkeysyms.h"
 
-#include "gdk/gdkprivate.h" /* for GDK_WINDOW_DESTROYED */
-
 #ifdef G_OS_WIN32
 
 static HMODULE gtk_dll;
@@ -798,7 +796,6 @@ do_post_parse_initialization (int    *argc,
   g_type_init ();
 
   _gtk_accel_map_init ();
-  _gtk_rc_init ();
 
   /* Set the 'initialized' flag.
    */
@@ -1658,7 +1655,7 @@ gtk_main_do_event (GdkEvent *event)
 	{
 	  /* The app may paint with a previously allocated cairo_t,
 	     which will draw directly to the window. We can't catch cairo
-	     drap operatoins to automatically flush the window, thus we
+	     draw operations to automatically flush the window, thus we
 	     need to explicitly flush any outstanding moves or double
 	     buffering */
 	  gdk_window_flush (event->any.window);
@@ -1667,7 +1664,6 @@ gtk_main_do_event (GdkEvent *event)
       break;
 
     case GDK_PROPERTY_NOTIFY:
-    case GDK_NO_EXPOSE:
     case GDK_FOCUS_CHANGE:
     case GDK_CONFIGURE:
     case GDK_MAP:
@@ -2384,7 +2380,7 @@ gtk_get_event_widget (GdkEvent *event)
 
   widget = NULL;
   if (event && event->any.window && 
-      (event->type == GDK_DESTROY || !GDK_WINDOW_DESTROYED (event->any.window)))
+      (event->type == GDK_DESTROY || !gdk_window_is_destroyed (event->any.window)))
     {
       gdk_window_get_user_data (event->any.window, &widget_ptr);
       widget = widget_ptr;

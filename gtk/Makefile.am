@@ -156,13 +156,18 @@ gtk_public_h_sources =          \
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
-	gtkapplication.h    \
+	gtkappchooser.h		\
+	gtkappchooserdialog.h	\
+	gtkappchooserbutton.h   \
+	gtkappchooserwidget.h	\
+	gtkapplication.h    	\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkassistant.h		\
 	gtkbbox.h		\
 	gtkbin.h		\
 	gtkbindings.h		\
+	gtkborder.h		\
 	gtkbox.h		\
 	gtkbuilder.h		\
 	gtkbuildable.h		\
@@ -175,7 +180,7 @@ gtk_public_h_sources =          \
 	gtkcellrenderercombo.h	\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
-	gtkcellrendererspin.h   \
+	gtkcellrendererspin.h	\
 	gtkcellrendererspinner.h\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
@@ -189,26 +194,28 @@ gtk_public_h_sources =          \
 	gtkcombobox.h		\
 	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
-	gtkdebug.h              \
+	gtkcssprovider.h	\
+	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
 	gtkdrawingarea.h	\
-	gtkeditable.h           \
+	gtkeditable.h		\
 	gtkentry.h		\
 	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
-	gtkfilechooser.h        \
-	gtkfilechooserbutton.h  \
-	gtkfilechooserdialog.h  \
-	gtkfilechooserwidget.h  \
+	gtkfilechooser.h	\
+	gtkfilechooserbutton.h	\
+	gtkfilechooserdialog.h	\
+	gtkfilechooserwidget.h	\
 	gtkfilefilter.h		\
 	gtkfixed.h		\
 	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
+	gtkgradient.h		\
 	gtkgrid.h		\
 	gtkhandlebox.h		\
 	gtkhbbox.h		\
@@ -230,7 +237,7 @@ gtk_public_h_sources =          \
 	gtkinfobar.h		\
 	gtkinvisible.h		\
 	gtklabel.h		\
-	gtklayout.h             \
+	gtklayout.h		\
 	gtklinkbutton.h		\
 	gtkliststore.h		\
 	gtkmain.h		\
@@ -242,7 +249,7 @@ gtk_public_h_sources =          \
 	gtkmessagedialog.h	\
 	gtkmisc.h		\
 	gtkmodules.h		\
-	gtkmountoperation.h     \
+	gtkmountoperation.h	\
 	gtknotebook.h		\
 	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
@@ -252,7 +259,7 @@ gtk_public_h_sources =          \
 	gtkplug.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
-	gtkprintoperationpreview.h	\
+	gtkprintoperationpreview.h \
 	gtkprintsettings.h	\
 	gtkprogressbar.h	\
 	gtkradioaction.h	\
@@ -264,13 +271,13 @@ gtk_public_h_sources =          \
 	gtkrecentaction.h	\
 	gtkrecentchooser.h 	\
 	gtkrecentchooserdialog.h \
-	gtkrecentchoosermenu.h 	\
+	gtkrecentchoosermenu.h	\
 	gtkrecentchooserwidget.h \
-	gtkrecentfilter.h 	\
+	gtkrecentfilter.h	\
 	gtkrecentmanager.h 	\
 	gtkscale.h		\
 	gtkscalebutton.h	\
-	gtkscrollable.h         \
+	gtkscrollable.h		\
 	gtkscrollbar.h		\
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
@@ -287,9 +294,14 @@ gtk_public_h_sources =          \
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
+	gtkstylecontext.h	\
+	gtkstyleproperties.h	\
+	gtkstyleprovider.h	\
 	gtkstyle.h		\
+	gtkswitch.h		\
+	gtksymboliccolor.h	\
 	gtktable.h		\
-	gtktearoffmenuitem.h    \
+	gtktearoffmenuitem.h	\
 	gtktestutils.h		\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
@@ -300,6 +312,7 @@ gtk_public_h_sources =          \
 	gtktexttag.h		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
+	gtkthemingengine.h	\
 	gtktoggleaction.h	\
 	gtktogglebutton.h	\
 	gtktoggletoolbutton.h	\
@@ -330,6 +343,7 @@ gtk_public_h_sources =          \
 	gtkvscrollbar.h		\
 	gtkvseparator.h		\
 	gtkwidget.h		\
+	gtkwidgetpath.h		\
 	gtkwindow.h
 
 if OS_UNIX
@@ -346,14 +360,28 @@ endif
 gtk_semi_private_h_sources =    \
 	gtktextlayout.h
 
+if ENABLE_PACKAGEKIT
+gtk_appchooser_impl_h_sources = \
+	gtkappchooseronlinepk.h \
+	$(NULL)
+endif
+
+if ENABLE_PACKAGEKIT
+gtk_appchooser_impl_c_sources = \
+	gtkappchooseronlinepk.c \
+	$(NULL)
+endif
+
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
+	gtk9slice.h 		\
 	gtkbuttonprivate.h	\
 	gtkquery.h		\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
 	gtkdndcursors.h		\
 	gtkentryprivate.h	\
+	gtkanimationdescription.h \
 	gtkbuilderprivate.h 	\
 	gtkcustompaperunixdialog.h\
 	gtkfilechooserdefault.h	\
@@ -369,7 +397,11 @@ gtk_private_h_sources =		\
 	gtkkeyhash.h		\
 	gtkmenuprivate.h	\
 	gtkmnemonichash.h	\
+	gtkmodifierstyle.h	\
 	gtkmountoperationprivate.h \
+	gtkappchooserprivate.h	\
+	gtkappchoosermodule.h 	\
+	gtkappchooseronline.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
@@ -391,16 +423,19 @@ gtk_private_h_sources =		\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
 	gtktextutil.h		\
+	gtktimeline.h		\
 	gtkthemes.h		\
 	gtktoolpaletteprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwindow-decorate.h	\
 	gtkwidgetprivate.h	\
-	$(gtk_clipboard_dnd_h_sources)
+	$(gtk_clipboard_dnd_h_sources) \
+	$(gtk_appchooser_impl_h_sources)
 
 # GTK+ C sources to build the library from
 gtk_base_c_sources =            \
+	gtk9slice.c		\
 	gtkquery.c		\
 	gtksearchengine.c	\
 	gtksearchenginesimple.c	\
@@ -415,13 +450,21 @@ gtk_base_c_sources =            \
 	gtkactivatable.c	\
 	gtkadjustment.c		\
 	gtkalignment.c		\
-	gtkapplication.c \
+	gtkappchooser.c		\
+	gtkappchooserwidget.c	\
+	gtkappchooserbutton.c   \
+	gtkappchooserdialog.c	\
+	gtkappchoosermodule.c	\
+	gtkappchooseronline.c	\
+	gtkapplication.c 	\
+	gtkanimationdescription.c \
 	gtkarrow.c		\
 	gtkaspectframe.c	\
 	gtkassistant.c		\
 	gtkbbox.c		\
 	gtkbin.c		\
 	gtkbindings.c		\
+	gtkborder.c		\
 	gtkbox.c		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
@@ -448,9 +491,10 @@ gtk_base_c_sources =            \
 	gtkcombobox.c		\
 	gtkcomboboxtext.c 	\
 	gtkcontainer.c		\
+	gtkcssprovider.c	\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
-	gtkeditable.c           \
+	gtkeditable.c		\
 	gtkentry.c		\
 	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
@@ -468,9 +512,10 @@ gtk_base_c_sources =            \
 	gtkfilesystem.c		\
 	gtkfilesystemmodel.c	\
 	gtkfixed.c		\
-	gtkfontbutton.c         \
-	gtkfontsel.c            \
+	gtkfontbutton.c		\
+	gtkfontsel.c		\
 	gtkframe.c		\
+	gtkgradient.c		\
 	gtkgrid.c		\
 	gtkhandlebox.c		\
 	gtkhbbox.c		\
@@ -508,8 +553,9 @@ gtk_base_c_sources =            \
 	gtkmessagedialog.c	\
 	gtkmisc.c		\
 	gtkmnemonichash.c	\
+	gtkmodifierstyle.c	\
 	gtkmodules.c		\
-	gtkmountoperation.c     \
+	gtkmountoperation.c	\
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
 	gtkorientable.c		\
@@ -521,7 +567,7 @@ gtk_base_c_sources =            \
 	gtkplug.c		\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
-	gtkprintoperationpreview.c	\
+	gtkprintoperationpreview.c \
 	gtkprintsettings.c	\
 	gtkprintutils.c		\
 	gtkprogressbar.c	\
@@ -530,20 +576,20 @@ gtk_base_c_sources =            \
 	gtkradiomenuitem.c	\
 	gtkradiotoolbutton.c	\
 	gtkrange.c		\
-	gtkrbtree.c 		\
+	gtkrbtree.c		\
 	gtkrc.c			\
 	gtkrecentaction.c	\
 	gtkrecentchooserdefault.c \
-	gtkrecentchooserdialog.c \
-	gtkrecentchoosermenu.c 	\
-	gtkrecentchooserwidget.c \
+	gtkrecentchooserdialog.c\
+	gtkrecentchoosermenu.c	\
+	gtkrecentchooserwidget.c\
 	gtkrecentchooserutils.c \
 	gtkrecentchooser.c 	\
 	gtkrecentfilter.c 	\
 	gtkrecentmanager.c 	\
 	gtkscale.c		\
 	gtkscalebutton.c	\
-	gtkscrollable.c         \
+	gtkscrollable.c		\
 	gtkscrollbar.c		\
 	gtkscrolledwindow.c	\
 	gtkselection.c		\
@@ -560,9 +606,14 @@ gtk_base_c_sources =            \
 	gtkstatusbar.c		\
 	gtkstatusicon.c		\
 	gtkstock.c		\
+	gtkstylecontext.c	\
+	gtkstyleproperties.c	\
+	gtkstyleprovider.c	\
 	gtkstyle.c		\
+	gtkswitch.c		\
+	gtksymboliccolor.c	\
 	gtktable.c		\
-	gtktearoffmenuitem.c    \
+	gtktearoffmenuitem.c	\
 	gtktestutils.c		\
 	gtktextbtree.c		\
 	gtktextbuffer.c		\
@@ -580,13 +631,15 @@ gtk_base_c_sources =            \
 	gtktextutil.c		\
 	gtktextview.c		\
 	gtkthemes.c		\
+	gtkthemingengine.c	\
+	gtktimeline.c		\
 	gtktoggleaction.c	\
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\
 	gtktoolbar.c		\
 	gtktoolbutton.c		\
 	gtktoolitem.c		\
-	gtktoolitemgroup.c		\
+	gtktoolitemgroup.c	\
 	gtktoolpalette.c	\
 	gtktoolshell.c		\
 	gtktooltip.c		\
@@ -612,9 +665,11 @@ gtk_base_c_sources =            \
 	gtkvscrollbar.c		\
 	gtkvseparator.c		\
 	gtkwidget.c		\
-	gtkwindow-decorate.c    \
+	gtkwidgetpath.c		\
+	gtkwindow-decorate.c	\
 	gtkwindow.c		\
-	$(gtk_clipboard_dnd_c_sources)
+	$(gtk_clipboard_dnd_c_sources) \
+	$(gtk_appchooser_impl_c_sources)
 
 gtk_c_sources = $(gtk_base_c_sources)
 gtk_all_c_sources = $(gtk_base_c_sources)

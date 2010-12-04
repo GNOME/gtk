@@ -1035,6 +1035,6 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
   screen = gdk_display_get_default_screen (display);
   window = gdk_screen_get_root_window (screen);
   XQueryBestCursor (GDK_DISPLAY_XDISPLAY (display), 
-		    GDK_WINDOW_XWINDOW (window), 
+		    GDK_WINDOW_XID (window), 
 		    128, 128, width, height);
 }

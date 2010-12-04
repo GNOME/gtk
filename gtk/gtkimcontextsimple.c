@@ -692,7 +692,7 @@ check_hex (GtkIMContextSimple *context_simple,
 static void
 beep_window (GdkWindow *window)
 {
-  GdkScreen *screen = gdk_window_get_screen (GDK_DRAWABLE (window));
+  GdkScreen *screen = gdk_window_get_screen (window);
   gboolean   beep;
 
   g_object_get (gtk_settings_get_for_screen (screen),

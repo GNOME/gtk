@@ -32,10 +32,8 @@
 #include <gio/gio.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkwindow.h>
+#include <gdk/gdkwindowimpl.h>
 #include <gdk/gdkprivate.h>
-#ifdef USE_MEDIALIB
-#include <gdk/gdkmedialib.h>
-#endif
 
 G_BEGIN_DECLS
 
@@ -178,25 +176,20 @@ typedef struct
 } GdkDeviceGrabInfo;
 
 typedef struct _GdkInputWindow GdkInputWindow;
+typedef struct _GdkWindowPaint GdkWindowPaint;
 
 typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
                                                GdkDevice            *device,
                                                GdkPointerWindowInfo *device_info,
                                                gpointer              user_data);
 
-/* Private version of GdkWindowObject. The initial part of this strucuture
-   is public for historical reasons. Don't change that part */
-typedef struct _GdkWindowPaint             GdkWindowPaint;
-
-#define GDK_WINDOW_OBJECT(object)    ((GdkWindowObject *) GDK_WINDOW (object))
-
-struct _GdkWindowObject
+struct _GdkWindow
 {
-  GdkDrawable parent_instance;
+  GObject parent_instance;
 
-  GdkDrawable *impl; /* window-system-specific delegate object */  
+  GdkWindowImpl *impl; /* window-system-specific delegate object */  
   
-  GdkWindowObject *parent;
+  GdkWindow *parent;
   GdkVisual *visual;
 
   gpointer user_data;
@@ -238,10 +231,10 @@ struct _GdkWindowObject
 
   guint update_and_descendants_freeze_count;
 
-  /* The GdkWindowObject that has the impl, ref:ed if another window.
+  /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
    * for as long as any GdkWindow references the impl. */
-  GdkWindowObject *impl_window; 
+  GdkWindow *impl_window; 
   int abs_x, abs_y; /* Absolute offset in impl */
   gint width, height;
   guint32 clip_tag;
@@ -267,18 +260,13 @@ struct _GdkWindowObject
   cairo_region_t *input_shape;
   
   cairo_surface_t *cairo_surface;
-  guint outstanding_surfaces; /* only set on impl window */
 
   GList *devices_inside;
   GHashTable *device_events;
 };
 
-#define GDK_WINDOW_TYPE(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->window_type)
-#define GDK_WINDOW_DESTROYED(d) (((GdkWindowObject*)(GDK_WINDOW (d)))->destroyed)
-
-extern GdkEventFunc   _gdk_event_func;    /* Callback for events */
-extern gpointer       _gdk_event_data;
-extern GDestroyNotify _gdk_event_notify;
+#define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
+#define GDK_WINDOW_DESTROYED(d) (GDK_WINDOW (d)->destroyed)
 
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
@@ -289,6 +277,7 @@ extern gboolean   _gdk_enable_multidevice;
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
+void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
 void   _gdk_event_queue_remove_link  (GdkDisplay *display,
 				      GList      *node);
@@ -318,15 +307,12 @@ GdkDeviceManager * _gdk_device_manager_new (GdkDisplay *display);
 gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
                                      GdkRectangle *extents);
 
-cairo_surface_t *_gdk_drawable_ref_cairo_surface (GdkDrawable *drawable);
-
-cairo_surface_t * _gdk_drawable_create_cairo_surface (GdkDrawable *drawable,
-						      int width,
-						      int height);
-
 /*************************************
  * Interfaces used by windowing code *
  *************************************/
+
+cairo_surface_t *
+           _gdk_window_ref_cairo_surface (GdkWindow *window);
 
 void       _gdk_window_impl_new          (GdkWindow      *window,
 					  GdkWindow      *real_parent,
@@ -367,9 +353,6 @@ gulong   _gdk_windowing_window_get_next_serial  (GdkDisplay *display);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
 						 gint       *x_offset,
 						 gint       *y_offset);
-cairo_region_t *_gdk_windowing_window_get_shape      (GdkWindow  *window);
-cairo_region_t *_gdk_windowing_window_get_input_shape(GdkWindow  *window);
-void     _gdk_windowing_window_beep             (GdkWindow *window);
 
 
 void       _gdk_windowing_get_device_state   (GdkDisplay       *display,
@@ -407,7 +390,7 @@ gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
 					gint        depth);
 
 
-#define GDK_WINDOW_IS_MAPPED(window) ((((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
+#define GDK_WINDOW_IS_MAPPED(window) (((window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
 
 /* Called when gdk_window_destroy() is called on a foreign window
@@ -442,9 +425,6 @@ struct _GdkPaintableIface
 };
 
 GType _gdk_paintable_get_type (void) G_GNUC_CONST;
-
-/* Implementation types */
-GType _gdk_window_impl_get_type (void) G_GNUC_CONST;
 
 struct GdkAppLaunchContextPrivate
 {

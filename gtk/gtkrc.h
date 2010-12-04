@@ -131,6 +131,8 @@ gboolean  _gtk_rc_match_widget_class     (GSList       *list,
                                           gchar        *path,
                                           gchar        *path_reversed);
 
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
+
 void      gtk_rc_add_default_file	(const gchar *filename);
 void      gtk_rc_set_default_files      (gchar **filenames);
 gchar**   gtk_rc_get_default_files      (void);
@@ -216,6 +218,8 @@ guint	  gtk_rc_parse_state	(GScanner	     *scanner,
 				 GtkStateType	     *state);
 guint	  gtk_rc_parse_priority	(GScanner	     *scanner,
 				 GtkPathPriorityType *priority);
+
+#endif
 
 /* rc properties
  * (structure forward declared in gtkstyle.h)

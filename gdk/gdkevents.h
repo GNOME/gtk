@@ -77,7 +77,6 @@ G_BEGIN_DECLS
 
 typedef struct _GdkEventAny	    GdkEventAny;
 typedef struct _GdkEventExpose	    GdkEventExpose;
-typedef struct _GdkEventNoExpose    GdkEventNoExpose;
 typedef struct _GdkEventVisibility  GdkEventVisibility;
 typedef struct _GdkEventMotion	    GdkEventMotion;
 typedef struct _GdkEventButton	    GdkEventButton;
@@ -205,8 +204,6 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  * @GDK_DROP_FINISHED: the drop operation initiated by the window has completed.
  * @GDK_CLIENT_EVENT: a message has been received from another application.
  * @GDK_VISIBILITY_NOTIFY: the window visibility status has changed.
- * @GDK_NO_EXPOSE: indicates that the source region was completely available
- *   when parts of a drawable were copied. This is not very useful.
  * @GDK_SCROLL: the scroll wheel was turned
  * @GDK_WINDOW_STATE: the state of a window has changed. See #GdkWindowState
  *   for the possible window states
@@ -258,7 +255,6 @@ typedef enum
   GDK_DROP_FINISHED     = 27,
   GDK_CLIENT_EVENT	= 28,
   GDK_VISIBILITY_NOTIFY = 29,
-  GDK_NO_EXPOSE		= 30,
   GDK_SCROLL            = 31,
   GDK_WINDOW_STATE      = 32,
   GDK_SETTING           = 33,
@@ -463,23 +459,6 @@ struct _GdkEventExpose
   GdkRectangle area;
   cairo_region_t *region;
   gint count; /* If non-zero, how many more events follow. */
-};
-
-/**
- * GdkEventNoExpose:
- * @type: the type of the event (%GDK_NO_EXPOSE).
- * @window: the window which received the event.
- * @send_event: %TRUE if the event was sent explicitly (e.g. using
- *   <function>XSendEvent</function>).
- *
- * Generated when the area of a #GdkDrawable being copied was completely
- * available.
- */
-struct _GdkEventNoExpose
-{
-  GdkEventType type;
-  GdkWindow *window;
-  gint8 send_event;
 };
 
 /**
@@ -1064,7 +1043,6 @@ union _GdkEvent
   GdkEventType		    type;
   GdkEventAny		    any;
   GdkEventExpose	    expose;
-  GdkEventNoExpose	    no_expose;
   GdkEventVisibility	    visibility;
   GdkEventMotion	    motion;
   GdkEventButton	    button;

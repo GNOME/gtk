@@ -1280,7 +1280,7 @@ gtk_range_set_range (GtkRange *range,
   gdouble value;
   
   g_return_if_fail (GTK_IS_RANGE (range));
-  g_return_if_fail (min < max);
+  g_return_if_fail (min <= max);
 
   priv = range->priv;
 
@@ -2016,10 +2016,15 @@ gtk_range_draw (GtkWidget      *widget,
   gint focus_line_width = 0;
   gint focus_padding = 0;
   gboolean touchscreen;
+  gboolean draw_trough = TRUE;
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-touchscreen-mode", &touchscreen,
                 NULL);
+
+  if (GTK_IS_SCALE (widget) &&
+      priv->adjustment->upper == priv->adjustment->lower)
+    draw_trough = FALSE;
 
   style = gtk_widget_get_style (widget);
   if (gtk_widget_get_can_focus (GTK_WIDGET (range)))
@@ -2112,6 +2117,7 @@ gtk_range_draw (GtkWidget      *widget,
             }
 	}
 
+      if (draw_trough)
         {
 	  gint trough_change_pos_x = width;
 	  gint trough_change_pos_y = height;
@@ -2146,6 +2152,17 @@ gtk_range_draw (GtkWidget      *widget,
                          x + trough_change_pos_x, y + trough_change_pos_y,
                          width - trough_change_pos_x,
                          height - trough_change_pos_y);
+        }
+      else
+        {
+          gtk_paint_box (style, cr,
+                         sensitive ? GTK_STATE_ACTIVE : GTK_STATE_INSENSITIVE,
+                         GTK_SHADOW_IN,
+                         GTK_WIDGET (range),
+                         "trough-upper",
+                         x, y,
+                         width,
+                         height);
         }
 
       if (priv->show_fill_level &&
@@ -2236,6 +2253,7 @@ gtk_range_draw (GtkWidget      *widget,
   gdk_cairo_rectangle (cr, &priv->slider);
   cairo_clip (cr);
 
+  if (draw_trough)
     {
       gtk_paint_slider (style,
                         cr,
@@ -2938,7 +2956,9 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
       gtk_widget_queue_draw (GTK_WIDGET (range));
       /* setup a timer to ensure the range isn't lagging too much behind the scroll position */
       if (!priv->repaint_id)
-        priv->repaint_id = gdk_threads_add_timeout_full (GDK_PRIORITY_EVENTS, 181, force_repaint, range, NULL);
+        priv->repaint_id = gdk_threads_add_timeout_full (GDK_PRIORITY_EVENTS,
+                                                         181, force_repaint,
+                                                         range, NULL);
     }
   
   /* Note that we don't round off to priv->round_digits here.
@@ -4058,8 +4078,8 @@ initial_timeout (gpointer data)
   g_object_get (settings, "gtk-timeout-repeat", &timeout, NULL);
 
   priv->timer->timeout_id = gdk_threads_add_timeout (timeout * SCROLL_DELAY_FACTOR,
-                                            second_timeout,
-                                            range);
+                                                     second_timeout,
+                                                     range);
   /* remove self */
   return FALSE;
 }
@@ -4081,8 +4101,8 @@ gtk_range_add_step_timer (GtkRange      *range,
   priv->timer = g_new (GtkRangeStepTimer, 1);
 
   priv->timer->timeout_id = gdk_threads_add_timeout (timeout,
-                                            initial_timeout,
-                                            range);
+                                                     initial_timeout,
+                                                     range);
   priv->timer->step = step;
 
   gtk_range_scroll (range, priv->timer->step);
@@ -4125,8 +4145,8 @@ gtk_range_reset_update_timer (GtkRange *range)
   gtk_range_remove_update_timer (range);
 
   priv->update_timeout_id = gdk_threads_add_timeout (UPDATE_DELAY,
-                                            update_timeout,
-                                            range);
+                                                     update_timeout,
+                                                     range);
 }
 
 static void

@@ -281,18 +281,18 @@ G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,
 static void
 mask_entry_set_background (MaskEntry *entry)
 {
-  static const GdkColor error_color = { 0, 65535, 60000, 60000 };
+  static const GdkRGBA error_color = { 1.0, 0.9, 0.9, 1.0 };
 
   if (entry->mask)
     {
       if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
 	{
-	  gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, &error_color);
+	  gtk_widget_override_color (GTK_WIDGET (entry), 0, &error_color);
 	  return;
 	}
     }
 
-  gtk_widget_modify_base (GTK_WIDGET (entry), GTK_STATE_NORMAL, NULL);
+  gtk_widget_override_color (GTK_WIDGET (entry), 0, NULL);
 }
 
 
@@ -437,7 +437,26 @@ do_combobox (GtkWidget *do_widget)
      
     gtk_container_remove (GTK_CONTAINER (combo), gtk_bin_get_child (GTK_BIN (combo)));
     gtk_container_add (GTK_CONTAINER (combo), entry);
-  
+
+    /* A combobox with string IDs */
+    frame = gtk_frame_new ("String IDs");
+    gtk_box_pack_start (GTK_BOX (vbox), frame, FALSE, FALSE, 0);
+
+    box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_set_border_width (GTK_CONTAINER (box), 5);
+    gtk_container_add (GTK_CONTAINER (frame), box);
+
+    combo = gtk_combo_box_text_new ();
+    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "never", "Not visible");
+    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "when-active", "Visible when active");
+    gtk_combo_box_text_append (GTK_COMBO_BOX_TEXT (combo), "always", "Always visible");
+    gtk_container_add (GTK_CONTAINER (box), combo);
+
+    entry = gtk_entry_new ();
+    g_object_bind_property (combo, "active-id",
+                            entry, "text",
+                            G_BINDING_BIDIRECTIONAL);
+    gtk_container_add (GTK_CONTAINER (box), entry);
   }
 
   if (!gtk_widget_get_visible (window))

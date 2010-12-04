@@ -236,23 +236,23 @@ create_widget_visible_border (const char *text)
   GtkWidget *inner_box;
   GtkWidget *test_widget;
   GtkWidget *label;
-  GdkColor color;
+  GdkRGBA color;
 
   outer_box = gtk_event_box_new ();
-  gdk_color_parse ("black", &color);
-  gtk_widget_modify_bg (outer_box, GTK_STATE_NORMAL, &color);
+  gdk_rgba_parse (&color, "black");
+  gtk_widget_override_background_color (outer_box, 0, &color);
 
   inner_box = gtk_event_box_new ();
   gtk_container_set_border_width (GTK_CONTAINER (inner_box), 5);
-  gdk_color_parse ("blue", &color);
-  gtk_widget_modify_bg (inner_box, GTK_STATE_NORMAL, &color);
+  gdk_rgba_parse (&color, "blue");
+  gtk_widget_override_background_color (inner_box, 0, &color);
 
   gtk_container_add (GTK_CONTAINER (outer_box), inner_box);
 
 
   test_widget = gtk_event_box_new ();
-  gdk_color_parse ("red", &color);
-  gtk_widget_modify_bg (test_widget, GTK_STATE_NORMAL, &color);
+  gdk_rgba_parse (&color, "red");
+  gtk_widget_override_background_color (test_widget, 0, &color);
 
   gtk_container_add (GTK_CONTAINER (inner_box), test_widget);
 

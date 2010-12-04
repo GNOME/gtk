@@ -22,6 +22,8 @@ CFILE_GLOB=$(top_srcdir)/gtk/*.c
 # Header files to ignore when scanning
 IGNORE_HFILES=				\
 	fnmatch.h			\
+	gtk9slice.h			\
+	gtkanimationdescription.h	\
 	gtkdebug.h			\
 	gtkbuilderprivate.h		\
 	gtkdndcursors.h			\
@@ -77,6 +79,7 @@ IGNORE_HFILES=				\
 	gtktexttagprivate.h		\
 	gtktexttypes.h			\
 	gtktextutil.h			\
+	gtktimeline.h			\
 	gtkthemes.h			\
 	gtktrayicon.h			\
 	gtktreedatalist.h		\
@@ -122,6 +125,7 @@ content_files =					\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
 	migrating-GtkApplication.xml		\
+	migrating-GtkStyleContext.xml		\
 	objects_grouped.sgml			\
 	osx.sgml				\
 	question_index.sgml			\
@@ -144,6 +148,7 @@ expand_content_files = 				\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
 	migrating-GtkApplication.xml		\
+	migrating-GtkStyleContext.xml		\
 	question_index.sgml			\
 	text_widget.sgml			\
 	tree_widget.sgml
@@ -322,7 +327,32 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-tblr.png				\
 	$(srcdir)/images/layout-tbrl.png				\
 	$(srcdir)/images/window-default.png				\
-	$(srcdir)/images/hello-world.png
+	$(srcdir)/images/hello-world.png				\
+	$(srcdir)/images/switch.png
+	$(srcdir)/images/linear.png					\
+	$(srcdir)/images/ease.png					\
+	$(srcdir)/images/ease-in-out.png				\
+	$(srcdir)/images/ease-in.png					\
+	$(srcdir)/images/ease-out.png					\
+	$(srcdir)/images/gradient1.png					\
+	$(srcdir)/images/gradient2.png					\
+	$(srcdir)/images/gradient3.png					\
+	$(srcdir)/images/gradient4.png					\
+	$(srcdir)/images/border1.png					\
+	$(srcdir)/images/border2.png					\
+	$(srcdir)/images/border3.png					\
+	$(srcdir)/images/slices.png					\
+	$(srcdir)/images/checks.png					\
+	$(srcdir)/images/options.png					\
+	$(srcdir)/images/arrows.png					\
+	$(srcdir)/images/expanders.png					\
+	$(srcdir)/images/background.png					\
+	$(srcdir)/images/frames.png					\
+	$(srcdir)/images/frame-gap.png					\
+	$(srcdir)/images/sliders.png					\
+	$(srcdir)/images/focus.png					\
+	$(srcdir)/images/handles.png					\
+	$(srcdir)/images/extensions.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \

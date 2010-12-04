@@ -132,7 +132,6 @@ GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
                                           GtkWidget       *widget,
                                           const char      *detail);
 
-
 void           gtk_icon_set_add_source   (GtkIconSet          *icon_set,
                                           const GtkIconSource *source);
 

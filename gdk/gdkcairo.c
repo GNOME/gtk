@@ -21,7 +21,6 @@
 
 #include "gdkcairo.h"
 
-#include "gdkdrawable.h"
 #include "gdkinternals.h"
 
 #include <math.h>
@@ -41,70 +40,6 @@
  * #GdkPixbufs and #GdkWindows as sources for drawing operations.
  */
 
-
-/**
- * gdk_cairo_create:
- * @drawable: a #GdkDrawable
- * 
- * Creates a Cairo context for drawing to @drawable.
- *
- * <note><para>
- * Note that due to double-buffering, Cairo contexts created 
- * in a GTK+ expose event handler cannot be cached and reused 
- * between different expose events. 
- * </para></note>
- *
- * Return value: A newly created Cairo context. Free with
- *  cairo_destroy() when you are done drawing.
- * 
- * Since: 2.8
- **/
-cairo_t *
-gdk_cairo_create (GdkDrawable *drawable)
-{
-  cairo_surface_t *surface;
-  cairo_t *cr;
-    
-  g_return_val_if_fail (GDK_IS_DRAWABLE (drawable), NULL);
-
-  surface = _gdk_drawable_ref_cairo_surface (drawable);
-  cr = cairo_create (surface);
-
-  if (GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip)
-    GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip (drawable, cr);
-    
-  cairo_surface_destroy (surface);
-
-  return cr;
-}
-
-/**
- * gdk_cairo_reset_clip:
- * @cr: a #cairo_t
- * @drawable: a #GdkDrawable
- *
- * Resets the clip region for a Cairo context created by gdk_cairo_create().
- *
- * This resets the clip region to the "empty" state for the given drawable.
- * This is required for non-native windows since a direct call to
- * cairo_reset_clip() would unset the clip region inherited from the
- * drawable (i.e. the window clip region), and thus let you e.g.
- * draw outside your window.
- *
- * This is rarely needed though, since most code just create a new cairo_t
- * using gdk_cairo_create() each time they want to draw something.
- *
- * Since: 2.18
- **/
-void
-gdk_cairo_reset_clip (cairo_t            *cr,
-		      GdkDrawable        *drawable)
-{
-  cairo_reset_clip (cr);
-
-  if (GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip)
-    GDK_DRAWABLE_GET_CLASS (drawable)->set_cairo_clip (drawable, cr);
-}
 
 /**
  * gdk_cairo_get_clip_rectangle:
@@ -149,7 +84,7 @@ gdk_cairo_get_clip_rectangle (cairo_t      *cr,
  * gdk_cairo_set_source_color:
  * @cr: a #cairo_t
  * @color: a #GdkColor
- * 
+ *
  * Sets the specified #GdkColor as the source color of @cr.
  *
  * Since: 2.8
@@ -167,6 +102,15 @@ gdk_cairo_set_source_color (cairo_t        *cr,
 			color->blue / 65535.);
 }
 
+/**
+ * gdk_cairo_set_source_rgba:
+ * @cr: a #cairo_t
+ * @rgba: a #GdkRGBA
+ *
+ * Sets the specified #GdkRGBA as the source color of @cr.
+ *
+ * Since: 3.0
+ **/
 void
 gdk_cairo_set_source_rgba (cairo_t       *cr,
                            const GdkRGBA *rgba)
@@ -363,7 +307,7 @@ gdk_cairo_set_source_window (cairo_t   *cr,
   g_return_if_fail (cr != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  surface = _gdk_drawable_ref_cairo_surface (GDK_DRAWABLE (window));
+  surface = _gdk_window_ref_cairo_surface (window);
   cairo_set_source_surface (cr, surface, x, y);
   cairo_surface_destroy (surface);
 }

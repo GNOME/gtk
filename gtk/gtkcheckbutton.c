@@ -155,34 +155,33 @@ gtk_check_button_paint (GtkWidget    *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   if (gtk_widget_has_focus (widget))
     {
-      GtkStateType state = gtk_widget_get_state (widget);
-      GtkStyle *style = gtk_widget_get_style (widget);
       GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
+      GtkStyleContext *context;
+      GtkStateFlags state;
       GtkAllocation allocation;
 
       gtk_widget_get_allocation (widget, &allocation);
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_set_state (context, state);
 
       if (interior_focus && child && gtk_widget_get_visible (child))
         {
           GtkAllocation child_allocation;
 
           gtk_widget_get_allocation (child, &child_allocation);
-          gtk_paint_focus (style, cr, state,
-                           widget, "checkbutton",
-                           child_allocation.x - allocation.x - focus_width - focus_pad,
-                           child_allocation.y - allocation.y - focus_width - focus_pad,
-                           child_allocation.width + 2 * (focus_width + focus_pad),
-                           child_allocation.height + 2 * (focus_width + focus_pad));
+          gtk_render_focus (context, cr,
+                            child_allocation.x - allocation.x - focus_width - focus_pad,
+                            child_allocation.y - allocation.y - focus_width - focus_pad,
+                            child_allocation.width + 2 * (focus_width + focus_pad),
+                            child_allocation.height + 2 * (focus_width + focus_pad));
         }
       else
-        {
-          gtk_paint_focus (style, cr, state,
-                           widget, "checkbutton",
-                           border_width,
-                           border_width,
-                           allocation.width - 2 * border_width,
-                           allocation.height - 2 * border_width);
-        }
+        gtk_render_focus (context, cr,
+                          border_width, border_width,
+                          allocation.width - 2 * border_width,
+                          allocation.height - 2 * border_width);
     }
 }
 
@@ -408,8 +407,7 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   GtkWidget *child;
   GtkButton *button;
   GtkToggleButton *toggle_button;
-  GtkStateType state_type;
-  GtkShadowType shadow_type;
+  GtkStateFlags state = 0;
   gint x, y;
   gint indicator_size;
   gint indicator_spacing;
@@ -418,16 +416,14 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
   guint border_width;
   gboolean interior_focus;
   GtkAllocation allocation;
-  GtkStyle *style;
-  GdkWindow *window;
+  GtkStyleContext *context;
 
   widget = GTK_WIDGET (check_button);
   button = GTK_BUTTON (check_button);
   toggle_button = GTK_TOGGLE_BUTTON (check_button);
 
   gtk_widget_get_allocation (widget, &allocation);
-  style = gtk_widget_get_style (widget);
-  window = gtk_widget_get_window (widget);
+  context = gtk_widget_get_style_context (widget);
 
   gtk_widget_style_get (widget, 
                         "interior-focus", &interior_focus,
@@ -447,37 +443,35 @@ gtk_real_check_button_draw_indicator (GtkCheckButton *check_button,
     x += focus_width + focus_pad;      
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
-    shadow_type = GTK_SHADOW_ETCHED_IN;
-  else if (gtk_toggle_button_get_active (toggle_button))
-    shadow_type = GTK_SHADOW_IN;
-  else
-    shadow_type = GTK_SHADOW_OUT;
+    state |= GTK_STATE_FLAG_INCONSISTENT;
+  else if (gtk_toggle_button_get_active (toggle_button) ||
+           (button->priv->button_down && button->priv->in_button))
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
-    state_type = GTK_STATE_ACTIVE;
-  else if (button->priv->in_button)
-    state_type = GTK_STATE_PRELIGHT;
+    state |= GTK_STATE_FLAG_SELECTED;
+
+  if (button->priv->in_button)
+    state |= GTK_STATE_FLAG_PRELIGHT;
   else if (!gtk_widget_is_sensitive (widget))
-    state_type = GTK_STATE_INSENSITIVE;
-  else
-    state_type = GTK_STATE_NORMAL;
-  
+    state |= GTK_STATE_FLAG_INSENSITIVE;
+
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
-    {
+  gtk_style_context_set_state (context, state);
 
-      gtk_paint_flat_box (style, cr, GTK_STATE_PRELIGHT,
-                          GTK_SHADOW_ETCHED_OUT, 
-                          widget, "checkbutton",
-                          border_width, border_width,
-                          allocation.width - (2 * border_width),
-                          allocation.height - (2 * border_width));
-    }
+  if (state & GTK_STATE_FLAG_PRELIGHT)
+    gtk_render_background (context, cr,
+                           border_width, border_width,
+                           allocation.width - (2 * border_width),
+                           allocation.height - (2 * border_width));
 
-  gtk_paint_check (style, cr,
-                   state_type, shadow_type,
-                   widget, "checkbutton",
-                   x, y, indicator_size, indicator_size);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+
+  gtk_render_check (context, cr,
+		    x, y, indicator_size, indicator_size);
+
+  gtk_style_context_restore (context);
 }

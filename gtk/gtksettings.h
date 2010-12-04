@@ -133,6 +133,8 @@ gboolean	    _gtk_settings_parse_convert       (GtkRcPropertyParser parser,
 						       GParamSpec         *pspec,
 						       GValue	          *dest_value);
 
+GdkScreen          *_gtk_settings_get_screen          (GtkSettings        *settings);
+
 
 G_END_DECLS
 

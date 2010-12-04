@@ -243,18 +243,15 @@ void calendar_select_font (GtkWidget    *button,
                                  CalendarData *calendar)
 {
   const char *font = NULL;
-  GtkRcStyle *style;
+  PangoFontDescription *font_desc;
 
   if (calendar->window)
-    font = gtk_font_button_get_font_name (GTK_FONT_BUTTON (button));
-
-  if (font)
-	{
-	  style = gtk_rc_style_new ();
-	  pango_font_description_free (style->font_desc);
-      style->font_desc = pango_font_description_from_string (font);
-	  gtk_widget_modify_style (calendar->window, style);
-	}
+    {
+      font = gtk_font_button_get_font_name (GTK_FONT_BUTTON (button));
+      font_desc = pango_font_description_from_string (font);
+      gtk_widget_override_font (calendar->window, font_desc);
+      pango_font_description_free (font_desc);
+    }
 }
 
 static gchar*
@@ -399,7 +396,8 @@ create_calendar(void)
   GtkWidget *frame, *label, *bbox, *align, *details;
 
   GtkSizeGroup *size;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  PangoFontDescription *font_desc;
   gchar *font;
   gint i;
   
@@ -478,10 +476,11 @@ create_calendar(void)
   gtk_box_pack_start (GTK_BOX (rpane), frame, FALSE, TRUE, 0);
   size = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
 
-  gtk_widget_ensure_style (calendar);
-  style = gtk_widget_get_style (calendar);
-  font = pango_font_description_to_string (style->font_desc);
+  context = gtk_widget_get_style_context (calendar);
+  gtk_style_context_get (context, 0, "font", &font_desc, NULL);
+  font = pango_font_description_to_string (font_desc);
   button = gtk_font_button_new_with_font (font);
+  pango_font_description_free (font_desc);
   g_free (font);
 
   g_signal_connect (button, "font-set",

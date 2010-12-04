@@ -45,12 +45,9 @@ G_BEGIN_DECLS
 #define GTK_IS_STYLE_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STYLE))
 #define GTK_STYLE_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STYLE, GtkStyleClass))
 
-#define GTK_TYPE_BORDER             (gtk_border_get_type ())
-
 /* Some forward declarations needed to rationalize the header
  * files.
  */
-typedef struct _GtkBorder      GtkBorder;
 typedef struct _GtkStyle       GtkStyle;
 typedef struct _GtkStyleClass  GtkStyleClass;
 typedef struct _GtkThemeEngine GtkThemeEngine;
@@ -383,23 +380,7 @@ struct _GtkStyleClass
   void (*_gtk_reserved11) (void);
 };
 
-/**
- * GtkBorder:
- * @left: The width of the left border.
- * @right: The width of the right border.
- * @top: The width of the top border.
- * @bottom: The width of the bottom border.
- *
- * A struct that specifies a border around a rectangular area that can
- * be of different width on each side.
- */
-struct _GtkBorder
-{
-  gint16 left;
-  gint16 right;
-  gint16 top;
-  gint16 bottom;
-};
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 
 GType     gtk_style_get_type                 (void) G_GNUC_CONST;
 GtkStyle* gtk_style_new			     (void);
@@ -637,12 +618,6 @@ void gtk_paint_spinner           (GtkStyle           *style,
                                   gint                width,
                                   gint                height);
 
-
-GType      gtk_border_get_type (void) G_GNUC_CONST;
-GtkBorder *gtk_border_new      (void) G_GNUC_MALLOC;
-GtkBorder *gtk_border_copy     (const GtkBorder *border_);
-void       gtk_border_free     (GtkBorder       *border_);
-
 void gtk_style_get_style_property (GtkStyle    *style,
                                    GType        widget_type,
                                    const gchar *property_name,
@@ -655,6 +630,8 @@ void gtk_style_get                (GtkStyle    *style,
                                    GType        widget_type,
                                    const gchar *first_property_name,
                                    ...) G_GNUC_NULL_TERMINATED;
+
+#endif
 
 /* --- private API --- */
 const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
@@ -677,6 +654,10 @@ void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
                                      gboolean            draw_arrow);
 void   _gtk_widget_get_cursor_color (GtkWidget          *widget,
 				     GdkColor           *color);
+
+gboolean   gtk_style_has_context     (GtkStyle *style);
+
+
 
 G_END_DECLS
 

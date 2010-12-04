@@ -59,9 +59,16 @@ struct _GdkIOClosure
 /* Private variable declarations
  */
 
-GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
-gpointer       _gdk_event_data = NULL;
-GDestroyNotify _gdk_event_notify = NULL;
+static GdkEventFunc   _gdk_event_func = NULL;    /* Callback for events */
+static gpointer       _gdk_event_data = NULL;
+static GDestroyNotify _gdk_event_notify = NULL;
+
+void
+_gdk_event_emit (GdkEvent *event)
+{
+  if (_gdk_event_func)
+    (*_gdk_event_func) (event, _gdk_event_data);
+}
 
 /*********************************************
  * Functions for maintaining the event queue *
@@ -636,7 +643,6 @@ gdk_event_get_time (const GdkEvent *event)
 	return event->dnd.time;
       case GDK_CLIENT_EVENT:
       case GDK_VISIBILITY_NOTIFY:
-      case GDK_NO_EXPOSE:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_NOTHING:
@@ -704,7 +710,6 @@ gdk_event_get_state (const GdkEvent        *event,
         return TRUE;
       case GDK_VISIBILITY_NOTIFY:
       case GDK_CLIENT_EVENT:
-      case GDK_NO_EXPOSE:
       case GDK_CONFIGURE:
       case GDK_FOCUS_CHANGE:
       case GDK_SELECTION_CLEAR:
@@ -1435,7 +1440,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
   temp_event.window_state.type = GDK_WINDOW_STATE;
   temp_event.window_state.send_event = FALSE;
   
-  old = ((GdkWindowObject*) temp_event.window_state.window)->state;
+  old = temp_event.window_state.window->state;
   
   temp_event.window_state.new_window_state = old;
   temp_event.window_state.new_window_state |= set_flags;
@@ -1450,7 +1455,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
    * inconsistent state to the user.
    */
   
-  ((GdkWindowObject*) window)->state = temp_event.window_state.new_window_state;
+  window->state = temp_event.window_state.new_window_state;
 
   if (temp_event.window_state.changed_mask & GDK_WINDOW_STATE_WITHDRAWN)
     _gdk_window_update_viewable (window);
@@ -1460,7 +1465,7 @@ gdk_synthesize_window_state (GdkWindow     *window,
    * Non-toplevels do use the GDK_WINDOW_STATE_WITHDRAWN flag
    * internally so we needed to update window->state.
    */
-  switch (((GdkWindowObject*) window)->window_type)
+  switch (window->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP: /* ? */

@@ -361,13 +361,36 @@ typedef enum
 } GtkShadowType;
 
 /* Widget states */
+
+/**
+ * GtkStateType:
+ *
+ * This type indicates the current state of a widget; the state determines how
+ * the widget is drawn. The #GtkStateType enumeration is also used to
+ * identify different colors in a #GtkStyle for drawing, so states can be
+ * used for subparts of a widget as well as entire widgets.
+ *
+ * @GTK_STATE_NORMAL: State during normal operation.
+ * @GTK_STATE_ACTIVE: State of a currently active widget, such as a depressed button.
+ * @GTK_STATE_PRELIGHT: State indicating that the mouse pointer is over
+ *                      the widget and the widget will respond to mouse clicks.
+ * @GTK_STATE_SELECTED: State of a selected item, such the selected row in a list.
+ * @GTK_STATE_INSENSITIVE: State indicating that the widget is
+ *                         unresponsive to user actions.
+ * @GTK_STATE_INCONSISTENT: The widget is inconsistent, such as checkbuttons
+ *                          or radiobuttons that aren't either set to %TRUE nor %FALSE,
+ *                          or buttons requiring the user attention.
+ * @GTK_STATE_FOCUSED: The widget has the keyboard focus.
+ */
 typedef enum
 {
   GTK_STATE_NORMAL,
   GTK_STATE_ACTIVE,
   GTK_STATE_PRELIGHT,
   GTK_STATE_SELECTED,
-  GTK_STATE_INSENSITIVE
+  GTK_STATE_INSENSITIVE,
+  GTK_STATE_INCONSISTENT,
+  GTK_STATE_FOCUSED
 } GtkStateType;
 
 /* Style for toolbars */
@@ -557,6 +580,86 @@ typedef enum
   GTK_SCROLL_NATURAL
 } GtkScrollablePolicy;
 
+/**
+ * GtkStateFlags:
+ * @GTK_STATE_FLAG_ACTIVE: Widget is active.
+ * @GTK_STATE_FLAG_PRELIGHT: Widget has a mouse pointer over it.
+ * @GTK_STATE_FLAG_SELECTED: Widget is selected.
+ * @GTK_STATE_FLAG_INSENSITIVE: Widget is insensitive.
+ * @GTK_STATE_FLAG_INCONSISTENT: Widget is inconsistent.
+ * @GTK_STATE_FLAG_FOCUSED: Widget has the keyboard focus.
+ *
+ * Describes a widget state.
+ */
+typedef enum
+{
+  GTK_STATE_FLAG_ACTIVE       = 1 << 0,
+  GTK_STATE_FLAG_PRELIGHT     = 1 << 1,
+  GTK_STATE_FLAG_SELECTED     = 1 << 2,
+  GTK_STATE_FLAG_INSENSITIVE  = 1 << 3,
+  GTK_STATE_FLAG_INCONSISTENT = 1 << 4,
+  GTK_STATE_FLAG_FOCUSED      = 1 << 5
+} GtkStateFlags;
+
+/**
+ * GtkRegionFlags:
+ * @GTK_REGION_EVEN: Region has an even number within a set.
+ * @GTK_REGION_ODD: Region has an odd number within a set.
+ * @GTK_REGION_FIRST: Region is the first one within a set.
+ * @GTK_REGION_LAST: Region is the last one within a set.
+ * @GTK_REGION_SORTED: Region is part of a sorted area.
+ *
+ * Describes a region within a widget.
+ */
+typedef enum {
+  GTK_REGION_EVEN    = 1 << 0,
+  GTK_REGION_ODD     = 1 << 1,
+  GTK_REGION_FIRST   = 1 << 2,
+  GTK_REGION_LAST    = 1 << 3,
+  GTK_REGION_SORTED  = 1 << 5
+} GtkRegionFlags;
+
+/**
+ * GtkJunctionSides:
+ * @GTK_JUNCTION_NONE: No junctions.
+ * @GTK_JUNCTION_CORNER_TOPLEFT: Element connects on the top-left corner.
+ * @GTK_JUNCTION_CORNER_TOPRIGHT: Element connects on the top-right corner.
+ * @GTK_JUNCTION_CORNER_BOTTOMLEFT: Element connects on the bottom-left corner.
+ * @GTK_JUNCTION_CORNER_BOTTOMRIGHT: Element connects on the bottom-right corner.
+ * @GTK_JUNCTION_TOP: Element connects on the top side.
+ * @GTK_JUNCTION_BOTTOM: Element connects on the bottom side.
+ * @GTK_JUNCTION_LEFT: Element connects on the left side.
+ * @GTK_JUNCTION_RIGHT: Element connects on the right side.
+ *
+ * Describes how a rendered element connects to adjacent elements.
+ */
+typedef enum {
+  GTK_JUNCTION_NONE   = 0,
+  GTK_JUNCTION_CORNER_TOPLEFT = 1 << 0,
+  GTK_JUNCTION_CORNER_TOPRIGHT = 1 << 1,
+  GTK_JUNCTION_CORNER_BOTTOMLEFT = 1 << 2,
+  GTK_JUNCTION_CORNER_BOTTOMRIGHT = 1 << 3,
+  GTK_JUNCTION_TOP    = (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_TOPRIGHT),
+  GTK_JUNCTION_BOTTOM = (GTK_JUNCTION_CORNER_BOTTOMLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT),
+  GTK_JUNCTION_LEFT   = (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMLEFT),
+  GTK_JUNCTION_RIGHT  = (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMRIGHT)
+} GtkJunctionSides;
+
+/**
+ * GtkBorderStyle:
+ * @GTK_BORDER_STYLE_NONE: No visible border
+ * @GTK_BORDER_STYLE_SOLID: A solid border
+ * @GTK_BORDER_STYLE_INSET: An inset border
+ * @GTK_BORDER_STYLE_OUTSET: An outset border
+ *
+ * Describes how the border of a UI element should be rendered.
+ */
+typedef enum {
+  GTK_BORDER_STYLE_NONE,
+  GTK_BORDER_STYLE_SOLID,
+  GTK_BORDER_STYLE_INSET,
+  GTK_BORDER_STYLE_OUTSET
+} GtkBorderStyle;
 
 G_END_DECLS
 

@@ -143,20 +143,18 @@ cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
                                                          int        width,
                                                          int        height);
 
-extern GdkDrawableClass  _gdk_x11_drawable_class;
 extern gboolean	         _gdk_use_xshm;
 extern const int         _gdk_nenvent_masks;
 extern const int         _gdk_event_mask_table[];
 extern GdkAtom		 _gdk_selection_property;
 extern gboolean          _gdk_synchronize;
 
-#define GDK_DRAWABLE_XROOTWIN(win)    (GDK_WINDOW_XROOTWIN (win))
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_SCREEN_X11 (screen)->display)
 #define GDK_SCREEN_XROOTWIN(screen)   (GDK_SCREEN_X11 (screen)->xroot_window)
-#define GDK_WINDOW_SCREEN(win)	      (GDK_DRAWABLE_IMPL_X11 (((GdkWindowObject *)win)->impl)->screen)
+#define GDK_WINDOW_SCREEN(win)	      (gdk_window_get_screen (win))
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xroot_window)
 #define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))
-#define GDK_WINDOW_IS_X11(win)        (GDK_IS_WINDOW_IMPL_X11 (((GdkWindowObject *)win)->impl))
+#define GDK_WINDOW_IS_X11(win)        (GDK_IS_WINDOW_IMPL_X11 ((win)->impl))
 
 #endif /* __GDK_PRIVATE_X11_H__ */

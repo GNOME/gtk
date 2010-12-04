@@ -561,7 +561,7 @@ recursive_attach_view (int                 depth,
 {
   GtkWidget *child_view;
   GtkWidget *event_box;
-  GdkColor color;
+  GdkRGBA color;
   GtkWidget *align;
 
   if (depth > 4)
@@ -571,8 +571,8 @@ recursive_attach_view (int                 depth,
 
   /* Event box is to add a black border around each child view */
   event_box = gtk_event_box_new ();
-  gdk_color_parse ("black", &color);
-  gtk_widget_modify_bg (event_box, GTK_STATE_NORMAL, &color);
+  gdk_rgba_parse (&color, "black");
+  gtk_widget_override_background_color (event_box, 0, &color);
 
   align = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_container_set_border_width (GTK_CONTAINER (align), 1);

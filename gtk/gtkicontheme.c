@@ -606,10 +606,7 @@ reset_styles_idle (gpointer user_data)
   priv = icon_theme->priv;
 
   if (priv->screen && priv->is_screen_singleton)
-    {
-      GtkSettings *settings = gtk_settings_get_for_screen (priv->screen);
-      gtk_rc_reset_styles (settings);
-    }
+    gtk_style_context_reset_widgets (priv->screen);
 
   priv->reset_styles_idle = 0;
 
@@ -3071,6 +3068,16 @@ gdk_color_to_css (GdkColor *color)
                           color->blue >> 8);
 }
 
+static gchar *
+gdk_rgba_to_css (GdkRGBA *color)
+{
+  return g_strdup_printf ("rgba(%d,%d,%d,%f)",
+                          (gint)(color->red * 255),
+                          (gint)(color->green * 255),
+                          (gint)(color->blue * 255),
+                          color->alpha);
+}
+
 static GdkPixbuf *
 _gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
                                        const gchar  *css_fg,
@@ -3236,6 +3243,83 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
 }
 
 /**
+ * gtk_icon_info_load_symbolic_for_context:
+ * @icon_info: a #GtkIconInfo
+ * context: a #GtkStyleContext
+ * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
+ *     was a symbolic one and whether the @fg color was applied to it.
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
+ * Loads an icon, modifying it to match the system colors for the foreground,
+ * success, warning and error colors provided. If the icon is not a symbolic
+ * one, the function will return the result from gtk_icon_info_load_icon().
+ *
+ * This allows loading symbolic icons that will match the system theme.
+ *
+ * See gtk_icon_info_load_symbolic() for more details.
+ *
+ * Return value: (transfer full): a #GdkPixbuf representing the loaded icon
+ *
+ * Since: 3.0
+ **/
+GdkPixbuf *
+gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
+                                         GtkStyleContext  *context,
+                                         gboolean         *was_symbolic,
+                                         GError          **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkRGBA *color = NULL;
+  GdkRGBA rgba;
+  gchar *css_fg = NULL, *css_success;
+  gchar *css_warning, *css_error;
+  GtkStateFlags state;
+
+  if (!icon_info->filename ||
+      !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
+    {
+      if (was_symbolic)
+        *was_symbolic = FALSE;
+      return gtk_icon_info_load_icon (icon_info, error);
+    }
+
+  if (was_symbolic)
+    *was_symbolic = TRUE;
+
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get (context, state, "color", &color, NULL);
+  if (color)
+    {
+      css_fg = gdk_rgba_to_css (color);
+      gdk_rgba_free (color);
+    }
+
+  css_success = css_warning = css_error = NULL;
+
+  if (gtk_style_context_lookup_color (context, "success_color", &rgba))
+    css_success = gdk_rgba_to_css (&rgba);
+
+  if (gtk_style_context_lookup_color (context, "warning_color", &rgba))
+    css_warning = gdk_rgba_to_css (&rgba);
+
+  if (gtk_style_context_lookup_color (context, "error_color", &rgba))
+    css_error = gdk_rgba_to_css (&rgba);
+
+  pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
+                                                  css_fg, css_success,
+                                                  css_warning, css_error,
+                                                  error);
+
+  g_free (css_fg);
+  g_free (css_success);
+  g_free (css_warning);
+  g_free (css_error);
+
+  return pixbuf;
+}
+
+/**
  * gtk_icon_info_load_symbolic_for_style:
  * @icon_info: a #GtkIconInfo
  * @style: a #GtkStyle to take the colors from
@@ -3256,6 +3340,8 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
  * Return value: (transfer full): a #GdkPixbuf representing the loaded icon
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.0: Use gtk_icon_info_load_symbolic_for_context() instead
  **/
 GdkPixbuf *
 gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,

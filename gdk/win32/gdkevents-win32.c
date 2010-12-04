@@ -756,7 +756,6 @@ _gdk_win32_print_event (const GdkEvent *event)
     CASE (GDK_DROP_FINISHED);
     CASE (GDK_CLIENT_EVENT);
     CASE (GDK_VISIBILITY_NOTIFY);
-    CASE (GDK_NO_EXPOSE);
     CASE (GDK_SCROLL);
     CASE (GDK_WINDOW_STATE);
     CASE (GDK_SETTING);
@@ -3019,54 +3018,51 @@ gdk_event_translate (MSG  *msg,
       /* We need to render to clipboard immediately, don't call
        * append_event()
        */
-      if (_gdk_event_func)
-	{
-	  event = gdk_event_new (GDK_SELECTION_REQUEST);
-	  event->selection.window = window;
-	  event->selection.send_event = FALSE;
-	  event->selection.selection = GDK_SELECTION_CLIPBOARD;
-	  event->selection.target = target;
-	  event->selection.property = _gdk_selection;
-	  event->selection.requestor = msg->hwnd;
-	  event->selection.time = msg->time;
+      event = gdk_event_new (GDK_SELECTION_REQUEST);
+      event->selection.window = window;
+      event->selection.send_event = FALSE;
+      event->selection.selection = GDK_SELECTION_CLIPBOARD;
+      event->selection.target = target;
+      event->selection.property = _gdk_selection;
+      event->selection.requestor = msg->hwnd;
+      event->selection.time = msg->time;
 
-	  fixup_event (event);
-	  GDK_NOTE (EVENTS, g_print (" (calling gdk_event_func)"));
-	  GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
-	  (*_gdk_event_func) (event, _gdk_event_data);
-	  gdk_event_free (event);
+      fixup_event (event);
+      GDK_NOTE (EVENTS, g_print (" (calling _gdk_event_emit)"));
+      GDK_NOTE (EVENTS, _gdk_win32_print_event (event));
+      _gdk_event_emit (event);
+      gdk_event_free (event);
 
-	  /* Now the clipboard owner should have rendered */
-	  if (!_delayed_rendering_data)
-	    {
-	      GDK_NOTE (EVENTS, g_print (" (no _delayed_rendering_data?)"));
-	    }
-	  else
-	    {
-	      if (msg->wParam == CF_DIB)
-		{
-		  _delayed_rendering_data =
-		    _gdk_win32_selection_convert_to_dib (_delayed_rendering_data,
-							 target);
-		  if (!_delayed_rendering_data)
-		    {
-		      g_warning ("Cannot convert to DIB from delayed rendered image");
-		      break;
-		    }
-		}
+      /* Now the clipboard owner should have rendered */
+      if (!_delayed_rendering_data)
+        {
+          GDK_NOTE (EVENTS, g_print (" (no _delayed_rendering_data?)"));
+        }
+      else
+        {
+          if (msg->wParam == CF_DIB)
+            {
+              _delayed_rendering_data =
+                _gdk_win32_selection_convert_to_dib (_delayed_rendering_data,
+                                                     target);
+              if (!_delayed_rendering_data)
+                {
+                  g_warning ("Cannot convert to DIB from delayed rendered image");
+                  break;
+                }
+            }
 
-	      /* The requestor is holding the clipboard, no
-	       * OpenClipboard() is required/possible
-	       */
-	      GDK_NOTE (DND,
-			g_print (" SetClipboardData(%s,%p)",
-				 _gdk_win32_cf_to_string (msg->wParam),
-				 _delayed_rendering_data));
+          /* The requestor is holding the clipboard, no
+           * OpenClipboard() is required/possible
+           */
+          GDK_NOTE (DND,
+                    g_print (" SetClipboardData(%s,%p)",
+                             _gdk_win32_cf_to_string (msg->wParam),
+                             _delayed_rendering_data));
 
-	      API_CALL (SetClipboardData, (msg->wParam, _delayed_rendering_data));
-	      _delayed_rendering_data = NULL;
-	    }
-	}
+          API_CALL (SetClipboardData, (msg->wParam, _delayed_rendering_data));
+          _delayed_rendering_data = NULL;
+        }
       break;
 
     case WM_ACTIVATE:
@@ -3223,8 +3219,7 @@ gdk_event_dispatch (GSource     *source,
 
   if (event)
     {
-      if (_gdk_event_func)
-	(*_gdk_event_func) (event, _gdk_event_data);
+      _gdk_event_emit (event);
       
       gdk_event_free (event);
 

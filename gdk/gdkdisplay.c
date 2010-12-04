@@ -933,20 +933,17 @@ gdk_window_real_window_get_device_position (GdkDisplay       *display,
                                             gint             *y,
                                             GdkModifierType  *mask)
 {
-  GdkWindowObject *private;
   gint tmpx, tmpy;
   GdkModifierType tmp_mask;
   gboolean normal_child;
 
-  private = (GdkWindowObject *) window;
-
-  normal_child = GDK_WINDOW_IMPL_GET_IFACE (private->impl)->get_device_state (window,
+  normal_child = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_device_state (window,
                                                                               device,
                                                                               &tmpx, &tmpy,
                                                                               &tmp_mask);
   /* We got the coords on the impl, convert to the window */
-  tmpx -= private->abs_x;
-  tmpy -= private->abs_y;
+  tmpx -= window->abs_x;
+  tmpy -= window->abs_y;
 
   if (x)
     *x = tmpx;
