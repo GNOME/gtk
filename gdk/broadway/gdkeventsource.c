@@ -128,8 +128,8 @@ _gdk_events_got_input (GdkDisplay *display,
 	    event = gdk_event_new (GDK_LEAVE_NOTIFY);
 	    event->crossing.window = g_object_ref (display_broadway->mouse_in_toplevel);
 	    event->crossing.time = time;
-	    event->crossing.x = x - GDK_WINDOW_OBJECT (display_broadway->mouse_in_toplevel)->x;
-	    event->crossing.y = y - GDK_WINDOW_OBJECT (display_broadway->mouse_in_toplevel)->y;
+	    event->crossing.x = x - display_broadway->mouse_in_toplevel->x;
+	    event->crossing.y = y - display_broadway->mouse_in_toplevel->y;
 	    event->crossing.x_root = x;
 	    event->crossing.y_root = y;
 	    event->crossing.mode = GDK_CROSSING_NORMAL;
@@ -156,8 +156,8 @@ _gdk_events_got_input (GdkDisplay *display,
 	    event = gdk_event_new (GDK_ENTER_NOTIFY);
 	    event->crossing.window = g_object_ref (window);
 	    event->crossing.time = time;
-	    event->crossing.x = x - GDK_WINDOW_OBJECT (window)->x;
-	    event->crossing.y = y - GDK_WINDOW_OBJECT (window)->y;
+	    event->crossing.x = x - window->x;
+	    event->crossing.y = y - window->y;
 	    event->crossing.x_root = x;
 	    event->crossing.y_root = y;
 	    event->crossing.mode = GDK_CROSSING_NORMAL;
@@ -183,8 +183,8 @@ _gdk_events_got_input (GdkDisplay *display,
 	event = gdk_event_new (GDK_MOTION_NOTIFY);
 	event->motion.window = g_object_ref (window);
 	event->motion.time = time;
-	event->motion.x = x - GDK_WINDOW_OBJECT (window)->x;
-	event->motion.y = y - GDK_WINDOW_OBJECT (window)->y;
+	event->motion.x = x - window->x;
+	event->motion.y = y - window->y;
 	event->motion.x_root = x;
 	event->motion.y_root = y;
 	gdk_event_set_device (event, display->core_pointer);
@@ -215,8 +215,8 @@ _gdk_events_got_input (GdkDisplay *display,
 	event = gdk_event_new (cmd == 'b' ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
 	event->button.window = g_object_ref (window);
 	event->button.time = time;
-	event->button.x = x - GDK_WINDOW_OBJECT (window)->x;
-	event->button.y = y - GDK_WINDOW_OBJECT (window)->y;
+	event->button.x = x - window->x;
+	event->button.y = y - window->y;
 	event->button.x_root = x;
 	event->button.y_root = y;
 	event->button.button = button + 1;
@@ -247,8 +247,8 @@ _gdk_events_got_input (GdkDisplay *display,
 	event = gdk_event_new (GDK_SCROLL);
 	event->scroll.window = g_object_ref (window);
 	event->scroll.time = time;
-	event->scroll.x = x - GDK_WINDOW_OBJECT (window)->x;
-	event->scroll.y = y - GDK_WINDOW_OBJECT (window)->y;
+	event->scroll.x = x - window->x;
+	event->scroll.y = y - window->y;
 	event->scroll.x_root = x;
 	event->scroll.y_root = y;
 	event->scroll.direction = dir == 0 ? GDK_SCROLL_UP : GDK_SCROLL_DOWN;
@@ -306,8 +306,7 @@ gdk_event_source_dispatch (GSource     *source,
 
   if (event)
     {
-      if (_gdk_event_func)
-	(*_gdk_event_func) (event, _gdk_event_data);
+      _gdk_event_emit (event);
 
       gdk_event_free (event);
     }

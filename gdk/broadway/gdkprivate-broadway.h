@@ -81,8 +81,8 @@ void _gdk_broadway_cursor_update_theme (GdkCursor *cursor);
 void _gdk_broadway_cursor_display_finalize (GdkDisplay *display);
 
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_SCREEN_BROADWAY (screen)->display)
-#define GDK_WINDOW_SCREEN(win)	      (GDK_DRAWABLE_IMPL_BROADWAY (((GdkWindowObject *)win)->impl)->screen)
+#define GDK_WINDOW_SCREEN(win)	      (GDK_WINDOW_IMPL_BROADWAY (((GdkWindow *)win)->impl)->screen)
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_BROADWAY (GDK_WINDOW_SCREEN (win))->display)
-#define GDK_WINDOW_IS_BROADWAY(win)   (GDK_IS_WINDOW_IMPL_BROADWAY (((GdkWindowObject *)win)->impl))
+#define GDK_WINDOW_IS_BROADWAY(win)   (GDK_IS_WINDOW_IMPL_BROADWAY (((GdkWindow *)win)->impl))
 
 #endif /* __GDK_PRIVATE_BROADWAY_H__ */

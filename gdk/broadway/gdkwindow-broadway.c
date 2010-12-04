@@ -49,7 +49,8 @@ static void     gdk_window_broadway_set_background     (GdkWindow      *window,
                                                    cairo_pattern_t *pattern);
 
 static void        gdk_window_impl_broadway_finalize   (GObject            *object);
-static void        gdk_window_impl_iface_init     (GdkWindowImplIface *iface);
+
+static const cairo_user_data_key_t gdk_broadway_cairo_key;
 
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
@@ -60,19 +61,9 @@ static void        gdk_window_impl_iface_init     (GdkWindowImplIface *iface);
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
 
-/* Return whether time1 is considered later than time2 as far as xserver
- * time is concerned.  Accounts for wraparound.
- */
-#define XSERVER_TIME_IS_LATER(time1, time2)                        \
-  ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
-    (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
-  )
-
-G_DEFINE_TYPE_WITH_CODE (GdkWindowImplBroadway,
-                         gdk_window_impl_broadway,
-                         GDK_TYPE_DRAWABLE_IMPL_BROADWAY,
-                         G_IMPLEMENT_INTERFACE (GDK_TYPE_WINDOW_IMPL,
-                                                gdk_window_impl_iface_init));
+G_DEFINE_TYPE (GdkWindowImplBroadway,
+	       gdk_window_impl_broadway,
+	       GDK_TYPE_WINDOW_IMPL)
 
 GType
 _gdk_window_impl_get_type (void)
@@ -123,34 +114,33 @@ static guint dirty_flush_id = 0;
 static void
 window_data_send (BroadwayOutput *output, GdkWindowImplBroadway *impl)
 {
-  GdkDrawableImplBroadway *drawable_impl = GDK_DRAWABLE_IMPL_BROADWAY (impl);
   cairo_t *cr;
 
-  if (drawable_impl->surface == NULL)
+  if (impl->surface == NULL)
     return;
 
   if (impl->last_synced)
     {
-      diff_surfaces (drawable_impl->surface,
-		     drawable_impl->last_surface);
+      diff_surfaces (impl->surface,
+		     impl->last_surface);
       broadway_output_put_rgba (output, impl->id, 0, 0,
-				cairo_image_surface_get_width (drawable_impl->last_surface),
-				cairo_image_surface_get_height (drawable_impl->last_surface),
-				cairo_image_surface_get_stride (drawable_impl->last_surface),
-				cairo_image_surface_get_data (drawable_impl->last_surface));
+				cairo_image_surface_get_width (impl->last_surface),
+				cairo_image_surface_get_height (impl->last_surface),
+				cairo_image_surface_get_stride (impl->last_surface),
+				cairo_image_surface_get_data (impl->last_surface));
     }
   else
     {
       impl->last_synced = TRUE;
       broadway_output_put_rgb (output, impl->id, 0, 0,
-			       cairo_image_surface_get_width (drawable_impl->surface),
-			       cairo_image_surface_get_height (drawable_impl->surface),
-			       cairo_image_surface_get_stride (drawable_impl->surface),
-			       cairo_image_surface_get_data (drawable_impl->surface));
+			       cairo_image_surface_get_width (impl->surface),
+			       cairo_image_surface_get_height (impl->surface),
+			       cairo_image_surface_get_stride (impl->surface),
+			       cairo_image_surface_get_data (impl->surface));
     }
 
-  cr = cairo_create (drawable_impl->last_surface);
-  cairo_set_source_surface (cr, drawable_impl->surface, 0, 0);
+  cr = cairo_create (impl->last_surface);
+  cairo_set_source_surface (cr, impl->surface, 0, 0);
   cairo_paint (cr);
   cairo_destroy (cr);
 }
@@ -209,9 +199,9 @@ _gdk_broadway_resync_windows (void)
   for (l = display->toplevels; l != NULL; l = l->next)
     {
       GdkWindowImplBroadway *impl = l->data;
-      GdkWindowObject *private;
+      GdkWindow *window;
 
-      private = (GdkWindowObject*) GDK_DRAWABLE_IMPL_BROADWAY (impl)->wrapper;
+      window = impl->wrapper;
 
       if (impl->id == 0)
 	continue; /* Skip root */
@@ -220,11 +210,11 @@ _gdk_broadway_resync_windows (void)
       impl->last_synced = FALSE;
       broadway_output_new_surface (display->output,
 				   impl->id,
-				   private->x,
-				   private->y,
-				   private->width,
-				   private->height);
-      if (GDK_WINDOW_IS_MAPPED (private))
+				   window->x,
+				   window->y,
+				   window->width,
+				   window->height);
+      if (GDK_WINDOW_IS_MAPPED (window))
 	{
 	  broadway_output_show_surface (display->output, impl->id);
 	  window_data_send (display->output, impl);
@@ -243,29 +233,19 @@ gdk_window_impl_broadway_init (GdkWindowImplBroadway *impl)
 }
 
 static void
-gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gdk_window_impl_broadway_finalize;
-}
-
-static void
 gdk_window_impl_broadway_finalize (GObject *object)
 {
-  GdkWindowObject *wrapper;
-  GdkDrawableImplBroadway *draw_impl;
-  GdkWindowImplBroadway *window_impl;
+  GdkWindow *wrapper;
+  GdkWindowImplBroadway *impl;
   GdkDisplayBroadway *display_broadway;
 
   g_return_if_fail (GDK_IS_WINDOW_IMPL_BROADWAY (object));
 
-  draw_impl = GDK_DRAWABLE_IMPL_BROADWAY (object);
-  window_impl = GDK_WINDOW_IMPL_BROADWAY (object);
+  impl = GDK_WINDOW_IMPL_BROADWAY (object);
 
-  wrapper = (GdkWindowObject*) draw_impl->wrapper;
+  wrapper = impl->wrapper;
 
-  display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (draw_impl->wrapper));
+  display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (impl->wrapper));
 
   if (display_broadway->mouse_in_toplevel == GDK_WINDOW (wrapper))
     {
@@ -273,14 +253,14 @@ gdk_window_impl_broadway_finalize (GObject *object)
       display_broadway->mouse_in_toplevel = NULL;
     }
 
-  g_hash_table_remove (display_broadway->id_ht, GINT_TO_POINTER(window_impl->id));
+  g_hash_table_remove (display_broadway->id_ht, GINT_TO_POINTER(impl->id));
 
-  if (window_impl->cursor)
-    gdk_cursor_unref (window_impl->cursor);
+  if (impl->cursor)
+    gdk_cursor_unref (impl->cursor);
 
-  g_hash_table_destroy (window_impl->device_cursor);
+  g_hash_table_destroy (impl->device_cursor);
 
-  display_broadway->toplevels = g_list_remove (display_broadway->toplevels, window_impl);
+  display_broadway->toplevels = g_list_remove (display_broadway->toplevels, impl);
 
   G_OBJECT_CLASS (gdk_window_impl_broadway_parent_class)->finalize (object);
 }
@@ -288,8 +268,8 @@ gdk_window_impl_broadway_finalize (GObject *object)
 void
 _gdk_windowing_window_init (GdkScreen * screen)
 {
-  GdkWindowObject *private;
-  GdkDrawableImplBroadway *draw_impl;
+  GdkWindow *window;
+  GdkWindowImplBroadway *impl;
   GdkScreenBroadway *screen_broadway;
 
   screen_broadway = GDK_SCREEN_BROADWAY (screen);
@@ -298,26 +278,26 @@ _gdk_windowing_window_init (GdkScreen * screen)
 
   screen_broadway->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
 
-  private = (GdkWindowObject *) screen_broadway->root_window;
-  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
-  private->impl_window = private;
-  private->visual = gdk_screen_get_system_visual (screen);
+  window = screen_broadway->root_window;
+  window->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  window->impl_window = window;
+  window->visual = gdk_screen_get_system_visual (screen);
 
-  draw_impl = GDK_DRAWABLE_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
-  draw_impl->screen = screen;
-  draw_impl->wrapper = GDK_DRAWABLE (private);
+  impl->screen = screen;
+  impl->wrapper = window;
 
-  private->window_type = GDK_WINDOW_ROOT;
-  private->depth = 24;
+  window->window_type = GDK_WINDOW_ROOT;
+  window->depth = 24;
 
-  private->x = 0;
-  private->y = 0;
-  private->abs_x = 0;
-  private->abs_y = 0;
-  private->width = gdk_screen_get_width (screen);
-  private->height = gdk_screen_get_height (screen);
-  private->viewable = TRUE;
+  window->x = 0;
+  window->y = 0;
+  window->abs_x = 0;
+  window->abs_y = 0;
+  window->width = gdk_screen_get_width (screen);
+  window->height = gdk_screen_get_height (screen);
+  window->viewable = TRUE;
 
   _gdk_window_update_size (screen_broadway->root_window);
 }
@@ -330,48 +310,43 @@ _gdk_window_impl_new (GdkWindow     *window,
 		      GdkWindowAttr *attributes,
 		      gint           attributes_mask)
 {
-  GdkWindowObject *private;
   GdkWindowImplBroadway *impl;
-  GdkDrawableImplBroadway *draw_impl;
   GdkScreenBroadway *screen_broadway;
   GdkDisplayBroadway *display_broadway;
   static int current_id = 1; /* 0 is the root window */
-
-  private = (GdkWindowObject *) window;
 
   screen_broadway = GDK_SCREEN_BROADWAY (screen);
   display_broadway = GDK_DISPLAY_BROADWAY (GDK_SCREEN_DISPLAY (screen));
 
   impl = g_object_new (_gdk_window_impl_get_type (), NULL);
-  private->impl = (GdkDrawable *)impl;
+  window->impl = (GdkWindowImpl *)impl;
   impl->id = current_id++;
   g_hash_table_insert (display_broadway->id_ht, GINT_TO_POINTER(impl->id), window);
-  draw_impl = GDK_DRAWABLE_IMPL_BROADWAY (impl);
-  draw_impl->wrapper = GDK_DRAWABLE (window);
+  impl->wrapper = window;
 
-  draw_impl->screen = screen;
+  impl->screen = screen;
 
-  g_assert (private->window_type == GDK_WINDOW_TOPLEVEL ||
-	    private->window_type == GDK_WINDOW_TEMP);
-  g_assert (GDK_WINDOW_TYPE (private->parent) == GDK_WINDOW_ROOT);
+  g_assert (window->window_type == GDK_WINDOW_TOPLEVEL ||
+	    window->window_type == GDK_WINDOW_TEMP);
+  g_assert (GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_ROOT);
 
   display_broadway->toplevels = g_list_prepend (display_broadway->toplevels, impl);
 
   /* Instead of window manager placement we have this mini hack
      so that the main/first window is not covered in the demos. */
-  if (impl->id > 1 && private->window_type == GDK_WINDOW_TOPLEVEL)
+  if (impl->id > 1 && window->window_type == GDK_WINDOW_TOPLEVEL)
     {
-      private->x = 100;
-      private->y = 20;
+      window->x = 100;
+      window->y = 20;
     }
 
   if (display_broadway->output)
     broadway_output_new_surface (display_broadway->output,
 				 impl->id,
-				 private->x,
-				 private->y,
-				 private->width,
-				 private->height);
+				 window->x,
+				 window->y,
+				 window->width,
+				 window->height);
 }
 
 
@@ -395,22 +370,129 @@ gdk_window_lookup (GdkNativeWindow anid)
 }
 
 static void
+resize_surface (GdkWindow *window)
+{
+  GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+  cairo_surface_t *old, *last_old;
+
+  if (impl->surface)
+    {
+      old = impl->surface;
+      last_old = impl->last_surface;
+
+      impl->surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
+						  gdk_window_get_width (impl->wrapper),
+						  gdk_window_get_height (impl->wrapper));
+      impl->last_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24,
+						       gdk_window_get_width (impl->wrapper),
+						       gdk_window_get_height (impl->wrapper));
+
+      { cairo_t *cr;
+      cr = cairo_create (impl->surface);
+      cairo_set_source_rgb (cr, 0.0, 1.0, 0.0);
+      cairo_rectangle (cr, 0, 0, 1000, 1000);
+      cairo_fill (cr);
+      cairo_destroy (cr);
+      }
+
+      cairo_surface_destroy (old);
+      cairo_surface_destroy (last_old);
+    }
+
+  if (impl->ref_surface)
+    {
+      cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
+				   NULL, NULL);
+      impl->ref_surface = NULL;
+    }
+}
+
+static void
+ref_surface_destroyed (void *data)
+{
+  GdkWindowImplBroadway *impl = data;
+
+  impl->ref_surface = NULL;
+}
+
+static cairo_surface_t *
+gdk_window_broadway_ref_cairo_surface (GdkWindow *window)
+{
+  GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+  cairo_t *cr;
+  int w, h;
+
+  if (GDK_IS_WINDOW_IMPL_BROADWAY (window) &&
+      GDK_WINDOW_DESTROYED (impl->wrapper))
+    return NULL;
+
+  w = gdk_window_get_width (impl->wrapper);
+  h = gdk_window_get_height (impl->wrapper);
+
+  /* Create actual backing store if missing */
+  if (!impl->surface)
+    {
+      impl->surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
+      impl->last_surface = cairo_image_surface_create (CAIRO_FORMAT_RGB24, w, h);
+
+      cr = cairo_create (impl->surface);
+      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+      cairo_rectangle (cr, 0, 0, w, h);
+      cairo_fill (cr);
+      cairo_destroy (cr);
+
+      cr = cairo_create (impl->last_surface);
+      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+      cairo_rectangle (cr, 0, 0, w, h);
+      cairo_fill (cr);
+      cairo_destroy (cr);
+    }
+
+  /* Create a destroyable surface referencing the real one */
+  if (!impl->ref_surface)
+    {
+      impl->ref_surface =
+	cairo_surface_create_for_rectangle (impl->surface,
+					    0, 0,
+					    w, h);
+      if (impl->ref_surface)
+	cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
+				     impl, ref_surface_destroyed);
+    }
+  else
+    cairo_surface_reference (impl->ref_surface);
+
+  return impl->ref_surface;
+}
+
+static void
 _gdk_broadway_window_destroy (GdkWindow *window,
 			      gboolean   recursing,
 			      gboolean   foreign_destroy)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplBroadway *impl;
   GdkDisplayBroadway *display_broadway;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  private = (GdkWindowObject*) window;
-  impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   _gdk_selection_window_destroyed (window);
 
-  _gdk_broadway_drawable_finish (private->impl);
+  if (impl->ref_surface)
+    {
+      cairo_surface_finish (impl->ref_surface);
+      cairo_surface_set_user_data (impl->ref_surface, &gdk_broadway_cairo_key,
+				   NULL, NULL);
+    }
+
+  if (impl->surface)
+    {
+      cairo_surface_destroy (impl->surface);
+      impl->surface = NULL;
+      cairo_surface_destroy (impl->last_surface);
+      impl->last_surface = NULL;
+    }
 
   display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (window));
   if (display_broadway->output)
@@ -442,7 +524,7 @@ gdk_window_destroy_notify (GdkWindow *window)
 {
   GdkWindowImplBroadway *window_impl;
 
-  window_impl = GDK_WINDOW_IMPL_BROADWAY (((GdkWindowObject *)window)->impl);
+  window_impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -458,18 +540,16 @@ gdk_window_destroy_notify (GdkWindow *window)
 static void
 gdk_window_broadway_show (GdkWindow *window, gboolean already_mapped)
 {
-  GdkWindowObject *private;
   GdkWindowImplBroadway *impl;
   GdkDisplayBroadway *display_broadway;
 
-  private = (GdkWindowObject*) window;
-  impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
-  if (private->event_mask & GDK_STRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
+  if (window->event_mask & GDK_STRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (window), GDK_MAP, NULL, FALSE);
 
-  if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_MAP, NULL, FALSE);
+  if (window->parent && window->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (window), GDK_MAP, NULL, FALSE);
 
   display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (window));
   if (display_broadway->output)
@@ -482,18 +562,16 @@ gdk_window_broadway_show (GdkWindow *window, gboolean already_mapped)
 static void
 gdk_window_broadway_hide (GdkWindow *window)
 {
-  GdkWindowObject *private;
   GdkWindowImplBroadway *impl;
   GdkDisplayBroadway *display_broadway;
 
-  private = (GdkWindowObject*) window;
-  impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
-  if (private->event_mask & GDK_STRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
+  if (window->event_mask & GDK_STRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (window), GDK_UNMAP, NULL, FALSE);
 
-  if (private->parent && private->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
-    _gdk_make_event (GDK_WINDOW (private), GDK_UNMAP, NULL, FALSE);
+  if (window->parent && window->parent->event_mask & GDK_SUBSTRUCTURE_MASK)
+    _gdk_make_event (GDK_WINDOW (window), GDK_UNMAP, NULL, FALSE);
 
   display_broadway = GDK_DISPLAY_BROADWAY (gdk_window_get_display (window));
   if (display_broadway->output)
@@ -525,8 +603,7 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 				 gint       width,
 				 gint       height)
 {
-  GdkWindowObject *private = (GdkWindowObject *) window;;
-  GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  GdkWindowImplBroadway *impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   GdkDisplayBroadway *display_broadway;
   gboolean changed;
 
@@ -536,8 +613,8 @@ gdk_window_broadway_move_resize (GdkWindow *window,
   if (with_move)
     {
       changed = TRUE;
-      private->x = x;
-      private->y = y;
+      window->x = x;
+      window->y = y;
       if (display_broadway->output != NULL)
 	{
 	  broadway_output_move_surface (display_broadway->output,
@@ -555,8 +632,8 @@ gdk_window_broadway_move_resize (GdkWindow *window,
       if (height < 1)
 	height = 1;
 
-      if (width != private->width ||
-	  height != private->height)
+      if (width != window->width ||
+	  height != window->height)
 	{
 	  changed = TRUE;
 
@@ -568,9 +645,9 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 					  impl->id, width, height);
 	  queue_dirty_flush (display_broadway);
 
-	  private->width = width;
-	  private->height = height;
-	  _gdk_broadway_drawable_update_size (private->impl);
+	  window->width = width;
+	  window->height = height;
+	  resize_surface (window);
 	  gdk_window_invalidate_rect (window, NULL, TRUE);
 	}
     }
@@ -582,10 +659,10 @@ gdk_window_broadway_move_resize (GdkWindow *window,
 
       event = gdk_event_new (GDK_CONFIGURE);
       event->configure.window = g_object_ref (window);
-      event->configure.x = private->x;
-      event->configure.y = private->y;
-      event->configure.width = private->width;
-      event->configure.height = private->height;
+      event->configure.x = window->x;
+      event->configure.y = window->y;
+      event->configure.width = window->width;
+      event->configure.height = window->height;
 
       gdk_event_set_device (event, GDK_DISPLAY_OBJECT (display_broadway)->core_pointer);
 
@@ -712,14 +789,12 @@ gdk_window_broadway_set_device_cursor (GdkWindow *window,
                                   GdkDevice *device,
                                   GdkCursor *cursor)
 {
-  GdkWindowObject *private;
   GdkWindowImplBroadway *impl;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
 
-  private = (GdkWindowObject *) window;
-  impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   if (!cursor)
     g_hash_table_remove (impl->device_cursor, device);
@@ -737,13 +812,11 @@ gdk_window_broadway_set_device_cursor (GdkWindow *window,
 GdkCursor *
 _gdk_broadway_window_get_cursor (GdkWindow *window)
 {
-  GdkWindowObject *private;
   GdkWindowImplBroadway *impl;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
 
-  private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   return impl->cursor;
 }
@@ -789,16 +862,12 @@ void
 gdk_window_get_frame_extents (GdkWindow    *window,
                               GdkRectangle *rect)
 {
-  GdkWindowObject *private;
-
   g_return_if_fail (rect != NULL);
 
-  private = (GdkWindowObject*) window;
-
-  rect->x = private->x;
-  rect->y = private->y;
-  rect->width = private->width;
-  rect->height = private->height;
+  rect->x = window->x;
+  rect->y = window->y;
+  rect->width = window->width;
+  rect->height = window->height;
 }
 
 void
@@ -870,7 +939,6 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
                                           gboolean         get_toplevel)
 {
   GdkWindow *window;
-  GdkWindowObject *private;
   GdkDisplayBroadway *display_broadway;
   GdkScreen *screen;
 
@@ -882,9 +950,8 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
 
   if (window != NULL)
     {
-      private = (GdkWindowObject *)window;
-      *win_x = display_broadway->last_x - private->x;
-      *win_y = display_broadway->last_y - private->y;
+      *win_x = display_broadway->last_x - window->x;
+      *win_y = display_broadway->last_y - window->y;
       if (mask)
 	*mask = 0;
     }
@@ -936,15 +1003,11 @@ void
 gdk_window_set_accept_focus (GdkWindow *window,
 			     gboolean accept_focus)
 {
-  GdkWindowObject *private;
-
-  private = (GdkWindowObject *)window;
-
   accept_focus = accept_focus != FALSE;
 
-  if (private->accept_focus != accept_focus)
+  if (window->accept_focus != accept_focus)
     {
-      private->accept_focus = accept_focus;
+      window->accept_focus = accept_focus;
     }
 }
 
@@ -952,15 +1015,11 @@ void
 gdk_window_set_focus_on_map (GdkWindow *window,
 			     gboolean focus_on_map)
 {
-  GdkWindowObject *private;
-
-  private = (GdkWindowObject *)window;
-
   focus_on_map = focus_on_map != FALSE;
 
-  if (private->focus_on_map != focus_on_map)
+  if (window->focus_on_map != focus_on_map)
     {
-      private->focus_on_map = focus_on_map;
+      window->focus_on_map = focus_on_map;
     }
 }
 
@@ -1180,9 +1239,7 @@ gdk_window_begin_move_drag (GdkWindow *window,
 void
 gdk_window_enable_synchronized_configure (GdkWindow *window)
 {
-  GdkWindowObject *private = (GdkWindowObject *)window;
-
-  if (!GDK_IS_WINDOW_IMPL_BROADWAY (private->impl))
+  if (!GDK_IS_WINDOW_IMPL_BROADWAY (window->impl))
     return;
 }
 
@@ -1236,13 +1293,11 @@ void
 _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
                                                cairo_region_t *region)
 {
-  GdkWindowObject *private;
   GdkWindowImplBroadway *impl;
 
   _gdk_window_process_updates_recurse (window, region);
 
-  private = (GdkWindowObject *)window;
-  impl = GDK_WINDOW_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
   impl->dirty = TRUE;
   queue_dirty_flush (GDK_DISPLAY_BROADWAY (gdk_window_get_display (window)));
 }
@@ -1297,15 +1352,13 @@ _gdk_broadway_window_translate (GdkWindow      *window,
 				gint            dx,
 				gint            dy)
 {
-  GdkWindowObject *private;
-  GdkDrawableImplBroadway *impl;
+  GdkWindowImplBroadway *impl;
   GdkDisplayBroadway *display_broadway;
   int n_rects, i;
   BroadwayRect *rects;
   cairo_rectangle_int_t rect;
 
-  private = (GdkWindowObject *)window;
-  impl = GDK_DRAWABLE_IMPL_BROADWAY (private->impl);
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
   if (impl->surface)
     {
@@ -1334,29 +1387,35 @@ _gdk_broadway_window_translate (GdkWindow      *window,
 }
 
 static void
-gdk_window_impl_iface_init (GdkWindowImplIface *iface)
+gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
 {
-  iface->show = gdk_window_broadway_show;
-  iface->hide = gdk_window_broadway_hide;
-  iface->withdraw = gdk_window_broadway_withdraw;
-  iface->set_events = gdk_window_broadway_set_events;
-  iface->get_events = gdk_window_broadway_get_events;
-  iface->raise = gdk_window_broadway_raise;
-  iface->lower = gdk_window_broadway_lower;
-  iface->restack_under = gdk_window_broadway_restack_under;
-  iface->restack_toplevel = gdk_window_broadway_restack_toplevel;
-  iface->move_resize = gdk_window_broadway_move_resize;
-  iface->set_background = gdk_window_broadway_set_background;
-  iface->reparent = gdk_window_broadway_reparent;
-  iface->set_device_cursor = gdk_window_broadway_set_device_cursor;
-  iface->get_geometry = gdk_window_broadway_get_geometry;
-  iface->get_root_coords = gdk_window_broadway_get_root_coords;
-  iface->get_device_state = gdk_window_broadway_get_device_state;
-  iface->shape_combine_region = gdk_window_broadway_shape_combine_region;
-  iface->input_shape_combine_region = gdk_window_broadway_input_shape_combine_region;
-  iface->set_static_gravities = gdk_window_broadway_set_static_gravities;
-  iface->queue_antiexpose = _gdk_broadway_window_queue_antiexpose;
-  iface->translate = _gdk_broadway_window_translate;
-  iface->destroy = _gdk_broadway_window_destroy;
-  iface->resize_cairo_surface = gdk_window_broadway_resize_cairo_surface;
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
+
+  object_class->finalize = gdk_window_impl_broadway_finalize;
+
+  impl_class->ref_cairo_surface = gdk_window_broadway_ref_cairo_surface;
+  impl_class->show = gdk_window_broadway_show;
+  impl_class->hide = gdk_window_broadway_hide;
+  impl_class->withdraw = gdk_window_broadway_withdraw;
+  impl_class->set_events = gdk_window_broadway_set_events;
+  impl_class->get_events = gdk_window_broadway_get_events;
+  impl_class->raise = gdk_window_broadway_raise;
+  impl_class->lower = gdk_window_broadway_lower;
+  impl_class->restack_under = gdk_window_broadway_restack_under;
+  impl_class->restack_toplevel = gdk_window_broadway_restack_toplevel;
+  impl_class->move_resize = gdk_window_broadway_move_resize;
+  impl_class->set_background = gdk_window_broadway_set_background;
+  impl_class->reparent = gdk_window_broadway_reparent;
+  impl_class->set_device_cursor = gdk_window_broadway_set_device_cursor;
+  impl_class->get_geometry = gdk_window_broadway_get_geometry;
+  impl_class->get_root_coords = gdk_window_broadway_get_root_coords;
+  impl_class->get_device_state = gdk_window_broadway_get_device_state;
+  impl_class->shape_combine_region = gdk_window_broadway_shape_combine_region;
+  impl_class->input_shape_combine_region = gdk_window_broadway_input_shape_combine_region;
+  impl_class->set_static_gravities = gdk_window_broadway_set_static_gravities;
+  impl_class->queue_antiexpose = _gdk_broadway_window_queue_antiexpose;
+  impl_class->translate = _gdk_broadway_window_translate;
+  impl_class->destroy = _gdk_broadway_window_destroy;
+  impl_class->resize_cairo_surface = gdk_window_broadway_resize_cairo_surface;
 }

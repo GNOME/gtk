@@ -27,7 +27,7 @@
 #ifndef __GDK_WINDOW_BROADWAY_H__
 #define __GDK_WINDOW_BROADWAY_H__
 
-#include <gdk/broadway/gdkdrawable-broadway.h>
+#include <gdk/gdkwindowimpl.h>
 
 G_BEGIN_DECLS
 
@@ -46,11 +46,19 @@ typedef struct _GdkWindowImplBroadwayClass GdkWindowImplBroadwayClass;
 
 struct _GdkWindowImplBroadway
 {
-  GdkDrawableImplBroadway parent_instance;
+  GdkWindowImpl parent_instance;
 
-  int id;
+  GdkWindow *wrapper;
+  GdkScreen *screen;
+
+  cairo_surface_t *surface;
+  cairo_surface_t *last_surface;
+  cairo_surface_t *ref_surface;
+
   GdkCursor *cursor;
   GHashTable *device_cursor;
+
+  int id;
 
   gint8 toplevel_window_type;
   gboolean dirty;
@@ -59,7 +67,7 @@ struct _GdkWindowImplBroadway
 
 struct _GdkWindowImplBroadwayClass
 {
-  GdkDrawableImplBroadwayClass parent_class;
+  GdkWindowImplClass parent_class;
 };
 
 GType gdk_window_impl_broadway_get_type (void);

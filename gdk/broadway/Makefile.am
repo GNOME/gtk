@@ -45,8 +45,6 @@ libgdk_broadway_la_SOURCES =		\
 	gdkdisplay-broadway.c	\
 	gdkdisplay-broadway.h	\
 	gdkdnd-broadway.c	\
-	gdkdrawable-broadway.c	\
-	gdkdrawable-broadway.h	\
 	gdkeventsource.c	\
 	gdkeventsource.h	\
 	gdkglobals-broadway.c	\
