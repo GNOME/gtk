@@ -75,7 +75,8 @@ enum
   PROP_REORDERABLE,
   PROP_SORT_INDICATOR,
   PROP_SORT_ORDER,
-  PROP_SORT_COLUMN_ID
+  PROP_SORT_COLUMN_ID,
+  PROP_CELL_AREA
 };
 
 enum
@@ -434,7 +435,7 @@ gtk_tree_view_column_constructor (GType                    type,
   tree_column->cell_area_context = gtk_cell_area_create_context (tree_column->cell_area);
 
   tree_column->context_changed_signal =
-    g_signal_connect (priv->cell_area_context, "notify",
+    g_signal_connect (tree_column->cell_area_context, "notify",
 		      G_CALLBACK (gtk_tree_view_column_context_changed), tree_column);
 
   return object;
@@ -693,7 +694,7 @@ gtk_tree_view_column_get_property (GObject         *object,
       break;
 
     case PROP_CELL_AREA:
-      g_value_set_object (value, tree_column->priv->cell_area);
+      g_value_set_object (value, tree_column->cell_area);
       break;
       
     default:
