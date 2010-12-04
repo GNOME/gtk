@@ -399,7 +399,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
 
 
 static void
-_gtk_entry_completion_buildable_custom_tag_end (GtkBuildable *buildable,
+gtk_entry_completion_buildable_custom_tag_end (GtkBuildable *buildable,
 						GtkBuilder   *builder,
 						GObject      *child,
 						const gchar  *tagname,
@@ -414,7 +414,7 @@ gtk_entry_completion_buildable_init (GtkBuildableIface *iface)
 {
   iface->add_child = _gtk_cell_layout_buildable_add_child;
   iface->custom_tag_start = _gtk_cell_layout_buildable_custom_tag_start;
-  iface->custom_tag_end = _gtk_entry_completion_buildable_custom_tag_end;
+  iface->custom_tag_end = gtk_entry_completion_buildable_custom_tag_end;
 }
 
 static void
