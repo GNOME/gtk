@@ -231,7 +231,9 @@
  * customized derived areas can be implemented who are interested in handling
  * other events. Handling an event can trigger the #GtkCellArea::focus-changed
  * signal to fire as well as #GtkCellArea::add-editable in the case that
- * an editable cell was clicked and needs to start editing.
+ * an editable cell was clicked and needs to start editing. You can call
+ * gtk_cell_area_stop_editing() at any time to cancel any cell editing
+ * that is currently in progress.
  *
  * The #GtkCellArea drives keyboard focus from cell to cell in a way similar
  * to #GtkWidget. For layouting widgets that support giving focus to cells it's
@@ -294,7 +296,7 @@
  *           else
  *             {
  *               if (focus_row == last_row)
- *     	           break;
+ *                 break;
  *               else
  *                 {
  *                   focus_row++;
@@ -307,6 +309,28 @@
  * }
  *   </programlisting>
  * </example>
+ * </para>
+ * </refsect2>
+ * <refsect2 id="cell-properties">
+ * <title>Cell Properties</title>
+ * <para>
+ * The #GtkCellArea introduces <emphasis>cell properties</emphasis> for #GtkCellRenderers in very
+ * much the same way that #GtkContainer introduces <link linkend="child-properties">child properties</link>
+ * for #GtkWidgets. This provides some general interfaces for defining the relationship cell areas
+ * have with thier cells. For instance in a #GtkCellAreaBox a cell might "expand" and recieve extra
+ * space when the area is allocated more than it's full natural request, or a cell might be configured
+ * to "align" with adjacent rows which were requested and rendered with the same #GtkCellAreaContext.
+ *
+ * Use gtk_cell_area_class_install_cell_property() to install cell properties
+ * for a cell area class and gtk_cell_area_class_find_cell_property() or
+ * gtk_cell_area_class_list_cell_properties() to get information about existing
+ * cell properties.
+ *
+ * To set the value of a cell property, use gtk_cell_area_cell_set_property(),
+ * gtk_cell_area_cell_set() or gtk_cell_area_cell_set_valist().
+ * To obtain the value of a cell property, use
+ * gtk_cell_area_cell_get_property(), gtk_cell_area_cell_get() or
+ * gtk_cell_area_cell_get_valist().
  * </para>
  * </refsect2>
  *
