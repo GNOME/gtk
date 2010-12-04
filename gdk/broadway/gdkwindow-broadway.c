@@ -65,12 +65,6 @@ G_DEFINE_TYPE (GdkWindowImplBroadway,
 	       gdk_window_impl_broadway,
 	       GDK_TYPE_WINDOW_IMPL)
 
-GType
-_gdk_window_impl_get_type (void)
-{
-  return gdk_window_impl_broadway_get_type ();
-}
-
 static void
 diff_surfaces (cairo_surface_t *surface,
 	       cairo_surface_t *old_surface)
@@ -279,7 +273,7 @@ _gdk_windowing_window_init (GdkScreen * screen)
   screen_broadway->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
 
   window = screen_broadway->root_window;
-  window->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
   window->impl_window = window;
   window->visual = gdk_screen_get_system_visual (screen);
 
@@ -318,7 +312,7 @@ _gdk_window_impl_new (GdkWindow     *window,
   screen_broadway = GDK_SCREEN_BROADWAY (screen);
   display_broadway = GDK_DISPLAY_BROADWAY (GDK_SCREEN_DISPLAY (screen));
 
-  impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  impl = g_object_new (GDK_TYPE_WINDOW_IMPL_BROADWAY, NULL);
   window->impl = (GdkWindowImpl *)impl;
   impl->id = current_id++;
   g_hash_table_insert (display_broadway->id_ht, GINT_TO_POINTER(impl->id), window);
