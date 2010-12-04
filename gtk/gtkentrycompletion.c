@@ -23,6 +23,7 @@
 
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"
+#include "gtkcellareabox.h"
 
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
@@ -63,11 +64,17 @@ enum
   PROP_POPUP_COMPLETION,
   PROP_POPUP_SET_WIDTH,
   PROP_POPUP_SINGLE_MATCH,
-  PROP_INLINE_SELECTION
+  PROP_INLINE_SELECTION,
+  PROP_CELL_AREA
 };
 
 
-static void                                                             gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
+static void     gtk_entry_completion_cell_layout_init    (GtkCellLayoutIface      *iface);
+static GtkCellArea* gtk_entry_completion_get_area        (GtkCellLayout           *cell_layout);
+
+static GObject *gtk_entry_completion_constructor         (GType                    type,
+							  guint                    n_construct_properties,
+							  GObjectConstructParam   *construct_properties);
 static void     gtk_entry_completion_set_property        (GObject      *object,
                                                           guint         prop_id,
                                                           const GValue *value,
@@ -76,30 +83,8 @@ static void     gtk_entry_completion_get_property        (GObject      *object,
                                                           guint         prop_id,
                                                           GValue       *value,
                                                           GParamSpec   *pspec);
-static void                                                             gtk_entry_completion_finalize            (GObject                 *object);
-
-static void     gtk_entry_completion_pack_start          (GtkCellLayout         *cell_layout,
-                                                          GtkCellRenderer       *cell,
-                                                          gboolean               expand);
-static void     gtk_entry_completion_pack_end            (GtkCellLayout         *cell_layout,
-                                                          GtkCellRenderer       *cell,
-                                                          gboolean               expand);
-static void                                                                      gtk_entry_completion_clear               (GtkCellLayout           *cell_layout);
-static void     gtk_entry_completion_add_attribute       (GtkCellLayout         *cell_layout,
-                                                          GtkCellRenderer       *cell,
-                                                          const char            *attribute,
-                                                          gint                   column);
-static void     gtk_entry_completion_set_cell_data_func  (GtkCellLayout         *cell_layout,
-                                                          GtkCellRenderer       *cell,
-                                                          GtkCellLayoutDataFunc  func,
-                                                          gpointer               func_data,
-                                                          GDestroyNotify         destroy);
-static void     gtk_entry_completion_clear_attributes    (GtkCellLayout         *cell_layout,
-                                                          GtkCellRenderer       *cell);
-static void     gtk_entry_completion_reorder             (GtkCellLayout         *cell_layout,
-                                                          GtkCellRenderer       *cell,
-                                                          gint                   position);
-static GList *  gtk_entry_completion_get_cells           (GtkCellLayout         *cell_layout);
+static void     gtk_entry_completion_finalize            (GObject      *object);
+static void     gtk_entry_completion_dispose             (GObject      *object);
 
 static gboolean gtk_entry_completion_visible_func        (GtkTreeModel       *model,
                                                           GtkTreeIter        *iter,
@@ -167,8 +152,10 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
 
   object_class = (GObjectClass *)klass;
 
+  object_class->constructor = gtk_entry_completion_constructor;
   object_class->set_property = gtk_entry_completion_set_property;
   object_class->get_property = gtk_entry_completion_get_property;
+  object_class->dispose = gtk_entry_completion_dispose;
   object_class->finalize = gtk_entry_completion_finalize;
 
   klass->match_selected = gtk_entry_completion_match_selected;
@@ -391,7 +378,35 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
 							 FALSE,
 							 GTK_PARAM_READWRITE));
 
+
+  /**
+   * GtkEntryCompletion:cell-area:
+   *
+   * The #GtkCellArea used to layout cell renderers in the treeview column.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (object_class,
+				   PROP_CELL_AREA,
+				   g_param_spec_object ("cell-area",
+							P_("Cell Area"),
+							P_("The GtkCellArea used to layout cells"),
+							GTK_TYPE_CELL_AREA,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
   g_type_class_add_private (object_class, sizeof (GtkEntryCompletionPrivate));
+}
+
+
+static void
+_gtk_entry_completion_buildable_custom_tag_end (GtkBuildable *buildable,
+						GtkBuilder   *builder,
+						GObject      *child,
+						const gchar  *tagname,
+						gpointer     *data)
+{
+  /* Just ignore the boolean return from here */
+  _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname, data);
 }
 
 static void
@@ -399,29 +414,19 @@ gtk_entry_completion_buildable_init (GtkBuildableIface *iface)
 {
   iface->add_child = _gtk_cell_layout_buildable_add_child;
   iface->custom_tag_start = _gtk_cell_layout_buildable_custom_tag_start;
-  iface->custom_tag_end = _gtk_cell_layout_buildable_custom_tag_end;
+  iface->custom_tag_end = _gtk_entry_completion_buildable_custom_tag_end;
 }
 
 static void
 gtk_entry_completion_cell_layout_init (GtkCellLayoutIface *iface)
 {
-  iface->pack_start = gtk_entry_completion_pack_start;
-  iface->pack_end = gtk_entry_completion_pack_end;
-  iface->clear = gtk_entry_completion_clear;
-  iface->add_attribute = gtk_entry_completion_add_attribute;
-  iface->set_cell_data_func = gtk_entry_completion_set_cell_data_func;
-  iface->clear_attributes = gtk_entry_completion_clear_attributes;
-  iface->reorder = gtk_entry_completion_reorder;
-  iface->get_cells = gtk_entry_completion_get_cells;
+  iface->get_area = gtk_entry_completion_get_area;
 }
 
 static void
 gtk_entry_completion_init (GtkEntryCompletion *completion)
 {
-  GtkCellRenderer *cell;
-  GtkTreeSelection *sel;
   GtkEntryCompletionPrivate *priv;
-  GtkWidget *popup_frame;
 
   /* yes, also priv, need to keep the code readable */
   completion->priv = G_TYPE_INSTANCE_GET_PRIVATE (completion,
@@ -438,9 +443,34 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
   priv->popup_single_match = TRUE;
   priv->inline_selection = FALSE;
 
-  /* completions */
   priv->filter_model = NULL;
+}
 
+static GObject *
+gtk_entry_completion_constructor (GType                    type,
+				  guint                    n_construct_properties,
+				  GObjectConstructParam   *construct_properties)
+{
+  GtkEntryCompletion        *completion;
+  GtkEntryCompletionPrivate *priv;
+  GObject                   *object;
+  GtkCellRenderer           *cell;
+  GtkTreeSelection          *sel;
+  GtkWidget                 *popup_frame;
+
+  object = G_OBJECT_CLASS (gtk_entry_completion_parent_class)->constructor
+    (type, n_construct_properties, construct_properties);
+
+  completion = (GtkEntryCompletion *) object;
+  priv       = completion->priv;
+
+  if (!priv->cell_area)
+    {
+      priv->cell_area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->cell_area);
+    }
+
+  /* completions */
   priv->tree_view = gtk_tree_view_new ();
   g_signal_connect (priv->tree_view, "button-press-event",
                     G_CALLBACK (gtk_entry_completion_list_button_press),
@@ -463,7 +493,7 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
                     completion);
   priv->first_sel_changed = TRUE;
 
-  priv->column = gtk_tree_view_column_new ();
+  priv->column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN, "cell-area", priv->cell_area, NULL);
   gtk_tree_view_append_column (GTK_TREE_VIEW (priv->tree_view), priv->column);
 
   priv->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
@@ -539,7 +569,10 @@ gtk_entry_completion_init (GtkEntryCompletion *completion)
    * been inserted, so we pack the action treeview after the first
    * action has been added
    */
+
+  return object;
 }
+
 
 static void
 gtk_entry_completion_set_property (GObject      *object,
@@ -549,6 +582,7 @@ gtk_entry_completion_set_property (GObject      *object,
 {
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (object);
   GtkEntryCompletionPrivate *priv = completion->priv;
+  GtkCellArea *area;
 
   switch (prop_id)
     {
@@ -585,6 +619,14 @@ gtk_entry_completion_set_property (GObject      *object,
       case PROP_INLINE_SELECTION:
         priv->inline_selection = g_value_get_boolean (value);
         break;
+
+      case PROP_CELL_AREA:
+	/* Construct-only, can only be assigned once */
+	area = g_value_get_object (value);
+
+	if (area)
+	  priv->cell_area = g_object_ref_sink (area);
+	break;
       
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -635,6 +677,10 @@ gtk_entry_completion_get_property (GObject    *object,
         g_value_set_boolean (value, gtk_entry_completion_get_inline_selection (completion));
         break;
 
+      case PROP_CELL_AREA:
+	g_value_set_object (value, completion->priv->cell_area);
+	break;
+
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -647,22 +693,8 @@ gtk_entry_completion_finalize (GObject *object)
   GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (object);
   GtkEntryCompletionPrivate *priv = completion->priv;
 
-  if (priv->tree_view)
-    gtk_widget_destroy (priv->tree_view);
-
-  if (priv->entry)
-    gtk_entry_set_completion (GTK_ENTRY (priv->entry), NULL);
-
-  if (priv->actions)
-    g_object_unref (priv->actions);
-  if (priv->action_view)
-    g_object_unref (priv->action_view);
-
   g_free (priv->case_normalized_key);
   g_free (priv->completion_prefix);
-
-  if (priv->popup_window)
-    gtk_widget_destroy (priv->popup_window);
 
   if (priv->match_notify)
     (* priv->match_notify) (priv->match_data);
@@ -670,100 +702,57 @@ gtk_entry_completion_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_entry_completion_parent_class)->finalize (object);
 }
 
-/* implement cell layout interface */
 static void
-gtk_entry_completion_pack_start (GtkCellLayout   *cell_layout,
-                                 GtkCellRenderer *cell,
-                                 gboolean         expand)
+gtk_entry_completion_dispose (GObject *object)
+{
+  GtkEntryCompletion *completion = GTK_ENTRY_COMPLETION (object);
+  GtkEntryCompletionPrivate *priv = completion->priv;
+
+  if (priv->tree_view)
+    {
+      gtk_widget_destroy (priv->tree_view);
+      priv->tree_view = NULL;
+    }
+
+  if (priv->entry)
+    gtk_entry_set_completion (GTK_ENTRY (priv->entry), NULL);
+
+  if (priv->actions)
+    {
+      g_object_unref (priv->actions);
+      priv->actions = NULL;
+    }
+
+  if (priv->action_view)
+    {
+      g_object_unref (priv->action_view);
+      priv->action_view = NULL;
+    }
+
+  if (priv->popup_window)
+    {
+      gtk_widget_destroy (priv->popup_window);
+      priv->popup_window = NULL;
+    }
+
+  if (priv->cell_area)
+    {
+      g_object_unref (priv->cell_area);
+      priv->cell_area = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_entry_completion_parent_class)->dispose (object);
+}
+
+/* implement cell layout interface (only need to return the underlying cell area) */
+static GtkCellArea* 
+gtk_entry_completion_get_area (GtkCellLayout *cell_layout)
 {
   GtkEntryCompletionPrivate *priv;
 
   priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
 
-  gtk_tree_view_column_pack_start (priv->column, cell, expand);
-}
-
-static void
-gtk_entry_completion_pack_end (GtkCellLayout   *cell_layout,
-                               GtkCellRenderer *cell,
-                               gboolean         expand)
-{
-  GtkEntryCompletionPrivate *priv;
-
-  priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
-
-  gtk_tree_view_column_pack_end (priv->column, cell, expand);
-}
-
-static void
-gtk_entry_completion_clear (GtkCellLayout *cell_layout)
-{
-  GtkEntryCompletionPrivate *priv;
-
-  priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
-
-  gtk_tree_view_column_clear (priv->column);
-}
-
-static void
-gtk_entry_completion_add_attribute (GtkCellLayout   *cell_layout,
-                                    GtkCellRenderer *cell,
-                                    const gchar     *attribute,
-                                    gint             column)
-{
-  GtkEntryCompletionPrivate *priv;
-
-  priv = GTK_ENTRY_COMPLETION  (cell_layout)->priv;
-
-  gtk_tree_view_column_add_attribute (priv->column, cell, attribute, column);
-}
-
-static void
-gtk_entry_completion_set_cell_data_func (GtkCellLayout          *cell_layout,
-                                         GtkCellRenderer        *cell,
-                                         GtkCellLayoutDataFunc   func,
-                                         gpointer                func_data,
-                                         GDestroyNotify          destroy)
-{
-  GtkEntryCompletionPrivate *priv;
-
-  priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
-
-  gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (priv->column),
-                                      cell, func, func_data, destroy);
-}
-
-static void
-gtk_entry_completion_clear_attributes (GtkCellLayout   *cell_layout,
-                                       GtkCellRenderer *cell)
-{
-  GtkEntryCompletionPrivate *priv;
-
-  priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
-
-  gtk_tree_view_column_clear_attributes (priv->column, cell);
-}
-
-static void
-gtk_entry_completion_reorder (GtkCellLayout   *cell_layout,
-                              GtkCellRenderer *cell,
-                              gint             position)
-{
-  GtkEntryCompletionPrivate *priv;
-
-  priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
-
-  gtk_cell_layout_reorder (GTK_CELL_LAYOUT (priv->column), cell, position);
-}
-
-static GList *
-gtk_entry_completion_get_cells (GtkCellLayout *cell_layout)
-{
-  GtkEntryCompletionPrivate *priv;
-
-  priv = GTK_ENTRY_COMPLETION (cell_layout)->priv;
-
-  return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->column));
+  return priv->cell_area;
 }
 
 /* all those callbacks */

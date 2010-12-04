@@ -37,6 +37,7 @@ struct _GtkEntryCompletionPrivate
   GtkTreeModelFilter *filter_model;
   GtkListStore *actions;
   gboolean first_sel_changed;
+  GtkCellArea *cell_area;
 
   GtkEntryCompletionMatchFunc match_func;
   gpointer match_data;
