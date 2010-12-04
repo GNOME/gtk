@@ -2702,7 +2702,6 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
 				    gint               *height)
 {
   GtkTreeViewColumnPrivate *priv;
-  int focus_line_width;
 
   g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN (tree_column));
 
@@ -2713,29 +2712,20 @@ gtk_tree_view_column_cell_get_size (GtkTreeViewColumn  *tree_column,
   if (width)
     * width = 0;
 
-  /* FIXME: This is a temporary hack to get things to allocate mostly right.
-   *
-   * We will add twice the focus-line-width to the for-width
-   * parameter below.  If we do not do this, the height returned is the
-   * height for two lines of text instead of one.  It feels like some lines
-   * get less width than expected (due to subtraction of focus_line_width?)
-   * and will unnecessarily wrap.
-   */
-  gtk_widget_style_get (priv->tree_view,
-                        "focus-line-width", &focus_line_width,
-                        NULL);
-
   g_signal_handler_block (priv->cell_area_context, 
 			  priv->context_changed_signal);
 
   gtk_cell_area_get_preferred_width (priv->cell_area,
                                      priv->cell_area_context,
                                      priv->tree_view,
-                                     width, NULL);
+                                     NULL, NULL);
+
+  gtk_cell_area_context_get_preferred_width (priv->cell_area_context, width, NULL);
+
   gtk_cell_area_get_preferred_height_for_width (priv->cell_area,
                                                 priv->cell_area_context,
                                                 priv->tree_view,
-                                                *width + focus_line_width * 2,
+                                                *width,
                                                 height,
                                                 NULL);
 
