@@ -58,7 +58,7 @@ create_box_window (void)
   GtkWidget *toggle;
   GtkWidget *alignment;
   GtkWidget *colorbox;
-  GdkColor red, blue;
+  GdkRGBA red, blue;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Boxes");
@@ -94,11 +94,11 @@ create_box_window (void)
                     gtk_label_new ("VBox 3 Bottom"),
                     FALSE, FALSE, 0);
 
-  gdk_color_parse ("red", &red);
-  gdk_color_parse ("blue", &blue);
+  gdk_rgba_parse (&red, "red");
+  gdk_rgba_parse (&blue, "blue");
 
   colorbox = gtk_event_box_new ();
-  gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &red);
+  gtk_widget_override_background_color (colorbox, 0, &red);
 
   alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);
@@ -114,7 +114,7 @@ create_box_window (void)
                       FALSE, TRUE, 0);
 
   colorbox = gtk_event_box_new ();
-  gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &blue);
+  gtk_widget_override_background_color (colorbox, 0, &blue);
 
   alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);
@@ -140,7 +140,7 @@ create_table_window (void)
   GtkWidget *toggle;
   GtkWidget *alignment;
   GtkWidget *colorbox;
-  GdkColor red, blue;
+  GdkRGBA red, blue;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Table");
@@ -164,11 +164,11 @@ create_table_window (void)
                     2, 3, 1, 3,
                     GTK_FILL, GTK_FILL, 0, 0);
 
-  gdk_color_parse ("red", &red);
-  gdk_color_parse ("blue", &blue);
+  gdk_rgba_parse (&red, "red");
+  gdk_rgba_parse (&blue, "blue");
 
   colorbox = gtk_event_box_new ();
-  gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &red);
+  gtk_widget_override_background_color (colorbox, GTK_STATE_NORMAL, &red);
 
   alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);
@@ -185,7 +185,7 @@ create_table_window (void)
                     GTK_FILL, GTK_FILL, 0, 0);
 
   colorbox = gtk_event_box_new ();
-  gtk_widget_modify_bg (colorbox, GTK_STATE_NORMAL, &blue);
+  gtk_widget_override_background_color (colorbox, 0, &blue);
 
   alignment = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 5, 5, 5, 5);

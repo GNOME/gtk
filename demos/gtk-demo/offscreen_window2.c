@@ -168,7 +168,7 @@ gtk_mirror_bin_realize (GtkWidget *widget)
 {
   GtkMirrorBin *bin = GTK_MIRROR_BIN (widget);
   GtkAllocation allocation;
-  GtkStyle *style;
+  GtkStyleContext *context;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -229,9 +229,9 @@ gtk_mirror_bin_realize (GtkWidget *widget)
                     G_CALLBACK (offscreen_window_from_parent), bin);
 
   gtk_widget_style_attach (widget);
-  style = gtk_widget_get_style (widget);
-  gtk_style_set_background (style, window, GTK_STATE_NORMAL);
-  gtk_style_set_background (style, bin->offscreen_window, GTK_STATE_NORMAL);
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_set_background (context, window);
+  gtk_style_context_set_background (context, bin->offscreen_window);
   gdk_window_show (bin->offscreen_window);
 }
 
@@ -451,12 +451,11 @@ gtk_mirror_bin_draw (GtkWidget *widget,
     }
   else if (gtk_cairo_should_draw_window (cr, bin->offscreen_window))
     {
-      gtk_paint_flat_box (gtk_widget_get_style (widget), cr,
-                          GTK_STATE_NORMAL, GTK_SHADOW_NONE,
-                          widget, "blah",
-                          0, 0,
-                          gdk_window_get_width (bin->offscreen_window),
-                          gdk_window_get_height (bin->offscreen_window));
+      gtk_render_background (gtk_widget_get_style_context (widget),
+                             cr,
+                             0, 0,
+                             gdk_window_get_width (bin->offscreen_window),
+                             gdk_window_get_height (bin->offscreen_window));
 
       if (bin->child)
         gtk_container_propagate_draw (GTK_CONTAINER (widget),

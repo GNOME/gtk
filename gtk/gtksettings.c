@@ -30,6 +30,9 @@
 #include "gtkwidget.h"
 #include "gtktypeutils.h"
 #include "gtkprivate.h"
+#include "gtkcssprovider.h"
+#include "gtksymboliccolor.h"
+#include "gtkversion.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -179,6 +182,8 @@ enum {
 };
 
 /* --- prototypes --- */
+static void     gtk_settings_provider_iface_init (GtkStyleProviderIface *iface);
+
 static void	gtk_settings_finalize		 (GObject		*object);
 static void	gtk_settings_get_property	 (GObject		*object,
 						  guint			 property_id,
@@ -203,6 +208,7 @@ static void    settings_update_font_options      (GtkSettings           *setting
 static gboolean settings_update_fontconfig       (GtkSettings           *settings);
 #endif
 static void    settings_update_color_scheme      (GtkSettings *settings);
+static void    settings_update_theme             (GtkSettings *settings);
 
 static void    merge_color_scheme                (GtkSettings           *settings, 
 						  const GValue          *value, 
@@ -221,7 +227,9 @@ static GSList           *object_list = NULL;
 static guint		 class_n_properties = 0;
 
 
-G_DEFINE_TYPE (GtkSettings, gtk_settings, G_TYPE_OBJECT)
+G_DEFINE_TYPE_EXTENDED (GtkSettings, gtk_settings, G_TYPE_OBJECT, 0,
+                        G_IMPLEMENT_INTERFACE (GTK_TYPE_STYLE_PROVIDER,
+                                               gtk_settings_provider_iface_init));
 
 /* --- functions --- */
 static void
@@ -1246,6 +1254,78 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_IM_STATUS_STYLE);
 }
 
+static GtkStyleProperties *
+gtk_settings_get_style (GtkStyleProvider *provider,
+                        GtkWidgetPath    *path)
+{
+  PangoFontDescription *font_desc;
+  gchar *font_name, *color_scheme;
+  GtkSettings *settings;
+  GtkStyleProperties *props;
+  gchar **colors;
+  guint i;
+
+  settings = GTK_SETTINGS (provider);
+  props = gtk_style_properties_new ();
+
+  g_object_get (settings,
+                "gtk-font-name", &font_name,
+                "gtk-color-scheme", &color_scheme,
+                NULL);
+
+  colors = g_strsplit_set (color_scheme, "\n;", -1);
+
+  for (i = 0; colors[i]; i++)
+    {
+      GtkSymbolicColor *color;
+      gchar *name, *pos;
+      GdkRGBA col;
+
+      if (!*colors[i])
+        continue;
+
+      name = colors[i];
+      pos = strchr (colors[i], ':');
+
+      if (!pos)
+        continue;
+
+      /* Set NUL after color name */
+      *pos = '\0';
+      pos++;
+
+      /* Find start of color string */
+      while (*pos == ' ')
+        pos++;
+
+      if (!*pos || !gdk_rgba_parse (&col, pos))
+        continue;
+
+      color = gtk_symbolic_color_new_literal (&col);
+      gtk_style_properties_map_color (props, name, color);
+      gtk_symbolic_color_unref (color);
+    }
+
+  font_desc = pango_font_description_from_string (font_name);
+
+  gtk_style_properties_set (props, 0,
+                            "font", font_desc,
+                            NULL);
+
+  pango_font_description_free (font_desc);
+  g_strfreev (colors);
+  g_free (color_scheme);
+  g_free (font_name);
+
+  return props;
+}
+
+static void
+gtk_settings_provider_iface_init (GtkStyleProviderIface *iface)
+{
+  iface->get_style = gtk_settings_get_style;
+}
+
 static void
 gtk_settings_finalize (GObject *object)
 {
@@ -1263,6 +1343,46 @@ gtk_settings_finalize (GObject *object)
   g_datalist_clear (&settings->queued_settings);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
+}
+
+static void
+settings_init_style (GtkSettings *settings)
+{
+  static GtkCssProvider *css_provider = NULL;
+  GtkCssProvider *default_provider;
+
+  /* Add provider for user file */
+  if (G_UNLIKELY (!css_provider))
+    {
+      gchar *css_path;
+
+      css_provider = gtk_css_provider_new ();
+      css_path = g_build_filename (g_get_user_config_dir (),
+                                   "gtk-3.0",
+                                   "gtk.css",
+                                   NULL);
+
+      if (g_file_test (css_path,
+                       G_FILE_TEST_IS_REGULAR))
+        gtk_css_provider_load_from_path (css_provider, css_path, NULL);
+
+      g_free (css_path);
+    }
+
+  gtk_style_context_add_provider_for_screen (settings->screen,
+                                             GTK_STYLE_PROVIDER (css_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  default_provider = gtk_css_provider_get_default ();
+  gtk_style_context_add_provider_for_screen (settings->screen,
+                                             GTK_STYLE_PROVIDER (default_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+  gtk_style_context_add_provider_for_screen (settings->screen,
+                                             GTK_STYLE_PROVIDER (settings),
+                                             GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
+
+  settings_update_theme (settings);
 }
 
 /**
@@ -1290,7 +1410,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       g_object_set_data_full (G_OBJECT (screen), I_("gtk-settings"), 
 			      settings, g_object_unref);
 
-      gtk_rc_reparse_all_for_settings (settings, TRUE);
+      settings_init_style (settings);
       settings_update_double_click (settings);
 #ifdef GDK_WINDOWING_X11
       settings_update_cursor_theme (settings);
@@ -1440,6 +1560,10 @@ gtk_settings_notify (GObject    *object,
       break;
     case PROP_COLOR_SCHEME:
       settings_update_color_scheme (settings);
+      gtk_style_context_reset_widgets (settings->screen);
+      break;
+    case PROP_THEME_NAME:
+      settings_update_theme (settings);
       break;
 #ifdef GDK_WINDOWING_X11
     case PROP_XFT_DPI:
@@ -1448,18 +1572,18 @@ gtk_settings_notify (GObject    *object,
        * widgets with gtk_widget_style_set(), and also causes more
        * recomputation than necessary.
        */
-      gtk_rc_reset_styles (GTK_SETTINGS (object));
+      gtk_style_context_reset_widgets (settings->screen);
       break;
     case PROP_XFT_ANTIALIAS:
     case PROP_XFT_HINTING:
     case PROP_XFT_HINTSTYLE:
     case PROP_XFT_RGBA:
       settings_update_font_options (settings);
-      gtk_rc_reset_styles (GTK_SETTINGS (object));
+      gtk_style_context_reset_widgets (settings->screen);
       break;
     case PROP_FONTCONFIG_TIMESTAMP:
       if (settings_update_fontconfig (settings))
-	gtk_rc_reset_styles (GTK_SETTINGS (object));
+        gtk_style_context_reset_widgets (settings->screen);
       break;
     case PROP_CURSOR_THEME_NAME:
     case PROP_CURSOR_THEME_SIZE:
@@ -2478,6 +2602,54 @@ settings_update_color_scheme (GtkSettings *settings)
    }
 }
 
+static void
+settings_update_theme (GtkSettings *settings)
+{
+  static GQuark quark_theme_name = 0;
+  GtkCssProvider *provider, *new_provider = NULL;
+  gboolean prefer_dark_theme;
+  gchar *theme_name;
+
+  if (G_UNLIKELY (!quark_theme_name))
+    quark_theme_name = g_quark_from_static_string ("gtk-settings-theme-name");
+
+  provider = g_object_get_qdata (G_OBJECT (settings), quark_theme_name);
+
+  g_object_get (settings,
+                "gtk-theme-name", &theme_name,
+                "gtk-application-prefer-dark-theme", &prefer_dark_theme,
+                NULL);
+
+  if (theme_name && *theme_name)
+    {
+      gchar *variant = NULL;
+
+      if (prefer_dark_theme)
+        variant = "dark";
+
+      new_provider = gtk_css_provider_get_named (theme_name, variant);
+      g_free (theme_name);
+    }
+
+  if (new_provider != provider)
+    {
+      if (provider)
+        gtk_style_context_remove_provider_for_screen (settings->screen,
+                                                      GTK_STYLE_PROVIDER (provider));
+
+      if (new_provider)
+        {
+          gtk_style_context_add_provider_for_screen (settings->screen,
+                                                     GTK_STYLE_PROVIDER (new_provider),
+                                                     GTK_STYLE_PROVIDER_PRIORITY_THEME);
+          g_object_ref (new_provider);
+        }
+
+      g_object_set_qdata_full (G_OBJECT (settings), quark_theme_name,
+                               new_provider, (GDestroyNotify) g_object_unref);
+    }
+}
+
 static gboolean
 add_color_to_hash (gchar      *name,
 		   GdkColor   *color,
@@ -2707,4 +2879,10 @@ get_color_scheme (GtkSettings *settings)
   g_hash_table_foreach (data->color_hash, append_color_scheme, string);
 
   return g_string_free (string, FALSE);
+}
+
+GdkScreen *
+_gtk_settings_get_screen (GtkSettings *settings)
+{
+  return settings->screen;
 }

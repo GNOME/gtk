@@ -541,9 +541,11 @@ gtk_rc_add_initial_default_files (void)
  * gtk_rc_add_default_file:
  * @filename: the pathname to the file. If @filename is not absolute, it
  *    is searched in the current directory.
- * 
+ *
  * Adds a file to the list of files to be parsed at the
  * end of gtk_init().
+ *
+ * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
  **/
 void
 gtk_rc_add_default_file (const gchar *filename)
@@ -571,9 +573,11 @@ gtk_rc_add_default_file (const gchar *filename)
 /**
  * gtk_rc_set_default_files:
  * @filenames: A %NULL-terminated list of filenames.
- * 
+ *
  * Sets the list of files that GTK+ will read at the
  * end of gtk_init().
+ *
+ * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
  **/
 void
 gtk_rc_set_default_files (gchar **filenames)
@@ -608,6 +612,8 @@ gtk_rc_set_default_files (gchar **filenames)
  * Return value: (transfer none): A %NULL-terminated array of filenames.
  *     This memory is owned by GTK+ and must not be freed by the application.
  *     If you want to store this information, you should make a copy.
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  **/
 gchar **
 gtk_rc_get_default_files (void)
@@ -926,6 +932,7 @@ gtk_rc_parse_string (const gchar *rc_string)
       
   g_return_if_fail (rc_string != NULL);
 
+#if 0
   rc_file = g_new (GtkRcFile, 1);
   rc_file->is_string = TRUE;
   rc_file->name = g_strdup (rc_string);
@@ -938,6 +945,7 @@ gtk_rc_parse_string (const gchar *rc_string)
 
   for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
     gtk_rc_context_parse_string (tmp_list->data, rc_string);
+#endif
 }
 
 static GtkRcFile *
@@ -1117,10 +1125,12 @@ gtk_rc_parse (const gchar *filename)
   
   g_return_if_fail (filename != NULL);
 
+#if 0
   add_to_rc_file_list (&global_rc_files, filename, TRUE);
   
   for (tmp_list = rc_contexts; tmp_list; tmp_list = tmp_list->next)
     gtk_rc_context_parse_file (tmp_list->data, filename, GTK_PATH_PRIO_RC, TRUE);
+#endif
 }
 
 /* Handling of RC styles */
@@ -1960,17 +1970,19 @@ sort_and_dereference_sets (GSList *styles)
 /**
  * gtk_rc_get_style:
  * @widget: a #GtkWidget
- * 
+ *
  * Finds all matching RC styles for a given widget,
- * composites them together, and then creates a 
+ * composites them together, and then creates a
  * #GtkStyle representing the composite appearance.
- * (GTK+ actually keeps a cache of previously 
+ * (GTK+ actually keeps a cache of previously
  * created styles, so a new style may not be
  * created.)
- * 
+ *
  * Returns: the resulting style. No refcount is added
  *   to the returned style, so if you want to save this
  *   style around, you should add a reference yourself.
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  **/
 GtkStyle *
 gtk_rc_get_style (GtkWidget *widget)
@@ -2078,16 +2090,18 @@ gtk_rc_get_style (GtkWidget *widget)
  * |[
  *  gtk_widget_path (widget, NULL, &path, NULL);
  *  gtk_widget_class_path (widget, NULL, &class_path, NULL);
- *  gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget), 
+ *  gtk_rc_get_style_by_paths (gtk_widget_get_settings (widget),
  *                             path, class_path,
  *                             G_OBJECT_TYPE (widget));
  * ]|
- * 
+ *
  * Return value: (transfer none): A style created by matching with the
  *     supplied paths, or %NULL if nothing matching was specified and the
  *     default style should be used. The returned value is owned by GTK+
  *     as part of an internal cache, so you must call g_object_ref() on
  *     the returned value if you want to keep a reference to it.
+ *
+ * Deprecated:3.0: Use #GtkStyleContext instead
  **/
 GtkStyle *
 gtk_rc_get_style_by_paths (GtkSettings *settings,
@@ -2167,6 +2181,11 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
   return NULL;
 }
 
+/**
+ * gtk_rc_scanner_new:
+ *
+ * Deprecated:3.0: Use #GtkCssProvider instead
+ */
 GScanner*
 gtk_rc_scanner_new (void)
 {
@@ -2183,6 +2202,7 @@ gtk_rc_parse_any (GtkRcContext *context,
   guint	   i;
   gboolean done;
 
+#if 0
   scanner = gtk_rc_scanner_new ();
   
   if (input_fd >= 0)
@@ -2264,6 +2284,7 @@ gtk_rc_parse_any (GtkRcContext *context,
     }
   
   g_scanner_destroy (scanner);
+#endif
 }
 
 static guint	   
@@ -3705,6 +3726,13 @@ gtk_rc_parse_engine (GtkRcContext *context,
   return result;
 }
 
+/**
+ * gtk_rc_parse_state:
+ * @scanner:
+ * @state:
+ *
+ * Deprecated:3.0: Use #GtkCssProvider instead
+ */
 guint
 gtk_rc_parse_state (GScanner	 *scanner,
 		    GtkStateType *state)
@@ -3756,6 +3784,13 @@ gtk_rc_parse_state (GScanner	 *scanner,
   return G_TOKEN_NONE;
 }
 
+/**
+ * gtk_rc_parse_priority:
+ * @scanner:
+ * @priority:
+ *
+ * Deprecated:3.0: Use #GtkCssProvider instead
+ */
 guint
 gtk_rc_parse_priority (GScanner	           *scanner,
 		       GtkPathPriorityType *priority)
@@ -3819,6 +3854,8 @@ gtk_rc_parse_priority (GScanner	           *scanner,
  *
  * Returns: %G_TOKEN_NONE if parsing succeeded, otherwise the token
  *     that was expected but not found
+ *
+ * Deprecated:3.0: Use #GtkCssProvider instead
  */
 guint
 gtk_rc_parse_color (GScanner *scanner,
@@ -3841,6 +3878,8 @@ gtk_rc_parse_color (GScanner *scanner,
  *     that was expected but not found
  *
  * Since: 2.12
+ *
+ * Deprecated:3.0: Use #GtkCssProvider instead
  */
 guint
 gtk_rc_parse_color_full (GScanner   *scanner,

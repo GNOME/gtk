@@ -3,6 +3,8 @@
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 <!ENTITY % local.common.attrib "xmlns:xi  CDATA  #FIXED 'http://www.w3.org/2003/XInclude'">
 <!ENTITY version SYSTEM "version.xml">
+<!ENTITY pi "&#960;">
+<!ENTITY solidus "&#8260;">
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
@@ -38,17 +40,29 @@
     <xi:include href="xml/gtkaccelmap.xml" />
     <xi:include href="xml/gtkclipboard.xml" />
     <xi:include href="xml/gtkdnd.xml" />
-    <xi:include href="xml/gtkicontheme.xml" />
     <xi:include href="xml/gtkstock.xml" />
-    <xi:include href="xml/gtkiconfactory.xml" />
-    <xi:include href="xml/gtkrc.xml" />
     <xi:include href="xml/gtksettings.xml" />
     <xi:include href="xml/gtkbindings.xml" />
     <xi:include href="xml/gtkenums.xml" />
-    <xi:include href="xml/gtkstyle.xml" />
     <xi:include href="xml/gtkselection.xml" />
     <xi:include href="xml/gtktesting.xml" />
     <xi:include href="xml/filesystem.xml" />
+  </part>
+
+  <part id="theming">
+    <title>Theming in GTK+</title>
+    <xi:include href="xml/gtkstylecontext.xml" />
+    <xi:include href="xml/gtkcssprovider.xml" />
+    <xi:include href="xml/gtkstyleprovider.xml" />
+    <xi:include href="xml/gtkstyleproperties.xml" />
+    <xi:include href="xml/gtkthemingengine.xml" />
+    <xi:include href="xml/gtkwidgetpath.xml" />
+    <xi:include href="xml/gtksymboliccolor.xml" />
+    <xi:include href="xml/gtkgradient.xml" />
+    <xi:include href="xml/gtkicontheme.xml" />
+    <xi:include href="xml/gtkiconfactory.xml" />
+    <xi:include href="xml/gtkrc.xml" />
+    <xi:include href="xml/gtkstyle.xml" />
   </part>
 
   <part id="gtkobjects">
@@ -336,6 +350,7 @@
     <xi:include href="xml/migrating-checklist.sgml" />
     <xi:include href="xml/migrating-2to3.xml" />
     <xi:include href="xml/migrating-GtkApplication.xml" />
+    <xi:include href="xml/migrating-GtkStyleContext.xml" />
   </part>
 
   <part>

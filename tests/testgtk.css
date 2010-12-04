@@ -1,0 +1,33 @@
+/* testgtk2.css sets all the buttons in the main window to blue by default */
+@import url("testgtk2.css");
+
+* {
+    -GtkButton-child-displacement-x: 1;
+    -GtkButton-child-displacement-y: 1;
+
+    -GtkToolbar-space-size: 10;
+    -GtkToolbar-space-style: line;
+    -GtkToolbar-button-relief: none;
+    -GtkButtonBox-child-min-width: 0;
+    -GtkButtonBox-child-min-height: 0;
+    -GtkArrow-arrow-scaling: 1.0;
+    -GtkEntry-invisible-char: 10046;
+
+    font: Sans 12;
+
+    -Gtest-foo: 47;
+    -Gtest-bar: 47;
+}
+
+GtkLabel:selected {
+    background-color: gray;
+}
+
+GtkLabel:prelight {
+    background-color: mix (#a0a0a0, rgb (75%, 200, 0%), 0.9);
+}
+
+/* override testgtk2, introduce the green color in the button list */
+#main_window GtkScrolledWindow GtkButton:prelight {
+    background-color: rgb (0%, 75%, 0);
+}

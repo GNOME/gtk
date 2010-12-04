@@ -294,12 +294,12 @@ gdk_drag_context_find (GdkDisplay *display,
       context_dest_xid = context->dest_window ? 
                             (private->drop_xid ?
                               private->drop_xid :
-                              GDK_DRAWABLE_XID (context->dest_window)) :
+                              GDK_WINDOW_XID (context->dest_window)) :
 	                     None;
 
       if ((!context->is_source == !is_source) &&
 	  ((source_xid == None) || (context->source_window &&
-	    (GDK_DRAWABLE_XID (context->source_window) == source_xid))) &&
+	    (GDK_WINDOW_XID (context->source_window) == source_xid))) &&
 	  ((dest_xid == None) || (context_dest_xid == dest_xid)))
 	return context;
       
@@ -547,7 +547,7 @@ gdk_window_cache_new (GdkScreen *screen)
   result->child_hash = g_hash_table_new (g_direct_hash, NULL);
   result->screen = screen;
 
-  XGetWindowAttributes (xdisplay, GDK_WINDOW_XWINDOW (root_window), &xwa);
+  XGetWindowAttributes (xdisplay, GDK_WINDOW_XID (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
 
   if (G_UNLIKELY (!GDK_DISPLAY_X11 (GDK_SCREEN_X11 (screen)->display)->trusted_client)) 
@@ -568,13 +568,13 @@ gdk_window_cache_new (GdkScreen *screen)
       return result;
     }
 
-  XSelectInput (xdisplay, GDK_WINDOW_XWINDOW (root_window),
+  XSelectInput (xdisplay, GDK_WINDOW_XID (root_window),
 		result->old_event_mask | SubstructureNotifyMask);
   gdk_window_add_filter (root_window, gdk_window_cache_filter, result);
   gdk_window_add_filter (NULL, gdk_window_cache_shape_filter, result);
 
   if (!_gdk_x11_get_window_child_info (gdk_screen_get_display (screen),
-				       GDK_WINDOW_XWINDOW (root_window),
+				       GDK_WINDOW_XID (root_window),
 				       FALSE, NULL,
 				       &children, &nchildren))
     return result;
@@ -598,9 +598,9 @@ gdk_window_cache_new (GdkScreen *screen)
    */
   if (gdk_screen_is_composited (screen))
     {
-      cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XWINDOW (root_window));
+      cow = XCompositeGetOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
       gdk_window_cache_add (result, cow, 0, 0, gdk_screen_get_width (screen), gdk_screen_get_height (screen), TRUE);
-      XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XWINDOW (root_window));
+      XCompositeReleaseOverlayWindow (xdisplay, GDK_WINDOW_XID (root_window));
     }
 #endif
 
@@ -613,7 +613,7 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
   GdkWindow *root_window = gdk_screen_get_root_window (cache->screen);
 
   XSelectInput (GDK_WINDOW_XDISPLAY (root_window),
-		GDK_WINDOW_XWINDOW (root_window),
+		GDK_WINDOW_XID (root_window),
 		cache->old_event_mask);
   gdk_window_remove_filter (root_window, gdk_window_cache_filter, cache);
   gdk_window_remove_filter (NULL, gdk_window_cache_shape_filter, cache);
@@ -774,7 +774,7 @@ get_client_window_at_coords (GdkWindowCache *cache,
   if (retval)
     return retval;
   else
-    return GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (cache->screen));
+    return GDK_WINDOW_XID (gdk_screen_get_root_window (cache->screen));
 }
 
 /*************************************************************
@@ -1405,8 +1405,8 @@ motif_set_targets (GdkDragContext *context)
 
   info.selection_atom = private->motif_selection;
 
-  XChangeProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
-		   GDK_DRAWABLE_XID (context->source_window),
+  XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
+		   GDK_WINDOW_XID (context->source_window),
 		   private->motif_selection,
 		   gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_INITIATOR_INFO"),
 		   8, PropModeReplace,
@@ -1475,13 +1475,13 @@ motif_send_enter (GdkDragContext  *context,
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_AND_DROP_MESSAGE");
   xev.xclient.format = 8;
-  xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
+  xev.xclient.window = GDK_WINDOW_XID (context->dest_window);
 
   MOTIF_XCLIENT_BYTE (&xev, 0) = XmTOP_LEVEL_ENTER;
   MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
   MOTIF_XCLIENT_SHORT (&xev, 1) = 0;
   MOTIF_XCLIENT_LONG (&xev, 1) = time;
-  MOTIF_XCLIENT_LONG (&xev, 2) = GDK_DRAWABLE_XID (context->source_window);
+  MOTIF_XCLIENT_LONG (&xev, 2) = GDK_WINDOW_XID (context->source_window);
 
   if (!private->motif_targets_set)
     motif_set_targets (context);
@@ -1490,11 +1490,11 @@ motif_send_enter (GdkDragContext  *context,
   MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
   if (!_gdk_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+			 GDK_WINDOW_XID (context->dest_window),
 			 FALSE, 0, &xev))
     GDK_NOTE (DND, 
 	      g_message ("Send event to %lx failed",
-			 GDK_DRAWABLE_XID (context->dest_window)));
+			 GDK_WINDOW_XID (context->dest_window)));
 }
 
 static void
@@ -1507,7 +1507,7 @@ motif_send_leave (GdkDragContext  *context,
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_AND_DROP_MESSAGE");
   xev.xclient.format = 8;
-  xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
+  xev.xclient.window = GDK_WINDOW_XID (context->dest_window);
 
   MOTIF_XCLIENT_BYTE (&xev, 0) = XmTOP_LEVEL_LEAVE;
   MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
@@ -1518,11 +1518,11 @@ motif_send_leave (GdkDragContext  *context,
   MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
   if (!_gdk_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+			 GDK_WINDOW_XID (context->dest_window),
 			 FALSE, 0, &xev))
     GDK_NOTE (DND, 
 	      g_message ("Send event to %lx failed",
-			 GDK_DRAWABLE_XID (context->dest_window)));
+			 GDK_WINDOW_XID (context->dest_window)));
 }
 
 static gboolean
@@ -1540,7 +1540,7 @@ motif_send_motion (GdkDragContext  *context,
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_AND_DROP_MESSAGE");
   xev.xclient.format = 8;
-  xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
+  xev.xclient.window = GDK_WINDOW_XID (context->dest_window);
 
   MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
   MOTIF_XCLIENT_SHORT (&xev, 1) = motif_dnd_get_flags (context);
@@ -1568,11 +1568,11 @@ motif_send_motion (GdkDragContext  *context,
     }
 
   if (!_gdk_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+			 GDK_WINDOW_XID (context->dest_window),
 			 FALSE, 0, &xev))
     GDK_NOTE (DND, 
 	      g_message ("Send event to %lx failed",
-			 GDK_DRAWABLE_XID (context->dest_window)));
+			 GDK_WINDOW_XID (context->dest_window)));
 
   return retval;
 }
@@ -1587,7 +1587,7 @@ motif_send_drop (GdkDragContext *context, guint32 time)
   xev.xclient.type = ClientMessage;
   xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_MOTIF_DRAG_AND_DROP_MESSAGE");
   xev.xclient.format = 8;
-  xev.xclient.window = GDK_DRAWABLE_XID (context->dest_window);
+  xev.xclient.window = GDK_WINDOW_XID (context->dest_window);
 
   MOTIF_XCLIENT_BYTE (&xev, 0) = XmDROP_START;
   MOTIF_XCLIENT_BYTE (&xev, 1) = local_byte_order;
@@ -1598,14 +1598,14 @@ motif_send_drop (GdkDragContext *context, guint32 time)
   MOTIF_XCLIENT_SHORT (&xev, 5) = private->last_y;
 
   MOTIF_XCLIENT_LONG (&xev, 3)  = private->motif_selection;
-  MOTIF_XCLIENT_LONG (&xev, 4)  = GDK_DRAWABLE_XID (context->source_window);
+  MOTIF_XCLIENT_LONG (&xev, 4)  = GDK_WINDOW_XID (context->source_window);
 
   if (!_gdk_send_xevent (display,
-			 GDK_DRAWABLE_XID (context->dest_window),
+			 GDK_WINDOW_XID (context->dest_window),
 			 FALSE, 0, &xev))
     GDK_NOTE (DND, 
 	      g_message ("Send event to %lx failed",
-			 GDK_DRAWABLE_XID (context->dest_window)));
+			 GDK_WINDOW_XID (context->dest_window)));
 }
 
 /* Target Side */
@@ -1924,7 +1924,7 @@ motif_drag_status (GdkEvent *event,
   if (!display)
     return GDK_FILTER_REMOVE;
   
-  context = gdk_drag_context_find (display, TRUE, GDK_DRAWABLE_XID (event->any.window), None);
+  context = gdk_drag_context_find (display, TRUE, GDK_WINDOW_XID (event->any.window), None);
 
   if (context)
     {
@@ -2228,8 +2228,8 @@ xdnd_set_targets (GdkDragContext *context)
       i++;
     }
 
-  XChangeProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
-		   GDK_DRAWABLE_XID (context->source_window),
+  XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
+		   GDK_WINDOW_XID (context->source_window),
 		   gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
@@ -2277,8 +2277,8 @@ xdnd_set_actions (GdkDragContext *context)
 	}
     }
 
-  XChangeProperty (GDK_DRAWABLE_XDISPLAY (context->source_window),
-		   GDK_DRAWABLE_XID (context->source_window),
+  XChangeProperty (GDK_WINDOW_XDISPLAY (context->source_window),
+		   GDK_WINDOW_XID (context->source_window),
 		   gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)atomlist, n_atoms);
@@ -2397,7 +2397,7 @@ xdnd_send_xevent (GdkDragContext *context,
 	}
     }
 
-  xwindow = GDK_WINDOW_XWINDOW (window);
+  xwindow = GDK_WINDOW_XID (window);
   
   if (_gdk_x11_display_is_root_window (display, xwindow))
     event_mask = ButtonPressMask;
@@ -2422,8 +2422,8 @@ xdnd_send_enter (GdkDragContext *context)
   xev.xclient.format = 32;
   xev.xclient.window = private->drop_xid ? 
                            private->drop_xid : 
-                           GDK_DRAWABLE_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->source_window);
+                           GDK_WINDOW_XID (context->dest_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
   xev.xclient.data.l[1] = (private->version << 24); /* version */
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
@@ -2431,7 +2431,7 @@ xdnd_send_enter (GdkDragContext *context)
 
   GDK_NOTE(DND,
 	   g_message ("Sending enter source window %#lx XDND protocol version %d\n",
-		      GDK_DRAWABLE_XID (context->source_window), private->version));
+		      GDK_WINDOW_XID (context->source_window), private->version));
   if (g_list_length (context->targets) > 3)
     {
       if (!private->xdnd_targets_set)
@@ -2457,7 +2457,7 @@ xdnd_send_enter (GdkDragContext *context)
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
-			   GDK_DRAWABLE_XID (context->dest_window)));
+			   GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
@@ -2476,8 +2476,8 @@ xdnd_send_leave (GdkDragContext *context)
   xev.xclient.format = 32;
   xev.xclient.window = private->drop_xid ? 
                            private->drop_xid : 
-                           GDK_DRAWABLE_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->source_window);
+                           GDK_WINDOW_XID (context->dest_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = 0;
   xev.xclient.data.l[3] = 0;
@@ -2488,7 +2488,7 @@ xdnd_send_leave (GdkDragContext *context)
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
-			   GDK_DRAWABLE_XID (context->dest_window)));
+			   GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
@@ -2506,8 +2506,8 @@ xdnd_send_drop (GdkDragContext *context, guint32 time)
   xev.xclient.format = 32;
   xev.xclient.window = private->drop_xid ? 
                            private->drop_xid : 
-                           GDK_DRAWABLE_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->source_window);
+                           GDK_WINDOW_XID (context->dest_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = time;
   xev.xclient.data.l[3] = 0;
@@ -2518,7 +2518,7 @@ xdnd_send_drop (GdkDragContext *context, guint32 time)
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
-			   GDK_DRAWABLE_XID (context->dest_window)));
+			   GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
@@ -2540,8 +2540,8 @@ xdnd_send_motion (GdkDragContext *context,
   xev.xclient.format = 32;
   xev.xclient.window = private->drop_xid ? 
                            private->drop_xid : 
-                           GDK_DRAWABLE_XID (context->dest_window);
-  xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->source_window);
+                           GDK_WINDOW_XID (context->dest_window);
+  xev.xclient.data.l[0] = GDK_WINDOW_XID (context->source_window);
   xev.xclient.data.l[1] = 0;
   xev.xclient.data.l[2] = (x_root << 16) | y_root;
   xev.xclient.data.l[3] = time;
@@ -2552,7 +2552,7 @@ xdnd_send_motion (GdkDragContext *context,
     {
       GDK_NOTE (DND, 
 		g_message ("Send event to %lx failed",
-			   GDK_DRAWABLE_XID (context->dest_window)));
+			   GDK_WINDOW_XID (context->dest_window)));
       g_object_unref (context->dest_window);
       context->dest_window = NULL;
     }
@@ -2654,7 +2654,7 @@ xdnd_read_actions (GdkDragContext *context)
       gdk_error_trap_push ();
       
       if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-			      GDK_DRAWABLE_XID (context->source_window),
+			      GDK_WINDOW_XID (context->source_window),
 			      gdk_x11_get_xatom_by_name_for_display (display, "XdndActionList"),
 			      0, 65536,
 			      False, XA_ATOM, &type, &format, &nitems,
@@ -2702,8 +2702,8 @@ xdnd_read_actions (GdkDragContext *context)
       GdkDragContext *source_context;
 
       source_context = gdk_drag_context_find (display, TRUE,
-					      GDK_DRAWABLE_XID (context->source_window),
-					      GDK_DRAWABLE_XID (context->dest_window));
+					      GDK_WINDOW_XID (context->source_window),
+					      GDK_WINDOW_XID (context->dest_window));
 
       if (source_context)
 	{
@@ -2903,7 +2903,7 @@ xdnd_enter_filter (GdkXEvent *xev,
   if (get_types)
     {
       gdk_error_trap_push ();
-      XGetWindowProperty (GDK_DRAWABLE_XDISPLAY (event->any.window), 
+      XGetWindowProperty (GDK_WINDOW_XDISPLAY (event->any.window), 
 			  source_window, 
 			  gdk_x11_get_xatom_by_name_for_display (display, "XdndTypeList"),
 			  0, 65536,
@@ -2983,7 +2983,7 @@ xdnd_leave_filter (GdkXEvent *xev,
 
   if ((display_x11->current_dest_drag != NULL) &&
       (display_x11->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_DRAWABLE_XID (display_x11->current_dest_drag->source_window) == source_window))
+      (GDK_WINDOW_XID (display_x11->current_dest_drag->source_window) == source_window))
     {
       event->dnd.type = GDK_DRAG_LEAVE;
       /* Pass ownership of context to the event */
@@ -3028,7 +3028,7 @@ xdnd_position_filter (GdkXEvent *xev,
 
   if ((display_x11->current_dest_drag != NULL) &&
       (display_x11->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_DRAWABLE_XID (display_x11->current_dest_drag->source_window) == source_window))
+      (GDK_WINDOW_XID (display_x11->current_dest_drag->source_window) == source_window))
     {
       event->dnd.type = GDK_DRAG_MOTION;
       event->dnd.context = display_x11->current_dest_drag;
@@ -3080,7 +3080,7 @@ xdnd_drop_filter (GdkXEvent *xev,
 
   if ((display_x11->current_dest_drag != NULL) &&
       (display_x11->current_dest_drag->protocol == GDK_DRAG_PROTO_XDND) &&
-      (GDK_DRAWABLE_XID (display_x11->current_dest_drag->source_window) == source_window))
+      (GDK_WINDOW_XID (display_x11->current_dest_drag->source_window) == source_window))
     {
       GdkDragContextPrivateX11 *private;
       private = PRIVATE_DATA (display_x11->current_dest_drag);
@@ -3386,7 +3386,7 @@ gdk_drag_find_window_for_screen (GdkDragContext  *context,
 
   dest = get_client_window_at_coords (window_cache,
 				      drag_window && GDK_WINDOW_IS_X11 (drag_window) ? 
-				      GDK_DRAWABLE_XID (drag_window) : None,
+				      GDK_WINDOW_XID (drag_window) : None,
 				      x_root, y_root);
 
   if (private->dest_xid != dest)
@@ -3478,7 +3478,7 @@ gdk_drag_motion (GdkDragContext *context,
 	  GdkDisplay *display = GDK_WINDOW_DISPLAY (dest_window);
 	  
 	  xdnd_check_dest (display, 
-			   GDK_DRAWABLE_XID (dest_window), 
+			   GDK_WINDOW_XID (dest_window), 
 			   &private->version);
 	}
     }
@@ -3498,8 +3498,8 @@ gdk_drag_motion (GdkDragContext *context,
 	      GdkDragContext *dest_context;
 		    
 	      dest_context = gdk_drag_context_find (display, FALSE,
-						    GDK_DRAWABLE_XID (context->source_window),
-						    GDK_DRAWABLE_XID (dest_window));
+						    GDK_WINDOW_XID (context->source_window),
+						    GDK_WINDOW_XID (dest_window));
 
 	      if (dest_context)
 		{
@@ -3733,7 +3733,7 @@ gdk_drag_status (GdkDragContext   *context,
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display,
 									"_MOTIF_DRAG_AND_DROP_MESSAGE");
       xev.xclient.format = 8;
-      xev.xclient.window = GDK_DRAWABLE_XID (context->source_window);
+      xev.xclient.window = GDK_WINDOW_XID (context->source_window);
 
       if (private->drag_status == GDK_DRAG_STATUS_ACTION_WAIT)
 	{
@@ -3795,20 +3795,20 @@ gdk_drag_status (GdkDragContext   *context,
       MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
       if (!_gdk_send_xevent (display,
-			     GDK_DRAWABLE_XID (context->source_window),
+			     GDK_WINDOW_XID (context->source_window),
 			     FALSE, 0, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
-			     GDK_DRAWABLE_XID (context->source_window)));
+			     GDK_WINDOW_XID (context->source_window)));
     }
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
     {
       xev.xclient.type = ClientMessage;
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndStatus");
       xev.xclient.format = 32;
-      xev.xclient.window = GDK_DRAWABLE_XID (context->source_window);
+      xev.xclient.window = GDK_WINDOW_XID (context->source_window);
 
-      xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->dest_window);
+      xev.xclient.data.l[0] = GDK_WINDOW_XID (context->dest_window);
       xev.xclient.data.l[1] = (action != 0) ? (2 | 1) : 0;
       xev.xclient.data.l[2] = 0;
       xev.xclient.data.l[3] = 0;
@@ -3818,7 +3818,7 @@ gdk_drag_status (GdkDragContext   *context,
 			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
-			     GDK_DRAWABLE_XID (context->source_window)));
+			     GDK_WINDOW_XID (context->source_window)));
     }
 
   private->old_action = action;
@@ -3875,7 +3875,7 @@ gdk_drop_reply (GdkDragContext   *context,
       MOTIF_XCLIENT_LONG (&xev, 4) = 0;
       
       _gdk_send_xevent (display,
-			GDK_DRAWABLE_XID (context->source_window),
+			GDK_WINDOW_XID (context->source_window),
 			FALSE, 0, &xev);
     }
 }
@@ -3905,9 +3905,9 @@ gdk_drop_finish (GdkDragContext   *context,
       xev.xclient.type = ClientMessage;
       xev.xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "XdndFinished");
       xev.xclient.format = 32;
-      xev.xclient.window = GDK_DRAWABLE_XID (context->source_window);
+      xev.xclient.window = GDK_WINDOW_XID (context->source_window);
       
-      xev.xclient.data.l[0] = GDK_DRAWABLE_XID (context->dest_window);
+      xev.xclient.data.l[0] = GDK_WINDOW_XID (context->dest_window);
       if (success)
 	{
 	  xev.xclient.data.l[1] = 1;
@@ -3926,7 +3926,7 @@ gdk_drop_finish (GdkDragContext   *context,
 			     FALSE, &xev))
 	GDK_NOTE (DND, 
 		  g_message ("Send event to %lx failed",
-			     GDK_DRAWABLE_XID (context->source_window)));
+			     GDK_WINDOW_XID (context->source_window)));
     }
 }
 
@@ -3970,7 +3970,7 @@ gdk_window_register_dnd (GdkWindow      *window)
   info.num_drop_sites = 0;
   info.total_size = sizeof(info);
 
-  XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_DRAWABLE_XID (window),
+  XChangeProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		   motif_drag_receiver_info_atom,
 		   motif_drag_receiver_info_atom,
 		   8, PropModeReplace,
@@ -3981,7 +3981,7 @@ gdk_window_register_dnd (GdkWindow      *window)
 
   /* The property needs to be of type XA_ATOM, not XA_INTEGER. Blech */
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-		   GDK_DRAWABLE_XID (window),
+		   GDK_WINDOW_XID (window),
 		   gdk_x11_get_xatom_by_name_for_display (display, "XdndAware"),
 		   XA_ATOM, 32, PropModeReplace,
 		   (guchar *)&xdnd_version, 1);

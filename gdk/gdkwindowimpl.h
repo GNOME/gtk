@@ -32,16 +32,26 @@
 G_BEGIN_DECLS
 
 #define GDK_TYPE_WINDOW_IMPL           (gdk_window_impl_get_type ())
-#define GDK_WINDOW_IMPL(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_WINDOW_IMPL, GdkWindowImpl))
-#define GDK_IS_WINDOW_IMPL(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_WINDOW_IMPL))
-#define GDK_WINDOW_IMPL_GET_IFACE(obj) (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GDK_TYPE_WINDOW_IMPL, GdkWindowImplIface))
+#define GDK_WINDOW_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL, GdkWindowImpl))
+#define GDK_WINDOW_IMPL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL, GdkWindowImplClass))
+#define GDK_IS_WINDOW_IMPL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL))
+#define GDK_IS_WINDOW_IMPL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL))
+#define GDK_WINDOW_IMPL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL, GdkWindowImplClass))
 
-typedef struct _GdkWindowImpl       GdkWindowImpl;      /* dummy */
-typedef struct _GdkWindowImplIface  GdkWindowImplIface;
+typedef struct _GdkWindowImpl       GdkWindowImpl;
+typedef struct _GdkWindowImplClass  GdkWindowImplClass;
 
-struct _GdkWindowImplIface
+struct _GdkWindowImpl
 {
-  GTypeInterface g_iface;
+  GObject parent;
+};
+
+struct _GdkWindowImplClass
+{
+  GObjectClass parent_class;
+
+  cairo_surface_t *
+               (* ref_cairo_surface)    (GdkWindow       *window);
 
   void         (* show)                 (GdkWindow       *window,
 					 gboolean         already_mapped);
@@ -94,6 +104,8 @@ struct _GdkWindowImplIface
                                          gint            *y,
                                          GdkModifierType *mask);
 
+  cairo_region_t * (* get_shape)        (GdkWindow       *window);
+  cairo_region_t * (* get_input_shape)  (GdkWindow       *window);
   void         (* shape_combine_region) (GdkWindow       *window,
                                          const cairo_region_t *shape_region,
                                          gint             offset_x,
@@ -146,6 +158,9 @@ struct _GdkWindowImplIface
                                               cairo_surface_t *surface,
                                               gint             width,
                                               gint             height);
+
+  /* optional */
+  gboolean     (* beep)                 (GdkWindow       *window);
 };
 
 /* Interface Functions */

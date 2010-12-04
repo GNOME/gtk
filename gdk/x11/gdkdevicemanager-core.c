@@ -415,7 +415,6 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 {
   GdkDeviceManagerCore *device_manager;
   GdkWindow *window;
-  GdkWindowObject *window_private;
   GdkWindowImplX11 *window_impl = NULL;
   gboolean return_val;
   GdkToplevelX11 *toplevel = NULL;
@@ -425,7 +424,6 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
   return_val = FALSE;
 
   window = get_event_window (translator, xevent);
-  window_private = (GdkWindowObject *) window;
 
   if (window)
     {
@@ -433,14 +431,14 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
         return FALSE;
 
       toplevel = _gdk_x11_window_get_toplevel (window);
-      window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+      window_impl = GDK_WINDOW_IMPL_X11 (window->impl);
       g_object_ref (window);
     }
 
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
 
-  if (window_private && GDK_WINDOW_DESTROYED (window))
+  if (window && GDK_WINDOW_DESTROYED (window))
     {
       if (xevent->type != DestroyNotify)
 	{
@@ -472,7 +470,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
   switch (xevent->type)
     {
     case KeyPress:
-      if (window_private == NULL)
+      if (window == NULL)
         {
           return_val = FALSE;
           break;
@@ -482,7 +480,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
       break;
 
     case KeyRelease:
-      if (window_private == NULL)
+      if (window == NULL)
         {
           return_val = FALSE;
           break;
@@ -518,7 +516,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
 
-      if (window_private == NULL)
+      if (window == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -590,7 +588,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 			   xevent->xbutton.x, xevent->xbutton.y,
 			   xevent->xbutton.button));
 
-      if (window_private == NULL)
+      if (window == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -628,7 +626,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 			   xevent->xmotion.x, xevent->xmotion.y,
 			   (xevent->xmotion.is_hint) ? "true" : "false"));
 
-      if (window_private == NULL)
+      if (window == NULL)
 	{
 	  return_val = FALSE;
 	  break;
@@ -661,7 +659,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 			   xevent->xcrossing.detail,
 			   xevent->xcrossing.subwindow));
 
-      if (window_private == NULL)
+      if (window == NULL)
         {
           return_val = FALSE;
           break;
@@ -705,7 +703,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
 			   xevent->xcrossing.window,
 			   xevent->xcrossing.detail, xevent->xcrossing.subwindow));
 
-      if (window_private == NULL)
+      if (window == NULL)
         {
           return_val = FALSE;
           break;

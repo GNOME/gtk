@@ -214,9 +214,14 @@ gtk_menu_bar_class_init (GtkMenuBarClass *class)
 static void
 gtk_menu_bar_init (GtkMenuBar *menu_bar)
 {
+  GtkStyleContext *context;
+
   menu_bar->priv = G_TYPE_INSTANCE_GET_PRIVATE (menu_bar,
                                                 GTK_TYPE_MENU_BAR,
                                                 GtkMenuBarPrivate);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (menu_bar));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUBAR);
 }
 
 GtkWidget*
@@ -345,11 +350,18 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
-          GtkStyle *style;
+          GtkStyleContext *context;
+          GtkBorder *border;
 
-          style = gtk_widget_get_style (widget);
-	  requisition->width += style->xthickness * 2;
-	  requisition->height += style->ythickness * 2;
+          context = gtk_widget_get_style_context (widget);
+
+          gtk_style_context_get (context, 0,
+                                 "border-width", &border,
+                                 NULL);
+
+	  requisition->width += border->left + border->right;
+	  requisition->height += border->top + border->bottom;
+          gtk_border_free (border);
 	}
     }
 }
@@ -424,11 +436,18 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       
       if (get_shadow_type (menu_bar) != GTK_SHADOW_NONE)
 	{
-          GtkStyle *style;
+          GtkStyleContext *context;
+          GtkBorder *border;
 
-          style = gtk_widget_get_style (widget);
-          child_allocation.x += style->xthickness;
-          child_allocation.y += style->ythickness;
+          context = gtk_widget_get_style_context (widget);
+          gtk_style_context_get (context, 0,
+                                 "border-width", &border,
+                                 NULL);
+
+          child_allocation.x += border->left;
+          child_allocation.y += border->top;
+
+          gtk_border_free (border);
 	}
       
       if (priv->pack_direction == GTK_PACK_DIRECTION_LTR ||
@@ -539,18 +558,26 @@ static gint
 gtk_menu_bar_draw (GtkWidget *widget,
 		   cairo_t   *cr)
 {
+  GtkStyleContext *context;
+  GtkStateFlags state;
   int border;
 
   border = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  context = gtk_widget_get_style_context (widget);
 
-  gtk_paint_box (gtk_widget_get_style (widget),
-                 cr,
-                 gtk_widget_get_state (widget),
-                 get_shadow_type (GTK_MENU_BAR (widget)),
-                 widget, "menubar",
-                 border, border,
-                 gtk_widget_get_allocated_width (widget) - border * 2,
-                 gtk_widget_get_allocated_height (widget) - border * 2);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_set_state (context, state);
+
+  if (get_shadow_type (GTK_MENU_BAR (widget)) != GTK_SHADOW_NONE)
+    gtk_render_background (context, cr,
+                           border, border,
+                           gtk_widget_get_allocated_width (widget) - border * 2,
+                           gtk_widget_get_allocated_height (widget) - border * 2);
+
+  gtk_render_frame (context, cr,
+                    border, border,
+                    gtk_widget_get_allocated_width (widget) - border * 2,
+                    gtk_widget_get_allocated_height (widget) - border * 2);
 
   GTK_WIDGET_CLASS (gtk_menu_bar_parent_class)->draw (widget, cr);
 

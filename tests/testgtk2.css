@@ -1,0 +1,9 @@
+/* this file gets included from testgtk.css */
+
+#main_window GtkButton {
+    font: Monospace 10;
+}
+
+#main_window GtkButton:hover {
+    background-color: rgba(0%, 0%, 75%, 0.1);
+}

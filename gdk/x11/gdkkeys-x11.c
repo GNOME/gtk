@@ -1609,14 +1609,13 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 /* Key handling not part of the keymap */
 /**
  * gdk_keyval_name:
+ * @keyval: a key value.
  *
  * Converts a key value into a symbolic name.
- * The names are the same as those in the 
+ * The names are the same as those in the
  * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
  * but without the leading "GDK_KEY_".
  *
- * @keyval: a key value.
- * 
  * Return value: (transfer none): a string containing the name of the key, or 
  * %NULL if @keyval is not a valid key. The string should not be modified.
  **/

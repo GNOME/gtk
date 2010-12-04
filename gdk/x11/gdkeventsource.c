@@ -179,15 +179,14 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
   if (filter_window)
     {
       /* Apply per-window filters */
-      GdkWindowObject *filter_private = (GdkWindowObject *) filter_window;
       GdkFilterReturn result;
 
       event->any.window = g_object_ref (filter_window);
 
-      if (filter_private->filters)
+      if (filter_window->filters)
 	{
 	  result = gdk_event_apply_filters (xevent, event,
-					    &filter_private->filters);
+					    &filter_window->filters);
 
           if (result == GDK_FILTER_REMOVE)
             {
@@ -319,8 +318,7 @@ gdk_event_source_dispatch (GSource     *source,
 
   if (event)
     {
-      if (_gdk_event_func)
-	(*_gdk_event_func) (event, _gdk_event_data);
+      _gdk_event_emit (event);
 
       gdk_event_free (event);
     }

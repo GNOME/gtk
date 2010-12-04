@@ -31,6 +31,7 @@
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
 #include "gdkeventtranslator.h"
+#include "gdkinternals.h"
 #include "gdkscreen.h"
 #include "gdkscreen-x11.h"
 #include "gdkinternals.h"
@@ -382,7 +383,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
                                  XEvent             *xevent)
 {
   GdkWindow *window;
-  GdkWindowObject *window_private;
   GdkWindowImplX11 *window_impl = NULL;
   GdkScreen *screen = NULL;
   GdkScreenX11 *screen_x11 = NULL;
@@ -396,7 +396,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
    * are reported same as structure events
    */
   window = get_event_window (translator, xevent);
-  window_private = (GdkWindowObject *) window;
 
   if (window)
     {
@@ -409,7 +408,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
       screen = GDK_WINDOW_SCREEN (window);
       screen_x11 = GDK_SCREEN_X11 (screen);
       toplevel = _gdk_x11_window_get_toplevel (window);
-      window_impl = GDK_WINDOW_IMPL_X11 (window_private->impl);
+      window_impl = GDK_WINDOW_IMPL_X11 (window->impl);
       xwindow = GDK_WINDOW_XID (window);
 
       g_object_ref (window);
@@ -418,7 +417,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
   event->any.window = window;
   event->any.send_event = xevent->xany.send_event ? TRUE : FALSE;
 
-  if (window_private && GDK_WINDOW_DESTROYED (window))
+  if (window && GDK_WINDOW_DESTROYED (window))
     {
       if (xevent->type != DestroyNotify)
 	{
@@ -480,7 +479,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 			   xevent->xexpose.width, xevent->xexpose.height,
 			   event->any.send_event ? " (send)" : ""));
 
-      if (window_private == NULL)
+      if (window == NULL)
         {
           return_val = FALSE;
           break;
@@ -508,7 +507,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 		  g_message ("graphics expose:\tdrawable: %ld",
 			     xevent->xgraphicsexpose.drawable));
 
-        if (window_private == NULL)
+        if (window == NULL)
           {
             return_val = FALSE;
             break;
@@ -522,16 +521,6 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
         _gdk_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
         return_val = FALSE;
       }
-      break;
-
-    case NoExpose:
-      GDK_NOTE (EVENTS,
-		g_message ("no expose:\t\tdrawable: %ld",
-			   xevent->xnoexpose.drawable));
-
-      event->no_expose.type = GDK_NO_EXPOSE;
-      event->no_expose.window = window;
-
       break;
 
     case VisibilityNotify:
@@ -554,7 +543,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  }
 #endif /* G_ENABLE_DEBUG */
 
-      if (window_private == NULL)
+      if (window == NULL)
         {
           return_val = FALSE;
           break;
@@ -605,7 +594,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  event->any.type = GDK_DESTROY;
 	  event->any.window = window;
 
-	  return_val = window_private && !GDK_WINDOW_DESTROYED (window);
+	  return_val = window && !GDK_WINDOW_DESTROYED (window);
 
 	  if (window && GDK_WINDOW_XID (window) != screen_x11->xroot_window)
 	    gdk_window_destroy_notify (window);
@@ -649,7 +638,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
       event->any.window = window;
 
       /* Unset iconified if it was set */
-      if (window && (((GdkWindowObject*)window)->state & GDK_WINDOW_STATE_ICONIFIED))
+      if (window && (window->state & GDK_WINDOW_STATE_ICONIFIED))
         gdk_synthesize_window_state (window,
                                      GDK_WINDOW_STATE_ICONIFIED,
                                      0);
@@ -682,18 +671,18 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 			   xevent->xconfigure.override_redirect,
 			   !window
 			   ? " (discarding)"
-			   : GDK_WINDOW_TYPE (window) == GDK_WINDOW_CHILD
+			   : window->window_type == GDK_WINDOW_CHILD
 			   ? " (discarding child)"
 			   : xevent->xconfigure.event != xevent->xconfigure.window
 			   ? " (discarding substructure)"
 			   : ""));
       if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
         {
-	  window_private->width = xevent->xconfigure.width;
-	  window_private->height = xevent->xconfigure.height;
+	  window->width = xevent->xconfigure.width;
+	  window->height = xevent->xconfigure.height;
 
 	  _gdk_window_update_size (window);
-	  _gdk_x11_drawable_update_size (window_private->impl);
+	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
 	  _gdk_x11_screen_size_changed (screen, xevent);
         }
 
@@ -726,8 +715,8 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	      Window child_window = 0;
 
 	      gdk_error_trap_push ();
-	      if (XTranslateCoordinates (GDK_DRAWABLE_XDISPLAY (window),
-					 GDK_DRAWABLE_XID (window),
+	      if (XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
+					 GDK_WINDOW_XID (window),
 					 screen_x11->xroot_window,
 					 0, 0,
 					 &tx, &ty,
@@ -743,19 +732,19 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	      event->configure.x = xevent->xconfigure.x;
 	      event->configure.y = xevent->xconfigure.y;
 	    }
-	  window_private->x = event->configure.x;
-	  window_private->y = event->configure.y;
-	  window_private->width = xevent->xconfigure.width;
-	  window_private->height = xevent->xconfigure.height;
+	  window->x = event->configure.x;
+	  window->y = event->configure.y;
+	  window->width = xevent->xconfigure.width;
+	  window->height = xevent->xconfigure.height;
 
 	  _gdk_window_update_size (window);
-	  _gdk_x11_drawable_update_size (window_private->impl);
+	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
 
-	  if (window_private->resize_count >= 1)
+	  if (window->resize_count >= 1)
 	    {
-	      window_private->resize_count -= 1;
+	      window->resize_count -= 1;
 
-	      if (window_private->resize_count == 0)
+	      if (window->resize_count == 0)
 		_gdk_moveresize_configure_done (display, window);
 	    }
 	}
@@ -770,7 +759,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 			   gdk_x11_get_xatom_name_for_display (display, xevent->xproperty.atom),
 			   "\""));
 
-      if (window_private == NULL)
+      if (window == NULL)
         {
 	  return_val = FALSE;
           break;
@@ -789,7 +778,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	    gdk_check_wm_desktop_changed (window);
 	}
 
-      if (window_private->event_mask & GDK_PROPERTY_CHANGE_MASK)
+      if (window->event_mask & GDK_PROPERTY_CHANGE_MASK)
 	{
 	  event->property.type = GDK_PROPERTY_NOTIFY;
 	  event->property.window = window;
@@ -894,7 +883,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	    break;
 	  case GDK_FILTER_CONTINUE:
 	    /* Send unknown ClientMessage's on to Gtk for it to use */
-            if (window_private == NULL)
+            if (window == NULL)
               {
                 return_val = FALSE;
               }
@@ -956,7 +945,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
       else
 #endif
 #if defined(HAVE_XCOMPOSITE) && defined (HAVE_XDAMAGE) && defined (HAVE_XFIXES)
-      if (display_x11->have_xdamage && window_private && window_private->composited &&
+      if (display_x11->have_xdamage && window && window->composited &&
 	  xevent->type == display_x11->xdamage_event_base + XDamageNotify &&
 	  ((XDamageNotifyEvent *) xevent)->damage == window_impl->damage)
 	{
@@ -964,8 +953,8 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  XserverRegion repair;
 	  GdkRectangle rect;
 
-	  rect.x = window_private->x + damage_event->area.x;
-	  rect.y = window_private->y + damage_event->area.y;
+	  rect.x = window->x + damage_event->area.x;
+	  rect.y = window->y + damage_event->area.y;
 	  rect.width = damage_event->area.width;
 	  rect.height = damage_event->area.height;
 
@@ -976,8 +965,8 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 			   repair, None);
 	  XFixesDestroyRegion (display_x11->xdisplay, repair);
 
-	  if (window_private->parent != NULL)
-	    _gdk_window_process_expose (GDK_WINDOW (window_private->parent),
+	  if (window->parent != NULL)
+	    _gdk_window_process_expose (window->parent,
 					damage_event->serial, &rect);
 
 	  return_val = TRUE;
@@ -1066,12 +1055,11 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
   else if (atom == gdk_x11_get_xatom_by_name_for_display (display, "WM_TAKE_FOCUS"))
     {
       GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (event->any.window);
-      GdkWindowObject *private = (GdkWindowObject *)win;
 
       /* There is no way of knowing reliably whether we are viewable;
        * _gdk_x11_set_input_focus_safe() traps errors asynchronously.
        */
-      if (toplevel && private->accept_focus)
+      if (toplevel && win->accept_focus)
 	_gdk_x11_set_input_focus_safe (display, toplevel->focus_window,
 				       RevertToParent,
 				       xevent->xclient.data.l[1]);

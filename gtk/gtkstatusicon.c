@@ -1701,8 +1701,16 @@ gtk_status_icon_color_changed (GtkTrayIcon   *tray,
 
   if (name)
     {
+      GdkRGBA rgba;
+
       g_object_get (priv->tray_icon, pspec->name, &color, NULL);
-      gtk_widget_modify_symbolic_color (priv->image, name, &color);
+
+      rgba.red = color.red / 65535.;
+      rgba.green = color.green / 65535.;
+      rgba.blue = color.blue / 65535.;
+      rgba.alpha = 1;
+
+      gtk_widget_override_symbolic_color (priv->image, name, &rgba);
     }
 }
 

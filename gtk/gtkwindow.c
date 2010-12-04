@@ -345,8 +345,7 @@ static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 					   GdkEventFocus     *event);
-static void gtk_window_style_set          (GtkWidget         *widget,
-                                           GtkStyle          *style);
+static void gtk_window_style_updated      (GtkWidget         *widget);
 static gint gtk_window_client_event	  (GtkWidget	     *widget,
 					   GdkEventClient    *event);
 static gboolean gtk_window_state_event    (GtkWidget          *widget,
@@ -595,7 +594,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->window_state_event = gtk_window_state_event;
   widget_class->direction_changed = gtk_window_direction_changed;
   widget_class->state_changed = gtk_window_state_changed;
-  widget_class->style_set = gtk_window_style_set;
+  widget_class->style_updated = gtk_window_style_updated;
 
   container_class->check_resize = gtk_window_check_resize;
 
@@ -4879,12 +4878,12 @@ gtk_window_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
   GtkWindow *window;
-  GtkStyle *style;
   GdkWindow *parent_window;
   GdkWindow *gdk_window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GtkWindowPrivate *priv;
+  GtkStyleContext *context;
 
   window = GTK_WINDOW (widget);
   priv = window->priv;
@@ -5012,10 +5011,11 @@ gtk_window_realize (GtkWidget *widget)
   gdk_window_set_user_data (gdk_window, window);
 
   gtk_widget_style_attach (widget);
-  style = gtk_widget_get_style (widget);
-  gtk_style_set_background (style, gdk_window, GTK_STATE_NORMAL);
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_set_background (context, gdk_window);
   if (priv->frame)
-    gtk_style_set_background (style, priv->frame, GTK_STATE_NORMAL);
+    gtk_style_context_set_background (context, priv->frame);
 
   if (priv->transient_parent &&
       gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
@@ -5113,12 +5113,13 @@ gtk_window_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unrealize (widget);
 }
 
-static GdkWindowEdge
-get_grip_edge (GtkWidget *widget)
+static GtkJunctionSides
+get_grip_junction (GtkWidget *widget)
 {
-  return gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR
-         ? GDK_WINDOW_EDGE_SOUTH_EAST
-         : GDK_WINDOW_EDGE_SOUTH_WEST;
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
+    return GTK_JUNCTION_CORNER_BOTTOMRIGHT;
+  else
+    return GTK_JUNCTION_CORNER_BOTTOMLEFT;
 }
 
 static gboolean
@@ -5231,7 +5232,7 @@ set_grip_shape (GtkWindow *window)
   cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 0.0);
   cairo_paint (cr);
   cairo_set_source_rgba (cr, 0.0, 0.0, 0.0, 1.0);
-  if (get_grip_edge (GTK_WIDGET (window)) == GDK_WINDOW_EDGE_SOUTH_EAST)
+  if (get_grip_junction (GTK_WIDGET (window)) & GTK_JUNCTION_CORNER_BOTTOMRIGHT)
     {
       cairo_move_to (cr, width, 0.0);
       cairo_line_to (cr, width, height);
@@ -5461,8 +5462,7 @@ gtk_window_state_changed (GtkWidget    *widget,
 }
 
 static void
-gtk_window_style_set (GtkWidget *widget,
-                      GtkStyle  *style)
+gtk_window_style_updated (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
@@ -5681,7 +5681,6 @@ gtk_window_get_resize_grip_area (GtkWindow *window,
 {
   GtkWidget *widget = GTK_WIDGET (window);
   GtkAllocation allocation;
-  GtkStyle *style;
   gint grip_width;
   gint grip_height;
 
@@ -5691,7 +5690,6 @@ gtk_window_get_resize_grip_area (GtkWindow *window,
     return FALSE;
 
   gtk_widget_get_allocation (widget, &allocation);
-  style = gtk_widget_get_style (widget);
 
   gtk_widget_style_get (widget,
                         "resize-grip-width", &grip_width,
@@ -7432,16 +7430,30 @@ gtk_window_draw (GtkWidget *widget,
 		 cairo_t   *cr)
 {
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+  GtkStyleContext *context;
   gboolean ret = FALSE;
 
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+
   if (!gtk_widget_get_app_paintable (widget))
-    gtk_paint_flat_box (gtk_widget_get_style (widget),
-                        cr,
-                        GTK_STATE_NORMAL,
-                        GTK_SHADOW_NONE, widget, "base",
-                        0, 0,
-                        gtk_widget_get_allocated_width (widget),
-                        gtk_widget_get_allocated_height (widget));
+    {
+      GtkStateFlags state;
+
+      state = gtk_widget_get_state_flags (widget);
+
+      if (gtk_window_has_toplevel_focus (GTK_WINDOW (widget)))
+        state |= GTK_STATE_FLAG_FOCUSED;
+
+      gtk_style_context_set_state (context, state);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+      gtk_render_background (context, cr, 0, 0,
+			     gtk_widget_get_allocated_width (widget),
+			     gtk_widget_get_allocated_height (widget));
+    }
+
+  gtk_style_context_restore (context);
 
   if (GTK_WIDGET_CLASS (gtk_window_parent_class)->draw)
     ret = GTK_WIDGET_CLASS (gtk_window_parent_class)->draw (widget, cr);
@@ -7451,18 +7463,18 @@ gtk_window_draw (GtkWidget *widget,
     {
       GdkRectangle rect;
 
+      gtk_style_context_save (context);
       cairo_save (cr);
+
       gtk_cairo_transform_to_window (cr, widget, priv->grip_window);
       gtk_window_get_resize_grip_area (GTK_WINDOW (widget), &rect);
-      gtk_paint_resize_grip (gtk_widget_get_style (widget),
-                             cr,
-                             gtk_widget_get_state (widget),
-                             widget,
-                             "statusbar",
-                             get_grip_edge (widget),
-                             0, 0,
-                             rect.width, rect.height);
+
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_GRIP);
+      gtk_style_context_set_junction_sides (context, get_grip_junction (widget));
+      gtk_render_handle (context, cr, 0, 0, rect.width, rect.height);
+
       cairo_restore (cr);
+      gtk_style_context_restore (context);
     }
 
   return ret;

@@ -13,7 +13,7 @@
     longer correct to assume that each window has an associated XID.
     Code that makes this assumption can sometimes be fixed by calling
     gdk_window_ensure_native() on the windows in question.
-    Calling gdk_x11_drawable_get_xid() (or GDK_WINDOW_XID()) from the
+    Calling gdk_x11_window_get_xid() (or GDK_WINDOW_XID()) from the
     X11-specific API on a non-native window will explicitly call
     gdk_window_ensure_native(), so old code using this will continue to
     work. A small gotcha is that the GDK_WINDOW_XID() call is no longer a
@@ -46,15 +46,9 @@
 
   <para>
     Problems can also occur when using cairo for drawing. One thing that can
-    go wrong is clip handling. If you ever need to reset the clip region on
-    a cairo_t (i.e. use cairo_reset_clip()), you have to to use
-    gdk_cairo_reset_clip() instead. The reason for this is that the cairo_reset_clip() call will remove the initial clip region that limits your drawing to
-    the client-side window at hand, so you will end up drawing over stuff
-    outside the window. You also need to use gdk_cairo_reset_clip() if you
-    use a cairo_t that was not allocated in a double-buffered expose handler
-    and keep it in use after window hierarchy changes (resizing, moving,
-    stacking order changes). The easiest fix for this kind of problem is to
-    simply create a new cairo context for each expose event.
+    go wrong is clip handling. You may not use cairo_reset_clip() on a
+    cairo_t on a cairo context created via gdk_cairo_create() or passed to
+    the GtkWidget::draw signal.
   </para>
 
   <para>

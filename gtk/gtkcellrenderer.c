@@ -27,18 +27,18 @@
 
 /**
  * SECTION:gtkcellrenderer
- * @Short_description: An object for rendering a single cell on a GdkDrawable
+ * @Short_description: An object for rendering a single cell
  * @Title: GtkCellRenderer
  * @See_also: #GtkCellRendererText, #GtkCellRendererPixbuf, #GtkCellRendererToggle
  *
  * The #GtkCellRenderer is a base class of a set of objects used for
- * rendering a cell to a #GdkDrawable.  These objects are used primarily by
+ * rendering a cell to a #cairo_t.  These objects are used primarily by
  * the #GtkTreeView widget, though they aren't tied to them in any
  * specific way.  It is worth noting that #GtkCellRenderer is not a
  * #GtkWidget and cannot be treated as such.
  *
  * The primary use of a #GtkCellRenderer is for drawing a certain graphical
- * elements on a #GdkDrawable. Typically, one cell renderer is used to
+ * elements on a #cairo_t. Typically, one cell renderer is used to
  * draw many cells on the screen.  To this extent, it isn't expected that a
  * CellRenderer keep any permanent state around.  Instead, any state is set
  * just prior to use using #GObject<!-- -->s property system.  Then, the

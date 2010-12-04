@@ -1,0 +1,117 @@
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 2010 Carlos Garnacho <carlosg@gnome.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
+#ifndef __GTK_STYLE_PROPERTIES_H__
+#define __GTK_STYLE_PROPERTIES_H__
+
+#include <glib-object.h>
+#include <gdk/gdk.h>
+#include <gtk/gtkenums.h>
+
+G_BEGIN_DECLS
+
+#define GTK_TYPE_STYLE_PROPERTIES         (gtk_style_properties_get_type ())
+#define GTK_STYLE_PROPERTIES(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GTK_TYPE_STYLE_PROPERTIES, GtkStyleProperties))
+#define GTK_STYLE_PROPERTIES_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST    ((c), GTK_TYPE_STYLE_PROPERTIES, GtkStylePropertiesClass))
+#define GTK_IS_STYLE_PROPERTIES(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GTK_TYPE_STYLE_PROPERTIES))
+#define GTK_IS_STYLE_PROPERTIES_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_STYLE_PROPERTIES))
+#define GTK_STYLE_PROPERTIES_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_STYLE_PROPERTIES, GtkStylePropertiesClass))
+
+typedef struct _GtkStyleProperties GtkStyleProperties;
+typedef struct _GtkStylePropertiesClass GtkStylePropertiesClass;
+
+typedef struct _GtkSymbolicColor GtkSymbolicColor;
+typedef struct _GtkGradient GtkGradient;
+
+struct _GtkStyleProperties
+{
+  GObject parent_object;
+  gpointer priv;
+};
+
+struct _GtkStylePropertiesClass
+{
+  GObjectClass parent_class;
+};
+
+typedef gboolean (* GtkStylePropertyParser) (const gchar  *string,
+                                             GValue       *value,
+                                             GError      **error);
+
+GType gtk_style_properties_get_type (void) G_GNUC_CONST;
+
+/* Semi-private API */
+const GValue * _gtk_style_properties_peek_property (GtkStyleProperties *props,
+                                                    const gchar        *prop_name,
+                                                    GtkStateFlags       state);
+
+/* Functions to register style properties */
+void     gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
+                                                 GParamSpec             *pspec);
+gboolean gtk_style_properties_lookup_property   (const gchar             *property_name,
+                                                 GtkStylePropertyParser  *parse_func,
+                                                 GParamSpec             **pspec);
+
+GtkStyleProperties * gtk_style_properties_new (void);
+
+void               gtk_style_properties_map_color    (GtkStyleProperties *props,
+                                                      const gchar        *name,
+                                                      GtkSymbolicColor   *color);
+GtkSymbolicColor * gtk_style_properties_lookup_color (GtkStyleProperties *props,
+                                                      const gchar        *name);
+
+void     gtk_style_properties_set_property (GtkStyleProperties *props,
+                                            const gchar        *property,
+                                            GtkStateFlags       state,
+                                            const GValue       *value);
+void     gtk_style_properties_set_valist   (GtkStyleProperties *props,
+                                            GtkStateFlags       state,
+                                            va_list             args);
+void     gtk_style_properties_set          (GtkStyleProperties *props,
+                                            GtkStateFlags       state,
+                                            ...) G_GNUC_NULL_TERMINATED;
+
+gboolean gtk_style_properties_get_property (GtkStyleProperties *props,
+                                            const gchar        *property,
+                                            GtkStateFlags       state,
+                                            GValue             *value);
+void     gtk_style_properties_get_valist   (GtkStyleProperties *props,
+                                            GtkStateFlags       state,
+                                            va_list             args);
+void     gtk_style_properties_get          (GtkStyleProperties *props,
+                                            GtkStateFlags       state,
+                                            ...) G_GNUC_NULL_TERMINATED;
+
+void     gtk_style_properties_unset_property (GtkStyleProperties *props,
+                                              const gchar        *property,
+                                              GtkStateFlags       state);
+
+void     gtk_style_properties_clear          (GtkStyleProperties  *props);
+
+void     gtk_style_properties_merge          (GtkStyleProperties       *props,
+                                              const GtkStyleProperties *props_to_merge,
+                                              gboolean                  replace);
+
+G_END_DECLS
+
+#endif /* __GTK_STYLE_PROPERTIES_H__ */

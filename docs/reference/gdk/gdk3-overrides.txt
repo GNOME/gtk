@@ -1,27 +1,4 @@
 
-# GdkPixmap, GdkBitmap and GdkDrawable are the same as GdkWindow.
-<STRUCT>
-<NAME>GdkWindow</NAME>
-struct GdkPixmap
-{
-  gpointer user_data;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkPixmap</NAME>
-struct GdkPixmap
-{
-  gpointer user_data;
-};
-</STRUCT>
-<STRUCT>
-<NAME>GdkDrawable</NAME>
-struct GdkDrawable
-{
-  gpointer user_data;
-};
-</STRUCT>
-
 # GdkAtom is an opaque typedef
 <STRUCT>
 <NAME>GdkAtom</NAME>

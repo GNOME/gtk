@@ -134,7 +134,7 @@
       them, are gone. This includes the <literal>gdk_draw</literal> family
       of functions like gdk_draw_rectangle() and gdk_draw_drawable(). As
       #GdkGC is roughly equivalent to #cairo_t and #GdkImage was used for
-      drawing images to GdkDrawables, which cairo supports automatically,
+      drawing images to GdkWindows, which cairo supports automatically,
       a transition is usually straightforward.
     </para>
     <para>
@@ -143,7 +143,7 @@
       was replaced.
     </para>
     <example>
-       <title>Drawing a GdkPixbuf onto a GdkDrawable</title>
+       <title>Drawing a GdkPixbuf onto a GdkWindow</title>
          <para>
            Drawing a pixbuf onto a drawable used to be done like this:
 <programlisting><![CDATA[
@@ -170,7 +170,7 @@ cairo_destroy (cr);
          </para>
       </example>
       <example>
-        <title>Drawing a tiled GdkPixmap to a GdkDrawable</title>
+        <title>Drawing a tiled GdkPixmap to a GdkWindow</title>
         <para>
           Tiled pixmaps are often used for drawing backgrounds.
           Old code looked something like this:

@@ -276,12 +276,6 @@
 /* Whether to load modules via .la files rather than directly */
 /* #undef USE_LA_MODULES */
 
-/* Define to 1 if medialib is available and should be used */
-/* #undef USE_MEDIALIB */
-
-/* Define to 1 if medialib 2.5 is available */
-/* #undef USE_MEDIALIB25 */
-
 /* Define to 1 if XXM is available and should be used */
 #ifndef _MSC_VER
 #  define USE_MMX 1

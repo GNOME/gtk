@@ -34,19 +34,7 @@
 #include <pango/pangowin32.h>
 #include <cairo-win32.h>
 
-#include "gdkscreen.h" /* gdk_screen_get_default() */
 #include "gdkprivate-win32.h"
-
-#define ROP3_D 0x00AA0029
-#define ROP3_DSna 0x00220326
-#define ROP3_DSPDxax 0x00E20746
-
-#define LINE_ATTRIBUTES (GDK_GC_LINE_WIDTH|GDK_GC_LINE_STYLE| \
-			 GDK_GC_CAP_STYLE|GDK_GC_JOIN_STYLE)
-
-#define MUST_RENDER_DASHES_MANUALLY(gcwin32)			\
-  (gcwin32->line_style == GDK_LINE_DOUBLE_DASH ||		\
-   (gcwin32->line_style == GDK_LINE_ON_OFF_DASH && gcwin32->pen_dash_offset))
 
 static cairo_surface_t *gdk_win32_ref_cairo_surface (GdkDrawable *drawable);
 static cairo_surface_t *gdk_win32_create_cairo_surface (GdkDrawable *drawable,

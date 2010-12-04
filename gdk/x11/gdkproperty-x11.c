@@ -703,7 +703,7 @@ gdk_property_get (GdkWindow   *window,
     }
 
   res = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-			    GDK_WINDOW_XWINDOW (window), xproperty,
+			    GDK_WINDOW_XID (window), xproperty,
 			    offset, get_length, pdelete,
 			    xtype, &ret_prop_type, &ret_format,
 			    &ret_nitems, &ret_bytes_after,
@@ -892,7 +892,7 @@ gdk_property_delete (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  XDeleteProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XWINDOW (window),
+  XDeleteProperty (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window),
 		   gdk_x11_atom_to_xatom_for_display (GDK_WINDOW_DISPLAY (window),
 						      property));
 }

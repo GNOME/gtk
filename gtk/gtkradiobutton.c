@@ -217,7 +217,7 @@ gtk_radio_button_init (GtkRadioButton *radio_button)
   priv->group = g_slist_prepend (NULL, radio_button);
 
   _gtk_button_set_depressed (GTK_BUTTON (radio_button), TRUE);
-  gtk_widget_set_state (GTK_WIDGET (radio_button), GTK_STATE_ACTIVE);
+  gtk_widget_set_state_flags (GTK_WIDGET (radio_button), GTK_STATE_FLAG_ACTIVE, TRUE);
 }
 
 static void
@@ -790,7 +790,7 @@ gtk_radio_button_clicked (GtkButton *button)
   GtkRadioButtonPrivate *priv = radio_button->priv;
   GtkToggleButton *toggle_button = GTK_TOGGLE_BUTTON (button);
   GtkToggleButton *tmp_button;
-  GtkStateType new_state;
+  GtkStateFlags new_state = 0;
   GSList *tmp_list;
   gint toggled;
   gboolean depressed;
@@ -818,14 +818,19 @@ gtk_radio_button_clicked (GtkButton *button)
 
       if (!tmp_button)
 	{
-	  new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
+          if (button->priv->in_button)
+            new_state |= GTK_STATE_FLAG_PRELIGHT;
+
+	  new_state |= GTK_STATE_FLAG_ACTIVE;
 	}
       else
 	{
 	  toggled = TRUE;
           _gtk_toggle_button_set_active (toggle_button,
                                          !gtk_toggle_button_get_active (toggle_button));
-	  new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_NORMAL);
+
+	  if (button->priv->in_button)
+	    new_state |= GTK_STATE_FLAG_PRELIGHT;
 	}
     }
   else
@@ -847,7 +852,10 @@ gtk_radio_button_clicked (GtkButton *button)
 	    }
 	}
 
-      new_state = (button->priv->in_button ? GTK_STATE_PRELIGHT : GTK_STATE_ACTIVE);
+      if (button->priv->in_button)
+        new_state |= GTK_STATE_FLAG_PRELIGHT;
+
+      new_state |= GTK_STATE_FLAG_ACTIVE;
     }
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
@@ -857,8 +865,8 @@ gtk_radio_button_clicked (GtkButton *button)
   else
     depressed = gtk_toggle_button_get_active (toggle_button);
 
-  if (gtk_widget_get_state (GTK_WIDGET (button)) != new_state)
-    gtk_widget_set_state (GTK_WIDGET (button), new_state);
+  if (gtk_widget_get_state_flags (GTK_WIDGET (button)) != new_state)
+    gtk_widget_set_state_flags (GTK_WIDGET (button), new_state, TRUE);
 
   if (toggled)
     {
@@ -883,9 +891,8 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkWidget *child;
   GtkButton *button;
   GtkToggleButton *toggle_button;
-  GtkStateType state_type;
-  GtkShadowType shadow_type;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkStateFlags state = 0;
   GdkWindow *window;
   gint x, y;
   gint indicator_size, indicator_spacing;
@@ -897,10 +904,10 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   widget = GTK_WIDGET (check_button);
   button = GTK_BUTTON (check_button);
   toggle_button = GTK_TOGGLE_BUTTON (check_button);
+  context = gtk_widget_get_style_context (widget);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-  style = gtk_widget_get_style (widget);
   gtk_widget_style_get (widget,
                         "interior-focus", &interior_focus,
                         "focus-line-width", &focus_width,
@@ -921,37 +928,34 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
     x += focus_width + focus_pad;      
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
-    shadow_type = GTK_SHADOW_ETCHED_IN;
+    state |= GTK_STATE_FLAG_INCONSISTENT;
   else if (gtk_toggle_button_get_active (toggle_button))
-    shadow_type = GTK_SHADOW_IN;
-  else
-    shadow_type = GTK_SHADOW_OUT;
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
-    state_type = GTK_STATE_ACTIVE;
-  else if (button->priv->in_button)
-    state_type = GTK_STATE_PRELIGHT;
+    state |= GTK_STATE_FLAG_SELECTED;
+
+  if (button->priv->in_button)
+    state |= GTK_STATE_FLAG_PRELIGHT;
   else if (!gtk_widget_is_sensitive (widget))
-    state_type = GTK_STATE_INSENSITIVE;
-  else
-    state_type = GTK_STATE_NORMAL;
+    state |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     x = allocation.width - (indicator_size + x);
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
-    {
-      gtk_paint_flat_box (style, cr,
-                          GTK_STATE_PRELIGHT,
-                          GTK_SHADOW_ETCHED_OUT, 
-                          widget, "checkbutton",
-                          border_width, border_width,
-                          allocation.width - (2 * border_width),
-                          allocation.height - (2 * border_width));
-    }
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
 
-  gtk_paint_option (style, cr,
-                    state_type, shadow_type,
-                    widget, "radiobutton",
-                    x, y, indicator_size, indicator_size);
+  if (state & GTK_STATE_FLAG_PRELIGHT)
+    gtk_render_background (context, cr,
+                           border_width, border_width,
+                           allocation.width - (2 * border_width),
+                           allocation.height - (2 * border_width));
+
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+
+  gtk_render_option (context, cr,
+                     x, y, indicator_size, indicator_size);
+
+  gtk_style_context_restore (context);
 }

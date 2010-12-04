@@ -399,7 +399,7 @@ create_composited_window (GtkWidget *widget)
   if (!window)
     {
       GtkWidget *event, *button;
-      GdkColor red;
+      GdkRGBA red;
 
       /* make the widgets */
       button = gtk_button_new_with_label ("A Button");
@@ -411,8 +411,8 @@ create_composited_window (GtkWidget *widget)
                         &window);
 
       /* put a red background on the window */
-      gdk_color_parse ("red", &red);
-      gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &red);
+      gdk_rgba_parse (&red, "red");
+      gtk_widget_override_background_color (window, 0, &red);
 
       /* set our event box to have a fully-transparent background
        * drawn on it.  currently there is no way to simply tell gtk
@@ -1202,8 +1202,7 @@ create_button_box (GtkWidget *widget)
 
 static GtkWidget*
 new_pixbuf (char      *filename,
-	    GdkWindow *window,
-	    GdkColor  *background)
+	    GdkWindow *window)
 {
   GtkWidget *widget;
   GdkPixbuf *pixbuf;
@@ -1379,8 +1378,7 @@ create_toolbar (GtkWidget *widget)
             {
               GtkWidget *icon;
 
-              icon = new_pixbuf ("test.xpm", gtk_widget_get_window (window),
-                                 &gtk_widget_get_style (window)->bg[GTK_STATE_NORMAL]);
+              icon = new_pixbuf ("test.xpm", gtk_widget_get_window (window));
               toolitem = gtk_tool_button_new (icon, create_toolbar_items[i].label);
             }
           if (create_toolbar_items[i].callback)
@@ -1450,8 +1448,7 @@ make_toolbar (GtkWidget *window)
           toolitem = gtk_separator_tool_item_new ();
           continue;
         }
-      icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window),
-                          &gtk_widget_get_style (window)->bg[GTK_STATE_NORMAL]);
+      icon  = new_pixbuf ("test.xpm", gtk_widget_get_window (window));
       toolitem = gtk_tool_button_new (icon, make_toolbar_items[i].label);
       gtk_tool_item_set_tooltip_text (toolitem, make_toolbar_items[i].tooltip);
       if (make_toolbar_items[i].callback != NULL)
@@ -2200,7 +2197,7 @@ create_rotated_text (GtkWidget *widget)
 
   if (!window)
     {
-      const GdkColor white = { 0, 0xffff, 0xffff, 0xffff };
+      const GdkRGBA white = { 1.0, 1.0, 1.0, 1.0 };
       GtkRequisition requisition;
       GtkWidget *content_area;
       GtkWidget *drawing_area;
@@ -2225,7 +2222,7 @@ create_rotated_text (GtkWidget *widget)
 
       drawing_area = gtk_drawing_area_new ();
       gtk_box_pack_start (GTK_BOX (content_area), drawing_area, TRUE, TRUE, 0);
-      gtk_widget_modify_bg (drawing_area, GTK_STATE_NORMAL, &white);
+      gtk_widget_override_background_color (drawing_area, 0, &white);
 
       tile_pixbuf = gdk_pixbuf_new_from_file ("marble.xpm", NULL);
       
@@ -2400,15 +2397,47 @@ grippy_button_press (GtkWidget *area, GdkEventButton *event, GdkWindowEdge edge)
 static gboolean
 grippy_draw (GtkWidget *area, cairo_t *cr, GdkWindowEdge edge)
 {
-  gtk_paint_resize_grip (gtk_widget_get_style (area),
-                         cr,
-			 gtk_widget_get_state (area),
-			 area,
-			 "statusbar",
-			 edge,
-			 0, 0,
-                         gtk_widget_get_allocated_width (area),
-                         gtk_widget_get_allocated_height (area));
+  GtkStyleContext *context;
+  GtkJunctionSides sides;
+
+  switch (edge)
+    {
+    case GDK_WINDOW_EDGE_NORTH_WEST:
+      sides = GTK_JUNCTION_CORNER_TOPLEFT;
+      break;
+    case GDK_WINDOW_EDGE_NORTH:
+      sides = GTK_JUNCTION_TOP;
+      break;
+    case GDK_WINDOW_EDGE_NORTH_EAST:
+      sides = GTK_JUNCTION_CORNER_TOPRIGHT;
+      break;
+    case GDK_WINDOW_EDGE_WEST:
+      sides = GTK_JUNCTION_LEFT;
+      break;
+    case GDK_WINDOW_EDGE_EAST:
+      sides = GTK_JUNCTION_RIGHT;
+      break;
+    case GDK_WINDOW_EDGE_SOUTH_WEST:
+      sides = GTK_JUNCTION_CORNER_BOTTOMLEFT;
+      break;
+    case GDK_WINDOW_EDGE_SOUTH:
+      sides = GTK_JUNCTION_BOTTOM;
+      break;
+    case GDK_WINDOW_EDGE_SOUTH_EAST:
+      sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
+      break;
+    }
+
+  context = gtk_widget_get_style_context (area);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, "grip");
+  gtk_style_context_set_junction_sides (context, sides);
+  gtk_render_handle (context, cr,
+                     0, 0,
+                     gtk_widget_get_allocated_width (area),
+                     gtk_widget_get_allocated_height (area));
+
+  gtk_style_context_restore (context);
 
   return TRUE;
 }
@@ -2708,7 +2737,7 @@ create_pixbuf (GtkWidget *widget)
 
       gdk_window = gtk_widget_get_window (window);
 
-      pixbufwid = new_pixbuf ("test.xpm", gdk_window, NULL);
+      pixbufwid = new_pixbuf ("test.xpm", gdk_window);
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -2720,7 +2749,7 @@ create_pixbuf (GtkWidget *widget)
       button = gtk_button_new ();
       gtk_box_pack_start (GTK_BOX (box2), button, FALSE, FALSE, 0);
 
-      pixbufwid = new_pixbuf ("test.xpm", gdk_window, NULL);
+      pixbufwid = new_pixbuf ("test.xpm", gdk_window);
 
       label = gtk_label_new ("Pixbuf\ntest");
       box3 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -4148,13 +4177,14 @@ create_event_box (GtkWidget *widget)
   GtkWidget *label;
   GtkWidget *visible_window_check;
   GtkWidget *above_child_check;
-  GdkColor color;
+  GdkRGBA color;
 
   if (!window)
     {
       color.red = 0;
-      color.blue = 65535;
+      color.blue = 1;
       color.green = 0;
+      color.alpha = 1;
       
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -4169,7 +4199,7 @@ create_event_box (GtkWidget *widget)
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_modify_bg (window, GTK_STATE_NORMAL, &color);
+      gtk_widget_override_background_color (window, 0, &color);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_pack_start (GTK_BOX (box1), hbox, TRUE, FALSE, 0);
@@ -4796,6 +4826,8 @@ cursor_draw (GtkWidget *widget,
 	     gpointer   user_data)
 {
   int width, height;
+  GtkStyleContext *context;
+  GdkRGBA *bg;
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -4808,7 +4840,10 @@ cursor_draw (GtkWidget *widget,
   cairo_rectangle (cr, 0, height / 2, width, height / 2);
   cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->bg[GTK_STATE_NORMAL]);
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get (context, 0, "background-color", &bg, NULL);
+  gdk_cairo_set_source_rgba (cr, bg);
+  gdk_rgba_free (bg);
   cairo_rectangle (cr, width / 3, height / 3, width / 3, height / 3);
   cairo_fill (cr);
 
@@ -9546,8 +9581,9 @@ create_rc_file (GtkWidget *widget)
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       button = gtk_button_new_with_label ("Reload");
-      g_signal_connect (button, "clicked",
-			G_CALLBACK (gtk_rc_reparse_all), NULL);
+      g_signal_connect_swapped (button, "clicked",
+                                G_CALLBACK (gtk_style_context_reset_widgets),
+                                gtk_widget_get_screen (button));
       gtk_widget_set_can_default (button, TRUE);
       gtk_box_pack_start (GTK_BOX (action_area), button, TRUE, TRUE, 0);
       gtk_widget_grab_default (button);
@@ -9760,6 +9796,8 @@ void create_layout (GtkWidget *widget)
     gtk_widget_destroy (window);
 }
 
+#if 0
+/* FIXME: need to completely redo this for GtkStyleContext */
 void
 create_styles (GtkWidget *widget)
 {
@@ -9769,11 +9807,11 @@ create_styles (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *entry;
   GtkWidget *vbox;
-  static GdkColor red =    { 0, 0xffff, 0,      0      };
-  static GdkColor green =  { 0, 0,      0xffff, 0      };
-  static GdkColor blue =   { 0, 0,      0,      0xffff };
-  static GdkColor yellow = { 0, 0xffff, 0xffff, 0      };
-  static GdkColor cyan =   { 0, 0     , 0xffff, 0xffff };
+  static GdkRGBA red =    { 1,0,0,1 };
+  static GdkRGBA green =  { 0,1,0,1 };
+  static GdkRGBA blue =   { 0,0,1,1 };
+  static GdkRGBA yellow = { 1,1,0,1 };
+  static GdkRGBA cyan =   { 0,1,1,1 };
   PangoFontDescription *font_desc;
 
   GtkRcStyle *rc_style;
@@ -9810,8 +9848,7 @@ create_styles (GtkWidget *widget)
       font_desc = pango_font_description_from_string ("Helvetica,Sans Oblique 18");
 
       button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_modify_font (gtk_bin_get_child (GTK_BIN (button)),
-                              font_desc);
+      gtk_widget_override_font (gtk_bin_get_child (GTK_BIN (button)), font_desc);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Foreground:");
@@ -9819,8 +9856,7 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_modify_fg (gtk_bin_get_child (GTK_BIN (button)),
-                            GTK_STATE_NORMAL, &red);
+      gtk_widget_override_color (gtk_bin_get_child (GTK_BIN (button)), 0, &red);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Background:");
@@ -9828,7 +9864,7 @@ create_styles (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
 
       button = gtk_button_new_with_label ("Some Text");
-      gtk_widget_modify_bg (button, GTK_STATE_NORMAL, &green);
+      gtk_widget_override_background_color (button, 0, &green);
       gtk_box_pack_start (GTK_BOX (vbox), button, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Text:");
@@ -9837,7 +9873,7 @@ create_styles (GtkWidget *widget)
 
       entry = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
-      gtk_widget_modify_text (entry, GTK_STATE_NORMAL, &blue);
+      gtk_widget_override_color (entry, 0, &blue);
       gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Base:");
@@ -9846,7 +9882,7 @@ create_styles (GtkWidget *widget)
 
       entry = gtk_entry_new ();
       gtk_entry_set_text (GTK_ENTRY (entry), "Some Text");
-      gtk_widget_modify_base (entry, GTK_STATE_NORMAL, &yellow);
+      gtk_widget_override_background_color (entry, 0, &yellow);
       gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 0);
 
       label = gtk_label_new ("Cursor:");
@@ -9892,6 +9928,7 @@ create_styles (GtkWidget *widget)
   else
     gtk_widget_destroy (window);
 }
+#endif
 
 /*
  * Main Window and Exit
@@ -9955,7 +9992,9 @@ struct {
   { "snapshot", create_snapshot },
   { "spinbutton", create_spins },
   { "statusbar", create_statusbar },
+#if 0
   { "styles", create_styles },
+#endif
   { "test idle", create_idle_test },
   { "test mainloop", create_mainloop, TRUE },
   { "test scrolling", create_scroll_test },
@@ -9985,7 +10024,7 @@ create_main_window (void)
   int i;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_widget_set_name (window, "main window");
+  gtk_widget_set_name (window, "main_window");
   gtk_window_move (GTK_WINDOW (window), 50, 20);
   gtk_window_set_default_size (GTK_WINDOW (window), -1, 400);
 
@@ -10188,6 +10227,9 @@ usage (void)
 int
 main (int argc, char *argv[])
 {
+  GtkCssProvider *provider, *memory_provider;
+  GdkDisplay *display;
+  GdkScreen *screen;
   GtkBindingSet *binding_set;
   int i;
   gboolean done_benchmarks = FALSE;
@@ -10196,19 +10238,28 @@ main (int argc, char *argv[])
 
   test_init ();
 
-  /* Check to see if we are being run from the correct
-   * directory.
-   */
-  if (file_exists ("testgtkrc"))
-    gtk_rc_add_default_file ("testgtkrc");
-  else if (file_exists ("tests/testgtkrc"))
-    gtk_rc_add_default_file ("tests/testgtkrc");
-  else
-    g_warning ("Couldn't find file \"testgtkrc\".");
-
   g_set_application_name ("GTK+ Test Program");
 
   gtk_init (&argc, &argv);
+
+  provider = gtk_css_provider_new ();
+
+  /* Check to see if we are being run from the correct
+   * directory.
+   */
+  if (file_exists ("testgtk.css"))
+    gtk_css_provider_load_from_path (provider, "testgtk.css", NULL);
+  else if (file_exists ("tests/testgtk.css"))
+    gtk_css_provider_load_from_path (provider, "tests/testgtk.css", NULL);
+  else
+    g_warning ("Couldn't find file \"testgtk.css\".");
+
+  display = gdk_display_get_default ();
+  screen = gdk_display_get_default_screen (display);
+
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref (provider);
 
   gtk_accelerator_set_default_mod_mask (GDK_SHIFT_MASK |
 					GDK_CONTROL_MASK |
@@ -10268,17 +10319,17 @@ main (int argc, char *argv[])
 				"debug_msg",
 				1,
 				G_TYPE_STRING, "GtkWidgetClass <ctrl><release>9 test");
-  
-  /* We use gtk_rc_parse_string() here so we can make sure it works across theme
-   * changes
-   */
 
-  gtk_rc_parse_string ("style \"testgtk-version-label\" { "
-		       "   fg[NORMAL] = \"#ff0000\"\n"
-		       "   font = \"Sans 18\"\n"
-		       "}\n"
-		       "widget \"*.testgtk-version-label\" style \"testgtk-version-label\"");
-  
+  memory_provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (memory_provider,
+                                   "#testgtk-version-label {\n"
+                                   "  color: #f00;\n"
+                                   "  font: Sans 18;\n"
+                                   "}",
+                                   -1, NULL);
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (memory_provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION + 1);
+
   create_main_window ();
 
   gtk_main ();

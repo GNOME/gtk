@@ -57,7 +57,7 @@ static void xembed_set_info            (GdkWindow     *window,
 GdkNativeWindow
 _gtk_plug_windowing_get_id (GtkPlug *plug)
 {
-  return GDK_WINDOW_XWINDOW (gtk_widget_get_window (GTK_WIDGET (plug)));
+  return GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (plug)));
 }
 
 void
@@ -146,7 +146,7 @@ xembed_set_info (GdkWindow     *window,
   buffer[1] = flags;
 
   XChangeProperty (GDK_DISPLAY_XDISPLAY (display),
-		   GDK_WINDOW_XWINDOW (window),
+		   GDK_WINDOW_XID (window),
 		   xembed_info_atom, xembed_info_atom, 32,
 		   PropModeReplace,
 		   (unsigned char *)buffer, 2);
@@ -280,7 +280,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	     * Probably need check in _gtk_plug_add_to_socket
 	     */
 
-            if (xre->parent != GDK_WINDOW_XWINDOW (priv->socket_window))
+            if (xre->parent != GDK_WINDOW_XID (priv->socket_window))
 	      {
 		GtkWidget *widget = GTK_WIDGET (plug);
 
@@ -297,7 +297,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 		 * be invisible to the app.
 		 */
 
-		if (xre->parent == GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen)))
+		if (xre->parent == GDK_WINDOW_XID (gdk_screen_get_root_window (screen)))
 		  {
 		    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: calling gtk_plug_send_delete_event()"));
 		    _gtk_plug_send_delete_event (widget);
@@ -309,7 +309,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	      goto done;
 	  }
 
-	if (xre->parent != GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen)))
+	if (xre->parent != GDK_WINDOW_XID (gdk_screen_get_root_window (screen)))
 	  {
 	    /* Start of embedding protocol */
 

@@ -31,26 +31,11 @@
 
 G_BEGIN_DECLS
 
-#ifndef GDK_COMPILATION
-#define GDK_WINDOW_TYPE(d) (gdk_window_get_window_type (GDK_WINDOW (d)))
-#define GDK_WINDOW_DESTROYED(d) (gdk_window_is_destroyed (GDK_WINDOW (d)))
-#endif
-
 void gdk_window_destroy_notify	     (GdkWindow *window);
 
 void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
-
-/* Tests whether a pair of x,y may cause overflows when converted to Pango
- * units (multiplied by PANGO_SCALE).  We don't allow the entire range, leave
- * some space for additions afterwards, to be safe...
- */
-#define GDK_PANGO_UNITS_OVERFLOWS(x,y) (G_UNLIKELY ( \
-	(y) >= PANGO_PIXELS (G_MAXINT-PANGO_SCALE)/2 || \
-	(x) >= PANGO_PIXELS (G_MAXINT-PANGO_SCALE)/2 || \
-	(y) <=-PANGO_PIXELS (G_MAXINT-PANGO_SCALE)/2 || \
-	(x) <=-PANGO_PIXELS (G_MAXINT-PANGO_SCALE)/2))
 
 G_END_DECLS
 

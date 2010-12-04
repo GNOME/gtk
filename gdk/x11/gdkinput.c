@@ -66,7 +66,7 @@ _gdk_input_select_device_events (GdkWindow *impl_window,
                                  GdkDevice *device)
 {
   guint event_mask;
-  GdkWindowObject *w;
+  GdkWindow *w;
   GdkInputWindow *iw;
   GdkInputMode mode;
   gboolean has_cursor;
@@ -74,7 +74,7 @@ _gdk_input_select_device_events (GdkWindow *impl_window,
   GList *l;
 
   event_mask = 0;
-  iw = ((GdkWindowObject *)impl_window)->input_window;
+  iw = impl_window->input_window;
 
   g_object_get (device,
                 "type", &type,
@@ -98,7 +98,7 @@ _gdk_input_select_device_events (GdkWindow *impl_window,
           if (event_mask)
             event_mask |= GDK_PROXIMITY_OUT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK;
 
-          gdk_window_set_device_events ((GdkWindow *) w, device, event_mask);
+          gdk_window_set_device_events (w, device, event_mask);
         }
     }
 }
@@ -106,18 +106,16 @@ _gdk_input_select_device_events (GdkWindow *impl_window,
 static void
 unset_extension_events (GdkWindow *window)
 {
-  GdkWindowObject *window_private;
-  GdkWindowObject *impl_window;
+  GdkWindow *impl_window;
   GdkDisplayX11 *display_x11;
   GdkInputWindow *iw;
 
-  window_private = (GdkWindowObject*) window;
-  impl_window = (GdkWindowObject *)_gdk_window_get_impl_window (window);
+  impl_window = _gdk_window_get_impl_window (window);
   iw = impl_window->input_window;
 
   display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
 
-  if (window_private->extension_events != 0)
+  if (window->extension_events != 0)
     {
       g_assert (iw != NULL);
       g_assert (g_list_find (iw->windows, window) != NULL);
@@ -131,7 +129,7 @@ unset_extension_events (GdkWindow *window)
 	}
     }
 
-  window_private->extension_events = 0;
+  window->extension_events = 0;
 }
 
 /**
@@ -150,8 +148,7 @@ gdk_input_set_extension_events (GdkWindow        *window,
                                 gint              mask,
 				GdkExtensionMode  mode)
 {
-  GdkWindowObject *window_private;
-  GdkWindowObject *impl_window;
+  GdkWindow *impl_window;
   GdkInputWindow *iw;
   GdkDisplayX11 *display_x11;
 #ifndef XINPUT_NONE
@@ -161,12 +158,11 @@ gdk_input_set_extension_events (GdkWindow        *window,
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_WINDOW_IS_X11 (window));
 
-  window_private = (GdkWindowObject*) window;
   display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  impl_window = (GdkWindowObject *)_gdk_window_get_impl_window (window);
+  impl_window = _gdk_window_get_impl_window (window);
 
   if (mode == GDK_EXTENSION_EVENTS_ALL && mask != 0)
     mask |= GDK_ALL_DEVICES_MASK;
@@ -190,9 +186,9 @@ gdk_input_set_extension_events (GdkWindow        *window,
 	  impl_window->input_window = iw;
 	}
 
-      if (window_private->extension_events == 0)
+      if (window->extension_events == 0)
 	iw->windows = g_list_append (iw->windows, window);
-      window_private->extension_events = mask;
+      window->extension_events = mask;
     }
   else
     {

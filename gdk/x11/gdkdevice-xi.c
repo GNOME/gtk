@@ -443,7 +443,7 @@ gdk_device_xi_grab (GdkDevice    *device,
 
   status = XGrabDevice (GDK_WINDOW_XDISPLAY (window),
                         device_xi->xdevice,
-                        GDK_WINDOW_XWINDOW (window),
+                        GDK_WINDOW_XID (window),
                         owner_events,
                         num_classes, event_classes,
                         GrabModeAsync, GrabModeAsync,
@@ -492,7 +492,7 @@ gdk_device_xi_select_window_events (GdkDevice    *device,
   find_events (device, event_mask, event_classes, &num_classes);
 
   XSelectExtensionEvent (GDK_WINDOW_XDISPLAY (window),
-			 GDK_WINDOW_XWINDOW (window),
+			 GDK_WINDOW_XID (window),
 			 event_classes, num_classes);
 
   if (event_mask)

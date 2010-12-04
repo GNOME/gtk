@@ -27,6 +27,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
 #include <gtk/gtkstyle.h>
+#include <gtk/gtkstylecontext.h>
 
 G_BEGIN_DECLS
 
@@ -178,11 +179,17 @@ GdkPixbuf *           gtk_icon_info_load_symbolic      (GtkIconInfo   *icon_info
                                                         GdkRGBA       *error_color,
                                                         gboolean      *was_symbolic,
                                                         GError       **error);
+GdkPixbuf *           gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
+                                                               GtkStyleContext  *context,
+                                                               gboolean         *was_symbolic,
+                                                               GError          **error);
+#ifndef GTK_DISABLE_DEPRECATED
 GdkPixbuf *           gtk_icon_info_load_symbolic_for_style  (GtkIconInfo   *icon_info,
                                                               GtkStyle      *style,
                                                               GtkStateType   state,
                                                               gboolean      *was_symbolic,
                                                               GError       **error);
+#endif
 void                  gtk_icon_info_set_raw_coordinates (GtkIconInfo  *icon_info,
 							 gboolean      raw_coordinates);
 

@@ -5618,7 +5618,7 @@ update_text_cell (GtkIconView *icon_view)
 	g_object_set (info->cell,
                       "alignment", PANGO_ALIGN_CENTER,
 		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
-		      "xalign", 0.0,
+		      "xalign", 0.5,
 		      "yalign", 0.0,
 		      NULL);
       else
@@ -5626,7 +5626,7 @@ update_text_cell (GtkIconView *icon_view)
                       "alignment", PANGO_ALIGN_LEFT,
 		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
 		      "xalign", 0.0,
-		      "yalign", 0.0,
+		      "yalign", 0.5,
 		      NULL);
     }
 }

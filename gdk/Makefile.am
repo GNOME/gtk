@@ -21,7 +21,6 @@ EXTRA_DIST +=			\
 	gdkkeysyms-update.pl	\
 	gdk.def 		\
 	gdkmarshalers.list	\
-	gdkmedialib.h		\
 	gdkwindowimpl.h		\
 	makeenums.pl		\
 	makefile.msc		\
@@ -55,13 +54,6 @@ LDADD = \
 	$(no_undefined)							\
 	$(LIBTOOL_EXPORT_OPTIONS)
 
-if USE_MEDIALIB
-medialib_sources =  \
-    gdkmedialib.c
-else
-medialib_sources =
-endif
-
 #
 # setup source file variables
 #
@@ -79,7 +71,6 @@ gdk_public_h_sources =				\
 	gdkdisplay.h				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
-	gdkdrawable.h				\
 	gdkevents.h				\
 	gdkinput.h				\
 	gdkkeys.h				\
@@ -111,7 +102,6 @@ gdk_private_headers =				\
 	gdkpoly-generic.h
 
 gdk_c_sources =                 \
-	$(medialib_sources)     \
 	gdk.c			\
 	gdkapplaunchcontext.c	\
 	gdkcairo.c		\
@@ -122,7 +112,6 @@ gdk_c_sources =                 \
 	gdkdisplay.c		\
 	gdkdisplaymanager.c	\
 	gdkdnd.c		\
-	gdkdraw.c		\
 	gdkevents.c     	\
 	gdkglobals.c		\
 	gdkkeys.c		\
@@ -202,7 +191,6 @@ x11_introspection_files = 		\
 	x11/gdkdevice-xi.c		\
 	x11/gdkdisplay-x11.c		\
 	x11/gdkdnd-x11.c		\
-	x11/gdkdrawable-x11.c		\
 	x11/gdkeventsource.c		\
 	x11/gdkeventtranslator.c	\
 	x11/gdkgeometry-x11.c		\

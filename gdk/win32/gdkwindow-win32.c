@@ -99,12 +99,6 @@ _gdk_window_impl_win32_get_type (void)
   return object_type;
 }
 
-GType
-_gdk_window_impl_get_type (void)
-{
-  return _gdk_window_impl_win32_get_type ();
-}
-
 static void
 gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
 {
@@ -211,7 +205,7 @@ _gdk_windowing_window_init (GdkScreen *screen)
   
   _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)_gdk_root;
-  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   private->impl_window = private;
   private->visual = gdk_screen_get_system_visual (screen);
 
@@ -435,7 +429,7 @@ _gdk_window_impl_new (GdkWindow     *window,
 
   hparent = GDK_WINDOW_HWND (real_parent);
 
-  impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   private->impl = (GdkDrawable *)impl;
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
@@ -641,7 +635,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   window = g_object_new (GDK_TYPE_WINDOW, NULL);
   private = (GdkWindowObject *)window;
   private->visual = gdk_screen_get_system_visual (_gdk_screen);
-  private->impl = g_object_new (_gdk_window_impl_get_type (), NULL);
+  private->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
   draw_impl = GDK_DRAWABLE_IMPL_WIN32 (private->impl);
   draw_impl->wrapper = GDK_DRAWABLE (window);
@@ -3128,12 +3122,6 @@ gdk_window_configure_finished (GdkWindow *window)
 }
 
 void
-_gdk_windowing_window_beep (GdkWindow *window)
-{
-  gdk_display_beep (_gdk_display);
-}
-
-void
 gdk_window_set_opacity (GdkWindow *window,
 			gdouble    opacity)
 {
@@ -3176,8 +3164,8 @@ _gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
 {
 }
 
-cairo_region_t *
-_gdk_windowing_window_get_shape (GdkWindow *window)
+static cairo_region_t *
+gdk_win32_window_get_shape (GdkWindow *window)
 {
   HRGN hrgn = CreateRectRgn (0, 0, 0, 0);
   int  type = GetWindowRgn (GDK_WINDOW_HWND (window), hrgn);
@@ -3193,8 +3181,8 @@ _gdk_windowing_window_get_shape (GdkWindow *window)
   return NULL;
 }
 
-cairo_region_t *
-_gdk_windowing_window_get_input_shape (GdkWindow *window)
+static cairo_region_t *
+_gdk_win32_window_get_input_shape (GdkWindow *window)
 {
   /* CHECK: are these really supposed to be the same? */
   return _gdk_windowing_window_get_shape (window);
@@ -3312,6 +3300,8 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->translate = _gdk_win32_window_translate;
   iface->destroy = _gdk_win32_window_destroy;
   iface->resize_cairo_surface = gdk_win32_window_resize_cairo_surface;
+  iface->get_shape = gdk_win32_window_get_shape;
+  iface->get_input_shape = gdk_win32_window_get_input_shape;
 }
 
 gboolean

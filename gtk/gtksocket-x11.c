@@ -39,7 +39,8 @@
 #include "gtkdnd.h"
 #include "gtkdebug.h"
 
-#include "x11/gdkx.h"
+#include "gdk/x11/gdkx.h"
+#include "gdk/gdkprivate.h"
 
 #ifdef HAVE_XFIXES
 #include <X11/extensions/Xfixes.h>
@@ -57,7 +58,7 @@ static gboolean xembed_get_info     (GdkWindow     *gdk_window,
 GdkNativeWindow
 _gtk_socket_windowing_get_id (GtkSocket *socket)
 {
-  return GDK_WINDOW_XWINDOW (gtk_widget_get_window (GTK_WIDGET (socket)));
+  return GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (socket)));
 }
 
 void
@@ -69,7 +70,7 @@ _gtk_socket_windowing_realize_window (GtkSocket *socket)
   window = gtk_widget_get_window (GTK_WIDGET (socket));
 
   XGetWindowAttributes (GDK_WINDOW_XDISPLAY (window),
-			GDK_WINDOW_XWINDOW (window),
+			GDK_WINDOW_XID (window),
 			&xattrs);
 
   /* Sooooo, it turns out that mozilla, as per the gtk2xt code selects
@@ -81,7 +82,7 @@ _gtk_socket_windowing_realize_window (GtkSocket *socket)
      this for GtkSocket, so we unselect it here, fixing the crashes in
      firefox. */
   XSelectInput (GDK_WINDOW_XDISPLAY (window),
-		GDK_WINDOW_XWINDOW (window), 
+		GDK_WINDOW_XID (window), 
 		(xattrs.your_event_mask & ~ButtonPressMask) |
 		SubstructureNotifyMask | SubstructureRedirectMask);
 }
@@ -90,7 +91,7 @@ void
 _gtk_socket_windowing_end_embedding_toplevel (GtkSocket *socket)
 {
   gtk_window_remove_embedded_xid (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (socket))),
-				  GDK_WINDOW_XWINDOW (socket->plug_window));
+				  GDK_WINDOW_XID (socket->plug_window));
 }
 
 void
@@ -105,7 +106,7 @@ _gtk_socket_windowing_size_request (GtkSocket *socket)
   socket->request_height = 1;
 	  
   if (XGetWMNormalHints (GDK_WINDOW_XDISPLAY (socket->plug_window),
-			 GDK_WINDOW_XWINDOW (socket->plug_window),
+			 GDK_WINDOW_XID (socket->plug_window),
 			 &hints, &supplied))
     {
       if (hints.flags & PMinSize)
@@ -134,8 +135,8 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 
   memset (&xkey, 0, sizeof (xkey));
   xkey.type = (gdk_event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
-  xkey.window = GDK_WINDOW_XWINDOW (socket->plug_window);
-  xkey.root = GDK_WINDOW_XWINDOW (gdk_screen_get_root_window (screen));
+  xkey.window = GDK_WINDOW_XID (socket->plug_window);
+  xkey.root = GDK_WINDOW_XID (gdk_screen_get_root_window (screen));
   xkey.subwindow = None;
   xkey.time = gdk_event->key.time;
   xkey.x = 0;
@@ -148,7 +149,7 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 
   gdk_error_trap_push ();
   XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
-	      GDK_WINDOW_XWINDOW (socket->plug_window),
+	      GDK_WINDOW_XID (socket->plug_window),
 	      False,
 	      (mask_key_presses ? KeyPressMask : NoEventMask),
 	      (XEvent *)&xkey);
@@ -220,8 +221,8 @@ _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
   memset (&xconfigure, 0, sizeof (xconfigure));
   xconfigure.type = ConfigureNotify;
 
-  xconfigure.event = GDK_WINDOW_XWINDOW (socket->plug_window);
-  xconfigure.window = GDK_WINDOW_XWINDOW (socket->plug_window);
+  xconfigure.event = GDK_WINDOW_XID (socket->plug_window);
+  xconfigure.window = GDK_WINDOW_XID (socket->plug_window);
 
   /* The ICCCM says that synthetic events should have root relative
    * coordinates. We still aren't really ICCCM compliant, since
@@ -243,7 +244,7 @@ _gtk_socket_windowing_send_configure_event (GtkSocket *socket)
 
   gdk_error_trap_push ();
   XSendEvent (GDK_WINDOW_XDISPLAY (socket->plug_window),
-	      GDK_WINDOW_XWINDOW (socket->plug_window),
+	      GDK_WINDOW_XID (socket->plug_window),
 	      False, NoEventMask, (XEvent *)&xconfigure);
   gdk_error_trap_pop_ignored ();
 }
@@ -252,7 +253,7 @@ void
 _gtk_socket_windowing_select_plug_window_input (GtkSocket *socket)
 {
   XSelectInput (GDK_DISPLAY_XDISPLAY (gtk_widget_get_display (GTK_WIDGET (socket))),
-		GDK_WINDOW_XWINDOW (socket->plug_window),
+		GDK_WINDOW_XID (socket->plug_window),
 		StructureNotifyMask | PropertyChangeMask);
 }
 
@@ -283,13 +284,13 @@ _gtk_socket_windowing_embed_notify (GtkSocket *socket)
 
   gdk_error_trap_push ();
   XFixesChangeSaveSet (GDK_DISPLAY_XDISPLAY (display),
-		       GDK_WINDOW_XWINDOW (socket->plug_window),
+		       GDK_WINDOW_XID (socket->plug_window),
 		       SetModeInsert, SaveSetRoot, SaveSetUnmap);
   gdk_error_trap_pop_ignored ();
 #endif
   _gtk_xembed_send_message (socket->plug_window,
 			    XEMBED_EMBEDDED_NOTIFY, 0,
-			    GDK_WINDOW_XWINDOW (gtk_widget_get_window (GTK_WIDGET (socket))),
+			    GDK_WINDOW_XID (gtk_widget_get_window (GTK_WIDGET (socket))),
 			    socket->xembed_version);
 }
 
@@ -309,7 +310,7 @@ xembed_get_info (GdkWindow     *window,
   
   gdk_error_trap_push ();
   status = XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
-			       GDK_WINDOW_XWINDOW (window),
+			       GDK_WINDOW_XID (window),
 			       xembed_info_atom,
 			       0, 2, False,
 			       xembed_info_atom, &type, &format,
@@ -508,7 +509,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 	/* Note that we get destroy notifies both from SubstructureNotify on
 	 * our window and StructureNotify on socket->plug_window
 	 */
-	if (socket->plug_window && (xdwe->window == GDK_WINDOW_XWINDOW (socket->plug_window)))
+	if (socket->plug_window && (xdwe->window == GDK_WINDOW_XID (socket->plug_window)))
 	  {
 	    gboolean result;
 	    
@@ -554,7 +555,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
       break;
     case PropertyNotify:
       if (socket->plug_window &&
-	  xevent->xproperty.window == GDK_WINDOW_XWINDOW (socket->plug_window))
+	  xevent->xproperty.window == GDK_WINDOW_XID (socket->plug_window))
 	{
 	  GdkDragProtocol protocol;
 
@@ -615,7 +616,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 
 	GTK_NOTE (PLUGSOCKET, g_message ("GtkSocket - ReparentNotify received"));
 	if (!socket->plug_window &&
-            xre->parent == GDK_WINDOW_XWINDOW (window))
+            xre->parent == GDK_WINDOW_XID (window))
 	  {
 	    _gtk_socket_add_window (socket, xre->window, FALSE);
 	    
@@ -629,8 +630,8 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
         else
           {
             if (socket->plug_window &&
-                xre->window == GDK_WINDOW_XWINDOW (socket->plug_window) &&
-                xre->parent != GDK_WINDOW_XWINDOW (window))
+                xre->window == GDK_WINDOW_XID (socket->plug_window) &&
+                xre->parent != GDK_WINDOW_XID (window))
               {
                 gboolean result;
 
@@ -650,7 +651,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
       }
     case UnmapNotify:
       if (socket->plug_window &&
-	  xevent->xunmap.window == GDK_WINDOW_XWINDOW (socket->plug_window))
+	  xevent->xunmap.window == GDK_WINDOW_XID (socket->plug_window))
 	{
 	  GTK_NOTE (PLUGSOCKET, g_message ("GtkSocket - Unmap notify"));
 

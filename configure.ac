@@ -858,28 +858,6 @@ AC_CHECK_HEADER(sys/sysinfo.h,
                 AC_DEFINE(HAVE_SYS_SYSINFO_H, 1,
                           [Define to 1 if sys/sysinfo.h is available]))
 
-AC_MSG_CHECKING(for mediaLib 2.3)
-use_mlib25=no
-# Check for a mediaLib 2.3 function since that is what the GTK+ mediaLib
-# patch requires.
-AC_CHECK_LIB(mlib, mlib_ImageSetStruct, use_mlib=yes, use_mlib=no)
-if test $use_mlib = yes; then
-    AC_DEFINE(USE_MEDIALIB, 1,
-              [Define to 1 if medialib is available and should be used])
-    MEDIA_LIB=-lmlib
-
-    AC_MSG_CHECKING(for mediaLib 2.5)
-    # Check for a mediaLib 2.5 function since that is what is needed for
-    # gdk_rgb_convert integration.
-    AC_CHECK_LIB(mlib, mlib_VideoColorRGBint_to_BGRAint, use_mlib25=yes, use_mlib25=no)
-    if test $use_mlib25 = yes; then
-        AC_DEFINE(USE_MEDIALIB25, 1,
-                  [Define to 1 if medialib 2.5 is available])
-    fi
-fi
-AM_CONDITIONAL(USE_MEDIALIB, test $use_mlib = yes)
-AM_CONDITIONAL(USE_MEDIALIB25, test $use_mlib25 = yes)
-
 dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)

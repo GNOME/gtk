@@ -99,7 +99,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testvolumebutton		\
 	testscrolledwindow		\
 	testcellarea			\
-	testswitch
+	testswitch			\
+	styleexamples
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -170,7 +171,6 @@ testsocket_DEPENDENCIES = $(DEPS)
 testsocket_child_DEPENDENCIES = $(DEPS)
 testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
-#testtext_DEPENDENCIES = $(TEST_DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -192,6 +192,7 @@ testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
+styleexamples_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -256,7 +257,6 @@ testtreeflow_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 testtreecolumnsizing_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
-#testtext_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 testxinerama_LDADD = $(LDADDS)
 testmerge_LDADD = $(LDADDS)
@@ -270,6 +270,7 @@ testwindows_LDADD = $(LDADDS)
 testexpand_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
 testswitch_LDADD = $(LDADDS)
+styleexamples_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
@@ -303,10 +304,6 @@ testtreemodel_SOURCES = \
 testtreeview_SOURCES =	\
 	prop-editor.c	\
 	testtreeview.c
-
-#testtext_SOURCES =	\
-#	prop-editor.c	\
-#	testtext.c
 
 testtoolbar_SOURCES =	\
 	testtoolbar.c	\
@@ -406,12 +403,13 @@ testexpand_SOURCES = testexpand.c
 testexpander_SOURCES = testexpander.c
 
 testswitch_SOURCES = testswitch.c
+styleexamples_SOURCES = styleexamples.c
 
 EXTRA_DIST += 			\
 	prop-editor.h		\
 	testgtk.1 		\
-	testgtkrc 		\
-	testgtkrc2 		\
+	testgtk.css		\
+	testgtk2.css		\
 	3DRings.xpm		\
 	FilesQueue.xpm		\
 	Modeller.xpm		\

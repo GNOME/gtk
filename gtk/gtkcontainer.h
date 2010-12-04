@@ -88,6 +88,8 @@ struct _GtkContainerClass
 				 guint            property_id,
 				 GValue          *value,
 				 GParamSpec      *pspec);
+  GtkWidgetPath * (*get_path_for_child) (GtkContainer *container,
+                                         GtkWidget    *child);
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
@@ -227,6 +229,9 @@ gboolean _gtk_container_get_need_resize      (GtkContainer     *container);
 void     _gtk_container_set_need_resize      (GtkContainer     *container,
                                               gboolean          need_resize);
 gboolean _gtk_container_get_reallocate_redraws (GtkContainer   *container);
+
+GtkWidgetPath * gtk_container_get_path_for_child (GtkContainer      *container,
+                                                  GtkWidget         *child);
 
 G_END_DECLS
 

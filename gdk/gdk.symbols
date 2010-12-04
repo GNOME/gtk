@@ -22,7 +22,6 @@ gdk_cairo_get_clip_rectangle
 gdk_cairo_rectangle
 gdk_cairo_region
 gdk_cairo_region_create_from_surface
-gdk_cairo_reset_clip
 gdk_cairo_set_source_color
 gdk_cairo_set_source_pixbuf
 gdk_cairo_set_source_rgba
@@ -154,9 +153,6 @@ gdk_drag_get_selection
 gdk_drag_motion
 gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_drag_status
-gdk_drawable_get_clip_region
-gdk_drawable_get_type G_GNUC_CONST
-gdk_drawable_get_visible_region
 gdk_drop_finish
 gdk_drop_reply
 gdk_enable_multidevice
@@ -390,7 +386,7 @@ gdk_window_begin_move_drag
 gdk_window_begin_paint_rect
 gdk_window_begin_paint_region
 gdk_window_begin_resize_drag
-gdk_window_class_get_type G_GNUC_CONST
+gdk_window_class_class_get_type G_GNUC_CONST
 gdk_window_configure_finished
 gdk_window_constrain_size
 gdk_window_coords_from_parent
@@ -414,6 +410,7 @@ gdk_window_geometry_changed
 gdk_window_get_accept_focus
 gdk_window_get_background_pattern
 gdk_window_get_children
+gdk_window_get_clip_region
 gdk_window_get_composited
 gdk_window_get_cursor
 gdk_window_get_decorations
@@ -440,9 +437,11 @@ gdk_window_get_screen
 gdk_window_get_state
 gdk_window_get_support_multidevice
 gdk_window_get_toplevel
+gdk_window_get_type G_GNUC_CONST
 gdk_window_get_type_hint
 gdk_window_get_update_area
 gdk_window_get_user_data
+gdk_window_get_visible_region
 gdk_window_get_visual
 gdk_window_get_width
 gdk_window_get_window_type
@@ -471,7 +470,6 @@ gdk_window_move
 gdk_window_move_region
 gdk_window_move_resize
 gdk_window_new
-gdk_window_object_get_type G_GNUC_CONST
 gdk_window_peek_children
 gdk_window_process_all_updates
 gdk_window_process_updates
@@ -547,8 +545,6 @@ gdk_x11_display_grab
 gdk_x11_display_set_cursor_theme
 gdk_x11_display_set_startup_notification_id
 gdk_x11_display_ungrab
-gdk_x11_drawable_get_xdisplay
-gdk_x11_drawable_get_xid
 gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
@@ -568,7 +564,7 @@ gdk_x11_screen_lookup_visual
 gdk_x11_screen_supports_net_wm_hint
 gdk_x11_ungrab_server
 gdk_x11_visual_get_xvisual
-gdk_x11_window_get_drawable_impl
+gdk_x11_window_get_xid
 gdk_x11_window_move_to_current_desktop
 gdk_x11_window_set_user_time
 gdk_x11_xatom_to_atom

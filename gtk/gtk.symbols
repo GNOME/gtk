@@ -1109,6 +1109,7 @@ gtk_icon_set_new
 gtk_icon_set_new_from_pixbuf
 gtk_icon_set_ref
 gtk_icon_set_render_icon
+gtk_icon_set_render_icon_pixbuf
 gtk_icon_set_unref
 gtk_icon_size_from_name
 gtk_icon_size_get_name
@@ -3336,9 +3337,12 @@ gtk_widget_modify_cursor
 gtk_widget_modify_fg
 gtk_widget_modify_font
 gtk_widget_modify_style
-gtk_widget_modify_symbolic_color
 gtk_widget_modify_text
 gtk_widget_new
+gtk_widget_override_background_color
+gtk_widget_override_color
+gtk_widget_override_font
+gtk_widget_override_symbolic_color
 gtk_widget_path
 gtk_widget_pop_composite_child
 gtk_widget_push_composite_child
@@ -3353,6 +3357,7 @@ gtk_widget_region_intersect
 gtk_widget_remove_accelerator
 gtk_widget_remove_mnemonic_label
 gtk_widget_render_icon
+gtk_widget_render_icon_pixbuf
 gtk_widget_reparent
 gtk_widget_reset_rc_styles
 gtk_widget_reset_shapes

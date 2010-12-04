@@ -31,9 +31,7 @@
 
 G_BEGIN_DECLS
 
-cairo_t *gdk_cairo_create            (GdkDrawable        *drawable);
-void     gdk_cairo_reset_clip        (cairo_t            *cr,
-				      GdkDrawable        *drawable);
+cairo_t *gdk_cairo_create            (GdkWindow          *window);
 gboolean gdk_cairo_get_clip_rectangle(cairo_t            *cr,
                                       GdkRectangle       *rect);
 

@@ -27,7 +27,8 @@
 #ifndef __GDK_WINDOW_X11_H__
 #define __GDK_WINDOW_X11_H__
 
-#include <gdk/x11/gdkdrawable-x11.h>
+#include "gdk/x11/gdkprivate-x11.h"
+#include "gdk/gdkwindowimpl.h"
 
 #ifdef HAVE_XDAMAGE
 #include <X11/extensions/Xdamage.h>
@@ -56,7 +57,11 @@ typedef struct _GdkXPositionInfo GdkXPositionInfo;
 
 struct _GdkWindowImplX11
 {
-  GdkDrawableImplX11 parent_instance;
+  GdkWindowImpl parent_instance;
+
+  GdkWindow *wrapper;
+
+  Window xid;
 
   GdkToplevelX11 *toplevel;	/* Toplevel-specific information */
   GdkCursor *cursor;
@@ -67,6 +72,8 @@ struct _GdkWindowImplX11
 				 * unset during resizing and scaling */
   guint override_redirect : 1;
   guint use_synchronized_configure : 1;
+  
+  cairo_surface_t *cairo_surface;
 
 #if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
   Damage damage;
@@ -75,7 +82,7 @@ struct _GdkWindowImplX11
  
 struct _GdkWindowImplX11Class 
 {
-  GdkDrawableImplX11Class parent_class;
+  GdkWindowImplClass parent_class;
 };
 
 struct _GdkToplevelX11
@@ -152,10 +159,12 @@ void            _gdk_x11_window_tmp_reset_bg        (GdkWindow *window,
 void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window);
 void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window);
 
-GdkCursor      *_gdk_x11_window_get_cursor    (GdkWindow *window);
-void            _gdk_x11_window_get_offsets   (GdkWindow *window,
-                                               gint      *x_offset,
-                                               gint      *y_offset);
+GdkCursor      *_gdk_x11_window_get_cursor          (GdkWindow *window);
+void            _gdk_x11_window_get_offsets         (GdkWindow *window,
+                                                     gint      *x_offset,
+                                                     gint      *y_offset);
+
+void            _gdk_x11_window_update_size         (GdkWindowImplX11 *impl);
 
 G_END_DECLS
 

@@ -977,7 +977,9 @@ gtk_expander_enter_notify (GtkWidget        *widget,
       expander->priv->prelight = TRUE;
 
       if (expander->priv->label_widget)
-	gtk_widget_set_state (expander->priv->label_widget, GTK_STATE_PRELIGHT);
+        gtk_widget_set_state_flags (expander->priv->label_widget,
+                                    GTK_STATE_FLAG_PRELIGHT,
+                                    FALSE);
 
       gtk_expander_redraw_expander (expander);
     }
@@ -997,7 +999,8 @@ gtk_expander_leave_notify (GtkWidget        *widget,
       expander->priv->prelight = FALSE;
 
       if (expander->priv->label_widget)
-	gtk_widget_set_state (expander->priv->label_widget, GTK_STATE_NORMAL);
+        gtk_widget_unset_state_flags (expander->priv->label_widget,
+                                      GTK_STATE_FLAG_PRELIGHT);
 
       gtk_expander_redraw_expander (expander);
     }
@@ -1913,7 +1916,7 @@ gtk_expander_set_label_widget (GtkExpander *expander,
 
   if (priv->label_widget)
     {
-      gtk_widget_set_state (priv->label_widget, GTK_STATE_NORMAL);
+      gtk_widget_set_state_flags (priv->label_widget, 0, TRUE);
       gtk_widget_unparent (priv->label_widget);
     }
 
@@ -1927,7 +1930,9 @@ gtk_expander_set_label_widget (GtkExpander *expander,
       gtk_widget_set_parent (label_widget, widget);
 
       if (priv->prelight)
-	gtk_widget_set_state (label_widget, GTK_STATE_PRELIGHT);
+	gtk_widget_set_state_flags (label_widget,
+                                    GTK_STATE_FLAG_PRELIGHT,
+                                    FALSE);
     }
 
   if (gtk_widget_get_visible (widget))

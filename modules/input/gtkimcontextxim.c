@@ -707,9 +707,9 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.type = (event->type == GDK_KEY_PRESS) ? KeyPress : KeyRelease;
   xevent.serial = 0;		/* hope it doesn't matter */
   xevent.send_event = event->send_event;
-  xevent.display = GDK_DRAWABLE_XDISPLAY (event->window);
-  xevent.window = GDK_DRAWABLE_XID (event->window);
-  xevent.root = GDK_DRAWABLE_XID (root_window);
+  xevent.display = GDK_WINDOW_XDISPLAY (event->window);
+  xevent.window = GDK_WINDOW_XID (event->window);
+  xevent.root = GDK_WINDOW_XID (root_window);
   xevent.subwindow = xevent.window;
   xevent.time = event->time;
   xevent.x = xevent.x_root = 0;
@@ -718,7 +718,7 @@ gtk_im_context_xim_filter_keypress (GtkIMContext *context,
   xevent.keycode = event->hardware_keycode;
   xevent.same_screen = True;
   
-  if (XFilterEvent ((XEvent *)&xevent, GDK_DRAWABLE_XID (context_xim->client_window)))
+  if (XFilterEvent ((XEvent *)&xevent, GDK_WINDOW_XID (context_xim->client_window)))
     return TRUE;
   
   if (event->state &
@@ -1434,7 +1434,7 @@ gtk_im_context_xim_get_ic (GtkIMContextXIM *context_xim)
 
       xic = XCreateIC (context_xim->im_info->im,
 		       XNInputStyle, im_style,
-		       XNClientWindow, GDK_DRAWABLE_XID (context_xim->client_window),
+		       XNClientWindow, GDK_WINDOW_XID (context_xim->client_window),
 		       name1, list1,
 		       name2, list2,
 		       NULL);

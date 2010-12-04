@@ -1752,7 +1752,7 @@ gtk_tool_item_group_set_label_widget (GtkToolItemGroup *group,
 
   if (priv->label_widget)
     {
-      gtk_widget_set_state (priv->label_widget, GTK_STATE_NORMAL);
+      gtk_widget_set_state_flags (priv->label_widget, 0, TRUE);
       gtk_container_remove (GTK_CONTAINER (alignment), priv->label_widget);
     }
 

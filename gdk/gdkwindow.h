@@ -31,7 +31,6 @@
 #ifndef __GDK_WINDOW_H__
 #define __GDK_WINDOW_H__
 
-#include <gdk/gdkdrawable.h>
 #include <gdk/gdktypes.h>
 #include <gdk/gdkevents.h>
 
@@ -43,7 +42,7 @@ typedef struct _GdkPointerHooks      GdkPointerHooks;
 typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
 /**
- * GdkWindowClass:
+ * GdkWindowWindowClass:
  * @GDK_INPUT_OUTPUT: window for graphics and events
  * @GDK_INPUT_ONLY: window for events only
  *
@@ -57,7 +56,7 @@ typedef enum
 {
   GDK_INPUT_OUTPUT,
   GDK_INPUT_ONLY
-} GdkWindowClass;
+} GdkWindowWindowClass;
 
 /**
  * GdkWindowType:
@@ -346,7 +345,7 @@ struct _GdkWindowAttr
   gint x, y;
   gint width;
   gint height;
-  GdkWindowClass wclass;
+  GdkWindowWindowClass wclass;
   GdkVisual *visual;
   GdkWindowType window_type;
   GdkCursor *cursor;
@@ -476,19 +475,19 @@ struct _GdkPointerHooks
 };
 
 typedef struct _GdkWindowObject GdkWindowObject;
-typedef struct _GdkWindowObjectClass GdkWindowObjectClass;
+typedef struct _GdkWindowClass GdkWindowClass;
 
-#define GDK_TYPE_WINDOW              (gdk_window_object_get_type ())
+#define GDK_TYPE_WINDOW              (gdk_window_get_type ())
 #define GDK_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW, GdkWindow))
-#define GDK_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+#define GDK_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW, GdkWindowClass))
 #define GDK_IS_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW))
 #define GDK_IS_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW))
-#define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowObjectClass))
+#define GDK_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW, GdkWindowClass))
 
 
-struct _GdkWindowObjectClass
+struct _GdkWindowClass
 {
-  GdkDrawableClass parent_class;
+  GObjectClass      parent_class;
 
   GdkWindow       * (* pick_embedded_child) (GdkWindow *window,
                                              gdouble    x,
@@ -522,7 +521,7 @@ struct _GdkWindowObjectClass
 
 /* Windows
  */
-GType         gdk_window_object_get_type       (void) G_GNUC_CONST;
+GType         gdk_window_get_type              (void) G_GNUC_CONST;
 GdkWindow*    gdk_window_new                   (GdkWindow     *parent,
                                                 GdkWindowAttr *attributes,
                                                 gint           attributes_mask);
@@ -679,6 +678,10 @@ void          gdk_window_set_geometry_hints (GdkWindow          *window,
 					     const GdkGeometry  *geometry,
 					     GdkWindowHints      geom_mask);
 void          gdk_set_sm_client_id          (const gchar        *sm_client_id);
+
+cairo_region_t *gdk_window_get_clip_region  (GdkWindow          *window);
+cairo_region_t *gdk_window_get_visible_region(GdkWindow         *window);
+
 
 void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
 					     const GdkRectangle *rectangle);

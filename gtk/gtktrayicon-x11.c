@@ -879,9 +879,9 @@ gtk_tray_icon_realize (GtkWidget *widget)
   GTK_NOTE (PLUGSOCKET,
 	    g_print ("GtkStatusIcon %p: realized, window: %lx, socket window: %lx\n",
 		     widget,
-		     (gulong) GDK_WINDOW_XWINDOW (window),
+		     (gulong) GDK_WINDOW_XID (window),
 		     gtk_plug_get_socket_window (GTK_PLUG (icon)) ?
-		     (gulong) GDK_WINDOW_XWINDOW (gtk_plug_get_socket_window (GTK_PLUG (icon))) : 0UL));
+		     (gulong) GDK_WINDOW_XID (gtk_plug_get_socket_window (GTK_PLUG (icon))) : 0UL));
 
   if (icon->priv->manager_window != None)
     gtk_tray_icon_send_dock_request (icon);

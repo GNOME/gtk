@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
 "POT-Creation-Date: 2010-10-12 17:16+0000\n"
-"PO-Revision-Date: 2010-11-29 09:32+0100\n"
+"PO-Revision-Date: 2010-12-01 12:38+0100\n"
 "Last-Translator: Andrej Žnidaršič <andrej.znidarsic@gmail.com>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: \n"
@@ -388,7 +388,7 @@ msgstr "Prevedli"
 
 #: ../gtk/gtkaboutdialog.c:2201
 msgid "Artwork by"
-msgstr "Grafična podobo oblikovali"
+msgstr "Grafično podobo oblikovali"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
