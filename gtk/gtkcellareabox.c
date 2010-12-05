@@ -205,6 +205,10 @@ struct _GtkCellAreaBoxPrivate
   GSList         *contexts;
 
   gint            spacing;
+
+  /* We hold on to the rtl state from a widget we are requested for
+   * so that we can navigate focus correctly */
+  gboolean        rtl;
 };
 
 enum {
@@ -244,6 +248,7 @@ gtk_cell_area_box_init (GtkCellAreaBox *box)
   priv->cells       = NULL;
   priv->contexts    = NULL;
   priv->spacing     = 0;
+  priv->rtl         = FALSE;
 }
 
 static void 
@@ -636,12 +641,16 @@ allocate_cells_manually (GtkCellAreaBox        *box,
   GtkRequestedSize         *sizes;
   gint                      i;
   gint                      nvisible = 0, nexpand = 0, group_expand;
-  gint                      avail_size, extra_size, extra_extra;
+  gint                      avail_size, extra_size, extra_extra, full_size;
   gint                      position = 0, for_size;
-
+  gboolean                  rtl;
 
   if (!priv->cells)
     return NULL;
+
+  /* For vertical oriented boxes, we just let the cell renderers realign themselves for rtl */
+  rtl = (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+	 gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   cells = list_consecutive_cells (box);
 
@@ -662,13 +671,13 @@ allocate_cells_manually (GtkCellAreaBox        *box,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      avail_size = width;
-      for_size   = height;
+      full_size = avail_size = width;
+      for_size  = height;
     }
   else
     {
-      avail_size = height;
-      for_size   = width;
+      full_size = avail_size = height;
+      for_size  = width;
     }
 
   /* Go ahead and collect the requests on the fly */
@@ -722,7 +731,12 @@ allocate_cells_manually (GtkCellAreaBox        *box,
 	    }
 	}
       
-      cell = allocated_cell_new (info->renderer, position, sizes[i].minimum_size);
+      if (rtl)
+	cell = allocated_cell_new (info->renderer, 
+				   full_size - (position + sizes[i].minimum_size),
+				   sizes[i].minimum_size);
+      else
+	cell = allocated_cell_new (info->renderer, position, sizes[i].minimum_size);
 
       allocated_cells = g_slist_prepend (allocated_cells, cell);
 	      
@@ -755,16 +769,27 @@ get_allocated_cells (GtkCellAreaBox        *box,
   GList                    *cell_list;
   GSList                   *allocated_cells = NULL;
   gint                      i, j, n_allocs;
-  gint                      for_size;
+  gint                      for_size, full_size;
+  gboolean                  rtl;
 
   group_allocs = gtk_cell_area_box_context_get_orientation_allocs (context, &n_allocs);
   if (!group_allocs)
     return allocate_cells_manually (box, widget, width, height);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    for_size = height;
+    {
+      full_size = width;
+      for_size  = height;
+    }
   else
-    for_size = width;
+    {
+      full_size = height;
+      for_size  = width;
+    }
+
+  /* For vertical oriented boxes, we just let the cell renderers realign themselves for rtl */
+  rtl = (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+	 gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   for (i = 0; i < n_allocs; i++)
     {
@@ -777,8 +802,14 @@ get_allocated_cells (GtkCellAreaBox        *box,
       if (group->n_cells == 1)
 	{
 	  CellInfo      *info = group->cells->data;
-	  AllocatedCell *cell = 
-	    allocated_cell_new (info->renderer, group_allocs[i].position, group_allocs[i].size);
+	  AllocatedCell *cell;
+
+	  if (rtl)
+	    cell = allocated_cell_new (info->renderer, 
+				       full_size - (group_allocs[i].position + group_allocs[i].size),
+				       group_allocs[i].size);
+	  else
+	    cell = allocated_cell_new (info->renderer, group_allocs[i].position, group_allocs[i].size);
 
 	  allocated_cells = g_slist_prepend (allocated_cells, cell);
 	}
@@ -854,7 +885,12 @@ get_allocated_cells (GtkCellAreaBox        *box,
 		    }
 		}
 	      
-	      cell = allocated_cell_new (info->renderer, position, sizes[j].minimum_size);
+	      if (rtl)
+		cell = allocated_cell_new (info->renderer, 
+					   full_size - (position + sizes[j].minimum_size),
+					   sizes[j].minimum_size);
+	      else
+		cell = allocated_cell_new (info->renderer, position, sizes[j].minimum_size);
 
 	      allocated_cells = g_slist_prepend (allocated_cells, cell);
 	      
@@ -1184,6 +1220,10 @@ gtk_cell_area_box_render (GtkCellArea          *area,
   GdkRectangle           focus_rect = { 0, };
   gboolean               first_focus_cell = TRUE;
   gboolean               focus_all = FALSE;
+  gboolean               rtl;
+
+  rtl = (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+	 gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   /* Make sure we dont paint a focus rectangle while there
    * is an editable widget in play 
@@ -1232,18 +1272,28 @@ gtk_cell_area_box_render (GtkCellArea          *area,
        * be user resizable and can be resized to be smaller than
        * the actual requested area). */
       if (cell_background.x > cell_area->x + cell_area->width ||
+	  cell_background.x + cell_background.width < cell_area->x ||
 	  cell_background.y > cell_area->y + cell_area->height)
 	break;
 
-      /* Special case for the last cell... let the last cell consume the remaining
-       * space in the area (the last cell is allowed to consume the remaining space if
-       * the space given for rendering is actually larger than allocation, this can
+      /* Special case for the last cell (or first cell in rtl)... let the last cell consume 
+       * the remaining space in the area (the last cell is allowed to consume the remaining 
+       * space if the space given for rendering is actually larger than allocation, this can
        * happen in the expander GtkTreeViewColumn where only the deepest depth column
        * receives the allocation... shallow columns recieve more width). */
       if (!l->next)
 	{
-	  cell_background.width  = cell_area->x + cell_area->width  - cell_background.x;
-	  cell_background.height = cell_area->y + cell_area->height - cell_background.y;
+	  if (rtl)
+	    {
+	      /* Fill the leading space for the first cell in the area (still last in the list) */
+	      cell_background.width = (cell_background.x - cell_area->x) + cell_background.width;
+	      cell_background.x     = cell_area->x;
+	    }
+	  else
+	    {
+	      cell_background.width  = cell_area->x + cell_area->width  - cell_background.x;
+	      cell_background.height = cell_area->y + cell_area->height - cell_background.y;
+	    }
 	}
       else
 	{
@@ -1560,6 +1610,10 @@ compute_size (GtkCellAreaBox        *box,
 
   *minimum_size = min_size;
   *natural_size = nat_size;
+
+  /* Update rtl state for focus navigation to work */
+  priv->rtl = (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+	       gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 }
 
 GtkRequestedSize *
@@ -1766,6 +1820,10 @@ compute_size_for_opposing_orientation (GtkCellAreaBox        *box,
   *natural_size = nat_size;
 
   g_free (orientation_sizes);
+
+  /* Update rtl state for focus navigation to work */
+  priv->rtl = (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
+	       gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 }
 
 
@@ -1925,10 +1983,10 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
   switch (direction)
     {
     case GTK_DIR_TAB_FORWARD:
-      cycle = FOCUS_NEXT;
+      cycle = priv->rtl ? FOCUS_PREV : FOCUS_NEXT;
       break;
     case GTK_DIR_TAB_BACKWARD:
-      cycle = FOCUS_PREV;
+      cycle = priv->rtl ? FOCUS_NEXT : FOCUS_PREV;
       break;
     case GTK_DIR_UP: 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL || !focus_cell)
@@ -1940,11 +1998,11 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
       break;
     case GTK_DIR_LEFT:
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !focus_cell)
-	cycle = FOCUS_PREV;
+	cycle = priv->rtl ? FOCUS_NEXT : FOCUS_PREV;
       break;
     case GTK_DIR_RIGHT:
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !focus_cell)
-	cycle = FOCUS_NEXT;
+	cycle = priv->rtl ? FOCUS_PREV : FOCUS_NEXT;
       break;
     default:
       break;

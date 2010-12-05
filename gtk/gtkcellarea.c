@@ -2986,8 +2986,6 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
   priv = area->priv;
 
   /* Remove margins from the background area to produce the cell area.
-   *
-   * XXX Maybe have to do some rtl mode treatment here...
    */
   gtk_cell_area_inner_cell_area (area, widget, cell_area, &inner_area);
 
