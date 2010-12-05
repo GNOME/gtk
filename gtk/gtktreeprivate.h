@@ -117,10 +117,7 @@ void _gtk_tree_view_column_start_drag       (GtkTreeView       *tree_view,
 					     GtkTreeViewColumn *column,
                                              GdkDevice         *device);
 gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
-					     GtkCellEditable   **editable_widget,
 					     GdkEvent           *event,
-					     gchar              *path_string,
-					     const GdkRectangle *background_area,
 					     const GdkRectangle *cell_area,
 					     guint               flags);
 gboolean          _gtk_tree_view_column_has_editable_cell(GtkTreeViewColumn  *column);

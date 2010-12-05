@@ -3155,10 +3155,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 	      guint flags = 0;
 
 	      if (_gtk_tree_view_column_cell_event (column,
-                                                    NULL,
 						    (GdkEvent *)event,
-						    NULL,
-						    &background_area,
 						    &cell_area, flags))
 		{
 		  GtkCellArea *area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (column));

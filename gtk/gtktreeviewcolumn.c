@@ -2776,10 +2776,7 @@ _gtk_tree_view_column_cell_render (GtkTreeViewColumn  *tree_column,
 
 gboolean
 _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
-				  GtkCellEditable   **editable_widget,
 				  GdkEvent           *event,
-				  gchar              *path_string,
-				  const GdkRectangle *background_area,
 				  const GdkRectangle *cell_area,
 				  guint               flags)
 {
@@ -2789,20 +2786,6 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
 
   priv = tree_column->priv;
 
-  /* FIXME: Should we pass background area here as well?
-   * What will happen to the path_string and editable widget
-   * variables?
-   *
-   * Answer, No dont pass background area... editable widgets
-   * grab the pointer and keyboard so the treeview doesnt 
-   * recieve these events while editable widgets are editing.
-   *
-   * Also it's important that gtk_cell_area_apply_attributes be
-   * called before passing the event to the cell (maybe we need to 
-   * instead use the path_string here to apply the attributes ?, 
-   * if the attributes are applied, the underlying CellArea knows
-   * the path string, which is expected when handling events).
-   */
   return gtk_cell_area_event (priv->cell_area,
                               priv->cell_area_context,
                               priv->tree_view,
