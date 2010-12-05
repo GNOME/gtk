@@ -133,6 +133,8 @@ void _gdk_dnd_init		(GdkDisplay *display);
 void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
+void _gdk_x11_window_register_dnd (GdkWindow *window);
+
 gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
 				   const gchar *name,
 				   GValue      *value);

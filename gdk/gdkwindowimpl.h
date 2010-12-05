@@ -160,6 +160,84 @@ struct _GdkWindowImplClass
 
   /* optional */
   gboolean     (* beep)                 (GdkWindow       *window);
+
+  void         (* focus)                (GdkWindow       *window,
+					 guint32          timestamp);
+  void         (* set_type_hint)        (GdkWindow       *window,
+					 GdkWindowTypeHint hint);
+  GdkWindowTypeHint (* get_type_hint)   (GdkWindow       *window);
+  void         (* set_modal_hint)       (GdkWindow *window,
+					 gboolean   modal);
+  void         (* set_skip_taskbar_hint) (GdkWindow *window,
+					  gboolean   skips_taskbar);
+  void         (* set_skip_pager_hint)  (GdkWindow *window,
+					 gboolean   skips_pager);
+  void         (* set_urgency_hint)     (GdkWindow *window,
+					 gboolean   urgent);
+  void         (* set_geometry_hints)   (GdkWindow         *window,
+					 const GdkGeometry *geometry,
+					 GdkWindowHints     geom_mask);
+  void         (* set_title)            (GdkWindow   *window,
+					 const gchar *title);
+  void         (* set_role)             (GdkWindow   *window,
+					 const gchar *role);
+  void         (* set_startup_id)       (GdkWindow   *window,
+					 const gchar *startup_id);
+  void         (* set_transient_for)    (GdkWindow *window,
+					 GdkWindow *parent);
+  void         (* get_root_origin)      (GdkWindow *window,
+					 gint      *x,
+					 gint      *y);
+  void         (* get_frame_extents)    (GdkWindow    *window,
+					 GdkRectangle *rect);
+  void         (* set_override_redirect) (GdkWindow *window,
+					  gboolean override_redirect);
+  void         (* set_accept_focus)     (GdkWindow *window,
+					 gboolean accept_focus);
+  void         (* set_focus_on_map)     (GdkWindow *window,
+					 gboolean focus_on_map);
+  void         (* set_icon_list)        (GdkWindow *window,
+					 GList     *pixbufs);
+  void         (* set_icon_name)        (GdkWindow   *window,
+					 const gchar *name);
+  void         (* iconify)              (GdkWindow *window);
+  void         (* deiconify)            (GdkWindow *window);
+  void         (* stick)                (GdkWindow *window);
+  void         (* unstick)              (GdkWindow *window);
+  void         (* maximize)             (GdkWindow *window);
+  void         (* unmaximize)           (GdkWindow *window);
+  void         (* fullscreen)           (GdkWindow *window);
+  void         (* unfullscreen)         (GdkWindow *window);
+  void         (* set_keep_above)       (GdkWindow *window,
+					 gboolean   setting);
+  void         (* set_keep_below)       (GdkWindow *window,
+					 gboolean   setting);
+  GdkWindow *  (* get_group)            (GdkWindow *window);
+  void         (* set_group)            (GdkWindow *window,
+					 GdkWindow *leader);
+  void         (* set_decorations)      (GdkWindow      *window,
+					 GdkWMDecoration decorations);
+  gboolean     (* get_decorations)      (GdkWindow       *window,
+					 GdkWMDecoration *decorations);
+  void         (* set_functions)        (GdkWindow    *window,
+					 GdkWMFunction functions);
+  void         (* begin_resize_drag)    (GdkWindow     *window,
+					 GdkWindowEdge  edge,
+					 gint           button,
+					 gint           root_x,
+					 gint           root_y,
+					 guint32        timestamp);
+  void         (* begin_move_drag)      (GdkWindow *window,
+					 gint       button,
+					 gint       root_x,
+					 gint       root_y,
+					 guint32    timestamp);
+  void         (* enable_synchronized_configure) (GdkWindow *window);
+  void         (* configure_finished)   (GdkWindow *window);
+  void         (* set_opacity)          (GdkWindow *window,
+					 gdouble    opacity);
+  void         (* destroy_notify)       (GdkWindow *window);
+  void         (* register_dnd)         (GdkWindow *window);
 };
 
 /* Interface Functions */
