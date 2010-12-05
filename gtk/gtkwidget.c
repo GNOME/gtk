@@ -7935,6 +7935,11 @@ modifier_style_changed (GtkModifierStyle *style,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_invalidate (context);
+
+  g_signal_emit (widget,
+                 widget_signals[STYLE_SET],
+                 0,
+                 widget->priv->style);
 }
 
 static GtkModifierStyle *
@@ -8188,11 +8193,6 @@ gtk_widget_modify_fg (GtkWidget      *widget,
     }
   else
     gtk_widget_override_color (widget, state, NULL);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
 }
 
 /**
@@ -8258,11 +8258,6 @@ gtk_widget_modify_bg (GtkWidget      *widget,
     }
   else
     gtk_widget_override_background_color (widget, state, NULL);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
 }
 
 /**
@@ -8396,11 +8391,6 @@ gtk_widget_modify_cursor (GtkWidget      *widget,
   secondary_rgba.alpha = 1;
 
   gtk_widget_override_cursor (widget, &primary_rgba, &secondary_rgba);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
 }
 
 /**
@@ -8421,11 +8411,6 @@ gtk_widget_modify_font (GtkWidget            *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   gtk_widget_override_font (widget, font_desc);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
 }
 
 static void
