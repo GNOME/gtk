@@ -439,6 +439,9 @@ void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
 
+const PangoFontDescription * gtk_style_context_get_font (GtkStyleContext *context,
+                                                    GtkStateFlags    state);
+
 void gtk_style_context_get_border           (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *border);

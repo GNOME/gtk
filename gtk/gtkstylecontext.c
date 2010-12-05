@@ -3346,6 +3346,38 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   *margin = *b;
 }
 
+/**
+ * gtk_style_context_get_font:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the font for
+ *
+ * Returns the font description for a given state. The returned
+ * object is const and will remain valid until the
+ * #GtkStyleContext::changed signal happens.
+ *
+ * Returns: the #PangoFontDescription for the given state. This
+ *          object is owned by GTK+ and should not be freed.
+ *
+ * Since: 3.0
+ **/
+const PangoFontDescription *
+gtk_style_context_get_font (GtkStyleContext *context,
+                            GtkStateFlags    state)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = context->priv;
+  g_return_val_if_fail (priv->widget_path != NULL, NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store, "font", state);
+  return g_value_get_boxed (value);
+}
+
 /* Paint methods */
 
 /**
