@@ -139,10 +139,6 @@ void		  _gtk_tree_view_column_get_focus_area   (GtkTreeViewColumn  *tree_column,
 							  const GdkRectangle *background_area,
 							  const GdkRectangle *cell_area,
 							  GdkRectangle       *focus_area);
-gboolean	  _gtk_tree_view_column_cell_focus       (GtkTreeViewColumn  *tree_column,
-							  gint                count,
-							  gboolean            left,
-							  gboolean            right);
 void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
 							  gboolean            install_handler);
 gboolean          _gtk_tree_view_column_cell_get_dirty   (GtkTreeViewColumn  *tree_column);

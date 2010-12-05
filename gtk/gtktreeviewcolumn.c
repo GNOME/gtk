@@ -2831,56 +2831,6 @@ _gtk_tree_view_column_get_focus_area (GtkTreeViewColumn  *tree_column,
 }
 
 
-gboolean
-_gtk_tree_view_column_cell_focus (GtkTreeViewColumn *tree_column,
-				  gint               count,
-				  gboolean           left,
-				  gboolean           right)
-{
-  gboolean rtl;
-  GtkDirectionType direction = 0;
-  GtkTreeViewColumnPrivate *priv = tree_column->priv;
-
-  rtl = gtk_widget_get_direction (priv->tree_view) == GTK_TEXT_DIR_RTL;
-
-  switch (count)
-    {
-      case -1:
-        direction = GTK_DIR_LEFT;
-        break;
-
-      case 1:
-        direction = GTK_DIR_RIGHT;
-        break;
-    }
-
-  /* if we are the current focus column and have multiple editable cells,
-   * try to select the next one, else move the focus to the next column
-   */
-  if (_gtk_tree_view_get_focus_column (GTK_TREE_VIEW (priv->tree_view)) == tree_column)
-    {
-      if (gtk_cell_area_focus (priv->cell_area, direction))
-        /* Focus stays in this column, so we are done */
-        return TRUE;
-
-      /* FIXME: RTL support for the following: */
-      if (count == -1 && !left)
-        {
-          direction = GTK_DIR_RIGHT;
-          gtk_cell_area_focus (priv->cell_area, direction);
-        }
-      else if (count == 1 && !right)
-        {
-          direction = GTK_DIR_LEFT;
-          gtk_cell_area_focus (priv->cell_area, direction);
-        }
-
-      return FALSE;
-    }
-
-  return gtk_cell_area_focus (priv->cell_area, direction);
-}
-
 /**
  * gtk_tree_view_column_cell_is_visible:
  * @tree_column: A #GtkTreeViewColumn
