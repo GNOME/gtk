@@ -3383,6 +3383,8 @@ gtk_render_check (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3427,6 +3429,8 @@ gtk_render_option (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3469,6 +3473,7 @@ gtk_render_arrow (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (size > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3514,6 +3519,8 @@ gtk_render_background (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3560,6 +3567,8 @@ gtk_render_frame (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3603,6 +3612,8 @@ gtk_render_expander (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3643,6 +3654,8 @@ gtk_render_focus (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3677,6 +3690,7 @@ gtk_render_layout (GtkStyleContext *context,
   PangoRectangle extents;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
   g_return_if_fail (cr != NULL);
 
   priv = context->priv;
@@ -3763,6 +3777,8 @@ gtk_render_slider (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3813,6 +3829,16 @@ gtk_render_frame_gap (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
+  g_return_if_fail (xy0_gap < xy1_gap);
+  g_return_if_fail (xy0_gap >= 0);
+
+  if (gap_side == GTK_POS_LEFT ||
+      gap_side == GTK_POS_RIGHT)
+    g_return_if_fail (xy1_gap <= height);
+  else
+    g_return_if_fail (xy1_gap <= width);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3860,6 +3886,8 @@ gtk_render_extension (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3903,6 +3931,8 @@ gtk_render_handle (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
@@ -3941,6 +3971,8 @@ gtk_render_activity (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
