@@ -302,6 +302,9 @@ main (gint argc, gchar **argv)
   
   gtk_init (&argc, &argv);
 
+  if (g_getenv ("RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Vertical cells in GtkTreeViewColumn example");
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
