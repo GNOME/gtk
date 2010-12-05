@@ -280,6 +280,30 @@ struct _GdkDisplayClass
   GdkScreen *		     (*get_screen)         (GdkDisplay *display,
 						    gint        screen_num);
   GdkScreen *		     (*get_default_screen) (GdkDisplay *display);
+  void                       (*beep)               (GdkDisplay *display);
+  void                       (*sync)               (GdkDisplay *display);
+  void                       (*flush)              (GdkDisplay *display);
+  GdkWindow *                (*get_default_group)  (GdkDisplay *display);
+  gboolean                   (*supports_selection_notification) (GdkDisplay *display);
+  gboolean                   (*request_selection_notification)  (GdkDisplay *display,
+								 GdkAtom     selection);
+  gboolean                   (*supports_clipboard_persistence)  (GdkDisplay *display);
+  void                       (*store_clipboard)    (GdkDisplay    *display,
+						    GdkWindow     *clipboard_window,
+						    guint32        time_,
+						    const GdkAtom *targets,
+						    gint           n_targets);
+  gboolean                   (*supports_shapes)    (GdkDisplay *display);
+  gboolean                   (*supports_input_shapes) (GdkDisplay *display);
+  gboolean                   (*supports_composite) (GdkDisplay *display);
+  GList *                    (*list_devices)       (GdkDisplay *display);
+  gboolean                   (*send_client_message) (GdkDisplay     *display,
+						     GdkEvent       *event,
+						     GdkNativeWindow winid);
+  void                       (*add_client_message_filter) (GdkDisplay   *display,
+							   GdkAtom       message_type,
+							   GdkFilterFunc func,
+							   gpointer      data);
 
 
   /* Signals */

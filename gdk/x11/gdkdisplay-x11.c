@@ -163,15 +163,6 @@ G_DEFINE_TYPE_WITH_CODE (GdkDisplayX11, _gdk_display_x11, GDK_TYPE_DISPLAY,
 
 
 static void
-_gdk_display_x11_class_init (GdkDisplayX11Class * class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-  
-  object_class->dispose = gdk_display_x11_dispose;
-  object_class->finalize = gdk_display_x11_finalize;
-}
-
-static void
 _gdk_display_x11_init (GdkDisplayX11 *display)
 {
 }
@@ -1526,57 +1517,25 @@ gdk_internal_connection_watch (Display  *display,
 }
 #endif /* HAVE_X11R6 */
 
-/**
- * gdk_display_get_name:
- * @display: a #GdkDisplay
- *
- * Gets the name of the display.
- * 
- * Returns: a string representing the display name. This string is owned
- * by GDK and should not be modified or freed.
- * 
- * Since: 2.2
- */
-G_CONST_RETURN gchar *
-gdk_display_get_name (GdkDisplay *display)
+static G_CONST_RETURN gchar *
+gdk_x11_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  
+
   return (gchar *) DisplayString (GDK_DISPLAY_X11 (display)->xdisplay);
 }
 
-/**
- * gdk_display_get_n_screens:
- * @display: a #GdkDisplay
- *
- * Gets the number of screen managed by the @display.
- * 
- * Returns: number of screens.
- * 
- * Since: 2.2
- */
-gint
-gdk_display_get_n_screens (GdkDisplay *display)
+static gint
+gdk_x11_display_get_n_screens (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
   
   return ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay);
 }
 
-/**
- * gdk_display_get_screen:
- * @display: a #GdkDisplay
- * @screen_num: the screen number
- *
- * Returns a screen object for one of the screens of the display.
- *
- * Returns: (transfer none): the #GdkScreen object
- *
- * Since: 2.2
- */
-GdkScreen *
-gdk_display_get_screen (GdkDisplay *display, 
-			gint        screen_num)
+static GdkScreen *
+gdk_x11_display_get_screen (GdkDisplay *display,
+			    gint        screen_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay) > screen_num, NULL);
@@ -1584,18 +1543,8 @@ gdk_display_get_screen (GdkDisplay *display,
   return GDK_DISPLAY_X11 (display)->screens[screen_num];
 }
 
-/**
- * gdk_display_get_default_screen:
- * @display: a #GdkDisplay
- *
- * Get the default #GdkScreen for @display.
- * 
- * Returns: (transfer none): the default #GdkScreen object for @display
- *
- * Since: 2.2
- */
-GdkScreen *
-gdk_display_get_default_screen (GdkDisplay *display)
+static GdkScreen *
+gdk_x11_display_get_default_screen (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   
@@ -1683,16 +1632,8 @@ gdk_device_ungrab (GdkDevice  *device,
     }
 }
 
-/**
- * gdk_display_beep:
- * @display: a #GdkDisplay
- *
- * Emits a short beep on @display
- *
- * Since: 2.2
- */
-void
-gdk_display_beep (GdkDisplay *display)
+static void
+gdk_x11_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
@@ -1703,48 +1644,16 @@ gdk_display_beep (GdkDisplay *display)
 #endif
 }
 
-/**
- * gdk_display_sync:
- * @display: a #GdkDisplay
- *
- * Flushes any requests queued for the windowing system and waits until all
- * requests have been handled. This is often used for making sure that the
- * display is synchronized with the current state of the program. Calling
- * gdk_display_sync() before gdk_error_trap_pop() makes sure that any errors
- * generated from earlier requests are handled before the error trap is 
- * removed.
- *
- * This is most useful for X11. On windowing systems where requests are
- * handled synchronously, this function will do nothing.
- *
- * Since: 2.2
- */
-void
-gdk_display_sync (GdkDisplay *display)
+static void
+gdk_x11_display_sync (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
   
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
 }
 
-/**
- * gdk_display_flush:
- * @display: a #GdkDisplay
- *
- * Flushes any requests queued for the windowing system; this happens automatically
- * when the main loop blocks waiting for new events, but if your application
- * is drawing without returning control to the main loop, you may need
- * to call this function explicitely. A common case where this function
- * needs to be called is when an application is executing drawing commands
- * from a thread other than the thread where the main loop is running.
- *
- * This is most useful for X11. On windowing systems where requests are
- * handled synchronously, this function will do nothing.
- *
- * Since: 2.4
- */
-void 
-gdk_display_flush (GdkDisplay *display)
+static void
+gdk_x11_display_flush (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
@@ -1752,21 +1661,8 @@ gdk_display_flush (GdkDisplay *display)
     XFlush (GDK_DISPLAY_XDISPLAY (display));
 }
 
-/**
- * gdk_display_get_default_group:
- * @display: a #GdkDisplay
- * 
- * Returns the default group leader window for all toplevel windows
- * on @display. This window is implicitly created by GDK. 
- * See gdk_window_set_group().
- * 
- * Return value: (transfer none): The default group leader window
- * for @display
- *
- * Since: 2.4
- **/
-GdkWindow *
-gdk_display_get_default_group (GdkDisplay *display)
+static GdkWindow *
+gdk_x11_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
@@ -2230,43 +2126,17 @@ gdk_notify_startup_complete_with_id (const gchar* startup_id)
 					     NULL);
 }
 
-/**
- * gdk_display_supports_selection_notification:
- * @display: a #GdkDisplay
- * 
- * Returns whether #GdkEventOwnerChange events will be 
- * sent when the owner of a selection changes.
- * 
- * Return value: whether #GdkEventOwnerChange events will 
- *               be sent.
- *
- * Since: 2.6
- **/
-gboolean 
-gdk_display_supports_selection_notification (GdkDisplay *display)
+static gboolean
+gdk_x11_display_supports_selection_notification (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 
   return display_x11->have_xfixes;
 }
 
-/**
- * gdk_display_request_selection_notification:
- * @display: a #GdkDisplay
- * @selection: the #GdkAtom naming the selection for which
- *             ownership change notification is requested
- * 
- * Request #GdkEventOwnerChange events for ownership changes
- * of the selection named by the given atom.
- * 
- * Return value: whether #GdkEventOwnerChange events will 
- *               be sent.
- *
- * Since: 2.6
- **/
-gboolean
-gdk_display_request_selection_notification (GdkDisplay *display,
-					    GdkAtom     selection)
+static gboolean
+gdk_x11_display_request_selection_notification (GdkDisplay *display,
+						GdkAtom     selection)
 
 {
 #ifdef HAVE_XFIXES
@@ -2290,21 +2160,8 @@ gdk_display_request_selection_notification (GdkDisplay *display,
     return FALSE;
 }
 
-/**
- * gdk_display_supports_clipboard_persistence
- * @display: a #GdkDisplay
- *
- * Returns whether the speicifed display supports clipboard
- * persistance; i.e. if it's possible to store the clipboard data after an
- * application has quit. On X11 this checks if a clipboard daemon is
- * running.
- *
- * Returns: %TRUE if the display supports clipboard persistance.
- *
- * Since: 2.6
- */
-gboolean
-gdk_display_supports_clipboard_persistence (GdkDisplay *display)
+static gboolean
+gdk_x11_display_supports_clipboard_persistence (GdkDisplay *display)
 {
   Atom clipboard_manager;
 
@@ -2313,29 +2170,12 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
   return XGetSelectionOwner (GDK_DISPLAY_X11 (display)->xdisplay, clipboard_manager) != None;
 }
 
-/**
- * gdk_display_store_clipboard
- * @display:          a #GdkDisplay
- * @clipboard_window: a #GdkWindow belonging to the clipboard owner
- * @time_:            a timestamp
- * @targets:	      an array of targets that should be saved, or %NULL 
- *                    if all available targets should be saved.
- * @n_targets:        length of the @targets array
- *
- * Issues a request to the clipboard manager to store the
- * clipboard data. On X11, this is a special program that works
- * according to the freedesktop clipboard specification, available at
- * <ulink url="http://www.freedesktop.org/Standards/clipboard-manager-spec">
- * http://www.freedesktop.org/Standards/clipboard-manager-spec</ulink>.
- *
- * Since: 2.6
- */
-void
-gdk_display_store_clipboard (GdkDisplay    *display,
-			     GdkWindow     *clipboard_window,
-			     guint32        time_,
-			     const GdkAtom *targets,
-			     gint           n_targets)
+static void
+gdk_x11_display_store_clipboard (GdkDisplay    *display,
+				 GdkWindow     *clipboard_window,
+				 guint32        time_,
+				 const GdkAtom *targets,
+				 gint           n_targets)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   Atom clipboard_manager, save_targets;
@@ -2396,36 +2236,14 @@ gdk_x11_display_get_user_time (GdkDisplay *display)
   return GDK_DISPLAY_X11 (display)->user_time;
 }
 
-/**
- * gdk_display_supports_shapes:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if gdk_window_shape_combine_mask() can
- * be used to create shaped windows on @display.
- *
- * Returns: %TRUE if shaped windows are supported 
- *
- * Since: 2.10
- */
-gboolean 
-gdk_display_supports_shapes (GdkDisplay *display)
+static gboolean
+gdk_x11_display_supports_shapes (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->have_shapes;
 }
 
-/**
- * gdk_display_supports_input_shapes:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if gdk_window_input_shape_combine_mask() can
- * be used to modify the input shape of windows on @display.
- *
- * Returns: %TRUE if windows with modified input shape are supported 
- *
- * Since: 2.10
- */
-gboolean 
-gdk_display_supports_input_shapes (GdkDisplay *display)
+static gboolean
+gdk_x11_display_supports_input_shapes (GdkDisplay *display)
 {
   return GDK_DISPLAY_X11 (display)->have_input_shapes;
 }
@@ -2510,22 +2328,8 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
                    (guchar *)startup_id, strlen (startup_id));
 }
 
-/**
- * gdk_display_supports_composite:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if gdk_window_set_composited() can be used
- * to redirect drawing on the window using compositing.
- *
- * Currently this only works on X11 with XComposite and
- * XDamage extensions available.
- *
- * Returns: %TRUE if windows may be composited.
- *
- * Since: 2.12
- */
-gboolean
-gdk_display_supports_composite (GdkDisplay *display)
+static gboolean
+gdk_x11_display_supports_composite (GdkDisplay *display)
 {
   GdkDisplayX11 *x11_display = GDK_DISPLAY_X11 (display);
 
@@ -2534,50 +2338,18 @@ gdk_display_supports_composite (GdkDisplay *display)
 	 x11_display->have_xfixes;
 }
 
-/**
- * gdk_display_list_devices:
- * @display: a #GdkDisplay
- *
- * Returns the list of available input devices attached to @display.
- * The list is statically allocated and should not be freed.
- *
- * Return value: (transfer none) (element-type GdkDevice):
- *     a list of #GdkDevice
- *
- * Since: 2.2
- *
- * Deprecated: 3.0: Use gdk_device_manager_list_devices() instead.
- **/
-GList *
-gdk_display_list_devices (GdkDisplay *display)
+static GList *
+gdk_x11_display_list_devices (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_DISPLAY_X11 (display)->input_devices;
 }
 
-/**
- * gdk_event_send_client_message_for_display:
- * @display: the #GdkDisplay for the window where the message is to be sent.
- * @event: the #GdkEvent to send, which should be a #GdkEventClient.
- * @winid: the window to send the client message to.
- *
- * On X11, sends an X ClientMessage event to a given window. On
- * Windows, sends a message registered with the name
- * GDK_WIN32_CLIENT_MESSAGE.
- *
- * This could be used for communicating between different
- * applications, though the amount of data is limited to 20 bytes on
- * X11, and to just four bytes on Windows.
- *
- * Returns: non-zero on success.
- *
- * Since: 2.2
- */
-gboolean
-gdk_event_send_client_message_for_display (GdkDisplay     *display,
-					   GdkEvent       *event,
-					   GdkNativeWindow winid)
+static gboolean
+gdk_x11_display_send_client_message (GdkDisplay     *display,
+				     GdkEvent       *event,
+				     GdkNativeWindow winid)
 {
   XEvent sev;
 
@@ -2594,26 +2366,11 @@ gdk_event_send_client_message_for_display (GdkDisplay     *display,
   return _gdk_send_xevent (display, winid, False, NoEventMask, &sev);
 }
 
-/**
- * gdk_display_add_client_message_filter:
- * @display: a #GdkDisplay for which this message filter applies
- * @message_type: the type of ClientMessage events to receive.
- *   This will be checked against the @message_type field
- *   of the XClientMessage event struct.
- * @func: the function to call to process the event.
- * @data: user data to pass to @func.
- *
- * Adds a filter to be called when X ClientMessage events are received.
- * See gdk_window_add_filter() if you are interested in filtering other
- * types of events.
- *
- * Since: 2.2
- **/
-void
-gdk_display_add_client_message_filter (GdkDisplay   *display,
-				       GdkAtom       message_type,
-				       GdkFilterFunc func,
-				       gpointer      data)
+static void
+gdk_x11_display_add_client_message_filter (GdkDisplay   *display,
+					   GdkAtom       message_type,
+					   GdkFilterFunc func,
+					   gpointer      data)
 {
   GdkClientFilter *filter;
   g_return_if_fail (GDK_IS_DISPLAY (display));
@@ -2626,26 +2383,6 @@ gdk_display_add_client_message_filter (GdkDisplay   *display,
   GDK_DISPLAY_X11(display)->client_filters =
     g_list_append (GDK_DISPLAY_X11 (display)->client_filters,
 		   filter);
-}
-
-/**
- * gdk_add_client_message_filter:
- * @message_type: the type of ClientMessage events to receive. This will be
- *     checked against the <structfield>message_type</structfield> field of the
- *     XClientMessage event struct.
- * @func: the function to call to process the event.
- * @data: user data to pass to @func.
- *
- * Adds a filter to the default display to be called when X ClientMessage events
- * are received. See gdk_display_add_client_message_filter().
- **/
-void
-gdk_add_client_message_filter (GdkAtom       message_type,
-			       GdkFilterFunc func,
-			       gpointer      data)
-{
-  gdk_display_add_client_message_filter (gdk_display_get_default (),
-					 message_type, func, data);
 }
 
 /*
@@ -2965,3 +2702,33 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
 
   gdk_x11_display_error_trap_pop_internal (display, FALSE);
 }
+
+static void
+_gdk_display_x11_class_init (GdkDisplayX11Class * class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
+
+  object_class->dispose = gdk_display_x11_dispose;
+  object_class->finalize = gdk_display_x11_finalize;
+
+  display_class->get_name = gdk_x11_display_get_name;
+  display_class->get_n_screens = gdk_x11_display_get_n_screens;
+  display_class->get_screen = gdk_x11_display_get_screen;
+  display_class->get_default_screen = gdk_x11_display_get_default_screen;
+  display_class->beep = gdk_x11_display_beep;
+  display_class->sync = gdk_x11_display_sync;
+  display_class->flush = gdk_x11_display_flush;
+  display_class->get_default_group = gdk_x11_display_get_default_group;
+  display_class->supports_selection_notification = gdk_x11_display_supports_selection_notification;
+  display_class->request_selection_notification = gdk_x11_display_request_selection_notification;
+  display_class->supports_clipboard_persistence = gdk_x11_display_supports_clipboard_persistence;
+  display_class->store_clipboard = gdk_x11_display_store_clipboard;
+  display_class->supports_shapes = gdk_x11_display_supports_shapes;
+  display_class->supports_input_shapes = gdk_x11_display_supports_input_shapes;
+  display_class->supports_composite = gdk_x11_display_supports_composite;
+  display_class->list_devices = gdk_x11_display_list_devices;
+  display_class->send_client_message = gdk_x11_display_send_client_message;
+  display_class->add_client_message_filter = gdk_x11_display_add_client_message_filter;
+}
+
