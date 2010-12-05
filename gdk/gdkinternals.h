@@ -385,10 +385,6 @@ void _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
 void _gdk_windowing_before_process_all_updates     (void);
 void _gdk_windowing_after_process_all_updates      (void);
 
-/* Return the number of bits-per-pixel for images of the specified depth. */
-gint _gdk_windowing_get_bits_for_depth (GdkDisplay *display,
-					gint        depth);
-
 
 #define GDK_WINDOW_IS_MAPPED(window) (((window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
