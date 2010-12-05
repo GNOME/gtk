@@ -3180,10 +3180,16 @@ gtk_tree_view_button_press (GtkWidget      *widget,
        */
       if (event->type == GDK_BUTTON_PRESS)
         {
+          GtkCellRenderer *focus_cell;
+
           if ((event->state & GDK_CONTROL_MASK) == GDK_CONTROL_MASK)
             tree_view->priv->ctrl_pressed = TRUE;
           if ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
             tree_view->priv->shift_pressed = TRUE;
+
+          focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
+          if (focus_cell)
+            gtk_tree_view_column_focus_cell (column, focus_cell);
 
           if (event->state & GDK_CONTROL_MASK)
             {

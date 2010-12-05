@@ -1466,6 +1466,40 @@ _gtk_tree_view_column_get_edited_cell (GtkTreeViewColumn *column)
   return gtk_cell_area_get_edited_cell (priv->cell_area);
 }
 
+GtkCellRenderer *
+_gtk_tree_view_column_get_cell_at_pos (GtkTreeViewColumn *column,
+                                       gint               x)
+{
+  GList *list;
+  GList *cell;
+  GtkCellRenderer *match = NULL;
+  GtkTreeViewColumnPrivate *priv = column->priv;
+
+  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
+  for (cell = list; cell; cell = cell->next)
+    {
+      GdkRectangle zero_cell_area = { 0, };
+      GdkRectangle allocation;
+
+      gtk_cell_area_get_cell_allocation (priv->cell_area,
+                                         priv->cell_area_context,
+                                         priv->tree_view,
+                                         cell->data,
+                                         &zero_cell_area,
+                                         &allocation);
+
+      if (allocation.x <= x && x <= allocation.x + allocation.width)
+        {
+          match = cell->data;
+          break;
+        }
+    }
+
+  g_list_free (list);
+
+  return match;
+}
+
 /* Public Functions */
 
 
