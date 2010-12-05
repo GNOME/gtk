@@ -166,14 +166,13 @@ enum
 #define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
 #define GTK_TREE_VIEW_UNSET_FLAG(tree_view, flag) G_STMT_START{ (tree_view->priv->flags&=~(flag)); }G_STMT_END
 #define GTK_TREE_VIEW_FLAG_SET(tree_view, flag)   ((tree_view->priv->flags&flag)==flag)
-#define TREE_VIEW_HEADER_HEIGHT(tree_view)        (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE)?tree_view->priv->header_height:0)
 #define TREE_VIEW_COLUMN_REQUESTED_WIDTH(column)  (CLAMP (column->requested_width, (column->min_width!=-1)?column->min_width:column->requested_width, (column->max_width!=-1)?column->max_width:column->requested_width))
 #define TREE_VIEW_DRAW_EXPANDERS(tree_view)       (!GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST)&&GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS))
 
  /* This lovely little value is used to determine how far away from the title bar
   * you can move the mouse and still have a column drag work.
   */
-#define TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER(tree_view) (10*TREE_VIEW_HEADER_HEIGHT(tree_view))
+#define TREE_VIEW_COLUMN_DRAG_DEAD_MULTIPLIER(tree_view) (10*gtk_tree_view_get_effective_header_height(tree_view))
 
 #ifdef __GNUC__
 
@@ -831,6 +830,8 @@ static void     gtk_tree_view_stop_rubber_band               (GtkTreeView       
 static void     update_prelight                              (GtkTreeView        *tree_view,
                                                               int                 x,
                                                               int                 y);
+
+static inline gint gtk_tree_view_get_effective_header_height (GtkTreeView *tree_view);
 
 /* interactive search */
 static void     gtk_tree_view_ensure_interactive_directory (GtkTreeView *tree_view);
@@ -2225,7 +2226,7 @@ gtk_tree_view_realize (GtkWidget *widget)
 
   /* Make the window for the tree */
   attributes.x = 0;
-  attributes.y = TREE_VIEW_HEADER_HEIGHT (tree_view);
+  attributes.y = gtk_tree_view_get_effective_header_height (tree_view);
   attributes.width = MAX (tree_view->priv->width, allocation.width);
   attributes.height = allocation.height;
   attributes.event_mask = (GDK_EXPOSURE_MASK |
@@ -2445,7 +2446,7 @@ gtk_tree_view_size_request (GtkWidget      *widget,
   gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 
   requisition->width = tree_view->priv->width;
-  requisition->height = tree_view->priv->height + TREE_VIEW_HEADER_HEIGHT (tree_view);
+  requisition->height = tree_view->priv->height + gtk_tree_view_get_effective_header_height (tree_view);
 
   tmp_list = tree_view->priv->children;
 }
@@ -2864,7 +2865,7 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   g_object_freeze_notify (G_OBJECT (tree_view->priv->vadjustment));
   gtk_adjustment_set_page_size (tree_view->priv->vadjustment,
                                 allocation->height -
-                                TREE_VIEW_HEADER_HEIGHT (tree_view));
+                                gtk_tree_view_get_effective_header_height (tree_view));
   gtk_adjustment_set_step_increment (tree_view->priv->vadjustment,
                                      tree_view->priv->vadjustment->page_size * 0.1);
   gtk_adjustment_set_page_increment (tree_view->priv->vadjustment,
@@ -2898,9 +2899,9 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
 			      tree_view->priv->header_height);
       gdk_window_move_resize (tree_view->priv->bin_window,
 			      - (gint) tree_view->priv->hadjustment->value,
-			      TREE_VIEW_HEADER_HEIGHT (tree_view),
+			      gtk_tree_view_get_effective_header_height (tree_view),
 			      MAX (tree_view->priv->width, allocation->width),
-			      allocation->height - TREE_VIEW_HEADER_HEIGHT (tree_view));
+			      allocation->height - gtk_tree_view_get_effective_header_height (tree_view));
     }
 
   if (tree_view->priv->tree == NULL)
@@ -6103,7 +6104,7 @@ gtk_tree_view_node_queue_redraw (GtkTreeView *tree_view,
 
   y = _gtk_rbtree_node_find_offset (tree, node)
     - tree_view->priv->vadjustment->value
-    + TREE_VIEW_HEADER_HEIGHT (tree_view);
+    + gtk_tree_view_get_effective_header_height (tree_view);
 
   gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
   gtk_widget_queue_draw_area (GTK_WIDGET (tree_view),
@@ -6287,7 +6288,7 @@ validate_visible_area (GtkTreeView *tree_view)
     return;
 
   gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
-  total_height = allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view);
+  total_height = allocation.height - gtk_tree_view_get_effective_header_height (tree_view);
 
   if (total_height == 0)
     return;
@@ -7436,7 +7437,7 @@ set_destination_row (GtkTreeView    *tree_view,
 
   di = get_info (tree_view);
 
-  if (di == NULL || y - TREE_VIEW_HEADER_HEIGHT (tree_view) < 0)
+  if (di == NULL || y - gtk_tree_view_get_effective_header_height (tree_view) < 0)
     {
       /* someone unset us as a drag dest, note that if
        * we return FALSE drag_leave isn't called
@@ -9915,6 +9916,15 @@ _gtk_tree_view_queue_draw_node (GtkTreeView        *tree_view,
     }
 }
 
+static inline gint
+gtk_tree_view_get_effective_header_height (GtkTreeView *tree_view)
+{
+  if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_HEADERS_VISIBLE))
+    return tree_view->priv->header_height;
+  /* else */
+  return 0;
+}
+
 gint
 _gtk_tree_view_get_header_height (GtkTreeView *tree_view)
 {
@@ -11176,7 +11186,7 @@ gtk_tree_view_adjustment_changed (GtkAdjustment *adjustment,
 	
       gdk_window_move (tree_view->priv->bin_window,
 		       - tree_view->priv->hadjustment->value,
-		       TREE_VIEW_HEADER_HEIGHT (tree_view));
+		       gtk_tree_view_get_effective_header_height (tree_view));
       gdk_window_move (tree_view->priv->header_window,
 		       - tree_view->priv->hadjustment->value,
 		       0);
@@ -11627,8 +11637,8 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 	{
           gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
 	  gdk_window_move_resize (tree_view->priv->bin_window,
-                                  x, y  + TREE_VIEW_HEADER_HEIGHT (tree_view),
-                                  tree_view->priv->width, allocation.height -  + TREE_VIEW_HEADER_HEIGHT (tree_view));
+                                  x, y  + gtk_tree_view_get_effective_header_height (tree_view),
+                                  tree_view->priv->width, allocation.height -  + gtk_tree_view_get_effective_header_height (tree_view));
 
           if (gtk_widget_get_mapped (GTK_WIDGET (tree_view)))
             gtk_tree_view_map_buttons (tree_view);
@@ -11648,8 +11658,8 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
     }
 
   gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
-  tree_view->priv->vadjustment->page_size = allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view);
-  tree_view->priv->vadjustment->page_increment = (allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view)) / 2;
+  tree_view->priv->vadjustment->page_size = allocation.height - gtk_tree_view_get_effective_header_height (tree_view);
+  tree_view->priv->vadjustment->page_increment = (allocation.height - gtk_tree_view_get_effective_header_height (tree_view)) / 2;
   tree_view->priv->vadjustment->lower = 0;
   tree_view->priv->vadjustment->upper = tree_view->priv->height;
   gtk_adjustment_changed (tree_view->priv->vadjustment);
@@ -13718,7 +13728,7 @@ gtk_tree_view_get_visible_rect (GtkTreeView  *tree_view,
       visible_rect->x = tree_view->priv->hadjustment->value;
       visible_rect->y = tree_view->priv->vadjustment->value;
       visible_rect->width = allocation.width;
-      visible_rect->height = allocation.height - TREE_VIEW_HEADER_HEIGHT (tree_view);
+      visible_rect->height = allocation.height - gtk_tree_view_get_effective_header_height (tree_view);
     }
 }
 
@@ -13811,7 +13821,7 @@ gtk_tree_view_convert_widget_to_bin_window_coords (GtkTreeView *tree_view,
   if (bx)
     *bx = wx + tree_view->priv->hadjustment->value;
   if (by)
-    *by = wy - TREE_VIEW_HEADER_HEIGHT (tree_view);
+    *by = wy - gtk_tree_view_get_effective_header_height (tree_view);
 }
 
 /**
@@ -13839,7 +13849,7 @@ gtk_tree_view_convert_bin_window_to_widget_coords (GtkTreeView *tree_view,
   if (wx)
     *wx = bx - tree_view->priv->hadjustment->value;
   if (wy)
-    *wy = by + TREE_VIEW_HEADER_HEIGHT (tree_view);
+    *wy = by + gtk_tree_view_get_effective_header_height (tree_view);
 }
 
 /**
