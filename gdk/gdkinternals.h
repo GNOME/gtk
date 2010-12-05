@@ -271,6 +271,22 @@ struct _GdkWindow
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
 #define GDK_WINDOW_DESTROYED(d) (GDK_WINDOW (d)->destroyed)
 
+struct _GdkDisplayClass
+{
+  GObjectClass parent_class;
+
+  G_CONST_RETURN gchar *     (*get_name)           (GdkDisplay *display);
+  gint			     (*get_n_screens)      (GdkDisplay *display);
+  GdkScreen *		     (*get_screen)         (GdkDisplay *display,
+						    gint        screen_num);
+  GdkScreen *		     (*get_default_screen) (GdkDisplay *display);
+
+
+  /* Signals */
+  void (*closed) (GdkDisplay *display,
+		  gboolean    is_error);
+};
+
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;

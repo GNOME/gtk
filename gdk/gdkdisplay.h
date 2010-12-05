@@ -116,22 +116,6 @@ struct _GdkDisplay
   GdkDeviceManager *GSEAL (device_manager);
 };
 
-struct _GdkDisplayClass
-{
-  GObjectClass parent_class;
-  
-  G_CONST_RETURN gchar *     (*get_display_name)   (GdkDisplay *display);
-  gint			     (*get_n_screens)      (GdkDisplay *display);
-  GdkScreen *		     (*get_screen)         (GdkDisplay *display,
-						    gint        screen_num);
-  GdkScreen *		     (*get_default_screen) (GdkDisplay *display);
-
-  
-  /* Signals */
-  void (*closed) (GdkDisplay *display,
-		  gboolean    is_error);
-};
-
 /**
  * GdkDisplayPointerHooks:
  * @get_pointer: Obtains the current pointer position and modifier state.
