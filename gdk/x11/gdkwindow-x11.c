@@ -3229,7 +3229,7 @@ _gdk_windowing_window_at_device_position (GdkDisplay      *display,
 	      pointer_window = child;
 	      break;
 	    }
-	  gdk_window_get_geometry (window, NULL, NULL, &width, &height, NULL);
+	  gdk_window_get_geometry (window, NULL, NULL, &width, &height);
 	  if (winx >= 0 && winy >= 0 && winx < width && winy < height) 
 	    {
 	      /* A childless toplevel, or below another window? */
@@ -5096,7 +5096,7 @@ calculate_unmoving_origin (MoveResizeData *mv_resize)
     {
       gdk_window_get_frame_extents (mv_resize->moveresize_window, &rect);
       gdk_window_get_geometry (mv_resize->moveresize_window, 
-			       NULL, NULL, &width, &height, NULL);
+			       NULL, NULL, &width, &height);
       
       switch (mv_resize->moveresize_geometry.win_gravity) 
 	{

@@ -362,7 +362,7 @@ gtk_decorated_window_motion_notify (GtkWidget       *widget,
   win_x += DECORATION_BORDER_LEFT;
   win_y += DECORATION_BORDER_TOP;
   
-  gdk_window_get_geometry (win, NULL, NULL, &win_w, &win_h, NULL);
+  gdk_window_get_geometry (win, NULL, NULL, &win_w, &win_h);
 
   if (deco->moving)
     {
@@ -547,7 +547,7 @@ gtk_decorated_window_window_state (GtkWidget	       *widget,
 	{
 	  int w, h;
 	  gdk_window_get_geometry (widget->window, NULL, NULL,
-				   &deco->last_w, &deco->last_h, NULL);
+				   &deco->last_w, &deco->last_h);
 	  gdk_window_get_origin (widget->window, &deco->last_x, &deco->last_y);
 	  w = gdk_screen_get_width(gdk_screen_get_default()) - DECORATION_BORDER_TOT_X;
 	  h = gdk_screen_get_height(gdk_screen_get_default()) - DECORATION_BORDER_TOT_Y;

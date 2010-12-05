@@ -6704,7 +6704,7 @@ gtk_icon_view_autoscroll (GtkIconView *icon_view)
   window = gtk_widget_get_window (GTK_WIDGET (icon_view));
 
   gdk_window_get_pointer (window, &px, &py, NULL);
-  gdk_window_get_geometry (window, &x, &y, &width, &height, NULL);
+  gdk_window_get_geometry (window, &x, &y, &width, &height);
 
   /* see if we are near the edge. */
   voffset = py - (y + 2 * SCROLL_EDGE_SIZE);
