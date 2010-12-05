@@ -210,7 +210,7 @@ void                    gtk_tree_view_column_focus_cell          (GtkTreeViewCol
 								  GtkCellRenderer         *cell);
 gboolean                gtk_tree_view_column_cell_get_position   (GtkTreeViewColumn       *tree_column,
 					                          GtkCellRenderer         *cell_renderer,
-					                          gint                    *start_pos,
+					                          gint                    *x_offset,
 					                          gint                    *width);
 void                    gtk_tree_view_column_queue_resize        (GtkTreeViewColumn       *tree_column);
 GtkWidget              *gtk_tree_view_column_get_tree_view       (GtkTreeViewColumn       *tree_column);

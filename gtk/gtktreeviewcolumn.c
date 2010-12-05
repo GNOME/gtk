@@ -2915,7 +2915,7 @@ _gtk_tree_view_column_cell_get_dirty (GtkTreeViewColumn  *tree_column)
  * gtk_tree_view_column_cell_get_position:
  * @tree_column: a #GtkTreeViewColumn
  * @cell_renderer: a #GtkCellRenderer
- * @start_pos: return location for the horizontal position of @cell within
+ * @x_offset: return location for the horizontal position of @cell within
  *            @tree_column, may be %NULL
  * @width: return location for the width of @cell, may be %NULL
  *
@@ -2928,7 +2928,7 @@ _gtk_tree_view_column_cell_get_dirty (GtkTreeViewColumn  *tree_column)
 gboolean
 gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
 					GtkCellRenderer   *cell_renderer,
-					gint              *start_pos,
+					gint              *x_offset,
 					gint              *width)
 {
   GtkTreeViewColumnPrivate *priv;
@@ -2948,8 +2948,8 @@ gtk_tree_view_column_cell_get_position (GtkTreeViewColumn *tree_column,
                                      &zero_cell_area,
                                      &allocation);
 
-  if (start_pos)
-    *start_pos = allocation.x;
+  if (x_offset)
+    *x_offset = allocation.x;
   if (width)
     *width = allocation.width;
 
