@@ -774,8 +774,8 @@ void         gtk_widget_override_symbolic_color   (GtkWidget     *widget,
                                                    const gchar   *name,
                                                    const GdkRGBA *color);
 void         gtk_widget_override_cursor           (GtkWidget       *widget,
-                                                   const GdkColor  *cursor,
-                                                   const GdkColor  *secondary_cursor);
+                                                   const GdkRGBA   *cursor,
+                                                   const GdkRGBA   *secondary_cursor);
 
 
 void        gtk_widget_style_attach               (GtkWidget     *widget);

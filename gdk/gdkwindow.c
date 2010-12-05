@@ -8052,7 +8052,7 @@ gdk_window_beep (GdkWindow *window)
 
   if (toplevel)
     {
-      if (GDK_WINDOW_IMPL_CLASS (toplevel)->beep (window))
+      if (GDK_WINDOW_IMPL_GET_CLASS (toplevel->impl)->beep (window))
         return;
     }
   

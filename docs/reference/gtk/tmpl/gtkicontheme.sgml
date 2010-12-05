@@ -449,6 +449,18 @@ The #GQuark used for #GtkIconThemeError errors.
 @Returns: 
 
 
+<!-- ##### FUNCTION gtk_icon_info_load_symbolic_for_context ##### -->
+<para>
+
+</para>
+
+@icon_info: 
+@context: 
+@was_symbolic: 
+@error: 
+@Returns: 
+
+
 <!-- ##### FUNCTION gtk_icon_info_set_raw_coordinates ##### -->
 <para>
 
