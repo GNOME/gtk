@@ -30,20 +30,19 @@
 
 #include <gio/gio.h>
 
-#define gtk_app_chooser_online_get_type _gtk_app_chooser_online_get_type
 static void gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface);
-G_DEFINE_INTERFACE_WITH_CODE (GtkAppChooserOnline, gtk_app_chooser_online, G_TYPE_OBJECT,
+G_DEFINE_INTERFACE_WITH_CODE (GtkAppChooserOnline, _gtk_app_chooser_online, G_TYPE_OBJECT,
                               g_type_interface_add_prerequisite (g_define_type_id, G_TYPE_ASYNC_INITABLE);)
 
 static void
-gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface)
+_gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface)
 {
   /* do nothing */
 }
 
 GtkAppChooserOnline *
-gtk_app_chooser_online_get_default_finish (GObject *source,
-                                           GAsyncResult *result)
+_gtk_app_chooser_online_get_default_finish (GObject      *source,
+                                            GAsyncResult *result)
 {
   GtkAppChooserOnline *retval;
 
@@ -51,11 +50,11 @@ gtk_app_chooser_online_get_default_finish (GObject *source,
                                                                 result, NULL));
 
   return retval;
-}  
+}
 
 void
-gtk_app_chooser_online_get_default_async (GAsyncReadyCallback callback,
-                                          gpointer user_data)
+_gtk_app_chooser_online_get_default_async (GAsyncReadyCallback callback,
+                                           gpointer            user_data)
 {
   GIOExtensionPoint *ep;
   GIOExtension *extension;
@@ -76,11 +75,11 @@ gtk_app_chooser_online_get_default_async (GAsyncReadyCallback callback,
 }
 
 void
-gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
-                                                  const gchar         *content_type,
-                                                  GtkWindow           *parent,
-                                                  GAsyncReadyCallback  callback,
-                                                  gpointer             user_data)
+_gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
+                                                   const gchar         *content_type,
+                                                   GtkWindow           *parent,
+                                                   GAsyncReadyCallback  callback,
+                                                   gpointer             user_data)
 {
   GtkAppChooserOnlineInterface *iface;
 
@@ -92,9 +91,9 @@ gtk_app_chooser_online_search_for_mimetype_async (GtkAppChooserOnline *self,
 }
 
 gboolean
-gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline  *self,
-                                                   GAsyncResult         *res,
-                                                   GError              **error)
+_gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline  *self,
+                                                    GAsyncResult         *res,
+                                                    GError              **error)
 {
   GtkAppChooserOnlineInterface *iface;
 

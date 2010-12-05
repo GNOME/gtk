@@ -1971,8 +1971,8 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
 
   if (slice)
     {
-      gtk_9slice_render (slice, cr, x, y, width, height);
-      gtk_9slice_unref (slice);
+      _gtk_9slice_render (slice, cr, x, y, width, height);
+      _gtk_9slice_unref (slice);
     }
   else if (border_style != GTK_BORDER_STYLE_NONE)
     render_frame_internal (engine, cr,

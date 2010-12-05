@@ -44,18 +44,18 @@ struct Gtk9Slice
   gint ref_count;
 };
 
-G_DEFINE_BOXED_TYPE (Gtk9Slice, gtk_9slice,
-                     gtk_9slice_ref, gtk_9slice_unref)
+G_DEFINE_BOXED_TYPE (Gtk9Slice, _gtk_9slice,
+                     _gtk_9slice_ref, _gtk_9slice_unref)
 
 
 Gtk9Slice *
-gtk_9slice_new (GdkPixbuf            *pixbuf,
-                gdouble               distance_top,
-                gdouble               distance_bottom,
-                gdouble               distance_left,
-                gdouble               distance_right,
-                GtkSliceSideModifier  horizontal_modifier,
-                GtkSliceSideModifier  vertical_modifier)
+_gtk_9slice_new (GdkPixbuf            *pixbuf,
+                 gdouble               distance_top,
+                 gdouble               distance_bottom,
+                 gdouble               distance_left,
+                 gdouble               distance_right,
+                 GtkSliceSideModifier  horizontal_modifier,
+                 GtkSliceSideModifier  vertical_modifier)
 {
   Gtk9Slice *slice;
   cairo_surface_t *surface;
@@ -264,12 +264,12 @@ render_corner (cairo_t         *cr,
 }
 
 void
-gtk_9slice_render (Gtk9Slice *slice,
-                   cairo_t   *cr,
-                   gdouble    x,
-                   gdouble    y,
-                   gdouble    width,
-                   gdouble    height)
+_gtk_9slice_render (Gtk9Slice *slice,
+                    cairo_t   *cr,
+                    gdouble    x,
+                    gdouble    y,
+                    gdouble    width,
+                    gdouble    height)
 {
   int img_width, img_height;
   cairo_surface_t *surface;
@@ -347,7 +347,7 @@ gtk_9slice_render (Gtk9Slice *slice,
 }
 
 Gtk9Slice *
-gtk_9slice_ref (Gtk9Slice *slice)
+_gtk_9slice_ref (Gtk9Slice *slice)
 {
   g_return_val_if_fail (slice != NULL, NULL);
 
@@ -356,7 +356,7 @@ gtk_9slice_ref (Gtk9Slice *slice)
 }
 
 void
-gtk_9slice_unref (Gtk9Slice *slice)
+_gtk_9slice_unref (Gtk9Slice *slice)
 {
   g_return_if_fail (slice != NULL);
 

@@ -27,22 +27,22 @@ G_BEGIN_DECLS
 /* Dummy typedefs */
 typedef struct GtkAnimationDescription GtkAnimationDescription;
 
-#define GTK_TYPE_ANIMATION_DESCRIPTION (gtk_animation_description_get_type ())
+#define GTK_TYPE_ANIMATION_DESCRIPTION (_gtk_animation_description_get_type ())
 
-GType gtk_animation_description_get_type (void) G_GNUC_CONST;
+GType                     _gtk_animation_description_get_type          (void) G_GNUC_CONST;
 
-GtkAnimationDescription * gtk_animation_description_new (gdouble                 duration,
-                                                         GtkTimelineProgressType progress_type,
-                                                         gboolean                loop);
+GtkAnimationDescription * _gtk_animation_description_new               (gdouble                  duration,
+                                                                        GtkTimelineProgressType  progress_type,
+                                                                        gboolean                 loop);
 
-gdouble                   gtk_animation_description_get_duration      (GtkAnimationDescription *desc);
-GtkTimelineProgressType   gtk_animation_description_get_progress_type (GtkAnimationDescription *desc);
-gboolean                  gtk_animation_description_get_loop          (GtkAnimationDescription *desc);
+gdouble                   _gtk_animation_description_get_duration      (GtkAnimationDescription *desc);
+GtkTimelineProgressType   _gtk_animation_description_get_progress_type (GtkAnimationDescription *desc);
+gboolean                  _gtk_animation_description_get_loop          (GtkAnimationDescription *desc);
 
-GtkAnimationDescription * gtk_animation_description_ref   (GtkAnimationDescription *desc);
-void                      gtk_animation_description_unref (GtkAnimationDescription *desc);
+GtkAnimationDescription * _gtk_animation_description_ref               (GtkAnimationDescription *desc);
+void                      _gtk_animation_description_unref             (GtkAnimationDescription *desc);
 
-GtkAnimationDescription * gtk_animation_description_from_string (const gchar *str);
+GtkAnimationDescription * _gtk_animation_description_from_string       (const gchar *str);
 
 G_END_DECLS
 

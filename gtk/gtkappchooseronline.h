@@ -54,20 +54,20 @@ struct _GtkAppChooserOnlineInterface {
                                           GError              **error);
 };
 
-GType                 _gtk_app_chooser_online_get_type                  (void) G_GNUC_CONST;
+GType                 _gtk_app_chooser_online_get_type                   (void) G_GNUC_CONST;
 
-void                  gtk_app_chooser_online_get_default_async          (GAsyncReadyCallback   callback,
-                                                                         gpointer              user_data);
-GtkAppChooserOnline * gtk_app_chooser_online_get_default_finish          (GObject             *source,
+void                  _gtk_app_chooser_online_get_default_async          (GAsyncReadyCallback   callback,
+                                                                          gpointer              user_data);
+GtkAppChooserOnline * _gtk_app_chooser_online_get_default_finish         (GObject             *source,
                                                                           GAsyncResult        *result);
 
-void                  gtk_app_chooser_online_search_for_mimetype_async  (GtkAppChooserOnline  *self,
-                                                                         const gchar          *content_type,
-                                                                         GtkWindow            *parent,
-                                                                         GAsyncReadyCallback   callback,
-                                                                         gpointer              user_data);
-gboolean              gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline  *self,
-                                                                         GAsyncResult         *res,
-                                                                         GError              **error);
+void                  _gtk_app_chooser_online_search_for_mimetype_async  (GtkAppChooserOnline  *self,
+                                                                          const gchar          *content_type,
+                                                                          GtkWindow            *parent,
+                                                                          GAsyncReadyCallback   callback,
+                                                                          gpointer              user_data);
+gboolean              _gtk_app_chooser_online_search_for_mimetype_finish (GtkAppChooserOnline  *self,
+                                                                          GAsyncResult         *res,
+                                                                          GError              **error);
 
 #endif /* __GTK_APP_CHOOSER_ONLINE_H__ */

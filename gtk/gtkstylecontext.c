@@ -495,7 +495,7 @@ enum {
   LAST_SIGNAL
 };
 
-guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GQuark provider_list_quark = 0;
 
@@ -842,19 +842,19 @@ animation_info_new (GtkStyleContext         *context,
   info = g_slice_new0 (AnimationInfo);
 
   info->rectangles = g_array_new (FALSE, FALSE, sizeof (cairo_rectangle_int_t));
-  info->timeline = gtk_timeline_new (duration);
+  info->timeline = _gtk_timeline_new (duration);
   info->window = g_object_ref (window);
   info->state = state;
   info->target_value = target_value;
   info->region_id = region_id;
 
-  gtk_timeline_set_progress_type (info->timeline, progress_type);
-  gtk_timeline_set_loop (info->timeline, loop);
+  _gtk_timeline_set_progress_type (info->timeline, progress_type);
+  _gtk_timeline_set_loop (info->timeline, loop);
 
   if (!loop && !target_value)
     {
-      gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
-      gtk_timeline_rewind (info->timeline);
+      _gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+      _gtk_timeline_rewind (info->timeline);
     }
 
   g_signal_connect (info->timeline, "frame",
@@ -862,7 +862,7 @@ animation_info_new (GtkStyleContext         *context,
   g_signal_connect (info->timeline, "finished",
                     G_CALLBACK (timeline_finished_cb), context);
 
-  gtk_timeline_start (info->timeline);
+  _gtk_timeline_start (info->timeline);
 
   return info;
 }
@@ -1076,7 +1076,7 @@ build_icon_factories (GtkStyleContext *context,
     }
 }
 
-GtkWidgetPath *
+static GtkWidgetPath *
 create_query_path (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
@@ -1628,7 +1628,7 @@ gtk_style_context_state_is_running (GtkStyleContext *context,
           context_has_animatable_region (context, info->region_id))
         {
           if (progress)
-            *progress = gtk_timeline_get_progress (info->timeline);
+            *progress = _gtk_timeline_get_progress (info->timeline);
 
           return TRUE;
         }
@@ -2855,9 +2855,9 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   if (!desc)
     return;
 
-  if (gtk_animation_description_get_duration (desc) == 0)
+  if (_gtk_animation_description_get_duration (desc) == 0)
     {
-      gtk_animation_description_unref (desc);
+      _gtk_animation_description_unref (desc);
       return;
     }
 
@@ -2867,37 +2867,37 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
       info->target_value != state_value)
     {
       /* Target values are the opposite */
-      if (!gtk_timeline_get_loop (info->timeline))
+      if (!_gtk_timeline_get_loop (info->timeline))
         {
           /* Reverse the animation */
-          if (gtk_timeline_get_direction (info->timeline) == GTK_TIMELINE_DIRECTION_FORWARD)
-            gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+          if (_gtk_timeline_get_direction (info->timeline) == GTK_TIMELINE_DIRECTION_FORWARD)
+            _gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
           else
-            gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_FORWARD);
+            _gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_FORWARD);
 
           info->target_value = state_value;
         }
       else
         {
           /* Take it out of its looping state */
-          gtk_timeline_set_loop (info->timeline, FALSE);
+          _gtk_timeline_set_loop (info->timeline, FALSE);
         }
     }
   else if (!info &&
-           (!gtk_animation_description_get_loop (desc) ||
+           (!_gtk_animation_description_get_loop (desc) ||
             state_value))
     {
       info = animation_info_new (context, region_id,
-                                 gtk_animation_description_get_duration (desc),
-                                 gtk_animation_description_get_progress_type (desc),
-                                 gtk_animation_description_get_loop (desc),
+                                 _gtk_animation_description_get_duration (desc),
+                                 _gtk_animation_description_get_progress_type (desc),
+                                 _gtk_animation_description_get_loop (desc),
                                  state, state_value, window);
 
       priv->animations = g_slist_prepend (priv->animations, info);
       priv->animations_invalidated = TRUE;
     }
 
-  gtk_animation_description_unref (desc);
+  _gtk_animation_description_unref (desc);
 }
 
 /**

@@ -4097,10 +4097,10 @@ _gtk_widget_start_state_transitions (GtkWidget *widget)
 
       if (animation_desc)
         {
-          if (gtk_animation_description_get_loop (animation_desc))
+          if (_gtk_animation_description_get_loop (animation_desc))
             _gtk_widget_notify_state_change (widget, flag, TRUE);
 
-          gtk_animation_description_unref (animation_desc);
+          _gtk_animation_description_unref (animation_desc);
         }
 
       flag >>= 1;

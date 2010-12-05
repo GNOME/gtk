@@ -134,7 +134,7 @@ pk_search_mime_async (GtkAppChooserOnline *obj,
 
   self->priv->result = g_simple_async_result_new (G_OBJECT (self),
                                                   callback, user_data,
-                                                  gtk_app_chooser_online_search_for_mimetype_async);
+                                                  _gtk_app_chooser_online_search_for_mimetype_async);
 
 #ifdef GDK_WINDOWING_X11
   window = gtk_widget_get_window (GTK_WIDGET (parent));
@@ -243,7 +243,7 @@ app_chooser_online_pk_init_async (GAsyncInitable *init,
 
   self->priv->init_result = g_simple_async_result_new (G_OBJECT (self),
                                                        callback, user_data,
-                                                       gtk_app_chooser_online_get_default_async);
+                                                       _gtk_app_chooser_online_get_default_async);
 
   self->priv->watch_id =
     g_bus_watch_name (G_BUS_TYPE_SESSION,

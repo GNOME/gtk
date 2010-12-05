@@ -2621,10 +2621,10 @@ slice_parse_str (GtkCssProvider  *css_provider,
       return NULL;
     }
 
-  slice = gtk_9slice_new (pixbuf,
-                          distance_top, distance_bottom,
-                          distance_left, distance_right,
-                          mods[0], mods[1]);
+  slice = _gtk_9slice_new (pixbuf,
+                           distance_top, distance_bottom,
+                           distance_left, distance_right,
+                           mods[0], mods[1]);
   g_object_unref (pixbuf);
 
   return slice;
@@ -2796,7 +2796,7 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
     {
       GtkAnimationDescription *desc;
 
-      desc = gtk_animation_description_from_string (value_str);
+      desc = _gtk_animation_description_from_string (value_str);
 
       if (desc)
         g_value_take_boxed (value, desc);
