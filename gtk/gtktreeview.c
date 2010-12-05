@@ -166,7 +166,6 @@ enum
 #define GTK_TREE_VIEW_SET_FLAG(tree_view, flag)   G_STMT_START{ (tree_view->priv->flags|=flag); }G_STMT_END
 #define GTK_TREE_VIEW_UNSET_FLAG(tree_view, flag) G_STMT_START{ (tree_view->priv->flags&=~(flag)); }G_STMT_END
 #define GTK_TREE_VIEW_FLAG_SET(tree_view, flag)   ((tree_view->priv->flags&flag)==flag)
-#define TREE_VIEW_DRAW_EXPANDERS(tree_view)       (!GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST)&&GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS))
 
  /* This lovely little value is used to determine how far away from the title bar
   * you can move the mouse and still have a column drag work.
@@ -747,6 +746,7 @@ static void     invalidate_empty_focus      (GtkTreeView *tree_view);
 /* Internal functions */
 static gboolean gtk_tree_view_is_expander_column             (GtkTreeView        *tree_view,
 							      GtkTreeViewColumn  *column);
+static inline gboolean gtk_tree_view_draw_expanders          (GtkTreeView        *tree_view);
 static void     gtk_tree_view_add_move_binding               (GtkBindingSet      *binding_set,
 							      guint               keyval,
 							      guint               modmask,
@@ -2585,7 +2585,7 @@ gtk_tree_view_get_column_padding (GtkTreeView       *tree_view,
     {
       padding += (tree_view->priv->deepest_depth - 1) * tree_view->priv->level_indentation;
 
-      if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
+      if (gtk_tree_view_draw_expanders (tree_view))
 	padding += tree_view->priv->deepest_depth * tree_view->priv->expander_size;
     }
 
@@ -3039,7 +3039,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
       /* are we in an arrow? */
       if (tree_view->priv->prelight_node &&
           GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT) &&
-	  TREE_VIEW_DRAW_EXPANDERS (tree_view))
+	  gtk_tree_view_draw_expanders (tree_view))
 	{
 	  if (event->button == 1)
 	    {
@@ -3116,7 +3116,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 		cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
 	      cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
 
-              if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
+              if (gtk_tree_view_draw_expanders (tree_view))
 	        {
 		  if (!rtl)
 		    cell_area.x += depth * tree_view->priv->expander_size;
@@ -3622,7 +3622,7 @@ do_prelight (GtkTreeView *tree_view,
       /*  We are still on the same node,
 	  but we might need to take care of the arrow  */
 
-      if (tree && node && TREE_VIEW_DRAW_EXPANDERS (tree_view))
+      if (tree && node && gtk_tree_view_draw_expanders (tree_view))
 	{
 	  gboolean over_arrow;
 	  gboolean flag_set;
@@ -3655,7 +3655,7 @@ do_prelight (GtkTreeView *tree_view,
 			     GTK_RBNODE_IS_PRELIT);
 
       if (GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_ARROW_PRELIT)
-	  && TREE_VIEW_DRAW_EXPANDERS (tree_view))
+	  && gtk_tree_view_draw_expanders (tree_view))
 	{
 	  GTK_TREE_VIEW_UNSET_FLAG (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
 	  
@@ -3683,7 +3683,7 @@ do_prelight (GtkTreeView *tree_view,
 
   /*  Prelight the new node and arrow  */
 
-  if (TREE_VIEW_DRAW_EXPANDERS (tree_view)
+  if (gtk_tree_view_draw_expanders (tree_view)
       && coords_are_over_arrow (tree_view, tree, node, x, y))
     {
       GTK_TREE_VIEW_SET_FLAG (tree_view, GTK_TREE_VIEW_ARROW_PRELIT);
@@ -5131,7 +5131,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 		cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
 	      cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
 
-              if (TREE_VIEW_DRAW_EXPANDERS(tree_view))
+              if (gtk_tree_view_draw_expanders (tree_view))
 	        {
 	          if (!rtl)
 		    cell_area.x += depth * tree_view->priv->expander_size;
@@ -5161,7 +5161,7 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 						   &cell_area,
 						   flags,
                                                    draw_focus);
-	      if (TREE_VIEW_DRAW_EXPANDERS(tree_view)
+	      if (gtk_tree_view_draw_expanders (tree_view)
 		  && (node->flags & GTK_RBNODE_IS_PARENT) == GTK_RBNODE_IS_PARENT)
 		{
 		  if (!got_pointer)
@@ -6228,7 +6228,7 @@ validate_row (GtkTreeView *tree_view,
         {
 	  tmp_width = tmp_width + horizontal_separator + (depth - 1) * tree_view->priv->level_indentation;
 
-	  if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
+	  if (gtk_tree_view_draw_expanders (tree_view))
 	    tmp_width += depth * tree_view->priv->expander_size;
 	}
       else
@@ -9544,6 +9544,16 @@ gtk_tree_view_is_expander_column (GtkTreeView       *tree_view,
       if (list && list->data == column)
 	return TRUE;
     }
+  return FALSE;
+}
+
+static inline gboolean
+gtk_tree_view_draw_expanders (GtkTreeView *tree_view)
+{
+  if (!GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_IS_LIST)
+      && GTK_TREE_VIEW_FLAG_SET (tree_view, GTK_TREE_VIEW_SHOW_EXPANDERS))
+    return TRUE;
+  /* else */
   return FALSE;
 }
 
@@ -13629,7 +13639,7 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
 	    rect->x += (depth - 1) * tree_view->priv->level_indentation;
 	  rect->width -= (depth - 1) * tree_view->priv->level_indentation;
 
-	  if (TREE_VIEW_DRAW_EXPANDERS (tree_view))
+	  if (gtk_tree_view_draw_expanders (tree_view))
 	    {
 	      if (!rtl)
 		rect->x += depth * tree_view->priv->expander_size;
@@ -14438,7 +14448,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
 	    cell_area.x += (depth - 1) * tree_view->priv->level_indentation;
 	  cell_area.width -= (depth - 1) * tree_view->priv->level_indentation;
 
-          if (TREE_VIEW_DRAW_EXPANDERS(tree_view))
+          if (gtk_tree_view_draw_expanders (tree_view))
 	    {
 	      if (!rtl)
 		cell_area.x += depth * tree_view->priv->expander_size;
