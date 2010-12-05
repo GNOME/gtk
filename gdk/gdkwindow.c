@@ -6859,8 +6859,7 @@ gdk_window_get_geometry (GdkWindow *window,
 	{
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 	  impl_class->get_geometry (window, x, y,
-				    width, height,
-				    NULL);
+				    width, height);
 	  /* This reports the position wrt to the native parent, we need to convert
 	     it to be relative to the client side parent */
 	  parent = window->parent;

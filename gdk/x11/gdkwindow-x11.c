@@ -2739,8 +2739,7 @@ gdk_window_x11_get_geometry (GdkWindow *window,
                              gint      *x,
                              gint      *y,
                              gint      *width,
-                             gint      *height,
-                             gint      *depth)
+                             gint      *height)
 {
   Window root;
   gint tx;
@@ -2764,8 +2763,6 @@ gdk_window_x11_get_geometry (GdkWindow *window,
 	*width = twidth;
       if (height)
 	*height = theight;
-      if (depth)
-	*depth = tdepth;
     }
 }
 

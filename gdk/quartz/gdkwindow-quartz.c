@@ -1645,8 +1645,7 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
                                 gint      *x,
                                 gint      *y,
                                 gint      *width,
-                                gint      *height,
-                                gint      *depth)
+                                gint      *height)
 {
   GdkWindowImplQuartz *impl;
   GdkWindowObject *private;
@@ -1713,9 +1712,6 @@ gdk_window_quartz_get_geometry (GdkWindow *window,
       if (height)
         *height = ns_rect.size.height;
     }
-    
-  if (depth)
-      *depth = gdk_visual_get_depth (gdk_window_get_visual (window));
 }
 
 static gint

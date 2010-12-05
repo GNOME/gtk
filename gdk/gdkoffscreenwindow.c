@@ -549,8 +549,7 @@ gdk_offscreen_window_get_geometry (GdkWindow *window,
 				   gint      *x,
 				   gint      *y,
 				   gint      *width,
-				   gint      *height,
-				   gint      *depth)
+				   gint      *height)
 {
   if (!GDK_WINDOW_DESTROYED (window))
     {
@@ -562,8 +561,6 @@ gdk_offscreen_window_get_geometry (GdkWindow *window,
 	*width = window->width;
       if (height)
 	*height = window->height;
-      if (depth)
-	*depth = window->depth;
     }
 }
 
