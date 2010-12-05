@@ -8322,36 +8322,6 @@ gtk_widget_modify_base (GtkWidget      *widget,
   gtk_widget_modify_color_component (widget, GTK_RC_BASE, state, color);
 }
 
-static void
-modify_color_property (GtkWidget      *widget,
-		       GtkRcStyle     *rc_style,
-		       const char     *name,
-		       const GdkColor *color)
-{
-  GQuark type_name = g_type_qname (G_OBJECT_TYPE (widget));
-  GQuark property_name = g_quark_from_string (name);
-
-  if (color)
-    {
-      GtkRcProperty rc_property = {0};
-      char *color_name;
-
-      rc_property.type_name = type_name;
-      rc_property.property_name = property_name;
-      rc_property.origin = NULL;
-
-      color_name = gdk_color_to_string (color);
-      g_value_init (&rc_property.value, G_TYPE_STRING);
-      g_value_take_string (&rc_property.value, color_name);
-
-      _gtk_rc_style_set_rc_property (rc_style, &rc_property);
-
-      g_value_unset (&rc_property.value);
-    }
-  else
-    _gtk_rc_style_unset_rc_property (rc_style, type_name, property_name);
-}
-
 /**
  * gtk_widget_modify_cursor:
  * @widget: a #GtkWidget
