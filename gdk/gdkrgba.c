@@ -49,7 +49,7 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * Since: 3.0
  **/
 GdkRGBA *
-gdk_rgba_copy (GdkRGBA *rgba)
+gdk_rgba_copy (const GdkRGBA *rgba)
 {
   GdkRGBA *copy;
 
