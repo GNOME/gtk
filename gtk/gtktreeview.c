@@ -9965,12 +9965,6 @@ _gtk_tree_view_get_rbtree (GtkTreeView *tree_view)
   return tree_view->priv->tree;
 }
 
-GtkTreeViewColumn *
-_gtk_tree_view_get_focus_column (GtkTreeView *tree_view)
-{
-  return tree_view->priv->focus_column;
-}
-
 GdkWindow *
 _gtk_tree_view_get_header_window (GtkTreeView *tree_view)
 {
