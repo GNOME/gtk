@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-10-26 16:52+0200\n"
-"PO-Revision-Date: 2010-10-25 01:05+0200\n"
+"POT-Creation-Date: 2010-12-05 14:56+0100\n"
+"PO-Revision-Date: 2010-12-05 14:56+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "Language: gl\n"
@@ -32,58 +32,58 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: KBabel 1.11.4\n"
 
-#: ../gdk/gdk.c:104
+#: ../gdk/gdk.c:115
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Produciuse un erro ao analizar a opción --gdk-debug"
 
-#: ../gdk/gdk.c:124
+#: ../gdk/gdk.c:135
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Produciuse un erro ao analizar a opción --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:152
+#: ../gdk/gdk.c:163
 msgid "Program class as used by the window manager"
 msgstr "Clase de programa tal como a usa o xestor de xanelas"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:153
+#: ../gdk/gdk.c:164
 msgid "CLASS"
 msgstr "CLASE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:155
+#: ../gdk/gdk.c:166
 msgid "Program name as used by the window manager"
 msgstr "Nome do programa tal como o usa o xestor de xanelas"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:156
+#: ../gdk/gdk.c:167
 msgid "NAME"
 msgstr "NOME"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:158
+#: ../gdk/gdk.c:169
 msgid "X display to use"
 msgstr "Pantalla de X que se vai usar"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:159
+#: ../gdk/gdk.c:170
 msgid "DISPLAY"
 msgstr "PANTALLA"
 
 #. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:161
+#: ../gdk/gdk.c:172
 msgid "X screen to use"
 msgstr "Pantalla X que se vai usar"
 
 #. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:162
+#: ../gdk/gdk.c:173
 msgid "SCREEN"
 msgstr "PANTALLA"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:165
+#: ../gdk/gdk.c:176
 msgid "GDK debugging flags to set"
 msgstr "Opcións de depuración GDK para estabelecer"
 
@@ -91,12 +91,12 @@ msgstr "Opcións de depuración GDK para estabelecer"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:166 ../gdk/gdk.c:169 ../gtk/gtkmain.c:534 ../gtk/gtkmain.c:537
+#: ../gdk/gdk.c:177 ../gdk/gdk.c:180 ../gtk/gtkmain.c:523 ../gtk/gtkmain.c:526
 msgid "FLAGS"
 msgstr "PARÁMETROS"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:168
+#: ../gdk/gdk.c:179
 msgid "GDK debugging flags to unset"
 msgstr "Opcións de depuración GDK para quitar"
 
@@ -315,17 +315,17 @@ msgstr "Tamaño da paleta en modo 8 bits"
 msgid "COLORS"
 msgstr "CORES"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:312
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Starting %s"
 msgstr "Iniciando %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:316
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:318
 #, c-format
 msgid "Opening %s"
 msgstr "Abrindo %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:321
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:323
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -346,7 +346,7 @@ msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
 msgstr ""
 "Este programa non fornece NINGUNHA GARANTÍA, para máis información visite %s"
 
-#: ../gtk/gtkaboutdialog.c:339 ../gtk/gtkaboutdialog.c:2232
+#: ../gtk/gtkaboutdialog.c:339 ../gtk/gtkaboutdialog.c:2233
 msgid "License"
 msgstr "Licenza"
 
@@ -355,41 +355,41 @@ msgid "The license of the program"
 msgstr "A licenza do programa"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:621
+#: ../gtk/gtkaboutdialog.c:622
 msgid "C_redits"
 msgstr "C_réditos"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:635
+#: ../gtk/gtkaboutdialog.c:636
 msgid "_License"
 msgstr "_Licenza"
 
-#: ../gtk/gtkaboutdialog.c:839
+#: ../gtk/gtkaboutdialog.c:840
 msgid "Could not show link"
 msgstr "Non foi posíbel mostrar a ligazón"
 
-#: ../gtk/gtkaboutdialog.c:932
+#: ../gtk/gtkaboutdialog.c:933
 #, c-format
 msgid "About %s"
 msgstr "Sobre %s"
 
-#: ../gtk/gtkaboutdialog.c:2150
+#: ../gtk/gtkaboutdialog.c:2151
 msgid "Credits"
 msgstr "Créditos"
 
-#: ../gtk/gtkaboutdialog.c:2182
+#: ../gtk/gtkaboutdialog.c:2183
 msgid "Written by"
 msgstr "Escrito por"
 
-#: ../gtk/gtkaboutdialog.c:2185
+#: ../gtk/gtkaboutdialog.c:2186
 msgid "Documented by"
 msgstr "Documentado por"
 
-#: ../gtk/gtkaboutdialog.c:2197
+#: ../gtk/gtkaboutdialog.c:2198
 msgid "Translated by"
 msgstr "Traducido por"
 
-#: ../gtk/gtkaboutdialog.c:2201
+#: ../gtk/gtkaboutdialog.c:2202
 msgid "Artwork by"
 msgstr "Material gráfico por"
 
@@ -495,7 +495,7 @@ msgstr "Etiqueta non compatíbel: «%s»"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:873
+#: ../gtk/gtkcalendar.c:878
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -503,7 +503,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:911
+#: ../gtk/gtkcalendar.c:916
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -512,7 +512,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1843
+#: ../gtk/gtkcalendar.c:1848
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -527,7 +527,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1874 ../gtk/gtkcalendar.c:2535
+#: ../gtk/gtkcalendar.c:1879 ../gtk/gtkcalendar.c:2564
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -543,7 +543,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1906 ../gtk/gtkcalendar.c:2403
+#: ../gtk/gtkcalendar.c:1911 ../gtk/gtkcalendar.c:2432
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -559,7 +559,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2168
+#: ../gtk/gtkcalendar.c:2197
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -595,15 +595,15 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:175 ../gtk/gtkcolorbutton.c:460
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:473
 msgid "Pick a Color"
 msgstr "Seleccione unha cor"
 
-#: ../gtk/gtkcolorbutton.c:350
+#: ../gtk/gtkcolorbutton.c:363
 msgid "Received invalid color data\n"
 msgstr "Recibiuse un dato de cor incorrecto\n"
 
-#: ../gtk/gtkcolorsel.c:395
+#: ../gtk/gtkcolorsel.c:416
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -611,7 +611,7 @@ msgstr ""
 "Seleccione a cor que quere desde o anel exterior. Seleccione a escuridade ou "
 "luminosidade usando o triángulo interior."
 
-#: ../gtk/gtkcolorsel.c:419
+#: ../gtk/gtkcolorsel.c:440
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -619,67 +619,67 @@ msgstr ""
 "Seleccione o contagotas, despois prema sobre calquera cor que haxa na súa "
 "pantalla para seleccionala."
 
-#: ../gtk/gtkcolorsel.c:428
+#: ../gtk/gtkcolorsel.c:449
 msgid "_Hue:"
 msgstr "_Matiz:"
 
-#: ../gtk/gtkcolorsel.c:429
+#: ../gtk/gtkcolorsel.c:450
 msgid "Position on the color wheel."
 msgstr "Posición na roda de cores."
 
-#: ../gtk/gtkcolorsel.c:431
+#: ../gtk/gtkcolorsel.c:452
 msgid "_Saturation:"
 msgstr "_Saturación:"
 
-#: ../gtk/gtkcolorsel.c:432
+#: ../gtk/gtkcolorsel.c:453
 msgid "Intensity of the color."
 msgstr "Intensidade da cor."
 
-#: ../gtk/gtkcolorsel.c:433
+#: ../gtk/gtkcolorsel.c:454
 msgid "_Value:"
 msgstr "_Valor:"
 
-#: ../gtk/gtkcolorsel.c:434
+#: ../gtk/gtkcolorsel.c:455
 msgid "Brightness of the color."
 msgstr "Brillo da cor."
 
-#: ../gtk/gtkcolorsel.c:435
+#: ../gtk/gtkcolorsel.c:456
 msgid "_Red:"
 msgstr "_Vermello:"
 
-#: ../gtk/gtkcolorsel.c:436
+#: ../gtk/gtkcolorsel.c:457
 msgid "Amount of red light in the color."
 msgstr "Cantidade de luz vermella na cor."
 
-#: ../gtk/gtkcolorsel.c:437
+#: ../gtk/gtkcolorsel.c:458
 msgid "_Green:"
 msgstr "V_erde:"
 
-#: ../gtk/gtkcolorsel.c:438
+#: ../gtk/gtkcolorsel.c:459
 msgid "Amount of green light in the color."
 msgstr "Cantidade de luz verde na cor."
 
-#: ../gtk/gtkcolorsel.c:439
+#: ../gtk/gtkcolorsel.c:460
 msgid "_Blue:"
 msgstr "_Azul:"
 
-#: ../gtk/gtkcolorsel.c:440
+#: ../gtk/gtkcolorsel.c:461
 msgid "Amount of blue light in the color."
 msgstr "Cantidade de luz azul na cor."
 
-#: ../gtk/gtkcolorsel.c:443
+#: ../gtk/gtkcolorsel.c:464
 msgid "Op_acity:"
 msgstr "Op_acidade:"
 
-#: ../gtk/gtkcolorsel.c:450 ../gtk/gtkcolorsel.c:460
+#: ../gtk/gtkcolorsel.c:471 ../gtk/gtkcolorsel.c:481
 msgid "Transparency of the color."
 msgstr "Transparencia da cor."
 
-#: ../gtk/gtkcolorsel.c:467
+#: ../gtk/gtkcolorsel.c:488
 msgid "Color _name:"
 msgstr "_Nome da cor:"
 
-#: ../gtk/gtkcolorsel.c:481
+#: ../gtk/gtkcolorsel.c:502
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -687,15 +687,15 @@ msgstr ""
 "Nesta entrada pode introducir un valor de cor en estilo HTML hexadecimal ou "
 "simplemente un nome de cor como 'orange'."
 
-#: ../gtk/gtkcolorsel.c:511
+#: ../gtk/gtkcolorsel.c:532
 msgid "_Palette:"
 msgstr "_Paleta:"
 
-#: ../gtk/gtkcolorsel.c:540
+#: ../gtk/gtkcolorsel.c:561
 msgid "Color Wheel"
 msgstr "Roda de cor"
 
-#: ../gtk/gtkcolorsel.c:1010
+#: ../gtk/gtkcolorsel.c:1031
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -706,7 +706,7 @@ msgstr ""
 "seleccionar esta cor como actual arrastrándoa até a outra cor ao longo da "
 "mostra."
 
-#: ../gtk/gtkcolorsel.c:1013
+#: ../gtk/gtkcolorsel.c:1034
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -714,7 +714,7 @@ msgstr ""
 "A cor que escolleu. Pode arrastrar esta cor a unha entrada da paleta e "
 "gardala para usala no futuro."
 
-#: ../gtk/gtkcolorsel.c:1018
+#: ../gtk/gtkcolorsel.c:1039
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
@@ -722,15 +722,15 @@ msgstr ""
 "A cor seleccionada anteriormente, para comparar coa cor que seleccionou "
 "agora."
 
-#: ../gtk/gtkcolorsel.c:1021
+#: ../gtk/gtkcolorsel.c:1042
 msgid "The color you've chosen."
 msgstr "A cor que seleccionou."
 
-#: ../gtk/gtkcolorsel.c:1421
+#: ../gtk/gtkcolorsel.c:1442
 msgid "_Save color here"
 msgstr "_Gardar a cor aquí"
 
-#: ../gtk/gtkcolorsel.c:1626
+#: ../gtk/gtkcolorsel.c:1647
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -807,23 +807,23 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: ../gtk/gtkentry.c:8570 ../gtk/gtktextview.c:8185
+#: ../gtk/gtkentry.c:8793 ../gtk/gtktextview.c:8229
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8584 ../gtk/gtktextview.c:8199
+#: ../gtk/gtkentry.c:8807 ../gtk/gtktextview.c:8243
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:9984
+#: ../gtk/gtkentry.c:10207
 msgid "Caps Lock and Num Lock are on"
 msgstr "Bloq Maiús e Bloq Num estás activados"
 
-#: ../gtk/gtkentry.c:9986
+#: ../gtk/gtkentry.c:10209
 msgid "Num Lock is on"
 msgstr "Bloq Num está activado"
 
-#: ../gtk/gtkentry.c:9988
+#: ../gtk/gtkentry.c:10211
 msgid "Caps Lock is on"
 msgstr "Bloq Maiús está activado"
 
@@ -842,7 +842,7 @@ msgstr "Escritorio"
 msgid "(None)"
 msgstr "(Ningún)"
 
-#: ../gtk/gtkfilechooserbutton.c:1997
+#: ../gtk/gtkfilechooserbutton.c:2001
 msgid "Other..."
 msgstr "Outro..."
 
@@ -903,192 +903,192 @@ msgstr "%1$s en %2$s"
 msgid "Search"
 msgstr "Buscar"
 
-#: ../gtk/gtkfilechooserdefault.c:1776 ../gtk/gtkfilechooserdefault.c:9382
+#: ../gtk/gtkfilechooserdefault.c:1776 ../gtk/gtkfilechooserdefault.c:9417
 msgid "Recently Used"
 msgstr "Usado recentemente"
 
-#: ../gtk/gtkfilechooserdefault.c:2430
+#: ../gtk/gtkfilechooserdefault.c:2437
 msgid "Select which types of files are shown"
 msgstr "Seleccione que tipos de ficheiros se mostran"
 
-#: ../gtk/gtkfilechooserdefault.c:2789
+#: ../gtk/gtkfilechooserdefault.c:2796
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Engadirlle o cartafol «%s» aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2833
+#: ../gtk/gtkfilechooserdefault.c:2840
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Engadirlle o cartafol actual aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2835
+#: ../gtk/gtkfilechooserdefault.c:2842
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Engadirlle os cartafoles seleccionados aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:2873
+#: ../gtk/gtkfilechooserdefault.c:2880
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Eliminar o marcador «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2875
+#: ../gtk/gtkfilechooserdefault.c:2882
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "O marcador «%s» non pode ser eliminado"
 
-#: ../gtk/gtkfilechooserdefault.c:2882 ../gtk/gtkfilechooserdefault.c:3746
+#: ../gtk/gtkfilechooserdefault.c:2889 ../gtk/gtkfilechooserdefault.c:3750
 msgid "Remove the selected bookmark"
 msgstr "Eliminar o marcador seleccionado"
 
-#: ../gtk/gtkfilechooserdefault.c:3442
+#: ../gtk/gtkfilechooserdefault.c:3445
 msgid "Remove"
 msgstr "Eliminar"
 
-#: ../gtk/gtkfilechooserdefault.c:3451
+#: ../gtk/gtkfilechooserdefault.c:3454
 msgid "Rename..."
 msgstr "Renomear..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3614
+#: ../gtk/gtkfilechooserdefault.c:3617
 msgid "Places"
 msgstr "Lugares"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3671
+#: ../gtk/gtkfilechooserdefault.c:3674
 msgid "_Places"
 msgstr "_Lugares"
 
-#: ../gtk/gtkfilechooserdefault.c:3727
+#: ../gtk/gtkfilechooserdefault.c:3731
 msgid "_Add"
 msgstr "_Engadir"
 
-#: ../gtk/gtkfilechooserdefault.c:3734
+#: ../gtk/gtkfilechooserdefault.c:3738
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Engadir o cartafol seleccionado aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:3739
+#: ../gtk/gtkfilechooserdefault.c:3743
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkfilechooserdefault.c:3881
+#: ../gtk/gtkfilechooserdefault.c:3885
 msgid "Could not select file"
 msgstr "Non foi posíbel seleccionar o ficheiro"
 
-#: ../gtk/gtkfilechooserdefault.c:4056
+#: ../gtk/gtkfilechooserdefault.c:4060
 msgid "_Add to Bookmarks"
 msgstr "_Engadir aos marcadores"
 
-#: ../gtk/gtkfilechooserdefault.c:4069
+#: ../gtk/gtkfilechooserdefault.c:4073
 msgid "Show _Hidden Files"
 msgstr "Mostrar os ficheiros _ocultos"
 
-#: ../gtk/gtkfilechooserdefault.c:4076
+#: ../gtk/gtkfilechooserdefault.c:4080
 msgid "Show _Size Column"
 msgstr "Mostrar a columna de _tamaño"
 
-#: ../gtk/gtkfilechooserdefault.c:4302
+#: ../gtk/gtkfilechooserdefault.c:4306
 msgid "Files"
 msgstr "Ficheiros"
 
-#: ../gtk/gtkfilechooserdefault.c:4353
+#: ../gtk/gtkfilechooserdefault.c:4357
 msgid "Name"
 msgstr "Nome"
 
-#: ../gtk/gtkfilechooserdefault.c:4376
+#: ../gtk/gtkfilechooserdefault.c:4380
 msgid "Size"
 msgstr "Tamaño"
 
-#: ../gtk/gtkfilechooserdefault.c:4390
+#: ../gtk/gtkfilechooserdefault.c:4394
 msgid "Modified"
 msgstr "Modificado"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4645 ../gtk/gtkprinteroptionwidget.c:793
+#: ../gtk/gtkfilechooserdefault.c:4649 ../gtk/gtkprinteroptionwidget.c:793
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: ../gtk/gtkfilechooserdefault.c:4688
+#: ../gtk/gtkfilechooserdefault.c:4692
 msgid "_Browse for other folders"
 msgstr "_Buscar outros cartafoles"
 
-#: ../gtk/gtkfilechooserdefault.c:4958
+#: ../gtk/gtkfilechooserdefault.c:4962
 msgid "Type a file name"
 msgstr "Teclee un nome de ficheiro"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5001
+#: ../gtk/gtkfilechooserdefault.c:5005
 msgid "Create Fo_lder"
 msgstr "Crear car_tafol"
 
-#: ../gtk/gtkfilechooserdefault.c:5011
+#: ../gtk/gtkfilechooserdefault.c:5015
 msgid "_Location:"
 msgstr "_Localización:"
 
-#: ../gtk/gtkfilechooserdefault.c:5215
+#: ../gtk/gtkfilechooserdefault.c:5219
 msgid "Save in _folder:"
 msgstr "Gardar no _cartafol:"
 
-#: ../gtk/gtkfilechooserdefault.c:5217
+#: ../gtk/gtkfilechooserdefault.c:5221
 msgid "Create in _folder:"
 msgstr "Crear no _cartafol:"
 
-#: ../gtk/gtkfilechooserdefault.c:6286
+#: ../gtk/gtkfilechooserdefault.c:6290
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Non foi posíbel ler os contidos do %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6290
+#: ../gtk/gtkfilechooserdefault.c:6294
 msgid "Could not read the contents of the folder"
 msgstr "Non foi posíbel ler os contidos do cartafol"
 
-#: ../gtk/gtkfilechooserdefault.c:6383 ../gtk/gtkfilechooserdefault.c:6451
-#: ../gtk/gtkfilechooserdefault.c:6596
+#: ../gtk/gtkfilechooserdefault.c:6387 ../gtk/gtkfilechooserdefault.c:6455
+#: ../gtk/gtkfilechooserdefault.c:6600
 msgid "Unknown"
 msgstr "Descoñecido"
 
-#: ../gtk/gtkfilechooserdefault.c:6398
+#: ../gtk/gtkfilechooserdefault.c:6402
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6400
+#: ../gtk/gtkfilechooserdefault.c:6404
 msgid "Yesterday at %H:%M"
 msgstr "Onte ás %H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7066
+#: ../gtk/gtkfilechooserdefault.c:7070
 msgid "Cannot change to folder because it is not local"
 msgstr "Non é posíbel cambiar ao cartafol porque non é local"
 
-#: ../gtk/gtkfilechooserdefault.c:7663 ../gtk/gtkfilechooserdefault.c:7684
+#: ../gtk/gtkfilechooserdefault.c:7667 ../gtk/gtkfilechooserdefault.c:7688
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "O atallo %s xa existe"
 
-#: ../gtk/gtkfilechooserdefault.c:7774
+#: ../gtk/gtkfilechooserdefault.c:7778
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "O atallo %s non existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8035 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8039 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Xa existe un ficheiro con nome «%s». Quere substituílo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8038 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8042 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O ficheiro xa existe en «%s». Se o substitúe sobrescribirá os seus contidos."
 
-#: ../gtk/gtkfilechooserdefault.c:8043 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8047 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Substituír"
 
-#: ../gtk/gtkfilechooserdefault.c:8751
+#: ../gtk/gtkfilechooserdefault.c:8755
 msgid "Could not start the search process"
 msgstr "Non foi posíbel iniciar o proceso de busca"
 
-#: ../gtk/gtkfilechooserdefault.c:8752
+#: ../gtk/gtkfilechooserdefault.c:8756
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1096,15 +1096,15 @@ msgstr ""
 "O programa non puido crear unha conexión co deamon indexador.  Asegúrese de "
 "que está en execución."
 
-#: ../gtk/gtkfilechooserdefault.c:8766
+#: ../gtk/gtkfilechooserdefault.c:8770
 msgid "Could not send the search request"
 msgstr "Non foi posíbel enviar a solicitude de busca"
 
-#: ../gtk/gtkfilechooserdefault.c:8954
+#: ../gtk/gtkfilechooserdefault.c:8989
 msgid "Search:"
 msgstr "Buscar:"
 
-#: ../gtk/gtkfilechooserdefault.c:9559
+#: ../gtk/gtkfilechooserdefault.c:9594
 #, c-format
 msgid "Could not mount %s"
 msgstr "Non foi posíbel montar %s"
@@ -1207,11 +1207,11 @@ msgid "Si_ze:"
 msgstr "_Tamaño:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:559
+#: ../gtk/gtkfontsel.c:558
 msgid "_Preview:"
 msgstr "_Previsualización:"
 
-#: ../gtk/gtkfontsel.c:1659
+#: ../gtk/gtkfontsel.c:1658
 msgid "Font Selection"
 msgstr "Selección do tipo de letra"
 
@@ -1223,7 +1223,7 @@ msgstr "Selección do tipo de letra"
 msgid "Error loading icon: %s"
 msgstr "Produciuse un erro ao cargar a icona: %s"
 
-#: ../gtk/gtkicontheme.c:1354
+#: ../gtk/gtkicontheme.c:1352
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1236,12 +1236,12 @@ msgstr ""
 "Pode obter unha copia desde:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1535
+#: ../gtk/gtkicontheme.c:1533
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "A icona «%s» non está presente no tema"
 
-#: ../gtk/gtkicontheme.c:3048
+#: ../gtk/gtkicontheme.c:3054
 msgid "Failed to load icon"
 msgstr "Produciuse un fallo ao cargar a icona"
 
@@ -1266,12 +1266,12 @@ msgid "System (%s)"
 msgstr "Sistema (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6196
+#: ../gtk/gtklabel.c:6233
 msgid "_Open Link"
 msgstr "_Abrir a ligazón"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6208
+#: ../gtk/gtklabel.c:6245
 msgid "Copy _Link Address"
 msgstr "Copiar o enderezo da _ligazón"
 
@@ -1284,27 +1284,27 @@ msgid "Invalid URI"
 msgstr "URI incorrecto"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:527
+#: ../gtk/gtkmain.c:516
 msgid "Load additional GTK+ modules"
 msgstr "Cargar os módulos adicionais GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:528
+#: ../gtk/gtkmain.c:517
 msgid "MODULES"
 msgstr "MÓDULOS"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:530
+#: ../gtk/gtkmain.c:519
 msgid "Make all warnings fatal"
 msgstr "Facer todos os avisos fatais"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:533
+#: ../gtk/gtkmain.c:522
 msgid "GTK+ debugging flags to set"
 msgstr "Marcas de depuración GTK+ para activar"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:536
+#: ../gtk/gtkmain.c:525
 msgid "GTK+ debugging flags to unset"
 msgstr "Marcas de depuración GTK+ para desconfigurar"
 
@@ -1313,20 +1313,20 @@ msgstr "Marcas de depuración GTK+ para desconfigurar"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:799
+#: ../gtk/gtkmain.c:788
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:864
+#: ../gtk/gtkmain.c:852
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Non é posíbel abrir a pantalla: %s"
 
-#: ../gtk/gtkmain.c:923
+#: ../gtk/gtkmain.c:911
 msgid "GTK+ Options"
 msgstr "Opcións GTK+"
 
-#: ../gtk/gtkmain.c:923
+#: ../gtk/gtkmain.c:911
 msgid "Show GTK+ Options"
 msgstr "Mostrar opcións GTK+"
 
@@ -1411,12 +1411,12 @@ msgstr "Intérprete de ordes Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Non é posíbel finalizar o proceso co PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4724 ../gtk/gtknotebook.c:7287
+#: ../gtk/gtknotebook.c:4758 ../gtk/gtknotebook.c:7353
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"
 
-#: ../gtk/gtkpagesetup.c:596 ../gtk/gtkpapersize.c:838
+#: ../gtk/gtkpagesetup.c:648 ../gtk/gtkpapersize.c:838
 #: ../gtk/gtkpapersize.c:880
 msgid "Not a valid page setup file"
 msgstr "Non é un ficheiro correcto de configuración de páxina"
@@ -1464,15 +1464,15 @@ msgstr "_Orientación:"
 msgid "Page Setup"
 msgstr "Configuración de páxina"
 
-#: ../gtk/gtkpathbar.c:154
+#: ../gtk/gtkpathbar.c:158
 msgid "Up Path"
 msgstr "Camiño superior"
 
-#: ../gtk/gtkpathbar.c:156
+#: ../gtk/gtkpathbar.c:160
 msgid "Down Path"
 msgstr "Camiño inferior"
 
-#: ../gtk/gtkpathbar.c:1490
+#: ../gtk/gtkpathbar.c:1523
 msgid "File System Root"
 msgstr "Sistema de ficheiros raíz"
 
@@ -1955,12 +1955,12 @@ msgstr "Algunhas das configuracións do diálogo están en conflito"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../gtk/gtkrc.c:2834
+#: ../gtk/gtkrc.c:2855
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Non é posíbel localizar o ficheiro 'include': «%s»"
 
-#: ../gtk/gtkrc.c:3470 ../gtk/gtkrc.c:3473
+#: ../gtk/gtkrc.c:3491 ../gtk/gtkrc.c:3494
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Non é posíbel localizar o ficheiro de imaxe no pixmap_path: «%s»"
@@ -2071,12 +2071,12 @@ msgstr ""
 "Non foi posíbel encontrar ningún aplicativo rexistrado co nome «%s» para o "
 "elemento co URI «%s»"
 
-#: ../gtk/gtkspinner.c:456
+#: ../gtk/gtkspinner.c:326
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Axustador"
 
-#: ../gtk/gtkspinner.c:457
+#: ../gtk/gtkspinner.c:327
 msgid "Provides visual indication of progress"
 msgstr "Fornece un indicador visual de progreso"
 
@@ -2584,6 +2584,32 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Red_ucir"
 
+#. Translators: if the "on" state label requires more than three
+#. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
+#. * the state
+#.
+#: ../gtk/gtkswitch.c:296 ../gtk/gtkswitch.c:339 ../gtk/gtkswitch.c:531
+msgctxt "switch"
+msgid "ON"
+msgstr "ACENDIDO"
+
+#. Translators: if the "off" state label requires more than three
+#. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
+#.
+#: ../gtk/gtkswitch.c:304 ../gtk/gtkswitch.c:340 ../gtk/gtkswitch.c:552
+msgctxt "switch"
+msgid "OFF"
+msgstr "APAGADO"
+
+#: ../gtk/gtkswitch.c:943
+msgctxt "light switch widget"
+msgid "Switch"
+msgstr "Interruptor"
+
+#: ../gtk/gtkswitch.c:944
+msgid "Switches between on and off states"
+msgstr "Cambia entre os estados acendido e apagado"
+
 #: ../gtk/gtktextbufferrichtext.c:650
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
@@ -2594,109 +2620,109 @@ msgstr "Erro descoñecido ao tentar deserializar %s"
 msgid "No deserialize function found for format %s"
 msgstr "Non se localizou a función de deserializar para o formato %s"
 
-#: ../gtk/gtktextbufferserialize.c:803 ../gtk/gtktextbufferserialize.c:829
+#: ../gtk/gtktextbufferserialize.c:799 ../gtk/gtktextbufferserialize.c:825
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Localizáronse tanto \"id\" como \"name\" no elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:813 ../gtk/gtktextbufferserialize.c:839
+#: ../gtk/gtktextbufferserialize.c:809 ../gtk/gtktextbufferserialize.c:835
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "O atributo «%s» localizouse dúas veces no elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:855
+#: ../gtk/gtktextbufferserialize.c:851
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "O elemento <%s> ten un ID «%s» non válido"
 
-#: ../gtk/gtktextbufferserialize.c:865
+#: ../gtk/gtktextbufferserialize.c:861
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr ""
 "O elemento <%s> non ten nin un atributo \"name\" nin un atributo \"id\""
 
-#: ../gtk/gtktextbufferserialize.c:952
+#: ../gtk/gtktextbufferserialize.c:948
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "O atributo «%s» repítese dúas veces no mesmo elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:970 ../gtk/gtktextbufferserialize.c:995
+#: ../gtk/gtktextbufferserialize.c:966 ../gtk/gtktextbufferserialize.c:991
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "O atributo «%s» non é válido no elemento <%s> neste contexto"
 
-#: ../gtk/gtktextbufferserialize.c:1034
+#: ../gtk/gtktextbufferserialize.c:1030
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "A etiqueta «%s» non foi definida."
 
-#: ../gtk/gtktextbufferserialize.c:1046
+#: ../gtk/gtktextbufferserialize.c:1042
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Localizouse unha etiqueta anónima e non é posíbel crear as etiquetas."
 
-#: ../gtk/gtktextbufferserialize.c:1057
+#: ../gtk/gtktextbufferserialize.c:1053
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr ""
 "A etiqueta «%s» non existe no búfer e non é posíbel crear as etiquetas."
 
-#: ../gtk/gtktextbufferserialize.c:1156 ../gtk/gtktextbufferserialize.c:1231
-#: ../gtk/gtktextbufferserialize.c:1336 ../gtk/gtktextbufferserialize.c:1410
+#: ../gtk/gtktextbufferserialize.c:1152 ../gtk/gtktextbufferserialize.c:1227
+#: ../gtk/gtktextbufferserialize.c:1332 ../gtk/gtktextbufferserialize.c:1406
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Non se permite o elemento <%s> por baixo de <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1187
+#: ../gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "«%s» non é un tipo de atributo correcto"
 
-#: ../gtk/gtktextbufferserialize.c:1195
+#: ../gtk/gtktextbufferserialize.c:1191
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "«%s» non é un nome de atributo correcto"
 
-#: ../gtk/gtktextbufferserialize.c:1205
+#: ../gtk/gtktextbufferserialize.c:1201
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "Non foi posíbel converter «%s» nun valor de tipo «%s» para o atributo «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1214
+#: ../gtk/gtktextbufferserialize.c:1210
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "«%s» non é un valor correcto para o atributo «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1299
+#: ../gtk/gtktextbufferserialize.c:1295
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "A etiqueta «%s» xa está definida"
 
-#: ../gtk/gtktextbufferserialize.c:1312
+#: ../gtk/gtktextbufferserialize.c:1308
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "A etiqueta «%s» ten a prioridade incorrecta«%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1365
+#: ../gtk/gtktextbufferserialize.c:1361
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "O elemento máis extremo no texto debe ser <text_view_markup> non <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1374 ../gtk/gtktextbufferserialize.c:1390
+#: ../gtk/gtktextbufferserialize.c:1370 ../gtk/gtktextbufferserialize.c:1386
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Xa se especificou un elemento <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1396
+#: ../gtk/gtktextbufferserialize.c:1392
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Un elemento <text> non pode aparecer antes dun elemento <tags>"
 
-#: ../gtk/gtktextbufferserialize.c:1796
+#: ../gtk/gtktextbufferserialize.c:1792
 msgid "Serialized data is malformed"
 msgstr "Os datos serializados están formados incorrectamente"
 
-#: ../gtk/gtktextbufferserialize.c:1874
+#: ../gtk/gtktextbufferserialize.c:1870
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -3655,81 +3681,81 @@ msgstr "Produciuse un fallo ao escribir o índice do cartafol\n"
 msgid "Failed to rewrite header\n"
 msgstr "Produciuse un fallo ao reescribir a cabeceira\n"
 
-#: ../gtk/updateiconcache.c:1463
+#: ../gtk/updateiconcache.c:1488
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Produciuse un fallo ao abrir o ficheiro %s : %s\n"
 
-#: ../gtk/updateiconcache.c:1471
+#: ../gtk/updateiconcache.c:1496 ../gtk/updateiconcache.c:1526
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Produciuse un fallo ao escribir o ficheiro da caché: %s\n"
 
-#: ../gtk/updateiconcache.c:1507
+#: ../gtk/updateiconcache.c:1537
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "A caché xerada non é correcta.\n"
 
-#: ../gtk/updateiconcache.c:1521
+#: ../gtk/updateiconcache.c:1551
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Non foi posíbel renomear %s como %s: %s, ao eliminar %s despois.\n"
 
-#: ../gtk/updateiconcache.c:1535
+#: ../gtk/updateiconcache.c:1565
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Non foi posíbel renomear %s como %s: %s\n"
 
-#: ../gtk/updateiconcache.c:1545
+#: ../gtk/updateiconcache.c:1575
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Non foi posíbel volver a renomear %s como %s: %s.\n"
 
-#: ../gtk/updateiconcache.c:1572
+#: ../gtk/updateiconcache.c:1602
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "O ficheiro da caché creouse correctamente.\n"
 
-#: ../gtk/updateiconcache.c:1611
+#: ../gtk/updateiconcache.c:1641
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Substituír unha caché existente, mesmo se está actualizada"
 
-#: ../gtk/updateiconcache.c:1612
+#: ../gtk/updateiconcache.c:1642
 msgid "Don't check for the existence of index.theme"
 msgstr "Non verificar a existencia de index.theme"
 
-#: ../gtk/updateiconcache.c:1613
+#: ../gtk/updateiconcache.c:1643
 msgid "Don't include image data in the cache"
 msgstr "Non incluír os datos da imaxe na caché"
 
-#: ../gtk/updateiconcache.c:1614
+#: ../gtk/updateiconcache.c:1644
 msgid "Output a C header file"
 msgstr "Xerar un ficheiro de cabeceira C"
 
-#: ../gtk/updateiconcache.c:1615
+#: ../gtk/updateiconcache.c:1645
 msgid "Turn off verbose output"
 msgstr "Desactivar a saída detallada"
 
-#: ../gtk/updateiconcache.c:1616
+#: ../gtk/updateiconcache.c:1646
 msgid "Validate existing icon cache"
 msgstr "Validar a caché de iconas existente"
 
-#: ../gtk/updateiconcache.c:1683
+#: ../gtk/updateiconcache.c:1713
 #, c-format
 msgid "File not found: %s\n"
 msgstr "O ficheiro non foi encontrado: %s\n"
 
-#: ../gtk/updateiconcache.c:1689
+#: ../gtk/updateiconcache.c:1719
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Non é unha caché de iconas correcta: %s\n"
 
-#: ../gtk/updateiconcache.c:1702
+#: ../gtk/updateiconcache.c:1732
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Non hai ficheiro de índice de tema.\n"
 
-#: ../gtk/updateiconcache.c:1706
+#: ../gtk/updateiconcache.c:1736
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4147,32 +4173,32 @@ msgstr "Personalizado %sx%s"
 msgid "output.%s"
 msgstr "saída.%s"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:493
+#: ../modules/printbackends/file/gtkprintbackendfile.c:501
 msgid "Print to File"
 msgstr "Imprimir a un ficheiro"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:578
 msgid "PDF"
 msgstr "PDF"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:578
 msgid "Postscript"
 msgstr "Postscript"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:570
+#: ../modules/printbackends/file/gtkprintbackendfile.c:578
 msgid "SVG"
 msgstr "SVG"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:582
+#: ../modules/printbackends/file/gtkprintbackendfile.c:590
 #: ../modules/printbackends/test/gtkprintbackendtest.c:503
 msgid "Pages per _sheet:"
 msgstr "Pá_xinas por folla:"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:641
+#: ../modules/printbackends/file/gtkprintbackendfile.c:649
 msgid "File"
 msgstr "Ficheiro"
 
-#: ../modules/printbackends/file/gtkprintbackendfile.c:651
+#: ../modules/printbackends/file/gtkprintbackendfile.c:659
 msgid "_Output format"
 msgstr "Formato de _saída"
 
