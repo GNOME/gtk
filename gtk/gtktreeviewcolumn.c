@@ -2811,26 +2811,6 @@ _gtk_tree_view_column_cell_event (GtkTreeViewColumn  *tree_column,
                               flags);
 }
 
-void
-_gtk_tree_view_column_get_focus_area (GtkTreeViewColumn  *tree_column,
-				      const GdkRectangle *background_area,
-				      const GdkRectangle *cell_area,
-				      GdkRectangle       *focus_area)
-{
-  /* FIXME */
-#if 0
-  gtk_tree_view_column_cell_process_action (tree_column,
-					    NULL,
-					    background_area,
-					    cell_area,
-					    0,
-					    CELL_ACTION_FOCUS,
-					    focus_area,
-					    NULL, NULL, NULL);
-#endif
-}
-
-
 /**
  * gtk_tree_view_column_cell_is_visible:
  * @tree_column: A #GtkTreeViewColumn

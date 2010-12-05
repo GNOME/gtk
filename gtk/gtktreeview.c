@@ -9367,42 +9367,31 @@ gtk_tree_view_clamp_column_visible (GtkTreeView       *tree_view,
        * focus cell is bigger than the page size, we make sure the
        * left-hand side of the cell is visible).
        *
-       * If the column does not have those so-called special cells, we
+       * If the column does not have an activatable cell, we
        * make sure the left-hand side of the column is visible.
        */
 
       if (focus_to_cell && gtk_tree_view_has_can_focus_cell (tree_view))
         {
-	  GtkTreePath *cursor_path;
-	  GdkRectangle background_area, cell_area, focus_area;
+          GtkCellArea *cell_area;
+          GtkCellRenderer *focus_cell;
 
-	  cursor_path = gtk_tree_row_reference_get_path (tree_view->priv->cursor);
+          cell_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (column));
+          focus_cell = gtk_cell_area_get_focus_cell (cell_area);
 
-	  gtk_tree_view_get_cell_area (tree_view,
-				       cursor_path, column, &cell_area);
-	  gtk_tree_view_get_background_area (tree_view,
-					     cursor_path, column,
-					     &background_area);
-
-	  gtk_tree_path_free (cursor_path);
-
-	  _gtk_tree_view_column_get_focus_area (column,
-						&background_area,
-						&cell_area,
-						&focus_area);
-
-	  x = focus_area.x;
-	  width = focus_area.width;
-
-	  if (width < tree_view->priv->hadjustment->page_size)
-	    {
-	      if ((tree_view->priv->hadjustment->value + tree_view->priv->hadjustment->page_size) < (x + width))
-		gtk_adjustment_set_value (tree_view->priv->hadjustment,
-					  x + width - tree_view->priv->hadjustment->page_size);
-	      else if (tree_view->priv->hadjustment->value > x)
-		gtk_adjustment_set_value (tree_view->priv->hadjustment, x);
-	    }
-	}
+          if (gtk_tree_view_column_cell_get_position (column, focus_cell,
+                                                      &x, &width))
+            {
+              if (width < tree_view->priv->hadjustment->page_size)
+                {
+                  if (tree_view->priv->hadjustment->value + tree_view->priv->hadjustment->page_size < x + width)
+                    gtk_adjustment_set_value (tree_view->priv->hadjustment,
+                                              x + width - tree_view->priv->hadjustment->page_size);
+                  else if (tree_view->priv->hadjustment->value > x)
+                    gtk_adjustment_set_value (tree_view->priv->hadjustment, x);
+                }
+            }
+        }
 
       gtk_adjustment_set_value (tree_view->priv->hadjustment, x);
     }
