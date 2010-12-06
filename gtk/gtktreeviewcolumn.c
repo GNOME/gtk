@@ -1530,6 +1530,27 @@ gtk_tree_view_column_new (void)
 }
 
 /**
+ * gtk_tree_view_column_new_with_area:
+ * @area: the #GtkCellArea that the newly created column should use to layout cells.
+ * 
+ * Creates a new #GtkTreeViewColumn using @area to render it's cells.
+ * 
+ * Return value: A newly created #GtkTreeViewColumn.
+ *
+ * Since: 3.0
+ */
+GtkTreeViewColumn *
+gtk_tree_view_column_new_with_area (GtkCellArea *area)
+{
+  GtkTreeViewColumn *tree_column;
+
+  tree_column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN, "cell-area", area, NULL);
+
+  return tree_column;
+}
+
+
+/**
  * gtk_tree_view_column_new_with_attributes:
  * @title: The title to set the header to.
  * @cell: The #GtkCellRenderer.

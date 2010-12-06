@@ -493,7 +493,7 @@ gtk_entry_completion_constructor (GType                    type,
                     completion);
   priv->first_sel_changed = TRUE;
 
-  priv->column = g_object_new (GTK_TYPE_TREE_VIEW_COLUMN, "cell-area", priv->cell_area, NULL);
+  priv->column = gtk_tree_view_column_new_with_area (priv->cell_area);
   gtk_tree_view_append_column (GTK_TREE_VIEW (priv->tree_view), priv->column);
 
   priv->scrolled_window = gtk_scrolled_window_new (NULL, NULL);
