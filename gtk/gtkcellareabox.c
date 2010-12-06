@@ -697,7 +697,10 @@ allocate_cells_manually (GtkCellAreaBox        *box,
 
   /* Naturally distribute the allocation */
   avail_size -= (nvisible - 1) * priv->spacing;
-  avail_size = gtk_distribute_natural_allocation (avail_size, nvisible, sizes);
+  if (avail_size > 0)
+    avail_size = gtk_distribute_natural_allocation (avail_size, nvisible, sizes);
+  else
+    avail_size = 0;
 
   /* Calculate/distribute expand for cells */
   if (nexpand > 0)
