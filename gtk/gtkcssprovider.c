@@ -1451,7 +1451,7 @@ scanner_apply_scope (GScanner    *scanner,
   if (scope == SCOPE_VALUE)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ (),.%\t\n'/\"";
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(),.%\t\n'/\"";
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
@@ -2407,7 +2407,6 @@ path_parse_str (GtkCssProvider  *css_provider,
 {
   gchar *path, *chr;
   const gchar *start, *end;
-
   start = str;
 
   if (g_str_has_prefix (str, "url"))
