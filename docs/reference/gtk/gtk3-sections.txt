@@ -5291,6 +5291,12 @@ gtk_widget_path_iter_set_widget_type
 gtk_widget_path_length
 gtk_widget_path_new
 gtk_widget_path_prepend_type
+
+<SUBSECTION Standard>
+GTK_TYPE_WIDGET_PATH
+
+<SUBSECTION Private>
+gtk_widget_path_get_type
 </SECTION>
 
 <SECTION>
