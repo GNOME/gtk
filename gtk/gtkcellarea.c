@@ -467,7 +467,7 @@ static gint            cell_attribute_find (CellAttribute         *cell_attribut
 static void            gtk_cell_area_add_editable     (GtkCellArea        *area,
 						       GtkCellRenderer    *renderer,
 						       GtkCellEditable    *editable,
-						       GdkRectangle       *cell_area);
+						       const GdkRectangle *cell_area);
 static void            gtk_cell_area_remove_editable  (GtkCellArea        *area,
 						       GtkCellRenderer    *renderer,
 						       GtkCellEditable    *editable);
@@ -952,9 +952,9 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 
       if (button_event->button == 1)
 	{
-	  GtkCellRenderer *renderer;
+	  GtkCellRenderer *renderer = NULL;
 	  GtkCellRenderer *focus_renderer;
-	  GdkRectangle     alloc_area, inner_area;
+	  GdkRectangle     alloc_area;
 	  gint             event_x, event_y;
 
 	  /* We may need some semantics to tell us the offset of the event
@@ -962,10 +962,15 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 	  event_x = button_event->x;
 	  event_y = button_event->y;
 
-	  renderer = 
-	    gtk_cell_area_get_cell_at_position (area, context, widget,
-						cell_area, event_x, event_y,
-						&alloc_area);
+	  /* Dont try to search for an event coordinate that is not in the area, that will
+	   * trigger a runtime warning.
+	   */
+	  if (event_x >= cell_area->x && event_x <= cell_area->x + cell_area->width &&
+	      event_y >= cell_area->y && event_y <= cell_area->y + cell_area->height)
+	    renderer = 
+	      gtk_cell_area_get_cell_at_position (area, context, widget,
+						  cell_area, event_x, event_y,
+						  &alloc_area);
 
 	  if (renderer)
 	    {
@@ -988,12 +993,10 @@ gtk_cell_area_real_event (GtkCellArea          *area,
 		  if (focus_renderer != renderer)
 		    gtk_cell_area_get_cell_allocation (area, context, widget, focus_renderer,
 						       cell_area, &alloc_area);
-
-		  gtk_cell_area_inner_cell_area (area, widget, &alloc_area, &inner_area);
 		  
 		  gtk_cell_area_set_focus_cell (area, focus_renderer);
 		  retval = gtk_cell_area_activate_cell (area, widget, focus_renderer,
-							event, &inner_area, flags);
+							event, &alloc_area, flags);
 		}
 	    }
 	}
@@ -2992,7 +2995,7 @@ static void
 gtk_cell_area_add_editable (GtkCellArea        *area,
 			    GtkCellRenderer    *renderer,
 			    GtkCellEditable    *editable,
-			    GdkRectangle       *cell_area)
+			    const GdkRectangle *cell_area)
 {
   g_signal_emit (area, cell_area_signals[SIGNAL_ADD_EDITABLE], 0, 
 		 renderer, editable, cell_area, area->priv->current_path);
@@ -3157,7 +3160,6 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 			     GtkCellRendererState  flags)
 {
   GtkCellRendererMode mode;
-  GdkRectangle        inner_area;
   GtkCellAreaPrivate *priv;
   
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
@@ -3167,10 +3169,6 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 
   priv = area->priv;
 
-  /* Remove margins from the background area to produce the cell area.
-   */
-  gtk_cell_area_inner_cell_area (area, widget, cell_area, &inner_area);
-
   g_object_get (renderer, "mode", &mode, NULL);
 
   if (mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)
@@ -3179,7 +3177,7 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 				      event, widget,
 				      priv->current_path,
 				      cell_area,
-				      &inner_area,
+				      cell_area,
 				      flags))
 	return TRUE;
     }
@@ -3192,7 +3190,7 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 					 event, widget,
 					 priv->current_path,
 					 cell_area,
-					 &inner_area,
+					 cell_area,
 					 flags);
       
       if (editable_widget != NULL)
@@ -3204,7 +3202,7 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 	  
 	  /* Signal that editing started so that callers can get 
 	   * a handle on the editable_widget */
-	  gtk_cell_area_add_editable (area, priv->focus_cell, editable_widget, &inner_area);
+	  gtk_cell_area_add_editable (area, priv->focus_cell, editable_widget, cell_area);
 
 	  /* If the signal was successfully handled start the editing */
 	  if (gtk_widget_get_parent (GTK_WIDGET (editable_widget)))
