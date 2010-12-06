@@ -350,6 +350,15 @@ struct _GdkKeymapClass
   void (*state_changed)     (GdkKeymap *keymap);
 };
 
+struct _GdkScreenClass
+{
+  GObjectClass parent_class;
+
+  void (*size_changed) (GdkScreen *screen);
+  void (*composited_changed) (GdkScreen *screen);
+  void (*monitors_changed) (GdkScreen *screen);
+};
+
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;

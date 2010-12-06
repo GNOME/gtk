@@ -62,15 +62,6 @@ struct _GdkScreen
   double GSEAL (resolution);	/* pixels/points scale factor for fonts */
 };
 
-struct _GdkScreenClass
-{
-  GObjectClass parent_class;
-
-  void (*size_changed) (GdkScreen *screen);
-  void (*composited_changed) (GdkScreen *screen);
-  void (*monitors_changed) (GdkScreen *screen);
-};
-
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 GdkVisual*   gdk_screen_get_system_visual     (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
