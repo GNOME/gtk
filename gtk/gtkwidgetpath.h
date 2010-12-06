@@ -33,7 +33,7 @@ typedef struct _GtkWidgetPath GtkWidgetPath;
 
 #define GTK_TYPE_WIDGET_PATH (gtk_widget_path_get_type ())
 
-GType           gtk_widget_path_get_type            (void) G_GNUC_CONST:
+GType           gtk_widget_path_get_type            (void) G_GNUC_CONST;
 GtkWidgetPath * gtk_widget_path_new                 (void);
 
 GtkWidgetPath * gtk_widget_path_copy                (const GtkWidgetPath *path);
