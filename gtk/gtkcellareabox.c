@@ -74,18 +74,12 @@ static void      gtk_cell_area_box_remove                         (GtkCellArea  
 static void      gtk_cell_area_box_foreach                        (GtkCellArea          *area,
 								   GtkCellCallback       callback,
 								   gpointer              callback_data);
-static void      gtk_cell_area_box_get_cell_allocation            (GtkCellArea          *area,
-								   GtkCellAreaContext   *context,	
-								   GtkWidget            *widget,
-								   GtkCellRenderer      *renderer,
-								   const GdkRectangle   *cell_area,
-								   GdkRectangle         *allocation);
-static gint      gtk_cell_area_box_event                          (GtkCellArea          *area,
+static void      gtk_cell_area_box_foreach_alloc                  (GtkCellArea          *area,
 								   GtkCellAreaContext   *context,
 								   GtkWidget            *widget,
-								   GdkEvent             *event,
 								   const GdkRectangle   *cell_area,
-								   GtkCellRendererState  flags);
+								   GtkCellAllocCallback  callback,
+								   gpointer              callback_data);
 static void      gtk_cell_area_box_render                         (GtkCellArea          *area,
 								   GtkCellAreaContext   *context,
 								   GtkWidget            *widget,
@@ -267,8 +261,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->add                 = gtk_cell_area_box_add;
   area_class->remove              = gtk_cell_area_box_remove;
   area_class->foreach             = gtk_cell_area_box_foreach;
-  area_class->get_cell_allocation = gtk_cell_area_box_get_cell_allocation;
-  area_class->event               = gtk_cell_area_box_event;
+  area_class->foreach_alloc       = gtk_cell_area_box_foreach_alloc;
   area_class->render              = gtk_cell_area_box_render;
   area_class->set_cell_property   = gtk_cell_area_box_set_cell_property;
   area_class->get_cell_property   = gtk_cell_area_box_get_cell_property;
@@ -1040,19 +1033,20 @@ gtk_cell_area_box_foreach (GtkCellArea        *area,
 }
 
 static void
-gtk_cell_area_box_get_cell_allocation (GtkCellArea          *area,
-				       GtkCellAreaContext   *context,	
-				       GtkWidget            *widget,
-				       GtkCellRenderer      *renderer,
-				       const GdkRectangle   *cell_area,
-				       GdkRectangle         *allocation)
+gtk_cell_area_box_foreach_alloc (GtkCellArea          *area,
+				 GtkCellAreaContext   *context,
+				 GtkWidget            *widget,
+				 const GdkRectangle   *cell_area,
+				 GtkCellAllocCallback  callback,
+				 gpointer              callback_data)
 {
   GtkCellAreaBox        *box      = GTK_CELL_AREA_BOX (area);
   GtkCellAreaBoxPrivate *priv     = box->priv;
   GtkCellAreaBoxContext *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
   GSList                *allocated_cells, *l;
+  GdkRectangle           allocation;
 
-  *allocation = *cell_area;
+  allocation = *cell_area;
 
   /* Get a list of cells with allocation sizes decided regardless
    * of alignments and pack order etc. */
@@ -1063,143 +1057,23 @@ gtk_cell_area_box_get_cell_allocation (GtkCellArea          *area,
     {
       AllocatedCell *cell = l->data;
 
-      if (cell->renderer == renderer)
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
-	  if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-	    {
-	      allocation->x     = cell_area->x + cell->position;
-	      allocation->width = cell->size;
-	    }
-	  else
-	    {
-	      allocation->y      = cell_area->y + cell->position;
-	      allocation->height = cell->size;
-	    }
-
-	  break;
+	  allocation.x     = cell_area->x + cell->position;
+	  allocation.width = cell->size;
 	}
+      else
+	{
+	  allocation.y      = cell_area->y + cell->position;
+	  allocation.height = cell->size;
+	}
+
+      if (callback (cell->renderer, &allocation, callback_data))
+	break;
     }
 
   g_slist_foreach (allocated_cells, (GFunc)allocated_cell_free, NULL);
   g_slist_free (allocated_cells);
-}
-
-enum {
-  FOCUS_NONE,
-  FOCUS_PREV,
-  FOCUS_NEXT
-};
-
-static gint
-gtk_cell_area_box_event (GtkCellArea          *area,
-			 GtkCellAreaContext   *context,
-			 GtkWidget            *widget,
-			 GdkEvent             *event,
-			 const GdkRectangle   *cell_area,
-			 GtkCellRendererState  flags)
-{
-  gint retval;
-
-  /* First let the parent class handle activation of cells via keystrokes */
-  retval = 
-    GTK_CELL_AREA_CLASS (gtk_cell_area_box_parent_class)->event (area, context, widget,
-								 event, cell_area, flags);
-  
-  if (retval)
-    return retval;
-
-  /* Also detect mouse events, for mouse events we need to allocate the renderers
-   * and find which renderer needs to be activated.
-   */
-  if (event->type == GDK_BUTTON_PRESS)
-    {
-      GdkEventButton *button_event = (GdkEventButton *)event;
-
-      if (button_event->button == 1)
-	{
-	  GtkCellAreaBox        *box      = GTK_CELL_AREA_BOX (area);
-	  GtkCellAreaBoxPrivate *priv     = box->priv;
-	  GtkCellAreaBoxContext *box_context = GTK_CELL_AREA_BOX_CONTEXT (context);
-	  GSList                *allocated_cells, *l;
-	  GdkRectangle           cell_background, inner_area;
-	  gint                   event_x, event_y;
-
-	  /* We may need some semantics to tell us the offset of the event
-	   * window we are handling events for (i.e. GtkTreeView has a bin_window) */
-	  event_x = button_event->x;
-	  event_y = button_event->y;
-
-	  cell_background = *cell_area;
-
-	  /* Get a list of cells with allocation sizes decided regardless
-	   * of alignments and pack order etc. */
-	  allocated_cells = get_allocated_cells (box, box_context, widget, 
-						 cell_area->width, cell_area->height);
-
-	  for (l = allocated_cells; l; l = l->next)
-	    {
-	      AllocatedCell *cell = l->data;
-
-	      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-		{
-		  cell_background.x     = cell_area->x + cell->position;
-		  cell_background.width = cell->size;
-		}
-	      else
-		{
-		  cell_background.y      = cell_area->y + cell->position;
-		  cell_background.height = cell->size;
-		}
-	      
-	      /* Remove margins from the background area to produce the cell area
-	       */
-	      gtk_cell_area_inner_cell_area (area, widget, &cell_background, &inner_area);
-	      
-	      if (event_x >= inner_area.x && event_x <= inner_area.x + inner_area.width &&
-		  event_y >= inner_area.y && event_y <= inner_area.y + inner_area.height)
-		{
-		  GtkCellRenderer *event_renderer = NULL;
-                  GtkCellRenderer *focus_renderer;
-
-                  focus_renderer = gtk_cell_area_get_focus_from_sibling (area, cell->renderer);
-                  if (focus_renderer)
-                    event_renderer = focus_renderer;
-                  else
-                    event_renderer = cell->renderer;
-
-                  event_renderer = cell->renderer;
-
-		  if (event_renderer)
-		    {
-		      if (gtk_cell_area_get_edited_cell (area))
-			{
-			  /* XXX Was it really canceled in this case ? */
-			  gtk_cell_area_stop_editing (area, TRUE);
-			  gtk_cell_area_set_focus_cell (area, event_renderer);
-			  retval = TRUE;
-			}
-		      else
-			{
-			  /* If we are activating via a focus sibling, we need to fix the
-			   * cell area */
-			  if (event_renderer != cell->renderer)
-			    gtk_cell_area_inner_cell_area (area, widget, cell_area, &cell_background);
-
-			  gtk_cell_area_set_focus_cell (area, event_renderer);
-
-			  retval = gtk_cell_area_activate_cell (area, widget, event_renderer,
-								event, &cell_background, flags);
-			}
-		      break;
-		    }
-		}
-	    }
-	  g_slist_foreach (allocated_cells, (GFunc)allocated_cell_free, NULL);
-	  g_slist_free (allocated_cells);
-	}
-    }
-
-  return retval;
 }
 
 static void
@@ -1958,6 +1832,12 @@ gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
   if (natural_width)
     *natural_width = nat_width;
 }
+
+enum {
+  FOCUS_NONE,
+  FOCUS_PREV,
+  FOCUS_NEXT
+};
 
 static gboolean
 gtk_cell_area_box_focus (GtkCellArea      *area,

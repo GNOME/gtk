@@ -72,6 +72,22 @@ typedef struct _GtkCellAreaContext       GtkCellAreaContext;
 typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
 					gpointer          data);
 
+/**
+ * GtkCellAllocCallback:
+ * @renderer: the cell renderer to operate on
+ * @area: the area allocated to @renderer inside the rectangle provided to gtk_cell_area_foreach_alloc().
+ * @data: user-supplied data
+ *
+ * The type of the callback functions used for iterating over
+ * the cell renderers and their allocated areas inside a #GtkCellArea, 
+ * see gtk_cell_area_foreach_alloc().
+ *
+ * Return value: %TRUE to stop iterating over cells.
+ */
+typedef gboolean    (*GtkCellAllocCallback) (GtkCellRenderer    *renderer,
+					     const GdkRectangle *cell_area,
+					     gpointer            data);
+
 
 struct _GtkCellArea
 {
@@ -88,8 +104,8 @@ struct _GtkCellArea
  * @remove: removes a #GtkCellRenderer from the area.
  * @foreach: Calls the #GtkCellCallback function on every #GtkCellRenderer in the area
  * with the provided user data until the callback returns %TRUE.
- * @get_cell_allocation: Gets the position (relative to the passed @cell_area rectangle) 
- * and size of a #GtkCellRenderer.
+ * @foreach_alloc: Calls the #GtkCellAllocCallback function on every #GtkCellRenderer in the area
+ * with the allocated area for the cell and the provided user data until the callback returns %TRUE.
  * @event: Handle an event in the area, this is generally used to activate a cell
  * at the event location for button events but can also be used to generically pass
  * events to #GtkWidgets drawn onto the area.
@@ -154,12 +170,12 @@ struct _GtkCellAreaClass
   void               (* foreach)                         (GtkCellArea             *area,
 							  GtkCellCallback          callback,
 							  gpointer                 callback_data);
-  void               (* get_cell_allocation)             (GtkCellArea             *area,
+  void               (* foreach_alloc)                   (GtkCellArea             *area,
 							  GtkCellAreaContext      *context,
 							  GtkWidget               *widget,
-							  GtkCellRenderer         *renderer,
 							  const GdkRectangle      *cell_area,
-							  GdkRectangle            *allocation);
+							  GtkCellAllocCallback     callback,
+							  gpointer                 callback_data);
   gint               (* event)                           (GtkCellArea             *area,
 							  GtkCellAreaContext      *context,
 							  GtkWidget               *widget,
@@ -253,12 +269,12 @@ gboolean              gtk_cell_area_has_renderer                   (GtkCellArea 
 void                  gtk_cell_area_foreach                        (GtkCellArea          *area,
 								    GtkCellCallback       callback,
 								    gpointer              callback_data);
-void                  gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,
+void                  gtk_cell_area_foreach_alloc                  (GtkCellArea          *area,
 								    GtkCellAreaContext   *context,
 								    GtkWidget            *widget,
-								    GtkCellRenderer      *renderer,
 								    const GdkRectangle   *cell_area,
-								    GdkRectangle         *allocation);
+								    GtkCellAllocCallback  callback,
+								    gpointer              callback_data);
 gint                  gtk_cell_area_event                          (GtkCellArea          *area,
 								    GtkCellAreaContext   *context,
 								    GtkWidget            *widget,
@@ -276,6 +292,22 @@ void                  gtk_cell_area_render                         (GtkCellArea 
 void                  gtk_cell_area_set_style_detail               (GtkCellArea          *area,
 								    const gchar          *detail);
 G_CONST_RETURN gchar *gtk_cell_area_get_style_detail               (GtkCellArea          *area);
+
+
+void                  gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,
+								    GtkCellAreaContext   *context,
+								    GtkWidget            *widget,
+								    GtkCellRenderer      *renderer,
+								    const GdkRectangle   *cell_area,
+								    GdkRectangle         *allocation);
+GtkCellRenderer      *gtk_cell_area_get_cell_at_position           (GtkCellArea          *area,
+								    GtkCellAreaContext   *context,
+								    GtkWidget            *widget,
+								    const GdkRectangle   *cell_area,
+								    gint                  x,
+								    gint                  y,
+								    GdkRectangle         *alloc_area);
+
 
 /* Geometry */
 GtkCellAreaContext   *gtk_cell_area_create_context                 (GtkCellArea        *area);
