@@ -146,14 +146,46 @@ align_cell_toggled (GtkToggleButton  *toggle,
   gtk_cell_area_cell_set (data->area, data->renderer, "align", active, NULL);
 }
 
+static void
+expand_cell_toggled (GtkToggleButton  *toggle,
+		     CallbackData     *data)
+{
+  gboolean active = gtk_toggle_button_get_active (toggle);
+
+  gtk_cell_area_cell_set (data->area, data->renderer, "expand", active, NULL);
+}
+
+static void
+create_control (GtkWidget *box, gint number, gboolean align, CallbackData *data)
+{
+  GtkWidget *checkbutton;
+  gchar *name;
+
+  if (align)
+    name = g_strdup_printf ("Align Cell #%d", number);
+  else
+    name = g_strdup_printf ("Expand Cell #%d", number);
+
+  checkbutton = gtk_check_button_new_with_label (name);
+  gtk_widget_show (checkbutton);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), align);
+  gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE, FALSE, 0);
+
+  if (align)
+    g_signal_connect (G_OBJECT (checkbutton), "toggled",
+		      G_CALLBACK (align_cell_toggled), data);
+  else
+    g_signal_connect (G_OBJECT (checkbutton), "toggled",
+		      G_CALLBACK (expand_cell_toggled), data);
+}
+
 gint
 main (gint argc, gchar **argv)
 {
   GtkWidget *window;
   GtkWidget *scrolled_window;
   GtkWidget *tree_view;
-  GtkWidget *vbox, *hbox;
-  GtkWidget *checkbutton;
+  GtkWidget *vbox, *hbox, *cntl_vbox;
   GtkTreeModel *tree_model;
   GtkCellRenderer *renderer;
   GtkTreeViewColumn *column;
@@ -172,10 +204,6 @@ main (gint argc, gchar **argv)
   vbox = gtk_vbox_new (FALSE, 6);
   gtk_widget_show (vbox);
   gtk_container_add (GTK_CONTAINER (window), vbox);
-
-  hbox = gtk_hbox_new (FALSE, 6);
-  gtk_widget_show (hbox);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (scrolled_window), GTK_SHADOW_ETCHED_IN);
@@ -257,31 +285,31 @@ main (gint argc, gchar **argv)
   gtk_container_add (GTK_CONTAINER (scrolled_window), tree_view);
   
   gtk_window_set_default_size (GTK_WINDOW (window),
-			       800, 175);
+			       800, 250);
 
-  checkbutton = gtk_check_button_new_with_label ("Align 1st Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), checkbutton, FALSE, FALSE, 0);
-  g_signal_connect (G_OBJECT (checkbutton), "toggled",
-                    G_CALLBACK (align_cell_toggled), &callback[0]);
+  hbox = gtk_hbox_new (FALSE, 6);
+  gtk_widget_show (hbox);
+  gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, FALSE, 0);
 
-  checkbutton = gtk_check_button_new_with_label ("Align 2nd Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), checkbutton, FALSE, FALSE, 0);
-  g_signal_connect (G_OBJECT (checkbutton), "toggled",
-                    G_CALLBACK (align_cell_toggled), &callback[1]);
+  /* Alignment controls */
+  cntl_vbox = gtk_vbox_new (FALSE, 2);
+  gtk_widget_show (cntl_vbox);
+  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
 
-  checkbutton = gtk_check_button_new_with_label ("Align 3rd Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), checkbutton, FALSE, FALSE, 0);
-  g_signal_connect (G_OBJECT (checkbutton), "toggled",
-                    G_CALLBACK (align_cell_toggled), &callback[2]);
+  create_control (cntl_vbox, 1, TRUE, &callback[0]);
+  create_control (cntl_vbox, 2, TRUE, &callback[1]);
+  create_control (cntl_vbox, 3, TRUE, &callback[2]);
+  create_control (cntl_vbox, 4, TRUE, &callback[3]);
 
-  checkbutton = gtk_check_button_new_with_label ("Align 4th Cell");
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), TRUE);
-  gtk_box_pack_start (GTK_BOX (hbox), checkbutton, FALSE, FALSE, 0);
-  g_signal_connect (G_OBJECT (checkbutton), "toggled",
-                    G_CALLBACK (align_cell_toggled), &callback[3]);
+  /* Expand controls */
+  cntl_vbox = gtk_vbox_new (FALSE, 2);
+  gtk_widget_show (cntl_vbox);
+  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
+
+  create_control (cntl_vbox, 1, FALSE, &callback[0]);
+  create_control (cntl_vbox, 2, FALSE, &callback[1]);
+  create_control (cntl_vbox, 3, FALSE, &callback[2]);
+  create_control (cntl_vbox, 4, FALSE, &callback[3]);
 
   gtk_widget_show_all (window);
   gtk_main ();
