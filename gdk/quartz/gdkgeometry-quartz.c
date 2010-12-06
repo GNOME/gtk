@@ -29,8 +29,7 @@ _gdk_quartz_window_translate (GdkWindow      *window,
                               gint            dy)
 {
   cairo_region_t *invalidate, *scrolled;
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *)private->impl;
+  GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *)window->impl;
   GdkRectangle extents;
 
   cairo_region_get_extents (area, &extents);

@@ -62,7 +62,7 @@ extern GdkWindow *_gdk_root;
 
 extern GdkDragContext *_gdk_quartz_drag_source_context;
 
-#define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)win)->impl))
+#define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindow *)win)->impl))
 
 /* Initialization */
 void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
@@ -129,10 +129,6 @@ void       _gdk_quartz_event_loop_release_event (NSEvent *event);
 /* Keys */
 GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
 gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
-
-/* Drawable */
-void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);
-void        _gdk_quartz_drawable_flush  (GdkDrawable *drawable);
 
 /* Geometry */
 void        _gdk_quartz_window_scroll      (GdkWindow       *window,

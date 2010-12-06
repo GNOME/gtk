@@ -68,8 +68,7 @@
 -(void)drawRect:(NSRect)rect 
 {
   GdkRectangle gdk_rect;
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (gdk_window->impl);
   const NSRect *drawn_rects;
   NSInteger count;
   int i;
@@ -78,7 +77,7 @@
   if (GDK_WINDOW_DESTROYED (gdk_window))
     return;
 
-  if (!(private->event_mask & GDK_EXPOSURE_MASK))
+  if (!(gdk_window->event_mask & GDK_EXPOSURE_MASK))
     return;
 
   if (NSEqualRects (rect, NSZeroRect))
@@ -127,8 +126,7 @@
  */
 -(void)updateTrackingRect
 {
-  GdkWindowObject *private = GDK_WINDOW_OBJECT (gdk_window);
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (gdk_window->impl);
   NSRect rect;
 
   if (!impl->toplevel)

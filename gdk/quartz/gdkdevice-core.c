@@ -188,8 +188,7 @@ gdk_device_core_query_state_helper (GdkWindow       *window,
                                     gint            *y,
                                     GdkModifierType *mask)
 {
-  GdkWindowObject *toplevel;
-  GdkWindowObject *private;
+  GdkWindow *toplevel;
   NSPoint point;
   gint x_tmp, y_tmp;
   GdkWindow *found_window;
@@ -204,7 +203,7 @@ gdk_device_core_query_state_helper (GdkWindow       *window,
       return NULL;
     }
 
-  toplevel = GDK_WINDOW_OBJECT (gdk_window_get_effective_toplevel (window));
+  toplevel = gdk_window_get_effective_toplevel (window);
 
   *mask = _gdk_quartz_events_get_current_event_mask ();
 
@@ -220,15 +219,14 @@ gdk_device_core_query_state_helper (GdkWindow       *window,
       NSWindow *nswindow;
 
       impl = GDK_WINDOW_IMPL_QUARTZ (toplevel->impl);
-      private = GDK_WINDOW_OBJECT (toplevel);
       nswindow = impl->toplevel;
 
       point = [nswindow mouseLocationOutsideOfEventStream];
 
       x_tmp = point.x;
-      y_tmp = private->height - point.y;
+      y_tmp = toplevel->height - point.y;
 
-      window = (GdkWindow *)toplevel;
+      window = toplevel;
     }
 
   found_window = _gdk_quartz_window_find_child (window, x_tmp, y_tmp,
