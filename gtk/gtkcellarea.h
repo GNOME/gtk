@@ -75,7 +75,7 @@ typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
 /**
  * GtkCellAllocCallback:
  * @renderer: the cell renderer to operate on
- * @area: the area allocated to @renderer inside the rectangle provided to gtk_cell_area_foreach_alloc().
+ * @cell_area: the area allocated to @renderer inside the rectangle provided to gtk_cell_area_foreach_alloc().
  * @data: user-supplied data
  *
  * The type of the callback functions used for iterating over
