@@ -71,7 +71,7 @@ static void      gtk_cell_area_box_add                            (GtkCellArea  
 								   GtkCellRenderer      *renderer);
 static void      gtk_cell_area_box_remove                         (GtkCellArea          *area,
 								   GtkCellRenderer      *renderer);
-static void      gtk_cell_area_box_forall                         (GtkCellArea          *area,
+static void      gtk_cell_area_box_foreach                        (GtkCellArea          *area,
 								   GtkCellCallback       callback,
 								   gpointer              callback_data);
 static void      gtk_cell_area_box_get_cell_allocation            (GtkCellArea          *area,
@@ -266,7 +266,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   /* GtkCellAreaClass */
   area_class->add                 = gtk_cell_area_box_add;
   area_class->remove              = gtk_cell_area_box_remove;
-  area_class->forall              = gtk_cell_area_box_forall;
+  area_class->foreach             = gtk_cell_area_box_foreach;
   area_class->get_cell_allocation = gtk_cell_area_box_get_cell_allocation;
   area_class->event               = gtk_cell_area_box_event;
   area_class->render              = gtk_cell_area_box_render;
@@ -1022,9 +1022,9 @@ gtk_cell_area_box_remove (GtkCellArea        *area,
 }
 
 static void
-gtk_cell_area_box_forall (GtkCellArea        *area,
-			  GtkCellCallback     callback,
-			  gpointer            callback_data)
+gtk_cell_area_box_foreach (GtkCellArea        *area,
+			   GtkCellCallback     callback,
+			   gpointer            callback_data)
 {
   GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
   GtkCellAreaBoxPrivate *priv = box->priv;
@@ -1034,7 +1034,8 @@ gtk_cell_area_box_forall (GtkCellArea        *area,
     {
       CellInfo *info = list->data;
 
-      callback (info->renderer, callback_data);
+      if (callback (info->renderer, callback_data))
+	break;
     }
 }
 

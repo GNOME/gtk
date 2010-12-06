@@ -65,10 +65,12 @@ typedef struct _GtkCellAreaContext       GtkCellAreaContext;
  * @data: user-supplied data
  *
  * The type of the callback functions used for iterating over
- * the cell renderers of a #GtkCellArea, see gtk_cell_area_forall().
+ * the cell renderers of a #GtkCellArea, see gtk_cell_area_foreach().
+ *
+ * Return value: %TRUE to stop iterating over cells.
  */
-typedef void    (*GtkCellCallback)     (GtkCellRenderer  *renderer,
-				        gpointer          data);
+typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
+					gpointer          data);
 
 
 struct _GtkCellArea
@@ -84,8 +86,8 @@ struct _GtkCellArea
  * GtkCellAreaClass:
  * @add: adds a #GtkCellRenderer to the area.
  * @remove: removes a #GtkCellRenderer from the area.
- * @forall: Calls the #GtkCellCallback function on every #GtkCellRenderer in the area
- * with the provided user data.
+ * @foreach: Calls the #GtkCellCallback function on every #GtkCellRenderer in the area
+ * with the provided user data until the callback returns %TRUE.
  * @get_cell_allocation: Gets the position (relative to the passed @cell_area rectangle) 
  * and size of a #GtkCellRenderer.
  * @event: Handle an event in the area, this is generally used to activate a cell
@@ -149,7 +151,7 @@ struct _GtkCellAreaClass
 							  GtkCellRenderer         *renderer);
   void               (* remove)                          (GtkCellArea             *area,
 							  GtkCellRenderer         *renderer);
-  void               (* forall)                          (GtkCellArea             *area,
+  void               (* foreach)                         (GtkCellArea             *area,
 							  GtkCellCallback          callback,
 							  gpointer                 callback_data);
   void               (* get_cell_allocation)             (GtkCellArea             *area,
@@ -248,7 +250,7 @@ void                  gtk_cell_area_remove                         (GtkCellArea 
 								    GtkCellRenderer      *renderer);
 gboolean              gtk_cell_area_has_renderer                   (GtkCellArea          *area,
 								    GtkCellRenderer      *renderer);
-void                  gtk_cell_area_forall                         (GtkCellArea          *area,
+void                  gtk_cell_area_foreach                        (GtkCellArea          *area,
 								    GtkCellCallback       callback,
 								    gpointer              callback_data);
 void                  gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,

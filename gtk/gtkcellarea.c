@@ -418,7 +418,7 @@ static void      gtk_cell_area_reorder                       (GtkCellLayout     
 static GList    *gtk_cell_area_get_cells                     (GtkCellLayout         *cell_layout);
 
 
-/* Used in forall loop to check if a child renderer is present */
+/* Used in foreach loop to check if a child renderer is present */
 typedef struct {
   GtkCellRenderer *renderer;
   gboolean         has_renderer;
@@ -571,7 +571,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   /* general */
   class->add              = NULL;
   class->remove           = NULL;
-  class->forall           = NULL;
+  class->foreach          = NULL;
   class->event            = gtk_cell_area_real_event;
   class->render           = NULL;
   class->apply_attributes = gtk_cell_area_real_apply_attributes;
@@ -1035,13 +1035,15 @@ gtk_cell_area_real_get_preferred_width_for_height (GtkCellArea        *area,
   GTK_CELL_AREA_GET_CLASS (area)->get_preferred_width (area, context, widget, minimum_width, natural_width);
 }
 
-static void
+static gboolean
 get_is_activatable (GtkCellRenderer *renderer,
 		    gboolean        *activatable)
 {
 
   if (gtk_cell_renderer_is_activatable (renderer))
     *activatable = TRUE;
+
+  return *activatable;
 }
 
 static gboolean
@@ -1055,7 +1057,7 @@ gtk_cell_area_real_is_activatable (GtkCellArea *area)
    * Subclasses can override this in the case that they are also
    * rendering widgets as well as renderers.
    */
-  gtk_cell_area_forall (area, (GtkCellCallback)get_is_activatable, &activatable);
+  gtk_cell_area_foreach (area, (GtkCellCallback)get_is_activatable, &activatable);
 
   return activatable;
 }
@@ -1229,11 +1231,13 @@ gtk_cell_area_reorder (GtkCellLayout   *cell_layout,
 	     g_type_name (G_TYPE_FROM_INSTANCE (cell_layout)));
 }
 
-static void
+static gboolean
 accum_cells (GtkCellRenderer *renderer,
 	     GList          **accum)
 {
   *accum = g_list_prepend (*accum, renderer);
+
+  return FALSE;
 }
 
 static GList *
@@ -1241,9 +1245,9 @@ gtk_cell_area_get_cells (GtkCellLayout *cell_layout)
 {
   GList *cells = NULL;
 
-  gtk_cell_area_forall (GTK_CELL_AREA (cell_layout), 
-			(GtkCellCallback)accum_cells,
-			&cells);
+  gtk_cell_area_foreach (GTK_CELL_AREA (cell_layout), 
+			 (GtkCellCallback)accum_cells,
+			 &cells);
 
   return g_list_reverse (cells);
 }
@@ -1332,12 +1336,14 @@ gtk_cell_area_remove (GtkCellArea        *area,
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 
-static void
+static gboolean
 get_has_renderer (GtkCellRenderer  *renderer,
 		  HasRendererCheck *check)
 {
   if (renderer == check->renderer)
     check->has_renderer = TRUE;
+
+  return check->has_renderer;
 }
 
 /**
@@ -1360,13 +1366,13 @@ gtk_cell_area_has_renderer (GtkCellArea     *area,
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
   g_return_val_if_fail (GTK_IS_CELL_RENDERER (renderer), FALSE);
 
-  gtk_cell_area_forall (area, (GtkCellCallback)get_has_renderer, &check);
+  gtk_cell_area_foreach (area, (GtkCellCallback)get_has_renderer, &check);
 
   return check.has_renderer;
 }
 
 /**
- * gtk_cell_area_forall:
+ * gtk_cell_area_foreach:
  * @area: a #GtkCellArea
  * @callback: the #GtkCellCallback to call
  * @callback_data: user provided data pointer
@@ -1376,9 +1382,9 @@ gtk_cell_area_has_renderer (GtkCellArea     *area,
  * Since: 3.0
  */
 void
-gtk_cell_area_forall (GtkCellArea        *area,
-		      GtkCellCallback     callback,
-		      gpointer            callback_data)
+gtk_cell_area_foreach (GtkCellArea        *area,
+		       GtkCellCallback     callback,
+		       gpointer            callback_data)
 {
   GtkCellAreaClass *class;
 
@@ -1387,10 +1393,10 @@ gtk_cell_area_forall (GtkCellArea        *area,
 
   class = GTK_CELL_AREA_GET_CLASS (area);
 
-  if (class->forall)
-    class->forall (area, callback, callback_data);
+  if (class->foreach)
+    class->foreach (area, callback, callback_data);
   else
-    g_warning ("GtkCellAreaClass::forall not implemented for `%s'", 
+    g_warning ("GtkCellAreaClass::foreach not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
 }
 

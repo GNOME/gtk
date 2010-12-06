@@ -4391,7 +4391,7 @@ GTK_CELL_AREA_WARN_INVALID_CELL_PROPERTY_ID
 gtk_cell_area_add
 gtk_cell_area_remove
 gtk_cell_area_has_renderer
-gtk_cell_area_forall
+gtk_cell_area_foreach
 gtk_cell_area_get_cell_allocation
 gtk_cell_area_event
 gtk_cell_area_render
