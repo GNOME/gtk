@@ -474,7 +474,6 @@ struct _GdkPointerHooks
                                    gint            *win_y);
 };
 
-typedef struct _GdkWindowObject GdkWindowObject;
 typedef struct _GdkWindowClass GdkWindowClass;
 
 #define GDK_TYPE_WINDOW              (gdk_window_get_type ())
