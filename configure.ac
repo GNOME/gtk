@@ -19,7 +19,7 @@ m4_define([gtk_version],
 # This is the X.Y used in -lgtk-FOO-X.Y
 m4_define([gtk_api_version], [3.0])
 
-AC_PREREQ([2.64])
+AC_PREREQ([2.62])
 AC_INIT([gtk+], [gtk_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
         [gtk+])
