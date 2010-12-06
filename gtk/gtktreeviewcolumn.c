@@ -172,6 +172,7 @@ struct _GtkTreeViewColumnPrivate
   guint reorderable         : 1;
   guint use_resized_width   : 1;
   guint expand              : 1;
+  guint resetting_context   : 1;
 };
 
 enum
@@ -1246,16 +1247,24 @@ gtk_tree_view_column_context_changed  (GtkCellAreaContext      *context,
 				       GParamSpec              *pspec,
 				       GtkTreeViewColumn       *tree_column)
 {
+  /* Here we want the column re-requested if the underlying context was
+   * actually reset for any reason, this can happen if the underlying
+   * area/cell configuration changes (i.e. cell packing properties
+   * or cell spacing and the like) 
+   *
+   * Note that we block this handler while requesting for sizes
+   * so there is no need to check for the new context size being -1,
+   * we also block the handler when explicitly resetting the context
+   * so as to avoid some infinite stack recursion.
+   */
   if (!strcmp (pspec->name, "minimum-width") ||
       !strcmp (pspec->name, "natural-width") ||
       !strcmp (pspec->name, "minimum-height") ||
       !strcmp (pspec->name, "natural-height"))
     {
-      /* XXX We want to do something specific if the size actually got cleared
-       * or if it just grew a little bit because of a data change and we
-       * are in GROW_ONLY mode. 
-       */
+      tree_column->priv->resetting_context = TRUE;
       _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
+      tree_column->priv->resetting_context = FALSE;
     }
 }
 
@@ -2891,6 +2900,21 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
   priv->dirty = TRUE;
   priv->padding = 0;
   priv->width = 0;
+
+  /* Issue a manual reset on the context to have all
+   * sizes re-requested for the context.
+   *
+   * This annoying 'resetting_context' flag is unfortunately
+   * necessary to prevent some infinite recursion
+   */
+  if (!tree_column->priv->resetting_context)
+    {
+      g_signal_handler_block (priv->cell_area_context, 
+			      priv->context_changed_signal);
+      gtk_cell_area_context_reset (priv->cell_area_context);
+      g_signal_handler_unblock (priv->cell_area_context, 
+				priv->context_changed_signal);
+    }
 
   if (priv->tree_view &&
       gtk_widget_get_realized (priv->tree_view))
