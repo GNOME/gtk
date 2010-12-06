@@ -108,8 +108,7 @@ void _gtk_tree_view_column_set_tree_view    (GtkTreeViewColumn *column,
 gint _gtk_tree_view_column_request_width    (GtkTreeViewColumn *tree_column);
 void _gtk_tree_view_column_allocate         (GtkTreeViewColumn *tree_column,
 					     int                x_offset,
-					     int                width,
-					     int                cell_width);
+					     int                width);
 void _gtk_tree_view_column_unset_model      (GtkTreeViewColumn *column,
 					     GtkTreeModel      *old_model);
 void _gtk_tree_view_column_unset_tree_view  (GtkTreeViewColumn *column);
@@ -136,8 +135,8 @@ void		  _gtk_tree_view_column_cell_set_dirty	 (GtkTreeViewColumn  *tree_column,
 gboolean          _gtk_tree_view_column_cell_get_dirty   (GtkTreeViewColumn  *tree_column);
 GdkWindow        *_gtk_tree_view_column_get_window       (GtkTreeViewColumn  *column);
 
-void              _gtk_tree_view_column_set_requested_width   (GtkTreeViewColumn  *column,
-							       gint                width);
+void              _gtk_tree_view_column_push_padding          (GtkTreeViewColumn  *column,
+							       gint                padding);
 gint              _gtk_tree_view_column_get_requested_width   (GtkTreeViewColumn  *column);
 void              _gtk_tree_view_column_set_resized_width     (GtkTreeViewColumn  *column,
 							       gint                width);

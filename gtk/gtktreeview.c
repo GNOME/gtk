@@ -344,7 +344,6 @@ struct _GtkTreeViewPrivate
   GtkRBNode *expanded_collapsed_node;
   GtkRBTree *expanded_collapsed_tree;
   guint expand_collapse_timeout;
-  gint  deepest_depth;
 
   /* Auto expand/collapse timeout in hover mode */
   guint auto_expand_timeout;
@@ -1759,8 +1758,6 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   tree_view->priv->event_last_x = -10000;
   tree_view->priv->event_last_y = -10000;
 
-  tree_view->priv->deepest_depth = 1;
-
   gtk_tree_view_set_vadjustment (tree_view, NULL);
   gtk_tree_view_set_hadjustment (tree_view, NULL);
 }
@@ -2541,56 +2538,6 @@ invalidate_last_column (GtkTreeView *tree_view)
     }
 }
 
-static gboolean 
-gtk_tree_view_column_is_edge (GtkTreeView       *tree_view,
-			      GtkTreeViewColumn *column)
-{
-  GtkTreeViewColumn *first_column = tree_view->priv->columns->data;
-  GtkTreeViewColumn *last_column  = g_list_last (tree_view->priv->columns)->data;
-
-  return (column == first_column || column == last_column);
-}
-
-/* Gets the space in a column that is not actually distributed to 
- * the internal cell area, i.e. total indentation expander size
- * grid line widths and horizontal separators */
-static gint
-gtk_tree_view_get_column_padding (GtkTreeView       *tree_view,
-				  GtkTreeViewColumn *column)
-{
-  gint padding;
-  gint grid_line_width;
-  gint horizontal_separator;
-
-  /* Get the deepest depth */
-
-  gtk_widget_style_get (GTK_WIDGET (tree_view),
-			"horizontal-separator", &horizontal_separator,
-			"grid-line-width", &grid_line_width,
-			NULL);
-
-  padding = horizontal_separator;
-
-  if (gtk_tree_view_is_expander_column (tree_view, column))
-    {
-      padding += (tree_view->priv->deepest_depth - 1) * tree_view->priv->level_indentation;
-
-      if (gtk_tree_view_draw_expanders (tree_view))
-	padding += tree_view->priv->deepest_depth * tree_view->priv->expander_size;
-    }
-
-  if (tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_VERTICAL ||
-      tree_view->priv->grid_lines == GTK_TREE_VIEW_GRID_LINES_BOTH)
-    {
-      if (gtk_tree_view_column_is_edge (tree_view, column))
-	padding += grid_line_width / 2.0;
-      else
-	padding += grid_line_width;
-    }
-
-  return padding;
-}
-
 /* GtkWidget::size_allocate helper */
 static void
 gtk_tree_view_size_allocate_columns (GtkWidget *widget,
@@ -2681,7 +2628,6 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        list != (rtl ? first_column->prev : last_column->next);
        list = (rtl ? list->prev : list->next)) 
     {
-      gint column_cell_width = 0;
       gint old_width, column_width;
 
       column = list->data;
@@ -2737,13 +2683,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
       if (extra_for_last > 0 && list == last_column)
 	column_width += extra_for_last;
 
-      /* Remove any padding that we add to the column around the cell area
-       * and give the correct internal cell area to the column.
-       */
-      column_cell_width = 
-	column_width - gtk_tree_view_get_column_padding (tree_view, column);
-
-      _gtk_tree_view_column_allocate (column, width, column_width, column_cell_width);
+      _gtk_tree_view_column_allocate (column, width, column_width);
 
       width += column_width;
 
@@ -3187,7 +3127,10 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           if ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
             tree_view->priv->shift_pressed = TRUE;
 
+
+	  /* This needs an x and a y ! */
           focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
+
           if (focus_cell)
             gtk_tree_view_column_focus_cell (column, focus_cell);
 
@@ -6178,8 +6121,10 @@ validate_row (GtkTreeView *tree_view,
 
   for (list = tree_view->priv->columns; list; list = list->next)
     {
-      gint tmp_width;
-      gint tmp_height;
+      gint padding = 0;
+      gint original_width;
+      gint new_width;
+      gint row_height;
 
       column = list->data;
 
@@ -6190,17 +6135,19 @@ validate_row (GtkTreeView *tree_view,
 	  !_gtk_tree_view_column_cell_get_dirty (column))
 	continue;
 
+      original_width = _gtk_tree_view_column_get_requested_width (column);
+
       gtk_tree_view_column_cell_set_cell_data (column, tree_view->priv->model, iter,
 					       GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
 					       node->children?TRUE:FALSE);
       gtk_tree_view_column_cell_get_size (column,
 					  NULL, NULL, NULL,
-					  &tmp_width, &tmp_height);
+					  NULL, &row_height);
 
       if (!is_separator)
 	{
-          tmp_height += vertical_separator;
-	  height = MAX (height, tmp_height);
+          padding += vertical_separator;
+	  height = MAX (height, row_height);
 	  height = MAX (height, tree_view->priv->expander_size);
 	}
       else
@@ -6213,27 +6160,28 @@ validate_row (GtkTreeView *tree_view,
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
         {
-	  tmp_width = tmp_width + horizontal_separator + (depth - 1) * tree_view->priv->level_indentation;
+	  padding += horizontal_separator + (depth - 1) * tree_view->priv->level_indentation;
 
 	  if (gtk_tree_view_draw_expanders (tree_view))
-	    tmp_width += depth * tree_view->priv->expander_size;
+	    padding += depth * tree_view->priv->expander_size;
 	}
       else
-	tmp_width = tmp_width + horizontal_separator;
+	padding += horizontal_separator;
 
       if (draw_vgrid_lines)
         {
 	  if (list->data == first_column || list->data == last_column)
-	    tmp_width += grid_line_width / 2.0;
+	    padding += grid_line_width / 2.0;
 	  else
-	    tmp_width += grid_line_width;
+	    padding += grid_line_width;
 	}
 
-      if (tmp_width > _gtk_tree_view_column_get_requested_width (column))
-	{
-	  retval = TRUE;
-	  _gtk_tree_view_column_set_requested_width (column, tmp_width);
-	}
+      /* Update the padding for the column */
+      _gtk_tree_view_column_push_padding (column, padding);
+      new_width = _gtk_tree_view_column_get_requested_width (column);
+
+      if (new_width > original_width)
+	retval = TRUE;
     }
 
   if (draw_hgrid_lines)
@@ -12789,10 +12737,6 @@ gtk_tree_view_real_expand_row (GtkTreeView *tree_view,
 			    gtk_tree_path_get_depth (path) + 1,
 			    open_all);
 
-  /* Update the deepest expanded row depth */
-  if (tree_view->priv->deepest_depth < gtk_tree_path_get_depth (path) + 1)
-    tree_view->priv->deepest_depth = gtk_tree_path_get_depth (path) + 1;
-
   remove_expand_collapse_timeout (tree_view);
 
   if (animate)
@@ -12845,17 +12789,6 @@ gtk_tree_view_expand_row (GtkTreeView *tree_view,
     return gtk_tree_view_real_expand_row (tree_view, path, tree, node, open_all, FALSE);
   else
     return FALSE;
-}
-
-static void
-gtk_tree_view_deepest_expanded_depth (GtkTreeView  *tree_view,
-				      GtkTreePath  *path,
-				      gint         *deepest)
-{
-  gint children_depth = gtk_tree_path_get_depth (path) + 1;
-
-  if (children_depth > *deepest)
-    *deepest = children_depth;
 }
 
 static gboolean
@@ -13008,17 +12941,6 @@ gtk_tree_view_real_collapse_row (GtkTreeView *tree_view,
 	   * more than just event.x and event.y. */
 	  gtk_tree_view_motion_bin_window (GTK_WIDGET (tree_view), &event);
 	}
-    }
-
-  /* If we're collapsing one of the deepest expanded rows, 
-   * we need to recalculate the deepest_depth
-   */
-  if (tree_view->priv->deepest_depth == gtk_tree_path_get_depth (path) + 1)
-    {
-      tree_view->priv->deepest_depth = 1;
-      gtk_tree_view_map_expanded_rows (tree_view, 
-				       (GtkTreeViewMappingFunc)gtk_tree_view_deepest_expanded_depth,
-				       &tree_view->priv->deepest_depth);
     }
 
   return TRUE;
