@@ -30,7 +30,6 @@
 
 #include <gio/gio.h>
 
-static void gtk_app_chooser_online_default_init (GtkAppChooserOnlineInterface *iface);
 G_DEFINE_INTERFACE_WITH_CODE (GtkAppChooserOnline, _gtk_app_chooser_online, G_TYPE_OBJECT,
                               g_type_interface_add_prerequisite (g_define_type_id, G_TYPE_ASYNC_INITABLE);)
 
