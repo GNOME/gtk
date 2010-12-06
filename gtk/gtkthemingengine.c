@@ -889,19 +889,13 @@ gtk_theming_module_load (GTypeModule *type_module)
   module_path = _gtk_find_module (name, "theming-engines");
 
   if (!module_path)
-    {
-      g_warning (_("Unable to locate theme engine in module path: \"%s\","), name);
-      return FALSE;
-    }
+    return FALSE;
 
   module = g_module_open (module_path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
   g_free (module_path);
 
   if (!module)
-    {
-      g_warning ("%s", g_module_error ());
-      return FALSE;
-    }
+    return FALSE;
 
   if (!g_module_symbol (module, "theme_init",
                         (gpointer *) &theming_module->init) ||
@@ -910,7 +904,6 @@ gtk_theming_module_load (GTypeModule *type_module)
       !g_module_symbol (module, "create_engine",
                         (gpointer *) &theming_module->create_engine))
     {
-      g_warning ("%s", g_module_error ());
       g_module_close (module);
 
       return FALSE;
