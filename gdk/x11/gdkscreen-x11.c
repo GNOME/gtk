@@ -87,152 +87,62 @@ struct _GdkX11Monitor
   char *	manufacturer;
 };
 
-static void
-_gdk_screen_x11_class_init (GdkScreenX11Class *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
-  object_class->dispose = gdk_screen_x11_dispose;
-  object_class->finalize = gdk_screen_x11_finalize;
-
-  signals[WINDOW_MANAGER_CHANGED] =
-    g_signal_new (g_intern_static_string ("window_manager_changed"),
-                  G_OBJECT_CLASS_TYPE (object_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GdkScreenX11Class, window_manager_changed),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__VOID,
-                  G_TYPE_NONE,
-                  0);
-}
 
 static void
 _gdk_screen_x11_init (GdkScreenX11 *screen)
 {
 }
 
-/**
- * gdk_screen_get_display:
- * @screen: a #GdkScreen
- *
- * Gets the display to which the @screen belongs.
- * 
- * Returns: (transfer none): the display to which @screen belongs
- *
- * Since: 2.2
- **/
-GdkDisplay *
-gdk_screen_get_display (GdkScreen *screen)
+static GdkDisplay *
+gdk_screen_x11_get_display (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
   return GDK_SCREEN_X11 (screen)->display;
 }
-/**
- * gdk_screen_get_width:
- * @screen: a #GdkScreen
- *
- * Gets the width of @screen in pixels
- * 
- * Returns: the width of @screen in pixels.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_width (GdkScreen *screen)
+
+static gint
+gdk_screen_x11_get_width (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   return WidthOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-/**
- * gdk_screen_get_height:
- * @screen: a #GdkScreen
- *
- * Gets the height of @screen in pixels
- * 
- * Returns: the height of @screen in pixels.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_height (GdkScreen *screen)
+static gint
+gdk_screen_x11_get_height (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   return HeightOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-/**
- * gdk_screen_get_width_mm:
- * @screen: a #GdkScreen
- *
- * Gets the width of @screen in millimeters. 
- * Note that on some X servers this value will not be correct.
- * 
- * Returns: the width of @screen in millimeters.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_width_mm (GdkScreen *screen)
+static gint
+gdk_screen_x11_get_width_mm (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);  
 
   return WidthMMOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-/**
- * gdk_screen_get_height_mm:
- * @screen: a #GdkScreen
- *
- * Returns the height of @screen in millimeters. 
- * Note that on some X servers this value will not be correct.
- * 
- * Returns: the heigth of @screen in millimeters.
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_height_mm (GdkScreen *screen)
+static gint
+gdk_screen_x11_get_height_mm (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   return HeightMMOfScreen (GDK_SCREEN_X11 (screen)->xscreen);
 }
 
-/**
- * gdk_screen_get_number:
- * @screen: a #GdkScreen
- *
- * Gets the index of @screen among the screens in the display
- * to which it belongs. (See gdk_screen_get_display())
- * 
- * Returns: the index
- *
- * Since: 2.2
- **/
-gint
-gdk_screen_get_number (GdkScreen *screen)
+static gint
+gdk_screen_x11_get_number (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
   
   return GDK_SCREEN_X11 (screen)->screen_num;
 }
 
-/**
- * gdk_screen_get_root_window:
- * @screen: a #GdkScreen
- *
- * Gets the root window of @screen.
- *
- * Returns: (transfer none): the root window
- *
- * Since: 2.2
- **/
-GdkWindow *
-gdk_screen_get_root_window (GdkScreen *screen)
+static GdkWindow *
+gdk_screen_x11_get_root_window (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
@@ -302,63 +212,25 @@ gdk_screen_x11_finalize (GObject *object)
   G_OBJECT_CLASS (_gdk_screen_x11_parent_class)->finalize (object);
 }
 
-/**
- * gdk_screen_get_n_monitors:
- * @screen: a #GdkScreen
- *
- * Returns the number of monitors which @screen consists of.
- *
- * Returns: number of monitors which @screen consists of
- *
- * Since: 2.2
- */
-gint
-gdk_screen_get_n_monitors (GdkScreen *screen)
+static gint
+gdk_screen_x11_get_n_monitors (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   return GDK_SCREEN_X11 (screen)->n_monitors;
 }
 
-/**
- * gdk_screen_get_primary_monitor:
- * @screen: a #GdkScreen.
- *
- * Gets the primary monitor for @screen.  The primary monitor
- * is considered the monitor where the 'main desktop' lives.
- * While normal application windows typically allow the window
- * manager to place the windows, specialized desktop applications
- * such as panels should place themselves on the primary monitor.
- *
- * If no primary monitor is configured by the user, the return value
- * will be 0, defaulting to the first monitor.
- *
- * Returns: An integer index for the primary monitor, or 0 if none is configured.
- *
- * Since: 2.20
- */
-gint
-gdk_screen_get_primary_monitor (GdkScreen *screen)
+static gint
+gdk_screen_x11_get_primary_monitor (GdkScreen *screen)
 {
   g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
 
   return GDK_SCREEN_X11 (screen)->primary_monitor;
 }
 
-/**
- * gdk_screen_get_monitor_width_mm:
- * @screen: a #GdkScreen
- * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
- *
- * Gets the width in millimeters of the specified monitor, if available.
- *
- * Returns: the width of the monitor, or -1 if not available
- *
- * Since: 2.14
- */
-gint
-gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
-				 gint       monitor_num)
+static gint
+gdk_screen_x11_get_monitor_width_mm	(GdkScreen *screen,
+					 gint       monitor_num)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
@@ -369,20 +241,9 @@ gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
   return screen_x11->monitors[monitor_num].width_mm;
 }
 
-/**
- * gdk_screen_get_monitor_height_mm:
- * @screen: a #GdkScreen
- * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
- *
- * Gets the height in millimeters of the specified monitor.
- *
- * Returns: the height of the monitor, or -1 if not available
- *
- * Since: 2.14
- */
-gint
-gdk_screen_get_monitor_height_mm (GdkScreen *screen,
-                                  gint       monitor_num)
+static gint
+gdk_screen_x11_get_monitor_height_mm (GdkScreen *screen,
+				      gint       monitor_num)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
@@ -393,23 +254,9 @@ gdk_screen_get_monitor_height_mm (GdkScreen *screen,
   return screen_x11->monitors[monitor_num].height_mm;
 }
 
-/**
- * gdk_screen_get_monitor_plug_name:
- * @screen: a #GdkScreen
- * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
- *
- * Returns the output name of the specified monitor.
- * Usually something like VGA, DVI, or TV, not the actual
- * product name of the display device.
- *
- * Returns: a newly-allocated string containing the name of the monitor,
- *   or %NULL if the name cannot be determined
- *
- * Since: 2.14
- */
-gchar *
-gdk_screen_get_monitor_plug_name (GdkScreen *screen,
-				  gint       monitor_num)
+static gchar *
+gdk_screen_x11_get_monitor_plug_name (GdkScreen *screen,
+				      gint       monitor_num)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
@@ -446,24 +293,10 @@ gdk_x11_screen_get_monitor_output (GdkScreen *screen,
   return screen_x11->monitors[monitor_num].output;
 }
 
-/**
- * gdk_screen_get_monitor_geometry:
- * @screen: a #GdkScreen
- * @monitor_num: the monitor number, between 0 and gdk_screen_get_n_monitors (screen)
- * @dest: (out caller-allocates) (allow-none): a #GdkRectangle to be filled with the monitor geometry
- *
- * Retrieves the #GdkRectangle representing the size and position of
- * the individual monitor within the entire screen area.
- *
- * Note that the size of the entire screen area can be retrieved via
- * gdk_screen_get_width() and gdk_screen_get_height().
- *
- * Since: 2.2
- */
-void
-gdk_screen_get_monitor_geometry (GdkScreen    *screen,
-				 gint          monitor_num,
-				 GdkRectangle *dest)
+static void
+gdk_screen_x11_get_monitor_geometry (GdkScreen    *screen,
+				     gint          monitor_num,
+				     GdkRectangle *dest)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 
@@ -475,31 +308,8 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
     *dest = screen_x11->monitors[monitor_num].geometry;
 }
 
-/**
- * gdk_screen_get_rgba_visual:
- * @screen: a #GdkScreen
- * 
- * Gets a visual to use for creating windows with an alpha channel.
- * The windowing system on which GTK+ is running
- * may not support this capability, in which case %NULL will
- * be returned. Even if a non-%NULL value is returned, its
- * possible that the window's alpha channel won't be honored
- * when displaying the window on the screen: in particular, for
- * X an appropriate windowing manager and compositing manager
- * must be running to provide appropriate display.
- *
- * This functionality is not implemented in the Windows backend.
- *
- * For setting an overall opacity for a top-level window, see
- * gdk_window_set_opacity().
- * 
- * Return value: (transfer none): a visual to use for windows with an
- *     alpha channel or %NULL if the capability is not available.
- *
- * Since: 2.8
- **/
-GdkVisual *
-gdk_screen_get_rgba_visual (GdkScreen *screen)
+static GdkVisual *
+gdk_screen_x11_get_rgba_visual (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11;
 
@@ -1022,24 +832,8 @@ _gdk_x11_screen_setup (GdkScreen *screen)
   screen_x11->is_composited = check_is_composited (screen_x11->display, screen_x11);
 }
 
-/**
- * gdk_screen_is_composited:
- * @screen: a #GdkScreen
- * 
- * Returns whether windows with an RGBA visual can reasonably
- * be expected to have their alpha channel drawn correctly on
- * the screen.
- *
- * On X11 this function returns whether a compositing manager is
- * compositing @screen.
- * 
- * Return value: Whether windows with RGBA visuals can reasonably be
- * expected to have their alpha channels drawn correctly on the screen.
- * 
- * Since: 2.10
- **/
-gboolean
-gdk_screen_is_composited (GdkScreen *screen)
+static gboolean
+gdk_screen_x11_is_composited (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11;
 
@@ -1204,19 +998,8 @@ _gdk_windowing_substitute_screen_number (const gchar *display_name,
   return g_string_free (str, FALSE);
 }
 
-/**
- * gdk_screen_make_display_name:
- * @screen: a #GdkScreen
- * 
- * Determines the name to pass to gdk_display_open() to get
- * a #GdkDisplay with this screen as the default screen.
- * 
- * Return value: a newly allocated string, free with g_free()
- *
- * Since: 2.2
- **/
-gchar *
-gdk_screen_make_display_name (GdkScreen *screen)
+static gchar *
+gdk_screen_x11_make_display_name (GdkScreen *screen)
 {
   const gchar *old_display;
 
@@ -1228,31 +1011,8 @@ gdk_screen_make_display_name (GdkScreen *screen)
 						  gdk_screen_get_number (screen));
 }
 
-/**
- * gdk_screen_get_active_window:
- * @screen: a #GdkScreen
- *
- * Returns the screen's currently active window.
- *
- * On X11, this is done by inspecting the _NET_ACTIVE_WINDOW property
- * on the root window, as described in the <ulink
- * url="http://www.freedesktop.org/Standards/wm-spec">Extended Window
- * Manager Hints</ulink>. If there is no currently currently active
- * window, or the window manager does not support the
- * _NET_ACTIVE_WINDOW hint, this function returns %NULL.
- *
- * On other platforms, this function may return %NULL, depending on whether
- * it is implementable on that platform.
- *
- * The returned window should be unrefed using g_object_unref() when
- * no longer needed.
- *
- * Return value: (transfer full): the currently active window, or %NULL.
- *
- * Since: 2.10
- **/
-GdkWindow *
-gdk_screen_get_active_window (GdkScreen *screen)
+static GdkWindow *
+gdk_screen_x11_get_active_window (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11;
   GdkWindow *ret = NULL;
@@ -1296,34 +1056,8 @@ gdk_screen_get_active_window (GdkScreen *screen)
   return ret;
 }
 
-/**
- * gdk_screen_get_window_stack:
- * @screen: a #GdkScreen
- *
- * Returns a #GList of #GdkWindow<!-- -->s representing the current
- * window stack.
- *
- * On X11, this is done by inspecting the _NET_CLIENT_LIST_STACKING
- * property on the root window, as described in the <ulink
- * url="http://www.freedesktop.org/Standards/wm-spec">Extended Window
- * Manager Hints</ulink>. If the window manager does not support the
- * _NET_CLIENT_LIST_STACKING hint, this function returns %NULL.
- *
- * On other platforms, this function may return %NULL, depending on whether
- * it is implementable on that platform.
- *
- * The returned list is newly allocated and owns references to the
- * windows it contains, so it should be freed using g_list_free() and
- * its windows unrefed using g_object_unref() when no longer needed.
- *
- * Return value: (transfer full) (element-type GdkWindow):
- *     a list of #GdkWindow<!-- -->s for the current window stack,
- *               or %NULL.
- *
- * Since: 2.10
- **/
-GList *
-gdk_screen_get_window_stack (GdkScreen *screen)
+static GList *
+gdk_screen_x11_get_window_stack (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11;
   GList *ret = NULL;
@@ -1433,29 +1167,9 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
   return result;
 }
 
-/**
- * gdk_screen_broadcast_client_message:
- * @screen: the #GdkScreen where the event will be broadcasted.
- * @event: the #GdkEvent.
- *
- * On X11, sends an X ClientMessage event to all toplevel windows on
- * @screen.
- *
- * Toplevel windows are determined by checking for the WM_STATE property,
- * as described in the Inter-Client Communication Conventions Manual (ICCCM).
- * If no windows are found with the WM_STATE property set, the message is
- * sent to all children of the root window.
- *
- * On Windows, broadcasts a message registered with the name
- * GDK_WIN32_CLIENT_MESSAGE to all top-level windows. The amount of
- * data is limited to one long, i.e. four bytes.
- *
- * Since: 2.2
- */
-
-void
-gdk_screen_broadcast_client_message (GdkScreen *screen,
-				     GdkEvent  *event)
+static void
+gdk_screen_x11_broadcast_client_message (GdkScreen *screen,
+					 GdkEvent  *event)
 {
   XEvent sev;
   GdkWindow *root_window;
@@ -1496,27 +1210,10 @@ check_transform (const gchar *xsettings_name,
     return TRUE;
 }
 
-/**
- * gdk_screen_get_setting:
- * @screen: the #GdkScreen where the setting is located
- * @name: the name of the setting
- * @value: location to store the value of the setting
- *
- * Retrieves a desktop-wide setting such as double-click time
- * for the #GdkScreen @screen.
- *
- * FIXME needs a list of valid settings here, or a link to
- * more information.
- *
- * Returns: %TRUE if the setting existed and a value was stored
- *   in @value, %FALSE otherwise.
- *
- * Since: 2.2
- **/
-gboolean
-gdk_screen_get_setting (GdkScreen   *screen,
-			const gchar *name,
-			GValue      *value)
+static gboolean
+gdk_screen_x11_get_setting (GdkScreen   *screen,
+			    const gchar *name,
+			    GValue      *value)
 {
 
   const char *xsettings_name = NULL;
@@ -2000,4 +1697,45 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
     }
 
   return GDK_SCREEN_X11 (screen)->window_manager_name;
+}
+
+static void
+_gdk_screen_x11_class_init (GdkScreenX11Class *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
+
+  object_class->dispose = gdk_screen_x11_dispose;
+  object_class->finalize = gdk_screen_x11_finalize;
+
+  screen_class->get_display = gdk_screen_x11_get_display;
+  screen_class->get_width = gdk_screen_x11_get_width;
+  screen_class->get_height = gdk_screen_x11_get_height;
+  screen_class->get_width_mm = gdk_screen_x11_get_width_mm;
+  screen_class->get_height_mm = gdk_screen_x11_get_height_mm;
+  screen_class->get_number = gdk_screen_x11_get_number;
+  screen_class->get_root_window = gdk_screen_x11_get_root_window;
+  screen_class->get_n_monitors = gdk_screen_x11_get_n_monitors;
+  screen_class->get_primary_monitor = gdk_screen_x11_get_primary_monitor;
+  screen_class->get_monitor_width_mm = gdk_screen_x11_get_monitor_width_mm;
+  screen_class->get_monitor_height_mm = gdk_screen_x11_get_monitor_height_mm;
+  screen_class->get_monitor_plug_name = gdk_screen_x11_get_monitor_plug_name;
+  screen_class->get_monitor_geometry = gdk_screen_x11_get_monitor_geometry;
+  screen_class->get_rgba_visual = gdk_screen_x11_get_rgba_visual;
+  screen_class->is_composited = gdk_screen_x11_is_composited;
+  screen_class->make_display_name = gdk_screen_x11_make_display_name;
+  screen_class->get_active_window = gdk_screen_x11_get_active_window;
+  screen_class->get_window_stack = gdk_screen_x11_get_window_stack;
+  screen_class->broadcast_client_message = gdk_screen_x11_broadcast_client_message;
+  screen_class->get_setting = gdk_screen_x11_get_setting;
+
+  signals[WINDOW_MANAGER_CHANGED] =
+    g_signal_new (g_intern_static_string ("window_manager_changed"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkScreenX11Class, window_manager_changed),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE,
+                  0);
 }

@@ -354,6 +354,36 @@ struct _GdkScreenClass
 {
   GObjectClass parent_class;
 
+  GdkDisplay * (* get_display)           (GdkScreen *screen);
+  gint         (* get_width)             (GdkScreen *screen);
+  gint         (* get_height)            (GdkScreen *screen);
+  gint         (* get_width_mm)          (GdkScreen *screen);
+  gint         (* get_height_mm)         (GdkScreen *screen);
+  gint         (* get_number)            (GdkScreen *screen);
+  GdkWindow *  (* get_root_window)       (GdkScreen *screen);
+  gint         (* get_n_monitors)        (GdkScreen *screen);
+  gint         (* get_primary_monitor)   (GdkScreen *screen);
+  gint         (* get_monitor_width_mm)	 (GdkScreen *screen,
+					  gint       monitor_num);
+  gint         (* get_monitor_height_mm) (GdkScreen *screen,
+					  gint       monitor_num);
+  gchar *      (* get_monitor_plug_name) (GdkScreen *screen,
+					  gint       monitor_num);
+  void         (* get_monitor_geometry)  (GdkScreen    *screen,
+					  gint          monitor_num,
+					  GdkRectangle *dest);
+  GdkVisual *  (* get_rgba_visual)       (GdkScreen *screen);
+  gboolean     (* is_composited)         (GdkScreen *screen);
+  gchar *      (* make_display_name)     (GdkScreen *screen);
+  GdkWindow *  (* get_active_window)     (GdkScreen *screen);
+  GList *      (* get_window_stack)      (GdkScreen *screen);
+  void         (* broadcast_client_message) (GdkScreen *screen,
+					     GdkEvent  *event);
+  gboolean     (* get_setting)           (GdkScreen   *screen,
+					  const gchar *name,
+					  GValue      *value);
+
+  /* Signals: */
   void (*size_changed) (GdkScreen *screen);
   void (*composited_changed) (GdkScreen *screen);
   void (*monitors_changed) (GdkScreen *screen);
