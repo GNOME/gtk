@@ -372,6 +372,8 @@ struct _GdkScreenClass
   void         (* get_monitor_geometry)  (GdkScreen    *screen,
 					  gint          monitor_num,
 					  GdkRectangle *dest);
+  GList *      (* list_visuals)          (GdkScreen *screen);
+  GdkVisual *  (* get_system_visual)     (GdkScreen *screen);
   GdkVisual *  (* get_rgba_visual)       (GdkScreen *screen);
   gboolean     (* is_composited)         (GdkScreen *screen);
   gchar *      (* make_display_name)     (GdkScreen *screen);
@@ -382,6 +384,23 @@ struct _GdkScreenClass
   gboolean     (* get_setting)           (GdkScreen   *screen,
 					  const gchar *name,
 					  GValue      *value);
+  gint         (* visual_get_best_depth) (GdkScreen   *screen);
+  GdkVisualType (* visual_get_best_type) (GdkScreen   *screen);
+  GdkVisual *  (* visual_get_best)       (GdkScreen   *screen);
+  GdkVisual *  (* visual_get_best_with_depth) (GdkScreen   *screen,
+					       gint depth);
+  GdkVisual *  (* visual_get_best_with_type) (GdkScreen   *screen,
+					      GdkVisualType visual_type);
+  GdkVisual *  (* visual_get_best_with_both) (GdkScreen   *screen,
+					      gint depth,
+					      GdkVisualType visual_type);
+  void         (* query_depths)          (GdkScreen   *screen,
+					  gint **depths,
+					  gint  *count);
+  void         (* query_visual_types)    (GdkScreen   *screen,
+					  GdkVisualType **visual_types,
+					  gint           *count);
+
 
   /* Signals: */
   void (*size_changed) (GdkScreen *screen);

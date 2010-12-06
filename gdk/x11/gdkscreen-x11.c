@@ -1721,6 +1721,7 @@ _gdk_screen_x11_class_init (GdkScreenX11Class *klass)
   screen_class->get_monitor_height_mm = gdk_screen_x11_get_monitor_height_mm;
   screen_class->get_monitor_plug_name = gdk_screen_x11_get_monitor_plug_name;
   screen_class->get_monitor_geometry = gdk_screen_x11_get_monitor_geometry;
+  screen_class->get_system_visual = _gdk_screen_x11_get_system_visual;
   screen_class->get_rgba_visual = gdk_screen_x11_get_rgba_visual;
   screen_class->is_composited = gdk_screen_x11_is_composited;
   screen_class->make_display_name = gdk_screen_x11_make_display_name;
@@ -1728,6 +1729,15 @@ _gdk_screen_x11_class_init (GdkScreenX11Class *klass)
   screen_class->get_window_stack = gdk_screen_x11_get_window_stack;
   screen_class->broadcast_client_message = gdk_screen_x11_broadcast_client_message;
   screen_class->get_setting = gdk_screen_x11_get_setting;
+  screen_class->visual_get_best_depth = _gdk_screen_x11_visual_get_best_depth;
+  screen_class->visual_get_best_type = _gdk_screen_x11_visual_get_best_type;
+  screen_class->visual_get_best = _gdk_screen_x11_visual_get_best;
+  screen_class->visual_get_best_with_depth = _gdk_screen_x11_visual_get_best_with_depth;
+  screen_class->visual_get_best_with_type = _gdk_screen_x11_visual_get_best_with_type;
+  screen_class->visual_get_best_with_both = _gdk_screen_x11_visual_get_best_with_both;
+  screen_class->query_depths = _gdk_screen_x11_query_depths;
+  screen_class->query_visual_types = _gdk_screen_x11_query_visual_types;
+  screen_class->list_visuals = _gdk_screen_x11_list_visuals;
 
   signals[WINDOW_MANAGER_CHANGED] =
     g_signal_new (g_intern_static_string ("window_manager_changed"),

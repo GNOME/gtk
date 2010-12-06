@@ -768,6 +768,46 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
 }
 
 /**
+ * gdk_screen_list_visuals:
+ * @screen: the relevant #GdkScreen.
+ *
+ * Lists the available visuals for the specified @screen.
+ * A visual describes a hardware image data format.
+ * For example, a visual might support 24-bit color, or 8-bit color,
+ * and might expect pixels to be in a certain format.
+ *
+ * Call g_list_free() on the return value when you're finished with it.
+ *
+ * Return value: (transfer container) (element-type GdkVisual):
+ *     a list of visuals; the list must be freed, but not its contents
+ *
+ * Since: 2.2
+ **/
+GList *
+gdk_screen_list_visuals (GdkScreen *screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->list_visuals (screen);
+}
+
+/**
+ * gdk_screen_get_system_visual:
+ * @screen: a #GdkScreen.
+ *
+ * Get the system's default visual for @screen.
+ * This is the visual for the root window of the display.
+ * The return value should not be freed.
+ *
+ * Return value: (transfer none): the system visual
+ *
+ * Since: 2.2
+ **/
+GdkVisual *
+gdk_screen_get_system_visual (GdkScreen * screen)
+{
+  return GDK_SCREEN_GET_CLASS(screen)->get_system_visual (screen);
+}
+
+/**
  * gdk_screen_get_rgba_visual:
  * @screen: a #GdkScreen
  *
