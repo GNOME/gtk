@@ -6,6 +6,8 @@ Overview of Changes from GTK+ 2.91.5 to 2.91.6
  - GtkStyle and GtkRcStyle have been deprecated
  - The GdkWindowClass enumeration is now GdkWindowWindowClass
  - gdk_window_get_geometry lost its depth argument
+ - The old, unused gtk_decorated_window_... functions have
+   been removed.
 
 * GtkComboBox has gained an 'active id' property that is
   intended for easy binding to settings
