@@ -311,6 +311,15 @@ struct _GdkDisplayClass
 		  gboolean    is_error);
 };
 
+struct _GdkKeymapClass
+{
+  GObjectClass parent_class;
+
+  void (*direction_changed) (GdkKeymap *keymap);
+  void (*keys_changed)      (GdkKeymap *keymap);
+  void (*state_changed)     (GdkKeymap *keymap);
+};
+
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;

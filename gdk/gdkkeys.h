@@ -89,15 +89,6 @@ struct _GdkKeymap
   GdkDisplay *GSEAL (display);
 };
 
-struct _GdkKeymapClass
-{
-  GObjectClass parent_class;
-
-  void (*direction_changed) (GdkKeymap *keymap);
-  void (*keys_changed)      (GdkKeymap *keymap);
-  void (*state_changed)     (GdkKeymap *keymap);
-};
-
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 
 #ifndef GDK_MULTIHEAD_SAFE
