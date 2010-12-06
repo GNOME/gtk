@@ -124,9 +124,6 @@ struct _GtkComboBoxPrivate
   guint scroll_timer;
   guint resize_idle_id;
 
-  gint  minimum_width;
-  gint  natural_width;
-
   /* For "has-entry" specific behavior we track
    * an automated cell renderer and text column */
   gint  text_column;
@@ -1018,9 +1015,6 @@ gtk_combo_box_init (GtkComboBox *combo_box)
                                                  GtkComboBoxPrivate);
   priv = combo_box->priv;
 
-  priv->minimum_width = 0;
-  priv->natural_width = 0;
-
   priv->wrap_width = 0;
 
   priv->active = -1;
@@ -1897,10 +1891,6 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
 				  hpolicy, vpolicy);
 
-  /* XXX This set_size_request call is part of the hack outlined below and can 
-   * go away once height-for-width is implemented on treeviews. */
-  gtk_widget_set_size_request (priv->tree_view, -1, -1);
-
   if (combo_box->priv->popup_fixed_width)
     {
       gtk_widget_get_preferred_size (priv->scrolled_window, &popup_req, NULL);
@@ -1914,24 +1904,15 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
     }
   else
     {
-      if (priv->natural_width > *width)
+      /* XXX This code depends on treeviews properly reporting their natural width
+       * list-mode menus won't fill up to their natural width until then */
+      gtk_widget_get_preferred_size (priv->scrolled_window, NULL, &popup_req);
+
+      if (popup_req.width > *width)
 	{
 	  hpolicy = GTK_POLICY_NEVER;
 	  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (priv->scrolled_window),
 					  hpolicy, vpolicy);
-
-
-	  /* XXX Currently we set the size-request on the internal treeview to be
-	   * the natural width of the cells, this hack can go away once our
-	   * treeview does height-for-width properly (i.e. just adjust *width
-	   * here to be the natural width request of the scrolled-window). 
-	   *
-	   * I can't tell why the magic number 5 is needed here (i.e. without it 
-	   * treeviews are left ellipsizing) , however it this all should be
-	   * removed with height-for-width treeviews.
-	   */
-	  gtk_widget_set_size_request (priv->tree_view, priv->natural_width + 5, -1);
-	  gtk_widget_get_preferred_size (priv->scrolled_window, NULL, &popup_req);
 
 	  *width = popup_req.width;
 	}
