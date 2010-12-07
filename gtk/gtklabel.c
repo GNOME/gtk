@@ -3014,13 +3014,19 @@ get_font_metrics (PangoContext *context, GtkWidget *widget)
 {
   GtkStyleContext *style_context;
   PangoFontDescription *font;
+  PangoFontMetrics *retval;
 
   style_context = gtk_widget_get_style_context (widget);
   gtk_style_context_get (style_context, 0, "font", &font, NULL);
 
-  return pango_context_get_metrics (context,
-                                     font,
-                                     pango_context_get_language (context));
+  retval = pango_context_get_metrics (context,
+                                      font,
+                                      pango_context_get_language (context));
+
+  if (font != NULL)
+    pango_font_description_free (font);
+
+  return retval;
 }
 
 static void
