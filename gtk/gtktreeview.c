@@ -6146,7 +6146,7 @@ validate_row (GtkTreeView *tree_view,
 
       if (!is_separator)
 	{
-          padding += vertical_separator;
+          row_height += vertical_separator;
 	  height = MAX (height, row_height);
 	  height = MAX (height, tree_view->priv->expander_size);
 	}
