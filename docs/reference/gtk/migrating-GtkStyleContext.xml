@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<chapter id="gtk-migrating-GtkStyleContext">
-  <title>Migrating from GtkStyle to GtkStyleContext</title>
+<section id="gtk-migrating-GtkStyleContext">
+  <title>Theming changes</title>
 
   <para>
     In GTK+ 3.0, #GtkStyleContext was added to replace #GtkStyle and
@@ -14,7 +14,7 @@
     porting applications, libraries and widgets.
   </para>
 
-  <refsect2 id="gtk-migrating-GtkStyleContext-themes">
+  <section id="gtk-migrating-GtkStyleContext-themes">
     <title>Migrating themes</title>
 
     <para>
@@ -27,9 +27,9 @@
       with possible variants such as the dark theme being named
       <filename>gtk-dark.css</filename> in the same directory.
     </para>
-  </refsect2>
+  </section>
 
-  <refsect2 id="gtk-migrating-theme-GtkStyleContext-engines">
+  <section id="gtk-migrating-theme-GtkStyleContext-engines">
     <title>Migrating theme engines</title>
 
     <para>
@@ -141,9 +141,9 @@
       attempt to handle.
     </para>
 
-  </refsect2>
+  </section>
 
-  <refsect2 id="gtk-migrating-GtkStyleContext-parser-extensions">
+  <section id="gtk-migrating-GtkStyleContext-parser-extensions">
     <title>Extending the CSS parser</title>
 
     <para>
@@ -175,9 +175,9 @@
       style property can be modified in CSS as
       <literal>-GtkWidget-focus-line-width</literal>.
     </para>
-  </refsect2>
+  </section>
 
-  <refsect2 id="gtk-migrating-GtkStyleContext-css">
+  <section id="gtk-migrating-GtkStyleContext-css">
     <title>Using the CSS file format</title>
 
     <para>
@@ -359,6 +359,15 @@
     </para>
 
     <para>
+      In the same vein, the light, dark and mid color variants that
+      were available in GtkStyle should be replaced by a combination of
+      symbolic colors and custom CSS, where necessary. text_aa should
+      really not be used anywhere, anyway, and the white and black colors
+      that were available in GtkStyle can just be replaced by literal
+      GdkRGBA structs.
+    </para>
+
+    <para>
       Access to colors has also changed a bit. With #GtkStyle, the common
       way to access colors is:
       <informalexample><programlisting>
@@ -393,9 +402,9 @@
       It is worth mentioning that the new file format does not support
       custom keybindings nor stock icon mappings as the RC format did.
     </para>
-  </refsect2>
+  </section>
 
-  <refsect2 id="gtk-migrating-GtkStyleContext-checklist">
+  <section id="gtk-migrating-GtkStyleContext-checklist">
     <title>A checklist for widgets</title>
 
     <para>
@@ -486,15 +495,34 @@
       </listitem>
 
       <listitem>
-        Replace all <literal>gtk_paint_*()</literal> calls with corresponding
-        <literal>gtk_render_*()</literal> calls. The most distinctive changes
-        are the use of #GtkStateFlags to represent the widget state and the
-        lack of #GtkShadowType. For gtk_render_check() and gtk_render_option(),
-        the @shadow_type parameter is replaced by the #GTK_STATE_FLAG_ACTIVE
-        and #GTK_STATE_FLAG_INCONSISTENT state flags. For things such as
-        pressed/unpressed button states, #GTK_STATE_FLAG_ACTIVE is used, and
-        the CSS may style normal/active states differently to render
-        outset/inset borders, respectively.
+        <para>
+          Replace all <literal>gtk_paint_*()</literal> calls with corresponding
+          <literal>gtk_render_*()</literal> calls.
+        </para>
+        <para>
+          The most distinctive changes are the use of #GtkStateFlags to
+          represent the widget state and the lack of #GtkShadowType. Note
+          that widget state is now passed implicitly via the context, so
+          to render in a certain state, you have to temporarily set the
+          state on the context, as in the following example:
+        </para>
+        <example>
+          <title>Rendering with a specific state</title>
+          <programlisting>
+            gtk_style_context_save (context);
+            gtk_style_context_set_state (context, GTK_STATE_FLAG_ACTIVE);
+            gtk_render_check (context, cr, x, y, width, height);
+            gtk_style_context_restore (context);
+          </programlisting>
+        </example>
+        <para>
+          For gtk_render_check() and gtk_render_option(), the @shadow_type
+          parameter is replaced by the #GTK_STATE_FLAG_ACTIVE and
+          #GTK_STATE_FLAG_INCONSISTENT state flags. For things such as
+          pressed/unpressed button states, #GTK_STATE_FLAG_ACTIVE is used,
+          and the CSS may style normal/active states differently to render
+          outset/inset borders, respectively.
+        </para>
       </listitem>
 
       <listitem>
@@ -515,9 +543,9 @@
         of this is merely a guideline. Widgets may choose to follow it or not.
       </listitem>
     </orderedlist>
-  </refsect2>
+  </section>
 
-  <refsect2 id="gtk-migrating-GtkStyleContext-parsing">
+  <section id="gtk-migrating-GtkStyleContext-parsing">
     <title>Parsing of custom resources</title>
     <para>
       As a consequence of the RC format going away, calling gtk_rc_parse() or
@@ -534,9 +562,9 @@
       by implementing the #GtkStyleProvider interface yourself. This is
       an advanced feature that should be rarely used.
     </para>
-  </refsect2>
+  </section>
 
-  <refsect2 id="gtk-migrating-GtkStyleContext-bonus-points">
+  <section id="gtk-migrating-GtkStyleContext-bonus-points">
     <title>Bonus points</title>
 
     <para>
@@ -627,5 +655,5 @@
         </para>
       </listitem>
     </orderedlist>
-  </refsect2>
-</chapter>
+  </section>
+</section>
