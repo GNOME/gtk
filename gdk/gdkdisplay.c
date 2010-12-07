@@ -764,10 +764,11 @@ _gdk_display_enable_motion_hints (GdkDisplay *display,
  * gdk_display_get_device_state:
  * @display: a #GdkDisplay.
  * @device: device to query status to.
- * @screen: location to store the #GdkScreen the @device is on, or %NULL.
- * @x: location to store root window X coordinate of @device, or %NULL.
- * @y: location to store root window Y coordinate of @device, or %NULL.
- * @mask: location to store current modifier mask for @device, or %NULL.
+ * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
+ *          the @device is on, or %NULL.
+ * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
+ * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
+ * @mask: (out) (allow-none): location to store current modifier mask for @device, or %NULL.
  *
  * Gets the current location and state of @device for a given display.
  *
@@ -804,8 +805,10 @@ gdk_display_get_device_state (GdkDisplay       *display,
  * gdk_display_get_window_at_device_position:
  * @display: a #GdkDisplay.
  * @device: #GdkDevice to query info to.
- * @win_x: return location for the X coordinate of the device location, relative to the window origin, or %NULL.
- * @win_y: return location for the Y coordinate of the device location, relative to the window origin, or %NULL.
+ * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
+ *         relative to the window origin, or %NULL.
+ * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
+ *         relative to the window origin, or %NULL.
  *
  * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
  * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
@@ -839,8 +842,8 @@ gdk_display_get_window_at_device_position (GdkDisplay *display,
 /**
  * gdk_display_set_device_hooks:
  * @display: a #GdkDisplay.
- * @new_hooks: a table of pointers to functions for getting quantities related to all
- *             devices position, or %NULL to restore the default table.
+ * @new_hooks: (allow-none): a table of pointers to functions for getting quantities related
+ *             to all devices position, or %NULL to restore the default table.
  *
  * This function allows for hooking into the operation of getting the current location of any
  * #GdkDevice on a particular #GdkDisplay. This is only useful for such low-level tools as
@@ -1054,7 +1057,7 @@ multihead_default_window_at_pointer (GdkDisplay *display,
 /**
  * gdk_display_set_pointer_hooks:
  * @display: a #GdkDisplay
- * @new_hooks: a table of pointers to functions for getting
+ * @new_hooks: (allow-none): a table of pointers to functions for getting
  *   quantities related to the current pointer position,
  *   or %NULL to restore the default table.
  * 
@@ -1155,7 +1158,7 @@ singlehead_default_window_at_pointer  (GdkScreen       *screen,
 
 /**
  * gdk_set_pointer_hooks:
- * @new_hooks: a table of pointers to functions for getting
+ * @new_hooks: (allow-none): a table of pointers to functions for getting
  *   quantities related to the current pointer position,
  *   or %NULL to restore the default table.
  * 
@@ -1745,8 +1748,8 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
  * gdk_device_grab_info_libgtk_only:
  * @display: the display for which to get the grab information
  * @device: device to get the grab information from
- * @grab_window: location to store current grab window
- * @owner_events: location to store boolean indicating whether
+ * @grab_window: (out) (transfer none): location to store current grab window
+ * @owner_events: (out): location to store boolean indicating whether
  *   the @owner_events flag to gdk_keyboard_grab() or
  *   gdk_pointer_grab() was %TRUE.
  *
