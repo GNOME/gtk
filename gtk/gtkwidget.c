@@ -1520,6 +1520,12 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * The ::style-set signal is emitted when a new style has been set
    * on a widget. Note that style-modifying functions like
    * gtk_widget_modify_base() also cause this signal to be emitted.
+   *
+   * Note that this signal is emitted for changes to the deprecated
+   * #GtkStyle. To track changes to the #GtkStyleContext associated
+   * with a widget, use the #GtkWidget::style-updated signal.
+   *
+   * Deprecated:3.0: Use the #GtkWidget::style-updated signal
    */
   widget_signals[STYLE_SET] =
     g_signal_new (I_("style-set"),
@@ -1531,6 +1537,16 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 		  G_TYPE_NONE, 1,
 		  GTK_TYPE_STYLE);
 
+  /**
+   * GtkWidget::style-updated:
+   * @widget: the object on which the signal is emitted
+   *
+   * The ::style-updated signal is emitted when the #GtkStyleContext
+   * of a widget is changed. Note that style-modifying functions like
+   * gtk_widget_override_color() also cause this signal to be emitted.
+   *
+   * Since: 3.0
+   */
   widget_signals[STYLE_UPDATED] =
     g_signal_new (I_("style-updated"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -8670,6 +8686,15 @@ reset_style_recurse (GtkWidget *widget, gpointer data)
 			  NULL);
 }
 
+/**
+ * gtk_widget_reset_style:
+ * @widget: a #GtkWidget
+ *
+ * Updates the style context of @widget and all descendents
+ * by updating its widget path.
+ *
+ * Since: 3.0
+ */
 void
 gtk_widget_reset_style (GtkWidget *widget)
 {
@@ -8739,7 +8764,7 @@ gtk_widget_peek_pango_context (GtkWidget *widget)
  *
  * If you create and keep a #PangoLayout using this context, you must
  * deal with changes to the context by calling pango_layout_context_changed()
- * on the layout in response to the #GtkWidget::style-set and
+ * on the layout in response to the #GtkWidget::style-updated and
  * #GtkWidget::direction-changed signals for the widget.
  *
  * Return value: (transfer none): the #PangoContext for the widget.
@@ -8855,7 +8880,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * If you keep a #PangoLayout created in this way around, in order to
  * notify the layout of changes to the base direction or font of this
  * widget, you must call pango_layout_context_changed() in response to
- * the #GtkWidget::style-set and #GtkWidget::direction-changed signals
+ * the #GtkWidget::style-updated and #GtkWidget::direction-changed signals
  * for the widget.
  *
  * Return value: (transfer full): the new #PangoLayout
