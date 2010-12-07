@@ -415,6 +415,7 @@ struct _GtkWidgetClass
                                            gint              *natural_size);
   void         (* adjust_size_allocation) (GtkWidget         *widget,
                                            GtkOrientation     orientation,
+                                           gint              *minimum_size,
                                            gint              *natural_size,
                                            gint              *allocated_pos,
                                            gint              *allocated_size);

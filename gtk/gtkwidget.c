@@ -641,6 +641,7 @@ static void             gtk_widget_real_adjust_size_request     (GtkWidget      
                                                                  gint              *natural_size);
 static void             gtk_widget_real_adjust_size_allocation  (GtkWidget         *widget,
                                                                  GtkOrientation     orientation,
+                                                                 gint              *minimum_size,
                                                                  gint              *natural_size,
                                                                  gint              *allocated_pos,
                                                                  gint              *allocated_size);
@@ -4636,7 +4637,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
   gboolean alloc_needed;
   gboolean size_changed;
   gboolean position_changed;
-  gint natural_width, natural_height;
+  gint natural_width, natural_height, dummy;
   gint min_width, min_height;
 
   priv = widget->priv;
@@ -4681,7 +4682,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
        * when aligning implicitly.
        */
       gtk_widget_get_preferred_width (widget, &min_width, &natural_width);
-      gtk_widget_get_preferred_height_for_width (widget, real_allocation.width, NULL, &natural_height);
+      gtk_widget_get_preferred_height_for_width (widget, real_allocation.width, &dummy, &natural_height);
     }
   else
     {
@@ -4690,18 +4691,20 @@ gtk_widget_size_allocate (GtkWidget	*widget,
        * when aligning implicitly.
        */
       gtk_widget_get_preferred_height (widget, &min_height, &natural_height);
-      gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, NULL, &natural_width);
+      gtk_widget_get_preferred_width_for_height (widget, real_allocation.height, &dummy, &natural_width);
     }
 
   /* Now that we have the right natural height and width, go ahead and remove any margins from the
    * allocated sizes and possibly limit them to the natural sizes */
   GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
 							 GTK_ORIENTATION_HORIZONTAL,
+							 &dummy,
 							 &natural_width,
 							 &adjusted_allocation.x,
 							 &adjusted_allocation.width);
   GTK_WIDGET_GET_CLASS (widget)->adjust_size_allocation (widget,
 							 GTK_ORIENTATION_VERTICAL,
+							 &dummy,
 							 &natural_height,
 							 &adjusted_allocation.y,
 							 &adjusted_allocation.height);
@@ -5026,10 +5029,12 @@ adjust_for_align(GtkAlign           align,
 static void
 adjust_for_margin(gint               start_margin,
                   gint               end_margin,
+                  gint              *minimum_size,
                   gint              *natural_size,
                   gint              *allocated_pos,
                   gint              *allocated_size)
 {
+  *minimum_size -= (start_margin + end_margin);
   *natural_size -= (start_margin + end_margin);
   *allocated_pos += start_margin;
   *allocated_size -= (start_margin + end_margin);
@@ -5038,6 +5043,7 @@ adjust_for_margin(gint               start_margin,
 static void
 gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
                                         GtkOrientation     orientation,
+                                        gint              *minimum_size,
                                         gint              *natural_size,
                                         gint              *allocated_pos,
                                         gint              *allocated_size)
@@ -5050,7 +5056,8 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
     {
       adjust_for_margin (aux_info->margin.left,
                          aux_info->margin.right,
-                         natural_size, allocated_pos, allocated_size);
+                         minimum_size, natural_size, 
+			 allocated_pos, allocated_size);
       adjust_for_align (aux_info->halign,
                         natural_size, allocated_pos, allocated_size);
     }
@@ -5058,7 +5065,8 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
     {
       adjust_for_margin (aux_info->margin.top,
                          aux_info->margin.bottom,
-                         natural_size, allocated_pos, allocated_size);
+                         minimum_size, natural_size, 
+			 allocated_pos, allocated_size);
       adjust_for_align (aux_info->valign,
                         natural_size, allocated_pos, allocated_size);
     }
