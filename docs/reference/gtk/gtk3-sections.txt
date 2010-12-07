@@ -4145,6 +4145,7 @@ GtkTreeViewColumnSizing
 GtkTreeCellDataFunc
 GtkTreeViewColumn
 gtk_tree_view_column_new
+gtk_tree_view_column_new_with_area
 gtk_tree_view_column_new_with_attributes
 gtk_tree_view_column_pack_start
 gtk_tree_view_column_pack_end
