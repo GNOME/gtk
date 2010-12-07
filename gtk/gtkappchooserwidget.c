@@ -402,13 +402,13 @@ gtk_app_chooser_sort_func (GtkTreeModel *model,
   /* they're both recommended/falback or not, so if one is a heading, wins */
   if (a_heading)
     {
-      return -1;
+      retval = -1;
       goto out;
     }
 
   if (b_heading)
     {
-      return 1;
+      retval = 1;
       goto out;
     }
 
