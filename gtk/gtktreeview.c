@@ -6148,6 +6148,7 @@ validate_row (GtkTreeView *tree_view,
 	{
           row_height += vertical_separator;
 	  height = MAX (height, row_height);
+	  height = MAX (height, tree_view->priv->expander_size);
 	}
       else
         {
@@ -6156,10 +6157,6 @@ validate_row (GtkTreeView *tree_view,
           else
             height = 2 + 2 * focus_pad;
         }
-
-      /* XXX Expander size is also used to draw the separator rows, 
-       * maybe that should not be the case ? */
-      height = MAX (height, tree_view->priv->expander_size);
 
       if (gtk_tree_view_is_expander_column (tree_view, column))
         {
