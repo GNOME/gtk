@@ -1844,7 +1844,7 @@ get_cell_by_position (GtkCellRenderer     *renderer,
  * Gets the #GtkCellRenderer at @x and @y coordinates inside @area and optionally
  * returns the full cell allocation for it inside @cell_area.
  *
- * Returns value: the #GtkCellRenderer at @x and @y.
+ * Return value: the #GtkCellRenderer at @x and @y.
  *
  * Since: 3.0
  */
