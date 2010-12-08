@@ -1485,10 +1485,9 @@ ensure_pixbuf_for_icon_name (GtkImage     *image,
       if (priv->data.name.pixbuf == NULL)
 	{
 	  priv->data.name.pixbuf =
-	    gtk_widget_render_icon (GTK_WIDGET (image),
-				    GTK_STOCK_MISSING_IMAGE,
-				    priv->icon_size,
-				    NULL);
+	    gtk_widget_render_icon_pixbuf (GTK_WIDGET (image),
+                                           GTK_STOCK_MISSING_IMAGE,
+                                           priv->icon_size);
 	  priv->was_symbolic = FALSE;
 	}
     }
@@ -1560,10 +1559,9 @@ ensure_pixbuf_for_gicon (GtkImage     *image,
       if (priv->data.gicon.pixbuf == NULL)
 	{
 	  priv->data.gicon.pixbuf =
-	    gtk_widget_render_icon (GTK_WIDGET (image),
-				    GTK_STOCK_MISSING_IMAGE,
-				    priv->icon_size,
-				    NULL);
+	    gtk_widget_render_icon_pixbuf (GTK_WIDGET (image),
+                                           GTK_STOCK_MISSING_IMAGE,
+                                           priv->icon_size);
 	  priv->was_symbolic = FALSE;
 	}
     }
@@ -1621,10 +1619,9 @@ gtk_image_draw (GtkWidget *widget,
           break;
 
         case GTK_IMAGE_STOCK:
-          pixbuf = gtk_widget_render_icon (widget,
-                                           priv->data.stock.stock_id,
-                                           priv->icon_size,
-                                           NULL);
+          pixbuf = gtk_widget_render_icon_pixbuf (widget,
+                                                  priv->data.stock.stock_id,
+                                                  priv->icon_size);
 
           /* already done */
           needs_state_transform = FALSE;
@@ -1890,10 +1887,9 @@ gtk_image_calc_size (GtkImage *image)
   switch (priv->storage_type)
     {
     case GTK_IMAGE_STOCK:
-      pixbuf = gtk_widget_render_icon (widget,
-				       priv->data.stock.stock_id,
-                                       priv->icon_size,
-                                       NULL);
+      pixbuf = gtk_widget_render_icon_pixbuf (widget,
+                                              priv->data.stock.stock_id,
+                                              priv->icon_size);
       break;
       
     case GTK_IMAGE_ICON_SET:
