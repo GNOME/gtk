@@ -30,6 +30,8 @@
 #include "gdk/x11/gdkprivate-x11.h"
 #include "gdk/gdkwindowimpl.h"
 
+#include <X11/Xlib.h>
+
 #ifdef HAVE_XDAMAGE
 #include <X11/extensions/Xdamage.h>
 #endif
