@@ -1124,7 +1124,7 @@ set_preview_widget (GtkFileChooserDefault *impl,
 static GdkPixbuf *
 render_search_icon (GtkFileChooserDefault *impl)
 {
-  return gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FIND, GTK_ICON_SIZE_MENU, NULL);
+  return gtk_widget_render_icon_pixbuf (GTK_WIDGET (impl), GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 }
 
 static GdkPixbuf *
@@ -1144,7 +1144,7 @@ render_recent_icon (GtkFileChooserDefault *impl)
 
   /* fallback */
   if (!retval)
-    retval = gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU, NULL);
+    retval = gtk_widget_render_icon_pixbuf (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU);
 
   return retval;
 }
