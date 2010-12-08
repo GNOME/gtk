@@ -481,10 +481,9 @@ gtk_cell_renderer_pixbuf_create_stock_pixbuf (GtkCellRendererPixbuf *cellpixbuf,
   if (priv->pixbuf)
     g_object_unref (priv->pixbuf);
 
-  priv->pixbuf = gtk_widget_render_icon (widget,
-                                               priv->stock_id,
-                                               priv->stock_size,
-                                               priv->stock_detail);
+  priv->pixbuf = gtk_widget_render_icon_pixbuf (widget,
+                                                priv->stock_id,
+                                                priv->stock_size);
 
   g_object_notify (G_OBJECT (cellpixbuf), "pixbuf");
 }
