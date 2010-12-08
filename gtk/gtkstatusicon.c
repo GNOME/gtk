@@ -1434,10 +1434,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 #ifdef GDK_WINDOWING_WIN32
 	{
 	  GdkPixbuf *pixbuf =
-	    gtk_widget_render_icon (priv->dummy_widget,
-				    priv->image_data.stock_id,
-				    GTK_ICON_SIZE_SMALL_TOOLBAR,
-				    NULL);
+	    gtk_widget_render_icon_pixbuf (priv->dummy_widget,
+                                           priv->image_data.stock_id,
+                                           GTK_ICON_SIZE_SMALL_TOOLBAR);
 
 	  prev_hicon = priv->nid.hIcon;
 	  priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (pixbuf);
@@ -1454,10 +1453,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	{
 	  GdkPixbuf *pixbuf;
 
-	  pixbuf = gtk_widget_render_icon (priv->dummy_widget,
-					   priv->image_data.stock_id,
-					   GTK_ICON_SIZE_SMALL_TOOLBAR,
-					   NULL);
+	  pixbuf = gtk_widget_render_icon_pixbuf (priv->dummy_widget,
+                                                  priv->image_data.stock_id,
+                                                  GTK_ICON_SIZE_SMALL_TOOLBAR);
 	  QUARTZ_POOL_ALLOC;
 	  [priv->status_item setImage:pixbuf];
 	  QUARTZ_POOL_RELEASE;
