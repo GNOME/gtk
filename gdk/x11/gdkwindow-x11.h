@@ -35,6 +35,7 @@
 #endif
 
 #ifdef HAVE_XSYNC
+#include <X11/Xlib.h>
 #include <X11/extensions/sync.h>
 #endif
 
