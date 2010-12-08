@@ -734,33 +734,32 @@ gtk_tree_menu_path_in_menu (GtkTreeMenu  *menu,
   gboolean            is_header = FALSE;
 
   /* Check if the is in root of the model */
-  if (gtk_tree_path_get_depth (path) == 1)
-    {
-      if (!priv->root)
-	in_menu = TRUE;
-    }
+  if (gtk_tree_path_get_depth (path) == 1 && !priv->root)
+    in_menu = TRUE;
   /* If we are a submenu, compare the parent path */
-  else if (priv->root && gtk_tree_path_get_depth (path) > 1)
+  else if (priv->root)
     {
       GtkTreePath *root_path   = gtk_tree_row_reference_get_path (priv->root);
-      GtkTreePath *parent_path = gtk_tree_path_copy (path);
-
-      gtk_tree_path_up (parent_path);
+      GtkTreePath *search_path = gtk_tree_path_copy (path);
 
       if (root_path)
 	{
-	  if (gtk_tree_path_compare (root_path, parent_path) == 0)
-	    in_menu = TRUE;
-	  
-	  if (!in_menu && priv->menu_with_header && 
-	      gtk_tree_path_compare (root_path, path) == 0)
+	  if (priv->menu_with_header && 
+	      gtk_tree_path_compare (root_path, search_path) == 0)
 	    {
 	      in_menu   = TRUE;
 	      is_header = TRUE;
 	    }
+	  else if (gtk_tree_path_get_depth (search_path) > 1)
+	    {
+	      gtk_tree_path_up (search_path);
+
+	      if (gtk_tree_path_compare (root_path, search_path) == 0)
+		in_menu = TRUE;
+	    }
 	}
       gtk_tree_path_free (root_path);
-      gtk_tree_path_free (parent_path);
+      gtk_tree_path_free (search_path);
     }
 
   if (header_item)
