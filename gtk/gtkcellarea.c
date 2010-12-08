@@ -1102,7 +1102,7 @@ gtk_cell_area_real_render (GtkCellArea          *area,
       !gtk_cell_area_is_activatable (area))
     render_data.focus_all = TRUE;
 
-  gtk_cell_area_foreach_alloc (area, context, widget, cell_area, cell_area, 
+  gtk_cell_area_foreach_alloc (area, context, widget, cell_area, background_area, 
 			       (GtkCellAllocCallback)render_cell, &render_data);
 
   if (render_data.paint_focus && 
