@@ -3856,6 +3856,8 @@ gtk_css_provider_get_named (const gchar *name,
             }
         }
 
+      g_free (subpath);
+
       if (path)
         {
           GError *error = NULL;
