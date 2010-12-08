@@ -76,6 +76,8 @@ typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
  * GtkCellAllocCallback:
  * @renderer: the cell renderer to operate on
  * @cell_area: the area allocated to @renderer inside the rectangle provided to gtk_cell_area_foreach_alloc().
+ * @cell_background: the background area for @renderer inside the background 
+ *                   area provided to gtk_cell_area_foreach_alloc().
  * @data: user-supplied data
  *
  * The type of the callback functions used for iterating over
@@ -86,6 +88,7 @@ typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
  */
 typedef gboolean    (*GtkCellAllocCallback) (GtkCellRenderer    *renderer,
 					     const GdkRectangle *cell_area,
+					     const GdkRectangle *cell_background,
 					     gpointer            data);
 
 
@@ -174,6 +177,7 @@ struct _GtkCellAreaClass
 							  GtkCellAreaContext      *context,
 							  GtkWidget               *widget,
 							  const GdkRectangle      *cell_area,
+							  const GdkRectangle      *background_area,
 							  GtkCellAllocCallback     callback,
 							  gpointer                 callback_data);
   gint               (* event)                           (GtkCellArea             *area,
@@ -273,6 +277,7 @@ void                  gtk_cell_area_foreach_alloc                  (GtkCellArea 
 								    GtkCellAreaContext   *context,
 								    GtkWidget            *widget,
 								    const GdkRectangle   *cell_area,
+								    const GdkRectangle   *background_area,
 								    GtkCellAllocCallback  callback,
 								    gpointer              callback_data);
 gint                  gtk_cell_area_event                          (GtkCellArea          *area,
@@ -307,7 +312,6 @@ GtkCellRenderer      *gtk_cell_area_get_cell_at_position           (GtkCellArea 
 								    gint                  x,
 								    gint                  y,
 								    GdkRectangle         *alloc_area);
-
 
 /* Geometry */
 GtkCellAreaContext   *gtk_cell_area_create_context                 (GtkCellArea        *area);

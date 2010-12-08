@@ -317,7 +317,7 @@
  * The #GtkCellArea introduces <emphasis>cell properties</emphasis> for #GtkCellRenderers in very
  * much the same way that #GtkContainer introduces <link linkend="child-properties">child properties</link>
  * for #GtkWidgets. This provides some general interfaces for defining the relationship cell areas
- * have with thier cells. For instance in a #GtkCellAreaBox a cell might "expand" and recieve extra
+ * have with their cells. For instance in a #GtkCellAreaBox a cell might "expand" and recieve extra
  * space when the area is allocated more than it's full natural request, or a cell might be configured
  * to "align" with adjacent rows which were requested and rendered with the same #GtkCellAreaContext.
  *
@@ -371,6 +371,14 @@ static gint      gtk_cell_area_real_event                          (GtkCellArea 
 								    GdkEvent             *event,
 								    const GdkRectangle   *cell_area,
 								    GtkCellRendererState  flags);
+static void      gtk_cell_area_real_render                         (GtkCellArea          *area,
+								    GtkCellAreaContext   *context,
+								    GtkWidget            *widget,
+								    cairo_t              *cr,
+								    const GdkRectangle   *background_area,
+								    const GdkRectangle   *cell_area,
+								    GtkCellRendererState  flags,
+								    gboolean              paint_focus);
 static void      gtk_cell_area_real_apply_attributes               (GtkCellArea           *area,
 								    GtkTreeModel          *tree_model,
 								    GtkTreeIter           *iter,
@@ -429,6 +437,18 @@ typedef struct {
   GtkCellRenderer *renderer;
   GdkRectangle     allocation;
 } RendererAllocationData;
+
+/* Used in foreach loop to render cells */
+typedef struct {
+  GtkCellArea         *area;
+  GtkWidget           *widget;
+  cairo_t             *cr;
+  GdkRectangle         focus_rect;
+  GtkCellRendererState render_flags;
+  guint                paint_focus : 1;
+  guint                focus_all   : 1;
+  guint                first_focus : 1;
+} CellRenderData;
 
 /* Used in foreach loop to get a cell by position */
 typedef struct {
@@ -587,7 +607,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
   class->remove           = NULL;
   class->foreach          = NULL;
   class->event            = gtk_cell_area_real_event;
-  class->render           = NULL;
+  class->render           = gtk_cell_area_real_render;
   class->apply_attributes = gtk_cell_area_real_apply_attributes;
 
   /* geometry */
@@ -1003,6 +1023,103 @@ gtk_cell_area_real_event (GtkCellArea          *area,
     }
 
   return retval;
+}
+
+static gboolean
+render_cell (GtkCellRenderer        *renderer,
+	     const GdkRectangle     *cell_area,
+	     const GdkRectangle     *cell_background,
+	     CellRenderData         *data)
+{
+  GtkCellRenderer      *focus_cell;
+  GtkCellRendererState  flags;
+  GdkRectangle          inner_area;
+
+  focus_cell = gtk_cell_area_get_focus_cell (data->area);
+  flags      = data->render_flags;
+
+  gtk_cell_area_inner_cell_area (data->area, data->widget, cell_area, &inner_area);
+
+  if ((flags & GTK_CELL_RENDERER_FOCUSED) &&
+      (data->focus_all || 
+       (focus_cell && 
+	(renderer == focus_cell || 
+	 gtk_cell_area_is_focus_sibling (data->area, focus_cell, renderer)))))
+    {
+      GdkRectangle cell_focus;
+
+      gtk_cell_renderer_get_aligned_area (renderer, data->widget, flags, &inner_area, &cell_focus);
+
+      if (data->first_focus)
+	{
+	  data->first_focus = FALSE;
+	  data->focus_rect  = cell_focus;
+	}
+      else
+	{
+	  gdk_rectangle_union (&data->focus_rect, &cell_focus, &data->focus_rect);
+	}
+    }
+  else
+    flags &= ~GTK_CELL_RENDERER_FOCUSED;
+
+  gtk_cell_renderer_render (renderer, data->cr, data->widget,
+			    cell_background, &inner_area, flags);
+
+  return FALSE;
+}
+
+static void
+gtk_cell_area_real_render (GtkCellArea          *area,
+			   GtkCellAreaContext   *context,
+			   GtkWidget            *widget,
+			   cairo_t              *cr,
+			   const GdkRectangle   *background_area,
+			   const GdkRectangle   *cell_area,
+			   GtkCellRendererState  flags,
+			   gboolean              paint_focus)
+{
+  CellRenderData render_data = 
+    { 
+      area, 
+      widget, 
+      cr, 
+      { 0, }, 
+      flags, 
+      paint_focus, 
+      FALSE, TRUE
+    };
+
+  /* Make sure we dont paint a focus rectangle while there
+   * is an editable widget in play 
+   */
+  if (gtk_cell_area_get_edited_cell (area))
+    render_data.paint_focus = FALSE;
+
+  /* If no cell can activate but the caller wants focus painted,
+   * then we paint focus around all cells */
+  if ((flags & GTK_CELL_RENDERER_FOCUSED) != 0 && paint_focus && 
+      !gtk_cell_area_is_activatable (area))
+    render_data.focus_all = TRUE;
+
+  gtk_cell_area_foreach_alloc (area, context, widget, cell_area, cell_area, 
+			       (GtkCellAllocCallback)render_cell, &render_data);
+
+  if (render_data.paint_focus && 
+      render_data.focus_rect.width != 0 && 
+      render_data.focus_rect.height != 0)
+    {
+      GtkStateType renderer_state = 
+	flags & GTK_CELL_RENDERER_SELECTED ? GTK_STATE_SELECTED :
+	(flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
+	 (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
+
+      gtk_paint_focus (gtk_widget_get_style (widget), cr, 
+		       renderer_state, widget,
+		       gtk_cell_area_get_style_detail (area),
+		       render_data.focus_rect.x,     render_data.focus_rect.y,
+		       render_data.focus_rect.width, render_data.focus_rect.height);
+    }
 }
 
 static void
@@ -1476,6 +1593,7 @@ gtk_cell_area_foreach (GtkCellArea        *area,
  * @context: the #GtkCellAreaContext for this row of data.
  * @widget: the #GtkWidget that @area is rendering to
  * @cell_area: the @widget relative coordinates and size for @area
+ * @background_area: the @widget relative coordinates of the background area
  * @callback: the #GtkCellAllocCallback to call
  * @callback_data: user provided data pointer
  *
@@ -1489,6 +1607,7 @@ gtk_cell_area_foreach_alloc (GtkCellArea          *area,
 			     GtkCellAreaContext   *context,
 			     GtkWidget            *widget,
 			     const GdkRectangle   *cell_area,
+			     const GdkRectangle   *background_area,
 			     GtkCellAllocCallback  callback,
 			     gpointer              callback_data)
 {
@@ -1503,7 +1622,7 @@ gtk_cell_area_foreach_alloc (GtkCellArea          *area,
   class = GTK_CELL_AREA_GET_CLASS (area);
 
   if (class->foreach_alloc)
-    class->foreach_alloc (area, context, widget, cell_area, callback, callback_data);
+    class->foreach_alloc (area, context, widget, cell_area, background_area, callback, callback_data);
   else
     g_warning ("GtkCellAreaClass::foreach_alloc not implemented for `%s'", 
 	       g_type_name (G_TYPE_FROM_INSTANCE (area)));
@@ -1647,6 +1766,7 @@ gtk_cell_area_get_style_detail (GtkCellArea *area)
 static gboolean
 get_cell_allocation (GtkCellRenderer        *renderer,
 		     const GdkRectangle     *cell_area,
+		     const GdkRectangle     *cell_background,
 		     RendererAllocationData *data)
 {
   if (data->renderer == renderer)
@@ -1687,7 +1807,7 @@ gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
   g_return_if_fail (cell_area != NULL);
   g_return_if_fail (allocation != NULL);
 
-  gtk_cell_area_foreach_alloc (area, context, widget, cell_area, 
+  gtk_cell_area_foreach_alloc (area, context, widget, cell_area, cell_area, 
 			       (GtkCellAllocCallback)get_cell_allocation, &data);
 
   *allocation = data.allocation;
@@ -1696,6 +1816,7 @@ gtk_cell_area_get_cell_allocation (GtkCellArea          *area,
 static gboolean
 get_cell_by_position (GtkCellRenderer     *renderer,
 		      const GdkRectangle  *cell_area,
+		      const GdkRectangle  *cell_background,
 		      CellByPositionData  *data)
 {
   if (data->x >= cell_area->x && data->x < cell_area->x + cell_area->width &&
@@ -1723,7 +1844,7 @@ get_cell_by_position (GtkCellRenderer     *renderer,
  * Gets the #GtkCellRenderer at @x and @y coordinates inside @area and optionally
  * returns the full cell allocation for it inside @cell_area.
  *
- * Returns: the #GtkCellRenderer at @x and @y.
+ * Returns value: the #GtkCellRenderer at @x and @y.
  *
  * Since: 3.0
  */
@@ -1745,7 +1866,7 @@ gtk_cell_area_get_cell_at_position (GtkCellArea          *area,
   g_return_val_if_fail (x >= cell_area->x && x <= cell_area->x + cell_area->width, NULL);
   g_return_val_if_fail (y >= cell_area->y && y <= cell_area->y + cell_area->height, NULL);
 
-  gtk_cell_area_foreach_alloc (area, context, widget, cell_area, 
+  gtk_cell_area_foreach_alloc (area, context, widget, cell_area, cell_area, 
 			       (GtkCellAllocCallback)get_cell_by_position, &data);
 
   if (alloc_area)
@@ -1753,7 +1874,6 @@ gtk_cell_area_get_cell_at_position (GtkCellArea          *area,
 
   return data.renderer;
 }
-
 
 /*************************************************************
  *                      API: Geometry                        *
