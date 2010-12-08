@@ -2273,11 +2273,13 @@ gtk_label_get_link_colors (GtkWidget  *widget,
                            GdkColor  **link_color,
                            GdkColor  **visited_link_color)
 {
-  gtk_widget_ensure_style (widget);
-  gtk_widget_style_get (widget,
-                        "link-color", link_color,
-                        "visited-link-color", visited_link_color,
-                        NULL);
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_style (context,
+                               "link-color", link_color,
+                               "visited-link-color", visited_link_color,
+                                NULL);
   if (!*link_color)
     *link_color = gdk_color_copy (&default_link_color);
   if (!*visited_link_color)
@@ -3007,13 +3009,31 @@ gtk_label_clear_layout (GtkLabel *label)
     }
 }
 
+static PangoFontMetrics *
+get_font_metrics (PangoContext *context, GtkWidget *widget)
+{
+  GtkStyleContext *style_context;
+  PangoFontDescription *font;
+  PangoFontMetrics *retval;
+
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get (style_context, 0, "font", &font, NULL);
+
+  retval = pango_context_get_metrics (context,
+                                      font,
+                                      pango_context_get_language (context));
+
+  if (font != NULL)
+    pango_font_description_free (font);
+
+  return retval;
+}
 
 static void
 get_label_width (GtkLabel *label,
 		 gint     *minimum,
 		 gint     *natural)
 {
-  GtkWidgetAuxInfo *aux_info;
   GtkLabelPrivate     *priv;
   PangoLayout      *layout;
   PangoContext     *context;
@@ -3022,14 +3042,10 @@ get_label_width (GtkLabel *label,
   gint              char_width, digit_width, char_pixels, text_width, ellipsize_chars, guess_width;
 
   priv     = label->priv;
-  aux_info = _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
 
   layout  = pango_layout_copy (priv->layout);
   context = pango_layout_get_context (layout);
-  metrics = pango_context_get_metrics (context,
-                                       gtk_widget_get_style (GTK_WIDGET (label))->font_desc,
-				       pango_context_get_language (context));
-  
+  metrics = get_font_metrics (context, GTK_WIDGET (label));
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
   digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
   char_pixels = MAX (char_width, digit_width);
@@ -3108,11 +3124,16 @@ get_label_width (GtkLabel *label,
     }
 
   /* if a width-request is set, use that as the requested label width */
-  if ((priv->wrap || priv->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0) &&
-      aux_info && aux_info->width > 0)
+  if (priv->wrap || priv->ellipsize || priv->width_chars > 0 || priv->max_width_chars > 0)
     {
-      *minimum = aux_info->width * PANGO_SCALE;
-      *natural = MAX (*natural, *minimum);
+      GtkWidgetAuxInfo *aux_info;
+
+      aux_info = _gtk_widget_get_aux_info (GTK_WIDGET (label), FALSE);
+      if (aux_info && aux_info->width > 0)
+        {
+          *minimum = aux_info->width * PANGO_SCALE;
+          *natural = MAX (*natural, *minimum);
+        }
     }
 
   g_object_unref (layout);
@@ -3143,10 +3164,7 @@ get_label_wrap_width (GtkLabel *label)
 
 	  layout  = pango_layout_copy (priv->layout);
 	  context = pango_layout_get_context (layout);
-          metrics = pango_context_get_metrics (context,
-                                               gtk_widget_get_style (GTK_WIDGET (label))->font_desc,
-					       pango_context_get_language (context));
-	  
+	  metrics = get_font_metrics (context, GTK_WIDGET (label));
 	  char_width = pango_font_metrics_get_approximate_char_width (metrics);
 	  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
 	  char_pixels = MAX (char_width, digit_width);
@@ -3353,9 +3371,7 @@ get_single_line_height (GtkWidget   *widget,
   gint ascent, descent;
 
   context = pango_layout_get_context (layout);
-  metrics = pango_context_get_metrics (context, gtk_widget_get_style (widget)->font_desc,
-                                       pango_context_get_language (context));
-
+  metrics = get_font_metrics (context, widget);
   ascent = pango_font_metrics_get_ascent (metrics);
   descent = pango_font_metrics_get_descent (metrics);
   pango_font_metrics_unref (metrics);

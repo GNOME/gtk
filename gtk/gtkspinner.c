@@ -345,7 +345,7 @@ typedef AtkObjectFactory        GtkSpinnerAccessibleFactory;
 typedef AtkObjectFactoryClass   GtkSpinnerAccessibleFactoryClass;
 
 G_DEFINE_TYPE (GtkSpinnerAccessibleFactory,
-               gtk_spinner_accessible_factory,
+               _gtk_spinner_accessible_factory,
                ATK_TYPE_OBJECT_FACTORY);
 
 static GType
@@ -366,14 +366,14 @@ gtk_spinner_accessible_factory_create_accessible (GObject *obj)
 }
 
 static void
-gtk_spinner_accessible_factory_class_init (AtkObjectFactoryClass *klass)
+_gtk_spinner_accessible_factory_class_init (AtkObjectFactoryClass *klass)
 {
   klass->create_accessible = gtk_spinner_accessible_factory_create_accessible;
   klass->get_accessible_type = gtk_spinner_accessible_factory_get_accessible_type;
 }
 
 static void
-gtk_spinner_accessible_factory_init (AtkObjectFactory *factory)
+_gtk_spinner_accessible_factory_init (AtkObjectFactory *factory)
 {
 }
 
@@ -402,7 +402,7 @@ gtk_spinner_get_accessible (GtkWidget *widget)
       if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE))
         atk_registry_set_factory_type (registry,
                                        GTK_TYPE_SPINNER,
-                                       gtk_spinner_accessible_factory_get_type ());
+                                       _gtk_spinner_accessible_factory_get_type ());
       first_time = FALSE;
     }
 

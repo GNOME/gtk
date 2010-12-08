@@ -108,7 +108,7 @@ search_for_mimetype_ready_cb (GObject      *source,
   GtkAppChooserDialog *self = user_data;
   GError *error = NULL;
 
-  gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
+  _gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
 
   if (error != NULL)
     {
@@ -128,11 +128,11 @@ online_button_clicked_cb (GtkButton *b,
 {
   GtkAppChooserDialog *self = user_data;
 
-  gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
-                                                    self->priv->content_type,
-                                                    GTK_WINDOW (self),
-                                                    search_for_mimetype_ready_cb,
-                                                    self);
+  _gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
+                                                     self->priv->content_type,
+                                                     GTK_WINDOW (self),
+                                                     search_for_mimetype_ready_cb,
+                                                     self);
 }
 
 static void
@@ -142,7 +142,7 @@ app_chooser_online_get_default_ready_cb (GObject *source,
 {
   GtkAppChooserDialog *self = user_data;
 
-  self->priv->online = gtk_app_chooser_online_get_default_finish (source, res);
+  self->priv->online = _gtk_app_chooser_online_get_default_finish (source, res);
 
   if (self->priv->online != NULL)
     {
@@ -164,7 +164,7 @@ app_chooser_online_get_default_ready_cb (GObject *source,
 static void
 ensure_online_button (GtkAppChooserDialog *self)
 {
-  gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb, self);
+  _gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb, self);
 }
 
 /* An application is valid if:

@@ -37,7 +37,6 @@
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtkwindow.h"
-#include "gtkwindow-decorate.h"
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
@@ -1135,8 +1134,6 @@ gtk_window_init (GtkWindow *window)
   priv->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);
 
-  gtk_decorated_window_init (window);
-
   g_signal_connect (priv->screen, "composited-changed",
 		    G_CALLBACK (gtk_window_on_composited_changed), window);
 }
@@ -1584,8 +1581,6 @@ gtk_window_set_title (GtkWindow   *window,
     {
       gdk_window_set_title (gtk_widget_get_window (widget),
                             priv->title);
-
-      gtk_decorated_window_set_title (window, title);
     }
 
   g_object_notify (G_OBJECT (window), "title");
@@ -4671,11 +4666,6 @@ gtk_window_show (GtkWidget *widget)
 	  was_realized = TRUE;
 	}
 
-      /* Must be done after the windows are realized,
-       * so that the decorations can be read
-       */
-      gtk_decorated_window_calculate_frame_size (window);
-
       /* We only send configure request if we didn't just finish
        * creating the window; if we just created the window
        * then we created it with widget->allocation anyhow.
@@ -7583,10 +7573,10 @@ gtk_window_set_frame_dimensions (GtkWindow *window,
       width = allocation.width + left + right;
       height = allocation.height + top + bottom;
       gdk_window_resize (priv->frame, width, height);
-      gtk_decorated_window_move_resize_window (window,
-					       left, top,
-                                               allocation.width,
-                                               allocation.height);
+      gdk_window_move_resize (gtk_widget_get_window (GTK_WIDGET (window)),
+                              left, top,
+                              allocation.width,
+                              allocation.height);
     }
 }
 

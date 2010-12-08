@@ -791,11 +791,6 @@ static gboolean gtk_css_provider_load_from_path_internal (GtkCssProvider  *css_p
                                                           gboolean         reset,
                                                           GError         **error);
 
-enum {
-  CSS_PROVIDER_PARSE_ERROR
-};
-
-
 GQuark
 gtk_css_provider_error_quark (void)
 {
@@ -1375,7 +1370,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
           (info->state == 0 ||
            info->state == state ||
            ((info->state & state) != 0 &&
-	    (info->state & ~(state)) == 0)))
+            (info->state & ~(state)) == 0)))
         {
           const gchar *val_str;
 
@@ -1456,7 +1451,7 @@ scanner_apply_scope (GScanner    *scanner,
   if (scope == SCOPE_VALUE)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ (),.%\t\n'/\"";
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(),.%\t\n'/\"";
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
@@ -1880,7 +1875,7 @@ parse_selector (GtkCssProvider  *css_provider,
 
 static GtkSymbolicColor *
 symbolic_color_parse_str (const gchar  *string,
-			  gchar       **end_ptr)
+                          gchar       **end_ptr)
 {
   GtkSymbolicColor *symbolic_color = NULL;
   gchar *str;
@@ -2073,7 +2068,7 @@ symbolic_color_parse_str (const gchar  *string,
       *end_ptr = (gchar *) str;
 
       if (str[0] != ')')
-	{
+        {
           gtk_symbolic_color_unref (color1);
           gtk_symbolic_color_unref (color2);
           return NULL;
@@ -2142,8 +2137,8 @@ symbolic_color_parse (const gchar  *str,
   if (*end != '\0')
     {
       g_set_error_literal (error,
-                           gtk_css_provider_error_quark (),
-                           CSS_PROVIDER_PARSE_ERROR,
+                           GTK_CSS_PROVIDER_ERROR,
+                           GTK_CSS_PROVIDER_ERROR_FAILED,
                            "Could not parse symbolic color");
 
       if (color)
@@ -2412,7 +2407,6 @@ path_parse_str (GtkCssProvider  *css_provider,
 {
   gchar *path, *chr;
   const gchar *start, *end;
-
   start = str;
 
   if (g_str_has_prefix (str, "url"))
@@ -2519,8 +2513,8 @@ path_parse (GtkCssProvider  *css_provider,
   if (*end != '\0')
     {
       g_set_error_literal (error,
-                           gtk_css_provider_error_quark (),
-                           CSS_PROVIDER_PARSE_ERROR,
+                           GTK_CSS_PROVIDER_ERROR,
+                           GTK_CSS_PROVIDER_ERROR_FAILED,
                            "Error parsing path");
       g_free (path);
       path = NULL;
@@ -2621,10 +2615,10 @@ slice_parse_str (GtkCssProvider  *css_provider,
       return NULL;
     }
 
-  slice = gtk_9slice_new (pixbuf,
-                          distance_top, distance_bottom,
-                          distance_left, distance_right,
-                          mods[0], mods[1]);
+  slice = _gtk_9slice_new (pixbuf,
+                           distance_top, distance_bottom,
+                           distance_left, distance_right,
+                           mods[0], mods[1]);
   g_object_unref (pixbuf);
 
   return slice;
@@ -2739,27 +2733,29 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
   if (type == GDK_TYPE_RGBA ||
       type == GDK_TYPE_COLOR)
     {
-      GdkRGBA color;
-      GdkColor rgb;
+      GdkRGBA rgba;
+      GdkColor color;
 
       if (type == GDK_TYPE_RGBA &&
-          gdk_rgba_parse (&color, value_str))
-        g_value_set_boxed (value, &color);
+          gdk_rgba_parse (&rgba, value_str))
+        g_value_set_boxed (value, &rgba);
       else if (type == GDK_TYPE_COLOR &&
-               gdk_color_parse (value_str, &rgb))
-        g_value_set_boxed (value, &rgb);
+               gdk_color_parse (value_str, &color))
+        g_value_set_boxed (value, &color);
       else
         {
           GtkSymbolicColor *symbolic_color;
 
           symbolic_color = symbolic_color_parse_str (value_str, &end);
 
-          if (!symbolic_color)
-            return FALSE;
-
-          g_value_unset (value);
-          g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
-          g_value_take_boxed (value, symbolic_color);
+          if (symbolic_color)
+            {
+              g_value_unset (value);
+              g_value_init (value, GTK_TYPE_SYMBOLIC_COLOR);
+              g_value_take_boxed (value, symbolic_color);
+            }
+          else
+            parsed = FALSE;
         }
     }
   else if (type == PANGO_TYPE_FONT_DESCRIPTION)
@@ -2790,13 +2786,16 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
       GtkThemingEngine *engine;
 
       engine = gtk_theming_engine_load (value_str);
-      g_value_set_object (value, engine);
+      if (engine)
+        g_value_set_object (value, engine);
+      else
+        parsed = FALSE;
     }
   else if (type == GTK_TYPE_ANIMATION_DESCRIPTION)
     {
       GtkAnimationDescription *desc;
 
-      desc = gtk_animation_description_from_string (value_str);
+      desc = _gtk_animation_description_from_string (value_str);
 
       if (desc)
         g_value_take_boxed (value, desc);
@@ -2878,8 +2877,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
       if (!enum_value)
         {
-          g_warning ("Unknown value '%s' for enum type '%s'",
-                     value_str, g_type_name (type));
+          g_set_error (error,
+                       GTK_CSS_PROVIDER_ERROR,
+                       GTK_CSS_PROVIDER_ERROR_FAILED,
+                       "Unknown value '%s' for enum type '%s'",
+                       value_str, g_type_name (type));
           parsed = FALSE;
         }
       else
@@ -2912,8 +2914,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
           if (!flag_value)
             {
-              g_warning ("Unknown flag '%s' for type '%s'",
-                         value_str, g_type_name (type));
+              g_set_error (error,
+                           GTK_CSS_PROVIDER_ERROR,
+                           GTK_CSS_PROVIDER_ERROR_FAILED,
+                           "Unknown flag '%s' for type '%s'",
+                           value_str, g_type_name (type));
               parsed = FALSE;
             }
           else
@@ -2928,8 +2933,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
       if (!flag_value)
         {
-          g_warning ("Unknown flag '%s' for type '%s'",
-                     value_str, g_type_name (type));
+          g_set_error (error,
+                       GTK_CSS_PROVIDER_ERROR,
+                       GTK_CSS_PROVIDER_ERROR_FAILED,
+                       "Unknown flag '%s' for type '%s'",
+                       value_str, g_type_name (type));
           parsed = FALSE;
         }
       else
@@ -2953,7 +2961,11 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
     }
   else
     {
-      g_warning ("Cannot parse string '%s' for type %s", value_str, g_type_name (type));
+      g_set_error (error,
+                   GTK_CSS_PROVIDER_ERROR,
+                   GTK_CSS_PROVIDER_ERROR_FAILED,
+                   "Cannot parse string '%s' for type %s",
+                   value_str, g_type_name (type));
       parsed = FALSE;
     }
 
@@ -2966,8 +2978,8 @@ css_provider_parse_value (GtkCssProvider  *css_provider,
 
       if (error && !*error)
         g_set_error_literal (error,
-                             gtk_css_provider_error_quark (),
-                             CSS_PROVIDER_PARSE_ERROR,
+                             GTK_CSS_PROVIDER_ERROR,
+                             GTK_CSS_PROVIDER_ERROR_FAILED,
                              "Failed to parse value");
     }
 
@@ -3320,6 +3332,9 @@ parse_stylesheet (GtkCssProvider  *css_provider,
                   GError         **error)
 {
   GtkCssProviderPrivate *priv;
+  gboolean result;
+
+  result = TRUE;
 
   priv = css_provider->priv;
   g_scanner_get_next_token (priv->scanner);
@@ -3334,7 +3349,26 @@ parse_stylesheet (GtkCssProvider  *css_provider,
 
       if (expected_token != G_TOKEN_NONE)
         {
-          scanner_report_warning (css_provider, expected_token, err);
+          /* If a GError was passed in, propagate the error and bail out,
+           * else report a warning and keep going
+           */
+          if (error != NULL)
+            {
+              result = FALSE;
+              if (err)
+                g_propagate_error (error, err);
+              else
+                g_set_error_literal (error,
+                                     GTK_CSS_PROVIDER_ERROR,
+                                     GTK_CSS_PROVIDER_ERROR_FAILED,
+                                     "Error parsing stylesheet");
+              break;
+            }
+          else
+            {
+              scanner_report_warning (css_provider, expected_token, err);
+              g_clear_error (&err);
+            }
 
           while (!g_scanner_eof (priv->scanner) &&
                  priv->scanner->token != G_TOKEN_RIGHT_CURLY)
@@ -3343,11 +3377,10 @@ parse_stylesheet (GtkCssProvider  *css_provider,
       else
         css_provider_commit (css_provider);
 
-      g_clear_error (&err);
       g_scanner_get_next_token (priv->scanner);
     }
 
-  return TRUE;
+  return result;
 }
 
 /**
@@ -3650,7 +3683,7 @@ gtk_css_provider_get_default (void)
         ".check:hover, .radio:hover {\n"
         "  background-color: @base_color;\n"
         "  border-color: @fg_color;\n"
-	"  color: @text_color;\n"
+        "  color: @text_color;\n"
         "  border-style: solid;\n"
         "  border-width: 1;\n"
         "}\n"

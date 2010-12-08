@@ -474,7 +474,6 @@ struct _GdkPointerHooks
                                    gint            *win_y);
 };
 
-typedef struct _GdkWindowObject GdkWindowObject;
 typedef struct _GdkWindowClass GdkWindowClass;
 
 #define GDK_TYPE_WINDOW              (gdk_window_get_type ())
@@ -720,8 +719,7 @@ void	      gdk_window_get_geometry	 (GdkWindow	  *window,
 					  gint		  *x,
 					  gint		  *y,
 					  gint		  *width,
-					  gint		  *height,
-					  gint		  *depth);
+					  gint		  *height);
 int           gdk_window_get_width       (GdkWindow       *window);
 int           gdk_window_get_height      (GdkWindow       *window);
 void	      gdk_window_get_position	 (GdkWindow	  *window,

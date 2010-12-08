@@ -559,7 +559,7 @@ gdk_window_cache_new (GdkScreen *screen)
       toplevel_windows = gdk_screen_get_toplevel_windows (screen);
       for (list = toplevel_windows; list; list = list->next) {
 	window = GDK_WINDOW (list->data);
-	gdk_window_get_geometry (window, &x, &y, &width, &height, NULL);
+	gdk_window_get_geometry (window, &x, &y, &width, &height);
 	gdk_window_cache_add (result, GDK_WINDOW_XID (window), 
 			      x, y, width, height, 
 			      gdk_window_is_visible (window));

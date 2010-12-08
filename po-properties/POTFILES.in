@@ -209,7 +209,6 @@ gtk/gtkvscrollbar.c
 gtk/gtkvseparator.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
-gtk/gtkwindow-decorate.c
 gtk/paper_names.c
 gtk/paper_names_offsets.c
 gtk/updateiconcache.c

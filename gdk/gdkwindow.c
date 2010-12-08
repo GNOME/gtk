@@ -6809,7 +6809,6 @@ gdk_window_set_device_cursor (GdkWindow *window,
  * @y: (out) (allow-none): return location for Y coordinate of window (relative to its parent)
  * @width: (out) (allow-none): return location for width of window
  * @height: (out) (allow-none): return location for height of window
- * @depth: (out) (allow-none): return location for bit depth of window
  *
  * Any of the return location arguments to this function may be %NULL,
  * if you aren't interested in getting the value of that field.
@@ -6839,8 +6838,7 @@ gdk_window_get_geometry (GdkWindow *window,
 			 gint      *x,
 			 gint      *y,
 			 gint      *width,
-			 gint      *height,
-			 gint      *depth)
+			 gint      *height)
 {
   GdkWindow *parent;
   GdkWindowImplClass *impl_class;
@@ -6861,8 +6859,7 @@ gdk_window_get_geometry (GdkWindow *window,
 	{
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 	  impl_class->get_geometry (window, x, y,
-				    width, height,
-				    depth);
+				    width, height);
 	  /* This reports the position wrt to the native parent, we need to convert
 	     it to be relative to the client side parent */
 	  parent = window->parent;
@@ -6884,8 +6881,6 @@ gdk_window_get_geometry (GdkWindow *window,
 	    *width = window->width;
 	  if (height)
 	    *height = window->height;
-	  if (depth)
-	    *depth = window->depth;
 	}
     }
 }

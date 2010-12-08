@@ -144,32 +144,6 @@
  * }
  * ]]></programlisting>
  *
- * Furthermore, in order to ensure correct height-for-width requests it is important
- * to check the input width against the real required minimum width. This can
- * easily be achieved as follows:
- *
- * <programlisting><![CDATA[
- * static void
- * foo_container_get_preferred_height_for_width (GtkWidget *widget, gint for_width,
- *                                               gint *min_height, gint *nat_height)
- * {
- *    if (i_am_in_height_for_width_mode)
- *      {
- *        gint min_width;
- *
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
- *
- *        for_width = MAX (min_width, for_width);
- *
- *        execute_real_height_for_width_request_code (widget, for_width, min_height, nat_height);
- *      }
- *    else
- *      {
- *        ... fall back on virtual results as mentioned in the previous example ...
- *      }
- * }
- * ]]></programlisting>
- *
  * Height for width requests are generally implemented in terms of a virtual allocation
  * of widgets in the input orientation. Assuming an height-for-width request mode, a container
  * would implement the <function>get_preferred_height_for_width()</function> virtual function by first calling
@@ -327,6 +301,7 @@ static void     gtk_container_adjust_size_request  (GtkWidget         *widget,
                                                     gint              *natural_size);
 static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
                                                       GtkOrientation   orientation,
+                                                      gint            *minimum_size,
                                                       gint            *natural_size,
                                                       gint            *allocated_pos,
                                                       gint            *allocated_size);
@@ -1809,6 +1784,7 @@ gtk_container_adjust_size_request (GtkWidget         *widget,
 static void
 gtk_container_adjust_size_allocation (GtkWidget         *widget,
                                       GtkOrientation     orientation,
+                                      gint              *minimum_size,
                                       gint              *natural_size,
                                       gint              *allocated_pos,
                                       gint              *allocated_size)
@@ -1821,7 +1797,7 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
   if (!GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
     {
       parent_class->adjust_size_allocation (widget, orientation,
-					    natural_size, allocated_pos,
+					    minimum_size, natural_size, allocated_pos,
 					    allocated_size);
       return;
     }
@@ -1845,6 +1821,7 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
   else
     {
       *allocated_pos += border_width;
+      *minimum_size -= border_width * 2;
       *natural_size -= border_width * 2;
     }
 
@@ -1856,7 +1833,7 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
    * and padding values.
    */
   parent_class->adjust_size_allocation (widget, orientation,
-					natural_size, allocated_pos,
+					minimum_size, natural_size, allocated_pos,
 					allocated_size);
 }
 

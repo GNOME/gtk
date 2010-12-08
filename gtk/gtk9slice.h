@@ -27,32 +27,32 @@ G_BEGIN_DECLS
 /* Dummy typedefs */
 typedef struct Gtk9Slice Gtk9Slice;
 
-#define GTK_TYPE_9SLICE (gtk_9slice_get_type ())
+#define GTK_TYPE_9SLICE (_gtk_9slice_get_type ())
 
 typedef enum {
   GTK_SLICE_REPEAT,
   GTK_SLICE_STRETCH
 } GtkSliceSideModifier;
 
-GType gtk_9slice_get_type (void) G_GNUC_CONST;
+GType       _gtk_9slice_get_type (void) G_GNUC_CONST;
 
-Gtk9Slice * gtk_9slice_new (GdkPixbuf            *pixbuf,
-                            gdouble               distance_top,
-                            gdouble               distance_bottom,
-                            gdouble               distance_left,
-                            gdouble               distance_right,
-                            GtkSliceSideModifier  horizontal_modifier,
-                            GtkSliceSideModifier  vertical_modifier);
+Gtk9Slice * _gtk_9slice_new      (GdkPixbuf            *pixbuf,
+                                  gdouble               distance_top,
+                                  gdouble               distance_bottom,
+                                  gdouble               distance_left,
+                                  gdouble               distance_right,
+                                  GtkSliceSideModifier  horizontal_modifier,
+                                  GtkSliceSideModifier  vertical_modifier);
 
-Gtk9Slice * gtk_9slice_ref   (Gtk9Slice *slice);
-void        gtk_9slice_unref (Gtk9Slice *slice);
+Gtk9Slice * _gtk_9slice_ref      (Gtk9Slice            *slice);
+void        _gtk_9slice_unref    (Gtk9Slice            *slice);
 
-void gtk_9slice_render (Gtk9Slice *slice,
-                        cairo_t   *cr,
-                        gdouble    x,
-                        gdouble    y,
-                        gdouble    width,
-                        gdouble    height);
+void        _gtk_9slice_render   (Gtk9Slice            *slice,
+                                  cairo_t              *cr,
+                                  gdouble               x,
+                                  gdouble               y,
+                                  gdouble               width,
+                                  gdouble               height);
 
 G_END_DECLS
 

@@ -140,7 +140,6 @@
 -(void)windowDidMove:(NSNotification *)aNotification
 {
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkEvent *event;
 
   _gdk_quartz_window_update_position (window);
@@ -148,10 +147,10 @@
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
-  event->configure.x = private->x;
-  event->configure.y = private->y;
-  event->configure.width = private->width;
-  event->configure.height = private->height;
+  event->configure.x = window->x;
+  event->configure.y = window->y;
+  event->configure.width = window->width;
+  event->configure.height = window->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
 }
@@ -160,23 +159,22 @@
 {
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowObject *private = (GdkWindowObject *)window;
   GdkEvent *event;
 
-  private->width = content_rect.size.width;
-  private->height = content_rect.size.height;
+  window->width = content_rect.size.width;
+  window->height = content_rect.size.height;
 
-  [[self contentView] setFrame:NSMakeRect (0, 0, private->width, private->height)];
+  [[self contentView] setFrame:NSMakeRect (0, 0, window->width, window->height)];
 
   _gdk_window_update_size (window);
 
   /* Synthesize a configure event */
   event = gdk_event_new (GDK_CONFIGURE);
   event->configure.window = g_object_ref (window);
-  event->configure.x = private->x;
-  event->configure.y = private->y;
-  event->configure.width = private->width;
-  event->configure.height = private->height;
+  event->configure.x = window->x;
+  event->configure.y = window->y;
+  event->configure.width = window->width;
+  event->configure.height = window->height;
 
   _gdk_event_queue_append (gdk_display_get_default (), event);
 }
@@ -199,8 +197,7 @@
 -(BOOL)canBecomeMainWindow
 {
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
   switch (impl->type_hint)
     {
@@ -229,16 +226,15 @@
 -(BOOL)canBecomeKeyWindow
 {
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
-  if (!private->accept_focus)
+  if (!window->accept_focus)
     return NO;
 
   /* Popup windows should not be able to get focused in the window
    * manager sense, it's only handled through grabs.
    */
-  if (private->window_type == GDK_WINDOW_TEMP)
+  if (window->window_type == GDK_WINDOW_TEMP)
     return NO;
 
   switch (impl->type_hint)
@@ -268,8 +264,7 @@
 - (void)showAndMakeKey:(BOOL)makeKey
 {
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
   inShowOrHide = YES;
 
@@ -284,8 +279,7 @@
 - (void)hide
 {
   GdkWindow *window = [[self contentView] gdkWindow];
-  GdkWindowObject *private = (GdkWindowObject *)window;
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (private->impl);
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
 
   inShowOrHide = YES;
   [impl->toplevel orderOut:nil];

@@ -304,7 +304,7 @@ gdk_screen_get_monitor_at_window (GdkScreen      *screen,
   g_return_val_if_fail (GDK_IS_SCREEN (screen), -1);
 
   gdk_window_get_geometry (window, &win_rect.x, &win_rect.y, &win_rect.width,
-			   &win_rect.height, NULL);
+			   &win_rect.height);
   gdk_window_get_origin (window, &win_rect.x, &win_rect.y);
   num_monitors = gdk_screen_get_n_monitors (screen);
   

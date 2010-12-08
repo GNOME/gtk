@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.92.x\n"
-"Report-Msgid-Bugs-To:\n"
-"POT-Creation-Date: 2010-11-20 11:47+0100\n"
-"PO-Revision-Date: 2010-11-20 11:48+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-12-06 18:12+0100\n"
+"PO-Revision-Date: 2010-12-06 18:13+0100\n"
 "Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "Language: nn\n"
@@ -77,7 +77,7 @@ msgstr "Feilsøkingsflagg som skal settes for GDK"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:177 ../gdk/gdk.c:180 ../gtk/gtkmain.c:525 ../gtk/gtkmain.c:528
+#: ../gdk/gdk.c:177 ../gdk/gdk.c:180 ../gtk/gtkmain.c:523 ../gtk/gtkmain.c:526
 msgid "FLAGS"
 msgstr "FLAGG"
 
@@ -301,17 +301,17 @@ msgstr "Størrelse på paletten i 8-bits modus"
 msgid "COLORS"
 msgstr "FARGER"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:312
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Starting %s"
 msgstr "Starter %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:316
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:318
 #, c-format
 msgid "Opening %s"
 msgstr "Åpner %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:321
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:323
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -788,23 +788,23 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8630 ../gtk/gtktextview.c:8229
+#: ../gtk/gtkentry.c:8793 ../gtk/gtktextview.c:8229
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8644 ../gtk/gtktextview.c:8243
+#: ../gtk/gtkentry.c:8807 ../gtk/gtktextview.c:8243
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10044
+#: ../gtk/gtkentry.c:10207
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock og Num Lock er på"
 
-#: ../gtk/gtkentry.c:10046
+#: ../gtk/gtkentry.c:10209
 msgid "Num Lock is on"
 msgstr "Num Lock er på"
 
-#: ../gtk/gtkentry.c:10048
+#: ../gtk/gtkentry.c:10211
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -1205,7 +1205,7 @@ msgstr "Valg av skrift"
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
 
-#: ../gtk/gtkicontheme.c:1355
+#: ../gtk/gtkicontheme.c:1352
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1218,12 +1218,12 @@ msgstr ""
 "Du kan finne en kopi av det på:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1536
+#: ../gtk/gtkicontheme.c:1533
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon «%s» er ikke tilstede i tema"
 
-#: ../gtk/gtkicontheme.c:3057
+#: ../gtk/gtkicontheme.c:3054
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
@@ -1248,12 +1248,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6214
+#: ../gtk/gtklabel.c:6243
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6226
+#: ../gtk/gtklabel.c:6255
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -1266,27 +1266,27 @@ msgid "Invalid URI"
 msgstr "Ugyldig URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:518
+#: ../gtk/gtkmain.c:516
 msgid "Load additional GTK+ modules"
 msgstr "Last tilleggsmoduler for GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:519
+#: ../gtk/gtkmain.c:517
 msgid "MODULES"
 msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:521
+#: ../gtk/gtkmain.c:519
 msgid "Make all warnings fatal"
 msgstr "La alle advarsler være fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:524
+#: ../gtk/gtkmain.c:522
 msgid "GTK+ debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:527
+#: ../gtk/gtkmain.c:525
 msgid "GTK+ debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 
@@ -1295,20 +1295,20 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:790
+#: ../gtk/gtkmain.c:788
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:855
+#: ../gtk/gtkmain.c:852
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:914
+#: ../gtk/gtkmain.c:911
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:914
+#: ../gtk/gtkmain.c:911
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -1393,7 +1393,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke avslutte prosess med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4756 ../gtk/gtknotebook.c:7319
+#: ../gtk/gtknotebook.c:4758 ../gtk/gtknotebook.c:7353
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -1937,12 +1937,12 @@ msgstr "Noen innstillinger i dialogen er i konflikt"
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../gtk/gtkrc.c:2834
+#: ../gtk/gtkrc.c:2855
 #, c-format
 msgid "Unable to find include file: \"%s\""
 msgstr "Kan ikke finne include-fil: «%s»"
 
-#: ../gtk/gtkrc.c:3470 ../gtk/gtkrc.c:3473
+#: ../gtk/gtkrc.c:3491 ../gtk/gtkrc.c:3494
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Klarte ikke å finne bildefil i pixmap_path: «%s»"
@@ -2049,14 +2049,15 @@ msgstr "Kan ikke finne en oppføring med URI «%s»"
 #: ../gtk/gtkrecentmanager.c:2437
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "Ingen registrerte programmer med navn «%s» funnet for oppføring med URI «%s»"
+msgstr ""
+"Ingen registrerte programmer med navn «%s» funnet for oppføring med URI «%s»"
 
-#: ../gtk/gtkspinner.c:456
+#: ../gtk/gtkspinner.c:326
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "Spinner"
 
-#: ../gtk/gtkspinner.c:457
+#: ../gtk/gtkspinner.c:327
 msgid "Provides visual indication of progress"
 msgstr "Gir visuell indikasjon av framdrift"
 
@@ -2564,6 +2565,32 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Zoom _ut"
 
+#. Translators: if the "on" state label requires more than three
+#. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
+#. * the state
+#.
+#: ../gtk/gtkswitch.c:296 ../gtk/gtkswitch.c:339 ../gtk/gtkswitch.c:531
+msgctxt "switch"
+msgid "ON"
+msgstr "PÅ"
+
+#. Translators: if the "off" state label requires more than three
+#. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
+#.
+#: ../gtk/gtkswitch.c:304 ../gtk/gtkswitch.c:340 ../gtk/gtkswitch.c:552
+msgctxt "switch"
+msgid "OFF"
+msgstr "AV"
+
+#: ../gtk/gtkswitch.c:943
+msgctxt "light switch widget"
+msgid "Switch"
+msgstr "Bryter"
+
+#: ../gtk/gtkswitch.c:944
+msgid "Switches between on and off states"
+msgstr "Bytter mellom av/på tilstand"
+
 #: ../gtk/gtktextbufferrichtext.c:650
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
@@ -2574,107 +2601,107 @@ msgstr "Ukjent feil ved forsøk på å deserialisere %s"
 msgid "No deserialize function found for format %s"
 msgstr "Ingen de-serialiseringsfunksjon funnet for format %s"
 
-#: ../gtk/gtktextbufferserialize.c:803 ../gtk/gtktextbufferserialize.c:829
+#: ../gtk/gtktextbufferserialize.c:799 ../gtk/gtktextbufferserialize.c:825
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "Både «id» og «name» ble finnet i element <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:813 ../gtk/gtktextbufferserialize.c:839
+#: ../gtk/gtktextbufferserialize.c:809 ../gtk/gtktextbufferserialize.c:835
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Attributten «%s» ble funnet to ganger på element <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:855
+#: ../gtk/gtktextbufferserialize.c:851
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "Element <%s> har ugyldig ID «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:865
+#: ../gtk/gtktextbufferserialize.c:861
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "Element <%s> har ikke et «name»- eller «id»-element"
 
-#: ../gtk/gtktextbufferserialize.c:952
+#: ../gtk/gtktextbufferserialize.c:948
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "Attributt «%s» gjentatt to ganger på samme <%s>-element"
 
-#: ../gtk/gtktextbufferserialize.c:970 ../gtk/gtktextbufferserialize.c:995
+#: ../gtk/gtktextbufferserialize.c:966 ../gtk/gtktextbufferserialize.c:991
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "Attributt «%s» er ugyldig på <%s>-element i denne konteksten"
 
-#: ../gtk/gtktextbufferserialize.c:1034
+#: ../gtk/gtktextbufferserialize.c:1030
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "Tagg «%s» er ikke definert."
 
-#: ../gtk/gtktextbufferserialize.c:1046
+#: ../gtk/gtktextbufferserialize.c:1042
 msgid "Anonymous tag found and tags can not be created."
 msgstr "Anonym tagg funnet og tagger kan ikke opprettes."
 
-#: ../gtk/gtktextbufferserialize.c:1057
+#: ../gtk/gtktextbufferserialize.c:1053
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "Tagg «%s» eksisterer ikke i bufferen og tagger kan ikke opprettes."
 
-#: ../gtk/gtktextbufferserialize.c:1156 ../gtk/gtktextbufferserialize.c:1231
-#: ../gtk/gtktextbufferserialize.c:1336 ../gtk/gtktextbufferserialize.c:1410
+#: ../gtk/gtktextbufferserialize.c:1152 ../gtk/gtktextbufferserialize.c:1227
+#: ../gtk/gtktextbufferserialize.c:1332 ../gtk/gtktextbufferserialize.c:1406
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "Element <%s> er ikke tillatt under <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1187
+#: ../gtk/gtktextbufferserialize.c:1183
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "«%s» er ikke en gyldig type attributt"
 
-#: ../gtk/gtktextbufferserialize.c:1195
+#: ../gtk/gtktextbufferserialize.c:1191
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "«%s» er ikke et gyldig attributtnavn"
 
-#: ../gtk/gtktextbufferserialize.c:1205
+#: ../gtk/gtktextbufferserialize.c:1201
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr ""
 "«%s» kunne ikke konverteres til en verdi av type «%s» for attributt «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1214
+#: ../gtk/gtktextbufferserialize.c:1210
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "«%s» er ikke en gyldig verdi for attributt «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1299
+#: ../gtk/gtktextbufferserialize.c:1295
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "Tagg «%s» er allerede definert"
 
-#: ../gtk/gtktextbufferserialize.c:1312
+#: ../gtk/gtktextbufferserialize.c:1308
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "Tagg «%s» har ugyldig prioritet «%s»"
 
-#: ../gtk/gtktextbufferserialize.c:1365
+#: ../gtk/gtktextbufferserialize.c:1361
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "Det ytterste elementet i en tekst må være <text_view_markup> ikke <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1374 ../gtk/gtktextbufferserialize.c:1390
+#: ../gtk/gtktextbufferserialize.c:1370 ../gtk/gtktextbufferserialize.c:1386
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "Et element <%s> er allerede spesifisert"
 
-#: ../gtk/gtktextbufferserialize.c:1396
+#: ../gtk/gtktextbufferserialize.c:1392
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "Et <text>-element kan ikke brukes før et <tags>-element"
 
-#: ../gtk/gtktextbufferserialize.c:1796
+#: ../gtk/gtktextbufferserialize.c:1792
 msgid "Serialized data is malformed"
 msgstr "Serialiserte data har feil utforming"
 
-#: ../gtk/gtktextbufferserialize.c:1874
+#: ../gtk/gtktextbufferserialize.c:1870
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
@@ -3632,81 +3659,81 @@ msgstr "Klarte ikke å skrive mappeindeks\n"
 msgid "Failed to rewrite header\n"
 msgstr "Klarte ikke skrive om hode\n"
 
-#: ../gtk/updateiconcache.c:1463
+#: ../gtk/updateiconcache.c:1488
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Klarte ikke å åpne fil %s: %s\n"
 
-#: ../gtk/updateiconcache.c:1471
+#: ../gtk/updateiconcache.c:1496 ../gtk/updateiconcache.c:1526
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Klarte ikke å skrive bufferfil: %s\n"
 
-#: ../gtk/updateiconcache.c:1507
+#: ../gtk/updateiconcache.c:1537
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "Generert buffer var ugyldig.\n"
 
-#: ../gtk/updateiconcache.c:1521
+#: ../gtk/updateiconcache.c:1551
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Klarte ikke å endre navn på %s til %s: %s, fjerner %s.\n"
 
-#: ../gtk/updateiconcache.c:1535
+#: ../gtk/updateiconcache.c:1565
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Klarte ikke å endre navn på %s til %s: %s\n"
 
-#: ../gtk/updateiconcache.c:1545
+#: ../gtk/updateiconcache.c:1575
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Klarte ikke å endre navn på %s tilbake til %s: %s\n"
 
-#: ../gtk/updateiconcache.c:1572
+#: ../gtk/updateiconcache.c:1602
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "Oppretting av bufferfil fullført.\n"
 
-#: ../gtk/updateiconcache.c:1611
+#: ../gtk/updateiconcache.c:1641
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Overskriv en eksisterende buffer, selv om den er oppdatert"
 
-#: ../gtk/updateiconcache.c:1612
+#: ../gtk/updateiconcache.c:1642
 msgid "Don't check for the existence of index.theme"
 msgstr "Ikke sjekk om index.theme eksisterer"
 
-#: ../gtk/updateiconcache.c:1613
+#: ../gtk/updateiconcache.c:1643
 msgid "Don't include image data in the cache"
 msgstr "Ikke ta med bildedata i bufferen"
 
-#: ../gtk/updateiconcache.c:1614
+#: ../gtk/updateiconcache.c:1644
 msgid "Output a C header file"
 msgstr "Skriv ut en C-headerfil"
 
-#: ../gtk/updateiconcache.c:1615
+#: ../gtk/updateiconcache.c:1645
 msgid "Turn off verbose output"
 msgstr "Slå av ekstra utdata"
 
-#: ../gtk/updateiconcache.c:1616
+#: ../gtk/updateiconcache.c:1646
 msgid "Validate existing icon cache"
 msgstr "Valider eksisterende ikonbuffer"
 
-#: ../gtk/updateiconcache.c:1683
+#: ../gtk/updateiconcache.c:1713
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Fil ikke funnet %s\n"
 
-#: ../gtk/updateiconcache.c:1689
+#: ../gtk/updateiconcache.c:1719
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ikke en gyldig ikonbuffer: %s\n"
 
-#: ../gtk/updateiconcache.c:1702
+#: ../gtk/updateiconcache.c:1732
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Ingen indeksfil for tema.\n"
 
-#: ../gtk/updateiconcache.c:1706
+#: ../gtk/updateiconcache.c:1736
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"

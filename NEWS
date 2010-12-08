@@ -1,3 +1,45 @@
+Overview of Changes from GTK+ 2.91.5 to 2.91.6
+==============================================
+
+* Deprecations, cleanups and API changes:
+ - GdkDrawable and some X11-specific APIs have been removed
+ - GtkStyle and GtkRcStyle have been deprecated
+ - The GdkWindowClass enumeration is now GdkWindowWindowClass
+ - gdk_window_get_geometry lost its depth argument
+ - The old, unused gtk_decorated_window_... functions have
+   been removed.
+
+* GtkComboBox has gained an 'active id' property that is
+  intended for easy binding to settings
+
+* GtkAppChooser: A new family of widgets that allow choosing
+  an application to open a file. This is strongly based on
+  the corresponding nautilus dialog, which it is replacing.
+
+* The GtkStyleContext branch has been merged, changing the APIs
+  that are used to do themed drawing, and the theme engine interfaces.
+  Among the new classes are GtkStyleContext (replacing GtkStyle) and
+  GtkCssProvider (replacing the gtkrc parser). The migration guide
+  contains a chapter about porting from GtkStyle to GtkStyleContext.
+
+* Bugs fixed:
+ 549720 Add a way to hide GtkScale's slider
+ 582557 need open with dialog box to use with IBM's Lotus Notes...
+ 619148 "active ID" properties (GtkComboBox)
+ 636060 use ATK_DEFINE_TYPE where possible
+ 636129 invalid uninstantiatable type `(null)' in cast to `GtkSpinner'
+ 636388 gtk3-demo craches (segfault) when pressing a key in the textarea...
+ 636511 New style override functions do not work on textview
+
+* Updated translations:
+ Estonian
+ Galician
+ Hebrew
+ Persian
+ Slovenian
+ Spanish
+
+
 Overview of Changes from GTK+ 2.91.4 to 2.91.5
 ==============================================
 

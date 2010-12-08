@@ -65,7 +65,7 @@ _gdk_input_select_device_events (GdkWindow *impl_window,
                                  GdkDevice *device)
 {
   guint event_mask;
-  GdkWindowObject *w;
+  GdkWindow *w;
   GdkInputWindow *iw;
   GdkInputMode mode;
   gboolean has_cursor;
@@ -73,7 +73,7 @@ _gdk_input_select_device_events (GdkWindow *impl_window,
   GList *l;
 
   event_mask = 0;
-  iw = ((GdkWindowObject *)impl_window)->input_window;
+  iw = impl_window->input_window;
 
   g_object_get (device,
                 "type", &type,
@@ -140,16 +140,14 @@ gdk_input_set_extension_events (GdkWindow        *window,
                                 gint              mask,
                                 GdkExtensionMode  mode)
 {
-  GdkWindowObject *window_private;
-  GdkWindowObject *impl_window;
   GList *tmp_list;
   GdkInputWindow *iw;
+  GdkWindow *impl_window;
 
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_WINDOW_IS_QUARTZ (window));
 
-  window_private = (GdkWindowObject*) window;
-  impl_window = (GdkWindowObject *)_gdk_window_get_impl_window (window);
+  impl_window = (GdkWindow *)_gdk_window_get_impl_window (window);
 
   if (mode == GDK_EXTENSION_EVENTS_NONE)
     mask = 0;
@@ -166,7 +164,7 @@ gdk_input_set_extension_events (GdkWindow        *window,
       iw->grabbed = FALSE;
 
       _gdk_input_windows = g_list_append (_gdk_input_windows, iw);
-      window_private->extension_events = mask;
+      window->extension_events = mask;
 
       /* Add enter window events to the event mask */
       /* FIXME, this is not needed for XINPUT_NONE */
@@ -183,7 +181,7 @@ gdk_input_set_extension_events (GdkWindow        *window,
           g_free (iw);
         }
 
-      window_private->extension_events = 0;
+      window->extension_events = 0;
     }
 
   for (tmp_list = _gdk_input_devices; tmp_list; tmp_list = tmp_list->next)

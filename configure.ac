@@ -10,7 +10,7 @@
 
 m4_define([gtk_major_version], [2])
 m4_define([gtk_minor_version], [91])
-m4_define([gtk_micro_version], [6])
+m4_define([gtk_micro_version], [7])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -19,7 +19,7 @@ m4_define([gtk_version],
 # This is the X.Y used in -lgtk-FOO-X.Y
 m4_define([gtk_api_version], [3.0])
 
-AC_PREREQ([2.64])
+AC_PREREQ([2.62])
 AC_INIT([gtk+], [gtk_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
         [gtk+])

@@ -26,11 +26,11 @@ test_parse_at (void)
   gboolean res;
   gint i;
   const gchar *valid[] = {
-    "@import \"test.css\";",
-    "@import 'test.css';",
-    "@import url(\"test.css\");",
-    "@import url('test.css');",
-    "@import\nurl (\t\"test.css\" ) ;",
+    "@import \"" SRCDIR "/test.css\";",
+    "@import '" SRCDIR "/test.css';",
+    "@import url(\"" SRCDIR "/test.css\");",
+    "@import url('" SRCDIR "/test.css');",
+    "@import\nurl (\t\"" SRCDIR "/test.css\" ) ;",
     "@define-color bg_color #f9a039;",
     "@define-color color @bg_color;",
     "@define-color color rgb(100, 99, 88);",
@@ -48,8 +48,8 @@ test_parse_at (void)
   };
 
   const gchar *invalid[] = {
-    "@import test.css ;",
-    "@import url ( \"test.css\" xyz );",
+    "@import " SRCDIR "/test.css ;",
+    "@import url ( \"" SRCDIR "/test.css\" xyz );",
     "@import url(\");",
     "@import url(');",
     "@import url(\"abc');",
@@ -77,6 +77,8 @@ test_parse_at (void)
     {
       provider = gtk_css_provider_new ();
       res = gtk_css_provider_load_from_data (provider, valid[i], -1, &error);
+      if (error)
+        g_print ("parsing '%s': got unexpected error: %s\n", valid[i], error->message);
       g_assert_no_error (error);
       g_assert (res);
 
@@ -217,8 +219,8 @@ test_parse_declarations (void)
     "                                     center center, 0.8,   \n"
     "                                     color-stop (0.0,#fff),\n"
     "                                     color-stop (1.0,#000))}\n",
-    "* { border-image: url (\"test.png\") 3 4 3 4 stretch       }",
-    "* { border-image: url (\"test.png\") 3 4 3 4 repeat stretch}",
+    "* { border-image: url (\"" SRCDIR "/test.png\") 3 4 3 4 stretch       }",
+    "* { border-image: url (\"" SRCDIR "/test.png\") 3 4 3 4 repeat stretch}",
     "* { transition: 150ms ease-in-out                          }",
     "* { transition: 1s linear loop                             }",
     NULL

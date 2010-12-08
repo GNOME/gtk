@@ -21,9 +21,9 @@
 #ifndef __GDK_WINDOW_QUARTZ_H__
 #define __GDK_WINDOW_QUARTZ_H__
 
-#include <gdk/quartz/gdkdrawable-quartz.h>
 #import <gdk/quartz/GdkQuartzView.h>
 #import <gdk/quartz/GdkQuartzWindow.h>
+#include "gdk/gdkwindowimpl.h"
 
 G_BEGIN_DECLS
 
@@ -42,7 +42,9 @@ typedef struct _GdkWindowImplQuartzClass GdkWindowImplQuartzClass;
 
 struct _GdkWindowImplQuartz
 {
-  GdkDrawableImplQuartz parent_instance;
+  GdkWindowImpl parent_instance;
+
+  GdkWindow *wrapper;
 
   NSWindow *toplevel;
   NSTrackingRectTag tracking_rect;
@@ -60,15 +62,26 @@ struct _GdkWindowImplQuartz
   GList *sorted_children;
 
   cairo_region_t *needs_display_region;
+
+  cairo_surface_t *cairo_surface;
 };
  
 struct _GdkWindowImplQuartzClass 
 {
-  GdkDrawableImplQuartzClass parent_class;
+  GdkWindowImplClass parent_class;
+
+  CGContextRef  (* get_context)     (GdkWindowImplQuartz *window,
+                                     gboolean             antialias);
+  void          (* release_context) (GdkWindowImplQuartz *window,
+                                     CGContextRef         cg_context);
 };
 
 GType _gdk_window_impl_quartz_get_type (void);
 
+CGContextRef gdk_quartz_window_get_context     (GdkWindowImplQuartz *window,
+                                                gboolean             antialias);
+void         gdk_quartz_window_release_context (GdkWindowImplQuartz *window,
+                                                CGContextRef         context);
 
 /* Root window implementation for Quartz
  */

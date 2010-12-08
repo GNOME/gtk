@@ -2478,7 +2478,7 @@ gtk_assistant_get_accessible (GtkWidget *widget)
 typedef struct _GtkAssistantAccessible          GtkAssistantAccessible;
 typedef struct _GtkAssistantAccessibleClass     GtkAssistantAccessibleClass;
 
-ATK_DEFINE_TYPE (GtkAssistantAccessible, gtk_assistant_accessible, GTK_TYPE_ASSISTANT);
+ATK_DEFINE_TYPE (GtkAssistantAccessible, _gtk_assistant_accessible, GTK_TYPE_ASSISTANT);
 
 static gint
 gtk_assistant_accessible_get_n_children (AtkObject *accessible)
@@ -2537,7 +2537,7 @@ gtk_assistant_accessible_ref_child (AtkObject *accessible,
 }
 
 static void
-gtk_assistant_accessible_class_init (GtkAssistantAccessibleClass *klass)
+_gtk_assistant_accessible_class_init (GtkAssistantAccessibleClass *klass)
 {
   AtkObjectClass *atk_class = ATK_OBJECT_CLASS (klass);
 
@@ -2546,7 +2546,7 @@ gtk_assistant_accessible_class_init (GtkAssistantAccessibleClass *klass)
 }
 
 static void
-gtk_assistant_accessible_init (GtkAssistantAccessible *self)
+_gtk_assistant_accessible_init (GtkAssistantAccessible *self)
 {
 }
 
@@ -2561,7 +2561,7 @@ G_DEFINE_TYPE (GtkAssistantAccessibleFactory,
 static GType
 gtk_assistant_accessible_factory_get_accessible_type (void)
 {
-  return gtk_assistant_accessible_get_type ();
+  return _gtk_assistant_accessible_get_type ();
 }
 
 static AtkObject*
@@ -2569,7 +2569,7 @@ gtk_assistant_accessible_factory_create_accessible (GObject *obj)
 {
   AtkObject *accessible;
 
-  accessible = g_object_new (gtk_assistant_accessible_get_type (), NULL);
+  accessible = g_object_new (_gtk_assistant_accessible_get_type (), NULL);
   atk_object_initialize (accessible, obj);
 
   return accessible;

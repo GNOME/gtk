@@ -328,7 +328,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-tbrl.png				\
 	$(srcdir)/images/window-default.png				\
 	$(srcdir)/images/hello-world.png				\
-	$(srcdir)/images/switch.png
+	$(srcdir)/images/switch.png					\
 	$(srcdir)/images/linear.png					\
 	$(srcdir)/images/ease.png					\
 	$(srcdir)/images/ease-in-out.png				\

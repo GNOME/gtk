@@ -604,12 +604,13 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       clip.y = bar_position;
     }
 
-  gtk_paint_box (style,
-                       cr,
-                       GTK_STATE_SELECTED, GTK_SHADOW_OUT,
-                       widget, "bar",
-                       clip.x, clip.y,
-                       clip.width, clip.height);
+  if (bar_size > 0)
+    gtk_paint_box (style,
+                   cr,
+                   GTK_STATE_SELECTED, GTK_SHADOW_OUT,
+                   widget, "bar",
+                   clip.x, clip.y,
+                   clip.width, clip.height);
 
   if (priv->label)
     {

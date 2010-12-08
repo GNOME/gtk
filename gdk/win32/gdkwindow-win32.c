@@ -1800,8 +1800,7 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 			       gint      *x,
 			       gint      *y,
 			       gint      *width,
-			       gint      *height,
-			       gint      *depth)
+			       gint      *height)
 {
   if (!window)
     window = _gdk_root;
@@ -1848,8 +1847,6 @@ gdk_win32_window_get_geometry (GdkWindow *window,
 	*width = rect.right - rect.left;
       if (height)
 	*height = rect.bottom - rect.top;
-      if (depth)
-	*depth = gdk_window_get_visual (window)->depth;
 
       GDK_NOTE (MISC, g_print ("gdk_win32_window_get_geometry: %p: %ldx%ldx%d@%+ld%+ld\n",
 			       GDK_WINDOW_HWND (window),

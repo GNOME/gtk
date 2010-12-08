@@ -32,10 +32,30 @@
  * SECTION:rgba_colors
  * @Short_description: RGBA colors
  * @Title: RGBA Colors
+ *
+ * The #GdkRGBA struct is a convenient way to pass rgba colors around.
+ * It's based on cairo's way to deal with colors and mirros its behavior.
+ * All values are in the range from 0.0 to 1.0 inclusive. So the color
+ * (0.0, 0.0, 0.0, 0.0) represents transparent black and
+ * (1.0, 1.0, 1.0, 1.0) is opaque white. Other values will be clamped
+ * to this range when drawing.
  */
 
 G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
                      gdk_rgba_copy, gdk_rgba_free)
+
+/**
+ * GdkRGBA:
+ * @red: The intensity of the red channel from 0.0 to 1.0 inclusive.
+ * @green: The intensity of the green channel from 0.0 to 1.0 inclusive.
+ * @blue: The intensity of the blue channel from 0.0 to 1.0 inclusive.
+ * @alpha: The opacity of the color from 0.0 for completely translucent to
+ *   1.0 for opaque.
+ *
+ * The GdkRGBA structure is used to pass around color data. When using it
+ * as struct members or on the stack, you want to use the struct directly
+ * and not allocate it.
+ */
 
 /**
  * gdk_rgba_copy:
@@ -49,7 +69,7 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * Since: 3.0
  **/
 GdkRGBA *
-gdk_rgba_copy (GdkRGBA *rgba)
+gdk_rgba_copy (const GdkRGBA *rgba)
 {
   GdkRGBA *copy;
 

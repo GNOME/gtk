@@ -282,11 +282,15 @@ gtk_modifier_style_set_color_property (GtkModifierStyle *style,
     }
 
   if (color)
-    g_hash_table_insert (priv->color_properties, str,
-                         gdk_rgba_copy (color));
+    {
+      g_hash_table_insert (priv->color_properties, str,
+                           gdk_rgba_copy (color));
+    }
   else
-    g_hash_table_remove (priv->color_properties, str);
+    {
+      g_hash_table_remove (priv->color_properties, str);
+      g_free (str);
+    }
 
   g_signal_emit (style, signals[CHANGED], 0);
-  g_free (str);
 }
