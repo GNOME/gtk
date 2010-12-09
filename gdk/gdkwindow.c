@@ -10685,3 +10685,21 @@ gdk_window_register_dnd (GdkWindow *window)
 {
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->register_dnd (window);
 }
+
+/**
+ * gdk_window_lookup:
+ * @anid: a native window handle
+ *
+ * Looks up the #GdkWindow that wraps the given native window handle.
+ *
+ * For example in the X backend, a native window handle is an Xlib
+ * <type>XID</type>.
+ *
+ * Return value: (transfer none): the #GdkWindow wrapper for the native
+ *    window, or %NULL if there is none.
+ **/
+GdkWindow *
+gdk_window_lookup (GdkNativeWindow anid)
+{
+  return gdk_window_lookup_for_display (gdk_display_get_default (), anid);
+}

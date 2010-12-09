@@ -685,12 +685,6 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   return window;
 }
 
-GdkWindow*
-gdk_window_lookup (GdkNativeWindow hwnd)
-{
-  return (GdkWindow*) gdk_win32_handle_table_lookup (hwnd); 
-}
-
 void
 _gdk_win32_window_destroy (GdkWindow *window,
 			   gboolean   recursing,
@@ -3103,7 +3097,7 @@ gdk_window_lookup_for_display (GdkDisplay      *display,
 {
   g_return_val_if_fail (display == _gdk_display, NULL);
 
-  return gdk_window_lookup (anid);
+  return (GdkWindow*) gdk_win32_handle_table_lookup (hwnd);
 }
 
 void

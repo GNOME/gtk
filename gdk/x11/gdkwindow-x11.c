@@ -969,24 +969,6 @@ gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
   return (GdkWindow*) gdk_xid_table_lookup_for_display (display, anid);
 }
 
-/**
- * gdk_window_lookup:
- * @anid: a native window handle.
- *
- * Looks up the #GdkWindow that wraps the given native window handle. 
- *
- * For example in the X backend, a native window handle is an Xlib
- * <type>XID</type>.
- *
- * Return value: (transfer none): the #GdkWindow wrapper for the native
- *    window, or %NULL if there is none.
- **/
-GdkWindow *
-gdk_window_lookup (GdkNativeWindow anid)
-{
-  return (GdkWindow*) gdk_xid_table_lookup (anid);
-}
-
 static void
 gdk_toplevel_x11_free_contents (GdkDisplay *display,
 				GdkToplevelX11 *toplevel)

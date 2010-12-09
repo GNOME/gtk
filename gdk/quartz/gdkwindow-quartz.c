@@ -2868,13 +2868,6 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   return NULL;
 }
 
-GdkWindow*
-gdk_window_lookup (GdkNativeWindow anid)
-{
-  /* Foreign windows aren't supported in Mac OS X */
-  return NULL;
-}
-
 GdkWindow *
 gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
 {
