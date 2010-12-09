@@ -495,18 +495,7 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
 {
   GtkWidget *widget = GTK_WIDGET (info_bar);
   GtkInfoBarPrivate *priv = info_bar->priv;
-  GdkRGBA info_default_border_color     = { 0.71, 0.67, 0.61, 1.0 };
-  GdkRGBA info_default_fill_color       = { 0.99, 0.99, 0.74, 1.0 };
-  GdkRGBA warning_default_border_color  = { 0.68, 0.47, 0.16, 1.0 };
-  GdkRGBA warning_default_fill_color    = { 0.98, 0.68, 0.24, 1.0 };
-  GdkRGBA question_default_border_color = { 0.38, 0.48, 0.84, 1.0 };
-  GdkRGBA question_default_fill_color   = { 0.54, 0.68, 0.83, 1.0 };
-  GdkRGBA error_default_border_color    = { 0.65, 0.15, 0.15, 1.0 };
-  GdkRGBA error_default_fill_color      = { 0.93, 0.21, 0.21, 1.0 };
-  GdkRGBA other_default_border_color    = { 0.71, 0.67, 0.61, 1.0 };
-  GdkRGBA other_default_fill_color      = { 0.99, 0.99, 0.74, 1.0 };
-  GdkRGBA *fg, *bg;
-  GdkRGBA sym_fg, sym_bg;
+  GdkRGBA fg, bg;
   GdkRGBA *color, *bg_color;
   GtkStyleContext *context;
 
@@ -527,56 +516,17 @@ gtk_info_bar_update_colors (GtkInfoBar *info_bar)
 
   context = gtk_widget_get_style_context (widget);
 
-  if (gtk_style_context_lookup_color (context, fg_color_name[priv->message_type], &sym_fg) &&
-      gtk_style_context_lookup_color (context, bg_color_name[priv->message_type], &sym_bg))
-    {
-      fg = &sym_fg;
-      bg = &sym_bg;
-    }
-  else
-    {
-      switch (priv->message_type)
-        {
-        case GTK_MESSAGE_INFO:
-          fg = &info_default_border_color;
-          bg = &info_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_WARNING:
-          fg = &warning_default_border_color;
-          bg = &warning_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_QUESTION:
-          fg = &question_default_border_color;
-          bg = &question_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_ERROR:
-          fg = &error_default_border_color;
-          bg = &error_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_OTHER:
-          fg = &other_default_border_color;
-          bg = &other_default_fill_color;
-          break;
-
-        default:
-          g_assert_not_reached();
-          fg = NULL;
-          bg = NULL;
-        }
-    }
+  gtk_style_context_lookup_color (context, fg_color_name[priv->message_type], &fg);
+  gtk_style_context_lookup_color (context, bg_color_name[priv->message_type], &bg);
 
   gtk_style_context_get (context, 0,
                          "color", &color,
                          "background-color", &bg_color,
                          NULL);
-  if (!gdk_rgba_equal (bg_color, bg))
-    gtk_widget_override_background_color (widget, 0, bg);
-  if (!gdk_rgba_equal (color, fg))
-    gtk_widget_override_color (widget, 0, fg);
+  if (!gdk_rgba_equal (bg_color, &bg))
+    gtk_widget_override_background_color (widget, 0, &bg);
+  if (!gdk_rgba_equal (color, &fg))
+    gtk_widget_override_color (widget, 0, &fg);
 
   gdk_rgba_free (color);
   gdk_rgba_free (bg_color);

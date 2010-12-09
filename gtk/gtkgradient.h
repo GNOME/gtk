@@ -52,9 +52,9 @@ void          gtk_gradient_add_color_stop (GtkGradient         *gradient,
 GtkGradient * gtk_gradient_ref            (GtkGradient         *gradient);
 void          gtk_gradient_unref          (GtkGradient         *gradient);
 
-gboolean      gtk_gradient_resolve        (GtkGradient         *gradient,
-                                           GtkStyleProperties  *props,
-                                           cairo_pattern_t    **resolved_gradient);
+cairo_pattern_t *
+              gtk_gradient_resolve        (GtkGradient         *gradient,
+                                           GtkStyleProperties  *props);
 
 G_END_DECLS
 

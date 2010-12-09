@@ -198,9 +198,9 @@ void gtk_theming_engine_get_style_valist   (GtkThemingEngine *engine,
 void gtk_theming_engine_get_style          (GtkThemingEngine *engine,
                                             ...);
 
-gboolean gtk_theming_engine_lookup_color (GtkThemingEngine *engine,
-                                          const gchar      *color_name,
-                                          GdkRGBA          *color);
+void gtk_theming_engine_lookup_color (GtkThemingEngine *engine,
+                                      const gchar      *color_name,
+                                      GdkRGBA          *color);
 
 G_CONST_RETURN GtkWidgetPath * gtk_theming_engine_get_path (GtkThemingEngine *engine);
 
