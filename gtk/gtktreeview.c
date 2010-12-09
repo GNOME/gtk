@@ -10101,6 +10101,9 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   GtkTreePath *cursor_path = NULL;
   gboolean grab_focus = TRUE;
   gboolean selectable;
+  GtkDirectionType direction;
+  GtkCellArea *cell_area = NULL;
+  GtkTreeIter iter;
 
   if (! gtk_widget_has_focus (GTK_WIDGET (tree_view)))
     return;
@@ -10117,6 +10120,26 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   if (cursor_tree == NULL)
     /* FIXME: we lost the cursor; should we get the first? */
     return;
+
+  direction = count < 0 ? GTK_DIR_UP : GTK_DIR_DOWN;
+
+
+  if (tree_view->priv->focus_column)
+    cell_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (tree_view->priv->focus_column));
+
+  /* If focus stays in the area for this row, then just return for this round */
+  if (cell_area && (count == -1 || count == 1) &&
+      gtk_tree_model_get_iter (tree_view->priv->model, &iter, cursor_path))
+    {
+      gtk_tree_view_column_cell_set_cell_data (tree_view->priv->focus_column,
+					       tree_view->priv->model,
+					       &iter,
+					       GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
+					       cursor_node->children?TRUE:FALSE);
+      
+      if (gtk_cell_area_focus (cell_area, direction))
+	return;
+    }
 
   selection_count = gtk_tree_selection_count_selected_rows (tree_view->priv->selection);
   selectable = _gtk_tree_selection_row_is_selectable (tree_view->priv->selection,
@@ -10189,6 +10212,10 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
       cursor_path = _gtk_tree_view_find_path (tree_view, new_cursor_tree, new_cursor_node);
       gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, TRUE);
       gtk_tree_path_free (cursor_path);
+
+      /* Give focus to the area in the new row */
+      if (cell_area)
+	gtk_cell_area_focus (cell_area, direction);
     }
   else
     {
