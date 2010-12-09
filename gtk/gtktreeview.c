@@ -10330,59 +10330,6 @@ cleanup:
   gtk_tree_path_free (cursor_path);
 }
 
-static gboolean
-gtk_tree_view_move_focus_column  (GtkTreeView       *tree_view,
-                                  GtkTreeViewColumn *tree_column,
-                                  gint               count,
-                                  gboolean           left,
-                                  gboolean           right)
-{
-  gboolean rtl;
-  GtkDirectionType direction = 0;
-  GtkCellArea *cell_area;
-
-  rtl = gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL;
-
-  switch (count)
-    {
-      case -1:
-        direction = GTK_DIR_LEFT;
-        break;
-
-      case 1:
-        direction = GTK_DIR_RIGHT;
-        break;
-    }
-
-  cell_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (tree_column));
-
-  /* if we are the current focus column and have multiple editable cells,
-   * try to select the next one, else move the focus to the next column
-   */
-  if (tree_view->priv->focus_column == tree_column)
-    {
-      if (gtk_cell_area_focus (cell_area, direction))
-        /* Focus stays in this column, so we are done */
-        return TRUE;
-
-      /* FIXME: RTL support for the following: */
-      if (count == -1 && !left)
-        {
-          direction = GTK_DIR_RIGHT;
-          gtk_cell_area_focus (cell_area, direction);
-        }
-      else if (count == 1 && !right)
-        {
-          direction = GTK_DIR_LEFT;
-          gtk_cell_area_focus (cell_area, direction);
-        }
-
-      return FALSE;
-    }
-
-  return gtk_cell_area_focus (cell_area, direction);
-}
-
 static void
 gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 				      gint         count)
@@ -10396,6 +10343,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
   gboolean found_column = FALSE;
   gboolean rtl;
   GtkDirectionType direction;
+  GtkCellArea *cell_area;
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
@@ -10440,8 +10388,6 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 
   while (list)
     {
-      gboolean left, right;
-
       column = list->data;
       if (gtk_tree_view_column_get_visible (column) == FALSE)
 	goto loop_end;
@@ -10452,23 +10398,14 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 					       GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
 					       cursor_node->children?TRUE:FALSE);
 
-      if (rtl)
-        {
-	  right = list->prev ? TRUE : FALSE;
-	  left = list->next ? TRUE : FALSE;
-	}
-      else
-        {
-	  left = list->prev ? TRUE : FALSE;
-	  right = list->next ? TRUE : FALSE;
-
-        }
-      if (gtk_tree_view_move_focus_column (tree_view, column, count, left, right))
+      cell_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (column));
+      if (gtk_cell_area_focus (cell_area, direction))
 	{
 	  tree_view->priv->focus_column = column;
 	  found_column = TRUE;
 	  break;
 	}
+
     loop_end:
       if (count == 1)
 	list = rtl ? list->prev : list->next;
