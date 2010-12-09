@@ -1257,7 +1257,7 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
 			     GtkCellRendererState flags)
 {
   GtkCellAreaPrivate *priv = area->priv;
-  GdkRectangle        background_area;
+  GdkRectangle        renderer_area;
   GtkCellRenderer    *activate_cell = NULL;
 
   if (priv->focus_cell)
@@ -1286,7 +1286,7 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
       /* Get the allocation of the focused cell.
        */
       gtk_cell_area_get_cell_allocation (area, context, widget, activate_cell,
-					 cell_area, &background_area);
+					 cell_area, &renderer_area);
       
       /* Activate or Edit the cell
        *
@@ -1294,7 +1294,7 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
        * the event argument anyway, worst case is we can synthesize one.
        */
       if (gtk_cell_area_activate_cell (area, widget, activate_cell, NULL,
-				       &background_area, flags))
+				       &renderer_area, flags))
 	return TRUE;
     }
 
