@@ -342,7 +342,7 @@ main (gint argc, gchar **argv)
   gtk_orientable_set_orientation (GTK_ORIENTABLE (area), GTK_ORIENTATION_VERTICAL);
 
   renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, "editable", TRUE, NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", DESCRIPTION_COLUMN,
