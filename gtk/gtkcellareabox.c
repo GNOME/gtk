@@ -1779,25 +1779,25 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
       cycle = priv->rtl ? FOCUS_NEXT : FOCUS_PREV;
       break;
     case GTK_DIR_UP: 
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL || !priv->last_focus_cell)
 	cycle = FOCUS_PREV;
       else if (!focus_cell)
 	cycle = FOCUS_LAST_CELL;
       break;
     case GTK_DIR_DOWN:
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-	cycle = FOCUS_PREV;
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL || !priv->last_focus_cell)
+	cycle = FOCUS_NEXT;
       else if (!focus_cell)
 	cycle = FOCUS_LAST_CELL;
       break;
     case GTK_DIR_LEFT:
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !priv->last_focus_cell)
 	cycle = priv->rtl ? FOCUS_NEXT : FOCUS_PREV;
       else if (!focus_cell)
 	cycle = FOCUS_LAST_CELL;
       break;
     case GTK_DIR_RIGHT:
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !priv->last_focus_cell)
 	cycle = priv->rtl ? FOCUS_PREV : FOCUS_NEXT;
       else if (!focus_cell)
 	cycle = FOCUS_LAST_CELL;
