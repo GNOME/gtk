@@ -129,6 +129,9 @@ static void      gtk_cell_area_box_layout_pack_end                (GtkCellLayout
 static void      gtk_cell_area_box_layout_reorder                 (GtkCellLayout      *cell_layout,
 								   GtkCellRenderer    *renderer,
 								   gint                position);
+static void      gtk_cell_area_box_focus_changed                  (GtkCellArea        *area,
+								   GParamSpec         *pspec,
+								   GtkCellAreaBox     *box);
 
 
 /* CellInfo/CellGroup metadata handling and convenience functions */
@@ -184,18 +187,24 @@ static GSList        *get_allocated_cells    (GtkCellAreaBox        *box,
 
 struct _GtkCellAreaBoxPrivate
 {
-  GtkOrientation  orientation;
+  GtkOrientation   orientation;
 
-  GList          *cells;
-  GArray         *groups;
+  /* We hold on to the previously focused cell when navigating
+   * up and down in a horizontal box (or left and right on a vertical one)
+   * this way we always re-enter the last focused cell. */
+  GtkCellRenderer *last_focus_cell;
+  gulong           focus_cell_id;
 
-  GSList         *contexts;
+  GList           *cells;
+  GArray          *groups;
 
-  gint            spacing;
+  GSList          *contexts;
+
+  gint             spacing;
 
   /* We hold on to the rtl state from a widget we are requested for
    * so that we can navigate focus correctly */
-  gboolean        rtl;
+  gboolean         rtl;
 };
 
 enum {
@@ -236,6 +245,11 @@ gtk_cell_area_box_init (GtkCellAreaBox *box)
   priv->contexts    = NULL;
   priv->spacing     = 0;
   priv->rtl         = FALSE;
+
+  /* Watch whenever focus is given to a cell, even if it's not with keynav,
+   * this way we remember upon entry of the area where focus was last time around */
+  priv->focus_cell_id = g_signal_connect (box, "notify::focus-cell", 
+					  G_CALLBACK (gtk_cell_area_box_focus_changed), box);
 }
 
 static void 
@@ -895,6 +909,16 @@ get_allocated_cells (GtkCellAreaBox        *box,
   return g_slist_reverse (allocated_cells);
 }
 
+
+static void
+gtk_cell_area_box_focus_changed (GtkCellArea        *area,
+				 GParamSpec         *pspec,
+				 GtkCellAreaBox     *box)
+{
+  if (gtk_cell_area_get_focus_cell (area))
+    box->priv->last_focus_cell = gtk_cell_area_get_focus_cell (area);
+}
+
 /*************************************************************
  *                      GObjectClass                         *
  *************************************************************/
@@ -990,6 +1014,9 @@ gtk_cell_area_box_remove (GtkCellArea        *area,
   GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
   GtkCellAreaBoxPrivate *priv = box->priv;
   GList                 *node;
+
+  if (priv->last_focus_cell == renderer)
+    priv->last_focus_cell = NULL;
 
   node = g_list_find_custom (priv->cells, renderer, 
 			     (GCompareFunc)cell_info_find);
@@ -1717,7 +1744,8 @@ gtk_cell_area_box_get_preferred_width_for_height (GtkCellArea        *area,
 enum {
   FOCUS_NONE,
   FOCUS_PREV,
-  FOCUS_NEXT
+  FOCUS_NEXT,
+  FOCUS_LAST_CELL
 };
 
 static gboolean
@@ -1751,26 +1779,39 @@ gtk_cell_area_box_focus (GtkCellArea      *area,
       cycle = priv->rtl ? FOCUS_NEXT : FOCUS_PREV;
       break;
     case GTK_DIR_UP: 
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL || !focus_cell)
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
 	cycle = FOCUS_PREV;
+      else if (!focus_cell)
+	cycle = FOCUS_LAST_CELL;
       break;
     case GTK_DIR_DOWN:
-      if (priv->orientation == GTK_ORIENTATION_VERTICAL || !focus_cell)
-	cycle = FOCUS_NEXT;
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+	cycle = FOCUS_PREV;
+      else if (!focus_cell)
+	cycle = FOCUS_LAST_CELL;
       break;
     case GTK_DIR_LEFT:
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !focus_cell)
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	cycle = priv->rtl ? FOCUS_NEXT : FOCUS_PREV;
+      else if (!focus_cell)
+	cycle = FOCUS_LAST_CELL;
       break;
     case GTK_DIR_RIGHT:
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL || !focus_cell)
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
 	cycle = priv->rtl ? FOCUS_PREV : FOCUS_NEXT;
+      else if (!focus_cell)
+	cycle = FOCUS_LAST_CELL;
       break;
     default:
       break;
     }
 
-  if (cycle != FOCUS_NONE)
+  if (cycle == FOCUS_LAST_CELL)
+    {
+      gtk_cell_area_set_focus_cell (area, priv->last_focus_cell);
+      cycled_focus = TRUE;
+    }
+  else if (cycle != FOCUS_NONE)
     {
       gboolean  found_cell = FALSE;
       GList    *list;
