@@ -568,15 +568,6 @@ gdk_display_add_client_message_filter (GdkDisplay   *display,
 				       GdkFilterFunc func,
 				       gpointer      data)
 {
-  /* XXX */
-  gdk_add_client_message_filter (message_type, func, data);
-}
-
-void
-gdk_add_client_message_filter (GdkAtom       message_type,
-			       GdkFilterFunc func,
-			       gpointer      data)
-{
   GdkClientFilter *filter = g_new (GdkClientFilter, 1);
 
   filter->type = message_type;
