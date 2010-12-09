@@ -17,12 +17,10 @@ INCLUDES = \
 	$(INCLUDED_IMMODULE_DEFINE)
 
 DEPS = \
-	$(top_builddir)/gdk/$(gdktargetlib) 				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/libgtk-3.0.la
 
 LDADDS = \
-	$(top_builddir)/gdk/$(gdktargetlib) 				\
-	$(top_builddir)/gtk/$(gtktargetlib) 				\
+	$(top_builddir)/gtk/libgtk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
 moduledir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/immodules

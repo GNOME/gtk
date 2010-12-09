@@ -267,12 +267,6 @@ case $gdktarget in
   *) AC_MSG_ERROR([Invalid target for GDK: use x11, quartz or win32.]);;
 esac
 
-gdktargetlib=libgdk-$gdktarget-$GTK_API_VERSION.la
-gtktargetlib=libgtk-$gdktarget-$GTK_API_VERSION.la
-
-AC_SUBST(gdktargetlib)
-AC_SUBST(gtktargetlib)
-
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
   GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG -DG_ERRORCHECK_MUTEXES"
@@ -666,53 +660,6 @@ else
     fi
 fi
 
-# `widechar' tests for gdki18n.h
-AC_MSG_CHECKING(for wchar.h)
-AC_TRY_CPP([#include <wchar.h>], gdk_wchar_h=yes, gdk_wchar_h=no)
-if test $gdk_wchar_h = yes; then
-   AC_DEFINE(HAVE_WCHAR_H, 1, [Have wchar.h include file])
-fi
-AC_MSG_RESULT($gdk_wchar_h)
-
-# Check for wctype.h (for iswalnum)
-AC_MSG_CHECKING(for wctype.h)
-AC_TRY_CPP([#include <wctype.h>], gdk_wctype_h=yes, gdk_wctype_h=no)
-if test $gdk_wctype_h = yes; then
-   AC_DEFINE(HAVE_WCTYPE_H, 1, [Have wctype.h include file])
-fi
-AC_MSG_RESULT($gdk_wctype_h)
-
-# in Solaris 2.5, `iswalnum' is in -lw
-GDK_WLIBS=
-AC_CHECK_FUNC(iswalnum,,[AC_CHECK_LIB(w,iswalnum,GDK_WLIBS=-lw)])
-
-oLIBS="$LIBS"
-LIBS="$LIBS $GDK_WLIBS"
-# The following is necessary for Linux libc-5.4.38
-AC_MSG_CHECKING(if iswalnum() and friends are properly defined)
-AC_TRY_LINK([#include <stdlib.h>],[
-#if (defined(HAVE_WCTYPE_H) || defined(HAVE_WCHAR_H))
-#  ifdef HAVE_WCTYPE_H
-#    include <wctype.h>
-#  else
-#    ifdef HAVE_WCHAR_H
-#      include <wchar.h>
-#    endif
-#  endif
-#else
-#  define iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
-#endif
-iswalnum((wchar_t) 0);
-], gdk_working_wctype=yes, gdk_working_wctype=no)
-LIBS="$oLIBS"
-
-if test $gdk_working_wctype = no; then
-   AC_DEFINE(HAVE_BROKEN_WCTYPE, 1, [Is the wctype implementation broken])
-   GDK_WLIBS=
-fi
-AC_MSG_RESULT($gdk_working_wctype)
-AC_SUBST(GDK_WLIBS)
-
 # Check for uxtheme.h (for MS-Windows Engine)
 AC_MSG_CHECKING(for uxtheme.h)
 AC_TRY_CPP([#include <uxtheme.h>], gtk_uxtheme_h=yes, gtk_uxtheme_h=no)
@@ -883,7 +830,7 @@ fi
 # Windowing system checks
 ########################################
 
-GDK_EXTRA_LIBS="$GDK_WLIBS"
+GDK_EXTRA_LIBS=
 GDK_EXTRA_CFLAGS=
 
 # GTK+ uses some X calls, so needs to link against X directly
@@ -1530,12 +1477,16 @@ AC_CONFIG_COMMANDS([gdk/gdkconfig.h], [
  * This is a generated file.  Please modify `configure.ac'
  */
 
-#ifndef GDKCONFIG_H
-#define GDKCONFIG_H
+#ifndef __GDKCONFIG_H__
+#define __GDKCONFIG_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
+
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 #ifndef GSEAL
 /* introduce GSEAL() here for all of Gdk and Gtk+ without the need to modify GLib */
@@ -1550,16 +1501,13 @@ _______EOF
 
 	cat >>$outfile <<_______EOF
 $gdk_windowing
-$gdk_wc
 _______EOF
 
 	cat >>$outfile <<_______EOF
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
-#endif /* GDKCONFIG_H */
+#endif  /* __GDKCONFIG_H__ */
 _______EOF
 
 
@@ -1570,30 +1518,19 @@ _______EOF
 	  mv $outfile gdk/gdkconfig.h
 	fi
 ],[
-if test "x$gdktarget" = "xx11" ; then
-  gdk_windowing='
+gdk_windowing=''
+if expr "$gdktarget" : ".*x11.*" > /dev/null ; then
+  gdk_windowing+='
 #define GDK_WINDOWING_X11'
-elif test "x$gdktarget" = "xwin32" ; then
-  gdk_windowing='
+fi
+if expr "$gdktarget" : ".*win32.*" > /dev/null ; then
+  gdk_windowing+='
 #define GDK_NATIVE_WINDOW_POINTER
-
 #define GDK_WINDOWING_WIN32'
-elif test "x$gdktarget" = "xquartz" ; then
+fi
+if expr "$gdktarget" : ".*quartz.*" > /dev/null ; then
   gdk_windowing='
 #define GDK_WINDOWING_QUARTZ'
-fi
-
-if test x$gdk_wchar_h = xyes; then
-  gdk_wc='
-#define GDK_HAVE_WCHAR_H 1'
-fi
-if test x$gdk_wctype_h = xyes; then
-  gdk_wc="\$gdk_wc
-#define GDK_HAVE_WCTYPE_H 1"
-fi
-if test x$gdk_working_wctype = xno; then
-  gdk_wc="\$gdk_wc
-#define GDK_HAVE_BROKEN_WCTYPE 1"
 fi
 ])
 

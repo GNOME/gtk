@@ -107,8 +107,7 @@ CPPFLAGS += \
 	-UGTK_DISABLE_SINGLE_INCLUDES
 
 GTKDOC_LIBS = \
-	$(top_builddir)/gdk/$(gdktargetlib)        			\
-	$(top_builddir)/gtk/$(gtktargetlib)				\
+	$(top_builddir)/gtk/libgtk-3.0.la				\
 	$(GTK_DEP_LIBS)
 
 

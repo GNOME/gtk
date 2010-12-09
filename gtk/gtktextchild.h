@@ -31,7 +31,7 @@
 #ifndef __GTK_TEXT_CHILD_H__
 #define __GTK_TEXT_CHILD_H__
 
-#include <gdkconfig.h>
+#include <gdk/gdk.h>
 #include <glib-object.h>
 
 G_BEGIN_DECLS

@@ -11,14 +11,12 @@ INCLUDES =				\
 	$(GTK_DEP_CFLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
-DEPS =									\
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+DEPS = \
+	$(top_builddir)/gtk/libgtk-3.0.la
 
-LDADDS =								\
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(GTK_DEP_LIBS)							\
+LDADDS = \
+	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(GTK_DEP_LIBS)				\
 	-lm
 
 if USE_X11

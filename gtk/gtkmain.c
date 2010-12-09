@@ -29,7 +29,7 @@
 #include "gtkmain.h"
 
 #include <glib.h>
-#include "gdkconfig.h"
+#include "gdk/gdk.h"
 
 #include <locale.h>
 
@@ -64,7 +64,6 @@
 #include "gtktooltip.h"
 #include "gtkdebug.h"
 #include "gtkmenu.h"
-#include "gdk/gdkkeysyms.h"
 
 #ifdef G_OS_WIN32
 

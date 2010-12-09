@@ -32,8 +32,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "gdkconfig.h"
-#include "gdk/gdkkeysyms.h"
+#include "gdk/gdk.h"
 #include "gtkhsv.h"
 #include "gtkwindow.h"
 #include "gtkselection.h"

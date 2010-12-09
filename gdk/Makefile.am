@@ -92,6 +92,7 @@ gdk_public_h_sources =				\
 	gdkwindow.h
 
 gdk_built_public_sources =			\
+	gdkconfig.h				\
 	gdkenumtypes.h
 
 gdk_private_headers =				\
@@ -145,6 +146,10 @@ common_sources = 		\
 	gdkmarshalers.c		\
 	gdkmarshalers.h
 
+libgdk_3_0_la_SOURCES = $(common_sources)
+libgdk_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
+libgdk_3_0_la_LDFLAGS = $(LDADD)
+
 libgdk_x11_3_0_la_SOURCES = $(common_sources)
 libgdk_x11_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
 libgdk_x11_3_0_la_LDFLAGS = $(LDADD)
@@ -166,10 +171,10 @@ introspection_files = 		\
         gdkenumtypes.c		\
         gdkenumtypes.h
 
-Gdk-3.0.gir: $(gdktargetlib) Makefile
+Gdk-3.0.gir: libgdk-3.0.la Makefile
 Gdk_3_0_gir_SCANNERFLAGS = --warn-all
 Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
-Gdk_3_0_gir_LIBS = $(gdktargetlib)
+Gdk_3_0_gir_LIBS = libgdk-3.0.la
 Gdk_3_0_gir_FILES = $(introspection_files)
 Gdk_3_0_gir_CFLAGS = $(INCLUDES)
 INTROSPECTION_GIRS += Gdk-3.0.gir
@@ -210,10 +215,10 @@ x11_introspection_files = 		\
 	x11/xsettings-common.c		\
         x11/gdkx.h
 
-GdkX11-3.0.gir: $(gdktargetlib) Gdk-3.0.gir Makefile
+GdkX11-3.0.gir: libgdk-3.0.la Gdk-3.0.gir Makefile
 GdkX11_3_0_gir_SCANNERFLAGS = --warn-all --strip-prefix=Gdk
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
-GdkX11_3_0_gir_LIBS = $(gdktargetlib)
+GdkX11_3_0_gir_LIBS = libgdk-3.0.la
 GdkX11_3_0_gir_FILES = $(x11_introspection_files)
 GdkX11_3_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
 INTROSPECTION_GIRS += GdkX11-3.0.gir
@@ -271,29 +276,15 @@ TESTS = abicheck.sh
 endif
 
 
-lib_LTLIBRARIES = $(gdktargetlib)
-
-EXTRA_LTLIBRARIES = libgdk-x11-3.0.la libgdk-win32-3.0.la libgdk-quartz-3.0.la
+noinst_LTLIBRARIES = libgdk-3.0.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += $(gdk_built_sources)
 EXTRA_HEADERS =
 
-#
-# Rule to install gdkconfig.h header file
-#
-configexecincludedir = $(libdir)/gtk-3.0/include
-#configexecinclude_DATA = gdkconfig.h
-
-install-exec-local: gdkconfig.h
-	$(mkinstalldirs) $(DESTDIR)$(configexecincludedir)
-	file=$(DESTDIR)$(configexecincludedir)/gdkconfig.h; \
-	if test -r $$file && cmp -s gdkconfig.h $$file; then :; \
-	else $(INSTALL_DATA) gdkconfig.h $$file; fi
-
 install-exec-hook:
 if DISABLE_EXPLICIT_DEPS
-	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/$(gdktargetlib)
+	$(SHELL) $(top_srcdir)/sanitize-la.sh $(DESTDIR)$(libdir)/libgdk-3.0.la
 endif
 
 #note: not gdkconfig.h

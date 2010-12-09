@@ -29,6 +29,7 @@
 
 #define __GDK_H_INSIDE__
 
+#include <gdk/gdkconfig.h>
 #include <gdk/gdkapplaunchcontext.h>
 #include <gdk/gdkcairo.h>
 #include <gdk/gdkcolor.h>

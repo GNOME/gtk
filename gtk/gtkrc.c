@@ -42,7 +42,7 @@
 
 #include <glib.h>
 #include <glib/gstdio.h>
-#include "gdkconfig.h"
+#include "gdk/gdk.h"
 
 #include "gtkversion.h"
 #include "gtkrc.h"

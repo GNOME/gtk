@@ -24,7 +24,7 @@
 #ifndef __GTK_TREE_STORE_H__
 #define __GTK_TREE_STORE_H__
 
-#include <gdkconfig.h>
+#include <gdk/gdk.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
 #include <stdarg.h>

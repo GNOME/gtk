@@ -30,9 +30,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gdkconfig.h"
-
-#include "gdk/gdkkeysyms.h"
+#include "gdk/gdk.h"
 
 #ifdef GDK_WINDOWING_X11
 #include <X11/Xlib.h>

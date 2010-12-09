@@ -32,7 +32,7 @@
 
 #include "gtklayout.h"
 
-#include "gdkconfig.h"
+#include "gdk/gdk.h"
 
 #include "gtkprivate.h"
 #include "gtkintl.h"
