@@ -8,8 +8,8 @@ gtk_binary_version=@GTK_BINARY_VERSION@
 gtk_host=@host@
 
 Name: GTK+
-Description: GTK+ Graphical UI Library (${target} target)
+Description: GTK+ Graphical UI Library
 Version: @VERSION@
-Requires: gdk-${target}-@GTK_API_VERSION@ @GTK_PACKAGES@
-Libs: -L${libdir} -lgtk-${target}-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
+Requires: @GTK_PACKAGES@
+Libs: -L${libdir} -lgtk-@GTK_API_VERSION@ @GTK_EXTRA_LIBS@
 Cflags: -I${includedir}/gtk-@GTK_API_VERSION@ @GTK_EXTRA_CFLAGS@ -DGSEAL_ENABLE
