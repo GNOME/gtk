@@ -15377,7 +15377,6 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
 			     GtkTreePath *cursor_path)
 {
   GtkTreeIter iter;
-  GdkRectangle background_area;
   GdkRectangle cell_area;
   GtkTreeViewColumn *focus_column;
   gchar *path_string;
@@ -15406,10 +15405,6 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
 					   &iter,
 					   GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
 					   cursor_node->children?TRUE:FALSE);
-  gtk_tree_view_get_background_area (tree_view,
-				     cursor_path,
-				     focus_column,
-				     &background_area);
   gtk_tree_view_get_cell_area (tree_view,
 			       cursor_path,
 			       focus_column,
