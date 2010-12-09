@@ -61,10 +61,14 @@ static void    gdk_app_launch_context_finalize    (GObject           *object);
 static gchar * gdk_app_launch_context_get_display (GAppLaunchContext *context,
                                                    GAppInfo          *info,
                                                    GList             *files);
+static gchar * gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
+                                                             GAppInfo          *info,
+                                                             GList             *files);
+static void    gdk_app_launch_context_launch_failed (GAppLaunchContext *context,
+                                                     const gchar       *startup_notify_id);
 
 
-G_DEFINE_TYPE (GdkAppLaunchContext, gdk_app_launch_context,
-	       G_TYPE_APP_LAUNCH_CONTEXT)
+G_DEFINE_TYPE (GdkAppLaunchContext, gdk_app_launch_context, G_TYPE_APP_LAUNCH_CONTEXT)
 
 static void
 gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
@@ -75,8 +79,8 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
   gobject_class->finalize = gdk_app_launch_context_finalize;
 
   context_class->get_display = gdk_app_launch_context_get_display;
-  context_class->get_startup_notify_id = _gdk_windowing_get_startup_notify_id;
-  context_class->launch_failed = _gdk_windowing_launch_failed;
+  context_class->get_startup_notify_id = gdk_app_launch_context_get_startup_notify_id;
+  context_class->launch_failed = gdk_app_launch_context_launch_failed;
 
   g_type_class_add_private (klass, sizeof (GdkAppLaunchContextPrivate));
 }
@@ -85,8 +89,8 @@ static void
 gdk_app_launch_context_init (GdkAppLaunchContext *context)
 {
   context->priv = G_TYPE_INSTANCE_GET_PRIVATE (context,
-					       GDK_TYPE_APP_LAUNCH_CONTEXT,
-					       GdkAppLaunchContextPrivate);
+                                               GDK_TYPE_APP_LAUNCH_CONTEXT,
+                                               GdkAppLaunchContextPrivate);
   context->priv->workspace = -1;
 }
 
@@ -144,22 +148,17 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
  * using this context. See also gdk_app_launch_context_set_screen().
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.0: Use gdk_display_get_app_launch_context() instead
  */
 void
 gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
-				    GdkDisplay          *display)
+                                    GdkDisplay          *display)
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
   g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
 
-  if (context->priv->display)
-    {
-      g_object_unref (context->priv->display);
-      context->priv->display = NULL;
-    }
-
-  if (display)
-    context->priv->display = g_object_ref (display);
+  g_warn_if_fail (display == NULL || display == context->priv->display);
 }
 
 /**
@@ -178,10 +177,12 @@ gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
  */
 void
 gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
-				   GdkScreen           *screen)
+                                   GdkScreen           *screen)
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
   g_return_if_fail (screen == NULL || GDK_IS_SCREEN (screen));
+
+  g_return_if_fail (screen == NULL || gdk_screen_get_display (screen) == context->priv->display);
 
   if (context->priv->screen)
     {
@@ -199,12 +200,12 @@ gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
  * @desktop: the number of a workspace, or -1
  *
  * Sets the workspace on which applications will be launched when
- * using this context when running under a window manager that 
- * supports multiple workspaces, as described in the 
- * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended 
- * Window Manager Hints</ulink>. 
+ * using this context when running under a window manager that
+ * supports multiple workspaces, as described in the
+ * <ulink url="http://www.freedesktop.org/Standards/wm-spec">Extended
+ * Window Manager Hints</ulink>.
  *
- * When the workspace is not specified or @desktop is set to -1, 
+ * When the workspace is not specified or @desktop is set to -1,
  * it is up to the window manager to pick one, typically it will
  * be the current workspace.
  *
@@ -212,7 +213,7 @@ gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
  */
 void
 gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
-				    gint                 desktop)
+                                    gint                 desktop)
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 
@@ -225,7 +226,7 @@ gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
  * @timestamp: a timestamp
  *
  * Sets the timestamp of @context. The timestamp should ideally
- * be taken from the event that triggered the launch. 
+ * be taken from the event that triggered the launch.
  *
  * Window managers can use this information to avoid moving the
  * focus to the newly launched application when the user is busy
@@ -236,7 +237,7 @@ gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
  */
 void
 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
-				      guint32              timestamp)
+                                      guint32              timestamp)
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 
@@ -280,20 +281,20 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
  * @context: a #GdkAppLaunchContext
  * @icon_name: (allow-none): an icon name, or %NULL
  *
- * Sets the icon for applications that are launched with this context. 
- * The @icon_name will be interpreted in the same way as the Icon field 
- * in desktop files. See also gdk_app_launch_context_set_icon(). 
+ * Sets the icon for applications that are launched with this context.
+ * The @icon_name will be interpreted in the same way as the Icon field
+ * in desktop files. See also gdk_app_launch_context_set_icon().
  *
  * If both @icon and @icon_name are set, the @icon_name takes priority.
- * If neither @icon or @icon_name is set, the icon is taken from either 
- * the file that is passed to launched application or from the #GAppInfo 
+ * If neither @icon or @icon_name is set, the icon is taken from either
+ * the file that is passed to launched application or from the #GAppInfo
  * for the launched application itself.
- * 
+ *
  * Since: 2.14
  */
 void
 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
-				      const char          *icon_name)
+                                      const char          *icon_name)
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 
@@ -309,9 +310,25 @@ gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
  * Returns: a new #GdkAppLaunchContext
  *
  * Since: 2.14
+ *
+ * Deprecated: 3.0: Use gdk_display_get_app_launch_context() instead
  */
 GdkAppLaunchContext *
 gdk_app_launch_context_new (void)
 {
-  return g_object_new (GDK_TYPE_APP_LAUNCH_CONTEXT, NULL);
+  return gdk_display_get_app_launch_context (gdk_display_get_default ());
+}
+
+static char *
+gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
+                                              GAppInfo          *info,
+                                              GList             *files)
+{
+ return NULL;
+}
+
+static void
+gdk_app_launch_context_launch_failed (GAppLaunchContext *context,
+                                      const gchar       *startup_notify_id)
+{
 }

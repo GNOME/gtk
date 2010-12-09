@@ -309,6 +309,8 @@ gboolean gdk_display_supports_composite        (GdkDisplay    *display);
 
 GdkDeviceManager * gdk_display_get_device_manager (GdkDisplay *display);
 
+GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
+
 
 G_END_DECLS
 

@@ -121,8 +121,7 @@ static GdkWindow* singlehead_default_window_get_pointer (GdkWindow       *window
 							 GdkModifierType *mask);
 static GdkWindow* singlehead_default_window_at_pointer  (GdkScreen       *screen,
 							 gint            *win_x,
-							 gint            *win_y);
-static GdkWindow *gdk_window_real_window_get_device_position     (GdkDisplay       *display,
+							 gint            *win_y);static GdkWindow *gdk_window_real_window_get_device_position     (GdkDisplay       *display,
                                                                   GdkDevice        *device,
                                                                   GdkWindow        *window,
                                                                   gint             *x,
@@ -132,6 +131,7 @@ static GdkWindow *gdk_display_real_get_window_at_device_position (GdkDisplay    
                                                                   GdkDevice        *device,
                                                                   gint             *win_x,
                                                                   gint             *win_y);
+static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -178,6 +178,8 @@ gdk_display_class_init (GdkDisplayClass *class)
 
   object_class->finalize = gdk_display_finalize;
   object_class->dispose = gdk_display_dispose;
+
+  class->get_app_launch_context = gdk_display_real_get_app_launch_context;
 
   /**
    * GdkDisplay::opened:
@@ -2210,4 +2212,33 @@ gdk_add_client_message_filter (GdkAtom       message_type,
 {
   gdk_display_add_client_message_filter (gdk_display_get_default (),
 					 message_type, func, data);
+}
+
+static GdkAppLaunchContext *
+gdk_display_real_get_app_launch_context (GdkDisplay *display)
+{
+  GdkAppLaunchContext *ctx;
+
+  ctx = gdk_app_launch_context_new ();
+  gdk_app_launch_context_set_display (ctx, display);
+
+  return ctx;
+}
+
+/**
+ * gdk_display_get_app_launch_context:
+ * @display: a #GdkDisplay
+ *
+ * Returns a #GdkAppLaunchContext suitable for launching
+ * applications on the given display.
+ *
+ * Returns: a new #GdkAppLaunchContext for @display.
+ *     Free with g_object_unref() when done
+ *
+ * Since: 3.0
+ */
+GdkAppLaunchContext *
+gdk_display_get_app_launch_context (GdkDisplay *display)
+{
+  return GDK_DISPLAY_GET_CLASS(display)->get_app_launch_context (display);
 }

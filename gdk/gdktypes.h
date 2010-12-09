@@ -147,6 +147,7 @@ typedef struct _GdkVisual             GdkVisual;
 typedef struct _GdkWindow             GdkWindow;
 typedef struct _GdkDisplay	      GdkDisplay;
 typedef struct _GdkScreen	      GdkScreen;
+typedef struct  GdkAppLaunchContext   GdkAppLaunchContext;
 
 /**
  * GdkByteOrder:

@@ -26,7 +26,6 @@ EXTRA_DIST += \
 
 libgdk_win32_la_SOURCES = \
 	xcursors.h \
-	gdkapplaunchcontext-win32.c \
 	gdkcursor-win32.c \
 	gdkdevicemanager-win32.c \
 	gdkdevicemanager-win32.h \

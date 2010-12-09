@@ -304,6 +304,7 @@ struct _GdkDisplayClass
 							   GdkAtom       message_type,
 							   GdkFilterFunc func,
 							   gpointer      data);
+  GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
 
 
   /* Signals */
@@ -574,12 +575,6 @@ struct GdkAppLaunchContextPrivate
   GIcon *icon;
   char *icon_name;
 };
-
-char *_gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
-					    GAppInfo          *info, 
-					    GList             *files);
-void  _gdk_windowing_launch_failed         (GAppLaunchContext *context, 
-				            const char        *startup_notify_id);
 
 void _gdk_display_device_grab_update                     (GdkDisplay *display,
                                                           GdkDevice  *device,

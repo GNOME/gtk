@@ -2703,6 +2703,8 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
   gdk_x11_display_error_trap_pop_internal (display, FALSE);
 }
 
+extern GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
+
 static void
 _gdk_display_x11_class_init (GdkDisplayX11Class * class)
 {
@@ -2730,5 +2732,6 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->list_devices = gdk_x11_display_list_devices;
   display_class->send_client_message = gdk_x11_display_send_client_message;
   display_class->add_client_message_filter = gdk_x11_display_add_client_message_filter;
+  display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
 }
 
