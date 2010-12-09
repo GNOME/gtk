@@ -1071,25 +1071,35 @@ gtk_style_lookup_icon_set (GtkStyle   *style,
  *
  * Deprecated:3.0: Use gtk_style_context_lookup_color() instead
  **/
-void
+gboolean
 gtk_style_lookup_color (GtkStyle   *style,
                         const char *color_name,
                         GdkColor   *color)
 {
   GtkStylePrivate *priv;
+  gboolean result;
   GdkRGBA rgba;
 
-  g_return_if_fail (GTK_IS_STYLE (style));
-  g_return_if_fail (color_name != NULL);
+  g_return_val_if_fail (GTK_IS_STYLE (style), FALSE);
+  g_return_val_if_fail (color_name != NULL, FALSE);
+  g_return_val_if_fail (color != NULL, FALSE);
 
   priv = GTK_STYLE_GET_PRIVATE (style);
 
-  gtk_style_context_lookup_color (priv->context, color_name, &rgba);
+  if (!priv->context)
+    return FALSE;
 
-  color->red = (guint16) (rgba.red * 65535);
-  color->green = (guint16) (rgba.green * 65535);
-  color->blue = (guint16) (rgba.blue * 65535);
-  color->pixel = 0;
+  result = gtk_style_context_lookup_color (priv->context, color_name, &rgba);
+
+  if (color)
+    {
+      color->red = (guint16) (rgba.red * 65535);
+      color->green = (guint16) (rgba.green * 65535);
+      color->blue = (guint16) (rgba.blue * 65535);
+      color->pixel = 0;
+    }
+
+  return result;
 }
 
 /**

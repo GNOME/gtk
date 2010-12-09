@@ -402,7 +402,7 @@ void	  gtk_style_apply_default_background (GtkStyle	   *style,
 
 GtkIconSet* gtk_style_lookup_icon_set        (GtkStyle     *style,
                                               const gchar  *stock_id);
-void        gtk_style_lookup_color           (GtkStyle     *style,
+gboolean    gtk_style_lookup_color           (GtkStyle     *style,
                                               const gchar  *color_name,
                                               GdkColor     *color);
 

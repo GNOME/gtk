@@ -19,7 +19,6 @@
 
 #include "config.h"
 #include "gtksymboliccolor.h"
-#include "gtkstylecontext.h"
 #include "gtkstyleproperties.h"
 #include "gtkintl.h"
 
@@ -469,81 +468,91 @@ _shade_color (GdkRGBA *color,
  * @props: #GtkStyleProperties to use when resolving named colors
  * @resolved_color: (out): return location for the resolved color
  *
- * Resolves @color using @props. @resolved_color will be filled in
- * with the resolved color.
+ * If @color is resolvable, @resolved_color will be filled in
+ * with the resolved color, and %TRUE will be returned. Generally,
+ * if @color can't be resolved, it is due to it being defined on
+ * top of a named color that doesn't exist in @props.
  *
- * If @props does not contain information for resolving @color or
- * any of the colors it depends on, then solid pink (#FF00FF) will
- * be assumed for the missing colors. This is to make it visually
- * obvious when a color is missing.
+ * Returns: %TRUE if the color has been resolved
  *
  * Since: 3.0
  **/
-void
+gboolean
 gtk_symbolic_color_resolve (GtkSymbolicColor   *color,
                             GtkStyleProperties *props,
                             GdkRGBA            *resolved_color)
 {
-  g_return_if_fail (color != NULL);
-  g_return_if_fail (resolved_color != NULL);
-  g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
+  g_return_val_if_fail (color != NULL, FALSE);
+  g_return_val_if_fail (resolved_color != NULL, FALSE);
 
   switch (color->type)
     {
     case COLOR_TYPE_LITERAL:
       *resolved_color = color->color;
-      break;
-
+      return TRUE;
     case COLOR_TYPE_NAME:
       {
         GtkSymbolicColor *named_color;
 
+        g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
+
         named_color = gtk_style_properties_lookup_color (props, color->name);
 
         if (!named_color)
-          gtk_style_context_lookup_default_color (color->name, resolved_color);
+          return FALSE;
 
-        gtk_symbolic_color_resolve (named_color, props, resolved_color);
+        return gtk_symbolic_color_resolve (named_color, props, resolved_color);
       }
-      break;
 
+      break;
     case COLOR_TYPE_SHADE:
       {
         GdkRGBA shade;
 
-        gtk_symbolic_color_resolve (color->shade.color, props, &shade);
+        if (!gtk_symbolic_color_resolve (color->shade.color, props, &shade))
+          return FALSE;
 
         _shade_color (&shade, color->shade.factor);
         *resolved_color = shade;
-      }
-      break;
 
+        return TRUE;
+      }
+
+      break;
     case COLOR_TYPE_ALPHA:
       {
         GdkRGBA alpha;
 
-        gtk_symbolic_color_resolve (color->alpha.color, props, &alpha);
+        if (!gtk_symbolic_color_resolve (color->alpha.color, props, &alpha))
+          return FALSE;
 
         *resolved_color = alpha;
         resolved_color->alpha = CLAMP (alpha.alpha * color->alpha.factor, 0, 1);
-      }
-      break;
 
+        return TRUE;
+      }
     case COLOR_TYPE_MIX:
       {
         GdkRGBA color1, color2;
 
-        gtk_symbolic_color_resolve (color->mix.color1, props, &color1);
-        gtk_symbolic_color_resolve (color->mix.color2, props, &color2);
+        if (!gtk_symbolic_color_resolve (color->mix.color1, props, &color1))
+          return FALSE;
+
+        if (!gtk_symbolic_color_resolve (color->mix.color2, props, &color2))
+          return FALSE;
 
         resolved_color->red = CLAMP (color1.red + ((color2.red - color1.red) * color->mix.factor), 0, 1);
         resolved_color->green = CLAMP (color1.green + ((color2.green - color1.green) * color->mix.factor), 0, 1);
         resolved_color->blue = CLAMP (color1.blue + ((color2.blue - color1.blue) * color->mix.factor), 0, 1);
         resolved_color->alpha = CLAMP (color1.alpha + ((color2.alpha - color1.alpha) * color->mix.factor), 0, 1);
-      }
-      break;
 
+        return TRUE;
+      }
+
+      break;
     default:
       g_assert_not_reached ();
     }
+
+  return FALSE;
 }

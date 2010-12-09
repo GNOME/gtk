@@ -2317,25 +2317,29 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
 
                   color = g_value_get_boxed (&pcache->value);
 
-                  gtk_symbolic_color_resolve (color, data->store, &rgba);
-                  g_value_unset (&pcache->value);
-
-                  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
+                  if (gtk_symbolic_color_resolve (color, data->store, &rgba))
                     {
-                      g_value_init (&pcache->value, GDK_TYPE_RGBA);
-                      g_value_set_boxed (&pcache->value, &rgba);
+                      g_value_unset (&pcache->value);
+
+                      if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_RGBA)
+                        {
+                          g_value_init (&pcache->value, GDK_TYPE_RGBA);
+                          g_value_set_boxed (&pcache->value, &rgba);
+                        }
+                      else
+                        {
+                          GdkColor rgb;
+
+                          rgb.red = rgba.red * 65535. + 0.5;
+                          rgb.green = rgba.green * 65535. + 0.5;
+                          rgb.blue = rgba.blue * 65535. + 0.5;
+
+                          g_value_init (&pcache->value, GDK_TYPE_COLOR);
+                          g_value_set_boxed (&pcache->value, &rgb);
+                        }
                     }
                   else
-                    {
-                      GdkColor rgb;
-
-                      rgb.red = rgba.red * 65535. + 0.5;
-                      rgb.green = rgba.green * 65535. + 0.5;
-                      rgb.blue = rgba.blue * 65535. + 0.5;
-
-                      g_value_init (&pcache->value, GDK_TYPE_COLOR);
-                      g_value_set_boxed (&pcache->value, &rgb);
-                    }
+                    g_param_value_set_default (pspec, &pcache->value);
                 }
 
               return &pcache->value;
@@ -2704,44 +2708,6 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
   return info->junction_sides;
 }
 
-gboolean
-gtk_style_context_lookup_default_color (const gchar *color_name,
-                                        GdkRGBA *color)
-{
-  static const GdkRGBA fallback_color = { 1.0, 0.0, 1.0, 1.0 };
-  static const struct {
-    const char *name;
-    const GdkRGBA rgba;
-  } colors[] = {
-    { "success_color",     { 0.3,   0.6,   0.02,  1.0 } },
-    { "warning_color",     { 0.96,  0.474, 0.24,  1.0 } },
-    { "error_color",       { 0.8,   0.0,   0.0,   1.0 } },
-    { "info_fg_color",     { 0.71,  0.67,  0.61,  1.0 } },
-    { "info_bg_color",     { 0.99,  0.99,  0.74,  1.0 } },
-    { "warning_fg_color",  { 0.68,  0.47,  0.16,  1.0 } },
-    { "warning_bg_color",  { 0.98,  0.68,  0.24,  1.0 } },
-    { "question_fg_color", { 0.38,  0.48,  0.84,  1.0 } },
-    { "question_bg_color", { 0.54,  0.68,  0.83,  1.0 } },
-    { "error_fg_color",    { 0.65,  0.15,  0.15,  1.0 } },
-    { "error_bg_color",    { 0.93,  0.21,  0.21,  1.0 } },
-    { "other_fg_color",    { 0.71,  0.67,  0.61,  1.0 } },
-    { "other_bg_color",    { 0.99,  0.99,  0.74,  1.0 } }
-  };
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (colors); i++)
-    {
-      if (g_str_equal (color_name, colors[i].name))
-        {
-          *color = colors[i].rgba;
-          return TRUE;
-        }
-    }
-
-  *color = fallback_color;
-  return FALSE;
-}
-
 /**
  * gtk_style_context_lookup_color:
  * @context: a #GtkStyleContext
@@ -2752,7 +2718,7 @@ gtk_style_context_lookup_default_color (const gchar *color_name,
  *
  * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
  **/
-void
+gboolean
 gtk_style_context_lookup_color (GtkStyleContext *context,
                                 const gchar     *color_name,
                                 GdkRGBA         *color)
@@ -2761,20 +2727,20 @@ gtk_style_context_lookup_color (GtkStyleContext *context,
   GtkSymbolicColor *sym_color;
   StyleData *data;
 
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (color_name != NULL);
-  g_return_if_fail (color != NULL);
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
+  g_return_val_if_fail (color_name != NULL, FALSE);
+  g_return_val_if_fail (color != NULL, FALSE);
 
   priv = context->priv;
-  g_return_if_fail (priv->widget_path != NULL);
+  g_return_val_if_fail (priv->widget_path != NULL, FALSE);
 
   data = style_data_lookup (context);
   sym_color = gtk_style_properties_lookup_color (data->store, color_name);
 
-  if (sym_color)
-    gtk_symbolic_color_resolve (sym_color, data->store, color);
-  else
-    gtk_style_context_lookup_default_color (color_name, color);
+  if (!sym_color)
+    return FALSE;
+
+  return gtk_symbolic_color_resolve (sym_color, data->store, color);
 }
 
 /**

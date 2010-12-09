@@ -3060,7 +3060,16 @@ gtk_icon_info_load_icon (GtkIconInfo *icon_info,
 }
 
 static gchar *
-gdk_rgba_to_css (const GdkRGBA *color)
+gdk_color_to_css (GdkColor *color)
+{
+  return g_strdup_printf ("rgb(%d,%d,%d)",
+                          color->red >> 8,
+                          color->green >> 8,
+                          color->blue >> 8);
+}
+
+static gchar *
+gdk_rgba_to_css (GdkRGBA *color)
 {
   return g_strdup_printf ("rgba(%d,%d,%d,%f)",
                           (gint)(color->red * 255),
@@ -3069,40 +3078,41 @@ gdk_rgba_to_css (const GdkRGBA *color)
                           color->alpha);
 }
 
-static char *
-_gtk_icon_info_color_to_css (const GdkRGBA *rgba,
-                             const char    *color_name)
-{
-  GdkRGBA color;
-
-  if (rgba)
-    return gdk_rgba_to_css (rgba);
-
-  gtk_style_context_lookup_default_color (color_name, &color);
-  return gdk_rgba_to_css (&color);
-}
-
 static GdkPixbuf *
-_gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
-                                       const GdkRGBA  *fg,
-                                       const GdkRGBA  *success_rgba,
-                                       const GdkRGBA  *warning_rgba,
-                                       const GdkRGBA  *error_rgba,
-                                       GError        **error)
+_gtk_icon_info_load_symbolic_internal (GtkIconInfo  *icon_info,
+                                       const gchar  *css_fg,
+                                       const gchar  *css_success,
+                                       const gchar  *css_warning,
+                                       const gchar  *css_error,
+                                       GError      **error)
 {
   GInputStream *stream;
   GdkPixbuf *pixbuf;
   gchar *data;
-  char *css_fg, *css_success, *css_warning, *css_error;
+  gchar *success, *warning, *err;
 
   /* css_fg can't possibly have failed, otherwise
    * that would mean we have a broken style */
-  g_return_val_if_fail (fg != NULL, NULL);
+  g_return_val_if_fail (css_fg != NULL, NULL);
 
-  css_fg = _gtk_icon_info_color_to_css (fg, "color");
-  css_warning = _gtk_icon_info_color_to_css (warning_rgba, "warning_color");
-  css_error = _gtk_icon_info_color_to_css (error_rgba, "error_color");
-  css_success = _gtk_icon_info_color_to_css (success_rgba, "success_color");
+  success = warning = err = NULL;
+
+  if (!css_success)
+    {
+      GdkColor success_default_color = { 0, 0x4e00, 0x9a00, 0x0600 };
+      success = gdk_color_to_css (&success_default_color);
+    }
+  if (!css_warning)
+    {
+      GdkColor warning_default_color = { 0, 0xf500, 0x7900, 0x3e00 };
+      warning = gdk_color_to_css (&warning_default_color);
+    }
+  if (!css_error)
+    {
+      GdkColor error_default_color = { 0, 0xcc00, 0x0000, 0x0000 };
+      err = gdk_color_to_css (&error_default_color);
+    }
+
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
                       "<svg version=\"1.1\"\n"
@@ -3112,26 +3122,24 @@ _gtk_icon_info_load_symbolic_internal (GtkIconInfo    *icon_info,
                       "     height=\"16\">\n"
                       "  <style type=\"text/css\">\n"
                       "    rect,path {\n"
-                      "      fill: ", css_fg, " !important;\n"
+                      "      fill: ", css_fg," !important;\n"
                       "    }\n"
                       "    .warning {\n"
-                      "      fill: ", css_warning, " !important;\n"
+                      "      fill: ", css_warning ? css_warning : warning," !important;\n"
                       "    }\n"
                       "    .error {\n"
-                      "      fill: ", css_error, " !important;\n"
+                      "      fill: ", css_error ? css_error : err," !important;\n"
                       "    }\n"
                       "    .success {\n"
-                      "      fill: ", css_success, " !important;\n"
+                      "      fill: ", css_success ? css_success : success," !important;\n"
                       "    }\n"
                       "  </style>\n"
                       "  <xi:include href=\"", icon_info->filename, "\"/>\n"
                       "</svg>",
                       NULL);
-
-  g_free (css_fg);
-  g_free (css_warning);
-  g_free (css_error);
-  g_free (css_success);
+  g_free (warning);
+  g_free (err);
+  g_free (success);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
@@ -3191,6 +3199,10 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
                              GError      **error)
 {
   GdkPixbuf *pixbuf;
+  gchar *css_fg;
+  gchar *css_success;
+  gchar *css_warning;
+  gchar *css_error;
 
   g_return_val_if_fail (fg != NULL, NULL);
 
@@ -3205,10 +3217,27 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
   if (was_symbolic)
     *was_symbolic = TRUE;
 
+  css_fg = gdk_rgba_to_string (fg);
+
+  css_success = css_warning = css_error = NULL;
+
+  if (warning_color)
+    css_warning = gdk_rgba_to_string (warning_color);
+
+  if (error_color)
+    css_error = gdk_rgba_to_string (error_color);
+
+  if (success_color)
+    css_success = gdk_rgba_to_string (success_color);
+
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
-                                                  fg, success_color,
-                                                  warning_color, error_color,
+                                                  css_fg, css_success,
+                                                  css_warning, css_error,
                                                   error);
+  g_free (css_fg);
+  g_free (css_warning);
+  g_free (css_success);
+  g_free (css_error);
 
   return pixbuf;
 }
@@ -3242,7 +3271,9 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
 {
   GdkPixbuf *pixbuf;
   GdkRGBA *color = NULL;
-  GdkRGBA success_color, warning_color, error_color;
+  GdkRGBA rgba;
+  gchar *css_fg = NULL, *css_success;
+  gchar *css_warning, *css_error;
   GtkStateFlags state;
 
   if (!icon_info->filename ||
@@ -3258,28 +3289,34 @@ gtk_icon_info_load_symbolic_for_context (GtkIconInfo      *icon_info,
 
   state = gtk_style_context_get_state (context);
   gtk_style_context_get (context, state, "color", &color, NULL);
-  gtk_style_context_lookup_color (context, "success_color", &success_color);
-  gtk_style_context_lookup_color (context, "warning_color", &warning_color);
-  gtk_style_context_lookup_color (context, "error_color", &error_color);
+  if (color)
+    {
+      css_fg = gdk_rgba_to_css (color);
+      gdk_rgba_free (color);
+    }
+
+  css_success = css_warning = css_error = NULL;
+
+  if (gtk_style_context_lookup_color (context, "success_color", &rgba))
+    css_success = gdk_rgba_to_css (&rgba);
+
+  if (gtk_style_context_lookup_color (context, "warning_color", &rgba))
+    css_warning = gdk_rgba_to_css (&rgba);
+
+  if (gtk_style_context_lookup_color (context, "error_color", &rgba))
+    css_error = gdk_rgba_to_css (&rgba);
 
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
-                                                  color, &success_color,
-                                                  &warning_color, &error_color,
+                                                  css_fg, css_success,
+                                                  css_warning, css_error,
                                                   error);
 
-  gdk_rgba_free (color);
+  g_free (css_fg);
+  g_free (css_success);
+  g_free (css_warning);
+  g_free (css_error);
 
   return pixbuf;
-}
-
-static void
-_color_to_rgba (const GdkColor *color,
-                GdkRGBA        *rgba)
-{
-  rgba->red = color->red / 65535.0;
-  rgba->green = color->green / 65535.0;
-  rgba->blue = color->blue / 65535.0;
-  rgba->alpha = 1.0;
 }
 
 /**
@@ -3314,8 +3351,12 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
                                        GError       **error)
 {
   GdkPixbuf *pixbuf;
-  GdkColor success_color, warning_color, error_color;
-  GdkRGBA fg_rgba, success_rgba, warning_rgba, error_rgba;
+  GdkColor success_color;
+  GdkColor warning_color;
+  GdkColor error_color;
+  GdkColor *fg;
+  gchar *css_fg, *css_success;
+  gchar *css_warning, *css_error;
 
   if (!icon_info->filename ||
       !g_str_has_suffix (icon_info->filename, "-symbolic.svg"))
@@ -3328,21 +3369,29 @@ gtk_icon_info_load_symbolic_for_style (GtkIconInfo   *icon_info,
   if (was_symbolic)
     *was_symbolic = TRUE;
 
-  _color_to_rgba (&style->fg[state], &fg_rgba);
+  fg = &style->fg[state];
+  css_fg = gdk_color_to_css (fg);
 
-  gtk_style_lookup_color (style, "success_color", &success_color);
-  _color_to_rgba (&success_color, &success_rgba);
+  css_success = css_warning = css_error = NULL;
 
-  gtk_style_lookup_color (style, "warning_color", &warning_color);
-  _color_to_rgba (&warning_color, &warning_rgba);
+  if (gtk_style_lookup_color (style, "success_color", &success_color))
+    css_success = gdk_color_to_css (&success_color);
 
-  gtk_style_lookup_color (style, "error_color", &error_color);
-  _color_to_rgba (&error_color, &error_rgba);
+  if (gtk_style_lookup_color (style, "warning_color", &warning_color))
+    css_warning = gdk_color_to_css (&warning_color);
+
+  if (gtk_style_lookup_color (style, "error_color", &error_color))
+    css_error = gdk_color_to_css (&error_color);
 
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
-                                                  &fg_rgba, &success_rgba,
-                                                  &warning_rgba, &error_rgba,
+                                                  css_fg, css_success,
+                                                  css_warning, css_error,
                                                   error);
+
+  g_free (css_fg);
+  g_free (css_success);
+  g_free (css_warning);
+  g_free (css_error);
 
   return pixbuf;
 }

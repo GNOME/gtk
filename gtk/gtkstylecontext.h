@@ -415,11 +415,9 @@ void             gtk_style_context_set_junction_sides (GtkStyleContext  *context
 						       GtkJunctionSides  sides);
 GtkJunctionSides gtk_style_context_get_junction_sides (GtkStyleContext  *context);
 
-void gtk_style_context_lookup_color (GtkStyleContext *context,
-                                     const gchar     *color_name,
-                                     GdkRGBA         *color);
-gboolean gtk_style_context_lookup_default_color (const gchar *color_name,
-                                                 GdkRGBA     *color);
+gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
+                                         const gchar     *color_name,
+                                         GdkRGBA         *color);
 
 void  gtk_style_context_notify_state_change (GtkStyleContext *context,
                                              GdkWindow       *window,

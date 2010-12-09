@@ -549,19 +549,21 @@ gtk_theming_engine_get_style (GtkThemingEngine *engine,
  * @color: (out): Return location for the looked up color
  *
  * Looks up and resolves a color name in the current style's color map.
+ *
+ * Returns: %TRUE if @color_name was found and resolved, %FALSE otherwise
  **/
-void
+gboolean
 gtk_theming_engine_lookup_color (GtkThemingEngine *engine,
                                  const gchar      *color_name,
                                  GdkRGBA          *color)
 {
   GtkThemingEnginePrivate *priv;
 
-  g_return_if_fail (GTK_IS_THEMING_ENGINE (engine));
-  g_return_if_fail (color_name != NULL);
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), FALSE);
+  g_return_val_if_fail (color_name != NULL, FALSE);
 
   priv = engine->priv;
-  gtk_style_context_lookup_color (priv->context, color_name, color);
+  return gtk_style_context_lookup_color (priv->context, color_name, color);
 }
 
 /**

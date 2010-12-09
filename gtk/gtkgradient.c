@@ -226,6 +226,7 @@ gtk_gradient_unref (GtkGradient *gradient)
  * gtk_gradient_resolve:
  * @gradient: a #GtkGradient
  * @props: #GtkStyleProperties to use when resolving named colors
+ * @resolved_gradient: (out): return location for the resolved pattern
  *
  * If @gradient is resolvable, @resolved_gradient will be filled in
  * with the resolved gradient as a cairo_pattern_t, and %TRUE will
@@ -233,20 +234,21 @@ gtk_gradient_unref (GtkGradient *gradient)
  * due to it being defined on top of a named color that doesn't
  * exist in @props.
  *
- * Returns: the resolved pattern. Use cairo_pattern_destroy()
- *   after use.
+ * Returns: %TRUE if the gradient has been resolved
  *
  * Since: 3.0
  **/
-cairo_pattern_t *
+gboolean
 gtk_gradient_resolve (GtkGradient         *gradient,
-                      GtkStyleProperties  *props)
+                      GtkStyleProperties  *props,
+                      cairo_pattern_t    **resolved_gradient)
 {
   cairo_pattern_t *pattern;
   guint i;
 
-  g_return_val_if_fail (gradient != NULL, NULL);
-  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), NULL);
+  g_return_val_if_fail (gradient != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
+  g_return_val_if_fail (resolved_gradient != NULL, FALSE);
 
   if (gradient->radius0 == 0 && gradient->radius1 == 0)
     pattern = cairo_pattern_create_linear (gradient->x0, gradient->y0,
@@ -264,12 +266,17 @@ gtk_gradient_resolve (GtkGradient         *gradient,
 
       stop = &g_array_index (gradient->stops, ColorStop, i);
 
-      gtk_symbolic_color_resolve (stop->color, props, &color);
+      if (!gtk_symbolic_color_resolve (stop->color, props, &color))
+        {
+          cairo_pattern_destroy (pattern);
+          return FALSE;
+        }
 
       cairo_pattern_add_color_stop_rgba (pattern, stop->offset,
                                          color.red, color.green,
                                          color.blue, color.alpha);
     }
 
-  return pattern;
+  *resolved_gradient = pattern;
+  return TRUE;
 }
