@@ -3074,7 +3074,7 @@ xdnd_drop_filter (GdkXEvent *xev,
  ************************** Public API ***********************
  *************************************************************/
 void
-_gdk_dnd_init (GdkDisplay *display)
+_gdk_x11_dnd_init (GdkDisplay *display)
 {
   int i;
   init_byte_order ();
@@ -3091,7 +3091,7 @@ _gdk_dnd_init (GdkDisplay *display)
 	gdk_atom_intern_static_string (xdnd_filters[i].atom_name),
 	xdnd_filters[i].func, NULL);
     }
-}		      
+}
 
 /* Source side */
 

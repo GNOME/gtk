@@ -1425,7 +1425,7 @@ gdk_display_open (const gchar *display_name)
 #endif
 
   _gdk_input_init (display);
-  _gdk_dnd_init (display);
+  _gdk_x11_dnd_init (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_x11_screen_setup (display_x11->screens[i]);
