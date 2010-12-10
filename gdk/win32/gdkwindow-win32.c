@@ -3150,11 +3150,6 @@ gdk_window_set_opacity (GdkWindow *window,
     }
 }
 
-void
-_gdk_windowing_window_set_composited (GdkWindow *window, gboolean composited)
-{
-}
-
 static cairo_region_t *
 gdk_win32_window_get_shape (GdkWindow *window)
 {

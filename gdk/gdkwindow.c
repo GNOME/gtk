@@ -7470,14 +7470,15 @@ gdk_window_set_composited (GdkWindow *window,
 
   display = gdk_window_get_display (window);
 
-  if (!gdk_display_supports_composite (display) && composited)
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+  if (composited && (!gdk_display_supports_composite (display) || !impl_class->set_composited))
     {
       g_warning ("gdk_window_set_composited called but "
                  "compositing is not supported");
       return;
     }
 
-  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
   impl_class->set_composited (window, composited);
 
   recompute_visible_regions (window, TRUE, FALSE);
