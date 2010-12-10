@@ -4831,9 +4831,9 @@ gdk_x11_window_set_opacity (GdkWindow *window,
 		     (guchar *) &cardinal, 1);
 }
 
-void
-_gdk_windowing_window_set_composited (GdkWindow *window,
-                                      gboolean   composited)
+static void
+gdk_x11_window_set_composited (GdkWindow *window,
+                               gboolean   composited)
 {
 #if defined(HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)
   GdkWindowImplX11 *impl;
@@ -5045,6 +5045,7 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->enable_synchronized_configure = gdk_x11_window_enable_synchronized_configure;
   impl_class->configure_finished = gdk_x11_window_configure_finished;
   impl_class->set_opacity = gdk_x11_window_set_opacity;
+  impl_class->set_composited = gdk_x11_window_set_composited;
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
   impl_class->drag_begin = _gdk_x11_window_drag_begin;

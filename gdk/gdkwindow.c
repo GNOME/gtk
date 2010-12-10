@@ -1780,13 +1780,11 @@ gdk_window_ensure_native (GdkWindow *window)
   reparent_to_impl (window);
 
   if (!window->input_only)
-    {
-      impl_class->set_background (window, window->background);
-    }
+    impl_class->set_background (window, window->background);
 
   impl_class->input_shape_combine_region (window,
-					  window->input_shape,
-					  0, 0);
+                                          window->input_shape,
+                                          0, 0);
 
   if (gdk_window_is_viewable (window))
     impl_class->show (window, FALSE);
@@ -7458,6 +7456,7 @@ gdk_window_set_composited (GdkWindow *window,
 			   gboolean   composited)
 {
   GdkDisplay *display;
+  GdkWindowImplClass *impl_class;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -7474,11 +7473,12 @@ gdk_window_set_composited (GdkWindow *window,
   if (!gdk_display_supports_composite (display) && composited)
     {
       g_warning ("gdk_window_set_composited called but "
-		 "compositing is not supported");
+                 "compositing is not supported");
       return;
     }
 
-  _gdk_windowing_window_set_composited (window, composited);
+  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+  impl_class->set_composited (window, composited);
 
   recompute_visible_regions (window, TRUE, FALSE);
 

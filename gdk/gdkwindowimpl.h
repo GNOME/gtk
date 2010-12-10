@@ -236,6 +236,8 @@ struct _GdkWindowImplClass
   void         (* configure_finished)   (GdkWindow *window);
   void         (* set_opacity)          (GdkWindow *window,
 					 gdouble    opacity);
+  void         (* set_composited)       (GdkWindow *window,
+                                         gboolean   composited);
   void         (* destroy_notify)       (GdkWindow *window);
   void         (* register_dnd)         (GdkWindow *window);
   GdkDragContext * (*drag_begin)        (GdkWindow *window,
