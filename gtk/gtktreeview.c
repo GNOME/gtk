@@ -10103,6 +10103,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
   gboolean selectable;
   GtkDirectionType direction;
   GtkCellArea *cell_area = NULL;
+  GtkCellRenderer *last_focus_cell = NULL;
   GtkTreeIter iter;
 
   if (! gtk_widget_has_focus (GTK_WIDGET (tree_view)))
@@ -10123,7 +10124,6 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 
   direction = count < 0 ? GTK_DIR_UP : GTK_DIR_DOWN;
 
-
   if (tree_view->priv->focus_column)
     cell_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (tree_view->priv->focus_column));
 
@@ -10136,7 +10136,12 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 					       &iter,
 					       GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
 					       cursor_node->children?TRUE:FALSE);
-      
+
+      /* Save the last cell that had focus, if we hit the end of the view we'll give
+       * focus back to it. */
+      last_focus_cell = gtk_cell_area_get_focus_cell (cell_area);
+
+      /* If focus stays in the area, no need to change the cursor row */
       if (gtk_cell_area_focus (cell_area, direction))
 	return;
     }
@@ -10242,6 +10247,9 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
         {
           gtk_widget_error_bell (GTK_WIDGET (tree_view));
         }
+
+      if (cell_area)
+	gtk_cell_area_set_focus_cell (cell_area, last_focus_cell);
     }
 
   if (grab_focus)
@@ -10370,7 +10378,9 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
   gboolean found_column = FALSE;
   gboolean rtl;
   GtkDirectionType direction;
-  GtkCellArea *cell_area;
+  GtkCellArea     *cell_area;
+  GtkCellRenderer *last_focus_cell = NULL;
+  GtkCellArea     *last_focus_area = NULL;
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
 
@@ -10395,6 +10405,11 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
   list = rtl ? g_list_last (tree_view->priv->columns) : g_list_first (tree_view->priv->columns);
   if (tree_view->priv->focus_column)
     {
+      /* Save the cell/area we are moving focus from, if moving the cursor
+       * by one step hits the end we'll set focus back here */
+      last_focus_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (tree_view->priv->focus_column));
+      last_focus_cell = gtk_cell_area_get_focus_cell (last_focus_area);
+
       for (; list; list = (rtl ? list->prev : list->next))
 	{
 	  if (list->data == tree_view->priv->focus_column)
@@ -10453,6 +10468,9 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
   else
     {
       gtk_widget_error_bell (GTK_WIDGET (tree_view));
+
+      if (last_focus_area)
+	gtk_cell_area_set_focus_cell (last_focus_area, last_focus_cell);
     }
 
   gtk_tree_view_clamp_column_visible (tree_view,
