@@ -310,7 +310,6 @@ gtk_icon_theme_get_for_screen (GdkScreen *screen)
   GtkIconTheme *icon_theme;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  g_return_val_if_fail (!screen->closed, NULL);
 
   icon_theme = g_object_get_data (G_OBJECT (screen), "gtk-icon-theme");
   if (!icon_theme)
