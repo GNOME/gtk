@@ -305,6 +305,10 @@ struct _GdkDisplayClass
 							   GdkFilterFunc func,
 							   gpointer      data);
   GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
+  GdkNativeWindow            (*get_drag_protocol)      (GdkDisplay      *display,
+                                                        GdkNativeWindow  winid,
+                                                        GdkDragProtocol *protocol,
+                                                        guint           *version);
 
 
   /* Signals */
@@ -407,6 +411,59 @@ struct _GdkScreenClass
   void (*size_changed) (GdkScreen *screen);
   void (*composited_changed) (GdkScreen *screen);
   void (*monitors_changed) (GdkScreen *screen);
+};
+
+struct _GdkDragContextClass {
+  GObjectClass parent_class;
+
+  GdkWindow * (*find_window)   (GdkDragContext  *context,
+                                GdkWindow       *drag_window,
+                                GdkScreen       *screen,
+                                gint             x_root,
+                                gint             y_root,
+                                GdkDragProtocol *protocol);
+  GdkAtom     (*get_selection) (GdkDragContext  *context);
+  gboolean    (*drag_motion)   (GdkDragContext  *context,
+                                GdkWindow       *dest_window,
+                                GdkDragProtocol  protocol,
+                                gint             root_x,
+                                gint             root_y,
+                                GdkDragAction    suggested_action,
+                                GdkDragAction    possible_actions,
+                                guint32          time_);
+  void        (*drag_status)   (GdkDragContext  *context,
+                                GdkDragAction    action,
+                                guint32          time_);
+  void        (*drag_abort)    (GdkDragContext  *context,
+                                guint32          time_);
+  void        (*drag_drop)     (GdkDragContext  *context,
+                                guint32          time_);
+  void        (*drop_reply)    (GdkDragContext  *context,
+                                gboolean         accept,
+                                guint32          time_);
+  void        (*drop_finish)   (GdkDragContext  *context,
+                                gboolean         success,
+                                guint32          time_);
+  gboolean    (*drop_status)   (GdkDragContext  *context);
+};
+
+struct _GdkDragContext {
+  GObject parent_instance;
+
+  GdkDragProtocol protocol;
+
+  gboolean is_source;
+  GdkWindow *source_window;
+  GdkWindow *dest_window;
+
+  GList *targets;
+  GdkDragAction actions;
+  GdkDragAction suggested_action;
+  GdkDragAction action;
+
+  guint32 start_time;
+
+  GdkDevice *device;
 };
 
 extern GSList    *_gdk_displays;

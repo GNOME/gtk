@@ -98,7 +98,6 @@ typedef enum {
  * this is used on both source and destination sides.
  */
 struct _GdkDragContextPrivateWin32 {
-  GdkDevice *device;
   gboolean being_finalized;
   gint ref_count;
   IUnknown *iface;
@@ -202,39 +201,6 @@ GdkDragContext *
 gdk_drag_context_new (void)
 {
   return g_object_new (GDK_TYPE_DRAG_CONTEXT, NULL);
-}
-
-GdkDevice *
-gdk_drag_context_get_device (GdkDragContext *context)
-{
-  GdkDragContextPrivateWin32 *private;
-
-  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
-
-  private = PRIVATE_DATA (context);
-
-  return private->device;
-}
-
-void
-gdk_drag_context_set_device (GdkDragContext *context,
-                             GdkDevice      *device)
-{
-  GdkDragContextPrivateWin32 *private;
-
-  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  private = PRIVATE_DATA (context);
-
-  if (private->device)
-    {
-      g_object_unref (private->device);
-      private->device = NULL;
-    }
-
-  if (device)
-    private->device = g_object_ref (device);
 }
 
 static GdkDragContext *

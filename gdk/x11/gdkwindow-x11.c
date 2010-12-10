@@ -4965,6 +4965,10 @@ gdk_x11_window_get_xid (GdkWindow *window)
   return GDK_WINDOW_IMPL_X11 (window->impl)->xid;
 }
 
+extern GdkDragContext * _gdk_x11_window_drag_begin (GdkWindow *window,
+                                                    GdkDevice *device,
+                                                    GList     *targets);
+
 static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
@@ -5043,5 +5047,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_opacity = gdk_x11_window_set_opacity;
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
+  impl_class->drag_begin = _gdk_x11_window_drag_begin;
 }
 

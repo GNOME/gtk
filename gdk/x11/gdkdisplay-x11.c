@@ -2704,6 +2704,10 @@ gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display)
 }
 
 extern GdkAppLaunchContext *_gdk_x11_display_get_app_launch_context (GdkDisplay *display);
+extern GdkNativeWindow      _gdk_x11_display_get_drag_protocol      (GdkDisplay *display,
+                                                                     GdkNativeWindow  xid,
+                                                                     GdkDragProtocol *protocol,
+                                                                     guint           *version);
 
 static void
 _gdk_display_x11_class_init (GdkDisplayX11Class * class)
@@ -2733,5 +2737,6 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->send_client_message = gdk_x11_display_send_client_message;
   display_class->add_client_message_filter = gdk_x11_display_add_client_message_filter;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
+  display_class->get_drag_protocol = _gdk_x11_display_get_drag_protocol;
 }
 

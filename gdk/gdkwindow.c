@@ -10687,6 +10687,39 @@ gdk_window_register_dnd (GdkWindow *window)
 }
 
 /**
+ * gdk_drag_begin:
+ * @window: the source window for this drag.
+ * @targets: (transfer none) (element-type GdkAtom): the offered targets,
+ *     as list of #GdkAtom<!-- -->s
+ *
+ * Starts a drag and creates a new drag context for it.
+ *
+ * This function is called by the drag source.
+ *
+ * Return value: (transfer full): a newly created #GdkDragContext.
+ */
+GdkDragContext *
+gdk_drag_begin (GdkWindow     *window,
+                GList         *targets)
+{
+  GdkDeviceManager *device_manager;
+  GdkDevice *device;
+
+  device_manager = gdk_display_get_device_manager (gdk_window_get_display (window));
+  device = gdk_device_manager_get_client_pointer (device_manager);
+
+  return gdk_drag_begin_for_device (window, device, targets);
+}
+
+GdkDragContext *
+gdk_drag_begin_for_device (GdkWindow     *window,
+                           GdkDevice     *device,
+                           GList         *targets)
+{
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, targets);
+}
+
+/**
  * gdk_window_lookup:
  * @anid: a native window handle
  *

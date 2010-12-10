@@ -238,6 +238,9 @@ struct _GdkWindowImplClass
 					 gdouble    opacity);
   void         (* destroy_notify)       (GdkWindow *window);
   void         (* register_dnd)         (GdkWindow *window);
+  GdkDragContext * (*drag_begin)        (GdkWindow *window,
+                                         GdkDevice *device,
+                                         GList     *targets);
 };
 
 /* Interface Functions */
