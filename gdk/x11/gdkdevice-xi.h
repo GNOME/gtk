@@ -20,7 +20,8 @@
 #ifndef __GDK_DEVICE_XI_H__
 #define __GDK_DEVICE_XI_H__
 
-#include <gdk/gdkdeviceprivate.h>
+#include "gdkdeviceprivate.h"
+
 #include <X11/extensions/XInput.h>
 
 G_BEGIN_DECLS

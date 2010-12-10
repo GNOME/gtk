@@ -21,9 +21,9 @@
 
 #include "gdkdevice.h"
 
+#include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkintl.h"
-#include "gdkinternals.h"
 
 
 typedef struct _GdkDeviceKey GdkDeviceKey;
@@ -1185,8 +1185,8 @@ gdk_device_grab (GdkDevice        *device,
   GdkGrabStatus res;
   GdkWindow *native;
 
-  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_SUCCESS);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_SUCCESS);
 
   if (_gdk_native_windows)
     native = window;
@@ -1198,21 +1198,23 @@ gdk_device_grab (GdkDevice        *device,
       native = gdk_offscreen_window_get_embedder (native);
 
       if (native == NULL ||
-	  (!_gdk_window_has_impl (native) &&
-	   !gdk_window_is_viewable (native)))
-	return GDK_GRAB_NOT_VIEWABLE;
+          (!_gdk_window_has_impl (native) &&
+           !gdk_window_is_viewable (native)))
+        return GDK_GRAB_NOT_VIEWABLE;
 
       native = gdk_window_get_toplevel (native);
     }
 
-  res = _gdk_windowing_device_grab (device,
-                                    window,
-                                    native,
-                                    owner_events,
-                                    get_native_grab_event_mask (event_mask),
-                                    NULL,
-                                    cursor,
-                                    time_);
+  if (native == NULL || GDK_WINDOW_DESTROYED (native))
+    return GDK_GRAB_NOT_VIEWABLE;
+
+  res = GDK_DEVICE_GET_CLASS (device)->grab (device,
+                                             native,
+                                             owner_events,
+                                             get_native_grab_event_mask (event_mask),
+                                             NULL,
+                                             cursor,
+                                             time_);
 
   if (res == GDK_GRAB_SUCCESS)
     {
@@ -1235,6 +1237,24 @@ gdk_device_grab (GdkDevice        *device,
     }
 
   return res;
+}
+
+/**
+ * gdk_device_ungrab:
+ * @device: a #GdkDevice
+ * @time_: a timestap (e.g. %GDK_CURRENT_TIME).
+ *
+ * Release any grab on @device.
+ *
+ * Since: 3.0
+ */
+void
+gdk_device_ungrab (GdkDevice  *device,
+                   guint32     time_)
+{
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
 }
 
 /* Private API */
@@ -1536,3 +1556,4 @@ _gdk_device_translate_axis (GdkDevice *device,
 
   return TRUE;
 }
+

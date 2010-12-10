@@ -24,6 +24,7 @@
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkprivate-x11.h"
+#include "gdkasync.h"
 #include "gdkx.h"
 
 static gboolean gdk_device_core_get_history (GdkDevice      *device,
@@ -296,7 +297,7 @@ gdk_device_core_grab (GdkDevice    *device,
 {
   GdkDisplay *display;
   Window xwindow, xconfine_to;
-  int status;
+  gint status;
 
   display = gdk_device_get_display (device);
 
@@ -310,6 +311,11 @@ gdk_device_core_grab (GdkDevice    *device,
   else
     xconfine_to = GDK_WINDOW_XID (confine_to);
 
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+    status = GrabSuccess;
+  else
+#endif
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       /* Device is a keyboard */
@@ -357,6 +363,8 @@ gdk_device_core_grab (GdkDevice    *device,
                              time_);
     }
 
+  _gdk_x11_display_update_grab_info (display, device, status);
+
   return _gdk_x11_convert_grab_status (status);
 }
 
@@ -365,13 +373,17 @@ gdk_device_core_ungrab (GdkDevice *device,
                         guint32    time_)
 {
   GdkDisplay *display;
+  gulong serial;
 
   display = gdk_device_get_display (device);
+  serial = NextRequest (GDK_DISPLAY_XDISPLAY (display));
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     XUngrabKeyboard (GDK_DISPLAY_XDISPLAY (display), time_);
   else
     XUngrabPointer (GDK_DISPLAY_XDISPLAY (display), time_);
+
+  _gdk_x11_display_update_grab_info_ungrab (display, device, time_, serial);
 }
 
 static GdkWindow *

@@ -139,6 +139,15 @@ void _gdk_xgrab_check_destroy      (GdkWindow *window);
 gboolean _gdk_x11_display_is_root_window (GdkDisplay *display,
 					  Window      xroot_window);
 
+void _gdk_x11_display_update_grab_info        (GdkDisplay *display,
+                                               GdkDevice  *device,
+                                               gint        status);
+void _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
+                                               GdkDevice  *device,
+                                               guint32     time,
+                                               gulong      serial);
+void _gdk_x11_device_check_extension_events   (GdkDevice *device);
+
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
 			      const gchar * const *atom_names,
 			      gint                 n_atoms);

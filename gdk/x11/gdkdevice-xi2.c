@@ -22,6 +22,7 @@
 #include "gdkdevice-xi2.h"
 
 #include "gdkintl.h"
+#include "gdkasync.h"
 #include "gdkx.h"
 
 #include <X11/extensions/XInput2.h>
@@ -364,7 +365,7 @@ gdk_device_xi2_grab (GdkDevice    *device,
   XIEventMask mask;
   Window xwindow;
   Cursor xcursor;
-  int status;
+  gint status;
 
   priv = GDK_DEVICE_XI2 (device)->priv;
   display = gdk_device_get_display (device);
@@ -384,6 +385,11 @@ gdk_device_xi2_grab (GdkDevice    *device,
   mask.deviceid = priv->device_id;
   mask.mask = gdk_device_xi2_translate_event_mask (event_mask, &mask.mask_len);
 
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+    status = GrabSuccess;
+  else
+#endif
   status = XIGrabDevice (GDK_DISPLAY_XDISPLAY (display),
                          priv->device_id,
                          xwindow,
@@ -395,6 +401,8 @@ gdk_device_xi2_grab (GdkDevice    *device,
 
   g_free (mask.mask);
 
+  _gdk_x11_display_update_grab_info (display, device, status);
+
   return _gdk_x11_convert_grab_status (status);
 }
 
@@ -404,13 +412,15 @@ gdk_device_xi2_ungrab (GdkDevice *device,
 {
   GdkDeviceXI2Private *priv;
   GdkDisplay *display;
+  gulong serial;
 
   priv = GDK_DEVICE_XI2 (device)->priv;
   display = gdk_device_get_display (device);
+  serial = NextRequest (GDK_DISPLAY_XDISPLAY (display));
 
-  XIUngrabDevice (GDK_DISPLAY_XDISPLAY (display),
-                  priv->device_id,
-                  time_);
+  XIUngrabDevice (GDK_DISPLAY_XDISPLAY (display), priv->device_id, time_);
+
+  _gdk_x11_display_update_grab_info_ungrab (display, device, time_, serial);
 }
 
 static GdkWindow *

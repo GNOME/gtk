@@ -20,7 +20,7 @@
 #ifndef __GDK_DEVICE_CORE_H__
 #define __GDK_DEVICE_CORE_H__
 
-#include <gdk/gdkdeviceprivate.h>
+#include "gdkdeviceprivate.h"
 
 G_BEGIN_DECLS
 

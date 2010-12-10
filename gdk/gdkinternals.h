@@ -30,8 +30,6 @@
 #define __GDK_INTERNALS_H__
 
 #include <gio/gio.h>
-#include <gdk/gdktypes.h>
-#include <gdk/gdkwindow.h>
 #include <gdk/gdkwindowimpl.h>
 #include <gdk/gdkprivate.h>
 
@@ -634,14 +632,6 @@ GdkWindow* _gdk_windowing_window_at_device_position  (GdkDisplay       *display,
                                                       gint             *win_y,
                                                       GdkModifierType  *mask,
                                                       gboolean          get_toplevel);
-GdkGrabStatus _gdk_windowing_device_grab     (GdkDevice        *device,
-                                              GdkWindow        *window,
-					      GdkWindow        *native,
-					      gboolean          owner_events,
-					      GdkEventMask      event_mask,
-					      GdkWindow        *confine_to,
-					      GdkCursor        *cursor,
-					      guint32           time);
 void _gdk_windowing_got_event                (GdkDisplay       *display,
 					      GList            *event_link,
 					      GdkEvent         *event,

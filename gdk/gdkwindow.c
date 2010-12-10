@@ -8726,14 +8726,13 @@ gdk_pointer_grab (GdkWindow *	  window,
       if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
         continue;
 
-      res = _gdk_windowing_device_grab (device,
-                                        window,
-                                        native,
-                                        owner_events,
-                                        get_native_grab_event_mask (event_mask),
-                                        confine_to,
-                                        cursor,
-                                        time);
+      res = GDK_DEVICE_GET_CLASS (device)->grab (device,
+                                                 native,
+                                                 owner_events,
+                                                 get_native_grab_event_mask (event_mask),
+                                                 confine_to,
+                                                 cursor,
+                                                 time);
 
       if (res == GDK_GRAB_SUCCESS)
         _gdk_display_add_device_grab (display,
@@ -8831,14 +8830,13 @@ gdk_keyboard_grab (GdkWindow *window,
       if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
         continue;
 
-      res = _gdk_windowing_device_grab (device,
-                                        window,
-                                        native,
-                                        owner_events,
-                                        GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
-                                        NULL,
-                                        NULL,
-                                        time);
+      res = GDK_DEVICE_GET_CLASS (device)->grab (device,
+                                                 native,
+                                                 owner_events,
+                                                 GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK,
+                                                 NULL,
+                                                 NULL,
+                                                 time);
 
       if (res == GDK_GRAB_SUCCESS)
         _gdk_display_add_device_grab (display,

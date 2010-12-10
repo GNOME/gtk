@@ -25,6 +25,7 @@
 #include "gdkdeviceprivate.h"
 #include "gdkprivate-x11.h"
 #include "gdkintl.h"
+#include "gdkasync.h"
 #include "gdkx.h"
 
 #define MAX_DEVICE_CLASSES 13
@@ -437,17 +438,26 @@ gdk_device_xi_grab (GdkDevice    *device,
   XEventClass event_classes[MAX_DEVICE_CLASSES];
   gint status, num_classes;
   GdkDeviceXI *device_xi;
+  GdkDisplay *display;
 
   device_xi = GDK_DEVICE_XI (device);
+  display = gdk_device_get_display (device);
   find_events (device, event_mask, event_classes, &num_classes);
 
-  status = XGrabDevice (GDK_WINDOW_XDISPLAY (window),
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+    status = GrabSuccess;
+  else
+#endif
+  status = XGrabDevice (GDK_DISPLAY_XDISPLAY (display),
                         device_xi->xdevice,
                         GDK_WINDOW_XID (window),
                         owner_events,
                         num_classes, event_classes,
                         GrabModeAsync, GrabModeAsync,
                         time_);
+
+  _gdk_x11_display_update_grab_info (display, device, status);
 
   return _gdk_x11_convert_grab_status (status);
 }
@@ -456,15 +466,20 @@ static void
 gdk_device_xi_ungrab (GdkDevice *device,
                       guint32    time_)
 {
-  GdkDisplay *display;
   GdkDeviceXI *device_xi;
+  GdkDisplay *display;
+  Display *xdisplay;
+  unsigned long serial;
 
   device_xi = GDK_DEVICE_XI (device);
   display = gdk_device_get_display (device);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
-  XUngrabDevice (GDK_DISPLAY_XDISPLAY (device),
-                 device_xi->xdevice,
-                 time_);
+  serial = NextRequest (xdisplay);
+
+  XUngrabDevice (xdisplay, device_xi->xdevice, time_);
+
+  _gdk_x11_display_update_grab_info_ungrab (display, device, time_, serial);
 }
 
 static GdkWindow*

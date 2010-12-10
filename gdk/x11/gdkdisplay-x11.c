@@ -1575,60 +1575,42 @@ struct XPointerUngrabInfo {
   guint32 time;
 };
 
-static void
-device_ungrab_callback (GdkDisplay *display,
-                        gpointer    data,
-                        gulong      serial)
-{
-  GdkDevice *device = data;
-
-  _gdk_display_device_grab_update (display, device, NULL, serial);
-}
-
-
 #define XSERVER_TIME_IS_LATER(time1, time2)                        \
   ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
   )
 
-/**
- * gdk_device_ungrab:
- * @device: a #GdkDevice
- * @time_: a timestap (e.g. %GDK_CURRENT_TIME).
- *
- * Release any grab on @device.
- *
- * Since: 3.0
- */
 void
-gdk_device_ungrab (GdkDevice  *device,
-                   guint32     time_)
+_gdk_x11_display_update_grab_info (GdkDisplay *display,
+                                   GdkDevice  *device,
+                                   gint        status)
 {
-  GdkDisplay *display;
-  Display *xdisplay;
+  if (status == GrabSuccess)
+    _gdk_x11_roundtrip_async (display,
+                              (GdkRoundTripCallback)_gdk_display_device_grab_update,
+                              device);
+}
+
+void
+_gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
+                                          GdkDevice  *device,
+                                          guint32     time,
+                                          gulong      serial)
+{
   GdkDeviceGrabInfo *grab;
-  unsigned long serial;
 
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  display = gdk_device_get_display (device);
-  xdisplay = GDK_DISPLAY_XDISPLAY (display);
-
-  serial = NextRequest (xdisplay);
-
-  GDK_DEVICE_GET_CLASS (device)->ungrab (device, time_);
-  XFlush (xdisplay);
+  XFlush (GDK_DISPLAY_XDISPLAY (display));
 
   grab = _gdk_display_get_last_device_grab (display, device);
   if (grab &&
-      (time_ == GDK_CURRENT_TIME ||
+      (time == GDK_CURRENT_TIME ||
        grab->time == GDK_CURRENT_TIME ||
-       !XSERVER_TIME_IS_LATER (grab->time, time_)))
+       !XSERVER_TIME_IS_LATER (grab->time, time)))
     {
       grab->serial_end = serial;
       _gdk_x11_roundtrip_async (display,
-				device_ungrab_callback,
-				device);
+                                (GdkRoundTripCallback)_gdk_display_device_grab_update,
+                                device);
     }
 }
 

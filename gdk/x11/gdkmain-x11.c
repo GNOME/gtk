@@ -129,53 +129,6 @@ _gdk_x11_convert_grab_status (gint status)
   return 0;
 }
 
-static void
-has_pointer_grab_callback (GdkDisplay *display,
-			   gpointer data,
-			   gulong serial)
-{
-  GdkDevice *device = data;
-
-  _gdk_display_device_grab_update (display, device, NULL, serial);
-}
-
-GdkGrabStatus
-_gdk_windowing_device_grab (GdkDevice    *device,
-                            GdkWindow    *window,
-                            GdkWindow    *native,
-                            gboolean      owner_events,
-                            GdkEventMask  event_mask,
-                            GdkWindow    *confine_to,
-                            GdkCursor    *cursor,
-                            guint32       time)
-{
-  GdkDisplay *display;
-  GdkGrabStatus status = GDK_GRAB_SUCCESS;
-
-  if (!window || GDK_WINDOW_DESTROYED (window))
-    return GDK_GRAB_NOT_VIEWABLE;
-
-  display = gdk_device_get_display (device);
-
-#ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
-    status = GrabSuccess;
-  else
-#endif
-    status = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                                  native,
-                                                  owner_events,
-                                                  event_mask,
-                                                  confine_to,
-                                                  cursor,
-                                                  time);
-  if (status == GDK_GRAB_SUCCESS)
-    _gdk_x11_roundtrip_async (display,
-			      has_pointer_grab_callback,
-                              device);
-  return status;
-}
-
 /**
  * _gdk_xgrab_check_unmap:
  * @window: a #GdkWindow
