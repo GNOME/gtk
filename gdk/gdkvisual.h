@@ -42,7 +42,6 @@ G_BEGIN_DECLS
 #define GDK_IS_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_VISUAL))
 #define GDK_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_VISUAL, GdkVisualClass))
 
-typedef struct _GdkVisualPrivate  GdkVisualPrivate;
 typedef struct _GdkVisualClass    GdkVisualClass;
 
 /**
@@ -84,53 +83,7 @@ typedef enum
  *
  * The #GdkVisual structure contains information about
  * a particular visual.
- *
- * <example id="rgbmask">
- * <title>Constructing a pixel value from components</title>
- * <programlisting>
- * guint
- * pixel_from_rgb (GdkVisual *visual,
- *                 guchar r, guchar b, guchar g)
- * {
- *   return ((r >> (16 - visual->red_prec))   << visual->red_shift) |
- *          ((g >> (16 - visual->green_prec)) << visual->green_shift) |
- *          ((r >> (16 - visual->blue_prec))  << visual->blue_shift);
- * }
- * </programlisting>
- * </example>
  */
-struct _GdkVisual
-{
-  /*< private >*/
-  GObject parent_instance;
-
-  GdkVisualType GSEAL (type);      /* Type of visual this is (PseudoColor, TrueColor, etc) */
-  gint GSEAL (depth);              /* Bit depth of this visual */
-  GdkByteOrder GSEAL (byte_order);
-  gint GSEAL (colormap_size);      /* Size of a colormap for this visual */
-  gint GSEAL (bits_per_rgb);       /* Number of significant bits per red, green and blue. */
-
-  /* The red, green and blue masks, shifts and precisions refer
-   * to value needed to calculate pixel values in TrueColor and DirectColor
-   * visuals. The "mask" is the significant bits within the pixel. The
-   * "shift" is the number of bits left we must shift a primary for it
-   * to be in position (according to the "mask"). "prec" refers to how
-   * much precision the pixel value contains for a particular primary.
-   */
-  guint32 GSEAL (red_mask);
-  gint GSEAL (red_shift);
-  gint GSEAL (red_prec);
-
-  guint32 GSEAL (green_mask);
-  gint GSEAL (green_shift);
-  gint GSEAL (green_prec);
-
-  guint32 GSEAL (blue_mask);
-  gint GSEAL (blue_shift);
-  gint GSEAL (blue_prec);
-
-  GdkVisualPrivate *priv;
-};
 
 GType         gdk_visual_get_type            (void) G_GNUC_CONST;
 
@@ -152,7 +105,7 @@ void gdk_query_visual_types (GdkVisualType  **visual_types,
 GList* gdk_list_visuals (void);
 #endif
 
-GdkScreen *gdk_visual_get_screen (GdkVisual *visual);
+GdkScreen    *gdk_visual_get_screen (GdkVisual *visual);
 
 GdkVisualType gdk_visual_get_visual_type         (GdkVisual *visual);
 gint          gdk_visual_get_depth               (GdkVisual *visual);

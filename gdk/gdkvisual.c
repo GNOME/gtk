@@ -25,7 +25,6 @@
 
 #include "gdkinternals.h"
 #include "gdkvisual.h"
-
 #include "gdkscreen.h"
 
 
@@ -55,6 +54,26 @@
  * then %GDK_VISUAL_STATIC_GRAY.
  */
 
+G_DEFINE_TYPE (GdkVisual, gdk_visual, G_TYPE_OBJECT)
+
+static void
+gdk_visual_init (GdkVisual *visual)
+{
+}
+
+static void
+gdk_visual_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (gdk_visual_parent_class)->finalize (object);
+}
+
+static void
+gdk_visual_class_init (GdkVisualClass *visual_class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (visual_class);
+
+  object_class->finalize = gdk_visual_finalize;
+}
 
 /**
  * gdk_list_visuals:
@@ -427,4 +446,22 @@ gdk_visual_get_blue_pixel_details (GdkVisual *visual,
 
   if (precision)
     *precision = visual->blue_prec;
+}
+
+/**
+ * gdk_visual_get_screen:
+ * @visual: a #GdkVisual
+ *
+ * Gets the screen to which this visual belongs
+ *
+ * Return value: (transfer none): the screen to which this visual belongs.
+ *
+ * Since: 2.2
+ */
+GdkScreen *
+gdk_visual_get_screen (GdkVisual *visual)
+{
+  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
+
+  return visual->screen;
 }

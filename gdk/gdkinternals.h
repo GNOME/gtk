@@ -466,6 +466,36 @@ struct _GdkDragContext {
   GdkDevice *device;
 };
 
+struct _GdkVisual
+{
+  GObject parent_instance;
+
+  GdkVisualType type;
+  gint depth;
+  GdkByteOrder byte_order;
+  gint colormap_size;
+  gint bits_per_rgb;
+
+  guint32 red_mask;
+  gint red_shift;
+  gint red_prec;
+
+  guint32 green_mask;
+  gint green_shift;
+  gint green_prec;
+
+  guint32 blue_mask;
+  gint blue_shift;
+  gint blue_prec;
+
+  GdkScreen *screen;
+};
+
+struct _GdkVisualClass
+{
+  GObjectClass parent_class;
+};
+
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;

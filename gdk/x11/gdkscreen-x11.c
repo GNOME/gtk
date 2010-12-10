@@ -810,7 +810,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
   init_multihead (screen);
   init_randr_support (screen);
   
-  _gdk_visual_init (screen);
+  _gdk_x11_visual_init (screen);
   _gdk_windowing_window_init (screen);
   
   return screen;
