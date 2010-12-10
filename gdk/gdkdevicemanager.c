@@ -117,12 +117,6 @@ enum {
 static guint signals [LAST_SIGNAL] = { 0 };
 
 
-struct _GdkDeviceManagerPrivate
-{
-  GdkDisplay *display;
-};
-
-
 static void
 gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
 {
@@ -203,18 +197,11 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
                   GDK_TYPE_DEVICE);
-
-  g_type_class_add_private (object_class, sizeof (GdkDeviceManagerPrivate));
 }
 
 static void
 gdk_device_manager_init (GdkDeviceManager *device_manager)
 {
-  GdkDeviceManagerPrivate *priv;
-
-  device_manager->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (device_manager,
-                                                             GDK_TYPE_DEVICE_MANAGER,
-                                                             GdkDeviceManagerPrivate);
 }
 
 static void
@@ -223,14 +210,10 @@ gdk_device_manager_set_property (GObject      *object,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
-  GdkDeviceManagerPrivate *priv;
-
-  priv = GDK_DEVICE_MANAGER (object)->priv;
-
   switch (prop_id)
     {
     case PROP_DISPLAY:
-      priv->display = g_value_get_object (value);
+      GDK_DEVICE_MANAGER (object)->display = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -244,14 +227,11 @@ gdk_device_manager_get_property (GObject      *object,
                                  GValue       *value,
                                  GParamSpec   *pspec)
 {
-  GdkDeviceManagerPrivate *priv;
-
-  priv = GDK_DEVICE_MANAGER (object)->priv;
 
   switch (prop_id)
     {
     case PROP_DISPLAY:
-      g_value_set_object (value, priv->display);
+      g_value_set_object (value, GDK_DEVICE_MANAGER (object)->display);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -274,13 +254,9 @@ gdk_device_manager_get_property (GObject      *object,
 GdkDisplay *
 gdk_device_manager_get_display (GdkDeviceManager *device_manager)
 {
-  GdkDeviceManagerPrivate *priv;
-
   g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
 
-  priv = device_manager->priv;
-
-  return priv->display;
+  return device_manager->display;
 }
 
 /**

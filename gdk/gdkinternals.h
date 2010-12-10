@@ -496,6 +496,31 @@ struct _GdkVisualClass
   GObjectClass parent_class;
 };
 
+struct _GdkDeviceManager
+{
+  GObject parent_instance;
+
+  GdkDisplay *display;
+};
+
+struct _GdkDeviceManagerClass
+{
+  GObjectClass parent_class;
+
+  /* Signals */
+  void (* device_added)   (GdkDeviceManager *device_manager,
+                           GdkDevice        *device);
+  void (* device_removed) (GdkDeviceManager *device_manager,
+                           GdkDevice        *device);
+  void (* device_changed) (GdkDeviceManager *device_manager,
+                           GdkDevice        *device);
+
+  /* VMethods */
+  GList * (* list_devices) (GdkDeviceManager *device_manager,
+                            GdkDeviceType     type);
+  GdkDevice * (* get_client_pointer) (GdkDeviceManager *device_manager);
+};
+
 extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;

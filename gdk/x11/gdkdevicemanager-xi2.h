@@ -20,7 +20,9 @@
 #ifndef __GDK_DEVICE_MANAGER_XI2_H__
 #define __GDK_DEVICE_MANAGER_XI2_H__
 
-#include <gdk/gdkdevicemanager.h>
+#include "gdkinternals.h"
+#include "gdkdevicemanager.h"
+
 #include <X11/extensions/XInput2.h>
 
 G_BEGIN_DECLS

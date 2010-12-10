@@ -37,41 +37,14 @@ G_BEGIN_DECLS
 #define GDK_DEVICE_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE_MANAGER, GdkDeviceManagerClass))
 
 typedef struct _GdkDeviceManager GdkDeviceManager;
-typedef struct _GdkDeviceManagerPrivate GdkDeviceManagerPrivate;
 typedef struct _GdkDeviceManagerClass GdkDeviceManagerClass;
 
-struct _GdkDeviceManager
-{
-  GObject parent_instance;
+GType        gdk_device_manager_get_type           (void) G_GNUC_CONST;
 
-  /*< private >*/
-  GdkDeviceManagerPrivate *priv;
-};
-
-struct _GdkDeviceManagerClass
-{
-  GObjectClass parent_class;
-
-  /* Signals */
-  void (* device_added)   (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-  void (* device_removed) (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-  void (* device_changed) (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-
-  /* VMethods */
-  GList * (* list_devices) (GdkDeviceManager *device_manager,
-                            GdkDeviceType     type);
-  GdkDevice * (* get_client_pointer) (GdkDeviceManager *device_manager);
-};
-
-GType gdk_device_manager_get_type (void) G_GNUC_CONST;
-
-GdkDisplay *             gdk_device_manager_get_display      (GdkDeviceManager *device_manager);
-GList *                  gdk_device_manager_list_devices     (GdkDeviceManager *device_manager,
-                                                              GdkDeviceType     type);
-GdkDevice *              gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager);
+GdkDisplay * gdk_device_manager_get_display        (GdkDeviceManager *device_manager);
+GList *      gdk_device_manager_list_devices       (GdkDeviceManager *device_manager,
+                                                    GdkDeviceType     type);
+GdkDevice *  gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager);
 
 G_END_DECLS
 

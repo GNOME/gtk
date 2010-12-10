@@ -20,7 +20,8 @@
 #ifndef __GDK_DEVICE_MANAGER_CORE_H__
 #define __GDK_DEVICE_MANAGER_CORE_H__
 
-#include <gdk/gdkdevicemanager.h>
+#include "gdkinternals.h"
+#include "gdkdevicemanager.h"
 
 G_BEGIN_DECLS
 
