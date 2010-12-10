@@ -3628,6 +3628,7 @@ gdk_drag_context_x11_drag_status (GdkDragContext *context,
       xev.xclient.data.l[1] = (action != 0) ? (2 | 1) : 0;
       xev.xclient.data.l[2] = 0;
       xev.xclient.data.l[3] = 0;
+      xev.xclient.data.l[4] = 0;
       if (!xdnd_send_xevent (context_x11, context->source_window, FALSE, &xev))
         GDK_NOTE (DND,
                   g_message ("Send event to %lx failed",
