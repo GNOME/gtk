@@ -26,6 +26,7 @@
 #include "gtkiconview.h"
 #include "gtkcelllayout.h"
 #include "gtkcellrenderer.h"
+#include "gtkcellareabox.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkmarshalers.h"
@@ -121,6 +122,9 @@ struct _GtkIconViewChild
 
 struct _GtkIconViewPrivate
 {
+  GtkCellArea        *cell_area;
+  GtkCellAreaContext *cell_area_context;
+
   gint width, height;
 
   GtkSelectionMode selection_mode;
@@ -245,6 +249,7 @@ enum
   PROP_REORDERABLE,
   PROP_TOOLTIP_COLUMN,
   PROP_ITEM_PADDING,
+  PROP_CELL_AREA,
 
   /* For scrollable interface */
   PROP_HADJUSTMENT,
@@ -255,7 +260,10 @@ enum
 
 /* GObject vfuncs */
 static void             gtk_icon_view_cell_layout_init          (GtkCellLayoutIface *iface);
-static void             gtk_icon_view_finalize                  (GObject            *object);
+static void             gtk_icon_view_dispose                   (GObject            *object);
+static GObject         *gtk_icon_view_constructor               (GType               type,
+								 guint               n_construct_properties,
+								 GObjectConstructParam *construct_properties);
 static void             gtk_icon_view_set_property              (GObject            *object,
 								 guint               prop_id,
 								 const GValue       *value,
@@ -526,7 +534,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
   widget_class = (GtkWidgetClass *) klass;
   container_class = (GtkContainerClass *) klass;
 
-  gobject_class->finalize = gtk_icon_view_finalize;
+  gobject_class->constructor = gtk_icon_view_constructor;
+  gobject_class->dispose = gtk_icon_view_dispose;
   gobject_class->set_property = gtk_icon_view_set_property;
   gobject_class->get_property = gtk_icon_view_get_property;
 
@@ -804,6 +813,21 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     P_("Padding around icon view items"),
 						     0, G_MAXINT, 6,
 						     GTK_PARAM_READWRITE));
+
+  /**
+   * GtkIconView:cell-area:
+   *
+   * The #GtkCellArea used to layout cell renderers for this view.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+				   PROP_CELL_AREA,
+				   g_param_spec_object ("cell-area",
+							P_("Cell Area"),
+							P_("The GtkCellArea used to layout cells"),
+							GTK_TYPE_CELL_AREA,
+							GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   /* Scrollable interface properties */
   g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
@@ -1144,12 +1168,59 @@ gtk_icon_view_init (GtkIconView *icon_view)
 }
 
 /* GObject methods */
-static void
-gtk_icon_view_finalize (GObject *object)
+static GObject *
+gtk_icon_view_constructor (GType               type,
+			   guint               n_construct_properties,
+			   GObjectConstructParam *construct_properties)
 {
+  GtkIconView        *icon_view;
+  GtkIconViewPrivate *priv;
+  GObject            *object;
+
+  object = G_OBJECT_CLASS (gtk_icon_view_parent_class)->constructor
+    (type, n_construct_properties, construct_properties);
+
+  icon_view = (GtkIconView *) object;
+  priv      = icon_view->priv;
+
+  if (!priv->cell_area)
+    {
+      priv->cell_area = gtk_cell_area_box_new ();
+      g_object_ref_sink (priv->cell_area);
+    }
+
+  gtk_cell_area_set_style_detail (priv->cell_area, "icon_view");
+
+  priv->cell_area_context = gtk_cell_area_create_context (priv->cell_area);
+
+  return object;
+
+}
+
+static void
+gtk_icon_view_dispose (GObject *object)
+{
+  GtkIconView *icon_view;
+  GtkIconViewPrivate *priv;
+
+  icon_view = GTK_ICON_VIEW (object);
+  priv      = icon_view->priv;
+
   gtk_icon_view_cell_layout_clear (GTK_CELL_LAYOUT (object));
 
-  G_OBJECT_CLASS (gtk_icon_view_parent_class)->finalize (object);
+  if (priv->cell_area_context)
+    {
+      g_object_unref (priv->cell_area_context);
+      priv->cell_area_context = NULL;
+    }
+
+  if (priv->cell_area)
+    {
+      g_object_unref (priv->cell_area);
+      priv->cell_area = NULL;
+    }
+
+  G_OBJECT_CLASS (gtk_icon_view_parent_class)->dispose (object);
 }
 
 
@@ -1160,6 +1231,7 @@ gtk_icon_view_set_property (GObject      *object,
 			    GParamSpec   *pspec)
 {
   GtkIconView *icon_view;
+  GtkCellArea *area;
 
   icon_view = GTK_ICON_VIEW (object);
 
@@ -1211,6 +1283,14 @@ gtk_icon_view_set_property (GObject      *object,
 
     case PROP_ITEM_PADDING:
       gtk_icon_view_set_item_padding (icon_view, g_value_get_int (value));
+      break;
+
+    case PROP_CELL_AREA:
+      /* Construct-only, can only be assigned once */
+      area = g_value_get_object (value);
+
+      if (area)
+	icon_view->priv->cell_area = g_object_ref_sink (area);
       break;
 
     case PROP_HADJUSTMENT:
@@ -1291,6 +1371,10 @@ gtk_icon_view_get_property (GObject      *object,
 
     case PROP_ITEM_PADDING:
       g_value_set_int (value, icon_view->priv->item_padding);
+      break;
+
+    case PROP_CELL_AREA:
+      g_value_set_object (value, icon_view->priv->cell_area);
       break;
 
     case PROP_HADJUSTMENT:
