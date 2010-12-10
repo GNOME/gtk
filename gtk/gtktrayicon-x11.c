@@ -445,6 +445,9 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
   gulong bytes_after;
   int error, result;
   GdkVisual *visual;
+  gint red_prec;
+  gint green_prec;
+  gint blue_prec;
 
   g_assert (icon->priv->manager_window != None);
 
@@ -468,9 +471,13 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
       visual = gdk_x11_screen_lookup_visual (screen, visual_id);
     }
 
+  gdk_visual_get_red_pixel_details (visual, NULL, NULL, &red_prec);
+  gdk_visual_get_green_pixel_details (visual, NULL, NULL, &green_prec);
+  gdk_visual_get_blue_pixel_details (visual, NULL, NULL, &blue_prec);
+
   icon->priv->manager_visual = visual;
   icon->priv->manager_visual_rgba = visual != NULL &&
-    (visual->red_prec + visual->blue_prec + visual->green_prec < visual->depth);
+    (red_prec + blue_prec + green_prec < gdk_visual_get_depth (visual));
 
   /* For the background-relative hack we use when we aren't using a real RGBA
    * visual, we can't be double-buffered */
@@ -844,7 +851,7 @@ gtk_tray_icon_set_visual (GtkTrayIcon *icon)
    * to be either the screen default visual or a TrueColor visual; ignore it
    * if it is something else
    */
-  if (visual && visual->type != GDK_VISUAL_TRUE_COLOR)
+  if (visual && gdk_visual_get_visual_type (visual) != GDK_VISUAL_TRUE_COLOR)
     visual = NULL;
 
   if (visual == NULL)
