@@ -43,25 +43,6 @@ typedef struct _GdkScreenClass GdkScreenClass;
 #define GDK_IS_SCREEN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN))
 #define GDK_SCREEN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN, GdkScreenClass))
 
-/**
- * GdkScreen:
- *
- * This is a currently just a placeholder typedef for the first argument of
- * the #GdkPointerHooks.window_at_pointer function in #GdkPointerHooks.
- * It will be used  when GDK gets multihead support.
- *
- * Since: 2.2
- */
-struct _GdkScreen
-{
-  GObject parent_instance;
-
-  guint GSEAL (closed) : 1;
-
-  cairo_font_options_t *GSEAL (font_options);
-  double GSEAL (resolution);	/* pixels/points scale factor for fonts */
-};
-
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
 GdkVisual*   gdk_screen_get_system_visual     (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
@@ -118,4 +99,4 @@ GList     *gdk_screen_get_window_stack  (GdkScreen *screen);
 
 G_END_DECLS
 
-#endif				/* __GDK_SCREEN_H__ */
+#endif  /* __GDK_SCREEN_H__ */

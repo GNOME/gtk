@@ -134,9 +134,9 @@ typedef guint32 GdkNativeWindow;
  
 /* Forward declarations of commonly used types
  */
-typedef struct _GdkColor	      GdkColor;
+typedef struct _GdkColor              GdkColor;
 typedef struct _GdkRGBA               GdkRGBA;
-typedef struct _GdkCursor	      GdkCursor;
+typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkVisual             GdkVisual;
 
 /**
@@ -145,8 +145,8 @@ typedef struct _GdkVisual             GdkVisual;
  * An opaque structure representing an onscreen drawable.
  */
 typedef struct _GdkWindow             GdkWindow;
-typedef struct _GdkDisplay	      GdkDisplay;
-typedef struct _GdkScreen	      GdkScreen;
+typedef struct _GdkDisplay            GdkDisplay;
+typedef struct _GdkScreen             GdkScreen;
 typedef struct  GdkAppLaunchContext   GdkAppLaunchContext;
 
 /**

@@ -316,6 +316,7 @@ struct _GdkDisplayClass
 		  gboolean    is_error);
 };
 
+
 struct _GdkKeymapClass
 {
   GObjectClass parent_class;
@@ -353,6 +354,16 @@ struct _GdkKeymapClass
   void (*direction_changed) (GdkKeymap *keymap);
   void (*keys_changed)      (GdkKeymap *keymap);
   void (*state_changed)     (GdkKeymap *keymap);
+};
+
+struct _GdkScreen
+{
+  GObject parent_instance;
+
+  guint closed : 1;
+
+  cairo_font_options_t *font_options;
+  double resolution; /* pixels/points scale factor for fonts */
 };
 
 struct _GdkScreenClass
