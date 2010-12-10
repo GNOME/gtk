@@ -146,6 +146,8 @@ GdkDragAction    gdk_drag_context_get_suggested_action (GdkDragContext *context)
 GdkDragAction    gdk_drag_context_get_selected_action  (GdkDragContext *context);
 
 GdkWindow       *gdk_drag_context_get_source_window    (GdkDragContext *context);
+GdkWindow       *gdk_drag_context_get_dest_window      (GdkDragContext *context);
+GdkDragProtocol  gdk_drag_context_get_protocol         (GdkDragContext *context);
 
 /* Destination side */
 
