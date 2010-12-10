@@ -685,10 +685,10 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   return window;
 }
 
-void
-_gdk_win32_window_destroy (GdkWindow *window,
-			   gboolean   recursing,
-			   gboolean   foreign_destroy)
+static void
+gdk_win32_window_destroy (GdkWindow *window,
+			  gboolean   recursing,
+			  gboolean   foreign_destroy)
 {
   GdkWindowObject *private = (GdkWindowObject *)window;
   GdkWindowImplWin32 *window_impl = GDK_WINDOW_IMPL_WIN32 (private->impl);
@@ -696,7 +696,7 @@ _gdk_win32_window_destroy (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   
-  GDK_NOTE (MISC, g_print ("_gdk_win32_window_destroy: %p\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_window_destroy: %p\n",
 			   GDK_WINDOW_HWND (window)));
 
   /* Remove ourself from the modal stack */
@@ -744,8 +744,8 @@ gdk_win32_window_resize_cairo_surface (GdkWindow       *window,
   return NULL;
 }
 
-void
-_gdk_windowing_window_destroy_foreign (GdkWindow *window)
+static void
+gdk_win32_window_destroy_foreign (GdkWindow *window)
 {
   /* It's somebody else's window, but in our hierarchy, so reparent it
    * to the desktop, and then try to destroy it.
@@ -3284,7 +3284,8 @@ gdk_window_impl_iface_init (GdkWindowImplIface *iface)
   iface->set_static_gravities = gdk_win32_window_set_static_gravities;
   iface->queue_antiexpose = _gdk_win32_window_queue_antiexpose;
   iface->translate = _gdk_win32_window_translate;
-  iface->destroy = _gdk_win32_window_destroy;
+  iface->destroy = gdk_win32_window_destroy;
+  iface->destroy_foreign = gdk_win32_window_destroy_foreign;
   iface->resize_cairo_surface = gdk_win32_window_resize_cairo_surface;
   iface->get_shape = gdk_win32_window_get_shape;
   iface->get_input_shape = gdk_win32_window_get_input_shape;

@@ -1934,7 +1934,12 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	   * foreign windows in our hierarchy.
 	   */
 	  if (window->parent)
-	    _gdk_windowing_window_destroy_foreign (window);
+            {
+              impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+              if (gdk_window_has_impl (window))
+                impl_class->destroy_foreign (window);
+            }
 
 	  /* Also for historical reasons, we remove any filters
 	   * on a foreign window when it or a parent is destroyed;

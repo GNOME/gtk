@@ -1001,9 +1001,9 @@ gdk_toplevel_x11_free_contents (GdkDisplay *display,
 }
 
 static void
-_gdk_x11_window_destroy (GdkWindow *window,
-			 gboolean   recursing,
-			 gboolean   foreign_destroy)
+gdk_x11_window_destroy (GdkWindow *window,
+                        gboolean   recursing,
+                        gboolean   foreign_destroy)
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   GdkToplevelX11 *toplevel;
@@ -1040,8 +1040,8 @@ gdk_window_x11_resize_cairo_surface (GdkWindow       *window,
   return surface;
 }
 
-void
-_gdk_windowing_window_destroy_foreign (GdkWindow *window)
+static void
+gdk_x11_window_destroy_foreign (GdkWindow *window)
 {
   /* It's somebody else's window, but in our hierarchy,
    * so reparent it to the root window, and then send
@@ -4999,7 +4999,8 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->set_static_gravities = gdk_window_x11_set_static_gravities;
   impl_class->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   impl_class->translate = _gdk_x11_window_translate;
-  impl_class->destroy = _gdk_x11_window_destroy;
+  impl_class->destroy = gdk_x11_window_destroy;
+  impl_class->destroy_foreign = gdk_x11_window_destroy_foreign;
   impl_class->resize_cairo_surface = gdk_window_x11_resize_cairo_surface;
   impl_class->get_shape = gdk_x11_window_get_shape;
   impl_class->get_input_shape = gdk_x11_window_get_input_shape;
