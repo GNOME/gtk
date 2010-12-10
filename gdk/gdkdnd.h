@@ -122,7 +122,7 @@ void             gdk_drag_status        (GdkDragContext   *context,
 				         GdkDragAction     action,
 					 guint32           time_);
 void             gdk_drop_reply         (GdkDragContext   *context,
-					 gboolean          ok,
+					 gboolean          accepted,
 					 guint32           time_);
 void             gdk_drop_finish        (GdkDragContext   *context,
 					 gboolean          success,
