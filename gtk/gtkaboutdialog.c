@@ -569,8 +569,8 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   /**
    * GtkAboutDialog:logo:
    *
-   * A logo for the about box. If this is not set, it defaults to
-   * gtk_window_get_default_icon_list().
+   * A logo for the about box. If it is %NULL, the default window icon
+   * set with gtk_window_set_default_icon() will be used.
    *
    * Since: 2.6
    */
