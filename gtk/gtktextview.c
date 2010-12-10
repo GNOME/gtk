@@ -7028,7 +7028,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
         {
           GtkWidget *source_widget;
           
-          suggested_action = context->suggested_action;
+          suggested_action = gdk_drag_context_get_suggested_action (context);
           
           source_widget = gtk_drag_get_source_widget (context);
           
@@ -7037,7 +7037,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
               /* Default to MOVE, unless the user has
                * pressed ctrl or alt to affect available actions
                */
-              if ((context->actions & GDK_ACTION_MOVE) != 0)
+              if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
                 suggested_action = GDK_ACTION_MOVE;
             }
         }
@@ -7194,7 +7194,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
           atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
 
-          for (list = context->targets; list; list = g_list_next (list))
+          for (list = gdk_drag_context_list_targets (context); list; list = g_list_next (list))
             {
               gint i;
 
@@ -7262,7 +7262,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
  done:
   gtk_drag_finish (context, success,
-		   success && context->action == GDK_ACTION_MOVE,
+		   success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE,
 		   time);
 
   if (success)

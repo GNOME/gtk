@@ -7188,7 +7188,7 @@ out:
     {
       GtkWidget *source_widget;
 
-      *suggested_action = context->suggested_action;
+      *suggested_action = gdk_drag_context_get_suggested_action (context);
       source_widget = gtk_drag_get_source_widget (context);
 
       if (source_widget == widget)
@@ -7196,7 +7196,7 @@ out:
           /* Default to MOVE, unless the user has
            * pressed ctrl or shift to affect available actions
            */
-          if ((context->actions & GDK_ACTION_MOVE) != 0)
+          if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
             *suggested_action = GDK_ACTION_MOVE;
         }
 
@@ -7729,7 +7729,7 @@ gtk_tree_view_drag_data_received (GtkWidget        *widget,
 
   gtk_drag_finish (context,
                    accepted,
-                   (context->action == GDK_ACTION_MOVE),
+                   (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
                    time);
 
   if (gtk_tree_path_get_depth (dest_row) == 1

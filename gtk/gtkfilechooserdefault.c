@@ -3071,11 +3071,11 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
     }
 #endif
 
-  if (context->suggested_action == GDK_ACTION_COPY ||
-      (context->actions & GDK_ACTION_COPY) != 0)
+  if (gdk_drag_context_get_suggested_action (context) == GDK_ACTION_COPY ||
+      (gdk_drag_context_get_actions (context) & GDK_ACTION_COPY) != 0)
     action = GDK_ACTION_COPY;
-  else if (context->suggested_action == GDK_ACTION_MOVE ||
-           (context->actions & GDK_ACTION_MOVE) != 0)
+  else if (gdk_drag_context_get_suggested_action (context) == GDK_ACTION_MOVE ||
+           (gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
     action = GDK_ACTION_MOVE;
   else
     {

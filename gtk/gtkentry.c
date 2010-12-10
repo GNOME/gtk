@@ -8988,7 +8988,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
       gtk_drag_dest_find_target (widget, context, NULL) != GDK_NONE)
     {
       source_widget = gtk_drag_get_source_widget (context);
-      suggested_action = context->suggested_action;
+      suggested_action = gdk_drag_context_get_suggested_action (context);
 
       if (!gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &sel1, &sel2) ||
           new_position < sel1 || new_position > sel2)
@@ -8998,7 +8998,7 @@ gtk_entry_drag_motion (GtkWidget        *widget,
 	      /* Default to MOVE, unless the user has
 	       * pressed ctrl or alt to affect available actions
 	       */
-	      if ((context->actions & GDK_ACTION_MOVE) != 0)
+	      if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
 	        suggested_action = GDK_ACTION_MOVE;
 	    }
 
@@ -9075,7 +9075,7 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
           end_change (entry);
 	}
       
-      gtk_drag_finish (context, TRUE, context->action == GDK_ACTION_MOVE, time);
+      gtk_drag_finish (context, TRUE, gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE, time);
     }
   else
     {
