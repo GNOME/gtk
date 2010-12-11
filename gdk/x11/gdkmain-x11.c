@@ -209,7 +209,7 @@ _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return;
 
   if (sm_client_id && strcmp (sm_client_id, ""))
@@ -507,7 +507,7 @@ _gdk_send_xevent (GdkDisplay *display,
 {
   gboolean result;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return FALSE;
 
   gdk_error_trap_push ();

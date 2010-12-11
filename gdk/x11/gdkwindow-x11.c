@@ -2791,7 +2791,7 @@ _gdk_windowing_get_device_state (GdkDisplay       *display,
 {
   GdkScreen *default_screen;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return;
 
   default_screen = gdk_display_get_default_screen (display);

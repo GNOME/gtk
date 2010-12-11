@@ -231,7 +231,7 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
   if (atom == GDK_NONE)
     return None;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return None;
 
   xatom = lookup_cached_xatom (display, atom);
@@ -337,7 +337,7 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
   if (xatom == None)
     return GDK_NONE;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return GDK_NONE;
 
   display_x11 = GDK_DISPLAY_X11 (display);

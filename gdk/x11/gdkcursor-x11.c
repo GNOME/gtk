@@ -177,8 +177,8 @@ get_blank_cursor (GdkDisplay *display)
 
   color.pixel = 0; 
   color.red = color.blue = color.green = 0;
-  
-  if (display->closed)
+
+  if (gdk_display_is_closed (display))
     cursor = None;
   else
     cursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
@@ -267,7 +267,7 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     {
       xcursor = None;
     } 
@@ -317,7 +317,7 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_return_if_fail (cursor->ref_count == 0);
 
   private = (GdkCursorPrivate *) cursor;
-  if (!private->display->closed && private->xcursor)
+  if (private->xcursor && !gdk_display_is_closed (private->display))
     XFreeCursor (GDK_DISPLAY_XDISPLAY (private->display), private->xcursor);
 
   g_free (private->name);
@@ -696,7 +696,7 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
   g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     xcursor = None;
   else 
     {
@@ -742,7 +742,7 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     xcursor = None;
   else 
     {
@@ -862,7 +862,7 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
   xbg.blue = bg->blue;
   xbg.green = bg->green;
   
-  if (display->closed)
+  if (gdk_display_is_closed (display->closed))
     xcursor = None;
   else
     xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),

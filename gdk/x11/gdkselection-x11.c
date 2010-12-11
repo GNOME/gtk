@@ -138,7 +138,7 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
   g_return_val_if_fail (selection != GDK_NONE, FALSE);
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return FALSE;
 
   if (owner) 
@@ -211,8 +211,8 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (selection != GDK_NONE, NULL);
-  
-  if (display->closed)
+
+  if (gdk_display_is_closed (display))
     return NULL;
   
   xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
@@ -458,7 +458,7 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   if (list)
     *list = NULL;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return 0;
 
   property.value = (guchar *)text;
@@ -709,7 +709,7 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     res = XLocaleNotSupported;
   else
     res = XmbTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display), 
