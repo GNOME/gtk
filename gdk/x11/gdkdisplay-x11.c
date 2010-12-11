@@ -2682,6 +2682,7 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->sync = gdk_x11_display_sync;
   display_class->flush = gdk_x11_display_flush;
   display_class->has_pending = gdk_x11_display_has_pending;
+  display_class->queue_events = _gdk_x11_display_queue_events;
   display_class->get_default_group = gdk_x11_display_get_default_group;
   display_class->supports_selection_notification = gdk_x11_display_supports_selection_notification;
   display_class->request_selection_notification = gdk_x11_display_request_selection_notification;

@@ -394,8 +394,8 @@ GdkEvent*
 gdk_display_get_event (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  
-  _gdk_events_queue (display);
+
+  GDK_DISPLAY_GET_CLASS (display)->queue_events (display);
   return _gdk_event_unqueue (display);
 }
 

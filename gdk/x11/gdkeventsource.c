@@ -263,7 +263,7 @@ gdk_event_source_check (GSource *source)
 }
 
 void
-_gdk_events_queue (GdkDisplay *display)
+_gdk_x11_display_queue_events (GdkDisplay *display)
 {
   GdkEvent *event;
   XEvent xevent;
@@ -279,14 +279,14 @@ _gdk_events_queue (GdkDisplay *display)
       XNextEvent (xdisplay, &xevent);
 
       switch (xevent.type)
-	{
-	case KeyPress:
-	case KeyRelease:
-	  break;
-	default:
-	  if (XFilterEvent (&xevent, None))
-	    continue;
-	}
+        {
+        case KeyPress:
+        case KeyRelease:
+          break;
+        default:
+          if (XFilterEvent (&xevent, None))
+            continue;
+        }
 
       event = gdk_event_source_translate_event (event_source, &xevent);
 
