@@ -153,6 +153,12 @@ struct _GdkWindowImplClass
 					 gboolean         recursing,
 					 gboolean         foreign_destroy);
 
+
+ /* Called when gdk_window_destroy() is called on a foreign window
+  * or an ancestor of the foreign window. It should generally reparent
+  * the window out of it's current heirarchy, hide it, and then
+  * send a message to the owner requesting that the window be destroyed.
+  */
   void         (*destroy_foreign)       (GdkWindow       *window);
 
   cairo_surface_t * (* resize_cairo_surface) (GdkWindow       *window,
