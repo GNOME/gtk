@@ -272,8 +272,6 @@ gdk_display_opened (GdkDisplay *display)
 static void
 gdk_display_init (GdkDisplay *display)
 {
-  _gdk_displays = g_slist_prepend (_gdk_displays, display);
-
   display->double_click_time = 250;
   display->double_click_distance = 5;
 
@@ -305,18 +303,6 @@ gdk_display_dispose (GObject *object)
   g_list_free (display->queued_events);
   display->queued_events = NULL;
   display->queued_tail = NULL;
-
-  _gdk_displays = g_slist_remove (_gdk_displays, object);
-
-  if (gdk_display_get_default () == display)
-    {
-      if (_gdk_displays)
-        gdk_display_manager_set_default_display (gdk_display_manager_get(),
-                                                 _gdk_displays->data);
-      else
-        gdk_display_manager_set_default_display (gdk_display_manager_get(),
-                                                 NULL);
-    }
 
   if (device_manager)
     {
@@ -607,6 +593,29 @@ void
 gdk_beep (void)
 {
   gdk_display_beep (gdk_display_get_default ());
+}
+
+/**
+ * gdk_flush:
+ *
+ * Flushes the output buffers of all display connections and waits
+ * until all requests have been processed.
+ * This is rarely needed by applications.
+ */
+void
+gdk_flush (void)
+{
+  GSList *list, *l;
+
+  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  for (l = list; l; l = l->next)
+    {
+      GdkDisplay *display = l->data;
+
+      GDK_DISPLAY_GET_CLASS (display)->sync (display);
+    }
+
+  g_slist_free (list);
 }
 
 /**
@@ -2263,4 +2272,27 @@ gdk_drag_get_protocol_for_display (GdkDisplay      *display,
                                    GdkDragProtocol *protocol)
 {
   return GDK_DISPLAY_GET_CLASS (display)->get_drag_protocol (display, xid, protocol, NULL);
+}
+
+/**
+ * gdk_display_open:
+ * @display_name: the name of the display to open
+ *
+ * Opens a display.
+ *
+ * Return value: (transfer none): a #GdkDisplay, or %NULL if the display
+ *               could not be opened.
+ *
+ * Since: 2.2
+ */
+GdkDisplay *
+gdk_display_open (const gchar *display_name)
+{
+  return gdk_display_manager_open_display (gdk_display_manager_get (), display_name);
+}
+
+gboolean
+gdk_display_has_pending (GdkDisplay *display)
+{
+  return GDK_DISPLAY_GET_CLASS (display)->has_pending (display);
 }

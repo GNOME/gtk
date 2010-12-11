@@ -40,4 +40,3 @@ gchar              *_gdk_display_arg_name = NULL;
 gboolean            _gdk_native_windows = FALSE;
 gboolean            _gdk_disable_multidevice = FALSE;
 
-GSList             *_gdk_displays = NULL;

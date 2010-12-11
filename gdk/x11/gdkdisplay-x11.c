@@ -165,6 +165,8 @@ G_DEFINE_TYPE_WITH_CODE (GdkDisplayX11, _gdk_display_x11, GDK_TYPE_DISPLAY,
 static void
 _gdk_display_x11_init (GdkDisplayX11 *display)
 {
+  _gdk_x11_display_manager_add_display (gdk_display_manager_get (),
+                                        GDK_DISPLAY_OBJECT (display));
 }
 
 static void
@@ -1090,7 +1092,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 }
 
 static void
-_gdk_event_init (GdkDisplay *display)
+gdk_event_init (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11;
   GdkDeviceManager *device_manager;
@@ -1112,7 +1114,7 @@ _gdk_event_init (GdkDisplay *display)
 }
 
 static void
-_gdk_input_init (GdkDisplay *display)
+gdk_input_init (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11;
   GdkDeviceManager *device_manager;
@@ -1175,7 +1177,7 @@ _gdk_input_init (GdkDisplay *display)
  * Since: 2.2
  */
 GdkDisplay *
-gdk_display_open (const gchar *display_name)
+_gdk_x11_display_open (const gchar *display_name)
 {
   Display *xdisplay;
   GdkDisplay *display;
@@ -1214,7 +1216,7 @@ gdk_display_open (const gchar *display_name)
 			 &display_x11->xrandr_event_base, &ignore))
   {
       int major, minor;
-      
+
       XRRQueryVersion (display_x11->xdisplay, &major, &minor);
 
       if ((major == 1 && minor >= 3) || major > 1)
@@ -1223,7 +1225,7 @@ gdk_display_open (const gchar *display_name)
        gdk_x11_register_standard_event_type (display, display_x11->xrandr_event_base, RRNumberEvents);
   }
 #endif
-  
+
   /* initialize the display's screens */ 
   display_x11->screens = g_new (GdkScreen *, ScreenCount (display_x11->xdisplay));
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
@@ -1240,7 +1242,7 @@ gdk_display_open (const gchar *display_name)
 
   display->device_manager = _gdk_device_manager_new (display);
 
-  _gdk_event_init (display);
+  gdk_event_init (display);
 
   attr.window_type = GDK_WINDOW_TOPLEVEL;
   attr.wclass = GDK_INPUT_OUTPUT;
@@ -1424,7 +1426,7 @@ gdk_display_open (const gchar *display_name)
   }
 #endif
 
-  _gdk_input_init (display);
+  gdk_input_init (display);
   _gdk_x11_dnd_init (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
@@ -1520,16 +1522,12 @@ gdk_internal_connection_watch (Display  *display,
 static G_CONST_RETURN gchar *
 gdk_x11_display_get_name (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
   return (gchar *) DisplayString (GDK_DISPLAY_X11 (display)->xdisplay);
 }
 
 static gint
 gdk_x11_display_get_n_screens (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-  
   return ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay);
 }
 
@@ -1537,17 +1535,14 @@ static GdkScreen *
 gdk_x11_display_get_screen (GdkDisplay *display,
 			    gint        screen_num)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (ScreenCount (GDK_DISPLAY_X11 (display)->xdisplay) > screen_num, NULL);
-  
+
   return GDK_DISPLAY_X11 (display)->screens[screen_num];
 }
 
 static GdkScreen *
 gdk_x11_display_get_default_screen (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  
   return GDK_DISPLAY_X11 (display)->default_screen;
 }
 
@@ -1557,11 +1552,9 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
 {
   GdkDisplayX11 *display_x11;
   gint i;
-  
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-  
+
   display_x11 = GDK_DISPLAY_X11 (display);
-  
+
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     {
       if (GDK_SCREEN_XROOTWIN (display_x11->screens[i]) == xroot_window)
@@ -1617,8 +1610,6 @@ _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
 static void
 gdk_x11_display_beep (GdkDisplay *display)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
 #ifdef HAVE_XKB
   XkbBell (GDK_DISPLAY_XDISPLAY (display), None, 0, None);
 #else
@@ -1629,18 +1620,20 @@ gdk_x11_display_beep (GdkDisplay *display)
 static void
 gdk_x11_display_sync (GdkDisplay *display)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
 }
 
 static void
 gdk_x11_display_flush (GdkDisplay *display)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
   if (!display->closed)
     XFlush (GDK_DISPLAY_XDISPLAY (display));
+}
+
+static gboolean
+gdk_x11_display_has_pending (GdkDisplay *display)
+{
+  return XPending (GDK_DISPLAY_XDISPLAY (display));
 }
 
 static GdkWindow *
@@ -1706,8 +1699,11 @@ gdk_x11_display_ungrab (GdkDisplay *display)
 static void
 gdk_display_x11_dispose (GObject *object)
 {
+  GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
   gint           i;
+
+  _gdk_x11_display_manager_remove_display (gdk_display_manager_get (), display);
 
   g_list_foreach (display_x11->input_devices, (GFunc) g_object_run_dispose, NULL);
 
@@ -1810,15 +1806,25 @@ gdk_display_x11_finalize (GObject *object)
 GdkDisplay *
 gdk_x11_lookup_xdisplay (Display *xdisplay)
 {
-  GSList *tmp_list;
+  GSList *list, *l;
+  GdkDisplay *display;
 
-  for (tmp_list = _gdk_displays; tmp_list; tmp_list = tmp_list->next)
+  display = NULL;
+
+  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
+
+  for (l = list; l; l = l->next)
     {
-      if (GDK_DISPLAY_XDISPLAY (tmp_list->data) == xdisplay)
-	return tmp_list->data;
+      if (GDK_DISPLAY_XDISPLAY (l->data) == xdisplay)
+        {
+          display = l->data;
+          break;
+        }
     }
-  
-  return NULL;
+
+  g_slist_free (list);
+
+  return display;
 }
 
 /**
@@ -1864,17 +1870,14 @@ gdk_x11_display_get_xdisplay (GdkDisplay *display)
 }
 
 void
-_gdk_windowing_set_default_display (GdkDisplay *display)
+_gdk_x11_display_make_default (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
   const gchar *startup_id;
-  
-  if (!display)
-    return;
 
   g_free (display_x11->startup_notification_id);
   display_x11->startup_notification_id = NULL;
-  
+
   startup_id = g_getenv ("DESKTOP_STARTUP_ID");
   if (startup_id && *startup_id != '\0')
     {
@@ -1882,9 +1885,9 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
         g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
       else
         gdk_x11_display_set_startup_notification_id (display, startup_id);
-      
+
       /* Clear the environment variable so it won't be inherited by
-       * child processes and confuse things.  
+       * child processes and confuse things.
        */
       g_unsetenv ("DESKTOP_STARTUP_ID");
     }
@@ -2367,35 +2370,6 @@ gdk_x11_display_add_client_message_filter (GdkDisplay   *display,
 		   filter);
 }
 
-/*
- *--------------------------------------------------------------
- * gdk_flush
- *
- *   Flushes the Xlib output buffer and then waits
- *   until all requests have been received and processed
- *   by the X server. The only real use for this function
- *   is in dealing with XShm.
- *
- * Arguments:
- *
- * Results:
- *
- * Side effects:
- *
- *--------------------------------------------------------------
- */
-void
-gdk_flush (void)
-{
-  GSList *tmp_list = _gdk_displays;
-
-  while (tmp_list)
-    {
-      XSync (GDK_DISPLAY_XDISPLAY (tmp_list->data), False);
-      tmp_list = tmp_list->next;
-    }
-}
-
 /**
  * gdk_x11_register_standard_event_type:
  * @display: a #GdkDisplay
@@ -2707,6 +2681,7 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->beep = gdk_x11_display_beep;
   display_class->sync = gdk_x11_display_sync;
   display_class->flush = gdk_x11_display_flush;
+  display_class->has_pending = gdk_x11_display_has_pending;
   display_class->get_default_group = gdk_x11_display_get_default_group;
   display_class->supports_selection_notification = gdk_x11_display_supports_selection_notification;
   display_class->request_selection_notification = gdk_x11_display_request_selection_notification;

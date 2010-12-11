@@ -189,15 +189,6 @@ gdk_display_beep (GdkDisplay *display)
 }
 
 void
-_gdk_windowing_exit (void)
-{
-  _gdk_win32_dnd_exit ();
-  CoUninitialize ();
-  DeleteDC (_gdk_display_hdc);
-  _gdk_display_hdc = NULL;
-}
-
-void
 gdk_error_trap_push (void)
 {
 }

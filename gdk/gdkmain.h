@@ -132,13 +132,6 @@ void gdk_beep (void);
 
 #endif /* GDK_MULTIHEAD_SAFE */
 
-/**
- * gdk_flush:
- *
- * Flushes the X output buffer and waits until all requests have been processed
- * by the server. This is rarely needed by applications. It's main use is for
- * trapping X errors with gdk_error_trap_push() and gdk_error_trap_pop().
- */
 void gdk_flush (void);
 
 G_END_DECLS

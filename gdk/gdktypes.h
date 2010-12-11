@@ -139,14 +139,10 @@ typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkVisual             GdkVisual;
 
-/**
- * GdkWindow:
- *
- * An opaque structure representing an onscreen drawable.
- */
-typedef struct _GdkWindow             GdkWindow;
+typedef struct _GdkDisplayManager     GdkDisplayManager;
 typedef struct _GdkDisplay            GdkDisplay;
 typedef struct _GdkScreen             GdkScreen;
+typedef struct _GdkWindow             GdkWindow;
 typedef struct  GdkAppLaunchContext   GdkAppLaunchContext;
 
 /**

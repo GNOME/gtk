@@ -269,6 +269,27 @@ struct _GdkWindow
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
 #define GDK_WINDOW_DESTROYED(d) (GDK_WINDOW (d)->destroyed)
 
+struct _GdkDisplayManager
+{
+  GObject parent_instance;
+};
+
+struct _GdkDisplayManagerClass
+{
+  GObjectClass parent_class;
+
+  GSList *     (*list_displays)       (GdkDisplayManager *manager);
+  GdkDisplay * (*get_default_display) (GdkDisplayManager *manager);
+  void         (*set_default_display) (GdkDisplayManager *manager,
+                                       GdkDisplay        *display);
+  GdkDisplay * (*open_display)        (GdkDisplayManager *manager,
+                                       const gchar       *name);
+
+  /* signals */
+  void         (*display_opened)      (GdkDisplayManager *manager,
+                                       GdkDisplay        *display);
+};
+
 struct _GdkDisplayClass
 {
   GObjectClass parent_class;
@@ -281,6 +302,7 @@ struct _GdkDisplayClass
   void                       (*beep)               (GdkDisplay *display);
   void                       (*sync)               (GdkDisplay *display);
   void                       (*flush)              (GdkDisplay *display);
+  gboolean                   (*has_pending)        (GdkDisplay *display);
   GdkWindow *                (*get_default_group)  (GdkDisplay *display);
   gboolean                   (*supports_selection_notification) (GdkDisplay *display);
   gboolean                   (*request_selection_notification)  (GdkDisplay *display,
@@ -530,7 +552,6 @@ struct _GdkDeviceManagerClass
   GdkDevice * (* get_client_pointer) (GdkDeviceManager *device_manager);
 };
 
-extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;
 extern gchar     *_gdk_display_arg_name;

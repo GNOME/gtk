@@ -27,6 +27,7 @@ libgdk_x11_la_SOURCES =    	\
 	gdkdevicemanager-core.h \
 	gdkdevicemanager-core.c \
 	gdkdevicemanager-x11.c	\
+	gdkdisplaymanager-x11.c	\
 	gdkdisplay-x11.c	\
 	gdkdisplay-x11.h	\
 	gdkdnd-x11.c	   	\

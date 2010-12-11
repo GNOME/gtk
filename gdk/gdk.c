@@ -228,9 +228,8 @@ gdk_pre_parse_libgtk_only (void)
 
   g_type_init ();
 
-  /* Do any setup particular to the windowing system
-   */
-  _gdk_windowing_init ();  
+  /* Do any setup particular to the windowing system */
+  gdk_display_manager_get ();
 }
 
   
@@ -262,13 +261,13 @@ gdk_parse_args (int    *argc,
     return;
 
   gdk_pre_parse_libgtk_only ();
-  
+
   option_context = g_option_context_new (NULL);
   g_option_context_set_ignore_unknown_options (option_context, TRUE);
   g_option_context_set_help_enabled (option_context, FALSE);
   option_group = g_option_group_new (NULL, NULL, NULL, NULL, NULL);
   g_option_context_set_main_group (option_context, option_group);
-  
+
   g_option_group_add_entries (option_group, gdk_args);
   g_option_group_add_entries (option_group, _gdk_windowing_args);
 
@@ -282,7 +281,7 @@ gdk_parse_args (int    *argc,
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
 }
 
-/** 
+/**
  * gdk_get_display_arg_name:
  *
  * Gets the display name specified in the command line arguments passed
@@ -309,13 +308,13 @@ gdk_get_display_arg_name (void)
 
 /**
  * gdk_display_open_default_libgtk_only:
- * 
+ *
  * Opens the default display specified by command line arguments or
  * environment variables, sets it as the default display, and returns
  * it.  gdk_parse_args must have been called first. If the default
  * display has previously been set, simply returns that. An internal
  * function that should not be used by applications.
- * 
+ *
  * Return value: (transfer none): the default display, if it could be
  *   opened, otherwise %NULL.
  **/
@@ -325,7 +324,7 @@ gdk_display_open_default_libgtk_only (void)
   GdkDisplay *display;
 
   g_return_val_if_fail (gdk_initialized, NULL);
-  
+
   display = gdk_display_get_default ();
   if (display)
     return display;
@@ -336,14 +335,10 @@ gdk_display_open_default_libgtk_only (void)
     {
       g_free (_gdk_display_arg_name);
       _gdk_display_arg_name = g_strdup (_gdk_display_name);
-      
+
       display = gdk_display_open (_gdk_display_name);
     }
-  
-  if (display)
-    gdk_display_manager_set_default_display (gdk_display_manager_get (),
-					     display);
-  
+
   return display;
 }
 
@@ -365,7 +360,7 @@ gdk_display_open_default_libgtk_only (void)
  */
 gboolean
 gdk_init_check (int    *argc,
-		char ***argv)
+                char ***argv)
 {
   gdk_parse_args (argc, argv);
 

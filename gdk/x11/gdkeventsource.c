@@ -414,36 +414,3 @@ gdk_event_source_select_events (GdkEventSource *source,
 
   XSelectInput (GDK_DISPLAY_XDISPLAY (source->display), window, xmask);
 }
-
-/**
- * gdk_events_pending:
- *
- * Checks if any events are ready to be processed for any display.
- *
- * Return value:  %TRUE if any events are pending.
- **/
-gboolean
-gdk_events_pending (void)
-{
-  GList *tmp_list;
-
-  for (tmp_list = event_sources; tmp_list; tmp_list = tmp_list->next)
-    {
-      GdkEventSource *tmp_source = tmp_list->data;
-      GdkDisplay *display = tmp_source->display;
-
-      if (_gdk_event_queue_find_first (display))
-	return TRUE;
-    }
-
-  for (tmp_list = event_sources; tmp_list; tmp_list = tmp_list->next)
-    {
-      GdkEventSource *tmp_source = tmp_list->data;
-      GdkDisplay *display = tmp_source->display;
-
-      if (gdk_check_xpending (display))
-	return TRUE;
-    }
-
-  return FALSE;
-}

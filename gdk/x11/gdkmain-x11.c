@@ -96,7 +96,7 @@ const GOptionEntry _gdk_windowing_args[] = {
 };
 
 void
-_gdk_windowing_init (void)
+_gdk_x11_windowing_init (void)
 {
   _gdk_x11_initialize_locale ();
 
@@ -222,21 +222,6 @@ _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
   else
     XDeleteProperty (display_x11->xdisplay, display_x11->leader_window,
 		     gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
-}
-
-/* Close all open displays
- */
-void
-_gdk_windowing_exit (void)
-{
-  GSList *tmp_list = _gdk_displays;
-    
-  while (tmp_list)
-    {
-      XCloseDisplay (GDK_DISPLAY_XDISPLAY (tmp_list->data));
-      
-      tmp_list = tmp_list->next;
-  }
 }
 
 /*
