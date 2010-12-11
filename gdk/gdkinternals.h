@@ -558,7 +558,6 @@ extern gint       _gdk_screen_number;
 extern gchar     *_gdk_display_arg_name;
 extern gboolean   _gdk_disable_multidevice;
 
-void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
 void _gdk_event_filter_unref        (GdkWindow      *window,
@@ -628,11 +627,7 @@ const char *_gdk_get_sm_client_id (void);
 
 void _gdk_cursor_destroy (GdkCursor *cursor);
 
-void     _gdk_windowing_init                    (void);
-
 extern const GOptionEntry _gdk_windowing_args[];
-void     _gdk_windowing_set_default_display     (GdkDisplay *display);
-
 gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
 					        gint         screen_number);
 
@@ -667,19 +662,8 @@ void _gdk_windowing_after_process_all_updates      (void);
 
 #define GDK_WINDOW_IS_MAPPED(window) (((window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
-
-/* Called when gdk_window_destroy() is called on a foreign window
- * or an ancestor of the foreign window. It should generally reparent
- * the window out of it's current heirarchy, hide it, and then
- * send a message to the owner requesting that the window be destroyed.
- */
-void _gdk_windowing_window_destroy_foreign (GdkWindow *window);
-
 void _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 					      const gchar *sm_client_id);
-
-void _gdk_windowing_window_set_composited (GdkWindow *window,
-					   gboolean composited);
 
 #define GDK_TYPE_PAINTABLE            (_gdk_paintable_get_type ())
 #define GDK_PAINTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PAINTABLE, GdkPaintable))
@@ -807,12 +791,6 @@ cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
                                                         gint       width,
                                                         gint       height);
 
-
-/************************************
- * Initialization and exit routines *
- ************************************/
-
-void _gdk_windowing_exit (void);
 
 G_END_DECLS
 
