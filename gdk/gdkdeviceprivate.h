@@ -20,8 +20,9 @@
 #ifndef __GDK_DEVICE_PRIVATE_H__
 #define __GDK_DEVICE_PRIVATE_H__
 
-#include <gdk/gdkdevice.h>
-#include <gdk/gdkevents.h>
+#include "gdkdevicemanager.h"
+#include "gdkdevice.h"
+#include "gdkevents.h"
 
 G_BEGIN_DECLS
 
@@ -31,21 +32,50 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDeviceClass GdkDeviceClass;
 
+typedef struct _GdkDeviceKey GdkDeviceKey;
+
+struct _GdkDeviceKey
+{
+  guint keyval;
+  GdkModifierType modifiers;
+};
+
+struct _GdkDevice
+{
+  GObject parent_instance;
+
+  gchar *name;
+  GdkInputSource source;
+  GdkInputMode mode;
+  gboolean has_cursor;
+  gint num_keys;
+  GdkDeviceKey *keys;
+  GdkDeviceManager *manager;
+  GdkDisplay *display;
+  /* Paired master for master,
+   * associated master for slaves
+   */
+  GdkDevice *associated;
+  GList *slaves;
+  GdkDeviceType type;
+  GArray *axes;
+};
+
 struct _GdkDeviceClass
 {
   GObjectClass parent_class;
 
-  gboolean (* get_history) (GdkDevice      *device,
-                            GdkWindow      *window,
-                            guint32         start,
-                            guint32         stop,
-                            GdkTimeCoord ***events,
-                            gint           *n_events);
+  gboolean (* get_history)   (GdkDevice      *device,
+                              GdkWindow      *window,
+                              guint32         start,
+                              guint32         stop,
+                              GdkTimeCoord ***events,
+                              gint           *n_events);
 
-  void (* get_state) (GdkDevice       *device,
-                      GdkWindow       *window,
-                      gdouble         *axes,
-                      GdkModifierType *mask);
+  void (* get_state)         (GdkDevice       *device,
+                              GdkWindow       *window,
+                              gdouble         *axes,
+                              GdkModifierType *mask);
 
   void (* set_window_cursor) (GdkDevice *device,
                               GdkWindow *window,
