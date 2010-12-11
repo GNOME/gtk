@@ -22,7 +22,7 @@
 #include "gdkdevicemanager-core.h"
 
 #include "gdktypes.h"
-#include "gdkdevicemanager.h"
+#include "gdkdevicemanagerprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkdevice-core.h"
 #include "gdkkeysyms.h"

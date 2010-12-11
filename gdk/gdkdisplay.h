@@ -34,10 +34,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkDisplayClass GdkDisplayClass;
-typedef struct _GdkDisplayPointerHooks GdkDisplayPointerHooks;
-typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
-
 #define GDK_TYPE_DISPLAY              (gdk_display_get_type ())
 #define GDK_DISPLAY_OBJECT(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY, GdkDisplay))
 #define GDK_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY, GdkDisplayClass))
@@ -45,76 +41,8 @@ typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
 #define GDK_IS_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY))
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
-/* Tracks information about the keyboard grab on this display */
-typedef struct
-{
-  GdkWindow *window;
-  GdkWindow *native_window;
-  gulong serial;
-  gboolean owner_events;
-  guint32 time;
-} GdkKeyboardGrabInfo;
-
-/* Tracks information about which window and position the pointer last was in.
- * This is useful when we need to synthesize events later.
- * Note that we track toplevel_under_pointer using enter/leave events,
- * so in the case of a grab, either with owner_events==FALSE or with the
- * pointer in no clients window the x/y coordinates may actually be outside
- * the window.
- */
-typedef struct
-{
-  GdkWindow *toplevel_under_pointer; /* The toplevel window with mouse inside, tracked via native events */
-  GdkWindow *window_under_pointer; /* The window that last got sent a normal enter event */
-  gdouble toplevel_x, toplevel_y; 
-  guint32 state;
-  guint32 button;
-} GdkPointerWindowInfo;
-
-typedef struct
-{
-  guint32 button_click_time[2];	/* The last 2 button click times. */
-  GdkWindow *button_window[2];  /* The last 2 windows to receive button presses. */
-  gint button_number[2];        /* The last 2 buttons to be pressed. */
-  gint button_x[2];             /* The last 2 button click positions. */
-  gint button_y[2];
-} GdkMultipleClickInfo;
-
-struct _GdkDisplay
-{
-  GObject parent_instance;
-
-  /*< private >*/
-  GList *GSEAL (queued_events);
-  GList *GSEAL (queued_tail);
-
-  /* Information for determining if the latest button click
-   * is part of a double-click or triple-click
-   */
-  GHashTable *GSEAL (multiple_click_info);
-
-  guint GSEAL (double_click_time);	/* Maximum time between clicks in msecs */
-  GdkDevice *GSEAL (core_pointer);	/* Core pointer device */
-
-  const GdkDisplayDeviceHooks *GSEAL (device_hooks); /* Current hooks for querying pointer */
-  
-  guint GSEAL (closed) : 1;		/* Whether this display has been closed */
-  guint GSEAL (ignore_core_events) : 1; /* Don't send core motion and button event */
-
-  guint GSEAL (double_click_distance);	/* Maximum distance between clicks in pixels */
-
-  GHashTable *GSEAL (device_grabs);
-  GHashTable *GSEAL (motion_hint_info);
-
-  /* Hashtable containing a GdkPointerWindowInfo for each device */
-  GHashTable *GSEAL (pointers_info);
-
-  /* Last reported event time from server */
-  guint32 GSEAL (last_event_time);
-
-  /* Device manager associated to the display */
-  GdkDeviceManager *GSEAL (device_manager);
-};
+typedef struct _GdkDisplayPointerHooks GdkDisplayPointerHooks;
+typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
 
 /**
  * GdkDisplayPointerHooks:

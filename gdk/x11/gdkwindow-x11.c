@@ -35,6 +35,7 @@
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
+#include "gdkvisualprivate.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkeventsource.h"

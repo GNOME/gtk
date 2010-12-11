@@ -1,7 +1,7 @@
 /*
  * gdkdisplay-x11.h
- * 
- * Copyright 2001 Sun Microsystems Inc. 
+ *
+ * Copyright 2001 Sun Microsystems Inc.
  *
  * Erwann Chenede <erwann.chenede@sun.com>
  *
@@ -24,11 +24,12 @@
 #ifndef __GDK_DISPLAY_X11__
 #define __GDK_DISPLAY_X11__
 
-#include <gdk/gdkdisplay.h>
-#include <gdk/gdkkeys.h>
-#include <gdk/gdkwindow.h>
-#include <gdk/gdkinternals.h>
-#include <gdk/gdkmain.h>
+#include "gdkdisplayprivate.h"
+#include "gdkkeys.h"
+#include "gdkwindow.h"
+#include "gdkinternals.h"
+#include "gdkmain.h"
+
 #include <X11/X.h>
 #include <X11/Xlib.h>
 
@@ -56,17 +57,17 @@ struct _GdkDisplayX11
   gint grab_count;
 
   /* Keyboard related information */
-
   gint xkb_event_type;
   gboolean use_xkb;
-  
+
   /* Whether we were able to turn on detectable-autorepeat using
    * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
-   * to checking the next event with XPending(). */
+   * to checking the next event with XPending().
+   */
   gboolean have_xkb_autorepeat;
 
   GdkKeymap *keymap;
-  guint	    keymap_serial;
+  guint      keymap_serial;
 
   gboolean have_xfixes;
   gint xfixes_event_base;
@@ -78,23 +79,22 @@ struct _GdkDisplayX11
   gboolean have_randr13;
   gint xrandr_event_base;
 
-  /* If the SECURITY extension is in place, whether this client holds 
-   * a trusted authorization and so is allowed to make various requests 
-   * (grabs, properties etc.) Otherwise always TRUE. */
+  /* If the SECURITY extension is in place, whether this client holds
+   * a trusted authorization and so is allowed to make various requests
+   * (grabs, properties etc.) Otherwise always TRUE.
+   */
   gboolean trusted_client;
 
   /* drag and drop information */
   GdkDragContext *current_dest_drag;
 
   /* data needed for MOTIF DnD */
-
   Window motif_drag_window;
   GdkWindow *motif_drag_gdk_window;
   GList **motif_target_lists;
   gint motif_n_target_lists;
 
   /* Mapping to/from virtual atoms */
-
   GHashTable *atom_from_virtual;
   GHashTable *atom_to_virtual;
 
@@ -102,13 +102,13 @@ struct _GdkDisplayX11
   Window leader_window;
   GdkWindow *leader_gdk_window;
   gboolean leader_window_title_set;
-  
+
   /* list of filters for client messages */
   GList *client_filters;
 
   /* List of functions to go from extension event => X window */
   GSList *event_types;
-  
+
   /* X ID hashtable */
   GHashTable *xid_ht;
 
@@ -151,10 +151,10 @@ struct _GdkDisplayX11Class
 
 GType      _gdk_display_x11_get_type            (void);
 GdkScreen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,
-						 Window       xrootwin);
+                                                 Window       xrootwin);
 void       _gdk_x11_display_error_event         (GdkDisplay  *display,
                                                  XErrorEvent *error);
 
 G_END_DECLS
 
-#endif				/* __GDK_DISPLAY_X11__ */
+#endif  /* __GDK_DISPLAY_X11__ */

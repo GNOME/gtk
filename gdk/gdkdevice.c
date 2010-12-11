@@ -19,10 +19,9 @@
 
 #include "config.h"
 
-#include "gdkdevice.h"
-
-#include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdisplayprivate.h"
+#include "gdkinternals.h"
 #include "gdkintl.h"
 
 typedef struct _GdkAxisInfo GdkAxisInfo;

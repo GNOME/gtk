@@ -31,9 +31,9 @@
 #ifndef __GDK_PRIVATE_X11_H__
 #define __GDK_PRIVATE_X11_H__
 
-#include <gdk/gdkcursor.h>
-#include <gdk/gdkprivate.h>
-#include <gdk/gdkinternals.h>
+#include "gdkcursor.h"
+#include "gdkprivate.h"
+#include "gdkinternals.h"
 #include "gdkwindow-x11.h"
 #include "gdkdisplay-x11.h"
 #include <cairo-xlib.h>

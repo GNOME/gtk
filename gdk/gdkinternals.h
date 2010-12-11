@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -30,8 +30,9 @@
 #define __GDK_INTERNALS_H__
 
 #include <gio/gio.h>
-#include <gdk/gdkwindowimpl.h>
-#include <gdk/gdkprivate.h>
+#include "gdkwindowimpl.h"
+#include "gdkdisplay.h"
+#include "gdkprivate.h"
 
 G_BEGIN_DECLS
 
@@ -42,8 +43,8 @@ G_BEGIN_DECLS
 /* Debugging support */
 
 typedef struct _GdkColorInfo           GdkColorInfo;
-typedef struct _GdkEventFilter	       GdkEventFilter;
-typedef struct _GdkClientFilter	       GdkClientFilter;
+typedef struct _GdkEventFilter         GdkEventFilter;
+typedef struct _GdkClientFilter        GdkClientFilter;
 
 typedef enum {
   GDK_COLOR_WRITEABLE = 1 << 0
@@ -78,26 +79,26 @@ typedef enum {
   GDK_DEBUG_DND           = 1 << 2,
   GDK_DEBUG_XIM           = 1 << 3,
   GDK_DEBUG_NOGRABS       = 1 << 4,
-  GDK_DEBUG_COLORMAP	  = 1 << 5,
-  GDK_DEBUG_INPUT	  = 1 << 6,
-  GDK_DEBUG_CURSOR	  = 1 << 7,
-  GDK_DEBUG_MULTIHEAD	  = 1 << 8,
-  GDK_DEBUG_XINERAMA	  = 1 << 9,
-  GDK_DEBUG_DRAW	  = 1 <<10,
+  GDK_DEBUG_COLORMAP      = 1 << 5,
+  GDK_DEBUG_INPUT         = 1 << 6,
+  GDK_DEBUG_CURSOR        = 1 << 7,
+  GDK_DEBUG_MULTIHEAD     = 1 << 8,
+  GDK_DEBUG_XINERAMA      = 1 << 9,
+  GDK_DEBUG_DRAW          = 1 <<10,
   GDK_DEBUG_EVENTLOOP     = 1 <<11
 } GdkDebugFlag;
 
 extern GList            *_gdk_default_filters;
-extern GdkWindow  	*_gdk_parent_root;
+extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
 extern gboolean _gdk_native_windows;
 
 #ifdef G_ENABLE_DEBUG
 
-#define GDK_NOTE(type,action)		     G_STMT_START { \
-    if (_gdk_debug_flags & GDK_DEBUG_##type)		    \
-       { action; };			     } G_STMT_END
+#define GDK_NOTE(type,action)                G_STMT_START { \
+    if (_gdk_debug_flags & GDK_DEBUG_##type)                \
+       { action; };                          } G_STMT_END
 
 #else /* !G_ENABLE_DEBUG */
 
@@ -157,29 +158,7 @@ struct _GdkEventPrivate
   GdkDevice *source_device;
 };
 
-/* Tracks information about the pointer grab on this display */
-typedef struct
-{
-  GdkWindow *window;
-  GdkWindow *native_window;
-  gulong serial_start;
-  gulong serial_end; /* exclusive, i.e. not active on serial_end */
-  gboolean owner_events;
-  guint event_mask;
-  gboolean implicit;
-  guint32 time;
-  GdkGrabOwnership ownership;
-
-  guint activated : 1;
-  guint implicit_ungrab : 1;
-} GdkDeviceGrabInfo;
-
 typedef struct _GdkWindowPaint GdkWindowPaint;
-
-typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
-                                               GdkDevice            *device,
-                                               GdkPointerWindowInfo *device_info,
-                                               gpointer              user_data);
 
 struct _GdkWindow
 {
@@ -269,290 +248,6 @@ struct _GdkWindow
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
 #define GDK_WINDOW_DESTROYED(d) (GDK_WINDOW (d)->destroyed)
 
-struct _GdkDisplayManager
-{
-  GObject parent_instance;
-};
-
-struct _GdkDisplayManagerClass
-{
-  GObjectClass parent_class;
-
-  GSList *     (*list_displays)       (GdkDisplayManager *manager);
-  GdkDisplay * (*get_default_display) (GdkDisplayManager *manager);
-  void         (*set_default_display) (GdkDisplayManager *manager,
-                                       GdkDisplay        *display);
-  GdkDisplay * (*open_display)        (GdkDisplayManager *manager,
-                                       const gchar       *name);
-
-  /* signals */
-  void         (*display_opened)      (GdkDisplayManager *manager,
-                                       GdkDisplay        *display);
-};
-
-struct _GdkDisplayClass
-{
-  GObjectClass parent_class;
-
-  G_CONST_RETURN gchar *     (*get_name)           (GdkDisplay *display);
-  gint			     (*get_n_screens)      (GdkDisplay *display);
-  GdkScreen *		     (*get_screen)         (GdkDisplay *display,
-						    gint        screen_num);
-  GdkScreen *		     (*get_default_screen) (GdkDisplay *display);
-  void                       (*beep)               (GdkDisplay *display);
-  void                       (*sync)               (GdkDisplay *display);
-  void                       (*flush)              (GdkDisplay *display);
-  gboolean                   (*has_pending)        (GdkDisplay *display);
-  void                       (*queue_events)       (GdkDisplay *display);
-  GdkWindow *                (*get_default_group)  (GdkDisplay *display);
-  gboolean                   (*supports_selection_notification) (GdkDisplay *display);
-  gboolean                   (*request_selection_notification)  (GdkDisplay *display,
-								 GdkAtom     selection);
-  gboolean                   (*supports_clipboard_persistence)  (GdkDisplay *display);
-  void                       (*store_clipboard)    (GdkDisplay    *display,
-						    GdkWindow     *clipboard_window,
-						    guint32        time_,
-						    const GdkAtom *targets,
-						    gint           n_targets);
-  gboolean                   (*supports_shapes)    (GdkDisplay *display);
-  gboolean                   (*supports_input_shapes) (GdkDisplay *display);
-  gboolean                   (*supports_composite) (GdkDisplay *display);
-  GList *                    (*list_devices)       (GdkDisplay *display);
-  gboolean                   (*send_client_message) (GdkDisplay     *display,
-						     GdkEvent       *event,
-						     GdkNativeWindow winid);
-  void                       (*add_client_message_filter) (GdkDisplay   *display,
-							   GdkAtom       message_type,
-							   GdkFilterFunc func,
-							   gpointer      data);
-  GdkAppLaunchContext *      (*get_app_launch_context) (GdkDisplay *display);
-  GdkNativeWindow            (*get_drag_protocol)      (GdkDisplay      *display,
-                                                        GdkNativeWindow  winid,
-                                                        GdkDragProtocol *protocol,
-                                                        guint           *version);
-
-
-  /* Signals */
-  void (*closed) (GdkDisplay *display,
-		  gboolean    is_error);
-};
-
-
-struct _GdkKeymapClass
-{
-  GObjectClass parent_class;
-
-  PangoDirection (* get_direction)      (GdkKeymap *keymap);
-  gboolean (* have_bidi_layouts)        (GdkKeymap *keymap);
-  gboolean (* get_caps_lock_state)      (GdkKeymap *keymap);
-  gboolean (* get_num_lock_state)       (GdkKeymap *keymap);
-  gboolean (* get_entries_for_keyval)   (GdkKeymap     *keymap,
-					 guint          keyval,
-					 GdkKeymapKey **keys,
-					 gint          *n_keys);
-  gboolean (* get_entries_for_keycode)  (GdkKeymap     *keymap,
-					 guint          hardware_keycode,
-					 GdkKeymapKey **keys,
-					 guint        **keyvals,
-					 gint          *n_entries);
-  guint (* lookup_key)                  (GdkKeymap          *keymap,
-					 const GdkKeymapKey *key);
-  gboolean (* translate_keyboard_state) (GdkKeymap       *keymap,
-					 guint            hardware_keycode,
-					 GdkModifierType  state,
-					 gint             group,
-					 guint           *keyval,
-					 gint            *effective_group,
-					 gint            *level,
-					 GdkModifierType *consumed_modifiers);
-  void (* add_virtual_modifiers)        (GdkKeymap       *keymap,
-					 GdkModifierType *state);
-  gboolean (* map_virtual_modifiers)    (GdkKeymap       *keymap,
-					 GdkModifierType *state);
-
-
-  /* Signals */
-  void (*direction_changed) (GdkKeymap *keymap);
-  void (*keys_changed)      (GdkKeymap *keymap);
-  void (*state_changed)     (GdkKeymap *keymap);
-};
-
-struct _GdkScreen
-{
-  GObject parent_instance;
-
-  guint closed : 1;
-
-  cairo_font_options_t *font_options;
-  double resolution; /* pixels/points scale factor for fonts */
-};
-
-struct _GdkScreenClass
-{
-  GObjectClass parent_class;
-
-  GdkDisplay * (* get_display)           (GdkScreen *screen);
-  gint         (* get_width)             (GdkScreen *screen);
-  gint         (* get_height)            (GdkScreen *screen);
-  gint         (* get_width_mm)          (GdkScreen *screen);
-  gint         (* get_height_mm)         (GdkScreen *screen);
-  gint         (* get_number)            (GdkScreen *screen);
-  GdkWindow *  (* get_root_window)       (GdkScreen *screen);
-  gint         (* get_n_monitors)        (GdkScreen *screen);
-  gint         (* get_primary_monitor)   (GdkScreen *screen);
-  gint         (* get_monitor_width_mm)	 (GdkScreen *screen,
-					  gint       monitor_num);
-  gint         (* get_monitor_height_mm) (GdkScreen *screen,
-					  gint       monitor_num);
-  gchar *      (* get_monitor_plug_name) (GdkScreen *screen,
-					  gint       monitor_num);
-  void         (* get_monitor_geometry)  (GdkScreen    *screen,
-					  gint          monitor_num,
-					  GdkRectangle *dest);
-  GList *      (* list_visuals)          (GdkScreen *screen);
-  GdkVisual *  (* get_system_visual)     (GdkScreen *screen);
-  GdkVisual *  (* get_rgba_visual)       (GdkScreen *screen);
-  gboolean     (* is_composited)         (GdkScreen *screen);
-  gchar *      (* make_display_name)     (GdkScreen *screen);
-  GdkWindow *  (* get_active_window)     (GdkScreen *screen);
-  GList *      (* get_window_stack)      (GdkScreen *screen);
-  void         (* broadcast_client_message) (GdkScreen *screen,
-					     GdkEvent  *event);
-  gboolean     (* get_setting)           (GdkScreen   *screen,
-					  const gchar *name,
-					  GValue      *value);
-  gint         (* visual_get_best_depth) (GdkScreen   *screen);
-  GdkVisualType (* visual_get_best_type) (GdkScreen   *screen);
-  GdkVisual *  (* visual_get_best)       (GdkScreen   *screen);
-  GdkVisual *  (* visual_get_best_with_depth) (GdkScreen   *screen,
-					       gint depth);
-  GdkVisual *  (* visual_get_best_with_type) (GdkScreen   *screen,
-					      GdkVisualType visual_type);
-  GdkVisual *  (* visual_get_best_with_both) (GdkScreen   *screen,
-					      gint depth,
-					      GdkVisualType visual_type);
-  void         (* query_depths)          (GdkScreen   *screen,
-					  gint **depths,
-					  gint  *count);
-  void         (* query_visual_types)    (GdkScreen   *screen,
-					  GdkVisualType **visual_types,
-					  gint           *count);
-
-
-  /* Signals: */
-  void (*size_changed) (GdkScreen *screen);
-  void (*composited_changed) (GdkScreen *screen);
-  void (*monitors_changed) (GdkScreen *screen);
-};
-
-struct _GdkDragContextClass {
-  GObjectClass parent_class;
-
-  GdkWindow * (*find_window)   (GdkDragContext  *context,
-                                GdkWindow       *drag_window,
-                                GdkScreen       *screen,
-                                gint             x_root,
-                                gint             y_root,
-                                GdkDragProtocol *protocol);
-  GdkAtom     (*get_selection) (GdkDragContext  *context);
-  gboolean    (*drag_motion)   (GdkDragContext  *context,
-                                GdkWindow       *dest_window,
-                                GdkDragProtocol  protocol,
-                                gint             root_x,
-                                gint             root_y,
-                                GdkDragAction    suggested_action,
-                                GdkDragAction    possible_actions,
-                                guint32          time_);
-  void        (*drag_status)   (GdkDragContext  *context,
-                                GdkDragAction    action,
-                                guint32          time_);
-  void        (*drag_abort)    (GdkDragContext  *context,
-                                guint32          time_);
-  void        (*drag_drop)     (GdkDragContext  *context,
-                                guint32          time_);
-  void        (*drop_reply)    (GdkDragContext  *context,
-                                gboolean         accept,
-                                guint32          time_);
-  void        (*drop_finish)   (GdkDragContext  *context,
-                                gboolean         success,
-                                guint32          time_);
-  gboolean    (*drop_status)   (GdkDragContext  *context);
-};
-
-struct _GdkDragContext {
-  GObject parent_instance;
-
-  GdkDragProtocol protocol;
-
-  gboolean is_source;
-  GdkWindow *source_window;
-  GdkWindow *dest_window;
-
-  GList *targets;
-  GdkDragAction actions;
-  GdkDragAction suggested_action;
-  GdkDragAction action;
-
-  guint32 start_time;
-
-  GdkDevice *device;
-};
-
-struct _GdkVisual
-{
-  GObject parent_instance;
-
-  GdkVisualType type;
-  gint depth;
-  GdkByteOrder byte_order;
-  gint colormap_size;
-  gint bits_per_rgb;
-
-  guint32 red_mask;
-  gint red_shift;
-  gint red_prec;
-
-  guint32 green_mask;
-  gint green_shift;
-  gint green_prec;
-
-  guint32 blue_mask;
-  gint blue_shift;
-  gint blue_prec;
-
-  GdkScreen *screen;
-};
-
-struct _GdkVisualClass
-{
-  GObjectClass parent_class;
-};
-
-struct _GdkDeviceManager
-{
-  GObject parent_instance;
-
-  GdkDisplay *display;
-};
-
-struct _GdkDeviceManagerClass
-{
-  GObjectClass parent_class;
-
-  /* Signals */
-  void (* device_added)   (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-  void (* device_removed) (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-  void (* device_changed) (GdkDeviceManager *device_manager,
-                           GdkDevice        *device);
-
-  /* VMethods */
-  GList * (* list_devices) (GdkDeviceManager *device_manager,
-                            GdkDeviceType     type);
-  GdkDevice * (* get_client_pointer) (GdkDeviceManager *device_manager);
-};
-
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;
 extern gchar     *_gdk_display_arg_name;
@@ -566,11 +261,11 @@ void _gdk_event_filter_unref        (GdkWindow      *window,
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
 void   _gdk_event_queue_remove_link  (GdkDisplay *display,
-				      GList      *node);
+                                      GList      *node);
 GList* _gdk_event_queue_prepend      (GdkDisplay *display,
-				      GdkEvent   *event);
+                                      GdkEvent   *event);
 GList* _gdk_event_queue_append       (GdkDisplay *display,
-				      GdkEvent   *event);
+                                      GdkEvent   *event);
 GList* _gdk_event_queue_insert_after (GdkDisplay *display,
                                       GdkEvent   *after_event,
                                       GdkEvent   *event);
@@ -578,7 +273,7 @@ GList* _gdk_event_queue_insert_before(GdkDisplay *display,
                                       GdkEvent   *after_event,
                                       GdkEvent   *event);
 void   _gdk_event_button_generate    (GdkDisplay *display,
-				      GdkEvent   *event);
+                                      GdkEvent   *event);
 
 void _gdk_windowing_event_data_copy (const GdkEvent *src,
                                      GdkEvent       *dst);
@@ -601,9 +296,9 @@ cairo_surface_t *
            _gdk_window_ref_cairo_surface (GdkWindow *window);
 
 void       _gdk_window_impl_new          (GdkWindow      *window,
-					  GdkWindow      *real_parent,
-					  GdkScreen      *screen,
-					  GdkEventMask    event_mask,
+                                          GdkWindow      *real_parent,
+                                          GdkScreen      *screen,
+                                          GdkEventMask    event_mask,
                                           GdkWindowAttr  *attributes,
                                           gint            attributes_mask);
 void       _gdk_window_destroy           (GdkWindow      *window,
@@ -629,20 +324,20 @@ void _gdk_cursor_destroy (GdkCursor *cursor);
 
 extern const GOptionEntry _gdk_windowing_args[];
 gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
-					        gint         screen_number);
+                                                gint         screen_number);
 
 gulong   _gdk_windowing_window_get_next_serial  (GdkDisplay *display);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
-						 gint       *x_offset,
-						 gint       *y_offset);
+                                                 gint       *x_offset,
+                                                 gint       *y_offset);
 
 
 void       _gdk_windowing_get_device_state   (GdkDisplay       *display,
                                               GdkDevice        *device,
-					      GdkScreen       **screen,
-					      gint             *x,
-					      gint             *y,
-					      GdkModifierType  *mask);
+                                              GdkScreen       **screen,
+                                              gint             *x,
+                                              gint             *y,
+                                              GdkModifierType  *mask);
 GdkWindow* _gdk_windowing_window_at_device_position  (GdkDisplay       *display,
                                                       GdkDevice        *device,
                                                       gint             *win_x,
@@ -650,9 +345,9 @@ GdkWindow* _gdk_windowing_window_at_device_position  (GdkDisplay       *display,
                                                       GdkModifierType  *mask,
                                                       gboolean          get_toplevel);
 void _gdk_windowing_got_event                (GdkDisplay       *display,
-					      GList            *event_link,
-					      GdkEvent         *event,
-					      gulong            serial);
+                                              GList            *event_link,
+                                              GdkEvent         *event,
+                                              gulong            serial);
 
 void _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
                                                     cairo_region_t *expose_region);
@@ -663,11 +358,11 @@ void _gdk_windowing_after_process_all_updates      (void);
 #define GDK_WINDOW_IS_MAPPED(window) (((window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
 
 void _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
-					      const gchar *sm_client_id);
+                                              const gchar *sm_client_id);
 
 #define GDK_TYPE_PAINTABLE            (_gdk_paintable_get_type ())
 #define GDK_PAINTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PAINTABLE, GdkPaintable))
-#define GDK_IS_PAINTABLE(obj)	      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_PAINTABLE))
+#define GDK_IS_PAINTABLE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_PAINTABLE))
 #define GDK_PAINTABLE_GET_IFACE(obj)  (G_TYPE_INSTANCE_GET_INTERFACE ((obj), GDK_TYPE_PAINTABLE, GdkPaintableIface))
 
 typedef struct _GdkPaintable        GdkPaintable;
@@ -685,76 +380,29 @@ struct _GdkPaintableIface
 
 GType _gdk_paintable_get_type (void) G_GNUC_CONST;
 
-struct GdkAppLaunchContextPrivate
-{
-  GdkDisplay *display;
-  GdkScreen *screen;
-  gint workspace;
-  guint32 timestamp;
-  GIcon *icon;
-  char *icon_name;
-};
-
-void _gdk_display_device_grab_update                     (GdkDisplay *display,
-                                                          GdkDevice  *device,
-                                                          GdkDevice  *source_device,
-                                                          gulong      current_serial);
-GdkDeviceGrabInfo  *_gdk_display_get_last_device_grab  (GdkDisplay *display,
-                                                        GdkDevice  *device);
-GdkDeviceGrabInfo  *_gdk_display_add_device_grab   (GdkDisplay       *display,
-                                                    GdkDevice        *device,
-						    GdkWindow        *window,
-						    GdkWindow        *native_window,
-                                                    GdkGrabOwnership  grab_ownership,
-						    gboolean          owner_events,
-						    GdkEventMask      event_mask,
-						    unsigned long     serial_start,
-						    guint32           time,
-						    gboolean          implicit);
-GdkDeviceGrabInfo  * _gdk_display_has_device_grab  (GdkDisplay *display,
-                                                    GdkDevice  *device,
-						    gulong      serial);
-gboolean _gdk_display_end_device_grab  (GdkDisplay *display,
-                                        GdkDevice  *device,
-					gulong      serial,
-					GdkWindow  *if_child,
-					gboolean    implicit);
-gboolean _gdk_display_check_grab_ownership (GdkDisplay *display,
-                                            GdkDevice  *device,
-                                            gulong      serial);
-void _gdk_display_enable_motion_hints     (GdkDisplay *display,
-                                           GdkDevice  *device);
-
-GdkPointerWindowInfo * _gdk_display_get_pointer_info (GdkDisplay *display,
-                                                      GdkDevice  *device);
-
-void _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
-                                        GdkDisplayPointerInfoForeach  func,
-                                        gpointer                      user_data);
-
 void _gdk_window_invalidate_for_expose (GdkWindow       *window,
-					cairo_region_t       *region);
+                                        cairo_region_t       *region);
 
 GdkWindow * _gdk_window_find_child_at (GdkWindow *window,
-				       int x, int y);
+                                       int x, int y);
 GdkWindow * _gdk_window_find_descendant_at (GdkWindow *toplevel,
-					    double x, double y,
-					    double *found_x,
-					    double *found_y);
+                                            double x, double y,
+                                            double *found_x,
+                                            double *found_y);
 
 void _gdk_window_add_damage (GdkWindow *toplevel,
-			     cairo_region_t *damaged_region);
+                             cairo_region_t *damaged_region);
 
 GdkEvent * _gdk_make_event (GdkWindow    *window,
-			    GdkEventType  type,
-			    GdkEvent     *event_in_queue,
-			    gboolean      before_event);
+                            GdkEventType  type,
+                            GdkEvent     *event_in_queue,
+                            gboolean      before_event);
 gboolean _gdk_window_event_parent_of (GdkWindow *parent,
                                       GdkWindow *child);
 
 void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
-				      GdkWindow                  *src,
-				      GdkWindow                  *dest,
+                                      GdkWindow                  *src,
+                                      GdkWindow                  *dest,
                                       GdkDevice                  *device,
                                       GdkDevice                  *source_device,
 				      GdkCrossingMode             mode,
@@ -767,7 +415,7 @@ void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				      gboolean                    non_linear);
 void _gdk_display_set_window_under_pointer (GdkDisplay *display,
                                             GdkDevice  *device,
-					    GdkWindow  *window);
+                                            GdkWindow  *window);
 
 
 void _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window);
@@ -785,8 +433,8 @@ GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
  *****************************/
 GType gdk_offscreen_window_get_type (void);
 void       _gdk_offscreen_window_new                 (GdkWindow     *window,
-						      GdkWindowAttr *attributes,
-						      gint           attributes_mask);
+                                                      GdkWindowAttr *attributes,
+                                                      gint           attributes_mask);
 cairo_surface_t * _gdk_offscreen_window_create_surface (GdkWindow *window,
                                                         gint       width,
                                                         gint       height);

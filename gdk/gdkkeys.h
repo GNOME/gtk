@@ -70,7 +70,6 @@ struct _GdkKeymapKey
 #define GDK_IS_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_KEYMAP))
 #define GDK_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_KEYMAP, GdkKeymapClass))
 
-typedef struct _GdkKeymap      GdkKeymap;
 typedef struct _GdkKeymapClass GdkKeymapClass;
 
 /**
@@ -83,11 +82,6 @@ typedef struct _GdkKeymapClass GdkKeymapClass;
  * state; the second phase is to look up the keycode/group/level triplet
  * in the keymap and see what keyval it corresponds to.
  */
-struct _GdkKeymap
-{
-  GObject     parent_instance;
-  GdkDisplay *GSEAL (display);
-};
 
 GType gdk_keymap_get_type (void) G_GNUC_CONST;
 

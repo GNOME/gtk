@@ -22,8 +22,7 @@
 
 #include "config.h"
 
-#include "gdkapplaunchcontext.h"
-#include "gdkinternals.h"
+#include "gdkapplaunchcontextprivate.h"
 
 #include "gdkx.h"
 #include "gdkscreen.h"
@@ -264,7 +263,6 @@ gdk_app_launch_context_x11_get_startup_notify_id (GAppLaunchContext *context,
                                                   GList             *files)
 {
   static int sequence = 0;
-  GdkAppLaunchContextPrivate *priv;
   GdkDisplay *display;
   GdkScreen *screen;
   int files_count;
@@ -278,14 +276,15 @@ gdk_app_launch_context_x11_get_startup_notify_id (GAppLaunchContext *context,
   guint32 timestamp;
   char *startup_id;
   GFileInfo *fileinfo;
+  GdkAppLaunchContext *ctx;
 
-  priv = GDK_APP_LAUNCH_CONTEXT (context)->priv;
+  ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
-  display = priv->display;
-  if (priv->screen)
-    screen = priv->screen;
+  display = ctx->display;
+  if (ctx->screen)
+    screen = ctx->screen;
   else
-    screen = gdk_display_get_default_screen (priv->display);
+    screen = gdk_display_get_default_screen (ctx->display);
 
   fileinfo = NULL;
 
@@ -315,14 +314,14 @@ gdk_app_launch_context_x11_get_startup_notify_id (GAppLaunchContext *context,
                                                 files_count), files_count);
 
   icon_name = NULL;
-  if (priv->icon_name)
-    icon_name = g_strdup (priv->icon_name);
+  if (ctx->icon_name)
+    icon_name = g_strdup (ctx->icon_name);
   else
     {
       icon = NULL;
 
-      if (priv->icon != NULL)
-        icon = g_object_ref (priv->icon);
+      if (ctx->icon != NULL)
+        icon = g_object_ref (ctx->icon);
       else if (files_count == 1)
         icon = get_icon (files->data, fileinfo);
 
@@ -340,13 +339,13 @@ gdk_app_launch_context_x11_get_startup_notify_id (GAppLaunchContext *context,
 
   binary_name = g_app_info_get_executable (info);
 
-  timestamp = priv->timestamp;
+  timestamp = ctx->timestamp;
   if (timestamp == GDK_CURRENT_TIME)
     timestamp = gdk_x11_display_get_user_time (display);
 
   screen_str = g_strdup_printf ("%d", gdk_screen_get_number (screen));
-  if (priv->workspace > -1)
-    workspace_str = g_strdup_printf ("%d", priv->workspace);
+  if (ctx->workspace > -1)
+    workspace_str = g_strdup_printf ("%d", ctx->workspace);
   else
     workspace_str = NULL;
 
@@ -392,18 +391,18 @@ static void
 gdk_app_launch_context_x11_launch_failed (GAppLaunchContext *context,
                                           const char        *startup_notify_id)
 {
-  GdkAppLaunchContextPrivate *priv;
+  GdkAppLaunchContext *ctx;
   GdkScreen *screen;
   StartupTimeoutData *data;
   StartupNotificationData *sn_data;
   GSList *l;
 
-  priv = GDK_APP_LAUNCH_CONTEXT (context)->priv;
+  ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
-  if (priv->screen)
-    screen = priv->screen;
+  if (ctx->screen)
+    screen = ctx->screen;
   else
-    screen = gdk_display_get_default_screen (priv->display);
+    screen = gdk_display_get_default_screen (ctx->display);
 
   data = g_object_get_data (G_OBJECT (screen), "appinfo-startup-data");
 
@@ -430,8 +429,8 @@ gdk_app_launch_context_x11_launch_failed (GAppLaunchContext *context,
     }
 }
 
-typedef struct GdkAppLaunchContext GdkAppLaunchContextX11;
-typedef struct GdkAppLaunchContextClass GdkAppLaunchContextX11Class;
+typedef GdkAppLaunchContext GdkAppLaunchContextX11;
+typedef GdkAppLaunchContextClass GdkAppLaunchContextX11Class;
 
 G_DEFINE_TYPE (GdkAppLaunchContextX11, _gdk_app_launch_context_x11, GDK_TYPE_APP_LAUNCH_CONTEXT)
 

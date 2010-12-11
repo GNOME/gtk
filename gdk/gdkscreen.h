@@ -44,7 +44,7 @@ typedef struct _GdkScreenClass GdkScreenClass;
 #define GDK_SCREEN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN, GdkScreenClass))
 
 GType        gdk_screen_get_type              (void) G_GNUC_CONST;
-GdkVisual*   gdk_screen_get_system_visual     (GdkScreen   *screen);
+GdkVisual *  gdk_screen_get_system_visual     (GdkScreen   *screen);
 GdkVisual *  gdk_screen_get_rgba_visual       (GdkScreen   *screen);
 gboolean     gdk_screen_is_composited	      (GdkScreen   *screen);
 

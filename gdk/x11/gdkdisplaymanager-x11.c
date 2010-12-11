@@ -26,7 +26,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 
-#include "gdkdisplaymanager.h"
+#include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
 
 #define GDK_TYPE_DISPLAY_MANAGER_X11    (gdk_display_manager_x11_get_type ())

@@ -27,10 +27,7 @@
 #include "config.h"
 
 #include "gdkconfig.h"
-#include "gdkdisplaymanager.h"
-
-#include "gdkscreen.h"
-#include "gdkdisplay.h"
+#include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
 #include "gdkintl.h"

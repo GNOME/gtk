@@ -19,10 +19,9 @@
 
 #include "config.h"
 
-#include "gdkdevicemanager.h"
-
+#include "gdkdevicemanagerprivate.h"
+#include "gdkdisplay.h"
 #include "gdkintl.h"
-#include "gdkinternals.h"
 
 
 /**

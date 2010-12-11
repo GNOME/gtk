@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gdkinternals.h"
+#include "gdkdisplayprivate.h"
 
 #include <string.h>
 #include <math.h>

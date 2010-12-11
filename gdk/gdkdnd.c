@@ -26,8 +26,7 @@
 
 #include "config.h"
 
-#include "gdkdnd.h"
-#include "gdkinternals.h"
+#include "gdkdndprivate.h"
 #include "gdkdisplay.h"
 #include "gdkwindow.h"
 

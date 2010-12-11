@@ -23,9 +23,8 @@
 
 #include "config.h"
 
-#include "gdkinternals.h"
-#include "gdkvisual.h"
-#include "gdkscreen.h"
+#include "gdkvisualprivate.h"
+#include "gdkscreenprivate.h"
 
 
 /**

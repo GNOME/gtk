@@ -26,7 +26,7 @@
 
 #include "config.h"
 
-#include "gdkdnd.h"
+#include "gdkdndprivate.h"
 
 #include "gdkmain.h"
 #include "gdkx.h"

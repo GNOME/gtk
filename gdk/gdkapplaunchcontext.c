@@ -22,9 +22,7 @@
 
 #include "config.h"
 
-#include "gdkapplaunchcontext.h"
-
-#include "gdkinternals.h"
+#include "gdkapplaunchcontextprivate.h"
 #include "gdkscreen.h"
 #include "gdkintl.h"
 
@@ -81,39 +79,29 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
   context_class->get_display = gdk_app_launch_context_get_display;
   context_class->get_startup_notify_id = gdk_app_launch_context_get_startup_notify_id;
   context_class->launch_failed = gdk_app_launch_context_launch_failed;
-
-  g_type_class_add_private (klass, sizeof (GdkAppLaunchContextPrivate));
 }
 
 static void
 gdk_app_launch_context_init (GdkAppLaunchContext *context)
 {
-  context->priv = G_TYPE_INSTANCE_GET_PRIVATE (context,
-                                               GDK_TYPE_APP_LAUNCH_CONTEXT,
-                                               GdkAppLaunchContextPrivate);
-  context->priv->workspace = -1;
+  context->workspace = -1;
 }
 
 static void
 gdk_app_launch_context_finalize (GObject *object)
 {
-  GdkAppLaunchContext *context;
-  GdkAppLaunchContextPrivate *priv;
+  GdkAppLaunchContext *context = GDK_APP_LAUNCH_CONTEXT (object);
 
-  context = GDK_APP_LAUNCH_CONTEXT (object);
+  if (context->display)
+    g_object_unref (context->display);
 
-  priv = context->priv;
+  if (context->screen)
+    g_object_unref (context->screen);
 
-  if (priv->display)
-    g_object_unref (priv->display);
+  if (context->icon)
+    g_object_unref (context->icon);
 
-  if (priv->screen)
-    g_object_unref (priv->screen);
-
-  if (priv->icon)
-    g_object_unref (priv->icon);
-
-  g_free (priv->icon_name);
+  g_free (context->icon_name);
 
   G_OBJECT_CLASS (gdk_app_launch_context_parent_class)->finalize (object);
 }
@@ -123,16 +111,14 @@ gdk_app_launch_context_get_display (GAppLaunchContext *context,
                                     GAppInfo          *info,
                                     GList             *files)
 {
+  GdkAppLaunchContext *ctx = GDK_APP_LAUNCH_CONTEXT (context);
   GdkDisplay *display;
-  GdkAppLaunchContextPrivate *priv;
 
-  priv = GDK_APP_LAUNCH_CONTEXT (context)->priv;
+  if (ctx->screen)
+    return gdk_screen_make_display_name (ctx->screen);
 
-  if (priv->screen)
-    return gdk_screen_make_display_name (priv->screen);
-
-  if (priv->display)
-    display = priv->display;
+  if (ctx->display)
+    display = ctx->display;
   else
     display = gdk_display_get_default ();
 
@@ -158,7 +144,7 @@ gdk_app_launch_context_set_display (GdkAppLaunchContext *context,
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
   g_return_if_fail (display == NULL || GDK_IS_DISPLAY (display));
 
-  g_warn_if_fail (display == NULL || display == context->priv->display);
+  g_warn_if_fail (display == NULL || display == context->display);
 }
 
 /**
@@ -182,16 +168,16 @@ gdk_app_launch_context_set_screen (GdkAppLaunchContext *context,
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
   g_return_if_fail (screen == NULL || GDK_IS_SCREEN (screen));
 
-  g_return_if_fail (screen == NULL || gdk_screen_get_display (screen) == context->priv->display);
+  g_return_if_fail (screen == NULL || gdk_screen_get_display (screen) == context->display);
 
-  if (context->priv->screen)
+  if (context->screen)
     {
-      g_object_unref (context->priv->screen);
-      context->priv->screen = NULL;
+      g_object_unref (context->screen);
+      context->screen = NULL;
     }
 
   if (screen)
-    context->priv->screen = g_object_ref (screen);
+    context->screen = g_object_ref (screen);
 }
 
 /**
@@ -217,7 +203,7 @@ gdk_app_launch_context_set_desktop (GdkAppLaunchContext *context,
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 
-  context->priv->workspace = desktop;
+  context->workspace = desktop;
 }
 
 /**
@@ -241,7 +227,7 @@ gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 
-  context->priv->timestamp = timestamp;
+  context->timestamp = timestamp;
 }
 
 /**
@@ -266,14 +252,14 @@ gdk_app_launch_context_set_icon (GdkAppLaunchContext *context,
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
   g_return_if_fail (icon == NULL || G_IS_ICON (icon));
 
-  if (context->priv->icon)
+  if (context->icon)
     {
-      g_object_unref (context->priv->icon);
-      context->priv->icon = NULL;
+      g_object_unref (context->icon);
+      context->icon = NULL;
     }
 
   if (icon)
-    context->priv->icon = g_object_ref (icon);
+    context->icon = g_object_ref (icon);
 }
 
 /**
@@ -298,8 +284,8 @@ gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
 {
   g_return_if_fail (GDK_IS_APP_LAUNCH_CONTEXT (context));
 
-  g_free (context->priv->icon_name);
-  context->priv->icon_name = g_strdup (icon_name);
+  g_free (context->icon_name);
+  context->icon_name = g_strdup (icon_name);
 }
 
 /**

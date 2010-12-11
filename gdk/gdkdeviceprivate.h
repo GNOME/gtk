@@ -20,8 +20,8 @@
 #ifndef __GDK_DEVICE_PRIVATE_H__
 #define __GDK_DEVICE_PRIVATE_H__
 
-#include "gdkdevicemanager.h"
 #include "gdkdevice.h"
+#include "gdkdevicemanager.h"
 #include "gdkevents.h"
 
 G_BEGIN_DECLS

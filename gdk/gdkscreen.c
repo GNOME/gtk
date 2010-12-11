@@ -23,9 +23,7 @@
 
 #include "config.h"
 
-#include "gdkscreen.h"
-#include "gdkinternals.h"
-
+#include "gdkscreenprivate.h"
 #include "gdkrectangle.h"
 #include "gdkwindow.h"
 #include "gdkintl.h"

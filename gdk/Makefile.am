@@ -96,9 +96,18 @@ gdk_built_public_sources =			\
 	gdkenumtypes.h
 
 gdk_private_headers =				\
-	gdkinternals.h				\
+	gdkapplaunchcontextprivate.h		\
+	gdkdevicemanagerprivate.h		\
 	gdkdeviceprivate.h			\
-	gdkintl.h
+	gdkdisplaymanagerprivate.h		\
+	gdkdisplayprivate.h			\
+	gdkdndprivate.h				\
+	gdkscreenprivate.h			\
+	gdkinternals.h				\
+	gdkintl.h				\
+	gdkkeysprivate.h			\
+	gdkvisualprivate.h			\
+	gdkpoly-generic.h
 
 gdk_c_sources =                 \
 	gdk.c			\

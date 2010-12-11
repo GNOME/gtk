@@ -24,6 +24,7 @@
 #include "config.h"
 
 #include "gdkdisplay.h"
+#include "gdkdisplayprivate.h"
 
 #include "gdkevents.h"
 #include "gdkwindowimpl.h"

@@ -26,11 +26,11 @@
 
 #include "config.h"
 
-#include "gdkx.h"
-#include "gdkprivate-x11.h"
-#include "gdkinternals.h"
-#include "gdkdisplay-x11.h"
+#include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"
+#include "gdkprivate-x11.h"
+#include "gdkdisplay-x11.h"
+#include "gdkx.h"
 
 #include <stdio.h>
 #include <stdlib.h>
