@@ -2682,14 +2682,14 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
 
       current_width += item->width;
 
-      max_height = MAX (max_height, item->height);
-
       if (items != first_item)
 	{
 	  if ((icon_view->priv->columns <= 0 && current_width > allocation.width) ||
 	      (icon_view->priv->columns > 0 && col >= icon_view->priv->columns))
 	    break;
 	}
+
+      max_height = MAX (max_height, item->height);
 
       current_width += icon_view->priv->column_spacing;
 
