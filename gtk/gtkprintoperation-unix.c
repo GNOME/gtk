@@ -633,7 +633,11 @@ handle_print_response (GtkWidget *dialog,
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup_set = gtk_print_unix_dialog_get_page_setup_set (GTK_PRINT_UNIX_DIALOG (pd));
-      
+
+      /* Set new print settings now so that custom-widget options
+       * can be added to the settings in the callback
+       */
+      gtk_print_operation_set_print_settings (rdata->op, settings);
       g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
     }
   
