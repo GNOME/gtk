@@ -172,7 +172,6 @@ struct _GtkTreeViewColumnPrivate
   guint reorderable         : 1;
   guint use_resized_width   : 1;
   guint expand              : 1;
-  guint resetting_context   : 1;
 };
 
 enum
@@ -1261,11 +1260,7 @@ gtk_tree_view_column_context_changed  (GtkCellAreaContext      *context,
       !strcmp (pspec->name, "natural-width") ||
       !strcmp (pspec->name, "minimum-height") ||
       !strcmp (pspec->name, "natural-height"))
-    {
-      tree_column->priv->resetting_context = TRUE;
-      _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
-      tree_column->priv->resetting_context = FALSE;
-    }
+    _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 }
 
 static void
@@ -2924,18 +2919,12 @@ _gtk_tree_view_column_cell_set_dirty (GtkTreeViewColumn *tree_column,
 
   /* Issue a manual reset on the context to have all
    * sizes re-requested for the context.
-   *
-   * This annoying 'resetting_context' flag is unfortunately
-   * necessary to prevent some infinite recursion
    */
-  if (!tree_column->priv->resetting_context)
-    {
-      g_signal_handler_block (priv->cell_area_context, 
-			      priv->context_changed_signal);
-      gtk_cell_area_context_reset (priv->cell_area_context);
-      g_signal_handler_unblock (priv->cell_area_context, 
-				priv->context_changed_signal);
-    }
+  g_signal_handler_block (priv->cell_area_context, 
+			  priv->context_changed_signal);
+  gtk_cell_area_context_reset (priv->cell_area_context);
+  g_signal_handler_unblock (priv->cell_area_context, 
+			    priv->context_changed_signal);
 
   if (priv->tree_view &&
       gtk_widget_get_realized (priv->tree_view))
