@@ -284,18 +284,35 @@ gtk_cell_area_context_real_reset (GtkCellAreaContext *context)
 {
   GtkCellAreaContextPrivate *priv = context->priv;
   
-  priv->min_width    = -1;
-  priv->nat_width    = -1;
-  priv->min_height   = -1;
-  priv->nat_height   = -1;
+  g_object_freeze_notify (G_OBJECT (context));
+
+  if (priv->min_width != -1)
+    {
+      priv->min_width = -1;
+      g_object_notify (G_OBJECT (context), "minimum-width");
+    }
+
+  if (priv->nat_width != -1)
+    {
+      priv->nat_width = -1;
+      g_object_notify (G_OBJECT (context), "natural-width");
+    }
+
+  if (priv->min_height != -1)
+    {
+      priv->min_height = -1;
+      g_object_notify (G_OBJECT (context), "minimum-height");
+    }
+
+  if (priv->nat_height != -1)
+    {
+      priv->nat_height = -1;
+      g_object_notify (G_OBJECT (context), "natural-height");
+    }
+
   priv->alloc_width  = 0;
   priv->alloc_height = 0;
 
-  g_object_freeze_notify (G_OBJECT (context));
-  g_object_notify (G_OBJECT (context), "minimum-width");
-  g_object_notify (G_OBJECT (context), "natural-width");
-  g_object_notify (G_OBJECT (context), "minimum-height");
-  g_object_notify (G_OBJECT (context), "natural-height");
   g_object_thaw_notify (G_OBJECT (context));
 }
 
