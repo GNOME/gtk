@@ -38,6 +38,6 @@ gchar              *_gdk_display_name = NULL;
 gint                _gdk_screen_number = -1;
 gchar              *_gdk_display_arg_name = NULL;
 gboolean            _gdk_native_windows = FALSE;
-gboolean            _gdk_enable_multidevice = FALSE;
+gboolean            _gdk_disable_multidevice = FALSE;
 
 GSList             *_gdk_displays = NULL;

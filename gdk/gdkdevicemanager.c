@@ -36,12 +36,13 @@
  *                    additional features such as sub-pixel positioning information and additional
  *                    device-dependent information.
  * @Title: GdkDeviceManager
- * @See_also: #GdkDevice, #GdkEvent, gdk_enable_multidevice()
+ * @See_also: #GdkDevice, #GdkEvent, gdk_disable_multidevice()
  *
- * By default, GDK supports the traditional single keyboard/pointer input scheme (Plus additional
- * special input devices such as tablets. In short, backwards compatible with 2.X). Since version 3.0,
- * if gdk_enable_multidevice() is called before gdk_display_open() and the platform supports it, GDK
- * will be aware of multiple keyboard/pointer pairs interacting simultaneously with the user interface.
+ * By default, and if the platform supports it, GDK is aware of multiple keyboard/pointer pairs
+ * and multitouch devices, this behavior can be changed by calling gdk_disable_multidevice()
+ * before gdk_display_open(), although there would be rarely a reason to do that. For a widget
+ * or window to be dealt as multipointer aware, gdk_window_set_support_multidevice() or
+ * gtk_widget_set_support_multidevice() must have been called on it.
  *
  * Conceptually, in multidevice mode there are 2 device types, virtual devices (or master devices)
  * are represented by the pointer cursors and keyboard foci that are seen on the screen. physical

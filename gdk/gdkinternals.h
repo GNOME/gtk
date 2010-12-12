@@ -272,7 +272,7 @@ extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;
 extern gchar     *_gdk_display_arg_name;
-extern gboolean   _gdk_enable_multidevice;
+extern gboolean   _gdk_disable_multidevice;
 
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
