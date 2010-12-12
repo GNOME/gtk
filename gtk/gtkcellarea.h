@@ -202,6 +202,8 @@ struct _GtkCellAreaClass
 
   /* Geometry */
   GtkCellAreaContext *(* create_context)                 (GtkCellArea             *area);
+  GtkCellAreaContext *(* copy_context)                   (GtkCellArea             *area,
+							  GtkCellAreaContext      *context);
   GtkSizeRequestMode (* get_request_mode)                (GtkCellArea             *area);
   void               (* get_preferred_width)             (GtkCellArea             *area,
 							  GtkCellAreaContext      *context,
@@ -316,6 +318,8 @@ GtkCellRenderer      *gtk_cell_area_get_cell_at_position           (GtkCellArea 
 
 /* Geometry */
 GtkCellAreaContext   *gtk_cell_area_create_context                 (GtkCellArea        *area);
+GtkCellAreaContext   *gtk_cell_area_copy_context                   (GtkCellArea        *area,
+								    GtkCellAreaContext *context);
 GtkSizeRequestMode    gtk_cell_area_get_request_mode               (GtkCellArea        *area);
 void                  gtk_cell_area_get_preferred_width            (GtkCellArea        *area,
 								    GtkCellAreaContext *context,

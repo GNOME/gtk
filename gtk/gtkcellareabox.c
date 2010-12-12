@@ -92,6 +92,8 @@ static void      gtk_cell_area_box_get_cell_property              (GtkCellArea  
 								   GValue               *value,
 								   GParamSpec           *pspec);
 static GtkCellAreaContext *gtk_cell_area_box_create_context       (GtkCellArea          *area);
+static GtkCellAreaContext *gtk_cell_area_box_copy_context         (GtkCellArea          *area,
+								   GtkCellAreaContext   *context);
 static GtkSizeRequestMode  gtk_cell_area_box_get_request_mode     (GtkCellArea          *area);
 static void      gtk_cell_area_box_get_preferred_width            (GtkCellArea          *area,
 								   GtkCellAreaContext   *context,
@@ -273,6 +275,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->get_cell_property   = gtk_cell_area_box_get_cell_property;
   
   area_class->create_context                 = gtk_cell_area_box_create_context;
+  area_class->copy_context                   = gtk_cell_area_box_copy_context;
   area_class->get_request_mode               = gtk_cell_area_box_get_request_mode;
   area_class->get_preferred_width            = gtk_cell_area_box_get_preferred_width;
   area_class->get_preferred_height           = gtk_cell_area_box_get_preferred_height;
@@ -1299,6 +1302,23 @@ gtk_cell_area_box_create_context (GtkCellArea *area)
   init_context_group (box, GTK_CELL_AREA_BOX_CONTEXT (context));
 
   return context;
+}
+
+static GtkCellAreaContext *
+gtk_cell_area_box_copy_context (GtkCellArea        *area,
+				GtkCellAreaContext *context)
+{
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  GtkCellAreaContext    *copy = 
+    (GtkCellAreaContext *)gtk_cell_area_box_context_copy (GTK_CELL_AREA_BOX (area), 
+							  GTK_CELL_AREA_BOX_CONTEXT (context));
+
+  priv->contexts = g_slist_prepend (priv->contexts, copy);
+
+  g_object_weak_ref (G_OBJECT (copy), (GWeakNotify)context_weak_notify, box);
+
+  return copy;
 }
 
 static GtkSizeRequestMode 

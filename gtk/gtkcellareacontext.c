@@ -490,6 +490,66 @@ gtk_cell_area_context_get_preferred_height (GtkCellAreaContext *context,
 }
 
 /**
+ * gtk_cell_area_context_get_preferred_height_for_width:
+ * @context: a #GtkCellAreaContext
+ * @width: a proposed width for allocation
+ * @minimum_height: (out) (allow-none): location to store the minimum height, or %NULL
+ * @natural_height: (out) (allow-none): location to store the natural height, or %NULL
+ *
+ * Gets the accumulative preferred height for @width for all rows which have been 
+ * requested for the same said @width with this context.
+ *
+ * After gtk_cell_area_context_reset() is called and/or before ever requesting
+ * the size of a #GtkCellArea, the returned values are -1.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_area_context_get_preferred_height_for_width (GtkCellAreaContext *context,
+						      gint                width,
+						      gint               *minimum_height,
+						      gint               *natural_height)
+{
+  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
+
+  if (GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->get_preferred_height_for_width)
+    GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->get_preferred_height_for_width (context,
+									       width,
+									       minimum_height,
+									       natural_height);
+}
+
+/**
+ * gtk_cell_area_context_get_preferred_width_for_height:
+ * @context: a #GtkCellAreaContext
+ * @height: a proposed height for allocation
+ * @minimum_width: (out) (allow-none): location to store the minimum width, or %NULL
+ * @natural_width: (out) (allow-none): location to store the natural width, or %NULL
+ *
+ * Gets the accumulative preferred width for @height for all rows which have 
+ * been requested for the same said @height with this context.
+ *
+ * After gtk_cell_area_context_reset() is called and/or before ever requesting
+ * the size of a #GtkCellArea, the returned values are -1.
+ *
+ * Since: 3.0 
+ */
+void
+gtk_cell_area_context_get_preferred_width_for_height (GtkCellAreaContext *context,
+						      gint                height,
+						      gint               *minimum_width,
+						      gint               *natural_width)
+{  
+  g_return_if_fail (GTK_IS_CELL_AREA_CONTEXT (context));
+
+  if (GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->get_preferred_width_for_height)
+    GTK_CELL_AREA_CONTEXT_GET_CLASS (context)->get_preferred_width_for_height (context,
+									       height,
+									       minimum_width,
+									       natural_width);
+}
+
+/**
  * gtk_cell_area_context_get_allocation:
  * @context: a #GtkCellAreaContext
  * @width: (out) (allow-none): location to store the allocated width, or %NULL.

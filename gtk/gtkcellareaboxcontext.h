@@ -62,6 +62,10 @@ struct _GtkCellAreaBoxContextClass
 GType   gtk_cell_area_box_context_get_type                     (void) G_GNUC_CONST;
 
 
+/* Create a duplicate of the context */
+GtkCellAreaBoxContext *gtk_cell_area_box_context_copy          (GtkCellAreaBox        *box,
+								GtkCellAreaBoxContext *box_context);
+
 /* Initialize group array dimensions */
 void    gtk_cell_area_box_init_groups                          (GtkCellAreaBoxContext *box_context,
 								guint                  n_groups,

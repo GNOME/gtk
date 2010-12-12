@@ -1924,6 +1924,46 @@ gtk_cell_area_create_context (GtkCellArea *area)
   return NULL;
 }
 
+/**
+ * gtk_cell_area_copy_context:
+ * @area: a #GtkCellArea
+ * @context: the #GtkCellAreaContext to copy
+ *
+ * This is sometimes needed for cases where rows need to share
+ * alignments in one orientation but may be separately grouped
+ * in the opposing orientation.
+ *
+ * For instance, #GtkIconView creates all icons (rows) to have
+ * the same width and the cells theirin to have the same
+ * horizontal alignments. However each row of icons may have
+ * a separate collective height. #GtkIconView uses this to
+ * request the heights of each row based on a context which
+ * was already used to request all the row widths that are
+ * to be displayed.
+ *
+ * Return value: (transfer full): a newly created #GtkCellAreaContext copy of @context.
+ *
+ * Since: 3.0
+ */
+GtkCellAreaContext *
+gtk_cell_area_copy_context (GtkCellArea        *area,
+			    GtkCellAreaContext *context)
+{
+  GtkCellAreaClass *class;
+
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+  g_return_val_if_fail (GTK_IS_CELL_AREA_CONTEXT (context), NULL);
+
+  class = GTK_CELL_AREA_GET_CLASS (area);
+
+  if (class->copy_context)
+    return class->copy_context (area, context);
+
+  g_warning ("GtkCellAreaClass::copy_context not implemented for `%s'", 
+	     g_type_name (G_TYPE_FROM_INSTANCE (area)));
+  
+  return NULL;
+}
 
 /**
  * gtk_cell_area_get_request_mode:
