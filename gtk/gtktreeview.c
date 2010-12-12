@@ -13513,13 +13513,21 @@ gtk_tree_view_get_cell_area_height (GtkTreeView *tree_view,
                                     GtkRBNode   *node,
                                     gint         vertical_separator)
 {
+  int height;
+
   /* The "cell" areas are the cell_area passed in to gtk_cell_renderer_render(),
    * i.e. just the cells, no spacing.
    *
-   * The cell area height is at least expander_size - vertical_separator;
+   * The cell area height is at least expander_size - vertical_separator.
+   * For regular nodes, the height is then at least expander_size. We should
+   * be able to enforce the expander_size minimum here, because this
+   * function will not be called for irregular (e.g. separator) rows.
    */
+  height = gtk_tree_view_get_row_height (tree_view, node);
+  if (height < tree_view->priv->expander_size)
+    height = tree_view->priv->expander_size;
 
-  return gtk_tree_view_get_row_height (tree_view, node) - vertical_separator;
+  return height - vertical_separator;
 }
 
 static inline gint
@@ -13634,10 +13642,13 @@ gtk_tree_view_get_row_height (GtkTreeView *tree_view,
   /* The "background" areas of all rows/cells add up to cover the entire tree.
    * The background includes all inter-row and inter-cell spacing.
    *
-   * The height of a row is at least "expander_size".
+   * If the row pointed at by node does not have a height set, we default
+   * to expander_size, which is the minimum height for regular nodes.
+   * Non-regular nodes (e.g. separators) can have a height set smaller
+   * than expander_size and should not be overruled here.
    */
   height = GTK_RBNODE_GET_HEIGHT (node);
-  if (height < tree_view->priv->expander_size)
+  if (height <= 0)
     height = tree_view->priv->expander_size;
 
   return height;
