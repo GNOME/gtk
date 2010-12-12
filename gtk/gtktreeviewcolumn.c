@@ -1472,34 +1472,19 @@ _gtk_tree_view_column_get_edited_cell (GtkTreeViewColumn *column)
 
 GtkCellRenderer *
 _gtk_tree_view_column_get_cell_at_pos (GtkTreeViewColumn *column,
-                                       gint               x)
+                                       GdkRectangle      *cell_area,
+                                       gint               x,
+                                       gint               y)
 {
-  GList *list;
-  GList *cell;
   GtkCellRenderer *match = NULL;
   GtkTreeViewColumnPrivate *priv = column->priv;
 
-  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
-  for (cell = list; cell; cell = cell->next)
-    {
-      GdkRectangle zero_cell_area = { 0, };
-      GdkRectangle allocation;
-
-      gtk_cell_area_get_cell_allocation (priv->cell_area,
-                                         priv->cell_area_context,
-                                         priv->tree_view,
-                                         cell->data,
-                                         &zero_cell_area,
-                                         &allocation);
-
-      if (allocation.x <= x && x <= allocation.x + allocation.width)
-        {
-          match = cell->data;
-          break;
-        }
-    }
-
-  g_list_free (list);
+  match = gtk_cell_area_get_cell_at_position (priv->cell_area,
+                                              priv->cell_area_context,
+                                              priv->tree_view,
+                                              cell_area,
+                                              x, y,
+                                              NULL);
 
   return match;
 }

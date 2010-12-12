@@ -3128,9 +3128,15 @@ gtk_tree_view_button_press (GtkWidget      *widget,
           if ((event->state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
             tree_view->priv->shift_pressed = TRUE;
 
-
-	  /* This needs an x and a y ! */
-          focus_cell = _gtk_tree_view_column_get_cell_at_pos (column, event->x - background_area.x);
+          /* We update the focus cell here, this is also needed if the
+           * column does not contain an editable cell.  In this case,
+           * GtkCellArea did not receive the event for processing (and
+           * could not update the focus cell).
+           */
+          focus_cell = _gtk_tree_view_column_get_cell_at_pos (column,
+                                                              &cell_area,
+                                                              event->x,
+                                                              event->y);
 
           if (focus_cell)
             gtk_tree_view_column_focus_cell (column, focus_cell);

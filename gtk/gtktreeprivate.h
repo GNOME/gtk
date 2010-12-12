@@ -122,7 +122,9 @@ gboolean _gtk_tree_view_column_cell_event   (GtkTreeViewColumn  *tree_column,
 gboolean          _gtk_tree_view_column_has_editable_cell(GtkTreeViewColumn  *column);
 GtkCellRenderer  *_gtk_tree_view_column_get_edited_cell  (GtkTreeViewColumn  *column);
 GtkCellRenderer  *_gtk_tree_view_column_get_cell_at_pos  (GtkTreeViewColumn  *column,
-							  gint                x);
+                                                          GdkRectangle       *cell_area,
+                                                          gint                x,
+                                                          gint                y);
 
 void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
 							  cairo_t            *cr,
