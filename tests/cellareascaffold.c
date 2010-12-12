@@ -848,7 +848,8 @@ cell_area_scaffold_activate (CellAreaScaffold *scaffold)
 	  cell_area.height = data->size;
 
 	  gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
-	  gtk_cell_area_activate (priv->area, priv->context, widget, &cell_area, GTK_CELL_RENDERER_FOCUSED);
+	  gtk_cell_area_activate (priv->area, priv->context, widget, &cell_area, 
+				  GTK_CELL_RENDERER_FOCUSED, FALSE);
 
 	  break;
 	}

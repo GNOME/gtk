@@ -874,7 +874,8 @@ static void     gtk_tree_view_put                       (GtkTreeView      *tree_
 							 gint              width,
 							 gint              height);
 static gboolean gtk_tree_view_start_editing             (GtkTreeView      *tree_view,
-							 GtkTreePath      *cursor_path);
+							 GtkTreePath      *cursor_path,
+							 gboolean          edit_only);
 static void gtk_tree_view_stop_editing                  (GtkTreeView *tree_view,
 							 gboolean     cancel_editing);
 static gboolean gtk_tree_view_real_start_interactive_search (GtkTreeView *tree_view,
@@ -10615,7 +10616,7 @@ gtk_tree_view_real_select_cursor_row (GtkTreeView *tree_view,
   if (!tree_view->priv->shift_pressed && start_editing &&
       tree_view->priv->focus_column)
     {
-      if (gtk_tree_view_start_editing (tree_view, cursor_path))
+      if (gtk_tree_view_start_editing (tree_view, cursor_path, FALSE))
 	{
 	  gtk_tree_path_free (cursor_path);
 	  return TRUE;
@@ -13348,7 +13349,7 @@ gtk_tree_view_set_cursor_on_cell (GtkTreeView       *tree_view,
       if (focus_cell)
 	gtk_tree_view_column_focus_cell (focus_column, focus_cell);
       if (start_editing)
-	gtk_tree_view_start_editing (tree_view, path);
+	gtk_tree_view_start_editing (tree_view, path, TRUE);
     }
 }
 
@@ -15374,7 +15375,8 @@ _gtk_tree_view_remove_editable (GtkTreeView       *tree_view,
 
 static gboolean
 gtk_tree_view_start_editing (GtkTreeView *tree_view,
-			     GtkTreePath *cursor_path)
+			     GtkTreePath *cursor_path,
+			     gboolean     edit_only)
 {
   GtkTreeIter iter;
   GdkRectangle cell_area;
@@ -15414,7 +15416,7 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
                               _gtk_tree_view_column_get_context (focus_column),
                               GTK_WIDGET (tree_view),
                               &cell_area,
-                              flags))
+                              flags, edit_only))
     retval = TRUE;
 
   return retval;

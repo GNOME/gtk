@@ -246,7 +246,8 @@ struct _GtkCellAreaClass
 							  GtkCellAreaContext      *context,
 							  GtkWidget               *widget,
 							  const GdkRectangle      *cell_area,
-							  GtkCellRendererState     flags);
+							  GtkCellRendererState     flags,
+							  gboolean                 edit_only);
 
   /*< private >*/
 
@@ -398,7 +399,8 @@ gboolean              gtk_cell_area_activate                       (GtkCellArea 
 								    GtkCellAreaContext  *context,
 								    GtkWidget           *widget,
 								    const GdkRectangle  *cell_area,
-								    GtkCellRendererState flags);
+								    GtkCellRendererState flags,
+								    gboolean             edit_only);
 gboolean              gtk_cell_area_focus                          (GtkCellArea         *area,
 								    GtkDirectionType     direction);
 void                  gtk_cell_area_set_focus_cell                 (GtkCellArea          *area,

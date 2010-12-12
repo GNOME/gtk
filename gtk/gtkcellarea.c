@@ -401,7 +401,8 @@ static gboolean  gtk_cell_area_real_activate                       (GtkCellArea 
 								    GtkCellAreaContext    *context,
 								    GtkWidget             *widget,
 								    const GdkRectangle    *cell_area,
-								    GtkCellRendererState   flags);
+								    GtkCellRendererState   flags,
+								    gboolean               edit_only);
 
 /* GtkCellLayoutIface */
 static void      gtk_cell_area_cell_layout_init              (GtkCellLayoutIface    *iface);
@@ -1254,14 +1255,23 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
 			     GtkCellAreaContext  *context,
 			     GtkWidget           *widget,
 			     const GdkRectangle  *cell_area,
-			     GtkCellRendererState flags)
+			     GtkCellRendererState flags,
+			     gboolean             edit_only)
 {
   GtkCellAreaPrivate *priv = area->priv;
   GdkRectangle        renderer_area;
   GtkCellRenderer    *activate_cell = NULL;
+  GtkCellRendererMode mode;
 
   if (priv->focus_cell)
-    activate_cell = priv->focus_cell;
+    {
+      g_object_get (priv->focus_cell, "mode", &mode, NULL);
+
+      if (gtk_cell_renderer_get_visible (priv->focus_cell) &&
+	  (edit_only ? mode == GTK_CELL_RENDERER_MODE_EDITABLE :
+	   mode != GTK_CELL_RENDERER_MODE_INERT))
+	activate_cell = priv->focus_cell;
+    }
   else
     {
       GList *cells, *l;
@@ -1274,12 +1284,15 @@ gtk_cell_area_real_activate (GtkCellArea         *area,
 	{
 	  GtkCellRenderer *renderer = l->data;
 
-	  if (gtk_cell_renderer_is_activatable (renderer))
+	  g_object_get (renderer, "mode", &mode, NULL);
+
+	  if (gtk_cell_renderer_get_visible (renderer) &&
+	      (edit_only ? mode == GTK_CELL_RENDERER_MODE_EDITABLE :
+	       mode != GTK_CELL_RENDERER_MODE_INERT))
 	    activate_cell = renderer;
 	}
       g_list_free (cells);
     }
-  
 
   if (activate_cell)
     {
@@ -2813,6 +2826,8 @@ gtk_cell_area_focus (GtkCellArea      *area,
  * @widget: the #GtkWidget that @area is rendering on
  * @cell_area: the size and location of @area relative to @widget's allocation
  * @flags: the #GtkCellRendererState flags for @area for this row of data.
+ * @edit_only: if %TRUE then only cell renderers that are %GTK_CELL_RENDERER_MODE_EDITABLE
+ *             will be activated.
  *
  * Activates @area, usually by activating the currently focused
  * cell, however some subclasses which embed widgets in the area
@@ -2827,11 +2842,12 @@ gtk_cell_area_activate (GtkCellArea         *area,
 			GtkCellAreaContext  *context,
 			GtkWidget           *widget,
 			const GdkRectangle  *cell_area,
-			GtkCellRendererState flags)
+			GtkCellRendererState flags,
+			gboolean             edit_only)
 {
   g_return_val_if_fail (GTK_IS_CELL_AREA (area), FALSE);
 
-  return GTK_CELL_AREA_GET_CLASS (area)->activate (area, context, widget, cell_area, flags);
+  return GTK_CELL_AREA_GET_CLASS (area)->activate (area, context, widget, cell_area, flags, edit_only);
 }
 
 
