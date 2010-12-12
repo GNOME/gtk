@@ -1479,6 +1479,14 @@ _gtk_tree_view_column_get_cell_at_pos (GtkTreeViewColumn *column,
   GtkCellRenderer *match = NULL;
   GtkTreeViewColumnPrivate *priv = column->priv;
 
+  if (x < cell_area->x)
+    {
+      /* This can happen when we click in the "indentation".  In this
+       * case, we set x to cell_area->x, the start of the first cell.
+       */
+      x = cell_area->x;
+    }
+
   match = gtk_cell_area_get_cell_at_position (priv->cell_area,
                                               priv->cell_area_context,
                                               priv->tree_view,
