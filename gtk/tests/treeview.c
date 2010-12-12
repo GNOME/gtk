@@ -176,7 +176,7 @@ test_row_separator_height (void)
   GtkListStore *store;
   GtkWidget *window;
   GtkWidget *tree_view;
-  GdkRectangle rect;
+  GdkRectangle rect, cell_rect;
 
   store = gtk_list_store_new (1, G_TYPE_STRING);
   gtk_list_store_insert_with_values (store, &iter, 0, 0, "Row content", -1);
@@ -201,12 +201,14 @@ test_row_separator_height (void)
                                                NULL);
 
   gtk_container_add (GTK_CONTAINER (window), tree_view);
-  gtk_widget_show (window);
+  gtk_widget_show_all (window);
 
 
   path = gtk_tree_path_new_from_indices (2, -1);
   gtk_tree_view_get_background_area (GTK_TREE_VIEW (tree_view),
                                      path, NULL, &rect);
+  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (tree_view),
+                               path, NULL, &cell_rect);
   gtk_tree_path_free (path);
 
   gtk_widget_style_get (tree_view,
@@ -221,6 +223,7 @@ test_row_separator_height (void)
     height = 2 + 2 * focus_pad;
 
   g_assert_cmpint (rect.height, ==, height);
+  g_assert_cmpint (cell_rect.height, ==, height);
 
   gtk_widget_destroy (tree_view);
 }

@@ -13604,10 +13604,21 @@ gtk_tree_view_get_cell_area (GtkTreeView        *tree_view,
       if ((!ret && tree == NULL) || ret)
 	return;
 
-      rect->y = gtk_tree_view_get_cell_area_y_offset (tree_view, tree, node,
-                                                      vertical_separator);
-      rect->height = gtk_tree_view_get_cell_area_height (tree_view, node,
-                                                         vertical_separator);
+      if (row_is_separator (tree_view, NULL, path))
+        {
+          /* There isn't really a "cell area" for separator, so we
+           * return the y, height values for background area instead.
+           */
+          rect->y = gtk_tree_view_get_row_y_offset (tree_view, tree, node);
+          rect->height = gtk_tree_view_get_row_height (tree_view, node);
+        }
+      else
+        {
+          rect->y = gtk_tree_view_get_cell_area_y_offset (tree_view, tree, node,
+                                                          vertical_separator);
+          rect->height = gtk_tree_view_get_cell_area_height (tree_view, node,
+                                                             vertical_separator);
+        }
 
       if (column &&
 	  gtk_tree_view_is_expander_column (tree_view, column))
