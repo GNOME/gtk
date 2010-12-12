@@ -34,6 +34,7 @@
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
 #include "gtkiconfactory.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkstylecontext
@@ -2982,8 +2983,7 @@ _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context)
 
 void
 _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
-                                             gint             rel_x,
-                                             gint             rel_y)
+					     GtkWidget       *widget)
 {
   GtkStyleContextPrivate *priv;
   GSList *l;
@@ -2998,6 +2998,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
   while (l)
     {
       AnimationInfo *info;
+      gint rel_x, rel_y;
       GSList *cur;
       guint i;
 
@@ -3017,6 +3018,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
         }
 
       info->invalidation_region = cairo_region_create ();
+      _gtk_widget_get_translation_to_window (widget, info->window, &rel_x, &rel_y);
 
       for (i = 0; i < info->rectangles->len; i++)
         {

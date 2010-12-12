@@ -459,8 +459,7 @@ const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                        GParamSpec      *pspec);
 void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);
 void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,
-                                                              gint             rel_x,
-                                                              gint             rel_y);
+							      GtkWidget       *widget);
 
 void gtk_style_context_invalidate (GtkStyleContext *context);
 void gtk_style_context_reset_widgets (GdkScreen *screen);

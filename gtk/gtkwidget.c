@@ -5564,9 +5564,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
     }
 
   context = gtk_widget_get_style_context (widget);
-  _gtk_style_context_coalesce_animation_areas (context,
-                                               widget->priv->allocation.x,
-                                               widget->priv->allocation.y);
+  _gtk_style_context_coalesce_animation_areas (context, widget);
 }
 
 /**
@@ -5688,11 +5686,11 @@ gtk_widget_event (GtkWidget *widget,
 }
 
 /* Returns TRUE if a translation should be done */
-static gboolean
-gtk_widget_get_translation_to_window (GtkWidget      *widget,
-                                      GdkWindow      *window,
-                                      int            *x,
-                                      int            *y)
+gboolean
+_gtk_widget_get_translation_to_window (GtkWidget      *widget,
+				       GdkWindow      *window,
+				       int            *x,
+				       int            *y)
 {
   GdkWindow *w, *widget_window;
 
@@ -5755,7 +5753,7 @@ gtk_cairo_transform_to_window (cairo_t   *cr,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (gtk_widget_get_translation_to_window (widget, window, &x, &y))
+  if (_gtk_widget_get_translation_to_window (widget, window, &x, &y))
     cairo_translate (cr, x, y);
 }
 
@@ -5798,9 +5796,9 @@ gtk_widget_send_expose (GtkWidget *widget,
   gdk_cairo_region (cr, event->expose.region);
   cairo_clip (cr);
 
-  do_clip = gtk_widget_get_translation_to_window (widget,
-                                                  event->expose.window,
-                                                  &x, &y);
+  do_clip = _gtk_widget_get_translation_to_window (widget,
+						   event->expose.window,
+						   &x, &y);
   cairo_translate (cr, -x, -y);
 
   _gtk_widget_draw_internal (widget, cr, do_clip);
