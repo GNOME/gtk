@@ -97,6 +97,11 @@ struct _GtkIconViewPrivate
   GtkCellArea        *cell_area;
   GtkCellAreaContext *cell_area_context;
 
+  gulong              add_editable_id;
+  gulong              remove_editable_id;
+  gulong              focus_changed_id;
+  gulong              context_changed_id;
+
   gint width, height;
 
   GtkSelectionMode selection_mode;
@@ -114,7 +119,6 @@ struct _GtkIconViewPrivate
 
   guint layout_idle_id;
   
-  gboolean doing_rubberband;
   gint rubberband_x1, rubberband_y1;
   gint rubberband_x2, rubberband_y2;
   GdkDevice *rubberband_device;
@@ -125,8 +129,6 @@ struct _GtkIconViewPrivate
 
   GtkIconViewItem *anchor_item;
   GtkIconViewItem *cursor_item;
-  GtkIconViewItem *edited_item;
-  GtkCellEditable *editable;
 
   GtkIconViewItem *last_single_clicked;
 
@@ -144,8 +146,8 @@ struct _GtkIconViewPrivate
   gint markup_column;
   gint pixbuf_column;
 
-  gint pixbuf_cell;
-  gint text_cell;
+  GtkCellRenderer *pixbuf_cell;
+  GtkCellRenderer *text_cell;
 
   gint tooltip_column;
 
@@ -181,6 +183,9 @@ struct _GtkIconViewPrivate
    * driving the scrollable adjustment values */
   guint hscroll_policy : 1;
   guint vscroll_policy : 1;
+
+  guint doing_rubberband : 1;
+
 };
 
 /* Signals */
@@ -371,19 +376,21 @@ static GtkCellArea         *gtk_icon_view_cell_layout_get_area           (GtkCel
 
 static void                 gtk_icon_view_item_selected_changed          (GtkIconView            *icon_view,
 		                                                          GtkIconViewItem        *item);
-static void                 gtk_icon_view_put                            (GtkIconView            *icon_view,
-									  GtkWidget              *widget,
-									  gint                    x,
-									  gint                    y,
-									  gint                    width,
-									  gint                    height);
-static void                 gtk_icon_view_remove_widget                  (GtkCellEditable        *editable,
+
+static void                 gtk_icon_view_add_editable                   (GtkCellArea            *area,
+									  GtkCellRenderer        *renderer,
+									  GtkCellEditable        *editable,
+									  GdkRectangle           *cell_area,
+									  const gchar            *path,
 									  GtkIconView            *icon_view);
-static void                 gtk_icon_view_start_editing                  (GtkIconView            *icon_view,
-									  GtkIconViewItem        *item,
-									  GdkEvent               *event);
-static void                 gtk_icon_view_stop_editing                   (GtkIconView            *icon_view,
-									  gboolean                cancel_editing);
+static void                 gtk_icon_view_remove_editable                (GtkCellArea            *area,
+									  GtkCellRenderer        *renderer,
+									  GtkCellEditable        *editable,
+									  GtkIconView            *icon_view);
+static void                 gtk_icon_view_focus_changed                  (GtkCellArea            *area,
+									  GtkCellRenderer        *renderer,
+									  const gchar            *path,
+									  GtkIconView            *icon_view);
 
 /* Source side drag signals */
 static void gtk_icon_view_drag_begin       (GtkWidget        *widget,
@@ -1067,8 +1074,8 @@ gtk_icon_view_init (GtkIconView *icon_view)
   icon_view->priv->text_column = -1;
   icon_view->priv->markup_column = -1;  
   icon_view->priv->pixbuf_column = -1;
-  icon_view->priv->text_cell = -1;
-  icon_view->priv->pixbuf_cell = -1;  
+  icon_view->priv->text_cell = NULL;
+  icon_view->priv->pixbuf_cell = NULL;  
   icon_view->priv->tooltip_column = -1;  
 
   gtk_widget_set_can_focus (GTK_WIDGET (icon_view), TRUE);
@@ -1115,8 +1122,17 @@ gtk_icon_view_constructor (GType               type,
 
   priv->cell_area_context = gtk_cell_area_create_context (priv->cell_area);
 
-  return object;
+  priv->add_editable_id = 
+    g_signal_connect (priv->cell_area, "add-editable", 
+		      G_CALLBACK (gtk_icon_view_add_editable), icon_view);
+  priv->remove_editable_id = 
+    g_signal_connect (priv->cell_area, "remove-editable", 
+		      G_CALLBACK (gtk_icon_view_remove_editable), icon_view);
+  priv->focus_changed_id = 
+    g_signal_connect (priv->cell_area, "focus-changed", 
+		      G_CALLBACK (gtk_icon_view_focus_changed), icon_view);
 
+  return object;
 }
 
 static void
@@ -1136,6 +1152,13 @@ gtk_icon_view_dispose (GObject *object)
 
   if (priv->cell_area)
     {
+      g_signal_handler_disconnect (priv->cell_area, priv->add_editable_id);
+      g_signal_handler_disconnect (priv->cell_area, priv->remove_editable_id);
+      g_signal_handler_disconnect (priv->cell_area, priv->focus_changed_id);
+      priv->add_editable_id = 0;
+      priv->remove_editable_id = 0;
+      priv->focus_changed_id = 0;
+
       g_object_unref (priv->cell_area);
       priv->cell_area = NULL;
     }
@@ -1322,7 +1345,7 @@ gtk_icon_view_destroy (GtkWidget *widget)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   gtk_icon_view_set_model (icon_view, NULL);
 
@@ -1795,23 +1818,24 @@ gtk_icon_view_item_selected_changed (GtkIconView      *icon_view,
     }
 }
 
-static void 
-gtk_icon_view_put (GtkIconView     *icon_view,
-		   GtkWidget       *widget,
-		   gint             x,
-		   gint             y,
-		   gint             width,
-		   gint             height)
+static void
+gtk_icon_view_add_editable (GtkCellArea            *area,
+			    GtkCellRenderer        *renderer,
+			    GtkCellEditable        *editable,
+			    GdkRectangle           *cell_area,
+			    const gchar            *path,
+			    GtkIconView            *icon_view)
 {
   GtkIconViewChild *child;
+  GtkWidget *widget = GTK_WIDGET (editable);
   
   child = g_new (GtkIconViewChild, 1);
   
   child->widget      = widget;
-  child->area.x      = x;
-  child->area.y      = y;
-  child->area.width  = width;
-  child->area.height = height;
+  child->area.x      = cell_area->x;
+  child->area.y      = cell_area->y;
+  child->area.width  = cell_area->width;
+  child->area.height = cell_area->height;
 
   icon_view->priv->children = g_list_append (icon_view->priv->children, child);
 
@@ -1822,68 +1846,31 @@ gtk_icon_view_put (GtkIconView     *icon_view,
 }
 
 static void
-gtk_icon_view_remove_widget (GtkCellEditable *editable,
-			     GtkIconView     *icon_view)
+gtk_icon_view_remove_editable (GtkCellArea            *area,
+			       GtkCellRenderer        *renderer,
+			       GtkCellEditable        *editable,
+			       GtkIconView            *icon_view)
 {
-  GtkIconViewItem *item;
-
-  if (icon_view->priv->edited_item == NULL)
-    return;
-
-  item = icon_view->priv->edited_item;
-  icon_view->priv->edited_item = NULL;
-  icon_view->priv->editable = NULL;
+  GtkTreePath *path;
 
   if (gtk_widget_has_focus (GTK_WIDGET (editable)))
     gtk_widget_grab_focus (GTK_WIDGET (icon_view));
   
-  g_signal_handlers_disconnect_by_func (editable,
-					gtk_icon_view_remove_widget,
-					icon_view);
-
   gtk_container_remove (GTK_CONTAINER (icon_view),
 			GTK_WIDGET (editable));  
 
-  gtk_icon_view_queue_draw_item (icon_view, item);
-}
-
-
-static void
-gtk_icon_view_start_editing (GtkIconView         *icon_view, 
-			     GtkIconViewItem     *item, 
-			     GdkEvent            *event)
-{
-  GdkRectangle        cell_area;
-  GtkIconViewPrivate *priv = icon_view->priv;
-
-  gtk_icon_view_set_cell_data (icon_view, item);
-  gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
-  gtk_cell_area_activate (priv->cell_area, priv->cell_area_context, 
-			  GTK_WIDGET (icon_view), &cell_area, 0 /* XXX flags */);
+  path = gtk_tree_path_new_from_string (gtk_cell_area_get_current_path_string (area));
+  gtk_icon_view_queue_draw_path (icon_view, path);
+  gtk_tree_path_free (path);
 }
 
 static void
-gtk_icon_view_stop_editing (GtkIconView *icon_view,
-			    gboolean     cancel_editing)
+gtk_icon_view_focus_changed (GtkCellArea            *area,
+			     GtkCellRenderer        *renderer,
+			     const gchar            *path,
+			     GtkIconView            *icon_view)
 {
-  GtkCellRenderer *cell = NULL;
-  GtkIconViewItem *item;
-  GList *l;
-
-  if (icon_view->priv->edited_item == NULL)
-    return;
-
-  /*
-   * This is very evil. We need to do this, because
-   * gtk_cell_editable_editing_done may trigger gtk_icon_view_row_changed
-   * later on. If gtk_icon_view_row_changed notices
-   * icon_view->priv->edited_item != NULL, it'll call
-   * gtk_icon_view_stop_editing again. Bad things will happen then.
-   *
-   * Please read that again if you intend to modify anything here.
-   */
-
-  /* XXX replace this with add-editable/remove-editable apis */
+  /* XXX Update cursor item for focus path here */
 }
 
 /**
@@ -1917,7 +1904,7 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   g_return_if_fail (path != NULL);
   g_return_if_fail (cell == NULL || GTK_IS_CELL_RENDERER (cell));
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (gtk_tree_path_get_depth (path) == 1)
     item = g_list_nth_data (icon_view->priv->items,
@@ -1930,7 +1917,15 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
   gtk_icon_view_scroll_to_path (icon_view, path, FALSE, 0.0, 0.0);
 
   if (start_editing)
-    gtk_icon_view_start_editing (icon_view, item, NULL);
+    {
+      GdkRectangle cell_area;
+
+      gtk_icon_view_set_cell_data (icon_view, item);
+      gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
+      gtk_cell_area_activate (icon_view->priv->cell_area, 
+			      icon_view->priv->cell_area_context, 
+			      GTK_WIDGET (icon_view), &cell_area, 0 /* XXX flags */, TRUE);
+    }
 }
 
 /**
@@ -2066,16 +2061,16 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	    icon_view->priv->last_single_clicked = item;
 
 	  /* cancel the current editing, if it exists */
-	  gtk_icon_view_stop_editing (icon_view, TRUE);
+	  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
-	  if (cell != NULL)
+	  if (cell != NULL && gtk_cell_renderer_is_activatable (cell))
 	    {
 	      gtk_icon_view_set_cell_data (icon_view, item);
 	      gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
 	      gtk_cell_area_activate (icon_view->priv->cell_area,
 				      icon_view->priv->cell_area_context,
 				      GTK_WIDGET (icon_view),
-				      &cell_area, 0/* XXX flags */);
+				      &cell_area, 0/* XXX flags */, FALSE);
 	    }
 	}
       else
@@ -2422,7 +2417,7 @@ gtk_icon_view_real_activate_cursor_item (GtkIconView *icon_view)
   gtk_icon_view_get_cell_area (icon_view, icon_view->priv->cursor_item, &cell_area);
   activated = gtk_cell_area_activate (icon_view->priv->cell_area, 
 				      icon_view->priv->cell_area_context, 
-				      GTK_WIDGET (icon_view), &cell_area, 0 /* XXX flags */);
+				      GTK_WIDGET (icon_view), &cell_area, 0 /* XXX flags */, FALSE);
 
   path = gtk_tree_path_new_from_indices (icon_view->priv->cursor_item->index, -1);
   gtk_icon_view_item_activated (icon_view, path);
@@ -2742,10 +2737,13 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 
   item_width = icon_view->priv->item_width;
 
-  /* Fetch the new item width */
+  /* Update the context widths for any invalidated
+   * items */
+  gtk_icon_view_cache_widths (icon_view);
+
+  /* Fetch the new item width if needed */
   if (item_width < 0)
     {
-      gtk_icon_view_cache_widths (icon_view);
       gtk_cell_area_context_get_preferred_width (icon_view->priv->cell_area_context, 
 						 &item_width, NULL);
       item_width += icon_view->priv->item_padding * 2;
@@ -2831,13 +2829,16 @@ gtk_icon_view_cache_widths (GtkIconView *icon_view)
     {
       GtkIconViewItem *item = items->data;
 
-      gtk_icon_view_set_cell_data (icon_view, item);
-      gtk_cell_area_get_preferred_width (icon_view->priv->cell_area, 
-					 icon_view->priv->cell_area_context,
-					 GTK_WIDGET (icon_view), NULL, NULL);
+      /* Only fetch the width of items with invalidated sizes */
+      if (item->width < 0)
+	{
+	  gtk_icon_view_set_cell_data (icon_view, item);
+	  gtk_cell_area_get_preferred_width (icon_view->priv->cell_area, 
+					     icon_view->priv->cell_area_context,
+					     GTK_WIDGET (icon_view), NULL, NULL);
+	}
     }
 }
-
 
 static void
 gtk_icon_view_invalidate_sizes (GtkIconView *icon_view)
@@ -2899,17 +2900,18 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
                           x, y,
                           item->width, item->height);
     }
-  
-  cell_area.x      = x - item->x;
-  cell_area.y      = y - item->y;
+
+  cell_area.x      = x;
+  cell_area.y      = y;
   cell_area.width  = item->width;
   cell_area.height = item->height;
 
+  if (gtk_widget_has_focus (widget) && item == icon_view->priv->cursor_item)
+    flags |= GTK_CELL_RENDERER_FOCUSED;
+
   gtk_cell_area_render (priv->cell_area, priv->cell_area_context,
 			widget, cr, &cell_area, &cell_area, flags, 
-			draw_focus &&
-			gtk_widget_has_focus (widget) &&
-			item == icon_view->priv->cursor_item);
+			draw_focus);
 }
 
 static void
@@ -3060,9 +3062,9 @@ gtk_icon_view_item_new (void)
 {
   GtkIconViewItem *item;
 
-  item = g_new0 (GtkIconViewItem, 1);
+  item = g_slice_new0 (GtkIconViewItem);
 
-  item->width = -1;
+  item->width  = -1;
   item->height = -1;
   
   return item;
@@ -3073,9 +3075,8 @@ gtk_icon_view_item_free (GtkIconViewItem *item)
 {
   g_return_if_fail (item != NULL);
 
-  g_free (item);
+  g_slice_free (GtkIconViewItem, item);
 }
-
 
 static GtkIconViewItem *
 gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
@@ -3093,21 +3094,26 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
     {
       GtkIconViewItem *item = items->data;
 
-      if (x >= item->x - icon_view->priv->column_spacing/2 && x <= item->x + item->width + icon_view->priv->column_spacing/2 &&
-	  y >= item->y - icon_view->priv->row_spacing/2 && y <= item->y + item->height + icon_view->priv->row_spacing/2)
+      if (x >= item->x - icon_view->priv->column_spacing/2 && 
+	  x <= item->x + item->width + icon_view->priv->column_spacing/2 &&
+	  y >= item->y - icon_view->priv->row_spacing/2 && 
+	  y <= item->y + item->height + icon_view->priv->row_spacing/2)
 	{
 	  if (only_in_cell || cell_at_pos)
 	    {
 	      GdkRectangle cell_area;
-	      GtkCellRenderer *cell;
+	      GtkCellRenderer *cell = NULL;
 
 	      gtk_icon_view_set_cell_data (icon_view, item);
 	      gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
-	      cell = gtk_cell_area_get_cell_at_position (icon_view->priv->cell_area,
-							 icon_view->priv->cell_area_context,
-							 GTK_WIDGET (icon_view),
-							 &cell_area,
-							 x, y, NULL);
+
+	      if (x >= cell_area.x && x <= cell_area.x + cell_area.width &&
+		  y >= cell_area.y && y <= cell_area.y + cell_area.height)
+		cell = gtk_cell_area_get_cell_at_position (icon_view->priv->cell_area,
+							   icon_view->priv->cell_area_context,
+							   GTK_WIDGET (icon_view),
+							   &cell_area,
+							   x, y, NULL);
 
 	      if (cell_at_pos)
 		*cell_at_pos = cell;
@@ -3117,11 +3123,9 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
 	      else
 		return item;
 	    }
-
 	  return item;
 	}
     }
-
   return NULL;
 }
 
@@ -3203,7 +3207,7 @@ gtk_icon_view_row_changed (GtkTreeModel *model,
   if (gtk_tree_path_get_depth (path) > 1)
     return;
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
   
   index = gtk_tree_path_get_indices(path)[0];
   item = g_list_nth_data (icon_view->priv->items, index);
@@ -3281,7 +3285,7 @@ gtk_icon_view_row_deleted (GtkTreeModel *model,
   list = g_list_nth (icon_view->priv->items, index);
   item = list->data;
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (item == icon_view->priv->anchor_item)
     icon_view->priv->anchor_item = NULL;
@@ -3329,7 +3333,7 @@ gtk_icon_view_rows_reordered (GtkTreeModel *model,
   if (iter != NULL)
     return;
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   length = gtk_tree_model_iter_n_children (model, NULL);
 
@@ -3440,7 +3444,7 @@ gtk_icon_view_real_move_cursor (GtkIconView     *icon_view,
   if (!gtk_widget_has_focus (GTK_WIDGET (icon_view)))
     return FALSE;
 
-  gtk_icon_view_stop_editing (icon_view, FALSE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, FALSE);
   gtk_widget_grab_focus (GTK_WIDGET (icon_view));
 
   if (gtk_get_current_event_state (&state))
@@ -3609,9 +3613,8 @@ static void
 gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
 				   gint         count)
 {
-#if _I_HAD_A_MILLION_DOLLARS_
   GtkIconViewItem *item;
-  gint cell;
+  GtkCellRenderer *cell;
   gboolean dirty = FALSE;
   gint step;
   GtkDirectionType direction;
@@ -3631,23 +3634,27 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
 	list = g_list_last (icon_view->priv->items);
 
       item = list ? list->data : NULL;
-      cell = -1;
+
+      /* Give focus to the first cell initially */
+      gtk_icon_view_set_cell_data (icon_view, item);
+      gtk_cell_area_focus (icon_view->priv->cell_area, direction);
     }
   else
     {
       item = icon_view->priv->cursor_item;
-      cell = icon_view->priv->cursor_cell;
       step = count > 0 ? 1 : -1;      
+
+      /* Save the current focus cell in case we hit the edge */
+      cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
+
       while (item)
 	{
-	  cell = find_cell (icon_view, item, cell,
-			    GTK_ORIENTATION_VERTICAL, 
-			    step, &count);
-	  if (count == 0)
+	  gtk_icon_view_set_cell_data (icon_view, item);
+
+	  if (gtk_cell_area_focus (icon_view->priv->cell_area, direction))
 	    break;
 
 	  item = find_item (icon_view, item, step, 0);
-	  count = count - step;
 	}
     }
 
@@ -3663,6 +3670,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
                                     GTK_DIR_TAB_FORWARD);
         }
 
+      gtk_cell_area_set_focus_cell (icon_view->priv->cell_area, cell);
       return;
     }
 
@@ -3672,6 +3680,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
       icon_view->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_view->priv->anchor_item = item;
 
+  cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
   gtk_icon_view_set_cursor_item (icon_view, item, cell);
 
   if (!icon_view->priv->ctrl_pressed &&
@@ -3687,7 +3696,6 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
 
   if (dirty)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
-#endif
 }
 
 static void 
@@ -3749,9 +3757,8 @@ static void
 gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
 				      gint         count)
 {
-#if _I_HAD_A_MILLION_DOLLARS_
   GtkIconViewItem *item;
-  gint cell = -1;
+  GtkCellRenderer *cell = NULL;
   gboolean dirty = FALSE;
   gint step;
   GtkDirectionType direction;
@@ -3771,22 +3778,27 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
 	list = g_list_last (icon_view->priv->items);
 
       item = list ? list->data : NULL;
+
+      /* Give focus to the first cell initially */
+      gtk_icon_view_set_cell_data (icon_view, item);
+      gtk_cell_area_focus (icon_view->priv->cell_area, direction);
     }
   else
     {
       item = icon_view->priv->cursor_item;
-      cell = icon_view->priv->cursor_cell;
       step = count > 0 ? 1 : -1;
+
+      /* Save the current focus cell in case we hit the edge */
+      cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
+
       while (item)
 	{
-	  cell = find_cell (icon_view, item, cell,
-			    GTK_ORIENTATION_HORIZONTAL, 
-			    step, &count);
-	  if (count == 0)
+	  gtk_icon_view_set_cell_data (icon_view, item);
+
+	  if (gtk_cell_area_focus (icon_view->priv->cell_area, direction))
 	    break;
 	  
 	  item = find_item (icon_view, item, 0, step);
-	  count = count - step;
 	}
     }
 
@@ -3802,6 +3814,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
                                     GTK_DIR_TAB_FORWARD);
         }
 
+      gtk_cell_area_set_focus_cell (icon_view->priv->cell_area, cell);
       return;
     }
 
@@ -3811,6 +3824,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
       icon_view->priv->selection_mode != GTK_SELECTION_MULTIPLE)
     icon_view->priv->anchor_item = item;
 
+  cell = gtk_cell_area_get_focus_cell (icon_view->priv->cell_area);
   gtk_icon_view_set_cursor_item (icon_view, item, cell);
 
   if (!icon_view->priv->ctrl_pressed &&
@@ -3826,7 +3840,6 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
 
   if (dirty)
     g_signal_emit (icon_view, icon_view_signals[SELECTION_CHANGED], 0);
-#endif
 }
 
 static void 
@@ -4628,7 +4641,7 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
       icon_view->priv->scroll_to_path = NULL;
     }
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (model)
     {
@@ -4743,143 +4756,91 @@ gtk_icon_view_get_model (GtkIconView *icon_view)
 static void
 update_text_cell (GtkIconView *icon_view)
 {
-#if _I_HAD_A_MILLION_DOLLARS_
-  GtkIconViewCellInfo *info;
-  GList *l;
-  gint i;
-	  
   if (icon_view->priv->text_column == -1 &&
       icon_view->priv->markup_column == -1)
     {
-      if (icon_view->priv->text_cell != -1)
+      if (icon_view->priv->text_cell != NULL)
 	{
-	  if (icon_view->priv->pixbuf_cell > icon_view->priv->text_cell)
-	    icon_view->priv->pixbuf_cell--;
-
-	  info = g_list_nth_data (icon_view->priv->cell_list, 
-				  icon_view->priv->text_cell);
-	  
-	  icon_view->priv->cell_list = g_list_remove (icon_view->priv->cell_list, info);
-	  
-	  free_cell_info (info);
-	  
-	  icon_view->priv->n_cells--;
-	  icon_view->priv->text_cell = -1;
+	  gtk_cell_area_remove (icon_view->priv->cell_area, 
+				icon_view->priv->text_cell);
+	  icon_view->priv->text_cell = NULL;
 	}
     }
   else 
     {
-      if (icon_view->priv->text_cell == -1)
+      if (icon_view->priv->text_cell == NULL)
 	{
-	  GtkCellRenderer *cell = gtk_cell_renderer_text_new ();
-	  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (icon_view), cell, FALSE);
-	  for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
-	    {
-	      info = l->data;
-	      if (info->cell == cell)
-		{
-		  icon_view->priv->text_cell = i;
-		  break;
-		}
-	    }
+	  icon_view->priv->text_cell = gtk_cell_renderer_text_new ();
+
+	  gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (icon_view), icon_view->priv->text_cell, FALSE);
 	}
-      
-      info = g_list_nth_data (icon_view->priv->cell_list,
-			      icon_view->priv->text_cell);
 
       if (icon_view->priv->markup_column != -1)
 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_view),
-					info->cell, 
+					icon_view->priv->text_cell, 
 					"markup", icon_view->priv->markup_column, 
 					NULL);
       else
 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_view),
-					info->cell, 
+					icon_view->priv->text_cell, 
 					"text", icon_view->priv->text_column, 
 					NULL);
 
       if (icon_view->priv->item_orientation == GTK_ORIENTATION_VERTICAL)
-	g_object_set (info->cell,
+	g_object_set (icon_view->priv->text_cell,
                       "alignment", PANGO_ALIGN_CENTER,
 		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
 		      "xalign", 0.5,
 		      "yalign", 0.0,
 		      NULL);
       else
-	g_object_set (info->cell,
+	g_object_set (icon_view->priv->text_cell,
                       "alignment", PANGO_ALIGN_LEFT,
 		      "wrap-mode", PANGO_WRAP_WORD_CHAR,
 		      "xalign", 0.0,
 		      "yalign", 0.5,
 		      NULL);
     }
-#endif
 }
 
 static void
 update_pixbuf_cell (GtkIconView *icon_view)
 {
-#if _I_HAD_A_MILLION_DOLLARS_
-  GtkIconViewCellInfo *info;
-  GList *l;
-  gint i;
-
   if (icon_view->priv->pixbuf_column == -1)
     {
-      if (icon_view->priv->pixbuf_cell != -1)
+      if (icon_view->priv->pixbuf_cell != NULL)
 	{
-	  if (icon_view->priv->text_cell > icon_view->priv->pixbuf_cell)
-	    icon_view->priv->text_cell--;
+	  gtk_cell_area_remove (icon_view->priv->cell_area, 
+				icon_view->priv->pixbuf_cell);
 
-	  info = g_list_nth_data (icon_view->priv->cell_list, 
-				  icon_view->priv->pixbuf_cell);
-	  
-	  icon_view->priv->cell_list = g_list_remove (icon_view->priv->cell_list, info);
-	  
-	  free_cell_info (info);
-	  
-	  icon_view->priv->n_cells--;
-	  icon_view->priv->pixbuf_cell = -1;
+	  icon_view->priv->pixbuf_cell = NULL;
 	}
     }
   else 
     {
-      if (icon_view->priv->pixbuf_cell == -1)
+      if (icon_view->priv->pixbuf_cell == NULL)
 	{
-	  GtkCellRenderer *cell = gtk_cell_renderer_pixbuf_new ();
+	  icon_view->priv->pixbuf_cell = gtk_cell_renderer_pixbuf_new ();
 	  
-	  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view), cell, FALSE);
-	  for (l = icon_view->priv->cell_list, i = 0; l; l = l->next, i++)
-	    {
-	      info = l->data;
-	      if (info->cell == cell)
-		{
-		  icon_view->priv->pixbuf_cell = i;
-		  break;
-		}
-	    }
+	  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (icon_view), icon_view->priv->pixbuf_cell, FALSE);
 	}
       
-	info = g_list_nth_data (icon_view->priv->cell_list, 
-				icon_view->priv->pixbuf_cell);
-	
-	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_view),
-					info->cell, 
-					"pixbuf", icon_view->priv->pixbuf_column, 
-					NULL);
+      gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (icon_view),
+				      icon_view->priv->pixbuf_cell, 
+				      "pixbuf", icon_view->priv->pixbuf_column, 
+				      NULL);
 
-	if (icon_view->priv->item_orientation == GTK_ORIENTATION_VERTICAL)
-	  g_object_set (info->cell,
-			"xalign", 0.5,
-			"yalign", 1.0,
-			NULL);
-	else
-	  g_object_set (info->cell,
-			"xalign", 0.0,
-			"yalign", 0.0,
-			NULL);
+      if (icon_view->priv->item_orientation == GTK_ORIENTATION_VERTICAL)
+	g_object_set (icon_view->priv->pixbuf_cell,
+		      "xalign", 0.5,
+		      "yalign", 1.0,
+		      NULL);
+      else
+	g_object_set (icon_view->priv->pixbuf_cell,
+		      "xalign", 0.0,
+		      "yalign", 0.0,
+		      NULL);
     }
-#endif
 }
 
 /**
@@ -4915,7 +4876,8 @@ gtk_icon_view_set_text_column (GtkIconView *icon_view,
       icon_view->priv->text_column = column;
     }
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   update_text_cell (icon_view);
 
@@ -4978,7 +4940,7 @@ gtk_icon_view_set_markup_column (GtkIconView *icon_view,
       icon_view->priv->markup_column = column;
     }
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   update_text_cell (icon_view);
 
@@ -5039,7 +5001,7 @@ gtk_icon_view_set_pixbuf_column (GtkIconView *icon_view,
       icon_view->priv->pixbuf_column = column;
     }
 
-  gtk_icon_view_stop_editing (icon_view, TRUE);
+  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   update_pixbuf_cell (icon_view);
 
@@ -5357,7 +5319,11 @@ gtk_icon_view_set_item_orientation (GtkIconView    *icon_view,
     {
       icon_view->priv->item_orientation = orientation;
 
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      if (GTK_IS_ORIENTABLE (icon_view->priv->cell_area))
+	gtk_orientable_set_orientation (GTK_ORIENTABLE (icon_view->priv->cell_area), 
+					icon_view->priv->item_orientation);
+
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
       gtk_icon_view_queue_layout (icon_view);
 
@@ -5410,7 +5376,7 @@ gtk_icon_view_set_columns (GtkIconView *icon_view,
     {
       icon_view->priv->columns = columns;
 
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_queue_layout (icon_view);
       
       g_object_notify (G_OBJECT (icon_view), "columns");
@@ -5456,7 +5422,7 @@ gtk_icon_view_set_item_width (GtkIconView *icon_view,
     {
       icon_view->priv->item_width = item_width;
       
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
       gtk_icon_view_queue_layout (icon_view);
       
@@ -5506,7 +5472,7 @@ gtk_icon_view_set_spacing (GtkIconView *icon_view,
     {
       icon_view->priv->spacing = spacing;
 
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
       gtk_icon_view_queue_layout (icon_view);
       
@@ -5552,7 +5518,7 @@ gtk_icon_view_set_row_spacing (GtkIconView *icon_view,
     {
       icon_view->priv->row_spacing = row_spacing;
 
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
       gtk_icon_view_queue_layout (icon_view);
       
@@ -5598,7 +5564,7 @@ gtk_icon_view_set_column_spacing (GtkIconView *icon_view,
     {
       icon_view->priv->column_spacing = column_spacing;
 
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
       gtk_icon_view_queue_layout (icon_view);
       
@@ -5645,7 +5611,7 @@ gtk_icon_view_set_margin (GtkIconView *icon_view,
     {
       icon_view->priv->margin = margin;
 
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
       gtk_icon_view_queue_layout (icon_view);
       
@@ -5691,7 +5657,7 @@ gtk_icon_view_set_item_padding (GtkIconView *icon_view,
     {
       icon_view->priv->item_padding = item_padding;
 
-      gtk_icon_view_stop_editing (icon_view, TRUE);
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
       gtk_icon_view_invalidate_sizes (icon_view);
       gtk_icon_view_queue_layout (icon_view);
       
