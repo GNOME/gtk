@@ -778,6 +778,12 @@ void          gdk_window_set_device_events (GdkWindow    *window,
 GdkEventMask  gdk_window_get_device_events (GdkWindow    *window,
                                             GdkDevice    *device);
 
+void          gdk_window_set_source_events (GdkWindow      *window,
+                                            GdkInputSource  source,
+                                            GdkEventMask    event_mask);
+GdkEventMask  gdk_window_get_source_events (GdkWindow      *window,
+                                            GdkInputSource  source);
+
 void          gdk_window_set_icon_list   (GdkWindow       *window,
 					  GList           *pixbufs);
 void	      gdk_window_set_icon_name	 (GdkWindow	  *window, 

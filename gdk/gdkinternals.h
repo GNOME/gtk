@@ -264,6 +264,10 @@ struct _GdkWindow
 
   GList *devices_inside;
   GHashTable *device_events;
+
+  GHashTable *source_event_masks;
+  gulong device_added_handler_id;
+  gulong device_changed_handler_id;
 };
 
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)

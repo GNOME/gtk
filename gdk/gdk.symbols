@@ -436,6 +436,7 @@ gdk_window_get_position
 gdk_window_get_root_coords
 gdk_window_get_root_origin
 gdk_window_get_screen
+gdk_window_get_source_events
 gdk_window_get_state
 gdk_window_get_support_multidevice
 gdk_window_get_toplevel
@@ -509,6 +510,7 @@ gdk_window_set_override_redirect
 gdk_window_set_role
 gdk_window_set_skip_pager_hint
 gdk_window_set_skip_taskbar_hint
+gdk_window_set_source_events
 gdk_window_set_startup_id
 gdk_window_set_static_gravities
 gdk_window_set_support_multidevice
