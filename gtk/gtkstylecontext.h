@@ -295,6 +295,14 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_SPINNER "spinner"
 
+/**
+ * GTK_STYLE_CLASS_NOTEBOOK:
+ *
+ * A widget class defining a notebook
+ */
+#define GTK_STYLE_CLASS_NOTEBOOK "notebook"
+
+
 /* Predefined set of widget regions */
 
 /**
