@@ -167,9 +167,6 @@ void _gdk_win32_window_move_region (GdkWindow       *window,
 				    const cairo_region_t *region,
 				    gint             dx,
 				    gint             dy);
-void _gdk_win32_windowing_window_get_offsets (GdkWindow *window,
-					      gint      *x_offset,
-					      gint      *y_offset);
 
 
 void _gdk_win32_selection_init (void);

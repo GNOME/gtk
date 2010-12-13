@@ -163,9 +163,6 @@ void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window);
 void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window);
 
 GdkCursor      *_gdk_x11_window_get_cursor          (GdkWindow *window);
-void            _gdk_x11_window_get_offsets         (GdkWindow *window,
-                                                     gint      *x_offset,
-                                                     gint      *y_offset);
 
 void            _gdk_x11_window_update_size         (GdkWindowImplX11 *impl);
 
