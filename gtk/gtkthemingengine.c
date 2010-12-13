@@ -1461,8 +1461,7 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
-  gint radius, border_width;
-  GtkBorder *border;
+  gint radius;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1470,14 +1469,10 @@ render_background_internal (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
                           "background-color", &bg_color,
-                          "border-width", &border,
                           "border-radius", &radius,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-  border_width = MIN (MIN (border->top, border->bottom),
-                      MIN (border->left, border->right));
-
   _cairo_round_rectangle_sides (cr, (gdouble) radius,
                                 x, y, width, height,
                                 SIDE_ALL, junction);
@@ -1694,7 +1689,6 @@ render_background_internal (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
-  gtk_border_free (border);
 }
 
 static void
