@@ -156,6 +156,7 @@ struct _GdkEventPrivate
   GdkScreen *screen;
   gpointer   windowing_data;
   GdkDevice *device;
+  GdkDevice *source_device;
 };
 
 /* Tracks information about the pointer grab on this display */
@@ -440,6 +441,7 @@ void  _gdk_windowing_launch_failed         (GAppLaunchContext *context,
 
 void _gdk_display_device_grab_update                     (GdkDisplay *display,
                                                           GdkDevice  *device,
+                                                          GdkDevice  *source_device,
                                                           gulong      current_serial);
 GdkDeviceGrabInfo  *_gdk_display_get_last_device_grab  (GdkDisplay *display,
                                                         GdkDevice  *device);
@@ -498,6 +500,7 @@ void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				      GdkWindow                  *src,
 				      GdkWindow                  *dest,
                                       GdkDevice                  *device,
+                                      GdkDevice                  *source_device,
 				      GdkCrossingMode             mode,
 				      gint                        toplevel_x,
 				      gint                        toplevel_y,

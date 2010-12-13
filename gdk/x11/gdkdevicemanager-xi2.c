@@ -641,6 +641,7 @@ translate_keyboard_string (GdkEventKey *event)
 static void
 generate_focus_event (GdkWindow *window,
                       GdkDevice *device,
+                      GdkDevice *source_device,
                       gboolean   in)
 {
   GdkEvent *event;
@@ -650,6 +651,7 @@ generate_focus_event (GdkWindow *window,
   event->focus_change.send_event = FALSE;
   event->focus_change.in = in;
   gdk_event_set_device (event, device);
+  gdk_event_set_source_device (event, source_device);
 
   gdk_event_put (event);
   gdk_event_free (event);
@@ -658,6 +660,7 @@ generate_focus_event (GdkWindow *window,
 static void
 handle_focus_change (GdkWindow *window,
                      GdkDevice *device,
+                     GdkDevice *source_device,
                      gint       detail,
                      gint       mode,
                      gboolean   in)
@@ -717,7 +720,7 @@ handle_focus_change (GdkWindow *window,
     }
 
   if (HAS_FOCUS (toplevel) != had_focus)
-    generate_focus_event (window, device, (in) ? TRUE : FALSE);
+    generate_focus_event (window, device, source_device, (in) ? TRUE : FALSE);
 }
 
 static gdouble *
@@ -916,7 +919,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
         GdkKeymap *keymap = gdk_keymap_get_for_display (display);
         GdkModifierType consumed, state;
-        GdkDevice *device;
+        GdkDevice *device, *source_device;
 
         event->key.type = xev->evtype == XI_KeyPress ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
 
@@ -932,6 +935,10 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         device = g_hash_table_lookup (device_manager->id_table,
                                       GUINT_TO_POINTER (xev->deviceid));
         gdk_event_set_device (event, device);
+
+        source_device = g_hash_table_lookup (device_manager->id_table,
+                                             GUINT_TO_POINTER (xev->sourceid));
+        gdk_event_set_source_device (event, source_device);
 
         event->key.keyval = GDK_KEY_VoidSymbol;
 
@@ -961,6 +968,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_ButtonRelease:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
+        GdkDevice *source_device;
 
         switch (xev->detail)
           {
@@ -989,6 +997,10 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             event->scroll.device = g_hash_table_lookup (device_manager->id_table,
                                                         GUINT_TO_POINTER (xev->deviceid));
 
+            source_device = g_hash_table_lookup (device_manager->id_table,
+                                                 GUINT_TO_POINTER (xev->sourceid));
+            gdk_event_set_source_device (event, source_device);
+
             event->scroll.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
             break;
           default:
@@ -1003,6 +1015,10 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
             event->button.device = g_hash_table_lookup (device_manager->id_table,
                                                         GUINT_TO_POINTER (xev->deviceid));
+
+            source_device = g_hash_table_lookup (device_manager->id_table,
+                                                 GUINT_TO_POINTER (xev->sourceid));
+            gdk_event_set_source_device (event, source_device);
 
             event->button.axes = translate_axes (event->button.device,
                                                  event->button.x,
@@ -1036,6 +1052,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Motion:
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
+        GdkDevice *source_device;
 
         event->motion.type = GDK_MOTION_NOTIFY;
 
@@ -1049,6 +1066,10 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->motion.device = g_hash_table_lookup (device_manager->id_table,
                                                     GINT_TO_POINTER (xev->deviceid));
+
+        source_device = g_hash_table_lookup (device_manager->id_table,
+                                             GUINT_TO_POINTER (xev->sourceid));
+        gdk_event_set_source_device (event, source_device);
 
         event->motion.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
 
@@ -1075,7 +1096,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_Leave:
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
-        GdkDevice *device;
+        GdkDevice *device, *source_device;
 
         event->crossing.type = (ev->evtype == XI_Enter) ? GDK_ENTER_NOTIFY : GDK_LEAVE_NOTIFY;
 
@@ -1093,6 +1114,10 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                       GINT_TO_POINTER (xev->deviceid));
         gdk_event_set_device (event, device);
 
+        source_device = g_hash_table_lookup (device_manager->id_table,
+                                             GUINT_TO_POINTER (xev->sourceid));
+        gdk_event_set_source_device (event, source_device);
+
         event->crossing.mode = translate_crossing_mode (xev->mode);
         event->crossing.detail = translate_notify_type (xev->detail);
         event->crossing.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
@@ -1102,12 +1127,16 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_FocusOut:
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
-        GdkDevice *device;
+        GdkDevice *device, *source_device;
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));
 
-        handle_focus_change (window, device, xev->detail, xev->mode,
+        source_device = g_hash_table_lookup (device_manager->id_table,
+                                             GUINT_TO_POINTER (xev->sourceid));
+
+        handle_focus_change (window, device, source_device,
+                             xev->detail, xev->mode,
                              (ev->evtype == XI_FocusIn) ? TRUE : FALSE);
 
         return_val = FALSE;

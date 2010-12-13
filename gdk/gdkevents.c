@@ -1077,6 +1077,66 @@ gdk_event_get_device (const GdkEvent *event)
 }
 
 /**
+ * gdk_event_set_source_device:
+ * @event: a #GdkEvent
+ * @device: a #GdkDevice
+ *
+ * Sets the slave device for @event to @device. The event
+ * must have been allocated by GTK+, for instance, by
+ * gdk_event_copy().
+ *
+ * Since: 3.0
+ **/
+void
+gdk_event_set_source_device (GdkEvent  *event,
+                             GdkDevice *device)
+{
+  GdkEventPrivate *private;
+
+  g_return_if_fail (gdk_event_is_allocated (event));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  private = (GdkEventPrivate *) event;
+
+  private->source_device = device;
+}
+
+/**
+ * gdk_event_get_source_device:
+ * @event: a #GdkEvent
+ *
+ * This function returns the hardware (slave) #GdkDevice that has triggered the event,
+ * falling back to the virtual (master) device (as in gdk_event_get_device()) if the
+ * event wasn't caused by interaction with a hardware device. This may happen for
+ * example in synthesized crossing events after a #GdkWindow updates its geometry or
+ * a grab is acquired/released.
+ *
+ * If the event does not contain device field, this function will return %NULL.
+ *
+ * Returns: a #GdkDevice, or %NULL.
+ *
+ * Since: 3.0
+ **/
+GdkDevice *
+gdk_event_get_source_device (const GdkEvent *event)
+{
+  GdkEventPrivate *private;
+
+  g_return_val_if_fail (event != NULL, NULL);
+
+  if (!gdk_event_is_allocated (event))
+    return NULL;
+
+  private = (GdkEventPrivate *) event;
+
+  if (private->source_device)
+    return private->source_device;
+
+  /* Fallback to event device */
+  return gdk_event_get_device (event);
+}
+
+/**
  * gdk_event_request_motions:
  * @event: a valid #GdkEvent
  *
