@@ -2703,5 +2703,8 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->get_maximal_cursor_size = _gdk_x11_display_get_maximal_cursor_size;
   display_class->supports_cursor_alpha = _gdk_x11_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_x11_display_supports_cursor_color;
+
+  display_class->before_process_all_updates = _gdk_x11_display_before_process_all_updates;
+  display_class->after_process_all_updates = _gdk_x11_display_after_process_all_updates;
 }
 

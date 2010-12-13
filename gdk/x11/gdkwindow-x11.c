@@ -4862,20 +4862,20 @@ gdk_x11_window_set_composited (GdkWindow *window,
 #endif
 }
 
-void
-_gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                               cairo_region_t *region)
+static void
+gdk_x11_window_process_updates_recurse (GdkWindow      *window,
+                                        cairo_region_t *region)
 {
   _gdk_window_process_updates_recurse (window, region);
 }
 
 void
-_gdk_windowing_before_process_all_updates (void)
+_gdk_x11_display_before_process_all_updates (GdkDisplay *display)
 {
 }
 
 void
-_gdk_windowing_after_process_all_updates (void)
+_gdk_x11_display_after_process_all_updates (GdkDisplay *display)
 {
 }
 
@@ -5051,5 +5051,5 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->destroy_notify = gdk_x11_window_destroy_notify;
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
   impl_class->drag_begin = _gdk_x11_window_drag_begin;
+  impl_class->process_updates_recurse = gdk_x11_window_process_updates_recurse;
 }
-

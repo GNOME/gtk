@@ -4039,19 +4039,18 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  cairo_region_get_extents (update_area, &clip_box);
 	  end_implicit = gdk_window_begin_implicit_paint (window, &clip_box);
 	  expose_region = cairo_region_copy (update_area);
+	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 	  if (!end_implicit)
 	    {
 	      /* Rendering is not double buffered by gdk, do outstanding
 	       * moves and queue antiexposure immediately. No need to do
 	       * any tricks */
 	      gdk_window_flush_outstanding_moves (window);
-	      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 	      save_region = impl_class->queue_antiexpose (window, update_area);
 	    }
-
 	  /* Render the invalid areas to the implicit paint, by sending exposes.
 	   * May flush if non-double buffered widget draw. */
-	  _gdk_windowing_window_process_updates_recurse (window, expose_region);
+          impl_class->process_updates_recurse (window, expose_region);
 
 	  if (end_implicit)
 	    {
@@ -4060,17 +4059,12 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	      /* By this time we know that any outstanding expose for this
 	       * area is invalid and we can avoid it, so queue an antiexpose.
-	       * However, it may be that due to an non-double buffered expose
 	       * we have already started drawing to the window, so it would
 	       * be to late to anti-expose now. Since this is merely an
 	       * optimization we just avoid doing it at all in that case.
 	       */
-	      if (window->implicit_paint != NULL &&
-		  !window->implicit_paint->flushed)
-		{
-		  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-		  save_region = impl_class->queue_antiexpose (window, update_area);
-		}
+	      if (window->implicit_paint != NULL && !window->implicit_paint->flushed)
+                save_region = impl_class->queue_antiexpose (window, update_area);
 
 	      gdk_window_end_implicit_paint (window);
 	    }
@@ -4093,11 +4087,39 @@ gdk_window_process_updates_internal (GdkWindow *window)
 static void
 flush_all_displays (void)
 {
-  GSList *displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  GSList *tmp_list;
+  GSList *displays, *l;
 
-  for (tmp_list = displays; tmp_list; tmp_list = tmp_list->next)
-    gdk_display_flush (tmp_list->data);
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  for (l = displays; l; l = l->next)
+    gdk_display_flush (l->data);
+
+  g_slist_free (displays);
+}
+
+static void
+before_process_all_updates (void)
+{
+  GSList *displays, *l;
+  GdkDisplayClass *display_class;
+
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  display_class = GDK_DISPLAY_GET_CLASS (displays->data);
+  for (l = displays; l; l = l->next)
+    display_class->before_process_all_updates (l->data);
+
+  g_slist_free (displays);
+}
+
+static void
+after_process_all_updates (void)
+{
+  GSList *displays, *l;
+  GdkDisplayClass *display_class;
+
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  display_class = GDK_DISPLAY_GET_CLASS (displays->data);
+  for (l = displays; l; l = l->next)
+    display_class->after_process_all_updates (l->data);
 
   g_slist_free (displays);
 }
@@ -4145,7 +4167,7 @@ gdk_window_process_all_updates (void)
   update_windows = NULL;
   update_idle = 0;
 
-  _gdk_windowing_before_process_all_updates ();
+  before_process_all_updates ();
 
   g_slist_foreach (old_update_windows, (GFunc)g_object_ref, NULL);
 
@@ -4170,7 +4192,7 @@ gdk_window_process_all_updates (void)
 
   flush_all_displays ();
 
-  _gdk_windowing_after_process_all_updates ();
+  after_process_all_updates ();
 
   in_process_all_updates = FALSE;
 

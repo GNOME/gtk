@@ -170,6 +170,9 @@ struct _GdkDisplayClass
                                                         GdkDragProtocol *protocol,
                                                         guint           *version);
 
+  void                       (*before_process_all_updates) (GdkDisplay *display);
+  void                       (*after_process_all_updates)  (GdkDisplay *display);
+
   /* Signals */
   void (*closed) (GdkDisplay *display,
                   gboolean    is_error);

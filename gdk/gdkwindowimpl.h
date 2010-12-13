@@ -251,6 +251,9 @@ struct _GdkWindowImplClass
   GdkDragContext * (*drag_begin)        (GdkWindow *window,
                                          GdkDevice *device,
                                          GList     *targets);
+
+  void         (*process_updates_recurse) (GdkWindow      *window,
+                                           cairo_region_t *region);
 };
 
 /* Interface Functions */
