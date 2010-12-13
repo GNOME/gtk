@@ -874,6 +874,29 @@ gtk_theming_engine_get_margin (GtkThemingEngine *engine,
   gtk_style_context_get_margin (priv->context, state, margin);
 }
 
+/**
+ * gtk_theming_engine_get_font:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve the font for
+ *
+ * Returns the font description for a given state.
+ *
+ * Returns: the #PangoFontDescription for the given state. This
+ *          object is owned by GTK+ and should not be freed.
+ *
+ * Since: 3.0
+ **/
+const PangoFontDescription *
+gtk_theming_engine_get_font (GtkThemingEngine *engine,
+                             GtkStateFlags     state)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
+
+  priv = engine->priv;
+  return gtk_style_context_get_font (priv->context, state);
+}
 
 /* GtkThemingModule */
 
