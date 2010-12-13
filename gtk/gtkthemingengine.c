@@ -2506,12 +2506,11 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
       gap_side == GTK_POS_BOTTOM)
     render_background_internal (engine, cr,
                                 0, 0, width, height,
-                                junction);
+                                GTK_JUNCTION_BOTTOM);
   else
     render_background_internal (engine, cr,
                                 0, 0, height, width,
-                                junction);
-
+                                GTK_JUNCTION_BOTTOM);
   cairo_restore (cr);
 
   cairo_save (cr);
