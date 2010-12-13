@@ -21,7 +21,8 @@
 
 #include "gdkdevicemanager-xi2.h"
 
-#include <gdk/gdkdeviceprivate.h>
+#include "gdkdeviceprivate.h"
+#include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkdevice-xi2.h"
 #include "gdkkeysyms.h"
@@ -905,7 +906,7 @@ get_event_window (GdkEventTranslator *translator,
             device = g_hash_table_lookup (GDK_DEVICE_MANAGER_XI2 (translator)->id_table,
                                           GUINT_TO_POINTER (((XIDeviceEvent *) ev)->deviceid));
 
-            serial = _gdk_windowing_window_get_next_serial (display);
+            serial = _gdk_display_get_next_serial (display);
             info = _gdk_display_has_device_grab (display, device, serial);
 
             if (info &&

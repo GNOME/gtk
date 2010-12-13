@@ -5686,8 +5686,9 @@ gdk_window_hide (GdkWindow *window)
         {
           GdkDevice *device = d->data;
 
-          if (_gdk_display_end_device_grab (display, device,
-                                            _gdk_windowing_window_get_next_serial (display),
+          if (_gdk_display_end_device_grab (display,
+                                            device,
+                                            _gdk_display_get_next_serial (display),
                                             window,
                                             TRUE))
             gdk_device_ungrab (device, GDK_CURRENT_TIME);
@@ -8742,7 +8743,7 @@ gdk_pointer_grab (GdkWindow *	  window,
 
   display = gdk_window_get_display (window);
 
-  serial = _gdk_windowing_window_get_next_serial (display);
+  serial = _gdk_display_get_next_serial (display);
   device_manager = gdk_display_get_device_manager (display);
   devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
@@ -8845,8 +8846,7 @@ gdk_keyboard_grab (GdkWindow *window,
     }
 
   display = gdk_window_get_display (window);
-
-  serial = _gdk_windowing_window_get_next_serial (display);
+  serial = _gdk_display_get_next_serial (display);
   device_manager = gdk_display_get_device_manager (display);
   devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
@@ -9056,7 +9056,7 @@ do_synthesize_crossing_event (gpointer data)
     return FALSE;
 
   display = gdk_window_get_display (changed_toplevel);
-  serial = _gdk_windowing_window_get_next_serial (display);
+  serial = _gdk_display_get_next_serial (display);
   g_hash_table_iter_init (&iter, display->pointers_info);
 
   while (g_hash_table_iter_next (&iter, &key, &value))

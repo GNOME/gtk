@@ -23,6 +23,7 @@
 
 #include "gdktypes.h"
 #include "gdkdevicemanagerprivate.h"
+#include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkdevice-core.h"
 #include "gdkkeysyms.h"
@@ -391,7 +392,7 @@ get_event_window (GdkEventTranslator *translator,
       GdkDeviceGrabInfo *info;
       gulong serial;
 
-      serial = _gdk_windowing_window_get_next_serial (display);
+      serial = _gdk_display_get_next_serial (display);
       info = _gdk_display_has_device_grab (display,
                                            GDK_DEVICE_MANAGER_CORE (device_manager)->core_keyboard,
                                            serial);

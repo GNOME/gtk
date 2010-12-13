@@ -173,6 +173,8 @@ struct _GdkDisplayClass
   void                       (*before_process_all_updates) (GdkDisplay *display);
   void                       (*after_process_all_updates)  (GdkDisplay *display);
 
+  gulong                     (*get_next_serial) (GdkDisplay *display);
+
   /* Signals */
   void (*closed) (GdkDisplay *display,
                   gboolean    is_error);
@@ -218,7 +220,7 @@ GdkPointerWindowInfo * _gdk_display_get_pointer_info  (GdkDisplay       *display
 void                _gdk_display_pointer_info_foreach (GdkDisplay       *display,
                                                        GdkDisplayPointerInfoForeach func,
                                                        gpointer          user_data);
-
+gulong              _gdk_display_get_next_serial      (GdkDisplay       *display);
 
 G_END_DECLS
 

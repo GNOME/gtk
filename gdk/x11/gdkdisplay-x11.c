@@ -1486,8 +1486,8 @@ process_internal_connection (GIOChannel  *gioc,
   return TRUE;
 }
 
-gulong
-_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+static gulong
+gdk_x11_display_get_next_serial (GdkDisplay *display)
 {
   return NextRequest (GDK_DISPLAY_XDISPLAY (display));
 }
@@ -2753,5 +2753,6 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
 
   display_class->before_process_all_updates = _gdk_x11_display_before_process_all_updates;
   display_class->after_process_all_updates = _gdk_x11_display_after_process_all_updates;
+  display_class->get_next_serial = gdk_x11_display_get_next_serial;
 }
 

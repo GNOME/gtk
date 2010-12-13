@@ -677,7 +677,7 @@ _gdk_display_enable_motion_hints (GdkDisplay *display,
 
   if (*device_serial != 0)
     {
-      serial = _gdk_windowing_window_get_next_serial (display);
+      serial = _gdk_display_get_next_serial (display);
       /* We might not actually generate the next request, so
 	 make sure this triggers always, this may cause it to
 	 trigger slightly too early, but this is just a hint
@@ -2410,4 +2410,10 @@ gdk_display_warp_device (GdkDisplay *display,
   g_return_if_fail (display == gdk_device_get_display (device));
 
   GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
+}
+
+gulong
+_gdk_display_get_next_serial (GdkDisplay *display)
+{
+  return GDK_DISPLAY_GET_CLASS (display)->get_next_serial (display);
 }

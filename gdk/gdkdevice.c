@@ -1136,7 +1136,7 @@ gdk_device_grab (GdkDevice        *device,
       gulong serial;
 
       display = gdk_window_get_display (window);
-      serial = _gdk_windowing_window_get_next_serial (display);
+      serial = _gdk_display_get_next_serial (display);
 
       _gdk_display_add_device_grab (display,
                                     device,
