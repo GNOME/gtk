@@ -254,6 +254,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_SCROLLBAR "scrollbar"
 
 /**
+ * GTK_STYLE_CLASS_SCALE:
+ *
+ * A CSS class to match scale widgets.
+ */
+#define GTK_STYLE_CLASS_SCALE "scale"
+
+/**
  * GTK_STYLE_CLASS_HEADER:
  *
  * A CSS class to match a header element.
@@ -294,6 +301,13 @@ struct _GtkStyleContextClass
  * A widget class defining a spinner
  */
 #define GTK_STYLE_CLASS_SPINNER "spinner"
+
+/**
+ * GTK_STYLE_CLASS_MARK:
+ *
+ * A widget class defining marks in a widget, such as in scales
+ */
+#define GTK_STYLE_CLASS_MARK "mark"
 
 /**
  * GTK_STYLE_CLASS_NOTEBOOK:

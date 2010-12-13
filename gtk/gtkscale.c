@@ -127,8 +127,7 @@ static void     gtk_scale_get_preferred_width     (GtkWidget      *widget,
 static void     gtk_scale_get_preferred_height    (GtkWidget      *widget,
                                                    gint           *minimum,
                                                    gint           *natural);
-static void     gtk_scale_style_set               (GtkWidget      *widget,
-                                                   GtkStyle       *previous);
+static void     gtk_scale_style_updated           (GtkWidget      *widget);
 static void     gtk_scale_get_range_border        (GtkRange       *range,
                                                    GtkBorder      *border);
 static void     gtk_scale_get_mark_label_size     (GtkScale        *scale,
@@ -204,7 +203,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   gobject_class->get_property = gtk_scale_get_property;
   gobject_class->finalize = gtk_scale_finalize;
 
-  widget_class->style_set = gtk_scale_style_set;
+  widget_class->style_updated = gtk_scale_style_updated;
   widget_class->screen_changed = gtk_scale_screen_changed;
   widget_class->draw = gtk_scale_draw;
   widget_class->get_preferred_width = gtk_scale_get_preferred_width;
@@ -430,6 +429,7 @@ gtk_scale_init (GtkScale *scale)
 {
   GtkScalePrivate *priv;
   GtkRange *range = GTK_RANGE (scale);
+  GtkStyleContext *context;
 
   scale->priv = G_TYPE_INSTANCE_GET_PRIVATE (scale,
                                              GTK_TYPE_SCALE,
@@ -449,6 +449,9 @@ gtk_scale_init (GtkScale *scale)
   g_signal_connect (scale, "notify::orientation",
                     G_CALLBACK (gtk_scale_orientation_notify),
                     NULL);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (scale));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE);
 }
 
 static void
@@ -921,8 +924,7 @@ gtk_scale_get_mark_label_size (GtkScale        *scale,
 }
 
 static void
-gtk_scale_style_set (GtkWidget *widget,
-                     GtkStyle  *previous)
+gtk_scale_style_updated (GtkWidget *widget)
 {
   gint slider_length;
   GtkRange *range;
@@ -937,7 +939,7 @@ gtk_scale_style_set (GtkWidget *widget,
 
   _gtk_scale_clear_layout (GTK_SCALE (widget));
 
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_set (widget, previous);
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->style_updated (widget);
 }
 
 static void
@@ -1032,8 +1034,8 @@ gtk_scale_draw (GtkWidget *widget,
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = scale->priv;
   GtkRange *range = GTK_RANGE (scale);
-  GtkStateType state_type;
-  GtkStyle *style;
+  GtkStateFlags state = 0;
+  GtkStyleContext *context;
   gint n_marks;
   gint *marks;
   gint focus_padding;
@@ -1041,7 +1043,7 @@ gtk_scale_draw (GtkWidget *widget,
   gint value_spacing;
   gint min_sep = 4;
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget,
                         "focus-padding", &focus_padding,
                         "slider-width", &slider_width, 
@@ -1053,9 +1055,8 @@ gtk_scale_draw (GtkWidget *widget,
    */
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->draw (widget, cr);
 
-  state_type = GTK_STATE_NORMAL;
   if (!gtk_widget_is_sensitive (widget))
-    state_type = GTK_STATE_INSENSITIVE;
+    state |= GTK_STATE_FLAG_INSENSITIVE;
 
   if (priv->marks)
     {
@@ -1098,8 +1099,12 @@ gtk_scale_draw (GtkWidget *widget,
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP, 0) - min_sep;
                 }
 
-              gtk_paint_vline (style, cr, state_type,
-                               widget, "scale-mark", y1, y2, x1);
+              gtk_style_context_save (context);
+              gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
+              gtk_style_context_set_state (context, state);
+
+              gtk_render_line (context, cr,
+                               x1, y1, x1, y2);
 
               if (mark->markup)
                 {
@@ -1124,10 +1129,11 @@ gtk_scale_draw (GtkWidget *widget,
                       min_pos_after = x3 + logical_rect.width + min_sep;
                     }
 
-                  gtk_paint_layout (style, cr, state_type,
-                                    FALSE, widget, "scale-mark",
-                                    x3, y3, layout);
+                  gtk_render_layout (context, cr,
+                                     x3, y3, layout);
                 }
+
+              gtk_style_context_restore (context);
             }
           else
             {
@@ -1147,8 +1153,12 @@ gtk_scale_draw (GtkWidget *widget,
                 }
               y1 = marks[i];
 
-              gtk_paint_hline (style, cr, state_type,
-                               widget, "range-mark", x1, x2, y1);
+              gtk_style_context_save (context);
+              gtk_style_context_add_class (context, GTK_STYLE_CLASS_MARK);
+              gtk_style_context_set_state (context, state);
+
+              gtk_render_line (context, cr,
+                               x1, y1, x2, y1);
 
               if (mark->markup)
                 {
@@ -1173,10 +1183,11 @@ gtk_scale_draw (GtkWidget *widget,
                       min_pos_after = y3 + logical_rect.height + min_sep;
                     }
 
-                  gtk_paint_layout (style, cr, state_type,
-                                    FALSE, widget, "scale-mark",
-                                    x3, y3, layout);
+                  gtk_render_layout (context, cr,
+                                     x3, y3, layout);
                 }
+
+              gtk_style_context_restore (context);
             }
         } 
 
@@ -1197,17 +1208,10 @@ gtk_scale_draw (GtkWidget *widget,
       gtk_scale_get_layout_offsets (scale, &x, &y);
       gtk_widget_get_allocation (widget, &allocation);
 
-      gtk_paint_layout (style,
-                        cr,
-                        state_type,
-			FALSE,
-                        widget,
-                        orientation == GTK_ORIENTATION_HORIZONTAL ?
-                        "hscale" : "vscale",
-                        x - allocation.x,
-                        y - allocation.y,
-                        layout);
-
+      gtk_render_layout (context, cr,
+                         x - allocation.x,
+                         y - allocation.y,
+                         layout);
     }
 
   return FALSE;
