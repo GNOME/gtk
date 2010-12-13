@@ -26,6 +26,7 @@
 
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkliststore.h>
+#include <gtk/gtkcellarea.h>
 #include <gtk/gtktreeviewcolumn.h>
 #include <gtk/gtktreemodelfilter.h>
 
@@ -81,6 +82,7 @@ struct _GtkEntryCompletionClass
 /* core */
 GType               gtk_entry_completion_get_type               (void) G_GNUC_CONST;
 GtkEntryCompletion *gtk_entry_completion_new                    (void);
+GtkEntryCompletion *gtk_entry_completion_new_with_area          (GtkCellArea                 *area);
 
 GtkWidget          *gtk_entry_completion_get_entry              (GtkEntryCompletion          *completion);
 

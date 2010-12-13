@@ -1119,6 +1119,7 @@ gtk_entry_buffer_get_type
 GtkEntryCompletion
 GtkEntryCompletionMatchFunc
 gtk_entry_completion_new
+gtk_entry_completion_new_with_area
 gtk_entry_completion_get_entry
 gtk_entry_completion_set_model
 gtk_entry_completion_get_model

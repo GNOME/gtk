@@ -996,6 +996,28 @@ gtk_entry_completion_new (void)
 }
 
 /**
+ * gtk_entry_completion_new_with_area:
+ * @area: the #GtkCellArea used to layout cells
+ *
+ * Creates a new #GtkEntryCompletion object using the
+ * specified @area to layout cells in the underlying 
+ * #GtkTreeViewColumn for the drop-down menu.
+ *
+ * Return value: A newly created #GtkEntryCompletion object.
+ *
+ * Since: 3.0
+ */
+GtkEntryCompletion *
+gtk_entry_completion_new_with_area (GtkCellArea *area)
+{
+  GtkEntryCompletion *completion;
+
+  completion = g_object_new (GTK_TYPE_ENTRY_COMPLETION, "cell-area", area, NULL);
+
+  return completion;
+}
+
+/**
  * gtk_entry_completion_get_entry:
  * @completion: A #GtkEntryCompletion.
  *
