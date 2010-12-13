@@ -139,19 +139,19 @@ _gdk_x11_cursor_display_finalize (GdkDisplay *display)
       GdkCursorPrivate* cursor = (GdkCursorPrivate*)(item->data);
       if (cursor->display == display)
         {
-	  GSList* olditem;
+          GSList* olditem;
           gdk_cursor_unref ((GdkCursor*) cursor);
-	  /* Remove this item from the list */
-	  *(itemp) = item->next;
-	  olditem = item;
-	  item = g_slist_next (item);
-	  g_slist_free_1 (olditem);
+          /* Remove this item from the list */
+          *(itemp) = item->next;
+          olditem = item;
+          item = g_slist_next (item);
+          g_slist_free_1 (olditem);
         } 
       else 
         {
-	  itemp = &(item->next);
-	  item = g_slist_next (item);
-	}
+          itemp = &(item->next);
+          item = g_slist_next (item);
+        }
     }
 }
 
@@ -189,89 +189,19 @@ get_blank_cursor (GdkDisplay *display)
   return cursor;
 }
 
-/**
- * gdk_cursor_new_for_display:
- * @display: the #GdkDisplay for which the cursor will be created
- * @cursor_type: cursor to create
- * 
- * Creates a new cursor from the set of builtin cursors.
- * Some useful ones are:
- * <itemizedlist>
- * <listitem><para>
- *  <inlinegraphic format="PNG" fileref="right_ptr.png"></inlinegraphic> #GDK_RIGHT_PTR (right-facing arrow)
- * </para></listitem>
- * <listitem><para>
- *  <inlinegraphic format="PNG" fileref="crosshair.png"></inlinegraphic> #GDK_CROSSHAIR (crosshair)
- * </para></listitem>
- * <listitem><para>
- *  <inlinegraphic format="PNG" fileref="xterm.png"></inlinegraphic> #GDK_XTERM (I-beam)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="watch.png"></inlinegraphic> #GDK_WATCH (busy)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="fleur.png"></inlinegraphic> #GDK_FLEUR (for moving objects)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="hand1.png"></inlinegraphic> #GDK_HAND1 (a right-pointing hand)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="hand2.png"></inlinegraphic> #GDK_HAND2 (a left-pointing hand)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="left_side.png"></inlinegraphic> #GDK_LEFT_SIDE (resize left side)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="right_side.png"></inlinegraphic> #GDK_RIGHT_SIDE (resize right side)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="top_left_corner.png"></inlinegraphic> #GDK_TOP_LEFT_CORNER (resize northwest corner)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="top_right_corner.png"></inlinegraphic> #GDK_TOP_RIGHT_CORNER (resize northeast corner)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="bottom_left_corner.png"></inlinegraphic> #GDK_BOTTOM_LEFT_CORNER (resize southwest corner)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="bottom_right_corner.png"></inlinegraphic> #GDK_BOTTOM_RIGHT_CORNER (resize southeast corner)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="top_side.png"></inlinegraphic> #GDK_TOP_SIDE (resize top side)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="bottom_side.png"></inlinegraphic> #GDK_BOTTOM_SIDE (resize bottom side)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="sb_h_double_arrow.png"></inlinegraphic> #GDK_SB_H_DOUBLE_ARROW (move vertical splitter)
- * </para></listitem>
- * <listitem><para>
- * <inlinegraphic format="PNG" fileref="sb_v_double_arrow.png"></inlinegraphic> #GDK_SB_V_DOUBLE_ARROW (move horizontal splitter)
- * </para></listitem>
- * <listitem><para>
- * #GDK_BLANK_CURSOR (Blank cursor). Since 2.16
- * </para></listitem>
- * </itemizedlist>
- *
- * Return value: a new #GdkCursor
- *
- * Since: 2.2
- **/
 GdkCursor*
-gdk_cursor_new_for_display (GdkDisplay    *display,
-			    GdkCursorType  cursor_type)
+_gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
+                                      GdkCursorType  cursor_type)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
   Cursor xcursor;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
   if (gdk_display_is_closed (display))
     {
       xcursor = None;
-    } 
-  else 
+    }
+  else
     {
       private = find_in_cache (display, cursor_type, NULL);
 
@@ -279,19 +209,19 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
         {
           /* Cache had it, add a ref for this user */
           gdk_cursor_ref ((GdkCursor*) private);
-       
+
           return (GdkCursor*) private;
-        } 
-      else 
+        }
+      else
         {
-	  if (cursor_type != GDK_BLANK_CURSOR)
+          if (cursor_type != GDK_BLANK_CURSOR)
             xcursor = XCreateFontCursor (GDK_DISPLAY_XDISPLAY (display),
                                          cursor_type);
-	  else
-	    xcursor = get_blank_cursor (display);
+          else
+            xcursor = get_blank_cursor (display);
        }
     }
-  
+
   private = g_new (GdkCursorPrivate, 1);
   private->display = display;
   private->xcursor = xcursor;
@@ -416,14 +346,14 @@ gdk_cursor_get_image (GdkCursor *cursor)
   if (cursor->type == GDK_CURSOR_IS_PIXMAP)
     {
       if (private->name)
-	images = XcursorLibraryLoadImages (private->name, theme, size);
+        images = XcursorLibraryLoadImages (private->name, theme, size);
     }
-  else 
+  else
     images = XcursorShapeLoadImages (cursor->type, theme, size);
 
   if (!images)
     return NULL;
-  
+
   image = images->images[0];
 
   data = g_malloc (4 * image->width * image->height);
@@ -437,9 +367,9 @@ gdk_cursor_get_image (GdkCursor *cursor)
     }
 
   pixbuf = gdk_pixbuf_new_from_data (data, GDK_COLORSPACE_RGB, TRUE,
-				     8, image->width, image->height,
-				     4 * image->width, 
-				     (GdkPixbufDestroyNotify)g_free, NULL);
+                                     8, image->width, image->height,
+                                     4 * image->width,
+                                     (GdkPixbufDestroyNotify)g_free, NULL);
 
   if (private->name)
     gdk_pixbuf_set_option (pixbuf, "name", private->name);
@@ -479,24 +409,24 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
         return;
 
       if (cursor->type == GDK_CURSOR_IS_PIXMAP)
-	{
-	  if (private->name)
-	    new_cursor = XcursorLibraryLoadCursor (xdisplay, private->name);
-	}
+        {
+          if (private->name)
+            new_cursor = XcursorLibraryLoadCursor (xdisplay, private->name);
+        }
       else 
-	new_cursor = XcursorShapeLoadCursor (xdisplay, cursor->type);
+        new_cursor = XcursorShapeLoadCursor (xdisplay, cursor->type);
       
       if (new_cursor != None)
-	{
-	  XFixesChangeCursor (xdisplay, new_cursor, private->xcursor);
- 	  private->xcursor = new_cursor;
-	}
+        {
+          XFixesChangeCursor (xdisplay, new_cursor, private->xcursor);
+          private->xcursor = new_cursor;
+        }
     }
 }
 
 static void
 update_cursor (gpointer data,
-	       gpointer user_data)
+               gpointer user_data)
 {
   GdkCursor *cursor;
 
@@ -531,8 +461,8 @@ update_cursor (gpointer data,
  */
 void
 gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
-				  const gchar *theme,
-				  const gint   size)
+                                  const gchar *theme,
+                                  const gint   size)
 {
   GdkDisplayX11 *display_x11;
   Display *xdisplay;
@@ -573,8 +503,8 @@ gdk_cursor_get_image (GdkCursor *cursor)
 
 void
 gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
-				  const gchar *theme,
-				  const gint   size)
+                                  const gchar *theme,
+                                  const gint   size)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 }
@@ -591,8 +521,8 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
 
 static XcursorImage*
 create_cursor_image (GdkPixbuf *pixbuf,
-		     gint       x,
-		     gint       y)
+                     gint       x,
+                     gint       y)
 {
   guint width, height;
   XcursorImage *xcimage;
@@ -624,42 +554,11 @@ create_cursor_image (GdkPixbuf *pixbuf,
   return xcimage;
 }
 
-
-/**
- * gdk_cursor_new_from_pixbuf:
- * @display: the #GdkDisplay for which the cursor will be created
- * @pixbuf: the #GdkPixbuf containing the cursor image
- * @x: the horizontal offset of the 'hotspot' of the cursor. 
- * @y: the vertical offset of the 'hotspot' of the cursor.
- *
- * Creates a new cursor from a pixbuf. 
- *
- * Not all GDK backends support RGBA cursors. If they are not 
- * supported, a monochrome approximation will be displayed. 
- * The functions gdk_display_supports_cursor_alpha() and 
- * gdk_display_supports_cursor_color() can be used to determine
- * whether RGBA cursors are supported; 
- * gdk_display_get_default_cursor_size() and 
- * gdk_display_get_maximal_cursor_size() give information about 
- * cursor sizes.
- *
- * If @x or @y are <literal>-1</literal>, the pixbuf must have
- * options named "x_hot" and "y_hot", resp., containing
- * integer values between %0 and the width resp. height of
- * the pixbuf. (Since: 3.0)
- *
- * On the X backend, support for RGBA cursors requires a
- * sufficently new version of the X Render extension. 
- *
- * Returns: a new #GdkCursor.
- * 
- * Since: 2.4
- */
 GdkCursor *
-gdk_cursor_new_from_pixbuf (GdkDisplay *display, 
-			    GdkPixbuf  *pixbuf,
-			    gint        x,
-			    gint        y)
+_gdk_x11_display_get_cursor_for_pixbuf (GdkDisplay *display,
+                                        GdkPixbuf  *pixbuf,
+                                        gint        x,
+                                        gint        y)
 {
   XcursorImage *xcimage;
   Cursor xcursor;
@@ -668,9 +567,6 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   const char *option;
   char *end;
   gint64 value;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
   if (x == -1 && (option = gdk_pixbuf_get_option (pixbuf, "x_hot")))
     {
@@ -697,8 +593,10 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
 
   if (gdk_display_is_closed (display))
-    xcursor = None;
-  else 
+    {
+      xcursor = None;
+    }
+  else
     {
       xcimage = create_cursor_image (pixbuf, x, y);
       xcursor = XcursorImageLoadCursor (GDK_DISPLAY_XDISPLAY (display), xcimage);
@@ -714,37 +612,24 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   cursor = (GdkCursor *) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
   cursor->ref_count = 1;
-  
+
   return cursor;
 }
 
-/**
- * gdk_cursor_new_from_name:
- * @display: the #GdkDisplay for which the cursor will be created
- * @name: the name of the cursor
- *
- * Creates a new cursor by looking up @name in the current cursor
- * theme. 
- * 
- * Returns: a new #GdkCursor, or %NULL if there is no cursor with 
- *   the given name 
- *
- * Since: 2.8
- */
-GdkCursor*  
-gdk_cursor_new_from_name (GdkDisplay  *display,
-			  const gchar *name)
+GdkCursor*
+_gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
+                                      const gchar *name)
 {
   Cursor xcursor;
   Display *xdisplay;
   GdkCursorPrivate *private;
   GdkCursor *cursor;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
   if (gdk_display_is_closed (display))
-    xcursor = None;
-  else 
+    {
+      xcursor = None;
+    }
+  else
     {
       private = find_in_cache (display, GDK_CURSOR_IS_PIXMAP, name);
 
@@ -759,7 +644,7 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
       xdisplay = GDK_DISPLAY_XDISPLAY (display);
       xcursor = XcursorLibraryLoadCursor (xdisplay, name);
       if (xcursor == None)
-	return NULL;
+        return NULL;
     }
 
   private = g_new (GdkCursorPrivate, 1);
@@ -776,62 +661,24 @@ gdk_cursor_new_from_name (GdkDisplay  *display,
   return cursor;
 }
 
-/**
- * gdk_display_supports_cursor_alpha:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if cursors can use an 8bit alpha channel 
- * on @display. Otherwise, cursors are restricted to bilevel 
- * alpha (i.e. a mask).
- *
- * Returns: whether cursors can have alpha channels.
- *
- * Since: 2.4
- */
-gboolean 
-gdk_display_supports_cursor_alpha (GdkDisplay *display)
+gboolean
+_gdk_x11_display_supports_cursor_alpha (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
   return XcursorSupportsARGB (GDK_DISPLAY_XDISPLAY (display));
 }
 
-/**
- * gdk_display_supports_cursor_color:
- * @display: a #GdkDisplay
- *
- * Returns %TRUE if multicolored cursors are supported
- * on @display. Otherwise, cursors have only a forground
- * and a background color.
- *
- * Returns: whether cursors can have multiple colors.
- *
- * Since: 2.4
- */
-gboolean 
-gdk_display_supports_cursor_color (GdkDisplay *display)
+gboolean
+_gdk_x11_display_supports_cursor_color (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
   return XcursorSupportsARGB (GDK_DISPLAY_XDISPLAY (display));
 }
 
-/**
- * gdk_display_get_default_cursor_size:
- * @display: a #GdkDisplay
- *
- * Returns the default size to use for cursors on @display.
- *
- * Returns: the default cursor size.
- *
- * Since: 2.4
- */
-guint     
-gdk_display_get_default_cursor_size (GdkDisplay *display)
+void
+_gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
+                                          guint      *width,
+                                          guint      *height)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return XcursorGetDefaultSize (GDK_DISPLAY_XDISPLAY (display));
+  *width = *height = XcursorGetDefaultSize (GDK_DISPLAY_XDISPLAY (display));
 }
 
 #else
@@ -839,11 +686,11 @@ gdk_display_get_default_cursor_size (GdkDisplay *display)
 static GdkCursor*
 gdk_cursor_new_from_pixmap (GdkDisplay     *display,
                             Pixmap          source_pixmap,
-			    Pixmap          mask_pixmap,
-			    const GdkColor *fg,
-			    const GdkColor *bg,
-			    gint            x,
-			    gint            y)
+                            Pixmap          mask_pixmap,
+                            const GdkColor *fg,
+                            const GdkColor *bg,
+                            gint            x,
+                            gint            y)
 {
   GdkCursorPrivate *private;
   GdkCursor *cursor;
@@ -866,7 +713,7 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
     xcursor = None;
   else
     xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
-				   source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
+                                   source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
   private = g_new (GdkCursorPrivate, 1);
   private->display = display;
   private->xcursor = xcursor;
@@ -876,15 +723,15 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
   cursor = (GdkCursor *) private;
   cursor->type = GDK_CURSOR_IS_PIXMAP;
   cursor->ref_count = 1;
-  
+
   return cursor;
 }
 
 GdkCursor *
-gdk_cursor_new_from_pixbuf (GdkDisplay *display, 
-			    GdkPixbuf  *pixbuf,
-			    gint        x,
-			    gint        y)
+_gdk_x11_display_get_cursor_for_pixbuf (GdkDisplay *display,
+                                        GdkPixbuf  *pixbuf,
+                                        gint        x,
+                                        gint        y)
 {
   GdkCursor *cursor;
   cairo_surface_t *pixmap, *mask;
@@ -895,9 +742,6 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   GdkScreen *screen;
   cairo_surface_t *image;
   cairo_t *cr;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
 
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
@@ -918,28 +762,28 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
       guint8 *src = pixels + j * rowstride;
       guint8 *d = data + data_stride * j;
       guint8 *md = mask_data + data_stride * j;
-	
+
       for (i = 0; i < width; i++)
-	{
-	  if (src[1] < 0x80)
-	    *d |= 1 << (i % 8);
-	  
-	  if (n_channels == 3 || src[3] >= 0x80)
-	    *md |= 1 << (i % 8);
-	  
-	  src += n_channels;
-	  if (i % 8 == 7)
-	    {
-	      d++; 
-	      md++;
-	    }
-	}
+        {
+          if (src[1] < 0x80)
+            *d |= 1 << (i % 8);
+
+          if (n_channels == 3 || src[3] >= 0x80)
+            *md |= 1 << (i % 8);
+
+          src += n_channels;
+          if (i % 8 == 7)
+            {
+              d++;
+              md++;
+            }
+        }
     }
-      
+
   screen = gdk_display_get_default_screen (display);
 
-  pixmap = _gdk_x11_window_create_bitmap_surface (gdk_screen_get_root_window (screen), 
-	 		                          width, height);
+  pixmap = _gdk_x11_window_create_bitmap_surface (gdk_screen_get_root_window (screen),
+                                                  width, height);
   cr = cairo_create (pixmap);
   image = cairo_image_surface_create_for_data (data, CAIRO_FORMAT_A1,
                                                width, height, data_stride);
@@ -948,9 +792,9 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
   cairo_destroy (cr);
- 
-  mask = _gdk_x11_window_create_bitmap_surface (gdk_screen_get_root_window (screen), 
-			                        width, height);
+
+  mask = _gdk_x11_window_create_bitmap_surface (gdk_screen_get_root_window (screen),
+                                                width, height);
   cr = cairo_create (mask);
   image = cairo_image_surface_create_for_data (mask_data, CAIRO_FORMAT_A1,
                                                width, height, data_stride);
@@ -959,54 +803,46 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
   cairo_paint (cr);
   cairo_destroy (cr);
- 
+
   cursor = gdk_cursor_new_from_pixmap (display,
                                        cairo_xlib_surface_get_drawable (pixmap),
                                        cairo_xlib_surface_get_drawable (mask),
                                        &fg, &bg,
                                        x, y);
-   
+
   cairo_surface_destroy (pixmap);
   cairo_surface_destroy (mask);
 
   g_free (data);
   g_free (mask_data);
-  
+
   return cursor;
 }
 
-GdkCursor*  
-gdk_cursor_new_from_name (GdkDisplay  *display,
-			  const gchar *name)
+GdkCursor*
+_gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
+                                      const gchar *name)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-
   return NULL;
 }
 
-gboolean 
-gdk_display_supports_cursor_alpha (GdkDisplay    *display)
+gboolean
+_gdk_x11_display_supports_cursor_alpha (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
   return FALSE;
 }
 
-gboolean 
-gdk_display_supports_cursor_color (GdkDisplay    *display)
+gboolean
+_gdk_x11_display_supports_cursor_color (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
   return FALSE;
 }
 
-guint     
-gdk_display_get_default_cursor_size (GdkDisplay    *display)
+void
+_gdk_x11_display_get_default_cursor_size (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-  
   /* no idea, really */
-  return 20; 
+  return 20;
 }
 
 #endif
@@ -1022,19 +858,19 @@ gdk_display_get_default_cursor_size (GdkDisplay    *display)
  *
  * Since: 2.4
  */
-void     
-gdk_display_get_maximal_cursor_size (GdkDisplay *display,
-				     guint       *width,
-				     guint       *height)
+void
+_gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
+                                          guint       *width,
+                                          guint       *height)
 {
   GdkScreen *screen;
   GdkWindow *window;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   screen = gdk_display_get_default_screen (display);
   window = gdk_screen_get_root_window (screen);
-  XQueryBestCursor (GDK_DISPLAY_XDISPLAY (display), 
-		    GDK_WINDOW_XID (window), 
-		    128, 128, width, height);
+  XQueryBestCursor (GDK_DISPLAY_XDISPLAY (display),
+                    GDK_WINDOW_XID (window),
+                    128, 128, width, height);
 }

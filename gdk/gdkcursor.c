@@ -27,8 +27,7 @@
 #include "config.h"
 
 #include "gdkcursor.h"
-
-#include "gdkdisplay.h"
+#include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
 
 
@@ -61,11 +60,11 @@ G_DEFINE_BOXED_TYPE (GdkCursor, gdk_cursor,
 /**
  * gdk_cursor_ref:
  * @cursor: a #GdkCursor
- * 
+ *
  * Adds a reference to @cursor.
- * 
+ *
  * Return value: Same @cursor that was passed in
- **/
+ */
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)
 {
@@ -83,8 +82,7 @@ gdk_cursor_ref (GdkCursor *cursor)
  *
  * Removes a reference from @cursor, deallocating the cursor
  * if no references remain.
- * 
- **/
+ */
 void
 gdk_cursor_unref (GdkCursor *cursor)
 {
@@ -100,14 +98,14 @@ gdk_cursor_unref (GdkCursor *cursor)
 /**
  * gdk_cursor_new:
  * @cursor_type: cursor to create
- * 
+ *
  * Creates a new cursor from the set of builtin cursors for the default display.
  * See gdk_cursor_new_for_display().
  *
  * To make the cursor invisible, use %GDK_BLANK_CURSOR.
- * 
+ *
  * Return value: a new #GdkCursor
- **/
+ */
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
@@ -130,4 +128,145 @@ gdk_cursor_get_cursor_type (GdkCursor *cursor)
   g_return_val_if_fail (cursor != NULL, GDK_BLANK_CURSOR);
 
   return cursor->type;
+}
+
+/**
+ * gdk_cursor_new_for_display:
+ * @display: the #GdkDisplay for which the cursor will be created
+ * @cursor_type: cursor to create
+ *
+ * Creates a new cursor from the set of builtin cursors.
+ * Some useful ones are:
+ * <itemizedlist>
+ * <listitem><para>
+ *  <inlinegraphic format="PNG" fileref="right_ptr.png"></inlinegraphic> #GDK_RIGHT_PTR (right-facing arrow)
+ * </para></listitem>
+ * <listitem><para>
+ *  <inlinegraphic format="PNG" fileref="crosshair.png"></inlinegraphic> #GDK_CROSSHAIR (crosshair)
+ * </para></listitem>
+ * <listitem><para>
+ *  <inlinegraphic format="PNG" fileref="xterm.png"></inlinegraphic> #GDK_XTERM (I-beam)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="watch.png"></inlinegraphic> #GDK_WATCH (busy)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="fleur.png"></inlinegraphic> #GDK_FLEUR (for moving objects)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="hand1.png"></inlinegraphic> #GDK_HAND1 (a right-pointing hand)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="hand2.png"></inlinegraphic> #GDK_HAND2 (a left-pointing hand)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="left_side.png"></inlinegraphic> #GDK_LEFT_SIDE (resize left side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="right_side.png"></inlinegraphic> #GDK_RIGHT_SIDE (resize right side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="top_left_corner.png"></inlinegraphic> #GDK_TOP_LEFT_CORNER (resize northwest corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="top_right_corner.png"></inlinegraphic> #GDK_TOP_RIGHT_CORNER (resize northeast corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="bottom_left_corner.png"></inlinegraphic> #GDK_BOTTOM_LEFT_CORNER (resize southwest corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="bottom_right_corner.png"></inlinegraphic> #GDK_BOTTOM_RIGHT_CORNER (resize southeast corner)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="top_side.png"></inlinegraphic> #GDK_TOP_SIDE (resize top side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="bottom_side.png"></inlinegraphic> #GDK_BOTTOM_SIDE (resize bottom side)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="sb_h_double_arrow.png"></inlinegraphic> #GDK_SB_H_DOUBLE_ARROW (move vertical splitter)
+ * </para></listitem>
+ * <listitem><para>
+ * <inlinegraphic format="PNG" fileref="sb_v_double_arrow.png"></inlinegraphic> #GDK_SB_V_DOUBLE_ARROW (move horizontal splitter)
+ * </para></listitem>
+ * <listitem><para>
+ * #GDK_BLANK_CURSOR (Blank cursor). Since 2.16
+ * </para></listitem>
+ * </itemizedlist>
+ *
+ * Return value: a new #GdkCursor
+ *
+ * Since: 2.2
+ **/
+GdkCursor*
+gdk_cursor_new_for_display (GdkDisplay    *display,
+                            GdkCursorType  cursor_type)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_type (display, cursor_type);
+}
+
+/**
+ * gdk_cursor_new_from_name:
+ * @display: the #GdkDisplay for which the cursor will be created
+ * @name: the name of the cursor
+ *
+ * Creates a new cursor by looking up @name in the current cursor
+ * theme.
+ *
+ * Returns: a new #GdkCursor, or %NULL if there is no cursor with
+ *   the given name
+ *
+ * Since: 2.8
+ */
+GdkCursor*
+gdk_cursor_new_from_name (GdkDisplay  *display,
+                          const gchar *name)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_name (display, name);
+}
+
+/**
+ * gdk_cursor_new_from_pixbuf:
+ * @display: the #GdkDisplay for which the cursor will be created
+ * @pixbuf: the #GdkPixbuf containing the cursor image
+ * @x: the horizontal offset of the 'hotspot' of the cursor.
+ * @y: the vertical offset of the 'hotspot' of the cursor.
+ *
+ * Creates a new cursor from a pixbuf.
+ *
+ * Not all GDK backends support RGBA cursors. If they are not
+ * supported, a monochrome approximation will be displayed.
+ * The functions gdk_display_supports_cursor_alpha() and
+ * gdk_display_supports_cursor_color() can be used to determine
+ * whether RGBA cursors are supported;
+ * gdk_display_get_default_cursor_size() and
+ * gdk_display_get_maximal_cursor_size() give information about
+ * cursor sizes.
+ *
+ * If @x or @y are <literal>-1</literal>, the pixbuf must have
+ * options named "x_hot" and "y_hot", resp., containing
+ * integer values between %0 and the width resp. height of
+ * the pixbuf. (Since: 3.0)
+ *
+ * On the X backend, support for RGBA cursors requires a
+ * sufficently new version of the X Render extension.
+ *
+ * Returns: a new #GdkCursor.
+ *
+ * Since: 2.4
+ */
+GdkCursor *
+gdk_cursor_new_from_pixbuf (GdkDisplay *display,
+                            GdkPixbuf  *pixbuf,
+                            gint        x,
+                            gint        y)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
+
+  return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_pixbuf (display, pixbuf, x, y);
 }

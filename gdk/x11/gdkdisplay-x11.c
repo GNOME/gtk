@@ -2696,5 +2696,12 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->add_client_message_filter = gdk_x11_display_add_client_message_filter;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
   display_class->get_drag_protocol = _gdk_x11_display_get_drag_protocol;
+  display_class->get_cursor_for_type = _gdk_x11_display_get_cursor_for_type;
+  display_class->get_cursor_for_name = _gdk_x11_display_get_cursor_for_name;
+  display_class->get_cursor_for_pixbuf = _gdk_x11_display_get_cursor_for_pixbuf;
+  display_class->get_default_cursor_size = _gdk_x11_display_get_default_cursor_size;
+  display_class->get_maximal_cursor_size = _gdk_x11_display_get_maximal_cursor_size;
+  display_class->supports_cursor_alpha = _gdk_x11_display_supports_cursor_alpha;
+  display_class->supports_cursor_color = _gdk_x11_display_supports_cursor_color;
 }
 

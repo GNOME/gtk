@@ -21,6 +21,7 @@
 #define __GDK_DISPLAY_PRIVATE_H__
 
 #include "gdkdisplay.h"
+#include "gdkcursor.h"
 
 G_BEGIN_DECLS
 
@@ -127,15 +128,34 @@ struct _GdkDisplayClass
   gboolean                   (*supports_selection_notification) (GdkDisplay *display);
   gboolean                   (*request_selection_notification)  (GdkDisplay *display,
                                                                  GdkAtom     selection);
+  gboolean                   (*supports_shapes)       (GdkDisplay *display);
+  gboolean                   (*supports_input_shapes) (GdkDisplay *display);
+  gboolean                   (*supports_composite)    (GdkDisplay *display);
+  gboolean                   (*supports_cursor_alpha) (GdkDisplay *display);
+  gboolean                   (*supports_cursor_color) (GdkDisplay *display);
+
   gboolean                   (*supports_clipboard_persistence)  (GdkDisplay *display);
   void                       (*store_clipboard)    (GdkDisplay    *display,
                                                     GdkWindow     *clipboard_window,
                                                     guint32        time_,
                                                     const GdkAtom *targets,
                                                     gint           n_targets);
-  gboolean                   (*supports_shapes)    (GdkDisplay *display);
-  gboolean                   (*supports_input_shapes) (GdkDisplay *display);
-  gboolean                   (*supports_composite) (GdkDisplay *display);
+
+  void                       (*get_default_cursor_size) (GdkDisplay *display,
+                                                         guint      *width,
+                                                         guint      *height);
+  void                       (*get_maximal_cursor_size) (GdkDisplay *display,
+                                                         guint      *width,
+                                                         guint      *height);
+  GdkCursor *                (*get_cursor_for_type)     (GdkDisplay    *display,
+                                                         GdkCursorType  type);
+  GdkCursor *                (*get_cursor_for_name)     (GdkDisplay    *display,
+                                                         const gchar   *name);
+  GdkCursor *                (*get_cursor_for_pixbuf)   (GdkDisplay    *display,
+                                                         GdkPixbuf     *pixbuf,
+                                                         gint           x,
+                                                         gint           y);
+
   GList *                    (*list_devices)       (GdkDisplay *display);
   gboolean                   (*send_client_message) (GdkDisplay     *display,
                                                      GdkEvent       *event,

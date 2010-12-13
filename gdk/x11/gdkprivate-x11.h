@@ -157,6 +157,23 @@ void _gdk_x11_display_manager_add_display     (GdkDisplayManager *manager,
 void _gdk_x11_display_manager_remove_display  (GdkDisplayManager *manager,
                                                GdkDisplay        *display);
 
+GdkCursor *_gdk_x11_display_get_cursor_for_type     (GdkDisplay    *display,
+                                                     GdkCursorType  type);
+GdkCursor *_gdk_x11_display_get_cursor_for_name     (GdkDisplay    *display,
+                                                     const gchar   *name);
+GdkCursor *_gdk_x11_display_get_cursor_for_pixbuf   (GdkDisplay    *display,
+                                                     GdkPixbuf     *pixbuf,
+                                                     gint           x,
+                                                     gint           y);
+gboolean   _gdk_x11_display_supports_cursor_alpha   (GdkDisplay    *display);
+gboolean   _gdk_x11_display_supports_cursor_color   (GdkDisplay    *display);
+void       _gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
+                                                     guint      *width,
+                                                     guint      *height);
+void       _gdk_x11_display_get_maximal_cursor_size (GdkDisplay *display,
+                                                     guint      *width,
+                                                     guint      *height);
+
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
 			      const gchar * const *atom_names,
 			      gint                 n_atoms);
