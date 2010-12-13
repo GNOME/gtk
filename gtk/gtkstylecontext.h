@@ -310,6 +310,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_MARK "mark"
 
 /**
+ * GTK_STYLE_CLASS_EXPANDER:
+ *
+ * A widget class defining an expander, such as those in treeviews
+ */
+#define GTK_STYLE_CLASS_EXPANDER "expander"
+
+/**
  * GTK_STYLE_CLASS_SPINBUTTON:
  *
  * A widget class defining an spinbutton
