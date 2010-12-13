@@ -49,7 +49,6 @@
 #include <X11/XKBlib.h>
 #endif
 
-
 typedef struct _GdkPredicate        GdkPredicate;
 typedef struct _GdkGlobalErrorTrap  GdkGlobalErrorTrap;
 
@@ -201,27 +200,6 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
     }
 
   g_list_free (devices);
-}
-
-void
-_gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
-					 const gchar *sm_client_id)
-{
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-
-  if (gdk_display_is_closed (display))
-    return;
-
-  if (sm_client_id && strcmp (sm_client_id, ""))
-    {
-      XChangeProperty (display_x11->xdisplay, display_x11->leader_window,
-		       gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"),
-		       XA_STRING, 8, PropModeReplace, (guchar *)sm_client_id,
-		       strlen (sm_client_id));
-    }
-  else
-    XDeleteProperty (display_x11->xdisplay, display_x11->leader_window,
-		     gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
 /*

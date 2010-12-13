@@ -321,7 +321,6 @@ gdk_set_locale
 gdk_set_pointer_hooks
 gdk_set_program_class
 gdk_set_show_events
-gdk_set_sm_client_id
 gdk_setting_action_get_type G_GNUC_CONST
 gdk_setting_get
 gdk_spawn_command_line_on_screen
@@ -566,6 +565,7 @@ gdk_x11_screen_get_window_manager_name
 gdk_x11_screen_get_xscreen
 gdk_x11_screen_lookup_visual
 gdk_x11_screen_supports_net_wm_hint
+gdk_x11_set_sm_client_id
 gdk_x11_ungrab_server
 gdk_x11_visual_get_xvisual
 gdk_x11_window_get_xid

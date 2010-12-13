@@ -136,8 +136,6 @@ static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay 
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static char *gdk_sm_client_id;
-
 static const GdkDisplayDeviceHooks default_device_hooks = {
   _gdk_windowing_get_device_state,
   gdk_window_real_window_get_device_position,
@@ -659,49 +657,6 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
   g_return_if_fail (event != NULL);
 
   gdk_screen_broadcast_client_message (gdk_screen_get_default (), event);
-}
-
-/**
- * gdk_set_sm_client_id:
- * @sm_client_id: the client id assigned by the session manager when the
- *    connection was opened, or %NULL to remove the property.
- * 
- * Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window so that
- * the window manager can save the application's state using the X11R6 ICCCM
- * session management protocol.
- *
- * See the X Session Management Library documentation for more information on
- * session management and the Inter-Client Communication Conventions Manual
- * (ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
- * (Both documents are part of the X Window System distribution.)
- **/
-void
-gdk_set_sm_client_id (const gchar* sm_client_id)
-{
-  GSList *displays, *tmp_list;
-  
-  g_free (gdk_sm_client_id);
-  gdk_sm_client_id = g_strdup (sm_client_id);
-
-  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
-  for (tmp_list = displays; tmp_list; tmp_list = tmp_list->next)
-    _gdk_windowing_display_set_sm_client_id (tmp_list->data, sm_client_id);
-
-  g_slist_free (displays);
-}
-
-/**
- * _gdk_get_sm_client_id:
- * 
- * Gets the client ID set with gdk_set_sm_client_id(), if any.
- * 
- * Return value: Session ID, or %NULL if gdk_set_sm_client_id()
- *               has never been called.
- **/
-const char *
-_gdk_get_sm_client_id (void)
-{
-  return gdk_sm_client_id;
 }
 
 void

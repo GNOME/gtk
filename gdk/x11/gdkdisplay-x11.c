@@ -157,6 +157,8 @@ static const char *const precache_atoms[] = {
   "_NET_VIRTUAL_ROOTS"
 };
 
+static char *gdk_sm_client_id;
+
 G_DEFINE_TYPE_WITH_CODE (GdkDisplayX11, _gdk_display_x11, GDK_TYPE_DISPLAY,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_display_x11_event_translator_init))
@@ -1165,6 +1167,25 @@ gdk_input_init (GdkDisplay *display)
   g_list_free (list);
 }
 
+static void
+set_sm_client_id (GdkDisplay  *display,
+                  const gchar *sm_client_id)
+{
+  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (gdk_display_is_closed (display))
+    return;
+
+  if (sm_client_id && strcmp (sm_client_id, ""))
+    XChangeProperty (display_x11->xdisplay, display_x11->leader_window,
+                     gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"),
+                     XA_STRING, 8, PropModeReplace, (guchar *)sm_client_id,
+                     strlen (sm_client_id));
+  else
+    XDeleteProperty (display_x11->xdisplay, display_x11->leader_window,
+                     gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
+}
+
 /**
  * gdk_display_open:
  * @display_name: the name of the display to open
@@ -1185,8 +1206,7 @@ _gdk_x11_display_open (const gchar *display_name)
   GdkWindowAttr attr;
   gint argc;
   gchar *argv[1];
-  const char *sm_client_id;
-  
+
   XClassHint *class_hint;
   gulong pid;
   gint i;
@@ -1357,9 +1377,8 @@ _gdk_x11_display_open (const gchar *display_name)
 		      class_hint);
   XFree (class_hint);
 
-  sm_client_id = _gdk_get_sm_client_id ();
-  if (sm_client_id)
-    _gdk_windowing_display_set_sm_client_id (display, sm_client_id);
+  if (gdk_sm_client_id)
+    set_sm_client_id (display, gdk_sm_client_id);
 
   pid = getpid ();
   XChangeProperty (display_x11->xdisplay,
@@ -2664,6 +2683,34 @@ extern GdkNativeWindow      _gdk_x11_display_get_drag_protocol      (GdkDisplay 
                                                                      GdkNativeWindow  xid,
                                                                      GdkDragProtocol *protocol,
                                                                      guint           *version);
+
+
+/**
+ * gdk_x11_set_sm_client_id:
+ * @sm_client_id: the client id assigned by the session manager when the
+ *    connection was opened, or %NULL to remove the property.
+ *
+ * Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window so that
+ * the window manager can save the application's state using the X11R6 ICCCM
+ * session management protocol.
+ *
+ * See the X Session Management Library documentation for more information on
+ * session management and the Inter-Client Communication Conventions Manual
+ */
+void
+gdk_x11_set_sm_client_id (const gchar *sm_client_id)
+{
+ GSList *displays, *l;
+
+  g_free (gdk_sm_client_id);
+  gdk_sm_client_id = g_strdup (sm_client_id);
+
+  displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  for (l = displays; l; l = l->next)
+    set_sm_client_id (l->data, sm_client_id);
+
+  g_slist_free (displays);
+}
 
 static void
 _gdk_display_x11_class_init (GdkDisplayX11Class * class)
