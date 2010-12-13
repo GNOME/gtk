@@ -3781,6 +3781,40 @@ gtk_combo_box_new (void)
 }
 
 /**
+ * gtk_combo_box_new_with_area:
+ * @area: the #GtkCellArea to use to layout cell renderers
+ *
+ * Creates a new empty #GtkComboBox using @area to layout cells.
+ *
+ * Return value: A new #GtkComboBox.
+ */
+GtkWidget *
+gtk_combo_box_new_with_area (GtkCellArea  *area)
+{
+  return g_object_new (GTK_TYPE_COMBO_BOX, "cell-area", area, NULL);
+}
+
+/**
+ * gtk_combo_box_new_with_area_and_entry:
+ * @area: the #GtkCellArea to use to layout cell renderers
+ *
+ * Creates a new empty #GtkComboBox with an entry.
+ *
+ * The new combo box will use @area to layout cells.
+ *
+ * Return value: A new #GtkComboBox.
+ */
+GtkWidget *
+gtk_combo_box_new_with_area_and_entry (GtkCellArea *area)
+{
+  return g_object_new (GTK_TYPE_COMBO_BOX, 
+		       "has-entry", TRUE, 
+		       "cell-area", area, 
+		       NULL);
+}
+
+
+/**
  * gtk_combo_box_new_with_entry:
  *
  * Creates a new empty #GtkComboBox with an entry.
