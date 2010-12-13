@@ -1986,6 +1986,8 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   double x_double, y_double;
   gdouble angle;
   gint line_width;
+  gboolean running, is_rtl;
+  gdouble progress;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -1993,23 +1995,23 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "color", &fg_color,
                           NULL);
-  gtk_theming_engine_get (engine, 0,
-                          "color", &outline_color,
+  gtk_theming_engine_get (engine, flags,
+                          "border-color", &outline_color,
                           NULL);
 
+  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress);
+  is_rtl = (gtk_theming_engine_get_direction (engine) == GTK_TEXT_DIR_RTL);
   line_width = 1;
 
-  /* FIXME: LTR/RTL */
-  if (flags & GTK_STATE_FLAG_ACTIVE)
-    {
-      angle = G_PI / 2;
-      interp = 1.0;
-    }
+  if (!running)
+    progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
+
+  if (is_rtl)
+    angle = (G_PI) - ((G_PI / 2) * progress);
   else
-    {
-      angle = 0;
-      interp = 0;
-    }
+    angle = (G_PI / 2) * progress;
+
+  interp = progress;
 
   /* Compute distance that the stroke extends beyonds the end
    * of the triangle we draw.
