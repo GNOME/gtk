@@ -527,27 +527,37 @@ for_size_copy (gpointer    key,
 
 GtkCellAreaBoxContext *
 gtk_cell_area_box_context_copy (GtkCellAreaBox        *box,
-				GtkCellAreaBoxContext *box_context)
+				GtkCellAreaBoxContext *context)
 {
-  GtkCellAreaBoxContext *context;
+  GtkCellAreaBoxContext *copy;
 
-  context = g_object_new (GTK_TYPE_CELL_AREA_BOX_CONTEXT, 
-			  "area", box, NULL);
+  copy = g_object_new (GTK_TYPE_CELL_AREA_BOX_CONTEXT, 
+		       "area", box, NULL);
 
-  gtk_cell_area_box_init_groups (context, 
-				 box_context->priv->base_widths->len,
-				 box_context->priv->expand);
+  gtk_cell_area_box_init_groups (copy, 
+				 context->priv->base_widths->len,
+				 context->priv->expand);
 
-  /* Copy all the arrays */
-  copy_size_array (box_context->priv->base_widths, 
-		   context->priv->base_widths);
-  copy_size_array (box_context->priv->base_heights, 
-		   context->priv->base_heights);
+  /* Copy the base arrays */
+  copy_size_array (context->priv->base_widths, 
+		   copy->priv->base_widths);
+  copy_size_array (context->priv->base_heights, 
+		   copy->priv->base_heights);
 
-  g_hash_table_foreach (box_context->priv->heights,
-			(GHFunc)for_size_copy, context->priv->heights);
-  g_hash_table_foreach (box_context->priv->widths,
-			(GHFunc)for_size_copy, context->priv->widths);
+  /* Copy each for size */
+  g_hash_table_foreach (context->priv->heights,
+			(GHFunc)for_size_copy, copy->priv->heights);
+  g_hash_table_foreach (context->priv->widths,
+			(GHFunc)for_size_copy, copy->priv->widths);
+
+  /* Copy any active allocation */
+  copy->priv->n_orientation_allocs = 
+    context->priv->n_orientation_allocs;
+
+  if (copy->priv->n_orientation_allocs)
+    copy->priv->orientation_allocs = 
+      g_memdup (context->priv->orientation_allocs, 
+		copy->priv->n_orientation_allocs * sizeof (GtkCellAreaBoxAllocation));
 
   return context;
 }
