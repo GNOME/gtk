@@ -4161,6 +4161,23 @@ gtk_icon_view_new (void)
 }
 
 /**
+ * gtk_icon_view_new_with_area:
+ * @area: the #GtkCellArea to use to layout cells
+ * 
+ * Creates a new #GtkIconView widget using the
+ * specified @area to layout cells inside the icons.
+ * 
+ * Return value: A newly created #GtkIconView widget
+ *
+ * Since: 3.0
+ **/
+GtkWidget *
+gtk_icon_view_new_with_area (GtkCellArea *area)
+{
+  return g_object_new (GTK_TYPE_ICON_VIEW, "cell-area", area, NULL);
+}
+
+/**
  * gtk_icon_view_new_with_model:
  * @model: The model.
  * 

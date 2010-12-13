@@ -1621,6 +1621,7 @@ gtk_hseparator_get_type
 GtkIconView
 GtkIconViewForeachFunc
 gtk_icon_view_new
+gtk_icon_view_new_with_area
 gtk_icon_view_new_with_model
 gtk_icon_view_set_model
 gtk_icon_view_get_model
