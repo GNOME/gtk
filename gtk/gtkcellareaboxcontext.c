@@ -559,7 +559,7 @@ gtk_cell_area_box_context_copy (GtkCellAreaBox        *box,
       g_memdup (context->priv->orientation_allocs, 
 		copy->priv->n_orientation_allocs * sizeof (GtkCellAreaBoxAllocation));
 
-  return context;
+  return copy;
 }
 
 void
