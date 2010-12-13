@@ -183,12 +183,16 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
    * @device_manager: the object on which the signal is emitted
    * @device: the #GdkDevice that changed.
    *
-   * The ::device-changed signal is emitted either when some
-   * #GdkDevice has changed the number of either axes or keys.
-   * For example In X this will normally happen when the slave
-   * device routing events through the master device changes,
-   * in that case the master device will change to reflect the
-   * new slave device axes and keys.
+   * The ::device-changed signal is emitted whenever a device
+   * has changed in the hierarchy, either slave devices being
+   * disconnected from their master device or connected to
+   * another one, or master devices being added or removed
+   * a slave device.
+   *
+   * If a slave device is detached from all master devices
+   * (gdk_device_get_associated_device() returns %NULL), its
+   * #GdkDeviceType will change to %GDK_DEVICE_TYPE_FLOATING,
+   * if it's attached, it will change to %GDK_DEVICE_TYPE_SLAVE.
    */
   signals [DEVICE_CHANGED] =
     g_signal_new (g_intern_static_string ("device-changed"),

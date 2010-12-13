@@ -263,15 +263,29 @@ add_device (GdkDeviceManagerXI2 *device_manager,
 
   if (dev->use == XIMasterPointer || dev->use == XIMasterKeyboard)
     device_manager->master_devices = g_list_append (device_manager->master_devices, device);
-  else if (dev->use == XISlavePointer || dev->use == XISlaveKeyboard)
+  else if (dev->use == XISlavePointer || dev->use == XISlaveKeyboard || dev->use == XIFloatingSlave)
     device_manager->slave_devices = g_list_append (device_manager->slave_devices, device);
-  else if (dev->use == XIFloatingSlave)
-    device_manager->floating_devices = g_list_append (device_manager->floating_devices, device);
   else
     g_warning ("Unhandled device: %s\n", gdk_device_get_name (device));
 
   if (emit_signal)
-    g_signal_emit_by_name (device_manager, "device-added", device);
+    {
+      if (dev->use == XISlavePointer || dev->use == XISlaveKeyboard)
+        {
+          GdkDevice *master;
+
+          /* The device manager is already constructed, then
+           * keep the hierarchy coherent for the added device.
+           */
+          master = g_hash_table_lookup (device_manager->id_table,
+                                        GINT_TO_POINTER (dev->attachment));
+
+          _gdk_device_set_associated_device (device, master);
+          _gdk_device_add_slave (master, device);
+        }
+
+      g_signal_emit_by_name (device_manager, "device-added", device);
+    }
 
   return device;
 }
@@ -289,7 +303,6 @@ remove_device (GdkDeviceManagerXI2 *device_manager,
     {
       device_manager->master_devices = g_list_remove (device_manager->master_devices, device);
       device_manager->slave_devices = g_list_remove (device_manager->slave_devices, device);
-      device_manager->floating_devices = g_list_remove (device_manager->floating_devices, device);
 
       g_signal_emit_by_name (device_manager, "device-removed", device);
 
@@ -301,7 +314,7 @@ remove_device (GdkDeviceManagerXI2 *device_manager,
 }
 
 static void
-relate_devices (gpointer key,
+relate_masters (gpointer key,
                 gpointer value,
                 gpointer user_data)
 {
@@ -317,12 +330,28 @@ relate_devices (gpointer key,
 }
 
 static void
+relate_slaves (gpointer key,
+               gpointer value,
+               gpointer user_data)
+{
+  GdkDeviceManagerXI2 *device_manager;
+  GdkDevice *slave, *master;
+
+  device_manager = user_data;
+  slave = g_hash_table_lookup (device_manager->id_table, key);
+  master = g_hash_table_lookup (device_manager->id_table, value);
+
+  _gdk_device_set_associated_device (slave, master);
+  _gdk_device_add_slave (master, slave);
+}
+
+static void
 gdk_device_manager_xi2_constructed (GObject *object)
 {
   GdkDeviceManagerXI2 *device_manager_xi2;
   GdkDisplay *display;
   GdkScreen *screen;
-  GHashTable *relations;
+  GHashTable *masters, *slaves;
   Display *xdisplay;
   XIDeviceInfo *info, *dev;
   int ndevices, i;
@@ -332,7 +361,9 @@ gdk_device_manager_xi2_constructed (GObject *object)
   device_manager_xi2 = GDK_DEVICE_MANAGER_XI2 (object);
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  relations = g_hash_table_new (NULL, NULL);
+
+  masters = g_hash_table_new (NULL, NULL);
+  slaves = g_hash_table_new (NULL, NULL);
 
   info = XIQueryDevice(xdisplay, XIAllDevices, &ndevices);
 
@@ -347,7 +378,14 @@ gdk_device_manager_xi2_constructed (GObject *object)
       if (dev->use == XIMasterPointer ||
           dev->use == XIMasterKeyboard)
         {
-          g_hash_table_insert (relations,
+          g_hash_table_insert (masters,
+                               GINT_TO_POINTER (dev->deviceid),
+                               GINT_TO_POINTER (dev->attachment));
+        }
+      else if (dev->use == XISlavePointer ||
+               dev->use == XISlaveKeyboard)
+        {
+          g_hash_table_insert (slaves,
                                GINT_TO_POINTER (dev->deviceid),
                                GINT_TO_POINTER (dev->attachment));
         }
@@ -356,8 +394,11 @@ gdk_device_manager_xi2_constructed (GObject *object)
   XIFreeDeviceInfo(info);
 
   /* Stablish relationships between devices */
-  g_hash_table_foreach (relations, relate_devices, object);
-  g_hash_table_destroy (relations);
+  g_hash_table_foreach (masters, relate_masters, object);
+  g_hash_table_destroy (masters);
+
+  g_hash_table_foreach (slaves, relate_slaves, object);
+  g_hash_table_destroy (slaves);
 
   /* Connect to hierarchy change events */
   screen = gdk_display_get_default_screen (display);
@@ -388,10 +429,6 @@ gdk_device_manager_xi2_dispose (GObject *object)
   g_list_free (device_manager_xi2->slave_devices);
   device_manager_xi2->slave_devices = NULL;
 
-  g_list_foreach (device_manager_xi2->floating_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (device_manager_xi2->floating_devices);
-  device_manager_xi2->floating_devices = NULL;
-
   if (device_manager_xi2->id_table)
     {
       g_hash_table_destroy (device_manager_xi2->id_table);
@@ -416,10 +453,21 @@ gdk_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
       list = device_manager_xi2->master_devices;
       break;
     case GDK_DEVICE_TYPE_SLAVE:
-      list = device_manager_xi2->slave_devices;
-      break;
     case GDK_DEVICE_TYPE_FLOATING:
-      list = device_manager_xi2->floating_devices;
+      {
+        GList *devs = device_manager_xi2->slave_devices;
+
+        while (devs)
+          {
+            GdkDevice *dev;
+
+            dev = devs->data;
+            devs = devs->next;
+
+            if (type == gdk_device_get_device_type (dev))
+              list = g_list_prepend (list, dev);
+          }
+      }
       break;
     default:
       g_assert_not_reached ();
@@ -457,32 +505,61 @@ static void
 handle_hierarchy_changed (GdkDeviceManagerXI2 *device_manager,
                           XIHierarchyEvent    *ev)
 {
+  GdkDisplay *display;
+  Display *xdisplay;
   GdkDevice *device;
+  XIDeviceInfo *info;
+  int ndevices;
   gint i;
 
-  /* We only care about enabled devices */
-  if (!(ev->flags & XIDeviceEnabled) &&
-      !(ev->flags & XIDeviceDisabled))
-    return;
+  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   for (i = 0; i < ev->num_info; i++)
     {
       if (ev->info[i].flags & XIDeviceEnabled)
         {
-          GdkDisplay *display;
-          Display *xdisplay;
-          XIDeviceInfo *info;
-          int ndevices;
-
-          display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
-          xdisplay = GDK_DISPLAY_XDISPLAY (display);
-
           info = XIQueryDevice(xdisplay, ev->info[i].deviceid, &ndevices);
           device = add_device (device_manager, &info[0], TRUE);
           XIFreeDeviceInfo(info);
         }
       else if (ev->info[i].flags & XIDeviceDisabled)
         remove_device (device_manager, ev->info[i].deviceid);
+      else if (ev->info[i].flags & XISlaveAttached ||
+               ev->info[i].flags & XISlaveDetached)
+        {
+          GdkDevice *master, *slave;
+
+          slave = g_hash_table_lookup (device_manager->id_table,
+                                       GINT_TO_POINTER (ev->info[i].deviceid));
+
+          /* Remove old master info */
+          master = gdk_device_get_associated_device (slave);
+
+          if (master)
+            {
+              _gdk_device_remove_slave (master, slave);
+              _gdk_device_set_associated_device (slave, NULL);
+
+              g_signal_emit_by_name (device_manager, "device-changed", master);
+            }
+
+          /* Add new master if it's an attachment event */
+          if (ev->info[i].flags & XISlaveAttached)
+            {
+              info = XIQueryDevice(xdisplay, ev->info[i].deviceid, &ndevices);
+
+              master = g_hash_table_lookup (device_manager->id_table,
+                                            GINT_TO_POINTER (info->attachment));
+
+              _gdk_device_set_associated_device (slave, master);
+              _gdk_device_add_slave (master, slave);
+
+              g_signal_emit_by_name (device_manager, "device-changed", master);
+            }
+
+          g_signal_emit_by_name (device_manager, "device-changed", slave);
+        }
     }
 }
 

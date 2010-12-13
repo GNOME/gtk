@@ -125,6 +125,10 @@ GdkTimeCoord ** _gdk_device_allocate_history  (GdkDevice *device,
 
 void _gdk_input_check_extension_events (GdkDevice *device);
 
+void _gdk_device_add_slave (GdkDevice *device,
+                            GdkDevice *slave);
+void _gdk_device_remove_slave (GdkDevice *device,
+                               GdkDevice *slave);
 
 G_END_DECLS
 

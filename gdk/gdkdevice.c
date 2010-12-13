@@ -59,7 +59,13 @@ struct _GdkDevicePrivate
   GdkDeviceKey *keys;
   GdkDeviceManager *device_manager;
   GdkDisplay *display;
+
+  /* Paired master for master,
+   * associated master for slaves
+   */
   GdkDevice *associated;
+
+  GList *slaves;
   GdkDeviceType type;
   GArray *axes;
 };
@@ -289,6 +295,9 @@ gdk_device_dispose (GObject *object)
 
   device = GDK_DEVICE (object);
   priv = device->priv;
+
+  if (priv->type == GDK_DEVICE_TYPE_SLAVE)
+    _gdk_device_remove_slave (priv->associated, device);
 
   if (priv->associated)
     {
@@ -820,6 +829,24 @@ gdk_device_get_associated_device (GdkDevice *device)
   return priv->associated;
 }
 
+static void
+_gdk_device_set_device_type (GdkDevice     *device,
+                             GdkDeviceType  type)
+{
+  GdkDevicePrivate *priv;
+
+  priv = device->priv;
+
+  if (priv->type != type)
+    {
+      priv->type = type;
+
+      g_print ("Setting device type to %d\n", type);
+
+      g_object_notify (G_OBJECT (device), "type");
+    }
+}
+
 void
 _gdk_device_set_associated_device (GdkDevice *device,
                                    GdkDevice *associated)
@@ -842,6 +869,81 @@ _gdk_device_set_associated_device (GdkDevice *device,
 
   if (associated)
     priv->associated = g_object_ref (associated);
+
+  if (priv->type != GDK_DEVICE_TYPE_MASTER)
+    {
+      if (priv->associated)
+        _gdk_device_set_device_type (device, GDK_DEVICE_TYPE_SLAVE);
+      else
+        _gdk_device_set_device_type (device, GDK_DEVICE_TYPE_FLOATING);
+    }
+}
+
+/**
+ * gdk_device_list_slave_devices:
+ * @device: a #GdkDevice
+ *
+ * If the device if of type %GDK_DEVICE_TYPE_MASTER, it will return
+ * the list of slave devices attached to it, otherwise it will return
+ * %NULL
+ *
+ * Returns: (transfer container): the list of slave devices, or %NULL. The
+ *          list must be freed with g_list_free(), the contents of the list
+ *          are owned by GTK+ and should not be freed.
+ **/
+GList *
+gdk_device_list_slave_devices (GdkDevice *device)
+{
+  GdkDevicePrivate *priv;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
+
+  priv = device->priv;
+
+  return g_list_copy (priv->slaves);
+}
+
+void
+_gdk_device_add_slave (GdkDevice *device,
+                       GdkDevice *slave)
+{
+  GdkDevicePrivate *priv;
+
+  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
+  g_return_if_fail (gdk_device_get_device_type (slave) != GDK_DEVICE_TYPE_MASTER);
+
+  priv = device->priv;
+
+  g_print ("Adding %s ---> %s\n",
+           gdk_device_get_name (slave),
+           gdk_device_get_name (device));
+
+  if (!g_list_find (priv->slaves, slave))
+    priv->slaves = g_list_prepend (priv->slaves, slave);
+}
+
+void
+_gdk_device_remove_slave (GdkDevice *device,
+                          GdkDevice *slave)
+{
+  GdkDevicePrivate *priv;
+  GList *elem;
+
+  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
+  g_return_if_fail (gdk_device_get_device_type (slave) != GDK_DEVICE_TYPE_MASTER);
+
+  priv = device->priv;
+  elem = g_list_find (priv->slaves, slave);
+
+  if (!elem)
+    return;
+
+  g_print ("Removing %s ---> %s\n",
+           gdk_device_get_name (slave),
+           gdk_device_get_name (device));
+
+  priv->slaves = g_list_delete_link (priv->slaves, elem);
 }
 
 /**
