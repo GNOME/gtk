@@ -27,6 +27,7 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtkcellrenderer.h>
+#include <gtk/gtkcellarea.h>
 #include <gtk/gtkselection.h>
 #include <gtk/gtktooltip.h>
 
@@ -112,6 +113,7 @@ struct _GtkIconViewClass
 
 GType          gtk_icon_view_get_type          (void) G_GNUC_CONST;
 GtkWidget *    gtk_icon_view_new               (void);
+GtkWidget *    gtk_icon_view_new_with_area     (GtkCellArea    *area);
 GtkWidget *    gtk_icon_view_new_with_model    (GtkTreeModel   *model);
 
 void           gtk_icon_view_set_model         (GtkIconView    *icon_view,
