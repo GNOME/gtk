@@ -1150,7 +1150,7 @@ compare_selector (GtkWidgetPath *path,
                   SelectorPath  *selector)
 {
   GSList *elements = selector->elements;
-  gboolean match = TRUE;
+  gboolean match = TRUE, first = TRUE, first_match = FALSE;
   guint64 score = 0;
   gint i;
 
@@ -1164,6 +1164,9 @@ compare_selector (GtkWidgetPath *path,
       elem = elements->data;
 
       match = compare_selector_element (path, i, elem, &elem_score);
+
+      if (match && first)
+        first_match = TRUE;
 
       /* Only move on to the next index if there is no match
        * with the current element (whether to continue or not
@@ -1197,6 +1200,8 @@ compare_selector (GtkWidgetPath *path,
           score <<= 4;
           score |= elem_score;
         }
+
+      first = FALSE;
     }
 
   /* If there are pending selector
@@ -1208,6 +1213,13 @@ compare_selector (GtkWidgetPath *path,
 
   if (!match)
     score = 0;
+  else if (first_match)
+    {
+      /* Assign more weight to these selectors 
+       * that matched right from the first element.
+       */
+      score <<= 4;
+    }
 
   return score;
 }
