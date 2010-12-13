@@ -1102,6 +1102,20 @@ main (int argc, char **argv)
 	if (g_getenv ("RTL"))
 	  gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
+	if (g_getenv ("LISTMODE"))
+	  {
+	    GtkCssProvider *provider = gtk_css_provider_new ();
+
+	    gtk_css_provider_load_from_data (provider,
+					     "* { -GtkComboBox-appears-as-list: true; }", 
+					     -1, NULL);
+
+	    gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+						       GTK_STYLE_PROVIDER (provider),
+						       GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+
+	  }
+
         window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
         gtk_container_set_border_width (GTK_CONTAINER (window), 5);
         g_signal_connect (window, "destroy", gtk_main_quit, NULL);
