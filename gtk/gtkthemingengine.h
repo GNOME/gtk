@@ -240,6 +240,8 @@ void gtk_theming_engine_get_margin  (GtkThemingEngine *engine,
                                      GtkStateFlags     state,
                                      GtkBorder        *margin);
 
+const PangoFontDescription * gtk_theming_engine_get_font (GtkThemingEngine *engine,
+                                                          GtkStateFlags     state);
 
 GtkThemingEngine * gtk_theming_engine_load (const gchar *name);
 
