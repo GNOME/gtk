@@ -310,6 +310,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_MARK "mark"
 
 /**
+ * GTK_STYLE_CLASS_SPINBUTTON:
+ *
+ * A widget class defining an spinbutton
+ */
+#define GTK_STYLE_CLASS_SPINBUTTON "spinbutton"
+
+/**
  * GTK_STYLE_CLASS_NOTEBOOK:
  *
  * A widget class defining a notebook
