@@ -9293,10 +9293,8 @@ gtk_icon_view_buildable_custom_tag_end (GtkBuildable *buildable,
 					const gchar  *tagname,
 					gpointer     *data)
 {
-  if (strcmp (tagname, "attributes") == 0)
-    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
-					       data);
-  else
+  if (!_gtk_cell_layout_buildable_custom_tag_end (buildable, builder, 
+						  child, tagname, data))
     parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
 					    data);
 }
