@@ -353,8 +353,10 @@ static void   gtk_entry_get_preferred_height (GtkWidget        *widget,
 static void   gtk_entry_size_allocate        (GtkWidget        *widget,
 					      GtkAllocation    *allocation);
 static void   gtk_entry_draw_frame           (GtkWidget        *widget,
+                                              GtkStyleContext  *context,
                                               cairo_t          *cr);
 static void   gtk_entry_draw_progress        (GtkWidget        *widget,
+                                              GtkStyleContext  *context,
                                               cairo_t          *cr);
 static gint   gtk_entry_draw                 (GtkWidget        *widget,
                                               cairo_t          *cr);
@@ -377,8 +379,7 @@ static gint   gtk_entry_focus_in             (GtkWidget        *widget,
 static gint   gtk_entry_focus_out            (GtkWidget        *widget,
 					      GdkEventFocus    *event);
 static void   gtk_entry_grab_focus           (GtkWidget        *widget);
-static void   gtk_entry_style_set            (GtkWidget        *widget,
-					      GtkStyle         *previous_style);
+static void   gtk_entry_style_updated        (GtkWidget        *widget);
 static gboolean gtk_entry_query_tooltip      (GtkWidget        *widget,
                                               gint              x,
                                               gint              y,
@@ -386,8 +387,8 @@ static gboolean gtk_entry_query_tooltip      (GtkWidget        *widget,
                                               GtkTooltip       *tooltip);
 static void   gtk_entry_direction_changed    (GtkWidget        *widget,
 					      GtkTextDirection  previous_dir);
-static void   gtk_entry_state_changed        (GtkWidget        *widget,
-					      GtkStateType      previous_state);
+static void   gtk_entry_state_flags_changed  (GtkWidget        *widget,
+					      GtkStateFlags     previous_state);
 static void   gtk_entry_screen_changed       (GtkWidget        *widget,
 					      GdkScreen        *old_screen);
 
@@ -681,12 +682,12 @@ gtk_entry_class_init (GtkEntryClass *class)
   widget_class->focus_in_event = gtk_entry_focus_in;
   widget_class->focus_out_event = gtk_entry_focus_out;
   widget_class->grab_focus = gtk_entry_grab_focus;
-  widget_class->style_set = gtk_entry_style_set;
+  widget_class->style_updated = gtk_entry_style_updated;
   widget_class->query_tooltip = gtk_entry_query_tooltip;
   widget_class->drag_begin = gtk_entry_drag_begin;
   widget_class->drag_end = gtk_entry_drag_end;
   widget_class->direction_changed = gtk_entry_direction_changed;
-  widget_class->state_changed = gtk_entry_state_changed;
+  widget_class->state_flags_changed = gtk_entry_state_flags_changed;
   widget_class->screen_changed = gtk_entry_screen_changed;
   widget_class->mnemonic_activate = gtk_entry_mnemonic_activate;
 
@@ -2309,10 +2310,9 @@ find_invisible_char (GtkWidget *widget)
     0x273a  /* SIXTEEN POINTED ASTERISK */
   };
 
-  if (gtk_widget_get_style (widget))
-    gtk_widget_style_get (widget,
-                          "invisible-char", &invisible_chars[0],
-                          NULL);
+  gtk_widget_style_get (widget,
+                        "invisible-char", &invisible_chars[0],
+                        NULL);
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
 
@@ -2347,6 +2347,7 @@ find_invisible_char (GtkWidget *widget)
 static void
 gtk_entry_init (GtkEntry *entry)
 {
+  GtkStyleContext *context;
   GtkEntryPrivate *priv;
 
   entry->priv = G_TYPE_INSTANCE_GET_PRIVATE (entry,
@@ -2393,6 +2394,8 @@ gtk_entry_init (GtkEntry *entry)
   g_signal_connect (priv->im_context, "delete-surrounding",
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
 
+  context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
 }
 
 static gint
@@ -2934,14 +2937,17 @@ _gtk_entry_get_borders (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GtkStyle *style;
 
   if (priv->has_frame)
     {
-      style = gtk_widget_get_style (widget);
+      GtkStyleContext *context;
+      GtkBorder padding;
 
-      *xborder = style->xthickness;
-      *yborder = style->ythickness;
+      context = gtk_widget_get_style_context (widget);
+      gtk_style_context_get_padding (context, 0, &padding);
+
+      *xborder = padding.left;
+      *yborder = padding.top;
     }
   else
     {
@@ -2967,14 +2973,20 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   gint xborder, yborder;
   GtkBorder inner_border;
   PangoContext *context;
+  GtkStyleContext *style_context;
+  GtkStateFlags state;
   gint icon_widths = 0;
   gint icon_width, i;
   gint width;
 
   gtk_widget_ensure_style (widget);
   context = gtk_widget_get_pango_context (widget);
+
+  style_context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
   metrics = pango_context_get_metrics (context,
-                                       gtk_widget_get_style (widget)->font_desc,
+                                       gtk_style_context_get_font (style_context, state),
                                        pango_context_get_language (context));
 
   _gtk_entry_get_borders (entry, &xborder, &yborder);
@@ -3017,13 +3029,19 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   PangoFontMetrics *metrics;
   gint xborder, yborder;
   GtkBorder inner_border;
+  GtkStyleContext *style_context;
+  GtkStateFlags state;
   PangoContext *context;
   gint height;
 
   gtk_widget_ensure_style (widget);
   context = gtk_widget_get_pango_context (widget);
+
+  style_context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
   metrics = pango_context_get_metrics (context,
-				       gtk_widget_get_style (widget)->font_desc,
+                                       gtk_style_context_get_font (style_context, state),
 				       pango_context_get_language (context));
 
   priv->ascent = pango_font_metrics_get_ascent (metrics);
@@ -3375,15 +3393,14 @@ draw_icon (GtkWidget            *widget,
 
 
 static void
-gtk_entry_draw_frame (GtkWidget      *widget,
-                      cairo_t        *cr)
+gtk_entry_draw_frame (GtkWidget       *widget,
+                      GtkStyleContext *context,
+                      cairo_t         *cr)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GtkStyle *style;
   GdkWindow *window;
   gint x = 0, y = 0, width, height;
-  GtkStateType state;
   GtkAllocation allocation;
   gint frame_x, frame_y;
 
@@ -3418,20 +3435,14 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       height -= 2 * priv->focus_width;
     }
 
-  style = gtk_widget_get_style (widget);
-  state = gtk_widget_get_state (widget);
-
-  gtk_paint_flat_box (style, cr,
-                      state, GTK_SHADOW_NONE,
-                      widget, "entry_bg",
-                      x, y, width, height);
+  gtk_render_background (context, cr,
+                         x, y, width, height);
 
   if (priv->has_frame)
-    gtk_paint_shadow (style, cr,
-                      state, priv->shadow_type,
-                      widget, "entry", x, y, width, height);
+    gtk_render_frame (context, cr,
+                      x, y, width, height);
 
-  gtk_entry_draw_progress (widget, cr);
+  gtk_entry_draw_progress (widget, context, cr);
 
   if (gtk_widget_has_focus (widget) && !priv->interior_focus)
     {
@@ -3440,10 +3451,8 @@ gtk_entry_draw_frame (GtkWidget      *widget,
       width += 2 * priv->focus_width;
       height += 2 * priv->focus_width;
 
-      gtk_paint_focus (style, cr,
-                       gtk_widget_get_state (widget),
-		       widget, "entry",
-		       0, 0, width, height);
+      gtk_render_focus (context, cr,
+                        0, 0, width, height);
     }
 
   cairo_restore (cr);
@@ -3514,26 +3523,24 @@ get_progress_area (GtkWidget *widget,
 }
 
 static void
-gtk_entry_draw_progress (GtkWidget      *widget,
-                         cairo_t        *cr)
+gtk_entry_draw_progress (GtkWidget       *widget,
+                         GtkStyleContext *context,
+                         cairo_t         *cr)
 {
   gint x, y, width, height;
-  GtkStateType state;
 
   get_progress_area (widget, &x, &y, &width, &height);
 
   if ((width <= 0) || (height <= 0))
     return;
 
-  state = GTK_STATE_SELECTED;
-  if (!gtk_widget_get_sensitive (widget))
-    state = GTK_STATE_INSENSITIVE;
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
 
-  gtk_paint_box (gtk_widget_get_style (widget), cr,
-                 state, GTK_SHADOW_OUT,
-                 widget, "entry-progress",
-                 x, y,
-                 width, height);
+  gtk_render_activity (context, cr,
+                       x, y, width, height);
+
+  gtk_style_context_restore (context);
 }
 
 static gint
@@ -3541,20 +3548,21 @@ gtk_entry_draw (GtkWidget *widget,
 		cairo_t   *cr)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
-  GtkStyle *style;
-  GtkStateType state;
+  GtkStyleContext *context;
+  GtkStateFlags state;
   GtkEntryPrivate *priv = entry->priv;
   int i;
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-  state = gtk_widget_has_focus (widget) ?
-    GTK_STATE_ACTIVE : gtk_widget_get_state (widget);
+  if (gtk_widget_has_focus (widget))
+    state |= GTK_STATE_FLAG_FOCUSED;
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       /* Draw entry_bg, shadow, progress and focus */
-      gtk_entry_draw_frame (widget, cr);
+      gtk_entry_draw_frame (widget, context, cr);
 
       /* Draw text and cursor */
       cairo_save (cr);
@@ -4309,8 +4317,8 @@ gtk_entry_direction_changed (GtkWidget        *widget,
 }
 
 static void
-gtk_entry_state_changed (GtkWidget      *widget,
-			 GtkStateType    previous_state)
+gtk_entry_state_flags_changed (GtkWidget     *widget,
+                               GtkStateFlags  previous_state)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
@@ -4508,8 +4516,7 @@ icon_margin_changed (GtkEntry *entry)
 }
 
 static void 
-gtk_entry_style_set (GtkWidget *widget,
-                     GtkStyle  *previous_style)
+gtk_entry_style_updated (GtkWidget *widget)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
@@ -5596,7 +5603,9 @@ get_layout_position (GtkEntry *entry,
 }
 
 static void
-draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
+draw_text_with_color (GtkEntry *entry,
+                      cairo_t  *cr,
+                      GdkRGBA  *default_color)
 {
   GtkEntryPrivate *priv = entry->priv;
   PangoLayout *layout = gtk_entry_ensure_layout (entry, TRUE);
@@ -5611,7 +5620,7 @@ draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
   get_layout_position (entry, &x, &y);
 
   cairo_move_to (cr, x, y);
-  gdk_cairo_set_source_color (cr, default_color);
+  gdk_cairo_set_source_rgba (cr, default_color);
   pango_cairo_show_layout (cr, layout);
 
   if (gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start_pos, &end_pos))
@@ -5619,25 +5628,22 @@ draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
       gint *ranges;
       gint n_ranges, i;
       PangoRectangle logical_rect;
-      GdkColor *selection_color, *text_color;
+      GdkRGBA selection_color, text_color;
       GtkBorder inner_border;
-      GtkStyle *style;
+      GtkStyleContext *context;
+      GtkStateFlags state;
 
+      context = gtk_widget_get_style_context (widget);
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-      style = gtk_widget_get_style (widget);
+      state = GTK_STATE_FLAG_SELECTED;
 
       if (gtk_widget_has_focus (widget))
-        {
-          selection_color = &style->base [GTK_STATE_SELECTED];
-          text_color = &style->text [GTK_STATE_SELECTED];
-        }
-      else
-        {
-          selection_color = &style->base [GTK_STATE_ACTIVE];
-	  text_color = &style->text [GTK_STATE_ACTIVE];
-        }
+        state |= GTK_STATE_FLAG_FOCUSED;
+
+      gtk_style_context_get_background_color (context, state, &selection_color);
+      gtk_style_context_get_color (context, state, &text_color);
 
       _gtk_entry_effective_inner_border (entry, &inner_border);
 
@@ -5650,11 +5656,11 @@ draw_text_with_color (GtkEntry *entry, cairo_t *cr, GdkColor *default_color)
 
       cairo_clip (cr);
 	  
-      gdk_cairo_set_source_color (cr, selection_color);
+      gdk_cairo_set_source_rgba (cr, &selection_color);
       cairo_paint (cr);
 
       cairo_move_to (cr, x, y);
-      gdk_cairo_set_source_color (cr, text_color);
+      gdk_cairo_set_source_rgba (cr, &text_color);
       pango_cairo_show_layout (cr, layout);
   
       g_free (ranges);
@@ -5668,9 +5674,9 @@ gtk_entry_draw_text (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
-  GtkStateType state;
-  GtkStyle *style;
-  GdkColor text_color, bar_text_color;
+  GtkStateFlags state = 0;
+  GdkRGBA text_color, bar_text_color;
+  GtkStyleContext *context;
   gint pos_x, pos_y;
   gint width, height;
   gint progress_x, progress_y, progress_width, progress_height;
@@ -5679,13 +5685,17 @@ gtk_entry_draw_text (GtkEntry *entry,
   /* Nothing to display at all */
   if (gtk_entry_get_display_mode (entry) == DISPLAY_BLANK)
     return;
-  
-  state = GTK_STATE_SELECTED;
-  if (!gtk_widget_get_sensitive (widget))
-    state = GTK_STATE_INSENSITIVE;
-  style = gtk_widget_get_style (widget);
-  text_color = style->text[gtk_widget_get_state (widget)];
-  bar_text_color = style->fg[state];
+
+  state = gtk_widget_get_state_flags (widget);
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_get_color (context, state, &text_color);
+
+  /* Get foreground color for progressbars */
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+  gtk_style_context_get_color (context, state, &bar_text_color);
+  gtk_style_context_restore (context);
 
   get_progress_area (widget,
                      &progress_x, &progress_y,
@@ -5698,7 +5708,7 @@ gtk_entry_draw_text (GtkEntry *entry,
 
   /* If the color is the same, or the progress area has a zero
    * size, then we only need to draw once. */
-  if ((text_color.pixel == bar_text_color.pixel) ||
+  if (gdk_rgba_equal (&text_color, &bar_text_color) ||
       ((progress_width == 0) || (progress_height == 0)))
     {
       draw_text_with_color (entry, cr, &text_color);
@@ -5869,10 +5879,18 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
 
       if (!block_at_line_end)
         {
+          GtkStyleContext *context;
+          GtkStateFlags state;
+          GdkRGBA color;
+
+          context = gtk_widget_get_style_context (widget);
+          state = gtk_widget_get_state_flags (widget);
+          gtk_style_context_get_background_color (context, state, &color);
+
           gdk_cairo_rectangle (cr, &rect);
           cairo_clip (cr);
           cairo_move_to (cr, x, y);
-          gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
+          gdk_cairo_set_source_rgba (cr, &color);
           pango_cairo_show_layout (cr, layout);
         }
 
@@ -8971,15 +8989,17 @@ gtk_entry_drag_motion (GtkWidget        *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GtkStyle *style;
+  GtkStyleContext *style_context;
   GtkWidget *source_widget;
   GdkDragAction suggested_action;
   gint new_position, old_position;
   gint sel1, sel2;
+  GtkBorder padding;
 
-  style = gtk_widget_get_style (widget);
-  x -= style->xthickness;
-  y -= style->ythickness;
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_padding (style_context, 0, &padding);
+  x -= padding.left;
+  y -= padding.top;
 
   old_position = priv->dnd_position;
   new_position = gtk_entry_find_position (entry, x + priv->scroll_offset);
@@ -9039,14 +9059,16 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   GtkEditable *editable = GTK_EDITABLE (widget);
-  GtkStyle *style;
+  GtkStyleContext *style_context;
+  GtkBorder padding;
   gchar *str;
 
   str = (gchar *) gtk_selection_data_get_text (selection_data);
 
-  style = gtk_widget_get_style (widget);
-  x -= style->xthickness;
-  y -= style->ythickness;
+  style_context = gtk_widget_get_style_context (widget);
+  gtk_style_context_get_padding (style_context, 0, &padding);
+  x -= padding.left;
+  y -= padding.top;
 
   if (str && priv->editable)
     {
