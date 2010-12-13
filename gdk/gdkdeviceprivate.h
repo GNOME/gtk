@@ -85,10 +85,10 @@ struct _GdkDeviceClass
                               GdkScreen  *screen,
                               gint        x,
                               gint        y);
-  gboolean (* query_state)   (GdkDevice        *device,
-                              GdkWindow        *window,
-                              GdkWindow       **root_window,
-                              GdkWindow       **child_window,
+  gboolean (* query_state)   (GdkDevice       *device,
+                              GdkWindow       *window,
+                              GdkWindow      **root_window,
+                              GdkWindow      **child_window,
                               gint             *root_x,
                               gint             *root_y,
                               gint             *win_x,
@@ -157,6 +157,20 @@ void _gdk_device_add_slave (GdkDevice *device,
                             GdkDevice *slave);
 void _gdk_device_remove_slave (GdkDevice *device,
                                GdkDevice *slave);
+gboolean   _gdk_device_query_state            (GdkDevice        *device,
+                                               GdkWindow        *window,
+                                               GdkWindow       **root_window,
+                                               GdkWindow       **child_window,
+                                               gint             *root_x,
+                                               gint             *root_y,
+                                               gint             *win_x,
+                                               gint             *win_y,
+                                               GdkModifierType  *mask);
+GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
+                                               gint             *win_x,
+                                               gint             *win_y,
+                                               GdkModifierType  *mask,
+                                               gboolean          get_toplevel);
 
 G_END_DECLS
 

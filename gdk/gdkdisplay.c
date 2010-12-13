@@ -133,12 +133,18 @@ static GdkWindow *gdk_display_real_get_window_at_device_position (GdkDisplay    
                                                                   GdkDevice        *device,
                                                                   gint             *win_x,
                                                                   gint             *win_y);
+static void       gdk_display_real_get_device_state              (GdkDisplay       *display,
+                                                                  GdkDevice        *device,
+                                                                  GdkScreen       **screen,
+                                                                  gint             *x,
+                                                                  gint             *y,
+                                                                  GdkModifierType  *mask);
 static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static const GdkDisplayDeviceHooks default_device_hooks = {
-  _gdk_windowing_get_device_state,
+  gdk_display_real_get_device_state,
   gdk_window_real_window_get_device_position,
   gdk_display_real_get_window_at_device_position
 };
@@ -838,7 +844,7 @@ gdk_display_real_get_window_at_device_position (GdkDisplay *display,
   GdkWindow *window;
   gint x, y;
 
-  window = _gdk_windowing_window_at_device_position (display, device, &x, &y, NULL, FALSE);
+  window = _gdk_device_window_at_position (device, &x, &y, NULL, FALSE);
 
   /* This might need corrections, as the native window returned
      may contain client side children */
@@ -952,15 +958,40 @@ multihead_window_at_device_position (GdkDisplay *display,
 }
 
 static void
+gdk_display_real_get_device_state (GdkDisplay       *display,
+                                   GdkDevice        *device,
+                                   GdkScreen       **screen,
+                                   gint             *x,
+                                   gint             *y,
+                                   GdkModifierType  *mask)
+{
+  GdkScreen *default_screen;
+  GdkWindow *root;
+
+  if (gdk_display_is_closed (display))
+    return;
+
+  default_screen = gdk_display_get_default_screen (display);
+
+  _gdk_device_query_state (device,
+                           gdk_screen_get_root_window (default_screen),
+                           &root, NULL,
+                           x, y,
+                           NULL, NULL,
+                           mask);
+
+  *screen = gdk_window_get_screen (root);
+}
+
+static void
 multihead_default_get_pointer (GdkDisplay       *display,
                                GdkScreen       **screen,
                                gint             *x,
                                gint             *y,
                                GdkModifierType  *mask)
 {
-  return _gdk_windowing_get_device_state (display,
-                                          display->core_pointer,
-                                          screen, x, y, mask);
+  gdk_display_real_get_device_state (display, display->core_pointer,
+                                     screen, x, y, mask);
 }
 
 static GdkWindow *
@@ -1329,7 +1360,7 @@ get_current_toplevel (GdkDisplay      *display,
   int x, y;
   GdkModifierType state;
 
-  pointer_window = _gdk_windowing_window_at_device_position (display, device, &x, &y, &state, TRUE);
+  pointer_window = _gdk_device_window_at_position (device, &x, &y, &state, TRUE);
 
   if (pointer_window != NULL &&
       (GDK_WINDOW_DESTROYED (pointer_window) ||
@@ -1340,6 +1371,7 @@ get_current_toplevel (GdkDisplay      *display,
   *x_out = x;
   *y_out = y;
   *state_out = state;
+
   return pointer_window;
 }
 

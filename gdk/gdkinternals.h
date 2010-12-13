@@ -326,39 +326,16 @@ extern const GOptionEntry _gdk_windowing_args[];
 gchar *_gdk_windowing_substitute_screen_number (const gchar *display_name,
                                                 gint         screen_number);
 
-gulong   _gdk_windowing_window_get_next_serial  (GdkDisplay *display);
 void     _gdk_windowing_window_get_offsets      (GdkWindow  *window,
                                                  gint       *x_offset,
                                                  gint       *y_offset);
 
-
-void       _gdk_windowing_get_device_state   (GdkDisplay       *display,
-                                              GdkDevice        *device,
-                                              GdkScreen       **screen,
-                                              gint             *x,
-                                              gint             *y,
-                                              GdkModifierType  *mask);
-GdkWindow* _gdk_windowing_window_at_device_position  (GdkDisplay       *display,
-                                                      GdkDevice        *device,
-                                                      gint             *win_x,
-                                                      gint             *win_y,
-                                                      GdkModifierType  *mask,
-                                                      gboolean          get_toplevel);
 void _gdk_windowing_got_event                (GdkDisplay       *display,
                                               GList            *event_link,
                                               GdkEvent         *event,
                                               gulong            serial);
 
-void _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                                    cairo_region_t *expose_region);
-void _gdk_windowing_before_process_all_updates     (void);
-void _gdk_windowing_after_process_all_updates      (void);
-
-
 #define GDK_WINDOW_IS_MAPPED(window) (((window)->state & GDK_WINDOW_STATE_WITHDRAWN) == 0)
-
-void _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
-                                              const gchar *sm_client_id);
 
 #define GDK_TYPE_PAINTABLE            (_gdk_paintable_get_type ())
 #define GDK_PAINTABLE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_PAINTABLE, GdkPaintable))

@@ -1455,3 +1455,38 @@ _gdk_device_translate_axis (GdkDevice *device,
   return TRUE;
 }
 
+gboolean
+_gdk_device_query_state (GdkDevice        *device,
+                         GdkWindow        *window,
+                         GdkWindow       **root_window,
+                         GdkWindow       **child_window,
+                         gint             *root_x,
+                         gint             *root_y,
+                         gint             *win_x,
+                         gint             *win_y,
+                         GdkModifierType  *mask)
+{
+  return GDK_DEVICE_GET_CLASS (device)->query_state (device,
+                                                     window,
+                                                     root_window,
+                                                     child_window,
+                                                     root_x,
+                                                     root_y,
+                                                     win_x,
+                                                     win_y,
+                                                     mask);
+}
+
+GdkWindow *
+_gdk_device_window_at_position (GdkDevice        *device,
+                                gint             *win_x,
+                                gint             *win_y,
+                                GdkModifierType  *mask,
+                                gboolean          get_toplevel)
+{
+  return GDK_DEVICE_GET_CLASS (device)->window_at_position (device,
+                                                            win_x,
+                                                            win_y,
+                                                            mask,
+                                                            get_toplevel);
+}

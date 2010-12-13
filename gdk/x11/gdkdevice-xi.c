@@ -491,6 +491,7 @@ gdk_device_xi_window_at_position (GdkDevice       *device,
 {
   return NULL;
 }
+
 static void
 gdk_device_xi_select_window_events (GdkDevice    *device,
                                     GdkWindow    *window,

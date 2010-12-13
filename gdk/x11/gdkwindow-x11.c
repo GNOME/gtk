@@ -2781,66 +2781,6 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   gdk_error_trap_pop_ignored ();
 }
 
-void
-_gdk_windowing_get_device_state (GdkDisplay       *display,
-                                 GdkDevice        *device,
-                                 GdkScreen       **screen,
-                                 gint             *x,
-                                 gint             *y,
-                                 GdkModifierType  *mask)
-{
-  GdkScreen *default_screen;
-
-  if (gdk_display_is_closed (display))
-    return;
-
-  default_screen = gdk_display_get_default_screen (display);
-
-
-  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
-    {
-      GdkWindow *root;
-
-      GDK_DEVICE_GET_CLASS (device)->query_state (device,
-                                                  gdk_screen_get_root_window (default_screen),
-                                                  &root, NULL,
-                                                  x, y,
-                                                  NULL, NULL,
-                                                  mask);
-      *screen = gdk_window_get_screen (root);
-    }
-  else
-    {
-      XSetWindowAttributes attributes;
-      Display *xdisplay;
-      Window xwindow, w, root, child;
-      int rootx, rooty, winx, winy;
-      unsigned int xmask;
-
-      /* FIXME: untrusted clients not multidevice-safe */
-
-      xdisplay = GDK_SCREEN_XDISPLAY (default_screen);
-      xwindow = GDK_SCREEN_XROOTWIN (default_screen);
-
-      w = XCreateWindow (xdisplay, xwindow, 0, 0, 1, 1, 0,
-			 CopyFromParent, InputOnly, CopyFromParent,
-			 0, &attributes);
-      XQueryPointer (xdisplay, w,
-		     &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
-      XDestroyWindow (xdisplay, w);
-
-      if (root != None)
-        {
-          GdkWindow *gdk_root = gdk_window_lookup_for_display (display, root);
-          *screen = gdk_window_get_screen (gdk_root);
-        }
-
-      *x = rootx;
-      *y = rooty;
-      *mask = xmask;
-    }
-}
-
 static gboolean
 gdk_window_x11_get_device_state (GdkWindow       *window,
                                  GdkDevice       *device,
@@ -2848,156 +2788,18 @@ gdk_window_x11_get_device_state (GdkWindow       *window,
                                  gint            *y,
                                  GdkModifierType *mask)
 {
-  GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
-  gboolean return_val;
+  GdkWindow *child;
 
   g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
 
-  return_val = TRUE;
+  if (GDK_WINDOW_DESTROYED (window))
+    return FALSE;
 
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
-	{
-          GdkWindow *child;
-
-          GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
-                                                      NULL, &child,
-                                                      NULL, NULL,
-                                                      x, y, mask);
-          return_val = (child != NULL);
-	}
-      else
-	{
-	  GdkScreen *screen;
-	  int originx, originy;
-          int rootx, rooty;
-          int winx = 0;
-          int winy = 0;
-          unsigned int xmask = 0;
-
-          _gdk_windowing_get_device_state (gdk_window_get_display (window), device,
-                                           &screen, &rootx, &rooty, &xmask);
-	  gdk_window_get_origin (window, &originx, &originy);
-	  winx = rootx - originx;
-	  winy = rooty - originy;
-
-          *x = winx;
-          *y = winy;
-          *mask = xmask;
-	}
-    }
-
-  return return_val;
-}
-
-GdkWindow*
-_gdk_windowing_window_at_device_position (GdkDisplay      *display,
-                                          GdkDevice       *device,
-                                          gint            *win_x,
-                                          gint            *win_y,
-                                          GdkModifierType *mask,
-                                          gboolean         get_toplevel)
-{
-  GdkWindow *window;
-  GdkScreen *screen;
-
-  screen = gdk_display_get_default_screen (display);
-
-  /* This function really only works if the mouse pointer is held still
-   * during its operation. If it moves from one leaf window to another
-   * than we'll end up with inaccurate values for win_x, win_y
-   * and the result.
-   */
-  gdk_x11_display_grab (display);
-  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
-    window = GDK_DEVICE_GET_CLASS (device)->window_at_position (device, win_x, win_y, mask, get_toplevel);
-  else
-    {
-      gint i, screens, width, height;
-      GList *toplevels, *list;
-      Window pointer_window, root, xwindow, child;
-      Window xwindow_last = 0;
-      Display *xdisplay;
-      int rootx = -1, rooty = -1;
-      int winx, winy;
-      unsigned int xmask;
-
-      /* FIXME: untrusted clients case not multidevice-safe */
-
-      xwindow = GDK_SCREEN_XROOTWIN (screen);
-      xdisplay = GDK_SCREEN_XDISPLAY (screen);
-
-      pointer_window = None;
-      screens = gdk_display_get_n_screens (display);
-      for (i = 0; i < screens; ++i) {
-	screen = gdk_display_get_screen (display, i);
-	toplevels = gdk_screen_get_toplevel_windows (screen);
-	for (list = toplevels; list != NULL; list = g_list_next (list)) {
-	  window = GDK_WINDOW (list->data);
-	  xwindow = GDK_WINDOW_XID (window);
-	  gdk_error_trap_push ();
-	  XQueryPointer (xdisplay, xwindow,
-			 &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
-	  if (gdk_error_trap_pop ())
-	    continue;
-	  if (child != None) 
-	    {
-	      pointer_window = child;
-	      break;
-	    }
-	  gdk_window_get_geometry (window, NULL, NULL, &width, &height);
-	  if (winx >= 0 && winy >= 0 && winx < width && winy < height) 
-	    {
-	      /* A childless toplevel, or below another window? */
-	      XSetWindowAttributes attributes;
-	      Window w;
-	      
-	      w = XCreateWindow (xdisplay, xwindow, winx, winy, 1, 1, 0, 
-				 CopyFromParent, InputOnly, CopyFromParent, 
-				 0, &attributes);
-	      XMapWindow (xdisplay, w);
-	      XQueryPointer (xdisplay, xwindow, 
-			     &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
-	      XDestroyWindow (xdisplay, w);
-	      if (child == w) 
-		{
-		  pointer_window = xwindow;
-		  break;
-		}
-	    }
-	}
-	g_list_free (toplevels);
-	if (pointer_window != None)
-	  break;
-      }
-      xwindow = pointer_window;
-
-      while (xwindow)
-	{
-	  xwindow_last = xwindow;
-	  gdk_error_trap_push ();
-	  XQueryPointer (xdisplay, xwindow,
-			 &root, &xwindow, &rootx, &rooty, &winx, &winy, &xmask);
-	  if (gdk_error_trap_pop ())
-	    break;
-	  if (get_toplevel && xwindow_last != root &&
-	      (window = gdk_window_lookup_for_display (display, xwindow_last)) != NULL &&
-	      GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
-	    break;
-	}
-
-      window = gdk_window_lookup_for_display (display, xwindow_last);
-
-      *win_x = window ? winx : -1;
-      *win_y = window ? winy : -1;
-      if (mask)
-        *mask = xmask;
-    }
-
-  gdk_x11_display_ungrab (display);
-
-  return window;
+  GDK_DEVICE_GET_CLASS (device)->query_state (device, window,
+                                              NULL, &child,
+                                              NULL, NULL,
+                                              x, y, mask);
+  return child != NULL;
 }
 
 static GdkEventMask

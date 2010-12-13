@@ -298,6 +298,7 @@ gdk_device_xi2_query_state (GdkDevice        *device,
                             GdkModifierType  *mask)
 {
   GdkDisplay *display;
+  GdkScreen *default_screen;
   GdkDeviceXI2Private *priv;
   Window xroot_window, xchild_window;
   gdouble xroot_x, xroot_y, xwin_x, xwin_y;
@@ -310,21 +311,49 @@ gdk_device_xi2_query_state (GdkDevice        *device,
 
   priv = GDK_DEVICE_XI2 (device)->priv;
   display = gdk_window_get_display (window);
+  default_screen = gdk_display_get_default_screen (display);
 
-  if (!XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
-                       priv->device_id,
-                       GDK_WINDOW_XID (window),
-                       &xroot_window,
-                       &xchild_window,
-                       &xroot_x,
-                       &xroot_y,
-                       &xwin_x,
-                       &xwin_y,
-                       &button_state,
-                       &mod_state,
-                       &group_state))
+  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
     {
-      return FALSE;
+      if (!XIQueryPointer (GDK_WINDOW_XDISPLAY (window),
+                           priv->device_id,
+                           GDK_WINDOW_XID (window),
+                           &xroot_window,
+                           &xchild_window,
+                           &xroot_x,
+                           &xroot_y,
+                           &xwin_x,
+                           &xwin_y,
+                           &button_state,
+                           &mod_state,
+                           &group_state))
+        return FALSE;
+    }
+  else
+    {
+      XSetWindowAttributes attributes;
+      Display *xdisplay;
+      Window xwindow, w;
+
+      /* FIXME: untrusted clients not multidevice-safe */
+      xdisplay = GDK_SCREEN_XDISPLAY (default_screen);
+      xwindow = GDK_SCREEN_XROOTWIN (default_screen);
+
+      w = XCreateWindow (xdisplay, xwindow, 0, 0, 1, 1, 0,
+                         CopyFromParent, InputOnly, CopyFromParent,
+                         0, &attributes);
+      XIQueryPointer (xdisplay, priv->device_id,
+                      w,
+                      &xroot_window,
+                      &xchild_window,
+                      &xroot_x,
+                      &xroot_y,
+                      &xwin_x,
+                      &xwin_y,
+                      &button_state,
+                      &mod_state,
+                      &group_state);
+      XDestroyWindow (xdisplay, w);
     }
 
   if (root_window)
@@ -455,24 +484,99 @@ gdk_device_xi2_window_at_position (GdkDevice       *device,
   xdisplay = GDK_SCREEN_XDISPLAY (screen);
   xwindow = GDK_SCREEN_XROOTWIN (screen);
 
-  XIQueryPointer (xdisplay,
-                  priv->device_id,
-                  xwindow,
-                  &root, &child,
-                  &xroot_x, &xroot_y,
-                  &xwin_x, &xwin_y,
-                  &button_state,
-                  &mod_state,
-                  &group_state);
+  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+    {
+      XIQueryPointer (xdisplay,
+                      priv->device_id,
+                      xwindow,
+                      &root, &child,
+                      &xroot_x, &xroot_y,
+                      &xwin_x, &xwin_y,
+                      &button_state,
+                      &mod_state,
+                      &group_state);
 
-  if (root == xwindow)
-    xwindow = child;
+      if (root == xwindow)
+        xwindow = child;
+      else
+        xwindow = root;
+    }
   else
-    xwindow = root;
+    {
+      gint i, screens, width, height;
+      GList *toplevels, *list;
+      Window pointer_window, root, child;
+
+      /* FIXME: untrusted clients case not multidevice-safe */
+      pointer_window = None;
+      screens = gdk_display_get_n_screens (display);
+
+      for (i = 0; i < screens; ++i)
+        {
+          screen = gdk_display_get_screen (display, i);
+          toplevels = gdk_screen_get_toplevel_windows (screen);
+          for (list = toplevels; list != NULL; list = g_list_next (list))
+            {
+              window = GDK_WINDOW (list->data);
+              xwindow = GDK_WINDOW_XID (window);
+              gdk_x11_display_error_trap_push (display);
+              XIQueryPointer (xdisplay,
+                              priv->device_id,
+                              xwindow,
+                              &root, &child,
+                              &xroot_x, &xroot_y,
+                              &xwin_x, &xwin_y,
+                              &button_state,
+                              &mod_state,
+                              &group_state);
+              if (gdk_x11_display_error_trap_pop (display))
+                continue;
+              if (child != None)
+                {
+                  pointer_window = child;
+                  break;
+                }
+              gdk_window_get_geometry (window, NULL, NULL, &width, &height);
+              if (xwin_x >= 0 && xwin_y >= 0 && xwin_x < width && xwin_y < height)
+                {
+                  /* A childless toplevel, or below another window? */
+                  XSetWindowAttributes attributes;
+                  Window w;
+
+                  w = XCreateWindow (xdisplay, xwindow, (int)xwin_x, (int)xwin_y, 1, 1, 0,
+                                     CopyFromParent, InputOnly, CopyFromParent,
+                                     0, &attributes);
+                  XMapWindow (xdisplay, w);
+                  XIQueryPointer (xdisplay,
+                                  priv->device_id,
+                                  xwindow,
+                                  &root, &child,
+                                  &xroot_x, &xroot_y,
+                                  &xwin_x, &xwin_y,
+                                  &button_state,
+                                  &mod_state,
+                                  &group_state);
+                  XDestroyWindow (xdisplay, w);
+                  if (child == w)
+                    {
+                      pointer_window = xwindow;
+                      break;
+                    }
+                }
+            }
+
+          g_list_free (toplevels);
+          if (pointer_window != None)
+            break;
+        }
+
+      xwindow = pointer_window;
+    }
 
   while (xwindow)
     {
       last = xwindow;
+      gdk_x11_display_error_trap_push (display);
       XIQueryPointer (xdisplay,
                       priv->device_id,
                       xwindow,
@@ -482,6 +586,8 @@ gdk_device_xi2_window_at_position (GdkDevice       *device,
                       &button_state,
                       &mod_state,
                       &group_state);
+      if (gdk_x11_display_error_trap_pop (display))
+        break;
 
       if (get_toplevel && last != root &&
           (window = gdk_window_lookup_for_display (display, last)) != NULL &&
