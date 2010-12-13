@@ -58,6 +58,10 @@ struct _GtkCellAreaContext
  * recalculated at gtk_cell_area_render() time.
  * @reset: Clear any previously stored information about requested and allocated
  * sizes for the context.
+ * @get_preferred_height_for_width: Returns the aligned height for the given width
+ * that context must store while collecting sizes for it's rows.
+ * @get_preferred_width_for_height: Returns the aligned width for the given height
+ * that context must store while collecting sizes for it's rows.
  */
 struct _GtkCellAreaContextClass
 {
@@ -84,6 +88,8 @@ struct _GtkCellAreaContextClass
   void (*_gtk_reserved2) (void);
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
+  void (*_gtk_reserved5) (void);
+  void (*_gtk_reserved6) (void);
 };
 
 GType        gtk_cell_area_context_get_type              (void) G_GNUC_CONST;

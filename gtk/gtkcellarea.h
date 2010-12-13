@@ -119,6 +119,8 @@ struct _GtkCellArea
  * class but can be overridden to apply some custom attributes.
  * @create_context: Creates and returns a class specific #GtkCellAreaContext to store cell 
  * alignment and allocation details for a said #GtkCellArea class.
+ * @copy_context: Creates a new #GtkCellAreaContext in the same state as the passed @context
+ * with any cell alignment data and allocations in tact.
  * @get_request_mode: This allows an area to tell its layouting widget whether it prefers to 
  * be allocated in %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or %GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT mode.
  * @get_preferred_width: Calculates the minimum and natural width of the area's cells
