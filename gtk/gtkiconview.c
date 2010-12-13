@@ -72,13 +72,14 @@
 typedef struct _GtkIconViewItem GtkIconViewItem;
 struct _GtkIconViewItem
 {
+  /* First member is always the rectangle so it 
+   * can be cast to a rectangle. */
+  GdkRectangle cell_area;
+
   GtkTreeIter iter;
   gint index;
   
   gint row, col;
-
-  /* Bounding box */
-  gint x, y, width, height;
 
   guint selected : 1;
   guint selected_before_rubberbanding : 1;
@@ -99,7 +100,6 @@ struct _GtkIconViewPrivate
 
   gulong              add_editable_id;
   gulong              remove_editable_id;
-  gulong              focus_changed_id;
   gulong              context_changed_id;
 
   GPtrArray          *row_contexts;
@@ -138,7 +138,6 @@ struct _GtkIconViewPrivate
 
   gint columns;
   gint item_width;
-  gint effective_item_width;
   gint spacing;
   gint row_spacing;
   gint column_spacing;
@@ -369,9 +368,6 @@ static GtkIconViewItem *    gtk_icon_view_get_item_at_coords             (GtkIco
 									  gint                    y,
 									  gboolean                only_in_cell,
 									  GtkCellRenderer       **cell_at_pos);
-static void                 gtk_icon_view_get_cell_area                  (GtkIconView            *icon_view,
-									  GtkIconViewItem        *item,
-									  GdkRectangle           *cell_area);
 static void                 gtk_icon_view_set_cell_data                  (GtkIconView            *icon_view,
 									  GtkIconViewItem        *item);
 
@@ -389,10 +385,6 @@ static void                 gtk_icon_view_add_editable                   (GtkCel
 static void                 gtk_icon_view_remove_editable                (GtkCellArea            *area,
 									  GtkCellRenderer        *renderer,
 									  GtkCellEditable        *editable,
-									  GtkIconView            *icon_view);
-static void                 gtk_icon_view_focus_changed                  (GtkCellArea            *area,
-									  GtkCellRenderer        *renderer,
-									  const gchar            *path,
 									  GtkIconView            *icon_view);
 
 /* Source side drag signals */
@@ -1087,7 +1079,6 @@ gtk_icon_view_init (GtkIconView *icon_view)
 
   icon_view->priv->columns = -1;
   icon_view->priv->item_width = -1;
-  icon_view->priv->effective_item_width = -1;
   icon_view->priv->spacing = 0;
   icon_view->priv->row_spacing = 6;
   icon_view->priv->column_spacing = 6;
@@ -1135,9 +1126,6 @@ gtk_icon_view_constructor (GType               type,
   priv->remove_editable_id = 
     g_signal_connect (priv->cell_area, "remove-editable", 
 		      G_CALLBACK (gtk_icon_view_remove_editable), icon_view);
-  priv->focus_changed_id = 
-    g_signal_connect (priv->cell_area, "focus-changed", 
-		      G_CALLBACK (gtk_icon_view_focus_changed), icon_view);
 
   return object;
 }
@@ -1167,10 +1155,8 @@ gtk_icon_view_dispose (GObject *object)
     {
       g_signal_handler_disconnect (priv->cell_area, priv->add_editable_id);
       g_signal_handler_disconnect (priv->cell_area, priv->remove_editable_id);
-      g_signal_handler_disconnect (priv->cell_area, priv->focus_changed_id);
       priv->add_editable_id = 0;
       priv->remove_editable_id = 0;
-      priv->focus_changed_id = 0;
 
       g_object_unref (priv->cell_area);
       priv->cell_area = NULL;
@@ -1616,16 +1602,22 @@ gtk_icon_view_draw (GtkWidget *widget,
   for (icons = icon_view->priv->items; icons; icons = icons->next) 
     {
       GtkIconViewItem *item = icons->data;
+      GdkRectangle paint_area;
+
+      paint_area.x      = ((GdkRectangle *)item)->x      - icon_view->priv->item_padding;
+      paint_area.y      = ((GdkRectangle *)item)->y      - icon_view->priv->item_padding;
+      paint_area.width  = ((GdkRectangle *)item)->width  + icon_view->priv->item_padding * 2;
+      paint_area.height = ((GdkRectangle *)item)->height + icon_view->priv->item_padding * 2;
       
       cairo_save (cr);
 
-      cairo_rectangle (cr, item->x, item->y, item->width, item->height);
+      cairo_rectangle (cr, paint_area.x, paint_area.y, paint_area.width, paint_area.height);
       cairo_clip (cr);
 
       if (gdk_cairo_get_clip_rectangle (cr, NULL))
         {
           gtk_icon_view_paint_item (icon_view, cr, item,
-                                    item->x, item->y,
+                                    ((GdkRectangle *)item)->x, ((GdkRectangle *)item)->y,
                                     icon_view->priv->draw_focus); 
      
           if (dest_index == item->index)
@@ -1646,49 +1638,36 @@ gtk_icon_view_draw (GtkWidget *widget,
       switch (dest_pos)
 	{
 	case GTK_ICON_VIEW_DROP_INTO:
-	  gtk_paint_focus (style,
-                                 cr,
-                                 state,
-                                 widget,
-                                 "iconview-drop-indicator",
-                                 dest_item->x, dest_item->y,
-                                 dest_item->width, dest_item->height);
+	  gtk_paint_focus (style, cr, state, widget,
+			   "iconview-drop-indicator",
+			   dest_item->cell_area.x, dest_item->cell_area.y,
+			   dest_item->cell_area.width, dest_item->cell_area.height);
 	  break;
 	case GTK_ICON_VIEW_DROP_ABOVE:
-	  gtk_paint_focus (style,
-                                 cr,
-                                 state,
-                                 widget,
-                                 "iconview-drop-indicator",
-                                 dest_item->x, dest_item->y - 1,
-                                 dest_item->width, 2);
+	  gtk_paint_focus (style, cr, state, widget,
+			   "iconview-drop-indicator",
+			   dest_item->cell_area.x, dest_item->cell_area.y - 1,
+			   dest_item->cell_area.width, 2);
 	  break;
 	case GTK_ICON_VIEW_DROP_LEFT:
-	  gtk_paint_focus (style,
-                                 cr,
-                                 state,
-                                 widget,
-                                 "iconview-drop-indicator",
-                                 dest_item->x - 1, dest_item->y,
-                                 2, dest_item->height);
+	  gtk_paint_focus (style, cr, state, widget,
+			   "iconview-drop-indicator",
+			   dest_item->cell_area.x - 1, dest_item->cell_area.y,
+			   2, dest_item->cell_area.height);
 	  break;
 	case GTK_ICON_VIEW_DROP_BELOW:
-	  gtk_paint_focus (style,
-                                 cr,
-                                 state,
-                                 widget,
-                                 "iconview-drop-indicator",
-                                 dest_item->x, dest_item->y + dest_item->height - 1,
-                                 dest_item->width, 2);
+	  gtk_paint_focus (style, cr, state, widget,
+			   "iconview-drop-indicator",
+			   dest_item->cell_area.x, 
+			   dest_item->cell_area.y + dest_item->cell_area.height - 1,
+			   dest_item->cell_area.width, 2);
 	  break;
 	case GTK_ICON_VIEW_DROP_RIGHT:
-	  gtk_paint_focus (style,
-                                 cr,
-                                 state,
-                                 widget,
-                                 "iconview-drop-indicator",
-                                 dest_item->x + dest_item->width - 1, dest_item->y,
-                                 2, dest_item->height);
+	  gtk_paint_focus (style, cr, state, widget,
+			   "iconview-drop-indicator",
+			   dest_item->cell_area.x + dest_item->cell_area.width - 1, 
+			   dest_item->cell_area.y,
+			   2, dest_item->cell_area.height);
 	case GTK_ICON_VIEW_NO_DROP: ;
 	  break;
 	}
@@ -1877,15 +1856,6 @@ gtk_icon_view_remove_editable (GtkCellArea            *area,
   gtk_tree_path_free (path);
 }
 
-static void
-gtk_icon_view_focus_changed (GtkCellArea            *area,
-			     GtkCellRenderer        *renderer,
-			     const gchar            *path,
-			     GtkIconView            *icon_view)
-{
-  /* XXX Update cursor item for focus path here */
-}
-
 /**
  * gtk_icon_view_set_cursor:
  * @icon_view: A #GtkIconView
@@ -1931,14 +1901,13 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 
   if (start_editing)
     {
-      GdkRectangle cell_area;
       GtkCellAreaContext *context;
 
       context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
       gtk_icon_view_set_cell_data (icon_view, item);
-      gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
       gtk_cell_area_activate (icon_view->priv->cell_area, context, 
-			      GTK_WIDGET (icon_view), &cell_area, 0 /* XXX flags */, TRUE);
+			      GTK_WIDGET (icon_view), (GdkRectangle *)item, 
+			      0 /* XXX flags */, TRUE);
     }
 }
 
@@ -1991,7 +1960,6 @@ gtk_icon_view_button_press (GtkWidget      *widget,
   GtkIconViewItem *item;
   gboolean dirty = FALSE;
   GtkCellRenderer *cell = NULL, *cursor_cell = NULL;
-  GdkRectangle cell_area;
 
   icon_view = GTK_ICON_VIEW (widget);
 
@@ -2084,10 +2052,9 @@ gtk_icon_view_button_press (GtkWidget      *widget,
 	      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
 
 	      gtk_icon_view_set_cell_data (icon_view, item);
-	      gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
 	      gtk_cell_area_activate (icon_view->priv->cell_area, context,
 				      GTK_WIDGET (icon_view),
-				      &cell_area, 0/* XXX flags */, FALSE);
+				      (GdkRectangle *)item, 0/* XXX flags */, FALSE);
 	    }
 	}
       else
@@ -2354,22 +2321,20 @@ gtk_icon_view_item_hit_test (GtkIconView      *icon_view,
 			     gint              width,
 			     gint              height)
 {
-  GdkRectangle cell_area;
   HitTestData data = { { x, y, width, height }, FALSE };
   GtkCellAreaContext *context;
+  GdkRectangle *item_area = (GdkRectangle *)item;
    
-  if (MIN (x + width, item->x + item->width) - MAX (x, item->x) <= 0 ||
-      MIN (y + height, item->y + item->height) - MAX (y, item->y) <= 0)
+  if (MIN (x + width, item_area->x + item_area->width) - MAX (x, item_area->x) <= 0 ||
+      MIN (y + height, item_area->y + item_area->height) - MAX (y, item_area->y) <= 0)
     return FALSE;
-
 
   context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
 
   gtk_icon_view_set_cell_data (icon_view, item);
-  gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
   gtk_cell_area_foreach_alloc (icon_view->priv->cell_area, context,
 			       GTK_WIDGET (icon_view),
-			       &cell_area, &cell_area,
+			       item_area, item_area,
 			       (GtkCellAllocCallback)hit_test, &data);
 
   return data.hit;
@@ -2427,7 +2392,6 @@ static gboolean
 gtk_icon_view_real_activate_cursor_item (GtkIconView *icon_view)
 {
   GtkTreePath *path;
-  GdkRectangle cell_area;
   gboolean activated;
   GtkCellAreaContext *context;
   
@@ -2437,9 +2401,10 @@ gtk_icon_view_real_activate_cursor_item (GtkIconView *icon_view)
   context = g_ptr_array_index (icon_view->priv->row_contexts, icon_view->priv->cursor_item->row);
 
   gtk_icon_view_set_cell_data (icon_view, icon_view->priv->cursor_item);
-  gtk_icon_view_get_cell_area (icon_view, icon_view->priv->cursor_item, &cell_area);
   activated = gtk_cell_area_activate (icon_view->priv->cell_area, context, 
-				      GTK_WIDGET (icon_view), &cell_area, 0 /* XXX flags */, FALSE);
+				      GTK_WIDGET (icon_view), 
+				      (GdkRectangle *)icon_view->priv->cursor_item, 
+				      0 /* XXX flags */, FALSE);
 
   path = gtk_tree_path_new_from_indices (icon_view->priv->cursor_item->index, -1);
   gtk_icon_view_item_activated (icon_view, path);
@@ -2674,15 +2639,19 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
   gtk_widget_get_allocation (widget, &allocation);
 
   context = gtk_cell_area_copy_context (priv->cell_area, priv->cell_area_context);
+  g_ptr_array_add (priv->row_contexts, context);
 
+  /* In the first loop we iterate horizontally until we hit allocation width
+   * and collect the aligned height-for-width */
   items = first_item;
   while (items)
     {
       GtkIconViewItem *item = items->data;
+      GdkRectangle    *item_area = (GdkRectangle *)item;
 
-      item->width = item_width;
+      item_area->width = item_width;
 
-      current_width += item->width;
+      current_width += item_area->width + icon_view->priv->item_padding * 2;
 
       if (items != first_item)
 	{
@@ -2700,8 +2669,8 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
 
       current_width += icon_view->priv->column_spacing;
 
-      item->y = *y;
-      item->x = x;
+      item_area->y = *y + icon_view->priv->item_padding;
+      item_area->x = x  + icon_view->priv->item_padding;
 
       x = current_width - icon_view->priv->margin; 
 	      
@@ -2720,28 +2689,25 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
   gtk_cell_area_context_get_preferred_height_for_width (context, item_width, &max_height, NULL);
   gtk_cell_area_context_allocate (context, item_width, max_height);
 
-  max_height += icon_view->priv->item_padding * 2;
-
-  g_ptr_array_add (priv->row_contexts, context);
-
-  /* Now go through the row again and align the icons */
+  /* In the second loop the item height has been aligned and derived and
+   * we just set the height and handle rtl layout */
   for (items = first_item; items != last_item; items = items->next)
     {
       GtkIconViewItem *item = items->data;
+      GdkRectangle    *item_area = (GdkRectangle *)item;
 
       if (rtl)
 	{
-	  item->x = *maximum_width - item->width - item->x;
+	  item_area->x = *maximum_width - item_area->width - item_area->x;
 	  item->col = col - 1 - item->col;
 	}
 
       /* All items in the same row get the same height */
-      item->height = max_height;
-
-      /* Adjust the new y coordinate. */
-      if (item->y + item->height + icon_view->priv->row_spacing > *y)
-	*y = item->y + item->height + icon_view->priv->row_spacing;
+      item_area->height = max_height;
     }
+
+  /* Adjust the new y coordinate. */
+  *y += max_height + icon_view->priv->row_spacing + icon_view->priv->item_padding * 2;
   
   return last_item;
 }
@@ -2776,13 +2742,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 
   /* Fetch the new item width if needed */
   if (item_width < 0)
-    {
-      gtk_cell_area_context_get_preferred_width (icon_view->priv->cell_area_context, 
-						 &item_width, NULL);
-      item_width += icon_view->priv->item_padding * 2;
-    }
+    gtk_cell_area_context_get_preferred_width (icon_view->priv->cell_area_context, 
+					       &item_width, NULL);
 
-  icon_view->priv->effective_item_width = item_width;
+  gtk_cell_area_context_allocate (icon_view->priv->cell_area_context, item_width, -1);
 
   icons = icon_view->priv->items;
   y += icon_view->priv->margin;
@@ -2844,17 +2807,6 @@ gtk_icon_view_layout (GtkIconView *icon_view)
   gtk_widget_queue_draw (widget);
 }
 
-static void 
-gtk_icon_view_get_cell_area (GtkIconView         *icon_view,
-			     GtkIconViewItem     *item,
-			     GdkRectangle        *cell_area)
-{
-  cell_area->x      = item->x + icon_view->priv->item_padding;
-  cell_area->width  = item->width - icon_view->priv->item_padding * 2;
-  cell_area->y      = item->y + icon_view->priv->item_padding;
-  cell_area->height = item->height - icon_view->priv->item_padding * 2;
-}
-
 /* This ensures that all widths have been cached in the
  * context and we have proper alignments to go on.
  */
@@ -2868,7 +2820,7 @@ gtk_icon_view_cache_widths (GtkIconView *icon_view)
       GtkIconViewItem *item = items->data;
 
       /* Only fetch the width of items with invalidated sizes */
-      if (item->width < 0)
+      if (item->cell_area.width < 0)
 	{
 	  gtk_icon_view_set_cell_data (icon_view, item);
 	  gtk_cell_area_get_preferred_width (icon_view->priv->cell_area, 
@@ -2888,8 +2840,8 @@ gtk_icon_view_invalidate_sizes (GtkIconView *icon_view)
 static void
 gtk_icon_view_item_invalidate_size (GtkIconViewItem *item)
 {
-  item->width = -1;
-  item->height = -1;
+  item->cell_area.width = -1;
+  item->cell_area.height = -1;
 }
 
 static void
@@ -2936,14 +2888,16 @@ gtk_icon_view_paint_item (GtkIconView     *icon_view,
                           GTK_SHADOW_NONE,
                           GTK_WIDGET (icon_view),
                           "icon_view_item",
-                          x, y,
-                          item->width, item->height);
+                          x - icon_view->priv->item_padding, 
+			  y - icon_view->priv->item_padding,
+                          item->cell_area.width + icon_view->priv->item_padding * 2, 
+			  item->cell_area.height + icon_view->priv->item_padding * 2);
     }
 
   cell_area.x      = x;
   cell_area.y      = y;
-  cell_area.width  = item->width;
-  cell_area.height = item->height;
+  cell_area.width  = item->cell_area.width;
+  cell_area.height = item->cell_area.height;
 
   if (gtk_widget_has_focus (widget) && item == icon_view->priv->cursor_item)
     flags |= GTK_CELL_RENDERER_FOCUSED;
@@ -3019,12 +2973,13 @@ static void
 gtk_icon_view_queue_draw_item (GtkIconView     *icon_view,
 			       GtkIconViewItem *item)
 {
-  GdkRectangle rect;
+  GdkRectangle  rect;
+  GdkRectangle *item_area = (GdkRectangle *)item;
 
-  rect.x = item->x;
-  rect.y = item->y;
-  rect.width = item->width;
-  rect.height = item->height;
+  rect.x      = item_area->x - icon_view->priv->item_padding;
+  rect.y      = item_area->y - icon_view->priv->item_padding;
+  rect.width  = item_area->width  + icon_view->priv->item_padding * 2;
+  rect.height = item_area->height + icon_view->priv->item_padding * 2;
 
   if (icon_view->priv->bin_window)
     gdk_window_invalidate_rect (icon_view->priv->bin_window, &rect, TRUE);
@@ -3104,8 +3059,8 @@ gtk_icon_view_item_new (void)
 
   item = g_slice_new0 (GtkIconViewItem);
 
-  item->width  = -1;
-  item->height = -1;
+  item->cell_area.width  = -1;
+  item->cell_area.height = -1;
   
   return item;
 }
@@ -3133,27 +3088,26 @@ gtk_icon_view_get_item_at_coords (GtkIconView          *icon_view,
   for (items = icon_view->priv->items; items; items = items->next)
     {
       GtkIconViewItem *item = items->data;
+      GdkRectangle    *item_area = (GdkRectangle *)item;
 
-      if (x >= item->x - icon_view->priv->column_spacing/2 && 
-	  x <= item->x + item->width + icon_view->priv->column_spacing/2 &&
-	  y >= item->y - icon_view->priv->row_spacing/2 && 
-	  y <= item->y + item->height + icon_view->priv->row_spacing/2)
+      if (x >= item_area->x - icon_view->priv->column_spacing/2 && 
+	  x <= item_area->x + item_area->width + icon_view->priv->column_spacing/2 &&
+	  y >= item_area->y - icon_view->priv->row_spacing/2 && 
+	  y <= item_area->y + item_area->height + icon_view->priv->row_spacing/2)
 	{
 	  if (only_in_cell || cell_at_pos)
 	    {
-	      GdkRectangle cell_area;
 	      GtkCellRenderer *cell = NULL;
 	      GtkCellAreaContext *context;
 
 	      context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
 	      gtk_icon_view_set_cell_data (icon_view, item);
-	      gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
 
-	      if (x >= cell_area.x && x <= cell_area.x + cell_area.width &&
-		  y >= cell_area.y && y <= cell_area.y + cell_area.height)
+	      if (x >= item_area->x && x <= item_area->x + item_area->width &&
+		  y >= item_area->y && y <= item_area->y + item_area->height)
 		cell = gtk_cell_area_get_cell_at_position (icon_view->priv->cell_area, context,
 							   GTK_WIDGET (icon_view),
-							   &cell_area,
+							   item_area,
 							   x, y, NULL);
 
 	      if (cell_at_pos)
@@ -3558,7 +3512,7 @@ find_item_page_up_down (GtkIconView     *icon_view,
   gint y, col;
   
   col = current->col;
-  y = current->y + count * gtk_adjustment_get_page_size (icon_view->priv->vadjustment);
+  y = current->cell_area.y + count * gtk_adjustment_get_page_size (icon_view->priv->vadjustment);
 
   item = g_list_find (icon_view->priv->items, current);
   if (count > 0)
@@ -3570,7 +3524,7 @@ find_item_page_up_down (GtkIconView     *icon_view,
 	      if (((GtkIconViewItem *)next->data)->col == col)
 		break;
 	    }
-	  if (!next || ((GtkIconViewItem *)next->data)->y > y)
+	  if (!next || ((GtkIconViewItem *)next->data)->cell_area.y > y)
 	    break;
 
 	  item = next;
@@ -3585,7 +3539,7 @@ find_item_page_up_down (GtkIconView     *icon_view,
 	      if (((GtkIconViewItem *)next->data)->col == col)
 		break;
 	    }
-	  if (!next || ((GtkIconViewItem *)next->data)->y < y)
+	  if (!next || ((GtkIconViewItem *)next->data)->cell_area.y < y)
 	    break;
 
 	  item = next;
@@ -3976,7 +3930,7 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
     item = g_list_nth_data (icon_view->priv->items,
 			    gtk_tree_path_get_indices(path)[0]);
   
-  if (!item || item->width < 0 ||
+  if (!item || item->cell_area.width < 0 ||
       !gtk_widget_get_realized (widget))
     {
       if (icon_view->priv->scroll_to_path)
@@ -3998,23 +3952,25 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
     {
       GtkAllocation allocation;
       gint x, y;
-      gint focus_width;
       gfloat offset;
+      GdkRectangle item_area = 
+	{ 
+	  item->cell_area.x - icon_view->priv->item_padding, 
+	  item->cell_area.y - icon_view->priv->item_padding, 
+	  item->cell_area.width  + icon_view->priv->item_padding * 2, 
+	  item->cell_area.height + icon_view->priv->item_padding * 2 
+	};
 
-      gtk_widget_style_get (widget,
-			    "focus-line-width", &focus_width,
-			    NULL);
-      
       gdk_window_get_position (icon_view->priv->bin_window, &x, &y);
 
       gtk_widget_get_allocation (widget, &allocation);
 
-      offset = y + item->y - focus_width - row_align * (allocation.height - item->height);
+      offset = y + item_area.y - row_align * (allocation.height - item_area.height);
 
       gtk_adjustment_set_value (icon_view->priv->vadjustment,
                                 gtk_adjustment_get_value (icon_view->priv->vadjustment) + offset);
 
-      offset = x + item->x - focus_width - col_align * (allocation.width - item->width);
+      offset = x + item_area.x - col_align * (allocation.width - item_area.width);
 
       gtk_adjustment_set_value (icon_view->priv->hadjustment,
                                 gtk_adjustment_get_value (icon_view->priv->hadjustment) + offset);
@@ -4034,11 +3990,13 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
   GtkAllocation allocation;
   GtkWidget *widget = GTK_WIDGET (icon_view);
   gint x, y, width, height;
-  gint focus_width;
-
-  gtk_widget_style_get (widget,
-			"focus-line-width", &focus_width,
-			NULL);
+  GdkRectangle item_area = 
+    { 
+      item->cell_area.x - icon_view->priv->item_padding, 
+      item->cell_area.y - icon_view->priv->item_padding, 
+      item->cell_area.width  + icon_view->priv->item_padding * 2, 
+      item->cell_area.height + icon_view->priv->item_padding * 2 
+    };
 
   width = gdk_window_get_width (icon_view->priv->bin_window);
   height = gdk_window_get_height (icon_view->priv->bin_window);
@@ -4046,21 +4004,21 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  if (y + item->y - focus_width < 0)
+  if (y + item_area.y < 0)
     gtk_adjustment_set_value (icon_view->priv->vadjustment, 
-			      gtk_adjustment_get_value (icon_view->priv->vadjustment) + y + item->y - focus_width);
-  else if (y + item->y + item->height + focus_width > allocation.height)
+			      gtk_adjustment_get_value (icon_view->priv->vadjustment) + y + item_area.y);
+  else if (y + item_area.y + item_area.height > allocation.height)
     gtk_adjustment_set_value (icon_view->priv->vadjustment, 
-			      gtk_adjustment_get_value (icon_view->priv->vadjustment) + y + item->y + item->height 
-			      + focus_width - allocation.height);
+			      gtk_adjustment_get_value (icon_view->priv->vadjustment) + y + item_area.y + 
+			      item_area.height - allocation.height);
 
-  if (x + item->x - focus_width < 0)
+  if (x + item_area.x < 0)
     gtk_adjustment_set_value (icon_view->priv->hadjustment, 
-                              gtk_adjustment_get_value (icon_view->priv->hadjustment) + x + item->x - focus_width);
-  else if (x + item->x + item->width + focus_width > allocation.width)
+                              gtk_adjustment_get_value (icon_view->priv->hadjustment) + x + item_area.x);
+  else if (x + item_area.x + item_area.width > allocation.width)
     gtk_adjustment_set_value (icon_view->priv->hadjustment, 
-			      gtk_adjustment_get_value (icon_view->priv->hadjustment) + x + item->x + item->width 
-                              + focus_width - allocation.width);
+			      gtk_adjustment_get_value (icon_view->priv->hadjustment) + x + item_area.x + 
+			      item_area.width - allocation.width);
 
   gtk_adjustment_changed (icon_view->priv->hadjustment);
   gtk_adjustment_changed (icon_view->priv->vadjustment);
@@ -4334,22 +4292,20 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
 
   if (cell)
     {
-      GdkRectangle cell_area;
       GtkCellAreaContext *context;
 
       context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
-      gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
       gtk_icon_view_set_cell_data (icon_view, item);
       gtk_cell_area_get_cell_allocation (icon_view->priv->cell_area, context,
 					 GTK_WIDGET (icon_view),
-					 cell, &cell_area, &rect);
+					 cell, (GdkRectangle *)item, &rect);
     }
   else
     {
-      rect.x = item->x;
-      rect.y = item->y;
-      rect.width = item->width;
-      rect.height = item->height;
+      rect.x = item->cell_area.x - icon_view->priv->item_padding;
+      rect.y = item->cell_area.y - icon_view->priv->item_padding;
+      rect.width  = item->cell_area.width  + icon_view->priv->item_padding * 2;
+      rect.height = item->cell_area.height + icon_view->priv->item_padding * 2;
     }
   
   if (icon_view->priv->bin_window)
@@ -4577,11 +4533,16 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
   for (icons = icon_view->priv->items; icons; icons = icons->next) 
     {
       GtkIconViewItem *item = icons->data;
+      GdkRectangle    *item_area = (GdkRectangle *)item;
 
-      if ((item->x + item->width >= (int)gtk_adjustment_get_value (icon_view->priv->hadjustment)) &&
-	  (item->y + item->height >= (int)gtk_adjustment_get_value (icon_view->priv->vadjustment)) &&
-	  (item->x <= (int) (gtk_adjustment_get_value (icon_view->priv->hadjustment) + gtk_adjustment_get_page_size (icon_view->priv->hadjustment))) &&
-	  (item->y <= (int) (gtk_adjustment_get_value (icon_view->priv->vadjustment) + gtk_adjustment_get_page_size (icon_view->priv->vadjustment))))
+      if ((item_area->x + item_area->width >= (int)gtk_adjustment_get_value (icon_view->priv->hadjustment)) &&
+	  (item_area->y + item_area->height >= (int)gtk_adjustment_get_value (icon_view->priv->vadjustment)) &&
+	  (item_area->x <= 
+	   (int) (gtk_adjustment_get_value (icon_view->priv->hadjustment) + 
+		  gtk_adjustment_get_page_size (icon_view->priv->hadjustment))) &&
+	  (item_area->y <= 
+	   (int) (gtk_adjustment_get_value (icon_view->priv->vadjustment) + 
+		  gtk_adjustment_get_page_size (icon_view->priv->vadjustment))))
 	{
 	  if (start_index == -1)
 	    start_index = item->index;
@@ -6191,8 +6152,8 @@ gtk_icon_view_drag_begin (GtkWidget      *widget,
 
   g_return_if_fail (item != NULL);
 
-  x = icon_view->priv->press_start_x - item->x + 1;
-  y = icon_view->priv->press_start_y - item->y + 1;
+  x = icon_view->priv->press_start_x - item->cell_area.x + 1;
+  y = icon_view->priv->press_start_y - item->cell_area.y + 1;
   
   path = gtk_tree_path_new_from_indices (item->index, -1);
   icon = gtk_icon_view_create_drag_icon (icon_view, path);
@@ -6753,13 +6714,13 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
 
   if (pos)
     {
-      if (drag_x < item->x + item->width / 4)
+      if (drag_x < item->cell_area.x + item->cell_area.width / 4)
 	*pos = GTK_ICON_VIEW_DROP_LEFT;
-      else if (drag_x > item->x + item->width * 3 / 4)
+      else if (drag_x > item->cell_area.x + item->cell_area.width * 3 / 4)
 	*pos = GTK_ICON_VIEW_DROP_RIGHT;
-      else if (drag_y < item->y + item->height / 4)
+      else if (drag_y < item->cell_area.y + item->cell_area.height / 4)
 	*pos = GTK_ICON_VIEW_DROP_ABOVE;
-      else if (drag_y > item->y + item->height * 3 / 4)
+      else if (drag_y > item->cell_area.y + item->cell_area.height * 3 / 4)
 	*pos = GTK_ICON_VIEW_DROP_BELOW;
       else
 	*pos = GTK_ICON_VIEW_DROP_INTO;
@@ -6806,29 +6767,38 @@ gtk_icon_view_create_drag_icon (GtkIconView *icon_view,
       
       if (index == item->index)
 	{
+	  GdkRectangle rect = { 
+	    item->cell_area.x - icon_view->priv->item_padding, 
+	    item->cell_area.y - icon_view->priv->item_padding, 
+	    item->cell_area.width  + icon_view->priv->item_padding * 2, 
+	    item->cell_area.height + icon_view->priv->item_padding * 2 
+	  };
+
 	  surface = gdk_window_create_similar_surface (icon_view->priv->bin_window,
                                                        CAIRO_CONTENT_COLOR,
-                                                       item->width + 2,
-                                                       item->height + 2);
+                                                       rect.width + 2,
+                                                       rect.height + 2);
 
 	  cr = cairo_create (surface);
 	  cairo_set_line_width (cr, 1.);
 
           gdk_cairo_set_source_color (cr, &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
-	  cairo_rectangle (cr, 0, 0, item->width + 2, item->height + 2);
+	  cairo_rectangle (cr, 0, 0, rect.width + 2, rect.height + 2);
 	  cairo_fill (cr);
 
           cairo_save (cr);
 
-          cairo_rectangle (cr, 0, 0, item->width, item->height);
+          cairo_rectangle (cr, 1, 1, rect.width, rect.height);
           cairo_clip (cr);
 
-	  gtk_icon_view_paint_item (icon_view, cr, item, 1, 1, FALSE);
+	  gtk_icon_view_paint_item (icon_view, cr, item, 
+				    icon_view->priv->item_padding + 1, 
+				    icon_view->priv->item_padding + 1, FALSE);
 
           cairo_restore (cr);
 
 	  cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
-	  cairo_rectangle (cr, 0.5, 0.5, item->width + 1, item->height + 1);
+	  cairo_rectangle (cr, 0.5, 0.5, rect.width + 1, rect.height + 1);
 	  cairo_stroke (cr);
 
 	  cairo_destroy (cr);
@@ -7137,16 +7107,14 @@ get_pixbuf_box (GtkIconView     *icon_view,
 		GdkRectangle    *box)
 {
   GetPixbufBoxData data = { { 0, }, FALSE };
-  GdkRectangle cell_area;
   GtkCellAreaContext *context;
 
   context = g_ptr_array_index (icon_view->priv->row_contexts, item->row);
 
   gtk_icon_view_set_cell_data (icon_view, item);
-  gtk_icon_view_get_cell_area (icon_view, item, &cell_area);
   gtk_cell_area_foreach_alloc (icon_view->priv->cell_area, context,
 			       GTK_WIDGET (icon_view),
-			       &cell_area, &cell_area,
+			       (GdkRectangle *)item, (GdkRectangle *)item,
 			       (GtkCellAllocCallback)get_pixbuf_foreach, &data);
 
   return data.pixbuf_found;
@@ -7222,8 +7190,8 @@ gtk_icon_view_item_accessible_image_get_image_position (AtkImage    *image,
 
   if (get_pixbuf_box (GTK_ICON_VIEW (item->widget), item->item, &box))
     {
-      *x+= box.x - item->item->x;
-      *y+= box.y - item->item->y;
+      *x+= box.x - item->item->cell_area.x;
+      *y+= box.y - item->item->cell_area.y;
     }
 
 }
@@ -7897,14 +7865,14 @@ gtk_icon_view_item_accessible_get_extents (AtkComponent *component,
   if (atk_state_set_contains_state (item->state_set, ATK_STATE_DEFUNCT))
     return;
 
-  *width = item->item->width;
-  *height = item->item->height;
+  *width = item->item->cell_area.width;
+  *height = item->item->cell_area.height;
   if (gtk_icon_view_item_accessible_is_showing (item))
     {
       parent_obj = gtk_widget_get_accessible (item->widget);
       atk_component_get_position (ATK_COMPONENT (parent_obj), &l_x, &l_y, coord_type);
-      *x = l_x + item->item->x;
-      *y = l_y + item->item->y;
+      *x = l_x + item->item->cell_area.x;
+      *y = l_y + item->item->cell_area.y;
     }
   else
     {
@@ -8027,10 +7995,10 @@ gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item)
   visible_rect.width = allocation.width;
   visible_rect.height = allocation.height;
 
-  if (((item->item->x + item->item->width) < visible_rect.x) ||
-     ((item->item->y + item->item->height) < (visible_rect.y)) ||
-     (item->item->x > (visible_rect.x + visible_rect.width)) ||
-     (item->item->y > (visible_rect.y + visible_rect.height)))
+  if (((item->item->cell_area.x + item->item->cell_area.width) < visible_rect.x) ||
+     ((item->item->cell_area.y + item->item->cell_area.height) < (visible_rect.y)) ||
+     (item->item->cell_area.x > (visible_rect.x + visible_rect.width)) ||
+     (item->item->cell_area.y > (visible_rect.y + visible_rect.height)))
     is_showing =  FALSE;
   else
     is_showing = TRUE;
