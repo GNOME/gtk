@@ -13754,7 +13754,7 @@ gtk_widget_get_path (GtkWidget *widget)
    * implementation with a wrong widget type in the widget path
    */
   if (widget->priv->path &&
-      G_OBJECT_TYPE (widget) != gtk_widget_path_get_widget_type (widget->priv->path))
+      G_OBJECT_TYPE (widget) != gtk_widget_path_get_object_type (widget->priv->path))
     {
       gtk_widget_path_free (widget->priv->path);
       widget->priv->path = NULL;

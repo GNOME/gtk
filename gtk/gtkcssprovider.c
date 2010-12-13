@@ -1073,7 +1073,7 @@ compare_selector_element (GtkWidgetPath   *path,
     {
       GType type;
 
-      type = gtk_widget_path_iter_get_widget_type (path, index);
+      type = gtk_widget_path_iter_get_object_type (path, index);
 
       if (!g_type_is_a (type, elem->type))
         return FALSE;

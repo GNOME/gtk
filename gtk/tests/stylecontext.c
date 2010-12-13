@@ -274,14 +274,14 @@ test_path (void)
   pos = gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
   g_assert_cmpint (pos, ==, 0);
   g_assert_cmpint (gtk_widget_path_length (path), ==, 1);
-  g_assert (gtk_widget_path_iter_get_widget_type (path, 0) == GTK_TYPE_WINDOW);
+  g_assert (gtk_widget_path_iter_get_object_type (path, 0) == GTK_TYPE_WINDOW);
   g_assert (gtk_widget_path_is_type (path, GTK_TYPE_WIDGET));
   g_assert (gtk_widget_path_iter_get_name (path, 0) == NULL);
 
   pos = gtk_widget_path_append_type (path, GTK_TYPE_WIDGET);
   g_assert_cmpint (pos, ==, 1);
   g_assert_cmpint (gtk_widget_path_length (path), ==, 2);
-  gtk_widget_path_iter_set_widget_type (path, pos, GTK_TYPE_BUTTON);
+  gtk_widget_path_iter_set_object_type (path, pos, GTK_TYPE_BUTTON);
   g_assert (gtk_widget_path_is_type (path, GTK_TYPE_BUTTON));
   g_assert (gtk_widget_path_has_parent (path, GTK_TYPE_WIDGET));
   g_assert (gtk_widget_path_has_parent (path, GTK_TYPE_WINDOW));

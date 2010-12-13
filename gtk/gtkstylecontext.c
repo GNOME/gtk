@@ -2386,7 +2386,15 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
   if (!priv->widget_path)
     return;
 
-  widget_type = gtk_widget_path_get_widget_type (priv->widget_path);
+  widget_type = gtk_widget_path_get_object_type (priv->widget_path);
+
+  if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+    {
+      g_warning ("%s: can't get style properties for non-widget class `%s'",
+                 G_STRLOC,
+                 g_type_name (widget_type));
+      return;
+    }
 
   widget_class = g_type_class_ref (widget_type);
   pspec = gtk_widget_class_find_style_property (widget_class, property_name);
@@ -2433,6 +2441,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
   GtkStyleContextPrivate *priv;
   const gchar *prop_name;
   GtkStateFlags state;
+  GType widget_type;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
@@ -2442,6 +2451,16 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
   if (!priv->widget_path)
     return;
 
+  widget_type = gtk_widget_path_get_object_type (priv->widget_path);
+
+  if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+    {
+      g_warning ("%s: can't get style properties for non-widget class `%s'",
+                 G_STRLOC,
+                 g_type_name (widget_type));
+      return;
+    }
+
   state = gtk_style_context_get_state (context);
 
   while (prop_name)
@@ -2449,10 +2468,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
       GtkWidgetClass *widget_class;
       GParamSpec *pspec;
       const GValue *peek_value;
-      GType widget_type;
       gchar *error;
-
-      widget_type = gtk_widget_path_get_widget_type (priv->widget_path);
 
       widget_class = g_type_class_ref (widget_type);
       pspec = gtk_widget_class_find_style_property (widget_class, prop_name);

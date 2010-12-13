@@ -239,7 +239,6 @@ gtk_widget_path_prepend_type (GtkWidgetPath *path,
   GtkPathElement new = { 0 };
 
   g_return_if_fail (path != NULL);
-  g_return_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET));
 
   new.type = type;
   g_array_prepend_val (path->elems, new);
@@ -263,7 +262,6 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
   GtkPathElement new = { 0 };
 
   g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), 0);
 
   new.type = type;
   g_array_append_val (path->elems, new);
@@ -272,11 +270,11 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
 }
 
 /**
- * gtk_widget_path_iter_get_widget_type:
+ * gtk_widget_path_iter_get_object_type:
  * @path: a #GtkWidgetPath
- * @pos: position to get the widget type for, -1 for the path head
+ * @pos: position to get the object type for, -1 for the path head
  *
- * Returns the widget #GType that is at position @pos in the widget
+ * Returns the object #GType that is at position @pos in the widget
  * hierarchy defined in @path.
  *
  * Returns: a widget type
@@ -284,7 +282,7 @@ gtk_widget_path_append_type (GtkWidgetPath *path,
  * Since: 3.0
  **/
 GType
-gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
+gtk_widget_path_iter_get_object_type (const GtkWidgetPath *path,
                                       gint                 pos)
 {
   GtkPathElement *elem;
@@ -300,18 +298,18 @@ gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
 }
 
 /**
- * gtk_widget_path_iter_set_widget_type:
+ * gtk_widget_path_iter_set_object_type:
  * @path: a #GtkWidgetPath
  * @pos: position to modify, -1 for the path head
- * @type: widget type to set
+ * @type: object type to set
  *
- * Sets the widget type for a given position in the widget hierarchy
- * defined by @path. @type must be a #GtkWidget derived #GType.
+ * Sets the object type for a given position in the widget hierarchy
+ * defined by @path.
  *
  * Since: 3.0
  **/
 void
-gtk_widget_path_iter_set_widget_type (GtkWidgetPath *path,
+gtk_widget_path_iter_set_object_type (GtkWidgetPath *path,
                                       gint           pos,
                                       GType          type)
 {
@@ -319,7 +317,6 @@ gtk_widget_path_iter_set_widget_type (GtkWidgetPath *path,
 
   g_return_if_fail (path != NULL);
   g_return_if_fail (path->elems->len != 0);
-  g_return_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET));
 
   if (pos < 0 || pos > path->elems->len)
     pos = path->elems->len - 1;
@@ -959,18 +956,18 @@ gtk_widget_path_iter_has_region (const GtkWidgetPath *path,
 }
 
 /**
- * gtk_widget_path_get_widget_type:
+ * gtk_widget_path_get_object_type:
  * @path: a #GtkWidget
  *
- * Returns the topmost widget type, that is, the widget type this path
+ * Returns the topmost object type, that is, the object type this path
  * is representing.
  *
- * Returns: The widget type
+ * Returns: The object type
  *
  * Since: 3.0
  **/
 GType
-gtk_widget_path_get_widget_type (const GtkWidgetPath *path)
+gtk_widget_path_get_object_type (const GtkWidgetPath *path)
 {
   GtkPathElement *elem;
 
@@ -1000,7 +997,6 @@ gtk_widget_path_is_type (const GtkWidgetPath *path,
   GtkPathElement *elem;
 
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), FALSE);
 
   elem = &g_array_index (path->elems, GtkPathElement,
                          path->elems->len - 1);
@@ -1031,7 +1027,6 @@ gtk_widget_path_has_parent (const GtkWidgetPath *path,
   guint i;
 
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (g_type_is_a (type, GTK_TYPE_WIDGET), FALSE);
 
   for (i = 0; i < path->elems->len - 1; i++)
     {

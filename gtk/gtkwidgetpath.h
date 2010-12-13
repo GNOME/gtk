@@ -46,9 +46,9 @@ gint            gtk_widget_path_append_type         (GtkWidgetPath       *path,
 void            gtk_widget_path_prepend_type        (GtkWidgetPath       *path,
                                                      GType                type);
 
-GType               gtk_widget_path_iter_get_widget_type (const GtkWidgetPath *path,
+GType               gtk_widget_path_iter_get_object_type (const GtkWidgetPath *path,
                                                           gint                 pos);
-void                gtk_widget_path_iter_set_widget_type (GtkWidgetPath       *path,
+void                gtk_widget_path_iter_set_object_type (GtkWidgetPath       *path,
                                                           gint                 pos,
                                                           GType                type);
 
@@ -103,7 +103,7 @@ gboolean gtk_widget_path_iter_has_qregion   (const GtkWidgetPath *path,
                                              GQuark               qname,
                                              GtkRegionFlags      *flags);
 
-GType           gtk_widget_path_get_widget_type (const GtkWidgetPath *path);
+GType           gtk_widget_path_get_object_type (const GtkWidgetPath *path);
 
 gboolean        gtk_widget_path_is_type    (const GtkWidgetPath *path,
                                             GType                type);
