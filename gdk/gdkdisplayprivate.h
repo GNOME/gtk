@@ -175,6 +175,9 @@ struct _GdkDisplayClass
 
   gulong                     (*get_next_serial) (GdkDisplay *display);
 
+  void                       (*notify_startup_complete) (GdkDisplay  *display,
+                                                         const gchar *startup_id);
+
   /* Signals */
   void (*closed) (GdkDisplay *display,
                   gboolean    is_error);

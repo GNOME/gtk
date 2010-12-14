@@ -235,11 +235,12 @@ void     gdk_display_store_clipboard                (GdkDisplay    *display,
 gboolean gdk_display_supports_shapes           (GdkDisplay    *display);
 gboolean gdk_display_supports_input_shapes     (GdkDisplay    *display);
 gboolean gdk_display_supports_composite        (GdkDisplay    *display);
+void     gdk_display_notify_startup_complete   (GdkDisplay    *display,
+                                                const gchar   *startup_id);
 
 GdkDeviceManager * gdk_display_get_device_manager (GdkDisplay *display);
 
 GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
-
 
 G_END_DECLS
 

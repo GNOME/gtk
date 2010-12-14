@@ -2062,72 +2062,27 @@ gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
   va_end (ap);
 
   broadcast_xmessage (display,
-		      "_NET_STARTUP_INFO",
+                      "_NET_STARTUP_INFO",
                       "_NET_STARTUP_INFO_BEGIN",
                       message->str);
 
   g_string_free (message, TRUE);
 }
 
-/**
- * gdk_notify_startup_complete:
- * 
- * Indicates to the GUI environment that the application has finished
- * loading. If the applications opens windows, this function is
- * normally called after opening the application's initial set of
- * windows.
- * 
- * GTK+ will call this function automatically after opening the first
- * #GtkWindow unless gtk_window_set_auto_startup_notification() is called 
- * to disable that feature.
- *
- * Since: 2.2
- **/
-void
-gdk_notify_startup_complete (void)
+static void
+gdk_x11_display_notify_startup_complete (GdkDisplay  *display,
+                                         const gchar *startup_id)
 {
-  GdkDisplay *display;
-  GdkDisplayX11 *display_x11;
-
-  display = gdk_display_get_default ();
-  if (!display)
-    return;
-  
-  display_x11 = GDK_DISPLAY_X11 (display);
-
-  if (display_x11->startup_notification_id == NULL)
-    return;
-
-  gdk_notify_startup_complete_with_id (display_x11->startup_notification_id);
-}
-
-/**
- * gdk_notify_startup_complete_with_id:
- * @startup_id: a startup-notification identifier, for which notification
- *              process should be completed
- * 
- * Indicates to the GUI environment that the application has finished
- * loading, using a given identifier.
- * 
- * GTK+ will call this function automatically for #GtkWindow with custom
- * startup-notification identifier unless
- * gtk_window_set_auto_startup_notification() is called to disable
- * that feature.
- *
- * Since: 2.12
- **/
-void
-gdk_notify_startup_complete_with_id (const gchar* startup_id)
-{
-  GdkDisplay *display;
-
-  display = gdk_display_get_default ();
-  if (!display)
-    return;
+  if (startup_id == NULL)
+    {
+      startup_id = GDK_DISPLAY_X11 (display)->startup_notification_id;
+      if (startup_id == NULL)
+        return;
+    }
 
   gdk_x11_display_broadcast_startup_message (display, "remove",
-					     "ID", startup_id,
-					     NULL);
+                                             "ID", startup_id,
+                                             NULL);
 }
 
 static gboolean
@@ -2754,5 +2709,6 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->before_process_all_updates = _gdk_x11_display_before_process_all_updates;
   display_class->after_process_all_updates = _gdk_x11_display_after_process_all_updates;
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
+  display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
 }
 
