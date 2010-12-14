@@ -330,6 +330,38 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_NOTEBOOK "notebook"
 
+/**
+ * GTK_STYLE_CLASS_INFO:
+ *
+ * A widget class for an area displaying an informational message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_INFO "info"
+
+/**
+ * GTK_STYLE_CLASS_WARNING:
+ *
+ * A widget class for an area displaying a warning message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_WARNING "warning"
+
+/**
+ * GTK_STYLE_CLASS_QUESTION:
+ *
+ * A widget class for an area displaying a question to the user,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_QUESTION "question"
+
+/**
+ * GTK_STYLE_CLASS_ERROR:
+ *
+ * A widget class for an area displaying an error message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_ERROR "error"
+
 
 /* Predefined set of widget regions */
 

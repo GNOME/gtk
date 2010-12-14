@@ -1215,7 +1215,7 @@ compare_selector (GtkWidgetPath *path,
     score = 0;
   else if (first_match)
     {
-      /* Assign more weight to these selectors 
+      /* Assign more weight to these selectors
        * that matched right from the first element.
        */
       score <<= 4;
@@ -3589,6 +3589,15 @@ gtk_css_provider_get_default (void)
         "@define-color tooltip_bg_color #eee1b3; \n"
         "@define-color tooltip_fg_color #000; \n"
         "\n"
+        "@define-color info_fg_color rgb (181, 171, 156);\n"
+        "@define-color info_bg_color rgb (252, 252, 189);\n"
+        "@define-color warning_fg_color rgb (173, 120, 41);\n"
+        "@define-color warning_bg_color rgb (250, 173, 61);\n"
+        "@define-color question_fg_color rgb (97, 122, 214);\n"
+        "@define-color question_bg_color rgb (138, 173, 212);\n"
+        "@define-color error_fg_color rgb (166, 38, 38);\n"
+        "@define-color error_bg_color rgb (237, 54, 54);\n"
+        "\n"
         "*,\n"
         "GtkTreeView > GtkButton {\n"
         "  background-color: @bg_color;\n"
@@ -3791,6 +3800,26 @@ gtk_css_provider_get_default (void)
         "\n"
         ".spinner:active {\n"
         "  transition: 750ms linear loop;\n"
+        "}\n"
+        "\n"
+        ".info {\n"
+        "  background-color: @info_bg_color;\n"
+        "  color: @info_fg_color;\n"
+        "}\n"
+        "\n"
+        ".warning {\n"
+        "  background-color: @warning_bg_color;\n"
+        "  color: @warning_fg_color;\n"
+        "}\n"
+        "\n"
+        ".question {\n"
+        "  background-color: @question_bg_color;\n"
+        "  color: @question_fg_color;\n"
+        "}\n"
+        "\n"
+        ".error {\n"
+        "  background-color: @error_bg_color;\n"
+        "  color: @error_fg_color;\n"
         "}\n"
         "\n";
 
