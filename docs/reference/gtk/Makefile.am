@@ -108,7 +108,8 @@ CPPFLAGS += \
 
 GTKDOC_LIBS = \
 	$(top_builddir)/gdk/$(gdktargetlib)        			\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/$(gtktargetlib)				\
+	$(GTK_DEP_LIBS)
 
 
 # Extra options to supply to gtkdoc-mkdb

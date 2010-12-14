@@ -45,8 +45,7 @@ INCLUDES = \
 	$(GTK_DEBUG_FLAGS)	\
 	$(GDK_DEP_CFLAGS)
 
-GTKDOC_LIBS = $(top_builddir)/gdk/$(gdktargetlib)
-
+GTKDOC_LIBS = $(top_builddir)/gdk/$(gdktargetlib) $(GDK_DEP_LIBS)
 
 # Extra options to supply to gtkdoc-mkdb
 MKDB_OPTIONS=--sgml-mode --output-format=xml --name-space=gdk
