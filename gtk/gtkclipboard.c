@@ -301,7 +301,7 @@ gtk_clipboard_get_for_display (GdkDisplay *display,
 {
   g_return_val_if_fail (display != NULL, NULL); /* See bgo#463773; this is needed because Flash Player sucks */
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (!display->closed, NULL);
+  g_return_val_if_fail (!gdk_display_is_closed (display), NULL);
 
   return clipboard_peek (display, selection, FALSE);
 }
