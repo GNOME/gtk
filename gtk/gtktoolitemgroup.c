@@ -1871,14 +1871,10 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
     {
       if (priv->animation)
         {
-          GTimeVal now;
-
-          g_get_current_time (&now);
-
           if (priv->animation_timeout)
             g_source_destroy (priv->animation_timeout);
 
-          priv->animation_start = (now.tv_sec * G_USEC_PER_SEC + now.tv_usec);
+          priv->animation_start = g_get_monotonic_time ();
           priv->animation_timeout = g_timeout_source_new (ANIMATION_TIMEOUT);
 
           g_source_set_callback (priv->animation_timeout,
