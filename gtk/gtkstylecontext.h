@@ -331,6 +331,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_NOTEBOOK "notebook"
 
 /**
+ * GTK_STYLE_CLASS_VIEW:
+ *
+ * A widget class defining a view, such as iconviews or treeviews
+ */
+#define GTK_STYLE_CLASS_VIEW "view"
+
+/**
  * GTK_STYLE_CLASS_INFO:
  *
  * A widget class for an area displaying an informational message,
