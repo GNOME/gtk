@@ -1162,6 +1162,8 @@ gtk_icon_view_dispose (GObject *object)
 
   if (priv->cell_area)
     {
+      gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+
       g_signal_handler_disconnect (priv->cell_area, priv->add_editable_id);
       g_signal_handler_disconnect (priv->cell_area, priv->remove_editable_id);
       priv->add_editable_id = 0;
@@ -1351,8 +1353,6 @@ static void
 gtk_icon_view_destroy (GtkWidget *widget)
 {
   GtkIconView *icon_view = GTK_ICON_VIEW (widget);
-
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   gtk_icon_view_set_model (icon_view, NULL);
 
@@ -2733,6 +2733,31 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
 }
 
 static void
+adjust_wrap_width (GtkIconView *icon_view)
+{
+  if (icon_view->priv->text_cell)
+    {
+      gint wrap_width = 50;
+
+      /* Here we go with the same old guess, try the icon size and set double
+       * the size of the first icon found in the list, naive but works much
+       * of the time */
+      if (icon_view->priv->items && icon_view->priv->pixbuf_cell)
+	{
+	  gtk_icon_view_set_cell_data (icon_view, icon_view->priv->items->data);
+	  gtk_cell_renderer_get_preferred_width (icon_view->priv->pixbuf_cell,
+						 GTK_WIDGET (icon_view),
+						 &wrap_width, NULL);
+	  
+	  wrap_width = MAX (wrap_width * 2, 50);
+	}
+      
+      g_object_set (icon_view->priv->text_cell, "wrap-width", wrap_width, NULL);
+      g_object_set (icon_view->priv->text_cell, "width", wrap_width, NULL);
+    }
+}
+
+static void
 gtk_icon_view_layout (GtkIconView *icon_view)
 {
   GtkAllocation allocation;
@@ -2756,8 +2781,10 @@ gtk_icon_view_layout (GtkIconView *icon_view)
 
   item_width = icon_view->priv->item_width;
 
-  /* Update the context widths for any invalidated
-   * items */
+  /* Update the wrap width for the text cell before going and requesting sizes */
+  adjust_wrap_width (icon_view);
+
+  /* Update the context widths for any invalidated items */
   gtk_icon_view_cache_widths (icon_view);
 
   /* Fetch the new item width if needed */
