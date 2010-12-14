@@ -425,7 +425,15 @@ static void      gtk_cell_area_reorder                       (GtkCellLayout     
 							      GtkCellRenderer       *cell,
 							      gint                   position);
 static GList    *gtk_cell_area_get_cells                     (GtkCellLayout         *cell_layout);
+static GtkCellArea *gtk_cell_area_get_area                   (GtkCellLayout         *cell_layout);
 
+/* GtkBuildableIface */
+static void      gtk_cell_area_buildable_init                (GtkBuildableIface     *iface);
+static void      gtk_cell_area_buildable_custom_tag_end      (GtkBuildable          *buildable,
+							      GtkBuilder            *builder,
+							      GObject               *child,
+							      const gchar           *tagname,
+							      gpointer              *data);
 
 /* Used in foreach loop to check if a child renderer is present */
 typedef struct {
@@ -560,10 +568,11 @@ static guint           cell_area_signals[LAST_SIGNAL] = { 0 };
 #define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
 #define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
 
-
 G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkCellArea, gtk_cell_area, G_TYPE_INITIALLY_UNOWNED,
 				  G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
-							 gtk_cell_area_cell_layout_init));
+							 gtk_cell_area_cell_layout_init)
+				  G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+							 gtk_cell_area_buildable_init))
 
 static void
 gtk_cell_area_init (GtkCellArea *area)
@@ -1328,6 +1337,7 @@ gtk_cell_area_cell_layout_init (GtkCellLayoutIface *iface)
   iface->clear_attributes   = gtk_cell_area_clear_attributes;
   iface->reorder            = gtk_cell_area_reorder;
   iface->get_cells          = gtk_cell_area_get_cells;
+  iface->get_area           = gtk_cell_area_get_area;
 }
 
 static void
@@ -1452,6 +1462,33 @@ gtk_cell_area_get_cells (GtkCellLayout *cell_layout)
   return g_list_reverse (cells);
 }
 
+static GtkCellArea *
+gtk_cell_area_get_area (GtkCellLayout *cell_layout)
+{
+  return GTK_CELL_AREA (cell_layout);
+}
+
+/*************************************************************
+ *                   GtkBuildableIface                       *
+ *************************************************************/
+static void
+gtk_cell_area_buildable_init (GtkBuildableIface *iface)
+{
+  iface->add_child = _gtk_cell_layout_buildable_add_child;
+  iface->custom_tag_start = _gtk_cell_layout_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_cell_area_buildable_custom_tag_end;
+}
+
+static void
+gtk_cell_area_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
+{
+  /* Just ignore the boolean return from here */
+  _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname, data);
+}
 
 /*************************************************************
  *                            API                            *
