@@ -312,8 +312,6 @@ void       _gdk_window_process_updates_recurse (GdkWindow *window,
 
 void       _gdk_screen_close             (GdkScreen      *screen);
 
-const char *_gdk_get_sm_client_id (void);
-
 /*****************************************
  * Interfaces provided by windowing code *
  *****************************************/

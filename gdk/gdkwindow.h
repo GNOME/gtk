@@ -676,7 +676,6 @@ void gdk_window_set_urgency_hint      (GdkWindow *window,
 void          gdk_window_set_geometry_hints (GdkWindow          *window,
 					     const GdkGeometry  *geometry,
 					     GdkWindowHints      geom_mask);
-void          gdk_set_sm_client_id          (const gchar        *sm_client_id);
 
 cairo_region_t *gdk_window_get_clip_region  (GdkWindow          *window);
 cairo_region_t *gdk_window_get_visible_region(GdkWindow         *window);
