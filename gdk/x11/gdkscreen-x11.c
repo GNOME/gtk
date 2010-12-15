@@ -810,8 +810,8 @@ _gdk_x11_screen_new (GdkDisplay *display,
   init_multihead (screen);
   init_randr_support (screen);
   
-  _gdk_x11_visual_init (screen);
-  _gdk_windowing_window_init (screen);
+  _gdk_x11_screen_init_visuals (screen);
+  _gdk_x11_screen_init_root_window (screen);
   
   return screen;
 }
@@ -1592,7 +1592,7 @@ gdk_xsettings_notify_cb (const char       *name,
 }
 
 void
-_gdk_screen_x11_events_init (GdkScreen *screen)
+_gdk_x11_screen_init_events (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
 

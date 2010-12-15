@@ -75,11 +75,14 @@ GList *       _gdk_screen_x11_list_visuals               (GdkScreen      *screen
 
 
 
-void _gdk_xid_table_insert (GdkDisplay *display,
-			    XID        *xid,
-			    gpointer    data);
-void _gdk_xid_table_remove (GdkDisplay *display,
-			    XID         xid);
+void     _gdk_xid_table_insert (GdkDisplay *display,
+                                XID        *xid,
+                                gpointer    data);
+void     _gdk_xid_table_remove (GdkDisplay *display,
+                                XID         xid);
+gpointer _gdk_xid_table_lookup (GdkDisplay *display,
+                                XID         xid);
+
 gint _gdk_send_xevent      (GdkDisplay *display,
 			    Window      window,
 			    gboolean    propagate,
@@ -106,9 +109,9 @@ void     _gdk_x11_window_translate         (GdkWindow *window,
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
 
-cairo_region_t* _xwindow_get_shape              (Display *xdisplay,
-                                            Window window,
-                                            gint shape_type);
+cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
+                                             Window window,
+                                             gint shape_type);
 
 void     _gdk_region_get_xrectangles       (const cairo_region_t      *region,
                                             gint                  x_offset,
@@ -152,6 +155,8 @@ void _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
 void _gdk_x11_display_queue_events            (GdkDisplay *display);
 void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
+GdkDeviceManager *_gdk_x11_device_manager_new (GdkDisplay *display);
+
 void _gdk_x11_display_manager_add_display     (GdkDisplayManager *manager,
                                                GdkDisplay        *display);
 void _gdk_x11_display_manager_remove_display  (GdkDisplayManager *manager,
@@ -180,13 +185,13 @@ void _gdk_x11_precache_atoms (GdkDisplay          *display,
 			      const gchar * const *atom_names,
 			      gint                 n_atoms);
 
-void _gdk_screen_x11_events_init   (GdkScreen *screen);
+void _gdk_events_init                 (GdkDisplay *display);
+void _gdk_events_uninit               (GdkDisplay *display);
+void _gdk_x11_dnd_init                (GdkDisplay *display);
 
-void _gdk_events_init           (GdkDisplay *display);
-void _gdk_events_uninit         (GdkDisplay *display);
-void _gdk_windowing_window_init (GdkScreen *screen);
-void _gdk_x11_visual_init       (GdkScreen *screen);
-void _gdk_x11_dnd_init          (GdkDisplay *display);
+void _gdk_x11_screen_init_root_window (GdkScreen *screen);
+void _gdk_x11_screen_init_visuals     (GdkScreen *screen);
+void _gdk_x11_screen_init_events      (GdkScreen *screen);
 
 void _gdk_x11_cursor_update_theme (GdkCursor *cursor);
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);

@@ -101,7 +101,7 @@ gdk_visual_x11_class_init (GdkVisualX11Class *class)
 }
 
 void
-_gdk_x11_visual_init (GdkScreen *screen)
+_gdk_x11_screen_init_visuals (GdkScreen *screen)
 {
   static const gint possible_depths[8] = { 32, 30, 24, 16, 15, 8, 4, 1 };
   static const GdkVisualType possible_types[6] =

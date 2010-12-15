@@ -23,19 +23,19 @@
 
 
 typedef GdkEventTranslatorIface GdkEventTranslatorInterface;
-G_DEFINE_INTERFACE (GdkEventTranslator, gdk_event_translator, G_TYPE_OBJECT);
+G_DEFINE_INTERFACE (GdkEventTranslator, _gdk_x11_event_translator, G_TYPE_OBJECT);
 
 
 static void
-gdk_event_translator_default_init (GdkEventTranslatorInterface *iface)
+_gdk_x11_event_translator_default_init (GdkEventTranslatorInterface *iface)
 {
 }
 
 
 GdkEvent *
-gdk_event_translator_translate (GdkEventTranslator *translator,
-                                GdkDisplay         *display,
-                                XEvent             *xevent)
+_gdk_x11_event_translator_translate (GdkEventTranslator *translator,
+                                     GdkDisplay         *display,
+                                     XEvent             *xevent)
 {
   GdkEventTranslatorIface *iface;
   GdkEvent *event;
@@ -59,7 +59,7 @@ gdk_event_translator_translate (GdkEventTranslator *translator,
 }
 
 GdkEventMask
-gdk_event_translator_get_handled_events (GdkEventTranslator *translator)
+_gdk_x11_event_translator_get_handled_events (GdkEventTranslator *translator)
 {
   GdkEventTranslatorIface *iface;
 
@@ -74,9 +74,9 @@ gdk_event_translator_get_handled_events (GdkEventTranslator *translator)
 }
 
 void
-gdk_event_translator_select_window_events (GdkEventTranslator *translator,
-                                           Window              window,
-                                           GdkEventMask        event_mask)
+_gdk_x11_event_translator_select_window_events (GdkEventTranslator *translator,
+                                                Window              window,
+                                                GdkEventMask        event_mask)
 {
   GdkEventTranslatorIface *iface;
 

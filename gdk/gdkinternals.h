@@ -283,8 +283,6 @@ void gdk_synthesize_window_state (GdkWindow     *window,
                                   GdkWindowState unset_flags,
                                   GdkWindowState set_flags);
 
-GdkDeviceManager * _gdk_device_manager_new (GdkDisplay *display);
-
 gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
                                      GdkRectangle *extents);
 

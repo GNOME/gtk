@@ -185,9 +185,6 @@ GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
 #endif
 
-     /* Return the Gdk* for a particular XID */
-gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
-						XID         xid);
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
@@ -211,7 +208,6 @@ XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
                                               gint       monitor_num);
 
 #ifndef GDK_MULTIHEAD_SAFE
-gpointer      gdk_xid_table_lookup   (XID              xid);
 gboolean      gdk_net_wm_supports    (GdkAtom    property);
 void          gdk_x11_grab_server    (void);
 void          gdk_x11_ungrab_server  (void);

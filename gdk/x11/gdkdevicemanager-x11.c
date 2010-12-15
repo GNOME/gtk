@@ -29,7 +29,7 @@
 #include "gdkx.h"
 
 GdkDeviceManager *
-_gdk_device_manager_new (GdkDisplay *display)
+_gdk_x11_device_manager_new (GdkDisplay *display)
 {
   if (!g_getenv ("GDK_CORE_DEVICE_EVENTS"))
     {

@@ -32,15 +32,22 @@
 
 #include <stdio.h>
 
-static guint     gdk_xid_hash  (XID *xid);
-static gboolean  gdk_xid_equal (XID *a,
-				XID *b);
+static guint
+gdk_xid_hash (XID *xid)
+{
+  return *xid;
+}
 
+static gboolean
+gdk_xid_equal (XID *a, XID *b)
+{
+  return (*a == *b);
+}
 
 void
 _gdk_xid_table_insert (GdkDisplay *display,
-		       XID	  *xid,
-		       gpointer    data)
+                       XID        *xid,
+                       gpointer    data)
 {
   GdkDisplayX11 *display_x11;
 
@@ -51,7 +58,7 @@ _gdk_xid_table_insert (GdkDisplay *display,
 
   if (!display_x11->xid_ht)
     display_x11->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
-					    (GEqualFunc) gdk_xid_equal);
+                                            (GEqualFunc) gdk_xid_equal);
 
   if (g_hash_table_lookup (display_x11->xid_ht, xid))
     g_warning ("XID collision, trouble ahead");
@@ -61,7 +68,7 @@ _gdk_xid_table_insert (GdkDisplay *display,
 
 void
 _gdk_xid_table_remove (GdkDisplay *display,
-		       XID	   xid)
+                       XID         xid)
 {
   GdkDisplayX11 *display_x11;
 
@@ -73,61 +80,19 @@ _gdk_xid_table_remove (GdkDisplay *display,
     g_hash_table_remove (display_x11->xid_ht, &xid);
 }
 
-/**
- * gdk_xid_table_lookup_for_display:
- * @display: the #GdkDisplay.
- * @xid: an X id.
- *
- * Returns the GDK object associated with the given X id.
- *
- * Return value: (transfer none): the associated #GdkWindow, or %NULL
- *     of no object is associated with the X id.
- *
- * Since: 2.2
- */
 gpointer
-gdk_xid_table_lookup_for_display (GdkDisplay  *display,
-				  XID	       xid)
+_gdk_xid_table_lookup (GdkDisplay  *display,
+                      XID          xid)
 {
   GdkDisplayX11 *display_x11;
   gpointer data = NULL;
-  
+
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  
+
   display_x11 = GDK_DISPLAY_X11 (display);
 
   if (display_x11->xid_ht)
     data = g_hash_table_lookup (display_x11->xid_ht, &xid);
-  
+
   return data;
-}
-
-
-/**
- * gdk_xid_table_lookup:
- * @xid: an X id.
- *
- * Returns the Gdk object associated with the given X id for the default
- * display.
- *
- * Return value: (transfer none): the associated #GdkWindow, or %NULL
- *     if no object is associated with the X id.
- */
-gpointer
-gdk_xid_table_lookup (XID xid)
-{
-  return gdk_xid_table_lookup_for_display (gdk_display_get_default (), xid);
-}
-
-static guint
-gdk_xid_hash (XID *xid)
-{
-  return *xid;
-}
-
-static gboolean
-gdk_xid_equal (XID *a,
-	       XID *b)
-{
-  return (*a == *b);
 }

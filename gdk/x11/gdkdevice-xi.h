@@ -66,23 +66,23 @@ struct _GdkDeviceXIClass
 };
 
 G_GNUC_INTERNAL
-GType gdk_device_xi_get_type (void) G_GNUC_CONST;
+GType gdk_device_xi_get_type           (void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
-void     gdk_device_xi_update_window_info (GdkWindow *window);
+void  gdk_device_xi_update_window_info (GdkWindow *window);
 
 G_GNUC_INTERNAL
-void     gdk_device_xi_update_axes (GdkDevice *device,
-                                    gint       axes_count,
-                                    gint       first_axis,
-                                    gint      *axis_data);
+void  gdk_device_xi_update_axes        (GdkDevice *device,
+                                        gint       axes_count,
+                                        gint       first_axis,
+                                        gint      *axis_data);
 G_GNUC_INTERNAL
-void     gdk_device_xi_translate_axes     (GdkDevice *device,
-                                           GdkWindow *window,
-                                           gint      *axis_data,
-                                           gdouble   *axes,
-                                           gdouble   *x,
-                                           gdouble   *y);
+void  gdk_device_xi_translate_axes     (GdkDevice *device,
+                                        GdkWindow *window,
+                                        gint      *axis_data,
+                                        gdouble   *axes,
+                                        gdouble   *x,
+                                        gdouble   *y);
 
 G_END_DECLS
 

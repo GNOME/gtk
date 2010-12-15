@@ -51,11 +51,11 @@ struct _GdkDeviceXI2Class
 };
 
 G_GNUC_INTERNAL
-GType gdk_device_xi2_get_type (void) G_GNUC_CONST;
+GType    gdk_device_xi2_get_type             (void) G_GNUC_CONST;
 
 G_GNUC_INTERNAL
-guchar * gdk_device_xi2_translate_event_mask (GdkEventMask  event_mask,
-                                              int          *len);
+guchar * gdk_device_xi2_translate_event_mask (GdkEventMask     event_mask,
+                                              int             *len);
 G_GNUC_INTERNAL
 guint    gdk_device_xi2_translate_state      (XIModifierState *mods_state,
                                               XIButtonState   *buttons_state);

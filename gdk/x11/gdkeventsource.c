@@ -202,9 +202,9 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
       GdkEventTranslator *translator = list->data;
 
       list = list->next;
-      event = gdk_event_translator_translate (translator,
-                                              event_source->display,
-                                              xevent);
+      event = _gdk_x11_event_translator_translate (translator,
+                                                   event_source->display,
+                                                   xevent);
     }
 
   if (event &&
@@ -394,12 +394,12 @@ gdk_x11_event_source_select_events (GdkEventSource *source,
       GdkEventTranslator *translator = list->data;
       GdkEventMask translator_mask, mask;
 
-      translator_mask = gdk_event_translator_get_handled_events (translator);
+      translator_mask = _gdk_x11_event_translator_get_handled_events (translator);
       mask = event_mask & translator_mask;
 
       if (mask != 0)
         {
-          gdk_event_translator_select_window_events (translator, window, mask);
+          _gdk_x11_event_translator_select_window_events (translator, window, mask);
           event_mask &= ~mask;
         }
 

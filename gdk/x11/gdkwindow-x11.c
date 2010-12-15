@@ -450,7 +450,7 @@ _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window)
 }
 
 void
-_gdk_windowing_window_init (GdkScreen * screen)
+_gdk_x11_screen_init_root_window (GdkScreen *screen)
 {
   GdkWindow *window;
   GdkWindowImplX11 *impl;
@@ -882,7 +882,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
 
   display_x11 = GDK_DISPLAY_X11 (display);
 
-  if ((win = gdk_xid_table_lookup_for_display (display, window)) != NULL)
+  if ((win = _gdk_xid_table_lookup (display, window)) != NULL)
     return g_object_ref (win);
 
   gdk_x11_display_error_trap_push (display);
@@ -912,7 +912,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   impl = GDK_WINDOW_IMPL_X11 (win->impl);
   impl->wrapper = win;
 
-  win->parent = gdk_xid_table_lookup_for_display (display, parent);
+  win->parent = _gdk_xid_table_lookup (display, parent);
 
   if (!win->parent || GDK_WINDOW_TYPE (win->parent) == GDK_WINDOW_FOREIGN)
     win->parent = gdk_screen_get_root_window (screen);
@@ -963,7 +963,7 @@ GdkWindow *
 gdk_x11_window_lookup_for_display (GdkDisplay *display,
                                    Window      window)
 {
-  return (GdkWindow*) gdk_xid_table_lookup_for_display (display, window);
+  return (GdkWindow*) _gdk_xid_table_lookup (display, window);
 }
 
 static void
@@ -3737,9 +3737,9 @@ gdk_x11_window_set_functions (GdkWindow    *window,
 }
 
 cairo_region_t *
-_xwindow_get_shape (Display *xdisplay,
-		    Window window,
-		    gint shape_type)
+_gdk_x11_xwindow_get_shape (Display *xdisplay,
+                            Window   window,
+                            gint     shape_type)
 {
   cairo_region_t *shape;
   GdkRectangle *rl;
@@ -3787,8 +3787,9 @@ gdk_x11_window_get_shape (GdkWindow *window)
 {
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    return _xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
-			      GDK_WINDOW_XID (window), ShapeBounding);
+    return _gdk_x11_xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
+                                       GDK_WINDOW_XID (window),
+                                       ShapeBounding);
 
   return NULL;
 }
@@ -3799,9 +3800,9 @@ gdk_x11_window_get_input_shape (GdkWindow *window)
 #if defined(ShapeInput)
   if (!GDK_WINDOW_DESTROYED (window) &&
       gdk_display_supports_shapes (GDK_WINDOW_DISPLAY (window)))
-    return _xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
-			      GDK_WINDOW_XID (window),
-			      ShapeInput);
+    return _gdk_x11_xwindow_get_shape (GDK_WINDOW_XDISPLAY (window),
+                                       GDK_WINDOW_XID (window),
+                                       ShapeInput);
 #endif
 
   return NULL;
