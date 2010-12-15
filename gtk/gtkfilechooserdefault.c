@@ -3224,6 +3224,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   GtkFileChooserDefault *impl;
   GtkTreePath *tree_path;
   GtkTreeViewDropPosition tree_pos;
+  GdkAtom target;
   int position;
   int bookmarks_index;
 
@@ -3243,9 +3244,11 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   g_assert (position >= bookmarks_index);
   position -= bookmarks_index;
 
-  if (gtk_targets_include_uri (&selection_data->target, 1))
+  target = gtk_selection_data_get_target (selection_data);
+
+  if (gtk_targets_include_uri (&target, 1))
     shortcuts_drop_uris (impl, selection_data, position);
-  else if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  else if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     shortcuts_reorder (impl, position);
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");
