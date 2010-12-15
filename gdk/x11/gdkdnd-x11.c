@@ -988,8 +988,8 @@ motif_find_drag_window (GdkDisplay *display,
        */
       if (display_x11->motif_drag_window)
 	{
-	  display_x11->motif_drag_gdk_window = 
-	    gdk_window_foreign_new_for_display (display, display_x11->motif_drag_window);
+	  display_x11->motif_drag_gdk_window =
+	    gdk_x11_window_foreign_new_for_display (display, display_x11->motif_drag_window);
 	  gdk_window_add_filter (display_x11->motif_drag_gdk_window,
 				 motif_drag_window_filter,
 				 NULL);
@@ -1668,12 +1668,12 @@ motif_drag_context_new (GdkWindow *dest_window,
   context->protocol = GDK_DRAG_PROTO_MOTIF;
   context->is_source = FALSE;
 
-  context->source_window = gdk_window_lookup_for_display (display, source_window);
+  context->source_window = gdk_x11_window_lookup_for_display (display, source_window);
   if (context->source_window)
     g_object_ref (context->source_window);
   else
     {
-      context->source_window = gdk_window_foreign_new_for_display (display, source_window);
+      context->source_window = gdk_x11_window_foreign_new_for_display (display, source_window);
       if (!context->source_window)
 	{
 	  g_object_unref (context_x11);
@@ -2843,12 +2843,12 @@ xdnd_enter_filter (GdkXEvent *xev,
   device_manager = gdk_display_get_device_manager (display);
   gdk_drag_context_set_device (context, gdk_device_manager_get_client_pointer (device_manager));
 
-  context->source_window = gdk_window_lookup_for_display (display, source_window);
+  context->source_window = gdk_x11_window_lookup_for_display (display, source_window);
   if (context->source_window)
     g_object_ref (context->source_window);
   else
     {
-      context->source_window = gdk_window_foreign_new_for_display (display, source_window);
+      context->source_window = gdk_x11_window_foreign_new_for_display (display, source_window);
       if (!context->source_window)
 	{
 	  g_object_unref (context);
@@ -3158,7 +3158,7 @@ _gdk_x11_display_get_drag_protocol (GdkDisplay      *display,
   base_precache_atoms (display);
 
   /* Check for a local drag */
-  window = gdk_window_lookup_for_display (display, xid);
+  window = gdk_x11_window_lookup_for_display (display, xid);
   if (window && gdk_window_get_window_type (window) != GDK_WINDOW_FOREIGN)
     {
       if (g_object_get_data (G_OBJECT (window), "gdk-dnd-registered") != NULL)
@@ -3273,11 +3273,11 @@ gdk_drag_context_x11_find_window (GdkDragContext  *context,
 
       if (recipient != None)
         {
-          dest_window = gdk_window_lookup_for_display (display, recipient);
+          dest_window = gdk_x11_window_lookup_for_display (display, recipient);
           if (dest_window)
             g_object_ref (dest_window);
           else
-            dest_window = gdk_window_foreign_new_for_display (display, recipient);
+            dest_window = gdk_x11_window_foreign_new_for_display (display, recipient);
         }
       else
         dest_window = NULL;

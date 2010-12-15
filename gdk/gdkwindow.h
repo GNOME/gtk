@@ -642,18 +642,7 @@ GdkWindowState gdk_window_get_state (GdkWindow *window);
  * window gravity on all children.
  */
 gboolean gdk_window_set_static_gravities (GdkWindow *window,
-					  gboolean   use_static);   
-
-/* Functions to create/lookup windows from their native equivalents */ 
-#ifndef GDK_MULTIHEAD_SAFE
-GdkWindow*    gdk_window_foreign_new (GdkNativeWindow anid);
-GdkWindow*    gdk_window_lookup      (GdkNativeWindow anid);
-#endif
-GdkWindow    *gdk_window_foreign_new_for_display (GdkDisplay      *display,
-						  GdkNativeWindow  anid);
-GdkWindow*    gdk_window_lookup_for_display (GdkDisplay      *display,
-					     GdkNativeWindow  anid);
-
+                                          gboolean   use_static);
 
 /* GdkWindow */
 

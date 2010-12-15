@@ -368,7 +368,7 @@ get_event_window (GdkEventTranslator *translator,
       xwindow = xevent->xany.window;
     }
 
-  return gdk_window_lookup_for_display (display, xwindow);
+  return gdk_x11_window_lookup_for_display (display, xwindow);
 }
 
 static gboolean

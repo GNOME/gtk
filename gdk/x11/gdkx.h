@@ -95,6 +95,7 @@ gint     gdk_x11_get_default_screen       (void);
  */
 #define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
 
+#define GDK_IS_DISPLAY_X11(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkDisplayX11")))
 
 #ifdef GDK_COMPILATION
 
@@ -249,6 +250,11 @@ void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 
 
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
+
+GdkWindow  *gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
+                                                    Window      window);
+GdkWindow  *gdk_x11_window_lookup_for_display      (GdkDisplay *display,
+                                                    Window      window);
 
 G_END_DECLS
 

@@ -316,7 +316,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 
 	    GTK_NOTE (PLUGSOCKET, g_message ("GtkPlug: start of embedding"));
 
-            priv->socket_window = gdk_window_lookup_for_display (display, xre->parent);
+            priv->socket_window = gdk_x11_window_lookup_for_display (display, xre->parent);
             if (priv->socket_window)
 	      {
 		gpointer user_data = NULL;
@@ -333,7 +333,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	      }
 	    else
 	      {
-		priv->socket_window = gdk_window_foreign_new_for_display (display, xre->parent);
+		priv->socket_window = gdk_x11_window_foreign_new_for_display (display, xre->parent);
 		if (!priv->socket_window) /* Already gone */
 		  break; /* FIXME: shouldn't this unref the plug? i.e. "goto done;" instead */
 	      }

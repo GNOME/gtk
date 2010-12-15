@@ -1023,8 +1023,8 @@ gdk_screen_x11_get_active_window (GdkScreen *screen)
 
           if (window != None)
             {
-              ret = gdk_window_foreign_new_for_display (screen_x11->display,
-                                                        *(GdkNativeWindow *) data);
+              ret = gdk_x11_window_foreign_new_for_display (screen_x11->display,
+                                                        *(Window *) data);
             }
         }
     }
@@ -1071,8 +1071,8 @@ gdk_screen_x11_get_window_stack (GdkScreen *screen)
 
           for (i = 0; i < nitems_return; i++)
             {
-              win = gdk_window_foreign_new_for_display (screen_x11->display,
-                                                        (GdkNativeWindow)stack[i]);
+              win = gdk_x11_window_foreign_new_for_display (screen_x11->display,
+                                                            (Window)stack[i]);
 
               if (win != NULL)
                 ret = g_list_append (ret, win);
@@ -1507,7 +1507,7 @@ gdk_xsettings_watch_cb (Window   window,
   GdkWindow *gdkwin;
   GdkScreen *screen = cb_data;
 
-  gdkwin = gdk_window_lookup_for_display (gdk_screen_get_display (screen), window);
+  gdkwin = gdk_x11_window_lookup_for_display (gdk_screen_get_display (screen), window);
 
   if (is_start)
     {
@@ -1515,7 +1515,7 @@ gdk_xsettings_watch_cb (Window   window,
 	g_object_ref (gdkwin);
       else
 	{
-	  gdkwin = gdk_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
+	  gdkwin = gdk_x11_window_foreign_new_for_display (gdk_screen_get_display (screen), window);
 	  
 	  /* gdk_window_foreign_new_for_display() can fail and return NULL if the
 	   * window has already been destroyed.

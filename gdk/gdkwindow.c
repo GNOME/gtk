@@ -5058,25 +5058,6 @@ gdk_get_default_root_window (void)
   return gdk_screen_get_root_window (gdk_screen_get_default ());
 }
 
-/**
- * gdk_window_foreign_new:
- * @anid: a native window handle.
- *
- * Wraps a native window for the default display in a #GdkWindow.
- * This may fail if the window has been destroyed.
- *
- * For example in the X backend, a native window handle is an Xlib
- * <type>XID</type>.
- *
- * Return value: (transfer full): the newly-created #GdkWindow wrapper
- *    for the native window, or %NULL if the window has been destroyed.
- **/
-GdkWindow *
-gdk_window_foreign_new (GdkNativeWindow anid)
-{
-  return gdk_window_foreign_new_for_display (gdk_display_get_default (), anid);
-}
-
 static void
 get_all_native_children (GdkWindow *window,
 			 GList **native)
@@ -10744,22 +10725,4 @@ gdk_drag_begin_for_device (GdkWindow     *window,
                            GList         *targets)
 {
   return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->drag_begin (window, device, targets);
-}
-
-/**
- * gdk_window_lookup:
- * @anid: a native window handle
- *
- * Looks up the #GdkWindow that wraps the given native window handle.
- *
- * For example in the X backend, a native window handle is an Xlib
- * <type>XID</type>.
- *
- * Return value: (transfer none): the #GdkWindow wrapper for the native
- *    window, or %NULL if there is none.
- **/
-GdkWindow *
-gdk_window_lookup (GdkNativeWindow anid)
-{
-  return gdk_window_lookup_for_display (gdk_display_get_default (), anid);
 }

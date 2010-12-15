@@ -848,30 +848,28 @@ x_event_mask_to_gdk_event_mask (long mask)
 }
 
 /**
- * gdk_window_foreign_new_for_display:
+ * gdk_x11_window_foreign_new_for_display:
  * @display: the #GdkDisplay where the window handle comes from.
- * @anid: a native window handle.
- * 
+ * @window: an XLib <type>Window</type>
+ *
  * Wraps a native window in a #GdkWindow.
+ *
  * This may fail if the window has been destroyed. If the window
- * was already known to GDK, a new reference to the existing 
+ * was already known to GDK, a new reference to the existing
  * #GdkWindow is returned.
  *
- * For example in the X backend, a native window handle is an Xlib
- * <type>XID</type>.
- * 
  * Return value: (transfer full): a #GdkWindow wrapper for the native
  *   window, or %NULL if the window has been destroyed. The wrapper
  *   will be newly created, if one doesn't exist already.
  *
- * Since: 2.2
- **/
+ * Since: 3.0
+ */
 GdkWindow *
-gdk_window_foreign_new_for_display (GdkDisplay     *display,
-				    GdkNativeWindow anid)
+gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
+                                        Window      window)
 {
   GdkScreen *screen;
-  GdkWindow *window;
+  GdkWindow *win;
   GdkWindowImplX11 *impl;
   GdkDisplayX11 *display_x11;
   XWindowAttributes attrs;
@@ -884,90 +882,88 @@ gdk_window_foreign_new_for_display (GdkDisplay     *display,
 
   display_x11 = GDK_DISPLAY_X11 (display);
 
-  if ((window = gdk_xid_table_lookup_for_display (display, anid)) != NULL)
-    return g_object_ref (window);
+  if ((win = gdk_xid_table_lookup_for_display (display, window)) != NULL)
+    return g_object_ref (win);
 
-  gdk_error_trap_push ();
-  result = XGetWindowAttributes (display_x11->xdisplay, anid, &attrs);
-  if (gdk_error_trap_pop () || !result)
+  gdk_x11_display_error_trap_push (display);
+  result = XGetWindowAttributes (display_x11->xdisplay, window, &attrs);
+  if (gdk_x11_display_error_trap_pop (display) || !result)
     return NULL;
 
-  /* FIXME: This is pretty expensive. Maybe the caller should supply
-   *        the parent */
-  gdk_error_trap_push ();
-  result = XQueryTree (display_x11->xdisplay, anid, &root, &parent, &children, &nchildren);
-  if (gdk_error_trap_pop () || !result)
+  /* FIXME: This is pretty expensive.
+   * Maybe the caller should supply the parent
+   */
+  gdk_x11_display_error_trap_push (display);
+  result = XQueryTree (display_x11->xdisplay, window, &root, &parent, &children, &nchildren);
+  if (gdk_x11_display_error_trap_pop (display) || !result)
     return NULL;
 
   if (children)
     XFree (children);
-  
+
   screen = _gdk_x11_display_screen_for_xrootwin (display, root);
 
-  window = g_object_new (GDK_TYPE_WINDOW, NULL);
+  win = g_object_new (GDK_TYPE_WINDOW, NULL);
+  win->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
+  win->impl_window = win;
+  win->visual = gdk_x11_screen_lookup_visual (screen,
+                                              XVisualIDFromVisual (attrs.visual));
 
-  window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
-  window->impl_window = window;
-  window->visual = gdk_x11_screen_lookup_visual (screen,
-                                                  XVisualIDFromVisual (attrs.visual));
+  impl = GDK_WINDOW_IMPL_X11 (win->impl);
+  impl->wrapper = win;
 
-  impl = GDK_WINDOW_IMPL_X11 (window->impl);
-  impl->wrapper = window;
-  
-  window->parent = gdk_xid_table_lookup_for_display (display, parent);
-  
-  if (!window->parent || GDK_WINDOW_TYPE (window->parent) == GDK_WINDOW_FOREIGN)
-    window->parent = gdk_screen_get_root_window (screen);
-  
-  window->parent->children = g_list_prepend (window->parent->children, window);
+  win->parent = gdk_xid_table_lookup_for_display (display, parent);
 
-  impl->xid = anid;
+  if (!win->parent || GDK_WINDOW_TYPE (win->parent) == GDK_WINDOW_FOREIGN)
+    win->parent = gdk_screen_get_root_window (screen);
 
-  window->x = attrs.x;
-  window->y = attrs.y;
-  window->width = attrs.width;
-  window->height = attrs.height;
-  window->window_type = GDK_WINDOW_FOREIGN;
-  window->destroyed = FALSE;
+  win->parent->children = g_list_prepend (win->parent->children, win);
 
-  window->event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
+  impl->xid = window;
+
+  win->x = attrs.x;
+  win->y = attrs.y;
+  win->width = attrs.width;
+  win->height = attrs.height;
+  win->window_type = GDK_WINDOW_FOREIGN;
+  win->destroyed = FALSE;
+
+  win->event_mask = x_event_mask_to_gdk_event_mask (attrs.your_event_mask);
 
   if (attrs.map_state == IsUnmapped)
-    window->state = GDK_WINDOW_STATE_WITHDRAWN;
+    win->state = GDK_WINDOW_STATE_WITHDRAWN;
   else
-    window->state = 0;
-  window->viewable = TRUE;
+    win->state = 0;
+  win->viewable = TRUE;
 
-  window->depth = attrs.depth;
-  
-  g_object_ref (window);
-  _gdk_xid_table_insert (display, &GDK_WINDOW_XID (window), window);
+  win->depth = attrs.depth;
+
+  g_object_ref (win);
+  _gdk_xid_table_insert (display, &GDK_WINDOW_XID (win), win);
 
   /* Update the clip region, etc */
-  _gdk_window_update_size (window);
+  _gdk_window_update_size (win);
 
-  return window;
+  return win;
 }
 
 /**
- * gdk_window_lookup_for_display:
+ * gdk_x11_window_lookup_for_display:
  * @display: the #GdkDisplay corresponding to the window handle
- * @anid: a native window handle.
+ * @window: an XLib <type>Window</type>
  *
  * Looks up the #GdkWindow that wraps the given native window handle.
- *
- * For example in the X backend, a native window handle is an Xlib
- * <type>XID</type>.
  *
  * Return value: (transfer none): the #GdkWindow wrapper for the native
  *    window, or %NULL if there is none.
  *
- * Since: 2.2
- **/
+ * Since: 3.0
+ */
 GdkWindow *
-gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
+gdk_x11_window_lookup_for_display (GdkDisplay *display,
+                                   Window      window)
 {
-  return (GdkWindow*) gdk_xid_table_lookup_for_display (display, anid);
+  return (GdkWindow*) gdk_xid_table_lookup_for_display (display, window);
 }
 
 static void
@@ -1008,11 +1004,11 @@ gdk_x11_window_destroy (GdkWindow *window,
 {
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   GdkToplevelX11 *toplevel;
-  
+
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   _gdk_selection_window_destroyed (window);
-  
+
   toplevel = _gdk_x11_window_get_toplevel (window);
   if (toplevel)
     gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), toplevel);
@@ -1021,13 +1017,11 @@ gdk_x11_window_destroy (GdkWindow *window,
     {
       cairo_surface_finish (impl->cairo_surface);
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-				   NULL, NULL);
+                                   NULL, NULL);
     }
 
   if (!recursing && !foreign_destroy)
-    {
-      XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
-    }
+    XDestroyWindow (GDK_WINDOW_XDISPLAY (window), GDK_WINDOW_XID (window));
 }
 
 static cairo_surface_t *
@@ -1049,28 +1043,28 @@ gdk_x11_window_destroy_foreign (GdkWindow *window)
    * it a delete event, as if we were a WM
    */
   XClientMessageEvent xclient;
-  
-  gdk_error_trap_push ();
+  GdkDisplay *display;
+
+  display = GDK_WINDOW_DISPLAY (window);
+  gdk_x11_display_error_trap_push (display);
   gdk_window_hide (window);
   gdk_window_reparent (window, NULL, 0, 0);
-  
+
   memset (&xclient, 0, sizeof (xclient));
   xclient.type = ClientMessage;
   xclient.window = GDK_WINDOW_XID (window);
-  xclient.message_type = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
-							       "WM_PROTOCOLS");
+  xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "WM_PROTOCOLS");
   xclient.format = 32;
-  xclient.data.l[0] = gdk_x11_get_xatom_by_name_for_display (GDK_WINDOW_DISPLAY (window),
-							    "WM_DELETE_WINDOW");
+  xclient.data.l[0] = gdk_x11_get_xatom_by_name_for_display (display, "WM_DELETE_WINDOW");
   xclient.data.l[1] = CurrentTime;
   xclient.data.l[2] = 0;
   xclient.data.l[3] = 0;
   xclient.data.l[4] = 0;
   
   XSendEvent (GDK_WINDOW_XDISPLAY (window),
-	      GDK_WINDOW_XID (window),
-	      False, 0, (XEvent *)&xclient);
-  gdk_error_trap_pop_ignored ();
+              GDK_WINDOW_XID (window),
+              False, 0, (XEvent *)&xclient);
+  gdk_x11_display_error_trap_pop_ignored (display);
 }
 
 static GdkWindow *

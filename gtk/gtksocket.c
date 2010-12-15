@@ -44,6 +44,10 @@
 #include "gtkintl.h"
 #include "gtkwidgetprivate.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 
 /**
  * SECTION:gtksocket
@@ -869,8 +873,13 @@ _gtk_socket_add_window (GtkSocket       *socket,
   GdkDisplay *display = gtk_widget_get_display (widget);
   gpointer user_data = NULL;
   GtkSocketPrivate *private = socket->priv;
-  
-  private->plug_window = gdk_window_lookup_for_display (display, xid);
+
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_DISPLAY_X11 (display))
+    private->plug_window = gdk_x11_window_lookup_for_display (display, xid);
+  else
+#endif
+    private->plug_window = NULL;
 
   if (private->plug_window)
     {
@@ -878,22 +887,22 @@ _gtk_socket_add_window (GtkSocket       *socket,
       gdk_window_get_user_data (private->plug_window, &user_data);
     }
 
-  if (user_data)		/* A widget's window in this process */
+  if (user_data) /* A widget's window in this process */
     {
       GtkWidget *child_widget = user_data;
 
       if (!GTK_IS_PLUG (child_widget))
-	{
-	  g_warning (G_STRLOC ": Can't add non-GtkPlug to GtkSocket");
-	  private->plug_window = NULL;
-	  gdk_error_trap_pop_ignored ();
-	  
-	  return;
-	}
+        {
+          g_warning (G_STRLOC ": Can't add non-GtkPlug to GtkSocket");
+          private->plug_window = NULL;
+          gdk_error_trap_pop_ignored ();
+
+          return;
+        }
 
       _gtk_plug_add_to_socket (GTK_PLUG (child_widget), socket);
     }
-  else				/* A foreign window */
+  else  /* A foreign window */
     {
       GtkWidget *toplevel;
       GdkDragProtocol protocol;
@@ -901,15 +910,18 @@ _gtk_socket_add_window (GtkSocket       *socket,
       gdk_error_trap_push ();
 
       if (!private->plug_window)
-	{  
-	  private->plug_window = gdk_window_foreign_new_for_display (display, xid);
-	  if (!private->plug_window) /* was deleted before we could get it */
-	    {
-	      gdk_error_trap_pop_ignored ();
-	      return;
-	    }
-	}
-	
+        {
+#ifdef GDK_WINDOWING_X11
+          if (GDK_IS_DISPLAY_X11 (display))
+            private->plug_window = gdk_x11_window_foreign_new_for_display (display, xid);
+#endif
+          if (!private->plug_window) /* was deleted before we could get it */
+            {
+              gdk_error_trap_pop_ignored ();
+              return;
+            }
+        }
+
       _gtk_socket_windowing_select_plug_window_input (socket);
 
       if (gdk_error_trap_pop ())

@@ -403,8 +403,6 @@ gdk_window_end_paint
 gdk_window_ensure_native
 gdk_window_flush
 gdk_window_focus
-gdk_window_foreign_new
-gdk_window_foreign_new_for_display
 gdk_window_freeze_toplevel_updates_libgtk_only
 gdk_window_freeze_updates
 gdk_window_fullscreen
@@ -463,8 +461,6 @@ gdk_window_is_input_only
 gdk_window_is_shaped
 gdk_window_is_viewable
 gdk_window_is_visible
-gdk_window_lookup
-gdk_window_lookup_for_display
 gdk_window_lower
 gdk_window_maximize
 gdk_window_merge_child_input_shapes
@@ -569,6 +565,8 @@ gdk_x11_screen_supports_net_wm_hint
 gdk_x11_set_sm_client_id
 gdk_x11_ungrab_server
 gdk_x11_visual_get_xvisual
+gdk_x11_window_foreign_new_for_display
+gdk_x11_window_lookup_for_display
 gdk_x11_window_get_xid
 gdk_x11_window_move_to_current_desktop
 gdk_x11_window_set_user_time

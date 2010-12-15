@@ -254,8 +254,8 @@ gtk_tray_icon_clear_manager_window (GtkTrayIcon *icon)
     {
       GdkWindow *gdkwin;
 
-      gdkwin = gdk_window_lookup_for_display (display,
-                                              icon->priv->manager_window);
+      gdkwin = gdk_x11_window_lookup_for_display (display,
+                                                  icon->priv->manager_window);
 
       gdk_window_remove_filter (gdkwin, gtk_tray_icon_manager_filter, icon);
 
@@ -767,12 +767,12 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
       GdkWindow *gdkwin;
 
       GTK_NOTE (PLUGSOCKET,
-		g_print ("GtkStatusIcon %p: is being managed by window %lx\n",
-				icon, (gulong) icon->priv->manager_window));
+        g_print ("GtkStatusIcon %p: is being managed by window %lx\n",
+                 icon, (gulong) icon->priv->manager_window));
 
-      gdkwin = gdk_window_lookup_for_display (display,
-					      icon->priv->manager_window);
-      
+      gdkwin = gdk_x11_window_lookup_for_display (display,
+                                                  icon->priv->manager_window);
+
       gdk_window_add_filter (gdkwin, gtk_tray_icon_manager_filter, icon);
 
       gtk_tray_icon_get_orientation_property (icon);

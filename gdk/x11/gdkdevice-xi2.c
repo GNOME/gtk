@@ -357,10 +357,10 @@ gdk_device_xi2_query_state (GdkDevice        *device,
     }
 
   if (root_window)
-    *root_window = gdk_window_lookup_for_display (display, xroot_window);
+    *root_window = gdk_x11_window_lookup_for_display (display, xroot_window);
 
   if (child_window)
-    *child_window = gdk_window_lookup_for_display (display, xchild_window);
+    *child_window = gdk_x11_window_lookup_for_display (display, xchild_window);
 
   if (root_x)
     *root_x = (gint) xroot_x;
@@ -590,7 +590,7 @@ gdk_device_xi2_window_at_position (GdkDevice       *device,
         break;
 
       if (get_toplevel && last != root &&
-          (window = gdk_window_lookup_for_display (display, last)) != NULL &&
+          (window = gdk_x11_window_lookup_for_display (display, last)) != NULL &&
           GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN)
         {
           xwindow = last;
@@ -600,7 +600,7 @@ gdk_device_xi2_window_at_position (GdkDevice       *device,
 
   gdk_x11_display_ungrab (display);
 
-  window = gdk_window_lookup_for_display (display, last);
+  window = gdk_x11_window_lookup_for_display (display, last);
 
   if (win_x)
     *win_x = (window) ? (gint) xwin_x : -1;

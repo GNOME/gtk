@@ -221,7 +221,7 @@ gdk_selection_owner_get_for_display (GdkDisplay *display,
   if (xwindow == None)
     return NULL;
 
-  return gdk_window_lookup_for_display (display, xwindow);
+  return gdk_x11_window_lookup_for_display (display, xwindow);
 }
 
 void

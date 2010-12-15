@@ -101,7 +101,7 @@ gdk_event_source_get_filter_window (GdkEventSource *event_source,
 {
   GdkWindow *window;
 
-  window = gdk_window_lookup_for_display (event_source->display,
+  window = gdk_x11_window_lookup_for_display (event_source->display,
                                           xevent->xany.window);
 
   if (window && !GDK_IS_WINDOW (window))

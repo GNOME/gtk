@@ -104,7 +104,7 @@ window_input_info_filter (GdkXEvent *xevent,
   xev = (XEvent *) xevent;
 
   display = gdk_device_manager_get_display (device_manager);
-  window = gdk_window_lookup_for_display (display, xev->xany.window);
+  window = gdk_x11_window_lookup_for_display (display, xev->xany.window);
 
   if (window && xev->type == ConfigureNotify)
     gdk_device_xi_update_window_info (window);
@@ -421,7 +421,7 @@ gdk_device_manager_xi_translate_event (GdkEventTranslator *translator,
   if (!device)
     return FALSE;
 
-  window = gdk_window_lookup_for_display (display, xevent->xany.window);
+  window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
 
   if (!window)
     return FALSE;

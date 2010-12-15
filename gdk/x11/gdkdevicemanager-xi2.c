@@ -894,7 +894,7 @@ get_event_window (GdkEventTranslator *translator,
       {
         XIDeviceEvent *xev = (XIDeviceEvent *) ev;
 
-        window = gdk_window_lookup_for_display (display, xev->event);
+        window = gdk_x11_window_lookup_for_display (display, xev->event);
 
         /* Apply keyboard grabs to non-native windows */
         if (ev->evtype == XI_KeyPress || ev->evtype == XI_KeyRelease)
@@ -926,7 +926,7 @@ get_event_window (GdkEventTranslator *translator,
       {
         XIEnterEvent *xev = (XIEnterEvent *) ev;
 
-        window = gdk_window_lookup_for_display (display, xev->event);
+        window = gdk_x11_window_lookup_for_display (display, xev->event);
       }
       break;
     }
@@ -1188,7 +1188,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->crossing.focus = xev->focus;
 
         event->crossing.window = window;
-        event->crossing.subwindow = gdk_window_lookup_for_display (display, xev->child);
+        event->crossing.subwindow = gdk_x11_window_lookup_for_display (display, xev->child);
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GINT_TO_POINTER (xev->deviceid));

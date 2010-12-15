@@ -384,7 +384,7 @@ get_event_window (GdkEventTranslator *translator,
 
   device_manager = GDK_DEVICE_MANAGER (translator);
   display = gdk_device_manager_get_display (device_manager);
-  window = gdk_window_lookup_for_display (display, xevent->xany.window);
+  window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
 
   /* Apply keyboard grabs to non-native windows */
   if (xevent->type == KeyPress || xevent->type == KeyRelease)
@@ -680,7 +680,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
        *  lookup the corresponding GdkWindow.
        */
       if (xevent->xcrossing.subwindow != None)
-	event->crossing.subwindow = gdk_window_lookup_for_display (display, xevent->xcrossing.subwindow);
+	event->crossing.subwindow = gdk_x11_window_lookup_for_display (display, xevent->xcrossing.subwindow);
       else
 	event->crossing.subwindow = NULL;
 
@@ -724,7 +724,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
        *  lookup the corresponding GdkWindow.
        */
       if (xevent->xcrossing.subwindow != None)
-	event->crossing.subwindow = gdk_window_lookup_for_display (display, xevent->xcrossing.subwindow);
+	event->crossing.subwindow = gdk_x11_window_lookup_for_display (display, xevent->xcrossing.subwindow);
       else
 	event->crossing.subwindow = NULL;
 

@@ -37,6 +37,10 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 /**
  * SECTION:gtkplug
  * @Short_description: Toplevel for embedding into other processes
@@ -513,7 +517,13 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
     {
       gpointer user_data = NULL;
 
-      priv->socket_window = gdk_window_lookup_for_display (display, socket_id);
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_DISPLAY_X11 (display))
+        priv->socket_window = gdk_x11_window_lookup_for_display (display, socket_id);
+      else
+#endif
+        priv->socket_window = NULL;
+
       if (priv->socket_window)
 	{
 	  gdk_window_get_user_data (priv->socket_window, &user_data);
@@ -532,7 +542,10 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 	    g_object_ref (priv->socket_window);
 	}
       else
-	priv->socket_window = gdk_window_foreign_new_for_display (display, socket_id);
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_DISPLAY_X11 (display))
+        priv->socket_window = gdk_x11_window_foreign_new_for_display (display, socket_id);
+#endif
 
       if (priv->socket_window) {
 	g_signal_emit (plug, plug_signals[EMBEDDED], 0);

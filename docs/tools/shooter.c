@@ -138,7 +138,7 @@ take_window_shot (Window   child,
   else
     xid = child;
 
-  window = gdk_window_foreign_new (xid);
+  window = gdk_x11_window_foreign_new_for_display (gdk_display_get_default (), xid);
 
   width = gdk_window_get_width (window);
   height = gdk_window_get_height (window);
