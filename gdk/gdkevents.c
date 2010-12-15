@@ -571,8 +571,7 @@ gdk_event_copy (const GdkEvent *event)
     }
 
   if (gdk_event_is_allocated (event))
-    _gdk_display_event_data_copy (gdk_screen_get_display (new_private->screen),
-                                  event, new_event);
+    _gdk_display_event_data_copy (gdk_display_get_default (), event, new_event);
 
   return new_event;
 }
@@ -589,8 +588,6 @@ gdk_event_copy (const GdkEvent *event)
 void
 gdk_event_free (GdkEvent *event)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (event != NULL);
 
   if (event->any.window)
@@ -642,8 +639,7 @@ gdk_event_free (GdkEvent *event)
       break;
     }
 
-  display = gdk_screen_get_display (gdk_event_get_screen (event));
-  _gdk_display_event_data_free (display, event);
+  _gdk_display_event_data_free (gdk_display_get_default (), event);
 
   g_hash_table_remove (event_hash, event);
   g_slice_free (GdkEventPrivate, (GdkEventPrivate*) event);
