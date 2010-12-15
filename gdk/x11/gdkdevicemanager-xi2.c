@@ -499,6 +499,8 @@ handle_device_changed (GdkDeviceManagerXI2  *device_manager,
 
   _gdk_device_reset_axes (device);
   translate_device_classes (display, device, ev->classes, ev->num_classes);
+
+  g_signal_emit_by_name (G_OBJECT (device), "changed");
 }
 
 static GdkCrossingMode

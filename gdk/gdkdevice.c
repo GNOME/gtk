@@ -64,6 +64,14 @@ struct _GdkDevicePrivate
   GArray *axes;
 };
 
+enum {
+  CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals [LAST_SIGNAL] = { 0 };
+
+
 static void gdk_device_dispose      (GObject      *object);
 static void gdk_device_set_property (GObject      *object,
                                      guint         prop_id,
@@ -237,6 +245,26 @@ gdk_device_class_init (GdkDeviceClass *klass)
                                                       P_("Number of axes in the device"),
                                                       0, G_MAXUINT, 0,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GdkDevice::changed:
+   * @device: the #GdkDevice that changed.
+   *
+   * The ::changed signal is emitted either when the #GdkDevice
+   * has changed the number of either axes or keys. For example
+   * In X this will normally happen when the slave device routing
+   * events through the master device changes (for example, user
+   * switches from the USB mouse to a tablet), in that case the
+   * master device will change to reflect the new slave device
+   * axes and keys.
+   */
+  signals[CHANGED] =
+    g_signal_new (g_intern_static_string ("changed"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  NULL, NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   g_type_class_add_private (object_class, sizeof (GdkDevicePrivate));
 }
