@@ -10426,16 +10426,7 @@ gtk_tree_view_move_cursor_left_right (GtkTreeView *tree_view,
 	}
     }
 
-  switch (count)
-    {
-      case -1:
-        direction = rtl ? GTK_DIR_RIGHT : GTK_DIR_LEFT;
-        break;
-
-      case 1:
-        direction = rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT;
-        break;
-    }
+  direction = count > 0 ? GTK_DIR_RIGHT : GTK_DIR_LEFT;
 
   while (list)
     {
