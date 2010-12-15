@@ -7037,7 +7037,7 @@ gtk_icon_view_drag_data_get (GtkWidget        *widget,
     goto done;
 
   /* If drag_data_get does nothing, try providing row data. */
-  if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  if (gtk_selection_data_get_target (selection_data) == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     gtk_tree_set_row_drag_data (selection_data,
 				model,
 				source_row);
@@ -7274,7 +7274,7 @@ gtk_icon_view_drag_data_received (GtkWidget        *widget,
   if (dest_row == NULL)
     return;
 
-  if (selection_data->length >= 0)
+  if (gtk_selection_data_get_length (selection_data) >= 0)
     {
       if (gtk_tree_drag_dest_drag_data_received (GTK_TREE_DRAG_DEST (model),
                                                  dest_row,
