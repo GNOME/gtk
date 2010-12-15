@@ -331,7 +331,10 @@ selection_get_cb (GtkWidget          *widget,
 		  guint               info,
 		  guint               time)
 {
-  GtkClipboard *clipboard = gtk_widget_get_clipboard (widget, selection_data->selection);
+  GtkClipboard *clipboard;
+
+  clipboard = gtk_widget_get_clipboard (widget,
+                                        gtk_selection_data_get_selection (selection_data));
 
   if (clipboard && clipboard->get_func)
     clipboard->get_func (clipboard, selection_data, info, clipboard->user_data);
@@ -863,8 +866,8 @@ selection_received (GtkWidget            *widget,
 {
   RequestContentsInfo *request_info = get_request_contents_info (widget);
   set_request_contents_info (widget, NULL);
-  
-  request_info->callback (gtk_widget_get_clipboard (widget, selection_data->selection), 
+
+  request_info->callback (gtk_widget_get_clipboard (widget, gtk_selection_data_get_selection (selection_data)),
 			  selection_data,
 			  request_info->user_data);
 
@@ -935,14 +938,16 @@ request_text_received_func (GtkClipboard     *clipboard,
        * if we asked for compound_text and didn't get it, try string;
        * If we asked for anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_atom_intern_static_string ("UTF8_STRING"))
+      GdkAtom target = gtk_selection_data_get_target (selection_data);
+
+      if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  gdk_atom_intern_static_string ("COMPOUND_TEXT"), 
 					  request_text_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern_static_string ("COMPOUND_TEXT"))
+      else if (target == gdk_atom_intern_static_string ("COMPOUND_TEXT"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  GDK_TARGET_STRING, 
@@ -1000,8 +1005,8 @@ request_rich_text_received_func (GtkClipboard     *clipboard,
   guint8 *result = NULL;
   gsize length = 0;
 
-  result = selection_data->data;
-  length = selection_data->length;
+  result = (guint8 *) gtk_selection_data_get_data (selection_data);
+  length = gtk_selection_data_get_length (selection_data);
 
   info->current_atom++;
 
@@ -1013,7 +1018,8 @@ request_rich_text_received_func (GtkClipboard     *clipboard,
       return;
     }
 
-  info->callback (clipboard, selection_data->target, result, length,
+  info->callback (clipboard, gtk_selection_data_get_target (selection_data),
+                  result, length,
                   info->user_data);
   g_free (info->atoms);
   g_free (info);
@@ -1081,21 +1087,23 @@ request_image_received_func (GtkClipboard     *clipboard,
        * if we asked for image/gif and didn't get it, try image/bmp;
        * If we asked for anything else and didn't get it, give up.
        */
-      if (selection_data->target == gdk_atom_intern_static_string ("image/png"))
+      GdkAtom target = gtk_selection_data_get_target (selection_data);
+
+      if (target == gdk_atom_intern_static_string ("image/png"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  gdk_atom_intern_static_string ("image/jpeg"), 
 					  request_image_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern_static_string ("image/jpeg"))
+      else if (target == gdk_atom_intern_static_string ("image/jpeg"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  gdk_atom_intern_static_string ("image/gif"), 
 					  request_image_received_func, info);
 	  return;
 	}
-      else if (selection_data->target == gdk_atom_intern_static_string ("image/gif"))
+      else if (target == gdk_atom_intern_static_string ("image/gif"))
 	{
 	  gtk_clipboard_request_contents (clipboard,
 					  gdk_atom_intern_static_string ("image/bmp"), 
@@ -1276,7 +1284,7 @@ clipboard_received_func (GtkClipboard     *clipboard,
 {
   WaitResults *results = data;
 
-  if (selection_data->length >= 0)
+  if (gtk_selection_data_get_length (selection_data) >= 0)
     results->data = gtk_selection_data_copy (selection_data);
   
   g_main_loop_quit (results->loop);
