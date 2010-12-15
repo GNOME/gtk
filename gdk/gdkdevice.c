@@ -841,8 +841,6 @@ _gdk_device_set_device_type (GdkDevice     *device,
     {
       priv->type = type;
 
-      g_print ("Setting device type to %d\n", type);
-
       g_object_notify (G_OBJECT (device), "type");
     }
 }
@@ -915,10 +913,6 @@ _gdk_device_add_slave (GdkDevice *device,
 
   priv = device->priv;
 
-  g_print ("Adding %s ---> %s\n",
-           gdk_device_get_name (slave),
-           gdk_device_get_name (device));
-
   if (!g_list_find (priv->slaves, slave))
     priv->slaves = g_list_prepend (priv->slaves, slave);
 }
@@ -938,10 +932,6 @@ _gdk_device_remove_slave (GdkDevice *device,
 
   if (!elem)
     return;
-
-  g_print ("Removing %s ---> %s\n",
-           gdk_device_get_name (slave),
-           gdk_device_get_name (device));
 
   priv->slaves = g_list_delete_link (priv->slaves, elem);
 }
