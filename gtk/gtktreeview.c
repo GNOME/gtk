@@ -3135,6 +3135,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
            */
           focus_cell = _gtk_tree_view_column_get_cell_at_pos (column,
                                                               &cell_area,
+                                                              &background_area,
                                                               event->x,
                                                               event->y);
 

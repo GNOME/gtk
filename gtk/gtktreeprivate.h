@@ -123,6 +123,7 @@ gboolean          _gtk_tree_view_column_has_editable_cell(GtkTreeViewColumn  *co
 GtkCellRenderer  *_gtk_tree_view_column_get_edited_cell  (GtkTreeViewColumn  *column);
 GtkCellRenderer  *_gtk_tree_view_column_get_cell_at_pos  (GtkTreeViewColumn  *column,
                                                           GdkRectangle       *cell_area,
+                                                          GdkRectangle       *background_area,
                                                           gint                x,
                                                           gint                y);
 

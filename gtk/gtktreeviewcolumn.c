@@ -1473,19 +1473,37 @@ _gtk_tree_view_column_get_edited_cell (GtkTreeViewColumn *column)
 GtkCellRenderer *
 _gtk_tree_view_column_get_cell_at_pos (GtkTreeViewColumn *column,
                                        GdkRectangle      *cell_area,
+                                       GdkRectangle      *background_area,
                                        gint               x,
                                        gint               y)
 {
   GtkCellRenderer *match = NULL;
   GtkTreeViewColumnPrivate *priv = column->priv;
 
+  /* If (x, y) is outside of the background area, immediately return */
+  if (x < background_area->x ||
+      x > background_area->x + background_area->width ||
+      y < background_area->y ||
+      y > background_area->y + background_area->height)
+    return NULL;
+
+  /* If (x, y) is inside the background area, clamp it to the cell_area
+   * so that a cell is still returned.  The main reason for doing this
+   * (on the x axis) is for handling clicks in the indentation area
+   * (either at the left or right depending on RTL setting).  Another
+   * reason is for handling clicks on the area where the focus rectangle
+   * is drawn (this is outside of cell area), this manifests itself
+   * mainly when a large setting is used for focus-line-width.
+   */
   if (x < cell_area->x)
-    {
-      /* This can happen when we click in the "indentation".  In this
-       * case, we set x to cell_area->x, the start of the first cell.
-       */
-      x = cell_area->x;
-    }
+    x = cell_area->x;
+  else if (x > cell_area->x + cell_area->width)
+    x = cell_area->x + cell_area->width;
+
+  if (y < cell_area->y)
+    y = cell_area->y;
+  else if (y > cell_area->y + cell_area->height)
+    y = cell_area->y + cell_area->height;
 
   match = gtk_cell_area_get_cell_at_position (priv->cell_area,
                                               priv->cell_area_context,
