@@ -709,6 +709,9 @@ main (int    argc,
   
   gtk_init (&argc, &argv);
 
+  if (g_getenv ("RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
+
   our_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) book_closed_xpm);  
   
 #if 0
