@@ -3840,13 +3840,16 @@ gtk_notebook_drag_data_get (GtkWidget        *widget,
 			    guint             info,
 			    guint             time)
 {
-  if (data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
+  GdkAtom target;
+
+  target = gtk_selection_data_get_target (data);
+  if (target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
       GtkNotebookPrivate *priv = notebook->priv;
 
       gtk_selection_data_set (data,
-			      data->target,
+			      target,
 			      8,
 			      (void*) &priv->detached_tab->child,
 			      sizeof (gpointer));
@@ -3870,9 +3873,9 @@ gtk_notebook_drag_data_received (GtkWidget        *widget,
   source_widget = gtk_drag_get_source_widget (context);
 
   if (source_widget &&
-      data->target == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
+      gtk_selection_data_get_target (data) == gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB"))
     {
-      child = (void*) data->data;
+      child = (void*) gtk_selection_data_get_data (data);
 
       do_detach_tab (GTK_NOTEBOOK (source_widget), notebook, *child, x, y);
       gtk_drag_finish (context, TRUE, FALSE, time);
