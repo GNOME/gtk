@@ -44,25 +44,7 @@ arguments.
 
 <para>
 The name of the X display to open instead of the one specified
-in the <envar>DISPLAY</envar> environment variable. 
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--screen <replaceable>screen_number</replaceable></systemitem></title>
-
-<para>
-  The number of the screen within the default display. This overrides
-  any screen number specified in the display name specified by
-  by he <systemitem>--display</systemitem> command line option or
-  the <envar>DISPLAY</envar> environment variable. If this screen
-  cannot be opened, then GTK+ will fall back to the screen
-  specified in the display name. This option is not useful
-  interactively; the intended purposes is that when a program
-  registers its command line with a <firstterm>session
-  manager</firstterm> for later restarting, it can save the
-  screen it is on, without having to worry if it might be
-  restarted on a different display.
+in the <envar>DISPLAY</envar> environment variable.
 </para>
 </formalpara>
 
@@ -70,7 +52,7 @@ in the <envar>DISPLAY</envar> environment variable.
 <title><systemitem>--sync</systemitem></title>
 
 <para>
-Makes all X requests synchronously. This is a useful option for 
+Makes all X requests synchronously. This is a useful option for
 debugging, but it will slow down the performance considerably.
 </para>
 </formalpara>

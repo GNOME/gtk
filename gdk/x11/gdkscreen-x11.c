@@ -959,33 +959,12 @@ _gdk_x11_screen_process_owner_change (GdkScreen *screen,
 #endif
 }
 
-/**
- * _gdk_windowing_substitute_screen_number:
- * @display_name: The name of a display, in the form used by 
- *                gdk_display_open (). If %NULL a default value
- *                will be used. On X11, this is derived from the DISPLAY
- *                environment variable.
- * @screen_number: The number of a screen within the display
- *                 referred to by @display_name.
- *
- * Modifies a @display_name to make @screen_number the default
- * screen when the display is opened.
- *
- * Return value: a newly allocated string holding the resulting
- *   display name. Free with g_free().
- */
-gchar * 
-_gdk_windowing_substitute_screen_number (const gchar *display_name,
-					 gint         screen_number)
+static gchar *
+substitute_screen_number (const gchar *display_name,
+                          gint         screen_number)
 {
   GString *str;
   gchar   *p;
-
-  if (!display_name)
-    display_name = getenv ("DISPLAY");
-
-  if (!display_name)
-    return NULL;
 
   str = g_string_new (display_name);
 
@@ -1007,8 +986,8 @@ gdk_screen_x11_make_display_name (GdkScreen *screen)
 
   old_display = gdk_display_get_name (gdk_screen_get_display (screen));
 
-  return _gdk_windowing_substitute_screen_number (old_display, 
-						  gdk_screen_get_number (screen));
+  return substitute_screen_number (old_display,
+                                   gdk_screen_get_number (screen));
 }
 
 static GdkWindow *

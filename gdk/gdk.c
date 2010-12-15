@@ -168,9 +168,6 @@ static const GOptionEntry gdk_args[] = {
   { "display",      0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,   &_gdk_display_name,
     /* Description of --display=DISPLAY in --help output */    N_("X display to use"),
     /* Placeholder in --display=DISPLAY in --help output */    N_("DISPLAY") },
-  { "screen",       0, 0, G_OPTION_ARG_INT,      &_gdk_screen_number,
-    /* Description of --screen=SCREEN in --help output */      N_("X screen to use"),
-    /* Placeholder in --screen=SCREEN in --help output */      N_("SCREEN") },
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,  
     /* Description of --gdk-debug=FLAGS in --help output */    N_("GDK debugging flags to set"),
@@ -296,12 +293,7 @@ G_CONST_RETURN gchar *
 gdk_get_display_arg_name (void)
 {
   if (!_gdk_display_arg_name)
-    {
-      if (_gdk_screen_number >= 0)
-	_gdk_display_arg_name = _gdk_windowing_substitute_screen_number (_gdk_display_name, _gdk_screen_number);
-      else
-	_gdk_display_arg_name = g_strdup (_gdk_display_name);
-   }
+    _gdk_display_arg_name = g_strdup (_gdk_display_name);
 
    return _gdk_display_arg_name;
 }
@@ -330,14 +322,6 @@ gdk_display_open_default_libgtk_only (void)
     return display;
 
   display = gdk_display_open (gdk_get_display_arg_name ());
-
-  if (!display && _gdk_screen_number >= 0)
-    {
-      g_free (_gdk_display_arg_name);
-      _gdk_display_arg_name = g_strdup (_gdk_display_name);
-
-      display = gdk_display_open (_gdk_display_name);
-    }
 
   return display;
 }
