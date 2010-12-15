@@ -3824,7 +3824,10 @@ gtk_css_provider_get_default (void)
         "\n";
 
       provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_data (provider, str, -1, NULL);
+      if (!gtk_css_provider_load_from_data (provider, str, -1, NULL))
+        {
+          g_error ("Failed to load the internal default CSS.");
+        }
     }
 
   return provider;
