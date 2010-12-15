@@ -415,7 +415,7 @@ gdk_selection_send_notify_for_display (GdkDisplay       *display,
     xevent.property = gdk_x11_atom_to_xatom_for_display (display, property);
   xevent.time = time;
 
-  _gdk_send_xevent (display, requestor, False, NoEventMask, (XEvent*) & xevent);
+  _gdk_x11_display_send_xevent (display, requestor, False, NoEventMask, (XEvent*) & xevent);
 }
 
 /**

@@ -2322,7 +2322,7 @@ gdk_x11_display_send_client_message (GdkDisplay     *display,
   memcpy(&sev.xclient.data, &event->client.data, sizeof (sev.xclient.data));
   sev.xclient.message_type = gdk_x11_atom_to_xatom_for_display (display, event->client.message_type);
 
-  return _gdk_send_xevent (display, winid, False, NoEventMask, &sev);
+  return _gdk_x11_display_send_xevent (display, winid, False, NoEventMask, &sev);
 }
 
 static void

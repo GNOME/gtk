@@ -1135,7 +1135,7 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
   if (send || (!found && (level == 1)))
     {
       xev->xclient.window = xid;
-      _gdk_send_xevent (display, xid, False, NoEventMask, xev);
+      _gdk_x11_display_send_xevent (display, xid, False, NoEventMask, xev);
     }
 
   result = send || found;

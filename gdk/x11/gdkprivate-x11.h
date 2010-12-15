@@ -83,11 +83,11 @@ void     _gdk_xid_table_remove (GdkDisplay *display,
 gpointer _gdk_xid_table_lookup (GdkDisplay *display,
                                 XID         xid);
 
-gint _gdk_send_xevent (GdkDisplay *display,
-                       Window      window,
-                       gboolean    propagate,
-                       glong       event_mask,
-                       XEvent     *event_send);
+gint _gdk_x11_display_send_xevent (GdkDisplay *display,
+                                   Window      window,
+                                   gboolean    propagate,
+                                   glong       event_mask,
+                                   XEvent     *event_send);
 
 /* Routines from gdkgeometry-x11.c */
 void _gdk_window_move_resize_child (GdkWindow     *window,

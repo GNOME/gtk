@@ -461,27 +461,12 @@ gdk_error_trap_pop (void)
   return gdk_error_trap_pop_internal (TRUE);
 }
 
-/**
- * _gdk_send_xevent:
- * @display: #GdkDisplay which @window is on
- * @window: window ID to which to send the event
- * @propagate: %TRUE if the event should be propagated if the target window
- *             doesn't handle it.
- * @event_mask: event mask to match against, or 0 to send it to @window
- *              without regard to event masks.
- * @event_send: #XEvent to send
- * 
- * Send an event, like XSendEvent(), but trap errors and check
- * the result.
- * 
- * Return value: %TRUE if sending the event succeeded.
- **/
-gint 
-_gdk_send_xevent (GdkDisplay *display,
-		  Window      window, 
-		  gboolean    propagate, 
-		  glong       event_mask,
-		  XEvent     *event_send)
+gint
+_gdk_x11_display_send_xevent (GdkDisplay *display,
+                              Window      window,
+                              gboolean    propagate,
+                              glong       event_mask,
+                              XEvent     *event_send)
 {
   gboolean result;
 
@@ -489,13 +474,13 @@ _gdk_send_xevent (GdkDisplay *display,
     return FALSE;
 
   gdk_x11_display_error_trap_push (display);
-  result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window, 
-		       propagate, event_mask, event_send);
+  result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window,
+                       propagate, event_mask, event_send);
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
-  
+
   if (gdk_x11_display_error_trap_pop (display))
     return FALSE;
- 
+
   return result;
 }
 

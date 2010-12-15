@@ -1449,12 +1449,12 @@ motif_send_enter (GdkDragContextX11 *context_x11,
   MOTIF_XCLIENT_LONG (&xev, 3) = context_x11->motif_selection;
   MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
-  if (!_gdk_send_xevent (display,
-			 GDK_WINDOW_XID (context->dest_window),
-			 FALSE, 0, &xev))
-    GDK_NOTE (DND, 
-	      g_message ("Send event to %lx failed",
-			 GDK_WINDOW_XID (context->dest_window)));
+  if (!_gdk_x11_display_send_xevent (display,
+                                     GDK_WINDOW_XID (context->dest_window),
+                                     FALSE, 0, &xev))
+    GDK_NOTE (DND,
+              g_message ("Send event to %lx failed",
+              GDK_WINDOW_XID (context->dest_window)));
 }
 
 static void
@@ -1478,12 +1478,12 @@ motif_send_leave (GdkDragContextX11 *context_x11,
   MOTIF_XCLIENT_LONG (&xev, 3) = 0;
   MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
-  if (!_gdk_send_xevent (display,
-			 GDK_WINDOW_XID (context->dest_window),
-			 FALSE, 0, &xev))
-    GDK_NOTE (DND, 
-	      g_message ("Send event to %lx failed",
-			 GDK_WINDOW_XID (context->dest_window)));
+  if (!_gdk_x11_display_send_xevent (display,
+                                     GDK_WINDOW_XID (context->dest_window),
+                                     FALSE, 0, &xev))
+    GDK_NOTE (DND,
+              g_message ("Send event to %lx failed",
+                         GDK_WINDOW_XID (context->dest_window)));
 }
 
 static gboolean
@@ -1528,12 +1528,12 @@ motif_send_motion (GdkDragContextX11 *context_x11,
       retval = FALSE;
     }
 
-  if (!_gdk_send_xevent (display,
-			 GDK_WINDOW_XID (context->dest_window),
-			 FALSE, 0, &xev))
-    GDK_NOTE (DND, 
-	      g_message ("Send event to %lx failed",
-			 GDK_WINDOW_XID (context->dest_window)));
+  if (!_gdk_x11_display_send_xevent (display,
+                                     GDK_WINDOW_XID (context->dest_window),
+                                     FALSE, 0, &xev))
+    GDK_NOTE (DND,
+              g_message ("Send event to %lx failed",
+                         GDK_WINDOW_XID (context->dest_window)));
 
   return retval;
 }
@@ -1562,12 +1562,12 @@ motif_send_drop (GdkDragContextX11 *context_x11,
   MOTIF_XCLIENT_LONG (&xev, 3)  = context_x11->motif_selection;
   MOTIF_XCLIENT_LONG (&xev, 4)  = GDK_WINDOW_XID (context->source_window);
 
-  if (!_gdk_send_xevent (display,
-			 GDK_WINDOW_XID (context->dest_window),
-			 FALSE, 0, &xev))
-    GDK_NOTE (DND, 
-	      g_message ("Send event to %lx failed",
-			 GDK_WINDOW_XID (context->dest_window)));
+  if (!_gdk_x11_display_send_xevent (display,
+                                     GDK_WINDOW_XID (context->dest_window),
+                                     FALSE, 0, &xev))
+    GDK_NOTE (DND,
+              g_message ("Send event to %lx failed",
+                         GDK_WINDOW_XID (context->dest_window)));
 }
 
 /* Target Side */
@@ -3613,12 +3613,12 @@ gdk_drag_context_x11_drag_status (GdkDragContext *context,
       MOTIF_XCLIENT_LONG (&xev, 3) = 0;
       MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
-      if (!_gdk_send_xevent (display,
-			     GDK_WINDOW_XID (context->source_window),
-			     FALSE, 0, &xev))
-	GDK_NOTE (DND, 
-		  g_message ("Send event to %lx failed",
-			     GDK_WINDOW_XID (context->source_window)));
+      if (!_gdk_x11_display_send_xevent (display,
+                                         GDK_WINDOW_XID (context->source_window),
+                                         FALSE, 0, &xev))
+        GDK_NOTE (DND,
+                  g_message ("Send event to %lx failed",
+                             GDK_WINDOW_XID (context->source_window)));
     }
   else if (context->protocol == GDK_DRAG_PROTO_XDND)
     {
@@ -3676,9 +3676,9 @@ gdk_drag_context_x11_drop_reply (GdkDragContext *context,
       MOTIF_XCLIENT_LONG (&xev, 3) = 0;
       MOTIF_XCLIENT_LONG (&xev, 4) = 0;
 
-      _gdk_send_xevent (display,
-			GDK_WINDOW_XID (context->source_window),
-			FALSE, 0, &xev);
+      _gdk_x11_display_send_xevent (display,
+                                    GDK_WINDOW_XID (context->source_window),
+                                    FALSE, 0, &xev);
     }
 }
 
