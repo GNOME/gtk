@@ -7167,6 +7167,9 @@ gdk_window_shape_combine_region (GdkWindow       *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  if (!window->shape && shape_region == NULL)
+    return;
+
   window->shaped = (shape_region != NULL);
 
   if (window->shape)
