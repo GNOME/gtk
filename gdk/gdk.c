@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -69,9 +69,9 @@ struct _GdkThreadsDispatch
 
 /* Private variable declarations
  */
-static int gdk_initialized = 0;			    /* 1 if the library is initialized,
-						     * 0 otherwise.
-						     */
+static int gdk_initialized = 0;                     /* 1 if the library is initialized,
+                                                     * 0 otherwise.
+                                                     */
 
 static gchar  *gdk_progclass = NULL;
 
@@ -82,37 +82,32 @@ static GCallback gdk_threads_unlock = NULL;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
-  {"events",	    GDK_DEBUG_EVENTS},
-  {"misc",	    GDK_DEBUG_MISC},
-  {"dnd",	    GDK_DEBUG_DND},
-  {"xim",	    GDK_DEBUG_XIM},
+  {"events",        GDK_DEBUG_EVENTS},
+  {"misc",          GDK_DEBUG_MISC},
+  {"dnd",           GDK_DEBUG_DND},
+  {"xim",           GDK_DEBUG_XIM},
   {"nograbs",       GDK_DEBUG_NOGRABS},
-  {"colormap",	    GDK_DEBUG_COLORMAP},
-  {"input",	    GDK_DEBUG_INPUT},
-  {"cursor",	    GDK_DEBUG_CURSOR},
-  {"multihead",	    GDK_DEBUG_MULTIHEAD},
-  {"xinerama",	    GDK_DEBUG_XINERAMA},
-  {"draw",	    GDK_DEBUG_DRAW},
-  {"eventloop",	    GDK_DEBUG_EVENTLOOP}
+  {"colormap",      GDK_DEBUG_COLORMAP},
+  {"input",         GDK_DEBUG_INPUT},
+  {"cursor",        GDK_DEBUG_CURSOR},
+  {"multihead",     GDK_DEBUG_MULTIHEAD},
+  {"xinerama",      GDK_DEBUG_XINERAMA},
+  {"draw",          GDK_DEBUG_DRAW},
+  {"eventloop",     GDK_DEBUG_EVENTLOOP}
 };
 
-static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
-
-#endif /* G_ENABLE_DEBUG */
-
-#ifdef G_ENABLE_DEBUG
 static gboolean
 gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
   guint debug_value = g_parse_debug_string (value,
-					    (GDebugKey *) gdk_debug_keys,
-					    gdk_ndebug_keys);
+                                            (GDebugKey *) gdk_debug_keys,
+                                            G_N_ELEMENTS (gdk_debug_keys));
 
   if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
     {
-      g_set_error (error, 
-		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
-		   _("Error parsing option --gdk-debug"));
+      g_set_error (error,
+                   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+                   _("Error parsing option --gdk-debug"));
       return FALSE;
     }
 
@@ -125,14 +120,14 @@ static gboolean
 gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
   guint debug_value = g_parse_debug_string (value,
-					    (GDebugKey *) gdk_debug_keys,
-					    gdk_ndebug_keys);
+                                            (GDebugKey *) gdk_debug_keys,
+                                            G_N_ELEMENTS (gdk_debug_keys));
 
   if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
     {
-      g_set_error (error, 
-		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
-		   _("Error parsing option --gdk-no-debug"));
+      g_set_error (error,
+                   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+                   _("Error parsing option --gdk-no-debug"));
       return FALSE;
     }
 
@@ -210,10 +205,10 @@ gdk_pre_parse_libgtk_only (void)
     gchar *debug_string = getenv("GDK_DEBUG");
     if (debug_string != NULL)
       _gdk_debug_flags = g_parse_debug_string (debug_string,
-					      (GDebugKey *) gdk_debug_keys,
-					      gdk_ndebug_keys);
+                                              (GDebugKey *) gdk_debug_keys,
+                                              G_N_ELEMENTS (gdk_debug_keys));
   }
-#endif	/* G_ENABLE_DEBUG */
+#endif  /* G_ENABLE_DEBUG */
 
   if (getenv ("GDK_NATIVE_WINDOWS"))
     {
@@ -247,7 +242,7 @@ gdk_pre_parse_libgtk_only (void)
  **/
 void
 gdk_parse_args (int    *argc,
-		char ***argv)
+                char ***argv)
 {
   GOptionContext *option_context;
   GOptionGroup *option_group;
@@ -527,28 +522,28 @@ gdk_init (int *argc, char ***argv)
  *       say_something = (yes_or_no != data->what);
  *
  *       if(say_something)
- * 	{
- * 	  /<!---->* set the variable *<!---->/
- * 	  yes_or_no = data->what;
- * 	}
+ *      {
+ *        /<!---->* set the variable *<!---->/
+ *        yes_or_no = data->what;
+ *      }
  *
  *       /<!---->* Unlock the yes_or_no variable *<!---->/
  *       G_UNLOCK (yes_or_no);
  *
  *       if (say_something)
- * 	{
- * 	  /<!---->* get GTK thread lock *<!---->/
- * 	  gdk_threads_enter (<!-- -->);
+ *      {
+ *        /<!---->* get GTK thread lock *<!---->/
+ *        gdk_threads_enter (<!-- -->);
  *
- *	  /<!---->* set label text *<!---->/
- * 	  if(data->what == YES_IT_IS)
- * 	    gtk_label_set_text (GTK_LABEL (data->label), "O yes, it is!");
- * 	  else
- * 	    gtk_label_set_text (GTK_LABEL (data->label), "O no, it isn't!");
+ *        /<!---->* set label text *<!---->/
+ *        if(data->what == YES_IT_IS)
+ *          gtk_label_set_text (GTK_LABEL (data->label), "O yes, it is!");
+ *        else
+ *          gtk_label_set_text (GTK_LABEL (data->label), "O no, it isn't!");
  *
- * 	  /<!---->* release GTK thread lock *<!---->/
- * 	  gdk_threads_leave (<!-- -->);
- * 	}
+ *        /<!---->* release GTK thread lock *<!---->/
+ *        gdk_threads_leave (<!-- -->);
+ *      }
  *     }
  *
  *   return NULL;
@@ -702,10 +697,10 @@ gdk_threads_init (void)
  **/
 void
 gdk_threads_set_lock_functions (GCallback enter_fn,
-				GCallback leave_fn)
+                                GCallback leave_fn)
 {
   g_return_if_fail (gdk_threads_lock == NULL &&
-		    gdk_threads_unlock == NULL);
+                    gdk_threads_unlock == NULL);
 
   gdk_threads_lock = enter_fn;
   gdk_threads_unlock = leave_fn;
@@ -795,9 +790,9 @@ gdk_threads_dispatch_free (gpointer data)
  */
 guint
 gdk_threads_add_idle_full (gint           priority,
-		           GSourceFunc    function,
-		           gpointer       data,
-		           GDestroyNotify notify)
+                           GSourceFunc    function,
+                           gpointer       data,
+                           GDestroyNotify notify)
 {
   GdkThreadsDispatch *dispatch;
 
@@ -830,7 +825,7 @@ gdk_threads_add_idle_full (gint           priority,
  */
 guint
 gdk_threads_add_idle (GSourceFunc    function,
-		      gpointer       data)
+                      gpointer       data)
 {
   return gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE,
                                     function, data, NULL);

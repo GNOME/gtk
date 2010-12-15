@@ -246,10 +246,10 @@ _get_scratch_gc (GdkWindow *window, cairo_region_t *clip_region)
                                                 &values);
     }
   
-  _gdk_region_get_xrectangles (clip_region,
-                               0, 0,
-                               &rectangles,
-                               &n_rects);
+  _gdk_x11_region_get_xrectangles (clip_region,
+                                   0, 0,
+                                   &rectangles,
+                                   &n_rects);
   
   XSetClipRectangles (screen->xdisplay,
                       screen->subwindow_gcs[depth],

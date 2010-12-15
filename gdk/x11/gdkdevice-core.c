@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include "glib.h"
 #include "gdkdevice-core.h"
 
 #include "gdkinternals.h"
@@ -368,10 +369,10 @@ gdk_device_core_grab (GdkDevice    *device,
 
       xevent_mask = 0;
 
-      for (i = 0; i < _gdk_nenvent_masks; i++)
+      for (i = 0; i < _gdk_x11_event_mask_table_size; i++)
         {
           if (event_mask & (1 << (i + 1)))
-            xevent_mask |= _gdk_event_mask_table[i];
+            xevent_mask |= _gdk_x11_event_mask_table[i];
         }
 
       /* We don't want to set a native motion hint mask, as we're emulating motion
@@ -589,10 +590,10 @@ gdk_device_core_select_window_events (GdkDevice    *device,
   /* Combine masks */
   event_mask |= window_mask;
 
-  for (i = 0; i < _gdk_nenvent_masks; i++)
+  for (i = 0; i < _gdk_x11_event_mask_table_size; i++)
     {
       if (event_mask & (1 << (i + 1)))
-        xmask |= _gdk_event_mask_table[i];
+        xmask |= _gdk_x11_event_mask_table[i];
     }
 
   if (GDK_WINDOW_XID (window) != GDK_WINDOW_XROOTWIN (window))

@@ -72,7 +72,7 @@
 #include <X11/extensions/Xdamage.h>
 #endif
 
-const int _gdk_event_mask_table[21] =
+const int _gdk_x11_event_mask_table[21] =
 {
   ExposureMask,
   PointerMotionMask,
@@ -91,12 +91,13 @@ const int _gdk_event_mask_table[21] =
   StructureNotifyMask,
   PropertyChangeMask,
   VisibilityChangeMask,
-  0,				/* PROXIMITY_IN */
-  0,				/* PROXIMTY_OUT */
+  0,                    /* PROXIMITY_IN */
+  0,                    /* PROXIMTY_OUT */
   SubstructureNotifyMask,
   ButtonPressMask      /* SCROLL; on X mouse wheel events is treated as mouse button 4/5 */
 };
-const int _gdk_nenvent_masks = sizeof (_gdk_event_mask_table) / sizeof (int);
+
+const gint _gdk_x11_event_mask_table_size = G_N_ELEMENTS (_gdk_x11_event_mask_table);
 
 /* Forward declarations */
 static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
@@ -838,9 +839,9 @@ x_event_mask_to_gdk_event_mask (long mask)
   GdkEventMask event_mask = 0;
   int i;
 
-  for (i = 0; i < _gdk_nenvent_masks; i++)
+  for (i = 0; i < _gdk_x11_event_mask_table_size; i++)
     {
-      if (mask & _gdk_event_mask_table[i])
+      if (mask & _gdk_x11_event_mask_table[i])
 	event_mask |= 1 << (i + 1);
     }
 
@@ -2883,9 +2884,9 @@ do_shape_combine_region (GdkWindow       *window,
       gint n_rects = 0;
       XRectangle *xrects = NULL;
 
-      _gdk_region_get_xrectangles (shape_region,
-                                   0, 0,
-                                   &xrects, &n_rects);
+      _gdk_x11_region_get_xrectangles (shape_region,
+                                       0, 0,
+                                       &xrects, &n_rects);
       
       if (shape == ShapeBounding)
 	{

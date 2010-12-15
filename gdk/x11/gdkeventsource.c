@@ -406,10 +406,10 @@ gdk_x11_event_source_select_events (GdkEventSource *source,
       list = list->next;
     }
 
-  for (i = 0; i < _gdk_nenvent_masks; i++)
+  for (i = 0; i < _gdk_x11_event_mask_table_size; i++)
     {
       if (event_mask & (1 << (i + 1)))
-        xmask |= _gdk_event_mask_table[i];
+        xmask |= _gdk_x11_event_mask_table[i];
     }
 
   XSelectInput (GDK_DISPLAY_XDISPLAY (source->display), window, xmask);

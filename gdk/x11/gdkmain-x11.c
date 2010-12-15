@@ -500,11 +500,11 @@ _gdk_send_xevent (GdkDisplay *display,
 }
 
 void
-_gdk_region_get_xrectangles (const cairo_region_t *region,
-                             gint             x_offset,
-                             gint             y_offset,
-                             XRectangle     **rects,
-                             gint            *n_rects)
+_gdk_x11_region_get_xrectangles (const cairo_region_t *region,
+                                 gint             x_offset,
+                                 gint             y_offset,
+                                 XRectangle     **rects,
+                                 gint            *n_rects)
 {
   XRectangle *rectangles;
   cairo_rectangle_int_t box;

@@ -83,11 +83,11 @@ void     _gdk_xid_table_remove (GdkDisplay *display,
 gpointer _gdk_xid_table_lookup (GdkDisplay *display,
                                 XID         xid);
 
-gint _gdk_send_xevent      (GdkDisplay *display,
-			    Window      window,
-			    gboolean    propagate,
-			    glong       event_mask,
-			    XEvent     *event_send);
+gint _gdk_send_xevent (GdkDisplay *display,
+                       Window      window,
+                       gboolean    propagate,
+                       glong       event_mask,
+                       XEvent     *event_send);
 
 /* Routines from gdkgeometry-x11.c */
 void _gdk_window_move_resize_child (GdkWindow     *window,
@@ -110,14 +110,14 @@ void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
 
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
-                                             Window window,
-                                             gint shape_type);
+                                             Window   window,
+                                             gint     shape_type);
 
-void     _gdk_region_get_xrectangles       (const cairo_region_t      *region,
-                                            gint                  x_offset,
-                                            gint                  y_offset,
-                                            XRectangle          **rects,
-                                            gint                 *n_rects);
+void     _gdk_x11_region_get_xrectangles   (const cairo_region_t  *region,
+                                            gint                   x_offset,
+                                            gint                   y_offset,
+                                            XRectangle           **rects,
+                                            gint                  *n_rects);
 
 gboolean _gdk_moveresize_handle_event   (XEvent     *event);
 gboolean _gdk_moveresize_configure_done (GdkDisplay *display,
@@ -209,9 +209,9 @@ cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
                                                          int        height);
 
 extern gboolean	         _gdk_use_xshm;
-extern const int         _gdk_nenvent_masks;
-extern const int         _gdk_event_mask_table[];
-extern GdkAtom		 _gdk_selection_property;
+extern const gint        _gdk_x11_event_mask_table[];
+extern const gint        _gdk_x11_event_mask_table_size;
+extern GdkAtom           _gdk_selection_property;
 extern gboolean          _gdk_synchronize;
 
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_SCREEN_X11 (screen)->display)
