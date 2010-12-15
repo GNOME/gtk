@@ -66,7 +66,49 @@ static void    gdk_app_launch_context_launch_failed (GAppLaunchContext *context,
                                                      const gchar       *startup_notify_id);
 
 
+enum
+{
+  PROP_0,
+  PROP_DISPLAY
+};
+
 G_DEFINE_TYPE (GdkAppLaunchContext, gdk_app_launch_context, G_TYPE_APP_LAUNCH_CONTEXT)
+
+static void
+gdk_app_launch_context_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GdkAppLaunchContext *context = GDK_APP_LAUNCH_CONTEXT (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      g_value_set_object (value, context->display);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
+
+static void
+gdk_app_launch_context_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  GdkAppLaunchContext *context = GDK_APP_LAUNCH_CONTEXT (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      context->display = g_value_dup_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+    }
+}
 
 static void
 gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
@@ -74,11 +116,19 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GAppLaunchContextClass *context_class = G_APP_LAUNCH_CONTEXT_CLASS (klass);
 
+  gobject_class->set_property = gdk_app_launch_context_set_property,
+  gobject_class->get_property = gdk_app_launch_context_get_property;
+
   gobject_class->finalize = gdk_app_launch_context_finalize;
 
   context_class->get_display = gdk_app_launch_context_get_display;
   context_class->get_startup_notify_id = gdk_app_launch_context_get_startup_notify_id;
   context_class->launch_failed = gdk_app_launch_context_launch_failed;
+
+  g_object_class_install_property (gobject_class, PROP_DISPLAY,
+    g_param_spec_object ("display", P_("Display"), P_("Display"),
+                         GDK_TYPE_DISPLAY,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 }
 
 static void
