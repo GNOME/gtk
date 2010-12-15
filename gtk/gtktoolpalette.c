@@ -1672,23 +1672,25 @@ gtk_tool_palette_get_drag_item (GtkToolPalette         *palette,
                                 const GtkSelectionData *selection)
 {
   GtkToolPaletteDragData *data;
+  GdkAtom target;
 
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), NULL);
   g_return_val_if_fail (NULL != selection, NULL);
 
-  g_return_val_if_fail (selection->format == 8, NULL);
-  g_return_val_if_fail (selection->length == sizeof (GtkToolPaletteDragData), NULL);
-  g_return_val_if_fail (selection->target == dnd_target_atom_item ||
-                        selection->target == dnd_target_atom_group,
+  g_return_val_if_fail (gtk_selection_data_get_format (selection) == 8, NULL);
+  g_return_val_if_fail (gtk_selection_data_get_length (selection) == sizeof (GtkToolPaletteDragData), NULL);
+  target = gtk_selection_data_get_target (selection);
+  g_return_val_if_fail (target == dnd_target_atom_item ||
+                        target == dnd_target_atom_group,
                         NULL);
 
-  data = (GtkToolPaletteDragData*) selection->data;
+  data = (GtkToolPaletteDragData*) gtk_selection_data_get_data (selection);
 
   g_return_val_if_fail (data->palette == palette, NULL);
 
-  if (dnd_target_atom_item == selection->target)
+  if (dnd_target_atom_item == target)
     g_return_val_if_fail (GTK_IS_TOOL_ITEM (data->item), NULL);
-  else if (dnd_target_atom_group == selection->target)
+  else if (dnd_target_atom_group == target)
     g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (data->item), NULL);
 
   return data->item;
@@ -1818,12 +1820,15 @@ gtk_tool_palette_item_drag_data_get (GtkWidget        *widget,
                                      gpointer          data)
 {
   GtkToolPaletteDragData drag_data = { GTK_TOOL_PALETTE (data), NULL };
+  GdkAtom target;
 
-  if (selection->target == dnd_target_atom_item)
+  target = gtk_selection_data_get_target (selection);
+
+  if (target == dnd_target_atom_item)
     drag_data.item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
 
   if (drag_data.item)
-    gtk_selection_data_set (selection, selection->target, 8,
+    gtk_selection_data_set (selection, target, 8,
                             (guchar*) &drag_data, sizeof (drag_data));
 }
 
@@ -1836,12 +1841,15 @@ gtk_tool_palette_child_drag_data_get (GtkWidget        *widget,
                                       gpointer          data)
 {
   GtkToolPaletteDragData drag_data = { GTK_TOOL_PALETTE (data), NULL };
+  GdkAtom target;
 
-  if (selection->target == dnd_target_atom_group)
+  target = gtk_selection_data_get_target (selection);
+
+  if (target == dnd_target_atom_group)
     drag_data.item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM_GROUP);
 
   if (drag_data.item)
-    gtk_selection_data_set (selection, selection->target, 8,
+    gtk_selection_data_set (selection, target, 8,
                             (guchar*) &drag_data, sizeof (drag_data));
 }
 
