@@ -8439,10 +8439,7 @@ gtk_widget_set_style_internal (GtkWidget *widget,
       GtkStyle *previous_style;
 
       if (gtk_widget_get_realized (widget))
-	{
-	  gtk_widget_reset_shapes (widget);
-	  gtk_style_detach (priv->style);
-	}
+        gtk_style_detach (priv->style);
 
       previous_style = priv->style;
       priv->style = style;
@@ -11227,42 +11224,6 @@ gtk_widget_input_shape_combine_region (GtkWidget *widget,
     }
 }
 
-
-static void
-gtk_reset_shapes_recurse (GtkWidget *widget,
-			  GdkWindow *window)
-{
-  gpointer data;
-  GList *list;
-
-  gdk_window_get_user_data (window, &data);
-  if (data != widget)
-    return;
-
-  gdk_window_shape_combine_region (window, NULL, 0, 0);
-  for (list = gdk_window_peek_children (window); list; list = list->next)
-    gtk_reset_shapes_recurse (widget, list->data);
-}
-
-/**
- * gtk_widget_reset_shapes:
- * @widget: a #GtkWidget
- *
- * Recursively resets the shape on this widget and its descendants.
- **/
-void
-gtk_widget_reset_shapes (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_realized (widget));
-
-  priv = widget->priv;
-
-  if (!priv->has_shape_mask)
-    gtk_reset_shapes_recurse (widget, priv->window);
-}
 
 /* style properties
  */

@@ -4868,7 +4868,6 @@ gtk_widget_pop_composite_child
 gtk_widget_push_composite_child
 gtk_widget_queue_draw_area
 gtk_widget_queue_draw_region
-gtk_widget_reset_shapes
 gtk_widget_set_app_paintable
 gtk_widget_set_double_buffered
 gtk_widget_set_redraw_on_allocate

@@ -900,9 +900,6 @@ void	     gtk_widget_shape_combine_region (GtkWidget *widget,
 void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
                                                     cairo_region_t *region);
 
-/* internal function */
-void	     gtk_widget_reset_shapes	   (GtkWidget *widget);
-
 GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,
 					 GtkWidget *label);
