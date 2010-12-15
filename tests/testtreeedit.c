@@ -55,7 +55,7 @@ create_model (void)
   GtkWidget *blah;
 
   blah = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  foo = gtk_widget_render_icon (blah, GTK_STOCK_NEW, GTK_ICON_SIZE_MENU, NULL);
+  foo = gtk_widget_render_icon_pixbuf (blah, GTK_STOCK_NEW, GTK_ICON_SIZE_MENU);
   gtk_widget_destroy (blah);
   
   model = gtk_tree_store_new (NUM_COLUMNS,
