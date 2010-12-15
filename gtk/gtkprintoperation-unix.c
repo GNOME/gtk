@@ -201,8 +201,8 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 						      GtkWindow         *parent,
 						      const gchar       *filename)
 {
-  gint argc;
-  gchar **argv;
+  GAppInfo *appinfo;
+  GAppLaunchContext *context;
   gchar *cmd;
   gchar *preview_cmd;
   GtkSettings *settings;
@@ -276,7 +276,11 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   quoted_filename = g_shell_quote (filename);
   quoted_settings_filename = g_shell_quote (settings_filename);
   cmd = shell_command_substitute_file (preview_cmd, quoted_filename, quoted_settings_filename, &filename_used, &settings_used);
-  g_shell_parse_argv (cmd, &argc, &argv, &error);
+
+  appinfo = g_app_info_create_from_commandline (cmd,
+                                                "Print Preview",
+                                                G_APP_INFO_CREATE_NONE,
+                                                &error);
 
   g_free (preview_cmd);
   g_free (quoted_filename);
@@ -286,9 +290,12 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (error != NULL)
     goto out;
 
-  gdk_spawn_on_screen (screen, NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error);
+  context = gdk_display_get_app_launch_context (gdk_screen_get_display (screen));
+  gdk_app_launch_context_set_screen (GDK_APP_LAUNCH_CONTEXT (context), screen);
+  g_app_info_launch (appinfo, NULL, context, &error);
 
-  g_strfreev (argv);
+  g_object_unref (context);
+  g_object_unref (appinfo);
 
   if (error != NULL)
     {
@@ -311,9 +318,9 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
       else
         g_error_free (error);
 
-      filename_used = FALSE; 
+      filename_used = FALSE;
       settings_used = FALSE;
-   } 
+   }
 
   if (!filename_used)
     g_unlink (filename);
@@ -323,7 +330,7 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 
   if (fd > 0)
     close (fd);
-  
+
   if (key_file)
     g_key_file_free (key_file);
   g_free (data);
