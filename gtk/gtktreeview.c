@@ -10089,7 +10089,13 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
 		   * is no column in focus, here we explicitly focus into the first cell */
 		  cell_area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (tree_view->priv->focus_column));
 		  if (!gtk_cell_area_get_focus_cell (cell_area))
-		    gtk_cell_area_focus (cell_area, GTK_DIR_RIGHT);
+                    {
+                      gboolean rtl;
+
+                      rtl = (gtk_widget_get_direction (GTK_WIDGET (tree_view)) == GTK_TEXT_DIR_RTL);
+                      gtk_cell_area_focus (cell_area,
+                                           rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT);
+                    }
 
 		  break;
 		}
