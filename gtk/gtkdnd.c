@@ -1720,6 +1720,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
   GdkDragContext *context;
   GtkDragDestInfo *info;
   GtkWidget *drop_widget;
+  GdkAtom target;
 
   drop_widget = data;
 
@@ -1727,23 +1728,24 @@ gtk_drag_selection_received (GtkWidget        *widget,
   info = gtk_drag_get_dest_info (context, FALSE);
 
   if (info->proxy_data && 
-      info->proxy_data->target == selection_data->target)
+      gtk_selection_data_get_target (info->proxy_data) == gtk_selection_data_get_target (selection_data))
     {
       gtk_selection_data_set (info->proxy_data,
-			      selection_data->type,
-			      selection_data->format,
-			      selection_data->data,
-			      selection_data->length);
+			      gtk_selection_data_get_data_type (selection_data),
+			      gtk_selection_data_get_format (selection_data),
+			      gtk_selection_data_get_data (selection_data),
+			      gtk_selection_data_get_length (selection_data));
       gtk_main_quit ();
       return;
     }
 
-  if (selection_data->target == gdk_atom_intern_static_string ("DELETE"))
+  target = gtk_selection_data_get_target (selection_data);
+  if (target == gdk_atom_intern_static_string ("DELETE"))
     {
       gtk_drag_finish (context, TRUE, FALSE, time);
     }
-  else if ((selection_data->target == gdk_atom_intern_static_string ("XmTRANSFER_SUCCESS")) ||
-	   (selection_data->target == gdk_atom_intern_static_string ("XmTRANSFER_FAILURE")))
+  else if ((target == gdk_atom_intern_static_string ("XmTRANSFER_SUCCESS")) ||
+	   (target == gdk_atom_intern_static_string ("XmTRANSFER_FAILURE")))
     {
       /* Do nothing */
     }
@@ -1758,11 +1760,11 @@ gtk_drag_selection_received (GtkWidget        *widget,
 	  guint target_info;
 
 	  if (gtk_target_list_find (site->target_list, 
-				    selection_data->target,
+				    target,
 				    &target_info))
 	    {
 	      if (!(site->flags & GTK_DEST_DEFAULT_DROP) ||
-		  selection_data->length >= 0)
+		  gtk_selection_data_get_length (selection_data) >= 0)
 		g_signal_emit_by_name (drop_widget,
 				       "drag-data-received",
 				       context, info->drop_x, info->drop_y,
@@ -1783,7 +1785,7 @@ gtk_drag_selection_received (GtkWidget        *widget,
 	{
 
 	  gtk_drag_finish (context, 
-			   (selection_data->length >= 0),
+			   (gtk_selection_data_get_length (selection_data) >= 0),
 			   (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
 			   time);
 	}
@@ -3796,7 +3798,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
 	  info->proxy_dest->proxy_data = selection_data;
 	  gtk_drag_get_data (info->widget,
 			     info->proxy_dest->context,
-			     selection_data->target,
+			     gtk_selection_data_get_target (selection_data),
 			     time);
 	  gtk_main ();
 	  info->proxy_dest->proxy_data = NULL;
@@ -3804,7 +3806,7 @@ gtk_drag_selection_get (GtkWidget        *widget,
       else
 	{
 	  if (gtk_target_list_find (info->target_list, 
-				    selection_data->target, 
+				    gtk_selection_data_get_target (selection_data),
 				    &target_info))
 	    {
 	      g_signal_emit_by_name (info->widget, "drag-data-get",
