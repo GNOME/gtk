@@ -72,7 +72,7 @@ void                  gdk_pre_parse_libgtk_only           (void);
  * Returns: the resulting locale.
  */
 gchar*                gdk_set_locale                      (void);
-void                  gdk_enable_multidevice              (void);
+void                  gdk_disable_multidevice             (void);
 
 G_CONST_RETURN gchar *gdk_get_program_class               (void);
 void                  gdk_set_program_class               (const gchar    *program_class);

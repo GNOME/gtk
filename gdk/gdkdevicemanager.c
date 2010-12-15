@@ -85,8 +85,8 @@
  *
  * In order to query the device hierarchy and be aware of changes in the device hierarchy (such as
  * virtual devices being created or removed, or physical devices being plugged or unplugged), GDK
- * provides #GdkDeviceManager. On X11, multidevice support is implemented through XInput 2. If
- * gdk_enable_multidevice() is called, the XInput 2.x #GdkDeviceManager implementation will be used
+ * provides #GdkDeviceManager. On X11, multidevice support is implemented through XInput 2. Unless
+ * gdk_disable_multidevice() is called, the XInput 2.x #GdkDeviceManager implementation will be used
  * as input source, else either the core or XInput 1.x implementations will be used.
  */
 
