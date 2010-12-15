@@ -350,22 +350,25 @@ gtk_color_button_drag_data_received (GtkWidget        *widget,
 				     guint32           time,
 				     GtkColorButton   *color_button)
 {
+  gint length;
   guint16 *dropped;
 
-  if (selection_data->length < 0)
+  length = gtk_selection_data_get_length (selection_data);
+
+  if (length < 0)
     return;
 
   /* We accept drops with the wrong format, since the KDE color
    * chooser incorrectly drops application/x-color with format 8.
    */
-  if (selection_data->length != 8) 
+  if (length != 8)
     {
       g_warning (_("Received invalid color data\n"));
       return;
     }
 
 
-  dropped = (guint16 *)selection_data->data;
+  dropped = (guint16 *) gtk_selection_data_get_data (selection_data);
 
   color_button->priv->rgba.red = dropped[0] / 65535.;
   color_button->priv->rgba.green = dropped[1] / 65535.;
@@ -428,7 +431,8 @@ gtk_color_button_drag_data_get (GtkWidget        *widget,
   dropped[2] = (guint16) (color_button->priv->rgba.blue * 65535);
   dropped[3] = (guint16) (color_button->priv->rgba.alpha * 65535);
 
-  gtk_selection_data_set (selection_data, selection_data->target,
+  gtk_selection_data_set (selection_data,
+                          gtk_selection_data_get_target (selection_data),
 			  16, (guchar *)dropped, 8);
 }
 
