@@ -8640,6 +8640,9 @@ gdk_window_shape_combine_region (GdkWindow       *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  if (!private->shaped && shape_region == NULL)
+    return;
+
   private->shaped = (shape_region != NULL);
 
   if (private->shape)
