@@ -51,7 +51,6 @@
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkscreen.h>
 #include <gdk/gdkselection.h>
-#include <gdk/gdkspawn.h>
 #include <gdk/gdktestutils.h>
 #include <gdk/gdkthreads.h>
 #include <gdk/gdktypes.h>

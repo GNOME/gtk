@@ -324,9 +324,6 @@ gdk_set_program_class
 gdk_set_show_events
 gdk_setting_action_get_type G_GNUC_CONST
 gdk_setting_get
-gdk_spawn_command_line_on_screen
-gdk_spawn_on_screen
-gdk_spawn_on_screen_with_pipes
 gdk_status_get_type G_GNUC_CONST
 gdk_string_to_compound_text
 gdk_string_to_compound_text_for_display

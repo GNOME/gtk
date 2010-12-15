@@ -202,7 +202,7 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 						      const gchar       *filename)
 {
   GAppInfo *appinfo;
-  GAppLaunchContext *context;
+  GdkAppLaunchContext *context;
   gchar *cmd;
   gchar *preview_cmd;
   GtkSettings *settings;
@@ -291,8 +291,8 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
     goto out;
 
   context = gdk_display_get_app_launch_context (gdk_screen_get_display (screen));
-  gdk_app_launch_context_set_screen (GDK_APP_LAUNCH_CONTEXT (context), screen);
-  g_app_info_launch (appinfo, NULL, context, &error);
+  gdk_app_launch_context_set_screen (context, screen);
+  g_app_info_launch (appinfo, NULL, G_APP_LAUNCH_CONTEXT (context), &error);
 
   g_object_unref (context);
   g_object_unref (appinfo);

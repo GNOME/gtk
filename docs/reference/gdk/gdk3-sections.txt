@@ -217,10 +217,6 @@ gdk_screen_get_resolution
 gdk_screen_set_resolution
 gdk_screen_get_active_window
 gdk_screen_get_window_stack
-<SUBSECTION Spawning>
-gdk_spawn_on_screen
-gdk_spawn_on_screen_with_pipes
-gdk_spawn_command_line_on_screen
 
 <SUBSECTION Standard>
 GDK_SCREEN

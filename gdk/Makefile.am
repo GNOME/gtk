@@ -84,7 +84,6 @@ gdk_public_h_sources =				\
 	gdkrgba.h				\
 	gdkscreen.h				\
 	gdkselection.h				\
-	gdkspawn.h				\
 	gdktestutils.h				\
 	gdkthreads.h				\
 	gdktypes.h				\
@@ -210,7 +209,6 @@ x11_introspection_files = 		\
 	x11/gdkscreen-x11.c		\
 	x11/gdkselection-x11.c		\
 	x11/gdksettings.c		\
-	x11/gdkspawn-x11.c		\
 	x11/gdktestutils-x11.c		\
 	x11/gdkvisual-x11.c		\
 	x11/gdkwindow-x11.c		\
