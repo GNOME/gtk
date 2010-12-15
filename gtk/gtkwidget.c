@@ -8689,7 +8689,9 @@ reset_style_recurse (GtkWidget *widget, gpointer data)
  * @widget: a #GtkWidget
  *
  * Updates the style context of @widget and all descendents
- * by updating its widget path.
+ * by updating its widget path. #GtkContainer<!-- -->s may want
+ * to use this on a child when reordering it in a way that a different
+ * style might apply to it. See also gtk_container_get_path_for_child().
  *
  * Since: 3.0
  */
