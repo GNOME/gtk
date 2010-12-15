@@ -562,9 +562,9 @@ create_focus_window (GdkDisplay *display,
                 GDK_KEY_RELEASE_MASK |
                 GDK_FOCUS_CHANGE_MASK);
 
-  gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                  focus_window,
-                                  event_mask, 0);
+  gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                      focus_window,
+                                      event_mask, 0);
 
   XMapWindow (xdisplay, focus_window);
 
@@ -827,9 +827,9 @@ _gdk_window_impl_new (GdkWindow     *window,
   if (attributes_mask & GDK_WA_TYPE_HINT)
     gdk_window_set_type_hint (window, attributes->type_hint);
 
-  gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                  GDK_WINDOW_XID (window), event_mask,
-                                  StructureNotifyMask | PropertyChangeMask);
+  gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                      GDK_WINDOW_XID (window), event_mask,
+                                      StructureNotifyMask | PropertyChangeMask);
 }
 
 static GdkEventMask
@@ -2833,9 +2833,9 @@ gdk_window_x11_set_events (GdkWindow    *window,
         xevent_mask = StructureNotifyMask | PropertyChangeMask;
 
       display_x11 = GDK_DISPLAY_X11 (gdk_window_get_display (window));
-      gdk_event_source_select_events ((GdkEventSource *) display_x11->event_source,
-                                      GDK_WINDOW_XID (window), event_mask,
-                                      xevent_mask);
+      gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
+                                          GDK_WINDOW_XID (window), event_mask,
+                                          xevent_mask);
     }
 }
 

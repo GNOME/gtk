@@ -89,7 +89,7 @@ gdk_event_apply_filters (XEvent    *xevent,
       tmp_list = node;
 
       if (result != GDK_FILTER_CONTINUE)
-	return result;
+        return result;
     }
 
   return GDK_FILTER_CONTINUE;
@@ -102,7 +102,7 @@ gdk_event_source_get_filter_window (GdkEventSource *event_source,
   GdkWindow *window;
 
   window = gdk_x11_window_lookup_for_display (event_source->display,
-                                          xevent->xany.window);
+                                              xevent->xany.window);
 
   if (window && !GDK_IS_WINDOW (window))
     window = NULL;
@@ -191,7 +191,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
             }
           else if (result == GDK_FILTER_TRANSLATE)
             return event;
-	}
+        }
     }
 
   gdk_event_free (event);
@@ -236,7 +236,7 @@ gdk_event_source_prepare (GSource *source,
 
   *timeout = -1;
   retval = (_gdk_event_queue_find_first (display) != NULL ||
-	    gdk_check_xpending (display));
+            gdk_check_xpending (display));
 
   GDK_THREADS_LEAVE ();
 
@@ -253,7 +253,7 @@ gdk_event_source_check (GSource *source)
 
   if (event_source->event_poll_fd.revents & G_IO_IN)
     retval = (_gdk_event_queue_find_first (event_source->display) != NULL ||
-	      gdk_check_xpending (event_source->display));
+              gdk_check_xpending (event_source->display));
   else
     retval = FALSE;
 
@@ -336,7 +336,7 @@ gdk_event_source_finalize (GSource *source)
 }
 
 GSource *
-gdk_event_source_new (GdkDisplay *display)
+gdk_x11_event_source_new (GdkDisplay *display)
 {
   GSource *source;
   GdkEventSource *event_source;
@@ -346,7 +346,7 @@ gdk_event_source_new (GdkDisplay *display)
 
   source = g_source_new (&event_funcs, sizeof (GdkEventSource));
   name = g_strdup_printf ("GDK X11 Event source (%s)",
-			  gdk_display_get_name (display));
+                          gdk_display_get_name (display));
   g_source_set_name (source, name);
   g_free (name);
   event_source = (GdkEventSource *) source;
@@ -369,8 +369,8 @@ gdk_event_source_new (GdkDisplay *display)
 }
 
 void
-gdk_event_source_add_translator (GdkEventSource     *source,
-                                 GdkEventTranslator *translator)
+gdk_x11_event_source_add_translator (GdkEventSource     *source,
+                                     GdkEventTranslator *translator)
 {
   g_return_if_fail (GDK_IS_EVENT_TRANSLATOR (translator));
 
@@ -378,10 +378,10 @@ gdk_event_source_add_translator (GdkEventSource     *source,
 }
 
 void
-gdk_event_source_select_events (GdkEventSource *source,
-                                Window          window,
-                                GdkEventMask    event_mask,
-                                unsigned int    extra_x_mask)
+gdk_x11_event_source_select_events (GdkEventSource *source,
+                                    Window          window,
+                                    GdkEventMask    event_mask,
+                                    unsigned int    extra_x_mask)
 {
   unsigned int xmask = extra_x_mask;
   GList *list;

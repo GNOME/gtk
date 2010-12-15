@@ -1100,19 +1100,19 @@ gdk_event_init (GdkDisplay *display)
   GdkDeviceManager *device_manager;
 
   display_x11 = GDK_DISPLAY_X11 (display);
-  display_x11->event_source = gdk_event_source_new (display);
+  display_x11->event_source = gdk_x11_event_source_new (display);
 
-  gdk_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
-                                   GDK_EVENT_TRANSLATOR (display));
+  gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
+                                       GDK_EVENT_TRANSLATOR (display));
 
   device_manager = gdk_display_get_device_manager (display);
-  gdk_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
-                                   GDK_EVENT_TRANSLATOR (device_manager));
+  gdk_x11_event_source_add_translator ((GdkEventSource *) display_x11->event_source,
+                                        GDK_EVENT_TRANSLATOR (device_manager));
 
   gdk_display_add_client_message_filter (display,
-					 gdk_atom_intern_static_string ("WM_PROTOCOLS"),
-					 gdk_wm_protocols_filter,
-					 NULL);
+                                         gdk_atom_intern_static_string ("WM_PROTOCOLS"),
+                                         gdk_wm_protocols_filter,
+                                         NULL);
 }
 
 static void
