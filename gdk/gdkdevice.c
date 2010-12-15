@@ -268,7 +268,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
     g_signal_new (g_intern_static_string ("changed"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
-                  NULL, NULL, NULL,
+                  0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
