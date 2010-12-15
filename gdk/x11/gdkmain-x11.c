@@ -128,19 +128,19 @@ _gdk_x11_convert_grab_status (gint status)
   return 0;
 }
 
-/**
- * _gdk_xgrab_check_unmap:
+/*
+ * _gdk_x11_window_grab_check_unmap:
  * @window: a #GdkWindow
  * @serial: serial from Unmap event (or from NextRequest(display)
  *   if the unmap is being done by this client.)
- * 
+ *
  * Checks to see if an unmap request or event causes the current
  * grab window to become not viewable, and if so, clear the
  * the pointer we keep to it.
  **/
 void
-_gdk_xgrab_check_unmap (GdkWindow *window,
-			gulong     serial)
+_gdk_x11_window_grab_check_unmap (GdkWindow *window,
+                                  gulong     serial)
 {
   GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;
@@ -160,15 +160,15 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
   g_list_free (devices);
 }
 
-/**
- * _gdk_xgrab_check_destroy:
+/*
+ * _gdk_x11_window_grab_check_destroy:
  * @window: a #GdkWindow
  * 
  * Checks to see if window is the current grab window, and if
  * so, clear the current grab window.
  **/
 void
-_gdk_xgrab_check_destroy (GdkWindow *window)
+_gdk_x11_window_grab_check_destroy (GdkWindow *window)
 {
   GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;

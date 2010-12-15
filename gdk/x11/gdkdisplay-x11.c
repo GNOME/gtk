@@ -613,14 +613,14 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
        * will have already flipped the iconified bit off.
        */
       if (window)
-	{
-	  if (GDK_WINDOW_IS_MAPPED (window))
-	    gdk_synthesize_window_state (window,
-					 0,
-					 GDK_WINDOW_STATE_ICONIFIED);
+        {
+          if (GDK_WINDOW_IS_MAPPED (window))
+            gdk_synthesize_window_state (window,
+                                         0,
+                                         GDK_WINDOW_STATE_ICONIFIED);
 
-	  _gdk_xgrab_check_unmap (window, xevent->xany.serial);
-	}
+          _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
+        }
 
       break;
 

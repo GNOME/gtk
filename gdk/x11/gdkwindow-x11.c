@@ -232,22 +232,22 @@ gdk_window_impl_x11_finalize (GObject *object)
 {
   GdkWindow *wrapper;
   GdkWindowImplX11 *impl;
-  
+
   g_return_if_fail (GDK_IS_WINDOW_IMPL_X11 (object));
 
   impl = GDK_WINDOW_IMPL_X11 (object);
-  
+
   wrapper = impl->wrapper;
 
-  _gdk_xgrab_check_destroy (wrapper);
+  _gdk_x11_window_grab_check_destroy (wrapper);
 
   if (!GDK_WINDOW_DESTROYED (wrapper))
     {
       GdkDisplay *display = GDK_WINDOW_DISPLAY (wrapper);
-      
+
       _gdk_xid_table_remove (display, impl->xid);
       if (impl->toplevel && impl->toplevel->focus_window)
-	_gdk_xid_table_remove (display, impl->toplevel->focus_window);
+        _gdk_xid_table_remove (display, impl->toplevel->focus_window);
     }
 
   g_free (impl->toplevel);
@@ -1092,13 +1092,13 @@ gdk_x11_window_destroy_notify (GdkWindow *window)
 
       _gdk_window_destroy (window, TRUE);
     }
-  
+
   _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), GDK_WINDOW_XID (window));
   if (window_impl->toplevel && window_impl->toplevel->focus_window)
     _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), window_impl->toplevel->focus_window);
 
-  _gdk_xgrab_check_destroy (window);
-  
+  _gdk_x11_window_grab_check_destroy (window);
+
   g_object_unref (window);
 }
 
@@ -1369,8 +1369,8 @@ gdk_window_x11_hide (GdkWindow *window)
    * but checking here makes things more consistent if we are
    * just doing stuff ourself.
    */
-  _gdk_xgrab_check_unmap (window,
-			  NextRequest (GDK_WINDOW_XDISPLAY (window)));
+  _gdk_x11_window_grab_check_unmap (window,
+                                    NextRequest (GDK_WINDOW_XDISPLAY (window)));
 
   /* You can't simply unmap toplevel windows. */
   switch (window->window_type)
