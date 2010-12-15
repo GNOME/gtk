@@ -151,11 +151,11 @@ gdk_device_xi_constructed (GObject *object)
   device = GDK_DEVICE_XI (object);
   display = gdk_device_get_display (GDK_DEVICE (object));
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   device->xdevice = XOpenDevice (GDK_DISPLAY_XDISPLAY (display),
                                  device->device_id);
 
-  if (gdk_error_trap_pop ())
+  if (gdk_x11_display_error_trap_pop (display))
     g_warning ("Device %s can't be opened",
                gdk_device_get_name (GDK_DEVICE (device)));
 

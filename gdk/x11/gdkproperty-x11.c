@@ -355,9 +355,9 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
        * we take precautions
        */
       char *name;
-      gdk_error_trap_push ();
+      gdk_x11_display_error_trap_push (display);
       name = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-      if (gdk_error_trap_pop ())
+      if (gdk_x11_display_error_trap_pop (display))
 	{
 	  g_warning (G_STRLOC " invalid X atom: %ld", xatom);
 	}

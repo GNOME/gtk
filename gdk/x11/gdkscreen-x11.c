@@ -1104,7 +1104,7 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
   gboolean result = FALSE;
   int i;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
 
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xid,
 			  gdk_x11_get_xatom_by_name_for_display (display, "WM_STATE"),
@@ -1141,7 +1141,7 @@ gdk_event_send_client_message_to_all_recurse (GdkDisplay *display,
   result = send || found;
 
  out:
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   return result;
 }
@@ -1333,12 +1333,12 @@ fetch_net_wm_check_window (GdkScreen *screen)
       return;
     }
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
 
   /* Find out if this WM goes away, so we can reset everything. */
   XSelectInput (screen_x11->xdisplay, *xwindow, StructureNotifyMask);
 
-  error = gdk_error_trap_pop ();
+  error = gdk_x11_display_error_trap_pop (display);
   if (!error)
     {
       screen_x11->wmspec_check_window = *xwindow;
@@ -1625,10 +1625,12 @@ const char*
 gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11;
+  GdkDisplay *display;
 
   screen_x11 = GDK_SCREEN_X11 (screen);
+  display = screen_x11->display;
 
-  if (!G_LIKELY (GDK_DISPLAY_X11 (screen_x11->display)->trusted_client))
+  if (!G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
     return screen_x11->window_manager_name;
 
   fetch_net_wm_check_window (screen);
@@ -1651,20 +1653,20 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
 
           name = NULL;
 
-	  gdk_error_trap_push ();
+          gdk_x11_display_error_trap_push (display);
 
-          XGetWindowProperty (GDK_DISPLAY_XDISPLAY (screen_x11->display),
+          XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
                               screen_x11->wmspec_check_window,
-                              gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+                              gdk_x11_get_xatom_by_name_for_display (display,
                                                                      "_NET_WM_NAME"),
                               0, G_MAXLONG, False,
-                              gdk_x11_get_xatom_by_name_for_display (screen_x11->display,
+                              gdk_x11_get_xatom_by_name_for_display (display,
                                                                      "UTF8_STRING"),
                               &type, &format,
                               &n_items, &bytes_after,
                               (guchar **)&name);
 
-          gdk_error_trap_pop_ignored ();
+          gdk_x11_display_error_trap_pop_ignored (display);
 
           if (name != NULL)
             {

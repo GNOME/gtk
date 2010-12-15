@@ -255,14 +255,14 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
   gulong *desktop;
 
   type = None;
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display),
                       GDK_WINDOW_XID (window),
                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_DESKTOP"),
                       0, G_MAXLONG, False, XA_CARDINAL, &type,
                       &format, &nitems,
                       &bytes_after, &data);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   if (type != None)
     {
@@ -298,12 +298,12 @@ gdk_check_wm_state_changed (GdkWindow *window)
   toplevel->have_fullscreen = FALSE;
 
   type = None;
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XID (window),
 		      gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_STATE"),
 		      0, G_MAXLONG, False, XA_ATOM, &type, &format, &nitems,
 		      &bytes_after, &data);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
   if (type != None)
     {
@@ -709,7 +709,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	      gint ty = 0;
 	      Window child_window = 0;
 
-	      gdk_error_trap_push ();
+	      gdk_x11_display_error_trap_push (display);
 	      if (XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
 					 GDK_WINDOW_XID (window),
 					 screen_x11->xroot_window,
@@ -720,7 +720,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 		  event->configure.x = tx;
 		  event->configure.y = ty;
 		}
-	      gdk_error_trap_pop_ignored ();
+	      gdk_x11_display_error_trap_pop_ignored (display);
 	    }
 	  else
 	    {
@@ -1346,11 +1346,11 @@ _gdk_x11_display_open (const gchar *display_name)
     int rootx, rooty, winx, winy;
     unsigned int xmask;
 
-    gdk_error_trap_push ();
-    XQueryPointer (display_x11->xdisplay, 
+    gdk_x11_display_error_trap_push (display);
+    XQueryPointer (display_x11->xdisplay,
 		   GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
 		   &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
-    if (G_UNLIKELY (gdk_error_trap_pop () == BadWindow)) 
+    if (G_UNLIKELY (gdk_x11_display_error_trap_pop (display) == BadWindow))
       {
 	g_warning ("Connection to display %s appears to be untrusted. Pointer and keyboard grabs and inter-client communication may not work as expected.", gdk_display_get_name (display));
 	display_x11->trusted_client = FALSE;
@@ -2144,14 +2144,14 @@ gdk_x11_display_store_clipboard (GdkDisplay    *display,
   clipboard_manager = gdk_x11_get_xatom_by_name_for_display (display, "CLIPBOARD_MANAGER");
   save_targets = gdk_x11_get_xatom_by_name_for_display (display, "SAVE_TARGETS");
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
 
   if (XGetSelectionOwner (display_x11->xdisplay, clipboard_manager) != None)
     {
       Atom property_name = None;
       Atom *xatoms;
       int i;
-      
+
       if (n_targets > 0)
 	{
 	  property_name = gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property);
@@ -2166,13 +2166,13 @@ gdk_x11_display_store_clipboard (GdkDisplay    *display,
 	  g_free (xatoms);
 
 	}
-      
+
       XConvertSelection (display_x11->xdisplay,
-			 clipboard_manager, save_targets, property_name,
-			 GDK_WINDOW_XID (clipboard_window), time_);
-      
+                         clipboard_manager, save_targets, property_name,
+                         GDK_WINDOW_XID (clipboard_window), time_);
+
     }
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 
 }
 

@@ -488,12 +488,12 @@ _gdk_send_xevent (GdkDisplay *display,
   if (gdk_display_is_closed (display))
     return FALSE;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window, 
 		       propagate, event_mask, event_send);
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
   
-  if (gdk_error_trap_pop ())
+  if (gdk_x11_display_error_trap_pop (display))
     return FALSE;
  
   return result;

@@ -147,7 +147,7 @@ gdk_test_simulate_key (GdkWindow      *window,
   g_free (keys);
   if (!success)
     return FALSE;
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (GDK_WINDOW_DISPLAY (window));
   xev.same_screen = XTranslateCoordinates (xev.display, xev.window, xev.root,
                                            xev.x, xev.y, &xev.x_root, &xev.y_root,
                                            &xev.subwindow);
@@ -158,7 +158,7 @@ gdk_test_simulate_key (GdkWindow      *window,
     success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
   success &= 0 != XSendEvent (xev.display, xev.window, True, key_pressrelease == GDK_KEY_PRESS ? KeyPressMask : KeyReleaseMask, (XEvent*) &xev);
   XSync (xev.display, False);
-  success &= 0 == gdk_error_trap_pop();
+  success &= 0 == gdk_x11_display_error_trap_pop (GDK_WINDOW_DISPLAY (window));
   return success;
 }
 
@@ -235,7 +235,7 @@ gdk_test_simulate_button (GdkWindow      *window,
   xev.y_root = 0;
   xev.state = modifiers;
   xev.button = button;
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (GDK_WINDOW_DISPLAY (window));
   xev.same_screen = XTranslateCoordinates (xev.display, xev.window, xev.root,
                                            xev.x, xev.y, &xev.x_root, &xev.y_root,
                                            &xev.subwindow);
@@ -245,6 +245,6 @@ gdk_test_simulate_button (GdkWindow      *window,
   success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
   success &= 0 != XSendEvent (xev.display, xev.window, True, button_pressrelease == GDK_BUTTON_PRESS ? ButtonPressMask : ButtonReleaseMask, (XEvent*) &xev);
   XSync (xev.display, False);
-  success &= 0 == gdk_error_trap_pop();
+  success &= 0 == gdk_x11_display_error_trap_pop(GDK_WINDOW_DISPLAY (window));
   return success;
 }

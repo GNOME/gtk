@@ -2620,7 +2620,7 @@ gdk_x11_window_get_root_origin (GdkWindow *window,
 
 static void
 gdk_x11_window_get_frame_extents (GdkWindow    *window,
-				  GdkRectangle *rect)
+                                  GdkRectangle *rect)
 {
   GdkDisplay *display;
   GdkWindowImplX11 *impl;
@@ -2641,14 +2641,14 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   guint ww, wh, wb, wd;
   gint wx, wy;
   gboolean got_frame_extents = FALSE;
-  
+
   g_return_if_fail (rect != NULL);
-  
+
   rect->x = 0;
   rect->y = 0;
   rect->width = 1;
   rect->height = 1;
-  
+
   while (window->parent && (window->parent)->parent)
     window = window->parent;
 
@@ -2665,18 +2665,19 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   nvroots = 0;
   vroots = NULL;
 
-  gdk_error_trap_push();
-  
   display = gdk_window_get_display (window);
+
+  gdk_x11_display_error_trap_push (display);
+
   xwindow = GDK_WINDOW_XID (window);
 
   /* first try: use _NET_FRAME_EXTENTS */
   if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY (display), xwindow,
-			  gdk_x11_get_xatom_by_name_for_display (display,
-								 "_NET_FRAME_EXTENTS"),
-			  0, G_MAXLONG, False, XA_CARDINAL, &type_return,
-			  &format_return, &nitems_return, &bytes_after_return,
-			  &data)
+                          gdk_x11_get_xatom_by_name_for_display (display,
+                                                                  "_NET_FRAME_EXTENTS"),
+                          0, G_MAXLONG, False, XA_CARDINAL, &type_return,
+                          &format_return, &nitems_return, &bytes_after_return,
+                          &data)
       == Success)
     {
       if ((type_return == XA_CARDINAL) && (format_return == 32) &&
@@ -2758,8 +2759,8 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
 	}
     }
   while (xparent != root);
-  
-  if (XGetGeometry (GDK_DISPLAY_XDISPLAY (display), xwindow, 
+
+  if (XGetGeometry (GDK_DISPLAY_XDISPLAY (display), xwindow,
 		    &root, &wx, &wy, &ww, &wh, &wb, &wd))
     {
       rect->x = wx;
@@ -2772,7 +2773,7 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   if (vroots)
     XFree (vroots);
 
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
 }
 
 static gboolean
