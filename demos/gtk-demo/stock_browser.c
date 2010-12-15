@@ -166,9 +166,9 @@ create_model (void)
             }
           g_free (sizes);
           
-          info.small_icon = gtk_widget_render_icon (window, info.id,
-                                                    size,
-                                                    NULL);
+          info.small_icon = gtk_widget_render_icon_pixbuf (window, 
+                                                           info.id,
+                                                           size);
           
           if (size != GTK_ICON_SIZE_MENU)
             {
