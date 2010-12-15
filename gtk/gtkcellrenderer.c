@@ -698,6 +698,9 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
       cairo_fill (cr);
     }
 
+  gdk_cairo_rectangle (cr, background_area);
+  cairo_clip (cr);
+
   GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,
                                               cr,
 					      widget,

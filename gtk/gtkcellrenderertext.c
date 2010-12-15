@@ -1833,6 +1833,11 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   else if (priv->wrap_width == -1)
     pango_layout_set_width (layout, -1);
 
+  cairo_save (cr);
+
+  gdk_cairo_rectangle (cr, cell_area);
+  cairo_clip (cr);
+
   gtk_paint_layout (gtk_widget_get_style (widget),
                           cr,
                           state,
@@ -1842,6 +1847,8 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
                           cell_area->x + x_offset + xpad,
                           cell_area->y + y_offset + ypad,
                           layout);
+
+  cairo_restore (cr);
 
   g_object_unref (layout);
 }
