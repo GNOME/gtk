@@ -1056,9 +1056,20 @@ render_cell (GtkCellRenderer        *renderer,
 	(renderer == focus_cell || 
 	 gtk_cell_area_is_focus_sibling (data->area, focus_cell, renderer)))))
     {
+      gint focus_line_width;
       GdkRectangle cell_focus;
 
       gtk_cell_renderer_get_aligned_area (renderer, data->widget, flags, &inner_area, &cell_focus);
+
+      gtk_widget_style_get (data->widget,
+                            "focus-line-width", &focus_line_width,
+                            NULL);
+
+      /* The focus rectangle is located around the aligned area of the cell */
+      cell_focus.x -= focus_line_width;
+      cell_focus.y -= focus_line_width;
+      cell_focus.width += 2 * focus_line_width;
+      cell_focus.height += 2 * focus_line_width;
 
       if (data->first_focus)
 	{
