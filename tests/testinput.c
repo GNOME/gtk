@@ -119,26 +119,27 @@ static void
 draw_brush (GtkWidget *widget, GdkInputSource source,
 	    gdouble x, gdouble y, gdouble pressure)
 {
-  GtkStyle *style;
-  GdkColor color;
+  GdkRGBA color;
   GdkRectangle update_rect;
   cairo_t *cr;
 
-  style = gtk_widget_get_style (widget);
+  color.alpha = 1.0;
 
   switch (source)
     {
     case GDK_SOURCE_MOUSE:
-      color = style->dark[gtk_widget_get_state (widget)];
+      color.red = color.green = 0.0;
+      color.blue = 1.0;
       break;
     case GDK_SOURCE_PEN:
-      color.red = color.green = color.blue = 0;
+      color.red = color.green = color.blue = 0.0;
       break;
     case GDK_SOURCE_ERASER:
-      color.red = color.green = color.blue = 65535;
+      color.red = color.green = color.blue = 1.0;
       break;
     default:
-      color = style->light[gtk_widget_get_state (widget)];
+      color.red = color.blue = 0.0;
+      color.green = 1.0;
     }
 
   update_rect.x = x - 10 * pressure;
@@ -147,7 +148,7 @@ draw_brush (GtkWidget *widget, GdkInputSource source,
   update_rect.height = 20 * pressure;
 
   cr = cairo_create (surface);
-  gdk_cairo_set_source_color (cr, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   gdk_cairo_rectangle (cr, &update_rect);
   cairo_fill (cr);
   cairo_destroy (cr);
