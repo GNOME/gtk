@@ -735,14 +735,14 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	  _gdk_window_update_size (window);
 	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
 
-	  if (window->resize_count >= 1)
-	    {
-	      window->resize_count -= 1;
+          if (window->resize_count >= 1)
+            {
+              window->resize_count -= 1;
 
-	      if (window->resize_count == 0)
-		_gdk_moveresize_configure_done (display, window);
-	    }
-	}
+              if (window->resize_count == 0)
+                _gdk_x11_moveresize_configure_done (display, window);
+            }
+        }
       break;
 
     case PropertyNotify:

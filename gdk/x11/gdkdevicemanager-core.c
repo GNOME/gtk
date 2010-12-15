@@ -452,8 +452,8 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
       (xevent->type == MotionNotify ||
        xevent->type == ButtonRelease))
     {
-      if (_gdk_moveresize_handle_event (xevent))
-	{
+      if (_gdk_x11_moveresize_handle_event (xevent))
+        {
           return_val = FALSE;
           goto done;
         }

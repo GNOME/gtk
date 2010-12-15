@@ -4150,22 +4150,22 @@ moveresize_lookahead (MoveResizeData *mv_resize,
   if (mv_resize->moveresize_process_time)
     {
       if (event->xmotion.time == mv_resize->moveresize_process_time)
-	{
-	  mv_resize->moveresize_process_time = 0;
-	  return TRUE;
-	}
+        {
+          mv_resize->moveresize_process_time = 0;
+          return TRUE;
+        }
       else
-	return FALSE;
+        return FALSE;
     }
 
   XCheckIfEvent (event->xany.display, &tmp_event,
-		 lookahead_motion_predicate, (XPointer) & seen_release);
+                 lookahead_motion_predicate, (XPointer) & seen_release);
 
   return mv_resize->moveresize_process_time == 0;
 }
-	
+
 gboolean
-_gdk_moveresize_handle_event (XEvent *event)
+_gdk_x11_moveresize_handle_event (XEvent *event)
 {
   guint button_mask = 0;
   GdkDisplay *display = gdk_x11_lookup_xdisplay (event->xany.display);
@@ -4180,21 +4180,21 @@ _gdk_moveresize_handle_event (XEvent *event)
     {
     case MotionNotify:
       if (mv_resize->moveresize_window->resize_count > 0)
-	{
-	  if (mv_resize->moveresize_pending_event)
-	    *mv_resize->moveresize_pending_event = *event;
-	  else
-	    mv_resize->moveresize_pending_event =
-	      g_memdup (event, sizeof (XEvent));
+        {
+          if (mv_resize->moveresize_pending_event)
+            *mv_resize->moveresize_pending_event = *event;
+          else
+            mv_resize->moveresize_pending_event =
+              g_memdup (event, sizeof (XEvent));
 
-	  break;
-	}
+          break;
+        }
       if (!moveresize_lookahead (mv_resize, event))
-	break;
+        break;
 
       update_pos (mv_resize,
-		  event->xmotion.x_root,
-		  event->xmotion.y_root);
+                  event->xmotion.x_root,
+                  event->xmotion.y_root);
 
       /* This should never be triggered in normal cases, but in the
        * case where the drag started without an implicit grab being
@@ -4203,28 +4203,28 @@ _gdk_moveresize_handle_event (XEvent *event)
        * get a permanently stuck grab.
        */
       if ((event->xmotion.state & button_mask) == 0)
-	finish_drag (mv_resize);
+        finish_drag (mv_resize);
       break;
 
     case ButtonRelease:
       update_pos (mv_resize,
-		  event->xbutton.x_root,
-		  event->xbutton.y_root);
+                  event->xbutton.x_root,
+                  event->xbutton.y_root);
 
       if (event->xbutton.button == mv_resize->moveresize_button)
-	finish_drag (mv_resize);
+        finish_drag (mv_resize);
       break;
     }
   return TRUE;
 }
 
-gboolean 
-_gdk_moveresize_configure_done (GdkDisplay *display,
-				GdkWindow  *window)
+gboolean
+_gdk_x11_moveresize_configure_done (GdkDisplay *display,
+                                    GdkWindow  *window)
 {
   XEvent *tmp_event;
   MoveResizeData *mv_resize = get_move_resize_data (display, FALSE);
-  
+
   if (!mv_resize || window != mv_resize->moveresize_window)
     return FALSE;
 
@@ -4232,16 +4232,16 @@ _gdk_moveresize_configure_done (GdkDisplay *display,
     {
       tmp_event = mv_resize->moveresize_pending_event;
       mv_resize->moveresize_pending_event = NULL;
-      _gdk_moveresize_handle_event (tmp_event);
+      _gdk_x11_moveresize_handle_event (tmp_event);
       g_free (tmp_event);
     }
-  
+
   return TRUE;
 }
 
 static void
 create_moveresize_window (MoveResizeData *mv_resize,
-			  guint32         timestamp)
+                          guint32         timestamp)
 {
   GdkWindowAttr attributes;
   gint attributes_mask;

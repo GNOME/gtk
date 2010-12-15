@@ -119,9 +119,9 @@ void     _gdk_x11_region_get_xrectangles   (const cairo_region_t  *region,
                                             XRectangle           **rects,
                                             gint                  *n_rects);
 
-gboolean _gdk_moveresize_handle_event   (XEvent     *event);
-gboolean _gdk_moveresize_configure_done (GdkDisplay *display,
-					 GdkWindow  *window);
+gboolean _gdk_x11_moveresize_handle_event   (XEvent     *event);
+gboolean _gdk_x11_moveresize_configure_done (GdkDisplay *display,
+                                             GdkWindow  *window);
 
 void _gdk_keymap_state_changed    (GdkDisplay      *display,
 				   XEvent          *event);

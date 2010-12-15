@@ -974,7 +974,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   if (ev->evtype == XI_Motion ||
       ev->evtype == XI_ButtonRelease)
     {
-      if (_gdk_moveresize_handle_event (xevent))
+      if (_gdk_x11_moveresize_handle_event (xevent))
         {
           XFreeEventData (dpy, cookie);
           return FALSE;
