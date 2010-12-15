@@ -486,20 +486,6 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
   return NULL;
 }
 
-/**
- * gdkx_visual_get:
- * @xvisualid: a X visual id.
- *
- * Returns a #GdkVisual corresponding to a X visual.
- *
- * Return value: the #GdkVisual.
- **/
-GdkVisual*
-gdkx_visual_get (VisualID xvisualid)
-{
-  return gdk_x11_screen_lookup_visual (gdk_screen_get_default (), xvisualid);
-}
-
 static void
 gdk_visual_add (GdkVisual *visual)
 {

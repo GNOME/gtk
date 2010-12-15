@@ -180,10 +180,7 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
 GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
-					 VisualID   xvisualid);
-#ifndef GDK_MULTIHEAD_SAFE
-GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
-#endif
+                                         VisualID   xvisualid);
 
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
