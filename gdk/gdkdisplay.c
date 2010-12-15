@@ -2502,3 +2502,18 @@ gdk_display_notify_startup_complete (GdkDisplay  *display,
 {
   GDK_DISPLAY_GET_CLASS (display)->notify_startup_complete (display, startup_id);
 }
+
+void
+_gdk_display_event_data_copy (GdkDisplay     *display,
+                              const GdkEvent *event,
+                              GdkEvent       *new_event)
+{
+  GDK_DISPLAY_GET_CLASS (display)->event_data_copy (display, event, new_event);
+}
+
+void
+_gdk_display_event_data_free (GdkDisplay *display,
+                              GdkEvent   *event)
+{
+  GDK_DISPLAY_GET_CLASS (display)->event_data_free (display, event);
+}

@@ -595,14 +595,3 @@ gdk_x11_get_default_xdisplay (void)
 {
   return GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
 }
-
-void
-_gdk_windowing_event_data_copy (const GdkEvent *src,
-                                GdkEvent       *dst)
-{
-}
-
-void
-_gdk_windowing_event_data_free (GdkEvent *event)
-{
-}

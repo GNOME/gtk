@@ -2668,6 +2668,19 @@ gdk_x11_set_sm_client_id (const gchar *sm_client_id)
 }
 
 static void
+gdk_x11_display_event_data_copy (GdkDisplay    *display,
+                                const GdkEvent *src,
+                                GdkEvent       *dst)
+{
+}
+
+static void
+gdk_x11_display_event_data_free (GdkDisplay *display,
+                                 GdkEvent *event)
+{
+}
+
+static void
 _gdk_display_x11_class_init (GdkDisplayX11Class * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -2710,5 +2723,7 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->after_process_all_updates = _gdk_x11_display_after_process_all_updates;
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
+  display_class->event_data_copy = gdk_x11_display_event_data_copy;
+  display_class->event_data_free = gdk_x11_display_event_data_free;
 }
 

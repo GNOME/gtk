@@ -177,6 +177,11 @@ struct _GdkDisplayClass
 
   void                       (*notify_startup_complete) (GdkDisplay  *display,
                                                          const gchar *startup_id);
+  void                       (*event_data_copy) (GdkDisplay     *display,
+                                                 const GdkEvent *event,
+                                                 GdkEvent       *new_event);
+  void                       (*event_data_free) (GdkDisplay     *display,
+                                                 GdkEvent       *event);
 
   /* Signals */
   void (*closed) (GdkDisplay *display,
@@ -224,6 +229,11 @@ void                _gdk_display_pointer_info_foreach (GdkDisplay       *display
                                                        GdkDisplayPointerInfoForeach func,
                                                        gpointer          user_data);
 gulong              _gdk_display_get_next_serial      (GdkDisplay       *display);
+void                _gdk_display_event_data_copy      (GdkDisplay       *display,
+                                                       const GdkEvent   *event,
+                                                       GdkEvent         *new_event);
+void                _gdk_display_event_data_free      (GdkDisplay       *display,
+                                                       GdkEvent         *event);
 
 G_END_DECLS
 
