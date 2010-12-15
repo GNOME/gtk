@@ -234,9 +234,9 @@ add_or_find_application (GtkAppChooserDialog *self)
   app = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self));
 
   /* we don't care about reporting errors here */
-  g_app_info_add_supports_type (app,
-                                self->priv->content_type,
-                                NULL);
+  g_app_info_set_as_last_used_for_type (app,
+                                        self->priv->content_type,
+                                        NULL);
 
   g_object_unref (app);
 }
