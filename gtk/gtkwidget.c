@@ -9488,6 +9488,8 @@ gtk_reset_shapes_recurse (GtkWidget *widget,
  * @widget: a #GtkWidget
  *
  * Recursively resets the shape on this widget and its descendants.
+ *
+ * Deprecated: This function is being removed in GTK+ 3.0. Don't use it.
  **/
 void
 gtk_widget_reset_shapes (GtkWidget *widget)

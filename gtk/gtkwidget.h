@@ -1268,8 +1268,10 @@ void	     gtk_widget_input_shape_combine_mask (GtkWidget *widget,
 						  gint       offset_x,
 						  gint       offset_y);
 
+#if !defined(GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /* internal function */
 void	     gtk_widget_reset_shapes	   (GtkWidget *widget);
+#endif
 
 /* Compute a widget's path in the form "GtkWindow.MyLabel", and
  * return newly alocated strings.
