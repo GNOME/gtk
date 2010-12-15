@@ -241,10 +241,10 @@ gdk_selection_convert (GdkWindow *requestor,
   display = GDK_WINDOW_DISPLAY (requestor);
 
   XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
-		     gdk_x11_atom_to_xatom_for_display (display, selection),
-		     gdk_x11_atom_to_xatom_for_display (display, target),
-		     gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property), 
-		     GDK_WINDOW_XID (requestor), time);
+                     gdk_x11_atom_to_xatom_for_display (display, selection),
+                     gdk_x11_atom_to_xatom_for_display (display, target),
+                     gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION"),
+                     GDK_WINDOW_XID (requestor), time);
 }
 
 /**
@@ -297,11 +297,11 @@ gdk_selection_property_get (GdkWindow  *requestor,
      notified of PropertyChange events _before_ the property is deleted.
      Otherwise there's no guarantee we'll win the race ... */
   if (XGetWindowProperty (GDK_WINDOW_XDISPLAY (requestor),
-			  GDK_WINDOW_XID (requestor),
-			  gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property),
-			  0, 0x1FFFFFFF /* MAXINT32 / 4 */, False, 
-			  AnyPropertyType, &prop_type, &prop_format,
-			  &nitems, &nbytes, &t) != Success)
+                          GDK_WINDOW_XID (requestor),
+                          gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION"),
+                          0, 0x1FFFFFFF /* MAXINT32 / 4 */, False,
+                          AnyPropertyType, &prop_type, &prop_format,
+                          &nitems, &nbytes, &t) != Success)
     goto err;
     
   if (prop_type != None)

@@ -154,7 +154,8 @@ static const char *const precache_atoms[] = {
   "_NET_WM_WINDOW_TYPE",
   "_NET_WM_WINDOW_TYPE_NORMAL",
   "_NET_WM_USER_TIME",
-  "_NET_VIRTUAL_ROOTS"
+  "_NET_VIRTUAL_ROOTS",
+  "GDK_SELECTION"
 };
 
 static char *gdk_sm_client_id;
@@ -2153,8 +2154,8 @@ gdk_x11_display_store_clipboard (GdkDisplay    *display,
       int i;
 
       if (n_targets > 0)
-	{
-	  property_name = gdk_x11_atom_to_xatom_for_display (display, _gdk_selection_property);
+        {
+          property_name = gdk_x11_get_xatom_by_name_for_display (display, "GDK_SELECTION");
 
 	  xatoms = g_new (Atom, n_targets);
 	  for (i = 0; i < n_targets; i++)

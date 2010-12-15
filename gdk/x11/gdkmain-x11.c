@@ -102,8 +102,6 @@ _gdk_x11_windowing_init (void)
   g_queue_init (&gdk_error_traps);
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
-
-  _gdk_selection_property = gdk_atom_intern_static_string ("GDK_SELECTION");
 }
 
 GdkGrabStatus
