@@ -111,9 +111,9 @@ on_notebook_drag_begin (GtkWidget      *widget,
 
   if (page_num > 2)
     {
-      pixbuf = gtk_widget_render_icon (widget,
-  				   (page_num % 2) ? GTK_STOCK_HELP : GTK_STOCK_STOP,
-				   GTK_ICON_SIZE_DND, NULL);
+      pixbuf = gtk_widget_render_icon_pixbuf (widget,
+  				              (page_num % 2) ? GTK_STOCK_HELP : GTK_STOCK_STOP,
+				              GTK_ICON_SIZE_DND);
 
       gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
       g_object_unref (pixbuf);
