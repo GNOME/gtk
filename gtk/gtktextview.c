@@ -6924,7 +6924,7 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
         {
           /* Extract the selected text */
           str = gtk_text_buffer_serialize (buffer, buffer,
-                                           selection_data->target,
+                                           gtk_selection_data_get_target (selection_data),
                                            &start, &end,
                                            &len);
         }
@@ -6932,7 +6932,7 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
       if (str)
         {
           gtk_selection_data_set (selection_data,
-                                  selection_data->target,
+                                  gtk_selection_data_get_target (selection_data),
                                   8, /* bytes */
                                   (guchar *) str, len);
           g_free (str);
@@ -7188,10 +7188,10 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
       GtkTextIter start, end;
       gboolean copy_tags = TRUE;
 
-      if (selection_data->length != sizeof (src_buffer))
+      if (gtk_selection_data_get_length (selection_data) != sizeof (src_buffer))
         return;
 
-      memcpy (&src_buffer, selection_data->data, sizeof (src_buffer));
+      memcpy (&src_buffer, gtk_selection_data_get_data (selection_data), sizeof (src_buffer));
 
       if (src_buffer == NULL)
         return;
@@ -7255,17 +7255,17 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
             }
         }
     }
-  else if (selection_data->length > 0 &&
+  else if (gtk_selection_data_get_length (selection_data) > 0 &&
            info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
     {
       gboolean retval;
       GError *error = NULL;
 
       retval = gtk_text_buffer_deserialize (buffer, buffer,
-                                            selection_data->target,
+                                            gtk_selection_data_get_target (selection_data),
                                             &drop_point,
-                                            (guint8 *) selection_data->data,
-                                            selection_data->length,
+                                            (guint8 *) gtk_selection_data_get_data (selection_data),
+                                            gtk_selection_data_get_length (selection_data),
                                             &error);
 
       if (!retval)
