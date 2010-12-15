@@ -60,12 +60,16 @@ gtk+-x11-3.0.pc gtk+-win32-3.0.pc gtk+-quartz-3.0.pc: gtk+-3.0.pc
 	rm -f $@ && \
 	cp gtk+-3.0.pc $@
 
+gdk-x11-3.0.pc gdk-win32-3.0.pc gdk-quartz-3.0.pc: gdk-3.0.pc
+	rm -f $@ && \
+	cp gdk-3.0.pc $@
+
 gtk+-*-3.0-uninstalled.pc: gtk+-3.0-uninstalled.pc
 	rm -f $@ && \
 	cp gtk+-3.0-uninstalled.pc $@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gtk+-3.0.pc gail-3.0.pc
+pkgconfig_DATA = gdk-3.0.pc gtk+-3.0.pc gail-3.0.pc
 
 pkgconfig_DATA += $(patsubst %,gtk+-%-3.0.pc,@gdktarget@)
 

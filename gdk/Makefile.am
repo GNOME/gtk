@@ -159,10 +159,6 @@ libgdk_3_0_la_SOURCES = $(common_sources)
 libgdk_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
 libgdk_3_0_la_LDFLAGS = $(LDADD)
 
-libgdk_x11_3_0_la_SOURCES = $(common_sources)
-libgdk_x11_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
-libgdk_x11_3_0_la_LDFLAGS = $(LDADD)
-
 libgdk_quartz_3_0_la_SOURCES = $(common_sources) gdkkeynames.c
 libgdk_quartz_3_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS)
 libgdk_quartz_3_0_la_LDFLAGS = $(LDADD)
@@ -284,8 +280,7 @@ if OS_LINUX
 TESTS = abicheck.sh
 endif
 
-
-noinst_LTLIBRARIES = libgdk-3.0.la
+lib_LTLIBRARIES = libgdk-3.0.la
 
 MAINTAINERCLEANFILES = $(gdk_built_sources) stamp-gdkenumtypes.h
 EXTRA_DIST += $(gdk_built_sources)

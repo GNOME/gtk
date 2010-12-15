@@ -1560,6 +1560,7 @@ AC_CONFIG_FILES([
 config.h.win32
 gtk-zip.sh
 Makefile
+gdk-3.0.pc
 gtk+-3.0.pc
 gtk+-unix-print-3.0.pc
 gail-3.0.pc
