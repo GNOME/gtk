@@ -209,7 +209,6 @@
 #include <gtk/gtktooltip.h>
 #include <gtk/gtktestutils.h>
 #include <gtk/gtktreednd.h>
-#include <gtk/gtktreemenu.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreemodelfilter.h>
 #include <gtk/gtktreemodelsort.h>

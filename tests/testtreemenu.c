@@ -5,6 +5,8 @@
 /*******************************************************
  *                       Grid Test                     *
  *******************************************************/
+
+#if _GTK_TREE_MENU_WAS_A_PUBLIC_CLASS_
 static GdkPixbuf *
 create_color_pixbuf (const char *color)
 {
@@ -126,6 +128,7 @@ create_menu_grid_demo (void)
   
   return menu;
 }
+#endif
 
 /*******************************************************
  *                      Simple Test                    *
@@ -273,21 +276,13 @@ simple_tree_model (void)
   return (GtkTreeModel *)store;
 }
 
-static GtkWidget *
-simple_tree_menu (void)
+static GtkCellArea *
+create_cell_area (void)
 {
-  GtkTreeModel *model;
-  GtkWidget *menu;
   GtkCellArea *area;
   GtkCellRenderer *renderer;
 
-  model = simple_tree_model ();
-
-  menu = gtk_tree_menu_new ();
-  gtk_tree_menu_set_model (GTK_TREE_MENU (menu), model);
-  gtk_tree_menu_set_root (GTK_TREE_MENU (menu), NULL);
-
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (menu));
+  area = gtk_cell_area_box_new ();
 
   cell_1 = renderer = gtk_cell_renderer_text_new ();
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, FALSE);
@@ -306,8 +301,24 @@ simple_tree_menu (void)
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
   gtk_cell_area_attribute_connect (area, renderer, "text", SIMPLE_COLUMN_DESCRIPTION);
 
+  return area;
+}
+
+#if _GTK_TREE_MENU_WAS_A_PUBLIC_CLASS_
+static GtkWidget *
+simple_tree_menu (GtkCellArea *area)
+{
+  GtkTreeModel *model;
+  GtkWidget *menu;
+
+  model = simple_tree_model ();
+
+  menu = gtk_tree_menu_new_with_area (area);
+  gtk_tree_menu_set_model (GTK_TREE_MENU (menu), model);
+
   return menu;
 }
+#endif
 
 static void
 orientation_changed (GtkComboBox  *combo,
@@ -363,6 +374,16 @@ expand_cell_3_toggled (GtkToggleButton  *toggle,
   gtk_cell_area_cell_set (area, cell_3, "expand", expand, NULL);
 }
 
+gboolean 
+enable_submenu_headers (GtkTreeModel      *model,
+			GtkTreeIter       *iter,
+			gpointer           data)
+{
+  return TRUE;
+}
+
+
+#if _GTK_TREE_MENU_WAS_A_PUBLIC_CLASS_
 static void
 menu_activated_cb (GtkTreeMenu *menu,
 		   const gchar *path,
@@ -382,15 +403,6 @@ menu_activated_cb (GtkTreeMenu *menu,
   g_free (row_name);
 }
 
-gboolean 
-enable_submenu_headers (GtkTreeModel      *model,
-			GtkTreeIter       *iter,
-			gpointer           data)
-{
-  return TRUE;
-}
-
-
 static void
 submenu_headers_toggled (GtkToggleButton  *toggle,
 			 GtkTreeMenu      *menu)
@@ -407,6 +419,7 @@ tearoff_toggled (GtkToggleButton *toggle,
 {
   gtk_tree_menu_set_tearoff (menu, gtk_toggle_button_get_active (toggle));
 }
+#endif
 
 static void
 tree_menu (void)
@@ -414,6 +427,7 @@ tree_menu (void)
   GtkWidget *window, *widget;
   GtkWidget *menu, *menubar, *vbox, *menuitem;
   GtkCellArea *area;
+  GtkTreeModel *store;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
@@ -425,6 +439,10 @@ tree_menu (void)
   menubar = gtk_menu_bar_new ();
   gtk_widget_show (menubar);
 
+  store = simple_tree_model ();
+  area  = create_cell_area ();
+
+#if _GTK_TREE_MENU_WAS_A_PUBLIC_CLASS_
   menuitem = gtk_menu_item_new_with_label ("Grid");
   menu = create_menu_grid_demo ();
   gtk_widget_show (menu);
@@ -442,13 +460,11 @@ tree_menu (void)
   g_signal_connect (menu, "menu-activate", G_CALLBACK (menu_activated_cb), NULL);
 
   gtk_box_pack_start (GTK_BOX (vbox), menubar, FALSE, FALSE, 0);
+#endif
 
   /* Add a combo box with the same menu ! */
-  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (menu));
-  widget = g_object_new (GTK_TYPE_COMBO_BOX, 
-			 "cell-area", area,
-			 "model", gtk_tree_menu_get_model (GTK_TREE_MENU (menu)),
-			 NULL);
+  widget = gtk_combo_box_new_with_area (area);
+  gtk_combo_box_set_model (GTK_COMBO_BOX (widget), store);
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
   gtk_widget_show (widget);
   gtk_box_pack_end (GTK_BOX (vbox), widget, FALSE, FALSE, 0);
@@ -504,6 +520,7 @@ tree_menu (void)
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (expand_cell_3_toggled), area);
 
+#if _GTK_TREE_MENU_WAS_A_PUBLIC_CLASS_
   widget = gtk_check_button_new_with_label ("Submenu Headers");
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), FALSE);
   gtk_widget_show (widget);
@@ -519,6 +536,7 @@ tree_menu (void)
   
   g_signal_connect (G_OBJECT (widget), "toggled",
                     G_CALLBACK (tearoff_toggled), menu);
+#endif
 
   gtk_container_add (GTK_CONTAINER (window), vbox);
 

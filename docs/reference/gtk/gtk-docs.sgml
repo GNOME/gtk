@@ -173,7 +173,6 @@
       <xi:include href="xml/gtkcombobox.xml" />
       <xi:include href="xml/gtkcomboboxtext.xml" />
       <xi:include href="xml/gtkmenu.xml" />
-      <xi:include href="xml/gtktreemenu.xml" />
       <xi:include href="xml/gtkmenubar.xml" />
       <xi:include href="xml/gtkmenuitem.xml" />
       <xi:include href="xml/gtkimagemenuitem.xml" />

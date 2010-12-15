@@ -40,11 +40,12 @@
  * and #GtkCellAreaContext. A #GtkCellAreaContext can be provided to the 
  * #GtkCellView at construction time in order to keep the cellview in context
  * of a group of cell views, this ensures that the renderers displayed will
- * be properly aligned with eachother (like the aligned cells of #GtkTreeMenu).
+ * be properly aligned with eachother (like the aligned cells in the menus
+ * of #GtkComboBox).
  *
  * #GtkCellView is #GtkOrientable in order to decide in which orientation
- * the underlying #GtkCellAreaContext should be allocated. Taking the #GtkTreeMenu
- * as an example, cellviews should be oriented horizontally if the menus are
+ * the underlying #GtkCellAreaContext should be allocated. Taking the #GtkComboBox
+ * menu as an example, cellviews should be oriented horizontally if the menus are
  * listed top-to-bottom and thus all share the same width but may have separate
  * individual heights (left-to-right menus should be allocated vertically since
  * they all share the same height but may have variable widths).
@@ -251,7 +252,7 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
    * ensure the sizes and cell alignments match across all the views with
    * the same context.
    *
-   * #GtkTreeMenu uses this to assign the same context to all cell views
+   * #GtkComboBox menus uses this to assign the same context to all cell views
    * in the menu items for a single menu (each submenu creates it's own
    * context since the size of each submenu does not depend on parent
    * or sibling menus).
@@ -1324,7 +1325,7 @@ gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
  * @draw_sensitive: whether to draw all cells in a sensitive state.
  *
  * Sets whether @cell_view should draw all of it's
- * cells in a sensitive state, this is used by #GtkTreeMenu
+ * cells in a sensitive state, this is used by #GtkComboBox menus
  * to ensure that rows with insensitive cells that contain
  * children appear sensitive in the parent menu item.
  *

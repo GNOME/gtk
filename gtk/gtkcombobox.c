@@ -2989,28 +2989,28 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box,
 		    combo_box);
 
   /* create our funky menu */
-  menu = gtk_tree_menu_new_with_area (priv->area);
+  menu = _gtk_tree_menu_new_with_area (priv->area);
   gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
 
-  gtk_tree_menu_set_model (GTK_TREE_MENU (menu), priv->model);
+  _gtk_tree_menu_set_model (GTK_TREE_MENU (menu), priv->model);
 
-  gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (menu), priv->wrap_width);
-  gtk_tree_menu_set_row_span_column (GTK_TREE_MENU (menu), priv->row_column);
-  gtk_tree_menu_set_column_span_column (GTK_TREE_MENU (menu), priv->col_column);
-  gtk_tree_menu_set_tearoff (GTK_TREE_MENU (menu), 
-			     combo_box->priv->add_tearoffs);
+  _gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (menu), priv->wrap_width);
+  _gtk_tree_menu_set_row_span_column (GTK_TREE_MENU (menu), priv->row_column);
+  _gtk_tree_menu_set_column_span_column (GTK_TREE_MENU (menu), priv->col_column);
+  _gtk_tree_menu_set_tearoff (GTK_TREE_MENU (menu), 
+			      combo_box->priv->add_tearoffs);
 
   g_signal_connect (menu, "menu-activate",
 		    G_CALLBACK (gtk_combo_box_menu_activate), combo_box);
 
   /* Chain our row_separator_func through */
-  gtk_tree_menu_set_row_separator_func (GTK_TREE_MENU (menu),
-					(GtkTreeViewRowSeparatorFunc)gtk_combo_box_row_separator_func,
-					combo_box, NULL);
+  _gtk_tree_menu_set_row_separator_func (GTK_TREE_MENU (menu),
+					 (GtkTreeViewRowSeparatorFunc)gtk_combo_box_row_separator_func,
+					 combo_box, NULL);
 
-  gtk_tree_menu_set_header_func (GTK_TREE_MENU (menu),
-				 (GtkTreeMenuHeaderFunc)gtk_combo_box_header_func,
-				 combo_box, NULL);
+  _gtk_tree_menu_set_header_func (GTK_TREE_MENU (menu),
+				  (GtkTreeMenuHeaderFunc)gtk_combo_box_header_func,
+				  combo_box, NULL);
 
   gtk_widget_set_name (menu, "gtk-combobox-popup-menu");
   
@@ -3916,7 +3916,7 @@ gtk_combo_box_set_wrap_width (GtkComboBox *combo_box,
       gtk_combo_box_check_appearance (combo_box);
 
       if (GTK_IS_TREE_MENU (priv->popup_widget))
-	gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (priv->popup_widget), priv->wrap_width);
+	_gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (priv->popup_widget), priv->wrap_width);
       
       g_object_notify (G_OBJECT (combo_box), "wrap-width");
     }
@@ -3970,7 +3970,7 @@ gtk_combo_box_set_row_span_column (GtkComboBox *combo_box,
       priv->row_column = row_span;
 
       if (GTK_IS_TREE_MENU (priv->popup_widget))
-	gtk_tree_menu_set_row_span_column (GTK_TREE_MENU (priv->popup_widget), priv->row_column);
+	_gtk_tree_menu_set_row_span_column (GTK_TREE_MENU (priv->popup_widget), priv->row_column);
 
       g_object_notify (G_OBJECT (combo_box), "row-span-column");
     }
@@ -4024,7 +4024,7 @@ gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
       priv->col_column = column_span;
 
       if (GTK_IS_TREE_MENU (priv->popup_widget))
-	gtk_tree_menu_set_column_span_column (GTK_TREE_MENU (priv->popup_widget), priv->col_column);
+	_gtk_tree_menu_set_column_span_column (GTK_TREE_MENU (priv->popup_widget), priv->col_column);
       
       g_object_notify (G_OBJECT (combo_box), "column-span-column");
     }
@@ -4296,8 +4296,8 @@ gtk_combo_box_set_model (GtkComboBox  *combo_box,
   if (GTK_IS_TREE_MENU (combo_box->priv->popup_widget))
     {
       /* menu mode */
-      gtk_tree_menu_set_model (GTK_TREE_MENU (combo_box->priv->popup_widget), 
-			       combo_box->priv->model);
+      _gtk_tree_menu_set_model (GTK_TREE_MENU (combo_box->priv->popup_widget), 
+				combo_box->priv->model);
     }
 
   if (combo_box->priv->cell_view)
@@ -4992,8 +4992,8 @@ gtk_combo_box_set_row_separator_func (GtkComboBox                 *combo_box,
 
   if (GTK_IS_TREE_MENU (combo_box->priv->popup_widget))
     {
-      gtk_tree_menu_set_model (GTK_TREE_MENU (combo_box->priv->popup_widget), NULL);
-      gtk_tree_menu_set_model (GTK_TREE_MENU (combo_box->priv->popup_widget), combo_box->priv->model);
+      _gtk_tree_menu_set_model (GTK_TREE_MENU (combo_box->priv->popup_widget), NULL);
+      _gtk_tree_menu_set_model (GTK_TREE_MENU (combo_box->priv->popup_widget), combo_box->priv->model);
     }
 
   gtk_widget_queue_draw (GTK_WIDGET (combo_box));

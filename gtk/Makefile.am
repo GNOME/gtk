@@ -325,7 +325,6 @@ gtk_public_h_sources = 		\
 	gtktoolshell.h		\
 	gtktooltip.h		\
 	gtktreednd.h		\
-	gtktreemenu.h		\
 	gtktreemodel.h		\
 	gtktreemodelfilter.h	\
 	gtktreemodelsort.h	\
@@ -434,6 +433,7 @@ gtk_private_h_sources =		\
 	gtktreeprivate.h	\
 	gtkwidgetprivate.h	\
 	gtkwindowprivate.h	\
+	gtktreemenu.h		\
 	$(gtk_clipboard_dnd_h_sources) \
 	$(gtk_appchooser_impl_h_sources)
 
