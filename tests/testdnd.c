@@ -377,13 +377,14 @@ target_drag_data_received  (GtkWidget          *widget,
 			    GdkDragContext     *context,
 			    gint                x,
 			    gint                y,
-			    GtkSelectionData   *data,
+			    GtkSelectionData   *selection_data,
 			    guint               info,
 			    guint               time)
 {
-  if ((data->length >= 0) && (data->format == 8))
+  if (gtk_selection_data_get_length (selection_data) >= 0 &&
+      gtk_selection_data_get_format (selection_data) == 8)
     {
-      g_print ("Received \"%s\" in trashcan\n", (gchar *)data->data);
+      g_print ("Received \"%s\" in trashcan\n", (gchar *) gtk_selection_data_get_data (selection_data));
       gtk_drag_finish (context, TRUE, FALSE, time);
       return;
     }
@@ -396,13 +397,14 @@ label_drag_data_received  (GtkWidget          *widget,
 			    GdkDragContext     *context,
 			    gint                x,
 			    gint                y,
-			    GtkSelectionData   *data,
+			    GtkSelectionData   *selection_data,
 			    guint               info,
 			    guint               time)
 {
-  if ((data->length >= 0) && (data->format == 8))
+  if (gtk_selection_data_get_length (selection_data) >= 0 &&
+      gtk_selection_data_get_format (selection_data) == 8)
     {
-      g_print ("Received \"%s\" in label\n", (gchar *)data->data);
+      g_print ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
       gtk_drag_finish (context, TRUE, FALSE, time);
       return;
     }
@@ -422,7 +424,7 @@ source_drag_data_get  (GtkWidget          *widget,
     g_print ("I was dropped on the rootwin\n");
   else
     gtk_selection_data_set (selection_data,
-			    selection_data->target,
+			    gtk_selection_data_get_target (selection_data),
 			    8, (guchar *) "I'm Data!", 9);
 }
   

@@ -265,24 +265,28 @@ stringify_span (guchar *data, gint *position)
 }
 
 void
-selection_received (GtkWidget *widget, GtkSelectionData *data)
+selection_received (GtkWidget *widget, GtkSelectionData *selection_data)
 {
   int position;
   int i;
   SelType seltype;
   char *str;
+  guchar *data;
   GtkTextBuffer *buffer;
-  
-  if (data->length < 0)
+  GdkAtom type;
+
+  if (gtk_selection_data_get_length (selection_data) < 0)
     {
       g_print("Error retrieving selection\n");
       return;
     }
 
+  type = gtk_selection_data_get_data_type (selection_data);
+
   seltype = SEL_TYPE_NONE;
   for (i=0; i<LAST_SEL_TYPE; i++)
     {
-      if (seltypes[i] == data->type)
+      if (seltypes[i] == type)
 	{
 	  seltype = i;
 	  break;
@@ -291,7 +295,7 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
 
   if (seltype == SEL_TYPE_NONE)
     {
-      char *name = gdk_atom_name (data->type);
+      char *name = gdk_atom_name (type);
       g_print("Don't know how to handle type: %s\n",
 	      name?name:"<unknown>");
       return;
@@ -306,38 +310,39 @@ selection_received (GtkWidget *widget, GtkSelectionData *data)
   gtk_text_buffer_set_text (buffer, "", -1);
 
   position = 0;
-  while (position < data->length)
+  while (position < gtk_selection_data_get_length (selection_data))
     {
+      data = (guchar *) gtk_selection_data_get_data (selection_data);
       switch (seltype)
 	{
 	case ATOM:
-	  str = stringify_atom (data->data, &position);
+	  str = stringify_atom (data, &position);
 	  break;
 	case COMPOUND_TEXT:
 	case STRING:
 	case TEXT:
-	  str = stringify_text (data->data, &position);
+	  str = stringify_text (data, &position);
 	  break;
 	case BITMAP:
 	case DRAWABLE:
 	case PIXMAP:
 	case WINDOW:
 	case COLORMAP:
-	  str = stringify_xid (data->data, &position);
+	  str = stringify_xid (data, &position);
 	  break;
 	case INTEGER:
 	case PIXEL:
-	  str = stringify_integer (data->data, &position);
+	  str = stringify_integer (data, &position);
 	  break;
 	case SPAN:
-	  str = stringify_span (data->data, &position);
+	  str = stringify_span (data, &position);
 	  break;
 	default:
 	  {
-	    char *name = gdk_atom_name (data->type);
+	    char *name = gdk_atom_name (gtk_selection_data_get_data_type (selection_data));
 	    g_print("Can't convert type %s to string\n",
 		    name?name:"<unknown>");
-	    position = data->length;
+	    position = gtk_selection_data_get_length (selection_data);
 	    continue;
 	  }
 	}

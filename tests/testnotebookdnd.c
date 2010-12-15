@@ -134,7 +134,7 @@ on_button_drag_data_received (GtkWidget        *widget,
   GtkWidget **child;
 
   source = gtk_drag_get_source_widget (context);
-  child = (void*) data->data;
+  child = (void*) gtk_selection_data_get_data (data);
 
   tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (source), *child);
   g_print ("Removing tab: %s\n", gtk_label_get_text (GTK_LABEL (tab_label)));
