@@ -1148,13 +1148,29 @@ gtk_cell_area_box_foreach_alloc (GtkCellArea          *area,
 	{
 	  if (l == allocated_cells)
 	    {
-	      cell_background.width += cell_background.x - background_area->x;
-	      cell_background.x      = background_area->x;
+              /* Add the depth to the first cell */
+              if (rtl)
+                {
+                  cell_background.width += background_area->width - cell_area->width;
+                  cell_background.x      = background_area->x + background_area->width - cell_background.width;
+                }
+              else
+                {
+                  cell_background.width += cell_area->x - background_area->x;
+                  cell_background.x      = background_area->x;
+                }
 	    }
 
 	  if (l->next == NULL)
-	      cell_background.width = 
-		background_area->width - (cell_background.x - background_area->x);
+            {
+              /* Grant this cell the remaining space */
+              int remain = cell_background.x - background_area->x;
+
+              if (rtl)
+                cell_background.x -= remain;
+              else
+                cell_background.width = background_area->width - remain;
+            }
 
 	  cell_background.y      = background_area->y;
 	  cell_background.height = background_area->height;
