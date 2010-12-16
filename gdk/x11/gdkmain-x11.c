@@ -26,13 +26,12 @@
 
 #include "config.h"
 
-#include "gdkx.h"
+#include "gdkdeviceprivate.h"
+#include "gdkinternals.h"
+#include "gdkintl.h"
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
-#include "gdkinternals.h"
 #include "gdkprivate-x11.h"
-#include "gdkintl.h"
-#include "gdkdeviceprivate.h"
 
 #include <glib/gprintf.h>
 #include <stdlib.h>

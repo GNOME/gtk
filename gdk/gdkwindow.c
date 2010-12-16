@@ -31,18 +31,14 @@
 
 #include "gdkwindow.h"
 
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"           /* For workaround */
-#endif
-
 #include "gdkrectangle.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
-#include "gdkscreen.h"
+#include "gdkscreenprivate.h"
+#include "gdkdisplayprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkvisualprivate.h"
 #include "gdkmarshalers.h"
-#include "gdkscreen.h"
 #include "gdkwindowimpl.h"
 
 #include <math.h>
@@ -1339,19 +1335,6 @@ gdk_window_new (GdkWindow     *parent,
   window->y = y;
   window->width = (attributes->width > 1) ? (attributes->width) : (1);
   window->height = (attributes->height > 1) ? (attributes->height) : (1);
-
-#ifdef GDK_WINDOWING_X11
-  /* Work around a bug where Xorg refuses to map toplevel InputOnly windows
-   * from an untrusted client: http://bugs.freedesktop.org/show_bug.cgi?id=6988
-   */
-  if (attributes->wclass == GDK_INPUT_ONLY &&
-      window->parent->window_type == GDK_WINDOW_ROOT &&
-      !G_LIKELY (GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (parent))->trusted_client))
-    {
-      g_warning ("Coercing GDK_INPUT_ONLY toplevel window to GDK_INPUT_OUTPUT to work around bug in Xorg server");
-      attributes->wclass = GDK_INPUT_OUTPUT;
-    }
-#endif
 
   if (attributes->wclass == GDK_INPUT_ONLY)
     {

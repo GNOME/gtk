@@ -26,7 +26,8 @@
 #include "gdkdevicemanager-xi2.h"
 #endif
 #endif
-#include "gdkx.h"
+#include "gdkinternals.h"
+#include "gdkprivate-x11.h"
 
 GdkDeviceManager *
 _gdk_x11_device_manager_new (GdkDisplay *display)

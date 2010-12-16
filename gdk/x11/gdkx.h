@@ -57,15 +57,16 @@ G_BEGIN_DECLS
 
 
 Window   gdk_x11_window_get_xid           (GdkWindow   *window);
+void     gdk_x11_window_set_user_time     (GdkWindow   *window,
+                                           guint32      timestamp);
+void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
+
 Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
-void     gdk_x11_window_set_user_time     (GdkWindow   *window,
-					   guint32      timestamp);
-void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
 
 const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 
@@ -97,47 +98,6 @@ gint     gdk_x11_get_default_screen       (void);
 
 #define GDK_IS_DISPLAY_X11(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkDisplayX11")))
 
-#ifdef GDK_COMPILATION
-
-#include "gdkprivate-x11.h"
-#include "gdkscreen-x11.h"
-
-/**
- * GDK_DISPLAY_XDISPLAY:
- * @display: a #GdkDisplay.
- *
- * Returns the display of a #GdkDisplay.
- *
- * Returns: an Xlib <type>Display*</type>
- */
-#define GDK_DISPLAY_XDISPLAY(display) (GDK_DISPLAY_X11(display)->xdisplay)
-
-/**
- * GDK_WINDOW_XDISPLAY:
- * @win: a #GdkWindow.
- *
- * Returns the display of a #GdkWindow.
- *
- * Returns: an Xlib <type>Display*</type>.
- */
-#define GDK_WINDOW_XDISPLAY(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xdisplay)
-#define GDK_WINDOW_XID(win)           (GDK_WINDOW_IMPL_X11(GDK_WINDOW (win)->impl)->xid)
-
-#define GDK_SCREEN_XDISPLAY(screen)   (GDK_SCREEN_X11 (screen)->xdisplay)
-
-/**
- * GDK_SCREEN_XSCREEN:
- * @screen: a #GdkScreen
- *
- * Returns the screen of a #GdkScreen.
- *
- * Returns: an Xlib <type>Screen*</type>.
- */
-#define GDK_SCREEN_XSCREEN(screen)    (GDK_SCREEN_X11 (screen)->xscreen)
-#define GDK_SCREEN_XNUMBER(screen)    (GDK_SCREEN_X11 (screen)->screen_num) 
-
-#else /* GDK_COMPILATION */
-
 #ifndef GDK_MULTIHEAD_SAFE
 /**
  * GDK_ROOT_WINDOW:
@@ -149,6 +109,14 @@ gint     gdk_x11_get_default_screen       (void);
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
+/**
+ * GDK_WINDOW_XDISPLAY:
+ * @win: a #GdkWindow.
+ *
+ * Returns the display of a #GdkWindow.
+ *
+ * Returns: an Xlib <type>Display*</type>.
+ */
 #define GDK_WINDOW_XDISPLAY(win)      (GDK_DISPLAY_XDISPLAY (gdk_window_get_display (win)))
 
 /**
@@ -161,7 +129,24 @@ gint     gdk_x11_get_default_screen       (void);
  */
 #define GDK_WINDOW_XID(win)           (gdk_x11_window_get_xid (win))
 
+/**
+ * GDK_DISPLAY_XDISPLAY:
+ * @display: a #GdkDisplay.
+ *
+ * Returns the display of a #GdkDisplay.
+ *
+ * Returns: an Xlib <type>Display*</type>
+ */
 #define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
+
+/**
+ * GDK_SCREEN_XSCREEN:
+ * @screen: a #GdkScreen
+ *
+ * Returns the screen of a #GdkScreen.
+ *
+ * Returns: an Xlib <type>Screen*</type>.
+ */
 #define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
 
 /**
@@ -174,8 +159,6 @@ gint     gdk_x11_get_default_screen       (void);
  *  its display.
  */
 #define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
-
-#endif /* GDK_COMPILATION */
 
 #define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
 
@@ -190,16 +173,16 @@ void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *
                                                                    const gchar *startup_id);
 
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
-						const gchar *theme,
-						const gint   size);
+                                                const gchar *theme,
+                                                const gint   size);
 
 void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
-						const char *message_type,
-						...) G_GNUC_NULL_TERMINATED;
+                                                const char *message_type,
+                                                ...) G_GNUC_NULL_TERMINATED;
 
 /* returns TRUE if we support the given WM spec feature */
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
-					      GdkAtom    property);
+                                              GdkAtom    property);
 
 XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
                                               gint       monitor_num);
@@ -214,14 +197,14 @@ GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
 
 /* Functions to get the X Atom equivalent to the GdkAtom */
-Atom	              gdk_x11_atom_to_xatom_for_display (GdkDisplay  *display,
-							 GdkAtom      atom);
-GdkAtom		      gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
-							 Atom	      xatom);
-Atom		      gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
-							     const gchar *atom_name);
+Atom                  gdk_x11_atom_to_xatom_for_display (GdkDisplay  *display,
+                                                         GdkAtom      atom);
+GdkAtom               gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
+                                                         Atom         xatom);
+Atom                  gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
+                                                             const gchar *atom_name);
 G_CONST_RETURN gchar *gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
-							  Atom         xatom);
+                                                          Atom         xatom);
 #ifndef GDK_MULTIHEAD_SAFE
 Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
 GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
@@ -229,8 +212,8 @@ Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
 G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
 
-void	    gdk_x11_display_grab	      (GdkDisplay *display);
-void	    gdk_x11_display_ungrab	      (GdkDisplay *display);
+void        gdk_x11_display_grab              (GdkDisplay *display);
+void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
 void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);
 /* warn unused because you could use pop_ignored otherwise */
@@ -238,8 +221,8 @@ G_GNUC_WARN_UNUSED_RESULT gint gdk_x11_display_error_trap_pop         (GdkDispla
 void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
 
 void        gdk_x11_register_standard_event_type (GdkDisplay *display,
-						  gint        event_base,
-						  gint        n_events);
+                                                  gint        event_base,
+                                                  gint        n_events);
 
 
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);

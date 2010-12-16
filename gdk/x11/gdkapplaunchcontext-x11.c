@@ -23,10 +23,9 @@
 #include "config.h"
 
 #include "gdkapplaunchcontextprivate.h"
-
-#include "gdkx.h"
 #include "gdkscreen.h"
 #include "gdkintl.h"
+#include "gdkprivate-x11.h"
 
 #include <glib.h>
 #include <gio/gdesktopappinfo.h>

@@ -34,7 +34,9 @@
 #include "gdkcursor.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"
+#include "gdkx.h"
 #include "gdkwindow-x11.h"
+#include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include <cairo-xlib.h>
 
@@ -59,18 +61,18 @@ GdkVisualType _gdk_screen_x11_visual_get_best_type       (GdkScreen      *screen
 GdkVisual *   _gdk_screen_x11_get_system_visual          (GdkScreen      *screen);
 GdkVisual*    _gdk_screen_x11_visual_get_best            (GdkScreen      *screen);
 GdkVisual*    _gdk_screen_x11_visual_get_best_with_depth (GdkScreen      *screen,
-							  gint            depth);
+                                                          gint            depth);
 GdkVisual*    _gdk_screen_x11_visual_get_best_with_type  (GdkScreen      *screen,
-							  GdkVisualType   visual_type);
+                                                          GdkVisualType   visual_type);
 GdkVisual*    _gdk_screen_x11_visual_get_best_with_both  (GdkScreen      *screen,
-							  gint            depth,
-							  GdkVisualType   visual_type);
+                                                          gint            depth,
+                                                          GdkVisualType   visual_type);
 void          _gdk_screen_x11_query_depths               (GdkScreen      *screen,
-							  gint          **depths,
-							  gint           *count);
+                                                          gint          **depths,
+                                                          gint           *count);
 void          _gdk_screen_x11_query_visual_types         (GdkScreen      *screen,
-							  GdkVisualType **visual_types,
-							  gint           *count);
+                                                          GdkVisualType **visual_types,
+                                                          gint           *count);
 GList *       _gdk_screen_x11_list_visuals               (GdkScreen      *screen);
 
 
@@ -100,11 +102,11 @@ void _gdk_window_process_expose    (GdkWindow     *window,
                                     GdkRectangle  *area);
 
 gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
-					    cairo_region_t *area);
+                                            cairo_region_t *area);
 void     _gdk_x11_window_translate         (GdkWindow *window,
-					    cairo_region_t *area,
-					    gint       dx,
-					    gint       dy);
+                                            cairo_region_t *area,
+                                            gint       dx,
+                                            gint       dy);
 
 void     _gdk_selection_window_destroyed   (GdkWindow            *window);
 gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
@@ -124,14 +126,14 @@ gboolean _gdk_x11_moveresize_configure_done (GdkDisplay *display,
                                              GdkWindow  *window);
 
 void _gdk_keymap_state_changed    (GdkDisplay      *display,
-				   XEvent          *event);
+                                   XEvent          *event);
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_x11_get_group_for_state (GdkDisplay      *display,
-				   GdkModifierType  state);
+                                   GdkModifierType  state);
 void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
                                                GdkModifierType *modifiers);
 gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
-					guint            keycode);
+                                        guint            keycode);
 
 void _gdk_x11_initialize_locale (void);
 void _gdk_x11_windowing_init    (void);
@@ -189,8 +191,8 @@ void       _gdk_x11_display_create_window_impl     (GdkDisplay    *display,
                                                     gint           attributes_mask);
 
 void _gdk_x11_precache_atoms (GdkDisplay          *display,
-			      const gchar * const *atom_names,
-			      gint                 n_atoms);
+                              const gchar * const *atom_names,
+                              gint                 n_atoms);
 
 void _gdk_events_init                 (GdkDisplay *display);
 void _gdk_events_uninit               (GdkDisplay *display);
@@ -206,8 +208,8 @@ void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 void _gdk_x11_window_register_dnd (GdkWindow *window);
 
 gboolean _gdk_x11_get_xft_setting (GdkScreen   *screen,
-				   const gchar *name,
-				   GValue      *value);
+                                   const gchar *name,
+                                   GValue      *value);
 
 GdkGrabStatus _gdk_x11_convert_grab_status (gint status);
 
@@ -215,7 +217,7 @@ cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
                                                          int        width,
                                                          int        height);
 
-extern gboolean	         _gdk_use_xshm;
+extern gboolean          _gdk_use_xshm;
 extern const gint        _gdk_x11_event_mask_table[];
 extern const gint        _gdk_x11_event_mask_table_size;
 extern GdkAtom           _gdk_selection_property;
@@ -223,10 +225,21 @@ extern gboolean          _gdk_synchronize;
 
 #define GDK_SCREEN_DISPLAY(screen)    (GDK_SCREEN_X11 (screen)->display)
 #define GDK_SCREEN_XROOTWIN(screen)   (GDK_SCREEN_X11 (screen)->xroot_window)
-#define GDK_WINDOW_SCREEN(win)	      (gdk_window_get_screen (win))
+#define GDK_WINDOW_SCREEN(win)        (gdk_window_get_screen (win))
 #define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->display)
 #define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xroot_window)
 #define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))
 #define GDK_WINDOW_IS_X11(win)        (GDK_IS_WINDOW_IMPL_X11 ((win)->impl))
+
+/* override some macros from gdkx.h with direct-access variants */
+#undef GDK_DISPLAY_XDISPLAY
+#undef GDK_WINDOW_XDISPLAY
+#undef GDK_WINDOW_XID
+#undef GDK_SCREEN_XDISPLAY
+
+#define GDK_DISPLAY_XDISPLAY(display) (GDK_DISPLAY_X11(display)->xdisplay)
+#define GDK_WINDOW_XDISPLAY(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xdisplay)
+#define GDK_WINDOW_XID(win)           (GDK_WINDOW_IMPL_X11(GDK_WINDOW (win)->impl)->xid)
+#define GDK_SCREEN_XDISPLAY(screen)   (GDK_SCREEN_X11 (screen)->xdisplay)
 
 #endif /* __GDK_PRIVATE_X11_H__ */

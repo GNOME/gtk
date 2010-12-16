@@ -24,7 +24,7 @@
 #include "gdkeventtranslator.h"
 #include "gdkdevice-xi.h"
 #include "gdkintl.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 #include <X11/extensions/XInput.h>
 

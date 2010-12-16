@@ -21,7 +21,6 @@
 #define __GDK_EVENT_SOURCE_H__
 
 #include "gdkeventtranslator.h"
-#include "gdkprivate-x11.h"
 
 G_BEGIN_DECLS
 

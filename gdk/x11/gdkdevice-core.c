@@ -19,14 +19,12 @@
 
 #include "config.h"
 
-#include "glib.h"
 #include "gdkdevice-core.h"
 
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkprivate-x11.h"
 #include "gdkasync.h"
-#include "gdkx.h"
 
 static gboolean gdk_device_core_get_history (GdkDevice      *device,
                                              GdkWindow      *window,

@@ -24,20 +24,19 @@
 
 #include "config.h"
 
-#include "gdkdisplay-x11.h"
-
-#include "gdkx.h"
 #include "gdkasync.h"
 #include "gdkdisplay.h"
 #include "gdkeventsource.h"
 #include "gdkeventtranslator.h"
 #include "gdkinternals.h"
 #include "gdkscreen.h"
-#include "gdkscreen-x11.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanager.h"
 #include "xsettings-client.h"
+#include "gdkdisplay-x11.h"
+#include "gdkprivate-x11.h"
+#include "gdkscreen-x11.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>

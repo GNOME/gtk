@@ -24,11 +24,8 @@
 #include "config.h"
 
 #include "gdkscreen-x11.h"
-
-#include "gdkscreen.h"
-#include "gdkdisplay.h"
 #include "gdkdisplay-x11.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 #include <glib.h>
 

@@ -23,7 +23,7 @@
 #include "gdktestutils.h"
 
 #include "gdkkeysyms.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 #include <X11/Xlib.h>
 
@@ -121,7 +121,7 @@ gdk_test_simulate_key (GdkWindow      *window,
   xev.type = key_pressrelease == GDK_KEY_PRESS ? KeyPress : KeyRelease;
   xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
+  xev.root = RootWindow (xev.display, GDK_SCREEN_X11 (screen)->screen_num);
   xev.subwindow = 0;
   xev.time = 0;
   xev.x = MAX (x, 0);
@@ -226,7 +226,7 @@ gdk_test_simulate_button (GdkWindow      *window,
   xev.type = button_pressrelease == GDK_BUTTON_PRESS ? ButtonPress : ButtonRelease;
   xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
+  xev.root = RootWindow (xev.display, GDK_SCREEN_X11 (screen)->screen_num);
   xev.subwindow = 0;
   xev.time = 0;
   xev.x = x;

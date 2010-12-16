@@ -46,7 +46,7 @@ in this Software without prior written authorization from The Open Group.
 #include "config.h"
 
 #include "gdkasync.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 #ifdef NEED_XIPROTO_H_FOR_XREPLY
 #include <X11/extensions/XIproto.h>

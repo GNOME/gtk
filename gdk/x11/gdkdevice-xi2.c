@@ -23,7 +23,7 @@
 
 #include "gdkintl.h"
 #include "gdkasync.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 #include <X11/extensions/XInput2.h>
 

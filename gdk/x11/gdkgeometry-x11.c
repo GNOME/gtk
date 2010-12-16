@@ -19,10 +19,9 @@
 
 #include "config.h"
 
+#include "gdkinternals.h"
 #include "gdkrectangle.h"
 #include "gdkprivate-x11.h"
-#include "gdkx.h"
-#include "gdkinternals.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkwindow-x11.h"

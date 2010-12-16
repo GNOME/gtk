@@ -21,13 +21,12 @@
 
 #include "gdkdevicemanager-xi2.h"
 
+#include "gdkkeysyms.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkdevice-xi2.h"
-#include "gdkkeysyms.h"
 #include "gdkprivate-x11.h"
-#include "gdkx.h"
 
 #include <string.h>
 

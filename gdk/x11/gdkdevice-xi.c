@@ -22,11 +22,10 @@
 #include "gdkdevice-xi.h"
 
 #include "gdkwindow.h"
+#include "gdkintl.h"
 #include "gdkdeviceprivate.h"
 #include "gdkprivate-x11.h"
-#include "gdkintl.h"
 #include "gdkasync.h"
-#include "gdkx.h"
 
 #define MAX_DEVICE_CLASSES 13
 

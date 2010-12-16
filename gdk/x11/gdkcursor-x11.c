@@ -31,10 +31,8 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "gdkcursor.h"
-
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
-#include "gdkx.h"
 
 #include <X11/Xlib.h>
 #include <X11/cursorfont.h>

@@ -20,9 +20,10 @@
 #ifndef __GDK_EVENT_TRANSLATOR_H__
 #define __GDK_EVENT_TRANSLATOR_H__
 
-#include <gdk/gdktypes.h>
-#include <gdk/gdkdisplay.h>
-#include "gdkprivate-x11.h"
+#include "gdktypes.h"
+#include "gdkdisplay.h"
+
+#include <X11/Xlib.h>
 
 G_BEGIN_DECLS
 

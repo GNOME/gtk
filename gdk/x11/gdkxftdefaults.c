@@ -54,7 +54,7 @@
 #endif
 
 #include <gdkscreen-x11.h>
-#include <gdkx.h>
+#include <gdkprivate-x11.h>
 
 static gint
 parse_boolean (char *v)
@@ -153,7 +153,6 @@ init_xft_settings (GdkScreen *screen)
 {
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
-  int xscreen = GDK_SCREEN_XNUMBER (screen);
   double dpi_double;
 
   if (screen_x11->xft_init)
@@ -174,8 +173,8 @@ init_xft_settings (GdkScreen *screen)
     screen_x11->xft_rgba = FC_RGBA_UNKNOWN;
 
   if (!get_double_default (xdisplay, "dpi", &dpi_double))
-    dpi_double = (((double) DisplayHeight (xdisplay, xscreen) * 25.4) / 
-		  (double) DisplayHeightMM (xdisplay, xscreen));
+    dpi_double = (((double) DisplayHeight (xdisplay, screen_x11->screen_num) * 25.4) /
+		  (double) DisplayHeightMM (xdisplay, screen_x11->screen_num));
 
   screen_x11->xft_dpi = (int)(0.5 + PANGO_SCALE * dpi_double);
 }

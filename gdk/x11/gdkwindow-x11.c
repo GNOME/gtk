@@ -29,16 +29,15 @@
 
 #include "gdkwindow-x11.h"
 
-#include "gdkx.h"
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
-#include "gdkasync.h"
-#include "gdkdisplay-x11.h"
-#include "gdkprivate-x11.h"
 #include "gdkvisualprivate.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdkasync.h"
 #include "gdkeventsource.h"
+#include "gdkdisplay-x11.h"
+#include "gdkprivate-x11.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -313,7 +312,7 @@ _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
                           width, height, 1);
   surface = cairo_xlib_surface_create_for_bitmap (GDK_WINDOW_XDISPLAY (window),
                                                   pixmap,
-                                                  GDK_SCREEN_XSCREEN (GDK_WINDOW_SCREEN (window)),
+                                                  GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (window))->xscreen,
                                                   width, height);
   attach_free_pixmap_handler (surface, GDK_WINDOW_DISPLAY (window), pixmap);
 

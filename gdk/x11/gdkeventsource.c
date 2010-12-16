@@ -22,7 +22,8 @@
 #include "gdkeventsource.h"
 
 #include "gdkinternals.h"
-#include "gdkx.h"
+#include "gdkwindow-x11.h"
+#include "gdkprivate-x11.h"
 
 
 static gboolean gdk_event_source_prepare  (GSource     *source,

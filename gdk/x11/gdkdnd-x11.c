@@ -29,11 +29,10 @@
 #include "gdkdndprivate.h"
 
 #include "gdkmain.h"
-#include "gdkx.h"
+#include "gdkinternals.h"
 #include "gdkasync.h"
 #include "gdkproperty.h"
 #include "gdkprivate-x11.h"
-#include "gdkinternals.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
 
