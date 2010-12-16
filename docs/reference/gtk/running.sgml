@@ -369,6 +369,15 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GDK_SYNCHRONIZE</envar></title>
+
+  <para>
+    If set, GDK makes all X requests synchronously. This is a useful
+    option for debugging, but it will slow down the performance considerably.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>

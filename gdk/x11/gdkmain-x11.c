@@ -87,12 +87,6 @@ static int	    gdk_x_io_error		 (Display     *display);
  */
 static GQueue gdk_error_traps;
 
-const GOptionEntry _gdk_windowing_args[] = {
-  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, 
-    /* Description of --sync in --help output */ N_("Make X calls synchronous"), NULL },
-  { NULL }
-};
-
 void
 _gdk_x11_windowing_init (void)
 {

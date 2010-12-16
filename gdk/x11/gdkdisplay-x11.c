@@ -1357,12 +1357,12 @@ _gdk_x11_display_open (const gchar *display_name)
       }
   }
 
-  if (_gdk_synchronize)
+  if (g_getenv ("GDK_SYNCHRONIZE"))
     XSynchronize (display_x11->xdisplay, True);
-  
+
   class_hint = XAllocClassHint();
   class_hint->res_name = g_get_prgname ();
-  
+
   class_hint->res_class = (char *)gdk_get_program_class ();
 
   /* XmbSetWMProperties sets the RESOURCE_NAME environment variable
@@ -1370,7 +1370,7 @@ _gdk_x11_display_open (const gchar *display_name)
    */
   argc = 1;
   argv[0] = g_get_prgname ();
-  
+
   XmbSetWMProperties (display_x11->xdisplay,
 		      display_x11->leader_window,
 		      NULL, NULL, argv, argc, NULL, NULL,

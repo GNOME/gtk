@@ -16,42 +16,41 @@ LDADDS = $(GDK_DEP_LIBS)
 
 noinst_LTLIBRARIES = libgdk-x11.la
 
-libgdk_x11_la_SOURCES =    	\
-	MwmUtil.h	   	\
+libgdk_x11_la_SOURCES = 	\
+	MwmUtil.h		\
 	gdkapplaunchcontext-x11.c \
 	gdkasync.c		\
 	gdkasync.h		\
-	gdkcursor-x11.c	   	\
+	gdkcursor-x11.c		\
 	gdkdevice-core.h	\
 	gdkdevice-core.c	\
-	gdkdevicemanager-core.h \
-	gdkdevicemanager-core.c \
+	gdkdevicemanager-core.h	\
+	gdkdevicemanager-core.c	\
 	gdkdevicemanager-x11.c	\
 	gdkdisplaymanager-x11.c	\
 	gdkdisplay-x11.c	\
 	gdkdisplay-x11.h	\
-	gdkdnd-x11.c	   	\
+	gdkdnd-x11.c		\
 	gdkeventsource.c	\
 	gdkeventsource.h	\
 	gdkeventtranslator.c	\
 	gdkeventtranslator.h	\
 	gdkgeometry-x11.c  	\
-	gdkglobals-x11.c   	\
 	gdkim-x11.c	   	\
 	gdkkeys-x11.c		\
-	gdkmain-x11.c	   	\
-	gdkproperty-x11.c  	\
+	gdkmain-x11.c		\
+	gdkproperty-x11.c	\
 	gdkscreen-x11.c		\
 	gdkscreen-x11.h		\
-	gdkselection-x11.c 	\
+	gdkselection-x11.c	\
 	gdktestutils-x11.c	\
-	gdkvisual-x11.c	   	\
-	gdkwindow-x11.c    	\
+	gdkvisual-x11.c		\
+	gdkwindow-x11.c		\
 	gdkwindow-x11.h		\
 	gdkxftdefaults.c	\
-	gdkxid.c	   	\
-	gdkx.h		   	\
-	gdkprivate-x11.h   	\
+	gdkxid.c		\
+	gdkx.h			\
+	gdkprivate-x11.h	\
 	xsettings-client.h	\
 	xsettings-client.c	\
 	xsettings-common.h	\
@@ -59,14 +58,14 @@ libgdk_x11_la_SOURCES =    	\
 
 if XINPUT_XFREE
 libgdk_x11_la_SOURCES += 	\
-	gdkdevicemanager-xi.c 	\
-	gdkdevicemanager-xi.h 	\
+	gdkdevicemanager-xi.c	\
+	gdkdevicemanager-xi.h	\
 	gdkdevice-xi.c		\
 	gdkdevice-xi.h
 if XINPUT_2
 libgdk_x11_la_SOURCES += 	\
-	gdkdevicemanager-xi2.c 	\
-	gdkdevicemanager-xi2.h 	\
+	gdkdevicemanager-xi2.c	\
+	gdkdevicemanager-xi2.h	\
 	gdkdevice-xi2.c		\
 	gdkdevice-xi2.h
 endif

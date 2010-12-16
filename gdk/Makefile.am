@@ -13,13 +13,13 @@ DIST_SUBDIRS = win32 x11 quartz tests
 
 CLEANFILES =
 
-EXTRA_DIST +=			\
+EXTRA_DIST += 			\
 	keynames.txt		\
 	keyname-table.h		\
 	gen-keyname-table.pl	\
-	gdkconfig.h.win32 	\
+	gdkconfig.h.win32	\
 	gdkkeysyms-update.pl	\
-	gdk.def 		\
+	gdk.def			\
 	gdkmarshalers.list	\
 	gdkwindowimpl.h		\
 	makeenums.pl		\
@@ -29,12 +29,12 @@ EXTRA_DIST +=			\
 	gdkenumtypes.h.template	\
 	abicheck.sh
 
-INCLUDES =                              \
+INCLUDES = 				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
 	-DGDK_COMPILATION		\
 	-I$(top_srcdir)			\
 	-I$(top_builddir)/gdk		\
-	$(GTK_DEBUG_FLAGS) 		\
+	$(GTK_DEBUG_FLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
 gtarget=$(gdktarget)
@@ -46,12 +46,12 @@ endif
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
 # we use the general approach here
-LDADD = \
-	$(GTK_LINK_FLAGS)						\
-	-version-info $(LT_VERSION_INFO)		 		\
-	-export-dynamic 						\
-	-rpath $(libdir) 						\
-	$(no_undefined)							\
+LDADD = 					\
+	$(GTK_LINK_FLAGS)			\
+	-version-info $(LT_VERSION_INFO)	\
+	-export-dynamic 			\
+	-rpath $(libdir) 			\
+	$(no_undefined)				\
 	$(LIBTOOL_EXPORT_OPTIONS)
 
 #
@@ -60,7 +60,7 @@ LDADD = \
 #
 # GDK header files for public installation (non-generated)
 #
-gdk_public_h_sources =				\
+gdk_public_h_sources = 				\
 	gdk.h					\
 	gdkapplaunchcontext.h			\
 	gdkcairo.h				\
@@ -90,11 +90,11 @@ gdk_public_h_sources =				\
 	gdkvisual.h				\
 	gdkwindow.h
 
-gdk_built_public_sources =			\
+gdk_built_public_sources = 			\
 	gdkconfig.h				\
 	gdkenumtypes.h
 
-gdk_private_headers =				\
+gdk_private_headers = 				\
 	gdkapplaunchcontextprivate.h		\
 	gdkdevicemanagerprivate.h		\
 	gdkdeviceprivate.h			\
@@ -108,33 +108,33 @@ gdk_private_headers =				\
 	gdkvisualprivate.h			\
 	gdkpoly-generic.h
 
-gdk_c_sources =                 \
-	gdk.c			\
-	gdkapplaunchcontext.c	\
-	gdkcairo.c		\
-	gdkcolor.c		\
-	gdkcursor.c		\
-	gdkdevice.c		\
-	gdkdevicemanager.c	\
-	gdkdisplay.c		\
-	gdkdisplaymanager.c	\
-	gdkdnd.c		\
-	gdkevents.c     	\
-	gdkglobals.c		\
-	gdkkeys.c		\
-	gdkkeyuni.c		\
-	gdkoffscreenwindow.c	\
-	gdkpango.c		\
-	gdkpixbuf-drawable.c	\
-	gdkrectangle.c		\
-	gdkrgba.c		\
-	gdkscreen.c		\
-	gdkselection.c		\
-	gdkvisual.c		\
-	gdkwindow.c		\
+gdk_c_sources = 				\
+	gdk.c					\
+	gdkapplaunchcontext.c			\
+	gdkcairo.c				\
+	gdkcolor.c				\
+	gdkcursor.c				\
+	gdkdevice.c				\
+	gdkdevicemanager.c			\
+	gdkdisplay.c				\
+	gdkdisplaymanager.c			\
+	gdkdnd.c				\
+	gdkevents.c     			\
+	gdkglobals.c				\
+	gdkkeys.c				\
+	gdkkeyuni.c				\
+	gdkoffscreenwindow.c			\
+	gdkpango.c				\
+	gdkpixbuf-drawable.c			\
+	gdkrectangle.c				\
+	gdkrgba.c				\
+	gdkscreen.c				\
+	gdkselection.c				\
+	gdkvisual.c				\
+	gdkwindow.c				\
 	gdkwindowimpl.c
 
-gdk_built_sources =				\
+gdk_built_sources = 				\
 	gdkenumtypes.c				\
 	gdkmarshalers.h 			\
 	gdkmarshalers.c				\
@@ -201,7 +201,6 @@ x11_introspection_files = 		\
 	x11/gdkeventsource.c		\
 	x11/gdkeventtranslator.c	\
 	x11/gdkgeometry-x11.c		\
-	x11/gdkglobals-x11.c		\
 	x11/gdkim-x11.c			\
 	x11/gdkkeys-x11.c		\
 	x11/gdkmain-x11.c		\

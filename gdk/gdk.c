@@ -177,15 +177,14 @@ static const GOptionEntry gdk_args[] = {
 /**
  * gdk_add_option_entries_libgtk_only:
  * @group: An option group.
- * 
+ *
  * Appends gdk option entries to the passed in option group. This is
  * not public API and must not be used by applications.
- **/
+ */
 void
 gdk_add_option_entries_libgtk_only (GOptionGroup *group)
 {
   g_option_group_add_entries (group, gdk_args);
-  g_option_group_add_entries (group, _gdk_windowing_args);
 }
 
 void
@@ -260,7 +259,6 @@ gdk_parse_args (int    *argc,
   g_option_context_set_main_group (option_context, option_group);
 
   g_option_group_add_entries (option_group, gdk_args);
-  g_option_group_add_entries (option_group, _gdk_windowing_args);
 
   if (!g_option_context_parse (option_context, argc, argv, &error))
     {
