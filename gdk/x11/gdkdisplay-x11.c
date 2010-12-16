@@ -32,6 +32,7 @@
 #include "gdkscreen.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
+#include "gdkkeysprivate.h"
 #include "gdkdevicemanager.h"
 #include "xsettings-client.h"
 #include "gdkdisplay-x11.h"
@@ -2680,6 +2681,21 @@ gdk_x11_display_event_data_free (GdkDisplay *display,
 {
 }
 
+static GdkKeymap *
+gdk_x11_display_get_keymap (GdkDisplay *display)
+{
+  GdkDisplayX11 *display_x11;
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
+  display_x11 = GDK_DISPLAY_X11 (display);
+
+  if (!display_x11->keymap)
+    display_x11->keymap = g_object_new (_gdk_keymap_x11_get_type (), NULL);
+
+  display_x11->keymap->display = display;
+
+  return display_x11->keymap;
+}
+
 static void
 _gdk_display_x11_class_init (GdkDisplayX11Class * class)
 {
@@ -2726,4 +2742,5 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->event_data_copy = gdk_x11_display_event_data_copy;
   display_class->event_data_free = gdk_x11_display_event_data_free;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;
+  display_class->get_keymap = gdk_x11_display_get_keymap;
 }

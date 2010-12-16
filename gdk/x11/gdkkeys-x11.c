@@ -52,7 +52,7 @@
 typedef struct _GdkKeymapX11   GdkKeymapX11;
 typedef struct _GdkKeymapClass GdkKeymapX11Class;
 
-#define GDK_TYPE_KEYMAP_X11          (gdk_keymap_x11_get_type ())
+#define GDK_TYPE_KEYMAP_X11          (_gdk_keymap_x11_get_type ())
 #define GDK_KEYMAP_X11(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_KEYMAP_X11, GdkKeymapX11))
 #define GDK_IS_KEYMAP_X11(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_KEYMAP_X11))
 
@@ -102,15 +102,15 @@ struct _GdkKeymapX11
 #define KEYMAP_USE_XKB(keymap) GDK_DISPLAY_X11 ((keymap)->display)->use_xkb
 #define KEYMAP_XDISPLAY(keymap) GDK_DISPLAY_XDISPLAY ((keymap)->display)
 
-static GType gdk_keymap_x11_get_type   (void);
+GType _gdk_keymap_x11_get_type   (void);
 static void  gdk_keymap_x11_class_init (GdkKeymapX11Class *klass);
 static void  gdk_keymap_x11_init       (GdkKeymapX11      *keymap);
 static void  gdk_keymap_x11_finalize   (GObject           *object);
 
 static GdkKeymapClass *parent_class = NULL;
 
-static GType
-gdk_keymap_x11_get_type (void)
+GType
+_gdk_keymap_x11_get_type (void)
 {
   static GType object_type = 0;
 
@@ -274,31 +274,6 @@ get_xkb (GdkKeymapX11 *keymap_x11)
  * XkbSetDetectableAutorepeat. If FALSE, we'll fall back
  * to checking the next event with XPending().
  */
-
-/**
- * gdk_keymap_get_for_display:
- * @display: the #GdkDisplay.
- *
- * Returns the #GdkKeymap attached to @display.
- *
- * Return value: (transfer none): the #GdkKeymap attached to @display.
- *
- * Since: 2.2
- **/
-GdkKeymap*
-gdk_keymap_get_for_display (GdkDisplay *display)
-{
-  GdkDisplayX11 *display_x11;
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  display_x11 = GDK_DISPLAY_X11 (display);
-
-  if (!display_x11->keymap)
-    display_x11->keymap = g_object_new (gdk_keymap_x11_get_type (), NULL);
-
-  display_x11->keymap->display = display;
-
-  return display_x11->keymap;
-}
 
 /* Find the index of the group/level pair within the keysyms for a key.
  * We round up the number of keysyms per keycode to the next even number,
