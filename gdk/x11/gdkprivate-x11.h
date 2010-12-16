@@ -123,15 +123,15 @@ gboolean _gdk_x11_moveresize_handle_event   (XEvent     *event);
 gboolean _gdk_x11_moveresize_configure_done (GdkDisplay *display,
                                              GdkWindow  *window);
 
-void _gdk_keymap_state_changed    (GdkDisplay      *display,
-                                   XEvent          *event);
-void _gdk_keymap_keys_changed     (GdkDisplay      *display);
-gint _gdk_x11_get_group_for_state (GdkDisplay      *display,
-                                   GdkModifierType  state);
-void _gdk_keymap_add_virtual_modifiers_compat (GdkKeymap       *keymap,
-                                               GdkModifierType *modifiers);
-gboolean _gdk_keymap_key_is_modifier   (GdkKeymap       *keymap,
-                                        guint            keycode);
+void     _gdk_x11_keymap_state_changed   (GdkDisplay      *display,
+                                          XEvent          *event);
+void     _gdk_x11_keymap_keys_changed    (GdkDisplay      *display);
+gint     _gdk_x11_get_group_for_state    (GdkDisplay      *display,
+                                          GdkModifierType  state);
+void     _gdk_x11_keymap_add_virt_mods   (GdkKeymap       *keymap,
+                                          GdkModifierType *modifiers);
+gboolean _gdk_x11_keymap_key_is_modifier (GdkKeymap       *keymap,
+                                          guint            keycode);
 
 void _gdk_x11_initialize_locale (void);
 void _gdk_x11_windowing_init    (void);

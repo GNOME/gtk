@@ -165,10 +165,10 @@ translate_key_event (GdkDisplay           *display,
                                        NULL, NULL, &consumed);
 
   state = event->key.state & ~consumed;
-  _gdk_keymap_add_virtual_modifiers_compat (keymap, &state);
+  _gdk_x11_keymap_add_virt_mods (keymap, &state);
   event->key.state |= state;
 
-  event->key.is_modifier = _gdk_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
+  event->key.is_modifier = _gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
   /* Fill in event->string crudely, since various programs
    * depend on it.

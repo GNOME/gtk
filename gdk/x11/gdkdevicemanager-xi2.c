@@ -1009,7 +1009,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->key.group = _gdk_x11_get_group_for_state (display, event->key.state);
 
         event->key.hardware_keycode = xev->detail;
-        event->key.is_modifier = _gdk_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
+        event->key.is_modifier = _gdk_x11_keymap_key_is_modifier (keymap, event->key.hardware_keycode);
 
         device = g_hash_table_lookup (device_manager->id_table,
                                       GUINT_TO_POINTER (xev->deviceid));
@@ -1029,7 +1029,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              NULL, NULL, &consumed);
 
         state = event->key.state & ~consumed;
-        _gdk_keymap_add_virtual_modifiers_compat (keymap, &state);
+        _gdk_x11_keymap_add_virt_mods (keymap, &state);
         event->key.state |= state;
 
         translate_keyboard_string ((GdkEventKey *) event);

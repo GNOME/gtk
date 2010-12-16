@@ -904,7 +904,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
       /* Let XLib know that there is a new keyboard mapping.
        */
       XRefreshKeyboardMapping (&xevent->xmapping);
-      _gdk_keymap_keys_changed (display);
+      _gdk_x11_keymap_keys_changed (display);
       return_val = FALSE;
       break;
 
@@ -977,13 +977,13 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	    {
 	    case XkbNewKeyboardNotify:
 	    case XkbMapNotify:
-	      _gdk_keymap_keys_changed (display);
+	      _gdk_x11_keymap_keys_changed (display);
 
 	      return_val = FALSE;
 	      break;
 
 	    case XkbStateNotify:
-	      _gdk_keymap_state_changed (display, xevent);
+	      _gdk_x11_keymap_state_changed (display, xevent);
 	      break;
 	    }
 	}
@@ -1411,7 +1411,7 @@ _gdk_x11_display_open (const gchar *display_name)
                              XkbNewKeyboardNotifyMask | XkbMapNotifyMask | XkbStateNotifyMask,
                              XkbNewKeyboardNotifyMask | XkbMapNotifyMask | XkbStateNotifyMask);
 
-	    /* keep this in sync with _gdk_keymap_state_changed() */ 
+	    /* keep this in sync with _gdk_x11_keymap_state_changed() */
 	    XkbSelectEventDetails (display_x11->xdisplay,
 				   XkbUseCoreKbd, XkbStateNotify,
 				   XkbAllStateComponentsMask,
@@ -1422,7 +1422,7 @@ _gdk_x11_display_open (const gchar *display_name)
 					&detectable_autorepeat_supported);
 
 	    GDK_NOTE (MISC, g_message ("Detectable autorepeat %s.",
-				       detectable_autorepeat_supported ? 
+				       detectable_autorepeat_supported ?
 				       "supported" : "not supported"));
 	    
 	    display_x11->have_xkb_autorepeat = detectable_autorepeat_supported;
