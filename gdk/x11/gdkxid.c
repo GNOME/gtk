@@ -44,9 +44,9 @@ gdk_xid_equal (XID *a, XID *b)
 }
 
 void
-_gdk_xid_table_insert (GdkDisplay *display,
-                       XID        *xid,
-                       gpointer    data)
+_gdk_x11_display_add_window (GdkDisplay *display,
+                             XID        *xid,
+                             GdkWindow  *data)
 {
   GdkDisplayX11 *display_x11;
 
@@ -66,8 +66,8 @@ _gdk_xid_table_insert (GdkDisplay *display,
 }
 
 void
-_gdk_xid_table_remove (GdkDisplay *display,
-                       XID         xid)
+_gdk_x11_display_remove_window (GdkDisplay *display,
+                                XID         xid)
 {
   GdkDisplayX11 *display_x11;
 
@@ -79,19 +79,31 @@ _gdk_xid_table_remove (GdkDisplay *display,
     g_hash_table_remove (display_x11->xid_ht, &xid);
 }
 
-gpointer
-_gdk_xid_table_lookup (GdkDisplay  *display,
-                      XID          xid)
+/**
+ * gdk_x11_window_lookup_for_display:
+ * @display: the #GdkDisplay corresponding to the window handle
+ * @window: an XLib <type>Window</type>
+ *
+ * Looks up the #GdkWindow that wraps the given native window handle.
+ *
+ * Return value: (transfer none): the #GdkWindow wrapper for the native
+ *    window, or %NULL if there is none.
+ *
+ * Since: 3.0
+ */
+GdkWindow *
+gdk_x11_window_lookup_for_display (GdkDisplay *display,
+                                   Window      window)
 {
   GdkDisplayX11 *display_x11;
-  gpointer data = NULL;
+  GdkWindow *data = NULL;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   display_x11 = GDK_DISPLAY_X11 (display);
 
   if (display_x11->xid_ht)
-    data = g_hash_table_lookup (display_x11->xid_ht, &xid);
+    data = g_hash_table_lookup (display_x11->xid_ht, &window);
 
   return data;
 }

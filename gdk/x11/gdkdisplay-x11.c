@@ -2727,4 +2727,3 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->event_data_free = gdk_x11_display_event_data_free;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;
 }
-

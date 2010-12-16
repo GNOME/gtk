@@ -244,9 +244,9 @@ gdk_window_impl_x11_finalize (GObject *object)
     {
       GdkDisplay *display = GDK_WINDOW_DISPLAY (wrapper);
 
-      _gdk_xid_table_remove (display, impl->xid);
+      _gdk_x11_display_remove_window (display, impl->xid);
       if (impl->toplevel && impl->toplevel->focus_window)
-        _gdk_xid_table_remove (display, impl->toplevel->focus_window);
+        _gdk_x11_display_remove_window (display, impl->toplevel->focus_window);
     }
 
   g_free (impl->toplevel);
@@ -486,10 +486,10 @@ _gdk_x11_screen_init_root_window (GdkScreen *screen)
   window->event_mask = GDK_STRUCTURE_MASK;
 
   _gdk_window_update_size (screen_x11->root_window);
-  
-  _gdk_xid_table_insert (screen_x11->display,
-			 &screen_x11->xroot_window,
-			 screen_x11->root_window);
+
+  _gdk_x11_display_add_window (screen_x11->display,
+                               &screen_x11->xroot_window,
+                               screen_x11->root_window);
 }
 
 static void
@@ -628,11 +628,13 @@ setup_toplevel_window (GdkWindow *window,
        * press events so they don't get sent to child windows.
        */
       toplevel->focus_window = create_focus_window (display, xid);
-      _gdk_xid_table_insert (screen_x11->display, &toplevel->focus_window, window);
+      _gdk_x11_display_add_window (screen_x11->display,
+                                   &toplevel->focus_window,
+                                   window);
     }
-  
+
   check_leader_window_title (screen_x11->display);
-  
+
   /* FIXME: Is there any point in doing this? Do any WM's pay
    * attention to PSize, and even if they do, is this the
    * correct value???
@@ -795,7 +797,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                              xattributes_mask, &xattributes);
 
   g_object_ref (window);
-  _gdk_xid_table_insert (screen_x11->display, &impl->xid, window);
+  _gdk_x11_display_add_window (screen_x11->display, &impl->xid, window);
 
   switch (GDK_WINDOW_TYPE (window))
     {
@@ -883,7 +885,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
 
   display_x11 = GDK_DISPLAY_X11 (display);
 
-  if ((win = _gdk_xid_table_lookup (display, window)) != NULL)
+  if ((win = gdk_x11_window_lookup_for_display (display, window)) != NULL)
     return g_object_ref (win);
 
   gdk_x11_display_error_trap_push (display);
@@ -913,7 +915,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   impl = GDK_WINDOW_IMPL_X11 (win->impl);
   impl->wrapper = win;
 
-  win->parent = _gdk_xid_table_lookup (display, parent);
+  win->parent = gdk_x11_window_lookup_for_display (display, parent);
 
   if (!win->parent || GDK_WINDOW_TYPE (win->parent) == GDK_WINDOW_FOREIGN)
     win->parent = gdk_screen_get_root_window (screen);
@@ -940,31 +942,12 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   win->depth = attrs.depth;
 
   g_object_ref (win);
-  _gdk_xid_table_insert (display, &GDK_WINDOW_XID (win), win);
+  _gdk_x11_display_add_window (display, &GDK_WINDOW_XID (win), win);
 
   /* Update the clip region, etc */
   _gdk_window_update_size (win);
 
   return win;
-}
-
-/**
- * gdk_x11_window_lookup_for_display:
- * @display: the #GdkDisplay corresponding to the window handle
- * @window: an XLib <type>Window</type>
- *
- * Looks up the #GdkWindow that wraps the given native window handle.
- *
- * Return value: (transfer none): the #GdkWindow wrapper for the native
- *    window, or %NULL if there is none.
- *
- * Since: 3.0
- */
-GdkWindow *
-gdk_x11_window_lookup_for_display (GdkDisplay *display,
-                                   Window      window)
-{
-  return (GdkWindow*) _gdk_xid_table_lookup (display, window);
 }
 
 static void
@@ -1093,9 +1076,9 @@ gdk_x11_window_destroy_notify (GdkWindow *window)
       _gdk_window_destroy (window, TRUE);
     }
 
-  _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), GDK_WINDOW_XID (window));
+  _gdk_x11_display_remove_window (GDK_WINDOW_DISPLAY (window), GDK_WINDOW_XID (window));
   if (window_impl->toplevel && window_impl->toplevel->focus_window)
-    _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), window_impl->toplevel->focus_window);
+    _gdk_x11_display_remove_window (GDK_WINDOW_DISPLAY (window), window_impl->toplevel->focus_window);
 
   _gdk_x11_window_grab_check_destroy (window);
 
@@ -1603,7 +1586,7 @@ gdk_window_x11_reparent (GdkWindow *window,
 	  if (impl->toplevel->focus_window)
 	    {
 	      XDestroyWindow (GDK_WINDOW_XDISPLAY (window), impl->toplevel->focus_window);
-	      _gdk_xid_table_remove (GDK_WINDOW_DISPLAY (window), impl->toplevel->focus_window);
+              _gdk_x11_display_remove_window (GDK_WINDOW_DISPLAY (window), impl->toplevel->focus_window);
 	    }
 	  
 	  gdk_toplevel_x11_free_contents (GDK_WINDOW_DISPLAY (window), 

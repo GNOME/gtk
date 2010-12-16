@@ -77,13 +77,11 @@ GList *       _gdk_screen_x11_list_visuals               (GdkScreen      *screen
 
 
 
-void     _gdk_xid_table_insert (GdkDisplay *display,
-                                XID        *xid,
-                                gpointer    data);
-void     _gdk_xid_table_remove (GdkDisplay *display,
-                                XID         xid);
-gpointer _gdk_xid_table_lookup (GdkDisplay *display,
-                                XID         xid);
+void _gdk_x11_display_add_window    (GdkDisplay *display,
+                                     XID        *xid,
+                                     GdkWindow  *window);
+void _gdk_x11_display_remove_window (GdkDisplay *display,
+                                     XID         xid);
 
 gint _gdk_x11_display_send_xevent (GdkDisplay *display,
                                    Window      window,
