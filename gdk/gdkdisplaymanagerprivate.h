@@ -39,6 +39,11 @@ struct _GdkDisplayManagerClass
                                        GdkDisplay        *display);
   GdkDisplay * (*open_display)        (GdkDisplayManager *manager,
                                        const gchar       *name);
+  GdkAtom      (*atom_intern)         (GdkDisplayManager *manager,
+                                       const gchar       *atom_name,
+                                       gboolean           copy_name);
+  gchar *      (*get_atom_name)       (GdkDisplayManager *manager,
+                                       GdkAtom            atom);
 
   /* signals */
   void         (*display_opened)      (GdkDisplayManager *manager,

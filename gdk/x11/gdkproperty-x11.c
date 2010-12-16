@@ -393,87 +393,44 @@ virtual_atom_check_init (void)
   if (!virtual_atom_hash)
     {
       gint i;
-      
+
       virtual_atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
       virtual_atom_array = g_ptr_array_new ();
-      
+
       for (i = 0; i < G_N_ELEMENTS (xatoms_offset); i++)
-	{
-	  g_ptr_array_add (virtual_atom_array, (gchar *)(xatoms_string + xatoms_offset[i]));
-	  g_hash_table_insert (virtual_atom_hash, (gchar *)(xatoms_string + xatoms_offset[i]),
-			       GUINT_TO_POINTER (i));
-	}
+        {
+          g_ptr_array_add (virtual_atom_array, (gchar *)(xatoms_string + xatoms_offset[i]));
+          g_hash_table_insert (virtual_atom_hash, (gchar *)(xatoms_string + xatoms_offset[i]),
+                               GUINT_TO_POINTER (i));
+        }
     }
 }
 
-static GdkAtom
-intern_atom (const gchar *atom_name, 
-	     gboolean     dup)
+GdkAtom
+_gdk_x11_display_manager_atom_intern (GdkDisplayManager *manager,
+                                      const gchar       *atom_name,
+                                      gboolean           dup)
 {
   GdkAtom result;
 
   virtual_atom_check_init ();
-  
+
   result = GDK_POINTER_TO_ATOM (g_hash_table_lookup (virtual_atom_hash, atom_name));
   if (!result)
     {
       result = INDEX_TO_ATOM (virtual_atom_array->len);
-      
+
       g_ptr_array_add (virtual_atom_array, dup ? g_strdup (atom_name) : (gchar *)atom_name);
-      g_hash_table_insert (virtual_atom_hash, 
-			   g_ptr_array_index (virtual_atom_array,
-					      ATOM_TO_INDEX (result)),
-			   GDK_ATOM_TO_POINTER (result));
+      g_hash_table_insert (virtual_atom_hash,
+                           g_ptr_array_index (virtual_atom_array,
+                                              ATOM_TO_INDEX (result)),
+                                              GDK_ATOM_TO_POINTER (result));
     }
 
   return result;
 }
 
-/**
- * gdk_atom_intern:
- * @atom_name: a string.
- * @only_if_exists: if %TRUE, GDK is allowed to not create a new atom, but
- *   just return %GDK_NONE if the requested atom doesn't already
- *   exists. Currently, the flag is ignored, since checking the
- *   existance of an atom is as expensive as creating it.
- *
- * Finds or creates an atom corresponding to a given string.
- *
- * Returns: the atom corresponding to @atom_name.
- */
-GdkAtom
-gdk_atom_intern (const gchar *atom_name, 
-		 gboolean     only_if_exists)
-{
-  return intern_atom (atom_name, TRUE);
-}
-
-/**
- * gdk_atom_intern_static_string:
- * @atom_name: a static string
- *
- * Finds or creates an atom corresponding to a given string.
- *
- * Note that this function is identical to gdk_atom_intern() except
- * that if a new #GdkAtom is created the string itself is used rather 
- * than a copy. This saves memory, but can only be used if the string 
- * will <emphasis>always</emphasis> exist. It can be used with statically
- * allocated strings in the main program, but not with statically 
- * allocated memory in dynamically loaded modules, if you expect to
- * ever unload the module again (e.g. do not use this function in
- * GTK+ theme engines).
- *
- * Returns: the atom corresponding to @atom_name
- * 
- * Since: 2.10
- */
-GdkAtom
-gdk_atom_intern_static_string (const gchar *atom_name)
-{
-  return intern_atom (atom_name, FALSE);
-}
-
-static G_CONST_RETURN char *
+static const gchar *
 get_atom_name (GdkAtom atom)
 {
   virtual_atom_check_init ();
@@ -484,18 +441,10 @@ get_atom_name (GdkAtom atom)
     return NULL;
 }
 
-/**
- * gdk_atom_name:
- * @atom: a #GdkAtom.
- *
- * Determines the string corresponding to an atom.
- *
- * Returns: a newly-allocated string containing the string
- *   corresponding to @atom. When you are done with the
- *   return value, you should free it using g_free().
- */
+
 gchar *
-gdk_atom_name (GdkAtom atom)
+_gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
+                                        GdkAtom            atom)
 {
   return g_strdup (get_atom_name (atom));
 }

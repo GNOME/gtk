@@ -159,10 +159,16 @@ void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
 GdkDeviceManager *_gdk_x11_device_manager_new (GdkDisplay *display);
 
-void _gdk_x11_display_manager_add_display     (GdkDisplayManager *manager,
-                                               GdkDisplay        *display);
-void _gdk_x11_display_manager_remove_display  (GdkDisplayManager *manager,
-                                               GdkDisplay        *display);
+void _gdk_x11_display_manager_add_display      (GdkDisplayManager *manager,
+                                                GdkDisplay        *display);
+void _gdk_x11_display_manager_remove_display   (GdkDisplayManager *manager,
+                                                GdkDisplay        *display);
+
+GdkAtom _gdk_x11_display_manager_atom_intern   (GdkDisplayManager *manager,
+                                                const gchar       *atom_name,
+                                                gboolean           copy_name);
+gchar * _gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
+                                                GdkAtom            atom);
 
 GdkCursor *_gdk_x11_display_get_cursor_for_type     (GdkDisplay    *display,
                                                      GdkCursorType  type);
