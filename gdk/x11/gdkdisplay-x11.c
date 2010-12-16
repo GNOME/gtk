@@ -1117,7 +1117,7 @@ gdk_event_init (GdkDisplay *display)
 }
 
 static void
-gdk_input_init (GdkDisplay *display)
+gdk_x11_display_init_input (GdkDisplay *display)
 {
   GdkDisplayX11 *display_x11;
   GdkDeviceManager *device_manager;
@@ -1446,8 +1446,8 @@ _gdk_x11_display_open (const gchar *display_name)
   }
 #endif
 
-  gdk_input_init (display);
-  _gdk_x11_dnd_init (display);
+  gdk_x11_display_init_input (display);
+  _gdk_x11_display_init_dnd (display);
 
   for (i = 0; i < ScreenCount (display_x11->xdisplay); i++)
     _gdk_x11_screen_setup (display_x11->screens[i]);

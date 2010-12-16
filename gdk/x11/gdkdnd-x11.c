@@ -3072,11 +3072,8 @@ xdnd_drop_filter (GdkXEvent *xev,
   return GDK_FILTER_REMOVE;
 }
 
-/*************************************************************
- ************************** Public API ***********************
- *************************************************************/
 void
-_gdk_x11_dnd_init (GdkDisplay *display)
+_gdk_x11_display_init_dnd (GdkDisplay *display)
 {
   int i;
   init_byte_order ();

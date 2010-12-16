@@ -8,8 +8,6 @@ gdk_init
 gdk_init_check
 gdk_parse_args
 gdk_get_display_arg_name
-gdk_set_locale
-gdk_set_sm_client_id
 gdk_notify_startup_complete
 gdk_notify_startup_complete_with_id
 

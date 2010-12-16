@@ -2305,7 +2305,6 @@ gtk_separator_tool_item_get_type G_GNUC_CONST
 gtk_separator_tool_item_new
 gtk_separator_tool_item_set_draw
 gtk_set_debug_flags
-gtk_set_locale
 gtk_settings_get_default
 gtk_settings_get_for_screen
 gtk_settings_get_type G_GNUC_CONST

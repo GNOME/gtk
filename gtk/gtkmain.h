@@ -112,7 +112,6 @@ gboolean gtk_init_check_abi_check (int	  *argc,
 #endif
 
 void           gtk_disable_setlocale    (void);
-gchar *        gtk_set_locale           (void);
 PangoLanguage *gtk_get_default_language (void);
 gboolean       gtk_events_pending       (void);
 

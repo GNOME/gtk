@@ -1170,37 +1170,6 @@ gtk_init_check_abi_check (int *argc, char ***argv, int num_checks, size_t sizeof
 #endif
 
 /**
- * gtk_set_locale:
- *
- * Initializes internationalization support for GTK+. gtk_init()
- * automatically does this, so there is typically no point
- * in calling this function.
- *
- * If you are calling this function because you changed the locale
- * after GTK+ is was initialized, then calling this function
- * may help a bit. (Note, however, that changing the locale
- * after GTK+ is initialized may produce inconsistent results and
- * is not really supported.)
- * 
- * In detail - sets the current locale according to the
- * program environment. This is the same as calling the C library function
- * <literal>setlocale (LC_ALL, "")</literal> but also takes care of the 
- * locale specific setup of the windowing system used by GDK.
- * 
- * Returns: a string corresponding to the locale set, typically in the
- * form lang_COUNTRY, where lang is an ISO-639 language code, and
- * COUNTRY is an ISO-3166 country code. On Unix, this form matches the
- * result of the setlocale(); it is also used on other machines, such as 
- * Windows, where the C library returns a different result. The string is 
- * owned by GTK+ and should not be modified or freed.
- **/
-gchar *
-gtk_set_locale (void)
-{
-  return gdk_set_locale ();
-}
-
-/**
  * _gtk_get_lc_ctype:
  *
  * Return the Unix-style locale string for the language currently in

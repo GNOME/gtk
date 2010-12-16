@@ -149,7 +149,6 @@ void     _gdk_x11_keymap_add_virt_mods   (GdkKeymap       *keymap,
 gboolean _gdk_x11_keymap_key_is_modifier (GdkKeymap       *keymap,
                                           guint            keycode);
 
-void _gdk_x11_initialize_locale (void);
 void _gdk_x11_windowing_init    (void);
 
 void _gdk_x11_window_grab_check_unmap   (GdkWindow *window,
@@ -214,9 +213,7 @@ void _gdk_x11_precache_atoms (GdkDisplay          *display,
                               const gchar * const *atom_names,
                               gint                 n_atoms);
 
-void _gdk_events_init                 (GdkDisplay *display);
-void _gdk_events_uninit               (GdkDisplay *display);
-void _gdk_x11_dnd_init                (GdkDisplay *display);
+void _gdk_x11_display_init_dnd        (GdkDisplay *display);
 
 void _gdk_x11_screen_init_root_window (GdkScreen *screen);
 void _gdk_x11_screen_init_visuals     (GdkScreen *screen);

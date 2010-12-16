@@ -80,8 +80,6 @@ static int	    gdk_x_io_error		 (Display     *display);
 void
 _gdk_x11_windowing_init (void)
 {
-  _gdk_x11_initialize_locale ();
-
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
 }

@@ -201,7 +201,6 @@ x11_introspection_files = 		\
 	x11/gdkeventsource.c		\
 	x11/gdkeventtranslator.c	\
 	x11/gdkgeometry-x11.c		\
-	x11/gdkim-x11.c			\
 	x11/gdkkeys-x11.c		\
 	x11/gdkmain-x11.c		\
 	x11/gdkproperty-x11.c		\

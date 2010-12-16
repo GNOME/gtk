@@ -50,29 +50,7 @@ gboolean              gdk_init_check                      (gint           *argc,
 void                  gdk_add_option_entries_libgtk_only  (GOptionGroup   *group);
 void                  gdk_pre_parse_libgtk_only           (void);
 
-/**
- * gdk_set_locale:
- *
- * Initializes the support for internationalization by calling the <function>setlocale()</function>
- * system call. This function is called by gtk_set_locale() and so GTK+
- * applications should use that instead.
- *
- * The locale to use is determined by the <envar>LANG</envar> environment variable,
- * so to run an application in a certain locale you can do something like this:
- * <informalexample>
- * <programlisting>
- *   export LANG="fr"
- *   ... run application ...
- * </programlisting>
- * </informalexample>
- *
- * If the locale is not supported by X then it is reset to the standard "C"
- * locale.
- *
- * Returns: the resulting locale.
- */
-gchar*                gdk_set_locale                      (void);
-void                  gdk_disable_multidevice             (void);
+void                  gdk_enable_multidevice              (void);
 
 G_CONST_RETURN gchar *gdk_get_program_class               (void);
 void                  gdk_set_program_class               (const gchar    *program_class);

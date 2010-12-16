@@ -5282,7 +5282,6 @@ gtk_window_group_get_type
 <SECTION>
 <FILE>gtkmain</FILE>
 <TITLE>General</TITLE>
-gtk_set_locale
 gtk_disable_setlocale
 gtk_get_default_language
 gtk_parse_args

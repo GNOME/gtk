@@ -317,7 +317,6 @@ gdk_selection_property_get
 gdk_selection_send_notify
 gdk_selection_send_notify_for_display
 gdk_set_double_click_time
-gdk_set_locale
 gdk_set_pointer_hooks
 gdk_set_program_class
 gdk_set_show_events
