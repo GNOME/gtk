@@ -2681,6 +2681,21 @@ gdk_x11_display_event_data_free (GdkDisplay *display,
 {
 }
 
+static gint
+pop_error_trap (GdkDisplay *display,
+                gboolean    ignored)
+{
+  if (ignored)
+    {
+      gdk_x11_display_error_trap_pop_ignored (display);
+      return Success;
+    }
+  else
+    {
+      return gdk_x11_display_error_trap_pop (display);
+    }
+}
+
 static GdkKeymap *
 gdk_x11_display_get_keymap (GdkDisplay *display)
 {
@@ -2743,4 +2758,6 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->event_data_free = gdk_x11_display_event_data_free;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;
   display_class->get_keymap = gdk_x11_display_get_keymap;
+  display_class->push_error_trap = gdk_x11_display_error_trap_push;
+  display_class->pop_error_trap = pop_error_trap;
 }

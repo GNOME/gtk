@@ -192,6 +192,9 @@ struct _GdkDisplayClass
                                                     gint           attributes_mask);
 
   GdkKeymap *                (*get_keymap)         (GdkDisplay    *display);
+  void                       (*push_error_trap)    (GdkDisplay    *display);
+  gint                       (*pop_error_trap)     (GdkDisplay    *display,
+                                                    gboolean       ignore);
 
   /* Signals */
   void (*closed) (GdkDisplay *display,

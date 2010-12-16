@@ -4759,4 +4759,7 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->register_dnd = _gdk_x11_window_register_dnd;
   impl_class->drag_begin = _gdk_x11_window_drag_begin;
   impl_class->process_updates_recurse = gdk_x11_window_process_updates_recurse;
+  impl_class->sync_rendering = _gdk_x11_window_sync_rendering;
+  impl_class->simulate_key = _gdk_x11_window_simulate_key;
+  impl_class->simulate_button = _gdk_x11_window_simulate_button;
 }

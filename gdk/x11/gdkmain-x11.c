@@ -49,7 +49,6 @@
 #endif
 
 typedef struct _GdkPredicate        GdkPredicate;
-typedef struct _GdkGlobalErrorTrap  GdkGlobalErrorTrap;
 
 struct _GdkPredicate
 {
@@ -63,12 +62,7 @@ static GdkXErrorHandler _gdk_old_error_handler;
 /* number of times we've pushed the GDK error handler */
 static int _gdk_error_handler_push_count = 0;
 
-struct _GdkGlobalErrorTrap
-{
-  GSList *displays;
-};
-
-/* 
+/*
  * Private function declarations
  */
 
@@ -83,16 +77,11 @@ static int	    gdk_x_error			 (Display     *display,
 						  XErrorEvent *error);
 static int	    gdk_x_io_error		 (Display     *display);
 
-/* Private variable declarations
- */
-static GQueue gdk_error_traps;
-
 void
 _gdk_x11_windowing_init (void)
 {
   _gdk_x11_initialize_locale ();
 
-  g_queue_init (&gdk_error_traps);
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
 }
@@ -320,136 +309,6 @@ _gdk_x11_error_handler_pop  (void)
       XSetErrorHandler (_gdk_old_error_handler);
       _gdk_old_error_handler = NULL;
     }
-}
-
-/**
- * gdk_error_trap_push:
- *
- * This function allows X errors to be trapped instead of the normal
- * behavior of exiting the application. It should only be used if it
- * is not possible to avoid the X error in any other way. Errors are
- * ignored on all #GdkDisplay currently known to the
- * #GdkDisplayManager. If you don't care which error happens and just
- * want to ignore everything, pop with gdk_error_trap_pop_ignored().
- * If you need the error code, use gdk_error_trap_pop() which may have
- * to block and wait for the error to arrive from the X server.
- *
- * This API exists on all platforms but only does anything on X.
- *
- * You can use gdk_x11_display_error_trap_push() to ignore errors
- * on only a single display.
- *
- * <example>
- * <title>Trapping an X error</title>
- * <programlisting>
- * gdk_error_trap_push (<!-- -->);
- *
- *  // ... Call the X function which may cause an error here ...
- *
- *
- * if (gdk_error_trap_pop (<!-- -->))
- *  {
- *    // ... Handle the error here ...
- *  }
- * </programlisting>
- * </example>
- *
- */
-void
-gdk_error_trap_push (void)
-{
-  GdkGlobalErrorTrap *trap;
-  GdkDisplayManager *manager;
-  GSList *tmp_list;
-
-  trap = g_slice_new (GdkGlobalErrorTrap);
-  manager = gdk_display_manager_get ();
-  trap->displays = gdk_display_manager_list_displays (manager);
-
-  g_slist_foreach (trap->displays, (GFunc) g_object_ref, NULL);
-  for (tmp_list = trap->displays;
-       tmp_list != NULL;
-       tmp_list = tmp_list->next)
-    {
-      gdk_x11_display_error_trap_push (tmp_list->data);
-    }
-
-  g_queue_push_head (&gdk_error_traps, trap);
-}
-
-static gint
-gdk_error_trap_pop_internal (gboolean need_code)
-{
-  GdkGlobalErrorTrap *trap;
-  gint result;
-  GSList *tmp_list;
-
-  trap = g_queue_pop_head (&gdk_error_traps);
-
-  g_return_val_if_fail (trap != NULL, Success);
-
-  result = Success;
-  for (tmp_list = trap->displays;
-       tmp_list != NULL;
-       tmp_list = tmp_list->next)
-    {
-      gint code = Success;
-
-      if (need_code)
-        code = gdk_x11_display_error_trap_pop (tmp_list->data);
-      else
-        gdk_x11_display_error_trap_pop_ignored (tmp_list->data);
-
-      /* we use the error on the last display listed, why not. */
-      if (code != Success)
-        result = code;
-    }
-
-  g_slist_foreach (trap->displays, (GFunc) g_object_unref, NULL);
-  g_slist_free (trap->displays);
-
-  g_slice_free (GdkGlobalErrorTrap, trap);
-
-  return result;
-}
-
-/**
- * gdk_error_trap_pop_ignored:
- *
- * Removes an error trap pushed with gdk_error_trap_push(), but
- * without bothering to wait and see whether an error occurred.  If an
- * error arrives later asynchronously that was triggered while the
- * trap was pushed, that error will be ignored.
- *
- * Since: 3.0
- */
-void
-gdk_error_trap_pop_ignored (void)
-{
-  gdk_error_trap_pop_internal (FALSE);
-}
-
-/**
- * gdk_error_trap_pop:
- *
- * Removes an error trap pushed with gdk_error_trap_push().
- * May block until an error has been definitively received
- * or not received from the X server. gdk_error_trap_pop_ignored()
- * is preferred if you don't need to know whether an error
- * occurred, because it never has to block. If you don't
- * need the return value of gdk_error_trap_pop(), use
- * gdk_error_trap_pop_ignored().
- *
- * Prior to GDK 3.0, this function would not automatically
- * sync for you, so you had to gdk_flush() if your last
- * call to Xlib was not a blocking round trip.
- *
- * Return value: X error code or 0 on success
- */
-gint
-gdk_error_trap_pop (void)
-{
-  return gdk_error_trap_pop_internal (TRUE);
 }
 
 gint
