@@ -3415,13 +3415,16 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
   else if (mode == GTK_CELL_RENDERER_MODE_EDITABLE)
     {
       GtkCellEditable *editable_widget;
+      GdkRectangle inner_area;
+
+      gtk_cell_area_inner_cell_area (area, widget, cell_area, &inner_area);
       
       editable_widget =
 	gtk_cell_renderer_start_editing (renderer,
 					 event, widget,
 					 priv->current_path,
-					 cell_area,
-					 cell_area,
+					 &inner_area,
+					 &inner_area,
 					 flags);
       
       if (editable_widget != NULL)
