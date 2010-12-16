@@ -1276,6 +1276,7 @@ gdk_window_new (GdkWindow     *parent,
 {
   GdkWindow *window;
   GdkScreen *screen;
+  GdkDisplay *display;
   int x, y;
   gboolean native;
   GdkEventMask event_mask;
@@ -1425,10 +1426,11 @@ gdk_window_new (GdkWindow     *parent,
     }
   else if (native)
     {
+      display = gdk_screen_get_display (screen);
       event_mask = get_native_event_mask (window);
 
       /* Create the impl */
-      _gdk_window_impl_new (window, real_parent, screen, event_mask, attributes, attributes_mask);
+      _gdk_display_create_window_impl (display, window, real_parent, screen, event_mask, attributes, attributes_mask);
       window->impl_window = window;
 
       /* This will put the native window topmost in the native parent, which may
@@ -1720,6 +1722,7 @@ gdk_window_ensure_native (GdkWindow *window)
 {
   GdkWindow *impl_window;
   GdkWindowImpl *new_impl, *old_impl;
+  GdkDisplay *display;
   GdkScreen *screen;
   GdkWindow *above;
   GList listhead;
@@ -1745,12 +1748,14 @@ gdk_window_ensure_native (GdkWindow *window)
   gdk_window_drop_cairo_surface (window);
 
   screen = gdk_window_get_screen (window);
+  display = gdk_screen_get_display (screen);
 
   old_impl = window->impl;
-  _gdk_window_impl_new (window, window->parent,
-			screen,
-			get_native_event_mask (window),
-			NULL, 0);
+  _gdk_display_create_window_impl (display,
+                                   window, window->parent,
+                                   screen,
+                                   get_native_event_mask (window),
+                                   NULL, 0);
   new_impl = window->impl;
 
   window->impl = old_impl;

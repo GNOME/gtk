@@ -677,17 +677,18 @@ setup_toplevel_window (GdkWindow *window,
 }
 
 void
-_gdk_window_impl_new (GdkWindow     *window,
-		      GdkWindow     *real_parent,
-		      GdkScreen     *screen,
-		      GdkEventMask   event_mask,
-		      GdkWindowAttr *attributes,
-		      gint           attributes_mask)
+_gdk_x11_display_create_window_impl (GdkDisplay    *display,
+                                     GdkWindow     *window,
+                                     GdkWindow     *real_parent,
+                                     GdkScreen     *screen,
+                                     GdkEventMask   event_mask,
+                                     GdkWindowAttr *attributes,
+                                     gint           attributes_mask)
 {
   GdkWindowImplX11 *impl;
   GdkScreenX11 *screen_x11;
   GdkDisplayX11 *display_x11;
-  
+
   Window xparent;
   Visual *xvisual;
   Display *xdisplay;
@@ -695,53 +696,53 @@ _gdk_window_impl_new (GdkWindow     *window,
   XSetWindowAttributes xattributes;
   long xattributes_mask;
   XClassHint *class_hint;
-  
+
   unsigned int class;
   const char *title;
-  
-  screen_x11 = GDK_SCREEN_X11 (screen);
+
+  display_x11 = GDK_DISPLAY_X11 (display);
   xparent = GDK_WINDOW_XID (real_parent);
-  display_x11 = GDK_DISPLAY_X11 (GDK_SCREEN_DISPLAY (screen));
-  
+  screen_x11 = GDK_SCREEN_X11 (screen);
+
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
   impl->wrapper = GDK_WINDOW (window);
-  
+
   xdisplay = screen_x11->xdisplay;
 
   xattributes_mask = 0;
 
   xvisual = gdk_x11_visual_get_xvisual (window->visual);
-  
+
   if (attributes_mask & GDK_WA_NOREDIR)
     {
       xattributes.override_redirect =
-	(attributes->override_redirect == FALSE)?False:True;
+        (attributes->override_redirect == FALSE)?False:True;
       xattributes_mask |= CWOverrideRedirect;
-    } 
+    }
   else
     xattributes.override_redirect = False;
 
   impl->override_redirect = xattributes.override_redirect;
-  
+
   if (window->parent && window->parent->guffaw_gravity)
     {
       xattributes.win_gravity = StaticGravity;
       xattributes_mask |= CWWinGravity;
     }
-  
+
   /* Sanity checks */
   switch (window->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
       if (GDK_WINDOW_TYPE (window->parent) != GDK_WINDOW_ROOT)
-	{
-	  /* The common code warns for this case */
-	  xparent = GDK_SCREEN_XROOTWIN (screen);
-	}
+        {
+          /* The common code warns for this case */
+          xparent = GDK_SCREEN_XROOTWIN (screen);
+        }
     }
-	  
+
   if (!window->input_only)
     {
       class = InputOutput;
@@ -752,24 +753,24 @@ _gdk_window_impl_new (GdkWindow     *window,
       xattributes_mask |= CWBorderPixel | CWBackPixel;
 
       if (window->guffaw_gravity)
-	xattributes.bit_gravity = StaticGravity;
+        xattributes.bit_gravity = StaticGravity;
       else
-	xattributes.bit_gravity = NorthWestGravity;
-      
+        xattributes.bit_gravity = NorthWestGravity;
+
       xattributes_mask |= CWBitGravity;
 
       xattributes.colormap = _gdk_visual_get_x11_colormap (window->visual);
       xattributes_mask |= CWColormap;
 
       if (window->window_type == GDK_WINDOW_TEMP)
-	{
-	  xattributes.save_under = True;
-	  xattributes.override_redirect = True;
-	  xattributes.cursor = None;
-	  xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
+        {
+          xattributes.save_under = True;
+          xattributes.override_redirect = True;
+          xattributes.cursor = None;
+          xattributes_mask |= CWSaveUnder | CWOverrideRedirect;
 
-	  impl->override_redirect = TRUE;
-	}
+          impl->override_redirect = TRUE;
+        }
     }
   else
     {
@@ -780,13 +781,13 @@ _gdk_window_impl_new (GdkWindow     *window,
       window->height > 65535)
     {
       g_warning ("Native Windows wider or taller than 65535 pixels are not supported");
-      
+
       if (window->width > 65535)
-	window->width = 65535;
+        window->width = 65535;
       if (window->height > 65535)
-	window->height = 65535;
+        window->height = 65535;
     }
-  
+
   impl->xid = XCreateWindow (xdisplay, xparent,
                              window->x + window->parent->abs_x,
                              window->y + window->parent->abs_y,
@@ -802,21 +803,21 @@ _gdk_window_impl_new (GdkWindow     *window,
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
       if (attributes_mask & GDK_WA_TITLE)
-	title = attributes->title;
+        title = attributes->title;
       else
-	title = get_default_title ();
-      
+        title = get_default_title ();
+
       gdk_window_set_title (window, title);
-      
+
       if (attributes_mask & GDK_WA_WMCLASS)
-	{
-	  class_hint = XAllocClassHint ();
-	  class_hint->res_name = attributes->wmclass_name;
-	  class_hint->res_class = attributes->wmclass_class;
-	  XSetClassHint (xdisplay, impl->xid, class_hint);
-	  XFree (class_hint);
-	}
-  
+        {
+          class_hint = XAllocClassHint ();
+          class_hint->res_name = attributes->wmclass_name;
+          class_hint->res_class = attributes->wmclass_class;
+          XSetClassHint (xdisplay, impl->xid, class_hint);
+          XFree (class_hint);
+        }
+
       setup_toplevel_window (window, window->parent);
       break;
 

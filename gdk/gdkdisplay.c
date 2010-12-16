@@ -2517,3 +2517,21 @@ _gdk_display_event_data_free (GdkDisplay *display,
 {
   GDK_DISPLAY_GET_CLASS (display)->event_data_free (display, event);
 }
+
+void
+_gdk_display_create_window_impl (GdkDisplay       *display,
+                                 GdkWindow        *window,
+                                 GdkWindow        *real_parent,
+                                 GdkScreen        *screen,
+                                 GdkEventMask      event_mask,
+                                 GdkWindowAttr    *attributes,
+                                 gint              attributes_mask)
+{
+  GDK_DISPLAY_GET_CLASS (display)->create_window_impl (display,
+                                                       window,
+                                                       real_parent,
+                                                       screen,
+                                                       event_mask,
+                                                       attributes,
+                                                       attributes_mask);
+}

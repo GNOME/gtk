@@ -2726,5 +2726,6 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
   display_class->event_data_copy = gdk_x11_display_event_data_copy;
   display_class->event_data_free = gdk_x11_display_event_data_free;
+  display_class->create_window_impl = _gdk_x11_display_create_window_impl;
 }
 

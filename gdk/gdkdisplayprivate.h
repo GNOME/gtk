@@ -21,6 +21,7 @@
 #define __GDK_DISPLAY_PRIVATE_H__
 
 #include "gdkdisplay.h"
+#include "gdkwindow.h"
 #include "gdkcursor.h"
 
 G_BEGIN_DECLS
@@ -182,6 +183,13 @@ struct _GdkDisplayClass
                                                  GdkEvent       *new_event);
   void                       (*event_data_free) (GdkDisplay     *display,
                                                  GdkEvent       *event);
+  void                       (*create_window_impl) (GdkDisplay    *display,
+                                                    GdkWindow     *window,
+                                                    GdkWindow     *real_parent,
+                                                    GdkScreen     *screen,
+                                                    GdkEventMask   event_mask,
+                                                    GdkWindowAttr *attributes,
+                                                    gint           attributes_mask);
 
   /* Signals */
   void (*closed) (GdkDisplay *display,
@@ -234,6 +242,13 @@ void                _gdk_display_event_data_copy      (GdkDisplay       *display
                                                        GdkEvent         *new_event);
 void                _gdk_display_event_data_free      (GdkDisplay       *display,
                                                        GdkEvent         *event);
+void                _gdk_display_create_window_impl   (GdkDisplay       *display,
+                                                       GdkWindow        *window,
+                                                       GdkWindow        *real_parent,
+                                                       GdkScreen        *screen,
+                                                       GdkEventMask      event_mask,
+                                                       GdkWindowAttr    *attributes,
+                                                       gint              attributes_mask);
 
 G_END_DECLS
 
