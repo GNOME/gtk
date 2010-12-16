@@ -1135,11 +1135,18 @@ gtk_cell_area_real_render (GtkCellArea          *area,
 	(flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
 	 (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
 
+      cairo_save (cr);
+
+      gdk_cairo_rectangle (cr, background_area);
+      cairo_clip (cr);
+
       gtk_paint_focus (gtk_widget_get_style (widget), cr, 
 		       renderer_state, widget,
 		       gtk_cell_area_get_style_detail (area),
 		       render_data.focus_rect.x,     render_data.focus_rect.y,
 		       render_data.focus_rect.width, render_data.focus_rect.height);
+
+      cairo_restore (cr);
     }
 }
 
