@@ -188,7 +188,6 @@ XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
                                               gint       monitor_num);
 
 #ifndef GDK_MULTIHEAD_SAFE
-gboolean      gdk_net_wm_supports    (GdkAtom    property);
 void          gdk_x11_grab_server    (void);
 void          gdk_x11_ungrab_server  (void);
 #endif

@@ -1449,23 +1449,6 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
   return FALSE;
 }
 
-/**
- * gdk_net_wm_supports:
- * @property: a property atom.
- *
- * This function is specific to the X11 backend of GDK, and indicates
- * whether the window manager for the default screen supports a certain
- * hint from the Extended Window Manager Hints Specification. See
- * gdk_x11_screen_supports_net_wm_hint() for complete details.
- *
- * Return value: %TRUE if the window manager supports @property
- **/
-gboolean
-gdk_net_wm_supports (GdkAtom property)
-{
-  return gdk_x11_screen_supports_net_wm_hint (gdk_screen_get_default (), property);
-}
-
 static void
 refcounted_grab_server (Display *xdisplay)
 {

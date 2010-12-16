@@ -236,7 +236,6 @@ gdk_keyval_to_unicode G_GNUC_CONST
 gdk_keyval_to_upper G_GNUC_CONST
 gdk_list_visuals
 gdk_modifier_type_get_type G_GNUC_CONST
-gdk_net_wm_supports
 gdk_notify_startup_complete
 gdk_notify_startup_complete_with_id
 gdk_notify_type_get_type G_GNUC_CONST
