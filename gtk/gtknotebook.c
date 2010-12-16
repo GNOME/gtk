@@ -8116,8 +8116,8 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *    GtkWidget **child;
  *    
  *    notebook = gtk_drag_get_source_widget (context);
- *    child = (void*) selection_data->data;
- *    
+ *    child = (void*) gtk_selection_data_get_data (selection_data);
+ *
  *    process_widget (*child);
  *    gtk_container_remove (GTK_CONTAINER (notebook), *child);
  *  }
