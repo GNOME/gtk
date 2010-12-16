@@ -217,7 +217,6 @@ cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
                                                          int        width,
                                                          int        height);
 
-extern gboolean          _gdk_use_xshm;
 extern const gint        _gdk_x11_event_mask_table[];
 extern const gint        _gdk_x11_event_mask_table_size;
 extern GdkAtom           _gdk_selection_property;

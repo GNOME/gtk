@@ -31,6 +31,4 @@
 
 #include <stdio.h>
 
-
-gboolean          _gdk_use_xshm = TRUE;  /* used as a cmd line arg */
 gboolean          _gdk_synchronize = FALSE;
