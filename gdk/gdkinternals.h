@@ -293,12 +293,6 @@ gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
 cairo_surface_t *
            _gdk_window_ref_cairo_surface (GdkWindow *window);
 
-void       _gdk_window_impl_new          (GdkWindow      *window,
-                                          GdkWindow      *real_parent,
-                                          GdkScreen      *screen,
-                                          GdkEventMask    event_mask,
-                                          GdkWindowAttr  *attributes,
-                                          gint            attributes_mask);
 void       _gdk_window_destroy           (GdkWindow      *window,
                                           gboolean        foreign_destroy);
 void       _gdk_window_clear_update_area (GdkWindow      *window);
