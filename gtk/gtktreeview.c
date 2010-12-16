@@ -575,7 +575,8 @@ static void     gtk_tree_view_get_preferred_height (GtkWidget        *widget,
 						    gint             *minimum,
 						    gint             *natural);
 static void     gtk_tree_view_size_request         (GtkWidget        *widget,
-						    GtkRequisition   *requisition);
+						    GtkRequisition   *requisition,
+                                                    gboolean          may_validate);
 static void     gtk_tree_view_size_allocate        (GtkWidget        *widget,
 						    GtkAllocation    *allocation);
 static gboolean gtk_tree_view_draw                 (GtkWidget        *widget,
@@ -2420,15 +2421,20 @@ gtk_tree_view_update_size (GtkTreeView *tree_view)
 
 static void
 gtk_tree_view_size_request (GtkWidget      *widget,
-			    GtkRequisition *requisition)
+			    GtkRequisition *requisition,
+                            gboolean        may_validate)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *tmp_list;
 
-  /* we validate some rows initially just to make sure we have some size. 
-   * In practice, with a lot of static lists, this should get a good width.
-   */
-  do_validate_rows (tree_view, FALSE);
+  if (may_validate)
+    {
+      /* we validate some rows initially just to make sure we have some size.
+       * In practice, with a lot of static lists, this should get a good width.
+       */
+      do_validate_rows (tree_view, FALSE);
+    }
+
   gtk_tree_view_size_request_columns (tree_view);
   gtk_tree_view_update_size (GTK_TREE_VIEW (widget));
 
@@ -2445,7 +2451,7 @@ gtk_tree_view_get_preferred_width (GtkWidget *widget,
 {
   GtkRequisition requisition;
 
-  gtk_tree_view_size_request (widget, &requisition);
+  gtk_tree_view_size_request (widget, &requisition, TRUE);
 
   *minimum = *natural = requisition.width;
 }
@@ -2457,7 +2463,7 @@ gtk_tree_view_get_preferred_height (GtkWidget *widget,
 {
   GtkRequisition requisition;
 
-  gtk_tree_view_size_request (widget, &requisition);
+  gtk_tree_view_size_request (widget, &requisition, TRUE);
 
   *minimum = *natural = requisition.height;
 }
@@ -6754,7 +6760,7 @@ do_validate_rows (GtkTreeView *tree_view, gboolean queue_resize)
        * Currently bypassing this but the real solution is to not update the scroll adjustments
        * untill we've recieved an allocation (never update scroll adjustments from size-requests).
        */
-      gtk_tree_view_size_request (GTK_WIDGET (tree_view), &requisition);
+      gtk_tree_view_size_request (GTK_WIDGET (tree_view), &requisition, FALSE);
 
       tree_view->priv->hadjustment->upper = MAX (tree_view->priv->hadjustment->upper, (gfloat)requisition.width);
       tree_view->priv->vadjustment->upper = MAX (tree_view->priv->vadjustment->upper, (gfloat)requisition.height);
