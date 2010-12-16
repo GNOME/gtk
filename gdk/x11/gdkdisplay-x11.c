@@ -488,7 +488,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	expose_rect.width = xevent->xexpose.width;
 	expose_rect.height = xevent->xexpose.height;
 
-        _gdk_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
+        _gdk_x11_window_process_expose (window, xevent->xexpose.serial, &expose_rect);
         return_val = FALSE;
       }
 
@@ -513,7 +513,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 	expose_rect.width = xevent->xgraphicsexpose.width;
 	expose_rect.height = xevent->xgraphicsexpose.height;
 
-        _gdk_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
+        _gdk_x11_window_process_expose (window, xevent->xgraphicsexpose.serial, &expose_rect);
         return_val = FALSE;
       }
       break;
@@ -960,9 +960,9 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 			   repair, None);
 	  XFixesDestroyRegion (display_x11->xdisplay, repair);
 
-	  if (window->parent != NULL)
-	    _gdk_window_process_expose (window->parent,
-					damage_event->serial, &rect);
+          if (window->parent != NULL)
+           _gdk_x11_window_process_expose (window->parent,
+                                           damage_event->serial, &rect);
 
 	  return_val = TRUE;
 	}

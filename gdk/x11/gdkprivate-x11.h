@@ -92,14 +92,14 @@ gint _gdk_x11_display_send_xevent (GdkDisplay *display,
                                    XEvent     *event_send);
 
 /* Routines from gdkgeometry-x11.c */
-void _gdk_window_move_resize_child (GdkWindow     *window,
-                                    gint           x,
-                                    gint           y,
-                                    gint           width,
-                                    gint           height);
-void _gdk_window_process_expose    (GdkWindow     *window,
-                                    gulong         serial,
-                                    GdkRectangle  *area);
+void _gdk_x11_window_move_resize_child (GdkWindow     *window,
+                                        gint           x,
+                                        gint           y,
+                                        gint           width,
+                                        gint           height);
+void _gdk_x11_window_process_expose    (GdkWindow     *window,
+                                        gulong         serial,
+                                        GdkRectangle  *area);
 
 gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
                                             cairo_region_t *area);

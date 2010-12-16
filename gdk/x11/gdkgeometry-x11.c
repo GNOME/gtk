@@ -53,11 +53,11 @@ struct _GdkWindowQueueItem
 };
 
 void
-_gdk_window_move_resize_child (GdkWindow *window,
-			       gint       x,
-			       gint       y,
-			       gint       width,
-			       gint       height)
+_gdk_x11_window_move_resize_child (GdkWindow *window,
+                                   gint       x,
+                                   gint       y,
+                                   gint       width,
+                                   gint       height)
 {
   g_return_if_fail (window != NULL);
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -68,9 +68,9 @@ _gdk_window_move_resize_child (GdkWindow *window,
       g_warning ("Native children wider or taller than 65535 pixels are not supported");
 
       if (width > 65535)
-	width = 65535;
+        width = 65535;
       if (height > 65535)
-	height = 65535;
+        height = 65535;
     }
 
   window->x = x;
@@ -79,16 +79,16 @@ _gdk_window_move_resize_child (GdkWindow *window,
   window->height = height;
 
   /* We don't really care about origin overflow, because on overflow
-     the window won't be visible anyway and thus it will be shaped
-     to nothing */
-
+   * the window won't be visible anyway and thus it will be shaped
+   * to nothing
+   */
   _gdk_x11_window_tmp_unset_parent_bg (window);
   _gdk_x11_window_tmp_unset_bg (window, TRUE);
   XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-		     GDK_WINDOW_XID (window),
-		     window->x + window->parent->abs_x,
-		     window->y + window->parent->abs_y,
-		     width, height);
+                     GDK_WINDOW_XID (window),
+                     window->x + window->parent->abs_x,
+                     window->y + window->parent->abs_y,
+                     width, height);
   _gdk_x11_window_tmp_reset_parent_bg (window);
   _gdk_x11_window_tmp_reset_bg (window, TRUE);
 }
@@ -326,9 +326,9 @@ _gdk_x11_window_queue_antiexpose (GdkWindow *window,
 }
 
 void
-_gdk_window_process_expose (GdkWindow    *window,
-			    gulong        serial,
-			    GdkRectangle *area)
+_gdk_x11_window_process_expose (GdkWindow    *window,
+                                gulong        serial,
+                                GdkRectangle *area)
 {
   cairo_region_t *invalidate_region = cairo_region_create_rectangle (area);
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
@@ -338,44 +338,44 @@ _gdk_window_process_expose (GdkWindow    *window,
       GList *tmp_list = display_x11->translate_queue->head;
 
       while (tmp_list)
-	{
-	  GdkWindowQueueItem *item = tmp_list->data;
+        {
+          GdkWindowQueueItem *item = tmp_list->data;
           GList *next = tmp_list->next;
 
-	  /* an overflow-safe (serial < item->serial) */
-	  if (serial - item->serial > (gulong) G_MAXLONG)
-	    {
-	      if (item->window == window)
-		{
-		  if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
-		    {
-		      if (item->u.translate.area)
-			{
-			  cairo_region_t *intersection;
+          /* an overflow-safe (serial < item->serial) */
+          if (serial - item->serial > (gulong) G_MAXLONG)
+            {
+              if (item->window == window)
+                {
+                  if (item->type == GDK_WINDOW_QUEUE_TRANSLATE)
+                    {
+                      if (item->u.translate.area)
+                        {
+                          cairo_region_t *intersection;
 
-			  intersection = cairo_region_copy (invalidate_region);
-			  cairo_region_intersect (intersection, item->u.translate.area);
-			  cairo_region_subtract (invalidate_region, intersection);
-			  cairo_region_translate (intersection, item->u.translate.dx, item->u.translate.dy);
-			  cairo_region_union (invalidate_region, intersection);
-			  cairo_region_destroy (intersection);
-			}
-		      else
-			cairo_region_translate (invalidate_region, item->u.translate.dx, item->u.translate.dy);
-		    }
-		  else		/* anti-expose */
-		    {
-		      cairo_region_subtract (invalidate_region, item->u.antiexpose.area);
-		    }
-		}
-	    }
-	  else
-	    {
-	      queue_delete_link (display_x11->translate_queue, tmp_list);
-	      queue_item_free (item);
-	    }
-	  tmp_list = next;
-	}
+                          intersection = cairo_region_copy (invalidate_region);
+                          cairo_region_intersect (intersection, item->u.translate.area);
+                          cairo_region_subtract (invalidate_region, intersection);
+                          cairo_region_translate (intersection, item->u.translate.dx, item->u.translate.dy);
+                          cairo_region_union (invalidate_region, intersection);
+                          cairo_region_destroy (intersection);
+                        }
+                      else
+                        cairo_region_translate (invalidate_region, item->u.translate.dx, item->u.translate.dy);
+                    }
+                  else /* anti-expose */
+                    {
+                      cairo_region_subtract (invalidate_region, item->u.antiexpose.area);
+                    }
+                }
+            }
+          else
+            {
+              queue_delete_link (display_x11->translate_queue, tmp_list);
+              queue_item_free (item);
+            }
+          tmp_list = next;
+        }
     }
 
   if (!cairo_region_is_empty (invalidate_region))
