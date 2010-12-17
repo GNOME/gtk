@@ -865,7 +865,7 @@ x_event_mask_to_gdk_event_mask (long mask)
  *   window, or %NULL if the window has been destroyed. The wrapper
  *   will be newly created, if one doesn't exist already.
  *
- * Since: 3.0
+ * Since: 2.24
  */
 GdkWindow *
 gdk_x11_window_foreign_new_for_display (GdkDisplay *display,

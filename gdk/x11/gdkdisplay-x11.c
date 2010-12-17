@@ -2652,6 +2652,8 @@ extern GdkNativeWindow      _gdk_x11_display_get_drag_protocol      (GdkDisplay 
  *
  * See the X Session Management Library documentation for more information on
  * session management and the Inter-Client Communication Conventions Manual
+ *
+ * Since: 2.24
  */
 void
 gdk_x11_set_sm_client_id (const gchar *sm_client_id)

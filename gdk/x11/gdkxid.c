@@ -89,7 +89,7 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
  * Return value: (transfer none): the #GdkWindow wrapper for the native
  *    window, or %NULL if there is none.
  *
- * Since: 3.0
+ * Since: 2.24
  */
 GdkWindow *
 gdk_x11_window_lookup_for_display (GdkDisplay *display,
