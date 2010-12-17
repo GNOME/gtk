@@ -175,13 +175,6 @@ gdk_screen_get_height_mm (GdkScreen *screen)
 }
 
 void
-_gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
-					 const gchar *sm_client_id)
-{
-  g_warning("gdk_set_sm_client_id %s", sm_client_id ? sm_client_id : "NULL");
-}
-
-void
 gdk_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (display == gdk_display_get_default());
