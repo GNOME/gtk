@@ -30,6 +30,7 @@
 
 G_BEGIN_DECLS
 
+#ifndef GDK_DISABLE_DEPRECATED
 gboolean gdk_spawn_on_screen              (GdkScreen             *screen,
 					   const gchar           *working_directory,
 					   gchar                **argv,
@@ -56,6 +57,7 @@ gboolean gdk_spawn_on_screen_with_pipes   (GdkScreen             *screen,
 gboolean gdk_spawn_command_line_on_screen (GdkScreen             *screen,
 					   const gchar           *command_line,
 					   GError               **error);
+#endif
 
 G_END_DECLS
 

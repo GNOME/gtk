@@ -1193,9 +1193,11 @@ gdk_set_sm_client_id
 
 #if IN_HEADER(__GDK_SPAWN_H__)
 #if IN_FILE(__GDK_SPAWN_X11_C__)
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_spawn_command_line_on_screen
 gdk_spawn_on_screen
 gdk_spawn_on_screen_with_pipes
+#endif
 #endif
 #endif
 
