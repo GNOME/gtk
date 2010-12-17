@@ -204,45 +204,19 @@ gdk_selection_convert (GdkWindow *requestor,
                      GDK_WINDOW_XID (requestor), time);
 }
 
-/**
- * gdk_selection_property_get:
- * @requestor: the window on which the data is stored
- * @data: location to store a pointer to the retrieved data.
-       If the retrieval failed, %NULL we be stored here, otherwise, it
-       will be non-%NULL and the returned data should be freed with g_free()
-       when you are finished using it. The length of the
-       allocated memory is one more than the length
-       of the returned data, and the final byte will always
-       be zero, to ensure nul-termination of strings.
- * @prop_type: location to store the type of the property.
- * @prop_format: location to store the format of the property.
- * 
- * Retrieves selection data that was stored by the selection
- * data in response to a call to gdk_selection_convert(). This function
- * will not be used by applications, who should use the #GtkClipboard
- * API instead.
- * 
- * Return value: the length of the retrieved data.
- **/
 gint
-gdk_selection_property_get (GdkWindow  *requestor,
-			    guchar    **data,
-			    GdkAtom    *ret_type,
-			    gint       *ret_format)
+_gdk_x11_display_get_selection_property (GdkDisplay  *display,
+                                         GdkWindow   *requestor,
+                                         guchar     **data,
+                                         GdkAtom     *ret_type,
+                                         gint        *ret_format)
 {
   gulong nitems;
   gulong nbytes;
-  gulong length = 0;		/* Quiet GCC */
+  gulong length = 0;
   Atom prop_type;
   gint prop_format;
   guchar *t = NULL;
-  GdkDisplay *display; 
-
-  g_return_val_if_fail (requestor != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
-  g_return_val_if_fail (GDK_WINDOW_IS_X11 (requestor), 0);
-  
-  display = GDK_WINDOW_DISPLAY (requestor);
 
   if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     goto err;

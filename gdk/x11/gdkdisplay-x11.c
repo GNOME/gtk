@@ -2763,4 +2763,5 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->get_selection_owner = _gdk_x11_display_get_selection_owner;
   display_class->set_selection_owner = _gdk_x11_display_set_selection_owner;
   display_class->send_selection_notify = _gdk_x11_display_send_selection_notify;
+  display_class->get_selection_property = _gdk_x11_display_get_selection_property;
 }

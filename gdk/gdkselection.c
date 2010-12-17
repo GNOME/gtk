@@ -334,3 +334,39 @@ gdk_selection_send_notify_for_display (GdkDisplay       *display,
   GDK_DISPLAY_GET_CLASS (display)
     ->send_selection_notify (display, requestor, selection,target, property, time_);
 }
+
+/**
+ * gdk_selection_property_get:
+ * @requestor: the window on which the data is stored
+ * @data: location to store a pointer to the retrieved data.
+       If the retrieval failed, %NULL we be stored here, otherwise, it
+       will be non-%NULL and the returned data should be freed with g_free()
+       when you are finished using it. The length of the
+       allocated memory is one more than the length
+       of the returned data, and the final byte will always
+       be zero, to ensure nul-termination of strings
+ * @prop_type: location to store the type of the property
+ * @prop_format: location to store the format of the property
+ *
+ * Retrieves selection data that was stored by the selection
+ * data in response to a call to gdk_selection_convert(). This function
+ * will not be used by applications, who should use the #GtkClipboard
+ * API instead.
+ *
+ * Return value: the length of the retrieved data.
+ */
+gint
+gdk_selection_property_get (GdkWindow  *requestor,
+                            guchar    **data,
+                            GdkAtom    *ret_type,
+                            gint       *ret_format)
+{
+  GdkDisplay *display;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (requestor), 0);
+
+  display = gdk_window_get_display (requestor);
+
+  return GDK_DISPLAY_GET_CLASS (display)
+           ->get_selection_property (display, requestor, data, ret_type, ret_format);
+}

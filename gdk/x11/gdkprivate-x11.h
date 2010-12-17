@@ -202,6 +202,11 @@ void        _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
                                                     GdkAtom          target,
                                                     GdkAtom          property,
                                                     guint32          time);
+gint        _gdk_x11_display_get_selection_property (GdkDisplay     *display,
+                                                     GdkWindow      *requestor,
+                                                     guchar        **data,
+                                                     GdkAtom        *ret_type,
+                                                     gint           *ret_format);
 
 void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
