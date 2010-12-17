@@ -61,6 +61,12 @@
 
 static GdkKeymap *default_keymap = NULL;
 
+typedef struct _GdkKeymapQuartz GdkKeymapQuartz;
+typedef struct _GdkKeymapQuartzClass GdkKeymapQuartzClass;
+
+G_DEFINE_TYPE (GdkKeyMapQuartz, _gdk_keymap_quartz, GDK_TYPE_KEYMAP)
+
+
 /* Note: we could check only if building against the 10.5 SDK instead, but
  * that would make non-xml layouts not work in 32-bit which would be a quite
  * bad regression. This way, old unsupported layouts will just not work in
@@ -431,46 +437,41 @@ gdk_keymap_get_for_display (GdkDisplay *display)
   return default_keymap;
 }
 
-PangoDirection
-gdk_keymap_get_direction (GdkKeymap *keymap)
+static PangoDirection
+gdk_quartz_keymap_get_direction (GdkKeymap *keymap)
 {
   return PANGO_DIRECTION_NEUTRAL;
 }
 
-gboolean
-gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
+static gboolean
+gdk_quartz_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
   /* FIXME: Can we implement this? */
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+static gboolean
+gdk_quartz_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
   /* FIXME: Implement this. */
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
+static gboolean
+gdk_quartz_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
   /* FIXME: Implement this. */
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-                                   guint          keyval,
-                                   GdkKeymapKey **keys,
-                                   gint          *n_keys)
+static gboolean
+gdk_quartz_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
+                                          guint          keyval,
+                                          GdkKeymapKey **keys,
+                                          gint          *n_keys)
 {
   GArray *keys_array;
   int i;
-
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (keys != NULL, FALSE);
-  g_return_val_if_fail (n_keys != NULL, FALSE);
-  g_return_val_if_fail (keyval != 0, FALSE);
 
   maybe_update_keymap ();
 
@@ -498,19 +499,16 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   return *n_keys > 0;;
 }
 
-gboolean
-gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
-                                    guint          hardware_keycode,
-                                    GdkKeymapKey **keys,
-                                    guint        **keyvals,
-                                    gint          *n_entries)
+static gboolean
+gdk_quartz_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
+                                           guint          hardware_keycode,
+                                           GdkKeymapKey **keys,
+                                           guint        **keyvals,
+                                           gint          *n_entries)
 {
   GArray *keys_array, *keyvals_array;
   int i;
   guint *p;
-
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (n_entries != NULL, FALSE);
 
   maybe_update_keymap ();
 
@@ -562,14 +560,10 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   return *n_entries > 0;
 }
 
-guint
-gdk_keymap_lookup_key (GdkKeymap          *keymap,
-                       const GdkKeymapKey *key)
+static guint
+gdk_quartz_keymap_lookup_key (GdkKeymap          *keymap,
+                              const GdkKeymapKey *key)
 {
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), 0);
-  g_return_val_if_fail (key != NULL, 0);
-  g_return_val_if_fail (key->group < 4, 0);
-
   /* FIXME: Implement */
 
   return 0;
@@ -609,23 +603,20 @@ translate_keysym (guint           hardware_keycode,
   return tmp_keyval;
 }
 
-gboolean
-gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
-                                     guint            hardware_keycode,
-                                     GdkModifierType  state,
-                                     gint             group,
-                                     guint           *keyval,
-                                     gint            *effective_group,
-                                     gint            *level,
-                                     GdkModifierType *consumed_modifiers)
+static gboolean
+gdk_quartz_keymap_translate_keyboard_state (GdkKeymap       *keymap,
+                                            guint            hardware_keycode,
+                                            GdkModifierType  state,
+                                            gint             group,
+                                            guint           *keyval,
+                                            gint            *effective_group,
+                                            gint            *level,
+                                            GdkModifierType *consumed_modifiers)
 {
   guint tmp_keyval;
   GdkModifierType bit;
   guint tmp_modifiers = 0;
 
-  g_return_val_if_fail (keymap == NULL || GDK_IS_KEYMAP (keymap), FALSE);
-  g_return_val_if_fail (group >= 0 && group <= 1, FALSE);
-  
   maybe_update_keymap ();
 
   if (keyval)
@@ -659,16 +650,16 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   return TRUE;
 }
 
-void
-gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-                                  GdkModifierType *state)
+static void
+gdk_quartz_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+                                         GdkModifierType *state)
 {
   /* FIXME: For now, we've mimiced the Windows backend. */
 }
 
-gboolean
-gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-                                  GdkModifierType *state)
+static gboolean
+gdk_quartz_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+                                         GdkModifierType *state)
 {
   /* FIXME: For now, we've mimiced the Windows backend. */
   return TRUE;
@@ -732,4 +723,35 @@ _gdk_quartz_keys_is_modifier (guint keycode)
     }
 
   return FALSE;
+}
+
+static void
+_gdk_keymap_quartz_init (GdkKeymapQuartz *keymap)
+{
+}
+
+static void
+_gdk_keymap_quartz_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (_gdk_keymap_quartz_parent_class)->finalize (object);
+}
+
+static void
+_gdk_keymap_quartz_class_init (GdkKeymapQuartzClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkKeymapClass *keymap_class = GDK_KEYMAP_CLASS (klass);
+
+  object_class->finalize = gdk_keymap_quartz_finalize;
+
+  keymap_class->get_direction = gdk_quartz_keymap_get_direction;
+  keymap_class->have_bidi_layouts = gdk_quartz_keymap_have_bidi_layouts;
+  keymap_class->get_caps_lock_state = gdk_quartz_keymap_get_caps_lock_state;
+  keymap_class->get_num_lock_state = gdk_quartz_keymap_get_num_lock_state;
+  keymap_class->get_entries_for_keyval = gdk_quartz_keymap_get_entries_for_keyval;
+  keymap_class->get_entries_for_keycode = gdk_quartz_keymap_get_entries_for_keycode;
+  keymap_class->lookup_key = gdk_quartz_keymap_lookup_key;
+  keymap_class->translate_keyboard_state = gdk_quartz_keymap_translate_keyboard_state;
+  keymap_class->add_virtual_modifiers = gdk_quartz_keymap_add_virtual_modifiers;
+  keymap_class->map_virtual_modifiers = gdk_quartz_keymap_map_virtual_modifiers;
 }
