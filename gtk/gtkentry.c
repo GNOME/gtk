@@ -8423,8 +8423,8 @@ gtk_entry_set_icon_tooltip_text (GtkEntry             *entry,
 
   priv = GTK_ENTRY_GET_PRIVATE (entry);
 
-  if (!(icon_info = priv->icons[icon_pos]))
-    icon_info = priv->icons[icon_pos];
+  if ((icon_info = priv->icons[icon_pos]) == NULL)
+    icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
   if (icon_info->tooltip)
     g_free (icon_info->tooltip);
@@ -8502,8 +8502,8 @@ gtk_entry_set_icon_tooltip_markup (GtkEntry             *entry,
 
   priv = GTK_ENTRY_GET_PRIVATE (entry);
 
-  if (!(icon_info = priv->icons[icon_pos]))
-    icon_info = priv->icons[icon_pos];
+  if ((icon_info = priv->icons[icon_pos]) == NULL)
+    icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
   if (icon_info->tooltip)
     g_free (icon_info->tooltip);
