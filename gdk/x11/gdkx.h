@@ -127,8 +127,10 @@ gint     gdk_x11_get_default_screen       (void);
 
 GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
 					 VisualID   xvisualid);
+#ifndef GDK_DISABLE_DEPRECATED
 #ifndef GDK_MULTIHEAD_SAFE
 GdkVisual* gdkx_visual_get            (VisualID   xvisualid);
+#endif
 #endif
 
 #ifdef GDK_ENABLE_BROKEN

@@ -1349,7 +1349,9 @@ gdk_x11_screen_get_monitor_output
 #if IN_FILE(__GDK_VISUAL_X11_C__)
 gdk_x11_screen_lookup_visual
 gdk_x11_visual_get_xvisual
+#ifndef GDK_DISABLE_DEPRECATED
 gdkx_visual_get
+#endif
 #endif
 
 #if IN_FILE(__GDK_WINDOW_X11_C__)
