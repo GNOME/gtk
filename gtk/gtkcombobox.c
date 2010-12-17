@@ -1450,6 +1450,7 @@ static void
 gtk_combo_box_add (GtkContainer *container,
                    GtkWidget    *widget)
 {
+  gboolean cell_view_removed = FALSE;
   GtkComboBox *combo_box = GTK_COMBO_BOX (container);
   GtkComboBoxPrivate *priv = combo_box->priv;
 
@@ -1461,23 +1462,26 @@ gtk_combo_box_add (GtkContainer *container,
       return;
     }
 
+  if (priv->cell_view != NULL && widget != priv->cell_view)
+    cell_view_removed = TRUE;
+
   if (priv->cell_view &&
       gtk_widget_get_parent (priv->cell_view))
     {
       gtk_widget_unparent (priv->cell_view);
       _gtk_bin_set_child (GTK_BIN (container), NULL);
+
+      /* since the cell_view was unparented, it's gone now */
+      priv->cell_view = NULL;
+
       gtk_widget_queue_resize (GTK_WIDGET (container));
     }
   
   gtk_widget_set_parent (widget, GTK_WIDGET (container));
   _gtk_bin_set_child (GTK_BIN (container), widget);
 
-  if (priv->cell_view &&
-      widget != priv->cell_view)
+  if (cell_view_removed)
     {
-      /* since the cell_view was unparented, it's gone now */
-      priv->cell_view = NULL;
-
       if (!priv->tree_view && priv->separator)
         {
           gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (priv->separator)),
