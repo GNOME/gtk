@@ -2290,7 +2290,7 @@ gtk_combo_box_popup_for_device (GtkComboBox *combo_box,
   if (!gtk_widget_get_realized (GTK_WIDGET (combo_box)))
     return;
 
-  if (gtk_widget_get_mapped (priv->popup_widget))
+  if (gtk_widget_get_mapped (priv->popup_window))
     return;
 
   if (priv->grab_pointer && priv->grab_keyboard)
