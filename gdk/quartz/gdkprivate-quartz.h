@@ -173,6 +173,8 @@ void       _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
                                                         guint      *height);
 void       _gdk_quartz_display_before_process_all_updates (GdkDisplay *display);
 void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
+void       _gdk_quartz_display_notify_startup_complete    (GdkDisplay *display,
+                                                           const gchar *id);
 
 
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
