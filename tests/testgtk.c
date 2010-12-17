@@ -8917,19 +8917,19 @@ create_snapshot (GtkWidget *widget)
 
 void
 selection_test_received (GtkWidget        *tree_view,
-                         GtkSelectionData *data)
+                         GtkSelectionData *selection_data)
 {
   GtkTreeModel *model;
   GtkListStore *store;
   GdkAtom *atoms;
   int i, l;
 
-  if (data->length < 0)
+  if (gtk_selection_data_get_length (selection_data) < 0)
     {
       g_print ("Selection retrieval failed\n");
       return;
     }
-  if (data->type != GDK_SELECTION_TYPE_ATOM)
+  if (gtk_selection_data_get_data_type (selection_data) != GDK_SELECTION_TYPE_ATOM)
     {
       g_print ("Selection \"TARGETS\" was not returned as atoms!\n");
       return;
@@ -8943,9 +8943,9 @@ selection_test_received (GtkWidget        *tree_view,
 
   /* Add new items to list */
 
-  atoms = (GdkAtom *)data->data;
+  gtk_selection_data_get_targets (selection_data,
+                                  &atoms, &l);
 
-  l = data->length / sizeof (GdkAtom);
   for (i = 0; i < l; i++)
     {
       char *name;

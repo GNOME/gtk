@@ -872,7 +872,7 @@ icon_size_lookup_intern (GtkSettings *settings,
  * modified by user preferences for a particular
  * #GtkSettings. Normally @size would be
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
- * isn't normally needed, gtk_widget_render_icon() is the usual
+ * isn't normally needed, gtk_widget_render_icon_pixbuf() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
@@ -905,7 +905,7 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
  * (See gtk_icon_size_lookup_for_settings().)
  * Normally @size would be
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
- * isn't normally needed, gtk_widget_render_icon() is the usual
+ * isn't normally needed, gtk_widget_render_icon_pixbuf() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
@@ -1131,7 +1131,7 @@ static guint cache_serial = 0;
  * for a given size and state on request, and automatically caches
  * some of the rendered #GdkPixbuf objects.
  *
- * Normally you would use gtk_widget_render_icon() instead of
+ * Normally you would use gtk_widget_render_icon_pixbuf() instead of
  * using #GtkIconSet directly. The one case where you'd use
  * #GtkIconSet is to create application-specific icon sets to place in
  * a #GtkIconFactory.
@@ -1577,7 +1577,7 @@ render_fallback_image (GtkStyleContext   *context,
  *        means render at the size of the source and don't scale.
  *
  * Renders an icon using gtk_render_icon_pixbuf(). In most cases,
- * gtk_widget_render_icon() is better, since it automatically provides
+ * gtk_widget_render_icon_pixbuf() is better, since it automatically provides
  * most of the arguments from the current widget settings.  This
  * function never returns %NULL; if the icon can't be rendered
  * (perhaps because an image file fails to load), a default "missing

@@ -222,6 +222,7 @@ gboolean gdk_device_get_axis     (GdkDevice         *device,
 GdkDisplay * gdk_device_get_display (GdkDevice      *device);
 
 GdkDevice  * gdk_device_get_associated_device (GdkDevice     *device);
+GList *      gdk_device_list_slave_devices    (GdkDevice     *device);
 
 GdkDeviceType gdk_device_get_device_type (GdkDevice *device);
 

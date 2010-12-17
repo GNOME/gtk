@@ -3379,19 +3379,19 @@ gtk_calendar_drag_motion (GtkWidget      *widget,
 {
   GtkCalendarPrivate *priv = GTK_CALENDAR_GET_PRIVATE (widget);
   GdkAtom target;
-  
-  if (!priv->drag_highlight) 
+
+  if (!priv->drag_highlight)
     {
       priv->drag_highlight = 1;
       gtk_drag_highlight (widget);
     }
-  
+
   target = gtk_drag_dest_find_target (widget, context, NULL);
-  if (target == GDK_NONE || context->suggested_action == 0)
+  if (target == GDK_NONE || gdk_drag_context_get_suggested_action (context) == 0)
     gdk_drag_status (context, 0, time);
   else
     {
-      set_status_pending (context, context->suggested_action);
+      set_status_pending (context, gdk_drag_context_get_suggested_action (context));
       gtk_drag_get_data (widget, context, target, time);
     }
   

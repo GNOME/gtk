@@ -34,6 +34,7 @@
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
 #include "gtkiconfactory.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkstylecontext
@@ -2982,8 +2983,7 @@ _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context)
 
 void
 _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
-                                             gint             rel_x,
-                                             gint             rel_y)
+					     GtkWidget       *widget)
 {
   GtkStyleContextPrivate *priv;
   GSList *l;
@@ -2998,6 +2998,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
   while (l)
     {
       AnimationInfo *info;
+      gint rel_x, rel_y;
       GSList *cur;
       guint i;
 
@@ -3017,6 +3018,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
         }
 
       info->invalidation_region = cairo_region_create ();
+      _gtk_widget_get_translation_to_window (widget, info->window, &rel_x, &rel_y);
 
       for (i = 0; i < info->rectangles->len; i++)
         {
@@ -3254,7 +3256,7 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
  * gtk_style_context_get_border:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the border for
- * @color: (out): return value for the border settings
+ * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
  *
@@ -3286,7 +3288,7 @@ gtk_style_context_get_border (GtkStyleContext *context,
  * gtk_style_context_get_padding:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the padding for
- * @color: (out): return value for the padding settings
+ * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
  *
@@ -3318,7 +3320,7 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  * gtk_style_context_get_margin:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the border for
- * @color: (out): return value for the margin settings
+ * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
  *
@@ -3344,6 +3346,38 @@ gtk_style_context_get_margin (GtkStyleContext *context,
                                                "margin", state);
   b = g_value_get_boxed (value);
   *margin = *b;
+}
+
+/**
+ * gtk_style_context_get_font:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the font for
+ *
+ * Returns the font description for a given state. The returned
+ * object is const and will remain valid until the
+ * #GtkStyleContext::changed signal happens.
+ *
+ * Returns: the #PangoFontDescription for the given state. This
+ *          object is owned by GTK+ and should not be freed.
+ *
+ * Since: 3.0
+ **/
+const PangoFontDescription *
+gtk_style_context_get_font (GtkStyleContext *context,
+                            GtkStateFlags    state)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = context->priv;
+  g_return_val_if_fail (priv->widget_path != NULL, NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store, "font", state);
+  return g_value_get_boxed (value);
 }
 
 /* Paint methods */

@@ -80,6 +80,7 @@ gdk_device_set_source
 gdk_devices_list
 gdk_device_type_get_type G_GNUC_CONST
 gdk_device_ungrab
+gdk_disable_multidevice
 gdk_display_add_client_message_filter
 gdk_display_beep
 gdk_display_close
@@ -135,7 +136,9 @@ gdk_drag_abort
 gdk_drag_action_get_type G_GNUC_CONST
 gdk_drag_begin
 gdk_drag_context_get_actions
+gdk_drag_context_get_dest_window
 gdk_drag_context_get_device
+gdk_drag_context_get_protocol
 gdk_drag_context_get_selected_action
 gdk_drag_context_get_source_window
 gdk_drag_context_get_suggested_action
@@ -155,7 +158,6 @@ gdk_drag_protocol_get_type G_GNUC_CONST
 gdk_drag_status
 gdk_drop_finish
 gdk_drop_reply
-gdk_enable_multidevice
 gdk_error_trap_pop
 gdk_error_trap_pop_ignored
 gdk_error_trap_push
@@ -434,6 +436,7 @@ gdk_window_get_position
 gdk_window_get_root_coords
 gdk_window_get_root_origin
 gdk_window_get_screen
+gdk_window_get_source_events
 gdk_window_get_state
 gdk_window_get_support_multidevice
 gdk_window_get_toplevel
@@ -507,6 +510,7 @@ gdk_window_set_override_redirect
 gdk_window_set_role
 gdk_window_set_skip_pager_hint
 gdk_window_set_skip_taskbar_hint
+gdk_window_set_source_events
 gdk_window_set_startup_id
 gdk_window_set_static_gravities
 gdk_window_set_support_multidevice

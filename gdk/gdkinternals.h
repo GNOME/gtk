@@ -156,6 +156,7 @@ struct _GdkEventPrivate
   GdkScreen *screen;
   gpointer   windowing_data;
   GdkDevice *device;
+  GdkDevice *source_device;
 };
 
 /* Tracks information about the pointer grab on this display */
@@ -263,6 +264,10 @@ struct _GdkWindow
 
   GList *devices_inside;
   GHashTable *device_events;
+
+  GHashTable *source_event_masks;
+  gulong device_added_handler_id;
+  gulong device_changed_handler_id;
 };
 
 #define GDK_WINDOW_TYPE(d) (((GDK_WINDOW (d)))->window_type)
@@ -272,7 +277,7 @@ extern GSList    *_gdk_displays;
 extern gchar     *_gdk_display_name;
 extern gint       _gdk_screen_number;
 extern gchar     *_gdk_display_arg_name;
-extern gboolean   _gdk_enable_multidevice;
+extern gboolean   _gdk_disable_multidevice;
 
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
@@ -440,6 +445,7 @@ void  _gdk_windowing_launch_failed         (GAppLaunchContext *context,
 
 void _gdk_display_device_grab_update                     (GdkDisplay *display,
                                                           GdkDevice  *device,
+                                                          GdkDevice  *source_device,
                                                           gulong      current_serial);
 GdkDeviceGrabInfo  *_gdk_display_get_last_device_grab  (GdkDisplay *display,
                                                         GdkDevice  *device);
@@ -498,6 +504,7 @@ void _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				      GdkWindow                  *src,
 				      GdkWindow                  *dest,
                                       GdkDevice                  *device,
+                                      GdkDevice                  *source_device,
 				      GdkCrossingMode             mode,
 				      gint                        toplevel_x,
 				      gint                        toplevel_y,

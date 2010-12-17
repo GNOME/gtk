@@ -273,7 +273,7 @@ gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
   g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  if (selection_data->target != gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  if (gtk_selection_data_get_target (selection_data) != gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     return FALSE;
   
   path_str = gtk_tree_path_to_string (path);
@@ -336,14 +336,14 @@ gtk_tree_get_row_drag_data (GtkSelectionData  *selection_data,
 
   if (path)
     *path = NULL;
-  
-  if (selection_data->target != gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+
+  if (gtk_selection_data_get_target (selection_data) != gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     return FALSE;
 
-  if (selection_data->length < 0)
+  if (gtk_selection_data_get_length (selection_data) < 0)
     return FALSE;
 
-  trd = (void*) selection_data->data;
+  trd = (void*) gtk_selection_data_get_data (selection_data);
 
   if (tree_model)
     *tree_model = trd->model;

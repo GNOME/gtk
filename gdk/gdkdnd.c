@@ -185,3 +185,40 @@ gdk_drag_context_get_source_window (GdkDragContext *context)
 
   return context->source_window;
 }
+
+/**
+ * gdk_drag_context_get_dest_window:
+ * @context: a #GdkDragContext
+ *
+ * Returns the destination windw for the DND operation.
+ *
+ * Return value: (transfer none): a #GdkWindow
+ *
+ * Since: 3.0
+ **/
+GdkWindow *
+gdk_drag_context_get_dest_window (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), NULL);
+
+  return context->dest_window;
+}
+
+/**
+ * gdk_drag_context_get_protocol:
+ * @context: a #GdkDragContext
+ *
+ * Returns the drag protocol thats used by this context.
+ *
+ * Returns: the drag protocol
+ *
+ * Since: 3.0
+ */
+GdkDragProtocol
+gdk_drag_context_get_protocol (GdkDragContext *context)
+{
+  g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_DRAG_PROTO_NONE);
+
+  return context->protocol;
+}
+

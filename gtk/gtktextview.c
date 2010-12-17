@@ -304,14 +304,13 @@ static void gtk_text_view_size_allocate        (GtkWidget        *widget,
                                                 GtkAllocation    *allocation);
 static void gtk_text_view_realize              (GtkWidget        *widget);
 static void gtk_text_view_unrealize            (GtkWidget        *widget);
-static void gtk_text_view_style_set            (GtkWidget        *widget,
-                                                GtkStyle         *previous_style);
+static void gtk_text_view_style_updated        (GtkWidget        *widget);
 static void gtk_text_view_direction_changed    (GtkWidget        *widget,
                                                 GtkTextDirection  previous_direction);
 static void gtk_text_view_grab_notify          (GtkWidget        *widget,
 					        gboolean         was_grabbed);
-static void gtk_text_view_state_changed        (GtkWidget        *widget,
-					        GtkStateType      previous_state);
+static void gtk_text_view_state_flags_changed  (GtkWidget        *widget,
+					        GtkStateFlags     previous_state);
 
 static gint gtk_text_view_event                (GtkWidget        *widget,
                                                 GdkEvent         *event);
@@ -409,8 +408,7 @@ static void     gtk_text_view_get_first_para_iter   (GtkTextView        *text_vi
                                                      GtkTextIter        *iter);
 static void     gtk_text_view_update_layout_width       (GtkTextView        *text_view);
 static void     gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
-                                                         GtkTextAttributes *values,
-                                                         GtkStyle           *style);
+                                                         GtkTextAttributes  *values);
 static void     gtk_text_view_ensure_layout          (GtkTextView        *text_view);
 static void     gtk_text_view_destroy_layout         (GtkTextView        *text_view);
 static void     gtk_text_view_check_keymap_direction (GtkTextView        *text_view);
@@ -603,10 +601,10 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   widget_class->destroy = gtk_text_view_destroy;
   widget_class->realize = gtk_text_view_realize;
   widget_class->unrealize = gtk_text_view_unrealize;
-  widget_class->style_set = gtk_text_view_style_set;
+  widget_class->style_updated = gtk_text_view_style_updated;
   widget_class->direction_changed = gtk_text_view_direction_changed;
   widget_class->grab_notify = gtk_text_view_grab_notify;
-  widget_class->state_changed = gtk_text_view_state_changed;
+  widget_class->state_flags_changed = gtk_text_view_state_flags_changed;
   widget_class->get_preferred_width = gtk_text_view_get_preferred_width;
   widget_class->get_preferred_height = gtk_text_view_get_preferred_height;
   widget_class->size_allocate = gtk_text_view_size_allocate;
@@ -3949,11 +3947,14 @@ gtk_text_view_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
+  GtkStyleContext *context;
+  GtkStateFlags state;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GSList *tmp_list;
-  
+  GdkRGBA color;
+
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
@@ -3977,11 +3978,11 @@ gtk_text_view_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   gdk_window_set_user_data (window, widget);
 
-  /* must come before text_window_realize calls */
-  gtk_widget_style_attach (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-  gdk_window_set_background (window,
-                             &gtk_widget_get_style (widget)->bg[gtk_widget_get_state (widget)]);
+  gtk_style_context_get_background_color (context, state, &color);
+  gdk_window_set_background_rgba (window, &color);
 
   text_window_realize (priv->text_window, widget);
 
@@ -4066,42 +4067,47 @@ gtk_text_view_unrealize (GtkWidget *widget)
 static void
 gtk_text_view_set_background (GtkTextView *text_view)
 {
-  GtkStyle *style;
-  GtkStateType state;
+  GtkStyleContext *context;
+  GtkStateFlags state;
   GtkWidget *widget;
   GtkTextViewPrivate *priv;
+  GdkRGBA color;
 
   widget = GTK_WIDGET (text_view);
   priv = text_view->priv;
 
-  style = gtk_widget_get_style (widget);
-  state = gtk_widget_get_state (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-  gdk_window_set_background (gtk_widget_get_window (widget),
-                             &style->bg[state]);
+  /* Set bin window background */
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
-  gdk_window_set_background (priv->text_window->bin_window,
-                             &style->base[state]);
+  gtk_style_context_get_background_color (context, state, &color);
+  gdk_window_set_background_rgba (priv->text_window->bin_window, &color);
+
+  gtk_style_context_restore (context);
+
+  /* Set lateral panes background */
+  gtk_style_context_get_background_color (context, state, &color);
+
+  gdk_window_set_background_rgba (gtk_widget_get_window (widget), &color);
 
   if (priv->left_window)
-    gdk_window_set_background (priv->left_window->bin_window,
-                               &style->bg[state]);
+    gdk_window_set_background_rgba (priv->left_window->bin_window, &color);
+
   if (priv->right_window)
-    gdk_window_set_background (priv->right_window->bin_window,
-                               &style->bg[state]);
+    gdk_window_set_background_rgba (priv->right_window->bin_window, &color);
 
   if (priv->top_window)
-    gdk_window_set_background (priv->top_window->bin_window,
-                               &style->bg[state]);
+    gdk_window_set_background_rgba (priv->top_window->bin_window, &color);
 
   if (priv->bottom_window)
-    gdk_window_set_background (priv->bottom_window->bin_window,
-                               &style->bg[state]);
+    gdk_window_set_background_rgba (priv->bottom_window->bin_window, &color);
 }
 
 static void
-gtk_text_view_style_set (GtkWidget *widget,
-                         GtkStyle  *previous_style)
+gtk_text_view_style_updated (GtkWidget *widget)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
@@ -4115,11 +4121,10 @@ gtk_text_view_style_set (GtkWidget *widget,
       gtk_text_view_set_background (text_view);
     }
 
-  if (priv->layout && previous_style)
+  if (priv->layout && priv->layout->default_style)
     {
       gtk_text_view_set_attributes_from_style (text_view,
-                                               priv->layout->default_style,
-                                               gtk_widget_get_style (widget));
+                                               priv->layout->default_style);
 
       ltr_context = gtk_widget_create_pango_context (widget);
       pango_context_set_base_dir (ltr_context, PANGO_DIRECTION_LTR);
@@ -4148,8 +4153,8 @@ gtk_text_view_direction_changed (GtkWidget        *widget,
 }
 
 static void
-gtk_text_view_state_changed (GtkWidget      *widget,
-		 	     GtkStateType    previous_state)
+gtk_text_view_state_flags_changed (GtkWidget     *widget,
+                                   GtkStateFlags  previous_state)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (widget);
   GdkCursor *cursor;
@@ -4870,13 +4875,14 @@ gtk_text_view_draw_focus (GtkWidget *widget,
 			NULL);
   
   if (gtk_widget_has_focus (widget) && !interior_focus)
-    {          
-      gtk_paint_focus (gtk_widget_get_style (widget), cr,
-                       gtk_widget_get_state (widget),
-                       widget, "textview",
-                       0, 0,
-                       gtk_widget_get_allocated_width (widget),
-                       gtk_widget_get_allocated_height (widget));
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (widget);
+
+      gtk_render_focus (context, cr, 0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
     }
 }
 
@@ -6535,16 +6541,30 @@ gtk_text_view_end_selection_drag (GtkTextView *text_view)
 
 static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
-                                         GtkTextAttributes  *values,
-                                         GtkStyle           *style)
+                                         GtkTextAttributes  *values)
 {
-  values->appearance.bg_color = style->base[GTK_STATE_NORMAL];
-  values->appearance.fg_color = style->text[GTK_STATE_NORMAL];
+  GtkStyleContext *context;
+  GdkRGBA bg_color, fg_color;
+  GtkStateFlags state;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
+  state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
+
+  gtk_style_context_get_background_color (context, state, &bg_color);
+  gtk_style_context_get_color (context, state, &fg_color);
+
+  values->appearance.bg_color.red = CLAMP (bg_color.red * 65535. + 0.5, 0, 65535);
+  values->appearance.bg_color.green = CLAMP (bg_color.green * 65535. + 0.5, 0, 65535);
+  values->appearance.bg_color.blue = CLAMP (bg_color.blue * 65535. + 0.5, 0, 65535);
+
+  values->appearance.fg_color.red = CLAMP (fg_color.red * 65535. + 0.5, 0, 65535);
+  values->appearance.fg_color.green = CLAMP (fg_color.green * 65535. + 0.5, 0, 65535);
+  values->appearance.fg_color.blue = CLAMP (fg_color.blue * 65535. + 0.5, 0, 65535);
 
   if (values->font)
     pango_font_description_free (values->font);
 
-  values->font = pango_font_description_copy (style->font_desc);
+  values->font = pango_font_description_copy (gtk_style_context_get_font (context, state));
 }
 
 static void
@@ -6638,10 +6658,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
       style = gtk_text_attributes_new ();
 
-      gtk_widget_ensure_style (widget);
-      gtk_text_view_set_attributes_from_style (text_view,
-                                               style,
-                                               gtk_widget_get_style (widget));
+      gtk_text_view_set_attributes_from_style (text_view, style);
 
       style->pixels_above_lines = priv->pixels_above_lines;
       style->pixels_below_lines = priv->pixels_below_lines;
@@ -6907,7 +6924,7 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
         {
           /* Extract the selected text */
           str = gtk_text_buffer_serialize (buffer, buffer,
-                                           selection_data->target,
+                                           gtk_selection_data_get_target (selection_data),
                                            &start, &end,
                                            &len);
         }
@@ -6915,7 +6932,7 @@ gtk_text_view_drag_data_get (GtkWidget        *widget,
       if (str)
         {
           gtk_selection_data_set (selection_data,
-                                  selection_data->target,
+                                  gtk_selection_data_get_target (selection_data),
                                   8, /* bytes */
                                   (guchar *) str, len);
           g_free (str);
@@ -7028,7 +7045,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
         {
           GtkWidget *source_widget;
           
-          suggested_action = context->suggested_action;
+          suggested_action = gdk_drag_context_get_suggested_action (context);
           
           source_widget = gtk_drag_get_source_widget (context);
           
@@ -7037,7 +7054,7 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
               /* Default to MOVE, unless the user has
                * pressed ctrl or alt to affect available actions
                */
-              if ((context->actions & GDK_ACTION_MOVE) != 0)
+              if ((gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
                 suggested_action = GDK_ACTION_MOVE;
             }
         }
@@ -7171,10 +7188,10 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
       GtkTextIter start, end;
       gboolean copy_tags = TRUE;
 
-      if (selection_data->length != sizeof (src_buffer))
+      if (gtk_selection_data_get_length (selection_data) != sizeof (src_buffer))
         return;
 
-      memcpy (&src_buffer, selection_data->data, sizeof (src_buffer));
+      memcpy (&src_buffer, gtk_selection_data_get_data (selection_data), sizeof (src_buffer));
 
       if (src_buffer == NULL)
         return;
@@ -7194,7 +7211,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
           atoms = gtk_text_buffer_get_deserialize_formats (buffer, &n_atoms);
 
-          for (list = context->targets; list; list = g_list_next (list))
+          for (list = gdk_drag_context_list_targets (context); list; list = g_list_next (list))
             {
               gint i;
 
@@ -7238,17 +7255,17 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
             }
         }
     }
-  else if (selection_data->length > 0 &&
+  else if (gtk_selection_data_get_length (selection_data) > 0 &&
            info == GTK_TEXT_BUFFER_TARGET_INFO_RICH_TEXT)
     {
       gboolean retval;
       GError *error = NULL;
 
       retval = gtk_text_buffer_deserialize (buffer, buffer,
-                                            selection_data->target,
+                                            gtk_selection_data_get_target (selection_data),
                                             &drop_point,
-                                            (guint8 *) selection_data->data,
-                                            selection_data->length,
+                                            (guint8 *) gtk_selection_data_get_data (selection_data),
+                                            gtk_selection_data_get_length (selection_data),
                                             &error);
 
       if (!retval)
@@ -7262,7 +7279,7 @@ gtk_text_view_drag_data_received (GtkWidget        *widget,
 
  done:
   gtk_drag_finish (context, success,
-		   success && context->action == GDK_ACTION_MOVE,
+		   success && gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE,
 		   time);
 
   if (success)
@@ -8352,10 +8369,13 @@ static void
 text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
+  GtkStyleContext *context;
+  GtkStateFlags state;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
   GdkCursor *cursor;
+  GdkRGBA color;
 
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = win->allocation.x;
@@ -8397,6 +8417,9 @@ text_window_realize (GtkTextWindow *win,
   gdk_window_show (win->bin_window);
   gdk_window_set_user_data (win->bin_window, win->widget);
 
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
   if (win->type == GTK_TEXT_WINDOW_TEXT)
     {
       if (gtk_widget_is_sensitive (widget))
@@ -8411,14 +8434,18 @@ text_window_realize (GtkTextWindow *win,
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         win->window);
 
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
-      gdk_window_set_background (win->bin_window,
-                                 &gtk_widget_get_style (widget)->base[gtk_widget_get_state (widget)]);
+      gtk_style_context_get_background_color (context, state, &color);
+      gdk_window_set_background_rgba (win->bin_window, &color);
+
+      gtk_style_context_restore (context);
     }
   else
     {
-      gdk_window_set_background (win->bin_window,
-                                 &gtk_widget_get_style (widget)->bg[gtk_widget_get_state (widget)]);
+      gtk_style_context_get_background_color (context, state, &color);
+      gdk_window_set_background_rgba (win->bin_window, &color);
     }
 
   g_object_set_qdata (G_OBJECT (win->window),

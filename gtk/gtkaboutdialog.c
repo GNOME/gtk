@@ -35,15 +35,18 @@
 #include <gdk/gdkkeysyms.h>
 
 #include "gtkaboutdialog.h"
+#include "gtkalignment.h"
 #include "gtkbutton.h"
 #include "gtkbbox.h"
 #include "gtkdialog.h"
+#include "gtkgrid.h"
 #include "gtkhbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
 #include "gtklinkbutton.h"
 #include "gtkmarshalers.h"
 #include "gtknotebook.h"
+#include "gtkorientable.h"
 #include "gtkscrolledwindow.h"
 #include "gtkstock.h"
 #include "gtktextview.h"
@@ -52,6 +55,7 @@
 #include "gtkshow.h"
 #include "gtkmain.h"
 #include "gtkmessagedialog.h"
+#include "gtktogglebutton.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -98,7 +102,7 @@ static GdkColor default_visited_link_color = { 0, 0x5555, 0x1a1a, 0x8b8b };
 /* Translators: this is the license preamble; the string at the end
  * contains the URL of the license.
  */
-static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s");
+static const gchar *gtk_license_preamble = N_("This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href=\"%s\">%s</a>");
 
 /* URLs for each GtkLicense type; keep in the same order as the enumeration */
 static const gchar *gtk_license_urls[] = {
@@ -132,16 +136,20 @@ struct _GtkAboutDialogPrivate
   gchar **documenters;
   gchar **artists;
 
+  gint credits_page;
+  gint license_page;
+
+  GtkWidget *notebook;
   GtkWidget *logo_image;
   GtkWidget *name_label;
+  GtkWidget *version_label;
   GtkWidget *comments_label;
   GtkWidget *copyright_label;
+  GtkWidget *license_label;
   GtkWidget *website_label;
 
   GtkWidget *credits_button;
-  GtkWidget *credits_dialog;
   GtkWidget *license_button;
-  GtkWidget *license_dialog;
 
   GdkCursor *hand_cursor;
   GdkCursor *regular_cursor;
@@ -197,9 +205,9 @@ static void                 set_cursor_if_appropriate       (GtkAboutDialog     
                                                              GdkDevice          *device,
                                                              gint                x,
                                                              gint                y);
-static void                 display_credits_dialog          (GtkWidget          *button,
+static void                 display_credits_page            (GtkWidget          *button,
                                                              gpointer            data);
-static void                 display_license_dialog          (GtkWidget          *button,
+static void                 display_license_page            (GtkWidget          *button,
                                                              gpointer            data);
 static void                 close_cb                        (GtkAboutDialog     *about);
 static gboolean             gtk_about_dialog_activate_link  (GtkAboutDialog     *about,
@@ -534,11 +542,99 @@ emit_activate_link (GtkAboutDialog *about,
 }
 
 static void
+update_license_button_visibility (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = about->priv;
+
+  if (priv->license_type == GTK_LICENSE_CUSTOM && priv->license != NULL)
+    gtk_widget_show (priv->license_button);
+  else
+    gtk_widget_hide (priv->license_button);
+}
+
+static void
+update_credits_button_visibility (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = about->priv;
+  gboolean show;
+
+  show = (priv->authors != NULL ||
+          priv->documenters != NULL ||
+          priv->artists != NULL ||
+         (priv->translator_credits != NULL &&
+          strcmp (priv->translator_credits, "translator_credits") &&
+          strcmp (priv->translator_credits, "translator-credits")));
+  if (show)
+    gtk_widget_show (priv->credits_button);
+  else
+    gtk_widget_hide (priv->credits_button);
+}
+
+static void
+switch_page (GtkAboutDialog *about,
+             gint            page)
+{
+  GtkAboutDialogPrivate *priv = about->priv;
+
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook), page);
+}
+
+static void
+display_main_page (GtkButton *button,
+                   gpointer   data)
+{
+  GtkAboutDialog *about = (GtkAboutDialog *)data;
+
+  switch_page (about, 0);
+}
+
+static void
+credits_button_clicked (GtkButton *button,
+                        gpointer   data)
+{
+  GtkAboutDialog *about = (GtkAboutDialog *)data;
+  GtkAboutDialogPrivate *priv = about->priv;
+  gboolean active;
+
+  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+
+  if (active)
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->license_button), FALSE);
+      display_credits_page (NULL, data);
+    }
+  else
+    {
+      display_main_page (NULL, data);
+    }
+}
+
+static void
+license_button_clicked (GtkButton *button,
+                        gpointer   data)
+{
+  GtkAboutDialog *about = (GtkAboutDialog *)data;
+  GtkAboutDialogPrivate *priv = about->priv;
+  gboolean active;
+
+  active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+
+  if (active)
+    {
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->credits_button), FALSE);
+      display_license_page (NULL, data);
+    }
+  else
+    {
+      display_main_page (NULL, data);
+    }
+}
+static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
   GtkDialog *dialog = GTK_DIALOG (about);
   GtkAboutDialogPrivate *priv;
-  GtkWidget *vbox, *hbox, *button, *close_button, *image;
+  GtkWidget *vbox, *page_vbox, *hbox, *button, *close_button, *image;
   GtkWidget *content_area, *action_area;
 
   /* Data */
@@ -574,7 +670,7 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   /* Widgets */
   gtk_widget_push_composite_child ();
 
-  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
   gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 
@@ -586,20 +682,30 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_label_set_justify (GTK_LABEL (priv->name_label), GTK_JUSTIFY_CENTER);
   gtk_box_pack_start (GTK_BOX (vbox), priv->name_label, FALSE, FALSE, 0);
 
+  priv->notebook = gtk_notebook_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), priv->notebook, TRUE, TRUE, 0);
+  gtk_widget_set_size_request (priv->notebook, 400, 100);
+
+  page_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+  gtk_widget_show (page_vbox);
+  gtk_notebook_set_show_tabs (GTK_NOTEBOOK (priv->notebook), FALSE);
+  gtk_notebook_set_show_border (GTK_NOTEBOOK (priv->notebook), FALSE);
+  gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), page_vbox, NULL);
+
+  priv->version_label = gtk_label_new (NULL);
+  gtk_label_set_selectable (GTK_LABEL (priv->version_label), TRUE);
+  gtk_label_set_justify (GTK_LABEL (priv->version_label), GTK_JUSTIFY_CENTER);
+  gtk_box_pack_start (GTK_BOX (page_vbox), priv->version_label, FALSE, FALSE, 0);
+
   priv->comments_label = gtk_label_new (NULL);
   gtk_label_set_selectable (GTK_LABEL (priv->comments_label), TRUE);
   gtk_label_set_justify (GTK_LABEL (priv->comments_label), GTK_JUSTIFY_CENTER);
   gtk_label_set_line_wrap (GTK_LABEL (priv->comments_label), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->comments_label, FALSE, FALSE, 0);
-
-  priv->copyright_label = gtk_label_new (NULL);
-  gtk_label_set_selectable (GTK_LABEL (priv->copyright_label), TRUE);
-  gtk_label_set_justify (GTK_LABEL (priv->copyright_label), GTK_JUSTIFY_CENTER);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->copyright_label, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (page_vbox), priv->comments_label, FALSE, FALSE, 0);
 
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_set_homogeneous (GTK_BOX (hbox), TRUE);
-  gtk_box_pack_start (GTK_BOX (vbox), hbox, TRUE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (page_vbox), hbox, FALSE, FALSE, 0);
 
   priv->website_label = button = gtk_label_new ("");
   gtk_widget_set_no_show_all (button, TRUE);
@@ -608,7 +714,20 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   g_signal_connect_swapped (button, "activate-link",
                             G_CALLBACK (emit_activate_link), about);
 
+  priv->license_label = gtk_label_new (NULL);
+  gtk_label_set_use_markup (GTK_LABEL (priv->license_label), TRUE);
+  gtk_label_set_selectable (GTK_LABEL (priv->license_label), TRUE);
+  gtk_label_set_justify (GTK_LABEL (priv->license_label), GTK_JUSTIFY_CENTER);
+  gtk_box_pack_end (GTK_BOX (page_vbox), priv->license_label, FALSE, FALSE, 0);
+  gtk_label_set_line_wrap (GTK_LABEL (priv->license_label), TRUE);
+
+  priv->copyright_label = gtk_label_new (NULL);
+  gtk_label_set_selectable (GTK_LABEL (priv->copyright_label), TRUE);
+  gtk_label_set_justify (GTK_LABEL (priv->copyright_label), GTK_JUSTIFY_CENTER);
+  gtk_box_pack_end (GTK_BOX (page_vbox), priv->copyright_label, FALSE, FALSE, 0);
+
   gtk_widget_show (vbox);
+  gtk_widget_show (priv->notebook);
   gtk_widget_show (priv->logo_image);
   gtk_widget_show (priv->name_label);
   gtk_widget_show (hbox);
@@ -619,30 +738,30 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_dialog_set_default_response (GTK_DIALOG (about), GTK_RESPONSE_CANCEL);
 
   /* Add the credits button */
-  button = gtk_button_new_with_mnemonic (_("C_redits"));
+  button = gtk_toggle_button_new_with_mnemonic (_("C_redits"));
   gtk_widget_set_can_default (button, TRUE);
   image = gtk_image_new_from_stock (GTK_STOCK_ABOUT, GTK_ICON_SIZE_BUTTON);
   gtk_button_set_image (GTK_BUTTON (button), image);
   gtk_widget_set_no_show_all (button, TRUE);
-  gtk_box_pack_end (GTK_BOX (action_area), 
-                    button, FALSE, TRUE, 0); 
+  gtk_box_pack_end (GTK_BOX (action_area), button, FALSE, TRUE, 0);
   gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), button, TRUE);
   g_signal_connect (button, "clicked",
-                    G_CALLBACK (display_credits_dialog), about);
+                    G_CALLBACK (credits_button_clicked), about);
   priv->credits_button = button;
-  priv->credits_dialog = NULL;
+  priv->credits_page = 0;
 
   /* Add the license button */
-  button = gtk_button_new_from_stock (_("_License"));
+  button = gtk_toggle_button_new_with_mnemonic (_("_License"));
   gtk_widget_set_can_default (button, TRUE);
   gtk_widget_set_no_show_all (button, TRUE);
-  gtk_box_pack_end (GTK_BOX (action_area), 
-                    button, FALSE, TRUE, 0); 
+  gtk_box_pack_end (GTK_BOX (action_area), button, FALSE, TRUE, 0);
   gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (action_area), button, TRUE);
   g_signal_connect (button, "clicked",
-                    G_CALLBACK (display_license_dialog), about);
+                    G_CALLBACK (license_button_clicked), about);
   priv->license_button = button;
-  priv->license_dialog = NULL;
+  priv->license_page = 0;
+
+  switch_page (about, 0);
 
   gtk_window_set_resizable (GTK_WINDOW (about), FALSE);
 
@@ -874,7 +993,7 @@ update_website (GtkAboutDialog *about)
       else
         {
           markup = g_strdup_printf ("<a href=\"%s\">%s</a>",
-                                    priv->website_url, priv->website_url);
+                                    priv->website_url, _("Homepage"));
         }
 
       gtk_label_set_markup (GTK_LABEL (priv->website_label), markup);
@@ -935,14 +1054,16 @@ update_name_version (GtkAboutDialog *about)
   g_free (title_string);
 
   if (priv->version != NULL)
-    name_string = g_markup_printf_escaped ("<span size=\"xx-large\" weight=\"bold\">%s %s</span>",
-                                             priv->name, priv->version);
+    {
+      gtk_label_set_markup (GTK_LABEL (priv->version_label), priv->version);
+      gtk_widget_show (priv->version_label);
+    }
   else
-    name_string = g_markup_printf_escaped ("<span size=\"xx-large\" weight=\"bold\">%s</span>",
-                                           priv->name);
+    gtk_widget_hide (priv->version_label);
 
+  name_string = g_markup_printf_escaped ("<span weight=\"bold\">%s</span>",
+                                         priv->name);
   gtk_label_set_markup (GTK_LABEL (priv->name_label), name_string);
-
   g_free (name_string);
 }
 
@@ -1187,15 +1308,17 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
     {
       priv->license = g_strdup (license);
       priv->license_type = GTK_LICENSE_CUSTOM;
-      gtk_widget_show (priv->license_button);
     }
   else
     {
       priv->license = NULL;
       priv->license_type = GTK_LICENSE_UNKNOWN;
-      gtk_widget_hide (priv->license_button);
     }
   g_free (tmp);
+
+  gtk_widget_hide (priv->license_label);
+
+  update_license_button_visibility (about);
 
   g_object_notify (G_OBJECT (about), "license");
   g_object_notify (G_OBJECT (about), "license-type");
@@ -1378,24 +1501,6 @@ gtk_about_dialog_get_authors (GtkAboutDialog *about)
   priv = about->priv;
 
   return (const gchar * const *) priv->authors;
-}
-
-static void
-update_credits_button_visibility (GtkAboutDialog *about)
-{
-  GtkAboutDialogPrivate *priv = about->priv;
-  gboolean show;
-
-  show = priv->authors != NULL ||
-         priv->documenters != NULL ||
-         priv->artists != NULL ||
-         (priv->translator_credits != NULL &&
-          strcmp (priv->translator_credits, "translator_credits") &&
-          strcmp (priv->translator_credits, "translator-credits"));
-  if (show)
-    gtk_widget_show (priv->credits_button);
-  else
-    gtk_widget_hide (priv->credits_button);
 }
 
 /**
@@ -1955,7 +2060,6 @@ text_view_visibility_notify_event (GtkWidget          *text_view,
 
 static GtkWidget *
 text_view_new (GtkAboutDialog  *about,
-               GtkWidget       *dialog,
                gchar          **strings,
                GtkWrapMode      wrap_mode)
 {
@@ -1969,6 +2073,8 @@ text_view_new (GtkAboutDialog  *about,
   GdkColor color;
   GdkColor link_color;
   GdkColor visited_link_color;
+  gint size;
+  PangoFontDescription *font_desc;
 
   GtkAboutDialogPrivate *priv = about->priv;
 
@@ -1999,6 +2105,12 @@ text_view_new (GtkAboutDialog  *about,
   gtk_text_view_set_cursor_visible (text_view, FALSE);
   gtk_text_view_set_editable (text_view, FALSE);
   gtk_text_view_set_wrap_mode (text_view, wrap_mode);
+
+  size = pango_font_description_get_size (gtk_widget_get_style (view)->font_desc);
+  font_desc = pango_font_description_new ();
+  pango_font_description_set_size (font_desc, size * PANGO_SCALE_SMALL);
+  gtk_widget_modify_font (view, font_desc);
+  pango_font_description_free (font_desc);
 
   gtk_text_view_set_left_margin (text_view, 8);
   gtk_text_view_set_right_margin (text_view, 8);
@@ -2051,7 +2163,7 @@ text_view_new (GtkAboutDialog  *about,
 
               if (*q1 == '<')
                 {
-                  gtk_text_buffer_insert_at_cursor (buffer, q0, (q1 - q0) + 1);
+                  gtk_text_buffer_insert_at_cursor (buffer, q0, q1 - q0 + 1);
                   gtk_text_buffer_get_end_iter (buffer, &end);
                   q1++;
                   link_type = "email";
@@ -2109,81 +2221,153 @@ text_view_new (GtkAboutDialog  *about,
 }
 
 static void
-add_credits_page (GtkAboutDialog *about,
-                  GtkWidget      *credits_dialog,
-                  GtkWidget      *notebook,
-                  gchar          *title,
-                  gchar         **people)
+add_credits_section (GtkAboutDialog *about,
+                     GtkGrid        *grid,
+                     gint           *row,
+                     gchar          *title,
+                     gchar         **people)
 {
-  GtkWidget *sw, *view;
+  GtkWidget *label;
+  gchar *markup;
+  gchar **p;
+  gchar *q0, *q1, *q2, *r1, *r2;
 
-  view = text_view_new (about, credits_dialog, people, GTK_WRAP_NONE);
+  if (people == NULL)
+    return;
 
-  sw = gtk_scrolled_window_new (NULL, NULL);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
-                                       GTK_SHADOW_IN);
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-  gtk_container_add (GTK_CONTAINER (sw), view);
+  markup = g_strdup_printf ("<span size=\"small\">%s</span>", title);
+  label = gtk_label_new (markup);
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  g_free (markup);
+  gtk_misc_set_alignment (GTK_MISC (label), 1.0, 0.5);
+  gtk_grid_attach (grid, label, 0, *row, 1, 1);
 
-  gtk_notebook_append_page (GTK_NOTEBOOK (notebook),
-                            sw, gtk_label_new (title));
+  for (p = people; *p; p++)
+    {
+      GString *str;
+
+      str = g_string_new ("<span size=\"small\">");
+
+      q0 = *p;
+      while (*q0)
+        {
+          q1 = strchr (q0, '<');
+          q2 = q1 ? strchr (q1, '>') : NULL;
+          r1 = strstr (q0, "http://");
+          if (r1)
+            {
+              r2 = strpbrk (r1, " \n\t");
+              if (!r2)
+                r2 = strchr (r1, '\0');
+            }
+          else
+            r2 = NULL;
+
+          if (r1 && r2 && (!q1 || !q2 || (r1 < q1)))
+            {
+              q1 = r1;
+              q2 = r2;
+            }
+          else if (q1 && (q1[1] == 'a' || q1[1] == 'A') && q1[2] == ' ')
+            {
+              /* if it is a <a> link leave it for the label to parse */
+              q1 = NULL;
+            }
+
+          if (q1 && q2)
+            {
+              gchar *link;
+              gchar *text;
+
+              if (*q1 == '<')
+                {
+                  /* email */
+                  gchar *escaped;
+
+                  text = g_strstrip (g_strndup (q0, q1 - q0));
+                  q1++;
+                  link = g_strndup (q1, q2 - q1);
+                  q2++;
+                  escaped = g_uri_escape_string (link, NULL, FALSE);
+                  g_string_append_printf (str,
+                                          "<a href=\"mailto:%s\">%s</a>",
+                                          escaped,
+                                          text);
+                  g_free (escaped);
+                  g_free (link);
+                  g_free (text);
+                }
+              else
+                {
+                  /* uri */
+                  text = g_strstrip (g_strndup (q0, q1 - q0));
+                  link = g_strndup (q1, q2 - q1);
+                  g_string_append_printf (str,
+                                          "<a href=\"%s\">%s</a>",
+                                          link,
+                                          text);
+                  g_free (link);
+                  g_free (text);
+                }
+
+              q0 = q2;
+            }
+          else
+            {
+              g_string_append (str, q0);
+              break;
+            }
+        }
+      g_string_append (str, "</span>");
+
+      label = gtk_label_new (str->str);
+      gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      g_string_free (str, TRUE);
+      gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
+      gtk_grid_attach (grid, label, 1, *row, 1, 1);
+      (*row)++;
+    }
+
+  /* skip one at the end */
+  (*row)++;
 }
 
 static void
-display_credits_dialog (GtkWidget *button,
-                        gpointer   data)
+create_credits_page (GtkAboutDialog *about)
 {
-  GtkAboutDialog *about = (GtkAboutDialog *)data;
   GtkAboutDialogPrivate *priv = about->priv;
-  GtkWidget *dialog, *notebook;
-  GtkDialog *credits_dialog;
-  GtkWidget *content_area;
-  GtkWidget *action_area;
+  GtkWidget *page_vbox;
+  GtkWidget *sw;
+  GtkWidget *grid;
+  GtkWidget *alignment;
+  gint row;
 
-  if (priv->credits_dialog != NULL)
-    {
-      gtk_window_present (GTK_WINDOW (priv->credits_dialog));
-      return;
-    }
+  page_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+  gtk_widget_show (page_vbox);
+  priv->credits_page = gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), page_vbox, NULL);
 
-  dialog = gtk_dialog_new_with_buttons (_("Credits"),
-                                        GTK_WINDOW (about),
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
-                                        NULL);
-  credits_dialog = GTK_DIALOG (dialog);
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_NONE);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_box_pack_start (GTK_BOX (page_vbox), sw, TRUE, TRUE, 0);
 
-  content_area = gtk_dialog_get_content_area (credits_dialog);
-  action_area = gtk_dialog_get_action_area (credits_dialog);
+  alignment = gtk_alignment_new (0.5, 0, 0, 0);
+  gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw), alignment);
 
-  gtk_container_set_border_width (GTK_CONTAINER (credits_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-
-  priv->credits_dialog = dialog;
-  gtk_window_set_default_size (GTK_WINDOW (dialog), 360, 260);
-  gtk_dialog_set_default_response (credits_dialog, GTK_RESPONSE_CANCEL);
-
-  gtk_window_set_modal (GTK_WINDOW (dialog),
-                        gtk_window_get_modal (GTK_WINDOW (about)));
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy), dialog);
-  g_signal_connect (dialog, "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &(priv->credits_dialog));
-
-  notebook = gtk_notebook_new ();
-  gtk_container_set_border_width (GTK_CONTAINER (notebook), 5);
-  gtk_box_pack_start (GTK_BOX (content_area), notebook, TRUE, TRUE, 0);
+  grid = gtk_grid_new ();
+  gtk_container_set_border_width (GTK_CONTAINER (grid), 5);
+  gtk_orientable_set_orientation (GTK_ORIENTABLE (grid), GTK_ORIENTATION_VERTICAL);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 2);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 12);
+  gtk_container_add (GTK_CONTAINER (alignment), grid);
 
   if (priv->authors != NULL)
-    add_credits_page (about, dialog, notebook, _("Written by"), priv->authors);
+    add_credits_section (about, GTK_GRID (grid), &row, _("Created by"), priv->authors);
 
   if (priv->documenters != NULL)
-    add_credits_page (about, dialog, notebook, _("Documented by"), priv->documenters);
+    add_credits_section (about, GTK_GRID (grid), &row, _("Documented by"), priv->documenters);
 
   /* Don't show an untranslated gettext msgid */
   if (priv->translator_credits != NULL &&
@@ -2195,86 +2379,68 @@ display_credits_dialog (GtkWidget *button,
       translators[0] = priv->translator_credits;
       translators[1] = NULL;
 
-      add_credits_page (about, dialog, notebook, _("Translated by"), translators);
+      add_credits_section (about, GTK_GRID (grid), &row, _("Translated by"), translators);
     }
 
   if (priv->artists != NULL)
-    add_credits_page (about, dialog, notebook, _("Artwork by"), priv->artists);
+    add_credits_section (about, GTK_GRID (grid), &row, _("Artwork by"), priv->artists);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show_all (sw);
 }
 
 static void
-set_policy (GtkWidget *sw)
-{
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_AUTOMATIC,
-                                  GTK_POLICY_AUTOMATIC);
-}
-
-static void
-display_license_dialog (GtkWidget *button,
-                        gpointer   data)
+display_credits_page (GtkWidget *button,
+                      gpointer   data)
 {
   GtkAboutDialog *about = (GtkAboutDialog *)data;
   GtkAboutDialogPrivate *priv = about->priv;
-  GtkWidget *dialog, *view, *sw;
-  GtkDialog *license_dialog;
-  GtkWidget *content_area;
-  GtkWidget *action_area;
+
+  if (priv->credits_page == 0)
+    create_credits_page (about);
+
+  switch_page (about, priv->credits_page);
+}
+
+static void
+create_license_page (GtkAboutDialog *about)
+{
+  GtkAboutDialogPrivate *priv = about->priv;
+  GtkWidget *page_vbox;
+  GtkWidget *sw;
+  GtkWidget *view;
   gchar *strings[2];
 
-  if (priv->license_dialog != NULL)
-    {
-      gtk_window_present (GTK_WINDOW (priv->license_dialog));
-      return;
-    }
-
-  dialog = gtk_dialog_new_with_buttons (_("License"),
-                                        GTK_WINDOW (about),
-                                        GTK_DIALOG_DESTROY_WITH_PARENT,
-                                        GTK_STOCK_CLOSE, GTK_RESPONSE_CANCEL,
-                                        NULL);
-  license_dialog = GTK_DIALOG (dialog);
-
-  content_area = gtk_dialog_get_content_area (license_dialog);
-  action_area = gtk_dialog_get_action_area (license_dialog);
-
-  gtk_container_set_border_width (GTK_CONTAINER (license_dialog), 5);
-  gtk_box_set_spacing (GTK_BOX (content_area), 2); /* 2 * 5 + 2 = 12 */
-  gtk_container_set_border_width (GTK_CONTAINER (action_area), 5);
-
-  priv->license_dialog = dialog;
-  gtk_window_set_default_size (GTK_WINDOW (dialog), 420, 320);
-  gtk_dialog_set_default_response (license_dialog, GTK_RESPONSE_CANCEL);
-
-  gtk_window_set_modal (GTK_WINDOW (dialog),
-                        gtk_window_get_modal (GTK_WINDOW (about)));
-
-  g_signal_connect (dialog, "response",
-                    G_CALLBACK (gtk_widget_destroy), dialog);
-  g_signal_connect (dialog, "destroy",
-                    G_CALLBACK (gtk_widget_destroyed),
-                    &(priv->license_dialog));
+  page_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 8);
+  priv->license_page = gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), page_vbox, NULL);
 
   sw = gtk_scrolled_window_new (NULL, NULL);
   gtk_container_set_border_width (GTK_CONTAINER (sw), 5);
-  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw),
-                                       GTK_SHADOW_IN);
+  gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW (sw), GTK_SHADOW_IN);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-                                  GTK_POLICY_NEVER,
-                                  GTK_POLICY_AUTOMATIC);
-  g_signal_connect (sw, "map", G_CALLBACK (set_policy), NULL);
-  gtk_box_pack_start (GTK_BOX (content_area), sw, TRUE, TRUE, 0);
+                                  GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+  gtk_box_pack_start (GTK_BOX (page_vbox), sw, TRUE, TRUE, 0);
 
   strings[0] = priv->license;
   strings[1] = NULL;
-  view = text_view_new (about, dialog, strings,
+  view = text_view_new (about, strings,
                         priv->wrap_license ? GTK_WRAP_WORD : GTK_WRAP_NONE);
 
   gtk_container_add (GTK_CONTAINER (sw), view);
 
-  gtk_widget_show_all (dialog);
+  gtk_widget_show_all (page_vbox);
+}
+
+static void
+display_license_page (GtkWidget *button,
+                      gpointer   data)
+{
+  GtkAboutDialog *about = (GtkAboutDialog *)data;
+  GtkAboutDialogPrivate *priv = about->priv;
+
+  if (priv->license_page == 0)
+    create_license_page (about);
+
+  switch_page (about, priv->license_page);
 }
 
 /**
@@ -2297,22 +2463,8 @@ gtk_about_dialog_new (void)
 static void
 close_cb (GtkAboutDialog *about)
 {
-  GtkAboutDialogPrivate *priv = about->priv;
-
-  if (priv->license_dialog != NULL)
-    {
-      gtk_widget_destroy (priv->license_dialog);
-      priv->license_dialog = NULL;
-    }
-
-  if (priv->credits_dialog != NULL)
-    {
-      gtk_widget_destroy (priv->credits_dialog);
-      priv->credits_dialog = NULL;
-    }
-
+  switch_page (about, 0);
   gtk_widget_hide (GTK_WIDGET (about));
-
 }
 
 /**
@@ -2360,6 +2512,7 @@ gtk_show_about_dialog (GtkWindow   *parent,
 
       if (parent)
         {
+          gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
           gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
           gtk_window_set_destroy_with_parent (GTK_WINDOW (dialog), TRUE);
           g_object_set_data_full (G_OBJECT (parent),
@@ -2409,36 +2562,34 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
       if (priv->license_type != GTK_LICENSE_CUSTOM)
         {
           const gchar *url;
+          gchar *license_string;
           GString *str;
 
           url = gtk_license_urls[priv->license_type];
           if (url == NULL)
             url = priv->website_url;
 
-          /* compose the new license string as:
-           *
-           *   <program-name>\n
-           *   <copyright line 1>\n
-           *   ...
-           *   <copyright line n>\n
-           *   \n
-           *   license preamble + URL
-           *
-           */
           str = g_string_sized_new (256);
-          g_string_append (str, priv->name);
-          g_string_append (str, "\n");
-          g_string_append (str, priv->copyright);
-          g_string_append (str, "\n\n");
-          g_string_append_printf (str, _(gtk_license_preamble), url);
+          g_string_append_printf (str, _(gtk_license_preamble), url, url);
 
           g_free (priv->license);
           priv->license = g_string_free (str, FALSE);
           priv->wrap_license = TRUE;
-          gtk_widget_show (priv->license_button);
+
+          license_string = g_strdup_printf ("<span size=\"small\">%s</span>",
+                                            priv->license);
+          gtk_label_set_markup (GTK_LABEL (priv->license_label), license_string);
+          g_free (license_string);
+          gtk_widget_show (priv->license_label);
+
+          update_license_button_visibility (about);
 
           g_object_notify (G_OBJECT (about), "wrap-license");
           g_object_notify (G_OBJECT (about), "license");
+        }
+      else
+        {
+          gtk_widget_show (priv->license_label);
         }
 
       g_object_notify (G_OBJECT (about), "license-type");

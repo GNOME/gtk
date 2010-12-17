@@ -157,8 +157,7 @@ static void     gtk_info_bar_get_property (GObject        *object,
                                            guint           prop_id,
                                            GValue         *value,
                                            GParamSpec     *pspec);
-static void     gtk_info_bar_style_set    (GtkWidget      *widget,
-                                           GtkStyle       *prev_style);
+static void     gtk_info_bar_style_updated (GtkWidget      *widget);
 static gboolean gtk_info_bar_draw         (GtkWidget      *widget,
                                            cairo_t        *cr);
 static void     gtk_info_bar_buildable_interface_init     (GtkBuildableIface *iface);
@@ -300,29 +299,34 @@ gtk_info_bar_draw (GtkWidget      *widget,
                    cairo_t        *cr)
 {
   GtkInfoBarPrivate *priv = GTK_INFO_BAR (widget)->priv;
-  const char* type_detail[] = {
-    "infobar-info",
-    "infobar-warning",
-    "infobar-question",
-    "infobar-error",
-    "infobar"
+  const char* type_class[] = {
+    GTK_STYLE_CLASS_INFO,
+    GTK_STYLE_CLASS_WARNING,
+    GTK_STYLE_CLASS_QUESTION,
+    GTK_STYLE_CLASS_ERROR,
+    NULL
   };
 
   if (priv->message_type != GTK_MESSAGE_OTHER)
     {
-      const char *detail;
+      GtkStyleContext *context;
 
-      detail = type_detail[priv->message_type];
+      context = gtk_widget_get_style_context (widget);
 
-      gtk_paint_box (gtk_widget_get_style (widget),
-                     cr,
-                     GTK_STATE_NORMAL,
-                     GTK_SHADOW_OUT,
-                     widget,
-                     detail,
-                     0, 0,
-                     gtk_widget_get_allocated_width (widget),
-                     gtk_widget_get_allocated_height (widget));
+      gtk_style_context_save (context);
+
+      if (type_class[priv->message_type])
+        gtk_style_context_add_class (context,
+                                     type_class[priv->message_type]);
+
+      gtk_render_background (context, cr, 0, 0,
+                             gtk_widget_get_allocated_width (widget),
+                             gtk_widget_get_allocated_height (widget));
+      gtk_render_frame (context, cr, 0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
+
+      gtk_style_context_restore (context);
     }
 
   if (GTK_WIDGET_CLASS (gtk_info_bar_parent_class)->draw)
@@ -345,7 +349,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   object_class->set_property = gtk_info_bar_set_property;
   object_class->finalize = gtk_info_bar_finalize;
 
-  widget_class->style_set = gtk_info_bar_style_set;
+  widget_class->style_updated = gtk_info_bar_style_updated;
   widget_class->draw = gtk_info_bar_draw;
 
   klass->close = gtk_info_bar_close;
@@ -491,100 +495,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
 }
 
 static void
-gtk_info_bar_update_colors (GtkInfoBar *info_bar)
-{
-  GtkWidget *widget = GTK_WIDGET (info_bar);
-  GtkInfoBarPrivate *priv = info_bar->priv;
-  GdkRGBA info_default_border_color     = { 0.71, 0.67, 0.61, 1.0 };
-  GdkRGBA info_default_fill_color       = { 0.99, 0.99, 0.74, 1.0 };
-  GdkRGBA warning_default_border_color  = { 0.68, 0.47, 0.16, 1.0 };
-  GdkRGBA warning_default_fill_color    = { 0.98, 0.68, 0.24, 1.0 };
-  GdkRGBA question_default_border_color = { 0.38, 0.48, 0.84, 1.0 };
-  GdkRGBA question_default_fill_color   = { 0.54, 0.68, 0.83, 1.0 };
-  GdkRGBA error_default_border_color    = { 0.65, 0.15, 0.15, 1.0 };
-  GdkRGBA error_default_fill_color      = { 0.93, 0.21, 0.21, 1.0 };
-  GdkRGBA other_default_border_color    = { 0.71, 0.67, 0.61, 1.0 };
-  GdkRGBA other_default_fill_color      = { 0.99, 0.99, 0.74, 1.0 };
-  GdkRGBA *fg, *bg;
-  GdkRGBA sym_fg, sym_bg;
-  GdkRGBA *color, *bg_color;
-  GtkStyleContext *context;
-
-  const char* fg_color_name[] = {
-    "info_fg_color",
-    "warning_fg_color",
-    "question_fg_color",
-    "error_fg_color",
-    "other_fg_color"
-  };
-  const char* bg_color_name[] = {
-    "info_bg_color",
-    "warning_bg_color",
-    "question_bg_color",
-    "error_bg_color",
-    "other_bg_color"
-  };
-
-  context = gtk_widget_get_style_context (widget);
-
-  if (gtk_style_context_lookup_color (context, fg_color_name[priv->message_type], &sym_fg) &&
-      gtk_style_context_lookup_color (context, bg_color_name[priv->message_type], &sym_bg))
-    {
-      fg = &sym_fg;
-      bg = &sym_bg;
-    }
-  else
-    {
-      switch (priv->message_type)
-        {
-        case GTK_MESSAGE_INFO:
-          fg = &info_default_border_color;
-          bg = &info_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_WARNING:
-          fg = &warning_default_border_color;
-          bg = &warning_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_QUESTION:
-          fg = &question_default_border_color;
-          bg = &question_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_ERROR:
-          fg = &error_default_border_color;
-          bg = &error_default_fill_color;
-          break;
-
-        case GTK_MESSAGE_OTHER:
-          fg = &other_default_border_color;
-          bg = &other_default_fill_color;
-          break;
-
-        default:
-          g_assert_not_reached();
-          fg = NULL;
-          bg = NULL;
-        }
-    }
-
-  gtk_style_context_get (context, 0,
-                         "color", &color,
-                         "background-color", &bg_color,
-                         NULL);
-  if (!gdk_rgba_equal (bg_color, bg))
-    gtk_widget_override_background_color (widget, 0, bg);
-  if (!gdk_rgba_equal (color, fg))
-    gtk_widget_override_color (widget, 0, fg);
-
-  gdk_rgba_free (color);
-  gdk_rgba_free (bg_color);
-}
-
-static void
-gtk_info_bar_style_set (GtkWidget *widget,
-                        GtkStyle  *prev_style)
+gtk_info_bar_style_updated (GtkWidget *widget)
 {
   GtkInfoBar *info_bar = GTK_INFO_BAR (widget);
   gint button_spacing;
@@ -605,8 +516,6 @@ gtk_info_bar_style_set (GtkWidget *widget,
   gtk_box_set_spacing (GTK_BOX (info_bar->priv->content_area), content_area_spacing);
   gtk_container_set_border_width (GTK_CONTAINER (info_bar->priv->content_area),
                                   content_area_border);
-
-  gtk_info_bar_update_colors (info_bar);
 }
 
 static void
@@ -1191,7 +1100,6 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
     {
       priv->message_type = message_type;
 
-      gtk_info_bar_update_colors (info_bar);
       gtk_widget_queue_draw (GTK_WIDGET (info_bar));
 
       atk_obj = gtk_widget_get_accessible (GTK_WIDGET (info_bar));

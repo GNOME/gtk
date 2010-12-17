@@ -478,6 +478,8 @@ gdk_window_get_device_cursor
 gdk_window_set_device_cursor
 gdk_window_get_device_events
 gdk_window_set_device_events
+gdk_window_get_source_events
+gdk_window_set_source_events
 
 <SUBSECTION>
 GdkPointerHooks
@@ -701,7 +703,7 @@ GdkDeviceKey
 GdkDeviceAxis
 GdkAxisUse
 GdkGrabOwnership
-gdk_enable_multidevice
+gdk_disable_multidevice
 gdk_device_manager_get_display
 gdk_device_manager_list_devices
 gdk_device_manager_get_client_pointer

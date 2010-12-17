@@ -36,12 +36,13 @@
  *                    additional features such as sub-pixel positioning information and additional
  *                    device-dependent information.
  * @Title: GdkDeviceManager
- * @See_also: #GdkDevice, #GdkEvent, gdk_enable_multidevice()
+ * @See_also: #GdkDevice, #GdkEvent, gdk_disable_multidevice()
  *
- * By default, GDK supports the traditional single keyboard/pointer input scheme (Plus additional
- * special input devices such as tablets. In short, backwards compatible with 2.X). Since version 3.0,
- * if gdk_enable_multidevice() is called before gdk_display_open() and the platform supports it, GDK
- * will be aware of multiple keyboard/pointer pairs interacting simultaneously with the user interface.
+ * By default, and if the platform supports it, GDK is aware of multiple keyboard/pointer pairs
+ * and multitouch devices, this behavior can be changed by calling gdk_disable_multidevice()
+ * before gdk_display_open(), although there would be rarely a reason to do that. For a widget
+ * or window to be dealt as multipointer aware, gdk_window_set_support_multidevice() or
+ * gtk_widget_set_support_multidevice() must have been called on it.
  *
  * Conceptually, in multidevice mode there are 2 device types, virtual devices (or master devices)
  * are represented by the pointer cursors and keyboard foci that are seen on the screen. physical
@@ -84,8 +85,8 @@
  *
  * In order to query the device hierarchy and be aware of changes in the device hierarchy (such as
  * virtual devices being created or removed, or physical devices being plugged or unplugged), GDK
- * provides #GdkDeviceManager. On X11, multidevice support is implemented through XInput 2. If
- * gdk_enable_multidevice() is called, the XInput 2.x #GdkDeviceManager implementation will be used
+ * provides #GdkDeviceManager. On X11, multidevice support is implemented through XInput 2. Unless
+ * gdk_disable_multidevice() is called, the XInput 2.x #GdkDeviceManager implementation will be used
  * as input source, else either the core or XInput 1.x implementations will be used.
  */
 
@@ -182,12 +183,16 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
    * @device_manager: the object on which the signal is emitted
    * @device: the #GdkDevice that changed.
    *
-   * The ::device-changed signal is emitted either when some
-   * #GdkDevice has changed the number of either axes or keys.
-   * For example In X this will normally happen when the slave
-   * device routing events through the master device changes,
-   * in that case the master device will change to reflect the
-   * new slave device axes and keys.
+   * The ::device-changed signal is emitted whenever a device
+   * has changed in the hierarchy, either slave devices being
+   * disconnected from their master device or connected to
+   * another one, or master devices being added or removed
+   * a slave device.
+   *
+   * If a slave device is detached from all master devices
+   * (gdk_device_get_associated_device() returns %NULL), its
+   * #GdkDeviceType will change to %GDK_DEVICE_TYPE_FLOATING,
+   * if it's attached, it will change to %GDK_DEVICE_TYPE_SLAVE.
    */
   signals [DEVICE_CHANGED] =
     g_signal_new (g_intern_static_string ("device-changed"),

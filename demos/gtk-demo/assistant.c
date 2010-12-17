@@ -110,7 +110,7 @@ create_page1 (GtkWidget *assistant)
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), box, "Page 1");
   gtk_assistant_set_page_type (GTK_ASSISTANT (assistant), box, GTK_ASSISTANT_PAGE_INTRO);
 
-  pixbuf = gtk_widget_render_icon (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+  pixbuf = gtk_widget_render_icon_pixbuf (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
   gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), box, pixbuf);
   g_object_unref (pixbuf);
 }
@@ -133,7 +133,7 @@ create_page2 (GtkWidget *assistant)
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), box, TRUE);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), box, "Page 2");
 
-  pixbuf = gtk_widget_render_icon (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+  pixbuf = gtk_widget_render_icon_pixbuf (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
   gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), box, pixbuf);
   g_object_unref (pixbuf);
 }
@@ -152,7 +152,7 @@ create_page3 (GtkWidget *assistant)
   gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), label, TRUE);
   gtk_assistant_set_page_title (GTK_ASSISTANT (assistant), label, "Confirmation");
 
-  pixbuf = gtk_widget_render_icon (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+  pixbuf = gtk_widget_render_icon_pixbuf (assistant, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
   gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), label, pixbuf);
   g_object_unref (pixbuf);
 }

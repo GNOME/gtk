@@ -239,6 +239,14 @@ compute_size_for_orientation (GtkWidget         *widget,
 									     &min_size, &nat_size);
 	      pop_recursion_check (widget, orientation);
             }
+#ifndef G_DISABLE_CHECKS
+          if (gtk_widget_get_screen (widget))
+            {
+              guint screen_width = gdk_screen_get_width (gtk_widget_get_screen (widget));
+              min_size = MIN (min_size, screen_width);
+              nat_size = MIN (nat_size, screen_width);
+            }
+#endif
         }
       else
         {
@@ -272,6 +280,14 @@ compute_size_for_orientation (GtkWidget         *widget,
 									     &min_size, &nat_size);
 	      pop_recursion_check (widget, orientation);
             }
+#ifndef G_DISABLE_CHECKS
+          if (gtk_widget_get_screen (widget))
+            {
+              guint screen_height = gdk_screen_get_height (gtk_widget_get_screen (widget));
+              min_size = MIN (min_size, screen_height);
+              nat_size = MIN (nat_size, screen_height);
+            }
+#endif
         }
 
       if (min_size > nat_size)

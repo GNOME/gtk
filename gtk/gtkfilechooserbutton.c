@@ -1041,7 +1041,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 										 data, type,
 										 drag_time);
 
-  if (widget == NULL || context == NULL || data == NULL || data->length < 0)
+  if (widget == NULL || context == NULL || data == NULL || gtk_selection_data_get_length (data) < 0)
     return;
 
   switch (type)

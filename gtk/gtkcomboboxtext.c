@@ -265,6 +265,7 @@ gtk_combo_box_text_insert (GtkComboBoxText *combo_box,
   store = GTK_LIST_STORE (gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box)));
   g_return_if_fail (GTK_IS_LIST_STORE (store));
   text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box));
+  g_return_if_fail (text_column >= 0);
   column_type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), text_column);
   g_return_if_fail (column_type == G_TYPE_STRING);
 
@@ -276,6 +277,7 @@ gtk_combo_box_text_insert (GtkComboBoxText *combo_box,
       gint id_column;
 
       id_column = gtk_combo_box_get_id_column (GTK_COMBO_BOX (combo_box));
+      g_return_if_fail (id_column >= 0);
       column_type = gtk_tree_model_get_column_type (GTK_TREE_MODEL (store), id_column);
       g_return_if_fail (column_type == G_TYPE_STRING);
 
@@ -359,6 +361,7 @@ gtk_combo_box_text_get_active_text (GtkComboBoxText *combo_box)
       model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo_box));
       g_return_val_if_fail (GTK_IS_LIST_STORE (model), NULL);
       text_column = gtk_combo_box_get_entry_text_column (GTK_COMBO_BOX (combo_box));
+      g_return_val_if_fail (text_column >= 0, NULL);
       column_type = gtk_tree_model_get_column_type (model, text_column);
       g_return_val_if_fail (column_type == G_TYPE_STRING, NULL);
       gtk_tree_model_get (model, &iter, text_column, &text, -1);

@@ -98,8 +98,7 @@ gdk_built_public_sources =			\
 gdk_private_headers =				\
 	gdkinternals.h				\
 	gdkdeviceprivate.h			\
-	gdkintl.h				\
-	gdkpoly-generic.h
+	gdkintl.h
 
 gdk_c_sources =                 \
 	gdk.c			\

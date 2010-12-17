@@ -77,8 +77,8 @@ get_image_pixbuf (GtkImage *image)
       return g_object_ref (gtk_image_get_pixbuf (image));
     case GTK_IMAGE_STOCK:
       gtk_image_get_stock (image, &stock_id, &size);
-      return gtk_widget_render_icon (GTK_WIDGET (image),
-                                     stock_id, size, NULL);
+      return gtk_widget_render_icon_pixbuf (GTK_WIDGET (image),
+                                            stock_id, size);
     default:
       g_warning ("Image storage type %d not handled",
                  gtk_image_get_storage_type (image));
@@ -125,7 +125,7 @@ drag_data_received (GtkWidget        *widget,
 {
   GdkPixbuf *pixbuf;
 
-  if (selection_data->length > 0)
+  if (gtk_selection_data_get_length (selection_data) > 0)
     {
       pixbuf = gtk_selection_data_get_pixbuf (selection_data);
       gtk_image_set_from_pixbuf (GTK_IMAGE (data), pixbuf);

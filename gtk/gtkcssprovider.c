@@ -1150,7 +1150,7 @@ compare_selector (GtkWidgetPath *path,
                   SelectorPath  *selector)
 {
   GSList *elements = selector->elements;
-  gboolean match = TRUE;
+  gboolean match = TRUE, first = TRUE, first_match = FALSE;
   guint64 score = 0;
   gint i;
 
@@ -1164,6 +1164,9 @@ compare_selector (GtkWidgetPath *path,
       elem = elements->data;
 
       match = compare_selector_element (path, i, elem, &elem_score);
+
+      if (match && first)
+        first_match = TRUE;
 
       /* Only move on to the next index if there is no match
        * with the current element (whether to continue or not
@@ -1197,6 +1200,8 @@ compare_selector (GtkWidgetPath *path,
           score <<= 4;
           score |= elem_score;
         }
+
+      first = FALSE;
     }
 
   /* If there are pending selector
@@ -1208,6 +1213,13 @@ compare_selector (GtkWidgetPath *path,
 
   if (!match)
     score = 0;
+  else if (first_match)
+    {
+      /* Assign more weight to these selectors
+       * that matched right from the first element.
+       */
+      score <<= 4;
+    }
 
   return score;
 }
@@ -3577,6 +3589,15 @@ gtk_css_provider_get_default (void)
         "@define-color tooltip_bg_color #eee1b3; \n"
         "@define-color tooltip_fg_color #000; \n"
         "\n"
+        "@define-color info_fg_color rgb (181, 171, 156);\n"
+        "@define-color info_bg_color rgb (252, 252, 189);\n"
+        "@define-color warning_fg_color rgb (173, 120, 41);\n"
+        "@define-color warning_bg_color rgb (250, 173, 61);\n"
+        "@define-color question_fg_color rgb (97, 122, 214);\n"
+        "@define-color question_bg_color rgb (138, 173, 212);\n"
+        "@define-color error_fg_color rgb (166, 38, 38);\n"
+        "@define-color error_bg_color rgb (237, 54, 54);\n"
+        "\n"
         "*,\n"
         "GtkTreeView > GtkButton {\n"
         "  background-color: @bg_color;\n"
@@ -3596,8 +3617,16 @@ gtk_css_provider_get_default (void)
         "  color: @selected_fg_color;\n"
         "}\n"
         "\n"
+        ".expander {\n"
+        "  color: #fff;\n"
+        "}\n"
+        "\n"
         ".expander:prelight {\n"
-        "  color: @selected_fg_color\n"
+        "  color: @text_color;\n"
+        "}\n"
+        "\n"
+        ".expander:active {\n"
+        "  transition: 300ms linear;\n"
         "}\n"
         "\n"
         "*:insensitive {\n"
@@ -3772,10 +3801,33 @@ gtk_css_provider_get_default (void)
         ".spinner:active {\n"
         "  transition: 750ms linear loop;\n"
         "}\n"
+        "\n"
+        ".info {\n"
+        "  background-color: @info_bg_color;\n"
+        "  color: @info_fg_color;\n"
+        "}\n"
+        "\n"
+        ".warning {\n"
+        "  background-color: @warning_bg_color;\n"
+        "  color: @warning_fg_color;\n"
+        "}\n"
+        "\n"
+        ".question {\n"
+        "  background-color: @question_bg_color;\n"
+        "  color: @question_fg_color;\n"
+        "}\n"
+        "\n"
+        ".error {\n"
+        "  background-color: @error_bg_color;\n"
+        "  color: @error_fg_color;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_data (provider, str, -1, NULL);
+      if (!gtk_css_provider_load_from_data (provider, str, -1, NULL))
+        {
+          g_error ("Failed to load the internal default CSS.");
+        }
     }
 
   return provider;
@@ -3855,6 +3907,8 @@ gtk_css_provider_get_named (const gchar *name,
               path = NULL;
             }
         }
+
+      g_free (subpath);
 
       if (path)
         {

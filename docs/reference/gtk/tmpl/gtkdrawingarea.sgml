@@ -35,8 +35,8 @@ the application may want to connect to:
   </listitem>
   <listitem>
     <para>
-    The "expose_event" signal to handle redrawing the
-    contents of the widget.
+    The "draw" signal to handle redrawing the contents of the
+    widget.
     </para>
   </listitem>
 </itemizedlist>
@@ -53,40 +53,47 @@ that drawing is implicitly clipped to the exposed area.
 <title>Simple <structname>GtkDrawingArea</structname> usage.</title>
 <programlisting>
 gboolean
-expose_event_callback (GtkWidget *widget, GdkEventExpose *event, gpointer data)
+draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
 {
-  cairo_t *cr;
-  
-  cr = gdk_cairo_create (event->window);
+  guint width, height;
+  GdkRGBA color;
 
-  cairo_set_source_rgb (cr, 0.0, 0.0, 1.0);
-  cairo_paint (cr);
+  width = gtk_widget_get_allocated_width (widget);
+  height = gtk_widget_get_allocated_height (widget);
+  cairo_arc (cr, 
+             width / 2.0, height / 2.0,
+             MIN (width, height) / 2.0,
+             0, 2 * G_PI);
 
-  cairo_destroy (cr);
- 
-  return TRUE;
+  gtk_style_context_get_color (gtk_widget_get_style_context (widget),
+                               0,
+                               &color);
+  gdk_cairo_set_source_rgba (cr, &color);
+
+  cairo_fill (cr);
+
+  return FALSE;
 }
 [...]
   GtkWidget *drawing_area = gtk_drawing_area_new (<!-- -->);
   gtk_widget_set_size_request (drawing_area, 100, 100);
-  g_signal_connect (G_OBJECT (drawing_area), "expose_event",  
-                    G_CALLBACK (expose_event_callback), NULL);
+  g_signal_connect (G_OBJECT (drawing_area), "draw",  
+                    G_CALLBACK (draw_callback), NULL);
 </programlisting>
 </example>
 
 <para>
-Expose events are normally delivered when a drawing area first comes
-onscreen, or when it's covered by another window and then uncovered
-(exposed). You can also force an expose event by adding to the "damage
-region" of the drawing area's window; gtk_widget_queue_draw_area() and
-gdk_window_invalidate_rect() are equally good ways to do this. You'll
-then get an expose event for the invalid region.
+Draw signals are normally delivered when a drawing area first comes
+onscreen, or when it's covered by another window and then uncovered.
+You can also force a redraw by adding to the "damage region" of the
+drawing area's window; use gtk_widget_queue_draw_area() to do this. 
+You'll then get a draw event for the invalid region.
 </para>
 
 <para>
 The available routines for drawing are documented on the <link
-linkend="gdk-Drawing-Primitives">GDK Drawing Primitives</link> page.
-See also gdk_draw_pixbuf() for drawing a #GdkPixbuf.
+linkend="gdk3-Cairo-Interaction">GDK Drawing Primitives</link> page
+and the cairo documentation.
 </para>
 
 <para>

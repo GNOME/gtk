@@ -808,6 +808,7 @@ color_sample_drop_handle (GtkWidget        *widget,
 {
   GtkColorSelection *colorsel = data;
   GtkColorSelectionPrivate *priv;
+  gint length;
   guint16 *vals;
   gdouble color[4];
   priv = colorsel->private_data;
@@ -818,21 +819,23 @@ color_sample_drop_handle (GtkWidget        *widget,
    * B
    * opacity
    */
-  
-  if (selection_data->length < 0)
+
+  length = gtk_selection_data_get_length (selection_data);
+
+  if (length < 0)
     return;
   
   /* We accept drops with the wrong format, since the KDE color
    * chooser incorrectly drops application/x-color with format 8.
    */
-  if (selection_data->length != 8)
+  if (length != 8)
     {
       g_warning ("Received invalid color data\n");
       return;
     }
-  
-  vals = (guint16 *)selection_data->data;
-  
+
+  vals = (guint16 *) gtk_selection_data_get_data (selection_data);
+
   if (widget == priv->cur_sample)
     {
       color[0] = (gdouble)vals[0] / 0xffff;
@@ -1533,23 +1536,26 @@ palette_drop_handle (GtkWidget        *widget,
 		     gpointer          data)
 {
   GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
+  gint length;
   guint16 *vals;
   gdouble color[4];
-  
-  if (selection_data->length < 0)
+
+  length = gtk_selection_data_get_length (selection_data);
+
+  if (length < 0)
     return;
   
   /* We accept drops with the wrong format, since the KDE color
    * chooser incorrectly drops application/x-color with format 8.
    */
-  if (selection_data->length != 8)
+  if (length != 8)
     {
       g_warning ("Received invalid color data\n");
       return;
     }
-  
-  vals = (guint16 *)selection_data->data;
-  
+
+  vals = (guint16 *) gtk_selection_data_get_data (selection_data);
+
   color[0] = (gdouble)vals[0] / 0xffff;
   color[1] = (gdouble)vals[1] / 0xffff;
   color[2] = (gdouble)vals[2] / 0xffff;

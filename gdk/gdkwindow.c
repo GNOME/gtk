@@ -576,6 +576,9 @@ gdk_window_finalize (GObject *object)
   if (window->device_events)
     g_hash_table_destroy (window->device_events);
 
+  if (window->source_event_masks)
+    g_hash_table_destroy (window->source_event_masks);
+
   if (window->devices_inside)
     g_list_free (window->devices_inside);
 
@@ -7164,6 +7167,9 @@ gdk_window_shape_combine_region (GdkWindow       *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  if (!window->shape && shape_region == NULL)
+    return;
+
   window->shaped = (shape_region != NULL);
 
   if (window->shape)
@@ -8335,6 +8341,7 @@ send_crossing_event (GdkDisplay                 *display,
 		     GdkNotifyType               notify_type,
 		     GdkWindow                  *subwindow,
                      GdkDevice                  *device,
+                     GdkDevice                  *source_device,
 		     gint                        toplevel_x,
 		     gint                        toplevel_y,
 		     GdkModifierType             mask,
@@ -8394,6 +8401,10 @@ send_crossing_event (GdkDisplay                 *display,
     {
       event = _gdk_make_event ((GdkWindow *)window, type, event_in_queue, TRUE);
       gdk_event_set_device (event, device);
+
+      if (source_device)
+        gdk_event_set_source_device (event, source_device);
+
       event->crossing.time = time_;
       event->crossing.subwindow = subwindow;
       if (subwindow)
@@ -8421,6 +8432,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				 GdkWindow                  *src,
 				 GdkWindow                  *dest,
                                  GdkDevice                  *device,
+                                 GdkDevice                  *source_device,
 				 GdkCrossingMode             mode,
 				 gint                        toplevel_x,
 				 gint                        toplevel_y,
@@ -8476,7 +8488,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 			   a, GDK_LEAVE_NOTIFY,
 			   mode,
 			   notify_type,
-			   NULL, device,
+			   NULL, device, source_device,
 			   toplevel_x, toplevel_y,
 			   mask, time_,
 			   event_in_queue,
@@ -8498,7 +8510,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				   mode,
 				   notify_type,
 				   (GdkWindow *)last,
-                                   device,
+				   device, source_device,
 				   toplevel_x, toplevel_y,
 				   mask, time_,
 				   event_in_queue,
@@ -8545,7 +8557,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 				   mode,
 				   notify_type,
 				   (GdkWindow *)next,
-                                   device,
+				   device, source_device,
 				   toplevel_x, toplevel_y,
 				   mask, time_,
 				   event_in_queue,
@@ -8567,7 +8579,7 @@ _gdk_synthesize_crossing_events (GdkDisplay                 *display,
 			   mode,
 			   notify_type,
 			   NULL,
-                           device,
+                           device, source_device,
 			   toplevel_x, toplevel_y,
 			   mask, time_,
 			   event_in_queue,
@@ -8900,6 +8912,143 @@ gdk_window_geometry_changed (GdkWindow *window)
   _gdk_synthesize_crossing_events_for_geometry_change (window);
 }
 
+static void
+source_events_device_added (GdkDeviceManager *device_manager,
+                            GdkDevice        *device,
+                            gpointer          user_data)
+{
+  GdkWindow *window;
+  GdkEventMask event_mask;
+  GdkInputSource source;
+
+  if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_FLOATING)
+    return;
+
+  window = user_data;
+  source = gdk_device_get_source (device);
+
+  event_mask = GPOINTER_TO_INT (g_hash_table_lookup (window->source_event_masks,
+                                                     GINT_TO_POINTER (source)));
+  if (event_mask)
+    gdk_window_set_device_events (window, device, event_mask);
+}
+
+static void
+source_events_device_changed (GdkDeviceManager *device_manager,
+                              GdkDevice        *device,
+                              gpointer          user_data)
+{
+  GdkDeviceType type;
+  GdkInputSource source;
+  GdkEventMask event_mask;
+  GdkWindow *window;
+
+  window = user_data;
+  type = gdk_device_get_device_type (device);
+  source = gdk_device_get_source (device);
+
+  event_mask = GPOINTER_TO_INT (g_hash_table_lookup (window->source_event_masks,
+                                                     GINT_TO_POINTER (source)));
+
+  if (!event_mask)
+    return;
+
+  if (type == GDK_DEVICE_TYPE_FLOATING)
+    {
+      /* The device was just floated, enable its event mask */
+      gdk_window_set_device_events (window, device, event_mask);
+    }
+  else if (type == GDK_DEVICE_TYPE_SLAVE)
+    gdk_window_set_device_events (window, device, 0);
+}
+
+/**
+ * gdk_window_set_source_events:
+ * @window: a #GdkWindow
+ * @source: a #GdkInputSource to define the source class.
+ * @event_mask: event mask for @window
+ *
+ * Sets the event mask for any floating device (i.e. not attached to any
+ * visible pointer) that has the source defined as @source. This event
+ * mask will be applied both to currently existing, newly added devices
+ * after this call, and devices being attached/detached.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_window_set_source_events (GdkWindow      *window,
+                              GdkInputSource  source,
+                              GdkEventMask    event_mask)
+{
+  GdkDeviceManager *device_manager;
+  GdkDisplay *display;
+  GList *devices, *d;
+  guint size;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  display = gdk_window_get_display (window);
+  device_manager = gdk_display_get_device_manager (display);
+
+  devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_FLOATING);
+
+  /* Set event mask for existing devices */
+  for (d = devices; d; d = d->next)
+    {
+      GdkDevice *device = d->data;
+
+      if (source == gdk_device_get_source (device))
+        gdk_window_set_device_events (window, device, event_mask);
+    }
+
+  /* Update accounting */
+  if (G_UNLIKELY (!window->source_event_masks))
+    window->source_event_masks = g_hash_table_new (NULL, NULL);
+
+  if (event_mask)
+    g_hash_table_insert (window->source_event_masks,
+                         GUINT_TO_POINTER (source),
+                         GUINT_TO_POINTER (event_mask));
+  else
+    g_hash_table_remove (window->source_event_masks,
+                         GUINT_TO_POINTER (source));
+
+  size = g_hash_table_size (window->source_event_masks);
+
+  /* Update handler if needed */
+  if (!window->device_added_handler_id && size > 0)
+    {
+      window->device_added_handler_id =
+        g_signal_connect (device_manager, "device-added",
+                          G_CALLBACK (source_events_device_added), window);
+      window->device_changed_handler_id =
+        g_signal_connect (device_manager, "device-changed",
+                          G_CALLBACK (source_events_device_changed), window);
+    }
+  else if (window->device_added_handler_id && size == 0)
+    g_signal_handler_disconnect (device_manager, window->device_added_handler_id);
+}
+
+/**
+ * gdk_window_get_source_events:
+ * @window: a #GdkWindow
+ * @source: a #GdkInputSource to define the source class.
+ *
+ * Returns the event mask for @window corresponding to the device class specified
+ * by @source.
+ *
+ * Returns: source event mask for @window
+ **/
+GdkEventMask
+gdk_window_get_source_events (GdkWindow      *window,
+                              GdkInputSource  source)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+
+  return GPOINTER_TO_UINT (g_hash_table_lookup (window->source_event_masks,
+                                                GUINT_TO_POINTER (source)));
+}
+
 static gboolean
 do_synthesize_crossing_event (gpointer data)
 {
@@ -8939,7 +9088,7 @@ do_synthesize_crossing_event (gpointer data)
               _gdk_synthesize_crossing_events (display,
                                                pointer_info->window_under_pointer,
                                                new_window_under_pointer,
-                                               device,
+                                               device, NULL,
                                                GDK_CROSSING_NORMAL,
                                                pointer_info->toplevel_x,
                                                pointer_info->toplevel_y,
@@ -9055,7 +9204,7 @@ proxy_pointer_event (GdkDisplay                 *display,
   GdkWindow *toplevel_window, *event_window;
   GdkWindow *pointer_window;
   GdkPointerWindowInfo *pointer_info;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
   GdkEvent *event;
   guint state;
   gdouble toplevel_x, toplevel_y;
@@ -9067,6 +9216,7 @@ proxy_pointer_event (GdkDisplay                 *display,
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
   device = gdk_event_get_device (source_event);
+  source_device = gdk_event_get_source_device (source_event);
   pointer_info = _gdk_display_get_pointer_info (display, device);
   toplevel_window = convert_native_coords_to_toplevel (event_window,
 						       toplevel_x, toplevel_y,
@@ -9100,7 +9250,7 @@ proxy_pointer_event (GdkDisplay                 *display,
       _gdk_synthesize_crossing_events (display,
 				       pointer_info->window_under_pointer,
 				       event_window,
-                                       device,
+                                       device, source_device,
 				       source_event->crossing.mode,
 				       toplevel_x, toplevel_y,
 				       state, time_,
@@ -9116,7 +9266,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 			   source_event->crossing.mode,
 			   source_event->crossing.detail,
 			   NULL,
-                           device,
+                           device, source_device,
 			   toplevel_x, toplevel_y,
 			   state, time_,
 			   source_event,
@@ -9146,7 +9296,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 			   source_event->crossing.mode,
 			   source_event->crossing.detail,
 			   NULL,
-                           device,
+                           device, source_device,
 			   toplevel_x, toplevel_y,
 			   state, time_,
 			   source_event,
@@ -9156,7 +9306,7 @@ proxy_pointer_event (GdkDisplay                 *display,
       _gdk_synthesize_crossing_events (display,
 				       event_window,
 				       pointer_window,
-                                       device,
+                                       device, source_device,
 				       source_event->crossing.mode,
 				       toplevel_x, toplevel_y,
 				       state, time_,
@@ -9175,7 +9325,7 @@ proxy_pointer_event (GdkDisplay                 *display,
       _gdk_synthesize_crossing_events (display,
 				       pointer_info->window_under_pointer,
 				       pointer_window,
-                                       device,
+                                       device, source_device,
 				       GDK_CROSSING_NORMAL,
 				       toplevel_x, toplevel_y,
 				       state, time_,
@@ -9236,6 +9386,7 @@ proxy_pointer_event (GdkDisplay                 *display,
 	  event->motion.device = source_event->motion.device;
           event->motion.axes = g_memdup (source_event->motion.axes,
                                          sizeof (gdouble) * gdk_device_get_n_axes (source_event->motion.device));
+          gdk_event_set_source_device (event, source_device);
 	}
     }
 
@@ -9265,7 +9416,7 @@ proxy_button_event (GdkEvent *source_event,
   gdouble toplevel_x, toplevel_y;
   GdkDisplay *display;
   GdkWindow *w;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
 
   type = source_event->any.type;
   event_window = source_event->any.window;
@@ -9273,6 +9424,7 @@ proxy_button_event (GdkEvent *source_event,
   gdk_event_get_state (source_event, &state);
   time_ = gdk_event_get_time (source_event);
   device = gdk_event_get_device (source_event);
+  source_device = gdk_event_get_source_device (source_event);
   display = gdk_window_get_display (source_event->any.window);
   toplevel_window = convert_native_coords_to_toplevel (event_window,
 						       toplevel_x, toplevel_y,
@@ -9309,7 +9461,7 @@ proxy_button_event (GdkEvent *source_event,
                                      serial,
 				      time_,
                                      TRUE);
-      _gdk_display_device_grab_update (display, device, serial);
+      _gdk_display_device_grab_update (display, device, source_device, serial);
     }
 
   pointer_window = get_pointer_window (display, toplevel_window, device,
@@ -9346,6 +9498,8 @@ proxy_button_event (GdkEvent *source_event,
       event->button.axes = g_memdup (source_event->button.axes,
                                      sizeof (gdouble) * gdk_device_get_n_axes (source_event->button.device));
 
+      gdk_event_set_source_device (event, source_device);
+
       if (type == GDK_BUTTON_PRESS)
 	_gdk_event_button_generate (display, event);
       return TRUE;
@@ -9359,6 +9513,7 @@ proxy_button_event (GdkEvent *source_event,
       event->scroll.y_root = source_event->scroll.y_root;
       event->scroll.state = state;
       event->scroll.device = source_event->scroll.device;
+      gdk_event_set_source_device (event, source_device);
       return TRUE;
 
     default:
@@ -9452,20 +9607,21 @@ _gdk_windowing_got_event (GdkDisplay *display,
   guint old_state, old_button;
   GdkDeviceGrabInfo *button_release_grab;
   GdkPointerWindowInfo *pointer_info;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
   gboolean is_toplevel;
 
   if (gdk_event_get_time (event) != GDK_CURRENT_TIME)
     display->last_event_time = gdk_event_get_time (event);
 
   device = gdk_event_get_device (event);
+  source_device = gdk_event_get_source_device (event);
 
   if (device)
     {
       GdkInputMode mode;
 
       g_object_get (device, "input-mode", &mode, NULL);
-      _gdk_display_device_grab_update (display, device, serial);
+      _gdk_display_device_grab_update (display, device, source_device, serial);
 
       if (mode == GDK_MODE_DISABLED ||
           !_gdk_display_check_grab_ownership (display, device, serial))
@@ -9510,7 +9666,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
                                          serial,
                                          gdk_event_get_time (event),
                                          TRUE);
-	  _gdk_display_device_grab_update (display, device, serial);
+	  _gdk_display_device_grab_update (display, device, source_device, serial);
 	}
       if (event->type == GDK_BUTTON_RELEASE &&
 	  !event->any.send_event)
@@ -9523,7 +9679,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	    {
 	      button_release_grab->serial_end = serial;
 	      button_release_grab->implicit_ungrab = FALSE;
-	      _gdk_display_device_grab_update (display, device, serial);
+	      _gdk_display_device_grab_update (display, device, source_device, serial);
 	    }
 	}
 
@@ -9645,7 +9801,7 @@ _gdk_windowing_got_event (GdkDisplay *display,
 	{
 	  button_release_grab->serial_end = serial;
 	  button_release_grab->implicit_ungrab = FALSE;
-	  _gdk_display_device_grab_update (display, device, serial);
+	  _gdk_display_device_grab_update (display, device, source_device, serial);
 	}
     }
 

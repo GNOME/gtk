@@ -1566,8 +1566,8 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 
   if (stock_id)
     {
-      pixbuf = gtk_widget_render_icon (info->widget, stock_id,
-				       GTK_ICON_SIZE_DND, NULL);
+      pixbuf = gtk_widget_render_icon_pixbuf (info->widget, stock_id,
+				              GTK_ICON_SIZE_DND, NULL);
 
       if (!pixbuf)
 	{

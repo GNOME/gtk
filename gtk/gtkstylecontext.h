@@ -254,6 +254,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_SCROLLBAR "scrollbar"
 
 /**
+ * GTK_STYLE_CLASS_SCALE:
+ *
+ * A CSS class to match scale widgets.
+ */
+#define GTK_STYLE_CLASS_SCALE "scale"
+
+/**
  * GTK_STYLE_CLASS_HEADER:
  *
  * A CSS class to match a header element.
@@ -294,6 +301,74 @@ struct _GtkStyleContextClass
  * A widget class defining a spinner
  */
 #define GTK_STYLE_CLASS_SPINNER "spinner"
+
+/**
+ * GTK_STYLE_CLASS_MARK:
+ *
+ * A widget class defining marks in a widget, such as in scales
+ */
+#define GTK_STYLE_CLASS_MARK "mark"
+
+/**
+ * GTK_STYLE_CLASS_EXPANDER:
+ *
+ * A widget class defining an expander, such as those in treeviews
+ */
+#define GTK_STYLE_CLASS_EXPANDER "expander"
+
+/**
+ * GTK_STYLE_CLASS_SPINBUTTON:
+ *
+ * A widget class defining an spinbutton
+ */
+#define GTK_STYLE_CLASS_SPINBUTTON "spinbutton"
+
+/**
+ * GTK_STYLE_CLASS_NOTEBOOK:
+ *
+ * A widget class defining a notebook
+ */
+#define GTK_STYLE_CLASS_NOTEBOOK "notebook"
+
+/**
+ * GTK_STYLE_CLASS_VIEW:
+ *
+ * A widget class defining a view, such as iconviews or treeviews
+ */
+#define GTK_STYLE_CLASS_VIEW "view"
+
+/**
+ * GTK_STYLE_CLASS_INFO:
+ *
+ * A widget class for an area displaying an informational message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_INFO "info"
+
+/**
+ * GTK_STYLE_CLASS_WARNING:
+ *
+ * A widget class for an area displaying a warning message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_WARNING "warning"
+
+/**
+ * GTK_STYLE_CLASS_QUESTION:
+ *
+ * A widget class for an area displaying a question to the user,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_QUESTION "question"
+
+/**
+ * GTK_STYLE_CLASS_ERROR:
+ *
+ * A widget class for an area displaying an error message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_ERROR "error"
+
 
 /* Predefined set of widget regions */
 
@@ -439,6 +514,9 @@ void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
 
+const PangoFontDescription * gtk_style_context_get_font (GtkStyleContext *context,
+                                                    GtkStateFlags    state);
+
 void gtk_style_context_get_border           (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *border);
@@ -456,8 +534,7 @@ const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                        GParamSpec      *pspec);
 void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);
 void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,
-                                                              gint             rel_x,
-                                                              gint             rel_y);
+							      GtkWidget       *widget);
 
 void gtk_style_context_invalidate (GtkStyleContext *context);
 void gtk_style_context_reset_widgets (GdkScreen *screen);

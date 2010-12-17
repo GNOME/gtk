@@ -831,6 +831,10 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    gchar    **path,
 					    gchar    **path_reversed);
 
+GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
+                                               const gchar *stock_id,
+                                               GtkIconSize  size,
+                                               const gchar *detail);
 #endif  /* GTK_DISABLE_DEPRECATED */
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
@@ -838,10 +842,9 @@ PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 					       const gchar *text);
 
-GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
+GdkPixbuf    *gtk_widget_render_icon_pixbuf   (GtkWidget   *widget,
                                                const gchar *stock_id,
-                                               GtkIconSize  size,
-                                               const gchar *detail);
+                                               GtkIconSize  size);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.
@@ -896,9 +899,6 @@ void	     gtk_widget_shape_combine_region (GtkWidget *widget,
                                               cairo_region_t *region);
 void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
                                                     cairo_region_t *region);
-
-/* internal function */
-void	     gtk_widget_reset_shapes	   (GtkWidget *widget);
 
 GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,

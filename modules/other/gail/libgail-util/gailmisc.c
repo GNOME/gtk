@@ -19,6 +19,7 @@
 
 #include "config.h"
 
+#include <math.h>
 #include <stdlib.h>
 #include <gtk/gtk.h>
 #include "gailmisc.h"
@@ -373,9 +374,11 @@ gail_misc_get_default_attributes (AtkAttributeSet *attrib_set,
                                   GtkWidget       *widget)
 {
   PangoContext *context;
-  GtkStyle *style_value;
+  GtkStyleContext *style_context;
   gint int_value;
   PangoWrapMode mode;
+  GdkRGBA color;
+  gchar *value;
 
   attrib_set = gail_misc_add_attribute (attrib_set, 
                                         ATK_TEXT_ATTR_DIRECTION,
@@ -453,25 +456,26 @@ gail_misc_get_default_attributes (AtkAttributeSet *attrib_set,
               g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_WRAP_MODE, 
                                                       int_value))); 
 
-  style_value = gtk_widget_get_style (widget);
-  if (style_value)
-    {
-      GdkColor color;
-      gchar *value;
+  style_context = gtk_widget_get_style_context (widget);
 
-      color = style_value->base[GTK_STATE_NORMAL];
-      value = g_strdup_printf ("%u,%u,%u",
-                               color.red, color.green, color.blue);
-      attrib_set = gail_misc_add_attribute (attrib_set,
-                                            ATK_TEXT_ATTR_BG_COLOR,
-                                            value); 
-      color = style_value->text[GTK_STATE_NORMAL];
-      value = g_strdup_printf ("%u,%u,%u",
-                               color.red, color.green, color.blue);
-      attrib_set = gail_misc_add_attribute (attrib_set,
-                                            ATK_TEXT_ATTR_FG_COLOR,
-                                            value); 
-    }
+  gtk_style_context_get_background_color (style_context, 0, &color);
+  value = g_strdup_printf ("%u,%u,%u",
+                           (guint) ceil (color.red * 65536 - color.red),
+                           (guint) ceil (color.green * 65536 - color.green),
+                           (guint) ceil (color.blue * 65536 - color.blue));
+  attrib_set = gail_misc_add_attribute (attrib_set,
+                                        ATK_TEXT_ATTR_BG_COLOR,
+                                        value); 
+
+  gtk_style_context_get_color (style_context, 0, &color);
+  value = g_strdup_printf ("%u,%u,%u",
+                           (guint) ceil (color.red * 65536 - color.red),
+                           (guint) ceil (color.green * 65536 - color.green),
+                           (guint) ceil (color.blue * 65536 - color.blue));
+  attrib_set = gail_misc_add_attribute (attrib_set,
+                                        ATK_TEXT_ATTR_FG_COLOR,
+                                        value); 
+
   attrib_set = gail_misc_add_attribute (attrib_set,
                                         ATK_TEXT_ATTR_FG_STIPPLE,
               g_strdup (atk_text_attribute_get_value (ATK_TEXT_ATTR_FG_STIPPLE, 

@@ -1124,7 +1124,7 @@ set_preview_widget (GtkFileChooserDefault *impl,
 static GdkPixbuf *
 render_search_icon (GtkFileChooserDefault *impl)
 {
-  return gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FIND, GTK_ICON_SIZE_MENU, NULL);
+  return gtk_widget_render_icon_pixbuf (GTK_WIDGET (impl), GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 }
 
 static GdkPixbuf *
@@ -1144,7 +1144,7 @@ render_recent_icon (GtkFileChooserDefault *impl)
 
   /* fallback */
   if (!retval)
-    retval = gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU, NULL);
+    retval = gtk_widget_render_icon_pixbuf (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU);
 
   return retval;
 }
@@ -3075,11 +3075,11 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
     }
 #endif
 
-  if (context->suggested_action == GDK_ACTION_COPY ||
-      (context->actions & GDK_ACTION_COPY) != 0)
+  if (gdk_drag_context_get_suggested_action (context) == GDK_ACTION_COPY ||
+      (gdk_drag_context_get_actions (context) & GDK_ACTION_COPY) != 0)
     action = GDK_ACTION_COPY;
-  else if (context->suggested_action == GDK_ACTION_MOVE ||
-           (context->actions & GDK_ACTION_MOVE) != 0)
+  else if (gdk_drag_context_get_suggested_action (context) == GDK_ACTION_MOVE ||
+           (gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
     action = GDK_ACTION_MOVE;
   else
     {
@@ -3228,6 +3228,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   GtkFileChooserDefault *impl;
   GtkTreePath *tree_path;
   GtkTreeViewDropPosition tree_pos;
+  GdkAtom target;
   int position;
   int bookmarks_index;
 
@@ -3247,9 +3248,11 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   g_assert (position >= bookmarks_index);
   position -= bookmarks_index;
 
-  if (gtk_targets_include_uri (&selection_data->target, 1))
+  target = gtk_selection_data_get_target (selection_data);
+
+  if (gtk_targets_include_uri (&target, 1))
     shortcuts_drop_uris (impl, selection_data, position);
-  else if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  else if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     shortcuts_reorder (impl, position);
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");

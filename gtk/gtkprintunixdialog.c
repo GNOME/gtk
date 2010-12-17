@@ -1928,6 +1928,7 @@ selected_printer_changed (GtkTreeSelection   *selection,
 
       priv->options_changed_handler =
         g_signal_connect_swapped (priv->options, "changed", G_CALLBACK (options_changed_cb), dialog);
+      schedule_idle_mark_conflicts (dialog);
     }
 
   update_dialog_from_settings (dialog);

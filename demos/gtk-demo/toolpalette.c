@@ -41,7 +41,7 @@ canvas_item_new (GtkWidget     *widget,
   GdkPixbuf *pixbuf;
 
   stock_id = gtk_tool_button_get_stock_id (button);
-  pixbuf = gtk_widget_render_icon (widget, stock_id, GTK_ICON_SIZE_DIALOG, NULL);
+  pixbuf = gtk_widget_render_icon_pixbuf (widget, stock_id, GTK_ICON_SIZE_DIALOG);
 
   if (pixbuf)
     {

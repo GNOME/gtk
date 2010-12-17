@@ -874,6 +874,29 @@ gtk_theming_engine_get_margin (GtkThemingEngine *engine,
   gtk_style_context_get_margin (priv->context, state, margin);
 }
 
+/**
+ * gtk_theming_engine_get_font:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve the font for
+ *
+ * Returns the font description for a given state.
+ *
+ * Returns: the #PangoFontDescription for the given state. This
+ *          object is owned by GTK+ and should not be freed.
+ *
+ * Since: 3.0
+ **/
+const PangoFontDescription *
+gtk_theming_engine_get_font (GtkThemingEngine *engine,
+                             GtkStateFlags     state)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
+
+  priv = engine->priv;
+  return gtk_style_context_get_font (priv->context, state);
+}
 
 /* GtkThemingModule */
 
@@ -1461,8 +1484,7 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
-  gint radius, border_width;
-  GtkBorder *border;
+  gint radius;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1470,14 +1492,10 @@ render_background_internal (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
                           "background-color", &bg_color,
-                          "border-width", &border,
                           "border-radius", &radius,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-  border_width = MIN (MIN (border->top, border->bottom),
-                      MIN (border->left, border->right));
-
   _cairo_round_rectangle_sides (cr, (gdouble) radius,
                                 x, y, width, height,
                                 SIDE_ALL, junction);
@@ -1694,7 +1712,6 @@ render_background_internal (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
-  gtk_border_free (border);
 }
 
 static void
@@ -1992,6 +2009,8 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   double x_double, y_double;
   gdouble angle;
   gint line_width;
+  gboolean running, is_rtl;
+  gdouble progress;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -1999,23 +2018,23 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "color", &fg_color,
                           NULL);
-  gtk_theming_engine_get (engine, 0,
-                          "color", &outline_color,
+  gtk_theming_engine_get (engine, flags,
+                          "border-color", &outline_color,
                           NULL);
 
+  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress);
+  is_rtl = (gtk_theming_engine_get_direction (engine) == GTK_TEXT_DIR_RTL);
   line_width = 1;
 
-  /* FIXME: LTR/RTL */
-  if (flags & GTK_STATE_FLAG_ACTIVE)
-    {
-      angle = G_PI / 2;
-      interp = 1.0;
-    }
+  if (!running)
+    progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
+
+  if (is_rtl)
+    angle = (G_PI) - ((G_PI / 2) * progress);
   else
-    {
-      angle = 0;
-      interp = 0;
-    }
+    angle = (G_PI / 2) * progress;
+
+  interp = progress;
 
   /* Compute distance that the stroke extends beyonds the end
    * of the triangle we draw.
@@ -2510,12 +2529,11 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
       gap_side == GTK_POS_BOTTOM)
     render_background_internal (engine, cr,
                                 0, 0, width, height,
-                                junction);
+                                GTK_JUNCTION_BOTTOM);
   else
     render_background_internal (engine, cr,
                                 0, 0, height, width,
-                                junction);
-
+                                GTK_JUNCTION_BOTTOM);
   cairo_restore (cr);
 
   cairo_save (cr);

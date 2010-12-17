@@ -56,8 +56,7 @@
  */
 
 
-static void gtk_scrollbar_style_set (GtkWidget *widget,
-                                     GtkStyle  *previous);
+static void gtk_scrollbar_style_updated (GtkWidget *widget);
 
 G_DEFINE_TYPE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_RANGE)
 
@@ -66,9 +65,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  widget_class->style_set = gtk_scrollbar_style_set;
-
-  GTK_RANGE_CLASS (class)->stepper_detail = "Xscrollbar";
+  widget_class->style_updated = gtk_scrollbar_style_updated;
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("min-slider-length",
@@ -125,8 +122,7 @@ gtk_scrollbar_init (GtkScrollbar *scrollbar)
 }
 
 static void
-gtk_scrollbar_style_set (GtkWidget *widget,
-                         GtkStyle  *previous)
+gtk_scrollbar_style_updated (GtkWidget *widget)
 {
   GtkRange *range = GTK_RANGE (widget);
   gint slider_length;
@@ -147,7 +143,7 @@ gtk_scrollbar_style_set (GtkWidget *widget,
   _gtk_range_set_steppers (range,
                            has_a, has_b, has_c, has_d);
 
-  GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_set (widget, previous);
+  GTK_WIDGET_CLASS (gtk_scrollbar_parent_class)->style_updated (widget);
 }
 
 /**

@@ -1089,6 +1089,9 @@ gboolean  gdk_event_get_axis            (const GdkEvent  *event,
 void       gdk_event_set_device         (GdkEvent        *event,
                                          GdkDevice       *device);
 GdkDevice* gdk_event_get_device         (const GdkEvent  *event);
+void       gdk_event_set_source_device  (GdkEvent        *event,
+                                         GdkDevice       *device);
+GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
 void      gdk_event_request_motions     (const GdkEventMotion *event);
 
 gboolean  gdk_events_get_distance       (GdkEvent        *event1,
