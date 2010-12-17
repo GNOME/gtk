@@ -2045,6 +2045,9 @@ text_view_visibility_notify_event (GtkWidget          *text_view,
     {
       GdkDevice *dev = d->data;
 
+      if (gdk_device_get_source (dev) == GDK_SOURCE_KEYBOARD)
+        continue;
+
       gdk_window_get_device_position (gtk_widget_get_window (text_view), dev,
                                       &wx, &wy, NULL);
 
