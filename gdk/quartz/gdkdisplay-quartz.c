@@ -227,6 +227,8 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->beep = gdk_quartz_display_beep;
   display_class->sync = _gdk_quartz_display_sync;
   display_class->flush = _gdk_quartz_display_flush;
+  display_class->queue_events = _gdk_quartz_display_queue_events;
+  display_class->has_pending = _gdk_quartz_display_has_pending;
   display_class->get_default_group = gdk_quartz_display_get_default_group;
   display_class->supports_selection_notification = gdk_quartz_display_supports_selection_notification;
   display_class->request_selection_notification = gdk_quartz_display_request_selection_notification;
