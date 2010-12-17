@@ -4762,4 +4762,7 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->sync_rendering = _gdk_x11_window_sync_rendering;
   impl_class->simulate_key = _gdk_x11_window_simulate_key;
   impl_class->simulate_button = _gdk_x11_window_simulate_button;
+  impl_class->get_property = _gdk_x11_window_get_property;
+  impl_class->change_property = _gdk_x11_window_change_property;
+  impl_class->delete_property = _gdk_x11_window_delete_property;
 }

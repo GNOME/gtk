@@ -112,6 +112,25 @@ gboolean _gdk_x11_window_simulate_button   (GdkWindow       *window,
                                             guint            button,
                                             GdkModifierType  modifiers,
                                             GdkEventType     button_pressrelease);
+gboolean _gdk_x11_window_get_property      (GdkWindow    *window,
+                                            GdkAtom       property,
+                                            GdkAtom       type,
+                                            gulong        offset,
+                                            gulong        length,
+                                            gint          pdelete,
+                                            GdkAtom      *actual_property_type,
+                                            gint         *actual_format_type,
+                                            gint         *actual_length,
+                                            guchar      **data);
+void     _gdk_x11_window_change_property   (GdkWindow    *window,
+                                            GdkAtom       property,
+                                            GdkAtom       type,
+                                            gint          format,
+                                            GdkPropMode   mode,
+                                            const guchar *data,
+                                            gint          nelements);
+void     _gdk_x11_window_delete_property   (GdkWindow    *window,
+                                            GdkAtom       property);
 
 gboolean _gdk_x11_window_queue_antiexpose  (GdkWindow *window,
                                             cairo_region_t *area);
@@ -182,6 +201,14 @@ GdkAtom _gdk_x11_display_manager_atom_intern   (GdkDisplayManager *manager,
                                                 gboolean           copy_name);
 gchar * _gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
                                                 GdkAtom            atom);
+guint   _gdk_x11_display_manager_lookup_keyval (GdkDisplayManager *manager,
+                                                const gchar       *name);
+gchar * _gdk_x11_display_manager_get_keyval_name (GdkDisplayManager *manager,
+                                                  guint              keyval);
+void    _gdk_x11_display_manager_keyval_convert_case (GdkDisplayManager *manager,
+                                                      guint              symbol,
+                                                      guint             *lower,
+                                                      guint             *upper);
 
 GdkCursor *_gdk_x11_display_get_cursor_for_type     (GdkDisplay    *display,
                                                      GdkCursorType  type);

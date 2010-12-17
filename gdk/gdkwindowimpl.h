@@ -28,6 +28,7 @@
 #define __GDK_WINDOW_IMPL_H__
 
 #include <gdk/gdkwindow.h>
+#include <gdk/gdkproperty.h>
 
 G_BEGIN_DECLS
 
@@ -268,6 +269,26 @@ struct _GdkWindowImplClass
                                            guint           button,
                                            GdkModifierType modifiers,
                                            GdkEventType    event_type);
+
+  gboolean     (*get_property)            (GdkWindow      *window,
+                                           GdkAtom         property,
+                                           GdkAtom         type,
+                                           gulong          offset,
+                                           gulong          length,
+                                           gint            pdelete,
+                                           GdkAtom        *actual_type,
+                                           gint           *actual_format,
+                                           gint           *actual_length,
+                                           guchar        **data);
+  void         (*change_property)         (GdkWindow      *window,
+                                           GdkAtom         property,
+                                           GdkAtom         type,
+                                           gint            format,
+                                           GdkPropMode     mode,
+                                           const guchar   *data,
+                                           gint            n_elements);
+  void         (*delete_property)         (GdkWindow      *window,
+                                           GdkAtom         property);
 };
 
 /* Interface Functions */
