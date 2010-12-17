@@ -516,7 +516,9 @@ void gdk_window_set_urgency_hint      (GdkWindow *window,
 void          gdk_window_set_geometry_hints (GdkWindow          *window,
 					     const GdkGeometry  *geometry,
 					     GdkWindowHints      geom_mask);
+#if !defined(GDK_DISABLE_DEPRECATED) || defined(GDK_COMPILATION)
 void          gdk_set_sm_client_id          (const gchar        *sm_client_id);
+#endif
 
 void	      gdk_window_begin_paint_rect   (GdkWindow          *window,
 					     const GdkRectangle *rectangle);

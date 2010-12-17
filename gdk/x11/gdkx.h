@@ -217,6 +217,8 @@ G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
 #endif /* GDK_MULTIHEAD_SAFE */
 #endif /* GDK_DISABLE_DEPRECATED */
 
+void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
+
 G_END_DECLS
 
 #endif /* __GDK_X_H__ */

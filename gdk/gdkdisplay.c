@@ -432,6 +432,8 @@ gdk_display_get_core_pointer (GdkDisplay *display)
  * session management and the Inter-Client Communication Conventions Manual
  * (ICCCM) for information on the <literal>WM_CLIENT_LEADER</literal> property. 
  * (Both documents are part of the X Window System distribution.)
+ *
+ * Deprecated:2.24: Use gdk_x11_set_sm_client_id() instead
  **/
 void
 gdk_set_sm_client_id (const gchar* sm_client_id)

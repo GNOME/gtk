@@ -395,6 +395,26 @@ _gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
 		     gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
+/**
+ * gdk_x11_set_sm_client_id:
+ * @sm_client_id: the client id assigned by the session manager when the
+ *    connection was opened, or %NULL to remove the property.
+ *
+ * Sets the <literal>SM_CLIENT_ID</literal> property on the application's leader window so that
+ * the window manager can save the application's state using the X11R6 ICCCM
+ * session management protocol.
+ *
+ * See the X Session Management Library documentation for more information on
+ * session management and the Inter-Client Communication Conventions Manual
+ *
+ * Since: 2.24
+ */
+void
+gdk_x11_set_sm_client_id (const gchar *sm_client_id)
+{
+  gdk_set_sm_client_id (sm_client_id);
+}
+
 /* Close all open displays
  */
 void

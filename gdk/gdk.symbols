@@ -1323,6 +1323,7 @@ gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
 gdk_x11_grab_server
 gdk_x11_ungrab_server
+gdk_x11_set_sm_client_id
 #endif
 
 #if IN_FILE(__GDK_EVENTS_X11_C__)
