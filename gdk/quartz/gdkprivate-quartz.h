@@ -67,9 +67,9 @@ extern GdkDragContext *_gdk_quartz_drag_source_context;
 /* Initialization */
 void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
 void _gdk_windowing_window_init             (void);
-void _gdk_events_init                       (void);
+void _gdk_quartz_events_init                (void);
 void _gdk_quartz_visual_init                (GdkScreen *screen);
-void _gdk_input_init                        (void);
+void _gdk_quartz_input_init                 (void);
 void _gdk_quartz_event_loop_init            (void);
 
 /* GC */
@@ -152,6 +152,8 @@ GdkDragContext * _gdk_quartz_window_drag_begin   (GdkWindow   *window,
 void        _gdk_quartz_display_sync                (GdkDisplay  *display);
 void        _gdk_quartz_display_flush               (GdkDisplay  *display);
 GList *     _gdk_quartz_display_list_devices        (GdkDisplay  *dpy);
+
+GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
 
 GdkNativeWinodw _gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
                                                            GdkNativeWindow *xid,

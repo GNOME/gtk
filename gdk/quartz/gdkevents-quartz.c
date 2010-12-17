@@ -60,7 +60,7 @@ gdk_quartz_event_get_nsevent (GdkEvent *event)
 }
 
 void
-_gdk_events_init (void)
+_gdk_quartz_events_init (void)
 {
   _gdk_quartz_event_loop_init ();
 

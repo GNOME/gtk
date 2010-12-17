@@ -204,7 +204,7 @@ _gdk_quartz_device_check_extension_events (GdkDevice *device)
 }
 
 void
-_gdk_input_init (void)
+_gdk_quartz_input_init (void)
 {
   GdkDeviceManager *device_manager;
   GList *list, *l;
@@ -251,29 +251,4 @@ _gdk_input_init (void)
                                        _gdk_display->core_pointer);
 
   _gdk_input_ignore_core = FALSE;
-}
-
-void
-_gdk_input_exit (void)
-{
-  GList *tmp_list;
-  GdkDevicePrivate *gdkdev;
-
-  for (tmp_list = _gdk_input_devices; tmp_list; tmp_list = tmp_list->next)
-    {
-      gdkdev = (GdkDevicePrivate *)(tmp_list->data);
-      if (gdkdev != (GdkDevicePrivate *)_gdk_core_pointer)
-	{
-	  gdk_device_set_mode ((GdkDevice *)gdkdev, GDK_MODE_DISABLED);
-	  g_object_unref(gdkdev);
-	}
-    }
-
-  g_list_free (_gdk_input_devices);
-
-  for (tmp_list = _gdk_input_windows; tmp_list; tmp_list = tmp_list->next)
-    {
-      g_free (tmp_list->data);
-    }
-  g_list_free (_gdk_input_windows);
 }
