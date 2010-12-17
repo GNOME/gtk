@@ -121,6 +121,7 @@ GtkIconSet* gtk_icon_set_ref             (GtkIconSet      *icon_set);
 void        gtk_icon_set_unref           (GtkIconSet      *icon_set);
 GtkIconSet* gtk_icon_set_copy            (GtkIconSet      *icon_set);
 
+#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
 /* Get one of the icon variants in the set, creating the variant if
  * necessary.
  */
@@ -130,7 +131,8 @@ GdkPixbuf*  gtk_icon_set_render_icon     (GtkIconSet      *icon_set,
                                           GtkStateType     state,
                                           GtkIconSize      size,
                                           GtkWidget       *widget,
-                                          const char      *detail);
+                                          const gchar     *detail);
+#endif
 
 void           gtk_icon_set_add_source   (GtkIconSet          *icon_set,
                                           const GtkIconSource *source);
