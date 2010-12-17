@@ -157,7 +157,28 @@ void        _gdk_quartz_display_add_client_message_filter (GdkDisplay      *disp
                                                            GdkFilterFunc    func,
                                                            gpointer         data);
 
-GdkVisual * _gdk_quartz_screen_get_rgba_visual          (GdkScreen   *screen);
+GdkVisual *   _gdk_quartz_screen_get_rgba_visual            (GdkScreen      *screen);
+GdkVisual *   _gdk_quartz_screen_get_system_visual          (GdkScreen      *screen);
+gint          _gdk_quartz_screen_visual_get_best_depth      (GdkScreen      *screen);
+GdkVisualType _gdk_quartz_screen_visual_get_best_type       (GdkScreen      *screen);
+GdkVisual *   _gdk_quartz_screen_get_system_visual          (GdkScreen      *screen);
+GdkVisual*    _gdk_quartz_screen_visual_get_best            (GdkScreen      *screen);
+GdkVisual*    _gdk_quartz_screen_visual_get_best_with_depth (GdkScreen      *screen,
+                                                             gint            depth);
+GdkVisual*    _gdk_quartz_screen_visual_get_best_with_type  (GdkScreen      *screen,
+                                                             GdkVisualType   visual_type);
+GdkVisual*    _gdk_quartz_screen_visual_get_best_with_both  (GdkScreen      *screen,
+                                                             gint            depth,
+                                                             GdkVisualType   visual_type);
+void          _gdk_quartz_screen_query_depths               (GdkScreen      *screen,
+                                                             gint          **depths,
+                                                             gint           *count);
+void          _gdk_quartz_screen_query_visual_types         (GdkScreen      *screen,
+                                                             GdkVisualType **visual_types,
+                                                             gint           *count);
+GList *       _gdk_quartz_screen_list_visuals               (GdkScreen      *screen);
+
+
 void        _gdk_quartz_screen_broadcast_client_message (GdkScreen   *screen,
                                                          GdkEvent    *event);
 gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,
