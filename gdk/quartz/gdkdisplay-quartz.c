@@ -183,7 +183,7 @@ gdk_quartz_display_supports_composite (GdkDisplay *display)
 }
 
 gulong
-_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+_gdk_quartz_display_get_next_serial (GdkDisplay *display)
 {
   return 0;
 }
@@ -248,4 +248,5 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->get_maximal_cursor_size = _gdk_quartz_display_get_maximal_cursor_size;
   display_class->supports_cursor_alpha = _gdk_quartz_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_quartz_display_supports_cursor_color;
+  display_class->get_next_serial = gdk_quartz_display_get_next_serial;
 }
