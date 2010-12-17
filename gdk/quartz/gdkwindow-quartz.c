@@ -3121,6 +3121,7 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
   impl_class->set_opacity = gdk_quartz_window_set_opacity;
   impl_class->destroy_notify = gdk_quartz_window_destroy_notify;
   impl_class->register_dnd = _gdk_quartz_window_register_dnd;
+  impl_class->drag_begin = _gdk_quartz_window_drag_begin;
 }
 
 static void

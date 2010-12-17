@@ -144,10 +144,20 @@ gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
 void        _gdk_quartz_window_set_startup_id    (GdkWindow   *window,
                                                   const gchar *startup_id);
 void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
+GdkDragContext * _gdk_quartz_window_drag_begin   (GdkWindow   *window,
+                                                  GdkDevice   *device,
+                                                  GList       *targets);
+
 
 void        _gdk_quartz_display_sync                (GdkDisplay  *display);
 void        _gdk_quartz_display_flush               (GdkDisplay  *display);
 GList *     _gdk_quartz_display_list_devices        (GdkDisplay  *dpy);
+
+GdkNativeWinodw _gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
+                                                           GdkNativeWindow *xid,
+                                                           GdkDragProtocol *protocol,
+                                                           guint            version);
+
 
 gboolean    _gdk_quartz_display_send_client_message       (GdkDisplay      *display,
                                                            GdkEvent        *event,

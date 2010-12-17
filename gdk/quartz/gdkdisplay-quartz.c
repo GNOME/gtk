@@ -233,5 +233,5 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->list_devices = _gdk_quartz_display_list_devices;
   display_class->send_client_message = _gdk_quartz_display_send_client_message;
   display_class->add_client_message_filter = _gdk_quartz_display_add_client_message_filter;
-
+  display_class->get_drag_protocol = _gdk_quartz_display_get_drag_protocol;
 }

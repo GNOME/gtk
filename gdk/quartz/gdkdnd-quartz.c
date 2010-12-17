@@ -21,71 +21,11 @@
 #include "gdkdnd.h"
 #include "gdkprivate-quartz.h"
 
-static gpointer parent_class = NULL;
+typedef struct _GdkDragContext GdkDragContextQuartz;
+typedef struct _GdkDragContextClass GdkDragContextQuartzClass;
 
-static void
-gdk_drag_context_finalize (GObject *object)
-{
-  GdkDragContext *context = GDK_DRAG_CONTEXT (object);
-  GdkDragContextPrivate *private = GDK_DRAG_CONTEXT_PRIVATE (context);
- 
-  g_free (private);
-  
-  G_OBJECT_CLASS (parent_class)->finalize (object);
-}
+G_DEFINE_TYPE (GdkDragContextQuartz, gdk_quartz_drag_context, GDK_TYPE_DRAG_CONTEXT)
 
-static void
-gdk_drag_context_init (GdkDragContext *dragcontext)
-{
-  GdkDragContextPrivate *priv = g_new0 (GdkDragContextPrivate, 1);
-
-  dragcontext->windowing_data = priv;
-}
-
-static void
-gdk_drag_context_class_init (GdkDragContextClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_drag_context_finalize;
-}
-
-GType
-gdk_drag_context_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-        sizeof (GdkDragContextClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_drag_context_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkDragContext),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) gdk_drag_context_init,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkDragContext",
-                                            &object_info,
-					    0);
-    }
-  
-  return object_type;
-}
-
-GdkDragContext *
-gdk_drag_context_new (void)
-{
-  return (GdkDragContext *)g_object_new (gdk_drag_context_get_type (), NULL);
-}
 
 GdkDragContext *_gdk_quartz_drag_source_context = NULL;
 
@@ -95,98 +35,91 @@ gdk_quartz_drag_source_context ()
   return _gdk_quartz_drag_source_context;
 }
 
-GdkDragContext * 
-gdk_drag_begin (GdkWindow     *window,
-		GList         *targets)
+GdkDragContext *
+_gdk_quartz_window_drag_begin (GdkWindow *window,
+                               GdkDevice *device,
+                               GList     *targets)
 {
-  GdkDeviceManager *device_manager;
-
   g_assert (_gdk_quartz_drag_source_context == NULL);
-  
+
   /* Create fake context */
-  _gdk_quartz_drag_source_context = gdk_drag_context_new ();
+  _gdk_quartz_drag_source_context = g_object_new (gdk_quartz_drag_context_get_type (), NULL);
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
-  device_manager = gdk_display_get_device_manager (gdk_display_get_default ());
-  gdk_drag_context_set_device (_gdk_quartz_drag_source_context,
-                               gdk_device_manager_get_client_pointer (device_manager));
+  gdk_drag_context_set_device (_gdk_quartz_drag_source_context, device);
 
   return _gdk_quartz_drag_source_context;
 }
 
-gboolean        
-gdk_drag_motion (GdkDragContext *context,
-		 GdkWindow      *dest_window,
-		 GdkDragProtocol protocol,
-		 gint            x_root, 
-		 gint            y_root,
-		 GdkDragAction   suggested_action,
-		 GdkDragAction   possible_actions,
-		 guint32         time)
+static gboolean
+gdk_quartz_drag_context_drag_motion (GdkDragContext  *context,
+                                     GdkWindow       *dest_window,
+                                     GdkDragProtocol  protocol,
+                                     gint             x_root,
+                                     gint             y_root,
+                                     GdkDragAction    suggested_action,
+                                     GdkDragAction    possible_actions,
+                                     guint32          time)
 {
   /* FIXME: Implement */
   return FALSE;
 }
 
 guint32
-gdk_drag_get_protocol_for_display (GdkDisplay      *display,
-				   guint32          xid,
-				   GdkDragProtocol *protocol)
+_gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
+                                           guint32          xid,
+                                           GdkDragProtocol *protocol)
 {
   /* FIXME: Implement */
   return 0;
 }
 
-void
-gdk_drag_find_window_for_screen (GdkDragContext  *context,
-				 GdkWindow       *drag_window,
-				 GdkScreen       *screen,
-				 gint             x_root,
-				 gint             y_root,
-				 GdkWindow      **dest_window,
-				 GdkDragProtocol *protocol)
+static void
+gdk_quartz_drag_context_find_window (GdkDragContext  *context,
+                                     GdkWindow       *drag_window,
+                                     GdkScreen       *screen,
+                                     gint             x_root,
+                                     gint             y_root,
+                                     GdkWindow      **dest_window,
+                                     GdkDragProtocol *protocol)
 {
   /* FIXME: Implement */
 }
 
-void
-gdk_drag_drop (GdkDragContext *context,
-	       guint32         time)
+static void
+gdk_quartz_drag_context_drag_drop (GdkDragContext *context,
+                                   guint32         time)
 {
   /* FIXME: Implement */
 }
 
-void
-gdk_drag_abort (GdkDragContext *context,
-		guint32         time)
+static void
+gdk_quartz_drag_context_drag_abort (GdkDragContext *context,
+                                    guint32         time)
 {
-  g_return_if_fail (context != NULL);
-  
   /* FIXME: Implement */
 }
 
-void             
-gdk_drag_status (GdkDragContext   *context,
-		 GdkDragAction     action,
-		 guint32           time)
+static void
+gdk_quartz_drag_context_drag_status (GdkDragContext *context,
+                                     GdkDragAction   action,
+                                     guint32         time)
 {
   context->action = action;
 }
 
-void 
-gdk_drop_reply (GdkDragContext   *context,
-		gboolean          ok,
-		guint32           time)
+static void
+gdk_quartz_drag_context_drop_reply (GdkDragContext *context,
+                                    gboolean        ok,
+                                    guint32         time)
 {
-  g_return_if_fail (context != NULL);
-
   /* FIXME: Implement */
 }
 
-void             
-gdk_drop_finish (GdkDragContext   *context,
-		 gboolean          success,
-		 guint32           time)
+static void
+gdk_quartz_drag_context_drop_finish (GdkDragContext *context,
+                                     gboolean        success,
+                                     guint32         time)
 {
   /* FIXME: Implement */
 }
@@ -197,22 +130,52 @@ _gdk_quartz_window_register_dnd (GdkWindow *window)
   /* FIXME: Implement */
 }
 
-GdkAtom       
-gdk_drag_get_selection (GdkDragContext *context)
+static GdkAtom
+gdk_quartz_drag_context_get_selection (GdkDragContext *context)
 {
   /* FIXME: Implement */
   return GDK_NONE;
 }
 
-gboolean 
-gdk_drag_drop_succeeded (GdkDragContext *context)
+static gboolean
+gdk_quartz_drag_context_drop_status (GdkDragContext *context)
 {
   /* FIXME: Implement */
   return FALSE;
 }
 
-id
+void
 gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context)
 {
   return GDK_DRAG_CONTEXT_PRIVATE (context)->dragging_info;
+}
+
+static void
+gdk_quartz_drag_context_init (GdkDragContextQuartz *context)
+{
+}
+
+static void
+gdk_quartz_drag_context_finalize (GObject *object)
+{
+  G_OBJECT_CLASS (gdk_quartz_drag_context_parent_class)->finalize (object);
+}
+
+static void
+gdk_drag_context_class_init (GdkDragContextClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDragContextClass *context_class = GDK_DRAG_CONTEXT_CLASS (klass);
+
+  object_class->finalize = gdk_quartz_drag_context_finalize;
+
+  context_class->find_window = gdk_quartz_drag_context_find_window;
+  context_class->drag_status = gdk_quartz_drag_context_drag_status;
+  context_class->drag_motion = gdk_quartz_drag_context_drag_motion;
+  context_class->drag_abort = gdk_quartz_drag_context_drag_abort;
+  context_class->drag_drop = gdk_quartz_drag_context_drag_drop;
+  context_class->drop_reply = gdk_quartz_drag_context_drop_reply;
+  context_class->drop_finish = gdk_quartz_drag_context_drop_finish;
+  context_class->drop_status = gdk_quartz_drag_context_drop_status;
+  context_class->get_selection = gdk_quartz_drag_context_get_selection;
 }
