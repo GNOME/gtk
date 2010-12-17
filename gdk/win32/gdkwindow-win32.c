@@ -618,8 +618,8 @@ _gdk_window_impl_new (GdkWindow     *window,
 }
 
 GdkWindow *
-gdk_window_foreign_new_for_display (GdkDisplay      *display,
-                                    GdkNativeWindow  anid)
+gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
+                                          GdkNativeWindow  anid)
 {
   GdkWindow *window;
   GdkWindowObject *private;
@@ -677,7 +677,7 @@ gdk_window_foreign_new_for_display (GdkDisplay      *display,
   g_object_ref (window);
   gdk_win32_handle_table_insert (&GDK_WINDOW_HWND (window), window);
 
-  GDK_NOTE (MISC, g_print ("gdk_window_foreign_new_for_display: %p: %s@%+d%+d\n",
+  GDK_NOTE (MISC, g_print ("gdk_win32_window_foreign_new_for_display: %p: %s@%+d%+d\n",
 			   (HWND) anid,
 			   _gdk_win32_drawable_description (window),
 			   private->x, private->y));
@@ -3092,8 +3092,8 @@ gdk_win32_window_shape_combine_region (GdkWindow       *window,
 }
 
 GdkWindow *
-gdk_window_lookup_for_display (GdkDisplay      *display,
-                               GdkNativeWindow  anid)
+gdk_win32_window_lookup_for_display (GdkDisplay      *display,
+                                     GdkNativeWindow  anid)
 {
   g_return_val_if_fail (display == _gdk_display, NULL);
 

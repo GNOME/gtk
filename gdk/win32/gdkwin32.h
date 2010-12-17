@@ -91,6 +91,10 @@ GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon);
 HICON         gdk_win32_pixbuf_to_hicon_libgtk_only (GdkPixbuf *pixbuf);
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND window);
 
+GdkWindow *   gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
+                                                        GdkNativeWindow anid);
+GdkWindow *   gdk_win32_window_lookup_for_display (GdkDisplay *display,
+                                                   GdkNativeWindow anid);
 
 G_END_DECLS
 
