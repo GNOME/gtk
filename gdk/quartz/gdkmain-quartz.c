@@ -62,13 +62,8 @@ gdk_error_trap_pop_ignored (void)
 }
 
 void
-gdk_notify_startup_complete (void)
-{
-  /* FIXME: Implement? */
-}
-
-void
-gdk_notify_startup_complete_with_id (const gchar* startup_id)
+_gdk_quartz_display_notify_startup_complete (GdkDisplay  *display,
+                                             const gchar *startup_id)
 {
   /* FIXME: Implement? */
 }
