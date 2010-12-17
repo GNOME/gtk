@@ -175,10 +175,12 @@ gdk_screen_height_mm G_GNUC_CONST
 
 #if IN_HEADER(__GDK_PROPERTY_H__)
 #if IN_FILE(__GDK_SELECTION_C__)
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_string_to_compound_text
 gdk_text_property_to_text_list
 gdk_text_property_to_utf8_list
 gdk_utf8_to_compound_text
+#endif
 #endif
 #endif
 
@@ -195,13 +197,25 @@ gdk_property_get
 
 #if IN_HEADER(__GDK_PROPERTY_H__)
 #if IN_FILE(__GDK_SELECTION_X11_C__)
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_free_compound_text
 gdk_free_text_list
 gdk_string_to_compound_text_for_display
 gdk_text_property_to_text_list_for_display
+gdk_utf8_to_compound_text_for_display
+#endif
 gdk_text_property_to_utf8_list_for_display
 gdk_utf8_to_string_target
-gdk_utf8_to_compound_text_for_display
+#endif
+#endif
+
+#if IN_HEADER(__GDK_X_H__)
+#if IN_FILE(__GDK_SELECTION_X11_C__)
+gdk_x11_display_string_to_compound_text
+gdk_x11_display_text_property_to_text_list
+gdk_x11_display_utf8_to_compound_text
+gdk_x11_free_compound_text
+gdk_x11_free_text_list
 #endif
 #endif
 
