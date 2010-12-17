@@ -23,7 +23,7 @@
 
 /**
  * SECTION:gtkcellarea
- * @Short_Description: An abstract class for laying out #GtkCellRenderers
+ * @Short_Description: An abstract class for laying out GtkCellRenderers
  * @Title: GtkCellArea
  *
  * The #GtkCellArea is an abstract class for #GtkCellLayout widgets (also referred 

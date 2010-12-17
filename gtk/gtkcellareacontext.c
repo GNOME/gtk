@@ -23,7 +23,7 @@
 
 /**
  * SECTION:gtkcellareacontext
- * @Short_Description: An object for a #GtkCellArea to store geometrical information for a series of rows.
+ * @Short_Description: An object for a GtkCellArea to store geometrical information for a series of rows.
  * @Title: GtkCellAreaContext
  *
  * The #GtkCellAreaContext object is created by a given #GtkCellArea implementation via it's 
