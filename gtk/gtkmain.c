@@ -1118,6 +1118,8 @@ gtk_exit (gint errorcode)
  * result of the setlocale(); it is also used on other machines, such as 
  * Windows, where the C library returns a different result. The string is 
  * owned by GTK+ and should not be modified or freed.
+ *
+ * Deprecated: 2.24: Use setlocale() directly
  **/
 gchar *
 gtk_set_locale (void)

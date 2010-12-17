@@ -129,10 +129,10 @@ gboolean gtk_init_check_abi_check (int	  *argc,
 
 #ifndef GTK_DISABLE_DEPRECATED
 void     gtk_exit                 (gint    error_code);
+gchar *        gtk_set_locale           (void);
 #endif /* GTK_DISABLE_DEPRECATED */
 
 void           gtk_disable_setlocale    (void);
-gchar *        gtk_set_locale           (void);
 PangoLanguage *gtk_get_default_language (void);
 gboolean       gtk_events_pending       (void);
 

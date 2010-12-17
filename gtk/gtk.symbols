@@ -2439,6 +2439,7 @@ gtk_get_current_event_state
 gtk_get_current_event_time
 #ifndef GTK_DISABLE_DEPRECATED
 gtk_exit
+gtk_set_locale
 gtk_idle_add
 gtk_idle_add_full
 gtk_idle_add_priority
@@ -2454,7 +2455,6 @@ gtk_false G_GNUC_CONST
 gtk_true G_GNUC_CONST
 gtk_events_pending
 gtk_disable_setlocale
-gtk_set_locale
 gtk_check_version
 gtk_get_default_language
 gtk_get_event_widget

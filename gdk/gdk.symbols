@@ -95,8 +95,8 @@ gdk_display_pointer_is_grabbed
 #ifndef GDK_DISABLE_DEPRECATED
 gdk_mbstowcs
 gdk_wcstombs
-#endif
 gdk_set_locale
+#endif
 #endif
 #endif
 

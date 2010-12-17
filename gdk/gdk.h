@@ -77,8 +77,8 @@ void gdk_pre_parse_libgtk_only          (void);
 
 #ifndef GDK_DISABLE_DEPRECATED
 void  	  gdk_exit		   	(gint	    	 error_code);
-#endif /* GDK_DISABLE_DEPRECATED */
 gchar*	  gdk_set_locale	   	(void);
+#endif /* GDK_DISABLE_DEPRECATED */
 
 G_CONST_RETURN char *gdk_get_program_class (void);
 void                 gdk_set_program_class (const char *program_class);
