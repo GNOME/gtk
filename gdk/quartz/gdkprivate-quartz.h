@@ -175,6 +175,11 @@ void       _gdk_quartz_display_before_process_all_updates (GdkDisplay *display);
 void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
 void       _gdk_quartz_display_notify_startup_complete    (GdkDisplay *display,
                                                            const gchar *id);
+void       _gdk_quartz_display_event_data_copy (GdkDisplay     *display,
+                                                const GdkEvent *src,
+                                                GdkEvent       *dst);
+void       _gdk_quartz_display_event_data_free (GdkDisplay     *display,
+                                                GdkEvent       *event);
 
 
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
