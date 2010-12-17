@@ -283,7 +283,21 @@ gboolean    _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
                                                      gboolean    send_event);
 GdkWindow * _gdk_quartz_display_get_selection_owner (GdkDisplay *display,
                                                      GdkAtom     selection);
-
-
+void        _gdk_quartz_display_send_selection_notify (GdkDisplay       *display,
+                                                       GdkNativeWindow  requestor,
+                                                       GdkAtom          selection,
+                                                       GdkAtom          target,
+                                                       GdkAtom          property,
+                                                       guint32          time);
+gint        _gdk_quartz_display_get_selection_property (GdkDisplay     *display,
+                                                        GdkWindow      *requestor,
+                                                        guchar        **data,
+                                                        GdkAtom        *ret_type,
+                                                        gint           *ret_format);
+void        _gdk_quartz_display_convert_selection      (GdkDisplay     *display,
+                                                        GdkWindow      *requestor,
+                                                        GdkAtom         selection,
+                                                        GdkAtom         target,
+                                                        guint32         time);
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */
