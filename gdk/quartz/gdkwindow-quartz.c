@@ -2853,21 +2853,6 @@ gdk_quartz_window_set_group (GdkWindow *window,
   /* FIXME: Implement */	
 }
 
-GdkWindow*
-gdk_window_foreign_new_for_display (GdkDisplay      *display,
-				    GdkNativeWindow  anid)
-{
-  /* Foreign windows aren't supported in Mac OS X */
-  return NULL;
-}
-
-GdkWindow *
-gdk_window_lookup_for_display (GdkDisplay *display, GdkNativeWindow anid)
-{
-  /* Foreign windows aren't supported in Mac OS X */
-  return NULL;
-}
-
 static void
 gdk_quartz_window_enable_synchronized_configure (GdkWindow *window)
 {
