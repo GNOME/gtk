@@ -74,49 +74,6 @@ gdk_events_pending (void)
 	  (_gdk_quartz_event_loop_check_pending ()));
 }
 
-void
-gdk_device_ungrab (GdkDevice *device,
-                   guint32    time_)
-{
-  GdkDeviceGrabInfo *grab;
-
-  grab = _gdk_display_get_last_device_grab (_gdk_display, device);
-  if (grab)
-    grab->serial_end = 0;
-
-  _gdk_display_device_grab_update (_gdk_display, device, 0);
-}
-
-GdkGrabStatus
-_gdk_windowing_device_grab (GdkDevice    *device,
-                            GdkWindow    *window,
-                            GdkWindow    *native,
-                            gboolean      owner_events,
-                            GdkEventMask  event_mask,
-                            GdkWindow    *confine_to,
-                            GdkCursor    *cursor,
-                            guint32       time)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
-
-  if (!window || GDK_WINDOW_DESTROYED (window))
-    return GDK_GRAB_NOT_VIEWABLE;
-
-  _gdk_display_add_device_grab (_gdk_display,
-                                device,
-                                window,
-                                native,
-                                GDK_OWNERSHIP_NONE,
-                                owner_events,
-                                event_mask,
-                                0,
-                                time,
-                                FALSE);
-
-  return GDK_GRAB_SUCCESS;
-}
-
 static void
 break_all_grabs (guint32 time)
 {

@@ -195,5 +195,7 @@ gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,
                                                          const gchar *name,
                                                          GValue      *value);
 
+void _gdk_quartz_device_check_extension_events (GdkDevice *device);
+
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */
