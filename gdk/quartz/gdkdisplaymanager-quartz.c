@@ -100,6 +100,8 @@ gdk_display_manager_quartz_class_init (GdkDisplayManagerQuartzClass *class)
   manager_class->list_displays = gdk_display_manager_quartz_list_displays;
   manager_class->set_default_display = gdk_display_manager_quartz_set_default_display;
   manager_class->get_default_display = gdk_display_manager_quartz_get_default_display;
+  manager_class->atom_intern = _gdk_quartz_display_manager_atom_intern;
+  manager_class->get_atom_name = _gdk_quartz_display_manager_get_atom_name;
 }
 
 void
