@@ -68,10 +68,10 @@ _gdk_quartz_events_init (void)
 }
 
 gboolean
-gdk_events_pending (void)
+_gdk_quartz_display_has_pending (GdkDisplay *display)
 {
-  return (_gdk_event_queue_find_first (_gdk_display) ||
-	  (_gdk_quartz_event_loop_check_pending ()));
+  return (_gdk_event_queue_find_first (display) ||
+         (_gdk_quartz_event_loop_check_pending ()));
 }
 
 static void
@@ -1296,7 +1296,7 @@ gdk_event_translate (GdkEvent *event,
 }
 
 void
-_gdk_events_queue (GdkDisplay *display)
+_gdk_quartz_display_queue_events (GdkDisplay *display)
 {  
   NSEvent *nsevent;
 

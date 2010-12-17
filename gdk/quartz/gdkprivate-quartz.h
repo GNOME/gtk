@@ -149,9 +149,11 @@ GdkDragContext * _gdk_quartz_window_drag_begin   (GdkWindow   *window,
                                                   GList       *targets);
 
 
-void        _gdk_quartz_display_sync                (GdkDisplay  *display);
-void        _gdk_quartz_display_flush               (GdkDisplay  *display);
-GList *     _gdk_quartz_display_list_devices        (GdkDisplay  *dpy);
+void     _gdk_quartz_display_sync         (GdkDisplay *display);
+void     _gdk_quartz_display_flush        (GdkDisplay *display);
+GList *  _gdk_quartz_display_list_devices (GdkDisplay *display);
+void     _gdk_quartz_display_queue_events (GdkDisplay *display);
+gboolean _gdk_quartz_display_has_pending  (GdkDisplay *display);
 
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
 
