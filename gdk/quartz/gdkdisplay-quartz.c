@@ -193,7 +193,7 @@ G_DEFINE_TYPE (GdkDisplayQuartz, _gdk_display_quartz, GDK_TYPE_DISPLAY)
 static void
 _gdk_display_quartz_init (GdkDisplayQuartz *display)
 {
-  gdk_x11_display_manager_add_display (gdk_display_nmanager_get (),
+  gdk_quartz_display_manager_add_display (gdk_display_nmanager_get (),
                                        GDK_DISPLAY_OBJECT (display));
 }
 
@@ -241,4 +241,11 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->send_client_message = _gdk_quartz_display_send_client_message;
   display_class->add_client_message_filter = _gdk_quartz_display_add_client_message_filter;
   display_class->get_drag_protocol = _gdk_quartz_display_get_drag_protocol;
+  display_class->get_cursor_for_type = _gdk_quartz_display_get_cursor_for_type;
+  display_class->get_cursor_for_name = _gdk_quartz_display_get_cursor_for_name;
+  display_class->get_cursor_for_pixbuf = _gdk_quartz_display_get_cursor_for_pixbuf;
+  display_class->get_default_cursor_size = _gdk_quartz_display_get_default_cursor_size;
+  display_class->get_maximal_cursor_size = _gdk_quartz_display_get_maximal_cursor_size;
+  display_class->supports_cursor_alpha = _gdk_quartz_display_supports_cursor_alpha;
+  display_class->supports_cursor_color = _gdk_quartz_display_supports_cursor_color;
 }

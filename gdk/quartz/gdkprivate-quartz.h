@@ -155,6 +155,26 @@ GList *  _gdk_quartz_display_list_devices (GdkDisplay *display);
 void     _gdk_quartz_display_queue_events (GdkDisplay *display);
 gboolean _gdk_quartz_display_has_pending  (GdkDisplay *display);
 
+GdkCursor *_gdk_quartz_display_get_cursor_for_type     (GdkDisplay    *display,
+                                                        GdkCursorType  type);
+GdkCursor *_gdk_quartz_display_get_cursor_for_name     (GdkDisplay    *display,
+                                                        const gchar   *name);
+GdkCursor *_gdk_quartz_display_get_cursor_for_pixbuf   (GdkDisplay    *display,
+                                                        GdkPixbuf     *pixbuf,
+                                                        gint           x,
+                                                        gint           y);
+gboolean   _gdk_quartz_display_supports_cursor_alpha   (GdkDisplay    *display);
+gboolean   _gdk_quartz_display_supports_cursor_color   (GdkDisplay    *display);
+void       _gdk_quartz_display_get_default_cursor_size (GdkDisplay *display,
+                                                        guint      *width,
+                                                        guint      *height);
+void       _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
+                                                        guint      *width,
+                                                        guint      *height);
+void       _gdk_quartz_display_before_process_all_updates (GdkDisplay *display);
+void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
+
+
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
 
 GdkNativeWinodw _gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,

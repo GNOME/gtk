@@ -175,14 +175,14 @@ create_builtin_cursor (GdkCursorType cursor_type)
 }
 
 GdkCursor*
-gdk_cursor_new_for_display (GdkDisplay    *display,
-			    GdkCursorType  cursor_type)
+_gdk_quartz_display_get_cursor_for_type (GdkDisplay    *display,
+                                         GdkCursorType  cursor_type)
 {
   NSCursor *nscursor;
 
   g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
-  switch (cursor_type) 
+  switch (cursor_type)
     {
     case GDK_XTERM:
       nscursor = [NSCursor IBeamCursor];
@@ -303,20 +303,15 @@ _gdk_quartz_pixbuf_to_ns_image (GdkPixbuf *pixbuf)
 }
 
 GdkCursor *
-gdk_cursor_new_from_pixbuf (GdkDisplay *display, 
-			    GdkPixbuf  *pixbuf,
-			    gint        x,
-			    gint        y)
+_gdk_quartz_display_get_cursor_for_pixbuf (GdkDisplay *display,
+                                           GdkPixbuf  *pixbuf,
+                                           gint        x,
+                                           gint        y)
 {
   NSImage *image;
   NSCursor *nscursor;
   GdkCursor *cursor;
   gboolean has_alpha;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-  g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
-  g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
 
   GDK_QUARTZ_ALLOC_POOL;
 
@@ -332,9 +327,9 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   return cursor;
 }
 
-GdkCursor*  
-gdk_cursor_new_from_name (GdkDisplay  *display,  
-			  const gchar *name)
+GdkCursor*
+_gdk_quartz_display_get_cursor_for_name (GdkDisplay  *display,
+                                         const gchar *name)
 {
   /* FIXME: Implement */
   return NULL;
@@ -354,38 +349,33 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_free (private);
 }
 
-gboolean 
-gdk_display_supports_cursor_alpha (GdkDisplay *display)
+gboolean
+_gdk_quartz_display_supports_cursor_alpha (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
   return TRUE;
 }
 
-gboolean 
-gdk_display_supports_cursor_color (GdkDisplay *display)
+gboolean
+_gdk_quartz_display_supports_cursor_color (GdkDisplay *display)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
   return TRUE;
 }
 
-guint     
-gdk_display_get_default_cursor_size (GdkDisplay *display)
+void
+_gdk_quartz_display_get_default_cursor_size (GdkDisplay *display,
+                                             guint      *width,
+                                             guint      *height)
 {
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
   /* Mac OS X doesn't have the notion of a default size */
-  return 32;
+  *width = 32;
+  *height = 32;
 }
 
-void     
-gdk_display_get_maximal_cursor_size (GdkDisplay *display,
-				     guint       *width,
-				     guint       *height)
+void
+_gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
+                                             guint       *width,
+                                             guint       *height)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
   /* Cursor sizes in Mac OS X can be arbitrarily large */
   *width = 65536;
   *height = 65536;
