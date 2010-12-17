@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -61,12 +61,12 @@ _gdk_x11_selection_window_destroyed (GdkWindow *window)
     {
       OwnerInfo *info = tmp_list->data;
       tmp_list = tmp_list->next;
-      
+
       if (info->owner == window)
-	{
-	  owner_list = g_slist_remove (owner_list, info);
-	  g_free (info);
-	}
+        {
+          owner_list = g_slist_remove (owner_list, info);
+          g_free (info);
+        }
     }
 }
 
@@ -78,24 +78,24 @@ _gdk_x11_selection_filter_clear_event (XSelectionClearEvent *event)
 {
   GSList *tmp_list = owner_list;
   GdkDisplay *display = gdk_x11_lookup_xdisplay (event->display);
-  
+
   while (tmp_list)
     {
       OwnerInfo *info = tmp_list->data;
 
       if (gdk_window_get_display (info->owner) == display &&
-	  info->selection == gdk_x11_xatom_to_atom_for_display (display, event->selection))
-	{
-	  if ((GDK_WINDOW_XID (info->owner) == event->window &&
-	       event->serial >= info->serial))
-	    {
-	      owner_list = g_slist_remove (owner_list, info);
-	      g_free (info);
-	      return TRUE;
-	    }
-	  else
-	    return FALSE;
-	}
+          info->selection == gdk_x11_xatom_to_atom_for_display (display, event->selection))
+        {
+          if ((GDK_WINDOW_XID (info->owner) == event->window &&
+               event->serial >= info->serial))
+            {
+              owner_list = g_slist_remove (owner_list, info);
+              g_free (info);
+              return TRUE;
+            }
+          else
+            return FALSE;
+        }
       tmp_list = tmp_list->next;
     }
 
@@ -127,24 +127,24 @@ _gdk_x11_display_set_selection_owner (GdkDisplay *display,
       xdisplay = GDK_WINDOW_XDISPLAY (owner);
       xwindow = GDK_WINDOW_XID (owner);
     }
-  else 
+  else
     {
       xdisplay = GDK_DISPLAY_XDISPLAY (display);
       xwindow = None;
     }
-  
+
   xselection = gdk_x11_atom_to_xatom_for_display (display, selection);
 
   tmp_list = owner_list;
   while (tmp_list)
     {
       info = tmp_list->data;
-      if (info->selection == selection) 
-	{
-	  owner_list = g_slist_remove (owner_list, info);
-	  g_free (info);
-	  break;
-	}
+      if (info->selection == selection)
+        {
+          owner_list = g_slist_remove (owner_list, info);
+          g_free (info);
+          break;
+        }
       tmp_list = tmp_list->next;
     }
 
@@ -173,8 +173,8 @@ _gdk_x11_display_get_selection_owner (GdkDisplay *display,
     return NULL;
 
   xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
-				gdk_x11_atom_to_xatom_for_display (display, 
-								   selection));
+                                gdk_x11_atom_to_xatom_for_display (display,
+                                                                   selection));
   if (xwindow == None)
     return NULL;
 
@@ -232,66 +232,66 @@ _gdk_x11_display_get_selection_property (GdkDisplay  *display,
                           AnyPropertyType, &prop_type, &prop_format,
                           &nitems, &nbytes, &t) != Success)
     goto err;
-    
+
   if (prop_type != None)
     {
       if (ret_type)
-	*ret_type = gdk_x11_xatom_to_atom_for_display (display, prop_type);
+        *ret_type = gdk_x11_xatom_to_atom_for_display (display, prop_type);
       if (ret_format)
-	*ret_format = prop_format;
+        *ret_format = prop_format;
 
       if (prop_type == XA_ATOM ||
-	  prop_type == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
-	{
-	  Atom* atoms = (Atom*) t;
-	  GdkAtom* atoms_dest;
-	  gint num_atom, i;
+          prop_type == gdk_x11_get_xatom_by_name_for_display (display, "ATOM_PAIR"))
+        {
+          Atom* atoms = (Atom*) t;
+          GdkAtom* atoms_dest;
+          gint num_atom, i;
 
-	  if (prop_format != 32)
-	    goto err;
-	  
-	  num_atom = nitems;
-	  length = sizeof (GdkAtom) * num_atom + 1;
+          if (prop_format != 32)
+            goto err;
 
-	  if (data)
-	    {
-	      *data = g_malloc (length);
-	      (*data)[length - 1] = '\0';
-	      atoms_dest = (GdkAtom *)(*data);
-	  
-	      for (i=0; i < num_atom; i++)
-		atoms_dest[i] = gdk_x11_xatom_to_atom_for_display (display, atoms[i]);
-	    }
-	}
+          num_atom = nitems;
+          length = sizeof (GdkAtom) * num_atom + 1;
+
+          if (data)
+            {
+              *data = g_malloc (length);
+              (*data)[length - 1] = '\0';
+              atoms_dest = (GdkAtom *)(*data);
+
+              for (i=0; i < num_atom; i++)
+                atoms_dest[i] = gdk_x11_xatom_to_atom_for_display (display, atoms[i]);
+            }
+        }
       else
-	{
-	  switch (prop_format)
-	    {
-	    case 8:
-	      length = nitems;
-	      break;
-	    case 16:
-	      length = sizeof(short) * nitems;
-	      break;
-	    case 32:
-	      length = sizeof(long) * nitems;
-	      break;
-	    default:
-	      g_assert_not_reached ();
-	      break;
-	    }
-	  
-	  /* Add on an extra byte to handle null termination.  X guarantees
-	     that t will be 1 longer than nitems and null terminated */
-	  length += 1;
+        {
+          switch (prop_format)
+            {
+            case 8:
+              length = nitems;
+              break;
+            case 16:
+              length = sizeof(short) * nitems;
+              break;
+            case 32:
+              length = sizeof(long) * nitems;
+              break;
+            default:
+              g_assert_not_reached ();
+              break;
+            }
 
-	  if (data)
-	    *data = g_memdup (t, length);
-	}
-      
+          /* Add on an extra byte to handle null termination.  X guarantees
+             that t will be 1 longer than nitems and null terminated */
+          length += 1;
+
+          if (data)
+            *data = g_memdup (t, length);
+        }
+
       if (t)
-	XFree (t);
-      
+        XFree (t);
+
       return length - 1;
     }
 
@@ -302,7 +302,7 @@ _gdk_x11_display_get_selection_property (GdkDisplay  *display,
     *ret_format = 0;
   if (data)
     *data = NULL;
-  
+
   return 0;
 }
 
@@ -332,35 +332,35 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
 }
 
 /**
- * gdk_text_property_to_text_list_for_display:
- * @display: The #GdkDisplay where the encoding is defined.
- * @encoding: an atom representing the encoding. The most 
- *    common values for this are STRING, or COMPOUND_TEXT. 
- *    This is value used as the type for the property.
- * @format: the format of the property.
- * @text: The text data.
- * @length: The number of items to transform.
- * @list: location to store a terminated array of strings in 
- *    the encoding of the current locale. This array should be 
+ * gdk_x11_display_text_property_to_text_list:
+ * @display: The #GdkDisplay where the encoding is defined
+ * @encoding: an atom representing the encoding. The most
+ *    common values for this are STRING, or COMPOUND_TEXT.
+ *    This is value used as the type for the property
+ * @format: the format of the property
+ * @text: The text data
+ * @length: The number of items to transform
+ * @list: location to store a terminated array of strings in
+ *    the encoding of the current locale. This array should be
  *    freed using gdk_free_text_list().
  *
- * Convert a text string from the encoding as it is stored 
+ * Convert a text string from the encoding as it is stored
  * in a property into an array of strings in the encoding of
  * the current locale. (The elements of the array represent the
  * nul-separated elements of the original text string.)
  *
- * Returns: the number of strings stored in list, or 0, 
- * if the conversion failed. 
+ * Returns: the number of strings stored in list, or 0,
+ *     if the conversion failed
  *
- * Since: 2.2
+ * Since: 3.0
  */
 gint
-gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
-					    GdkAtom       encoding,
-					    gint          format, 
-					    const guchar *text,
-					    gint          length,
-					    gchar      ***list)
+gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
+                                            GdkAtom       encoding,
+                                            gint          format,
+                                            const guchar *text,
+                                            gint          length,
+                                            gchar      ***list)
 {
   XTextProperty property;
   gint count = 0;
@@ -378,31 +378,31 @@ gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
   property.encoding = gdk_x11_atom_to_xatom_for_display (display, encoding);
   property.format = format;
   property.nitems = length;
-  res = XmbTextPropertyToTextList (GDK_DISPLAY_XDISPLAY (display), &property, 
-				   &local_list, &count);
+  res = XmbTextPropertyToTextList (GDK_DISPLAY_XDISPLAY (display), &property,
+                                   &local_list, &count);
   if (res == XNoMemory || res == XLocaleNotSupported || res == XConverterNotFound)
     return 0;
   else
     {
       if (list)
-	*list = local_list;
+        *list = g_strdupv (local_list);
       else
-	XFreeStringList (local_list);
-      
+        XFreeStringList (local_list);
+
       return count;
     }
 }
 
 /**
- * gdk_free_text_list:
+ * gdk_x11_free_text_list:
  * @list: the value stored in the @list parameter by
- *   a call to gdk_text_property_to_text_list().
+ *   a call to gdk_x11_display_text_property_to_text_list().
  *
  * Frees the array of strings created by
- * gdk_text_property_to_text_list().
+ * gdk_x11_display_text_property_to_text_list().
  */
 void
-gdk_free_text_list (gchar **list)
+gdk_x11_free_text_list (gchar **list)
 {
   g_return_if_fail (list != NULL);
 
@@ -411,9 +411,9 @@ gdk_free_text_list (gchar **list)
 
 static gint
 make_list (const gchar  *text,
-	   gint          length,
-	   gboolean      latin1,
-	   gchar      ***list)
+           gint          length,
+           gboolean      latin1,
+           gchar      ***list)
 {
   GSList *strings = NULL;
   gint n_strings = 0;
@@ -426,40 +426,40 @@ make_list (const gchar  *text,
   while (p < text + length)
     {
       gchar *str;
-      
+
       q = p;
       while (*q && q < text + length)
-	q++;
+        q++;
 
       if (latin1)
-	{
-	  str = g_convert (p, q - p,
-			   "UTF-8", "ISO-8859-1",
-			   NULL, NULL, &error);
+        {
+          str = g_convert (p, q - p,
+                           "UTF-8", "ISO-8859-1",
+                           NULL, NULL, &error);
 
-	  if (!str)
-	    {
-	      g_warning ("Error converting selection from STRING: %s",
-			 error->message);
-	      g_error_free (error);
-	    }
-	}
+          if (!str)
+            {
+              g_warning ("Error converting selection from STRING: %s",
+                         error->message);
+              g_error_free (error);
+            }
+        }
       else
-	{
-	  str = g_strndup (p, q - p);
-	  if (!g_utf8_validate (str, -1, NULL))
-	    {
-	      g_warning ("Error converting selection from UTF8_STRING");
-	      g_free (str);
-	      str = NULL;
-	    }
-	}
+        {
+          str = g_strndup (p, q - p);
+          if (!g_utf8_validate (str, -1, NULL))
+            {
+              g_warning ("Error converting selection from UTF8_STRING");
+              g_free (str);
+              str = NULL;
+            }
+        }
 
       if (str)
-	{
-	  strings = g_slist_prepend (strings, str);
-	  n_strings++;
-	}
+        {
+          strings = g_slist_prepend (strings, str);
+          n_strings++;
+        }
 
       p = q + 1;
     }
@@ -469,54 +469,32 @@ make_list (const gchar  *text,
       *list = g_new (gchar *, n_strings + 1);
       (*list)[n_strings] = NULL;
     }
-     
+
   i = n_strings;
   tmp_list = strings;
   while (tmp_list)
     {
       if (list)
-	(*list)[--i] = tmp_list->data;
+        (*list)[--i] = tmp_list->data;
       else
-	g_free (tmp_list->data);
-      
+        g_free (tmp_list->data);
+
       tmp_list = tmp_list->next;
     }
-  
+
   g_slist_free (strings);
 
   return n_strings;
 }
 
-/**
- * gdk_text_property_to_utf8_list_for_display:
- * @display:  a #GdkDisplay
- * @encoding: an atom representing the encoding of the text
- * @format:   the format of the property
- * @text:     the text to convert
- * @length:   the length of @text, in bytes
- * @list:     location to store the list of strings or %NULL. The
- *            list should be freed with g_strfreev().
- * 
- * Converts a text property in the given encoding to
- * a list of UTF-8 strings. 
- * 
- * Return value: the number of strings in the resulting
- *               list.
- *
- * Since: 2.2
- **/
-gint 
-gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
-					    GdkAtom        encoding,
-					    gint           format,
-					    const guchar  *text,
-					    gint           length,
-					    gchar       ***list)
+gint
+_gdk_x11_display_text_property_to_utf8_list (GdkDisplay    *display,
+                                             GdkAtom        encoding,
+                                             gint           format,
+                                             const guchar  *text,
+                                             gint           length,
+                                             gchar       ***list)
 {
-  g_return_val_if_fail (text != NULL, 0);
-  g_return_val_if_fail (length >= 0, 0);
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-  
   if (encoding == GDK_TARGET_STRING)
     {
       return make_list ((gchar *)text, length, TRUE, list);
@@ -534,88 +512,88 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
       gboolean need_conversion = !g_get_charset (&charset);
       gint count = 0;
       GError *error = NULL;
-      
+
       /* Probably COMPOUND text, we fall back to Xlib routines
        */
-      local_count = gdk_text_property_to_text_list_for_display (display,
-								encoding,
-								format, 
-								text,
-								length,
-								&local_list);
+      local_count = gdk_x11_display_text_property_to_text_list (display,
+                                                                encoding,
+                                                                format,
+                                                                text,
+                                                                length,
+                                                                &local_list);
       if (list)
-	*list = g_new (gchar *, local_count + 1);
-      
+        *list = g_new (gchar *, local_count + 1);
+
       for (i=0; i<local_count; i++)
-	{
-	  /* list contains stuff in our default encoding
-	   */
-	  if (need_conversion)
-	    {
-	      gchar *utf = g_convert (local_list[i], -1,
-				      "UTF-8", charset,
-				      NULL, NULL, &error);
-	      if (utf)
-		{
-		  if (list)
-		    (*list)[count++] = utf;
-		  else
-		    g_free (utf);
-		}
-	      else
-		{
-		  g_warning ("Error converting to UTF-8 from '%s': %s",
-			     charset, error->message);
-		  g_error_free (error);
-		  error = NULL;
-		}
-	    }
-	  else
-	    {
-	      if (list)
-		{
-		  if (g_utf8_validate (local_list[i], -1, NULL))
-		    (*list)[count++] = g_strdup (local_list[i]);
-		  else
-		    g_warning ("Error converting selection");
-		}
-	    }
-	}
+        {
+          /* list contains stuff in our default encoding
+           */
+          if (need_conversion)
+            {
+              gchar *utf = g_convert (local_list[i], -1,
+                                      "UTF-8", charset,
+                                      NULL, NULL, &error);
+              if (utf)
+                {
+                  if (list)
+                    (*list)[count++] = utf;
+                  else
+                    g_free (utf);
+                }
+              else
+                {
+                  g_warning ("Error converting to UTF-8 from '%s': %s",
+                             charset, error->message);
+                  g_error_free (error);
+                  error = NULL;
+                }
+            }
+          else
+            {
+              if (list)
+                {
+                  if (g_utf8_validate (local_list[i], -1, NULL))
+                    (*list)[count++] = g_strdup (local_list[i]);
+                  else
+                    g_warning ("Error converting selection");
+                }
+            }
+        }
 
       if (local_count)
-	gdk_free_text_list (local_list);
-      
+        gdk_x11_free_text_list (local_list);
+
       if (list)
-	(*list)[count] = NULL;
+        (*list)[count] = NULL;
 
       return count;
     }
 }
 
 /**
- * gdk_string_to_compound_text_for_display:
- * @display:  the #GdkDisplay where the encoding is defined.
- * @str:      a nul-terminated string.
- * @encoding: location to store the encoding atom 
- *	      (to be used as the type for the property).
- * @format:   location to store the format of the property
- * @ctext:    location to store newly allocated data for the property.
- * @length:   the length of @text, in bytes
- * 
- * Convert a string from the encoding of the current 
- * locale into a form suitable for storing in a window property.
- * 
- * Returns: 0 upon success, non-zero upon failure. 
+ * gdk_x11_display_string_to_compound_text:
+ * @display: the #GdkDisplay where the encoding is defined
+ * @str: a nul-terminated string
+ * @encoding: location to store the encoding atom
+ *     (to be used as the type for the property)
+ * @format: location to store the format of the property
+ * @ctext: location to store newly allocated data for the property
+ * @length: the length of @text, in bytes
  *
- * Since: 2.2
- **/
+ * Convert a string from the encoding of the current
+ * locale into a form suitable for storing in a window property.
+ *
+ * Returns: 0 upon success, non-zero upon failure
+ *
+ * Since: 3.0
+ */
 gint
-gdk_string_to_compound_text_for_display (GdkDisplay  *display,
-					 const gchar *str,
-					 GdkAtom     *encoding,
-					 gint        *format,
-					 guchar     **ctext,
-					 gint        *length)
+gdk_x11_display_string_to_compound_text (GdkDisplay  *display,
+                                         const gchar *str,
+                                         GdkAtom     *encoding,
+                                         gint        *format,
+                                         guchar     **ctext,
+                                         gint        *length)
 {
   gint res;
   XTextProperty property;
@@ -625,9 +603,9 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
   if (gdk_display_is_closed (display))
     res = XLocaleNotSupported;
   else
-    res = XmbTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display), 
-				     (char **)&str, 1, XCompoundTextStyle,
-				     &property);
+    res = XmbTextListToTextProperty (GDK_DISPLAY_XDISPLAY (display),
+                                     (char **)&str, 1, XCompoundTextStyle,
+                                     &property);
   if (res != Success)
     {
       property.encoding = None;
@@ -655,9 +633,9 @@ gdk_string_to_compound_text_for_display (GdkDisplay  *display,
  * This routine strips out all non-allowed C0 and C1 characters
  * from the input string and also canonicalizes \r, and \r\n to \n
  */
-static gchar * 
+static gchar *
 sanitize_utf8 (const gchar *src,
-	       gboolean return_latin1)
+               gboolean return_latin1)
 {
   gint len = strlen (src);
   GString *result = g_string_sized_new (len);
@@ -666,89 +644,76 @@ sanitize_utf8 (const gchar *src,
   while (*p)
     {
       if (*p == '\r')
-	{
-	  p++;
-	  if (*p == '\n')
-	    p++;
+        {
+          p++;
+          if (*p == '\n')
+            p++;
 
-	  g_string_append_c (result, '\n');
-	}
+          g_string_append_c (result, '\n');
+        }
       else
-	{
-	  gunichar ch = g_utf8_get_char (p);
-	  
-	  if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
-	    {
-	      if (return_latin1)
-		{
-		  if (ch <= 0xff)
-		    g_string_append_c (result, ch);
-		  else
-		    g_string_append_printf (result,
-					    ch < 0x10000 ? "\\u%04x" : "\\U%08x",
-					    ch);
-		}
-	      else
-		{
-		  char buf[7];
-		  gint buflen;
-		  
-		  buflen = g_unichar_to_utf8 (ch, buf);
-		  g_string_append_len (result, buf, buflen);
-		}
-	    }
+        {
+          gunichar ch = g_utf8_get_char (p);
 
-	  p = g_utf8_next_char (p);
-	}
+          if (!((ch < 0x20 && ch != '\t' && ch != '\n') || (ch >= 0x7f && ch < 0xa0)))
+            {
+              if (return_latin1)
+                {
+                  if (ch <= 0xff)
+                    g_string_append_c (result, ch);
+                  else
+                    g_string_append_printf (result,
+                                            ch < 0x10000 ? "\\u%04x" : "\\U%08x",
+                                            ch);
+                }
+              else
+                {
+                  char buf[7];
+                  gint buflen;
+
+                  buflen = g_unichar_to_utf8 (ch, buf);
+                  g_string_append_len (result, buf, buflen);
+                }
+            }
+
+          p = g_utf8_next_char (p);
+        }
     }
 
   return g_string_free (result, FALSE);
 }
 
-/**
- * gdk_utf8_to_string_target:
- * @str: a UTF-8 string
- * 
- * Converts an UTF-8 string into the best possible representation
- * as a STRING. The representation of characters not in STRING
- * is not specified; it may be as pseudo-escape sequences
- * \x{ABCD}, or it may be in some other form of approximation.
- * 
- * Return value: the newly-allocated string, or %NULL if the
- *               conversion failed. (It should not fail for
- *               any properly formed UTF-8 string unless system
- *               limits like memory or file descriptors are exceeded.)
- **/
 gchar *
-gdk_utf8_to_string_target (const gchar *str)
+_gdk_x11_display_utf8_to_string_target (GdkDisplay  *display,
+                                        const gchar *str)
 {
   return sanitize_utf8 (str, TRUE);
 }
 
 /**
- * gdk_utf8_to_compound_text_for_display:
- * @display:  a #GdkDisplay
- * @str:      a UTF-8 string
+ * gdk_x11_display_utf8_to_compound_text:
+ * @display: a #GdkDisplay
+ * @str: a UTF-8 string
  * @encoding: location to store resulting encoding
- * @format:   location to store format of the result
- * @ctext:    location to store the data of the result
- * @length:   location to store the length of the data
- *            stored in @ctext
- * 
- * Converts from UTF-8 to compound text. 
- * 
- * Return value: %TRUE if the conversion succeeded, otherwise
- *               %FALSE.
+ * @format: location to store format of the result
+ * @ctext: location to store the data of the result
+ * @length: location to store the length of the data
+ *     stored in @ctext
  *
- * Since: 2.2
- **/
+ * Converts from UTF-8 to compound text.
+ *
+ * Return value: %TRUE if the conversion succeeded,
+ *     otherwise %FALSE
+ *
+ * Since: 3.0
+ */
 gboolean
-gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
-				       const gchar *str,
-				       GdkAtom     *encoding,
-				       gint        *format,
-				       guchar     **ctext,
-				       gint        *length)
+gdk_x11_display_utf8_to_compound_text (GdkDisplay  *display,
+                                       const gchar *str,
+                                       GdkAtom     *encoding,
+                                       gint        *format,
+                                       guchar     **ctext,
+                                       gint        *length)
 {
   gboolean need_conversion;
   const gchar *charset;
@@ -766,53 +731,56 @@ gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
   if (need_conversion)
     {
       locale_str = g_convert (tmp_str, -1,
-			      charset, "UTF-8",
-			      NULL, NULL, &error);
+                              charset, "UTF-8",
+                              NULL, NULL, &error);
       g_free (tmp_str);
 
       if (!locale_str)
-	{
-	  if (!(error->domain = G_CONVERT_ERROR &&
-		error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
-	    {
-	      g_warning ("Error converting from UTF-8 to '%s': %s",
-			 charset, error->message);
-	    }
-	  g_error_free (error);
+        {
+          if (!(error->domain = G_CONVERT_ERROR &&
+                error->code == G_CONVERT_ERROR_ILLEGAL_SEQUENCE))
+            {
+              g_warning ("Error converting from UTF-8 to '%s': %s",
+                         charset, error->message);
+            }
+          g_error_free (error);
 
-	  if (encoding)
-	    *encoding = None;
-	  if (format)
-	    *format = None;
-	  if (ctext)
-	    *ctext = NULL;
-	  if (length)
-	    *length = 0;
+          if (encoding)
+            *encoding = None;
+          if (format)
+            *format = None;
+          if (ctext)
+            *ctext = NULL;
+          if (length)
+            *length = 0;
 
-	  return FALSE;
-	}
+          return FALSE;
+        }
     }
   else
     locale_str = tmp_str;
-    
-  result = gdk_string_to_compound_text_for_display (display, locale_str,
-						    encoding, format, 
-						    ctext, length);
+
+  result = gdk_x11_display_string_to_compound_text (display, locale_str,
+                                                    encoding, format,
+                                                    ctext, length);
   result = (result == Success? TRUE : FALSE);
-  
+
   g_free (locale_str);
 
   return result;
 }
 
 /**
- * gdk_free_compound_text:
+ * gdk_x11_free_compound_text:
  * @ctext: The pointer stored in @ctext from a call to
- *   gdk_string_to_compound_text().
+ *   gdk_x11_display_string_to_compound_text().
  *
- * Frees the data returned from gdk_string_to_compound_text().
+ * Frees the data returned from gdk_x11_display_string_to_compound_text().
+ *
+ * Since: 3.0
  */
-void gdk_free_compound_text (guchar *ctext)
+void
+gdk_x11_free_compound_text (guchar *ctext)
 {
   if (ctext)
     XFree (ctext);

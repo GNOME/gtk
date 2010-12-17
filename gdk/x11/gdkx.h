@@ -231,6 +231,30 @@ GdkWindow  *gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
 GdkWindow  *gdk_x11_window_lookup_for_display      (GdkDisplay *display,
                                                     Window      window);
 
+gint     gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
+                                                     GdkAtom       encoding,
+                                                     gint          format,
+                                                     const guchar *text,
+                                                     gint          length,
+                                                     gchar      ***list);
+void     gdk_x11_free_text_list                     (gchar       **list);
+gint     gdk_x11_display_string_to_compound_text    (GdkDisplay   *display,
+                                                     const gchar  *str,
+                                                     GdkAtom      *encoding,
+                                                     gint         *format,
+                                                     guchar      **ctext,
+                                                     gint         *length);
+gboolean gdk_x11_display_utf8_to_compound_text      (GdkDisplay   *display,
+                                                     const gchar  *str,
+                                                     GdkAtom      *encoding,
+                                                     gint         *format,
+                                                     guchar      **ctext,
+                                                     gint         *length);
+void     gdk_x11_free_compound_text                 (guchar       *ctext);
+
+
+
+
 G_END_DECLS
 
 #endif /* __GDK_X_H__ */

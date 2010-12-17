@@ -2231,10 +2231,10 @@ set_text_property (GdkDisplay  *display,
   else
     {
       GdkAtom gdk_type;
-      
-      gdk_utf8_to_compound_text_for_display (display,
-					     utf8_str, &gdk_type, &prop_format,
-					     (guchar **)&prop_text, &prop_length);
+
+      gdk_x11_display_utf8_to_compound_text (display,
+                                             utf8_str, &gdk_type, &prop_format,
+                                             (guchar **)&prop_text, &prop_length);
       prop_type = gdk_x11_atom_to_xatom_for_display (display, gdk_type);
       is_compound_text = TRUE;
     }
@@ -2249,7 +2249,7 @@ set_text_property (GdkDisplay  *display,
 		       prop_length);
 
       if (is_compound_text)
-	gdk_free_compound_text ((guchar *)prop_text);
+	gdk_x11_free_compound_text ((guchar *)prop_text);
       else
 	g_free (prop_text);
     }

@@ -220,6 +220,15 @@ struct _GdkDisplayClass
                                                         GdkAtom      target,
                                                         guint32      time);
 
+  gint                   (*text_property_to_utf8_list) (GdkDisplay     *display,
+                                                        GdkAtom         encoding,
+                                                        gint            format,
+                                                        const guchar   *text,
+                                                        gint            length,
+                                                        gchar        ***list);
+  gchar *                (*utf8_to_string_target)      (GdkDisplay     *display,
+                                                        const gchar    *text);
+
   /* Signals */
   void (*closed) (GdkDisplay *display,
                   gboolean    is_error);

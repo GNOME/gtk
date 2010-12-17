@@ -1318,18 +1318,22 @@ selection_set_compound_text (GtkSelectionData *selection_data,
   gint format;
   gint new_length;
   gboolean result = FALSE;
-  
-  tmp = g_strndup (str, len);
-  if (gdk_utf8_to_compound_text_for_display (selection_data->display, tmp,
-					     &encoding, &format, &text, &new_length))
-    {
-      gtk_selection_data_set (selection_data, encoding, format, text, new_length);
-      gdk_free_compound_text (text);
-      
-      result = TRUE;
-    }
 
-  g_free (tmp);
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_DISPLAY_X11 (selection_data->display))
+    {
+      tmp = g_strndup (str, len);
+      if (gdk_x11_display_utf8_to_compound_text (selection_data->display, tmp,
+                                                 &encoding, &format, &text, &new_length))
+        {
+          gtk_selection_data_set (selection_data, encoding, format, text, new_length);
+          gdk_x11_free_compound_text (text);
+
+          result = TRUE;
+        }
+      g_free (tmp);
+    }
+#endif
 
   return result;
 }

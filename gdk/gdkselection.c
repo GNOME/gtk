@@ -138,116 +138,6 @@ gdk_selection_send_notify (GdkNativeWindow requestor,
 }
 
 /**
- * gdk_text_property_to_text_list:
- * @encoding: an atom representing the encoding. The most common
- *   values for this are <literal>STRING</literal>,
- *   or <literal>COMPOUND_TEXT</literal>. This is
- *   value used as the type for the property.
- * @format: the format of the property.
- * @text: the text data.
- * @length: the length of the property, in items.
- * @list: location to store a terminated array of strings
- *   in the encoding of the current locale. This
- *   array should be freed using gdk_free_text_list().
- *
- * Converts a text string from the encoding as it is stored in
- * a property into an array of strings in the encoding of
- * the current local. (The elements of the array represent
- * the nul-separated elements of the original text string.)
- *
- * Returns: the number of strings stored in @list, or 0,
- *   if the conversion failed.
- */
-gint
-gdk_text_property_to_text_list (GdkAtom       encoding,
-				gint          format, 
-				const guchar *text,
-				gint          length,
-				gchar      ***list)
-{
-  return gdk_text_property_to_text_list_for_display (gdk_display_get_default (),
-						     encoding, format, text, length, list);
-}
-
-/**
- * gdk_text_property_to_utf8_list:
- * @encoding: an atom representing the encoding of the text
- * @format:   the format of the property
- * @text:     the text to convert
- * @length:   the length of @text, in bytes
- * @list: (allow-none):     location to store the list of strings or %NULL. The
- *            list should be freed with g_strfreev().
- * 
- * Convert a text property in the giving encoding to
- * a list of UTF-8 strings. 
- * 
- * Return value: the number of strings in the resulting
- *               list.
- **/
-gint 
-gdk_text_property_to_utf8_list (GdkAtom        encoding,
-				gint           format,
-				const guchar  *text,
-				gint           length,
-				gchar       ***list)
-{
-  return gdk_text_property_to_utf8_list_for_display (gdk_display_get_default (),
-						     encoding, format, text, length, list);
-}
-
-/**
- * gdk_string_to_compound_text:
- * @str: a nul-terminated string.
- * @encoding: location to store the encoding atom (to be used as
- *   the type for the property).
- * @format: location to store the format for the property.
- * @ctext: location to store newly allocated data for the property.
- * @length: location to store the length of @ctext in items.
- *
- * Converts a string from the encoding of the current locale
- * into a form suitable for storing in a window property.
- *
- * Returns: 0 upon sucess, non-zero upon failure.
- */
-gint
-gdk_string_to_compound_text (const gchar *str,
-			     GdkAtom     *encoding,
-			     gint        *format,
-			     guchar     **ctext,
-			     gint        *length)
-{
-  return gdk_string_to_compound_text_for_display (gdk_display_get_default (),
-						  str, encoding, format, 
-						  ctext, length);
-}
-
-/**
- * gdk_utf8_to_compound_text:
- * @str:      a UTF-8 string
- * @encoding: location to store resulting encoding
- * @format:   location to store format of the result
- * @ctext:    location to store the data of the result
- * @length:   location to store the length of the data
- *            stored in @ctext
- * 
- * Convert from UTF-8 to compound text. 
- * 
- * Return value: %TRUE if the conversion succeeded, otherwise
- *               false.
- **/
-gboolean
-gdk_utf8_to_compound_text (const gchar *str,
-			   GdkAtom     *encoding,
-			   gint        *format,
-			   guchar     **ctext,
-			   gint        *length)
-{
-  return gdk_utf8_to_compound_text_for_display (gdk_display_get_default (),
-						str, encoding, format, 
-						ctext, length);
-}
-
-/**
  * gdk_selection_owner_set_for_display:
  * @display: the #GdkDisplay
  * @owner: a #GdkWindow or %NULL to indicate that the owner for
@@ -385,4 +275,59 @@ gdk_selection_convert (GdkWindow *requestor,
 
   GDK_DISPLAY_GET_CLASS (display)
     ->convert_selection (display, requestor, selection, target, time);
+}
+
+/**
+ * gdk_text_property_to_utf8_list_for_display:
+ * @display:  a #GdkDisplay
+ * @encoding: an atom representing the encoding of the text
+ * @format:   the format of the property
+ * @text:     the text to convert
+ * @length:   the length of @text, in bytes
+ * @list:     location to store the list of strings or %NULL. The
+ *            list should be freed with g_strfreev().
+ *
+ * Converts a text property in the given encoding to
+ * a list of UTF-8 strings.
+ *
+ * Return value: the number of strings in the resulting list
+ *
+ * Since: 2.2
+ */
+gint
+gdk_text_property_to_utf8_list_for_display (GdkDisplay     *display,
+                                            GdkAtom         encoding,
+                                            gint            format,
+                                            const guchar   *text,
+                                            gint            length,
+                                            gchar        ***list)
+{
+  g_return_val_if_fail (text != NULL, 0);
+  g_return_val_if_fail (length >= 0, 0);
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
+
+  return GDK_DISPLAY_GET_CLASS (display)
+           ->text_property_to_utf8_list (display, encoding, format, text, length, list);
+}
+
+/**
+ * gdk_utf8_to_string_target:
+ * @str: a UTF-8 string
+ *
+ * Converts an UTF-8 string into the best possible representation
+ * as a STRING. The representation of characters not in STRING
+ * is not specified; it may be as pseudo-escape sequences
+ * \x{ABCD}, or it may be in some other form of approximation.
+ *
+ * Return value: the newly-allocated string, or %NULL if the
+ *               conversion failed. (It should not fail for
+ *               any properly formed UTF-8 string unless system
+ *               limits like memory or file descriptors are exceeded.)
+ **/
+gchar *
+gdk_utf8_to_string_target (const gchar *str)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+
+  return GDK_DISPLAY_GET_CLASS (display)->utf8_to_string_target (display, str);
 }
