@@ -299,5 +299,14 @@ void        _gdk_quartz_display_convert_selection      (GdkDisplay     *display,
                                                         GdkAtom         selection,
                                                         GdkAtom         target,
                                                         guint32         time);
+gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *display,
+                                                            GdkAtom         encoding,
+                                                            gint            format,
+                                                            const guchar   *text,
+                                                            gint            length,
+                                                            gchar        ***list);
+gchar *     _gdk_quartz_display_utf8_to_string_target      (GdkDisplay     *displayt,
+                                                            const gchar    *str);
+
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */
