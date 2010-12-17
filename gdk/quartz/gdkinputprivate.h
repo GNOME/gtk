@@ -133,8 +133,7 @@ extern gint             _gdk_input_ignore_core;
 
 GdkInputWindow *   _gdk_input_window_find    (GdkWindow        *window);
 void               _gdk_input_window_destroy (GdkWindow        *window);
-void               _gdk_input_init           (void);
-void               _gdk_input_exit           (void);
+void               _gdk_quartz_input_init    (void);
 gint               _gdk_input_enable_window  (GdkWindow        *window,
 					      GdkDevicePrivate *gdkdev);
 gint               _gdk_input_disable_window (GdkWindow        *window,

@@ -37,12 +37,6 @@ gdk_quartz_display_get_default_group (GdkDisplay *display)
   return NULL;
 }
 
-void
-_gdk_windowing_set_default_display (GdkDisplay *display)
-{
-  g_assert (display == NULL || _gdk_display == display);
-}
-
 GdkDeviceManager *
 _gdk_device_manager_new (GdkDisplay *display)
 {
@@ -52,7 +46,7 @@ _gdk_device_manager_new (GdkDisplay *display)
 }
 
 GdkDisplay *
-gdk_display_open (const gchar *display_name)
+_gdk_quartz_display_open (const gchar *display_name)
 {
   if (_gdk_display != NULL)
     return NULL;
@@ -60,7 +54,7 @@ gdk_display_open (const gchar *display_name)
   /* Initialize application */
   [NSApplication sharedApplication];
 
-  _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
+  _gdk_display = g_object_new (_gdk_quartz_display_get_type (), NULL);
   _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
 
   _gdk_screen = _gdk_screen_quartz_new ();
@@ -69,9 +63,9 @@ gdk_display_open (const gchar *display_name)
 
   _gdk_windowing_window_init ();
 
-  _gdk_events_init ();
+  _gdk_quartz_events_init ();
 
-  _gdk_input_init ();
+  _gdk_quartz_input_init ();
 
 #if 0
   /* FIXME: Remove the #if 0 when we have these functions */
@@ -199,6 +193,17 @@ G_DEFINE_TYPE (GdkDisplayQuartz, _gdk_display_quartz, GDK_TYPE_DISPLAY)
 static void
 _gdk_display_quartz_init (GdkDisplayQuartz *display)
 {
+  gdk_x11_display_manager_add_display (gdk_display_nmanager_get (),
+                                       GDK_DISPLAY_OBJECT (display));
+}
+
+static void
+_gdk_display_quartz_dispose (GObject *object)
+{
+  _gdk_quartz_display_manager_remove_display (gdk_display_manager_get (),
+                                              GDK_DISPLAY_OBJECT (object));
+
+  G_OBJECT_CLASS (_gdk_display_quartz_parent_class)->dispose (object);
 }
 
 static void
