@@ -1438,8 +1438,9 @@ _gdk_quartz_screen_get_setting (GdkScreen   *screen,
 }
 
 void
-_gdk_windowing_event_data_copy (const GdkEvent *src,
-                                GdkEvent       *dst)
+_gdk_quartz_display_event_data_copy (GdkDisplay     *display,
+                                     const GdkEvent *src,
+                                     GdkEvent       *dst)
 {
   GdkEventPrivate *priv_src = (GdkEventPrivate *) src;
   GdkEventPrivate *priv_dst = (GdkEventPrivate *) dst;
@@ -1452,7 +1453,8 @@ _gdk_windowing_event_data_copy (const GdkEvent *src,
 }
 
 void
-_gdk_windowing_event_data_free (GdkEvent *event)
+_gdk_quartz_display_event_data_free (GdkDisplay *display,
+                                     GdkEvent   *event)
 {
   GdkEventPrivate *priv = (GdkEventPrivate *) event;
 
