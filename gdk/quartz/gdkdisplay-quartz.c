@@ -259,4 +259,6 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->send_selection_notify = _gdk_quartz_display_send_selection_notify;
   display_class->get_selection_property = _gdk_quartz_display_get_selection_property;
   display_class->convert_selection = _gdk_quartz_display_convert_selection;
+  display_class->text_property_to_utf8_list = _gdk_quartz_display_text_property_to_utf8_list;
+  display_class->utf8_to_string_target = _gdk_quartz_display_utf8_to_string_target;
 }
