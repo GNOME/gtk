@@ -259,10 +259,6 @@ GdkDisplay *gdk_display_get_default (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE
 
-#ifndef GDK_DISABLE_DEPRECATED
-GdkDevice  *gdk_display_get_core_pointer (GdkDisplay *display);
-#endif /* GDK_DISABLE_DEPRECATED */
-
 void             gdk_display_get_pointer           (GdkDisplay             *display,
 						    GdkScreen             **screen,
 						    gint                   *x,

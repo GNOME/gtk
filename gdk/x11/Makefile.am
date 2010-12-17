@@ -37,7 +37,6 @@ libgdk_x11_la_SOURCES =    	\
 	gdkgeometry-x11.c  	\
 	gdkglobals-x11.c   	\
 	gdkim-x11.c	   	\
-	gdkinput.c		\
 	gdkkeys-x11.c		\
 	gdkmain-x11.c	   	\
 	gdkproperty-x11.c  	\

@@ -621,13 +621,8 @@ gdk_device_set_mode (GdkDevice    *device,
       gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER)
     return FALSE;
 
-  /* FIXME: setting has_cursor when mode is window? */
-
   device->priv->mode = mode;
   g_object_notify (G_OBJECT (device), "input-mode");
-
-  if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER)
-    _gdk_input_check_extension_events (device);
 
   return TRUE;
 }

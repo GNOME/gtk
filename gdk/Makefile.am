@@ -72,7 +72,6 @@ gdk_public_h_sources =				\
 	gdkdisplaymanager.h			\
 	gdkdnd.h				\
 	gdkevents.h				\
-	gdkinput.h				\
 	gdkkeys.h				\
 	gdkkeysyms.h				\
 	gdkkeysyms-compat.h			\
@@ -195,7 +194,6 @@ x11_introspection_files = 		\
 	x11/gdkgeometry-x11.c		\
 	x11/gdkglobals-x11.c		\
 	x11/gdkim-x11.c			\
-	x11/gdkinput.c			\
 	x11/gdkkeys-x11.c		\
 	x11/gdkmain-x11.c		\
 	x11/gdkproperty-x11.c		\

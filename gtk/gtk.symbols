@@ -3408,7 +3408,6 @@ gtk_widget_get_direction
 gtk_widget_get_display
 gtk_widget_get_double_buffered
 gtk_widget_get_events
-gtk_widget_get_extension_events
 gtk_widget_get_halign
 gtk_widget_get_has_tooltip
 gtk_widget_get_has_window
@@ -3554,7 +3553,6 @@ gtk_widget_set_device_events
 gtk_widget_set_direction
 gtk_widget_set_double_buffered
 gtk_widget_set_events
-gtk_widget_set_extension_events
 gtk_widget_set_halign
 gtk_widget_set_has_tooltip
 gtk_widget_set_has_window

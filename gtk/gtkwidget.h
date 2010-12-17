@@ -671,10 +671,6 @@ void	   gtk_widget_set_device_events	  (GtkWidget	       *widget,
 void       gtk_widget_add_device_events   (GtkWidget           *widget,
                                            GdkDevice           *device,
 					   GdkEventMask         events);
-void	   gtk_widget_set_extension_events (GtkWidget		*widget,
-					    GdkExtensionMode	mode);
-
-GdkExtensionMode gtk_widget_get_extension_events (GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GType		 widget_type);

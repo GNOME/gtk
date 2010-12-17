@@ -650,45 +650,6 @@ gdk_event_send_clientmessage_toall (GdkEvent *event)
 }
 
 /**
- * gdk_device_get_core_pointer:
- * 
- * Returns the core pointer device for the default display.
- * 
- * Return value: (transfer none): the core pointer device; this is owned
- *   by the display and should not be freed.
- *
- * Deprecated: 3.0: Use gdk_device_manager_get_client_pointer() instead, or
- *             gdk_event_get_device() if a #GdkEvent with pointer device
- *             information is available.
- **/
-GdkDevice *
-gdk_device_get_core_pointer (void)
-{
-  return gdk_display_get_core_pointer (gdk_display_get_default ());
-}
-
-/**
- * gdk_display_get_core_pointer:
- * @display: a #GdkDisplay
- * 
- * Returns the core pointer device for the given display
- * 
- * Return value: (transfer none): the core pointer device; this is owned by the
- *   display and should not be freed.
- *
- * Since: 2.2
- *
- * Deprecated: 3.0: Use gdk_device_manager_get_client_pointer() instead, or
- *             gdk_event_get_device() if a #GdkEvent with device
- *             information is available.
- **/
-GdkDevice *
-gdk_display_get_core_pointer (GdkDisplay *display)
-{
-  return display->core_pointer;
-}
-
-/**
  * gdk_set_sm_client_id:
  * @sm_client_id: the client id assigned by the session manager when the
  *    connection was opened, or %NULL to remove the property.

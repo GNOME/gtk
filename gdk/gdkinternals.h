@@ -176,7 +176,6 @@ typedef struct
   guint implicit_ungrab : 1;
 } GdkDeviceGrabInfo;
 
-typedef struct _GdkInputWindow GdkInputWindow;
 typedef struct _GdkWindowPaint GdkWindowPaint;
 
 typedef void (* GdkDisplayPointerInfoForeach) (GdkDisplay           *display,
@@ -253,7 +252,6 @@ struct _GdkWindow
 
   guint num_offscreen_children;
   GdkWindowPaint *implicit_paint;
-  GdkInputWindow *input_window; /* only set for impl windows */
 
   GList *outstanding_moves;
 
@@ -527,10 +525,6 @@ cairo_region_t *_gdk_window_calculate_full_clip_region    (GdkWindow     *window
                                                       gint          *base_y_offset);
 gboolean    _gdk_window_has_impl (GdkWindow *window);
 GdkWindow * _gdk_window_get_impl_window (GdkWindow *window);
-GdkWindow *_gdk_window_get_input_window_for_event (GdkWindow *native_window,
-						   GdkEventType event_type,
-						   int x, int y,
-						   gulong serial);
 
 /*****************************
  * offscreen window routines *

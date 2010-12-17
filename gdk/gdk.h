@@ -40,7 +40,6 @@
 #include <gdk/gdkdnd.h>
 #include <gdk/gdkenumtypes.h>
 #include <gdk/gdkevents.h>
-#include <gdk/gdkinput.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkmain.h>

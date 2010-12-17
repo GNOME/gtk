@@ -24,8 +24,6 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#undef GDK_DISABLE_DEPRECATED /* gdk_input_set_extension_events() */
-
 #include "config.h"
 #include <stdarg.h>
 #include <string.h>
@@ -467,7 +465,6 @@ enum {
   PROP_COMPOSITE_CHILD,
   PROP_STYLE,
   PROP_EVENTS,
-  PROP_EXTENSION_EVENTS,
   PROP_NO_SHOW_ALL,
   PROP_HAS_TOOLTIP,
   PROP_TOOLTIP_MARKUP,
@@ -669,7 +666,6 @@ static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
 static GQuark		quark_event_mask = 0;
 static GQuark           quark_device_event_mask = 0;
-static GQuark		quark_extension_event_mode = 0;
 static GQuark		quark_parent_window = 0;
 static GQuark		quark_pointer_window = 0;
 static GQuark		quark_shape_info = 0;
@@ -783,7 +779,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
   quark_device_event_mask = g_quark_from_static_string ("gtk-device-event-mask");
-  quark_extension_event_mode = g_quark_from_static_string ("gtk-extension-event-mode");
   quark_parent_window = g_quark_from_static_string ("gtk-parent-window");
   quark_pointer_window = g_quark_from_static_string ("gtk-pointer-window");
   quark_shape_info = g_quark_from_static_string ("gtk-shape-info");
@@ -1000,14 +995,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
  						       GDK_TYPE_EVENT_MASK,
  						       GDK_STRUCTURE_MASK,
  						       GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_EXTENSION_EVENTS,
-				   g_param_spec_enum ("extension-events",
- 						      P_("Extension events"),
- 						      P_("The mask that decides what kind of extension events this widget gets"),
- 						      GDK_TYPE_EXTENSION_MODE,
- 						      GDK_EXTENSION_EVENTS_NONE,
- 						      GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
 				   PROP_NO_SHOW_ALL,
 				   g_param_spec_boolean ("no-show-all",
@@ -3231,9 +3218,6 @@ gtk_widget_set_property (GObject         *object,
       if (!gtk_widget_get_realized (widget) && gtk_widget_get_has_window (widget))
 	gtk_widget_set_events (widget, g_value_get_flags (value));
       break;
-    case PROP_EXTENSION_EVENTS:
-      gtk_widget_set_extension_events (widget, g_value_get_enum (value));
-      break;
     case PROP_NO_SHOW_ALL:
       gtk_widget_set_no_show_all (widget, g_value_get_boolean (value));
       break;
@@ -3348,7 +3332,6 @@ gtk_widget_get_property (GObject         *object,
   switch (prop_id)
     {
       gpointer *eventp;
-      gpointer *modep;
 
     case PROP_NAME:
       if (priv->name)
@@ -3409,10 +3392,6 @@ gtk_widget_get_property (GObject         *object,
     case PROP_EVENTS:
       eventp = g_object_get_qdata (G_OBJECT (widget), quark_event_mask);
       g_value_set_flags (value, GPOINTER_TO_INT (eventp));
-      break;
-    case PROP_EXTENSION_EVENTS:
-      modep = g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode);
-      g_value_set_enum (value, GPOINTER_TO_INT (modep));
       break;
     case PROP_NO_SHOW_ALL:
       g_value_set_boolean (value, gtk_widget_get_no_show_all (widget));
@@ -4182,52 +4161,6 @@ gtk_widget_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_widget_set_extension_events_internal (GtkWidget        *widget,
-                                          GdkExtensionMode  mode,
-                                          GList            *window_list)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-  GList *free_list = NULL;
-  GList *l;
-
-  if (window_list == NULL)
-    {
-      if (gtk_widget_get_has_window (widget))
-        window_list = g_list_prepend (NULL, priv->window);
-      else
-        window_list = gdk_window_get_children (priv->window);
-
-      free_list = window_list;
-    }
-
-  for (l = window_list; l != NULL; l = l->next)
-    {
-      GdkWindow *window = l->data;
-      gpointer user_data;
-
-      gdk_window_get_user_data (window, &user_data);
-      if (user_data == widget)
-        {
-          GList *children;
-
-          gdk_input_set_extension_events (window,
-                                          gdk_window_get_events (window),
-                                          mode);
-
-          children = gdk_window_get_children (window);
-          if (children)
-            {
-              gtk_widget_set_extension_events_internal (widget, mode, children);
-              g_list_free (children);
-            }
-        }
-    }
-
-  if (free_list)
-    g_list_free (free_list);
-}
-
-static void
 _gtk_widget_enable_device_events (GtkWidget *widget)
 {
   GHashTable *device_events;
@@ -4279,7 +4212,6 @@ void
 gtk_widget_realize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
-  GdkExtensionMode mode;
   cairo_region_t *region;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -4321,10 +4253,6 @@ gtk_widget_realize (GtkWidget *widget)
       region = g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info);
       if (region)
 	gdk_window_input_shape_combine_region (priv->window, region, 0, 0);
-
-      mode = gtk_widget_get_extension_events (widget);
-      if (mode != GDK_EXTENSION_EVENTS_NONE)
-        gtk_widget_set_extension_events_internal (widget, mode, NULL);
 
       if (priv->multidevice)
         gdk_window_set_support_multidevice (priv->window, TRUE);
@@ -9760,28 +9688,6 @@ gtk_widget_add_device_events (GtkWidget    *widget,
 }
 
 /**
- * gtk_widget_set_extension_events:
- * @widget: a #GtkWidget
- * @mode: bitfield of extension events to receive
- *
- * Sets the extension events mask to @mode. See #GdkExtensionMode
- * and gdk_input_set_extension_events().
- **/
-void
-gtk_widget_set_extension_events (GtkWidget *widget,
-				 GdkExtensionMode mode)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (gtk_widget_get_realized (widget))
-    gtk_widget_set_extension_events_internal (widget, mode, NULL);
-
-  g_object_set_qdata (G_OBJECT (widget), quark_extension_event_mode,
-                      GINT_TO_POINTER (mode));
-  g_object_notify (G_OBJECT (widget), "extension-events");
-}
-
-/**
  * gtk_widget_get_toplevel:
  * @widget: a #GtkWidget
  *
@@ -9991,23 +9897,6 @@ gtk_widget_get_device_events (GtkWidget *widget,
     return 0;
 
   return GPOINTER_TO_UINT (g_hash_table_lookup (device_events, device));
-}
-
-/**
- * gtk_widget_get_extension_events:
- * @widget: a #GtkWidget
- *
- * Retrieves the extension events the widget will receive; see
- * gdk_input_set_extension_events().
- *
- * Return value: extension events for @widget
- **/
-GdkExtensionMode
-gtk_widget_get_extension_events (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
-
-  return GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (widget), quark_extension_event_mode));
 }
 
 /**
@@ -13637,7 +13526,7 @@ gtk_widget_get_window (GtkWidget *widget)
  * Returns %TRUE if @widget is multiple pointer aware. See
  * gtk_widget_set_support_multidevice() for more information.
  *
- * Returns: %TRUE is @widget is multidevice aware.
+ * Returns: %TRUE if @widget is multidevice aware.
  **/
 gboolean
 gtk_widget_get_support_multidevice (GtkWidget *widget)
@@ -13668,17 +13557,7 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   priv = widget->priv;
-
-  if (support_multidevice)
-    {
-      priv->multidevice = TRUE;
-      gtk_widget_set_extension_events (widget, GDK_EXTENSION_EVENTS_ALL);
-    }
-  else
-    {
-      priv->multidevice = FALSE;
-      gtk_widget_set_extension_events (widget, GDK_EXTENSION_EVENTS_NONE);
-    }
+  priv->multidevice = (support_multidevice == TRUE);
 
   if (gtk_widget_get_realized (widget))
     gdk_window_set_support_multidevice (priv->window, support_multidevice);

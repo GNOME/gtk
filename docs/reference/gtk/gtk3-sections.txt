@@ -4937,8 +4937,6 @@ gtk_widget_get_parent_window
 gtk_widget_set_events
 gtk_widget_get_events
 gtk_widget_add_events
-gtk_widget_set_extension_events
-gtk_widget_get_extension_events
 gtk_widget_set_device_events
 gtk_widget_get_device_events
 gtk_widget_add_device_events
