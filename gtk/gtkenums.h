@@ -364,12 +364,6 @@ typedef enum
 
 /**
  * GtkStateType:
- *
- * This type indicates the current state of a widget; the state determines how
- * the widget is drawn. The #GtkStateType enumeration is also used to
- * identify different colors in a #GtkStyle for drawing, so states can be
- * used for subparts of a widget as well as entire widgets.
- *
  * @GTK_STATE_NORMAL: State during normal operation.
  * @GTK_STATE_ACTIVE: State of a currently active widget, such as a depressed button.
  * @GTK_STATE_PRELIGHT: State indicating that the mouse pointer is over
@@ -381,6 +375,11 @@ typedef enum
  *                          or radiobuttons that aren't either set to %TRUE nor %FALSE,
  *                          or buttons requiring the user attention.
  * @GTK_STATE_FOCUSED: The widget has the keyboard focus.
+ *
+ * This type indicates the current state of a widget; the state determines how
+ * the widget is drawn. The #GtkStateType enumeration is also used to
+ * identify different colors in a #GtkStyle for drawing, so states can be
+ * used for subparts of a widget as well as entire widgets.
  */
 typedef enum
 {
