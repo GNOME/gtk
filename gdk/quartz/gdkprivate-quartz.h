@@ -187,7 +187,7 @@ void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                                    GdkEventMask   event_mask,
                                                    GdkWindowAttr *attributes,
                                                    gint           attributes_mask);
-
+GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
 
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
