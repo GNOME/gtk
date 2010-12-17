@@ -1897,15 +1897,6 @@ _gdk_windowing_get_device_state (GdkDisplay       *display,
   gdk_window_quartz_get_device_state_helper (_gdk_root, device, x, y, mask);
 }
 
-void
-gdk_display_warp_pointer (GdkDisplay *display,
-			  GdkScreen  *screen,
-			  gint        x,
-			  gint        y)
-{
-  CGDisplayMoveCursorToPoint (CGMainDisplayID (), CGPointMake (x, y));
-}
-
 /* Returns coordinates relative to the found window. */
 GdkWindow *
 _gdk_windowing_window_at_pointer (GdkDisplay      *display,
