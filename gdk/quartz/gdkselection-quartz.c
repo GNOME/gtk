@@ -45,31 +45,33 @@ _gdk_quartz_display_get_selection_owner (GdkDisplay *display,
 }
 
 void
-gdk_selection_convert (GdkWindow *requestor,
-		       GdkAtom    selection,
-		       GdkAtom    target,
-		       guint32    time)
+_gdk_quartz_display_convert_selection (GdkDisplay *display,
+                                       GdkWindow  *requestor,
+                                       GdkAtom     selection,
+                                       GdkAtom     target,
+                                       guint32     time)
 {
   /* FIXME: Implement */
 }
 
 gint
-gdk_selection_property_get (GdkWindow  *requestor,
-			    guchar    **data,
-			    GdkAtom    *ret_type,
-			    gint       *ret_format)
+_gdk_quartz_display_get_selection_property (GdkDisplay *display,
+                                            GdkWindow  *requestor,
+                                            guchar    **data,
+                                            GdkAtom    *ret_type,
+                                            gint       *ret_format)
 {
   /* FIXME: Implement */
   return 0;
 }
 
 void
-gdk_selection_send_notify_for_display (GdkDisplay *display,
-				       guint32     requestor,
-				       GdkAtom     selection,
-				       GdkAtom     target,
-				       GdkAtom     property,
-				       guint32     time)
+_gdk_quartz_display_send_selection_send_notify (GdkDisplay      *display,
+                                                GdkNativeWindow  requestor,
+                                                GdkAtom          selection,
+                                                GdkAtom          target,
+                                                GdkAtom          property,
+                                                guint32          time)
 {
   /* FIXME: Implement */
 }
@@ -77,7 +79,7 @@ gdk_selection_send_notify_for_display (GdkDisplay *display,
 gint
 gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
 					    GdkAtom       encoding,
-					    gint          format, 
+					    gint          format,
 					    const guchar *text,
 					    gint          length,
 					    gchar      ***list)
