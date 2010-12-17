@@ -180,6 +180,14 @@ void       _gdk_quartz_display_event_data_copy (GdkDisplay     *display,
                                                 GdkEvent       *dst);
 void       _gdk_quartz_display_event_data_free (GdkDisplay     *display,
                                                 GdkEvent       *event);
+void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
+                                                   GdkWindow     *window,
+                                                   GdkWindow     *real_parent,
+                                                   GdkScreen     *screen,
+                                                   GdkEventMask   event_mask,
+                                                   GdkWindowAttr *attributes,
+                                                   gint           attributes_mask);
+
 
 
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);

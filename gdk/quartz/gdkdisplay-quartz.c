@@ -252,5 +252,5 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->notify_startup_complete = _gdk_quartz_display_notify_startup_complete;
   display_class->event_data_copy = _gdk_quartz_display_event_data_copy;
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
-
+  display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
 }

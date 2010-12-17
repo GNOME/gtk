@@ -843,12 +843,13 @@ get_nsscreen_for_point (gint x, gint y)
 }
 
 void
-_gdk_window_impl_new (GdkWindow     *window,
-		      GdkWindow     *real_parent,
-		      GdkScreen     *screen,
-		      GdkEventMask   event_mask,
-		      GdkWindowAttr *attributes,
-		      gint           attributes_mask)
+_gdk_x11_display_create_window_imp (GdkDisplay    *display,
+                                    GdkWindow     *window,
+                                    GdkWindow     *real_parent,
+                                    GdkScreen     *screen,
+                                    GdkEventMask   event_mask,
+                                    GdkWindowAttr *attributes,
+                                    gint           attributes_mask)
 {
   GdkWindowImplQuartz *impl;
   GdkWindowImplQuartz *parent_impl;
