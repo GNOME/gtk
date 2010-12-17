@@ -66,6 +66,14 @@ typedef struct _GdkKeymapQuartzClass GdkKeymapQuartzClass;
 
 G_DEFINE_TYPE (GdkKeyMapQuartz, _gdk_keymap_quartz, GDK_TYPE_KEYMAP)
 
+GdkKeymap *
+_gdk_quartz_display_get_keymap (GdkDisplay *display)
+{
+  if (default_keymap == NULL)
+    default_keymap = g_object_new (_gdk_keymap_quartz_get_type (), NULL);
+
+  return default_keymap;
+}
 
 /* Note: we could check only if building against the 10.5 SDK instead, but
  * that would make non-xml layouts not work in 32-bit which would be a quite
