@@ -219,6 +219,12 @@ G_CONST_RETURN char *gdk_x11_font_get_name     (GdkFont *font);
 
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
 
+GdkWindow  *gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
+                                                    Window      window);
+GdkWindow  *gdk_x11_window_lookup_for_display      (GdkDisplay *display,
+                                                    Window      window);
+
+
 G_END_DECLS
 
 #endif /* __GDK_X_H__ */

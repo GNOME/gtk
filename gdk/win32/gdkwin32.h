@@ -117,6 +117,11 @@ GdkDrawable  *gdk_win32_begin_direct_draw_libgtk_only (GdkDrawable *drawable,
 						       gint *y_offset_out);
 void          gdk_win32_end_direct_draw_libgtk_only (gpointer priv_data);
 
+GdkWindow *   gdk_win32_window_foreign_new_for_display (GdkDisplay *display,
+                                                        GdkNativeWindow anid);
+GdkWindow *   gdk_win32_window_lookup_for_display (GdkDisplay *display,
+                                                   GdkNativeWindow anid);
+
 
 G_END_DECLS
 
