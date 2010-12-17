@@ -994,9 +994,6 @@ gtk_editable_get_editable
 GTK_EDITABLE
 GTK_IS_EDITABLE
 GTK_TYPE_EDITABLE
-GTK_EDITABLE_CLASS
-GTK_IS_EDITABLE_CLASS
-GTK_EDITABLE_GET_CLASS
 GTK_EDITABLE_GET_IFACE
 <SUBSECTION Private>
 gtk_editable_get_type
@@ -1737,9 +1734,7 @@ GTK_IMAGE_GET_CLASS
 GtkImagePrivate
 gtk_image_get_type
 GtkImageIconSetData
-GtkImageImageData
 GtkImagePixbufData
-GtkImagePixmapData
 GtkImageStockData
 GtkImageAnimationData
 GtkImageIconNameData
@@ -2483,8 +2478,6 @@ GTK_RANGE_GET_CLASS
 <SUBSECTION Private>
 gtk_range_get_type
 GtkRangePrivate
-GtkRangeLayout
-GtkRangeStepTimer
 </SECTION>
 
 <SECTION>
@@ -2773,13 +2766,11 @@ gtk_scrollable_set_vscroll_policy
 
 
 <SUBSECTION Standard>
-GtkScrollableIface
-GTK_IS_SCROLLABLE
-GTK_IS_SCROLLABLE_CLASS
-GTK_SCROLLABLE
-GTK_SCROLLABLE_CLASS
-GTK_SCROLLABLE_GET_IFACE
+GtkScrollableInterface
 GTK_TYPE_SCROLLABLE
+GTK_SCROLLABLE
+GTK_IS_SCROLLABLE
+GTK_SCROLLABLE_GET_IFACE
 
 <SUBSECTION Private>
 gtk_scrollable_get_type
@@ -3002,7 +2993,7 @@ GTK_SPINNER
 GTK_IS_SPINNER
 GTK_TYPE_SPINNER
 GTK_SPINNER_CLASS
-GTK_IS_SPINER_CLASS
+GTK_IS_SPINNER_CLASS
 GTK_SPINNER_GET_CLASS
 GTK_IS_SPINNER_CLASS
 
@@ -3228,7 +3219,6 @@ GTK_TEXT_BUFFER_GET_CLASS
 <SUBSECTION Private>
 GtkTextBufferPrivate
 gtk_text_buffer_get_type
-GtkTextLogAttrCache
 </SECTION>
 
 <SECTION>
@@ -3497,8 +3487,6 @@ GtkTextViewPrivate
 gtk_text_view_get_type
 gtk_text_child_anchor_get_type
 GtkTextBTree
-GtkTextWindow
-GtkTextPendingScroll
 </SECTION>
 
 <SECTION>
