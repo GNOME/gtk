@@ -79,9 +79,3 @@ gdk_window_set_startup_id (GdkWindow   *window,
 {
   /* FIXME: Implement? */
 }
-
-void
-_gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
-					 const gchar *sm_client_id)
-{
-}
