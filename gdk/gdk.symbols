@@ -956,7 +956,9 @@ gdk_visual_get_type G_GNUC_CONST
 
 #if IN_HEADER(__GDK_X_H__)
 #if IN_FILE(__GDK_EVENTS_X11_C__)
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_net_wm_supports
+#endif
 #endif
 #endif
 

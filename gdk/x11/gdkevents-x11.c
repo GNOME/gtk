@@ -2880,6 +2880,8 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
  * gdk_x11_screen_supports_net_wm_hint() for complete details.
  * 
  * Return value: %TRUE if the window manager supports @property
+ *
+ * Deprecated:2.24: Use gdk_x11_screen_supports_net_wm_hint() instead
  **/
 gboolean
 gdk_net_wm_supports (GdkAtom property)

@@ -166,7 +166,9 @@ XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
 
 #ifndef GDK_MULTIHEAD_SAFE
 gpointer      gdk_xid_table_lookup   (XID              xid);
+#ifndef GDK_DISABLE_DEPRECATED
 gboolean      gdk_net_wm_supports    (GdkAtom    property);
+#endif
 void          gdk_x11_grab_server    (void);
 void          gdk_x11_ungrab_server  (void);
 #endif
