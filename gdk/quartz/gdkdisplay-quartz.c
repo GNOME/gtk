@@ -75,7 +75,7 @@ gdk_display_open (const gchar *display_name)
 
 #if 0
   /* FIXME: Remove the #if 0 when we have these functions */
-  _gdk_dnd_init ();
+  _gdk_quartz_dnd_init ();
 #endif
 
   g_signal_emit_by_name (gdk_display_manager_get (),
