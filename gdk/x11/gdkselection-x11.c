@@ -334,32 +334,16 @@ gdk_selection_property_get (GdkWindow  *requestor,
   return 0;
 }
 
-/**
- * gdk_selection_send_notify_for_display:
- * @display: the #GdkDisplay where @requestor is realized
- * @requestor: window to which to deliver response.
- * @selection: selection that was requested.
- * @target: target that was selected.
- * @property: property in which the selection owner stored the data,
- *            or %GDK_NONE to indicate that the request was rejected.
- * @time_: timestamp. 
- *
- * Send a response to SelectionRequest event.
- *
- * Since: 2.2
- **/
 void
-gdk_selection_send_notify_for_display (GdkDisplay       *display,
-				       GdkNativeWindow  requestor,
-				       GdkAtom          selection,
-				       GdkAtom          target,
-				       GdkAtom          property, 
-				       guint32          time)
+_gdk_x11_display_send_selection_notify (GdkDisplay       *display,
+                                        GdkNativeWindow  requestor,
+                                        GdkAtom          selection,
+                                        GdkAtom          target,
+                                        GdkAtom          property,
+                                        guint32          time)
 {
   XSelectionEvent xevent;
-  
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  
+
   xevent.type = SelectionNotify;
   xevent.serial = 0;
   xevent.send_event = True;

@@ -203,6 +203,12 @@ struct _GdkDisplayClass
                                                      GdkAtom       selection,
                                                      guint32       time,
                                                      gboolean      send_event);
+  void                       (*send_selection_notify) (GdkDisplay *dispay,
+                                                       GdkNativeWindow  requestor,
+                                                       GdkAtom          selection,
+                                                       GdkAtom          target,
+                                                       GdkAtom          property,
+                                                       guint32          time_);
 
   /* Signals */
   void (*closed) (GdkDisplay *display,
