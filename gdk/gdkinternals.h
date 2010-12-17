@@ -280,6 +280,9 @@ extern gboolean   _gdk_disable_multidevice;
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
+void _gdk_event_filter_unref        (GdkWindow      *window,
+				     GdkEventFilter *filter);
+
 void   _gdk_event_emit               (GdkEvent   *event);
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
 void   _gdk_event_queue_remove_link  (GdkDisplay *display,

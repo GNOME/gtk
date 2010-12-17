@@ -55,14 +55,17 @@ static GSourceFuncs event_funcs = {
 static GList *event_sources = NULL;
 
 static gint
-gdk_event_apply_filters (XEvent   *xevent,
-			 GdkEvent *event,
-			 GList   **filters)
+gdk_event_apply_filters (XEvent    *xevent,
+			 GdkEvent  *event,
+			 GdkWindow *window)
 {
   GList *tmp_list;
   GdkFilterReturn result;
 
-  tmp_list = *filters;
+  if (window == NULL)
+    tmp_list = _gdk_default_filters;
+  else
+    tmp_list = window->filters;
 
   while (tmp_list)
     {
@@ -78,18 +81,12 @@ gdk_event_apply_filters (XEvent   *xevent,
       filter->ref_count++;
       result = filter->function (xevent, event, filter->data);
 
-      /* get the next node after running the function since the
-         function may add or remove a next node */
-      node = tmp_list;
-      tmp_list = tmp_list->next;
+      /* Protect against unreffing the filter mutating the list */
+      node = tmp_list->next;
 
-      filter->ref_count--;
-      if (filter->ref_count == 0)
-        {
-          *filters = g_list_remove_link (*filters, node);
-          g_list_free_1 (node);
-          g_free (filter);
-        }
+      _gdk_event_filter_unref (window, filter);
+
+      tmp_list = node;
 
       if (result != GDK_FILTER_CONTINUE)
 	return result;
@@ -162,8 +159,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
     {
       /* Apply global filters */
 
-      result = gdk_event_apply_filters (xevent, event,
-                                        &_gdk_default_filters);
+      result = gdk_event_apply_filters (xevent, event, NULL);
 
       if (result == GDK_FILTER_REMOVE)
         {
@@ -186,7 +182,7 @@ gdk_event_source_translate_event (GdkEventSource *event_source,
       if (filter_window->filters)
 	{
 	  result = gdk_event_apply_filters (xevent, event,
-					    &filter_window->filters);
+					    filter_window);
 
           if (result == GDK_FILTER_REMOVE)
             {
