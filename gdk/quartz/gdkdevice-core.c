@@ -86,6 +86,7 @@ gdk_device_core_class_init (GdkDeviceCoreClass *klass)
   device_class->ungrab = gdk_device_core_ungrab;
   device_class->window_at_position = gdk_device_core_window_at_position;
   device_class->select_window_events = gdk_device_core_select_window_events;
+  device_class->check_extension_events = _gdk_quartz_device_check_extension_events;
 }
 
 static void
@@ -303,7 +304,13 @@ static void
 gdk_device_core_ungrab (GdkDevice *device,
                         guint32    time_)
 {
-  /* Should remain empty */
+  GdkDeviceGrabInfo *grab;
+
+  grab = _gdk_display_get_last_device_grab (_gdk_display, device);
+  if (grab)
+    grab->serial_end = 0;
+
+  _gdk_display_device_grab_update (_gdk_display, device, 0);
 }
 
 static GdkWindow *

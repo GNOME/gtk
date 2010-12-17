@@ -199,7 +199,7 @@ _gdk_input_window_destroy (GdkWindow *window)
 }
 
 void
-_gdk_input_check_extension_events (GdkDevice *device)
+_gdk_quartz_device_check_extension_events (GdkDevice *device)
 {
 }
 
