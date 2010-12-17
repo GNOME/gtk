@@ -139,8 +139,8 @@ void     _gdk_x11_window_translate         (GdkWindow *window,
                                             gint       dx,
                                             gint       dy);
 
-void     _gdk_selection_window_destroyed   (GdkWindow            *window);
-gboolean _gdk_selection_filter_clear_event (XSelectionClearEvent *event);
+void     _gdk_x11_selection_window_destroyed   (GdkWindow            *window);
+gboolean _gdk_x11_selection_filter_clear_event (XSelectionClearEvent *event);
 
 cairo_region_t* _gdk_x11_xwindow_get_shape  (Display *xdisplay,
                                              Window   window,

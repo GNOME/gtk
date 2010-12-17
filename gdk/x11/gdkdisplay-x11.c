@@ -792,7 +792,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
 		g_message ("selection clear:\twindow: %ld",
 			   xevent->xproperty.window));
 
-      if (_gdk_selection_filter_clear_event (&xevent->xselectionclear))
+      if (_gdk_x11_selection_filter_clear_event (&xevent->xselectionclear))
 	{
 	  event->selection.type = GDK_SELECTION_CLEAR;
 	  event->selection.window = window;

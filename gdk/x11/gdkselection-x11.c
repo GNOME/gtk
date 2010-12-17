@@ -54,7 +54,7 @@ static GSList *owner_list;
  * low code solution
  */
 void
-_gdk_selection_window_destroyed (GdkWindow *window)
+_gdk_x11_selection_window_destroyed (GdkWindow *window)
 {
   GSList *tmp_list = owner_list;
   while (tmp_list)
@@ -74,7 +74,7 @@ _gdk_selection_window_destroyed (GdkWindow *window)
  * reflect changes to the selection owner that we didn't make ourself.
  */
 gboolean
-_gdk_selection_filter_clear_event (XSelectionClearEvent *event)
+_gdk_x11_selection_filter_clear_event (XSelectionClearEvent *event)
 {
   GSList *tmp_list = owner_list;
   GdkDisplay *display = gdk_x11_lookup_xdisplay (event->display);
