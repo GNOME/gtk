@@ -236,5 +236,11 @@ gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,
 
 void _gdk_quartz_device_check_extension_events (GdkDevice *device);
 
+GdkAtom _gdk_quartz_display_manager_atom_intern   (GdkDisplayManager *manager,
+                                                   const gchar       *atom_name,
+                                                   gboolean           copy_name);
+gchar * _gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
+                                                   GdkAtom            atom);
+
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

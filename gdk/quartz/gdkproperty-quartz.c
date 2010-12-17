@@ -151,27 +151,22 @@ intern_atom_internal (const gchar *atom_name, gboolean allocate)
 }
 
 GdkAtom
-gdk_atom_intern (const gchar *atom_name,
-		 gboolean     only_if_exists)
+_gdk_quartz_display_manager_atom_intern (GdkDisplayManager *manager,
+                                         const gchar       *atom_name,
+                                         gboolean           copy_name)
 {
-  return intern_atom_internal (atom_name, TRUE);
+  return intern_atom_internal (atom_name, copy_name);
 }
-
-GdkAtom
-gdk_atom_intern_static_string (const gchar *atom_name)
-{
-  return intern_atom_internal (atom_name, FALSE);
-}
-
 
 gchar *
-gdk_atom_name (GdkAtom atom)
+_gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
+                                           GdkAtom            atom)
 {
   ensure_atom_tables ();
-    
+
   if (GPOINTER_TO_INT (atom) >= atoms_to_names->len)
     return NULL;
-    
+
   return g_strdup (g_ptr_array_index (atoms_to_names, GPOINTER_TO_INT (atom)));
 }
 
