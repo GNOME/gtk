@@ -140,13 +140,13 @@ _gdk_visual_init (void)
 
 /* We prefer the system visual for now ... */
 gint
-gdk_visual_get_best_depth (void)
+_gdk_quartz_screen_visual_get_best_depth (GdkScreen *screen)
 {
   return system_visual->depth;
 }
 
 GdkVisualType
-gdk_visual_get_best_type (void)
+_gdk_quartz_screen_visual_get_best_type (GdkScreen *screen)
 {
   return system_visual->type;
 }
@@ -158,19 +158,20 @@ _gdk_quartz_screen_get_rgba_visual (GdkScreen *screen)
 }
 
 GdkVisual*
-gdk_screen_get_system_visual (GdkScreen *screen)
+_gdk_quartz_screen_get_system_visual (GdkScreen *screen)
 {
   return system_visual;
 }
 
 GdkVisual*
-gdk_visual_get_best (void)
+_gdk_quartz_screen_visual_get_best (GdkScreen *screen)
 {
   return system_visual;
 }
 
 GdkVisual*
-gdk_visual_get_best_with_depth (gint depth)
+_gdk_quartz_screen_visual_get_best_with_depth (GdkScreen *screen,
+                                               gint       depth)
 {
   GdkVisual *visual = NULL;
 
@@ -196,7 +197,8 @@ gdk_visual_get_best_with_depth (gint depth)
 }
 
 GdkVisual*
-gdk_visual_get_best_with_type (GdkVisualType visual_type)
+_gdk_quartz_screen_visual_get_best_with_type (GdkScreen     *screen,
+                                              GdkVisualType  visual_type)
 {
   if (system_visual->type == visual_type)
     return system_visual;
@@ -207,8 +209,9 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 }
 
 GdkVisual*
-gdk_visual_get_best_with_both (gint          depth,
-			       GdkVisualType visual_type)
+_gdk_quartz_screen_visual_get_best_with_both (GdkScreen     *screen,
+                                              gint           depth,
+                                              GdkVisualType  visual_type)
 {
   if (system_visual->depth == depth
       && system_visual->type == visual_type)
@@ -225,23 +228,25 @@ gdk_visual_get_best_with_both (gint          depth,
 
 /* For these, we also prefer the system visual */
 void
-gdk_query_depths  (gint **depths,
-		   gint  *count)
+_gdk_quartz_screen_query_depths  (GdkScreen  *screen,
+                                  gint      **depths,
+                                  gint       *count)
 {
   *count = 1;
   *depths = &system_visual->depth;
 }
 
 void
-gdk_query_visual_types (GdkVisualType **visual_types,
-			gint           *count)
+_gdk_quartz_screen_query_visual_types (GdkScreen      *screen,
+                                       GdkVisualType **visual_types,
+                                       gint           *count)
 {
   *count = 1;
   *visual_types = &system_visual->type;
 }
 
 GList*
-gdk_screen_list_visuals (GdkScreen *screen)
+_gdk_quartz_screen_list_visuals (GdkScreen *screen)
 {
   GList *visuals = NULL;
 
