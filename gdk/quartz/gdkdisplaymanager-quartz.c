@@ -75,6 +75,35 @@ gdk_display_manager_quartz_set_default_display (GdkDisplayManager *manager,
   manager_quartz->default_display = display;
 }
 
+#include "../gdkkeynames.c"
+
+static gchar *
+gdk_quartz_display_manager_get_keyval_name (GdkDisplayManager *manager,
+                                            guint              keyval)
+{
+  return _gdk_keyval_name (keyval);
+}
+
+static guint
+gdk_quartz_display_manager_lookup_keyval (GdkDisplayManager *manager,
+                                          const gchar       *name)
+{
+  return _gdk_keyval_from_name (name);
+}
+
+static void
+gdk_quartz_display_manager_keyval_convert_case (GdkDisplayManager *manager,
+                                                guint              symbol,
+                                                guint             *lower,
+                                                guint             *upper)
+{
+  /* FIXME implement this */
+  if (lower)
+    *lower = symbol;
+  if (upper)
+    *upper = symbol;
+}
+
 static void
 gdk_display_manager_quartz_init (GdkDisplayManagerQuartz *manager)
 {
@@ -102,6 +131,9 @@ gdk_display_manager_quartz_class_init (GdkDisplayManagerQuartzClass *class)
   manager_class->get_default_display = gdk_display_manager_quartz_get_default_display;
   manager_class->atom_intern = _gdk_quartz_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_quartz_display_manager_get_atom_name;
+  manager_class->lookup_keyval = gdk_quartz_display_manager_lookup_keyval;
+  manager_class->get_keyval_name = gdk_quartz_display_manager_get_keyval_name;
+  manager_class->keyval_convert_case = gdk_quartz_display_manager_keyval_convert_case;
 }
 
 void

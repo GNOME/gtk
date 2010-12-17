@@ -16,6 +16,7 @@ CLEANFILES =
 EXTRA_DIST += 			\
 	keynames.txt		\
 	keyname-table.h		\
+	gdkkeynames.c		\
 	gen-keyname-table.pl	\
 	gdkconfig.h.win32	\
 	gdkkeysyms-update.pl	\
@@ -158,7 +159,7 @@ libgdk_3_0_la_SOURCES = $(common_sources)
 libgdk_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
 libgdk_3_0_la_LDFLAGS = $(LDADD)
 
-libgdk_quartz_3_0_la_SOURCES = $(common_sources) gdkkeynames.c
+libgdk_quartz_3_0_la_SOURCES = $(common_sources)
 libgdk_quartz_3_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS)
 libgdk_quartz_3_0_la_LDFLAGS = $(LDADD)
 
