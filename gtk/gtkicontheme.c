@@ -3245,7 +3245,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_load_symbolic_for_context:
  * @icon_info: a #GtkIconInfo
- * context: a #GtkStyleContext
+ * @context: a #GtkStyleContext
  * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
  *     was a symbolic one and whether the @fg color was applied to it.
  * @error: (allow-none): location to store error information on failure,
