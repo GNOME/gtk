@@ -20,52 +20,12 @@
 
 #include "config.h"
 
-#include "gdkvisual.h"
+#include "gdkvisualprivate.h"
 #include "gdkprivate-quartz.h"
 
 static GdkVisual *system_visual;
 static GdkVisual *rgba_visual;
 static GdkVisual *gray_visual;
-
-static void
-gdk_visual_finalize (GObject *object)
-{
-  g_error ("A GdkVisual object was finalized. This should not happen");
-}
-
-static void
-gdk_visual_class_init (GObjectClass *class)
-{
-  class->finalize = gdk_visual_finalize;
-}
-
-GType
-gdk_visual_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-        sizeof (GdkVisualClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_visual_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkVisual),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkVisual",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
 
 static void
 gdk_visual_decompose_mask (gulong  mask,
@@ -89,14 +49,17 @@ gdk_visual_decompose_mask (gulong  mask,
 }
 
 static GdkVisual *
-create_standard_visual (gint depth)
+create_standard_visual (GdkScreen *screen,
+                        gint       depth)
 {
   GdkVisual *visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+
+  visual->screen = screen;
 
   visual->depth = depth;
   visual->byte_order = GDK_MSB_FIRST; /* FIXME: Should this be different on intel macs? */
   visual->colormap_size = 0;
-  
+
   visual->type = GDK_VISUAL_TRUE_COLOR;
 
   visual->red_mask = 0xff0000;
@@ -117,9 +80,11 @@ create_standard_visual (gint depth)
 }
 
 static GdkVisual *
-create_gray_visual (void)
+create_gray_visual (GdkScreen *screen)
 {
   GdkVisual *visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+
+  visual->screen = screen;
 
   visual->depth = 1;
   visual->byte_order = GDK_MSB_FIRST;
@@ -131,11 +96,11 @@ create_gray_visual (void)
 }
 
 void
-_gdk_visual_init (void)
+_gdk_quartz_visual_init (GdkScreen *screen)
 {
-  system_visual = create_standard_visual (24);
-  rgba_visual = create_standard_visual (32);
-  gray_visual = create_gray_visual ();
+  system_visual = create_standard_visual (screen, 24);
+  rgba_visual = create_standard_visual (screen, 32);
+  gray_visual = create_gray_visual (screen);
 }
 
 /* We prefer the system visual for now ... */
@@ -256,12 +221,3 @@ _gdk_quartz_screen_list_visuals (GdkScreen *screen)
 
   return visuals;
 }
-
-GdkScreen *
-gdk_visual_get_screen (GdkVisual *visual)
-{
-  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
-
-  return gdk_screen_get_default ();
-}
-

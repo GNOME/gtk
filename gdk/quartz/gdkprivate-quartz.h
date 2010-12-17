@@ -68,7 +68,7 @@ extern GdkDragContext *_gdk_quartz_drag_source_context;
 void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
 void _gdk_windowing_window_init             (void);
 void _gdk_events_init                       (void);
-void _gdk_visual_init                       (void);
+void _gdk_quartz_visual_init                (GdkScreen *screen);
 void _gdk_input_init                        (void);
 void _gdk_quartz_event_loop_init            (void);
 
