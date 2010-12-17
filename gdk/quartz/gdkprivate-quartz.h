@@ -276,5 +276,14 @@ void     _gdk_quartz_window_change_property   (GdkWindow    *window,
 void     _gdk_quartz_window_delete_property   (GdkWindow    *window,
                                                GdkAtom       property);
 
+gboolean    _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
+                                                     GdkWindow  *owner,
+                                                     GdkAtom     selection,
+                                                     guint32     time,
+                                                     gboolean    send_event);
+GdkWindow * _gdk_quartz_display_get_selection_owner (GdkDisplay *display,
+                                                     GdkAtom     selection);
+
+
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

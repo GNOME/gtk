@@ -254,4 +254,6 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
   display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
   display_class->get_keymap = _gdk_quartz_display_get_keymap;
+  display_class->get_selection_owner = _gdk_quartz_display_get_selection_owner;
+  display_class->set_selection_owner = _gdk_quartz_display_set_selection_owner;
 }

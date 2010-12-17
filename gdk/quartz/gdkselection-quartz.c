@@ -26,19 +26,19 @@
 #include "gdkproperty.h"
 
 gboolean
-gdk_selection_owner_set_for_display (GdkDisplay *display,
-				     GdkWindow  *owner,
-				     GdkAtom     selection,
-				     guint32     time,
-				     gint        send_event)
+_gdk_quartz_display_set_selection_owner_set (GdkDisplay *display,
+                                             GdkWindow  *owner,
+                                             GdkAtom     selection,
+                                             guint32     time,
+                                             gint        send_event)
 {
   /* FIXME: Implement */
   return TRUE;
 }
 
 GdkWindow*
-gdk_selection_owner_get_for_display (GdkDisplay *display,
-				     GdkAtom     selection)
+_gdk_quartz_display_get_selection_owner (GdkDisplay *display,
+                                         GdkAtom     selection)
 {
   /* FIXME: Implement */
   return NULL;
