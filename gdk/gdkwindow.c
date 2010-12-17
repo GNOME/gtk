@@ -1956,10 +1956,14 @@ _gdk_event_filter_unref (GdkWindow       *window,
       filters = &private->filters;
     }
 
-  for (tmp_list = *filters; tmp_list; tmp_list = tmp_list->next)
+  tmp_list = *filters;
+  while (tmp_list)
     {
       GdkEventFilter *iter_filter = tmp_list->data;
       GList *node;
+
+      node = tmp_list;
+      tmp_list = tmp_list->next;
 
       if (iter_filter != filter)
         continue;
@@ -1969,9 +1973,6 @@ _gdk_event_filter_unref (GdkWindow       *window,
       filter->ref_count--;
       if (filter->ref_count != 0)
         continue;
-
-      node = tmp_list;
-      tmp_list = tmp_list->next;
 
       *filters = g_list_remove_link (*filters, node);
       g_free (filter);
