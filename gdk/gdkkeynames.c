@@ -45,8 +45,8 @@ gdk_keys_keyval_compare (const void *pkey, const void *pbase)
   return (*(int *) pkey) - ((gdk_key *) pbase)->keyval;
 }
 
-gchar*
-gdk_keyval_name (guint keyval)
+static gchar*
+_gdk_keyval_name (guint keyval)
 {
   static gchar buf[100];
   gdk_key *found;
@@ -86,8 +86,8 @@ gdk_keys_name_compare (const void *pkey, const void *pbase)
 		 (const char *) (keynames + ((const gdk_key *) pbase)->offset));
 }
 
-guint
-gdk_keyval_from_name (const gchar *keyval_name)
+static guint
+_gdk_keyval_from_name (const gchar *keyval_name)
 {
   gdk_key *found;
 
