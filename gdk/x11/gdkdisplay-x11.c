@@ -1187,17 +1187,6 @@ set_sm_client_id (GdkDisplay  *display,
                      gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
 }
 
-/**
- * gdk_display_open:
- * @display_name: the name of the display to open
- *
- * Opens a display.
- *
- * Return value: (transfer none): a #GdkDisplay, or %NULL if the display
- *               could not be opened.
- *
- * Since: 2.2
- */
 GdkDisplay *
 _gdk_x11_display_open (const gchar *display_name)
 {
