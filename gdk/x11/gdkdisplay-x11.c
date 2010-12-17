@@ -2760,4 +2760,6 @@ _gdk_display_x11_class_init (GdkDisplayX11Class * class)
   display_class->get_keymap = gdk_x11_display_get_keymap;
   display_class->push_error_trap = gdk_x11_display_error_trap_push;
   display_class->pop_error_trap = pop_error_trap;
+  display_class->get_selection_owner = _gdk_x11_display_get_selection_owner;
+  display_class->set_selection_owner = _gdk_x11_display_set_selection_owner;
 }

@@ -196,6 +196,14 @@ struct _GdkDisplayClass
   gint                       (*pop_error_trap)     (GdkDisplay    *display,
                                                     gboolean       ignore);
 
+  GdkWindow *                (*get_selection_owner) (GdkDisplay   *display,
+                                                     GdkAtom       selection);
+  gboolean                   (*set_selection_owner) (GdkDisplay   *display,
+                                                     GdkWindow    *owner,
+                                                     GdkAtom       selection,
+                                                     guint32       time,
+                                                     gboolean      send_event);
+
   /* Signals */
   void (*closed) (GdkDisplay *display,
                   gboolean    is_error);

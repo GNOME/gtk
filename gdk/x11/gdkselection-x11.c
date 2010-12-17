@@ -101,31 +101,13 @@ _gdk_selection_filter_clear_event (XSelectionClearEvent *event)
 
   return FALSE;
 }
-/**
- * gdk_selection_owner_set_for_display:
- * @display: the #GdkDisplay.
- * @owner: a #GdkWindow or %NULL to indicate that the owner for
- *         the given should be unset.
- * @selection: an atom identifying a selection.
- * @time_: timestamp to use when setting the selection. 
- *         If this is older than the timestamp given last time the owner was 
- *         set for the given selection, the request will be ignored.
- * @send_event: if %TRUE, and the new owner is different from the current
- *              owner, the current owner will be sent a SelectionClear event.
- *
- * Sets the #GdkWindow @owner as the current owner of the selection @selection.
- * 
- * Returns: %TRUE if the selection owner was successfully changed to owner,
- *	    otherwise %FALSE. 
- *
- * Since: 2.2
- */
+
 gboolean
-gdk_selection_owner_set_for_display (GdkDisplay *display,
-				     GdkWindow  *owner,
-				     GdkAtom     selection,
-				     guint32     time, 
-				     gboolean    send_event)
+_gdk_x11_display_set_selection_owner (GdkDisplay *display,
+                                      GdkWindow  *owner,
+                                      GdkAtom     selection,
+                                      guint32     time,
+                                      gboolean    send_event)
 {
   Display *xdisplay;
   Window xwindow;
@@ -133,17 +115,14 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   GSList *tmp_list;
   OwnerInfo *info;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-  g_return_val_if_fail (selection != GDK_NONE, FALSE);
-
   if (gdk_display_is_closed (display))
     return FALSE;
 
-  if (owner) 
+  if (owner)
     {
       if (GDK_WINDOW_DESTROYED (owner) || !GDK_WINDOW_IS_X11 (owner))
-	return FALSE;
-      
+        return FALSE;
+
       gdk_window_ensure_native (owner);
       xdisplay = GDK_WINDOW_XDISPLAY (owner);
       xwindow = GDK_WINDOW_XID (owner);
@@ -184,35 +163,15 @@ gdk_selection_owner_set_for_display (GdkDisplay *display,
   return (XGetSelectionOwner (xdisplay, xselection) == xwindow);
 }
 
-/**
- * gdk_selection_owner_get_for_display:
- * @display: a #GdkDisplay.
- * @selection: an atom indentifying a selection.
- *
- * Determine the owner of the given selection.
- *
- * Note that the return value may be owned by a different 
- * process if a foreign window was previously created for that
- * window, but a new foreign window will never be created by this call. 
- *
- * Returns: (transfer none): if there is a selection owner for this window,
- *    and it is a window known to the current process, the #GdkWindow that
- *    owns the selection, otherwise %NULL.
- *
- * Since: 2.2
- */ 
 GdkWindow *
-gdk_selection_owner_get_for_display (GdkDisplay *display,
-				     GdkAtom     selection)
+_gdk_x11_display_get_selection_owner (GdkDisplay *display,
+                                      GdkAtom     selection)
 {
   Window xwindow;
-  
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (selection != GDK_NONE, NULL);
 
   if (gdk_display_is_closed (display))
     return NULL;
-  
+
   xwindow = XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
 				gdk_x11_atom_to_xatom_for_display (display, 
 								   selection));

@@ -187,6 +187,16 @@ void _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
                                                guint32     time,
                                                gulong      serial);
 void _gdk_x11_display_queue_events            (GdkDisplay *display);
+
+
+gboolean    _gdk_x11_display_set_selection_owner (GdkDisplay *display,
+                                                  GdkWindow  *owner,
+                                                  GdkAtom     selection,
+                                                  guint32     time,
+                                                  gboolean    send_event);
+GdkWindow * _gdk_x11_display_get_selection_owner (GdkDisplay *display,
+                                                  GdkAtom     selection);
+
 void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
 GdkDeviceManager *_gdk_x11_device_manager_new (GdkDisplay *display);
