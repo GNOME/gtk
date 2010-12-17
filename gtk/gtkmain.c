@@ -863,7 +863,12 @@ post_parse_hook (GOptionContext *context,
 /**
  * gtk_get_debug_flags:
  *
- * Returns the GTK+ debug flags setting.
+ * Returns the GTK+ debug flags.
+ *
+ * This function is intended for GTK+ modules that want
+ * to adjust their debug output based on GTK+ debug flags.
+ *
+ * Returns: the GTK+ debug flags.
  */
 guint
 gtk_get_debug_flags (void)
