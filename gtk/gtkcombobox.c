@@ -2681,8 +2681,8 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
         {
           child.x += border.left + border_width;
           child.y += border.top + border_width;
-          child.width -= (2 * border_width) - (border.left + border.right);
-          child.height -= (2 * border_width) - (border.top + border.bottom);
+          child.width -= (2 * border_width) + border.left + border.right;
+          child.height -= (2 * border_width) + border.top + border.bottom;
         }
 
       if (gtk_widget_get_visible (priv->popup_window))
