@@ -152,10 +152,8 @@ gdk_visual_get_best_type (void)
 }
 
 GdkVisual *
-gdk_screen_get_rgba_visual (GdkScreen *screen)
+_gdk_quartz_screen_get_rgba_visual (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return rgba_visual;
 }
 
