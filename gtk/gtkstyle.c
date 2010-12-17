@@ -1634,7 +1634,6 @@ gtk_style_render_icon (GtkStyle            *style,
  * @window:
  * @set_bg:
  * @state_type:
- * @area: (allow-none):
  * @x:
  * @y:
  * @width:
@@ -3687,8 +3686,6 @@ gtk_paint_box (GtkStyle           *style,
  * @cr: a #cairo_t
  * @state_type: a state
  * @shadow_type: the type of shadow to draw
- * @area: (allow-none): clip rectangle, or %NULL if the
- *        output should not be clipped
  * @widget: (allow-none): the widget
  * @detail: (allow-none): a style detail
  * @x: x origin of the box

@@ -832,7 +832,7 @@ gtk_theming_engine_get_border (GtkThemingEngine *engine,
  * gtk_theming_engine_get_padding:
  * @engine: a #GtkthemingEngine
  * @state: state to retrieve the padding for
- * @color: (out): return value for the padding settings
+ * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
  *
@@ -853,9 +853,9 @@ gtk_theming_engine_get_padding (GtkThemingEngine *engine,
 
 /**
  * gtk_theming_engine_get_margin:
- * @engien: a #GtkThemingEngine
+ * @engine: a #GtkThemingEngine
  * @state: state to retrieve the border for
- * @color: (out): return value for the margin settings
+ * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
  *
