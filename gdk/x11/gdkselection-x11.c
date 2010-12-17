@@ -182,20 +182,18 @@ _gdk_x11_display_get_selection_owner (GdkDisplay *display,
 }
 
 void
-gdk_selection_convert (GdkWindow *requestor,
-		       GdkAtom    selection,
-		       GdkAtom    target,
-		       guint32    time)
+_gdk_x11_display_convert_selection (GdkDisplay *display,
+                                    GdkWindow  *requestor,
+                                    GdkAtom     selection,
+                                    GdkAtom     target,
+                                    guint32     time)
 {
-  GdkDisplay *display;
-
   g_return_if_fail (selection != GDK_NONE);
 
   if (GDK_WINDOW_DESTROYED (requestor) || !GDK_WINDOW_IS_X11 (requestor))
     return;
 
   gdk_window_ensure_native (requestor);
-  display = GDK_WINDOW_DISPLAY (requestor);
 
   XConvertSelection (GDK_WINDOW_XDISPLAY (requestor),
                      gdk_x11_atom_to_xatom_for_display (display, selection),

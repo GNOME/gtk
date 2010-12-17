@@ -207,6 +207,11 @@ gint        _gdk_x11_display_get_selection_property (GdkDisplay     *display,
                                                      guchar        **data,
                                                      GdkAtom        *ret_type,
                                                      gint           *ret_format);
+void        _gdk_x11_display_convert_selection      (GdkDisplay     *display,
+                                                     GdkWindow      *requestor,
+                                                     GdkAtom         selection,
+                                                     GdkAtom         target,
+                                                     guint32         time);
 
 void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 

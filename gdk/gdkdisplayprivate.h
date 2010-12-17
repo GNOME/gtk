@@ -208,12 +208,17 @@ struct _GdkDisplayClass
                                                        GdkAtom          selection,
                                                        GdkAtom          target,
                                                        GdkAtom          property,
-                                                       guint32          time_);
+                                                       guint32          time);
   gint                       (*get_selection_property) (GdkDisplay  *display,
                                                         GdkWindow   *requestor,
                                                         guchar     **data,
                                                         GdkAtom     *type,
                                                         gint        *format);
+  void                       (*convert_selection)      (GdkDisplay  *display,
+                                                        GdkWindow   *requestor,
+                                                        GdkAtom      selection,
+                                                        GdkAtom      target,
+                                                        guint32      time);
 
   /* Signals */
   void (*closed) (GdkDisplay *display,

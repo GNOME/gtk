@@ -370,3 +370,19 @@ gdk_selection_property_get (GdkWindow  *requestor,
   return GDK_DISPLAY_GET_CLASS (display)
            ->get_selection_property (display, requestor, data, ret_type, ret_format);
 }
+
+void
+gdk_selection_convert (GdkWindow *requestor,
+                       GdkAtom    selection,
+                       GdkAtom    target,
+                       guint32    time)
+{
+  GdkDisplay *display;
+
+  g_return_if_fail (selection != GDK_NONE);
+
+  display = gdk_window_get_display (requestor);
+
+  GDK_DISPLAY_GET_CLASS (display)
+    ->convert_selection (display, requestor, selection, target, time);
+}
