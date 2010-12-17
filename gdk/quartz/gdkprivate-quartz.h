@@ -157,5 +157,12 @@ void        _gdk_quartz_display_add_client_message_filter (GdkDisplay      *disp
                                                            GdkFilterFunc    func,
                                                            gpointer         data);
 
+GdkVisual * _gdk_quartz_screen_get_rgba_visual          (GdkScreen   *screen);
+void        _gdk_quartz_screen_broadcast_client_message (GdkScreen   *screen,
+                                                         GdkEvent    *event);
+gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,
+                                                         const gchar *name,
+                                                         GValue      *value);
+
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

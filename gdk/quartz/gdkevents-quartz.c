@@ -1415,16 +1415,16 @@ _gdk_quartz_display_send_client_message (GdkDisplay      *display,
 }
 
 void
-gdk_screen_broadcast_client_message (GdkScreen *screen,
-				     GdkEvent  *event)
+_gdk_quartz_screen_broadcast_client_message (GdkScreen *screen,
+                                             GdkEvent  *event)
 {
   /* Not supported. */
 }
 
 gboolean
-gdk_screen_get_setting (GdkScreen   *screen,
-			const gchar *name,
-			GValue      *value)
+_gdk_quartz_screen_get_setting (GdkScreen   *screen,
+                                const gchar *name,
+                                GValue      *value)
 {
   if (strcmp (name, "gtk-double-click-time") == 0)
     {
