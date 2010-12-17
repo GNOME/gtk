@@ -424,8 +424,8 @@ _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
 }
 
 void
-_gdk_windowing_window_process_updates_recurse (GdkWindow *window,
-                                               cairo_region_t *region)
+_gdk_quartz_window_process_updates_recurse (GdkWindow *window,
+                                            cairo_region_t *region)
 {
   /* Make sure to only flush each toplevel at most once if we're called
    * from process_all_updates.
@@ -467,7 +467,7 @@ _gdk_windowing_window_process_updates_recurse (GdkWindow *window,
 }
 
 void
-_gdk_windowing_before_process_all_updates (void)
+_gdk_quartz_display_before_process_all_updates (GdkDisplay *display)
 {
   in_process_all_updates = TRUE;
 
@@ -475,7 +475,7 @@ _gdk_windowing_before_process_all_updates (void)
 }
 
 void
-_gdk_windowing_after_process_all_updates (void)
+_gdk_quartz_display_after_process_all_updates (GdkDisplay *display)
 {
   GSList *old_update_nswindows = update_nswindows;
   GSList *tmp_list = update_nswindows;
@@ -3122,6 +3122,7 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
   impl_class->destroy_notify = gdk_quartz_window_destroy_notify;
   impl_class->register_dnd = _gdk_quartz_window_register_dnd;
   impl_class->drag_begin = _gdk_quartz_window_drag_begin;
+  impl_class->process_updates_recurse = gdk_x11_window_process_updates_recurse;
 }
 
 static void
