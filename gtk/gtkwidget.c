@@ -6697,12 +6697,15 @@ gtk_widget_device_is_shadowed (GtkWidget *widget,
  * @name: name for the widget
  *
  * Widgets can be named, which allows you to refer to them from a
- * gtkrc file. You can apply a style to widgets with a particular name
- * in the gtkrc file. See the documentation for gtkrc files (on the
- * same page as the docs for #GtkRcStyle).
+ * CSS file. You can apply a style to widgets with a particular name
+ * in the CSS file. See the documentation for the CSS syntax (on the
+ * same page as the docs for #GtkStyleContext).
  *
- * Note that widget names are separated by periods in paths (see
- * gtk_widget_path()), so names with embedded periods may cause confusion.
+ * Note that the CSS syntax has certain special characters to delimit
+ * and represent elements in a selector (period, &num;, &gt;, &ast;...),
+ * so using these will make your widget impossible to match by name.
+ * Any combination of alphanumeric symbols, dashes and underscores will
+ * suffice.
  **/
 void
 gtk_widget_set_name (GtkWidget	 *widget,
