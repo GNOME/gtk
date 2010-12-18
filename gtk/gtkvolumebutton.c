@@ -47,7 +47,7 @@
 
 #define EPSILON (1e-10)
 
-const char * const icons[] =
+static const gchar * const icons[] =
 {
   "audio-volume-muted",
   "audio-volume-high",
@@ -55,7 +55,8 @@ const char * const icons[] =
   "audio-volume-medium",
   NULL
 };
-const char * const icons_symbolic[] =
+
+static const gchar * const icons_symbolic[] =
 {
   "audio-volume-muted-symbolic",
   "audio-volume-high-symbolic",
