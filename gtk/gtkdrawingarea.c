@@ -48,7 +48,6 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 static void
 gtk_drawing_area_init (GtkDrawingArea *darea)
 {
-  darea->draw_data = NULL;
 }
 
 

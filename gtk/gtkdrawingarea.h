@@ -51,8 +51,6 @@ typedef struct _GtkDrawingAreaClass  GtkDrawingAreaClass;
 struct _GtkDrawingArea
 {
   GtkWidget widget;
-
-  gpointer GSEAL (draw_data);
 };
 
 struct _GtkDrawingAreaClass
