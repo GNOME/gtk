@@ -32,10 +32,10 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_CELL_AREA_BOX		  (gtk_cell_area_box_get_type ())
-#define GTK_CELL_AREA_BOX(obj)		  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_AREA_BOX, GtkCellAreaBox))
-#define GTK_CELL_AREA_BOX_CLASS(klass)	  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_AREA_BOX, GtkCellAreaBoxClass))
-#define GTK_IS_CELL_AREA_BOX(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_AREA_BOX))
+#define GTK_TYPE_CELL_AREA_BOX            (gtk_cell_area_box_get_type ())
+#define GTK_CELL_AREA_BOX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_CELL_AREA_BOX, GtkCellAreaBox))
+#define GTK_CELL_AREA_BOX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_CELL_AREA_BOX, GtkCellAreaBoxClass))
+#define GTK_IS_CELL_AREA_BOX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_CELL_AREA_BOX))
 #define GTK_IS_CELL_AREA_BOX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_CELL_AREA_BOX))
 #define GTK_CELL_AREA_BOX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CELL_AREA_BOX, GtkCellAreaBoxClass))
 
@@ -63,20 +63,20 @@ struct _GtkCellAreaBoxClass
   void (*_gtk_reserved4) (void);
 };
 
-GType              gtk_cell_area_box_get_type        (void) G_GNUC_CONST;
+GType        gtk_cell_area_box_get_type    (void) G_GNUC_CONST;
 
-GtkCellArea       *gtk_cell_area_box_new             (void);
-void               gtk_cell_area_box_pack_start      (GtkCellAreaBox  *box,
-						      GtkCellRenderer *renderer,
-						      gboolean         expand,
-						      gboolean         align);
-void               gtk_cell_area_box_pack_end        (GtkCellAreaBox  *box,
-						      GtkCellRenderer *renderer,
-						      gboolean         expand,
-						      gboolean         align);
-gint               gtk_cell_area_box_get_spacing     (GtkCellAreaBox  *box);
-void               gtk_cell_area_box_set_spacing     (GtkCellAreaBox  *box,
-						      gint             spacing);
+GtkCellArea *gtk_cell_area_box_new         (void);
+void         gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
+                                            GtkCellRenderer *renderer,
+                                            gboolean         expand,
+                                            gboolean         align);
+void         gtk_cell_area_box_pack_end    (GtkCellAreaBox  *box,
+                                            GtkCellRenderer *renderer,
+                                            gboolean         expand,
+                                            gboolean         align);
+gint         gtk_cell_area_box_get_spacing (GtkCellAreaBox  *box);
+void         gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
+                                            gint             spacing);
 
 
 G_END_DECLS
