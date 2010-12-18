@@ -222,6 +222,8 @@ gtk_tree_store_class_init (GtkTreeStoreClass *class)
   object_class = (GObjectClass *) class;
 
   object_class->finalize = gtk_tree_store_finalize;
+
+  g_type_class_add_private (class, sizeof (GtkTreeStorePrivate));
 }
 
 static void
