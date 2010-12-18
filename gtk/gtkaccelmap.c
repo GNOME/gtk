@@ -22,7 +22,7 @@
 #include "gtkaccelmap.h"
 
 #include "gtkmarshalers.h"
-#include "gtkwindow.h"  /* in lack of GtkAcceleratable */
+#include "gtkwindowprivate.h"
 #include "gtkintl.h"
 
 #include <glib/gstdio.h>

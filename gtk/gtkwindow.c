@@ -25,6 +25,9 @@
  */
 
 #include "config.h"
+
+#include "gtkintl.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -32,11 +35,10 @@
 #include "gdk/gdk.h"
 #include "gdk/gdkkeysyms.h"
 
-#include "gtkintl.h"
-
 #include "gtkprivate.h"
 #include "gtkrc.h"
 #include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
@@ -95,7 +97,6 @@
  */
 
 typedef struct _GtkDeviceGrabInfo GtkDeviceGrabInfo;
-typedef struct _GtkWindowGroupPrivate GtkWindowGroupPrivate;
 
 struct _GtkWindowPrivate
 {
@@ -297,7 +298,6 @@ struct _GtkWindowGeometryInfo
   GtkWindowLastGeometryInfo last;
 };
 
-#define GTK_WINDOW_GROUP_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GTK_TYPE_WINDOW_GROUP, GtkWindowGroupPrivate))
 
 struct _GtkDeviceGrabInfo
 {
@@ -308,6 +308,7 @@ struct _GtkDeviceGrabInfo
 
 struct _GtkWindowGroupPrivate
 {
+  GSList *grabs;
   GSList *device_grabs;
 };
 
@@ -8461,37 +8462,20 @@ gtk_window_has_toplevel_focus (GtkWindow *window)
   return window->priv->has_toplevel_focus;
 }
 
+G_DEFINE_TYPE (GtkWindowGroup, gtk_window_group, G_TYPE_OBJECT)
+
+static void
+gtk_window_group_init (GtkWindowGroup *group)
+{
+  group->priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
+                                             GTK_TYPE_WINDOW_GROUP,
+                                             GtkWindowGroupPrivate);
+}
+
 static void
 gtk_window_group_class_init (GtkWindowGroupClass *klass)
 {
   g_type_class_add_private (klass, sizeof (GtkWindowGroupPrivate));
-}
-
-GType
-gtk_window_group_get_type (void)
-{
-  static GType window_group_type = 0;
-
-  if (!window_group_type)
-    {
-      const GTypeInfo window_group_info =
-      {
-	sizeof (GtkWindowGroupClass),
-	NULL,		/* base_init */
-	NULL,		/* base_finalize */
-	(GClassInitFunc) gtk_window_group_class_init,
-	NULL,		/* class_finalize */
-	NULL,		/* class_data */
-	sizeof (GtkWindowGroup),
-	0,		/* n_preallocs */
-	(GInstanceInitFunc) NULL,
-      };
-
-      window_group_type = g_type_register_static (G_TYPE_OBJECT, I_("GtkWindowGroup"), 
-						  &window_group_info, 0);
-    }
-
-  return window_group_type;
 }
 
 /**
@@ -8510,14 +8494,16 @@ gtk_window_group_new (void)
 
 static void
 window_group_cleanup_grabs (GtkWindowGroup *group,
-			    GtkWindow      *window)
+                            GtkWindow      *window)
 {
   GtkWindowGroupPrivate *priv;
   GtkDeviceGrabInfo *info;
   GSList *tmp_list;
   GSList *to_remove = NULL;
 
-  tmp_list = group->grabs;
+  priv = group->priv;
+
+  tmp_list = priv->grabs;
   while (tmp_list)
     {
       if (gtk_widget_get_toplevel (tmp_list->data) == (GtkWidget*) window)
@@ -8532,7 +8518,6 @@ window_group_cleanup_grabs (GtkWindowGroup *group,
       to_remove = g_slist_delete_link (to_remove, to_remove);
     }
 
-  priv = GTK_WINDOW_GROUP_GET_PRIVATE (group);
   tmp_list = priv->device_grabs;
 
   while (tmp_list)
@@ -8709,10 +8694,31 @@ gtk_window_group_get_current_grab (GtkWindowGroup *window_group)
 {
   g_return_val_if_fail (GTK_IS_WINDOW_GROUP (window_group), NULL);
 
-  if (window_group->grabs)
-    return GTK_WIDGET (window_group->grabs->data);
+  if (window_group->priv->grabs)
+    return GTK_WIDGET (window_group->priv->grabs->data);
   return NULL;
 }
+
+void
+_gtk_window_group_add_grab (GtkWindowGroup *window_group,
+                            GtkWidget      *widget)
+{
+  GtkWindowGroupPrivate *priv;
+
+  priv = window_group->priv;
+  priv->grabs = g_slist_prepend (priv->grabs, widget);
+}
+
+void
+_gtk_window_group_remove_grab (GtkWindowGroup *window_group,
+                               GtkWidget      *widget)
+{
+  GtkWindowGroupPrivate *priv;
+
+  priv = window_group->priv;
+  priv->grabs = g_slist_remove (priv->grabs, widget);
+}
+
 
 void
 _gtk_window_group_add_device_grab (GtkWindowGroup *window_group,
@@ -8723,7 +8729,7 @@ _gtk_window_group_add_device_grab (GtkWindowGroup *window_group,
   GtkWindowGroupPrivate *priv;
   GtkDeviceGrabInfo *info;
 
-  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+  priv = window_group->priv;
 
   info = g_slice_new0 (GtkDeviceGrabInfo);
   info->widget = widget;
@@ -8743,7 +8749,7 @@ _gtk_window_group_remove_device_grab (GtkWindowGroup *window_group,
   GSList *list, *node = NULL;
   GdkDevice *other_device;
 
-  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+  priv = window_group->priv;
   other_device = gdk_device_get_associated_device (device);
   list = priv->device_grabs;
 
@@ -8794,7 +8800,7 @@ gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
   g_return_val_if_fail (GTK_IS_WINDOW_GROUP (window_group), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
-  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+  priv = window_group->priv;
   list = priv->device_grabs;
   other_device = gdk_device_get_associated_device (device);
 
@@ -8821,7 +8827,7 @@ _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
   GdkDevice *other_device;
   GSList *list;
 
-  priv = GTK_WINDOW_GROUP_GET_PRIVATE (window_group);
+  priv = window_group->priv;
   other_device = gdk_device_get_associated_device (device);
   list = priv->device_grabs;
 

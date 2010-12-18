@@ -45,6 +45,7 @@
 #include "gtkplug.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
+#include "gtkwindowprivate.h"
 #include "gtkdebug.h"
 
 #include "x11/gdkx.h"

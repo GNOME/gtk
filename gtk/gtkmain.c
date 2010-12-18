@@ -60,7 +60,7 @@
 #include "gtkselection.h"
 #include "gtksettings.h"
 #include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 #include "gtktooltip.h"
 #include "gtkdebug.h"
 #include "gtkmenu.h"
@@ -1585,8 +1585,8 @@ gtk_main_do_event (GdkEvent *event)
   if (device)
     grab_widget = gtk_window_group_get_current_device_grab (window_group, device);
 
-  if (!grab_widget && window_group->grabs)
-    grab_widget = window_group->grabs->data;
+  if (!grab_widget)
+    grab_widget = gtk_window_group_get_current_grab (window_group);
 
   /* If the grab widget is an ancestor of the event widget
    *  then we send the event to the original event widget.
@@ -1629,7 +1629,7 @@ gtk_main_do_event (GdkEvent *event)
       
     case GDK_DELETE:
       g_object_ref (event_widget);
-      if ((!window_group->grabs || gtk_widget_get_toplevel (window_group->grabs->data) == event_widget) &&
+      if ((!gtk_window_group_get_current_grab (window_group) || gtk_widget_get_toplevel (gtk_window_group_get_current_grab (window_group)) == event_widget) &&
 	  !gtk_widget_event (event_widget, event))
 	gtk_widget_destroy (event_widget);
       g_object_unref (event_widget);
@@ -1988,16 +1988,13 @@ gtk_grab_add (GtkWidget *widget)
   if (!gtk_widget_has_grab (widget) && gtk_widget_is_sensitive (widget))
     {
       _gtk_widget_set_has_grab (widget, TRUE);
-      
+
       group = gtk_main_get_window_group (widget);
 
-      if (group->grabs)
-	old_grab_widget = (GtkWidget *)group->grabs->data;
-      else
-	old_grab_widget = NULL;
+      old_grab_widget = gtk_window_group_get_current_grab (group);
 
       g_object_ref (widget);
-      group->grabs = g_slist_prepend (group->grabs, widget);
+      _gtk_window_group_add_grab (group, widget);
 
       gtk_grab_notify (group, NULL, old_grab_widget, widget, TRUE);
     }
@@ -2018,9 +2015,7 @@ gtk_grab_get_current (void)
 
   group = gtk_main_get_window_group (NULL);
 
-  if (group->grabs)
-    return GTK_WIDGET (group->grabs->data);
-  return NULL;
+  return gtk_window_group_get_current_grab (group);
 }
 
 void
@@ -2036,15 +2031,11 @@ gtk_grab_remove (GtkWidget *widget)
       _gtk_widget_set_has_grab (widget, FALSE);
 
       group = gtk_main_get_window_group (widget);
-      group->grabs = g_slist_remove (group->grabs, widget);
-      
-      if (group->grabs)
-	new_grab_widget = (GtkWidget *)group->grabs->data;
-      else
-	new_grab_widget = NULL;
+      _gtk_window_group_remove_grab (group, widget);
+      new_grab_widget = gtk_window_group_get_current_grab (group);
 
       gtk_grab_notify (group, NULL, widget, new_grab_widget, FALSE);
-      
+
       g_object_unref (widget);
     }
 }

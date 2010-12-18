@@ -35,7 +35,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
-#include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
 #include "gtksocketprivate.h"

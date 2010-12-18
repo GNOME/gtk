@@ -34,7 +34,7 @@
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 
 /**
  * SECTION:gtkplug

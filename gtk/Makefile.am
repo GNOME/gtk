@@ -433,6 +433,7 @@ gtk_private_h_sources =		\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwidgetprivate.h	\
+	gtkwindowprivate.h	\
 	$(gtk_clipboard_dnd_h_sources) \
 	$(gtk_appchooser_impl_h_sources)
 

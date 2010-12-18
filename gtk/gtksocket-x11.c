@@ -31,7 +31,7 @@
 #include "gdk/gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkwindow.h"
+#include "gtkwindowprivate.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
 #include "gtksocket.h"

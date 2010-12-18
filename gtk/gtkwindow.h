@@ -53,6 +53,7 @@ typedef struct _GtkWindowClass        GtkWindowClass;
 typedef struct _GtkWindowGeometryInfo GtkWindowGeometryInfo;
 typedef struct _GtkWindowGroup        GtkWindowGroup;
 typedef struct _GtkWindowGroupClass   GtkWindowGroupClass;
+typedef struct _GtkWindowGroupPrivate GtkWindowGroupPrivate;
 
 struct _GtkWindow
 {
@@ -95,7 +96,7 @@ struct _GtkWindowGroup
 {
   GObject parent_instance;
 
-  GSList *GSEAL (grabs);
+  GtkWindowGroupPrivate *priv;
 };
 
 struct _GtkWindowGroupClass
@@ -336,6 +337,7 @@ void             gtk_window_group_remove_window (GtkWindowGroup     *window_grou
 					         GtkWindow          *window);
 GList *          gtk_window_group_list_windows  (GtkWindowGroup     *window_group);
 
+GtkWidget *      gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
 GtkWidget *      gtk_window_group_get_current_device_grab (GtkWindowGroup *window_group,
                                                            GdkDevice      *device);
 
@@ -352,65 +354,6 @@ gboolean gtk_window_get_has_resize_grip    (GtkWindow    *window);
 gboolean gtk_window_resize_grip_is_visible (GtkWindow    *window);
 gboolean gtk_window_get_resize_grip_area   (GtkWindow    *window,
                                             GdkRectangle *rect);
-
-
-/* --- internal functions --- */
-void            _gtk_window_internal_set_focus (GtkWindow *window,
-						GtkWidget *focus);
-void            gtk_window_remove_embedded_xid (GtkWindow       *window,
-						GdkNativeWindow  xid);
-void            gtk_window_add_embedded_xid    (GtkWindow       *window,
-						GdkNativeWindow  xid);
-void            _gtk_window_reposition         (GtkWindow *window,
-						gint       x,
-						gint       y);
-void            _gtk_window_constrain_size     (GtkWindow *window,
-						gint       width,
-						gint       height,
-						gint      *new_width,
-						gint      *new_height);
-GtkWidget      *gtk_window_group_get_current_grab (GtkWindowGroup *window_group);
-void            _gtk_window_group_add_device_grab    (GtkWindowGroup   *window_group,
-                                                      GtkWidget        *widget,
-                                                      GdkDevice        *device,
-                                                      gboolean          block_others);
-void            _gtk_window_group_remove_device_grab (GtkWindowGroup   *window_group,
-                                                      GtkWidget        *widget,
-                                                      GdkDevice        *device);
-
-gboolean        _gtk_window_group_widget_is_blocked_for_device (GtkWindowGroup *window_group,
-                                                                GtkWidget      *widget,
-                                                                GdkDevice      *device);
-
-void            _gtk_window_set_has_toplevel_focus (GtkWindow *window,
-						    gboolean   has_toplevel_focus);
-void            _gtk_window_unset_focus_and_default (GtkWindow *window,
-						     GtkWidget *widget);
-
-void            _gtk_window_set_is_active          (GtkWindow *window,
-						    gboolean   is_active);
-
-void            _gtk_window_set_is_toplevel        (GtkWindow *window,
-						    gboolean   is_toplevel);
-
-void            _gtk_window_get_wmclass            (GtkWindow  *window,
-                                                    gchar     **wmclass_name,
-                                                    gchar     **wmclass_class);
-
-typedef void (*GtkWindowKeysForeachFunc) (GtkWindow      *window,
-					  guint           keyval,
-					  GdkModifierType modifiers,
-					  gboolean        is_mnemonic,
-					  gpointer        data);
-
-void _gtk_window_keys_foreach (GtkWindow               *window,
-			       GtkWindowKeysForeachFunc func,
-			       gpointer                 func_data);
-
-/* --- internal (GtkAcceleratable) --- */
-gboolean	_gtk_window_query_nonaccels	(GtkWindow	*window,
-						 guint		 accel_key,
-						 GdkModifierType accel_mods);
 
 G_END_DECLS
 
