@@ -50,17 +50,28 @@ struct _GtkPrintJobPrivate
   cairo_surface_t *surface;
 
   GtkPrintStatus status;
-  GtkPrintBackend *backend;  
+  GtkPrintBackend *backend;
   GtkPrinter *printer;
   GtkPrintSettings *settings;
   GtkPageSetup *page_setup;
 
-  guint printer_set : 1;
-  guint page_setup_set : 1;
-  guint settings_set  : 1;
-  guint track_print_status : 1;
-};
+  GtkPrintPages print_pages;
+  GtkPageRange *page_ranges;
+  gint num_page_ranges;
+  GtkPageSet page_set;
+  gint num_copies;
+  gdouble scale;
+  guint number_up;
+  GtkNumberUpLayout number_up_layout;
 
+  guint printer_set           : 1;
+  guint page_setup_set        : 1;
+  guint settings_set          : 1;
+  guint track_print_status    : 1;
+  guint rotate_to_orientation : 1;
+  guint collate               : 1;
+  guint reverse               : 1;
+};
 
 #define GTK_PRINT_JOB_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GTK_TYPE_PRINT_JOB, GtkPrintJobPrivate))
@@ -180,7 +191,7 @@ gtk_print_job_init (GtkPrintJob *job)
 {
   GtkPrintJobPrivate *priv;
 
-  priv = job->priv = GTK_PRINT_JOB_GET_PRIVATE (job); 
+  priv = job->priv = GTK_PRINT_JOB_GET_PRIVATE (job);
 
   priv->spool_io = NULL;
 
@@ -194,18 +205,18 @@ gtk_print_job_init (GtkPrintJob *job)
   priv->page_setup_set = FALSE;
   priv->status = GTK_PRINT_STATUS_INITIAL;
   priv->track_print_status = FALSE;
-  
-  job->print_pages = GTK_PRINT_PAGES_ALL;
-  job->page_ranges = NULL;
-  job->num_page_ranges = 0;
-  job->collate = FALSE;
-  job->reverse = FALSE;
-  job->num_copies = 1;
-  job->scale = 1.0;
-  job->page_set = GTK_PAGE_SET_ALL;
-  job->rotate_to_orientation = FALSE;
-  job->number_up = 1;
-  job->number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
+
+  priv->print_pages = GTK_PRINT_PAGES_ALL;
+  priv->page_ranges = NULL;
+  priv->num_page_ranges = 0;
+  priv->collate = FALSE;
+  priv->reverse = FALSE;
+  priv->num_copies = 1;
+  priv->scale = 1.0;
+  priv->page_set = GTK_PAGE_SET_ALL;
+  priv->rotate_to_orientation = FALSE;
+  priv->number_up = 1;
+  priv->number_up_layout = GTK_NUMBER_UP_LAYOUT_LEFT_TO_RIGHT_TOP_TO_BOTTOM;
 }
 
 
@@ -250,7 +261,7 @@ gtk_print_job_finalize (GObject *object)
       g_io_channel_unref (priv->spool_io);
       priv->spool_io = NULL;
     }
-  
+
   if (priv->backend)
     g_object_unref (priv->backend);
 
@@ -262,13 +273,13 @@ gtk_print_job_finalize (GObject *object)
 
   if (priv->settings)
     g_object_unref (priv->settings);
-  
+
   if (priv->page_setup)
     g_object_unref (priv->page_setup);
 
-  g_free (job->page_ranges);
-  job->page_ranges = NULL;
-  
+  g_free (priv->page_ranges);
+  priv->page_ranges = NULL;
+
   g_free (priv->title);
   priv->title = NULL;
 
@@ -682,4 +693,331 @@ gtk_print_job_send (GtkPrintJob             *job,
   gtk_print_backend_print_stream (priv->backend, job,
 				  priv->spool_io,
                                   callback, user_data, dnotify);
+}
+
+/**
+ * gtk_print_job_get_pages:
+ * @job: a #GtkPrintJob
+ *
+ * Gets the #GtkPrintPages setting for this job.
+ *
+ * Returns: the #GtkPrintPages setting
+ *
+ * Since: 3.0
+ */
+GtkPrintPages
+gtk_print_job_get_pages (GtkPrintJob *job)
+{
+  return job->priv->print_pages;
+}
+
+/**
+ * gtk_print_job_set_pages:
+ * @job: a #GtkPrintJob
+ * @pages: the #GtkPrintPages setting
+ *
+ * Sets the #GtkPrintPages setting for this job.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_pages (GtkPrintJob   *job,
+                         GtkPrintPages  pages)
+{
+  job->priv->print_pages = pages;
+}
+
+/**
+ * gtk_print_job_get_page_ranges:
+ * @job: a #GtkPrintJob
+ * @n_ranges: (out): return location for the number of ranges
+ *
+ * Gets the page ranges for this job.
+ *
+ * Returns: a pointer to an array of #GtkPageRange structs
+ *
+ * Since: 3.0
+ */
+GtkPageRange *
+gtk_print_job_get_page_ranges (GtkPrintJob *job,
+                               gint        *n_ranges)
+{
+  *n_ranges = job->priv->num_page_ranges;
+  return job->priv->page_ranges;
+}
+
+/**
+ * gtk_print_job_set_page_ranges:
+ * @job: a #GtkPrintJob
+ * @ranges: pointer to an array of #GtkPageRange structs
+ * @n_ranges: the length of the @ranges array
+ *
+ * Sets the page ranges for this job.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_page_ranges (GtkPrintJob  *job,
+                               GtkPageRange *ranges,
+                               gint          n_ranges)
+{
+  job->priv->page_ranges = ranges;
+  job->priv->num_page_ranges = n_ranges;
+}
+
+/**
+ * gtk_print_job_get_page_set:
+ * @job: a #GtkPrintJob
+ *
+ * Gets the #GtkPageSet setting for this job.
+ *
+ * Returns: the #GtkPageSet setting
+ *
+ * Since: 3.0
+ */
+GtkPageSet
+gtk_print_job_get_page_set (GtkPrintJob *job)
+{
+  return job->priv->page_set;
+}
+
+/**
+ * gtk_print_job_set_page_set:
+ * @job: a #GtkPrintJob
+ * @page_set: a #GtkPageSet setting
+ *
+ * Sets the #GtkPageSet setting for this job.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_page_set (GtkPrintJob *job,
+                            GtkPageSet   page_set)
+{
+  job->priv->page_set = page_set;
+}
+
+/**
+ * gtk_print_job_get_num_copies:
+ * @job: a #GtkPrintJob
+ *
+ * Gets the number of copies of this job.
+ *
+ * Returns: the number of copies
+ *
+ * Since: 3.0
+ */
+gint
+gtk_print_job_get_num_copies (GtkPrintJob *job)
+{
+  return job->priv->num_copies;
+}
+
+/**
+ * gtk_print_job_set_num_copies:
+ * @job: a #GtkPrintJob
+ * @num_copies: the number of copies
+ *
+ * Sets the number of copies for this job.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_num_copies (GtkPrintJob *job,
+                              gint         num_copies)
+{
+  job->priv->num_copies = num_copies;
+}
+
+/**
+ * gtk_print_job_get_scale:
+ * @job: a #GtkPrintJob
+ *
+ * Gets the scale for this job (where 1.0 means unscaled).
+ *
+ * Returns: the scale
+ *
+ * Since: 3.0
+ */
+gdouble
+gtk_print_job_get_scale (GtkPrintJob *job)
+
+{
+  return job->priv->scale;
+}
+
+/**
+ * gtk_print_job_set_scale:
+ * @job: a #GtkPrintJob
+ * @scale: the scale
+ *
+ * Sets the scale for this job (where 1.0 means unscaled).
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_scale (GtkPrintJob *job,
+                         gdouble      scale)
+{
+  job->priv->scale = scale;
+}
+
+/**
+ * gtk_print_job_get_n_up:
+ * @job: a #GtkPrintJob
+ *
+ * Gets the n-up setting for this job.
+ *
+ * Returns: the n-up setting
+ *
+ * Since: 3.0
+ */
+guint
+gtk_print_job_get_n_up (GtkPrintJob *job)
+{
+  return job->priv->number_up;
+}
+
+/**
+ * gtk_print_job_set_n_up:
+ * @job: a #GtkPrintJob
+ * @n_up: the n-up value
+ *
+ * Sets the n-up setting for this job.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_n_up (GtkPrintJob *job,
+                        guint        n_up)
+{
+  job->priv->number_up = n_up;
+}
+
+/**
+ * gtk_print_job_get_n_up_layout:
+ * @job: a #GtkPrintJob
+ *
+ * Gets the n-up layout setting for this job.
+ *
+ * Returns: the n-up layout
+ *
+ * Since: 3.0
+ */
+GtkNumberUpLayout
+gtk_print_job_get_n_up_layout (GtkPrintJob *job)
+{
+  return job->priv->number_up_layout;
+}
+
+/**
+ * gtk_print_job_set_n_up_layout:
+ * @job: a #GtkPrintJob
+ * @layout: the n-up layout setting
+ *
+ * Sets the n-up layout setting for this job.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_n_up_layout (GtkPrintJob       *job,
+                               GtkNumberUpLayout  layout)
+{
+  job->priv->number_up_layout = layout;
+}
+
+/**
+ * gtk_print_job_get_rotate:
+ * @job: a #GtkPrintJob
+ *
+ * Gets whether the job is printed rotated.
+ *
+ * Returns: whether the job is printed rotated
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_print_job_get_rotate (GtkPrintJob *job)
+{
+  return job->priv->rotate_to_orientation;
+}
+
+/**
+ * gtk_print_job_set_rotate:
+ * @job: a #GtkPrintJob
+ * @rotate: whether to print rotated
+ *
+ * Sets whether this job is printed rotated.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_rotate (GtkPrintJob *job,
+                          gboolean     rotate)
+{
+  job->priv->rotate_to_orientation = rotate;
+}
+
+/**
+ * gtk_print_job_get_collate:
+ * @job: a #GtkPrintJob
+ *
+ * Gets whether this job is printed collated.
+ *
+ * Returns: whether the job is printed collated
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_print_job_get_collate (GtkPrintJob *job)
+{
+  return job->priv->collate;
+}
+
+/**
+ * gtk_print_job_set_collated:
+ * @job: a #GtkPrintJob
+ * @collate: whether the job is printed collated
+ *
+ * Sets whether this job is printed collated.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_collate (GtkPrintJob *job,
+                           gboolean     collate)
+{
+  job->priv->collate = collate;
+}
+
+/**
+ * gtk_print_job_get_reverse:
+ * @job: a #GtkPrintJob
+ *
+ * Gets whether this job is printed reversed.
+ *
+ * Returns: whether the job is printed reversed.
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_print_job_get_reverse (GtkPrintJob *job)
+{
+  return job->priv->reverse;
+}
+
+/**
+ * gtk_print_job_set_reverse:
+ * @job: a #GtkPrintJob
+ * @reverse: whether the job is printed reversed
+ *
+ * Sets whether this job is printed reversed.
+ *
+ * Since: 3.0
+ */
+void
+gtk_print_job_set_reverse (GtkPrintJob *job,
+                           gboolean     reverse)
+{
+  job->priv->reverse = reverse;
 }

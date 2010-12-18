@@ -4366,44 +4366,49 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPrintSettings *settings,
 				GtkPageSetup     *page_setup)
 {
+  GtkPrintPages pages;
+  GtkPageRange *ranges;
+  gint n_ranges;
   GtkPageSet page_set;
   GtkPaperSize *paper_size;
   const char *ppd_paper_name;
   double scale;
 
-  print_job->print_pages = gtk_print_settings_get_print_pages (settings);
-  print_job->page_ranges = NULL;
-  print_job->num_page_ranges = 0;
-  
-  if (print_job->print_pages == GTK_PRINT_PAGES_RANGES)
-    print_job->page_ranges =
-      gtk_print_settings_get_page_ranges (settings,
-					  &print_job->num_page_ranges);
-  
+  pages = gtk_print_settings_get_print_pages (settings);
+  gtk_print_job_set_pages (print_job, pages);
+
+  if (pages == GTK_PRINT_PAGES_RANGES)
+    ranges = gtk_print_settings_get_page_ranges (settings, &n_ranges);
+  else
+    {
+      ranges = NULL;
+      n_ranges = 0;
+    }
+
+  gtk_print_job_set_page_ranges (print_job, ranges, n_ranges);
   if (gtk_print_settings_get_collate (settings))
     gtk_print_settings_set (settings, "cups-Collate", "True");
-  print_job->collate = FALSE;
+  gtk_print_job_set_collate (print_job, FALSE);
 
   if (gtk_print_settings_get_reverse (settings))
     gtk_print_settings_set (settings, "cups-OutputOrder", "Reverse");
-  print_job->reverse = FALSE;
+  gtk_print_job_set_reverse (print_job, FALSE);
 
   if (gtk_print_settings_get_n_copies (settings) > 1)
     gtk_print_settings_set_int (settings, "cups-copies",
-				gtk_print_settings_get_n_copies (settings));
-  print_job->num_copies = 1;
+                                gtk_print_settings_get_n_copies (settings));
+  gtk_print_job_set_num_copies (print_job, 1);
 
   scale = gtk_print_settings_get_scale (settings);
-  print_job->scale = 1.0;
   if (scale != 100.0)
-    print_job->scale = scale/100.0;
+    gtk_print_job_set_scale (print_job, scale / 100.0);
 
   page_set = gtk_print_settings_get_page_set (settings);
   if (page_set == GTK_PAGE_SET_EVEN)
     gtk_print_settings_set (settings, "cups-page-set", "even");
   else if (page_set == GTK_PAGE_SET_ODD)
     gtk_print_settings_set (settings, "cups-page-set", "odd");
-  print_job->page_set = GTK_PAGE_SET_ALL;
+  gtk_print_job_set_page_set (print_job, GTK_PAGE_SET_ALL);
 
   paper_size = gtk_page_setup_get_paper_size (page_setup);
   ppd_paper_name = gtk_paper_size_get_ppd_name (paper_size);
@@ -4455,7 +4460,7 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
       g_type_class_unref (enum_class);
     }
 
-  print_job->rotate_to_orientation = TRUE;
+  gtk_print_job_set_rotate (print_job, TRUE);
 }
 
 static GtkPageSetup *

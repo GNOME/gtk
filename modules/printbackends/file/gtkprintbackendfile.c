@@ -706,28 +706,34 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPageSetup     *page_setup)
 {
   gdouble scale;
+  GtkPrintPages pages;
+  GtkPageRange *ranges;
+  gint n_ranges;
 
-  print_job->print_pages = gtk_print_settings_get_print_pages (settings);
-  print_job->page_ranges = NULL;
-  print_job->num_page_ranges = 0;
-  
-  if (print_job->print_pages == GTK_PRINT_PAGES_RANGES)
-    print_job->page_ranges =
-      gtk_print_settings_get_page_ranges (settings,
-					  &print_job->num_page_ranges);
-  
-  print_job->collate = gtk_print_settings_get_collate (settings);
-  print_job->reverse = gtk_print_settings_get_reverse (settings);
-  print_job->num_copies = gtk_print_settings_get_n_copies (settings);
-  print_job->number_up = gtk_print_settings_get_number_up (settings);
-  print_job->number_up_layout = gtk_print_settings_get_number_up_layout (settings);
+  pages = gtk_print_settings_get_print_pages (settings);
+  gtk_print_job_set_pages (print_job, pages);
+
+  if (pages == GTK_PRINT_PAGES_RANGES)
+    ranges = gtk_print_settings_get_page_ranges (settings, &n_ranges);
+  else
+    {
+      ranges = NULL;
+      n_ranges = 0;
+    }
+
+  gtk_print_job_set_page_ranges (print_job, ranges, n_ranges);
+  gtk_print_job_set_collate (print_job, gtk_print_settings_get_collate (settings));
+  gtk_print_job_set_reverse (print_job, gtk_print_settings_get_reverse (settings));
+  gtk_print_job_set_num_copies (print_job, gtk_print_settings_get_n_copies (settings));
+  gtk_print_job_set_n_up (print_job, gtk_print_settings_get_number_up (settings));
+  gtk_print_job_set_n_up_layout (print_job, gtk_print_settings_get_number_up_layout (settings));
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)
-    print_job->scale = scale/100.0;
+    gtk_print_job_set_scale (print_job, scale / 100.0);
 
-  print_job->page_set = gtk_print_settings_get_page_set (settings);
-  print_job->rotate_to_orientation = TRUE;
+  gtk_print_job_set_page_set (print_job, gtk_print_settings_get_page_set (settings));
+  gtk_print_job_set_rotate (print_job, TRUE);
 }
 
 static GList *
