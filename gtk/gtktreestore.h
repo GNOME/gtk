@@ -40,25 +40,15 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_STORE_CLASS(klass)		(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_STORE))
 #define GTK_TREE_STORE_GET_CLASS(obj)		(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_STORE, GtkTreeStoreClass))
 
-typedef struct _GtkTreeStore       GtkTreeStore;
-typedef struct _GtkTreeStoreClass  GtkTreeStoreClass;
+typedef struct _GtkTreeStore        GtkTreeStore;
+typedef struct _GtkTreeStoreClass   GtkTreeStoreClass;
+typedef struct _GtkTreeStorePrivate GtkTreeStorePrivate;
 
 struct _GtkTreeStore
 {
   GObject parent;
 
-  gint GSEAL (stamp);
-  gpointer GSEAL (root);
-  gpointer GSEAL (last);
-  gint GSEAL (n_columns);
-  gint GSEAL (sort_column_id);
-  GList *GSEAL (sort_list);
-  GtkSortType GSEAL (order);
-  GType *GSEAL (column_headers);
-  GtkTreeIterCompareFunc GSEAL (default_sort_func);
-  gpointer GSEAL (default_sort_data);
-  GDestroyNotify GSEAL (default_sort_destroy);
-  guint GSEAL (columns_dirty) : 1;
+  GtkTreeStorePrivate *priv;
 };
 
 struct _GtkTreeStoreClass
