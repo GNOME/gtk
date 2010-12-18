@@ -1,0 +1,443 @@
+/* GDK - The GIMP Drawing Kit
+ * Copyright (C) 2009 Carlos Garnacho <carlosg@gnome.org>
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include "config.h"
+
+#include <string.h>
+#include <gdk/gdktypes.h>
+#include <gdk/gdkdevicemanager.h>
+#include "gdkdevicemanager-wayland.h"
+#include "gdkdevice-wayland.h"
+#include "gdkkeysyms.h"
+#include "gdkprivate-wayland.h"
+#include "gdkeventsource.h"
+
+
+static void    gdk_device_manager_core_finalize    (GObject *object);
+
+static GList * gdk_device_manager_core_list_devices (GdkDeviceManager *device_manager,
+                                                     GdkDeviceType     type);
+static GdkDevice * gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager);
+
+G_DEFINE_TYPE (GdkDeviceManagerCore, gdk_device_manager_core, GDK_TYPE_DEVICE_MANAGER)
+
+static void
+gdk_device_manager_core_class_init (GdkDeviceManagerCoreClass *klass)
+{
+  GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gdk_device_manager_core_finalize;
+  device_manager_class->list_devices = gdk_device_manager_core_list_devices;
+  device_manager_class->get_client_pointer = gdk_device_manager_core_get_client_pointer;
+}
+
+static void
+input_handle_motion(void *data, struct wl_input_device *input_device,
+		    uint32_t time,
+		    int32_t x, int32_t y, int32_t sx, int32_t sy)
+{
+  GdkWaylandDevice *device = data;
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_NOTHING);
+
+  device->x = x;
+  device->y = y;
+  device->surface_x = sx;
+  device->surface_y = sy;
+
+  event->motion.type = GDK_MOTION_NOTIFY;
+  event->motion.window = g_object_ref (device->pointer_focus);
+  gdk_event_set_device (event, device->pointer);
+  event->motion.time = time;
+  event->motion.x = (gdouble) sx;
+  event->motion.y = (gdouble) sy;
+  event->motion.x_root = (gdouble) x;
+  event->motion.y_root = (gdouble) y;
+  event->motion.axes = NULL;
+  event->motion.state = device->modifiers;
+  event->motion.is_hint = 0;
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+static void
+input_handle_button(void *data, struct wl_input_device *input_device,
+		     uint32_t time, uint32_t button, uint32_t state)
+{
+  GdkWaylandDevice *device = data;
+  GdkEvent *event;
+  uint32_t modifier;
+
+  fprintf (stderr, "button event %d, state %d\n", button, state);
+
+  event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
+  event->button.window = g_object_ref (device->pointer_focus);
+  gdk_event_set_device (event, device->pointer);
+  event->button.time = time;
+  event->button.x = (gdouble) device->surface_x;
+  event->button.y = (gdouble) device->surface_y;
+  event->button.x_root = (gdouble) device->x;
+  event->button.y_root = (gdouble) device->y;
+  event->button.axes = NULL;
+  event->button.state = device->modifiers;
+  event->button.button = button - 271;
+
+  modifier = 1 << (8 + button - 272);
+  if (state)
+    device->modifiers |= modifier;
+  else
+    device->modifiers &= ~modifier;
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+static void
+input_handle_key(void *data, struct wl_input_device *input_device,
+		 uint32_t time, uint32_t key, uint32_t state)
+{
+  GdkWaylandDevice *device = data;
+  GdkEvent *event;
+  uint32_t code, modifier, level;
+
+  event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+  event->key.window = g_object_ref (device->keyboard_focus);
+  gdk_event_set_device (event, device->keyboard);
+  event->button.time = time;
+  event->key.state = device->modifiers;
+  event->key.group = 0;
+  event->key.hardware_keycode = key;
+
+  code = key + device->xkb->min_key_code;
+
+  level = 0;
+  if (device->modifiers & ShiftMask &&
+      XkbKeyGroupWidth(device->xkb, code, 0) > 1)
+    level = 1;
+
+  event->key.keyval = XkbKeySymEntry(device->xkb, code, level, 0);
+
+  modifier = device->xkb->map->modmap[code];
+  if (state)
+    device->modifiers |= modifier;
+  else
+    device->modifiers &= ~modifier;
+
+  event->key.is_modifier = modifier > 0;
+
+  if (event->key.keyval == GDK_KEY_Escape)
+    {
+      event->key.length = 1;
+      event->key.string = g_strdup ("\033");
+    }
+  else if (event->key.keyval == GDK_KEY_Return ||
+	   event->key.keyval == GDK_KEY_KP_Enter)
+    {
+      event->key.length = 1;
+      event->key.string = g_strdup ("\r");
+    }
+  else if (event->key.state & GDK_CONTROL_MASK)
+    {
+      gsize bytes_written;
+      gint len;
+      gchar buf[7];
+      int c = event->key.keyval;
+
+      /* Apply the control key - Taken from Xlib */
+      if ((c >= XK_at && c < '\177') || c == ' ')
+	c &= 0x1F;
+      else if (c == XK_2)
+	{
+	  event->key.string = g_memdup ("\0\0", 2);
+	  event->key.length = 1;
+	  buf[0] = '\0';
+	  goto out;
+	}
+      else if (c >= XK_3 && c <= XK_7)
+	c -= (XK_3 - '\033');
+      else if (c == XK_8)
+	c = '\177';
+      else if (c == XK_slash)
+	c = '_' & 0x1F;
+
+      len = g_unichar_to_utf8 (c, buf);
+      buf[len] = '\0';
+
+      event->key.string = g_locale_from_utf8 (buf, len,
+					      NULL, &bytes_written,
+					      NULL);
+      if (event->key.string)
+	event->key.length = bytes_written;
+    }
+  else
+    {
+      char buffer[128];
+      xkb_keysym_to_string(event->key.keyval, buffer, sizeof buffer);
+      event->key.string = g_strdup (buffer);
+      event->key.length = strlen(event->key.string);
+    }
+
+ out:
+  _gdk_wayland_display_deliver_event (device->display, event);
+
+  fprintf (stderr, "keyboard event, code %d, sym %d, string %s, mods 0x%x\n",
+	   code, event->key.keyval, event->key.string, event->key.state);
+}
+
+static void
+input_handle_pointer_focus(void *data,
+			   struct wl_input_device *input_device,
+			   uint32_t time, struct wl_surface *surface,
+			   int32_t x, int32_t y, int32_t sx, int32_t sy)
+{
+  GdkWaylandDevice *device = data;
+  GdkEvent *event;
+
+  if (device->pointer_focus)
+    {
+      event = gdk_event_new (GDK_LEAVE_NOTIFY);
+      event->crossing.window = g_object_ref (device->pointer_focus);
+      gdk_event_set_device (event, device->pointer);
+      event->crossing.subwindow = NULL;
+      event->crossing.time = time;
+      event->crossing.x = (gdouble) device->surface_x;
+      event->crossing.y = (gdouble) device->surface_y;
+      event->crossing.x_root = (gdouble) device->x;
+      event->crossing.y_root = (gdouble) device->y;
+
+      event->crossing.mode = GDK_CROSSING_NORMAL;
+      event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+      event->crossing.focus = TRUE;
+      event->crossing.state = 0;
+
+      _gdk_wayland_display_deliver_event (device->display, event);
+
+      g_object_unref(device->pointer_focus);
+      device->pointer_focus = NULL;
+    }
+
+  if (surface)
+    {
+      device->pointer_focus = wl_surface_get_user_data(surface);
+      g_object_ref(device->pointer_focus);
+
+      event = gdk_event_new (GDK_ENTER_NOTIFY);
+      event->crossing.window = g_object_ref (device->pointer_focus);
+      gdk_event_set_device (event, device->pointer);
+      event->crossing.subwindow = NULL;
+      event->crossing.time = time;
+      event->crossing.x = (gdouble) sx;
+      event->crossing.y = (gdouble) sy;
+      event->crossing.x_root = (gdouble) x;
+      event->crossing.y_root = (gdouble) y;
+
+      event->crossing.mode = GDK_CROSSING_NORMAL;
+      event->crossing.detail = GDK_NOTIFY_ANCESTOR;
+      event->crossing.focus = TRUE;
+      event->crossing.state = 0;
+
+      device->surface_x = sx;
+      device->surface_y = sy;
+      device->x = x;
+      device->y = y;
+
+      _gdk_wayland_display_deliver_event (device->display, event);
+    }
+
+  fprintf (stderr, "pointer focus surface %p, window %p\n",
+	   surface, device->pointer_focus);
+}
+
+static void
+update_modifiers(GdkWaylandDevice *device, struct wl_array *keys)
+{
+  uint32_t *k, *end;
+
+  end = keys->data + keys->size;
+  for (k = keys->data; k < end; k++)
+    device->modifiers |= device->xkb->map->modmap[*k];
+
+  fprintf (stderr, "modifiers: 0x%x\n", device->modifiers);
+}
+
+static void
+input_handle_keyboard_focus(void *data,
+			    struct wl_input_device *input_device,
+			    uint32_t time,
+			    struct wl_surface *surface,
+			    struct wl_array *keys)
+{
+  GdkWaylandDevice *device = data;
+  GdkEvent *event;
+
+  fprintf (stderr, "keyboard focus surface %p\n", surface);
+
+  if (device->keyboard_focus)
+    {
+      event = gdk_event_new (GDK_FOCUS_CHANGE);
+      event->focus_change.window = g_object_ref (device->keyboard_focus);
+      event->focus_change.send_event = FALSE;
+      event->focus_change.in = FALSE;
+      gdk_event_set_device (event, device->keyboard);
+
+      g_object_unref(device->pointer_focus);
+      device->keyboard_focus = NULL;
+
+      _gdk_wayland_display_deliver_event (device->display, event);
+    }
+
+  if (surface)
+    {
+      device->keyboard_focus = wl_surface_get_user_data(surface);
+      g_object_ref(device->keyboard_focus);
+
+      event = gdk_event_new (GDK_FOCUS_CHANGE);
+      event->focus_change.window = g_object_ref (device->keyboard_focus);
+      event->focus_change.send_event = FALSE;
+      event->focus_change.in = TRUE;
+      gdk_event_set_device (event, device->keyboard);
+
+      update_modifiers (device, keys);
+
+      _gdk_wayland_display_deliver_event (device->display, event);
+    }
+}
+
+static const struct wl_input_device_listener input_device_listener = {
+	input_handle_motion,
+	input_handle_button,
+	input_handle_key,
+	input_handle_pointer_focus,
+	input_handle_keyboard_focus,
+};
+
+void
+gdk_device_manager_core_add_device (GdkDeviceManager *device_manager,
+				    struct wl_input_device *wl_device)
+{
+  GdkDisplay *display;
+  GdkDeviceManagerCore *device_manager_core =
+    GDK_DEVICE_MANAGER_CORE(device_manager);
+  struct xkb_rule_names names;
+  GdkWaylandDevice *device;
+
+  device = g_new0 (GdkWaylandDevice, 1);
+  display = gdk_device_manager_get_display (device_manager);
+
+  device->display = display;
+  device->pointer = g_object_new (GDK_TYPE_DEVICE_CORE,
+				  "name", "Core Pointer",
+				  "type", GDK_DEVICE_TYPE_MASTER,
+				  "input-source", GDK_SOURCE_MOUSE,
+				  "input-mode", GDK_MODE_SCREEN,
+				  "has-cursor", TRUE,
+				  "display", display,
+				  "device-manager", device_manager,
+				  NULL);
+
+  device->keyboard = g_object_new (GDK_TYPE_DEVICE_CORE,
+				   "name", "Core Keyboard",
+				   "type", GDK_DEVICE_TYPE_MASTER,
+				   "input-source", GDK_SOURCE_KEYBOARD,
+				   "input-mode", GDK_MODE_SCREEN,
+				   "has-cursor", FALSE,
+				   "display", display,
+				   "device-manager", device_manager,
+				   NULL);
+
+  GDK_DEVICE_CORE (device->pointer)->device = device;
+  GDK_DEVICE_CORE (device->keyboard)->device = device;
+  device->device = wl_device;
+
+  names.rules = "evdev";
+  names.model = "pc105";
+  names.layout = "us";
+  names.variant = "";
+  names.options = "";
+  device->xkb = xkb_compile_keymap_from_rules(&names);
+
+  wl_input_device_add_listener(device->device,
+			       &input_device_listener, device);
+
+  device_manager_core->devices =
+    g_list_prepend (device_manager_core->devices, device->keyboard);
+  device_manager_core->devices =
+    g_list_prepend (device_manager_core->devices, device->pointer);
+
+  _gdk_device_set_associated_device (device->pointer, device->keyboard);
+  _gdk_device_set_associated_device (device->keyboard, device->pointer);
+}
+
+static void
+gdk_device_manager_core_init (GdkDeviceManagerCore *device_manager)
+{
+}
+
+static void
+free_device (void *data, void *user_data)
+{
+  g_object_unref (data);
+}
+
+static void
+gdk_device_manager_core_finalize (GObject *object)
+{
+  GdkDeviceManagerCore *device_manager_core;
+
+  device_manager_core = GDK_DEVICE_MANAGER_CORE (object);
+
+  g_list_foreach (device_manager_core->devices, free_device, NULL);
+  g_list_free (device_manager_core->devices);
+
+  G_OBJECT_CLASS (gdk_device_manager_core_parent_class)->finalize (object);
+}
+
+static GList *
+gdk_device_manager_core_list_devices (GdkDeviceManager *device_manager,
+                                      GdkDeviceType     type)
+{
+  GdkDeviceManagerCore *device_manager_core;
+  GList *devices = NULL;
+
+  if (type == GDK_DEVICE_TYPE_MASTER)
+    {
+      device_manager_core = (GdkDeviceManagerCore *) device_manager;
+      devices = g_list_copy(device_manager_core->devices);
+    }
+
+  return devices;
+}
+
+static GdkDevice *
+gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager)
+{
+  GdkDeviceManagerCore *device_manager_core;
+
+  device_manager_core = (GdkDeviceManagerCore *) device_manager;
+  return device_manager_core->devices->data;
+}
+
+GdkDeviceManager *
+_gdk_device_manager_new (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
+                       "display", display,
+                       NULL);
+}

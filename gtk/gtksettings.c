@@ -1466,9 +1466,12 @@ gtk_settings_get_for_screen (GdkScreen *screen)
       settings_init_style (settings);
       settings_update_double_click (settings);
 #ifdef GDK_WINDOWING_X11
-      settings_update_cursor_theme (settings);
-      settings_update_resolution (settings);
-      settings_update_font_options (settings);
+      if (GDK_IS_X11_SCREEN (screen))
+	{
+	  settings_update_cursor_theme (settings);
+	  settings_update_resolution (settings);
+	  settings_update_font_options (settings);
+	}
 #endif
       settings_update_color_scheme (settings);
     }

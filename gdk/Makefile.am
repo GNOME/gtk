@@ -11,7 +11,7 @@ INTROSPECTION_COMPILER_ARGS = \
 
 SUBDIRS = $(GDK_BACKENDS) . tests
 
-DIST_SUBDIRS = win32 x11 quartz tests
+DIST_SUBDIRS = win32 x11 quartz wayland tests
 
 CLEANFILES =
 
@@ -175,6 +175,10 @@ libgdk_3_0_la_LIBADD += win32/libgdk-win32.la
 libgdk_3_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
 libgdk_3_0_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
 endif # USE_WIN32
+
+if USE_WAYLAND
+libgdk_3_0_la_LIBADD += wayland/libgdk-wayland.la
+endif
 
 if HAVE_INTROSPECTION
 
