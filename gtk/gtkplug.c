@@ -33,6 +33,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
+#include "gtksocketprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
@@ -346,8 +347,8 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   gtk_plug_set_is_child (plug, TRUE);
   priv->same_app = TRUE;
-  socket_->same_app = TRUE;
-  socket_->plug_widget = widget;
+  socket_->priv->same_app = TRUE;
+  socket_->priv->plug_widget = widget;
 
   priv->socket_window = gtk_widget_get_window (GTK_WIDGET (socket_));
   g_object_ref (priv->socket_window);
@@ -436,14 +437,14 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   gtk_widget_unparent (GTK_WIDGET (plug));
   _gtk_widget_set_in_reparent (widget, FALSE);
   
-  socket_->plug_widget = NULL;
-  if (socket_->plug_window != NULL)
+  socket_->priv->plug_widget = NULL;
+  if (socket_->priv->plug_window != NULL)
     {
-      g_object_unref (socket_->plug_window);
-      socket_->plug_window = NULL;
+      g_object_unref (socket_->priv->plug_window);
+      socket_->priv->plug_window = NULL;
     }
   
-  socket_->same_app = FALSE;
+  socket_->priv->same_app = FALSE;
 
   priv->same_app = FALSE;
   if (priv->socket_window != NULL)
