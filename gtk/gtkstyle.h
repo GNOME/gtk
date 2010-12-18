@@ -634,14 +634,6 @@ void gtk_style_get                (GtkStyle    *style,
 #endif
 
 /* --- private API --- */
-const GValue* _gtk_style_peek_property_value (GtkStyle           *style,
-					      GType               widget_type,
-					      GParamSpec         *pspec,
-					      GtkRcPropertyParser parser);
-
-void          _gtk_style_init_for_settings   (GtkStyle           *style,
-                                              GtkSettings        *settings);
-
 void          _gtk_style_shade               (const GdkColor     *a,
                                               GdkColor           *b,
                                               gdouble             k);
@@ -655,7 +647,7 @@ void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
 void   _gtk_widget_get_cursor_color (GtkWidget          *widget,
 				     GdkColor           *color);
 
-gboolean   gtk_style_has_context     (GtkStyle *style);
+gboolean   gtk_style_has_context    (GtkStyle *style);
 
 
 

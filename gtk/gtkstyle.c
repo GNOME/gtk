@@ -82,7 +82,6 @@ typedef struct {
 typedef struct _GtkStylePrivate GtkStylePrivate;
 
 struct _GtkStylePrivate {
-  GSList *color_hashes;
   GtkStyleContext *context;
   gulong context_changed_id;
 };
@@ -104,8 +103,6 @@ static void      gtk_style_get_property         (GObject        *object,
                                                  GValue         *value,
                                                  GParamSpec     *pspec);
 
-static void	 gtk_style_realize		(GtkStyle	*style,
-						 GdkVisual      *visual);
 static void      gtk_style_real_realize        (GtkStyle	*style);
 static void      gtk_style_real_unrealize      (GtkStyle	*style);
 static void      gtk_style_real_copy           (GtkStyle	*style,
@@ -334,8 +331,6 @@ static void hls_to_rgb			(gdouble	 *h,
 					 gdouble	 *l,
 					 gdouble	 *s);
 
-static void style_unrealize_cursors     (GtkStyle *style);
-
 static void transform_detail_string (const gchar     *detail,
                                      GtkStyleContext *context);
 
@@ -378,54 +373,13 @@ G_DEFINE_TYPE (GtkStyle, gtk_style, G_TYPE_OBJECT)
 
 /* --- functions --- */
 
-/**
- * _gtk_style_init_for_settings:
- * @style: a #GtkStyle
- * @settings: a #GtkSettings
- * 
- * Initializes the font description in @style according to the default
- * font name of @settings. This is called for gtk_style_new() with
- * the settings for the default screen (if any); if we are creating
- * a style for a particular screen, we then call it again in a
- * location where we know the correct settings.
- * The reason for this is that gtk_rc_style_create_style() doesn't
- * take the screen for an argument.
- **/
-void
-_gtk_style_init_for_settings (GtkStyle    *style,
-			      GtkSettings *settings)
-{
-  const gchar *font_name = _gtk_rc_context_get_default_font_name (settings);
-
-  if (style->font_desc)
-    pango_font_description_free (style->font_desc);
-  
-  style->font_desc = pango_font_description_from_string (font_name);
-      
-  if (!pango_font_description_get_family (style->font_desc))
-    {
-      g_warning ("Default font does not have a family set");
-      pango_font_description_set_family (style->font_desc, "Sans");
-    }
-  if (pango_font_description_get_size (style->font_desc) <= 0)
-    {
-      g_warning ("Default font does not have a positive size");
-      pango_font_description_set_size (style->font_desc, 10 * PANGO_SCALE);
-    }
-}
-
 static void
 gtk_style_init (GtkStyle *style)
 {
   gint i;
-  
-  GtkSettings *settings = gtk_settings_get_default ();
-  
-  if (settings)
-    _gtk_style_init_for_settings (style, settings);
-  else
-    style->font_desc = pango_font_description_from_string ("Sans 10");
-  
+
+  style->font_desc = pango_font_description_from_string ("Sans 10");
+
   style->attach_count = 0;
   
   style->black.red = 0;
@@ -557,25 +511,6 @@ gtk_style_class_init (GtkStyleClass *klass)
 }
 
 static void
-clear_property_cache (GtkStyle *style)
-{
-  if (style->property_cache)
-    {
-      guint i;
-
-      for (i = 0; i < style->property_cache->len; i++)
-	{
-	  PropertyValue *node = &g_array_index (style->property_cache, PropertyValue, i);
-
-	  g_param_spec_unref (node->pspec);
-	  g_value_unset (&node->value);
-	}
-      g_array_free (style->property_cache, TRUE);
-      style->property_cache = NULL;
-    }
-}
-
-static void
 gtk_style_finalize (GObject *object)
 {
   GtkStyle *style = GTK_STYLE (object);
@@ -583,8 +518,6 @@ gtk_style_finalize (GObject *object)
 
   g_return_if_fail (style->attach_count == 0);
 
-  clear_property_cache (style);
-  
   /* All the styles in the list have the same 
    * style->styles pointer. If we delete the 
    * *first* style from the list, we need to update
@@ -611,9 +544,6 @@ gtk_style_finalize (GObject *object)
 
   g_slist_foreach (style->icon_factories, (GFunc) g_object_unref, NULL);
   g_slist_free (style->icon_factories);
-
-  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_unref, NULL);
-  g_slist_free (priv->color_hashes);
 
   pango_font_description_free (style->font_desc);
 
@@ -748,6 +678,7 @@ gtk_style_update_from_context (GtkStyle *style)
   GtkStylePrivate *priv;
   GtkStateType state;
   GtkBorder *padding;
+  gint i;
 
   priv = GTK_STYLE_GET_PRIVATE (style);
 
@@ -792,6 +723,33 @@ gtk_style_update_from_context (GtkStyle *style)
 
       gtk_border_free (padding);
     }
+
+  for (i = 0; i < 5; i++)
+    {
+      _gtk_style_shade (&style->bg[i], &style->light[i], LIGHTNESS_MULT);
+      _gtk_style_shade (&style->bg[i], &style->dark[i], DARKNESS_MULT);
+
+      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
+      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
+      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
+
+      style->text_aa[i].red = (style->text[i].red + style->base[i].red) / 2;
+      style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
+      style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
+    }
+
+  style->black.red = 0x0000;
+  style->black.green = 0x0000;
+  style->black.blue = 0x0000;
+
+  style->white.red = 0xffff;
+  style->white.green = 0xffff;
+  style->white.blue = 0xffff;
+
+  for (i = 0; i < 5; i++)
+    style->background[i] = cairo_pattern_create_rgb (style->bg[i].red / 65535.0,
+                                                     style->bg[i].green / 65535.0,
+                                                     style->bg[i].blue / 65535.0);
 }
 
 static void
@@ -837,26 +795,6 @@ gtk_style_copy (GtkStyle *style)
   new_style = GTK_STYLE_GET_CLASS (style)->clone (style);
   GTK_STYLE_GET_CLASS (style)->copy (new_style, style);
 
-  return new_style;
-}
-
-static GtkStyle*
-gtk_style_duplicate (GtkStyle *style)
-{
-  GtkStyle *new_style;
-  
-  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
-  
-  new_style = gtk_style_copy (style);
-  
-  /* All the styles in the list have the same 
-   * style->styles pointer. When we insert a new 
-   * style, we append it to the list to avoid having 
-   * to update the existing ones. 
-   */
-  style->styles = g_slist_append (style->styles, new_style);
-  new_style->styles = style->styles;  
-  
   return new_style;
 }
 
@@ -914,69 +852,10 @@ GtkStyle*
 gtk_style_attach (GtkStyle  *style,
                   GdkWindow *window)
 {
-  GSList *styles;
-  GtkStyle *new_style = NULL;
-  GdkVisual *visual;
-  
   g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
   g_return_val_if_fail (window != NULL, NULL);
-  
-  visual = gdk_window_get_visual (window);
-  
-  if (!style->styles)
-    style->styles = g_slist_append (NULL, style);
-  
-  styles = style->styles;
-  while (styles)
-    {
-      new_style = styles->data;
-      
-      if (new_style->visual == visual)
-        break;
 
-      new_style = NULL;
-      styles = styles->next;
-    }
-
-  if (!new_style)
-    {
-      styles = style->styles;
-      
-      while (styles)
-	{
-	  new_style = styles->data;
-	  
-	  if (new_style->attach_count == 0)
-	    {
-	      gtk_style_realize (new_style, visual);
-	      break;
-	    }
-	  
-	  new_style = NULL;
-	  styles = styles->next;
-	}
-    }
-  
-  if (!new_style)
-    {
-      new_style = gtk_style_duplicate (style);
-      gtk_style_realize (new_style, visual);
-    }
-
-  /* A style gets a refcount from being attached */
-  if (new_style->attach_count == 0)
-    g_object_ref (new_style);
-
-  /* Another refcount belongs to the parent */
-  if (style != new_style) 
-    {
-      g_object_unref (style);
-      g_object_ref (new_style);
-    }
-  
-  new_style->attach_count++;
-  
-  return new_style;
+  return style;
 }
 
 /**
@@ -992,35 +871,6 @@ void
 gtk_style_detach (GtkStyle *style)
 {
   g_return_if_fail (GTK_IS_STYLE (style));
-
-  if (style->attach_count == 0)
-    return;
-
-  style->attach_count -= 1;
-  if (style->attach_count == 0)
-    {
-      g_signal_emit (style, unrealize_signal, 0);
-      
-      g_object_unref (style->visual);
-      style->visual = NULL;
-
-      if (style->private_font_desc)
-	{
-	  pango_font_description_free (style->private_font_desc);
-	  style->private_font_desc = NULL;
-	}
-
-      g_object_unref (style);
-    }
-}
-
-static void
-gtk_style_realize (GtkStyle  *style,
-                   GdkVisual *visual)
-{
-  style->visual = g_object_ref (visual);
-
-  g_signal_emit (style, realize_signal, 0);
 }
 
 /**
@@ -1141,8 +991,6 @@ static void
 gtk_style_real_copy (GtkStyle *style,
 		     GtkStyle *src)
 {
-  GtkStylePrivate *priv = GTK_STYLE_GET_PRIVATE (style);
-  GtkStylePrivate *src_priv = GTK_STYLE_GET_PRIVATE (src);
   gint i;
   
   for (i = 0; i < 5; i++)
@@ -1179,64 +1027,12 @@ gtk_style_real_copy (GtkStyle *style,
   g_slist_free (style->icon_factories);
   style->icon_factories = g_slist_copy (src->icon_factories);
   g_slist_foreach (style->icon_factories, (GFunc) g_object_ref, NULL);
-
-  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_unref, NULL);
-  g_slist_free (priv->color_hashes);
-  priv->color_hashes = g_slist_copy (src_priv->color_hashes);
-  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_ref, NULL);
-
-  /* don't copy, just clear cache */
-  clear_property_cache (style);
 }
 
 static void
 gtk_style_real_init_from_rc (GtkStyle   *style,
 			     GtkRcStyle *rc_style)
 {
-  GtkStylePrivate *priv = GTK_STYLE_GET_PRIVATE (style);
-  gint i;
-
-  /* cache _should_ be still empty */
-  clear_property_cache (style);
-
-  if (rc_style->font_desc)
-    pango_font_description_merge (style->font_desc, rc_style->font_desc, TRUE);
-    
-  for (i = 0; i < 5; i++)
-    {
-      if (rc_style->color_flags[i] & GTK_RC_FG)
-	style->fg[i] = rc_style->fg[i];
-      if (rc_style->color_flags[i] & GTK_RC_BG)
-	style->bg[i] = rc_style->bg[i];
-      if (rc_style->color_flags[i] & GTK_RC_TEXT)
-	style->text[i] = rc_style->text[i];
-      if (rc_style->color_flags[i] & GTK_RC_BASE)
-	style->base[i] = rc_style->base[i];
-    }
-
-  if (rc_style->xthickness >= 0)
-    style->xthickness = rc_style->xthickness;
-  if (rc_style->ythickness >= 0)
-    style->ythickness = rc_style->ythickness;
-
-  style->icon_factories = g_slist_copy (rc_style->icon_factories);
-  g_slist_foreach (style->icon_factories, (GFunc) g_object_ref, NULL);
-
-  priv->color_hashes = g_slist_copy (_gtk_rc_style_get_color_hashes (rc_style));
-  g_slist_foreach (priv->color_hashes, (GFunc) g_hash_table_ref, NULL);
-}
-
-static gint
-style_property_values_cmp (gconstpointer bsearch_node1,
-			   gconstpointer bsearch_node2)
-{
-  const PropertyValue *val1 = bsearch_node1;
-  const PropertyValue *val2 = bsearch_node2;
-
-  if (val1->widget_type == val2->widget_type)
-    return val1->pspec < val2->pspec ? -1 : val1->pspec == val2->pspec ? 0 : 1;
-  else
-    return val1->widget_type < val2->widget_type ? -1 : 1;
 }
 
 /**
@@ -1258,9 +1054,9 @@ gtk_style_get_style_property (GtkStyle     *style,
                               const gchar *property_name,
                               GValue      *value)
 {
+  GtkStylePrivate *priv;
   GtkWidgetClass *klass;
   GParamSpec *pspec;
-  GtkRcPropertyParser parser;
   const GValue *peek_value;
 
   klass = g_type_class_ref (widget_type);
@@ -1276,10 +1072,10 @@ gtk_style_get_style_property (GtkStyle     *style,
       return;
     }
 
-  parser = g_param_spec_get_qdata (pspec,
-                                   g_quark_from_static_string ("gtk-rc-property-parser"));
-
-  peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
+  priv = GTK_STYLE_GET_PRIVATE (style);
+  peek_value = _gtk_style_context_peek_style_property (priv->context,
+                                                       widget_type,
+                                                       0, pspec);
 
   if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
     g_value_copy (peek_value, value);
@@ -1312,6 +1108,7 @@ gtk_style_get_valist (GtkStyle    *style,
                       const gchar *first_property_name,
                       va_list      var_args)
 {
+  GtkStylePrivate *priv;
   const char *property_name;
   GtkWidgetClass *klass;
 
@@ -1319,11 +1116,11 @@ gtk_style_get_valist (GtkStyle    *style,
 
   klass = g_type_class_ref (widget_type);
 
+  priv = GTK_STYLE_GET_PRIVATE (style);
   property_name = first_property_name;
   while (property_name)
     {
       GParamSpec *pspec;
-      GtkRcPropertyParser parser;
       const GValue *peek_value;
       gchar *error;
 
@@ -1338,10 +1135,8 @@ gtk_style_get_valist (GtkStyle    *style,
           break;
         }
 
-      parser = g_param_spec_get_qdata (pspec,
-                                       g_quark_from_static_string ("gtk-rc-property-parser"));
-
-      peek_value = _gtk_style_peek_property_value (style, widget_type, pspec, parser);
+      peek_value = _gtk_style_context_peek_style_property (priv->context, widget_type,
+                                                           0, pspec);
       G_VALUE_LCOPY (peek_value, var_args, 0, &error);
       if (error)
         {
@@ -1383,195 +1178,14 @@ gtk_style_get (GtkStyle    *style,
   va_end (var_args);
 }
 
-const GValue*
-_gtk_style_peek_property_value (GtkStyle           *style,
-				GType               widget_type,
-				GParamSpec         *pspec,
-				GtkRcPropertyParser parser)
-{
-  PropertyValue *pcache, key = { 0, NULL, { 0, } };
-  const GtkRcProperty *rcprop = NULL;
-  guint i;
-
-  g_return_val_if_fail (GTK_IS_STYLE (style), NULL);
-  g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), NULL);
-  g_return_val_if_fail (g_type_is_a (pspec->owner_type, GTK_TYPE_WIDGET), NULL);
-  g_return_val_if_fail (g_type_is_a (widget_type, pspec->owner_type), NULL);
-
-  key.widget_type = widget_type;
-  key.pspec = pspec;
-
-  /* need value cache array */
-  if (!style->property_cache)
-    style->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
-  else
-    {
-      pcache = bsearch (&key,
-			style->property_cache->data, style->property_cache->len,
-			sizeof (PropertyValue), style_property_values_cmp);
-      if (pcache)
-	return &pcache->value;
-    }
-
-  i = 0;
-  while (i < style->property_cache->len &&
-	 style_property_values_cmp (&key, &g_array_index (style->property_cache, PropertyValue, i)) >= 0)
-    i++;
-
-  g_array_insert_val (style->property_cache, i, key);
-  pcache = &g_array_index (style->property_cache, PropertyValue, i);
-
-  /* cache miss, initialize value type, then set contents */
-  g_param_spec_ref (pcache->pspec);
-  g_value_init (&pcache->value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-
-  /* value provided by rc style? */
-  if (style->rc_style)
-    {
-      GQuark prop_quark = g_quark_from_string (pspec->name);
-
-      do
-	{
-	  rcprop = _gtk_rc_style_lookup_rc_property (style->rc_style,
-						     g_type_qname (widget_type),
-						     prop_quark);
-	  if (rcprop)
-	    break;
-	  widget_type = g_type_parent (widget_type);
-	}
-      while (g_type_is_a (widget_type, pspec->owner_type));
-    }
-
-  /* when supplied by rc style, we need to convert */
-  if (rcprop && !_gtk_settings_parse_convert (parser, &rcprop->value,
-					      pspec, &pcache->value))
-    {
-      gchar *contents = g_strdup_value_contents (&rcprop->value);
-      
-      g_message ("%s: failed to retrieve property `%s::%s' of type `%s' from rc file value \"%s\" of type `%s'",
-		 rcprop->origin ? rcprop->origin : "(for origin information, set GTK_DEBUG)",
-		 g_type_name (pspec->owner_type), pspec->name,
-		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-		 contents,
-		 G_VALUE_TYPE_NAME (&rcprop->value));
-      g_free (contents);
-      rcprop = NULL; /* needs default */
-    }
-  
-  /* not supplied by rc style (or conversion failed), revert to default */
-  if (!rcprop)
-    g_param_value_set_default (pspec, &pcache->value);
-
-  return &pcache->value;
-}
-
-static cairo_pattern_t *
-load_background (GdkVisual   *visual,
-	         GdkColor    *bg_color,
-	         const gchar *filename)
-{
-  if (filename == NULL)
-    {
-      return cairo_pattern_create_rgb (bg_color->red   / 65535.0,
-                                       bg_color->green / 65535.0,
-                                       bg_color->blue  / 65535.0);
-    }
-  if (strcmp (filename, "<parent>") == 0)
-    return NULL;
-  else
-    {
-      GdkPixbuf *pixbuf;
-      cairo_surface_t *surface;
-      cairo_pattern_t *pattern;
-      cairo_t *cr;
-      GdkScreen *screen = gdk_visual_get_screen (visual);
-  
-      pixbuf = gdk_pixbuf_new_from_file (filename, NULL);
-      if (!pixbuf)
-        return NULL;
-
-      surface = gdk_window_create_similar_surface (gdk_screen_get_root_window (screen),
-                                                   CAIRO_CONTENT_COLOR,
-                                                   gdk_pixbuf_get_width (pixbuf),
-                                                   gdk_pixbuf_get_height (pixbuf));
-  
-      cr = cairo_create (surface);
-
-      gdk_cairo_set_source_color (cr, bg_color);
-      cairo_paint (cr);
-
-      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-      cairo_paint (cr);
-
-      cairo_destroy (cr);
-      g_object_unref (pixbuf);
-
-      pattern = cairo_pattern_create_for_surface (surface);
-
-      cairo_surface_destroy (surface);
-
-      return pattern;
-    }
-}
-
 static void
 gtk_style_real_realize (GtkStyle *style)
 {
-  gint i;
-
-  for (i = 0; i < 5; i++)
-    {
-      _gtk_style_shade (&style->bg[i], &style->light[i], LIGHTNESS_MULT);
-      _gtk_style_shade (&style->bg[i], &style->dark[i], DARKNESS_MULT);
-
-      style->mid[i].red = (style->light[i].red + style->dark[i].red) / 2;
-      style->mid[i].green = (style->light[i].green + style->dark[i].green) / 2;
-      style->mid[i].blue = (style->light[i].blue + style->dark[i].blue) / 2;
-
-      style->text_aa[i].red = (style->text[i].red + style->base[i].red) / 2;
-      style->text_aa[i].green = (style->text[i].green + style->base[i].green) / 2;
-      style->text_aa[i].blue = (style->text[i].blue + style->base[i].blue) / 2;
-    }
-
-  style->black.red = 0x0000;
-  style->black.green = 0x0000;
-  style->black.blue = 0x0000;
-
-  style->white.red = 0xffff;
-  style->white.green = 0xffff;
-  style->white.blue = 0xffff;
-
-  for (i = 0; i < 5; i++)
-    {
-      const char *image_name;
-
-      if (style->rc_style)
-        image_name = style->rc_style->bg_pixmap_name[i];
-      else
-        image_name = NULL;
-
-      style->background[i] = load_background (style->visual,
-					      &style->bg[i],
-					      image_name);
-    }
 }
 
 static void
 gtk_style_real_unrealize (GtkStyle *style)
 {
-  int i;
-
-  for (i = 0; i < 5; i++)
-    {
-      if (style->background[i])
-	{
-	  cairo_pattern_destroy (style->background[i]);
-	  style->background[i] = NULL;
-	}
-      
-    }
-  
-  style_unrealize_cursors (style);
 }
 
 static void
@@ -4319,19 +3933,6 @@ struct _CursorInfo
   GdkColor primary;
   GdkColor secondary;
 };
-
-static void
-style_unrealize_cursors (GtkStyle *style)
-{
-  CursorInfo *
-  
-  cursor_info = g_object_get_data (G_OBJECT (style), "gtk-style-cursor-info");
-  if (cursor_info)
-    {
-      g_free (cursor_info);
-      g_object_set_data (G_OBJECT (style), I_("gtk-style-cursor-info"), NULL);
-    }
-}
 
 static const GdkColor *
 get_insertion_cursor_color (GtkWidget *widget,

@@ -47,7 +47,6 @@
 typedef struct {
   GtkPathType   type;
   GPatternSpec *pspec;
-  GSList       *path;
   gpointer      user_data;
   guint         seq_id;
 } PatternSpec;
@@ -65,7 +64,6 @@ static GQuark		 key_id_class_binding_set = 0;
 static void
 pattern_spec_free (PatternSpec *pspec)
 {
-  _gtk_rc_free_widget_class_path (pspec->path);
   if (pspec->pspec)
     g_pattern_spec_free (pspec->pspec);
   g_free (pspec);
@@ -972,6 +970,8 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
  *
  * This function is used internally by the GtkRC parsing mechanism to
  * assign match patterns to #GtkBindingSet structures.
+ *
+ * Deprecated: 3.0
  */
 void
 gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
@@ -1009,16 +1009,10 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
   pspec = g_new (PatternSpec, 1);
   pspec->type = path_type;
   if (path_type == GTK_PATH_WIDGET_CLASS)
-    {
-      pspec->pspec = NULL;
-      pspec->path = _gtk_rc_parse_widget_class_path (path_pattern);
-    }
+    pspec->pspec = NULL;
   else
-    {
-      pspec->pspec = g_pattern_spec_new (path_pattern);
-      pspec->path = NULL;
-    }
-    
+    pspec->pspec = g_pattern_spec_new (path_pattern);
+
   pspec->seq_id = priority << 28;
   pspec->user_data = binding_set;
   
@@ -1070,13 +1064,8 @@ binding_match_activate (GSList          *pspec_list,
 
       binding_set = NULL;
       pspec = slist->data;
-      
-      if (pspec->type == GTK_PATH_WIDGET_CLASS)
-        {
-          if (_gtk_rc_match_widget_class (pspec->path, path_length, path, path_reversed))
-	    binding_set = pspec->user_data;
-        }
-      else
+
+      if (pspec->type != GTK_PATH_WIDGET_CLASS)
         {
           if (g_pattern_match (pspec->pspec, path_length, path, path_reversed))
 	    binding_set = pspec->user_data;
@@ -1175,47 +1164,12 @@ gtk_bindings_activate_list (GObject   *object,
 			    GSList    *entries,
 			    gboolean   is_release)
 {
-  GtkWidget *widget = GTK_WIDGET (object);
   gboolean handled = FALSE;
 
   if (!entries)
     return FALSE;
 
-  if (!handled)
-    {
-      guint path_length;
-      gchar *path, *path_reversed;
-      GSList *patterns;
-      gboolean unbound;
-
-      gtk_widget_path (widget, &path_length, &path, &path_reversed);
-      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET, is_release);
-      handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
-      g_slist_free (patterns);
-      g_free (path);
-      g_free (path_reversed);
-
-      if (unbound)
-        return FALSE;
-    }
-
-  if (!handled)
-    {
-      guint path_length;
-      gchar *path, *path_reversed;
-      GSList *patterns;
-      gboolean unbound;
-
-      gtk_widget_class_path (widget, &path_length, &path, &path_reversed);
-      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_WIDGET_CLASS, is_release);
-      handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
-      g_slist_free (patterns);
-      g_free (path);
-      g_free (path_reversed);
-
-      if (unbound)
-        return FALSE;
-    }
+  /* FIXME: Add back binding parsing from user config files */
 
   if (!handled)
     {
@@ -1332,349 +1286,4 @@ gtk_bindings_activate_event (GObject     *object,
   g_slist_free (entries);
 
   return handled;
-}
-
-static guint
-gtk_binding_parse_signal (GScanner       *scanner,
-			  GtkBindingSet  *binding_set,
-			  guint		  keyval,
-			  GdkModifierType modifiers)
-{
-  gchar *signal;
-  guint expected_token = 0;
-  GSList *args;
-  GSList *slist;
-  gboolean done;
-  gboolean negate;
-  gboolean need_arg;
-  gboolean seen_comma;
-  guint token;
-
-  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
-  
-  g_scanner_get_next_token (scanner);
-  if (scanner->token != G_TOKEN_STRING)
-    return G_TOKEN_STRING;
-  g_scanner_peek_next_token (scanner);
-  if (scanner->next_token != '(')
-    {
-      g_scanner_get_next_token (scanner);
-      return '(';
-    }
-  signal = g_strdup (scanner->value.v_string);
-  g_scanner_get_next_token (scanner);
-
-  negate = FALSE;
-  args = NULL;
-  done = FALSE;
-  need_arg = TRUE;
-  seen_comma = FALSE;
-  scanner->config->scan_symbols = FALSE;
-  do
-    {
-      if (need_arg)
-	expected_token = G_TOKEN_INT;
-      else
-	expected_token = ')';
-
-      token = g_scanner_get_next_token (scanner);
-      switch (token)
-	{
-	  GtkBindingArg *arg;
-
-	case G_TOKEN_FLOAT:
-	  if (need_arg)
-	    {
-	      need_arg = FALSE;
-	      arg = g_new (GtkBindingArg, 1);
-	      arg->arg_type = G_TYPE_DOUBLE;
-	      arg->d.double_data = scanner->value.v_float;
-	      if (negate)
-		{
-		  arg->d.double_data = - arg->d.double_data;
-		  negate = FALSE;
-		}
-	      args = g_slist_prepend (args, arg);
-	    }
-	  else
-	    done = TRUE;
-	  break;
-	case G_TOKEN_INT:
-	  if (need_arg)
-	    {
-	      need_arg = FALSE;
-	      arg = g_new (GtkBindingArg, 1);
-	      arg->arg_type = G_TYPE_LONG;
-	      arg->d.long_data = scanner->value.v_int;
-	      if (negate)
-		{
-		  arg->d.long_data = - arg->d.long_data;
-		  negate = FALSE;
-		}
-	      args = g_slist_prepend (args, arg);
-	    }
-          else
-	    done = TRUE;
-	  break;
-	case G_TOKEN_STRING:
-	  if (need_arg && !negate)
-	    {
-	      need_arg = FALSE;
-	      arg = g_new (GtkBindingArg, 1);
-	      arg->arg_type = G_TYPE_STRING;
-	      arg->d.string_data = g_strdup (scanner->value.v_string);
-	      args = g_slist_prepend (args, arg);
-	    }
-	  else
-	    done = TRUE;
-	  break;
-	case G_TOKEN_IDENTIFIER:
-	  if (need_arg && !negate)
-	    {
-	      need_arg = FALSE;
-	      arg = g_new (GtkBindingArg, 1);
-	      arg->arg_type = GTK_TYPE_IDENTIFIER;
-	      arg->d.string_data = g_strdup (scanner->value.v_identifier);
-	      args = g_slist_prepend (args, arg);
-	    }
-	  else
-	    done = TRUE;
-	  break;
-	case '-':
-	  if (!need_arg)
-	    done = TRUE;
-	  else if (negate)
-	    {
-	      expected_token = G_TOKEN_INT;
-	      done = TRUE;
-	    }
-	  else
-	    negate = TRUE;
-	  break;
-	case ',':
-	  seen_comma = TRUE;
-	  if (need_arg)
-	    done = TRUE;
-	  else
-	    need_arg = TRUE;
-	  break;
-	case ')':
-	  if (!(need_arg && seen_comma) && !negate)
-	    {
-	      args = g_slist_reverse (args);
-	      _gtk_binding_entry_add_signall (binding_set,
-                                              keyval,
-                                              modifiers,
-                                              signal,
-                                              args);
-	      expected_token = G_TOKEN_NONE;
-	    }
-	  done = TRUE;
-	  break;
-	default:
-	  done = TRUE;
-	  break;
-	}
-    }
-  while (!done);
-  scanner->config->scan_symbols = TRUE;
-  
-  for (slist = args; slist; slist = slist->next)
-    {
-      GtkBindingArg *arg;
-
-      arg = slist->data;
-      if (G_TYPE_FUNDAMENTAL (arg->arg_type) == G_TYPE_STRING)
-	g_free (arg->d.string_data);
-      g_free (arg);
-    }
-  g_slist_free (args);
-  g_free (signal);
-
-  return expected_token;
-}
-
-static inline guint
-gtk_binding_parse_bind (GScanner       *scanner,
-			GtkBindingSet  *binding_set)
-{
-  guint keyval = 0;
-  GdkModifierType modifiers = 0;
-  gboolean unbind = FALSE;
-  guint token;
-
-  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
-
-  token = g_scanner_get_next_token (scanner);
-  if (token != GTK_RC_TOKEN_BIND &&
-      token != GTK_RC_TOKEN_UNBIND)
-    return GTK_RC_TOKEN_BIND;
-  unbind = token == GTK_RC_TOKEN_UNBIND;
-  g_scanner_get_next_token (scanner);
-  if (scanner->token != G_TOKEN_STRING)
-    return G_TOKEN_STRING;
-  gtk_accelerator_parse (scanner->value.v_string, &keyval, &modifiers);
-  modifiers &= BINDING_MOD_MASK ();
-  if (keyval == 0)
-    return G_TOKEN_STRING;
-
-  if (unbind)
-    {
-      gtk_binding_entry_skip (binding_set, keyval, modifiers);
-      return G_TOKEN_NONE;
-    }
-
-  g_scanner_get_next_token (scanner);
-
-  if (scanner->token != '{')
-    return '{';
-
-  gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
-
-  g_scanner_peek_next_token (scanner);
-  while (scanner->next_token != '}')
-    {
-      switch (scanner->next_token)
-	{
-	  guint expected_token;
-
-	case G_TOKEN_STRING:
-	  expected_token = gtk_binding_parse_signal (scanner,
-						     binding_set,
-						     keyval,
-						     modifiers);
-	  if (expected_token != G_TOKEN_NONE)
-	    return expected_token;
-	  break;
-	default:
-	  g_scanner_get_next_token (scanner);
-	  return '}';
-	}
-      g_scanner_peek_next_token (scanner);
-    }
-  g_scanner_get_next_token (scanner);
-
-  return G_TOKEN_NONE;
-}
-
-guint
-_gtk_binding_parse_binding (GScanner *scanner)
-{
-  GtkBindingSet *binding_set;
-  gchar *name;
-  guint token;
-
-  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
-
-  token = g_scanner_get_next_token (scanner);
-  if (token != GTK_RC_TOKEN_BINDING)
-    return GTK_RC_TOKEN_BINDING;
-  g_scanner_get_next_token (scanner);
-  if (scanner->token != G_TOKEN_STRING)
-    return G_TOKEN_STRING;
-  name = g_strdup (scanner->value.v_string);
-
-  g_scanner_get_next_token (scanner);
-  if (scanner->token != '{')
-    {
-      g_free (name);
-      return G_TOKEN_STRING;
-    }
-
-  binding_set = gtk_binding_set_find (name);
-  if (!binding_set)
-    {
-      binding_set = gtk_binding_set_new (name);
-      binding_set->parsed = 1;
-    }
-  g_free (name);
-
-  g_scanner_peek_next_token (scanner);
-  while (scanner->next_token != '}')
-    {
-      guint next_token = scanner->next_token;
-      switch (next_token)
-	{
-	  guint expected_token;
-
-	case GTK_RC_TOKEN_BIND:
-	case GTK_RC_TOKEN_UNBIND:
-	  expected_token = gtk_binding_parse_bind (scanner, binding_set);
-	  if (expected_token != G_TOKEN_NONE)
-	    return expected_token;
-	  break;
-	default:
-	  g_scanner_get_next_token (scanner);
-	  return '}';
-	}
-      g_scanner_peek_next_token (scanner);
-    }
-  g_scanner_get_next_token (scanner);
-
-  return G_TOKEN_NONE;
-}
-
-static void
-free_pattern_specs (GSList *pattern_specs)
-{
-  GSList *slist;
-
-  for (slist = pattern_specs; slist; slist = slist->next)
-    {
-      PatternSpec *pspec;
-
-      pspec = slist->data;
-
-      pattern_spec_free (pspec);
-    }
-
-  g_slist_free (pattern_specs);
-}
-
-static void
-binding_set_delete (GtkBindingSet *binding_set)
-{
-  GtkBindingEntry *entry, *next;
-
-  entry = binding_set->entries;
-  while (entry)
-    {
-      next = entry->set_next;
-      binding_entry_destroy (entry);
-      entry = next;
-    }
-  
-  free_pattern_specs (binding_set->widget_path_pspecs);
-  free_pattern_specs (binding_set->widget_class_pspecs);
-  free_pattern_specs (binding_set->class_branch_pspecs);
-
-  g_free (binding_set);
-}
-
-/**
- * _gtk_binding_reset_parsed:
- * 
- * Remove all binding sets that were added by gtk_binding_parse_binding().
- */
-void
-_gtk_binding_reset_parsed (void)
-{
-  GSList *slist, *next;
-  
-  slist = binding_set_list;
-  while (slist)
-    {
-      GtkBindingSet *binding_set;
-
-      binding_set = slist->data;
-      next = slist->next;
-
-      if (binding_set->parsed)
-	{
-	  binding_set_list = g_slist_delete_link (binding_set_list, slist);
-	  binding_set_delete (binding_set);
-	}
-
-      slist = next;
-    }
 }

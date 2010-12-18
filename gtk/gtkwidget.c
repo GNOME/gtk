@@ -45,7 +45,6 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gdk/gdk.h"
-#include "gdk/gdkprivate.h" /* Used in gtk_reset_shapes_recurse to avoid copy */
 #include <gobject/gvaluecollector.h>
 #include <gobject/gobjectnotifyqueue.c>
 #include <cairo-gobject.h>
@@ -560,10 +559,7 @@ static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
 								 GtkStateData 	  *data);
-static void             gtk_widget_reset_rc_style               (GtkWidget        *widget);
-static void		gtk_widget_set_style_internal		(GtkWidget	  *widget,
-								 GtkStyle	  *style,
-								 gboolean	   initial_emission);
+;
 static gint		gtk_widget_event_internal		(GtkWidget	  *widget,
 								 GdkEvent	  *event);
 static gboolean		gtk_widget_real_mnemonic_activate	(GtkWidget	  *widget,
@@ -6290,9 +6286,29 @@ gtk_widget_real_query_tooltip (GtkWidget  *widget,
 static void
 gtk_widget_real_style_updated (GtkWidget *widget)
 {
+  if (gtk_widget_get_realized (widget))
+    {
+      /* Trigger ::style-set for old
+       * widgets not listening to this
+       */
+      g_signal_emit (widget,
+                     widget_signals[STYLE_SET],
+                     0,
+                     widget->priv->style);
+    }
+
   if (widget->priv->context)
-    gtk_style_context_invalidate (widget->priv->context);
-  gtk_widget_queue_resize (widget);
+    {
+      gtk_style_context_invalidate (widget->priv->context);
+
+      if (gtk_widget_get_realized (widget) &&
+          gtk_widget_get_has_window (widget))
+        gtk_style_context_set_background (widget->priv->context,
+                                          widget->priv->window);
+    }
+
+  if (widget->priv->anchored)
+    gtk_widget_queue_resize (widget);
 }
 
 static gboolean
@@ -6733,9 +6749,6 @@ gtk_widget_set_name (GtkWidget	 *widget,
 
   if (priv->context)
     gtk_style_context_set_path (priv->context, priv->path);
-
-  if (priv->rc_style)
-    gtk_widget_reset_rc_style (widget);
 
   g_object_notify (G_OBJECT (widget), "name");
 }
@@ -7658,23 +7671,6 @@ gtk_widget_set_style (GtkWidget *widget,
 		      GtkStyle	*style)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  if (style)
-    {
-      gboolean initial_emission;
-
-      initial_emission = !widget->priv->rc_style && !widget->priv->user_style;
-
-      widget->priv->rc_style = FALSE;
-      widget->priv->user_style = TRUE;
-
-      gtk_widget_set_style_internal (widget, style, initial_emission);
-    }
-  else
-    {
-      if (widget->priv->user_style)
-	gtk_widget_reset_rc_style (widget);
-    }
 }
 
 /**
@@ -7698,42 +7694,21 @@ gtk_widget_ensure_style (GtkWidget *widget)
     {
       GtkStyle *style;
 
+      if (widget->priv->style)
+        g_object_unref (widget->priv->style);
+
       style = g_object_new (GTK_TYPE_STYLE,
                             "context", gtk_widget_get_style_context (widget),
                             NULL);
 
-      gtk_widget_set_style_internal (widget, style, TRUE);
+      widget->priv->style = g_object_ref (style);
+
+      g_signal_emit (widget,
+                     widget_signals[STYLE_SET],
+                     0, NULL);
+
       g_object_unref (style);
     }
-
-#if 0
-  if (!widget->priv->rc_style && !widget->priv->user_style)
-    gtk_widget_reset_rc_style (widget);
-#endif
-}
-
-/* Look up the RC style for this widget, unsetting any user style that
- * may be in effect currently
- **/
-static void
-gtk_widget_reset_rc_style (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-  GtkStyle *new_style = NULL;
-  gboolean initial_emission;
-
-  initial_emission = !priv->rc_style && !priv->user_style;
-
-  priv->user_style = FALSE;
-  priv->rc_style = TRUE;
-
-  if (gtk_widget_has_screen (widget))
-    new_style = gtk_rc_get_style (widget);
-  if (!new_style)
-    new_style = gtk_widget_get_default_style ();
-
-  if (initial_emission || new_style != priv->style)
-    gtk_widget_set_style_internal (widget, new_style, initial_emission);
 }
 
 /**
@@ -7790,13 +7765,6 @@ gtk_widget_modify_style (GtkWidget      *widget,
 			   quark_rc_style,
 			   gtk_rc_style_copy (style),
 			   (GDestroyNotify) g_object_unref);
-
-  /* note that "style" may be invalid here if it was the old
-   * modifier style and the only reference was our own.
-   */
-
-  if (widget->priv->rc_style)
-    gtk_widget_reset_rc_style (widget);
 }
 
 /**
@@ -7888,11 +7856,6 @@ modifier_style_changed (GtkModifierStyle *style,
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_invalidate (context);
-
-  g_signal_emit (widget,
-                 widget_signals[STYLE_SET],
-                 0,
-                 widget->priv->style);
 }
 
 static GtkModifierStyle *
@@ -8347,59 +8310,6 @@ static void
 gtk_widget_real_style_set (GtkWidget *widget,
                            GtkStyle  *previous_style)
 {
-  GtkWidgetPrivate *priv = widget->priv;
-
-  if (gtk_widget_get_realized (widget) &&
-      gtk_widget_get_has_window (widget))
-    gtk_style_set_background (priv->style, priv->window,
-                              gtk_widget_get_state (widget));
-}
-
-static void
-gtk_widget_set_style_internal (GtkWidget *widget,
-			       GtkStyle	 *style,
-			       gboolean   initial_emission)
-{
-  GtkWidgetPrivate *priv = widget->priv;
-
-  g_object_ref (widget);
-  g_object_freeze_notify (G_OBJECT (widget));
-
-  if (priv->style != style)
-    {
-      GtkStyle *previous_style;
-
-      if (gtk_widget_get_realized (widget))
-        gtk_style_detach (priv->style);
-
-      previous_style = priv->style;
-      priv->style = style;
-      g_object_ref (priv->style);
-
-      if (gtk_widget_get_realized (widget))
-	priv->style = gtk_style_attach (priv->style, priv->window);
-
-      gtk_widget_update_pango_context (widget);
-      g_signal_emit (widget,
-		     widget_signals[STYLE_SET],
-		     0,
-		     initial_emission ? NULL : previous_style);
-      g_object_unref (previous_style);
-
-      if (priv->anchored && !initial_emission)
-	gtk_widget_queue_resize (widget);
-    }
-  else if (initial_emission)
-    {
-      gtk_widget_update_pango_context (widget);
-      g_signal_emit (widget,
-		     widget_signals[STYLE_SET],
-		     0,
-		     NULL);
-    }
-  g_object_notify (G_OBJECT (widget), "style");
-  g_object_thaw_notify (G_OBJECT (widget));
-  g_object_unref (widget);
 }
 
 typedef struct {
@@ -8594,11 +8504,6 @@ _gtk_widget_propagate_screen_changed (GtkWidget    *widget,
 static void
 reset_style_recurse (GtkWidget *widget, gpointer data)
 {
-#if 0
-  if (widget->priv->rc_style)
-    gtk_widget_reset_rc_style (widget);
-#endif
-
   if (widget->priv->context)
     {
       _gtk_widget_update_path (widget);
@@ -13797,7 +13702,11 @@ style_context_changed (GtkStyleContext *context,
 {
   GtkWidget *widget = user_data;
 
+  gtk_widget_update_pango_context (widget);
   g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
+
+  if (widget->priv->anchored)
+    gtk_widget_queue_resize (widget);
 }
 
 /**

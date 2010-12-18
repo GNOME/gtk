@@ -1334,8 +1334,6 @@ gtk_settings_finalize (GObject *object)
 
   object_list = g_slist_remove (object_list, settings);
 
-  _gtk_rc_context_destroy (settings);
-
   for (i = 0; i < class_n_properties; i++)
     g_value_unset (&settings->property_values[i].value);
   g_free (settings->property_values);
