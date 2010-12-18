@@ -48,8 +48,8 @@ struct _GtkSocketPrivate
   guint is_mapped : 1;
   guint active    : 1;
 
-  GtkAccelGroup *GSEAL (accel_group);
-  GtkWidget *GSEAL (toplevel);
+  GtkAccelGroup *accel_group;
+  GtkWidget *toplevel;
 };
 
 /* In gtksocket.c: */
