@@ -6024,7 +6024,7 @@ gtk_window_client_event (GtkWidget	*widget,
   if (event->message_type == atom_rcfiles) 
     {
       send_client_message_to_embedded_windows (widget, atom_rcfiles);
-      gtk_rc_reparse_all_for_settings (gtk_widget_get_settings (widget), FALSE);
+      gtk_style_context_reset_widgets (gtk_widget_get_screen (widget));
     }
 
   if (event->message_type == atom_iconthemes) 
