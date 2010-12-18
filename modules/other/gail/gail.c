@@ -308,7 +308,7 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
    * plug will report a focus notification.
    */
   if (GTK_IS_SOCKET (widget) &&
-      GTK_SOCKET (widget)->plug_widget == NULL)
+      gtk_socket_get_plug_window (GTK_SOCKET (widget)) != NULL)
     return TRUE;
   /*
    * The widget may not yet be visible on the screen so we wait until it is.
