@@ -65,6 +65,7 @@ gdk_device_get_type G_GNUC_CONST
 gdk_device_grab
 gdk_device_grab_info_libgtk_only
 gdk_device_list_axes
+gdk_device_list_slave_devices
 gdk_device_manager_core_get_type
 gdk_device_manager_get_client_pointer
 gdk_device_manager_get_display
@@ -101,6 +102,7 @@ gdk_display_get_window_at_device_position
 gdk_display_get_window_at_pointer
 gdk_display_is_closed
 gdk_display_keyboard_ungrab
+gdk_display_list_devices
 gdk_display_manager_get
 gdk_display_manager_get_default_display
 gdk_display_manager_get_type G_GNUC_CONST
@@ -165,6 +167,7 @@ gdk_event_get_coords
 gdk_event_get_device
 gdk_event_get_root_coords
 gdk_event_get_screen
+gdk_event_get_source_device
 gdk_event_get_state
 gdk_event_get_time
 gdk_event_get_type G_GNUC_CONST
@@ -179,6 +182,7 @@ gdk_event_send_client_message_for_display
 gdk_event_send_clientmessage_toall
 gdk_event_set_device
 gdk_event_set_screen
+gdk_event_set_source_device
 gdk_events_get_angle
 gdk_events_get_center
 gdk_events_get_distance
