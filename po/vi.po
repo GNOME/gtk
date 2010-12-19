@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Gtk+ 2.15.3\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-10-01 15:41-0400\n"
-"PO-Revision-Date: 2010-03-22 23:18+0930\n"
+"PO-Revision-Date: 2010-12-19 16:22+0700\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "Language: vi\n"
@@ -43,7 +43,7 @@ msgstr "HẠNG"
 #. Description of --name=NAME in --help output
 #: gdk/gdk.c:154
 msgid "Program name as used by the window manager"
-msgstr "Tên chương trình như được dùng bởi bộ quản lý cửa sổ"
+msgstr "Tên chương trình được dùng bởi trình quản lý cửa sổ"
 
 #. Placeholder in --name=NAME in --help output
 #: gdk/gdk.c:155
@@ -53,12 +53,12 @@ msgstr "TÊN"
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:157
 msgid "X display to use"
-msgstr "Bộ trình bày X cần dùng"
+msgstr "Trình hiển thị X cần dùng"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:158
 msgid "DISPLAY"
-msgstr "BỘ TRÌNH BÀY"
+msgstr "HIỂN THỊ"
 
 #. Description of --screen=SCREEN in --help output
 #: gdk/gdk.c:160
@@ -72,9 +72,8 @@ msgstr "MÀN HÌNH"
 
 #. Description of --gdk-debug=FLAGS in --help output
 #: gdk/gdk.c:164
-#, fuzzy
 msgid "GDK debugging flags to set"
-msgstr "Các cờ gỡ lỗi GTK+ cần đặt"
+msgstr "Các cờ gỡ lỗi GDK cần đặt"
 
 #. Placeholder in --gdk-debug=FLAGS in --help output
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
@@ -86,9 +85,8 @@ msgstr "CỜ"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
 #: gdk/gdk.c:167
-#, fuzzy
 msgid "GDK debugging flags to unset"
-msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
+msgstr "Các cờ gỡ lỗi GDK cần bỏ đặt"
 
 #: gdk/keyname-table.h:3940
 msgctxt "keyboard label"
@@ -316,10 +314,10 @@ msgid "Opening %s"
 msgstr "Đang mở %s"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:321
-#, fuzzy, c-format
+#, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
-msgstr[0] "Đang mở %s"
+msgstr[0] "Đang mở %d mục"
 
 #. Description of --sync in --help output
 #: gdk/x11/gdkmain-x11.c:96
@@ -367,19 +365,19 @@ msgstr "Công trạng"
 
 #: gtk/gtkaboutdialog.c:2185
 msgid "Written by"
-msgstr "Tác giả"
+msgstr "Tác giả:"
 
 #: gtk/gtkaboutdialog.c:2188
 msgid "Documented by"
-msgstr "Tài liệu"
+msgstr "Tài liệu:"
 
 #: gtk/gtkaboutdialog.c:2200
 msgid "Translated by"
-msgstr "Bản dịch"
+msgstr "Bản dịch:"
 
 #: gtk/gtkaboutdialog.c:2204
 msgid "Artwork by"
-msgstr "Đồ họa"
+msgstr "Đồ họa:"
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
@@ -457,9 +455,9 @@ msgid "Invalid type function on line %d: '%s'"
 msgstr "Hàm kiểu không hợp lệ tại dòng %d: '%s'"
 
 #: gtk/gtkbuilderparser.c:407
-#, fuzzy, c-format
+#, c-format
 msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr "Trùng ID đối tượng '%s' trên dòng %d (trùng với trên dòng %d)"
+msgstr "Trùng ID đối tượng '%s' trên dòng %d (trùng với dòng %d)"
 
 #: gtk/gtkbuilderparser.c:859
 #, c-format
@@ -607,7 +605,7 @@ msgstr ""
 
 #: gtk/gtkcolorsel.c:417
 msgid "_Hue:"
-msgstr "_Sắc độ :"
+msgstr "_Sắc độ:"
 
 #: gtk/gtkcolorsel.c:418
 msgid "Position on the color wheel."
@@ -618,9 +616,8 @@ msgid "_Saturation:"
 msgstr "Độ _bão hòa:"
 
 #: gtk/gtkcolorsel.c:421
-#, fuzzy
 msgid "Intensity of the color."
-msgstr "Độ trong suốt của màu."
+msgstr "Cường độ màu."
 
 #: gtk/gtkcolorsel.c:422
 msgid "_Value:"
@@ -632,7 +629,7 @@ msgstr "Độ sáng của màu."
 
 #: gtk/gtkcolorsel.c:424
 msgid "_Red:"
-msgstr "Mà_u đỏ :"
+msgstr "Đỏ:"
 
 #: gtk/gtkcolorsel.c:425
 msgid "Amount of red light in the color."
@@ -648,7 +645,7 @@ msgstr "Lượng sắc xanh lá cây trong màu."
 
 #: gtk/gtkcolorsel.c:428
 msgid "_Blue:"
-msgstr "Xanh _dương:"
+msgstr "Xanh _lục:"
 
 #: gtk/gtkcolorsel.c:429
 msgid "Amount of blue light in the color."
@@ -793,20 +790,19 @@ msgstr "Lề giấy"
 
 #: gtk/gtkentry.c:8601 gtk/gtktextview.c:8248
 msgid "Input _Methods"
-msgstr "_Phương pháp nhập"
+msgstr "Cách _gõ"
 
 #: gtk/gtkentry.c:8615 gtk/gtktextview.c:8262
 msgid "_Insert Unicode Control Character"
-msgstr "Chèn ký tự đ_iều khiển Unicode"
+msgstr "_Chèn ký tự điều khiển Unicode"
 
 #: gtk/gtkentry.c:10015
 msgid "Caps Lock and Num Lock are on"
-msgstr ""
+msgstr "Caps Lock và Num Lock đều bật"
 
 #: gtk/gtkentry.c:10017
-#, fuzzy
 msgid "Num Lock is on"
-msgstr "Caps Lock đã bật"
+msgstr "Num Lock đã bật"
 
 #: gtk/gtkentry.c:10019
 msgid "Caps Lock is on"
@@ -915,7 +911,7 @@ msgstr "Không thể gỡ bỏ Đánh dấu '%s'."
 
 #: gtk/gtkfilechooserdefault.c:2861 gtk/gtkfilechooserdefault.c:3725
 msgid "Remove the selected bookmark"
-msgstr "Gỡ bỏ đánh dấu được chọn"
+msgstr "Gỡ bỏ Đánh dấu được chọn"
 
 #: gtk/gtkfilechooserdefault.c:3421
 msgid "Remove"
@@ -953,7 +949,7 @@ msgstr "Không thể chọn tập tin đó"
 
 #: gtk/gtkfilechooserdefault.c:4035
 msgid "_Add to Bookmarks"
-msgstr "Thê_m vào Đánh dấu"
+msgstr "T_hêm Đánh dấu"
 
 #: gtk/gtkfilechooserdefault.c:4048
 msgid "Show _Hidden Files"
@@ -973,7 +969,7 @@ msgstr "Tên"
 
 #: gtk/gtkfilechooserdefault.c:4355
 msgid "Size"
-msgstr "Cỡ"
+msgstr "Kích thước"
 
 #: gtk/gtkfilechooserdefault.c:4369
 msgid "Modified"
@@ -1179,20 +1175,20 @@ msgstr "aăâbcdđeêghikoôơuư AĂÂBCDĐEÊGHIKOÔƠUƯ"
 
 #: gtk/gtkfontsel.c:370
 msgid "_Family:"
-msgstr "_Họ :"
+msgstr "_Họ:"
 
 #: gtk/gtkfontsel.c:376
 msgid "_Style:"
-msgstr "_Kiểu :"
+msgstr "_Kiểu:"
 
 #: gtk/gtkfontsel.c:382
 msgid "Si_ze:"
-msgstr "_Cỡ :"
+msgstr "_Cỡ:"
 
 #. create the text entry widget
 #: gtk/gtkfontsel.c:559
 msgid "_Preview:"
-msgstr "_Xem thử :"
+msgstr "_Xem thử:"
 
 #: gtk/gtkfontsel.c:1659
 msgid "Font Selection"
@@ -1350,9 +1346,9 @@ msgid "Remember _forever"
 msgstr "_Nhớ mãi mãi"
 
 #: gtk/gtkmountoperation.c:883
-#, fuzzy, c-format
+#, c-format
 msgid "Unknown Application (PID %d)"
-msgstr "Ứng dụng lạ (pid %d)"
+msgstr "Ứng dụng lạ (PID %d)"
 
 #: gtk/gtkmountoperation.c:1066
 #, c-format
@@ -1364,10 +1360,10 @@ msgid "_End Process"
 msgstr "_Chấm dứt tiến trình"
 
 #: gtk/gtkmountoperation-stub.c:64
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr ""
-"Không thể buộc chấm dứt tiến trình có pid %d. Thao tác chưa được cài đặt."
+"Không thể buộc chấm dứt tiến trình có PID %d. Thao tác chưa được cài đặt."
 
 #. translators: this string is a name for the 'less' command
 #: gtk/gtkmountoperation-x11.c:862
@@ -1391,9 +1387,9 @@ msgid "Z Shell"
 msgstr "Z Shell"
 
 #: gtk/gtkmountoperation-x11.c:963
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot end process with PID %d: %s"
-msgstr "Không thể chấm dứt tiến trình có pid %d: %s"
+msgstr "Không thể chấm dứt tiến trình có PID %d: %s"
 
 #: gtk/gtknotebook.c:4619 gtk/gtknotebook.c:7170
 #, c-format
@@ -1468,9 +1464,8 @@ msgid "Not available"
 msgstr "Không sẵn sàng"
 
 #: gtk/gtkprinteroptionwidget.c:794
-#, fuzzy
 msgid "Select a folder"
-msgstr "Chọn tập tin"
+msgstr "Chọn thư mục"
 
 #: gtk/gtkprinteroptionwidget.c:813
 msgid "_Save in folder:"
@@ -1687,7 +1682,7 @@ msgstr "Đố_i chiếu"
 
 #: gtk/gtkprintunixdialog.c:2271
 msgid "_Reverse"
-msgstr "Để ngu_yên"
+msgstr "Đả_o"
 
 #: gtk/gtkprintunixdialog.c:2291
 msgid "General"
@@ -2109,7 +2104,6 @@ msgid "_Cancel"
 msgstr "_Thôi"
 
 #: gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
 msgstr "_CD-ROM"
@@ -2170,7 +2164,6 @@ msgid "_Edit"
 msgstr "_Sửa"
 
 #: gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
 msgstr "_Tập tin"
@@ -2249,7 +2242,6 @@ msgid "_Up"
 msgstr "_Lên"
 
 #: gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "Đĩa _cứng"
@@ -2587,9 +2579,9 @@ msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "Tìm thuộc tính « %s » hai lần trên yếu tố <%s>"
 
 #: gtk/gtktextbufferserialize.c:845
-#, fuzzy, c-format
+#, c-format
 msgid "<%s> element has invalid ID \"%s\""
-msgstr "Yếu tố <%s> có mã nhận diện không hợp lệ « %s »"
+msgstr "Yếu tố <%s> có ID không hợp lệ « %s »"
 
 #: gtk/gtktextbufferserialize.c:855
 #, c-format
@@ -2690,39 +2682,39 @@ msgstr ""
 
 #: gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
-msgstr "_LRM dấu trái-sang-phải"
+msgstr "_LRM Đánh dấu Trái-sang-phải"
 
 #: gtk/gtktextutil.c:61
 msgid "RLM _Right-to-left mark"
-msgstr "_RLM dấu phải-sang-trái"
+msgstr "_RLM Đánh dấu Phải-sang-trái"
 
 #: gtk/gtktextutil.c:62
 msgid "LRE Left-to-right _embedding"
-msgstr "LR_E nhúng trái-sang-phải"
+msgstr "LRE _Nhúng Trái-sang-phải"
 
 #: gtk/gtktextutil.c:63
 msgid "RLE Right-to-left e_mbedding"
-msgstr "RLE _nhúng phải-sang-trái"
+msgstr "RLE N_húng Phải-sang-trái"
 
 #: gtk/gtktextutil.c:64
 msgid "LRO Left-to-right _override"
-msgstr "LR_O đè trái-sang-phải"
+msgstr "_LRO Đè Trái-sang-phải"
 
 #: gtk/gtktextutil.c:65
 msgid "RLO Right-to-left o_verride"
-msgstr "RLO đè phải-s_ang-trái"
+msgstr "RLO Đè _Phải-sang-trái"
 
 #: gtk/gtktextutil.c:66
 msgid "PDF _Pop directional formatting"
-msgstr "_PDF dạng thức định hướng Pop"
+msgstr "PDF dạng thức định hướng Pop"
 
 #: gtk/gtktextutil.c:67
 msgid "ZWS _Zero width space"
-msgstr "_ZWS Dấu cách có độ dài bằng không"
+msgstr "ZWS Dấu _cách có độ dài bằng không"
 
 #: gtk/gtktextutil.c:68
 msgid "ZWJ Zero width _joiner"
-msgstr "ZW_J Bộ nối kết có độ dài bằng không"
+msgstr "ZWJ Bộ _nối kết có độ dài bằng không"
 
 #: gtk/gtktextutil.c:69
 msgid "ZWNJ Zero width _non-joiner"
@@ -2732,18 +2724,18 @@ msgstr "ZW_NJ Bộ không nối kết có độ dài bằng không"
 #, c-format
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr ""
-"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « "
-"%s »,"
+"Không thể định vị cơ chế sắc thái tại « module_path » (đường dẫn mô-đun): « %s "
+"»,"
 
 #: gtk/gtkuimanager.c:1505
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
-msgstr "Gặp thẻ đầu bất ngờ « %s » trên dòng %d ký tự %d"
+msgstr "Gặp thẻ đầu bất thường « %s » trên dòng %d ký tự %d"
 
 #: gtk/gtkuimanager.c:1595
 #, c-format
 msgid "Unexpected character data on line %d char %d"
-msgstr "Gặp dữ liệu ký tự bất ngờ trên dòng %d ký tự %d"
+msgstr "Gặp dữ liệu ký tự bất thường trên dòng %d ký tự %d"
 
 #: gtk/gtkuimanager.c:2427
 msgid "Empty"
@@ -3914,9 +3906,9 @@ msgid "Printer '%s' is out of paper."
 msgstr "Máy in « %s » cạn giấy."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1686
-#, fuzzy, c-format
+#, c-format
 msgid "Printer '%s' is currently offline."
-msgstr "Máy in « %s » hiện thời ngoại tuyến."
+msgstr "Máy in '%s' hiện thời ngoại tuyến."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1687
 #, c-format
@@ -4216,13 +4208,50 @@ msgstr "Không thể lấy thông tin cho tập tin « %s »: %s"
 #: tests/testfilechooser.c:222
 #, c-format
 msgid "Failed to open file '%s': %s"
-msgstr "Lỗi mở tập tin « %s »': %s"
+msgstr "Không mở được tập tin « %s »: %s"
 
 #: tests/testfilechooser.c:267
 #, c-format
 msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
-msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập tin ảnh bị hỏng"
+msgstr ""
+"Lỗi tải tập tin ảnh « %s »: không biết lý do, có lẽ tập tin ảnh bị hỏng."
+
+msgid "Color profile has invalid length %d."
+msgstr "Hồ sơ màu sắc có chiều dài sai %d."
+
+msgid "Input file descriptor is NULL."
+msgstr "Tập tin đầu vào có bộ mô tả VÔ GIÁ TRỊ."
+
+msgid "Failed to read QTIF header"
+msgstr "Lỗi đọc phần đầu QTIF"
+
+msgid "QTIF atom size too large (%d bytes)"
+msgstr "Atom QTIF có kích cỡ quá lớn (%d byte)"
+
+msgid "Failed to allocate %d bytes for file read buffer"
+msgstr "Lỗi cấp phát %d byte cho vùng đệm đọc tập tin"
+
+msgid "File error when reading QTIF atom: %s"
+msgstr "Gặp lỗi tập tin khi đọc atom QTIF: %s"
+
+msgid "Failed to skip the next %d bytes with seek()."
+msgstr "Không nhảy được qua %d byte kế tiếp dùng seek()."
+
+msgid "Failed to allocate QTIF context structure."
+msgstr "Không cấp phát được cấu trúc ngữ cảnh QTIF."
+
+msgid "Failed to create GdkPixbufLoader object."
+msgstr "Không tạo được đối tượng kiểu GdkPixbufLoader (nạp vùng đệm điểm ảnh)."
+
+msgid "Failed to find an image data atom."
+msgstr "Không tìm thấy được một atom kiểu dữ liệu ảnh."
+
+msgid "The QTIF image format"
+msgstr "Định dạng ảnh QTIF"
+
+msgid "Image is corrupted or truncated"
+msgstr "Ảnh bị cắt bớt hoặc bị hỏng"
 
 #~ msgid "Gdk debugging flags to set"
 #~ msgstr "Những cờ gỡ lỗi Gdk cần đặt"
@@ -4312,10 +4341,9 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 #~ msgid "Image pixel data corrupt"
 #~ msgstr "Dữ liệu điểm ảnh của ảnh bị hỏng"
 
-#, fuzzy
 #~ msgid "failed to allocate image buffer of %u byte"
 #~ msgid_plural "failed to allocate image buffer of %u bytes"
-#~ msgstr[0] "Lỗi cấp phát %d byte cho vùng đệm đọc tập tin"
+#~ msgstr[0] "lỗi cấp phát bộ đệm ảnh có kích thước %u byte"
 
 #~ msgid "Unexpected icon chunk in animation"
 #~ msgstr "Gặp đoạn biểu tượng bất thường trong hoạt cảnh"
@@ -4586,9 +4614,6 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 #~ msgid "Keys for PNG text chunks must be ASCII characters."
 #~ msgstr "Các khóa cho các đoạn PNG text phải là ký tự ASCII."
 
-#~ msgid "Color profile has invalid length %d."
-#~ msgstr "Hồ sơ màu sắc có chiều dài sai %d."
-
 #~ msgid ""
 #~ "PNG compression level must be a value between 0 and 9; value '%s' could "
 #~ "not be parsed."
@@ -4657,37 +4682,6 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 #~ msgid "The PNM/PBM/PGM/PPM image format family"
 #~ msgstr "Họ dạng thức ảnh PNM/PBM/PGM/PPM"
 
-#~ msgid "Input file descriptor is NULL."
-#~ msgstr "Tập tin đầu vào có bộ mô tả VÔ GIÁ TRỊ."
-
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "Lỗi đọc phần đầu QTIF"
-
-#~ msgid "QTIF atom size too large (%d bytes)"
-#~ msgstr "Atom QTIF có kích cỡ quá lớn (%d byte)"
-
-#~ msgid "Failed to allocate %d bytes for file read buffer"
-#~ msgstr "Lỗi cấp phát %d byte cho vùng đệm đọc tập tin"
-
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "Gặp lỗi tập tin khi đọc atom QTIF: %s"
-
-#~ msgid "Failed to skip the next %d bytes with seek()."
-#~ msgstr "Không nhảy được qua %d byte kế tiếp dùng seek()."
-
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "Không cấp phát được cấu trúc ngữ cảnh QTIF."
-
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr ""
-#~ "Không tạo được đối tượng kiểu GdkPixbufLoader (nạp vùng đệm điểm ảnh)."
-
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "Không tìm thấy được một atom kiểu dữ liệu ảnh."
-
-#~ msgid "The QTIF image format"
-#~ msgstr "Định dạng ảnh QTIF"
-
 #~ msgid "RAS image has bogus header data"
 #~ msgstr "Ảnh RAS có dữ liệu phần đầu giả"
 
@@ -4718,9 +4712,6 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 
 #~ msgid "Cannot allocate new pixbuf"
 #~ msgstr "Không thể cấp phát bộ đệm điểm ảnh mới"
-
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "Ảnh bị cắt bớt hoặc bị hỏng"
 
 #~ msgid "Cannot allocate colormap structure"
 #~ msgstr "Không thể cấp phát cấu trúc bản đồ màu sắc"
@@ -4912,7 +4903,7 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 #~ msgstr "_Xóa bỏ tập tin"
 
 #~ msgid "_Rename File"
-#~ msgstr "Th_ay tên tập tin"
+#~ msgstr "Đổ_i tên tập tin"
 
 #~ msgid ""
 #~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
@@ -4957,7 +4948,7 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 #~ msgstr "Đổi tên tập tin « %s » thành:"
 
 #~ msgid "_Rename"
-#~ msgstr "Th_ay tên"
+#~ msgstr "Đổ_i tên"
 
 #~ msgid "_Selection: "
 #~ msgstr "_Vùng chọn: "
@@ -4989,7 +4980,7 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 #~ msgstr "Nhập"
 
 #~ msgid "No extended input devices"
-#~ msgstr "Không có thiết bị gõ mở rộng nào"
+#~ msgstr "Không có thiết bị nhập đã mở rộng nào"
 
 #~ msgid "_Device:"
 #~ msgstr "Thiết _bị:"
@@ -5044,3 +5035,54 @@ msgstr "Lỗi tải tập tin ảnh « %s »: không biết sao, có lẽ tập 
 
 #~ msgid "--- No Tip ---"
 #~ msgstr "--- Không có mẹo ---"
+
+#~ msgid "Color profile has invalid length '%"
+#~ msgstr "Hồ sơ màu có độ dài không hợp lệ '%"
+
+#~ msgid "Color profile has invalid length '%d'."
+#~ msgstr "Hồ sơ màu có độ dài không hợp lệ '%d'."
+
+#~ msgid "Duplicate object id '%s' on line %d (previously on line %d)"
+#~ msgstr "Trùng ID đối tượng '%s' trên dòng %d (trùng với trên dòng %d)"
+
+#~ msgid "_Files"
+#~ msgstr "_Tập tin"
+
+#~ msgid "Unknown Application (pid %d)"
+#~ msgstr "Ứng dụng lạ (pid %d)"
+
+#~ msgid "Cannot kill process with pid %d. Operation is not implemented."
+#~ msgstr ""
+#~ "Không thể buộc chấm dứt tiến trình có pid %d. Thao tác chưa được cài đặt."
+
+#~ msgid "Cannot end process with pid %d: %s"
+#~ msgstr "Không thể chấm dứt tiến trình có pid %d: %s"
+
+#~ msgctxt "Stock label"
+#~ msgid "_CD-Rom"
+#~ msgstr "_CD-ROM"
+
+#~ msgctxt "Stock label"
+#~ msgid "_Harddisk"
+#~ msgstr "Đĩa _cứng"
+
+#~ msgid "<%s> element has invalid id \"%s\""
+#~ msgstr "Yếu tố <%s> có mã nhận diện không hợp lệ « %s »"
+
+#~ msgid "Printer '%s' is currently off-line."
+#~ msgstr "Máy in « %s » hiện thời ngoại tuyến."
+
+#~ msgid "(Empty)"
+#~ msgstr "(Rỗng)"
+
+#~ msgid "<b>_Search:</b>"
+#~ msgstr "<b>Tìm _kiếm:</b>"
+
+#~ msgid "<b>Recently Used</b>"
+#~ msgstr "<b>Vừa dùng</b>"
+
+#~ msgid "directfb arg"
+#~ msgstr "directfb arg"
+
+#~ msgid "sdl|system"
+#~ msgstr "sdl|system"
