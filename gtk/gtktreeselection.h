@@ -36,6 +36,8 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_SELECTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_SELECTION))
 #define GTK_TREE_SELECTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
 
+typedef struct _GtkTreeSelectionPrivate      GtkTreeSelectionPrivate;
+
 /**
  * GtkTreeSelectionFunc:
  * @selection: A #GtkTreeSelection
@@ -74,15 +76,10 @@ typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
 
 struct _GtkTreeSelection
 {
+  /*< private >*/
   GObject parent;
 
-  /*< private >*/
-
-  GtkTreeView *GSEAL (tree_view);
-  GtkSelectionMode GSEAL (type);
-  GtkTreeSelectionFunc GSEAL (user_func);
-  gpointer GSEAL (user_data);
-  GDestroyNotify GSEAL (destroy);
+  GtkTreeSelectionPrivate *priv;
 };
 
 struct _GtkTreeSelectionClass
