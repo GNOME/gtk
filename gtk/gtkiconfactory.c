@@ -853,8 +853,8 @@ icon_size_lookup_intern (GtkSettings *settings,
  * @settings: a #GtkSettings object, used to determine
  *   which set of user preferences to used.
  * @size: (type int): an icon size
- * @width: location to store icon width
- * @height: location to store icon height
+ * @width: (out): location to store icon width
+ * @height: (out): location to store icon height
  *
  * Obtains the pixel size of a semantic icon size, possibly
  * modified by user preferences for a particular
@@ -885,8 +885,8 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 /**
  * gtk_icon_size_lookup:
  * @size: (type int): an icon size
- * @width: location to store icon width
- * @height: location to store icon height
+ * @width: (out): location to store icon width
+ * @height: (out): location to store icon height
  *
  * Obtains the pixel size of a semantic icon size, possibly
  * modified by user preferences for the default #GtkSettings.
