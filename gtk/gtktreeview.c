@@ -3189,7 +3189,7 @@ gtk_tree_view_button_press (GtkWidget      *widget,
 
 	  if (tree_view->priv->rubber_banding_enable
 	      && !node_selected
-	      && tree_view->priv->selection->type == GTK_SELECTION_MULTIPLE)
+	      && gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_MULTIPLE)
 	    {
 	      tree_view->priv->press_start_y += tree_view->priv->dy;
 	      tree_view->priv->rubber_band_x = event->x;
@@ -10067,7 +10067,7 @@ gtk_tree_view_focus_to_cursor (GtkTreeView *tree_view)
 
       if (cursor_path)
 	{
-	  if (tree_view->priv->selection->type == GTK_SELECTION_MULTIPLE)
+	  if (gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_MULTIPLE)
 	    gtk_tree_view_real_set_cursor (tree_view, cursor_path, FALSE, FALSE);
 	  else
 	    gtk_tree_view_real_set_cursor (tree_view, cursor_path, TRUE, FALSE);
@@ -10174,7 +10174,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
 						      cursor_path);
 
   if (selection_count == 0
-      && tree_view->priv->selection->type != GTK_SELECTION_NONE
+      && gtk_tree_selection_get_mode (tree_view->priv->selection) != GTK_SELECTION_NONE
       && !tree_view->priv->ctrl_pressed
       && selectable)
     {
@@ -10212,7 +10212,7 @@ gtk_tree_view_move_cursor_up_down (GtkTreeView *tree_view,
    * If the list has only one item and multi-selection is set then select
    * the row (if not yet selected).
    */
-  if (tree_view->priv->selection->type == GTK_SELECTION_MULTIPLE &&
+  if (gtk_tree_selection_get_mode (tree_view->priv->selection) == GTK_SELECTION_MULTIPLE &&
       new_cursor_node == NULL)
     {
       if (count == -1)
@@ -10563,7 +10563,7 @@ gtk_tree_view_real_select_all (GtkTreeView *tree_view)
   if (!gtk_widget_has_focus (GTK_WIDGET (tree_view)))
     return FALSE;
 
-  if (tree_view->priv->selection->type != GTK_SELECTION_MULTIPLE)
+  if (gtk_tree_selection_get_mode (tree_view->priv->selection) != GTK_SELECTION_MULTIPLE)
     return FALSE;
 
   gtk_tree_selection_select_all (tree_view->priv->selection);
@@ -10577,7 +10577,7 @@ gtk_tree_view_real_unselect_all (GtkTreeView *tree_view)
   if (!gtk_widget_has_focus (GTK_WIDGET (tree_view)))
     return FALSE;
 
-  if (tree_view->priv->selection->type != GTK_SELECTION_MULTIPLE)
+  if (gtk_tree_selection_get_mode (tree_view->priv->selection) != GTK_SELECTION_MULTIPLE)
     return FALSE;
 
   gtk_tree_selection_unselect_all (tree_view->priv->selection);
