@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-04 15:16+0200\n"
-"PO-Revision-Date: 2010-12-04 15:25+0200\n"
+"POT-Creation-Date: 2010-12-19 09:02+0200\n"
+"PO-Revision-Date: 2010-12-19 09:07+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -138,7 +138,7 @@ msgstr "בית"
 #: ../gdk/keyname-table.h:3949
 msgctxt "keyboard label"
 msgid "Left"
-msgstr "שמאל"
+msgstr "שמאלה"
 
 #: ../gdk/keyname-table.h:3950
 msgctxt "keyboard label"
@@ -148,7 +148,7 @@ msgstr "מעלה"
 #: ../gdk/keyname-table.h:3951
 msgctxt "keyboard label"
 msgid "Right"
-msgstr "ימין"
+msgstr "ימינה"
 
 #: ../gdk/keyname-table.h:3952
 msgctxt "keyboard label"
@@ -158,32 +158,32 @@ msgstr "מטה"
 #: ../gdk/keyname-table.h:3953
 msgctxt "keyboard label"
 msgid "Page_Up"
-msgstr "עמוד_למעלה"
+msgstr "Page_Up"
 
 #: ../gdk/keyname-table.h:3954
 msgctxt "keyboard label"
 msgid "Page_Down"
-msgstr "עמוד_למטה"
+msgstr "Page_Down"
 
 #: ../gdk/keyname-table.h:3955
 msgctxt "keyboard label"
 msgid "End"
-msgstr "סוף"
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3956
 msgctxt "keyboard label"
 msgid "Begin"
-msgstr "התחלה"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3957
 msgctxt "keyboard label"
 msgid "Print"
-msgstr "הדפסה"
+msgstr "Print"
 
 #: ../gdk/keyname-table.h:3958
 msgctxt "keyboard label"
 msgid "Insert"
-msgstr "הוספה"
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3959
 msgctxt "keyboard label"
@@ -213,7 +213,7 @@ msgstr "בית"
 #: ../gdk/keyname-table.h:3964
 msgctxt "keyboard label"
 msgid "KP_Left"
-msgstr "שמאל"
+msgstr "שמאלה"
 
 #: ../gdk/keyname-table.h:3965
 msgctxt "keyboard label"
@@ -223,7 +223,7 @@ msgstr "מעלה"
 #: ../gdk/keyname-table.h:3966
 msgctxt "keyboard label"
 msgid "KP_Right"
-msgstr "ימין"
+msgstr "ימינה"
 
 #: ../gdk/keyname-table.h:3967
 msgctxt "keyboard label"
@@ -233,7 +233,7 @@ msgstr "מטה"
 #: ../gdk/keyname-table.h:3968
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
-msgstr "עמוד למעלה"
+msgstr "Page Up"
 
 #: ../gdk/keyname-table.h:3969
 msgctxt "keyboard label"
@@ -243,7 +243,7 @@ msgstr "קודם"
 #: ../gdk/keyname-table.h:3970
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
-msgstr "עמוד למטה"
+msgstr "Page Down"
 
 #: ../gdk/keyname-table.h:3971
 msgctxt "keyboard label"
@@ -253,27 +253,27 @@ msgstr "הבא"
 #: ../gdk/keyname-table.h:3972
 msgctxt "keyboard label"
 msgid "KP_End"
-msgstr "סוף"
+msgstr "End"
 
 #: ../gdk/keyname-table.h:3973
 msgctxt "keyboard label"
 msgid "KP_Begin"
-msgstr "התחלה"
+msgstr "Begin"
 
 #: ../gdk/keyname-table.h:3974
 msgctxt "keyboard label"
 msgid "KP_Insert"
-msgstr "הוספה"
+msgstr "Insert"
 
 #: ../gdk/keyname-table.h:3975
 msgctxt "keyboard label"
 msgid "KP_Delete"
-msgstr "מחיקה"
+msgstr "Delete"
 
 #: ../gdk/keyname-table.h:3976
 msgctxt "keyboard label"
 msgid "Delete"
-msgstr "מחיקה"
+msgstr "Delete"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:54
@@ -308,12 +308,12 @@ msgstr "COLORS"
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:305
 #, c-format
 msgid "Starting %s"
-msgstr "מתחיל את %s"
+msgstr "%s מתחיל"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:318
 #, c-format
 msgid "Opening %s"
-msgstr "פותח את %s"
+msgstr "%s נפתח"
 
 #: ../gdk/x11/gdkapplaunchcontext-x11.c:323
 #, c-format
@@ -330,55 +330,58 @@ msgstr "Make X calls synchronous"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
-#: ../gtk/gtkaboutdialog.c:101
+#: ../gtk/gtkaboutdialog.c:105
 #, c-format
-msgid "This program comes with ABSOLUTELY NO WARRANTY; for details, visit %s"
-msgstr "תכנית זו מופצת ללא שום אחריות; לפרטים נא לבקר בכתובת %s"
+msgid ""
+"This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
+"\"%s\">%s</a>"
+msgstr ""
+"תכנית זו מופצת ללא שום אחריות; לפרטים נא לבקר בכתובת <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:339 ../gtk/gtkaboutdialog.c:2233
+#: ../gtk/gtkaboutdialog.c:347
 msgid "License"
 msgstr "רישיון"
 
-#: ../gtk/gtkaboutdialog.c:340
+#: ../gtk/gtkaboutdialog.c:348
 msgid "The license of the program"
 msgstr "רישיון השימוש בתוכנה"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:622
+#: ../gtk/gtkaboutdialog.c:741
 msgid "C_redits"
 msgstr "_תודות"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:636
+#: ../gtk/gtkaboutdialog.c:754
 msgid "_License"
 msgstr "_רישיון"
 
-#: ../gtk/gtkaboutdialog.c:840
+#: ../gtk/gtkaboutdialog.c:959
 msgid "Could not show link"
 msgstr "לא ניתן להציג את הקישור"
 
-#: ../gtk/gtkaboutdialog.c:933
+#: ../gtk/gtkaboutdialog.c:996
+msgid "Homepage"
+msgstr "דף הבית"
+
+#: ../gtk/gtkaboutdialog.c:1052
 #, c-format
 msgid "About %s"
 msgstr "על אודות %s"
 
-#: ../gtk/gtkaboutdialog.c:2151
-msgid "Credits"
-msgstr "תודות"
+#: ../gtk/gtkaboutdialog.c:2370
+msgid "Created by"
+msgstr "נוצר על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2183
-msgid "Written by"
-msgstr "נכתב על ידי"
-
-#: ../gtk/gtkaboutdialog.c:2186
+#: ../gtk/gtkaboutdialog.c:2373
 msgid "Documented by"
 msgstr "תועד על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2198
+#: ../gtk/gtkaboutdialog.c:2385
 msgid "Translated by"
 msgstr "תורגם על ידי"
 
-#: ../gtk/gtkaboutdialog.c:2202
+#: ../gtk/gtkaboutdialog.c:2389
 msgid "Artwork by"
 msgstr "אומנות על ידי"
 
@@ -582,11 +585,11 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:473
+#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:477
 msgid "Pick a Color"
 msgstr "בחירת צבע"
 
-#: ../gtk/gtkcolorbutton.c:363
+#: ../gtk/gtkcolorbutton.c:366
 msgid "Received invalid color data\n"
 msgstr "התקבלו נתוני צבע בלתי תקינים\n"
 
@@ -680,7 +683,7 @@ msgstr "_פלטה:"
 msgid "Color Wheel"
 msgstr "גלגל הצבעים"
 
-#: ../gtk/gtkcolorsel.c:1031
+#: ../gtk/gtkcolorsel.c:1034
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -689,27 +692,27 @@ msgstr ""
 "הצבע הקודם שנבחר, להשוואה עם הצבע הנבחר כעת. ניתן לגרור צבע זה לרשומה בפלטה, "
 "או לבחור צבע זה כנוכחי על־ידי גרירתו לפיסת הצבע השנייה שלצידו."
 
-#: ../gtk/gtkcolorsel.c:1034
+#: ../gtk/gtkcolorsel.c:1037
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr "הצבע שנבחר. ניתן לגרור צבע זה לרשומת פלטה כדי לשמור אותו לשימוש בעתיד."
 
-#: ../gtk/gtkcolorsel.c:1039
+#: ../gtk/gtkcolorsel.c:1042
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "הצבע הקודם שנבחר, להשוואה עם הצבע שנבחר כעת."
 
-#: ../gtk/gtkcolorsel.c:1042
+#: ../gtk/gtkcolorsel.c:1045
 msgid "The color you've chosen."
 msgstr "הצבע שנבחר."
 
-#: ../gtk/gtkcolorsel.c:1442
+#: ../gtk/gtkcolorsel.c:1445
 msgid "_Save color here"
 msgstr "_שמירת הצבע כאן"
 
-#: ../gtk/gtkcolorsel.c:1647
+#: ../gtk/gtkcolorsel.c:1653
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -732,7 +735,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:374 ../gtk/gtkprintunixdialog.c:3240
+#: ../gtk/gtkcustompaperunixdialog.c:374 ../gtk/gtkprintunixdialog.c:3241
 msgid "Manage Custom Sizes"
 msgstr "ניהול גדלים מותאמים"
 
@@ -785,23 +788,23 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:8794 ../gtk/gtktextview.c:8229
+#: ../gtk/gtkentry.c:8807 ../gtk/gtktextview.c:8246
 msgid "Input _Methods"
 msgstr "_שיטות קלט"
 
-#: ../gtk/gtkentry.c:8808 ../gtk/gtktextview.c:8243
+#: ../gtk/gtkentry.c:8821 ../gtk/gtktextview.c:8260
 msgid "_Insert Unicode Control Character"
 msgstr "_הזנת תו בקרה יוניקוד"
 
-#: ../gtk/gtkentry.c:10208
+#: ../gtk/gtkentry.c:10225
 msgid "Caps Lock and Num Lock are on"
 msgstr "ה־Caps Lock וה־Num Lock פעילים"
 
-#: ../gtk/gtkentry.c:10210
+#: ../gtk/gtkentry.c:10227
 msgid "Num Lock is on"
 msgstr "ה־Num Lock פעיל"
 
-#: ../gtk/gtkentry.c:10212
+#: ../gtk/gtkentry.c:10229
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -880,7 +883,7 @@ msgstr "‏%1$s ב־%2$s"
 msgid "Search"
 msgstr "חיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:1776 ../gtk/gtkfilechooserdefault.c:9417
+#: ../gtk/gtkfilechooserdefault.c:1776 ../gtk/gtkfilechooserdefault.c:9424
 msgid "Recently Used"
 msgstr "בשימוש לאחרונה"
 
@@ -913,174 +916,174 @@ msgstr "הסרת הסימנייה '%s'"
 msgid "Bookmark '%s' cannot be removed"
 msgstr "לא ניתן להסיר את הסימנייה '%s'"
 
-#: ../gtk/gtkfilechooserdefault.c:2889 ../gtk/gtkfilechooserdefault.c:3750
+#: ../gtk/gtkfilechooserdefault.c:2889 ../gtk/gtkfilechooserdefault.c:3757
 msgid "Remove the selected bookmark"
 msgstr "הסרת הסימנייה הנבחרת"
 
-#: ../gtk/gtkfilechooserdefault.c:3445
+#: ../gtk/gtkfilechooserdefault.c:3452
 msgid "Remove"
 msgstr "הסרה"
 
-#: ../gtk/gtkfilechooserdefault.c:3454
+#: ../gtk/gtkfilechooserdefault.c:3461
 msgid "Rename..."
 msgstr "שינוי שם..."
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3617
+#: ../gtk/gtkfilechooserdefault.c:3624
 msgid "Places"
 msgstr "מקומות"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3674
+#: ../gtk/gtkfilechooserdefault.c:3681
 msgid "_Places"
 msgstr "_מקומות"
 
-#: ../gtk/gtkfilechooserdefault.c:3731
+#: ../gtk/gtkfilechooserdefault.c:3738
 msgid "_Add"
 msgstr "_הוספה"
 
-#: ../gtk/gtkfilechooserdefault.c:3738
+#: ../gtk/gtkfilechooserdefault.c:3745
 msgid "Add the selected folder to the Bookmarks"
 msgstr "הוספת התיקייה הנבחרת לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:3743
+#: ../gtk/gtkfilechooserdefault.c:3750
 msgid "_Remove"
 msgstr "_הסרה"
 
-#: ../gtk/gtkfilechooserdefault.c:3885
+#: ../gtk/gtkfilechooserdefault.c:3892
 msgid "Could not select file"
 msgstr "לא ניתן לבחור את הקובץ"
 
-#: ../gtk/gtkfilechooserdefault.c:4060
+#: ../gtk/gtkfilechooserdefault.c:4067
 msgid "_Add to Bookmarks"
 msgstr "_הוספה לסימניות"
 
-#: ../gtk/gtkfilechooserdefault.c:4073
+#: ../gtk/gtkfilechooserdefault.c:4080
 msgid "Show _Hidden Files"
 msgstr "הצגת קבצים _נסתרים"
 
-#: ../gtk/gtkfilechooserdefault.c:4080
+#: ../gtk/gtkfilechooserdefault.c:4087
 msgid "Show _Size Column"
 msgstr "הצגת _רוחב העמודה"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: ../gtk/gtkfilechooserdefault.c:4306
+#: ../gtk/gtkfilechooserdefault.c:4313
 msgid "Files"
 msgstr "קבצים"
 
-#: ../gtk/gtkfilechooserdefault.c:4357
+#: ../gtk/gtkfilechooserdefault.c:4364
 msgid "Name"
 msgstr "שם"
 
-#: ../gtk/gtkfilechooserdefault.c:4380
+#: ../gtk/gtkfilechooserdefault.c:4387
 msgid "Size"
 msgstr "גודל"
 
-#: ../gtk/gtkfilechooserdefault.c:4394
+#: ../gtk/gtkfilechooserdefault.c:4401
 msgid "Modified"
 msgstr "שונה"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4649 ../gtk/gtkprinteroptionwidget.c:793
+#: ../gtk/gtkfilechooserdefault.c:4656 ../gtk/gtkprinteroptionwidget.c:793
 msgid "_Name:"
 msgstr "_שם:"
 
-#: ../gtk/gtkfilechooserdefault.c:4692
+#: ../gtk/gtkfilechooserdefault.c:4699
 msgid "_Browse for other folders"
 msgstr "_דפדוף לתיקיות אחרות"
 
-#: ../gtk/gtkfilechooserdefault.c:4962
+#: ../gtk/gtkfilechooserdefault.c:4969
 msgid "Type a file name"
 msgstr "הזנת שם קובץ"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5005
+#: ../gtk/gtkfilechooserdefault.c:5012
 msgid "Create Fo_lder"
 msgstr "יצירת _תיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:5015
+#: ../gtk/gtkfilechooserdefault.c:5022
 msgid "_Location:"
 msgstr "_מיקום:"
 
-#: ../gtk/gtkfilechooserdefault.c:5219
+#: ../gtk/gtkfilechooserdefault.c:5226
 msgid "Save in _folder:"
 msgstr "שמירה ב_תיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:5221
+#: ../gtk/gtkfilechooserdefault.c:5228
 msgid "Create in _folder:"
 msgstr "יצירה ב_תיקייה:"
 
-#: ../gtk/gtkfilechooserdefault.c:6290
+#: ../gtk/gtkfilechooserdefault.c:6297
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "לא ניתן לקרוא את התוכן של %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6294
+#: ../gtk/gtkfilechooserdefault.c:6301
 msgid "Could not read the contents of the folder"
 msgstr "לא ניתן לקרוא את תכני התיקייה"
 
-#: ../gtk/gtkfilechooserdefault.c:6387 ../gtk/gtkfilechooserdefault.c:6455
-#: ../gtk/gtkfilechooserdefault.c:6600
+#: ../gtk/gtkfilechooserdefault.c:6394 ../gtk/gtkfilechooserdefault.c:6462
+#: ../gtk/gtkfilechooserdefault.c:6607
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../gtk/gtkfilechooserdefault.c:6402
+#: ../gtk/gtkfilechooserdefault.c:6409
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6404
+#: ../gtk/gtkfilechooserdefault.c:6411
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב־%H:%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7070
+#: ../gtk/gtkfilechooserdefault.c:7077
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: ../gtk/gtkfilechooserdefault.c:7667 ../gtk/gtkfilechooserdefault.c:7688
+#: ../gtk/gtkfilechooserdefault.c:7674 ../gtk/gtkfilechooserdefault.c:7695
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "הקיצור %s כבר קיים"
 
-#: ../gtk/gtkfilechooserdefault.c:7778
+#: ../gtk/gtkfilechooserdefault.c:7785
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "הקיצור %s אינו קיים"
 
-#: ../gtk/gtkfilechooserdefault.c:8039 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8046 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "קובץ בשם \"%s\" כבר קיים. האם ברצונך להחליפו?"
 
-#: ../gtk/gtkfilechooserdefault.c:8042 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8049 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים ב-\"%s\". החלפתו תגרום לאיבוד תוכנו."
 
-#: ../gtk/gtkfilechooserdefault.c:8047 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8054 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: ../gtk/gtkfilechooserdefault.c:8755
+#: ../gtk/gtkfilechooserdefault.c:8762
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:8756
+#: ../gtk/gtkfilechooserdefault.c:8763
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr "התנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
-#: ../gtk/gtkfilechooserdefault.c:8770
+#: ../gtk/gtkfilechooserdefault.c:8777
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
-#: ../gtk/gtkfilechooserdefault.c:8989
+#: ../gtk/gtkfilechooserdefault.c:8996
 msgid "Search:"
 msgstr "חיפוש:"
 
-#: ../gtk/gtkfilechooserdefault.c:9594
+#: ../gtk/gtkfilechooserdefault.c:9601
 #, c-format
 msgid "Could not mount %s"
 msgstr "לא ניתן לעגון את %s"
@@ -1201,7 +1204,7 @@ msgstr "בחירת גופן"
 msgid "Error loading icon: %s"
 msgstr "שגיאה בטעינת סמל: %s"
 
-#: ../gtk/gtkicontheme.c:1355
+#: ../gtk/gtkicontheme.c:1352
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1214,12 +1217,12 @@ msgstr ""
 "אתה יכול לקבל עותק מ:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1536
+#: ../gtk/gtkicontheme.c:1533
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "הסמל '%s' לא קיים בערכת הנושא"
 
-#: ../gtk/gtkicontheme.c:3057
+#: ../gtk/gtkicontheme.c:3054
 msgid "Failed to load icon"
 msgstr "ארע כשל בטעינת סמל"
 
@@ -1246,12 +1249,12 @@ msgid "System (%s)"
 msgstr "מערכת (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6215
+#: ../gtk/gtklabel.c:6249
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6227
+#: ../gtk/gtklabel.c:6261
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
@@ -1297,16 +1300,16 @@ msgstr "GTK+ debugging flags to unset"
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmain.c:853
+#: ../gtk/gtkmain.c:852
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Cannot open display: %s"
 
-#: ../gtk/gtkmain.c:912
+#: ../gtk/gtkmain.c:916
 msgid "GTK+ Options"
 msgstr "GTK+ Options"
 
-#: ../gtk/gtkmain.c:912
+#: ../gtk/gtkmain.c:916
 msgid "Show GTK+ Options"
 msgstr "Show GTK+ Options"
 
@@ -1390,7 +1393,7 @@ msgstr "מעטפת Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
-#: ../gtk/gtknotebook.c:4756 ../gtk/gtknotebook.c:7319
+#: ../gtk/gtknotebook.c:4914 ../gtk/gtknotebook.c:7571
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -1423,7 +1426,7 @@ msgstr ""
 " מעלה: %s %s\n"
 " מטה: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:858 ../gtk/gtkprintunixdialog.c:3291
+#: ../gtk/gtkpagesetupunixdialog.c:858 ../gtk/gtkprintunixdialog.c:3292
 msgid "Manage Custom Sizes..."
 msgstr "ניהול גדלים _מותאמים..."
 
@@ -1431,7 +1434,7 @@ msgstr "ניהול גדלים _מותאמים..."
 msgid "_Format for:"
 msgstr "_תצורה עבור:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:931 ../gtk/gtkprintunixdialog.c:3463
+#: ../gtk/gtkpagesetupunixdialog.c:931 ../gtk/gtkprintunixdialog.c:3464
 msgid "_Paper size:"
 msgstr "_גודל הנייר:"
 
@@ -1439,7 +1442,7 @@ msgstr "_גודל הנייר:"
 msgid "_Orientation:"
 msgstr "_כיווניות:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1026 ../gtk/gtkprintunixdialog.c:3525
+#: ../gtk/gtkpagesetupunixdialog.c:1026 ../gtk/gtkprintunixdialog.c:3526
 msgid "Page Setup"
 msgstr "הגדרות עמוד"
 
@@ -1620,41 +1623,41 @@ msgstr "קבלת נתוני המדפסת נכשלה"
 msgid "Getting printer information..."
 msgstr "נתוני המדפסת מתקבלים..."
 
-#: ../gtk/gtkprintunixdialog.c:2139
+#: ../gtk/gtkprintunixdialog.c:2140
 msgid "Printer"
 msgstr "מדפסת"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2149
+#: ../gtk/gtkprintunixdialog.c:2150
 msgid "Location"
 msgstr "מיקום"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2160
+#: ../gtk/gtkprintunixdialog.c:2161
 msgid "Status"
 msgstr "מצב"
 
-#: ../gtk/gtkprintunixdialog.c:2186
+#: ../gtk/gtkprintunixdialog.c:2187
 msgid "Range"
 msgstr "טווח"
 
-#: ../gtk/gtkprintunixdialog.c:2190
+#: ../gtk/gtkprintunixdialog.c:2191
 msgid "_All Pages"
 msgstr "כל ה_דפים"
 
-#: ../gtk/gtkprintunixdialog.c:2197
+#: ../gtk/gtkprintunixdialog.c:2198
 msgid "C_urrent Page"
 msgstr "_הדף הנוכחי"
 
-#: ../gtk/gtkprintunixdialog.c:2207
+#: ../gtk/gtkprintunixdialog.c:2208
 msgid "Se_lection"
 msgstr "_בחירה"
 
-#: ../gtk/gtkprintunixdialog.c:2216
+#: ../gtk/gtkprintunixdialog.c:2217
 msgid "Pag_es:"
 msgstr "_דפים:"
 
-#: ../gtk/gtkprintunixdialog.c:2217
+#: ../gtk/gtkprintunixdialog.c:2218
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -1662,28 +1665,28 @@ msgstr ""
 "ניתן לציין טווח דפים אחד או יותר,\n"
 " לדוגמה: 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2227
+#: ../gtk/gtkprintunixdialog.c:2228
 msgid "Pages"
 msgstr "דפים"
 
-#: ../gtk/gtkprintunixdialog.c:2240
+#: ../gtk/gtkprintunixdialog.c:2241
 msgid "Copies"
 msgstr "עותקים"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2245
+#: ../gtk/gtkprintunixdialog.c:2246
 msgid "Copie_s:"
 msgstr "_עותקים:"
 
-#: ../gtk/gtkprintunixdialog.c:2263
+#: ../gtk/gtkprintunixdialog.c:2264
 msgid "C_ollate"
 msgstr "_איסוף"
 
-#: ../gtk/gtkprintunixdialog.c:2271
+#: ../gtk/gtkprintunixdialog.c:2272
 msgid "_Reverse"
 msgstr "_החזרה"
 
-#: ../gtk/gtkprintunixdialog.c:2291
+#: ../gtk/gtkprintunixdialog.c:2292
 msgid "General"
 msgstr "כללי"
 
@@ -1693,42 +1696,42 @@ msgstr "כללי"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3024
+#: ../gtk/gtkprintunixdialog.c:3025
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3534
 msgid "Left to right, top to bottom"
 msgstr "שמאל לימין, מלמעלה למטה"
 
-#: ../gtk/gtkprintunixdialog.c:3024
+#: ../gtk/gtkprintunixdialog.c:3025
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3534
 msgid "Left to right, bottom to top"
 msgstr "שמאל לימין, מלמטה למעלה"
 
-#: ../gtk/gtkprintunixdialog.c:3025
+#: ../gtk/gtkprintunixdialog.c:3026
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3535
 msgid "Right to left, top to bottom"
 msgstr "ימין לשמאל, מלמעלה למטה"
 
-#: ../gtk/gtkprintunixdialog.c:3025
+#: ../gtk/gtkprintunixdialog.c:3026
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3535
 msgid "Right to left, bottom to top"
 msgstr "ימין לשמאל, מלמטה למעלה"
 
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3027
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3536
 msgid "Top to bottom, left to right"
 msgstr "מלמעלה למטה, משמאל לימין"
 
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3027
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3536
 msgid "Top to bottom, right to left"
 msgstr "מלמעלה למטה, מימין לשמאל"
 
-#: ../gtk/gtkprintunixdialog.c:3027
+#: ../gtk/gtkprintunixdialog.c:3028
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3537
 msgid "Bottom to top, left to right"
 msgstr "מלמטה למעלה, משמאל לימין"
 
-#: ../gtk/gtkprintunixdialog.c:3027
+#: ../gtk/gtkprintunixdialog.c:3028
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3537
 msgid "Bottom to top, right to left"
 msgstr "מלמטה למעלה, מימין לשמאל"
@@ -1736,125 +1739,125 @@ msgstr "מלמטה למעלה, מימין לשמאל"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3031 ../gtk/gtkprintunixdialog.c:3044
+#: ../gtk/gtkprintunixdialog.c:3032 ../gtk/gtkprintunixdialog.c:3045
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3569
 msgid "Page Ordering"
 msgstr "סדר דפים"
 
-#: ../gtk/gtkprintunixdialog.c:3060
+#: ../gtk/gtkprintunixdialog.c:3061
 msgid "Left to right"
 msgstr "שמאל לימין"
 
-#: ../gtk/gtkprintunixdialog.c:3061
+#: ../gtk/gtkprintunixdialog.c:3062
 msgid "Right to left"
 msgstr "ימין לשמאל"
 
-#: ../gtk/gtkprintunixdialog.c:3073
+#: ../gtk/gtkprintunixdialog.c:3074
 msgid "Top to bottom"
 msgstr "מלמעלה למטה"
 
-#: ../gtk/gtkprintunixdialog.c:3074
+#: ../gtk/gtkprintunixdialog.c:3075
 msgid "Bottom to top"
 msgstr "מלמטה למעלה"
 
-#: ../gtk/gtkprintunixdialog.c:3314
+#: ../gtk/gtkprintunixdialog.c:3315
 msgid "Layout"
 msgstr "פריסה"
 
-#: ../gtk/gtkprintunixdialog.c:3318
+#: ../gtk/gtkprintunixdialog.c:3319
 msgid "T_wo-sided:"
 msgstr "ד_ו־צדדי:"
 
-#: ../gtk/gtkprintunixdialog.c:3333
+#: ../gtk/gtkprintunixdialog.c:3334
 msgid "Pages per _side:"
 msgstr "מספר _עמודים בכל צג:"
 
-#: ../gtk/gtkprintunixdialog.c:3350
+#: ../gtk/gtkprintunixdialog.c:3351
 msgid "Page or_dering:"
 msgstr "_סדר הדפים:"
 
-#: ../gtk/gtkprintunixdialog.c:3366
+#: ../gtk/gtkprintunixdialog.c:3367
 msgid "_Only print:"
 msgstr "ה_דפסה בלבד:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3381
+#: ../gtk/gtkprintunixdialog.c:3382
 msgid "All sheets"
 msgstr "כל הדפים"
 
-#: ../gtk/gtkprintunixdialog.c:3382
+#: ../gtk/gtkprintunixdialog.c:3383
 msgid "Even sheets"
 msgstr "דפים זוגיים"
 
-#: ../gtk/gtkprintunixdialog.c:3383
+#: ../gtk/gtkprintunixdialog.c:3384
 msgid "Odd sheets"
 msgstr "דפים אי זוגיים"
 
-#: ../gtk/gtkprintunixdialog.c:3386
+#: ../gtk/gtkprintunixdialog.c:3387
 msgid "Sc_ale:"
 msgstr "_התאמה:"
 
-#: ../gtk/gtkprintunixdialog.c:3413
+#: ../gtk/gtkprintunixdialog.c:3414
 msgid "Paper"
 msgstr "נייר"
 
-#: ../gtk/gtkprintunixdialog.c:3417
+#: ../gtk/gtkprintunixdialog.c:3418
 msgid "Paper _type:"
 msgstr "_סוג נייר:"
 
-#: ../gtk/gtkprintunixdialog.c:3432
+#: ../gtk/gtkprintunixdialog.c:3433
 msgid "Paper _source:"
 msgstr "מ_קור נייר:"
 
-#: ../gtk/gtkprintunixdialog.c:3447
+#: ../gtk/gtkprintunixdialog.c:3448
 msgid "Output t_ray:"
 msgstr "_מגש פלט:"
 
-#: ../gtk/gtkprintunixdialog.c:3487
+#: ../gtk/gtkprintunixdialog.c:3488
 msgid "Or_ientation:"
 msgstr "_כיווניות:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3502
+#: ../gtk/gtkprintunixdialog.c:3503
 msgid "Portrait"
 msgstr "לאורך"
 
-#: ../gtk/gtkprintunixdialog.c:3503
+#: ../gtk/gtkprintunixdialog.c:3504
 msgid "Landscape"
 msgstr "לרוחב"
 
-#: ../gtk/gtkprintunixdialog.c:3504
+#: ../gtk/gtkprintunixdialog.c:3505
 msgid "Reverse portrait"
 msgstr "לאורך הפוך"
 
-#: ../gtk/gtkprintunixdialog.c:3505
+#: ../gtk/gtkprintunixdialog.c:3506
 msgid "Reverse landscape"
 msgstr "לרוחב הפוך"
 
-#: ../gtk/gtkprintunixdialog.c:3550
+#: ../gtk/gtkprintunixdialog.c:3551
 msgid "Job Details"
 msgstr "פרטי המשימה"
 
-#: ../gtk/gtkprintunixdialog.c:3556
+#: ../gtk/gtkprintunixdialog.c:3557
 msgid "Pri_ority:"
 msgstr "_עדיפות:"
 
-#: ../gtk/gtkprintunixdialog.c:3571
+#: ../gtk/gtkprintunixdialog.c:3572
 msgid "_Billing info:"
 msgstr "_נתוני חיוב:"
 
-#: ../gtk/gtkprintunixdialog.c:3589
+#: ../gtk/gtkprintunixdialog.c:3590
 msgid "Print Document"
 msgstr "הדפסת מסמך"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3598
+#: ../gtk/gtkprintunixdialog.c:3599
 msgid "_Now"
 msgstr "_כעת"
 
-#: ../gtk/gtkprintunixdialog.c:3609
+#: ../gtk/gtkprintunixdialog.c:3610
 msgid "A_t:"
 msgstr "_ב:"
 
@@ -1862,7 +1865,7 @@ msgstr "_ב:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3615
+#: ../gtk/gtkprintunixdialog.c:3616
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -1870,77 +1873,72 @@ msgstr ""
 "ציון זמן ההדפסה,\n"
 "לדוגמה: 15:30, 2:35‎ pm,‏ 14:15:20, 11:46:30‎ am,‏ 4‎ pm"
 
-#: ../gtk/gtkprintunixdialog.c:3625
+#: ../gtk/gtkprintunixdialog.c:3626
 msgid "Time of print"
 msgstr "זמן ההדפסה"
 
-#: ../gtk/gtkprintunixdialog.c:3641
+#: ../gtk/gtkprintunixdialog.c:3642
 msgid "On _hold"
 msgstr "ב_המתנה"
 
-#: ../gtk/gtkprintunixdialog.c:3642
+#: ../gtk/gtkprintunixdialog.c:3643
 msgid "Hold the job until it is explicitly released"
 msgstr "החזקת המשימה עד שתשוחרר מפורשות"
 
-#: ../gtk/gtkprintunixdialog.c:3662
+#: ../gtk/gtkprintunixdialog.c:3663
 msgid "Add Cover Page"
 msgstr "הוספת עמוד שער"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3671
+#: ../gtk/gtkprintunixdialog.c:3672
 msgid "Be_fore:"
 msgstr "ל_פני:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3689
+#: ../gtk/gtkprintunixdialog.c:3690
 msgid "_After:"
 msgstr "א_חרי:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3707
+#: ../gtk/gtkprintunixdialog.c:3708
 msgid "Job"
 msgstr "משימה"
 
-#: ../gtk/gtkprintunixdialog.c:3773
+#: ../gtk/gtkprintunixdialog.c:3774
 msgid "Advanced"
 msgstr "מתקדם"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3811
+#: ../gtk/gtkprintunixdialog.c:3812
 msgid "Image Quality"
 msgstr "איכות תמונה"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3815
+#: ../gtk/gtkprintunixdialog.c:3816
 msgid "Color"
 msgstr "צבע"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3820
+#: ../gtk/gtkprintunixdialog.c:3821
 msgid "Finishing"
 msgstr "גימור"
 
-#: ../gtk/gtkprintunixdialog.c:3830
+#: ../gtk/gtkprintunixdialog.c:3831
 msgid "Some of the settings in the dialog conflict"
 msgstr "חלק מההגדרות בתיבת הדו־שיח מתנגשות"
 
-#: ../gtk/gtkprintunixdialog.c:3853
+#: ../gtk/gtkprintunixdialog.c:3854
 msgid "Print"
 msgstr "הדפסה"
 
-#: ../gtk/gtkrc.c:2834
-#, c-format
-msgid "Unable to find include file: \"%s\""
-msgstr "לא ניתן למצוא את קובץ ה include: \"%s\""
-
-#: ../gtk/gtkrc.c:3470 ../gtk/gtkrc.c:3473
+#: ../gtk/gtkrc.c:871
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "לא ניתן לאתר את קובץ התמונה ב־pixmap_path:‏ \"%s\""
@@ -2049,12 +2047,12 @@ msgstr "לא ניתן למצוא פריט עם כתובת '%s'"
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "לא נמצא יישום הרשום בשם '%s' עבור הפריט בעל הכתובת '%s'"
 
-#: ../gtk/gtkspinner.c:439
+#: ../gtk/gtkspinner.c:326
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
 msgstr "הנפשת המתנה"
 
-#: ../gtk/gtkspinner.c:440
+#: ../gtk/gtkspinner.c:327
 msgid "Provides visual indication of progress"
 msgstr "אספקת חיווי חזותי של התהליך"
 
@@ -2768,39 +2766,39 @@ msgstr "מידע תו לא צפוי בשורה %d תו %d"
 msgid "Empty"
 msgstr "ריק"
 
-#: ../gtk/gtkvolumebutton.c:83
+#: ../gtk/gtkvolumebutton.c:170
 msgid "Volume"
 msgstr "עצמת שמע"
 
-#: ../gtk/gtkvolumebutton.c:85
+#: ../gtk/gtkvolumebutton.c:172
 msgid "Turns volume down or up"
 msgstr "מגביר או מנמיך את העצמה"
 
-#: ../gtk/gtkvolumebutton.c:88
+#: ../gtk/gtkvolumebutton.c:175
 msgid "Adjusts the volume"
 msgstr "מכוון את העצמה"
 
-#: ../gtk/gtkvolumebutton.c:94 ../gtk/gtkvolumebutton.c:97
+#: ../gtk/gtkvolumebutton.c:181 ../gtk/gtkvolumebutton.c:184
 msgid "Volume Down"
 msgstr "הנמכת העצמה"
 
-#: ../gtk/gtkvolumebutton.c:96
+#: ../gtk/gtkvolumebutton.c:183
 msgid "Decreases the volume"
 msgstr "מנמיך את העצמה"
 
-#: ../gtk/gtkvolumebutton.c:100 ../gtk/gtkvolumebutton.c:103
+#: ../gtk/gtkvolumebutton.c:187 ../gtk/gtkvolumebutton.c:190
 msgid "Volume Up"
 msgstr "הגברת העצמה"
 
-#: ../gtk/gtkvolumebutton.c:102
+#: ../gtk/gtkvolumebutton.c:189
 msgid "Increases the volume"
 msgstr "מגביר את העצמה"
 
-#: ../gtk/gtkvolumebutton.c:160
+#: ../gtk/gtkvolumebutton.c:247
 msgid "Muted"
 msgstr "מושתק"
 
-#: ../gtk/gtkvolumebutton.c:164
+#: ../gtk/gtkvolumebutton.c:251
 msgid "Full Volume"
 msgstr "עצמה מלאה"
 
@@ -2809,7 +2807,7 @@ msgstr "עצמה מלאה"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:177
+#: ../gtk/gtkvolumebutton.c:264
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4240,6 +4238,15 @@ msgid ""
 "Failed to load image '%s': reason not known, probably a corrupt image file"
 msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידועה, כנראה קובץ תמונה פגום"
 
+#~ msgid "Credits"
+#~ msgstr "תודות"
+
+#~ msgid "Written by"
+#~ msgstr "נכתב על ידי"
+
+#~ msgid "Unable to find include file: \"%s\""
+#~ msgstr "לא ניתן למצוא את קובץ ה include: \"%s\""
+
 #~ msgid "Error creating folder '%s': %s"
 #~ msgstr "שגיאה ביצירת התיקייה '%s': %s"
 
@@ -4930,9 +4937,6 @@ msgstr "נכשל בפתיחת התמונה '%s': הסיבה איננה ידוע�
 
 #~ msgid "_Folder name:"
 #~ msgstr "שם ה_תיקייה:"
-
-#~ msgid "C_reate"
-#~ msgstr "_צור"
 
 #~ msgid ""
 #~ "The filename \"%s\" contains symbols that are not allowed in filenames"
