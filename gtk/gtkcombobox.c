@@ -4422,7 +4422,7 @@ gtk_combo_box_list_select_func (GtkTreeSelection *selection,
   GList *list, *columns;
   gboolean sensitive = FALSE;
 
-  columns = gtk_tree_view_get_columns (selection->tree_view);
+  columns = gtk_tree_view_get_columns (gtk_tree_selection_get_tree_view (selection));
 
   for (list = columns; list && !sensitive; list = list->next)
     {
