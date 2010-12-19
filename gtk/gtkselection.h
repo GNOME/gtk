@@ -44,28 +44,6 @@ typedef struct _GtkTargetEntry   GtkTargetEntry;
 #define GTK_TYPE_SELECTION_DATA (gtk_selection_data_get_type ())
 #define GTK_TYPE_TARGET_LIST    (gtk_target_list_get_type ())
 
-/* The contents of a selection are returned in a GtkSelectionData
- * structure. selection/target identify the request.  type specifies
- * the type of the return; if length < 0, and the data should be
- * ignored. This structure has object semantics - no fields should be
- * modified directly, they should not be created directly, and
- * pointers to them should not be stored beyond the duration of a
- * callback. (If the last is changed, we'll need to add reference
- * counting.) The time field gives the timestamp at which the data was
- * sent.
- */
-
-struct _GtkSelectionData
-{
-  GdkAtom       GSEAL (selection);
-  GdkAtom       GSEAL (target);
-  GdkAtom       GSEAL (type);
-  gint          GSEAL (format);
-  guchar       *GSEAL (data);
-  gint          GSEAL (length);
-  GdkDisplay   *GSEAL (display);
-};
-
 struct _GtkTargetEntry
 {
   gchar *target;

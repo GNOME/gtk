@@ -52,6 +52,7 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtkdndcursors.h"
+#include "gtkselectionprivate.h"
 
 static GSList *source_widgets = NULL;
 

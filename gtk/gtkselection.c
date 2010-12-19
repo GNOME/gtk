@@ -52,13 +52,16 @@
  */
 
 #include "config.h"
+
+#include "gtkselection.h"
+#include "gtkselectionprivate.h"
+
 #include <stdarg.h>
 #include <string.h>
 #include "gdk.h"
 
 #include "gtkmain.h"
 #include "gtkdebug.h"
-#include "gtkselection.h"
 #include "gtktextbufferrichtext.h"
 #include "gtkintl.h"
 #include "gdk-pixbuf/gdk-pixbuf.h"
