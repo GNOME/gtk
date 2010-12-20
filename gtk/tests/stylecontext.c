@@ -518,6 +518,36 @@ test_style_property (void)
   g_object_unref (context);
 }
 
+void
+test_basic_properties (void)
+{
+  GtkStyleContext *context;
+  GtkWidgetPath *path;
+  GdkRGBA *color;
+  GdkRGBA *bg_color;
+  PangoFontDescription *font;
+
+  context = gtk_style_context_new ();
+  path = gtk_widget_path_new ();
+  gtk_style_context_set_path (context, path);
+  gtk_widget_path_free (path);
+
+  gtk_style_context_get (context, 0,
+                         "color", &color,
+                         "background-color", &bg_color,
+                         "font", &font,
+                         NULL);
+  g_assert (color != NULL);
+  g_assert (bg_color != NULL);
+  g_assert (font != NULL);
+
+  gdk_rgba_free (color);
+  gdk_rgba_free (bg_color);
+  pango_font_description_free (font);
+
+  g_object_unref (context);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -531,6 +561,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/path", test_path);
   g_test_add_func ("/style/match", test_match);
   g_test_add_func ("/style/style-property", test_style_property);
+  g_test_add_func ("/style/basic", test_basic_properties);
 
   return g_test_run ();
 }
