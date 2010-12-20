@@ -217,6 +217,7 @@ x11_introspection_files = 		\
 	x11/xsettings-common.c		\
         x11/gdkx.h			\
 	x11/gdkx11cursor.h		\
+	x11/gdkx11visual.h		\
 	x11/gdkx11window.h
 
 GdkX11-3.0.gir: libgdk-3.0.la Gdk-3.0.gir Makefile

@@ -56,6 +56,7 @@
 #define __GDKX_H_INSIDE__
 
 #include <gdk/x11/gdkx11cursor.h>
+#include <gdk/x11/gdkx11visual.h>
 #include <gdk/x11/gdkx11window.h>
 
 #undef __GDKX_H_INSIDE__
@@ -63,7 +64,6 @@
 G_BEGIN_DECLS
 
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
-Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
 int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
 
@@ -118,11 +118,6 @@ gint     gdk_x11_get_default_screen       (void);
  *  its display.
  */
 #define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
-
-#define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
-
-GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
-                                         VisualID   xvisualid);
 
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
