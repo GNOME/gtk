@@ -134,8 +134,8 @@ static void
 gdk_window_impl_x11_init (GdkWindowImplX11 *impl)
 {  
   impl->toplevel_window_type = -1;
-  impl->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
-                                               (GDestroyNotify) gdk_cursor_unref);
+  impl->device_cursor = g_hash_table_new_full (NULL, NULL,
+                                               NULL, g_object_unref);
 }
 
 GdkToplevelX11 *
@@ -2509,7 +2509,7 @@ gdk_window_x11_set_device_cursor (GdkWindow *window,
     {
       _gdk_x11_cursor_update_theme (cursor);
       g_hash_table_replace (impl->device_cursor,
-                            device, gdk_cursor_ref (cursor));
+                            device, g_object_ref (cursor));
     }
 
   if (!GDK_WINDOW_DESTROYED (window))

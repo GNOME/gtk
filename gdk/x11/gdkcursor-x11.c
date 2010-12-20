@@ -98,7 +98,7 @@ add_to_cache (GdkX11Cursor* cursor)
   cursor_cache = g_slist_prepend (cursor_cache, cursor);
 
   /* Take a ref so that if the caller frees it we still have it */
-  gdk_cursor_ref ((GdkCursor*) cursor);
+  g_object_ref (cursor);
 }
 
 /* Returns 0 on a match
@@ -261,7 +261,7 @@ _gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
       if (private)
         {
           /* Cache had it, add a ref for this user */
-          gdk_cursor_ref ((GdkCursor*) private);
+          g_object_ref (private);
 
           return (GdkCursor*) private;
         }
@@ -671,7 +671,7 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
       if (private)
         {
           /* Cache had it, add a ref for this user */
-          gdk_cursor_ref ((GdkCursor*) private);
+          g_object_ref (private);
 
           return (GdkCursor*) private;
         }
