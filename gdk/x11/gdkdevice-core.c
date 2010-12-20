@@ -200,15 +200,12 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
                                    GdkWindow *window,
                                    GdkCursor *cursor)
 {
-  GdkCursorPrivate *cursor_private;
   Cursor xcursor;
-
-  cursor_private = (GdkCursorPrivate*) cursor;
 
   if (!cursor)
     xcursor = None;
   else
-    xcursor = cursor_private->xcursor;
+    xcursor = gdk_x11_cursor_get_xcursor (cursor);
 
   XDefineCursor (GDK_WINDOW_XDISPLAY (window),
                  GDK_WINDOW_XID (window),
@@ -362,7 +359,7 @@ gdk_device_core_grab (GdkDevice    *device,
       else
         {
           _gdk_x11_cursor_update_theme (cursor);
-          xcursor = ((GdkCursorPrivate *) cursor)->xcursor;
+          xcursor = gdk_x11_cursor_get_xcursor (cursor);
         }
 
       xevent_mask = 0;

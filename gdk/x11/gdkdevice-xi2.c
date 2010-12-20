@@ -245,7 +245,6 @@ gdk_device_xi2_set_window_cursor (GdkDevice *device,
                                   GdkCursor *cursor)
 {
   GdkDeviceXI2Private *priv;
-  GdkCursorPrivate *cursor_private;
 
   priv = GDK_DEVICE_XI2 (device)->priv;
 
@@ -255,12 +254,10 @@ gdk_device_xi2_set_window_cursor (GdkDevice *device,
 
   if (cursor)
     {
-      cursor_private = (GdkCursorPrivate*) cursor;
-
       XIDefineCursor (GDK_WINDOW_XDISPLAY (window),
                       priv->device_id,
                       GDK_WINDOW_XID (window),
-                      cursor_private->xcursor);
+                      gdk_x11_cursor_get_xcursor (cursor));
     }
   else
     XIUndefineCursor (GDK_WINDOW_XDISPLAY (window),
@@ -408,7 +405,7 @@ gdk_device_xi2_grab (GdkDevice    *device,
   else
     {
       _gdk_x11_cursor_update_theme (cursor);
-      xcursor = ((GdkCursorPrivate *) cursor)->xcursor;
+      xcursor = gdk_x11_cursor_get_xcursor (cursor);
     }
 
   mask.deviceid = priv->device_id;
