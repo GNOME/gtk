@@ -1457,7 +1457,7 @@ compute_size (GtkCellAreaBox        *box,
                gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 }
 
-GtkRequestedSize *
+static GtkRequestedSize *
 get_group_sizes (GtkCellArea    *area,
                  CellGroup      *group,
                  GtkOrientation  orientation,
