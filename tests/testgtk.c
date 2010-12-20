@@ -4880,7 +4880,7 @@ set_cursor (GtkWidget *spinner,
   cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), c);
   gdk_window_set_cursor (gtk_widget_get_window (widget),
                          cursor);
-  gdk_cursor_unref (cursor);
+  g_object_unref (cursor);
 }
 
 static gint
@@ -8626,7 +8626,7 @@ destroy_properties (GtkWidget             *widget,
 
   if (data->cursor)
     {
-      gdk_cursor_unref (data->cursor);
+      g_object_unref (data->cursor);
       data->cursor = NULL;
     }
 
@@ -8763,7 +8763,7 @@ destroy_snapshot_data (GtkWidget             *widget,
   
   if (data->cursor)
     {
-      gdk_cursor_unref (data->cursor);
+      g_object_unref (data->cursor);
       data->cursor = NULL;
     }
 
