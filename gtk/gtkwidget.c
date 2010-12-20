@@ -2160,12 +2160,8 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * @widget: the object which received the signal
    * @event: (type Gdk.EventAny): the #GdkEventAny which triggered this signal
    *
-   * The ::unmap-event signal may be emitted when the @widget's window is
+   * The ::unmap-event signal will be emitted when the @widget's window is
    * unmapped. A window is unmapped when it becomes invisible on the screen.
-   *
-   * For performance reasons GTK+ may not emit ::unmap-event, so one
-   * should always also implement ::unrealize in order to release
-   * resources and disconnect signal handlers.
    *
    * To receive this signal, the #GdkWindow associated to the widget needs
    * to enable the #GDK_STRUCTURE_MASK mask. GDK will enable this mask
