@@ -565,7 +565,7 @@ gdk_window_finalize (GObject *object)
     cairo_region_destroy (window->input_shape);
 
   if (window->cursor)
-    gdk_cursor_unref (window->cursor);
+    g_object_unref (window->cursor);
 
   if (window->device_cursor)
     g_hash_table_destroy (window->device_cursor);
@@ -1391,8 +1391,8 @@ gdk_window_new (GdkWindow     *parent,
   if (window->parent)
     window->parent->children = g_list_prepend (window->parent->children, window);
 
-  window->device_cursor = g_hash_table_new_full (NULL, NULL, NULL,
-                                                 (GDestroyNotify) gdk_cursor_unref);
+  window->device_cursor = g_hash_table_new_full (NULL, NULL,
+                                                 NULL, g_object_unref);
 
   native = _gdk_native_windows; /* Default */
   if (window->parent->window_type == GDK_WINDOW_ROOT)
@@ -6674,14 +6674,14 @@ gdk_window_set_cursor (GdkWindow *window,
 
   if (window->cursor)
     {
-      gdk_cursor_unref (window->cursor);
+      g_object_unref (window->cursor);
       window->cursor = NULL;
     }
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
       if (cursor)
-	window->cursor = gdk_cursor_ref (cursor);
+	window->cursor = g_object_ref (cursor);
 
       _gdk_display_pointer_info_foreach (display,
                                          update_cursor_foreach,
@@ -6751,7 +6751,7 @@ gdk_window_set_device_cursor (GdkWindow *window,
   if (!cursor)
     g_hash_table_remove (window->device_cursor, device);
   else
-    g_hash_table_replace (window->device_cursor, device, gdk_cursor_ref (cursor));
+    g_hash_table_replace (window->device_cursor, device, g_object_ref (cursor));
 
   if (!GDK_WINDOW_DESTROYED (window))
     {
