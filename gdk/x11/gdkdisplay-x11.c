@@ -160,13 +160,13 @@ static const char *const precache_atoms[] = {
 
 static char *gdk_sm_client_id;
 
-G_DEFINE_TYPE_WITH_CODE (GdkX11Display, _gdk_x11_display, GDK_TYPE_DISPLAY,
+G_DEFINE_TYPE_WITH_CODE (GdkX11Display, gdk_x11_display, GDK_TYPE_DISPLAY,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_x11_display_event_translator_init))
 
 
 static void
-_gdk_x11_display_init (GdkX11Display *display)
+gdk_x11_display_init (GdkX11Display *display)
 {
   _gdk_x11_display_manager_add_display (gdk_display_manager_get (),
                                         GDK_DISPLAY (display));
@@ -1737,7 +1737,7 @@ gdk_x11_display_dispose (GObject *object)
       display_x11->event_source = NULL;
     }
 
-  G_OBJECT_CLASS (_gdk_x11_display_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_x11_display_parent_class)->dispose (object);
 }
 
 static void
@@ -1810,7 +1810,7 @@ gdk_x11_display_finalize (GObject *object)
       g_slice_free (GdkErrorTrap, trap);
     }
 
-  G_OBJECT_CLASS (_gdk_x11_display_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_x11_display_parent_class)->finalize (object);
 }
 
 /**
@@ -2714,7 +2714,7 @@ gdk_x11_display_get_keymap (GdkDisplay *display)
 }
 
 static void
-_gdk_x11_display_class_init (GdkX11DisplayClass * class)
+gdk_x11_display_class_init (GdkX11DisplayClass * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);

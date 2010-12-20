@@ -38,7 +38,17 @@
 
 G_BEGIN_DECLS
 
-#define GDK_IS_X11_DISPLAY(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkX11Display")))
+typedef struct _GdkX11Display GdkX11Display;
+typedef struct _GdkX11DisplayClass GdkX11DisplayClass;
+
+#define GDK_TYPE_X11_DISPLAY              (gdk_x11_display_get_type())
+#define GDK_X11_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_DISPLAY, GdkX11Display))
+#define GDK_X11_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_DISPLAY, GdkX11DisplayClass))
+#define GDK_IS_X11_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_DISPLAY))
+#define GDK_IS_X11_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_DISPLAY))
+#define GDK_X11_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_DISPLAY, GdkX11DisplayClass))
+
+GType      gdk_x11_display_get_type            (void);
 
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 

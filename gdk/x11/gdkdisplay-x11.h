@@ -35,14 +35,6 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkX11Display GdkX11Display;
-typedef struct _GdkX11DisplayClass GdkX11DisplayClass;
-
-#define GDK_TYPE_X11_DISPLAY              (_gdk_x11_display_get_type())
-#define GDK_X11_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_DISPLAY, GdkX11Display))
-#define GDK_X11_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_DISPLAY, GdkX11DisplayClass))
-#define GDK_IS_X11_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_DISPLAY))
-#define GDK_X11_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_DISPLAY, GdkX11DisplayClass))
 
 struct _GdkX11Display
 {
@@ -148,7 +140,6 @@ struct _GdkX11DisplayClass
   GdkDisplayClass parent_class;
 };
 
-GType      _gdk_x11_display_get_type            (void);
 GdkScreen *_gdk_x11_display_screen_for_xrootwin (GdkDisplay  *display,
                                                  Window       xrootwin);
 void       _gdk_x11_display_error_event         (GdkDisplay  *display,
