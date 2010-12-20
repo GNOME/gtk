@@ -78,6 +78,8 @@ gdk_cursor_init (GdkCursor *cursor)
  * Adds a reference to @cursor.
  *
  * Return value: Same @cursor that was passed in
+ *
+ * Deprecated: 3.0: Use g_object_ref() instead
  */
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)
@@ -93,6 +95,8 @@ gdk_cursor_ref (GdkCursor *cursor)
  *
  * Removes a reference from @cursor, deallocating the cursor
  * if no references remain.
+ *
+ * Deprecated: 3.0: Use g_object_unref() instead
  */
 void
 gdk_cursor_unref (GdkCursor *cursor)
