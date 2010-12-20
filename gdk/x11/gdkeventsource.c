@@ -272,7 +272,7 @@ _gdk_x11_display_queue_events (GdkDisplay *display)
   GdkEventSource *event_source;
   GdkX11Display *display_x11;
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
   event_source = (GdkEventSource *) display_x11->event_source;
 
   while (!_gdk_event_queue_find_first (display) && XPending (xdisplay))
@@ -353,7 +353,7 @@ gdk_x11_event_source_new (GdkDisplay *display)
   event_source = (GdkEventSource *) source;
   event_source->display = display;
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
   connection_number = ConnectionNumber (display_x11->xdisplay);
 
   event_source->event_poll_fd.fd = connection_number;

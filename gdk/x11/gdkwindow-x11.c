@@ -504,7 +504,7 @@ set_wm_protocols (GdkWindow *window)
   protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_PING");
 
 #ifdef HAVE_XSYNC
-  if (GDK_DISPLAY_X11 (display)->use_sync)
+  if (GDK_X11_DISPLAY (display)->use_sync)
     protocols[n++] = gdk_x11_get_xatom_by_name_for_display (display, "_NET_WM_SYNC_REQUEST");
 #endif
   
@@ -528,7 +528,7 @@ get_default_title (void)
 static void
 check_leader_window_title (GdkDisplay *display)
 {
-  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
   if (display_x11->leader_window && !display_x11->leader_window_title_set)
     {
@@ -550,7 +550,7 @@ create_focus_window (GdkDisplay *display,
   Window focus_window;
 
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
 
   focus_window = XCreateSimpleWindow (xdisplay, parent,
                                       -1, -1, 1, 1, 0,
@@ -583,7 +583,7 @@ ensure_sync_counter (GdkWindow *window)
 
       if (toplevel && impl->use_synchronized_configure &&
 	  toplevel->update_counter == None &&
-	  GDK_DISPLAY_X11 (display)->use_sync)
+	  GDK_X11_DISPLAY (display)->use_sync)
 	{
 	  Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
 	  XSyncValue value;
@@ -655,7 +655,7 @@ setup_toplevel_window (GdkWindow *window,
 		   PropModeReplace,
 		   (guchar *)&pid, 1);
 
-  leader_window = GDK_DISPLAY_X11 (screen_x11->display)->leader_window;
+  leader_window = GDK_X11_DISPLAY (screen_x11->display)->leader_window;
   if (!leader_window)
     leader_window = xid;
   XChangeProperty (xdisplay, xid, 
@@ -671,8 +671,8 @@ setup_toplevel_window (GdkWindow *window,
 
   if (!window->focus_on_map)
     gdk_x11_window_set_user_time (window, 0);
-  else if (GDK_DISPLAY_X11 (screen_x11->display)->user_time != 0)
-    gdk_x11_window_set_user_time (window, GDK_DISPLAY_X11 (screen_x11->display)->user_time);
+  else if (GDK_X11_DISPLAY (screen_x11->display)->user_time != 0)
+    gdk_x11_window_set_user_time (window, GDK_X11_DISPLAY (screen_x11->display)->user_time);
 
   ensure_sync_counter (window);
 }
@@ -701,7 +701,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   unsigned int class;
   const char *title;
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
   xparent = GDK_WINDOW_XID (real_parent);
   screen_x11 = GDK_SCREEN_X11 (screen);
 
@@ -883,7 +883,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
 
   if ((win = gdk_x11_window_lookup_for_display (display, window)) != NULL)
     return g_object_ref (win);
@@ -1127,7 +1127,7 @@ update_wm_hints (GdkWindow *window,
       wm_hints.window_group = GDK_WINDOW_XID (toplevel->group_leader);
     }
   else
-    wm_hints.window_group = GDK_DISPLAY_X11 (display)->leader_window;
+    wm_hints.window_group = GDK_X11_DISPLAY (display)->leader_window;
 
   if (toplevel->urgency_hint)
     wm_hints.flags |= XUrgencyHint;
@@ -1275,7 +1275,7 @@ gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
   if (WINDOW_IS_TOPLEVEL (window))
     {
       display = gdk_window_get_display (window);
-      display_x11 = GDK_DISPLAY_X11 (display);
+      display_x11 = GDK_X11_DISPLAY (display);
       toplevel = _gdk_x11_window_get_toplevel (window);
       
       if (toplevel->user_time != 0 &&
@@ -2816,7 +2816,7 @@ gdk_window_x11_set_events (GdkWindow    *window,
       if (GDK_WINDOW_XID (window) != GDK_WINDOW_XROOTWIN (window))
         xevent_mask = StructureNotifyMask | PropertyChangeMask;
 
-      display_x11 = GDK_DISPLAY_X11 (gdk_window_get_display (window));
+      display_x11 = GDK_X11_DISPLAY (gdk_window_get_display (window));
       gdk_x11_event_source_select_events ((GdkEventSource *) display_x11->event_source,
                                           GDK_WINDOW_XID (window), event_mask,
                                           xevent_mask);
@@ -3004,7 +3004,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
     return;
 
   display = gdk_window_get_display (window);
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
   toplevel = _gdk_x11_window_get_toplevel (window);
 
   if (!toplevel)
@@ -4470,7 +4470,7 @@ gdk_x11_window_configure_finished (GdkWindow *window)
       GdkToplevelX11 *toplevel = _gdk_x11_window_get_toplevel (window);
 
       if (toplevel && toplevel->update_counter != None &&
-	  GDK_DISPLAY_X11 (display)->use_sync &&
+	  GDK_X11_DISPLAY (display)->use_sync &&
 	  !XSyncValueIsZero (toplevel->current_counter_value))
 	{
 	  XSyncSetCounter (GDK_WINDOW_XDISPLAY (window), 
@@ -4491,7 +4491,7 @@ gdk_x11_window_beep (GdkWindow *window)
   display = GDK_WINDOW_DISPLAY (window);
 
 #ifdef HAVE_XKB
-  if (GDK_DISPLAY_X11 (display)->use_xkb)
+  if (GDK_X11_DISPLAY (display)->use_xkb)
     {
       XkbBell (GDK_DISPLAY_XDISPLAY (display),
                GDK_WINDOW_XID (window),

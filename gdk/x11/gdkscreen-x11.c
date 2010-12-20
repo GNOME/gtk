@@ -486,7 +486,7 @@ init_randr13 (GdkScreen *screen)
 {
 #ifdef HAVE_RANDR
   GdkDisplay *display = gdk_screen_get_display (screen);
-  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
   Display *dpy = GDK_SCREEN_XDISPLAY (screen);
   XRRScreenResources *resources;
@@ -790,7 +790,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
 {
   GdkScreen *screen;
   GdkScreenX11 *screen_x11;
-  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
   screen = g_object_new (GDK_TYPE_SCREEN_X11, NULL);
 
@@ -897,7 +897,7 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
   height = gdk_screen_get_height (screen);
 
 #ifdef HAVE_RANDR
-  display_x11 = GDK_DISPLAY_X11 (gdk_screen_get_display (screen));
+  display_x11 = GDK_X11_DISPLAY (gdk_screen_get_display (screen));
 
   if (display_x11->have_randr13 && event->type == ConfigureNotify)
     {
@@ -1300,7 +1300,7 @@ fetch_net_wm_check_window (GdkScreen *screen)
   screen_x11 = GDK_SCREEN_X11 (screen);
   display = screen_x11->display;
 
-  g_return_if_fail (GDK_DISPLAY_X11 (display)->trusted_client);
+  g_return_if_fail (GDK_X11_DISPLAY (display)->trusted_client);
   
   g_get_current_time (&tv);
 
@@ -1392,7 +1392,7 @@ gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
   screen_x11 = GDK_SCREEN_X11 (screen);
   display = screen_x11->display;
 
-  if (!G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+  if (!G_LIKELY (GDK_X11_DISPLAY (display)->trusted_client))
     return FALSE;
 
   supported_atoms = g_object_get_data (G_OBJECT (screen), "gdk-net-wm-supported-atoms");
@@ -1610,7 +1610,7 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
   screen_x11 = GDK_SCREEN_X11 (screen);
   display = screen_x11->display;
 
-  if (!G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+  if (!G_LIKELY (GDK_X11_DISPLAY (display)->trusted_client))
     return screen_x11->window_manager_name;
 
   fetch_net_wm_check_window (screen);

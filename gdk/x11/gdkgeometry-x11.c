@@ -157,7 +157,7 @@ static void
 gdk_window_queue (GdkWindow          *window,
 		  GdkWindowQueueItem *item)
 {
-  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (GDK_WINDOW_DISPLAY (window));
   
   if (!display_x11->translate_queue)
     display_x11->translate_queue = g_queue_new ();
@@ -331,7 +331,7 @@ _gdk_x11_window_process_expose (GdkWindow    *window,
                                 GdkRectangle *area)
 {
   cairo_region_t *invalidate_region = cairo_region_create_rectangle (area);
-  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (GDK_WINDOW_DISPLAY (window));
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (GDK_WINDOW_DISPLAY (window));
 
   if (display_x11->translate_queue)
     {

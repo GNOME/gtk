@@ -1320,7 +1320,7 @@ selection_set_compound_text (GtkSelectionData *selection_data,
   gboolean result = FALSE;
 
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_DISPLAY_X11 (selection_data->display))
+  if (GDK_IS_X11_DISPLAY (selection_data->display))
     {
       tmp = g_strndup (str, len);
       if (gdk_x11_display_utf8_to_compound_text (selection_data->display, tmp,
@@ -2277,7 +2277,7 @@ _gtk_selection_request (GtkWidget *widget,
   /* Create GdkWindow structure for the requestor */
 
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_DISPLAY_X11 (display))
+  if (GDK_IS_X11_DISPLAY (display))
     info->requestor = gdk_x11_window_foreign_new_for_display (display, event->requestor);
   else
 #endif

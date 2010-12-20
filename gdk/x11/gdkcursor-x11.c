@@ -146,7 +146,7 @@ find_in_cache (GdkDisplay    *display,
   return NULL;
 }
 
-/* Called by gdk_display_x11_finalize to flush any cached cursors
+/* Called by gdk_x11_display_finalize to flush any cached cursors
  * for a dead display.
  */
 void 
@@ -397,7 +397,7 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
   GdkX11Display *display_x11;
 
   private = (GdkX11Cursor *) cursor;
-  display_x11 = GDK_DISPLAY_X11 (gdk_cursor_get_display (cursor));
+  display_x11 = GDK_X11_DISPLAY (gdk_cursor_get_display (cursor));
   xdisplay = GDK_DISPLAY_XDISPLAY (display_x11);
 
   if (!display_x11->have_xfixes)
@@ -476,7 +476,7 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   old_theme = XcursorGetTheme (xdisplay);

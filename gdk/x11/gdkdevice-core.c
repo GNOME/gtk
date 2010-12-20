@@ -247,7 +247,7 @@ gdk_device_core_query_state (GdkDevice        *device,
   display = gdk_window_get_display (window);
   default_screen = gdk_display_get_default_screen (display);
 
-  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+  if (G_LIKELY (GDK_X11_DISPLAY (display)->trusted_client))
     {
       if (!XQueryPointer (GDK_WINDOW_XDISPLAY (window),
                           GDK_WINDOW_XID (window),
@@ -437,7 +437,7 @@ gdk_device_core_window_at_position (GdkDevice       *device,
   xdisplay = GDK_SCREEN_XDISPLAY (screen);
   xwindow = GDK_SCREEN_XROOTWIN (screen);
 
-  if (G_LIKELY (GDK_DISPLAY_X11 (display)->trusted_client))
+  if (G_LIKELY (GDK_X11_DISPLAY (display)->trusted_client))
     {
       XQueryPointer (xdisplay, xwindow,
                      &root, &child,

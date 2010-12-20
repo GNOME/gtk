@@ -875,7 +875,7 @@ _gtk_socket_add_window (GtkSocket       *socket,
   GtkSocketPrivate *private = socket->priv;
 
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_DISPLAY_X11 (display))
+  if (GDK_IS_X11_DISPLAY (display))
     private->plug_window = gdk_x11_window_lookup_for_display (display, xid);
   else
 #endif
@@ -912,7 +912,7 @@ _gtk_socket_add_window (GtkSocket       *socket,
       if (!private->plug_window)
         {
 #ifdef GDK_WINDOWING_X11
-          if (GDK_IS_DISPLAY_X11 (display))
+          if (GDK_IS_X11_DISPLAY (display))
             private->plug_window = gdk_x11_window_foreign_new_for_display (display, xid);
 #endif
           if (!private->plug_window) /* was deleted before we could get it */

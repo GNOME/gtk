@@ -518,7 +518,7 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
       gpointer user_data = NULL;
 
 #ifdef GDK_WINDOWING_X11
-      if (GDK_IS_DISPLAY_X11 (display))
+      if (GDK_IS_X11_DISPLAY (display))
         priv->socket_window = gdk_x11_window_lookup_for_display (display, socket_id);
       else
 #endif
@@ -543,7 +543,7 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 	}
       else
 #ifdef GDK_WINDOWING_X11
-      if (GDK_IS_DISPLAY_X11 (display))
+      if (GDK_IS_X11_DISPLAY (display))
         priv->socket_window = gdk_x11_window_foreign_new_for_display (display, socket_id);
 #endif
 

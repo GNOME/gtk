@@ -53,7 +53,7 @@ _gdk_x11_display_add_window (GdkDisplay *display,
   g_return_if_fail (xid != NULL);
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
 
   if (!display_x11->xid_ht)
     display_x11->xid_ht = g_hash_table_new ((GHashFunc) gdk_xid_hash,
@@ -73,7 +73,7 @@ _gdk_x11_display_remove_window (GdkDisplay *display,
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
 
   if (display_x11->xid_ht)
     g_hash_table_remove (display_x11->xid_ht, &xid);
@@ -100,7 +100,7 @@ gdk_x11_window_lookup_for_display (GdkDisplay *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
 
   if (display_x11->xid_ht)
     data = g_hash_table_lookup (display_x11->xid_ht, &window);
