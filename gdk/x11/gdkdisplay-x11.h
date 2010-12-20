@@ -35,16 +35,16 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkDisplayX11 GdkDisplayX11;
-typedef struct _GdkDisplayX11Class GdkDisplayX11Class;
+typedef struct _GdkX11Display GdkX11Display;
+typedef struct _GdkX11DisplayClass GdkX11DisplayClass;
 
 #define GDK_TYPE_DISPLAY_X11              (_gdk_display_x11_get_type())
-#define GDK_DISPLAY_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_X11, GdkDisplayX11))
-#define GDK_DISPLAY_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_X11, GdkDisplayX11Class))
+#define GDK_DISPLAY_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_X11, GdkX11Display))
+#define GDK_DISPLAY_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_X11, GdkX11DisplayClass))
 #define GDK_IS_DISPLAY_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_X11))
-#define GDK_DISPLAY_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_X11, GdkDisplayX11Class))
+#define GDK_DISPLAY_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_X11, GdkX11DisplayClass))
 
-struct _GdkDisplayX11
+struct _GdkX11Display
 {
   GdkDisplay parent_instance;
   Display *xdisplay;
@@ -143,7 +143,7 @@ struct _GdkDisplayX11
   GSList *error_traps;
 };
 
-struct _GdkDisplayX11Class
+struct _GdkX11DisplayClass
 {
   GdkDisplayClass parent_class;
 };

@@ -234,7 +234,7 @@ update_modmap (Display      *display,
 static XkbDescPtr
 get_xkb (GdkKeymapX11 *keymap_x11)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_KEYMAP (keymap_x11)->display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (GDK_KEYMAP (keymap_x11)->display);
   Display *xdisplay = display_x11->xdisplay;
 
   update_keyrange (keymap_x11);
@@ -318,7 +318,7 @@ set_symbol (KeySym       *syms,
 static void
 update_keymaps (GdkKeymapX11 *keymap_x11)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (GDK_KEYMAP (keymap_x11)->display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (GDK_KEYMAP (keymap_x11)->display);
   Display *xdisplay = display_x11->xdisplay;
 
 #ifdef HAVE_XKB
@@ -671,7 +671,7 @@ void
 _gdk_x11_keymap_state_changed (GdkDisplay *display,
                                XEvent     *xevent)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
   XkbEvent *xkb_event = (XkbEvent *)xevent;
 
   if (display_x11->keymap)
@@ -691,7 +691,7 @@ _gdk_x11_keymap_state_changed (GdkDisplay *display,
 void
 _gdk_x11_keymap_keys_changed (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
   ++display_x11->keymap_serial;
 
@@ -1595,7 +1595,7 @@ gint
 _gdk_x11_get_group_for_state (GdkDisplay      *display,
                               GdkModifierType  state)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
 #ifdef HAVE_XKB
   if (display_x11->use_xkb)

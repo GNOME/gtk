@@ -174,7 +174,7 @@ insert_atom_pair (GdkDisplay *display,
 		  GdkAtom     virtual_atom,
 		  Atom        xatom)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);  
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);  
   
   if (!display_x11->atom_from_virtual)
     {
@@ -194,7 +194,7 @@ static Atom
 lookup_cached_xatom (GdkDisplay *display,
 		     GdkAtom     atom)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
   if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (xatoms_offset) - N_CUSTOM_PREDEFINED)
     return ATOM_TO_INDEX (atom);
@@ -328,7 +328,7 @@ GdkAtom
 gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 				   Atom	       xatom)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkAtom virtual_atom = GDK_NONE;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), GDK_NONE);

@@ -394,7 +394,7 @@ _gdk_x11_cursor_update_theme (GdkCursor *cursor)
   Display *xdisplay;
   GdkX11Cursor *private;
   Cursor new_cursor = None;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
 
   private = (GdkX11Cursor *) cursor;
   display_x11 = GDK_DISPLAY_X11 (gdk_cursor_get_display (cursor));
@@ -469,7 +469,7 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                   const gchar *theme,
                                   const gint   size)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   Display *xdisplay;
   gchar *old_theme;
   gint old_size;

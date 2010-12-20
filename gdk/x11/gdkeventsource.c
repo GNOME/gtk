@@ -270,7 +270,7 @@ _gdk_x11_display_queue_events (GdkDisplay *display)
   XEvent xevent;
   Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
   GdkEventSource *event_source;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
 
   display_x11 = GDK_DISPLAY_X11 (display);
   event_source = (GdkEventSource *) display_x11->event_source;
@@ -341,7 +341,7 @@ gdk_x11_event_source_new (GdkDisplay *display)
 {
   GSource *source;
   GdkEventSource *event_source;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   int connection_number;
   char *name;
 

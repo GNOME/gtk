@@ -486,7 +486,7 @@ init_randr13 (GdkScreen *screen)
 {
 #ifdef HAVE_RANDR
   GdkDisplay *display = gdk_screen_get_display (screen);
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
   GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
   Display *dpy = GDK_SCREEN_XDISPLAY (screen);
   XRRScreenResources *resources;
@@ -790,7 +790,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
 {
   GdkScreen *screen;
   GdkScreenX11 *screen_x11;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
   screen = g_object_new (GDK_TYPE_SCREEN_X11, NULL);
 
@@ -890,7 +890,7 @@ _gdk_x11_screen_size_changed (GdkScreen *screen,
 {
   gint width, height;
 #ifdef HAVE_RANDR
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
 #endif
 
   width = gdk_screen_get_width (screen);

@@ -528,7 +528,7 @@ get_default_title (void)
 static void
 check_leader_window_title (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
   if (display_x11->leader_window && !display_x11->leader_window_title_set)
     {
@@ -544,7 +544,7 @@ static Window
 create_focus_window (GdkDisplay *display,
 		     XID         parent)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkEventMask event_mask;
   Display *xdisplay;
   Window focus_window;
@@ -688,7 +688,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 {
   GdkWindowImplX11 *impl;
   GdkScreenX11 *screen_x11;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
 
   Window xparent;
   Visual *xvisual;
@@ -874,7 +874,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
   GdkScreen *screen;
   GdkWindow *win;
   GdkWindowImplX11 *impl;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   XWindowAttributes attrs;
   Window root, parent;
   Window *children = NULL;
@@ -1262,7 +1262,7 @@ static void
 gdk_window_x11_show (GdkWindow *window, gboolean already_mapped)
 {
   GdkDisplay *display;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkToplevelX11 *toplevel;
   GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
@@ -2811,7 +2811,7 @@ gdk_window_x11_set_events (GdkWindow    *window,
   
   if (!GDK_WINDOW_DESTROYED (window))
     {
-      GdkDisplayX11 *display_x11;
+      GdkX11Display *display_x11;
 
       if (GDK_WINDOW_XID (window) != GDK_WINDOW_XROOTWIN (window))
         xevent_mask = StructureNotifyMask | PropertyChangeMask;
@@ -2994,7 +2994,7 @@ gdk_x11_window_set_user_time (GdkWindow *window,
                               guint32    timestamp)
 {
   GdkDisplay *display;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkToplevelX11 *toplevel;
   glong timestamp_long = (glong)timestamp;
   Window xid;

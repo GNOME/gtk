@@ -160,13 +160,13 @@ static const char *const precache_atoms[] = {
 
 static char *gdk_sm_client_id;
 
-G_DEFINE_TYPE_WITH_CODE (GdkDisplayX11, _gdk_display_x11, GDK_TYPE_DISPLAY,
+G_DEFINE_TYPE_WITH_CODE (GdkX11Display, _gdk_display_x11, GDK_TYPE_DISPLAY,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_display_x11_event_translator_init))
 
 
 static void
-_gdk_display_x11_init (GdkDisplayX11 *display)
+_gdk_display_x11_init (GdkX11Display *display)
 {
   _gdk_x11_display_manager_add_display (gdk_display_manager_get (),
                                         GDK_DISPLAY (display));
@@ -383,7 +383,7 @@ gdk_display_x11_translate_event (GdkEventTranslator *translator,
   GdkScreen *screen = NULL;
   GdkScreenX11 *screen_x11 = NULL;
   GdkToplevelX11 *toplevel = NULL;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
   gboolean return_val;
   Window xwindow = None;
 
@@ -1097,7 +1097,7 @@ gdk_wm_protocols_filter (GdkXEvent *xev,
 static void
 gdk_event_init (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkDeviceManager *device_manager;
 
   display_x11 = GDK_DISPLAY_X11 (display);
@@ -1119,7 +1119,7 @@ gdk_event_init (GdkDisplay *display)
 static void
 gdk_x11_display_init_input (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkDeviceManager *device_manager;
   GdkDevice *device;
   GList *list, *l;
@@ -1172,7 +1172,7 @@ static void
 set_sm_client_id (GdkDisplay  *display,
                   const gchar *sm_client_id)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
   if (gdk_display_is_closed (display))
     return;
@@ -1203,7 +1203,7 @@ _gdk_x11_display_open (const gchar *display_name)
 {
   Display *xdisplay;
   GdkDisplay *display;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkWindowAttr attr;
   gint argc;
   gchar *argv[1];
@@ -1570,7 +1570,7 @@ gboolean
 _gdk_x11_display_is_root_window (GdkDisplay *display,
 				 Window      xroot_window)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   gint i;
 
   display_x11 = GDK_DISPLAY_X11 (display);
@@ -1678,7 +1678,7 @@ gdk_x11_display_get_default_group (GdkDisplay *display)
 void
 gdk_x11_display_grab (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   
   g_return_if_fail (GDK_IS_DISPLAY (display));
   
@@ -1701,7 +1701,7 @@ gdk_x11_display_grab (GdkDisplay *display)
 void
 gdk_x11_display_ungrab (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   
   g_return_if_fail (GDK_IS_DISPLAY (display));
   
@@ -1720,7 +1720,7 @@ static void
 gdk_display_x11_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (object);
   gint           i;
 
   _gdk_x11_display_manager_remove_display (gdk_display_manager_get (), display);
@@ -1743,7 +1743,7 @@ gdk_display_x11_dispose (GObject *object)
 static void
 gdk_display_x11_finalize (GObject *object)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (object);
   gint           i;
 
   /* Keymap */
@@ -1892,7 +1892,7 @@ gdk_x11_display_get_xdisplay (GdkDisplay *display)
 void
 _gdk_x11_display_make_default (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
   const gchar *startup_id;
 
   g_free (display_x11->startup_notification_id);
@@ -2089,7 +2089,7 @@ gdk_x11_display_notify_startup_complete (GdkDisplay  *display,
 static gboolean
 gdk_x11_display_supports_selection_notification (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
   return display_x11->have_xfixes;
 }
@@ -2100,7 +2100,7 @@ gdk_x11_display_request_selection_notification (GdkDisplay *display,
 
 {
 #ifdef HAVE_XFIXES
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
   Atom atom;
 
   if (display_x11->have_xfixes)
@@ -2137,7 +2137,7 @@ gdk_x11_display_store_clipboard (GdkDisplay    *display,
 				 const GdkAtom *targets,
 				 gint           n_targets)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
   Atom clipboard_manager, save_targets;
 
   g_return_if_fail (GDK_WINDOW_IS_X11 (clipboard_window));
@@ -2251,7 +2251,7 @@ void
 gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
                                              const gchar *startup_id)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   gchar *time_str;
 
   display_x11 = GDK_DISPLAY_X11 (display);
@@ -2291,7 +2291,7 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
 static gboolean
 gdk_x11_display_supports_composite (GdkDisplay *display)
 {
-  GdkDisplayX11 *x11_display = GDK_DISPLAY_X11 (display);
+  GdkX11Display *x11_display = GDK_DISPLAY_X11 (display);
 
   return x11_display->have_xcomposite &&
 	 x11_display->have_xdamage &&
@@ -2372,7 +2372,7 @@ gdk_x11_register_standard_event_type (GdkDisplay *display,
 				      gint        n_events)
 {
   GdkEventTypeX11 *event_type;
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
 
   display_x11 = GDK_DISPLAY_X11 (display);
   event_type = g_new (GdkEventTypeX11, 1);
@@ -2391,7 +2391,7 @@ void
 _gdk_x11_display_error_event (GdkDisplay  *display,
                               XErrorEvent *error)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GSList *tmp_list;
   gboolean ignore;
 
@@ -2451,7 +2451,7 @@ _gdk_x11_display_error_event (GdkDisplay  *display,
 }
 
 static void
-delete_outdated_error_traps (GdkDisplayX11 *display_x11)
+delete_outdated_error_traps (GdkX11Display *display_x11)
 {
   GSList *tmp_list;
   gulong processed_sequence;
@@ -2497,7 +2497,7 @@ delete_outdated_error_traps (GdkDisplayX11 *display_x11)
 void
 gdk_x11_display_error_trap_push (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkErrorTrap *trap;
 
   display_x11 = GDK_DISPLAY_X11 (display);
@@ -2520,7 +2520,7 @@ static gint
 gdk_x11_display_error_trap_pop_internal (GdkDisplay *display,
                                          gboolean    need_code)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkErrorTrap *trap;
   GSList *tmp_list;
   int result;
@@ -2701,7 +2701,7 @@ pop_error_trap (GdkDisplay *display,
 static GdkKeymap *
 gdk_x11_display_get_keymap (GdkDisplay *display)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   display_x11 = GDK_DISPLAY_X11 (display);
 
@@ -2714,7 +2714,7 @@ gdk_x11_display_get_keymap (GdkDisplay *display)
 }
 
 static void
-_gdk_display_x11_class_init (GdkDisplayX11Class * class)
+_gdk_display_x11_class_init (GdkX11DisplayClass * class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);

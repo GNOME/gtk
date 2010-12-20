@@ -48,7 +48,7 @@ _gdk_x11_display_add_window (GdkDisplay *display,
                              XID        *xid,
                              GdkWindow  *data)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
 
   g_return_if_fail (xid != NULL);
   g_return_if_fail (GDK_IS_DISPLAY (display));
@@ -69,7 +69,7 @@ void
 _gdk_x11_display_remove_window (GdkDisplay *display,
                                 XID         xid)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
@@ -95,7 +95,7 @@ GdkWindow *
 gdk_x11_window_lookup_for_display (GdkDisplay *display,
                                    Window      window)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkWindow *data = NULL;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);

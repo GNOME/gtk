@@ -417,7 +417,7 @@ gdk_device_manager_core_translate_event (GdkEventTranslator *translator,
   GdkWindowImplX11 *window_impl = NULL;
   gboolean return_val;
   GdkToplevelX11 *toplevel = NULL;
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_DISPLAY_X11 (display);
 
   device_manager = GDK_DEVICE_MANAGER_CORE (translator);
   return_val = FALSE;

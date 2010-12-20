@@ -38,7 +38,7 @@
 
 G_BEGIN_DECLS
 
-#define GDK_IS_DISPLAY_X11(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkDisplayX11")))
+#define GDK_IS_DISPLAY_X11(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkX11Display")))
 
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 

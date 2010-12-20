@@ -246,7 +246,7 @@ gdk_x_error (Display	 *xdisplay,
       displays = gdk_display_manager_list_displays (manager);
       while (displays != NULL)
         {
-          GdkDisplayX11 *gdk_display = displays->data;
+          GdkX11Display *gdk_display = displays->data;
 
           if (xdisplay == gdk_display->xdisplay)
             {
