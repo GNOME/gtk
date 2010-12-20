@@ -62,7 +62,8 @@
 
 enum {
   PROP_0,
-  PROP_CURSOR_TYPE
+  PROP_CURSOR_TYPE,
+  PROP_DISPLAY
 };
 
 G_DEFINE_ABSTRACT_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
@@ -79,6 +80,9 @@ gdk_cursor_get_property (GObject    *object,
     {
     case PROP_CURSOR_TYPE:
       g_value_set_enum (value, cursor->type);
+      break;
+    case PROP_DISPLAY:
+      g_value_set_object (value, cursor->display);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -98,6 +102,11 @@ gdk_cursor_set_property (GObject      *object,
     {
     case PROP_CURSOR_TYPE:
       cursor->type = g_value_get_enum (value);
+      break;
+    case PROP_DISPLAY:
+      cursor->display = g_value_get_object (value);
+      /* check that implementations actually provide the display when constructing */
+      g_assert (cursor->display != NULL);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -120,6 +129,14 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                       P_("Standard cursor type"),
                                                       GDK_TYPE_CURSOR_TYPE, GDK_X_CURSOR,
                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  g_object_class_install_property (object_class,
+				   PROP_DISPLAY,
+				   g_param_spec_object ("display",
+                                                        P_("Display"),
+                                                        P_("Display of this cursor"),
+                                                        GDK_TYPE_DISPLAY,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void

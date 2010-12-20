@@ -39,6 +39,7 @@ struct _GdkCursor
 
   /*< private >*/
   GdkCursorType type;
+  GdkDisplay *display;
 };
 
 struct _GdkCursorClass

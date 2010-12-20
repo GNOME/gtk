@@ -276,6 +276,7 @@ _gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
 
   private = g_object_new (GDK_TYPE_X11_CURSOR,
                           "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          "display", display,
                           NULL);
   private->display = display;
   private->xcursor = xcursor;
@@ -638,6 +639,7 @@ _gdk_x11_display_get_cursor_for_pixbuf (GdkDisplay *display,
 
   private = g_object_new (GDK_TYPE_X11_CURSOR, 
                           "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          "display", display,
                           NULL);
   private->display = display;
   private->xcursor = xcursor;
@@ -679,6 +681,7 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
 
   private = g_object_new (GDK_TYPE_X11_CURSOR,
                           "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          "display", display,
                           NULL);
   private->display = display;
   private->xcursor = xcursor;
@@ -744,6 +747,7 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
                                    source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
   private = g_object_new (GDK_TYPE_X11_CURSOR,
                           "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          "display", display,
                           NULL);
   private->display = display;
   private->xcursor = xcursor;
