@@ -398,8 +398,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   /**
    * GtkAboutDialog:website-label:
    *
-   * The label for the link to the website of the program. If this is not set,
-   * it defaults to the URL specified in the #GtkAboutDialog:website property.
+   * The label for the link to the website of the program.
    *
    * Since: 2.6
    */
@@ -407,7 +406,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
                                    PROP_WEBSITE_LABEL,
                                    g_param_spec_string ("website-label",
                                                         P_("Website label"),
-                                                        P_("The label for the link to the website of the program. If this is not set, it defaults to the URL"),
+                                                        P_("The label for the link to the website of the program"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
@@ -1001,9 +1000,7 @@ update_website (GtkAboutDialog *about)
     }
   else
     {
-      if (priv->website_url)
-        gtk_label_set_text (GTK_LABEL (priv->website_label), priv->website_url);
-      else if (priv->website_text)
+      if (priv->website_text)
         gtk_label_set_text (GTK_LABEL (priv->website_label), priv->website_text);
       else
         gtk_widget_hide (priv->website_label);
@@ -1454,7 +1451,6 @@ gtk_about_dialog_get_website_label (GtkAboutDialog *about)
  * @website_label: the label used for the website link
  *
  * Sets the label to be used for the website link.
- * It defaults to the website URL.
  *
  * Since: 2.6
  */
