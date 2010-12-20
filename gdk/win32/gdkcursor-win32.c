@@ -249,12 +249,6 @@ _gdk_cursor_destroy (GdkCursor *cursor)
   g_free (private);
 }
 
-GdkDisplay *
-gdk_cursor_get_display (GdkCursor *cursor)
-{
-  return gdk_display_get_default ();
-}
-
 GdkPixbuf *
 gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon)
 {

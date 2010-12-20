@@ -354,3 +354,23 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
 
   return GDK_DISPLAY_GET_CLASS (display)->get_cursor_for_pixbuf (display, pixbuf, x, y);
 }
+
+/** 
+ * gdk_cursor_get_display:
+ * @cursor: a #GdkCursor.
+ *
+ * Returns the display on which the #GdkCursor is defined.
+ *
+ * Returns: (transfer none): the #GdkDisplay associated to @cursor
+ *
+ * Since: 2.2
+ */
+
+GdkDisplay *
+gdk_cursor_get_display (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return cursor->display;
+}
+

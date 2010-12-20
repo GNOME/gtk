@@ -391,14 +391,6 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
   *height = 65536;
 }
 
-GdkDisplay *
-gdk_cursor_get_display (GdkCursor *cursor)
-{
-  g_return_val_if_fail (cursor != NULL, NULL);
-
-  return gdk_display_get_default ();
-}
-
 GdkPixbuf *
 gdk_cursor_get_image (GdkCursor *cursor)
 {

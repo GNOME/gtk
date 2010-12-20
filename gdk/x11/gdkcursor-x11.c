@@ -321,25 +321,6 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
   return ((GdkX11Cursor *)cursor)->xcursor;
 }
 
-/** 
- * gdk_cursor_get_display:
- * @cursor: a #GdkCursor.
- *
- * Returns the display on which the #GdkCursor is defined.
- *
- * Returns: (transfer none): the #GdkDisplay associated to @cursor
- *
- * Since: 2.2
- */
-
-GdkDisplay *
-gdk_cursor_get_display (GdkCursor *cursor)
-{
-  g_return_val_if_fail (cursor != NULL, NULL);
-
-  return ((GdkX11Cursor *)cursor)->display;
-}
-
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
 
 /**
