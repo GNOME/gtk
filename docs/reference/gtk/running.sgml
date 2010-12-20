@@ -268,15 +268,6 @@ additional environment variables.
 </formalpara>
 
 <formalpara>
-  <title><envar>GTK2_RC_FILES</envar></title>
-
-  <para>
-    Specifies a list of RC files to parse instead of the default ones;
-    see <link linkend="gtk-Resource-Files">Resource Files</link>.
-  </para>
-</formalpara>
-
-<formalpara>
   <title><envar>GTK_EXE_PREFIX</envar></title>
 
   <para>
