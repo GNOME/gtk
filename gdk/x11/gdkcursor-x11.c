@@ -45,6 +45,17 @@
 #include <string.h>
 #include <errno.h>
 
+typedef struct _GdkCursorPrivate       GdkCursorPrivate;
+
+struct _GdkCursorPrivate
+{
+  GdkCursor cursor;
+  Cursor xcursor;
+  GdkDisplay *display;
+  gchar *name;
+  guint serial;
+};
+
 
 static guint theme_serial = 0;
 
