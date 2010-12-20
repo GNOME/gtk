@@ -402,7 +402,7 @@ set_busy_cursor (GtkPrintUnixDialog *dialog,
   gdk_display_flush (display);
 
   if (cursor)
-    gdk_cursor_unref (cursor);
+    g_object_unref (cursor);
 }
 
 static void

@@ -4171,7 +4171,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
       gdk_window_set_cursor (text_view->priv->text_window->bin_window, cursor);
 
       if (cursor)
-      gdk_cursor_unref (cursor);
+      g_object_unref (cursor);
 
       text_view->priv->mouse_cursor_obscured = FALSE;
     }
@@ -4196,7 +4196,7 @@ set_invisible_cursor (GdkWindow *window)
  
   gdk_window_set_cursor (window, cursor);
   
-  gdk_cursor_unref (cursor);
+  g_object_unref (cursor);
 }
 
 static void
@@ -4220,7 +4220,7 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
       cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)),
 					   GDK_XTERM);
       gdk_window_set_cursor (text_view->priv->text_window->bin_window, cursor);
-      gdk_cursor_unref (cursor);
+      g_object_unref (cursor);
       text_view->priv->mouse_cursor_obscured = FALSE;
     }
 }
@@ -8428,7 +8428,7 @@ text_window_realize (GtkTextWindow *win,
           cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
 					       GDK_XTERM);
           gdk_window_set_cursor (win->bin_window, cursor);
-          gdk_cursor_unref (cursor);
+          g_object_unref (cursor);
         } 
 
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->priv->im_context,

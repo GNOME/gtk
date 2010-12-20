@@ -684,7 +684,7 @@ set_cross_grab (GtkHSV *hsv,
                     NULL,
                     cursor,
                     time);
-  gdk_cursor_unref (cursor);
+  g_object_unref (cursor);
 }
 
 static gboolean

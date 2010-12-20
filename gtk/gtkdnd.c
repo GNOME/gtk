@@ -734,7 +734,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
       for (i = 0 ; i < n_drag_cursors - 1; i++)
 	if (drag_cursors[i].cursor != NULL)
 	  {
-	    gdk_cursor_unref (drag_cursors[i].cursor);
+	    g_object_unref (drag_cursors[i].cursor);
 	    drag_cursors[i].cursor = NULL;
 	  }
     }
@@ -751,7 +751,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
     {
       if (display != gdk_cursor_get_display (drag_cursors[i].cursor))
 	{
-	  gdk_cursor_unref (drag_cursors[i].cursor);
+	  g_object_unref (drag_cursors[i].cursor);
 	  drag_cursors[i].cursor = NULL;
 	}
     }
@@ -776,7 +776,7 @@ gtk_drag_get_cursor (GdkDisplay        *display,
           if (display == gdk_cursor_get_display (info->drag_cursors[i]))
 	    return info->drag_cursors[i];
 	  
-	  gdk_cursor_unref (info->drag_cursors[i]);
+	  g_object_unref (info->drag_cursors[i]);
 	  info->drag_cursors[i] = NULL;
         }
 
@@ -3891,7 +3891,7 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
     {
       if (info->drag_cursors[i] != NULL)
         {
-          gdk_cursor_unref (info->drag_cursors[i]);
+          g_object_unref (info->drag_cursors[i]);
           info->drag_cursors[i] = NULL;
         }
     }

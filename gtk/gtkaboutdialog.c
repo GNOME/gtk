@@ -796,8 +796,8 @@ gtk_about_dialog_finalize (GObject *object)
   g_slist_foreach (priv->visited_links, (GFunc)g_free, NULL);
   g_slist_free (priv->visited_links);
 
-  gdk_cursor_unref (priv->hand_cursor);
-  gdk_cursor_unref (priv->regular_cursor);
+  g_object_unref (priv->hand_cursor);
+  g_object_unref (priv->regular_cursor);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }

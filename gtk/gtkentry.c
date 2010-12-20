@@ -2699,7 +2699,7 @@ update_cursors (GtkWidget *widget)
               display = gtk_widget_get_display (widget);
               cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
               gdk_window_set_cursor (icon_info->window, cursor);
-              gdk_cursor_unref (cursor);
+              g_object_unref (cursor);
             }
           else
             {
@@ -2863,7 +2863,7 @@ gtk_entry_realize (GtkWidget *widget)
   gdk_window_set_user_data (priv->text_area, entry);
 
   if (attributes_mask & GDK_WA_CURSOR)
-    gdk_cursor_unref (attributes.cursor);
+    g_object_unref (attributes.cursor);
 
   gtk_widget_style_attach (widget);
 
@@ -4029,7 +4029,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
       
       cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       gdk_window_set_cursor (priv->text_area, cursor);
-      gdk_cursor_unref (cursor);
+      g_object_unref (cursor);
       priv->mouse_cursor_obscured = FALSE;
     }
 
@@ -4142,7 +4142,7 @@ set_invisible_cursor (GdkWindow *window)
 
   gdk_window_set_cursor (window, cursor);
 
-  gdk_cursor_unref (cursor);
+  g_object_unref (cursor);
 }
 
 static void
@@ -4336,7 +4336,7 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
       gdk_window_set_cursor (priv->text_area, cursor);
 
       if (cursor)
-        gdk_cursor_unref (cursor);
+        g_object_unref (cursor);
 
       priv->mouse_cursor_obscured = FALSE;
 

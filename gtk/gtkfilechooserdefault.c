@@ -6053,7 +6053,7 @@ set_busy_cursor (GtkFileChooserDefault *impl,
   gdk_display_flush (display);
 
   if (cursor)
-    gdk_cursor_unref (cursor);
+    g_object_unref (cursor);
 }
 
 /* Creates a sort model to wrap the file system model and sets it on the tree view */

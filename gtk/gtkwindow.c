@@ -5202,7 +5202,7 @@ set_grip_cursor (GtkWindow *window)
       display = gtk_widget_get_display (widget);
       cursor = gdk_cursor_new_for_display (display, cursor_type);
       gdk_window_set_cursor (priv->grip_window, cursor);
-      gdk_cursor_unref (cursor);
+      g_object_unref (cursor);
     }
   else
     gdk_window_set_cursor (priv->grip_window, NULL);

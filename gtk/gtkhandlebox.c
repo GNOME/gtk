@@ -1199,7 +1199,7 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 				    G_CALLBACK (gtk_handle_box_grab_event), hb);
 		}
 
-	      gdk_cursor_unref (fleur);
+	      g_object_unref (fleur);
 	      event_handled = TRUE;
 	    }
 	  else if (priv->child_detached) /* Double click */

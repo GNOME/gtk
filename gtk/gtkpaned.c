@@ -1134,7 +1134,7 @@ gtk_paned_realize (GtkWidget *widget)
                                  &attributes, attributes_mask);
   gdk_window_set_user_data (priv->handle, paned);
   if (attributes_mask & GDK_WA_CURSOR)
-    gdk_cursor_unref (attributes.cursor);
+    g_object_unref (attributes.cursor);
 
   gtk_widget_style_attach (widget);
 
@@ -1439,7 +1439,7 @@ gtk_paned_state_changed (GtkWidget    *widget,
       gdk_window_set_cursor (priv->handle, cursor);
 
       if (cursor)
-        gdk_cursor_unref (cursor);
+        g_object_unref (cursor);
     }
 }
 

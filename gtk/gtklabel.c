@@ -3799,7 +3799,7 @@ gtk_label_update_cursor (GtkLabel *label)
       gdk_window_set_cursor (priv->select_info->window, cursor);
 
       if (cursor)
-        gdk_cursor_unref (cursor);
+        g_object_unref (cursor);
     }
 }
 
@@ -5113,7 +5113,7 @@ gtk_label_create_window (GtkLabel *label)
   gdk_window_set_user_data (priv->select_info->window, widget);
 
   if (attributes_mask & GDK_WA_CURSOR)
-    gdk_cursor_unref (attributes.cursor);
+    g_object_unref (attributes.cursor);
 }
 
 static void

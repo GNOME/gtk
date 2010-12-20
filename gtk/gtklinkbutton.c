@@ -390,7 +390,7 @@ set_hand_cursor (GtkWidget *widget,
   gdk_display_flush (display);
 
   if (cursor)
-    gdk_cursor_unref (cursor);
+    g_object_unref (cursor);
 }
 
 static void

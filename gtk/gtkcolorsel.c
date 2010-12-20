@@ -1968,7 +1968,7 @@ get_screen_color (GtkWidget *button)
                                  GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
                                  picker_cursor,
                                  time);
-  gdk_cursor_unref (picker_cursor);
+  g_object_unref (picker_cursor);
 
   if (grab_status != GDK_GRAB_SUCCESS)
     {
