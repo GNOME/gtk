@@ -4318,10 +4318,14 @@ gtk_widget_unrealize (GtkWidget *widget)
   if (gtk_widget_get_realized (widget))
     {
       g_object_ref (widget);
-      _gtk_tooltip_hide (widget);
+
+      if (widget->priv->mapped)
+        gtk_widget_unmap (widget);
+
       g_signal_emit (widget, widget_signals[UNREALIZE], 0);
+      g_assert (!widget->priv->mapped);
       gtk_widget_set_realized (widget, FALSE);
-      gtk_widget_set_mapped (widget, FALSE);
+
       g_object_unref (widget);
     }
 
@@ -10507,10 +10511,7 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  if (gtk_widget_get_mapped (widget))
-    gtk_widget_real_unmap (widget);
-
-  gtk_widget_set_mapped (widget, FALSE);
+  g_assert (!widget->priv->mapped);
 
   /* printf ("unrealizing %s\n", g_type_name (G_TYPE_FROM_INSTANCE (widget)));
    */
