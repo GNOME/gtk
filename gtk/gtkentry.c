@@ -2775,6 +2775,8 @@ gtk_entry_map (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->map (widget);
 
+  gdk_window_show (priv->text_area);
+
   for (i = 0; i < MAX_ICONS; i++)
     {
       if ((icon_info = priv->icons[i]) != NULL)
@@ -2803,6 +2805,8 @@ gtk_entry_unmap (GtkWidget *widget)
             gdk_window_hide (icon_info->window);
         }
     }
+
+  gdk_window_hide (priv->text_area);
 
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->unmap (widget);
 }
@@ -2862,8 +2866,6 @@ gtk_entry_realize (GtkWidget *widget)
     gdk_cursor_unref (attributes.cursor);
 
   gtk_widget_style_attach (widget);
-
-  gdk_window_show (priv->text_area);
 
   gtk_im_context_set_client_window (priv->im_context, priv->text_area);
 
