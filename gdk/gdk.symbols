@@ -79,6 +79,7 @@ gdk_device_set_mode
 gdk_device_set_source
 gdk_device_type_get_type G_GNUC_CONST
 gdk_device_ungrab
+gdk_device_warp
 gdk_disable_multidevice
 gdk_display_add_client_message_filter
 gdk_display_beep
@@ -130,7 +131,6 @@ gdk_display_supports_input_shapes
 gdk_display_supports_selection_notification
 gdk_display_supports_shapes
 gdk_display_sync
-gdk_display_warp_device
 gdk_display_warp_pointer
 gdk_drag_abort
 gdk_drag_action_get_type G_GNUC_CONST

@@ -229,6 +229,11 @@ GdkGrabStatus gdk_device_grab        (GdkDevice        *device,
 void          gdk_device_ungrab      (GdkDevice        *device,
                                       guint32           time_);
 
+void          gdk_device_warp        (GdkDevice        *device,
+                                      GdkScreen        *screen,
+                                      gint              x,
+                                      gint              y);
+
 gboolean gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
                                            GdkDevice   *device,
                                            GdkWindow  **grab_window,

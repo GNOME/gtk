@@ -2393,7 +2393,7 @@ gdk_display_get_maximal_cursor_size (GdkDisplay *display,
  *
  * Since: 2.8
  *
- * Deprecated: 3.0: Use gdk_display_warp_device() instead.
+ * Deprecated: 3.0: Use gdk_device_warp() instead.
  */
 void
 gdk_display_warp_pointer (GdkDisplay *display,
@@ -2401,47 +2401,9 @@ gdk_display_warp_pointer (GdkDisplay *display,
                           gint        x,
                           gint        y)
 {
-  gdk_display_warp_device (display,
-                           display->core_pointer,
-                           screen,
-                           x, y);
-}
-
-/**
- * gdk_display_warp_device:
- * @display: a #GdkDisplay.
- * @device: a #GdkDevice.
- * @screen: the screen of @display to warp @device to.
- * @x: the X coordinate of the destination.
- * @y: the Y coordinate of the destination.
- *
- * Warps @device in @display to the point @x,@y on
- * the screen @screen, unless the device is confined
- * to a window by a grab, in which case it will be moved
- * as far as allowed by the grab. Warping the pointer
- * creates events as if the user had moved the mouse
- * instantaneously to the destination.
- *
- * Note that the pointer should normally be under the
- * control of the user. This function was added to cover
- * some rare use cases like keyboard navigation support
- * for the color picker in the #GtkColorSelectionDialog.
- *
- * Since: 3.0
- **/
-void
-gdk_display_warp_device (GdkDisplay *display,
-                         GdkDevice  *device,
-                         GdkScreen  *screen,
-                         gint        x,
-                         gint        y)
-{
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (GDK_IS_DEVICE (device));
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (display == gdk_device_get_display (device));
-
-  GDK_DEVICE_GET_CLASS (device)->warp (device, screen, x, y);
+  gdk_device_warp (display->core_pointer,
+                   screen,
+                   x, y);
 }
 
 gulong

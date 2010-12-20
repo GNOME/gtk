@@ -4255,9 +4255,9 @@ gtk_drag_key_cb (GtkWidget         *widget,
     {
       info->cur_x += dx;
       info->cur_y += dy;
-      gdk_display_warp_device (gtk_widget_get_display (widget), pointer,
-                               gtk_widget_get_screen (widget),
-                               info->cur_x, info->cur_y);
+      gdk_device_warp (pointer,
+                       gtk_widget_get_screen (widget),
+                       info->cur_x, info->cur_y);
     }
 
   gtk_drag_update (info, info->cur_screen, info->cur_x, info->cur_y, (GdkEvent *)event);

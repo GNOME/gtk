@@ -196,11 +196,6 @@ GdkWindow *      gdk_display_get_window_at_device_position (GdkDisplay          
                                                             GdkDevice             *device,
                                                             gint                  *win_x,
                                                             gint                  *win_y);
-void             gdk_display_warp_device                   (GdkDisplay            *display,
-                                                            GdkDevice             *device,
-                                                            GdkScreen             *screen,
-                                                            gint                   x,
-                                                            gint                   y);
 
 #ifndef GDK_MULTIDEVICE_SAFE
 GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay                   *display,

@@ -1866,7 +1866,7 @@ key_press (GtkWidget   *invisible,
       return FALSE;
     }
 
-  gdk_display_warp_device (display, pointer_device, screen, x + dx, y + dy);
+  gdk_device_warp (pointer_device, screen, x + dx, y + dy);
 
   return TRUE;
 

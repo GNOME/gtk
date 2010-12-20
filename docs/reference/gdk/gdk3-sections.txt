@@ -135,7 +135,6 @@ gdk_display_set_pointer_hooks
 GdkDisplayDeviceHooks
 gdk_display_set_device_hooks
 gdk_display_warp_pointer
-gdk_display_warp_device
 gdk_display_supports_cursor_color
 gdk_display_supports_cursor_alpha
 gdk_display_get_default_cursor_size
@@ -716,6 +715,7 @@ gdk_device_get_display
 gdk_device_get_has_cursor
 gdk_device_get_n_axes
 gdk_device_get_n_keys
+gdk_device_warp
 
 <SUBSECTION>
 gdk_device_grab
