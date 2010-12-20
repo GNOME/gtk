@@ -1391,7 +1391,7 @@ gail_tree_view_get_selected_rows (AtkTable *table,
 
   selection = gtk_tree_view_get_selection (tree_view);
 
-  switch (gtk_selection_get_mode (selection))
+  switch (gtk_tree_selection_get_mode (selection))
     {
     case GTK_SELECTION_SINGLE:
     case GTK_SELECTION_BROWSE:
