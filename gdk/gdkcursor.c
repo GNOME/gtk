@@ -374,3 +374,24 @@ gdk_cursor_get_display (GdkCursor *cursor)
   return cursor->display;
 }
 
+/**
+ * gdk_cursor_get_image:
+ * @cursor: a #GdkCursor
+ *
+ * Returns a #GdkPixbuf with the image used to display the cursor.
+ *
+ * Note that depending on the capabilities of the windowing system and 
+ * on the cursor, GDK may not be able to obtain the image data. In this 
+ * case, %NULL is returned.
+ *
+ * Returns: (transfer full): a #GdkPixbuf representing @cursor, or %NULL
+ *
+ * Since: 2.8
+ */
+GdkPixbuf*  
+gdk_cursor_get_image (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return GDK_CURSOR_GET_CLASS (cursor)->get_image (cursor);
+}

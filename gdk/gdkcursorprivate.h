@@ -45,6 +45,8 @@ struct _GdkCursor
 struct _GdkCursorClass
 {
   GObjectClass parent_class;
+
+  GdkPixbuf *   (* get_image)   (GdkCursor *    cursor);
 };
 
 G_END_DECLS

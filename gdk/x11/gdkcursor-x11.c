@@ -181,6 +181,8 @@ _gdk_x11_cursor_display_finalize (GdkDisplay *display)
 
 G_DEFINE_TYPE (GdkX11Cursor, gdk_x11_cursor, GDK_TYPE_CURSOR)
 
+static GdkPixbuf* gdk_x11_cursor_get_image (GdkCursor *cursor);
+
 void
 gdk_x11_cursor_finalize (GObject *object)
 {
@@ -197,11 +199,14 @@ gdk_x11_cursor_finalize (GObject *object)
 }
 
 static void
-gdk_x11_cursor_class_init (GdkX11CursorClass *cursor_class)
+gdk_x11_cursor_class_init (GdkX11CursorClass *xcursor_class)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (cursor_class);
+  GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (xcursor_class);
+  GObjectClass *object_class = G_OBJECT_CLASS (xcursor_class);
 
   object_class->finalize = gdk_x11_cursor_finalize;
+
+  cursor_class->get_image = gdk_x11_cursor_get_image;
 }
 
 static void
@@ -323,22 +328,8 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
 
-/**
- * gdk_cursor_get_image:
- * @cursor: a #GdkCursor
- *
- * Returns a #GdkPixbuf with the image used to display the cursor.
- *
- * Note that depending on the capabilities of the windowing system and 
- * on the cursor, GDK may not be able to obtain the image data. In this 
- * case, %NULL is returned.
- *
- * Returns: (transfer full): a #GdkPixbuf representing @cursor, or %NULL
- *
- * Since: 2.8
- */
-GdkPixbuf*  
-gdk_cursor_get_image (GdkCursor *cursor)
+static GdkPixbuf*  
+gdk_x11_cursor_get_image (GdkCursor *cursor)
 {
   Display *xdisplay;
   GdkX11Cursor *private;
@@ -350,9 +341,7 @@ gdk_cursor_get_image (GdkCursor *cursor)
   GdkPixbuf *pixbuf;
   gchar *theme;
   
-  g_return_val_if_fail (cursor != NULL, NULL);
-
-  private = (GdkX11Cursor *) cursor;
+  private = GDK_X11_CURSOR (cursor);
     
   xdisplay = GDK_DISPLAY_XDISPLAY (gdk_cursor_get_display (cursor));
 
@@ -509,11 +498,9 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 
 #else
 
-GdkPixbuf*  
-gdk_cursor_get_image (GdkCursor *cursor)
+static GdkPixbuf*  
+gdk_x11_cursor_get_image (GdkCursor *cursor)
 {
-  g_return_val_if_fail (cursor != NULL, NULL);
-  
   return NULL;
 }
 
