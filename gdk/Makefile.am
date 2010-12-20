@@ -219,6 +219,7 @@ x11_introspection_files = 		\
 	x11/gdkx11cursor.h		\
 	x11/gdkx11display.h		\
 	x11/gdkx11screen.h		\
+	x11/gdkx11selection.h		\
 	x11/gdkx11visual.h		\
 	x11/gdkx11window.h
 

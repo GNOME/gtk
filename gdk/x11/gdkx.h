@@ -58,6 +58,7 @@
 #include <gdk/x11/gdkx11cursor.h>
 #include <gdk/x11/gdkx11display.h>
 #include <gdk/x11/gdkx11screen.h>
+#include <gdk/x11/gdkx11selection.h>
 #include <gdk/x11/gdkx11visual.h>
 #include <gdk/x11/gdkx11window.h>
 
@@ -100,30 +101,6 @@ GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
 Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
 G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
-
-gint     gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
-                                                     GdkAtom       encoding,
-                                                     gint          format,
-                                                     const guchar *text,
-                                                     gint          length,
-                                                     gchar      ***list);
-void     gdk_x11_free_text_list                     (gchar       **list);
-gint     gdk_x11_display_string_to_compound_text    (GdkDisplay   *display,
-                                                     const gchar  *str,
-                                                     GdkAtom      *encoding,
-                                                     gint         *format,
-                                                     guchar      **ctext,
-                                                     gint         *length);
-gboolean gdk_x11_display_utf8_to_compound_text      (GdkDisplay   *display,
-                                                     const gchar  *str,
-                                                     GdkAtom      *encoding,
-                                                     gint         *format,
-                                                     guchar      **ctext,
-                                                     gint         *length);
-void     gdk_x11_free_compound_text                 (guchar       *ctext);
-
-
-
 
 G_END_DECLS
 
