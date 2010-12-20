@@ -57,6 +57,7 @@
 
 #include <gdk/x11/gdkx11cursor.h>
 #include <gdk/x11/gdkx11display.h>
+#include <gdk/x11/gdkx11property.h>
 #include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11selection.h>
 #include <gdk/x11/gdkx11visual.h>
@@ -83,23 +84,6 @@ Display *gdk_x11_get_default_xdisplay     (void);
 #ifndef GDK_MULTIHEAD_SAFE
 void          gdk_x11_grab_server    (void);
 void          gdk_x11_ungrab_server  (void);
-#endif
-
-
-/* Functions to get the X Atom equivalent to the GdkAtom */
-Atom                  gdk_x11_atom_to_xatom_for_display (GdkDisplay  *display,
-                                                         GdkAtom      atom);
-GdkAtom               gdk_x11_xatom_to_atom_for_display (GdkDisplay  *display,
-                                                         Atom         xatom);
-Atom                  gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
-                                                             const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
-                                                          Atom         xatom);
-#ifndef GDK_MULTIHEAD_SAFE
-Atom                  gdk_x11_atom_to_xatom     (GdkAtom      atom);
-GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
-Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
-G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
 
 G_END_DECLS
