@@ -4828,6 +4828,7 @@ gtk_window_unmap (GtkWidget *widget)
 {
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
+  GtkWidget *child;
   GtkWindowGeometryInfo *info;
   GdkWindow *gdk_window;
   GdkWindowState state;
@@ -4862,6 +4863,10 @@ gtk_window_unmap (GtkWidget *widget)
   priv->stick_initially = (state & GDK_WINDOW_STATE_STICKY) != 0;
   priv->above_initially = (state & GDK_WINDOW_STATE_ABOVE) != 0;
   priv->below_initially = (state & GDK_WINDOW_STATE_BELOW) != 0;
+
+  child = gtk_bin_get_child (&(window->bin));
+  if (child)
+    gtk_widget_unmap (child);
 }
 
 static void

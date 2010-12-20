@@ -255,7 +255,7 @@ In the following
 
    widget->parent && GTK_WIDGET_MAPPED (widget->parent) && 
      GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_CHILD_VISIBLE 
-       => GTK_WIDGET_MAPPED (widget)
+       <=> GTK_WIDGET_MAPPED (widget)
 
 Note:, the definition
 

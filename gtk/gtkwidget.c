@@ -8722,6 +8722,18 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                        G_OBJECT_TYPE_NAME (parent), parent,
                        G_OBJECT_TYPE_NAME (widget), widget);
         }
+      else if (!widget->priv->toplevel)
+        {
+          /* No parent or parent not mapped on non-toplevel implies... */
+
+          if (widget->priv->mapped && !widget->priv->in_reparent)
+            g_warning ("%s %p is mapped but visible=%d child_visible=%d parent %s %p mapped=%d",
+                       G_OBJECT_TYPE_NAME (widget), widget,
+                       widget->priv->visible,
+                       widget->priv->child_visible,
+                       parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
+                       parent ? parent->priv->mapped : FALSE);
+        }
     }
 
   if (!widget->priv->realized)
