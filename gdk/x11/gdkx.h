@@ -55,14 +55,13 @@
 
 #define __GDKX_H_INSIDE__
 
+#include <gdk/x11/gdkx11cursor.h>
 #include <gdk/x11/gdkx11window.h>
 
 #undef __GDKX_H_INSIDE__
 
 G_BEGIN_DECLS
 
-Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
-Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
 Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
@@ -75,26 +74,6 @@ Window   gdk_x11_get_default_root_xwindow (void);
 Display *gdk_x11_get_default_xdisplay     (void);
 gint     gdk_x11_get_default_screen       (void);
 #endif
-
-/**
- * GDK_CURSOR_XDISPLAY:
- * @cursor: a #GdkCursor.
- *
- * Returns the display of a #GdkCursor.
- *
- * Returns: an Xlib <type>Display*</type>.
- */
-#define GDK_CURSOR_XDISPLAY(cursor)   (gdk_x11_cursor_get_xdisplay (cursor))
-
-/**
- * GDK_CURSOR_XCURSOR:
- * @cursor: a #GdkCursor.
- *
- * Returns the X cursor belonging to a #GdkCursor.
- *
- * Returns: an Xlib <type>Cursor</type>.
- */
-#define GDK_CURSOR_XCURSOR(cursor)    (gdk_x11_cursor_get_xcursor (cursor))
 
 #define GDK_IS_DISPLAY_X11(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkDisplayX11")))
 

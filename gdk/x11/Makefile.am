@@ -76,6 +76,7 @@ libgdkinclude_HEADERS = 	\
 	gdkx.h
 
 libgdkx11include_HEADERS = 	\
+	gdkx11cursor.h		\
 	gdkx11window.h
 
 noinst_PROGRAMS = checksettings
