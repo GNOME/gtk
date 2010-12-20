@@ -56,6 +56,7 @@
 #define __GDKX_H_INSIDE__
 
 #include <gdk/x11/gdkx11cursor.h>
+#include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11visual.h>
 #include <gdk/x11/gdkx11window.h>
 
@@ -64,15 +65,10 @@
 G_BEGIN_DECLS
 
 Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
-Screen * gdk_x11_screen_get_xscreen       (GdkScreen   *screen);
-int      gdk_x11_screen_get_screen_number (GdkScreen   *screen);
-
-const char* gdk_x11_screen_get_window_manager_name (GdkScreen *screen);
 
 #ifndef GDK_MULTIHEAD_SAFE
 Window   gdk_x11_get_default_root_xwindow (void);
 Display *gdk_x11_get_default_xdisplay     (void);
-gint     gdk_x11_get_default_screen       (void);
 #endif
 
 #define GDK_IS_DISPLAY_X11(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkDisplayX11")))
@@ -88,37 +84,6 @@ gint     gdk_x11_get_default_screen       (void);
 
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
-/**
- * GDK_DISPLAY_XDISPLAY:
- * @display: a #GdkDisplay.
- *
- * Returns the display of a #GdkDisplay.
- *
- * Returns: an Xlib <type>Display*</type>
- */
-#define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
-
-/**
- * GDK_SCREEN_XSCREEN:
- * @screen: a #GdkScreen
- *
- * Returns the screen of a #GdkScreen.
- *
- * Returns: an Xlib <type>Screen*</type>.
- */
-#define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
-
-/**
- * GDK_SCREEN_XNUMBER:
- * @screen: a #GdkScreen
- *
- * Returns the index of a #GdkScreen.
- *
- * Returns: the position of @screen among the screens of
- *  its display.
- */
-#define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
-
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
 G_CONST_RETURN gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
@@ -132,13 +97,6 @@ void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
 void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
                                                 const char *message_type,
                                                 ...) G_GNUC_NULL_TERMINATED;
-
-/* returns TRUE if we support the given WM spec feature */
-gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
-                                              GdkAtom    property);
-
-XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
-                                              gint       monitor_num);
 
 #ifndef GDK_MULTIHEAD_SAFE
 void          gdk_x11_grab_server    (void);
