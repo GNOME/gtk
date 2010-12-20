@@ -323,9 +323,11 @@ gtk_cell_renderer_spin_start_editing (GtkCellRenderer      *cell,
 
   g_object_get (cell_text, "text", &text, NULL);
   if (text)
-    gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin),
-			       g_ascii_strtod (text, NULL));
-  g_free (text);
+    {
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (spin),
+                                 g_strtod (text, NULL));
+      g_free (text);
+    }
 
   g_object_set_data_full (G_OBJECT (spin), GTK_CELL_RENDERER_SPIN_PATH,
 			  g_strdup (path), g_free);
