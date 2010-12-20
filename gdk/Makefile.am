@@ -215,7 +215,8 @@ x11_introspection_files = 		\
 	x11/gdkxid.c			\
 	x11/xsettings-client.c		\
 	x11/xsettings-common.c		\
-        x11/gdkx.h
+        x11/gdkx.h			\
+	x11/gdkx11window.h
 
 GdkX11-3.0.gir: libgdk-3.0.la Gdk-3.0.gir Makefile
 GdkX11_3_0_gir_SCANNERFLAGS = --warn-all --strip-prefix=Gdk

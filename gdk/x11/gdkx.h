@@ -32,9 +32,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-G_BEGIN_DECLS
-
-
 /**
  * SECTION:x_interaction
  * @Short_description: X backend-specific functions
@@ -56,10 +53,13 @@ G_BEGIN_DECLS
  */
 
 
-Window   gdk_x11_window_get_xid           (GdkWindow   *window);
-void     gdk_x11_window_set_user_time     (GdkWindow   *window,
-                                           guint32      timestamp);
-void     gdk_x11_window_move_to_current_desktop (GdkWindow   *window);
+#define __GDKX_H_INSIDE__
+
+#include <gdk/x11/gdkx11window.h>
+
+#undef __GDKX_H_INSIDE__
+
+G_BEGIN_DECLS
 
 Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
@@ -110,26 +110,6 @@ gint     gdk_x11_get_default_screen       (void);
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
 /**
- * GDK_WINDOW_XDISPLAY:
- * @win: a #GdkWindow.
- *
- * Returns the display of a #GdkWindow.
- *
- * Returns: an Xlib <type>Display*</type>.
- */
-#define GDK_WINDOW_XDISPLAY(win)      (GDK_DISPLAY_XDISPLAY (gdk_window_get_display (win)))
-
-/**
- * GDK_WINDOW_XID:
- * @win: a #GdkWindow.
- *
- * Returns the X window belonging to a #GdkWindow.
- *
- * Returns: the Xlib <type>Window</type> of @win.
- */
-#define GDK_WINDOW_XID(win)           (gdk_x11_window_get_xid (win))
-
-/**
  * GDK_DISPLAY_XDISPLAY:
  * @display: a #GdkDisplay.
  *
@@ -165,7 +145,6 @@ gint     gdk_x11_get_default_screen       (void);
 GdkVisual* gdk_x11_screen_lookup_visual (GdkScreen *screen,
                                          VisualID   xvisualid);
 
-guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
 G_CONST_RETURN gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
@@ -225,11 +204,6 @@ void        gdk_x11_register_standard_event_type (GdkDisplay *display,
 
 
 void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
-
-GdkWindow  *gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
-                                                    Window      window);
-GdkWindow  *gdk_x11_window_lookup_for_display      (GdkDisplay *display,
-                                                    Window      window);
 
 gint     gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
                                                      GdkAtom       encoding,

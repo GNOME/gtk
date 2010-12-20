@@ -2,6 +2,7 @@
 include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
+libgdkx11includedir = $(includedir)/gtk-3.0/gdk/x11
 
 INCLUDES = 			\
 	-DG_LOG_DOMAIN=\"Gdk\"	\
@@ -74,6 +75,8 @@ endif
 libgdkinclude_HEADERS = 	\
 	gdkx.h
 
+libgdkx11include_HEADERS = 	\
+	gdkx11window.h
 
 noinst_PROGRAMS = checksettings
 checksettings_LDADD = libgdk-x11.la $(GLIB_LIBS)
