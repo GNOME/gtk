@@ -38,7 +38,11 @@
 
 G_BEGIN_DECLS
 
+#ifdef GDK_COMPILATION
 typedef struct _GdkX11Display GdkX11Display;
+#else
+typedef GdkDisplay GdkX11Display;
+#endif
 typedef struct _GdkX11DisplayClass GdkX11DisplayClass;
 
 #define GDK_TYPE_X11_DISPLAY              (gdk_x11_display_get_type())
