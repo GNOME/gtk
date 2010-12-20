@@ -31,6 +31,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "gdkcursor.h"
+#include "gdkcursorprivate.h"
 #include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 

@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gdkcursor.h"
+#include "gdkcursorprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
 
@@ -52,6 +53,11 @@
  * #GdkWindowAttr struct passed to gdk_window_new().
  */
 
+/**
+ * GdkCursor:
+ *
+ * The #GdkCursor structure represents a cursor. Its contents are private.
+ */
 
 G_DEFINE_BOXED_TYPE (GdkCursor, gdk_cursor,
                      gdk_cursor_ref,

@@ -96,6 +96,7 @@ gdk_built_public_sources = 			\
 
 gdk_private_headers = 				\
 	gdkapplaunchcontextprivate.h		\
+	gdkcursorprivate.h			\
 	gdkdevicemanagerprivate.h		\
 	gdkdeviceprivate.h			\
 	gdkdisplaymanagerprivate.h		\

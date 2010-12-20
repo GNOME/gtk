@@ -208,18 +208,6 @@ typedef enum
   GDK_CURSOR_IS_PIXMAP 	  = -1
 } GdkCursorType;
 
-/**
- * GdkCursor:
- *
- * A #GdkCursor structure represents a cursor.
- */
-struct _GdkCursor
-{
-  /*< private >*/
-  GdkCursorType GSEAL (type);
-  guint GSEAL (ref_count);
-};
-
 /* Cursors
  */
 
