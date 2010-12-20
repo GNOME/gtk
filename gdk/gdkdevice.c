@@ -414,7 +414,7 @@ gdk_device_get_property (GObject    *object,
  * or %NULL.
  * @mask: location to store the modifiers, or %NULL.
  *
- * Gets the current state of a device relative to @window.
+ * Gets the current state of a pointer device relative to @window.
  */
 void
 gdk_device_get_state (GdkDevice       *device,
@@ -423,6 +423,7 @@ gdk_device_get_state (GdkDevice       *device,
                       GdkModifierType *mask)
 {
   g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (GDK_IS_WINDOW (window));
 
   if (GDK_DEVICE_GET_CLASS (device)->get_state)
@@ -438,7 +439,7 @@ gdk_device_get_state (GdkDevice       *device,
  * @events: (array length=n_events) (out) (transfer none): location to store a newly-allocated array of #GdkTimeCoord, or %NULL
  * @n_events: location to store the length of @events, or %NULL
  *
- * Obtains the motion history for a device; given a starting and
+ * Obtains the motion history for a pointer device; given a starting and
  * ending timestamp, return all events in the motion history for
  * the device in the given range of time. Some windowing systems
  * do not support motion history, in which case, %FALSE will
@@ -457,6 +458,7 @@ gdk_device_get_history (GdkDevice      *device,
                         gint           *n_events)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   if (n_events)
@@ -540,6 +542,7 @@ gboolean
 gdk_device_get_has_cursor (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
 
   return device->priv->has_cursor;
 }
@@ -706,7 +709,7 @@ gdk_device_set_key (GdkDevice      *device,
 
 /**
  * gdk_device_get_axis_use:
- * @device: a #GdkDevice.
+ * @device: a pointer #GdkDevice.
  * @index_: the index of the axis.
  *
  * Returns the axis use for @index_.
@@ -722,6 +725,7 @@ gdk_device_get_axis_use (GdkDevice *device,
   GdkAxisInfo *info;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_AXIS_IGNORE);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, GDK_AXIS_IGNORE);
   g_return_val_if_fail (index_ < device->priv->axes->len, GDK_AXIS_IGNORE);
 
   info = &g_array_index (device->priv->axes, GdkAxisInfo, index_);
@@ -731,7 +735,7 @@ gdk_device_get_axis_use (GdkDevice *device,
 
 /**
  * gdk_device_set_axis_use:
- * @device: a #GdkDevice
+ * @device: a pointer #GdkDevice
  * @index_: the index of the axis
  * @use: specifies how the axis is used
  *
@@ -746,6 +750,7 @@ gdk_device_set_axis_use (GdkDevice   *device,
   GdkAxisInfo *info;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (index_ < device->priv->axes->len);
 
   priv = device->priv;
@@ -955,7 +960,7 @@ gdk_device_get_device_type (GdkDevice *device)
 
 /**
  * gdk_device_get_n_axes:
- * @device: a #GdkDevice
+ * @device: a pointer #GdkDevice
  *
  * Returns the number of axes the device currently has.
  *
@@ -967,13 +972,14 @@ gint
 gdk_device_get_n_axes (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
   return device->priv->axes->len;
 }
 
 /**
  * gdk_device_list_axes:
- * @device: a #GdkDevice
+ * @device: a pointer #GdkDevice
  *
  * Returns a #GList of #GdkAtom<!-- -->s, containing the labels for
  * the axes that @device currently has.
@@ -990,6 +996,9 @@ gdk_device_list_axes (GdkDevice *device)
   GList *axes = NULL;
   gint i;
 
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+
   priv = device->priv;
 
   for (i = 0; i < priv->axes->len; i++)
@@ -1005,7 +1014,7 @@ gdk_device_list_axes (GdkDevice *device)
 
 /**
  * gdk_device_get_axis_value:
- * @device: a #GdkDevice.
+ * @device: a pointer #GdkDevice.
  * @axes: pointer to an array of axes
  * @axis_label: #GdkAtom with the axis label.
  * @value: location to store the found value.
@@ -1028,6 +1037,7 @@ gdk_device_get_axis_value (GdkDevice *device,
   gint i;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
 
   if (axes == NULL)
     return FALSE;
@@ -1074,6 +1084,7 @@ gdk_device_get_axis (GdkDevice  *device,
   gint i;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
 
   if (axes == NULL)
     return FALSE;

@@ -4943,7 +4943,7 @@ gdk_window_get_pointer (GdkWindow	  *window,
 /**
  * gdk_window_get_device_position:
  * @window: a #GdkWindow.
- * @device: #GdkDevice to query to.
+ * @device: pointer #GdkDevice to query to.
  * @x: (out) (allow-none): return location for the X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): return location for the Y coordinate of @device, or %NULL.
  * @mask: (out) (allow-none): return location for the modifier mask, or %NULL.
@@ -4972,6 +4972,7 @@ gdk_window_get_device_position (GdkWindow       *window,
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
   tmp_x = 0;
   tmp_y = 0;
@@ -6697,7 +6698,7 @@ gdk_window_set_cursor (GdkWindow *window,
 /**
  * gdk_window_get_device_cursor:
  * @window: a #GdkWindow.
- * @device: a #GdkDevice.
+ * @device: a master, pointer #GdkDevice.
  *
  * Retrieves a #GdkCursor pointer for the @device currently set on the
  * specified #GdkWindow, or %NULL.  If the return value is %NULL then
@@ -6716,6 +6717,8 @@ gdk_window_get_device_cursor (GdkWindow *window,
 {
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER, NULL);
 
   return g_hash_table_lookup (window->device_cursor, device);
 }
@@ -6723,7 +6726,7 @@ gdk_window_get_device_cursor (GdkWindow *window,
 /**
  * gdk_window_set_device_cursor:
  * @window: a #Gdkwindow
- * @device: a #GdkDevice
+ * @device: a master, pointer #GdkDevice
  * @cursor: a #GdkCursor
  *
  * Sets a specific #GdkCursor for a given device when it gets inside @window.
@@ -6744,6 +6747,8 @@ gdk_window_set_device_cursor (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
+  g_return_if_fail (gdk_device_get_device_type (device) == GDK_DEVICE_TYPE_MASTER);
 
   display = gdk_window_get_display (window);
 

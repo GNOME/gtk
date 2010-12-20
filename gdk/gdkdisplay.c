@@ -724,7 +724,7 @@ _gdk_display_enable_motion_hints (GdkDisplay *display,
 /**
  * gdk_display_get_device_state:
  * @display: a #GdkDisplay.
- * @device: device to query status to.
+ * @device: pointer device to query status about.
  * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
  *          the @device is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
@@ -749,6 +749,7 @@ gdk_display_get_device_state (GdkDisplay       *display,
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
   g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
 
   display->device_hooks->get_device_state (display, device, &tmp_screen, &tmp_x, &tmp_y, &tmp_mask);
 
@@ -765,7 +766,7 @@ gdk_display_get_device_state (GdkDisplay       *display,
 /**
  * gdk_display_get_window_at_device_position:
  * @display: a #GdkDisplay.
- * @device: #GdkDevice to query info to.
+ * @device: pointer #GdkDevice to query info to.
  * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
  *         relative to the window origin, or %NULL.
  * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
@@ -789,6 +790,7 @@ gdk_display_get_window_at_device_position (GdkDisplay *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
   window = display->device_hooks->window_at_device_position (display, device, &tmp_x, &tmp_y);
 
