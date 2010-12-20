@@ -853,6 +853,8 @@ lookup_default_value (PropertyNode *node,
 {
   if (node->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
     g_value_set_object (value, gtk_theming_engine_load (NULL));
+  else if (node->pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
+    g_value_take_boxed (value, pango_font_description_from_string ("Sans 10"));
   else
     g_param_value_set_default (node->pspec, value);
 }
