@@ -59,9 +59,17 @@
  * The #GdkCursor structure represents a cursor. Its contents are private.
  */
 
-G_DEFINE_BOXED_TYPE (GdkCursor, gdk_cursor,
-                     gdk_cursor_ref,
-                     gdk_cursor_unref)
+G_DEFINE_ABSTRACT_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
+
+static void
+gdk_cursor_class_init (GdkCursorClass *cursor_class)
+{
+}
+
+static void
+gdk_cursor_init (GdkCursor *cursor)
+{
+}
 
 /**
  * gdk_cursor_ref:
@@ -75,11 +83,8 @@ GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)
 {
   g_return_val_if_fail (cursor != NULL, NULL);
-  g_return_val_if_fail (cursor->ref_count > 0, NULL);
 
-  cursor->ref_count += 1;
-
-  return cursor;
+  return g_object_ref (cursor);
 }
 
 /**
@@ -93,12 +98,8 @@ void
 gdk_cursor_unref (GdkCursor *cursor)
 {
   g_return_if_fail (cursor != NULL);
-  g_return_if_fail (cursor->ref_count > 0);
 
-  cursor->ref_count -= 1;
-
-  if (cursor->ref_count == 0)
-    _gdk_cursor_destroy (cursor);
+  g_object_unref (cursor);
 }
 
 /**

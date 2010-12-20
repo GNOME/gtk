@@ -386,11 +386,11 @@ gdk_window_class_init (GdkWindowClass *klass)
    */
   g_object_class_install_property (object_class,
                                    PROP_CURSOR,
-                                   g_param_spec_boxed ("cursor",
-                                                       P_("Cursor"),
-                                                       P_("Cursor"),
-                                                       GDK_TYPE_CURSOR,
-                                                       G_PARAM_READWRITE));
+                                   g_param_spec_object ("cursor",
+                                                        P_("Cursor"),
+                                                        P_("Cursor"),
+                                                        GDK_TYPE_CURSOR,
+                                                        G_PARAM_READWRITE));
 
   /**
    * GdkWindow::pick-embedded-child:
@@ -593,7 +593,7 @@ gdk_window_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_CURSOR:
-      gdk_window_set_cursor (window, g_value_get_boxed (value));
+      gdk_window_set_cursor (window, g_value_get_object (value));
       break;
 
     default:
@@ -613,7 +613,7 @@ gdk_window_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_CURSOR:
-      g_value_set_boxed (value, gdk_window_get_cursor (window));
+      g_value_set_object (value, gdk_window_get_cursor (window));
       break;
 
     default:

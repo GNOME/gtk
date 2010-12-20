@@ -31,11 +31,19 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GdkCursorClass GdkCursorClass;
+
 struct _GdkCursor
 {
+  GObject parent_instance;
+
   /*< private >*/
   GdkCursorType type;
-  guint ref_count;
+};
+
+struct _GdkCursorClass
+{
+  GObjectClass parent_class;
 };
 
 G_END_DECLS
