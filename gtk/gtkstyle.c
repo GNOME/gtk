@@ -798,6 +798,26 @@ gtk_style_copy (GtkStyle *style)
   return new_style;
 }
 
+GtkStyle*
+_gtk_style_new_for_path (GdkScreen     *screen,
+			 GtkWidgetPath *path)
+{
+  GtkStyleContext *context;
+  GtkStyle *style;
+
+  context = gtk_style_context_new ();
+  gtk_style_context_set_screen (context, screen);
+  gtk_style_context_set_path (context, path);
+
+  style = g_object_new (GTK_TYPE_STYLE,
+                        "context", context,
+                        NULL);
+
+  g_object_unref (context);
+
+  return style;
+}
+
 /**
  * gtk_style_new:
  * @returns: a new #GtkStyle.
@@ -809,22 +829,15 @@ gtk_style_copy (GtkStyle *style)
 GtkStyle*
 gtk_style_new (void)
 {
-  GtkStyleContext *context;
   GtkWidgetPath *path;
   GtkStyle *style;
 
-  context = gtk_style_context_new ();
-  gtk_style_context_set_screen (context, gdk_screen_get_default ());
-
   path = gtk_widget_path_new ();
   gtk_widget_path_append_type (path, GTK_TYPE_WIDGET);
-  gtk_style_context_set_path (context, path);
 
-  style = g_object_new (GTK_TYPE_STYLE,
-                        "context", context,
-                        NULL);
+  style = _gtk_style_new_for_path (gdk_screen_get_default (),
+				   path);
 
-  g_object_unref (context);
   gtk_widget_path_free (path);
 
   return style;

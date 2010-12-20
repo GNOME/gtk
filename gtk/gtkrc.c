@@ -807,7 +807,83 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
 			   const char  *class_path,
 			   GType        type)
 {
-  return NULL;
+  GtkWidgetPath *path;
+  GtkStyle *style;
+
+  path = gtk_widget_path_new ();
+
+  /* For compatibility, we return a GtkStyle based on a GtkStyleContext
+   * with a GtkWidgetPath appropriate for the supplied information.
+   *
+   * GtkWidgetPath is composed of a list of GTypes with optional names;
+   * In GTK+-2.0, widget_path consisted of the widget names, or
+   * the class names for unnamed widgets, while class_path had the
+   * class names always. So, use class_path to determine the GTypes
+   * and extract widget names from widget_path as applicable.
+   */
+  if (class_path == NULL)
+    {
+      gtk_widget_path_append_type (path, type == G_TYPE_NONE ? GTK_TYPE_WIDGET : type);
+    }
+  else
+    {
+      const gchar *widget_p, *widget_next;
+      const gchar *class_p, *class_next;
+
+      widget_next = widget_path;
+      class_next = class_path;
+
+      while (*class_next)
+	{
+	  GType component_type;
+	  gchar *component_class;
+	  gchar *component_name;
+	  gint pos;
+
+	  class_p = class_next;
+	  if (*class_p == '.')
+	    class_p++;
+
+	  widget_p = widget_next; /* Might be NULL */
+	  if (widget_p && *widget_p == '.')
+	    widget_p++;
+
+	  class_next = strchr (class_p, '.');
+	  if (class_next == NULL)
+	    class_next = class_p + strlen (class_p);
+
+	  if (widget_p)
+	    {
+	      widget_next = strchr (widget_p, '.');
+	      if (widget_next == NULL)
+		widget_next = widget_p + strlen (widget_p);
+	    }
+
+	  component_class = g_strndup (class_p, class_next - class_p);
+	  if (widget_p && *widget_p)
+	    component_name = g_strndup (widget_p, widget_next - widget_p);
+	  else
+	    component_name = NULL;
+
+	  component_type = g_type_from_name (component_class);
+	  if (component_type == G_TYPE_INVALID)
+	    component_type = GTK_TYPE_WIDGET;
+
+	  pos = gtk_widget_path_append_type (path, component_type);
+	  if (component_name != NULL && strcmp (component_name, component_name) != 0)
+	    gtk_widget_path_iter_set_name (path, pos, component_name);
+
+	  g_free (component_class);
+	  g_free (component_name);
+	}
+    }
+
+  style = _gtk_style_new_for_path (_gtk_settings_get_screen (settings),
+				   path);
+
+  gtk_widget_path_free (path);
+
+  return style;
 }
 
 /**

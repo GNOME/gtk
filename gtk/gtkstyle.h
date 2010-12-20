@@ -34,6 +34,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
+#include <gtk/gtkwidgetpath.h>
 
 
 G_BEGIN_DECLS
@@ -634,9 +635,12 @@ void gtk_style_get                (GtkStyle    *style,
 #endif
 
 /* --- private API --- */
+GtkStyle*     _gtk_style_new_for_path        (GdkScreen          *screen,
+					      GtkWidgetPath      *path);
 void          _gtk_style_shade               (const GdkColor     *a,
                                               GdkColor           *b,
                                               gdouble             k);
+
 
 void   gtk_draw_insertion_cursor    (GtkWidget          *widget,
                                      cairo_t            *cr,
