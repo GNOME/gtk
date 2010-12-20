@@ -148,6 +148,7 @@ gdk_display_supports_shapes
 gdk_display_supports_input_shapes
 gdk_display_supports_composite
 <SUBSECTION Standard>
+GDK_DISPLAY
 GDK_DISPLAY_OBJECT
 GDK_IS_DISPLAY
 GDK_TYPE_DISPLAY

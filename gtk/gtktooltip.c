@@ -1284,7 +1284,7 @@ tooltip_popup_timeout (gpointer data)
   GdkDisplay *display;
   GtkTooltip *tooltip;
 
-  display = GDK_DISPLAY_OBJECT (data);
+  display = GDK_DISPLAY (data);
   tooltip = g_object_get_data (G_OBJECT (display),
 			       "gdk-display-current-tooltip");
 

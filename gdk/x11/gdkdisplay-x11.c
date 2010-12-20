@@ -169,7 +169,7 @@ static void
 _gdk_display_x11_init (GdkDisplayX11 *display)
 {
   _gdk_x11_display_manager_add_display (gdk_display_manager_get (),
-                                        GDK_DISPLAY_OBJECT (display));
+                                        GDK_DISPLAY (display));
 }
 
 static void
@@ -1719,7 +1719,7 @@ gdk_x11_display_ungrab (GdkDisplay *display)
 static void
 gdk_display_x11_dispose (GObject *object)
 {
-  GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
+  GdkDisplay *display = GDK_DISPLAY (object);
   GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (object);
   gint           i;
 
@@ -1758,7 +1758,7 @@ gdk_display_x11_finalize (GObject *object)
       g_free (display_x11->motif_target_lists);
     }
 
-  _gdk_x11_cursor_display_finalize (GDK_DISPLAY_OBJECT(display_x11));
+  _gdk_x11_cursor_display_finalize (GDK_DISPLAY (display_x11));
 
   /* Atom Hashtable */
   g_hash_table_destroy (display_x11->atom_from_virtual);

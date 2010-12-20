@@ -300,10 +300,10 @@ gdk_display_init (GdkDisplay *display)
 static void
 gdk_display_dispose (GObject *object)
 {
-  GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
+  GdkDisplay *display = GDK_DISPLAY (object);
   GdkDeviceManager *device_manager;
 
-  device_manager = gdk_display_get_device_manager (GDK_DISPLAY_OBJECT (object));
+  device_manager = gdk_display_get_device_manager (GDK_DISPLAY (object));
 
   g_list_foreach (display->queued_events, (GFunc)gdk_event_free, NULL);
   g_list_free (display->queued_events);
@@ -325,7 +325,7 @@ gdk_display_dispose (GObject *object)
 static void
 gdk_display_finalize (GObject *object)
 {
-  GdkDisplay *display = GDK_DISPLAY_OBJECT (object);
+  GdkDisplay *display = GDK_DISPLAY (object);
 
   g_hash_table_foreach_remove (display->device_grabs,
                                free_device_grabs_foreach,

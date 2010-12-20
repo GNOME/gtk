@@ -250,7 +250,7 @@ gdk_x_error (Display	 *xdisplay,
 
           if (xdisplay == gdk_display->xdisplay)
             {
-              error_display = GDK_DISPLAY_OBJECT (gdk_display);
+              error_display = GDK_DISPLAY (gdk_display);
               g_slist_free (displays);
               displays = NULL;
             }
