@@ -77,6 +77,7 @@ libgdkinclude_HEADERS = 	\
 
 libgdkx11include_HEADERS = 	\
 	gdkx11cursor.h		\
+	gdkx11display.h		\
 	gdkx11screen.h		\
 	gdkx11visual.h		\
 	gdkx11window.h

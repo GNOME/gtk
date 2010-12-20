@@ -56,6 +56,7 @@
 #define __GDKX_H_INSIDE__
 
 #include <gdk/x11/gdkx11cursor.h>
+#include <gdk/x11/gdkx11display.h>
 #include <gdk/x11/gdkx11screen.h>
 #include <gdk/x11/gdkx11visual.h>
 #include <gdk/x11/gdkx11window.h>
@@ -64,14 +65,10 @@
 
 G_BEGIN_DECLS
 
-Display *gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
-
 #ifndef GDK_MULTIHEAD_SAFE
 Window   gdk_x11_get_default_root_xwindow (void);
 Display *gdk_x11_get_default_xdisplay     (void);
 #endif
-
-#define GDK_IS_DISPLAY_X11(object)   (G_TYPE_CHECK_INSTANCE_TYPE ((object), g_type_from_name ("GdkDisplayX11")))
 
 #ifndef GDK_MULTIHEAD_SAFE
 /**
@@ -82,28 +79,10 @@ Display *gdk_x11_get_default_xdisplay     (void);
 #define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
 #endif
 
-#define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
-
-guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
-
-G_CONST_RETURN gchar *gdk_x11_display_get_startup_notification_id (GdkDisplay *display);
-void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *display,
-                                                                   const gchar *startup_id);
-
-void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
-                                                const gchar *theme,
-                                                const gint   size);
-
-void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
-                                                const char *message_type,
-                                                ...) G_GNUC_NULL_TERMINATED;
-
 #ifndef GDK_MULTIHEAD_SAFE
 void          gdk_x11_grab_server    (void);
 void          gdk_x11_ungrab_server  (void);
 #endif
-
-GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
 
 /* Functions to get the X Atom equivalent to the GdkAtom */
@@ -121,21 +100,6 @@ GdkAtom               gdk_x11_xatom_to_atom     (Atom         xatom);
 Atom                  gdk_x11_get_xatom_by_name (const gchar *atom_name);
 G_CONST_RETURN gchar *gdk_x11_get_xatom_name    (Atom         xatom);
 #endif
-
-void        gdk_x11_display_grab              (GdkDisplay *display);
-void        gdk_x11_display_ungrab            (GdkDisplay *display);
-
-void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);
-/* warn unused because you could use pop_ignored otherwise */
-G_GNUC_WARN_UNUSED_RESULT gint gdk_x11_display_error_trap_pop         (GdkDisplay *display);
-void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
-
-void        gdk_x11_register_standard_event_type (GdkDisplay *display,
-                                                  gint        event_base,
-                                                  gint        n_events);
-
-
-void        gdk_x11_set_sm_client_id (const gchar *sm_client_id);
 
 gint     gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
                                                      GdkAtom       encoding,
