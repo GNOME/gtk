@@ -357,7 +357,16 @@ gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
       area = iface->get_area (cell_layout);
 
       if (area)
-	gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (area), cell, func, func_data, destroy);
+	{
+	  /* Ensure that the correct proxy object is sent to 'func' */
+	  if (GTK_CELL_LAYOUT (area) != cell_layout)
+	    _gtk_cell_area_set_cell_data_func_with_proxy (area, cell, 
+							  (GFunc)func, func_data, destroy, 
+							  cell_layout);
+	  else
+	    gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT (area), cell, 
+						func, func_data, destroy);
+	}
     }
 }
 

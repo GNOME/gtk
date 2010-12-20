@@ -497,6 +497,7 @@ typedef struct {
   GtkCellLayoutDataFunc  func;
   gpointer               data;
   GDestroyNotify         destroy;
+  GtkCellLayout         *proxy;
 } CellInfo;
 
 static CellInfo       *cell_info_new       (GtkCellLayoutDataFunc  func,
@@ -1208,8 +1209,8 @@ apply_cell_attributes (GtkCellRenderer *renderer,
   /* Call any GtkCellLayoutDataFunc that may have been set by the user
    */
   if (info->func)
-    info->func (GTK_CELL_LAYOUT (data->area), renderer,
-                data->model, data->iter, info->data);
+    info->func (info->proxy ? info->proxy : GTK_CELL_LAYOUT (data->area), renderer,
+		data->model, data->iter, info->data);
 
   g_object_thaw_notify (G_OBJECT (renderer));
 }
@@ -1419,36 +1420,9 @@ gtk_cell_area_set_cell_data_func (GtkCellLayout         *cell_layout,
                                   gpointer               func_data,
                                   GDestroyNotify         destroy)
 {
-  GtkCellArea        *area   = GTK_CELL_AREA (cell_layout);
-  GtkCellAreaPrivate *priv   = area->priv;
-  CellInfo           *info;
+  GtkCellArea *area   = GTK_CELL_AREA (cell_layout);
 
-  info = g_hash_table_lookup (priv->cell_info, renderer);
-
-  if (info)
-    {
-      if (info->destroy && info->data)
-        info->destroy (info->data);
-
-      if (func)
-        {
-          info->func    = func;
-          info->data    = func_data;
-          info->destroy = destroy;
-        }
-      else
-        {
-          info->func    = NULL;
-          info->data    = NULL;
-          info->destroy = NULL;
-        }
-    }
-  else
-    {
-      info = cell_info_new (func, func_data, destroy);
-
-      g_hash_table_insert (priv->cell_info, renderer, info);
-    }
+  _gtk_cell_area_set_cell_data_func_with_proxy (area, renderer, (GFunc)func, func_data, destroy, NULL);
 }
 
 static void
@@ -3635,4 +3609,54 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
 
   *minimum_size += focus_line_width;
   *natural_size += focus_line_width;
+}
+
+void
+_gtk_cell_area_set_cell_data_func_with_proxy (GtkCellArea           *area,
+					      GtkCellRenderer       *cell,
+					      GFunc                  func,
+					      gpointer               func_data,
+					      GDestroyNotify         destroy,
+					      gpointer               proxy)
+{
+  GtkCellAreaPrivate *priv;
+  CellInfo           *info;
+
+  g_return_if_fail (GTK_IS_CELL_AREA (area));
+  g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
+
+  priv = area->priv;
+
+  info = g_hash_table_lookup (priv->cell_info, cell);
+
+  /* Note we do not take a reference to the proxy, the proxy is a GtkCellLayout
+   * that is forwarding it's implementation to a delegate GtkCellArea therefore
+   * it's life-cycle is longer than the area's life cycle. 
+   */
+  if (info)
+    {
+      if (info->destroy && info->data)
+	info->destroy (info->data);
+
+      if (func)
+	{
+	  info->func    = (GtkCellLayoutDataFunc)func;
+	  info->data    = func_data;
+	  info->destroy = destroy;
+	  info->proxy   = proxy;
+	}
+      else
+	{
+	  info->func    = NULL;
+	  info->data    = NULL;
+	  info->destroy = NULL;
+	  info->proxy   = NULL;
+	}
+    }
+  else
+    {
+      info = cell_info_new ((GtkCellLayoutDataFunc)func, func_data, destroy);
+
+      g_hash_table_insert (priv->cell_info, cell, info);
+    }
 }
