@@ -29,6 +29,7 @@
 #include "gdkcursor.h"
 #include "gdkcursorprivate.h"
 #include "gdkdisplayprivate.h"
+#include "gdkintl.h"
 #include "gdkinternals.h"
 
 
@@ -59,11 +60,66 @@
  * The #GdkCursor structure represents a cursor. Its contents are private.
  */
 
+enum {
+  PROP_0,
+  PROP_CURSOR_TYPE
+};
+
 G_DEFINE_ABSTRACT_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
+
+static void
+gdk_cursor_get_property (GObject    *object,
+                         guint       prop_id,
+                         GValue     *value,
+                         GParamSpec *pspec)
+{
+  GdkCursor *cursor = GDK_CURSOR (object);
+
+  switch (prop_id)
+    {
+    case PROP_CURSOR_TYPE:
+      g_value_set_enum (value, cursor->type);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_cursor_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
+{
+  GdkCursor *cursor = GDK_CURSOR (object);
+
+  switch (prop_id)
+    {
+    case PROP_CURSOR_TYPE:
+      cursor->type = g_value_get_enum (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
 
 static void
 gdk_cursor_class_init (GdkCursorClass *cursor_class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (cursor_class);
+
+  object_class->get_property = gdk_cursor_get_property;
+  object_class->set_property = gdk_cursor_set_property;
+
+  g_object_class_install_property (object_class,
+				   PROP_CURSOR_TYPE,
+				   g_param_spec_enum ("cursor-type",
+                                                      P_("Cursor type"),
+                                                      P_("Standard cursor type"),
+                                                      GDK_TYPE_CURSOR_TYPE, GDK_X_CURSOR,
+                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void

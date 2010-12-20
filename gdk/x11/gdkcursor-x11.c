@@ -247,7 +247,6 @@ _gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
                                       GdkCursorType  cursor_type)
 {
   GdkX11Cursor *private;
-  GdkCursor *cursor;
   Cursor xcursor;
 
   if (gdk_display_is_closed (display))
@@ -275,19 +274,18 @@ _gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
        }
     }
 
-  private = g_object_new (GDK_TYPE_X11_CURSOR, NULL);
+  private = g_object_new (GDK_TYPE_X11_CURSOR,
+                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          NULL);
   private->display = display;
   private->xcursor = xcursor;
   private->name = NULL;
   private->serial = theme_serial;
 
-  cursor = (GdkCursor *) private;
-  cursor->type = cursor_type;
-  
   if (xcursor != None)
     add_to_cache (private);
 
-  return cursor;
+  return GDK_CURSOR (private);
 }
 
 /**
@@ -599,7 +597,6 @@ _gdk_x11_display_get_cursor_for_pixbuf (GdkDisplay *display,
   XcursorImage *xcimage;
   Cursor xcursor;
   GdkX11Cursor *private;
-  GdkCursor *cursor;
   const char *option;
   char *end;
   gint64 value;
@@ -639,16 +636,15 @@ _gdk_x11_display_get_cursor_for_pixbuf (GdkDisplay *display,
       XcursorImageDestroy (xcimage);
     }
 
-  private = g_object_new (GDK_TYPE_X11_CURSOR, NULL);
+  private = g_object_new (GDK_TYPE_X11_CURSOR, 
+                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          NULL);
   private->display = display;
   private->xcursor = xcursor;
   private->name = NULL;
   private->serial = theme_serial;
 
-  cursor = (GdkCursor *) private;
-  cursor->type = GDK_CURSOR_IS_PIXMAP;
-
-  return cursor;
+  return GDK_CURSOR (private);
 }
 
 GdkCursor*
@@ -658,7 +654,6 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
   Cursor xcursor;
   Display *xdisplay;
   GdkX11Cursor *private;
-  GdkCursor *cursor;
 
   if (gdk_display_is_closed (display))
     {
@@ -682,17 +677,17 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
         return NULL;
     }
 
-  private = g_object_new (GDK_TYPE_X11_CURSOR, NULL);
+  private = g_object_new (GDK_TYPE_X11_CURSOR,
+                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          NULL);
   private->display = display;
   private->xcursor = xcursor;
   private->name = g_strdup (name);
   private->serial = theme_serial;
 
-  cursor = (GdkCursor *) private;
-  cursor->type = GDK_CURSOR_IS_PIXMAP;
   add_to_cache (private);
 
-  return cursor;
+  return GDK_CURSOR (private);
 }
 
 gboolean
@@ -727,7 +722,6 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
                             gint            y)
 {
   GdkX11Cursor *private;
-  GdkCursor *cursor;
   Cursor xcursor;
   XColor xfg, xbg;
 
@@ -748,16 +742,15 @@ gdk_cursor_new_from_pixmap (GdkDisplay     *display,
   else
     xcursor = XCreatePixmapCursor (GDK_DISPLAY_XDISPLAY (display),
                                    source_pixmap, mask_pixmap, &xfg, &xbg, x, y);
-  private = g_object_new (GDK_TYPE_X11_CURSOR, NULL);
+  private = g_object_new (GDK_TYPE_X11_CURSOR,
+                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          NULL);
   private->display = display;
   private->xcursor = xcursor;
   private->name = NULL;
   private->serial = theme_serial;
 
-  cursor = (GdkCursor *) private;
-  cursor->type = GDK_CURSOR_IS_PIXMAP;
-
-  return cursor;
+  return GDK_CURSOR (private);
 }
 
 GdkCursor *
