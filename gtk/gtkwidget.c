@@ -368,6 +368,11 @@ struct _GtkWidgetPrivate
    */
   GtkWidget *parent;
 
+#ifdef G_ENABLE_DEBUG
+  /* Number of gtk_widget_push_verify_invariants () */
+  guint verifying_invariants_count;
+#endif /* G_ENABLE_DEBUG */
+
   /* Widget's path for styling */
   GtkWidgetPath *path;
 };
@@ -555,6 +560,15 @@ static void             gtk_widget_real_move_focus              (GtkWidget      
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
+#ifdef G_ENABLE_DEBUG
+static void             gtk_widget_verify_invariants            (GtkWidget        *widget);
+static void             gtk_widget_push_verify_invariants       (GtkWidget        *widget);
+static void             gtk_widget_pop_verify_invariants        (GtkWidget        *widget);
+#else
+#define                 gtk_widget_verify_invariants(widget)
+#define                 gtk_widget_push_verify_invariants(widget)
+#define                 gtk_widget_pop_verify_invariants(widget)
+#endif
 static PangoContext*	gtk_widget_peek_pango_context		(GtkWidget	  *widget);
 static void     	gtk_widget_update_pango_context		(GtkWidget	  *widget);
 static void		gtk_widget_propagate_state		(GtkWidget	  *widget,
@@ -3694,8 +3708,9 @@ gtk_widget_unparent (GtkWidget *widget)
   if (priv->parent == NULL)
     return;
 
-  /* keep this function in sync with gtk_menu_detach()
-   */
+  /* keep this function in sync with gtk_menu_detach() */
+
+  gtk_widget_push_verify_invariants (widget);
 
   g_object_freeze_notify (G_OBJECT (widget));
   nqueue = g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
@@ -3767,6 +3782,8 @@ gtk_widget_unparent (GtkWidget *widget)
   if (!priv->parent)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
   g_object_notify_queue_thaw (G_OBJECT (widget), nqueue);
+
+  gtk_widget_pop_verify_invariants (widget);
   g_object_unref (widget);
 }
 
@@ -3848,8 +3865,10 @@ gtk_widget_show (GtkWidget *widget)
   if (!gtk_widget_get_visible (widget))
     {
       g_object_ref (widget);
+      gtk_widget_push_verify_invariants (widget);
+
       if (!gtk_widget_is_toplevel (widget))
-	gtk_widget_queue_resize (widget);
+        gtk_widget_queue_resize (widget);
 
       /* see comment in set_parent() for why this should and can be
        * conditional
@@ -3864,6 +3883,8 @@ gtk_widget_show (GtkWidget *widget)
 
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify (G_OBJECT (widget), "visible");
+
+      gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
     }
 }
@@ -3945,8 +3966,10 @@ gtk_widget_hide (GtkWidget *widget)
       GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
 
       g_object_ref (widget);
+      gtk_widget_push_verify_invariants (widget);
+
       if (toplevel != widget && gtk_widget_is_toplevel (toplevel))
-	_gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
+        _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
 
       /* a parent may now be expand=FALSE since we're hidden. */
       if (widget->priv->need_compute_expand ||
@@ -3960,6 +3983,8 @@ gtk_widget_hide (GtkWidget *widget)
       if (!gtk_widget_is_toplevel (widget))
 	gtk_widget_queue_resize (widget);
       g_object_notify (G_OBJECT (widget), "visible");
+
+      gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
     }
 }
@@ -4119,13 +4144,17 @@ gtk_widget_map (GtkWidget *widget)
 
   if (!gtk_widget_get_mapped (widget))
     {
+      gtk_widget_push_verify_invariants (widget);
+
       if (!gtk_widget_get_realized (widget))
-	gtk_widget_realize (widget);
+        gtk_widget_realize (widget);
 
       g_signal_emit (widget, widget_signals[MAP], 0);
 
       if (!gtk_widget_get_has_window (widget))
-	gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
+        gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
+
+      gtk_widget_pop_verify_invariants (widget);
 
       _gtk_widget_start_state_transitions (widget);
     }
@@ -4149,10 +4178,14 @@ gtk_widget_unmap (GtkWidget *widget)
 
   if (gtk_widget_get_mapped (widget))
     {
+      gtk_widget_push_verify_invariants (widget);
+
       if (!gtk_widget_get_has_window (widget))
 	gdk_window_invalidate_rect (priv->window, &priv->allocation, FALSE);
       _gtk_tooltip_hide (widget);
       g_signal_emit (widget, widget_signals[UNMAP], 0);
+
+      gtk_widget_pop_verify_invariants (widget);
     }
 }
 
@@ -4218,6 +4251,8 @@ gtk_widget_realize (GtkWidget *widget)
 
   if (!gtk_widget_get_realized (widget))
     {
+      gtk_widget_push_verify_invariants (widget);
+
       /*
 	if (GTK_IS_CONTAINER (widget) && gtk_widget_get_has_window (widget))
 	  g_message ("gtk_widget_realize(%s)", G_OBJECT_TYPE_NAME (widget));
@@ -4254,6 +4289,8 @@ gtk_widget_realize (GtkWidget *widget)
         gdk_window_set_support_multidevice (priv->window, TRUE);
 
       _gtk_widget_enable_device_events (widget);
+
+      gtk_widget_pop_verify_invariants (widget);
     }
 }
 
@@ -4270,6 +4307,8 @@ gtk_widget_unrealize (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  gtk_widget_push_verify_invariants (widget);
+
   if (widget->priv->has_shape_mask)
     gtk_widget_shape_combine_region (widget, NULL);
 
@@ -4285,6 +4324,8 @@ gtk_widget_unrealize (GtkWidget *widget)
       gtk_widget_set_mapped (widget, FALSE);
       g_object_unref (widget);
     }
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 /*****************************************
@@ -4584,6 +4625,8 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  gtk_widget_push_verify_invariants (widget);
+
 #ifdef G_ENABLE_DEBUG
   if (gtk_get_debug_flags () & GTK_DEBUG_GEOMETRY)
     {
@@ -4683,7 +4726,7 @@ gtk_widget_size_allocate (GtkWidget	*widget,
 		      old_allocation.y != real_allocation.y);
 
   if (!alloc_needed && !size_changed && !position_changed)
-    return;
+    goto out;
 
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
@@ -4735,6 +4778,9 @@ gtk_widget_size_allocate (GtkWidget	*widget,
       gtk_widget_invalidate_widget_windows (priv->parent, invalidate);
       cairo_region_destroy (invalidate);
     }
+
+out:
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 /**
@@ -7515,6 +7561,9 @@ gtk_widget_set_parent (GtkWidget *widget,
    */
 
   g_object_ref_sink (widget);
+
+  gtk_widget_push_verify_invariants (widget);
+
   priv->parent = parent;
 
   parent_flags = gtk_widget_get_state_flags (parent);
@@ -7578,6 +7627,8 @@ gtk_widget_set_parent (GtkWidget *widget,
       gtk_style_context_set_screen (widget->priv->context,
                                     gtk_widget_get_screen (widget));
     }
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 /**
@@ -8578,6 +8629,173 @@ gtk_widget_get_default_style (void)
   return gtk_default_style;
 }
 
+#ifdef G_ENABLE_DEBUG
+/* Verify invariants, see docs/widget_system.txt for notes on much of
+ * this.  Invariants may be temporarily broken while we're in the
+ * process of updating state, of course, so you can only
+ * verify_invariants() after a given operation is complete.
+ * Use push/pop_verify_invariants to help with that.
+ */
+static void
+gtk_widget_verify_invariants (GtkWidget *widget)
+{
+  GtkWidget *parent;
+
+  if (widget->priv->verifying_invariants_count > 0)
+    return;
+
+  parent = widget->priv->parent;
+
+  if (widget->priv->mapped)
+    {
+      /* Mapped implies ... */
+
+      if (!widget->priv->realized)
+        g_warning ("%s %p is mapped but not realized",
+                   G_OBJECT_TYPE_NAME (widget), widget);
+
+      if (!widget->priv->visible)
+        g_warning ("%s %p is mapped but not visible",
+                   G_OBJECT_TYPE_NAME (widget), widget);
+
+      if (!widget->priv->toplevel)
+        {
+          if (!widget->priv->child_visible)
+            g_warning ("%s %p is mapped but not child_visible",
+                       G_OBJECT_TYPE_NAME (widget), widget);
+        }
+    }
+  else
+    {
+      /* Not mapped implies... */
+
+      if (widget->priv->toplevel)
+        {
+          if (widget->priv->visible)
+            g_warning ("%s %p toplevel is visible but not mapped",
+                       G_OBJECT_TYPE_NAME (widget), widget);
+        }
+    }
+
+  /* Parent related checks aren't possible if parent has
+   * verifying_invariants_count > 0 because parent needs to recurse
+   * children first before the invariants will hold.
+   */
+  if (parent == NULL || parent->priv->verifying_invariants_count == 0)
+    {
+      if (parent &&
+          parent->priv->realized)
+        {
+          /* Parent realized implies... */
+
+#if 0
+          /* This is in widget_system.txt but appears to fail
+           * because there's no gtk_container_realize() that
+           * realizes all children... instead we just lazily
+           * wait for map to fix things up.
+           */
+          if (!widget->priv->realized)
+            g_warning ("%s %p is realized but child %s %p is not realized",
+                       G_OBJECT_TYPE_NAME (parent), parent,
+                       G_OBJECT_TYPE_NAME (widget), widget);
+#endif
+        }
+      else if (!widget->priv->toplevel)
+        {
+          /* No parent or parent not realized on non-toplevel implies... */
+
+          if (widget->priv->realized && !widget->priv->in_reparent)
+            g_warning ("%s %p is not realized but child %s %p is realized",
+                       parent ? G_OBJECT_TYPE_NAME (parent) : "no parent", parent,
+                       G_OBJECT_TYPE_NAME (widget), widget);
+        }
+
+      if (parent &&
+          parent->priv->mapped &&
+          widget->priv->visible &&
+          widget->priv->child_visible)
+        {
+          /* Parent mapped and we are visible implies... */
+
+          if (!widget->priv->mapped)
+            g_warning ("%s %p is mapped but visible child %s %p is not mapped",
+                       G_OBJECT_TYPE_NAME (parent), parent,
+                       G_OBJECT_TYPE_NAME (widget), widget);
+        }
+    }
+
+  if (!widget->priv->realized)
+    {
+      /* Not realized implies... */
+
+#if 0
+      /* widget_system.txt says these hold, but they don't. */
+      if (widget->priv->resize_pending)
+        g_warning ("%s %p resize pending but not realized",
+                   G_OBJECT_TYPE_NAME (widget), widget);
+
+      if (widget->priv->alloc_needed)
+        g_warning ("%s %p alloc needed but not realized",
+                   G_OBJECT_TYPE_NAME (widget), widget);
+
+      if (widget->priv->width_request_needed)
+        g_warning ("%s %p width request needed but not realized",
+                   G_OBJECT_TYPE_NAME (widget), widget);
+
+      if (widget->priv->height_request_needed)
+        g_warning ("%s %p height request needed but not realized",
+                   G_OBJECT_TYPE_NAME (widget), widget);
+#endif
+    }
+}
+
+/* The point of this push/pop is that invariants may not hold while
+ * we're busy making changes. So we only check at the outermost call
+ * on the call stack, after we finish updating everything.
+ */
+static void
+gtk_widget_push_verify_invariants (GtkWidget *widget)
+{
+  widget->priv->verifying_invariants_count += 1;
+}
+
+static void
+gtk_widget_verify_child_invariants (GtkWidget *widget,
+                                    gpointer   client_data)
+{
+  /* We don't recurse further; this is a one-level check. */
+  gtk_widget_verify_invariants (widget);
+}
+
+static void
+gtk_widget_pop_verify_invariants (GtkWidget *widget)
+{
+  g_assert (widget->priv->verifying_invariants_count > 0);
+
+  widget->priv->verifying_invariants_count -= 1;
+
+  if (widget->priv->verifying_invariants_count == 0)
+    {
+      gtk_widget_verify_invariants (widget);
+
+      if (GTK_IS_CONTAINER (widget))
+        {
+          /* Check one level of children, because our
+           * push_verify_invariants() will have prevented some of the
+           * checks. This does not recurse because if recursion is
+           * needed, it will happen naturally as each child has a
+           * push/pop on that child. For example if we're recursively
+           * mapping children, we'll push/pop on each child as we map
+           * it.
+           */
+          gtk_container_forall (GTK_CONTAINER (widget),
+                                gtk_widget_verify_child_invariants,
+                                NULL);
+        }
+    }
+}
+#endif /* G_ENABLE_DEBUG */
+
 static PangoContext *
 gtk_widget_peek_pango_context (GtkWidget *widget)
 {
@@ -8907,6 +9125,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
   priv = widget->priv;
 
   g_object_ref (widget);
+  gtk_widget_verify_invariants (widget);
 
   if (is_visible)
     priv->child_visible = TRUE;
@@ -8931,6 +9150,7 @@ gtk_widget_set_child_visible (GtkWidget *widget,
 	gtk_widget_unmap (widget);
     }
 
+  gtk_widget_verify_invariants (widget);
   g_object_unref (widget);
 }
 
