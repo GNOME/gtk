@@ -81,6 +81,7 @@ libgdkx11include_HEADERS = 	\
 	gdkx11property.h	\
 	gdkx11screen.h		\
 	gdkx11selection.h	\
+	gdkx11utils.h		\
 	gdkx11visual.h		\
 	gdkx11window.h
 

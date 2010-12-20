@@ -24,46 +24,39 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
-#ifndef __GDK_X_H__
-#define __GDK_X_H__
+#if !defined (__GDKX_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdkx.h> can be included directly."
+#endif
+
+#ifndef __GDK_X11_UTILS_H__
+#define __GDK_X11_UTILS_H__
 
 #include <gdk/gdk.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
+G_BEGIN_DECLS
+
+#ifndef GDK_MULTIHEAD_SAFE
+Window   gdk_x11_get_default_root_xwindow (void);
+Display *gdk_x11_get_default_xdisplay     (void);
+#endif
+
+#ifndef GDK_MULTIHEAD_SAFE
 /**
- * SECTION:x_interaction
- * @Short_description: X backend-specific functions
- * @Title: X Window System Interaction
+ * GDK_ROOT_WINDOW:
  *
- * The functions in this section are specific to the GDK X11 backend.
- * To use them, you need to include the <literal>&lt;gdk/gdkx.h&gt;</literal>
- * header and use the X11-specific pkg-config files to build your
- * application (either <literal>gdk-x11-3.0</literal> or
- * <literal>gtk+-x11-3.0</literal>).
- *
- * To make your code compile with other GDK backends, guard backend-specific
- * calls by an ifdef as follows:
- * <informalexample><programlisting>
- * #ifdef GDK_WINDOWING_X11
- *   /<!---->* X11-specific calls here... *<!---->/
- * #endif
- * </programlisting></informalexample>
+ * Obtains the Xlib window id of the root window of the current screen.
  */
+#define GDK_ROOT_WINDOW()             (gdk_x11_get_default_root_xwindow ())
+#endif
 
+#ifndef GDK_MULTIHEAD_SAFE
+void          gdk_x11_grab_server    (void);
+void          gdk_x11_ungrab_server  (void);
+#endif
 
-#define __GDKX_H_INSIDE__
+G_END_DECLS
 
-#include <gdk/x11/gdkx11cursor.h>
-#include <gdk/x11/gdkx11display.h>
-#include <gdk/x11/gdkx11property.h>
-#include <gdk/x11/gdkx11screen.h>
-#include <gdk/x11/gdkx11selection.h>
-#include <gdk/x11/gdkx11utils.h>
-#include <gdk/x11/gdkx11visual.h>
-#include <gdk/x11/gdkx11window.h>
-
-#undef __GDKX_H_INSIDE__
-
-#endif /* __GDK_X_H__ */
+#endif /* __GDK_X11_UTILS_H__ */
