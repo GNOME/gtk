@@ -89,6 +89,10 @@ _gdk_xid_table_remove (GdkDisplay *display,
  *     with the X id.
  *
  * Since: 2.2
+ *
+ * Deprecated:2.24: This function will be removed in GTK+ 3.0. GTK+
+ *     only stores windows in its X id table nowadays, so use
+ *     gdk_x11_window_lookup_for_display() instead.
  */
 gpointer
 gdk_xid_table_lookup_for_display (GdkDisplay  *display,
@@ -118,6 +122,10 @@ gdk_xid_table_lookup_for_display (GdkDisplay  *display,
  * Return value: the associated Gdk object, which may be a #GdkPixmap,
  *     a #GdkWindow or a #GdkFont or %NULL if no object is associated
  *     with the X id.
+ *
+ * Deprecated:2.24: This function will be removed in GTK+ 3.0. GTK+
+ *     only stores windows in its X id table nowadays, so use
+ *     gdk_x11_window_lookup_for_display() instead.
  */
 gpointer
 gdk_xid_table_lookup (XID xid)

@@ -141,9 +141,10 @@ GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
 					   Colormap   xcolormap);
 
-     /* Return the Gdk* for a particular XID */
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 						XID         xid);
+#endif
 guint32       gdk_x11_get_server_time  (GdkWindow       *window);
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
@@ -165,8 +166,8 @@ XID      gdk_x11_screen_get_monitor_output   (GdkScreen *screen,
                                               gint       monitor_num);
 
 #ifndef GDK_MULTIHEAD_SAFE
-gpointer      gdk_xid_table_lookup   (XID              xid);
 #ifndef GDK_DISABLE_DEPRECATED
+gpointer      gdk_xid_table_lookup   (XID              xid);
 gboolean      gdk_net_wm_supports    (GdkAtom    property);
 #endif
 void          gdk_x11_grab_server    (void);
