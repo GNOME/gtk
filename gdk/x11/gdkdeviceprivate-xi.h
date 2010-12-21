@@ -23,6 +23,10 @@
 #include "gdkx11device-xi.h"
 #include "gdkdeviceprivate.h"
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/XInput.h>
+
 G_BEGIN_DECLS
 
 struct _GdkX11DeviceXI

@@ -30,6 +30,10 @@
 #include "gdkintl.h"
 #include "gdkkeysyms.h"
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/XInput2.h>
+
 #include <string.h>
 
 struct _GdkX11DeviceManagerXI2

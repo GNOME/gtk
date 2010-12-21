@@ -22,8 +22,6 @@
 
 #include <gdk/gdk.h>
 
-#include <X11/extensions/XInput2.h>
-
 G_BEGIN_DECLS
 
 #define GDK_TYPE_X11_DEVICE_XI2         (gdk_x11_device_xi2_get_type ())

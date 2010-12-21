@@ -38,6 +38,12 @@
 #include "gdkwindow-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkdisplay-x11.h"
+
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/XInput.h>
+#include <X11/extensions/XInput2.h>
+
 #include <cairo-xlib.h>
 
 void _gdk_x11_error_handler_push (void);

@@ -26,6 +26,10 @@
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
 
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/XInput2.h>
+
 struct _GdkX11DeviceXI2
 {
   GdkDevice parent_instance;
