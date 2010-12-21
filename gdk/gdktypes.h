@@ -43,7 +43,7 @@
  * itself, but also occasionally when compiling programs that use GDK
  * (or GTK). One such setting is what windowing API backend is in use.
  */
-#include <gdkconfig.h>
+#include <gdk/gdkconfig.h>
 
 /* some common magic values */
 
