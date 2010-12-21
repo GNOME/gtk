@@ -219,8 +219,6 @@ static void             gdk_window_drop_cairo_surface (GdkWindow *private);
 
 static void gdk_window_free_paint_stack (GdkWindow *window);
 
-static void gdk_window_init       (GdkWindow            *window);
-static void gdk_window_class_init (GdkWindowClass *klass);
 static void gdk_window_finalize   (GObject              *object);
 
 static void gdk_window_set_property (GObject      *object,
@@ -273,22 +271,7 @@ new_region_tag (void)
   return ++tag;
 }
 
-GType
-gdk_window_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    object_type = g_type_register_static_simple (G_TYPE_OBJECT,
-						 "GdkWindow",
-						 sizeof (GdkWindowClass),
-						 (GClassInitFunc) gdk_window_class_init,
-						 sizeof (GdkWindow),
-						 (GInstanceInitFunc) gdk_window_init,
-						 0);
-
-  return object_type;
-}
+G_DEFINE_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
 
 GType
 _gdk_paintable_get_type (void)
