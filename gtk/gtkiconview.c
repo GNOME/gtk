@@ -4732,7 +4732,9 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
       icon_view->priv->scroll_to_path = NULL;
     }
 
-  gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
+  /* The area can be NULL while disposing */
+  if (icon_view->priv->cell_area)
+    gtk_cell_area_stop_editing (icon_view->priv->cell_area, TRUE);
 
   if (model)
     {
