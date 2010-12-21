@@ -33,12 +33,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-typedef struct _GdkX11Visual GdkX11Visual;
-typedef struct _GdkX11VisualClass GdkX11VisualClass;
-
-#define GDK_TYPE_X11_VISUAL (gdk_x11_visual_get_type ())
-#define GDK_X11_VISUAL(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_VISUAL, GdkX11Visual))
-
 struct _GdkX11Visual
 {
   GdkVisual visual;

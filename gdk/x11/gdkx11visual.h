@@ -38,6 +38,22 @@
 
 G_BEGIN_DECLS
 
+#define GDK_TYPE_X11_VISUAL              (gdk_x11_visual_get_type ())
+#define GDK_X11_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_VISUAL, GdkX11Visual))
+#define GDK_X11_VISUAL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_VISUAL, GdkX11VisualClass))
+#define GDK_IS_X11_VISUAL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_VISUAL))
+#define GDK_IS_X11_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_VISUAL))
+#define GDK_X11_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_VISUAL, GdkX11VisualClass))
+
+#ifdef GDK_COMPILATION
+typedef struct _GdkX11Visual GdkX11Visual;
+#else
+typedef GdkVisual GdkX11Visual;
+#endif
+typedef struct _GdkX11VisualClass GdkX11VisualClass;
+
+GType    gdk_x11_visual_get_type          (void);
+
 Visual * gdk_x11_visual_get_xvisual       (GdkVisual   *visual);
 
 #define GDK_VISUAL_XVISUAL(visual)    (gdk_x11_visual_get_xvisual (visual))
