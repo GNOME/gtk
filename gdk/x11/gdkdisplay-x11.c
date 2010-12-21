@@ -1588,6 +1588,16 @@ struct XPointerUngrabInfo {
   guint32 time;
 };
 
+static void
+device_grab_update_callback (GdkDisplay *display,
+                             gpointer    data,
+                             gulong      serial)
+{
+  GdkDevice *device = data;
+
+  _gdk_display_device_grab_update (display, device, NULL, serial);
+}
+
 #define XSERVER_TIME_IS_LATER(time1, time2)                        \
   ( (( time1 > time2 ) && ( time1 - time2 < ((guint32)-1)/2 )) ||  \
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
@@ -1599,9 +1609,7 @@ _gdk_x11_display_update_grab_info (GdkDisplay *display,
                                    gint        status)
 {
   if (status == GrabSuccess)
-    _gdk_x11_roundtrip_async (display,
-                              (GdkRoundTripCallback)_gdk_display_device_grab_update,
-                              device);
+    _gdk_x11_roundtrip_async (display, device_grab_update_callback, device);
 }
 
 void
@@ -1621,9 +1629,7 @@ _gdk_x11_display_update_grab_info_ungrab (GdkDisplay *display,
        !XSERVER_TIME_IS_LATER (grab->time, time)))
     {
       grab->serial_end = serial;
-      _gdk_x11_roundtrip_async (display,
-                                (GdkRoundTripCallback)_gdk_display_device_grab_update,
-                                device);
+      _gdk_x11_roundtrip_async (display, device_grab_update_callback, device);
     }
 }
 
