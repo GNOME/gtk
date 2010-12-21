@@ -285,12 +285,12 @@ create_cell_area (void)
   area = gtk_cell_area_box_new ();
 
   cell_1 = renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, FALSE);
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, FALSE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "text", SIMPLE_COLUMN_NAME);
 
   cell_2 = renderer = gtk_cell_renderer_pixbuf_new ();
   g_object_set (G_OBJECT (renderer), "xalign", 0.0F, NULL);
-  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, TRUE, FALSE);
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, TRUE, FALSE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "stock-id", SIMPLE_COLUMN_ICON);
 
   cell_3 = renderer = gtk_cell_renderer_text_new ();
@@ -298,7 +298,7 @@ create_cell_area (void)
 		"wrap-mode", PANGO_WRAP_WORD,
 		"wrap-width", 215,
 		NULL);
-  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE);
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area), renderer, FALSE, TRUE, FALSE);
   gtk_cell_area_attribute_connect (area, renderer, "text", SIMPLE_COLUMN_DESCRIPTION);
 
   return area;
