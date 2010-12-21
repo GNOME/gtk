@@ -1,3 +1,94 @@
+Overview of Changes from GTK+ 2.91.6 to 2.91.7
+==============================================
+
+* The treeview-refactor branch has been merged, bringing more
+  flexible cell arrangement with GtkCellArea, GtkCellAreaBox, etc
+
+* The gdk-backend branch has been merged. This branch cleans up the
+  internal frontend/backend separation in GDK, with the ultimate goal
+  of allowing to build a single gdk library that contains multiple
+  backends (interesting combinations are x11+wayland or quartz+x11).
+
+  For now, GDK is still restricted to a single backend, but
+  as a first step, the libraries no longer include the backend name
+  in their soname, but are just libgdk-3.0.so and libgtk-3.0.so.
+
+  Only the x11 backend has been kept up to date with this cleanup
+  work, other backends are broken in this release.
+
+* Deprecations and removals:
+ - G_SEALed struct members have been removed from GtkWindowGroup,
+   GtkDrawingArea, GtkTreeStore, GtkTreeModelSort, GtkTreeSelection,
+   GtkSocket, GtkPrintJob, GtkSelectionData
+ - Input device handling:
+   - gdk_display_list_devices, gdk_display_get_core_pointer,
+     gdk_input_set_extension_events, gtk_widget_set_extension_events,
+     gdk_devices_list have been removed
+   - gdk_display_warp_device has been replaced by gdk_device_warp
+   - gdk_enable_multidevice has been replaced by gdk_disable_multidevice
+ - Drag-and-Drop:
+   gdk_drag_context_new, gdk_drag_find_window and gdk_drag_get_protocol
+   have been removed
+ - Property handling:
+   Functions that deal with X11-specific encodings such as Compound Text
+   have been moved to backend-specific API:
+   gdk_string_to_compound_text[_for_display],
+   gdk_utf8_to_compound_text[_for_display], gdk_free_compound_text,
+   gdk_text_property_to_text_list[_for_display], gdk_free_text_list,
+   gdk_text_property_to_utf8_list
+ - Foreign windows:
+   Functions for dealing with GdkWindow wrappers around foreign
+   windows have been moved to backend-specific API.
+ - Application launching:
+   The gdk_spawn_* APIs have been removed, since they were trivial
+   wrappers around g_spawn_* on most platforms and can be replaced
+   by GIO GAppInfo APIs.
+ - Misc. other functions: gdk_net_wm_supports, gdk_set_locale,
+   gdkx_visual_get have been either removed, gdk_set_sm_client_id
+   has been moved to backend-specific API.
+
+* A number of GTK+ widgets have been ported to use GtkStyleContext
+  directly for rendering
+
+* The tracker search backend for the file chooser has been updated
+  to work with libtracker-sparql as available in tracker >= 0.9
+
+* The GtkAboutDialog has been given a facelift. It no longer
+  opens second-level dialogs
+
+* The GDK X11 backend now uses XI2 (including multi-device capabilities)
+  by default. Use gdk_disable_multidevice() to switch back to the
+  XI1/Core implementation
+
+* Bug fixes:
+ 629923 Consider always calling unmap() when unsetting MAPPED flag
+ 634657 Dynamically attached calendar does not respond to mouse clicks
+ 635401 Setting conflict warning does not disappear when conflict is fixed
+ 636732 Gtk+ fails to build
+ 636777 Leak in gtk_css_provider_get_named
+ 637018 Add checks for id-column/entry-text-column >= 0
+ 637069 Custom print settings set in custom-widget-apply are lost
+ 637155 Remove vestiges of support for themes using XSHAPE
+ 637156 Optimize gtk_widget_shape_combine_region (widget, NULL, ...)
+ 637189 gtk_cell_renderer_spin_start_editing uses g_ascii_strtod but...
+ 637243 docs: fix link failure on gtk-doc scanner binaries
+ 637256 gtkstylecontext: fix typos in annotations
+ 637464 Fix GdkWindowFilter internal refcounting
+ 637471 GTK2_RC_FILES should be renamed to GTK3_RC_FILES
+ 637520 Gtk+ seems to have broken Mutter
+ 637606 Missing out annotations for gtk_accelerator_parse and...
+ 637608 Problems with the new AboutDialog
+
+* Translation updates:
+ Estonian
+ Hebrew
+ Kazakh
+ Norwegian bokmål
+ Persian
+ Spanish
+ Vietnamese
+
+
 Overview of Changes from GTK+ 2.91.5 to 2.91.6
 ==============================================
 
