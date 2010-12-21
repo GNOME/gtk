@@ -688,6 +688,17 @@ gdk_offscreen_window_get_embedder (GdkWindow *window)
 }
 
 static void
+gdk_offscreen_window_do_nothing (GdkWindow *window)
+{
+}
+
+static void
+gdk_offscreen_window_set_boolean (GdkWindow *window,
+                                  gboolean   setting)
+{
+}
+
+static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
   GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
@@ -699,21 +710,80 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->show = gdk_offscreen_window_show;
   impl_class->hide = gdk_offscreen_window_hide;
   impl_class->withdraw = gdk_offscreen_window_withdraw;
+  impl_class->set_events = gdk_offscreen_window_set_events;
+  impl_class->get_events = gdk_offscreen_window_get_events;
   impl_class->raise = gdk_offscreen_window_raise;
   impl_class->lower = gdk_offscreen_window_lower;
+  impl_class->restack_under = NULL;
+  impl_class->restack_toplevel = NULL;
   impl_class->move_resize = gdk_offscreen_window_move_resize;
   impl_class->set_background = gdk_offscreen_window_set_background;
-  impl_class->get_events = gdk_offscreen_window_get_events;
-  impl_class->set_events = gdk_offscreen_window_set_events;
   impl_class->reparent = gdk_offscreen_window_reparent;
+  impl_class->set_device_cursor = NULL;
   impl_class->get_geometry = gdk_offscreen_window_get_geometry;
+  impl_class->get_root_coords = gdk_offscreen_window_get_root_coords;
+  impl_class->get_device_state = gdk_offscreen_window_get_device_state;
   impl_class->shape_combine_region = gdk_offscreen_window_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   impl_class->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   impl_class->translate = gdk_offscreen_window_translate;
-  impl_class->get_root_coords = gdk_offscreen_window_get_root_coords;
-  impl_class->get_device_state = gdk_offscreen_window_get_device_state;
   impl_class->destroy = gdk_offscreen_window_destroy;
+  impl_class->destroy_foreign = NULL;
   impl_class->resize_cairo_surface = gdk_offscreen_window_resize_cairo_surface;
+  impl_class->get_shape = NULL;
+  impl_class->get_input_shape = NULL;
+  impl_class->beep = NULL;
+
+  impl_class->focus = NULL;
+  impl_class->set_type_hint = NULL;
+  impl_class->get_type_hint = NULL;
+  impl_class->set_modal_hint = NULL;
+  impl_class->set_skip_taskbar_hint = gdk_offscreen_window_set_boolean;
+  impl_class->set_skip_pager_hint = gdk_offscreen_window_set_boolean;
+  impl_class->set_urgency_hint = NULL;
+  impl_class->set_geometry_hints = NULL;
+  impl_class->set_title = NULL;
+  impl_class->set_role = NULL;
+  impl_class->set_startup_id = NULL;
+  impl_class->set_transient_for = NULL;
+  impl_class->get_root_origin = NULL;
+  impl_class->get_frame_extents = NULL;
+  impl_class->set_override_redirect = NULL;
+  impl_class->set_accept_focus = NULL;
+  impl_class->set_focus_on_map = NULL;
+  impl_class->set_icon_list = NULL;
+  impl_class->set_icon_name = NULL;
+  impl_class->iconify = gdk_offscreen_window_do_nothing;
+  impl_class->deiconify = gdk_offscreen_window_do_nothing;
+  impl_class->stick = gdk_offscreen_window_do_nothing;
+  impl_class->unstick = gdk_offscreen_window_do_nothing;
+  impl_class->maximize = gdk_offscreen_window_do_nothing;
+  impl_class->unmaximize = gdk_offscreen_window_do_nothing;
+  impl_class->fullscreen = gdk_offscreen_window_do_nothing;
+  impl_class->unfullscreen = gdk_offscreen_window_do_nothing;
+  impl_class->set_keep_above = gdk_offscreen_window_set_boolean;
+  impl_class->set_keep_below = gdk_offscreen_window_set_boolean;
+  impl_class->get_group = NULL;
+  impl_class->set_group = NULL;
+  impl_class->set_decorations = NULL;
+  impl_class->get_decorations = NULL;
+  impl_class->set_functions = NULL;
+  impl_class->set_functions = NULL;
+  impl_class->begin_resize_drag = NULL;
+  impl_class->begin_move_drag = NULL;
+  impl_class->enable_synchronized_configure = NULL;
+  impl_class->configure_finished = NULL;
+  impl_class->set_opacity = NULL;
+  impl_class->set_composited = NULL;
+  impl_class->destroy_notify = NULL;
+  impl_class->register_dnd = NULL;
+  impl_class->drag_begin = NULL;
+  impl_class->process_updates_recurse = NULL;
+  impl_class->sync_rendering = NULL;
+  impl_class->simulate_key = NULL;
+  impl_class->simulate_button = NULL;
+  impl_class->get_property = NULL;
+  impl_class->change_property = NULL;
+  impl_class->delete_property = NULL;
 }
