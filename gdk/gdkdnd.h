@@ -104,7 +104,7 @@ struct _GdkDragContextClass {
 /* Drag and Drop */
 
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
 GdkDragContext * gdk_drag_context_new        (void);
 #endif
 
