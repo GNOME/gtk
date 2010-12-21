@@ -20,7 +20,7 @@
 #ifndef __GDK_X11_DEVICE_XI2_H__
 #define __GDK_X11_DEVICE_XI2_H__
 
-#include "gdkdeviceprivate.h"
+#include <gdk/gdk.h>
 
 #include <X11/extensions/XInput2.h>
 
@@ -35,19 +35,6 @@ G_BEGIN_DECLS
 
 typedef struct _GdkX11DeviceXI2 GdkX11DeviceXI2;
 typedef struct _GdkX11DeviceXI2Class GdkX11DeviceXI2Class;
-
-struct _GdkX11DeviceXI2
-{
-  GdkDevice parent_instance;
-
-  /*< private >*/
-  gint device_id;
-};
-
-struct _GdkX11DeviceXI2Class
-{
-  GdkDeviceClass parent_class;
-};
 
 GType gdk_x11_device_xi2_get_type (void) G_GNUC_CONST;
 

@@ -22,11 +22,12 @@
 #include "gdkx11devicemanager-core.h"
 #include "gdkx11device-core.h"
 
-#include "gdkkeysyms.h"
 #include "gdkdevicemanagerprivate.h"
+#include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkprivate-x11.h"
+#include "gdkkeysyms.h"
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>

@@ -20,7 +20,7 @@
 #ifndef __GDK_X11_DEVICE_CORE_H__
 #define __GDK_X11_DEVICE_CORE_H__
 
-#include "gdkdeviceprivate.h"
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -34,15 +34,6 @@ G_BEGIN_DECLS
 typedef struct _GdkX11DeviceCore GdkX11DeviceCore;
 typedef struct _GdkX11DeviceCoreClass GdkX11DeviceCoreClass;
 
-struct _GdkX11DeviceCore
-{
-  GdkDevice parent_instance;
-};
-
-struct _GdkX11DeviceCoreClass
-{
-  GdkDeviceClass parent_class;
-};
 
 GType gdk_x11_device_core_get_type (void) G_GNUC_CONST;
 

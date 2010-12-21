@@ -20,11 +20,22 @@
 #include "config.h"
 
 #include "gdkx11device-core.h"
+#include "gdkdeviceprivate.h"
 
 #include "gdkinternals.h"
 #include "gdkwindow.h"
 #include "gdkprivate-x11.h"
 #include "gdkasync.h"
+
+struct _GdkX11DeviceCore
+{
+  GdkDevice parent_instance;
+};
+
+struct _GdkX11DeviceCoreClass
+{
+  GdkDeviceClass parent_class;
+};
 
 static gboolean gdk_x11_device_core_get_history (GdkDevice       *device,
                                                  GdkWindow       *window,

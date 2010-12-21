@@ -34,7 +34,7 @@ G_BEGIN_DECLS
 #define GDK_IS_DEVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE))
 
 typedef struct _GdkDevice GdkDevice;
-typedef struct _GdkDevicePrivate GdkDevicePrivate;
+typedef struct _GdkDeviceClass GdkDeviceClass;
 typedef struct _GdkTimeCoord GdkTimeCoord;
 
 /**

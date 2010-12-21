@@ -20,7 +20,7 @@
 #ifndef __GDK_X11_DEVICE_XI_H__
 #define __GDK_X11_DEVICE_XI_H__
 
-#include "gdkdeviceprivate.h"
+#include <gdk/gdk.h>
 
 #include <X11/extensions/XInput.h>
 
@@ -36,34 +36,6 @@ G_BEGIN_DECLS
 typedef struct _GdkX11DeviceXI GdkX11DeviceXI;
 typedef struct _GdkX11DeviceXIClass GdkX11DeviceXIClass;
 
-struct _GdkX11DeviceXI
-{
-  GdkDevice parent_instance;
-
-  /*< private >*/
-  guint32 device_id;
-  XDevice *xdevice;
-
-  gint button_press_type;
-  gint button_release_type;
-  gint key_press_type;
-  gint key_release_type;
-  gint motion_notify_type;
-  gint proximity_in_type;
-  gint proximity_out_type;
-  gint state_notify_type;
-
-  /* minimum key code for device */
-  gint min_keycode;
-  gint *axis_data;
-
-  guint in_proximity : 1;
-};
-
-struct _GdkX11DeviceXIClass
-{
-  GdkDeviceClass parent_class;
-};
 
 GType gdk_x11_device_xi_get_type (void) G_GNUC_CONST;
 

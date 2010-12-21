@@ -20,10 +20,10 @@
 #include "config.h"
 
 #include "gdkx11device-xi.h"
+#include "gdkdeviceprivate-xi.h"
 
 #include "gdkwindow.h"
 #include "gdkintl.h"
-#include "gdkdeviceprivate.h"
 #include "gdkprivate-x11.h"
 #include "gdkasync.h"
 

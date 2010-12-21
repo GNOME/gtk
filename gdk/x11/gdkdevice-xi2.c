@@ -20,12 +20,23 @@
 #include "config.h"
 
 #include "gdkx11device-xi2.h"
+#include "gdkdeviceprivate.h"
 
 #include "gdkintl.h"
 #include "gdkasync.h"
 #include "gdkprivate-x11.h"
 
-#include <X11/extensions/XInput2.h>
+struct _GdkX11DeviceXI2
+{
+  GdkDevice parent_instance;
+
+  gint device_id;
+};
+
+struct _GdkX11DeviceXI2Class
+{
+  GdkDeviceClass parent_class;
+};
 
 static void gdk_x11_device_xi2_get_property (GObject      *object,
                                              guint         prop_id,

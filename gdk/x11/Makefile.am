@@ -24,6 +24,7 @@ libgdk_x11_la_SOURCES = 	\
 	gdkasync.h		\
 	gdkcursor-x11.c		\
 	gdkdevice-core-x11.c	\
+	gdkdeviceprivate-xi.h	\
 	gdkdevicemanager-core-x11.c \
 	gdkdevicemanager-x11.c	\
 	gdkdisplaymanager-x11.c	\

@@ -20,8 +20,9 @@
 #include "config.h"
 
 #include "gdkx11devicemanager-xi.h"
-#include "gdkx11device-xi.h"
+#include "gdkdeviceprivate-xi.h"
 
+#include "gdkdevicemanagerprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkintl.h"
 #include "gdkprivate-x11.h"
