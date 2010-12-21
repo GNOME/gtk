@@ -106,8 +106,7 @@ gdk_private_headers = 				\
 	gdkinternals.h				\
 	gdkintl.h				\
 	gdkkeysprivate.h			\
-	gdkvisualprivate.h			\
-	gdkpoly-generic.h
+	gdkvisualprivate.h
 
 gdk_c_sources = 				\
 	gdk.c					\
