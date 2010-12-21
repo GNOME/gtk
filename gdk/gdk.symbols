@@ -537,8 +537,8 @@ gdk_display_manager_get_default_display
 gdk_drag_abort
 gdk_drag_begin
 gdk_drag_context_get_type G_GNUC_CONST
-gdk_drag_context_new
 #ifndef GDK_DISABLE_DEPRECATED
+gdk_drag_context_new
 gdk_drag_context_ref
 gdk_drag_context_unref
 #endif

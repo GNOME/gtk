@@ -214,6 +214,9 @@ gdk_drag_context_finalize (GObject *object)
  * Creates a new #GdkDragContext.
  * 
  * Return value: the newly created #GdkDragContext.
+ *
+ * Deprecated: 2.24: This function is not useful, you always
+ *   obtain drag contexts by gdk_drag_begin() or similar.
  **/
 GdkDragContext *
 gdk_drag_context_new (void)
