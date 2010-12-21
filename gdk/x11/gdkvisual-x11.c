@@ -33,13 +33,13 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-typedef struct _GdkVisualX11 GdkVisualX11;
-typedef struct _GdkVisualX11Class GdkVisualX11Class;
+typedef struct _GdkX11Visual GdkX11Visual;
+typedef struct _GdkX11VisualClass GdkX11VisualClass;
 
-#define GDK_TYPE_VISUAL_X11 (gdk_visual_x11_get_type ())
-#define GDK_VISUAL_X11(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_VISUAL_X11, GdkVisualX11))
+#define GDK_TYPE_X11_VISUAL (gdk_x11_visual_get_type ())
+#define GDK_X11_VISUAL(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_VISUAL, GdkX11Visual))
 
-struct _GdkVisualX11
+struct _GdkX11Visual
 {
   GdkVisual visual;
 
@@ -47,7 +47,7 @@ struct _GdkVisualX11
   Colormap colormap;
 };
 
-struct _GdkVisualX11Class
+struct _GdkX11VisualClass
 {
   GdkVisualClass visual_class;
 };
@@ -75,32 +75,32 @@ static const gchar *const visual_names[] =
 
 #endif /* G_ENABLE_DEBUG */
 
-G_DEFINE_TYPE (GdkVisualX11, gdk_visual_x11, GDK_TYPE_VISUAL)
+G_DEFINE_TYPE (GdkX11Visual, gdk_x11_visual, GDK_TYPE_VISUAL)
 
 static void
-gdk_visual_x11_init (GdkVisualX11 *visual_x11)
+gdk_x11_visual_init (GdkX11Visual *x11_visual)
 {
-  visual_x11->colormap = None;
+  x11_visual->colormap = None;
 }
 
 static void
-gdk_visual_x11_finalize (GObject *object)
+gdk_x11_visual_finalize (GObject *object)
 {
   GdkVisual *visual = (GdkVisual *)object;
-  GdkVisualX11 *visual_x11 = (GdkVisualX11 *)object;
+  GdkX11Visual *x11_visual = (GdkX11Visual *)object;
 
-  if (visual_x11->colormap != None)
-    XFreeColormap (GDK_SCREEN_XDISPLAY (visual->screen), visual_x11->colormap);
+  if (x11_visual->colormap != None)
+    XFreeColormap (GDK_SCREEN_XDISPLAY (visual->screen), x11_visual->colormap);
 
-  G_OBJECT_CLASS (gdk_visual_x11_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_x11_visual_parent_class)->finalize (object);
 }
 
 static void
-gdk_visual_x11_class_init (GdkVisualX11Class *class)
+gdk_x11_visual_class_init (GdkX11VisualClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->finalize = gdk_visual_x11_finalize;
+  object_class->finalize = gdk_x11_visual_finalize;
 }
 
 void
@@ -136,7 +136,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
 
   visuals = g_new (GdkVisual *, nxvisuals);
   for (i = 0; i < nxvisuals; i++)
-    visuals[i] = g_object_new (GDK_TYPE_VISUAL_X11, NULL);
+    visuals[i] = g_object_new (GDK_TYPE_X11_VISUAL, NULL);
 
   default_xvisual = DefaultVisual (screen_x11->xdisplay, screen_x11->screen_num);
 
@@ -182,7 +182,7 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
 	  visuals[nvisuals]->blue_mask = visual_list[i].blue_mask;
 	  visuals[nvisuals]->colormap_size = visual_list[i].colormap_size;
 	  visuals[nvisuals]->bits_per_rgb = visual_list[i].bits_per_rgb;
-	  GDK_VISUAL_X11 (visuals[nvisuals])->xvisual = visual_list[i].visual;
+	  GDK_X11_VISUAL (visuals[nvisuals])->xvisual = visual_list[i].visual;
 
 	  if ((visuals[nvisuals]->type == GDK_VISUAL_TRUE_COLOR) ||
 	      (visuals[nvisuals]->type == GDK_VISUAL_DIRECT_COLOR))
@@ -257,10 +257,10 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
 
   for (i = 0; i < nvisuals; i++)
     {
-      if (default_xvisual->visualid == GDK_VISUAL_X11 (visuals[i])->xvisual->visualid)
+      if (default_xvisual->visualid == GDK_X11_VISUAL (visuals[i])->xvisual->visualid)
          {
            screen_x11->system_visual = visuals[i];
-           GDK_VISUAL_X11 (visuals[i])->colormap =
+           GDK_X11_VISUAL (visuals[i])->colormap =
                DefaultColormap (screen_x11->xdisplay, screen_x11->screen_num);
          }
 
@@ -483,7 +483,7 @@ gdk_x11_screen_lookup_visual (GdkScreen *screen,
   screen_x11 = GDK_SCREEN_X11 (screen);
 
   for (i = 0; i < screen_x11->nvisuals; i++)
-    if (xvisualid == GDK_VISUAL_X11 (screen_x11->visuals[i])->xvisual->visualid)
+    if (xvisualid == GDK_X11_VISUAL (screen_x11->visuals[i])->xvisual->visualid)
       return screen_x11->visuals[i];
 
   return NULL;
@@ -498,7 +498,7 @@ gdk_visual_add (GdkVisual *visual)
     screen_x11->visual_hash = g_hash_table_new ((GHashFunc) gdk_visual_hash,
                                                 (GEqualFunc) gdk_visual_equal);
 
-  g_hash_table_insert (screen_x11->visual_hash, GDK_VISUAL_X11 (visual)->xvisual, visual);
+  g_hash_table_insert (screen_x11->visual_hash, GDK_X11_VISUAL (visual)->xvisual, visual);
 }
 
 static void
@@ -552,21 +552,21 @@ gdk_visual_equal (Visual *a,
 Colormap
 _gdk_visual_get_x11_colormap (GdkVisual *visual)
 {
-  GdkVisualX11 *visual_x11;
+  GdkX11Visual *x11_visual;
 
   g_return_val_if_fail (GDK_IS_VISUAL (visual), None);
 
-  visual_x11 = GDK_VISUAL_X11 (visual);
+  x11_visual = GDK_X11_VISUAL (visual);
 
-  if (visual_x11->colormap == None)
+  if (x11_visual->colormap == None)
     {
-      visual_x11->colormap = XCreateColormap (GDK_SCREEN_XDISPLAY (visual->screen),
+      x11_visual->colormap = XCreateColormap (GDK_SCREEN_XDISPLAY (visual->screen),
                                               GDK_SCREEN_XROOTWIN (visual->screen),
-                                              visual_x11->xvisual,
+                                              x11_visual->xvisual,
                                               AllocNone);
     }
 
-  return visual_x11->colormap;
+  return x11_visual->colormap;
 }
 
 /**
@@ -582,5 +582,5 @@ gdk_x11_visual_get_xvisual (GdkVisual *visual)
 {
   g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
 
-  return GDK_VISUAL_X11 (visual)->xvisual;
+  return GDK_X11_VISUAL (visual)->xvisual;
 }
