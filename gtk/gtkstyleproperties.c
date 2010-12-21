@@ -855,6 +855,12 @@ lookup_default_value (PropertyNode *node,
     g_value_set_object (value, gtk_theming_engine_load (NULL));
   else if (node->pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
     g_value_take_boxed (value, pango_font_description_from_string ("Sans 10"));
+  else if (node->pspec->value_type == GDK_TYPE_RGBA)
+    {
+      GdkRGBA color;
+      gdk_rgba_parse (&color, "pink");
+      g_value_set_boxed (value, &color);
+    }
   else
     g_param_value_set_default (node->pspec, value);
 }
