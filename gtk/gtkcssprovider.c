@@ -53,7 +53,7 @@
  * falling back to
  * <filename><replaceable>datadir</replaceable>/share/themes/<replaceable>theme-name</replaceable>/gtk-3.0/gtk.css</filename>,
  * where <replaceable>theme-name</replaceable> is the name of the current theme
- * (see the #GtkSettings:gtk-theme-name setting) and <replaceable>datadir</datadir>
+ * (see the #GtkSettings:gtk-theme-name setting) and <replaceable>datadir</replaceable>
  * is the prefix configured when GTK+ was compiled, unless overridden by the
  * <envar>GTK_DATA_PREFIX</envar> environment variable.
  * </para>
