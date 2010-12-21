@@ -32,6 +32,10 @@
 #include "gdkmarshalers.h"
 #include "gdkintl.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
 
 /**
  * SECTION:gdkdisplaymanager
@@ -147,10 +151,6 @@ gdk_display_manager_get_property (GObject      *object,
     }
 }
 
-#ifdef GDK_WINDOWING_X11
-extern GType gdk_display_manager_x11_get_type (void);
-#endif
-
 /**
  * gdk_display_manager_get:
  *
@@ -174,7 +174,7 @@ gdk_display_manager_get (void)
       backend = g_getenv ("GDK_BACKEND");
 #ifdef GDK_WINDOWING_X11
       if (backend == NULL || strcmp (backend, "x11") == 0)
-        manager = g_object_new (gdk_display_manager_x11_get_type (), NULL);
+        manager = g_object_new (gdk_x11_display_manager_get_type (), NULL);
       else
 #endif
       if (backend != NULL)

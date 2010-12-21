@@ -23,19 +23,14 @@
 
 #include "config.h"
 
+#include "gdkx11displaymanager.h"
+#include "gdkdisplaymanagerprivate.h"
 #include "gdkdisplay-x11.h"
 #include "gdkprivate-x11.h"
 
-#include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
 
-#define GDK_TYPE_DISPLAY_MANAGER_X11    (gdk_display_manager_x11_get_type ())
-#define GDK_DISPLAY_MANAGER_X11(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_MANAGER_X11, GdkDisplayManagerX11))
-
-typedef struct _GdkDisplayManagerX11 GdkDisplayManagerX11;
-typedef struct _GdkDisplayManagerClass GdkDisplayManagerX11Class;
-
-struct _GdkDisplayManagerX11
+struct _GdkX11DisplayManager
 {
   GdkDisplayManager parent;
 
@@ -43,65 +38,66 @@ struct _GdkDisplayManagerX11
   GSList *displays;
 };
 
-G_DEFINE_TYPE (GdkDisplayManagerX11, gdk_display_manager_x11, GDK_TYPE_DISPLAY_MANAGER)
+struct _GdkX11DisplayManagerClass
+{
+  GdkDisplayManagerClass parent_class;
+};
+
+G_DEFINE_TYPE (GdkX11DisplayManager, gdk_x11_display_manager, GDK_TYPE_X11_DISPLAY_MANAGER)
 
 static GdkDisplay *
-gdk_display_manager_x11_open_display (GdkDisplayManager *manager,
+gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
                                       const gchar       *name)
 {
   return _gdk_x11_display_open (name);
 }
 
 static GSList *
-gdk_display_manager_x11_list_displays (GdkDisplayManager *manager)
+gdk_x11_display_manager_list_displays (GdkDisplayManager *manager)
 {
-  GdkDisplayManagerX11 *manager_x11 = GDK_DISPLAY_MANAGER_X11 (manager);
-
-  return g_slist_copy (manager_x11->displays);
+  return g_slist_copy (GDK_X11_DISPLAY_MANAGER (manager)->displays);
 }
 
 static GdkDisplay *
-gdk_display_manager_x11_get_default_display (GdkDisplayManager *manager)
+gdk_x11_display_manager_get_default_display (GdkDisplayManager *manager)
 {
-  return GDK_DISPLAY_MANAGER_X11 (manager)->default_display;
+  return GDK_X11_DISPLAY_MANAGER (manager)->default_display;
 }
 
 static void
-gdk_display_manager_x11_set_default_display (GdkDisplayManager *manager,
+gdk_x11_display_manager_set_default_display (GdkDisplayManager *manager,
                                              GdkDisplay        *display)
 {
-  GdkDisplayManagerX11 *manager_x11 = GDK_DISPLAY_MANAGER_X11 (manager);
-
-  manager_x11->default_display = display;
+  GDK_X11_DISPLAY_MANAGER (manager)->default_display = display;
 
   _gdk_x11_display_make_default (display);
 }
 
 static void
-gdk_display_manager_x11_init (GdkDisplayManagerX11 *manager)
+gdk_x11_display_manager_init (GdkX11DisplayManager *manager)
 {
   _gdk_x11_windowing_init ();
 }
 
 static void
-gdk_display_manager_x11_finalize (GObject *object)
+gdk_x11_display_manager_finalize (GObject *object)
 {
-  g_error ("A GdkDisplayManagerX11 object was finalized. This should not happen");
-  G_OBJECT_CLASS (gdk_display_manager_x11_parent_class)->finalize (object);
+  g_error ("A GdkX11DisplayManager object was finalized. This should not happen");
+  G_OBJECT_CLASS (gdk_x11_display_manager_parent_class)->finalize (object);
 }
 
 static void
-gdk_display_manager_x11_class_init (GdkDisplayManagerX11Class *class)
+gdk_x11_display_manager_class_init (GdkX11DisplayManagerClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_CLASS (class);
 
-  object_class->finalize = gdk_display_manager_x11_finalize;
+  object_class->finalize = gdk_x11_display_manager_finalize;
 
-  manager_class->open_display = gdk_display_manager_x11_open_display;
-  manager_class->list_displays = gdk_display_manager_x11_list_displays;
-  manager_class->set_default_display = gdk_display_manager_x11_set_default_display;
-  manager_class->get_default_display = gdk_display_manager_x11_get_default_display;
+  manager_class->open_display = gdk_x11_display_manager_open_display;
+  manager_class->list_displays = gdk_x11_display_manager_list_displays;
+  manager_class->set_default_display = gdk_x11_display_manager_set_default_display;
+  manager_class->get_default_display = gdk_x11_display_manager_get_default_display;
   manager_class->atom_intern = _gdk_x11_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_x11_display_manager_get_atom_name;
   manager_class->lookup_keyval = _gdk_x11_display_manager_lookup_keyval;
@@ -113,7 +109,7 @@ void
 _gdk_x11_display_manager_add_display (GdkDisplayManager *manager,
                                       GdkDisplay        *display)
 {
-  GdkDisplayManagerX11 *manager_x11 = GDK_DISPLAY_MANAGER_X11 (manager);
+  GdkX11DisplayManager *manager_x11 = GDK_X11_DISPLAY_MANAGER (manager);
 
   if (manager_x11->displays == NULL)
     gdk_display_manager_set_default_display (manager, display);
@@ -125,7 +121,7 @@ void
 _gdk_x11_display_manager_remove_display (GdkDisplayManager *manager,
                                          GdkDisplay        *display)
 {
-  GdkDisplayManagerX11 *manager_x11 = GDK_DISPLAY_MANAGER_X11 (manager);
+  GdkX11DisplayManager *manager_x11 = GDK_X11_DISPLAY_MANAGER (manager);
 
   manager_x11->displays = g_slist_remove (manager_x11->displays, display);
 
