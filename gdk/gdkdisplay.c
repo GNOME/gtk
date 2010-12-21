@@ -186,6 +186,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   object_class->dispose = gdk_display_dispose;
 
   class->get_app_launch_context = gdk_display_real_get_app_launch_context;
+  class->window_type = GDK_TYPE_WINDOW;
 
   /**
    * GdkDisplay::opened:
@@ -2501,7 +2502,7 @@ _gdk_display_create_window_impl (GdkDisplay       *display,
 GdkWindow *
 _gdk_display_create_window (GdkDisplay *display)
 {
-  return g_object_new (GDK_TYPE_WINDOW, NULL);
+  return g_object_new (GDK_DISPLAY_GET_CLASS (display)->window_type, NULL);
 }
 
 /**

@@ -115,6 +115,8 @@ struct _GdkDisplayClass
 {
   GObjectClass parent_class;
 
+  GType window_type;          /* type for native windows for this display, set in class_init */
+
   G_CONST_RETURN gchar *     (*get_name)           (GdkDisplay *display);
   gint                       (*get_n_screens)      (GdkDisplay *display);
   GdkScreen *                (*get_screen)         (GdkDisplay *display,
