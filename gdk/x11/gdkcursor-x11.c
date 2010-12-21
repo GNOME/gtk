@@ -271,7 +271,7 @@ _gdk_x11_display_get_cursor_for_type (GdkDisplay    *display,
     }
 
   private = g_object_new (GDK_TYPE_X11_CURSOR,
-                          "cursor-type", GDK_CURSOR_IS_PIXMAP,
+                          "cursor-type", cursor_type,
                           "display", display,
                           NULL);
   private->xcursor = xcursor;
