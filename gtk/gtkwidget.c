@@ -7741,7 +7741,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (!widget->priv->style ||
-      !gtk_style_has_context (widget->priv->style))
+      widget->priv->style == gtk_widget_get_default_style ())
     {
       GtkStyle *style;
 
