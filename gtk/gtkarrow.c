@@ -28,7 +28,7 @@
  * SECTION:gtkarrow
  * @Short_description: Displays an arrow
  * @Title: GtkArrow
- * @See_also: gtk_paint_arrow()
+ * @See_also: gtk_render_arrow()
  *
  * GtkArrow should be used to draw simple arrows that need to point in
  * one of the four cardinal directions (up, down, left, or right).  The
@@ -310,15 +310,20 @@ gtk_arrow_draw (GtkWidget *widget,
   GtkArrow *arrow = GTK_ARROW (widget);
   GtkArrowPrivate *priv = arrow->priv;
   GtkMisc *misc = GTK_MISC (widget);
-  GtkShadowType shadow_type;
-  GtkStateType state;
+  GtkStyleContext *context;
+  GtkStateFlags state;
   gint x, y, width, height;
   gint extent;
   gint xpad, ypad;
   gfloat xalign, yalign;
   GtkArrowType effective_arrow_type;
   gfloat arrow_scaling;
+  gdouble angle;
 
+  if (priv->arrow_type == GTK_ARROW_NONE)
+    return FALSE;
+
+  context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget, "arrow-scaling", &arrow_scaling, NULL);
 
   gtk_misc_get_padding (misc, &xpad, &ypad);
@@ -342,26 +347,30 @@ gtk_arrow_draw (GtkWidget *widget,
   x = floor (xpad + ((width  - extent) * xalign));
   y = floor (ypad + ((height - extent) * yalign));
 
-  shadow_type = priv->shadow_type;
-  state = gtk_widget_get_state (widget);
-
-  if (state == GTK_STATE_ACTIVE)
+  switch (effective_arrow_type)
     {
-      if (shadow_type == GTK_SHADOW_IN)
-        shadow_type = GTK_SHADOW_OUT;
-      else if (shadow_type == GTK_SHADOW_OUT)
-        shadow_type = GTK_SHADOW_IN;
-      else if (shadow_type == GTK_SHADOW_ETCHED_IN)
-        shadow_type = GTK_SHADOW_ETCHED_OUT;
-      else if (shadow_type == GTK_SHADOW_ETCHED_OUT)
-        shadow_type = GTK_SHADOW_ETCHED_IN;
+    case GTK_ARROW_UP:
+      angle = 0;
+      break;
+    case GTK_ARROW_RIGHT:
+      angle = G_PI / 2;
+      break;
+    case GTK_ARROW_DOWN:
+      angle = G_PI;
+      break;
+    case GTK_ARROW_LEFT:
+    default:
+      angle = (3 * G_PI) / 2;
+      break;
     }
 
-  gtk_paint_arrow (gtk_widget_get_style (widget), cr,
-                   state, shadow_type,
-                   widget, "arrow",
-                   effective_arrow_type, TRUE,
-                   x, y, extent, extent);
+  gtk_style_context_save (context);
+
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_set_state (context, state);
+  gtk_render_arrow (context, cr, angle, x, y, extent);
+
+  gtk_style_context_restore (context);
 
   return FALSE;
 }
