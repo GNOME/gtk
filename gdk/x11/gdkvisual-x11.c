@@ -34,7 +34,7 @@
 #include <X11/Xutil.h>
 
 typedef struct _GdkVisualX11 GdkVisualX11;
-typedef struct _GdkVisualClass GdkVisualX11Class;
+typedef struct _GdkVisualX11Class GdkVisualX11Class;
 
 #define GDK_TYPE_VISUAL_X11 (gdk_visual_x11_get_type ())
 #define GDK_VISUAL_X11(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_VISUAL_X11, GdkVisualX11))
@@ -45,6 +45,11 @@ struct _GdkVisualX11
 
   Visual *xvisual;
   Colormap colormap;
+};
+
+struct _GdkVisualX11Class
+{
+  GdkVisualClass visual_class;
 };
 
 static void     gdk_visual_add            (GdkVisual *visual);
