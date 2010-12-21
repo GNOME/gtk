@@ -141,7 +141,7 @@ GdkColormap* gdkx_colormap_get (Colormap xcolormap);
 GdkColormap *gdk_x11_colormap_foreign_new (GdkVisual *visual,
 					   Colormap   xcolormap);
 
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
 gpointer      gdk_xid_table_lookup_for_display (GdkDisplay *display,
 						XID         xid);
 #endif
