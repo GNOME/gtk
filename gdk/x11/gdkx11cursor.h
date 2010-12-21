@@ -38,6 +38,22 @@
 
 G_BEGIN_DECLS
 
+#define GDK_TYPE_X11_CURSOR              (gdk_x11_cursor_get_type ())
+#define GDK_X11_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_CURSOR, GdkX11Cursor))
+#define GDK_X11_CURSOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_CURSOR, GdkX11CursorClass))
+#define GDK_IS_X11_CURSOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_CURSOR))
+#define GDK_IS_X11_CURSOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_CURSOR))
+#define GDK_X11_CURSOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_CURSOR, GdkX11CursorClass))
+
+#ifdef GDK_COMPILATION
+typedef struct _GdkX11Cursor GdkX11Cursor;
+#else
+typedef GdkCursor GdkX11Cursor;
+#endif
+typedef struct _GdkX11CursorClass GdkX11CursorClass;
+
+GType    gdk_x11_cursor_get_type          (void);
+
 Display *gdk_x11_cursor_get_xdisplay      (GdkCursor   *cursor);
 Cursor   gdk_x11_cursor_get_xcursor       (GdkCursor   *cursor);
 
