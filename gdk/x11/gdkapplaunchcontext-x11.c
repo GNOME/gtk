@@ -22,6 +22,7 @@
 
 #include "config.h"
 
+#include "gdkx11applaunchcontext.h"
 #include "gdkapplaunchcontextprivate.h"
 #include "gdkscreen.h"
 #include "gdkintl.h"
@@ -127,10 +128,10 @@ end_startup_notification (GdkDisplay *display,
  * timeouts. The reason our timeout is dumb is that we don't monitor
  * the sequence (don't use an SnMonitorContext)
  */
-#define STARTUP_TIMEOUT_LENGTH_SECONDS 30 
+#define STARTUP_TIMEOUT_LENGTH_SECONDS 30
 #define STARTUP_TIMEOUT_LENGTH (STARTUP_TIMEOUT_LENGTH_SECONDS * 1000)
 
-typedef struct 
+typedef struct
 {
   GdkDisplay *display;
   char *startup_id;
@@ -147,7 +148,7 @@ free_startup_notification_data (gpointer data)
   g_free (sn_data);
 }
 
-typedef struct 
+typedef struct
 {
   GSList *contexts;
   guint timeout_id;
@@ -257,7 +258,7 @@ add_startup_timeout (GdkScreen  *screen,
 
 
 static char *
-gdk_app_launch_context_x11_get_startup_notify_id (GAppLaunchContext *context,
+gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                                   GAppInfo          *info,
                                                   GList             *files)
 {
@@ -387,8 +388,8 @@ gdk_app_launch_context_x11_get_startup_notify_id (GAppLaunchContext *context,
 
 
 static void
-gdk_app_launch_context_x11_launch_failed (GAppLaunchContext *context,
-                                          const char        *startup_notify_id)
+gdk_x11_app_launch_context_launch_failed (GAppLaunchContext *context,
+                                          const gchar       *startup_notify_id)
 {
   GdkAppLaunchContext *ctx;
   GdkScreen *screen;
@@ -428,22 +429,30 @@ gdk_app_launch_context_x11_launch_failed (GAppLaunchContext *context,
     }
 }
 
-typedef GdkAppLaunchContext GdkAppLaunchContextX11;
-typedef GdkAppLaunchContextClass GdkAppLaunchContextX11Class;
+struct _GdkX11AppLaunchContext
+{
+  GdkAppLaunchContext parent_instance;
+};
 
-G_DEFINE_TYPE (GdkAppLaunchContextX11, _gdk_app_launch_context_x11, GDK_TYPE_APP_LAUNCH_CONTEXT)
+struct _GdkX11AppLaunchContextClass
+{
+  GdkAppLaunchContextClass parent_class;
+};
+
+
+G_DEFINE_TYPE (GdkX11AppLaunchContext, gdk_x11_app_launch_context, GDK_TYPE_APP_LAUNCH_CONTEXT)
 
 static void
-_gdk_app_launch_context_x11_class_init (GdkAppLaunchContextX11Class *klass)
+gdk_x11_app_launch_context_class_init (GdkX11AppLaunchContextClass *klass)
 {
   GAppLaunchContextClass *ctx_class = G_APP_LAUNCH_CONTEXT_CLASS (klass);
 
-  ctx_class->get_startup_notify_id = gdk_app_launch_context_x11_get_startup_notify_id;
-  ctx_class->launch_failed = gdk_app_launch_context_x11_launch_failed;
+  ctx_class->get_startup_notify_id = gdk_x11_app_launch_context_get_startup_notify_id;
+  ctx_class->launch_failed = gdk_x11_app_launch_context_launch_failed;
 }
 
 static void
-_gdk_app_launch_context_x11_init (GdkAppLaunchContextX11 *ctx)
+gdk_x11_app_launch_context_init (GdkX11AppLaunchContext *ctx)
 {
 }
 
@@ -452,7 +461,7 @@ _gdk_x11_display_get_app_launch_context (GdkDisplay *display)
 {
   GdkAppLaunchContext *ctx;
 
-  ctx = g_object_new (_gdk_app_launch_context_x11_get_type (),
+  ctx = g_object_new (GDK_TYPE_X11_APP_LAUNCH_CONTEXT,
                       "display", display,
                       NULL);
 

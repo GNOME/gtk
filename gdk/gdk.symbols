@@ -509,6 +509,7 @@ gdk_window_unstick
 gdk_window_withdraw
 gdk_wm_decoration_get_type G_GNUC_CONST
 gdk_wm_function_get_type G_GNUC_CONST
+gdk_x11_app_launch_context_get_type
 gdk_x11_atom_to_xatom
 gdk_x11_atom_to_xatom_for_display
 gdk_x11_cursor_get_type
