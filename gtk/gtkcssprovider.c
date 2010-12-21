@@ -2116,8 +2116,9 @@ symbolic_color_parse_str (const gchar  *string,
         }
       else
         {
-          /* color name? parse until first whitespace */
-          while (*end != ' ' && *end != '\0')
+          /* Color name */
+          while (*end != '\0' &&
+                 (g_ascii_isalnum (*end) || *end == ' '))
             end++;
         }
 
