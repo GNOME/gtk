@@ -271,7 +271,7 @@ new_region_tag (void)
   return ++tag;
 }
 
-G_DEFINE_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
+G_DEFINE_ABSTRACT_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
 
 GType
 _gdk_paintable_get_type (void)
