@@ -20,7 +20,7 @@
 #ifndef __GDK_X11_DEVICE_MANAGER_XI2_H__
 #define __GDK_X11_DEVICE_MANAGER_XI2_H__
 
-#include "gdkdevicemanagerprivate.h"
+#include <gdk/gdk.h>
 
 #include <X11/extensions/XInput2.h>
 
@@ -36,26 +36,6 @@ G_BEGIN_DECLS
 typedef struct _GdkX11DeviceManagerXI2 GdkX11DeviceManagerXI2;
 typedef struct _GdkX11DeviceManagerXI2Class GdkX11DeviceManagerXI2Class;
 
-struct _GdkX11DeviceManagerXI2
-{
-  GdkDeviceManager parent_object;
-
-  /*< private >*/
-
-  GHashTable *id_table;
-
-  GList *master_devices;
-  GList *slave_devices;
-
-  GdkDevice *client_pointer;
-
-  gint opcode;
-};
-
-struct _GdkX11DeviceManagerXI2Class
-{
-  GdkDeviceManagerClass parent_class;
-};
 
 GType gdk_x11_device_manager_xi2_get_type (void) G_GNUC_CONST;
 

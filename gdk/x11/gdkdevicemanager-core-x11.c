@@ -20,9 +20,9 @@
 #include "config.h"
 
 #include "gdkx11devicemanager-core.h"
+#include "gdkdevicemanagerprivate-core.h"
 #include "gdkx11device-core.h"
 
-#include "gdkdevicemanagerprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"

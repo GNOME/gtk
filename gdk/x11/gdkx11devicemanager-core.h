@@ -20,7 +20,7 @@
 #ifndef __GDK_X11_DEVICE_MANAGER_CORE_H__
 #define __GDK_X11_DEVICE_MANAGER_CORE_H__
 
-#include "gdkdevicemanagerprivate.h"
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -34,17 +34,6 @@ G_BEGIN_DECLS
 typedef struct _GdkX11DeviceManagerCore GdkX11DeviceManagerCore;
 typedef struct _GdkX11DeviceManagerCoreClass GdkX11DeviceManagerCoreClass;
 
-struct _GdkX11DeviceManagerCore
-{
-  GdkDeviceManager parent_object;
-  GdkDevice *core_pointer;
-  GdkDevice *core_keyboard;
-};
-
-struct _GdkX11DeviceManagerCoreClass
-{
-  GdkDeviceManagerClass parent_class;
-};
 
 GType gdk_x11_device_manager_core_get_type (void) G_GNUC_CONST;
 

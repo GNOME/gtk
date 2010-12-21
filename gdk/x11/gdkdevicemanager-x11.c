@@ -58,8 +58,8 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 
               device_manager_xi2 = g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_XI2,
                                                  "display", display,
+                                                 "opcode", opcode,
                                                  NULL);
-              device_manager_xi2->opcode = opcode;
 
               return GDK_DEVICE_MANAGER (device_manager_xi2);
             }

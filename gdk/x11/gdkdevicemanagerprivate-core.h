@@ -17,42 +17,26 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_DEVICE_PRIVATE_XI_H__
-#define __GDK_DEVICE_PRIVATE_XI_H__
+#ifndef __GDK_DEVICE_MANAGER_PRIVATE_CORE_H__
+#define __GDK_DEVICE_MANAGER_PRIVATE_CORE_H__
 
-#include "gdkx11device-xi.h"
-#include "gdkdeviceprivate.h"
+#include "gdkx11devicemanager-core.h"
+#include "gdkdevicemanagerprivate.h"
 
 G_BEGIN_DECLS
 
-struct _GdkX11DeviceXI
+struct _GdkX11DeviceManagerCore
 {
-  GdkDevice parent_instance;
-
-  /*< private >*/
-  guint32 device_id;
-  XDevice *xdevice;
-
-  gint button_press_type;
-  gint button_release_type;
-  gint key_press_type;
-  gint key_release_type;
-  gint motion_notify_type;
-  gint proximity_in_type;
-  gint proximity_out_type;
-  gint state_notify_type;
-
-  /* minimum key code for device */
-  gint min_keycode;
-  gint *axis_data;
-  guint in_proximity : 1;
+  GdkDeviceManager parent_object;
+  GdkDevice *core_pointer;
+  GdkDevice *core_keyboard;
 };
 
-struct _GdkX11DeviceXIClass
+struct _GdkX11DeviceManagerCoreClass
 {
-  GdkDeviceClass parent_class;
+  GdkDeviceManagerClass parent_class;
 };
 
 G_END_DECLS
 
-#endif /* __GDK_DEVICE_PRIVATE_XI_H__ */
+#endif /* __GDK_DEVICE_MANAGER_PRIVATE_CORE_H__ */

@@ -20,7 +20,7 @@
 #ifndef __GDK_X11_DEVICE_MANAGER_XI_H__
 #define __GDK_X11_DEVICE_MANAGER_XI_H__
 
-#include "gdkx11devicemanager-core.h"
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -32,23 +32,11 @@ G_BEGIN_DECLS
 #define GDK_X11_DEVICE_MANAGER_XI_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_X11_DEVICE_MANAGER_XI, GdkX11DeviceManagerXIClass))
 
 typedef struct _GdkX11DeviceManagerXI GdkX11DeviceManagerXI;
-typedef struct _GdkX11DeviceManagerXIPrivate GdkX11DeviceManagerXIPrivate;
 typedef struct _GdkX11DeviceManagerXIClass GdkX11DeviceManagerXIClass;
 
-struct _GdkX11DeviceManagerXI
-{
-  GdkX11DeviceManagerCore parent_object;
-
-  /*< private >*/
-  GdkX11DeviceManagerXIPrivate *priv;
-};
-
-struct _GdkX11DeviceManagerXIClass
-{
-  GdkX11DeviceManagerCoreClass parent_class;
-};
 
 GType gdk_x11_device_manager_xi_get_type (void) G_GNUC_CONST;
+
 
 G_END_DECLS
 

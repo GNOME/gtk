@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkx11devicemanager-xi.h"
+#include "gdkdevicemanagerprivate-core.h"
 #include "gdkdeviceprivate-xi.h"
 
 #include "gdkdevicemanagerprivate.h"
@@ -30,13 +31,21 @@
 #include <X11/extensions/XInput.h>
 
 
-struct _GdkX11DeviceManagerXIPrivate
+struct _GdkX11DeviceManagerXI
 {
+  GdkX11DeviceManagerCore parent_object;
+
   GHashTable *id_table;
   gint event_base;
   GList *devices;
   gboolean ignore_core_events;
 };
+
+struct _GdkX11DeviceManagerXIClass
+{
+  GdkX11DeviceManagerCoreClass parent_class;
+};
+
 
 static void gdk_x11_device_manager_xi_constructed  (GObject      *object);
 static void gdk_x11_device_manager_xi_dispose      (GObject      *object);
@@ -87,8 +96,6 @@ gdk_x11_device_manager_xi_class_init (GdkX11DeviceManagerXIClass *klass)
                                                      P_("Event base for XInput events"),
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-
-  g_type_class_add_private (object_class, sizeof (GdkX11DeviceManagerXIPrivate));
 }
 
 static GdkFilterReturn
@@ -116,14 +123,8 @@ window_input_info_filter (GdkXEvent *xevent,
 static void
 gdk_x11_device_manager_xi_init (GdkX11DeviceManagerXI *device_manager)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
-
-  device_manager->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (device_manager,
-                                                             GDK_TYPE_X11_DEVICE_MANAGER_XI,
-                                                             GdkX11DeviceManagerXIPrivate);
-
-  priv->id_table = g_hash_table_new_full (NULL, NULL, NULL,
-                                          (GDestroyNotify) g_object_unref);
+  device_manager->id_table = g_hash_table_new_full (NULL, NULL, NULL,
+                                                   (GDestroyNotify) g_object_unref);
 
   gdk_window_add_filter (NULL, window_input_info_filter, device_manager);
 }
@@ -262,12 +263,12 @@ create_device (GdkDeviceManager *device_manager,
 static void
 gdk_x11_device_manager_xi_constructed (GObject *object)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
+  GdkX11DeviceManagerXI *device_manager;
   XDeviceInfo *devices;
   gint i, num_devices;
   GdkDisplay *display;
 
-  priv = GDK_X11_DEVICE_MANAGER_XI (object)->priv;
+  device_manager = GDK_X11_DEVICE_MANAGER_XI (object);
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
   devices = XListInputDevices (GDK_DISPLAY_XDISPLAY (display), &num_devices);
 
@@ -279,8 +280,8 @@ gdk_x11_device_manager_xi_constructed (GObject *object)
                               display, &devices[i]);
       if (device)
         {
-          priv->devices = g_list_prepend (priv->devices, device);
-          g_hash_table_insert (priv->id_table,
+          device_manager->devices = g_list_prepend (device_manager->devices, device);
+          g_hash_table_insert (device_manager->id_table,
                                GINT_TO_POINTER (devices[i].id),
                                g_object_ref (device));
         }
@@ -289,7 +290,7 @@ gdk_x11_device_manager_xi_constructed (GObject *object)
   XFreeDeviceList (devices);
 
   gdk_x11_register_standard_event_type (display,
-                                        priv->event_base,
+                                        device_manager->event_base,
                                         15 /* Number of events */);
 
   if (G_OBJECT_CLASS (gdk_x11_device_manager_xi_parent_class)->constructed)
@@ -299,18 +300,17 @@ gdk_x11_device_manager_xi_constructed (GObject *object)
 static void
 gdk_x11_device_manager_xi_dispose (GObject *object)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
+  GdkX11DeviceManagerXI *device_manager;
 
-  priv = GDK_X11_DEVICE_MANAGER_XI (object)->priv;
+  device_manager = GDK_X11_DEVICE_MANAGER_XI (object);
+  g_list_foreach (device_manager->devices, (GFunc) g_object_unref, NULL);
+  g_list_free (device_manager->devices);
+  device_manager->devices = NULL;
 
-  g_list_foreach (priv->devices, (GFunc) g_object_unref, NULL);
-  g_list_free (priv->devices);
-  priv->devices = NULL;
-
-  if (priv->id_table != NULL)
+  if (device_manager->id_table != NULL)
     {
-      g_hash_table_destroy (priv->id_table);
-      priv->id_table = NULL;
+      g_hash_table_destroy (device_manager->id_table);
+      device_manager->id_table = NULL;
     }
 
   gdk_window_remove_filter (NULL, window_input_info_filter, object);
@@ -324,14 +324,14 @@ gdk_x11_device_manager_xi_set_property (GObject      *object,
                                         const GValue *value,
                                         GParamSpec   *pspec)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
+  GdkX11DeviceManagerXI *device_manager;
 
-  priv = GDK_X11_DEVICE_MANAGER_XI (object)->priv;
+  device_manager = GDK_X11_DEVICE_MANAGER_XI (object);
 
   switch (prop_id)
     {
     case PROP_EVENT_BASE:
-      priv->event_base = g_value_get_int (value);
+      device_manager->event_base = g_value_get_int (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -345,14 +345,14 @@ gdk_x11_device_manager_xi_get_property (GObject    *object,
                                         GValue     *value,
                                         GParamSpec *pspec)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
+  GdkX11DeviceManagerXI *device_manager;
 
-  priv = GDK_X11_DEVICE_MANAGER_XI (object)->priv;
+  device_manager = GDK_X11_DEVICE_MANAGER_XI (object);
 
   switch (prop_id)
     {
     case PROP_EVENT_BASE:
-      g_value_set_int (value, priv->event_base);
+      g_value_set_int (value, device_manager->event_base);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -379,13 +379,13 @@ translate_state (guint state, guint device_state)
 }
 
 static GdkDevice *
-lookup_device (GdkX11DeviceManagerXI *device_manager,
+lookup_device (GdkX11DeviceManagerXI *manager,
                XEvent                *xevent)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
+  GdkX11DeviceManagerXI *device_manager;
   guint32 device_id;
 
-  priv = GDK_X11_DEVICE_MANAGER_XI (device_manager)->priv;
+  device_manager = GDK_X11_DEVICE_MANAGER_XI (manager);
 
   /* This is a sort of a hack, as there isn't any XDeviceAnyEvent -
      but it's potentially faster than scanning through the types of
@@ -393,7 +393,7 @@ lookup_device (GdkX11DeviceManagerXI *device_manager,
      the types for the device anyways */
   device_id = ((XDeviceButtonEvent *)xevent)->deviceid;
 
-  return g_hash_table_lookup (priv->id_table, GINT_TO_POINTER (device_id));
+  return g_hash_table_lookup (device_manager->id_table, GINT_TO_POINTER (device_id));
 }
 
 static gboolean
@@ -402,7 +402,6 @@ gdk_x11_device_manager_xi_translate_event (GdkEventTranslator *translator,
                                            GdkEvent           *event,
                                            XEvent             *xevent)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
   GdkX11DeviceManagerXI *device_manager;
   GdkEventTranslatorIface *parent_iface;
   GdkX11DeviceXI *device_xi;
@@ -411,9 +410,8 @@ gdk_x11_device_manager_xi_translate_event (GdkEventTranslator *translator,
 
   parent_iface = g_type_interface_peek_parent (GDK_EVENT_TRANSLATOR_GET_IFACE (translator));
   device_manager = GDK_X11_DEVICE_MANAGER_XI (translator);
-  priv = device_manager->priv;
 
-  if (!priv->ignore_core_events &&
+  if (!device_manager->ignore_core_events &&
       parent_iface->translate_event (translator, display, event, xevent))
     return TRUE;
 
@@ -550,7 +548,7 @@ gdk_x11_device_manager_xi_translate_event (GdkEventTranslator *translator,
       event->motion.device = device;
 
       if (device_xi->in_proximity)
-        priv->ignore_core_events = TRUE;
+        device_manager->ignore_core_events = TRUE;
 
       event->motion.x_root = (gdouble) xdme->x_root;
       event->motion.y_root = (gdouble) xdme->y_root;
@@ -598,13 +596,13 @@ gdk_x11_device_manager_xi_translate_event (GdkEventTranslator *translator,
         {
           event->proximity.type = GDK_PROXIMITY_IN;
           device_xi->in_proximity = TRUE;
-          priv->ignore_core_events = TRUE;
+          device_manager->ignore_core_events = TRUE;
         }
       else
         {
           event->proximity.type = GDK_PROXIMITY_OUT;
           device_xi->in_proximity = FALSE;
-          priv->ignore_core_events = FALSE;
+          device_manager->ignore_core_events = FALSE;
         }
 
       event->proximity.device = device;
@@ -647,18 +645,18 @@ gdk_x11_device_manager_xi_translate_event (GdkEventTranslator *translator,
 }
 
 static GList *
-gdk_x11_device_manager_xi_list_devices (GdkDeviceManager *device_manager,
+gdk_x11_device_manager_xi_list_devices (GdkDeviceManager *manager,
                                         GdkDeviceType     type)
 {
-  GdkX11DeviceManagerXIPrivate *priv;
+  GdkX11DeviceManagerXI *device_manager;
 
-  priv = GDK_X11_DEVICE_MANAGER_XI (device_manager)->priv;
+  device_manager = GDK_X11_DEVICE_MANAGER_XI (manager);
 
   if (type == GDK_DEVICE_TYPE_MASTER)
-    return GDK_DEVICE_MANAGER_CLASS (gdk_x11_device_manager_xi_parent_class)->list_devices (device_manager, type);
+    return GDK_DEVICE_MANAGER_CLASS (gdk_x11_device_manager_xi_parent_class)->list_devices (manager, type);
   else if (type == GDK_DEVICE_TYPE_FLOATING)
     {
-      return g_list_copy (priv->devices);
+      return g_list_copy (device_manager->devices);
     }
   else
     return NULL;

@@ -22,19 +22,48 @@
 #include "gdkx11devicemanager-xi2.h"
 #include "gdkx11device-xi2.h"
 
-#include "gdkkeysyms.h"
+#include "gdkdevicemanagerprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
 #include "gdkprivate-x11.h"
+#include "gdkintl.h"
+#include "gdkkeysyms.h"
 
 #include <string.h>
+
+struct _GdkX11DeviceManagerXI2
+{
+  GdkDeviceManager parent_object;
+
+  GHashTable *id_table;
+
+  GList *master_devices;
+  GList *slave_devices;
+
+  GdkDevice *client_pointer;
+
+  gint opcode;
+};
+
+struct _GdkX11DeviceManagerXI2Class
+{
+  GdkDeviceManagerClass parent_class;
+};
 
 #define HAS_FOCUS(toplevel) ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
 
-static void    gdk_x11_device_manager_xi2_constructed (GObject *object);
-static void    gdk_x11_device_manager_xi2_dispose     (GObject *object);
+static void    gdk_x11_device_manager_xi2_constructed  (GObject      *object);
+static void    gdk_x11_device_manager_xi2_dispose      (GObject      *object);
+static void    gdk_x11_device_manager_xi2_set_property (GObject      *object,
+                                                        guint         prop_id,
+                                                        const GValue *value,
+                                                        GParamSpec   *pspec);
+static void    gdk_x11_device_manager_xi2_get_property (GObject      *object,
+                                                        guint         prop_id,
+                                                        GValue       *value,
+                                                        GParamSpec   *pspec);
 
 static GList * gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
                                                         GdkDeviceType     type);
@@ -57,6 +86,11 @@ G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK
                                                 gdk_x11_device_manager_xi2_event_translator_init))
 
 
+enum {
+  PROP_0,
+  PROP_OPCODE
+};
+
 static void
 gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
 {
@@ -65,9 +99,19 @@ gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
 
   object_class->constructed = gdk_x11_device_manager_xi2_constructed;
   object_class->dispose = gdk_x11_device_manager_xi2_dispose;
+  object_class->set_property = gdk_x11_device_manager_xi2_set_property;
+  object_class->get_property = gdk_x11_device_manager_xi2_get_property;
 
   device_manager_class->list_devices = gdk_x11_device_manager_xi2_list_devices;
   device_manager_class->get_client_pointer = gdk_x11_device_manager_xi2_get_client_pointer;
+
+  g_object_class_install_property (object_class,
+                                   PROP_OPCODE,
+                                   g_param_spec_int ("opcode",
+                                                     P_("Opcode"),
+                                                     P_("Opcode for XInput2 requests"),
+                                                     0, G_MAXINT, 0,
+                                                     G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 
 static void
@@ -489,6 +533,48 @@ gdk_x11_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager)
 
   return g_hash_table_lookup (device_manager_xi2->id_table,
                               GINT_TO_POINTER (device_id));
+}
+
+static void
+gdk_x11_device_manager_xi2_set_property (GObject      *object,
+                                         guint         prop_id,
+                                         const GValue *value,
+                                         GParamSpec   *pspec)
+{
+  GdkX11DeviceManagerXI2 *device_manager;
+
+  device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
+
+  switch (prop_id)
+    {
+    case PROP_OPCODE:
+      device_manager->opcode = g_value_get_int (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_x11_device_manager_xi2_get_property (GObject    *object,
+                                         guint       prop_id,
+                                         GValue     *value,
+                                         GParamSpec *pspec)
+{
+  GdkX11DeviceManagerXI2 *device_manager;
+
+  device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
+
+  switch (prop_id)
+    {
+    case PROP_OPCODE:
+      g_value_set_int (value, device_manager->opcode);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
