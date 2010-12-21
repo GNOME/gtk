@@ -128,6 +128,27 @@ static void        gdk_window_impl_x11_finalize   (GObject            *object);
     (( time1 < time2 ) && ( time2 - time1 > ((guint32)-1)/2 ))     \
   )
 
+struct _GdkX11Window {
+  GdkWindow parent;
+};
+
+struct _GdkX11WindowClass {
+  GdkWindowClass parent_class;
+};
+
+G_DEFINE_TYPE (GdkX11Window, gdk_x11_window, GDK_TYPE_WINDOW)
+
+static void
+gdk_x11_window_class_init (GdkX11WindowClass *x11_window_class)
+{
+}
+
+static void
+gdk_x11_window_init (GdkX11Window *x11_window)
+{
+}
+
+
 G_DEFINE_TYPE (GdkWindowImplX11, gdk_window_impl_x11, GDK_TYPE_WINDOW_IMPL)
 
 static void

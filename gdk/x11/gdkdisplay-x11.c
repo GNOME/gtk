@@ -2722,6 +2722,8 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   object_class->dispose = gdk_x11_display_dispose;
   object_class->finalize = gdk_x11_display_finalize;
 
+  display_class->window_type = GDK_TYPE_X11_WINDOW;
+
   display_class->get_name = gdk_x11_display_get_name;
   display_class->get_n_screens = gdk_x11_display_get_n_screens;
   display_class->get_screen = gdk_x11_display_get_screen;

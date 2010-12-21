@@ -38,6 +38,22 @@
 
 G_BEGIN_DECLS
 
+#define GDK_TYPE_X11_WINDOW              (gdk_x11_window_get_type ())
+#define GDK_X11_WINDOW(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_WINDOW, GdkX11Window))
+#define GDK_X11_WINDOW_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_WINDOW, GdkX11WindowClass))
+#define GDK_IS_X11_WINDOW(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_WINDOW))
+#define GDK_IS_X11_WINDOW_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_WINDOW))
+#define GDK_X11_WINDOW_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_WINDOW, GdkX11WindowClass))
+
+#ifdef GDK_COMPILATION
+typedef struct _GdkX11Window GdkX11Window;
+#else
+typedef GdkWindow GdkX11Window;
+#endif
+typedef struct _GdkX11WindowClass GdkX11WindowClass;
+
+GType    gdk_x11_window_get_type          (void);
+
 Window   gdk_x11_window_get_xid           (GdkWindow   *window);
 void     gdk_x11_window_set_user_time     (GdkWindow   *window,
                                            guint32      timestamp);
