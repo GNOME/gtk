@@ -1041,7 +1041,7 @@ _gdk_windowing_window_init (void)
 
   g_assert (_gdk_root == NULL);
 
-  _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+  _gdk_root = _gdk_display_create_window (_gdk_display);
 
   _gdk_root->impl = g_object_new (_gdk_root_window_impl_quartz_get_type (), NULL);
   _gdk_root->impl_window = _gdk_root;

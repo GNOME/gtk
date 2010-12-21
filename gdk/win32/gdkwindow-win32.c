@@ -203,7 +203,8 @@ _gdk_windowing_window_init (GdkScreen *screen)
 
   g_assert (_gdk_root == NULL);
   
-  _gdk_root = g_object_new (GDK_TYPE_WINDOW, NULL);
+  _gdk_root = _gdk_display_create_window (_gdk_display);
+
   private = (GdkWindowObject *)_gdk_root;
   private->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);
   private->impl_window = private;
@@ -632,7 +633,7 @@ gdk_win32_window_foreign_new_for_display (GdkDisplay      *display,
 
   g_return_val_if_fail (display == _gdk_display, NULL);
 
-  window = g_object_new (GDK_TYPE_WINDOW, NULL);
+  window = _gdk_display_create_window (display);
   private = (GdkWindowObject *)window;
   private->visual = gdk_screen_get_system_visual (_gdk_screen);
   private->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WIN32, NULL);

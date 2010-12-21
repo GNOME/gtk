@@ -287,6 +287,7 @@ void                _gdk_display_create_window_impl   (GdkDisplay       *display
                                                        GdkEventMask      event_mask,
                                                        GdkWindowAttr    *attributes,
                                                        gint              attributes_mask);
+GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display);
 
 G_END_DECLS
 

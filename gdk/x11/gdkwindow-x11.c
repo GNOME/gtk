@@ -460,7 +460,7 @@ _gdk_x11_screen_init_root_window (GdkScreen *screen)
 
   g_assert (x11_screen->root_window == NULL);
 
-  window = x11_screen->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
+  window = x11_screen->root_window = _gdk_display_create_window (gdk_screen_get_display (screen));
 
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl_window = window;
@@ -906,7 +906,7 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
 
   screen = _gdk_x11_display_screen_for_xrootwin (display, root);
 
-  win = g_object_new (GDK_TYPE_WINDOW, NULL);
+  win = _gdk_display_create_window (display);
   win->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   win->impl_window = win;
   win->visual = gdk_x11_screen_lookup_visual (screen,

@@ -2498,6 +2498,12 @@ _gdk_display_create_window_impl (GdkDisplay       *display,
                                                        attributes_mask);
 }
 
+GdkWindow *
+_gdk_display_create_window (GdkDisplay *display)
+{
+  return g_object_new (GDK_TYPE_WINDOW, NULL);
+}
+
 /**
  * gdk_keymap_get_for_display:
  * @display: the #GdkDisplay.

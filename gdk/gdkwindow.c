@@ -1307,7 +1307,9 @@ gdk_window_new (GdkWindow     *parent,
       return NULL;
     }
 
-  window = g_object_new (GDK_TYPE_WINDOW, NULL);
+  display = gdk_screen_get_display (screen);
+
+  window = _gdk_display_create_window (display);
 
   /* Windows with a foreign parent are treated as if they are children
    * of the root window, except for actual creation.
@@ -1409,7 +1411,6 @@ gdk_window_new (GdkWindow     *parent,
     }
   else if (native)
     {
-      display = gdk_screen_get_display (screen);
       event_mask = get_native_event_mask (window);
 
       /* Create the impl */
