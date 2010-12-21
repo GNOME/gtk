@@ -104,7 +104,9 @@ struct _GdkDragContextClass {
 /* Drag and Drop */
 
 GType            gdk_drag_context_get_type   (void) G_GNUC_CONST;
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION
 GdkDragContext * gdk_drag_context_new        (void);
+#endif
 
 GList           *gdk_drag_context_list_targets         (GdkDragContext *context);
 GdkDragAction    gdk_drag_context_get_actions          (GdkDragContext *context);
@@ -152,6 +154,7 @@ void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
 					   GdkDragProtocol  *protocol);
 
 #ifndef GDK_MULTIHEAD_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 GdkNativeWindow gdk_drag_get_protocol (GdkNativeWindow   xid,
 				       GdkDragProtocol  *protocol);
 
@@ -161,6 +164,7 @@ void    gdk_drag_find_window  (GdkDragContext   *context,
 			       gint              y_root,
 			       GdkWindow       **dest_window,
 			       GdkDragProtocol  *protocol);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIHEAD_SAFE */
 
 gboolean        gdk_drag_motion      (GdkDragContext *context,

@@ -563,8 +563,10 @@ gdk_drag_context_list_targets
 gdk_drag_context_get_source_window
 gdk_drag_context_get_dest_window
 gdk_drag_context_get_protocol
+#ifndef GDK_DISABLE_DEPRECATED
 gdk_drag_find_window
 gdk_drag_get_protocol
+#endif
 #endif
 #endif
 

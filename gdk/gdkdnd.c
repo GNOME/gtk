@@ -45,6 +45,8 @@
  *
  * This function is called by the drag source to obtain the 
  * @dest_window and @protocol parameters for gdk_drag_motion().
+ *
+ * Deprecated: 2.24: Use gdk_drag_find_window_for_screen() instead.
  **/
 void
 gdk_drag_find_window (GdkDragContext  *context,
@@ -69,6 +71,8 @@ gdk_drag_find_window (GdkDragContext  *context,
  * Return value: the windowing system specific id for the window where
  *    the drop should happen. This may be @xid or the id of a proxy
  *    window, or zero if @xid doesn't support Drag and Drop.
+ *
+ * Deprecated: 2.24: Use gdk_drag_get_protocol_for_display() instead
  **/
 GdkNativeWindow
 gdk_drag_get_protocol (GdkNativeWindow  xid,
