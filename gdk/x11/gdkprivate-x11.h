@@ -145,8 +145,6 @@ gboolean _gdk_x11_moveresize_handle_event   (XEvent     *event);
 gboolean _gdk_x11_moveresize_configure_done (GdkDisplay *display,
                                              GdkWindow  *window);
 
-GType    _gdk_keymap_x11_get_type        (void);
-
 void     _gdk_x11_keymap_state_changed   (GdkDisplay      *display,
                                           XEvent          *event);
 void     _gdk_x11_keymap_keys_changed    (GdkDisplay      *display);
