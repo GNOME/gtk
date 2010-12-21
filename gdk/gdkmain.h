@@ -112,6 +112,8 @@ void gdk_beep (void);
 
 void gdk_flush (void);
 
+void gdk_disable_multidevice (void);
+
 G_END_DECLS
 
 #endif /* __GDK_MAIN_H__ */
