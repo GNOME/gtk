@@ -312,7 +312,7 @@ _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
                           width, height, 1);
   surface = cairo_xlib_surface_create_for_bitmap (GDK_WINDOW_XDISPLAY (window),
                                                   pixmap,
-                                                  GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (window))->xscreen,
+                                                  GDK_X11_SCREEN (GDK_WINDOW_SCREEN (window))->xscreen,
                                                   width, height);
   attach_free_pixmap_handler (surface, GDK_WINDOW_DISPLAY (window), pixmap);
 
@@ -454,13 +454,13 @@ _gdk_x11_screen_init_root_window (GdkScreen *screen)
 {
   GdkWindow *window;
   GdkWindowImplX11 *impl;
-  GdkScreenX11 *screen_x11;
+  GdkX11Screen *x11_screen;
 
-  screen_x11 = GDK_SCREEN_X11 (screen);
+  x11_screen = GDK_X11_SCREEN (screen);
 
-  g_assert (screen_x11->root_window == NULL);
+  g_assert (x11_screen->root_window == NULL);
 
-  window = screen_x11->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
+  window = x11_screen->root_window = g_object_new (GDK_TYPE_WINDOW, NULL);
 
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl_window = window;
@@ -468,28 +468,28 @@ _gdk_x11_screen_init_root_window (GdkScreen *screen)
 
   impl = GDK_WINDOW_IMPL_X11 (window->impl);
   
-  impl->xid = screen_x11->xroot_window;
+  impl->xid = x11_screen->xroot_window;
   impl->wrapper = window;
   
   window->window_type = GDK_WINDOW_ROOT;
-  window->depth = DefaultDepthOfScreen (screen_x11->xscreen);
+  window->depth = DefaultDepthOfScreen (x11_screen->xscreen);
 
   window->x = 0;
   window->y = 0;
   window->abs_x = 0;
   window->abs_y = 0;
-  window->width = WidthOfScreen (screen_x11->xscreen);
-  window->height = HeightOfScreen (screen_x11->xscreen);
+  window->width = WidthOfScreen (x11_screen->xscreen);
+  window->height = HeightOfScreen (x11_screen->xscreen);
   window->viewable = TRUE;
 
   /* see init_randr_support() in gdkscreen-x11.c */
   window->event_mask = GDK_STRUCTURE_MASK;
 
-  _gdk_window_update_size (screen_x11->root_window);
+  _gdk_window_update_size (x11_screen->root_window);
 
-  _gdk_x11_display_add_window (screen_x11->display,
-                               &screen_x11->xroot_window,
-                               screen_x11->root_window);
+  _gdk_x11_display_add_window (x11_screen->display,
+                               &x11_screen->xroot_window,
+                               x11_screen->root_window);
 }
 
 static void
@@ -615,7 +615,7 @@ setup_toplevel_window (GdkWindow *window,
   GdkDisplay *display = gdk_window_get_display (window);
   Display *xdisplay = GDK_WINDOW_XDISPLAY (window);
   XID xid = GDK_WINDOW_XID (window);
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (parent));
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (GDK_WINDOW_SCREEN (parent));
   XSizeHints size_hints;
   long pid;
   Window leader_window;
@@ -628,12 +628,12 @@ setup_toplevel_window (GdkWindow *window,
        * press events so they don't get sent to child windows.
        */
       toplevel->focus_window = create_focus_window (display, xid);
-      _gdk_x11_display_add_window (screen_x11->display,
+      _gdk_x11_display_add_window (x11_screen->display,
                                    &toplevel->focus_window,
                                    window);
     }
 
-  check_leader_window_title (screen_x11->display);
+  check_leader_window_title (x11_screen->display);
 
   /* FIXME: Is there any point in doing this? Do any WM's pay
    * attention to PSize, and even if they do, is this the
@@ -650,29 +650,29 @@ setup_toplevel_window (GdkWindow *window,
   
   pid = getpid ();
   XChangeProperty (xdisplay, xid,
-		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "_NET_WM_PID"),
+		   gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_PID"),
 		   XA_CARDINAL, 32,
 		   PropModeReplace,
 		   (guchar *)&pid, 1);
 
-  leader_window = GDK_X11_DISPLAY (screen_x11->display)->leader_window;
+  leader_window = GDK_X11_DISPLAY (x11_screen->display)->leader_window;
   if (!leader_window)
     leader_window = xid;
   XChangeProperty (xdisplay, xid, 
-		   gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "WM_CLIENT_LEADER"),
+		   gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "WM_CLIENT_LEADER"),
 		   XA_WINDOW, 32, PropModeReplace,
 		   (guchar *) &leader_window, 1);
 
   if (toplevel->focus_window != None)
     XChangeProperty (xdisplay, xid, 
-                     gdk_x11_get_xatom_by_name_for_display (screen_x11->display, "_NET_WM_USER_TIME_WINDOW"),
+                     gdk_x11_get_xatom_by_name_for_display (x11_screen->display, "_NET_WM_USER_TIME_WINDOW"),
                      XA_WINDOW, 32, PropModeReplace,
                      (guchar *) &toplevel->focus_window, 1);
 
   if (!window->focus_on_map)
     gdk_x11_window_set_user_time (window, 0);
-  else if (GDK_X11_DISPLAY (screen_x11->display)->user_time != 0)
-    gdk_x11_window_set_user_time (window, GDK_X11_DISPLAY (screen_x11->display)->user_time);
+  else if (GDK_X11_DISPLAY (x11_screen->display)->user_time != 0)
+    gdk_x11_window_set_user_time (window, GDK_X11_DISPLAY (x11_screen->display)->user_time);
 
   ensure_sync_counter (window);
 }
@@ -687,7 +687,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                                      gint           attributes_mask)
 {
   GdkWindowImplX11 *impl;
-  GdkScreenX11 *screen_x11;
+  GdkX11Screen *x11_screen;
   GdkX11Display *display_x11;
 
   Window xparent;
@@ -703,13 +703,13 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   display_x11 = GDK_X11_DISPLAY (display);
   xparent = GDK_WINDOW_XID (real_parent);
-  screen_x11 = GDK_SCREEN_X11 (screen);
+  x11_screen = GDK_X11_SCREEN (screen);
 
   impl = g_object_new (GDK_TYPE_WINDOW_IMPL_X11, NULL);
   window->impl = GDK_WINDOW_IMPL (impl);
   impl->wrapper = GDK_WINDOW (window);
 
-  xdisplay = screen_x11->xdisplay;
+  xdisplay = x11_screen->xdisplay;
 
   xattributes_mask = 0;
 
@@ -748,9 +748,9 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
     {
       class = InputOutput;
 
-      xattributes.background_pixel = BlackPixel (xdisplay, screen_x11->screen_num);
+      xattributes.background_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
 
-      xattributes.border_pixel = BlackPixel (xdisplay, screen_x11->screen_num);
+      xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
       xattributes_mask |= CWBorderPixel | CWBackPixel;
 
       if (window->guffaw_gravity)
@@ -797,7 +797,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
                              xattributes_mask, &xattributes);
 
   g_object_ref (window);
-  _gdk_x11_display_add_window (screen_x11->display, &impl->xid, window);
+  _gdk_x11_display_add_window (x11_screen->display, &impl->xid, window);
 
   switch (GDK_WINDOW_TYPE (window))
     {

@@ -505,7 +505,7 @@ gdk_window_cache_new (GdkScreen *screen)
   XGetWindowAttributes (xdisplay, GDK_WINDOW_XID (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
 
-  if (G_UNLIKELY (!GDK_X11_DISPLAY (GDK_SCREEN_X11 (screen)->display)->trusted_client)) 
+  if (G_UNLIKELY (!GDK_X11_DISPLAY (GDK_X11_SCREEN (screen)->display)->trusted_client)) 
     {
       GList *toplevel_windows, *list;
       GdkWindow *window;

@@ -381,7 +381,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
   GdkWindow *window;
   GdkWindowImplX11 *window_impl = NULL;
   GdkScreen *screen = NULL;
-  GdkScreenX11 *screen_x11 = NULL;
+  GdkX11Screen *x11_screen = NULL;
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   gboolean return_val;
@@ -402,7 +402,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
         return FALSE;
 
       screen = GDK_WINDOW_SCREEN (window);
-      screen_x11 = GDK_SCREEN_X11 (screen);
+      x11_screen = GDK_X11_SCREEN (screen);
       toplevel = _gdk_x11_window_get_toplevel (window);
       window_impl = GDK_WINDOW_IMPL_X11 (window->impl);
       xwindow = GDK_WINDOW_XID (window);
@@ -430,14 +430,14 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       for (i = 0; i < n; i++)
         {
           screen = gdk_display_get_screen (display, i);
-          screen_x11 = GDK_SCREEN_X11 (screen);
+          x11_screen = GDK_X11_SCREEN (screen);
 
-          if (screen_x11->wmspec_check_window == xwindow)
+          if (x11_screen->wmspec_check_window == xwindow)
             {
-              screen_x11->wmspec_check_window = None;
-              screen_x11->last_wmspec_check_time = 0;
-              g_free (screen_x11->window_manager_name);
-              screen_x11->window_manager_name = g_strdup ("unknown");
+              x11_screen->wmspec_check_window = None;
+              x11_screen->last_wmspec_check_time = 0;
+              g_free (x11_screen->window_manager_name);
+              x11_screen->window_manager_name = g_strdup ("unknown");
 
               /* careful, reentrancy */
               _gdk_x11_screen_window_manager_changed (screen);
@@ -592,7 +592,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 
 	  return_val = window && !GDK_WINDOW_DESTROYED (window);
 
-	  if (window && GDK_WINDOW_XID (window) != screen_x11->xroot_window)
+	  if (window && GDK_WINDOW_XID (window) != x11_screen->xroot_window)
 	    gdk_window_destroy_notify (window);
 	}
       else
@@ -713,7 +713,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	      gdk_x11_display_error_trap_push (display);
 	      if (XTranslateCoordinates (GDK_WINDOW_XDISPLAY (window),
 					 GDK_WINDOW_XID (window),
-					 screen_x11->xroot_window,
+					 x11_screen->xroot_window,
 					 0, 0,
 					 &tx, &ty,
 					 &child_window))
@@ -1273,7 +1273,7 @@ _gdk_x11_display_open (const gchar *display_name)
   attr.height = 10;
   attr.event_mask = 0;
 
-  display_x11->leader_gdk_window = gdk_window_new (GDK_SCREEN_X11 (display_x11->default_screen)->root_window, 
+  display_x11->leader_gdk_window = gdk_window_new (GDK_X11_SCREEN (display_x11->default_screen)->root_window, 
 						   &attr, GDK_WA_X | GDK_WA_Y);
   (_gdk_x11_window_get_toplevel (display_x11->leader_gdk_window))->is_leader = TRUE;
 
@@ -1349,7 +1349,7 @@ _gdk_x11_display_open (const gchar *display_name)
 
     gdk_x11_display_error_trap_push (display);
     XQueryPointer (display_x11->xdisplay,
-		   GDK_SCREEN_X11 (display_x11->default_screen)->xroot_window,
+		   GDK_X11_SCREEN (display_x11->default_screen)->xroot_window,
 		   &root, &child, &rootx, &rooty, &winx, &winy, &xmask);
     if (G_UNLIKELY (gdk_x11_display_error_trap_pop (display) == BadWindow))
       {

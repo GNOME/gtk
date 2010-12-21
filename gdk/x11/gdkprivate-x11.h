@@ -45,24 +45,24 @@ void _gdk_x11_error_handler_pop  (void);
 
 Colormap _gdk_visual_get_x11_colormap (GdkVisual *visual);
 
-gint          _gdk_screen_x11_visual_get_best_depth      (GdkScreen      *screen);
-GdkVisualType _gdk_screen_x11_visual_get_best_type       (GdkScreen      *screen);
-GdkVisual *   _gdk_screen_x11_get_system_visual          (GdkScreen      *screen);
-GdkVisual*    _gdk_screen_x11_visual_get_best            (GdkScreen      *screen);
-GdkVisual*    _gdk_screen_x11_visual_get_best_with_depth (GdkScreen      *screen,
+gint          _gdk_x11_screen_visual_get_best_depth      (GdkScreen      *screen);
+GdkVisualType _gdk_x11_screen_visual_get_best_type       (GdkScreen      *screen);
+GdkVisual *   _gdk_x11_screen_get_system_visual          (GdkScreen      *screen);
+GdkVisual*    _gdk_x11_screen_visual_get_best            (GdkScreen      *screen);
+GdkVisual*    _gdk_x11_screen_visual_get_best_with_depth (GdkScreen      *screen,
                                                           gint            depth);
-GdkVisual*    _gdk_screen_x11_visual_get_best_with_type  (GdkScreen      *screen,
+GdkVisual*    _gdk_x11_screen_visual_get_best_with_type  (GdkScreen      *screen,
                                                           GdkVisualType   visual_type);
-GdkVisual*    _gdk_screen_x11_visual_get_best_with_both  (GdkScreen      *screen,
+GdkVisual*    _gdk_x11_screen_visual_get_best_with_both  (GdkScreen      *screen,
                                                           gint            depth,
                                                           GdkVisualType   visual_type);
-void          _gdk_screen_x11_query_depths               (GdkScreen      *screen,
+void          _gdk_x11_screen_query_depths               (GdkScreen      *screen,
                                                           gint          **depths,
                                                           gint           *count);
-void          _gdk_screen_x11_query_visual_types         (GdkScreen      *screen,
+void          _gdk_x11_screen_query_visual_types         (GdkScreen      *screen,
                                                           GdkVisualType **visual_types,
                                                           gint           *count);
-GList *       _gdk_screen_x11_list_visuals               (GdkScreen      *screen);
+GList *       _gdk_x11_screen_list_visuals               (GdkScreen      *screen);
 
 
 
@@ -288,11 +288,11 @@ cairo_surface_t * _gdk_x11_window_create_bitmap_surface (GdkWindow *window,
 extern const gint        _gdk_x11_event_mask_table[];
 extern const gint        _gdk_x11_event_mask_table_size;
 
-#define GDK_SCREEN_DISPLAY(screen)    (GDK_SCREEN_X11 (screen)->display)
-#define GDK_SCREEN_XROOTWIN(screen)   (GDK_SCREEN_X11 (screen)->xroot_window)
+#define GDK_SCREEN_DISPLAY(screen)    (GDK_X11_SCREEN (screen)->display)
+#define GDK_SCREEN_XROOTWIN(screen)   (GDK_X11_SCREEN (screen)->xroot_window)
 #define GDK_WINDOW_SCREEN(win)        (gdk_window_get_screen (win))
-#define GDK_WINDOW_DISPLAY(win)       (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->display)
-#define GDK_WINDOW_XROOTWIN(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xroot_window)
+#define GDK_WINDOW_DISPLAY(win)       (GDK_X11_SCREEN (GDK_WINDOW_SCREEN (win))->display)
+#define GDK_WINDOW_XROOTWIN(win)      (GDK_X11_SCREEN (GDK_WINDOW_SCREEN (win))->xroot_window)
 #define GDK_GC_DISPLAY(gc)            (GDK_SCREEN_DISPLAY (GDK_GC_X11(gc)->screen))
 #define GDK_WINDOW_IS_X11(win)        (GDK_IS_WINDOW_IMPL_X11 ((win)->impl))
 
@@ -303,8 +303,8 @@ extern const gint        _gdk_x11_event_mask_table_size;
 #undef GDK_SCREEN_XDISPLAY
 
 #define GDK_DISPLAY_XDISPLAY(display) (GDK_X11_DISPLAY(display)->xdisplay)
-#define GDK_WINDOW_XDISPLAY(win)      (GDK_SCREEN_X11 (GDK_WINDOW_SCREEN (win))->xdisplay)
+#define GDK_WINDOW_XDISPLAY(win)      (GDK_X11_SCREEN (GDK_WINDOW_SCREEN (win))->xdisplay)
 #define GDK_WINDOW_XID(win)           (GDK_WINDOW_IMPL_X11(GDK_WINDOW (win)->impl)->xid)
-#define GDK_SCREEN_XDISPLAY(screen)   (GDK_SCREEN_X11 (screen)->xdisplay)
+#define GDK_SCREEN_XDISPLAY(screen)   (GDK_X11_SCREEN (screen)->xdisplay)
 
 #endif /* __GDK_PRIVATE_X11_H__ */

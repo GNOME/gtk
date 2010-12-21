@@ -79,7 +79,7 @@ _gdk_x11_window_simulate_key (GdkWindow      *window,
   xev.type = key_pressrelease == GDK_KEY_PRESS ? KeyPress : KeyRelease;
   xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_X11 (screen)->screen_num);
+  xev.root = RootWindow (xev.display, GDK_X11_SCREEN (screen)->screen_num);
   xev.subwindow = 0;
   xev.time = 0;
   xev.x = MAX (x, 0);
@@ -157,7 +157,7 @@ _gdk_x11_window_simulate_button (GdkWindow      *window,
   xev.type = button_pressrelease == GDK_BUTTON_PRESS ? ButtonPress : ButtonRelease;
   xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_X11 (screen)->screen_num);
+  xev.root = RootWindow (xev.display, GDK_X11_SCREEN (screen)->screen_num);
   xev.subwindow = 0;
   xev.time = 0;
   xev.x = x;

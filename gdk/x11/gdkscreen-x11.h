@@ -21,8 +21,8 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_SCREEN_X11_H__
-#define __GDK_SCREEN_X11_H__
+#ifndef __GDK_X11_SCREEN__
+#define __GDK_X11_SCREEN__
 
 #include "gdkscreenprivate.h"
 #include "gdkvisual.h"
@@ -32,19 +32,19 @@
 
 G_BEGIN_DECLS
   
-typedef struct _GdkScreenX11 GdkScreenX11;
-typedef struct _GdkScreenX11Class GdkScreenX11Class;
+typedef struct _GdkX11Screen GdkX11Screen;
+typedef struct _GdkX11ScreenClass GdkX11ScreenClass;
 
-#define GDK_TYPE_SCREEN_X11              (_gdk_screen_x11_get_type ())
-#define GDK_SCREEN_X11(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_X11, GdkScreenX11))
-#define GDK_SCREEN_X11_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN_X11, GdkScreenX11Class))
-#define GDK_IS_SCREEN_X11(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN_X11))
-#define GDK_IS_SCREEN_X11_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN_X11))
-#define GDK_SCREEN_X11_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN_X11, GdkScreenX11Class))
+#define GDK_TYPE_X11_SCREEN              (_gdk_x11_screen_get_type ())
+#define GDK_X11_SCREEN(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_SCREEN, GdkX11Screen))
+#define GDK_X11_SCREEN_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_SCREEN, GdkX11ScreenClass))
+#define GDK_IS_X11_SCREEN(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_SCREEN))
+#define GDK_IS_X11_SCREEN_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_SCREEN))
+#define GDK_X11_SCREEN_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_SCREEN, GdkX11ScreenClass))
 
 typedef struct _GdkX11Monitor GdkX11Monitor;
 
-struct _GdkScreenX11
+struct _GdkX11Screen
 {
   GdkScreen parent_instance;
   
@@ -105,14 +105,14 @@ struct _GdkScreenX11
   gboolean is_composited;
 };
   
-struct _GdkScreenX11Class
+struct _GdkX11ScreenClass
 {
   GdkScreenClass parent_class;
 
-  void (* window_manager_changed) (GdkScreenX11 *screen_x11);
+  void (* window_manager_changed) (GdkX11Screen *x11_screen);
 };
 
-GType       _gdk_screen_x11_get_type (void);
+GType       _gdk_x11_screen_get_type (void);
 GdkScreen * _gdk_x11_screen_new      (GdkDisplay *display,
 				      gint	  screen_number);
 
@@ -125,4 +125,4 @@ void _gdk_x11_screen_process_owner_change   (GdkScreen *screen,
 
 G_END_DECLS
 
-#endif /* __GDK_SCREEN_X11_H__ */
+#endif /* __GDK_X11_SCREEN__ */

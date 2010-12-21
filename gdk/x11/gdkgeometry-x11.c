@@ -224,12 +224,12 @@ gdk_window_queue (GdkWindow          *window,
 static GC
 _get_scratch_gc (GdkWindow *window, cairo_region_t *clip_region)
 {
-  GdkScreenX11 *screen;
+  GdkX11Screen *screen;
   XRectangle *rectangles;
   gint n_rects;
   gint depth;
 
-  screen = GDK_SCREEN_X11 (gdk_window_get_screen (window));
+  screen = GDK_X11_SCREEN (gdk_window_get_screen (window));
   depth = gdk_visual_get_depth (gdk_window_get_visual (window)) - 1;
 
   if (!screen->subwindow_gcs[depth])
