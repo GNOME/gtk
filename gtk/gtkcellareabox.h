@@ -69,15 +69,20 @@ GtkCellArea *gtk_cell_area_box_new         (void);
 void         gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
                                             GtkCellRenderer *renderer,
                                             gboolean         expand,
-                                            gboolean         align);
+                                            gboolean         align,
+					    gboolean         fixed);
 void         gtk_cell_area_box_pack_end    (GtkCellAreaBox  *box,
                                             GtkCellRenderer *renderer,
                                             gboolean         expand,
-                                            gboolean         align);
+                                            gboolean         align,
+					    gboolean         fixed);
 gint         gtk_cell_area_box_get_spacing (GtkCellAreaBox  *box);
 void         gtk_cell_area_box_set_spacing (GtkCellAreaBox  *box,
                                             gint             spacing);
 
+/* Private interaction with GtkCellAreaBoxContext */
+gboolean    _gtk_cell_area_box_group_visible (GtkCellAreaBox  *box,
+					      gint             group_idx);
 
 G_END_DECLS
 

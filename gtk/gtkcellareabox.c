@@ -83,6 +83,11 @@ static void      gtk_cell_area_box_foreach_alloc                  (GtkCellArea  
                                                                    const GdkRectangle   *background_area,
                                                                    GtkCellAllocCallback  callback,
                                                                    gpointer              callback_data);
+static void      gtk_cell_area_box_apply_attributes               (GtkCellArea          *area,
+								   GtkTreeModel         *tree_model,
+								   GtkTreeIter          *iter,
+								   gboolean              is_expander,
+								   gboolean              is_expanded);
 static void      gtk_cell_area_box_set_cell_property              (GtkCellArea          *area,
                                                                    GtkCellRenderer      *renderer,
                                                                    guint                 prop_id,
@@ -145,6 +150,7 @@ typedef struct {
   guint            expand : 1; /* Whether the cell expands */
   guint            pack   : 1; /* Whether it is packed from the start or end */
   guint            align  : 1; /* Whether to align its position with adjacent rows */
+  guint            fixed  : 1; /* Whether to require the same size for all rows */
 } CellInfo;
 
 typedef struct {
@@ -153,6 +159,8 @@ typedef struct {
   guint  id           : 8;
   guint  n_cells      : 8;
   guint  expand_cells : 8;
+  guint  align        : 1;
+  guint  visible      : 1;
 } CellGroup;
 
 typedef struct {
@@ -165,7 +173,8 @@ typedef struct {
 static CellInfo      *cell_info_new          (GtkCellRenderer       *renderer,
                                               GtkPackType            pack,
                                               gboolean               expand,
-                                              gboolean               align);
+                                              gboolean               align,
+					      gboolean               fixed);
 static void           cell_info_free         (CellInfo              *info);
 static gint           cell_info_find         (CellInfo              *info,
                                               GtkCellRenderer       *renderer);
@@ -223,6 +232,7 @@ enum {
   CELL_PROP_0,
   CELL_PROP_EXPAND,
   CELL_PROP_ALIGN,
+  CELL_PROP_FIXED_SIZE,
   CELL_PROP_PACK_TYPE
 };
 
@@ -277,6 +287,7 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
   area_class->remove              = gtk_cell_area_box_remove;
   area_class->foreach             = gtk_cell_area_box_foreach;
   area_class->foreach_alloc       = gtk_cell_area_box_foreach_alloc;
+  area_class->apply_attributes    = gtk_cell_area_box_apply_attributes;
   area_class->set_cell_property   = gtk_cell_area_box_set_cell_property;
   area_class->get_cell_property   = gtk_cell_area_box_get_cell_property;
 
@@ -341,6 +352,23 @@ gtk_cell_area_box_class_init (GtkCellAreaBoxClass *class)
                                              ("align",
                                               P_("Align"),
                                               P_("Whether cell should align with adjacent rows"),
+                                              FALSE,
+                                              GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCellAreaBox:fixed-size:
+   *
+   * Whether the cell renderer should require the same size
+   * for all rows for which it was requested.
+   *
+   * Since: 3.0
+   */
+  gtk_cell_area_class_install_cell_property (area_class,
+                                             CELL_PROP_FIXED_SIZE,
+                                             g_param_spec_boolean
+                                             ("fixed-size",
+                                              P_("Fixed Size"),
+                                              P_("Whether cells should be the same size in all rows"),
                                               TRUE,
                                               GTK_PARAM_READWRITE));
 
@@ -373,7 +401,8 @@ static CellInfo *
 cell_info_new  (GtkCellRenderer *renderer,
                 GtkPackType      pack,
                 gboolean         expand,
-                gboolean         align)
+                gboolean         align,
+		gboolean         fixed)
 {
   CellInfo *info = g_slice_new (CellInfo);
 
@@ -381,6 +410,7 @@ cell_info_new  (GtkCellRenderer *renderer,
   info->pack     = pack;
   info->expand   = expand;
   info->align    = align;
+  info->fixed    = fixed;
 
   return info;
 }
@@ -476,6 +506,7 @@ cell_groups_rebuild (GtkCellAreaBox *box)
   CellGroup             *group_ptr;
   GList                 *cells, *l;
   guint                  id = 0;
+  gboolean               last_cell_fixed = FALSE;
 
   cell_groups_clear (box);
 
@@ -492,8 +523,10 @@ cell_groups_rebuild (GtkCellAreaBox *box)
     {
       CellInfo *info = l->data;
 
-      /* A new group starts with any aligned cell, the first group is implied */
-      if (info->align && l != cells)
+      /* A new group starts with any aligned cell, or
+       * at the beginning and end of a fixed size cell. 
+       * the first group is implied */
+      if ((info->align || info->fixed || last_cell_fixed) && l != cells)
         {
           memset (&group, 0x0, sizeof (CellGroup));
           group.id = ++id;
@@ -505,9 +538,16 @@ cell_groups_rebuild (GtkCellAreaBox *box)
       group_ptr->cells = g_list_prepend (group_ptr->cells, info);
       group_ptr->n_cells++;
 
+      /* Not every group is aligned, some are floating
+       * fixed size cells */
+      if (info->align)
+	group_ptr->align = TRUE;
+
       /* A group expands if it contains any expand cells */
       if (info->expand)
         group_ptr->expand_cells++;
+
+      last_cell_fixed = info->fixed;
     }
 
   g_list_free (cells);
@@ -582,20 +622,23 @@ init_context_group (GtkCellAreaBox        *box,
                     GtkCellAreaBoxContext *context)
 {
   GtkCellAreaBoxPrivate *priv = box->priv;
-  gint                  *expand_groups, i;
+  gint                  *expand_groups, *align_groups, i;
 
   expand_groups = g_new (gboolean, priv->groups->len);
+  align_groups  = g_new (gboolean, priv->groups->len);
 
   for (i = 0; i < priv->groups->len; i++)
     {
       CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
 
       expand_groups[i] = (group->expand_cells > 0);
+      align_groups[i]  = group->align;
     }
 
   /* This call implies reseting the request info */
-  gtk_cell_area_box_init_groups (context, priv->groups->len, expand_groups);
+  gtk_cell_area_box_init_groups (context, priv->groups->len, expand_groups, align_groups);
   g_free (expand_groups);
+  g_free (align_groups);
 }
 
 static void
@@ -782,7 +825,7 @@ get_allocated_cells (GtkCellAreaBox        *box,
   GtkCellAreaBoxPrivate    *priv = box->priv;
   GList                    *cell_list;
   GSList                   *allocated_cells = NULL;
-  gint                      i, j, n_allocs;
+  gint                      i, j, n_allocs, position;
   gint                      for_size, full_size;
   gboolean                  rtl;
 
@@ -807,7 +850,7 @@ get_allocated_cells (GtkCellAreaBox        *box,
   rtl = (priv->orientation == GTK_ORIENTATION_HORIZONTAL &&
          gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
-  for (i = 0; i < n_allocs; i++)
+  for (position = 0, i = 0; i < n_allocs; i++)
     {
       /* We dont always allocate all groups, sometimes the requested
        * group has only invisible cells for every row, hence the usage
@@ -820,20 +863,43 @@ get_allocated_cells (GtkCellAreaBox        *box,
         {
           CellInfo      *info = group->cells->data;
           AllocatedCell *cell;
+	  gint           cell_position, cell_size;
+
+	  /* If were not aligned, place the cell after the last cell */
+	  if (info->align)
+	    position = cell_position = group_allocs[i].position;
+	  else
+	    cell_position = position;
+
+	  /* If not a fixed size, use only the requested size for this row */
+	  if (info->fixed)
+	    cell_size = group_allocs[i].size;
+	  else
+	    {
+	      gint dummy;
+              gtk_cell_area_request_renderer (area, info->renderer,
+                                              priv->orientation,
+                                              widget, for_size,
+                                              &dummy,
+                                              &cell_size);
+	      cell_size = MIN (cell_size, group_allocs[i].size);
+	    }
 
           if (rtl)
             cell = allocated_cell_new (info->renderer,
-                                       full_size - (group_allocs[i].position + group_allocs[i].size),
-                                       group_allocs[i].size);
+                                       full_size - (cell_position + cell_size), cell_size);
           else
-            cell = allocated_cell_new (info->renderer, group_allocs[i].position, group_allocs[i].size);
+            cell = allocated_cell_new (info->renderer, cell_position, cell_size);
+
+	  position += cell_size;
+          position += priv->spacing;
 
           allocated_cells = g_slist_prepend (allocated_cells, cell);
         }
       else
         {
           GtkRequestedSize *sizes;
-          gint              avail_size, position;
+          gint              avail_size, cell_position;
           gint              visible_cells, expand_cells;
           gint              extra_size, extra_extra;
 
@@ -845,11 +911,19 @@ get_allocated_cells (GtkCellAreaBox        *box,
           if (visible_cells == 0)
             continue;
 
-          /* Offset the allocation to the group position
-           * and allocate into the group's available size
-           */
-          position   = group_allocs[i].position;
-          avail_size = group_allocs[i].size;
+	  /* If were not aligned, place the cell after the last cell 
+	   * and eat up the extra space
+	   */
+	  if (group->align)
+	    {
+	      avail_size = group_allocs[i].size;
+	      position   = cell_position = group_allocs[i].position;
+	    }
+	  else
+	    {
+	      avail_size    = group_allocs[i].size + (group_allocs[i].position - position);
+	      cell_position = position;
+	    }
 
           sizes = g_new (GtkRequestedSize, visible_cells);
 
@@ -906,20 +980,24 @@ get_allocated_cells (GtkCellAreaBox        *box,
 
               if (rtl)
                 cell = allocated_cell_new (info->renderer,
-                                           full_size - (position + sizes[j].minimum_size),
+                                           full_size - (cell_position + sizes[j].minimum_size),
                                            sizes[j].minimum_size);
               else
-                cell = allocated_cell_new (info->renderer, position, sizes[j].minimum_size);
+                cell = allocated_cell_new (info->renderer, cell_position, sizes[j].minimum_size);
 
               allocated_cells = g_slist_prepend (allocated_cells, cell);
 
-              position += sizes[j].minimum_size;
-              position += priv->spacing;
+              cell_position += sizes[j].minimum_size;
+              cell_position += priv->spacing;
             }
 
           g_free (sizes);
+
+	  position = cell_position;
         }
     }
+
+  g_free (group_allocs);
 
   /* Note it might not be important to reverse the list here at all,
    * we have the correct positions, no need to allocate from left to right
@@ -1022,7 +1100,7 @@ gtk_cell_area_box_add (GtkCellArea        *area,
                        GtkCellRenderer    *renderer)
 {
   gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (area),
-                                renderer, FALSE, TRUE);
+                                renderer, FALSE, FALSE, TRUE);
 }
 
 static void
@@ -1222,6 +1300,40 @@ gtk_cell_area_box_foreach_alloc (GtkCellArea          *area,
 }
 
 static void
+gtk_cell_area_box_apply_attributes (GtkCellArea          *area,
+				    GtkTreeModel         *tree_model,
+				    GtkTreeIter          *iter,
+				    gboolean              is_expander,
+				    gboolean              is_expanded)
+{
+  GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
+  GtkCellAreaBoxPrivate *priv = box->priv;
+  gint                   i;
+
+  /* Call the parent class to apply the attributes */
+  GTK_CELL_AREA_CLASS
+    (gtk_cell_area_box_parent_class)->apply_attributes (area, tree_model, iter, 
+							is_expander, is_expanded);
+
+  /* Update visible state for cell groups */
+  for (i = 0; i < priv->groups->len; i++)
+    {
+      CellGroup *group = &g_array_index (priv->groups, CellGroup, i);
+      GList     *list;
+
+      group->visible = FALSE;
+
+      for (list = group->cells; list && group->visible == FALSE; list = list->next)
+	{
+          CellInfo *info = list->data;
+
+          if (gtk_cell_renderer_get_visible (info->renderer))
+	    group->visible = TRUE;
+	}
+    }
+}
+
+static void
 gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
                                      GtkCellRenderer    *renderer,
                                      guint               prop_id,
@@ -1261,6 +1373,16 @@ gtk_cell_area_box_set_cell_property (GtkCellArea        *area,
       if (info->align != val)
         {
           info->align = val;
+          rebuild     = TRUE;
+        }
+      break;
+
+    case CELL_PROP_FIXED_SIZE:
+      val = g_value_get_boolean (value);
+
+      if (info->fixed != val)
+        {
+          info->fixed = val;
           rebuild     = TRUE;
         }
       break;
@@ -1311,6 +1433,10 @@ gtk_cell_area_box_get_cell_property (GtkCellArea        *area,
 
     case CELL_PROP_ALIGN:
       g_value_set_boolean (value, info->align);
+      break;
+
+    case CELL_PROP_FIXED_SIZE:
+      g_value_set_boolean (value, info->fixed);
       break;
 
     case CELL_PROP_PACK_TYPE:
@@ -1935,7 +2061,7 @@ gtk_cell_area_box_layout_pack_start (GtkCellLayout      *cell_layout,
                                      GtkCellRenderer    *renderer,
                                      gboolean            expand)
 {
-  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (cell_layout), renderer, expand, TRUE);
+  gtk_cell_area_box_pack_start (GTK_CELL_AREA_BOX (cell_layout), renderer, expand, FALSE, TRUE);
 }
 
 static void
@@ -1943,7 +2069,7 @@ gtk_cell_area_box_layout_pack_end (GtkCellLayout      *cell_layout,
                                    GtkCellRenderer    *renderer,
                                    gboolean            expand)
 {
-  gtk_cell_area_box_pack_end (GTK_CELL_AREA_BOX (cell_layout), renderer, expand, TRUE);
+  gtk_cell_area_box_pack_end (GTK_CELL_AREA_BOX (cell_layout), renderer, expand, FALSE, TRUE);
 }
 
 static void
@@ -1971,6 +2097,24 @@ gtk_cell_area_box_layout_reorder (GtkCellLayout      *cell_layout,
 }
 
 /*************************************************************
+ *       Private interaction with GtkCellAreaBoxContext      *
+ *************************************************************/
+gboolean
+_gtk_cell_area_box_group_visible (GtkCellAreaBox  *box,
+				  gint             group_idx)
+{
+  GtkCellAreaBoxPrivate *priv  = box->priv;
+  CellGroup *group;
+  
+  g_assert (group_idx >= 0 && group_idx < priv->groups->len);
+
+  group = &g_array_index (priv->groups, CellGroup, group_idx);
+
+  return group->visible;
+}
+
+
+/*************************************************************
  *                            API                            *
  *************************************************************/
 /**
@@ -1995,6 +2139,7 @@ gtk_cell_area_box_new (void)
  * @expand: whether @renderer should receive extra space when the area receives
  * more than its natural size
  * @align: whether @renderer should be aligned in adjacent rows
+ * @fixed: whether @renderer should have the same size in all rows
  *
  * Adds @renderer to @box, packed with reference to the start of @box.
  *
@@ -2007,7 +2152,8 @@ void
 gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
                                GtkCellRenderer *renderer,
                                gboolean         expand,
-                               gboolean         align)
+                               gboolean         align,
+			       gboolean         fixed)
 {
   GtkCellAreaBoxPrivate *priv;
   CellInfo              *info;
@@ -2024,7 +2170,7 @@ gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
       return;
     }
 
-  info = cell_info_new (renderer, GTK_PACK_START, expand, align);
+  info = cell_info_new (renderer, GTK_PACK_START, expand, align, fixed);
 
   priv->cells = g_list_append (priv->cells, info);
 
@@ -2038,6 +2184,7 @@ gtk_cell_area_box_pack_start  (GtkCellAreaBox  *box,
  * @expand: whether @renderer should receive extra space when the area receives
  * more than its natural size
  * @align: whether @renderer should be aligned in adjacent rows
+ * @fixed: whether @renderer should have the same size in all rows
  *
  * Adds @renderer to @box, packed with reference to the end of @box.
  *
@@ -2050,7 +2197,8 @@ void
 gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
                             GtkCellRenderer *renderer,
                             gboolean         expand,
-                            gboolean         align)
+                            gboolean         align,
+			    gboolean         fixed)
 {
   GtkCellAreaBoxPrivate *priv;
   CellInfo              *info;
@@ -2067,7 +2215,7 @@ gtk_cell_area_box_pack_end (GtkCellAreaBox  *box,
       return;
     }
 
-  info = cell_info_new (renderer, GTK_PACK_END, expand, align);
+  info = cell_info_new (renderer, GTK_PACK_END, expand, align, fixed);
 
   priv->cells = g_list_append (priv->cells, info);
 

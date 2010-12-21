@@ -156,27 +156,50 @@ expand_cell_toggled (GtkToggleButton  *toggle,
 }
 
 static void
-create_control (GtkWidget *box, gint number, gboolean align, CallbackData *data)
+fixed_cell_toggled (GtkToggleButton  *toggle,
+		    CallbackData     *data)
+{
+  gboolean active = gtk_toggle_button_get_active (toggle);
+
+  gtk_cell_area_cell_set (data->area, data->renderer, "fixed-size", active, NULL);
+}
+
+enum {
+  CNTL_EXPAND,
+  CNTL_ALIGN,
+  CNTL_FIXED
+};
+
+static void
+create_control (GtkWidget *box, gint number, gint cntl, CallbackData *data)
 {
   GtkWidget *checkbutton;
-  gchar *name;
+  GCallback  callback = NULL;
+  gchar *name = NULL;
 
-  if (align)
-    name = g_strdup_printf ("Align Cell #%d", number);
-  else
-    name = g_strdup_printf ("Expand Cell #%d", number);
+  switch (cntl)
+    {
+    case CNTL_EXPAND: 
+      name = g_strdup_printf ("Expand Cell #%d", number); 
+      callback = G_CALLBACK (expand_cell_toggled);
+      break;
+    case CNTL_ALIGN: 
+      name = g_strdup_printf ("Align Cell #%d", number); 
+      callback = G_CALLBACK (align_cell_toggled);
+      break;
+    case CNTL_FIXED: 
+      name = g_strdup_printf ("Fix size Cell #%d", number); 
+      callback = G_CALLBACK (fixed_cell_toggled);
+      break;
+    }
 
   checkbutton = gtk_check_button_new_with_label (name);
   gtk_widget_show (checkbutton);
-  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), align);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (checkbutton), cntl == CNTL_FIXED);
   gtk_box_pack_start (GTK_BOX (box), checkbutton, FALSE, FALSE, 0);
 
-  if (align)
-    g_signal_connect (G_OBJECT (checkbutton), "toggled",
-		      G_CALLBACK (align_cell_toggled), data);
-  else
-    g_signal_connect (G_OBJECT (checkbutton), "toggled",
-		      G_CALLBACK (expand_cell_toggled), data);
+  g_signal_connect (G_OBJECT (checkbutton), "toggled", callback, data);
+  g_free (name);
 }
 
 gint
@@ -296,20 +319,30 @@ main (gint argc, gchar **argv)
   gtk_widget_show (cntl_vbox);
   gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
 
-  create_control (cntl_vbox, 1, TRUE, &callback[0]);
-  create_control (cntl_vbox, 2, TRUE, &callback[1]);
-  create_control (cntl_vbox, 3, TRUE, &callback[2]);
-  create_control (cntl_vbox, 4, TRUE, &callback[3]);
+  create_control (cntl_vbox, 1, CNTL_ALIGN, &callback[0]);
+  create_control (cntl_vbox, 2, CNTL_ALIGN, &callback[1]);
+  create_control (cntl_vbox, 3, CNTL_ALIGN, &callback[2]);
+  create_control (cntl_vbox, 4, CNTL_ALIGN, &callback[3]);
 
   /* Expand controls */
   cntl_vbox = gtk_vbox_new (FALSE, 2);
   gtk_widget_show (cntl_vbox);
   gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
 
-  create_control (cntl_vbox, 1, FALSE, &callback[0]);
-  create_control (cntl_vbox, 2, FALSE, &callback[1]);
-  create_control (cntl_vbox, 3, FALSE, &callback[2]);
-  create_control (cntl_vbox, 4, FALSE, &callback[3]);
+  create_control (cntl_vbox, 1, CNTL_EXPAND, &callback[0]);
+  create_control (cntl_vbox, 2, CNTL_EXPAND, &callback[1]);
+  create_control (cntl_vbox, 3, CNTL_EXPAND, &callback[2]);
+  create_control (cntl_vbox, 4, CNTL_EXPAND, &callback[3]);
+
+  /* Fixed controls */
+  cntl_vbox = gtk_vbox_new (FALSE, 2);
+  gtk_widget_show (cntl_vbox);
+  gtk_box_pack_start (GTK_BOX (hbox), cntl_vbox, FALSE, FALSE, 0);
+
+  create_control (cntl_vbox, 1, CNTL_FIXED, &callback[0]);
+  create_control (cntl_vbox, 2, CNTL_FIXED, &callback[1]);
+  create_control (cntl_vbox, 3, CNTL_FIXED, &callback[2]);
+  create_control (cntl_vbox, 4, CNTL_FIXED, &callback[3]);
 
   gtk_widget_show_all (window);
   gtk_main ();

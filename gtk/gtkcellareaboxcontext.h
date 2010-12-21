@@ -69,7 +69,8 @@ GtkCellAreaBoxContext *gtk_cell_area_box_context_copy          (GtkCellAreaBox  
 /* Initialize group array dimensions */
 void    gtk_cell_area_box_init_groups                          (GtkCellAreaBoxContext *box_context,
                                                                 guint                  n_groups,
-                                                                gboolean              *expand_groups);
+                                                                gboolean              *expand_groups,
+								gboolean              *align_groups);
 
 /* Update cell-group sizes */
 void    gtk_cell_area_box_context_push_group_width             (GtkCellAreaBoxContext *box_context,
