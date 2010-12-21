@@ -57,7 +57,7 @@ static GList *  gdk_device_manager_xi_list_devices     (GdkDeviceManager  *devic
                                                         GdkDeviceType      type);
 
 
-G_DEFINE_TYPE_WITH_CODE (GdkDeviceManagerXI, gdk_device_manager_xi, GDK_TYPE_DEVICE_MANAGER_CORE,
+G_DEFINE_TYPE_WITH_CODE (GdkDeviceManagerXI, gdk_device_manager_xi, GDK_TYPE_X11_DEVICE_MANAGER_CORE,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
                                                 gdk_device_manager_xi_event_translator_init))
 

@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gdkdevicemanager-core.h"
+#include "gdkx11devicemanager-core.h"
 #ifdef XINPUT_XFREE
 #include "gdkdevicemanager-xi.h"
 #ifdef XINPUT_2
@@ -79,7 +79,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
 
   GDK_NOTE (INPUT, g_print ("Creating core device manager\n"));
 
-  return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
+  return g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_CORE,
                        "display", display,
                        NULL);
 }

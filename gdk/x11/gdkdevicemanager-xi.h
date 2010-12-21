@@ -20,7 +20,7 @@
 #ifndef __GDK_DEVICE_MANAGER_XI_H__
 #define __GDK_DEVICE_MANAGER_XI_H__
 
-#include "gdkdevicemanager-core.h"
+#include "gdkx11devicemanager-core.h"
 
 G_BEGIN_DECLS
 
@@ -37,7 +37,7 @@ typedef struct _GdkDeviceManagerXIClass GdkDeviceManagerXIClass;
 
 struct _GdkDeviceManagerXI
 {
-  GdkDeviceManagerCore parent_object;
+  GdkX11DeviceManagerCore parent_object;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
 
@@ -47,7 +47,7 @@ struct _GdkDeviceManagerXI
 
 struct _GdkDeviceManagerXIClass
 {
-  GdkDeviceManagerCoreClass parent_class;
+  GdkX11DeviceManagerCoreClass parent_class;
 };
 
 GType gdk_device_manager_xi_get_type (void) G_GNUC_CONST;

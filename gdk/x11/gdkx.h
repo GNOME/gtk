@@ -56,6 +56,8 @@
 #define __GDKX_H_INSIDE__
 
 #include <gdk/x11/gdkx11cursor.h>
+#include <gdk/x11/gdkx11device-core.h>
+#include <gdk/x11/gdkx11devicemanager-core.h>
 #include <gdk/x11/gdkx11display.h>
 #include <gdk/x11/gdkx11displaymanager.h>
 #include <gdk/x11/gdkx11keys.h>
