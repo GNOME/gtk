@@ -43,7 +43,7 @@ struct _GdkX11DisplayManagerClass
   GdkDisplayManagerClass parent_class;
 };
 
-G_DEFINE_TYPE (GdkX11DisplayManager, gdk_x11_display_manager, GDK_TYPE_X11_DISPLAY_MANAGER)
+G_DEFINE_TYPE (GdkX11DisplayManager, gdk_x11_display_manager, GDK_TYPE_DISPLAY_MANAGER)
 
 static GdkDisplay *
 gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
