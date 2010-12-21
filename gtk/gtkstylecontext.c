@@ -499,6 +499,8 @@ enum {
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static GQuark provider_list_quark = 0;
+static GdkRGBA fallback_color = { 1.0, 0.75, 0.75, 1.0 };
+static GtkBorder fallback_border = { 0 };
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -3192,6 +3194,9 @@ gtk_style_context_get_color (GtkStyleContext *context,
   const GValue *value;
   GdkRGBA *c;
 
+  g_return_if_fail (color != NULL);
+  *color = fallback_color;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3200,8 +3205,12 @@ gtk_style_context_get_color (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "color", state);
-  c = g_value_get_boxed (value);
-  *color = *c;
+
+  if (value)
+    {
+      c = g_value_get_boxed (value);
+      *color = *c;
+    }
 }
 
 /**
@@ -3224,6 +3233,9 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
   const GValue *value;
   GdkRGBA *c;
 
+  g_return_if_fail (color != NULL);
+  *color = fallback_color;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3232,8 +3244,12 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "background-color", state);
-  c = g_value_get_boxed (value);
-  *color = *c;
+
+  if (value)
+    {
+      c = g_value_get_boxed (value);
+      *color = *c;
+    }
 }
 
 /**
@@ -3256,6 +3272,9 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
   const GValue *value;
   GdkRGBA *c;
 
+  g_return_if_fail (color != NULL);
+  *color = fallback_color;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3264,8 +3283,12 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "border-color", state);
-  c = g_value_get_boxed (value);
-  *color = *c;
+
+  if (value)
+    {
+      c = g_value_get_boxed (value);
+      *color = *c;
+    }
 }
 
 /**
@@ -3288,6 +3311,9 @@ gtk_style_context_get_border (GtkStyleContext *context,
   const GValue *value;
   GtkBorder *b;
 
+  g_return_if_fail (border != NULL);
+  *border = fallback_border;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3296,8 +3322,12 @@ gtk_style_context_get_border (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "border-width", state);
-  b = g_value_get_boxed (value);
-  *border = *b;
+
+  if (value)
+    {
+      b = g_value_get_boxed (value);
+      *border = *b;
+    }
 }
 
 /**
@@ -3320,6 +3350,9 @@ gtk_style_context_get_padding (GtkStyleContext *context,
   const GValue *value;
   GtkBorder *b;
 
+  g_return_if_fail (padding != NULL);
+  *padding = fallback_border;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3328,8 +3361,12 @@ gtk_style_context_get_padding (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "padding", state);
-  b = g_value_get_boxed (value);
-  *padding = *b;
+
+  if (value)
+    {
+      b = g_value_get_boxed (value);
+      *padding = *b;
+    }
 }
 
 /**
@@ -3352,6 +3389,9 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   const GValue *value;
   GtkBorder *b;
 
+  g_return_if_fail (margin != NULL);
+  *margin = fallback_border;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3360,8 +3400,12 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "margin", state);
-  b = g_value_get_boxed (value);
-  *margin = *b;
+
+  if (value)
+    {
+      b = g_value_get_boxed (value);
+      *margin = *b;
+    }
 }
 
 /**
@@ -3393,7 +3437,11 @@ gtk_style_context_get_font (GtkStyleContext *context,
 
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store, "font", state);
-  return g_value_get_boxed (value);
+
+  if (value)
+    return g_value_get_boxed (value);
+
+  return NULL;
 }
 
 /* Paint methods */
