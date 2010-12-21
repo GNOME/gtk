@@ -139,7 +139,7 @@ find_in_cache (GdkDisplay    *display,
 /* Called by gdk_x11_display_finalize to flush any cached cursors
  * for a dead display.
  */
-void 
+void
 _gdk_x11_cursor_display_finalize (GdkDisplay *display)
 {
   GSList* item;
@@ -173,7 +173,7 @@ G_DEFINE_TYPE (GdkX11Cursor, gdk_x11_cursor, GDK_TYPE_CURSOR)
 
 static GdkPixbuf* gdk_x11_cursor_get_image (GdkCursor *cursor);
 
-void
+static void
 gdk_x11_cursor_finalize (GObject *object)
 {
   GdkX11Cursor *private = GDK_X11_CURSOR (object);
