@@ -25,6 +25,7 @@
 #define __GDK_X11_SCREEN__
 
 #include "gdkscreenprivate.h"
+#include "gdkx11screen.h"
 #include "gdkvisual.h"
 #include "xsettings-client.h"
 #include <X11/X.h>
@@ -32,16 +33,6 @@
 
 G_BEGIN_DECLS
   
-typedef struct _GdkX11Screen GdkX11Screen;
-typedef struct _GdkX11ScreenClass GdkX11ScreenClass;
-
-#define GDK_TYPE_X11_SCREEN              (_gdk_x11_screen_get_type ())
-#define GDK_X11_SCREEN(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_X11_SCREEN, GdkX11Screen))
-#define GDK_X11_SCREEN_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_X11_SCREEN, GdkX11ScreenClass))
-#define GDK_IS_X11_SCREEN(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_X11_SCREEN))
-#define GDK_IS_X11_SCREEN_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_X11_SCREEN))
-#define GDK_X11_SCREEN_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_X11_SCREEN, GdkX11ScreenClass))
-
 typedef struct _GdkX11Monitor GdkX11Monitor;
 
 struct _GdkX11Screen

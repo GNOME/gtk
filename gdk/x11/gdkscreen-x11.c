@@ -64,7 +64,7 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GdkX11Screen, _gdk_x11_screen, GDK_TYPE_SCREEN)
+G_DEFINE_TYPE (GdkX11Screen, gdk_x11_screen, GDK_TYPE_SCREEN)
 
 typedef struct _NetWmSupportedAtoms NetWmSupportedAtoms;
 
@@ -86,7 +86,7 @@ struct _GdkX11Monitor
 
 
 static void
-_gdk_x11_screen_init (GdkX11Screen *screen)
+gdk_x11_screen_init (GdkX11Screen *screen)
 {
 }
 
@@ -178,7 +178,7 @@ gdk_x11_screen_dispose (GObject *object)
   if (x11_screen->root_window)
     _gdk_window_destroy (x11_screen->root_window, TRUE);
 
-  G_OBJECT_CLASS (_gdk_x11_screen_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_x11_screen_parent_class)->dispose (object);
 
   x11_screen->xdisplay = NULL;
   x11_screen->xscreen = NULL;
@@ -206,7 +206,7 @@ gdk_x11_screen_finalize (GObject *object)
 
   deinit_multihead (GDK_SCREEN (object));
   
-  G_OBJECT_CLASS (_gdk_x11_screen_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_x11_screen_parent_class)->finalize (object);
 }
 
 static gint
@@ -1661,7 +1661,7 @@ gdk_x11_screen_get_window_manager_name (GdkScreen *screen)
 }
 
 static void
-_gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
+gdk_x11_screen_class_init (GdkX11ScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
