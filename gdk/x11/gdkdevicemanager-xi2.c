@@ -19,13 +19,13 @@
 
 #include "config.h"
 
-#include "gdkdevicemanager-xi2.h"
+#include "gdkx11devicemanager-xi2.h"
+#include "gdkx11device-xi2.h"
 
 #include "gdkkeysyms.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkeventtranslator.h"
-#include "gdkdevice-xi2.h"
 #include "gdkprivate-x11.h"
 
 #include <string.h>
@@ -33,45 +33,45 @@
 #define HAS_FOCUS(toplevel) ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
 
-static void    gdk_device_manager_xi2_constructed (GObject *object);
-static void    gdk_device_manager_xi2_dispose     (GObject *object);
+static void    gdk_x11_device_manager_xi2_constructed (GObject *object);
+static void    gdk_x11_device_manager_xi2_dispose     (GObject *object);
 
-static GList * gdk_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
-                                                    GdkDeviceType     type);
-static GdkDevice * gdk_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager);
+static GList * gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
+                                                        GdkDeviceType     type);
+static GdkDevice * gdk_x11_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager);
 
-static void     gdk_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface);
+static void     gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface);
 
-static gboolean gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
-                                                        GdkDisplay         *display,
-                                                        GdkEvent           *event,
-                                                        XEvent             *xevent);
-static GdkEventMask gdk_device_manager_xi2_get_handled_events   (GdkEventTranslator *translator);
-static void         gdk_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
-                                                                 Window              window,
-                                                                 GdkEventMask        event_mask);
+static gboolean gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
+                                                            GdkDisplay         *display,
+                                                            GdkEvent           *event,
+                                                            XEvent             *xevent);
+static GdkEventMask gdk_x11_device_manager_xi2_get_handled_events   (GdkEventTranslator *translator);
+static void         gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
+                                                                     Window              window,
+                                                                     GdkEventMask        event_mask);
 
 
-G_DEFINE_TYPE_WITH_CODE (GdkDeviceManagerXI2, gdk_device_manager_xi2, GDK_TYPE_DEVICE_MANAGER,
+G_DEFINE_TYPE_WITH_CODE (GdkX11DeviceManagerXI2, gdk_x11_device_manager_xi2, GDK_TYPE_DEVICE_MANAGER,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_EVENT_TRANSLATOR,
-                                                gdk_device_manager_xi2_event_translator_init))
+                                                gdk_x11_device_manager_xi2_event_translator_init))
 
 
 static void
-gdk_device_manager_xi2_class_init (GdkDeviceManagerXI2Class *klass)
+gdk_x11_device_manager_xi2_class_init (GdkX11DeviceManagerXI2Class *klass)
 {
   GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->constructed = gdk_device_manager_xi2_constructed;
-  object_class->dispose = gdk_device_manager_xi2_dispose;
+  object_class->constructed = gdk_x11_device_manager_xi2_constructed;
+  object_class->dispose = gdk_x11_device_manager_xi2_dispose;
 
-  device_manager_class->list_devices = gdk_device_manager_xi2_list_devices;
-  device_manager_class->get_client_pointer = gdk_device_manager_xi2_get_client_pointer;
+  device_manager_class->list_devices = gdk_x11_device_manager_xi2_list_devices;
+  device_manager_class->get_client_pointer = gdk_x11_device_manager_xi2_get_client_pointer;
 }
 
 static void
-gdk_device_manager_xi2_init (GdkDeviceManagerXI2 *device_manager)
+gdk_x11_device_manager_xi2_init (GdkX11DeviceManagerXI2 *device_manager)
 {
   device_manager->id_table = g_hash_table_new_full (g_direct_hash,
                                                     g_direct_equal,
@@ -80,9 +80,9 @@ gdk_device_manager_xi2_init (GdkDeviceManagerXI2 *device_manager)
 }
 
 static void
-_gdk_device_manager_xi2_select_events (GdkDeviceManager *device_manager,
-                                       Window            xwindow,
-                                       XIEventMask      *event_mask)
+_gdk_x11_device_manager_xi2_select_events (GdkDeviceManager *device_manager,
+                                           Window            xwindow,
+                                           XIEventMask      *event_mask)
 {
   GdkDisplay *display;
   Display *xdisplay;
@@ -230,7 +230,7 @@ create_device (GdkDeviceManager *device_manager,
       break;
     }
 
-  device = g_object_new (GDK_TYPE_DEVICE_XI2,
+  device = g_object_new (GDK_TYPE_X11_DEVICE_XI2,
                          "name", dev->name,
                          "type", type,
                          "input-source", input_source,
@@ -247,9 +247,9 @@ create_device (GdkDeviceManager *device_manager,
 }
 
 static GdkDevice *
-add_device (GdkDeviceManagerXI2 *device_manager,
-            XIDeviceInfo        *dev,
-            gboolean             emit_signal)
+add_device (GdkX11DeviceManagerXI2 *device_manager,
+            XIDeviceInfo           *dev,
+            gboolean                emit_signal)
 {
   GdkDisplay *display;
   GdkDevice *device;
@@ -291,8 +291,8 @@ add_device (GdkDeviceManagerXI2 *device_manager,
 }
 
 static void
-remove_device (GdkDeviceManagerXI2 *device_manager,
-               int                  device_id)
+remove_device (GdkX11DeviceManagerXI2 *device_manager,
+               gint                    device_id)
 {
   GdkDevice *device;
 
@@ -318,7 +318,7 @@ relate_masters (gpointer key,
                 gpointer value,
                 gpointer user_data)
 {
-  GdkDeviceManagerXI2 *device_manager;
+  GdkX11DeviceManagerXI2 *device_manager;
   GdkDevice *device, *relative;
 
   device_manager = user_data;
@@ -334,7 +334,7 @@ relate_slaves (gpointer key,
                gpointer value,
                gpointer user_data)
 {
-  GdkDeviceManagerXI2 *device_manager;
+  GdkX11DeviceManagerXI2 *device_manager;
   GdkDevice *slave, *master;
 
   device_manager = user_data;
@@ -346,9 +346,9 @@ relate_slaves (gpointer key,
 }
 
 static void
-gdk_device_manager_xi2_constructed (GObject *object)
+gdk_x11_device_manager_xi2_constructed (GObject *object)
 {
-  GdkDeviceManagerXI2 *device_manager_xi2;
+  GdkX11DeviceManagerXI2 *device_manager;
   GdkDisplay *display;
   GdkScreen *screen;
   GHashTable *masters, *slaves;
@@ -358,14 +358,14 @@ gdk_device_manager_xi2_constructed (GObject *object)
   XIEventMask event_mask;
   unsigned char mask[2] = { 0 };
 
-  device_manager_xi2 = GDK_DEVICE_MANAGER_XI2 (object);
+  device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   masters = g_hash_table_new (NULL, NULL);
   slaves = g_hash_table_new (NULL, NULL);
 
-  info = XIQueryDevice(xdisplay, XIAllDevices, &ndevices);
+  info = XIQueryDevice (xdisplay, XIAllDevices, &ndevices);
 
   /* Initialize devices list */
   for (i = 0; i < ndevices; i++)
@@ -373,7 +373,7 @@ gdk_device_manager_xi2_constructed (GObject *object)
       GdkDevice *device;
 
       dev = &info[i];
-      device = add_device (device_manager_xi2, dev, FALSE);
+      device = add_device (device_manager, dev, FALSE);
 
       if (dev->use == XIMasterPointer ||
           dev->use == XIMasterKeyboard)
@@ -391,7 +391,7 @@ gdk_device_manager_xi2_constructed (GObject *object)
         }
     }
 
-  XIFreeDeviceInfo(info);
+  XIFreeDeviceInfo (info);
 
   /* Stablish relationships between devices */
   g_hash_table_foreach (masters, relate_masters, object);
@@ -409,43 +409,41 @@ gdk_device_manager_xi2_constructed (GObject *object)
   event_mask.mask_len = sizeof (mask);
   event_mask.mask = mask;
 
-  _gdk_device_manager_xi2_select_events (GDK_DEVICE_MANAGER (object),
-                                         GDK_WINDOW_XID (gdk_screen_get_root_window (screen)),
-                                         &event_mask);
+  _gdk_x11_device_manager_xi2_select_events (GDK_DEVICE_MANAGER (object),
+                                             GDK_WINDOW_XID (gdk_screen_get_root_window (screen)),
+                                             &event_mask);
 }
 
 static void
-gdk_device_manager_xi2_dispose (GObject *object)
+gdk_x11_device_manager_xi2_dispose (GObject *object)
 {
-  GdkDeviceManagerXI2 *device_manager_xi2;
+  GdkX11DeviceManagerXI2 *device_manager;
 
-  device_manager_xi2 = GDK_DEVICE_MANAGER_XI2 (object);
+  device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
 
-  g_list_foreach (device_manager_xi2->master_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (device_manager_xi2->master_devices);
-  device_manager_xi2->master_devices = NULL;
+  g_list_free_full (device_manager->master_devices, g_object_unref);
+  device_manager->master_devices = NULL;
 
-  g_list_foreach (device_manager_xi2->slave_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (device_manager_xi2->slave_devices);
-  device_manager_xi2->slave_devices = NULL;
+  g_list_free_full (device_manager->slave_devices, g_object_unref);
+  device_manager->slave_devices = NULL;
 
-  if (device_manager_xi2->id_table)
+  if (device_manager->id_table)
     {
-      g_hash_table_destroy (device_manager_xi2->id_table);
-      device_manager_xi2->id_table = NULL;
+      g_hash_table_destroy (device_manager->id_table);
+      device_manager->id_table = NULL;
     }
 
-  G_OBJECT_CLASS (gdk_device_manager_xi2_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_x11_device_manager_xi2_parent_class)->dispose (object);
 }
 
 static GList *
-gdk_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
-                                     GdkDeviceType     type)
+gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
+                                         GdkDeviceType     type)
 {
-  GdkDeviceManagerXI2 *device_manager_xi2;
+  GdkX11DeviceManagerXI2 *device_manager_xi2;
   GList *list = NULL;
 
-  device_manager_xi2 = GDK_DEVICE_MANAGER_XI2 (device_manager);
+  device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (device_manager);
 
   switch (type)
     {
@@ -477,13 +475,13 @@ gdk_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
 }
 
 static GdkDevice *
-gdk_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager)
+gdk_x11_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager)
 {
-  GdkDeviceManagerXI2 *device_manager_xi2;
+  GdkX11DeviceManagerXI2 *device_manager_xi2;
   GdkDisplay *display;
   int device_id;
 
-  device_manager_xi2 = (GdkDeviceManagerXI2 *) device_manager;
+  device_manager_xi2 = (GdkX11DeviceManagerXI2 *) device_manager;
   display = gdk_device_manager_get_display (device_manager);
 
   XIGetClientPointer (GDK_DISPLAY_XDISPLAY (display),
@@ -494,16 +492,16 @@ gdk_device_manager_xi2_get_client_pointer (GdkDeviceManager *device_manager)
 }
 
 static void
-gdk_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface)
+gdk_x11_device_manager_xi2_event_translator_init (GdkEventTranslatorIface *iface)
 {
-  iface->translate_event = gdk_device_manager_xi2_translate_event;
-  iface->get_handled_events = gdk_device_manager_xi2_get_handled_events;
-  iface->select_window_events = gdk_device_manager_xi2_select_window_events;
+  iface->translate_event = gdk_x11_device_manager_xi2_translate_event;
+  iface->get_handled_events = gdk_x11_device_manager_xi2_get_handled_events;
+  iface->select_window_events = gdk_x11_device_manager_xi2_select_window_events;
 }
 
 static void
-handle_hierarchy_changed (GdkDeviceManagerXI2 *device_manager,
-                          XIHierarchyEvent    *ev)
+handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
+                          XIHierarchyEvent       *ev)
 {
   GdkDisplay *display;
   Display *xdisplay;
@@ -519,9 +517,9 @@ handle_hierarchy_changed (GdkDeviceManagerXI2 *device_manager,
     {
       if (ev->info[i].flags & XIDeviceEnabled)
         {
-          info = XIQueryDevice(xdisplay, ev->info[i].deviceid, &ndevices);
+          info = XIQueryDevice (xdisplay, ev->info[i].deviceid, &ndevices);
           device = add_device (device_manager, &info[0], TRUE);
-          XIFreeDeviceInfo(info);
+          XIFreeDeviceInfo (info);
         }
       else if (ev->info[i].flags & XIDeviceDisabled)
         remove_device (device_manager, ev->info[i].deviceid);
@@ -547,7 +545,7 @@ handle_hierarchy_changed (GdkDeviceManagerXI2 *device_manager,
           /* Add new master if it's an attachment event */
           if (ev->info[i].flags & XISlaveAttached)
             {
-              info = XIQueryDevice(xdisplay, ev->info[i].deviceid, &ndevices);
+              info = XIQueryDevice (xdisplay, ev->info[i].deviceid, &ndevices);
 
               master = g_hash_table_lookup (device_manager->id_table,
                                             GINT_TO_POINTER (info->attachment));
@@ -564,8 +562,8 @@ handle_hierarchy_changed (GdkDeviceManagerXI2 *device_manager,
 }
 
 static void
-handle_device_changed (GdkDeviceManagerXI2  *device_manager,
-                       XIDeviceChangedEvent *ev)
+handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
+                       XIDeviceChangedEvent   *ev)
 {
   GdkDisplay *display;
   GdkDevice *device;
@@ -581,7 +579,7 @@ handle_device_changed (GdkDeviceManagerXI2  *device_manager,
 }
 
 static GdkCrossingMode
-translate_crossing_mode (int mode)
+translate_crossing_mode (gint mode)
 {
   switch (mode)
     {
@@ -597,7 +595,7 @@ translate_crossing_mode (int mode)
 }
 
 static GdkNotifyType
-translate_notify_type (int detail)
+translate_notify_type (gint detail)
 {
   switch (detail)
     {
@@ -618,8 +616,8 @@ translate_notify_type (int detail)
 
 static gboolean
 set_screen_from_root (GdkDisplay *display,
-		      GdkEvent   *event,
-		      Window      xrootwin)
+                      GdkEvent   *event,
+                      Window      xrootwin)
 {
   GdkScreen *screen;
 
@@ -675,19 +673,19 @@ translate_keyboard_string (GdkEventKey *event)
       /* Apply the control key - Taken from Xlib
        */
       if (event->state & GDK_CONTROL_MASK)
-	{
-	  if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
-	  else if (c == '2')
-	    {
-	      event->string = g_memdup ("\0\0", 2);
-	      event->length = 1;
-	      buf[0] = '\0';
+        {
+          if ((c >= '@' && c < '\177') || c == ' ') c &= 0x1F;
+          else if (c == '2')
+            {
+              event->string = g_memdup ("\0\0", 2);
+              event->length = 1;
+              buf[0] = '\0';
               return;
-	    }
-	  else if (c >= '3' && c <= '7') c -= ('3' - '\033');
-	  else if (c == '8') c = '\177';
-	  else if (c == '/') c = '_' & 0x1F;
-	}
+            }
+          else if (c >= '3' && c <= '7') c -= ('3' - '\033');
+          else if (c == '8') c = '\177';
+          else if (c == '/') c = '_' & 0x1F;
+        }
 
       len = g_unichar_to_utf8 (c, buf);
       buf[len] = '\0';
@@ -696,7 +694,7 @@ translate_keyboard_string (GdkEventKey *event)
                                           NULL, &bytes_written,
                                           NULL);
       if (event->string)
-	event->length = bytes_written;
+        event->length = bytes_written;
     }
   else if (event->keyval == GDK_KEY_Escape)
     {
@@ -704,7 +702,7 @@ translate_keyboard_string (GdkEventKey *event)
       event->string = g_strdup ("\033");
     }
   else if (event->keyval == GDK_KEY_Return ||
-	  event->keyval == GDK_KEY_KP_Enter)
+          event->keyval == GDK_KEY_KP_Enter)
     {
       event->length = 1;
       event->string = g_strdup ("\r");
@@ -866,7 +864,7 @@ is_parent_of (GdkWindow *parent,
   while (w != NULL)
     {
       if (w == parent)
-	return TRUE;
+        return TRUE;
 
       w = gdk_window_get_parent (w);
     }
@@ -902,7 +900,7 @@ get_event_window (GdkEventTranslator *translator,
             GdkDevice *device;
             gulong serial;
 
-            device = g_hash_table_lookup (GDK_DEVICE_MANAGER_XI2 (translator)->id_table,
+            device = g_hash_table_lookup (GDK_X11_DEVICE_MANAGER_XI2 (translator)->id_table,
                                           GUINT_TO_POINTER (((XIDeviceEvent *) ev)->deviceid));
 
             serial = _gdk_display_get_next_serial (display);
@@ -934,12 +932,12 @@ get_event_window (GdkEventTranslator *translator,
 }
 
 static gboolean
-gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
-                                        GdkDisplay         *display,
-                                        GdkEvent           *event,
-                                        XEvent             *xevent)
+gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
+                                            GdkDisplay         *display,
+                                            GdkEvent           *event,
+                                            XEvent             *xevent)
 {
-  GdkDeviceManagerXI2 *device_manager;
+  GdkX11DeviceManagerXI2 *device_manager;
   XGenericEventCookie *cookie;
   gboolean return_val = TRUE;
   GdkWindow *window;
@@ -947,7 +945,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
   Display *dpy;
 
   dpy = GDK_DISPLAY_XDISPLAY (display);
-  device_manager = (GdkDeviceManagerXI2 *) translator;
+  device_manager = (GdkX11DeviceManagerXI2 *) translator;
   cookie = &xevent->xcookie;
 
   if (!XGetEventData (dpy, cookie))
@@ -1005,7 +1003,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         event->key.window = window;
 
         event->key.time = xev->time;
-        event->key.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->key.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
         event->key.group = _gdk_x11_get_group_for_state (display, event->key.state);
 
         event->key.hardware_keycode = xev->detail;
@@ -1080,7 +1078,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                                  GUINT_TO_POINTER (xev->sourceid));
             gdk_event_set_source_device (event, source_device);
 
-            event->scroll.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
+            event->scroll.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
             break;
           default:
             event->button.type = (ev->evtype == XI_ButtonPress) ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
@@ -1114,7 +1112,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                 gdk_device_get_axis (device, event->button.axes, GDK_AXIS_Y, &event->button.y);
               }
 
-            event->button.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
+            event->button.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
             event->button.button = xev->detail;
           }
 
@@ -1150,7 +1148,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
                                              GUINT_TO_POINTER (xev->sourceid));
         gdk_event_set_source_device (event, source_device);
 
-        event->motion.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
 
         /* There doesn't seem to be motion hints in XI */
         event->motion.is_hint = FALSE;
@@ -1199,7 +1197,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->crossing.mode = translate_crossing_mode (xev->mode);
         event->crossing.detail = translate_notify_type (xev->detail);
-        event->crossing.state = gdk_device_xi2_translate_state (&xev->mods, &xev->buttons);
+        event->crossing.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons);
       }
       break;
     case XI_FocusIn:
@@ -1233,8 +1231,8 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         g_object_ref (event->any.window);
 
       if (((event->any.type == GDK_ENTER_NOTIFY) ||
-	   (event->any.type == GDK_LEAVE_NOTIFY)) &&
-	  (event->crossing.subwindow != NULL))
+           (event->any.type == GDK_LEAVE_NOTIFY)) &&
+          (event->crossing.subwindow != NULL))
         g_object_ref (event->crossing.subwindow);
     }
   else
@@ -1250,7 +1248,7 @@ gdk_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 }
 
 static GdkEventMask
-gdk_device_manager_xi2_get_handled_events (GdkEventTranslator *translator)
+gdk_x11_device_manager_xi2_get_handled_events (GdkEventTranslator *translator)
 {
   return (GDK_KEY_PRESS_MASK |
           GDK_KEY_RELEASE_MASK |
@@ -1269,9 +1267,9 @@ gdk_device_manager_xi2_get_handled_events (GdkEventTranslator *translator)
 }
 
 static void
-gdk_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
-                                             Window              window,
-                                             GdkEventMask        evmask)
+gdk_x11_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
+                                                 Window              window,
+                                                 GdkEventMask        evmask)
 {
   GdkDeviceManager *device_manager;
   XIEventMask event_mask;
@@ -1279,8 +1277,8 @@ gdk_device_manager_xi2_select_window_events (GdkEventTranslator *translator,
   device_manager = GDK_DEVICE_MANAGER (translator);
 
   event_mask.deviceid = XIAllMasterDevices;
-  event_mask.mask = gdk_device_xi2_translate_event_mask (evmask, &event_mask.mask_len);
+  event_mask.mask = _gdk_x11_device_xi2_translate_event_mask (evmask, &event_mask.mask_len);
 
-  _gdk_device_manager_xi2_select_events (device_manager, window, &event_mask);
+  _gdk_x11_device_manager_xi2_select_events (device_manager, window, &event_mask);
   g_free (event_mask.mask);
 }

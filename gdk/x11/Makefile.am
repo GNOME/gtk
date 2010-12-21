@@ -54,18 +54,22 @@ libgdk_x11_la_SOURCES = 	\
 	xsettings-common.h	\
 	xsettings-common.c
 
+libgdkx11include_HEADERS =
+
 if XINPUT_XFREE
 libgdk_x11_la_SOURCES += 	\
 	gdkdevicemanager-xi.c	\
-	gdkdevicemanager-xi.h	\
-	gdkdevice-xi.c		\
-	gdkdevice-xi.h
+	gdkdevice-xi.c
+libgdkx11include_HEADERS +=	\
+	gdkx11devicemanager-xi.h \
+	gdkx11device-xi.h
 if XINPUT_2
 libgdk_x11_la_SOURCES += 	\
 	gdkdevicemanager-xi2.c	\
-	gdkdevicemanager-xi2.h	\
-	gdkdevice-xi2.c		\
-	gdkdevice-xi2.h
+	gdkdevice-xi2.c
+libgdkx11include_HEADERS +=	\
+	gdkx11devicemanager-xi2.h \
+	gdkx11device-xi2.h
 endif
 endif
 
@@ -73,7 +77,7 @@ endif
 libgdkinclude_HEADERS = 	\
 	gdkx.h
 
-libgdkx11include_HEADERS = 	\
+libgdkx11include_HEADERS += 	\
 	gdkx11cursor.h		\
 	gdkx11device-core.h	\
 	gdkx11devicemanager-core.h \

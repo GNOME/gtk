@@ -213,6 +213,24 @@ void _gdk_x11_device_check_extension_events   (GdkDevice  *device);
 
 GdkDeviceManager *_gdk_x11_device_manager_new (GdkDisplay *display);
 
+void _gdk_x11_device_xi_update_window_info (GdkWindow *window);
+
+void _gdk_x11_device_xi_update_axes        (GdkDevice *device,
+                                            gint       axes_count,
+                                            gint       first_axis,
+                                            gint      *axis_data);
+void _gdk_x11_device_xi_translate_axes     (GdkDevice *device,
+                                            GdkWindow *window,
+                                            gint      *axis_data,
+                                            gdouble   *axes,
+                                            gdouble   *x,
+                                            gdouble   *y);
+
+guchar * _gdk_x11_device_xi2_translate_event_mask (GdkEventMask     event_mask,
+                                                   gint            *len);
+guint    _gdk_x11_device_xi2_translate_state      (XIModifierState *mods_state,
+                                                   XIButtonState   *buttons_state);
+
 void _gdk_x11_display_manager_add_display      (GdkDisplayManager *manager,
                                                 GdkDisplay        *display);
 void _gdk_x11_display_manager_remove_display   (GdkDisplayManager *manager,

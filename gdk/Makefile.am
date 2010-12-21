@@ -190,11 +190,11 @@ x11_introspection_files = 		\
 	x11/gdkapplaunchcontext-x11.c	\
 	x11/gdkasync.c			\
 	x11/gdkcursor-x11.c		\
-	x11/gdkdevice-core.c		\
-	x11/gdkdevicemanager-core.c	\
+	x11/gdkdevice-core-x11.c	\
+	x11/gdkdevicemanager-core-x11.c	\
 	x11/gdkdevicemanager-x11.c	\
-	x11/gdkdevicemanager-xi2.c	\
 	x11/gdkdevicemanager-xi.c	\
+	x11/gdkdevicemanager-xi2.c	\
 	x11/gdkdevice-xi2.c		\
 	x11/gdkdevice-xi.c		\
 	x11/gdkdisplay-x11.c		\

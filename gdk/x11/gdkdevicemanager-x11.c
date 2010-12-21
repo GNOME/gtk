@@ -21,9 +21,9 @@
 
 #include "gdkx11devicemanager-core.h"
 #ifdef XINPUT_XFREE
-#include "gdkdevicemanager-xi.h"
+#include "gdkx11devicemanager-xi.h"
 #ifdef XINPUT_2
-#include "gdkdevicemanager-xi2.h"
+#include "gdkx11devicemanager-xi2.h"
 #endif
 #endif
 #include "gdkinternals.h"
@@ -52,11 +52,11 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
           if (!_gdk_disable_multidevice &&
               XIQueryVersion (xdisplay, &major, &minor) != BadRequest)
             {
-              GdkDeviceManagerXI2 *device_manager_xi2;
+              GdkX11DeviceManagerXI2 *device_manager_xi2;
 
               GDK_NOTE (INPUT, g_print ("Creating XI2 device manager\n"));
 
-              device_manager_xi2 = g_object_new (GDK_TYPE_DEVICE_MANAGER_XI2,
+              device_manager_xi2 = g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_XI2,
                                                  "display", display,
                                                  NULL);
               device_manager_xi2->opcode = opcode;
@@ -68,7 +68,7 @@ _gdk_x11_device_manager_new (GdkDisplay *display)
             {
               GDK_NOTE (INPUT, g_print ("Creating XI device manager\n"));
 
-              return g_object_new (GDK_TYPE_DEVICE_MANAGER_XI,
+              return g_object_new (GDK_TYPE_X11_DEVICE_MANAGER_XI,
                                    "display", display,
                                    "event-base", firstevent,
                                    NULL);
