@@ -27,6 +27,7 @@
 
 #include "config.h"
 
+#if 0
 #ifdef XINPUT_2
 
 /* Hack to have keyboard events interpreted
@@ -39,6 +40,7 @@
 #undef GDK_COMPILATION
 
 #endif /* XINPUT_2 */
+#endif
 
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
