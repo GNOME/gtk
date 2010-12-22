@@ -918,7 +918,7 @@ fill_key_event (GdkWindow    *window,
   device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
   
-  gdk_keymap_translate_keyboard_state (NULL,
+  gdk_keymap_translate_keyboard_state (gdk_keymap_get_for_display (_gdk_display),
 				       event->key.hardware_keycode,
 				       event->key.state, 
 				       event->key.group,
