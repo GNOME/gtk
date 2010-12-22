@@ -124,6 +124,53 @@
   </section>
 
   <section>
+    <title>Use GIO for launching applications</title>
+    <para>
+      The <literal>gdk_spawn</literal> family of functions has been
+      deprecated in GDK 2.24 and removed from GDK 3. Various replacements
+      exit; the best replacement depends on the circumstances:
+      <itemizedlist>
+        <listitem>If you are opening a document or URI by launching a command
+        like <literal>firefox http://my-favourite-website.com</literal> or
+        <literal>gnome-open ghelp:epiphany</literal>, it is best to just use
+        gtk_show_uri(); as an added benefit, your application will henceforth
+        respect the users preference for what application to use.</listitem>
+        <listitem>If you are launching a regular, installed application that
+        has a desktop file, it is best to use GIOs #GAppInfo with a suitable
+        launch context.
+        <informalexample><programlisting>
+        GAppInfo *info;
+        GAppLaunchContext *context;
+        GError *error = NULL;
+
+        info = g_desktop_app_info_new ("epiphany.desktop");
+        context = gdk_app_launch_context_new ();
+        g_app_info_launch (info, NULL, context, &amp;error);
+
+        if (error)
+          {
+            g_warning ("Failed to launch epiphany: %s", error-&gt;message);
+            g_error_free (error);
+          }
+
+        g_object_unref (info);
+        g_object_unref (context);
+        </programlisting></informalexample>
+        </listitem>
+        <listitem>If you are launching a custom commandline, you can
+        still use g_app_info_launch() with a GAppInfo that is constructed
+        with g_app_info_create_from_commandline(), or you can use the
+        more lowlevel <literal>g_spawn</literal> family of functions
+        (e.g. g_spawn_command_line_async()), and pass <envar>DISPLAY</envar>
+        in the environment. gdk_screen_make_display_name() can be
+        used to find the right value for the <envar>DISPLAY</envar>
+        environment variable.
+        </listitem>
+      </itemizedlist>
+    </para>
+  </section>
+
+  <section>
     <title>Use cairo for drawing</title>
     <para>
       In GTK+ 3, the GDK drawing API (which closely mimics the X
