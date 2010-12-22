@@ -1,6 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * gdkdisplaymanager-quartz.c
  *
+ * Copyrighgt (C) 2005 Imendio AB
  * Copyright 2010 Red Hat, Inc.
  *
  * Author: Matthias clasen
@@ -23,19 +24,22 @@
 
 #include "config.h"
 
+#include <dlfcn.h>
+#include <ApplicationServices/ApplicationServices.h>
+
 #include "gdkdisplay-quartz.h"
 #include "gdkprivate-quartz.h"
 
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
 
-#define GDK_TYPE_DISPLAY_MANAGER_QUARTZ    (gdk_display_manager_quartz_get_type ())
-#define GDK_DISPLAY_MANAGER_QUARTZ(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_MANAGER_QUARTZ, GdkDisplayManagerQuartz))
+#define GDK_TYPE_QUARTZ_DISPLAY_MANAGER    (gdk_quartz_display_manager_get_type ())
+#define GDK_QUARTZ_DISPLAY_MANAGER(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_DISPLAY_MANAGER, GdkQuartzDisplayManager))
 
-typedef struct _GdkDisplayManagerQuartz GdkDisplayManagerQuartz;
-typedef struct _GdkDisplayManagerClass GdkDisplayManagerQuartzClass;
+typedef struct _GdkQuartzDisplayManager GdkQuartzDisplayManager;
+typedef struct _GdkDisplayManagerClass GdkQuartzDisplayManagerClass;
 
-struct _GdkDisplayManagerQuartz
+struct _GdkQuartzDisplayManager
 {
   GdkDisplayManager parent;
 
@@ -43,34 +47,34 @@ struct _GdkDisplayManagerQuartz
   GSList *displays;
 };
 
-G_DEFINE_TYPE (GdkDisplayManagerQuartz, gdk_display_manager_quartz, GDK_TYPE_DISPLAY_MANAGER)
+G_DEFINE_TYPE (GdkQuartzDisplayManager, gdk_quartz_display_manager, GDK_TYPE_DISPLAY_MANAGER)
 
 static GdkDisplay *
-gdk_display_manager_quartz_open_display (GdkDisplayManager *manager,
-                                      const gchar       *name)
+gdk_quartz_display_manager_open_display (GdkDisplayManager *manager,
+                                         const gchar       *name)
 {
   return _gdk_quartz_display_open (name);
 }
 
 static GSList *
-gdk_display_manager_quartz_list_displays (GdkDisplayManager *manager)
+gdk_quartz_display_manager_list_displays (GdkDisplayManager *manager)
 {
-  GdkDisplayManagerQuartz *manager_quartz = GDK_DISPLAY_MANAGER_QUARTZ (manager);
+  GdkQuartzDisplayManager *manager_quartz = GDK_QUARTZ_DISPLAY_MANAGER (manager);
 
   return g_slist_copy (manager_quartz->displays);
 }
 
 static GdkDisplay *
-gdk_display_manager_quartz_get_default_display (GdkDisplayManager *manager)
+gdk_quartz_display_manager_get_default_display (GdkDisplayManager *manager)
 {
-  return GDK_DISPLAY_MANAGER_QUARTZ (manager)->default_display;
+  return GDK_QUARTZ_DISPLAY_MANAGER (manager)->default_display;
 }
 
 static void
-gdk_display_manager_quartz_set_default_display (GdkDisplayManager *manager,
+gdk_quartz_display_manager_set_default_display (GdkDisplayManager *manager,
                                                 GdkDisplay        *display)
 {
-  GdkDisplayManagerQuartz *manager_quartz = GDK_DISPLAY_MANAGER_QUARTZ (manager);
+  GdkQuartzDisplayManager *manager_quartz = GDK_QUARTZ_DISPLAY_MANAGER (manager);
 
   manager_quartz->default_display = display;
 }
@@ -105,30 +109,41 @@ gdk_quartz_display_manager_keyval_convert_case (GdkDisplayManager *manager,
 }
 
 static void
-gdk_display_manager_quartz_init (GdkDisplayManagerQuartz *manager)
+gdk_quartz_display_manager_init (GdkQuartzDisplayManager *manager)
 {
-  _gdk_quartz_windowing_init ();
+  ProcessSerialNumber psn = { 0, kCurrentProcess };
+  void (*_gtk_quartz_framework_init_ptr) (void);
+
+  /* Make the current process a foreground application, i.e. an app
+   * with a user interface, in case we're not running from a .app bundle
+   */
+  TransformProcessType (&psn, kProcessTransformToForegroundApplication);
+
+  /* Initialize GTK+ framework if there is one. */
+  _gtk_quartz_framework_init_ptr = dlsym (RTLD_DEFAULT, "_gtk_quartz_framework_init");
+  if (_gtk_quartz_framework_init_ptr)
+    _gtk_quartz_framework_init_ptr ();
 }
 
 static void
-gdk_display_manager_quartz_finalize (GObject *object)
+gdk_quartz_display_manager_finalize (GObject *object)
 {
-  g_error ("A GdkDisplayManagerQuartz object was finalized. This should not happen");
-  G_OBJECT_CLASS (gdk_display_manager_quartz_parent_class)->finalize (object);
+  g_error ("A GdkQuartzDisplayManager object was finalized. This should not happen");
+  G_OBJECT_CLASS (gdk_quartz_display_manager_parent_class)->finalize (object);
 }
 
 static void
-gdk_display_manager_quartz_class_init (GdkDisplayManagerQuartzClass *class)
+gdk_quartz_display_manager_class_init (GdkQuartzDisplayManagerClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayManagerClass *manager_class = GDK_DISPLAY_MANAGER_CLASS (class);
 
-  object_class->finalize = gdk_display_manager_quartz_finalize;
+  object_class->finalize = gdk_quartz_display_manager_finalize;
 
-  manager_class->open_display = gdk_display_manager_quartz_open_display;
-  manager_class->list_displays = gdk_display_manager_quartz_list_displays;
-  manager_class->set_default_display = gdk_display_manager_quartz_set_default_display;
-  manager_class->get_default_display = gdk_display_manager_quartz_get_default_display;
+  manager_class->open_display = gdk_quartz_display_manager_open_display;
+  manager_class->list_displays = gdk_quartz_display_manager_list_displays;
+  manager_class->set_default_display = gdk_quartz_display_manager_set_default_display;
+  manager_class->get_default_display = gdk_quartz_display_manager_get_default_display;
   manager_class->atom_intern = _gdk_quartz_display_manager_atom_intern;
   manager_class->get_atom_name = _gdk_quartz_display_manager_get_atom_name;
   manager_class->lookup_keyval = gdk_quartz_display_manager_lookup_keyval;
@@ -140,7 +155,7 @@ void
 _gdk_quartz_display_manager_add_display (GdkDisplayManager *manager,
                                          GdkDisplay        *display)
 {
-  GdkDisplayManagerQuartz *manager_quartz = GDK_DISPLAY_MANAGER_QUARTZ (manager);
+  GdkQuartzDisplayManager *manager_quartz = GDK_QUARTZ_DISPLAY_MANAGER (manager);
 
   if (manager_quartz->displays == NULL)
     gdk_display_manager_set_default_display (manager, display);
@@ -152,7 +167,7 @@ void
 _gdk_quartz_display_manager_remove_display (GdkDisplayManager *manager,
                                             GdkDisplay        *display)
 {
-  GdkDisplayManagerQuartz *manager_quartz = GDK_DISPLAY_MANAGER_QUARTZ (manager);
+  GdkQuartzDisplayManager *manager_quartz = GDK_QUARTZ_DISPLAY_MANAGER (manager);
 
   manager_quartz->displays = g_slist_remove (manager_quartz->displays, display);
 
