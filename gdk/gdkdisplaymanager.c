@@ -156,6 +156,11 @@ gdk_display_manager_get_property (GObject      *object,
  *
  * Gets the singleton #GdkDisplayManager object.
  *
+ * When called for the first time, this function consults the
+ * <envar>GDK_BACKEND</envar> to find out which of the supported
+ * GDK backends to use (in case GDK has been compiled with multiple
+ * backends).
+ *
  * Returns: (transfer none): The global #GdkDisplayManager singleton;
  *     gdk_parse_pargs(), gdk_init(), or gdk_init_check() must have
  *     been called first.
