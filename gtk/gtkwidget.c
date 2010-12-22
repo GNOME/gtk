@@ -8669,12 +8669,18 @@ gtk_widget_verify_invariants (GtkWidget *widget)
     {
       /* Not mapped implies... */
 
+#if 0
+  /* This check makes sense for normal toplevels, but for
+   * something like a toplevel that is embedded within a clutter
+   * state, mapping may depend on external factors.
+   */
       if (widget->priv->toplevel)
         {
           if (widget->priv->visible)
             g_warning ("%s %p toplevel is visible but not mapped",
                        G_OBJECT_TYPE_NAME (widget), widget);
         }
+#endif
     }
 
   /* Parent related checks aren't possible if parent has
