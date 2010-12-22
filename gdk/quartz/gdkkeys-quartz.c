@@ -453,17 +453,6 @@ maybe_update_keymap (void)
     }
 }
 
-GdkKeymap *
-gdk_keymap_get_for_display (GdkDisplay *display)
-{
-  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
-
-  if (default_keymap == NULL)
-    default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
-
-  return default_keymap;
-}
-
 static PangoDirection
 gdk_quartz_keymap_get_direction (GdkKeymap *keymap)
 {
