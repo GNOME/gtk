@@ -1,6 +1,6 @@
 /* gdkscreen-quartz.h
  *
- * Copyright (C) 2009  Kristian Rietveld  <kris@gtk.org>
+ * Copyright (C) 2009, 2010  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,24 +18,24 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_SCREEN_QUARTZ_H__
-#define __GDK_SCREEN_QUARTZ_H__
+#ifndef __GDK_QUARTZ_SCREEN_H__
+#define __GDK_QUARTZ_SCREEN_H__
 
 G_BEGIN_DECLS
 
 #include <gdk/gdkscreenprivate.h>
 
-typedef struct _GdkScreenQuartz GdkScreenQuartz;
-typedef struct _GdkScreenQuartzClass GdkScreenQuartzClass;
+typedef struct _GdkQuartzScreen GdkQuartzScreen;
+typedef struct _GdkQuartzScreenClass GdkQuartzScreenClass;
 
-#define GDK_TYPE_SCREEN_QUARTZ              (_gdk_screen_quartz_get_type ())
-#define GDK_SCREEN_QUARTZ(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_QUARTZ, GdkScreenQuartz))
-#define GDK_SCREEN_QUARTZ_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN_QUARTZ, GdkScreenQuartzClass))
-#define GDK_IS_SCREEN_QUARTZ(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN_QUARTZ))
-#define GDK_IS_SCREEN_QUARTZ_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN_QUARTZ))
-#define GDK_SCREEN_QUARTZ_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN_QUARTZ, GdkScreenQuartzClass))
+#define GDK_TYPE_QUARTZ_SCREEN              (_gdk_quartz_screen_get_type ())
+#define GDK_QUARTZ_SCREEN(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_SCREEN, GdkQuartzScreen))
+#define GDK_QUARTZ_SCREEN_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_SCREEN, GdkQuartzScreenClass))
+#define GDK_IS_QUARTZ_SCREEN(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_SCREEN))
+#define GDK_IS_QUARTZ_SCREEN_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_SCREEN))
+#define GDK_QUARTZ_SCREEN_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_SCREEN, GdkQuartzScreenClass))
 
-struct _GdkScreenQuartz
+struct _GdkQuartzScreen
 {
   GdkScreen parent_instance;
 
@@ -56,14 +56,14 @@ struct _GdkScreenQuartz
   guint emit_monitors_changed : 1;
 };
 
-struct _GdkScreenQuartzClass
+struct _GdkQuartzScreenClass
 {
   GdkScreenClass parent_class;
 };
 
-GType      _gdk_screen_quartz_get_type (void);
-GdkScreen *_gdk_screen_quartz_new      (void);
+GType      _gdk_quartz_screen_get_type (void);
+GdkScreen *_gdk_quartz_screen_new      (void);
 
 G_END_DECLS
 
-#endif /* _GDK_SCREEN_QUARTZ_H_ */
+#endif /* _GDK_QUARTZ_SCREEN_H_ */
