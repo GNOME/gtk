@@ -1337,12 +1337,6 @@ _gdk_quartz_display_queue_events (GdkDisplay *display)
 }
 
 void
-gdk_flush (void)
-{
-  /* Not supported. */
-}
-
-void
 _gdk_quartz_display_add_client_message_filter (GdkDisplay   *display,
                                                GdkAtom       message_type,
                                                GdkFilterFunc func,
