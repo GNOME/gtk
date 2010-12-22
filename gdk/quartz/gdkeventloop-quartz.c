@@ -664,7 +664,7 @@ gdk_event_dispatch (GSource     *source,
 
   GDK_THREADS_ENTER ();
 
-  _gdk_events_queue (_gdk_display);
+  _gdk_quartz_display_queue_events (_gdk_display);
 
   event = _gdk_event_unqueue (_gdk_display);
 
