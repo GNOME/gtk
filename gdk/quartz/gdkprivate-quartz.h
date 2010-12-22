@@ -186,7 +186,7 @@ GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
 
-GdkNativeWinodw _gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
+GdkNativeWindow _gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
                                                            GdkNativeWindow *xid,
                                                            GdkDragProtocol *protocol,
                                                            guint            version);
