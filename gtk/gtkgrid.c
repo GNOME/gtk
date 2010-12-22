@@ -439,9 +439,11 @@ gtk_grid_forall (GtkContainer *container,
   GtkGridChild *child;
   GList *list;
 
-  for (list = priv->children; list; list = list->next)
+  list = priv->children;
+  while (list)
     {
       child = list->data;
+      list  = list->next;
 
       (* callback) (child->widget, callback_data);
     }
