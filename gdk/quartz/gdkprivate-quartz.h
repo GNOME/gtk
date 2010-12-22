@@ -35,8 +35,6 @@
 
 #include "config.h"
 
-typedef struct _GdkCursorPrivate GdkCursorPrivate;
-
 struct _GdkVisualClass
 {
   GObjectClass parent_class;
