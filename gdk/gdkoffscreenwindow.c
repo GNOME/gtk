@@ -699,6 +699,13 @@ gdk_offscreen_window_set_boolean (GdkWindow *window,
 }
 
 static void
+gdk_offscreen_window_process_updates_recurse (GdkWindow *window,
+                                              cairo_region_t *region)
+{
+  _gdk_window_process_updates_recurse (window, region);
+}
+
+static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
   GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
@@ -779,7 +786,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->destroy_notify = NULL;
   impl_class->register_dnd = NULL;
   impl_class->drag_begin = NULL;
-  impl_class->process_updates_recurse = NULL;
+  impl_class->process_updates_recurse = gdk_offscreen_window_process_updates_recurse;
   impl_class->sync_rendering = NULL;
   impl_class->simulate_key = NULL;
   impl_class->simulate_button = NULL;
