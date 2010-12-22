@@ -31,6 +31,7 @@
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 #include "gtktextbuffer.h"
+#include "gtkselectionprivate.h"
 #include "gtkquartz.h"
 
 
@@ -252,7 +253,7 @@ gtk_clipboard_get_for_display (GdkDisplay *display,
 			       GdkAtom     selection)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (!display->closed, NULL);
+  g_return_val_if_fail (!gdk_display_is_closed (display), NULL);
 
   return clipboard_peek (display, selection, FALSE);
 }
