@@ -22,7 +22,7 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdevicemanager.h>
 #include "gdkdevicemanager-core.h"
-#include "gdkdevice-core.h"
+#include "gdkdevice-core-quartz.h"
 #include "gdkkeysyms.h"
 
 
@@ -55,7 +55,7 @@ static GdkDevice *
 create_core_pointer (GdkDeviceManager *device_manager,
                      GdkDisplay       *display)
 {
-  return g_object_new (GDK_TYPE_DEVICE_CORE,
+  return g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
                        "name", "Core Pointer",
                        "type", GDK_DEVICE_TYPE_MASTER,
                        "input-source", GDK_SOURCE_MOUSE,
@@ -70,7 +70,7 @@ static GdkDevice *
 create_core_keyboard (GdkDeviceManager *device_manager,
                       GdkDisplay       *display)
 {
-  return g_object_new (GDK_TYPE_DEVICE_CORE,
+  return g_object_new (GDK_TYPE_QUARTZ_DEVICE_CORE,
                        "name", "Core Keyboard",
                        "type", GDK_DEVICE_TYPE_MASTER,
                        "input-source", GDK_SOURCE_KEYBOARD,
