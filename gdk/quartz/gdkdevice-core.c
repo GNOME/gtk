@@ -86,7 +86,6 @@ gdk_device_core_class_init (GdkDeviceCoreClass *klass)
   device_class->ungrab = gdk_device_core_ungrab;
   device_class->window_at_position = gdk_device_core_window_at_position;
   device_class->select_window_events = gdk_device_core_select_window_events;
-  device_class->check_extension_events = _gdk_quartz_device_check_extension_events;
 }
 
 static void
