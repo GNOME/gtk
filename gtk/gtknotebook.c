@@ -371,8 +371,7 @@ static void gtk_notebook_drag_end            (GtkWidget        *widget,
 					      GdkDragContext   *context);
 static gboolean gtk_notebook_drag_failed     (GtkWidget        *widget,
 					      GdkDragContext   *context,
-					      GtkDragResult     result,
-					      gpointer          data);
+					      GtkDragResult     result);
 static gboolean gtk_notebook_drag_motion     (GtkWidget        *widget,
 					      GdkDragContext   *context,
 					      gint              x,
@@ -665,6 +664,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   widget_class->drag_drop = gtk_notebook_drag_drop;
   widget_class->drag_data_get = gtk_notebook_drag_data_get;
   widget_class->drag_data_received = gtk_notebook_drag_data_received;
+  widget_class->drag_failed = gtk_notebook_drag_failed;
   widget_class->compute_expand = gtk_notebook_compute_expand;
 
   container_class->add = gtk_notebook_add;
@@ -1201,9 +1201,6 @@ gtk_notebook_init (GtkNotebook *notebook)
   gtk_drag_dest_set (GTK_WIDGET (notebook), 0,
 		     notebook_targets, G_N_ELEMENTS (notebook_targets),
                      GDK_ACTION_MOVE);
-
-  g_signal_connect (G_OBJECT (notebook), "drag-failed",
-		    G_CALLBACK (gtk_notebook_drag_failed), NULL);
 
   gtk_drag_dest_set_track_motion (GTK_WIDGET (notebook), TRUE);
 
@@ -3588,8 +3585,7 @@ gtk_notebook_create_window (GtkNotebook *notebook,
 static gboolean
 gtk_notebook_drag_failed (GtkWidget      *widget,
 			  GdkDragContext *context,
-			  GtkDragResult   result,
-			  gpointer        data)
+			  GtkDragResult   result)
 {
   if (result == GTK_DRAG_RESULT_NO_TARGET)
     {

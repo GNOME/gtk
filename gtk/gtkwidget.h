@@ -375,6 +375,9 @@ struct _GtkWidgetClass
 				    GtkSelectionData   *selection_data,
 				    guint               info,
 				    guint               time_);
+  gboolean (* drag_failed)         (GtkWidget          *widget,
+                                    GdkDragContext     *context,
+                                    GtkDragResult       result);
 
   /* Signals used only for keybindings */
   gboolean (* popup_menu)          (GtkWidget          *widget);
