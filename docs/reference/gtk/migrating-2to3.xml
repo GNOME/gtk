@@ -128,7 +128,7 @@
     <para>
       The <literal>gdk_spawn</literal> family of functions has been
       deprecated in GDK 2.24 and removed from GDK 3. Various replacements
-      exit; the best replacement depends on the circumstances:
+      exist; the best replacement depends on the circumstances:
       <itemizedlist>
         <listitem>If you are opening a document or URI by launching a command
         like <literal>firefox http://my-favourite-website.com</literal> or
