@@ -242,5 +242,19 @@ GdkAtom _gdk_quartz_display_manager_atom_intern   (GdkDisplayManager *manager,
 gchar * _gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
                                                    GdkAtom            atom);
 
+void     _gdk_quartz_window_sync_rendering    (GdkWindow       *window);
+gboolean _gdk_quartz_window_simulate_key      (GdkWindow       *window,
+                                               gint             x,
+                                               gint             y,
+                                               guint            keyval,
+                                               GdkModifierType  modifiers,
+                                               GdkEventType     key_pressrelease);
+gboolean _gdk_quartz_window_simulate_button   (GdkWindow       *window,
+                                               gint             x,
+                                               gint             y,
+                                               guint            button,
+                                               GdkModifierType  modifiers,
+                                               GdkEventType     button_pressrelease);
+
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */
