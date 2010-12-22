@@ -145,4 +145,17 @@ void        _gdk_quartz_window_set_startup_id    (GdkWindow   *window,
                                                   const gchar *startup_id);
 void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
 
+void        _gdk_quartz_display_sync                (GdkDisplay  *display);
+void        _gdk_quartz_display_flush               (GdkDisplay  *display);
+GList *     _gdk_quartz_display_list_devices        (GdkDisplay  *dpy);
+
+gboolean    _gdk_quartz_display_send_client_message       (GdkDisplay      *display,
+                                                           GdkEvent        *event,
+                                                           GdkNativeWindow  winid);
+void        _gdk_quartz_display_add_client_message_filter (GdkDisplay      *display,
+                                                           GdkAtom          message_type,
+                                                           GdkFilterFunc    func,
+                                                           gpointer         data);
+
+
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

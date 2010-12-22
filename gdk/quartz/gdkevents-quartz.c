@@ -1385,30 +1385,30 @@ gdk_flush (void)
 }
 
 void
-gdk_display_add_client_message_filter (GdkDisplay   *display,
-				       GdkAtom       message_type,
-				       GdkFilterFunc func,
-				       gpointer      data)
+_gdk_quartz_display_add_client_message_filter (GdkDisplay   *display,
+                                               GdkAtom       message_type,
+                                               GdkFilterFunc func,
+                                               gpointer      data)
 {
   /* Not supported. */
 }
 
 void
-gdk_display_sync (GdkDisplay *display)
+_gdk_quartz_display_sync (GdkDisplay *display)
 {
   /* Not supported. */
 }
 
 void
-gdk_display_flush (GdkDisplay *display)
+_gdk_quartz_display_flush (GdkDisplay *display)
 {
   /* Not supported. */
 }
 
 gboolean
-gdk_event_send_client_message_for_display (GdkDisplay      *display,
-					   GdkEvent        *event,
-					   GdkNativeWindow  winid)
+_gdk_quartz_display_send_client_message (GdkDisplay      *display,
+                                         GdkEvent        *event,
+                                         GdkNativeWindow  winid)
 {
   /* Not supported. */
   return FALSE;
