@@ -22,6 +22,7 @@
 
 #import "GdkQuartzView.h"
 #include "gdkwindow-quartz.h"
+#include "gdkcursor-quartz.h"
 #include "gdkprivate-quartz.h"
 #include "gdkdevice-core.h"
 
@@ -156,10 +157,10 @@ gdk_device_core_set_window_cursor (GdkDevice *device,
                                    GdkWindow *window,
                                    GdkCursor *cursor)
 {
-  GdkCursorPrivate *cursor_private;
+  GdkQuartzCursor *cursor_private;
   NSCursor *nscursor;
 
-  cursor_private = (GdkCursorPrivate*) cursor;
+  cursor_private = (GdkQuartzCursor *) cursor;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
