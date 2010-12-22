@@ -22,7 +22,7 @@
 #import <Foundation/Foundation.h>
 #include <glib.h>
 
-@interface GdkQuartzWindow : NSWindow {
+@interface GdkQuartzNSWindow : NSWindow {
   BOOL    inMove;
   BOOL    inShowOrHide;
 

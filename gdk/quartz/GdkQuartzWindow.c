@@ -22,7 +22,7 @@
 #include "gdkwindow-quartz.h"
 #include "gdkprivate-quartz.h"
 
-@implementation GdkQuartzWindow
+@implementation GdkQuartzNSWindow
 
 -(BOOL)windowShouldClose:(id)sender
 {

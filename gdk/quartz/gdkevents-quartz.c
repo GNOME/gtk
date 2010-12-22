@@ -379,7 +379,7 @@ _gdk_quartz_events_update_focus_window (GdkWindow *window,
   if (got_focus && window == current_keyboard_window)
     return;
 
-  /* FIXME: Don't do this when grabbed? Or make GdkQuartzWindow
+  /* FIXME: Don't do this when grabbed? Or make GdkQuartzNSWindow
    * disallow it in the first place instead?
    */
   
@@ -1140,7 +1140,7 @@ gdk_event_translate (GdkEvent *event,
    * dragged. This is a workaround for the window getting events for
    * the window title.
    */
-  if ([(GdkQuartzWindow *)nswindow isInMove])
+  if ([(GdkQuartzNSWindow *)nswindow isInMove])
     {
       break_all_grabs (get_time_from_ns_event (nsevent));
       return FALSE;

@@ -927,11 +927,11 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                           NSResizableWindowMask);
           }
 
-	impl->toplevel = [[GdkQuartzWindow alloc] initWithContentRect:content_rect 
-			                                    styleMask:style_mask
-			                                      backing:NSBackingStoreBuffered
-			                                        defer:NO
-                                                                screen:screen];
+	impl->toplevel = [[GdkQuartzNSWindow alloc] initWithContentRect:content_rect 
+			                                      styleMask:style_mask
+			                                        backing:NSBackingStoreBuffered
+			                                          defer:NO
+                                                                  screen:screen];
 
 	if (attributes_mask & GDK_WA_TITLE)
 	  title = attributes->title;
@@ -1146,7 +1146,7 @@ gdk_window_quartz_show (GdkWindow *window, gboolean already_mapped)
       make_key = (window->accept_focus && focus_on_map &&
                   window->window_type != GDK_WINDOW_TEMP);
 
-      [(GdkQuartzWindow*)impl->toplevel showAndMakeKey:make_key];
+      [(GdkQuartzNSWindow*)impl->toplevel showAndMakeKey:make_key];
       clear_toplevel_order ();
 
       _gdk_quartz_events_send_map_event (window);
@@ -1243,7 +1243,7 @@ gdk_window_quartz_hide (GdkWindow *window)
       if (impl->transient_for)
         _gdk_quartz_window_detach_from_parent (window);
 
-      [(GdkQuartzWindow*)impl->toplevel hide];
+      [(GdkQuartzNSWindow*)impl->toplevel hide];
     }
   else if (impl->view)
     {
@@ -2408,7 +2408,7 @@ gdk_quartz_window_begin_resize_drag (GdkWindow     *window,
       return;
     }
 
-  [(GdkQuartzWindow *)impl->toplevel beginManualResize];
+  [(GdkQuartzNSWindow *)impl->toplevel beginManualResize];
 }
 
 static void
@@ -2432,7 +2432,7 @@ gdk_quartz_window_begin_move_drag (GdkWindow *window,
       return;
     }
 
-  [(GdkQuartzWindow *)impl->toplevel beginManualMove];
+  [(GdkQuartzNSWindow *)impl->toplevel beginManualMove];
 }
 
 static void
