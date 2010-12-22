@@ -67,10 +67,10 @@ gdk_quartz_drag_context_drag_motion (GdkDragContext  *context,
 }
 
 GdkNativeWindow
-_gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
-                                           GdkNativeWindow *xid,
-                                           GdkDragProtocol *protocol,
-                                           guint            version)
+_gdk_quartz_display_get_drag_protocol (GdkDisplay      *display,
+                                       GdkNativeWindow  xid,
+                                       GdkDragProtocol *protocol,
+                                       guint           *version)
 {
   /* FIXME: Implement */
   return 0;

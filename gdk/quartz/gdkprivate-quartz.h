@@ -176,10 +176,10 @@ GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
 
 GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
 
-GdkNativeWindow _gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
-                                                           GdkNativeWindow *xid,
+GdkNativeWindow _gdk_quartz_display_get_drag_protocol     (GdkDisplay      *display,
+                                                           GdkNativeWindow  xid,
                                                            GdkDragProtocol *protocol,
-                                                           guint            version);
+                                                           guint           *version);
 
 
 gboolean    _gdk_quartz_display_send_client_message       (GdkDisplay      *display,
@@ -223,6 +223,11 @@ GdkAtom _gdk_quartz_display_manager_atom_intern   (GdkDisplayManager *manager,
                                                    gboolean           copy_name);
 gchar * _gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
                                                    GdkAtom            atom);
+
+void    _gdk_quartz_display_manager_add_display    (GdkDisplayManager *manager,
+                                                    GdkDisplay        *display);
+void    _gdk_quartz_display_manager_remove_display (GdkDisplayManager *manager,
+                                                    GdkDisplay        *display);
 
 void     _gdk_quartz_window_sync_rendering    (GdkWindow       *window);
 gboolean _gdk_quartz_window_simulate_key      (GdkWindow       *window,
