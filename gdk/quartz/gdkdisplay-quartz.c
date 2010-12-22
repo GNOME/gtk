@@ -23,6 +23,7 @@
 #include "gdk.h"
 #include "gdkprivate-quartz.h"
 #include "gdkscreen-quartz.h"
+#include "gdkwindow-quartz.h"
 #include "gdkdisplay-quartz.h"
 #include "gdkdevicemanager-core.h"
 
@@ -286,6 +287,8 @@ _gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
 
   object_class->finalize = _gdk_quartz_display_finalize;
+
+  display_class->window_type = GDK_TYPE_QUARTZ_WINDOW;
 
   display_class->get_name = gdk_quartz_display_get_name;
   display_class->get_n_screens = gdk_quartz_display_get_n_screens;
