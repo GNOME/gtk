@@ -20,6 +20,8 @@
 
 #include "config.h"
 
+#include <gdk/gdkdisplayprivate.h>
+
 #import "GdkQuartzView.h"
 #include "gdkwindow-quartz.h"
 #include "gdkcursor-quartz.h"
@@ -310,7 +312,7 @@ gdk_device_core_ungrab (GdkDevice *device,
   if (grab)
     grab->serial_end = 0;
 
-  _gdk_display_device_grab_update (_gdk_display, device, 0);
+  _gdk_display_device_grab_update (_gdk_display, device, NULL, 0);
 }
 
 static GdkWindow *
