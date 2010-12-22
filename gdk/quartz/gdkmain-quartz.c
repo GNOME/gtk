@@ -73,9 +73,9 @@ gdk_notify_startup_complete_with_id (const gchar* startup_id)
   /* FIXME: Implement? */
 }
 
-void          
-gdk_window_set_startup_id (GdkWindow   *window,
-			   const gchar *startup_id)
+void
+_gdk_quartz_window_set_startup_id (GdkWindow   *window,
+                                   const gchar *startup_id)
 {
   /* FIXME: Implement? */
 }
