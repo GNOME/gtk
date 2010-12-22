@@ -56,9 +56,9 @@ _gdk_quartz_display_open (const gchar *display_name)
   _gdk_display = g_object_new (_gdk_quartz_display_get_type (), NULL);
   _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
 
-  _gdk_screen = _gdk_screen_quartz_new ();
+  _gdk_screen = _gdk_quartz_screen_new ();
 
-  _gdk_quartz_visual_init (_gdk_screen);
+  _gdk_quartz_screen_init_visuals (_gdk_screen);
 
   _gdk_windowing_window_init ();
 
