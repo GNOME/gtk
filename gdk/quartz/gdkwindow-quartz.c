@@ -3104,6 +3104,9 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
   impl_class->sync_rendering = _gdk_quartz_window_sync_rendering;
   impl_class->simulate_key = _gdk_quartz_window_simulate_key;
   impl_class->simulate_button = _gdk_quartz_window_simulate_button;
+  impl_class->get_property = _gdk_quartz_window_get_property;
+  impl_class->change_property = _gdk_quartz_window_change_property;
+  impl_class->delete_property = _gdk_quartz_window_delete_property;
 }
 
 static void
