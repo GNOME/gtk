@@ -2976,6 +2976,58 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->get_shape = gdk_quartz_window_get_shape;
   impl_class->get_input_shape = gdk_quartz_window_get_input_shape;
 
+  impl_class->focus = gdk_quartz_window_focus;
+  impl_class->set_type_hint = gdk_quartz_window_set_type_hint;
+  impl_class->get_type_hint = gdk_quartz_window_get_type_hint;
+  impl_class->set_modal_hint = gdk_quartz_window_set_modal_hint;
+  impl_class->set_skip_taskbar_hint = gdk_quartz_window_set_skip_taskbar_hint;
+  impl_class->set_skip_pager_hint = gdk_quartz_window_set_skip_pager_hint;
+  impl_class->set_urgency_hint = gdk_quartz_window_set_urgency_hint;
+  impl_class->set_geometry_hints = gdk_quartz_window_set_geometry_hints;
+  impl_class->set_title = gdk_quartz_window_set_title;
+  impl_class->set_role = gdk_quartz_window_set_role;
+  impl_class->set_startup_id = _gdk_quartz_window_set_startup_id;
+  impl_class->set_transient_for = gdk_quartz_window_set_transient_for;
+  impl_class->get_root_origin = gdk_quartz_window_get_root_origin;
+  impl_class->get_frame_extents = gdk_quartz_window_get_frame_extents;
+  impl_class->set_override_redirect = gdk_quartz_window_set_override_redirect;
+  impl_class->set_accept_focus = gdk_quartz_window_set_accept_focus;
+  impl_class->set_focus_on_map = gdk_quartz_window_set_focus_on_map;
+  impl_class->set_icon_list = gdk_quartz_window_set_icon_list;
+  impl_class->set_icon_name = gdk_quartz_window_set_icon_name;
+  impl_class->iconify = gdk_quartz_window_iconify;
+  impl_class->deiconify = gdk_quartz_window_deiconify;
+  impl_class->stick = gdk_quartz_window_stick;
+  impl_class->unstick = gdk_quartz_window_unstick;
+  impl_class->maximize = gdk_quartz_window_maximize;
+  impl_class->unmaximize = gdk_quartz_window_unmaximize;
+  impl_class->fullscreen = gdk_quartz_window_fullscreen;
+  impl_class->unfullscreen = gdk_quartz_window_unfullscreen;
+  impl_class->set_keep_above = gdk_quartz_window_set_keep_above;
+  impl_class->set_keep_below = gdk_quartz_window_set_keep_below;
+  impl_class->get_group = gdk_quartz_window_get_group;
+  impl_class->set_group = gdk_quartz_window_set_group;
+  impl_class->set_decorations = gdk_quartz_window_set_decorations;
+  impl_class->get_decorations = gdk_quartz_window_get_decorations;
+  impl_class->set_functions = gdk_quartz_window_set_functions;
+  impl_class->set_functions = gdk_quartz_window_set_functions;
+  impl_class->begin_resize_drag = gdk_quartz_window_begin_resize_drag;
+  impl_class->begin_move_drag = gdk_quartz_window_begin_move_drag;
+  impl_class->enable_synchronized_configure = gdk_quartz_window_enable_synchronized_configure;
+  impl_class->configure_finished = gdk_quartz_window_configure_finished;
+  impl_class->set_opacity = gdk_quartz_window_set_opacity;
+  impl_class->destroy_notify = gdk_quartz_window_destroy_notify;
+  impl_class->register_dnd = _gdk_quartz_window_register_dnd;
+  impl_class->drag_begin = _gdk_quartz_window_drag_begin;
+  impl_class->process_updates_recurse = _gdk_quartz_window_process_updates_recurse;
+  impl_class->sync_rendering = _gdk_quartz_window_sync_rendering;
+  impl_class->simulate_key = _gdk_quartz_window_simulate_key;
+  impl_class->simulate_button = _gdk_quartz_window_simulate_button;
+  impl_class->get_property = _gdk_quartz_window_get_property;
+  impl_class->change_property = _gdk_quartz_window_change_property;
+  impl_class->delete_property = _gdk_quartz_window_delete_property;
+
+
   impl_quartz_class->get_context = gdk_window_impl_quartz_get_context;
   impl_quartz_class->release_context = gdk_window_impl_quartz_release_context;
 }
@@ -3082,63 +3134,11 @@ static void
 gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
 {
   GdkWindowImplQuartzClass *window_quartz_class = GDK_WINDOW_IMPL_QUARTZ_CLASS (klass);
-  GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
 
   root_window_parent_class = g_type_class_peek_parent (klass);
 
   window_quartz_class->get_context = gdk_root_window_impl_quartz_get_context;
   window_quartz_class->release_context = gdk_root_window_impl_quartz_release_context;
-
-  impl_class->focus = gdk_quartz_window_focus;
-  impl_class->set_type_hint = gdk_quartz_window_set_type_hint;
-  impl_class->get_type_hint = gdk_quartz_window_get_type_hint;
-  impl_class->set_modal_hint = gdk_quartz_window_set_modal_hint;
-  impl_class->set_skip_taskbar_hint = gdk_quartz_window_set_skip_taskbar_hint;
-  impl_class->set_skip_pager_hint = gdk_quartz_window_set_skip_pager_hint;
-  impl_class->set_urgency_hint = gdk_quartz_window_set_urgency_hint;
-  impl_class->set_geometry_hints = gdk_quartz_window_set_geometry_hints;
-  impl_class->set_title = gdk_quartz_window_set_title;
-  impl_class->set_role = gdk_quartz_window_set_role;
-  impl_class->set_startup_id = _gdk_quartz_window_set_startup_id;
-  impl_class->set_transient_for = gdk_quartz_window_set_transient_for;
-  impl_class->get_root_origin = gdk_quartz_window_get_root_origin;
-  impl_class->get_frame_extents = gdk_quartz_window_get_frame_extents;
-  impl_class->set_override_redirect = gdk_quartz_window_set_override_redirect;
-  impl_class->set_accept_focus = gdk_quartz_window_set_accept_focus;
-  impl_class->set_focus_on_map = gdk_quartz_window_set_focus_on_map;
-  impl_class->set_icon_list = gdk_quartz_window_set_icon_list;
-  impl_class->set_icon_name = gdk_quartz_window_set_icon_name;
-  impl_class->iconify = gdk_quartz_window_iconify;
-  impl_class->deiconify = gdk_quartz_window_deiconify;
-  impl_class->stick = gdk_quartz_window_stick;
-  impl_class->unstick = gdk_quartz_window_unstick;
-  impl_class->maximize = gdk_quartz_window_maximize;
-  impl_class->unmaximize = gdk_quartz_window_unmaximize;
-  impl_class->fullscreen = gdk_quartz_window_fullscreen;
-  impl_class->unfullscreen = gdk_quartz_window_unfullscreen;
-  impl_class->set_keep_above = gdk_quartz_window_set_keep_above;
-  impl_class->set_keep_below = gdk_quartz_window_set_keep_below;
-  impl_class->get_group = gdk_quartz_window_get_group;
-  impl_class->set_group = gdk_quartz_window_set_group;
-  impl_class->set_decorations = gdk_quartz_window_set_decorations;
-  impl_class->get_decorations = gdk_quartz_window_get_decorations;
-  impl_class->set_functions = gdk_quartz_window_set_functions;
-  impl_class->set_functions = gdk_quartz_window_set_functions;
-  impl_class->begin_resize_drag = gdk_quartz_window_begin_resize_drag;
-  impl_class->begin_move_drag = gdk_quartz_window_begin_move_drag;
-  impl_class->enable_synchronized_configure = gdk_quartz_window_enable_synchronized_configure;
-  impl_class->configure_finished = gdk_quartz_window_configure_finished;
-  impl_class->set_opacity = gdk_quartz_window_set_opacity;
-  impl_class->destroy_notify = gdk_quartz_window_destroy_notify;
-  impl_class->register_dnd = _gdk_quartz_window_register_dnd;
-  impl_class->drag_begin = _gdk_quartz_window_drag_begin;
-  impl_class->process_updates_recurse = _gdk_quartz_window_process_updates_recurse;
-  impl_class->sync_rendering = _gdk_quartz_window_sync_rendering;
-  impl_class->simulate_key = _gdk_quartz_window_simulate_key;
-  impl_class->simulate_button = _gdk_quartz_window_simulate_button;
-  impl_class->get_property = _gdk_quartz_window_get_property;
-  impl_class->change_property = _gdk_quartz_window_change_property;
-  impl_class->delete_property = _gdk_quartz_window_delete_property;
 }
 
 static void
