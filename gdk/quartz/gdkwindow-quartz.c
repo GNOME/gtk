@@ -24,10 +24,11 @@
 
 #include "gdk.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdisplayprivate.h"
 #include "gdkwindowimpl.h"
 #include "gdkprivate-quartz.h"
 #include "gdkscreen-quartz.h"
-#include "gdkinputprivate.h"
+#include "gdkcursor-quartz.h"
 
 #include <sys/time.h>
 #include <cairo-quartz.h>
@@ -649,7 +650,7 @@ _gdk_quartz_window_gdk_xy_to_xy (gint  gdk_x,
                                  gint *ns_x,
                                  gint *ns_y)
 {
-  GdkScreenQuartz *screen_quartz = GDK_SCREEN_QUARTZ (_gdk_screen);
+  GdkQuartzScreen *screen_quartz = GDK_QUARTZ_SCREEN (_gdk_screen);
 
   if (ns_y)
     *ns_y = screen_quartz->height - gdk_y + screen_quartz->min_y;
@@ -664,7 +665,7 @@ _gdk_quartz_window_xy_to_gdk_xy (gint  ns_x,
                                  gint *gdk_x,
                                  gint *gdk_y)
 {
-  GdkScreenQuartz *screen_quartz = GDK_SCREEN_QUARTZ (_gdk_screen);
+  GdkQuartzScreen *screen_quartz = GDK_QUARTZ_SCREEN (_gdk_screen);
 
   if (gdk_y)
     *gdk_y = screen_quartz->height - ns_y + screen_quartz->min_y;
@@ -1639,10 +1640,10 @@ gdk_window_quartz_set_device_cursor (GdkWindow *window,
                                      GdkDevice *device,
                                      GdkCursor *cursor)
 {
-  GdkCursorPrivate *cursor_private;
+  GdkQuartzCursor *cursor_private;
   NSCursor *nscursor;
 
-  cursor_private = (GdkCursorPrivate *)cursor;
+  cursor_private = (GdkQuartzCursor *)cursor;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
@@ -1992,7 +1993,7 @@ gdk_window_quartz_set_events (GdkWindow       *window,
   /* The mask is set in the common code. */
 }
 
-static_void
+static void
 gdk_quartz_window_set_urgency_hint (GdkWindow *window,
                                     gboolean   urgent)
 {
@@ -2593,7 +2594,7 @@ _gdk_windowing_window_queue_antiexpose (GdkWindow  *window,
   return FALSE;
 }
 
-static_void
+static void
 gdk_quartz_window_stick (GdkWindow *window)
 {
   if (GDK_WINDOW_DESTROYED (window) ||
@@ -2768,7 +2769,7 @@ gdk_quartz_window_fullscreen (GdkWindow *window)
 }
 
 static void
-gdk_quarz_window_unfullscreen (GdkWindow *window)
+gdk_quartz_window_unfullscreen (GdkWindow *window)
 {
   FullscreenSavedGeometry *geometry;
 
@@ -3054,8 +3055,8 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
 
   root_window_parent_class = g_type_class_peek_parent (klass);
 
-  drawable_quartz_class->get_context = gdk_root_window_impl_quartz_get_context;
-  drawable_quartz_class->release_context = gdk_root_window_impl_quartz_release_context;
+  window_quartz_class->get_context = gdk_root_window_impl_quartz_get_context;
+  window_quartz_class->release_context = gdk_root_window_impl_quartz_release_context;
 
   impl_class->focus = gdk_quartz_window_focus;
   impl_class->set_type_hint = gdk_quartz_window_set_type_hint;
@@ -3100,7 +3101,7 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
   impl_class->destroy_notify = gdk_quartz_window_destroy_notify;
   impl_class->register_dnd = _gdk_quartz_window_register_dnd;
   impl_class->drag_begin = _gdk_quartz_window_drag_begin;
-  impl_class->process_updates_recurse = gdk_x11_window_process_updates_recurse;
+  impl_class->process_updates_recurse = _gdk_quartz_window_process_updates_recurse;
   impl_class->sync_rendering = _gdk_quartz_window_sync_rendering;
   impl_class->simulate_key = _gdk_quartz_window_simulate_key;
   impl_class->simulate_button = _gdk_quartz_window_simulate_button;
