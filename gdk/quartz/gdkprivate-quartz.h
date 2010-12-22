@@ -35,11 +35,6 @@
 
 #include "config.h"
 
-struct _GdkVisualClass
-{
-  GObjectClass parent_class;
-};
-
 extern GdkDisplay *_gdk_display;
 extern GdkScreen *_gdk_screen;
 extern GdkWindow *_gdk_root;
@@ -52,7 +47,6 @@ extern GdkDragContext *_gdk_quartz_drag_source_context;
 void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
 void _gdk_windowing_window_init             (void);
 void _gdk_quartz_events_init                (void);
-void _gdk_quartz_visual_init                (GdkScreen *screen);
 void _gdk_quartz_input_init                 (void);
 void _gdk_quartz_event_loop_init            (void);
 
@@ -209,6 +203,7 @@ void          _gdk_quartz_screen_query_depths               (GdkScreen      *scr
 void          _gdk_quartz_screen_query_visual_types         (GdkScreen      *screen,
                                                              GdkVisualType **visual_types,
                                                              gint           *count);
+void          _gdk_quartz_screen_init_visuals               (GdkScreen      *screen);
 GList *       _gdk_quartz_screen_list_visuals               (GdkScreen      *screen);
 
 

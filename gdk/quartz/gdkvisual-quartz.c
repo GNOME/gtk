@@ -23,6 +23,29 @@
 #include "gdkvisualprivate.h"
 #include "gdkprivate-quartz.h"
 
+GType gdk_quartz_visual_get_type (void);
+
+#define GDK_TYPE_QUARTZ_VISUAL              (gdk_quartz_visual_get_type ())
+#define GDK_QUARTZ_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisual))
+#define GDK_QUARTZ_VISUAL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisualClass))
+#define GDK_IS_QUARTZ_VISUAL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_VISUAL))
+#define GDK_IS_QUARTZ_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_VISUAL))
+#define GDK_QUARTZ_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisualClass))
+
+typedef struct _GdkQuartzVisual GdkQuartzVisual;
+typedef struct _GdkQuartzVisualClass GdkQuartzVisualClass;
+
+struct _GdkQuartzVisual
+{
+  GdkVisual visual;
+};
+
+struct _GdkQuartzVisualClass
+{
+  GdkVisualClass visual_class;
+};
+
+
 static GdkVisual *system_visual;
 static GdkVisual *rgba_visual;
 static GdkVisual *gray_visual;
@@ -52,7 +75,7 @@ static GdkVisual *
 create_standard_visual (GdkScreen *screen,
                         gint       depth)
 {
-  GdkVisual *visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+  GdkVisual *visual = g_object_new (GDK_TYPE_QUARTZ_VISUAL, NULL);
 
   visual->screen = screen;
 
@@ -82,7 +105,7 @@ create_standard_visual (GdkScreen *screen,
 static GdkVisual *
 create_gray_visual (GdkScreen *screen)
 {
-  GdkVisual *visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+  GdkVisual *visual = g_object_new (GDK_TYPE_QUARTZ_VISUAL, NULL);
 
   visual->screen = screen;
 
@@ -95,12 +118,17 @@ create_gray_visual (GdkScreen *screen)
   return visual;
 }
 
-void
-_gdk_quartz_visual_init (GdkScreen *screen)
+
+G_DEFINE_TYPE (GdkQuartzVisual, _gdk_quartz_visual, GDK_TYPE_VISUAL)
+
+static void
+_gdk_quartz_visual_init (GdkQuartzVisual *quartz_visual)
 {
-  system_visual = create_standard_visual (screen, 24);
-  rgba_visual = create_standard_visual (screen, 32);
-  gray_visual = create_gray_visual (screen);
+}
+
+static void
+_gdk_quartz_visual_class_init (GdkQuartzVisualClass *class)
+{
 }
 
 /* We prefer the system visual for now ... */
@@ -208,6 +236,14 @@ _gdk_quartz_screen_query_visual_types (GdkScreen      *screen,
 {
   *count = 1;
   *visual_types = &system_visual->type;
+}
+
+void
+_gdk_quartz_screen_init_visuals (GdkScreen *screen)
+{
+  system_visual = create_standard_visual (screen, 24);
+  rgba_visual = create_standard_visual (screen, 32);
+  gray_visual = create_gray_visual (screen);
 }
 
 GList*
