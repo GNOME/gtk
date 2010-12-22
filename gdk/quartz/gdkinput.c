@@ -199,11 +199,6 @@ _gdk_input_window_destroy (GdkWindow *window)
 }
 
 void
-_gdk_quartz_device_check_extension_events (GdkDevice *device)
-{
-}
-
-void
 _gdk_quartz_input_init (void)
 {
   GdkDeviceManager *device_manager;
