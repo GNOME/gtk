@@ -22,6 +22,7 @@ libgdk_quartz_la_SOURCES =    	\
 	GdkQuartzWindow.c	\
 	GdkQuartzWindow.h	\
 	gdkcursor-quartz.c	\
+	gdkcursor-quartz.h	\
 	gdkdevice-core.c	\
 	gdkdevicemanager-core.c	\
 	gdkdisplay-quartz.c	\
