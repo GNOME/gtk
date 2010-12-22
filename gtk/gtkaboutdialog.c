@@ -2373,12 +2373,11 @@ create_credits_page (GtkAboutDialog *about)
       strcmp (priv->translator_credits, "translator_credits") != 0 &&
       strcmp (priv->translator_credits, "translator-credits") != 0)
     {
-      gchar *translators[2];
+      gchar **translators;
 
-      translators[0] = priv->translator_credits;
-      translators[1] = NULL;
-
+      translators = g_strsplit (priv->translator_credits, "\n", 0);
       add_credits_section (about, GTK_GRID (grid), &row, _("Translated by"), translators);
+      g_strfreev (translators);
     }
 
   if (priv->artists != NULL)
