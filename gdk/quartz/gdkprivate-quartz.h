@@ -141,4 +141,8 @@ void        _gdk_quartz_window_translate   (GdkWindow       *window,
 gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
                                                   cairo_region_t *area);
 
+void        _gdk_quartz_window_set_startup_id    (GdkWindow   *window,
+                                                  const gchar *startup_id);
+void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
+
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

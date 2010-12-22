@@ -191,8 +191,8 @@ gdk_drop_finish (GdkDragContext   *context,
   /* FIXME: Implement */
 }
 
-void            
-gdk_window_register_dnd (GdkWindow *window)
+void
+_gdk_quartz_window_register_dnd (GdkWindow *window)
 {
   /* FIXME: Implement */
 }
