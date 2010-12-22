@@ -33,7 +33,7 @@
 #include "gdkkeysyms.h"
 #include "gdkdisplay-quartz.h"
 #include "gdkprivate-quartz.h"
-#include "gdkdevicemanager-core.h"
+#include "gdkdevicemanager-core-quartz.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
@@ -312,13 +312,13 @@ create_focus_event (GdkWindow *window,
 		    gboolean   in)
 {
   GdkEvent *event;
-  GdkDeviceManagerCore *device_manager;
+  GdkQuartzDeviceManagerCore *device_manager;
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
   event->focus_change.window = window;
   event->focus_change.in = in;
 
-  device_manager = GDK_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
 
   return event;
@@ -900,7 +900,7 @@ fill_key_event (GdkWindow    *window,
                 GdkEventType  type)
 {
   GdkEventPrivate *priv;
-  GdkDeviceManagerCore *device_manager;
+  GdkQuartzDeviceManagerCore *device_manager;
   gchar buf[7];
   gunichar c = 0;
 
@@ -915,7 +915,7 @@ fill_key_event (GdkWindow    *window,
   event->key.group = ([nsevent modifierFlags] & NSAlternateKeyMask) ? 1 : 0;
   event->key.keyval = GDK_KEY_VoidSymbol;
 
-  device_manager = GDK_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
+  device_manager = GDK_QUARTZ_DEVICE_MANAGER_CORE (_gdk_display->device_manager);
   gdk_event_set_device (event, device_manager->core_keyboard);
   
   gdk_keymap_translate_keyboard_state (NULL,

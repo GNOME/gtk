@@ -25,7 +25,7 @@
 #include "gdkscreen-quartz.h"
 #include "gdkwindow-quartz.h"
 #include "gdkdisplay-quartz.h"
-#include "gdkdevicemanager-core.h"
+#include "gdkdevicemanager-core-quartz.h"
 
 static GdkWindow *
 gdk_quartz_display_get_default_group (GdkDisplay *display)
@@ -40,7 +40,7 @@ gdk_quartz_display_get_default_group (GdkDisplay *display)
 GdkDeviceManager *
 _gdk_device_manager_new (GdkDisplay *display)
 {
-  return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
+  return g_object_new (GDK_TYPE_QUARTZ_DEVICE_MANAGER_CORE,
                        "display", display,
                        NULL);
 }
