@@ -15,6 +15,7 @@ DEPS = \
 
 LDADDS = \
 	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
 noinst_PROGRAMS	= 	\
