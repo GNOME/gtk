@@ -3050,6 +3050,7 @@ static void
 gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
 {
   GdkWindowImplQuartzClass *window_quartz_class = GDK_WINDOW_IMPL_QUARTZ_CLASS (klass);
+  GdkWindowImplClass *impl_class = GDK_WINDOW_IMPL_CLASS (klass);
 
   root_window_parent_class = g_type_class_peek_parent (klass);
 
@@ -3100,6 +3101,9 @@ gdk_root_window_impl_quartz_class_init (GdkRootWindowImplQuartzClass *klass)
   impl_class->register_dnd = _gdk_quartz_window_register_dnd;
   impl_class->drag_begin = _gdk_quartz_window_drag_begin;
   impl_class->process_updates_recurse = gdk_x11_window_process_updates_recurse;
+  impl_class->sync_rendering = _gdk_quartz_window_sync_rendering;
+  impl_class->simulate_key = _gdk_quartz_window_simulate_key;
+  impl_class->simulate_button = _gdk_quartz_window_simulate_button;
 }
 
 static void
