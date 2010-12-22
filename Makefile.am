@@ -80,6 +80,9 @@ endif
 DISTCLEANFILES = \
 	gtk+-unix-print-3.0.pc		\
 	gtk+-3.0.pc			\
+	gtk+-x11-3.0.pc			\
+	gdk-3.0.pc			\
+	gdk-x11-3.0.pc			\
 	gail-3.0.pc			\
 	gtk+-3.0-uninstalled.pc		\
 	gail-3.0-uninstalled.pc		\
