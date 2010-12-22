@@ -256,5 +256,25 @@ gboolean _gdk_quartz_window_simulate_button   (GdkWindow       *window,
                                                GdkModifierType  modifiers,
                                                GdkEventType     button_pressrelease);
 
+gboolean _gdk_quartz_window_get_property      (GdkWindow    *window,
+                                               GdkAtom       property,
+                                               GdkAtom       type,
+                                               gulong        offset,
+                                               gulong        length,
+                                               gint          pdelete,
+                                               GdkAtom      *actual_property_type,
+                                               gint         *actual_format_type,
+                                               gint         *actual_length,
+                                               guchar      **data);
+void     _gdk_quartz_window_change_property   (GdkWindow    *window,
+                                               GdkAtom       property,
+                                               GdkAtom       type,
+                                               gint          format,
+                                               GdkPropMode   mode,
+                                               const guchar *data,
+                                               gint          nelements);
+void     _gdk_quartz_window_delete_property   (GdkWindow    *window,
+                                               GdkAtom       property);
+
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

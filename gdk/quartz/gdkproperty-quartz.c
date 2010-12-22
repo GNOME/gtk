@@ -171,36 +171,36 @@ _gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
 }
 
 void
-gdk_property_delete (GdkWindow *window,
-		     GdkAtom    property)
+_gdk_quartz_window_delete_property (GdkWindow *window,
+                                    GdkAtom    property)
 {
   /* FIXME: Implement */
 }
 
 gint
-gdk_property_get (GdkWindow   *window,
-		  GdkAtom      property,
-		  GdkAtom      type,
-		  gulong       offset,
-		  gulong       length,
-		  gint         pdelete,
-		  GdkAtom     *actual_property_type,
-		  gint        *actual_format_type,
-		  gint        *actual_length,
-		  guchar     **data)
+_gdk_quartz_window_get_property (GdkWindow   *window,
+                                 GdkAtom      property,
+                                 GdkAtom      type,
+                                 gulong       offset,
+                                 gulong       length,
+                                 gint         pdelete,
+                                 GdkAtom     *actual_property_type,
+                                 gint        *actual_format_type,
+                                 gint        *actual_length,
+                                 guchar     **data)
 {
   /* FIXME: Implement */
   return 0;
 }
 
 void
-gdk_property_change (GdkWindow   *window,
-		     GdkAtom      property,
-		     GdkAtom      type,
-		     gint         format,
-		     GdkPropMode  mode,
-		     const guchar *data,
-		     gint         nelements)
+_gdk_quartz_window_change_property (GdkWindow   *window,
+                                    GdkAtom      property,
+                                    GdkAtom      type,
+                                    gint         format,
+                                    GdkPropMode  mode,
+                                    const guchar *data,
+                                    gint         nelements)
 {
   /* FIXME: Implement */
 }
