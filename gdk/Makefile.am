@@ -156,17 +156,23 @@ common_sources = 		\
 	gdkmarshalers.h
 
 libgdk_3_0_la_SOURCES = $(common_sources)
-libgdk_3_0_la_LIBADD = x11/libgdk-x11.la $(GDK_DEP_LIBS)
+libgdk_3_0_la_LIBADD = $(GDK_DEP_LIBS)
 libgdk_3_0_la_LDFLAGS = $(LDADD)
 
-libgdk_quartz_3_0_la_SOURCES = $(common_sources)
-libgdk_quartz_3_0_la_LIBADD = quartz/libgdk-quartz.la $(GDK_DEP_LIBS)
-libgdk_quartz_3_0_la_LDFLAGS = $(LDADD)
+if USE_X11
+libgdk_3_0_la_LIBADD += x11/libgdk-x11.la
+endif # USE_X11
 
-libgdk_win32_3_0_la_SOURCES = $(common_sources) gdkkeynames.c
-libgdk_win32_3_0_la_LIBADD = win32/libgdk-win32.la $(GDK_DEP_LIBS)
-libgdk_win32_3_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
-libgdk_win32_3_0_la_LDFLAGS = -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def $(LDADD)
+if USE_QUARTZ
+libgdk_3_0_la_LIBADD += quartz/libgdk-quartz.la
+endif # USE_QUARTZ
+
+if USE_WIN32
+libgdk_3_0_la_SOURCES += gdkkeynames.c
+libgdk_3_0_la_LIBADD += win32/libgdk-win32.la
+libgdk_3_0_la_DEPENDENCIES = win32/libgdk-win32.la win32/rc/gdk-win32-res.o gdk.def
+libgdk_3_0_la_LDFLAGS += -Wl,win32/rc/gdk-win32-res.o -export-symbols $(srcdir)/gdk.def
+endif # USE_WIN32
 
 if HAVE_INTROSPECTION
 
