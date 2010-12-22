@@ -26,11 +26,11 @@
 #include "gdkproperty.h"
 
 gboolean
-_gdk_quartz_display_set_selection_owner_set (GdkDisplay *display,
-                                             GdkWindow  *owner,
-                                             GdkAtom     selection,
-                                             guint32     time,
-                                             gint        send_event)
+_gdk_quartz_display_set_selection_owner (GdkDisplay *display,
+                                         GdkWindow  *owner,
+                                         GdkAtom     selection,
+                                         guint32     time,
+                                         gint        send_event)
 {
   /* FIXME: Implement */
   return TRUE;
@@ -66,12 +66,12 @@ _gdk_quartz_display_get_selection_property (GdkDisplay *display,
 }
 
 void
-_gdk_quartz_display_send_selection_send_notify (GdkDisplay      *display,
-                                                GdkNativeWindow  requestor,
-                                                GdkAtom          selection,
-                                                GdkAtom          target,
-                                                GdkAtom          property,
-                                                guint32          time)
+_gdk_quartz_display_send_selection_notify (GdkDisplay      *display,
+                                           GdkNativeWindow  requestor,
+                                           GdkAtom          selection,
+                                           GdkAtom          target,
+                                           GdkAtom          property,
+                                           guint32          time)
 {
   /* FIXME: Implement */
 }
