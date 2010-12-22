@@ -72,6 +72,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gdk-3.0.pc gtk+-3.0.pc gail-3.0.pc
 
 pkgconfig_DATA += $(patsubst %,gtk+-%-3.0.pc,@gdktarget@)
+pkgconfig_DATA += $(patsubst %,gdk-%-3.0.pc,@gdktarget@)
 
 if OS_UNIX
 pkgconfig_DATA += gtk+-unix-print-3.0.pc
