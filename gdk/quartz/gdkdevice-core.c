@@ -241,8 +241,11 @@ gdk_device_core_query_state_helper (GdkWindow       *window,
     translate_coords_to_child_coords (window, found_window,
                                       &x_tmp, &y_tmp);
 
-  *x = x_tmp;
-  *y = y_tmp;
+  if (x)
+    *x = x_tmp;
+
+  if (y)
+    *y = y_tmp;
 
   return found_window;
 }
