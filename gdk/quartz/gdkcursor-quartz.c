@@ -22,35 +22,10 @@
 
 #include "gdkdisplay.h"
 #include "gdkcursor.h"
-#include "gdkcursorprivate.h"
+#include "gdkcursor-quartz.h"
 #include "gdkprivate-quartz.h"
 
 #include "xcursors.h"
-
-static GType gdk_quartz_cursor_get_type (void);
-
-#define GDK_TYPE_QUARTZ_CURSOR              (gdk_quartz_cursor_get_type ())
-#define GDK_QUARTZ_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_CURSOR, GdkQuartzCursor))
-#define GDK_QUARTZ_CURSOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_CURSOR, GdkQuartzCursorClass))
-#define GDK_IS_QUARTZ_CURSOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_CURSOR))
-#define GDK_IS_QUARTZ_CURSOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_CURSOR))
-#define GDK_QUARTZ_CURSOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_CURSOR, GdkQuartzCursorClass))
-
-typedef struct _GdkQuartzCursor GdkQuartzCursor;
-typedef struct _GdkQuartzCursorClass GdkQuartzCursorClass;
-
-struct _GdkQuartzCursor
-{
-  GdkCursor cursor;
-
-  NSCursor *nscursor;
-};
-
-struct _GdkQuartzCursorClass
-{
-  GdkCursorClass cursor_class;
-};
-
 
 static GdkCursor *cached_xcursors[G_N_ELEMENTS (xcursors)];
 
