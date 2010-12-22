@@ -756,8 +756,6 @@ gdk_event_get_state (const GdkEvent        *event,
 	*state =  event->crossing.state;
         return TRUE;
       case GDK_PROPERTY_NOTIFY:
-	*state =  event->property.state;
-        return TRUE;
       case GDK_VISIBILITY_NOTIFY:
       case GDK_CLIENT_EVENT:
       case GDK_CONFIGURE:
