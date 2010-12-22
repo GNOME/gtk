@@ -2277,6 +2277,7 @@ add_credits_section (GtkAboutDialog *about,
             {
               gchar *link;
               gchar *text;
+              gchar *name;
 
               if (*q1 == '<')
                 {
@@ -2284,6 +2285,7 @@ add_credits_section (GtkAboutDialog *about,
                   gchar *escaped;
 
                   text = g_strstrip (g_strndup (q0, q1 - q0));
+                  name = g_markup_escape_text (text, -1);
                   q1++;
                   link = g_strndup (q1, q2 - q1);
                   q2++;
@@ -2291,22 +2293,25 @@ add_credits_section (GtkAboutDialog *about,
                   g_string_append_printf (str,
                                           "<a href=\"mailto:%s\">%s</a>",
                                           escaped,
-                                          text);
+                                          name[0] ? name : link);
                   g_free (escaped);
                   g_free (link);
                   g_free (text);
+                  g_free (name);
                 }
               else
                 {
                   /* uri */
                   text = g_strstrip (g_strndup (q0, q1 - q0));
+                  name = g_markup_escape_text (text, -1);
                   link = g_strndup (q1, q2 - q1);
                   g_string_append_printf (str,
                                           "<a href=\"%s\">%s</a>",
                                           link,
-                                          text);
+                                          name[0] ? name : link);
                   g_free (link);
                   g_free (text);
+                  g_free (name);
                 }
 
               q0 = q2;
