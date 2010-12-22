@@ -668,7 +668,7 @@ gtk_combo_popup_button_press (GtkWidget        *button,
   popup_grab_on_window (combo->popwin->window,
 			gtk_get_current_event_time ());
 
-  g_signal_emit_by_name (button, "depressed");
+  g_signal_emit_by_name (button, "pressed");
 
   gtk_grab_add (combo->popwin);
 
