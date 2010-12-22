@@ -54,4 +54,4 @@ GType gdk_quartz_cursor_get_type (void);
 
 G_END_DECLS
 
-#endif /* __GDK_QUARTZ_DRAG_CONTEXT_H__ */
+#endif /* __GDK_QUARTZ_CURSOR_H__ */
