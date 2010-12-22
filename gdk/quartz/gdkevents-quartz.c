@@ -31,6 +31,7 @@
 
 #include "gdkscreen.h"
 #include "gdkkeysyms.h"
+#include "gdkdisplay-quartz.h"
 #include "gdkprivate-quartz.h"
 #include "gdkdevicemanager-core.h"
 
@@ -94,7 +95,7 @@ break_all_grabs (guint32 time)
           grab->implicit_ungrab = TRUE;
         }
 
-      _gdk_display_device_grab_update (_gdk_display, l->data, 0);
+      _gdk_display_device_grab_update (_gdk_display, l->data, NULL, 0);
     }
 
   g_list_free (list);
