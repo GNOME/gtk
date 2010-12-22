@@ -1,7 +1,7 @@
 /* GDK - The GIMP Drawing Kit
  * gdkdisplaymanager-quartz.c
  *
- * Copyrighgt (C) 2005 Imendio AB
+ * Copyright (C) 2005 Imendio AB
  * Copyright 2010 Red Hat, Inc.
  *
  * Author: Matthias clasen
@@ -28,24 +28,12 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 #include "gdkdisplay-quartz.h"
+#include "gdkdisplaymanager-quartz.h"
 #include "gdkprivate-quartz.h"
 
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
 
-#define GDK_TYPE_QUARTZ_DISPLAY_MANAGER    (gdk_quartz_display_manager_get_type ())
-#define GDK_QUARTZ_DISPLAY_MANAGER(object) (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_DISPLAY_MANAGER, GdkQuartzDisplayManager))
-
-typedef struct _GdkQuartzDisplayManager GdkQuartzDisplayManager;
-typedef struct _GdkDisplayManagerClass GdkQuartzDisplayManagerClass;
-
-struct _GdkQuartzDisplayManager
-{
-  GdkDisplayManager parent;
-
-  GdkDisplay *default_display;
-  GSList *displays;
-};
 
 G_DEFINE_TYPE (GdkQuartzDisplayManager, gdk_quartz_display_manager, GDK_TYPE_DISPLAY_MANAGER)
 
