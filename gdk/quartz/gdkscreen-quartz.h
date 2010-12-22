@@ -23,6 +23,8 @@
 
 G_BEGIN_DECLS
 
+#include <gdk/gdkscreenprivate.h>
+
 typedef struct _GdkScreenQuartz GdkScreenQuartz;
 typedef struct _GdkScreenQuartzClass GdkScreenQuartzClass;
 

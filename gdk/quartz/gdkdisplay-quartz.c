@@ -21,11 +21,10 @@
 #include "config.h"
 
 #include "gdk.h"
-#include "gdkdisplay-quartz.h"
 #include "gdkprivate-quartz.h"
 #include "gdkscreen-quartz.h"
+#include "gdkdisplay-quartz.h"
 #include "gdkdevicemanager-core.h"
-
 
 static GdkWindow *
 gdk_quartz_display_get_default_group (GdkDisplay *display)
@@ -188,37 +187,37 @@ _gdk_quartz_display_get_next_serial (GdkDisplay *display)
   return 0;
 }
 
-G_DEFINE_TYPE (GdkDisplayQuartz, _gdk_display_quartz, GDK_TYPE_DISPLAY)
+G_DEFINE_TYPE (GdkQuartzDisplay, _gdk_quartz_display, GDK_TYPE_DISPLAY)
 
 static void
-_gdk_display_quartz_init (GdkDisplayQuartz *display)
+_gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
-  gdk_quartz_display_manager_add_display (gdk_display_nmanager_get (),
-                                       GDK_DISPLAY_OBJECT (display));
+  _gdk_quartz_display_manager_add_display (gdk_display_manager_get (),
+                                           GDK_DISPLAY_OBJECT (display));
 }
 
 static void
-_gdk_display_quartz_dispose (GObject *object)
+_gdk_quartz_display_dispose (GObject *object)
 {
   _gdk_quartz_display_manager_remove_display (gdk_display_manager_get (),
                                               GDK_DISPLAY_OBJECT (object));
 
-  G_OBJECT_CLASS (_gdk_display_quartz_parent_class)->dispose (object);
+  G_OBJECT_CLASS (_gdk_quartz_display_parent_class)->dispose (object);
 }
 
 static void
-_gdk_display_quartz_finalize (GObject *object)
+_gdk_quartz_display_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (_gdk_display_quartz_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gdk_quartz_display_parent_class)->finalize (object);
 }
 
 static void
-_gdk_display_quartz_class_init (GdkDisplayQuartz *class)
+_gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
 
-  object_class->finalize = _gdk_display_quartz_finalize;
+  object_class->finalize = _gdk_quartz_display_finalize;
 
   display_class->get_name = gdk_quartz_display_get_name;
   display_class->get_n_screens = gdk_quartz_display_get_n_screens;
@@ -248,7 +247,7 @@ _gdk_display_quartz_class_init (GdkDisplayQuartz *class)
   display_class->get_maximal_cursor_size = _gdk_quartz_display_get_maximal_cursor_size;
   display_class->supports_cursor_alpha = _gdk_quartz_display_supports_cursor_alpha;
   display_class->supports_cursor_color = _gdk_quartz_display_supports_cursor_color;
-  display_class->get_next_serial = gdk_quartz_display_get_next_serial;
+  display_class->get_next_serial = _gdk_quartz_display_get_next_serial;
   display_class->notify_startup_complete = _gdk_quartz_display_notify_startup_complete;
   display_class->event_data_copy = _gdk_quartz_display_event_data_copy;
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
