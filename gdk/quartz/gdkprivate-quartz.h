@@ -26,6 +26,7 @@
 
 #include <gdk/gdkprivate.h>
 #include <gdk/quartz/gdkwindow-quartz.h>
+#include <gdk/quartz/gdkdnd-quartz.h>
 #include <gdk/quartz/gdkquartz.h>
 
 #include <gdk/gdk.h>
@@ -34,20 +35,11 @@
 
 #include "config.h"
 
-#define GDK_DRAG_CONTEXT_PRIVATE(context) ((GdkDragContextPrivate *) GDK_DRAG_CONTEXT (context)->windowing_data)
-
 typedef struct _GdkCursorPrivate GdkCursorPrivate;
-typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
 
 struct _GdkVisualClass
 {
   GObjectClass parent_class;
-};
-
-struct _GdkDragContextPrivate
-{
-  id <NSDraggingInfo> dragging_info;
-  GdkDevice *device;
 };
 
 extern GdkDisplay *_gdk_display;

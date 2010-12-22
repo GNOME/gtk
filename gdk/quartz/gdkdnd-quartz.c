@@ -19,12 +19,10 @@
  */
 
 #include "gdkdnd.h"
+#include "gdkdnd-quartz.h"
 #include "gdkprivate-quartz.h"
 
-typedef struct _GdkDragContext GdkDragContextQuartz;
-typedef struct _GdkDragContextClass GdkDragContextQuartzClass;
-
-G_DEFINE_TYPE (GdkDragContextQuartz, gdk_quartz_drag_context, GDK_TYPE_DRAG_CONTEXT)
+G_DEFINE_TYPE (GdkQuartzDragContext, gdk_quartz_drag_context, GDK_TYPE_DRAG_CONTEXT)
 
 
 GdkDragContext *_gdk_quartz_drag_source_context = NULL;
@@ -40,15 +38,18 @@ _gdk_quartz_window_drag_begin (GdkWindow *window,
                                GdkDevice *device,
                                GList     *targets)
 {
+  GdkDragContext *context;
+
   g_assert (_gdk_quartz_drag_source_context == NULL);
 
   /* Create fake context */
-  _gdk_quartz_drag_source_context = g_object_new (gdk_quartz_drag_context_get_type (), NULL);
+  _gdk_quartz_drag_source_context = g_object_new (GDK_TYPE_QUARTZ_DRAG_CONTEXT,
+                                                  NULL);
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
-  gdk_drag_context_set_device (_gdk_quartz_drag_source_context, device);
+  gdk_drag_context_set_device (context, device);
 
-  return _gdk_quartz_drag_source_context;
+  return context;
 }
 
 static gboolean
@@ -65,25 +66,26 @@ gdk_quartz_drag_context_drag_motion (GdkDragContext  *context,
   return FALSE;
 }
 
-guint32
+GdkNativeWindow
 _gdk_quartz_display_get_drag_get_protocol (GdkDisplay      *display,
-                                           guint32          xid,
-                                           GdkDragProtocol *protocol)
+                                           GdkNativeWindow *xid,
+                                           GdkDragProtocol *protocol,
+                                           guint            version)
 {
   /* FIXME: Implement */
   return 0;
 }
 
-static void
+static GdkWindow *
 gdk_quartz_drag_context_find_window (GdkDragContext  *context,
                                      GdkWindow       *drag_window,
                                      GdkScreen       *screen,
                                      gint             x_root,
                                      gint             y_root,
-                                     GdkWindow      **dest_window,
                                      GdkDragProtocol *protocol)
 {
   /* FIXME: Implement */
+  return NULL;
 }
 
 static void
@@ -144,14 +146,14 @@ gdk_quartz_drag_context_drop_status (GdkDragContext *context)
   return FALSE;
 }
 
-void
+id
 gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context)
 {
-  return GDK_DRAG_CONTEXT_PRIVATE (context)->dragging_info;
+  return GDK_QUARTZ_DRAG_CONTEXT (context)->dragging_info;
 }
 
 static void
-gdk_quartz_drag_context_init (GdkDragContextQuartz *context)
+gdk_quartz_drag_context_init (GdkQuartzDragContext *context)
 {
 }
 
