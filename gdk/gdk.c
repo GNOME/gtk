@@ -48,6 +48,51 @@
  * utility functions.
  */
 
+/**
+ * GDK_WINDOWING_X11:
+ *
+ * The #GDK_WINDOWING_X11 macro is defined if the X11 backend
+ * is supported.
+ *
+ * Use this macro to guard code that is specific to the X11-backend.
+ * Since GDK may be configured with multiple backends, an additional
+ * runtime check for the used backend is recommended:
+ * </para>
+ * <example>
+ * <title>Backend-specific code</title>
+ * <programlisting>
+ * #ifdef GDK_WINDOWING_X11
+ *   if (GDK_IS_X11_DISPLAY (display))
+ *     {
+ *       /&ast; make X11-specific calls here &ast;/
+ *     }
+ *   else
+ * #endif
+ * #ifdef GDK_WINDOWING_QUARTZ
+ *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ *     {
+ *       /&ast; make Quartz-specific calls here &ast/
+ *     }
+ *   else
+ * #endif
+ *   g_error ("Unsupported GDK backend");
+ * </programlisting>
+ * </example>
+ */
+
+/**
+ * GDK_WINDOWING_WIN32:
+ *
+ * The #GDK_WINDOWING_WIN32 macro is defined if the Win32 backend
+ * is supported.
+ */
+
+/**
+ * GDK_WINDOWING_QUARTZ:
+ *
+ * The #GDK_WINDOWING_QUARTZ macro is defined if the Quartz backend
+ * is supported.
+ */
 
 typedef struct _GdkPredicate  GdkPredicate;
 
@@ -323,14 +368,14 @@ gdk_display_open_default_libgtk_only (void)
  * @argc: (inout): the number of command line arguments.
  * @argv: (array length=argc) (inout): the array of command line arguments.
  *
- * Initializes the GDK library and connects to the X server, returning %TRUE on
- * success.
+ * Initializes the GDK library and connects to the windowing system,
+ * returning %TRUE on success.
  *
- * Any arguments used by GDK are removed from the array and @argc and @argv are
- * updated accordingly.
+ * Any arguments used by GDK are removed from the array and @argc and @argv
+ * are updated accordingly.
  *
- * GTK+ initializes GDK in gtk_init() and so this function is not usually needed
- * by GTK+ applications.
+ * GTK+ initializes GDK in gtk_init() and so this function is not usually
+ * needed by GTK+ applications.
  *
  * Returns: %TRUE if initialization succeeded.
  */
@@ -349,15 +394,15 @@ gdk_init_check (int    *argc,
  * @argc: (inout): the number of command line arguments.
  * @argv: (array length=argc) (inout): the array of command line arguments.
  *
- * Initializes the GDK library and connects to the X server.
+ * Initializes the GDK library and connects to the windowing system.
  * If initialization fails, a warning message is output and the application
  * terminates with a call to <literal>exit(1)</literal>.
  *
- * Any arguments used by GDK are removed from the array and @argc and @argv are
- * updated accordingly.
+ * Any arguments used by GDK are removed from the array and @argc and @argv
+ * are updated accordingly.
  *
- * GTK+ initializes GDK in gtk_init() and so this function is not usually needed
- * by GTK+ applications.
+ * GTK+ initializes GDK in gtk_init() and so this function is not usually
+ * needed by GTK+ applications.
  */
 void
 gdk_init (int *argc, char ***argv)
