@@ -44,12 +44,6 @@ struct _GdkVisualClass
   GObjectClass parent_class;
 };
 
-struct _GdkCursorPrivate
-{
-  GdkCursor cursor;
-  NSCursor *nscursor;
-};
-
 struct _GdkDragContextPrivate
 {
   id <NSDraggingInfo> dragging_info;

@@ -22,9 +22,35 @@
 
 #include "gdkdisplay.h"
 #include "gdkcursor.h"
+#include "gdkcursorprivate.h"
 #include "gdkprivate-quartz.h"
 
 #include "xcursors.h"
+
+static GType gdk_quartz_cursor_get_type (void);
+
+#define GDK_TYPE_QUARTZ_CURSOR              (gdk_quartz_cursor_get_type ())
+#define GDK_QUARTZ_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_CURSOR, GdkQuartzCursor))
+#define GDK_QUARTZ_CURSOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_CURSOR, GdkQuartzCursorClass))
+#define GDK_IS_QUARTZ_CURSOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_CURSOR))
+#define GDK_IS_QUARTZ_CURSOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_CURSOR))
+#define GDK_QUARTZ_CURSOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_CURSOR, GdkQuartzCursorClass))
+
+typedef struct _GdkQuartzCursor GdkQuartzCursor;
+typedef struct _GdkQuartzCursorClass GdkQuartzCursorClass;
+
+struct _GdkQuartzCursor
+{
+  GdkCursor cursor;
+
+  NSCursor *nscursor;
+};
+
+struct _GdkQuartzCursorClass
+{
+  GdkCursorClass cursor_class;
+};
+
 
 static GdkCursor *cached_xcursors[G_N_ELEMENTS (xcursors)];
 
@@ -32,17 +58,15 @@ static GdkCursor *
 gdk_quartz_cursor_new_from_nscursor (NSCursor      *nscursor,
                                      GdkCursorType  cursor_type)
 {
-  GdkCursorPrivate *private;
-  GdkCursor *cursor;
+  GdkQuartzCursor *private;
 
-  private = g_new (GdkCursorPrivate, 1);
+  private = g_object_new (GDK_TYPE_QUARTZ_CURSOR,
+                          "cursor-type", cursor_type,
+                          "display", _gdk_display,
+                          NULL);
   private->nscursor = nscursor;
 
-  cursor = (GdkCursor *)private;
-  cursor->type = cursor_type;
-  cursor->ref_count = 1;
-
-  return cursor;
+  return GDK_CURSOR (private);
 }
 
 static GdkCursor *
@@ -335,19 +359,36 @@ _gdk_quartz_display_get_cursor_for_name (GdkDisplay  *display,
   return NULL;
 }
 
-void
-_gdk_cursor_destroy (GdkCursor *cursor)
+G_DEFINE_TYPE (GdkQuartzCursor, gdk_quartz_cursor, GDK_TYPE_CURSOR)
+
+static GdkPixbuf *gdk_quartz_cursor_get_image (GdkCursor *cursor);
+
+static void
+gdk_quartz_cursor_finalize (GObject *object)
 {
-  GdkCursorPrivate *private;
+  GdkQuartzCursor *private = GDK_QUARTZ_CURSOR (object);
 
-  g_return_if_fail (cursor != NULL);
-  g_return_if_fail (cursor->ref_count == 0);
-
-  private = (GdkCursorPrivate *)cursor;
-  [private->nscursor release];
-  
-  g_free (private);
+  if (private->nscursor)
+    [private->nscursor release];
+  private->nscursor = NULL;
 }
+
+static void
+gdk_quartz_cursor_class_init (GdkQuartzCursorClass *quartz_cursor_class)
+{
+  GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (quartz_cursor_class);
+  GObjectClass *object_class = G_OBJECT_CLASS (quartz_cursor_class);
+
+  object_class->finalize = gdk_quartz_cursor_finalize;
+
+  cursor_class->get_image = gdk_quartz_cursor_get_image;
+}
+
+static void
+gdk_quartz_cursor_init (GdkQuartzCursor *cursor)
+{
+}
+
 
 gboolean
 _gdk_quartz_display_supports_cursor_alpha (GdkDisplay *display)
@@ -381,8 +422,8 @@ _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
   *height = 65536;
 }
 
-GdkPixbuf *
-gdk_cursor_get_image (GdkCursor *cursor)
+static GdkPixbuf *
+gdk_quartz_cursor_get_image (GdkCursor *cursor)
 {
   /* FIXME: Implement */
   return NULL;
