@@ -63,6 +63,37 @@ static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_FOREIGN && \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
 
+/*
+ * GdkQuartzWindow
+ */
+
+struct _GdkQuartzWindow
+{
+  GdkWindow parent;
+};
+
+struct _GdkQuartzWindowClass
+{
+  GdkWindowClass parent_class;
+};
+
+G_DEFINE_TYPE (GdkQuartzWindow, gdk_quartz_window, GDK_TYPE_WINDOW);
+
+static void
+gdk_quartz_window_class_init (GdkQuartzWindowClass *quartz_window_class)
+{
+}
+
+static void
+gdk_quartz_window_init (GdkQuartzWindow *quartz_window)
+{
+}
+
+
+/*
+ * GdkQuartzWindowImpl
+ */
+
 NSView *
 gdk_quartz_window_get_nsview (GdkWindow *window)
 {
