@@ -32,22 +32,6 @@ _gdk_windowing_init (void)
 }
 
 void
-gdk_error_trap_push (void)
-{
-}
-
-gint
-gdk_error_trap_pop (void)
-{
-  return 0;
-}
-
-void
-gdk_error_trap_pop_ignored (void)
-{
-}
-
-void
 _gdk_quartz_display_notify_startup_complete (GdkDisplay  *display,
                                              const gchar *startup_id)
 {
