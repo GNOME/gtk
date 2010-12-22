@@ -1,3 +1,36 @@
+Overview of Changes from GTK+ 2.23.2 to 2.23.3
+==============================================
+
+* New deprecations:
+ - GtkRuler (and subclasses)
+ - gtk_widget_reset_shapes
+ - gdk_set_sm_client_id
+ - Foreign window APIs
+ - gdk_spawn_*
+ - gdkx_visual_get
+ - gdk_net_wm_supports
+ - gdk_set_locale, gtk_set_locale
+ - Some GDK text conversion routines
+ - gdk_drag_context_new
+ - gdk_drag_find_window and gdk_drag_get_protocol
+ - gdk_xid_table functions
+
+* Bug fixes:
+ 629955 Deprecate / remove gtk_main and gtk_init_add / remove* API
+ 634558 Selecting "Search" should focus text box for keyboard entry
+ 634697 gdk: Add XSetting for "gtk-cursor-blink-timeout"
+ 634882 Usage of deprecated GLib API (g_source_get_current_time)
+ 635307 iconcache: Ensure we don't lose data on power loss
+ 635588 Clicking URL to be opened freezes the application for seconds
+ 636832 anoncvs.gnome.org does not exist
+ 637069 Custom print settings set in custom-widget-apply are lost
+ 637156 Optimize gtk_widget_shape_combine_region (widget, NULL, ...)
+
+* Translation updates:
+ Czech
+ Norwegian bokmål
+
+
 Overview of Changes from GTK+ 2.23.1 to 2.23.2
 ==============================================
 
