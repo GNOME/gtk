@@ -26,6 +26,10 @@
 #ifndef __GTK_MENU_PRIVATE_H__
 #define __GTK_MENU_PRIVATE_H__
 
+#include <gtk/gtkmenu.h>
+
+G_BEGIN_DECLS
+
 /* Directions for submenus */
 typedef enum
 {
@@ -40,5 +44,90 @@ typedef enum
   GTK_LEFT_RIGHT
 } GtkSubmenuPlacement;
 
+
+struct _GtkMenuPrivate
+{
+  GtkWidget *parent_menu_item;
+  GtkWidget *old_active_menu_item;
+
+  GtkAccelGroup *accel_group;
+  gchar         *accel_path;
+
+  GtkMenuPositionFunc position_func;
+  gpointer            position_func_data;
+  GDestroyNotify      position_func_data_destroy;
+  gint                position_x;
+  gint                position_y;
+
+  guint toggle_size;
+  guint accel_size;
+
+  /* Do _not_ touch these widgets directly. We hide the reference
+   * count from the toplevel to the menu, so it must be restored
+   * before operating on these widgets
+   */
+  GtkWidget *toplevel;
+
+  GtkWidget     *tearoff_window;
+  GtkWidget     *tearoff_hbox;
+  GtkWidget     *tearoff_scrollbar;
+  GtkAdjustment *tearoff_adjustment;
+
+  GdkWindow *view_window;
+  GdkWindow *bin_window;
+
+  gint scroll_offset;
+  gint saved_scroll_offset;
+  gint scroll_step;
+
+  guint scroll_timeout;
+
+  guint needs_destruction_ref : 1;
+  guint torn_off              : 1;
+  /* The tearoff is active when it is torn off and the not-torn-off
+   * menu is not popped up.
+   */
+  guint tearoff_active        : 1;
+  guint scroll_fast           : 1;
+
+  guint upper_arrow_visible   : 1;
+  guint lower_arrow_visible   : 1;
+  guint upper_arrow_prelight  : 1;
+  guint lower_arrow_prelight  : 1;
+
+  guint have_position         : 1;
+  guint have_layout           : 1;
+  guint seen_item_enter       : 1;
+  guint ignore_button_release : 1;
+  guint no_toggle_size        : 1;
+
+  /* info used for the table */
+  guint *heights;
+  gint heights_length;
+  gint requested_height;
+
+  gboolean initially_pushed_in;
+  gint monitor_num;
+
+  /* Cached layout information */
+  gint n_rows;
+  gint n_columns;
+
+  gchar *title;
+
+ /* Arrow states */
+  GtkStateFlags lower_arrow_state;
+  GtkStateFlags upper_arrow_state;
+
+  /* navigation region */
+  gint navigation_x;
+  gint navigation_y;
+  gint navigation_width;
+  gint navigation_height;
+
+  guint navigation_timeout;
+};
+
+G_END_DECLS
 
 #endif /* __GTK_MENU_PRIVATE_H__ */

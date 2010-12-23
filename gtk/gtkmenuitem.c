@@ -30,7 +30,7 @@
 #include "gtkaccellabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenu.h"
+#include "gtkmenuprivate.h"
 #include "gtkmenubar.h"
 #include "gtkmenuprivate.h"
 #include "gtkseparatormenuitem.h"
@@ -1253,8 +1253,8 @@ gtk_menu_item_select (GtkMenuItem *menu_item)
     {
       GtkMenu *menu = GTK_MENU (parent);
 
-      if (menu->parent_menu_item)
-        gtk_widget_queue_draw (GTK_WIDGET (menu->parent_menu_item));
+      if (menu->priv->parent_menu_item)
+        gtk_widget_queue_draw (GTK_WIDGET (menu->priv->parent_menu_item));
     }
 }
 
@@ -1275,8 +1275,8 @@ gtk_menu_item_deselect (GtkMenuItem *menu_item)
     {
       GtkMenu *menu = GTK_MENU (parent);
 
-      if (menu->parent_menu_item)
-        gtk_widget_queue_draw (GTK_WIDGET (menu->parent_menu_item));
+      if (menu->priv->parent_menu_item)
+        gtk_widget_queue_draw (GTK_WIDGET (menu->priv->parent_menu_item));
     }
 }
 
@@ -1621,7 +1621,7 @@ gtk_real_menu_item_select (GtkMenuItem *menu_item)
   if (!touchscreen_mode &&
       menu_item->submenu &&
       (!gtk_widget_get_mapped (menu_item->submenu) ||
-       GTK_MENU (menu_item->submenu)->tearoff_active))
+       GTK_MENU (menu_item->submenu)->priv->tearoff_active))
     {
       _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item), TRUE);
     }
@@ -1836,8 +1836,8 @@ gtk_menu_item_popup_timeout (gpointer data)
 
   parent = gtk_widget_get_parent (GTK_WIDGET (menu_item));
 
-  if ((GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->active) || 
-      (GTK_IS_MENU (parent) && GTK_MENU (parent)->torn_off))
+  if ((GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->active) ||
+      (GTK_IS_MENU (parent) && GTK_MENU (parent)->priv->torn_off))
     {
       gtk_menu_item_real_popup_submenu (GTK_WIDGET (menu_item), TRUE);
       if (menu_item->timer_from_keypress && menu_item->submenu)
@@ -2027,8 +2027,8 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
     }
   else if (GTK_IS_MENU (parent))
     {
-      if (GTK_MENU (parent)->parent_menu_item)
-	menu_item->from_menubar = GTK_MENU_ITEM (GTK_MENU (parent)->parent_menu_item)->from_menubar;
+      if (GTK_MENU (parent)->priv->parent_menu_item)
+	menu_item->from_menubar = GTK_MENU_ITEM (GTK_MENU (parent)->priv->parent_menu_item)->from_menubar;
       else
 	menu_item->from_menubar = FALSE;
     }
@@ -2059,13 +2059,13 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
     case GTK_LEFT_RIGHT:
       if (GTK_IS_MENU (parent))
-	parent_menu_item = GTK_MENU_ITEM (GTK_MENU (parent)->parent_menu_item);
+	parent_menu_item = GTK_MENU_ITEM (GTK_MENU (parent)->priv->parent_menu_item);
       else
 	parent_menu_item = NULL;
 
       parent_xthickness = gtk_widget_get_style (parent)->xthickness;
 
-      if (parent_menu_item && !GTK_MENU (parent)->torn_off)
+      if (parent_menu_item && !GTK_MENU (parent)->priv->torn_off)
 	{
 	  menu_item->submenu_direction = parent_menu_item->submenu_direction;
 	}
@@ -2117,9 +2117,9 @@ gtk_menu_item_position_menu (GtkMenu  *menu,
 
   gtk_menu_set_monitor (menu, monitor_num);
 
-  if (!gtk_widget_get_visible (menu->toplevel))
+  if (!gtk_widget_get_visible (menu->priv->toplevel))
     {
-      gtk_window_set_type_hint (GTK_WINDOW (menu->toplevel), menu_item->from_menubar?
+      gtk_window_set_type_hint (GTK_WINDOW (menu->priv->toplevel), menu_item->from_menubar?
 				GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU : GDK_WINDOW_TYPE_HINT_POPUP_MENU);
     }
 }
@@ -2233,8 +2233,8 @@ gtk_menu_item_parent_set (GtkWidget *widget,
 
   if (menu)
     _gtk_menu_item_refresh_accel_path (menu_item,
-				       menu->accel_path,
-				       menu->accel_group,
+				       menu->priv->accel_path,
+				       menu->priv->accel_group,
 				       TRUE);
 
   if (GTK_WIDGET_CLASS (gtk_menu_item_parent_class)->parent_set)
@@ -2338,10 +2338,10 @@ gtk_menu_item_set_accel_path (GtkMenuItem *menu_item,
     {
       GtkMenu *menu = GTK_MENU (parent);
 
-      if (menu->accel_group)
+      if (menu->priv->accel_group)
 	_gtk_menu_item_refresh_accel_path (GTK_MENU_ITEM (widget),
 					   NULL,
-					   menu->accel_group,
+					   menu->priv->accel_group,
 					   FALSE);
     }
 }

@@ -46,8 +46,9 @@ G_BEGIN_DECLS
 #define GTK_MENU_GET_CLASS(obj)         (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU, GtkMenuClass))
 
 
-typedef struct _GtkMenu	      GtkMenu;
-typedef struct _GtkMenuClass  GtkMenuClass;
+typedef struct _GtkMenu        GtkMenu;
+typedef struct _GtkMenuClass   GtkMenuClass;
+typedef struct _GtkMenuPrivate GtkMenuPrivate;
 
 typedef void (*GtkMenuPositionFunc) (GtkMenu   *menu,
 				     gint      *x,
@@ -59,55 +60,10 @@ typedef void (*GtkMenuDetachFunc)   (GtkWidget *attach_widget,
 
 struct _GtkMenu
 {
-  GtkMenuShell GSEAL (menu_shell);
-  
-  GtkWidget *GSEAL (parent_menu_item);
-  GtkWidget *GSEAL (old_active_menu_item);
+  GtkMenuShell menu_shell;
 
-  GtkAccelGroup *GSEAL (accel_group);
-  gchar         *GSEAL (accel_path);
-  GtkMenuPositionFunc GSEAL (position_func);
-  gpointer GSEAL (position_func_data);
-
-  guint GSEAL (toggle_size);
-  /* Do _not_ touch these widgets directly. We hide the reference
-   * count from the toplevel to the menu, so it must be restored
-   * before operating on these widgets
-   */
-  GtkWidget *GSEAL (toplevel);
-  
-  GtkWidget *GSEAL (tearoff_window);
-  GtkWidget *GSEAL (tearoff_hbox);
-  GtkWidget *GSEAL (tearoff_scrollbar);
-  GtkAdjustment *GSEAL (tearoff_adjustment);
-
-  GdkWindow *GSEAL (view_window);
-  GdkWindow *GSEAL (bin_window);
-
-  gint GSEAL (scroll_offset);
-  gint GSEAL (saved_scroll_offset);
-  gint GSEAL (scroll_step);
-  guint GSEAL (timeout_id);
-  
-  /* When a submenu of this menu is popped up, motion in this
-   * region is ignored
-   */
-  cairo_region_t *GSEAL (navigation_region); /* unused */
-  guint GSEAL (navigation_timeout);
-
-  guint GSEAL (needs_destruction_ref_count) : 1;
-  guint GSEAL (torn_off) : 1;
-  /* The tearoff is active when it is torn off and the not-torn-off
-   * menu is not popped up.
-   */
-  guint GSEAL (tearoff_active) : 1;
-
-  guint GSEAL (scroll_fast) : 1;
-
-  guint GSEAL (upper_arrow_visible) : 1;
-  guint GSEAL (lower_arrow_visible) : 1;
-  guint GSEAL (upper_arrow_prelight) : 1;
-  guint GSEAL (lower_arrow_prelight) : 1;
+  /*< private >*/
+  GtkMenuPrivate *priv;
 };
 
 struct _GtkMenuClass

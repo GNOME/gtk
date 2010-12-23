@@ -30,7 +30,7 @@
 #include "gtkhbox.h"
 #include "gtkliststore.h"
 #include "gtkmain.h"
-#include "gtkmenu.h"
+#include "gtkmenuprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
 #include "gtktearoffmenuitem.h"
@@ -1641,10 +1641,10 @@ gtk_combo_box_detacher (GtkWidget *widget,
 
   g_return_if_fail (priv->popup_widget == (GtkWidget *) menu);
 
-  g_signal_handlers_disconnect_by_func (menu->toplevel,
+  g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
 					gtk_combo_box_menu_show,
 					combo_box);
-  g_signal_handlers_disconnect_by_func (menu->toplevel,
+  g_signal_handlers_disconnect_by_func (menu->priv->toplevel,
 					gtk_combo_box_menu_hide,
 					combo_box);
   
@@ -1672,6 +1672,8 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 
   if (GTK_IS_MENU (popup))
     {
+      GtkMenu *menu = GTK_MENU (popup);
+
       if (priv->popup_window)
         {
           gtk_widget_destroy (priv->popup_window);
@@ -1680,26 +1682,23 @@ gtk_combo_box_set_popup_widget (GtkComboBox *combo_box,
 
       priv->popup_widget = popup;
 
-      /* 
-       * Note that we connect to show/hide on the toplevel, not the
+      /* Note that we connect to show/hide on the toplevel, not the
        * menu itself, since the menu is not shown/hidden when it is
        * popped up while torn-off.
        */
-      g_signal_connect (GTK_MENU (popup)->toplevel, "show",
+      g_signal_connect (menu->priv->toplevel, "show",
                         G_CALLBACK (gtk_combo_box_menu_show), combo_box);
-      g_signal_connect (GTK_MENU (popup)->toplevel, "hide",
+      g_signal_connect (menu->priv->toplevel, "hide",
                         G_CALLBACK (gtk_combo_box_menu_hide), combo_box);
 
-      gtk_menu_attach_to_widget (GTK_MENU (popup),
-				 GTK_WIDGET (combo_box),
-				 gtk_combo_box_detacher);
+      gtk_menu_attach_to_widget (menu, GTK_WIDGET (combo_box), gtk_combo_box_detacher);
     }
   else
     {
       if (!priv->popup_window)
         {
 	  GtkWidget *toplevel;
-	  
+
           priv->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
           gtk_widget_set_name (priv->popup_window, "gtk-combobox-popup-window");
 
@@ -1932,21 +1931,21 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
       /* FIXME handle nested menus better */
       menu_item = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
       if (menu_item)
-	gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget), 
+	gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget),
 				    menu_item);
 
       gtk_combo_box_menu_position_over (menu, x, y, push_in, user_data);
     }
 
-  if (!gtk_widget_get_visible (GTK_MENU (priv->popup_widget)->toplevel))
-    gtk_window_set_type_hint (GTK_WINDOW (GTK_MENU (priv->popup_widget)->toplevel),
+  if (!gtk_widget_get_visible (GTK_MENU (priv->popup_widget)->priv->toplevel))
+    gtk_window_set_type_hint (GTK_WINDOW (GTK_MENU (priv->popup_widget)->priv->toplevel),
                               GDK_WINDOW_TYPE_HINT_COMBO);
 }
 
 static void
-gtk_combo_box_list_position (GtkComboBox *combo_box, 
-			     gint        *x, 
-			     gint        *y, 
+gtk_combo_box_list_position (GtkComboBox *combo_box,
+			     gint        *x,
+			     gint        *y,
 			     gint        *width,
 			     gint        *height)
 {

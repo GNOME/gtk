@@ -31,7 +31,7 @@
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenu.h"
+#include "gtkmenuprivate.h"
 #include "gtkmenubar.h"
 #include "gtkmenuitem.h"
 #include "gtkmenushell.h"
@@ -1530,7 +1530,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
           if (touchscreen_mode)
             {
               /* close menu when returning from submenu. */
-              _gtk_menu_item_popdown_submenu (GTK_MENU (menu_shell)->parent_menu_item);
+              _gtk_menu_item_popdown_submenu (GTK_MENU (menu_shell)->priv->parent_menu_item);
               _gtk_menu_shell_update_mnemonics (parent_menu_shell);
               break;
             }

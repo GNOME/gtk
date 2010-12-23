@@ -152,7 +152,6 @@ gtk_public_h_sources =          \
 	gtkaccessible.h		\
 	gtkaction.h		\
 	gtkactiongroup.h	\
-	gtkaccelgroupprivate.h	\
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
@@ -379,6 +378,7 @@ endif
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
 	gtk9slice.h 		\
+	gtkaccelgroupprivate.h	\
 	gtkbuttonprivate.h	\
 	gtkquery.h		\
 	gtksearchengine.h	\
