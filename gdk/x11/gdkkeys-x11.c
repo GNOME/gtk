@@ -736,8 +736,11 @@ _gdk_keymap_keys_changed (GdkDisplay *display)
  *
  * Returns the direction of effective layout of the keymap.
  *
- * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL 
- *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL 
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
+ *
+ * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
+ *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
  *   otherwise.
  **/
 PangoDirection
@@ -773,6 +776,9 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
  *
  * Determines if keyboard layouts for both right-to-left and left-to-right
  * languages are in use.
+ *
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
  *
  * Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
  *
@@ -850,6 +856,9 @@ gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
  * keyboard group. The level is computed from the modifier mask.
  * The returned array should be freed
  * with g_free().
+ *
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
  *
  * Return value: %TRUE if keys were found and returned
  **/
@@ -996,6 +1005,9 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  * When a keycode is pressed by the user, the keyval from
  * this list of entries is selected by considering the effective
  * keyboard group and level. See gdk_keymap_translate_keyboard_state().
+ *
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
  *
  * Returns: %TRUE if there were any entries
  **/
@@ -1153,6 +1165,9 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
  * this function, since the effective group/level may not be
  * the same as the current keyboard state.
  * 
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
+ *
  * Return value: a keyval, or 0 if none was mapped to the given @key
  **/
 guint
@@ -1472,6 +1487,9 @@ translate_keysym (GdkKeymapX11   *keymap_x11,
  * not <literal>&lt;Control&gt;&lt;Shift&gt;plus</literal>,
  * </para></note>
  * 
+ * Note that passing %NULL for @keymap is deprecated and will stop
+ * to work in GTK+ 3.0. Use gdk_keymap_get_for_display() instead.
+ *
  * Return value: %TRUE if there was a keyval bound to the keycode/state/group
  **/
 gboolean
