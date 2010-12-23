@@ -25,7 +25,10 @@
  */
 
 #include "config.h"
+
 #include "gtktexttagtable.h"
+
+#include "gtktexttagprivate.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
 #include "gtkintl.h"
@@ -176,7 +179,7 @@ gtk_text_tag_table_new (void)
 static void
 foreach_unref (GtkTextTag *tag, gpointer data)
 {
-  GtkTextTagTable *table = GTK_TEXT_TAG_TABLE (tag->table);
+  GtkTextTagTable *table = GTK_TEXT_TAG_TABLE (tag->priv->table);
   GtkTextTagTablePrivate *priv = table->priv;
   GSList *tmp;
   
@@ -193,7 +196,7 @@ foreach_unref (GtkTextTag *tag, gpointer data)
       tmp = tmp->next;
     }
   
-  tag->table = NULL;
+  tag->priv->table = NULL;
   g_object_unref (tag);
 }
 
@@ -263,35 +266,35 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
 
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
-  g_return_if_fail (tag->table == NULL);
+  g_return_if_fail (tag->priv->table == NULL);
 
   priv = table->priv;
 
-  if (tag->name && g_hash_table_lookup (priv->hash, tag->name))
+  if (tag->priv->name && g_hash_table_lookup (priv->hash, tag->priv->name))
     {
       g_warning ("A tag named '%s' is already in the tag table.",
-                 tag->name);
+                 tag->priv->name);
       return;
     }
   
   g_object_ref (tag);
 
-  if (tag->name)
-    g_hash_table_insert (priv->hash, tag->name, tag);
+  if (tag->priv->name)
+    g_hash_table_insert (priv->hash, tag->priv->name, tag);
   else
     {
       priv->anonymous = g_slist_prepend (priv->anonymous, tag);
       priv->anon_count += 1;
     }
 
-  tag->table = table;
+  tag->priv->table = table;
 
   /* We get the highest tag priority, as the most-recently-added
      tag. Note that we do NOT use gtk_text_tag_set_priority,
      as it assumes the tag is already in the table. */
   size = gtk_text_tag_table_get_size (table);
   g_assert (size > 0);
-  tag->priority = size - 1;
+  tag->priv->priority = size - 1;
 
   g_signal_emit (table, signals[TAG_ADDED], 0, tag);
 }
@@ -337,7 +340,7 @@ gtk_text_tag_table_remove (GtkTextTagTable *table,
   
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
-  g_return_if_fail (tag->table == table);
+  g_return_if_fail (tag->priv->table == table);
 
   priv = table->priv;
 
@@ -358,10 +361,10 @@ gtk_text_tag_table_remove (GtkTextTagTable *table,
      priorities of the tags in the table. */
   gtk_text_tag_set_priority (tag, gtk_text_tag_table_get_size (table) - 1);
 
-  tag->table = NULL;
+  tag->priv->table = NULL;
 
-  if (tag->name)
-    g_hash_table_remove (priv->hash, tag->name);
+  if (tag->priv->name)
+    g_hash_table_remove (priv->hash, tag->priv->name);
   else
     {
       priv->anonymous = g_slist_remove (priv->anonymous, tag);

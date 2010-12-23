@@ -1283,8 +1283,8 @@ totally_invisible_line (GtkTextLayout *layout,
           invalidate_cached_style (layout);
 
           /* Bail out if an elision-unsetting tag begins */
-          if (seg->body.toggle.info->tag->invisible_set &&
-              !seg->body.toggle.info->tag->values->invisible)
+          if (seg->body.toggle.info->tag->priv->invisible_set &&
+              !seg->body.toggle.info->tag->priv->values->invisible)
             break;
         }
       else if (seg->type == &gtk_text_toggle_off_type)
@@ -1292,8 +1292,8 @@ totally_invisible_line (GtkTextLayout *layout,
           invalidate_cached_style (layout);
 
           /* Bail out if an elision-setting tag ends */
-          if (seg->body.toggle.info->tag->invisible_set &&
-              seg->body.toggle.info->tag->values->invisible)
+          if (seg->body.toggle.info->tag->priv->invisible_set &&
+              seg->body.toggle.info->tag->priv->values->invisible)
             break;
         }
 
@@ -2103,7 +2103,7 @@ tags_array_toggle_tag (GPtrArray  *array,
 
   tags = (GtkTextTag**) array->pdata;
 
-  for (pos = 0; pos < array->len && tags[pos]->priority < tag->priority; pos++) ;
+  for (pos = 0; pos < array->len && tags[pos]->priv->priority < tag->priv->priority; pos++) ;
 
   if (pos < array->len && tags[pos] == tag)
     g_ptr_array_remove_index (array, pos);

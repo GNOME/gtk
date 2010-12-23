@@ -75,61 +75,15 @@ typedef struct _GtkTextAttributes GtkTextAttributes;
 
 #define GTK_TYPE_TEXT_ATTRIBUTES     (gtk_text_attributes_get_type ())
 
-typedef struct _GtkTextTag GtkTextTag;
-typedef struct _GtkTextTagClass GtkTextTagClass;
+typedef struct _GtkTextTag             GtkTextTag;
+typedef struct _GtkTextTagPrivate      GtkTextTagPrivate;
+typedef struct _GtkTextTagClass        GtkTextTagClass;
 
 struct _GtkTextTag
 {
   GObject parent_instance;
 
-  GtkTextTagTable *GSEAL (table);
-
-  char *GSEAL (name);           /* Name of this tag.  This field is actually
-                                 * a pointer to the key from the entry in
-                                 * tkxt->tagTable, so it needn't be freed
-                                 * explicitly. */
-  int GSEAL (priority);  /* Priority of this tag within widget.  0
-                         * means lowest priority.  Exactly one tag
-                         * has each integer value between 0 and
-                         * numTags-1. */
-  /*
-   * Information for displaying text with this tag.  The information
-   * belows acts as an override on information specified by lower-priority
-   * tags.  If no value is specified, then the next-lower-priority tag
-   * on the text determins the value.  The text widget itself provides
-   * defaults if no tag specifies an override.
-   */
-
-  GtkTextAttributes *GSEAL (values);
-  
-  /* Flags for whether a given value is set; if a value is unset, then
-   * this tag does not affect it.
-   */
-  guint GSEAL (bg_color_set) : 1;
-  guint GSEAL (fg_color_set) : 1;
-  guint GSEAL (scale_set) : 1;
-  guint GSEAL (justification_set) : 1;
-  guint GSEAL (left_margin_set) : 1;
-  guint GSEAL (indent_set) : 1;
-  guint GSEAL (rise_set) : 1;
-  guint GSEAL (strikethrough_set) : 1;
-  guint GSEAL (right_margin_set) : 1;
-  guint GSEAL (pixels_above_lines_set) : 1;
-  guint GSEAL (pixels_below_lines_set) : 1;
-  guint GSEAL (pixels_inside_wrap_set) : 1;
-  guint GSEAL (tabs_set) : 1;
-  guint GSEAL (underline_set) : 1;
-  guint GSEAL (wrap_mode_set) : 1;
-  guint GSEAL (bg_full_height_set) : 1;
-  guint GSEAL (invisible_set) : 1;
-  guint GSEAL (editable_set) : 1;
-  guint GSEAL (language_set) : 1;
-  guint GSEAL (pg_bg_color_set) : 1;
-
-  /* Whether these margins accumulate or override */
-  guint GSEAL (accumulative_margin) : 1;
-
-  guint GSEAL (pad1) : 1;
+  GtkTextTagPrivate *priv;
 };
 
 struct _GtkTextTagClass

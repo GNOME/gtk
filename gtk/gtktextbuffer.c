@@ -38,6 +38,7 @@
 #include "gtktextbufferrichtext.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtktexttagprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -2504,7 +2505,7 @@ gtk_text_buffer_real_apply_tag (GtkTextBuffer     *buffer,
                                 const GtkTextIter *start,
                                 const GtkTextIter *end)
 {
-  if (tag->table != buffer->priv->tag_table)
+  if (tag->priv->table != buffer->priv->tag_table)
     {
       g_warning ("Can only apply tags that are in the tag table for the buffer");
       return;
@@ -2519,7 +2520,7 @@ gtk_text_buffer_real_remove_tag (GtkTextBuffer     *buffer,
                                  const GtkTextIter *start,
                                  const GtkTextIter *end)
 {
-  if (tag->table != buffer->priv->tag_table)
+  if (tag->priv->table != buffer->priv->tag_table)
     {
       g_warning ("Can only remove tags that are in the tag table for the buffer");
       return;
@@ -2611,7 +2612,7 @@ gtk_text_buffer_apply_tag (GtkTextBuffer     *buffer,
   g_return_if_fail (end != NULL);
   g_return_if_fail (gtk_text_iter_get_buffer (start) == buffer);
   g_return_if_fail (gtk_text_iter_get_buffer (end) == buffer);
-  g_return_if_fail (tag->table == buffer->priv->tag_table);
+  g_return_if_fail (tag->priv->table == buffer->priv->tag_table);
   
   gtk_text_buffer_emit_tag (buffer, tag, TRUE, start, end);
 }
@@ -2640,7 +2641,7 @@ gtk_text_buffer_remove_tag (GtkTextBuffer     *buffer,
   g_return_if_fail (end != NULL);
   g_return_if_fail (gtk_text_iter_get_buffer (start) == buffer);
   g_return_if_fail (gtk_text_iter_get_buffer (end) == buffer);
-  g_return_if_fail (tag->table == buffer->priv->tag_table);
+  g_return_if_fail (tag->priv->table == buffer->priv->tag_table);
   
   gtk_text_buffer_emit_tag (buffer, tag, FALSE, start, end);
 }
