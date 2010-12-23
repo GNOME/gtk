@@ -165,7 +165,7 @@ gdk_quartz_drag_context_finalize (GObject *object)
 }
 
 static void
-gdk_drag_context_class_init (GdkDragContextClass *klass)
+gdk_quartz_drag_context_class_init (GdkQuartzDragContextClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDragContextClass *context_class = GDK_DRAG_CONTEXT_CLASS (klass);
