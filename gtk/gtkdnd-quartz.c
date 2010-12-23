@@ -1109,7 +1109,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   GdkDragContext *context;
   NSWindow *nswindow;
 
-  context = gdk_drag_begin (NULL, NULL);
+  context = gdk_drag_begin (gtk_widget_get_window (widget), NULL);
 
   info = gtk_drag_get_source_info (context, TRUE);
   
