@@ -93,7 +93,7 @@ static void gtk_cell_renderer_progress_render       (GtkCellRenderer         *ce
 						     GtkWidget               *widget,
 						     const GdkRectangle      *background_area,
 						     const GdkRectangle      *cell_area,
-				                     GtkCellRendererState  flags);
+				                     GtkCellRendererState    flags);
 
      
 G_DEFINE_TYPE_WITH_CODE (GtkCellRendererProgress, gtk_cell_renderer_progress, GTK_TYPE_CELL_RENDERER,
