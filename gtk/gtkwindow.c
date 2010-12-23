@@ -3147,7 +3147,7 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
  * using this function, GTK+ will do its best to convince the window
  * manager not to decorate the window. Depending on the system, this
  * function may not have any effect when called on a window that is
- * already visible, so you should call it before calling gtk_window_show().
+ * already visible, so you should call it before calling gtk_widget_show().
  *
  * On Windows, this function always works, since there's no window manager
  * policy involved.
@@ -9482,7 +9482,7 @@ _gtk_window_set_is_active (GtkWindow *window,
  * _gtk_window_set_is_toplevel:
  * @window: a #GtkWindow
  * @is_toplevel: %TRUE if the window is still a real toplevel (nominally a
- * parent of the root window); %FALSE if it is not (for example, for an
+ * child of the root window); %FALSE if it is not (for example, for an
  * in-process, parented GtkPlug)
  *
  * Internal function used by #GtkPlug when it gets parented/unparented by a

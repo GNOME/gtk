@@ -7145,9 +7145,11 @@ gtk_widget_get_has_window (GtkWidget *widget)
  * gtk_widget_is_toplevel:
  * @widget: a #GtkWidget
  *
- * Determines whether @widget is a toplevel widget. Currently only
- * #GtkWindow and #GtkInvisible are toplevel widgets. Toplevel
- * widgets have no parent widget.
+ * Determines whether @widget is a toplevel widget.
+ *
+ * Currently only #GtkWindow and #GtkInvisible (and out-of-process
+ * #GtkPlugs) are toplevel widgets. Toplevel widgets have no parent
+ * widget.
  *
  * Return value: %TRUE if @widget is a toplevel, %FALSE otherwise
  *
