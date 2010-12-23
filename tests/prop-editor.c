@@ -909,10 +909,13 @@ property_widget (GObject    *object,
 
       gtk_container_add (GTK_CONTAINER (prop_edit), label);
       gtk_container_add (GTK_CONTAINER (prop_edit), button);
-      
+
       g_object_connect_property (object, spec,
 				 G_CALLBACK (object_changed),
 				 prop_edit, G_OBJECT (label));
+
+      /* The Properties button is not really modifying, anyway */
+      can_modify = TRUE;
     }
   else if (type == G_TYPE_PARAM_BOXED &&
            G_PARAM_SPEC_VALUE_TYPE (spec) == GDK_TYPE_COLOR)
@@ -936,6 +939,12 @@ property_widget (GObject    *object,
       gtk_misc_set_alignment (GTK_MISC (prop_edit), 0.0, 0.5);
     }
   
+  if (!can_modify)
+    gtk_widget_set_sensitive (prop_edit, FALSE);
+
+  if (g_param_spec_get_blurb (spec))
+    gtk_widget_set_tooltip_text (prop_edit, g_param_spec_get_blurb (spec));
+
   return prop_edit;
 }
 
@@ -1004,18 +1013,9 @@ properties_from_type (GObject *object,
       prop_edit = property_widget (object, spec, can_modify);
       gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
 
-      if (prop_edit)
-        {
-          if (!can_modify)
-            gtk_widget_set_sensitive (prop_edit, FALSE);
+      /* set initial value */
+      g_object_notify (object, spec->name);
 
-	  if (g_param_spec_get_blurb (spec))
-	    gtk_widget_set_tooltip_text (prop_edit, g_param_spec_get_blurb (spec));
-
-          /* set initial value */
-          g_object_notify (object, spec->name);
-        }
-      
       ++i;
     }
 
@@ -1087,18 +1087,9 @@ child_properties_from_object (GObject *object)
       prop_edit = property_widget (object, spec, can_modify);
       gtk_table_attach_defaults (GTK_TABLE (table), prop_edit, 1, 2, i, i + 1);
 
-      if (prop_edit)
-        {
-          if (!can_modify)
-            gtk_widget_set_sensitive (prop_edit, FALSE);
+      /* set initial value */
+      gtk_widget_child_notify (GTK_WIDGET (object), spec->name);
 
-	  if (g_param_spec_get_blurb (spec))
-	    gtk_widget_set_tooltip_text (prop_edit, g_param_spec_get_blurb (spec));
-
-          /* set initial value */
-          gtk_widget_child_notify (GTK_WIDGET (object), spec->name);
-        }
-      
       ++i;
     }
 
