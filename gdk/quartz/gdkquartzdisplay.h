@@ -30,7 +30,7 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_QUARTZ_DISPLAY              (_gdk_quartz_display_get_type ())
+#define GDK_TYPE_QUARTZ_DISPLAY              (gdk_quartz_display_get_type ())
 #define GDK_QUARTZ_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_DISPLAY, GdkQuartzDisplay))
 #define GDK_QUARTZ_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_DISPLAY, GdkQuartzDisplayClass))
 #define GDK_IS_QUARTZ_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_DISPLAY))
@@ -45,7 +45,7 @@ typedef GdkDisplay GdkQuartzDisplay;
 typedef struct _GdkQuartzDisplayClass GdkQuartzDisplayClass;
 
 
-GType _gdk_quartz_display_get_type (void);
+GType gdk_quartz_display_get_type (void);
 
 G_END_DECLS
 

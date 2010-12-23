@@ -119,7 +119,7 @@ _gdk_quartz_display_open (const gchar *display_name)
   /* Initialize application */
   [NSApplication sharedApplication];
 
-  _gdk_display = g_object_new (_gdk_quartz_display_get_type (), NULL);
+  _gdk_display = g_object_new (gdk_quartz_display_get_type (), NULL);
   _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
 
   _gdk_screen = g_object_new (_gdk_quartz_screen_get_type (), NULL);
@@ -248,38 +248,38 @@ gdk_quartz_display_supports_composite (GdkDisplay *display)
 }
 
 static GList *
-_gdk_quartz_display_list_devices (GdkDisplay *display)
+gdk_quartz_display_list_devices (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_QUARTZ_DISPLAY (display)->input_devices;
 }
 
-gulong
-_gdk_quartz_display_get_next_serial (GdkDisplay *display)
+static gulong
+gdk_quartz_display_get_next_serial (GdkDisplay *display)
 {
   return 0;
 }
 
 static void
-_gdk_quartz_display_notify_startup_complete (GdkDisplay  *display,
-                                             const gchar *startup_id)
+gdk_quartz_display_notify_startup_complete (GdkDisplay  *display,
+                                            const gchar *startup_id)
 {
   /* FIXME: Implement? */
 }
 
 
-G_DEFINE_TYPE (GdkQuartzDisplay, _gdk_quartz_display, GDK_TYPE_DISPLAY)
+G_DEFINE_TYPE (GdkQuartzDisplay, gdk_quartz_display, GDK_TYPE_DISPLAY)
 
 static void
-_gdk_quartz_display_init (GdkQuartzDisplay *display)
+gdk_quartz_display_init (GdkQuartzDisplay *display)
 {
   _gdk_quartz_display_manager_add_display (gdk_display_manager_get (),
                                            GDK_DISPLAY_OBJECT (display));
 }
 
 static void
-_gdk_quartz_display_dispose (GObject *object)
+gdk_quartz_display_dispose (GObject *object)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
 
@@ -289,27 +289,27 @@ _gdk_quartz_display_dispose (GObject *object)
   g_list_foreach (display_quartz->input_devices,
                   (GFunc) g_object_run_dispose, NULL);
 
-  G_OBJECT_CLASS (_gdk_quartz_display_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_quartz_display_parent_class)->dispose (object);
 }
 
 static void
-_gdk_quartz_display_finalize (GObject *object)
+gdk_quartz_display_finalize (GObject *object)
 {
   GdkQuartzDisplay *display_quartz = GDK_QUARTZ_DISPLAY (object);
 
   g_list_foreach (display_quartz->input_devices, (GFunc) g_object_unref, NULL);
   g_list_free (display_quartz->input_devices);
 
-  G_OBJECT_CLASS (_gdk_quartz_display_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_quartz_display_parent_class)->finalize (object);
 }
 
 static void
-_gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
+gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
 
-  object_class->finalize = _gdk_quartz_display_finalize;
+  object_class->finalize = gdk_quartz_display_finalize;
 
   display_class->window_type = GDK_TYPE_QUARTZ_WINDOW;
 
@@ -330,7 +330,7 @@ _gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->supports_shapes = gdk_quartz_display_supports_shapes;
   display_class->supports_input_shapes = gdk_quartz_display_supports_input_shapes;
   display_class->supports_composite = gdk_quartz_display_supports_composite;
-  display_class->list_devices = _gdk_quartz_display_list_devices;
+  display_class->list_devices = gdk_quartz_display_list_devices;
   display_class->send_client_message = _gdk_quartz_display_send_client_message;
   display_class->add_client_message_filter = _gdk_quartz_display_add_client_message_filter;
   display_class->get_drag_protocol = _gdk_quartz_display_get_drag_protocol;
@@ -344,8 +344,8 @@ _gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
 
   display_class->before_process_all_updates = _gdk_quartz_display_before_process_all_updates;
   display_class->after_process_all_updates = _gdk_quartz_display_after_process_all_updates;
-  display_class->get_next_serial = _gdk_quartz_display_get_next_serial;
-  display_class->notify_startup_complete = _gdk_quartz_display_notify_startup_complete;
+  display_class->get_next_serial = gdk_quartz_display_get_next_serial;
+  display_class->notify_startup_complete = gdk_quartz_display_notify_startup_complete;
   display_class->event_data_copy = _gdk_quartz_display_event_data_copy;
   display_class->event_data_free = _gdk_quartz_display_event_data_free;
   display_class->create_window_impl = _gdk_quartz_display_create_window_impl;
