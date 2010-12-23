@@ -68,10 +68,10 @@ static void display_reconfiguration_callback (CGDirectDisplayID            displ
                                               CGDisplayChangeSummaryFlags  flags,
                                               void                        *userInfo);
 
-G_DEFINE_TYPE (GdkQuartzScreen, _gdk_quartz_screen, GDK_TYPE_SCREEN);
+G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, GDK_TYPE_SCREEN);
 
 static void
-_gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
+gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
 {
   GdkScreen *screen = GDK_SCREEN (quartz_screen);
   NSScreen *nsscreen;
@@ -102,7 +102,7 @@ gdk_quartz_screen_dispose (GObject *object)
   CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback,
                                           screen);
 
-  G_OBJECT_CLASS (_gdk_quartz_screen_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_quartz_screen_parent_class)->dispose (object);
 }
 
 static void
@@ -411,7 +411,7 @@ gdk_quartz_screen_is_composited (GdkScreen *screen)
 }
 
 static void
-_gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
+gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);

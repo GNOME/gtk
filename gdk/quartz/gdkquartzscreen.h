@@ -29,7 +29,7 @@ G_BEGIN_DECLS
 
 #include <gdk/gdk.h>
 
-#define GDK_TYPE_QUARTZ_SCREEN              (_gdk_quartz_screen_get_type ())
+#define GDK_TYPE_QUARTZ_SCREEN              (gdk_quartz_screen_get_type ())
 #define GDK_QUARTZ_SCREEN(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_SCREEN, GdkQuartzScreen))
 #define GDK_QUARTZ_SCREEN_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_SCREEN, GdkQuartzScreenClass))
 #define GDK_IS_QUARTZ_SCREEN(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_SCREEN))
@@ -44,7 +44,7 @@ typedef GdkScreen GdkQuartzScreen;
 typedef struct _GdkQuartzScreenClass GdkQuartzScreenClass;
 
 
-GType      _gdk_quartz_screen_get_type (void);
+GType      gdk_quartz_screen_get_type (void);
 
 G_END_DECLS
 
