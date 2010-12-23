@@ -4150,8 +4150,8 @@ gtk_drag_cancel (GtkDragSourceInfo *info, GtkDragResult result, guint32 time)
  *************************************************************/
 
 static gboolean
-gtk_drag_motion_cb (GtkWidget      *widget, 
-		    GdkEventMotion *event, 
+gtk_drag_motion_cb (GtkWidget      *widget,
+		    GdkEventMotion *event,
 		    gpointer        data)
 {
   GtkDragSourceInfo *info = (GtkDragSourceInfo *)data;
@@ -4170,7 +4170,9 @@ gtk_drag_motion_cb (GtkWidget      *widget,
   else
     screen = gdk_event_get_screen ((GdkEvent *)event);
 
-  gtk_drag_update (info, screen, event->x_root, event->y_root, (GdkEvent *) event);
+  x_root = (gint)(event->x_root + 0.5);
+  y_root = (gint)(event->y_root + 0.5);
+  gtk_drag_update (info, screen, x_root, y_root, (GdkEvent *) event);
 
   return TRUE;
 }
@@ -4184,7 +4186,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
  *************************************************************/
 
 #define BIG_STEP 20
-#define SMALL_STEP 2
+#define SMALL_STEP 1
 
 static gboolean
 gtk_drag_key_cb (GtkWidget         *widget, 
