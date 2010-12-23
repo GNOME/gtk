@@ -123,10 +123,9 @@ _gdk_quartz_display_open (const gchar *display_name)
   _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
 
   _gdk_screen = g_object_new (gdk_quartz_screen_get_type (), NULL);
-
   _gdk_quartz_screen_init_visuals (_gdk_screen);
 
-  _gdk_windowing_window_init ();
+  _gdk_quartz_window_init_windowing (_gdk_display, _gdk_screen);
 
   _gdk_quartz_events_init ();
 
@@ -188,6 +187,18 @@ gdk_quartz_display_beep (GdkDisplay *display)
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   NSBeep();
+}
+
+static void
+gdk_quartz_display_sync (GdkDisplay *display)
+{
+  /* Not supported. */
+}
+
+static void
+gdk_quartz_display_flush (GdkDisplay *display)
+{
+  /* Not supported. */
 }
 
 static gboolean
@@ -318,8 +329,8 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_screen = gdk_quartz_display_get_screen;
   display_class->get_default_screen = gdk_quartz_display_get_default_screen;
   display_class->beep = gdk_quartz_display_beep;
-  display_class->sync = _gdk_quartz_display_sync;
-  display_class->flush = _gdk_quartz_display_flush;
+  display_class->sync = gdk_quartz_display_sync;
+  display_class->flush = gdk_quartz_display_flush;
   display_class->queue_events = _gdk_quartz_display_queue_events;
   display_class->has_pending = _gdk_quartz_display_has_pending;
   display_class->get_default_group = gdk_quartz_display_get_default_group;

@@ -1340,17 +1340,6 @@ _gdk_quartz_display_add_client_message_filter (GdkDisplay   *display,
   /* Not supported. */
 }
 
-void
-_gdk_quartz_display_sync (GdkDisplay *display)
-{
-  /* Not supported. */
-}
-
-void
-_gdk_quartz_display_flush (GdkDisplay *display)
-{
-  /* Not supported. */
-}
 
 gboolean
 _gdk_quartz_display_send_client_message (GdkDisplay      *display,

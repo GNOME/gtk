@@ -1043,48 +1043,22 @@ _gdk_quartz_window_update_position (GdkWindow *window)
 }
 
 void
-_gdk_windowing_update_window_sizes (GdkScreen *screen)
-{
-  GList *windows, *list;
-
-  /* The size of the root window is so that it can contain all
-   * monitors attached to this machine.  The monitors are laid out
-   * within this root window.  We calculate the size of the root window
-   * and the positions of the different monitors in gdkscreen-quartz.c.
-   *
-   * This data is updated when the monitor configuration is changed.
-   */
-  _gdk_root->x = 0;
-  _gdk_root->y = 0;
-  _gdk_root->abs_x = 0;
-  _gdk_root->abs_y = 0;
-  _gdk_root->width = gdk_screen_get_width (screen);
-  _gdk_root->height = gdk_screen_get_height (screen);
-
-  windows = gdk_screen_get_toplevel_windows (screen);
-
-  for (list = windows; list; list = list->next)
-    _gdk_quartz_window_update_position (list->data);
-
-  g_list_free (windows);
-}
-
-void
-_gdk_windowing_window_init (void)
+_gdk_quartz_window_init_windowing (GdkDisplay *display,
+                                   GdkScreen  *screen)
 {
   GdkWindowImplQuartz *impl;
 
   g_assert (_gdk_root == NULL);
 
-  _gdk_root = _gdk_display_create_window (_gdk_display);
+  _gdk_root = _gdk_display_create_window (display);
 
   _gdk_root->impl = g_object_new (_gdk_root_window_impl_quartz_get_type (), NULL);
   _gdk_root->impl_window = _gdk_root;
-  _gdk_root->visual = gdk_screen_get_system_visual (_gdk_screen);
+  _gdk_root->visual = gdk_screen_get_system_visual (screen);
 
   impl = GDK_WINDOW_IMPL_QUARTZ (_gdk_root->impl);
 
-  _gdk_windowing_update_window_sizes (_gdk_screen);
+  _gdk_quartz_screen_update_window_sizes (screen);
 
   _gdk_root->state = 0; /* We don't want GDK_WINDOW_STATE_WITHDRAWN here */
   _gdk_root->window_type = GDK_WINDOW_ROOT;

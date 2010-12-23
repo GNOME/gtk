@@ -184,6 +184,36 @@ gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
   GDK_QUARTZ_RELEASE_POOL;
 }
 
+void
+_gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
+{
+  GList *windows, *list;
+
+  /* The size of the root window is so that it can contain all
+   * monitors attached to this machine.  The monitors are laid out
+   * within this root window.  We calculate the size of the root window
+   * and the positions of the different monitors in gdkscreen-quartz.c.
+   *
+   * This data is updated when the monitor configuration is changed.
+   */
+
+  /* FIXME: At some point, fetch the root window from GdkScreen.  But
+   * on OS X will we only have a single root window anyway.
+   */
+  _gdk_root->x = 0;
+  _gdk_root->y = 0;
+  _gdk_root->abs_x = 0;
+  _gdk_root->abs_y = 0;
+  _gdk_root->width = gdk_screen_get_width (screen);
+  _gdk_root->height = gdk_screen_get_height (screen);
+
+  windows = gdk_screen_get_toplevel_windows (screen);
+
+  for (list = windows; list; list = list->next)
+    _gdk_quartz_window_update_position (list->data);
+
+  g_list_free (windows);
+}
 
 static void
 process_display_reconfiguration (GdkQuartzScreen *screen)
@@ -195,7 +225,7 @@ process_display_reconfiguration (GdkQuartzScreen *screen)
 
   gdk_quartz_screen_calculate_layout (GDK_QUARTZ_SCREEN (screen));
 
-  _gdk_windowing_update_window_sizes (GDK_SCREEN (screen));
+  _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
 
   if (screen->emit_monitors_changed)
     {
