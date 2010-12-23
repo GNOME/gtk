@@ -5173,7 +5173,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
 			  GtkAllocation *allocation)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = window->priv;
   GtkAllocation child_allocation;
   GtkWidget *child;
   guint border_width;

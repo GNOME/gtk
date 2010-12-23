@@ -400,6 +400,7 @@ gtk_private_h_sources =		\
 	gtkintl.h		\
 	gtkkeyhash.h		\
 	gtkmenuprivate.h	\
+	gtkmenushellprivate.h	\
 	gtkmnemonichash.h	\
 	gtkmodifierstyle.h	\
 	gtkmountoperationprivate.h \

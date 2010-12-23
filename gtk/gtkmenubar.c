@@ -34,6 +34,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenuitem.h"
 #include "gtkmenuprivate.h"
+#include "gtkmenushellprivate.h"
 #include "gtksettings.h"
 #include "gtksizerequest.h"
 #include "gtkwindow.h"
@@ -301,7 +302,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
       priv = menu_bar->priv;
 
       nchildren = 0;
-      children = menu_shell->children;
+      children = menu_shell->priv->children;
 
       while (children)
 	{
@@ -425,7 +426,7 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 
   gtk_widget_style_get (widget, "internal-padding", &ipadding, NULL);
   
-  if (menu_shell->children)
+  if (menu_shell->priv->children)
     {
       border_width = gtk_container_get_border_width (GTK_CONTAINER (menu_bar));
       child_allocation.x = (border_width +
@@ -454,15 +455,15 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 	  priv->pack_direction == GTK_PACK_DIRECTION_RTL)
 	{
 	  child_allocation.height = MAX (1, (gint)allocation->height - child_allocation.y * 2);
-	  
-	  offset = child_allocation.x; 	/* Window edge to menubar start */
-	  ltr_x = child_allocation.x;
-	  
-	  children = menu_shell->children;
-	  while (children)
-	    {
-	      gint toggle_size;          
-	      
+
+          offset = child_allocation.x; 	/* Window edge to menubar start */
+          ltr_x = child_allocation.x;
+
+          children = menu_shell->priv->children;
+          while (children)
+            {
+              gint toggle_size;
+
 	      child = children->data;
 	      children = children->next;
 	      
@@ -504,15 +505,15 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
       else
 	{
 	  child_allocation.width = MAX (1, (gint)allocation->width - child_allocation.x * 2);
-	  
-	  offset = child_allocation.y; 	/* Window edge to menubar start */
-	  ltr_y = child_allocation.y;
-	  
-	  children = menu_shell->children;
-	  while (children)
-	    {
-	      gint toggle_size;          
-	      
+
+          offset = child_allocation.y; 	/* Window edge to menubar start */
+          ltr_y = child_allocation.y;
+
+          children = menu_shell->priv->children;
+          while (children)
+            {
+              gint toggle_size;
+
 	      child = children->data;
 	      children = children->next;
 	      
@@ -766,8 +767,8 @@ _gtk_menu_bar_cycle_focus (GtkMenuBar       *menubar,
 	  if (current && current->next)
 	    {
 	      GtkMenuShell *new_menushell = GTK_MENU_SHELL (current->next->data);
-	      if (new_menushell->children)
-		to_activate = new_menushell->children->data;
+	      if (new_menushell->priv->children)
+		to_activate = new_menushell->priv->children->data;
 	    }
 	}
 	  
@@ -912,7 +913,7 @@ gtk_menu_bar_set_pack_direction (GtkMenuBar       *menubar,
 
       gtk_widget_queue_resize (GTK_WIDGET (menubar));
 
-      for (l = GTK_MENU_SHELL (menubar)->children; l; l = l->next)
+      for (l = GTK_MENU_SHELL (menubar)->priv->children; l; l = l->next)
 	gtk_widget_queue_resize (GTK_WIDGET (l->data));
 
       g_object_notify (G_OBJECT (menubar), "pack-direction");
@@ -965,7 +966,7 @@ gtk_menu_bar_set_child_pack_direction (GtkMenuBar       *menubar,
 
       gtk_widget_queue_resize (GTK_WIDGET (menubar));
 
-      for (l = GTK_MENU_SHELL (menubar)->children; l; l = l->next)
+      for (l = GTK_MENU_SHELL (menubar)->priv->children; l; l = l->next)
 	gtk_widget_queue_resize (GTK_WIDGET (l->data));
 
       g_object_notify (G_OBJECT (menubar), "child-pack-direction");

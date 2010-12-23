@@ -31,6 +31,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuprivate.h"
+#include "gtkmenushellprivate.h"
 #include "gtkmenubar.h"
 #include "gtkmenuprivate.h"
 #include "gtkseparatormenuitem.h"
@@ -1656,7 +1657,7 @@ gtk_menu_item_mnemonic_activate (GtkWidget *widget,
   if (group_cycling &&
       parent &&
       GTK_IS_MENU_SHELL (parent) &&
-      GTK_MENU_SHELL (parent)->active)
+      GTK_MENU_SHELL (parent)->priv->active)
     {
       gtk_menu_shell_select_item (GTK_MENU_SHELL (parent),
 				  widget);
@@ -1816,7 +1817,7 @@ gtk_menu_item_real_popup_submenu (GtkWidget *widget,
                       widget,
                       menu_position_func,
                       menu_item,
-                      GTK_MENU_SHELL (parent)->button,
+                      GTK_MENU_SHELL (parent)->priv->button,
                       0);
     }
 
@@ -1836,12 +1837,12 @@ gtk_menu_item_popup_timeout (gpointer data)
 
   parent = gtk_widget_get_parent (GTK_WIDGET (menu_item));
 
-  if ((GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->active) ||
+  if ((GTK_IS_MENU_SHELL (parent) && GTK_MENU_SHELL (parent)->priv->active) ||
       (GTK_IS_MENU (parent) && GTK_MENU (parent)->priv->torn_off))
     {
       gtk_menu_item_real_popup_submenu (GTK_WIDGET (menu_item), TRUE);
       if (menu_item->timer_from_keypress && menu_item->submenu)
-	GTK_MENU_SHELL (menu_item->submenu)->ignore_enter = TRUE;
+	GTK_MENU_SHELL (menu_item->submenu)->priv->ignore_enter = TRUE;
     }
 
   menu_item->timer = 0;

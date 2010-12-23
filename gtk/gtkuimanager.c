@@ -38,6 +38,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
+#include "gtkmenushellprivate.h"
 #include "gtkmenubar.h"
 #include "gtkmenutoolbutton.h"
 #include "gtkseparatormenuitem.h"
@@ -1955,9 +1956,9 @@ get_action_by_name (GtkUIManager *merge,
 }
 
 static gboolean
-find_menu_position (GNode      *node, 
-		    GtkWidget **menushell_p, 
-		    gint       *pos_p)
+find_menu_position (GNode      *node,
+                    GtkWidget **menushell_p,
+                    gint       *pos_p)
 {
   GtkWidget *menushell;
   gint pos = 0;
@@ -1998,7 +1999,7 @@ find_menu_position (GNode      *node,
 	case NODE_TYPE_MENU_PLACEHOLDER:
 	  menushell = gtk_widget_get_parent (NODE_INFO (parent)->proxy);
 	  g_return_val_if_fail (GTK_IS_MENU_SHELL (menushell), FALSE);
-	  pos = g_list_index (GTK_MENU_SHELL (menushell)->children,
+	  pos = g_list_index (GTK_MENU_SHELL (menushell)->priv->children,
 			      NODE_INFO (parent)->proxy) + 1;
 	  break;
 	default:
@@ -2025,7 +2026,7 @@ find_menu_position (GNode      *node,
       if (!GTK_IS_MENU_SHELL (menushell))
         return FALSE;
 
-      pos = g_list_index (GTK_MENU_SHELL (menushell)->children, prev_child) + 1;
+      pos = g_list_index (GTK_MENU_SHELL (menushell)->priv->children, prev_child) + 1;
     }
 
   if (menushell_p)

@@ -31,6 +31,7 @@
 #include "gtkliststore.h"
 #include "gtkmain.h"
 #include "gtkmenuprivate.h"
+#include "gtkmenushellprivate.h"
 #include "gtkscrolledwindow.h"
 #include "gtkseparatormenuitem.h"
 #include "gtktearoffmenuitem.h"
@@ -1874,7 +1875,7 @@ gtk_combo_box_menu_position_over (GtkMenu  *menu,
       menu_ypos -= child_allocation.height / 2;
     }
 
-  children = GTK_MENU_SHELL (combo_box->priv->popup_widget)->children;
+  children = GTK_MENU_SHELL (combo_box->priv->popup_widget)->priv->children;
   while (children)
     {
       child = children->data;
@@ -1924,15 +1925,15 @@ gtk_combo_box_menu_position (GtkMenu  *menu,
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *menu_item;
 
-  if (priv->wrap_width > 0 || priv->cell_view == NULL)	
+  if (priv->wrap_width > 0 || priv->cell_view == NULL)
     gtk_combo_box_menu_position_below (menu, x, y, push_in, user_data);
   else
     {
       /* FIXME handle nested menus better */
       menu_item = gtk_menu_get_active (GTK_MENU (priv->popup_widget));
       if (menu_item)
-	gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget),
-				    menu_item);
+        gtk_menu_shell_select_item (GTK_MENU_SHELL (priv->popup_widget),
+                                     menu_item);
 
       gtk_combo_box_menu_position_over (menu, x, y, push_in, user_data);
     }
@@ -3189,13 +3190,13 @@ gtk_combo_box_menu_fill (GtkComboBox *combo_box)
       GtkWidget *tearoff = gtk_tearoff_menu_item_new ();
 
       gtk_widget_show (tearoff);
-      
+
       if (priv->wrap_width)
-	gtk_menu_attach (GTK_MENU (menu), tearoff, 0, priv->wrap_width, 0, 1);
+        gtk_menu_attach (GTK_MENU (menu), tearoff, 0, priv->wrap_width, 0, 1);
       else
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
+        gtk_menu_shell_append (GTK_MENU_SHELL (menu), tearoff);
     }
-  
+
   gtk_combo_box_menu_fill_level (combo_box, menu, NULL);
 }
 
@@ -3342,11 +3343,11 @@ menu_occupied (GtkMenu   *menu,
 {
   GList *i;
 
-  for (i = GTK_MENU_SHELL (menu)->children; i; i = i->next)
+  for (i = GTK_MENU_SHELL (menu)->priv->children; i; i = i->next)
     {
       guint l, r, b, t;
 
-      gtk_container_child_get (GTK_CONTAINER (menu), 
+      gtk_container_child_get (GTK_CONTAINER (menu),
 			       i->data,
                                "left-attach", &l,
                                "right-attach", &r,
@@ -3375,12 +3376,12 @@ gtk_combo_box_relayout_item (GtkComboBox *combo_box,
 
   if (!GTK_IS_MENU_SHELL (menu))
     return;
-  
+
   if (priv->col_column == -1 &&
       priv->row_column == -1 &&
       last)
     {
-      gtk_container_child_get (GTK_CONTAINER (menu), 
+      gtk_container_child_get (GTK_CONTAINER (menu),
 			       last,
 			       "right-attach", &current_col,
 			       "top-attach", &current_row,
