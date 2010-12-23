@@ -3664,10 +3664,8 @@ gtk_window_get_deletable
 gtk_window_get_destroy_with_parent
 gtk_window_get_focus
 gtk_window_get_focus_on_map
-gtk_window_get_frame_dimensions
 gtk_window_get_gravity
 gtk_window_get_group
-gtk_window_get_has_frame
 gtk_window_get_has_resize_grip
 gtk_window_get_icon
 gtk_window_get_icon_list
@@ -3733,10 +3731,8 @@ gtk_window_set_deletable
 gtk_window_set_destroy_with_parent
 gtk_window_set_focus
 gtk_window_set_focus_on_map
-gtk_window_set_frame_dimensions
 gtk_window_set_geometry_hints
 gtk_window_set_gravity
-gtk_window_set_has_frame
 gtk_window_set_has_resize_grip
 gtk_window_set_icon
 gtk_window_set_icon_from_file

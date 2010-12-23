@@ -110,7 +110,6 @@ struct _GtkWindowPrivate
 
   GdkModifierType        mnemonic_modifier;
   GdkScreen             *screen;
-  GdkWindow             *frame;
   GdkWindowTypeHint      gdk_type_hint;
 
   GtkApplication        *application;
@@ -125,10 +124,6 @@ struct _GtkWindowPrivate
   gchar   *wmclass_name;
   gchar   *wm_role;
 
-  guint    frame_bottom;
-  guint    frame_left;
-  guint    frame_right;
-  guint    frame_top;
   guint    keys_changed_handler;
 
   guint16  configure_request_count;
@@ -155,7 +150,6 @@ struct _GtkWindowPrivate
   guint    gravity                   : 5; /* GdkGravity */
   guint    has_focus                 : 1;
   guint    has_user_ref_count        : 1;
-  guint    has_frame                 : 1;
   guint    has_toplevel_focus        : 1;
   guint    iconify_initially         : 1; /* gtk_window_iconify() called before realization */
   guint    is_active                 : 1;
@@ -323,12 +317,8 @@ static void gtk_window_realize            (GtkWidget         *widget);
 static void gtk_window_unrealize          (GtkWidget         *widget);
 static void gtk_window_size_allocate      (GtkWidget         *widget,
 					   GtkAllocation     *allocation);
-static gint gtk_window_event              (GtkWidget *widget,
-					   GdkEvent *event);
 static gboolean gtk_window_map_event      (GtkWidget         *widget,
                                            GdkEventAny       *event);
-static gboolean gtk_window_frame_event    (GtkWindow *window,
-					   GdkEvent *event);
 static gint gtk_window_configure_event    (GtkWidget         *widget,
 					   GdkEventConfigure *event);
 static gint gtk_window_key_press_event    (GtkWidget         *widget,
@@ -599,7 +589,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   container_class->check_resize = gtk_window_check_resize;
 
   klass->set_focus = gtk_window_real_set_focus;
-  klass->frame_event = gtk_window_frame_event;
 
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
@@ -983,16 +972,6 @@ gtk_window_class_init (GtkWindowClass *klass)
                   _gtk_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_WIDGET);
-  
-  window_signals[FRAME_EVENT] =
-    g_signal_new (I_("frame-event"),
-                  G_TYPE_FROM_CLASS (gobject_class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET(GtkWindowClass, frame_event),
-                  _gtk_boolean_handled_accumulator, NULL,
-                  _gtk_marshal_BOOLEAN__BOXED,
-                  G_TYPE_BOOLEAN, 1,
-                  GDK_TYPE_EVENT);
 
   /**
    * GtkWindow::activate-focus:
@@ -1110,12 +1089,6 @@ gtk_window_init (GtkWindow *window)
   priv->need_default_size = TRUE;
   priv->need_default_position = TRUE;
   priv->modal = FALSE;
-  priv->frame = NULL;
-  priv->has_frame = FALSE;
-  priv->frame_left = 0;
-  priv->frame_right = 0;
-  priv->frame_top = 0;
-  priv->frame_bottom = 0;
   priv->gdk_type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
@@ -4335,15 +4308,7 @@ gtk_window_move (GtkWindow *window,
        * the same as the position being changed by the window
        * manager.
        */
-      
-      /* FIXME are we handling gravity properly for framed windows? */
-      if (priv->frame)
-        gdk_window_move (priv->frame,
-                         x - priv->frame_left,
-                         y - priv->frame_top);
-      else
-        gdk_window_move (gtk_widget_get_window (GTK_WIDGET (window)),
-                         x, y);
+      gdk_window_move (gtk_widget_get_window (GTK_WIDGET (window)), x, y);
     }
   else
     {
@@ -4448,10 +4413,7 @@ gtk_window_get_position (GtkWindow *window,
       
       if (gtk_widget_get_mapped (widget))
         {
-	  if (priv->frame)
-	    gdk_window_get_frame_extents (priv->frame, &frame_extents);
-	  else
-	    gdk_window_get_frame_extents (gdk_window, &frame_extents);
+          gdk_window_get_frame_extents (gdk_window, &frame_extents);
           x = frame_extents.x;
           y = frame_extents.y;
           gtk_window_get_size (window, &w, &h);
@@ -4460,7 +4422,7 @@ gtk_window_get_position (GtkWindow *window,
         {
           /* We just say the frame has 0 size on all sides.
            * Not sure what else to do.
-           */             
+           */
           gtk_window_compute_configure_request (window,
                                                 &frame_extents,
                                                 NULL, NULL);
@@ -4725,10 +4687,7 @@ gtk_window_map (GtkWidget *widget)
       !gtk_widget_get_mapped (child))
     gtk_widget_map (child);
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gdk_window;
+  toplevel = gdk_window;
 
   if (priv->maximize_initially)
     gdk_window_maximize (toplevel);
@@ -4770,9 +4729,6 @@ gtk_window_map (GtkWidget *widget)
     }
 
   gdk_window_show (gdk_window);
-
-  if (priv->frame)
-    gdk_window_show (priv->frame);
 
   if (priv->grip_window)
     gdk_window_show (priv->grip_window);
@@ -4836,10 +4792,7 @@ gtk_window_unmap (GtkWidget *widget)
   gdk_window = gtk_widget_get_window (widget);
 
   gtk_widget_set_mapped (widget, FALSE);
-  if (priv->frame)
-    gdk_window_withdraw (priv->frame);
-  else
-    gdk_window_withdraw (gdk_window);
+  gdk_window_withdraw (gdk_window);
 
   priv->configure_request_count = 0;
   priv->configure_notify_received = FALSE;
@@ -4927,57 +4880,15 @@ gtk_window_realize (GtkWidget *widget)
       g_warning (G_STRLOC": Unknown window type %d!", priv->type);
       break;
     }
-   
+
   attributes.title = priv->title;
   attributes.wmclass_name = priv->wmclass_name;
   attributes.wmclass_class = priv->wmclass_class;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
 
-  if (priv->has_frame)
-    {
-      gtk_widget_get_allocation (widget, &allocation);
-      attributes.width = allocation.width + priv->frame_left + priv->frame_right;
-      attributes.height = allocation.height + priv->frame_top + priv->frame_bottom;
-      attributes.event_mask = (GDK_EXPOSURE_MASK |
-			       GDK_KEY_PRESS_MASK |
-			       GDK_ENTER_NOTIFY_MASK |
-			       GDK_LEAVE_NOTIFY_MASK |
-			       GDK_FOCUS_CHANGE_MASK |
-			       GDK_STRUCTURE_MASK |
-			       GDK_BUTTON_MOTION_MASK |
-			       GDK_POINTER_MOTION_HINT_MASK |
-			       GDK_BUTTON_PRESS_MASK |
-			       GDK_BUTTON_RELEASE_MASK);
-      
-      attributes_mask = GDK_WA_VISUAL;
-
-      priv->frame = gdk_window_new (gtk_widget_get_root_window (widget),
-				      &attributes, attributes_mask);
-						 
-      if (priv->opacity_set)
-	gdk_window_set_opacity (priv->frame, priv->opacity);
-
-      gdk_window_set_user_data (priv->frame, widget);
-      
-      attributes.window_type = GDK_WINDOW_CHILD;
-      attributes.x = priv->frame_left;
-      attributes.y = priv->frame_top;
-    
-      attributes_mask = GDK_WA_X | GDK_WA_Y;
-
-      parent_window = priv->frame;
-
-      g_signal_connect (window,
-			"event",
-			G_CALLBACK (gtk_window_event),
-			NULL);
-    }
-  else
-    {
-      attributes_mask = 0;
-      parent_window = gtk_widget_get_root_window (widget);
-    }
+  attributes_mask = 0;
+  parent_window = gtk_widget_get_root_window (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
   attributes.width = allocation.width;
@@ -4999,7 +4910,7 @@ gtk_window_realize (GtkWidget *widget)
   gdk_window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_set_window (widget, gdk_window);
 
-  if (!priv->has_frame && priv->opacity_set)
+  if (priv->opacity_set)
     gdk_window_set_opacity (gdk_window, priv->opacity);
 
   gdk_window_enable_synchronized_configure (gdk_window);
@@ -5010,8 +4921,6 @@ gtk_window_realize (GtkWidget *widget)
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_set_background (context, gdk_window);
-  if (priv->frame)
-    gtk_style_context_set_background (context, priv->frame);
 
   if (priv->transient_parent &&
       gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
@@ -5091,13 +5000,6 @@ gtk_window_unrealize (GtkWidget *widget)
       info->last.configure_request.height = -1;
       /* be sure we reset geom hints on re-realize */
       info->last.flags = 0;
-    }
-
-  if (priv->frame)
-    {
-      gdk_window_set_user_data (priv->frame, NULL);
-      gdk_window_destroy (priv->frame);
-      priv->frame = NULL;
     }
 
   /* Icons */
@@ -5294,72 +5196,9 @@ gtk_window_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      if (priv->frame)
-        gdk_window_resize (priv->frame,
-                           allocation->width + priv->frame_left + priv->frame_right,
-                           allocation->height + priv->frame_top + priv->frame_bottom);
       update_grip_visibility (window);
       set_grip_position (window);
     }
-}
-
-static gint
-gtk_window_event (GtkWidget *widget, GdkEvent *event)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-  GtkWindowPrivate *priv = window->priv;
-  gboolean return_val;
-
-  if (priv->frame && (event->any.window == priv->frame))
-    {
-      if ((event->type != GDK_KEY_PRESS) &&
-	  (event->type != GDK_KEY_RELEASE) &&
-	  (event->type != GDK_FOCUS_CHANGE))
-	{
-	  g_signal_stop_emission_by_name (widget, "event");
-	  return_val = FALSE;
-	  g_signal_emit (widget, window_signals[FRAME_EVENT], 0, event, &return_val);
-	  return TRUE;
-	}
-      else
-	{
-	  g_object_unref (event->any.window);
-	  event->any.window = g_object_ref (gtk_widget_get_window (widget));
-	}
-    }
-
-  return FALSE;
-}
-
-static gboolean
-gtk_window_frame_event (GtkWindow *window, GdkEvent *event)
-{
-  GtkWindowPrivate *priv = window->priv;
-  GdkEventConfigure *configure_event;
-  GdkRectangle rect;
-
-  switch (event->type)
-    {
-    case GDK_CONFIGURE:
-      configure_event = (GdkEventConfigure *)event;
-      
-      /* Invalidate the decorations */
-      rect.x = 0;
-      rect.y = 0;
-      rect.width = configure_event->width;
-      rect.height = configure_event->height;
-      
-      gdk_window_invalidate_rect (priv->frame, &rect, FALSE);
-
-      /* Pass on the (modified) configure event */
-      configure_event->width -= priv->frame_left + priv->frame_right;
-      configure_event->height -= priv->frame_top + priv->frame_bottom;
-      return gtk_window_configure_event (GTK_WIDGET (window), configure_event);
-      break;
-    default:
-      break;
-    }
-  return FALSE;
 }
 
 static gint
@@ -7069,31 +6908,16 @@ gtk_window_move_resize (GtkWindow *window)
 
       /* Now send the configure request */
       if (configure_request_pos_changed)
-	{
-	  if (priv->frame)
-	    {
-	      gdk_window_move_resize (priv->frame,
-				      new_request.x - priv->frame_left,
-                                      new_request.y - priv->frame_top,
-				      new_request.width + priv->frame_left + priv->frame_right,
-				      new_request.height + priv->frame_top + priv->frame_bottom);
-	      gdk_window_resize (gdk_window,
-                                 new_request.width, new_request.height);
-	    }
-	  else
-	    gdk_window_move_resize (gdk_window,
-				    new_request.x, new_request.y,
-				    new_request.width, new_request.height);
-	}
+        {
+          gdk_window_move_resize (gdk_window,
+                                  new_request.x, new_request.y,
+                                  new_request.width, new_request.height);
+        }
       else  /* only size changed */
-	{
-	  if (priv->frame)
-	    gdk_window_resize (priv->frame,
-			       new_request.width + priv->frame_left + priv->frame_right,
-			       new_request.height + priv->frame_top + priv->frame_bottom);
-	  gdk_window_resize (gdk_window,
-			     new_request.width, new_request.height);
-	}
+        {
+          gdk_window_resize (gdk_window,
+                             new_request.width, new_request.height);
+        }
 
       if (priv->type == GTK_WINDOW_POPUP)
         {
@@ -7145,17 +6969,10 @@ gtk_window_move_resize (GtkWindow *window)
       /* Handle any position changes.
        */
       if (configure_request_pos_changed)
-	{
-	  if (priv->frame)
-	    {
-	      gdk_window_move (priv->frame,
-			       new_request.x - priv->frame_left,
-			       new_request.y - priv->frame_top);
-	    }
-	  else
-	    gdk_window_move (gdk_window,
-			     new_request.x, new_request.y);
-	}
+        {
+          gdk_window_move (gdk_window,
+                           new_request.x, new_request.y);
+        }
 
       /* And run the resize queue.
        */
@@ -7477,116 +7294,6 @@ gtk_window_draw (GtkWidget *widget,
 }
 
 /**
- * gtk_window_set_has_frame:
- * @window: a #GtkWindow
- * @setting: a boolean
- *
- * (Note: this is a special-purpose function for the framebuffer port,
- *  that causes GTK+ to draw its own window border. For most applications,
- *  you want gtk_window_set_decorated() instead, which tells the window
- *  manager whether to draw the window border.)
- * 
- * If this function is called on a window with setting of %TRUE, before
- * it is realized or showed, it will have a "frame" window around
- * @window->window, accessible in @window->frame. Using the signal 
- * frame_event you can receive all events targeted at the frame.
- * 
- * This function is used by the linux-fb port to implement managed
- * windows, but it could conceivably be used by X-programs that
- * want to do their own window decorations.
- *
- **/
-void
-gtk_window_set_has_frame (GtkWindow *window, 
-			  gboolean   setting)
-{
-  GtkWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (window)));
-
-  priv = window->priv;
-
-  priv->has_frame = setting != FALSE;
-}
-
-/**
- * gtk_window_get_has_frame:
- * @window: a #GtkWindow
- * 
- * Accessor for whether the window has a frame window exterior to
- * @window->window. Gets the value set by gtk_window_set_has_frame ().
- *
- * Return value: %TRUE if a frame has been added to the window
- *   via gtk_window_set_has_frame().
- **/
-gboolean
-gtk_window_get_has_frame (GtkWindow *window)
-{
-  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
-
-  return window->priv->has_frame;
-}
-
-/**
- * gtk_window_set_frame_dimensions:
- * @window: a #GtkWindow that has a frame
- * @left: The width of the left border
- * @top: The height of the top border
- * @right: The width of the right border
- * @bottom: The height of the bottom border
- *
- * (Note: this is a special-purpose function intended for the framebuffer
- *  port; see gtk_window_set_has_frame(). It will have no effect on the
- *  window border drawn by the window manager, which is the normal
- *  case when using the X Window system.)
- *
- * For windows with frames (see gtk_window_set_has_frame()) this function
- * can be used to change the size of the frame border.
- **/
-void
-gtk_window_set_frame_dimensions (GtkWindow *window, 
-				 gint       left,
-				 gint       top,
-				 gint       right,
-				 gint       bottom)
-{
-  GtkWindowPrivate *priv;
-  GtkAllocation allocation;
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
-
-  if (priv->frame_left == left &&
-      priv->frame_top == top &&
-      priv->frame_right == right &&
-      priv->frame_bottom == bottom)
-    return;
-
-  priv->frame_left = left;
-  priv->frame_top = top;
-  priv->frame_right = right;
-  priv->frame_bottom = bottom;
-
-  if (gtk_widget_get_realized (widget) && priv->frame)
-    {
-	  gint width, height;
-	  gtk_widget_get_allocation (widget, &allocation);
-
-      width = allocation.width + left + right;
-      height = allocation.height + top + bottom;
-      gdk_window_resize (priv->frame, width, height);
-      gdk_window_move_resize (gtk_widget_get_window (GTK_WIDGET (window)),
-                              left, top,
-                              allocation.width,
-                              allocation.height);
-    }
-}
-
-/**
  * gtk_window_present:
  * @window: a #GtkWindow
  *
@@ -7700,10 +7407,7 @@ gtk_window_iconify (GtkWindow *window)
 
   priv->iconify_initially = TRUE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_iconify (toplevel);
@@ -7736,10 +7440,7 @@ gtk_window_deiconify (GtkWindow *window)
 
   priv->iconify_initially = FALSE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_deiconify (toplevel);
@@ -7777,10 +7478,7 @@ gtk_window_stick (GtkWindow *window)
 
   priv->stick_initially = TRUE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_stick (toplevel);
@@ -7815,10 +7513,7 @@ gtk_window_unstick (GtkWindow *window)
 
   priv->stick_initially = FALSE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_unstick (toplevel);
@@ -7858,10 +7553,7 @@ gtk_window_maximize (GtkWindow *window)
 
   priv->maximize_initially = TRUE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_maximize (toplevel);
@@ -7896,10 +7588,7 @@ gtk_window_unmaximize (GtkWindow *window)
 
   priv->maximize_initially = FALSE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_unmaximize (toplevel);
@@ -7936,10 +7625,7 @@ gtk_window_fullscreen (GtkWindow *window)
 
   priv->fullscreen_initially = TRUE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_fullscreen (toplevel);
@@ -7976,10 +7662,7 @@ gtk_window_unfullscreen (GtkWindow *window)
 
   priv->fullscreen_initially = FALSE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_unfullscreen (toplevel);
@@ -8030,10 +7713,7 @@ gtk_window_set_keep_above (GtkWindow *window,
   if (setting)
     priv->below_initially = FALSE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_set_keep_above (toplevel, setting);
@@ -8084,10 +7764,7 @@ gtk_window_set_keep_below (GtkWindow *window,
   if (setting)
     priv->above_initially = FALSE;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_set_keep_below (toplevel, setting);
@@ -8227,57 +7904,12 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
 
   priv = window->priv;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   gdk_window_begin_resize_drag (toplevel,
                                 edge, button,
                                 root_x, root_y,
                                 timestamp);
-}
-
-/**
- * gtk_window_get_frame_dimensions:
- * @window: a #GtkWindow
- * @left: (out) (allow-none): location to store the width of the frame at the left, or %NULL
- * @top: (out) (allow-none): location to store the height of the frame at the top, or %NULL
- * @right: (out) (allow-none): location to store the width of the frame at the returns, or %NULL
- * @bottom: (out) (allow-none): location to store the height of the frame at the bottom, or %NULL
- *
- * (Note: this is a special-purpose function intended for the
- *  framebuffer port; see gtk_window_set_has_frame(). It will not
- *  return the size of the window border drawn by the <link
- *  linkend="gtk-X11-arch">window manager</link>, which is the normal
- *  case when using a windowing system.  See
- *  gdk_window_get_frame_extents() to get the standard window border
- *  extents.)
- * 
- * Retrieves the dimensions of the frame window for this toplevel.
- * See gtk_window_set_has_frame(), gtk_window_set_frame_dimensions().
- **/
-void
-gtk_window_get_frame_dimensions (GtkWindow *window,
-				 gint      *left,
-				 gint      *top,
-				 gint      *right,
-				 gint      *bottom)
-{
-  GtkWindowPrivate *priv;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  priv = window->priv;
-
-  if (left)
-    *left = priv->frame_left;
-  if (top)
-    *top = priv->frame_top;
-  if (right)
-    *right = priv->frame_right;
-  if (bottom)
-    *bottom = priv->frame_bottom;
 }
 
 /**
@@ -8313,10 +7945,7 @@ gtk_window_begin_move_drag  (GtkWindow *window,
 
   priv = window->priv;
 
-  if (priv->frame)
-    toplevel = priv->frame;
-  else
-    toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (widget);
 
   gdk_window_begin_move_drag (toplevel,
                               button,
