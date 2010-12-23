@@ -124,8 +124,6 @@ void        _gdk_quartz_window_translate   (GdkWindow       *window,
 gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
                                                   cairo_region_t *area);
 
-void        _gdk_quartz_window_set_startup_id    (GdkWindow   *window,
-                                                  const gchar *startup_id);
 void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
 GdkDragContext * _gdk_quartz_window_drag_begin   (GdkWindow   *window,
                                                   GdkDevice   *device,
@@ -155,8 +153,6 @@ void       _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
                                                         guint      *height);
 void       _gdk_quartz_display_before_process_all_updates (GdkDisplay *display);
 void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
-void       _gdk_quartz_display_notify_startup_complete    (GdkDisplay *display,
-                                                           const gchar *id);
 void       _gdk_quartz_display_event_data_copy (GdkDisplay     *display,
                                                 const GdkEvent *src,
                                                 GdkEvent       *dst);

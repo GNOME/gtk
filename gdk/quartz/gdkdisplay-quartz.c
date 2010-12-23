@@ -261,6 +261,14 @@ _gdk_quartz_display_get_next_serial (GdkDisplay *display)
   return 0;
 }
 
+static void
+_gdk_quartz_display_notify_startup_complete (GdkDisplay  *display,
+                                             const gchar *startup_id)
+{
+  /* FIXME: Implement? */
+}
+
+
 G_DEFINE_TYPE (GdkQuartzDisplay, _gdk_quartz_display, GDK_TYPE_DISPLAY)
 
 static void

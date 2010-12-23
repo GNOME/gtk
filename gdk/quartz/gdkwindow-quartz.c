@@ -2143,6 +2143,13 @@ gdk_quartz_window_set_role (GdkWindow   *window,
 }
 
 static void
+gdk_quartz_window_set_startup_id (GdkWindow   *window,
+                                  const gchar *startup_id)
+{
+  /* FIXME: Implement? */
+}
+
+static void
 gdk_quartz_window_set_transient_for (GdkWindow *window,
                                      GdkWindow *parent)
 {
@@ -2982,7 +2989,7 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->set_geometry_hints = gdk_quartz_window_set_geometry_hints;
   impl_class->set_title = gdk_quartz_window_set_title;
   impl_class->set_role = gdk_quartz_window_set_role;
-  impl_class->set_startup_id = _gdk_quartz_window_set_startup_id;
+  impl_class->set_startup_id = gdk_quartz_window_set_startup_id;
   impl_class->set_transient_for = gdk_quartz_window_set_transient_for;
   impl_class->get_root_origin = gdk_quartz_window_get_root_origin;
   impl_class->get_frame_extents = gdk_quartz_window_get_frame_extents;
