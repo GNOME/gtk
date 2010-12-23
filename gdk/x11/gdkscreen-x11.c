@@ -1,7 +1,7 @@
  /*
  * gdkscreen-x11.c
- * 
- * Copyright 2001 Sun Microsystems Inc. 
+ *
+ * Copyright 2001 Sun Microsystems Inc.
  *
  * Erwann Chenede <erwann.chenede@sun.com>
  *
@@ -842,20 +842,23 @@ gdk_x11_screen_is_composited (GdkScreen *screen)
 }
 
 static void
-init_randr_support (GdkScreen * screen)
+init_randr_support (GdkScreen *screen)
 {
   GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
-  
+
   XSelectInput (GDK_SCREEN_XDISPLAY (screen),
-		x11_screen->xroot_window,
-		StructureNotifyMask);
+                x11_screen->xroot_window,
+                StructureNotifyMask);
 
 #ifdef HAVE_RANDR
+  if (!GDK_X11_DISPLAY (gdk_screen_get_display (screen))->have_randr12)
+    return;
+
   XRRSelectInput (GDK_SCREEN_XDISPLAY (screen),
-		  x11_screen->xroot_window,
-		  RRScreenChangeNotifyMask	|
-		  RRCrtcChangeNotifyMask	|
-		  RROutputPropertyNotifyMask);
+                  x11_screen->xroot_window,
+                  RRScreenChangeNotifyMask
+                  | RRCrtcChangeNotifyMask
+                  | RROutputPropertyNotifyMask);
 #endif
 }
 
