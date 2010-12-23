@@ -9064,6 +9064,16 @@ gtk_widget_render_icon (GtkWidget      *widget,
  * @parent_window: the new parent window.
  *
  * Sets a non default parent window for @widget.
+ *
+ * For GtkWindow classes, setting a @parent_window effects whether 
+ * the window is a toplevel window or can be embedded into other
+ * widgets.
+ *
+ * <note><para>
+ * For GtkWindow classes, this needs to be called before the
+ * window is realized.
+ * </para></note>
+ * 
  **/
 void
 gtk_widget_set_parent_window   (GtkWidget           *widget,
@@ -9089,11 +9099,8 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
        * this is the primary entry point to allow toplevels to be
        * embeddable.
        */
-      if (GTK_IS_WINDOW (widget))
-	{
-	  _gtk_window_set_is_toplevel (GTK_WINDOW (widget), FALSE);
-	  gtk_container_set_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
-	}
+      if (GTK_IS_WINDOW (widget) && !GTK_IS_PLUG (widget))
+	_gtk_window_set_is_toplevel (GTK_WINDOW (widget), parent_window == NULL);
     }
 }
 
