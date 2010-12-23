@@ -4866,6 +4866,8 @@ gtk_window_realize (GtkWidget *widget)
 
   if (gtk_widget_get_parent_window (widget))
     {
+      gtk_container_set_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
+
       gtk_widget_set_realized (widget, TRUE);
 
       attributes.x = allocation.x;
@@ -4892,6 +4894,8 @@ gtk_window_realize (GtkWidget *widget)
       gdk_window_enable_synchronized_configure (gdk_window);
       return;
     }
+
+  gtk_container_set_resize_mode (GTK_CONTAINER (window), GTK_RESIZE_QUEUE);
 
   /* ensure widget tree is properly size allocated */
   if (allocation.x == -1 &&
@@ -5357,8 +5361,7 @@ static gboolean
 gtk_window_state_event (GtkWidget           *widget,
                         GdkEventWindowState *event)
 {
-  if (gtk_widget_is_toplevel (GTK_WIDGET (widget)))
-    update_grip_visibility (GTK_WINDOW (widget));
+  update_grip_visibility (GTK_WINDOW (widget));
 
   return FALSE;
 }
@@ -5369,12 +5372,9 @@ gtk_window_direction_changed (GtkWidget        *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  if (gtk_widget_is_toplevel (GTK_WIDGET (widget)))
-    {
-      set_grip_cursor (window);
-      set_grip_position (window);
-      set_grip_shape (window);
-    }
+  set_grip_cursor (window);
+  set_grip_position (window);
+  set_grip_shape (window);
 }
 
 static void
@@ -5383,8 +5383,7 @@ gtk_window_state_changed (GtkWidget    *widget,
 {
   GtkWindow *window = GTK_WINDOW (widget);
 
-  if (gtk_widget_is_toplevel (GTK_WIDGET (widget)))
-    update_grip_visibility (window);
+  update_grip_visibility (window);
 }
 
 static void
@@ -7345,23 +7344,6 @@ gtk_window_draw (GtkWidget *widget,
   GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
   GtkStyleContext *context;
   gboolean ret = FALSE;
-
-  /* If the window is not toplevel anymore than it's embedded somewhere,
-   * so just chain up and paint the children */
-  if (!gtk_widget_is_toplevel (widget))
-    {
-      if (!gtk_widget_get_app_paintable (widget))
-	gtk_paint_flat_box (gtk_widget_get_style (widget),
-			    cr,
-			    gtk_widget_get_state (widget),
-			    GTK_SHADOW_NONE,
-			    widget, "window",
-			    0, 0,
-			    gtk_widget_get_allocated_width (widget),
-			    gtk_widget_get_allocated_height (widget));
-      
-      return GTK_WIDGET_CLASS (gtk_window_parent_class)->draw (widget, cr);
-    }
 
   context = gtk_widget_get_style_context (widget);
 
