@@ -880,6 +880,7 @@ GdkWindow *
 gdk_window_foreign_new_for_display (GdkDisplay     *display,
 				    GdkNativeWindow anid)
 {
+  return gdk_x11_window_foreign_new_for_display (display, anid);
 }
 
 /**
