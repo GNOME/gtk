@@ -299,7 +299,7 @@ gdk_keymap_get_default (void)
 
 /**
  * gdk_keymap_get_direction:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ * @keymap: a #GdkKeymap
  *
  * Returns the direction of effective layout of the keymap.
  *
@@ -315,7 +315,7 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
 
 /**
  * gdk_keymap_have_bidi_layouts:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ * @keymap: a #GdkKeymap
  *
  * Determines if keyboard layouts for both right-to-left and left-to-right
  * languages are in use.
@@ -364,7 +364,7 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
 
 /**
  * gdk_keymap_get_entries_for_keyval:
- * @keymap: (allow-none): a #GdkKeymap, or %NULL to use the default keymap
+ * @keymap: a #GdkKeymap
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
  * @keys: (out): return location for an array of #GdkKeymapKey
  * @n_keys: (out): return location for number of elements in returned array
@@ -394,7 +394,7 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 
 /**
  * gdk_keymap_get_entries_for_keycode:
- * @keymap: (allow-none): a #GdkKeymap or %NULL to use the default keymap
+ * @keymap: a #GdkKeymap
  * @hardware_keycode: a keycode
  * @keys: (out): return location for array of #GdkKeymapKey, or %NULL
  * @keyvals: (out): return location for array of keyvals, or %NULL
@@ -421,7 +421,7 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
 
 /**
  * gdk_keymap_lookup_key:
- * @keymap: a #GdkKeymap or %NULL to use the default keymap
+ * @keymap: a #GdkKeymap
  * @key: a #GdkKeymapKey with keycode, group, and level initialized
  *
  * Looks up the keyval mapped to a keycode/group/level triplet.
@@ -441,21 +441,23 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
 
 /**
  * gdk_keymap_translate_keyboard_state:
- * @keymap: (allow-none): a #GdkKeymap, or %NULL to use the default
+ * @keymap: a #GdkKeymap
  * @hardware_keycode: a keycode
  * @state: a modifier state
  * @group: active keyboard group
  * @keyval: (out) (allow-none): return location for keyval, or %NULL
- * @effective_group: (out) (allow-none): return location for effective group, or %NULL
- * @level: (out) (allow-none):  return location for level, or %NULL
- * @consumed_modifiers: (out) (allow-none):  return location for modifiers that were used to
- *     determine the group or level, or %NULL
+ * @effective_group: (out) (allow-none): return location for effective
+ *     group, or %NULL
+ * @level: (out) (allow-none): return location for level, or %NULL
+ * @consumed_modifiers: (out) (allow-none): return location for modifiers
+ *     that were used to determine the group or level, or %NULL
  *
  * Translates the contents of a #GdkEventKey into a keyval, effective
  * group, and level. Modifiers that affected the translation and
  * are thus unavailable for application use are returned in
- * @consumed_modifiers.  See <xref linkend="key-group-explanation"/> for an explanation of
- * groups and levels.  The @effective_group is the group that was
+ * @consumed_modifiers.
+ * See <xref linkend="key-group-explanation"/> for an explanation of
+ * groups and levels. The @effective_group is the group that was
  * actually used for the translation; some keys such as Enter are not
  * affected by the active keyboard group. The @level is derived from
  * @state. For convenience, #GdkEventKey already contains the translated
@@ -580,9 +582,10 @@ gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
 
 /**
  * gdk_keyval_name:
- * @keyval: a key value.
+ * @keyval: a key value
  *
  * Converts a key value into a symbolic name.
+ *
  * The names are the same as those in the
  * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
  * but without the leading "GDK_KEY_".
@@ -599,6 +602,19 @@ gdk_keyval_name (guint keyval)
   return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_keyval_name (manager, keyval);
 }
 
+/**
+ * gdk_keyval_from_name:
+ * @keyval_name: a key name
+ *
+ * Converts a key name to a key value.
+ *
+ * The names are the same as those in the
+ * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+ * but without the leading "GDK_KEY_".
+ *
+ * Returns: the corresponding key value, or %GDK_KEY_VoidSymbol
+ *     if the key name is not a valid key
+ */
 guint
 gdk_keyval_from_name (const gchar *keyval_name)
 {
