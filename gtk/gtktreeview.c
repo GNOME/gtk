@@ -2128,6 +2128,9 @@ gtk_tree_view_map_buttons (GtkTreeView *tree_view)
 	  column = list->data;
 	  button = gtk_tree_view_column_get_button (column);
 
+          if (gtk_tree_view_column_get_visible (column) && button)
+            gtk_widget_show_now (button);
+
           if (gtk_widget_get_visible (button) &&
               !gtk_widget_get_mapped (button))
             gtk_widget_map (button);
@@ -11631,6 +11634,8 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
 	    {
 	      column = list->data;
 	      button = gtk_tree_view_column_get_button (column);
+
+              gtk_widget_hide (button);
 	      gtk_widget_unmap (button);
 	    }
 	  gdk_window_hide (tree_view->priv->header_window);

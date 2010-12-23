@@ -987,7 +987,9 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     {
       if (priv->visible)
 	{
-	  gtk_widget_show_now (priv->button);
+          if (gdk_window_is_visible (_gtk_tree_view_get_header_window (GTK_TREE_VIEW (priv->tree_view))))
+            gtk_widget_show_now (priv->button);
+
 	  if (priv->window)
 	    {
 	      if (priv->resizable)
@@ -1326,9 +1328,6 @@ _gtk_tree_view_column_realize_button (GtkTreeViewColumn *column)
 
   g_return_if_fail (_gtk_tree_view_get_header_window (tree_view) != NULL);
   gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
-
-  if (priv->visible)
-    gtk_widget_show (priv->button);
 
   attr.window_type = GDK_WINDOW_CHILD;
   attr.wclass = GDK_INPUT_ONLY;
