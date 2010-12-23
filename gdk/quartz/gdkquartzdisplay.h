@@ -1,4 +1,4 @@
-/* gdkdisplay-quartz.h
+/* gdkquartzdisplay.h
  *
  * Copyright (C) 2005-2007  Imendio AB
  * Copyright (C) 2010 Kristian Rietveld  <kris@gtk.org>
@@ -19,11 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#if !defined(__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdkquartz.h> can be included directly."
+#endif
+
 #ifndef __GDK_QUARTZ_DISPLAY_H__
 #define __GDK_QUARTZ_DISPLAY_H__
 
 #include <gdk/gdk.h>
-#include "gdkdisplayprivate.h"
 
 G_BEGIN_DECLS
 
@@ -34,20 +37,13 @@ G_BEGIN_DECLS
 #define GDK_IS_QUARTZ_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_DISPLAY))
 #define GDK_QUARTZ_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_DISPLAY, GdkQuartzDisplayClass))
 
+#ifdef GDK_COMPILATION
 typedef struct _GdkQuartzDisplay GdkQuartzDisplay;
+#else
+typedef GdkDisplay GdkQuartzDisplay;
+#endif
 typedef struct _GdkQuartzDisplayClass GdkQuartzDisplayClass;
 
-struct _GdkQuartzDisplay
-{
-  GdkDisplay display;
-
-  GList *input_devices;
-};
-
-struct _GdkQuartzDisplayClass
-{
-  GdkDisplayClass display_class;
-};
 
 GType _gdk_quartz_display_get_type (void);
 

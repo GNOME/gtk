@@ -20,13 +20,24 @@
 
 #include "config.h"
 
+#include <gdk/gdkdeviceprivate.h>
 #include <gdk/gdkdisplayprivate.h>
 
 #import "GdkQuartzView.h"
-#include "gdkwindow-quartz.h"
-#include "gdkcursor-quartz.h"
+#include "gdkquartzwindow.h"
+#include "gdkquartzcursor.h"
 #include "gdkprivate-quartz.h"
-#include "gdkdevice-core-quartz.h"
+#include "gdkquartzdevice-core.h"
+
+struct _GdkQuartzDeviceCore
+{
+  GdkDevice parent_instance;
+};
+
+struct _GdkQuartzDeviceCoreClass
+{
+  GdkDeviceClass parent_class;
+};
 
 static gboolean gdk_quartz_device_core_get_history (GdkDevice      *device,
                                                     GdkWindow      *window,
@@ -159,18 +170,12 @@ gdk_quartz_device_core_set_window_cursor (GdkDevice *device,
                                           GdkWindow *window,
                                           GdkCursor *cursor)
 {
-  GdkQuartzCursor *cursor_private;
   NSCursor *nscursor;
-
-  cursor_private = (GdkQuartzCursor *) cursor;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!cursor)
-    nscursor = [NSCursor arrowCursor];
-  else
-    nscursor = cursor_private->nscursor;
+  nscursor = _gdk_quartz_cursor_get_ns_cursor (cursor);
 
   [nscursor set];
 }

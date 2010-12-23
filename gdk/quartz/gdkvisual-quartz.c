@@ -21,19 +21,9 @@
 #include "config.h"
 
 #include "gdkvisualprivate.h"
+#include "gdkquartzvisual.h"
 #include "gdkprivate-quartz.h"
 
-GType _gdk_quartz_visual_get_type (void);
-
-#define GDK_TYPE_QUARTZ_VISUAL              (_gdk_quartz_visual_get_type ())
-#define GDK_QUARTZ_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisual))
-#define GDK_QUARTZ_VISUAL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisualClass))
-#define GDK_IS_QUARTZ_VISUAL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_VISUAL))
-#define GDK_IS_QUARTZ_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_VISUAL))
-#define GDK_QUARTZ_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisualClass))
-
-typedef struct _GdkQuartzVisual GdkQuartzVisual;
-typedef struct _GdkQuartzVisualClass GdkQuartzVisualClass;
 
 struct _GdkQuartzVisual
 {

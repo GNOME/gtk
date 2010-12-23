@@ -19,8 +19,9 @@
  */
 
 #include "gdkdnd.h"
-#include "gdkdnd-quartz.h"
+#include "gdkquartzdnd.h"
 #include "gdkprivate-quartz.h"
+
 
 G_DEFINE_TYPE (GdkQuartzDragContext, gdk_quartz_drag_context, GDK_TYPE_DRAG_CONTEXT)
 

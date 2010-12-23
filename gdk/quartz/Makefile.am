@@ -1,6 +1,7 @@
 include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
+libgdkquartzincludedir = $(includedir)/gtk-3.0/gdk/quartz
 
 INCLUDES = 				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
@@ -22,15 +23,11 @@ libgdk_quartz_la_SOURCES =    	\
 	GdkQuartzWindow.c	\
 	GdkQuartzWindow.h	\
 	gdkcursor-quartz.c	\
-	gdkcursor-quartz.h	\
 	gdkdevice-core-quartz.c	\
-	gdkdevice-core-quartz.h	\
 	gdkdevicemanager-core-quartz.c	\
 	gdkdevicemanager-core-quartz.h	\
 	gdkdisplay-quartz.c	\
-	gdkdisplay-quartz.h	\
 	gdkdisplaymanager-quartz.c	\
-	gdkdisplaymanager-quartz.h	\
 	gdkdnd-quartz.c		\
 	gdkdnd-quartz.h		\
 	gdkevents-quartz.c	\
@@ -53,6 +50,19 @@ libgdk_quartz_la_SOURCES =    	\
 
 libgdkinclude_HEADERS = 	\
 	gdkquartz.h
+
+libgdkquartzinclude_HEADERS =		\
+	gdkquartzcursor.h		\
+	gdkquartzdevice-core.h		\
+	gdkquartzdevicemanager-core.h	\
+	gdkquartzdisplay.h		\
+	gdkquartzdisplaymanager.h	\
+	gdkquartzdnd.h			\
+	gdkquartzkeys.h			\
+	gdkquartzscreen.h		\
+	gdkquartzutils.h		\
+	gdkquartzvisual.h		\
+	gdkquartzwindow.h
 
 
 -include $(top_srcdir)/git.mk

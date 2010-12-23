@@ -29,11 +29,13 @@
 #import <Cocoa/Cocoa.h>
 #include <Carbon/Carbon.h>
 
+#include <gdk/gdkdisplayprivate.h>
+
 #include "gdkscreen.h"
 #include "gdkkeysyms.h"
-#include "gdkdisplay-quartz.h"
+#include "gdkquartzdisplay.h"
 #include "gdkprivate-quartz.h"
-#include "gdkdevicemanager-core-quartz.h"
+#include "gdkquartzdevicemanager-core.h"
 
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15

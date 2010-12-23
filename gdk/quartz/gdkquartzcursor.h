@@ -1,4 +1,4 @@
-/* gdkcursor-quartz.h
+/* gdkquartzcursor.h
  *
  * Copyright (C) 2005-2007  Imendio AB
  * Copyright (C) 2010 Kristian Rietveld  <kris@gtk.org>
@@ -19,12 +19,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#if !defined(__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdkquartz.h> can be included directly."
+#endif
+
 #ifndef __GDK_QUARTZ_CURSOR_H__
 #define __GDK_QUARTZ_CURSOR_H__
 
 #include <gdk/gdk.h>
-#include <gdk/quartz/gdkquartz.h>
-#include "gdkcursorprivate.h"
 
 G_BEGIN_DECLS
 
@@ -35,20 +37,12 @@ G_BEGIN_DECLS
 #define GDK_IS_QUARTZ_CURSOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_CURSOR))
 #define GDK_QUARTZ_CURSOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_CURSOR, GdkQuartzCursorClass))
 
+#ifdef GDK_COMPILATION
 typedef struct _GdkQuartzCursor GdkQuartzCursor;
+#else
+typedef GdkCursor GdkQuartzCursor;
+#endif
 typedef struct _GdkQuartzCursorClass GdkQuartzCursorClass;
-
-struct _GdkQuartzCursor
-{
-  GdkCursor cursor;
-
-  NSCursor *nscursor;
-};
-
-struct _GdkQuartzCursorClass
-{
-  GdkCursorClass cursor_class;
-};
 
 GType gdk_quartz_cursor_get_type (void);
 

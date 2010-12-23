@@ -27,12 +27,20 @@
 #include <dlfcn.h>
 #include <ApplicationServices/ApplicationServices.h>
 
-#include "gdkdisplay-quartz.h"
-#include "gdkdisplaymanager-quartz.h"
+#include "gdkquartzdisplay.h"
+#include "gdkquartzdisplaymanager.h"
 #include "gdkprivate-quartz.h"
 
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
+
+struct _GdkQuartzDisplayManager
+{
+  GdkDisplayManager parent;
+
+  GdkDisplay *default_display;
+  GSList *displays;
+};
 
 
 G_DEFINE_TYPE (GdkQuartzDisplayManager, gdk_quartz_display_manager, GDK_TYPE_DISPLAY_MANAGER)

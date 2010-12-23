@@ -22,10 +22,24 @@
 
 #include "gdkdisplay.h"
 #include "gdkcursor.h"
-#include "gdkcursor-quartz.h"
+#include "gdkcursorprivate.h"
+#include "gdkquartzcursor.h"
 #include "gdkprivate-quartz.h"
 
 #include "xcursors.h"
+
+struct _GdkQuartzCursor
+{
+  GdkCursor cursor;
+
+  NSCursor *nscursor;
+};
+
+struct _GdkQuartzCursorClass
+{
+  GdkCursorClass cursor_class;
+};
+
 
 static GdkCursor *cached_xcursors[G_N_ELEMENTS (xcursors)];
 
@@ -395,6 +409,21 @@ _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
   /* Cursor sizes in Mac OS X can be arbitrarily large */
   *width = 65536;
   *height = 65536;
+}
+
+NSCursor *
+_gdk_quartz_cursor_get_ns_cursor (GdkCursor *cursor)
+{
+  GdkQuartzCursor *cursor_private;
+
+  if (!cursor)
+    return [NSCursor arrowCursor];
+
+  g_return_val_if_fail (GDK_IS_QUARTZ_CURSOR (cursor), NULL);
+
+  cursor_private = GDK_QUARTZ_CURSOR (cursor);
+
+  return cursor_private->nscursor;
 }
 
 static GdkPixbuf *

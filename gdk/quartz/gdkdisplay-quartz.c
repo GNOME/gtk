@@ -20,12 +20,27 @@
 
 #include "config.h"
 
-#include "gdk.h"
+#include <gdk/gdk.h>
+#include <gdk/gdkdisplayprivate.h>
+
 #include "gdkprivate-quartz.h"
-#include "gdkscreen-quartz.h"
-#include "gdkwindow-quartz.h"
-#include "gdkdisplay-quartz.h"
-#include "gdkdevicemanager-core-quartz.h"
+#include "gdkquartzscreen.h"
+#include "gdkquartzwindow.h"
+#include "gdkquartzdisplay.h"
+#include "gdkquartzdevicemanager-core.h"
+
+
+struct _GdkQuartzDisplay
+{
+  GdkDisplay display;
+
+  GList *input_devices;
+};
+
+struct _GdkQuartzDisplayClass
+{
+  GdkDisplayClass display_class;
+};
 
 static GdkWindow *
 gdk_quartz_display_get_default_group (GdkDisplay *display)
@@ -107,7 +122,7 @@ _gdk_quartz_display_open (const gchar *display_name)
   _gdk_display = g_object_new (_gdk_quartz_display_get_type (), NULL);
   _gdk_display->device_manager = _gdk_device_manager_new (_gdk_display);
 
-  _gdk_screen = _gdk_quartz_screen_new ();
+  _gdk_screen = g_object_new (_gdk_quartz_screen_get_type (), NULL);
 
   _gdk_quartz_screen_init_visuals (_gdk_screen);
 

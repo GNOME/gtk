@@ -37,7 +37,11 @@
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
-#include "quartz/gdkdisplaymanager-quartz.h"
+/* We immediately include gdkquartzdisplaymanager.h here instead of
+ * gdkquartz.h so that we do not have to enable -xobjective-c for the
+ * "generic" GDK source code.
+ */
+#include "quartz/gdkquartzdisplaymanager.h"
 #endif
 
 

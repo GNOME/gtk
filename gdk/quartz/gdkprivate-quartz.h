@@ -25,9 +25,11 @@
 #define GDK_QUARTZ_RELEASE_POOL [pool release]
 
 #include <gdk/gdkprivate.h>
-#include <gdk/quartz/gdkwindow-quartz.h>
-#include <gdk/quartz/gdkdnd-quartz.h>
 #include <gdk/quartz/gdkquartz.h>
+#include <gdk/quartz/gdkdevicemanager-core-quartz.h>
+#include <gdk/quartz/gdkdnd-quartz.h>
+#include <gdk/quartz/gdkscreen-quartz.h>
+#include <gdk/quartz/gdkwindow-quartz.h>
 
 #include <gdk/gdk.h>
 
@@ -56,6 +58,9 @@ typedef enum {
   GDK_QUARTZ_CONTEXT_FILL   = 1 << 1,
   GDK_QUARTZ_CONTEXT_TEXT   = 1 << 2
 } GdkQuartzContextValuesMask;
+
+/* Cursor */
+NSCursor   *_gdk_quartz_cursor_get_ns_cursor        (GdkCursor *cursor);
 
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,

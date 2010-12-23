@@ -1,5 +1,7 @@
-/* GDK - The GIMP Drawing Kit
+/* gdkdevicemanager-quartz.h
+ *
  * Copyright (C) 2009 Carlos Garnacho <carlosg@gnome.org>
+ * Copyright (C) 2010  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,22 +19,13 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_QUARTZ_DEVICE_MANAGER_CORE_H__
-#define __GDK_QUARTZ_DEVICE_MANAGER_CORE_H__
+#ifndef __GDK_QUARTZ_DEVICE_MANAGER_CORE__
+#define __GDK_QUARTZ_DEVICE_MANAGER_CORE__
 
-#include <gdk/gdkdevicemanagerprivate.h>
+#include <gdkdevicemanagerprivate.h>
+#include <gdkquartzdevicemanager-core.h>
 
 G_BEGIN_DECLS
-
-#define GDK_TYPE_QUARTZ_DEVICE_MANAGER_CORE         (gdk_quartz_device_manager_core_get_type ())
-#define GDK_QUARTZ_DEVICE_MANAGER_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_QUARTZ_DEVICE_MANAGER_CORE, GdkQuartzDeviceManagerCore))
-#define GDK_QUARTZ_DEVICE_MANAGER_CORE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_QUARTZ_DEVICE_MANAGER_CORE, GdkQuartzDeviceManagerCoreClass))
-#define GDK_IS_QUARTZ_DEVICE_MANAGER_CORE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_QUARTZ_DEVICE_MANAGER_CORE))
-#define GDK_IS_QUARTZ_DEVICE_MANAGER_CORE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_QUARTZ_DEVICE_MANAGER_CORE))
-#define GDK_QUARTZ_DEVICE_MANAGER_CORE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_QUARTZ_DEVICE_MANAGER_CORE, GdkQuartzDeviceManagerCoreClass))
-
-typedef struct _GdkQuartzDeviceManagerCore GdkQuartzDeviceManagerCore;
-typedef struct _GdkQuartzDeviceManagerCoreClass GdkQuartzDeviceManagerCoreClass;
 
 struct _GdkQuartzDeviceManagerCore
 {
@@ -46,9 +39,6 @@ struct _GdkQuartzDeviceManagerCoreClass
   GdkDeviceManagerClass parent_class;
 };
 
-GType gdk_quartz_device_manager_core_get_type (void) G_GNUC_CONST;
-
-
 G_END_DECLS
 
-#endif /* __GDK_QUARTZ_DEVICE_MANAGER_CORE_H__ */
+#endif /* __GDK_QUARTZ_DEVICE_MANAGER__ */

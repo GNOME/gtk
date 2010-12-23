@@ -17,10 +17,14 @@
  * Boston, MA 02111-1307, USA.
  */
 
+#if !defined(__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdkquartz.h> can be included directly."
+#endif
+
 #ifndef __GDK_QUARTZ_DEVICE_CORE_H__
 #define __GDK_QUARTZ_DEVICE_CORE_H__
 
-#include <gdk/gdkdeviceprivate.h>
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
@@ -33,16 +37,6 @@ G_BEGIN_DECLS
 
 typedef struct _GdkQuartzDeviceCore GdkQuartzDeviceCore;
 typedef struct _GdkQuartzDeviceCoreClass GdkQuartzDeviceCoreClass;
-
-struct _GdkQuartzDeviceCore
-{
-  GdkDevice parent_instance;
-};
-
-struct _GdkQuartzDeviceCoreClass
-{
-  GdkDeviceClass parent_class;
-};
 
 GType gdk_quartz_device_core_get_type (void) G_GNUC_CONST;
 

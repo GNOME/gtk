@@ -21,8 +21,10 @@
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkdevicemanager.h>
+#include <gdk/gdkdeviceprivate.h>
+#include <gdk/gdkdevicemanagerprivate.h>
 #include "gdkdevicemanager-core-quartz.h"
-#include "gdkdevice-core-quartz.h"
+#include "gdkquartzdevice-core.h"
 #include "gdkkeysyms.h"
 
 

@@ -20,15 +20,17 @@
  */
 
 #include "config.h"
-#include <Carbon/Carbon.h>
 
-#include "gdk.h"
-#include "gdkdeviceprivate.h"
-#include "gdkdisplayprivate.h"
+#include <gdk/gdk.h>
+#include <gdk/gdkdeviceprivate.h>
+#include <gdk/gdkdisplayprivate.h>
+
 #include "gdkwindowimpl.h"
 #include "gdkprivate-quartz.h"
-#include "gdkscreen-quartz.h"
-#include "gdkcursor-quartz.h"
+#include "gdkquartzscreen.h"
+#include "gdkquartzcursor.h"
+
+#include <Carbon/Carbon.h>
 
 #include <sys/time.h>
 #include <cairo-quartz.h>
@@ -1671,18 +1673,12 @@ gdk_window_quartz_set_device_cursor (GdkWindow *window,
                                      GdkDevice *device,
                                      GdkCursor *cursor)
 {
-  GdkQuartzCursor *cursor_private;
   NSCursor *nscursor;
-
-  cursor_private = (GdkQuartzCursor *)cursor;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!cursor)
-    nscursor = [NSCursor arrowCursor];
-  else 
-    nscursor = cursor_private->nscursor;
+  nscursor = _gdk_quartz_cursor_get_ns_cursor (cursor);
 
   [nscursor set];
 }

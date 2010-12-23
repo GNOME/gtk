@@ -1,6 +1,7 @@
-/* gdkscreen-quartz.h
+/* gdkquartzutils.h
  *
- * Copyright (C) 2009,2010  Kristian Rietveld  <kris@gtk.org>
+ * Copyright (C) 2005  Imendio AB
+ * Copyright (C) 2010  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,39 +19,20 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_QUARTZ_SCREEN__
-#define __GDK_QUARTZ_SCREEN__
+#if !defined (__GDKQUARTZ_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdkquartz.h> can be included directly."
+#endif
 
-#include <gdkscreenprivate.h>
+#ifndef __GDK_QUARTZ_UTILS_H__
+#define __GDK_QUARTZ_UTILS_H__
+
+#include <gdk/gdk.h>
 
 G_BEGIN_DECLS
 
-struct _GdkQuartzScreen
-{
-  GdkScreen parent_instance;
-
-  GdkDisplay *display;
-
-  /* Origin of "root window" in Cocoa coordinates */
-  gint min_x;
-  gint min_y;
-
-  gint width;
-  gint height;
-
-  int n_screens;
-  GdkRectangle *screen_rects;
-
-  guint screen_changed_id;
-
-  guint emit_monitors_changed : 1;
-};
-
-struct _GdkQuartzScreenClass
-{
-  GdkScreenClass parent_class;
-};
+NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
+NSEvent  *gdk_quartz_event_get_nsevent                          (GdkEvent       *event);
 
 G_END_DECLS
 
-#endif /* __GDK_QUARTZ_SCREEN__ */
+#endif /* __GDK_QUARTZ_UTILS_H__ */

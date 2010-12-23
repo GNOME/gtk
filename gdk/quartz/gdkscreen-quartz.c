@@ -20,8 +20,9 @@
  */
 
 #include "config.h"
-#include "gdk.h"
-#include "gdkscreen-quartz.h"
+
+#include <gdk/gdk.h>
+
 #include "gdkprivate-quartz.h"
  
 
@@ -252,12 +253,6 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
         screen->screen_changed_id = gdk_threads_add_idle (screen_changed_idle,
                                                           screen);
     }
-}
-
-GdkScreen *
-_gdk_quartz_screen_new (void)
-{
-  return g_object_new (GDK_TYPE_QUARTZ_SCREEN, NULL);
 }
 
 static GdkDisplay *

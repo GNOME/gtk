@@ -54,6 +54,7 @@
 #include <Carbon/Carbon.h>
 #include <AppKit/NSEvent.h>
 #include "gdk.h"
+#include "gdkquartzkeys.h"
 #include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"
 
@@ -61,17 +62,6 @@
 #define KEYVALS_PER_KEYCODE 4
 
 static GdkKeymap *default_keymap = NULL;
-
-
-#define GDK_TYPE_QUARTZ_KEYMAP              (gdk_quartz_keymap_get_type ())
-#define GDK_QUARTZ_KEYMAP(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_KEYMAP, GdkQuartzKeymap))
-#define GDK_QUARTZ_KEYMAP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_KEYMAP, GdkQuartzKeymapClass))
-#define GDK_IS_QUARTZ_KEYMAP(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_KEYMAP))
-#define GDK_IS_QUARTZ_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_QUARTZ_KEYMAP))
-#define GDK_QUARTZ_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_QUARTZ_KEYMAP, GdkQuartzKeymapClass))
-
-typedef struct _GdkQuartzKeymap GdkQuartzKeymap;
-typedef struct _GdkQuartzKeymapClass GdkQuartzKeymapClass;
 
 struct _GdkQuartzKeymap
 {
