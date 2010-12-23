@@ -51,6 +51,9 @@ typedef struct _GtkDrawingAreaClass  GtkDrawingAreaClass;
 struct _GtkDrawingArea
 {
   GtkWidget widget;
+
+  /*< private >*/
+  gpointer dummy;
 };
 
 struct _GtkDrawingAreaClass
