@@ -39,8 +39,6 @@ _gdk_quartz_window_drag_begin (GdkWindow *window,
                                GdkDevice *device,
                                GList     *targets)
 {
-  GdkDragContext *context;
-
   g_assert (_gdk_quartz_drag_source_context == NULL);
 
   /* Create fake context */
@@ -48,9 +46,9 @@ _gdk_quartz_window_drag_begin (GdkWindow *window,
                                                   NULL);
   _gdk_quartz_drag_source_context->is_source = TRUE;
 
-  gdk_drag_context_set_device (context, device);
+  gdk_drag_context_set_device (_gdk_quartz_drag_source_context, device);
 
-  return context;
+  return _gdk_quartz_drag_source_context;
 }
 
 static gboolean
