@@ -248,9 +248,6 @@ void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
 void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
                                                      gint       number);
 
-void       _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
-                                                           cairo_region_t    *region);
-
 void       _gdk_quartz_window_update_position           (GdkWindow    *window);
 
 

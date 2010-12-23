@@ -433,9 +433,9 @@ gdk_window_impl_quartz_end_paint (GdkPaintable *paintable)
     }
 }
 
-void
-_gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
-                                                cairo_region_t    *region)
+static void
+gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
+                                               cairo_region_t    *region)
 {
   GdkWindowImplQuartz *impl;
   int i, n_rects;
@@ -490,7 +490,7 @@ _gdk_quartz_window_process_updates_recurse (GdkWindow *window,
     }
 
   if (WINDOW_IS_TOPLEVEL (window))
-    _gdk_quartz_window_set_needs_display_in_region (window, region);
+    gdk_quartz_window_set_needs_display_in_region (window, region);
   else
     _gdk_window_process_updates_recurse (window, region);
 
@@ -1387,7 +1387,7 @@ move_resize_window_internal (GdkWindow *window,
 
               [impl->view setFrame:nsrect];
 
-              _gdk_quartz_window_set_needs_display_in_region (window, expose_region);
+              gdk_quartz_window_set_needs_display_in_region (window, expose_region);
             }
           else
             {
@@ -2254,7 +2254,7 @@ gdk_quartz_window_translate (GdkWindow      *window,
       cairo_region_intersect (intersection, area);
       cairo_region_translate (intersection, dx, dy);
 
-      _gdk_quartz_window_set_needs_display_in_region (window, intersection);
+      gdk_quartz_window_set_needs_display_in_region (window, intersection);
       cairo_region_destroy (intersection);
     }
 
@@ -2266,7 +2266,7 @@ gdk_quartz_window_translate (GdkWindow      *window,
   cairo_region_subtract (invalidate, scrolled);
   cairo_region_destroy (scrolled);
 
-  _gdk_quartz_window_set_needs_display_in_region (window, invalidate);
+  gdk_quartz_window_set_needs_display_in_region (window, invalidate);
   cairo_region_destroy (invalidate);
 }
 
