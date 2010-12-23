@@ -8633,6 +8633,7 @@ gtk_widget_get_default_style (void)
 }
 
 #ifdef G_ENABLE_DEBUG
+
 /* Verify invariants, see docs/widget_system.txt for notes on much of
  * this.  Invariants may be temporarily broken while we're in the
  * process of updating state, of course, so you can only
@@ -9083,6 +9084,16 @@ gtk_widget_set_parent_window   (GtkWidget           *widget,
 	g_object_unref (old_parent_window);
       if (parent_window)
 	g_object_ref (parent_window);
+
+      /* Unset toplevel flag when adding a parent window to a widget,
+       * this is the primary entry point to allow toplevels to be
+       * embeddable.
+       */
+      if (GTK_IS_WINDOW (widget))
+	{
+	  _gtk_window_set_is_toplevel (GTK_WINDOW (widget), FALSE);
+	  gtk_container_set_resize_mode (GTK_CONTAINER (widget), GTK_RESIZE_PARENT);
+	}
     }
 }
 
