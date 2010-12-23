@@ -129,6 +129,7 @@ static TreeEntry other_entries[] =
       99,
       NULL
     },
+    { 0, },
   };
 
 static TreeEntry add_entries[] =
