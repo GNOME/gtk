@@ -55,13 +55,6 @@ static int          current_button_state;
 static void append_event                        (GdkEvent  *event,
                                                  gboolean   windowing);
 
-NSEvent *
-gdk_quartz_event_get_nsevent (GdkEvent *event)
-{
-  /* FIXME: If the event here is unallocated, we crash. */
-  return ((GdkEventPrivate *) event)->windowing_data;
-}
-
 void
 _gdk_quartz_events_init (void)
 {
