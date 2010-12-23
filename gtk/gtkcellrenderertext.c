@@ -2157,19 +2157,19 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->width_chars > 0)
     min_width = 
       xpad * 2 + 
-      MIN (PANGO_PIXELS (text_width), 
+      MIN (PANGO_PIXELS_CEIL (text_width), 
 	   (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars)));
   /* If no width-chars set, minimum for wrapping text will be the wrap-width */
   else if (priv->wrap_width > -1)
-    min_width = xpad * 2 + rect.x + MIN (PANGO_PIXELS (text_width), priv->wrap_width);
+    min_width = xpad * 2 + rect.x + MIN (PANGO_PIXELS_CEIL (text_width), priv->wrap_width);
   else
-    min_width = xpad * 2 + rect.x + PANGO_PIXELS (text_width);
+    min_width = xpad * 2 + rect.x + PANGO_PIXELS_CEIL (text_width);
 
   if (priv->width_chars > 0)
     nat_width = xpad * 2 + 
-      MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS (text_width));
+      MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS_CEIL (text_width));
   else
-    nat_width = xpad * 2 + PANGO_PIXELS (text_width);
+    nat_width = xpad * 2 + PANGO_PIXELS_CEIL (text_width);
 
 
   nat_width = MAX (nat_width, min_width);
