@@ -109,15 +109,15 @@ create_gray_visual (GdkScreen *screen)
 }
 
 
-G_DEFINE_TYPE (GdkQuartzVisual, _gdk_quartz_visual, GDK_TYPE_VISUAL)
+G_DEFINE_TYPE (GdkQuartzVisual, gdk_quartz_visual, GDK_TYPE_VISUAL)
 
 static void
-_gdk_quartz_visual_init (GdkQuartzVisual *quartz_visual)
+gdk_quartz_visual_init (GdkQuartzVisual *quartz_visual)
 {
 }
 
 static void
-_gdk_quartz_visual_class_init (GdkQuartzVisualClass *class)
+gdk_quartz_visual_class_init (GdkQuartzVisualClass *class)
 {
 }
 

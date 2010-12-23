@@ -30,7 +30,7 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_QUARTZ_VISUAL              (_gdk_quartz_visual_get_type ())
+#define GDK_TYPE_QUARTZ_VISUAL              (gdk_quartz_visual_get_type ())
 #define GDK_QUARTZ_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisual))
 #define GDK_QUARTZ_VISUAL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_QUARTZ_VISUAL, GdkQuartzVisualClass))
 #define GDK_IS_QUARTZ_VISUAL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_QUARTZ_VISUAL))
@@ -45,7 +45,7 @@ typedef GdkVisual GdkQuartzVisual;
 typedef struct _GdkQuartzVisualClass GdkQuartzVisualClass;
 
 
-GType _gdk_quartz_visual_get_type (void);
+GType gdk_quartz_visual_get_type (void);
 
 G_END_DECLS
 
