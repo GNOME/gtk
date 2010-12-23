@@ -44,7 +44,7 @@ typedef GdkKeymap GdkQuartzKeymap;
 #endif
 typedef struct _GdkQuartzKeymapClass GdkQuartzKeymapClass;
 
-GType _gdk_quartz_keymap_get_type (void);
+GType gdk_quartz_keymap_get_type (void);
 
 G_END_DECLS
 

@@ -73,13 +73,13 @@ struct _GdkQuartzKeymapClass
   GdkKeymapClass keymap_class;
 };
 
-G_DEFINE_TYPE (GdkQuartzKeymap, _gdk_quartz_keymap, GDK_TYPE_KEYMAP)
+G_DEFINE_TYPE (GdkQuartzKeymap, gdk_quartz_keymap, GDK_TYPE_KEYMAP)
 
 GdkKeymap *
 _gdk_quartz_display_get_keymap (GdkDisplay *display)
 {
   if (default_keymap == NULL)
-    default_keymap = g_object_new (_gdk_quartz_keymap_get_type (), NULL);
+    default_keymap = g_object_new (gdk_quartz_keymap_get_type (), NULL);
 
   return default_keymap;
 }
@@ -732,23 +732,23 @@ _gdk_quartz_keys_is_modifier (guint keycode)
 }
 
 static void
-_gdk_quartz_keymap_init (GdkQuartzKeymap *keymap)
+gdk_quartz_keymap_init (GdkQuartzKeymap *keymap)
 {
 }
 
 static void
-_gdk_quartz_keymap_finalize (GObject *object)
+gdk_quartz_keymap_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (_gdk_quartz_keymap_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_quartz_keymap_parent_class)->finalize (object);
 }
 
 static void
-_gdk_quartz_keymap_class_init (GdkQuartzKeymapClass *klass)
+gdk_quartz_keymap_class_init (GdkQuartzKeymapClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkKeymapClass *keymap_class = GDK_KEYMAP_CLASS (klass);
 
-  object_class->finalize = _gdk_quartz_keymap_finalize;
+  object_class->finalize = gdk_quartz_keymap_finalize;
 
   keymap_class->get_direction = gdk_quartz_keymap_get_direction;
   keymap_class->have_bidi_layouts = gdk_quartz_keymap_have_bidi_layouts;
