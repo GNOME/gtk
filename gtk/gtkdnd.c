@@ -4184,7 +4184,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
  *************************************************************/
 
 #define BIG_STEP 20
-#define SMALL_STEP 1
+#define SMALL_STEP 2
 
 static gboolean
 gtk_drag_key_cb (GtkWidget         *widget, 
@@ -4204,41 +4204,49 @@ gtk_drag_key_cb (GtkWidget         *widget,
   if (event->type == GDK_KEY_PRESS)
     {
       switch (event->keyval)
-	{
-	case GDK_KEY_Escape:
-	  gtk_drag_cancel (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
-	  return TRUE;
+{
+        case GDK_KEY_Escape:
+          gtk_drag_cancel (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
+          return TRUE;
 
-	case GDK_KEY_space:
-	case GDK_KEY_Return:
+        case GDK_KEY_space:
+        case GDK_KEY_Return:
         case GDK_KEY_ISO_Enter:
-	case GDK_KEY_KP_Enter:
-	case GDK_KEY_KP_Space:
-	  gtk_drag_end (info, event->time);
-	  gtk_drag_drop (info, event->time);
-	  return TRUE;
+        case GDK_KEY_KP_Enter:
+        case GDK_KEY_KP_Space:
+          if ((gdk_drag_context_get_selected_action (info->context) != 0) &&
+              (gdk_drag_context_get_dest_window (info->context) != NULL))
+            {
+              gtk_drag_end (info, event->time);
+              gtk_drag_drop (info, event->time);
+            }
+          else
+            {
+              gtk_drag_cancel (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
+            }
 
-	case GDK_KEY_Up:
-	case GDK_KEY_KP_Up:
-	  dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
-	  break;
-	  
-	case GDK_KEY_Down:
-	case GDK_KEY_KP_Down:
-	  dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
-	  break;
-	  
-	case GDK_KEY_Left:
-	case GDK_KEY_KP_Left:
-	  dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
-	  break;
-	  
-	case GDK_KEY_Right:
-	case GDK_KEY_KP_Right:
-	  dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
-	  break;
-	}
-      
+          return TRUE;
+
+        case GDK_KEY_Up:
+        case GDK_KEY_KP_Up:
+          dy = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          break;
+
+        case GDK_KEY_Down:
+        case GDK_KEY_KP_Down:
+          dy = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          break;
+
+        case GDK_KEY_Left:
+        case GDK_KEY_KP_Left:
+          dx = (state & GDK_MOD1_MASK) ? -BIG_STEP : -SMALL_STEP;
+          break;
+
+        case GDK_KEY_Right:
+        case GDK_KEY_KP_Right:
+          dx = (state & GDK_MOD1_MASK) ? BIG_STEP : SMALL_STEP;
+          break;
+        }
     }
 
   /* Now send a "motion" so that the modifier state is updated */
