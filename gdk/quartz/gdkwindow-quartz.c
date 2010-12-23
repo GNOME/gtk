@@ -2220,6 +2220,56 @@ gdk_window_quartz_set_static_gravities (GdkWindow *window,
   return FALSE;
 }
 
+static gboolean
+gdk_quartz_window_queue_antiexpose (GdkWindow *window,
+                                    cairo_region_t *area)
+{
+  return FALSE;
+}
+
+static void
+gdk_quartz_window_translate (GdkWindow      *window,
+                             cairo_region_t *area,
+                             gint            dx,
+                             gint            dy)
+{
+  cairo_region_t *invalidate, *scrolled;
+  GdkWindowImplQuartz *impl = (GdkWindowImplQuartz *)window->impl;
+  GdkRectangle extents;
+
+  cairo_region_get_extents (area, &extents);
+
+  [impl->view scrollRect:NSMakeRect (extents.x - dx, extents.y - dy,
+                                     extents.width, extents.height)
+              by:NSMakeSize (dx, dy)];
+
+  if (impl->needs_display_region)
+    {
+      cairo_region_t *intersection;
+
+      /* Invalidate already invalidated area that was moved at new
+       * location.
+       */
+      intersection = cairo_region_copy (impl->needs_display_region);
+      cairo_region_intersect (intersection, area);
+      cairo_region_translate (intersection, dx, dy);
+
+      _gdk_quartz_window_set_needs_display_in_region (window, intersection);
+      cairo_region_destroy (intersection);
+    }
+
+  /* Calculate newly exposed area that needs invalidation */
+  scrolled = cairo_region_copy (area);
+  cairo_region_translate (scrolled, dx, dy);
+
+  invalidate = cairo_region_copy (area);
+  cairo_region_subtract (invalidate, scrolled);
+  cairo_region_destroy (scrolled);
+
+  _gdk_quartz_window_set_needs_display_in_region (window, invalidate);
+  cairo_region_destroy (invalidate);
+}
+
 static void
 gdk_quartz_window_set_focus_on_map (GdkWindow *window,
                                     gboolean focus_on_map)
@@ -2945,8 +2995,8 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->shape_combine_region = gdk_window_quartz_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
   impl_class->set_static_gravities = gdk_window_quartz_set_static_gravities;
-  impl_class->queue_antiexpose = _gdk_quartz_window_queue_antiexpose;
-  impl_class->translate = _gdk_quartz_window_translate;
+  impl_class->queue_antiexpose = gdk_quartz_window_queue_antiexpose;
+  impl_class->translate = gdk_quartz_window_translate;
   impl_class->destroy = gdk_quartz_window_destroy;
   impl_class->destroy_foreign = gdk_quartz_window_destroy_foreign;
   impl_class->resize_cairo_surface = gdk_window_quartz_resize_cairo_surface;

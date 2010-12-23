@@ -75,14 +75,6 @@ void       _gdk_quartz_event_loop_release_event (NSEvent *event);
 GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
 gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
 
-/* Geometry */
-void        _gdk_quartz_window_translate   (GdkWindow       *window,
-                                            cairo_region_t  *area,
-                                            gint             dx,
-                                            gint             dy);
-gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
-                                                  cairo_region_t *area);
-
 /* Drag and Drop */
 void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
 GdkDragContext * _gdk_quartz_window_drag_begin   (GdkWindow   *window,
