@@ -5601,7 +5601,7 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
     g_assert (impl->toplevel_set_focus_id == 0);
 
   toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     {
       impl->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
 						      G_CALLBACK (toplevel_set_focus_cb), impl);
