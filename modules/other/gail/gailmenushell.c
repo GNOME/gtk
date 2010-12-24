@@ -155,7 +155,7 @@ gail_menu_shell_ref_selection (AtkSelection   *selection,
 
   shell = GTK_MENU_SHELL (widget);
 
-  item = gtk_menu_shell_get_selectec_item (shell);
+  item = gtk_menu_shell_get_selected_item (shell);
   if (item != NULL)
   {
     obj = gtk_widget_get_accessible (item);
