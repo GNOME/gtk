@@ -340,7 +340,7 @@ _gdk_x11_display_send_selection_notify (GdkDisplay       *display,
  * @format: the format of the property
  * @text: The text data
  * @length: The number of items to transform
- * @list: location to store a terminated array of strings in
+ * @list: location to store an  array of strings in
  *    the encoding of the current locale. This array should be
  *    freed using gdk_free_text_list().
  *
@@ -385,7 +385,7 @@ gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
   else
     {
       if (list)
-        *list = g_strdupv (local_list);
+        *list = local_list;
       else
         XFreeStringList (local_list);
 
