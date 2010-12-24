@@ -161,12 +161,17 @@ gtk_separator_get_preferred_size (GtkWidget      *widget,
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder border;
   gboolean wide_sep;
   gint     sep_width;
   gint     sep_height;
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_get_border (context, state, &border);
+
   gtk_widget_style_get (widget,
                         "wide-separators",  &wide_sep,
                         "separator-width",  &sep_width,
@@ -179,11 +184,11 @@ gtk_separator_get_preferred_size (GtkWidget      *widget,
     }
   else if (orientation == GTK_ORIENTATION_VERTICAL)
     {
-      *minimum = *natural = wide_sep ? sep_height : style->ythickness;
+      *minimum = *natural = wide_sep ? sep_height : border.top;
     }
   else
     {
-      *minimum = *natural = wide_sep ? sep_width : style->xthickness;
+      *minimum = *natural = wide_sep ? sep_width : border.left;
     }
 }
 
@@ -209,15 +214,16 @@ gtk_separator_draw (GtkWidget    *widget,
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
-  GtkStateType state;
-  GtkStyle *style;
+  GtkStateFlags state;
+  GtkStyleContext *context;
+  GtkBorder padding;
   GdkWindow *window;
   gboolean wide_separators;
   gint separator_width;
   gint separator_height;
   int width, height;
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget,
                         "wide-separators",  &wide_separators,
                         "separator-width",  &separator_width,
@@ -225,39 +231,36 @@ gtk_separator_draw (GtkWidget    *widget,
                         NULL);
 
   window = gtk_widget_get_window (widget);
-  state = gtk_widget_get_state (widget);
+  state = gtk_widget_get_state_flags (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
+
+  gtk_style_context_get_padding (context, state, &padding);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
 
   if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
       if (wide_separators)
-        gtk_paint_box (style, cr,
-                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
-                       widget, "hseparator",
-                       0, (height - separator_height) / 2,
-                       width, separator_height);
+        gtk_render_frame (context, cr,
+                          0, (height - separator_height) / 2,
+                          width, separator_height);
       else
-        gtk_paint_hline (style, cr,
-                         gtk_widget_get_state (widget),
-                         widget, "hseparator",
-                         0, width - 1,
-                         (height - style->ythickness) / 2);
+        gtk_render_line (context, cr,
+                         0, (height - padding.top) / 2,
+                         width - 1, (height - padding.top) / 2);
     }
   else
     {
       if (wide_separators)
-        gtk_paint_box (style, cr,
-                       gtk_widget_get_state (widget), GTK_SHADOW_ETCHED_OUT,
-                       widget, "vseparator",
-                       (width - separator_width) / 2, 0,
-                       separator_width, height);
+        gtk_render_frame (context, cr,
+                          (width - separator_width) / 2, 0,
+                          separator_width, height);
       else
-        gtk_paint_vline (style, cr,
-                         gtk_widget_get_state (widget),
-                         widget, "vseparator",
-                         0, height - 1,
-                         (width - style->xthickness) / 2);
+        gtk_render_line (context, cr,
+                         (width - padding.left) / 2, 0,
+                         (width - padding.left) / 2, height - 1);
     }
 
   return FALSE;
