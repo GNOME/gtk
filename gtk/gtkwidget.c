@@ -3715,8 +3715,6 @@ gtk_widget_unparent (GtkWidget *widget)
   toplevel = gtk_widget_get_toplevel (widget);
   if (gtk_widget_is_toplevel (toplevel))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
-  else
-    toplevel = NULL;
 
   if (gtk_container_get_focus_child (GTK_CONTAINER (priv->parent)) == widget)
     gtk_container_set_focus_child (GTK_CONTAINER (priv->parent), NULL);
@@ -3775,7 +3773,7 @@ gtk_widget_unparent (GtkWidget *widget)
     }
 
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
-  if (toplevel)
+  if (toplevel && gtk_widget_is_toplevel (toplevel))
     {
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
       g_object_unref (toplevel);

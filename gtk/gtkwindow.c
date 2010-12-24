@@ -5997,6 +5997,9 @@ gtk_window_focus (GtkWidget        *widget,
   GtkWidget *old_focus_child;
   GtkWidget *parent;
 
+  if (!gtk_widget_is_toplevel (GTK_WIDGET (widget)))
+    return GTK_WIDGET_CLASS (gtk_window_parent_class)->focus (widget, direction);
+
   container = GTK_CONTAINER (widget);
   window = GTK_WINDOW (widget);
   priv = window->priv;
@@ -6050,6 +6053,12 @@ static void
 gtk_window_move_focus (GtkWidget       *widget,
                        GtkDirectionType dir)
 {
+  if (!gtk_widget_is_toplevel (GTK_WIDGET (widget)))
+    {
+      GTK_WIDGET_CLASS (gtk_window_parent_class)->move_focus (widget, dir);
+      return;
+    }
+
   gtk_widget_child_focus (widget, dir);
 
   if (! gtk_container_get_focus_child (GTK_CONTAINER (widget)))
