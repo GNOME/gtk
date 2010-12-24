@@ -24,6 +24,14 @@
 
 G_BEGIN_DECLS
 
+
+#define GDK_DEVICE_MANAGER_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE_MANAGER, GdkDeviceManagerClass))
+#define GDK_IS_DEVICE_MANAGER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_DEVICE_MANAGER))
+#define GDK_DEVICE_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE_MANAGER, GdkDeviceManagerClass))
+
+
+typedef struct _GdkDeviceManagerClass GdkDeviceManagerClass;
+
 struct _GdkDeviceManager
 {
   GObject parent_instance;

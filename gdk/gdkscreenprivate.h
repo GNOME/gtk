@@ -25,6 +25,12 @@
 
 G_BEGIN_DECLS
 
+#define GDK_SCREEN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN, GdkScreenClass))
+#define GDK_IS_SCREEN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN))
+#define GDK_SCREEN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN, GdkScreenClass))
+
+typedef struct _GdkScreenClass GdkScreenClass;
+
 struct _GdkScreen
 {
   GObject parent_instance;

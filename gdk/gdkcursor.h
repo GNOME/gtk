@@ -38,10 +38,7 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_CURSOR              (gdk_cursor_get_type ())
 #define GDK_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_CURSOR, GdkCursor))
-#define GDK_CURSOR_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_CURSOR, GdkCursorClass))
 #define GDK_IS_CURSOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_CURSOR))
-#define GDK_IS_CURSOR_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_CURSOR))
-#define GDK_CURSOR_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_CURSOR, GdkCursorClass))
 
 
 /**

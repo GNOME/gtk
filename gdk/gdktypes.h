@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -69,7 +69,7 @@ G_BEGIN_DECLS
 
 /* Type definitions for the basic structures.
  */
-typedef struct _GdkPoint	      GdkPoint;
+typedef struct _GdkPoint              GdkPoint;
 
 /**
  * GdkRectangle:
@@ -77,7 +77,7 @@ typedef struct _GdkPoint	      GdkPoint;
  * Defines the position and size of a rectangle. It is identical to
  * #cairo_rectangle_int_t.
  */
-typedef cairo_rectangle_int_t	      GdkRectangle;
+typedef cairo_rectangle_int_t         GdkRectangle;
 
 /**
  * GdkAtom:
@@ -131,15 +131,17 @@ typedef gpointer GdkNativeWindow;
 #else
 typedef guint32 GdkNativeWindow;
 #endif
- 
-/* Forward declarations of commonly used types
- */
+
+/* Forward declarations of commonly used types */
 typedef struct _GdkColor              GdkColor;
 typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkCursor             GdkCursor;
 typedef struct _GdkVisual             GdkVisual;
+typedef struct _GdkDevice             GdkDevice;
+typedef struct _GdkDragContext        GdkDragContext;
 
 typedef struct _GdkDisplayManager     GdkDisplayManager;
+typedef struct _GdkDeviceManager      GdkDeviceManager;
 typedef struct _GdkDisplay            GdkDisplay;
 typedef struct _GdkScreen             GdkScreen;
 typedef struct _GdkWindow             GdkWindow;
@@ -208,13 +210,13 @@ typedef enum
 typedef enum
 {
   GDK_SHIFT_MASK    = 1 << 0,
-  GDK_LOCK_MASK	    = 1 << 1,
+  GDK_LOCK_MASK     = 1 << 1,
   GDK_CONTROL_MASK  = 1 << 2,
-  GDK_MOD1_MASK	    = 1 << 3,
-  GDK_MOD2_MASK	    = 1 << 4,
-  GDK_MOD3_MASK	    = 1 << 5,
-  GDK_MOD4_MASK	    = 1 << 6,
-  GDK_MOD5_MASK	    = 1 << 7,
+  GDK_MOD1_MASK     = 1 << 3,
+  GDK_MOD2_MASK     = 1 << 4,
+  GDK_MOD3_MASK     = 1 << 5,
+  GDK_MOD4_MASK     = 1 << 6,
+  GDK_MOD5_MASK     = 1 << 7,
   GDK_BUTTON1_MASK  = 1 << 8,
   GDK_BUTTON2_MASK  = 1 << 9,
   GDK_BUTTON3_MASK  = 1 << 10,
@@ -236,11 +238,11 @@ typedef enum
 
 typedef enum
 {
-  GDK_OK	  = 0,
-  GDK_ERROR	  = -1,
+  GDK_OK          = 0,
+  GDK_ERROR       = -1,
   GDK_ERROR_PARAM = -2,
   GDK_ERROR_FILE  = -3,
-  GDK_ERROR_MEM	  = -4
+  GDK_ERROR_MEM   = -4
 } GdkStatus;
 
 /**

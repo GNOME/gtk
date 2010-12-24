@@ -24,6 +24,12 @@
 
 G_BEGIN_DECLS
 
+#define GDK_KEYMAP_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_KEYMAP, GdkKeymapClass))
+#define GDK_IS_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_KEYMAP))
+#define GDK_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_KEYMAP, GdkKeymapClass))
+
+typedef struct _GdkKeymapClass GdkKeymapClass;
+
 struct _GdkKeymapClass
 {
   GObjectClass parent_class;

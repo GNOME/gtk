@@ -33,8 +33,6 @@ G_BEGIN_DECLS
 #define GDK_DEVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE, GdkDevice))
 #define GDK_IS_DEVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE))
 
-typedef struct _GdkDevice GdkDevice;
-typedef struct _GdkDeviceClass GdkDeviceClass;
 typedef struct _GdkTimeCoord GdkTimeCoord;
 
 /**
@@ -156,7 +154,7 @@ struct _GdkTimeCoord
   gdouble axes[GDK_MAX_TIMECOORD_AXES];
 };
 
-GType gdk_device_get_type (void) G_GNUC_CONST;
+GType                 gdk_device_get_type       (void) G_GNUC_CONST;
 
 G_CONST_RETURN gchar *gdk_device_get_name       (GdkDevice *device);
 gboolean              gdk_device_get_has_cursor (GdkDevice *device);

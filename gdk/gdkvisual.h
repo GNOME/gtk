@@ -37,12 +37,7 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_VISUAL              (gdk_visual_get_type ())
 #define GDK_VISUAL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_VISUAL, GdkVisual))
-#define GDK_VISUAL_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_VISUAL, GdkVisualClass))
 #define GDK_IS_VISUAL(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_VISUAL))
-#define GDK_IS_VISUAL_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_VISUAL))
-#define GDK_VISUAL_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_VISUAL, GdkVisualClass))
-
-typedef struct _GdkVisualClass    GdkVisualClass;
 
 /**
  * GdkVisualType:
@@ -88,19 +83,19 @@ typedef enum
 GType         gdk_visual_get_type            (void) G_GNUC_CONST;
 
 #ifndef GDK_MULTIHEAD_SAFE
-gint	      gdk_visual_get_best_depth	     (void);
-GdkVisualType gdk_visual_get_best_type	     (void);
-GdkVisual*    gdk_visual_get_system	     (void);
-GdkVisual*    gdk_visual_get_best	     (void);
-GdkVisual*    gdk_visual_get_best_with_depth (gint	     depth);
+gint          gdk_visual_get_best_depth      (void);
+GdkVisualType gdk_visual_get_best_type       (void);
+GdkVisual*    gdk_visual_get_system          (void);
+GdkVisual*    gdk_visual_get_best            (void);
+GdkVisual*    gdk_visual_get_best_with_depth (gint           depth);
 GdkVisual*    gdk_visual_get_best_with_type  (GdkVisualType  visual_type);
-GdkVisual*    gdk_visual_get_best_with_both  (gint	     depth,
-					      GdkVisualType  visual_type);
+GdkVisual*    gdk_visual_get_best_with_both  (gint           depth,
+                                              GdkVisualType  visual_type);
 
-void gdk_query_depths	    (gint	    **depths,
-			     gint	     *count);
+void gdk_query_depths       (gint           **depths,
+                             gint            *count);
 void gdk_query_visual_types (GdkVisualType  **visual_types,
-			     gint	     *count);
+                             gint            *count);
 
 GList* gdk_list_visuals (void);
 #endif

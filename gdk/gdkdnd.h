@@ -36,11 +36,9 @@
 
 G_BEGIN_DECLS
 
-/* Object that holds information about a drag in progress.
- * this is used on both source and destination sides.
- */
-typedef struct _GdkDragContext        GdkDragContext;
-typedef struct _GdkDragContextClass GdkDragContextClass;
+#define GDK_TYPE_DRAG_CONTEXT              (gdk_drag_context_get_type ())
+#define GDK_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAG_CONTEXT, GdkDragContext))
+#define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
 
 /**
  * GdkDragAction:
@@ -93,14 +91,6 @@ typedef enum
 } GdkDragProtocol;
 
 
-#define GDK_TYPE_DRAG_CONTEXT              (gdk_drag_context_get_type ())
-#define GDK_DRAG_CONTEXT(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DRAG_CONTEXT, GdkDragContext))
-#define GDK_DRAG_CONTEXT_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
-#define GDK_IS_DRAG_CONTEXT(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DRAG_CONTEXT))
-#define GDK_IS_DRAG_CONTEXT_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DRAG_CONTEXT))
-#define GDK_DRAG_CONTEXT_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DRAG_CONTEXT, GdkDragContextClass))
-
-
 GType            gdk_drag_context_get_type             (void) G_GNUC_CONST;
 
 void             gdk_drag_context_set_device           (GdkDragContext *context,
@@ -119,14 +109,14 @@ GdkDragProtocol  gdk_drag_context_get_protocol         (GdkDragContext *context)
 /* Destination side */
 
 void             gdk_drag_status        (GdkDragContext   *context,
-				         GdkDragAction     action,
-					 guint32           time_);
+                                         GdkDragAction     action,
+                                         guint32           time_);
 void             gdk_drop_reply         (GdkDragContext   *context,
-					 gboolean          accepted,
-					 guint32           time_);
+                                         gboolean          accepted,
+                                         guint32           time_);
 void             gdk_drop_finish        (GdkDragContext   *context,
-					 gboolean          success,
-					 guint32           time_);
+                                         gboolean          success,
+                                         guint32           time_);
 GdkAtom          gdk_drag_get_selection (GdkDragContext   *context);
 
 /* Source side */
@@ -139,29 +129,29 @@ GdkDragContext * gdk_drag_begin_for_device (GdkWindow      *window,
                                             GList          *targets);
 
 GdkNativeWindow gdk_drag_get_protocol_for_display (GdkDisplay       *display,
-						   GdkNativeWindow   xid,
-						   GdkDragProtocol  *protocol);
+                                                   GdkNativeWindow   xid,
+                                                   GdkDragProtocol  *protocol);
 
 void    gdk_drag_find_window_for_screen   (GdkDragContext   *context,
-					   GdkWindow        *drag_window,
-					   GdkScreen        *screen,
-					   gint              x_root,
-					   gint              y_root,
-					   GdkWindow       **dest_window,
-					   GdkDragProtocol  *protocol);
+                                           GdkWindow        *drag_window,
+                                           GdkScreen        *screen,
+                                           gint              x_root,
+                                           gint              y_root,
+                                           GdkWindow       **dest_window,
+                                           GdkDragProtocol  *protocol);
 
 gboolean        gdk_drag_motion      (GdkDragContext *context,
-				      GdkWindow      *dest_window,
-				      GdkDragProtocol protocol,
-				      gint            x_root, 
-				      gint            y_root,
-				      GdkDragAction   suggested_action,
-				      GdkDragAction   possible_actions,
-				      guint32         time_);
+                                      GdkWindow      *dest_window,
+                                      GdkDragProtocol protocol,
+                                      gint            x_root,
+                                      gint            y_root,
+                                      GdkDragAction   suggested_action,
+                                      GdkDragAction   possible_actions,
+                                      guint32         time_);
 void            gdk_drag_drop        (GdkDragContext *context,
-				      guint32         time_);
+                                      guint32         time_);
 void            gdk_drag_abort       (GdkDragContext *context,
-				      guint32         time_);
+                                      guint32         time_);
 gboolean        gdk_drag_drop_succeeded (GdkDragContext *context);
 
 G_END_DECLS
