@@ -836,6 +836,7 @@ gtk_spin_button_draw (GtkWidget      *widget,
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ENTRY);
 
   if (is_rtl)
     gtk_style_context_set_junction_sides (context, GTK_JUNCTION_RIGHT);
@@ -852,6 +853,7 @@ gtk_spin_button_draw (GtkWidget      *widget,
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_UP);
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_DOWN);
 
+  gtk_style_context_restore (context);
   cairo_restore (cr);
 
   return FALSE;
