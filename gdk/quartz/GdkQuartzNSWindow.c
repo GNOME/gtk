@@ -18,7 +18,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#import "GdkQuartzWindow.h"
+#import "GdkQuartzNSWindow.h"
 #include "gdkquartzwindow.h"
 #include "gdkdnd-quartz.h"
 #include "gdkprivate-quartz.h"

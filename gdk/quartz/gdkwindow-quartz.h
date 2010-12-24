@@ -22,7 +22,7 @@
 #define __GDK_WINDOW_QUARTZ_H__
 
 #import <gdk/quartz/GdkQuartzView.h>
-#import <gdk/quartz/GdkQuartzWindow.h>
+#import <gdk/quartz/GdkQuartzNSWindow.h>
 #include "gdk/gdkwindowimpl.h"
 
 G_BEGIN_DECLS

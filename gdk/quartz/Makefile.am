@@ -20,8 +20,8 @@ noinst_LTLIBRARIES = libgdk-quartz.la
 libgdk_quartz_la_SOURCES =    	\
 	GdkQuartzView.c		\
 	GdkQuartzView.h		\
-	GdkQuartzWindow.c	\
-	GdkQuartzWindow.h	\
+	GdkQuartzNSWindow.c	\
+	GdkQuartzNSWindow.h	\
 	gdkcursor-quartz.c	\
 	gdkdevice-core-quartz.c	\
 	gdkdevicemanager-core-quartz.c	\
