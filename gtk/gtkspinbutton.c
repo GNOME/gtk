@@ -693,7 +693,7 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
   if (gtk_entry_get_width_chars (entry) < 0)
     {
       PangoContext *context;
-      PangoFontDescription *font_desc;
+      const PangoFontDescription *font_desc;
       PangoFontMetrics *metrics;
       gint width;
       gint w;
@@ -710,10 +710,7 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
                             "focus-line-width", &focus_width,
                             NULL);
 
-      /* FIXME: update to get_font_desc */
-      gtk_style_context_get (style_context, 0,
-                             "font", &font_desc,
-                             NULL);
+      font_desc = gtk_style_context_get_font (style_context, 0);
 
       context = gtk_widget_get_pango_context (widget);
       metrics = pango_context_get_metrics (context, font_desc,
@@ -2301,16 +2298,14 @@ gtk_spin_button_get_wrap (GtkSpinButton *spin_button)
 static gint
 spin_button_get_arrow_size (GtkSpinButton *spin_button)
 {
-  PangoFontDescription *font_desc;
+  const PangoFontDescription *font_desc;
   GtkStyleContext *context;
   gint size;
   gint arrow_size;
 
   /* FIXME: use getter */
   context = gtk_widget_get_style_context (GTK_WIDGET (spin_button));
-  gtk_style_context_get (context, 0,
-                         "font", &font_desc,
-                         NULL);
+  font_desc = gtk_style_context_get_font (context, 0);
 
   size = pango_font_description_get_size (font_desc);
   arrow_size = MAX (PANGO_PIXELS (size), MIN_ARROW_WIDTH);
