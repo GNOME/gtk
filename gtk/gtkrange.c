@@ -1660,7 +1660,7 @@ gtk_range_hierarchy_changed (GtkWidget *widget,
                                           G_CALLBACK (resize_grip_visible_changed),
                                           widget);
   window = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (window))
+  if (gtk_widget_is_toplevel (window))
     g_signal_connect (window, "notify::resize-grip-visible",
                       G_CALLBACK (resize_grip_visible_changed), widget);
 }

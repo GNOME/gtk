@@ -9221,6 +9221,7 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
 			     gboolean   is_toplevel)
 {
   GtkWidget *widget;
+  GtkWidget *toplevel;
 
   widget = GTK_WIDGET (window);
 
@@ -9234,6 +9235,12 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
 
   if (is_toplevel)
     {
+      toplevel = gtk_widget_get_toplevel (widget);
+      if (!gtk_widget_is_toplevel (toplevel))
+	toplevel = NULL;
+
+      _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
+
       _gtk_widget_set_is_toplevel (widget, TRUE);
       toplevel_list = g_slist_prepend (toplevel_list, window);
     }
@@ -9241,6 +9248,8 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
     {
       _gtk_widget_set_is_toplevel (widget, FALSE);
       toplevel_list = g_slist_remove (toplevel_list, window);
+
+      _gtk_widget_propagate_hierarchy_changed (widget, widget);
     }
 }
 
