@@ -36,9 +36,6 @@
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkbin.h>
 
-#include "gtk/gtkaccelgroupprivate.h"
-
-
 G_BEGIN_DECLS
 
 #define GTK_TYPE_WINDOW			(gtk_window_get_type ())

@@ -39,6 +39,7 @@
 #include "gtkrc.h"
 #include "gtkwindow.h"
 #include "gtkwindowprivate.h"
+#include "gtkaccelgroupprivate.h"
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtkmain.h"
