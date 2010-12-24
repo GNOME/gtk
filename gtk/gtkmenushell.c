@@ -1883,7 +1883,7 @@ gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
 GtkWidget *
 gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell)
 {
-  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+  g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), NULL);
 
   return menu_shell->priv->active_menu_item;
 }
@@ -1904,7 +1904,7 @@ gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell)
 GtkWidget *
 gtk_menu_shell_get_parent_shell (GtkMenuShell *menu_shell)
 {
-  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+  g_return_val_if_fail (GTK_IS_MENU_SHELL (menu_shell), NULL);
 
   return menu_shell->priv->parent_menu_shell;
 }
