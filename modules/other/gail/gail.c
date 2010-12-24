@@ -250,7 +250,7 @@ gail_focus_watcher (GSignalInvocationHint *ihint,
 			{
 			  if (GTK_IS_MENU_SHELL (child))
 			    {
-			      if (GTK_MENU_SHELL (child)->active_menu_item)
+			      if (gtk_menu_shell_get_selected_item (GTK_MENU_SHELL (child)))
 				{
 				  /*
 				   * We have a menu which has a menu item selected
@@ -349,10 +349,12 @@ gail_finish_select (GtkWidget *widget)
   if (GTK_IS_MENU_ITEM (widget))
     {
       GtkMenuItem* menu_item;
+      GtkWidget *submenu;
 
       menu_item = GTK_MENU_ITEM (widget);
-      if (menu_item->submenu &&
-          !gtk_widget_get_mapped (menu_item->submenu))
+      submenu = gtk_menu_item_get_submenu (menu_item);
+      if (submenu &&
+          !gtk_widget_get_mapped (submenu))
         {
           /*
            * If the submenu is not visble, wait until it is before
@@ -360,7 +362,7 @@ gail_finish_select (GtkWidget *widget)
            */
           gulong handler_id;
 
-          handler_id = g_signal_handler_find (menu_item->submenu,
+          handler_id = g_signal_handler_find (submenu,
                                               G_SIGNAL_MATCH_FUNC,
                                               g_signal_lookup ("map",
                                                                GTK_TYPE_WINDOW),
@@ -369,11 +371,10 @@ gail_finish_select (GtkWidget *widget)
                                               (gpointer) gail_map_submenu_cb,
                                               NULL); 
           if (!handler_id)
-            g_signal_connect (menu_item->submenu, "map",
+            g_signal_connect (submenu, "map",
                               G_CALLBACK (gail_map_submenu_cb),
                               NULL);
             return;
-
         }
       /*
        * If we are waiting to report focus on a menubar or a menu item
@@ -422,8 +423,11 @@ gail_map_submenu_cb (GtkWidget *widget)
 {
   if (GTK_IS_MENU (widget))
     {
-      if (GTK_MENU (widget)->parent_menu_item)
-        gail_finish_select (GTK_MENU (widget)->parent_menu_item);
+      GtkWidget *parent_menu_item;
+
+      parent_menu_item = gtk_menu_get_attach_widget (GTK_MENU (widget));
+      if (parent_menu_item)
+        gail_finish_select (parent_menu_item);
     }
 }
 
@@ -454,12 +458,12 @@ gail_deselect_watcher (GSignalInvocationHint *ihint,
     {
       GtkWidget *parent_menu_shell;
 
-      parent_menu_shell = GTK_MENU_SHELL (menu_shell)->parent_menu_shell;
+      parent_menu_shell = gtk_menu_shell_get_parent_shell (GTK_MENU_SHELL (menu_shell));
       if (parent_menu_shell)
         {
           GtkWidget *active_menu_item;
 
-          active_menu_item = GTK_MENU_SHELL (parent_menu_shell)->active_menu_item;
+          active_menu_item = gtk_menu_shell_get_selected_item (GTK_MENU_SHELL (parent_menu_shell));
           if (active_menu_item)
             {
               gail_focus_notify_when_idle (active_menu_item);
@@ -661,7 +665,7 @@ gail_deactivate_watcher (GSignalInvocationHint *ihint,
 
   g_return_val_if_fail (GTK_IS_MENU_SHELL(widget), TRUE);
   shell = GTK_MENU_SHELL(widget);
-  if (!shell->parent_menu_shell)
+  if (! gtk_menu_shell_get_parent_shell (shell))
     focus = focus_before_menu;
       
   /*

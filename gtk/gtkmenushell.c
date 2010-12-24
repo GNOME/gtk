@@ -1869,3 +1869,42 @@ gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
       g_object_notify (G_OBJECT (menu_shell), "take-focus");
     }
 }
+
+/**
+ * gtk_menu_shell_get_selected_item:
+ * @menu_shell: a #GtkMenuShell
+ *
+ * Gets the currently selected item.
+ *
+ * Returns: the currently selected item
+ *
+ * Since: 3.0
+ */
+GtkWidget *
+gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell)
+{
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  return menu_shell->priv->active_menu_item;
+}
+
+/**
+ * gtk_menu_shell_get_parent_shell:
+ * @menu_shell: a #GtkMenuShell
+ *
+ * Gets the parent menu shell.
+ *
+ * The parent menu shell of a submenu is the #GtkMenu or #GtkMenuBar
+ * from which it was opened up.
+ *
+ * Returns: the parent #GtkMenuShell
+ *
+ * Since: 3.0
+ */
+GtkWidget *
+gtk_menu_shell_get_parent_shell (GtkMenuShell *menu_shell)
+{
+  g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
+
+  return menu_shell->priv->parent_menu_shell;
+}

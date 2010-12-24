@@ -1501,6 +1501,8 @@ gtk_menu_shell_append
 gtk_menu_shell_cancel
 gtk_menu_shell_deactivate
 gtk_menu_shell_deselect
+gtk_menu_shell_get_selected_item
+gtk_menu_shell_get_parent_shell
 gtk_menu_shell_get_take_focus
 gtk_menu_shell_get_type G_GNUC_CONST
 gtk_menu_shell_insert

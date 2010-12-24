@@ -111,6 +111,9 @@ gboolean gtk_menu_shell_get_take_focus (GtkMenuShell *menu_shell);
 void     gtk_menu_shell_set_take_focus (GtkMenuShell *menu_shell,
                                         gboolean      take_focus);
 
+GtkWidget *gtk_menu_shell_get_selected_item (GtkMenuShell *menu_shell);
+GtkWidget *gtk_menu_shell_get_parent_shell  (GtkMenuShell *menu_shell);
+
 G_END_DECLS
 
 #endif /* __GTK_MENU_SHELL_H__ */
