@@ -182,8 +182,8 @@ static void     gtk_paned_realize               (GtkWidget        *widget);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
 static void     gtk_paned_map                   (GtkWidget        *widget);
 static void     gtk_paned_unmap                 (GtkWidget        *widget);
-static void     gtk_paned_state_changed         (GtkWidget        *widget,
-                                                 GtkStateType      previous_state);
+static void     gtk_paned_state_flags_changed   (GtkWidget        *widget,
+                                                 GtkStateFlags     previous_state);
 static gboolean gtk_paned_draw                  (GtkWidget        *widget,
 						 cairo_t          *cr);
 static gboolean gtk_paned_enter                 (GtkWidget        *widget,
@@ -299,7 +299,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->motion_notify_event = gtk_paned_motion;
   widget_class->grab_broken_event = gtk_paned_grab_broken;
   widget_class->grab_notify = gtk_paned_grab_notify;
-  widget_class->state_changed = gtk_paned_state_changed;
+  widget_class->state_flags_changed = gtk_paned_state_flags_changed;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -706,8 +706,8 @@ gtk_paned_set_property (GObject        *object,
       else
         priv->cursor_type = GDK_SB_V_DOUBLE_ARROW;
 
-      /* state_changed updates the cursor */
-      gtk_paned_state_changed (GTK_WIDGET (paned), gtk_widget_get_state (GTK_WIDGET (paned)));
+      /* state_flags_changed updates the cursor */
+      gtk_paned_state_flags_changed (GTK_WIDGET (paned), 0);
       gtk_widget_queue_resize (GTK_WIDGET (paned));
       break;
     case PROP_POSITION:
@@ -1197,27 +1197,28 @@ gtk_paned_draw (GtkWidget *widget,
       priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      GtkStateType state;
+      GtkStyleContext *context;
+      GtkStateFlags state;
       GtkAllocation allocation;
 
       gtk_widget_get_allocation (widget, &allocation);
-      
-      if (gtk_widget_is_focus (widget))
-	state = GTK_STATE_SELECTED;
-      else if (priv->handle_prelit)
-	state = GTK_STATE_PRELIGHT;
-      else
-	state = gtk_widget_get_state (widget);
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
 
-      gtk_paint_handle (gtk_widget_get_style (widget),
-                        cr,
-			state, GTK_SHADOW_NONE,
-			widget, "paned",
-			priv->handle_pos.x - allocation.x,
-                        priv->handle_pos.y - allocation.y,
-			priv->handle_pos.width,
-                        priv->handle_pos.height,
-			!priv->orientation);
+      if (gtk_widget_is_focus (widget))
+	state |= GTK_STATE_FLAG_SELECTED;
+      if (priv->handle_prelit)
+	state |= GTK_STATE_FLAG_PRELIGHT;
+
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+      gtk_render_handle (context, cr,
+                         priv->handle_pos.x - allocation.x,
+                         priv->handle_pos.y - allocation.y,
+                         priv->handle_pos.width,
+                         priv->handle_pos.height);
+
+      gtk_style_context_restore (context);
     }
 
   /* Chain up to draw children */
@@ -1421,8 +1422,8 @@ gtk_paned_grab_notify (GtkWidget *widget,
 }
 
 static void
-gtk_paned_state_changed (GtkWidget    *widget,
-                         GtkStateType  previous_state)
+gtk_paned_state_flags_changed (GtkWidget     *widget,
+                               GtkStateFlags  previous_state)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
