@@ -40,9 +40,11 @@ G_BEGIN_DECLS
 
 GType                gdk_app_launch_context_get_type      (void);
 
+#ifndef GDK_DISABLE_DEPRECATED
 GdkAppLaunchContext *gdk_app_launch_context_new           (void);
 void                 gdk_app_launch_context_set_display   (GdkAppLaunchContext *context,
                                                            GdkDisplay          *display);
+#endif
 void                 gdk_app_launch_context_set_screen    (GdkAppLaunchContext *context,
                                                            GdkScreen           *screen);
 void                 gdk_app_launch_context_set_desktop   (GdkAppLaunchContext *context,

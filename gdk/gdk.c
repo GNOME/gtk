@@ -57,7 +57,7 @@
  * Use this macro to guard code that is specific to the X11-backend.
  * Since GDK may be configured with multiple backends, an additional
  * runtime check for the used backend is recommended:
- * </para>
+ *
  * <example>
  * <title>Backend-specific code</title>
  * <programlisting>

@@ -2218,8 +2218,9 @@ gdk_display_real_get_app_launch_context (GdkDisplay *display)
 {
   GdkAppLaunchContext *ctx;
 
-  ctx = gdk_app_launch_context_new ();
-  gdk_app_launch_context_set_display (ctx, display);
+  ctx = g_object_new (GDK_TYPE_APP_LAUNCH_CONTEXT,
+                      "display", display,
+                      NULL);
 
   return ctx;
 }

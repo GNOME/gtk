@@ -144,7 +144,7 @@
         GError *error = NULL;
 
         info = g_desktop_app_info_new ("epiphany.desktop");
-        context = gdk_app_launch_context_new ();
+        context = gdk_display_get_app_launch_context (display);
         g_app_info_launch (info, NULL, context, &amp;error);
 
         if (error)

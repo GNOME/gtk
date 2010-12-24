@@ -41,9 +41,9 @@
  * <programlisting>
  * GdkAppLaunchContext *context;
  *
- * context = gdk_app_launch_context_new (<!-- -->);
+ * context = gdk_display_get_app_launch_context (display);
  *
- * gdk_app_launch_context_set_screen (my_screen);
+ * gdk_app_launch_context_set_screen (screen);
  * gdk_app_launch_context_set_timestamp (event->time);
  *
  * if (!g_app_info_launch_default_for_uri ("http://www.gtk.org", context, &error))
