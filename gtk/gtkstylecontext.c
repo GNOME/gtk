@@ -3043,8 +3043,12 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
           cairo_rectangle_int_t *rect;
 
           rect = &g_array_index (info->rectangles, cairo_rectangle_int_t, i);
-          rect->x += rel_x;
-          rect->y += rel_y;
+
+	  /* These are widget relative coordinates,
+	   * so have them inverted to be window relative
+	   */
+          rect->x -= rel_x;
+          rect->y -= rel_y;
 
           cairo_region_union_rectangle (info->invalidation_region, rect);
         }
