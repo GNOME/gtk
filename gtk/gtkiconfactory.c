@@ -32,7 +32,7 @@
 #include "gtkiconcache.h"
 #include "gtkdebug.h"
 #include "gtkicontheme.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtkstock.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"

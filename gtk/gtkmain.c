@@ -39,7 +39,7 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-#include <sys/types.h>		/* For uid_t, gid_t */
+#include <sys/types.h>          /* For uid_t, gid_t */
 
 #ifdef G_OS_WIN32
 #define STRICT
@@ -58,7 +58,7 @@
 #include "gtkrc.h"
 #include "gtkrecentmanager.h"
 #include "gtkselection.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 #include "gtktooltip.h"
