@@ -103,7 +103,8 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testcellarea			\
 	testswitch			\
 	styleexamples			\
-	testtreemenu
+	testtreemenu			\
+	testtoplevelembed
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -199,6 +200,7 @@ testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
 styleexamples_DEPENDENCIES = $(TEST_DEPS)
+testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -280,6 +282,7 @@ testexpand_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
 testswitch_LDADD = $(LDADDS)
 styleexamples_LDADD = $(LDADDS)
+testtoplevelembed_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
@@ -419,7 +422,10 @@ testexpand_SOURCES = testexpand.c
 testexpander_SOURCES = testexpander.c
 
 testswitch_SOURCES = testswitch.c
+
 styleexamples_SOURCES = styleexamples.c
+
+testtoplevelembed_SOURCES = testtoplevelembed.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
