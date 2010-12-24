@@ -3712,12 +3712,6 @@ gtk_widget_unparent (GtkWidget *widget)
   g_object_freeze_notify (G_OBJECT (widget));
   nqueue = g_object_notify_queue_freeze (G_OBJECT (widget), _gtk_widget_child_property_notify_context);
 
-  /* Need to unset the parent window early, this can result in 
-   * an additional "hierarchy-changed" propagation if we are removing
-   * a parented GtkWindow from the hierarchy.
-   */
-  gtk_widget_set_parent_window (widget, NULL);
-
   toplevel = gtk_widget_get_toplevel (widget);
   if (gtk_widget_is_toplevel (toplevel))
     _gtk_window_unset_focus_and_default (GTK_WINDOW (toplevel), widget);
@@ -3752,6 +3746,12 @@ gtk_widget_unparent (GtkWidget *widget)
       else
 	gtk_widget_unrealize (widget);
     }
+
+  /* Need to unset the parent window early, this can result in 
+   * an additional "hierarchy-changed" propagation if we are removing
+   * a parented GtkWindow from the hierarchy.
+   */
+  gtk_widget_set_parent_window (widget, NULL);
 
   /* Removing a widget from a container restores the child visible
    * flag to the default state, so it doesn't affect the child
