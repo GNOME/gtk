@@ -37,7 +37,7 @@
 #include "gtkmarshalers.h"
 #include "gtkrc.h"
 #include "gtkselection.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"

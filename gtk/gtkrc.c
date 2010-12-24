@@ -53,7 +53,7 @@
 #include "gtkmain.h"
 #include "gtkmodules.h"
 #include "gtkprivate.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtkwindow.h"
 
 #ifdef G_OS_WIN32
