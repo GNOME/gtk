@@ -669,21 +669,24 @@ compute_v (GtkHSV *hsv,
 /* Event handlers */
 
 static void
-set_cross_grab (GtkHSV *hsv,
-                guint32 time)
+set_cross_grab (GtkHSV    *hsv,
+                GdkDevice *device,
+                guint32    time)
 {
   GtkHSVPrivate *priv = hsv->priv;
   GdkCursor *cursor;
 
   cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (hsv)),
                                        GDK_CROSSHAIR);
-  gdk_pointer_grab (priv->window, FALSE,
-                    (GDK_POINTER_MOTION_MASK
-                     | GDK_POINTER_MOTION_HINT_MASK
-                     | GDK_BUTTON_RELEASE_MASK),
-                    NULL,
-                    cursor,
-                    time);
+  gdk_device_grab (device,
+                   priv->window,
+                   GDK_OWNERSHIP_NONE,
+                   FALSE,
+                   GDK_POINTER_MOTION_MASK
+                    | GDK_POINTER_MOTION_HINT_MASK
+                    | GDK_BUTTON_RELEASE_MASK,
+                   cursor,
+                   time);
   g_object_unref (cursor);
 }
 
@@ -709,15 +712,15 @@ gtk_hsv_button_press (GtkWidget      *widget,
 
   if (priv->mode != DRAG_NONE || event->button != 1)
     return FALSE;
-  
+
   x = event->x;
   y = event->y;
-  
+
   if (is_in_ring (hsv, x, y))
     {
       priv->mode = DRAG_H;
-      set_cross_grab (hsv, event->time);
-      
+      set_cross_grab (hsv, gdk_event_get_device (event), event->time);
+
       gtk_hsv_set_color (hsv,
                          compute_v (hsv, x, y),
                          priv->s,
@@ -725,26 +728,26 @@ gtk_hsv_button_press (GtkWidget      *widget,
 
       gtk_widget_grab_focus (widget);
       priv->focus_on_ring = TRUE;
-      
+
       return TRUE;
     }
-  
+
   if (is_in_triangle (hsv, x, y))
     {
       gdouble s, v;
-      
+
       priv->mode = DRAG_SV;
-      set_cross_grab (hsv, event->time);
-      
+      set_cross_grab (hsv, gdk_event_get_device (event), event->time);
+
       compute_sv (hsv, x, y, &s, &v);
       gtk_hsv_set_color (hsv, priv->h, s, v);
 
       gtk_widget_grab_focus (widget);
       priv->focus_on_ring = FALSE;
-      
+
       return TRUE;
     }
-  
+
   return FALSE;
 }
 
@@ -759,14 +762,13 @@ gtk_hsv_button_release (GtkWidget      *widget,
 
   if (priv->mode == DRAG_NONE || event->button != 1)
     return FALSE;
-  
+
   /* Set the drag mode to DRAG_NONE so that signal handlers for "catched"
    * can see that this is the final color state.
    */
-  
   mode = priv->mode;
   priv->mode = DRAG_NONE;
-  
+
   x = event->x;
   y = event->y;
 
@@ -786,8 +788,8 @@ gtk_hsv_button_release (GtkWidget      *widget,
       g_assert_not_reached ();
     }
 
-  gdk_display_pointer_ungrab (gdk_window_get_display (event->window),
-                              event->time);
+  gdk_device_ungrab (gdk_event_get_device (event), event->time);
+
   return TRUE;
 }
 

@@ -6935,23 +6935,27 @@ shape_pressed (GtkWidget *widget, GdkEventButton *event)
   p->y = (int) event->y;
 
   gtk_grab_add (widget);
-  gdk_pointer_grab (gtk_widget_get_window (widget), TRUE,
-		    GDK_BUTTON_RELEASE_MASK |
-		    GDK_BUTTON_MOTION_MASK |
-		    GDK_POINTER_MOTION_HINT_MASK,
-		    NULL, NULL, 0);
+  gdk_device_grab (gdk_event_get_device ((GdkEvent*)event),
+                   gtk_widget_get_window (widget),
+                   GDK_OWNERSHIP_NONE,
+                   TRUE,
+                   GDK_BUTTON_RELEASE_MASK |
+                   GDK_BUTTON_MOTION_MASK |
+                   GDK_POINTER_MOTION_HINT_MASK,
+                   NULL,
+                   event->time);
 }
 
 static void
-shape_released (GtkWidget *widget)
+shape_released (GtkWidget      *widget,
+                GdkEventButton *event)
 {
   gtk_grab_remove (widget);
-  gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
-			      GDK_CURRENT_TIME);
+  gdk_device_ungrab (gdk_event_get_device ((GdkEvent*)event), event->time);
 }
 
 static void
-shape_motion (GtkWidget      *widget, 
+shape_motion (GtkWidget      *widget,
 	      GdkEventMotion *event)
 {
   gint xp, yp;
@@ -8640,21 +8644,20 @@ destroy_properties (GtkWidget             *widget,
 }
 
 static gint
-property_query_event (GtkWidget	       *widget,
-		      GdkEvent	       *event,
-		      struct PropertiesData *data)
+property_query_event (GtkWidget             *widget,
+                      GdkEvent              *event,
+                      struct PropertiesData *data)
 {
   GtkWidget *res_widget = NULL;
 
   if (!data->in_query)
     return FALSE;
-  
+
   if (event->type == GDK_BUTTON_RELEASE)
     {
       gtk_grab_remove (widget);
-      gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
-				  GDK_CURRENT_TIME);
-      
+      gdk_device_ungrab (gdk_event_get_device (event), GDK_CURRENT_TIME);
+
       res_widget = find_widget_at_pointer (gtk_widget_get_display (widget));
       if (res_widget)
 	{
@@ -8674,23 +8677,27 @@ query_properties (GtkButton *button,
 		  struct PropertiesData *data)
 {
   GtkWidget *widget = GTK_WIDGET (button);
-  gint failure;
+  GdkDisplay *display;
+  GdkDeviceManager *device_manager;
+  GdkDevice *device;
 
   g_signal_connect (button, "event",
 		    G_CALLBACK (property_query_event), data);
 
+  display = gtk_widget_get_display (widget);
 
   if (!data->cursor)
-    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-					       GDK_TARGET);
+    data->cursor = gdk_cursor_new_for_display (display, GDK_TARGET);
 
-  failure = gdk_pointer_grab (gtk_widget_get_window (widget),
-			      TRUE,
-			      GDK_BUTTON_RELEASE_MASK,
-			      NULL,
-			      data->cursor,
-			      GDK_CURRENT_TIME);
-
+  device_manager = gdk_display_get_device_manager (display);
+  device = gdk_device_manager_get_client_pointer (device_manager);
+  gdk_device_grab (device,
+                   gtk_widget_get_window (widget),
+                   GDK_OWNERSHIP_NONE,
+                   TRUE,
+                   GDK_BUTTON_RELEASE_MASK,
+                   data->cursor,
+                   GDK_CURRENT_TIME);
   gtk_grab_add (widget);
 
   data->in_query = TRUE;
