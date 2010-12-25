@@ -10719,9 +10719,10 @@ gdk_drag_begin_for_device (GdkWindow     *window,
  * gdk_test_render_sync:
  * @window: a mapped #GdkWindow
  *
- * This function retrieves a pixel from @window to force the windowing
+ * Retrieves a pixel from @window to force the windowing
  * system to carry out any pending rendering commands.
- * This function is intended to be used to syncronize with rendering
+ *
+ * This function is intended to be used to synchronize with rendering
  * pipelines, to benchmark windowing system rendering operations.
  *
  * Since: 2.14
@@ -10733,17 +10734,17 @@ gdk_test_render_sync (GdkWindow *window)
 }
 
 /**
- * gdk_test_simulate_key
- * @window: a #GdkWindow to simulate a key event for.
- * @x:      x coordinate within @window for the key event.
- * @y:      y coordinate within @window for the key event.
- * @keyval: A GDK keyboard value.
- * @modifiers: Keyboard modifiers the event is setup with.
+ * gdk_test_simulate_key:
+ * @window: a #GdkWindow to simulate a key event for
+ * @x:      x coordinate within @window for the key event
+ * @y:      y coordinate within @window for the key event
+ * @keyval: A GDK keyboard value
+ * @modifiers: Keyboard modifiers the event is setup with
  * @key_pressrelease: either %GDK_KEY_PRESS or %GDK_KEY_RELEASE
  *
  * This function is intended to be used in GTK+ test programs.
  * If (@x,@y) are > (-1,-1), it will warp the mouse pointer to
- * the given (@x,@y) corrdinates within @window and simulate a
+ * the given (@x,@y) coordinates within @window and simulate a
  * key press or release event.
  *
  * When the mouse pointer is warped to the target location, use
@@ -10753,13 +10754,13 @@ gdk_test_render_sync (GdkWindow *window)
  * be warped and @window origin will be used as mouse pointer
  * location for the event.
  *
- * Also, gtk_test_simulate_key() is a fairly low level function,
+ * Also, gdk_test_simulate_key() is a fairly low level function,
  * for most testing purposes, gtk_test_widget_send_key() is the
  * right function to call which will generate a key press event
  * followed by its accompanying key release event.
  *
- * Returns: whether all actions neccessary for a key event simulation
- *     were carried out successfully.
+ * Returns: whether all actions necessary for a key event simulation
+ *     were carried out successfully
  *
  * Since: 2.14
  */
@@ -10776,32 +10777,32 @@ gdk_test_simulate_key (GdkWindow      *window,
 }
 
 /**
- * gdk_test_simulate_button
- * @window: a #GdkWindow to simulate a button event for.
- * @x:      x coordinate within @window for the button event.
- * @y:      y coordinate within @window for the button event.
- * @button: Number of the pointer button for the event, usually 1, 2 or 3.
- * @modifiers: Keyboard modifiers the event is setup with.
+ * gdk_test_simulate_button:
+ * @window: a #GdkWindow to simulate a button event for
+ * @x:      x coordinate within @window for the button event
+ * @y:      y coordinate within @window for the button event
+ * @button: Number of the pointer button for the event, usually 1, 2 or 3
+ * @modifiers: Keyboard modifiers the event is setup with
  * @button_pressrelease: either %GDK_BUTTON_PRESS or %GDK_BUTTON_RELEASE
  *
  * This function is intended to be used in GTK+ test programs.
- * It will warp the mouse pointer to the given (@x,@y) corrdinates
+ * It will warp the mouse pointer to the given (@x,@y) coordinates
  * within @window and simulate a button press or release event.
  * Because the mouse pointer needs to be warped to the target
  * location, use of this function outside of test programs that
  * run in their own virtual windowing system (e.g. Xvfb) is not
  * recommended.
  *
-* Also, gtk_test_simulate_button() is a fairly low level function,
+* Also, gdk_test_simulate_button() is a fairly low level function,
  * for most testing purposes, gtk_test_widget_click() is the right
  * function to call which will generate a button press event followed
  * by its accompanying button release event.
  *
- * Returns: whether all actions neccessary for a button event simulation
- *     were carried out successfully.
+ * Returns: whether all actions necessary for a button event simulation
+ *     were carried out successfully
  *
  * Since: 2.14
- **/
+ */
 gboolean
 gdk_test_simulate_button (GdkWindow      *window,
                           gint            x,
@@ -10816,8 +10817,8 @@ gdk_test_simulate_button (GdkWindow      *window,
 
 /**
  * gdk_property_get:
- * @window: a #GdkWindow.
- * @property: the property to retrieve.
+ * @window: a #GdkWindow
+ * @property: the property to retrieve
  * @type: the desired property type, or %GDK_NONE, if any type of data
  *   is acceptable. If this does not match the actual
  *   type, then @actual_format and @actual_length will
@@ -10888,8 +10889,8 @@ gdk_property_get (GdkWindow  *window,
 
 /**
  * gdk_property_change:
- * @window: a #GdkWindow.
- * @property: the property to change.
+ * @window: a #GdkWindow
+ * @property: the property to change
  * @type: the new type for the property. If @mode is
  *   %GDK_PROP_MODE_PREPEND or %GDK_PROP_MODE_APPEND, then this
  *   must match the existing type or an error will occur.
@@ -10921,8 +10922,8 @@ gdk_property_change (GdkWindow    *window,
 
 /**
  * gdk_property_delete:
- * @window: a #GdkWindow.
- * @property: the property to delete.
+ * @window: a #GdkWindow
+ * @property: the property to delete
  *
  * Deletes a property from a window.
  */
