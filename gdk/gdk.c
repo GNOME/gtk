@@ -986,9 +986,9 @@ gdk_threads_add_timeout (guint       interval,
  * @interval: the time between calls to the function, in seconds
  * @function: function to call
  * @data:     data to pass to @function
- * @notify: (allow-none):   function to call when the timeout is removed, or %NULL
+ * @notify: (allow-none): function to call when the timeout is removed, or %NULL
  *
- * A variant of gdk_threads_add_timout_full() with second-granularity.
+ * A variant of gdk_threads_add_timeout_full() with second-granularity.
  * See g_timeout_add_seconds_full() for a discussion of why it is
  * a good idea to use this function if you don't need finer granularity.
  *

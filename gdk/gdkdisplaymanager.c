@@ -170,7 +170,7 @@ gdk_display_manager_get_property (GObject      *object,
  * backends).
  *
  * Returns: (transfer none): The global #GdkDisplayManager singleton;
- *     gdk_parse_pargs(), gdk_init(), or gdk_init_check() must have
+ *     gdk_parse_args(), gdk_init(), or gdk_init_check() must have
  *     been called first.
  *
  * Since: 2.2
