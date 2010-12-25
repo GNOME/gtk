@@ -220,13 +220,7 @@ gail_toplevel_show_event_watcher (GSignalInvocationHint *ihint,
     return TRUE;
 
   child = gtk_widget_get_accessible (widget);
-  if (!strcmp (atk_role_get_name (atk_object_get_role (child)), "redundant object"))
-    {
-      return TRUE;
-    }
-
-  child = gtk_widget_get_accessible (widget);
-  if (!strcmp (atk_role_get_name (atk_object_get_role (child)), "redundant object"))
+  if (atk_object_get_role (child) == ATK_ROLE_REDUNDANT_OBJECT)
     {
       return TRUE;
     }
