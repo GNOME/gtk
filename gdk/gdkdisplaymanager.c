@@ -298,6 +298,18 @@ gdk_display_manager_list_displays (GdkDisplayManager *manager)
   return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->list_displays (manager);
 }
 
+/**
+ * gdk_display_manager_open_display:
+ * @manager: a #GdkDisplayManager
+ * @name: the name of the display to open
+ *
+ * Opens a display.
+ *
+ * Return value: (transfer none): a #GdkDisplay, or %NULL
+ *     if the display could not be opened
+ *
+ * Since: 3.0
+ */
 GdkDisplay *
 gdk_display_manager_open_display (GdkDisplayManager *manager,
                                   const gchar       *name)

@@ -58,9 +58,7 @@
  * Since GDK may be configured with multiple backends, an additional
  * runtime check for the used backend is recommended:
  *
- * <example>
- * <title>Backend-specific code</title>
- * <programlisting>
+ * |[
  * #ifdef GDK_WINDOWING_X11
  *   if (GDK_IS_X11_DISPLAY (display))
  *     {
@@ -76,8 +74,7 @@
  *   else
  * #endif
  *   g_error ("Unsupported GDK backend");
- * </programlisting>
- * </example>
+ * ]|
  */
 
 /**
@@ -1091,7 +1088,7 @@ gdk_set_program_class (const char *program_class)
  * any way and doesn't observe the presence of XInput 2.
  *
  * Since: 3.0
- **/
+ */
 void
 gdk_disable_multidevice (void)
 {

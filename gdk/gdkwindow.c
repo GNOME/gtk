@@ -10670,13 +10670,16 @@ gdk_window_register_dnd (GdkWindow *window)
  * gdk_drag_begin:
  * @window: the source window for this drag.
  * @targets: (transfer none) (element-type GdkAtom): the offered targets,
- *     as list of #GdkAtom<!-- -->s
+ *     as list of #GdkAtoms
  *
  * Starts a drag and creates a new drag context for it.
+ * This function assumes that the drag is controlled by the
+ * client pointer device, use gdk_drag_begin_for_device() to
+ * begin a drag with a different device.
  *
  * This function is called by the drag source.
  *
- * Return value: (transfer full): a newly created #GdkDragContext.
+ * Return value: (transfer full): a newly created #GdkDragContext
  */
 GdkDragContext *
 gdk_drag_begin (GdkWindow     *window,
@@ -10691,6 +10694,19 @@ gdk_drag_begin (GdkWindow     *window,
   return gdk_drag_begin_for_device (window, device, targets);
 }
 
+/**
+ * gdk_drag_begin_for_device:
+ * @window: the source window for this drag
+ * @device: the device that controls this drag
+ * @targets: (transfer none) (element-type GdkAtom): the offered targets,
+ *     as list of #GdkAtoms
+ *
+ * Starts a drag and creates a new drag context for it.
+ *
+ * This function is called by the drag source.
+ *
+ * Return value: (transfer full): a newly created #GdkDragContext
+ */
 GdkDragContext *
 gdk_drag_begin_for_device (GdkWindow     *window,
                            GdkDevice     *device,

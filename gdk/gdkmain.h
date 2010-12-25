@@ -50,8 +50,6 @@ gboolean              gdk_init_check                      (gint           *argc,
 void                  gdk_add_option_entries_libgtk_only  (GOptionGroup   *group);
 void                  gdk_pre_parse_libgtk_only           (void);
 
-void                  gdk_enable_multidevice              (void);
-
 G_CONST_RETURN gchar *gdk_get_program_class               (void);
 void                  gdk_set_program_class               (const gchar    *program_class);
 
@@ -96,9 +94,11 @@ GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 #ifndef GDK_MULTIHEAD_SAFE
 
 #ifndef GDK_MULTIDEVICE_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 void          gdk_pointer_ungrab     (guint32       time_);
 void          gdk_keyboard_ungrab    (guint32       time_);
 gboolean      gdk_pointer_is_grabbed (void);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 gint gdk_screen_width  (void) G_GNUC_CONST;

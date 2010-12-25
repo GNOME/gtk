@@ -36,6 +36,7 @@ struct _GdkDeviceManager
 {
   GObject parent_instance;
 
+  /*< private >*/
   GdkDisplay *display;
 };
 

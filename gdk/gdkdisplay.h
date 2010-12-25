@@ -173,7 +173,7 @@ void gdk_display_set_double_click_distance (GdkDisplay   *display,
 GdkDisplay *gdk_display_get_default (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE
-
+#ifndef GDK_DISABLE_DEPRECATED
 void             gdk_display_get_pointer           (GdkDisplay             *display,
                                                     GdkScreen             **screen,
                                                     gint                   *x,
@@ -186,6 +186,9 @@ void             gdk_display_warp_pointer          (GdkDisplay             *disp
                                                     GdkScreen              *screen,
                                                     gint                   x,
                                                     gint                   y);
+GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay                   *display,
+                                                       const GdkDisplayPointerHooks *new_hooks);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 void             gdk_display_get_device_state              (GdkDisplay            *display,
@@ -198,11 +201,6 @@ GdkWindow *      gdk_display_get_window_at_device_position (GdkDisplay          
                                                             GdkDevice             *device,
                                                             gint                  *win_x,
                                                             gint                  *win_y);
-
-#ifndef GDK_MULTIDEVICE_SAFE
-GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay                   *display,
-                                                       const GdkDisplayPointerHooks *new_hooks);
-#endif /* GDK_MULTIDEVICE_SAFE */
 
 GdkDisplayDeviceHooks *gdk_display_set_device_hooks (GdkDisplay                  *display,
                                                      const GdkDisplayDeviceHooks *new_hooks);

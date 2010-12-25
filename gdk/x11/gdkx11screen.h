@@ -64,37 +64,35 @@ gint     gdk_x11_get_default_screen       (void);
 #endif
 
 /**
- * GDK_DISPLAY_XDISPLAY:
- * @display: a #GdkDisplay.
+ * GDK_SCREEN_XDISPLAY:
+ * @screen: a #GdkScreen
  *
- * Returns the display of a #GdkDisplay.
+ * Returns the display of a X11 #GdkScreen.
  *
  * Returns: an Xlib <type>Display*</type>
  */
-#define GDK_SCREEN_XDISPLAY(screen)   (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
+#define GDK_SCREEN_XDISPLAY(screen) (gdk_x11_display_get_xdisplay (gdk_screen_get_display (screen)))
 
 /**
  * GDK_SCREEN_XSCREEN:
  * @screen: a #GdkScreen
  *
- * Returns the screen of a #GdkScreen.
+ * Returns the screen of a X11 #GdkScreen.
  *
- * Returns: an Xlib <type>Screen*</type>.
+ * Returns: an Xlib <type>Screen*</type>
  */
-#define GDK_SCREEN_XSCREEN(screen)    (gdk_x11_screen_get_xscreen (screen))
+#define GDK_SCREEN_XSCREEN(screen) (gdk_x11_screen_get_xscreen (screen))
 
 /**
  * GDK_SCREEN_XNUMBER:
  * @screen: a #GdkScreen
  *
- * Returns the index of a #GdkScreen.
+ * Returns the index of a X11 #GdkScreen.
  *
- * Returns: the position of @screen among the screens of
- *  its display.
+ * Returns: the position of @screen among the screens of its display
  */
-#define GDK_SCREEN_XNUMBER(screen)    (gdk_x11_screen_get_screen_number (screen))
+#define GDK_SCREEN_XNUMBER(screen) (gdk_x11_screen_get_screen_number (screen))
 
-/* returns TRUE if we support the given WM spec feature */
 gboolean gdk_x11_screen_supports_net_wm_hint (GdkScreen *screen,
                                               GdkAtom    property);
 

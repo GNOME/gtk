@@ -69,6 +69,7 @@ struct _GdkDragContextClass {
 struct _GdkDragContext {
   GObject parent_instance;
 
+  /*< private >*/
   GdkDragProtocol protocol;
 
   gboolean is_source;

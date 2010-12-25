@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef __GDK_X_H__
@@ -31,27 +31,6 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-
-/**
- * SECTION:x_interaction
- * @Short_description: X backend-specific functions
- * @Title: X Window System Interaction
- *
- * The functions in this section are specific to the GDK X11 backend.
- * To use them, you need to include the <literal>&lt;gdk/gdkx.h&gt;</literal>
- * header and use the X11-specific pkg-config files to build your
- * application (either <literal>gdk-x11-3.0</literal> or
- * <literal>gtk+-x11-3.0</literal>).
- *
- * To make your code compile with other GDK backends, guard backend-specific
- * calls by an ifdef as follows:
- * <informalexample><programlisting>
- * #ifdef GDK_WINDOWING_X11
- *   /<!---->* X11-specific calls here... *<!---->/
- * #endif
- * </programlisting></informalexample>
- */
-
 
 #define __GDKX_H_INSIDE__
 

@@ -34,6 +34,7 @@ struct _GdkVisual
 {
   GObject parent_instance;
 
+  /*< private >*/
   GdkVisualType type;
   gint depth;
   GdkByteOrder byte_order;

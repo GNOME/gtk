@@ -24,6 +24,19 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 
+/**
+ * SECTION:gdkdevice
+ * @Short_description: Object representing an input device
+ * @Title: GdkDevice
+ * @See_also: #GdkDeviceManager
+ *
+ * The #GdkDevice object represents a single input device.
+ *
+ * See the #GdkDeviceManager documentation for more information
+ * about the various kinds of master and slave devices, and their
+ * relationships.
+ */
+
 typedef struct _GdkAxisInfo GdkAxisInfo;
 
 struct _GdkAxisInfo

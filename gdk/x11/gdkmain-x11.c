@@ -48,7 +48,41 @@
 #include <X11/XKBlib.h>
 #endif
 
-typedef struct _GdkPredicate        GdkPredicate;
+/**
+ * SECTION:x_interaction
+ * @Short_description: X backend-specific functions
+ * @Title: X Window System Interaction
+ *
+ * The functions in this section are specific to the GDK X11 backend.
+ * To use them, you need to include the <literal>&lt;gdk/gdkx.h&gt;</literal>
+ * header and use the X11-specific pkg-config files to build your
+ * application (either <literal>gdk-x11-3.0</literal> or
+ * <literal>gtk+-x11-3.0</literal>).
+ *
+ * To make your code compile with other GDK backends, guard backend-specific
+ * calls by an ifdef as follows. Since GDK may be built with multiple
+ * backends, you should also check for the backend that is in use (e.g. by
+ * using the GDK_IS_X11_DISPLAY() macro).
+ * |[
+ * #ifdef GDK_WINDOWING_X11
+ *   if (GDK_IS_X11_DISPLAY (display))
+ *     {
+ *       /&ast; make X11-specific calls here &ast;/
+ *     }
+ *   else
+ * #endif
+ * #ifdef GDK_WINDOWING_QUARTZ
+ *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ *     {
+ *       /&ast; make Quartz-specific calls here &ast/
+ *     }
+ *   else
+ * #endif
+ *   g_error ("Unsupported GDK backend");
+ * ]|
+ */
+
+typedef struct _GdkPredicate GdkPredicate;
 
 struct _GdkPredicate
 {
