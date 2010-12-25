@@ -745,9 +745,14 @@ gtk_style_update_from_context (GtkStyle *style)
   style->white.blue = 0xffff;
 
   for (i = 0; i < 5; i++)
-    style->background[i] = cairo_pattern_create_rgb (style->bg[i].red / 65535.0,
-                                                     style->bg[i].green / 65535.0,
-                                                     style->bg[i].blue / 65535.0);
+    {
+      if (style->background[i])
+        cairo_pattern_destroy (style->background[i]);
+
+      style->background[i] = cairo_pattern_create_rgb (style->bg[i].red / 65535.0,
+                                                       style->bg[i].green / 65535.0,
+                                                       style->bg[i].blue / 65535.0);
+    }
 }
 
 static void
