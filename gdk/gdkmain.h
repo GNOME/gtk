@@ -71,14 +71,16 @@ G_CONST_RETURN gchar *gdk_get_display_arg_name (void);
 /**
  * gdk_get_display:
  *
- * Gets the name of the display, which usually comes from the <envar>DISPLAY</envar>
- * environment variable or the <option>--display</option> command line option.
+ * Gets the name of the display, which usually comes from the
+ * <envar>DISPLAY</envar> environment variable or the
+ * <option>--display</option> command line option.
  *
  * Returns: the name of the display.
  */
-gchar*	              gdk_get_display          (void);
+gchar*        gdk_get_display        (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 				      gboolean      owner_events,
 				      GdkEventMask  event_mask,
@@ -88,6 +90,7 @@ GdkGrabStatus gdk_pointer_grab       (GdkWindow    *window,
 GdkGrabStatus gdk_keyboard_grab      (GdkWindow    *window,
 				      gboolean      owner_events,
 				      guint32       time_);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 #ifndef GDK_MULTIHEAD_SAFE

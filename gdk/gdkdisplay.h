@@ -132,11 +132,13 @@ GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
 GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
 
 #ifndef GDK_MULTIDEVICE_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
                                             guint32      time_);
 void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
                                             guint32      time_);
 gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 gboolean    gdk_display_device_is_grabbed  (GdkDisplay  *display,
