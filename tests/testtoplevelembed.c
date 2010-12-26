@@ -9,9 +9,6 @@ remove_notebook_page (GtkWidget *button,
 		      GtkWidget *toplevel)
 {
   gtk_container_remove (GTK_CONTAINER (notebook), toplevel);
-
-  gtk_widget_hide (toplevel);
-  gtk_widget_show (toplevel);
 }
 
 GtkWidget *
@@ -20,7 +17,7 @@ create_tab_label (GtkWidget *toplevel)
   GtkWidget *box = gtk_hbox_new (FALSE, 2);
   GtkWidget *label = gtk_label_new (G_OBJECT_TYPE_NAME (toplevel));
   GtkWidget *button = gtk_button_new ();
-  GtkWidget *image = gtk_image_new_from_stock (GTK_STOCK_REMOVE, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  GtkWidget *image = gtk_image_new_from_stock (GTK_STOCK_CLOSE, GTK_ICON_SIZE_MENU);
 
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
@@ -66,6 +63,7 @@ main (gint argc, gchar **argv)
   g_signal_connect (window, "destroy", gtk_main_quit, NULL);
 
   notebook = gtk_notebook_new ();
+  gtk_notebook_set_scrollable (GTK_NOTEBOOK (notebook), TRUE);
   gtk_container_add (GTK_CONTAINER (window), notebook);
 
   gtk_widget_realize (notebook);
