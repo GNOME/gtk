@@ -719,7 +719,7 @@ gtk_hsv_button_press (GtkWidget      *widget,
   if (is_in_ring (hsv, x, y))
     {
       priv->mode = DRAG_H;
-      set_cross_grab (hsv, gdk_event_get_device (event), event->time);
+      set_cross_grab (hsv, gdk_event_get_device ((GdkEvent *) event), event->time);
 
       gtk_hsv_set_color (hsv,
                          compute_v (hsv, x, y),
@@ -737,7 +737,7 @@ gtk_hsv_button_press (GtkWidget      *widget,
       gdouble s, v;
 
       priv->mode = DRAG_SV;
-      set_cross_grab (hsv, gdk_event_get_device (event), event->time);
+      set_cross_grab (hsv, gdk_event_get_device ((GdkEvent *) event), event->time);
 
       compute_sv (hsv, x, y, &s, &v);
       gtk_hsv_set_color (hsv, priv->h, s, v);
@@ -788,7 +788,7 @@ gtk_hsv_button_release (GtkWidget      *widget,
       g_assert_not_reached ();
     }
 
-  gdk_device_ungrab (gdk_event_get_device (event), event->time);
+  gdk_device_ungrab (gdk_event_get_device ((GdkEvent *) event), event->time);
 
   return TRUE;
 }
