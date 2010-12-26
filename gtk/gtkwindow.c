@@ -9232,6 +9232,7 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
 {
   GtkWidget *widget;
   GtkWidget *toplevel;
+  gboolean   was_anchored;
 
   widget = GTK_WIDGET (window);
 
@@ -9243,16 +9244,47 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
   if (is_toplevel == gtk_widget_is_toplevel (widget))
     return;
 
+  was_anchored = _gtk_widget_get_anchored (widget);
+
   if (is_toplevel)
     {
+      gboolean was_visible = gtk_widget_get_visible (widget);
+
+      /* Pass through regular pathways of an embedded toplevel
+       * to go through unmapping and hiding the widget before
+       * becomming a toplevel again.
+       */
+      if (was_visible)
+	gtk_widget_hide (widget);
+
+      /* Save the toplevel this widget was previously anchored into before
+       * propagating a hierarchy-changed. 
+       *
+       * Usually this happens by way of gtk_widget_unparent() and we are
+       * already unanchored at this point, just adding this clause incase
+       * things happen differently.
+       */
       toplevel = gtk_widget_get_toplevel (widget);
-      if (!gtk_widget_is_toplevel (toplevel))
+      if (!gtk_widget_is_toplevel (widget))
 	toplevel = NULL;
 
+      _gtk_widget_set_is_toplevel (widget, TRUE);
+
+      /* When a window becomes toplevel after being embedded and anchored
+       * into another window we need to unset it's anchored flag so that
+       * the hierarchy changed signal kicks in properly. 
+       */
+      _gtk_widget_set_anchored (widget, FALSE);
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
 
-      _gtk_widget_set_is_toplevel (widget, TRUE);
       toplevel_list = g_slist_prepend (toplevel_list, window);
+
+      /* If an embedded toplevel gets removed from the hierarchy
+       * and is still in a visible state, we need to show it again
+       * so it will be realized as a real toplevel again.
+       */
+      if (was_visible)
+	gtk_widget_show (widget);
     }
   else
     {

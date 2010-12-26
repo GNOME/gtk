@@ -3719,14 +3719,6 @@ gtk_widget_unparent (GtkWidget *widget)
   if (gtk_container_get_focus_child (GTK_CONTAINER (priv->parent)) == widget)
     gtk_container_set_focus_child (GTK_CONTAINER (priv->parent), NULL);
 
-  /* If we are unanchoring the child, we save around the toplevel
-   * to emit hierarchy changed
-   */
-  if (priv->parent->priv->anchored)
-    g_object_ref (toplevel);
-  else
-    toplevel = NULL;
-
   gtk_widget_queue_draw_child (widget);
 
   /* Reset the width and height here, to force reallocation if we
@@ -3745,11 +3737,13 @@ gtk_widget_unparent (GtkWidget *widget)
 	gtk_widget_unrealize (widget);
     }
 
-  /* Need to unset the parent window early, this can result in 
-   * an additional "hierarchy-changed" propagation if we are removing
-   * a parented GtkWindow from the hierarchy.
+  /* If we are unanchoring the child, we save around the toplevel
+   * to emit hierarchy changed
    */
-  gtk_widget_set_parent_window (widget, NULL);
+  if (priv->parent->priv->anchored)
+    g_object_ref (toplevel);
+  else
+    toplevel = NULL;
 
   /* Removing a widget from a container restores the child visible
    * flag to the default state, so it doesn't affect the child
@@ -3773,11 +3767,18 @@ gtk_widget_unparent (GtkWidget *widget)
     }
 
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, old_parent);
-  if (toplevel && gtk_widget_is_toplevel (toplevel))
+  if (toplevel)
     {
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
       g_object_unref (toplevel);
     }
+
+  /* Now that the parent pointer is nullified and the hierarchy-changed
+   * already passed, go ahead and unset the parent window, if we are unparenting
+   * an embeded GtkWindow the window will become toplevel again and hierarchy-changed
+   * will fire again for the new subhierarchy.
+   */
+  gtk_widget_set_parent_window (widget, NULL);
 
   g_object_notify (G_OBJECT (widget), "parent");
   g_object_thaw_notify (G_OBJECT (widget));
