@@ -3596,7 +3596,9 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
       gint x, y;
 
       display = gtk_widget_get_display (widget);
-      gdk_display_get_pointer (display, NULL, &x, &y, NULL);
+      gdk_display_get_device_state (gtk_widget_get_display (widget),
+                                    gdk_drag_context_get_device (context),
+                                    NULL, &x, &y, NULL);
 
       g_signal_emit (notebook, notebook_signals[CREATE_WINDOW], 0,
                      priv->detached_tab->child, x, y, &dest_notebook);
