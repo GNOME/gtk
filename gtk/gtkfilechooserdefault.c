@@ -1178,11 +1178,14 @@ shortcuts_reload_icons_get_info_cb (GCancellable *cancellable,
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->icon_size);
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
-  gtk_list_store_set (data->impl->shortcuts_model, &iter,
-		      SHORTCUTS_COL_PIXBUF, pixbuf,
-		      -1);
-  gtk_tree_path_free (path);
+  if (path)
+    {
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
+      gtk_list_store_set (data->impl->shortcuts_model, &iter,
+			  SHORTCUTS_COL_PIXBUF, pixbuf,
+			  -1);
+      gtk_tree_path_free (path);
+    }
 
   if (pixbuf)
     g_object_unref (pixbuf);
@@ -5586,21 +5589,20 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
   GtkWidget *toplevel;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+  toplevel = gtk_widget_get_toplevel (widget);
 
-  if (previous_toplevel)
+  if (previous_toplevel && 
+      impl->toplevel_set_focus_id != 0)
     {
-      g_assert (impl->toplevel_set_focus_id != 0);
       g_signal_handler_disconnect (previous_toplevel,
                                    impl->toplevel_set_focus_id);
       impl->toplevel_set_focus_id = 0;
       impl->toplevel_last_focus_widget = NULL;
     }
-  else
-    g_assert (impl->toplevel_set_focus_id == 0);
 
-  toplevel = gtk_widget_get_toplevel (widget);
   if (gtk_widget_is_toplevel (toplevel))
     {
+      g_assert (impl->toplevel_set_focus_id == 0);
       impl->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
 						      G_CALLBACK (toplevel_set_focus_cb), impl);
       impl->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
