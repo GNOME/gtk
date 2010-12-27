@@ -161,8 +161,6 @@ gboolean              gdk_device_get_has_cursor (GdkDevice *device);
 
 /* Functions to configure a device */
 GdkInputSource gdk_device_get_source    (GdkDevice      *device);
-void           gdk_device_set_source    (GdkDevice      *device,
-                                         GdkInputSource  source);
 
 GdkInputMode   gdk_device_get_mode      (GdkDevice      *device);
 gboolean       gdk_device_set_mode      (GdkDevice      *device,

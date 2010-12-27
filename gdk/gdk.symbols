@@ -75,7 +75,6 @@ gdk_device_manager_list_devices
 gdk_device_set_axis_use
 gdk_device_set_key
 gdk_device_set_mode
-gdk_device_set_source
 gdk_device_type_get_type G_GNUC_CONST
 gdk_device_ungrab
 gdk_device_warp

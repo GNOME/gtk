@@ -610,23 +610,6 @@ gdk_device_get_source (GdkDevice *device)
 }
 
 /**
- * gdk_device_set_source:
- * @device: a #GdkDevice.
- * @source: the source type.
- *
- * Sets the source type for an input device.
- **/
-void
-gdk_device_set_source (GdkDevice      *device,
-                       GdkInputSource  source)
-{
-  g_return_if_fail (GDK_IS_DEVICE (device));
-
-  device->source = source;
-  g_object_notify (G_OBJECT (device), "input-source");
-}
-
-/**
  * gdk_device_get_mode:
  * @device: a #GdkDevice
  *
