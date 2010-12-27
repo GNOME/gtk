@@ -6806,7 +6806,7 @@ gtk_text_view_reset_im_context (GtkTextView *text_view)
  * gtk_foo_bar_key_press_event (GtkWidget   *widget,
  *                              GdkEventKey *event)
  * {
- *   if ((key->keyval == GDK_Return || key->keyval == GDK_KP_Enter))
+ *   if ((key->keyval == GDK_KEY_Return || key->keyval == GDK_KEY_KP_Enter))
  *     {
  *       if (gtk_text_view_im_context_filter_keypress (GTK_TEXT_VIEW (view), event))
  *         return TRUE;
@@ -7350,6 +7350,8 @@ gtk_text_view_set_hadjustment (GtkTextView   *text_view,
  * Returns: (transfer none): pointer to the vertical #GtkAdjustment
  *
  * Since: 2.22
+ *
+ * Deprecated: 3.0: Use gtk_scrollable_get_vadjustment()
  **/
 GtkAdjustment*
 gtk_text_view_get_vadjustment (GtkTextView *text_view)
