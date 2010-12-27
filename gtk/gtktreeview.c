@@ -9717,7 +9717,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
   GtkAllocation allocation;
   GtkAllocation button_allocation;
   GdkScreen *screen = gtk_widget_get_screen (GTK_WIDGET (tree_view));
-  GdkDisplay *display = gdk_screen_get_display (screen);
   GtkWidget *button;
   GdkDevice *pointer, *keyboard;
 
@@ -9749,13 +9748,24 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
       attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
       tree_view->priv->drag_window = gdk_window_new (tree_view->priv->bin_window,
-						     &attributes,
-						     attributes_mask);
+                                                     &attributes,
+                                                     attributes_mask);
       gdk_window_set_user_data (tree_view->priv->drag_window, GTK_WIDGET (tree_view));
     }
 
-  gdk_display_pointer_ungrab (display, GDK_CURRENT_TIME);
-  gdk_display_keyboard_ungrab (display, GDK_CURRENT_TIME);
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      keyboard = device;
+      pointer = gdk_device_get_associated_device (device);
+    }
+  else
+    {
+      pointer = device;
+      keyboard = gdk_device_get_associated_device (device);
+    }
+
+  gdk_device_ungrab (pointer, GDK_CURRENT_TIME);
+  gdk_device_ungrab (keyboard, GDK_CURRENT_TIME);
 
   gtk_grab_remove (button);
 
@@ -9808,16 +9818,6 @@ _gtk_tree_view_column_start_drag (GtkTreeView       *tree_view,
     gtk_main_iteration ();
 
   tree_view->priv->in_column_drag = TRUE;
-  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-    {
-      keyboard = device;
-      pointer = gdk_device_get_associated_device (device);
-    }
-  else
-    {
-      pointer = device;
-      keyboard = gdk_device_get_associated_device (device);
-    }
 
   gdk_device_grab (pointer,
                    tree_view->priv->drag_window,
