@@ -5251,11 +5251,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
 	}
       else
 	{
-	  if (priv->frame)
-	    gdk_window_resize (priv->frame,
-			       allocation->width + priv->frame_left + priv->frame_right,
-			       allocation->height + priv->frame_top + priv->frame_bottom);
-	  
 	  update_grip_visibility (window);
 	  set_grip_position (window);
 	}
@@ -5273,12 +5268,6 @@ gtk_window_size_allocate (GtkWidget     *widget,
 	MAX (1, (gint)allocation->height - child_allocation.y * 2);
 
       gtk_widget_size_allocate (child, &child_allocation);
-    }
-
-  if (gtk_widget_get_realized (widget))
-    {
-      update_grip_visibility (window);
-      set_grip_position (window);
     }
 }
 
