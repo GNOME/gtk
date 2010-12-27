@@ -191,11 +191,6 @@ GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay               
 #endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
-GdkWindow *      gdk_display_get_window_at_device_position (GdkDisplay            *display,
-                                                            GdkDevice             *device,
-                                                            gint                  *win_x,
-                                                            gint                  *win_y);
-
 GdkDisplayDeviceHooks *gdk_display_set_device_hooks (GdkDisplay                  *display,
                                                      const GdkDisplayDeviceHooks *new_hooks);
 

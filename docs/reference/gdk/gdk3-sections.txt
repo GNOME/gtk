@@ -126,7 +126,6 @@ gdk_display_set_double_click_distance
 gdk_display_get_pointer
 gdk_display_list_devices
 gdk_display_get_window_at_pointer
-gdk_display_get_window_at_device_position
 GdkDisplayPointerHooks
 gdk_display_set_pointer_hooks
 GdkDisplayDeviceHooks
@@ -705,6 +704,7 @@ gdk_device_ungrab
 <SUBSECTION>
 gdk_device_get_state
 gdk_device_get_position
+gdk_device_get_window_at_position
 gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord

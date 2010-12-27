@@ -536,9 +536,7 @@ gtk_tooltip_trigger_tooltip_query (GdkDisplay *display)
 
   /* Trigger logic as if the mouse moved */
   device = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (display));
-  window = gdk_display_get_window_at_device_position (display,
-                                                      device,
-                                                      &x, &y);
+  window = gdk_device_get_window_at_position (device, &x, &y);
   if (!window)
     return;
 

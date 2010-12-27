@@ -436,6 +436,45 @@ gdk_device_get_position (GdkDevice        *device,
 }
 
 /**
+ * gdk_device_get_window_at_position:
+ * @device: pointer #GdkDevice to query info to.
+ * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
+ *         relative to the window origin, or %NULL.
+ * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
+ *         relative to the window origin, or %NULL.
+ *
+ * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
+ * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
+ *
+ * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
+ *
+ * Since: 3.0
+ **/
+GdkWindow *
+gdk_device_get_window_at_position (GdkDevice  *device,
+                                   gint       *win_x,
+                                   gint       *win_y)
+{
+  GdkDisplay *display;
+  gint tmp_x, tmp_y;
+  GdkWindow *window;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+
+  display = gdk_device_get_display (device);
+
+  window = display->device_hooks->window_at_device_position (display, device, &tmp_x, &tmp_y);
+
+  if (win_x)
+    *win_x = tmp_x;
+  if (win_y)
+    *win_y = tmp_y;
+
+  return window;
+}
+
+/**
  * gdk_device_get_history:
  * @device: a #GdkDevice
  * @window: the window with respect to which which the event coordinates will be reported

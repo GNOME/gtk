@@ -697,45 +697,6 @@ _gdk_display_enable_motion_hints (GdkDisplay *display,
 }
 
 /**
- * gdk_display_get_window_at_device_position:
- * @display: a #GdkDisplay.
- * @device: pointer #GdkDevice to query info to.
- * @win_x: (out) (allow-none): return location for the X coordinate of the device location,
- *         relative to the window origin, or %NULL.
- * @win_y: (out) (allow-none): return location for the Y coordinate of the device location,
- *         relative to the window origin, or %NULL.
- *
- * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
- * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
- *
- * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
- *
- * Since: 3.0
- **/
-GdkWindow *
-gdk_display_get_window_at_device_position (GdkDisplay *display,
-                                           GdkDevice  *device,
-                                           gint       *win_x,
-                                           gint       *win_y)
-{
-  gint tmp_x, tmp_y;
-  GdkWindow *window;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
-
-  window = display->device_hooks->window_at_device_position (display, device, &tmp_x, &tmp_y);
-
-  if (win_x)
-    *win_x = tmp_x;
-  if (win_y)
-    *win_y = tmp_y;
-
-  return window;
-}
-
-/**
  * gdk_display_set_device_hooks:
  * @display: a #GdkDisplay.
  * @new_hooks: (allow-none): a table of pointers to functions for getting quantities related
@@ -890,7 +851,7 @@ gdk_window_real_window_get_device_position (GdkDisplay       *display,
  *
  * Since: 2.2
  *
- * Deprecated: 3.0: Use gdk_display_get_window_at_device_position() instead.
+ * Deprecated: 3.0: Use gdk_device_get_window_at_position() instead.
  **/
 GdkWindow *
 gdk_display_get_window_at_pointer (GdkDisplay *display,
@@ -899,7 +860,7 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return gdk_display_get_window_at_device_position (display, display->core_pointer, win_x, win_y);
+  return gdk_device_get_window_at_position (display->core_pointer, win_x, win_y);
 }
 
 static void

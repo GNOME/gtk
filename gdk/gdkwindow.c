@@ -4951,8 +4951,7 @@ gdk_window_get_pointer (GdkWindow	  *window,
  * corner of @window.
  *
  * Return value: (transfer none): The window underneath @device (as with
- * gdk_display_get_window_at_device_position()), or %NULL if the
- * window is not known to GDK.
+ * gdk_device_get_window_at_position()), or %NULL if the window is not known to GDK.
  *
  * Since: 3.0
  **/
@@ -5007,7 +5006,7 @@ gdk_window_get_device_position (GdkWindow       *window,
  *
  * Return value: (transfer none): window under the mouse pointer
  *
- * Deprecated: 3.0: Use gdk_display_get_window_at_device_position() instead.
+ * Deprecated: 3.0: Use gdk_device_get_window_at_position() instead.
  **/
 GdkWindow*
 gdk_window_at_pointer (gint *win_x,

@@ -63,6 +63,7 @@ gdk_device_get_position
 gdk_device_get_source
 gdk_device_get_state
 gdk_device_get_type G_GNUC_CONST
+gdk_device_get_window_at_position
 gdk_device_grab
 gdk_device_grab_info_libgtk_only
 gdk_device_list_axes
@@ -97,7 +98,6 @@ gdk_display_get_n_screens
 gdk_display_get_pointer
 gdk_display_get_screen
 gdk_display_get_type G_GNUC_CONST
-gdk_display_get_window_at_device_position
 gdk_display_get_window_at_pointer
 gdk_display_has_pending
 gdk_display_is_closed

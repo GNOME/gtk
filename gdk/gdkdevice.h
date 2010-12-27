@@ -193,6 +193,11 @@ void     gdk_device_get_position (GdkDevice         *device,
                                   GdkScreen        **screen,
                                   gint              *x,
                                   gint              *y);
+GdkWindow *
+         gdk_device_get_window_at_position
+                                 (GdkDevice         *device,
+                                  gint              *win_x,
+                                  gint              *win_y);
 gboolean gdk_device_get_history  (GdkDevice         *device,
                                   GdkWindow         *window,
                                   guint32            start,

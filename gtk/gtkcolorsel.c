@@ -1710,8 +1710,7 @@ grab_color_at_pointer (GdkScreen *screen,
   if (!pixbuf)
     {
       gint x, y;
-      GdkDisplay *display = gdk_screen_get_display (screen);
-      GdkWindow *window = gdk_display_get_window_at_device_position (display, device, &x, &y);
+      GdkWindow *window = gdk_device_get_window_at_position (device, &x, &y);
       if (!window)
 	return;
       pixbuf = gdk_pixbuf_get_from_window (window,
