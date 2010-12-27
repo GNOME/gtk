@@ -58,7 +58,8 @@ struct _GtkTextChildAnchor
 {
   GObject parent_instance;
 
-  gpointer GSEAL (segment);
+  /*< private >*/
+  gpointer segment;
 };
 
 struct _GtkTextChildAnchorClass
@@ -72,12 +73,12 @@ struct _GtkTextChildAnchorClass
   void (*_gtk_reserved4) (void);
 };
 
-GType gtk_text_child_anchor_get_type (void) G_GNUC_CONST;
+GType               gtk_text_child_anchor_get_type    (void) G_GNUC_CONST;
 
-GtkTextChildAnchor* gtk_text_child_anchor_new (void);
+GtkTextChildAnchor* gtk_text_child_anchor_new         (void);
 
-GList*   gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor);
-gboolean gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
+GList*              gtk_text_child_anchor_get_widgets (GtkTextChildAnchor *anchor);
+gboolean            gtk_text_child_anchor_get_deleted (GtkTextChildAnchor *anchor);
 
 G_END_DECLS
 
