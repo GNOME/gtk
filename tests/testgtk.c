@@ -8576,14 +8576,14 @@ find_widget (GtkWidget *widget, FindWidgetData *data)
 }
 
 static GtkWidget *
-find_widget_at_pointer (GdkDisplay *display)
+find_widget_at_pointer (GdkDevice *device)
 {
   GtkWidget *widget = NULL;
   GdkWindow *pointer_window;
   gint x, y;
   FindWidgetData data;
  
- pointer_window = gdk_display_get_window_at_pointer (display, NULL, NULL);
+ pointer_window = gdk_device_get_window_at_position (device, NULL, NULL);
  
  if (pointer_window)
    {
@@ -8658,7 +8658,7 @@ property_query_event (GtkWidget             *widget,
       gtk_grab_remove (widget);
       gdk_device_ungrab (gdk_event_get_device (event), GDK_CURRENT_TIME);
 
-      res_widget = find_widget_at_pointer (gtk_widget_get_display (widget));
+      res_widget = find_widget_at_pointer (gdk_event_get_device (event));
       if (res_widget)
 	{
 	  g_object_set_data (G_OBJECT (res_widget), "prop-editor-screen",
@@ -8799,7 +8799,7 @@ snapshot_widget_event (GtkWidget	       *widget,
       gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
 				  GDK_CURRENT_TIME);
       
-      res_widget = find_widget_at_pointer (gtk_widget_get_display (widget));
+      res_widget = find_widget_at_pointer (gdk_event_get_device (event));
       if (data->is_toplevel && res_widget)
 	res_widget = gtk_widget_get_toplevel (res_widget);
       if (res_widget)
