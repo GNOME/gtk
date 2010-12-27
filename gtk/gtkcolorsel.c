@@ -1804,7 +1804,6 @@ key_press (GtkWidget   *invisible,
            GdkEventKey *event,
            gpointer     data)
 {  
-  GdkDisplay *display = gtk_widget_get_display (invisible);
   GdkScreen *screen = gdk_event_get_screen ((GdkEvent *) event);
   GdkDevice *device, *pointer_device;
   guint state = event->state & gtk_accelerator_get_default_mod_mask ();
@@ -1813,7 +1812,7 @@ key_press (GtkWidget   *invisible,
 
   device = gdk_event_get_device ((GdkEvent * ) event);
   pointer_device = gdk_device_get_associated_device (device);
-  gdk_display_get_device_state (display, pointer_device, NULL, &x, &y, NULL);
+  gdk_device_get_position (pointer_device, NULL, &x, &y);
 
   dx = 0;
   dy = 0;

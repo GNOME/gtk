@@ -1236,10 +1236,9 @@ gtk_handle_box_motion (GtkWidget      *widget,
   new_x = 0;
   new_y = 0;
   screen = gtk_widget_get_screen (widget);
-  gdk_display_get_device_state (gdk_screen_get_display (screen),
-                                event->device,
-                                &pointer_screen,
-                                &new_x, &new_y, NULL);
+  gdk_device_get_position (event->device,
+                           &pointer_screen,
+                           &new_x, &new_y);
   if (pointer_screen != screen)
     {
       new_x = priv->orig_x;

@@ -2415,8 +2415,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
     }
   else
     {
-      gdk_display_get_device_state (gtk_widget_get_display (widget), pointer,
-                                    &info->cur_screen, &info->cur_x, &info->cur_y, NULL);
+      gdk_device_get_position (pointer, &info->cur_screen, &info->cur_x, &info->cur_y);
     }
 
   g_signal_emit_by_name (widget, "drag-begin", info->context);
@@ -4160,10 +4159,7 @@ gtk_drag_motion_cb (GtkWidget      *widget,
 
   if (event->is_hint)
     {
-      GdkDisplay *display = gtk_widget_get_display (widget);
-
-      gdk_display_get_device_state (display, event->device,
-                                    &screen, &x_root, &y_root, NULL);
+      gdk_device_get_position (event->device, &screen, &x_root, &y_root);
       event->x_root = x_root;
       event->y_root = y_root;
     }

@@ -399,6 +399,43 @@ gdk_device_get_state (GdkDevice       *device,
 }
 
 /**
+ * gdk_device_get_position:
+ * @device: pointer device to query status about.
+ * @screen: (out) (transfer none) (allow-none): location to store the #GdkScreen
+ *          the @device is on, or %NULL.
+ * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
+ * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
+ *
+ * Gets the current location of @device.
+ *
+ * Since: 3.0
+ **/
+void
+gdk_device_get_position (GdkDevice        *device,
+                         GdkScreen       **screen,
+                         gint             *x,
+                         gint             *y)
+{
+  GdkScreen *tmp_screen;
+  GdkDisplay *display;
+  gint tmp_x, tmp_y;
+  GdkModifierType tmp_mask;
+
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
+
+  display = gdk_device_get_display (device);
+  display->device_hooks->get_device_state (display, device, &tmp_screen, &tmp_x, &tmp_y, &tmp_mask);
+
+  if (screen)
+    *screen = tmp_screen;
+  if (x)
+    *x = tmp_x;
+  if (y)
+    *y = tmp_y;
+}
+
+/**
  * gdk_device_get_history:
  * @device: a #GdkDevice
  * @window: the window with respect to which which the event coordinates will be reported
