@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -36,57 +36,46 @@
 
 G_BEGIN_DECLS
 
-#define	GTK_TYPE_MENU_ITEM		(gtk_menu_item_get_type ())
-#define GTK_MENU_ITEM(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU_ITEM, GtkMenuItem))
-#define GTK_MENU_ITEM_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_ITEM, GtkMenuItemClass))
-#define GTK_IS_MENU_ITEM(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU_ITEM))
-#define GTK_IS_MENU_ITEM_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_ITEM))
-#define GTK_MENU_ITEM_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_ITEM, GtkMenuItemClass))
+#define GTK_TYPE_MENU_ITEM            (gtk_menu_item_get_type ())
+#define GTK_MENU_ITEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_MENU_ITEM, GtkMenuItem))
+#define GTK_MENU_ITEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_MENU_ITEM, GtkMenuItemClass))
+#define GTK_IS_MENU_ITEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_MENU_ITEM))
+#define GTK_IS_MENU_ITEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_MENU_ITEM))
+#define GTK_MENU_ITEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_MENU_ITEM, GtkMenuItemClass))
 
 
-typedef struct _GtkMenuItem	  GtkMenuItem;
-typedef struct _GtkMenuItemClass  GtkMenuItemClass;
+typedef struct _GtkMenuItem        GtkMenuItem;
+typedef struct _GtkMenuItemClass   GtkMenuItemClass;
+typedef struct _GtkMenuItemPrivate GtkMenuItemPrivate;
 
 struct _GtkMenuItem
 {
   GtkBin bin;
 
-  GtkWidget *GSEAL (submenu);
-  GdkWindow *GSEAL (event_window);
-
-  guint16 GSEAL (toggle_size);
-  guint16 GSEAL (accelerator_width);
-  gchar  *GSEAL (accel_path);
-
-  guint GSEAL (show_submenu_indicator) : 1;
-  guint GSEAL (submenu_placement) : 1;
-  guint GSEAL (submenu_direction) : 1;
-  guint GSEAL (right_justify): 1;
-  guint GSEAL (timer_from_keypress) : 1;
-  guint GSEAL (from_menubar) : 1;
-  guint GSEAL (timer);
+  /*< private >*/
+  GtkMenuItemPrivate *priv;
 };
 
 struct _GtkMenuItemClass
 {
   GtkBinClass parent_class;
-  
-  /* If the following flag is true, then we should always hide
-   * the menu when the MenuItem is activated. Otherwise, the 
+
+  /* If the following flag is true, then we should always
+   * hide the menu when the MenuItem is activated. Otherwise,
    * it is up to the caller. For instance, when navigating
    * a menu with the keyboard, <Space> doesn't hide, but
    * <Return> does.
    */
   guint hide_on_activate : 1;
-  
+
   void (* activate)             (GtkMenuItem *menu_item);
   void (* activate_item)        (GtkMenuItem *menu_item);
   void (* toggle_size_request)  (GtkMenuItem *menu_item,
-				 gint        *requisition);
+                                 gint        *requisition);
   void (* toggle_size_allocate) (GtkMenuItem *menu_item,
-				 gint         allocation);
+                                 gint         allocation);
   void (* set_label)            (GtkMenuItem *menu_item,
-				 const gchar *label);
+                                 const gchar *label);
   G_CONST_RETURN gchar *(* get_label) (GtkMenuItem *menu_item);
 
   void (* select)               (GtkMenuItem *menu_item);
@@ -100,44 +89,36 @@ struct _GtkMenuItemClass
 };
 
 
-GType	   gtk_menu_item_get_type	      (void) G_GNUC_CONST;
+GType      gtk_menu_item_get_type             (void) G_GNUC_CONST;
+
 GtkWidget* gtk_menu_item_new                  (void);
 GtkWidget* gtk_menu_item_new_with_label       (const gchar         *label);
 GtkWidget* gtk_menu_item_new_with_mnemonic    (const gchar         *label);
 void       gtk_menu_item_set_submenu          (GtkMenuItem         *menu_item,
-					       GtkWidget           *submenu);
+                                               GtkWidget           *submenu);
 GtkWidget* gtk_menu_item_get_submenu          (GtkMenuItem         *menu_item);
 void       gtk_menu_item_select               (GtkMenuItem         *menu_item);
 void       gtk_menu_item_deselect             (GtkMenuItem         *menu_item);
 void       gtk_menu_item_activate             (GtkMenuItem         *menu_item);
 void       gtk_menu_item_toggle_size_request  (GtkMenuItem         *menu_item,
-					       gint                *requisition);
+                                               gint                *requisition);
 void       gtk_menu_item_toggle_size_allocate (GtkMenuItem         *menu_item,
-					       gint                 allocation);
+                                               gint                 allocation);
 void       gtk_menu_item_set_right_justified  (GtkMenuItem         *menu_item,
-					       gboolean             right_justified);
+                                               gboolean             right_justified);
 gboolean   gtk_menu_item_get_right_justified  (GtkMenuItem         *menu_item);
-void	   gtk_menu_item_set_accel_path	      (GtkMenuItem	   *menu_item,
-					       const gchar	   *accel_path);
+void       gtk_menu_item_set_accel_path       (GtkMenuItem         *menu_item,
+                                               const gchar         *accel_path);
 G_CONST_RETURN gchar* gtk_menu_item_get_accel_path (GtkMenuItem    *menu_item);
 
 void       gtk_menu_item_set_label            (GtkMenuItem         *menu_item,
- 					       const gchar         *label);
+                                               const gchar         *label);
 G_CONST_RETURN gchar *gtk_menu_item_get_label (GtkMenuItem         *menu_item);
 
 void       gtk_menu_item_set_use_underline    (GtkMenuItem         *menu_item,
- 					       gboolean             setting);
+                                               gboolean             setting);
 gboolean   gtk_menu_item_get_use_underline    (GtkMenuItem         *menu_item);
 
-/* private */
-void	  _gtk_menu_item_refresh_accel_path   (GtkMenuItem	   *menu_item,
-					       const gchar	   *prefix,
-					       GtkAccelGroup	   *accel_group,
-					       gboolean		    group_changed);
-gboolean  _gtk_menu_item_is_selectable        (GtkWidget           *menu_item);
-void      _gtk_menu_item_popup_submenu        (GtkWidget           *menu_item,
-                                               gboolean             with_delay);
-void      _gtk_menu_item_popdown_submenu      (GtkWidget           *menu_item);
 
 G_END_DECLS
 

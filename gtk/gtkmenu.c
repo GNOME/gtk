@@ -35,6 +35,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuprivate.h"
+#include "gtkmenuitemprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkwindow.h"
@@ -3032,13 +3033,13 @@ gtk_menu_get_preferred_width (GtkWidget *widget,
        * case the toggle size request depends on the size
        * request of a child of the child (e.g. for ImageMenuItem)
        */
-       GTK_MENU_ITEM (child)->show_submenu_indicator = TRUE;
+       GTK_MENU_ITEM (child)->priv->show_submenu_indicator = TRUE;
        gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
        gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child), &toggle_size);
        max_toggle_size = MAX (max_toggle_size, toggle_size);
        max_accel_width = MAX (max_accel_width,
-                              GTK_MENU_ITEM (child)->accelerator_width);
+                              GTK_MENU_ITEM (child)->priv->accelerator_width);
 
        part = child_min / (r - l);
        min_width = MAX (min_width, part);
@@ -3325,7 +3326,7 @@ get_accel_path (GtkWidget *menu_item,
   path = _gtk_widget_get_accel_path (menu_item, locked);
   if (!path)
     {
-      path = GTK_MENU_ITEM (menu_item)->accel_path;
+      path = GTK_MENU_ITEM (menu_item)->priv->accel_path;
 
       if (locked)
         {
@@ -3437,7 +3438,7 @@ gtk_menu_key_press (GtkWidget   *widget,
   if (can_change_accels &&
       menu_shell->priv->active_menu_item &&
       gtk_bin_get_child (GTK_BIN (menu_shell->priv->active_menu_item)) && /* no separators */
-      GTK_MENU_ITEM (menu_shell->priv->active_menu_item)->submenu == NULL &&  /* no submenus */
+      GTK_MENU_ITEM (menu_shell->priv->active_menu_item)->priv->submenu == NULL &&  /* no submenus */
       (delete || gtk_accelerator_valid (accel_key, accel_mods)))
     {
       GtkWidget *menu_item = menu_shell->priv->active_menu_item;
@@ -3505,7 +3506,7 @@ definitely_within_item (GtkWidget *widget,
                         gint       x,
                         gint       y)
 {
-  GdkWindow *window = GTK_MENU_ITEM (widget)->event_window;
+  GdkWindow *window = GTK_MENU_ITEM (widget)->priv->event_window;
   int w, h;
 
   w = gdk_window_get_width (window);
@@ -4250,10 +4251,10 @@ gtk_menu_leave_notify (GtkWidget        *widget,
    * with a submenu, in which case we enter submenu navigation mode.
    */
   if (menu_shell->priv->active_menu_item != NULL
-      && menu_item->submenu != NULL
-      && menu_item->submenu_placement == GTK_LEFT_RIGHT)
+      && menu_item->priv->submenu != NULL
+      && menu_item->priv->submenu_placement == GTK_LEFT_RIGHT)
     {
-      if (GTK_MENU_SHELL (menu_item->submenu)->priv->active)
+      if (GTK_MENU_SHELL (menu_item->priv->submenu)->priv->active)
         {
           gtk_menu_set_submenu_navigation_region (menu, menu_item, event);
           return TRUE;
@@ -4389,12 +4390,12 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
   GtkMenuPopdownData *popdown_data;
   GdkWindow *window;
 
-  g_return_if_fail (menu_item->submenu != NULL);
+  g_return_if_fail (menu_item->priv->submenu != NULL);
   g_return_if_fail (event != NULL);
 
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
 
-  window = gtk_widget_get_window (menu_item->submenu);
+  window = gtk_widget_get_window (menu_item->priv->submenu);
   gdk_window_get_origin (window, &submenu_left, &submenu_top);
 
   submenu_right = submenu_left + gdk_window_get_width (window);
@@ -4413,7 +4414,7 @@ gtk_menu_set_submenu_navigation_region (GtkMenu          *menu,
        * location of the rectangle. This is why the width or height
        * can be negative.
        */
-      if (menu_item->submenu_direction == GTK_DIRECTION_RIGHT)
+      if (menu_item->priv->submenu_direction == GTK_DIRECTION_RIGHT)
         {
           /* right */
           priv->navigation_x = submenu_left;
@@ -5359,7 +5360,7 @@ gtk_menu_move_current (GtkMenuShell         *menu_shell,
             {
               GtkWidget *parent = menu_shell->priv->parent_menu_shell;
 
-              if (! GTK_MENU_ITEM (menu_shell->priv->active_menu_item)->submenu &&
+              if (! GTK_MENU_ITEM (menu_shell->priv->active_menu_item)->priv->submenu &&
                   (!parent ||
                    g_list_length (GTK_MENU_SHELL (parent)->priv->children) <= 1))
                 match = menu_shell->priv->active_menu_item;

@@ -32,7 +32,7 @@
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenubar.h"
-#include "gtkmenuitem.h"
+#include "gtkmenuitemprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtkmenuprivate.h"
 #include "gtkmnemonichash.h"
@@ -645,9 +645,10 @@ gtk_menu_shell_button_press (GtkWidget      *widget,
         }
     }
 
-  if (menu_item && _gtk_menu_item_is_selectable (menu_item) &&
-      GTK_MENU_ITEM (menu_item)->submenu != NULL &&
-      !gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->submenu))
+  if (menu_item &&
+      _gtk_menu_item_is_selectable (menu_item) &&
+      GTK_MENU_ITEM (menu_item)->priv->submenu != NULL &&
+      !gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->priv->submenu))
     {
       _gtk_menu_item_popup_submenu (menu_item, FALSE);
       priv->activated_submenu = TRUE;
@@ -701,7 +702,7 @@ gtk_menu_shell_button_release (GtkWidget      *widget,
           if (menu_item && (priv->active_menu_item == menu_item) &&
               _gtk_menu_item_is_selectable (menu_item))
             {
-              GtkWidget *submenu = GTK_MENU_ITEM (menu_item)->submenu;
+              GtkWidget *submenu = GTK_MENU_ITEM (menu_item)->priv->submenu;
 
               if (submenu == NULL)
                 {
@@ -955,11 +956,11 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
                * its submenu.
                */
               if ((event->state & (GDK_BUTTON1_MASK|GDK_BUTTON2_MASK|GDK_BUTTON3_MASK)) &&
-                  GTK_MENU_ITEM (menu_item)->submenu != NULL)
+                  GTK_MENU_ITEM (menu_item)->priv->submenu != NULL)
                 {
                   GTK_MENU_SHELL (parent)->priv->activated_submenu = TRUE;
 
-                  if (!gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->submenu))
+                  if (!gtk_widget_get_visible (GTK_MENU_ITEM (menu_item)->priv->submenu))
                     {
                       gboolean touchscreen_mode;
 
@@ -1010,7 +1011,7 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
         }
 
       if ((priv->active_menu_item == event_widget) &&
-          (menu_item->submenu == NULL))
+          (menu_item->priv->submenu == NULL))
         {
           if ((event->detail != GDK_NOTIFY_INFERIOR) &&
               (gtk_widget_get_state (GTK_WIDGET (menu_item)) != GTK_STATE_NORMAL))
@@ -1225,7 +1226,7 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
   /* This allows the bizarre radio buttons-with-submenus-display-history
    * behavior
    */
-  if (GTK_MENU_ITEM (priv->active_menu_item)->submenu)
+  if (GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu)
     gtk_widget_activate (priv->active_menu_item);
 }
 
@@ -1447,11 +1448,11 @@ gtk_menu_shell_select_submenu_first (GtkMenuShell *menu_shell)
 
   menu_item = GTK_MENU_ITEM (priv->active_menu_item);
 
-  if (menu_item->submenu)
+  if (menu_item->priv->submenu)
     {
       _gtk_menu_item_popup_submenu (GTK_WIDGET (menu_item), FALSE);
-      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->submenu), TRUE);
-      if (GTK_MENU_SHELL (menu_item->submenu)->priv->active_menu_item)
+      gtk_menu_shell_select_first (GTK_MENU_SHELL (menu_item->priv->submenu), TRUE);
+      if (GTK_MENU_SHELL (menu_item->priv->submenu)->priv->active_menu_item)
         return TRUE;
     }
 
@@ -1483,8 +1484,8 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
     case GTK_MENU_DIR_PARENT:
       if (touchscreen_mode &&
           priv->active_menu_item &&
-          GTK_MENU_ITEM (priv->active_menu_item)->submenu &&
-          gtk_widget_get_visible (GTK_MENU_ITEM (priv->active_menu_item)->submenu))
+          GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu &&
+          gtk_widget_get_visible (GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu))
         {
           /* if we are on a menu item that has an open submenu but the
            * focus is not in that submenu (e.g. because it's empty or
@@ -1522,9 +1523,9 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
        */
       else if (priv->active_menu_item &&
                _gtk_menu_item_is_selectable (priv->active_menu_item) &&
-               GTK_MENU_ITEM (priv->active_menu_item)->submenu)
+               GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu)
         {
-          GtkMenuShell *submenu = GTK_MENU_SHELL (GTK_MENU_ITEM (priv->active_menu_item)->submenu);
+          GtkMenuShell *submenu = GTK_MENU_SHELL (GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu);
 
           if (GTK_MENU_SHELL_GET_CLASS (menu_shell)->submenu_placement !=
               GTK_MENU_SHELL_GET_CLASS (submenu)->submenu_placement)
@@ -1535,7 +1536,7 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
     case GTK_MENU_DIR_CHILD:
       if (priv->active_menu_item &&
           _gtk_menu_item_is_selectable (priv->active_menu_item) &&
-          GTK_MENU_ITEM (priv->active_menu_item)->submenu)
+          GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu)
         {
           if (gtk_menu_shell_select_submenu_first (menu_shell))
             break;
@@ -1562,17 +1563,13 @@ gtk_real_menu_shell_move_current (GtkMenuShell         *menu_shell,
 
     case GTK_MENU_DIR_PREV:
       gtk_menu_shell_move_selected (menu_shell, -1);
-      if (!had_selection &&
-          !priv->active_menu_item &&
-          priv->children)
+      if (!had_selection && !priv->active_menu_item && priv->children)
         _gtk_menu_shell_select_last (menu_shell, TRUE);
       break;
 
     case GTK_MENU_DIR_NEXT:
       gtk_menu_shell_move_selected (menu_shell, 1);
-      if (!had_selection &&
-          !priv->active_menu_item &&
-          priv->children)
+      if (!had_selection && !priv->active_menu_item && priv->children)
         gtk_menu_shell_select_first (menu_shell, TRUE);
       break;
     }
@@ -1587,7 +1584,7 @@ gtk_real_menu_shell_activate_current (GtkMenuShell *menu_shell,
   if (priv->active_menu_item &&
       _gtk_menu_item_is_selectable (priv->active_menu_item))
   {
-    if (GTK_MENU_ITEM (priv->active_menu_item)->submenu == NULL)
+    if (GTK_MENU_ITEM (priv->active_menu_item)->priv->submenu == NULL)
       gtk_menu_shell_activate_item (menu_shell,
                                     priv->active_menu_item,
                                     force_hide);

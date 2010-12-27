@@ -32,7 +32,7 @@
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
-#include "gtkmenuitem.h"
+#include "gtkmenuitemprivate.h"
 #include "gtkmenuprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtksettings.h"
@@ -313,7 +313,7 @@ gtk_menu_bar_size_request (GtkWidget      *widget,
 	    {
               gint toggle_size;
 
-	      GTK_MENU_ITEM (child)->show_submenu_indicator = FALSE;
+	      GTK_MENU_ITEM (child)->priv->show_submenu_indicator = FALSE;
               gtk_widget_get_preferred_size (child, &child_requisition, NULL);
               gtk_menu_item_toggle_size_request (GTK_MENU_ITEM (child),
                                                  &toggle_size);
@@ -476,10 +476,11 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 		child_requisition.width += toggle_size;
 	      else
 		child_requisition.height += toggle_size;
-	      
+
 	      /* Support for the right justified help menu */
-	      if ((children == NULL) && (GTK_IS_MENU_ITEM(child))
-		  && (GTK_MENU_ITEM(child)->right_justify)) 
+	      if (children == NULL &&
+                  GTK_IS_MENU_ITEM (child) &&
+                  GTK_MENU_ITEM (child)->priv->right_justify)
 		{
 		  ltr_x = allocation->width -
 		    child_requisition.width - offset;
@@ -526,11 +527,12 @@ gtk_menu_bar_size_allocate (GtkWidget     *widget,
 		child_requisition.width += toggle_size;
 	      else
 		child_requisition.height += toggle_size;
-	      
-	      /* Support for the right justified help menu */
-	      if ((children == NULL) && (GTK_IS_MENU_ITEM(child))
-		  && (GTK_MENU_ITEM(child)->right_justify)) 
-		{
+
+              /* Support for the right justified help menu */
+              if (children == NULL &&
+                  GTK_IS_MENU_ITEM (child) &&
+                  GTK_MENU_ITEM (child)->priv->right_justify)
+                {
 		  ltr_y = allocation->height -
 		    child_requisition.height - offset;
 		}

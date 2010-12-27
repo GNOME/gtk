@@ -27,6 +27,7 @@
 #include "config.h"
 
 #include "gtkmenuprivate.h"
+#include "gtkmenuitemprivate.h"
 #include "gtktearoffmenuitem.h"
 #include "gtkintl.h"
 
@@ -186,28 +187,30 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
       else
         shadow_type = GTK_SHADOW_OUT;
 
-      if (menu_item->toggle_size > ARROW_SIZE)
+      if (menu_item->priv->toggle_size > ARROW_SIZE)
         {
           if (direction == GTK_TEXT_DIR_LTR) {
-            arrow_x = x + (menu_item->toggle_size - ARROW_SIZE)/2;
+            arrow_x = x + (menu_item->priv->toggle_size - ARROW_SIZE)/2;
             arrow_type = GTK_ARROW_LEFT;
           }
           else {
-            arrow_x = x + width - menu_item->toggle_size + (menu_item->toggle_size - ARROW_SIZE)/2; 
-            arrow_type = GTK_ARROW_RIGHT;	    
+            arrow_x = x + width - menu_item->priv->toggle_size + (menu_item->priv->toggle_size - ARROW_SIZE)/2;
+            arrow_type = GTK_ARROW_RIGHT;
           }
-          x += menu_item->toggle_size + BORDER_SPACING;
+          x += menu_item->priv->toggle_size + BORDER_SPACING;
         }
       else
         {
-          if (direction == GTK_TEXT_DIR_LTR) {
-            arrow_x = ARROW_SIZE / 2;
-            arrow_type = GTK_ARROW_LEFT;
-          }
-          else {
-            arrow_x = x + width - 2 * ARROW_SIZE + ARROW_SIZE / 2; 
-            arrow_type = GTK_ARROW_RIGHT;	    
-          }
+          if (direction == GTK_TEXT_DIR_LTR)
+            {
+              arrow_x = ARROW_SIZE / 2;
+              arrow_type = GTK_ARROW_LEFT;
+            }
+          else
+            {
+              arrow_x = x + width - 2 * ARROW_SIZE + ARROW_SIZE / 2;
+              arrow_type = GTK_ARROW_RIGHT;
+            }
           x += 2 * ARROW_SIZE;
         }
 
@@ -216,7 +219,7 @@ gtk_tearoff_menu_item_draw (GtkWidget *widget,
                        state, shadow_type,
                        widget, "tearoffmenuitem",
                        arrow_type, FALSE,
-                       arrow_x, y + height / 2 - 5, 
+                       arrow_x, y + height / 2 - 5,
                        ARROW_SIZE, ARROW_SIZE);
     }
 

@@ -21,11 +21,12 @@
  * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
 #include "gtkcheckmenuitem.h"
+#include "gtkmenuitemprivate.h"
 #include "gtkaccellabel.h"
 #include "gtkactivatable.h"
 #include "gtktoggleaction.h"
@@ -59,31 +60,31 @@ static gint gtk_check_menu_item_draw                 (GtkWidget             *wid
                                                       cairo_t               *cr);
 static void gtk_check_menu_item_activate             (GtkMenuItem           *menu_item);
 static void gtk_check_menu_item_toggle_size_request  (GtkMenuItem           *menu_item,
-						      gint                  *requisition);
+                                                      gint                  *requisition);
 static void gtk_real_check_menu_item_draw_indicator  (GtkCheckMenuItem      *check_menu_item,
-						      cairo_t               *cr);
+                                                      cairo_t               *cr);
 static void gtk_check_menu_item_set_property         (GObject               *object,
-						      guint                  prop_id,
-						      const GValue          *value,
-						      GParamSpec            *pspec);
+                                                      guint                  prop_id,
+                                                      const GValue          *value,
+                                                      GParamSpec            *pspec);
 static void gtk_check_menu_item_get_property         (GObject               *object,
-						      guint                  prop_id,
-						      GValue                *value,
-						      GParamSpec            *pspec);
+                                                      guint                  prop_id,
+                                                      GValue                *value,
+                                                      GParamSpec            *pspec);
 
 static void gtk_check_menu_item_activatable_interface_init (GtkActivatableIface  *iface);
 static void gtk_check_menu_item_update                     (GtkActivatable       *activatable,
-							    GtkAction            *action,
-							    const gchar          *property_name);
+                                                            GtkAction            *action,
+                                                            const gchar          *property_name);
 static void gtk_check_menu_item_sync_action_properties     (GtkActivatable       *activatable,
-							    GtkAction            *action);
+                                                            GtkAction            *action);
 
 static GtkActivatableIface *parent_activatable_iface;
 static guint                check_menu_item_signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCheckMenuItem, gtk_check_menu_item, GTK_TYPE_MENU_ITEM,
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
-						gtk_check_menu_item_activatable_interface_init))
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
+                                                gtk_check_menu_item_activatable_interface_init))
 
 static void
 gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
@@ -143,12 +144,12 @@ gtk_check_menu_item_class_init (GtkCheckMenuItemClass *klass)
 
   check_menu_item_signals[TOGGLED] =
     g_signal_new (I_("toggled"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkCheckMenuItemClass, toggled),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkCheckMenuItemClass, toggled),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   g_type_class_add_private (klass, sizeof (GtkCheckMenuItemPrivate));
 }
@@ -163,8 +164,8 @@ gtk_check_menu_item_activatable_interface_init (GtkActivatableIface  *iface)
 
 static void
 gtk_check_menu_item_update (GtkActivatable *activatable,
-			    GtkAction      *action,
-			    const gchar    *property_name)
+                            GtkAction      *action,
+                            const gchar    *property_name)
 {
   GtkCheckMenuItem *check_menu_item;
 
@@ -184,12 +185,12 @@ gtk_check_menu_item_update (GtkActivatable *activatable,
 
   if (strcmp (property_name, "draw-as-radio") == 0)
     gtk_check_menu_item_set_draw_as_radio (check_menu_item,
-					   gtk_toggle_action_get_draw_as_radio (GTK_TOGGLE_ACTION (action)));
+                                           gtk_toggle_action_get_draw_as_radio (GTK_TOGGLE_ACTION (action)));
 }
 
 static void
 gtk_check_menu_item_sync_action_properties (GtkActivatable *activatable,
-		                            GtkAction      *action)
+                                            GtkAction      *action)
 {
   GtkCheckMenuItem *check_menu_item;
 
@@ -208,7 +209,7 @@ gtk_check_menu_item_sync_action_properties (GtkActivatable *activatable,
     return;
 
   gtk_check_menu_item_set_draw_as_radio (check_menu_item,
-					 gtk_toggle_action_get_draw_as_radio (GTK_TOGGLE_ACTION (action)));
+                                         gtk_toggle_action_get_draw_as_radio (GTK_TOGGLE_ACTION (action)));
 }
 
 GtkWidget*
@@ -221,8 +222,8 @@ GtkWidget*
 gtk_check_menu_item_new_with_label (const gchar *label)
 {
   return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
-		       "label", label,
-		       NULL);
+                       "label", label,
+                       NULL);
 }
 
 
@@ -240,14 +241,14 @@ GtkWidget*
 gtk_check_menu_item_new_with_mnemonic (const gchar *label)
 {
   return g_object_new (GTK_TYPE_CHECK_MENU_ITEM, 
-		       "label", label,
-		       "use-underline", TRUE,
-		       NULL);
+                       "label", label,
+                       "use-underline", TRUE,
+                       NULL);
 }
 
 void
 gtk_check_menu_item_set_active (GtkCheckMenuItem *check_menu_item,
-				gboolean          is_active)
+                                gboolean          is_active)
 {
   GtkCheckMenuItemPrivate *priv;
 
@@ -280,7 +281,7 @@ gtk_check_menu_item_get_active (GtkCheckMenuItem *check_menu_item)
 
 static void
 gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
-					 gint        *requisition)
+                                         gint        *requisition)
 {
   guint toggle_spacing;
   guint indicator_size;
@@ -288,9 +289,9 @@ gtk_check_menu_item_toggle_size_request (GtkMenuItem *menu_item,
   g_return_if_fail (GTK_IS_CHECK_MENU_ITEM (menu_item));
   
   gtk_widget_style_get (GTK_WIDGET (menu_item),
-			"toggle-spacing", &toggle_spacing,
-			"indicator-size", &indicator_size,
-			NULL);
+                        "toggle-spacing", &toggle_spacing,
+                        "indicator-size", &indicator_size,
+                        NULL);
 
   *requisition = indicator_size + toggle_spacing;
 }
@@ -363,7 +364,7 @@ gtk_check_menu_item_get_inconsistent (GtkCheckMenuItem *check_menu_item)
  **/
 void
 gtk_check_menu_item_set_draw_as_radio (GtkCheckMenuItem *check_menu_item,
-				       gboolean          draw_as_radio)
+                                       gboolean          draw_as_radio)
 {
   GtkCheckMenuItemPrivate *priv;
 
@@ -450,7 +451,7 @@ gtk_check_menu_item_activate (GtkMenuItem *menu_item)
 
 static void
 gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
-					 cairo_t          *cr)
+                                         cairo_t          *cr)
 {
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
   GtkWidget *widget;
@@ -475,72 +476,72 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
       gtk_widget_get_allocation (widget, &allocation);
 
       gtk_widget_style_get (widget,
- 			    "toggle-spacing", &toggle_spacing,
- 			    "horizontal-padding", &horizontal_padding,
-			    "indicator-size", &indicator_size,
- 			    NULL);
+                            "toggle-spacing", &toggle_spacing,
+                            "horizontal-padding", &horizontal_padding,
+                            "indicator-size", &indicator_size,
+                            NULL);
 
-      toggle_size = GTK_MENU_ITEM (check_menu_item)->toggle_size;
+      toggle_size = GTK_MENU_ITEM (check_menu_item)->priv->toggle_size;
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
       offset = border_width + style->xthickness + 2;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
-	{
+        {
           x = offset + horizontal_padding +
-	    (toggle_size - toggle_spacing - indicator_size) / 2;
-	}
+            (toggle_size - toggle_spacing - indicator_size) / 2;
+        }
       else 
-	{
+        {
           x = allocation.width -
-	    offset - horizontal_padding - toggle_size + toggle_spacing +
-	    (toggle_size - toggle_spacing - indicator_size) / 2;
-	}
+            offset - horizontal_padding - toggle_size + toggle_spacing +
+            (toggle_size - toggle_spacing - indicator_size) / 2;
+        }
 
       y = (allocation.height - indicator_size) / 2;
 
       if (priv->active ||
-	  priv->always_show_toggle ||
-	  (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT))
-	{
+          priv->always_show_toggle ||
+          (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT))
+        {
           GdkWindow *window;
 
           window = gtk_widget_get_window (widget);
-	  state_type = gtk_widget_get_state (widget);
-	  
-	  if (priv->inconsistent)
-	    shadow_type = GTK_SHADOW_ETCHED_IN;
-	  else if (priv->active)
-	    shadow_type = GTK_SHADOW_IN;
-	  else 
-	    shadow_type = GTK_SHADOW_OUT;
-	  
-	  if (!gtk_widget_is_sensitive (widget))
-	    state_type = GTK_STATE_INSENSITIVE;
+          state_type = gtk_widget_get_state (widget);
 
-	  if (priv->draw_as_radio)
-	    {
+          if (priv->inconsistent)
+            shadow_type = GTK_SHADOW_ETCHED_IN;
+          else if (priv->active)
+            shadow_type = GTK_SHADOW_IN;
+          else
+            shadow_type = GTK_SHADOW_OUT;
+
+          if (!gtk_widget_is_sensitive (widget))
+            state_type = GTK_STATE_INSENSITIVE;
+
+          if (priv->draw_as_radio)
+            {
               gtk_paint_option (style, cr,
-				state_type, shadow_type,
-				widget, "option",
-				x, y, indicator_size, indicator_size);
-	    }
-	  else
-	    {
+                                state_type, shadow_type,
+                                widget, "option",
+                                x, y, indicator_size, indicator_size);
+            }
+          else
+            {
               gtk_paint_check (style, cr,
-			       state_type, shadow_type,
-			       widget, "check",
-			       x, y, indicator_size, indicator_size);
-	    }
-	}
+                               state_type, shadow_type,
+                               widget, "check",
+                               x, y, indicator_size, indicator_size);
+            }
+        }
     }
 }
 
 
 static void
 gtk_check_menu_item_get_property (GObject     *object,
-				  guint        prop_id,
-				  GValue      *value,
-				  GParamSpec  *pspec)
+                                  guint        prop_id,
+                                  GValue      *value,
+                                  GParamSpec  *pspec)
 {
   GtkCheckMenuItem *checkitem = GTK_CHECK_MENU_ITEM (object);
   GtkCheckMenuItemPrivate *priv = checkitem->priv;
@@ -565,9 +566,9 @@ gtk_check_menu_item_get_property (GObject     *object,
 
 static void
 gtk_check_menu_item_set_property (GObject      *object,
-				  guint         prop_id,
-				  const GValue *value,
-				  GParamSpec   *pspec)
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
   GtkCheckMenuItem *checkitem = GTK_CHECK_MENU_ITEM (object);
   
