@@ -49,7 +49,14 @@ static GdkDisplay *
 gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
                                       const gchar       *name)
 {
-  return _gdk_x11_display_open (name);
+  GdkX11DisplayManager *manager_x11 = GDK_X11_DISPLAY_MANAGER (manager);
+  GdkDisplay *display;
+
+  display = _gdk_x11_display_open (name);
+  if (manager_x11->default_display == NULL)
+    gdk_display_manager_set_default_display (manager, display);
+
+  return display;
 }
 
 static GSList *
@@ -110,9 +117,6 @@ _gdk_x11_display_manager_add_display (GdkDisplayManager *manager,
                                       GdkDisplay        *display)
 {
   GdkX11DisplayManager *manager_x11 = GDK_X11_DISPLAY_MANAGER (manager);
-
-  if (manager_x11->displays == NULL)
-    gdk_display_manager_set_default_display (manager, display);
 
   manager_x11->displays = g_slist_prepend (manager_x11->displays, display);
 }
