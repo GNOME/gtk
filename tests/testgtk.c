@@ -8796,8 +8796,8 @@ snapshot_widget_event (GtkWidget	       *widget,
   if (event->type == GDK_BUTTON_RELEASE)
     {
       gtk_grab_remove (widget);
-      gdk_display_pointer_ungrab (gtk_widget_get_display (widget),
-				  GDK_CURRENT_TIME);
+      gdk_device_ungrab (gdk_event_get_device (event),
+			 GDK_CURRENT_TIME);
       
       res_widget = find_widget_at_pointer (gdk_event_get_device (event));
       if (data->is_toplevel && res_widget)
@@ -8843,10 +8843,15 @@ snapshot_widget (GtkButton *button,
 		 struct SnapshotData *data)
 {
   GtkWidget *widget = GTK_WIDGET (button);
+  GdkDevice *device;
   gint failure;
 
-  g_signal_connect (button, "event",
-		    G_CALLBACK (snapshot_widget_event), data);
+  device = gtk_get_current_event_device ();
+  if (device == NULL)
+    return;
+
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    device = gdk_device_get_associated_device (device);
 
   data->is_toplevel = widget == data->toplevel_button;
 
@@ -8854,12 +8859,16 @@ snapshot_widget (GtkButton *button,
     data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
 					       GDK_TARGET);
 
-  failure = gdk_pointer_grab (gtk_widget_get_window (widget),
-			      TRUE,
-			      GDK_BUTTON_RELEASE_MASK,
-			      NULL,
-			      data->cursor,
-			      GDK_CURRENT_TIME);
+  failure = gdk_device_grab (device,
+                             gtk_widget_get_window (widget),
+                             GDK_OWNERSHIP_APPLICATION,
+			     TRUE,
+			     GDK_BUTTON_RELEASE_MASK,
+			     data->cursor,
+			     GDK_CURRENT_TIME);
+
+  g_signal_connect (button, "event",
+		    G_CALLBACK (snapshot_widget_event), data);
 
   gtk_grab_add (widget);
 
