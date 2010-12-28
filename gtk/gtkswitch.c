@@ -151,16 +151,20 @@ gtk_switch_motion (GtkWidget      *widget,
     {
       gint position = event->x - priv->offset;
       GtkAllocation allocation;
-      GtkStyle *style;
+      GtkStyleContext *context;
+      GtkStateFlags state;
+      GtkBorder padding;
 
-      style = gtk_widget_get_style (widget);
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+      gtk_style_context_get_padding (context, state, &padding);
       gtk_widget_get_allocation (widget, &allocation);
 
       /* constrain the handle within the trough width */
-      if (position > (allocation.width / 2 - style->xthickness))
-        priv->handle_x = allocation.width / 2 - style->xthickness;
-      else if (position < style->xthickness)
-        priv->handle_x = style->xthickness;
+      if (position > (allocation.width / 2 - padding.right))
+        priv->handle_x = allocation.width / 2 - padding.right;
+      else if (position < padding.left)
+        priv->handle_x = padding.left;
       else
         priv->handle_x = position;
 
@@ -274,12 +278,18 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
-  GtkStyle *style = gtk_widget_get_style (widget);
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder padding;
   gint width, slider_width, focus_width, focus_pad;
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
-  width = style->xthickness * 2;
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_get_padding (context, state, &padding);
+
+  width = padding.left + padding.right;
 
   gtk_widget_style_get (widget,
                         "slider-width", &slider_width,
@@ -320,13 +330,19 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum,
                                  gint      *natural)
 {
-  GtkStyle *style = gtk_widget_get_style (widget);
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder padding;
   gint height, focus_width, focus_pad;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gchar *str;
 
-  height = style->ythickness * 2;
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_get_padding (context, state, &padding);
+
+  height = padding.top + padding.bottom;
 
   gtk_widget_style_get (widget,
                         "focus-line-width", &focus_width,
@@ -452,17 +468,21 @@ gtk_switch_paint_handle (GtkWidget    *widget,
                          cairo_t      *cr,
                          GdkRectangle *box)
 {
-  GtkStyle *style = gtk_widget_get_style (widget);
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  GtkStateFlags state;
 
-  gtk_paint_slider (style, cr,
-                    gtk_widget_get_state (widget),
-                    GTK_SHADOW_OUT,
-                    GTK_WIDGET (widget), "switch-slider",
-                    box->x,
-                    box->y,
-                    box->width,
-                    box->height,
-                    GTK_ORIENTATION_HORIZONTAL);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+
+  gtk_render_slider (context, cr,
+                     box->x, box->y,
+                     box->width, box->height,
+                     GTK_ORIENTATION_HORIZONTAL);
+
+  gtk_style_context_restore (context);
 }
 
 static gboolean
@@ -470,12 +490,13 @@ gtk_switch_draw (GtkWidget *widget,
                  cairo_t   *cr)
 {
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-  GtkStyle *style;
+  GtkStyleContext *context;
   GdkRectangle handle;
   PangoLayout *layout;
   PangoRectangle rect;
   gint label_x, label_y;
-  GtkStateType state;
+  GtkStateFlags state;
+  GtkBorder padding;
   gint focus_width, focus_pad;
   gint x, y, width, height;
 
@@ -484,7 +505,13 @@ gtk_switch_draw (GtkWidget *widget,
                         "focus-padding", &focus_pad,
                         NULL);
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  if (priv->is_active)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_style_context_get_padding (context, state, &padding);
 
   x = 0;
   y = 0;
@@ -492,37 +519,27 @@ gtk_switch_draw (GtkWidget *widget,
   height = gtk_widget_get_allocated_height (widget);
 
   if (gtk_widget_has_focus (widget))
-    gtk_paint_focus (style, cr,
-                     gtk_widget_get_state (widget),
-                     widget, "button",
-                     x, y, width, height);
+    gtk_render_focus (context, cr, x, y, width, height);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
 
   x += focus_width + focus_pad;
   y += focus_width + focus_pad;
   width -= 2 * (focus_width + focus_pad);
   height -= 2 * (focus_width + focus_pad);
 
-  state = priv->is_active ? GTK_STATE_SELECTED : gtk_widget_get_state (widget);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
-  /* background - XXX should this be a flat box instead? we're missing
-   * the border given by the shadow with that, which would require
-   * fixing all theme engines to add a subtle border for this widget
-   */
-  gtk_paint_box (style, cr,
-                 state,
-                 GTK_SHADOW_IN,
-                 widget, "switch-background",
-                 x, y, width, height);
-
-  if (!gtk_widget_is_sensitive (widget))
-    state = GTK_STATE_INSENSITIVE;
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
 
   /* XXX the +1/-1 it's pixel wriggling after checking with the default
    * theme and xmag
    */
-  handle.y = y + style->ythickness + 1;
-  handle.width = (width - style->xthickness * 2) / 2;
-  handle.height = (height - style->ythickness * 2) - 1;
+  handle.y = y + padding.top + 1;
+  handle.width = (width - padding.left - padding.right) / 2;
+  handle.height = (height - padding.top - padding.bottom) - 1;
 
   /* Translators: if the "on" state label requires more than three
    * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -532,17 +549,12 @@ gtk_switch_draw (GtkWidget *widget,
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
 
-  label_x = x + style->xthickness
-          + ((width / 2) - rect.width - (style->xthickness * 2)) / 2;
-  label_y = y + style->ythickness
-          + (height - rect.height - (style->ythickness * 2)) / 2;
+  label_x = x + padding.left
+          + ((width / 2) - rect.width - padding.left - padding.right) / 2;
+  label_y = y + padding.top
+          + (height - rect.height - padding.top - padding.bottom) / 2;
 
-  gtk_paint_layout (style, cr,
-                    state,
-                    FALSE,
-                    widget, "switch-on-label",
-                    label_x, label_y,
-                    layout);
+  gtk_render_layout (context, cr, label_x, label_y, layout);
 
   g_object_unref (layout);
 
@@ -553,27 +565,24 @@ gtk_switch_draw (GtkWidget *widget,
   pango_layout_get_extents (layout, NULL, &rect);
   pango_extents_to_pixels (&rect, NULL);
 
-  label_x = x + style->xthickness
+  label_x = x + padding.left
           + (width / 2)
-          + ((width / 2) - rect.width - (style->xthickness * 2)) / 2;
-  label_y = y + style->ythickness
-          + (height - rect.height - (style->ythickness * 2)) / 2;
+          + ((width / 2) - rect.width - padding.left - padding.right) / 2;
+  label_y = y + padding.top
+          + (height - rect.height - padding.top - padding.bottom) / 2;
 
-  gtk_paint_layout (style, cr,
-                    state,
-                    FALSE,
-                    widget, "switch-off-label",
-                    label_x, label_y,
-                    layout);
+  gtk_render_layout (context, cr, label_x, label_y, layout);
 
   g_object_unref (layout);
 
   if (priv->is_dragging)
     handle.x = x + priv->handle_x;
   else if (priv->is_active)
-    handle.x = x + width - handle.width - style->xthickness;
+    handle.x = x + width - handle.width - padding.right;
   else
-    handle.x = x + style->xthickness;
+    handle.x = x + padding.left;
+
+  gtk_style_context_restore (context);
 
   gtk_switch_paint_handle (widget, cr, &handle);
 
@@ -824,7 +833,10 @@ gtk_switch_set_active (GtkSwitch *sw,
   if (priv->is_active != is_active)
     {
       AtkObject *accessible;
+      GtkWidget *widget;
+      GtkStyleContext *context;
 
+      widget = GTK_WIDGET (sw);
       priv->is_active = is_active;
 
       g_object_notify_by_pspec (G_OBJECT (sw), switch_props[PROP_ACTIVE]);
@@ -834,6 +846,14 @@ gtk_switch_set_active (GtkSwitch *sw,
 
       accessible = gtk_widget_get_accessible (GTK_WIDGET (sw));
       atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, priv->is_active);
+
+      if (gtk_widget_get_realized (widget))
+        {
+          context = gtk_widget_get_style_context (widget);
+          gtk_style_context_notify_state_change (context,
+                                                 gtk_widget_get_window (widget),
+                                                 NULL, GTK_STATE_ACTIVE, is_active);
+        }
 
       gtk_widget_queue_draw (GTK_WIDGET (sw));
     }
