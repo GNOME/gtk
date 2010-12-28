@@ -41,7 +41,9 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <X11/extensions/shape.h>
+#ifdef HAVE_XCOMPOSITE
 #include <X11/extensions/Xcomposite.h>
+#endif
 
 #include <string.h>
 
@@ -498,7 +500,9 @@ gdk_window_cache_new (GdkScreen *screen)
   GdkWindow *root_window = gdk_screen_get_root_window (screen);
   GdkChildInfoX11 *children;
   guint nchildren, i;
+#ifdef HAVE_XCOMPOSITE
   Window cow;
+#endif
 
   GdkWindowCache *result = g_new (GdkWindowCache, 1);
 
