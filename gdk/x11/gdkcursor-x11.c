@@ -824,10 +824,13 @@ _gdk_x11_display_supports_cursor_color (GdkDisplay *display)
 }
 
 void
-_gdk_x11_display_get_default_cursor_size (GdkDisplay *display)
+_gdk_x11_display_get_default_cursor_size (GdkDisplay *display,
+                                          guint      *width,
+                                          guint      *height)
 {
   /* no idea, really */
-  return 20;
+  *width = *height = 20;
+  return;
 }
 
 #endif
