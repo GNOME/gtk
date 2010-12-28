@@ -136,8 +136,7 @@ static void     gtk_handle_box_map           (GtkWidget      *widget);
 static void     gtk_handle_box_unmap         (GtkWidget      *widget);
 static void     gtk_handle_box_realize       (GtkWidget      *widget);
 static void     gtk_handle_box_unrealize     (GtkWidget      *widget);
-static void     gtk_handle_box_style_set     (GtkWidget      *widget,
-                                              GtkStyle       *previous_style);
+static void     gtk_handle_box_style_updated (GtkWidget      *widget);
 static void     gtk_handle_box_size_request  (GtkWidget      *widget,
                                               GtkRequisition *requisition);
 static void     gtk_handle_box_get_preferred_width (GtkWidget *widget,
@@ -229,7 +228,7 @@ gtk_handle_box_class_init (GtkHandleBoxClass *class)
   widget_class->unmap = gtk_handle_box_unmap;
   widget_class->realize = gtk_handle_box_realize;
   widget_class->unrealize = gtk_handle_box_unrealize;
-  widget_class->style_set = gtk_handle_box_style_set;
+  widget_class->style_updated = gtk_handle_box_style_updated;
   widget_class->get_preferred_width = gtk_handle_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_handle_box_get_preferred_height;
   widget_class->size_allocate = gtk_handle_box_size_allocate;
@@ -269,6 +268,7 @@ static void
 gtk_handle_box_init (GtkHandleBox *handle_box)
 {
   GtkHandleBoxPrivate *priv;
+  GtkStyleContext *context;
 
   handle_box->priv = G_TYPE_INSTANCE_GET_PRIVATE (handle_box,
                                                   GTK_TYPE_HANDLE_BOX,
@@ -286,6 +286,9 @@ gtk_handle_box_init (GtkHandleBox *handle_box)
   priv->in_drag = FALSE;
   priv->shrink_on_detach = TRUE;
   priv->snap_edge = -1;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (handle_box));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DOCK);
 }
 
 static void 
@@ -408,8 +411,8 @@ gtk_handle_box_realize (GtkWidget *widget)
   GtkHandleBoxPrivate *priv = hb->priv;
   GtkAllocation allocation;
   GtkRequisition requisition;
-  GtkStateType state;
-  GtkStyle *style;
+  GtkStateFlags state;
+  GtkStyleContext *context;
   GtkWidget *child;
   GdkWindow *window;
   GdkWindowAttr attributes;
@@ -479,12 +482,12 @@ gtk_handle_box_realize (GtkWidget *widget)
   gdk_window_set_decorations (priv->float_window, 0);
   gdk_window_set_type_hint (priv->float_window, GDK_WINDOW_TYPE_HINT_TOOLBAR);
 
-  gtk_widget_style_attach (widget);
-  style = gtk_widget_get_style (widget);
-  state = gtk_widget_get_state (widget);
-  gtk_style_set_background (style, window, state);
-  gtk_style_set_background (style, priv->bin_window, state);
-  gtk_style_set_background (style, priv->float_window, state);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_set_background (context, window);
+  gtk_style_context_set_background (context, priv->bin_window);
+  gtk_style_context_set_background (context, priv->float_window);
 }
 
 static void
@@ -504,8 +507,7 @@ gtk_handle_box_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_handle_box_style_set (GtkWidget *widget,
-			  GtkStyle  *previous_style)
+gtk_handle_box_style_updated (GtkWidget *widget)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
   GtkHandleBoxPrivate *priv = hb->priv;
@@ -513,15 +515,20 @@ gtk_handle_box_style_set (GtkWidget *widget,
   if (gtk_widget_get_realized (widget) &&
       gtk_widget_get_has_window (widget))
     {
-      GtkStateType state;
-      GtkStyle *style;
+      GtkStateFlags state;
+      GtkStyleContext *context;
 
-      style = gtk_widget_get_style (widget);
-      state = gtk_widget_get_state (widget);
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
 
-      gtk_style_set_background (style, gtk_widget_get_window (widget), state);
-      gtk_style_set_background (style, priv->bin_window, state);
-      gtk_style_set_background (style, priv->float_window, state);
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+
+      gtk_style_context_set_background (context, gtk_widget_get_window (widget));
+      gtk_style_context_set_background (context, priv->bin_window);
+      gtk_style_context_set_background (context, priv->float_window);
+
+      gtk_style_context_restore (context);
     }
 }
 
@@ -760,8 +767,8 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
                            cairo_t      *cr)
 {
   GtkWidget *widget = GTK_WIDGET (hb);
-  GtkStateType state;
-  GtkStyle *style;
+  GtkStateFlags state;
+  GtkStyleContext *context;
   GdkWindow *window;
   guint x;
   guint y;
@@ -791,36 +798,31 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
       height = DRAG_HANDLE_SIZE;
     }
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
   window = gtk_widget_get_window (widget);
-  state = gtk_widget_get_state (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-  gtk_paint_shadow (style,
-		    cr,
-		    state,
-		    GTK_SHADOW_ETCHED_IN,
-		    widget, "handle",
-		    x,
-		    y,
-		    width,
-		    height);
-   if (handle_position == GTK_POS_LEFT ||
-       handle_position == GTK_POS_RIGHT)
-     gtk_paint_hline (style,
-		      cr,
-		      state,
-		      widget, "handlebox",
-		      handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
-		      handle_position == GTK_POS_LEFT ? allocation_width : allocation_width - DRAG_HANDLE_SIZE,
-		      allocation_height / 2);
-   else
-     gtk_paint_vline (style,
-		      cr,
-		      state,
-		      widget, "handlebox",
-		      handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
-		      handle_position == GTK_POS_TOP ? allocation_height : allocation_height - DRAG_HANDLE_SIZE,
-		      allocation_width / 2);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
+
+  if (handle_position == GTK_POS_LEFT ||
+      handle_position == GTK_POS_RIGHT)
+    gtk_render_line (context, cr,
+                     handle_position == GTK_POS_LEFT ? DRAG_HANDLE_SIZE : 0,
+                     allocation_height / 2,
+                     handle_position == GTK_POS_LEFT ? allocation_width : allocation_width - DRAG_HANDLE_SIZE,
+                     allocation_height / 2);
+  else
+    gtk_render_line (context, cr,
+                     allocation_width / 2,
+                     handle_position == GTK_POS_TOP ? DRAG_HANDLE_SIZE : 0,
+                     allocation_width / 2,
+                     handle_position == GTK_POS_TOP ? allocation_height : allocation_height - DRAG_HANDLE_SIZE);
+
+  gtk_style_context_restore (context);
 }
 
 void
@@ -957,6 +959,8 @@ gtk_handle_box_paint (GtkWidget      *widget,
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
   GtkHandleBoxPrivate *priv = hb->priv;
   GtkBin *bin = GTK_BIN (widget);
+  GtkStyleContext *context;
+  GtkStateFlags state;
   GtkWidget *child;
   gint width, height;
   GdkRectangle rect;
@@ -968,12 +972,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
   width = gdk_window_get_width (priv->bin_window);
   height = gdk_window_get_height (priv->bin_window);
 
-  gtk_paint_box (gtk_widget_get_style (widget),
-                 cr,
-                 gtk_widget_get_state (widget),
-                 priv->shadow_type,
-                 widget, "handlebox_bin",
-                 0, 0, width, height);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+
+  gtk_render_background (context, cr, 0, 0, width, height);
+  gtk_render_frame (context, cr, 0, 0, width, height);
 
   switch (handle_position)
     {
@@ -1010,15 +1016,14 @@ gtk_handle_box_paint (GtkWidget      *widget,
       break;
     }
 
-  gtk_paint_handle (gtk_widget_get_style (widget), cr,
-                    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-                    widget, "handlebox",
-                    rect.x, rect.y, rect.width, rect.height, 
-                    handle_orientation);
+  gtk_render_handle (context, cr,
+                     rect.x, rect.y, rect.width, rect.height);
 
   child = gtk_bin_get_child (bin);
   if (child != NULL && gtk_widget_get_visible (child))
     GTK_WIDGET_CLASS (gtk_handle_box_parent_class)->draw (widget, cr);
+
+  gtk_style_context_restore (context);
 }
 
 static gboolean
