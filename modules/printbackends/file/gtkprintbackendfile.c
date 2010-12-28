@@ -501,6 +501,7 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
 			  "name", _("Print to File"),
 			  "backend", backend,
 			  "is-virtual", TRUE,
+			  "accepts-pdf", TRUE,
 			  NULL); 
 
   gtk_printer_set_has_details (printer, TRUE);

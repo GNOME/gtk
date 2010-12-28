@@ -145,7 +145,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
                                    g_param_spec_boolean ("accepts-pdf",
 							 P_("Accepts PDF"),
 							 P_("TRUE if this printer can accept PDF"),
-							 TRUE,
+							 FALSE,
 							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (G_OBJECT_CLASS (class),
                                    PROP_ACCEPTS_PS,
@@ -256,7 +256,7 @@ gtk_printer_init (GtkPrinter *printer)
   priv->is_accepting_jobs = TRUE;
   priv->is_new = TRUE;
   priv->has_details = FALSE;
-  priv->accepts_pdf = TRUE;
+  priv->accepts_pdf = FALSE;
   priv->accepts_ps = TRUE;
 
   priv->state_message = NULL;  
