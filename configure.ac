@@ -1520,16 +1520,16 @@ _______EOF
 ],[
 gdk_windowing=''
 if expr "$gdktarget" : ".*x11.*" > /dev/null ; then
-  gdk_windowing+='
+  gdk_windowing='$gdk_windowing
 #define GDK_WINDOWING_X11'
 fi
 if expr "$gdktarget" : ".*win32.*" > /dev/null ; then
-  gdk_windowing+='
+  gdk_windowing='$gdk_windowing
 #define GDK_NATIVE_WINDOW_POINTER
 #define GDK_WINDOWING_WIN32'
 fi
 if expr "$gdktarget" : ".*quartz.*" > /dev/null ; then
-  gdk_windowing='
+  gdk_windowing='$gdk_windowing
 #define GDK_WINDOWING_QUARTZ'
 fi
 ])
@@ -1551,7 +1551,7 @@ AC_ARG_ENABLE(Bsymbolic,
                            enable_Bsymbolic=no)
                LDFLAGS="${SAVED_LDFLAGS}"])
 
-if test "x${enable_Bsymbolic}" == "xyes"; then
+if test "x${enable_Bsymbolic}" = "xyes" ; then
   GTK_LINK_FLAGS=-Wl,-Bsymbolic-functions
 fi
 AC_SUBST(GTK_LINK_FLAGS)
