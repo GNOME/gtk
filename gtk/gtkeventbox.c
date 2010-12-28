@@ -435,10 +435,8 @@ gtk_event_box_realize (GtkWidget *widget)
       gdk_window_set_user_data (priv->event_window, widget);
     }
 
-  gtk_widget_style_attach (widget);
-
   if (visible_window)
-    gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
+    gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
 }
 
 static void
@@ -581,14 +579,14 @@ gtk_event_box_draw (GtkWidget      *widget,
 {
   if (gtk_widget_get_has_window (widget) &&
       !gtk_widget_get_app_paintable (widget))
-    gtk_paint_flat_box (gtk_widget_get_style (widget),
-                        cr,
-			gtk_widget_get_state (widget),
-                        GTK_SHADOW_NONE,
-			widget, "eventbox",
-			0, 0,
-                        gtk_widget_get_allocated_width (widget),
-                        gtk_widget_get_allocated_height (widget));
+    {
+      GtkStyleContext *context;
+
+      context = gtk_widget_get_style_context (widget);
+      gtk_render_background (context, cr, 0, 0,
+                             gtk_widget_get_allocated_width (widget),
+                             gtk_widget_get_allocated_height (widget));
+    }
   
   GTK_WIDGET_CLASS (gtk_event_box_parent_class)->draw (widget, cr);
 
