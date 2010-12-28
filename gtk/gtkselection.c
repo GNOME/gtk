@@ -1316,18 +1316,19 @@ selection_set_compound_text (GtkSelectionData *selection_data,
   gint format;
   gint new_length;
   gboolean result = FALSE;
-  
+
+#ifdef GDK_WINDOWING_X11
   tmp = g_strndup (str, len);
-  if (gdk_utf8_to_compound_text_for_display (selection_data->display, tmp,
-					     &encoding, &format, &text, &new_length))
+  if (gdk_x11_display_utf8_to_compound_text (selection_data->display, tmp,
+                                             &encoding, &format, &text, &new_length))
     {
       gtk_selection_data_set (selection_data, encoding, format, text, new_length);
-      gdk_free_compound_text (text);
-      
+      gdk_x11_free_compound_text (text);
+
       result = TRUE;
     }
-
   g_free (tmp);
+#endif
 
   return result;
 }
@@ -2273,15 +2274,14 @@ _gtk_selection_request (GtkWidget *widget,
   
   info->selection = event->selection;
   info->num_incrs = 0;
-  
+
   /* Create GdkWindow structure for the requestor */
-  
-  info->requestor = gdk_window_lookup_for_display (display,
-						   event->requestor);
-  if (!info->requestor)
-    info->requestor = gdk_window_foreign_new_for_display (display,
-							  event->requestor);
-  
+#ifdef GDK_WINDOWING_X11
+  info->requestor = gdk_x11_window_foreign_new_for_display (display, event->requestor);
+#else
+  info->requestor = NULL;
+#endif
+
   /* Determine conversions we need to perform */
   
   if (event->target == gtk_selection_atoms[MULTIPLE])
