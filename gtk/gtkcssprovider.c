@@ -3694,7 +3694,7 @@ gtk_css_provider_get_default (void)
         "  color: #000;\n"
         "}\n"
         "\n"
-        ".progressbar:prelight,\n"
+        ".progressbar,\n"
         ".entry.progressbar {\n"
         "  background-color: @selected_bg_color;\n"
         "  border-color: shade (@selected_bg_color, 0.7);\n"
