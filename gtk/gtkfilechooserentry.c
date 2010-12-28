@@ -889,16 +889,16 @@ completion_feedback_window_draw_cb (GtkWidget *widget,
   /* Stolen from gtk_tooltip_paint_window() */
 
   GtkFileChooserEntry *chooser_entry = GTK_FILE_CHOOSER_ENTRY (data);
+  GtkStyleContext *context;
 
-  gtk_paint_flat_box (gtk_widget_get_style (chooser_entry->completion_feedback_window),
-                      cr,
-		      GTK_STATE_NORMAL,
-		      GTK_SHADOW_OUT,
-		      chooser_entry->completion_feedback_window,
-		      "tooltip",
-		      0, 0,
-                      gtk_widget_get_allocated_width (widget),
-                      gtk_widget_get_allocated_height (widget));
+  context = gtk_widget_get_style_context (chooser_entry->completion_feedback_window);
+
+  gtk_render_background (context, cr, 0, 0,
+			 gtk_widget_get_allocated_width (widget),
+			 gtk_widget_get_allocated_height (widget));
+  gtk_render_frame (context, cr, 0, 0,
+		    gtk_widget_get_allocated_width (widget),
+		    gtk_widget_get_allocated_height (widget));
 
   return FALSE;
 }
@@ -933,8 +933,9 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
 {
   /* Stolen from gtk_tooltip_init() */
 
-  GtkStyle *style;
+  GtkStyleContext *context;
   GtkWidget *alignment;
+  GtkBorder padding, border;
 
   chooser_entry->completion_feedback_window = gtk_window_new (GTK_WINDOW_POPUP);
   gtk_window_set_type_hint (GTK_WINDOW (chooser_entry->completion_feedback_window),
@@ -944,10 +945,17 @@ create_completion_feedback_window (GtkFileChooserEntry *chooser_entry)
   gtk_widget_set_name (chooser_entry->completion_feedback_window, "gtk-tooltip");
 
   alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
-  style = gtk_widget_get_style (chooser_entry->completion_feedback_window);
+  context = gtk_widget_get_style_context (chooser_entry->completion_feedback_window);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
+
+  gtk_style_context_get_padding (context, 0, &padding);
+  gtk_style_context_get_border (context, 0, &border);
+
   gtk_alignment_set_padding (GTK_ALIGNMENT (alignment),
-                             style->ythickness, style->ythickness,
-                             style->xthickness, style->xthickness);
+                             border.top + padding.top,
+                             border.bottom + padding.bottom,
+                             border.left + padding.left,
+                             border.right + padding.right);
   gtk_container_add (GTK_CONTAINER (chooser_entry->completion_feedback_window), alignment);
   gtk_widget_show (alignment);
 
