@@ -211,7 +211,12 @@ get_child_padding_delta (GtkBin *bin,
    * direct vfuncs
    */
   GTK_WIDGET_GET_CLASS (bin)->get_preferred_width (GTK_WIDGET (bin), &hmin, &hnat);
+  GTK_WIDGET_GET_CLASS (bin)->adjust_size_request (GTK_WIDGET (bin), 
+						   GTK_ORIENTATION_HORIZONTAL, &hmin, &hnat);
+
   GTK_WIDGET_GET_CLASS (bin)->get_preferred_height (GTK_WIDGET (bin), &vmin, &vnat);
+  GTK_WIDGET_GET_CLASS (bin)->adjust_size_request (GTK_WIDGET (bin), 
+						   GTK_ORIENTATION_VERTICAL, &vmin, &vnat);
 
   gtk_widget_get_preferred_width (priv->child, &child_hmin, NULL);
   gtk_widget_get_preferred_height (priv->child, &child_vmin, NULL);
