@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-12-05 14:56+0100\n"
-"PO-Revision-Date: 2010-12-05 14:56+0100\n"
+"PO-Revision-Date: 2010-12-29 13:03+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "Language: gl\n"
@@ -2591,7 +2591,7 @@ msgstr "Red_ucir"
 #: ../gtk/gtkswitch.c:296 ../gtk/gtkswitch.c:339 ../gtk/gtkswitch.c:531
 msgctxt "switch"
 msgid "ON"
-msgstr "ACENDIDO"
+msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -2599,7 +2599,7 @@ msgstr "ACENDIDO"
 #: ../gtk/gtkswitch.c:304 ../gtk/gtkswitch.c:340 ../gtk/gtkswitch.c:552
 msgctxt "switch"
 msgid "OFF"
-msgstr "APAGADO"
+msgstr "○"
 
 #: ../gtk/gtkswitch.c:943
 msgctxt "light switch widget"
