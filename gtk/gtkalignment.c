@@ -102,6 +102,14 @@ static void gtk_alignment_get_preferred_width          (GtkWidget           *wid
 static void gtk_alignment_get_preferred_height         (GtkWidget           *widget,
                                                         gint                *minimum_size,
                                                         gint                *natural_size);
+static void gtk_alignment_get_preferred_width_for_height (GtkWidget           *widget,
+							  gint                 for_size,
+							  gint                *minimum_size,
+							  gint                *natural_size);
+static void gtk_alignment_get_preferred_height_for_width (GtkWidget           *widget,
+							  gint                 for_size,
+							  gint                *minimum_size,
+							  gint                *natural_size);
 
 G_DEFINE_TYPE (GtkAlignment, gtk_alignment, GTK_TYPE_BIN)
 
@@ -120,6 +128,8 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
   widget_class->size_allocate        = gtk_alignment_size_allocate;
   widget_class->get_preferred_width  = gtk_alignment_get_preferred_width;
   widget_class->get_preferred_height = gtk_alignment_get_preferred_height;
+  widget_class->get_preferred_width_for_height = gtk_alignment_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width = gtk_alignment_get_preferred_height_for_width;
 
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
@@ -571,6 +581,7 @@ gtk_alignment_size_allocate (GtkWidget     *widget,
 static void
 gtk_alignment_get_preferred_size (GtkWidget      *widget,
                                   GtkOrientation  orientation,
+				  gint            for_size,
                                   gint           *minimum_size,
                                   gint           *natural_size)
 {
@@ -589,12 +600,44 @@ gtk_alignment_get_preferred_size (GtkWidget      *widget,
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
 	{
 	  minimum += (priv->padding_left + priv->padding_right);
-	  gtk_widget_get_preferred_width (child, &child_min, &child_nat);
+
+	  if (for_size < 0)
+	    gtk_widget_get_preferred_width (child, &child_min, &child_nat);
+	  else
+	    {
+	      gint min_height;
+
+	      gtk_widget_get_preferred_height (child, &min_height, NULL);
+
+	      for_size -= (priv->padding_top + priv->padding_bottom);
+
+	      if (for_size > min_height)
+		for_size = (min_height * (1.0 - priv->yscale) +
+			    for_size * priv->yscale);
+
+	      gtk_widget_get_preferred_width_for_height (child, for_size, &child_min, &child_nat);
+	    }
 	}
       else
 	{
 	  minimum += (priv->padding_top + priv->padding_bottom);
-	  gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+
+	  if (for_size < 0)
+	    gtk_widget_get_preferred_height (child, &child_min, &child_nat);
+	  else
+	    {
+	      gint min_width;
+
+	      gtk_widget_get_preferred_width (child, &min_width, NULL);
+
+	      for_size -= (priv->padding_left + priv->padding_right);
+
+	      if (for_size > min_width)
+		for_size = (min_width * (1.0 - priv->xscale) +
+			    for_size * priv->xscale);
+
+	      gtk_widget_get_preferred_height_for_width (child, for_size, &child_min, &child_nat);
+	    }
 	}
 
       natural = minimum;
@@ -615,7 +658,7 @@ gtk_alignment_get_preferred_width (GtkWidget      *widget,
                                    gint           *minimum_size,
                                    gint           *natural_size)
 {
-  gtk_alignment_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, minimum_size, natural_size);
+  gtk_alignment_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, -1, minimum_size, natural_size);
 }
 
 static void
@@ -623,7 +666,26 @@ gtk_alignment_get_preferred_height (GtkWidget      *widget,
                                     gint           *minimum_size,
                                     gint           *natural_size)
 {
-  gtk_alignment_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
+  gtk_alignment_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, -1, minimum_size, natural_size);
+}
+
+
+static void 
+gtk_alignment_get_preferred_width_for_height (GtkWidget           *widget,
+					      gint                 for_size,
+					      gint                *minimum_size,
+					      gint                *natural_size)
+{
+  gtk_alignment_get_preferred_size (widget, GTK_ORIENTATION_HORIZONTAL, for_size, minimum_size, natural_size);
+}
+
+static void
+gtk_alignment_get_preferred_height_for_width (GtkWidget           *widget,
+					      gint                 for_size,
+					      gint                *minimum_size,
+					      gint                *natural_size)
+{
+  gtk_alignment_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, for_size, minimum_size, natural_size);
 }
 
 /**
