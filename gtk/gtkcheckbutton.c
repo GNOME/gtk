@@ -331,7 +331,6 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
       child = gtk_bin_get_child (GTK_BIN (button));
       if (child && gtk_widget_get_visible (child))
 	{
-	  GtkRequisition child_requisition;
           guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
 	  child_allocation.width = allocation->width -
