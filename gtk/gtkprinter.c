@@ -779,6 +779,15 @@ gtk_printer_accepts_pdf (GtkPrinter *printer)
   return printer->priv->accepts_pdf;
 }
 
+void
+gtk_printer_set_accepts_pdf (GtkPrinter *printer,
+			     gboolean val)
+{
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
+  printer->priv->accepts_pdf = val;
+}
+
 /**
  * gtk_printer_accepts_ps:
  * @printer: a #GtkPrinter
@@ -796,6 +805,15 @@ gtk_printer_accepts_ps (GtkPrinter *printer)
   g_return_val_if_fail (GTK_IS_PRINTER (printer), TRUE);
   
   return printer->priv->accepts_ps;
+}
+
+void
+gtk_printer_set_accepts_ps (GtkPrinter *printer,
+			    gboolean val)
+{
+  g_return_if_fail (GTK_IS_PRINTER (printer));
+
+  printer->priv->accepts_ps = val;
 }
 
 gboolean

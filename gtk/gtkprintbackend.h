@@ -172,6 +172,10 @@ GtkPrinter *gtk_printer_new                   (const char      *name,
 					       GtkPrintBackend *backend,
 					       gboolean         is_virtual);
 gboolean    gtk_printer_is_new                (GtkPrinter      *printer);
+void        gtk_printer_set_accepts_pdf       (GtkPrinter      *printer,
+					       gboolean         val);
+void        gtk_printer_set_accepts_ps        (GtkPrinter      *printer,
+					       gboolean         val);
 void        gtk_printer_set_is_new            (GtkPrinter      *printer,
 					       gboolean         val);
 void        gtk_printer_set_is_active         (GtkPrinter      *printer,

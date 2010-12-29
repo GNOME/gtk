@@ -506,17 +506,63 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
   gtk_print_backend_set_list_done (GTK_PRINT_BACKEND (backend));
 }
 
+typedef struct {
+  GtkPrinter          *printer;
+  GtkPrinterOptionSet *set;
+} _OutputFormatChangedData;
+
+static void
+set_printer_format_from_option_set (GtkPrinter          *printer,
+				    GtkPrinterOptionSet *set)
+{
+  GtkPrinterOption *format_option;
+  const gchar *value;
+  gint i;
+
+  format_option = gtk_printer_option_set_lookup (set, "output-file-format");
+  if (format_option && format_option->value)
+    {
+      value = format_option->value;
+      if (value)
+        {
+	  for (i = 0; i < N_FORMATS; ++i)
+	    if (strcmp (value, formats[i]) == 0)
+	      break;
+
+	  g_assert (i < N_FORMATS);
+
+	  switch (i)
+	    {
+	      case FORMAT_PDF:
+		gtk_printer_set_accepts_pdf (printer, TRUE);
+		gtk_printer_set_accepts_ps (printer, FALSE);
+		break;
+	      case FORMAT_PS:
+		gtk_printer_set_accepts_pdf (printer, FALSE);
+		gtk_printer_set_accepts_ps (printer, TRUE);
+		break;
+	      case FORMAT_SVG:
+	      default:
+		gtk_printer_set_accepts_pdf (printer, FALSE);
+		gtk_printer_set_accepts_ps (printer, FALSE);
+		break;
+	    }
+	}
+    }
+}
+
 static void
 file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
-                                         GtkPrinterOptionSet *set)
+					 gpointer             user_data)
 {
   GtkPrinterOption *uri_option;
   gchar            *base = NULL;
+  _OutputFormatChangedData *data = (_OutputFormatChangedData *) user_data;
 
   if (! format_option->value)
     return;
 
-  uri_option = gtk_printer_option_set_lookup (set,
+  uri_option = gtk_printer_option_set_lookup (data->set,
                                               "gtk-main-page-custom-input");
 
   if (uri_option && uri_option->value)
@@ -556,6 +602,8 @@ file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
       g_free (tmp);
       g_free (base);
     }
+
+  set_printer_format_from_option_set (data->printer, data->set);
 }
 
 static GtkPrinterOptionSet *
@@ -575,6 +623,7 @@ file_printer_get_options (GtkPrinter           *printer,
   OutputFormat format;
   gchar *uri;
   gint current_format = 0;
+  _OutputFormatChangedData *format_changed_data;
 
   format = format_from_settings (settings);
 
@@ -659,9 +708,13 @@ file_printer_get_options (GtkPrinter           *printer,
       gtk_printer_option_set (option, supported_formats[current_format]);
       gtk_printer_option_set_add (set, option);
 
-      g_signal_connect (option, "changed",
-                        G_CALLBACK (file_printer_output_file_format_changed),
-                        set);
+      set_printer_format_from_option_set (printer, set);
+      format_changed_data = g_new (_OutputFormatChangedData, 1);
+      format_changed_data->printer = printer;
+      format_changed_data->set = set;
+      g_signal_connect_data (option, "changed",
+			     G_CALLBACK (file_printer_output_file_format_changed),
+			     format_changed_data, (GClosureNotify)g_free, 0);
 
       g_object_unref (option);
     }
