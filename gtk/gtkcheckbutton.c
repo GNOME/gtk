@@ -96,6 +96,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
   gtk_widget_set_has_window (GTK_WIDGET (check_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
   gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (check_button), TRUE);
+  gtk_button_set_alignment (GTK_BUTTON (check_button), 0.0, 0.5);
 }
 
 GtkWidget*
