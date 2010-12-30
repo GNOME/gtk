@@ -42,6 +42,7 @@
 #include "gtkcellareacontext.h"
 #include "gtkcelllayout.h"
 #include "gtkcellview.h"
+#include "gtkmenushellprivate.h"
 #include "gtkprivate.h"
 
 
@@ -1035,7 +1036,7 @@ row_changed_cb (GtkTreeModel         *model,
 	    {
 	      /* Destroy the header item and then the following separator */
 	      gtk_widget_destroy (item);
-	      gtk_widget_destroy (GTK_MENU_SHELL (menu)->children->data);
+	      gtk_widget_destroy (GTK_MENU_SHELL (menu)->priv->children->data);
 
 	      priv->menu_with_header = FALSE;
 	    }
@@ -1137,11 +1138,11 @@ area_apply_attributes_cb (GtkCellArea          *area,
 	      /* For header items we need to set the sensitivity
 	       * of the following separator item 
 	       */
-	      if (GTK_MENU_SHELL (menu)->children && 
-		  GTK_MENU_SHELL (menu)->children->next)
+	      if (GTK_MENU_SHELL (menu)->priv->children && 
+		  GTK_MENU_SHELL (menu)->priv->children->next)
 		{
 		  GtkWidget *separator = 
-		    GTK_MENU_SHELL (menu)->children->next->data;
+		    GTK_MENU_SHELL (menu)->priv->children->next->data;
 
 		  gtk_widget_set_sensitive (separator, sensitive);
 		}
@@ -1188,7 +1189,7 @@ menu_occupied (GtkTreeMenu *menu,
 {
   GList *i;
 
-  for (i = GTK_MENU_SHELL (menu)->children; i; i = i->next)
+  for (i = GTK_MENU_SHELL (menu)->priv->children; i; i = i->next)
     {
       guint l, r, b, t;
 
