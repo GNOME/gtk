@@ -4796,6 +4796,11 @@ gtk_combo_box_set_add_tearoffs (GtkComboBox *combo_box,
     {
       combo_box->priv->add_tearoffs = add_tearoffs;
       gtk_combo_box_check_appearance (combo_box);
+
+      if (GTK_IS_TREE_MENU (combo_box->priv->popup_widget))
+	_gtk_tree_menu_set_tearoff (GTK_TREE_MENU (combo_box->priv->popup_widget), 
+				    combo_box->priv->add_tearoffs);
+
       g_object_notify (G_OBJECT (combo_box), "add-tearoffs");
     }
 }
