@@ -10,14 +10,12 @@ TOP = ..\..
 ################################################################
 
 # Possibly override versions from build/win32/module.defs
-GTK_VER = 2.0
-GDK_PIXBUF_VER = 2.0
+GTK_VER = 3.0
 
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
 GTK_LIBS = ../gtk/gtk-win32-$(GTK_VER).lib
-GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 
-INCLUDES = -I . -I .. -I ../gdk -I ../gdk-pixbuf -I ../gtk
+INCLUDES = -I . -I .. -I ../gdk -I ../gtk $(GDK_PIXBUF_CFLAGS)
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) $(INTL_CFLAGS) $(ATK_CFLAGS) $(CAIRO_CFLAGS)
 LDFLAGS = /link /machine:ix86 $(LINKDEBUG)
 DEFINES = -DG_LOG_DOMAIN=\"GtkTest\" -DGTK_VERSION=\"$(GTK_VER)\"
@@ -43,7 +41,7 @@ TESTAPPS = \
 #	autotestfilechooser autotestfilesystem \
 #	buildertest floatingtest \
 	flicker \
-	objecttests \
+#	objecttests \
 	testaccel testactions testassistant \
 	testbbox testbuttons \
 	testcairo testcalendar testcellrenderertext testclientmessage testcombo testcombochange \
@@ -52,13 +50,13 @@ TESTAPPS = \
 	testfilechooser testfilechooserbutton testframe \
 	testgrouping testgtk \
 	testicontheme testiconview testimage testinput \
-	testmenus testmountoperation testmenubars testmerge testmultidisplay testmultiscreen \
+	testmountoperation testmenubars testmerge testmultidisplay testmultiscreen \
 	testnouiprint testnotebookdnd \
 	testoffscreen testorientable \
 	testprint \
-	testrecentchooser testrecentchoosermenu testrgb testrichtext \
+	testrecentchooser testrecentchoosermenu testrichtext \
 	testscale testselection testspinbutton \
-	testtext testtoolbar testtooltips \
+	testtoolbar testtooltips \
 	testtreecolumns testtreecolumnsizing testtreeedit testtreeflow testtreefocus \
 	testtreemodel testtreesort testtreeview treestoretest \
 	testsocket testsocket_child teststatusicon \
@@ -110,7 +108,7 @@ EXTRA_OBJETCS = testsocket_common.obj
 
 $(TESTAPP).exe : ../gtk/gtk-win32-$(GTK_VER).lib $(TESTAPP).obj $(EXTRA_OBJETCS)
 	$(CC) $(CFLAGS) $(TESTAPP).obj $(EXTRA_OBJETCS) $(GTK_LIBS) $(GDK_LIBS) $(GDK_PIXBUF_LIBS) \
-	$(PANGO_LIBS) $(GLIB_LIBS) $(CAIRO_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
+	$(PANGO_LIBS) $(PANGOCAIRO_LIBS) $(GLIB_LIBS) $(CAIRO_LIBS) $(EXTRA_LIBS) $(LDFLAGS)
 
 $(TESTAPP).obj : $(TESTAPP).c
 	$(CC) $(CFLAGS) -c -DG_LOG_DOMAIN=\"$(TESTAPP)\" $(TESTAPP).c
