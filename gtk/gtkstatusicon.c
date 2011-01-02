@@ -47,6 +47,9 @@
 #ifdef GDK_WINDOWING_X11
 #include "gdk/x11/gdkx.h"
 #endif
+#ifdef GDK_WINDOWING_WIN32
+#include "gdk/win32/gdkwin32.h"
+#endif
 
 #ifdef GDK_WINDOWING_WIN32
 #include "gtkicontheme.h"
@@ -643,7 +646,7 @@ build_button_event (GtkStatusIconPrivate *priv,
   e->axes = NULL;
   e->state = 0;
   e->button = button;
-  e->device = gdk_display_get_default ()->core_pointer;
+  //FIXME: e->device = gdk_display_get_default ()->core_pointer;
   e->x_root = e->x;
   e->y_root = e->y;
 }
