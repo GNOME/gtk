@@ -34,6 +34,8 @@
 #include "gtkprivate.h"
 #include "gtksocket.h"
 #include "gtksocketprivate.h"
+#include "gtkplugprivate.h"
+#include "gtkwindowprivate.h"
 #include "gtkdebug.h"
 
 #include "win32/gdkwin32.h"
@@ -62,30 +64,32 @@ _gtk_socket_windowing_realize_window (GtkSocket *socket)
 void
 _gtk_socket_windowing_end_embedding_toplevel (GtkSocket *socket)
 {
+  GtkSocketPrivate *priv = socket->priv;
   gtk_window_remove_embedded_xid (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (socket))),
-				  GDK_WINDOW_HWND (socket->plug_window));
+				  GDK_WINDOW_HWND (priv->plug_window));
 }
 
 void
 _gtk_socket_windowing_size_request (GtkSocket *socket)
 {
+  GtkSocketPrivate *priv = socket->priv;
   MINMAXINFO mmi;
 
-  socket->request_width = 1;
-  socket->request_height = 1;
+  priv->request_width = 1;
+  priv->request_height = 1;
   
   mmi.ptMaxSize.x = mmi.ptMaxSize.y = 16000; /* ??? */
   mmi.ptMinTrackSize.x = mmi.ptMinTrackSize.y = 1;
   mmi.ptMaxTrackSize.x = mmi.ptMaxTrackSize.y = 16000; /* ??? */
   mmi.ptMaxPosition.x = mmi.ptMaxPosition.y = 0;
 
-  if (SendMessage (GDK_WINDOW_HWND (socket->plug_window), WM_GETMINMAXINFO,
+  if (SendMessage (GDK_WINDOW_HWND (priv->plug_window), WM_GETMINMAXINFO,
 		   0, (LPARAM) &mmi) == 0)
     {
-      socket->request_width = mmi.ptMinTrackSize.x;
-      socket->request_height = mmi.ptMinTrackSize.y;
+      priv->request_width = mmi.ptMinTrackSize.x;
+      priv->request_height = mmi.ptMinTrackSize.y;
     }
-  socket->have_size = TRUE;
+  priv->have_size = TRUE;
 }
 
 void
@@ -93,7 +97,8 @@ _gtk_socket_windowing_send_key_event (GtkSocket *socket,
 				      GdkEvent  *gdk_event,
 				      gboolean   mask_key_presses)
 {
-  PostMessage (GDK_WINDOW_HWND (socket->plug_window),
+  GtkSocketPrivate *priv = socket->priv;
+  PostMessage (GDK_WINDOW_HWND (priv->plug_window),
 	       (gdk_event->type == GDK_KEY_PRESS ? WM_KEYDOWN : WM_KEYUP),
 	       gdk_event->key.hardware_keycode, 0);
 }
@@ -102,12 +107,14 @@ void
 _gtk_socket_windowing_focus_change (GtkSocket *socket,
 				    gboolean   focus_in)
 {
+  GtkSocketPrivate *priv = socket->priv;
+
   if (focus_in)
-    _gtk_win32_embed_send_focus_message (socket->plug_window,
+    _gtk_win32_embed_send_focus_message (priv->plug_window,
 					 GTK_WIN32_EMBED_FOCUS_IN,
 					 GTK_WIN32_EMBED_FOCUS_CURRENT);
   else
-    _gtk_win32_embed_send (socket->plug_window,
+    _gtk_win32_embed_send (priv->plug_window,
 			   GTK_WIN32_EMBED_FOCUS_OUT,
 			   0, 0);
 }
@@ -116,7 +123,9 @@ void
 _gtk_socket_windowing_update_active (GtkSocket *socket,
 				     gboolean   active)
 {
-  _gtk_win32_embed_send (socket->plug_window,
+  GtkSocketPrivate *priv = socket->priv;
+
+  _gtk_win32_embed_send (priv->plug_window,
 			 (active ? GTK_WIN32_EMBED_WINDOW_ACTIVATE : GTK_WIN32_EMBED_WINDOW_DEACTIVATE),
 			 0, 0);
 }
@@ -125,7 +134,8 @@ void
 _gtk_socket_windowing_update_modality (GtkSocket *socket,
 				       gboolean   modality)
 {
-  _gtk_win32_embed_send (socket->plug_window,
+  GtkSocketPrivate *priv = socket->priv;
+  _gtk_win32_embed_send (priv->plug_window,
 			 (modality ? GTK_WIN32_EMBED_MODALITY_ON : GTK_WIN32_EMBED_MODALITY_OFF),
 			 0, 0);
 }
@@ -135,6 +145,7 @@ _gtk_socket_windowing_focus (GtkSocket       *socket,
 			     GtkDirectionType direction)
 {
   int detail = -1;
+  GtkSocketPrivate *priv = socket->priv;
 
   switch (direction)
     {
@@ -150,7 +161,7 @@ _gtk_socket_windowing_focus (GtkSocket       *socket,
       break;
     }
   
-  _gtk_win32_embed_send_focus_message (socket->plug_window,
+  _gtk_win32_embed_send_focus_message (priv->plug_window,
 				       GTK_WIN32_EMBED_FOCUS_IN,
 				       detail);
 }
@@ -170,7 +181,9 @@ _gtk_socket_windowing_select_plug_window_input (GtkSocket *socket)
 void
 _gtk_socket_windowing_embed_get_info (GtkSocket *socket)
 {
-  socket->is_mapped = TRUE;	/* XXX ? */
+  GtkSocketPrivate *priv = socket->priv;
+
+  priv->is_mapped = TRUE;	/* XXX ? */
 }
 
 void
@@ -200,12 +213,13 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
   GtkWidget *widget;
   MSG *msg;
   GdkFilterReturn return_val;
+  GtkSocketPrivate *priv = socket->priv;
 
   socket = GTK_SOCKET (data);
 
   return_val = GDK_FILTER_CONTINUE;
 
-  if (socket->plug_widget)
+  if (priv->plug_widget)
     return return_val;
 
   widget = GTK_WIDGET (socket);
@@ -225,11 +239,11 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 	    g_warning ("GTK Win32 embedding protocol version mismatch, "
 		       "client uses version %d, we understand version %d",
 		       (int) msg->lParam, GTK_WIN32_EMBED_PROTOCOL_VERSION);
-	  if (!socket->plug_window)
+	  if (!priv->plug_window)
 	    {
 	      _gtk_socket_add_window (socket, (GdkNativeWindow) msg->wParam, FALSE);
 	      
-	      if (socket->plug_window)
+	      if (priv->plug_window)
 		GTK_NOTE (PLUGSOCKET, g_printerr ("GtkSocket: window created"));
 	      
 	      return_val = GDK_FILTER_REMOVE;
@@ -237,7 +251,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 	}
       else if (msg->message == _gtk_win32_embed_message_type (GTK_WIN32_EMBED_EVENT_PLUG_MAPPED))
 	{
-	  gboolean was_mapped = socket->is_mapped;
+	  gboolean was_mapped = priv->is_mapped;
 	  gboolean is_mapped = msg->wParam != 0;
 
 	  GTK_NOTE (PLUGSOCKET, g_printerr ("GtkSocket: PLUG_MAPPED received is_mapped:%d\n", is_mapped));
@@ -247,7 +261,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
 		_gtk_socket_handle_map_request (socket);
 	      else
 		{
-		  gdk_window_show (socket->plug_window);
+		  gdk_window_show (priv->plug_window);
 		  _gtk_socket_unmap_notify (socket);
 		}
 	    }
@@ -256,7 +270,7 @@ _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
       else if (msg->message == _gtk_win32_embed_message_type (GTK_WIN32_EMBED_PLUG_RESIZED))
 	{
 	  GTK_NOTE (PLUGSOCKET, g_printerr ("GtkSocket: PLUG_RESIZED received\n"));
-	  socket->have_size = FALSE;
+	  priv->have_size = FALSE;
 	  gtk_widget_queue_resize (widget);
 	  return_val = GDK_FILTER_REMOVE;
 	}
