@@ -291,7 +291,7 @@ calculate_progress (gdouble                 linear_progress,
 
       break;
     case GTK_TIMELINE_PROGRESS_EASE:
-      progress = (sinf ((progress - 0.5) * G_PI) + 1) / 2;
+      progress = (sin ((progress - 0.5) * G_PI) + 1) / 2;
       break;
     case GTK_TIMELINE_PROGRESS_EASE_IN:
       progress = pow (progress, 3);
