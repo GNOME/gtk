@@ -29,6 +29,7 @@
 #include "gtkanimationdescription.h"
 #include "gtk9slice.h"
 #include "gtkcssprovider.h"
+#include "gtkprivate.h"
 
 /**
  * SECTION:gtkcssprovider
