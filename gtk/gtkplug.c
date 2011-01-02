@@ -40,6 +40,9 @@
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkwin32.h"
+#endif
 
 /**
  * SECTION:gtkplug
@@ -545,6 +548,10 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 #ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         priv->socket_window = gdk_x11_window_foreign_new_for_display (display, socket_id);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+      if (GDK_IS_WIN32_DISPLAY (display))
+        priv->socket_window = gdk_win32_window_foreign_new_for_display (display, socket_id);
 #endif
 
       if (priv->socket_window) {

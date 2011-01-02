@@ -31,6 +31,7 @@
 #include "gtkwin32embedwidget.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkwindowprivate.h"
 
 
 static void            gtk_win32_embed_widget_realize               (GtkWidget        *widget);
@@ -95,12 +96,12 @@ _gtk_win32_embed_widget_new (GdkNativeWindow parent_id)
   embed_widget = g_object_new (GTK_TYPE_WIN32_EMBED_WIDGET, NULL);
   
   embed_widget->parent_window =
-    gdk_window_lookup_for_display (gdk_display_get_default (),
-				   parent_id);
+    gdk_win32_window_lookup_for_display (gdk_display_get_default (),
+					 parent_id);
   
   if (!embed_widget->parent_window)
     embed_widget->parent_window =
-      gdk_window_foreign_new_for_display (gdk_display_get_default (),
+      gdk_win32_window_foreign_new_for_display (gdk_display_get_default (),
 					  parent_id);
   
   return GTK_WIDGET (embed_widget);
@@ -149,7 +150,8 @@ gtk_win32_embed_widget_window_process (HWND hwnd, UINT msg, WPARAM wparam, LPARA
   GtkWin32EmbedWidget *embed_widget;
   gpointer user_data;
 
-  window = gdk_window_lookup ((GdkNativeWindow)hwnd);
+  window = gdk_win32_window_lookup_for_display (gdk_display_get_default (),
+						(GdkNativeWindow)hwnd);
   if (window == NULL) {
     g_warning ("No such window!");
     return 0;
