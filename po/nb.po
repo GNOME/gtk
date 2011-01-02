@@ -6,70 +6,61 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.92.x\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-12-17 13:05+0100\n"
-"PO-Revision-Date: 2010-12-17 13:09+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug."
+"cgi?product=gtk%2b&component=general\n"
+"POT-Creation-Date: 2010-12-24 02:57+0000\n"
+"PO-Revision-Date: 2010-12-30 20:35+0100\n"
 "Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
-"Language: nn\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
+"Language: nn\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Virtaal 0.6.1\n"
+"X-Generator: Lokalize 1.1\n"
 
-#: ../gdk/gdk.c:115
+#: ../gdk/gdk.c:155
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Feil ved lesing av flagg --gdk-debug"
 
-#: ../gdk/gdk.c:135
+#: ../gdk/gdk.c:175
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Feil ved lesing av flagg --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:163
+#: ../gdk/gdk.c:203
 msgid "Program class as used by the window manager"
 msgstr "Programklasse som brukes av vindushåndtereren"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:164
+#: ../gdk/gdk.c:204
 msgid "CLASS"
 msgstr "KLASSE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:166
+#: ../gdk/gdk.c:206
 msgid "Program name as used by the window manager"
 msgstr "Programnavn som brukes av vindushåndtereren"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:167
+#: ../gdk/gdk.c:207
 msgid "NAME"
 msgstr "NAVN"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:169
+#: ../gdk/gdk.c:209
 msgid "X display to use"
 msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:170
+#: ../gdk/gdk.c:210
 msgid "DISPLAY"
 msgstr "SKJERM"
 
-#. Description of --screen=SCREEN in --help output
-#: ../gdk/gdk.c:172
-msgid "X screen to use"
-msgstr "X-skjerm som skal brukes"
-
-#. Placeholder in --screen=SCREEN in --help output
-#: ../gdk/gdk.c:173
-msgid "SCREEN"
-msgstr "SKJERM"
-
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:176
+#: ../gdk/gdk.c:213
 msgid "GDK debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GDK"
 
@@ -77,12 +68,12 @@ msgstr "Feilsøkingsflagg som skal settes for GDK"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:177 ../gdk/gdk.c:180 ../gtk/gtkmain.c:523 ../gtk/gtkmain.c:526
+#: ../gdk/gdk.c:214 ../gdk/gdk.c:217 ../gtk/gtkmain.c:522 ../gtk/gtkmain.c:525
 msgid "FLAGS"
 msgstr "FLAGG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:179
+#: ../gdk/gdk.c:216
 msgid "GDK debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
@@ -301,27 +292,22 @@ msgstr "Størrelse på paletten i 8-bits modus"
 msgid "COLORS"
 msgstr "FARGER"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:305
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:294
 #, c-format
 msgid "Starting %s"
 msgstr "Starter %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:318
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:307
 #, c-format
 msgid "Opening %s"
 msgstr "Åpner %s"
 
-#: ../gdk/x11/gdkapplaunchcontext-x11.c:323
+#: ../gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Åpner %d oppføring"
 msgstr[1] "Åpner %d oppføringer"
-
-#. Description of --sync in --help output
-#: ../gdk/x11/gdkmain-x11.c:94
-msgid "Make X calls synchronous"
-msgstr "Gjør kall til X-bibliotekene synkrone"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
@@ -331,7 +317,9 @@ msgstr "Gjør kall til X-bibliotekene synkrone"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
-msgstr "Dette programmet kommer UTEN NOEN SOM HELST GARANTI; besøk  <a href=\"%s\">%s</a> for detaljer"
+msgstr ""
+"Dette programmet kommer UTEN NOEN SOM HELST GARANTI; besøk  <a href=\"%s\">%"
+"s</a> for detaljer"
 
 #: ../gtk/gtkaboutdialog.c:347
 msgid "License"
@@ -342,41 +330,41 @@ msgid "The license of the program"
 msgstr "Programmets lisens"
 
 #. Add the credits button
-#: ../gtk/gtkaboutdialog.c:741
+#: ../gtk/gtkaboutdialog.c:740
 msgid "C_redits"
 msgstr "Bid_ragsytere"
 
 #. Add the license button
-#: ../gtk/gtkaboutdialog.c:754
+#: ../gtk/gtkaboutdialog.c:753
 msgid "_License"
 msgstr "_Lisens"
 
-#: ../gtk/gtkaboutdialog.c:959
+#: ../gtk/gtkaboutdialog.c:958
 msgid "Could not show link"
 msgstr "Klarte ikke å vise lenke"
 
-#: ../gtk/gtkaboutdialog.c:996
+#: ../gtk/gtkaboutdialog.c:995
 msgid "Homepage"
 msgstr "Hjemmeside"
 
-#: ../gtk/gtkaboutdialog.c:1052
+#: ../gtk/gtkaboutdialog.c:1049
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
 
-#: ../gtk/gtkaboutdialog.c:2367
+#: ../gtk/gtkaboutdialog.c:2371
 msgid "Created by"
 msgstr "Laget av"
 
-#: ../gtk/gtkaboutdialog.c:2370
+#: ../gtk/gtkaboutdialog.c:2374
 msgid "Documented by"
 msgstr "Dokumentert av"
 
-#: ../gtk/gtkaboutdialog.c:2382
+#: ../gtk/gtkaboutdialog.c:2384
 msgid "Translated by"
 msgstr "Oversatt av"
 
-#: ../gtk/gtkaboutdialog.c:2386
+#: ../gtk/gtkaboutdialog.c:2389
 msgid "Artwork by"
 msgstr "Grafikk av"
 
@@ -480,7 +468,7 @@ msgstr "Uhåndtert tag «%s»"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:878
+#: ../gtk/gtkcalendar.c:882
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -488,7 +476,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:916
+#: ../gtk/gtkcalendar.c:920
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -497,7 +485,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1848
+#: ../gtk/gtkcalendar.c:1900
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -512,7 +500,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1879 ../gtk/gtkcalendar.c:2564
+#: ../gtk/gtkcalendar.c:1931 ../gtk/gtkcalendar.c:2620
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -528,7 +516,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1911 ../gtk/gtkcalendar.c:2432
+#: ../gtk/gtkcalendar.c:1963 ../gtk/gtkcalendar.c:2488
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -544,7 +532,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2197
+#: ../gtk/gtkcalendar.c:2253
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -588,7 +576,7 @@ msgstr "Velg en farge"
 msgid "Received invalid color data\n"
 msgstr "Mottok ugyldige fargedata\n"
 
-#: ../gtk/gtkcolorsel.c:416
+#: ../gtk/gtkcolorsel.c:415
 msgid ""
 "Select the color you want from the outer ring. Select the darkness or "
 "lightness of that color using the inner triangle."
@@ -596,7 +584,7 @@ msgstr ""
 "Velg fargen du ønsker fra den ytre ringen. Velg lysstyrke for denne fargen "
 "ved å bruke den indre trekanten."
 
-#: ../gtk/gtkcolorsel.c:440
+#: ../gtk/gtkcolorsel.c:439
 msgid ""
 "Click the eyedropper, then click a color anywhere on your screen to select "
 "that color."
@@ -604,67 +592,67 @@ msgstr ""
 "Trykk på dråpetelleren og trykk så på en farge hvor som helst på skjermen "
 "for å velge denne fargen."
 
-#: ../gtk/gtkcolorsel.c:449
+#: ../gtk/gtkcolorsel.c:448
 msgid "_Hue:"
 msgstr "_Glød:"
 
-#: ../gtk/gtkcolorsel.c:450
+#: ../gtk/gtkcolorsel.c:449
 msgid "Position on the color wheel."
 msgstr "Posisjon på fargehjulet."
 
-#: ../gtk/gtkcolorsel.c:452
+#: ../gtk/gtkcolorsel.c:451
 msgid "_Saturation:"
 msgstr "_Metning:"
 
-#: ../gtk/gtkcolorsel.c:453
+#: ../gtk/gtkcolorsel.c:452
 msgid "Intensity of the color."
 msgstr "Intensitet for fargen."
 
-#: ../gtk/gtkcolorsel.c:454
+#: ../gtk/gtkcolorsel.c:453
 msgid "_Value:"
 msgstr "_Verdi:"
 
-#: ../gtk/gtkcolorsel.c:455
+#: ../gtk/gtkcolorsel.c:454
 msgid "Brightness of the color."
 msgstr "Lysstyrke for fargen."
 
-#: ../gtk/gtkcolorsel.c:456
+#: ../gtk/gtkcolorsel.c:455
 msgid "_Red:"
 msgstr "_Rød:"
 
-#: ../gtk/gtkcolorsel.c:457
+#: ../gtk/gtkcolorsel.c:456
 msgid "Amount of red light in the color."
 msgstr "Mende med rødt lys i fargen."
 
-#: ../gtk/gtkcolorsel.c:458
+#: ../gtk/gtkcolorsel.c:457
 msgid "_Green:"
 msgstr "_Grønn:"
 
-#: ../gtk/gtkcolorsel.c:459
+#: ../gtk/gtkcolorsel.c:458
 msgid "Amount of green light in the color."
 msgstr "Mengde med grønt lys i fargen."
 
-#: ../gtk/gtkcolorsel.c:460
+#: ../gtk/gtkcolorsel.c:459
 msgid "_Blue:"
 msgstr "_Blå:"
 
-#: ../gtk/gtkcolorsel.c:461
+#: ../gtk/gtkcolorsel.c:460
 msgid "Amount of blue light in the color."
 msgstr "Mengde med blått lys i fargen."
 
-#: ../gtk/gtkcolorsel.c:464
+#: ../gtk/gtkcolorsel.c:463
 msgid "Op_acity:"
 msgstr "_Ugjennomsiktighet:"
 
-#: ../gtk/gtkcolorsel.c:471 ../gtk/gtkcolorsel.c:481
+#: ../gtk/gtkcolorsel.c:470 ../gtk/gtkcolorsel.c:480
 msgid "Transparency of the color."
 msgstr "Gjennomsiktighet for fargen."
 
-#: ../gtk/gtkcolorsel.c:488
+#: ../gtk/gtkcolorsel.c:487
 msgid "Color _name:"
 msgstr "Farge_navn:"
 
-#: ../gtk/gtkcolorsel.c:502
+#: ../gtk/gtkcolorsel.c:501
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -672,15 +660,15 @@ msgstr ""
 "Du kan skrive inn en heksadesimal fargeverdi i HTML-stil, eller bruke et "
 "fargenavn som f.eks. «oransje» i denne oppføringen."
 
-#: ../gtk/gtkcolorsel.c:532
+#: ../gtk/gtkcolorsel.c:531
 msgid "_Palette:"
 msgstr "_Palett:"
 
-#: ../gtk/gtkcolorsel.c:561
+#: ../gtk/gtkcolorsel.c:560
 msgid "Color Wheel"
 msgstr "Fargehjul"
 
-#: ../gtk/gtkcolorsel.c:1034
+#: ../gtk/gtkcolorsel.c:1033
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -690,7 +678,7 @@ msgstr ""
 "denne fargen til en palettoppføring, eller velge denne fargen som aktiv ved "
 "å dra den til den andre fargeprøven ved siden av."
 
-#: ../gtk/gtkcolorsel.c:1037
+#: ../gtk/gtkcolorsel.c:1036
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -698,21 +686,21 @@ msgstr ""
 "Fargen du har valgt. Du kan dra denne fargen til en palettoppføring for å "
 "lagre den for senere bruk."
 
-#: ../gtk/gtkcolorsel.c:1042
+#: ../gtk/gtkcolorsel.c:1041
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
 msgstr "Tidligere valgt farge. For sammenligning med fargen du velger nå."
 
-#: ../gtk/gtkcolorsel.c:1045
+#: ../gtk/gtkcolorsel.c:1044
 msgid "The color you've chosen."
 msgstr "Fargen du har valgt."
 
-#: ../gtk/gtkcolorsel.c:1445
+#: ../gtk/gtkcolorsel.c:1444
 msgid "_Save color here"
 msgstr "_Lagre fargen her"
 
-#: ../gtk/gtkcolorsel.c:1653
+#: ../gtk/gtkcolorsel.c:1652
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -789,23 +777,23 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8807 ../gtk/gtktextview.c:8246
+#: ../gtk/gtkentry.c:8809 ../gtk/gtktextview.c:8246
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8821 ../gtk/gtktextview.c:8260
+#: ../gtk/gtkentry.c:8823 ../gtk/gtktextview.c:8260
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10225
+#: ../gtk/gtkentry.c:10227
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock og Num Lock er på"
 
-#: ../gtk/gtkentry.c:10227
+#: ../gtk/gtkentry.c:10229
 msgid "Num Lock is on"
 msgstr "Num Lock er på"
 
-#: ../gtk/gtkentry.c:10229
+#: ../gtk/gtkentry.c:10231
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -1004,7 +992,7 @@ msgstr "Opprett _mappe"
 
 #: ../gtk/gtkfilechooserdefault.c:5022
 msgid "_Location:"
-msgstr "_Lokasjon:"
+msgstr "_Adresse:"
 
 #: ../gtk/gtkfilechooserdefault.c:5226
 msgid "Save in _folder:"
@@ -1206,7 +1194,7 @@ msgstr "Valg av skrift"
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
 
-#: ../gtk/gtkicontheme.c:1352
+#: ../gtk/gtkicontheme.c:1351
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1219,12 +1207,12 @@ msgstr ""
 "Du kan finne en kopi av det på:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1533
+#: ../gtk/gtkicontheme.c:1532
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon «%s» er ikke tilstede i tema"
 
-#: ../gtk/gtkicontheme.c:3054
+#: ../gtk/gtkicontheme.c:3053
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
@@ -1249,12 +1237,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6249
+#: ../gtk/gtklabel.c:6250
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6261
+#: ../gtk/gtklabel.c:6262
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -1267,27 +1255,27 @@ msgid "Invalid URI"
 msgstr "Ugyldig URI"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:516
+#: ../gtk/gtkmain.c:515
 msgid "Load additional GTK+ modules"
 msgstr "Last tilleggsmoduler for GTK+"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:517
+#: ../gtk/gtkmain.c:516
 msgid "MODULES"
 msgstr "MODULER"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:519
+#: ../gtk/gtkmain.c:518
 msgid "Make all warnings fatal"
 msgstr "La alle advarsler være fatale"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:522
+#: ../gtk/gtkmain.c:521
 msgid "GTK+ debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GTK+"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:525
+#: ../gtk/gtkmain.c:524
 msgid "GTK+ debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 
@@ -1296,20 +1284,20 @@ msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:788
+#: ../gtk/gtkmain.c:787
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmain.c:852
+#: ../gtk/gtkmain.c:851
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:911
+#: ../gtk/gtkmain.c:915
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:911
+#: ../gtk/gtkmain.c:915
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -1365,8 +1353,7 @@ msgstr "A_vslutt prosess"
 #: ../gtk/gtkmountoperation-stub.c:64
 #, c-format
 msgid "Cannot kill process with PID %d. Operation is not implemented."
-msgstr ""
-"Kan ikke terminere prosess med PID %d. Operasjonen er ikke implementert."
+msgstr "Kan ikke terminere prosess med PID %d. Operasjonen er ikke implementert."
 
 #. translators: this string is a name for the 'less' command
 #: ../gtk/gtkmountoperation-x11.c:862
@@ -1394,7 +1381,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke avslutte prosess med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4914 ../gtk/gtknotebook.c:7571
+#: ../gtk/gtknotebook.c:4910 ../gtk/gtknotebook.c:7567
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -1549,14 +1536,13 @@ msgstr "Feil under oppretting av forhåndsvisning for utskrift"
 
 #: ../gtk/gtkprintoperation.c:2935
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr ""
-"Den mest sannsynlige årsaken er at en midlertidig fil ikke kunne lages."
+msgstr "Den mest sannsynlige årsaken er at en midlertidig fil ikke kunne lages."
 
-#: ../gtk/gtkprintoperation-unix.c:297
+#: ../gtk/gtkprintoperation-unix.c:304
 msgid "Error launching preview"
 msgstr "Feil under start av forhåndsvisning"
 
-#: ../gtk/gtkprintoperation-unix.c:470 ../gtk/gtkprintoperation-win32.c:1447
+#: ../gtk/gtkprintoperation-unix.c:477 ../gtk/gtkprintoperation-win32.c:1447
 msgid "Application"
 msgstr "Program"
 
@@ -1630,7 +1616,7 @@ msgstr "Skriver"
 #. Translators: this is the header for the location column in the print dialog
 #: ../gtk/gtkprintunixdialog.c:2150
 msgid "Location"
-msgstr "Lokasjon"
+msgstr "Adresse"
 
 #. Translators: this is the header for the printer status column in the print dialog
 #: ../gtk/gtkprintunixdialog.c:2161
@@ -1938,7 +1924,7 @@ msgstr "Noen innstillinger i dialogen er i konflikt"
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../gtk/gtkrc.c:2366 ../gtk/gtkrc.c:2369
+#: ../gtk/gtkrc.c:947
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Klarte ikke å finne bildefil i pixmap_path: «%s»"
@@ -1972,7 +1958,7 @@ msgstr "Klarte ikke tømme listen"
 
 #: ../gtk/gtkrecentchooserdefault.c:1778
 msgid "Copy _Location"
-msgstr "Kopier _lokasjon"
+msgstr "Kopier _adresse"
 
 #: ../gtk/gtkrecentchooserdefault.c:1791
 msgid "_Remove From List"
@@ -2661,8 +2647,7 @@ msgstr "«%s» er ikke et gyldig attributtnavn"
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr ""
-"«%s» kunne ikke konverteres til en verdi av type «%s» for attributt «%s»"
+msgstr "«%s» kunne ikke konverteres til en verdi av type «%s» for attributt «%s»"
 
 #: ../gtk/gtktextbufferserialize.c:1210
 #, c-format
@@ -2701,8 +2686,8 @@ msgstr "Serialiserte data har feil utforming"
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr ""
-"Serialiserte data er feilutformet.Første del er ikke "
-"GTKTEXTBUFFERCONTENTS-0001"
+"Serialiserte data er feilutformet.Første del er ikke GTKTEXTBUFFERCONTENTS-"
+"0001"
 
 #: ../gtk/gtktextutil.c:60
 msgid "LRM _Left-to-right mark"
@@ -2749,53 +2734,53 @@ msgstr "ZWNJ Zero width _non-joiner"
 msgid "Unable to locate theme engine in module_path: \"%s\","
 msgstr "Klarte ikke å finne temamotor i module_path: «%s»."
 
-#: ../gtk/gtkuimanager.c:1505
+#: ../gtk/gtkuimanager.c:1506
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
 msgstr "Uventet startmarkering «%s» på linje %d tegn %d"
 
-#: ../gtk/gtkuimanager.c:1595
+#: ../gtk/gtkuimanager.c:1596
 #, c-format
 msgid "Unexpected character data on line %d char %d"
 msgstr "Uventet tegndata på linje %d tegn %d"
 
-#: ../gtk/gtkuimanager.c:2427
+#: ../gtk/gtkuimanager.c:2428
 msgid "Empty"
 msgstr "Tom"
 
-#: ../gtk/gtkvolumebutton.c:83
+#: ../gtk/gtkvolumebutton.c:170
 msgid "Volume"
 msgstr "Volum"
 
-#: ../gtk/gtkvolumebutton.c:85
+#: ../gtk/gtkvolumebutton.c:172
 msgid "Turns volume down or up"
 msgstr "Tar volumet ned eller opp"
 
-#: ../gtk/gtkvolumebutton.c:88
+#: ../gtk/gtkvolumebutton.c:175
 msgid "Adjusts the volume"
 msgstr "Justerer volumet"
 
-#: ../gtk/gtkvolumebutton.c:94 ../gtk/gtkvolumebutton.c:97
+#: ../gtk/gtkvolumebutton.c:181 ../gtk/gtkvolumebutton.c:184
 msgid "Volume Down"
 msgstr "Volum ned"
 
-#: ../gtk/gtkvolumebutton.c:96
+#: ../gtk/gtkvolumebutton.c:183
 msgid "Decreases the volume"
 msgstr "Senker volumet"
 
-#: ../gtk/gtkvolumebutton.c:100 ../gtk/gtkvolumebutton.c:103
+#: ../gtk/gtkvolumebutton.c:187 ../gtk/gtkvolumebutton.c:190
 msgid "Volume Up"
 msgstr "Volum opp"
 
-#: ../gtk/gtkvolumebutton.c:102
+#: ../gtk/gtkvolumebutton.c:189
 msgid "Increases the volume"
 msgstr "Hever volumet"
 
-#: ../gtk/gtkvolumebutton.c:160
+#: ../gtk/gtkvolumebutton.c:247
 msgid "Muted"
 msgstr "Dempet"
 
-#: ../gtk/gtkvolumebutton.c:164
+#: ../gtk/gtkvolumebutton.c:251
 msgid "Full Volume"
 msgstr "Fullt volum"
 
@@ -2804,7 +2789,7 @@ msgstr "Fullt volum"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:177
+#: ../gtk/gtkvolumebutton.c:264
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
@@ -4234,3 +4219,12 @@ msgid ""
 msgstr ""
 "Feil under lasting av bilde «%s»: årsak ikke kjent, sannsynligvis korrupt "
 "bildefil"
+
+#~ msgid "X screen to use"
+#~ msgstr "X-skjerm som skal brukes"
+
+#~ msgid "SCREEN"
+#~ msgstr "SKJERM"
+
+#~ msgid "Make X calls synchronous"
+#~ msgstr "Gjør kall til X-bibliotekene synkrone"
