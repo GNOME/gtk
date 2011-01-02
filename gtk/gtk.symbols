@@ -700,7 +700,9 @@ gtk_css_provider_load_from_data
 gtk_css_provider_load_from_file
 gtk_css_provider_load_from_path
 gtk_css_provider_new
+#ifdef G_OS_UNIX
 gtk_custom_paper_unix_dialog_get_type G_GNUC_CONST
+#endif
 gtk_debug_flag_get_type G_GNUC_CONST
 gtk_delete_type_get_type G_GNUC_CONST
 gtk_dest_defaults_get_type G_GNUC_CONST
@@ -889,7 +891,9 @@ gtk_entry_set_visibility
 gtk_entry_set_width_chars
 gtk_entry_text_index_to_layout_index
 gtk_entry_unset_invisible_char
+#ifdef G_OS_UNIX
 gtk_enumerate_printers
+#endif
 gtk_event_box_get_above_child
 gtk_event_box_get_type G_GNUC_CONST
 gtk_event_box_get_visible_window
@@ -1632,12 +1636,14 @@ gtk_page_setup_set_right_margin
 gtk_page_setup_set_top_margin
 gtk_page_setup_to_file
 gtk_page_setup_to_key_file
+#ifdef G_OS_UNIX
 gtk_page_setup_unix_dialog_get_page_setup
 gtk_page_setup_unix_dialog_get_print_settings
 gtk_page_setup_unix_dialog_get_type G_GNUC_CONST
 gtk_page_setup_unix_dialog_new
 gtk_page_setup_unix_dialog_set_page_setup
 gtk_page_setup_unix_dialog_set_print_settings
+#endif /* G_OS_UNIX */
 gtk_paint_arrow
 gtk_paint_box
 gtk_paint_box_gap
@@ -1705,6 +1711,7 @@ gtk_plug_new
 gtk_plug_new_for_display
 gtk_policy_type_get_type G_GNUC_CONST
 gtk_position_type_get_type G_GNUC_CONST
+#ifdef G_OS_UNIX
 gtk_print_backend_add_printer
 gtk_print_backend_destroy
 gtk_print_backend_error_quark
@@ -1718,6 +1725,7 @@ gtk_print_backend_remove_printer
 gtk_print_backend_set_list_done
 gtk_print_backend_set_password
 gtk_print_capabilities_get_type G_GNUC_CONST
+#endif /* G_OS_UNIX */
 gtk_print_context_create_pango_context
 gtk_print_context_create_pango_layout
 gtk_print_context_get_cairo_context
@@ -1731,6 +1739,7 @@ gtk_print_context_get_type G_GNUC_CONST
 gtk_print_context_get_width
 gtk_print_context_set_cairo_context
 gtk_print_duplex_get_type G_GNUC_CONST
+#ifdef G_OS_UNIX
 gtk_printer_accepts_pdf
 gtk_printer_accepts_ps
 gtk_printer_compare
@@ -1781,8 +1790,10 @@ gtk_printer_option_widget_has_external_label
 gtk_printer_option_widget_new
 gtk_printer_option_widget_set_source
 gtk_printer_request_details
+#endif /* G_OS_UNIX */
 gtk_print_error_get_type G_GNUC_CONST
 gtk_print_error_quark
+#ifdef G_OS_UNIX
 gtk_printer_set_description
 gtk_printer_set_has_details
 gtk_printer_set_icon_name
@@ -1826,6 +1837,7 @@ gtk_print_job_set_scale
 gtk_print_job_set_source_file
 gtk_print_job_set_status
 gtk_print_job_set_track_print_status
+#endif /* G_OS_UNIX */
 gtk_print_operation_action_get_type G_GNUC_CONST
 gtk_print_operation_cancel
 gtk_print_operation_draw_page_finish
@@ -1943,6 +1955,7 @@ gtk_print_settings_to_file
 gtk_print_settings_to_key_file
 gtk_print_settings_unset
 gtk_print_status_get_type G_GNUC_CONST
+#ifdef G_OS_UNIX
 gtk_print_unix_dialog_add_custom_tab
 gtk_print_unix_dialog_get_current_page
 gtk_print_unix_dialog_get_embed_page_setup
@@ -1962,6 +1975,7 @@ gtk_print_unix_dialog_set_manual_capabilities
 gtk_print_unix_dialog_set_page_setup
 gtk_print_unix_dialog_set_settings
 gtk_print_unix_dialog_set_support_selection
+#endif
 #ifdef GDK_WINDOWING_WIN32
 gtk_print_win32_devnames_free
 gtk_print_win32_devnames_from_printer_name
@@ -3058,7 +3072,9 @@ gtk_tooltip_set_markup
 gtk_tooltip_set_text
 gtk_tooltip_set_tip_area
 gtk_tooltip_trigger_tooltip_query
+#ifdef GDK_WINDOWING_X11
 gtk_tray_icon_get_type G_GNUC_CONST
+#endif
 gtk_tree_drag_dest_drag_data_received
 gtk_tree_drag_dest_get_type G_GNUC_CONST
 gtk_tree_drag_dest_row_drop_possible
