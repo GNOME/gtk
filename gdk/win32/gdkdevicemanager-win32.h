@@ -20,7 +20,7 @@
 #ifndef __GDK_DEVICE_MANAGER_WIN32_H__
 #define __GDK_DEVICE_MANAGER_WIN32_H__
 
-#include <gdk/gdkdevicemanager.h>
+#include <gdk/gdkdevicemanagerprivate.h>
 
 G_BEGIN_DECLS
 

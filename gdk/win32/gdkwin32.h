@@ -27,6 +27,18 @@
 #ifndef __GDK_WIN32_H__
 #define __GDK_WIN32_H__
 
+#define __GDKWIN32_H_INSIDE__
+
+#include <gdk/win32/gdkwin32cursor.h>
+#include <gdk/win32/gdkwin32display.h>
+#include <gdk/win32/gdkwin32displaymanager.h>
+#include <gdk/win32/gdkwin32dnd.h>
+#include <gdk/win32/gdkwin32keys.h>
+#include <gdk/win32/gdkwin32screen.h>
+#include <gdk/win32/gdkwin32window.h>
+
+#undef __GDKWIN32_H_INSIDE__
+
 #include <gdk/gdkprivate.h>
 
 #ifndef STRICT
@@ -41,18 +53,12 @@ G_BEGIN_DECLS
 
 #include "gdkprivate-win32.h"
 
-#define GDK_WINDOW_HWND(win)          (GDK_DRAWABLE_IMPL_WIN32(((GdkWindowObject *)win)->impl)->handle)
-#define GDK_DRAWABLE_IMPL_WIN32_HANDLE(d) (((GdkDrawableImplWin32 *) d)->handle)
-#define GDK_DRAWABLE_HANDLE(win)      (GDK_IS_WINDOW (win) ? GDK_WINDOW_HWND (win) : (GDK_IS_DRAWABLE_IMPL_WIN32 (win) ? GDK_DRAWABLE_IMPL_WIN32_HANDLE (win) : 0))
+#define GDK_WINDOW_HWND(win)          (GDK_WINDOW_IMPL_WIN32(win->impl)->handle)
 #else
 /* definition for exported 'internals' go here */
-#define GDK_WINDOW_HWND(d) (gdk_win32_drawable_get_handle (d))
+#define GDK_WINDOW_HWND(d) (gdk_win32_window_get_handle (d))
 
 #endif
-
-#define GDK_ROOT_WINDOW()             ((guint32) HWND_DESKTOP)
-#define GDK_DISPLAY()                 NULL
-
 
 /* These need to be here so gtkstatusicon.c can pick them up if needed. */
 #ifndef WM_XBUTTONDOWN
@@ -77,9 +83,8 @@ gboolean      gdk_win32_window_is_win32 (GdkWindow *window);
 
 /* Return the Gdk* for a particular HANDLE */
 gpointer      gdk_win32_handle_table_lookup (GdkNativeWindow handle);
-
-/* Translate from drawable to Windows handle */
-HGDIOBJ       gdk_win32_drawable_get_handle (GdkDrawable *drawable);
+/* Translate from window to Windows handle */
+HGDIOBJ       gdk_win32_window_get_handle (GdkWindow *window);
 
 void          gdk_win32_selection_add_targets (GdkWindow  *owner,
 					       GdkAtom     selection,

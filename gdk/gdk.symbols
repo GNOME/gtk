@@ -350,13 +350,16 @@ gdk_visual_get_type G_GNUC_CONST
 gdk_visual_get_visual_type
 gdk_visual_type_get_type G_GNUC_CONST
 #ifdef GDK_WINDOWING_WIN32
-gdk_win32_drawable_get_handle
 gdk_win32_handle_table_lookup
 gdk_win32_icon_to_pixbuf_libgtk_only
 gdk_win32_pixbuf_to_hicon_libgtk_only
 gdk_win32_selection_add_targets
 gdk_win32_set_modal_dialog_libgtk_only
 gdk_win32_window_is_win32
+gdk_win32_window_get_handle
+gdk_win32_display_get_type
+gdk_win32_window_foreign_new_for_display
+gdk_win32_window_lookup_for_display
 #endif
 gdk_window_add_filter
 gdk_window_at_pointer
@@ -429,7 +432,9 @@ gdk_window_hide
 gdk_window_hints_get_type G_GNUC_CONST
 gdk_window_iconify
 gdk_window_impl_get_type G_GNUC_CONST
+#ifdef GDK_WINDOWING_X11
 gdk_window_impl_x11_get_type G_GNUC_CONST
+#endif
 gdk_window_input_shape_combine_region
 gdk_window_invalidate_maybe_recurse
 gdk_window_invalidate_rect
@@ -508,6 +513,7 @@ gdk_window_unstick
 gdk_window_withdraw
 gdk_wm_decoration_get_type G_GNUC_CONST
 gdk_wm_function_get_type G_GNUC_CONST
+#ifdef GDK_WINDOWING_X11
 gdk_x11_app_launch_context_get_type
 gdk_x11_atom_to_xatom
 gdk_x11_atom_to_xatom_for_display
@@ -570,3 +576,4 @@ gdk_x11_window_move_to_current_desktop
 gdk_x11_window_set_user_time
 gdk_x11_xatom_to_atom
 gdk_x11_xatom_to_atom_for_display
+#endif

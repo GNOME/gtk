@@ -34,7 +34,8 @@
 #include "config.h"
 
 #include "gdkdisplay.h"
-#include "gdkinput.h"
+#include "gdkdevice.h"
+#include "gdkdisplayprivate.h"
 
 #include "gdkprivate-win32.h"
 #include "gdkdevicemanager-win32.h"
@@ -47,11 +48,11 @@ GList            *_gdk_input_windows;
 GList *
 gdk_devices_list (void)
 {
-  return gdk_display_list_devices (_gdk_display);
+  return _gdk_win32_display_list_devices (_gdk_display);
 }
 
 GList *
-gdk_display_list_devices (GdkDisplay *dpy)
+_gdk_win32_display_list_devices (GdkDisplay *dpy)
 {
   g_return_val_if_fail (dpy == _gdk_display, NULL);
 
@@ -69,7 +70,6 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
                                 GdkExtensionMode mode)
 {
   GdkDeviceManager *device_manager;
-  GdkWindowObject *window_private;
   GList *devices, *d;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -80,8 +80,7 @@ gdk_input_set_extension_events (GdkWindow *window, gint mask,
   if (mode == GDK_EXTENSION_EVENTS_NONE)
     mask = 0;
 
-  window_private = (GdkWindowObject *) window;
-  window_private->extension_events = mask;
+  window->extension_events = mask;
 
   device_manager = gdk_display_get_device_manager (_gdk_display);
   devices = gdk_device_manager_list_devices (device_manager,

@@ -24,6 +24,7 @@
 #include <windowsx.h>
 #include <objbase.h>
 
+#include "gdkdisplayprivate.h"
 #include "gdkdevice-win32.h"
 #include "gdkwin32.h"
 
@@ -134,14 +135,14 @@ gdk_device_win32_set_window_cursor (GdkDevice *device,
                                     GdkWindow *window,
                                     GdkCursor *cursor)
 {
-  GdkCursorPrivate *cursor_private;
-  GdkWindowObject *parent_window;
+  GdkWin32Cursor *cursor_private;
+  GdkWindow *parent_window;
   GdkWindowImplWin32 *impl;
   HCURSOR hcursor;
   HCURSOR hprevcursor;
 
-  impl = GDK_WINDOW_IMPL_WIN32 (GDK_WINDOW_OBJECT (window)->impl);
-  cursor_private = (GdkCursorPrivate*) cursor;
+  impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
+  cursor_private = (GdkWin32Cursor*) cursor;
 
   hprevcursor = impl->hcursor;
 
@@ -164,13 +165,11 @@ gdk_device_win32_set_window_cursor (GdkDevice *device,
            * first ancestor that has cursor defined, and if so, set
            * new cursor.
            */
-          GdkWindowObject *curr_window_obj = GDK_WINDOW_OBJECT (curr_window);
-
-          while (curr_window_obj &&
-                 !GDK_WINDOW_IMPL_WIN32 (curr_window_obj->impl)->hcursor)
+          while (curr_window && curr_window->impl &&
+                 !GDK_WINDOW_IMPL_WIN32 (curr_window->impl)->hcursor)
             {
-              curr_window_obj = curr_window_obj->parent;
-              if (curr_window_obj == GDK_WINDOW_OBJECT (window))
+              curr_window = curr_window->parent;
+              if (curr_window == GDK_WINDOW (window))
                 {
                   SetCursor (hcursor);
                   break;
@@ -188,7 +187,7 @@ gdk_device_win32_set_window_cursor (GdkDevice *device,
     {
       /* Look for a suitable cursor to use instead */
       hcursor = NULL;
-      parent_window = GDK_WINDOW_OBJECT (window)->parent;
+      parent_window = GDK_WINDOW (window)->parent;
 
       while (hcursor == NULL)
         {
@@ -329,12 +328,19 @@ static void
 gdk_device_win32_ungrab (GdkDevice *device,
                          guint32    time_)
 {
+  GdkDeviceGrabInfo *info;
   GdkDisplay *display;
 
   display = gdk_device_get_display (device);
+  info = _gdk_display_get_last_device_grab (display, device);
+
+  if (info)
+    info->serial_end = 0;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     ReleaseCapture ();
+
+  _gdk_display_device_grab_update (display, device, NULL, 0);
 }
 
 static GdkWindow *

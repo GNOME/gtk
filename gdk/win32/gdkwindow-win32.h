@@ -27,31 +27,13 @@
 #ifndef __GDK_WINDOW_WIN32_H__
 #define __GDK_WINDOW_WIN32_H__
 
-#include <gdk/win32/gdkdrawable-win32.h>
+#include "gdk/win32/gdkprivate-win32.h"
+#include "gdk/gdkwindowimpl.h"
+#include "gdk/gdkcursor.h"
+
+#include <windows.h>
 
 G_BEGIN_DECLS
-
-typedef struct _GdkWin32PositionInfo    GdkWin32PositionInfo;
-
-#if 0
-struct _GdkWin32PositionInfo
-{
-  gint x;
-  gint y;
-  gint width;
-  gint height;
-  gint x_offset;		/* Offsets to add to Win32 coordinates */
-  gint y_offset;		/* within window to get GDK coodinates */
-  guint big : 1;
-  guint mapped : 1;
-  guint no_bg : 1;	        /* Set when the window background
-				 * is temporarily unset during resizing
-				 * and scaling
-				 */
-  GdkRectangle clip_rect;	/* visible rectangle of window */
-};
-#endif
-
 
 /* Window implementation for Win32
  */
@@ -68,7 +50,10 @@ typedef struct _GdkWindowImplWin32Class GdkWindowImplWin32Class;
 
 struct _GdkWindowImplWin32
 {
-  GdkDrawableImplWin32 parent_instance;
+  GdkWindowImpl parent_instance;
+
+  GdkWindow *wrapper;
+  HANDLE handle;
 
   gint8 toplevel_window_type;
 
@@ -90,11 +75,16 @@ struct _GdkWindowImplWin32
   gboolean   changing_state;
 
   guint no_bg : 1;
+
+  cairo_surface_t *cairo_surface;
+  HDC              hdc;
+  int              hdc_count;
+  HBITMAP          saved_dc_bitmap; /* Original bitmap for dc */
 };
  
 struct _GdkWindowImplWin32Class 
 {
-  GdkDrawableImplWin32Class parent_class;
+  GdkWindowImplClass parent_class;
 };
 
 GType _gdk_window_impl_win32_get_type (void);

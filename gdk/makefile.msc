@@ -19,8 +19,7 @@ WTKIT = $(TOP)\wtkit126
 
 # Nothing much configurable below
 # overwrite version?
-GTK_VER=2.0
-GDK_PIXBUF_VER=$(GTK_VER)
+GTK_VER=3.0
 
 !IFNDEF PERL
 PERL = perl
@@ -28,20 +27,19 @@ PERL = perl
 
 INCLUDES = -FImsvc_recommended_pragmas.h \
 	-I . -I .. \
-	$(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) -I ../gdk-pixbuf \
+	$(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) $(GDK_PIXBUF_CFLAGS) \
 
 DEFINES = \
-	-DHAVE_CONFIG_H -DGDK_ENABLE_BROKEN \
+	-DHAVE_CONFIG_H \
 	-DGDK_VERSION=\"$(GTK_VER)\" \
 	-DG_LOG_DOMAIN=\"Gdk\" \
 	-DGDK_COMPILATION -DG_LOG_DOMAIN=\"Gdk\"
 
 EXTRALIBS = \
 	$(WTKIT)\lib\i386\wntab32x.lib \
-	$(GLIB_LIBS) \
-	..\gdk-pixbuf\gdk_pixbuf-$(GDK_PIXBUF_VER).lib \
-	$(PANGOWIN32_LIBS) $(PANGOCAIRO_LIBS) $(INTL_LIBS) $(CAIRO_LIBS) \
-	$(PANGOCAIRO_LIBS)
+	$(GLIB_LIBS) $(GDK_PIXBUF_LIBS) \
+	$(CAIRO_LIBS) $(CAIRO_GOBJECT_LIBS) \
+	$(PANGOWIN32_LIBS) $(PANGOCAIRO_LIBS) $(INTL_LIBS)
 
 gdk-win32-backend :
 	cd win32
@@ -57,8 +55,8 @@ all: \
 	gdkmarshalers.c \
 	gdk-win32-backend \
 	libgdk-win32-$(GTK_VER)-0.dll \
-	testgdk.exe \
-	gdk-win32-$(GTK_VER)s.lib \
+#	testgdk.exe \
+#	gdk-win32-$(GTK_VER)s.lib \
 #	gdk-x11-$(GTK_VER).dll \
 
 gdk_OBJECTS = \
@@ -67,15 +65,14 @@ gdk_OBJECTS = \
 	gdkcairo.obj \
 	gdkcolor.obj \
 	gdkcursor.obj \
+	gdkdevice.obj \
+	gdkdevicemanager.obj \
 	gdkdisplay.obj \
 	gdkdisplaymanager.obj \
 	gdkdnd.obj \
-	gdkdraw.obj \
 	gdkenumtypes.obj \
 	gdkevents.obj \
-	gdkgc.obj \
 	gdkglobals.obj \
-	gdkwindowimpl.obj \
 	gdkkeynames.obj \
 	gdkkeys.obj \
 	gdkkeyuni.obj \
@@ -83,31 +80,43 @@ gdk_OBJECTS = \
 	gdkoffscreenwindow.obj \
 	gdkpango.obj \
 	gdkpixbuf-drawable.obj \
-	gdkpixbuf-render.obj \
 	gdkrectangle.obj \
+	gdkrgba.obj \
 	gdkscreen.obj \
 	gdkselection.obj \
 	gdkvisual.obj \
-	gdkwindow.obj
+	gdkwindow.obj \
+	gdkwindowimpl.obj \
 
-gdk_public_h_sources = \
-	gdk.h		\
-	gdkcolor.h	\
-	gdkcursor.h     \
-	gdkdnd.h	\
-	gdkdrawable.h	\
-	gdkevents.h	\
-	gdkgc.h		\
-	gdkkeysyms.h	\
-	gdkinput.h	\
-	gdkkeys.h	\
-	gdkpango.h	\
-	gdkpixbuf.h	\
-	gdkproperty.h	\
-	gdkselection.h	\
-	gdktypes.h	\
-	gdkvisual.h	\
-	gdkwindow.h	\
+gdk_public_h_sources = 				\
+	gdk.h					\
+	gdkapplaunchcontext.h			\
+	gdkcairo.h				\
+	gdkcolor.h				\
+	gdkcursor.h				\
+	gdkdevice.h				\
+	gdkdevicemanager.h			\
+	gdkdisplay.h				\
+	gdkdisplaymanager.h			\
+	gdkdnd.h				\
+	gdkevents.h				\
+	gdkkeys.h				\
+	gdkkeysyms.h				\
+	gdkkeysyms-compat.h			\
+	gdkmain.h				\
+	gdkpango.h				\
+	gdkpixbuf.h				\
+	gdkprivate.h				\
+	gdkproperty.h				\
+	gdkrectangle.h				\
+	gdkrgba.h				\
+	gdkscreen.h				\
+	gdkselection.h				\
+	gdktestutils.h				\
+	gdkthreads.h				\
+	gdktypes.h				\
+	gdkvisual.h				\
+	gdkwindow.h
 
 # private marshalers
 gdkmarshalers.h : gdkmarshalers.list
@@ -136,6 +145,7 @@ gdk.def: gdk.symbols
 		-DG_GNUC_CONST= \
 		gdk.symbols >> gdk.def
 
+# /force /verbose:lib 
 libgdk-win32-$(GTK_VER)-0.dll : $(gdk_OBJECTS) gdk.def win32\gdk-win32.lib
 	$(CC) $(CFLAGS) -LD -Fe$@ $(gdk_OBJECTS) win32\gdk-win32.lib $(EXTRALIBS) \
 	gdi32.lib user32.lib imm32.lib shell32.lib ole32.lib uuid.lib win32\gdk.res \

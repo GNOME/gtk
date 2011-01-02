@@ -31,6 +31,7 @@
 #include "gdkvisual.h"
 #include "gdkscreen.h" /* gdk_screen_get_default() */
 #include "gdkprivate-win32.h"
+#include "gdkvisualprivate.h"
 
 static void  gdk_visual_decompose_mask (gulong     mask,
 					gint      *shift,
@@ -41,46 +42,6 @@ static GdkVisual *system_visual = NULL;
 static gint available_depths[1];
 
 static GdkVisualType available_types[1];
-
-static void
-gdk_visual_finalize (GObject *object)
-{
-  g_error ("A GdkVisual object was finalized. This should not happen");
-}
-
-static void
-gdk_visual_class_init (GObjectClass *class)
-{
-  class->finalize = gdk_visual_finalize;
-}
-
-GType
-gdk_visual_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-        sizeof (GdkVisualClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_visual_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkVisual),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkVisual",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
 
 void
 _gdk_visual_init (void)
@@ -102,6 +63,7 @@ _gdk_visual_init (void)
   gint map_entries = 0;
 
   system_visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+  system_visual->screen = gdk_screen_get_default();
 
   GDK_NOTE (COLORMAP, g_print ("BITSPIXEL=%d NUMCOLORS=%d\n",
 			       bitspixel, numcolors));
@@ -290,31 +252,31 @@ _gdk_visual_init (void)
 }
 
 gint
-gdk_visual_get_best_depth (void)
+_gdk_win32_screen_visual_get_best_depth (GdkScreen *screen)
 {
   return available_depths[0];
 }
 
 GdkVisualType
-gdk_visual_get_best_type (void)
+_gdk_win32_screen_visual_get_best_type (GdkScreen *screen)
 {
   return available_types[0];
 }
 
 GdkVisual*
-gdk_screen_get_system_visual (GdkScreen *screen)
+_gdk_win32_screen_get_system_visual (GdkScreen *screen)
 {
   return system_visual;
 }
 
 GdkVisual*
-gdk_visual_get_best (void)
+_gdk_win32_screen_visual_get_best (GdkScreen *screen)
 {
   return ((GdkVisual*) system_visual);
 }
 
 GdkVisual*
-gdk_visual_get_best_with_depth (gint depth)
+_gdk_win32_screen_visual_get_best_with_depth (GdkScreen *screen, gint depth)
 {
   if (depth == system_visual->depth)
     return (GdkVisual*) system_visual;
@@ -323,7 +285,7 @@ gdk_visual_get_best_with_depth (gint depth)
 }
 
 GdkVisual*
-gdk_visual_get_best_with_type (GdkVisualType visual_type)
+_gdk_win32_screen_visual_get_best_with_type (GdkScreen *screen, GdkVisualType visual_type)
 {
   if (visual_type == system_visual->type)
     return system_visual;
@@ -332,8 +294,9 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 }
 
 GdkVisual*
-gdk_visual_get_best_with_both (gint          depth,
-			       GdkVisualType visual_type)
+_gdk_win32_screen_visual_get_best_with_both (GdkScreen    *screen,
+					     gint          depth,
+					     GdkVisualType visual_type)
 {
   if ((depth == system_visual->depth) && (visual_type == system_visual->type))
     return system_visual;
@@ -342,33 +305,27 @@ gdk_visual_get_best_with_both (gint          depth,
 }
 
 void
-gdk_query_depths  (gint **depths,
-		   gint  *count)
+_gdk_win32_screen_query_depths  (GdkScreen *screen,
+				 gint **depths,
+				 gint  *count)
 {
   *count = 1;
   *depths = available_depths;
 }
 
 void
-gdk_query_visual_types (GdkVisualType **visual_types,
-			gint           *count)
+_gdk_win32_screen_query_visual_types (GdkScreen      *screen,
+				      GdkVisualType **visual_types,
+				      gint           *count)
 {
   *count = 1;
   *visual_types = available_types;
 }
 
 GList*
-gdk_screen_list_visuals (GdkScreen *screen)
+_gdk_win32_screen_list_visuals (GdkScreen *screen)
 {
   return g_list_append (NULL, (gpointer) system_visual);
-}
-
-GdkScreen *
-gdk_visual_get_screen (GdkVisual *visual)
-{
-  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
-
-  return gdk_screen_get_default ();
 }
 
 static void

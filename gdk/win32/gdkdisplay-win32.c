@@ -21,6 +21,10 @@
 #include "config.h"
 #include "gdk.h"
 #include "gdkprivate-win32.h"
+#include "gdkdisplayprivate.h"
+#include "gdkwin32display.h"
+#include "gdkwin32screen.h"
+#include "gdkwin32window.h"
 
 #define HAVE_MONITOR_INFO
 
@@ -36,8 +40,8 @@ _gdk_windowing_set_default_display (GdkDisplay *display)
   g_assert (display == NULL || _gdk_display == display);
 }
 
-gulong
-_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+static gulong
+gdk_win32_display_get_next_serial (GdkDisplay *display)
 {
 	return 0;
 }
@@ -179,7 +183,7 @@ _gdk_monitor_init (void)
 }
 
 GdkDisplay *
-gdk_display_open (const gchar *display_name)
+_gdk_win32_display_open (const gchar *display_name)
 {
   GDK_NOTE (MISC, g_print ("gdk_display_open: %s\n", (display_name ? display_name : "NULL")));
 
@@ -199,8 +203,8 @@ gdk_display_open (const gchar *display_name)
       return NULL;
     }
 
-  _gdk_display = g_object_new (GDK_TYPE_DISPLAY, NULL);
-  _gdk_screen = g_object_new (GDK_TYPE_SCREEN, NULL);
+  _gdk_display = g_object_new (GDK_TYPE_WIN32_DISPLAY, NULL);
+  _gdk_screen = g_object_new (GDK_TYPE_WIN32_SCREEN, NULL);
 
   _gdk_monitor_init ();
   _gdk_visual_init ();
@@ -220,8 +224,20 @@ gdk_display_open (const gchar *display_name)
   return _gdk_display;
 }
 
-G_CONST_RETURN gchar *
-gdk_display_get_name (GdkDisplay *display)
+struct _GdkWin32Display
+{
+  GdkDisplay display;
+};
+
+struct _GdkWin32DisplayClass
+{
+  GdkDisplayClass display_class;
+};
+
+G_DEFINE_TYPE (GdkWin32Display, gdk_win32_display, GDK_TYPE_DISPLAY)
+
+static G_CONST_RETURN gchar *
+gdk_win32_display_get_name (GdkDisplay *display)
 {
   HDESK hdesk = GetThreadDesktop (GetCurrentThreadId ());
   char dummy;
@@ -277,24 +293,24 @@ gdk_display_get_name (GdkDisplay *display)
 				  window_station_name,
 				  desktop_name);
 
-  GDK_NOTE (MISC, g_print ("gdk_display_get_name: %s\n", display_name));
+  GDK_NOTE (MISC, g_print ("gdk_win32_display_get_name: %s\n", display_name));
 
   display_name_cache = display_name;
 
   return display_name_cache;
 }
 
-gint
-gdk_display_get_n_screens (GdkDisplay *display)
+static gint
+gdk_win32_display_get_n_screens (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
   
   return 1;
 }
 
-GdkScreen *
-gdk_display_get_screen (GdkDisplay *display,
-			gint        screen_num)
+static GdkScreen *
+gdk_win32_display_get_screen (GdkDisplay *display,
+			      gint        screen_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (screen_num == 0, NULL);
@@ -302,16 +318,16 @@ gdk_display_get_screen (GdkDisplay *display,
   return _gdk_screen;
 }
 
-GdkScreen *
-gdk_display_get_default_screen (GdkDisplay *display)
+static GdkScreen *
+gdk_win32_display_get_default_screen (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return _gdk_screen;
 }
 
-GdkWindow *
-gdk_display_get_default_group (GdkDisplay *display)
+static GdkWindow *
+gdk_win32_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
@@ -320,30 +336,30 @@ gdk_display_get_default_group (GdkDisplay *display)
   return NULL;
 }
 
-gboolean 
-gdk_display_supports_selection_notification (GdkDisplay *display)
+static gboolean
+gdk_win32_display_supports_selection_notification (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
   return FALSE;
 }
 
-gboolean 
-gdk_display_request_selection_notification (GdkDisplay *display,
+static gboolean 
+gdk_win32_display_request_selection_notification (GdkDisplay *display,
                                             GdkAtom     selection)
 
 {
   return FALSE;
 }
 
-gboolean
-gdk_display_supports_clipboard_persistence (GdkDisplay *display)
+static gboolean
+gdk_win32_display_supports_clipboard_persistence (GdkDisplay *display)
 {
   return FALSE;
 }
 
-void
-gdk_display_store_clipboard (GdkDisplay    *display,
+static void
+gdk_win32_display_store_clipboard (GdkDisplay    *display,
 			     GdkWindow     *clipboard_window,
 			     guint32        time_,
 			     const GdkAtom *targets,
@@ -351,16 +367,16 @@ gdk_display_store_clipboard (GdkDisplay    *display,
 {
 }
 
-gboolean 
-gdk_display_supports_shapes (GdkDisplay *display)
+static gboolean 
+gdk_win32_display_supports_shapes (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
   return TRUE;
 }
 
-gboolean 
-gdk_display_supports_input_shapes (GdkDisplay *display)
+static gboolean
+gdk_win32_display_supports_input_shapes (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
@@ -371,8 +387,142 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
   return FALSE;
 }
 
-gboolean
-gdk_display_supports_composite (GdkDisplay *display)
+static gboolean
+gdk_win32_display_supports_composite (GdkDisplay *display)
 {
   return FALSE;
+}
+
+static void
+gdk_win32_display_beep (GdkDisplay *display)
+{
+  g_return_if_fail (display == gdk_display_get_default());
+  if (!MessageBeep (-1))
+    Beep(1000, 50);
+}
+
+static void
+gdk_win32_display_flush (GdkDisplay * display)
+{
+  g_return_if_fail (display == _gdk_display);
+
+  GdiFlush ();
+}
+
+static void
+gdk_win32_display_dispose (GObject *object)
+{
+}
+
+static void
+gdk_win32_display_finalize (GObject *object)
+{
+}
+
+static void
+gdk_win32_display_init(GdkWin32Display *display)
+{
+}
+
+static void
+gdk_win32_display_before_process_all_updates (GdkDisplay  *display)
+{
+  /* nothing */
+}
+static void
+gdk_win32_display_after_process_all_updates (GdkDisplay  *display)
+{
+  /* nothing */
+}
+static void
+gdk_win32_display_notify_startup_complete (GdkDisplay  *display,
+                                           const gchar *startup_id)
+{
+  /* nothing */
+}
+static void
+gdk_win32_display_event_data_copy (GdkDisplay    *display,
+                                   const GdkEvent *src,
+                                   GdkEvent       *dst)
+{
+  /* nothing */
+}
+static void
+gdk_win32_display_event_data_free (GdkDisplay *display,
+                                   GdkEvent *event)
+{
+  /* nothing */
+}
+static void
+gdk_win32_display_push_error_trap (GdkDisplay *display)
+{
+  /* nothing */
+}
+static gint
+gdk_win32_display_pop_error_trap (GdkDisplay *display,
+				  gboolean    ignored)
+{
+  return 0;
+}
+static void
+gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (klass);
+
+  object_class->dispose = gdk_win32_display_dispose;
+  object_class->finalize = gdk_win32_display_finalize;
+
+  display_class->window_type = GDK_TYPE_WIN32_WINDOW;
+
+  display_class->get_name = gdk_win32_display_get_name;
+  display_class->get_n_screens = gdk_win32_display_get_n_screens;
+  display_class->get_screen = gdk_win32_display_get_screen;
+  display_class->get_default_screen = gdk_win32_display_get_default_screen;
+  display_class->beep = gdk_win32_display_beep;
+  display_class->sync = _gdk_win32_display_sync;
+  display_class->flush = gdk_win32_display_flush;
+  display_class->has_pending = _gdk_win32_display_has_pending;
+  display_class->queue_events = _gdk_win32_display_queue_events;
+  display_class->get_default_group = gdk_win32_display_get_default_group;
+
+  display_class->supports_selection_notification = gdk_win32_display_supports_selection_notification;
+  display_class->request_selection_notification = gdk_win32_display_request_selection_notification;
+  display_class->supports_clipboard_persistence = gdk_win32_display_supports_clipboard_persistence;
+  display_class->store_clipboard = gdk_win32_display_store_clipboard;
+  display_class->supports_shapes = gdk_win32_display_supports_shapes;
+  display_class->supports_input_shapes = gdk_win32_display_supports_input_shapes;
+  display_class->supports_composite = gdk_win32_display_supports_composite;
+
+  display_class->list_devices = _gdk_win32_display_list_devices;
+  display_class->send_client_message = _gdk_win32_display_send_client_message;
+  display_class->add_client_message_filter = _gdk_win32_display_add_client_message_filter;
+  //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;
+  display_class->get_drag_protocol = _gdk_win32_display_get_drag_protocol;
+  display_class->get_cursor_for_type = _gdk_win32_display_get_cursor_for_type;
+  display_class->get_cursor_for_name = _gdk_win32_display_get_cursor_for_name;
+  display_class->get_cursor_for_pixbuf = _gdk_win32_display_get_cursor_for_pixbuf;
+  display_class->get_default_cursor_size = _gdk_win32_display_get_default_cursor_size;
+  display_class->get_maximal_cursor_size = _gdk_win32_display_get_maximal_cursor_size;
+  display_class->supports_cursor_alpha = _gdk_win32_display_supports_cursor_alpha;
+  display_class->supports_cursor_color = _gdk_win32_display_supports_cursor_color;
+
+  display_class->before_process_all_updates = gdk_win32_display_before_process_all_updates;
+  display_class->after_process_all_updates = gdk_win32_display_after_process_all_updates;
+  display_class->get_next_serial = gdk_win32_display_get_next_serial;
+  display_class->notify_startup_complete = gdk_win32_display_notify_startup_complete;
+  display_class->event_data_copy = gdk_win32_display_event_data_copy;
+  display_class->event_data_free = gdk_win32_display_event_data_free;
+  display_class->create_window_impl = _gdk_win32_display_create_window_impl;
+
+  display_class->get_keymap = _gdk_win32_display_get_keymap;
+  display_class->push_error_trap = gdk_win32_display_push_error_trap;
+  display_class->pop_error_trap = gdk_win32_display_pop_error_trap;
+  display_class->get_selection_owner = _gdk_win32_display_get_selection_owner;
+  display_class->set_selection_owner = _gdk_win32_display_set_selection_owner;
+  display_class->send_selection_notify = _gdk_win32_display_send_selection_notify;
+  display_class->get_selection_property = _gdk_win32_display_get_selection_property;
+  display_class->convert_selection = _gdk_win32_display_convert_selection;
+  display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;
+  display_class->utf8_to_string_target = _gdk_win32_display_utf8_to_string_target;
 }

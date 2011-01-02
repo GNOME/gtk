@@ -38,6 +38,7 @@
 #include "gdkinternals.h"
 #include "gdkintl.h"
 #include "gdkprivate-win32.h"
+#include "gdkwin32.h"
 
 #include <objbase.h>
 
@@ -64,7 +65,7 @@ const GOptionEntry _gdk_windowing_args[] = {
   { NULL }
 };
 
-int __stdcall
+BOOL WINAPI
 DllMain (HINSTANCE hinstDLL,
 	 DWORD     dwReason,
 	 LPVOID    reserved)
@@ -75,7 +76,7 @@ DllMain (HINSTANCE hinstDLL,
 }
 
 void
-_gdk_windowing_init (void)
+_gdk_win32_windowing_init (void)
 {
   gchar buf[10];
 
@@ -151,67 +152,6 @@ _gdk_other_api_failed (const gchar *where,
   g_warning ("%s: %s failed", where, api);
 }
 
-gint
-gdk_screen_get_width (GdkScreen *screen)
-{
-  return GDK_WINDOW_OBJECT (_gdk_root)->width;
-}
-
-gint
-gdk_screen_get_height (GdkScreen *screen)
-{
-  return GDK_WINDOW_OBJECT (_gdk_root)->height;
-}
-gint
-gdk_screen_get_width_mm (GdkScreen *screen)
-{
-  return (double) gdk_screen_get_width (screen) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSX) * 25.4;
-}
-
-gint
-gdk_screen_get_height_mm (GdkScreen *screen)
-{
-  return (double) gdk_screen_get_height (screen) / GetDeviceCaps (_gdk_display_hdc, LOGPIXELSY) * 25.4;
-}
-
-void
-gdk_display_beep (GdkDisplay *display)
-{
-  g_return_if_fail (display == gdk_display_get_default());
-  Beep(1000, 50);
-}
-
-void
-gdk_error_trap_push (void)
-{
-}
-
-gint
-gdk_error_trap_pop (void)
-{
-  return 0;
-}
-
-void
-gdk_error_trap_pop_ignored (void)
-{
-}
-
-void
-gdk_notify_startup_complete (void)
-{
-}
-
-void
-gdk_notify_startup_complete_with_id (const gchar* startup_id)
-{
-}
-
-void          
-gdk_window_set_startup_id (GdkWindow   *window,
-			   const gchar *startup_id)
-{
-}
 
 #ifdef G_ENABLE_DEBUG
 
@@ -1021,13 +961,13 @@ _gdk_win32_cairo_region_to_string (const cairo_region_t *rgn)
 }
 
 gchar *
-_gdk_win32_drawable_description (GdkDrawable *d)
+_gdk_win32_window_description (GdkWindow *d)
 {
-  g_return_val_if_fail (GDK_IS_DRAWABLE (d), NULL);
+  g_return_val_if_fail (GDK_IS_WINDOW (d), NULL);
 
   return static_printf ("%s:%p:%dx%dx%d",
 			G_OBJECT_TYPE_NAME (d),
-			GDK_DRAWABLE_HANDLE (d),
+			GDK_WINDOW_HWND (d),
 			gdk_window_get_width (GDK_WINDOW (d)),
                         gdk_window_get_height (GDK_WINDOW (d)),
                         gdk_visual_get_depth (gdk_window_get_visual (GDK_WINDOW (d))));

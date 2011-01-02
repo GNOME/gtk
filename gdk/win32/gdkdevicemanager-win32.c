@@ -29,6 +29,8 @@
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-win32.h"
 #include "gdkdevice-wintab.h"
+#include "gdkwin32.h"
+#include "gdkdisplayprivate.h"
 
 #include <windows.h>
 #include <wintab.h>
@@ -860,7 +862,6 @@ _gdk_input_other_event (GdkEvent  *event,
                         GdkWindow *window)
 {
   GdkDisplay *display;
-  GdkWindowObject *obj;
   GdkDeviceWintab *device = NULL;
   GdkDeviceGrabInfo *last_grab;
   GdkEventMask masktest;
@@ -900,8 +901,6 @@ _gdk_input_other_event (GdkEvent  *event,
         return FALSE;
     }
 
-  obj = GDK_WINDOW_OBJECT (window);
-
   switch (msg->message)
     {
     case WT_PACKET:
@@ -928,7 +927,6 @@ _gdk_input_other_event (GdkEvent  *event,
           g_object_unref (window);
 
           window = g_object_ref (last_grab->window);
-          obj = GDK_WINDOW_OBJECT (window);
         }
 
       if (window == _gdk_root)
@@ -1006,12 +1004,12 @@ _gdk_input_other_event (GdkEvent  *event,
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... not selected\n"));
 
-          if (obj->parent == GDK_WINDOW_OBJECT (_gdk_root))
+          if (window->parent == GDK_WINDOW (_gdk_root))
             return FALSE;
 
           /* It is not good to propagate the extended events up to the parent
            * if this window wants normal (not extended) motion/button events */
-          if (obj->event_mask & masktest)
+          if (window->event_mask & masktest)
             {
               GDK_NOTE (EVENTS_OR_INPUT,
                         g_print ("... wants ordinary event, ignoring this\n"));
@@ -1022,8 +1020,7 @@ _gdk_input_other_event (GdkEvent  *event,
           pt.y = y;
           ClientToScreen (GDK_WINDOW_HWND (window), &pt);
           g_object_unref (window);
-          window = (GdkWindow *) obj->parent;
-          obj = GDK_WINDOW_OBJECT (window);
+          window = window->parent;
           g_object_ref (window);
           ScreenToClient (GDK_WINDOW_HWND (window), &pt);
           x = pt.x;
