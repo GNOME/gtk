@@ -126,8 +126,6 @@ gdk_display_set_double_click_distance
 gdk_display_get_pointer
 gdk_display_list_devices
 gdk_display_get_window_at_pointer
-GdkDisplayPointerHooks
-gdk_display_set_pointer_hooks
 GdkDisplayDeviceHooks
 gdk_display_set_device_hooks
 gdk_display_warp_pointer
