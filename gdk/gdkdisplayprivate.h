@@ -31,6 +31,28 @@ G_BEGIN_DECLS
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
 
+typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
+
+struct _GdkDisplayDeviceHooks
+{
+  void (* get_device_state)                  (GdkDisplay       *display,
+                                              GdkDevice        *device,
+                                              GdkScreen       **screen,
+                                              gint             *x,
+                                              gint             *y,
+                                              GdkModifierType  *mask);
+  GdkWindow * (* window_get_device_position) (GdkDisplay      *display,
+                                              GdkDevice       *device,
+                                              GdkWindow       *window,
+                                              gint            *x,
+                                              gint            *y,
+                                              GdkModifierType *mask);
+  GdkWindow * (* window_at_device_position)  (GdkDisplay *display,
+                                              GdkDevice  *device,
+                                              gint       *win_x,
+                                              gint       *win_y);
+};
+
 typedef struct _GdkDisplayClass GdkDisplayClass;
 
 /* Tracks information about the keyboard grab on this display */

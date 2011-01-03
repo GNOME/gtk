@@ -41,46 +41,6 @@ G_BEGIN_DECLS
 #define GDK_DISPLAY_OBJECT(object)    GDK_DISPLAY(object)
 #endif
 
-typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
-
-/**
- * GdkDisplayDeviceHooks:
- * @get_device_state: Obtains the current position and modifier state for
- * @device. The position is given in coordinates relative to the window
- * containing the pointer, which is returned in @window.
- * @window_get_device_position: Obtains the window underneath the device
- * position. Current device position and modifier state are returned in
- * @x, @y and @mask. The position is given in coordinates relative to
- * @window.
- * @window_at_device_position: Obtains the window underneath the device
- * position, returning the location of that window in @win_x, @win_y.
- * Returns %NULL if the window under the mouse pointer is not known to
- * GDK (for example, belongs to another application).
- *
- * A table of pointers to functions for getting quantities related to
- * the current device position. Each #GdkDisplay has a table of this type,
- * which can be set using gdk_display_set_device_hooks().
- */
-struct _GdkDisplayDeviceHooks
-{
-  void (* get_device_state)                  (GdkDisplay       *display,
-                                              GdkDevice        *device,
-                                              GdkScreen       **screen,
-                                              gint             *x,
-                                              gint             *y,
-                                              GdkModifierType  *mask);
-  GdkWindow * (* window_get_device_position) (GdkDisplay      *display,
-                                              GdkDevice       *device,
-                                              GdkWindow       *window,
-                                              gint            *x,
-                                              gint            *y,
-                                              GdkModifierType *mask);
-  GdkWindow * (* window_at_device_position)  (GdkDisplay *display,
-                                              GdkDevice  *device,
-                                              gint       *win_x,
-                                              gint       *win_y);
-};
-
 GType       gdk_display_get_type (void) G_GNUC_CONST;
 GdkDisplay *gdk_display_open                (const gchar *display_name);
 
@@ -148,9 +108,6 @@ void             gdk_display_warp_pointer          (GdkDisplay             *disp
                                                     gint                   y);
 #endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
-
-GdkDisplayDeviceHooks *gdk_display_set_device_hooks (GdkDisplay                  *display,
-                                                     const GdkDisplayDeviceHooks *new_hooks);
 
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
 

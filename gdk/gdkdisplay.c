@@ -620,37 +620,6 @@ _gdk_display_enable_motion_hints (GdkDisplay *display,
 }
 
 /**
- * gdk_display_set_device_hooks:
- * @display: a #GdkDisplay.
- * @new_hooks: (allow-none): a table of pointers to functions for getting quantities related
- *             to all devices position, or %NULL to restore the default table.
- *
- * This function allows for hooking into the operation of getting the current location of any
- * #GdkDevice on a particular #GdkDisplay. This is only useful for such low-level tools as
- * an event recorder. Applications should never have any reason to use this facility.
- *
- * Returns: (transfer none): The previous device hook table.
- *
- * Since: 3.0
- **/
-GdkDisplayDeviceHooks *
-gdk_display_set_device_hooks (GdkDisplay                  *display,
-                              const GdkDisplayDeviceHooks *new_hooks)
-{
-  const GdkDisplayDeviceHooks *result;
-
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  result = display->device_hooks;
-
-  if (new_hooks)
-    display->device_hooks = new_hooks;
-  else
-    display->device_hooks = &default_device_hooks;
-
-  return (GdkDisplayDeviceHooks *) result;
-}
-
-/**
  * gdk_display_get_pointer:
  * @display: a #GdkDisplay
  * @screen: (allow-none): location to store the screen that the
