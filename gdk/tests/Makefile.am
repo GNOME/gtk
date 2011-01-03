@@ -16,8 +16,8 @@ progs_ldadd = \
 	$(NULL)
 
 #TEST_PROGS              += check-gdk-cairo
-check_gdk_cairo_SOURCES  = check-gdk-cairo.c
-check_gdk_cairo_LDADD    = $(progs_ldadd)
+#check_gdk_cairo_SOURCES  = check-gdk-cairo.c
+#check_gdk_cairo_LDADD    = $(progs_ldadd)
 
 TEST_PROGS        += gdk-color
 gdk_color_SOURCES  = gdk-color.c

@@ -57,8 +57,8 @@ floating_LDADD			 = $(progs_ldadd)
 # on a naked X server creates slightly different event
 # sequences than running on a normal desktop
 # TEST_PROGS			+= crossingevents
-crossingevents_SOURCES		 = crossingevents.c
-crossingevents_LDADD		 = $(progs_ldadd)
+#crossingevents_SOURCES		 = crossingevents.c
+#crossingevents_LDADD		 = $(progs_ldadd)
 
 # Should be ported to new API's
 #TEST_PROGS			+= filechooser
@@ -72,9 +72,9 @@ builder_LDFLAGS			 = -export-dynamic
 
 if OS_UNIX
 #TEST_PROGS			+= defaultvalue
+#defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
+#defaultvalue_LDADD 		 = $(progs_ldadd)
 endif
-defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
-defaultvalue_LDADD 		 = $(progs_ldadd)
 
 TEST_PROGS			+= textbuffer
 textbuffer_SOURCES		 = textbuffer.c pixbuf-init.c
