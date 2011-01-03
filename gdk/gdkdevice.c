@@ -443,36 +443,6 @@ gdk_device_get_position (GdkDevice        *device,
     *y = tmp_y;
 }
 
-static GdkWindow *
-gdk_display_real_get_window_at_device_position (GdkDisplay *display,
-                                                GdkDevice  *device,
-                                                gint       *win_x,
-                                                gint       *win_y)
-{
-  GdkWindow *window;
-  gint x, y;
-
-  window = _gdk_device_window_at_position (device, &x, &y, NULL, FALSE);
-
-  /* This might need corrections, as the native window returned
-     may contain client side children */
-  if (window)
-    {
-      double xx, yy;
-
-      window = _gdk_window_find_descendant_at (window,
-					       x, y,
-					       &xx, &yy);
-      x = floor (xx + 0.5);
-      y = floor (yy + 0.5);
-    }
-
-  *win_x = x;
-  *win_y = y;
-
-  return window;
-}
-
 /**
  * gdk_device_get_window_at_position:
  * @device: pointer #GdkDevice to query info to.
@@ -493,16 +463,26 @@ gdk_device_get_window_at_position (GdkDevice  *device,
                                    gint       *win_x,
                                    gint       *win_y)
 {
-  GdkDisplay *display;
   gint tmp_x, tmp_y;
   GdkWindow *window;
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
-  display = gdk_device_get_display (device);
+  window = _gdk_device_window_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
 
-  window = gdk_display_real_get_window_at_device_position (display, device, &tmp_x, &tmp_y);
+  /* This might need corrections, as the native window returned
+     may contain client side children */
+  if (window)
+    {
+      double xx, yy;
+
+      window = _gdk_window_find_descendant_at (window,
+					       tmp_x, tmp_y,
+					       &xx, &yy);
+      tmp_x = floor (xx + 0.5);
+      tmp_y = floor (yy + 0.5);
+    }
 
   if (win_x)
     *win_x = tmp_x;
