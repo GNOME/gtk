@@ -952,7 +952,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
                            allocation.width - (2 * border_width),
                            allocation.height - (2 * border_width));
 
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
 
   gtk_render_option (context, cr,
                      x, y, indicator_size, indicator_size);
