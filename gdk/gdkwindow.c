@@ -4938,38 +4938,6 @@ gdk_window_get_pointer (GdkWindow	  *window,
   return gdk_window_get_device_position (window, display->core_pointer, x, y, mask);
 }
 
-static GdkWindow *
-gdk_window_real_window_get_device_position (GdkDisplay       *display,
-                                            GdkDevice        *device,
-                                            GdkWindow        *window,
-                                            gint             *x,
-                                            gint             *y,
-                                            GdkModifierType  *mask)
-{
-  gint tmpx, tmpy;
-  GdkModifierType tmp_mask;
-  gboolean normal_child;
-
-  normal_child = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_device_state (window,
-                                                                              device,
-                                                                              &tmpx, &tmpy,
-                                                                              &tmp_mask);
-  /* We got the coords on the impl, convert to the window */
-  tmpx -= window->abs_x;
-  tmpy -= window->abs_y;
-
-  if (x)
-    *x = tmpx;
-  if (y)
-    *y = tmpy;
-  if (mask)
-    *mask = tmp_mask;
-
-  if (normal_child)
-    return _gdk_window_find_child_at (window, tmpx, tmpy);
-  return NULL;
-}
-
 /**
  * gdk_window_get_device_position:
  * @window: a #GdkWindow.
@@ -4994,21 +4962,21 @@ gdk_window_get_device_position (GdkWindow       *window,
                                 gint            *y,
                                 GdkModifierType *mask)
 {
-  GdkDisplay *display;
   gint tmp_x, tmp_y;
   GdkModifierType tmp_mask;
-  GdkWindow *child;
+  gboolean normal_child;
 
   g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
-  tmp_x = 0;
-  tmp_y = 0;
-
-  display = gdk_window_get_display (window);
-  child = gdk_window_real_window_get_device_position (display, device, window,
-                                                      &tmp_x, &tmp_y, &tmp_mask);
+  normal_child = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_device_state (window,
+                                                                             device,
+                                                                             &tmp_x, &tmp_y,
+                                                                             &tmp_mask);
+  /* We got the coords on the impl, convert to the window */
+  tmp_x -= window->abs_x;
+  tmp_y -= window->abs_y;
 
   if (x)
     *x = tmp_x;
@@ -5017,9 +4985,11 @@ gdk_window_get_device_position (GdkWindow       *window,
   if (mask)
     *mask = tmp_mask;
 
-  _gdk_display_enable_motion_hints (display, device);
+  _gdk_display_enable_motion_hints (gdk_window_get_display (window), device);
 
-  return child;
+  if (normal_child)
+    return _gdk_window_find_child_at (window, tmp_x, tmp_y);
+  return NULL;
 }
 
 /**
