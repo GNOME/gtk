@@ -9237,14 +9237,16 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
 
   if (is_toplevel)
     {
-      gboolean was_visible = gtk_widget_get_visible (widget);
-
       /* Pass through regular pathways of an embedded toplevel
        * to go through unmapping and hiding the widget before
        * becomming a toplevel again.
+       *
+       * We remain hidden after becomming toplevel in order to
+       * avoid problems during an embedded toplevel's dispose cycle
+       * (When a toplevel window is shown it tries to grab focus again,
+       * this causes problems while disposing).
        */
-      if (was_visible)
-	gtk_widget_hide (widget);
+      gtk_widget_hide (widget);
 
       /* Save the toplevel this widget was previously anchored into before
        * propagating a hierarchy-changed. 
@@ -9267,13 +9269,6 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);
 
       toplevel_list = g_slist_prepend (toplevel_list, window);
-
-      /* If an embedded toplevel gets removed from the hierarchy
-       * and is still in a visible state, we need to show it again
-       * so it will be realized as a real toplevel again.
-       */
-      if (was_visible)
-	gtk_widget_show (widget);
     }
   else
     {
