@@ -8,7 +8,8 @@ INTROSPECTION_COMPILER_ARGS = \
    --includedir=$(srcdir) \
    --includedir=.
 
-SUBDIRS = $(gdktarget) . tests
+SUBDIRS = $(GDK_BACKENDS) . tests
+
 DIST_SUBDIRS = win32 x11 quartz tests
 
 CLEANFILES =
@@ -37,8 +38,6 @@ INCLUDES = 				\
 	-I$(top_builddir)/gdk		\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GDK_DEP_CFLAGS)
-
-gtarget=$(gdktarget)
 
 if PLATFORM_WIN32
 no_undefined = -no-undefined

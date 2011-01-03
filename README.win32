@@ -85,7 +85,7 @@ LDFLAGS="-L/devel/dist/${ARCH}/${LIBPNG}/lib \
 LIBS=-lintl \
 CFLAGS=-O2 \
 ./configure \
---with-gdktarget=win32 \
+--enable-win32-backend \
 --disable-gdiplus \
 --with-included-immodules \
 --without-libjasper \

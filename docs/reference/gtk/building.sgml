@@ -360,9 +360,14 @@ How to compile GTK+ itself
           <group>
             <arg>--enable-packagekit</arg>
             <arg>--disable-packagekit</arg>
-          </group>
-          <group>
-            <arg>--with-gdktarget=[x11/win32/quartz]</arg>
+	  </group>
+	  <group>
+            <arg>--enable-x11-backend</arg>
+            <arg>--disable-x11-backend</arg>
+            <arg>--enable-win32-backend</arg>
+            <arg>--disable-win32-backend</arg>
+            <arg>--enable-quartz-backend</arg>
+            <arg>--disable-quartz-backend</arg>
           </group>
           <group>
             <arg>--enable-introspection=[no/auto/yes]</arg>
@@ -545,13 +550,20 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--with-gdktarget</systemitem></title>
+        <title><systemitem>--enable-x11-backend</systemitem>,
+	  <systemitem>--disable-x11-backend</systemitem>,
+	  <systemitem>--enable-win32-backend</systemitem>,
+	  <systemitem>--disable-win32-backend</systemitem>,
+	  <systemitem>--enable-quartz-backend</systemitem>,
+          and <systemitem>--disable-quartz-backend</systemitem></title>
 
         <para>
-          Toggles between the supported backends for GDK.
-          The default is x11, unless the platform is Windows, in which
-          case the default is win32. Other supported backends are
-          the quartz backend for OS X.
+          Enables specific backends for GDK.  If none of these options
+          are given, the x11 backend will be enabled by default,
+          unless the platform is Windows, in which case the default is
+          win32.  If any backend is explicitly enabled or disabled, no
+          other platform will be enabled automatically.  Other
+          supported backends are the quartz backend for OS X.
         </para>
       </formalpara>
       <formalpara>

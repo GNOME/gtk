@@ -57,8 +57,6 @@ INCLUDES =						\
 	$(gtk_clipboard_dnd_c_sources_CFLAGS)		\
 	$(INCLUDED_IMMODULE_DEFINE)
 
-gtarget=$(gdktarget)
-
 if PLATFORM_WIN32
 no_undefined = -no-undefined
 endif
