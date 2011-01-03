@@ -632,15 +632,14 @@ gdk_event_check (GSource *source)
 
   GDK_THREADS_ENTER ();
 
-  /* XXX: This check isn't right it won't handle a recursive GLib main
-   * loop run within an outer CFRunLoop run. Such loops will pile up
-   * memory. Fixing this requires setting a flag *only* when we call
-   * g_main_context_check() from within the run loop iteraton code,
-   * and also maintaining our own stack of run loops... allocating and
-   * releasing NSAutoReleasePools not properly nested with CFRunLoop
-   * runs seems to cause problems.
-   */
-  if (current_loop_level == 0)
+`/* Refresh the autorelease pool if we're at the base CFRunLoop level
+  * (indicated by current_loop_level) and the base g_main_loop level
+  * (indicated by g_main_depth()). Messing with the autorelease pool at
+  * any level of nesting can cause access to deallocated memory because
+  * autorelease_pool is static and releasing a pool will cause all pools
+  * allocated inside of it to be released as well.
+  */
+    if (current_loop_level == 0 && g_main_depth() == 0)
     {
       if (autorelease_pool)
 	[autorelease_pool release];
