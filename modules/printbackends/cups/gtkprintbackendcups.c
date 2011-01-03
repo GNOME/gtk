@@ -343,7 +343,7 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
   gint             level = 2;
 
   if (gtk_printer_accepts_pdf (printer))
-    surface = cairo_pdf_surface_create_for_strean (_cairo_write_to_cups, cache_io, width, height);
+    surface = cairo_pdf_surface_create_for_stream (_cairo_write_to_cups, cache_io, width, height);
   else
     surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, cache_io, width, height);
 
