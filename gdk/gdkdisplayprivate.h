@@ -31,16 +31,6 @@ G_BEGIN_DECLS
 #define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
 
 
-typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
-
-struct _GdkDisplayDeviceHooks
-{
-  GdkWindow * (* window_at_device_position)  (GdkDisplay *display,
-                                              GdkDevice  *device,
-                                              gint       *win_x,
-                                              gint       *win_y);
-};
-
 typedef struct _GdkDisplayClass GdkDisplayClass;
 
 /* Tracks information about the keyboard grab on this display */
@@ -109,8 +99,6 @@ struct _GdkDisplay
   GHashTable *multiple_click_info;
   guint double_click_time;  /* Maximum time between clicks in msecs */
   GdkDevice *core_pointer;  /* Core pointer device */
-
-  const GdkDisplayDeviceHooks *device_hooks; /* Hooks for querying pointer */
 
   guint closed             : 1;  /* Whether this display has been closed */
   guint ignore_core_events : 1;  /* Don't send core motion and button event */

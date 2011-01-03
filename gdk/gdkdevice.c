@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include <math.h>
+
 #include "gdkdeviceprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
@@ -441,6 +443,36 @@ gdk_device_get_position (GdkDevice        *device,
     *y = tmp_y;
 }
 
+static GdkWindow *
+gdk_display_real_get_window_at_device_position (GdkDisplay *display,
+                                                GdkDevice  *device,
+                                                gint       *win_x,
+                                                gint       *win_y)
+{
+  GdkWindow *window;
+  gint x, y;
+
+  window = _gdk_device_window_at_position (device, &x, &y, NULL, FALSE);
+
+  /* This might need corrections, as the native window returned
+     may contain client side children */
+  if (window)
+    {
+      double xx, yy;
+
+      window = _gdk_window_find_descendant_at (window,
+					       x, y,
+					       &xx, &yy);
+      x = floor (xx + 0.5);
+      y = floor (yy + 0.5);
+    }
+
+  *win_x = x;
+  *win_y = y;
+
+  return window;
+}
+
 /**
  * gdk_device_get_window_at_position:
  * @device: pointer #GdkDevice to query info to.
@@ -470,7 +502,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
 
   display = gdk_device_get_display (device);
 
-  window = display->device_hooks->window_at_device_position (display, device, &tmp_x, &tmp_y);
+  window = gdk_display_real_get_window_at_device_position (display, device, &tmp_x, &tmp_y);
 
   if (win_x)
     *win_x = tmp_x;

@@ -34,7 +34,6 @@
 #include "gdkscreen.h"
 
 #include <glib.h>
-#include <math.h>
 
 
 /**
@@ -72,17 +71,9 @@ static void gdk_display_dispose     (GObject         *object);
 static void gdk_display_finalize    (GObject         *object);
 
 
-static GdkWindow *gdk_display_real_get_window_at_device_position (GdkDisplay       *display,
-                                                                  GdkDevice        *device,
-                                                                  gint             *win_x,
-                                                                  gint             *win_y);
 static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
 
 static guint signals[LAST_SIGNAL] = { 0 };
-
-static const GdkDisplayDeviceHooks default_device_hooks = {
-  gdk_display_real_get_window_at_device_position
-};
 
 G_DEFINE_TYPE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
 
@@ -190,8 +181,6 @@ gdk_display_init (GdkDisplay *display)
 {
   display->double_click_time = 250;
   display->double_click_distance = 5;
-
-  display->device_hooks = &default_device_hooks;
 
   display->device_grabs = g_hash_table_new (NULL, NULL);
   display->motion_hint_info = g_hash_table_new_full (NULL, NULL, NULL,
@@ -658,36 +647,6 @@ gdk_display_get_pointer (GdkDisplay      *display,
     *y = tmp_y;
   if (mask)
     *mask = tmp_mask;
-}
-
-static GdkWindow *
-gdk_display_real_get_window_at_device_position (GdkDisplay *display,
-                                                GdkDevice  *device,
-                                                gint       *win_x,
-                                                gint       *win_y)
-{
-  GdkWindow *window;
-  gint x, y;
-
-  window = _gdk_device_window_at_position (device, &x, &y, NULL, FALSE);
-
-  /* This might need corrections, as the native window returned
-     may contain client side children */
-  if (window)
-    {
-      double xx, yy;
-
-      window = _gdk_window_find_descendant_at (window,
-					       x, y,
-					       &xx, &yy);
-      x = floor (xx + 0.5);
-      y = floor (yy + 0.5);
-    }
-
-  *win_x = x;
-  *win_y = y;
-
-  return window;
 }
 
 /**
