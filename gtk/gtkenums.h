@@ -581,6 +581,7 @@ typedef enum
 
 /**
  * GtkStateFlags:
+ * @GTK_STATE_FLAG_NORMAL: State during normal operation.
  * @GTK_STATE_FLAG_ACTIVE: Widget is active.
  * @GTK_STATE_FLAG_PRELIGHT: Widget has a mouse pointer over it.
  * @GTK_STATE_FLAG_SELECTED: Widget is selected.
@@ -592,6 +593,7 @@ typedef enum
  */
 typedef enum
 {
+  GTK_STATE_FLAG_NORMAL       = 0,
   GTK_STATE_FLAG_ACTIVE       = 1 << 0,
   GTK_STATE_FLAG_PRELIGHT     = 1 << 1,
   GTK_STATE_FLAG_SELECTED     = 1 << 2,
