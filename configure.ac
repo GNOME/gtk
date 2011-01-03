@@ -236,21 +236,24 @@ AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
                              [turn on debugging @<:@default=debug_default@:>@]),,
               enable_debug=debug_default)
-AC_ARG_ENABLE(xkb,
-              [AC_HELP_STRING([--enable-xkb],
-                              [support XKB [default=maybe]])],,
-              [enable_xkb="maybe"])
-AC_ARG_ENABLE(xinerama,
-              [AC_HELP_STRING([--enable-xinerama],
-	                      [support xinerama extension if available [default=yes]])],,
-              [enable_xinerama="yes"])
+
 AC_ARG_ENABLE(rebuilds,
               [AC_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
               [enable_rebuilds=yes])
 
-AC_ARG_WITH(xinput,
-            [AC_HELP_STRING([--with-xinput=@<:@no/yes@:>@], [support XInput])])
+AC_ARG_ENABLE(xkb,
+              [AC_HELP_STRING([--enable-xkb],
+                              [support XKB extension [default=maybe]])],,
+              [enable_xkb="maybe"])
+AC_ARG_ENABLE(xinerama,
+              [AC_HELP_STRING([--enable-xinerama],
+	                      [support Xinerama extension if available [default=yes]])],,
+              [enable_xinerama="yes"])
+AC_ARG_ENABLE(xinput,
+              [AC_HELP_STRING([--enable-xinput],
+                              [support XInput extension if available [default=yes]])],,
+              [enable_xinput="yes"])
 
 if test "$platform_win32" = yes; then
   gdktarget=win32
@@ -258,8 +261,10 @@ else
   gdktarget=x11
 fi
 
-AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz]] select non-default GDK target],
-	gdktarget=$with_gdktarget)
+AC_ARG_WITH(gdktarget,
+            AC_HELP_STRING([--with-gdktarget=@<:@x11/win32/quartz@:>@],
+                           [select non-default GDK target]),
+            gdktarget=$with_gdktarget)
 
 AC_SUBST(gdktarget)
 case $gdktarget in
@@ -726,8 +731,8 @@ dnl AC_HELP_STRING cause problems.
 dnl AC_HELP_STRING([--with-included-immodules=MODULE1 MODULE2 ...],
 dnl                [build the specified input method modules into gtk])
 AC_ARG_WITH(included_immodules,
-[  --with-included-immodules=MODULE1,MODULE2,...
-                          build the specified input methods into gtk])
+            AC_HELP_STRING([--with-included-immodules=MODULE1,MODULE2,...],
+                           [build the specified input methods into gtk]))
 
 if $dynworks; then
    :
@@ -1017,7 +1022,7 @@ if test "x$gdktarget" = "xx11"; then
   fi
 
   # set up things for XInput
-  if test "x$with_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
+  if test "x$enable_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
     have_xinput=yes
 
     AC_DEFINE(XINPUT_XFREE, 1,
@@ -1272,7 +1277,7 @@ LIBS="$old_LIBS"
 ################################################################
 
 AC_ARG_ENABLE(cups,
-              [AC_HELP_STRING([--disable-cups]
+              [AC_HELP_STRING([--disable-cups],
                               [disable cups print backend])],,
               [enable_cups=auto])
 
@@ -1332,7 +1337,7 @@ fi
 #
 
 AC_ARG_ENABLE(papi,
-              [AC_HELP_STRING([--disable-papi]
+              [AC_HELP_STRING([--disable-papi],
                               [disable papi print backend])],,
              [enable_papi=auto])
 
@@ -1367,7 +1372,7 @@ if test "$os_win32" != "yes"; then
 *** postscript backend enabled.]))
 
   AC_CHECK_HEADER(cairo-svg.h,,AC_MSG_ERROR([
-*** Can't find cairo-svg.h. You must build Cairo with the
+*** Cannot find cairo-svg.h. You must build Cairo with the
 *** svg backend enabled.]))
 fi
 
@@ -1418,15 +1423,15 @@ GOBJECT_INTROSPECTION_CHECK([0.9.3])
 #################################################
 
 AC_ARG_ENABLE(packagekit,
-	      AC_HELP_STRING([--disable-packagekit],
-			     [build packagekit open with module]))
+              AC_HELP_STRING([--disable-packagekit],
+                             [build packagekit open-with module]))
 
 ENABLE_PACKAGEKIT=
 if test "os_win32" != "yes"; then
-   	if test "x$enable_packagekit" != "xno"; then
-	   	ENABLE_PACKAGEKIT=1
-      	   	AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
-	fi
+        if test "x$enable_packagekit" != "xno"; then
+                ENABLE_PACKAGEKIT=1
+                AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
+        fi
 fi
 
 AC_SUBST(ENABLE_PACKAGEKIT)

@@ -327,7 +327,7 @@ How to compile GTK+ itself
             <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
           </group>
           <group>
-            <arg>--enable-debug=[no|minimum|yes]</arg>
+            <arg>--enable-debug=[no/minimum/yes]</arg>
           </group>
           <group>
             <arg>--disable-Bsymbolic</arg>
@@ -354,13 +354,18 @@ How to compile GTK+ itself
             <arg>--enable-papi</arg>
           </group>
           <group>
-            <arg>--with-xinput=[no|yes]</arg>
+            <arg>--enable-xinput</arg>
+            <arg>--disable-xinput</arg>
           </group>
           <group>
-            <arg>--with-gdktarget=[x11|win32|quartz]</arg>
+            <arg>--enable-packagekit</arg>
+            <arg>--disable-packagekit</arg>
           </group>
           <group>
-            <arg>--disable-introspection</arg>
+            <arg>--with-gdktarget=[x11/win32/quartz]</arg>
+          </group>
+          <group>
+            <arg>--enable-introspection=[no/auto/yes]</arg>
           </group>
         </cmdsynopsis>
       </para>
@@ -513,7 +518,8 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--with-xinput</systemitem></title>
+        <title><systemitem>--disable-xinput</systemitem> and
+           <systemitem>--enable-xinput</systemitem></title>
         <para>
           Controls whether GTK+ is built with support for the XInput
           or XInput2 extension. These extensions provide an extended
@@ -525,6 +531,19 @@ How to compile GTK+ itself
           information.
         </para>
       </formalpara>
+
+      <formalpara>
+        <title><systemitem>--disable-packagekit</systemitem> and
+           <systemitem>--enable-packagekit</systemitem></title>
+        <para>
+          By default the <command>configure</command> script will try
+          to build the PackageKit support for the open-with dialog if
+          the PackageKit libraries are found.
+          These options can be used to explicitly control whether
+          PackageKit support should be built.
+        </para>
+      </formalpara>
+
       <formalpara>
         <title><systemitem>--with-gdktarget</systemitem></title>
 
@@ -536,10 +555,11 @@ How to compile GTK+ itself
         </para>
       </formalpara>
       <formalpara>
-        <title><systemitem>--disable-introspection</systemitem></title>
+        <title><systemitem>--enable-introspection</systemitem></title>
 
         <para>
-          Build without introspection support.
+          Build with or without introspection support.
+          The default is 'auto'.
         </para>
       </formalpara>
     </refsect1>
