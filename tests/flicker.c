@@ -204,7 +204,6 @@ main (int argc, char *argv[])
 {
   GtkWidget *window1;
 
-  gtk_set_locale ();
   gtk_init (&argc, &argv);
 
   window1 = create_flicker ();
