@@ -193,8 +193,10 @@ void             gdk_display_warp_pointer          (GdkDisplay             *disp
 						    gint                   x,
 						    gint                   y);
 
+#ifndef GDK_DISABLE_DEPRECATED
 GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay                   *display,
 						       const GdkDisplayPointerHooks *new_hooks);
+#endif
 
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
 

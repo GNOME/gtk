@@ -637,6 +637,8 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
  * Return value: the previous pointer hook table
  *
  * Since: 2.2
+ *
+ * Deprecated: 2.24: This function will go away in GTK 3 for lack of use cases.
  **/
 GdkDisplayPointerHooks *
 gdk_display_set_pointer_hooks (GdkDisplay                   *display,
