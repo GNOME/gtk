@@ -133,6 +133,10 @@ GdkAtom       gtk_selection_data_get_data_type (const GtkSelectionData *selectio
 gint          gtk_selection_data_get_format    (const GtkSelectionData *selection_data);
 const guchar *gtk_selection_data_get_data      (const GtkSelectionData *selection_data);
 gint          gtk_selection_data_get_length    (const GtkSelectionData *selection_data);
+const guchar *gtk_selection_data_get_data_with_length
+                                               (const GtkSelectionData *selection_data,
+                                                gint                   *length);
+
 GdkDisplay   *gtk_selection_data_get_display   (const GtkSelectionData *selection_data);
 
 void     gtk_selection_data_set      (GtkSelectionData     *selection_data,

@@ -1223,6 +1223,29 @@ gtk_selection_data_get_length (const GtkSelectionData *selection_data)
 }
 
 /**
+ * gtk_selection_data_get_data_with_length:
+ * @selection_data: a pointer to a #GtkSelectionData structure
+ * @length: return location for length of the data segment
+ *
+ * Retrieves the raw data of the selection along with its length.
+ *
+ * Returns: (array length=length): the raw data of the selection
+ *
+ * Rename to: gtk_selection_data_get_data
+ * Since: 3.0
+ */
+const guchar*
+gtk_selection_data_get_data_with_length (const GtkSelectionData *selection_data,
+                                         gint                   *length)
+{
+  g_return_val_if_fail (selection_data != NULL, NULL);
+
+  *length = selection_data->length;
+
+  return selection_data->data;
+}
+
+/**
  * gtk_selection_data_get_display:
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *
