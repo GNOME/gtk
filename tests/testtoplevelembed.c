@@ -9,6 +9,7 @@ remove_notebook_page (GtkWidget *button,
 		      GtkWidget *toplevel)
 {
   gtk_container_remove (GTK_CONTAINER (notebook), toplevel);
+  gtk_widget_show (toplevel);
 }
 
 GtkWidget *
