@@ -41,12 +41,6 @@ struct _GdkDisplayDeviceHooks
                                               gint             *x,
                                               gint             *y,
                                               GdkModifierType  *mask);
-  GdkWindow * (* window_get_device_position) (GdkDisplay      *display,
-                                              GdkDevice       *device,
-                                              GdkWindow       *window,
-                                              gint            *x,
-                                              gint            *y,
-                                              GdkModifierType *mask);
   GdkWindow * (* window_at_device_position)  (GdkDisplay *display,
                                               GdkDevice  *device,
                                               gint       *win_x,

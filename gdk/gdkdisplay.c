@@ -72,12 +72,6 @@ static void gdk_display_dispose     (GObject         *object);
 static void gdk_display_finalize    (GObject         *object);
 
 
-static GdkWindow *gdk_window_real_window_get_device_position     (GdkDisplay       *display,
-                                                                  GdkDevice        *device,
-                                                                  GdkWindow        *window,
-                                                                  gint             *x,
-                                                                  gint             *y,
-                                                                  GdkModifierType  *mask);
 static GdkWindow *gdk_display_real_get_window_at_device_position (GdkDisplay       *display,
                                                                   GdkDevice        *device,
                                                                   gint             *win_x,
@@ -94,7 +88,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static const GdkDisplayDeviceHooks default_device_hooks = {
   gdk_display_real_get_device_state,
-  gdk_window_real_window_get_device_position,
   gdk_display_real_get_window_at_device_position
 };
 
@@ -692,38 +685,6 @@ gdk_display_real_get_window_at_device_position (GdkDisplay *display,
   *win_y = y;
 
   return window;
-}
-
-static GdkWindow *
-gdk_window_real_window_get_device_position (GdkDisplay       *display,
-                                            GdkDevice        *device,
-                                            GdkWindow        *window,
-                                            gint             *x,
-                                            gint             *y,
-                                            GdkModifierType  *mask)
-{
-  gint tmpx, tmpy;
-  GdkModifierType tmp_mask;
-  gboolean normal_child;
-
-  normal_child = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_device_state (window,
-                                                                              device,
-                                                                              &tmpx, &tmpy,
-                                                                              &tmp_mask);
-  /* We got the coords on the impl, convert to the window */
-  tmpx -= window->abs_x;
-  tmpy -= window->abs_y;
-
-  if (x)
-    *x = tmpx;
-  if (y)
-    *y = tmpy;
-  if (mask)
-    *mask = tmp_mask;
-
-  if (normal_child)
-    return _gdk_window_find_child_at (window, tmpx, tmpy);
-  return NULL;
 }
 
 /**
