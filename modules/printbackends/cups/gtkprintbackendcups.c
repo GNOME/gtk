@@ -333,18 +333,19 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 				   gdouble           height,
 				   GIOChannel       *cache_io)
 {
-  cairo_surface_t *surface; 
+  cairo_surface_t *surface;
   ppd_file_t      *ppd_file = NULL;
   ppd_attr_t      *ppd_attr = NULL;
   ppd_attr_t      *ppd_attr_res = NULL;
   ppd_attr_t      *ppd_attr_screen_freq = NULL;
   ppd_attr_t      *ppd_attr_res_screen_freq = NULL;
   gchar           *res_string = NULL;
-  int              level = 2;
- 
-  /* TODO: check if it is a ps or pdf printer */
-  
-  surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, cache_io, width, height);
+  gint             level = 2;
+
+  if (gtk_printer_accepts_pdf (printer))
+    surface = cairo_pdf_surface_create_for_stream (_cairo_write_to_cups, cache_io, width, height);
+  else
+    surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, cache_io, width, height);
 
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
 
@@ -376,14 +377,14 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
             }
         }
 
-      res_string = g_strdup_printf ("%ddpi", 
+      res_string = g_strdup_printf ("%ddpi",
                                     gtk_print_settings_get_resolution (settings));
       ppd_attr_res_screen_freq = ppdFindAttr (ppd_file, "ResScreenFreq", res_string);
       g_free (res_string);
 
       if (ppd_attr_res_screen_freq == NULL)
         {
-          res_string = g_strdup_printf ("%dx%ddpi", 
+          res_string = g_strdup_printf ("%dx%ddpi",
                                         gtk_print_settings_get_resolution_x (settings),
                                         gtk_print_settings_get_resolution_y (settings));
           ppd_attr_res_screen_freq = ppdFindAttr (ppd_file, "ResScreenFreq", res_string);
@@ -398,11 +399,14 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_screen_freq->value));
     }
 
-  if (level == 2)
-    cairo_ps_surface_restrict_to_level (surface, CAIRO_PS_LEVEL_2);
+  if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_PS)
+    {
+      if (level == 2)
+        cairo_ps_surface_restrict_to_level (surface, CAIRO_PS_LEVEL_2);
 
-  if (level == 3)
-    cairo_ps_surface_restrict_to_level (surface, CAIRO_PS_LEVEL_3);
+      if (level == 3)
+        cairo_ps_surface_restrict_to_level (surface, CAIRO_PS_LEVEL_3);
+    }
 
   cairo_surface_set_fallback_resolution (surface,
                                          2.0 * gtk_print_settings_get_printer_lpi (settings),
