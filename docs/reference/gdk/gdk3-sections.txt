@@ -474,10 +474,6 @@ gdk_window_get_source_events
 gdk_window_set_source_events
 
 <SUBSECTION>
-GdkPointerHooks
-gdk_set_pointer_hooks
-
-<SUBSECTION>
 gdk_offscreen_window_get_surface
 gdk_offscreen_window_set_embedder
 gdk_offscreen_window_get_embedder

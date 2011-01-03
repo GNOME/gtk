@@ -38,7 +38,6 @@ G_BEGIN_DECLS
 
 typedef struct _GdkGeometry          GdkGeometry;
 typedef struct _GdkWindowAttr        GdkWindowAttr;
-typedef struct _GdkPointerHooks      GdkPointerHooks;
 typedef struct _GdkWindowRedirect    GdkWindowRedirect;
 
 /**
@@ -446,34 +445,6 @@ struct _GdkGeometry
   GdkGravity win_gravity;
 };
 
-/**
- * GdkPointerHooks:
- * @get_pointer: Obtains the current pointer position and modifier state.
- *  The position is given in coordinates relative to the window containing
- *  the pointer, which is returned in @window.
- * @window_at_pointer: Obtains the window underneath the mouse pointer,
- *  returning the location of that window in @win_x, @win_y. Returns %NULL
- *  if the window under the mouse pointer is not known to GDK (for example,
- *  belongs to another application).
- *
- * A table of pointers to functions for getting quantities related to
- * the current pointer position. GDK has one global table of this type,
- * which can be set using gdk_set_pointer_hooks().
- *
- * This is only useful for such low-level tools as an event recorder.
- * Applications should never have any reason to use this facility
- */
-struct _GdkPointerHooks 
-{
-  GdkWindow* (*get_pointer)       (GdkWindow	   *window,
-			           gint	           *x,
-			           gint   	   *y,
-			           GdkModifierType *mask);
-  GdkWindow* (*window_at_pointer) (GdkScreen       *screen, /* unused */
-                                   gint            *win_x,
-                                   gint            *win_y);
-};
-
 typedef struct _GdkWindowClass GdkWindowClass;
 
 #define GDK_TYPE_WINDOW              (gdk_window_get_type ())
@@ -871,10 +842,6 @@ void       gdk_window_constrain_size      (GdkGeometry  *geometry,
 
 void gdk_window_enable_synchronized_configure (GdkWindow *window);
 void gdk_window_configure_finished            (GdkWindow *window);
-
-#if !defined (GDK_MULTIHEAD_SAFE) && !defined (GDK_MULTIDEVICE_SAFE)
-GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);
-#endif /* !GDK_MULTIHEAD_SAFE && !GDK_MULTIDEVICE_SAFE */
 
 GdkWindow *gdk_get_default_root_window (void);
 
