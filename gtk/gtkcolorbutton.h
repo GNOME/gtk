@@ -42,12 +42,6 @@
 G_BEGIN_DECLS
 
 
-/* The GtkColorButton widget is a simple color picker in a button.
- * The button displays a sample of the currently selected color.  When
- * the user clicks on the button, a color selection dialog pops up.
- * The color picker emits the "color_set" signal when the color is set.
- */
-
 #define GTK_TYPE_COLOR_BUTTON             (gtk_color_button_get_type ())
 #define GTK_COLOR_BUTTON(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COLOR_BUTTON, GtkColorButton))
 #define GTK_COLOR_BUTTON_CLASS(klass)     (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_COLOR_BUTTON, GtkColorButtonClass))
@@ -84,22 +78,21 @@ GtkWidget *gtk_color_button_new            (void);
 GtkWidget *gtk_color_button_new_with_color (const GdkColor *color);
 GtkWidget *gtk_color_button_new_with_rgba  (const GdkRGBA  *rgba);
 void       gtk_color_button_set_color      (GtkColorButton *color_button,
-					    const GdkColor *color);
+                                            const GdkColor *color);
 void       gtk_color_button_set_alpha      (GtkColorButton *color_button,
-					    guint16         alpha);
+                                            guint16         alpha);
 void       gtk_color_button_get_color      (GtkColorButton *color_button,
-					    GdkColor       *color);
+                                            GdkColor       *color);
 guint16    gtk_color_button_get_alpha      (GtkColorButton *color_button);
 void       gtk_color_button_set_use_alpha  (GtkColorButton *color_button,
-					    gboolean        use_alpha);
+                                            gboolean        use_alpha);
 gboolean   gtk_color_button_get_use_alpha  (GtkColorButton *color_button);
-
 void       gtk_color_button_set_rgba       (GtkColorButton *color_button,
                                             const GdkRGBA  *rgba);
 void       gtk_color_button_get_rgba       (GtkColorButton *color_button,
                                             GdkRGBA        *rgba);
 void       gtk_color_button_set_title      (GtkColorButton *color_button,
-					    const gchar    *title);
+                                            const gchar    *title);
 G_CONST_RETURN gchar *gtk_color_button_get_title (GtkColorButton *color_button);
 
 
