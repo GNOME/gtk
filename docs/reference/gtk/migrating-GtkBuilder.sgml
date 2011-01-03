@@ -81,12 +81,7 @@ if (!gtk_builder_add_from_file (builder, FILE, &amp;error))
       <listitem><para>
         GtkBuilder supports context information in translatable
         properties in a slightly different way than libglade.
-        Intltool does not yet support this; see
-        <ulink url="http://bugzilla.gnome.org/show_bug.cgi?id=454894">bug
-        454894</ulink> for the current status of intltool support for
-        GtkBuilder files. Thankfully, context in translations is a
-        rarely used feature, and if you are not using it, intltools
-        glade format support works just fine for GtkBuilder files.
+        Intltool does support this since version 0.41.1.
       </para></listitem>
 
       <listitem><para>
