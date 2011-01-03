@@ -726,6 +726,8 @@ singlehead_default_window_at_pointer  (GdkScreen       *screen,
  * see gdk_display_set_pointer_hooks().
  * 
  * Return value: the previous pointer hook table
+ *
+ * Deprecated: 2.24: This function will go away in GTK 3 for lack of use cases.
  **/
 GdkPointerHooks *
 gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks)

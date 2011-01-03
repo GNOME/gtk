@@ -702,10 +702,6 @@ void gdk_window_get_internal_paint_info (GdkWindow    *window,
 void gdk_window_enable_synchronized_configure (GdkWindow *window);
 void gdk_window_configure_finished            (GdkWindow *window);
 
-#ifndef GDK_MULTIHEAD_SAFE
-GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
-#endif /* GDK_MULTIHEAD_SAFE */
-
 GdkWindow *gdk_get_default_root_window (void);
 
 /* Offscreen redirection */
@@ -726,6 +722,10 @@ void       gdk_window_redirect_to_drawable   (GdkWindow     *window,
 void       gdk_window_remove_redirection     (GdkWindow     *window);
 
 #ifndef GDK_DISABLE_DEPRECATED
+#ifndef GDK_MULTIHEAD_SAFE
+GdkPointerHooks *gdk_set_pointer_hooks (const GdkPointerHooks *new_hooks);   
+#endif /* GDK_MULTIHEAD_SAFE */
+
 #define GDK_ROOT_PARENT()             (gdk_get_default_root_window ())
 #define gdk_window_get_size            gdk_drawable_get_size
 #define gdk_window_get_type            gdk_window_get_window_type
