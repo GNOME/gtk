@@ -35,12 +35,6 @@ typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
 
 struct _GdkDisplayDeviceHooks
 {
-  void (* get_device_state)                  (GdkDisplay       *display,
-                                              GdkDevice        *device,
-                                              GdkScreen       **screen,
-                                              gint             *x,
-                                              gint             *y,
-                                              GdkModifierType  *mask);
   GdkWindow * (* window_at_device_position)  (GdkDisplay *display,
                                               GdkDevice  *device,
                                               gint       *win_x,

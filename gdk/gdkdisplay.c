@@ -76,18 +76,11 @@ static GdkWindow *gdk_display_real_get_window_at_device_position (GdkDisplay    
                                                                   GdkDevice        *device,
                                                                   gint             *win_x,
                                                                   gint             *win_y);
-static void       gdk_display_real_get_device_state              (GdkDisplay       *display,
-                                                                  GdkDevice        *device,
-                                                                  GdkScreen       **screen,
-                                                                  gint             *x,
-                                                                  gint             *y,
-                                                                  GdkModifierType  *mask);
 static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static const GdkDisplayDeviceHooks default_device_hooks = {
-  gdk_display_real_get_device_state,
   gdk_display_real_get_window_at_device_position
 };
 
@@ -635,20 +628,30 @@ gdk_display_get_pointer (GdkDisplay      *display,
 			 gint            *y,
 			 GdkModifierType *mask)
 {
-  GdkScreen *tmp_screen;
+  GdkScreen *default_screen;
+  GdkWindow *root;
   gint tmp_x, tmp_y;
   GdkModifierType tmp_mask;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  /* We call get_device_state here manually instead of gdk_device_get_position()
-   * because we also care about the modifier mask */
+  if (gdk_display_is_closed (display))
+    return;
 
-  display->device_hooks->get_device_state (display,
-                                           display->core_pointer,
-                                           &tmp_screen, &tmp_x, &tmp_y, &tmp_mask);
+  default_screen = gdk_display_get_default_screen (display);
+
+  /* We call _gdk_device_query_state() here manually instead of
+   * gdk_device_get_position() because we care about the modifier mask */
+
+  _gdk_device_query_state (display->core_pointer,
+                           gdk_screen_get_root_window (default_screen),
+                           &root, NULL,
+                           &tmp_x, &tmp_y,
+                           NULL, NULL,
+                           &tmp_mask);
+
   if (screen)
-    *screen = tmp_screen;
+    *screen = gdk_window_get_screen (root);
   if (x)
     *x = tmp_x;
   if (y)
@@ -714,32 +717,6 @@ gdk_display_get_window_at_pointer (GdkDisplay *display,
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return gdk_device_get_window_at_position (display->core_pointer, win_x, win_y);
-}
-
-static void
-gdk_display_real_get_device_state (GdkDisplay       *display,
-                                   GdkDevice        *device,
-                                   GdkScreen       **screen,
-                                   gint             *x,
-                                   gint             *y,
-                                   GdkModifierType  *mask)
-{
-  GdkScreen *default_screen;
-  GdkWindow *root;
-
-  if (gdk_display_is_closed (display))
-    return;
-
-  default_screen = gdk_display_get_default_screen (display);
-
-  _gdk_device_query_state (device,
-                           gdk_screen_get_root_window (default_screen),
-                           &root, NULL,
-                           x, y,
-                           NULL, NULL,
-                           mask);
-
-  *screen = gdk_window_get_screen (root);
 }
 
 static void

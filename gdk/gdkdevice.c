@@ -416,19 +416,25 @@ gdk_device_get_position (GdkDevice        *device,
                          gint             *x,
                          gint             *y)
 {
-  GdkScreen *tmp_screen;
   GdkDisplay *display;
   gint tmp_x, tmp_y;
-  GdkModifierType tmp_mask;
+  GdkScreen *default_screen;
+  GdkWindow *root;
 
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
 
   display = gdk_device_get_display (device);
-  display->device_hooks->get_device_state (display, device, &tmp_screen, &tmp_x, &tmp_y, &tmp_mask);
+  default_screen = gdk_display_get_default_screen (display);
+
+  _gdk_device_query_state (device,
+                           gdk_screen_get_root_window (default_screen),
+                           &root, NULL,
+                           &tmp_x, &tmp_y,
+                           NULL, NULL, NULL);
 
   if (screen)
-    *screen = tmp_screen;
+    *screen = gdk_window_get_screen (root);
   if (x)
     *x = tmp_x;
   if (y)
