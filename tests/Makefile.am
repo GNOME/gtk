@@ -408,6 +408,7 @@ testswitch_SOURCES = testswitch.c
 styleexamples_SOURCES = styleexamples.c
 
 EXTRA_DIST += 			\
+	gradient1.png		\
 	prop-editor.h		\
 	testgtk.1 		\
 	testgtk.css		\
