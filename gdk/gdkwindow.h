@@ -577,7 +577,7 @@ void       gdk_window_coords_from_parent (GdkWindow       *window,
                                           gdouble         *x,
                                           gdouble         *y);
 
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION) || defined (GDK_COMPILATION)
+#if !defined (GDK_DISABLE_DEPRECATED) || defined (GDK_COMPILATION)
 /* Used by gtk_handle_box_button_changed () */
 gboolean      gdk_window_get_deskrelative_origin (GdkWindow	  *window,
 					  gint		  *x,

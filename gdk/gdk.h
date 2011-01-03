@@ -96,15 +96,12 @@ gboolean  gdk_get_use_xshm		(void);
 gchar*	                  gdk_get_display		(void);
 G_CONST_RETURN gchar*	  gdk_get_display_arg_name	(void);
 
-#if !defined (GDK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-/* Used by gtk_input_add_full () */
+#ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add_full	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,
 			   gpointer	     data,
 			   GDestroyNotify    destroy);
-#endif /* !GDK_DISABLE_DEPRECATED || GTK_COMPILATION */
-#ifndef GDK_DISABLE_DEPRECATED
 gint gdk_input_add	  (gint		     source,
 			   GdkInputCondition condition,
 			   GdkInputFunction  function,
