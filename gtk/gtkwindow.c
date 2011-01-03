@@ -4920,9 +4920,7 @@ gtk_window_realize (GtkWidget *widget)
 
   gdk_window_set_user_data (gdk_window, window);
 
-  gtk_widget_style_attach (widget);
   context = gtk_widget_get_style_context (widget);
-
   gtk_style_context_set_background (context, gdk_window);
 
   if (priv->transient_parent &&
