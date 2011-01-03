@@ -61,7 +61,7 @@
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
 
-#define EXAMPLE_PAGE_AREA_SIZE 140
+#define EXAMPLE_PAGE_AREA_SIZE 110
 #define RULER_DISTANCE 7.5
 #define RULER_RADIUS 2
 
@@ -3509,7 +3509,7 @@ create_page_setup_page (GtkPrintUnixDialog *dialog)
   draw = gtk_drawing_area_new ();
   gtk_widget_set_has_window (draw, FALSE);
   priv->page_layout_preview = draw;
-  gtk_widget_set_size_request (draw, 350, 200);
+  gtk_widget_set_size_request (draw, 280, 160);
   g_signal_connect (draw, "expose-event", G_CALLBACK (draw_page_cb), dialog);
   gtk_widget_show (draw);
 
