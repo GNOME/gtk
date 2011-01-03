@@ -277,7 +277,13 @@ if test -z "$backend_set"; then
 fi
 
 cairo_backends=
+backend_immodules=
 GDK_BACKENDS=
+GDK_EXTRA_LIBS=
+GDK_EXTRA_CFLAGS=
+GDK_WINDOWING=
+GIO_PACKAGE=gio-2.0
+PANGO_PACKAGES="pango pangocairo"
 
 if test "x$enable_x11_backend" == xyes; then
   # GDK calls the xlib backend "x11," cairo calls it "xlib." Other
@@ -287,19 +293,36 @@ if test "x$enable_x11_backend" == xyes; then
   # Pull in gio-unix for GDesktopAppInfo usage, see at least
   # gdkapplaunchcontext-x11.c
   GIO_PACKAGE=gio-unix-2.0
+  backend_immodules="$backend_immodules,xim"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_X11"
 fi
 
 if test "x$enable_win32_backend" == xyes; then
   cairo_backends="$cairo_backends cairo-win32"
   GDK_BACKENDS="$GDK_BACKENDS win32"
-  GIO_PACKAGE=gio-2.0
+  backend_immodules="$backend_immodules,ime"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_NATIVE_WINDOW_POINTER
+#define GDK_WINDOWING_WIN32"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
+  AM_CONDITIONAL(USE_WIN32, true)
+  PANGO_PACKAGES="pangowin32 pangocairo"
+else
+  AM_CONDITIONAL(USE_WIN32, false)
 fi
 
 if test "x$enable_quartz_backend" == xyes; then
   cairo_backends="$cairo_backends cairo-quartz"
   GDK_BACKENDS="$GDK_BACKENDS quartz"
-  GIO_PACKAGE=gio-2.0
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_QUARTZ"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
+  AM_CONDITIONAL(USE_QUARTZ, true)
+else
+  AM_CONDITIONAL(USE_QUARTZ, false)
 fi
+
 
 AC_SUBST(GDK_BACKENDS)
 
@@ -767,14 +790,7 @@ else
    fi
 fi
 
-all_immodules="am-et,cedilla,cyrillic-translit"
-if test "x$enable_win32_backend" == xyes; then
-   all_immodules="${all_immodules},ime"
-fi
-all_immodules="${all_immodules},inuktitut,ipa,multipress,thai,ti-er,ti-et,viqr"
-if test "x$enable_x11_backend" == xyes; then
-   all_immodules="${all_immodules},xim"
-fi
+all_immodules="am-et,cedilla,cyrillic-translit,inuktitut,ipa,multipress,thai,ti-er,ti-et,viqr$backend_immodules"
 
 included_immodules=""
 # If the switch specified without listing any specific ones, include all
@@ -858,9 +874,6 @@ fi
 ########################################
 # Windowing system checks
 ########################################
-
-GDK_EXTRA_LIBS=
-GDK_EXTRA_CFLAGS=
 
 # GTK+ uses some X calls, so needs to link against X directly
 GTK_DEP_PACKAGES_FOR_X=
@@ -1125,28 +1138,7 @@ else
   AM_CONDITIONAL(HAVE_X11R6, false)
 fi
 
-
-if test "x$enable_win32_backend" == xyes; then
-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
-  AM_CONDITIONAL(USE_WIN32, true)
-else
-  AM_CONDITIONAL(USE_WIN32, false)
-fi
-
-if test "x$enable_quartz_backend" == xyes; then
-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
-  AM_CONDITIONAL(USE_QUARTZ, true)
-else
-  AM_CONDITIONAL(USE_QUARTZ, false)
-fi
-
 # Check for Pango flags
-
-if test "x$enable_win32_backend" == xyes; then
-	PANGO_PACKAGES="pangowin32 pangocairo"
-else
-	PANGO_PACKAGES="pango pangocairo"
-fi
 
 AC_MSG_CHECKING(Pango flags)
 if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
@@ -1543,20 +1535,7 @@ _______EOF
 	  mv $outfile gdk/gdkconfig.h
 	fi
 ],[
-gdk_windowing=''
-if test "x$enable_x11_backend" == xyes; then
-  gdk_windowing="\$gdk_windowing
-#define GDK_WINDOWING_X11"
-fi
-if test "x$enable_win32_backend" == xyes; then
-  gdk_windowing="\$gdk_windowing
-#define GDK_NATIVE_WINDOW_POINTER
-#define GDK_WINDOWING_WIN32"
-fi
-if test "x$enable_quartz_backend" == xyes; then
-  gdk_windowing="\$gdk_windowing
-#define GDK_WINDOWING_QUARTZ"
-fi
+gdk_windowing='$GDK_WINDOWING'
 ])
 
 dnl
