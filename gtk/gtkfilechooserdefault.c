@@ -280,8 +280,7 @@ static void     gtk_file_chooser_default_map            (GtkWidget             *
 static void     gtk_file_chooser_default_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *widget,
 							    GtkWidget          *previous_toplevel);
-static void     gtk_file_chooser_default_style_set      (GtkWidget             *widget,
-							 GtkStyle              *previous_style);
+static void     gtk_file_chooser_default_style_updated  (GtkWidget             *widget);
 static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
 							 GdkScreen             *previous_screen);
 static void     gtk_file_chooser_default_size_allocate  (GtkWidget             *widget,
@@ -487,7 +486,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->map = gtk_file_chooser_default_map;
   widget_class->unmap = gtk_file_chooser_default_unmap;
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
-  widget_class->style_set = gtk_file_chooser_default_style_set;
+  widget_class->style_updated = gtk_file_chooser_default_style_updated;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
   widget_class->size_allocate = gtk_file_chooser_default_size_allocate;
 
@@ -5689,8 +5688,7 @@ check_icon_theme (GtkFileChooserDefault *impl)
 }
 
 static void
-gtk_file_chooser_default_style_set (GtkWidget *widget,
-				    GtkStyle  *previous_style)
+gtk_file_chooser_default_style_updated (GtkWidget *widget)
 {
   GtkFileChooserDefault *impl;
 
@@ -5698,9 +5696,9 @@ gtk_file_chooser_default_style_set (GtkWidget *widget,
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
-  profile_msg ("    parent class style_set start", NULL);
-  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_set (widget, previous_style);
-  profile_msg ("    parent class style_set end", NULL);
+  profile_msg ("    parent class style_udpated start", NULL);
+  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_updated (widget);
+  profile_msg ("    parent class style_updated end", NULL);
 
   if (gtk_widget_has_screen (GTK_WIDGET (impl)))
     change_icon_theme (impl);
@@ -7840,14 +7838,15 @@ find_good_size_from_style (GtkWidget *widget,
 			   gint      *height)
 {
   GtkFileChooserDefault *impl;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkStateFlags state;
   int font_size;
   GdkScreen *screen;
   double resolution;
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-  g_assert (style != NULL);
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   screen = gtk_widget_get_screen (widget);
@@ -7860,7 +7859,7 @@ find_good_size_from_style (GtkWidget *widget,
   else
     resolution = 96.0; /* wheeee */
 
-  font_size = pango_font_description_get_size (style->font_desc);
+  font_size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
   font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
 
   *width = font_size * NUM_CHARS;
