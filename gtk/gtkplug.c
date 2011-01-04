@@ -728,9 +728,8 @@ gtk_plug_realize (GtkWidget *widget)
 
   gdk_window_set_user_data (gdk_window, window);
 
-  gtk_widget_style_attach (widget);
-  gtk_style_set_background (gtk_widget_get_style (widget),
-                            gdk_window, GTK_STATE_NORMAL);
+  gtk_style_context_set_background (gtk_widget_get_style_context (widget),
+                                    gdk_window);
 
   gdk_window_enable_synchronized_configure (gdk_window);
 }
