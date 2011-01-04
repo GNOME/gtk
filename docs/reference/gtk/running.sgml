@@ -392,6 +392,19 @@ nevertheless.
   </para>
 </formalpara>
 
+<formalpara>
+  <title><envar>DESKTOP_STARTUP_ID</envar></title>
+
+  <para>
+    GTK+ uses this environment variable to provide startup notification
+    according to the <ulink url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">Startup Notification Spec</ulink>.
+    Following the specification, GTK+ unsets this variable after reading
+    it (to keep it from leaking to child processes). So, if you need its
+    value for your own purposes, you have to read it before calling
+    gtk_init().
+  </para>
+</formalpara>
+
 </refsect2>
 
 </refsect1>
