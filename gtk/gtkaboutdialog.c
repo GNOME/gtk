@@ -1879,7 +1879,6 @@ follow_if_link (GtkAboutDialog *about,
           GdkColor *style_visited_link_color;
           GdkColor color;
 
-          gtk_widget_ensure_style (GTK_WIDGET (about));
           gtk_widget_style_get (GTK_WIDGET (about),
                                 "visited-link-color", &style_visited_link_color,
                                 NULL);
@@ -2074,10 +2073,10 @@ text_view_new (GtkAboutDialog  *about,
   GdkColor visited_link_color;
   gint size;
   PangoFontDescription *font_desc;
-
   GtkAboutDialogPrivate *priv = about->priv;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
-  gtk_widget_ensure_style (GTK_WIDGET (about));
   gtk_widget_style_get (GTK_WIDGET (about),
                         "link-color", &style_link_color,
                         "visited-link-color", &style_visited_link_color,
@@ -2105,7 +2104,10 @@ text_view_new (GtkAboutDialog  *about,
   gtk_text_view_set_editable (text_view, FALSE);
   gtk_text_view_set_wrap_mode (text_view, wrap_mode);
 
-  size = pango_font_description_get_size (gtk_widget_get_style (view)->font_desc);
+  context = gtk_widget_get_style_context (view);
+  state = gtk_widget_get_state_flags (view);
+
+  size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
   font_desc = pango_font_description_new ();
   pango_font_description_set_size (font_desc, size * PANGO_SCALE_SMALL);
   gtk_widget_modify_font (view, font_desc);
