@@ -1104,11 +1104,16 @@ gtk_drag_highlight_draw (GtkWidget *widget,
 {
   int width = gtk_widget_get_allocated_width (widget);
   int height = gtk_widget_get_allocated_height (widget);
+  GtkStyleContext *context;
 
-  gtk_paint_shadow (gtk_widget_get_style (widget), cr,
-                    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-                    widget, "dnd",
-                    0, 0, width, height);
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
+
+  gtk_render_frame (context, cr, 0, 0, width, height);
+
+  gtk_style_context_restore (context);
 
   cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
   cairo_set_line_width (cr, 1.0);
