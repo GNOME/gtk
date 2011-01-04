@@ -235,7 +235,6 @@ enum {
   CHILD_PROP_POSITION,
   CHILD_PROP_TAB_EXPAND,
   CHILD_PROP_TAB_FILL,
-  CHILD_PROP_TAB_PACK,
   CHILD_PROP_REORDERABLE,
   CHILD_PROP_DETACHABLE
 };
@@ -783,19 +782,6 @@ gtk_notebook_class_init (GtkNotebookClass *class)
 								    TRUE,
 								    GTK_PARAM_READWRITE));
 
-  /**
-   * GtkNotebook:tab-pack:
-   *
-   *  Deprecated: 2.20: The tab packing functionality of children should not
-   *  be used anymore and support will be removed in the future.
-   */
-  gtk_container_class_install_child_property (container_class,
-					      CHILD_PROP_TAB_PACK,
-					      g_param_spec_enum ("tab-pack", 
-								 P_("Tab pack type"),
-								 P_("A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"),
-								 GTK_TYPE_PACK_TYPE, GTK_PACK_START,
-								 GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class,
 					      CHILD_PROP_REORDERABLE,
 					      g_param_spec_boolean ("reorderable",
@@ -3775,7 +3761,7 @@ do_detach_tab (GtkNotebook     *from,
   GtkWidget *tab_label, *menu_label;
   gboolean tab_expand, tab_fill, reorderable, detachable;
   GList *element;
-  guint tab_pack;
+  guint tab_pack = GTK_PACK_START;
   gint page_num;
 
   menu_label = gtk_notebook_get_menu_label (from, child);
@@ -3794,7 +3780,6 @@ do_detach_tab (GtkNotebook     *from,
 			   child,
 			   "tab-expand", &tab_expand,
 			   "tab-fill", &tab_fill,
-			   "tab-pack", &tab_pack,
 			   "reorderable", &reorderable,
 			   "detachable", &detachable,
 			   NULL);
@@ -3810,7 +3795,6 @@ do_detach_tab (GtkNotebook     *from,
   gtk_notebook_insert_page_menu (to, child, tab_label, menu_label, page_num);
 
   gtk_container_child_set (GTK_CONTAINER (to), child,
-			   "tab-pack", tab_pack,
 			   "tab-expand", tab_expand,
 			   "tab-fill", tab_fill,
 			   "reorderable", reorderable,
@@ -3937,13 +3921,6 @@ gtk_notebook_set_child_property (GtkContainer    *container,
 					  g_value_get_boolean (value),
 					  pack_type);
       break;
-    case CHILD_PROP_TAB_PACK:
-      gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (container), child,
-					    &expand, &fill, &pack_type);
-      gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (container), child,
-					  expand, fill,
-					  g_value_get_enum (value));
-      break;
     case CHILD_PROP_REORDERABLE:
       gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (container), child,
 					g_value_get_boolean (value));
@@ -3971,7 +3948,6 @@ gtk_notebook_get_child_property (GtkContainer    *container,
   GtkWidget *label;
   gboolean expand;
   gboolean fill;
-  GtkPackType pack_type;
 
   /* not finding child's page is valid for menus or labels */
   list = gtk_notebook_find_child (notebook, child, NULL);
@@ -4012,11 +3988,6 @@ gtk_notebook_get_child_property (GtkContainer    *container,
 	gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (container), child,
 					      NULL, &fill, NULL);
 	g_value_set_boolean (value, fill);
-      break;
-    case CHILD_PROP_TAB_PACK:
-	gtk_notebook_query_tab_label_packing (GTK_NOTEBOOK (container), child,
-					      NULL, NULL, &pack_type);
-	g_value_set_enum (value, pack_type);
       break;
     case CHILD_PROP_REORDERABLE:
       g_value_set_boolean (value,
@@ -4598,7 +4569,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   gtk_widget_child_notify (child, "tab-expand");
   gtk_widget_child_notify (child, "tab-fill");
-  gtk_widget_child_notify (child, "tab-pack");
   gtk_widget_child_notify (child, "tab-label");
   gtk_widget_child_notify (child, "menu-label");
   gtk_widget_child_notify (child, "position");
@@ -7837,7 +7807,6 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
       page->pack = pack_type;
       gtk_notebook_child_reordered (notebook, page);
     }
-  gtk_widget_child_notify (child, "tab-pack");
   gtk_widget_child_notify (child, "position");
   if (priv->show_tabs)
     gtk_notebook_pages_allocate (notebook);
@@ -7924,7 +7893,6 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
   /* Move around the menu items if necessary */
   gtk_notebook_child_reordered (notebook, page);
-  gtk_widget_child_notify (child, "tab-pack");
   gtk_widget_child_notify (child, "position");
 
   if (priv->show_tabs)
