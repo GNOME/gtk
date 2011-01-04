@@ -2865,8 +2865,6 @@ gtk_entry_realize (GtkWidget *widget)
   if (attributes_mask & GDK_WA_CURSOR)
     g_object_unref (attributes.cursor);
 
-  gtk_widget_style_attach (widget);
-
   gtk_im_context_set_client_window (priv->im_context, priv->text_area);
 
   gtk_entry_adjust_scroll (entry);
@@ -2981,7 +2979,6 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   gint icon_width, i;
   gint width;
 
-  gtk_widget_ensure_style (widget);
   context = gtk_widget_get_pango_context (widget);
 
   style_context = gtk_widget_get_style_context (widget);
@@ -3036,7 +3033,6 @@ gtk_entry_get_preferred_height (GtkWidget *widget,
   PangoContext *context;
   gint height;
 
-  gtk_widget_ensure_style (widget);
   context = gtk_widget_get_pango_context (widget);
 
   style_context = gtk_widget_get_style_context (widget);
@@ -7726,8 +7722,6 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
 
   g_object_freeze_notify (G_OBJECT (entry));
 
-  gtk_widget_ensure_style (GTK_WIDGET (entry));
-
   /* need to dup before clearing */
   new_id = g_strdup (stock_id);
 
@@ -7795,8 +7789,6 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
     icon_info = construct_icon_info (GTK_WIDGET (entry), icon_pos);
 
   g_object_freeze_notify (G_OBJECT (entry));
-
-  gtk_widget_ensure_style (GTK_WIDGET (entry));
 
   /* need to dup before clearing */
   new_name = g_strdup (icon_name);
