@@ -107,8 +107,7 @@ struct _GtkMessageDialogPrivate
   guint          message_type       : 3;
 };
 
-static void gtk_message_dialog_style_set  (GtkWidget             *widget,
-                                           GtkStyle              *prev_style);
+static void gtk_message_dialog_style_updated (GtkWidget             *widget);
 
 static void gtk_message_dialog_set_property (GObject          *object,
 					     guint             prop_id,
@@ -174,7 +173,7 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
   gobject_class = G_OBJECT_CLASS (class);
   
-  widget_class->style_set = gtk_message_dialog_style_set;
+  widget_class->style_updated = gtk_message_dialog_style_updated;
 
   gobject_class->set_property = gtk_message_dialog_set_property;
   gobject_class->get_property = gtk_message_dialog_get_property;
@@ -381,13 +380,18 @@ setup_primary_label_font (GtkMessageDialog *dialog)
   GtkMessageDialogPrivate *priv = dialog->priv;
   gint size;
   PangoFontDescription *font_desc;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
   /* unset the font settings */
   gtk_widget_modify_font (priv->label, NULL);
 
   if (priv->has_secondary_text && !priv->has_primary_markup)
     {
-      size = pango_font_description_get_size (gtk_widget_get_style (priv->label)->font_desc);
+      context = gtk_widget_get_style_context (priv->label);
+      state = gtk_widget_get_state_flags (priv->label);
+
+      size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
       font_desc = pango_font_description_new ();
       pango_font_description_set_weight (font_desc, PANGO_WEIGHT_BOLD);
       pango_font_description_set_size (font_desc, size * PANGO_SCALE_LARGE);
@@ -979,8 +983,7 @@ gtk_message_dialog_add_buttons (GtkMessageDialog* message_dialog,
 }
 
 static void
-gtk_message_dialog_style_set (GtkWidget *widget,
-                              GtkStyle  *prev_style)
+gtk_message_dialog_style_updated (GtkWidget *widget)
 {
   GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (widget);
   GtkWidget *parent;
@@ -999,5 +1002,5 @@ gtk_message_dialog_style_set (GtkWidget *widget,
 
   setup_primary_label_font (dialog);
 
-  GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_set (widget, prev_style);
+  GTK_WIDGET_CLASS (gtk_message_dialog_parent_class)->style_updated (widget);
 }
