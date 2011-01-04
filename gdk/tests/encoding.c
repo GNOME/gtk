@@ -1,6 +1,6 @@
 #include <gdk/gdk.h>
 #ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"
+#include <gdk/x11/gdkx.h>
 #endif
 
 static void
