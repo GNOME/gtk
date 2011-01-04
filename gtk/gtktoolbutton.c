@@ -73,8 +73,7 @@ static void gtk_tool_button_toolbar_reconfigured (GtkToolItem *tool_item);
 static gboolean   gtk_tool_button_create_menu_proxy (GtkToolItem     *item);
 static void       button_clicked                    (GtkWidget       *widget,
 						     GtkToolButton   *button);
-static void gtk_tool_button_style_set      (GtkWidget          *widget,
-					    GtkStyle           *prev_style);
+static void gtk_tool_button_style_updated  (GtkWidget          *widget);
 
 static void gtk_tool_button_construct_contents (GtkToolItem *tool_item);
 
@@ -153,7 +152,7 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
   object_class->notify = gtk_tool_button_property_notify;
   object_class->finalize = gtk_tool_button_finalize;
 
-  widget_class->style_set = gtk_tool_button_style_set;
+  widget_class->style_updated = gtk_tool_button_style_updated;
 
   tool_item_class->create_menu_proxy = gtk_tool_button_create_menu_proxy;
   tool_item_class->toolbar_reconfigured = gtk_tool_button_toolbar_reconfigured;
@@ -807,8 +806,7 @@ gtk_tool_button_update_icon_spacing (GtkToolButton *button)
 }
 
 static void
-gtk_tool_button_style_set (GtkWidget *widget,
-			   GtkStyle  *prev_style)
+gtk_tool_button_style_updated (GtkWidget *widget)
 {
   gtk_tool_button_update_icon_spacing (GTK_TOOL_BUTTON (widget));
 }
