@@ -2932,8 +2932,7 @@ stop_scrolling (GtkNotebook *notebook)
 }
 
 static GList*
-get_drop_position (GtkNotebook *notebook,
-		   guint        pack)
+get_drop_position (GtkNotebook *notebook)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GList *children, *last_child;
@@ -2955,8 +2954,7 @@ get_drop_position (GtkNotebook *notebook,
       if ((priv->operation != DRAG_OPERATION_REORDER || page != priv->cur_page) &&
 	  gtk_widget_get_visible (page->child) &&
 	  page->tab_label &&
-	  gtk_widget_get_mapped (page->tab_label) &&
-	  page->pack == pack)
+	  gtk_widget_get_mapped (page->tab_label))
 	{
 	  switch (priv->tab_pos)
 	    {
@@ -2964,22 +2962,19 @@ get_drop_position (GtkNotebook *notebook,
 	    case GTK_POS_BOTTOM:
 	      if (!is_rtl)
 		{
-		  if ((page->pack == GTK_PACK_START && PAGE_MIDDLE_X (page) > x) ||
-		      (page->pack == GTK_PACK_END && PAGE_MIDDLE_X (page) < x))
+		  if (PAGE_MIDDLE_X (page) > x)
 		    return children;
 		}
 	      else
 		{
-		  if ((page->pack == GTK_PACK_START && PAGE_MIDDLE_X (page) < x) ||
-		      (page->pack == GTK_PACK_END && PAGE_MIDDLE_X (page) > x))
+		  if (PAGE_MIDDLE_X (page) < x)
 		    return children;
 		}
 
 	      break;
 	    case GTK_POS_LEFT:
 	    case GTK_POS_RIGHT:
-	      if ((page->pack == GTK_PACK_START && PAGE_MIDDLE_Y (page) > y) ||
-		  (page->pack == GTK_PACK_END && PAGE_MIDDLE_Y (page) < y))
+	      if (PAGE_MIDDLE_Y (page) > y)
 		return children;
 
 	      break;
@@ -3094,7 +3089,7 @@ gtk_notebook_stop_reorder (GtkNotebook *notebook)
 	  gint old_page_num, page_num;
 	  GList *element;
 
-	  element = get_drop_position (notebook, page->pack);
+	  element = get_drop_position (notebook);
 	  old_page_num = g_list_position (priv->children, priv->focus_tab);
 	  page_num = reorder_tab (notebook, element, priv->focus_tab);
           gtk_notebook_child_reordered (notebook, page);
@@ -3225,7 +3220,7 @@ scroll_notebook_timer (gpointer data)
 
   pointer_position = get_pointer_position (notebook);
 
-  element = get_drop_position (notebook, priv->cur_page->pack);
+  element = get_drop_position (notebook);
   reorder_tab (notebook, element, priv->focus_tab);
   first_tab = gtk_notebook_search_page (notebook, priv->first_tab,
 					(pointer_position == POINTER_BEFORE) ? STEP_PREV : STEP_NEXT,
@@ -3751,7 +3746,6 @@ do_detach_tab (GtkNotebook     *from,
   GtkWidget *tab_label, *menu_label;
   gboolean tab_expand, tab_fill, reorderable, detachable;
   GList *element;
-  guint tab_pack = GTK_PACK_START;
   gint page_num;
 
   menu_label = gtk_notebook_get_menu_label (from, child);
@@ -3780,7 +3774,7 @@ do_detach_tab (GtkNotebook     *from,
   to_priv->mouse_x = x + to_allocation.x;
   to_priv->mouse_y = y + to_allocation.y;
 
-  element = get_drop_position (to, tab_pack);
+  element = get_drop_position (to);
   page_num = g_list_position (to_priv->children, element);
   gtk_notebook_insert_page_menu (to, child, tab_label, menu_label, page_num);
 
