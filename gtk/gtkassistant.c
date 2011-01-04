@@ -126,8 +126,7 @@ struct _GtkAssistantPrivate
 static void     gtk_assistant_class_init         (GtkAssistantClass *class);
 static void     gtk_assistant_init               (GtkAssistant      *assistant);
 static void     gtk_assistant_destroy            (GtkWidget         *widget);
-static void     gtk_assistant_style_set          (GtkWidget         *widget,
-						  GtkStyle          *old_style);
+static void     gtk_assistant_style_updated      (GtkWidget         *widget);
 static void     gtk_assistant_get_preferred_width  (GtkWidget        *widget,
                                                     gint             *minimum,
                                                     gint             *natural);
@@ -224,7 +223,7 @@ gtk_assistant_class_init (GtkAssistantClass *class)
   container_class = (GtkContainerClass *) class;
 
   widget_class->destroy = gtk_assistant_destroy;
-  widget_class->style_set = gtk_assistant_style_set;
+  widget_class->style_updated = gtk_assistant_style_updated;
   widget_class->get_preferred_width = gtk_assistant_get_preferred_width;
   widget_class->get_preferred_height = gtk_assistant_get_preferred_height;
   widget_class->size_allocate = gtk_assistant_size_allocate;
@@ -782,6 +781,7 @@ static void
 gtk_assistant_init (GtkAssistant *assistant)
 {
   GtkAssistantPrivate *priv;
+  GtkStyleContext *context;
 
   assistant->priv = G_TYPE_INSTANCE_GET_PRIVATE (assistant,
                                                  GTK_TYPE_ASSISTANT,
@@ -799,11 +799,17 @@ gtk_assistant_init (GtkAssistant *assistant)
   gtk_widget_set_parent (priv->header_image, GTK_WIDGET (assistant));
   gtk_widget_show (priv->header_image);
 
+  context = gtk_widget_get_style_context (priv->header_image);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+
   /* Sidebar */
   priv->sidebar_image = gtk_image_new ();
   gtk_misc_set_alignment (GTK_MISC (priv->sidebar_image), 0., 0.);
   gtk_widget_set_parent (priv->sidebar_image, GTK_WIDGET (assistant));
   gtk_widget_show (priv->sidebar_image);
+
+  context = gtk_widget_get_style_context (priv->sidebar_image);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
   /* Action area  */
   priv->action_area  = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
@@ -1084,28 +1090,16 @@ find_page (GtkAssistant  *assistant,
 }
 
 static void
-set_title_colors (GtkWidget *assistant,
-		  GtkWidget *title_label)
-{
-  GtkStyle *style;
-
-  gtk_widget_ensure_style (assistant);
-  style = gtk_widget_get_style (assistant);
-
-  /* change colors schema, for making the header text visible */
-  gtk_widget_modify_bg (title_label, GTK_STATE_NORMAL, &style->bg[GTK_STATE_SELECTED]);
-  gtk_widget_modify_fg (title_label, GTK_STATE_NORMAL, &style->fg[GTK_STATE_SELECTED]);
-}
-
-static void
 set_title_font (GtkWidget *assistant,
 		GtkWidget *title_label)
 {
   PangoFontDescription *desc;
+  GtkStyleContext *context;
   gint size;
 
   desc = pango_font_description_new ();
-  size = pango_font_description_get_size (gtk_widget_get_style (assistant)->font_desc);
+  context = gtk_widget_get_style_context (title_label);
+  size = pango_font_description_get_size (gtk_style_context_get_font (context, 0));
 
   pango_font_description_set_weight (desc, PANGO_WEIGHT_ULTRABOLD);
   pango_font_description_set_size   (desc, size * PANGO_SCALE_XX_LARGE);
@@ -1115,8 +1109,7 @@ set_title_font (GtkWidget *assistant,
 }
 
 static void
-gtk_assistant_style_set (GtkWidget *widget,
-			 GtkStyle  *old_style)
+gtk_assistant_style_updated (GtkWidget *widget)
 {
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
@@ -1128,9 +1121,7 @@ gtk_assistant_style_set (GtkWidget *widget,
     {
       GtkAssistantPage *page = list->data;
 
-      set_title_colors (widget, page->title);
       set_title_font (widget, page->title);
-
       list = list->next;
     }
 }
@@ -1412,7 +1403,9 @@ assistant_paint_colored_box (GtkWidget *widget,
   GtkAssistant *assistant = GTK_ASSISTANT (widget);
   GtkAssistantPrivate *priv = assistant->priv;
   GtkAllocation allocation, action_area_allocation, header_image_allocation;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GdkRGBA color;
   gint border_width, header_padding, content_padding;
   gint content_x, content_width;
   gboolean rtl;
@@ -1425,13 +1418,20 @@ assistant_paint_colored_box (GtkWidget *widget,
 			"content-padding", &content_padding,
 			NULL);
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
   gtk_widget_get_allocation (widget, &allocation);
   gtk_widget_get_allocation (priv->action_area, &action_area_allocation);
   gtk_widget_get_allocation (priv->header_image, &header_image_allocation);
 
   /* colored box */
-  gdk_cairo_set_source_color (cr, &style->bg[GTK_STATE_SELECTED]);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
+
+  gtk_style_context_get_background_color (context, state, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
+
   cairo_rectangle (cr,
 		   border_width,
 		   border_width,
@@ -1454,7 +1454,10 @@ assistant_paint_colored_box (GtkWidget *widget,
       content_width -= sidebar_image_allocation.width;
     }
 
-  gdk_cairo_set_source_color (cr, &style->bg[GTK_STATE_NORMAL]);
+  gtk_style_context_restore (context);
+
+  gtk_style_context_get_background_color (context, state, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
 
   cairo_rectangle (cr,
 		   content_x,
@@ -1867,6 +1870,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 {
   GtkAssistantPrivate *priv;
   GtkAssistantPage *page_info;
+  GtkStyleContext *context;
   gint n_pages;
 
   g_return_val_if_fail (GTK_IS_ASSISTANT (assistant), 0);
@@ -1884,9 +1888,11 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
 		    G_CALLBACK (on_page_notify_visibility), assistant);
 
   gtk_misc_set_alignment (GTK_MISC (page_info->title), 0.,0.5);
-  set_title_colors (GTK_WIDGET (assistant), page_info->title);
   set_title_font   (GTK_WIDGET (assistant), page_info->title);
   gtk_widget_show  (page_info->title);
+
+  context = gtk_widget_get_style_context (page_info->title);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
   n_pages = g_list_length (priv->pages);
 

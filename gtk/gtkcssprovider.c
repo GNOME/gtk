@@ -3823,6 +3823,11 @@ gtk_css_provider_get_default (void)
         "  background-color: @error_bg_color;\n"
         "  color: @error_fg_color;\n"
         "}\n"
+        "\n"
+        ".highlight {\n"
+        "  background-color: @selected_bg_color;\n"
+        "  color: @selected_fg_color;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
