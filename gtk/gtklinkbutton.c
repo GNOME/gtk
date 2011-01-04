@@ -105,8 +105,7 @@ static gboolean gtk_link_button_button_press (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
-static void     gtk_link_button_style_set    (GtkWidget        *widget,
-					      GtkStyle         *old_style);
+static void     gtk_link_button_style_updated (GtkWidget        *widget);
 static gboolean gtk_link_button_enter_cb     (GtkWidget        *widget,
 					      GdkEventCrossing *event,
 					      gpointer          user_data);
@@ -153,7 +152,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   
   widget_class->button_press_event = gtk_link_button_button_press;
   widget_class->popup_menu = gtk_link_button_popup_menu;
-  widget_class->style_set = gtk_link_button_style_set;
+  widget_class->style_updated = gtk_link_button_style_updated;
   
   container_class->add = gtk_link_button_add;
 
@@ -365,8 +364,7 @@ gtk_link_button_add (GtkContainer *container,
 }
 
 static void
-gtk_link_button_style_set (GtkWidget *widget,
-			   GtkStyle  *old_style)
+gtk_link_button_style_updated (GtkWidget *widget)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
 
