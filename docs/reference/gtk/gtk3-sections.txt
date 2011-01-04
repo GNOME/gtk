@@ -5317,11 +5317,6 @@ gtk_device_grab_add
 gtk_device_grab_remove
 
 <SUBSECTION>
-GtkFunction
-GtkCallbackMarshal
-GtkArg
-
-<SUBSECTION>
 GTK_PRIORITY_RESIZE
 
 <SUBSECTION>
