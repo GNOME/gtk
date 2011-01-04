@@ -61,8 +61,7 @@ static void      gtk_dialog_add_buttons_valist   (GtkDialog    *dialog,
 static gboolean  gtk_dialog_delete_event_handler (GtkWidget    *widget,
                                                   GdkEventAny  *event,
                                                   gpointer      user_data);
-static void      gtk_dialog_style_set            (GtkWidget    *widget,
-                                                  GtkStyle     *prev_style);
+static void      gtk_dialog_style_updated        (GtkWidget    *widget);
 static void      gtk_dialog_map                  (GtkWidget    *widget);
 
 static void      gtk_dialog_close                (GtkDialog    *dialog);
@@ -115,7 +114,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
   widget_class = GTK_WIDGET_CLASS (class);
 
   widget_class->map = gtk_dialog_map;
-  widget_class->style_set = gtk_dialog_style_set;
+  widget_class->style_updated = gtk_dialog_style_updated;
 
   class->close = gtk_dialog_close;
 
@@ -382,8 +381,7 @@ gtk_dialog_map (GtkWidget *widget)
 }
 
 static void
-gtk_dialog_style_set (GtkWidget *widget,
-                      GtkStyle  *prev_style)
+gtk_dialog_style_updated (GtkWidget *widget)
 {
   update_spacings (GTK_DIALOG (widget));
 }
