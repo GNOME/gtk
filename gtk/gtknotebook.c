@@ -4897,23 +4897,11 @@ gtk_notebook_search_page (GtkNotebook *notebook,
   GtkNotebookPrivate *priv = notebook->priv;
   GtkNotebookPage *page = NULL;
   GList *old_list = NULL;
-  gint flag = 0;
-
-  switch (direction)
-    {
-    case STEP_PREV:
-      flag = GTK_PACK_END;
-      break;
-
-    case STEP_NEXT:
-      flag = GTK_PACK_START;
-      break;
-    }
 
   if (list)
     page = list->data;
 
-  if (!page || page->pack == flag)
+  if (!page || direction == STEP_NEXT)
     {
       if (list)
 	{
@@ -4926,7 +4914,7 @@ gtk_notebook_search_page (GtkNotebook *notebook,
       while (list)
 	{
 	  page = list->data;
-	  if (page->pack == flag &&
+	  if (direction == STEP_NEXT &&
 	      (!find_visible ||
 	       (gtk_widget_get_visible (page->child) &&
 		(!page->tab_label || NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page)))))
@@ -4944,7 +4932,7 @@ gtk_notebook_search_page (GtkNotebook *notebook,
   while (list)
     {
       page = list->data;
-      if (page->pack != flag &&
+      if (direction == STEP_PREV &&
 	  (!find_visible ||
 	   (gtk_widget_get_visible (page->child) &&
 	    (!page->tab_label || NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page)))))
