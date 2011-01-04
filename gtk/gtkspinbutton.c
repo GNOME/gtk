@@ -2167,24 +2167,22 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
                            gdouble        min,
                            gdouble        max)
 {
-  GtkSpinButtonPrivate *priv;
+  GtkAdjustment *adjustment;
   gdouble value;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  priv = spin_button->priv;
+  adjustment = spin_button->priv->adjustment;
 
-  priv->adjustment->lower = min;
-  priv->adjustment->upper = max;
+  adjustment->lower = min;
+  adjustment->upper = max;
 
-  value = CLAMP (priv->adjustment->value,
-                 priv->adjustment->lower,
-                 (priv->adjustment->upper - priv->adjustment->page_size));
+  value = CLAMP (adjustment->value, adjustment->lower, adjustment->upper);
 
-  if (value != priv->adjustment->value)
+  if (value != adjustment->value)
     gtk_spin_button_set_value (spin_button, value);
 
-  gtk_adjustment_changed (priv->adjustment);
+  gtk_adjustment_changed (adjustment);
 }
 
 /**
