@@ -2449,11 +2449,9 @@ gtk_range_set_fill_level
 gtk_range_set_restrict_to_fill_level
 gtk_range_set_show_fill_level
 gtk_range_get_adjustment
-gtk_range_set_update_policy
 gtk_range_set_adjustment
 gtk_range_get_inverted
 gtk_range_set_inverted
-gtk_range_get_update_policy
 gtk_range_get_value
 gtk_range_set_increments
 gtk_range_set_range
@@ -5984,7 +5982,6 @@ GtkShadowType
 GtkStateType
 GtkStateFlags
 GtkToolbarStyle
-GtkUpdateType
 GtkWindowPosition
 GtkWindowType
 GtkSortType

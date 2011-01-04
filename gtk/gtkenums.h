@@ -401,14 +401,6 @@ typedef enum
   GTK_TOOLBAR_BOTH_HORIZ
 } GtkToolbarStyle;
 
-/* Data update types (for ranges) */
-typedef enum
-{
-  GTK_UPDATE_CONTINUOUS,
-  GTK_UPDATE_DISCONTINUOUS,
-  GTK_UPDATE_DELAYED
-} GtkUpdateType;
-
 /* Window position types */
 typedef enum
 {

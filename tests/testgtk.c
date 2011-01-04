@@ -5867,15 +5867,12 @@ create_range_controls (GtkWidget *widget)
 
       scale = gtk_scale_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adjustment));
       gtk_widget_set_size_request (GTK_WIDGET (scale), 150, -1);
-      gtk_range_set_update_policy (GTK_RANGE (scale), GTK_UPDATE_DELAYED);
       gtk_scale_set_digits (GTK_SCALE (scale), 1);
       gtk_scale_set_draw_value (GTK_SCALE (scale), TRUE);
       gtk_box_pack_start (GTK_BOX (box2), scale, TRUE, TRUE, 0);
       gtk_widget_show (scale);
 
       scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, GTK_ADJUSTMENT (adjustment));
-      gtk_range_set_update_policy (GTK_RANGE (scrollbar), 
-				   GTK_UPDATE_CONTINUOUS);
       gtk_box_pack_start (GTK_BOX (box2), scrollbar, TRUE, TRUE, 0);
       gtk_widget_show (scrollbar);
 

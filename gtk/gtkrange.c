@@ -87,7 +87,6 @@ struct _GtkRangePrivate
   GtkOrientation     orientation;
   GtkSensitivityType lower_sensitivity;
   GtkSensitivityType upper_sensitivity;
-  GtkUpdateType      update_policy;
 
   GdkDevice         *grab_device;
   GdkRectangle       range_rect;     /* Area of entire stepper + trough assembly in widget->window coords */
@@ -118,7 +117,6 @@ struct _GtkRangePrivate
   gint  slider_end;
 
   guint repaint_id;
-  guint update_timeout_id;
 
   /* Steppers are: < > ---- < >
    *               a b      c d
@@ -133,7 +131,6 @@ struct _GtkRangePrivate
   guint need_recalc            : 1;
   guint slider_size_fixed      : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
-  guint update_pending         : 1;  /* need to emit value_changed */
 
   /* Stepper sensitivity */
   guint lower_sensitive        : 1;
@@ -148,7 +145,6 @@ struct _GtkRangePrivate
 enum {
   PROP_0,
   PROP_ORIENTATION,
-  PROP_UPDATE_POLICY,
   PROP_ADJUSTMENT,
   PROP_INVERTED,
   PROP_LOWER_STEPPER_SENSITIVITY,
@@ -266,14 +262,11 @@ static void          gtk_range_adjustment_changed       (GtkAdjustment *adjustme
 static void          gtk_range_add_step_timer           (GtkRange      *range,
                                                          GtkScrollType  step);
 static void          gtk_range_remove_step_timer        (GtkRange      *range);
-static void          gtk_range_reset_update_timer       (GtkRange      *range);
-static void          gtk_range_remove_update_timer      (GtkRange      *range);
 static GdkRectangle* get_area                           (GtkRange      *range,
                                                          MouseLocation  location);
 static gboolean      gtk_range_real_change_value        (GtkRange      *range,
                                                          GtkScrollType  scroll,
                                                          gdouble        value);
-static void          gtk_range_update_value             (GtkRange      *range);
 static gboolean      gtk_range_key_press                (GtkWidget     *range,
 							 GdkEventKey   *event);
 
@@ -416,15 +409,6 @@ gtk_range_class_init (GtkRangeClass *class)
                                     PROP_ORIENTATION,
                                     "orientation");
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_UPDATE_POLICY,
-                                   g_param_spec_enum ("update-policy",
-						      P_("Update policy"),
-						      P_("How the range should be updated on the screen"),
-						      GTK_TYPE_UPDATE_TYPE,
-						      GTK_UPDATE_CONTINUOUS,
-						      GTK_PARAM_READWRITE));
-  
   g_object_class_install_property (gobject_class,
                                    PROP_ADJUSTMENT,
                                    g_param_spec_object ("adjustment",
@@ -624,9 +608,6 @@ gtk_range_set_property (GObject      *object,
 
       gtk_widget_queue_resize (GTK_WIDGET (range));
       break;
-    case PROP_UPDATE_POLICY:
-      gtk_range_set_update_policy (range, g_value_get_enum (value));
-      break;
     case PROP_ADJUSTMENT:
       gtk_range_set_adjustment (range, g_value_get_object (value));
       break;
@@ -667,9 +648,6 @@ gtk_range_get_property (GObject      *object,
     {
     case PROP_ORIENTATION:
       g_value_set_enum (value, priv->orientation);
-      break;
-    case PROP_UPDATE_POLICY:
-      g_value_set_enum (value, priv->update_policy);
       break;
     case PROP_ADJUSTMENT:
       g_value_set_object (value, priv->adjustment);
@@ -712,7 +690,6 @@ gtk_range_init (GtkRange *range)
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
   priv->adjustment = NULL;
-  priv->update_policy = GTK_UPDATE_CONTINUOUS;
   priv->inverted = FALSE;
   priv->flippable = FALSE;
   priv->min_slider_size = 1;
@@ -761,53 +738,6 @@ gtk_range_get_adjustment (GtkRange *range)
     gtk_range_set_adjustment (range, NULL);
 
   return priv->adjustment;
-}
-
-/**
- * gtk_range_set_update_policy:
- * @range: a #GtkRange
- * @policy: update policy
- *
- * Sets the update policy for the range. #GTK_UPDATE_CONTINUOUS means that
- * anytime the range slider is moved, the range value will change and the
- * value_changed signal will be emitted. #GTK_UPDATE_DELAYED means that
- * the value will be updated after a brief timeout where no slider motion
- * occurs, so updates are spaced by a short time rather than
- * continuous. #GTK_UPDATE_DISCONTINUOUS means that the value will only
- * be updated when the user releases the button and ends the slider
- * drag operation.
- **/
-void
-gtk_range_set_update_policy (GtkRange      *range,
-			     GtkUpdateType  policy)
-{
-  GtkRangePrivate *priv;
-
-  g_return_if_fail (GTK_IS_RANGE (range));
-
-  priv = range->priv;
-
-  if (priv->update_policy != policy)
-    {
-      priv->update_policy = policy;
-      g_object_notify (G_OBJECT (range), "update-policy");
-    }
-}
-
-/**
- * gtk_range_get_update_policy:
- * @range: a #GtkRange
- *
- * Gets the update policy of @range. See gtk_range_set_update_policy().
- *
- * Return value: the current update policy
- **/
-GtkUpdateType
-gtk_range_get_update_policy (GtkRange *range)
-{
-  g_return_val_if_fail (GTK_IS_RANGE (range), GTK_UPDATE_CONTINUOUS);
-
-  return range->priv->update_policy;
 }
 
 /**
@@ -1528,7 +1458,6 @@ gtk_range_destroy (GtkWidget *widget)
   GtkRangePrivate *priv = range->priv;
 
   gtk_range_remove_step_timer (range);
-  gtk_range_remove_update_timer (range);
 
   if (priv->repaint_id)
     g_source_remove (priv->repaint_id);
@@ -1780,7 +1709,6 @@ gtk_range_unrealize (GtkWidget *widget)
   GtkRangePrivate *priv = range->priv;
 
   gtk_range_remove_step_timer (range);
-  gtk_range_remove_update_timer (range);
 
   gdk_window_set_user_data (priv->event_window, NULL);
   gdk_window_destroy (priv->event_window);
@@ -2682,8 +2610,6 @@ stop_scrolling (GtkRange *range)
 {
   range_grab_remove (range);
   gtk_range_remove_step_timer (range);
-  /* Flush any pending discontinuous/delayed updates */
-  gtk_range_update_value (range);
 }
 
 static gboolean
@@ -2800,13 +2726,6 @@ gtk_range_scroll_event (GtkWidget      *widget,
       g_signal_emit (range, signals[CHANGE_VALUE], 0,
                      GTK_SCROLL_JUMP, adj->value + delta,
                      &handled);
-      
-      /* Policy DELAYED makes sense with scroll events,
-       * but DISCONTINUOUS doesn't, so we update immediately
-       * for DISCONTINUOUS
-       */
-      if (priv->update_policy == GTK_UPDATE_DISCONTINUOUS)
-        gtk_range_update_value (range);
     }
 
   return TRUE;
@@ -3234,13 +3153,6 @@ gtk_range_move_slider (GtkRange     *range,
 
   if (! gtk_range_scroll (range, scroll))
     gtk_widget_error_bell (GTK_WIDGET (range));
-
-  /* Policy DELAYED makes sense with key events,
-   * but DISCONTINUOUS doesn't, so we update immediately
-   * for DISCONTINUOUS
-   */
-  if (priv->update_policy == GTK_UPDATE_DISCONTINUOUS)
-    gtk_range_update_value (range);
 }
 
 static void
@@ -4022,41 +3934,9 @@ gtk_range_real_change_value (GtkRange     *range,
 
       gtk_widget_queue_draw (GTK_WIDGET (range));
 
-      switch (priv->update_policy)
-        {
-        case GTK_UPDATE_CONTINUOUS:
-          gtk_adjustment_set_value (priv->adjustment, value);
-          break;
-
-          /* Delayed means we update after a period of inactivity */
-        case GTK_UPDATE_DELAYED:
-          gtk_range_reset_update_timer (range);
-          /* FALL THRU */
-
-          /* Discontinuous means we update on button release */
-        case GTK_UPDATE_DISCONTINUOUS:
-          /* don't emit value_changed signal */
-          priv->adjustment->value = value;
-          priv->update_pending = TRUE;
-          break;
-        }
+      gtk_adjustment_set_value (priv->adjustment, value);
     }
   return FALSE;
-}
-
-static void
-gtk_range_update_value (GtkRange *range)
-{
-  GtkRangePrivate *priv = range->priv;
-
-  gtk_range_remove_update_timer (range);
-
-  if (priv->update_pending)
-    {
-      gtk_adjustment_value_changed (priv->adjustment);
-
-      priv->update_pending = FALSE;
-    }
 }
 
 struct _GtkRangeStepTimer
@@ -4131,43 +4011,6 @@ gtk_range_remove_step_timer (GtkRange *range)
       g_free (priv->timer);
 
       priv->timer = NULL;
-    }
-}
-
-static gboolean
-update_timeout (gpointer data)
-{
-  GtkRange *range = GTK_RANGE (data);
-  GtkRangePrivate *priv = range->priv;
-
-  gtk_range_update_value (range);
-  priv->update_timeout_id = 0;
-
-  /* self-remove */
-  return FALSE;
-}
-
-static void
-gtk_range_reset_update_timer (GtkRange *range)
-{
-  GtkRangePrivate *priv = range->priv;
-
-  gtk_range_remove_update_timer (range);
-
-  priv->update_timeout_id = gdk_threads_add_timeout (UPDATE_DELAY,
-                                                     update_timeout,
-                                                     range);
-}
-
-static void
-gtk_range_remove_update_timer (GtkRange *range)
-{
-  GtkRangePrivate *priv = range->priv;
-
-  if (priv->update_timeout_id != 0)
-    {
-      g_source_remove (priv->update_timeout_id);
-      priv->update_timeout_id = 0;
     }
 }
 
