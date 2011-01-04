@@ -42,25 +42,17 @@
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtktooltip.h"
+#include "gtkicontheme.h"
+#include "gtklabel.h"
+#include "gtktypebuiltins.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "gdk/x11/gdkx.h"
 #endif
+
 #ifdef GDK_WINDOWING_WIN32
 #include "gdk/win32/gdkwin32.h"
-#endif
-
-#ifdef GDK_WINDOWING_WIN32
-#include "gtkicontheme.h"
-#include "gtklabel.h"
-
-#include "win32/gdkwin32.h"
 #define WM_GTK_TRAY_NOTIFICATION (WM_USER+1)
-#endif
-
-#ifdef GDK_WINDOWING_QUARTZ
-#include "gtkicontheme.h"
-#include "gtklabel.h"
 #endif
 
 #define BLINK_TIMEOUT 500

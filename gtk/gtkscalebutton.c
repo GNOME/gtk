@@ -53,7 +53,7 @@
 #include "gtkstock.h"
 #include "gtkvbox.h"
 #include "gtkwindow.h"
-
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
 /**

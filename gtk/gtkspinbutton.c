@@ -43,6 +43,7 @@
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtktypebuiltins.h"
 
 #define MIN_SPIN_BUTTON_WIDTH 30
 #define MAX_TIMER_CALLS       5

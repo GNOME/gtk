@@ -26,12 +26,15 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
+
 #include "gtkhandlebox.h"
 #include "gtkinvisible.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindow.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

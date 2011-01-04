@@ -333,7 +333,6 @@ gtk_public_h_sources = 		\
 	gtktreestore.h		\
 	gtktreeview.h		\
 	gtktreeviewcolumn.h	\
-	gtktypeutils.h		\
 	gtkuimanager.h		\
 	gtkvbbox.h		\
 	gtkvbox.h		\
@@ -662,7 +661,6 @@ gtk_base_c_sources = 		\
 	gtktreeview.c		\
 	gtktreeviewcolumn.c	\
 	gtktypebuiltins.c	\
-	gtktypeutils.c		\
 	gtkuimanager.c		\
 	gtkvbbox.c		\
 	gtkvbox.c		\

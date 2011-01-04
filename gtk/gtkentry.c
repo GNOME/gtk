@@ -58,6 +58,7 @@
 #include "gtkwindow.h"
 #include "gtktreeview.h"
 #include "gtktreeselection.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkentryprivate.h"
 #include "gtkcelllayout.h"

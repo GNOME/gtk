@@ -32,8 +32,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <gobject/gobjectnotifyqueue.c>
+#include <gobject/gvaluecollector.h>
+
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -42,8 +46,6 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
-#include <gobject/gobjectnotifyqueue.c>
-#include <gobject/gvaluecollector.h>
 
 
 /**

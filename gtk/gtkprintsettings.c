@@ -19,12 +19,16 @@
  */
 
 #include "config.h"
+
 #include <string.h>
 #include <stdlib.h>
+
 #include <glib/gprintf.h>
-#include <gtk/gtk.h>
+
 #include "gtkprintsettings.h"
 #include "gtkprintutils.h"
+#include "gtktypebuiltins.h"
+#include "gtkwidget.h"
 
 
 typedef struct _GtkPrintSettingsClass GtkPrintSettingsClass;

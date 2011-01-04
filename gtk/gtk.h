@@ -217,7 +217,7 @@
 #include <gtk/gtktreestore.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtktypeutils.h>
+#include <gtk/gtktypebuiltins.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtkvbbox.h>
 #include <gtk/gtkvbox.h>

@@ -48,6 +48,10 @@
  */
 
 #include "config.h"
+
+#include <stdlib.h>
+#include <string.h>
+
 #include "gtkmain.h"
 #include "gtktexttag.h"
 #include "gtktexttypes.h"
@@ -55,9 +59,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
-
-#include <stdlib.h>
-#include <string.h>
+#include "gtktypebuiltins.h"
 
 enum {
   EVENT,

@@ -26,6 +26,7 @@
  */
 
 #include "config.h"
+
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
@@ -34,6 +35,7 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
+#include "gtktypebuiltins.h"
 
 /**
  * SECTION:gtkstatusbar

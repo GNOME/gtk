@@ -42,6 +42,7 @@
 #include "gtkprivate.h"
 #include "gtkdnd.h"
 #include "gtkbuildable.h"
+#include "gtktypebuiltins.h"
 
 
 /**

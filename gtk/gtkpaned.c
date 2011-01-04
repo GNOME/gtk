@@ -33,7 +33,7 @@
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkwindow.h"
-
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

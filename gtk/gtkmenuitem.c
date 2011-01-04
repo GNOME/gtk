@@ -25,6 +25,7 @@
  */
 
 #include "config.h"
+
 #include <string.h>
 
 #include "gtkaccellabel.h"
@@ -40,6 +41,7 @@
 #include "gtkbuildable.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
+#include "gtktypebuiltins.h"
 
 
 enum {

@@ -28,6 +28,7 @@
 #include "gtkeventbox.h"
 #include "gtkmain.h"
 #include "gtksizerequest.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
 

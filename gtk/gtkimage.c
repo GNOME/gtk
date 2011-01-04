@@ -25,6 +25,7 @@
  */
 
 #include "config.h"
+
 #include <math.h>
 #include <string.h>
 
@@ -36,6 +37,7 @@
 #include "gtksizerequest.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 /**
  * SECTION:gtkimage

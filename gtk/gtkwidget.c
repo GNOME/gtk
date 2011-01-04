@@ -63,6 +63,7 @@
 #include "gtkmodifierstyle.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
+#include "gtktypebuiltins.h"
 
 
 /**

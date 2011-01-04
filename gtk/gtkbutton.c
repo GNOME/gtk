@@ -55,6 +55,7 @@
 #include "gtkiconfactory.h"
 #include "gtkactivatable.h"
 #include "gtksizerequest.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

@@ -40,6 +40,7 @@
 #include "gtktreeselection.h"
 #include "gtkvseparator.h"
 #include "gtkwindow.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
 #include <gobject/gvaluecollector.h>

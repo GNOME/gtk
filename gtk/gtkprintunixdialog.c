@@ -20,14 +20,20 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <math.h>
 
-#include "gtkintl.h"
-#include "gtkprivate.h"
+#include "gtkprintunixdialog.h"
+
+#include "gtkcustompaperunixdialog.h"
+#include "gtkprintbackend.h"
+#include "gtkprinter-private.h"
+#include "gtkprinteroptionwidget.h"
+#include "gtkprintutils.h"
 
 #include "gtkspinbutton.h"
 #include "gtkcellrendererpixbuf.h"
@@ -49,16 +55,11 @@
 #include "gtklabel.h"
 #include "gtkeventbox.h"
 #include "gtkbuildable.h"
-
-#include "gtkcustompaperunixdialog.h"
-#include "gtkprintbackend.h"
-#include "gtkprinter-private.h"
-#include "gtkprintunixdialog.h"
-#include "gtkprinteroptionwidget.h"
-#include "gtkprintutils.h"
-
 #include "gtkmessagedialog.h"
 #include "gtkbutton.h"
+#include "gtkintl.h"
+#include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 #define EXAMPLE_PAGE_AREA_SIZE 110
 #define RULER_DISTANCE 7.5

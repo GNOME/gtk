@@ -25,9 +25,11 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+
 #include "gtkiconfactory.h"
 #include "gtkiconcache.h"
 #include "gtkdebug.h"
@@ -38,7 +40,7 @@
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-
+#include "gtktypebuiltins.h"
 
 static GSList *all_icon_factories = NULL;
 

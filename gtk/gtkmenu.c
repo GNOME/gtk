@@ -46,6 +46,7 @@
 #include "gtksettings.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtktypebuiltins.h"
 
 #define NAVIGATION_REGION_OVERSHOOT 50  /* How much the navigation region
                                          * extends below the submenu

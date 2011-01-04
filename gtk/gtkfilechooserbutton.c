@@ -52,6 +52,7 @@
 
 #include "gtkfilechooserbutton.h"
 
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
 /* **************** *

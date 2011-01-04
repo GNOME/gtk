@@ -49,6 +49,7 @@
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkentryprivate.h"
+#include "gtktypebuiltins.h"
 
 
 /**

@@ -46,6 +46,7 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkstock.h"
+#include "gtktypebuiltins.h"
 
 /**
  * SECTION:gtkinfobar

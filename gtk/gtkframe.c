@@ -29,6 +29,7 @@
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 

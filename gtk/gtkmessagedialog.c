@@ -26,6 +26,7 @@
  */
 
 #include "config.h"
+
 #include <string.h>
 
 #include "gtkmessagedialog.h"
@@ -39,6 +40,7 @@
 #include "gtkiconfactory.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 /**
  * SECTION:gtkmessagedialog

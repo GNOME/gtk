@@ -23,18 +23,20 @@
  */
 
 #include "config.h"
+
 #include <math.h>
 #include <string.h>
+
+#include "x11/gdkx.h"
+#include <X11/Xatom.h>
+#include <cairo-xlib.h>
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktrayicon.h"
 #include "gtktestutils.h"
 #include "gtkdebug.h"
-
-#include "x11/gdkx.h"
-#include <X11/Xatom.h>
-#include <cairo-xlib.h>
+#include "gtktypebuiltins.h"
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1

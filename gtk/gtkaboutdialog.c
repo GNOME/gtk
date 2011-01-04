@@ -54,6 +54,7 @@
 #include "gtkmain.h"
 #include "gtkmessagedialog.h"
 #include "gtktogglebutton.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

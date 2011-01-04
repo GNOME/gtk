@@ -41,6 +41,7 @@
 #include "gtkscrollable.h"
 #include "gtksizerequest.h"
 #include "gtktreednd.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
 /**

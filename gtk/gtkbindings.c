@@ -11,7 +11,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -32,14 +32,17 @@
 #include <stdarg.h>
 
 #include "gtkbindings.h"
-#include "gtktypeutils.h"
 #include "gtkkeyhash.h"
 #include "gtkwidget.h"
 #include "gtkrc.h"
-
+#include "gtkintl.h"
 
 /* --- defines --- */
-#define	BINDING_MOD_MASK()	(gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
+#define BINDING_MOD_MASK() (gtk_accelerator_get_default_mod_mask () | GDK_RELEASE_MASK)
+
+
+#define GTK_TYPE_IDENTIFIER (gtk_identifier_get_type ())
+GType gtk_identifier_get_type (void) G_GNUC_CONST;
 
 
 /* --- structures --- */
@@ -52,14 +55,28 @@ typedef struct {
 
 
 /* --- variables --- */
-static GHashTable	*binding_entry_hash_table = NULL;
+static GHashTable       *binding_entry_hash_table = NULL;
 static GSList           *binding_key_hashes = NULL;
-static GSList		*binding_set_list = NULL;
-static const gchar	 key_class_binding_set[] = "gtk-class-binding-set";
-static GQuark		 key_id_class_binding_set = 0;
+static GSList           *binding_set_list = NULL;
+static const gchar       key_class_binding_set[] = "gtk-class-binding-set";
+static GQuark            key_id_class_binding_set = 0;
 
 
 /* --- functions --- */
+GType
+gtk_identifier_get_type (void)
+{
+  static GType our_type = 0;
+
+  if (our_type == 0)
+    {
+      GTypeInfo tinfo = { 0, };
+      our_type = g_type_register_static (G_TYPE_STRING, I_("GtkIdentifier"), &tinfo, 0);
+    }
+
+  return our_type;
+}
+
 static void
 pattern_spec_free (PatternSpec *pspec)
 {
@@ -70,7 +87,7 @@ pattern_spec_free (PatternSpec *pspec)
 
 static GtkBindingSignal*
 binding_signal_new (const gchar *signal_name,
-		    guint	 n_args)
+                    guint        n_args)
 {
   GtkBindingSignal *signal;
 
@@ -91,7 +108,7 @@ binding_signal_free (GtkBindingSignal *sig)
   for (i = 0; i < sig->n_args; i++)
     {
       if (G_TYPE_FUNDAMENTAL (sig->args[i].arg_type) == G_TYPE_STRING)
-	g_free (sig->args[i].d.string_data);
+        g_free (sig->args[i].d.string_data);
     }
   g_slice_free1 (sizeof (GtkBindingSignal) + sig->n_args * sizeof (GtkBindingArg), sig);
 }
@@ -110,7 +127,7 @@ binding_entry_hash (gconstpointer  key)
 
 static gint
 binding_entries_compare (gconstpointer  a,
-			 gconstpointer  b)
+                         gconstpointer  b)
 {
   register const GtkBindingEntry *ea = a;
   register const GtkBindingEntry *eb = b;
@@ -120,7 +137,7 @@ binding_entries_compare (gconstpointer  a,
 
 static void
 binding_key_hash_insert_entry (GtkKeyHash      *key_hash,
-			       GtkBindingEntry *entry)
+                               GtkBindingEntry *entry)
 {
   guint keyval = entry->keyval;
   
@@ -130,9 +147,9 @@ binding_key_hash_insert_entry (GtkKeyHash      *key_hash,
   if (entry->modifiers & GDK_SHIFT_MASK)
     {
       if (keyval == GDK_KEY_Tab)
-	keyval = GDK_KEY_ISO_Left_Tab;
+        keyval = GDK_KEY_ISO_Left_Tab;
       else
-	keyval = gdk_keyval_to_upper (keyval);
+        keyval = gdk_keyval_to_upper (keyval);
     }
   
   _gtk_key_hash_add_entry (key_hash, keyval, entry->modifiers & ~GDK_RELEASE_MASK, entry);
@@ -149,8 +166,8 @@ binding_key_hash_destroy (gpointer data)
 
 static void
 insert_entries_into_key_hash (gpointer key,
-			      gpointer value,
-			      gpointer data)
+                              gpointer value,
+                              gpointer data)
 {
   GtkKeyHash *key_hash = data;
   GtkBindingEntry *entry = value;
@@ -176,9 +193,9 @@ binding_key_hash_for_keymap (GdkKeymap *keymap)
       g_object_set_qdata_full (G_OBJECT (keymap), key_hash_quark, key_hash, binding_key_hash_destroy);
 
       if (binding_entry_hash_table)
-	g_hash_table_foreach (binding_entry_hash_table,
-			      insert_entries_into_key_hash,
-			      key_hash);
+        g_hash_table_foreach (binding_entry_hash_table,
+                              insert_entries_into_key_hash,
+                              key_hash);
 
       binding_key_hashes = g_slist_prepend (binding_key_hashes, key_hash);
     }
@@ -189,8 +206,8 @@ binding_key_hash_for_keymap (GdkKeymap *keymap)
 
 static GtkBindingEntry*
 binding_entry_new (GtkBindingSet  *binding_set,
-		   guint           keyval,
-		   GdkModifierType modifiers)
+                   guint           keyval,
+                   GdkModifierType modifiers)
 {
   GSList *tmp_list;
   GtkBindingEntry *entry;
@@ -230,9 +247,9 @@ binding_entry_free (GtkBindingEntry *entry)
   GtkBindingSignal *sig;
 
   g_assert (entry->set_next == NULL &&
-	    entry->hash_next == NULL &&
-	    entry->in_emission == FALSE &&
-	    entry->destroyed == TRUE);
+            entry->hash_next == NULL &&
+            entry->in_emission == FALSE &&
+            entry->destroyed == TRUE);
 
   entry->destroyed = FALSE;
   
@@ -264,13 +281,13 @@ binding_entry_destroy (GtkBindingEntry *entry)
   while (tmp)
     {
       if (tmp == entry)
-	{
-	  if (last)
-	    last->set_next = entry->set_next;
-	  else
-	    entry->binding_set->entries = entry->set_next;
-	  break;
-	}
+        {
+          if (last)
+            last->set_next = entry->set_next;
+          else
+            entry->binding_set->entries = entry->set_next;
+          break;
+        }
       last = tmp;
       tmp = last->set_next;
     }
@@ -283,13 +300,13 @@ binding_entry_destroy (GtkBindingEntry *entry)
   while (tmp)
     {
       if (tmp == entry)
-	{
-	  if (last)
-	    last->hash_next = entry->hash_next;
-	  else
-	    begin = entry->hash_next;
-	  break;
-	}
+        {
+          if (last)
+            last->hash_next = entry->hash_next;
+          else
+            begin = entry->hash_next;
+          break;
+        }
       last = tmp;
       tmp = last->hash_next;
     }
@@ -317,8 +334,8 @@ binding_entry_destroy (GtkBindingEntry *entry)
 
 static GtkBindingEntry*
 binding_ht_lookup_entry (GtkBindingSet  *set,
-			 guint		 keyval,
-			 GdkModifierType modifiers)
+                         guint           keyval,
+                         GdkModifierType modifiers)
 {
   GtkBindingEntry lookup_entry = { 0 };
   GtkBindingEntry *entry;
@@ -339,9 +356,9 @@ binding_ht_lookup_entry (GtkBindingSet  *set,
 
 static gboolean
 binding_compose_params (GObject         *object,
-			GtkBindingArg	*args,
-			GSignalQuery	*query,
-			GValue	       **params_p)
+                        GtkBindingArg   *args,
+                        GSignalQuery    *query,
+                        GValue         **params_p)
 {
   GValue *params;
   const GType *types;
@@ -366,85 +383,85 @@ binding_compose_params (GObject         *object,
       g_value_init (params, *types);
 
       switch (G_TYPE_FUNDAMENTAL (args->arg_type))
-	{
-	case G_TYPE_DOUBLE:
-	  g_value_init (&tmp_value, G_TYPE_DOUBLE);
-	  g_value_set_double (&tmp_value, args->d.double_data);
-	  break;
-	case G_TYPE_LONG:
-	  g_value_init (&tmp_value, G_TYPE_LONG);
-	  g_value_set_long (&tmp_value, args->d.long_data);
-	  break;
-	case G_TYPE_STRING:
-	  /* gtk_rc_parse_flags/enum() has fancier parsing for this; we can't call
-	   * that since we don't have a GParamSpec, so just do something simple
-	   */
-	  if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_ENUM)
-	    {
-	      GEnumClass *class = G_ENUM_CLASS (g_type_class_ref (*types));
-	      
-	      valid = FALSE;
-	      
-	      if (args->arg_type == GTK_TYPE_IDENTIFIER)
-		{
-		  GEnumValue *enum_value = NULL;
-		  enum_value = g_enum_get_value_by_name (class, args->d.string_data);
-		  if (!enum_value)
-		    enum_value = g_enum_get_value_by_nick (class, args->d.string_data);
-		  if (enum_value)
-		    {
-		      g_value_init (&tmp_value, *types);
-		      g_value_set_enum (&tmp_value, enum_value->value);
-		      valid = TRUE;
-		    }
-		}
+        {
+        case G_TYPE_DOUBLE:
+          g_value_init (&tmp_value, G_TYPE_DOUBLE);
+          g_value_set_double (&tmp_value, args->d.double_data);
+          break;
+        case G_TYPE_LONG:
+          g_value_init (&tmp_value, G_TYPE_LONG);
+          g_value_set_long (&tmp_value, args->d.long_data);
+          break;
+        case G_TYPE_STRING:
+          /* gtk_rc_parse_flags/enum() has fancier parsing for this; we can't call
+           * that since we don't have a GParamSpec, so just do something simple
+           */
+          if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_ENUM)
+            {
+              GEnumClass *class = G_ENUM_CLASS (g_type_class_ref (*types));
 
-	      g_type_class_unref (class);
-	    }
-	  /* This is just a hack for compatibility with GTK+-1.2 where a string
-	   * could be used for a single flag value / without the support for multiple
-	   * values in gtk_rc_parse_flags(), this isn't very useful.
-	   */
-	  else if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_FLAGS)
-	    {
-	      GFlagsClass *class = G_FLAGS_CLASS (g_type_class_ref (*types));
-	      
-	      valid = FALSE;
-	      
-	      if (args->arg_type == GTK_TYPE_IDENTIFIER)
-		{
-		  GFlagsValue *flags_value = NULL;
-		  flags_value = g_flags_get_value_by_name (class, args->d.string_data);
-		  if (!flags_value)
-		    flags_value = g_flags_get_value_by_nick (class, args->d.string_data);
-		  if (flags_value)
-		    {
-		      g_value_init (&tmp_value, *types);
-		      g_value_set_flags (&tmp_value, flags_value->value);
-		      valid = TRUE;
-		    }
-		}
+              valid = FALSE;
 
-	      g_type_class_unref (class);
-	    }
-	  else
-	    {
-	      g_value_init (&tmp_value, G_TYPE_STRING);
-	      g_value_set_static_string (&tmp_value, args->d.string_data);
-	    }
-	  break;
-	default:
-	  valid = FALSE;
-	  break;
-	}
+              if (args->arg_type == GTK_TYPE_IDENTIFIER)
+                {
+                  GEnumValue *enum_value = NULL;
+                  enum_value = g_enum_get_value_by_name (class, args->d.string_data);
+                  if (!enum_value)
+                    enum_value = g_enum_get_value_by_nick (class, args->d.string_data);
+                  if (enum_value)
+                    {
+                      g_value_init (&tmp_value, *types);
+                      g_value_set_enum (&tmp_value, enum_value->value);
+                      valid = TRUE;
+                    }
+                }
+
+              g_type_class_unref (class);
+            }
+          /* This is just a hack for compatibility with GTK+-1.2 where a string
+           * could be used for a single flag value / without the support for multiple
+           * values in gtk_rc_parse_flags(), this isn't very useful.
+           */
+          else if (G_TYPE_FUNDAMENTAL (*types) == G_TYPE_FLAGS)
+            {
+              GFlagsClass *class = G_FLAGS_CLASS (g_type_class_ref (*types));
+
+              valid = FALSE;
+
+              if (args->arg_type == GTK_TYPE_IDENTIFIER)
+                {
+                  GFlagsValue *flags_value = NULL;
+                  flags_value = g_flags_get_value_by_name (class, args->d.string_data);
+                  if (!flags_value)
+                    flags_value = g_flags_get_value_by_nick (class, args->d.string_data);
+                  if (flags_value)
+                    {
+                      g_value_init (&tmp_value, *types);
+                      g_value_set_flags (&tmp_value, flags_value->value);
+                      valid = TRUE;
+                    }
+                }
+
+              g_type_class_unref (class);
+            }
+          else
+            {
+              g_value_init (&tmp_value, G_TYPE_STRING);
+              g_value_set_static_string (&tmp_value, args->d.string_data);
+            }
+          break;
+        default:
+          valid = FALSE;
+          break;
+        }
 
       if (valid)
-	{
-	  if (!g_value_transform (&tmp_value, params))
-	    valid = FALSE;
+        {
+          if (!g_value_transform (&tmp_value, params))
+            valid = FALSE;
 
-	  g_value_unset (&tmp_value);
-	}
+          g_value_unset (&tmp_value);
+        }
       
       types++;
       params++;
@@ -456,7 +473,7 @@ binding_compose_params (GObject         *object,
       guint j;
 
       for (j = 0; j < i; j++)
-	g_value_unset (&(*params_p)[j]);
+        g_value_unset (&(*params_p)[j]);
       
       g_free (*params_p);
       *params_p = NULL;
@@ -467,7 +484,7 @@ binding_compose_params (GObject         *object,
 
 static gboolean
 gtk_binding_entry_activate (GtkBindingEntry *entry,
-			    GObject	    *object)
+                            GObject         *object)
 {
   GtkBindingSignal *sig;
   gboolean old_emission;
@@ -489,65 +506,65 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
       
       signal_id = g_signal_lookup (sig->signal_name, G_OBJECT_TYPE (object));
       if (!signal_id)
-	{
-	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-		     "could not find signal \"%s\" in the `%s' class ancestry",
-		     entry->binding_set->set_name,
-		     accelerator,
-		     sig->signal_name,
-		     g_type_name (G_OBJECT_TYPE (object)));
-	  g_free (accelerator);
-	  continue;
-	}
-      
+        {
+          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
+          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
+                     "could not find signal \"%s\" in the `%s' class ancestry",
+                     entry->binding_set->set_name,
+                     accelerator,
+                     sig->signal_name,
+                     g_type_name (G_OBJECT_TYPE (object)));
+          g_free (accelerator);
+          continue;
+        }
+
       g_signal_query (signal_id, &query);
       if (query.n_params != sig->n_args ||
-	  (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) || 
-	  !binding_compose_params (object, sig->args, &query, &params))
-	{
-	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-		     "signature mismatch for signal \"%s\" in the `%s' class ancestry",
-		     entry->binding_set->set_name,
-		     accelerator,
-		     sig->signal_name,
-		     g_type_name (G_OBJECT_TYPE (object)));
-	}
+          (query.return_type != G_TYPE_NONE && query.return_type != G_TYPE_BOOLEAN) ||
+          !binding_compose_params (object, sig->args, &query, &params))
+        {
+          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
+          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
+                     "signature mismatch for signal \"%s\" in the `%s' class ancestry",
+                     entry->binding_set->set_name,
+                     accelerator,
+                     sig->signal_name,
+                     g_type_name (G_OBJECT_TYPE (object)));
+        }
       else if (!(query.signal_flags & G_SIGNAL_ACTION))
-	{
-	  accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
-	  g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
-		     "signal \"%s\" in the `%s' class ancestry cannot be used for action emissions",
-		     entry->binding_set->set_name,
-		     accelerator,
-		     sig->signal_name,
-		     g_type_name (G_OBJECT_TYPE (object)));
-	}
+        {
+          accelerator = gtk_accelerator_name (entry->keyval, entry->modifiers);
+          g_warning ("gtk_binding_entry_activate(): binding \"%s::%s\": "
+                     "signal \"%s\" in the `%s' class ancestry cannot be used for action emissions",
+                     entry->binding_set->set_name,
+                     accelerator,
+                     sig->signal_name,
+                     g_type_name (G_OBJECT_TYPE (object)));
+        }
       g_free (accelerator);
       if (accelerator)
-	continue;
+        continue;
 
       if (query.return_type == G_TYPE_BOOLEAN)
-	g_value_init (&return_val, G_TYPE_BOOLEAN);
+        g_value_init (&return_val, G_TYPE_BOOLEAN);
       
       g_signal_emitv (params, signal_id, 0, &return_val);
 
       if (query.return_type == G_TYPE_BOOLEAN)
-	{
-	  if (g_value_get_boolean (&return_val))
-	    handled = TRUE;
-	  g_value_unset (&return_val);
-	}
+        {
+          if (g_value_get_boolean (&return_val))
+            handled = TRUE;
+          g_value_unset (&return_val);
+        }
       else
-	handled = TRUE;
+        handled = TRUE;
       
       for (i = 0; i < query.n_params + 1; i++)
-	g_value_unset (&params[i]);
+        g_value_unset (&params[i]);
       g_free (params);
       
       if (entry->destroyed)
-	break;
+        break;
     }
   
   g_object_unref (object);
@@ -617,9 +634,9 @@ gtk_binding_set_by_class (gpointer object_class)
 
   binding_set = gtk_binding_set_new (g_type_name (G_OBJECT_CLASS_TYPE (class)));
   gtk_binding_set_add_path (binding_set,
-			    GTK_PATH_CLASS,
-			    g_type_name (G_OBJECT_CLASS_TYPE (class)),
-			    GTK_PATH_PRIO_GTK);
+                            GTK_PATH_CLASS,
+                            g_type_name (G_OBJECT_CLASS_TYPE (class)),
+                            GTK_PATH_PRIO_GTK);
   g_dataset_id_set_data (class, key_id_class_binding_set, binding_set);
 
   return binding_set;
@@ -648,7 +665,7 @@ gtk_binding_set_find (const gchar *set_name)
       
       binding_set = slist->data;
       if (g_str_equal (binding_set->set_name, (gpointer) set_name))
-	return binding_set;
+        return binding_set;
     }
   return NULL;
 }
@@ -666,10 +683,10 @@ gtk_binding_set_find (const gchar *set_name)
  * Return value: %TRUE if a binding was found and activated
  */
 gboolean
-gtk_binding_set_activate (GtkBindingSet	 *binding_set,
-			  guint		  keyval,
-			  GdkModifierType modifiers,
-			  GObject	 *object)
+gtk_binding_set_activate (GtkBindingSet  *binding_set,
+                          guint           keyval,
+                          GdkModifierType modifiers,
+                          GObject        *object)
 {
   GtkBindingEntry *entry;
   
@@ -745,9 +762,9 @@ gtk_binding_entry_skip (GtkBindingSet  *binding_set,
  * gtk_binding_entry_add_signal() on @binding_set.
  */
 void
-gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
-			  guint		  keyval,
-			  GdkModifierType modifiers)
+gtk_binding_entry_remove (GtkBindingSet  *binding_set,
+                          guint           keyval,
+                          GdkModifierType modifiers)
 {
   GtkBindingEntry *entry;
   
@@ -775,10 +792,10 @@ gtk_binding_entry_remove (GtkBindingSet	 *binding_set,
  */
 void
 gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
-                               guint	       keyval,
+                               guint           keyval,
                                GdkModifierType modifiers,
                                const gchar    *signal_name,
-                               GSList	      *binding_args)
+                               GSList         *binding_args)
 {
   _gtk_binding_entry_add_signall (binding_set,
                                   keyval, modifiers,
@@ -787,10 +804,10 @@ gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
 
 void
 _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
-                                guint	       keyval,
+                                guint          keyval,
                                 GdkModifierType modifiers,
                                 const gchar    *signal_name,
-                                GSList	      *binding_args)
+                                GSList        *binding_args)
 {
   GtkBindingEntry *entry;
   GtkBindingSignal *signal, **signal_p;
@@ -813,40 +830,40 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
       
       tmp_arg = slist->data;
       if (!tmp_arg)
-	{
-	  g_warning ("gtk_binding_entry_add_signall(): arg[%u] is `NULL'", n);
-	  binding_signal_free (signal);
-	  return;
-	}
+        {
+          g_warning ("gtk_binding_entry_add_signall(): arg[%u] is `NULL'", n);
+          binding_signal_free (signal);
+          return;
+        }
       switch (G_TYPE_FUNDAMENTAL (tmp_arg->arg_type))
-	{
-	case  G_TYPE_LONG:
-	  arg->arg_type = G_TYPE_LONG;
-	  arg->d.long_data = tmp_arg->d.long_data;
-	  break;
-	case  G_TYPE_DOUBLE:
-	  arg->arg_type = G_TYPE_DOUBLE;
-	  arg->d.double_data = tmp_arg->d.double_data;
-	  break;
-	case  G_TYPE_STRING:
+        {
+        case  G_TYPE_LONG:
+          arg->arg_type = G_TYPE_LONG;
+          arg->d.long_data = tmp_arg->d.long_data;
+          break;
+        case  G_TYPE_DOUBLE:
+          arg->arg_type = G_TYPE_DOUBLE;
+          arg->d.double_data = tmp_arg->d.double_data;
+          break;
+        case  G_TYPE_STRING:
           if (tmp_arg->arg_type != GTK_TYPE_IDENTIFIER)
-	    arg->arg_type = G_TYPE_STRING;
-	  else
-	    arg->arg_type = GTK_TYPE_IDENTIFIER;
-	  arg->d.string_data = g_strdup (tmp_arg->d.string_data);
-	  if (!arg->d.string_data)
-	    {
-	      g_warning ("gtk_binding_entry_add_signall(): value of `string' arg[%u] is `NULL'", n);
-	      binding_signal_free (signal);
-	      return;
-	    }
-	  break;
-	default:
-	  g_warning ("gtk_binding_entry_add_signall(): unsupported type `%s' for arg[%u]",
-		     g_type_name (arg->arg_type), n);
-	  binding_signal_free (signal);
-	  return;
-	}
+            arg->arg_type = G_TYPE_STRING;
+          else
+            arg->arg_type = GTK_TYPE_IDENTIFIER;
+          arg->d.string_data = g_strdup (tmp_arg->d.string_data);
+          if (!arg->d.string_data)
+            {
+              g_warning ("gtk_binding_entry_add_signall(): value of `string' arg[%u] is `NULL'", n);
+              binding_signal_free (signal);
+              return;
+            }
+          break;
+        default:
+          g_warning ("gtk_binding_entry_add_signall(): unsupported type `%s' for arg[%u]",
+                     g_type_name (arg->arg_type), n);
+          binding_signal_free (signal);
+          return;
+        }
       arg++;
       n++;
     }
@@ -879,11 +896,11 @@ _gtk_binding_entry_add_signall (GtkBindingSet  *binding_set,
  */
 void
 gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
-			      guint           keyval,
-			      GdkModifierType modifiers,
-			      const gchar    *signal_name,
-			      guint           n_args,
-			      ...)
+                              guint           keyval,
+                              GdkModifierType modifiers,
+                              const gchar    *signal_name,
+                              guint           n_args,
+                              ...)
 {
   GSList *slist, *free_slist;
   va_list args;
@@ -903,45 +920,45 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
 
       arg->arg_type = va_arg (args, GType);
       switch (G_TYPE_FUNDAMENTAL (arg->arg_type))
-	{
-	case G_TYPE_CHAR:
-	case G_TYPE_UCHAR:
-	case G_TYPE_INT:
-	case G_TYPE_UINT:
-	case G_TYPE_BOOLEAN:
-	case G_TYPE_ENUM:
-	case G_TYPE_FLAGS:
-	  arg->arg_type = G_TYPE_LONG;
-	  arg->d.long_data = va_arg (args, gint);
-	  break;
-	case G_TYPE_LONG:
-	case G_TYPE_ULONG:
-	  arg->arg_type = G_TYPE_LONG;
-	  arg->d.long_data = va_arg (args, glong);
-	  break;
-	case G_TYPE_FLOAT:
-	case G_TYPE_DOUBLE:
-	  arg->arg_type = G_TYPE_DOUBLE;
-	  arg->d.double_data = va_arg (args, gdouble);
-	  break;
-	case G_TYPE_STRING:
-	  if (arg->arg_type != GTK_TYPE_IDENTIFIER)
-	    arg->arg_type = G_TYPE_STRING;
-	  arg->d.string_data = va_arg (args, gchar*);
-	  if (!arg->d.string_data)
-	    {
-	      g_warning ("gtk_binding_entry_add_signal(): type `%s' arg[%u] is `NULL'",
-			 g_type_name (arg->arg_type),
-			 i);
-	      i += n_args + 1;
-	    }
-	  break;
-	default:
-	  g_warning ("gtk_binding_entry_add_signal(): unsupported type `%s' for arg[%u]",
-		     g_type_name (arg->arg_type), i);
-	  i += n_args + 1;
-	  break;
-	}
+        {
+        case G_TYPE_CHAR:
+        case G_TYPE_UCHAR:
+        case G_TYPE_INT:
+        case G_TYPE_UINT:
+        case G_TYPE_BOOLEAN:
+        case G_TYPE_ENUM:
+        case G_TYPE_FLAGS:
+          arg->arg_type = G_TYPE_LONG;
+          arg->d.long_data = va_arg (args, gint);
+          break;
+        case G_TYPE_LONG:
+        case G_TYPE_ULONG:
+          arg->arg_type = G_TYPE_LONG;
+          arg->d.long_data = va_arg (args, glong);
+          break;
+        case G_TYPE_FLOAT:
+        case G_TYPE_DOUBLE:
+          arg->arg_type = G_TYPE_DOUBLE;
+          arg->d.double_data = va_arg (args, gdouble);
+          break;
+        case G_TYPE_STRING:
+          if (arg->arg_type != GTK_TYPE_IDENTIFIER)
+            arg->arg_type = G_TYPE_STRING;
+          arg->d.string_data = va_arg (args, gchar*);
+          if (!arg->d.string_data)
+            {
+              g_warning ("gtk_binding_entry_add_signal(): type `%s' arg[%u] is `NULL'",
+                         g_type_name (arg->arg_type),
+                         i);
+              i += n_args + 1;
+            }
+          break;
+        default:
+          g_warning ("gtk_binding_entry_add_signal(): unsupported type `%s' for arg[%u]",
+                     g_type_name (arg->arg_type), i);
+          i += n_args + 1;
+          break;
+        }
     }
   va_end (args);
 
@@ -973,10 +990,10 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
  * Deprecated: 3.0
  */
 void
-gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
-			  GtkPathType	      path_type,
-			  const gchar	     *path_pattern,
-			  GtkPathPriorityType priority)
+gtk_binding_set_add_path (GtkBindingSet      *binding_set,
+                          GtkPathType         path_type,
+                          const gchar        *path_pattern,
+                          GtkPathPriorityType priority)
 {
   PatternSpec *pspec;
   GSList **slist_p, *slist;
@@ -1024,18 +1041,18 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
       slist = slist->next;
       
       if (g_pattern_spec_equal (tmp_pspec->pspec, pspec->pspec))
-	{
-	  GtkPathPriorityType lprio = tmp_pspec->seq_id >> 28;
+        {
+          GtkPathPriorityType lprio = tmp_pspec->seq_id >> 28;
 
-	  pattern_spec_free (pspec);
-	  pspec = NULL;
-	  if (lprio < priority)
-	    {
-	      tmp_pspec->seq_id &= 0x0fffffff;
-	      tmp_pspec->seq_id |= priority << 28;
-	    }
-	  break;
-	}
+          pattern_spec_free (pspec);
+          pspec = NULL;
+          if (lprio < priority)
+            {
+              tmp_pspec->seq_id &= 0x0fffffff;
+              tmp_pspec->seq_id |= priority << 28;
+            }
+          break;
+        }
     }
   if (pspec)
     {
@@ -1046,10 +1063,10 @@ gtk_binding_set_add_path (GtkBindingSet	     *binding_set,
 
 static gboolean
 binding_match_activate (GSList          *pspec_list,
-			GObject	        *object,
-			guint	         path_length,
-			gchar           *path,
-			gchar           *path_reversed,
+                        GObject         *object,
+                        guint            path_length,
+                        gchar           *path,
+                        gchar           *path_reversed,
                         gboolean        *unbound)
 {
   GSList *slist;
@@ -1067,7 +1084,7 @@ binding_match_activate (GSList          *pspec_list,
       if (pspec->type != GTK_PATH_WIDGET_CLASS)
         {
           if (g_pattern_match (pspec->pspec, path_length, path, path_reversed))
-	    binding_set = pspec->user_data;
+            binding_set = pspec->user_data;
         }
 
       if (binding_set)
@@ -1088,7 +1105,7 @@ binding_match_activate (GSList          *pspec_list,
 
 static gint
 gtk_binding_pattern_compare (gconstpointer new_pattern,
-			     gconstpointer existing_pattern)
+                             gconstpointer existing_pattern)
 {
   register const PatternSpec *np  = new_pattern;
   register const PatternSpec *ep  = existing_pattern;
@@ -1102,8 +1119,8 @@ gtk_binding_pattern_compare (gconstpointer new_pattern,
 
 static GSList*
 gtk_binding_entries_sort_patterns (GSList      *entries,
-				   GtkPathType  path_id,
-				   gboolean     is_release)
+                                   GtkPathType  path_id,
+                                   gboolean     is_release)
 {
   GSList *patterns;
   GSList *tmp_list;
@@ -1125,34 +1142,34 @@ gtk_binding_entries_sort_patterns (GSList      *entries,
       GSList *slist = NULL;
 
       if (is_release != ((entry->modifiers & GDK_RELEASE_MASK) != 0))
-	continue;
+        continue;
 
       binding_set = entry->binding_set;
 
       if (binding_set->current)
-	continue;
+        continue;
       binding_set->current = entry;
 
       switch (path_id)
-	{
-	case GTK_PATH_WIDGET:
-	  slist = binding_set->widget_path_pspecs;
-	  break;
-	case GTK_PATH_WIDGET_CLASS:
-	  slist = binding_set->widget_class_pspecs;
-	  break;
-	case GTK_PATH_CLASS:
-	  slist = binding_set->class_branch_pspecs;
-	  break;
-	}
+        {
+        case GTK_PATH_WIDGET:
+          slist = binding_set->widget_path_pspecs;
+          break;
+        case GTK_PATH_WIDGET_CLASS:
+          slist = binding_set->widget_class_pspecs;
+          break;
+        case GTK_PATH_CLASS:
+          slist = binding_set->class_branch_pspecs;
+          break;
+        }
 
       for (; slist; slist = slist->next)
-	{
-	  PatternSpec *pspec;
+        {
+          PatternSpec *pspec;
 
-	  pspec = slist->data;
-	  patterns = g_slist_insert_sorted (patterns, pspec, gtk_binding_pattern_compare);
-	}
+          pspec = slist->data;
+          patterns = g_slist_insert_sorted (patterns, pspec, gtk_binding_pattern_compare);
+        }
     }
 
   return patterns;
@@ -1160,8 +1177,8 @@ gtk_binding_entries_sort_patterns (GSList      *entries,
 
 static gboolean
 gtk_bindings_activate_list (GObject   *object,
-			    GSList    *entries,
-			    gboolean   is_release)
+                            GSList    *entries,
+                            gboolean   is_release)
 {
   gboolean handled = FALSE;
 
@@ -1179,24 +1196,24 @@ gtk_bindings_activate_list (GObject   *object,
       patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_CLASS, is_release);
       class_type = G_TYPE_FROM_INSTANCE (object);
       while (class_type && !handled)
-	{
-	  guint path_length;
-	  gchar *path;
-	  gchar *path_reversed;
+        {
+          guint path_length;
+          gchar *path;
+          gchar *path_reversed;
 
-	  path = g_strdup (g_type_name (class_type));
-	  path_reversed = g_strdup (path);
-	  g_strreverse (path_reversed);
-	  path_length = strlen (path);
-	  handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
-	  g_free (path);
-	  g_free (path_reversed);
+          path = g_strdup (g_type_name (class_type));
+          path_reversed = g_strdup (path);
+          g_strreverse (path_reversed);
+          path_length = strlen (path);
+          handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
+          g_free (path);
+          g_free (path_reversed);
 
           if (unbound)
             break;
 
-	  class_type = g_type_parent (class_type);
-	}
+          class_type = g_type_parent (class_type);
+        }
       g_slist_free (patterns);
 
       if (unbound)
@@ -1219,8 +1236,8 @@ gtk_bindings_activate_list (GObject   *object,
  */
 gboolean
 gtk_bindings_activate (GObject         *object,
-		       guint	        keyval,
-		       GdkModifierType  modifiers)
+                       guint            keyval,
+                       GdkModifierType  modifiers)
 {
   GSList *entries = NULL;
   GdkDisplay *display;
@@ -1274,13 +1291,13 @@ gtk_bindings_activate_event (GObject     *object,
   key_hash = binding_key_hash_for_keymap (gdk_keymap_get_for_display (display));
 
   entries = _gtk_key_hash_lookup (key_hash,
-				  event->hardware_keycode,
-				  event->state,
-				  BINDING_MOD_MASK () & ~GDK_RELEASE_MASK,
-				  event->group);
+                                  event->hardware_keycode,
+                                  event->state,
+                                  BINDING_MOD_MASK () & ~GDK_RELEASE_MASK,
+                                  event->group);
   
   handled = gtk_bindings_activate_list (object, entries,
-					event->type == GDK_KEY_RELEASE);
+                                        event->type == GDK_KEY_RELEASE);
 
   g_slist_free (entries);
 

@@ -50,6 +50,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
 #include "gtkscrollable.h"
+#include "gtktypebuiltins.h"
 
 
 /**

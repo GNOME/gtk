@@ -37,9 +37,9 @@
 #include "gtksettings.h"
 #include "gtksizerequest.h"
 #include "gtkwindow.h"
-
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 #define BORDER_SPACING  0
 #define DEFAULT_IPADDING 1

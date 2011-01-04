@@ -40,6 +40,7 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtktypebuiltins.h"
 
 #define MENU_SHELL_TIMEOUT   500
 

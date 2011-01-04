@@ -198,7 +198,6 @@ gtk/gtktreesortable.c
 gtk/gtktreestore.c
 gtk/gtktreeview.c
 gtk/gtktreeviewcolumn.c
-gtk/gtktypeutils.c
 gtk/gtkuimanager.c
 gtk/gtkvbbox.c
 gtk/gtkvbox.c

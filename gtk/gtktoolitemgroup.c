@@ -22,11 +22,11 @@
 
 #include "config.h"
 
-#include "gtktoolpaletteprivate.h"
-
-#include <gtk/gtk.h>
 #include <math.h>
 #include <string.h>
+
+#include "gtktoolpaletteprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

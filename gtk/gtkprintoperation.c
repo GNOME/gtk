@@ -21,16 +21,18 @@
 #include "config.h"
 
 #include <errno.h>
-#include <stdlib.h>       
+#include <stdlib.h>
 #include <math.h>
-
 #include <string.h>
+
+#include <cairo-pdf.h>
+
 #include "gtkprintoperation-private.h"
 #include "gtkmarshalers.h"
-#include <cairo-pdf.h>
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkmessagedialog.h"
+#include "gtktypebuiltins.h"
 
 #define SHOW_PROGRESS_TIME 1200
 

@@ -50,6 +50,7 @@
 #include "gtkshow.h"
 #include "gtktooltip.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 /*rint() is only available in GCC and/or C99*/
 #if (__STDC_VERSION__ < 199901L && !defined __GNUC__)
