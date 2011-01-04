@@ -273,12 +273,6 @@ static const gchar attach_data_key[] = "gtk-menu-attach-data";
 
 static guint menu_signals[LAST_SIGNAL] = { 0 };
 
-static GtkMenuPrivate *
-gtk_menu_get_private (GtkMenu *menu)
-{
-  return G_TYPE_INSTANCE_GET_PRIVATE (menu, GTK_TYPE_MENU, GtkMenuPrivate);
-}
-
 G_DEFINE_TYPE (GtkMenu, gtk_menu, GTK_TYPE_MENU_SHELL)
 
 static void
@@ -324,7 +318,7 @@ is_grid_attached (AttachInfo *ai)
 static void
 menu_ensure_layout (GtkMenu *menu)
 {
-  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  GtkMenuPrivate *priv = menu->priv;
 
   if (!priv->have_layout)
     {
@@ -410,7 +404,7 @@ menu_ensure_layout (GtkMenu *menu)
 static gint
 gtk_menu_get_n_columns (GtkMenu *menu)
 {
-  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  GtkMenuPrivate *priv = menu->priv;
 
   menu_ensure_layout (menu);
 
@@ -420,7 +414,7 @@ gtk_menu_get_n_columns (GtkMenu *menu)
 static gint
 gtk_menu_get_n_rows (GtkMenu *menu)
 {
-  GtkMenuPrivate *priv = gtk_menu_get_private (menu);
+  GtkMenuPrivate *priv = menu->priv;
 
   menu_ensure_layout (menu);
 
@@ -2878,7 +2872,7 @@ gtk_menu_draw (GtkWidget *widget,
   GtkBorder menu_border;
 
   menu = GTK_MENU (widget);
-  priv = gtk_menu_get_private (menu);
+  priv = menu->priv;
   context = gtk_widget_get_style_context (widget);
   window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -4176,7 +4170,7 @@ gtk_menu_enter_notify (GtkWidget        *widget,
 
       if (GTK_IS_MENU (menu))
         {
-          GtkMenuPrivate *priv = gtk_menu_get_private (GTK_MENU (menu));
+          GtkMenuPrivate *priv = (GTK_MENU (menu))->priv;
           GtkMenuShell *menu_shell = GTK_MENU_SHELL (menu);
 
           if (priv->seen_item_enter)
