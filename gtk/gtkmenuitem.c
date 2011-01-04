@@ -166,8 +166,6 @@ G_DEFINE_TYPE_WITH_CODE (GtkMenuItem, gtk_menu_item, GTK_TYPE_BIN,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ACTIVATABLE,
                                                 gtk_menu_item_activatable_interface_init))
 
-#define GET_PRIVATE(object)  \
-  (G_TYPE_INSTANCE_GET_PRIVATE ((object), GTK_TYPE_MENU_ITEM, GtkMenuItemPrivate))
 
 static void
 gtk_menu_item_class_init (GtkMenuItemClass *klass)
@@ -709,7 +707,7 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
 
   if (child != NULL && gtk_widget_get_visible (child))
     {
-      GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
+      GtkMenuItemPrivate *priv = menu_item->priv;
       gint child_min, child_nat;
 
       gtk_widget_get_preferred_width (child, &child_min, &child_nat);
@@ -808,7 +806,7 @@ gtk_menu_item_get_preferred_height (GtkWidget *widget,
 
   if (child != NULL && gtk_widget_get_visible (child))
     {
-      GtkMenuItemPrivate *priv = GET_PRIVATE (menu_item);
+      GtkMenuItemPrivate *priv = menu_item->priv;
       gint child_min, child_nat;
 
       gtk_widget_get_preferred_height (child, &child_min, &child_nat);
@@ -2533,7 +2531,7 @@ gtk_menu_item_set_reserve_indicator (GtkMenuItem         *menu_item,
 
   g_return_if_fail (GTK_IS_MENU_ITEM (menu_item));
 
-  priv = GET_PRIVATE (menu_item);
+  priv = menu_item->priv;
 
   if (priv->reserve_indicator != reserve)
     {
@@ -2545,11 +2543,7 @@ gtk_menu_item_set_reserve_indicator (GtkMenuItem         *menu_item,
 gboolean
 gtk_menu_item_get_reserve_indicator (GtkMenuItem         *menu_item)
 {
-  GtkMenuItemPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_MENU_ITEM (menu_item), FALSE);
 
-  priv = GET_PRIVATE (menu_item);
-
-  return priv->reserve_indicator;
+  return menu_item->priv->reserve_indicator;
 }
