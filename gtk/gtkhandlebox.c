@@ -611,11 +611,19 @@ gtk_handle_box_size_request (GtkWidget      *widget,
 	}
       else
 	{
+          GtkStyleContext *context;
+          GtkStateFlags state;
+          GtkBorder padding;
+
+          context = gtk_widget_get_style_context (widget);
+          state = gtk_widget_get_state_flags (widget);
+          gtk_style_context_get_padding (context, state, &padding);
+
 	  if (handle_position == GTK_POS_LEFT ||
 	      handle_position == GTK_POS_RIGHT)
-	    requisition->height += gtk_widget_get_style (widget)->ythickness;
+	    requisition->height += padding.top;
 	  else
-	    requisition->width += gtk_widget_get_style (widget)->xthickness;
+	    requisition->width += padding.left;
 	}
     }
   else
