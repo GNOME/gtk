@@ -34,22 +34,26 @@
  * @Short_description: Displays a calendar and allows the user to select a date
  * @Title: GtkCalendar
  *
- * #GtkCalendar is a widget that displays a calendar, one month at a time. It
- * can be created with gtk_calendar_new().
+ * #GtkCalendar is a widget that displays a Gregorian calendar, one month
+ * at a time. It can be created with gtk_calendar_new().
  *
  * The month and year currently displayed can be altered with
- * gtk_calendar_select_month(). The exact day can be selected from the displayed
- * month using gtk_calendar_select_day().
+ * gtk_calendar_select_month(). The exact day can be selected from the
+ * displayed month using gtk_calendar_select_day().
  *
- * To place a visual marker on a particular day, use gtk_calendar_mark_day() and
- * to remove the marker, gtk_calendar_unmark_day(). Alternative, all marks can
- * be cleared with gtk_calendar_clear_marks().
+ * To place a visual marker on a particular day, use gtk_calendar_mark_day()
+ * and to remove the marker, gtk_calendar_unmark_day(). Alternative, all
+ * marks can be cleared with gtk_calendar_clear_marks().
  *
  * The way in which the calendar itself is displayed can be altered using
  * gtk_calendar_set_display_options().
  *
  * The selected date can be retrieved from a #GtkCalendar using
  * gtk_calendar_get_date().
+ *
+ * Users should be aware that, although the Gregorian calendar is the legal
+ * calendar in most countries, it was adopted progressively between 1582 and
+ * 1929. Display before these dates is likely to be historically incorrect.
  */
 
 #include "config.h"
