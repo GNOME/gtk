@@ -24,30 +24,30 @@
  *
  * #GtkCellLayout is an interface to be implemented by all objects which
  * want to provide a #GtkTreeViewColumn-like API for packing cells, setting
- * attributes and data funcs. 
+ * attributes and data funcs.
  *
  * One of the notable features provided by implementations of GtkCellLayout
  * are <emphasis>attributes</emphasis>. Attributes let you set the properties
  * in flexible ways. They can just be set to constant values like regular
- * properties. But they can also be mapped to a column of the underlying 
- * tree model with gtk_cell_layout_set_attributes(), which means that the value 
- * of the attribute can change from cell to cell as they are rendered by the 
- * cell renderer. Finally, it is possible to specify a function with 
- * gtk_cell_layout_set_cell_data_func() that is called to determine the value 
+ * properties. But they can also be mapped to a column of the underlying
+ * tree model with gtk_cell_layout_set_attributes(), which means that the value
+ * of the attribute can change from cell to cell as they are rendered by the
+ * cell renderer. Finally, it is possible to specify a function with
+ * gtk_cell_layout_set_cell_data_func() that is called to determine the value
  * of the attribute for each cell that is rendered.
  *
  * <refsect2 id="GtkCellLayout-BUILDER-UI">
  * <title>GtkCellLayouts as GtkBuildable</title>
  * <para>
- * Implementations of GtkCellLayout which also implement the GtkBuildable 
- * interface (#GtkCellView, #GtkIconView, #GtkComboBox, #GtkComboBoxEntry, 
+ * Implementations of GtkCellLayout which also implement the GtkBuildable
+ * interface (#GtkCellView, #GtkIconView, #GtkComboBox, #GtkComboBoxEntry,
  * #GtkEntryCompletion, #GtkTreeViewColumn) accept GtkCellRenderer objects
- * as &lt;child&gt; elements in UI definitions. They support a custom 
- * &lt;attributes&gt; element for their children, which can contain 
- * multiple &lt;attribute&gt; elements. Each &lt;attribute&gt; element has 
- * a name attribute which specifies a property of the cell renderer; the 
+ * as &lt;child&gt; elements in UI definitions. They support a custom
+ * &lt;attributes&gt; element for their children, which can contain
+ * multiple &lt;attribute&gt; elements. Each &lt;attribute&gt; element has
+ * a name attribute which specifies a property of the cell renderer; the
  * content of the element is the attribute value.
- * 
+ *
  * <example>
  * <title>A UI definition fragment specifying attributes</title>
  * <programlisting><![CDATA[
@@ -105,15 +105,15 @@ gtk_cell_layout_default_init (GtkCellLayoutInterface *iface)
 
 /**
  * gtk_cell_layout_pack_start:
- * @cell_layout: A #GtkCellLayout.
- * @cell: A #GtkCellRenderer.
- * @expand: %TRUE if @cell is to be given extra space allocated to @cell_layout.
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer
+ * @expand: %TRUE if @cell is to be given extra space allocated to @cell_layout
  *
  * Packs the @cell into the beginning of @cell_layout. If @expand is %FALSE,
  * then the @cell is allocated no more space than it needs. Any unused space
  * is divided evenly between cells for which @expand is %TRUE.
  *
- * Note that reusing the same cell renderer is not supported. 
+ * Note that reusing the same cell renderer is not supported.
  *
  * Since: 2.4
  */
@@ -143,15 +143,15 @@ gtk_cell_layout_pack_start (GtkCellLayout   *cell_layout,
 
 /**
  * gtk_cell_layout_pack_end:
- * @cell_layout: A #GtkCellLayout.
- * @cell: A #GtkCellRenderer.
- * @expand: %TRUE if @cell is to be given extra space allocated to @cell_layout.
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer
+ * @expand: %TRUE if @cell is to be given extra space allocated to @cell_layout
  *
  * Adds the @cell to the end of @cell_layout. If @expand is %FALSE, then the
  * @cell is allocated no more space than it needs. Any unused space is
  * divided evenly between cells for which @expand is %TRUE.
  *
- * Note that reusing the same cell renderer is not supported. 
+ * Note that reusing the same cell renderer is not supported.
  *
  * Since: 2.4
  */
@@ -181,7 +181,7 @@ gtk_cell_layout_pack_end (GtkCellLayout   *cell_layout,
 
 /**
  * gtk_cell_layout_clear:
- * @cell_layout: A #GtkCellLayout.
+ * @cell_layout: a #GtkCellLayout
  *
  * Unsets all the mappings on all renderers on @cell_layout and
  * removes all renderers from @cell_layout.
@@ -245,14 +245,15 @@ gtk_cell_layout_set_attributesv (GtkCellLayout   *cell_layout,
 
 /**
  * gtk_cell_layout_set_attributes:
- * @cell_layout: A #GtkCellLayout.
- * @cell: A #GtkCellRenderer.
- * @Varargs: A %NULL-terminated list of attributes.
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer
+ * @Varargs: a %NULL-terminated list of attributes
  *
- * Sets the attributes in list as the attributes of @cell_layout. The
- * attributes should be in attribute/column order, as in
- * gtk_cell_layout_add_attribute(). All existing attributes are removed, and
- * replaced with the new attributes.
+ * Sets the attributes in list as the attributes of @cell_layout.
+ *
+ * The attributes should be in attribute/column order, as in
+ * gtk_cell_layout_add_attribute(). All existing attributes are
+ * removed, and replaced with the new attributes.
  *
  * Since: 2.4
  */
@@ -273,16 +274,17 @@ gtk_cell_layout_set_attributes (GtkCellLayout   *cell_layout,
 
 /**
  * gtk_cell_layout_add_attribute:
- * @cell_layout: A #GtkCellLayout.
- * @cell: A #GtkCellRenderer.
- * @attribute: An attribute on the renderer.
- * @column: The column position on the model to get the attribute from.
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer
+ * @attribute: an attribute on the renderer
+ * @column: the column position on the model to get the attribute from
  *
- * Adds an attribute mapping to the list in @cell_layout. The @column is the
- * column of the model to get a value from, and the @attribute is the
- * parameter on @cell to be set from the value. So for example if column 2
- * of the model contains strings, you could have the "text" attribute of a
- * #GtkCellRendererText get its values from column 2.
+ * Adds an attribute mapping to the list in @cell_layout.
+ *
+ * The @column is the column of the model to get a value from, and the
+ * @attribute is the parameter on @cell to be set from the value. So for
+ * example if column 2 of the model contains strings, you could have the
+ * "text" attribute of a #GtkCellRendererText get its values from column 2.
  *
  * Since: 2.4
  */
@@ -318,16 +320,19 @@ gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
 
 /**
  * gtk_cell_layout_set_cell_data_func:
- * @cell_layout: A #GtkCellLayout.
- * @cell: A #GtkCellRenderer.
- * @func: The #GtkCellLayoutDataFunc to use.
- * @func_data: The user data for @func.
- * @destroy: The destroy notification for @func_data.
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer
+ * @func (allow-none: the #GtkCellLayoutDataFunc to use, or %NULL
+ * @func_data: user data for @func
+ * @destroy: destroy notify for @func_data
  *
- * Sets the #GtkCellLayoutDataFunc to use for @cell_layout. This function
- * is used instead of the standard attributes mapping for setting the
- * column value, and should set the value of @cell_layout's cell renderer(s)
- * as appropriate. @func may be %NULL to remove and older one.
+ * Sets the #GtkCellLayoutDataFunc to use for @cell_layout.
+ *
+ * This function is used instead of the standard attributes mapping
+ * for setting the column value, and should set the value of @cell_layout's
+ * cell renderer(s) as appropriate.
+ *
+ * @func may be %NULL to remove a previously set function.
  *
  * Since: 2.4
  */
@@ -372,8 +377,8 @@ gtk_cell_layout_set_cell_data_func (GtkCellLayout         *cell_layout,
 
 /**
  * gtk_cell_layout_clear_attributes:
- * @cell_layout: A #GtkCellLayout.
- * @cell: A #GtkCellRenderer to clear the attribute mapping on.
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer to clear the attribute mapping on
  *
  * Clears all existing attributes previously set with
  * gtk_cell_layout_set_attributes().
@@ -405,12 +410,14 @@ gtk_cell_layout_clear_attributes (GtkCellLayout   *cell_layout,
 
 /**
  * gtk_cell_layout_reorder:
- * @cell_layout: A #GtkCellLayout.
- * @cell: A #GtkCellRenderer to reorder.
- * @position: New position to insert @cell at.
+ * @cell_layout: a #GtkCellLayout
+ * @cell: a #GtkCellRenderer to reorder
+ * @position: new position to insert @cell at
  *
- * Re-inserts @cell at @position. Note that @cell has already to be packed
- * into @cell_layout for this to function properly.
+ * Re-inserts @cell at @position.
+ *
+ * Note that @cell has already to be packed into @cell_layout
+ * for this to function properly.
  *
  * Since: 2.4
  */
@@ -441,12 +448,13 @@ gtk_cell_layout_reorder (GtkCellLayout   *cell_layout,
 /**
  * gtk_cell_layout_get_cells:
  * @cell_layout: a #GtkCellLayout
- * 
+ *
  * Returns the cell renderers which have been added to @cell_layout.
  *
- * Return value: (element-type GtkCellRenderer) (transfer container): a list of cell renderers. The list, but not the
- *   renderers has been newly allocated and should be freed with
- *   g_list_free() when no longer needed.
+ * Return value: (element-type GtkCellRenderer) (transfer container):
+ *     a list of cell renderers. The list, but not the renderers has
+ *     been newly allocated and should be freed with g_list_free()
+ *     when no longer needed.
  *
  * Since: 2.12
  */
@@ -475,13 +483,14 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
 /**
  * gtk_cell_layout_get_area:
  * @cell_layout: a #GtkCellLayout
- * 
- * Returns the underlying #GtkCellArea which might be @cell_layout if called on a #GtkCellArea or
- * might be %NULL if no #GtkCellArea is used by @cell_layout.
  *
- * Return value: (transfer none): a list of cell renderers. The list, but not the
- *   renderers has been newly allocated and should be freed with
- *   g_list_free() when no longer needed.
+ * Returns the underlying #GtkCellArea which might be @cell_layout
+ * if called on a #GtkCellArea or might be %NULL if no #GtkCellArea
+ * is used by @cell_layout.
+ *
+ * Return value: (transfer none): a list of cell renderers. The list,
+ *     but not the renderers has been newly allocated and should be
+ *     freed with g_list_free() when no longer needed.
  *
  * Since: 3.0
  */
