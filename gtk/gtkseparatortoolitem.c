@@ -302,8 +302,6 @@ gtk_separator_tool_item_realize (GtkWidget *widget)
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                        &attributes, attributes_mask);
   gdk_window_set_user_data (priv->event_window, widget);
-
-  gtk_widget_style_attach (widget);
 }
 
 static void
