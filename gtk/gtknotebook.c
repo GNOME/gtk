@@ -445,8 +445,6 @@ static gint gtk_notebook_page_compare        (gconstpointer     a,
 static GList* gtk_notebook_find_child        (GtkNotebook      *notebook,
 					      GtkWidget        *child,
 					      const gchar      *function);
-static gint  gtk_notebook_real_page_position (GtkNotebook      *notebook,
-					      GList            *list);
 static GList * gtk_notebook_search_page      (GtkNotebook      *notebook,
 					      GList            *list,
 					      gint              direction,
@@ -4568,7 +4566,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
  * gtk_notebook_timer
  * gtk_notebook_set_scroll_timer
  * gtk_notebook_page_compare
- * gtk_notebook_real_page_position
  * gtk_notebook_search_page
  */
 static void
@@ -4889,28 +4886,6 @@ gtk_notebook_update_labels (GtkNotebook *notebook)
 	    gtk_label_set_text (GTK_LABEL (page->menu_label), string);
 	}
     }
-}
-
-static gint
-gtk_notebook_real_page_position (GtkNotebook *notebook,
-				 GList       *list)
-{
-  GtkNotebookPrivate *priv = notebook->priv;
-  GList *work;
-  gint count_start;
-
-  for (work = priv->children, count_start = 0;
-       work && work != list; work = work->next)
-    if (GTK_NOTEBOOK_PAGE (work)->pack == GTK_PACK_START)
-      count_start++;
-
-  if (!work)
-    return -1;
-
-  if (GTK_NOTEBOOK_PAGE (list)->pack == GTK_PACK_START)
-    return count_start;
-
-  return (count_start + g_list_length (list) - 1);
 }
 
 static GList *
@@ -6582,7 +6557,7 @@ gtk_notebook_menu_item_create (GtkNotebook *notebook,
   menu_item = gtk_menu_item_new ();
   gtk_container_add (GTK_CONTAINER (menu_item), page->menu_label);
   gtk_menu_shell_insert (GTK_MENU_SHELL (priv->menu), menu_item,
-			 gtk_notebook_real_page_position (notebook, list));
+                         g_list_position (priv->children, list));
   g_signal_connect (menu_item, "activate",
 		    G_CALLBACK (gtk_notebook_menu_switch_page), page);
   if (gtk_widget_get_visible (page->child))
@@ -7516,7 +7491,7 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 	  gchar string[32];
 
 	  g_snprintf (string, sizeof(string), _("Page %u"), 
-		      gtk_notebook_real_page_position (notebook, list));
+		      g_list_position (priv->children, list));
 	  page->tab_label = gtk_label_new (string);
 	  gtk_widget_set_parent (page->tab_label, GTK_WIDGET (notebook));
 	}
