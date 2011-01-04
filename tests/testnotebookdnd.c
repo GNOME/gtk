@@ -1,5 +1,5 @@
 /* -*- Mode: C; c-file-style: "gnu"; tab-width: 8 -*- */
-/* 
+/*
  * GTK - The GIMP Toolkit
  * Copyright (C) 2006  Carlos Garnacho Parro <carlosg@gnome.org>
  *
@@ -21,12 +21,6 @@
  * Boston, MA 02111-1307, USA.
  */
 #include <gtk/gtk.h>
-
-enum {
-  PACK_START,
-  PACK_END,
-  PACK_ALTERNATE
-};
 
 static gpointer GROUP_A = "GROUP_A";
 static gpointer GROUP_B = "GROUP_B";
@@ -69,10 +63,10 @@ static const GtkTargetEntry button_targets[] = {
 
 static GtkNotebook*
 window_creation_function (GtkNotebook *source_notebook,
-			  GtkWidget   *child,
-			  gint         x,
-			  gint         y,
-			  gpointer     data)
+                          GtkWidget   *child,
+                          gint         x,
+                          gint         y,
+                          gpointer     data)
 {
   GtkWidget *window, *notebook;
 
@@ -82,7 +76,7 @@ window_creation_function (GtkNotebook *source_notebook,
                     G_CALLBACK (window_creation_function), NULL);
 
   gtk_notebook_set_group_name (GTK_NOTEBOOK (notebook),
-			       gtk_notebook_get_group_name (source_notebook));
+                               gtk_notebook_get_group_name (source_notebook));
 
   gtk_container_add (GTK_CONTAINER (window), notebook);
 
@@ -101,8 +95,8 @@ on_page_reordered (GtkNotebook *notebook, GtkWidget *child, guint page_num, gpoi
 
 static void
 on_notebook_drag_begin (GtkWidget      *widget,
-			GdkDragContext *context,
-			gpointer        data)
+                        GdkDragContext *context,
+                        gpointer        data)
 {
   GdkPixbuf *pixbuf;
   guint page_num;
@@ -112,8 +106,8 @@ on_notebook_drag_begin (GtkWidget      *widget,
   if (page_num > 2)
     {
       pixbuf = gtk_widget_render_icon_pixbuf (widget,
-  				              (page_num % 2) ? GTK_STOCK_HELP : GTK_STOCK_STOP,
-				              GTK_ICON_SIZE_DND);
+                                              (page_num % 2) ? GTK_STOCK_HELP : GTK_STOCK_STOP,
+                                              GTK_ICON_SIZE_DND);
 
       gtk_drag_set_icon_pixbuf (context, pixbuf, 0, 0);
       g_object_unref (pixbuf);
@@ -122,13 +116,13 @@ on_notebook_drag_begin (GtkWidget      *widget,
 
 static void
 on_button_drag_data_received (GtkWidget        *widget,
-			      GdkDragContext   *context,
-			      gint              x,
-			      gint              y,
-			      GtkSelectionData *data,
-			      guint             info,
-			      guint             time,
-			      gpointer          user_data)
+                              GdkDragContext   *context,
+                              gint              x,
+                              gint              y,
+                              GtkSelectionData *data,
+                              guint             info,
+                              guint             time,
+                              gpointer          user_data)
 {
   GtkWidget *source, *tab_label;
   GtkWidget **child;
@@ -144,9 +138,8 @@ on_button_drag_data_received (GtkWidget        *widget,
 
 static GtkWidget*
 create_notebook (gchar           **labels,
-		 const gchar      *group,
-		 gint              packing,
-		 GtkPositionType   pos)
+                 const gchar      *group,
+                 GtkPositionType   pos)
 {
   GtkWidget *notebook, *title, *page;
   gint count = 0;
@@ -171,26 +164,21 @@ create_notebook (gchar           **labels,
       gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
       gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
 
-      if (packing == PACK_END ||
-	  (packing == PACK_ALTERNATE && count % 2 == 1))
-	gtk_container_child_set (GTK_CONTAINER (notebook), page, "tab-pack", GTK_PACK_END, NULL);
-
       count++;
       labels++;
     }
 
   g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
-		    G_CALLBACK (on_page_reordered), NULL);
+                    G_CALLBACK (on_page_reordered), NULL);
   g_signal_connect_after (G_OBJECT (notebook), "drag-begin",
-			  G_CALLBACK (on_notebook_drag_begin), NULL);
+                          G_CALLBACK (on_notebook_drag_begin), NULL);
   return notebook;
 }
 
 static GtkWidget*
 create_notebook_with_notebooks (gchar           **labels,
-			        const gchar      *group,
-			        gint              packing,
-			        GtkPositionType   pos)
+                                const gchar      *group,
+                                GtkPositionType   pos)
 {
   GtkWidget *notebook, *title, *page;
   gint count = 0;
@@ -206,27 +194,23 @@ create_notebook_with_notebooks (gchar           **labels,
 
   while (*labels)
     {
-      page = create_notebook (labels, group, packing, pos);
+      page = create_notebook (labels, group, pos);
       gtk_notebook_popup_enable (GTK_NOTEBOOK (page));
-      
+
       title = gtk_label_new (*labels);
 
       gtk_notebook_append_page (GTK_NOTEBOOK (notebook), page, title);
       gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (notebook), page, TRUE);
       gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (notebook), page, TRUE);
-      
-      if (packing == PACK_END ||
-	  (packing == PACK_ALTERNATE && count % 2 == 1))
-	gtk_container_child_set (GTK_CONTAINER (notebook), page, "tab-pack", GTK_PACK_END, NULL);
 
       count++;
       labels++;
     }
 
   g_signal_connect (GTK_NOTEBOOK (notebook), "page-reordered",
-		    G_CALLBACK (on_page_reordered), NULL);
+                    G_CALLBACK (on_page_reordered), NULL);
   g_signal_connect_after (G_OBJECT (notebook), "drag-begin",
-			  G_CALLBACK (on_notebook_drag_begin), NULL);
+                          G_CALLBACK (on_notebook_drag_begin), NULL);
   return notebook;
 }
 
@@ -238,13 +222,13 @@ create_trash_button (void)
   button = gtk_button_new_from_stock (GTK_STOCK_DELETE);
 
   gtk_drag_dest_set (button,
-		     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
-		     button_targets,
-		     G_N_ELEMENTS (button_targets),
-		     GDK_ACTION_MOVE);
+                     GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
+                     button_targets,
+                     G_N_ELEMENTS (button_targets),
+                     GDK_ACTION_MOVE);
 
   g_signal_connect_after (G_OBJECT (button), "drag-data-received",
-			  G_CALLBACK (on_button_drag_data_received), NULL);
+                          G_CALLBACK (on_button_drag_data_received), NULL);
   return button;
 }
 
@@ -259,24 +243,24 @@ main (gint argc, gchar *argv[])
   table = gtk_table_new (3, 2, FALSE);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
-			     create_notebook (tabs1, GROUP_A, PACK_ALTERNATE, GTK_POS_TOP),
-			     0, 1, 0, 1);
+                             create_notebook (tabs1, GROUP_A, GTK_POS_TOP),
+                             0, 1, 0, 1);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
-			     create_notebook (tabs2, GROUP_B, PACK_ALTERNATE, GTK_POS_BOTTOM),
-			     0, 1, 1, 2);
+                             create_notebook (tabs2, GROUP_B, GTK_POS_BOTTOM),
+                             0, 1, 1, 2);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
-			     create_notebook (tabs3, GROUP_B, PACK_END, GTK_POS_LEFT),
-			     1, 2, 0, 1);
+                             create_notebook (tabs3, GROUP_B, GTK_POS_LEFT),
+                             1, 2, 0, 1);
 
   gtk_table_attach_defaults (GTK_TABLE (table),
-			     create_notebook_with_notebooks (tabs4, GROUP_A, PACK_ALTERNATE, GTK_POS_RIGHT),
-			     1, 2, 1, 2);
+                             create_notebook_with_notebooks (tabs4, GROUP_A, GTK_POS_RIGHT),
+                             1, 2, 1, 2);
 
   gtk_table_attach (GTK_TABLE (table),
-		    create_trash_button (), 1, 2, 2, 3,
-		    GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
+                    create_trash_button (), 1, 2, 2, 3,
+                    GTK_EXPAND | GTK_FILL, GTK_SHRINK, 0, 0);
 
   gtk_container_add (GTK_CONTAINER (window), table);
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 400);
