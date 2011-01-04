@@ -387,9 +387,9 @@ static gboolean do_setlocale = TRUE;
  * 
  * Prevents gtk_init(), gtk_init_check(), gtk_init_with_args() and
  * gtk_parse_args() from automatically
- * calling <literal>setlocale (LC_ALL, "")</literal>. You would 
- * want to use this function if you wanted to set the locale for 
- * your program to something other than the user's locale, or if 
+ * calling <literal>setlocale (LC_ALL, "")</literal>. You would
+ * want to use this function if you wanted to set the locale for
+ * your program to something other than the user's locale, or if
  * you wanted to set different values for different locale categories.
  *
  * Most programs should not need to call this function.
@@ -903,8 +903,8 @@ gtk_init_with_args (int            *argc,
 
 /**
  * gtk_parse_args:
- * @argc: (inout): a pointer to the number of command line arguments.
- * @argv: (array) (inout): a pointer to the array of command line arguments.
+ * @argc: (inout): a pointer to the number of command line arguments
+ * @argv: (array) (inout): a pointer to the array of command line arguments
  *
  * Parses command line arguments, and initializes global
  * attributes of GTK+, but does not actually open a connection
@@ -913,7 +913,7 @@ gtk_init_with_args (int            *argc,
  * Any arguments used by GTK+ or GDK are removed from the array and
  * @argc and @argv are updated accordingly.
  *
- * You shouldn't call this function explicitely if you are using
+ * There is no need to call this function explicitely if you are using
  * gtk_init(), or gtk_init_check().
  *
  * Return value: %TRUE if initialization succeeded, otherwise %FALSE.
@@ -987,27 +987,30 @@ gtk_init_check (int	 *argc,
 
 /**
  * gtk_init:
- * @argc: (inout): Address of the <parameter>argc</parameter> parameter of your
- *   main() function. Changed if any arguments were handled.
- * @argv: (array length=argc) (inout) (allow-none): Address of the <parameter>argv</parameter> parameter of main().
- *   Any parameters understood by gtk_init() are stripped before return.
+ * @argc: (inout): Address of the <parameter>argc</parameter> parameter of
+ *     your main() function. Changed if any arguments were handled
+ * @argv: (array length=argc) (inout) (allow-none): Address of the
+ *     <parameter>argv</parameter> parameter of main(). Any options
+ *     understood by GTK+ are stripped before return.
  *
  * Call this function before using any other GTK+ functions in your GUI
  * applications.  It will initialize everything needed to operate the
- * toolkit and parses some standard command line options. @argc and 
- * @argv are adjusted accordingly so your own code will 
- * never see those standard arguments. 
+ * toolkit and parses some standard command line options.
  *
- * Note that there are some alternative ways to initialize GTK+: 
- * if you are calling gtk_parse_args(), gtk_init_check(), 
- * gtk_init_with_args() or g_option_context_parse() with 
- * the option group returned by gtk_get_option_group(), you 
- * <emphasis>don't</emphasis> have to call gtk_init().
+ * @argc and @argv are adjusted accordingly so your own code will
+ * never see those standard arguments.
+ *
+ * Note that there are some alternative ways to initialize GTK+:
+ * if you are calling gtk_parse_args(), gtk_init_check(),
+ * gtk_init_with_args() or g_option_context_parse() with
+ * the option group returned by gtk_get_option_group(),
+ * you <emphasis>don't</emphasis> have to call gtk_init().
  *
  * <note><para>
- * This function will terminate your program if it was unable to initialize 
- * the GUI for some reason. If you want your program to fall back to a 
- * textual interface you want to call gtk_init_check() instead.
+ * This function will terminate your program if it was unable to
+ * initialize the windowing system for some reason. If you want
+ * your program to fall back to a textual interface you want to
+ * call gtk_init_check() instead.
  * </para></note>
  *
  * <note><para>
@@ -1018,7 +1021,7 @@ gtk_init_check (int	 *argc,
  * but notice that other libraries (e.g. libdbus or gvfs) might do
  * similar things.
  * </para></note>
- **/
+ */
 void
 gtk_init (int *argc, char ***argv)
 {
