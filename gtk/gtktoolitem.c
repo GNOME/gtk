@@ -451,8 +451,6 @@ gtk_tool_item_realize (GtkWidget *widget)
 
   if (toolitem->priv->use_drag_window)
     create_drag_window(toolitem);
-
-  gtk_widget_style_attach (widget);
 }
 
 static void
