@@ -24,16 +24,17 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
-#include "config.h"
+
 #include "gtkbutton.h"
 #include "gtkdialog.h"
 #include "gtkhbbox.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkvbox.h"
-#include "gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkbindings.h"

@@ -26,9 +26,9 @@
  */
 
 #include "config.h"
+
 #include <string.h>
 
-#include "gdk/gdkkeysyms.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkwindowprivate.h"

@@ -18,10 +18,10 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <string.h>
 
-#include <gdk/gdkkeysyms-compat.h>
 #include "gtkprivate.h"
 #include "gtkaccelgroup.h"
 #include "gtkimcontextsimple.h"
@@ -87,22 +87,22 @@ static const GtkComposeTableCompact gtk_compose_table_compact = {
 };
 
 static const guint16 gtk_compose_ignore[] = {
-  GDK_Shift_L,
-  GDK_Shift_R,
-  GDK_Control_L,
-  GDK_Control_R,
-  GDK_Caps_Lock,
-  GDK_Shift_Lock,
-  GDK_Meta_L,
-  GDK_Meta_R,
-  GDK_Alt_L,
-  GDK_Alt_R,
-  GDK_Super_L,
-  GDK_Super_R,
-  GDK_Hyper_L,
-  GDK_Hyper_R,
-  GDK_Mode_switch,
-  GDK_ISO_Level3_Shift
+  GDK_KEY_Shift_L,
+  GDK_KEY_Shift_R,
+  GDK_KEY_Control_L,
+  GDK_KEY_Control_R,
+  GDK_KEY_Caps_Lock,
+  GDK_KEY_Shift_Lock,
+  GDK_KEY_Meta_L,
+  GDK_KEY_Meta_R,
+  GDK_KEY_Alt_L,
+  GDK_KEY_Alt_R,
+  GDK_KEY_Super_L,
+  GDK_KEY_Super_R,
+  GDK_KEY_Hyper_L,
+  GDK_KEY_Hyper_R,
+  GDK_KEY_Mode_switch,
+  GDK_KEY_ISO_Level3_Shift
 };
 
 static void     gtk_im_context_simple_finalize           (GObject                  *obj);
@@ -299,14 +299,14 @@ check_table (GtkIMContextSimple    *context_simple,
 }
 
 /* Checks if a keysym is a dead key. Dead key keysym values are defined in
- * ../gdk/gdkkeysyms.h and the first is GDK_dead_grave. As X.Org is updated,
+ * ../gdk/gdkkeysyms.h and the first is GDK_KEY_dead_grave. As X.Org is updated,
  * more dead keys are added and we need to update the upper limit.
- * Currently, the upper limit is GDK_dead_dasia+1. The +1 has to do with 
- * a temporary issue in the X.Org header files. 
+ * Currently, the upper limit is GDK_KEY_dead_dasia+1. The +1 has to do with
+ * a temporary issue in the X.Org header files.
  * In future versions it will be just the keysym (no +1).
  */
 #define IS_DEAD_KEY(k) \
-    ((k) >= GDK_dead_grave && (k) <= (GDK_dead_dasia+1))
+    ((k) >= GDK_KEY_dead_grave && (k) <= (GDK_KEY_dead_dasia+1))
 
 #ifdef GDK_WINDOWING_WIN32
 
@@ -323,15 +323,15 @@ check_win32_special_cases (GtkIMContextSimple    *context_simple,
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
   if (n_compose == 2 &&
-      priv->compose_buffer[1] == GDK_space)
+      priv->compose_buffer[1] == GDK_KEY_space)
     {
       gunichar value = 0;
 
       switch (priv->compose_buffer[0])
 	{
-	case GDK_dead_acute:
+	case GDK_KEY_dead_acute:
 	  value = 0x00B4; break;
-	case GDK_dead_diaeresis:
+	case GDK_KEY_dead_diaeresis:
 	  value = 0x00A8; break;
 	}
       if (value > 0)
@@ -523,8 +523,8 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
 }
 
 static gboolean
-check_algorithmically (GtkIMContextSimple    *context_simple,
-		       gint                   n_compose)
+check_algorithmically (GtkIMContextSimple *context_simple,
+                       gint                n_compose)
 
 {
   GtkIMContextSimplePrivate *priv = context_simple->priv;
@@ -550,7 +550,7 @@ check_algorithmically (GtkIMContextSimple    *context_simple,
 	  switch (priv->compose_buffer[i])
 	    {
 #define CASE(keysym, unicode) \
-	    case GDK_dead_##keysym: combination_buffer[i+1] = unicode; break
+	    case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
 
 	    CASE (grave, 0x0300);
 	    CASE (acute, 0x0301);
@@ -830,8 +830,8 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   if (event->type == GDK_KEY_RELEASE)
     {
       if (priv->in_hex_sequence &&
-	  (event->keyval == GDK_Control_L || event->keyval == GDK_Control_R ||
-	   event->keyval == GDK_Shift_L || event->keyval == GDK_Shift_R))
+	  (event->keyval == GDK_KEY_Control_L || event->keyval == GDK_KEY_Control_R ||
+	   event->keyval == GDK_KEY_Shift_L || event->keyval == GDK_KEY_Shift_R))
 	{
 	  if (priv->tentative_match &&
 	      g_unichar_validate (priv->tentative_match))
@@ -872,14 +872,14 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     have_hex_mods = TRUE;
   else
     have_hex_mods = (event->state & (HEX_MOD_MASK)) == HEX_MOD_MASK;
-  is_hex_start = event->keyval == GDK_U;
-  is_hex_end = (event->keyval == GDK_space || 
-		event->keyval == GDK_KP_Space ||
-		event->keyval == GDK_Return || 
-		event->keyval == GDK_ISO_Enter ||
-		event->keyval == GDK_KP_Enter);
-  is_backspace = event->keyval == GDK_BackSpace;
-  is_escape = event->keyval == GDK_Escape;
+  is_hex_start = event->keyval == GDK_KEY_U;
+  is_hex_end = (event->keyval == GDK_KEY_space ||
+		event->keyval == GDK_KEY_KP_Space ||
+		event->keyval == GDK_KEY_Return ||
+		event->keyval == GDK_KEY_ISO_Enter ||
+		event->keyval == GDK_KEY_KP_Enter);
+  is_backspace = event->keyval == GDK_KEY_BackSpace;
+  is_escape = event->keyval == GDK_KEY_Escape;
   hex_keyval = canonical_hex_keyval (event);
 
   /* If we are already in a non-hex sequence, or
@@ -897,9 +897,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     {
       if (event->state & (GDK_MOD1_MASK | GDK_CONTROL_MASK) ||
 	  (priv->in_hex_sequence && priv->modifiers_dropped &&
-	   (event->keyval == GDK_Return || 
-	    event->keyval == GDK_ISO_Enter ||
-	    event->keyval == GDK_KP_Enter)))
+	   (event->keyval == GDK_KEY_Return ||
+	    event->keyval == GDK_KEY_ISO_Enter ||
+	    event->keyval == GDK_KEY_KP_Enter)))
 	{
 	  return FALSE;
 	}

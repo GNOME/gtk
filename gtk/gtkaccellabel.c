@@ -37,8 +37,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#include <gdk/gdkkeysyms.h>
-
 /**
  * SECTION:gtkaccellabel
  * @Short_description: A label which displays an accelerator key on the right of the text

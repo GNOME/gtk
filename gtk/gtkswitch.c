@@ -40,8 +40,6 @@
 
 #include "gtkswitch.h"
 
-#include <gdk/gdkkeysyms.h>
-
 #include "gtkaccessible.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"

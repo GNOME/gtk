@@ -18,11 +18,10 @@
  */
 
 #include "config.h"
+
 #include <string.h>
 
 #include <atk/atk.h>
-
-#include <gdk/gdkkeysyms.h>
 
 #include "gtkiconview.h"
 #include "gtkcelllayout.h"

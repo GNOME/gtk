@@ -81,7 +81,6 @@
 #include "gtkmarshalers.h"
 #include "gtktooltip.h"
 #include "gtkprivate.h"
-#include "gdk/gdkkeysyms.h"
 
 /***************************************************************************/
 /* The following date routines are taken from the lib_date package. 

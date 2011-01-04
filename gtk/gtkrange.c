@@ -30,7 +30,6 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <gdk/gdkkeysyms.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"

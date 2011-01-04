@@ -32,8 +32,6 @@
 
 #include <string.h>
 
-#include <gdk/gdkkeysyms.h>
-
 #include "gtkaboutdialog.h"
 #include "gtkalignment.h"
 #include "gtkbutton.h"

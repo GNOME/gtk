@@ -21,8 +21,6 @@
 
 #include "gtkcellrendereraccel.h"
 
-#include "gdk/gdkkeysyms.h"
-
 #include "gtkintl.h"
 #include "gtkaccelgroup.h"
 #include "gtkmarshalers.h"

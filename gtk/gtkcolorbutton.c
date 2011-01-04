@@ -31,8 +31,7 @@
 #include "config.h"
 
 #include "gtkcolorbutton.h"
-#include "gdk/gdkkeysyms.h"
-#include "gdk-pixbuf/gdk-pixbuf.h"
+
 #include "gtkbutton.h"
 #include "gtkmain.h"
 #include "gtkalignment.h"

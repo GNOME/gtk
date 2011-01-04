@@ -23,7 +23,6 @@
 
 #include "gtkfilechooserdefault.h"
 
-#include "gdk/gdkkeysyms.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
 #include "gtkcelllayout.h"

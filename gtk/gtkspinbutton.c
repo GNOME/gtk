@@ -28,12 +28,13 @@
  */
 
 #include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
 #include <locale.h>
-#include "gdk/gdkkeysyms.h"
+
 #include "gtkbindings.h"
 #include "gtkspinbutton.h"
 #include "gtkentryprivate.h"

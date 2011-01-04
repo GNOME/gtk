@@ -25,7 +25,7 @@
  */
 
 #include "config.h"
-#include "gdk/gdkkeysyms.h"
+
 #include "gtkbindings.h"
 #include "gtkkeyhash.h"
 #include "gtklabel.h"

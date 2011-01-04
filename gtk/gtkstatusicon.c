@@ -29,9 +29,9 @@
 
 #include "config.h"
 
-#include "gtkstatusicon.h"
-
 #include <string.h>
+
+#include "gtkstatusicon.h"
 
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
@@ -39,7 +39,6 @@
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
 #include "gtktrayicon.h"
-
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtktooltip.h"
@@ -62,9 +61,7 @@
 #ifdef GDK_WINDOWING_QUARTZ
 #include "gtkicontheme.h"
 #include "gtklabel.h"
-#endif	
-
-#include "gdkkeysyms.h"
+#endif
 
 #define BLINK_TIMEOUT 500
 

@@ -25,13 +25,15 @@
  */
 
 #include "config.h"
+
 #include <string.h>
-#include "gdk/gdkkeysyms.h"
+
+#include  <gobject/gvaluecollector.h>
+
 #include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkbindings.h"
 #include "gtkcheckmenuitem.h"
-#include  <gobject/gvaluecollector.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkmenuprivate.h"

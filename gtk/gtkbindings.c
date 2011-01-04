@@ -30,7 +30,6 @@
 #include "config.h"
 #include <string.h>
 #include <stdarg.h>
-#include <gdkkeysyms.h>
 
 #include "gtkbindings.h"
 #include "gtktypeutils.h"

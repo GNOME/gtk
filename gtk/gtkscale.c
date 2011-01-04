@@ -30,7 +30,6 @@
 #include <math.h>
 #include <stdlib.h>
 
-#include "gdk/gdkkeysyms.h"
 #include "gtkscale.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"

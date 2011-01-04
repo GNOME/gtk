@@ -42,8 +42,6 @@
 #include "gtkwindow.h"
 #include "gtkprivate.h"
 
-#include <gdk/gdkkeysyms.h>
-
 #include <gobject/gvaluecollector.h>
 
 #include <string.h>

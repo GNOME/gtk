@@ -32,12 +32,10 @@
 
 #include "config.h"
 
-#include "gtktoolbar.h"
-
 #include <math.h>
 #include <string.h>
 
-#include <gdk/gdkkeysyms.h>
+#include "gtktoolbar.h"
 
 #include "gtkarrow.h"
 #include "gtkbindings.h"

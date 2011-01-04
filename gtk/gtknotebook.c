@@ -27,12 +27,10 @@
 
 #include "config.h"
 
-#include "gtknotebook.h"
-
 #include <stdio.h>
 #include <string.h>
 
-#include <gdk/gdkkeysyms.h>
+#include "gtknotebook.h"
 
 #include "gtkmain.h"
 #include "gtkmenu.h"

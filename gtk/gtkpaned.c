@@ -28,7 +28,6 @@
 
 #include "gtkpaned.h"
 
-#include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

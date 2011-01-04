@@ -25,8 +25,9 @@
  */
 
 #include "config.h"
+
 #include <math.h>
-#include <gdk/gdkkeysyms.h>
+
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkscrollable.h"

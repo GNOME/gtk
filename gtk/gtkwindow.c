@@ -32,8 +32,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <limits.h>
-#include "gdk/gdk.h"
-#include "gdk/gdkkeysyms.h"
 
 #include "gtkprivate.h"
 #include "gtkrc.h"

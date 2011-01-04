@@ -19,9 +19,9 @@
 
 
 #include "config.h"
+
 #include <math.h>
 #include <string.h>
-#include <gdk/gdkkeysyms.h>
 
 #include "gtktreeview.h"
 #include "gtkrbtree.h"

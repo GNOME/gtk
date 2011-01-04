@@ -33,8 +33,7 @@
 #include "gtkaccellabel.h" /* For _gtk_accel_label_class_get_accelerator_label */
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
-#include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
-#include "gdk/gdkkeysyms.h"
+#include "gtkmain.h"        /* For _gtk_boolean_handled_accumulator */
 #include "gtkmarshalers.h"
 
 

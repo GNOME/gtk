@@ -30,17 +30,14 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <glib/gprintf.h>
 #include <string.h>
 
 #include <atk/atk.h>
 
-#include "gdk/gdk.h"
-#include "gdk/gdkkeysyms.h"
-
 #include "gtkfontsel.h"
-
 #include "gtkbutton.h"
 #include "gtkcellrenderertext.h"
 #include "gtkentry.h"
