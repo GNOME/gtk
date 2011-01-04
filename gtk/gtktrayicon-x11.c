@@ -85,8 +85,7 @@ static void gtk_tray_icon_get_property  (GObject     *object,
 					 GParamSpec  *pspec);
 
 static void     gtk_tray_icon_realize   (GtkWidget   *widget);
-static void     gtk_tray_icon_style_set (GtkWidget   *widget,
-					 GtkStyle    *previous_style);
+static void     gtk_tray_icon_style_updated (GtkWidget   *widget);
 static gboolean gtk_tray_icon_delete    (GtkWidget   *widget,
 					 GdkEventAny *event);
 static gboolean gtk_tray_icon_draw      (GtkWidget   *widget,
@@ -114,7 +113,7 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
   gobject_class->dispose = gtk_tray_icon_dispose;
 
   widget_class->realize = gtk_tray_icon_realize;
-  widget_class->style_set = gtk_tray_icon_style_set;
+  widget_class->style_updated = gtk_tray_icon_style_updated;
   widget_class->delete_event = gtk_tray_icon_delete;
   widget_class->draw = gtk_tray_icon_draw;
 
@@ -361,15 +360,21 @@ gtk_tray_icon_draw (GtkWidget *widget,
   focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget));
   if (focus_child && gtk_widget_has_focus (focus_child))
     {
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      GtkStyleContext *context;
+      GtkStateFlags state;
 
-      gtk_paint_focus (gtk_widget_get_style (widget),
-                       cr,
-                       gtk_widget_get_state (widget),
-                       widget, "tray_icon",
-                       border_width, border_width,
-                       gtk_widget_get_allocated_width (widget) - 2 * border_width,
-                       gtk_widget_get_allocated_height (widget) - 2 * border_width);
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+
+      gtk_render_focus (context, cr, border_width, border_width,
+                        gtk_widget_get_allocated_width (widget) - 2 * border_width,
+                        gtk_widget_get_allocated_height (widget) - 2 * border_width);
+
+      gtk_style_context_restore (context);
     }
 
   return retval;
@@ -895,8 +900,7 @@ gtk_tray_icon_realize (GtkWidget *widget)
 }
 
 static void
-gtk_tray_icon_style_set (GtkWidget   *widget,
-			 GtkStyle    *previous_style)
+gtk_tray_icon_style_updated (GtkWidget   *widget)
 {
   /* The default handler resets the background according to the style. We either
    * use a transparent background or a parent-relative background and ignore the
