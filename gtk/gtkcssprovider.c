@@ -559,7 +559,8 @@
  *         <entry>engine</entry>
  *         <entry>engine-name</entry>
  *         <entry>#GtkThemingEngine</entry>
- *         <entry>engine: clearlooks;</entry>
+ *         <entry>engine: clearlooks;
+ *  engine: none; /&ast; use the default (i.e. builtin) engine) &ast;/ </entry>
  *       </row>
  *       <row>
  *         <entry>background-color</entry>
