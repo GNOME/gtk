@@ -1,18 +1,18 @@
 <refentry id="gtk-builder-convert">
 
 <refmeta>
-<refentrytitle>gtk-builder-convert-3.0</refentrytitle>
+<refentrytitle>gtk-builder-convert</refentrytitle>
 <manvolnum>1</manvolnum>
 </refmeta>
 
 <refnamediv>
-<refname>gtk-builder-convert-3.0</refname>
+<refname>gtk-builder-convert</refname>
 <refpurpose>Glade file conversion utility</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
 <cmdsynopsis>
-<command>gtk-builder-convert-3.0</command>
+<command>gtk-builder-convert</command>
 <arg choice="opt">--skip-windows</arg>
 <arg choice="opt">--root <replaceable>name</replaceable></arg>
 <arg choice="req">input</arg>
@@ -21,7 +21,7 @@
 </refsynopsisdiv>
 
 <refsect1><title>Description</title>
-<para><command>gtk-builder-convert-3.0</command> converts glade files
+<para><command>gtk-builder-convert</command> converts glade files
 into XML files which can be loaded with GtkBuilder.
 </para>
 <para>
@@ -40,7 +40,7 @@ its output the file specified as the second argument.
   <varlistentry>
     <term>--root</term>
     <term>-r</term>
-    <listitem><para>Convert only the widget named <replaceable>name</replaceable> 
+    <listitem><para>Convert only the widget named <replaceable>name</replaceable>
        and its children.</para></listitem>
   </varlistentry>
 </variablelist>

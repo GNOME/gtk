@@ -356,8 +356,8 @@
   <part>
     <title>GTK+ Tools</title>
     <xi:include href="gtk-query-immodules-3.0.xml" />
-    <xi:include href="gtk-update-icon-cache-3.0.xml" />
-    <xi:include href="gtk-builder-convert-3.0.xml" />
+    <xi:include href="gtk-update-icon-cache.xml" />
+    <xi:include href="gtk-builder-convert.xml" />
   </part>
 
   <xi:include href="glossary.xml" />

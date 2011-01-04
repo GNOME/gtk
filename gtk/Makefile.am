@@ -990,18 +990,18 @@ endif
 #
 bin_PROGRAMS = \
 	gtk-query-immodules-3.0 \
-	gtk-update-icon-cache-3.0
+	gtk-update-icon-cache
 
-bin_SCRIPTS = gtk-builder-convert-3.0
+bin_SCRIPTS = gtk-builder-convert
 
 if OS_WIN32
 
 # Workaround for UAC silliness: programs with "update" in their name
 # are believed to be installers and require elevated privileges to be
 # used... Use a manifest file to tell Windows that
-# gtk-update-icon-cache-3.0.exe doesn't require any special privileges.
+# gtk-update-icon-cache.exe doesn't require any special privileges.
 
-GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache-3.0.exe.manifest
+GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
 
 bin_SCRIPTS += \
 	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
@@ -1011,7 +1011,7 @@ $(GTK_UPDATE_ICON_CACHE_MANIFEST):
 	 echo '<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">' ; \
 	 echo '  <assemblyIdentity version="1.0.0.0"' ; \
 	 echo '     processorArchitecture="'$(EXE_MANIFEST_ARCHITECTURE)'"' ; \
-	 echo '     name="gtk-update-icon-cache-3.0.exe"' ; \
+	 echo '     name="gtk-update-icon-cache.exe"' ; \
 	 echo '     type="win32"/>' ; \
 	 echo '  <!-- Identify the application security requirements. -->' ; \
 	 echo '  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">' ; \
@@ -1031,8 +1031,8 @@ gtk_query_immodules_3_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_3_0_LDADD = $(LDADDS)
 gtk_query_immodules_3_0_SOURCES = queryimmodules.c
 
-gtk_update_icon_cache_3_0_LDADD = $(GDK_PIXBUF_LIBS)
-gtk_update_icon_cache_3_0_SOURCES = updateiconcache.c
+gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
+gtk_update_icon_cache_SOURCES = updateiconcache.c
 
 .PHONY: files test test-debug
 
@@ -1329,12 +1329,12 @@ if CROSS_COMPILING
 gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
 gtk_update_icon_cache_program =							\
-	   ./gtk-update-icon-cache-3.0
+	   ./gtk-update-icon-cache
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
-	$(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache-3.0$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
-	$(gtk_update_icon_cache_program) --force --ignore-theme-index		\
+	$(AM_V_at) $(MAKE) $(AM_MAKEFLAGS) gtk-update-icon-cache$(EXEEXT) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
+	$(AM_V_GEN) $(gtk_update_icon_cache_program) --quiet --force --ignore-theme-index		\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h.tmp &&        \
 	mv gtkbuiltincache.h.tmp gtkbuiltincache.h
 
@@ -1348,7 +1348,7 @@ EXTRA_DIST +=                   \
 	tree_minus.xpm		\
 	tree_plus.xpm		\
 	gtk.def			\
-	gtk-builder-convert-3.0	\
+	gtk-builder-convert	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
