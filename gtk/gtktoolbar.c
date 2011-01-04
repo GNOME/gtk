@@ -3614,9 +3614,7 @@ static GtkReliefStyle
 get_button_relief (GtkToolbar *toolbar)
 {
   GtkReliefStyle button_relief = GTK_RELIEF_NORMAL;
-  
-  gtk_widget_ensure_style (GTK_WIDGET (toolbar));
-  
+
   gtk_widget_style_get (GTK_WIDGET (toolbar),
                         "button-relief", &button_relief,
                         NULL);
