@@ -261,7 +261,6 @@ struct _GtkNotebookPage
   guint default_tab  : 1;	/* If true, we create the tab label ourself */
   guint expand       : 1;
   guint fill         : 1;
-  guint pack         : 1;
   guint reorderable  : 1;
   guint detachable   : 1;
 
@@ -4450,7 +4449,6 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   page->menu_label = menu_label;
   page->expand = FALSE;
   page->fill = TRUE;
-  page->pack = GTK_PACK_START; 
 
   if (!menu_label)
     page->default_menu = TRUE;
