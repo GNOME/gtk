@@ -312,7 +312,7 @@ struct _GtkWidgetPrivate
   guint has_grab              : 1;
   guint shadowed              : 1;
   guint rc_style              : 1;
-  guint user_style            : 1;
+  guint style_update_pending  : 1;
   guint app_paintable         : 1;
   guint double_buffered       : 1;
   guint redraw_on_alloc       : 1;
@@ -4265,6 +4265,9 @@ gtk_widget_realize (GtkWidget *widget)
 	gtk_widget_realize (priv->parent);
 
       gtk_widget_ensure_style (widget);
+
+      if (priv->style_update_pending)
+        g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
 
       g_signal_emit (widget, widget_signals[REALIZE], 0);
 
@@ -13941,7 +13944,16 @@ style_context_changed (GtkStyleContext *context,
   GtkWidget *widget = user_data;
 
   gtk_widget_update_pango_context (widget);
-  g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
+
+  if (gtk_widget_get_realized (widget))
+    g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
+  else
+    {
+      /* Compress all style updates so it
+       * is only emitted once pre-realize.
+       */
+      widget->priv->style_update_pending = TRUE;
+    }
 
   if (widget->priv->anchored)
     gtk_widget_queue_resize (widget);
