@@ -43,6 +43,23 @@ typedef struct _GtkEntryCompletion            GtkEntryCompletion;
 typedef struct _GtkEntryCompletionClass       GtkEntryCompletionClass;
 typedef struct _GtkEntryCompletionPrivate     GtkEntryCompletionPrivate;
 
+/**
+ * GtkEntryCompletionMatchFunc:
+ * @completion: the #GtkEntryCompletion
+ * @key: the string to match, normalized and case-folded
+ * @iter: a #GtkTreeIter indicating the row to match
+ * @user_data: user data given to gtk_entry_completion_set_match_func()
+ *
+ * A function which decides whether the row indicated by @iter matches
+ * a given @key, and should be displayed as a possible completion for @key.
+ * Note that @key is normalized and case-folded (see g_utf8_normalize()
+ * and g_utf8_casefold()). If this is not appropriate, match functions
+ * have access to the unmodified key via
+ * <literal>gtk_entry_get_text (GTK_ENTRY (gtk_entry_completion_get_entry (<!-- -->)))</literal>.
+ *
+ * Returns: %TRUE if @iter should be displayed as a possible completion
+ *     for @key
+ */
 typedef gboolean (* GtkEntryCompletionMatchFunc) (GtkEntryCompletion *completion,
                                                   const gchar        *key,
                                                   GtkTreeIter        *iter,
@@ -67,10 +84,10 @@ struct _GtkEntryCompletionClass
   void     (* action_activated) (GtkEntryCompletion *completion,
                                  gint                index_);
   gboolean (* insert_prefix)    (GtkEntryCompletion *completion,
-				 const gchar        *prefix);
+                                 const gchar        *prefix);
   gboolean (* cursor_on_match)  (GtkEntryCompletion *completion,
-				 GtkTreeModel       *model,
-				 GtkTreeIter        *iter);
+                                 GtkTreeModel       *model,
+                                 GtkTreeIter        *iter);
 
   /* Padding for future expansion */
   void (*_gtk_reserved0) (void);
