@@ -5781,21 +5781,13 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
                                     _gtk_notebook_get_tab_flags (notebook, page));
       gtk_style_context_get_padding (context, 0, &padding);
 
-      if (direction == STEP_NEXT && page->pack != GTK_PACK_START)
-	{
-	  if (!showarrow)
-	    break;
-	  else if (priv->operation == DRAG_OPERATION_REORDER)
-	    packing_changed = TRUE;
-	}
-
       if (direction == STEP_NEXT)
 	*children = gtk_notebook_search_page (notebook, *children, direction, TRUE);
       else
 	{
 	  *children = (*children)->next;
 
-          if (page->pack != GTK_PACK_END || !gtk_widget_get_visible (page->child))
+          if (!gtk_widget_get_visible (page->child))
 	    continue;
 	}
 
@@ -5822,8 +5814,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 	    {
 	      if (!allocate_at_bottom)
 		{
-		  if ((priv->cur_page->pack == GTK_PACK_START && left_x >= anchor) ||
-		      (priv->cur_page->pack == GTK_PACK_END && left_x < anchor))
+		  if (left_x >= anchor)
 		    {
 		      left_x = priv->drag_window_x = anchor;
 		      anchor += priv->cur_page->allocation.width - tab_overlap;
@@ -5831,8 +5822,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 		}
 	      else
 		{
-		  if ((priv->cur_page->pack == GTK_PACK_START && right_x <= anchor) ||
-		      (priv->cur_page->pack == GTK_PACK_END && right_x > anchor))
+		  if (right_x <= anchor)
 		    {
 		      anchor -= priv->cur_page->allocation.width;
 		      left_x = priv->drag_window_x = anchor;
@@ -5853,7 +5843,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
  	      if (allocate_at_bottom)
 		anchor -= child_allocation.width;
 
-	      if (priv->operation == DRAG_OPERATION_REORDER && page->pack == priv->cur_page->pack)
+	      if (priv->operation == DRAG_OPERATION_REORDER)
  		{
  		  if (!allocate_at_bottom &&
  		      left_x >= anchor &&
@@ -5877,9 +5867,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 	  if (priv->operation == DRAG_OPERATION_REORDER &&
 	      !gap_left && packing_changed)
 	    {
-	      if (!allocate_at_bottom &&
-		  ((priv->cur_page->pack == GTK_PACK_START && top_y >= anchor) ||
-		   (priv->cur_page->pack == GTK_PACK_END && top_y < anchor)))
+	      if (!allocate_at_bottom && top_y >= anchor)
 		{
 		  top_y = priv->drag_window_y = anchor;
 		  anchor += priv->cur_page->allocation.height - tab_overlap;
@@ -5898,7 +5886,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 	      if (allocate_at_bottom)
 		anchor -= child_allocation.height;
 
-              if (priv->operation == DRAG_OPERATION_REORDER && page->pack == priv->cur_page->pack)
+              if (priv->operation == DRAG_OPERATION_REORDER)
 		{
 		  if (!allocate_at_bottom &&
 		      top_y >= anchor &&
@@ -5956,13 +5944,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
  	    {
  	      if (priv->operation == DRAG_OPERATION_REORDER)
  		{
-                  if (page->pack == priv->cur_page->pack &&
- 		      !allocate_at_bottom &&
+                  if (!allocate_at_bottom &&
  		      left_x >  anchor + child_allocation.width / 2 &&
  		      left_x <= anchor + child_allocation.width)
                     anchor += priv->cur_page->allocation.width - tab_overlap;
-                  else if (page->pack == priv->cur_page->pack &&
- 			   allocate_at_bottom &&
+                  else if (allocate_at_bottom &&
  			   right_x >= anchor &&
  			   right_x <= anchor + child_allocation.width / 2)
                     anchor -= priv->cur_page->allocation.width - tab_overlap;
@@ -5982,13 +5968,11 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
  	    {
  	      if (priv->operation == DRAG_OPERATION_REORDER)
 		{
-		  if (page->pack == priv->cur_page->pack &&
-		      !allocate_at_bottom &&
+		  if (!allocate_at_bottom &&
 		      top_y >= anchor + child_allocation.height / 2 &&
 		      top_y <= anchor + child_allocation.height)
 		    anchor += priv->cur_page->allocation.height - tab_overlap;
-		  else if (page->pack == priv->cur_page->pack &&
-			   allocate_at_bottom &&
+		  else if (allocate_at_bottom &&
 			   bottom_y >= anchor &&
 			   bottom_y <= anchor + child_allocation.height / 2)
 		    anchor -= priv->cur_page->allocation.height - tab_overlap;
@@ -6013,8 +5997,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   /* Don't move the current tab past the last position during tabs reordering */
   if (children &&
       priv->operation == DRAG_OPERATION_REORDER &&
-      ((direction == STEP_NEXT && priv->cur_page->pack == GTK_PACK_START) ||
-       ((direction == STEP_PREV || packing_changed) && priv->cur_page->pack == GTK_PACK_END)))
+      direction == STEP_NEXT)
     {
       switch (tab_pos)
 	{
@@ -6219,19 +6202,12 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
   GList *children;
   GList *last_list = NULL;
   GList *last_calculated_child = NULL;
-  gboolean pack;
   gint tab_pos = get_effective_tab_pos (notebook);
-  guint real_direction;
 
   if (!start)
     return;
 
   children = start;
-  pack = GTK_NOTEBOOK_PAGE (start)->pack;
-  if (pack == GTK_PACK_END)
-    real_direction = (direction == STEP_PREV) ? STEP_NEXT : STEP_PREV;
-  else
-    real_direction = direction;
 
   while (1)
     {
@@ -6245,29 +6221,26 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 	      if (NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) &&
 		  gtk_widget_get_visible (page->child))
 		{
-		  if (page->pack == pack)
-		    {
-		      *tab_space -= page->requisition.width;
-		      if (*tab_space < 0 || children == *end)
-			{
-			  if (*tab_space < 0) 
-			    {
-			      *tab_space = - (*tab_space +
-					      page->requisition.width);
+		  *tab_space -= page->requisition.width;
+		  if (*tab_space < 0 || children == *end)
+                    {
+                      if (*tab_space < 0)
+                        {
+                          *tab_space = - (*tab_space +
+                                          page->requisition.width);
 
-			      if (*tab_space == 0 && direction == STEP_PREV)
-				children = last_calculated_child;
+                          if (*tab_space == 0 && direction == STEP_PREV)
+                            children = last_calculated_child;
 
-			      *end = children;
-			    }
-			  return;
-			}
+                          *end = children;
+                        }
+                      return;
+                    }
 
-		      last_calculated_child = children;
-		    }
-		  last_list = children;
+                  last_calculated_child = children;
+                  last_list = children;
 		}
-	      if (real_direction == STEP_NEXT)
+	      if (direction == STEP_NEXT)
 		children = children->next;
 	      else
 		children = children->prev;
@@ -6281,39 +6254,35 @@ gtk_notebook_calc_tabs (GtkNotebook  *notebook,
 	      if (NOTEBOOK_IS_TAB_LABEL_PARENT (notebook, page) &&
 		  gtk_widget_get_visible (page->child))
 		{
-		  if (page->pack == pack)
-		    {
-		      *tab_space -= page->requisition.height;
-		      if (*tab_space < 0 || children == *end)
-			{
-			  if (*tab_space < 0)
-			    {
-			      *tab_space = - (*tab_space +
-					      page->requisition.height);
+                  *tab_space -= page->requisition.height;
+                  if (*tab_space < 0 || children == *end)
+                    {
+                      if (*tab_space < 0)
+                        {
+                          *tab_space = - (*tab_space +
+                                          page->requisition.height);
 
-			      if (*tab_space == 0 && direction == STEP_PREV)
-				children = last_calculated_child;
+                          if (*tab_space == 0 && direction == STEP_PREV)
+                            children = last_calculated_child;
 
-			      *end = children;
-			    }
-			  return;
-			}
+                          *end = children;
+                        }
+                      return;
+                    }
 
-		      last_calculated_child = children;
-		    }
-		  last_list = children;
+                  last_calculated_child = children;
+                  last_list = children;
 		}
-	      if (real_direction == STEP_NEXT)
+	      if (direction == STEP_NEXT)
 		children = children->next;
 	      else
 		children = children->prev;
 	    }
 	  break;
 	}
-      if (real_direction == STEP_PREV)
+      if (direction == STEP_PREV)
 	return;
-      pack = (pack == GTK_PACK_END) ? GTK_PACK_START : GTK_PACK_END;
-      real_direction = STEP_PREV;
+      direction = STEP_PREV;
       children = last_list;
     }
 }
