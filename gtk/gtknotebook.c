@@ -1899,60 +1899,22 @@ _gtk_notebook_get_tab_flags (GtkNotebook     *notebook,
   gboolean is_last = FALSE;
   GList *pages;
 
-  if (page->pack == GTK_PACK_START)
+  for (pages = priv->children; pages; pages = pages->next)
     {
-      gint last = -1;
+      GtkNotebookPage *p = pages->data;
 
-      for (pages = priv->children; pages; pages = pages->next)
+      if (!gtk_widget_get_visible (p->tab_label))
+        continue;
+
+      i++;
+
+      /* No need to keep counting tabs after it */
+      if (page == p)
         {
-          GtkNotebookPage *p = pages->data;
-
-          if (!gtk_widget_get_visible (p->tab_label))
-            continue;
-
-          if (p->pack == GTK_PACK_END)
-            last = i;
-
-          if (page->pack == p->pack)
-            i++;
-
-          /* No need to keep counting tabs after it */
-          if (page == p)
-            {
-              page_num = i;
-              is_last = (last == -1 && pages->next == NULL);
-              break;
-            }
+          page_num = i;
+          is_last = pages->next == NULL;
+          break;
         }
-    }
-  else
-    {
-      gboolean found = FALSE;
-
-      is_last = TRUE;
-
-      /* Count all pack_start tabs from the beginning
-       * of the list until we find the page, then all
-       * items until the end, that should give us the
-       * tab position
-       */
-      for (pages = priv->children; pages; pages = pages->next)
-        {
-          GtkNotebookPage *p = pages->data;
-
-          if (!gtk_widget_get_visible (p->tab_label))
-            continue;
-
-          if (p->pack == GTK_PACK_START || p == page || found)
-            i++;
-
-          if (page == p)
-            found = TRUE;
-          else if (p->pack == GTK_PACK_END && !found)
-            is_last = FALSE;
-        }
-
-      page_num = i;
     }
 
   if (page_num < 0)
@@ -4967,14 +4929,13 @@ gtk_notebook_paint (GtkWidget    *widget,
   gint tab_pos;
   GtkStyleContext *context;
   GtkRegionFlags tab_flags;
-  gboolean has_pack_start, has_pack_end;
 
   notebook = GTK_NOTEBOOK (widget);
   priv = notebook->priv;
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
   tab_pos = get_effective_tab_pos (notebook);
   context = gtk_widget_get_style_context (widget);
-  showarrow = has_pack_start = has_pack_end = FALSE;
+  showarrow = FALSE;
 
   if ((!priv->show_tabs && !priv->show_border) ||
       !priv->cur_page || !gtk_widget_get_visible (priv->cur_page->child))
@@ -5060,16 +5021,11 @@ gtk_notebook_paint (GtkWidget    *widget,
       if (!gtk_widget_get_visible (page->child))
         continue;
 
-      if (page->pack == GTK_PACK_START)
-        has_pack_start = TRUE;
-      else
-        has_pack_end = TRUE;
-
       if (!gtk_widget_get_mapped (page->tab_label))
         showarrow = TRUE;
 
       /* No point in keeping searching */
-      if (has_pack_start && has_pack_end && showarrow)
+      if (showarrow)
         break;
     }
 
@@ -5085,32 +5041,20 @@ gtk_notebook_paint (GtkWidget    *widget,
       switch (tab_pos)
         {
         case GTK_POS_TOP:
-          if (has_pack_start)
-            junction |= (is_rtl) ? GTK_JUNCTION_CORNER_TOPRIGHT : GTK_JUNCTION_CORNER_TOPLEFT;
+          junction |= (is_rtl) ? GTK_JUNCTION_CORNER_TOPRIGHT : GTK_JUNCTION_CORNER_TOPLEFT;
 
-          if (has_pack_end)
-            junction |= (is_rtl) ? GTK_JUNCTION_CORNER_TOPLEFT : GTK_JUNCTION_CORNER_TOPRIGHT;
           break;
         case GTK_POS_BOTTOM:
-          if (has_pack_start)
-            junction |= (is_rtl) ? GTK_JUNCTION_CORNER_BOTTOMRIGHT : GTK_JUNCTION_CORNER_BOTTOMLEFT;
+          junction |= (is_rtl) ? GTK_JUNCTION_CORNER_BOTTOMRIGHT : GTK_JUNCTION_CORNER_BOTTOMLEFT;
 
-          if (has_pack_end)
-            junction |= (is_rtl) ? GTK_JUNCTION_CORNER_BOTTOMLEFT : GTK_JUNCTION_CORNER_BOTTOMRIGHT;
           break;
         case GTK_POS_LEFT:
-          if (has_pack_start)
-            junction |= GTK_JUNCTION_CORNER_TOPLEFT;
+          junction |= GTK_JUNCTION_CORNER_TOPLEFT;
 
-          if (has_pack_end)
-            junction |= GTK_JUNCTION_CORNER_BOTTOMLEFT;
           break;
         case GTK_POS_RIGHT:
-          if (has_pack_start)
-            junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
+          junction |= GTK_JUNCTION_CORNER_TOPRIGHT;
 
-          if (has_pack_end)
-            junction |= GTK_JUNCTION_CORNER_BOTTOMRIGHT;
           break;
         }
 
