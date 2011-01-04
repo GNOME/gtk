@@ -936,11 +936,15 @@ set_default_size (GtkRecentChooserDefault *impl)
   gint monitor_num;
   GtkRequisition req;
   GdkRectangle monitor;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
   widget = GTK_WIDGET (impl);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   /* Size based on characters and the icon size */
-  font_size = pango_font_description_get_size (gtk_widget_get_style (widget)->font_desc);
+  font_size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
   font_size = PANGO_PIXELS (font_size);
 
   width = impl->icon_size + font_size * NUM_CHARS;
