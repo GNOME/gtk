@@ -26,7 +26,6 @@ static void         gail_box_class_init            (GailBoxClass  *klass);
 static void         gail_box_init                  (GailBox       *box);
 static void         gail_box_initialize            (AtkObject     *accessible,
                                                     gpointer       data);
-static AtkStateSet* gail_box_ref_state_set         (AtkObject     *accessible);
 
 G_DEFINE_TYPE (GailBox, gail_box, GAIL_TYPE_CONTAINER)
 
@@ -36,7 +35,6 @@ gail_box_class_init (GailBoxClass *klass)
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
   class->initialize = gail_box_initialize;
-  class->ref_state_set = gail_box_ref_state_set;
 }
 
 static void
@@ -51,24 +49,4 @@ gail_box_initialize (AtkObject *accessible,
   ATK_OBJECT_CLASS (gail_box_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_FILLER;
-}
-
-static AtkStateSet*
-gail_box_ref_state_set (AtkObject *accessible)
-{
-  AtkStateSet *state_set;
-  GtkWidget *widget;
-
-  state_set = ATK_OBJECT_CLASS (gail_box_parent_class)->ref_state_set (accessible);
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-
-  if (widget == NULL)
-    return state_set;
-
-  if (GTK_IS_VBOX (widget) || GTK_IS_VBUTTON_BOX (widget))
-    atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
-  else if (GTK_IS_HBOX (widget) || GTK_IS_HBUTTON_BOX (widget))
-    atk_state_set_add_state (state_set, ATK_STATE_HORIZONTAL);
-
-  return state_set;
 }

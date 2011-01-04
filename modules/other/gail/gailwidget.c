@@ -511,6 +511,18 @@ gail_widget_ref_state_set (AtkObject *accessible)
         {
           atk_state_set_add_state (state_set, ATK_STATE_DEFAULT);
         }
+
+      if (GTK_IS_ORIENTABLE(widget))
+        switch (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)))
+          {
+          case GTK_ORIENTATION_HORIZONTAL:
+            atk_state_set_add_state (state_set, ATK_STATE_HORIZONTAL);
+            break;
+
+          case GTK_ORIENTATION_VERTICAL:
+            atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
+            break;
+          }
     }
   return state_set;
 }
@@ -976,6 +988,15 @@ gail_widget_real_notify_gtk (GObject     *obj,
       state = ATK_STATE_SENSITIVE;
       value = gtk_widget_get_sensitive (widget);
     }
+  else if (strcmp (pspec->name, "orientation") == 0)
+    {
+      GtkOrientable *orientable;
+
+      orientable = GTK_ORIENTABLE (widget);
+
+      state = ATK_STATE_HORIZONTAL;
+      value = (gtk_orientable_get_orientation (orientable) == GTK_ORIENTATION_HORIZONTAL);
+    }
   else
     return;
 
@@ -983,6 +1004,8 @@ gail_widget_real_notify_gtk (GObject     *obj,
   if (state == ATK_STATE_SENSITIVE)
     atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, value);
 
+  if (state == ATK_STATE_HORIZONTAL)
+    atk_object_notify_state_change (atk_obj, ATK_STATE_VERTICAL, !value);
 }
 
 static void 

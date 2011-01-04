@@ -35,9 +35,6 @@ static void         gail_range_real_initialize   (AtkObject      *obj,
 
 static void         gail_range_finalize          (GObject        *object);
 
-static AtkStateSet* gail_range_ref_state_set     (AtkObject      *obj);
-
-
 static void         gail_range_real_notify_gtk   (GObject        *obj,
                                                   GParamSpec     *pspec);
 
@@ -85,7 +82,6 @@ gail_range_class_init		(GailRangeClass *klass)
 
   widget_class->notify_gtk = gail_range_real_notify_gtk;
 
-  class->ref_state_set = gail_range_ref_state_set;
   class->initialize = gail_range_real_initialize;
 
   gobject_class->finalize = gail_range_finalize;
@@ -130,34 +126,7 @@ gail_range_real_initialize (AtkObject *obj,
   obj->role = ATK_ROLE_SLIDER;
 }
 
-static AtkStateSet*
-gail_range_ref_state_set (AtkObject *obj)
-{
-  AtkStateSet *state_set;
-  GtkWidget *widget;
-  GtkRange *range;
-
-  state_set = ATK_OBJECT_CLASS (gail_range_parent_class)->ref_state_set (obj);
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
-
-  if (widget == NULL)
-    return state_set;
-
-  range = GTK_RANGE (widget);
-
-  /*
-   * We do not generate property change for orientation change as there
-   * is no interface to change the orientation which emits a notification
-   */
-  if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
-    atk_state_set_add_state (state_set, ATK_STATE_HORIZONTAL);
-  else
-    atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
-
-  return state_set;
-}
-
-static void	 
+static void
 atk_value_interface_init (AtkValueIface *iface)
 {
   iface->get_current_value = gail_range_get_current_value;
@@ -167,7 +136,7 @@ atk_value_interface_init (AtkValueIface *iface)
   iface->set_current_value = gail_range_set_current_value;
 }
 
-static void	 
+static void
 gail_range_get_current_value (AtkValue		*obj,
                               GValue		*value)
 {

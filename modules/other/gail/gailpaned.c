@@ -31,9 +31,6 @@ static void         gail_paned_real_initialize     (AtkObject      *obj,
                                                     gpointer       data);
 static void         gail_paned_size_allocate_gtk   (GtkWidget      *widget,
                                                     GtkAllocation  *allocation);
-
-static AtkStateSet* gail_paned_ref_state_set       (AtkObject      *accessible);
-
 static void         atk_value_interface_init       (AtkValueIface  *iface);
 static void         gail_paned_get_current_value   (AtkValue       *obj,
                                                     GValue         *value);
@@ -52,33 +49,12 @@ gail_paned_class_init (GailPanedClass *klass)
 {
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
-  class->ref_state_set = gail_paned_ref_state_set;
   class->initialize = gail_paned_real_initialize;
 }
 
 static void
 gail_paned_init (GailPaned *paned)
 {
-}
-
-static AtkStateSet*
-gail_paned_ref_state_set (AtkObject *accessible)
-{
-  AtkStateSet *state_set;
-  GtkWidget *widget;
-
-  state_set = ATK_OBJECT_CLASS (gail_paned_parent_class)->ref_state_set (accessible);
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-
-  if (widget == NULL)
-    return state_set;
-
-  if (GTK_IS_VPANED (widget))
-    atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
-  else if (GTK_IS_HPANED (widget))
-    atk_state_set_add_state (state_set, ATK_STATE_HORIZONTAL);
-
-  return state_set;
 }
 
 static void

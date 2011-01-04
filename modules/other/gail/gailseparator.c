@@ -26,7 +26,6 @@ static void         gail_separator_class_init            (GailSeparatorClass  *k
 static void         gail_separator_init                  (GailSeparator       *accessible);
 static void         gail_separator_initialize            (AtkObject           *accessible,
                                                           gpointer             data);
-static AtkStateSet* gail_separator_ref_state_set	 (AtkObject	      *accessible);
 
 G_DEFINE_TYPE (GailSeparator, gail_separator, GAIL_TYPE_WIDGET)
 
@@ -36,7 +35,6 @@ gail_separator_class_init (GailSeparatorClass *klass)
   AtkObjectClass  *class = ATK_OBJECT_CLASS (klass);
 
   class->initialize = gail_separator_initialize;
-  class->ref_state_set = gail_separator_ref_state_set;
 }
 
 static void
@@ -51,24 +49,4 @@ gail_separator_initialize (AtkObject *accessible,
   ATK_OBJECT_CLASS (gail_separator_parent_class)->initialize (accessible, data);
 
   accessible->role = ATK_ROLE_SEPARATOR;
-}
-
-static AtkStateSet*
-gail_separator_ref_state_set (AtkObject *accessible)
-{
-  AtkStateSet *state_set;
-  GtkWidget *widget;
-
-  state_set = ATK_OBJECT_CLASS (gail_separator_parent_class)->ref_state_set (accessible);
-  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (accessible));
-
-  if (widget == NULL)
-    return state_set;
-
-  if (GTK_IS_VSEPARATOR (widget))
-    atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
-  else if (GTK_IS_HSEPARATOR (widget))
-    atk_state_set_add_state (state_set, ATK_STATE_HORIZONTAL);
-
-  return state_set;
 }
