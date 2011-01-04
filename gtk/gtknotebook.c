@@ -1439,9 +1439,6 @@ reorder_tab (GtkNotebook *notebook, GList *position, GList *tab)
    * same relative position, taking packing into account */
   elem = (position) ? position->prev : g_list_last (priv->children);
 
-  while (elem && elem != tab && GTK_NOTEBOOK_PAGE (elem)->pack != GTK_NOTEBOOK_PAGE (tab)->pack)
-    elem = elem->prev;
-
   if (elem == tab)
     return g_list_position (priv->children, tab);
 
@@ -1504,7 +1501,7 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 					    (effective_direction == GTK_DIR_RIGHT) ? STEP_NEXT : STEP_PREV,
 					    TRUE);
 	}
-      while (child && GTK_NOTEBOOK_PAGE (last)->pack == GTK_NOTEBOOK_PAGE (child)->pack);
+      while (child);
 
       child = last;
     }
@@ -1518,25 +1515,20 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 
   page = child->data;
 
-  if (page->pack == priv->cur_page->pack)
-    {
-      if (effective_direction == GTK_DIR_RIGHT)
-	page_num = reorder_tab (notebook, (page->pack == GTK_PACK_START) ? child->next : child, priv->focus_tab);
-      else
-	page_num = reorder_tab (notebook, (page->pack == GTK_PACK_START) ? child : child->next, priv->focus_tab);
+  if (effective_direction == GTK_DIR_RIGHT)
+    page_num = reorder_tab (notebook, child->next, priv->focus_tab);
+  else
+    page_num = reorder_tab (notebook, child, priv->focus_tab);
 
-      gtk_notebook_pages_allocate (notebook);
+  gtk_notebook_pages_allocate (notebook);
 
-      g_signal_emit (notebook,
-		     notebook_signals[PAGE_REORDERED],
-		     0,
-		     ((GtkNotebookPage *) priv->focus_tab->data)->child,
-		     page_num);
+  g_signal_emit (notebook,
+                 notebook_signals[PAGE_REORDERED],
+                 0,
+                 ((GtkNotebookPage *) priv->focus_tab->data)->child,
+                 page_num);
 
-      return TRUE;
-    }
-
-  return FALSE;
+  return TRUE;
 }
 
 /**
