@@ -283,7 +283,7 @@ endif
 # This places the generated .def file in srcdir, since it is expected to be there.
 # (The one from a tarball is)
 gdk.def: gdk.symbols
-	(echo -e EXPORTS; $(CPP) -P -DGDK_WINDOWING_WIN32 - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk.def
+	$(AM_V_GEN) (echo -e EXPORTS; $(CPP) -P -DGDK_WINDOWING_WIN32 - <$(srcdir)/gdk.symbols | sed -e '/^$$/d' -e 's/^/	/' -e 's/G_GNUC_[^ ]*//g') > $(srcdir)/gdk.def
 
 TESTS_ENVIRONMENT = srcdir="$(srcdir)"
 if OS_LINUX
@@ -309,34 +309,34 @@ BUILT_SOURCES = \
 gdkenumtypes.h: stamp-gdkenumtypes.h
 	@true
 stamp-gdkenumtypes.h: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.h.template
-	( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.h.template \
+	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.h.template \
 		$(gdk_public_h_sources) ) >> xgen-geth \
 	&& (cmp -s xgen-geth gdkenumtypes.h || cp xgen-geth gdkenumtypes.h ) \
 	&& rm -f xgen-geth \
 	&& echo timestamp > $(@F)
 gdkenumtypes.c: @REBUILD@ $(gdk_public_h_sources) gdkenumtypes.c.template
-	( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.c.template \
+	$(AM_V_GEN) ( cd $(srcdir) && $(GLIB_MKENUMS) --template gdkenumtypes.c.template \
 		$(gdk_public_h_sources) ) > xgen-getc \
 	&& cp xgen-getc gdkenumtypes.c  \
 	&& rm -f xgen-getc
 
-# 
+#
 # Marshaller generation
 #
 gdkmarshalers.h: @REBUILD@ gdkmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --header > gdkmarshalers-h.tmp \
 	&& mv gdkmarshalers-h.tmp gdkmarshalers.h \
 	|| ( rm -f gdkmarshalers-h.tmp && exit 1)
 gdkmarshalers.c: @REBUILD@ gdkmarshalers.list
-	$(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body > gdkmarshalers-c.tmp	\
+	$(AM_V_GEN) $(GLIB_GENMARSHAL) --prefix=_gdk_marshal $(srcdir)/gdkmarshalers.list --body > gdkmarshalers-c.tmp	\
 	&& mv gdkmarshalers-c.tmp gdkmarshalers.c \
 	|| ( rm -f gdkmarshalers-c.tmp && exit 1 )
 
 gdkconfig.h: stamp-gc-h
-	@if test -f gdkconfig.h; then :; \
+	$(AM_V_GEN) if test -f gdkconfig.h; then :; \
 	else rm -f stamp-gc-h; $(MAKE) stamp-gc-h; fi
 stamp-gc-h: $(top_builddir)/config.status
-	cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h
+	$(AM_V_at) cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h
 	echo timestamp > stamp-gc-h
 
 dist-hook: ../build/win32/vs9/gdk.vcproj
