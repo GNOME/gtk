@@ -123,16 +123,6 @@ void       gtk_menu_item_set_reserve_indicator(GtkMenuItem         *menu_item,
 					       gboolean             reserve);
 gboolean   gtk_menu_item_get_reserve_indicator(GtkMenuItem         *menu_item);
 
-/* private */
-void	  _gtk_menu_item_refresh_accel_path   (GtkMenuItem	   *menu_item,
-					       const gchar	   *prefix,
-					       GtkAccelGroup	   *accel_group,
-					       gboolean		    group_changed);
-gboolean  _gtk_menu_item_is_selectable        (GtkWidget           *menu_item);
-void      _gtk_menu_item_popup_submenu        (GtkWidget           *menu_item,
-                                               gboolean             with_delay);
-void      _gtk_menu_item_popdown_submenu      (GtkWidget           *menu_item);
-
 G_END_DECLS
 
 #endif /* __GTK_MENU_ITEM_H__ */
