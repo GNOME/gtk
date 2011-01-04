@@ -1136,8 +1136,6 @@ gtk_paned_realize (GtkWidget *widget)
   if (attributes_mask & GDK_WA_CURSOR)
     g_object_unref (attributes.cursor);
 
-  gtk_widget_style_attach (widget);
-
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     gdk_window_show (priv->handle);
