@@ -309,8 +309,8 @@ gtk_fixed_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, window);
       gdk_window_set_user_data (window, widget);
 
-      gtk_widget_style_attach (widget);
-      gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
+      gtk_style_context_set_background (gtk_widget_get_style_context (widget),
+                                        window);
     }
 }
 
