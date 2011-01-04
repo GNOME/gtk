@@ -155,7 +155,7 @@ static void       gtk_tooltip_class_init           (GtkTooltipClass *klass);
 static void       gtk_tooltip_init                 (GtkTooltip      *tooltip);
 static void       gtk_tooltip_dispose              (GObject         *object);
 
-static void       gtk_tooltip_window_style_set     (GtkTooltip      *tooltip);
+static void       gtk_tooltip_window_style_updated (GtkTooltip      *tooltip);
 static gboolean   gtk_tooltip_paint_window         (GtkTooltip      *tooltip,
                                                     cairo_t         *cr);
 static void       gtk_tooltip_window_hide          (GtkWidget       *widget,
@@ -182,7 +182,8 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
 static void
 gtk_tooltip_init (GtkTooltip *tooltip)
 {
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkBorder padding, border;
 
   tooltip->timeout_id = 0;
   tooltip->browse_mode_timeout_id = 0;
@@ -207,21 +208,27 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   g_signal_connect (tooltip->window, "hide",
 		    G_CALLBACK (gtk_tooltip_window_hide), tooltip);
 
-  style = gtk_widget_get_style (tooltip->window);
+  context = gtk_widget_get_style_context (tooltip->window);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
+
+  gtk_style_context_get_padding (context, 0, &padding);
+  gtk_style_context_get_border (context, 0, &border);
 
   tooltip->alignment = gtk_alignment_new (0.5, 0.5, 1.0, 1.0);
   gtk_alignment_set_padding (GTK_ALIGNMENT (tooltip->alignment),
-                             style->ythickness, style->ythickness,
-                             style->xthickness, style->xthickness);
+                             border.top + padding.top,
+                             border.bottom + padding.bottom,
+                             border.left + padding.left,
+                             border.right + padding.right);
   gtk_container_add (GTK_CONTAINER (tooltip->window), tooltip->alignment);
   gtk_widget_show (tooltip->alignment);
 
-  g_signal_connect_swapped (tooltip->window, "style-set",
-			    G_CALLBACK (gtk_tooltip_window_style_set), tooltip);
+  g_signal_connect_swapped (tooltip->window, "style-updated",
+			    G_CALLBACK (gtk_tooltip_window_style_updated), tooltip);
   g_signal_connect_swapped (tooltip->window, "draw",
 			    G_CALLBACK (gtk_tooltip_paint_window), tooltip);
 
-  tooltip->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, style->xthickness);
+  tooltip->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, padding.left);
   gtk_container_add (GTK_CONTAINER (tooltip->alignment), tooltip->box);
   gtk_widget_show (tooltip->box);
 
@@ -569,18 +576,22 @@ gtk_tooltip_reset (GtkTooltip *tooltip)
 }
 
 static void
-gtk_tooltip_window_style_set (GtkTooltip *tooltip)
+gtk_tooltip_window_style_updated (GtkTooltip *tooltip)
 {
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkBorder padding, border;
 
-  style = gtk_widget_get_style (tooltip->window);
+  context = gtk_widget_get_style_context (tooltip->window);
+  gtk_style_context_get_padding (context, 0, &padding);
+  gtk_style_context_get_border (context, 0, &border);
 
   gtk_alignment_set_padding (GTK_ALIGNMENT (tooltip->alignment),
-                             style->ythickness, style->ythickness,
-                             style->xthickness, style->xthickness);
+                             border.top + padding.top,
+                             border.bottom + padding.bottom,
+                             border.left + padding.left,
+                             border.right + padding.right);
 
-  gtk_box_set_spacing (GTK_BOX (tooltip->box),
-                       style->xthickness);
+  gtk_box_set_spacing (GTK_BOX (tooltip->box), padding.left);
 
   gtk_widget_queue_draw (tooltip->window);
 }
@@ -589,15 +600,16 @@ static gboolean
 gtk_tooltip_paint_window (GtkTooltip *tooltip,
                           cairo_t    *cr)
 {
-  gtk_paint_flat_box (gtk_widget_get_style (tooltip->window),
-		      cr,
-		      GTK_STATE_NORMAL,
-		      GTK_SHADOW_OUT,
-		      tooltip->window,
-		      "tooltip",
-		      0, 0,
-                      gtk_widget_get_allocated_width (tooltip->window),
-                      gtk_widget_get_allocated_height (tooltip->window));
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (tooltip->window);
+
+  gtk_render_background (context, cr, 0, 0,
+			 gtk_widget_get_allocated_width (tooltip->window),
+			 gtk_widget_get_allocated_height (tooltip->window));
+  gtk_render_frame (context, cr, 0, 0,
+                    gtk_widget_get_allocated_width (tooltip->window),
+                    gtk_widget_get_allocated_height (tooltip->window));
 
   return FALSE;
 }
