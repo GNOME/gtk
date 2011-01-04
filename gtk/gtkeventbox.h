@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -44,12 +44,16 @@ G_BEGIN_DECLS
 #define GTK_IS_EVENT_BOX_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_EVENT_BOX))
 #define GTK_EVENT_BOX_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_EVENT_BOX, GtkEventBoxClass))
 
-typedef struct _GtkEventBox	  GtkEventBox;
-typedef struct _GtkEventBoxClass  GtkEventBoxClass;
+typedef struct _GtkEventBox        GtkEventBox;
+typedef struct _GtkEventBoxClass   GtkEventBoxClass;
+typedef struct _GtkEventBoxPrivate GtkEventBoxPrivate;
 
 struct _GtkEventBox
 {
   GtkBin bin;
+
+  /*< private >*/
+  GtkEventBoxPrivate *priv;
 };
 
 struct _GtkEventBoxClass
@@ -63,14 +67,14 @@ struct _GtkEventBoxClass
   void (*_gtk_reserved4) (void);
 };
 
-GType	   gtk_event_box_get_type           (void) G_GNUC_CONST;
+GType      gtk_event_box_get_type           (void) G_GNUC_CONST;
 GtkWidget* gtk_event_box_new                (void);
 gboolean   gtk_event_box_get_visible_window (GtkEventBox *event_box);
 void       gtk_event_box_set_visible_window (GtkEventBox *event_box,
-					     gboolean     visible_window);
+                                             gboolean     visible_window);
 gboolean   gtk_event_box_get_above_child    (GtkEventBox *event_box);
 void       gtk_event_box_set_above_child    (GtkEventBox *event_box,
-					     gboolean     above_child);
+                                             gboolean     above_child);
 
 G_END_DECLS
 

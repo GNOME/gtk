@@ -34,20 +34,28 @@
 #include "gtkintl.h"
 
 
-typedef struct
+/**
+ * SECTION:gtkeventbox
+ * @Short_description: A widget used to catch events for widgets which
+ *     do not have their own window
+ * @Title: GtkEventBox
+ *
+ * The #GtkEventBox widget is a subclass of #GtkBin which also has its
+ * own window. It is useful since it allows you to catch events for widgets
+ * which do not have their own window.
+ */
+
+struct _GtkEventBoxPrivate
 {
   gboolean above_child;
   GdkWindow *event_window;
-} GtkEventBoxPrivate;
+};
 
 enum {
   PROP_0,
   PROP_VISIBLE_WINDOW,
   PROP_ABOVE_CHILD
 };
-
-
-#define GTK_EVENT_BOX_GET_PRIVATE(obj)  G_TYPE_INSTANCE_GET_PRIVATE((obj), GTK_TYPE_EVENT_BOX, GtkEventBoxPrivate)
 
 static void     gtk_event_box_realize       (GtkWidget        *widget);
 static void     gtk_event_box_unrealize     (GtkWidget        *widget);
@@ -109,7 +117,7 @@ gtk_event_box_class_init (GtkEventBoxClass *class)
                                                         P_("Whether the event-trapping window of the eventbox is above the window of the child widget as opposed to below it."),
                                                         FALSE,
                                                         GTK_PARAM_READWRITE));
-  
+
   g_type_class_add_private (class, sizeof (GtkEventBoxPrivate));
 }
 
@@ -119,59 +127,74 @@ gtk_event_box_init (GtkEventBox *event_box)
   GtkEventBoxPrivate *priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (event_box), TRUE);
- 
-  priv = GTK_EVENT_BOX_GET_PRIVATE (event_box);
+
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (event_box,
+                                      GTK_TYPE_EVENT_BOX,
+                                      GtkEventBoxPrivate);
+
+  event_box->priv = priv;
   priv->above_child = FALSE;
 }
 
+/**
+ * gtk_event_box_new:
+ *
+ * Creates a new #GtkEventBox.
+ *
+ * Returns: a new #GtkEventBox
+ */
 GtkWidget*
 gtk_event_box_new (void)
 {
   return g_object_new (GTK_TYPE_EVENT_BOX, NULL);
 }
 
-static void 
+static void
 gtk_event_box_set_property (GObject      *object,
-			    guint         prop_id,
-			    const GValue *value,
-			    GParamSpec   *pspec)
+                            guint         prop_id,
+                            const GValue *value,
+                            GParamSpec   *pspec)
 {
   GtkEventBox *event_box;
-  
+
   event_box = GTK_EVENT_BOX (object);
-  
+
   switch (prop_id)
     {
     case PROP_VISIBLE_WINDOW:
       gtk_event_box_set_visible_window (event_box, g_value_get_boolean (value));
-      break;	  
+      break;
+
     case PROP_ABOVE_CHILD:
       gtk_event_box_set_above_child (event_box, g_value_get_boolean (value));
-      break;	  
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
 }
 
-static void 
+static void
 gtk_event_box_get_property (GObject     *object,
-			    guint        prop_id,
-			    GValue      *value,
-			    GParamSpec  *pspec)
+                            guint        prop_id,
+                            GValue      *value,
+                            GParamSpec  *pspec)
 {
   GtkEventBox *event_box;
-  
+
   event_box = GTK_EVENT_BOX (object);
-  
+
   switch (prop_id)
     {
     case PROP_VISIBLE_WINDOW:
       g_value_set_boolean (value, gtk_event_box_get_visible_window (event_box));
       break;
+
     case PROP_ABOVE_CHILD:
       g_value_set_boolean (value, gtk_event_box_get_above_child (event_box));
       break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -188,7 +211,7 @@ gtk_event_box_get_property (GObject     *object,
  * Return value: %TRUE if the event box window is visible
  *
  * Since: 2.4
- **/
+ */
 gboolean
 gtk_event_box_get_visible_window (GtkEventBox *event_box)
 {
@@ -200,25 +223,25 @@ gtk_event_box_get_visible_window (GtkEventBox *event_box)
 /**
  * gtk_event_box_set_visible_window:
  * @event_box: a #GtkEventBox
- * @visible_window: boolean value
+ * @visible_window: %TRUE to make the event box have a visible window
  *
  * Set whether the event box uses a visible or invisible child
  * window. The default is to use visible windows.
  *
  * In an invisible window event box, the window that the
- * event box creates is a %GDK_INPUT_ONLY window, which 
+ * event box creates is a %GDK_INPUT_ONLY window, which
  * means that it is invisible and only serves to receive
  * events.
- * 
+ *
  * A visible window event box creates a visible (%GDK_INPUT_OUTPUT)
- * window that acts as the parent window for all the widgets  
+ * window that acts as the parent window for all the widgets
  * contained in the event box.
- * 
+ *
  * You should generally make your event box invisible if
  * you just want to trap events. Creating a visible window
  * may cause artifacts that are visible to the user, especially
  * if the user is using a theme with gradients or pixmaps.
- * 
+ *
  * The main reason to create a non input-only event box is if
  * you want to set the background to a different color or
  * draw on it.
@@ -227,22 +250,22 @@ gtk_event_box_get_visible_window (GtkEventBox *event_box)
  * There is one unexpected issue for an invisible event box that has its
  * window below the child. (See gtk_event_box_set_above_child().)
  * Since the input-only window is not an ancestor window of any windows
- * that descendent widgets of the event box create, events on these 
+ * that descendent widgets of the event box create, events on these
  * windows aren't propagated up by the windowing system, but only by GTK+.
  * The practical effect of this is if an event isn't in the event
- * mask for the descendant window (see gtk_widget_add_events()),  
- * it won't be received by the event box. 
+ * mask for the descendant window (see gtk_widget_add_events()),
+ * it won't be received by the event box.
  * </para><para>
  * This problem doesn't occur for visible event boxes, because in
  * that case, the event box window is actually the ancestor of the
  * descendant windows, not just at the same place on the screen.
  * </para></note>
- * 
+ *
  * Since: 2.4
- **/
+ */
 void
 gtk_event_box_set_visible_window (GtkEventBox *event_box,
-				  gboolean visible_window)
+                                  gboolean     visible_window)
 {
   GtkWidget *widget;
 
@@ -255,29 +278,29 @@ gtk_event_box_set_visible_window (GtkEventBox *event_box,
   if (visible_window != gtk_widget_get_has_window (widget))
     {
       if (gtk_widget_get_realized (widget))
-	{
-	  gboolean visible = gtk_widget_get_visible (widget);
+        {
+          gboolean visible = gtk_widget_get_visible (widget);
 
-	  if (visible)
-	    gtk_widget_hide (widget);
+          if (visible)
+            gtk_widget_hide (widget);
 
-	  gtk_widget_unrealize (widget);
+          gtk_widget_unrealize (widget);
 
           gtk_widget_set_has_window (widget, visible_window);
 
-	  gtk_widget_realize (widget);
+          gtk_widget_realize (widget);
 
-	  if (visible)
-	    gtk_widget_show (widget);
-	}
+          if (visible)
+            gtk_widget_show (widget);
+        }
       else
-	{
+        {
           gtk_widget_set_has_window (widget, visible_window);
-	}
+        }
 
       if (gtk_widget_get_visible (widget))
-	gtk_widget_queue_resize (widget);
-      
+        gtk_widget_queue_resize (widget);
+
       g_object_notify (G_OBJECT (event_box), "visible-window");
     }
 }
@@ -287,22 +310,20 @@ gtk_event_box_set_visible_window (GtkEventBox *event_box,
  * @event_box: a #GtkEventBox
  *
  * Returns whether the event box window is above or below the
- * windows of its child. See gtk_event_box_set_above_child() for
- * details.
+ * windows of its child. See gtk_event_box_set_above_child()
+ * for details.
  *
- * Return value: %TRUE if the event box window is above the window
- * of its child.
+ * Return value: %TRUE if the event box window is above the
+ *     window of its child
  *
  * Since: 2.4
- **/
+ */
 gboolean
 gtk_event_box_get_above_child (GtkEventBox *event_box)
 {
-  GtkEventBoxPrivate *priv;
+  GtkEventBoxPrivate *priv = event_box->priv;
 
   g_return_val_if_fail (GTK_IS_EVENT_BOX (event_box), FALSE);
-
-  priv = GTK_EVENT_BOX_GET_PRIVATE (event_box);
 
   return priv->above_child;
 }
@@ -310,29 +331,28 @@ gtk_event_box_get_above_child (GtkEventBox *event_box)
 /**
  * gtk_event_box_set_above_child:
  * @event_box: a #GtkEventBox
- * @above_child: %TRUE if the event box window is above the windows of its child
+ * @above_child: %TRUE if the event box window is above its child
  *
- * Set whether the event box window is positioned above the windows of its child,
- * as opposed to below it. If the window is above, all events inside the
- * event box will go to the event box. If the window is below, events
- * in windows of child widgets will first got to that widget, and then
- * to its parents.
+ * Set whether the event box window is positioned above the windows
+ * of its child, as opposed to below it. If the window is above, all
+ * events inside the event box will go to the event box. If the window
+ * is below, events in windows of child widgets will first got to that
+ * widget, and then to its parents.
  *
  * The default is to keep the window below the child.
- * 
+ *
  * Since: 2.4
- **/
+ */
 void
 gtk_event_box_set_above_child (GtkEventBox *event_box,
-			       gboolean above_child)
+                               gboolean     above_child)
 {
+  GtkEventBoxPrivate *priv = event_box->priv;
   GtkWidget *widget;
-  GtkEventBoxPrivate *priv;
 
   g_return_if_fail (GTK_IS_EVENT_BOX (event_box));
 
   widget = GTK_WIDGET (event_box);
-  priv = GTK_EVENT_BOX_GET_PRIVATE (event_box);
 
   above_child = above_child != FALSE;
 
@@ -341,46 +361,44 @@ gtk_event_box_set_above_child (GtkEventBox *event_box,
       priv->above_child = above_child;
 
       if (gtk_widget_get_realized (widget))
-	{
-	  if (!gtk_widget_get_has_window (widget))
-	    {
-	      if (above_child)
-		gdk_window_raise (priv->event_window);
-	      else
-		gdk_window_lower (priv->event_window);
-	    }
-	  else
-	    {
-	      gboolean visible = gtk_widget_get_visible (widget);
+        {
+          if (!gtk_widget_get_has_window (widget))
+            {
+              if (above_child)
+                gdk_window_raise (priv->event_window);
+              else
+                gdk_window_lower (priv->event_window);
+            }
+          else
+            {
+              gboolean visible = gtk_widget_get_visible (widget);
 
-	      if (visible)
-		gtk_widget_hide (widget);
-	      
-	      gtk_widget_unrealize (widget);
-	      
-	      gtk_widget_realize (widget);
-	      
-	      if (visible)
-		gtk_widget_show (widget);
-	    }
-	}
+              if (visible)
+                gtk_widget_hide (widget);
+
+              gtk_widget_unrealize (widget);
+              gtk_widget_realize (widget);
+
+              if (visible)
+                gtk_widget_show (widget);
+            }
+        }
 
       if (gtk_widget_get_visible (widget))
-	gtk_widget_queue_resize (widget);
-      
+        gtk_widget_queue_resize (widget);
+
       g_object_notify (G_OBJECT (event_box), "above-child");
     }
 }
 
-
 static void
 gtk_event_box_realize (GtkWidget *widget)
 {
+  GtkEventBoxPrivate *priv;
   GtkAllocation allocation;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
-  GtkEventBoxPrivate *priv;
   gboolean visible_window;
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -393,14 +411,14 @@ gtk_event_box_realize (GtkWidget *widget)
   attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.event_mask = gtk_widget_get_events (widget)
-			| GDK_BUTTON_MOTION_MASK
-			| GDK_BUTTON_PRESS_MASK
-			| GDK_BUTTON_RELEASE_MASK
-			| GDK_EXPOSURE_MASK
-			| GDK_ENTER_NOTIFY_MASK
-			| GDK_LEAVE_NOTIFY_MASK;
+                        | GDK_BUTTON_MOTION_MASK
+                        | GDK_BUTTON_PRESS_MASK
+                        | GDK_BUTTON_RELEASE_MASK
+                        | GDK_EXPOSURE_MASK
+                        | GDK_ENTER_NOTIFY_MASK
+                        | GDK_LEAVE_NOTIFY_MASK;
 
-  priv = GTK_EVENT_BOX_GET_PRIVATE (widget);
+  priv = GTK_EVENT_BOX (widget)->priv;
 
   visible_window = gtk_widget_get_has_window (widget);
   if (visible_window)
@@ -431,7 +449,7 @@ gtk_event_box_realize (GtkWidget *widget)
         attributes_mask = 0;
 
       priv->event_window = gdk_window_new (window,
-					   &attributes, attributes_mask);
+                                           &attributes, attributes_mask);
       gdk_window_set_user_data (priv->event_window, widget);
     }
 
@@ -442,10 +460,8 @@ gtk_event_box_realize (GtkWidget *widget)
 static void
 gtk_event_box_unrealize (GtkWidget *widget)
 {
-  GtkEventBoxPrivate *priv;
-  
-  priv = GTK_EVENT_BOX_GET_PRIVATE (widget);
-  
+  GtkEventBoxPrivate *priv = GTK_EVENT_BOX (widget)->priv;
+
   if (priv->event_window != NULL)
     {
       gdk_window_set_user_data (priv->event_window, NULL);
@@ -459,9 +475,7 @@ gtk_event_box_unrealize (GtkWidget *widget)
 static void
 gtk_event_box_map (GtkWidget *widget)
 {
-  GtkEventBoxPrivate *priv;
-
-  priv = GTK_EVENT_BOX_GET_PRIVATE (widget);
+  GtkEventBoxPrivate *priv = GTK_EVENT_BOX (widget)->priv;
 
   if (priv->event_window != NULL && !priv->above_child)
     gdk_window_show (priv->event_window);
@@ -475,9 +489,7 @@ gtk_event_box_map (GtkWidget *widget)
 static void
 gtk_event_box_unmap (GtkWidget *widget)
 {
-  GtkEventBoxPrivate *priv;
-
-  priv = GTK_EVENT_BOX_GET_PRIVATE (widget);
+  GtkEventBoxPrivate *priv = GTK_EVENT_BOX (widget)->priv;
 
   if (priv->event_window != NULL)
     gdk_window_hide (priv->event_window);
@@ -551,21 +563,21 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      priv = GTK_EVENT_BOX_GET_PRIVATE (widget);
+      priv = GTK_EVENT_BOX (widget)->priv;
 
       if (priv->event_window != NULL)
-	gdk_window_move_resize (priv->event_window,
-				child_allocation.x,
-				child_allocation.y,
-				child_allocation.width,
-				child_allocation.height);
-      
+        gdk_window_move_resize (priv->event_window,
+                                child_allocation.x,
+                                child_allocation.y,
+                                child_allocation.width,
+                                child_allocation.height);
+
       if (gtk_widget_get_has_window (widget))
-	gdk_window_move_resize (gtk_widget_get_window (widget),
-				allocation->x,
-				allocation->y,
-				child_allocation.width,
-				child_allocation.height);
+        gdk_window_move_resize (gtk_widget_get_window (widget),
+                                allocation->x,
+                                allocation->y,
+                                child_allocation.width,
+                                child_allocation.height);
     }
 
   child = gtk_bin_get_child (bin);
@@ -574,8 +586,8 @@ gtk_event_box_size_allocate (GtkWidget     *widget,
 }
 
 static gboolean
-gtk_event_box_draw (GtkWidget      *widget,
-                    cairo_t        *cr)
+gtk_event_box_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
   if (gtk_widget_get_has_window (widget) &&
       !gtk_widget_get_app_paintable (widget))
@@ -587,7 +599,7 @@ gtk_event_box_draw (GtkWidget      *widget,
                              gtk_widget_get_allocated_width (widget),
                              gtk_widget_get_allocated_height (widget));
     }
-  
+
   GTK_WIDGET_CLASS (gtk_event_box_parent_class)->draw (widget, cr);
 
   return FALSE;
