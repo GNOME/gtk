@@ -68,8 +68,8 @@ struct _GtkDrawingAreaClass
 };
 
 
-GType      gtk_drawing_area_get_type   (void) G_GNUC_CONST;
-GtkWidget* gtk_drawing_area_new        (void);
+GType      gtk_drawing_area_get_type (void) G_GNUC_CONST;
+GtkWidget* gtk_drawing_area_new      (void);
 
 G_END_DECLS
 

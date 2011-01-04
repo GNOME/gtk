@@ -21,7 +21,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -29,9 +29,109 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkdrawingarea
+ * @Short_description: A widget for custom user interface elements
+ * @Title: GtkDrawingArea
+ * @See_also: #GtkImage
+ *
+ * The #GtkDrawingArea widget is used for creating custom user interface
+ * elements. It's essentially a blank widget; you can draw on it. After
+ * creating a drawing area, the application may want to connect to:
+ *
+ * <itemizedlist>
+ *   <listitem>
+ *     <para>
+ *     Mouse and button press signals to respond to input from
+ *     the user. (Use gtk_widget_add_events() to enable events
+ *     you wish to receive.)
+ *     </para>
+ *   </listitem>
+ *   <listitem>
+ *     <para>
+ *     The #GtkWidget::realize signal to take any necessary actions
+ *     when the widget is instantiated on a particular display.
+ *     (Create GDK resources in response to this signal.)
+ *     </para>
+ *   </listitem>
+ *   <listitem>
+ *     <para>
+ *     The #GtkWidget::configure-event signal to take any necessary
+ *     actions when the widget changes size.
+ *     </para>
+ *   </listitem>
+ *   <listitem>
+ *     <para>
+ *     The #GtkWidget::draw signal to handle redrawing the
+ *     contents of the widget.
+ *     </para>
+ *   </listitem>
+ * </itemizedlist>
+ *
+ * The following code portion demonstrates using a drawing
+ * area to display a circle in the normal widget foreground
+ * color.
+ *
+ * Note that GDK automatically clears the exposed area to the
+ * background color before sending the expose event, and that
+ * drawing is implicitly clipped to the exposed area.
+ *
+ * <example>
+ * <title>Simple GtkDrawingArea usage</title>
+ * <programlisting>
+ * gboolean
+ * draw_callback (GtkWidget *widget, cairo_t *cr, gpointer data)
+ * {
+ *   guint width, height;
+ *   GdkRGBA color;
+ *
+ *   width = gtk_widget_get_allocated_width (widget);
+ *   height = gtk_widget_get_allocated_height (widget);
+ *   cairo_arc (cr,
+ *              width / 2.0, height / 2.0,
+ *              MIN (width, height) / 2.0,
+ *              0, 2 * G_PI);
+ *
+ *   gtk_style_context_get_color (gtk_widget_get_style_context (widget),
+ *                                0,
+ *                                &amp;color);
+ *   gdk_cairo_set_source_rgba (cr, &amp;color);
+ *
+ *   cairo_fill (cr);
+ *
+ *  return FALSE;
+ * }
+ * [...]
+ *   GtkWidget &ast;drawing_area = gtk_drawing_area_new (<!-- -->);
+ *   gtk_widget_set_size_request (drawing_area, 100, 100);
+ *   g_signal_connect (G_OBJECT (drawing_area), "draw",
+ *                     G_CALLBACK (draw_callback), NULL);
+ * </programlisting>
+ * </example>
+ *
+ * Draw signals are normally delivered when a drawing area first comes
+ * onscreen, or when it's covered by another window and then uncovered.
+ * You can also force an expose event by adding to the "damage region"
+ * of the drawing area's window; gtk_widget_queue_draw_area() and
+ * gdk_window_invalidate_rect() are equally good ways to do this.
+ * You'll then get a draw signal for the invalid region.
+ *
+ * The available routines for drawing are documented on the <link
+ * linkend="gdk3-Cairo-Interaction">GDK Drawing Primitives</link> page
+ * and the cairo documentation.
+ *
+ * To receive mouse events on a drawing area, you will need to enable
+ * them with gtk_widget_add_events(). To receive keyboard events, you
+ * will need to set the #GTK_CAN_FOCUS flag on the drawing area, and
+ * should probably draw some user-visible indication that the drawing
+ * area is focused. Use the GTK_HAS_FOCUS() macro in your expose event
+ * handler to decide whether to draw the focus indicator. See
+ * gtk_paint_focus() for one way to draw focus.
+ */
+
 static void gtk_drawing_area_realize       (GtkWidget           *widget);
 static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
-					    GtkAllocation       *allocation);
+                                            GtkAllocation       *allocation);
 static void gtk_drawing_area_send_configure (GtkDrawingArea     *darea);
 
 G_DEFINE_TYPE (GtkDrawingArea, gtk_drawing_area, GTK_TYPE_WIDGET)
@@ -50,7 +150,13 @@ gtk_drawing_area_init (GtkDrawingArea *darea)
 {
 }
 
-
+/**
+ * gtk_drawing_area_new:
+ *
+ * Creates a new drawing area.
+ *
+ * Returns: a new #GtkDrawingArea
+ */
 GtkWidget*
 gtk_drawing_area_new (void)
 {
@@ -101,7 +207,7 @@ gtk_drawing_area_realize (GtkWidget *widget)
 
 static void
 gtk_drawing_area_size_allocate (GtkWidget     *widget,
-				GtkAllocation *allocation)
+                                GtkAllocation *allocation)
 {
   g_return_if_fail (GTK_IS_DRAWING_AREA (widget));
   g_return_if_fail (allocation != NULL);
@@ -135,7 +241,7 @@ gtk_drawing_area_send_configure (GtkDrawingArea *darea)
   event->configure.y = allocation.y;
   event->configure.width = allocation.width;
   event->configure.height = allocation.height;
-  
+
   gtk_widget_event (widget, event);
   gdk_event_free (event);
 }
