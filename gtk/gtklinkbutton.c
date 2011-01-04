@@ -1,12 +1,12 @@
 /* GTK - The GIMP Toolkit
  * gtklinkbutton.c - an hyperlink-enabled button
- * 
+ *
  * Copyright (C) 2006 Emmanuele Bassi <ebassi@gmail.com>
  * All rights reserved.
  *
  * Based on gnome-href code by:
- * 	James Henstridge <james@daa.com.au>
- * 
+ *      James Henstridge <james@daa.com.au>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -55,7 +55,7 @@
 #include "gtkdnd.h"
 #include "gtkimagemenuitem.h"
 #include "gtklabel.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"

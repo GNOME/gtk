@@ -20,7 +20,7 @@
 #include "config.h"
 #include <string.h>
 #include "gtkimcontext.h"
-#include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
 

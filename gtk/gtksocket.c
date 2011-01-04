@@ -31,7 +31,7 @@
 
 #include <string.h>
 
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
 #include "gtkwindowprivate.h"

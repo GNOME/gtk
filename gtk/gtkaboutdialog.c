@@ -51,7 +51,7 @@
 #include "gtkvbox.h"
 #include "gtkiconfactory.h"
 #include "gtkshow.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmessagedialog.h"
 #include "gtktogglebutton.h"
 #include "gtktypebuiltins.h"

@@ -31,7 +31,7 @@
 #include "gtklabel.h"
 #include "gtkaccellabel.h"
 #include "gtkdnd.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkpango.h"
 #include "gtkwindow.h"

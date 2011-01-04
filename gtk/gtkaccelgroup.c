@@ -30,10 +30,10 @@
 
 #include "gtkaccelgroup.h"
 #include "gtkaccelgroupprivate.h"
-#include "gtkaccellabel.h" /* For _gtk_accel_label_class_get_accelerator_label */
+#include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
-#include "gtkmain.h"        /* For _gtk_boolean_handled_accumulator */
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 
 
@@ -43,7 +43,7 @@
  * @Title: Accelerator Groups
  * @See_also:gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
  * gtk_item_factory_new(), gtk_label_new_with_mnemonic()
- * 
+ *
  * A #GtkAccelGroup represents a group of keyboard accelerators,
  * typically attached to a toplevel #GtkWindow (with
  * gtk_window_add_accel_group()). Usually you won't need to create a

@@ -52,7 +52,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtktexttag.h"
 #include "gtktexttypes.h"
 #include "gtktexttagtable.h"

@@ -42,7 +42,7 @@
 #include "gtkhbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkorientable.h"

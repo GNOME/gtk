@@ -32,7 +32,7 @@
 #include "gtksizerequest.h"
 #include "gtkactivatable.h"
 #include "gtkintl.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkprivate.h"
 
 

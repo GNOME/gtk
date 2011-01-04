@@ -30,22 +30,30 @@
 
 G_BEGIN_DECLS
 
-
-/* Functions for use within GTK+
+/**
+ * GtkModuleInitFunc:
+ * @argc: Pointer to the number of arguments remaining after gtk_init()
+ * @argv: Points to the argument vector
+ *
+ * Each GTK+ module must have a function gtk_module_init()
+ * with this prototype. This function is called after loading
+ * the module with the @argc and @argv cleaned from any arguments
+ * that GTK+ handles itself.
  */
-gchar * _gtk_find_module        (const gchar *name,
-			         const gchar *type);
-gchar **_gtk_get_module_path    (const gchar *type);
+typedef void     (*GtkModuleInitFunc)        (gint        *argc,
+                                              gchar      ***argv);
 
-void    _gtk_modules_init             (gint         *argc,
-				       gchar      ***argv,
-				       const gchar  *gtk_modules_args);
-void    _gtk_modules_settings_changed (GtkSettings  *settings,
-				       const gchar  *modules);
-
-typedef void	 (*GtkModuleInitFunc)        (gint	  *argc,
-					      gchar      ***argv);
-typedef void	 (*GtkModuleDisplayInitFunc) (GdkDisplay   *display);
+/**
+ * GtkModuleDisplayInitFunc:
+ * @display: an open #GdkDisplay
+ *
+ * A multihead-aware GTK+ module may have a gtk_module_display_init()
+ * function with this prototype. GTK+ calls this function for each
+ * opened display.
+ *
+ * Since: 2.2
+ */
+typedef void     (*GtkModuleDisplayInitFunc) (GdkDisplay   *display);
 
 
 G_END_DECLS

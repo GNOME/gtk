@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -41,15 +41,33 @@
 
 G_BEGIN_DECLS
 
-/* Priorities for redrawing and resizing
+/**
+ * GTK_PRIORITY_RESIZE:
+ *
+ * Use this priority for functionality related to size allocation.
+ *
+ * It is used internally by GTK+ to compute the sizes of widgets.
+ * This priority is higher than %GDK_PRIORITY_REDRAW to avoid
+ * resizing a widget which was just redrawn.
  */
-#define GTK_PRIORITY_RESIZE     (G_PRIORITY_HIGH_IDLE + 10)
+#define GTK_PRIORITY_RESIZE (G_PRIORITY_HIGH_IDLE + 10)
 
-typedef gint	(*GtkKeySnoopFunc)	    (GtkWidget	  *grab_widget,
-					     GdkEventKey  *event,
-					     gpointer	   func_data);
+/**
+ * GtkKeySnoopFunc:
+ * @grab_widget: the widget to which the event will be delivered
+ * @event: the key event
+ * @func_data: data supplied to gtk_key_snooper_install()
+ *
+ * Key snooper functions are called before normal event delivery.
+ * They can be used to implement custom key event handling.
+ *
+ * Returns: %TRUE to stop further processing of @event, %FALSE to continue.
+ */
+typedef gint (*GtkKeySnoopFunc) (GtkWidget   *grab_widget,
+                                 GdkEventKey *event,
+                                 gpointer     func_data);
 
-/* Gtk version.
+/* GTK+ version
  */
 guint gtk_get_major_version (void) G_GNUC_CONST;
 guint gtk_get_minor_version (void) G_GNUC_CONST;
@@ -63,16 +81,16 @@ guint gtk_get_interface_age (void) G_GNUC_CONST;
 #define gtk_binary_age gtk_get_binary_age ()
 #define gtk_interface_age gtk_get_interface_age ()
 
-const gchar* gtk_check_version (guint	required_major,
-			        guint	required_minor,
-			        guint	required_micro);
+const gchar* gtk_check_version (guint   required_major,
+                                guint   required_minor,
+                                guint   required_micro);
 
 
 /* Initialization, exit, mainloop and miscellaneous routines
  */
 
 gboolean gtk_parse_args           (int    *argc,
-				   char ***argv);
+                                   char ***argv);
 
 void     gtk_init                 (int    *argc,
                                    char ***argv);
@@ -88,22 +106,22 @@ gboolean gtk_init_with_args       (gint                 *argc,
                                    GError              **error);
 
 GOptionGroup *gtk_get_option_group (gboolean open_default_display);
-  
+
 #ifdef G_PLATFORM_WIN32
 
 /* Variants that are used to check for correct struct packing
  * when building GTK+-using code.
  */
-void	 gtk_init_abi_check       (int	  *argc,
-				   char	***argv,
-				   int     num_checks,
-				   size_t  sizeof_GtkWindow,
-				   size_t  sizeof_GtkBox);
-gboolean gtk_init_check_abi_check (int	  *argc,
-				   char	***argv,
-				   int     num_checks,
-				   size_t  sizeof_GtkWindow,
-				   size_t  sizeof_GtkBox);
+void     gtk_init_abi_check       (int    *argc,
+                                   char ***argv,
+                                   int     num_checks,
+                                   size_t  sizeof_GtkWindow,
+                                   size_t  sizeof_GtkBox);
+gboolean gtk_init_check_abi_check (int    *argc,
+                                   char ***argv,
+                                   int     num_checks,
+                                   size_t  sizeof_GtkWindow,
+                                   size_t  sizeof_GtkBox);
 
 #define gtk_init(argc, argv) gtk_init_abi_check (argc, argv, 2, sizeof (GtkWindow), sizeof (GtkBox))
 #define gtk_init_check(argc, argv) gtk_init_check_abi_check (argc, argv, 2, sizeof (GtkWindow), sizeof (GtkBox))
@@ -114,25 +132,19 @@ void           gtk_disable_setlocale    (void);
 PangoLanguage *gtk_get_default_language (void);
 gboolean       gtk_events_pending       (void);
 
-/* The following is the event func GTK+ registers with GDK
- * we expose it mainly to allow filtering of events between
- * GDK and GTK+.
- */
-void 	   gtk_main_do_event	   (GdkEvent           *event);
+void       gtk_main_do_event       (GdkEvent           *event);
+void       gtk_main                (void);
+guint      gtk_main_level          (void);
+void       gtk_main_quit           (void);
+gboolean   gtk_main_iteration      (void);
+gboolean   gtk_main_iteration_do   (gboolean            blocking);
 
-void	   gtk_main		   (void);
-guint	   gtk_main_level	   (void);
-void	   gtk_main_quit	   (void);
-gboolean   gtk_main_iteration	   (void);
-/* gtk_main_iteration() calls gtk_main_iteration_do(TRUE) */
-gboolean   gtk_main_iteration_do   (gboolean blocking);
+gboolean   gtk_true                (void) G_GNUC_CONST;
+gboolean   gtk_false               (void) G_GNUC_CONST;
 
-gboolean   gtk_true		   (void) G_GNUC_CONST;
-gboolean   gtk_false		   (void) G_GNUC_CONST;
-
-void	   gtk_grab_add		   (GtkWidget	       *widget);
-GtkWidget* gtk_grab_get_current	   (void);
-void	   gtk_grab_remove	   (GtkWidget	       *widget);
+void       gtk_grab_add            (GtkWidget          *widget);
+GtkWidget* gtk_grab_get_current    (void);
+void       gtk_grab_remove         (GtkWidget          *widget);
 
 void       gtk_device_grab_add     (GtkWidget          *widget,
                                     GdkDevice          *device,
@@ -140,29 +152,20 @@ void       gtk_device_grab_add     (GtkWidget          *widget,
 void       gtk_device_grab_remove  (GtkWidget          *widget,
                                     GdkDevice          *device);
 
-guint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
-				    gpointer	    func_data);
-void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);
+guint      gtk_key_snooper_install (GtkKeySnoopFunc snooper,
+                                    gpointer        func_data);
+void       gtk_key_snooper_remove  (guint           snooper_handler_id);
 
-GdkEvent*       gtk_get_current_event       (void);
-guint32         gtk_get_current_event_time  (void);
-gboolean        gtk_get_current_event_state (GdkModifierType *state);
-GdkDevice *     gtk_get_current_event_device (void);
+GdkEvent * gtk_get_current_event        (void);
+guint32    gtk_get_current_event_time   (void);
+gboolean   gtk_get_current_event_state  (GdkModifierType *state);
+GdkDevice *gtk_get_current_event_device (void);
 
-GtkWidget* gtk_get_event_widget	   (GdkEvent	   *event);
+GtkWidget *gtk_get_event_widget         (GdkEvent        *event);
 
+void       gtk_propagate_event          (GtkWidget       *widget,
+                                         GdkEvent        *event);
 
-/* Private routines internal to GTK+ 
- */
-void       gtk_propagate_event     (GtkWidget         *widget,
-				    GdkEvent          *event);
-
-gboolean _gtk_boolean_handled_accumulator (GSignalInvocationHint *ihint,
-                                   GValue                *return_accu,
-                                   const GValue          *handler_return,
-                                   gpointer               dummy);
-
-gchar *_gtk_get_lc_ctype (void);
 
 G_END_DECLS
 

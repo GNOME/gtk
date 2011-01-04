@@ -23,6 +23,7 @@ gtkentry.sgml
 gtkentrybuffer.sgml
 gtkeventbox.sgml
 gtkexpander.sgml
+gtkfeatures.sgml
 gtkhbox.sgml
 gtkiconview.sgml
 gtkimcontextsimple.sgml
@@ -30,6 +31,7 @@ gtkimmulticontext.sgml
 gtkitemfactory.sgml
 gtklayout.sgml
 gtklinkbutton.sgml
+gtkmain.sgml
 gtkmessagedialog.sgml
 gtknotebook.sgml
 gtkobject.sgml

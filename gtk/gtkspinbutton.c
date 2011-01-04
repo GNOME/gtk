@@ -38,7 +38,7 @@
 #include "gtkbindings.h"
 #include "gtkspinbutton.h"
 #include "gtkentryprivate.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"

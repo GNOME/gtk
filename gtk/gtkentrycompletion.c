@@ -35,7 +35,7 @@
 #include "gtkvbox.h"
 #include "gtkwindow.h"
 #include "gtkentry.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 
 #include "gtkprivate.h"
