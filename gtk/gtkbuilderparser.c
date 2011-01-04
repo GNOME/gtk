@@ -23,13 +23,12 @@
 #include <string.h>
 #include <gmodule.h>
 
-#include "gtktypeutils.h"
 #include "gtkbuilderprivate.h"
 #include "gtkbuilder.h"
 #include "gtkbuildable.h"
 #include "gtkdebug.h"
 #include "gtkversion.h"
-#include "gtktypeutils.h"
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
 

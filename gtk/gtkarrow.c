@@ -48,7 +48,7 @@
 #include <math.h>
 #include "gtkarrow.h"
 #include "gtksizerequest.h"
-#include "gtktypeutils.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

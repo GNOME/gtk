@@ -32,7 +32,6 @@
 #include "gtkscrollable.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
-#include "gtktypeutils.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

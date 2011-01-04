@@ -25,7 +25,7 @@
 
 #include "gtkorientable.h"
 #include "gtkprivate.h"
-#include "gtktypeutils.h"
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
 

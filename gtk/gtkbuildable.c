@@ -40,7 +40,6 @@
 
 #include "config.h"
 #include "gtkbuildable.h"
-#include "gtktypeutils.h"
 #include "gtkintl.h"
 
 

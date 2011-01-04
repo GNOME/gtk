@@ -63,8 +63,8 @@
 #include "config.h"
 
 #include "gtkscrollable.h"
-#include "gtktypeutils.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
 G_DEFINE_INTERFACE (GtkScrollable, gtk_scrollable, G_TYPE_OBJECT)

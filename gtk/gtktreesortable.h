@@ -27,7 +27,6 @@
 
 #include <gtk/gtkenums.h>
 #include <gtk/gtktreemodel.h>
-#include <gtk/gtktypeutils.h>
 
 
 G_BEGIN_DECLS

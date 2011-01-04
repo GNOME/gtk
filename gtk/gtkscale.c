@@ -37,6 +37,7 @@
 #include "gtkmarshalers.h"
 #include "gtkbindings.h"
 #include "gtkorientable.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"

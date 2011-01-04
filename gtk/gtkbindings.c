@@ -33,8 +33,8 @@
 #include <gdkkeysyms.h>
 
 #include "gtkbindings.h"
-#include "gtkkeyhash.h"
 #include "gtktypeutils.h"
+#include "gtkkeyhash.h"
 #include "gtkwidget.h"
 #include "gtkrc.h"
 

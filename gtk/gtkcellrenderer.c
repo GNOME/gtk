@@ -21,6 +21,7 @@
 #include "gtkcellrenderer.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtktreeprivate.h"
 

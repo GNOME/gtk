@@ -53,6 +53,7 @@
 #include "gtkcelllayout.h"
 #include "gtkcellareabox.h"
 #include "gtkcellareaboxcontext.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
 
