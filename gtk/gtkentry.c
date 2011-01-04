@@ -6169,6 +6169,8 @@ gtk_entry_move_adjustments (GtkEntry *entry)
   GtkAdjustment *adjustment;
   PangoContext *context;
   PangoFontMetrics *metrics;
+  GtkStyleContext *style_context;
+  GtkStateFlags state;
   gint x, layout_x, border_x, border_y;
   gint char_width;
 
@@ -6186,8 +6188,11 @@ gtk_entry_move_adjustments (GtkEntry *entry)
 
   /* Approximate width of a char, so user can see what is ahead/behind */
   context = gtk_widget_get_pango_context (widget);
-  metrics = pango_context_get_metrics (context, 
-                                       gtk_widget_get_style (widget)->font_desc,
+  style_context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  metrics = pango_context_get_metrics (context,
+                                       gtk_style_context_get_font (style_context, state),
 				       pango_context_get_language (context));
   char_width = pango_font_metrics_get_approximate_char_width (metrics) / PANGO_SCALE;
 
