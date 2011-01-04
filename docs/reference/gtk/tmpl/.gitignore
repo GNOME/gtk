@@ -16,9 +16,11 @@ gtkcolorsel.sgml
 gtkcombobox.sgml
 gtkcomboboxentry.sgml
 gtkcontainer.sgml
+gtkdialog.sgml
 gtkeditable.sgml
 gtkentry.sgml
 gtkentrybuffer.sgml
+gtkeventbox.sgml
 gtkhbox.sgml
 gtkiconview.sgml
 gtkimcontextsimple.sgml
