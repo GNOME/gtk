@@ -1510,6 +1510,8 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion,
                              GdkDevice          *device)
 {
   GtkTreeViewColumn *column;
+  GtkStyleContext *context;
+  GdkRGBA color;
   GList *renderers;
   GtkWidget *toplevel;
 
@@ -1529,9 +1531,12 @@ _gtk_entry_completion_popup (GtkEntryCompletion *completion,
     
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
   renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
-  gtk_widget_ensure_style (completion->priv->tree_view);
-  g_object_set (GTK_CELL_RENDERER (renderers->data), "cell-background-gdk",
-                &gtk_widget_get_style (completion->priv->tree_view)->bg[GTK_STATE_NORMAL],
+
+  context = gtk_widget_get_style_context (completion->priv->tree_view);
+  gtk_style_context_get_background_color (context, 0, &color);
+
+  g_object_set (GTK_CELL_RENDERER (renderers->data),
+                "cell-background-rgba", &color,
                 NULL);
   g_list_free (renderers);
 
