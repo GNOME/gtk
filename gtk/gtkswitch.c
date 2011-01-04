@@ -422,8 +422,6 @@ gtk_switch_realize (GtkWidget *widget)
                                        &attributes,
                                        attributes_mask);
   gdk_window_set_user_data (priv->event_window, widget);
-
-  gtk_widget_style_attach (widget);
 }
 
 static void
