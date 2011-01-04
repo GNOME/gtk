@@ -143,18 +143,7 @@ _gtk_get_localedir (void)
 
 /* Private type definitions
  */
-typedef struct _GtkQuitFunction		 GtkQuitFunction;
 typedef struct _GtkKeySnooperData	 GtkKeySnooperData;
-
-struct _GtkQuitFunction
-{
-  guint id;
-  guint main_level;
-  GtkCallbackMarshal marshal;
-  GtkFunction function;
-  gpointer data;
-  GDestroyNotify destroy;
-};
 
 struct _GtkKeySnooperData
 {
@@ -163,8 +152,6 @@ struct _GtkKeySnooperData
   guint id;
 };
 
-static gint  gtk_quit_invoke_function	 (GtkQuitFunction    *quitf);
-static void  gtk_quit_destroy		 (GtkQuitFunction    *quitf);
 static gint  gtk_invoke_key_snoopers	 (GtkWidget	     *grab_widget,
 					  GdkEvent	     *event);
 
@@ -177,8 +164,6 @@ static GList *current_events = NULL;
 
 static GSList *main_loops = NULL;      /* stack of currently executing main loops */
 
-static GList *quit_functions = NULL;	   /* A list of quit functions.
-					    */
 static GSList *key_snoopers = NULL;
 
 static guint debug_flags = 0;		   /* Global GTK debug flag */
@@ -1256,11 +1241,10 @@ gtk_get_default_language (void)
 void
 gtk_main (void)
 {
-  GList *tmp_list;
   GMainLoop *loop;
 
   gtk_main_loop_level++;
-  
+
   loop = g_main_loop_new (NULL, TRUE);
   main_loops = g_slist_prepend (main_loops, loop);
 
@@ -1272,43 +1256,6 @@ gtk_main (void)
       gdk_flush ();
     }
 
-  if (quit_functions)
-    {
-      GList *reinvoke_list = NULL;
-      GtkQuitFunction *quitf;
-
-      while (quit_functions)
-	{
-	  quitf = quit_functions->data;
-
-	  tmp_list = quit_functions;
-	  quit_functions = g_list_remove_link (quit_functions, quit_functions);
-	  g_list_free_1 (tmp_list);
-
-	  if ((quitf->main_level && quitf->main_level != gtk_main_loop_level) ||
-	      gtk_quit_invoke_function (quitf))
-	    {
-	      reinvoke_list = g_list_prepend (reinvoke_list, quitf);
-	    }
-	  else
-	    {
-	      gtk_quit_destroy (quitf);
-	    }
-	}
-      if (reinvoke_list)
-	{
-	  GList *work;
-	  
-	  work = g_list_last (reinvoke_list);
-	  if (quit_functions)
-	    quit_functions->prev = work;
-	  work->next = quit_functions;
-	  quit_functions = work;
-	}
-
-      gdk_flush ();
-    }
-    
   main_loops = g_slist_remove (main_loops, loop);
 
   g_main_loop_unref (loop);
@@ -2132,124 +2079,6 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
   return return_val;
 }
 
-guint
-gtk_quit_add_full (guint		main_level,
-		   GtkFunction		function,
-		   GtkCallbackMarshal	marshal,
-		   gpointer		data,
-		   GDestroyNotify	destroy)
-{
-  static guint quit_id = 1;
-  GtkQuitFunction *quitf;
-  
-  g_return_val_if_fail ((function != NULL) || (marshal != NULL), 0);
-
-  quitf = g_slice_new (GtkQuitFunction);
-  
-  quitf->id = quit_id++;
-  quitf->main_level = main_level;
-  quitf->function = function;
-  quitf->marshal = marshal;
-  quitf->data = data;
-  quitf->destroy = destroy;
-
-  quit_functions = g_list_prepend (quit_functions, quitf);
-  
-  return quitf->id;
-}
-
-static void
-gtk_quit_destroy (GtkQuitFunction *quitf)
-{
-  if (quitf->destroy)
-    quitf->destroy (quitf->data);
-  g_slice_free (GtkQuitFunction, quitf);
-}
-
-static gint
-gtk_quit_destructor (GtkWidget **object_p)
-{
-  if (*object_p)
-    gtk_widget_destroy (*object_p);
-  g_free (object_p);
-
-  return FALSE;
-}
-
-void
-gtk_quit_add_destroy (guint      main_level,
-		      GtkWidget *object)
-{
-  GtkWidget **object_p;
-
-  g_return_if_fail (main_level > 0);
-  g_return_if_fail (GTK_IS_WIDGET (object));
-
-  object_p = g_new (GtkWidget*, 1);
-  *object_p = object;
-  g_signal_connect (object,
-		    "destroy",
-		    G_CALLBACK (gtk_widget_destroyed),
-		    object_p);
-  gtk_quit_add (main_level, (GtkFunction) gtk_quit_destructor, object_p);
-}
-
-guint
-gtk_quit_add (guint	  main_level,
-	      GtkFunction function,
-	      gpointer	  data)
-{
-  return gtk_quit_add_full (main_level, function, NULL, data, NULL);
-}
-
-void
-gtk_quit_remove (guint id)
-{
-  GtkQuitFunction *quitf;
-  GList *tmp_list;
-  
-  tmp_list = quit_functions;
-  while (tmp_list)
-    {
-      quitf = tmp_list->data;
-      
-      if (quitf->id == id)
-	{
-	  quit_functions = g_list_remove_link (quit_functions, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_quit_destroy (quitf);
-	  
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-}
-
-void
-gtk_quit_remove_by_data (gpointer data)
-{
-  GtkQuitFunction *quitf;
-  GList *tmp_list;
-  
-  tmp_list = quit_functions;
-  while (tmp_list)
-    {
-      quitf = tmp_list->data;
-      
-      if (quitf->data == data)
-	{
-	  quit_functions = g_list_remove_link (quit_functions, tmp_list);
-	  g_list_free (tmp_list);
-	  gtk_quit_destroy (quitf);
-
-	  return;
-	}
-      
-      tmp_list = tmp_list->next;
-    }
-}
-
 /**
  * gtk_get_current_event:
  * 
@@ -2354,26 +2183,6 @@ gtk_get_event_widget (GdkEvent *event)
     }
   
   return widget;
-}
-
-static gint
-gtk_quit_invoke_function (GtkQuitFunction *quitf)
-{
-  if (!quitf->marshal)
-    return quitf->function (quitf->data);
-  else
-    {
-      GtkArg args[1];
-      gint ret_val = FALSE;
-
-      args[0].name = NULL;
-      args[0].type = G_TYPE_BOOLEAN;
-      args[0].d.pointer_data = &ret_val;
-      ((GtkCallbackMarshal) quitf->marshal) (NULL,
-					     quitf->data,
-					     0, args);
-      return ret_val;
-    }
 }
 
 /**

@@ -202,8 +202,7 @@ of the main loop return.
 
 <!-- ##### FUNCTION gtk_main_level ##### -->
 <para>
-Asks for the current nesting level of the main loop. This can be useful
-when calling gtk_quit_add().
+Asks for the current nesting level of the main loop.
 </para>
 
 @void: 
@@ -439,33 +438,6 @@ If @widget does not have the grab, this function does nothing.
 @Returns: 
 
 
-<!-- ##### FUNCTION gtk_quit_add_destroy ##### -->
-<para>
-Trigger destruction of @object in case the mainloop at level @main_level
-is quit.
-</para>
-
-@main_level: Level of the mainloop which shall trigger the destruction.
-@object: Object to be destroyed.
-@Deprecated: This function is going to be removed in GTK+ 3.0
-
-
-<!-- ##### FUNCTION gtk_quit_add ##### -->
-<para>
-Registers a function to be called when an instance of the mainloop is left.
-</para>
-
-@main_level: Level at which termination the function shall be called. You
- can pass 0 here to have the function run at the termination of the current
- mainloop.
-@function: The function to call. This should return 0 to be removed from the 
- list of quit handlers. Otherwise the function might be called again.
-@data: Pointer to pass when calling @function.
-@Returns: A handle for this quit handler (you need this for gtk_quit_remove())
-  or 0 if you passed a %NULL pointer in @function.
-@Deprecated: This function is going to be removed in GTK+ 3.0
-
-
 <!-- ##### USER_FUNCTION GtkCallbackMarshal ##### -->
 <para>
 
@@ -484,50 +456,6 @@ Registers a function to be called when an instance of the mainloop is left.
 
 @type: 
 @name: 
-
-<!-- ##### FUNCTION gtk_quit_add_full ##### -->
-<para>
-Registers a function to be called when an instance of the mainloop is left.
-In comparison to gtk_quit_add() this function adds the possibility to 
-pass a marshaller and a function to be called when the quit handler is freed.
-</para>
-<para>
-The former can be used to run interpreted code instead of a compiled function
-while the latter can be used to free the information stored in @data (while
-you can do this in @function as well)... So this function will mostly be
-used by GTK+ wrappers for languages other than C.
-</para>
-
-@main_level: Level at which termination the function shall be called. You
- can pass 0 here to have the function run at the termination of the current
- mainloop.
-@function: The function to call. This should return 0 to be removed from the 
- list of quit handlers. Otherwise the function might be called again.
-@marshal: The marshaller to be used. If this is non-%NULL, @function is 
- ignored.
-@data: Pointer to pass when calling @function.
-@destroy: Function to call to destruct @data. Gets @data as argument.
-@Returns: A handle for this quit handler (you need this for gtk_quit_remove())
-  or 0 if you passed a %NULL pointer in @function.
-@Deprecated: This function is going to be removed in GTK+ 3.0
-
-
-<!-- ##### FUNCTION gtk_quit_remove ##### -->
-<para>
-Removes a quit handler by its identifier.
-</para>
-
-@quit_handler_id: Identifier for the handler returned when installing it.
-@Deprecated: This function is going to be removed in GTK+ 3.0
-
-
-<!-- ##### FUNCTION gtk_quit_remove_by_data ##### -->
-<para>
-Removes a quit handler identified by its @data field.
-</para>
-
-@data: The pointer passed as @data to gtk_quit_add() or gtk_quit_add_full().
-@Deprecated: This function is going to be removed in GTK+ 3.0
 
 
 <!-- ##### MACRO GTK_PRIORITY_RESIZE ##### -->

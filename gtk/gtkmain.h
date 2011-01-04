@@ -141,21 +141,6 @@ void       gtk_device_grab_add     (GtkWidget          *widget,
 void       gtk_device_grab_remove  (GtkWidget          *widget,
                                     GdkDevice          *device);
 
-#if !defined (GTK_DISABLE_DEPRECATED) || defined (GTK_COMPILATION)
-void	   gtk_quit_add_destroy	   (guint	       main_level,
-				    GtkWidget	      *object);
-guint	   gtk_quit_add		   (guint	       main_level,
-				    GtkFunction	       function,
-				    gpointer	       data);
-guint	   gtk_quit_add_full	   (guint	       main_level,
-				    GtkFunction	       function,
-				    GtkCallbackMarshal marshal,
-				    gpointer	       data,
-				    GDestroyNotify     destroy);
-void	   gtk_quit_remove	   (guint	       quit_handler_id);
-void	   gtk_quit_remove_by_data (gpointer	       data);
-#endif
-
 guint	   gtk_key_snooper_install (GtkKeySnoopFunc snooper,
 				    gpointer	    func_data);
 void	   gtk_key_snooper_remove  (guint	    snooper_handler_id);

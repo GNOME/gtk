@@ -5318,13 +5318,8 @@ gtk_device_grab_remove
 
 <SUBSECTION>
 GtkFunction
-gtk_quit_add_destroy
-gtk_quit_add
 GtkCallbackMarshal
 GtkArg
-gtk_quit_add_full
-gtk_quit_remove
-gtk_quit_remove_by_data
 
 <SUBSECTION>
 GTK_PRIORITY_RESIZE
