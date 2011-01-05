@@ -2074,7 +2074,7 @@ adjustment_changed (GtkAdjustment *adjustment,
     {
     case COLORSEL_SATURATION:
     case COLORSEL_VALUE:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 100;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 100;
       gtk_hsv_to_rgb (priv->color[COLORSEL_HUE],
 		      priv->color[COLORSEL_SATURATION],
 		      priv->color[COLORSEL_VALUE],
@@ -2083,7 +2083,7 @@ adjustment_changed (GtkAdjustment *adjustment,
 		      &priv->color[COLORSEL_BLUE]);
       break;
     case COLORSEL_HUE:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 360;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 360;
       gtk_hsv_to_rgb (priv->color[COLORSEL_HUE],
 		      priv->color[COLORSEL_SATURATION],
 		      priv->color[COLORSEL_VALUE],
@@ -2094,7 +2094,7 @@ adjustment_changed (GtkAdjustment *adjustment,
     case COLORSEL_RED:
     case COLORSEL_GREEN:
     case COLORSEL_BLUE:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 255;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 255;
       
       gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
 		      priv->color[COLORSEL_GREEN],
@@ -2104,7 +2104,7 @@ adjustment_changed (GtkAdjustment *adjustment,
 		      &priv->color[COLORSEL_VALUE]);
       break;
     default:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 255;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 255;
       break;
     }
   update_color (colorsel);
