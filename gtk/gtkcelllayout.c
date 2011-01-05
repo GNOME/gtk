@@ -488,9 +488,7 @@ gtk_cell_layout_get_cells (GtkCellLayout *cell_layout)
  * if called on a #GtkCellArea or might be %NULL if no #GtkCellArea
  * is used by @cell_layout.
  *
- * Return value: (transfer none): a list of cell renderers. The list,
- *     but not the renderers has been newly allocated and should be
- *     freed with g_list_free() when no longer needed.
+ * Return value: (transfer none): the cell area used by @cell_layout.
  *
  * Since: 3.0
  */
