@@ -662,33 +662,35 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   /* update the scrollbar to match the displayed adjustment */
   if (adjustment)
     {
-      gdouble value;
-
-      adjustment->page_increment = page_size * 0.9;
-      adjustment->step_increment = page_size * 0.1;
-      adjustment->page_size = page_size;
+      gdouble value, lower, upper;
 
       if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation ||
           GTK_TEXT_DIR_LTR == direction)
         {
-          adjustment->lower = 0;
-          adjustment->upper = MAX (0, page_start);
+          lower = 0;
+          upper = MAX (0, page_start);
 
-          value = MIN (offset, adjustment->upper - adjustment->page_size);
+          value = MIN (offset, upper - page_size);
           gtk_adjustment_clamp_page (adjustment, value, offset + page_size);
         }
       else
         {
-          adjustment->lower = page_size - MAX (0, page_start);
-          adjustment->upper = page_size;
+          lower = page_size - MAX (0, page_start);
+          upper = page_size;
 
           offset = -offset;
 
-          value = MAX (offset, adjustment->lower);
+          value = MAX (offset, lower);
           gtk_adjustment_clamp_page (adjustment, offset, value + page_size);
         }
 
-      gtk_adjustment_changed (adjustment);
+      gtk_adjustment_configure (adjustment,
+                                value,
+                                lower,
+                                upper,
+                                page_size * 0.1,
+                                page_size * 0.9,
+                                page_size);
     }
 }
 
