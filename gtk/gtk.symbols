@@ -3408,7 +3408,9 @@ gtk_range_get_show_fill_level
 gtk_range_get_slider_range
 gtk_range_get_slider_size_fixed
 gtk_range_get_type G_GNUC_CONST
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_range_get_update_policy
+#endif
 gtk_range_get_upper_stepper_sensitivity
 gtk_range_get_value
 gtk_range_set_adjustment
@@ -3422,7 +3424,9 @@ gtk_range_set_range
 gtk_range_set_restrict_to_fill_level
 gtk_range_set_show_fill_level
 gtk_range_set_slider_size_fixed
+#ifndef GTK_DISABLE_DEPRECATED
 gtk_range_set_update_policy
+#endif
 gtk_range_set_upper_stepper_sensitivity
 gtk_range_set_value
 #endif

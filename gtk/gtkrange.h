@@ -135,9 +135,11 @@ struct _GtkRangeClass
 
 GType              gtk_range_get_type                      (void) G_GNUC_CONST;
 
+#ifndef GTK_DISABLE_DEPRECATED
 void               gtk_range_set_update_policy             (GtkRange      *range,
                                                             GtkUpdateType  policy);
 GtkUpdateType      gtk_range_get_update_policy             (GtkRange      *range);
+#endif /* GTK_DISABLE_DEPRECATED */
 
 void               gtk_range_set_adjustment                (GtkRange      *range,
                                                             GtkAdjustment *adjustment);

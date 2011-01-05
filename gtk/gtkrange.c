@@ -30,6 +30,8 @@
 #include <stdio.h>
 #include <math.h>
 
+#undef GTK_DISABLE_DEPRECATED
+
 #include <gdk/gdkkeysyms.h>
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -757,6 +759,9 @@ gtk_range_get_adjustment (GtkRange *range)
  * continuous. #GTK_UPDATE_DISCONTINUOUS means that the value will only
  * be updated when the user releases the button and ends the slider
  * drag operation.
+ *
+ * Deprecated: 2.24: There is no replacement. If you require delayed
+ *   updates, you need to code it yourself.
  **/
 void
 gtk_range_set_update_policy (GtkRange      *range,
@@ -778,6 +783,9 @@ gtk_range_set_update_policy (GtkRange      *range,
  * Gets the update policy of @range. See gtk_range_set_update_policy().
  *
  * Return value: the current update policy
+ *
+ * Deprecated: 2.24: There is no replacement. If you require delayed
+ *   updates, you need to code it yourself.
  **/
 GtkUpdateType
 gtk_range_get_update_policy (GtkRange *range)
