@@ -186,7 +186,7 @@ gtk/gtktexttag.c
 gtk/gtktexttagtable.c
 gtk/gtktextutil.c
 gtk/gtktextview.c
-gtk/gtkthemes.c
+gtk/gtkthemingengine.c
 gtk/gtktoggleaction.c
 gtk/gtktogglebutton.c
 gtk/gtktoggletoolbutton.c
