@@ -127,12 +127,6 @@ struct _GtkTextAppearance
   /* super/subscript rise, can be negative */
   gint rise;
 
-  /*< private >*/
-  /* I'm not sure this can really be used without breaking some things
-   * an app might do :-/
-   */
-  gpointer padding1;
-
   /*< public >*/
   guint underline : 4;          /* PangoUnderline */
   guint strikethrough : 1;
@@ -143,7 +137,7 @@ struct _GtkTextAppearance
    * had background stuff set.
    */
   guint draw_bg : 1;
-  
+
   /* These are only used when we are actually laying out and rendering
    * a paragraph; not when a GtkTextAppearance is part of a
    * GtkTextAttributes.
@@ -152,10 +146,7 @@ struct _GtkTextAppearance
   guint is_text : 1;
 
   /*< private >*/
-  guint pad1 : 1;
-  guint pad2 : 1;
-  guint pad3 : 1;
-  guint pad4 : 1;
+  guint padding[4];
 };
 
 struct _GtkTextAttributes
@@ -173,17 +164,13 @@ struct _GtkTextAttributes
   PangoFontDescription *font;
 
   gdouble font_scale;
-  
+
   gint left_margin;
-
-  gint indent;  
-
   gint right_margin;
+  gint indent;
 
   gint pixels_above_lines;
-
   gint pixels_below_lines;
-
   gint pixels_inside_wrap;
 
   PangoTabArray *tabs;
@@ -211,10 +198,7 @@ struct _GtkTextAttributes
   guint editable : 1;
 
   /*< private >*/
-  guint pad1 : 1;
-  guint pad2 : 1;
-  guint pad3 : 1;
-  guint pad4 : 1;
+  guint padding[4];
 };
 
 GtkTextAttributes* gtk_text_attributes_new         (void);
