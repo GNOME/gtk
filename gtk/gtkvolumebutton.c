@@ -232,21 +232,21 @@ cb_query_tooltip (GtkWidget  *button,
 		  gpointer    user_data)
 {
   GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gdouble val;
   char *str;
   AtkImage *image;
 
   image = ATK_IMAGE (gtk_widget_get_accessible (button));
 
-  adj = gtk_scale_button_get_adjustment (scale_button);
+  adjustment = gtk_scale_button_get_adjustment (scale_button);
   val = gtk_scale_button_get_value (scale_button);
 
-  if (val < (adj->lower + EPSILON))
+  if (val < (gtk_adjustment_get_lower (adjustment) + EPSILON))
     {
       str = g_strdup (_("Muted"));
     }
-  else if (val >= (adj->upper - EPSILON))
+  else if (val >= (gtk_adjustment_get_upper (adjustment) - EPSILON))
     {
       str = g_strdup (_("Full Volume"));
     }
@@ -254,7 +254,7 @@ cb_query_tooltip (GtkWidget  *button,
     {
       int percent;
 
-      percent = (int) (100. * val / (adj->upper - adj->lower) + .5);
+      percent = (int) (100. * val / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) + .5);
 
       /* Translators: this is the percentage of the current volume,
        * as used in the tooltip, eg. "49 %".
