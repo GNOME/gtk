@@ -1,3 +1,100 @@
+Overview of Changes from GTK+ 2.91.7 to 2.99.0
+==============================================
+
+* Deprecations and removals:
+ - Long-obsolete linuxfb-related GtkWindow APIs have been dropped
+ - G_SEALed struct members have been removed from GtkMenu,
+   GtkMenuShell, GtkMenuItem, GtkSettings
+ - GtkThemeEngine has been removed
+ - gdk_display_get_window_at_device_position() has been renamed to
+   gdk_device_get_window_at_position()
+ - gdk_display_get_device_state() has been renamed to
+   gdk_device_get_position()
+ - gdk_device_set_source() has been dropped
+ - gdk_set_pointer_hooks(), gdk_display_set_pointer_hooks() and
+   gdk_display_set_device_hooks() have been removed
+ - The deprecated GtkNotebook:tab-pack child property has been removed
+ - The deprecated gtk_quit_add() functions have been removed
+
+* The gtk-update-icon-cache and gtk-builder-convert utilities have
+  been renamed back to their un-suffixed names. Distributions will
+  have to resolve the conflict between GTK+ 2.x and 3.0 packages
+  by dropping one set of the utilities and adding a dependency.
+
+* It is now possible to include multiple GDK backends in a single
+  library. The --with-gdk-backend option has been split into separate
+  --enable-{x11,win32,quartz}-backend options.
+
+* The GDK Quartz backend has been ported to the new GDK backend API
+
+* A number of widgets have been ported to use GtkStyleContext directly:
+  GtkAccelLabel, GtkArrow, GtkSeparator, GtkSpinButton, GtkMessageDialog,
+  GtkFrame, GtkEventBox, GtkScrolledWindow, GtkProgressBar, GtkEntry,
+  GtkFileChooserEntry, GtkSwitch, GtkHandleBox, GtkToolbar, GtkFixed,
+  GtkToolPalette, GtkAboutDialog, GtkAssistant, GtkTrayIcon, GtkPaned,
+  GtkToolButton, GtkSocket, GtkRecentChooser, GtkTooltip, GtkPathBar,
+  GtkWin32EmbedWidget, GtkCellView, GtkDialog, GtkDrawingArea, GtkPlug,
+  GtkEntryCompletion, GtkFileChooserButton, GtkFileChooser, GtkHandleBox,
+  GtkLinkButton, GtkOffscreenWindow
+
+* Various problems with width-for-height geometry management have been
+  fixed in GtkAlignment, GtkCheckButton, GtkBin
+
+* The GtkCellView and GtkComboBox widgets have been ported to use
+  GtkCellArea for their cell layouts.
+
+* The cups print backend can now send print jobs directly in PDF if
+  cups supports it
+
+* Bugs fixed:
+ 144324 Leaking dnd contexts with XDnD
+ 165987 unsets DESKTOP_STARTUP_ID
+ 307963 GtkSpinButton clamps value with the wrong maximum.
+ 321958 gtk.Calendar Notes should also say the format of year
+ 533745 Segfault on gdk.DragContext.drag_get_selection()
+ 553404 Out-of-date comment in gtk_text_view_add_child_in_window()
+ 559503 Description should mention gregorian
+ 560177 Applications should send print jobs to CUPS in PDF format...
+ 562182 gtk_init() docs inaccurate
+ 599130 Ending a drag using space or enter doesn't always cause a...
+ 617312 Move documentation to inline comments: GtkDialog
+ 617315 Move documentation to inline comments: GtkDrawingArea
+ 617322 Move documentation to inline comments: GtkEntryCompletion
+ 617327 Move documentation to inline comments: GtkExpander
+ 617471 Migrate API docs from templates to source files...
+ 621720 Use $(AM_V_GEN) to silent the build a bit.
+ 622125 Note that gtk_show_uri needs gvfs to spawn URLs
+ 629955 Deprecate/remove gtk_main and gtk_init_add/remove* API
+ 633795 gdk_event_get_state wrongly extracts GDK_PROPERTY_NOTIFY...
+ 634711 Xlib warning when RANDR is missing
+ 635299 add gtk_selection_data_get_data_with_length API...
+ 637691 Eating events breaks proxied DND
+ 637721 gtk 2.91.6 issue with gtkcellrendererprogress
+ 637736 [GtkAboutDialog] Newlines are ignored in translator-credits
+ 637763 [GtkAboutDialog] no longer display contact link
+ 637834 gtk_widget_verify_invariants: relax toplevel checks
+ 637849 Shell segfaults when unicode characters after U+00FF...
+ 637895 gdk_pointer_grab() deprecated comment is not helpful enough
+ 637907 gtkwindow.h includes a private header
+ 637910 GtkSpinner - does not animate
+ 637958 print dialog doesn't fit on netbook screen size
+ 637974 Gtk+ 2.91.7 build of introspection fails
+ 638179 in draw signal handle call gtk_style_context_add_provider...
+ 638193 GtkSpinButton documentation out of date
+ 638231 GtkSwitch states translation
+ 638386 gdk_x11_display_init_input careless
+ 638580 'application' window's property released too late
+ 638608 gtkenums: add GTK_STATE_FLAG_NORMAL = 0
+
+* Updated translations:
+ Kurdish
+ Norwegian bokmål
+ Punjabi
+ Spanish
+ Swedish
+ Uighur
+
+
 Overview of Changes from GTK+ 2.91.6 to 2.91.7
 ==============================================
 
