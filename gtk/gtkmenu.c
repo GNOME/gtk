@@ -4759,15 +4759,8 @@ gtk_menu_scroll_to (GtkMenu *menu,
 
   widget = GTK_WIDGET (menu);
 
-  if (priv->tearoff_active &&
-      priv->tearoff_adjustment &&
-      (priv->tearoff_adjustment->value != offset))
-    {
-      priv->tearoff_adjustment->value =
-        CLAMP (offset,
-               0, priv->tearoff_adjustment->upper - priv->tearoff_adjustment->page_size);
-      gtk_adjustment_value_changed (priv->tearoff_adjustment);
-    }
+  if (priv->tearoff_active && priv->tearoff_adjustment)
+    gtk_adjustment_set_value (priv->tearoff_adjustment, offset);
 
   /* Move/resize the viewport according to arrows: */
   gtk_widget_get_allocation (widget, &allocation);
