@@ -24,9 +24,9 @@ set_interp_type (GtkWidget *widget, gpointer data)
 void
 overall_changed_cb (GtkAdjustment *adjustment, gpointer data)
 {
-  if (adjustment->value != overall_alpha)
+  if (gtk_adjustment_get_value (adjustment) != overall_alpha)
     {
-      overall_alpha = adjustment->value;
+      overall_alpha = gtk_adjustment_get_value (adjustment);
       gtk_widget_queue_draw (darea);
     }
 }
