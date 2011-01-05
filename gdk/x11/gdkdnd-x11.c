@@ -68,6 +68,7 @@ typedef struct {
   GHashTable *child_hash;
   guint old_event_mask;
   GdkScreen *screen;
+  gint ref_count;
 } GdkWindowCache;
 
 
@@ -105,7 +106,9 @@ struct _GdkX11DragContextClass
 
 /* Forward declarations */
 
-static void gdk_window_cache_destroy (GdkWindowCache *cache);
+static GdkWindowCache *gdk_window_cache_get   (GdkScreen      *screen);
+static GdkWindowCache *gdk_window_cache_ref   (GdkWindowCache *cache);
+static void            gdk_window_cache_unref (GdkWindowCache *cache);
 
 static void motif_read_target_table (GdkDisplay *display);
 
@@ -137,6 +140,7 @@ static void   xdnd_manage_source_filter (GdkDragContext *context,
                                          gboolean        add_filter);
 
 static GList *contexts;
+static GSList *window_caches;
 
 static const struct {
   const char *atom_name;
@@ -212,8 +216,8 @@ gdk_x11_drag_context_class_init (GdkX11DragContextClass *klass)
 static void
 gdk_x11_drag_context_finalize (GObject *object)
 {
-  GdkX11DragContext *context_x11 = GDK_X11_DRAG_CONTEXT (object);
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkX11DragContext *x11_context = GDK_X11_DRAG_CONTEXT (object);
 
   if (context->source_window)
     {
@@ -221,7 +225,8 @@ gdk_x11_drag_context_finalize (GObject *object)
         xdnd_manage_source_filter (context, context->source_window, FALSE);
     }
 
-  g_slist_free_full (context_x11->window_caches, (GDestroyNotify)gdk_window_cache_destroy);
+  g_slist_free_full (x11_context->window_caches, (GDestroyNotify)gdk_window_cache_unref);
+  x11_context->window_caches = NULL;
 
   contexts = g_list_remove (contexts, context);
 
@@ -509,6 +514,7 @@ gdk_window_cache_new (GdkScreen *screen)
   result->children = NULL;
   result->child_hash = g_hash_table_new (g_direct_hash, NULL);
   result->screen = screen;
+  result->ref_count = 1;
 
   XGetWindowAttributes (xdisplay, GDK_WINDOW_XID (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
@@ -593,6 +599,48 @@ gdk_window_cache_destroy (GdkWindowCache *cache)
   g_hash_table_destroy (cache->child_hash);
 
   g_free (cache);
+}
+
+static GdkWindowCache *
+gdk_window_cache_ref (GdkWindowCache *cache)
+{
+  cache->ref_count += 1;
+
+  return cache;
+}
+
+static void
+gdk_window_cache_unref (GdkWindowCache *cache)
+{
+  g_assert (cache->ref_count > 0);
+
+  cache->ref_count -= 1;
+
+  if (cache->ref_count == 0)
+    {
+      window_caches = g_slist_remove (window_caches, cache);
+      gdk_window_cache_destroy (cache);
+    }
+}
+
+GdkWindowCache *
+gdk_window_cache_get (GdkScreen *screen)
+{
+  GSList *list;
+  GdkWindowCache *cache;
+
+  for (list = window_caches; list; list = list->next)
+    {
+      cache = list->data;
+      if (cache->screen == screen)
+        return gdk_window_cache_ref (cache);
+    }
+
+  cache = gdk_window_cache_new (screen);
+
+  window_caches = g_slist_prepend (window_caches, cache);
+
+  return cache;
 }
 
 static gboolean
@@ -3229,7 +3277,7 @@ drag_context_find_window_cache (GdkX11DragContext *context_x11,
         return cache;
     }
 
-  cache = gdk_window_cache_new (screen);
+  cache = gdk_window_cache_get (screen);
   context_x11->window_caches = g_slist_prepend (context_x11->window_caches, cache);
 
   return cache;
