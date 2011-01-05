@@ -118,7 +118,7 @@ gail_adjustment_get_current_value (AtkValue             *obj,
     return;
   }
 
-  current_value = adjustment->value;
+  current_value = gtk_adjustment_get_value (adjustment);
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value,current_value);
@@ -138,7 +138,7 @@ gail_adjustment_get_maximum_value (AtkValue             *obj,
     return;
   }
 
-  maximum_value = adjustment->upper;
+  maximum_value = gtk_adjustment_get_upper (adjustment);
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, maximum_value);
@@ -158,7 +158,7 @@ gail_adjustment_get_minimum_value (AtkValue             *obj,
     return;
   }
 
-  minimum_value = adjustment->lower;
+  minimum_value = gtk_adjustment_get_lower (adjustment);
   memset (value,  0, sizeof (GValue));
   g_value_init (value, G_TYPE_DOUBLE);
   g_value_set_double (value, minimum_value);
@@ -178,26 +178,26 @@ gail_adjustment_get_minimum_increment (AtkValue        *obj,
     return;
   }
 
-  if (adjustment->step_increment != 0 &&
-      adjustment->page_increment != 0)
+  if (gtk_adjustment_get_step_increment (adjustment) != 0 &&
+      gtk_adjustment_get_page_increment (adjustment) != 0)
     {
-      if (ABS (adjustment->step_increment) < ABS (adjustment->page_increment))
-        minimum_increment = adjustment->step_increment;
+      if (ABS (gtk_adjustment_get_step_increment (adjustment)) < ABS (gtk_adjustment_get_page_increment (adjustment)))
+        minimum_increment = gtk_adjustment_get_step_increment (adjustment);
       else
-        minimum_increment = adjustment->page_increment;
+        minimum_increment = gtk_adjustment_get_page_increment (adjustment);
     }
-  else if (adjustment->step_increment == 0 &&
-           adjustment->page_increment == 0)
+  else if (gtk_adjustment_get_step_increment (adjustment) == 0 &&
+           gtk_adjustment_get_page_increment (adjustment) == 0)
     {
       minimum_increment = 0;
     }
-  else if (adjustment->step_increment == 0)
+  else if (gtk_adjustment_get_step_increment (adjustment) == 0)
     {
-      minimum_increment = adjustment->page_increment;
+      minimum_increment = gtk_adjustment_get_page_increment (adjustment);
     }
   else
     {
-      minimum_increment = adjustment->step_increment;
+      minimum_increment = gtk_adjustment_get_step_increment (adjustment);
     }
 
   memset (value,  0, sizeof (GValue));

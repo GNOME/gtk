@@ -1061,9 +1061,9 @@ static gboolean gail_widget_on_screen (GtkWidget *widget)
       gtk_widget_get_allocation (viewport, &viewport_allocation);
 
       adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (viewport));
-      visible_rect.y = adjustment->value;
+      visible_rect.y = gtk_adjustment_get_value (adjustment);
       adjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (viewport));
-      visible_rect.x = adjustment->value;
+      visible_rect.x = gtk_adjustment_get_value (adjustment);
       visible_rect.width = viewport_allocation.width;
       visible_rect.height = viewport_allocation.height;
 
