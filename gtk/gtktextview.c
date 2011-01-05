@@ -380,7 +380,7 @@ static void gtk_text_view_move_cursor       (GtkTextView           *text_view,
                                              GtkMovementStep        step,
                                              gint                   count,
                                              gboolean               extend_selection);
-static gboolean gtk_text_view_move_viewport (GtkTextView           *text_view,
+static void gtk_text_view_move_viewport     (GtkTextView           *text_view,
                                              GtkScrollStep          step,
                                              gint                   count);
 static void gtk_text_view_set_anchor       (GtkTextView           *text_view);
@@ -425,7 +425,7 @@ static void     gtk_text_view_pend_cursor_blink      (GtkTextView        *text_v
 static void     gtk_text_view_stop_cursor_blink      (GtkTextView        *text_view);
 static void     gtk_text_view_reset_blink_time       (GtkTextView        *text_view);
 
-static void     gtk_text_view_value_changed                (GtkAdjustment *adj,
+static void     gtk_text_view_value_changed                (GtkAdjustment *adjustment,
 							    GtkTextView   *view);
 static void     gtk_text_view_commit_handler               (GtkIMContext  *context,
 							    const gchar   *str,
@@ -1768,30 +1768,6 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
                                  line_top);
 }
 
-static gboolean
-set_adjustment_clamped (GtkAdjustment *adj, gdouble val)
-{
-  DV (g_print ("  Setting adj to raw value %g\n", val));
-  
-  /* We don't really want to clamp to upper; we want to clamp to
-     upper - page_size which is the highest value the scrollbar
-     will let us reach. */
-  if (val > (adj->upper - adj->page_size))
-    val = adj->upper - adj->page_size;
-
-  if (val < adj->lower)
-    val = adj->lower;
-
-  if (val != adj->value)
-    {
-      DV (g_print ("  Setting adj to clamped value %g\n", val));
-      gtk_adjustment_set_value (adj, val);
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
 /**
  * gtk_text_view_scroll_to_iter:
  * @text_view: a #GtkTextView
@@ -1926,8 +1902,8 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   if (scroll_inc != 0)
     {
-      retval = set_adjustment_clamped (text_view->priv->vadjustment,
-                                       current_y_scroll + scroll_inc);
+      gtk_adjustment_set_value (text_view->priv->vadjustment,
+                                current_y_scroll + scroll_inc);
 
       DV (g_print (" vert increment %d\n", scroll_inc));
     }
@@ -1963,12 +1939,15 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   
   if (scroll_inc != 0)
     {
-      retval = set_adjustment_clamped (text_view->priv->hadjustment,
-                                       current_x_scroll + scroll_inc);
+      gtk_adjustment_set_value (text_view->priv->hadjustment,
+                                current_x_scroll + scroll_inc);
 
       DV (g_print (" horiz increment %d\n", scroll_inc));
     }
   
+  retval = (current_y_scroll != gtk_adjustment_get_value (text_view->priv->vadjustment))
+           || (current_x_scroll != gtk_adjustment_get_value (text_view->priv->hadjustment));
+
   if (retval)
     {
       DV(g_print (">Actually scrolled ("G_STRLOC")\n"));
@@ -5247,6 +5226,7 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
   if (!priv->cursor_visible) 
     {
       GtkScrollStep scroll_step;
+      gdouble old_xpos, old_ypos;
 
       switch (step) 
 	{
@@ -5281,14 +5261,15 @@ gtk_text_view_move_cursor_internal (GtkTextView     *text_view,
           break;
 	}
 
-      if (!gtk_text_view_move_viewport (text_view, scroll_step, count))
+      old_xpos = priv->xoffset;
+      old_ypos = priv->yoffset;
+      gtk_text_view_move_viewport (text_view, scroll_step, count);
+      if ((old_xpos != priv->xoffset || old_ypos != priv->yoffset) &&
+          leave_direction != -1 &&
+          !gtk_widget_keynav_failed (GTK_WIDGET (text_view),
+                                     leave_direction))
         {
-          if (leave_direction != -1 &&
-              !gtk_widget_keynav_failed (GTK_WIDGET (text_view),
-                                         leave_direction))
-            {
-              g_signal_emit_by_name (text_view, "move-focus", leave_direction);
-            }
+          g_signal_emit_by_name (text_view, "move-focus", leave_direction);
         }
 
       return;
@@ -5483,7 +5464,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
   gtk_text_view_move_cursor_internal (text_view, step, count, extend_selection);
 }
 
-static gboolean
+static void
 gtk_text_view_move_viewport (GtkTextView     *text_view,
                              GtkScrollStep    step,
                              gint             count)
@@ -5527,7 +5508,7 @@ gtk_text_view_move_viewport (GtkTextView     *text_view,
       break;
     }
 
-  return set_adjustment_clamped (adjustment, gtk_adjustment_get_value (adjustment) + count * increment);
+  gtk_adjustment_set_value (adjustment, gtk_adjustment_get_value (adjustment) + count * increment);
 }
 
 static void
@@ -5547,7 +5528,7 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
                             gboolean     extend_selection)
 {
   GtkTextViewPrivate *priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gint cursor_x_pos, cursor_y_pos;
   GtkTextMark *insert_mark;
   GtkTextIter old_insert;
@@ -5561,7 +5542,7 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
   g_return_val_if_fail (priv->vadjustment != NULL, FALSE);
   
-  adj = priv->vadjustment;
+  adjustment = priv->vadjustment;
 
   insert_mark = gtk_text_buffer_get_insert (get_buffer (text_view));
 
@@ -5582,13 +5563,13 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
   if (count < 0)
     {
       gtk_text_view_get_first_para_iter (text_view, &anchor);
-      y0 = adj->page_size;
-      y1 = adj->page_size + count * adj->page_increment;
+      y0 = gtk_adjustment_get_page_size (adjustment);
+      y1 = gtk_adjustment_get_page_size (adjustment) + count * gtk_adjustment_get_page_increment (adjustment);
     }
   else
     {
       gtk_text_view_get_first_para_iter (text_view, &anchor);
-      y0 = count * adj->page_increment + adj->page_size;
+      y0 = count * gtk_adjustment_get_page_increment (adjustment) + gtk_adjustment_get_page_size (adjustment);
       y1 = 0;
     }
 
@@ -5597,13 +5578,13 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 
   new_insert = old_insert;
 
-  if (count < 0 && adj->value <= (adj->lower + 1e-12))
+  if (count < 0 && gtk_adjustment_get_value (adjustment) <= (gtk_adjustment_get_lower (adjustment) + 1e-12))
     {
       /* already at top, just be sure we are at offset 0 */
       gtk_text_buffer_get_start_iter (get_buffer (text_view), &new_insert);
       move_cursor (text_view, &new_insert, extend_selection);
     }
-  else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
+  else if (count > 0 && gtk_adjustment_get_value (adjustment) >= (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_page_size (adjustment) - 1e-12))
     {
       /* already at bottom, just be sure we are at the end */
       gtk_text_buffer_get_end_iter (get_buffer (text_view), &new_insert);
@@ -5613,13 +5594,13 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
     {
       gtk_text_view_get_virtual_cursor_pos (text_view, NULL, &cursor_x_pos, &cursor_y_pos);
 
-      oldval = adj->value;
-      newval = adj->value;
+      oldval = gtk_adjustment_get_value (adjustment);
+      newval = gtk_adjustment_get_value (adjustment);
 
-      newval += count * adj->page_increment;
+      newval += count * gtk_adjustment_get_page_increment (adjustment);
 
-      set_adjustment_clamped (adj, newval);
-      cursor_y_pos += adj->value - oldval;
+      gtk_adjustment_set_value (adjustment, newval);
+      cursor_y_pos += gtk_adjustment_get_value (adjustment) - oldval;
 
       gtk_text_layout_get_iter_at_pixel (priv->layout, &new_insert, cursor_x_pos, cursor_y_pos);
       clamp_iter_onscreen (text_view, &new_insert);
@@ -5643,7 +5624,7 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
                              gboolean     extend_selection)
 {
   GtkTextViewPrivate *priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gint cursor_x_pos, cursor_y_pos;
   GtkTextMark *insert_mark;
   GtkTextIter old_insert;
@@ -5656,7 +5637,7 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
 
   g_return_val_if_fail (priv->hadjustment != NULL, FALSE);
 
-  adj = priv->hadjustment;
+  adjustment = priv->hadjustment;
 
   insert_mark = gtk_text_buffer_get_insert (get_buffer (text_view));
 
@@ -5680,13 +5661,13 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
 
   new_insert = old_insert;
 
-  if (count < 0 && adj->value <= (adj->lower + 1e-12))
+  if (count < 0 && gtk_adjustment_get_value (adjustment) <= (gtk_adjustment_get_lower (adjustment) + 1e-12))
     {
       /* already at far left, just be sure we are at offset 0 */
       gtk_text_iter_set_line_offset (&new_insert, 0);
       move_cursor (text_view, &new_insert, extend_selection);
     }
-  else if (count > 0 && adj->value >= (adj->upper - adj->page_size - 1e-12))
+  else if (count > 0 && gtk_adjustment_get_value (adjustment) >= (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_page_size (adjustment) - 1e-12))
     {
       /* already at far right, just be sure we are at the end */
       if (!gtk_text_iter_ends_line (&new_insert))
@@ -5697,13 +5678,13 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
     {
       gtk_text_view_get_virtual_cursor_pos (text_view, NULL, &cursor_x_pos, &cursor_y_pos);
 
-      oldval = adj->value;
-      newval = adj->value;
+      oldval = gtk_adjustment_get_value (adjustment);
+      newval = gtk_adjustment_get_value (adjustment);
 
-      newval += count * adj->page_increment;
+      newval += count * gtk_adjustment_get_page_increment (adjustment);
 
-      set_adjustment_clamped (adj, newval);
-      cursor_x_pos += adj->value - oldval;
+      gtk_adjustment_set_value (adjustment, newval);
+      cursor_x_pos += gtk_adjustment_get_value (adjustment) - oldval;
 
       gtk_text_layout_get_iter_at_pixel (priv->layout, &new_insert, cursor_x_pos, cursor_y_pos);
       clamp_iter_onscreen (text_view, &new_insert);
@@ -6201,12 +6182,12 @@ selection_scan_timeout (gpointer data)
 #define LOWER_OFFSET_ANCHOR 0.2
 
 static gboolean
-check_scroll (gdouble offset, GtkAdjustment *adj)
+check_scroll (gdouble offset, GtkAdjustment *adjustment)
 {
   if ((offset > UPPER_OFFSET_ANCHOR &&
-       adj->value + adj->page_size < adj->upper) ||
+       gtk_adjustment_get_value (adjustment) + gtk_adjustment_get_page_size (adjustment) < gtk_adjustment_get_upper (adjustment)) ||
       (offset < LOWER_OFFSET_ANCHOR &&
-       adj->value > adj->lower))
+       gtk_adjustment_get_value (adjustment) > gtk_adjustment_get_lower (adjustment)))
     return TRUE;
 
   return FALSE;
@@ -7525,7 +7506,7 @@ adjust_allocation (GtkWidget *widget,
 }
             
 static void
-gtk_text_view_value_changed (GtkAdjustment *adj,
+gtk_text_view_value_changed (GtkAdjustment *adjustment,
                              GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv;
@@ -7536,20 +7517,20 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
 
   priv = text_view->priv;
 
-  /* Note that we oddly call this function with adj == NULL
+  /* Note that we oddly call this function with adjustment == NULL
    * sometimes
    */
   
   priv->onscreen_validated = FALSE;
 
   DV(g_print(">Scroll offset changed %s/%g, onscreen_validated = FALSE ("G_STRLOC")\n",
-             adj == priv->hadjustment ? "hadj" : adj == priv->vadjustment ? "vadj" : "none",
-             adj ? adj->value : 0.0));
+             adjustment == priv->hadjustment ? "hadjustment" : adjustment == priv->vadjustment ? "vadjustment" : "none",
+             adjustment ? gtk_adjustment_get_value (adjustment) : 0.0));
   
-  if (adj == priv->hadjustment)
+  if (adjustment == priv->hadjustment)
     {
-      dx = priv->xoffset - (gint)adj->value;
-      priv->xoffset = adj->value;
+      dx = priv->xoffset - (gint)gtk_adjustment_get_value (adjustment);
+      priv->xoffset = gtk_adjustment_get_value (adjustment);
 
       /* If the change is due to a size change we need 
        * to invalidate the entire text window because there might be
@@ -7563,18 +7544,18 @@ gtk_text_view_value_changed (GtkAdjustment *adj,
 	  priv->width_changed = FALSE;
 	}
     }
-  else if (adj == priv->vadjustment)
+  else if (adjustment == priv->vadjustment)
     {
-      dy = priv->yoffset - (gint)adj->value;
-      priv->yoffset = adj->value;
+      dy = priv->yoffset - (gint)gtk_adjustment_get_value (adjustment);
+      priv->yoffset = gtk_adjustment_get_value (adjustment);
 
       if (priv->layout)
         {
-          gtk_text_layout_get_line_at_y (priv->layout, &iter, adj->value, &line_top);
+          gtk_text_layout_get_line_at_y (priv->layout, &iter, gtk_adjustment_get_value (adjustment), &line_top);
 
           gtk_text_buffer_move_mark (get_buffer (text_view), priv->first_para_mark, &iter);
 
-          priv->first_para_pixels = adj->value - line_top;
+          priv->first_para_pixels = gtk_adjustment_get_value (adjustment) - line_top;
         }
     }
   
