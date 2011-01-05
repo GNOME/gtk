@@ -3632,35 +3632,35 @@ gtk_combo_box_list_auto_scroll (GtkComboBox *combo_box,
   gtk_widget_get_allocation (tree_view, &allocation);
 
   adj = gtk_scrolled_window_get_hadjustment (GTK_SCROLLED_WINDOW (combo_box->priv->scrolled_window));
-  if (adj && adj->upper - adj->lower > adj->page_size)
+  if (adj && gtk_adjustment_get_upper (adj) - gtk_adjustment_get_lower (adj) > gtk_adjustment_get_page_size (adj))
     {
       if (x <= allocation.x &&
-          adj->lower < adj->value)
+          gtk_adjustment_get_lower (adj) < gtk_adjustment_get_value (adj))
         {
-          value = adj->value - (allocation.x - x + 1);
+          value = gtk_adjustment_get_value (adj) - (allocation.x - x + 1);
           gtk_adjustment_set_value (adj, value);
         }
       else if (x >= allocation.x + allocation.width &&
-               adj->upper - adj->page_size > adj->value)
+               gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj) > gtk_adjustment_get_value (adj))
         {
-          value = adj->value + (x - allocation.x - allocation.width + 1);
+          value = gtk_adjustment_get_value (adj) + (x - allocation.x - allocation.width + 1);
           gtk_adjustment_set_value (adj, MAX (value, 0.0));
         }
     }
 
   adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (combo_box->priv->scrolled_window));
-  if (adj && adj->upper - adj->lower > adj->page_size)
+  if (adj && gtk_adjustment_get_upper (adj) - gtk_adjustment_get_lower (adj) > gtk_adjustment_get_page_size (adj))
     {
       if (y <= allocation.y &&
-          adj->lower < adj->value)
+          gtk_adjustment_get_lower (adj) < gtk_adjustment_get_value (adj))
         {
-          value = adj->value - (allocation.y - y + 1);
+          value = gtk_adjustment_get_value (adj) - (allocation.y - y + 1);
           gtk_adjustment_set_value (adj, value);
         }
       else if (y >= allocation.height &&
-               adj->upper - adj->page_size > adj->value)
+               gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj) > gtk_adjustment_get_value (adj))
         {
-          value = adj->value + (y - allocation.height + 1);
+          value = gtk_adjustment_get_value (adj) + (y - allocation.height + 1);
           gtk_adjustment_set_value (adj, MAX (value, 0.0));
         }
     }
