@@ -26,10 +26,14 @@ GTKDOC_LIBS = $(top_builddir)/modules/other/gail/libgail-util/libgailutil.la
 
 # gtkdoc-mkdb related varaibles
 MKDB_OPTIONS =
-content_files =
+content_files =		\
+	version.xml
 
 HTML_IMAGES =
 
 include $(top_srcdir)/gtk-doc.make
+
+# Other files to distribute
+EXTRA_DIST += version.xml.in
 
 -include $(top_srcdir)/git.mk
