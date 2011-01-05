@@ -26,15 +26,17 @@
  * @Short_description: A container which can hide its child
  * @Title: GtkExpander
  *
+ * <para>
  * A #GtkExpander allows the user to hide or show its child by clicking
  * on an expander triangle similar to the triangles used in a #GtkTreeView.
- *
+ * </para>
+ * <para>
  * Normally you use an expander as you would use any other descendant
  * of #GtkBin; you create the child widget and use gtk_container_add()
  * to add it to the expander. When the expander is toggled, it will take
  * care of showing and hiding the child automatically.
- *
- * <section id="expander-special-usage">
+ * </para>
+ * <refsect2 id="expander-special-usage">
  * <title>Special Usage</title>
  * <para>
  * There are situations in which you may prefer to show and hide the
@@ -45,6 +47,7 @@
  * its expansion state. You should watch this property with a signal
  * connection as follows:
  * </para>
+ * <informalexample>
  * <programlisting id="expander-callback-example">
  * expander = gtk_expander_new_with_mnemonic ("_More Options");
  * g_signal_connect (expander, "notify::expanded",
@@ -71,7 +74,8 @@
  *     }
  * }
  * </programlisting>
- * </section>
+ * </informalexample>
+ * </refsect2>
  * <refsect2 id="GtkExpander-BUILDER-UI">
  * <title>GtkExpander as GtkBuildable</title>
  * <para>
