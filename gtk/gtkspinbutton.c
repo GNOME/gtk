@@ -90,15 +90,15 @@
  * {
  *
  *   GtkWidget *window, *button;
- *   GtkAdjustment *adj;
+ *   GtkAdjustment *adjustment;
  *
- *   adj = gtk_adjustment_new (50.0, 0.0, 100.0, 1.0, 5.0, 0.0);
+ *   adjustment = gtk_adjustment_new (50.0, 0.0, 100.0, 1.0, 5.0, 0.0);
  *
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
  *
  *   /&ast; creates the spinbutton, with no decimal places &ast;/
- *   button = gtk_spin_button_new (adj, 1.0, 0);
+ *   button = gtk_spin_button_new (adjustment, 1.0, 0);
  *   gtk_container_add (GTK_CONTAINER (window), button);
  *
  *   gtk_widget_show_all (window);
@@ -124,15 +124,15 @@
  * create_floating_spin_button (void)
  * {
  *   GtkWidget *window, *button;
- *   GtkAdjustment *adj;
+ *   GtkAdjustment *adjustment;
  *
- *   adj = gtk_adjustment_new (2.500, 0.0, 5.0, 0.001, 0.1, 0.0);
+ *   adjustment = gtk_adjustment_new (2.500, 0.0, 5.0, 0.001, 0.1, 0.0);
  *
  *   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
  *   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
  *
  *   /&ast; creates the spinbutton, with three decimal places &ast;/
- *   button = gtk_spin_button_new (adj, 0.001, 3);
+ *   button = gtk_spin_button_new (adjustment, 0.001, 3);
  *   gtk_container_add (GTK_CONTAINER (window), button);
  *
  *   gtk_widget_show_all (window);
@@ -431,12 +431,12 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * on_output (GtkSpinButton *spin,
    *            gpointer       data)
    * {
-   *    GtkAdjustment *adj;
+   *    GtkAdjustment *adjustment;
    *    gchar *text;
    *    int value;
    *
-   *    adj = gtk_spin_button_get_adjustment (spin);
-   *    value = (int)gtk_adjustment_get_value (adj);
+   *    adjustment = gtk_spin_button_get_adjustment (spin);
+   *    value = (int)gtk_adjustment_get_value (adjustment);
    *    text = g_strdup_printf ("%02d", value);
    *    gtk_entry_set_text (GTK_ENTRY (spin), text);
    *    g_free (text);
@@ -599,7 +599,7 @@ gtk_spin_button_get_property (GObject      *object,
       g_value_set_enum (value, priv->update_policy);
       break;
      case PROP_VALUE:
-       g_value_set_double (value, priv->adjustment->value);
+       g_value_set_double (value, gtk_adjustment_get_value (priv->adjustment));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -831,14 +831,14 @@ gtk_spin_button_get_preferred_width (GtkWidget *widget,
 
       /* Get max of MIN_SPIN_BUTTON_WIDTH, size of upper, size of lower */
       width = MIN_SPIN_BUTTON_WIDTH;
-      max_string_len = MAX (10, compute_double_length (1e9 * priv->adjustment->step_increment,
+      max_string_len = MAX (10, compute_double_length (1e9 * gtk_adjustment_get_step_increment (priv->adjustment),
                                                        priv->digits));
 
-      string_len = compute_double_length (priv->adjustment->upper,
+      string_len = compute_double_length (gtk_adjustment_get_upper (priv->adjustment),
                                           priv->digits);
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
       width = MAX (width, w);
-      string_len = compute_double_length (priv->adjustment->lower, priv->digits);
+      string_len = compute_double_length (gtk_adjustment_get_lower (priv->adjustment), priv->digits);
       w = PANGO_PIXELS (MIN (string_len, max_string_len) * digit_width);
       width = MAX (width, w);
 
@@ -973,17 +973,17 @@ spin_button_at_limit (GtkSpinButton *spin_button,
   if (priv->wrap)
     return FALSE;
 
-  if (priv->adjustment->step_increment > 0)
+  if (gtk_adjustment_get_step_increment (priv->adjustment) > 0)
     effective_arrow = arrow;
   else
     effective_arrow = arrow == GTK_ARROW_UP ? GTK_ARROW_DOWN : GTK_ARROW_UP;
 
   if (effective_arrow == GTK_ARROW_UP &&
-      (priv->adjustment->upper - priv->adjustment->value <= EPSILON))
+      (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_value (priv->adjustment) <= EPSILON))
     return TRUE;
 
   if (effective_arrow == GTK_ARROW_DOWN &&
-      (priv->adjustment->value - priv->adjustment->lower <= EPSILON))
+      (gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) <= EPSILON))
     return TRUE;
 
   return FALSE;
@@ -1213,13 +1213,13 @@ gtk_spin_button_scroll (GtkWidget      *widget,
     {
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
-      gtk_spin_button_real_spin (spin, priv->adjustment->step_increment);
+      gtk_spin_button_real_spin (spin, gtk_adjustment_get_step_increment (priv->adjustment));
     }
   else if (event->direction == GDK_SCROLL_DOWN)
     {
       if (!gtk_widget_has_focus (widget))
         gtk_widget_grab_focus (widget);
-      gtk_spin_button_real_spin (spin, -priv->adjustment->step_increment);
+      gtk_spin_button_real_spin (spin, -gtk_adjustment_get_step_increment (priv->adjustment));
     }
   else
     return FALSE;
@@ -1242,7 +1242,7 @@ gtk_spin_button_stop_spinning (GtkSpinButton *spin)
 
   priv->button = 0;
   priv->timer = 0;
-  priv->timer_step = priv->adjustment->step_increment;
+  priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
   priv->timer_calls = 0;
 
   priv->click_child = NO_ARROW;
@@ -1305,18 +1305,18 @@ gtk_spin_button_button_press (GtkWidget      *widget,
           if (event->y <= requisition.height / 2)
             {
               if (event->button == 1)
-                start_spinning (spin, GTK_ARROW_UP, priv->adjustment->step_increment);
+                start_spinning (spin, GTK_ARROW_UP, gtk_adjustment_get_step_increment (priv->adjustment));
               else if (event->button == 2)
-                start_spinning (spin, GTK_ARROW_UP, priv->adjustment->page_increment);
+                start_spinning (spin, GTK_ARROW_UP, gtk_adjustment_get_page_increment (priv->adjustment));
               else
                 priv->click_child = GTK_ARROW_UP;
             }
           else
             {
               if (event->button == 1)
-                start_spinning (spin, GTK_ARROW_DOWN, priv->adjustment->step_increment);
+                start_spinning (spin, GTK_ARROW_DOWN, gtk_adjustment_get_step_increment (priv->adjustment));
               else if (event->button == 2)
-                start_spinning (spin, GTK_ARROW_DOWN, priv->adjustment->page_increment);
+                start_spinning (spin, GTK_ARROW_DOWN, gtk_adjustment_get_page_increment (priv->adjustment));
               else
                 priv->click_child = GTK_ARROW_DOWN;
             }
@@ -1366,7 +1366,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
                 {
                   gdouble diff;
 
-                  diff = priv->adjustment->upper - priv->adjustment->value;
+                  diff = gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_value (priv->adjustment);
                   if (diff > EPSILON)
                     gtk_spin_button_real_spin (spin, diff);
                 }
@@ -1375,7 +1375,7 @@ gtk_spin_button_button_release (GtkWidget      *widget,
                 {
                   gdouble diff;
 
-                  diff = priv->adjustment->value - priv->adjustment->lower;
+                  diff = gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment);
                   if (diff > EPSILON)
                     gtk_spin_button_real_spin (spin, -diff);
                 }
@@ -1455,7 +1455,7 @@ gtk_spin_button_timer (GtkSpinButton *spin_button)
       else
         {
           if (priv->climb_rate > 0.0 && priv->timer_step
-              < priv->adjustment->page_increment)
+              < gtk_adjustment_get_page_increment (priv->adjustment))
             {
               if (priv->timer_calls < MAX_TIMER_CALLS)
                 priv->timer_calls++;
@@ -1505,7 +1505,7 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
    */
   gtk_spin_button_update (spin);
 
-  old_value = priv->adjustment->value;
+  old_value = gtk_adjustment_get_value (priv->adjustment);
 
   /* We don't test whether the entry is editable, since
    * this key binding conceptually corresponds to changing
@@ -1520,7 +1520,7 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
       gtk_spin_button_real_spin (spin, -priv->timer_step);
 
       if (priv->climb_rate > 0.0 && priv->timer_step
-          < priv->adjustment->page_increment)
+          < gtk_adjustment_get_page_increment (priv->adjustment))
         {
           if (priv->timer_calls < MAX_TIMER_CALLS)
             priv->timer_calls++;
@@ -1538,7 +1538,7 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
       gtk_spin_button_real_spin (spin, priv->timer_step);
 
       if (priv->climb_rate > 0.0 && priv->timer_step
-          < priv->adjustment->page_increment)
+          < gtk_adjustment_get_page_increment (priv->adjustment))
         {
           if (priv->timer_calls < MAX_TIMER_CALLS)
             priv->timer_calls++;
@@ -1553,18 +1553,18 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
     case GTK_SCROLL_PAGE_BACKWARD:
     case GTK_SCROLL_PAGE_DOWN:
     case GTK_SCROLL_PAGE_LEFT:
-      gtk_spin_button_real_spin (spin, -priv->adjustment->page_increment);
+      gtk_spin_button_real_spin (spin, -gtk_adjustment_get_page_increment (priv->adjustment));
       break;
 
     case GTK_SCROLL_PAGE_FORWARD:
     case GTK_SCROLL_PAGE_UP:
     case GTK_SCROLL_PAGE_RIGHT:
-      gtk_spin_button_real_spin (spin, priv->adjustment->page_increment);
+      gtk_spin_button_real_spin (spin, gtk_adjustment_get_page_increment (priv->adjustment));
       break;
 
     case GTK_SCROLL_START:
       {
-        gdouble diff = priv->adjustment->value - priv->adjustment->lower;
+        gdouble diff = gtk_adjustment_get_value (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment);
         if (diff > EPSILON)
           gtk_spin_button_real_spin (spin, -diff);
         break;
@@ -1572,7 +1572,7 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
 
     case GTK_SCROLL_END:
       {
-        gdouble diff = priv->adjustment->upper - priv->adjustment->value;
+        gdouble diff = gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_value (priv->adjustment);
         if (diff > EPSILON)
           gtk_spin_button_real_spin (spin, diff);
         break;
@@ -1585,7 +1585,7 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
 
   gtk_spin_button_update (spin);
 
-  if (priv->adjustment->value == old_value)
+  if (gtk_adjustment_get_value (priv->adjustment) == old_value)
     gtk_widget_error_bell (GTK_WIDGET (spin));
 }
 
@@ -1597,7 +1597,7 @@ gtk_spin_button_key_release (GtkWidget   *widget,
   GtkSpinButtonPrivate *priv = spin->priv;
 
   /* We only get a release at the end of a key repeat run, so reset the timer_step */
-  priv->timer_step = priv->adjustment->step_increment;
+  priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
   priv->timer_calls = 0;
 
   return TRUE;
@@ -1611,15 +1611,15 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
   gdouble inc;
   gdouble tmp;
 
-  inc = priv->adjustment->step_increment;
+  inc = gtk_adjustment_get_step_increment (priv->adjustment);
   if (inc == 0)
     return;
 
-  tmp = (val - priv->adjustment->lower) / inc;
+  tmp = (val - gtk_adjustment_get_lower (priv->adjustment)) / inc;
   if (tmp - floor (tmp) < ceil (tmp) - tmp)
-    val = priv->adjustment->lower + floor (tmp) * inc;
+    val = gtk_adjustment_get_lower (priv->adjustment) + floor (tmp) * inc;
   else
-    val = priv->adjustment->lower + ceil (tmp) * inc;
+    val = gtk_adjustment_get_lower (priv->adjustment) + ceil (tmp) * inc;
 
   gtk_spin_button_set_value (spin_button, val);
 }
@@ -1778,47 +1778,47 @@ gtk_spin_button_real_spin (GtkSpinButton *spin_button,
                            gdouble        increment)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gdouble new_value = 0.0;
   gboolean wrapped = FALSE;
 
-  adj = priv->adjustment;
+  adjustment = priv->adjustment;
 
-  new_value = adj->value + increment;
+  new_value = gtk_adjustment_get_value (adjustment) + increment;
 
   if (increment > 0)
     {
       if (priv->wrap)
         {
-          if (fabs (adj->value - adj->upper) < EPSILON)
+          if (fabs (gtk_adjustment_get_value (adjustment) - gtk_adjustment_get_upper (adjustment)) < EPSILON)
             {
-              new_value = adj->lower;
+              new_value = gtk_adjustment_get_lower (adjustment);
               wrapped = TRUE;
             }
-          else if (new_value > adj->upper)
-            new_value = adj->upper;
+          else if (new_value > gtk_adjustment_get_upper (adjustment))
+            new_value = gtk_adjustment_get_upper (adjustment);
         }
       else
-        new_value = MIN (new_value, adj->upper);
+        new_value = MIN (new_value, gtk_adjustment_get_upper (adjustment));
     }
   else if (increment < 0)
     {
       if (priv->wrap)
         {
-          if (fabs (adj->value - adj->lower) < EPSILON)
+          if (fabs (gtk_adjustment_get_value (adjustment) - gtk_adjustment_get_lower (adjustment)) < EPSILON)
             {
-              new_value = adj->upper;
+              new_value = gtk_adjustment_get_upper (adjustment);
               wrapped = TRUE;
             }
-          else if (new_value < adj->lower)
-            new_value = adj->lower;
+          else if (new_value < gtk_adjustment_get_lower (adjustment))
+            new_value = gtk_adjustment_get_lower (adjustment);
         }
       else
-        new_value = MAX (new_value, adj->lower);
+        new_value = MAX (new_value, gtk_adjustment_get_lower (adjustment));
     }
 
-  if (fabs (new_value - adj->value) > EPSILON)
-    gtk_adjustment_set_value (adj, new_value);
+  if (fabs (new_value - gtk_adjustment_get_value (adjustment)) > EPSILON)
+    gtk_adjustment_set_value (adjustment, new_value);
 
   if (wrapped)
     g_signal_emit (spin_button, spinbutton_signals[WRAPPED], 0);
@@ -1844,7 +1844,7 @@ gtk_spin_button_default_output (GtkSpinButton *spin_button)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
-  gchar *buf = g_strdup_printf ("%0.*f", priv->digits, priv->adjustment->value);
+  gchar *buf = g_strdup_printf ("%0.*f", priv->digits, gtk_adjustment_get_value (priv->adjustment));
 
   if (strcmp (buf, gtk_entry_get_text (GTK_ENTRY (spin_button))))
     gtk_entry_set_text (GTK_ENTRY (spin_button), buf);
@@ -1957,7 +1957,7 @@ gtk_spin_button_new_with_range (gdouble min,
                                 gdouble max,
                                 gdouble step)
 {
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   GtkSpinButton *spin;
   gint digits;
 
@@ -1966,7 +1966,7 @@ gtk_spin_button_new_with_range (gdouble min,
 
   spin = g_object_new (GTK_TYPE_SPIN_BUTTON, NULL);
 
-  adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
+  adjustment = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
 
   if (fabs (step) >= 1.0 || step == 0.0)
     digits = 0;
@@ -1976,7 +1976,7 @@ gtk_spin_button_new_with_range (gdouble min,
       digits = MAX_DIGITS;
   }
 
-  gtk_spin_button_configure (spin, adj, step, digits);
+  gtk_spin_button_configure (spin, adjustment, step, digits);
 
   gtk_spin_button_set_numeric (spin, TRUE);
 
@@ -1993,7 +1993,7 @@ adjustment_changed_cb (GtkAdjustment *adjustment, gpointer data)
   GtkSpinButton *spin_button = GTK_SPIN_BUTTON (data);
   GtkSpinButtonPrivate *priv = spin_button->priv;
 
-  priv->timer_step = priv->adjustment->step_increment;
+  priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
   gtk_widget_queue_resize (GTK_WIDGET (spin_button));
 }
 
@@ -2036,7 +2036,7 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
           g_signal_connect (adjustment, "changed",
                             G_CALLBACK (adjustment_changed_cb),
                             spin_button);
-          priv->timer_step = priv->adjustment->step_increment;
+          priv->timer_step = gtk_adjustment_get_step_increment (priv->adjustment);
         }
 
       gtk_widget_queue_resize (GTK_WIDGET (spin_button));
@@ -2126,8 +2126,13 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 
   priv = spin_button->priv;
 
-  priv->adjustment->step_increment = step;
-  priv->adjustment->page_increment = page;
+  gtk_adjustment_configure (priv->adjustment,
+                            gtk_adjustment_get_value (priv->adjustment),
+                            gtk_adjustment_get_lower (priv->adjustment),
+                            gtk_adjustment_get_upper (priv->adjustment),
+                            step,
+                            page,
+                            gtk_adjustment_get_page_size (priv->adjustment));
 }
 
 /**
@@ -2151,9 +2156,9 @@ gtk_spin_button_get_increments (GtkSpinButton *spin_button,
   priv = spin_button->priv;
 
   if (step)
-    *step = priv->adjustment->step_increment;
+    *step = gtk_adjustment_get_step_increment (priv->adjustment);
   if (page)
-    *page = priv->adjustment->page_increment;
+    *page = gtk_adjustment_get_page_increment (priv->adjustment);
 }
 
 /**
@@ -2170,21 +2175,18 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
                            gdouble        max)
 {
   GtkAdjustment *adjustment;
-  gdouble value;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   adjustment = spin_button->priv->adjustment;
 
-  adjustment->lower = min;
-  adjustment->upper = max;
-
-  value = CLAMP (adjustment->value, adjustment->lower, adjustment->upper);
-
-  if (value != adjustment->value)
-    gtk_spin_button_set_value (spin_button, value);
-
-  gtk_adjustment_changed (adjustment);
+  gtk_adjustment_configure (adjustment,
+                            CLAMP (gtk_adjustment_get_value (adjustment), min, max),
+                            min,
+                            max,
+                            gtk_adjustment_get_step_increment (adjustment),
+                            gtk_adjustment_get_page_increment (adjustment),
+                            gtk_adjustment_get_page_size (adjustment));
 }
 
 /**
@@ -2208,9 +2210,9 @@ gtk_spin_button_get_range (GtkSpinButton *spin_button,
   priv = spin_button->priv;
 
   if (min)
-    *min = priv->adjustment->lower;
+    *min = gtk_adjustment_get_lower (priv->adjustment);
   if (max)
-    *max = priv->adjustment->upper;
+    *max = gtk_adjustment_get_upper (priv->adjustment);
 }
 
 /**
@@ -2226,7 +2228,7 @@ gtk_spin_button_get_value (GtkSpinButton *spin_button)
 {
   g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), 0.0);
 
-  return spin_button->priv->adjustment->value;
+  return gtk_adjustment_get_value (spin_button->priv->adjustment);
 }
 
 /**
@@ -2247,7 +2249,7 @@ gtk_spin_button_get_value_as_int (GtkSpinButton *spin_button)
 
   priv = spin_button->priv;
 
-  val = priv->adjustment->value;
+  val = gtk_adjustment_get_value (priv->adjustment);
   if (val - floor (val) < ceil (val) - val)
     return floor (val);
   else
@@ -2271,7 +2273,7 @@ gtk_spin_button_set_value (GtkSpinButton *spin_button,
 
   priv = spin_button->priv;
 
-  if (fabs (value - priv->adjustment->value) > EPSILON)
+  if (fabs (value - gtk_adjustment_get_value (priv->adjustment)) > EPSILON)
     gtk_adjustment_set_value (priv->adjustment, value);
   else
     {
@@ -2498,17 +2500,17 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
                       gdouble        increment)
 {
   GtkSpinButtonPrivate *priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gdouble diff;
 
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   priv = spin_button->priv;
 
-  adj = priv->adjustment;
+  adjustment = priv->adjustment;
 
   /* for compatibility with the 1.0.x version of this function */
-  if (increment != 0 && increment != adj->step_increment &&
+  if (increment != 0 && increment != gtk_adjustment_get_step_increment (adjustment) &&
       (direction == GTK_SPIN_STEP_FORWARD ||
        direction == GTK_SPIN_STEP_BACKWARD))
     {
@@ -2521,34 +2523,34 @@ gtk_spin_button_spin (GtkSpinButton *spin_button,
     {
     case GTK_SPIN_STEP_FORWARD:
 
-      gtk_spin_button_real_spin (spin_button, adj->step_increment);
+      gtk_spin_button_real_spin (spin_button, gtk_adjustment_get_step_increment (adjustment));
       break;
 
     case GTK_SPIN_STEP_BACKWARD:
 
-      gtk_spin_button_real_spin (spin_button, -adj->step_increment);
+      gtk_spin_button_real_spin (spin_button, -gtk_adjustment_get_step_increment (adjustment));
       break;
 
     case GTK_SPIN_PAGE_FORWARD:
 
-      gtk_spin_button_real_spin (spin_button, adj->page_increment);
+      gtk_spin_button_real_spin (spin_button, gtk_adjustment_get_page_increment (adjustment));
       break;
 
     case GTK_SPIN_PAGE_BACKWARD:
 
-      gtk_spin_button_real_spin (spin_button, -adj->page_increment);
+      gtk_spin_button_real_spin (spin_button, -gtk_adjustment_get_page_increment (adjustment));
       break;
 
     case GTK_SPIN_HOME:
 
-      diff = adj->value - adj->lower;
+      diff = gtk_adjustment_get_value (adjustment) - gtk_adjustment_get_lower (adjustment);
       if (diff > EPSILON)
         gtk_spin_button_real_spin (spin_button, -diff);
       break;
 
     case GTK_SPIN_END:
 
-      diff = adj->upper - adj->value;
+      diff = gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_value (adjustment);
       if (diff > EPSILON)
         gtk_spin_button_real_spin (spin_button, diff);
       break;
@@ -2596,15 +2598,15 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
 
   if (priv->update_policy == GTK_UPDATE_ALWAYS)
     {
-      if (val < priv->adjustment->lower)
-        val = priv->adjustment->lower;
-      else if (val > priv->adjustment->upper)
-        val = priv->adjustment->upper;
+      if (val < gtk_adjustment_get_lower (priv->adjustment))
+        val = gtk_adjustment_get_lower (priv->adjustment);
+      else if (val > gtk_adjustment_get_upper (priv->adjustment))
+        val = gtk_adjustment_get_upper (priv->adjustment);
     }
   else if ((priv->update_policy == GTK_UPDATE_IF_VALID) &&
            (error ||
-            val < priv->adjustment->lower ||
-            val > priv->adjustment->upper))
+            val < gtk_adjustment_get_lower (priv->adjustment) ||
+            val > gtk_adjustment_get_upper (priv->adjustment)))
     {
       gtk_spin_button_value_changed (priv->adjustment, spin_button);
       return;
