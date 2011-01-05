@@ -2644,14 +2644,6 @@ gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
   old_page_size = gtk_adjustment_get_page_size (adj);
   new_upper = MAX (allocation.width, icon_view->priv->width);
 
-  g_object_set (adj,
-                "lower", 0.0,
-                "upper", new_upper,
-                "page-size", (gdouble)allocation.width,
-                "step-increment", allocation.width * 0.1,
-                "page-increment", allocation.width * 0.9,
-                NULL);
-
   if (gtk_widget_get_direction (GTK_WIDGET (icon_view)) == GTK_TEXT_DIR_RTL)
     {
       /* Make sure no scrolling occurs for RTL locales also (if possible) */
@@ -2671,8 +2663,13 @@ gtk_icon_view_set_hadjustment_values (GtkIconView *icon_view)
   else
     new_value = CLAMP (old_value, 0, new_upper - allocation.width);
 
-  if (new_value != old_value)
-    gtk_adjustment_set_value (adj, new_value);
+  gtk_adjustment_configure (adj,
+                            new_value,
+                            0.0,
+                            new_upper,
+                            allocation.width * 0.1,
+                            allocation.width * 0.9,
+                            allocation.width);
 }
 
 static void
@@ -2680,26 +2677,16 @@ gtk_icon_view_set_vadjustment_values (GtkIconView *icon_view)
 {
   GtkAllocation  allocation;
   GtkAdjustment *adj = icon_view->priv->vadjustment;
-  gdouble old_value;
-  gdouble new_value;
-  gdouble new_upper;
 
   gtk_widget_get_allocation (GTK_WIDGET (icon_view), &allocation);
 
-  old_value = gtk_adjustment_get_value (adj);
-  new_upper = MAX (allocation.height, icon_view->priv->height);
-
-  g_object_set (adj,
-                "lower", 0.0,
-                "upper", new_upper,
-                "page-size", (gdouble)allocation.height,
-                "step-increment", allocation.height * 0.1,
-                "page-increment", allocation.height * 0.9,
-                NULL);
-
-  new_value = CLAMP (old_value, 0, new_upper - allocation.height);
-  if (new_value != old_value)
-    gtk_adjustment_set_value (adj, new_value);
+  gtk_adjustment_configure (adj,
+                            gtk_adjustment_get_value (adj),
+                            0.0,
+                            MAX (allocation.height, icon_view->priv->height),
+                            allocation.height * 0.1,
+                            allocation.height * 0.9,
+                            allocation.height);
 }
 
 static void
