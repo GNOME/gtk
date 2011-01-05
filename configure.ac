@@ -248,12 +248,12 @@ AC_ARG_ENABLE(xkb,
               [enable_xkb="maybe"])
 AC_ARG_ENABLE(xinerama,
               [AC_HELP_STRING([--enable-xinerama],
-	                      [support Xinerama extension if available [default=yes]])],,
-              [enable_xinerama="yes"])
+	                      [support Xinerama extension if available [default=maybe]])],,
+              [enable_xinerama="maybe"])
 AC_ARG_ENABLE(xinput,
               [AC_HELP_STRING([--enable-xinput],
                               [support XInput extension if available [default=yes]])],,
-              [enable_xinput="yes"])
+              [enable_xinput="maybe"])
 
 AC_ARG_ENABLE(x11-backend,
               [AC_HELP_STRING([--enable-x11-backend],
@@ -323,6 +323,8 @@ else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
 
+# strip leading space
+GDK_BACKENDS=${GDK_BACKENDS/# }
 
 AC_SUBST(GDK_BACKENDS)
 
@@ -731,6 +733,7 @@ AC_ARG_ENABLE(modules,
                               [disable dynamic module loading])])
 
 dynworks=false
+build_dynamic_modules=no
 deps=
 if test x$enable_modules = xno; then
     AC_MSG_RESULT(no)
@@ -758,10 +761,12 @@ else
     fi
 
     if $dynworks; then
+        build_dynamic_modules=yes
         AC_DEFINE(USE_GMODULE, 1,
                   [Define to 1 if gmodule works and should be used])
         AC_MSG_RESULT(yes)
     else
+        build_dynamic_modules=no
         AC_MSG_RESULT(no)
     fi
 fi
@@ -878,6 +883,7 @@ fi
 # GTK+ uses some X calls, so needs to link against X directly
 GTK_DEP_PACKAGES_FOR_X=
 GTK_DEP_LIBS_FOR_X=
+X_EXTENSIONS=
 
 if test "x$enable_x11_backend" == xyes; then
   X_PACKAGES=fontconfig
@@ -977,10 +983,13 @@ if test "x$enable_x11_backend" == xyes; then
   # Check for XKB support.
 
   if test "x$enable_xkb" = "xyes"; then
-        AC_MSG_WARN(XKB support explicitly enabled)
-        AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension])
+        AC_CHECK_FUNC(XkbQueryExtension,
+                      X_EXTENSIONS="$X_EXTENSIONS XKB"
+                      AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension]),
+                      AC_MSG_ERROR([*** XKB extension not found. Check 'config.log' for more details.]))
   elif test "x$enable_xkb" = "xmaybe"; then
         AC_CHECK_FUNC(XkbQueryExtension,
+                      X_EXTENSIONS="$X_EXTENSIONS XKB"
                       AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension]))
   else
         AC_MSG_WARN(XKB support explicitly disabled)
@@ -1002,19 +1011,23 @@ if test "x$enable_x11_backend" == xyes; then
 
   CFLAGS="$gtk_save_CFLAGS"
 
-  if test "x$enable_xinerama" = "xyes"; then
+  if test "x$enable_xinerama" != "xno"; then
     # Check for Xinerama extension (Solaris impl or Xfree impl)
+    have_xfree_xinerama=false
+    have_solaris_xinerama=false
+
     gtk_save_cppflags="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS $x_cflags"
 
     # Check for XFree
-    AC_MSG_CHECKING(for Xinerama support on XFree86)
+    AC_MSG_CHECKING(for Xinerama packages)
 
-    have_xfree_xinerama=false
     if $PKG_CONFIG --exists xinerama ; then
+       AC_MSG_RESULT(yes)
        have_xfree_xinerama=true
        X_PACKAGES="$X_PACKAGES xinerama"
     else
+       AC_MSG_RESULT(no)
        AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
 	   [AC_CHECK_HEADER(X11/extensions/Xinerama.h,
 	   [GTK_ADD_LIB(x_extra_libs,Xinerama)
@@ -1023,14 +1036,12 @@ if test "x$enable_x11_backend" == xyes; then
     fi
 
     if $have_xfree_xinerama ; then
+      X_EXTENSIONS="$X_EXTENSIONS Xinerama"
       AC_DEFINE(HAVE_XFREE_XINERAMA, 1,
                 [Define to 1 if XFree Xinerama is available])
       AC_DEFINE(HAVE_XINERAMA, 1,
                 [Define to 1 is Xinerama is available])
-      AC_MSG_RESULT(yes)
     else
-      AC_MSG_RESULT(no)
-
       case "$host" in
         *-*-solaris*)
             # Check for solaris
@@ -1043,6 +1054,7 @@ if test "x$enable_x11_backend" == xyes; then
 		    [#include <X11/Xlib.h>])])
 
             if $have_solaris_xinerama ; then
+              X_EXTENSIONS="$X_EXTENSIONS Xinerama"
               AC_DEFINE(HAVE_SOLARIS_XINERAMA, 1,
                         [Define to 1 if solaris xinerama is available])
 	      AC_DEFINE(HAVE_XINERAMA, 1,
@@ -1057,6 +1069,11 @@ if test "x$enable_x11_backend" == xyes; then
       esac
     fi
   fi
+  if test "x$enable_xinerama" = "xyes" ; then
+    if test "x$have_xfree_xinerama" != "xtrue" -a "x$have_solaris_xinerama" != "xtrue" ; then
+      AC_MSG_ERROR([*** Xinerama extension not found. Check 'config.log' for more details.])
+    fi
+  fi
 
   # set up things for XInput
   if test "x$enable_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
@@ -1068,7 +1085,11 @@ if test "x$enable_x11_backend" == xyes; then
     X_PACKAGES="$X_PACKAGES xi"
 
     AC_CHECK_HEADER(X11/extensions/XInput2.h,
-                    have_xinput2=yes; AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]))
+                    have_xinput2=yes
+                    X_EXTENSIONS="$X_EXTENSIONS XI2"
+                    AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]),
+                    X_EXTENSIONS="$X_EXTENSIONS XInput")
+
   else
     AC_DEFINE(XINPUT_NONE, 1,
               [Define to 1 if no XInput should be used])
@@ -1077,11 +1098,18 @@ if test "x$enable_x11_backend" == xyes; then
   AM_CONDITIONAL(XINPUT_XFREE, test "x$have_xinput" = "xyes")
   AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
 
+  if test "x$enable_xinput" = "xyes" ; then
+    if test "x$have_xinput" != "xyes" -a "x$have_xinput2" != "xyes" ; then
+      AC_MSG_ERROR([*** XInput extension not found. Check 'config.log' for more details.])
+    fi
+  fi
+
   # Check for the RANDR extension
   if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
      AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
 
      X_PACKAGES="$X_PACKAGES xrandr"
+     X_EXTENSIONS="$X_EXTENSIONS XRANDR"
   fi
 
   # Checks for Xcursor library
@@ -1098,6 +1126,7 @@ if test "x$enable_x11_backend" == xyes; then
     AC_DEFINE(HAVE_XFIXES, 1, [Have the XFIXES X extension])
 
     X_PACKAGES="$X_PACKAGES xfixes"
+    X_EXTENSIONS="$X_EXTENSIONS XFIXES"
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
   fi
 
@@ -1107,6 +1136,7 @@ if test "x$enable_x11_backend" == xyes; then
     AC_DEFINE(HAVE_XCOMPOSITE, 1, [Have the XCOMPOSITE X extension])
 
     X_PACKAGES="$X_PACKAGES xcomposite"
+    X_EXTENSIONS="$X_EXTENSIONS Composite"
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcomposite"
   fi
 
@@ -1116,6 +1146,7 @@ if test "x$enable_x11_backend" == xyes; then
     AC_DEFINE(HAVE_XDAMAGE, 1, [Have the XDAMAGE X extension])
 
     X_PACKAGES="$X_PACKAGES xdamage"
+    X_EXTENSIONS="$X_EXTENSIONS DAMAGE"
     GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
   fi
 
@@ -1129,6 +1160,10 @@ if test "x$enable_x11_backend" == xyes; then
   LIBS="$gtk_save_libs"
 
   AM_CONDITIONAL(USE_X11, true)
+
+  # strip leading space
+  X_EXTENSIONS=${X_EXTENSIONS/# }
+
 else
   XPACKAGES=
 
@@ -1288,6 +1323,8 @@ LIBS="$old_LIBS"
 # Printing system checks
 ################################################################
 
+PRINT_BACKENDS="file lpr"
+
 AC_ARG_ENABLE(cups,
               [AC_HELP_STRING([--disable-cups],
                               [disable cups print backend])],,
@@ -1326,6 +1363,7 @@ else
 
     AC_CHECK_HEADER(cups/cups.h,,AC_MSG_ERROR([[*** Sorry, cups-config present but cups/cups.h missing.]]))
 
+    PRINT_BACKENDS="$PRINT_BACKENDS cups"
     AM_CONDITIONAL(HAVE_CUPS, true)
 
     gtk_save_cflags="$CFLAGS"
@@ -1359,6 +1397,7 @@ else
   AC_MSG_CHECKING(libpapi)
   AC_CHECK_LIB(papi, papiServiceCreate, have_papi=yes, have_papi=no)
   if test $have_papi = yes; then
+    PRINT_BACKENDS="$PRINT_BACKENDS papi"
     AC_DEFINE([HAVE_PAPI], [], [Define to 1 if libpapi available])
   fi
   AM_CONDITIONAL(HAVE_PAPI, test $have_papi = yes)
@@ -1395,6 +1434,9 @@ AC_ARG_ENABLE(test-print-backend,
               [AC_HELP_STRING([--enable-test-print-backend],
                               [build test print backend])],,
               [enable_test_print_backend=no])
+if test "x$enable_test_print_backend" != "xno" ; then
+  PRINT_BACKENDS="$PRINT_BACKENDS test"
+fi
 AM_CONDITIONAL(TEST_PRINT_BACKEND, test "x$enable_test_print_backend" != "xno")
 
 
@@ -1438,16 +1480,15 @@ AC_ARG_ENABLE(packagekit,
               AC_HELP_STRING([--disable-packagekit],
                              [build packagekit open-with module]))
 
-ENABLE_PACKAGEKIT=
+build_packagekit=no
 if test "os_win32" != "yes"; then
         if test "x$enable_packagekit" != "xno"; then
-                ENABLE_PACKAGEKIT=1
+                build_packagekit=yes
                 AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
         fi
 fi
 
-AC_SUBST(ENABLE_PACKAGEKIT)
-AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$ENABLE_PACKAGEKIT" = "x1")
+AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$build_packagekit" = "xyes")
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
@@ -1624,5 +1665,19 @@ perf/Makefile
 
 AC_OUTPUT
 
-echo "configuration:
-        backends:             $GDK_BACKENDS"
+# beautify the immodule list a bit
+included_immodules=${included_immodules//,/ }
+included_immodules=${included_immodules:-none}
+
+echo "configuration:"
+echo "        GDK backends:         $GDK_BACKENDS"
+if test "x$enable_x11_backend" = "xyes"; then
+echo "        X11 extensions:       $X_EXTENSIONS"
+fi
+echo "        Print backends:       $PRINT_BACKENDS"
+echo "        Dynamic modules:      $build_dynamic_modules"
+echo "        Included immodules:   $included_immodules"
+echo "        PackageKit support:   $build_packagekit"
+echo "        Introspection:        $found_introspection"
+echo "        Debugging:            $enable_debug"
+echo "        Documentation:        $enable_gtk_doc"
