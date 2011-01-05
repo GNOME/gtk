@@ -892,7 +892,7 @@ scroll_new_row_tree (ScrollFixture *fixture,
 			gtk_main_iteration ();
 
 		/* Test position, the scroll bar must be at the end */
-		g_assert (vadjustment->value == vadjustment->upper - vadjustment->page_size);
+		g_assert (gtk_adjustment_get_value (vadjustment) == gtk_adjustment_get_upper (vadjustment) - gtk_adjustment_get_page_size (vadjustment));
 	}
 }
 
