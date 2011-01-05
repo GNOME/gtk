@@ -577,12 +577,12 @@ gtk_scale_button_new (GtkIconSize   size,
 		      const gchar **icons)
 {
   GtkScaleButton *button;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
 
-  adj = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
+  adjustment = gtk_adjustment_new (min, min, max, step, 10 * step, 0);
 
   button = g_object_new (GTK_TYPE_SCALE_BUTTON,
-                         "adjustment", adj,
+                         "adjustment", adjustment,
                          "icons", icons,
                          "size", size,
                          NULL);
@@ -834,12 +834,12 @@ gtk_scale_button_scroll (GtkWidget      *widget,
 {
   GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gdouble d;
 
   button = GTK_SCALE_BUTTON (widget);
   priv = button->priv;
-  adj = priv->adjustment;
+  adjustment = priv->adjustment;
 
   if (event->type != GDK_SCROLL)
     return FALSE;
@@ -847,15 +847,15 @@ gtk_scale_button_scroll (GtkWidget      *widget,
   d = gtk_scale_button_get_value (button);
   if (event->direction == GDK_SCROLL_UP)
     {
-      d += adj->step_increment;
-      if (d > adj->upper)
-	d = adj->upper;
+      d += gtk_adjustment_get_step_increment (adjustment);
+      if (d > gtk_adjustment_get_upper (adjustment))
+	d = gtk_adjustment_get_upper (adjustment);
     }
   else
     {
-      d -= adj->step_increment;
-      if (d < adj->lower)
-	d = adj->lower;
+      d -= gtk_adjustment_get_step_increment (adjustment);
+      if (d < gtk_adjustment_get_lower (adjustment))
+	d = gtk_adjustment_get_lower (adjustment);
     }
   gtk_scale_button_set_value (button, d);
 
@@ -897,7 +897,7 @@ gtk_scale_popup (GtkWidget *widget,
   GtkAllocation allocation, dock_allocation, scale_allocation;
   GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gint x, y, m, dx, dy, sx, sy, startoff;
   gint min_slider_size;
   gdouble v;
@@ -909,7 +909,7 @@ gtk_scale_popup (GtkWidget *widget,
   is_moved = FALSE;
   button = GTK_SCALE_BUTTON (widget);
   priv = button->priv;
-  adj = priv->adjustment;
+  adjustment = priv->adjustment;
 
   display = gtk_widget_get_display (widget);
   screen = gtk_widget_get_screen (widget);
@@ -946,7 +946,7 @@ gtk_scale_popup (GtkWidget *widget,
   priv->timeout = TRUE;
 
   /* position (needs widget to be shown already) */
-  v = gtk_scale_button_get_value (button) / (adj->upper - adj->lower);
+  v = gtk_scale_button_get_value (button) / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment));
   min_slider_size = gtk_range_get_min_slider_size (GTK_RANGE (priv->scale));
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
@@ -1192,7 +1192,7 @@ cb_button_timeout (gpointer user_data)
 {
   GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gdouble val;
   gboolean res = TRUE;
 
@@ -1202,19 +1202,19 @@ cb_button_timeout (gpointer user_data)
   if (priv->click_id == 0)
     return FALSE;
 
-  adj = priv->adjustment;
+  adjustment = priv->adjustment;
 
   val = gtk_scale_button_get_value (button);
   val += priv->direction;
-  if (val <= adj->lower)
+  if (val <= gtk_adjustment_get_lower (adjustment))
     {
       res = FALSE;
-      val = adj->lower;
+      val = gtk_adjustment_get_lower (adjustment);
     }
-  else if (val > adj->upper)
+  else if (val > gtk_adjustment_get_upper (adjustment))
     {
       res = FALSE;
-      val = adj->upper;
+      val = gtk_adjustment_get_upper (adjustment);
     }
   gtk_scale_button_set_value (button, val);
 
@@ -1234,19 +1234,19 @@ cb_button_press (GtkWidget      *widget,
 {
   GtkScaleButton *button;
   GtkScaleButtonPrivate *priv;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
 
   button = GTK_SCALE_BUTTON (user_data);
   priv = button->priv;
-  adj = priv->adjustment;
+  adjustment = priv->adjustment;
 
   if (priv->click_id != 0)
     g_source_remove (priv->click_id);
 
   if (widget == priv->plus_button)
-    priv->direction = fabs (adj->page_increment);
+    priv->direction = fabs (gtk_adjustment_get_page_increment (adjustment));
   else
-    priv->direction = - fabs (adj->page_increment);
+    priv->direction = - fabs (gtk_adjustment_get_page_increment (adjustment));
 
   priv->click_id = gdk_threads_add_timeout (priv->click_timeout,
                                             cb_button_timeout,
@@ -1530,7 +1530,7 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
 {
   GtkScaleButtonPrivate *priv;
   GtkRange *range;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   gdouble value;
   const gchar *name;
   guint num_icons;
@@ -1557,14 +1557,14 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
     }
 
   range = GTK_RANGE (priv->scale);
-  adj = priv->adjustment;
+  adjustment = priv->adjustment;
   value = gtk_scale_button_get_value (button);
 
   /* The 2-icons special case */
   if (num_icons == 2)
     {
       gdouble limit;
-      limit = (adj->upper - adj->lower) / 2 + adj->lower;
+      limit = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) / 2 + gtk_adjustment_get_lower (adjustment);
       if (value < limit)
 	name = priv->icon_list[0];
       else
@@ -1577,11 +1577,11 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
     }
 
   /* With 3 or more icons */
-  if (value == adj->lower)
+  if (value == gtk_adjustment_get_lower (adjustment))
     {
       name = priv->icon_list[0];
     }
-  else if (value == adj->upper)
+  else if (value == gtk_adjustment_get_upper (adjustment))
     {
       name = priv->icon_list[1];
     }
@@ -1590,8 +1590,8 @@ gtk_scale_button_update_icon (GtkScaleButton *button)
       gdouble step;
       guint i;
 
-      step = (adj->upper - adj->lower) / (num_icons - 2);
-      i = (guint) ((value - adj->lower) / step) + 2;
+      step = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) / (num_icons - 2);
+      i = (guint) ((value - gtk_adjustment_get_lower (adjustment)) / step) + 2;
       g_assert (i < num_icons);
       name = priv->icon_list[i];
     }
