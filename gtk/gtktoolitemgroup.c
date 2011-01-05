@@ -1112,13 +1112,13 @@ gtk_tool_item_group_set_focus_cb (GtkWidget *window,
           if (gtk_widget_translate_coordinates
                 (widget, p, 0, 0, NULL, &y) && y < 0)
             {
-              y += adjustment->value;
+              y += gtk_adjustment_get_value (adjustment);
               gtk_adjustment_clamp_page (adjustment, y, y + allocation.height);
             }
           else if (gtk_widget_translate_coordinates (widget, p, 0, allocation.height, NULL, &y) &&
                    y > p_allocation.height)
             {
-              y += adjustment->value;
+              y += gtk_adjustment_get_value (adjustment);
               gtk_adjustment_clamp_page (adjustment, y - allocation.height, y);
             }
         }
@@ -1136,13 +1136,13 @@ gtk_tool_item_group_set_focus_cb (GtkWidget *window,
           if (gtk_widget_translate_coordinates
                 (widget, p, 0, 0, &x, NULL) && x < 0)
             {
-              x += adjustment->value;
+              x += gtk_adjustment_get_value (adjustment);
               gtk_adjustment_clamp_page (adjustment, x, x + allocation.width);
             }
           else if (gtk_widget_translate_coordinates (widget, p, allocation.width, 0, &x, NULL) &&
                    x > p_allocation.width)
             {
-              x += adjustment->value;
+              x += gtk_adjustment_get_value (adjustment);
               gtk_adjustment_clamp_page (adjustment, x - allocation.width, x);
             }
 
