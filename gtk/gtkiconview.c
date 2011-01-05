@@ -1688,7 +1688,7 @@ rubberband_scroll_timeout (gpointer data)
   GtkIconView *icon_view = data;
 
   gtk_adjustment_set_value (icon_view->priv->vadjustment,
-                            icon_view->priv->vadjustment->value +
+                            gtk_adjustment_get_value (icon_view->priv->vadjustment) +
                             icon_view->priv->scroll_value_diff);
 
   gtk_icon_view_update_rubberband (icon_view);
@@ -1713,9 +1713,9 @@ gtk_icon_view_motion (GtkWidget      *widget,
       gtk_icon_view_update_rubberband (widget);
       
       abs_y = event->y - icon_view->priv->height *
-	(icon_view->priv->vadjustment->value /
-	 (icon_view->priv->vadjustment->upper -
-	  icon_view->priv->vadjustment->lower));
+	(gtk_adjustment_get_value (icon_view->priv->vadjustment) /
+	 (gtk_adjustment_get_upper (icon_view->priv->vadjustment) -
+	  gtk_adjustment_get_lower (icon_view->priv->vadjustment)));
 
       gtk_widget_get_allocation (widget, &allocation);
 
@@ -2768,8 +2768,8 @@ gtk_icon_view_adjustment_changed (GtkAdjustment *adjustment,
   if (gtk_widget_get_realized (GTK_WIDGET (icon_view)))
     {
       gdk_window_move (priv->bin_window,
-                       - priv->hadjustment->value,
-                       - priv->vadjustment->value);
+                       - gtk_adjustment_get_value (priv->hadjustment),
+                       - gtk_adjustment_get_value (priv->vadjustment));
 
       if (icon_view->priv->doing_rubberband)
         gtk_icon_view_update_rubberband (GTK_WIDGET (icon_view));
@@ -4061,7 +4061,7 @@ find_item_page_up_down (GtkIconView     *icon_view,
   gint y, col;
   
   col = current->col;
-  y = current->y + count * icon_view->priv->vadjustment->page_size;
+  y = current->y + count * gtk_adjustment_get_page_size (icon_view->priv->vadjustment);
 
   item = g_list_find (icon_view->priv->items, current);
   if (count > 0)
@@ -4502,12 +4502,12 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
       offset = y + item->y - focus_width - row_align * (allocation.height - item->height);
 
       gtk_adjustment_set_value (icon_view->priv->vadjustment,
-                                icon_view->priv->vadjustment->value + offset);
+                                gtk_adjustment_get_value (icon_view->priv->vadjustment) + offset);
 
       offset = x + item->x - focus_width - col_align * (allocation.width - item->width);
 
       gtk_adjustment_set_value (icon_view->priv->hadjustment,
-                                icon_view->priv->hadjustment->value + offset);
+                                gtk_adjustment_get_value (icon_view->priv->hadjustment) + offset);
 
       gtk_adjustment_changed (icon_view->priv->hadjustment);
       gtk_adjustment_changed (icon_view->priv->vadjustment);
@@ -4538,18 +4538,18 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
 
   if (y + item->y - focus_width < 0)
     gtk_adjustment_set_value (icon_view->priv->vadjustment, 
-			      icon_view->priv->vadjustment->value + y + item->y - focus_width);
+			      gtk_adjustment_get_value (icon_view->priv->vadjustment) + y + item->y - focus_width);
   else if (y + item->y + item->height + focus_width > allocation.height)
     gtk_adjustment_set_value (icon_view->priv->vadjustment, 
-			      icon_view->priv->vadjustment->value + y + item->y + item->height 
+			      gtk_adjustment_get_value (icon_view->priv->vadjustment) + y + item->y + item->height 
 			      + focus_width - allocation.height);
 
   if (x + item->x - focus_width < 0)
     gtk_adjustment_set_value (icon_view->priv->hadjustment, 
-                              icon_view->priv->hadjustment->value + x + item->x - focus_width);
+                              gtk_adjustment_get_value (icon_view->priv->hadjustment) + x + item->x - focus_width);
   else if (x + item->x + item->width + focus_width > allocation.width)
     gtk_adjustment_set_value (icon_view->priv->hadjustment, 
-			      icon_view->priv->hadjustment->value + x + item->x + item->width 
+			      gtk_adjustment_get_value (icon_view->priv->hadjustment) + x + item->x + item->width 
                               + focus_width - allocation.width);
 
   gtk_adjustment_changed (icon_view->priv->hadjustment);
@@ -5284,10 +5284,10 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
     {
       GtkIconViewItem *item = icons->data;
 
-      if ((item->x + item->width >= (int)icon_view->priv->hadjustment->value) &&
-	  (item->y + item->height >= (int)icon_view->priv->vadjustment->value) &&
-	  (item->x <= (int) (icon_view->priv->hadjustment->value + icon_view->priv->hadjustment->page_size)) &&
-	  (item->y <= (int) (icon_view->priv->vadjustment->value + icon_view->priv->vadjustment->page_size)))
+      if ((item->x + item->width >= (int)gtk_adjustment_get_value (icon_view->priv->hadjustment)) &&
+	  (item->y + item->height >= (int)gtk_adjustment_get_value (icon_view->priv->vadjustment)) &&
+	  (item->x <= (int) (gtk_adjustment_get_value (icon_view->priv->hadjustment) + gtk_adjustment_get_page_size (icon_view->priv->hadjustment))) &&
+	  (item->y <= (int) (gtk_adjustment_get_value (icon_view->priv->vadjustment) + gtk_adjustment_get_page_size (icon_view->priv->vadjustment))))
 	{
 	  if (start_index == -1)
 	    start_index = item->index;
@@ -6678,11 +6678,11 @@ gtk_icon_view_autoscroll (GtkIconView *icon_view)
 
   if (voffset != 0)
     gtk_adjustment_set_value (icon_view->priv->vadjustment,
-                              icon_view->priv->vadjustment->value + voffset);
+                              gtk_adjustment_get_value (icon_view->priv->vadjustment) + voffset);
 
   if (hoffset != 0)
     gtk_adjustment_set_value (icon_view->priv->hadjustment,
-                              icon_view->priv->hadjustment->value + hoffset);
+                              gtk_adjustment_get_value (icon_view->priv->hadjustment) + hoffset);
 }
 
 
@@ -7490,8 +7490,8 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
     *path = NULL;
 
   item = gtk_icon_view_get_item_at_coords (icon_view, 
-					   drag_x + icon_view->priv->hadjustment->value, 
-					   drag_y + icon_view->priv->vadjustment->value,
+					   drag_x + gtk_adjustment_get_value (icon_view->priv->hadjustment), 
+					   drag_y + gtk_adjustment_get_value (icon_view->priv->vadjustment),
 					   FALSE, NULL);
 
   if (item == NULL)
@@ -8747,10 +8747,10 @@ gtk_icon_view_item_accessible_is_showing (GtkIconViewItemAccessible *item)
   icon_view = GTK_ICON_VIEW (item->widget);
   visible_rect.x = 0;
   if (icon_view->priv->hadjustment)
-    visible_rect.x += icon_view->priv->hadjustment->value;
+    visible_rect.x += gtk_adjustment_get_value (icon_view->priv->hadjustment);
   visible_rect.y = 0;
   if (icon_view->priv->hadjustment)
-    visible_rect.y += icon_view->priv->vadjustment->value;
+    visible_rect.y += gtk_adjustment_get_value (icon_view->priv->vadjustment);
   visible_rect.width = allocation.width;
   visible_rect.height = allocation.height;
 
