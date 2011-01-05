@@ -159,10 +159,10 @@ int_modified (GtkAdjustment *adj, gpointer data)
       GtkWidget *parent = gtk_widget_get_parent (widget);
 
       gtk_container_child_set (GTK_CONTAINER (parent), 
-			       widget, p->spec->name, (int) adj->value, NULL);
+			       widget, p->spec->name, (int) gtk_adjustment_get_value (adj), NULL);
     }
   else
-    g_object_set (p->obj, p->spec->name, (int) adj->value, NULL);
+    g_object_set (p->obj, p->spec->name, (int) gtk_adjustment_get_value (adj), NULL);
 }
 
 static void
@@ -190,7 +190,7 @@ int_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   get_property_value (object, pspec, &val);
 
-  if (g_value_get_int (&val) != (int)adj->value)
+  if (g_value_get_int (&val) != (int)gtk_adjustment_get_value (adj))
     {
       block_controller (G_OBJECT (adj));
       gtk_adjustment_set_value (adj, g_value_get_int (&val));
@@ -211,10 +211,10 @@ uint_modified (GtkAdjustment *adj, gpointer data)
       GtkWidget *parent = gtk_widget_get_parent (widget);
 
       gtk_container_child_set (GTK_CONTAINER (parent), 
-			       widget, p->spec->name, (guint) adj->value, NULL);
+			       widget, p->spec->name, (guint) gtk_adjustment_get_value (adj), NULL);
     }
   else
-    g_object_set (p->obj, p->spec->name, (guint) adj->value, NULL);
+    g_object_set (p->obj, p->spec->name, (guint) gtk_adjustment_get_value (adj), NULL);
 }
 
 static void
@@ -226,7 +226,7 @@ uint_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_init (&val, G_TYPE_UINT);
   get_property_value (object, pspec, &val);
 
-  if (g_value_get_uint (&val) != (guint)adj->value)
+  if (g_value_get_uint (&val) != (guint)gtk_adjustment_get_value (adj))
     {
       block_controller (G_OBJECT (adj));
       gtk_adjustment_set_value (adj, g_value_get_uint (&val));
@@ -247,10 +247,10 @@ float_modified (GtkAdjustment *adj, gpointer data)
       GtkWidget *parent = gtk_widget_get_parent (widget);
 
       gtk_container_child_set (GTK_CONTAINER (parent), 
-			       widget, p->spec->name, (float) adj->value, NULL);
+			       widget, p->spec->name, (float) gtk_adjustment_get_value (adj), NULL);
     }
   else
-    g_object_set (p->obj, p->spec->name, (float) adj->value, NULL);
+    g_object_set (p->obj, p->spec->name, (float) gtk_adjustment_get_value (adj), NULL);
 }
 
 static void
@@ -262,7 +262,7 @@ float_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_init (&val, G_TYPE_FLOAT);
   get_property_value (object, pspec, &val);
 
-  if (g_value_get_float (&val) != (float) adj->value)
+  if (g_value_get_float (&val) != (float) gtk_adjustment_get_value (adj))
     {
       block_controller (G_OBJECT (adj));
       gtk_adjustment_set_value (adj, g_value_get_float (&val));
@@ -283,10 +283,10 @@ double_modified (GtkAdjustment *adj, gpointer data)
       GtkWidget *parent = gtk_widget_get_parent (widget);
 
       gtk_container_child_set (GTK_CONTAINER (parent), 
-			       widget, p->spec->name, (double) adj->value, NULL);
+			       widget, p->spec->name, (double) gtk_adjustment_get_value (adj), NULL);
     }
   else
-    g_object_set (p->obj, p->spec->name, (double) adj->value, NULL);
+    g_object_set (p->obj, p->spec->name, (double) gtk_adjustment_get_value (adj), NULL);
 }
 
 static void
@@ -298,7 +298,7 @@ double_changed (GObject *object, GParamSpec *pspec, gpointer data)
   g_value_init (&val, G_TYPE_DOUBLE);
   get_property_value (object, pspec, &val);
 
-  if (g_value_get_double (&val) != adj->value)
+  if (g_value_get_double (&val) != gtk_adjustment_get_value (adj))
     {
       block_controller (G_OBJECT (adj));
       gtk_adjustment_set_value (adj, g_value_get_double (&val));
