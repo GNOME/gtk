@@ -2344,7 +2344,7 @@ gtk_text_view_set_wrap_mode (GtkTextView *text_view,
     {
       priv->wrap_mode = wrap_mode;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->wrap_mode = wrap_mode;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2404,7 +2404,7 @@ gtk_text_view_set_editable (GtkTextView *text_view,
       if (setting && gtk_widget_has_focus (GTK_WIDGET (text_view)))
 	gtk_im_context_focus_in (priv->im_context);
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
 	  gtk_text_layout_set_overwrite_mode (priv->layout,
 					      priv->overwrite_mode && priv->editable);
@@ -2455,7 +2455,7 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
     {
       priv->pixels_above_lines = pixels_above_lines;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->pixels_above_lines = pixels_above_lines;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2504,7 +2504,7 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
     {
       priv->pixels_below_lines = pixels_below_lines;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->pixels_below_lines = pixels_below_lines;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2553,7 +2553,7 @@ gtk_text_view_set_pixels_inside_wrap (GtkTextView *text_view,
     {
       priv->pixels_inside_wrap = pixels_inside_wrap;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->pixels_inside_wrap = pixels_inside_wrap;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2602,7 +2602,7 @@ gtk_text_view_set_justification (GtkTextView     *text_view,
     {
       priv->justify = justification;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->justification = justification;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2651,7 +2651,7 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
     {
       priv->left_margin = left_margin;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->left_margin = left_margin;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2698,7 +2698,7 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
     {
       priv->right_margin = right_margin;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->right_margin = right_margin;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2747,7 +2747,7 @@ gtk_text_view_set_indent (GtkTextView *text_view,
     {
       priv->indent = indent;
 
-      if (priv->layout)
+      if (priv->layout && priv->layout->default_style)
         {
           priv->layout->default_style->indent = indent;
           gtk_text_layout_default_style_changed (priv->layout);
@@ -2798,7 +2798,7 @@ gtk_text_view_set_tabs (GtkTextView   *text_view,
 
   priv->tabs = tabs ? pango_tab_array_copy (tabs) : NULL;
 
-  if (priv->layout)
+  if (priv->layout && priv->layout->default_style)
     {
       /* some unkosher futzing in internal struct details... */
       if (priv->layout->default_style->tabs)
@@ -4116,7 +4116,7 @@ gtk_text_view_direction_changed (GtkWidget        *widget,
 {
   GtkTextViewPrivate *priv = GTK_TEXT_VIEW (widget)->priv;
 
-  if (priv->layout)
+  if (priv->layout && priv->layout->default_style)
     {
       priv->layout->default_style->direction = gtk_widget_get_direction (widget);
 
