@@ -63,6 +63,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testmultidisplay		\
 	testmultiscreen			\
 	testnotebookdnd			\
+	testnumerableicon		\
 	testnouiprint			\
 	testoffscreen			\
 	testoffscreenwindow		\
@@ -158,6 +159,7 @@ testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
+testnumerableicon_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
@@ -236,6 +238,7 @@ testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)
 testnouiprint_LDADD = $(LDADDS)
+testnumerableicon_LDADD = $(LDADDS)
 testoffscreen_LDADD = $(LDADDS)
 testoffscreenwindow_LDADD = $(LDADDS)
 testappchooser_LDADD = $(LDADDS)
@@ -362,6 +365,10 @@ testiconview_SOURCES = 		\
 
 testiconview_keynav_SOURCES = 	\
 	testiconview-keynav.c
+
+testnumerableicon_SOURCES =	\
+	testnumerableicon.c	\
+	prop-editor.c
 
 testrecentchooser_SOURCES = 	\
 	prop-editor.c 		\

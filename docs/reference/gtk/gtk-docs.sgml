@@ -61,6 +61,7 @@
     <xi:include href="xml/gtkgradient.xml" />
     <xi:include href="xml/gtkicontheme.xml" />
     <xi:include href="xml/gtkiconfactory.xml" />
+    <xi:include href="xml/gtknumerableicon.xml" />
     <xi:include href="xml/gtkrc.xml" />
     <xi:include href="xml/gtkstyle.xml" />
   </part>

@@ -101,6 +101,7 @@ gtk_message_dialog_get_type
 gtk_misc_get_type
 gtk_mount_operation_get_type
 gtk_notebook_get_type
+gtk_numerable_icon_get_type
 gtk_offscreen_window_get_type
 gtk_orientable_get_type
 gtk_page_setup_get_type

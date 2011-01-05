@@ -137,6 +137,7 @@
 #include <gtk/gtkmodules.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
+#include <gtk/gtknumerableicon.h>
 #include <gtk/gtkoffscreenwindow.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkpagesetup.h>

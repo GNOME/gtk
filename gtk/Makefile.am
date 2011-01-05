@@ -252,6 +252,7 @@ gtk_public_h_sources = 		\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
+	gtknumerableicon.h	\
 	gtkoffscreenwindow.h	\
 	gtkorientable.h		\
 	gtkpagesetup.h		\
@@ -401,6 +402,7 @@ gtk_private_h_sources =		\
 	gtkmnemonichash.h	\
 	gtkmodifierstyle.h	\
 	gtkmountoperationprivate.h \
+	gtknumerableiconprivate.h \
 	gtkpango.h		\
 	gtkpathbar.h		\
 	gtkplugprivate.h	\
@@ -565,6 +567,7 @@ gtk_base_c_sources = 		\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
 	gtknotebook.c		\
+	gtknumerableicon.c	\
 	gtkoffscreenwindow.c	\
 	gtkorientable.c		\
 	gtkpagesetup.c		\
