@@ -525,11 +525,11 @@ create_pattern (GtkWidget   *widget,
 #define PATTERN_SIZE (1 << 18)
 
 static void
-pattern_hadj_changed (GtkAdjustment *adj,
+pattern_hadj_changed (GtkAdjustment *adjustment,
 		      GtkWidget     *darea)
 {
-  gint *old_value = g_object_get_data (G_OBJECT (adj), "old-value");
-  gint new_value = adj->value;
+  gint *old_value = g_object_get_data (G_OBJECT (adjustment), "old-value");
+  gint new_value = adjustment->value;
 
   if (gtk_widget_get_realized (darea))
     {
@@ -540,11 +540,11 @@ pattern_hadj_changed (GtkAdjustment *adj,
 }
 
 static void
-pattern_vadj_changed (GtkAdjustment *adj,
+pattern_vadj_changed (GtkAdjustment *adjustment,
 		      GtkWidget *darea)
 {
-  gint *old_value = g_object_get_data (G_OBJECT (adj), "old-value");
-  gint new_value = adj->value;
+  gint *old_value = g_object_get_data (G_OBJECT (adjustment), "old-value");
+  gint new_value = adjustment->value;
 
   if (gtk_widget_get_realized (darea))
     {
@@ -572,8 +572,8 @@ create_big_windows (GtkWidget *widget)
   GtkWidget *content_area;
   GtkWidget *darea, *table, *scrollbar;
   GtkWidget *eventbox;
-  GtkAdjustment *hadj;
-  GtkAdjustment *vadj;
+  GtkAdjustment *hadjustment;
+  GtkAdjustment *vadjustment;
   static gint current_x;
   static gint current_y;
  
@@ -608,15 +608,15 @@ create_big_windows (GtkWidget *widget)
 
       darea = gtk_drawing_area_new ();
 
-      hadj = gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
-      g_signal_connect (hadj, "value_changed",
+      hadjustment = gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
+      g_signal_connect (hadjustment, "value_changed",
 			G_CALLBACK (pattern_hadj_changed), darea);
-      g_object_set_data (G_OBJECT (hadj), "old-value", &current_x);
+      g_object_set_data (G_OBJECT (hadjustment), "old-value", &current_x);
 
-      vadj = gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
-      g_signal_connect (vadj, "value_changed",
+      vadjustment = gtk_adjustment_new (0, 0, PATTERN_SIZE, 10, 100, 100);
+      g_signal_connect (vadjustment, "value_changed",
 			G_CALLBACK (pattern_vadj_changed), darea);
-      g_object_set_data (G_OBJECT (vadj), "old-value", &current_y);
+      g_object_set_data (G_OBJECT (vadjustment), "old-value", &current_y);
       
       g_signal_connect (darea, "realize",
                         G_CALLBACK (pattern_realize),
@@ -630,13 +630,13 @@ create_big_windows (GtkWidget *widget)
 
       gtk_container_add (GTK_CONTAINER (eventbox), darea);
 
-      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadj);
+      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_HORIZONTAL, hadjustment);
       gtk_table_attach (GTK_TABLE (table), scrollbar,
 			0, 1,                  1, 2,
 			GTK_FILL | GTK_EXPAND, GTK_FILL,
 			0,                     0);
 
-      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadj);
+      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, vadjustment);
       gtk_table_attach (GTK_TABLE (table), scrollbar,
 			1, 2,                  0, 1,
 			GTK_FILL,              GTK_EXPAND | GTK_FILL,
@@ -4613,7 +4613,7 @@ create_spins (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *val_label;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
 
   if (!window)
     {
@@ -4650,8 +4650,8 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = gtk_adjustment_new (0, 0, 1410, 30, 60, 0);
-      spinner = gtk_spin_button_new (adj, 0, 0);
+      adjustment = gtk_adjustment_new (0, 0, 1410, 30, 60, 0);
+      spinner = gtk_spin_button_new (adjustment, 0, 0);
       gtk_editable_set_editable (GTK_EDITABLE (spinner), FALSE);
       g_signal_connect (spinner,
 			"output",
@@ -4668,9 +4668,9 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
+      adjustment = gtk_adjustment_new (1.0, 1.0, 12.0, 1.0,
 						  5.0, 0.0);
-      spinner = gtk_spin_button_new (adj, 0, 0);
+      spinner = gtk_spin_button_new (adjustment, 0, 0);
       gtk_spin_button_set_update_policy (GTK_SPIN_BUTTON (spinner),
 					 GTK_UPDATE_IF_VALID);
       g_signal_connect (spinner,
@@ -4692,8 +4692,8 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = gtk_adjustment_new (0, 0, 255, 1, 16, 0);
-      spinner = gtk_spin_button_new (adj, 0, 0);
+      adjustment = gtk_adjustment_new (0, 0, 255, 1, 16, 0);
+      spinner = gtk_spin_button_new (adjustment, 0, 0);
       gtk_editable_set_editable (GTK_EDITABLE (spinner), TRUE);
       g_signal_connect (spinner,
 			"input",
@@ -4724,9 +4724,9 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = gtk_adjustment_new (0.0, -10000.0, 10000.0,
+      adjustment = gtk_adjustment_new (0.0, -10000.0, 10000.0,
 						  0.5, 100.0, 0.0);
-      spinner1 = gtk_spin_button_new (adj, 1.0, 2);
+      spinner1 = gtk_spin_button_new (adjustment, 1.0, 2);
       gtk_spin_button_set_wrap (GTK_SPIN_BUTTON (spinner1), TRUE);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner1, FALSE, TRUE, 0);
 
@@ -4737,9 +4737,9 @@ create_spins (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (vbox2), label, FALSE, TRUE, 0);
 
-      adj = gtk_adjustment_new (2, 1, 15, 1, 1, 0);
-      spinner2 = gtk_spin_button_new (adj, 0.0, 0);
-      g_signal_connect (adj, "value_changed",
+      adjustment = gtk_adjustment_new (2, 1, 15, 1, 1, 0);
+      spinner2 = gtk_spin_button_new (adjustment, 0.0, 0);
+      g_signal_connect (adjustment, "value_changed",
 			G_CALLBACK (change_digits),
 			spinner2);
       gtk_box_pack_start (GTK_BOX (vbox2), spinner2, FALSE, TRUE, 0);
@@ -4937,7 +4937,7 @@ create_cursors (GtkWidget *widget)
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *any;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   GtkWidget *entry;
   GtkWidget *size;  
 
@@ -4997,11 +4997,11 @@ create_cursors (GtkWidget *widget)
       gtk_misc_set_alignment (GTK_MISC (label), 0, 0.5);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-      adj = gtk_adjustment_new (0,
+      adjustment = gtk_adjustment_new (0,
                                 0, 152,
                                 2,
                                 10, 0);
-      spinner = gtk_spin_button_new (adj, 0, 0);
+      spinner = gtk_spin_button_new (adjustment, 0, 0);
       gtk_box_pack_start (GTK_BOX (hbox), spinner, TRUE, TRUE, 0);
 
       frame =
@@ -7922,7 +7922,7 @@ window_controls (GtkWidget *window)
   GtkWidget *vbox;
   GtkWidget *button;
   GtkWidget *spin;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   GtkWidget *entry;
   GtkWidget *om;
   gint i;
@@ -7956,15 +7956,15 @@ window_controls (GtkWidget *window)
 		    G_CALLBACK (configure_event_callback),
 		    label);
 
-  adj = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
-  spin = gtk_spin_button_new (adj, 0, 0);
+  adjustment = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
+  spin = gtk_spin_button_new (adjustment, 0, 0);
 
   gtk_box_pack_start (GTK_BOX (vbox), spin, FALSE, FALSE, 0);
 
   g_object_set_data (G_OBJECT (control_window), "spin1", spin);
 
-  adj = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
-  spin = gtk_spin_button_new (adj, 0, 0);
+  adjustment = gtk_adjustment_new (10.0, -2000.0, 2000.0, 1.0, 5.0, 0.0);
+  spin = gtk_spin_button_new (adjustment, 0, 0);
 
   gtk_box_pack_start (GTK_BOX (vbox), spin, FALSE, FALSE, 0);
 
@@ -9078,7 +9078,7 @@ static int scroll_test_pos = 0.0;
 static gint
 scroll_test_draw (GtkWidget     *widget,
                   cairo_t       *cr,
-                  GtkAdjustment *adj)
+                  GtkAdjustment *adjustment)
 {
   gint i,j;
   gint imin, imax, jmin, jmax;
@@ -9089,13 +9089,13 @@ scroll_test_draw (GtkWidget     *widget,
   imin = (clip.x) / 10;
   imax = (clip.x + clip.width + 9) / 10;
 
-  jmin = ((int)adj->value + clip.y) / 10;
-  jmax = ((int)adj->value + clip.y + clip.height + 9) / 10;
+  jmin = ((int)adjustment->value + clip.y) / 10;
+  jmax = ((int)adjustment->value + clip.y + clip.height + 9) / 10;
 
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
       if ((i+j) % 2)
-	cairo_rectangle (cr, 10*i, 10*j - (int)adj->value, 1+i%10, 1+j%10);
+	cairo_rectangle (cr, 10*i, 10*j - (int)adjustment->value, 1+i%10, 1+j%10);
 
   cairo_fill (cr);
 
@@ -9104,38 +9104,38 @@ scroll_test_draw (GtkWidget     *widget,
 
 static gint
 scroll_test_scroll (GtkWidget *widget, GdkEventScroll *event,
-		    GtkAdjustment *adj)
+		    GtkAdjustment *adjustment)
 {
-  gdouble new_value = adj->value + ((event->direction == GDK_SCROLL_UP) ?
-				    -adj->page_increment / 2:
-				    adj->page_increment / 2);
-  new_value = CLAMP (new_value, adj->lower, adj->upper - adj->page_size);
-  gtk_adjustment_set_value (adj, new_value);  
+  gdouble new_value = adjustment->value + ((event->direction == GDK_SCROLL_UP) ?
+				    -adjustment->page_increment / 2:
+				    adjustment->page_increment / 2);
+  new_value = CLAMP (new_value, adjustment->lower, adjustment->upper - adjustment->page_size);
+  gtk_adjustment_set_value (adjustment, new_value);  
   
   return TRUE;
 }
 
 static void
 scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
-		       GtkAdjustment *adj)
+		       GtkAdjustment *adjustment)
 {
   GtkAllocation allocation;
 
   gtk_widget_get_allocation (widget, &allocation);
-  adj->page_increment = 0.9 * allocation.height;
-  adj->page_size = allocation.height;
+  adjustment->page_increment = 0.9 * allocation.height;
+  adjustment->page_size = allocation.height;
 
-  g_signal_emit_by_name (adj, "changed");
+  g_signal_emit_by_name (adjustment, "changed");
 }
 
 static void
-scroll_test_adjustment_changed (GtkAdjustment *adj, GtkWidget *widget)
+scroll_test_adjustment_changed (GtkAdjustment *adjustment, GtkWidget *widget)
 {
   GdkWindow *window;
   gint dy;
 
-  dy = scroll_test_pos - (int)adj->value;
-  scroll_test_pos = adj->value;
+  dy = scroll_test_pos - (int)adjustment->value;
+  scroll_test_pos = adjustment->value;
 
   if (!gtk_widget_is_drawable (widget))
     return;
@@ -9155,7 +9155,7 @@ create_scroll_test (GtkWidget *widget)
   GtkWidget *drawing_area;
   GtkWidget *scrollbar;
   GtkWidget *button;
-  GtkAdjustment *adj;
+  GtkAdjustment *adjustment;
   GdkGeometry geometry;
   GdkWindowHints geometry_mask;
 
@@ -9187,21 +9187,21 @@ create_scroll_test (GtkWidget *widget)
 
       gtk_widget_set_events (drawing_area, GDK_EXPOSURE_MASK | GDK_SCROLL_MASK);
 
-      adj = gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0);
+      adjustment = gtk_adjustment_new (0.0, 0.0, 1000.0, 1.0, 180.0, 200.0);
       scroll_test_pos = 0.0;
 
-      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adj);
+      scrollbar = gtk_scrollbar_new (GTK_ORIENTATION_VERTICAL, adjustment);
       gtk_box_pack_start (GTK_BOX (hbox), scrollbar, FALSE, FALSE, 0);
       gtk_widget_show (scrollbar);
 
       g_signal_connect (drawing_area, "draw",
-			G_CALLBACK (scroll_test_draw), adj);
+			G_CALLBACK (scroll_test_draw), adjustment);
       g_signal_connect (drawing_area, "configure_event",
-			G_CALLBACK (scroll_test_configure), adj);
+			G_CALLBACK (scroll_test_configure), adjustment);
       g_signal_connect (drawing_area, "scroll_event",
-			G_CALLBACK (scroll_test_scroll), adj);
+			G_CALLBACK (scroll_test_scroll), adjustment);
       
-      g_signal_connect (adj, "value_changed",
+      g_signal_connect (adjustment, "value_changed",
 			G_CALLBACK (scroll_test_adjustment_changed),
 			drawing_area);
       
