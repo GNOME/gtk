@@ -3396,7 +3396,6 @@ gtk_ui_manager_remove_action_group
 gtk_ui_manager_remove_ui
 gtk_ui_manager_set_add_tearoffs
 gtk_unit_get_type G_GNUC_CONST
-gtk_update_type_get_type G_GNUC_CONST
 gtk_vbox_get_type G_GNUC_CONST
 gtk_vbox_new
 gtk_vbutton_box_get_type G_GNUC_CONST
