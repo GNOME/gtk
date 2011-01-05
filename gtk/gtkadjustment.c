@@ -52,6 +52,15 @@
  */
 
 
+struct _GtkAdjustmentPrivate {
+  gdouble lower;
+  gdouble upper;
+  gdouble value;
+  gdouble step_increment;
+  gdouble page_increment;
+  gdouble page_size;
+};
+
 enum
 {
   PROP_0,
@@ -239,17 +248,16 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 		  NULL, NULL,
 		  _gtk_marshal_VOID__VOID,
 		  G_TYPE_NONE, 0);
+
+  g_type_class_add_private (class, sizeof (GtkAdjustmentPrivate));
 }
 
 static void
 gtk_adjustment_init (GtkAdjustment *adjustment)
 {
-  adjustment->value = 0.0;
-  adjustment->lower = 0.0;
-  adjustment->upper = 0.0;
-  adjustment->step_increment = 0.0;
-  adjustment->page_increment = 0.0;
-  adjustment->page_size = 0.0;
+  adjustment->priv = G_TYPE_INSTANCE_GET_PRIVATE (adjustment,
+                                                  GTK_TYPE_ADJUSTMENT,
+                                                  GtkAdjustmentPrivate);
 }
 
 static void
@@ -259,26 +267,27 @@ gtk_adjustment_get_property (GObject    *object,
                              GParamSpec *pspec)
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
+  GtkAdjustmentPrivate *priv = adjustment->priv;
 
   switch (prop_id)
     {
     case PROP_VALUE:
-      g_value_set_double (value, adjustment->value);
+      g_value_set_double (value, priv->value);
       break;
     case PROP_LOWER:
-      g_value_set_double (value, adjustment->lower);
+      g_value_set_double (value, priv->lower);
       break;
     case PROP_UPPER:
-      g_value_set_double (value, adjustment->upper);
+      g_value_set_double (value, priv->upper);
       break;
     case PROP_STEP_INCREMENT:
-      g_value_set_double (value, adjustment->step_increment);
+      g_value_set_double (value, priv->step_increment);
       break;
     case PROP_PAGE_INCREMENT:
-      g_value_set_double (value, adjustment->page_increment);
+      g_value_set_double (value, priv->page_increment);
       break;
     case PROP_PAGE_SIZE:
-      g_value_set_double (value, adjustment->page_size);
+      g_value_set_double (value, priv->page_size);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -294,6 +303,7 @@ gtk_adjustment_set_property (GObject      *object,
 {
   GtkAdjustment *adjustment = GTK_ADJUSTMENT (object);
   gdouble double_value = g_value_get_double (value);
+  GtkAdjustmentPrivate *priv = adjustment->priv;
 
   switch (prop_id)
     {
@@ -301,19 +311,19 @@ gtk_adjustment_set_property (GObject      *object,
       gtk_adjustment_set_value (adjustment, double_value);
       break;
     case PROP_LOWER:
-      adjustment->lower = double_value;
+      priv->lower = double_value;
       break;
     case PROP_UPPER:
-      adjustment->upper = double_value;
+      priv->upper = double_value;
       break;
     case PROP_STEP_INCREMENT:
-      adjustment->step_increment = double_value;
+      priv->step_increment = double_value;
       break;
     case PROP_PAGE_INCREMENT:
-      adjustment->page_increment = double_value;
+      priv->page_increment = double_value;
       break;
     case PROP_PAGE_SIZE:
-      adjustment->page_size = double_value;
+      priv->page_size = double_value;
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -397,7 +407,7 @@ gtk_adjustment_get_value (GtkAdjustment *adjustment)
 {
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->value;
+  return adjustment->priv->value;
 }
 
 /**
@@ -416,17 +426,21 @@ void
 gtk_adjustment_set_value (GtkAdjustment *adjustment,
 			  gdouble        value)
 {
+  GtkAdjustmentPrivate *priv;
+  
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  priv = adjustment->priv;
 
   /* don't use CLAMP() so we don't end up below lower if upper - page_size
    * is smaller than lower
    */
-  value = MIN (value, adjustment->upper - adjustment->page_size);
-  value = MAX (value, adjustment->lower);
+  value = MIN (value, priv->upper - priv->page_size);
+  value = MAX (value, priv->lower);
 
-  if (value != adjustment->value)
+  if (value != priv->value)
     {
-      adjustment->value = value;
+      priv->value = value;
 
       gtk_adjustment_value_changed (adjustment);
     }
@@ -447,7 +461,7 @@ gtk_adjustment_get_lower (GtkAdjustment *adjustment)
 {
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->lower;
+  return adjustment->priv->lower;
 }
 
 /**
@@ -477,7 +491,7 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (lower != adjustment->lower)
+  if (lower != adjustment->priv->lower)
     g_object_set (adjustment, "lower", lower, NULL);
 }
 
@@ -496,7 +510,7 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
 {
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->upper;
+  return adjustment->priv->upper;
 }
 
 /**
@@ -522,7 +536,7 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (upper != adjustment->upper)
+  if (upper != adjustment->priv->upper)
     g_object_set (adjustment, "upper", upper, NULL);
 }
 
@@ -541,7 +555,7 @@ gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
 {
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->step_increment;
+  return adjustment->priv->step_increment;
 }
 
 /**
@@ -563,7 +577,7 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (step_increment != adjustment->step_increment)
+  if (step_increment != adjustment->priv->step_increment)
     g_object_set (adjustment, "step-increment", step_increment, NULL);
 }
 
@@ -582,7 +596,7 @@ gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
 {
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->page_increment;
+  return adjustment->priv->page_increment;
 }
 
 /**
@@ -604,7 +618,7 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (page_increment != adjustment->page_increment)
+  if (page_increment != adjustment->priv->page_increment)
     g_object_set (adjustment, "page-increment", page_increment, NULL);
 }
 
@@ -623,7 +637,7 @@ gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
 {
   g_return_val_if_fail (GTK_IS_ADJUSTMENT (adjustment), 0.0);
 
-  return adjustment->page_size;
+  return adjustment->priv->page_size;
 }
 
 /**
@@ -645,7 +659,7 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  if (page_size != adjustment->page_size)
+  if (page_size != adjustment->priv->page_size)
     g_object_set (adjustment, "page-size", page_size, NULL);
 }
 
@@ -676,10 +690,13 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
                           gdouble        page_increment,
                           gdouble        page_size)
 {
+  GtkAdjustmentPrivate *priv;
   gboolean value_changed = FALSE;
   guint64 old_stamp = adjustment_changed_stamp;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+
+  priv = adjustment->priv;
 
   g_object_freeze_notify (G_OBJECT (adjustment));
 
@@ -697,12 +714,12 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
   value = MIN (value, upper - page_size);
   value = MAX (value, lower);
 
-  if (value != adjustment->value)
+  if (value != priv->value)
     {
       /* set value manually to make sure "changed" is emitted with the
        * new value in place and is emitted before "value-changed"
        */
-      adjustment->value = value;
+      priv->value = value;
       value_changed = TRUE;
     }
 
@@ -766,23 +783,26 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 			   gdouble        lower,
 			   gdouble        upper)
 {
+  GtkAdjustmentPrivate *priv;
   gboolean need_emission;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
 
-  lower = CLAMP (lower, adjustment->lower, adjustment->upper);
-  upper = CLAMP (upper, adjustment->lower, adjustment->upper);
+  priv = adjustment->priv;
+
+  lower = CLAMP (lower, priv->lower, priv->upper);
+  upper = CLAMP (upper, priv->lower, priv->upper);
 
   need_emission = FALSE;
 
-  if (adjustment->value + adjustment->page_size < upper)
+  if (priv->value + priv->page_size < upper)
     {
-      adjustment->value = upper - adjustment->page_size;
+      priv->value = upper - priv->page_size;
       need_emission = TRUE;
     }
-  if (adjustment->value > lower)
+  if (priv->value > lower)
     {
-      adjustment->value = lower;
+      priv->value = lower;
       need_emission = TRUE;
     }
 

@@ -43,8 +43,9 @@ G_BEGIN_DECLS
 #define GTK_ADJUSTMENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ADJUSTMENT, GtkAdjustmentClass))
 
 
-typedef struct _GtkAdjustment	    GtkAdjustment;
-typedef struct _GtkAdjustmentClass  GtkAdjustmentClass;
+typedef struct _GtkAdjustment	      GtkAdjustment;
+typedef struct _GtkAdjustmentPrivate  GtkAdjustmentPrivate;
+typedef struct _GtkAdjustmentClass    GtkAdjustmentClass;
 
 /**
  * GtkAdjustment:
@@ -66,12 +67,7 @@ struct _GtkAdjustment
 {
   GInitiallyUnowned parent_instance;
 
-  gdouble GSEAL (lower);
-  gdouble GSEAL (upper);
-  gdouble GSEAL (value);
-  gdouble GSEAL (step_increment);
-  gdouble GSEAL (page_increment);
-  gdouble GSEAL (page_size);
+  GtkAdjustmentPrivate *priv;
 };
 
 struct _GtkAdjustmentClass
