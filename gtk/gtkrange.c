@@ -1181,16 +1181,19 @@ gtk_range_set_increments (GtkRange *range,
                           gdouble   step,
                           gdouble   page)
 {
-  GtkRangePrivate *priv;
+  GtkAdjustment *adjustment;
 
   g_return_if_fail (GTK_IS_RANGE (range));
 
-  priv = range->priv;
+  adjustment = range->priv->adjustment;
 
-  priv->adjustment->step_increment = step;
-  priv->adjustment->page_increment = page;
-
-  gtk_adjustment_changed (priv->adjustment);
+  gtk_adjustment_configure (adjustment,
+                            gtk_adjustment_get_value (adjustment),
+                            gtk_adjustment_get_lower (adjustment),
+                            gtk_adjustment_get_upper (adjustment),
+                            step,
+                            page,
+                            gtk_adjustment_get_page_size (adjustment));
 }
 
 /**
@@ -1209,24 +1212,27 @@ gtk_range_set_range (GtkRange *range,
                      gdouble   max)
 {
   GtkRangePrivate *priv;
+  GtkAdjustment *adjustment;
   gdouble value;
   
   g_return_if_fail (GTK_IS_RANGE (range));
   g_return_if_fail (min <= max);
 
   priv = range->priv;
+  adjustment = priv->adjustment;
 
-  priv->adjustment->lower = min;
-  priv->adjustment->upper = max;
-
-  value = priv->adjustment->value;
-
+  value = gtk_adjustment_get_value (adjustment);
   if (priv->restrict_to_fill_level)
-    value = MIN (value, MAX (priv->adjustment->lower,
+    value = MIN (value, MAX (gtk_adjustment_get_lower (adjustment),
                              priv->fill_level));
 
-  gtk_adjustment_set_value (priv->adjustment, value);
-  gtk_adjustment_changed (priv->adjustment);
+  gtk_adjustment_configure (adjustment,
+                            value,
+                            min,
+                            max,
+                            gtk_adjustment_get_step_increment (adjustment),
+                            gtk_adjustment_get_page_increment (adjustment),
+                            gtk_adjustment_get_page_size (adjustment));
 }
 
 /**
