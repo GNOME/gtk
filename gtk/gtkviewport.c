@@ -706,10 +706,10 @@ gtk_viewport_realize (GtkWidget *widget)
                                       &attributes, attributes_mask);
   gdk_window_set_user_data (priv->view_window, viewport);
 
-  attributes.x = - hadjustment->value;
-  attributes.y = - vadjustment->value;
-  attributes.width = hadjustment->upper;
-  attributes.height = vadjustment->upper;
+  attributes.x = - gtk_adjustment_get_value (hadjustment);
+  attributes.y = - gtk_adjustment_get_value (vadjustment);
+  attributes.width = gtk_adjustment_get_upper (hadjustment);
+  attributes.height = gtk_adjustment_get_upper (vadjustment);
   
   attributes.event_mask = event_mask;
 
@@ -847,8 +847,8 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
   
   child_allocation.x = 0;
   child_allocation.y = 0;
-  child_allocation.width = hadjustment->upper;
-  child_allocation.height = vadjustment->upper;
+  child_allocation.width = gtk_adjustment_get_upper (hadjustment);
+  child_allocation.height = gtk_adjustment_get_upper (vadjustment);
   if (gtk_widget_get_realized (widget))
     {
       GtkAllocation view_allocation;
@@ -866,8 +866,8 @@ gtk_viewport_size_allocate (GtkWidget     *widget,
 			      view_allocation.width,
 			      view_allocation.height);
       gdk_window_move_resize (priv->bin_window,
-                              - hadjustment->value,
-                              - vadjustment->value,
+                              - gtk_adjustment_get_value (hadjustment),
+                              - gtk_adjustment_get_value (vadjustment),
                               child_allocation.width,
                               child_allocation.height);
     }
@@ -899,8 +899,8 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
       gint new_x, new_y;
 
       gdk_window_get_position (priv->bin_window, &old_x, &old_y);
-      new_x = - hadjustment->value;
-      new_y = - vadjustment->value;
+      new_x = - gtk_adjustment_get_value (hadjustment);
+      new_y = - gtk_adjustment_get_value (vadjustment);
 
       if (new_x != old_x || new_y != old_y)
 	{
