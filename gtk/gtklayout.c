@@ -878,8 +878,8 @@ gtk_layout_realize (GtkWidget *widget)
 
   gtk_widget_get_allocation (widget, &allocation);
 
-  attributes.x = - priv->hadjustment->value,
-  attributes.y = - priv->vadjustment->value;
+  attributes.x = - gtk_adjustment_get_value (priv->hadjustment),
+  attributes.y = - gtk_adjustment_get_value (priv->vadjustment);
   attributes.width = MAX (priv->width, allocation.width);
   attributes.height = MAX (priv->height, allocation.height);
   attributes.event_mask = GDK_EXPOSURE_MASK | GDK_SCROLL_MASK | 
@@ -1112,8 +1112,8 @@ gtk_layout_adjustment_changed (GtkAdjustment *adjustment,
   if (gtk_widget_get_realized (GTK_WIDGET (layout)))
     {
       gdk_window_move (priv->bin_window,
-		       - priv->hadjustment->value,
-		       - priv->vadjustment->value);
+		       - gtk_adjustment_get_value (priv->hadjustment),
+		       - gtk_adjustment_get_value (priv->vadjustment));
 
       gdk_window_process_updates (priv->bin_window, TRUE);
     }
