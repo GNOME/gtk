@@ -529,7 +529,7 @@ pattern_hadj_changed (GtkAdjustment *adjustment,
 		      GtkWidget     *darea)
 {
   gint *old_value = g_object_get_data (G_OBJECT (adjustment), "old-value");
-  gint new_value = adjustment->value;
+  gint new_value = gtk_adjustment_get_value (adjustment);
 
   if (gtk_widget_get_realized (darea))
     {
@@ -544,7 +544,7 @@ pattern_vadj_changed (GtkAdjustment *adjustment,
 		      GtkWidget *darea)
 {
   gint *old_value = g_object_get_data (G_OBJECT (adjustment), "old-value");
-  gint new_value = adjustment->value;
+  gint new_value = gtk_adjustment_get_value (adjustment);
 
   if (gtk_widget_get_realized (darea))
     {
@@ -9089,13 +9089,13 @@ scroll_test_draw (GtkWidget     *widget,
   imin = (clip.x) / 10;
   imax = (clip.x + clip.width + 9) / 10;
 
-  jmin = ((int)adjustment->value + clip.y) / 10;
-  jmax = ((int)adjustment->value + clip.y + clip.height + 9) / 10;
+  jmin = ((int)gtk_adjustment_get_value (adjustment) + clip.y) / 10;
+  jmax = ((int)gtk_adjustment_get_value (adjustment) + clip.y + clip.height + 9) / 10;
 
   for (i=imin; i<imax; i++)
     for (j=jmin; j<jmax; j++)
       if ((i+j) % 2)
-	cairo_rectangle (cr, 10*i, 10*j - (int)adjustment->value, 1+i%10, 1+j%10);
+	cairo_rectangle (cr, 10*i, 10*j - (int)gtk_adjustment_get_value (adjustment), 1+i%10, 1+j%10);
 
   cairo_fill (cr);
 
@@ -9106,10 +9106,10 @@ static gint
 scroll_test_scroll (GtkWidget *widget, GdkEventScroll *event,
 		    GtkAdjustment *adjustment)
 {
-  gdouble new_value = adjustment->value + ((event->direction == GDK_SCROLL_UP) ?
-				    -adjustment->page_increment / 2:
-				    adjustment->page_increment / 2);
-  new_value = CLAMP (new_value, adjustment->lower, adjustment->upper - adjustment->page_size);
+  gdouble new_value = gtk_adjustment_get_value (adjustment) + ((event->direction == GDK_SCROLL_UP) ?
+				    -gtk_adjustment_get_page_increment (adjustment) / 2:
+				    gtk_adjustment_get_page_increment (adjustment) / 2);
+  new_value = CLAMP (new_value, gtk_adjustment_get_lower (adjustment), gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_page_size (adjustment));
   gtk_adjustment_set_value (adjustment, new_value);  
   
   return TRUE;
@@ -9122,10 +9122,13 @@ scroll_test_configure (GtkWidget *widget, GdkEventConfigure *event,
   GtkAllocation allocation;
 
   gtk_widget_get_allocation (widget, &allocation);
-  adjustment->page_increment = 0.9 * allocation.height;
-  adjustment->page_size = allocation.height;
-
-  g_signal_emit_by_name (adjustment, "changed");
+  gtk_adjustment_configure (adjustment,
+                            gtk_adjustment_get_value (adjustment),
+                            gtk_adjustment_get_lower (adjustment),
+                            gtk_adjustment_get_upper (adjustment),
+                            0.1 * allocation.height,
+                            0.9 * allocation.height,
+                            allocation.height);
 }
 
 static void
@@ -9134,8 +9137,8 @@ scroll_test_adjustment_changed (GtkAdjustment *adjustment, GtkWidget *widget)
   GdkWindow *window;
   gint dy;
 
-  dy = scroll_test_pos - (int)adjustment->value;
-  scroll_test_pos = adjustment->value;
+  dy = scroll_test_pos - (int)gtk_adjustment_get_value (adjustment);
+  scroll_test_pos = gtk_adjustment_get_value (adjustment);
 
   if (!gtk_widget_is_drawable (widget))
     return;
