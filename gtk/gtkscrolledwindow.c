@@ -1332,27 +1332,27 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
 
   if (adjustment)
     {
-      gdouble value = adjustment->value;
+      gdouble value = gtk_adjustment_get_value (adjustment);
       
       switch (scroll)
 	{
 	case GTK_SCROLL_STEP_FORWARD:
-	  value += adjustment->step_increment;
+	  value += gtk_adjustment_get_step_increment (adjustment);
 	  break;
 	case GTK_SCROLL_STEP_BACKWARD:
-	  value -= adjustment->step_increment;
+	  value -= gtk_adjustment_get_step_increment (adjustment);
 	  break;
 	case GTK_SCROLL_PAGE_FORWARD:
-	  value += adjustment->page_increment;
+	  value += gtk_adjustment_get_page_increment (adjustment);
 	  break;
 	case GTK_SCROLL_PAGE_BACKWARD:
-	  value -= adjustment->page_increment;
+	  value -= gtk_adjustment_get_page_increment (adjustment);
 	  break;
 	case GTK_SCROLL_START:
-	  value = adjustment->lower;
+	  value = gtk_adjustment_get_lower (adjustment);
 	  break;
 	case GTK_SCROLL_END:
-	  value = adjustment->upper;
+	  value = gtk_adjustment_get_upper (adjustment);
 	  break;
 	default:
 	  g_assert_not_reached ();
@@ -1842,12 +1842,12 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   if (range && gtk_widget_get_visible (range))
     {
-      GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (range));
+      GtkAdjustment *adjustment = gtk_range_get_adjustment (GTK_RANGE (range));
       gdouble delta;
 
       delta = _gtk_range_get_wheel_delta (GTK_RANGE (range), event->direction);
 
-      gtk_adjustment_set_value (adj, adj->value + delta);
+      gtk_adjustment_set_value (adjustment, gtk_adjustment_get_value (adjustment) + delta);
 
       return TRUE;
     }
@@ -1915,8 +1915,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  gboolean visible;
 
 	  visible = priv->hscrollbar_visible;
-	  priv->hscrollbar_visible = (adjustment->upper - adjustment->lower >
-					      adjustment->page_size);
+	  priv->hscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
+				      gtk_adjustment_get_page_size (adjustment));
 
 	  if (priv->hscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
@@ -1930,8 +1930,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  gboolean visible;
 
 	  visible = priv->vscrollbar_visible;
-	  priv->vscrollbar_visible = (adjustment->upper - adjustment->lower >
-					      adjustment->page_size);
+	  priv->vscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
+			              gtk_adjustment_get_page_size (adjustment));
 
 	  if (priv->vscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
