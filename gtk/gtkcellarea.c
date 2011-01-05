@@ -810,7 +810,7 @@ gtk_cell_area_class_init (GtkCellAreaClass *class)
                                    ("edit-widget",
                                     P_("Edit Widget"),
                                     P_("The widget currently editing the edited cell"),
-                                    GTK_TYPE_CELL_RENDERER,
+                                    GTK_TYPE_CELL_EDITABLE,
                                     G_PARAM_READABLE));
 
   /* Pool for Cell Properties */
