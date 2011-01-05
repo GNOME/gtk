@@ -27,6 +27,9 @@
  *  - Using GtkDialog
  */
 #include <string.h>
+
+#undef GDK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include "demo-common.h"
 
