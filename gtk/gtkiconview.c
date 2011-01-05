@@ -3122,6 +3122,13 @@ gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
   AtkObject *item_obj;
   AtkObject *cursor_item_obj;
 
+  /* When hitting this path from keynav, the focus cell is
+   * already set, we dont need to notify the atk object
+   * but we still need to queue the draw here (in the case
+   * that the focus cell changes but not the cursor item).
+   */
+  gtk_icon_view_queue_draw_item (icon_view, item);
+
   if (icon_view->priv->cursor_item == item &&
       (cursor_cell == NULL || cursor_cell == gtk_cell_area_get_focus_cell (icon_view->priv->cell_area)))
     return;
@@ -3147,8 +3154,6 @@ gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
       if (!gtk_cell_area_get_focus_cell (icon_view->priv->cell_area))
 	gtk_cell_area_focus (icon_view->priv->cell_area, GTK_DIR_TAB_FORWARD);
     }
-
-  gtk_icon_view_queue_draw_item (icon_view, item);
   
   /* Notify that accessible focus object has changed */
   item_obj = atk_object_ref_accessible_child (obj, item->index);
