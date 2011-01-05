@@ -415,7 +415,12 @@ gtk_test_slider_set_perc (GtkWidget      *widget,
   else if (GTK_IS_SPIN_BUTTON (widget))
     adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
   if (adjustment)
-    gtk_adjustment_set_value (adjustment, adjustment->lower + (adjustment->upper - adjustment->lower - adjustment->page_size) * percentage * 0.01);
+    gtk_adjustment_set_value (adjustment, 
+                              gtk_adjustment_get_lower (adjustment) 
+                              + (gtk_adjustment_get_upper (adjustment) 
+                                 - gtk_adjustment_get_lower (adjustment) 
+                                 - gtk_adjustment_get_page_size (adjustment))
+                                * percentage * 0.01);
 }
 
 /**
@@ -428,7 +433,7 @@ gtk_test_slider_set_perc (GtkWidget      *widget,
  * of the adjustment belonging to @widget, and is not a percentage
  * as passed in to gtk_test_slider_set_perc().
  *
- * Returns: adjustment->value for an adjustment belonging to @widget.
+ * Returns: gtk_adjustment_get_value (adjustment) for an adjustment belonging to @widget.
  *
  * Since: 2.14
  **/
@@ -440,7 +445,7 @@ gtk_test_slider_get_value (GtkWidget *widget)
     adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
   else if (GTK_IS_SPIN_BUTTON (widget))
     adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-  return adjustment ? adjustment->value : 0;
+  return adjustment ? gtk_adjustment_get_value (adjustment) : 0;
 }
 
 /**
