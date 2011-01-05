@@ -3874,7 +3874,6 @@ changed_handler (GtkTextLayout     *layout,
   
   if (old_height != new_height)
     {
-      gboolean yoffset_changed = FALSE;
       GSList *tmp_list;
       int new_first_para_top;
       int old_first_para_top;
@@ -3900,14 +3899,7 @@ changed_handler (GtkTextLayout     *layout,
         {
           priv->yoffset += new_first_para_top - old_first_para_top;
           
-          text_view->priv->vadjustment->value = priv->yoffset;
-          yoffset_changed = TRUE;
-        }
-
-      if (yoffset_changed)
-        {
-          DV(g_print ("Changing scroll position (%s)\n", G_STRLOC));
-          gtk_adjustment_value_changed (text_view->priv->vadjustment);
+          gtk_adjustment_set_value (text_view->priv->vadjustment, priv->yoffset);
         }
 
       /* FIXME be smarter about which anchored widgets we update */
@@ -5520,22 +5512,22 @@ gtk_text_view_move_viewport (GtkTextView     *text_view,
     {
     case GTK_SCROLL_STEPS:
     case GTK_SCROLL_HORIZONTAL_STEPS:
-      increment = adjustment->step_increment;
+      increment = gtk_adjustment_get_step_increment (adjustment);
       break;
     case GTK_SCROLL_PAGES:
     case GTK_SCROLL_HORIZONTAL_PAGES:
-      increment = adjustment->page_increment;
+      increment = gtk_adjustment_get_page_increment (adjustment);
       break;
     case GTK_SCROLL_ENDS:
     case GTK_SCROLL_HORIZONTAL_ENDS:
-      increment = adjustment->upper - adjustment->lower;
+      increment = gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment);
       break;
     default:
       increment = 0.0;
       break;
     }
 
-  return set_adjustment_clamped (adjustment, adjustment->value + count * increment);
+  return set_adjustment_clamped (adjustment, gtk_adjustment_get_value (adjustment) + count * increment);
 }
 
 static void
