@@ -1,29 +1,29 @@
 # GTK+ eesti keele tõlge.
 # Estonian translation of GTK+.
 #
-# Copyright (C) 1999-2007 Free Software Foundation, Inc.
-# Copyright (C) 2007-2010 The GNOME Project.
+# Copyright (C) 1999–2007 Free Software Foundation, Inc.
+# Copyright (C) 2007–2011 The GNOME Project.
 # This file is distributed under the same license as the gtk package.
 #
 # Lauris Kaplinski <lauris ariman ee>, 1999.
-# Tõivo Leedjärv <toivo linux ee>, 2002-2004.
+# Tõivo Leedjärv <toivo linux ee>, 2002–2004.
 # Priit Laes <amd tt ee>, 2004, 2005.
-# Ivar Smolin <okul linux ee>, 2005-2010.
-# Mattias Põldaru <mahfiaz gmail com>, 2009-2010.
+# Ivar Smolin <okul linux ee>, 2005–2011.
+# Mattias Põldaru <mahfiaz gmail com>, 2009–2010.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
-"POT-Creation-Date: 2010-12-19 10:13+0000\n"
-"PO-Revision-Date: 2010-11-30 14:03+0200\n"
+"POT-Creation-Date: 2011-01-05 14:44+0000\n"
+"PO-Revision-Date: 2011-01-05 17:06+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
-"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: et\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, c-format
@@ -57,14 +57,6 @@ msgstr "Kasutatav X'i kuva"
 #. Placeholder in --display=DISPLAY in --help output
 msgid "DISPLAY"
 msgstr "KUVA"
-
-#. Description of --screen=SCREEN in --help output
-msgid "X screen to use"
-msgstr "Kasutatav X'i ekraan"
-
-#. Placeholder in --screen=SCREEN in --help output
-msgid "SCREEN"
-msgstr "EKRAAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
 msgid "GDK debugging flags to set"
@@ -267,10 +259,6 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Avamine: %d kirje"
 msgstr[1] "Avamine: %d kirjet"
 
-#. Description of --sync in --help output
-msgid "Make X calls synchronous"
-msgstr "X'i kutsungid sünkroonseks"
-
 #. Translators: this is the license preamble; the string at the end
 #. * contains the URL of the license.
 #.
@@ -379,6 +367,69 @@ msgstr "Tühik"
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
+
+msgid "Other application..."
+msgstr "Muu rakendus..."
+
+msgid "Failed to look for applications online"
+msgstr ""
+
+msgid "Find applications online"
+msgstr ""
+
+msgid "Could not run application"
+msgstr "Rakendust pole võimalik käivitada"
+
+#, c-format
+msgid "Could not find '%s'"
+msgstr ""
+
+msgid "Could not find application"
+msgstr "Rakendust pole võimalik leida"
+
+#. Translators: %s is a filename
+#, c-format
+msgid "Select an application to open \"%s\""
+msgstr "Vali faili \"%s\" avamiseks rakendus"
+
+#, c-format
+msgid "No applications available to open \"%s\""
+msgstr "Puudub rakendus faili \"%s\" avamiseks"
+
+#. Translators: %s is a file type description
+#, c-format
+msgid "Select an application for \"%s\" files"
+msgstr "Vali \"%s\" liiki failide avamiseks rakendus"
+
+#, c-format
+msgid "No applications available to open \"%s\" files"
+msgstr "Puudub rakendus \"%s\" liiki failide avamiseks"
+
+msgid ""
+"Click \"Show other applications\", for more options, or \"Find applications "
+"online\" to install a new application"
+msgstr ""
+
+msgid "Forget association"
+msgstr "Unusta seos"
+
+msgid "Show other applications"
+msgstr "Näita teisi rakendusi"
+
+msgid "_Open"
+msgstr "_Ava"
+
+msgid "Default Application"
+msgstr "Vaikimisi rakendus"
+
+msgid "Recommended Applications"
+msgstr "Soovitatavad rakendused"
+
+msgid "Related Applications"
+msgstr "Seotud rakendused"
+
+msgid "Other Applications"
+msgstr "Muud rakendused"
 
 #, c-format
 msgid "Invalid type function on line %d: '%s'"
@@ -1564,7 +1615,7 @@ msgstr "Printimine"
 
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
-msgstr "Ei leia pildifaili otsingurajalt 'pixmap_path': \"%s\""
+msgstr "Pildifaili pole otsingurajalt 'pixmap_path' võimalik leida: \"%s\""
 
 #, c-format
 msgid "This function is not implemented for widgets of class '%s'"
@@ -2210,10 +2261,6 @@ msgstr "ZWJ Null-laiusega ü_hendaja"
 
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "ZWJ Null-laiusega _mitteühendaja"
-
-#, c-format
-msgid "Unable to locate theme engine in module_path: \"%s\","
-msgstr "Ei leia teemamootorit otsingurajalt 'module_path': \"%s\","
 
 #, c-format
 msgid "Unexpected start tag '%s' on line %d char %d"
@@ -3397,6 +3444,15 @@ msgid ""
 msgstr ""
 "Tõrge pildifaili '%s' laadimisel: põhjus teadmata, arvatavasti on pildifail "
 "rikutud"
+
+#~ msgid "X screen to use"
+#~ msgstr "Kasutatav X'i ekraan"
+
+#~ msgid "SCREEN"
+#~ msgstr "EKRAAN"
+
+#~ msgid "Make X calls synchronous"
+#~ msgstr "X'i kutsungid sünkroonseks"
 
 #~ msgid "Credits"
 #~ msgstr "Autorid"
