@@ -1736,17 +1736,14 @@ get_size (GtkCellRenderer    *cell,
 
   pango_layout_get_pixel_extents (layout, NULL, &rect);
 
-  if (height)
-    *height = ypad * 2 + rect.height;
-
-  if (width)
-    *width = xpad * 2 + rect.x + rect.width;
-
   if (cell_area)
     {
       gfloat xalign, yalign;
 
       gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
+
+      rect.height = MIN (rect.height, cell_area->height - 2 * ypad);
+      rect.width  = MIN (rect.width, cell_area->width - (2 * xpad) - rect.x);
 
       if (x_offset)
 	{
@@ -1769,6 +1766,12 @@ get_size (GtkCellRenderer    *cell,
       if (x_offset) *x_offset = 0;
       if (y_offset) *y_offset = 0;
     }
+
+  if (height)
+    *height = ypad * 2 + rect.height;
+
+  if (width)
+    *width = xpad * 2 + rect.x + rect.width;
 
   g_object_unref (layout);
 }
