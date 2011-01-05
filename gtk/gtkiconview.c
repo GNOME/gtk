@@ -2892,30 +2892,6 @@ gtk_icon_view_layout_single_row (GtkIconView *icon_view,
 }
 
 static void
-gtk_icon_view_set_adjustment_upper (GtkAdjustment *adj,
-				    gdouble        upper)
-{
-  if (upper != adj->upper)
-    {
-      gdouble min = MAX (0.0, upper - adj->page_size);
-      gboolean value_changed = FALSE;
-      
-      adj->upper = upper;
-
-      if (adj->value > min)
-	{
-	  adj->value = min;
-	  value_changed = TRUE;
-	}
-      
-      gtk_adjustment_changed (adj);
-      
-      if (value_changed)
-	gtk_adjustment_value_changed (adj);
-    }
-}
-
-static void
 gtk_icon_view_layout (GtkIconView *icon_view)
 {
   GtkAllocation allocation;
@@ -2983,10 +2959,8 @@ gtk_icon_view_layout (GtkIconView *icon_view)
       size_changed = TRUE;
     }
 
-  gtk_icon_view_set_adjustment_upper (icon_view->priv->hadjustment, 
-				      icon_view->priv->width);
-  gtk_icon_view_set_adjustment_upper (icon_view->priv->vadjustment, 
-				      icon_view->priv->height);
+  gtk_icon_view_set_hadjustment_values (icon_view);
+  gtk_icon_view_set_vadjustment_values (icon_view);
 
   if (size_changed)
     gtk_widget_queue_resize_no_redraw (widget);
