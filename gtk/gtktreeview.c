@@ -11669,11 +11669,13 @@ gtk_tree_view_set_headers_visible (GtkTreeView *tree_view,
     }
 
   gtk_widget_get_allocation (GTK_WIDGET (tree_view), &allocation);
-  tree_view->priv->vadjustment->page_size = allocation.height - gtk_tree_view_get_effective_header_height (tree_view);
-  tree_view->priv->vadjustment->page_increment = (allocation.height - gtk_tree_view_get_effective_header_height (tree_view)) / 2;
-  tree_view->priv->vadjustment->lower = 0;
-  tree_view->priv->vadjustment->upper = tree_view->priv->height;
-  gtk_adjustment_changed (tree_view->priv->vadjustment);
+  gtk_adjustment_configure (tree_view->priv->vadjustment,
+                            gtk_adjustment_get_value (tree_view->priv->vadjustment),
+                            0,
+                            tree_view->priv->height,
+                            gtk_adjustment_get_step_increment (tree_view->priv->vadjustment),
+                            (allocation.height - gtk_tree_view_get_effective_header_height (tree_view)) / 2,
+                            allocation.height - gtk_tree_view_get_effective_header_height (tree_view));
 
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 
