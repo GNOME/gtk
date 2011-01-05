@@ -2943,7 +2943,7 @@ gtk_cell_area_activate (GtkCellArea         *area,
 /**
  * gtk_cell_area_set_focus_cell:
  * @area: a #GtkCellArea
- * @focus_cell: the #GtkCellRenderer to give focus to
+ * @renderer: the #GtkCellRenderer to give focus to
  *
  * This is generally called from #GtkCellArea implementations
  * either gtk_cell_area_grab_focus() or gtk_cell_area_update_focus()

@@ -1570,16 +1570,11 @@ gtk_cell_renderer_get_preferred_height_for_width (GtkCellRenderer *cell,
  * gtk_cell_renderer_get_preferred_size:
  * @cell: a #GtkCellRenderer instance
  * @widget: the #GtkWidget this cell will be rendering to
- * @request_natural: Whether to base the contextual request off of the
- *     base natural or the base minimum
  * @minimum_size: (out) (allow-none): location for storing the minimum size, or %NULL
  * @natural_size: (out) (allow-none): location for storing the natural size, or %NULL
  *
  * Retrieves the minimum and natural size of a cell taking
  * into account the widget's preference for height-for-width management.
- *
- * If request_natural is specified, the non-contextual natural value will
- * be used to make the contextual request; otherwise the minimum will be used.
  *
  * Since: 3.0
  */
