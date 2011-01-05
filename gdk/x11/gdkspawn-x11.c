@@ -76,7 +76,7 @@ set_environment (gpointer user_data)
  * Since: 2.4
  *
  * Deprecated: 2.24: This function is being removed in 3.0. Use
- *     either g_spawn() or #GdkAppLaunchContext instead
+ *     either g_spawn_sync(), g_spawn_async(), or #GdkAppLaunchContext instead.
  **/
 gboolean
 gdk_spawn_on_screen (GdkScreen             *screen,
@@ -139,7 +139,7 @@ gdk_spawn_on_screen (GdkScreen             *screen,
  * Since: 2.4
  *
  * Deprecated: 2.24: This function is being removed in 3.0. Use
- *     either g_spawn_with_pipes() or #GdkAppLaunchContext instead
+ *     either g_spawn_async_with_pipes() or #GdkAppLaunchContext instead.
  **/
 gboolean
 gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
@@ -196,7 +196,8 @@ gdk_spawn_on_screen_with_pipes (GdkScreen            *screen,
  * Since: 2.4
  *
  * Deprecated: 2.24: This function is being removed in 3.0. Use
- *     either g_spawn_command_line() or #GdkAppLaunchContext instead
+ *     either g_spawn_command_line_sync(), g_spawn_command_line_async() or 
+ *     #GdkAppLaunchContext instead.
  **/
 gboolean
 gdk_spawn_command_line_on_screen (GdkScreen    *screen,
