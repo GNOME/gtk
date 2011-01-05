@@ -68,6 +68,7 @@ typedef struct {
   GHashTable *child_hash;
   guint old_event_mask;
   GdkScreen *screen;
+  gint ref_count;
 } GdkWindowCache;
 
 /* Structure that holds information about a drag in progress.
@@ -103,7 +104,9 @@ struct _GdkDragContextPrivateX11 {
 
 /* Forward declarations */
 
-static void gdk_window_cache_destroy (GdkWindowCache *cache);
+static GdkWindowCache *gdk_window_cache_get   (GdkScreen      *screen);
+static GdkWindowCache *gdk_window_cache_ref   (GdkWindowCache *cache);
+static void            gdk_window_cache_unref (GdkWindowCache *cache);
 
 static void motif_read_target_table (GdkDisplay *display);
 
@@ -137,6 +140,7 @@ static void   xdnd_manage_source_filter (GdkDragContext *context,
 static void gdk_drag_context_finalize   (GObject              *object);
 
 static GList *contexts;
+static GSList *window_caches;
 
 static const struct {
   const char *atom_name;
@@ -197,9 +201,8 @@ gdk_drag_context_finalize (GObject *object)
   if (context->dest_window)
     g_object_unref (context->dest_window);
 
-  for (tmp_list = private->window_caches; tmp_list; tmp_list = tmp_list->next)
-    gdk_window_cache_destroy (tmp_list->data);
-  g_slist_free (private->window_caches);
+  g_slist_free_full (private->window_caches, (GDestroyNotify)gdk_window_cache_unref);
+  private->window_caches = NULL;
   
   contexts = g_list_remove (contexts, context);
 
@@ -531,6 +534,7 @@ gdk_window_cache_new (GdkScreen *screen)
   result->children = NULL;
   result->child_hash = g_hash_table_new (g_direct_hash, NULL);
   result->screen = screen;
+  result->ref_count = 1;
 
   XGetWindowAttributes (xdisplay, GDK_WINDOW_XWINDOW (root_window), &xwa);
   result->old_event_mask = xwa.your_event_mask;
@@ -591,6 +595,49 @@ gdk_window_cache_new (GdkScreen *screen)
 
   return result;
 }
+
+static GdkWindowCache *
+gdk_window_cache_ref (GdkWindowCache *cache)
+{
+  cache->ref_count += 1;
+
+  return cache;
+}
+
+static void
+gdk_window_cache_unref (GdkWindowCache *cache)
+{
+  g_assert (cache->ref_count > 0);
+
+  cache->ref_count -= 1;
+
+  if (cache->ref_count == 0)
+    {
+      window_caches = g_slist_remove (window_caches, cache);
+      gdk_window_cache_destroy (cache);
+    }
+}
+
+GdkWindowCache *
+gdk_window_cache_get (GdkScreen *screen)
+{
+  GSList *list;
+  GdkWindowCache *cache;
+
+  for (list = window_caches; list; list = list->next)
+    {
+      cache = list->data;
+      if (cache->screen == screen)
+        return gdk_window_cache_ref (cache);
+    }
+
+  cache = gdk_window_cache_new (screen);
+
+  window_caches = g_slist_prepend (window_caches, cache);
+
+  return cache;
+}
+
 
 static void
 gdk_window_cache_destroy (GdkWindowCache *cache)
@@ -3302,7 +3349,7 @@ drag_context_find_window_cache (GdkDragContext  *context,
 	return cache;
     }
 
-  cache = gdk_window_cache_new (screen);
+  cache = gdk_window_cache_get (screen);
   private->window_caches = g_slist_prepend (private->window_caches, cache);
   
   return cache;
