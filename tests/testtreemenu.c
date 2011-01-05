@@ -425,7 +425,7 @@ static void
 tree_menu (void)
 {
   GtkWidget *window, *widget;
-  GtkWidget *menu, *menubar, *vbox, *menuitem;
+  GtkWidget *menubar, *vbox;
   GtkCellArea *area;
   GtkTreeModel *store;
 
