@@ -3100,7 +3100,14 @@ gtk_icon_view_set_cursor_item (GtkIconView     *icon_view,
     }
   icon_view->priv->cursor_item = item;
 
-  gtk_cell_area_set_focus_cell (icon_view->priv->cell_area, cursor_cell);
+  if (cursor_cell)
+    gtk_cell_area_set_focus_cell (icon_view->priv->cell_area, cursor_cell);
+  else
+    {
+      /* Make sure there is a cell in focus initially */
+      if (!gtk_cell_area_get_focus_cell (icon_view->priv->cell_area))
+	gtk_cell_area_focus (icon_view->priv->cell_area, GTK_DIR_TAB_FORWARD);
+    }
 
   gtk_icon_view_queue_draw_item (icon_view, item);
   
@@ -3734,6 +3741,7 @@ gtk_icon_view_move_cursor_up_down (GtkIconView *icon_view,
                                     direction == GTK_DIR_UP ?
                                     GTK_DIR_TAB_BACKWARD :
                                     GTK_DIR_TAB_FORWARD);
+
         }
 
       gtk_cell_area_set_focus_cell (icon_view->priv->cell_area, cell);
@@ -3878,6 +3886,7 @@ gtk_icon_view_move_cursor_left_right (GtkIconView *icon_view,
                                     direction == GTK_DIR_LEFT ?
                                     GTK_DIR_TAB_BACKWARD :
                                     GTK_DIR_TAB_FORWARD);
+
         }
 
       gtk_cell_area_set_focus_cell (icon_view->priv->cell_area, cell);
