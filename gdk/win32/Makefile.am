@@ -25,7 +25,6 @@ EXTRA_DIST += \
 	makefile.msc
 
 libgdk_win32_la_SOURCES = \
-	xcursors.h \
 	gdkcursor-win32.c \
 	gdkdevicemanager-win32.c \
 	gdkdevicemanager-win32.h \
@@ -35,12 +34,9 @@ libgdk_win32_la_SOURCES = \
 	gdkdevice-wintab.h \
 	gdkdisplay-win32.c \
 	gdkdnd-win32.c \
-	gdkdrawable-win32.c \
-	gdkdrawable-win32.h \
 	gdkevents-win32.c \
 	gdkgeometry-win32.c \
 	gdkglobals-win32.c \
-	gdkim-win32.c \
 	gdkinput.c \
 	gdkkeys-win32.c \
 	gdkmain-win32.c \
@@ -48,15 +44,22 @@ libgdk_win32_la_SOURCES = \
 	gdkproperty-win32.c \
 	gdkscreen-win32.c \
 	gdkselection-win32.c \
-	gdkspawn-win32.c \
 	gdktestutils-win32.c \
 	gdkvisual-win32.c \
+	gdkwin32cursor.h \
+	gdkwin32display.h \
+	gdkwin32displaymanager.h \
+	gdkwin32dnd.h \
 	gdkwin32.h \
 	gdkwin32id.c \
+	gdkwin32keys.h \
+	gdkwin32screen.h \
+	gdkwin32window.h \
 	gdkwindow-win32.c \
 	gdkwindow-win32.h \
+	pktdef.h \
 	wintab.h \
-	pktdef.h
+	xcursors.h
 
 libgdkinclude_HEADERS =		\
 	gdkwin32.h
