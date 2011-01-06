@@ -869,7 +869,7 @@ gtktypebuiltins.c: @REBUILD@ $(gtk_public_h_sources) gtktypebuiltins.c.template
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
-gtktypefuncs.c: @REBUILD@ $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
+gtktypefuncs.c: @REBUILD@ stamp-gtktypebuiltins.h $(top_srcdir)/gtk/*.h $(top_srcdir)/gdk/*.h Makefile
 	$(AM_V_GEN) echo '#include <gtk/gtk.h>' > xgen-gtfsrc.c && \
 	  ${CPP} $(DEFS) $(INCLUDES) -DGTK_ENABLE_BROKEN $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) xgen-gtfsrc.c | \
 	  $(GREP) -o '\bg[td]k_[a-zA-Z0-9_]*_get_type\b' | \
@@ -1289,7 +1289,7 @@ GENERATED_ICONS = \
 # need to copy the icons so that we can replace the generated ones with
 # symlinks, even in the readonly srcdir case
 stamp-icons: $(STOCK_ICONS)
-	if [ ! -d stock-icons ]; then 					\
+	$(AM_V_GEN) if [ ! -d stock-icons ]; then 			\
 	  for d in 16 20 24 32 48; do 					\
 	    mkdir -p stock-icons/$$d; 					\
 	  done;								\
