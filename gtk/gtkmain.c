@@ -52,7 +52,7 @@
  *
  * When your callbacks are invoked, you would typically take some action - for
  * example, when an Open button is clicked you might display a
- * #GtkFileSelectionDialog. After a callback finishes, GTK+ will return to the
+ * #GtkFileChooserDialog. After a callback finishes, GTK+ will return to the
  * main loop and await more user input.
  * </para>
  * <example>

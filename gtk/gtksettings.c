@@ -1047,7 +1047,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_ENABLE_TOOLTIPS);
 
   /**
-   * GtkSettings:toolbar-style:
+   * GtkSettings:gtk-toolbar-style:
    *
    * The size of icons in default toolbars.
    */
@@ -1062,7 +1062,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_TOOLBAR_STYLE);
 
   /**
-   * GtkSettings:toolbar-icon-size:
+   * GtkSettings:gtk-toolbar-icon-size:
    *
    * The size of icons in default toolbars.
    */

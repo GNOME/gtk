@@ -915,7 +915,7 @@ gtk_file_chooser_set_local_only (GtkFileChooser *chooser,
 
 /**
  * gtk_file_chooser_get_local_only:
- * @chooser: a #GtkFileChoosre
+ * @chooser: a #GtkFileChooser
  * 
  * Gets whether only local files can be selected in the
  * file selector. See gtk_file_chooser_set_local_only()
@@ -1264,7 +1264,7 @@ gtk_file_chooser_set_current_folder (GtkFileChooser *chooser,
  * Note that this is the folder that the file chooser is currently displaying
  * (e.g. "/home/username/Documents"), which is <emphasis>not the same</emphasis>
  * as the currently-selected folder if the chooser is in
- * %GTK_FILE_CHOOSER_SELECT_FOLDER mode
+ * %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER mode
  * (e.g. "/home/username/Documents/selected-folder/".  To get the
  * currently-selected folder in that mode, use gtk_file_chooser_get_uri() as the
  * usual way to get the selection.
@@ -1568,7 +1568,7 @@ gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
  * Note that this is the folder that the file chooser is currently displaying
  * (e.g. "file:///home/username/Documents"), which is <emphasis>not the same</emphasis>
  * as the currently-selected folder if the chooser is in
- * %GTK_FILE_CHOOSER_SELECT_FOLDER mode
+ * %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER mode
  * (e.g. "file:///home/username/Documents/selected-folder/".  To get the
  * currently-selected folder in that mode, use gtk_file_chooser_get_uri() as the
  * usual way to get the selection.

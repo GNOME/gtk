@@ -94,7 +94,7 @@ gtk_tool_shell_get_orientation (GtkToolShell *shell)
  * @shell: a #GtkToolShell
  *
  * Retrieves whether the tool shell has text, icons, or both. Tool items must
- * not call this function directly, but rely on gtk_tool_item_get_style()
+ * not call this function directly, but rely on gtk_tool_item_get_toolbar_style()
  * instead.
  *
  * Return value: the current style of @shell

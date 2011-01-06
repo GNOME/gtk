@@ -950,11 +950,11 @@ gtk_accel_groups_activate (GObject	  *object,
  * @keyval:    a GDK keyval
  * @modifiers: modifier mask
  * @returns:   %TRUE if the accelerator is valid
- * 
+ *
  * Determines whether a given keyval and modifier mask constitute
- * a valid keyboard accelerator. For example, the #GDK_a keyval
+ * a valid keyboard accelerator. For example, the #GDK_KEY_a keyval
  * plus #GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
- * But, you can't, for instance, use the #GDK_Control_L keyval
+ * But, you can't, for instance, use the #GDK_KEY_Control_L keyval
  * as an accelerator.
  */
 gboolean
@@ -1278,11 +1278,11 @@ gtk_accelerator_parse (const gchar     *accelerator,
  * gtk_accelerator_name:
  * @accelerator_key:  accelerator keyval
  * @accelerator_mods: accelerator modifier mask
- * 
+ *
  * Converts an accelerator keyval and modifier mask
  * into a string parseable by gtk_accelerator_parse().
- * For example, if you pass in #GDK_q and #GDK_CONTROL_MASK,
- * this function returns "&lt;Control&gt;q". 
+ * For example, if you pass in #GDK_KEY_q and #GDK_CONTROL_MASK,
+ * this function returns "&lt;Control&gt;q".
  *
  * If you need to display accelerators in the user interface,
  * see gtk_accelerator_get_label().

@@ -231,7 +231,7 @@
  * give every row it's minimum or natural height or, if the model content
  * is expected to fit inside the layouting widget without scrolling, it
  * would make sense to calculate the allocation for each row at
- * #GtkWidget.size_allocate() time using gtk_distribute_natural_allocation().
+ * #GtkWidget::size-allocate time using gtk_distribute_natural_allocation().
  * </para>
  * </refsect2>
  * <refsect2 id="cell-area-events-and-focus">
