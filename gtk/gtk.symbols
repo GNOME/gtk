@@ -3135,6 +3135,7 @@ gtk_tree_model_iter_n_children
 gtk_tree_model_iter_next
 gtk_tree_model_iter_nth_child
 gtk_tree_model_iter_parent
+gtk_tree_model_iter_previous
 gtk_tree_model_ref_node
 gtk_tree_model_row_changed
 gtk_tree_model_row_deleted

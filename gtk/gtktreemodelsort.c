@@ -189,6 +189,8 @@ static void         gtk_tree_model_sort_get_value          (GtkTreeModel        
                                                             GValue                *value);
 static gboolean     gtk_tree_model_sort_iter_next          (GtkTreeModel          *tree_model,
                                                             GtkTreeIter           *iter);
+static gboolean     gtk_tree_model_sort_iter_previous      (GtkTreeModel          *tree_model,
+                                                            GtkTreeIter           *iter);
 static gboolean     gtk_tree_model_sort_iter_children      (GtkTreeModel          *tree_model,
                                                             GtkTreeIter           *iter,
                                                             GtkTreeIter           *parent);
@@ -325,6 +327,7 @@ gtk_tree_model_sort_tree_model_init (GtkTreeModelIface *iface)
   iface->get_path = gtk_tree_model_sort_get_path;
   iface->get_value = gtk_tree_model_sort_get_value;
   iface->iter_next = gtk_tree_model_sort_iter_next;
+  iface->iter_previous = gtk_tree_model_sort_iter_previous;
   iface->iter_children = gtk_tree_model_sort_iter_children;
   iface->iter_has_child = gtk_tree_model_sort_iter_has_child;
   iface->iter_n_children = gtk_tree_model_sort_iter_n_children;
@@ -1076,6 +1079,31 @@ gtk_tree_model_sort_iter_next (GtkTreeModel *tree_model,
       return FALSE;
     }
   iter->user_data2 = elt + 1;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_tree_model_sort_iter_previous (GtkTreeModel *tree_model,
+                                   GtkTreeIter  *iter)
+{
+  GtkTreeModelSort *tree_model_sort = (GtkTreeModelSort *) tree_model;
+  GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
+  SortLevel *level;
+  SortElt *elt;
+
+  g_return_val_if_fail (priv->child_model != NULL, FALSE);
+  g_return_val_if_fail (priv->stamp == iter->stamp, FALSE);
+
+  level = iter->user_data;
+  elt = iter->user_data2;
+
+  if (elt == (SortElt *)level->array->data)
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
+  iter->user_data2 = elt - 1;
 
   return TRUE;
 }

@@ -1180,6 +1180,59 @@ gtk_tree_model_iter_next (GtkTreeModel  *tree_model,
   return (* iface->iter_next) (tree_model, iter);
 }
 
+static gboolean
+gtk_tree_model_iter_previous_default (GtkTreeModel *tree_model,
+                                      GtkTreeIter  *iter)
+{
+  gboolean retval;
+  GtkTreePath *path;
+
+  path = gtk_tree_model_get_path (tree_model, iter);
+  if (path == NULL)
+    return FALSE;
+
+  retval = gtk_tree_path_prev (path) &&
+           gtk_tree_model_get_iter (tree_model, iter, path);
+  if (retval == FALSE)
+    iter->stamp = 0;
+
+  gtk_tree_path_free (path);
+
+  return retval;
+}
+
+/**
+ * gtk_tree_model_iter_previous:
+ * @tree_model: a #GtkTreeModel
+ * @iter: (inout): the #GtkTreeIter
+ *
+ * Sets @iter to point to the previous node at the current level. If there
+ * is no previous @iter, %FALSE is returned and @iter is set to be invalid.
+ *
+ * Return value: %TRUE if @iter has been changed to the previous node
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_tree_model_iter_previous (GtkTreeModel *tree_model,
+                              GtkTreeIter  *iter)
+{
+  gboolean retval;
+  GtkTreeModelIface *iface;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL (tree_model), FALSE);
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  iface = GTK_TREE_MODEL_GET_IFACE (tree_model);
+
+  if (iface->iter_previous)
+    retval = (* iface->iter_previous) (tree_model, iter);
+  else
+    retval = gtk_tree_model_iter_previous_default (tree_model, iter);
+
+  return retval;
+}
+
 /**
  * gtk_tree_model_iter_children:
  * @tree_model: A #GtkTreeModel.

@@ -3948,6 +3948,7 @@ gtk_tree_model_get_iter_first
 gtk_tree_model_get_path
 gtk_tree_model_get_value
 gtk_tree_model_iter_next
+gtk_tree_model_iter_previous
 gtk_tree_model_iter_children
 gtk_tree_model_iter_has_child
 gtk_tree_model_iter_n_children

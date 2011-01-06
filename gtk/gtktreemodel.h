@@ -97,6 +97,8 @@ struct _GtkTreeModelIface
 				    GValue       *value);
   gboolean     (* iter_next)       (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter);
+  gboolean     (* iter_previous)   (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter);
   gboolean     (* iter_children)   (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
 				    GtkTreeIter  *parent);
@@ -206,6 +208,8 @@ void              gtk_tree_model_get_value       (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  gint          column,
 						  GValue       *value);
+gboolean          gtk_tree_model_iter_previous   (GtkTreeModel *tree_model,
+						  GtkTreeIter  *iter);
 gboolean          gtk_tree_model_iter_next       (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 gboolean          gtk_tree_model_iter_children   (GtkTreeModel *tree_model,

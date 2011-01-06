@@ -104,6 +104,8 @@ static void         gtk_tree_store_get_value       (GtkTreeModel      *tree_mode
 						    GValue            *value);
 static gboolean     gtk_tree_store_iter_next       (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter);
+static gboolean     gtk_tree_store_iter_previous   (GtkTreeModel      *tree_model,
+						    GtkTreeIter       *iter);
 static gboolean     gtk_tree_store_iter_children   (GtkTreeModel      *tree_model,
 						    GtkTreeIter       *iter,
 						    GtkTreeIter       *parent);
@@ -236,6 +238,7 @@ gtk_tree_store_tree_model_init (GtkTreeModelIface *iface)
   iface->get_path = gtk_tree_store_get_path;
   iface->get_value = gtk_tree_store_get_value;
   iface->iter_next = gtk_tree_store_iter_next;
+  iface->iter_previous = gtk_tree_store_iter_previous;
   iface->iter_children = gtk_tree_store_iter_children;
   iface->iter_has_child = gtk_tree_store_iter_has_child;
   iface->iter_n_children = gtk_tree_store_iter_n_children;
@@ -671,16 +674,33 @@ gtk_tree_store_iter_next (GtkTreeModel  *tree_model,
   g_return_val_if_fail (iter->user_data != NULL, FALSE);
   g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->priv->stamp, FALSE);
 
-  if (G_NODE (iter->user_data)->next)
-    {
-      iter->user_data = G_NODE (iter->user_data)->next;
-      return TRUE;
-    }
-  else
+  if (G_NODE (iter->user_data)->next == NULL)
     {
       iter->stamp = 0;
       return FALSE;
     }
+
+  iter->user_data = G_NODE (iter->user_data)->next;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_tree_store_iter_previous (GtkTreeModel *tree_model,
+                              GtkTreeIter  *iter)
+{
+  g_return_val_if_fail (iter->user_data != NULL, FALSE);
+  g_return_val_if_fail (iter->stamp == GTK_TREE_STORE (tree_model)->priv->stamp, FALSE);
+
+  if (G_NODE (iter->user_data)->prev == NULL)
+    {
+      iter->stamp = 0;
+      return FALSE;
+    }
+
+  iter->user_data = G_NODE (iter->user_data)->prev;
+
+  return TRUE;
 }
 
 static gboolean

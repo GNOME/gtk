@@ -168,6 +168,13 @@ list_store_test_insert_high_values (void)
 
   g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
   g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 1));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (!gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
 
   g_object_unref (store);
 }
@@ -205,6 +212,13 @@ list_store_test_append (void)
 
   g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
   g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 1));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (!gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
 
   g_object_unref (store);
 }
@@ -242,6 +256,13 @@ list_store_test_prepend (void)
 
   g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
   g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 1));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 0));
+
+  g_assert (!gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
 
   g_object_unref (store);
 }
@@ -280,6 +301,20 @@ list_store_test_insert_after (void)
 
   g_assert (!gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &iter_copy));
 
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 2));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 2));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter3, &iter_copy));
+  g_assert (iter_position (store, &iter3, 1));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (!gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+
   g_object_unref (store);
 }
 
@@ -312,6 +347,16 @@ list_store_test_insert_after_NULL (void)
 
   g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 0));
   g_assert (iters_equal (&iter2, &iter_copy));
+
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 1));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 0));
+
+  g_assert (!gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
 
   g_object_unref (store);
 }
@@ -353,6 +398,20 @@ list_store_test_insert_before (void)
   g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
   g_assert (iters_equal (&iter3, &iter_copy));
 
+  g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 2));
+  g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 2));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter3, &iter_copy));
+  g_assert (iter_position (store, &iter3, 1));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (!gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+
   g_object_unref (store);
 }
 
@@ -385,6 +444,13 @@ list_store_test_insert_before_NULL (void)
 
   g_assert (gtk_tree_model_iter_nth_child (GTK_TREE_MODEL (store), &iter_copy, NULL, 1));
   g_assert (iters_equal (&iter2, &iter_copy));
+  g_assert (iter_position (store, &iter2, 1));
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
+  g_assert (iters_equal (&iter, &iter_copy));
+  g_assert (iter_position (store, &iter, 0));
+
+  g_assert (!gtk_tree_model_iter_previous (GTK_TREE_MODEL (store), &iter_copy));
 
   g_object_unref (store);
 }
@@ -854,6 +920,20 @@ list_store_test_move_before_single (void)
 /* iter invalidation */
 
 static void
+list_store_test_iter_previous_invalid (ListStore     *fixture,
+                                       gconstpointer  user_data)
+{
+  GtkTreeIter iter;
+
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (fixture->store), &iter);
+
+  g_assert (gtk_tree_model_iter_previous (GTK_TREE_MODEL (fixture->store),
+                                          &iter) == FALSE);
+  g_assert (gtk_list_store_iter_is_valid (fixture->store, &iter) == FALSE);
+  g_assert (iter.stamp == 0);
+}
+
+static void
 list_store_test_iter_next_invalid (ListStore     *fixture,
                                    gconstpointer  user_data)
 {
@@ -1025,6 +1105,9 @@ main (int    argc,
 		   list_store_test_move_before_single);
 
   /* iter invalidation */
+  g_test_add ("/list-store/iter-prev-invalid", ListStore, NULL,
+              list_store_setup, list_store_test_iter_previous_invalid,
+              list_store_teardown);
   g_test_add ("/list-store/iter-next-invalid", ListStore, NULL,
               list_store_setup, list_store_test_iter_next_invalid,
               list_store_teardown);
