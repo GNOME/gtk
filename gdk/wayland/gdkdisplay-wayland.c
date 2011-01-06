@@ -169,7 +169,7 @@ shell_handle_configure(void *data, struct wl_shell *shell,
   window->height = height;
 
   _gdk_window_update_size (window);
-  _gdk_wayland_window_update_size (GDK_WINDOW_IMPL_WAYLAND (window->impl));
+  _gdk_wayland_window_update_size (window);
 
   g_object_ref(window);
 

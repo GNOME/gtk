@@ -39,49 +39,7 @@
 G_BEGIN_DECLS
 
 typedef struct _GdkToplevelWayland GdkToplevelWayland;
-typedef struct _GdkWindowImplWayland GdkWindowImplWayland;
-typedef struct _GdkWindowImplWaylandClass GdkWindowImplWaylandClass;
 typedef struct _GdkXPositionInfo GdkXPositionInfo;
-
-/* Window implementation for Wayland
- */
-
-#define GDK_TYPE_WINDOW_IMPL_WAYLAND              (_gdk_window_impl_wayland_get_type ())
-#define GDK_WINDOW_IMPL_WAYLAND(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_WAYLAND, GdkWindowImplWayland))
-#define GDK_WINDOW_IMPL_WAYLAND_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_WINDOW_IMPL_WAYLAND, GdkWindowImplWaylandClass))
-#define GDK_IS_WINDOW_IMPL_WAYLAND(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_WAYLAND))
-#define GDK_IS_WINDOW_IMPL_WAYLAND_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_WINDOW_IMPL_WAYLAND))
-#define GDK_WINDOW_IMPL_WAYLAND_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_WINDOW_IMPL_WAYLAND, GdkWindowImplWaylandClass))
-
-struct _GdkWindowImplWayland
-{
-  GdkWindowImpl parent_instance;
-
-  GdkWindow *wrapper;
-
-  GdkToplevelWayland *toplevel;	/* Toplevel-specific information */
-  GdkCursor *cursor;
-  GHashTable *device_cursor;
-
-  gint8 toplevel_window_type;
-  guint no_bg : 1;		/* Set when the window background is temporarily
-				 * unset during resizing and scaling */
-  guint override_redirect : 1;
-
-  struct wl_surface *surface;
-  EGLImageKHR *pending_image;
-  EGLImageKHR *next_image;
-
-  cairo_surface_t *cairo_surface;
-  GLuint texture;
-  EGLImageKHR image;
-
-};
-
-struct _GdkWindowImplWaylandClass
-{
-  GdkWindowImplClass parent_class;
-};
 
 struct _GdkToplevelWayland
 {
@@ -143,7 +101,7 @@ void                _gdk_wayland_window_get_offsets   (GdkWindow   *window,
 						       gint        *x_offset,
 						       gint        *y_offset);
 
-void                _gdk_wayland_window_update_size   (GdkWindowImplWayland  *drawable);
+void                _gdk_wayland_window_update_size   (GdkWindow   *window);
 
 G_END_DECLS
 
