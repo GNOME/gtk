@@ -861,7 +861,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkWindow: resize-grip-visible:
+   * GtkWindow:resize-grip-visible:
    *
    * Whether a corner resize grip is currently shown.
    *
@@ -5520,7 +5520,7 @@ update_grip_visibility (GtkWindow *window)
  *
  * Determines whether a resize grip is visible for the specified window.
  *
- * Returns %TRUE if a resize grip exists and is visible.
+ * Returns: %TRUE if a resize grip exists and is visible
  *
  * Since: 3.0
  */
@@ -5567,7 +5567,7 @@ gtk_window_resize_grip_is_visible (GtkWindow *window)
  *
  * Determines whether the window may have a resize grip.
  *
- * Returns: %TRUE if the window has a resize grip.
+ * Returns: %TRUE if the window has a resize grip
  *
  * Since: 3.0
  */
@@ -5583,12 +5583,12 @@ gtk_window_get_has_resize_grip (GtkWindow *window)
  * gtk_window_get_resize_grip_area:
  * @window: a #GtkWindow
  * @rect: a pointer to a #GdkRectangle which we should store the
- *     resize grip area.
+ *     resize grip area
  *
  * If a window has a resize grip, this will retrieve the grip
  * position, width and height into the specified #GdkRectangle.
  *
- * Returns: %TRUE if the resize grip's area was retrieved.
+ * Returns: %TRUE if the resize grip's area was retrieved
  *
  * Since: 3.0
  */

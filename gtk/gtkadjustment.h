@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -43,25 +43,15 @@ G_BEGIN_DECLS
 #define GTK_ADJUSTMENT_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_ADJUSTMENT, GtkAdjustmentClass))
 
 
-typedef struct _GtkAdjustment	      GtkAdjustment;
+typedef struct _GtkAdjustment         GtkAdjustment;
 typedef struct _GtkAdjustmentPrivate  GtkAdjustmentPrivate;
 typedef struct _GtkAdjustmentClass    GtkAdjustmentClass;
 
 /**
  * GtkAdjustment:
- * @lower: the minimum value.
- * @upper: the maximum value.
- * @value: the current value.
- * @step_increment: the increment to use to make minor changes to the @value.
- *   In a #GtkScrollbar this increment is used when the mouse is clicked on the
- *   arrows at the top and bottom of the scrollbar, to scroll by a small amount.
- * @page_increment: the increment to use to make major changes to the @value.
- *   In a #GtkScrollbar this increment is used when the mouse is clicked in the
- *   trough, to scroll by a large amount.
- * @page_size: In a #GtkScrollbar this is the size of the area which is currently
- *   visible.
  *
- * The #GtkAdjustment struct contains the following fields.
+ * The #GtkAdjustment struct contains only private fields and
+ * should not be directly accessed.
  */
 struct _GtkAdjustment
 {
@@ -74,7 +64,7 @@ struct _GtkAdjustmentClass
 {
   GInitiallyUnownedClass parent_class;
 
-  void (* changed)	 (GtkAdjustment *adjustment);
+  void (* changed)       (GtkAdjustment *adjustment);
   void (* value_changed) (GtkAdjustment *adjustment);
 
   /* Padding for future expansion */
@@ -85,23 +75,23 @@ struct _GtkAdjustmentClass
 };
 
 
-GType	   gtk_adjustment_get_type		(void) G_GNUC_CONST;
-GtkAdjustment*   gtk_adjustment_new		(gdouble	  value,
-						 gdouble	  lower,
-						 gdouble	  upper,
-						 gdouble	  step_increment,
-						 gdouble	  page_increment,
-						 gdouble	  page_size);
+GType      gtk_adjustment_get_type              (void) G_GNUC_CONST;
+GtkAdjustment*   gtk_adjustment_new             (gdouble          value,
+                                                 gdouble          lower,
+                                                 gdouble          upper,
+                                                 gdouble          step_increment,
+                                                 gdouble          page_increment,
+                                                 gdouble          page_size);
 
-void	   gtk_adjustment_changed		(GtkAdjustment	 *adjustment);
-void	   gtk_adjustment_value_changed		(GtkAdjustment	 *adjustment);
-void	   gtk_adjustment_clamp_page		(GtkAdjustment	 *adjustment,
-						 gdouble	  lower,
-						 gdouble	  upper);
+void       gtk_adjustment_changed               (GtkAdjustment   *adjustment);
+void       gtk_adjustment_value_changed         (GtkAdjustment   *adjustment);
+void       gtk_adjustment_clamp_page            (GtkAdjustment   *adjustment,
+                                                 gdouble          lower,
+                                                 gdouble          upper);
 
-gdouble	   gtk_adjustment_get_value		(GtkAdjustment   *adjustment);
-void	   gtk_adjustment_set_value		(GtkAdjustment	 *adjustment,
-						 gdouble	  value);
+gdouble    gtk_adjustment_get_value             (GtkAdjustment   *adjustment);
+void       gtk_adjustment_set_value             (GtkAdjustment   *adjustment,
+                                                 gdouble          value);
 gdouble    gtk_adjustment_get_lower             (GtkAdjustment   *adjustment);
 void       gtk_adjustment_set_lower             (GtkAdjustment   *adjustment,
                                                  gdouble          lower);
@@ -120,11 +110,11 @@ void       gtk_adjustment_set_page_size         (GtkAdjustment   *adjustment,
 
 void       gtk_adjustment_configure             (GtkAdjustment   *adjustment,
                                                  gdouble          value,
-						 gdouble          lower,
-						 gdouble          upper,
-						 gdouble          step_increment,
-						 gdouble          page_increment,
-						 gdouble          page_size);
+                                                 gdouble          lower,
+                                                 gdouble          upper,
+                                                 gdouble          step_increment,
+                                                 gdouble          page_increment,
+                                                 gdouble          page_size);
 
 G_END_DECLS
 
