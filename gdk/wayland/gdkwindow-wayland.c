@@ -216,13 +216,13 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
       window->height > 65535)
     {
       g_warning ("Native Windows wider or taller than 65535 pixels are not supported");
-      
+
       if (window->width > 65535)
 	window->width = 65535;
       if (window->height > 65535)
 	window->height = 65535;
     }
-  
+
   g_object_ref (window);
 
   switch (GDK_WINDOW_TYPE (window))
@@ -1043,8 +1043,6 @@ gdk_wayland_window_set_keep_below (GdkWindow *window, gboolean setting)
 static GdkWindow *
 gdk_wayland_window_get_group (GdkWindow *window)
 {
-  GdkToplevelWayland *toplevel;
-
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return NULL;
@@ -1080,21 +1078,6 @@ gdk_wayland_window_set_functions (GdkWindow    *window,
 {
 }
 
-enum wl_grab_type {
-	WL_DEVICE_GRAB_NONE = 0,
-	WL_DEVICE_GRAB_RESIZE_TOP = 1,
-	WL_DEVICE_GRAB_RESIZE_BOTTOM = 2,
-	WL_DEVICE_GRAB_RESIZE_LEFT = 4,
-	WL_DEVICE_GRAB_RESIZE_TOP_LEFT = 5,
-	WL_DEVICE_GRAB_RESIZE_BOTTOM_LEFT = 6,
-	WL_DEVICE_GRAB_RESIZE_RIGHT = 8,
-	WL_DEVICE_GRAB_RESIZE_TOP_RIGHT = 9,
-	WL_DEVICE_GRAB_RESIZE_BOTTOM_RIGHT = 10,
-	WL_DEVICE_GRAB_RESIZE_MASK = 15,
-	WL_DEVICE_GRAB_MOVE = 16,
-	WL_DEVICE_GRAB_MOTION = 17
-};
-
 static void
 gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
 				      GdkWindowEdge  edge,
@@ -1116,35 +1099,35 @@ gdk_wayland_window_begin_resize_drag (GdkWindow     *window,
   switch (edge)
     {
     case GDK_WINDOW_EDGE_NORTH_WEST:
-      grab_type = WL_DEVICE_GRAB_RESIZE_TOP_LEFT;
+      grab_type = WL_GRAB_RESIZE_TOP_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_NORTH:
-      grab_type = WL_DEVICE_GRAB_RESIZE_TOP;
+      grab_type = WL_GRAB_RESIZE_TOP;
       break;
 
     case GDK_WINDOW_EDGE_NORTH_EAST:
-      grab_type = WL_DEVICE_GRAB_RESIZE_RIGHT;
+      grab_type = WL_GRAB_RESIZE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_WEST:
-      grab_type = WL_DEVICE_GRAB_RESIZE_LEFT;
+      grab_type = WL_GRAB_RESIZE_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_EAST:
-      grab_type = WL_DEVICE_GRAB_RESIZE_RIGHT;
+      grab_type = WL_GRAB_RESIZE_RIGHT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_WEST:
-      grab_type = WL_DEVICE_GRAB_RESIZE_BOTTOM_LEFT;
+      grab_type = WL_GRAB_RESIZE_BOTTOM_LEFT;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH:
-      grab_type = WL_DEVICE_GRAB_RESIZE_BOTTOM;
+      grab_type = WL_GRAB_RESIZE_BOTTOM;
       break;
 
     case GDK_WINDOW_EDGE_SOUTH_EAST:
-      grab_type = WL_DEVICE_GRAB_RESIZE_BOTTOM_RIGHT;
+      grab_type = WL_GRAB_RESIZE_BOTTOM_RIGHT;
       break;
 
     default:
@@ -1248,16 +1231,15 @@ static void
 gdk_wayland_window_process_updates_recurse (GdkWindow *window,
 					    cairo_region_t *region)
 {
+#if 0
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   cairo_rectangle_int_t rect;
   int i, n;
 
-#if 0
   gdk_wayland_window_ref_cairo_surface (window);
 
   _gdk_wayland_window_attach_image (window, impl->image);
   cairo_surface_destroy (impl->cairo_surface);
-#endif
 
   n = cairo_region_num_rectangles(region);
   for (i = 0; i < n; i++)
@@ -1266,6 +1248,7 @@ gdk_wayland_window_process_updates_recurse (GdkWindow *window,
       wl_surface_damage (impl->surface,
 			 rect.x, rect.y, rect.width, rect.height);
     }
+#endif
 
   _gdk_window_process_updates_recurse (window, region);
 }
