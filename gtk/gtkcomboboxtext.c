@@ -41,6 +41,11 @@
  * gtk_combo_box_text_append_text(), gtk_combo_box_text_insert_text()
  * or gtk_combo_box_text_prepend_text() and remove options with
  * gtk_combo_box_text_remove_text().
+ *
+ * If the GtkComboBoxText contains an entry (via the 'has-entry' property),
+ * its contents can be retrieved using gtk_combo_box_text_get_active_text().
+ * The entry itself can be accessed by calling gtk_bin_get_child() on the
+ * combo box.
  */
 
 G_DEFINE_TYPE (GtkComboBoxText, gtk_combo_box_text, GTK_TYPE_COMBO_BOX);
@@ -256,7 +261,8 @@ gtk_combo_box_text_remove (GtkComboBoxText *combo_box,
  * @combo_box: A #GtkComboBoxText
  *
  * Returns the currently active string in @combo_box or %NULL if none
- * is selected.
+ * is selected. If @combo_box contains an entry, this function will return
+ * its contents (which will not necessarily be an item from the list).
  *
  * Returns: a newly allocated string containing the currently active text.
  *     Must be freed with g_free().
