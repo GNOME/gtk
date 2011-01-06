@@ -2489,7 +2489,7 @@ gtk_cell_area_class_list_cell_properties (GtkCellAreaClass  *aclass,
  *           with @first_prop_name
  *
  * Adds @renderer to @area, setting cell properties at the same time.
- * See gtk_cell_area_add() and gtk_cell_area_child_set() for more details.
+ * See gtk_cell_area_add() and gtk_cell_area_cell_set() for more details.
  *
  * Since: 3.0
  */
