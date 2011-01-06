@@ -490,8 +490,8 @@ gdk_wayland_display_flush (GdkDisplay *display)
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   if (!display->closed)
-    wl_display_iterate(GDK_DISPLAY_WAYLAND (display)->wl_display,
-		       WL_DISPLAY_WRITABLE);
+    _gdk_wayland_display_flush (display,
+				GDK_DISPLAY_WAYLAND (display)->event_source);
 }
 
 static gboolean

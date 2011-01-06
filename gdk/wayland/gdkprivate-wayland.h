@@ -121,6 +121,7 @@ GdkDeviceManager *_gdk_device_manager_new (GdkDisplay *display);
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
 GSource *_gdk_wayland_display_event_source_new (GdkDisplay *display);
 void     _gdk_wayland_display_queue_events (GdkDisplay *display);
+void     _gdk_wayland_display_flush (GdkDisplay *display, GSource *source);
 
 GdkAppLaunchContext *_gdk_wayland_display_get_app_launch_context (GdkDisplay *display);
 

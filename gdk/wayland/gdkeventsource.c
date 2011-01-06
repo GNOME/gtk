@@ -151,6 +151,16 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
 }
 
 void
+_gdk_wayland_display_flush (GdkDisplay *display, GSource *source)
+{
+  GdkWaylandEventSource *wayland_source = (GdkWaylandEventSource *) source;
+
+  while (wayland_source->mask & WL_DISPLAY_WRITABLE)
+    wl_display_iterate(GDK_DISPLAY_WAYLAND (display)->wl_display,
+		       WL_DISPLAY_WRITABLE);
+}
+
+void
 _gdk_wayland_display_queue_events (GdkDisplay *display)
 {
   GdkDisplayWayland *display_wayland;
