@@ -40,8 +40,8 @@ Overview of Changes from GTK+ 2.91.7 to 2.99.0
 * Various problems with width-for-height geometry management have been
   fixed in GtkAlignment, GtkCheckButton, GtkBin
 
-* The GtkCellView and GtkComboBox widgets have been ported to use
-  GtkCellArea for their cell layouts.
+* The GtkComboBox, GtkIconView and GtkCellView widgets have been ported
+  to use GtkCellArea for their cell layouts
 
 * The cups print backend can now send print jobs directly in PDF if
   cups supports it
