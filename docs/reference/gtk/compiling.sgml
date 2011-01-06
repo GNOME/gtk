@@ -69,24 +69,5 @@ define the preprocessor symbol GDK_MULTIDEVICE_SAFE by using the command
 line option <literal>-DGTK_MULTIDEVICE_SAFE=1</literal>.
 </para>
 
-<para>
-The recommended way of using GTK+ has always been to only include the
-toplevel headers <filename>gtk.h</filename>, <filename>gdk.h</filename>,
-<filename>gdk-pixbuf.h</filename>.
-If you want to make sure that your program follows this recommended
-practise, you can define the preprocessor symbols GTK_DISABLE_SINGLE_INCLUDES
-and GDK_PIXBUF_DISABLE_SINGLE_INCLUDES to make GTK+ generate an error
-when individual headers are directly included.
-There are some exceptions: <filename>gdkkeysyms.h</filename> is not included in
-<filename>gdk.h</filename> because the file is quite large; see
-<link linkend="gdk-Keyboard-Handling">Key Values documentation</link>.
-<filename>gdkx.h</filename> must be included independently because It's
-platform-specific; see
-<link linkend="gdk-X-Window-System-Interaction">X Window System Interaction</link>
-documentation.
-The same for <filename>gtkunixprint.h</filename> if you use the non-portable
-<link linkend="GtkPrintUnixDialog">GtkPrintUnixDialog</link> API.
-</para>
-
 </refsect1>
 </refentry>

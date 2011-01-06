@@ -51,7 +51,7 @@
  * This function can be used as a replacement for gnome_vfs_url_show()
  * and gnome_url_show().
  *
- * Returns: %TRUE on success, %FALSE on error.
+ * Returns: %TRUE on success, %FALSE on error
  *
  * Since: 2.14
  */

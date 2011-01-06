@@ -57,7 +57,7 @@
  * </para>
  * <example>
  * <title>Typical <function>main()</function> function for a GTK+ application</title>
- * <programlisting><![CDATA[
+ * <programlisting>
  * int
  * main (int argc, char **argv)
  * {
@@ -82,7 +82,7 @@
  *   /&ast; The user lost interest &ast;/
  *   return 0;
  * }
- * ]]></programlisting>
+ * </programlisting>
  * </example>
  * <para>
  * It's OK to use the GLib main loop directly instead of gtk_main(), though it
@@ -262,7 +262,7 @@ static const GDebugKey gtk_debug_keys[] = {
  * macro, which represents the major version of the GTK+ headers you
  * have included when compiling your code.
  *
- * Returns: the major version number of the GTK+ library.
+ * Returns: the major version number of the GTK+ library
  *
  * Since: 3.0
  */
@@ -283,7 +283,7 @@ gtk_get_major_version (void)
  * #GTK_MINOR_VERSION macro, which represents the minor version of the
  * GTK+ headers you have included when compiling your code.
  *
- * Returns: the minor version number of the GTK+ library.
+ * Returns: the minor version number of the GTK+ library
  *
  * Since: 3.0
  */
@@ -304,7 +304,7 @@ gtk_get_minor_version (void)
  * #GTK_MICRO_VERSION macro, which represents the micro version of the
  * GTK+ headers you have included when compiling your code.
  *
- * Returns: the micro version number of the GTK+ library.
+ * Returns: the micro version number of the GTK+ library
  *
  * Since: 3.0
  */
@@ -322,7 +322,7 @@ gtk_get_micro_version (void)
  * If <application>libtool</application> means nothing to you, don't
  * worry about it.
  *
- * Returns: the binary age of the GTK+ library.
+ * Returns: the binary age of the GTK+ library
  *
  * Since: 3.0
  */
@@ -340,7 +340,7 @@ gtk_get_binary_age (void)
  * If <application>libtool</application> means nothing to you, don't
  * worry about it.
  *
- * Returns: the interface age of the GTK+ library.
+ * Returns: the interface age of the GTK+ library
  *
  * Since: 3.0
  */
@@ -393,13 +393,13 @@ gtk_check_version (guint required_major,
   gint required_effective_micro = 100 * required_minor + required_micro;
 
   if (required_major > GTK_MAJOR_VERSION)
-    return "Gtk+ version too old (major mismatch)";
+    return "GTK+ version too old (major mismatch)";
   if (required_major < GTK_MAJOR_VERSION)
-    return "Gtk+ version too new (major mismatch)";
+    return "GTK+ version too new (major mismatch)";
   if (required_effective_micro < gtk_effective_micro - GTK_BINARY_AGE)
-    return "Gtk+ version too new (micro mismatch)";
+    return "GTK+ version too new (micro mismatch)";
   if (required_effective_micro > gtk_effective_micro)
-    return "Gtk+ version too old (micro mismatch)";
+    return "GTK+ version too old (micro mismatch)";
   return NULL;
 }
 
@@ -1385,14 +1385,14 @@ gtk_main_quit (void)
  *
  * <example>
  * <title>Updating the UI during a long computation</title>
- * <programlisting><![CDATA[
- *  /&ast; computation going on &ast;/
- *  ...
+ * <programlisting>
+ *  /&ast; computation going on... &ast;/
+ *
  *  while (gtk_events_pending ())
  *    gtk_main_iteration ();
- *  ...
- *  /&ast; computation continued &ast;/
- * ]]></programlisting>
+ *
+ *  /&ast; ...computation continued &ast;/
+ * </programlisting>
  * </example>
  *
  * Returns: %TRUE if any events are pending, %FALSE otherwise
@@ -1907,8 +1907,8 @@ gtk_main_do_event (GdkEvent *event)
  *
  * <example>
  * <title>A persistent window</title>
- * <programlisting><![CDATA[
- * #include <gtk/gtk.h>
+ * <programlisting>
+ * #include &lt;gtk/gtk.h>&lt;
  *
  * int
  * main (int argc, char **argv)
@@ -1934,7 +1934,7 @@ gtk_main_do_event (GdkEvent *event)
  *
  *   return 0;
  * }
- * ]]></programlisting>
+ * </programlisting>
  * </example>
  *
  * Returns: %TRUE
