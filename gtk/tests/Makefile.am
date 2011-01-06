@@ -18,7 +18,7 @@ progs_ldadd = \
 	$(top_builddir)/gdk/libgdk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
-noinst_PROGRAMS = $(TEST_PROGS) $(SAMPLE_PROGS)
+noinst_PROGRAMS = $(TEST_PROGS)
 
 
 TEST_PROGS			+= testing
@@ -95,10 +95,6 @@ expander_LDADD		 = $(progs_ldadd)
 TEST_PROGS			+= action
 action_SOURCES			 = action.c
 action_LDADD			 = $(progs_ldadd)
-
-SAMPLE_PROGS = gtk-example-application
-gtk_example_application_SOURCES	= gtk-example-application.c
-gtk_example_application_LDADD	= $(progs_ldadd)
 
 TEST_PROGS			+= stylecontext
 stylecontext_SOURCES		 = stylecontext.c

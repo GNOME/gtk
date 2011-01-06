@@ -48,4 +48,4 @@ LDADD = \
 	$(top_builddir)/gtk/libgtk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
-noinst_PROGRAMS = hello-world window-default
+noinst_PROGRAMS = hello-world window-default bloatpad
