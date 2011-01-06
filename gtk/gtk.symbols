@@ -3022,6 +3022,8 @@ gtk_print_capabilities_get_type G_GNUC_CONST
 #if IN_FILE(__GTK_PRINTER_C__)
 #ifdef G_OS_UNIX
 gtk_printer_new
+gtk_printer_set_accepts_pdf
+gtk_printer_set_accepts_ps
 gtk_printer_set_description
 gtk_printer_set_has_details
 gtk_printer_set_icon_name
