@@ -1,7 +1,8 @@
 #include <gtk/gtk.h>
 
 /* This is a callback function. The data arguments are ignored
- * in this example. More on callbacks below. */
+ * in this example. More on callbacks below.
+ */
 static void
 print_hello (GtkWidget *widget,
              gpointer   data)

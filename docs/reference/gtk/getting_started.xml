@@ -43,7 +43,7 @@
   <warning><para>Even if GTK+ installs multiple header files, only the
   top-level <filename>gtk/gtk.h</filename> header can be directly included
   by third party code. The compiler will abort with an error if any other
-  header will be included.</para></warning>
+  header is directly included.</para></warning>
 
   <para>We then proceed into the <function>main</function>() function of the
   application, and we declare a <varname>window</varname> variable as a pointer
