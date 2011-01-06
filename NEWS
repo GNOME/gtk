@@ -3,8 +3,7 @@ Overview of Changes from GTK+ 2.91.7 to 2.99.0
 
 * Deprecations and removals:
  - Long-obsolete linuxfb-related GtkWindow APIs have been dropped
- - G_SEALed struct members have been removed from GtkMenu,
-   GtkMenuShell, GtkMenuItem, GtkSettings
+ - All remaining G_SEALed struct members have been removed
  - GtkThemeEngine has been removed
  - gdk_display_get_window_at_device_position() has been renamed to
    gdk_device_get_window_at_position()
