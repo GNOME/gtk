@@ -2912,18 +2912,12 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
       gdouble half;
       gint i;
 
-      num_steps = 0;
-
-      gtk_theming_engine_get_style (engine,
-                                    "num-steps", &num_steps,
-                                    NULL);
+      num_steps = 12;
 
       state = gtk_theming_engine_get_state (engine);
       gtk_theming_engine_get (engine, state,
                               "color", &color,
                               NULL);
-      if (num_steps == 0)
-        num_steps = 12;
 
       if (gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress))
         step = (guint) (progress * num_steps);

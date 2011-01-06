@@ -2841,9 +2841,7 @@ gtk_default_draw_spinner (GtkStyle     *style,
   gint i;
   guint real_step;
 
-  gtk_style_get (style, GTK_TYPE_SPINNER,
-                 "num-steps", &num_steps,
-                 NULL);
+  num_steps = 12;
   real_step = step % num_steps;
 
   /* set a clip region for the expose event */

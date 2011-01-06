@@ -126,10 +126,8 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    * Pulse of the spinner. Increment this value to draw the next frame of the
    * spinner animation. Usually, you would update this value in a timeout.
    *
-   * The #GtkSpinner widget draws one full cycle of the animation per second by default.
-   * You can learn about the number of frames used by the theme
-   * by looking at the #GtkSpinner:num-steps style property and the duration
-   * of the cycle by looking at #GtkSpinner:cycle-duration.
+   * By default, the #GtkSpinner widget draws one full cycle of the animation,
+   * consisting of 12 frames, in 750 milliseconds.
    *
    * Since: 2.20
    */
@@ -172,7 +170,7 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 }
 
 /**
- * gtk_cell_renderer_spinner_new
+ * gtk_cell_renderer_spinner_new:
  *
  * Returns a new cell renderer which will show a spinner to indicate
  * activity.
