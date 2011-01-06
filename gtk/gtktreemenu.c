@@ -23,7 +23,7 @@
  * Boston, MA 02111-1307, USA.
  */
 
-/**
+/*
  * SECTION:gtktreemenu
  * @Short_Description: A GtkMenu automatically created from a #GtkTreeModel
  * @Title: GtkTreeMenu
@@ -253,7 +253,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
   widget_class->get_preferred_width  = gtk_tree_menu_get_preferred_width;
   widget_class->get_preferred_height = gtk_tree_menu_get_preferred_height;
 
-  /**
+  /*
    * GtkTreeMenu::menu-activate:
    * @menu: a #GtkTreeMenu
    * @path: the #GtkTreePath string for the item which was activated
@@ -274,11 +274,11 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                   _gtk_marshal_VOID__STRING,
                   G_TYPE_NONE, 1, G_TYPE_STRING);
 
-  /**
+  /*
    * GtkTreeMenu:model:
    *
    * The #GtkTreeModel from which the menu is constructed.
-   * 
+   *
    * Since: 3.0
    */
   g_object_class_install_property (object_class,
@@ -289,7 +289,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                                                         GTK_TYPE_TREE_MODEL,
                                                         GTK_PARAM_READWRITE));
 
-  /**
+  /*
    * GtkTreeMenu:root:
    *
    * The #GtkTreePath that is the root for this menu, or %NULL.
@@ -313,7 +313,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                                                        GTK_TYPE_TREE_PATH,
                                                        GTK_PARAM_READWRITE));
 
-  /**
+  /*
    * GtkTreeMenu:cell-area:
    *
    * The #GtkCellArea used to render cells in the menu items.
@@ -331,7 +331,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                                                         GTK_TYPE_CELL_AREA,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-  /**
+  /*
    * GtkTreeMenu:tearoff:
    *
    * Specifies whether this menu comes with a leading tearoff menu item
@@ -346,7 +346,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
-  /**
+  /*
    * GtkTreeMenu:wrap-width:
    *
    * If wrap-width is set to a positive value, the list will be
@@ -365,7 +365,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                                                      0,
                                                      GTK_PARAM_READWRITE));
 
-  /**
+  /*
    * GtkTreeMenu:row-span-column:
    *
    * If this is set to a non-negative value, it must be the index of a column
@@ -387,7 +387,7 @@ _gtk_tree_menu_class_init (GtkTreeMenuClass *class)
                                                      -1,
                                                      GTK_PARAM_READWRITE));
 
-  /**
+  /*
    * GtkTreeMenu:column-span-column:
    *
    * If this is set to a non-negative value, it must be the index of a column
@@ -1548,7 +1548,7 @@ _gtk_tree_menu_new (void)
   return (GtkWidget *)g_object_new (GTK_TYPE_TREE_MENU, NULL);
 }
 
-/**
+/*
  * _gtk_tree_menu_new_with_area:
  * @area: the #GtkCellArea to use to render cells in the menu
  *
@@ -1566,7 +1566,7 @@ _gtk_tree_menu_new_with_area (GtkCellArea    *area)
                                     NULL);
 }
 
-/**
+/*
  * _gtk_tree_menu_new_full:
  * @area: (allow-none): the #GtkCellArea to use to render cells in the menu, or %NULL.
  * @model: (allow-none): the #GtkTreeModel to build the menu heirarchy from, or %NULL.
@@ -1590,7 +1590,7 @@ _gtk_tree_menu_new_full (GtkCellArea         *area,
                                     NULL);
 }
 
-/**
+/*
  * _gtk_tree_menu_set_model:
  * @menu: a #GtkTreeMenu
  * @model: (allow-none): the #GtkTreeModel to build the menu hierarchy from, or %NULL.
@@ -1611,7 +1611,7 @@ _gtk_tree_menu_set_model (GtkTreeMenu  *menu,
   rebuild_menu (menu);
 }
 
-/**
+/*
  * _gtk_tree_menu_get_model:
  * @menu: a #GtkTreeMenu
  *
@@ -1634,7 +1634,7 @@ _gtk_tree_menu_get_model (GtkTreeMenu *menu)
   return priv->model;
 }
 
-/**
+/*
  * _gtk_tree_menu_set_root:
  * @menu: a #GtkTreeMenu
  * @path: (allow-none): the #GtkTreePath which is the root of @menu, or %NULL.
@@ -1666,7 +1666,7 @@ _gtk_tree_menu_set_root (GtkTreeMenu         *menu,
   rebuild_menu (menu);
 }
 
-/**
+/*
  * _gtk_tree_menu_get_root:
  * @menu: a #GtkTreeMenu
  *
@@ -1693,7 +1693,7 @@ _gtk_tree_menu_get_root (GtkTreeMenu *menu)
   return NULL;
 }
 
-/**
+/*
  * _gtk_tree_menu_get_tearoff:
  * @menu: a #GtkTreeMenu
  *
@@ -1715,7 +1715,7 @@ _gtk_tree_menu_get_tearoff (GtkTreeMenu *menu)
   return priv->tearoff;
 }
 
-/**
+/*
  * _gtk_tree_menu_set_tearoff:
  * @menu: a #GtkTreeMenu
  * @tearoff: whether the menu should have a leading tearoff menu item.
@@ -1744,7 +1744,7 @@ _gtk_tree_menu_set_tearoff (GtkTreeMenu *menu,
     }
 }
 
-/**
+/*
  * _gtk_tree_menu_get_wrap_width:
  * @menu: a #GtkTreeMenu
  *
@@ -1767,7 +1767,7 @@ _gtk_tree_menu_get_wrap_width (GtkTreeMenu *menu)
   return priv->wrap_width;
 }
 
-/**
+/*
  * _gtk_tree_menu_set_wrap_width:
  * @menu: a #GtkTreeMenu
  * @width: the wrap width
@@ -1798,7 +1798,7 @@ _gtk_tree_menu_set_wrap_width (GtkTreeMenu *menu,
     }
 }
 
-/**
+/*
  * _gtk_tree_menu_get_row_span_column:
  * @menu: a #GtkTreeMenu
  *
@@ -1822,7 +1822,7 @@ _gtk_tree_menu_get_row_span_column (GtkTreeMenu *menu)
   return priv->row_span_col;
 }
 
-/**
+/*
  * _gtk_tree_menu_set_row_span_column:
  * @menu: a #GtkTreeMenu
  * @row_span: the column in the model to fetch the row span for a given menu item.
@@ -1854,7 +1854,7 @@ _gtk_tree_menu_set_row_span_column (GtkTreeMenu *menu,
     }
 }
 
-/**
+/*
  * _gtk_tree_menu_get_column_span_column:
  * @menu: a #GtkTreeMenu
  *
@@ -1878,7 +1878,7 @@ _gtk_tree_menu_get_column_span_column (GtkTreeMenu *menu)
   return priv->col_span_col;
 }
 
-/**
+/*
  * _gtk_tree_menu_set_column_span_column:
  * @menu: a #GtkTreeMenu
  * @column_span: the column in the model to fetch the column span for a given menu item.
@@ -1910,12 +1910,12 @@ _gtk_tree_menu_set_column_span_column (GtkTreeMenu *menu,
     }
 }
 
-/**
+/*
  * _gtk_tree_menu_get_row_separator_func:
  * @menu: a #GtkTreeMenu
- * 
+ *
  * Gets the current #GtkTreeViewRowSeparatorFunc separator function.
- * 
+ *
  * Return value: the current row separator function.
  *
  * Since: 3.0
@@ -1932,13 +1932,13 @@ _gtk_tree_menu_get_row_separator_func (GtkTreeMenu *menu)
   return priv->row_separator_func;
 }
 
-/**
+/*
  * _gtk_tree_menu_set_row_separator_func:
  * @menu: a #GtkTreeMenu
  * @func: (allow-none): a #GtkTreeViewRowSeparatorFunc, or %NULL to unset the separator function.
  * @data: (allow-none): user data to pass to @func, or %NULL
  * @destroy: (allow-none): destroy notifier for @data, or %NULL
- * 
+ *
  * Sets the row separator function, which is used to determine
  * whether a row should be drawn as a separator. If the row separator
  * function is %NULL, no separators are drawn. This is the default value.
@@ -1967,7 +1967,7 @@ _gtk_tree_menu_set_row_separator_func (GtkTreeMenu          *menu,
   rebuild_menu (menu);
 }
 
-/**
+/*
  * _gtk_tree_menu_get_header_func:
  * @menu: a #GtkTreeMenu
  *
@@ -1989,7 +1989,7 @@ _gtk_tree_menu_get_header_func (GtkTreeMenu *menu)
   return priv->header_func;
 }
 
-/**
+/*
  * _gtk_tree_menu_set_header_func:
  * @menu: a #GtkTreeMenu
  * @func: (allow-none): a #GtkTreeMenuHeaderFunc, or %NULL to unset the header function.
