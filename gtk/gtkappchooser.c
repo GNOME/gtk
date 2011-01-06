@@ -21,6 +21,17 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
+/**
+ * SECTION:gtkappchooser
+ * @Title: GtkAppChooser
+ * @Short_description: Interface implemented by widgets allowing to chooser applications
+ *
+ * #GtkAppChooser is an interface that can be implemented by widgets which
+ * allow the user to choose an application (typically for the purpose of
+ * opening a file). The main objects that implement this interface are
+ * #GtkAppChooserWidget, #GtkAppChooserDialog and #GtkAppChooserButton.
+ */
+
 #include "config.h"
 
 #include "gtkappchooser.h"

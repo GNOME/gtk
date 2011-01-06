@@ -30,6 +30,9 @@
   <link linkend="GtkFontButton">
     <inlinegraphic fileref="font-button.png" format="PNG"></inlinegraphic>
   </link>
+  <link linkend="GtkAppChooserButton">
+    <inlinegraphic fileref="appchooserbutton.png" format="PNG"></inlinegraphic>
+  </link>
   <link linkend="GtkFrame">
     <inlinegraphic fileref="frame.png" format="PNG"></inlinegraphic>
   </link>
@@ -122,6 +125,9 @@
   </link>
   <link linkend="GtkFileChooserDialog">
     <inlinegraphic fileref="filechooser.png" format="PNG"></inlinegraphic>
+  </link>
+  <link linkend="GtkAppChooserDialog">
+    <inlinegraphic fileref="appchooserdialog.png" format="PNG"></inlinegraphic>
   </link>
   <link linkend="GtkSwitch">
     <inlinegraphic fileref="switch.png" format="PNG"></inlinegraphic>

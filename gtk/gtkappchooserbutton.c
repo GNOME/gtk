@@ -21,6 +21,14 @@
  * Authors: Cosimo Cecchi <ccecchi@redhat.com>
  */
 
+/**
+ * SECTION:gtkappchooserbutton
+ * @Title: GtkAppChooserButton
+ * @Short_description: A button to launch an application chooser dialog
+ *
+ * The #GtkAppChooserButton is a widget that lets the user select
+ * an application. It implements the #GtkAppChooser interface.
+ */
 #include "config.h"
 
 #include "gtkappchooserbutton.h"

@@ -24,6 +24,18 @@
  *          Cosimo Cecchi <ccecchi@redhat.com>
  */
 
+/**
+ * SECTION:gtkappchooserdialog
+ * @Title: GtkAppChooserDialog
+ * @Short_description: An application chooser dialog
+ *
+ * #GtkAppChooserDialog shows a #GtkAppChooserWidget inside a #GtkDialog.
+ *
+ * Note that #GtkAppChooserDialog does not have any interesting methods
+ * of its own. Instead, you should get the embedded #GtkAppChooserWidget
+ * using gtk_file_chooser_dialog_get_widget() and call its methods if
+ * the gneeric #GtkAppChooser interface is not sufficient for your needs.
+ */
 #include "config.h"
 
 #include "gtkappchooserdialog.h"

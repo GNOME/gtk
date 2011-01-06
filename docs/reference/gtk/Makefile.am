@@ -275,6 +275,8 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-page-setup.png		\
 	$(srcdir)/images/aboutdialog.png				\
 	$(srcdir)/images/accel-label.png				\
+	$(srcdir)/images/appchooserbutton.png				\
+	$(srcdir)/images/appchooserdialog.png				\
 	$(srcdir)/images/assistant.png					\
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\

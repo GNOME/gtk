@@ -45,6 +45,17 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+/**
+ * SECTION:gtkappchooserwidget
+ * @Title: GtkAppChooserWidget
+ * @Short_description: Application chooser widget that can be embedded in other widgets
+ *
+ * #GtkAppChooserWidget is a widget for selecting applications.
+ * It is the main building block for #GtkAppChooserDialog. Most
+ * applications only need to use the latter; but you can use
+ * this widget as part of a larger widget if you have special needs.
+ */
+
 struct _GtkAppChooserWidgetPrivate {
   GAppInfo *selected_app_info;
 
