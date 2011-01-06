@@ -1,3 +1,26 @@
+Overview of Changes from GTK+ 2.23.3 to 2.23.90
+===============================================
+
+* New deprecations:
+ - gdk_set_pointer_hooks(), gdk_display_set_pointer_hooks()
+ - gtk_range_get/set_update_policy()
+ - gtk_window_get/set_frame_dimensions() and
+   gtk_window_get/set_has_frame()
+
+* The cups print backend can now send print jobs directly in PDF if
+  cups supports it
+
+* Bugs fixed:
+ 144324 Leaking dnd contexts with XDnD
+ 165987 unsets DESKTOP_STARTUP_ID
+ 560177 Applications should send print jobs to CUPS in PDF format...
+ 562182 gtk_init() docs inaccurate
+ 622125 Note that gtk_show_uri needs gvfs to spawn URLs
+ 637691 Eating events breaks proxied DND
+ 637958 print dialog doesn't fit on netbook screen size
+ 637973 thunderbird crashes when copying text with gtk 2.23.3
+
+
 Overview of Changes from GTK+ 2.23.2 to 2.23.3
 ==============================================
 
