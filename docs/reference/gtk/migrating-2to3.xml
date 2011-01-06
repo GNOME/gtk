@@ -100,10 +100,11 @@
   </para>
   <para>
     To ensure that your application does not have problems with this, you
-    define the preprocessor symbol <literal>GSEAL_ENABLE</literal>. This
-    will make the compiler catch all uses of direct access to struct fields
-    so that you can go through them one by one and replace them with a call
-    to an accessor function instead.
+    define the preprocessor symbol <literal>GSEAL_ENABLE</literal> while
+    building your application against GTK+ 2.x. This will make the compiler
+    catch all uses of direct access to struct fields so that you can go
+    through them one by one and replace them with a call to an accessor
+    function instead.
     <programlisting>
     make CFLAGS+="-DGSEAL_ENABLE"
     </programlisting>

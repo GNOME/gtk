@@ -1546,15 +1546,6 @@ AC_CONFIG_COMMANDS([gdk/gdkconfig.h], [
 
 G_BEGIN_DECLS
 
-#ifndef GSEAL
-/* introduce GSEAL() here for all of Gdk and Gtk+ without the need to modify GLib */
-#  ifdef GSEAL_ENABLE
-#    define GSEAL(ident)      _g_sealed__ ## ident
-#  else
-#    define GSEAL(ident)      ident
-#  endif
-#endif /* !GSEAL */
-
 _______EOF
 
 	cat >>$outfile <<_______EOF
