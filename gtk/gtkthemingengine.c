@@ -809,7 +809,7 @@ gtk_theming_engine_get_border_color (GtkThemingEngine *engine,
  * gtk_theming_engine_get_border:
  * @engine: a #GtkthemingEngine
  * @state: state to retrieve the border for
- * @color: (out): return value for the border settings
+ * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
  *
