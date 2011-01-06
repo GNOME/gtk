@@ -70,35 +70,37 @@ _gdk_selection_window_destroyed (GdkWindow *window)
 }
 
 gboolean
-gdk_selection_owner_set_for_display (GdkDisplay *display,
-				     GdkWindow  *owner,
-				     GdkAtom     selection,
-				     guint32     time,
-				     gboolean    send_event)
+_gdk_broadway_display_set_selection_owner (GdkDisplay *display,
+					   GdkWindow  *owner,
+					   GdkAtom     selection,
+					   guint32     time,
+					   gboolean    send_event)
 {
   return FALSE;
 }
 
 GdkWindow *
-gdk_selection_owner_get_for_display (GdkDisplay *display,
-				     GdkAtom     selection)
+_gdk_broadway_display_get_selection_owner (GdkDisplay *display,
+					   GdkAtom     selection)
 {
   return NULL;
 }
 
 void
-gdk_selection_convert (GdkWindow *requestor,
-		       GdkAtom    selection,
-		       GdkAtom    target,
-		       guint32    time)
+_gdk_broadway_display_convert_selection (GdkDisplay *display,
+					 GdkWindow *requestor,
+					 GdkAtom    selection,
+					 GdkAtom    target,
+					 guint32    time)
 {
 }
 
 gint
-gdk_selection_property_get (GdkWindow  *requestor,
-			    guchar    **data,
-			    GdkAtom    *ret_type,
-			    gint       *ret_format)
+_gdk_broadway_display_get_selection_property (GdkDisplay *display,
+					      GdkWindow  *requestor,
+					      guchar    **data,
+					      GdkAtom    *ret_type,
+					      gint       *ret_format)
 {
   if (ret_type)
     *ret_type = GDK_NONE;
@@ -111,42 +113,23 @@ gdk_selection_property_get (GdkWindow  *requestor,
 }
 
 void
-gdk_selection_send_notify_for_display (GdkDisplay       *display,
-				       GdkNativeWindow  requestor,
-				       GdkAtom          selection,
-				       GdkAtom          target,
-				       GdkAtom          property, 
-				       guint32          time)
+_gdk_broadway_display_send_selection_notify (GdkDisplay       *display,
+					     GdkNativeWindow  requestor,
+					     GdkAtom          selection,
+					     GdkAtom          target,
+					     GdkAtom          property, 
+					     guint32          time)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 }
 
-gint
-gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
-					    GdkAtom       encoding,
-					    gint          format, 
-					    const guchar *text,
-					    gint          length,
-					    gchar      ***list)
-{
-  return 0;
-}
-
-void
-gdk_free_text_list (gchar **list)
-{
-  g_return_if_fail (list != NULL);
-
-  g_strfreev (list);
-}
-
 gint 
-gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
-					    GdkAtom        encoding,
-					    gint           format,
-					    const guchar  *text,
-					    gint           length,
-					    gchar       ***list)
+_gdk_broadway_display_text_property_to_utf8_list (GdkDisplay    *display,
+						  GdkAtom        encoding,
+						  gint           format,
+						  const guchar  *text,
+						  gint           length,
+						  gchar       ***list)
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);
@@ -155,37 +138,9 @@ gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
   return 0;
 }
 
-gint
-gdk_string_to_compound_text_for_display (GdkDisplay  *display,
-					 const gchar *str,
-					 GdkAtom     *encoding,
-					 gint        *format,
-					 guchar     **ctext,
-					 gint        *length)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
-  return 1;
-}
-
 gchar *
-gdk_utf8_to_string_target (const gchar *str)
+_gdk_broadway_display_utf8_to_string_target (GdkDisplay  *display,
+					     const gchar *str)
 {
   return g_strdup (str);
-}
-
-gboolean
-gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
-				       const gchar *str,
-				       GdkAtom     *encoding,
-				       gint        *format,
-				       guchar     **ctext,
-				       gint        *length)
-{
-  return FALSE;
-}
-
-void gdk_free_compound_text (guchar *ctext)
-{
-  g_free (ctext);
 }

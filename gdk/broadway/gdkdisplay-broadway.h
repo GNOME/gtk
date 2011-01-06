@@ -21,31 +21,31 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_DISPLAY_BROADWAY__
-#define __GDK_DISPLAY_BROADWAY__
+#ifndef __GDK_BROADWAY_DISPLAY__
+#define __GDK_BROADWAY_DISPLAY__
 
-#include <gdk/gdkdisplay.h>
-#include <gdk/gdkkeys.h>
-#include <gdk/gdkwindow.h>
-#include <gdk/gdkinternals.h>
-#include <gdk/gdkmain.h>
+#include "gdkdisplayprivate.h"
+#include "gdkkeys.h"
+#include "gdkwindow.h"
+#include "gdkinternals.h"
+#include "gdkmain.h"
 #include "broadway.h"
 
 G_BEGIN_DECLS
 
-typedef struct _GdkDisplayBroadway GdkDisplayBroadway;
-typedef struct _GdkDisplayBroadwayClass GdkDisplayBroadwayClass;
-
-#define GDK_TYPE_DISPLAY_BROADWAY              (_gdk_display_broadway_get_type())
-#define GDK_DISPLAY_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_BROADWAY, GdkDisplayBroadway))
-#define GDK_DISPLAY_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_BROADWAY, GdkDisplayBroadwayClass))
-#define GDK_IS_DISPLAY_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_BROADWAY))
-#define GDK_IS_DISPLAY_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_BROADWAY))
-#define GDK_DISPLAY_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_BROADWAY, GdkDisplayBroadwayClass))
+typedef struct _GdkBroadwayDisplay GdkBroadwayDisplay;
+typedef struct _GdkBroadwayDisplayClass GdkBroadwayDisplayClass;
 
 typedef  struct HttpRequest HttpRequest;
 
-struct _GdkDisplayBroadway
+#define GDK_TYPE_BROADWAY_DISPLAY              (gdk_broadway_display_get_type())
+#define GDK_BROADWAY_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplay))
+#define GDK_BROADWAY_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplayClass))
+#define GDK_IS_BROADWAY_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_DISPLAY))
+#define GDK_IS_BROADWAY_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_DISPLAY))
+#define GDK_BROADWAY_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_DISPLAY, GdkBroadwayDisplayClass))
+
+struct _GdkBroadwayDisplay
 {
   GdkDisplay parent_instance;
   GdkScreen *default_screen;
@@ -86,13 +86,13 @@ struct _GdkDisplayBroadway
   HttpRequest *input;
 };
 
-struct _GdkDisplayBroadwayClass
+struct _GdkBroadwayDisplayClass
 {
   GdkDisplayClass parent_class;
 };
 
-GType      _gdk_display_broadway_get_type            (void);
+GType      gdk_broadway_display_get_type            (void);
 
 G_END_DECLS
 
-#endif				/* __GDK_DISPLAY_BROADWAY__ */
+#endif				/* __GDK_BROADWAY_DISPLAY__ */

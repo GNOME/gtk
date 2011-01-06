@@ -32,7 +32,7 @@
 #include "gdkscreen-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdevicemanager.h"
+#include "gdkdevicemanager-broadway.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -41,45 +41,37 @@
 #include <errno.h>
 #include <unistd.h>
 
-static void   gdk_display_broadway_dispose            (GObject            *object);
-static void   gdk_display_broadway_finalize           (GObject            *object);
+static void   gdk_broadway_display_dispose            (GObject            *object);
+static void   gdk_broadway_display_finalize           (GObject            *object);
 
-G_DEFINE_TYPE (GdkDisplayBroadway, _gdk_display_broadway, GDK_TYPE_DISPLAY)
-
-
-static void
-_gdk_display_broadway_class_init (GdkDisplayBroadwayClass * class)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (class);
-
-  object_class->dispose = gdk_display_broadway_dispose;
-  object_class->finalize = gdk_display_broadway_finalize;
-}
+G_DEFINE_TYPE (GdkBroadwayDisplay, gdk_broadway_display, GDK_TYPE_DISPLAY)
 
 static void
-_gdk_display_broadway_init (GdkDisplayBroadway *display)
+gdk_broadway_display_init (GdkBroadwayDisplay *display)
 {
+  _gdk_broadway_display_manager_add_display (gdk_display_manager_get (),
+					     GDK_DISPLAY_OBJECT (display));
   display->id_ht = g_hash_table_new (NULL, NULL);
 }
 
 static void
-_gdk_event_init (GdkDisplay *display)
+gdk_event_init (GdkDisplay *display)
 {
-  GdkDisplayBroadway *display_broadway;
+  GdkBroadwayDisplay *broadway_display;
 
-  display_broadway = GDK_DISPLAY_BROADWAY (display);
-  display_broadway->event_source = gdk_event_source_new (display);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
+  broadway_display->event_source = _gdk_broadway_event_source_new (display);
 }
 
 static void
-_gdk_input_init (GdkDisplay *display)
+gdk_broadway_display_init_input (GdkDisplay *display)
 {
-  GdkDisplayBroadway *display_broadway;
+  GdkBroadwayDisplay *broadway_display;
   GdkDeviceManager *device_manager;
   GdkDevice *device;
   GList *list, *l;
 
-  display_broadway = GDK_DISPLAY_BROADWAY (display);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
   device_manager = gdk_display_get_device_manager (display);
 
   /* For backwards compatibility, just add
@@ -94,7 +86,7 @@ _gdk_input_init (GdkDisplay *display)
       if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
         continue;
 
-      display_broadway->input_devices = g_list_prepend (display_broadway->input_devices,
+      broadway_display->input_devices = g_list_prepend (broadway_display->input_devices,
                                                    g_object_ref (l->data));
     }
 
@@ -117,7 +109,7 @@ _gdk_input_init (GdkDisplay *display)
     }
 
   /* Add the core pointer to the devices list */
-  display_broadway->input_devices = g_list_prepend (display_broadway->input_devices,
+  broadway_display->input_devices = g_list_prepend (broadway_display->input_devices,
                                                g_object_ref (display->core_pointer));
 
   g_list_free (list);
@@ -184,13 +176,13 @@ got_input (GInputStream *stream,
   message = g_data_input_stream_read_upto_finish (G_DATA_INPUT_STREAM (stream), result, &len, &error);
   if (message == NULL)
     {
-      GDK_DISPLAY_BROADWAY (request->display)->input = NULL;
+      GDK_BROADWAY_DISPLAY (request->display)->input = NULL;
       http_request_free (request);
       return;
     }
 
   g_assert (message[0] == 0);
-  _gdk_events_got_input (request->display, message + 1);
+  _gdk_broadway_events_got_input (request->display, message + 1);
 
   /* Skip past ending 0xff */
   g_data_input_stream_read_byte (request->data, NULL, NULL);
@@ -232,11 +224,11 @@ start_input (HttpRequest *request)
   gsize len;
   GChecksum *checksum;
   char *origin, *host;
-  GdkDisplayBroadway *display_broadway;
+  GdkBroadwayDisplay *broadway_display;
 
-  display_broadway = GDK_DISPLAY_BROADWAY (request->display);
+  broadway_display = GDK_BROADWAY_DISPLAY (request->display);
 
-  if (display_broadway->input != NULL)
+  if (broadway_display->input != NULL)
     {
       send_error (request, 409, "Input already handled");
       return;
@@ -337,7 +329,7 @@ start_input (HttpRequest *request)
   g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
 			     challenge, 16, NULL, NULL, NULL);
 
-  display_broadway->input = request;
+  broadway_display->input = request;
 
   g_data_input_stream_read_upto_async (request->data, "\xff", 1, 0, NULL,
 				       (GAsyncReadyCallback)got_input, request);
@@ -349,16 +341,16 @@ static void
 start_output (HttpRequest *request)
 {
   GSocket *socket;
-  GdkDisplayBroadway *display_broadway;
+  GdkBroadwayDisplay *broadway_display;
   int fd;
 
   socket = g_socket_connection_get_socket (request->connection);
 
-  display_broadway = GDK_DISPLAY_BROADWAY (request->display);
+  broadway_display = GDK_BROADWAY_DISPLAY (request->display);
   fd = g_socket_get_fd (socket);
   set_fd_blocking (fd);
   /* We dup this because otherwise it'll be closed with the request SocketConnection */
-  display_broadway->output = broadway_output_new (dup(fd));
+  broadway_display->output = broadway_output_new (dup(fd));
   _gdk_broadway_resync_windows ();
   http_request_free (request);
 }
@@ -488,45 +480,40 @@ handle_incoming_connection (GSocketService    *service,
 }
 
 GdkDisplay *
-gdk_display_open (const gchar *display_name)
+_gdk_broadway_display_open (const gchar *display_name)
 {
   GdkDisplay *display;
-  GdkDisplayBroadway *display_broadway;
-  const char *sm_client_id;
+  GdkBroadwayDisplay *broadway_display;
   GError *error;
 
-  display = g_object_new (GDK_TYPE_DISPLAY_BROADWAY, NULL);
-  display_broadway = GDK_DISPLAY_BROADWAY (display);
+  display = g_object_new (GDK_TYPE_BROADWAY_DISPLAY, NULL);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  display_broadway->output = NULL;
+  broadway_display->output = NULL;
 
   /* initialize the display's screens */
-  display_broadway->screens = g_new (GdkScreen *, 1);
-  display_broadway->screens[0] = _gdk_broadway_screen_new (display, 0);
+  broadway_display->screens = g_new (GdkScreen *, 1);
+  broadway_display->screens[0] = _gdk_broadway_screen_new (display, 0);
 
   /* We need to initialize events after we have the screen
    * structures in places
    */
-  _gdk_screen_broadway_events_init (display_broadway->screens[0]);
+  _gdk_broadway_screen_events_init (broadway_display->screens[0]);
 
   /*set the default screen */
-  display_broadway->default_screen = display_broadway->screens[0];
+  broadway_display->default_screen = broadway_display->screens[0];
 
-  display->device_manager = _gdk_device_manager_new (display);
+  display->device_manager = _gdk_broadway_device_manager_new (display);
 
-  _gdk_event_init (display);
+  gdk_event_init (display);
 
-  sm_client_id = _gdk_get_sm_client_id ();
-  if (sm_client_id)
-    _gdk_windowing_display_set_sm_client_id (display, sm_client_id);
+  gdk_broadway_display_init_input (display);
+  _gdk_broadway_display_init_dnd (display);
 
-  _gdk_input_init (display);
-  _gdk_dnd_init (display);
+  _gdk_broadway_screen_setup (broadway_display->screens[0]);
 
-  _gdk_broadway_screen_setup (display_broadway->screens[0]);
-
-  display_broadway->service = g_socket_service_new ();
-  if (!g_socket_listener_add_inet_port (G_SOCKET_LISTENER (display_broadway->service),
+  broadway_display->service = g_socket_service_new ();
+  if (!g_socket_listener_add_inet_port (G_SOCKET_LISTENER (broadway_display->service),
 					8080,
 					G_OBJECT (display),
 					&error))
@@ -535,7 +522,7 @@ gdk_display_open (const gchar *display_name)
       g_error_free (error);
       return NULL;
     }
-  g_signal_connect (display_broadway->service, "incoming", G_CALLBACK (handle_incoming_connection), NULL);
+  g_signal_connect (broadway_display->service, "incoming", G_CALLBACK (handle_incoming_connection), NULL);
 
   g_signal_emit_by_name (display, "opened");
   g_signal_emit_by_name (gdk_display_manager_get (), "display-opened", display);
@@ -544,68 +531,68 @@ gdk_display_open (const gchar *display_name)
 }
 
 
-G_CONST_RETURN gchar *
-gdk_display_get_name (GdkDisplay *display)
+static G_CONST_RETURN gchar *
+gdk_broadway_display_get_name (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return (gchar *) "Broadway";
 }
 
-gint
-gdk_display_get_n_screens (GdkDisplay *display)
+static gint
+gdk_broadway_display_get_n_screens (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
 
   return 1;
 }
 
-GdkScreen *
-gdk_display_get_screen (GdkDisplay *display,
-			gint        screen_num)
+static GdkScreen *
+gdk_broadway_display_get_screen (GdkDisplay *display,
+				 gint        screen_num)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
   g_return_val_if_fail (screen_num == 0, NULL);
 
-  return GDK_DISPLAY_BROADWAY (display)->screens[screen_num];
+  return GDK_BROADWAY_DISPLAY (display)->screens[screen_num];
 }
 
-GdkScreen *
-gdk_display_get_default_screen (GdkDisplay *display)
+static GdkScreen *
+gdk_broadway_display_get_default_screen (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_BROADWAY (display)->default_screen;
+  return GDK_BROADWAY_DISPLAY (display)->default_screen;
 }
 
-void
-gdk_device_ungrab (GdkDevice  *device,
-                   guint32     time_)
-{
-}
-
-void
-gdk_display_beep (GdkDisplay *display)
+static void
+gdk_broadway_display_beep (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 }
 
-void
-gdk_display_sync (GdkDisplay *display)
+static void
+gdk_broadway_display_sync (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
 }
 
-void
-gdk_display_flush (GdkDisplay *display)
+static void
+gdk_broadway_display_flush (GdkDisplay *display)
 {
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
 }
 
-GdkWindow *
-gdk_display_get_default_group (GdkDisplay *display)
+static gboolean
+gdk_broadway_display_has_pending (GdkDisplay *display)
+{
+  return FALSE;
+}
+
+static GdkWindow *
+gdk_broadway_display_get_default_group (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
@@ -613,156 +600,208 @@ gdk_display_get_default_group (GdkDisplay *display)
 }
 
 static void
-gdk_display_broadway_dispose (GObject *object)
+gdk_broadway_display_dispose (GObject *object)
 {
-  GdkDisplayBroadway *display_broadway = GDK_DISPLAY_BROADWAY (object);
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (object);
 
-  g_list_foreach (display_broadway->input_devices, (GFunc) g_object_run_dispose, NULL);
+  _gdk_broadway_display_manager_remove_display (gdk_display_manager_get (),
+						GDK_DISPLAY_OBJECT (object));
 
-  _gdk_screen_close (display_broadway->screens[0]);
+  g_list_foreach (broadway_display->input_devices, (GFunc) g_object_run_dispose, NULL);
 
-  if (display_broadway->event_source)
+  _gdk_screen_close (broadway_display->screens[0]);
+
+  if (broadway_display->event_source)
     {
-      g_source_destroy (display_broadway->event_source);
-      g_source_unref (display_broadway->event_source);
-      display_broadway->event_source = NULL;
+      g_source_destroy (broadway_display->event_source);
+      g_source_unref (broadway_display->event_source);
+      broadway_display->event_source = NULL;
     }
 
-  G_OBJECT_CLASS (_gdk_display_broadway_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_broadway_display_parent_class)->dispose (object);
 }
 
 static void
-gdk_display_broadway_finalize (GObject *object)
+gdk_broadway_display_finalize (GObject *object)
 {
-  GdkDisplayBroadway *display_broadway = GDK_DISPLAY_BROADWAY (object);
+  GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (object);
 
   /* Keymap */
-  if (display_broadway->keymap)
-    g_object_unref (display_broadway->keymap);
+  if (broadway_display->keymap)
+    g_object_unref (broadway_display->keymap);
 
-  _gdk_broadway_cursor_display_finalize (GDK_DISPLAY_OBJECT(display_broadway));
+  _gdk_broadway_cursor_display_finalize (GDK_DISPLAY_OBJECT(broadway_display));
 
   /* Atom Hashtable */
-  g_hash_table_destroy (display_broadway->atom_from_virtual);
-  g_hash_table_destroy (display_broadway->atom_to_virtual);
+  g_hash_table_destroy (broadway_display->atom_from_virtual);
+  g_hash_table_destroy (broadway_display->atom_to_virtual);
 
   /* input GdkDevice list */
-  g_list_foreach (display_broadway->input_devices, (GFunc) g_object_unref, NULL);
-  g_list_free (display_broadway->input_devices);
+  g_list_foreach (broadway_display->input_devices, (GFunc) g_object_unref, NULL);
+  g_list_free (broadway_display->input_devices);
   /* Free all GdkScreens */
-  g_object_unref (display_broadway->screens[0]);
-  g_free (display_broadway->screens);
+  g_object_unref (broadway_display->screens[0]);
+  g_free (broadway_display->screens);
 
-  G_OBJECT_CLASS (_gdk_display_broadway_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_broadway_display_parent_class)->finalize (object);
 }
 
 void
-_gdk_windowing_set_default_display (GdkDisplay *display)
+_gdk_broadway_display_make_default (GdkDisplay *display)
 {
 }
 
-void
-gdk_notify_startup_complete (void)
+static void
+gdk_broadway_display_notify_startup_complete (GdkDisplay  *display,
+					      const gchar *startup_id)
 {
 }
 
-void
-gdk_notify_startup_complete_with_id (const gchar* startup_id)
-{
-}
-
-gboolean
-gdk_display_supports_selection_notification (GdkDisplay *display)
+static gboolean
+gdk_broadway_display_supports_selection_notification (GdkDisplay *display)
 {
   return FALSE;
 }
 
-gboolean
-gdk_display_request_selection_notification (GdkDisplay *display,
-					    GdkAtom     selection)
+static gboolean
+gdk_broadway_display_request_selection_notification (GdkDisplay *display,
+						     GdkAtom     selection)
 
 {
     return FALSE;
 }
 
-gboolean
-gdk_display_supports_clipboard_persistence (GdkDisplay *display)
+static gboolean
+gdk_broadway_display_supports_clipboard_persistence (GdkDisplay *display)
 {
   return FALSE;
 }
 
-void
-gdk_display_store_clipboard (GdkDisplay    *display,
-			     GdkWindow     *clipboard_window,
-			     guint32        time_,
-			     const GdkAtom *targets,
-			     gint           n_targets)
+static void
+gdk_broadway_display_store_clipboard (GdkDisplay    *display,
+				      GdkWindow     *clipboard_window,
+				      guint32        time_,
+				      const GdkAtom *targets,
+				      gint           n_targets)
 {
 }
 
-gboolean
-gdk_display_supports_shapes (GdkDisplay *display)
-{
-  return FALSE;
-}
-
-gboolean
-gdk_display_supports_input_shapes (GdkDisplay *display)
+static gboolean
+gdk_broadway_display_supports_shapes (GdkDisplay *display)
 {
   return FALSE;
 }
 
-gboolean
-gdk_display_supports_composite (GdkDisplay *display)
+static gboolean
+gdk_broadway_display_supports_input_shapes (GdkDisplay *display)
 {
   return FALSE;
 }
 
-GList *
-gdk_display_list_devices (GdkDisplay *display)
+static gboolean
+gdk_broadway_display_supports_composite (GdkDisplay *display)
+{
+  return FALSE;
+}
+
+static GList *
+gdk_broadway_display_list_devices (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
-  return GDK_DISPLAY_BROADWAY (display)->input_devices;
+  return GDK_BROADWAY_DISPLAY (display)->input_devices;
 }
 
-gboolean
-gdk_event_send_client_message_for_display (GdkDisplay     *display,
-					   GdkEvent       *event,
-					   GdkNativeWindow winid)
+static gboolean
+gdk_broadway_display_send_client_message (GdkDisplay     *display,
+					  GdkEvent       *event,
+					  GdkNativeWindow winid)
 {
   return FALSE;
 }
 
-void
-gdk_display_add_client_message_filter (GdkDisplay   *display,
-				       GdkAtom       message_type,
-				       GdkFilterFunc func,
-				       gpointer      data)
+static void
+gdk_broadway_display_add_client_message_filter (GdkDisplay   *display,
+						GdkAtom       message_type,
+						GdkFilterFunc func,
+						gpointer      data)
 {
 }
 
-void
-gdk_add_client_message_filter (GdkAtom       message_type,
-			       GdkFilterFunc func,
-			       gpointer      data)
-{
-}
-
-void
-gdk_flush (void)
-{
-  GSList *tmp_list = _gdk_displays;
-
-  while (tmp_list)
-    {
-      gdk_display_flush (GDK_DISPLAY_OBJECT (tmp_list->data));
-      tmp_list = tmp_list->next;
-    }
-}
-
-gulong
-_gdk_windowing_window_get_next_serial (GdkDisplay *display)
+static gulong
+gdk_broadway_display_get_next_serial (GdkDisplay *display)
 {
   return 0;
 }
+
+
+static void
+gdk_broadway_display_event_data_copy (GdkDisplay    *display,
+				      const GdkEvent *src,
+				      GdkEvent       *dst)
+{
+}
+
+static void
+gdk_broadway_display_event_data_free (GdkDisplay    *display,
+				      GdkEvent *event)
+{
+}
+
+static void
+gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+  GdkDisplayClass *display_class = GDK_DISPLAY_CLASS (class);
+
+  object_class->dispose = gdk_broadway_display_dispose;
+  object_class->finalize = gdk_broadway_display_finalize;
+
+  display_class->window_type = GDK_TYPE_BROADWAY_WINDOW;
+
+  display_class->get_name = gdk_broadway_display_get_name;
+  display_class->get_n_screens = gdk_broadway_display_get_n_screens;
+  display_class->get_screen = gdk_broadway_display_get_screen;
+  display_class->get_default_screen = gdk_broadway_display_get_default_screen;
+  display_class->beep = gdk_broadway_display_beep;
+  display_class->sync = gdk_broadway_display_sync;
+  display_class->flush = gdk_broadway_display_flush;
+  display_class->has_pending = gdk_broadway_display_has_pending;
+  display_class->queue_events = _gdk_broadway_display_queue_events;
+  display_class->get_default_group = gdk_broadway_display_get_default_group;
+  display_class->supports_selection_notification = gdk_broadway_display_supports_selection_notification;
+  display_class->request_selection_notification = gdk_broadway_display_request_selection_notification;
+  display_class->supports_clipboard_persistence = gdk_broadway_display_supports_clipboard_persistence;
+  display_class->store_clipboard = gdk_broadway_display_store_clipboard;
+  display_class->supports_shapes = gdk_broadway_display_supports_shapes;
+  display_class->supports_input_shapes = gdk_broadway_display_supports_input_shapes;
+  display_class->supports_composite = gdk_broadway_display_supports_composite;
+  display_class->list_devices = gdk_broadway_display_list_devices;
+  display_class->send_client_message = gdk_broadway_display_send_client_message;
+  display_class->add_client_message_filter = gdk_broadway_display_add_client_message_filter;
+  display_class->get_drag_protocol = _gdk_broadway_display_get_drag_protocol;
+  display_class->get_cursor_for_type = _gdk_broadway_display_get_cursor_for_type;
+  display_class->get_cursor_for_name = _gdk_broadway_display_get_cursor_for_name;
+  display_class->get_cursor_for_pixbuf = _gdk_broadway_display_get_cursor_for_pixbuf;
+  display_class->get_default_cursor_size = _gdk_broadway_display_get_default_cursor_size;
+  display_class->get_maximal_cursor_size = _gdk_broadway_display_get_maximal_cursor_size;
+  display_class->supports_cursor_alpha = _gdk_broadway_display_supports_cursor_alpha;
+  display_class->supports_cursor_color = _gdk_broadway_display_supports_cursor_color;
+
+  display_class->before_process_all_updates = _gdk_broadway_display_before_process_all_updates;
+  display_class->after_process_all_updates = _gdk_broadway_display_after_process_all_updates;
+  display_class->get_next_serial = gdk_broadway_display_get_next_serial;
+  display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
+  display_class->event_data_copy = gdk_broadway_display_event_data_copy;
+  display_class->event_data_free = gdk_broadway_display_event_data_free;
+  display_class->create_window_impl = _gdk_broadway_display_create_window_impl;
+  display_class->get_keymap = _gdk_broadway_display_get_keymap;
+  display_class->get_selection_owner = _gdk_broadway_display_get_selection_owner;
+  display_class->set_selection_owner = _gdk_broadway_display_set_selection_owner;
+  display_class->send_selection_notify = _gdk_broadway_display_send_selection_notify;
+  display_class->get_selection_property = _gdk_broadway_display_get_selection_property;
+  display_class->convert_selection = _gdk_broadway_display_convert_selection;
+  display_class->text_property_to_utf8_list = _gdk_broadway_display_text_property_to_utf8_list;
+  display_class->utf8_to_string_target = _gdk_broadway_display_utf8_to_string_target;
+}
+

@@ -37,6 +37,7 @@ broadway_built_sources =		\
 libgdk_broadway_la_SOURCES =		\
 	${broadway_built_private_headers}\
 	gdkapplaunchcontext-broadway.c \
+	gdkbroadwaydisplaymanager.h	\
 	gdkcursor-broadway.c	\
 	gdkdevice-broadway.h	\
 	gdkdevice-broadway.c	\
@@ -44,6 +45,7 @@ libgdk_broadway_la_SOURCES =		\
 	gdkdevicemanager-broadway.c \
 	gdkdisplay-broadway.c	\
 	gdkdisplay-broadway.h	\
+	gdkdisplaymanager-broadway.c	\
 	gdkdnd-broadway.c	\
 	gdkeventsource.c	\
 	gdkeventsource.h	\
@@ -56,7 +58,6 @@ libgdk_broadway_la_SOURCES =		\
 	gdkscreen-broadway.c	\
 	gdkscreen-broadway.h	\
 	gdkselection-broadway.c	\
-	gdkspawn-broadway.c	\
 	gdktestutils-broadway.c	\
 	gdkvisual-broadway.c	\
 	gdkwindow-broadway.c	\

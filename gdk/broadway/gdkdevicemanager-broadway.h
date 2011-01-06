@@ -20,34 +20,34 @@
 #ifndef __GDK_DEVICE_MANAGER_BROADWAY_H__
 #define __GDK_DEVICE_MANAGER_BROADWAY_H__
 
-#include <gdk/gdkdevicemanager.h>
+#include <gdk/gdkdevicemanagerprivate.h>
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_DEVICE_MANAGER_CORE         (gdk_device_manager_core_get_type ())
-#define GDK_DEVICE_MANAGER_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_MANAGER_CORE, GdkDeviceManagerCore))
-#define GDK_DEVICE_MANAGER_CORE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE_MANAGER_CORE, GdkDeviceManagerCoreClass))
-#define GDK_IS_DEVICE_MANAGER_CORE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE_MANAGER_CORE))
-#define GDK_IS_DEVICE_MANAGER_CORE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_DEVICE_MANAGER_CORE))
-#define GDK_DEVICE_MANAGER_CORE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE_MANAGER_CORE, GdkDeviceManagerCoreClass))
+#define GDK_TYPE_BROADWAY_DEVICE_MANAGER         (gdk_broadway_device_manager_get_type ())
+#define GDK_BROADWAY_DEVICE_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_BROADWAY_DEVICE_MANAGER, GdkBroadwayDeviceManager))
+#define GDK_BROADWAY_DEVICE_MANAGER_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_BROADWAY_DEVICE_MANAGER, GdkBroadwayDeviceManagerClass))
+#define GDK_IS_BROADWAY_DEVICE_MANAGER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_BROADWAY_DEVICE_MANAGER))
+#define GDK_IS_BROADWAY_DEVICE_MANAGER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_BROADWAY_DEVICE_MANAGER))
+#define GDK_BROADWAY_DEVICE_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_BROADWAY_DEVICE_MANAGER, GdkBroadwayDeviceManagerClass))
 
-typedef struct _GdkDeviceManagerCore GdkDeviceManagerCore;
-typedef struct _GdkDeviceManagerCoreClass GdkDeviceManagerCoreClass;
+typedef struct _GdkBroadwayDeviceManager GdkBroadwayDeviceManager;
+typedef struct _GdkBroadwayDeviceManagerClass GdkBroadwayDeviceManagerClass;
 
-struct _GdkDeviceManagerCore
+struct _GdkBroadwayDeviceManager
 {
   GdkDeviceManager parent_object;
   GdkDevice *core_pointer;
   GdkDevice *core_keyboard;
 };
 
-struct _GdkDeviceManagerCoreClass
+struct _GdkBroadwayDeviceManagerClass
 {
   GdkDeviceManagerClass parent_class;
 };
 
-GType gdk_device_manager_core_get_type (void) G_GNUC_CONST;
-
+GType gdk_broadway_device_manager_get_type (void) G_GNUC_CONST;
+GdkDeviceManager *_gdk_broadway_device_manager_new (GdkDisplay *display);
 
 G_END_DECLS
 

@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 typedef struct _GdkEventSource GdkEventSource;
 
 G_GNUC_INTERNAL
-GSource * gdk_event_source_new            (GdkDisplay *display);
+GSource * _gdk_broadway_event_source_new            (GdkDisplay *display);
 
 G_END_DECLS
 

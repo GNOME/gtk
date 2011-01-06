@@ -89,10 +89,10 @@ gdk_event_source_check (GSource *source)
 }
 
 void
-_gdk_events_got_input (GdkDisplay *display,
-		       const char *message)
+_gdk_broadway_events_got_input (GdkDisplay *display,
+				const char *message)
 {
-  GdkDisplayBroadway *display_broadway = GDK_DISPLAY_BROADWAY (display);
+  GdkBroadwayDisplay *display_broadway = GDK_BROADWAY_DISPLAY (display);
   GdkScreen *screen;
   GdkWindow *root, *window;
   char *p;
@@ -288,7 +288,7 @@ _gdk_events_got_input (GdkDisplay *display,
 }
 
 void
-_gdk_events_queue (GdkDisplay *display)
+_gdk_broadway_display_queue_events (GdkDisplay *display)
 {
 }
 
@@ -325,7 +325,7 @@ gdk_event_source_finalize (GSource *source)
 }
 
 GSource *
-gdk_event_source_new (GdkDisplay *display)
+_gdk_broadway_event_source_new (GdkDisplay *display)
 {
   GSource *source;
   GdkEventSource *event_source;
@@ -346,21 +346,4 @@ gdk_event_source_new (GdkDisplay *display)
   event_sources = g_list_prepend (event_sources, source);
 
   return source;
-}
-
-gboolean
-gdk_events_pending (void)
-{
-  GList *tmp_list;
-
-  for (tmp_list = event_sources; tmp_list; tmp_list = tmp_list->next)
-    {
-      GdkEventSource *tmp_source = tmp_list->data;
-      GdkDisplay *display = tmp_source->display;
-
-      if (_gdk_event_queue_find_first (display))
-	return TRUE;
-    }
-
-  return FALSE;
 }

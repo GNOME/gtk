@@ -29,7 +29,6 @@
 #include "gdkintl.h"
 
 #include <glib.h>
-#include <gio/gdesktopappinfo.h>
 
 #include <string.h>
 #include <unistd.h>

@@ -30,32 +30,32 @@
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
 
-static void    gdk_device_manager_core_finalize    (GObject *object);
-static void    gdk_device_manager_core_constructed (GObject *object);
+static void    gdk_broadway_device_manager_finalize    (GObject *object);
+static void    gdk_broadway_device_manager_constructed (GObject *object);
 
-static GList * gdk_device_manager_core_list_devices (GdkDeviceManager *device_manager,
-                                                     GdkDeviceType     type);
-static GdkDevice * gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager);
+static GList * gdk_broadway_device_manager_list_devices (GdkDeviceManager *device_manager,
+							 GdkDeviceType     type);
+static GdkDevice * gdk_broadway_device_manager_get_client_pointer (GdkDeviceManager *device_manager);
 
-G_DEFINE_TYPE (GdkDeviceManagerCore, gdk_device_manager_core, GDK_TYPE_DEVICE_MANAGER)
+G_DEFINE_TYPE (GdkBroadwayDeviceManager, gdk_broadway_device_manager, GDK_TYPE_DEVICE_MANAGER)
 
 static void
-gdk_device_manager_core_class_init (GdkDeviceManagerCoreClass *klass)
+gdk_broadway_device_manager_class_init (GdkBroadwayDeviceManagerClass *klass)
 {
   GdkDeviceManagerClass *device_manager_class = GDK_DEVICE_MANAGER_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = gdk_device_manager_core_finalize;
-  object_class->constructed = gdk_device_manager_core_constructed;
-  device_manager_class->list_devices = gdk_device_manager_core_list_devices;
-  device_manager_class->get_client_pointer = gdk_device_manager_core_get_client_pointer;
+  object_class->finalize = gdk_broadway_device_manager_finalize;
+  object_class->constructed = gdk_broadway_device_manager_constructed;
+  device_manager_class->list_devices = gdk_broadway_device_manager_list_devices;
+  device_manager_class->get_client_pointer = gdk_broadway_device_manager_get_client_pointer;
 }
 
 static GdkDevice *
 create_core_pointer (GdkDeviceManager *device_manager,
                      GdkDisplay       *display)
 {
-  return g_object_new (GDK_TYPE_DEVICE_CORE,
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Core Pointer",
                        "type", GDK_DEVICE_TYPE_MASTER,
                        "input-source", GDK_SOURCE_MOUSE,
@@ -70,7 +70,7 @@ static GdkDevice *
 create_core_keyboard (GdkDeviceManager *device_manager,
                       GdkDisplay       *display)
 {
-  return g_object_new (GDK_TYPE_DEVICE_CORE,
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE,
                        "name", "Core Keyboard",
                        "type", GDK_DEVICE_TYPE_MASTER,
                        "input-source", GDK_SOURCE_KEYBOARD,
@@ -82,30 +82,30 @@ create_core_keyboard (GdkDeviceManager *device_manager,
 }
 
 static void
-gdk_device_manager_core_init (GdkDeviceManagerCore *device_manager)
+gdk_broadway_device_manager_init (GdkBroadwayDeviceManager *device_manager)
 {
 }
 
 static void
-gdk_device_manager_core_finalize (GObject *object)
+gdk_broadway_device_manager_finalize (GObject *object)
 {
-  GdkDeviceManagerCore *device_manager_core;
+  GdkBroadwayDeviceManager *device_manager;
 
-  device_manager_core = GDK_DEVICE_MANAGER_CORE (object);
+  device_manager = GDK_BROADWAY_DEVICE_MANAGER (object);
 
-  g_object_unref (device_manager_core->core_pointer);
-  g_object_unref (device_manager_core->core_keyboard);
+  g_object_unref (device_manager->core_pointer);
+  g_object_unref (device_manager->core_keyboard);
 
-  G_OBJECT_CLASS (gdk_device_manager_core_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_broadway_device_manager_parent_class)->finalize (object);
 }
 
 static void
-gdk_device_manager_core_constructed (GObject *object)
+gdk_broadway_device_manager_constructed (GObject *object)
 {
-  GdkDeviceManagerCore *device_manager;
+  GdkBroadwayDeviceManager *device_manager;
   GdkDisplay *display;
 
-  device_manager = GDK_DEVICE_MANAGER_CORE (object);
+  device_manager = GDK_BROADWAY_DEVICE_MANAGER (object);
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (object));
   device_manager->core_pointer = create_core_pointer (GDK_DEVICE_MANAGER (device_manager), display);
   device_manager->core_keyboard = create_core_keyboard (GDK_DEVICE_MANAGER (device_manager), display);
@@ -116,35 +116,33 @@ gdk_device_manager_core_constructed (GObject *object)
 
 
 static GList *
-gdk_device_manager_core_list_devices (GdkDeviceManager *device_manager,
-                                      GdkDeviceType     type)
+gdk_broadway_device_manager_list_devices (GdkDeviceManager *device_manager,
+					  GdkDeviceType     type)
 {
-  GdkDeviceManagerCore *device_manager_core;
+  GdkBroadwayDeviceManager *broadway_device_manager = (GdkBroadwayDeviceManager *) device_manager;
   GList *devices = NULL;
 
   if (type == GDK_DEVICE_TYPE_MASTER)
     {
-      device_manager_core = (GdkDeviceManagerCore *) device_manager;
-      devices = g_list_prepend (devices, device_manager_core->core_keyboard);
-      devices = g_list_prepend (devices, device_manager_core->core_pointer);
+      devices = g_list_prepend (devices, broadway_device_manager->core_keyboard);
+      devices = g_list_prepend (devices, broadway_device_manager->core_pointer);
     }
 
   return devices;
 }
 
 static GdkDevice *
-gdk_device_manager_core_get_client_pointer (GdkDeviceManager *device_manager)
+gdk_broadway_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
 {
-  GdkDeviceManagerCore *device_manager_core;
+  GdkBroadwayDeviceManager *broadway_device_manager = (GdkBroadwayDeviceManager *) device_manager;
 
-  device_manager_core = (GdkDeviceManagerCore *) device_manager;
-  return device_manager_core->core_pointer;
+  return broadway_device_manager->core_pointer;
 }
 
 GdkDeviceManager *
-_gdk_device_manager_new (GdkDisplay *display)
+_gdk_broadway_device_manager_new (GdkDisplay *display)
 {
-  return g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
+  return g_object_new (GDK_TYPE_BROADWAY_DEVICE_MANAGER,
 		       "display", display,
 		       NULL);
 }

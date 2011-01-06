@@ -21,28 +21,28 @@
  * Boston, MA 02111-1307, USA.
  */
 
-#ifndef __GDK_SCREEN_BROADWAY_H__
-#define __GDK_SCREEN_BROADWAY_H__
+#ifndef __GDK_BROADWAY_SCREEN_H__
+#define __GDK_BROADWAY_SCREEN_H__
 
-#include <gdk/gdkscreen.h>
+#include <gdk/gdkscreenprivate.h>
 #include <gdk/gdkvisual.h>
 #include "gdkprivate-broadway.h"
 
 G_BEGIN_DECLS
 
-typedef struct _GdkScreenBroadway GdkScreenBroadway;
-typedef struct _GdkScreenBroadwayClass GdkScreenBroadwayClass;
+typedef struct _GdkBroadwayScreen GdkBroadwayScreen;
+typedef struct _GdkBroadwayScreenClass GdkBroadwayScreenClass;
 
-#define GDK_TYPE_SCREEN_BROADWAY              (_gdk_screen_broadway_get_type ())
-#define GDK_SCREEN_BROADWAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_SCREEN_BROADWAY, GdkScreenBroadway))
-#define GDK_SCREEN_BROADWAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_SCREEN_BROADWAY, GdkScreenBroadwayClass))
-#define GDK_IS_SCREEN_BROADWAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_SCREEN_BROADWAY))
-#define GDK_IS_SCREEN_BROADWAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_SCREEN_BROADWAY))
-#define GDK_SCREEN_BROADWAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_SCREEN_BROADWAY, GdkScreenBroadwayClass))
+#define GDK_TYPE_BROADWAY_SCREEN              (gdk_broadway_screen_get_type ())
+#define GDK_BROADWAY_SCREEN(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_SCREEN, GdkBroadwayScreen))
+#define GDK_BROADWAY_SCREEN_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_BROADWAY_SCREEN, GdkBroadwayScreenClass))
+#define GDK_IS_BROADWAY_SCREEN(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_SCREEN))
+#define GDK_IS_BROADWAY_SCREEN_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_BROADWAY_SCREEN))
+#define GDK_BROADWAY_SCREEN_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_BROADWAY_SCREEN, GdkBroadwayScreenClass))
 
 typedef struct _GdkBroadwayMonitor GdkBroadwayMonitor;
 
-struct _GdkScreenBroadway
+struct _GdkBroadwayScreen
 {
   GdkScreen parent_instance;
 
@@ -63,18 +63,18 @@ struct _GdkScreenBroadway
   gint navailable_types;
 };
 
-struct _GdkScreenBroadwayClass
+struct _GdkBroadwayScreenClass
 {
   GdkScreenClass parent_class;
 
-  void (* window_manager_changed) (GdkScreenBroadway *screen_broadway);
+  void (* window_manager_changed) (GdkBroadwayScreen *screen);
 };
 
-GType       _gdk_screen_broadway_get_type (void);
+GType       gdk_broadway_screen_get_type (void);
 GdkScreen * _gdk_broadway_screen_new      (GdkDisplay *display,
 					   gint	  screen_number);
-void _gdk_broadway_screen_setup                  (GdkScreen *screen);
+void _gdk_broadway_screen_setup           (GdkScreen *screen);
 
 G_END_DECLS
 
-#endif /* __GDK_SCREEN_BROADWAY_H__ */
+#endif /* __GDK_BROADWAY_SCREEN_H__ */

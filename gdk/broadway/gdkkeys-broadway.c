@@ -29,6 +29,7 @@
 #include "gdkprivate-broadway.h"
 #include "gdkinternals.h"
 #include "gdkdisplay-broadway.h"
+#include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"
 
 #include <stdio.h>
@@ -38,199 +39,152 @@
 #include <limits.h>
 #include <errno.h>
 
-typedef struct _GdkKeymapBroadway   GdkKeymapBroadway;
-typedef struct _GdkKeymapClass GdkKeymapBroadwayClass;
+typedef struct _GdkBroadwayKeymap   GdkBroadwayKeymap;
+typedef struct _GdkKeymapClass GdkBroadwayKeymapClass;
 
-#define GDK_TYPE_KEYMAP_BROADWAY          (gdk_keymap_broadway_get_type ())
-#define GDK_KEYMAP_BROADWAY(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_KEYMAP_BROADWAY, GdkKeymapBroadway))
-#define GDK_IS_KEYMAP_BROADWAY(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_KEYMAP_BROADWAY))
+#define GDK_TYPE_BROADWAY_KEYMAP          (gdk_broadway_keymap_get_type ())
+#define GDK_BROADWAY_KEYMAP(object)       (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_BROADWAY_KEYMAP, GdkBroadwayKeymap))
+#define GDK_IS_BROADWAY_KEYMAP(object)    (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_BROADWAY_KEYMAP))
 
 typedef struct _DirectionCacheEntry DirectionCacheEntry;
 
-struct _GdkKeymapBroadway
+struct _GdkBroadwayKeymap
 {
   GdkKeymap     parent_instance;
-
 };
 
-#define KEYMAP_USE_XKB(keymap) GDK_DISPLAY_BROADWAY ((keymap)->display)->use_xkb
-#define KEYMAP_XDISPLAY(keymap) GDK_DISPLAY_XDISPLAY ((keymap)->display)
-
-static GType gdk_keymap_broadway_get_type   (void);
-static void  gdk_keymap_broadway_class_init (GdkKeymapBroadwayClass *klass);
-static void  gdk_keymap_broadway_init       (GdkKeymapBroadway      *keymap);
-static void  gdk_keymap_broadway_finalize   (GObject           *object);
-
-static GdkKeymapClass *parent_class = NULL;
-
-static GType
-gdk_keymap_broadway_get_type (void)
+struct _GdkBroadwayKeymapClass
 {
-  static GType object_type = 0;
+  GdkKeymapClass keymap_class;
+};
 
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-	{
-	  sizeof (GdkKeymapClass),
-	  (GBaseInitFunc) NULL,
-	  (GBaseFinalizeFunc) NULL,
-	  (GClassInitFunc) gdk_keymap_broadway_class_init,
-	  NULL,           /* class_finalize */
-	  NULL,           /* class_data */
-	  sizeof (GdkKeymapBroadway),
-	  0,              /* n_preallocs */
-	  (GInstanceInitFunc) gdk_keymap_broadway_init,
-	};
-      
-      object_type = g_type_register_static (GDK_TYPE_KEYMAP,
-                                            g_intern_static_string ("GdkKeymapBroadway"),
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
+G_DEFINE_TYPE (GdkBroadwayKeymap, gdk_broadway_keymap, GDK_TYPE_KEYMAP)
+
+static void  gdk_broadway_keymap_finalize   (GObject           *object);
 
 static void
-gdk_keymap_broadway_class_init (GdkKeymapBroadwayClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
-
-  object_class->finalize = gdk_keymap_broadway_finalize;
-}
-
-static void
-gdk_keymap_broadway_init (GdkKeymapBroadway *keymap)
+gdk_broadway_keymap_init (GdkBroadwayKeymap *keymap)
 {
 }
 
 static void
-gdk_keymap_broadway_finalize (GObject *object)
+gdk_broadway_keymap_finalize (GObject *object)
 {
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_broadway_keymap_parent_class)->finalize (object);
 }
 
 GdkKeymap*
-gdk_keymap_get_for_display (GdkDisplay *display)
+_gdk_broadway_display_get_keymap (GdkDisplay *display)
 {
-  GdkDisplayBroadway *display_broadway;
+  GdkBroadwayDisplay *broadway_display;
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  display_broadway = GDK_DISPLAY_BROADWAY (display);
+  broadway_display = GDK_BROADWAY_DISPLAY (display);
 
-  if (!display_broadway->keymap)
-    display_broadway->keymap = g_object_new (gdk_keymap_broadway_get_type (), NULL);
+  if (!broadway_display->keymap)
+    broadway_display->keymap = g_object_new (gdk_broadway_keymap_get_type (), NULL);
 
-  display_broadway->keymap->display = display;
+  broadway_display->keymap->display = display;
 
-  return display_broadway->keymap;
+  return broadway_display->keymap;
 }
 
-PangoDirection
-gdk_keymap_get_direction (GdkKeymap *keymap)
+static PangoDirection
+gdk_broadway_keymap_get_direction (GdkKeymap *keymap)
 {
   return PANGO_DIRECTION_NEUTRAL;
 }
 
-gboolean
-gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
+static gboolean
+gdk_broadway_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+static gboolean
+gdk_broadway_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
+static gboolean
+gdk_broadway_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
-                                   guint          keyval,
-                                   GdkKeymapKey **keys,
-                                   gint          *n_keys)
+static gboolean
+gdk_broadway_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
+					    guint          keyval,
+					    GdkKeymapKey **keys,
+					    gint          *n_keys)
 {
   *n_keys = 0;
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
-                                    guint          hardware_keycode,
-                                    GdkKeymapKey **keys,
-                                    guint        **keyvals,
-                                    gint          *n_entries)
+static gboolean
+gdk_broadway_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
+					     guint          hardware_keycode,
+					     GdkKeymapKey **keys,
+					     guint        **keyvals,
+					     gint          *n_entries)
 {
   *n_entries = 0;
   return FALSE;
 }
 
-guint
-gdk_keymap_lookup_key (GdkKeymap          *keymap,
-                       const GdkKeymapKey *key)
+static guint
+gdk_broadway_keymap_lookup_key (GdkKeymap          *keymap,
+				const GdkKeymapKey *key)
 {
   return 0;
 }
 
 
-gboolean
-gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
-                                     guint            hardware_keycode,
-                                     GdkModifierType  state,
-                                     gint             group,
-                                     guint           *keyval,
-                                     gint            *effective_group,
-                                     gint            *level,
-                                     GdkModifierType *consumed_modifiers)
+static gboolean
+gdk_broadway_keymap_translate_keyboard_state (GdkKeymap       *keymap,
+					      guint            hardware_keycode,
+					      GdkModifierType  state,
+					      gint             group,
+					      guint           *keyval,
+					      gint            *effective_group,
+					      gint            *level,
+					      GdkModifierType *consumed_modifiers)
 {
   return FALSE;
 }
 
-
-/* Key handling not part of the keymap */
-gchar*
-gdk_keyval_name (guint	      keyval)
-{
-  switch (keyval)
-    {
-    case GDK_KEY_Page_Up:
-      return "Page_Up";
-    case GDK_KEY_Page_Down:
-      return "Page_Down";
-    case GDK_KEY_KP_Page_Up:
-      return "KP_Page_Up";
-    case GDK_KEY_KP_Page_Down:
-      return "KP_Page_Down";
-    }
-
-  return "TODO";
-}
-
-guint
-gdk_keyval_from_name (const gchar *keyval_name)
-{
-  g_return_val_if_fail (keyval_name != NULL, 0);
-
-  return 0;
-}
-
-void
-gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
-				  GdkModifierType *state)
+static void
+gdk_broadway_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+					   GdkModifierType *state)
 {
 }
 
-gboolean
-gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
-				  GdkModifierType *state)
+static gboolean
+gdk_broadway_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+					   GdkModifierType *state)
 {
   return FALSE;
 }
+
+static void
+gdk_broadway_keymap_class_init (GdkBroadwayKeymapClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkKeymapClass *keymap_class = GDK_KEYMAP_CLASS (klass);
+
+  object_class->finalize = gdk_broadway_keymap_finalize;
+
+  keymap_class->get_direction = gdk_broadway_keymap_get_direction;
+  keymap_class->have_bidi_layouts = gdk_broadway_keymap_have_bidi_layouts;
+  keymap_class->get_caps_lock_state = gdk_broadway_keymap_get_caps_lock_state;
+  keymap_class->get_num_lock_state = gdk_broadway_keymap_get_num_lock_state;
+  keymap_class->get_entries_for_keyval = gdk_broadway_keymap_get_entries_for_keyval;
+  keymap_class->get_entries_for_keycode = gdk_broadway_keymap_get_entries_for_keycode;
+  keymap_class->lookup_key = gdk_broadway_keymap_lookup_key;
+  keymap_class->translate_keyboard_state = gdk_broadway_keymap_translate_keyboard_state;
+  keymap_class->add_virtual_modifiers = gdk_broadway_keymap_add_virtual_modifiers;
+  keymap_class->map_virtual_modifiers = gdk_broadway_keymap_map_virtual_modifiers;
+}
+

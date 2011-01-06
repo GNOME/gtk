@@ -87,36 +87,3 @@ void
 _gdk_windowing_exit (void)
 {
 }
-
-void
-gdk_error_trap_push (void)
-{
-}
-
-void
-gdk_error_trap_pop_ignored (void)
-{
-}
-
-gint
-gdk_error_trap_pop (void)
-{
-  return 0;
-}
-
-gchar *
-gdk_get_display (void)
-{
-  return g_strdup (gdk_display_get_name (gdk_display_get_default ()));
-}
-
-void
-_gdk_windowing_event_data_copy (const GdkEvent *src,
-                                GdkEvent       *dst)
-{
-}
-
-void
-_gdk_windowing_event_data_free (GdkEvent *event)
-{
-}

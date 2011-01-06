@@ -24,28 +24,28 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_DEVICE_CORE         (gdk_device_core_get_type ())
-#define GDK_DEVICE_CORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_DEVICE_CORE, GdkDeviceCore))
-#define GDK_DEVICE_CORE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_DEVICE_CORE, GdkDeviceCoreClass))
-#define GDK_IS_DEVICE_CORE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_DEVICE_CORE))
-#define GDK_IS_DEVICE_CORE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_DEVICE_CORE))
-#define GDK_DEVICE_CORE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE_CORE, GdkDeviceCoreClass))
+#define GDK_TYPE_BROADWAY_DEVICE         (gdk_broadway_device_get_type ())
+#define GDK_BROADWAY_DEVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_BROADWAY_DEVICE, GdkBroadwayDevice))
+#define GDK_BROADWAY_DEVICE_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_BROADWAY_DEVICE, GdkBroadwayDeviceClass))
+#define GDK_IS_BROADWAY_DEVICE(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_BROADWAY_DEVICE))
+#define GDK_IS_BROADWAY_DEVICE_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_BROADWAY_DEVICE))
+#define GDK_BROADWAY_DEVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_BROADWAY_DEVICE, GdkBroadwayDeviceClass))
 
-typedef struct _GdkDeviceCore GdkDeviceCore;
-typedef struct _GdkDeviceCoreClass GdkDeviceCoreClass;
+typedef struct _GdkBroadwayDevice GdkBroadwayDevice;
+typedef struct _GdkBroadwayDeviceClass GdkBroadwayDeviceClass;
 
-struct _GdkDeviceCore
+struct _GdkBroadwayDevice
 {
   GdkDevice parent_instance;
 };
 
-struct _GdkDeviceCoreClass
+struct _GdkBroadwayDeviceClass
 {
   GdkDeviceClass parent_class;
 };
 
 G_GNUC_INTERNAL
-GType gdk_device_core_get_type (void) G_GNUC_CONST;
+GType gdk_broadway_device_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 
