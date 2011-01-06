@@ -51,8 +51,8 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#ifndef __GTK_TEXT_TAG_H__
-#define __GTK_TEXT_TAG_H__
+#ifndef __GTK_TEXT_ATTRIBUTES_H__
+#define __GTK_TEXT_ATTRIBUTES_H__
 
 
 #include <gdk/gdk.h>
@@ -61,52 +61,103 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkTextIter GtkTextIter;
-typedef struct _GtkTextTagTable GtkTextTagTable;
+typedef struct _GtkTextAttributes GtkTextAttributes;
 
-#define GTK_TYPE_TEXT_TAG            (gtk_text_tag_get_type ())
-#define GTK_TEXT_TAG(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TEXT_TAG, GtkTextTag))
-#define GTK_TEXT_TAG_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TEXT_TAG, GtkTextTagClass))
-#define GTK_IS_TEXT_TAG(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TEXT_TAG))
-#define GTK_IS_TEXT_TAG_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TEXT_TAG))
-#define GTK_TEXT_TAG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TEXT_TAG, GtkTextTagClass))
+#define GTK_TYPE_TEXT_ATTRIBUTES     (gtk_text_attributes_get_type ())
 
-typedef struct _GtkTextTag             GtkTextTag;
-typedef struct _GtkTextTagPrivate      GtkTextTagPrivate;
-typedef struct _GtkTextTagClass        GtkTextTagClass;
+typedef struct _GtkTextAppearance GtkTextAppearance;
 
-struct _GtkTextTag
+struct _GtkTextAppearance
 {
-  GObject parent_instance;
+  /*< public >*/
+  GdkColor bg_color;
+  GdkColor fg_color;
 
-  GtkTextTagPrivate *priv;
+  /* super/subscript rise, can be negative */
+  gint rise;
+
+  /*< public >*/
+  guint underline : 4;          /* PangoUnderline */
+  guint strikethrough : 1;
+
+  /* Whether to use background-related values; this is irrelevant for
+   * the values struct when in a tag, but is used for the composite
+   * values struct; it's true if any of the tags being composited
+   * had background stuff set.
+   */
+  guint draw_bg : 1;
+
+  /* These are only used when we are actually laying out and rendering
+   * a paragraph; not when a GtkTextAppearance is part of a
+   * GtkTextAttributes.
+   */
+  guint inside_selection : 1;
+  guint is_text : 1;
+
+  /*< private >*/
+  guint padding[4];
 };
 
-struct _GtkTextTagClass
+struct _GtkTextAttributes
 {
-  GObjectClass parent_class;
+  /*< private >*/
+  guint refcount;
 
-  gboolean (* event) (GtkTextTag        *tag,
-                      GObject           *event_object, /* widget, canvas item, whatever */
-                      GdkEvent          *event,        /* the event itself */
-                      const GtkTextIter *iter);        /* location of event in buffer */
+  /*< public >*/
+  GtkTextAppearance appearance;
 
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
-  void (*_gtk_reserved4) (void);
+  GtkJustification justification;
+  GtkTextDirection direction;
+
+  /* Individual chunks of this can be set/unset as a group */
+  PangoFontDescription *font;
+
+  gdouble font_scale;
+
+  gint left_margin;
+  gint right_margin;
+  gint indent;
+
+  gint pixels_above_lines;
+  gint pixels_below_lines;
+  gint pixels_inside_wrap;
+
+  PangoTabArray *tabs;
+
+  GtkWrapMode wrap_mode;        /* How to handle wrap-around for this tag.
+                                 * Must be GTK_WRAPMODE_CHAR,
+                                 * GTK_WRAPMODE_NONE, GTK_WRAPMODE_WORD
+                                 */
+
+  PangoLanguage *language;
+
+  /*< private >*/
+  GdkColor *pg_bg_color;
+
+  /*< public >*/
+  /* hide the text  */
+  guint invisible : 1;
+
+  /* Background is fit to full line height rather than
+   * baseline +/- ascent/descent (font height)
+   */
+  guint bg_full_height : 1;
+
+  /* can edit this text */
+  guint editable : 1;
+
+  /*< private >*/
+  guint padding[4];
 };
 
-GType        gtk_text_tag_get_type     (void) G_GNUC_CONST;
-GtkTextTag  *gtk_text_tag_new          (const gchar       *name);
-gint         gtk_text_tag_get_priority (GtkTextTag        *tag);
-void         gtk_text_tag_set_priority (GtkTextTag        *tag,
-                                        gint               priority);
-gboolean     gtk_text_tag_event        (GtkTextTag        *tag,
-                                        GObject           *event_object,
-                                        GdkEvent          *event,
-                                        const GtkTextIter *iter);
+GtkTextAttributes* gtk_text_attributes_new         (void);
+GtkTextAttributes* gtk_text_attributes_copy        (GtkTextAttributes *src);
+void               gtk_text_attributes_copy_values (GtkTextAttributes *src,
+                                                    GtkTextAttributes *dest);
+void               gtk_text_attributes_unref       (GtkTextAttributes *values);
+GtkTextAttributes *gtk_text_attributes_ref         (GtkTextAttributes *values);
+
+GType              gtk_text_attributes_get_type    (void) G_GNUC_CONST;
 
 
 G_END_DECLS

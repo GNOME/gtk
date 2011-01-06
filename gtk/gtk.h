@@ -189,6 +189,7 @@
 #include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktearoffmenuitem.h>
+#include <gtk/gtktextattributes.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextbufferrichtext.h>
 #include <gtk/gtktextchild.h>
