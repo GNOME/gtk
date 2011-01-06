@@ -5344,10 +5344,8 @@ gtk_window_get_default_size
 gtk_window_get_destroy_with_parent
 gtk_window_get_focus
 gtk_window_get_focus_on_map
-gtk_window_get_frame_dimensions
 gtk_window_get_gravity
 gtk_window_get_group
-gtk_window_get_has_frame
 gtk_window_get_icon
 gtk_window_get_icon_list
 gtk_window_get_icon_name
@@ -5410,10 +5408,14 @@ gtk_window_set_destroy_with_parent
 gtk_window_set_focus
 gtk_window_set_focus_on_map
 gtk_window_set_startup_id
-gtk_window_set_frame_dimensions
 gtk_window_set_geometry_hints
 gtk_window_set_gravity
+#ifndef GTK_DISABLE_DEPRECATED
+gtk_window_get_frame_dimensions
+gtk_window_set_frame_dimensions
+gtk_window_get_has_frame
 gtk_window_set_has_frame
+#endif
 gtk_window_set_icon
 #ifndef _WIN64
 gtk_window_set_icon_from_file PRIVATE

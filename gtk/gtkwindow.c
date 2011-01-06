@@ -6658,6 +6658,7 @@ gtk_window_expose (GtkWidget      *widget,
  * windows, but it could conceivably be used by X-programs that
  * want to do their own window decorations.
  *
+ * Deprecated: 2.24: This function will be removed in GTK+ 3
  **/
 void
 gtk_window_set_has_frame (GtkWindow *window, 
@@ -6678,6 +6679,8 @@ gtk_window_set_has_frame (GtkWindow *window,
  *
  * Return value: %TRUE if a frame has been added to the window
  *   via gtk_window_set_has_frame().
+ *
+ * Deprecated: 2.24: This function will be removed in GTK+ 3
  **/
 gboolean
 gtk_window_get_has_frame (GtkWindow *window)
@@ -6702,6 +6705,8 @@ gtk_window_get_has_frame (GtkWindow *window)
  *
  * For windows with frames (see gtk_window_set_has_frame()) this function
  * can be used to change the size of the frame border.
+ *
+ * Deprecated: 2.24: This function will be removed in GTK+ 3
  **/
 void
 gtk_window_set_frame_dimensions (GtkWindow *window, 
@@ -7376,6 +7381,8 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
  * 
  * Retrieves the dimensions of the frame window for this toplevel.
  * See gtk_window_set_has_frame(), gtk_window_set_frame_dimensions().
+ *
+ * Deprecated: 2.24: This function will be removed in GTK+ 3
  **/
 void
 gtk_window_get_frame_dimensions (GtkWindow *window,

@@ -256,7 +256,7 @@ gboolean   gtk_window_is_active                (GtkWindow           *window);
 gboolean   gtk_window_has_toplevel_focus       (GtkWindow           *window);
 
 
-
+#ifndef GTK_DISABLE_DEPRECATED
 /* gtk_window_set_has_frame () must be called before realizing the window_*/
 void       gtk_window_set_has_frame            (GtkWindow *window, 
 						gboolean   setting);
@@ -271,6 +271,7 @@ void       gtk_window_get_frame_dimensions     (GtkWindow *window,
 						gint      *top,
 						gint      *right,
 						gint      *bottom);
+#endif
 void       gtk_window_set_decorated            (GtkWindow *window,
                                                 gboolean   setting);
 gboolean   gtk_window_get_decorated            (GtkWindow *window);
