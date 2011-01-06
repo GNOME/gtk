@@ -9255,7 +9255,7 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
        * things happen differently.
        */
       toplevel = gtk_widget_get_toplevel (widget);
-      if (!gtk_widget_is_toplevel (widget))
+      if (!gtk_widget_is_toplevel (toplevel))
 	toplevel = NULL;
 
       _gtk_widget_set_is_toplevel (widget, TRUE);
