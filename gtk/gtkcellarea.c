@@ -2945,11 +2945,12 @@ gtk_cell_area_activate (GtkCellArea         *area,
  * @area: a #GtkCellArea
  * @renderer: the #GtkCellRenderer to give focus to
  *
- * This is generally called from #GtkCellArea implementations
- * either gtk_cell_area_grab_focus() or gtk_cell_area_update_focus()
- * is called. It's also up to the #GtkCellArea implementation
- * to update the focused cell when receiving events from
- * gtk_cell_area_event() appropriately.
+ * Explicitly sets the currently focused cell to @renderer.
+ *
+ * This is generally called by implementations of
+ * #GtkCellAreaClass.focus() or #GtkCellAreaClass.event(),
+ * however it can also be used to implement functions such
+ * as gtk_tree_view_set_cursor_on_cell().
  *
  * Since: 3.0
  */
