@@ -32,13 +32,12 @@ G_BEGIN_DECLS
 
 /**
  * GtkModuleInitFunc:
- * @argc: Pointer to the number of arguments remaining after gtk_init()
- * @argv: Points to the argument vector
+ * @argc: GTK+ always passes %NULL for this argument
+ * @argv: GTK+ always passes %NULL for this argument
  *
  * Each GTK+ module must have a function gtk_module_init()
  * with this prototype. This function is called after loading
- * the module with the @argc and @argv cleaned from any arguments
- * that GTK+ handles itself.
+ * the module.
  */
 typedef void     (*GtkModuleInitFunc)        (gint        *argc,
                                               gchar      ***argv);
