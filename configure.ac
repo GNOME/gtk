@@ -254,6 +254,22 @@ AC_ARG_ENABLE(xinput,
               [AC_HELP_STRING([--enable-xinput],
                               [support XInput extension if available [default=yes]])],,
               [enable_xinput="maybe"])
+AC_ARG_ENABLE(xrandr,
+              [AC_HELP_STRING([--enable-xrandr],
+                              [support XRandR extension if available [default=maybe]])],,
+              [enable_xrandr="maybe"])
+AC_ARG_ENABLE(xfixes,
+              [AC_HELP_STRING([--enable-xfixes],
+                              [support XFixes extension if available [default=maybe]])],,
+              [enable_xfixes="maybe"])
+AC_ARG_ENABLE(xcomposite,
+              [AC_HELP_STRING([--enable-xcomposite],
+                              [support X Composite extension if available [default=maybe]])],,
+              [enable_xcomposite="maybe"])
+AC_ARG_ENABLE(xdamage,
+              [AC_HELP_STRING([--enable-xdamage],
+                              [support X Damage extension if available [default=maybe]])],,
+              [enable_xdamage="maybe"])
 
 AC_ARG_ENABLE(x11-backend,
               [AC_HELP_STRING([--enable-x11-backend],
@@ -1105,11 +1121,15 @@ if test "x$enable_x11_backend" == xyes; then
   fi
 
   # Check for the RANDR extension
-  if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
-     AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
+  if test x"$enable_xrandr" != xno; then
+    if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
+      AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
 
-     X_PACKAGES="$X_PACKAGES xrandr"
-     X_EXTENSIONS="$X_EXTENSIONS XRANDR"
+      X_PACKAGES="$X_PACKAGES xrandr"
+      X_EXTENSIONS="$X_EXTENSIONS XRANDR"
+    elif test x"$enable_xrandr" = xyes; then
+      AC_MSG_ERROR([RANDR support requested but xrandr not found])
+    fi
   fi
 
   # Checks for Xcursor library
@@ -1122,32 +1142,44 @@ if test "x$enable_x11_backend" == xyes; then
 
   # Checks for XFixes extension
 
-  if $PKG_CONFIG --exists xfixes ; then
-    AC_DEFINE(HAVE_XFIXES, 1, [Have the XFIXES X extension])
+  if test x"$enable_xfixes" != xno; then
+    if $PKG_CONFIG --exists xfixes ; then
+      AC_DEFINE(HAVE_XFIXES, 1, [Have the XFIXES X extension])
 
-    X_PACKAGES="$X_PACKAGES xfixes"
-    X_EXTENSIONS="$X_EXTENSIONS XFIXES"
-    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
+      X_PACKAGES="$X_PACKAGES xfixes"
+      X_EXTENSIONS="$X_EXTENSIONS XFIXES"
+      GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
+    elif test x"$enable_xfixes" = xyes; then
+      AC_MSG_ERROR([XFixes support requested but xfixes not found])
+    fi
   fi
 
   # Checks for Xcomposite extension
 
-  if $PKG_CONFIG --exists xcomposite ; then
-    AC_DEFINE(HAVE_XCOMPOSITE, 1, [Have the XCOMPOSITE X extension])
+  if test x"$enable_xcomposite" != xno; then
+    if $PKG_CONFIG --exists xcomposite ; then
+      AC_DEFINE(HAVE_XCOMPOSITE, 1, [Have the XCOMPOSITE X extension])
 
-    X_PACKAGES="$X_PACKAGES xcomposite"
-    X_EXTENSIONS="$X_EXTENSIONS Composite"
-    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcomposite"
+      X_PACKAGES="$X_PACKAGES xcomposite"
+      X_EXTENSIONS="$X_EXTENSIONS Composite"
+      GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcomposite"
+    elif test x"$enable_xcomposite" = xyes; then
+      AC_MSG_ERROR([Xcomposite support requested but xcomposite not found])
+    fi
   fi
 
   # Checks for Xdamage extension
 
-  if $PKG_CONFIG --exists xdamage ; then
-    AC_DEFINE(HAVE_XDAMAGE, 1, [Have the XDAMAGE X extension])
+  if test x"$enable_xdamage" != xno; then
+    if $PKG_CONFIG --exists xdamage ; then
+      AC_DEFINE(HAVE_XDAMAGE, 1, [Have the XDAMAGE X extension])
 
-    X_PACKAGES="$X_PACKAGES xdamage"
-    X_EXTENSIONS="$X_EXTENSIONS DAMAGE"
-    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
+      X_PACKAGES="$X_PACKAGES xdamage"
+      X_EXTENSIONS="$X_EXTENSIONS DAMAGE"
+      GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
+    elif test x"$enable_xdamage" = xyes; then
+      AC_MSG_ERROR([Xdamage support requested but xdamage not found])
+    fi
   fi
 
   if $have_base_x_pc ; then
