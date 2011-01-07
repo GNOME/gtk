@@ -709,10 +709,7 @@ gdk_wayland_display_get_keymap (GdkDisplay *display)
   display_wayland = GDK_DISPLAY_WAYLAND (display);
 
   if (!display_wayland->keymap)
-    display_wayland->keymap =
-      g_object_new (_gdk_wayland_keymap_get_type(), NULL);
-
-  display_wayland->keymap->display = display;
+    display_wayland->keymap = _gdk_wayland_keymap_new (display);
 
   return display_wayland->keymap;
 }

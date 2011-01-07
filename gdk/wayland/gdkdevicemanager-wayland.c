@@ -28,6 +28,7 @@
 #include "gdkprivate-wayland.h"
 #include "gdkeventsource.h"
 
+#include <X11/extensions/XKBcommon.h>
 
 static void    gdk_device_manager_core_finalize    (GObject *object);
 
@@ -116,6 +117,8 @@ input_handle_key(void *data, struct wl_input_device *input_device,
   GdkWaylandDevice *device = data;
   GdkEvent *event;
   uint32_t code, modifier, level;
+  struct xkb_desc *xkb;
+  GdkKeymap *keymap;
 
   event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
   event->key.window = g_object_ref (device->keyboard_focus);
@@ -125,16 +128,19 @@ input_handle_key(void *data, struct wl_input_device *input_device,
   event->key.group = 0;
   event->key.hardware_keycode = key;
 
-  code = key + device->xkb->min_key_code;
+  keymap = gdk_keymap_get_for_display (device->display);
+  xkb = _gdk_wayland_keymap_get_xkb_desc (keymap);
+
+  code = key + xkb->min_key_code;
 
   level = 0;
   if (device->modifiers & ShiftMask &&
-      XkbKeyGroupWidth(device->xkb, code, 0) > 1)
+      XkbKeyGroupWidth(xkb, code, 0) > 1)
     level = 1;
 
-  event->key.keyval = XkbKeySymEntry(device->xkb, code, level, 0);
+  event->key.keyval = XkbKeySymEntry(xkb, code, level, 0);
 
-  modifier = device->xkb->map->modmap[code];
+  modifier = xkb->map->modmap[code];
   if (state)
     device->modifiers |= modifier;
   else
@@ -269,10 +275,15 @@ static void
 update_modifiers(GdkWaylandDevice *device, struct wl_array *keys)
 {
   uint32_t *k, *end;
+  GdkKeymap *keymap;
+  struct xkb_desc *xkb;
+
+  keymap = gdk_keymap_get_for_display (device->display);
+  xkb = _gdk_wayland_keymap_get_xkb_desc (keymap);
 
   end = keys->data + keys->size;
   for (k = keys->data; k < end; k++)
-    device->modifiers |= device->xkb->map->modmap[*k];
+    device->modifiers |= xkb->map->modmap[*k];
 
   fprintf (stderr, "modifiers: 0x%x\n", device->modifiers);
 }
@@ -335,7 +346,6 @@ gdk_device_manager_core_add_device (GdkDeviceManager *device_manager,
   GdkDisplay *display;
   GdkDeviceManagerCore *device_manager_core =
     GDK_DEVICE_MANAGER_CORE(device_manager);
-  struct xkb_rule_names names;
   GdkWaylandDevice *device;
 
   device = g_new0 (GdkWaylandDevice, 1);
@@ -365,13 +375,6 @@ gdk_device_manager_core_add_device (GdkDeviceManager *device_manager,
   GDK_DEVICE_CORE (device->pointer)->device = device;
   GDK_DEVICE_CORE (device->keyboard)->device = device;
   device->device = wl_device;
-
-  names.rules = "evdev";
-  names.model = "pc105";
-  names.layout = "us";
-  names.variant = "";
-  names.options = "";
-  device->xkb = xkb_compile_keymap_from_rules(&names);
 
   wl_input_device_add_listener(device->device,
 			       &input_device_listener, device);

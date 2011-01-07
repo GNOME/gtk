@@ -46,7 +46,9 @@
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
 GType      _gdk_wayland_window_get_type            (void);
-GType      _gdk_wayland_keymap_get_type            (void);
+
+GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
+struct xkb_desc *_gdk_wayland_keymap_get_xkb_desc (GdkKeymap *keymap);
 
 GdkCursor *_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 						     GdkCursorType  cursor_type);

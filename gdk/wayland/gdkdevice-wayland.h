@@ -20,8 +20,8 @@
 #ifndef __GDK_DEVICE_CORE_H__
 #define __GDK_DEVICE_CORE_H__
 
+#include <stdint.h>
 #include <gdk/gdkdeviceprivate.h>
-#include <X11/extensions/XKBcommon.h>
 
 G_BEGIN_DECLS
 
@@ -45,7 +45,6 @@ struct _GdkWaylandDevice
   GdkWindow *pointer_focus;
   GdkWindow *keyboard_focus;
   struct wl_input_device *device;
-  struct xkb_desc *xkb;
   int32_t x, y, surface_x, surface_y;
 };
 
