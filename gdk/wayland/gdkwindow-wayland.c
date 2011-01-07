@@ -106,6 +106,7 @@ struct _GdkWindowImplWayland
   struct wl_buffer *buffer;
   EGLImageKHR *pending_image;
   EGLImageKHR *next_image;
+  unsigned int mapped : 1;
 
   cairo_surface_t *cairo_surface;
   GLuint texture;
@@ -159,6 +160,8 @@ _gdk_wayland_window_update_size (GdkWindow *window)
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkDisplayWayland *display_wayland =
     GDK_DISPLAY_WAYLAND (gdk_window_get_display (impl->wrapper));
+  GdkRectangle area;
+  cairo_region_t *region;
 
   fprintf(stderr, "update size, window %p\n", impl->wrapper);
 
@@ -179,11 +182,23 @@ _gdk_wayland_window_update_size (GdkWindow *window)
 
       impl->image = NULL;
 
-      wl_buffer_destroy(impl->buffer);
-      impl->buffer = NULL;
+      if (impl->buffer)
+	{
+	  wl_buffer_destroy(impl->buffer);
+	  impl->buffer = NULL;
+	}
 
       fprintf(stderr, " - cleared image\n");
     }
+
+  area.x = 0;
+  area.y = 0;
+  area.width = window->width;
+  area.height = window->height;
+
+  region = cairo_region_create_rectangle (&area);
+  _gdk_window_invalidate_for_expose (window, region);
+  cairo_region_destroy (region);
 }
 
 GdkWindow *
@@ -318,19 +333,6 @@ _gdk_wayland_window_attach_image (GdkWindow *window, EGLImageKHR image)
 
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  if (impl->pending_image)
-    {
-      if (impl->next_image && impl->next_image != impl->image)
-	display_wayland->destroy_image(display_wayland->egl_display,
-				       impl->next_image);
-
-      impl->next_image = image;
-
-      return;
-    }
-
-  impl->pending_image = image;
-
   wl_visual =
     wl_display_get_premultiplied_argb_visual(display_wayland->wl_display);
 
@@ -345,8 +347,7 @@ _gdk_wayland_window_attach_image (GdkWindow *window, EGLImageKHR image)
   g_object_ref(impl);
 
   fprintf(stderr, "attach %p %dx%d (image %p, name %d)\n",
-	  window, window->width, window->height,
-	  impl->pending_image, name);
+	  window, window->width, window->height, image, name);
 }
 
 static void
@@ -1269,9 +1270,11 @@ gdk_wayland_window_process_updates_recurse (GdkWindow *window,
   int i, n;
 
   if (impl->buffer == NULL)
+    _gdk_wayland_window_attach_image (window, impl->image);
+  if (!impl->mapped)
     {
-      _gdk_wayland_window_attach_image (window, impl->image);
       wl_surface_map_toplevel (impl->surface);
+      impl->mapped = TRUE;
     }
 
   n = cairo_region_num_rectangles(region);
