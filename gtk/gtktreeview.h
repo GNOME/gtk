@@ -336,6 +336,13 @@ void                   gtk_tree_view_get_visible_rect              (GtkTreeView 
 gboolean               gtk_tree_view_get_visible_range             (GtkTreeView               *tree_view,
 								    GtkTreePath              **start_path,
 								    GtkTreePath              **end_path);
+gboolean               gtk_tree_view_is_blank_at_pos               (GtkTreeView               *tree_view,
+                                                                    gint                       x,
+                                                                    gint                       y,
+                                                                    GtkTreePath              **path,
+                                                                    GtkTreeViewColumn        **column,
+                                                                    gint                      *cell_x,
+                                                                    gint                      *cell_y);
 
 /* Drag-and-Drop support */
 void                   gtk_tree_view_enable_model_drag_source      (GtkTreeView               *tree_view,

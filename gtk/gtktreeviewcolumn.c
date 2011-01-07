@@ -1515,6 +1515,45 @@ _gtk_tree_view_column_get_cell_at_pos (GtkTreeViewColumn *column,
   return match;
 }
 
+gboolean
+_gtk_tree_view_column_is_blank_at_pos (GtkTreeViewColumn *column,
+                                       GdkRectangle      *cell_area,
+                                       GdkRectangle      *background_area,
+                                       gint               x,
+                                       gint               y)
+{
+  GtkCellRenderer *match;
+  GdkRectangle cell_alloc, aligned_area, inner_area;
+  GtkTreeViewColumnPrivate *priv = column->priv;
+
+  match = _gtk_tree_view_column_get_cell_at_pos (column,
+                                                 cell_area,
+                                                 background_area,
+                                                 x, y);
+  if (!match)
+    return FALSE;
+
+  gtk_cell_area_get_cell_allocation (priv->cell_area,
+                                     priv->cell_area_context,
+                                     priv->tree_view,
+                                     match,
+                                     cell_area,
+                                     &cell_alloc);
+
+  gtk_cell_area_inner_cell_area (priv->cell_area, priv->tree_view,
+                                 &cell_alloc, &inner_area);
+  gtk_cell_renderer_get_aligned_area (match, priv->tree_view, 0,
+                                      &inner_area, &aligned_area);
+
+  if (x < aligned_area.x ||
+      x > aligned_area.x + aligned_area.width ||
+      y < aligned_area.y ||
+      y > aligned_area.y + aligned_area.height)
+    return TRUE;
+
+  return FALSE;
+}
+
 /* Public Functions */
 
 

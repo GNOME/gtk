@@ -126,6 +126,11 @@ GtkCellRenderer  *_gtk_tree_view_column_get_cell_at_pos  (GtkTreeViewColumn  *co
                                                           GdkRectangle       *background_area,
                                                           gint                x,
                                                           gint                y);
+gboolean          _gtk_tree_view_column_is_blank_at_pos  (GtkTreeViewColumn  *column,
+                                                          GdkRectangle       *cell_area,
+                                                          GdkRectangle       *background_area,
+                                                          gint                x,
+                                                          gint                y);
 
 void		  _gtk_tree_view_column_cell_render      (GtkTreeViewColumn  *tree_column,
 							  cairo_t            *cr,
