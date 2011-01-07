@@ -353,64 +353,52 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	
 	break;
       }
-
-#if 0
- /* FIXME: this needs some X11 backend api to do things
-  * in a saner way
-  */
     case KeyPress:
     case KeyRelease:
       {
-        static GdkDeviceManager *core_device_manager = NULL;
+        GdkModifierType state, consumed;
         GdkDeviceManager *device_manager;
-        GdkEvent *translated_event;
-        GList *devices, *d;
-        GdkDevice *keyboard = NULL;
+        GdkDevice *pointer, *keyboard;
+        GdkKeymap *keymap;
+
+        if (xevent->type == KeyPress)
+          event->key.type = GDK_KEY_PRESS;
+        else
+          event->key.type = GDK_KEY_RELEASE;
+
+        event->key.window = gdk_x11_window_lookup_for_display (display, xevent->xany.window);
+        event->key.send_event = TRUE;
+        event->key.time = xevent->xkey.time;
+        event->key.state = (GdkModifierType) xevent->xkey.state;
+        event->key.hardware_keycode = xevent->xkey.keycode;
+        event->key.keyval = GDK_KEY_VoidSymbol;
 
         device_manager = gdk_display_get_device_manager (display);
+        pointer = gdk_device_manager_get_client_pointer (device_manager);
+        keyboard = gdk_device_get_associated_device (pointer);
+        gdk_event_set_device (event, keyboard);
 
-        /* bail out if the device manager already
-         * interprets core keyboard events.
-         */
-        if (!GDK_IS_DEVICE_MANAGER_XI2 (device_manager))
-          return GDK_FILTER_CONTINUE;
+        keymap = gdk_keymap_get_for_display (display);
+        gdk_keymap_translate_keyboard_state (keymap,
+                                             event->key.hardware_keycode,
+                                             event->key.state,
+                                             event->key.group,
+                                             &event->key.keyval,
+                                             NULL, NULL, &consumed);
 
-        /* Find out the first keyboard device, the
-         * generated event will be assigned to it.
-         */
-        devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
+        state = event->key.state & ~consumed;
+        gdk_keymap_add_virtual_modifiers (keymap, &state);
+        event->key.state |= state;
 
-        for (d = devices; d; d = d->next)
-          {
-            GdkDevice *device = d->data;
+        event->key.length = 0;
+        event->key.string = g_strdup ("");
 
-            if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
-              keyboard = device;
-          }
+        /* FIXME: These should be filled in properly */
+        event->key.group = 0;
+        event->key.is_modifier = FALSE;
 
-        g_list_free (devices);
-
-        if (!keyboard)
-          return GDK_FILTER_CONTINUE;
-
-        /* This is a crude hack so key events
-         * are interpreted as if there was a
-         * GdkDeviceManagerCore available.
-         */
-        if (G_UNLIKELY (!core_device_manager))
-          core_device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_CORE,
-                                              "display", display,
-                                              NULL);
-
-        translated_event = gdk_event_translator_translate (GDK_EVENT_TRANSLATOR (core_device_manager), display, xevent);
-        gdk_event_set_device (translated_event, keyboard);
-
-        gtk_main_do_event (translated_event);
-        gdk_event_free (translated_event);
-
-        return_val = GDK_FILTER_REMOVE;
+        return_val = GDK_FILTER_TRANSLATE;
       }
-#endif
     }
 
   return return_val;
