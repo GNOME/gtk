@@ -29,6 +29,8 @@
 
 #include "gdkinternals.h"
 
+#include <X11/extensions/XKBcommon.h>
+
 typedef struct _GdkWaylandDisplayManager GdkWaylandDisplayManager;
 typedef struct _GdkWaylandDisplayManagerClass GdkWaylandDisplayManagerClass;
 
@@ -108,14 +110,32 @@ static guint
 gdk_wayland_display_manager_lookup_keyval (GdkDisplayManager *manager,
 					   const gchar       *keyval_name)
 {
-  return /* XStringToKeysym (keyval_name); */ 0;
+  g_return_val_if_fail (keyval_name != NULL, 0);
+
+  return xkb_string_to_keysym(keyval_name);
 }
 
 static gchar *
 gdk_wayland_display_manager_get_keyval_name (GdkDisplayManager *manager,
 					     guint              keyval)
 {
-  return NULL;
+  static char buf[128];
+
+  switch (keyval)
+    {
+    case GDK_KEY_Page_Up:
+      return "Page_Up";
+    case GDK_KEY_Page_Down:
+      return "Page_Down";
+    case GDK_KEY_KP_Page_Up:
+      return "KP_Page_Up";
+    case GDK_KEY_KP_Page_Down:
+      return "KP_Page_Down";
+    }
+
+  xkb_keysym_to_string(keyval, buf, sizeof buf);
+
+  return buf;
 }
 
 static void
