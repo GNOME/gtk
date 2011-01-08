@@ -382,16 +382,6 @@ gdk_wayland_cairo_surface_destroy (void *data)
   impl->cairo_surface = NULL;
 }
 
-gboolean
-_gdk_windowing_set_cairo_surface_size (cairo_surface_t *surface,
-				       int width,
-				       int height)
-{
-  fprintf (stderr, "_gdk_windowing_set_cairo_surface_size\n");
-
-  return FALSE;
-}
-
 static cairo_surface_t *
 gdk_wayland_create_cairo_surface (GdkWindowImplWayland *impl,
 			      int width,
