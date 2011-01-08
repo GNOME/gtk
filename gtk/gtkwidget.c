@@ -105,7 +105,7 @@
  * For example, when queried in the normal
  * %GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH mode:
  * First, the default minimum and natural width for each widget
- * in the interface will be computed using gtk_width_get_preferred_width().
+ * in the interface will be computed using gtk_widget_get_preferred_width().
  * Because the preferred widths for each container depend on the preferred
  * widths of their children, this information propagates up the hierarchy,
  * and finally a minimum and natural width is determined for the entire
