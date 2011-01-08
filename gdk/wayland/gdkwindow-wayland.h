@@ -93,8 +93,6 @@ struct _GdkToplevelWayland
 GType               _gdk_window_impl_wayland_get_type  (void);
 
 GdkToplevelWayland *_gdk_wayland_window_get_toplevel  (GdkWindow   *window);
-void                _gdk_wayland_window_attach_image  (GdkWindow   *window,
-						       EGLImageKHR  image);
 
 GdkCursor          *_gdk_wayland_window_get_cursor    (GdkWindow   *window);
 void                _gdk_wayland_window_get_offsets   (GdkWindow   *window,

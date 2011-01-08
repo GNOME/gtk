@@ -103,15 +103,11 @@ struct _GdkWindowImplWayland
   gint8 toplevel_window_type;
 
   struct wl_surface *surface;
-  struct wl_buffer *buffer;
-  EGLImageKHR *pending_image;
-  EGLImageKHR *next_image;
   unsigned int mapped : 1;
 
   cairo_surface_t *cairo_surface;
+  cairo_surface_t *server_surface;
   GLuint texture;
-  EGLImageKHR image;
-
 };
 
 struct _GdkWindowImplWaylandClass
@@ -169,26 +165,6 @@ _gdk_wayland_window_update_size (GdkWindow *window)
     {
       cairo_surface_destroy (impl->cairo_surface);
       impl->cairo_surface = NULL;
-    }
-
-  if (impl->image)
-    {
-      if (impl->image == impl->next_image)
-	impl->next_image = NULL;
-
-      if (impl->image != impl->pending_image)
-	display_wayland->destroy_image(display_wayland->egl_display,
-				       impl->image);
-
-      impl->image = NULL;
-
-      if (impl->buffer)
-	{
-	  wl_buffer_destroy(impl->buffer);
-	  impl->buffer = NULL;
-	}
-
-      fprintf(stderr, " - cleared image\n");
     }
 
   area.x = 0;
@@ -319,35 +295,62 @@ gdk_toplevel_wayland_free_contents (GdkDisplay *display,
     }
 }
 
-void
-_gdk_wayland_window_attach_image (GdkWindow *window, EGLImageKHR image)
+static const cairo_user_data_key_t gdk_wayland_cairo_key;
+
+typedef struct _GdkWaylandCairoSurfaceData {
+  EGLImageKHR image;
+  GLuint texture;
+  struct wl_buffer *buffer;
+  GdkDisplayWayland *display;
+} GdkWaylandCairoSurfaceData;
+
+struct wl_buffer *
+_gdk_wayland_surface_get_buffer (GdkDisplayWayland *display,
+				 cairo_surface_t *surface)
+{
+  GdkWaylandCairoSurfaceData *data;
+  EGLint name, stride;
+  struct wl_visual *visual;
+  int width, height;
+
+  data = cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key);
+
+  if (data->buffer)
+    return data->buffer;
+
+  visual =
+    wl_display_get_premultiplied_argb_visual(display->wl_display);
+
+  width = cairo_gl_surface_get_width (surface);
+  height = cairo_gl_surface_get_height (surface);
+  display->export_drm_image (display->egl_display,
+			     data->image, &name, NULL, &stride);
+  data->buffer = wl_drm_create_buffer(display->drm,
+				      name, width, height, stride, visual);
+
+  return data->buffer;
+}
+
+static void
+gdk_wayland_window_attach_image (GdkWindow *window)
 {
   GdkDisplayWayland *display_wayland =
     GDK_DISPLAY_WAYLAND (gdk_window_get_display (window));
-  GdkWindowImplWayland *impl;
-  EGLint name, stride;
-  struct wl_visual *wl_visual;
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  struct wl_buffer *buffer;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  if (impl->server_surface == impl->cairo_surface)
+    return;
 
-  wl_visual =
-    wl_display_get_premultiplied_argb_visual(display_wayland->wl_display);
+  impl->server_surface = impl->cairo_surface;
+  buffer = _gdk_wayland_surface_get_buffer (display_wayland,
+					    impl->cairo_surface);
+  wl_surface_attach (impl->surface, buffer, 0, 0);
 
-  display_wayland->export_drm_image (display_wayland->egl_display,
-				     image, &name, NULL, &stride);
-
-  impl->buffer = wl_drm_create_buffer(display_wayland->drm,
-				      name, window->width, window->height,
-				      stride, wl_visual);
-  wl_surface_attach (impl->surface, impl->buffer, 0, 0);
-
-  g_object_ref(impl);
-
-  fprintf(stderr, "attach %p %dx%d (image %p, name %d)\n",
-	  window, window->width, window->height, image, name);
+  fprintf(stderr, "attach %p %dx%d\n", window, window->width, window->height);
 }
 
 static void
@@ -372,23 +375,25 @@ gdk_window_impl_wayland_finalize (GObject *object)
   G_OBJECT_CLASS (_gdk_window_impl_wayland_parent_class)->finalize (object);
 }
 
-static const cairo_user_data_key_t gdk_wayland_cairo_key;
-
 static void
-gdk_wayland_cairo_surface_destroy (void *data)
+gdk_wayland_cairo_surface_destroy (void *p)
 {
-  GdkWindowImplWayland *impl = data;
+  GdkWaylandCairoSurfaceData *data = p;
 
-  impl->cairo_surface = NULL;
+  data->display->destroy_image (data->display->egl_display, data->image);
+  cairo_device_acquire(data->display->cairo_device);
+  glDeleteTextures(1, &data->texture);
+  cairo_device_release(data->display->cairo_device);
+  if (data->buffer)
+    wl_buffer_destroy(data->buffer);
+  g_free(data);
 }
 
 static cairo_surface_t *
-gdk_wayland_create_cairo_surface (GdkWindowImplWayland *impl,
-			      int width,
-			      int height)
+gdk_wayland_create_cairo_surface (GdkDisplayWayland *display,
+				  int width, int height)
 {
-  GdkDisplayWayland *display_wayland =
-    GDK_DISPLAY_WAYLAND (gdk_window_get_display (impl->wrapper));
+  GdkWaylandCairoSurfaceData *data;
   cairo_surface_t *surface;
 
   EGLint image_attribs[] = {
@@ -399,26 +404,24 @@ gdk_wayland_create_cairo_surface (GdkWindowImplWayland *impl,
     EGL_NONE
   };
 
-  if (impl->image == NULL)
-    {
-      image_attribs[1] = width;
-      image_attribs[3] = height;
-      impl->image =
-	display_wayland->create_drm_image(display_wayland->egl_display,
-					  image_attribs);
-      if (impl->texture == 0)
-	glGenTextures(1, &impl->texture);
+  data = g_new (GdkWaylandCairoSurfaceData, 1);
+  data->display = display;
+  data->buffer = NULL;
+  image_attribs[1] = width;
+  image_attribs[3] = height;
+  data->image = display->create_drm_image(display->egl_display, image_attribs);
+  glGenTextures(1, &data->texture);
+  glBindTexture(GL_TEXTURE_2D, data->texture);
+  display->image_target_texture_2d(GL_TEXTURE_2D, data->image);
 
-      glBindTexture(GL_TEXTURE_2D, impl->texture);
-      display_wayland->image_target_texture_2d(GL_TEXTURE_2D, impl->image);
+  printf("allocate image %dx%d (image %p)\n", width, height, data->image);
 
-      printf("allocate image %dx%d (image %p, window %p)\n",
-	     width, height, impl->image, impl->wrapper);
-    }
-
-  surface = cairo_gl_surface_create_for_texture(display_wayland->cairo_device,
+  surface = cairo_gl_surface_create_for_texture(display->cairo_device,
 						CAIRO_CONTENT_COLOR_ALPHA,
-						impl->texture, width, height);
+						data->texture, width, height);
+
+  cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
+			       data, gdk_wayland_cairo_surface_destroy);
 
   if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
     fprintf (stderr, "create gl surface failed\n");
@@ -430,6 +433,8 @@ static cairo_surface_t *
 gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkDisplayWayland *display_wayland =
+    GDK_DISPLAY_WAYLAND (gdk_window_get_display (impl->wrapper));
 
   if (GDK_WINDOW_DESTROYED (impl->wrapper))
     return NULL;
@@ -437,15 +442,12 @@ gdk_wayland_window_ref_cairo_surface (GdkWindow *window)
   if (!impl->cairo_surface)
     {
       impl->cairo_surface =
-	gdk_wayland_create_cairo_surface (impl,
+	gdk_wayland_create_cairo_surface (display_wayland,
 				      impl->wrapper->width,
 				      impl->wrapper->height);
-
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_wayland_cairo_key,
-				   impl, gdk_wayland_cairo_surface_destroy);
     }
-  else
-    cairo_surface_reference (impl->cairo_surface);
+
+  cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
 }
@@ -1259,8 +1261,7 @@ gdk_wayland_window_process_updates_recurse (GdkWindow *window,
   cairo_rectangle_int_t rect;
   int i, n;
 
-  if (impl->buffer == NULL)
-    _gdk_wayland_window_attach_image (window, impl->image);
+  gdk_wayland_window_attach_image (window);
   if (!impl->mapped)
     {
       wl_surface_map_toplevel (impl->surface);
