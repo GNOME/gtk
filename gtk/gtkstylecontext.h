@@ -79,29 +79,38 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_PROPERTY_FONT "font"
 
 /**
- * GTK_STYLE_PROPERTY_MARGIN:
- *
- * A property holding the rendered element's margin as a #GtkBorder. The
- * margin is defined as the spacing between the border of the element
- * and its surrounding elements.
- */
-#define GTK_STYLE_PROPERTY_MARGIN "margin"
-
-/**
  * GTK_STYLE_PROPERTY_PADDING:
  *
  * A property holding the rendered element's padding as a #GtkBorder. The
  * padding is defined as the spacing between the inner part of the element border
- * and its child.
+ * and its child. It's the innermost spacing property of the padding/border/margin
+ * series.
  */
 #define GTK_STYLE_PROPERTY_PADDING "padding"
 
 /**
  * GTK_STYLE_PROPERTY_BORDER_WIDTH:
  *
- * A property holding the rendered element's border width in pixels as a #gint.
+ * A property holding the rendered element's border width in pixels as
+ * a #GtkBorder. The border is the intermediary spacing property of the
+ * padding/border/margin series.
+ *
+ * gtk_render_frame() uses this property to find out the frame line width,
+ * so #GtkWidget<!-- -->s rendering frames may need to add up this padding when
+ * requesting size
  */
 #define GTK_STYLE_PROPERTY_BORDER_WIDTH "border-width"
+
+/**
+ * GTK_STYLE_PROPERTY_MARGIN:
+ *
+ * A property holding the rendered element's margin as a #GtkBorder. The
+ * margin is defined as the spacing between the border of the element
+ * and its surrounding elements. It is external to #GtkWidget<!-- -->s's
+ * size allocations, and the most external spacing property of the
+ * padding/border/margin series.
+ */
+#define GTK_STYLE_PROPERTY_MARGIN "margin"
 
 /**
  * GTK_STYLE_PROPERTY_BORDER_RADIUS:

@@ -3421,6 +3421,7 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
  * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
+ * See %GTK_STYLE_PROPERTY_BORDER_WIDTH.
  *
  * Since: 3.0
  **/
@@ -3460,6 +3461,7 @@ gtk_style_context_get_border (GtkStyleContext *context,
  * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
+ * See %GTK_STYLE_PROPERTY_PADDING.
  *
  * Since: 3.0
  **/
@@ -3499,6 +3501,7 @@ gtk_style_context_get_padding (GtkStyleContext *context,
  * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
+ * See %GTK_STYLE_PROPERTY_MARGIN.
  *
  * Since: 3.0
  **/
