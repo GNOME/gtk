@@ -67,10 +67,6 @@ void		 gail_misc_get_origins            (GtkWidget         *widget,
 					           gint              *x_toplevel,
 					           gint              *y_toplevel);
 
-AtkAttributeSet* gail_misc_add_to_attr_set        (AtkAttributeSet   *attrib_set,
-			                           GtkTextAttributes *attrs,
-			                           AtkTextAttribute  attr);
-
 AtkAttributeSet* gail_misc_buffer_get_run_attributes
                                                   (GtkTextBuffer     *buffer,
                                                    gint              offset,
