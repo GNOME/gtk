@@ -179,6 +179,16 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
+  /**
+   * GtkProgressBar:show_text:
+   *
+   * Sets whether the progressbar will show text superimposed
+   * over the bar. The shown text is either the value of
+   * the #GtkProgressBar::text property or, if that is %NULL,
+   * the #GtkProgressBar::fraction value, as a percentage.
+   *
+   * Since: 3.0
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_SHOW_TEXT,
                                    g_param_spec_boolean ("show-text",

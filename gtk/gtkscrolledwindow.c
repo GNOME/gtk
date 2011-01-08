@@ -378,6 +378,13 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							     DEFAULT_SCROLLBAR_SPACING,
 							     GTK_PARAM_READABLE));
 
+  /**
+   * GtkScrolledWindow:min-content-width:
+   *
+   * The minimum content width of @scrolled_window, or -1 if not set.
+   *
+   * Since: 3.0
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_MIN_CONTENT_WIDTH,
                                    g_param_spec_int ("min-content-width",
@@ -385,6 +392,14 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                      P_("The minimum width that the scrolled window will allocate to its content"),
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkScrolledWindow:min-content-height:
+   *
+   * The minimum content height of @scrolled_window, or -1 if not set.
+   *
+   * Since: 3.0
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_MIN_CONTENT_HEIGHT,
                                    g_param_spec_int ("min-content-height",
