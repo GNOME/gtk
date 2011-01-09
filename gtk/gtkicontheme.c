@@ -1513,8 +1513,8 @@ gtk_icon_theme_error_quark (void)
  * returned by this function. Otherwise GTK+ may need to keep the old 
  * icon theme loaded, which would be a waste of memory.
  * 
- * Return value: the rendered icon; this may be a newly created icon
- *  or a new reference to an internal icon, so you must not modify
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *  created icon or a new reference to an internal icon, so you must not modify
  *  the icon. Use g_object_unref() to release your reference to the
  *  icon. %NULL if the icon isn't found.
  *
