@@ -698,9 +698,6 @@ gail_text_view_get_default_attributes (AtkText *text)
   attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_INVISIBLE, text_attrs->invisible);
   attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_BG_FULL_HEIGHT, text_attrs->bg_full_height);
 
-  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FG_STIPPLE, NULL);
-  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_STIPPLE, NULL);
-
   attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_STRIKETHROUGH,
                                    text_attrs->appearance.strikethrough);
   attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_UNDERLINE,
