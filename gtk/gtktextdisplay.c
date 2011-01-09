@@ -354,21 +354,6 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
 			      int              y)
 {
   GtkTextRenderer *text_renderer = GTK_TEXT_RENDERER (renderer);
-  GtkStyle *style;
-  GdkColor *fg;
-
-  style = gtk_widget_get_style (text_renderer->widget);
-  if (text_renderer->state == SELECTED)
-    {
-      if (gtk_widget_has_focus (text_renderer->widget))
-	fg = &style->text[GTK_STATE_SELECTED];
-      else
-	fg = &style->text[GTK_STATE_SELECTED];
-    }
-  else if (text_renderer->state == CURSOR && gtk_widget_has_focus (text_renderer->widget))
-    fg = &style->base[GTK_STATE_NORMAL];
-  else
-    fg = &style->text[GTK_STATE_NORMAL];
 
   if (attr->data == NULL)
     {
@@ -377,18 +362,17 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
        */
       GdkRectangle shape_rect;
       cairo_t *cr;
-      
+
       shape_rect.x = PANGO_PIXELS (x);
       shape_rect.y = PANGO_PIXELS (y + attr->logical_rect.y);
       shape_rect.width = PANGO_PIXELS (x + attr->logical_rect.width) - shape_rect.x;
       shape_rect.height = PANGO_PIXELS (y + attr->logical_rect.y + attr->logical_rect.height) - shape_rect.y;
-      
+
+      set_color (text_renderer, PANGO_RENDER_PART_FOREGROUND);
+
       cr = text_renderer->cr;
 
-      cairo_save (cr);
-
       cairo_set_line_width (cr, 1.0);
-      gdk_cairo_set_source_color (cr, fg);
 
       cairo_rectangle (cr,
                        shape_rect.x + 0.5, shape_rect.y + 0.5,
@@ -403,8 +387,8 @@ gtk_text_renderer_draw_shape (PangoRenderer   *renderer,
                      shape_rect.y + 0.5);
 
       cairo_stroke (cr);
-      
-      cairo_restore (cr);
+
+      unset_color (text_renderer);
     }
   else if (GDK_IS_PIXBUF (attr->data))
     {
