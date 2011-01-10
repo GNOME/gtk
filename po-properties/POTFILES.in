@@ -129,6 +129,7 @@ gtk/gtkmountoperation.c
 gtk/gtkmountoperation-stub.c
 gtk/gtkmountoperation-x11.c
 gtk/gtknotebook.c
+gtk/gtknumerableicon.c
 gtk/gtkorientable.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
