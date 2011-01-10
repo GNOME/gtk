@@ -6524,6 +6524,9 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
 
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+
   gtk_style_context_get_background_color (context, state, &bg_color);
   gtk_style_context_get_color (context, state, &fg_color);
 
@@ -6539,6 +6542,8 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
     pango_font_description_free (values->font);
 
   values->font = pango_font_description_copy (gtk_style_context_get_font (context, state));
+
+  gtk_style_context_restore (context);
 }
 
 static void
