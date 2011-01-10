@@ -3469,6 +3469,7 @@ gtk_widget_get_clipboard
 gtk_widget_get_composite_name
 gtk_widget_get_default_direction
 gtk_widget_get_default_style
+gtk_widget_get_device_enabled
 gtk_widget_get_device_events
 gtk_widget_get_direction
 gtk_widget_get_display
@@ -3615,6 +3616,7 @@ gtk_widget_set_can_focus
 gtk_widget_set_child_visible
 gtk_widget_set_composite_name
 gtk_widget_set_default_direction
+gtk_widget_set_device_enabled
 gtk_widget_set_device_events
 gtk_widget_set_direction
 gtk_widget_set_double_buffered

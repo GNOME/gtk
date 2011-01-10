@@ -663,6 +663,10 @@ static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 static void gtk_widget_add_events_internal (GtkWidget *widget,
                                             GdkDevice *device,
                                             gint       events);
+static void gtk_widget_set_device_enabled_internal (GtkWidget *widget,
+                                                    GdkDevice *device,
+                                                    gboolean   recurse,
+                                                    gboolean   enabled);
 
 /* --- variables --- */
 static gpointer         gtk_widget_parent_class = NULL;
@@ -691,6 +695,7 @@ static GQuark		quark_has_tooltip = 0;
 static GQuark		quark_tooltip_window = 0;
 static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
+static GQuark           quark_enabled_devices = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -804,6 +809,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_tooltip_window = g_quark_from_static_string ("gtk-tooltip-window");
   quark_visual = g_quark_from_static_string ("gtk-widget-visual");
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
+  quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -4222,6 +4228,105 @@ _gtk_widget_enable_device_events (GtkWidget *widget)
     }
 }
 
+static GList *
+get_widget_windows (GtkWidget *widget)
+{
+  GList *window_list, *last, *l, *children, *ret;
+
+  if (gtk_widget_get_has_window (widget))
+    window_list = g_list_prepend (NULL, gtk_widget_get_window (widget));
+  else
+    window_list = gdk_window_peek_children (gtk_widget_get_window (widget));
+
+  last = g_list_last (window_list);
+  ret = NULL;
+
+  for (l = window_list; l; l = l->next)
+    {
+      GtkWidget *window_widget;
+
+      gdk_window_get_user_data (l->data, (gpointer *) window_widget);
+
+      if (widget != window_widget)
+        continue;
+
+      ret = g_list_prepend (ret, l->data);
+      children = gdk_window_peek_children (GDK_WINDOW (l->data));
+
+      if (children)
+        {
+          last = g_list_concat (last, children);
+          last = g_list_last (last);
+        }
+    }
+
+  g_list_free (window_list);
+
+  return ret;
+}
+
+static void
+device_enable_foreach (GtkWidget *widget,
+                       gpointer   user_data)
+{
+  GdkDevice *device = user_data;
+  gtk_widget_set_device_enabled_internal (widget, device, TRUE, TRUE);
+}
+
+static void
+device_disable_foreach (GtkWidget *widget,
+                        gpointer   user_data)
+{
+  GdkDevice *device = user_data;
+  gtk_widget_set_device_enabled_internal (widget, device, TRUE, FALSE);
+}
+
+static void
+gtk_widget_set_device_enabled_internal (GtkWidget *widget,
+                                        GdkDevice *device,
+                                        gboolean   recurse,
+                                        gboolean   enabled)
+{
+  GList *window_list, *l;
+
+  window_list = get_widget_windows (widget);
+
+  for (l = window_list; l; l = l->next)
+    {
+      GdkEventMask events = 0;
+      GdkWindow *window;
+
+      window = l->data;
+
+      if (enabled)
+        events = gdk_window_get_events (window);
+
+      gdk_window_set_device_events (window, device, events);
+    }
+
+  if (recurse && GTK_IS_CONTAINER (widget))
+    {
+      if (enabled)
+        gtk_container_forall (GTK_CONTAINER (widget), device_enable_foreach, device);
+      else
+        gtk_container_forall (GTK_CONTAINER (widget), device_disable_foreach, device);
+    }
+
+  g_list_free (window_list);
+}
+
+static void
+gtk_widget_update_devices_mask (GtkWidget *widget,
+                                gboolean   recurse)
+{
+  GList *enabled_devices, *l;
+
+  enabled_devices = g_object_get_qdata (G_OBJECT (widget), quark_enabled_devices);
+
+  for (l = enabled_devices; l; l = l->next)
+    gtk_widget_set_device_enabled_internal (widget, GDK_DEVICE (l->data), recurse, TRUE);
+}
+
 /**
  * gtk_widget_realize:
  * @widget: a #GtkWidget
@@ -4300,6 +4405,7 @@ gtk_widget_realize (GtkWidget *widget)
         gdk_window_set_support_multidevice (priv->window, TRUE);
 
       _gtk_widget_enable_device_events (widget);
+      gtk_widget_update_devices_mask (widget, TRUE);
 
       gtk_widget_pop_verify_invariants (widget);
     }
@@ -9749,6 +9855,53 @@ gtk_widget_set_device_events (GtkWidget    *widget,
   g_hash_table_insert (device_events, device, GUINT_TO_POINTER (events));
 }
 
+/**
+ * gtk_widget_enable_device:
+ * @widget: a #GtkWidget
+ * @device: a #GdkDevice
+ *
+ * Enables a #GdkDevice to interact with @widget and
+ * all its children, it does so by descending through
+ * the #GdkWindow hierarchy and enabling the same mask
+ * that is has for core events (i.e. the one that
+ * gdk_window_get_events() returns).
+ *
+ * Since: 3.0
+ **/
+void
+gtk_widget_set_device_enabled (GtkWidget *widget,
+                               GdkDevice *device,
+                               gboolean   enabled)
+{
+  GList *enabled_devices;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GDK_IS_DEVICE (device));
+
+  enabled_devices = g_object_get_qdata (G_OBJECT (widget), quark_enabled_devices);
+  enabled_devices = g_list_append (enabled_devices, device);
+
+  g_object_set_qdata_full (G_OBJECT (widget), quark_enabled_devices,
+                           enabled_devices, (GDestroyNotify) g_list_free);;
+
+  if (gtk_widget_get_realized (widget))
+    gtk_widget_set_device_enabled_internal (widget, device, TRUE, enabled);
+}
+
+gboolean
+gtk_widget_get_device_enabled (GtkWidget *widget,
+                               GdkDevice *device)
+{
+  GList *enabled_devices;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
+
+  enabled_devices = g_object_get_qdata (G_OBJECT (widget), quark_enabled_devices);
+
+  return g_list_find (enabled_devices, device) != NULL;
+}
+
 static void
 gtk_widget_add_events_internal_list (GtkWidget *widget,
                                      GdkDevice *device,
@@ -9818,7 +9971,10 @@ gtk_widget_add_events (GtkWidget *widget,
                       GINT_TO_POINTER (old_events | events));
 
   if (gtk_widget_get_realized (widget))
-    gtk_widget_add_events_internal (widget, NULL, events);
+    {
+      gtk_widget_add_events_internal (widget, NULL, events);
+      gtk_widget_update_devices_mask (widget, FALSE);
+    }
 
   g_object_notify (G_OBJECT (widget), "events");
 }

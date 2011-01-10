@@ -4975,6 +4975,8 @@ gtk_widget_add_events
 gtk_widget_set_device_events
 gtk_widget_get_device_events
 gtk_widget_add_device_events
+gtk_widget_set_device_enabled
+gtk_widget_get_device_enabled
 gtk_widget_get_toplevel
 gtk_widget_get_ancestor
 gtk_widget_get_visual
