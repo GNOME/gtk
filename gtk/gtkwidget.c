@@ -9018,23 +9018,20 @@ gtk_widget_render_icon_pixbuf (GtkWidget   *widget,
                                const gchar *stock_id,
                                GtkIconSize  size)
 {
-  GtkWidgetPrivate *priv;
+  GtkStyleContext *context;
   GtkIconSet *icon_set;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
   g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == -1, NULL);
 
-  priv = widget->priv;
-
-  gtk_widget_ensure_style (widget);
-
-  icon_set = gtk_style_context_lookup_icon_set (priv->context, stock_id);
+  context = gtk_widget_get_style_context (widget);
+  icon_set = gtk_style_context_lookup_icon_set (context, stock_id);
 
   if (icon_set == NULL)
     return NULL;
 
-  return gtk_icon_set_render_icon_pixbuf (icon_set, priv->context, size);
+  return gtk_icon_set_render_icon_pixbuf (icon_set, context, size);
 }
 
 /**
