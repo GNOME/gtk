@@ -30,6 +30,7 @@
 #include "gtkvbox.h"
 #include "gtkmenu.h"
 #include "gtkmain.h"
+#include "gtkbuildable.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 #include "gtkalias.h"
@@ -51,6 +52,12 @@ static void gtk_menu_tool_button_destroy    (GtkObject              *object);
 static int  menu_deactivate_cb              (GtkMenuShell           *menu_shell,
 					     GtkMenuToolButton      *button);
 
+static void gtk_menu_tool_button_buildable_interface_init (GtkBuildableIface   *iface);
+static void gtk_menu_tool_button_buildable_add_child      (GtkBuildable        *buildable,
+							   GtkBuilder          *builder,
+							   GObject             *child,
+							   const gchar         *type);
+
 enum
 {
   SHOW_MENU,
@@ -65,7 +72,11 @@ enum
 
 static gint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON)
+static GtkBuildableIface *parent_buildable_iface;
+
+G_DEFINE_TYPE_WITH_CODE (GtkMenuToolButton, gtk_menu_tool_button, GTK_TYPE_TOOL_BUTTON,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_menu_tool_button_buildable_interface_init))
 
 static void
 gtk_menu_tool_button_construct_contents (GtkMenuToolButton *button)
@@ -438,6 +449,26 @@ gtk_menu_tool_button_destroy (GtkObject *object)
     }
 
   GTK_OBJECT_CLASS (gtk_menu_tool_button_parent_class)->destroy (object);
+}
+
+static void
+gtk_menu_tool_button_buildable_add_child (GtkBuildable *buildable,
+					  GtkBuilder   *builder,
+					  GObject      *child,
+					  const gchar  *type)
+{
+  if (type && strcmp (type, "menu") == 0)
+    gtk_menu_tool_button_set_menu (GTK_MENU_TOOL_BUTTON (buildable),
+                                   GTK_WIDGET (child));
+  else
+    parent_buildable_iface->add_child (buildable, builder, child, type);
+}
+
+static void
+gtk_menu_tool_button_buildable_interface_init (GtkBuildableIface *iface)
+{
+  parent_buildable_iface = g_type_interface_peek_parent (iface);
+  iface->add_child = gtk_menu_tool_button_buildable_add_child;
 }
 
 /**
