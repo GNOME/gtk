@@ -27,21 +27,6 @@
 
 #include "config.h"
 
-#if 0
-#ifdef XINPUT_2
-
-/* Hack to have keyboard events interpreted
- * regardless of the default device manager
- */
-#define GDK_COMPILATION
-#include "x11/gdkdevicemanager-core.h"
-#include "x11/gdkdevicemanager-xi2.h"
-#include "x11/gdkeventtranslator.h"
-#undef GDK_COMPILATION
-
-#endif /* XINPUT_2 */
-#endif
-
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
