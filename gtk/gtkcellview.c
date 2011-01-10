@@ -895,7 +895,7 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
  * Returns the model for @cell_view. If no model is used %NULL is
  * returned.
  *
- * Returns: a #GtkTreeModel used or %NULL
+ * Returns: (transfer none): a #GtkTreeModel used or %NULL
  *
  * Since: 2.16
  **/

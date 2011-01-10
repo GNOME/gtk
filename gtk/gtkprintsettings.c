@@ -107,10 +107,10 @@ copy_hash_entry  (gpointer  key,
 /**
  * gtk_print_settings_copy:
  * @other: a #GtkPrintSettings
- * 
+ *
  * Copies a #GtkPrintSettings object.
- * 
- * Return value: a newly allocated copy of @other
+ *
+ * Return value: (transfer full): a newly allocated copy of @other
  *
  * Since: 2.10
  */
@@ -473,7 +473,7 @@ gtk_print_settings_set_int (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_foreach:
  * @settings: a #GtkPrintSettings
- * @func: (scope call) the function to call
+ * @func: (scope call): the function to call
  * @user_data: user data for @func
  *
  * Calls @func for each key-value pair of @settings.
@@ -1402,16 +1402,16 @@ gtk_print_settings_set_print_pages (GtkPrintSettings *settings,
   
   gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_PRINT_PAGES, str);
 }
-     
+
 /**
  * gtk_print_settings_get_page_ranges:
  * @settings: a #GtkPrintSettings
  * @num_ranges: return location for the length of the returned array
- * 
+ *
  * Gets the value of %GTK_PRINT_SETTINGS_PAGE_RANGES.
- * 
- * Return value: an array of #GtkPageRange<!-- -->s. Use g_free()
- *   to free the array when it is no longer needed. 
+ *
+ * Return value: (transfer full): an array of #GtkPageRange<!-- -->s.
+ *     Use g_free() to free the array when it is no longer needed.
  *
  * Since: 2.10
  */

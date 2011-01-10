@@ -199,7 +199,7 @@ gtk_invisible_set_screen (GtkInvisible *invisible,
  *
  * Returns the #GdkScreen object associated with @invisible
  *
- * Return value: the associated #GdkScreen.
+ * Return value: (transfer none): the associated #GdkScreen.
  *
  * Since: 2.2
  **/

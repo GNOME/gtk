@@ -306,12 +306,13 @@ gtk_radio_button_new_with_label (GSList      *group,
  * @group: the radio button group
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkRadioButton
  *
  * Creates a new #GtkRadioButton containing a label, adding it to the same 
  * group as @group. The label will be created using 
  * gtk_label_new_with_mnemonic(), so underscores in @label indicate the 
  * mnemonic for the button.
+ *
+ * Returns: (transfer full): a new #GtkRadioButton
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic (GSList      *group,
@@ -374,11 +375,12 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
  * @radio_group_member: (allow-none): widget to get radio group from or %NULL
  * @label: the text of the button, with an underscore in front of the
  *         mnemonic character
- * @returns: a new #GtkRadioButton
  *
  * Creates a new #GtkRadioButton containing a label. The label
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the button.
+ *
+ * Returns: (transfer full): a new #GtkRadioButton
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,

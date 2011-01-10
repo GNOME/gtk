@@ -1786,7 +1786,7 @@ gtk_spin_button_set_adjustment (GtkSpinButton *spin_button,
  * 
  * Get the adjustment associated with a #GtkSpinButton
  * 
- * Return value: the #GtkAdjustment of @spin_button
+ * Return value: (transfer none): the #GtkAdjustment of @spin_button
  **/
 GtkAdjustment *
 gtk_spin_button_get_adjustment (GtkSpinButton *spin_button)

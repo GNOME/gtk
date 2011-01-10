@@ -302,10 +302,10 @@ gtk_viewport_destroy (GtkObject *object)
 /**
  * gtk_viewport_get_hadjustment:
  * @viewport: a #GtkViewport.
- * 
+ *
  * Returns the horizontal adjustment of the viewport.
  *
- * Return value: the horizontal adjustment of @viewport.
+ * Return value: (transfer none): the horizontal adjustment of @viewport.
  **/
 GtkAdjustment*
 gtk_viewport_get_hadjustment (GtkViewport *viewport)
@@ -324,7 +324,7 @@ gtk_viewport_get_hadjustment (GtkViewport *viewport)
  * 
  * Returns the vertical adjustment of the viewport.
  *
- * Return value: the vertical adjustment of @viewport.
+ * Return value: (transfer none): the vertical adjustment of @viewport.
  **/
 GtkAdjustment*
 gtk_viewport_get_vadjustment (GtkViewport *viewport)
@@ -581,7 +581,7 @@ gtk_viewport_get_shadow_type (GtkViewport *viewport)
  *
  * Gets the bin window of the #GtkViewport.
  *
- * Return value: a #GdkWindow
+ * Return value: (transfer none): a #GdkWindow
  *
  * Since: 2.20
  **/

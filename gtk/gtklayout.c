@@ -145,10 +145,10 @@ gtk_layout_new (GtkAdjustment *hadjustment,
 /**
  * gtk_layout_get_bin_window:
  * @layout: a #GtkLayout
- * 
+ *
  * Retrieve the bin window of the layout used for drawing operations.
- * 
- * Return value: a #GdkWindow
+ *
+ * Return value: (transfer none): a #GdkWindow
  *
  * Since: 2.14
  **/
@@ -163,18 +163,18 @@ gtk_layout_get_bin_window (GtkLayout *layout)
 /**
  * gtk_layout_get_hadjustment:
  * @layout: a #GtkLayout
- * 
+ *
  * This function should only be called after the layout has been
  * placed in a #GtkScrolledWindow or otherwise configured for
  * scrolling. It returns the #GtkAdjustment used for communication
  * between the horizontal scrollbar and @layout.
  *
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
- * 
- * Return value: horizontal scroll adjustment
+ *
+ * Return value: (transfer none): horizontal scroll adjustment
  **/
-GtkAdjustment* 
-gtk_layout_get_hadjustment (GtkLayout     *layout)
+GtkAdjustment*
+gtk_layout_get_hadjustment (GtkLayout *layout)
 {
   g_return_val_if_fail (GTK_IS_LAYOUT (layout), NULL);
 
@@ -183,18 +183,18 @@ gtk_layout_get_hadjustment (GtkLayout     *layout)
 /**
  * gtk_layout_get_vadjustment:
  * @layout: a #GtkLayout
- * 
+ *
  * This function should only be called after the layout has been
  * placed in a #GtkScrolledWindow or otherwise configured for
  * scrolling. It returns the #GtkAdjustment used for communication
  * between the vertical scrollbar and @layout.
  *
  * See #GtkScrolledWindow, #GtkScrollbar, #GtkAdjustment for details.
- * 
- * Return value: vertical scroll adjustment
+ *
+ * Return value: (transfer none): vertical scroll adjustment
  **/
-GtkAdjustment* 
-gtk_layout_get_vadjustment (GtkLayout     *layout)
+GtkAdjustment*
+gtk_layout_get_vadjustment (GtkLayout *layout)
 {
   g_return_val_if_fail (GTK_IS_LAYOUT (layout), NULL);
 

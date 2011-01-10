@@ -1586,7 +1586,7 @@ gtk_file_chooser_set_current_folder_uri (GtkFileChooser *chooser,
 /**
  * gtk_file_chooser_get_current_folder_uri:
  * @chooser: a #GtkFileChooser
- * 
+ *
  * Gets the current folder of @chooser as an URI.
  * See gtk_file_chooser_set_current_folder_uri().
  *
@@ -1628,7 +1628,7 @@ gtk_file_chooser_get_current_folder_uri (GtkFileChooser *chooser)
  * @chooser: a #GtkFileChooser
  * @file: the #GFile for the new folder
  * @error: (allow-none): location to store error, or %NULL.
- * 
+ *
  * Sets the current folder for @chooser from a #GFile.
  * Internal function, see gtk_file_chooser_set_current_folder_uri().
  *
@@ -1652,11 +1652,11 @@ gtk_file_chooser_set_current_folder_file (GtkFileChooser  *chooser,
 /**
  * gtk_file_chooser_get_current_folder_file:
  * @chooser: a #GtkFileChooser
- * 
+ *
  * Gets the current folder of @chooser as #GFile.
  * See gtk_file_chooser_get_current_folder_uri().
- * 
- * Return value: the #GFile for the current folder.
+ *
+ * Return value: (transfer full): the #GFile for the current folder.
  *
  * Since: 2.14
  */
@@ -1665,7 +1665,7 @@ gtk_file_chooser_get_current_folder_file (GtkFileChooser *chooser)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), NULL);
 
-  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_current_folder (chooser);  
+  return GTK_FILE_CHOOSER_GET_IFACE (chooser)->get_current_folder (chooser);
 }
 
 /**
@@ -1804,8 +1804,8 @@ gtk_file_chooser_set_file (GtkFileChooser  *chooser,
  * If the file chooser is in folder mode, this function returns the selected
  * folder.
  *
- * Returns: a selected #GFile. You own the returned file; use
- *          g_object_unref() to release it.
+ * Returns: (transfer full): a selected #GFile. You own the returned file;
+ *     use g_object_unref() to release it.
  *
  * Since: 2.14
  **/
@@ -1885,11 +1885,11 @@ gtk_file_chooser_set_preview_widget (GtkFileChooser *chooser,
 /**
  * gtk_file_chooser_get_preview_widget:
  * @chooser: a #GtkFileChooser
- * 
+ *
  * Gets the current preview widget; see
  * gtk_file_chooser_set_preview_widget().
- * 
- * Return value: the current preview widget, or %NULL
+ *
+ * Return value: (transfer none): the current preview widget, or %NULL
  *
  * Since: 2.4
  **/
@@ -2007,12 +2007,12 @@ gtk_file_chooser_get_use_preview_label (GtkFileChooser *chooser)
 /**
  * gtk_file_chooser_get_preview_file:
  * @chooser: a #GtkFileChooser
- * 
+ *
  * Gets the #GFile that should be previewed in a custom preview
  * Internal function, see gtk_file_chooser_get_preview_uri().
- * 
- * Return value: the #GFile for the file to preview, or %NULL if no file
- *  is selected. Free with g_object_unref().
+ *
+ * Return value: (transfer none): the #GFile for the file to preview,
+ *     or %NULL if no file is selected. Free with g_object_unref().
  *
  * Since: 2.14
  **/
@@ -2156,11 +2156,11 @@ gtk_file_chooser_set_extra_widget (GtkFileChooser *chooser,
 /**
  * gtk_file_chooser_get_extra_widget:
  * @chooser: a #GtkFileChooser
- * 
+ *
  * Gets the current preview widget; see
  * gtk_file_chooser_set_extra_widget().
- * 
- * Return value: the current extra widget, or %NULL
+ *
+ * Return value: (transfer none): the current extra widget, or %NULL
  *
  * Since: 2.4
  **/
@@ -2273,10 +2273,10 @@ gtk_file_chooser_set_filter (GtkFileChooser *chooser,
 /**
  * gtk_file_chooser_get_filter:
  * @chooser: a #GtkFileChooser
- * 
+ *
  * Gets the current filter; see gtk_file_chooser_set_filter().
- * 
- * Return value: the current filter, or %NULL
+ *
+ * Return value: (transfer none): the current filter, or %NULL
  *
  * Since: 2.4
  **/

@@ -869,7 +869,7 @@ gtk_action_unblock_activate (GtkAction *action)
  * This function is intended for use by action implementations to
  * create icons displayed in the proxy widgets.
  *
- * Returns: a widget that displays the icon for this action.
+ * Returns: (transfer full): a widget that displays the icon for this action.
  *
  * Since: 2.4
  */
@@ -895,7 +895,7 @@ gtk_action_create_icon (GtkAction *action, GtkIconSize icon_size)
  *
  * Creates a menu item widget that proxies for the given action.
  *
- * Returns: a menu item connected to the action.
+ * Returns: (transfer full): a menu item connected to the action.
  *
  * Since: 2.4
  */
@@ -920,7 +920,7 @@ gtk_action_create_menu_item (GtkAction *action)
  *
  * Creates a toolbar item widget that proxies for the given action.
  *
- * Returns: a toolbar item connected to the action.
+ * Returns: (transfer full): a toolbar item connected to the action.
  *
  * Since: 2.4
  */
@@ -1683,7 +1683,7 @@ gtk_action_set_gicon (GtkAction *action,
  *
  * Gets the gicon of @action.
  *
- * Returns: The action's #GIcon if one is set.
+ * Returns: (transfer none): The action's #GIcon if one is set.
  *
  * Since: 2.16
  */
@@ -1941,7 +1941,7 @@ gtk_action_disconnect_accelerator (GtkAction *action)
  * item or the toolbar item it creates, this function returns an
  * instance of that menu.
  *
- * Return value: the menu item provided by the action, or %NULL.
+ * Return value: (transfer full): the menu item provided by the action, or %NULL.
  *
  * Since: 2.12
  */

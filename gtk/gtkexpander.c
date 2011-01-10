@@ -1758,8 +1758,9 @@ gtk_expander_set_label_widget (GtkExpander *expander,
  * Retrieves the label widget for the frame. See
  * gtk_expander_set_label_widget().
  *
- * Return value: the label widget, or %NULL if there is none.
- * 
+ * Return value: (transfer none): the label widget,
+ *     or %NULL if there is none.
+ *
  * Since: 2.4
  **/
 GtkWidget *

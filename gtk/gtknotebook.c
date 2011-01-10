@@ -7416,12 +7416,12 @@ gtk_notebook_get_tab_label_text (GtkNotebook *notebook,
  * gtk_notebook_get_menu_label:
  * @notebook: a #GtkNotebook
  * @child: a widget contained in a page of @notebook
- * 
+ *
  * Retrieves the menu label widget of the page containing @child.
- * 
- * Return value: the menu label, or %NULL if the
- *               notebook page does not have a menu label other
- *               than the default (the tab label).
+ *
+ * Return value: (transfer none): the menu label, or %NULL if the
+ *     notebook page does not have a menu label other than the
+ *     default (the tab label).
  **/
 GtkWidget*
 gtk_notebook_get_menu_label (GtkNotebook *notebook,
@@ -7433,14 +7433,14 @@ gtk_notebook_get_menu_label (GtkNotebook *notebook,
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
 
   list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)  
+  if (!list)
     return NULL;
 
   if (GTK_NOTEBOOK_PAGE (list)->default_menu)
     return NULL;
 
   return GTK_NOTEBOOK_PAGE (list)->menu_label;
-}  
+}
 
 /**
  * gtk_notebook_set_menu_label:
@@ -7867,10 +7867,11 @@ gtk_notebook_get_group_id (GtkNotebook *notebook)
 /**
  * gtk_notebook_get_group:
  * @notebook: a #GtkNotebook
- * 
+ *
  * Gets the current group identificator pointer for @notebook.
- * 
- * Return Value: the group identificator, or %NULL if none is set.
+ *
+ * Return Value: (transfer none): the group identificator,
+ *     or %NULL if none is set.
  *
  * Since: 2.12
  *
@@ -8071,8 +8072,8 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
  *
  * Gets one of the action widgets. See gtk_notebook_set_action_widget().
  *
- * Returns: The action widget with the given @pack_type or
- *     %NULL when this action widget has not been set
+ * Returns: (transfer none): The action widget with the given @pack_type
+ *     or %NULL when this action widget has not been set
  *
  * Since: 2.20
  */

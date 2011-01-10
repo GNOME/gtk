@@ -273,7 +273,7 @@ gtk_print_context_get_cairo_context (GtkPrintContext *context)
  * Obtains the #GtkPageSetup that determines the page
  * dimensions of the #GtkPrintContext.
  *
- * Return value: the page setup of @context
+ * Return value: (transfer none): the page setup of @context
  *
  * Since: 2.10
  */
@@ -441,10 +441,10 @@ _gtk_print_context_set_hard_margins (GtkPrintContext *context,
  * gtk_print_context_get_pango_fontmap:
  * @context: a #GtkPrintContext
  *
- * Returns a #PangoFontMap that is suitable for use 
+ * Returns a #PangoFontMap that is suitable for use
  * with the #GtkPrintContext.
  *
- * Return value: the font map of @context
+ * Return value: (transfer none): the font map of @context
  *
  * Since: 2.10
  */
@@ -458,12 +458,12 @@ gtk_print_context_get_pango_fontmap (GtkPrintContext *context)
 
 /**
  * gtk_print_context_create_pango_context:
- * @context: a #GtkPrintContext 
+ * @context: a #GtkPrintContext
  *
  * Creates a new #PangoContext that can be used with the
  * #GtkPrintContext.
  *
- * Return value: a new Pango context for @context
+ * Return value: (transfer full): a new Pango context for @context
  * 
  * Since: 2.10
  */
@@ -497,7 +497,7 @@ gtk_print_context_create_pango_context (GtkPrintContext *context)
  * Creates a new #PangoLayout that is suitable for use
  * with the #GtkPrintContext.
  * 
- * Return value: a new Pango layout for @context
+ * Return value: (transfer full): a new Pango layout for @context
  *
  * Since: 2.10
  */

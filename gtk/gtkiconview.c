@@ -5238,7 +5238,7 @@ gtk_icon_view_get_visible_range (GtkIconView  *icon_view,
 /**
  * gtk_icon_view_selected_foreach:
  * @icon_view: A #GtkIconView.
- * @func: The funcion to call for each selected icon.
+ * @func: (scope call): The function to call for each selected icon.
  * @data: User data to pass to the function.
  * 
  * Calls a function for each selected icon. Note that the model or
@@ -5439,7 +5439,8 @@ gtk_icon_view_set_model (GtkIconView *icon_view,
  * Returns the model the #GtkIconView is based on.  Returns %NULL if the
  * model is unset.
  *
- * Return value: A #GtkTreeModel, or %NULL if none is currently being used.
+ * Return value: (transfer none): A #GtkTreeModel, or %NULL if none is
+ *     currently being used.
  *
  * Since: 2.6 
  **/
@@ -7501,10 +7502,10 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @path: a #GtkTreePath in @icon_view
  *
- * Creates a #GdkPixmap representation of the item at @path.  
+ * Creates a #GdkPixmap representation of the item at @path.
  * This image is used for a drag icon.
  *
- * Return value: a newly-allocated pixmap of the drag icon.
+ * Return value: (transfer full): a newly-allocated pixmap of the drag icon.
  * 
  * Since: 2.8
  **/

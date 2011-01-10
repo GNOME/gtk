@@ -632,15 +632,15 @@ gtk_cell_renderer_activate (GtkCellRenderer      *cell,
  * @cell: a #GtkCellRenderer
  * @event: a #GdkEvent
  * @widget: widget that received the event
- * @path: widget-dependent string representation of the event location; 
+ * @path: widget-dependent string representation of the event location;
  *    e.g. for #GtkTreeView, a string representation of #GtkTreePath
  * @background_area: background area as passed to gtk_cell_renderer_render()
  * @cell_area: cell area as passed to gtk_cell_renderer_render()
  * @flags: render flags
- * 
+ *
  * Passes an activate event to the cell renderer for possible processing.
- * 
- * Return value: A new #GtkCellEditable, or %NULL
+ *
+ * Return value: (transfer full): A new #GtkCellEditable, or %NULL
  **/
 GtkCellEditable *
 gtk_cell_renderer_start_editing (GtkCellRenderer      *cell,

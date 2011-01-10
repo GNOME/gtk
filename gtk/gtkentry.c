@@ -6685,7 +6685,7 @@ get_buffer (GtkEntry *entry)
  *
  * Since: 2.18
  *
- * Returns: A #GtkEntryBuffer object.
+ * Returns: (transfer none): A #GtkEntryBuffer object.
  */
 GtkEntryBuffer*
 gtk_entry_get_buffer (GtkEntry *entry)
@@ -6770,7 +6770,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
  *
  * See also gtk_entry_get_icon_window().
  *
- * Return value: the entry's text window.
+ * Return value: (transfer none): the entry's text window.
  *
  * Since: 2.20
  **/
@@ -7944,7 +7944,8 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
  * method will work regardless of whether the icon was set using a
  * #GdkPixbuf, a #GIcon, a stock item, or an icon name.
  *
- * Returns: A #GdkPixbuf, or %NULL if no icon is set for this position.
+ * Returns: (transfer none): A #GdkPixbuf, or %NULL if no icon is
+ *     set for this position.
  *
  * Since: 2.16
  */
@@ -7978,8 +7979,8 @@ gtk_entry_get_icon_pixbuf (GtkEntry             *entry,
  * no icon or if the icon was set by some other method (e.g., by
  * stock, pixbuf, or icon name).
  *
- * Returns: A #GIcon, or %NULL if no icon is set or if the icon
- *          is not a #GIcon
+ * Returns: (transfer none): A #GIcon, or %NULL if no icon is set
+ *     or if the icon is not a #GIcon
  *
  * Since: 2.16
  */
@@ -8309,7 +8310,7 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  *
  * See also gtk_entry_get_text_window().
  *
- * Return value: the entry's icon window at @icon_pos.
+ * Return value: (transfer none): the entry's icon window at @icon_pos.
  *
  * Since: 2.20
  */
@@ -9833,7 +9834,8 @@ gtk_entry_set_completion (GtkEntry           *entry,
  *
  * Returns the auxiliary completion object currently in use by @entry.
  *
- * Return value: The auxiliary completion object currently in use by @entry.
+ * Return value: (transfer none): The auxiliary completion object currently
+ *     in use by @entry.
  *
  * Since: 2.4
  */

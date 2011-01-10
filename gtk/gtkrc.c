@@ -601,13 +601,13 @@ gtk_rc_set_default_files (gchar **filenames)
 
 /**
  * gtk_rc_get_default_files:
- * 
+ *
  * Retrieves the current list of RC files that will be parsed
  * at the end of gtk_init().
- * 
- * Return value: A %NULL-terminated array of filenames. This memory
- * is owned by GTK+ and must not be freed by the application.
- * If you want to store this information, you should make a copy.
+ *
+ * Return value: (transfer none): A %NULL-terminated array of filenames.
+ *     This memory is owned by GTK+ and must not be freed by the application.
+ *     If you want to store this information, you should make a copy.
  **/
 gchar **
 gtk_rc_get_default_files (void)
@@ -1250,12 +1250,12 @@ gtk_rc_style_new (void)
 /**
  * gtk_rc_style_copy:
  * @orig: the style to copy
- * 
+ *
  * Makes a copy of the specified #GtkRcStyle. This function
  * will correctly copy an RC style that is a member of a class
  * derived from #GtkRcStyle.
- * 
- * Return value: the resulting #GtkRcStyle
+ *
+ * Return value: (transfer full): the resulting #GtkRcStyle
  **/
 GtkRcStyle *
 gtk_rc_style_copy (GtkRcStyle *orig)
@@ -2028,12 +2028,12 @@ gtk_rc_get_style (GtkWidget *widget)
 /**
  * gtk_rc_get_style_by_paths:
  * @settings: a #GtkSettings object
- * @widget_path: (allow-none): the widget path to use when looking up the style, or %NULL
- *               if no matching against the widget path should be done
- * @class_path: (allow-none): the class path to use when looking up the style, or %NULL
- *               if no matching against the class path should be done.
+ * @widget_path: (allow-none): the widget path to use when looking up the
+ *     style, or %NULL if no matching against the widget path should be done
+ * @class_path: (allow-none): the class path to use when looking up the style,
+ *     or %NULL if no matching against the class path should be done.
  * @type: a type that will be used along with parent types of this type
- *        when matching against class styles, or #G_TYPE_NONE
+ *     when matching against class styles, or #G_TYPE_NONE
  *
  * Creates up a #GtkStyle from styles defined in a RC file by providing
  * the raw components used in matching. This function may be useful
@@ -2050,11 +2050,11 @@ gtk_rc_get_style (GtkWidget *widget)
  *                             G_OBJECT_TYPE (widget));
  * ]|
  * 
- * Return value: A style created by matching with the supplied paths,
- *   or %NULL if nothing matching was specified and the default style should
- *   be used. The returned value is owned by GTK+ as part of an internal cache,
- *   so you must call g_object_ref() on the returned value if you want to
- *   keep a reference to it.
+ * Return value: (transfer none): A style created by matching with the
+ *     supplied paths, or %NULL if nothing matching was specified and the
+ *     default style should be used. The returned value is owned by GTK+
+ *     as part of an internal cache, so you must call g_object_ref() on
+ *     the returned value if you want to keep a reference to it.
  **/
 GtkStyle *
 gtk_rc_get_style_by_paths (GtkSettings *settings,

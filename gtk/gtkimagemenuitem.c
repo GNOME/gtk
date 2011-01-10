@@ -951,11 +951,12 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
 
 /**
  * gtk_image_menu_item_get_image:
- * @image_menu_item: a #GtkImageMenuItem.
- * @returns: the widget set as image of @image_menu_item.
+ * @image_menu_item: a #GtkImageMenuItem
  *
  * Gets the widget that is currently set as the image of @image_menu_item.
  * See gtk_image_menu_item_set_image().
+ *
+ * Return value: (transfer none): the widget set as image of @image_menu_item
  **/
 GtkWidget*
 gtk_image_menu_item_get_image (GtkImageMenuItem *image_menu_item)

@@ -2037,7 +2037,8 @@ gtk_status_icon_get_storage_type (GtkStatusIcon *status_icon)
  * The caller of this function does not own a reference to the
  * returned pixbuf.
  * 
- * Return value: the displayed pixbuf, or %NULL if the image is empty.
+ * Return value: (transfer none): the displayed pixbuf,
+ *     or %NULL if the image is empty.
  *
  * Since: 2.10
  **/
@@ -2136,7 +2137,7 @@ gtk_status_icon_get_icon_name (GtkStatusIcon *status_icon)
  *
  * If this function fails, @icon is left unchanged;
  *
- * Returns: the displayed icon, or %NULL if the image is empty
+ * Returns: (transfer none): the displayed icon, or %NULL if the image is empty
  *
  * Since: 2.14
  **/
@@ -2205,13 +2206,13 @@ gtk_status_icon_set_screen (GtkStatusIcon *status_icon,
 #endif
 }
 
-/** 
+/**
  * gtk_status_icon_get_screen:
  * @status_icon: a #GtkStatusIcon
  *
  * Returns the #GdkScreen associated with @status_icon.
  *
- * Return value: a #GdkScreen.
+ * Return value: (transfer none): a #GdkScreen.
  *
  * Since: 2.12
  */
@@ -2220,7 +2221,7 @@ gtk_status_icon_get_screen (GtkStatusIcon *status_icon)
 {
   g_return_val_if_fail (GTK_IS_STATUS_ICON (status_icon), NULL);
 
-#ifdef GDK_WINDOWING_X11   
+#ifdef GDK_WINDOWING_X11
   return gtk_window_get_screen (GTK_WINDOW (status_icon->priv->tray_icon));
 #else
   return gdk_screen_get_default ();

@@ -7297,12 +7297,12 @@ gtk_widget_update_pango_context (GtkWidget *widget)
 /**
  * gtk_widget_create_pango_context:
  * @widget: a #GtkWidget
- * 
+ *
  * Creates a new #PangoContext with the appropriate font map,
  * font description, and base direction for drawing text for
  * this widget. See also gtk_widget_get_pango_context().
- * 
- * Return value: the new #PangoContext
+ *
+ * Return value: (transfer full): the new #PangoContext
  **/
 PangoContext *
 gtk_widget_create_pango_context (GtkWidget *widget)
@@ -7333,7 +7333,7 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * gtk_widget_create_pango_layout:
  * @widget: a #GtkWidget
  * @text: text to set on the layout (can be %NULL)
- * 
+ *
  * Creates a new #PangoLayout with the appropriate font map,
  * font description, and base direction for drawing text for
  * this widget.
@@ -7341,10 +7341,10 @@ gtk_widget_create_pango_context (GtkWidget *widget)
  * If you keep a #PangoLayout created in this way around, in order to
  * notify the layout of changes to the base direction or font of this
  * widget, you must call pango_layout_context_changed() in response to
- * the #GtkWidget::style-set and #GtkWidget::direction-changed signals 
+ * the #GtkWidget::style-set and #GtkWidget::direction-changed signals
  * for the widget.
- * 
- * Return value: the new #PangoLayout
+ *
+ * Return value: (transfer full): the new #PangoLayout
  **/
 PangoLayout *
 gtk_widget_create_pango_layout (GtkWidget   *widget,
@@ -7385,7 +7385,8 @@ gtk_widget_create_pango_layout (GtkWidget   *widget,
  * the application and should not be modified. The pixbuf should be freed
  * after use with g_object_unref().
  *
- * Return value: a new pixbuf, or %NULL if the stock ID wasn't known
+ * Return value: (transfer full): a new pixbuf, or %NULL if the
+ *     stock ID wasn't known
  **/
 GdkPixbuf*
 gtk_widget_render_icon (GtkWidget      *widget,

@@ -925,8 +925,8 @@ gtk_recent_chooser_get_items (GtkRecentChooser *chooser)
  *
  * Since the returned array is %NULL terminated, @length may be %NULL.
  * 
- * Return value: A newly allocated, %NULL terminated array of strings. Use
- *   g_strfreev() to free it.
+ * Return value: (transfer full): A newly allocated, %NULL-terminated array
+ *     of strings. Use g_strfreev() to free it.
  *
  * Since: 2.10
  */
@@ -1056,7 +1056,7 @@ gtk_recent_chooser_set_filter (GtkRecentChooser *chooser,
  * Gets the #GtkRecentFilter object currently used by @chooser to affect
  * the display of the recently used resources.
  *
- * Return value: a #GtkRecentFilter object.
+ * Return value: (transfer none): a #GtkRecentFilter object.
  *
  * Since: 2.10
  */

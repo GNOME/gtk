@@ -2997,10 +2997,10 @@ gtk_toolbar_get_n_items (GtkToolbar *toolbar)
  *
  * Returns the @n<!-- -->'th item on @toolbar, or %NULL if the
  * toolbar does not contain an @n<!-- -->'th item.
- * 
- * Return value: The @n<!-- -->'th #GtkToolItem on @toolbar, or %NULL if there
- * isn't an @n<!-- -->'th item.
- * 
+ *
+ * Return value: (transfer none): The @n<!-- -->'th #GtkToolItem on @toolbar,
+ *     or %NULL if there isn't an @n<!-- -->'th item.
+ *
  * Since: 2.4
  **/
 GtkToolItem *

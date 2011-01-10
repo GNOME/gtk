@@ -1869,6 +1869,14 @@ gtk_grab_add (GtkWidget *widget)
     }
 }
 
+/**
+ * gtk_grab_get_current:
+ *
+ * Queries the current grab of the default window group.
+ *
+ * Return value: (transfer none): The widget which currently
+ *     has the grab or %NULL if no grab is active
+ */
 GtkWidget*
 gtk_grab_get_current (void)
 {
@@ -2337,7 +2345,8 @@ gtk_get_current_event_state (GdkModifierType *state)
  * returns %NULL, otherwise returns the widget that received the event
  * originally.
  * 
- * Return value: the widget that originally received @event, or %NULL
+ * Return value: (transfer none): the widget that originally
+ *     received @event, or %NULL
  **/
 GtkWidget*
 gtk_get_event_widget (GdkEvent *event)

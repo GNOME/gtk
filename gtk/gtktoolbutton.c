@@ -1252,12 +1252,13 @@ gtk_tool_button_set_label_widget (GtkToolButton *button,
 /**
  * gtk_tool_button_get_label_widget:
  * @button: a #GtkToolButton
- * 
- * Returns the widget used as label on @button. See
- * gtk_tool_button_set_label_widget().
- * 
- * Return value: The widget used as label on @button, or %NULL.
- * 
+ *
+ * Returns the widget used as label on @button.
+ * See gtk_tool_button_set_label_widget().
+ *
+ * Return value: (transfer none): The widget used as label
+ *     on @button, or %NULL.
+ *
  * Since: 2.4
  **/
 GtkWidget *
@@ -1271,12 +1272,13 @@ gtk_tool_button_get_label_widget (GtkToolButton *button)
 /**
  * gtk_tool_button_get_icon_widget:
  * @button: a #GtkToolButton
- * 
- * Return the widget used as icon widget on @button. See
- * gtk_tool_button_set_icon_widget().
- * 
- * Return value: The widget used as icon on @button, or %NULL.
- * 
+ *
+ * Return the widget used as icon widget on @button.
+ * See gtk_tool_button_set_icon_widget().
+ *
+ * Return value: (transfer none): The widget used as icon
+ *     on @button, or %NULL.
+ *
  * Since: 2.4
  **/
 GtkWidget *

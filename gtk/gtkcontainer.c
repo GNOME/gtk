@@ -1509,7 +1509,7 @@ gtk_container_forall (GtkContainer *container,
 /**
  * gtk_container_foreach:
  * @container: a #GtkContainer
- * @callback: a callback
+ * @callback: (scope call):  a callback
  * @callback_data: callback user data
  * 
  * Invokes @callback on each non-internal child of @container. See

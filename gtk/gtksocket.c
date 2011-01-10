@@ -378,7 +378,7 @@ gtk_socket_get_id (GtkSocket *socket)
  * Retrieves the window of the plug. Use this to check if the plug has
  * been created inside of the socket.
  *
- * Return value: the window of the plug if available, or %NULL
+ * Return value: (transfer none): the window of the plug if available, or %NULL
  *
  * Since:  2.14
  **/

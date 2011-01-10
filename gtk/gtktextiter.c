@@ -1002,7 +1002,7 @@ gtk_text_iter_get_pixbuf (const GtkTextIter *iter)
  * anchor is returned (with no new reference count added). Otherwise,
  * %NULL is returned.
  *
- * Return value: the anchor at @iter
+ * Return value: (transfer none): the anchor at @iter
  **/
 GtkTextChildAnchor*
 gtk_text_iter_get_child_anchor (const GtkTextIter *iter)
@@ -3239,7 +3239,7 @@ gtk_text_iter_forward_word_ends (GtkTextIter      *iter,
 }
 
 /**
- * gtk_text_iter_backward_word_starts
+ * gtk_text_iter_backward_word_starts:
  * @iter: a #GtkTextIter
  * @count: number of times to move
  * 
@@ -3317,7 +3317,7 @@ gtk_text_iter_forward_visible_word_ends (GtkTextIter *iter,
 }
 
 /**
- * gtk_text_iter_backward_visible_word_starts
+ * gtk_text_iter_backward_visible_word_starts:
  * @iter: a #GtkTextIter
  * @count: number of times to move
  * 
@@ -4306,7 +4306,7 @@ matches_pred (GtkTextIter *iter,
 /**
  * gtk_text_iter_forward_find_char:
  * @iter: a #GtkTextIter
- * @pred: a function to be called on each character
+ * @pred: (scope call): a function to be called on each character
  * @user_data: user data for @pred
  * @limit: (allow-none): search limit, or %NULL for none 
  * 
@@ -4344,7 +4344,7 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
 /**
  * gtk_text_iter_backward_find_char:
  * @iter: a #GtkTextIter
- * @pred: function to be called on each character
+ * @pred: (scope call): function to be called on each character
  * @user_data: user data for @pred
  * @limit: (allow-none): search limit, or %NULL for none
  * 

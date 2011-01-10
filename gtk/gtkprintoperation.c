@@ -1401,10 +1401,10 @@ gtk_print_operation_set_default_page_setup (GtkPrintOperation *op,
  * gtk_print_operation_get_default_page_setup:
  * @op: a #GtkPrintOperation
  *
- * Returns the default page setup, see 
+ * Returns the default page setup, see
  * gtk_print_operation_set_default_page_setup().
  *
- * Returns: the default page setup 
+ * Returns: (transfer none): the default page setup
  *
  * Since: 2.10
  */
@@ -1457,15 +1457,15 @@ gtk_print_operation_set_print_settings (GtkPrintOperation *op,
 /**
  * gtk_print_operation_get_print_settings:
  * @op: a #GtkPrintOperation
- * 
- * Returns the current print settings. 
  *
- * Note that the return value is %NULL until either 
- * gtk_print_operation_set_print_settings() or 
+ * Returns the current print settings.
+ *
+ * Note that the return value is %NULL until either
+ * gtk_print_operation_set_print_settings() or
  * gtk_print_operation_run() have been called.
- * 
- * Return value: the current print settings of @op.
- * 
+ *
+ * Return value: (transfer none): the current print settings of @op.
+ *
  * Since: 2.10
  **/
 GtkPrintSettings *

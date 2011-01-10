@@ -913,10 +913,11 @@ gtk_tool_item_get_text_orientation (GtkToolItem *tool_item)
  * gtk_tool_item_get_text_size_group:
  * @tool_item: a #GtkToolItem
  *
- * Returns the size group used for labels in @tool_item. Custom subclasses of
- * #GtkToolItem should call this function and use the size group for labels.
+ * Returns the size group used for labels in @tool_item.
+ * Custom subclasses of #GtkToolItem should call this function
+ * and use the size group for labels.
  *
- * Return value: a #GtkSizeGroup
+ * Return value: (transfer none): a #GtkSizeGroup
  *
  * Since: 2.20
  */
@@ -1355,20 +1356,21 @@ gtk_tool_item_retrieve_proxy_menu_item (GtkToolItem *tool_item)
 
 /**
  * gtk_tool_item_get_proxy_menu_item:
- * @tool_item: a #GtkToolItem 
+ * @tool_item: a #GtkToolItem
  * @menu_item_id: a string used to identify the menu item
- * 
+ *
  * If @menu_item_id matches the string passed to
  * gtk_tool_item_set_proxy_menu_item() return the corresponding #GtkMenuItem.
  *
- * Custom subclasses of #GtkToolItem should use this function to update
- * their menu item when the #GtkToolItem changes. That the
- * @menu_item_id<!-- -->s must match ensures that a #GtkToolItem will not
- * inadvertently change a menu item that they did not create.
- * 
- * Return value: The #GtkMenuItem passed to
- * gtk_tool_item_set_proxy_menu_item(), if the @menu_item_id<!-- -->s match.
- * 
+ * Custom subclasses of #GtkToolItem should use this function to
+ * update their menu item when the #GtkToolItem changes. That the
+ * @menu_item_id<!-- -->s must match ensures that a #GtkToolItem
+ * will not inadvertently change a menu item that they did not create.
+ *
+ * Return value: (transfer none): The #GtkMenuItem passed to
+ *     gtk_tool_item_set_proxy_menu_item(), if the @menu_item_id<!-- -->s
+ *     match.
+ *
  * Since: 2.4
  **/
 GtkWidget *

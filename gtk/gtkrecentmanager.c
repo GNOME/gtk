@@ -1922,8 +1922,9 @@ gtk_recent_info_get_application_info (GtkRecentInfo  *info,
  *
  * Retrieves the list of applications that have registered this resource.
  *
- * Return value: (array length=length zero-terminated=1): a newly allocated
- *  %NULL-terminated array of strings. Use g_strfreev() to free it.
+ * Return value: (array length=length zero-terminated=1) (transfer full):
+ *     a newly allocated %NULL-terminated array of strings.
+ *     Use g_strfreev() to free it.
  *
  * Since: 2.10
  */
@@ -2082,8 +2083,8 @@ get_icon_fallback (const gchar *icon_name,
  *
  * Retrieves the icon of size @size associated to the resource MIME type.
  *
- * Return value: a #GdkPixbuf containing the icon, or %NULL. Use
- *   g_object_unref() when finished using the icon.
+ * Return value: (transfer full): a #GdkPixbuf containing the icon,
+ *     or %NULL. Use g_object_unref() when finished using the icon.
  *
  * Since: 2.10
  */
@@ -2419,8 +2420,9 @@ gtk_recent_info_get_age (GtkRecentInfo *info)
  * array of returned group names will be %NULL terminated, so length might
  * optionally be %NULL.
  *
- * Return value:  (array length=length zero-terminated=1): a newly allocated
- * %NULL terminated array of strings.  Use g_strfreev() to free it.
+ * Return value:  (array length=length zero-terminated=1) (transfer full):
+ *     a newly allocated %NULL terminated array of strings.
+ *     Use g_strfreev() to free it.
  *
  * Since: 2.10
  */

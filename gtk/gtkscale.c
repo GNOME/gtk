@@ -1263,13 +1263,13 @@ gtk_scale_finalize (GObject *object)
  * gtk_scale_get_layout:
  * @scale: A #GtkScale
  *
- * Gets the #PangoLayout used to display the scale. 
- * The returned object is owned by the scale so does 
- * not need to be freed by the caller. 
+ * Gets the #PangoLayout used to display the scale. The returned
+ * object is owned by the scale so does not need to be freed by
+ * the caller.
  *
- * Return value: the #PangoLayout for this scale, or %NULL 
- *    if the #GtkScale:draw-value property is %FALSE.
- *   
+ * Return value: (transfer none): the #PangoLayout for this scale,
+ *     or %NULL if the #GtkScale:draw-value property is %FALSE.
+ *
  * Since: 2.4
  */
 PangoLayout *

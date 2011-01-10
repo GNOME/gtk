@@ -2250,7 +2250,7 @@ gtk_button_set_image (GtkButton *button,
  * This may have been explicitly set by gtk_button_set_image()
  * or constructed by gtk_button_new_from_stock().
  *
- * Return value: a #GtkWidget or %NULL in case there is no image
+ * Return value: (transfer none): a #GtkWidget or %NULL in case there is no image
  *
  * Since: 2.6
  */

@@ -1645,7 +1645,8 @@ gtk_assistant_get_n_pages (GtkAssistant *assistant)
  *
  * Returns the child widget contained in page number @page_num.
  *
- * Return value: The child widget, or %NULL if @page_num is out of bounds.
+ * Return value: (transfer none): The child widget, or %NULL
+ *     if @page_num is out of bounds.
  *
  * Since: 2.10
  **/
@@ -2076,11 +2077,11 @@ gtk_assistant_set_page_header_image (GtkAssistant *assistant,
  * gtk_assistant_get_page_header_image:
  * @assistant: a #GtkAssistant
  * @page: a page of @assistant
- * 
- * Gets the header image for @page. 
- * 
- * Return value: the header image for @page, or %NULL
- * if there's no header image for the page.
+ *
+ * Gets the header image for @page.
+ *
+ * Return value: (transfer none): the header image for @page, or %NULL
+ *     if there's no header image for the page.
  *
  * Since: 2.10
  **/
@@ -2156,11 +2157,11 @@ gtk_assistant_set_page_side_image (GtkAssistant *assistant,
  * gtk_assistant_get_page_side_image:
  * @assistant: a #GtkAssistant
  * @page: a page of @assistant
- * 
- * Gets the header image for @page. 
- * 
- * Return value: the side image for @page, or %NULL
- * if there's no side image for the page.
+ *
+ * Gets the header image for @page.
+ *
+ * Return value: (transfer none): the side image for @page, or %NULL
+ *     if there's no side image for the page.
  *
  * Since: 2.10
  **/

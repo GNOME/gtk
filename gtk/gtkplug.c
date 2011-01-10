@@ -307,7 +307,7 @@ gtk_plug_get_embedded (GtkPlug *plug)
  *
  * Retrieves the socket the plug is embedded in.
  *
- * Return value: the window of the socket, or %NULL
+ * Return value: (transfer none): the window of the socket, or %NULL
  *
  * Since: 2.14
  **/
@@ -540,7 +540,7 @@ gtk_plug_new (GdkNativeWindow socket_id)
 
 /**
  * gtk_plug_new_for_display:
- * @display : the #GdkDisplay on which @socket_id is displayed
+ * @display: the #GdkDisplay on which @socket_id is displayed
  * @socket_id: the XID of the socket's window.
  * 
  * Create a new plug widget inside the #GtkSocket identified by socket_id.

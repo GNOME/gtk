@@ -1619,7 +1619,7 @@ render_fallback_image (GtkStyle          *style,
  * (perhaps because an image file fails to load), a default "missing
  * image" icon will be returned instead.
  *
- * Return value: a #GdkPixbuf to be displayed
+ * Return value: (transfer full): a #GdkPixbuf to be displayed
  */
 GdkPixbuf*
 gtk_icon_set_render_icon (GtkIconSet        *icon_set,
@@ -2122,7 +2122,7 @@ gtk_icon_source_get_icon_name (const GtkIconSource *source)
  * virtual function. The reference count on the pixbuf is
  * not incremented.
  *
- * Return value: source pixbuf
+ * Return value: (transfer none): source pixbuf
  */
 GdkPixbuf*
 gtk_icon_source_get_pixbuf (const GtkIconSource *source)

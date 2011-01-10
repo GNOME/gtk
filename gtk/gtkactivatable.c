@@ -496,7 +496,7 @@ gtk_activatable_do_set_related_action (GtkActivatable *activatable,
  *
  * Gets the related #GtkAction for @activatable.
  *
- * Returns: the related #GtkAction if one is set.
+ * Returns: (transfer none): the related #GtkAction if one is set.
  *
  * Since: 2.16
  **/

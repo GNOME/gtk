@@ -990,17 +990,16 @@ gtk_drag_get_data (GtkWidget      *widget,
 }
 
 
-/*************************************************************
+/**
  * gtk_drag_get_source_widget:
- *     Get the widget the was the source of this drag, if
- *     the drag originated from this application.
- *   arguments:
- *     context: The drag context for this drag
- *   results:
- *     The source widget, or NULL if the drag originated from
- *     a different application.
- *************************************************************/
-
+ * @context: a (destination side) drag context
+ *
+ * Determines the source widget for a drag.
+ *
+ * Return value: (transfer none): if the drag is occurring
+ *     within a single application, a pointer to the source widget.
+ *     Otherwise, %NULL.
+ */
 GtkWidget *
 gtk_drag_get_source_widget (GdkDragContext *context)
 {

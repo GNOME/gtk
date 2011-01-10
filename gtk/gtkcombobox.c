@@ -5294,12 +5294,13 @@ out:
 }
 
 /**
- * gtk_combo_box_get_model
+ * gtk_combo_box_get_model:
  * @combo_box: A #GtkComboBox
  *
  * Returns the #GtkTreeModel which is acting as data source for @combo_box.
  *
- * Return value: (transfer none): A #GtkTreeModel which was passed during construction.
+ * Return value: (transfer none): A #GtkTreeModel which was passed
+ *     during construction.
  *
  * Since: 2.4
  */
@@ -6074,7 +6075,8 @@ gtk_combo_box_set_title (GtkComboBox *combo_box,
  * This function is mostly intended for use by accessibility technologies;
  * applications should have little use for it.
  *
- * Returns: the accessible object corresponding to the combo box's popup.
+ * Returns: (transfer none): the accessible object corresponding
+ *     to the combo box's popup.
  *
  * Since: 2.6
  */

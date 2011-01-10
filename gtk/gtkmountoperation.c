@@ -1450,7 +1450,7 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
  *
  * Gets the transient parent used by the #GtkMountOperation
  *
- * Returns: the transient parent for windows shown by @op
+ * Returns: (transfer none): the transient parent for windows shown by @op
  *
  * Since: 2.14
  */
@@ -1500,10 +1500,10 @@ gtk_mount_operation_set_screen (GtkMountOperation *op,
  * gtk_mount_operation_get_screen:
  * @op: a #GtkMountOperation
  *
- * Gets the screen on which windows of the #GtkMountOperation 
+ * Gets the screen on which windows of the #GtkMountOperation
  * will be shown.
  *
- * Returns: the screen on which windows of @op are shown
+ * Returns: (transfer none): the screen on which windows of @op are shown
  *
  * Since: 2.14
  */

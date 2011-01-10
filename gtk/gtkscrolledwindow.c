@@ -540,7 +540,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
  * horizontal scrollbar to the child widget's horizontal scroll
  * functionality.
  *
- * Returns: the horizontal #GtkAdjustment
+ * Returns: (transfer none): the horizontal #GtkAdjustment
  */
 GtkAdjustment*
 gtk_scrolled_window_get_hadjustment (GtkScrolledWindow *scrolled_window)
@@ -557,10 +557,9 @@ gtk_scrolled_window_get_hadjustment (GtkScrolledWindow *scrolled_window)
  * @scrolled_window: a #GtkScrolledWindow
  * 
  * Returns the vertical scrollbar's adjustment, used to connect the
- * vertical scrollbar to the child widget's vertical scroll
- * functionality.
+ * vertical scrollbar to the child widget's vertical scroll functionality.
  * 
- * Returns: the vertical #GtkAdjustment
+ * Returns: (transfer none): the vertical #GtkAdjustment
  */
 GtkAdjustment*
 gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window)
@@ -575,11 +574,11 @@ gtk_scrolled_window_get_vadjustment (GtkScrolledWindow *scrolled_window)
 /**
  * gtk_scrolled_window_get_hscrollbar:
  * @scrolled_window: a #GtkScrolledWindow
- * 
+ *
  * Returns the horizontal scrollbar of @scrolled_window.
  *
- * Returns: the horizontal scrollbar of the scrolled window, or 
- *  %NULL if it does not have one.
+ * Returns: (transfer none): the horizontal scrollbar of the scrolled window,
+ *     or %NULL if it does not have one.
  *
  * Since: 2.8
  */
@@ -597,8 +596,8 @@ gtk_scrolled_window_get_hscrollbar (GtkScrolledWindow *scrolled_window)
  * 
  * Returns the vertical scrollbar of @scrolled_window.
  *
- * Returns: the vertical scrollbar of the scrolled window, or
- *  %NULL if it does not have one.
+ * Returns: (transfer none): the vertical scrollbar of the scrolled window,
+ *     or %NULL if it does not have one.
  *
  * Since: 2.8
  */

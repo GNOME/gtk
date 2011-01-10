@@ -733,7 +733,7 @@ gtk_range_init (GtkRange *range)
  * The return value does not have a reference added, so should not
  * be unreferenced.
  * 
- * Return value: a #GtkAdjustment
+ * Return value: (transfer none): a #GtkAdjustment
  **/
 GtkAdjustment*
 gtk_range_get_adjustment (GtkRange *range)
@@ -1417,7 +1417,7 @@ gtk_range_set_fill_level (GtkRange *range,
 
 /**
  * gtk_range_get_fill_level:
- * @range : A #GtkRange
+ * @range: A #GtkRange
  *
  * Gets the current position of the fill level indicator.
  *

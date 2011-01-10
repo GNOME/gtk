@@ -203,12 +203,12 @@ gtk_buildable_parser_finished (GtkBuildable *buildable,
  * @builder: #GtkBuilder used to construct this object
  * @name: name of child to construct
  *
- * Constructs a child of @buildable with the name @name. 
+ * Constructs a child of @buildable with the name @name.
  *
  * #GtkBuilder calls this function if a "constructor" has been
  * specified in the UI definition.
  *
- * Returns: the constructed child
+ * Returns: (transfer full): the constructed child
  *
  * Since: 2.12
  **/
@@ -336,7 +336,7 @@ gtk_buildable_custom_finished (GtkBuildable  *buildable,
  *
  * Get the internal child called @childname of the @buildable object.
  *
- * Returns: the internal child of the buildable object 
+ * Returns: (transfer none): the internal child of the buildable object
  *
  * Since: 2.12
  **/

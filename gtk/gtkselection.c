@@ -1226,7 +1226,7 @@ gtk_selection_data_get_length (GtkSelectionData *selection_data)
  *
  * Retrieves the display of the selection.
  *
- * Returns: the display of the selection.
+ * Returns: (transfer none): the display of the selection.
  *
  * Since: 2.14
  **/
@@ -1660,7 +1660,7 @@ gtk_selection_data_set_pixbuf (GtkSelectionData *selection_data,
  * 
  * Gets the contents of the selection data as a #GdkPixbuf.
  * 
- * Return value: if the selection data contained a recognized
+ * Return value: (transfer full): if the selection data contained a recognized
  *   image type and it could be converted to a #GdkPixbuf, a 
  *   newly allocated pixbuf is returned, otherwise %NULL.
  *   If the result is non-%NULL it must be freed with g_object_unref().

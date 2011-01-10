@@ -645,7 +645,7 @@ gtk_style_finalize (GObject *object)
  *
  * Creates a copy of the passed in #GtkStyle object.
  *
- * Returns: a copy of @style
+ * Returns: (transfer full): a copy of @style
  */
 GtkStyle*
 gtk_style_copy (GtkStyle *style)
@@ -703,12 +703,12 @@ gtk_style_new (void)
  *
  * Attaches a style to a window; this process allocates the
  * colors and creates the GC's for the style - it specializes
- * it to a particular visual and colormap. The process may 
- * involve the creation of a new style if the style has already 
+ * it to a particular visual and colormap. The process may
+ * involve the creation of a new style if the style has already
  * been attached to a window with a different style and colormap.
  *
- * Since this function may return a new object, you have to use it 
- * in the following way: 
+ * Since this function may return a new object, you have to use it
+ * in the following way:
  * <literal>style = gtk_style_attach (style, window)</literal>
  *
  * Returns: Either @style, or a newly-created #GtkStyle.
@@ -2173,11 +2173,13 @@ gtk_style_real_set_background (GtkStyle    *style,
  *     don't scale.
  * @widget: (allow-none): the widget
  * @detail: (allow-none): a style detail
- * @returns: a newly-created #GdkPixbuf containing the rendered icon
  *
  * Renders the icon specified by @source at the given @size
  * according to the given parameters and returns the result in a
  * pixbuf.
+ *
+ * Return value: (transfer full): a newly-created #GdkPixbuf
+ *     containing the rendered icon
  */
 GdkPixbuf *
 gtk_style_render_icon (GtkStyle            *style,

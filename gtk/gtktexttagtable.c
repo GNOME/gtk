@@ -399,7 +399,7 @@ list_foreach (gpointer data, gpointer user_data)
 /**
  * gtk_text_tag_table_foreach:
  * @table: a #GtkTextTagTable
- * @func: a function to call on each tag
+ * @func: (scope call): a function to call on each tag
  * @data: user data
  *
  * Calls @func on each tag in @table, with user data @data.

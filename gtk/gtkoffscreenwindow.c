@@ -266,7 +266,8 @@ gtk_offscreen_window_new (void)
  * a #GdkPixmap.  If you need to keep this around over window
  * resizes then you should add a reference to it.
  *
- * Returns: A #GdkPixmap pointer to the offscreen pixmap, or %NULL.
+ * Returns: (transfer none): A #GdkPixmap pointer to the offscreen pixmap,
+ *     or %NULL.
  *
  * Since: 2.20
  */
@@ -287,7 +288,7 @@ gtk_offscreen_window_get_pixmap (GtkOffscreenWindow *offscreen)
  * and the application should unreference it once it is no longer
  * needed.
  *
- * Returns: A #GdkPixbuf pointer, or %NULL.
+ * Returns: (transfer full): A #GdkPixbuf pointer, or %NULL.
  *
  * Since: 2.20
  */

@@ -1540,7 +1540,7 @@ gtk_paned_set_position (GtkPaned *paned,
  * 
  * Obtains the first child of the paned widget.
  * 
- * Return value: first child, or %NULL if it is not set.
+ * Return value: (transfer none): first child, or %NULL if it is not set.
  *
  * Since: 2.4
  **/
@@ -1558,7 +1558,7 @@ gtk_paned_get_child1 (GtkPaned *paned)
  * 
  * Obtains the second child of the paned widget.
  * 
- * Return value: second child, or %NULL if it is not set.
+ * Return value: (transfer none): second child, or %NULL if it is not set.
  *
  * Since: 2.4
  **/
@@ -2240,7 +2240,7 @@ gtk_paned_toggle_handle_focus (GtkPaned *paned)
  * enables the callback to distinguish between the window
  * of the paned, a child and the handle.
  *
- * Return value: the paned's handle window.
+ * Return value: (transfer none): the paned's handle window.
  *
  * Since: 2.20
  **/

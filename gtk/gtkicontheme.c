@@ -3044,8 +3044,9 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_load_icon:
  * @icon_info: a #GtkIconInfo structure from gtk_icon_theme_lookup_icon()
- * @error: (allow-none): location to store error information on failure, or %NULL.
- * 
+ * @error: (allow-none): location to store error information on failure,
+ *     or %NULL.
+ *
  * Renders an icon previously looked up in an icon theme using
  * gtk_icon_theme_lookup_icon(); the size will be based on the size
  * passed to gtk_icon_theme_lookup_icon(). Note that the resulting
@@ -3056,12 +3057,12 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo  *icon_info,
  * up too far. (This maintains sharpness.). This behaviour can be changed
  * by passing the %GTK_ICON_LOOKUP_FORCE_SIZE flag when obtaining
  * the #GtkIconInfo. If this flag has been specified, the pixbuf
- * returned by this function will be scaled to the exact size. 
- * 
- * Return value: the rendered icon; this may be a newly created icon
- *  or a new reference to an internal icon, so you must not modify
- *  the icon. Use g_object_unref() to release your reference to the
- *  icon.
+ * returned by this function will be scaled to the exact size.
+ *
+ * Return value: (transfer full): the rendered icon; this may be a newly
+ *     created icon or a new reference to an internal icon, so you must
+ *     not modify the icon. Use g_object_unref() to release your reference
+ *     to the icon.
  *
  * Since: 2.4
  **/

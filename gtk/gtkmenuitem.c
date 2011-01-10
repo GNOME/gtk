@@ -799,10 +799,10 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
  * gtk_menu_item_get_submenu:
  * @menu_item: a #GtkMenuItem
  *
- * Gets the submenu underneath this menu item, if any. See
- * gtk_menu_item_set_submenu().
+ * Gets the submenu underneath this menu item, if any.
+ * See gtk_menu_item_set_submenu().
  *
- * Return value: submenu for this menu item, or %NULL if none.
+ * Return value: (transfer none): submenu for this menu item, or %NULL if none.
  **/
 GtkWidget *
 gtk_menu_item_get_submenu (GtkMenuItem *menu_item)

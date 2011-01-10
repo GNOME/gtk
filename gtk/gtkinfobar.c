@@ -744,7 +744,7 @@ gtk_info_bar_add_action_widget (GtkInfoBar *info_bar,
  *
  * Returns the action area of @info_bar.
  *
- * Returns: the action area.
+ * Returns: (transfer none): the action area
  *
  * Since: 2.18
  */
@@ -762,7 +762,7 @@ gtk_info_bar_get_action_area (GtkInfoBar *info_bar)
  *
  * Returns the content area of @info_bar.
  *
- * Returns: the content area.
+ * Returns: (transfer none): the content area
  *
  * Since: 2.18
  */
@@ -786,7 +786,7 @@ gtk_info_bar_get_content_area (GtkInfoBar *info_bar)
  * to the end of the info bars's action area. The button widget is
  * returned, but usually you don't need it.
  *
- * Returns: the button widget that was added
+ * Returns: (transfer none): the button widget that was added
  *
  * Since: 2.18
  */

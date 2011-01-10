@@ -588,7 +588,7 @@ gtk_statusbar_get_has_resize_grip (GtkStatusbar *statusbar)
  *
  * Retrieves the box containing the label widget.
  *
- * Returns: a #GtkBox
+ * Returns: (transfer none): a #GtkBox
  *
  * Since: 2.20
  */
