@@ -147,7 +147,7 @@ struct _GtkImagePrivate
 
   gboolean              was_symbolic;
   gchar                *filename;       /* Only used with GTK_IMAGE_ANIMATION, GTK_IMAGE_PIXBUF */
-  gint                  last_rendered_state;  /* a GtkStateType, with -1 meaning an invalid state,
+  gint                  last_rendered_state;  /* a GtkStateFlags, with -1 meaning an invalid state,
                                                * only used with GTK_IMAGE_GICON, GTK_IMAGE_ICON_NAME */
   gint                  pixel_size;
   guint                 need_calc_size : 1;
@@ -168,8 +168,7 @@ static void gtk_image_get_preferred_height (GtkWidget    *widget,
                                             gint         *minimum,
                                             gint         *natural);
 
-static void gtk_image_style_set            (GtkWidget    *widget,
-                                            GtkStyle     *prev_style);
+static void gtk_image_style_updated        (GtkWidget    *widget);
 static void gtk_image_screen_changed       (GtkWidget    *widget,
                                             GdkScreen    *prev_screen);
 static void gtk_image_destroy              (GtkWidget    *widget);
@@ -226,7 +225,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->get_preferred_height = gtk_image_get_preferred_height;
   widget_class->unmap = gtk_image_unmap;
   widget_class->unrealize = gtk_image_unrealize;
-  widget_class->style_set = gtk_image_style_set;
+  widget_class->style_updated = gtk_image_style_updated;
   widget_class->screen_changed = gtk_image_screen_changed;
   
   g_object_class_install_property (gobject_class,
@@ -1391,8 +1390,8 @@ icon_theme_changed (GtkImage *image)
 }
 
 static void
-ensure_pixbuf_for_icon_name (GtkImage     *image,
-			     GtkStateType  state)
+ensure_pixbuf_for_icon_name (GtkImage      *image,
+                             GtkStateFlags  state)
 {
   GtkImagePrivate *priv = image->priv;
   GdkScreen *screen;
@@ -1496,8 +1495,8 @@ ensure_pixbuf_for_icon_name (GtkImage     *image,
 }
 
 static void
-ensure_pixbuf_for_gicon (GtkImage     *image,
-			 GtkStateType  state)
+ensure_pixbuf_for_gicon (GtkImage      *image,
+                         GtkStateFlags  state)
 {
   GtkImagePrivate *priv = image->priv;
   GdkScreen *screen;
@@ -1588,10 +1587,16 @@ gtk_image_draw (GtkWidget *widget,
       gint xpad, ypad;
       gfloat xalign, yalign;
       GdkPixbuf *pixbuf;
-      GtkStateType state;
+      GtkStateFlags state;
       gboolean needs_state_transform;
+      GtkStyleContext *context;
 
       misc = GTK_MISC (widget);
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
 
       /* For stock items and icon sets, we lazily calculate
        * the size; we might get here between a queue_resize()
@@ -1609,9 +1614,9 @@ gtk_image_draw (GtkWidget *widget,
 
       x = floor (xpad + ((gtk_widget_get_allocated_width (widget) - priv->required_width) * xalign));
       y = floor (ypad + ((gtk_widget_get_allocated_height (widget) - priv->required_height) * yalign));
-      
-      needs_state_transform = gtk_widget_get_state (widget) != GTK_STATE_NORMAL;
-      
+
+      needs_state_transform = state != 0;
+
       switch (priv->storage_type)
         {
 
@@ -1631,13 +1636,8 @@ gtk_image_draw (GtkWidget *widget,
 
         case GTK_IMAGE_ICON_SET:
           pixbuf =
-            gtk_icon_set_render_icon (priv->data.icon_set.icon_set,
-                                      gtk_widget_get_style (widget),
-                                      gtk_widget_get_direction (widget),
-                                      gtk_widget_get_state (widget),
-                                      priv->icon_size,
-                                      widget,
-                                      NULL);
+            gtk_icon_set_render_icon_pixbuf (priv->data.icon_set.icon_set,
+                                             context, priv->icon_size);
 
           /* already done */
           needs_state_transform = FALSE;
@@ -1666,10 +1666,9 @@ gtk_image_draw (GtkWidget *widget,
           break;
 
 	case GTK_IMAGE_ICON_NAME:
-	  state = gtk_widget_get_state (widget);
-	  if (state == GTK_STATE_INSENSITIVE)
+	  if (state & GTK_STATE_FLAG_INSENSITIVE)
 	    {
-	      ensure_pixbuf_for_icon_name (image, GTK_STATE_NORMAL);
+	      ensure_pixbuf_for_icon_name (image, 0);
 	    }
 	  else
 	    {
@@ -1686,10 +1685,9 @@ gtk_image_draw (GtkWidget *widget,
 	  break;
 
 	case GTK_IMAGE_GICON:
-	  state = gtk_widget_get_state (widget);
-	  if (state == GTK_STATE_INSENSITIVE)
+	  if (state & GTK_STATE_FLAG_INSENSITIVE)
 	    {
-	      ensure_pixbuf_for_gicon (image, GTK_STATE_NORMAL);
+	      ensure_pixbuf_for_gicon (image, 0);
 	    }
 	  else
 	    {
@@ -1728,16 +1726,8 @@ gtk_image_draw (GtkWidget *widget,
               gtk_icon_source_set_size (source,
                                         GTK_ICON_SIZE_SMALL_TOOLBAR);
               gtk_icon_source_set_size_wildcarded (source, FALSE);
-              
-              rendered = gtk_style_render_icon (gtk_widget_get_style (widget),
-                                                source,
-                                                gtk_widget_get_direction (widget),
-                                                gtk_widget_get_state (widget),
-                                                /* arbitrary */
-                                                (GtkIconSize)-1,
-                                                widget,
-                                                "gtk-image");
 
+              rendered = gtk_render_icon_pixbuf (context, source, (GtkIconSize) -1);
               gtk_icon_source_free (source);
 
               g_object_unref (pixbuf);
@@ -1749,6 +1739,8 @@ gtk_image_draw (GtkWidget *widget,
 
           g_object_unref (pixbuf);
         }
+
+      gtk_style_context_restore (context);
     }
 
   return FALSE;
@@ -1878,8 +1870,15 @@ gtk_image_calc_size (GtkImage *image)
   GtkWidget *widget = GTK_WIDGET (image);
   GtkImagePrivate *priv = image->priv;
   GdkPixbuf *pixbuf = NULL;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
   priv->need_calc_size = 0;
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
 
   /* We update stock/icon set on every size request, because
    * the theme could have affected the size; for other kinds of
@@ -1895,21 +1894,16 @@ gtk_image_calc_size (GtkImage *image)
       break;
       
     case GTK_IMAGE_ICON_SET:
-      pixbuf = gtk_icon_set_render_icon (priv->data.icon_set.icon_set,
-                                         gtk_widget_get_style (widget),
-                                         gtk_widget_get_direction (widget),
-                                         gtk_widget_get_state (widget),
-                                         priv->icon_size,
-                                         widget,
-                                         NULL);
+      pixbuf = gtk_icon_set_render_icon_pixbuf (priv->data.icon_set.icon_set,
+                                                context, priv->icon_size);
       break;
     case GTK_IMAGE_ICON_NAME:
-      ensure_pixbuf_for_icon_name (image, GTK_STATE_NORMAL);
+      ensure_pixbuf_for_icon_name (image, 0);
       pixbuf = priv->data.name.pixbuf;
       if (pixbuf) g_object_ref (pixbuf);
       break;
     case GTK_IMAGE_GICON:
-      ensure_pixbuf_for_gicon (image, GTK_STATE_NORMAL);
+      ensure_pixbuf_for_gicon (image, 0);
       pixbuf = priv->data.gicon.pixbuf;
       if (pixbuf)
 	g_object_ref (pixbuf);
@@ -1929,6 +1923,8 @@ gtk_image_calc_size (GtkImage *image)
 
       g_object_unref (pixbuf);
     }
+
+  gtk_style_context_restore (context);
 }
 
 static void
@@ -1964,14 +1960,13 @@ gtk_image_get_preferred_height (GtkWidget *widget,
 }
 
 static void
-gtk_image_style_set (GtkWidget      *widget,
-		     GtkStyle       *prev_style)
+gtk_image_style_updated (GtkWidget *widget)
 {
   GtkImage *image;
 
   image = GTK_IMAGE (widget);
 
-  GTK_WIDGET_CLASS (gtk_image_parent_class)->style_set (widget, prev_style);
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
   icon_theme_changed (image);
 }
