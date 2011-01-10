@@ -156,8 +156,7 @@ static void gtk_layout_allocate_child     (GtkLayout      *layout,
                                            GtkLayoutChild *child);
 static void gtk_layout_adjustment_changed (GtkAdjustment  *adjustment,
                                            GtkLayout      *layout);
-static void gtk_layout_style_set          (GtkWidget      *widget,
-					   GtkStyle       *old_style);
+static void gtk_layout_style_updated      (GtkWidget      *widget);
 
 static void gtk_layout_set_hadjustment_values (GtkLayout      *layout);
 static void gtk_layout_set_vadjustment_values (GtkLayout      *layout);
@@ -678,7 +677,7 @@ gtk_layout_class_init (GtkLayoutClass *class)
   widget_class->get_preferred_height = gtk_layout_get_preferred_height;
   widget_class->size_allocate = gtk_layout_size_allocate;
   widget_class->draw = gtk_layout_draw;
-  widget_class->style_set = gtk_layout_style_set;
+  widget_class->style_updated = gtk_layout_style_updated;
 
   container_class->add = gtk_layout_add;
   container_class->remove = gtk_layout_remove;
@@ -888,9 +887,7 @@ gtk_layout_realize (GtkWidget *widget)
   priv->bin_window = gdk_window_new (window,
                                      &attributes, attributes_mask);
   gdk_window_set_user_data (priv->bin_window, widget);
-
-  gtk_widget_style_attach (widget);
-  gtk_style_set_background (gtk_widget_get_style (widget), priv->bin_window, GTK_STATE_NORMAL);
+  gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->bin_window);
 
   tmp_list = priv->children;
   while (tmp_list)
@@ -903,17 +900,16 @@ gtk_layout_realize (GtkWidget *widget)
 }
 
 static void
-gtk_layout_style_set (GtkWidget *widget,
-                      GtkStyle  *old_style)
+gtk_layout_style_updated (GtkWidget *widget)
 {
   GtkLayoutPrivate *priv;
 
-  GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_set (widget, old_style);
+  GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_updated (widget);
 
   if (gtk_widget_get_realized (widget))
     {
       priv = GTK_LAYOUT (widget)->priv;
-      gtk_style_set_background (gtk_widget_get_style (widget), priv->bin_window, GTK_STATE_NORMAL);
+      gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->bin_window);
     }
 }
 
