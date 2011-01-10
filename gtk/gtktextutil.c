@@ -248,8 +248,8 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
                                                pixmap_height + 2);
   cr = cairo_create (surface);
 
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+  gtk_style_context_save (style_context);
+  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_VIEW);
 
   gtk_style_context_get_background_color (style_context, state, &color);
   gdk_cairo_set_source_rgba (cr, &color);
@@ -270,7 +270,7 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   cairo_surface_set_device_offset (surface, 2, 2);
 
-  gtk_style_context_restore (context);
+  gtk_style_context_restore (style_context);
 
   return surface;
 }
