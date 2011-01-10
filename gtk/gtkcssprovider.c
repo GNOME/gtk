@@ -2682,14 +2682,14 @@ border_parse_str (const gchar  *str,
   border = gtk_border_new ();
 
   SKIP_SPACES (str);
-  if (!g_ascii_isdigit (*str))
+  if (!g_ascii_isdigit (*str) && *str != '-')
     return border;
 
   first = unit_parse_str (str, end_str);
   str = *end_str;
   SKIP_SPACES (str);
 
-  if (!g_ascii_isdigit (*str))
+  if (!g_ascii_isdigit (*str) && *str != '-')
     {
       border->left = border->right = border->top = border->bottom = (gint) first;
       *end_str = (gchar *) str;
@@ -2700,7 +2700,7 @@ border_parse_str (const gchar  *str,
   str = *end_str;
   SKIP_SPACES (str);
 
-  if (!g_ascii_isdigit (*str))
+  if (!g_ascii_isdigit (*str) && *str != '-')
     {
       border->top = border->bottom = (gint) first;
       border->left = border->right = (gint) second;
@@ -2712,7 +2712,7 @@ border_parse_str (const gchar  *str,
   str = *end_str;
   SKIP_SPACES (str);
 
-  if (!g_ascii_isdigit (*str))
+  if (!g_ascii_isdigit (*str) && *str != '-')
     {
       border->top = (gint) first;
       border->left = border->right = (gint) second;
