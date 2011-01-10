@@ -118,18 +118,18 @@ draw_default_surface (GtkNumerableIcon *self)
   cr = cairo_create (surface);
 
   cairo_arc (cr, DEFAULT_SURFACE_SIZE / 2., DEFAULT_SURFACE_SIZE / 2.,
-             DEFAULT_RADIUS, 0., 2 * M_PI);
+             DEFAULT_RADIUS, 0., 2 * G_PI);
 
   gdk_cairo_set_source_rgba (cr, self->priv->background);
   cairo_fill (cr);
 
   cairo_arc (cr, DEFAULT_SURFACE_SIZE / 2., DEFAULT_SURFACE_SIZE / 2.,
-             DEFAULT_RADIUS - DEFAULT_BORDER_SIZE, 0., 2 * M_PI);
+             DEFAULT_RADIUS - DEFAULT_BORDER_SIZE, 0., 2 * G_PI);
   gdk_cairo_set_source_rgba  (cr, self->priv->foreground);
   cairo_fill (cr);
 
   cairo_arc (cr, DEFAULT_SURFACE_SIZE / 2., DEFAULT_SURFACE_SIZE / 2.,
-             DEFAULT_RADIUS - 2 * DEFAULT_BORDER_SIZE, 0., 2 * M_PI);
+             DEFAULT_RADIUS - 2 * DEFAULT_BORDER_SIZE, 0., 2 * G_PI);
   gdk_cairo_set_source_rgba  (cr, self->priv->background);
   cairo_fill (cr);
 
@@ -157,7 +157,7 @@ draw_from_gradient (cairo_pattern_t *pattern)
   cairo_pattern_set_matrix (pattern, &matrix);
 
   cairo_arc (cr, DEFAULT_SURFACE_SIZE / 2., DEFAULT_SURFACE_SIZE / 2.,
-             DEFAULT_RADIUS, 0., 2 * M_PI);
+             DEFAULT_RADIUS, 0., 2 * G_PI);
 
   cairo_set_source (cr, pattern);
   cairo_fill (cr);
