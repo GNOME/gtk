@@ -766,7 +766,7 @@ gtk_message_dialog_set_image (GtkMessageDialog *dialog,
  *
  * Gets the dialog's image.
  *
- * Return value: the dialog's image
+ * Return value: (transfer none): the dialog's image
  *
  * Since: 2.14
  **/
@@ -919,12 +919,15 @@ gtk_message_dialog_format_secondary_markup (GtkMessageDialog *message_dialog,
  * gtk_message_dialog_get_message_area:
  * @message_dialog: a #GtkMessageDialog
  *
- * Return value: A #GtkVBox corresponding to the "message area" in the
- * @message_dialog.  This is the box where the dialog's primary and secondary
- * labels are packed.  You can add your own extra content to that box and it
- * will appear below those labels, on the right side of the dialog's image (or
- * on the left for right-to-left languages).  See gtk_dialog_get_content_area()
- * for the corresponding function in the parent #GtkDialog.
+ * Returns the message area of the dialog. This is the box where the
+ * dialog's primary and secondary labels are packed. You can add your
+ * own extra content to that box and it will appear below those labels,
+ * on the right side of the dialog's image (or on the left for right-to-left
+ * languages).  See gtk_dialog_get_content_area() for the corresponding
+ * function in the parent #GtkDialog.
+ *
+ * Return value: (transfer none): A #GtkVBox corresponding to the
+ *     "message area" in the @message_dialog.
  *
  * Since: 2.22
  **/
