@@ -784,10 +784,9 @@ void         gtk_widget_override_cursor           (GtkWidget       *widget,
                                                    const GdkRGBA   *cursor,
                                                    const GdkRGBA   *secondary_cursor);
 
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 
 void        gtk_widget_style_attach               (GtkWidget     *widget);
-
-#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 
 /* Widget styles.
  */

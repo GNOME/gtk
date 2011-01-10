@@ -7792,6 +7792,8 @@ gtk_widget_get_parent (GtkWidget *widget)
  * (finally #GtkWidget) would attach the style itself.
  *
  * Since: 2.20
+ *
+ * Deprecated: 3.0. This step is unnecessary with #GtkStyleContext.
  **/
 void
 gtk_widget_style_attach (GtkWidget *widget)
