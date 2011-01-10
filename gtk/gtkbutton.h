@@ -127,10 +127,7 @@ void _gtk_button_paint                     (GtkButton          *button,
                                             cairo_t            *cr,
                                             int                 width,
                                             int                 height,
-					    GtkStateType        state_type,
-					    GtkShadowType       shadow_type,
-					    const gchar        *main_detail,
-					    const gchar        *default_detail);
+					    GtkStateFlags       state);
 
 G_END_DECLS
 

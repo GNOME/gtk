@@ -1555,10 +1555,7 @@ _gtk_button_paint (GtkButton          *button,
 		   cairo_t            *cr,
                    int                 width,
                    int                 height,
-		   GtkStateType        state_type,
-		   GtkShadowType       shadow_type,
-		   const gchar        *main_detail,
-		   const gchar        *default_detail)
+		   GtkStateFlags       state)
 {
   GtkButtonPrivate *priv = button->priv;
   GtkWidget *widget;
@@ -1571,12 +1568,12 @@ _gtk_button_paint (GtkButton          *button,
   GtkAllocation allocation;
   GdkWindow *window;
   GtkStyleContext *context;
-  GtkStateFlags state;
 
   widget = GTK_WIDGET (button);
-
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
 
   gtk_button_get_props (button, &default_border, &default_outside_border, NULL, &interior_focus);
   gtk_style_context_get_style (context,
@@ -1615,9 +1612,6 @@ _gtk_button_paint (GtkButton          *button,
       width -= 2 * (focus_width + focus_pad);
       height -= 2 * (focus_width + focus_pad);
     }
-
-  state = gtk_widget_get_state_flags (widget);
-  gtk_style_context_set_state (context, state);
 
   if (priv->relief != GTK_RELIEF_NONE || priv->depressed ||
       state & GTK_STATE_FLAG_PRELIGHT)
@@ -1671,6 +1665,8 @@ _gtk_button_paint (GtkButton          *button,
 
       gtk_border_free (border);
     }
+
+  gtk_style_context_restore (context);
 }
 
 static gboolean
@@ -1678,14 +1674,11 @@ gtk_button_draw (GtkWidget *widget,
 		 cairo_t   *cr)
 {
   GtkButton *button = GTK_BUTTON (widget);
-  GtkButtonPrivate *priv = button->priv;
 
   _gtk_button_paint (button, cr, 
                      gtk_widget_get_allocated_width (widget),
                      gtk_widget_get_allocated_height (widget),
-                     gtk_widget_get_state (widget),
-                     priv->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
-                     "button", "buttondefault");
+                     gtk_widget_get_state_flags (widget));
 
   GTK_WIDGET_CLASS (gtk_button_parent_class)->draw (widget, cr);
 
