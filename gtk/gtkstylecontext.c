@@ -2965,6 +2965,76 @@ gtk_style_context_cancel_animations (GtkStyleContext *context,
     }
 }
 
+static gboolean
+is_parent_of (GdkWindow *parent,
+              GdkWindow *child)
+{
+  GtkWidget *child_widget, *parent_widget;
+  GdkWindow *window;
+
+  gdk_window_get_user_data (child, (gpointer *) &child_widget);
+  gdk_window_get_user_data (parent, (gpointer *) &parent_widget);
+
+  if (child_widget != parent_widget &&
+      !gtk_widget_is_ancestor (child_widget, parent_widget))
+    return FALSE;
+
+  window = child;
+
+  while (window)
+    {
+      if (window == parent)
+        return TRUE;
+
+      window = gdk_window_get_parent (window);
+    }
+
+  return FALSE;
+}
+
+/**
+ * gtk_style_context_scroll_animations:
+ * @context: a #GtkStyleContext
+ * @window: a #GdkWindow used previously in
+ *          gtk_style_context_notify_state_change()
+ * @dx: Amount to scroll in the X axis
+ * @dy: Amount to scroll in the Y axis
+ *
+ * This function is analogous to gdk_window_scroll(), and
+ * should be called together with it so the invalidation
+ * areas for any ongoing animation are scrolled together
+ * with it.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_scroll_animations (GtkStyleContext *context,
+                                     GdkWindow       *window,
+                                     gint             dx,
+                                     gint             dy)
+{
+  GtkStyleContextPrivate *priv;
+  AnimationInfo *info;
+  GSList *l;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  priv = context->priv;
+  l = priv->animations;
+
+  while (l)
+    {
+      info = l->data;
+      l = l->next;
+
+      if (info->invalidation_region &&
+          (window == info->window ||
+           is_parent_of (window, info->window)))
+        cairo_region_translate (info->invalidation_region, dx, dy);
+    }
+}
+
 /**
  * gtk_style_context_push_animatable_region:
  * @context: a #GtkStyleContext

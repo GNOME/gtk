@@ -524,6 +524,10 @@ void  gtk_style_context_notify_state_change (GtkStyleContext *context,
                                              gboolean         state_value);
 void  gtk_style_context_cancel_animations   (GtkStyleContext *context,
                                              gpointer         region_id);
+void  gtk_style_context_scroll_animations   (GtkStyleContext *context,
+                                             GdkWindow       *window,
+                                             gint             dx,
+                                             gint             dy);
 
 void gtk_style_context_push_animatable_region (GtkStyleContext *context,
                                                gpointer         region_id);
