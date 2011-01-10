@@ -626,6 +626,7 @@ gtk_base_c_sources = 		\
 	gtktable.c		\
 	gtktearoffmenuitem.c	\
 	gtktestutils.c		\
+	gtktextattributes.c	\
 	gtktextbtree.c		\
 	gtktextbuffer.c		\
 	gtktextbufferrichtext.c	\
