@@ -4243,9 +4243,9 @@ get_widget_windows (GtkWidget *widget)
 
   for (l = window_list; l; l = l->next)
     {
-      GtkWidget *window_widget;
+      GtkWidget *window_widget = NULL;
 
-      gdk_window_get_user_data (l->data, (gpointer *) window_widget);
+      gdk_window_get_user_data (l->data, (gpointer *) &window_widget);
 
       if (widget != window_widget)
         continue;
