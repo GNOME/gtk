@@ -3143,13 +3143,8 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
       if (info->invalidation_region)
         continue;
 
-      /* There's not much point in keeping the animation running */
       if (info->rectangles->len == 0)
-        {
-          priv->animations = g_slist_remove (priv->animations, info);
-          animation_info_free (info);
-          continue;
-        }
+        continue;
 
       info->invalidation_region = cairo_region_create ();
       _gtk_widget_get_translation_to_window (widget, info->window, &rel_x, &rel_y);
