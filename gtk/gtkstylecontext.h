@@ -399,6 +399,20 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_ERROR "error"
 
+/**
+ * GTK_STYLE_CLASS_HORIZONTAL:
+ *
+ * A widget class for horizontally layered widgets.
+ */
+#define GTK_STYLE_CLASS_HORIZONTAL "horizontal"
+
+/**
+ * GTK_STYLE_CLASS_VERTICAL:
+ *
+ * A widget class for vertically layered widgets.
+ */
+#define GTK_STYLE_CLASS_VERTICAL "vertical"
+
 
 /* Predefined set of widget regions */
 
