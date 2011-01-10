@@ -1112,11 +1112,15 @@ palette_draw (GtkWidget *drawing_area,
                cairo_t   *cr,
 	       gpointer   data)
 {
+  GtkStyleContext *context;
   gint focus_width;
+  GdkRGBA color;
 
-  gdk_cairo_set_source_color (cr, &gtk_widget_get_style (drawing_area)->bg[GTK_STATE_NORMAL]);
+  context = gtk_widget_get_style_context (drawing_area);
+  gtk_style_context_get_background_color (context, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_paint (cr);
-  
+
   if (gtk_widget_has_focus (drawing_area))
     {
       set_focus_line_attributes (drawing_area, cr, &focus_width);
