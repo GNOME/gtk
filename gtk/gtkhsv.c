@@ -253,8 +253,6 @@ gtk_hsv_realize (GtkWidget *widget)
   priv->window = gdk_window_new (parent_window, &attr, attr_mask);
   gdk_window_set_user_data (priv->window, hsv);
   gdk_window_show (priv->window);
-
-  gtk_widget_style_attach (widget);
 }
 
 static void
@@ -997,10 +995,11 @@ paint_triangle (GtkHSV      *hsv,
   gint x_start, x_end;
   cairo_surface_t *source;
   gdouble r, g, b;
-  gchar *detail;
   gint stride;
   int width, height;
-  
+  GtkStyleContext *context;
+  GtkStateFlags state;
+
   priv = hsv->priv;
   width = gtk_widget_get_allocated_width (widget); 
   height = gtk_widget_get_allocated_height (widget); 
@@ -1142,14 +1141,20 @@ paint_triangle (GtkHSV      *hsv,
   b = priv->v;
   hsv_to_rgb (&r, &g, &b);
 
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  state = gtk_widget_get_state_flags (widget);
+  gtk_style_context_set_state (context, state);
+
   if (INTENSITY (r, g, b) > 0.5)
     {
-      detail = "colorwheel_light";
+      gtk_style_context_add_class (context, "light-area-focus");
       cairo_set_source_rgb (cr, 0., 0., 0.);
     }
   else
     {
-      detail = "colorwheel_dark";
+      gtk_style_context_add_class (context, "dark-area-focus");
       cairo_set_source_rgb (cr, 1., 1., 1.);
     }
 
@@ -1173,15 +1178,14 @@ paint_triangle (GtkHSV      *hsv,
                             "focus-padding", &focus_pad,
                             NULL);
 
-      gtk_paint_focus (gtk_widget_get_style (widget),
-                       cr,
-                       gtk_widget_get_state (widget),
-                       widget, detail,
-                       xx - FOCUS_RADIUS - focus_width - focus_pad,
-                       yy - FOCUS_RADIUS - focus_width - focus_pad,
-                       2 * (FOCUS_RADIUS + focus_width + focus_pad),
-                       2 * (FOCUS_RADIUS + focus_width + focus_pad));
+      gtk_render_focus (context, cr,
+                        xx - FOCUS_RADIUS - focus_width - focus_pad,
+                        yy - FOCUS_RADIUS - focus_width - focus_pad,
+                        2 * (FOCUS_RADIUS + focus_width + focus_pad),
+                        2 * (FOCUS_RADIUS + focus_width + focus_pad));
     }
+
+  gtk_style_context_restore (context);
 }
 
 /* Paints the contents of the HSV color selector */
@@ -1196,13 +1200,22 @@ gtk_hsv_draw (GtkWidget      *widget,
   paint_triangle (hsv, cr);
 
   if (gtk_widget_has_focus (widget) && priv->focus_on_ring)
-    gtk_paint_focus (gtk_widget_get_style (widget),
-                     cr,
-                     gtk_widget_get_state (widget),
-                     widget, NULL,
-                     0, 0,
-                     gtk_widget_get_allocated_width (widget),
-                     gtk_widget_get_allocated_height (widget));
+    {
+      GtkStyleContext *context;
+      GtkStateFlags state;
+
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+
+      gtk_render_focus (context, cr, 0, 0,
+                        gtk_widget_get_allocated_width (widget),
+                        gtk_widget_get_allocated_height (widget));
+
+      gtk_style_context_restore (context);
+    }
 
   return FALSE;
 }

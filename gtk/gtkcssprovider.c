@@ -3837,6 +3837,14 @@ gtk_css_provider_get_default (void)
         "  background-color: @selected_bg_color;\n"
         "  color: @selected_fg_color;\n"
         "}\n"
+        "\n"
+        ".light-area-focus {\n"
+        "  color: #000;\n"
+        "}\n"
+        "\n"
+        ".dark-area-focus {\n"
+        "  color: #fff;\n"
+        "}\n"
         "\n";
 
       provider = gtk_css_provider_new ();
