@@ -648,6 +648,7 @@ static void
 gtk_paned_init (GtkPaned *paned)
 {
   GtkPanedPrivate *priv;
+  GtkStyleContext *context;
 
   gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
@@ -684,6 +685,9 @@ gtk_paned_init (GtkPaned *paned)
   priv->handle_pos.y = -1;
 
   priv->drag_pos = -1;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (paned));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR);
 }
 
 static void

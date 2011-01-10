@@ -361,6 +361,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_DND "dnd"
 
 /**
+ * GTK_STYLE_CLASS_PANE_SEPARATOR:
+ *
+ * A CSS class for a pane separator, such as those in #GtkPaned.
+ */
+#define GTK_STYLE_CLASS_PANE_SEPARATOR "pane-separator"
+
+/**
  * GTK_STYLE_CLASS_INFO:
  *
  * A widget class for an area displaying an informational message,

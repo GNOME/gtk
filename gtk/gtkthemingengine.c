@@ -2604,7 +2604,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
 
-  if (gtk_theming_engine_has_class (engine, "grip"))
+  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
       GtkJunctionSides sides;
       gint skip = -1;
@@ -2869,7 +2869,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
       cairo_restore (cr);
     }
-  else if (gtk_theming_engine_has_class (engine, "paned"))
+  else if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_PANE_SEPARATOR))
     {
       if (width > height)
         for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
