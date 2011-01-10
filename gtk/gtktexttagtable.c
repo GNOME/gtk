@@ -52,7 +52,7 @@
  * The GtkTextTagTable implementation of the GtkBuildable interface
  * supports adding tags by specifying "tag" as the "type"
  * attribute of a &lt;child&gt; element.
- * </para>
+ *
  * <example>
  * <title>A UI definition fragment specifying tags</title>
  * <programlisting><![CDATA[
@@ -63,6 +63,8 @@
  * </object>
  * ]]></programlisting>
  * </example>
+ * </para>
+ * </refsect2>
  */
 
 struct _GtkTextTagTablePrivate

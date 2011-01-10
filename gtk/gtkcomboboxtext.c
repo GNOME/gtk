@@ -70,7 +70,8 @@
  * </object>
  * ]]></programlisting>
  * </example>
- *
+ * </para>
+ * </refsect2>
  */
 
 static void     gtk_combo_box_text_buildable_interface_init     (GtkBuildableIface *iface);
