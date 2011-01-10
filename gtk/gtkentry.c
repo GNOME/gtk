@@ -1152,7 +1152,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    g_param_spec_boolean ("primary-icon-activatable",
                                                          P_("Primary icon activatable"),
                                                          P_("Whether the primary icon is activatable"),
-                                                         FALSE,
+                                                         TRUE,
                                                          GTK_PARAM_READWRITE));
   
   /**
@@ -1173,7 +1173,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                                    g_param_spec_boolean ("secondary-icon-activatable",
                                                          P_("Secondary icon activatable"),
                                                          P_("Whether the secondary icon is activatable"),
-                                                         FALSE,
+                                                         TRUE,
                                                          GTK_PARAM_READWRITE));
   
   
@@ -7959,7 +7959,7 @@ gtk_entry_get_icon_activatable (GtkEntry             *entry,
   priv = entry->priv;
   icon_info = priv->icons[icon_pos];
 
-  return (icon_info != NULL && !icon_info->nonactivatable);
+  return (!icon_info || !icon_info->nonactivatable);
 }
 
 /**
