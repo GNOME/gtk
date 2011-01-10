@@ -9405,3 +9405,27 @@ _gtk_window_get_wmclass (GtkWindow  *window,
   *wmclass_name = priv->wmclass_name;
   *wmclass_class = priv->wmclass_class;
 }
+
+/**
+ * gtk_window_set_has_user_ref_count:
+ * @window: a #GtkWindow
+ * @setting: the new value
+ *
+ * Tells GTK+ whether to drop its extra reference to the window
+ * when gtk_window_destroy() is called.
+ *
+ * This function is only exported for the benefit of language
+ * bindings which may need to keep the window alive until their
+ * wrapper object is garbage collected. There is no justification
+ * for ever calling this function in an application.
+ *
+ * Since: 3.0
+ */
+void
+gtk_window_set_has_user_ref_count (GtkWindow *window,
+                                   gboolean   setting)
+{
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  window->priv->has_user_ref_count = setting;
+}
