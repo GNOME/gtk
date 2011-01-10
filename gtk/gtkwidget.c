@@ -4191,6 +4191,9 @@ gtk_widget_unmap (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[UNMAP], 0);
 
       gtk_widget_pop_verify_invariants (widget);
+
+      if (priv->context)
+        gtk_style_context_cancel_animations (priv->context, NULL);
     }
 }
 

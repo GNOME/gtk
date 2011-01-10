@@ -454,6 +454,12 @@ struct AnimationInfo
   GtkTimeline *timeline;
 
   gpointer region_id;
+
+  /* Region stack (until region_id) at the time of
+   * rendering, this is used for nested cancellation.
+   */
+  GSList *parent_regions;
+
   GdkWindow *window;
   GtkStateType state;
   gboolean target_value;
@@ -749,6 +755,7 @@ animation_info_free (AnimationInfo *info)
     cairo_region_destroy (info->invalidation_region);
 
   g_array_free (info->rectangles, TRUE);
+  g_slist_free (info->parent_regions);
   g_slice_free (AnimationInfo, info);
 }
 
@@ -1572,7 +1579,6 @@ context_has_animatable_region (GtkStyleContext *context,
                                gpointer         region_id)
 {
   GtkStyleContextPrivate *priv;
-  GSList *r;
 
   /* NULL region_id means everything
    * rendered through the style context
@@ -1581,14 +1587,7 @@ context_has_animatable_region (GtkStyleContext *context,
     return TRUE;
 
   priv = context->priv;
-
-  for (r = priv->animation_regions; r; r = r->next)
-    {
-      if (r->data == region_id)
-        return TRUE;
-    }
-
-  return FALSE;
+  return g_slist_find (priv->animation_regions, region_id) != NULL;
 }
 
 /**
@@ -2920,6 +2919,53 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
 }
 
 /**
+ * gtk_style_context_cancel_animations:
+ * @context: a #GtkStyleContext
+ * @region_id: (allow-none): animatable region to stop, or %NULL.
+ *     See gtk_style_context_push_animatable_region()
+ *
+ * Stops all running animations for @region_id and all animatable
+ * regions underneath.
+ *
+ * A %NULL @region_id will stop all ongoing animations in @context,
+ * when dealing with a #GtkStyleContext obtained through
+ * gtk_widget_get_style_context(), this is normally done for you
+ * in all circumstances you would expect all widget to be stopped,
+ * so this should be only used in complex widgets with different
+ * animatable regions.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_cancel_animations (GtkStyleContext *context,
+                                     gpointer         region_id)
+{
+  GtkStyleContextPrivate *priv;
+  AnimationInfo *info;
+  GSList *l, *node;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  l = priv->animations;
+
+  while (l)
+    {
+      info = l->data;
+      node = l;
+      l = l->next;
+
+      if (!region_id ||
+          info->region_id == region_id ||
+          g_slist_find (info->parent_regions, region_id))
+        {
+          priv->animations = g_slist_remove (priv->animations, info);
+          animation_info_free (info);
+        }
+    }
+}
+
+/**
  * gtk_style_context_push_animatable_region:
  * @context: a #GtkStyleContext
  * @region_id: unique identifier for the animatable region
@@ -3096,6 +3142,14 @@ store_animation_region (GtkStyleContext *context,
           rect.height = (gint) height;
 
           g_array_append_val (info->rectangles, rect);
+
+          if (!info->parent_regions)
+            {
+              GSList *parent_regions;
+
+              parent_regions = g_slist_find (priv->animation_regions, info->region_id);
+              info->parent_regions = g_slist_copy (parent_regions);
+            }
         }
     }
 }
