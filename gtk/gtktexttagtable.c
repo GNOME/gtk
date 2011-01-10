@@ -26,12 +26,41 @@
 
 #include "config.h"
 #include "gtktexttagtable.h"
+#include "gtkbuildable.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
 #include "gtkintl.h"
 #include "gtkalias.h"
 
 #include <stdlib.h>
+
+/**
+ * SECTION:gtktexttagtable
+ * @Short_description: Collection of tags that can be used together
+ * @Title: GtkTextTagTable
+ *
+ * You may wish to begin by reading the <link linkend="TextWidget">text widget
+ * conceptual overview</link> which gives an overview of all the objects and data
+ * types related to the text widget and how they work together.
+ *
+ * <refsect2 id="GtkTextTagTable-BUILDER-UI">
+ * <title>GtkTextTagTables as GtkBuildable</title>
+ * <para>
+ * The GtkTextTagTable implementation of the GtkBuildable interface
+ * supports adding tags by specifying "tag" as the "type" 
+ * attribute of a &lt;child&gt; element.
+ *
+ * <example>
+ * <title>A UI definition fragment specifying tags</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkTextTagTable">
+ *  <child type="tag">
+ *    <object class="GtkTextTag"/>
+ *  </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ */
 
 enum {
   TAG_CHANGED,
@@ -54,9 +83,17 @@ static void gtk_text_tag_table_get_property (GObject              *object,
                                              GValue               *value,
                                              GParamSpec           *pspec);
 
+static void gtk_text_tag_table_buildable_interface_init (GtkBuildableIface   *iface);
+static void gtk_text_tag_table_buildable_add_child      (GtkBuildable        *buildable,
+							 GtkBuilder          *builder,
+							 GObject             *child,
+							 const gchar         *type);
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_CODE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_text_tag_table_buildable_interface_init))
 
 static void
 gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
@@ -194,6 +231,23 @@ gtk_text_tag_table_get_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
+}
+
+static void
+gtk_text_tag_table_buildable_interface_init (GtkBuildableIface   *iface)
+{
+  iface->add_child = gtk_text_tag_table_buildable_add_child;
+}
+
+static void
+gtk_text_tag_table_buildable_add_child (GtkBuildable        *buildable,
+					GtkBuilder          *builder,
+					GObject             *child,
+					const gchar         *type)
+{
+  if (type && strcmp (type, "tag") == 0)
+    gtk_text_tag_table_add (GTK_TEXT_TAG_TABLE (buildable),
+			    GTK_TEXT_TAG (child));
 }
 
 /**
