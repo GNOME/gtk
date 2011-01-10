@@ -76,8 +76,7 @@ static void     gtk_print_unix_dialog_get_property (GObject            *object,
                                                     guint               prop_id,
                                                     GValue             *value,
                                                     GParamSpec         *pspec);
-static void     gtk_print_unix_dialog_style_set    (GtkWidget          *widget,
-                                                    GtkStyle           *previous_style);
+static void     gtk_print_unix_dialog_style_updated (GtkWidget          *widget);
 static void     populate_dialog                    (GtkPrintUnixDialog *dialog);
 static void     unschedule_idle_mark_conflicts     (GtkPrintUnixDialog *dialog);
 static void     selected_printer_changed           (GtkTreeSelection   *selection,
@@ -291,7 +290,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   object_class->set_property = gtk_print_unix_dialog_set_property;
   object_class->get_property = gtk_print_unix_dialog_get_property;
 
-  widget_class->style_set = gtk_print_unix_dialog_style_set;
+  widget_class->style_updated = gtk_print_unix_dialog_style_updated;
 
   g_object_class_install_property (object_class,
                                    PROP_PAGE_SETUP,
@@ -1960,9 +1959,10 @@ paint_page (GtkWidget *widget,
             gchar     *text,
             gint       text_x)
 {
-  GtkStyle *style;
+  GtkStyleContext *context;
   gint x, y, width, height;
   gint text_y, linewidth;
+  GdkRGBA color;
 
   x = x_offset * scale;
   y = y_offset * scale;
@@ -1972,13 +1972,18 @@ paint_page (GtkWidget *widget,
   linewidth = 2;
   text_y = 21;
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
 
-  gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_NORMAL]);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+
+  gtk_style_context_get_background_color (context, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_NORMAL]);
+  gtk_style_context_get_color (context, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_set_line_width (cr, linewidth);
   cairo_rectangle (cr, x + linewidth/2.0, y + linewidth/2.0, width - linewidth, height - linewidth);
   cairo_stroke (cr);
@@ -1989,6 +1994,8 @@ paint_page (GtkWidget *widget,
   cairo_set_font_size (cr, (gint)(9 * scale));
   cairo_move_to (cr, x + (gint)(text_x * scale), y + (gint)(text_y * scale));
   cairo_show_text (cr, text);
+
+  gtk_style_context_restore (context);
 }
 
 static gboolean
@@ -2035,10 +2042,9 @@ draw_collate_cb (GtkWidget          *widget,
 }
 
 static void
-gtk_print_unix_dialog_style_set (GtkWidget *widget,
-                                 GtkStyle  *previous_style)
+gtk_print_unix_dialog_style_updated (GtkWidget *widget)
 {
-  GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_set (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_print_unix_dialog_parent_class)->style_updated (widget);
 
   if (gtk_widget_has_screen (widget))
     {
@@ -2589,7 +2595,7 @@ draw_page_cb (GtkWidget          *widget,
               GtkPrintUnixDialog *dialog)
 {
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
-  GtkStyle *style;
+  GtkStyleContext *context;
   gdouble ratio;
   gint w, h, tmp, shadow_offset;
   gint pages_x, pages_y, i, x, y, layout_w, layout_h;
@@ -2599,7 +2605,7 @@ draw_page_cb (GtkWidget          *widget,
   PangoLayout *layout;
   PangoFontDescription *font;
   gchar *text;
-  GdkColor *color;
+  GdkRGBA color;
   GtkNumberUpLayout number_up_layout;
   gint start_x, end_x, start_y, end_y;
   gint dx, dy;
@@ -2698,7 +2704,10 @@ draw_page_cb (GtkWidget          *widget,
       pages_y = tmp;
     }
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
   pos_x = (width - w) / 2;
   pos_y = (height - h) / 2 - 10;
@@ -2706,18 +2715,20 @@ draw_page_cb (GtkWidget          *widget,
 
   shadow_offset = 3;
 
-  color = &style->text[GTK_STATE_NORMAL];
-  cairo_set_source_rgba (cr, color->red / 65535., color->green / 65535., color->blue / 65535, 0.5);
+  gtk_style_context_get_color (context, 0, &color);
+  cairo_set_source_rgba (cr, color.red, color.green, color.blue, 0.5);
   cairo_rectangle (cr, shadow_offset + 1, shadow_offset + 1, w, h);
   cairo_fill (cr);
 
-  gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_NORMAL]);
+  gtk_style_context_get_background_color (context, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_rectangle (cr, 1, 1, w, h);
   cairo_fill (cr);
   cairo_set_line_width (cr, 1.0);
   cairo_rectangle (cr, 0.5, 0.5, w + 1, h + 1);
 
-  gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_NORMAL]);
+  gtk_style_context_get_color (context, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_stroke (cr);
 
   i = 1;
@@ -2984,6 +2995,8 @@ draw_page_cb (GtkWidget          *widget,
       cairo_line_to (cr, pos_x + w + 0.5, pos_y + h + shadow_offset + RULER_DISTANCE + RULER_RADIUS);
       cairo_stroke (cr);
     }
+
+  gtk_style_context_restore (context);
 
   return TRUE;
 }
