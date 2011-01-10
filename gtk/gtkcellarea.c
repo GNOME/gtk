@@ -3395,6 +3395,9 @@ gtk_cell_area_activate_cell (GtkCellArea          *area,
 
   priv = area->priv;
 
+  if (!gtk_cell_renderer_get_sensitive (renderer))
+    return FALSE;
+
   g_object_get (renderer, "mode", &mode, NULL);
 
   if (mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE)

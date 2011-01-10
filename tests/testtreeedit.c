@@ -24,12 +24,14 @@
 typedef struct {
   const gchar *string;
   gboolean is_editable;
+  gboolean is_sensitive;
   gint progress;
 } ListEntry;
 
 enum {
   STRING_COLUMN,
   IS_EDITABLE_COLUMN,
+  IS_SENSITIVE_COLUMN,
   PIXBUF_COLUMN,
   LAST_PIXBUF_COLUMN,
   PROGRESS_COLUMN,
@@ -38,11 +40,11 @@ enum {
 
 static ListEntry model_strings[] =
 {
-  {"A simple string", TRUE, 0 },
-  {"Another string!", TRUE, 10 },
-  {"Guess what, a third string. This one can't be edited", FALSE, 47 },
-  {"And then a fourth string. Neither can this", FALSE, 48 },
-  {"Multiline\nFun!", TRUE, 75 },
+  {"A simple string", TRUE, TRUE, 0 },
+  {"Another string!", TRUE, TRUE, 10 },
+  {"Guess what, a third string. This one can't be edited", FALSE, TRUE, 47 },
+  {"And then a fourth string. Neither can this", FALSE, TRUE, 48 },
+  {"Multiline\nFun!", TRUE, FALSE, 75 },
   { NULL }
 };
 
@@ -63,6 +65,7 @@ create_model (void)
   model = gtk_tree_store_new (NUM_COLUMNS,
 			      G_TYPE_STRING,
 			      G_TYPE_BOOLEAN,
+			      G_TYPE_BOOLEAN,
 			      GDK_TYPE_PIXBUF,
 			      GDK_TYPE_PIXBUF,
 			      G_TYPE_INT);
@@ -74,6 +77,7 @@ create_model (void)
       gtk_tree_store_set (model, &iter,
 			  STRING_COLUMN, model_strings[i].string,
 			  IS_EDITABLE_COLUMN, model_strings[i].is_editable,
+			  IS_SENSITIVE_COLUMN, model_strings[i].is_sensitive,
 			  PIXBUF_COLUMN, foo,
 			  LAST_PIXBUF_COLUMN, bar,
 			  PROGRESS_COLUMN, model_strings[i].progress,
@@ -84,9 +88,9 @@ create_model (void)
 }
 
 static void
-toggled (GtkCellRendererToggle *cell,
-	 gchar                 *path_string,
-	 gpointer               data)
+editable_toggled (GtkCellRendererToggle *cell,
+		  gchar                 *path_string,
+		  gpointer               data)
 {
   GtkTreeModel *model = GTK_TREE_MODEL (data);
   GtkTreeIter iter;
@@ -98,6 +102,25 @@ toggled (GtkCellRendererToggle *cell,
 
   value = !value;
   gtk_tree_store_set (GTK_TREE_STORE (model), &iter, IS_EDITABLE_COLUMN, value, -1);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+sensitive_toggled (GtkCellRendererToggle *cell,
+		   gchar                 *path_string,
+		   gpointer               data)
+{
+  GtkTreeModel *model = GTK_TREE_MODEL (data);
+  GtkTreeIter iter;
+  GtkTreePath *path = gtk_tree_path_new_from_string (path_string);
+  gboolean value;
+
+  gtk_tree_model_get_iter (model, &iter, path);
+  gtk_tree_model_get (model, &iter, IS_SENSITIVE_COLUMN, &value, -1);
+
+  value = !value;
+  gtk_tree_store_set (GTK_TREE_STORE (model), &iter, IS_SENSITIVE_COLUMN, value, -1);
 
   gtk_tree_path_free (path);
 }
@@ -247,7 +270,9 @@ main (gint argc, gchar **argv)
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "pixbuf", PIXBUF_COLUMN, NULL);
+				       "pixbuf", PIXBUF_COLUMN, 
+				       "sensitive", IS_SENSITIVE_COLUMN,
+				       NULL);
   callback[0].area = area;
   callback[0].renderer = renderer;
 
@@ -256,6 +281,7 @@ main (gint argc, gchar **argv)
   gtk_tree_view_column_set_attributes (column, renderer,
 				       "text", STRING_COLUMN,
 				       "editable", IS_EDITABLE_COLUMN,
+				       "sensitive", IS_SENSITIVE_COLUMN,
 				       NULL);
   callback[1].area = area;
   callback[1].renderer = renderer;
@@ -267,6 +293,7 @@ main (gint argc, gchar **argv)
   gtk_tree_view_column_set_attributes (column, renderer,
 		  		       "text", STRING_COLUMN,
 				       "editable", IS_EDITABLE_COLUMN,
+				       "sensitive", IS_SENSITIVE_COLUMN,
 				       NULL);
   callback[2].area = area;
   callback[2].renderer = renderer;
@@ -279,7 +306,9 @@ main (gint argc, gchar **argv)
 		NULL);
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-				       "pixbuf", LAST_PIXBUF_COLUMN, NULL);
+				       "pixbuf", LAST_PIXBUF_COLUMN, 
+				       "sensitive", IS_SENSITIVE_COLUMN,
+				       NULL);
   callback[3].area = area;
   callback[3].renderer = renderer;
 
@@ -287,7 +316,7 @@ main (gint argc, gchar **argv)
 
   renderer = gtk_cell_renderer_toggle_new ();
   g_signal_connect (renderer, "toggled",
-		    G_CALLBACK (toggled), tree_model);
+		    G_CALLBACK (editable_toggled), tree_model);
   
   g_object_set (renderer,
 		"xalign", 0.0,
@@ -296,6 +325,19 @@ main (gint argc, gchar **argv)
 					       -1, "Editable",
 					       renderer,
 					       "active", IS_EDITABLE_COLUMN,
+					       NULL);
+
+  renderer = gtk_cell_renderer_toggle_new ();
+  g_signal_connect (renderer, "toggled",
+		    G_CALLBACK (sensitive_toggled), tree_model);
+  
+  g_object_set (renderer,
+		"xalign", 0.0,
+		NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
+					       -1, "Sensitive",
+					       renderer,
+					       "active", IS_SENSITIVE_COLUMN,
 					       NULL);
 
   renderer = gtk_cell_renderer_progress_new ();
