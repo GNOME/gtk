@@ -866,6 +866,9 @@ get_allocated_cells (GtkCellAreaBox        *box,
           AllocatedCell *cell;
 	  gint           cell_position, cell_size;
 
+	  if (!gtk_cell_renderer_get_visible (info->renderer))
+	    continue;
+
 	  /* If were not aligned, place the cell after the last cell */
 	  if (info->align)
 	    position = cell_position = group_allocs[i].position;
