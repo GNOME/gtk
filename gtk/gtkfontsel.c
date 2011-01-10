@@ -151,8 +151,7 @@ static void    gtk_font_selection_get_property       (GObject         *object,
 static void    gtk_font_selection_finalize	     (GObject         *object);
 static void    gtk_font_selection_screen_changed     (GtkWidget	      *widget,
 						      GdkScreen       *previous_screen);
-static void    gtk_font_selection_style_set          (GtkWidget      *widget,
-						      GtkStyle       *prev_style);
+static void    gtk_font_selection_style_updated      (GtkWidget      *widget);
 
 /* These are the callbacks & related functions. */
 static void     gtk_font_selection_select_font           (GtkTreeSelection *selection,
@@ -212,7 +211,7 @@ gtk_font_selection_class_init (GtkFontSelectionClass *klass)
   gobject_class->get_property = gtk_font_selection_get_property;
 
   widget_class->screen_changed = gtk_font_selection_screen_changed;
-  widget_class->style_set = gtk_font_selection_style_set;
+  widget_class->style_updated = gtk_font_selection_style_updated;
    
   g_object_class_install_property (gobject_class,
                                    PROP_FONT_NAME,
@@ -655,8 +654,7 @@ gtk_font_selection_screen_changed (GtkWidget *widget,
 }
 
 static void
-gtk_font_selection_style_set (GtkWidget *widget,
-			      GtkStyle  *prev_style)
+gtk_font_selection_style_updated (GtkWidget *widget)
 {
   /* Maybe fonts where installed or removed... */
   gtk_font_selection_reload_fonts (GTK_FONT_SELECTION (widget));
@@ -1162,7 +1160,7 @@ static void
 gtk_font_selection_update_preview (GtkFontSelection *fontsel)
 {
   GtkFontSelectionPrivate *priv = fontsel->priv;
-  GtkRcStyle *rc_style;
+  GtkStyleContext *context;
   gint new_height;
   GtkRequisition old_requisition, new_requisition;
   GtkWidget *preview_entry = priv->preview_entry;
@@ -1170,11 +1168,9 @@ gtk_font_selection_update_preview (GtkFontSelection *fontsel)
 
   gtk_widget_get_preferred_size (preview_entry, &old_requisition, NULL);
 
-  rc_style = gtk_rc_style_new ();
-  rc_style->font_desc = gtk_font_selection_get_font_description (fontsel);
-  
-  gtk_widget_modify_style (preview_entry, rc_style);
-  g_object_unref (rc_style);
+  context = gtk_widget_get_style_context (preview_entry);
+  gtk_widget_override_font (preview_entry,
+                            gtk_font_selection_get_font_description (fontsel));
 
   gtk_widget_get_preferred_size (preview_entry, &new_requisition, NULL);
   
