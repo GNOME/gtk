@@ -2961,7 +2961,7 @@ gtk_tree_model_filter_set_root (GtkTreeModelFilter *filter,
  * Creates a new #GtkTreeModel, with @child_model as the child_model
  * and @root as the virtual root.
  *
- * Return value: A new #GtkTreeModel.
+ * Return value: (transfer full): A new #GtkTreeModel.
  *
  * Since: 2.4
  */
@@ -2995,7 +2995,7 @@ gtk_tree_model_filter_new (GtkTreeModel *child_model,
  *
  * Returns a pointer to the child model of @filter.
  *
- * Return value: A pointer to a #GtkTreeModel.
+ * Return value: (transfer none): A pointer to a #GtkTreeModel.
  *
  * Since: 2.4
  */
