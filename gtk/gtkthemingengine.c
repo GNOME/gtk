@@ -2323,13 +2323,13 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       cairo_set_matrix (cr, &cairo_matrix);
     }
   else
-    cairo_translate (cr, x, y);
+    cairo_move_to (cr, x, y);
 
   if (flags & GTK_STATE_FLAG_INSENSITIVE)
     {
       cairo_save (cr);
       cairo_set_source_rgb (cr, 1, 1, 1);
-      cairo_move_to (cr, 1, 1);
+      cairo_move_to (cr, x + 1, y + 1);
       _gtk_pango_fill_layout (cr, layout);
       cairo_restore (cr);
     }
