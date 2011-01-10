@@ -907,7 +907,7 @@ endif
 
 if USE_QUARTZ
 install-mac-key-theme:
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key
 	$(INSTALL_DATA) $(srcdir)/gtkrc.key.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
 uninstall-mac-key-theme:
 	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
@@ -930,11 +930,11 @@ dist-hook: ../build/win32/vs9/gtk.vcproj
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0
 	$(INSTALL_DATA) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key
 	$(INSTALL_DATA) $(srcdir)/gtkrc.key.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
-	$(mkinstalldirs) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key
 	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme

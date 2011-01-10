@@ -47,7 +47,6 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/install-sh \
 	$(srcdir)/ltmain.sh \
 	$(srcdir)/missing \
-	$(srcdir)/mkinstalldirs \
 	$(srcdir)/omf.make \
 	$(srcdir)/xmldocs.make \
 	$(srcdir)/gtk-doc.make \
