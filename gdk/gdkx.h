@@ -24,7 +24,7 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-/* This is a cludge to be able to include gdk/gdkx.h from inside the
+/* This is a kludge to be able to include gdk/gdkx.h from inside the
  * GTK source tree.
  * Also, this hopefully serves as a warning to new backends to put
  * their header into the backend dir from the start.
