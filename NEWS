@@ -1,3 +1,40 @@
+Overview of Changes from GTK+ 2.99.1 to 2.99.2
+==============================================
+
+* More widgets are using GtkStyleContext directly:
+  GtkColorButton, GtkColorSelection, GtkHSV,
+  GtkFontSelection, GtkPrintUnixDialog, GtkImage,
+  GtkLayout, GtkViewport, GtkTextDisplay, GtkTextUtil,
+  GtkCalendar
+
+* GtkBuilder support has been added for setting menus
+  on GtkMenuToolButtons and for adding tags to
+  GtkTextTagTable as well as adding items to
+  GtkComboBoxText
+
+* Bug fixes:
+ 350618 start rubber banding on "white space"
+ 612918 Support disabling X11 extensions
+ 635687 problem with pygtk or gtk with gtk.Plug and gtk.Socket...
+ 638017 GtkTextView: Crash in gtk_text_view_set_tabs()
+ 638119 GtkSpinner animation not correctly stopped...
+ 638880 Need a setter for has_user_ref_count
+ 639030 Small cleanup in gailtextview code.
+ 639047 Fix remaining usage of g[dk]ktargetlib.
+ 639079 Obtain the fg color from the renderer
+ 639105 Port GtkTextDisplay to StyleContext.
+ 639106 New CSS style misses distinction between "selected focused"...
+ 639127 Misc Win32 GDK building problems
+ 639157 GtkOrientable should add/ remove "horizontal" and "vertical"...
+
+* Translation updates:
+ British English
+ Galician
+ Hebrew
+ Indonesian
+ Spanish
+
+
 Overview of Changes from GTK+ 2.91.7 to 2.99.0
 ==============================================
 
