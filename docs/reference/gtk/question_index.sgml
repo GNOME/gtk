@@ -675,19 +675,19 @@ How do I change the font of a widget?
 This has several possible answers, depending on what exactly you want to 
 achieve. One option is gtk_widget_modify_font(). Note that this function 
 can be used to change only the font size, as in the following example:
-<programlisting>
+<informalexample><programlisting>
  PangoFontDesc *font_desc = pango_font_description_new (<!-- -->);
  pango_font_description_set_size (font_desc, 40);
  gtk_widget_modify_font (widget, font);
  pango_font_description_free (font_desc);
-</programlisting>
+</programlisting></informalexample>
 </para>
 <para>
 If you want to make the text of a label larger, you can use 
 gtk_label_set_markup():
-<programlisting>
+<informalexample><programlisting>
 gtk_label_set_markup (label, "&lt;big&gt;big text&lt;/big&gt;");
-</programlisting>
+</programlisting></informalexample>
 This is preferred for many apps because it's a relative size to the 
 user's chosen font size. See g_markup_escape_text() if you are 
 constructing such strings on the fly.
@@ -988,7 +988,7 @@ This is not ideal, since it can cause some flickering.
 </para></listitem>
 <listitem><para>
 Create the cairo context inside the expose handler. If you do this,
-gdk_create_cairo() arranges for it to be backed by the double-buffering 
+gdk_cairo_create() arranges for it to be backed by the double-buffering
 pixmap. This is the preferred solution, and is used throughout GTK+
 itself.
 </para></listitem>
