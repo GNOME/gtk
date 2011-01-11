@@ -239,8 +239,6 @@ GdkX11_3_0_gir_FILES = $(x11_introspection_files)
 GdkX11_3_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
 INTROSPECTION_GIRS += GdkX11-3.0.gir
 
-introspection_files += $(filter-out x11/gdkx.h, $(x11_introspection_files))
-
 endif # USE_X11
 
 girdir = $(datadir)/gir-1.0
