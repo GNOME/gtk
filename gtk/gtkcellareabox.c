@@ -830,7 +830,7 @@ get_allocated_cells (GtkCellAreaBox        *box,
   gint                      for_size, full_size;
   gboolean                  rtl;
 
-  group_allocs = gtk_cell_area_box_context_get_orientation_allocs (context, &n_allocs);
+  group_allocs = _gtk_cell_area_box_context_get_orientation_allocs (context, &n_allocs);
   if (!group_allocs)
     return allocate_cells_manually (box, widget, width, height);
 
@@ -1479,7 +1479,7 @@ gtk_cell_area_box_copy_context (GtkCellArea        *area,
   GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
   GtkCellAreaBoxPrivate *priv = box->priv;
   GtkCellAreaContext    *copy =
-    (GtkCellAreaContext *)gtk_cell_area_box_context_copy (GTK_CELL_AREA_BOX (area),
+    (GtkCellAreaContext *)_gtk_cell_area_box_context_copy (GTK_CELL_AREA_BOX (area),
                                                           GTK_CELL_AREA_BOX_CONTEXT (context));
 
   priv->contexts = g_slist_prepend (priv->contexts, copy);
@@ -1564,17 +1564,17 @@ compute_size (GtkCellAreaBox        *box,
       if (orientation == GTK_ORIENTATION_HORIZONTAL)
         {
           if (for_size < 0)
-            gtk_cell_area_box_context_push_group_width (context, group->id, group_min_size, group_nat_size);
+            _gtk_cell_area_box_context_push_group_width (context, group->id, group_min_size, group_nat_size);
           else
-            gtk_cell_area_box_context_push_group_width_for_height (context, group->id, for_size,
+            _gtk_cell_area_box_context_push_group_width_for_height (context, group->id, for_size,
                                                                    group_min_size, group_nat_size);
         }
       else
         {
           if (for_size < 0)
-            gtk_cell_area_box_context_push_group_height (context, group->id, group_min_size, group_nat_size);
+            _gtk_cell_area_box_context_push_group_height (context, group->id, group_min_size, group_nat_size);
           else
-            gtk_cell_area_box_context_push_group_height_for_width (context, group->id, for_size,
+            _gtk_cell_area_box_context_push_group_height_for_width (context, group->id, for_size,
                                                                    group_min_size, group_nat_size);
         }
     }
@@ -1723,9 +1723,9 @@ compute_size_for_opposing_orientation (GtkCellAreaBox        *box,
   n_expand_groups = count_expand_groups (box);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    orientation_sizes = gtk_cell_area_box_context_get_widths (context, &n_groups);
+    orientation_sizes = _gtk_cell_area_box_context_get_widths (context, &n_groups);
   else
-    orientation_sizes = gtk_cell_area_box_context_get_heights (context, &n_groups);
+    orientation_sizes = _gtk_cell_area_box_context_get_heights (context, &n_groups);
 
   /* First start by naturally allocating space among groups of cells */
   avail_size -= (n_groups - 1) * priv->spacing;
@@ -1779,12 +1779,12 @@ compute_size_for_opposing_orientation (GtkCellAreaBox        *box,
 
       if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
         {
-          gtk_cell_area_box_context_push_group_height_for_width (context, group_idx, for_size,
+          _gtk_cell_area_box_context_push_group_height_for_width (context, group_idx, for_size,
                                                                  group_min, group_nat);
         }
       else
         {
-          gtk_cell_area_box_context_push_group_width_for_height (context, group_idx, for_size,
+          _gtk_cell_area_box_context_push_group_width_for_height (context, group_idx, for_size,
                                                                  group_min, group_nat);
         }
     }
