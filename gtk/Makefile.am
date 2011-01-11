@@ -305,6 +305,7 @@ gtk_public_h_sources = 		\
 	gtktable.h		\
 	gtktearoffmenuitem.h	\
 	gtktestutils.h		\
+	gtktextattributes.h	\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
 	gtktextchild.h		\
