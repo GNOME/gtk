@@ -183,7 +183,7 @@ introspection_files = 		\
         gdkenumtypes.h
 
 Gdk-3.0.gir: libgdk-3.0.la Makefile
-Gdk_3_0_gir_SCANNERFLAGS = --warn-all
+Gdk_3_0_gir_SCANNERFLAGS = --warn-all --c-include="gdk/gdk.h"
 Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
 Gdk_3_0_gir_LIBS = libgdk-3.0.la
 Gdk_3_0_gir_FILES = $(introspection_files)
