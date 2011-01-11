@@ -722,6 +722,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
         }
     }
 
+#ifndef G_OS_WIN32
   if (self->priv->show_recommended || self->priv->show_all)
     {
       recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
@@ -748,6 +749,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
       exclude_apps = g_list_concat (exclude_apps,
                                     g_list_copy (fallback_apps));
     }
+#endif
 
   if (self->priv->show_other || self->priv->show_all)
     {

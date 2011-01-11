@@ -33,6 +33,7 @@ libgdk_win32_la_SOURCES = \
 	gdkdevice-wintab.c \
 	gdkdevice-wintab.h \
 	gdkdisplay-win32.c \
+	gdkdisplaymanager-win32.c \
 	gdkdnd-win32.c \
 	gdkevents-win32.c \
 	gdkgeometry-win32.c \

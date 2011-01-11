@@ -1169,7 +1169,14 @@ gtk_init (int *argc, char ***argv)
     }
 }
 
-#ifdef G_PLATFORM_WIN32
+#ifdef G_OS_WIN32
+
+/* This is relevant when building with gcc for Windows (MinGW),
+ * where we want to be struct packing compatible with MSVC,
+ * i.e. use the -mms-bitfields switch.
+ * For Cygwin there should be no need to be compatible with MSVC,
+ * so no need to use G_PLATFORM_WIN32.
+ */
 
 static void
 check_sizeof_GtkWindow (size_t sizeof_GtkWindow)

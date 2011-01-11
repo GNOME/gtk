@@ -271,7 +271,9 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
   GIcon *icon;
   gboolean cycled_recommended;
 
+#ifndef G_OS_WIN32
   recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
+#endif
   cycled_recommended = FALSE;
 
   for (l = recommended_apps; l != NULL; l = l->next)

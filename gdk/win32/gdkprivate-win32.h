@@ -109,7 +109,6 @@ GdkScreen *GDK_WINDOW_SCREEN(GObject *win);
 #define GDK_WINDOW_IS_WIN32(win)        (GDK_IS_WINDOW_IMPL_WIN32 (win->impl))
 
 typedef struct _GdkColormapPrivateWin32 GdkColormapPrivateWin32;
-typedef struct _GdkWin32Cursor          GdkWin32Cursor;
 typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 
 struct _GdkWin32Cursor

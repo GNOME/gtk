@@ -107,7 +107,7 @@ gboolean gtk_init_with_args       (gint                 *argc,
 
 GOptionGroup *gtk_get_option_group (gboolean open_default_display);
 
-#ifdef G_PLATFORM_WIN32
+#ifdef G_OS_WIN32
 
 /* Variants that are used to check for correct struct packing
  * when building GTK+-using code.
