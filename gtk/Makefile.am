@@ -971,6 +971,7 @@ Gtk_3_0_gir_SCANNERFLAGS = --warn-all --add-include-path=$(top_builddir)/gdk
 if USE_X11
 Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
 endif
+Gtk_3_0_gir_SCANNERFLAGS += --c-include="gtk/gtk.h"
 Gtk_3_0_gir_INCLUDES = Atk-1.0 Gdk-3.0
 Gtk_3_0_gir_CFLAGS = \
 		$(INCLUDES) \
