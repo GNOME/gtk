@@ -897,8 +897,8 @@ libgtk_3_0_la_DEPENDENCIES = $(deps)
 #libgtk_win32_3_0_la_LDFLAGS = $(libtool_opts) -Wl,-luuid
 
 if USE_WIN32
-libgtk_3_0_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
-libgtk_3_0_la_DEPENDENCIES += $(gtk_win32_res) $(deps)
+libgtk_3_0_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32 -luuid
+libgtk_3_0_la_DEPENDENCIES += $(gtk_def) $(gtk_win32_res) $(deps)
 libgtk_target_ldflags = $(gtk_win32_res_ldflag) $(gtk_win32_symbols)
 endif
 
