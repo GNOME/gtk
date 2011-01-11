@@ -637,7 +637,8 @@ would use a combo box?
 <para>
 With GTK+, a #GtkComboBox is the recommended widget to use for this use case.
 This widget looks like either a combo box or the current option menu, depending
-on the current theme. If you need an editable text entry, use #GtkComboBoxEntry.
+on the current theme. If you need an editable text entry, use the
+#GtkComboBox:has-entry property.
 </para>
 </answer>
 </qandaentry>
