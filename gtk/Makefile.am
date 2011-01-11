@@ -173,7 +173,7 @@ gtk_public_h_sources = 		\
 	gtkcellarea.h		\
 	gtkcellareacontext.h	\
 	gtkcellareabox.h	\
-	gtkcellareaboxcontext.h	\
+	gtkcellareaboxcontextprivate.h	\
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\

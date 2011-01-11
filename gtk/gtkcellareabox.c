@@ -52,7 +52,7 @@
 #include "gtkorientable.h"
 #include "gtkcelllayout.h"
 #include "gtkcellareabox.h"
-#include "gtkcellareaboxcontext.h"
+#include "gtkcellareaboxcontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 

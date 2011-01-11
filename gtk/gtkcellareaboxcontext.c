@@ -24,7 +24,7 @@
 #include "config.h"
 #include "gtkintl.h"
 #include "gtkcellareabox.h"
-#include "gtkcellareaboxcontext.h"
+#include "gtkcellareaboxcontextprivate.h"
 #include "gtkorientable.h"
 
 /* GObjectClass */
