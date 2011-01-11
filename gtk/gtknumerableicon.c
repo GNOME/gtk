@@ -889,7 +889,7 @@ gtk_numerable_icon_set_style_context (GtkNumerableIcon *self,
  * If this method is called and an icon name was already set as
  * background for the icon, @icon will be used, i.e. the last method
  * called between gtk_numerable_icon_set_background_gicon() and
- * #gtk_numerable_icon_set_background_icon_name() has always priority.
+ * gtk_numerable_icon_set_background_icon_name() has always priority.
  *
  * Since: 3.0
  */
