@@ -465,7 +465,6 @@ using code like the following:
  g_object_unref (layout);
 </programlisting>
 </informalexample>
-Do not use the deprecated #GdkFont and gdk_draw_text().
 </para>
 
 <para>
@@ -498,7 +497,6 @@ pango_layout_get_pixel_size(), using code like the following:
  g_object_unref (layout);
 </programlisting>
 </informalexample>
-Do not use the deprecated function gdk_text_width().
 </para>
 
 <para>
@@ -586,9 +584,7 @@ channel will be respected.
 <para>
 See <link linkend="TreeWidget">tree widget overview</link> &mdash; you
 should use the #GtkTreeView widget. (A list is just a tree with no branches, 
-so the tree widget is used for lists as well.) Do not use the deprecated 
-widgets #GtkTree or #GtkCList/#GtkCTree in newly-written code, they are
-less flexible and result in an inferior user interface.
+so the tree widget is used for lists as well).
 </para>
 </answer>
 </qandaentry>
@@ -601,8 +597,7 @@ less flexible and result in an inferior user interface.
 <answer>
 <para>
 See <link linkend="TextWidget">text widget overview</link> &mdash; you
-should use the #GtkTextView widget. Do not use the deprecated widget #GtkText 
-in newly-written code, it has a number of problems that are best avoided.
+should use the #GtkTextView widget.
 </para>
 <para>
 If you only have a small amount of text, #GtkLabel may also be appropriate 
