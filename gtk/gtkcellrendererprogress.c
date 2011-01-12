@@ -534,8 +534,9 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
 				   GtkCellRendererState  flags)
 {
   GtkCellRendererProgress *cellprogress = GTK_CELL_RENDERER_PROGRESS (cell);
-  GtkCellRendererProgressPrivate *priv= cellprogress->priv; 
-  GtkStyle *style;
+  GtkCellRendererProgressPrivate *priv= cellprogress->priv;
+  GtkStyleContext *context;
+  GtkBorder padding, border;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gint x, y, w, h, x_pos, y_pos, bar_position, bar_size, start, full_size;
@@ -543,8 +544,7 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
   GdkRectangle clip;
   gboolean is_rtl;
 
-  style = gtk_widget_get_style (widget);
-
+  context = gtk_widget_get_style_context (widget);
   is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
@@ -553,15 +553,21 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
   w = cell_area->width - xpad * 2;
   h = cell_area->height - ypad * 2;
 
-  /* FIXME: GtkProgressBar draws the box with "trough" detail,
-   * but some engines don't paint anything with that detail for
-   * non-GtkProgressBar widgets.
-   */
-  gtk_paint_box (style,
-                       cr,
-                       GTK_STATE_NORMAL, GTK_SHADOW_IN, 
-                       widget, NULL,
-                       x, y, w, h);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
+
+  gtk_render_background (context, cr, x, y, w, h);
+  gtk_render_frame (context, cr, x, y, w, h);
+
+  gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
+  gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &padding);
+
+  x += border.left + padding.left;
+  y += border.top + padding.top;
+  w -= border.left + border.right + padding.left + padding.right;
+  h -= border.top + border.bottom + padding.top + padding.bottom;
+
+  gtk_style_context_restore (context);
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
@@ -604,13 +610,15 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       clip.y = bar_position;
     }
 
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
+
   if (bar_size > 0)
-    gtk_paint_box (style,
-                   cr,
-                   GTK_STATE_SELECTED, GTK_SHADOW_OUT,
-                   widget, "bar",
-                   clip.x, clip.y,
-                   clip.width, clip.height);
+    gtk_render_activity (context, cr,
+                         clip.x, clip.y,
+                         clip.width, clip.height);
+
+  gtk_style_context_restore (context);
 
   if (priv->label)
     {
@@ -624,23 +632,28 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       else
 	text_xalign = priv->text_xalign;
 
-      x_pos = x + style->xthickness + text_xalign *
-	(w - 2 * style->xthickness - logical_rect.width);
+      x_pos = x + padding.left + text_xalign *
+	(w - padding.left - padding.right - logical_rect.width);
 
-      y_pos = y + style->ythickness + priv->text_yalign *
-	(h - 2 * style->ythickness - logical_rect.height);
+      y_pos = y + padding.top + priv->text_yalign *
+	(h - padding.top - padding.bottom - logical_rect.height);
 
       cairo_save (cr);
       gdk_cairo_rectangle (cr, &clip);
       cairo_clip (cr);
 
-      gtk_paint_layout (style, cr,
-                              GTK_STATE_SELECTED,
-                              FALSE, widget, "progressbar",
-                              x_pos, y_pos, 
-                              layout);
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
 
+      gtk_render_layout (context, cr,
+                         x_pos, y_pos,
+                         layout);
+
+      gtk_style_context_restore (context);
       cairo_restore (cr);
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
       if (bar_position > start)
         {
@@ -659,11 +672,9 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
           gdk_cairo_rectangle (cr, &clip);
           cairo_clip (cr);
 
-          gtk_paint_layout (style, cr,
-                                  GTK_STATE_NORMAL,
-                                  FALSE, widget, "progressbar",
-                                  x_pos, y_pos,
-                                  layout);
+          gtk_render_layout (context, cr,
+                             x_pos, y_pos,
+                             layout);
 
           cairo_restore (cr);
         }
@@ -685,15 +696,14 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
           gdk_cairo_rectangle (cr, &clip);
           cairo_clip (cr);
 
-          gtk_paint_layout (style, cr,
-                                  GTK_STATE_NORMAL,
-                                  FALSE, widget, "progressbar",
-                                  x_pos, y_pos,
-                                  layout);
-          
+          gtk_render_layout (context, cr,
+                             x_pos, y_pos,
+                             layout);
+
           cairo_restore (cr);
         }
 
+      gtk_style_context_restore (context);
       g_object_unref (layout);
     }
 }
