@@ -33,6 +33,14 @@
 
 #include <glib-object.h>
 
+
+/**
+ * SECTION:gtkenum
+ * @Short_description: Public enumerated types used throughout GTK+
+ * @Title: Standard Enumerations
+ */
+
+
 G_BEGIN_DECLS
 
 /**
@@ -64,7 +72,15 @@ typedef enum
   GTK_ALIGN_CENTER
 } GtkAlign;
 
-/* Arrow placement */
+
+/**
+ * GtkArrowPlacement:
+ * @GTK_ARROWS_BOTH: Place one arrow on each end of the menu.
+ * @GTK_ARROWS_START: Place both arrows at the top of the menu.
+ * @GTK_ARROWS_END: Place both arrows at the bottom of the menu.
+ *
+ * Used to specify the placement of scroll arrows in scrolling menus.
+ */
 typedef enum
 {
   GTK_ARROWS_BOTH,
@@ -72,7 +88,16 @@ typedef enum
   GTK_ARROWS_END
 } GtkArrowPlacement;
 
-/* Arrow types */
+/**
+ * GtkArrowType
+ * @GTK_ARROW_UP: Represents an upward pointing arrow.
+ * @GTK_ARROW_DOWN: Represents a downward pointing arrow.
+ * @GTK_ARROW_LEFT: Represents a left pointing arrow.
+ * @GTK_ARROW_RIGHT: Represents a right pointing arrow.
+ * @GTK_ARROW_NONE: No arrow. Since 2.10.
+ *
+ * Used to indicate the direction in which a #GtkArrow should point.
+ */
 typedef enum
 {
   GTK_ARROW_UP,
@@ -82,7 +107,16 @@ typedef enum
   GTK_ARROW_NONE
 } GtkArrowType;
 
-/* Attach options (for tables) */
+/**
+ * GtkAttachOptions:
+ * @GTK_EXPAND: the widget should expand to take up any extra space in its
+ * container that has been allocated.
+ * @GTK_SHRINK: the widget should shrink as and when possible.
+ * @GTK_FILL: the widget should fill the space allocated to it.
+ *
+ * Denotes the expansion properties that a widget will have when it (or its
+ * parent) is resized.
+ */
 typedef enum
 {
   GTK_EXPAND = 1 << 0,
@@ -90,7 +124,20 @@ typedef enum
   GTK_FILL   = 1 << 2
 } GtkAttachOptions;
 
-/* Button box styles */
+/**
+ * GtkButtonBoxStyle:
+ * @GTK_BUTTONBOX_DEFAULT_STYLE: Default packing.
+ * @GTK_BUTTONBOX_SPREAD: Buttons are evenly spread across the box.
+ * @GTK_BUTTONBOX_EDGE: Buttons are placed at the edges of the box.
+ * @GTK_BUTTONBOX_START: Buttons are grouped towards the start of the box,
+ *   (on the left for a HBox, or the top for a VBox).
+ * @GTK_BUTTONBOX_END: Buttons are grouped towards the end of the box,
+ *   (on the right for a HBox, or the bottom for a VBox).
+ * @GTK_BUTTONBOX_CENTER: Buttons are centered in the box. Since 2.12.
+ *
+ * Used to dictate the style that a #GtkButtonBox uses to layout the buttons it
+ * contains. (See also: #GtkVButtonBox and #GtkHButtonBox).
+ */
 typedef enum
 {
   GTK_BUTTONBOX_SPREAD = 1,
@@ -99,6 +146,7 @@ typedef enum
   GTK_BUTTONBOX_END,
   GTK_BUTTONBOX_CENTER
 } GtkButtonBoxStyle;
+
 
 typedef enum
 {
@@ -125,7 +173,15 @@ typedef enum
   GTK_DIR_RIGHT
 } GtkDirectionType;
 
-/* Expander styles */
+/**
+ * GtkExpanderStyle:
+ * @GTK_EXPANDER_COLLAPSED: The style used for a collapsed subtree.
+ * @GTK_EXPANDER_SEMI_COLLAPSED: Intermediate style used during animation.
+ * @GTK_EXPANDER_SEMI_EXPANDED: Intermediate style used during animation.
+ * @GTK_EXPANDER_EXPANDED: The style used for an expanded subtree.
+ *
+ * Used to specify the style of the expanders drawn by a #GtkTreeView.
+ */
 typedef enum
 {
   GTK_EXPANDER_COLLAPSED,
@@ -171,7 +227,16 @@ typedef enum
   GTK_TEXT_DIR_RTL
 } GtkTextDirection;
 
-/* justification for label and maybe other widgets (text?) */
+/**
+ * GtkJustification:
+ * @GTK_JUSTIFY_LEFT: The text is placed at the left edge of the label.
+ * @GTK_JUSTIFY_RIGHT: The text is placed at the right edge of the label.
+ * @GTK_JUSTIFY_CENTER: The text is placed in the center of the label.
+ * @GTK_JUSTIFY_FILL: The text is placed is distributed across the label.
+ *
+ * Used for justifying the text inside a #GtkLabel widget. (See also
+ * #GtkAlignment).
+ */
 typedef enum
 {
   GTK_JUSTIFY_LEFT,
@@ -245,14 +310,35 @@ typedef enum
   GTK_SCROLL_HORIZONTAL_ENDS
 } GtkScrollStep;
 
-/* Orientation for toolbars, etc. */
+/**
+ * GtkOrientation:
+ * @GTK_ORIENTATION_HORIZONTAL: The widget is in horizontal orientation.
+ * @GTK_ORIENTATION_VERTICAL: The widget is in vertical orientation.
+ *
+ * Represents the orientation of widgets which can be switched between horizontal
+ * and vertical orientation on the fly, like #GtkToolbar.
+ */
 typedef enum
 {
   GTK_ORIENTATION_HORIZONTAL,
   GTK_ORIENTATION_VERTICAL
 } GtkOrientation;
 
-/* Placement type for scrolled window */
+/**
+ * GtkCornerType:
+ * @GTK_CORNER_TOP_LEFT: Place the scrollbars on the right and bottom of the
+ *  widget (default behaviour).
+ * @GTK_CORNER_BOTTOM_LEFT: Place the scrollbars on the top and right of the
+ *  widget.
+ * @GTK_CORNER_TOP_RIGHT: Place the scrollbars on the left and bottom of the
+ *  widget.
+ * @GTK_CORNER_BOTTOM_RIGHT: Place the scrollbars on the top and left of the
+ *  widget.
+ *
+ * Specifies which corner a child widget should be placed in when packed into
+ * a #GtkScrolledWindow. This is effectively the opposite of where the scroll
+ * bars are placed.
+ */
 typedef enum
 {
   GTK_CORNER_TOP_LEFT,
@@ -261,7 +347,14 @@ typedef enum
   GTK_CORNER_BOTTOM_RIGHT
 } GtkCornerType;
 
-/* Packing types (for boxes) */
+/**
+ * GtkPackType:
+ * @GTK_PACK_START: The child is packed into the start of the box
+ * @GTK_PACK_END: The child is packed into the end of the box
+ *
+ * Represents the packing location #GtkBox children. (See: #GtkVBox,
+ * #GtkHBox, and #GtkButtonBox).
+ */
 typedef enum
 {
   GTK_PACK_START,
@@ -288,7 +381,15 @@ typedef enum
   GTK_PATH_CLASS
 } GtkPathType;
 
-/* Scrollbar policy types (for scrolled windows) */
+/**
+ * GtkPolicyType:
+ * @GTK_POLICY_ALWAYS: The scrollbar is always visible.
+ * @GTK_POLICY_AUTOMATIC: The scrollbar will appear and disappear as necessary. For example,
+ *  when all of a #GtkCList can not be seen.
+ * @GTK_POLICY_NEVER: The scrollbar will never appear.
+ *
+ * Determines when a scroll bar will be visible.
+ */
 typedef enum
 {
   GTK_POLICY_ALWAYS,
@@ -296,6 +397,17 @@ typedef enum
   GTK_POLICY_NEVER
 } GtkPolicyType;
 
+/**
+ * GtkPositionType:
+ * @GTK_POS_LEFT: The feature is at the left edge.
+ * @GTK_POS_RIGHT: The feature is at the right edge.
+ * @GTK_POS_TOP: The feature is at the top edge.
+ * @GTK_POS_BOTTOM: The feature is at the bottom edge.
+ *
+ * Describes which edge of a widget a certain feature is positioned at, e.g. the
+ * tabs of a #GtkNotebook, the handle of a #GtkHandleBox or the label of a
+ * #GtkScale.
+ */
 typedef enum
 {
   GTK_POS_LEFT,
@@ -304,7 +416,14 @@ typedef enum
   GTK_POS_BOTTOM
 } GtkPositionType;
 
-/* Style for buttons */
+/**
+ * GtkReliefStyle:
+ * @GTK_RELIEF_NORMAL: Draw a normal relief.
+ * @GTK_RELIEF_HALF: A half relief.
+ * @GTK_RELIEF_NONE: No relief.
+ *
+ * Indicated the relief to be drawn around a #GtkButton.
+ */
 typedef enum
 {
   GTK_RELIEF_NORMAL,
@@ -312,12 +431,17 @@ typedef enum
   GTK_RELIEF_NONE
 } GtkReliefStyle;
 
-/* Resize type */
+/**
+ * GtkResizeMode:
+ * @GTK_RESIZE_PARENT: Pass resize request to the parent
+ * @GTK_RESIZE_QUEUE: Queue resizes on this widget
+ * @GTK_RESIZE_IMMEDIATE: Resize immediately. Deprecated.
+ */
 typedef enum
 {
-  GTK_RESIZE_PARENT,		/* Pass resize request to the parent */
-  GTK_RESIZE_QUEUE,		/* Queue resizes on this widget */
-  GTK_RESIZE_IMMEDIATE		/* Perform the resizes now */
+  GTK_RESIZE_PARENT,
+  GTK_RESIZE_QUEUE,
+  GTK_RESIZE_IMMEDIATE
 } GtkResizeMode;
 
 /* scrolling types */
@@ -341,16 +465,42 @@ typedef enum
   GTK_SCROLL_END
 } GtkScrollType;
 
-/* list selection modes */
+/**
+ * GtkSelectionMode:
+ * @GTK_SELECTION_NONE: No selection is possible.
+ * @GTK_SELECTION_SINGLE: Zero or one element may be selected.
+ * @GTK_SELECTION_BROWSE: Exactly one element is selected. In some circumstances,
+ *  such as initially or during a search operation, it's possible for no element
+ *  to be selected with %GTK_SELECTION_BROWSE. What is really enforced is that
+ *  the user can't deselect a currently selected element except by selecting
+ *  another element.
+ * @GTK_SELECTION_MULTIPLE: Any number of elements may be selected.
+ *  Clicks toggle the state of an item. Any number of elements may be selected.
+ *  The Ctrl key may be used to enlarge the selection, and Shift key to select
+ *  between the focus and the child pointed to. Some widgets may also allow
+ *  Click-drag to select a range of elements.
+ * @GTK_SELECTION_EXTENDED: Deprecated, behaves identical to %GTK_SELECTION_MULTIPLE.
+ *
+ * Used to control what selections users are allowed to make.
+ */
 typedef enum
 {
-  GTK_SELECTION_NONE,                             /* Nothing can be selected */
+  GTK_SELECTION_NONE,
   GTK_SELECTION_SINGLE,
   GTK_SELECTION_BROWSE,
   GTK_SELECTION_MULTIPLE
 } GtkSelectionMode;
 
-/* Shadow types */
+/**
+ * GtkShadowType:
+ * @GTK_SHADOW_NONE: No outline.
+ * @GTK_SHADOW_IN: The outline is bevelled inwards.
+ * @GTK_SHADOW_OUT: The outline is bevelled outwards like a button.
+ * @GTK_SHADOW_ETCHED_IN: The outline has a sunken 3d appearance.
+ * @GTK_SHADOW_ETCHED_OUT: The outline has a raised 3d appearance.
+ *
+ * Used to change the appearance of an outline typically provided by a #GtkFrame.
+ */
 typedef enum
 {
   GTK_SHADOW_NONE,
@@ -392,7 +542,20 @@ typedef enum
   GTK_STATE_FOCUSED
 } GtkStateType;
 
-/* Style for toolbars */
+/**
+ * GtkToolbarStyle:
+ * @GTK_TOOLBAR_ICONS: Buttons display only icons in the toolbar.
+ * @GTK_TOOLBAR_TEXT: Buttons display only text labels in the toolbar.
+ * @GTK_TOOLBAR_BOTH: Buttons display text and icons in the toolbar.
+ * @GTK_TOOLBAR_BOTH_HORIZ: Buttons display icons and text alongside each
+ *  other, rather than vertically stacked
+ *
+ * Used to customize the appearance of a #GtkToolbar. Note that
+ * setting the toolbar style overrides the user's preferences
+ * for the default toolbar style.  Note that if the button has only
+ * a label set and GTK_TOOLBAR_ICONS is used, the label will be
+ * visible, and vice versa.
+ */
 typedef enum
 {
   GTK_TOOLBAR_ICONS,
@@ -401,7 +564,19 @@ typedef enum
   GTK_TOOLBAR_BOTH_HORIZ
 } GtkToolbarStyle;
 
-/* Window position types */
+/**
+ * GtkWindowPosition:
+ * @GTK_WIN_POS_NONE: No influence is made on placement.
+ * @GTK_WIN_POS_CENTER: Windows should be placed in the center of the screen.
+ * @GTK_WIN_POS_MOUSE: Windows should be placed at the current mouse position.
+ * @GTK_WIN_POS_CENTER_ALWAYS: Keep window centered as it changes size, etc.
+ * @GTK_WIN_POS_CENTER_ON_PARENT: Center the window on its transient
+ *  parent (see gtk_window_set_transient_for()).
+ *
+ * Window placement can be influenced using this enumeration. Note that
+ * using #GTK_WIN_POS_CENTER_ALWAYS is almost always a bad idea.
+ * It won't necessarily work well with all window managers or on all windowing systems.
+ */
 typedef enum
 {
   GTK_WIN_POS_NONE,
@@ -411,7 +586,25 @@ typedef enum
   GTK_WIN_POS_CENTER_ON_PARENT
 } GtkWindowPosition;
 
-/* Window types */
+/**
+ * GtkWindowType:
+ * @GTK_WINDOW_TOPLEVEL: A regular window, such as a dialog.
+ * @GTK_WINDOW_POPUP: A special window such as a tooltip.
+ *
+ * A #GtkWindow can be one of these types. Most things you'd consider a
+ * "window" should have type #GTK_WINDOW_TOPLEVEL; windows with this type
+ * are managed by the window manager and have a frame by default (call
+ * gtk_window_set_decorated() to toggle the frame).  Windows with type
+ * #GTK_WINDOW_POPUP are ignored by the window manager; window manager
+ * keybindings won't work on them, the window manager won't decorate the
+ * window with a frame, many GTK+ features that rely on the window
+ * manager will not work (e.g. resize grips and
+ * maximization/minimization). #GTK_WINDOW_POPUP is used to implement
+ * widgets such as #GtkMenu or tooltips that you normally don't think of
+ * as windows per se. Nearly all windows should be #GTK_WINDOW_TOPLEVEL.
+ * In particular, do not use #GTK_WINDOW_POPUP just to turn off
+ * the window borders; use gtk_window_set_decorated() for that.
+ */
 typedef enum
 {
   GTK_WINDOW_TOPLEVEL,
@@ -427,7 +620,13 @@ typedef enum
   GTK_WRAP_WORD_CHAR
 } GtkWrapMode;
 
-/* How to sort */
+/**
+ * GtkSortType:
+ * @GTK_SORT_ASCENDING: Sorting is in ascending order.
+ * @GTK_SORT_DESCENDING: Sorting is in descending order.
+ *
+ * Determines the direction of a sort.
+ */
 typedef enum
 {
   GTK_SORT_ASCENDING,
@@ -533,6 +732,21 @@ typedef enum
   GTK_TREE_VIEW_GRID_LINES_BOTH
 } GtkTreeViewGridLines;
 
+/**
+ * GtkDragResult:
+ * @GTK_DRAG_RESULT_SUCCESS: The drag operation was successful.
+ * @GTK_DRAG_RESULT_NO_TARGET: No suitable drag target.
+ * @GTK_DRAG_RESULT_USER_CANCELLED: The user cancelled the drag operation.
+ * @GTK_DRAG_RESULT_TIMEOUT_EXPIRED: The drag operation timed out.
+ * @GTK_DRAG_RESULT_GRAB_BROKEN: The pointer or keyboard grab used
+ *  for the drag operation was broken.
+ * @GTK_DRAG_RESULT_ERROR: The drag operation failed due to some
+ *  unspecified error.
+ *
+ * Gives an indication why a drag operation failed.
+ * The value can by obtained by connecting to the
+ * #GtkWidget::drag-failed signal.
+ */
 typedef enum
 {
   GTK_DRAG_RESULT_SUCCESS,
