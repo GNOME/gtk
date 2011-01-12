@@ -2032,7 +2032,7 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   if (!running)
     progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
 
-  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_VERTICAL))
+  if (!gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_HORIZONTAL))
     {
       if (is_rtl)
         angle = (G_PI) - ((G_PI / 2) * progress);
