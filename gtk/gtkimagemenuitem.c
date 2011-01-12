@@ -554,6 +554,9 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
   if (priv->image && gtk_widget_get_visible (priv->image))
     {
       gint x, y, offset;
+      GtkStyleContext *context;
+      GtkStateFlags state;
+      GtkBorder padding;
       GtkRequisition child_requisition;
       GtkAllocation child_allocation;
       guint horizontal_padding, toggle_spacing;
@@ -573,18 +576,20 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
 
       gtk_widget_get_allocation (widget, &widget_allocation);
 
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+      gtk_style_context_get_padding (context, state, &padding);
+      offset = gtk_container_get_border_width (GTK_CONTAINER (image_menu_item));
+
       if (pack_dir == GTK_PACK_DIRECTION_LTR ||
           pack_dir == GTK_PACK_DIRECTION_RTL)
         {
-          offset = gtk_container_get_border_width (GTK_CONTAINER (image_menu_item)) +
-                   gtk_widget_get_style (widget)->xthickness;
-
           if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
               (pack_dir == GTK_PACK_DIRECTION_LTR))
-            x = offset + horizontal_padding +
+            x = offset + horizontal_padding + padding.left +
                (toggle_size - toggle_spacing - child_requisition.width) / 2;
           else
-            x = widget_allocation.width - offset - horizontal_padding -
+            x = widget_allocation.width - offset - horizontal_padding - padding.right -
               toggle_size + toggle_spacing +
               (toggle_size - toggle_spacing - child_requisition.width) / 2;
 
@@ -592,15 +597,12 @@ gtk_image_menu_item_size_allocate (GtkWidget     *widget,
         }
       else
         {
-          offset = gtk_container_get_border_width (GTK_CONTAINER (image_menu_item)) +
-                   gtk_widget_get_style (widget)->ythickness;
-
           if ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR) ==
               (pack_dir == GTK_PACK_DIRECTION_TTB))
-            y = offset + horizontal_padding +
+            y = offset + horizontal_padding + padding.top +
               (toggle_size - toggle_spacing - child_requisition.height) / 2;
           else
-            y = widget_allocation.height - offset - horizontal_padding -
+            y = widget_allocation.height - offset - horizontal_padding - padding.bottom -
               toggle_size + toggle_spacing +
               (toggle_size - toggle_spacing - child_requisition.height) / 2;
 
