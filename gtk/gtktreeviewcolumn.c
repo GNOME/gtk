@@ -1881,6 +1881,8 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
   if (priv->visible)
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 
+  _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
+
   gtk_tree_view_column_update_button (tree_column);
   g_object_notify (G_OBJECT (tree_column), "visible");
 }
