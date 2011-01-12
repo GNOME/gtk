@@ -342,7 +342,7 @@ stamp-gc-h: $(top_builddir)/config.status
 dist-hook: ../build/win32/vs9/gdk.vcproj
 
 ../build/win32/vs9/gdk.vcproj: ../build/win32/vs9/gdk.vcprojin
-	for F in $(libgdk_win32_3_0_la_SOURCES); do \
+	for F in $(libgdk_3_0_la_SOURCES); do \
 		case $$F in \
 		*.c) echo '   <File RelativePath="..\..\..\gdk\'$$F'" />' \
 		     ;; \

@@ -122,29 +122,24 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File RelativePath="..\..\..\gdk\win32\gdkapplaunchcontext-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkcolor-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkcursor-win32.c" />
+			<File RelativePath="..\..\..\gdk\win32\gdkdevice-win32.c" />
+			<File RelativePath="..\..\..\gdk\win32\gdkdevice-wintab.c" />
+			<File RelativePath="..\..\..\gdk\win32\gdkdevicemanager-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkdisplay-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkdnd-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkdrawable-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkevents-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkfont-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkgc-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkgeometry-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkglobals-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkim-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkinput-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkinput.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkkeys-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkmain-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkpixmap-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkproperty-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkscreen-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkselection-win32.c" />
-			<File RelativePath="..\..\..\gdk\win32\gdkspawn-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdktestutils-win32.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkvisual-win32.c" />
+			<File RelativePath="..\..\..\gdk\win32\gdkwin32displaymanager.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkwin32id.c" />
 			<File RelativePath="..\..\..\gdk\win32\gdkwindow-win32.c" />
 		</Filter>

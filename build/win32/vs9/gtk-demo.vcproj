@@ -43,7 +43,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
