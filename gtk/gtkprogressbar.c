@@ -1204,10 +1204,23 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
                                   GtkOrientation  orientation)
 {
   GtkProgressBarPrivate *priv = pbar->priv;
+  GtkStyleContext *context;
 
   if (priv->orientation != orientation)
     {
       priv->orientation = orientation;
+      context = gtk_widget_get_style_context (GTK_WIDGET (pbar));
+
+      if (pbar->priv->orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_VERTICAL);
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_HORIZONTAL);
+        }
+      else
+        {
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
+          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VERTICAL);
+        }
 
       if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
         gtk_widget_queue_resize (GTK_WIDGET (pbar));
