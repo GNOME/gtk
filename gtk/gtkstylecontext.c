@@ -3613,11 +3613,15 @@ gtk_render_check (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_check (priv->theming_engine, cr,
                               x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3659,11 +3663,15 @@ gtk_render_option (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_option (priv->theming_engine, cr,
                                x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3702,11 +3710,15 @@ gtk_render_arrow (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, size, size);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_arrow (priv->theming_engine, cr,
                               angle, x, y, size);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3749,10 +3761,14 @@ gtk_render_background (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_background (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3797,10 +3813,14 @@ gtk_render_frame (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_frame (priv->theming_engine, cr, x, y, width, height);
+  
+  cairo_restore (cr);
 }
 
 /**
@@ -3842,10 +3862,14 @@ gtk_render_expander (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_expander (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3884,10 +3908,14 @@ gtk_render_focus (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_focus (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3920,6 +3948,8 @@ gtk_render_layout (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   pango_layout_get_extents (layout, &extents, NULL);
 
   store_animation_region (context,
@@ -3930,6 +3960,8 @@ gtk_render_layout (GtkStyleContext *context,
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_layout (priv->theming_engine, cr, x, y, layout);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3962,8 +3994,12 @@ gtk_render_line (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_line (priv->theming_engine, cr, x0, y0, x1, y1);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -4007,10 +4043,14 @@ gtk_render_slider (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_slider (priv->theming_engine, cr, x, y, width, height, orientation);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -4067,12 +4107,16 @@ gtk_render_frame_gap (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_frame_gap (priv->theming_engine, cr,
                                   x, y, width, height, gap_side,
                                   xy0_gap, xy1_gap);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -4116,10 +4160,14 @@ gtk_render_extension (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_extension (priv->theming_engine, cr, x, y, width, height, gap_side);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -4161,10 +4209,14 @@ gtk_render_handle (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_handle (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -4201,10 +4253,14 @@ gtk_render_activity (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_activity (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
