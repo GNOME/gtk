@@ -3660,6 +3660,7 @@ _gtk_cell_area_set_cell_data_func_with_proxy (GtkCellArea           *area,
   else
     {
       info = cell_info_new ((GtkCellLayoutDataFunc)func, func_data, destroy);
+      info->proxy = proxy;
 
       g_hash_table_insert (priv->cell_info, cell, info);
     }
