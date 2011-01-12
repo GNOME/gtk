@@ -84,7 +84,6 @@ struct _GtkToolItemGroupPrivate
   gboolean           animation;
   gint64             animation_start;
   GSource           *animation_timeout;
-  GtkExpanderStyle   expander_style;
   gint               expander_size;
   gint               header_spacing;
   PangoEllipsizeMode ellipsize;
@@ -266,43 +265,52 @@ gtk_tool_item_group_header_draw_cb (GtkWidget *widget,
 {
   GtkToolItemGroup *group = GTK_TOOL_ITEM_GROUP (data);
   GtkToolItemGroupPrivate* priv = group->priv;
-  GtkExpanderStyle expander_style;
   GtkOrientation orientation;
   gint x, y, width, height;
   GtkTextDirection direction;
+  GtkStyleContext *context;
+  GtkStateFlags state = 0;
 
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
-  expander_style = priv->expander_style;
   direction = gtk_widget_get_direction (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
+  context = gtk_widget_get_style_context (widget);
+
+  if (!priv->collapsed)
+    state |= GTK_STATE_FLAG_ACTIVE;
+
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
 
   if (GTK_ORIENTATION_VERTICAL == orientation)
     {
-      if (GTK_TEXT_DIR_RTL == direction)
-        x = width - priv->expander_size / 2;
-      else
-        x = priv->expander_size / 2;
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VERTICAL);
 
-      y = height / 2;
+      if (GTK_TEXT_DIR_RTL == direction)
+        x = width;
+      else
+        x = 0;
+
+      y = height / 2 - priv->expander_size / 2;
     }
   else
     {
-      x = width / 2;
-      y = priv->expander_size / 2;
-
-      /* Unfortunatly gtk_paint_expander() doesn't support rotated drawing
-       * modes. Luckily the following shady arithmetics produce the desired
-       * result. */
-      expander_style = GTK_EXPANDER_EXPANDED - expander_style;
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
+      x = width / 2 - priv->expander_size / 2;
+      y = 0;
     }
 
-  gtk_paint_expander (gtk_widget_get_style (widget),
-                      cr,
-                      gtk_widget_get_state (priv->header),
-                      GTK_WIDGET (group),
-                      "tool-palette-header", x, y,
-                      expander_style);
+  /* The expander is the only animatable region */
+  gtk_style_context_push_animatable_region (context, GUINT_TO_POINTER (1));
+
+  gtk_render_expander (context, cr, x, y,
+                       priv->expander_size,
+                       priv->expander_size);
+
+  gtk_style_context_pop_animatable_region (context);
+  gtk_style_context_restore (context);
 
   return FALSE;
 }
@@ -382,7 +390,6 @@ gtk_tool_item_group_init (GtkToolItemGroup *group)
   priv->children = NULL;
   priv->header_spacing = DEFAULT_HEADER_SPACING;
   priv->expander_size = DEFAULT_EXPANDER_SIZE;
-  priv->expander_style = GTK_EXPANDER_EXPANDED;
 
   priv->label_widget = gtk_label_new (NULL);
   gtk_misc_set_alignment (GTK_MISC (priv->label_widget), 0.0, 0.5);
@@ -1200,10 +1207,12 @@ gtk_tool_item_group_realize (GtkWidget *widget)
   GdkDisplay *display;
   gint attributes_mask;
   guint border_width;
+  GtkStyleContext *context;
 
   gtk_widget_set_realized (widget, TRUE);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+  context = gtk_widget_get_style_context (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -1231,9 +1240,7 @@ gtk_tool_item_group_realize (GtkWidget *widget)
 
   gdk_window_set_user_data (window, widget);
 
-  gtk_widget_style_attach (widget);
-  gtk_style_set_background (gtk_widget_get_style (widget),
-                            window, GTK_STATE_NORMAL);
+  gtk_style_context_set_background (context, window);
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback) gtk_widget_set_parent_window,
@@ -1254,11 +1261,10 @@ gtk_tool_item_group_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_tool_item_group_style_set (GtkWidget *widget,
-                               GtkStyle  *previous_style)
+gtk_tool_item_group_style_updated (GtkWidget *widget)
 {
   gtk_tool_item_group_header_adjust_style (GTK_TOOL_ITEM_GROUP (widget));
-  GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->style_set (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->style_updated (widget);
 }
 
 static void
@@ -1573,7 +1579,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   wclass->size_allocate        = gtk_tool_item_group_size_allocate;
   wclass->realize              = gtk_tool_item_group_realize;
   wclass->unrealize            = gtk_tool_item_group_unrealize;
-  wclass->style_set            = gtk_tool_item_group_style_set;
+  wclass->style_updated        = gtk_tool_item_group_style_updated;
   wclass->screen_changed       = gtk_tool_item_group_screen_changed;
 
   cclass->add                = gtk_tool_item_group_add;
@@ -1866,22 +1872,6 @@ gtk_tool_item_group_animation_cb (gpointer data)
   /* Enque this early to reduce number of expose events. */
   gtk_widget_queue_resize_no_redraw (GTK_WIDGET (group));
 
-  /* Figure out current style of the expander arrow. */
-  if (priv->collapsed)
-    {
-      if (priv->expander_style == GTK_EXPANDER_EXPANDED)
-        priv->expander_style = GTK_EXPANDER_SEMI_COLLAPSED;
-      else
-        priv->expander_style = GTK_EXPANDER_COLLAPSED;
-    }
-  else
-    {
-      if (priv->expander_style == GTK_EXPANDER_COLLAPSED)
-        priv->expander_style = GTK_EXPANDER_SEMI_EXPANDED;
-      else
-        priv->expander_style = GTK_EXPANDER_EXPANDED;
-    }
-
   gtk_tool_item_group_force_expose (group);
 
   /* Finish animation when done. */
@@ -1921,6 +1911,8 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
                                            GTK_WIDGET (group));
   if (collapsed != priv->collapsed)
     {
+      GtkStyleContext *context;
+
       if (priv->animation)
         {
           if (priv->animation_timeout)
@@ -1932,14 +1924,23 @@ gtk_tool_item_group_set_collapsed (GtkToolItemGroup *group,
           g_source_set_callback (priv->animation_timeout,
                                  gtk_tool_item_group_animation_cb,
                                  group, NULL);
-
           g_source_attach (priv->animation_timeout, NULL);
+
+          context = gtk_widget_get_style_context (gtk_bin_get_child (GTK_BIN (priv->header)));
+
+          gtk_style_context_save (context);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
+
+          gtk_style_context_notify_state_change (context,
+                                                 gtk_widget_get_window (priv->header),
+                                                 GUINT_TO_POINTER (1),
+                                                 GTK_STATE_FLAG_ACTIVE,
+                                                 !collapsed);
+
+          gtk_style_context_restore (context);
         }
-        else
-        {
-          priv->expander_style = GTK_EXPANDER_COLLAPSED;
-          gtk_tool_item_group_force_expose (group);
-        }
+      else
+        gtk_tool_item_group_force_expose (group);
 
       priv->collapsed = collapsed;
       g_object_notify (G_OBJECT (group), "collapsed");
