@@ -4468,6 +4468,8 @@ gtk_widget_unrealize (GtkWidget *widget)
  * Normally you would only use this function in widget
  * implementations. You might also use it to schedule a redraw of a
  * #GtkDrawingArea or some portion thereof.
+ *
+ * Since: 3.0
  **/
 void
 gtk_widget_queue_draw_region (GtkWidget      *widget,
@@ -5607,6 +5609,8 @@ gtk_cairo_set_event (cairo_t        *cr,
  * use "else if" statements to check which window should be drawn.
  *
  * Returns: %TRUE if @window should be drawn
+ *
+ * Since: 3.0
  **/
 gboolean
 gtk_cairo_should_draw_window (cairo_t *cr,
@@ -5681,6 +5685,8 @@ _gtk_widget_draw_internal (GtkWidget *widget,
  * <note><para>Special purpose widgets may contain special code for
  * rendering to the screen and might appear differently on screen
  * and when rendered using gtk_widget_draw().</para></note>
+ *
+ * Since: 3.0
  **/
 void
 gtk_widget_draw (GtkWidget *widget,
@@ -5832,6 +5838,8 @@ _gtk_widget_get_translation_to_window (GtkWidget      *widget,
  * preparing an expose event to be emitted with the #GtkWidget::draw
  * signal. It is intended to help porting multiwindow widgets from
  * GTK+ 2 to the rendering architecture of GTK+ 3.
+ *
+ * Since: 3.0
  **/
 void
 gtk_cairo_transform_to_window (cairo_t   *cr,
