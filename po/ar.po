@@ -7,13 +7,13 @@
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Seba Barto <nanoosaamar@yahoo.com>, 2006.
 # Anas Afif Emad <anas.e87@gmail.com>, 2008.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-12 08:54+0200\n"
-"PO-Revision-Date: 2010-11-13 03:20+0300\n"
+"POT-Creation-Date: 2011-01-12 09:10+0200\n"
+"PO-Revision-Date: 2011-01-12 09:10+0300\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "MIME-Version: 1.0\n"
@@ -322,11 +322,13 @@ msgstr[5] "يجري فتح %Id عنصر"
 #. * contains the URL of the license.
 #.
 #: gtk/gtkaboutdialog.c:104
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
-msgstr "يأتي هذا البرنامج دون أي ضمانات على الإطلاق؛ زر %s لمزيد من المعلومات."
+msgstr ""
+"يأتي هذا البرنامج دون أي ضمانات على الإطلاق؛ زر <a href=\"%s\">%s</a> لمزيد "
+"من المعلومات."
 
 #: gtk/gtkaboutdialog.c:346
 msgid "License"
@@ -351,9 +353,8 @@ msgid "Could not show link"
 msgstr "تعذّر إظهار الوصلة"
 
 #: gtk/gtkaboutdialog.c:994
-#, fuzzy
 msgid "Homepage"
-msgstr "Home"
+msgstr "الموقع"
 
 #: gtk/gtkaboutdialog.c:1048
 #, c-format
@@ -361,9 +362,8 @@ msgid "About %s"
 msgstr "عنْ %s"
 
 #: gtk/gtkaboutdialog.c:2372
-#, fuzzy
 msgid "Created by"
-msgstr "ان_شئ"
+msgstr "أنشئه"
 
 #: gtk/gtkaboutdialog.c:2375
 msgid "Documented by"
@@ -448,95 +448,87 @@ msgid "Backslash"
 msgstr "Backslash"
 
 #: gtk/gtkappchooserbutton.c:259
-#, fuzzy
 msgid "Other application..."
-msgstr "تطبيق"
+msgstr "تطبيق آخر..."
 
 #: gtk/gtkappchooserdialog.c:127
 msgid "Failed to look for applications online"
-msgstr ""
+msgstr "فشل البحث عن تطبيق على الإنترنت"
 
 #: gtk/gtkappchooserdialog.c:164
 msgid "Find applications online"
-msgstr ""
+msgstr "ابحث عن تطبيق على الإنترنت"
 
 #: gtk/gtkappchooserdialog.c:208
-#, fuzzy
 msgid "Could not run application"
-msgstr "تعذّر مسح القائمة"
+msgstr "تعذّر تشغيل التّطبيق"
 
 #: gtk/gtkappchooserdialog.c:221
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find '%s'"
-msgstr "تعذّر وصْل %s"
+msgstr "تعذر إيجاد '%s'"
 
 #: gtk/gtkappchooserdialog.c:224
-#, fuzzy
 msgid "Could not find application"
-msgstr "تعذّر إظهار الوصلة"
+msgstr "تعذّر العثور على تطبيق"
 
 #. Translators: %s is a filename
 #: gtk/gtkappchooserdialog.c:334
 #, c-format
 msgid "Select an application to open \"%s\""
-msgstr ""
+msgstr "اختر تطبيقا لفتح \"%s\""
 
 #: gtk/gtkappchooserdialog.c:335 gtk/gtkappchooserwidget.c:644
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr ""
+msgstr "لا توجد أي تطبيقات لفتح \"%s\""
 
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:341
 #, c-format
 msgid "Select an application for \"%s\" files"
-msgstr ""
+msgstr "اختر تطبيقا لملفات \"%s\""
 
 #: gtk/gtkappchooserdialog.c:344
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr ""
+msgstr "لا توجد أي تطبيقات لفتح ملفات \"%s\""
 
 #: gtk/gtkappchooserdialog.c:358
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"انقر على \"أظهر التطبيقات الأخرى\" لمزيد من الخيارات، أو \"ابحث عن تطبيق على "
+"الإنترنت\" لتثبيت تطبيق جديد."
 
 #: gtk/gtkappchooserdialog.c:428
-#, fuzzy
 msgid "Forget association"
-msgstr "انس كلمة السر _حالاً"
+msgstr "انس الارتباط"
 
 #: gtk/gtkappchooserdialog.c:493
-#, fuzzy
 msgid "Show other applications"
-msgstr "اعرض خيارات ج‌ت‌ك+"
+msgstr "أظهر التطبيقات الأخرى"
 
 #: gtk/gtkappchooserdialog.c:511
-#, fuzzy
 msgid "_Open"
 msgstr "ا_فتح"
 
 #: gtk/gtkappchooserwidget.c:593
-#, fuzzy
 msgid "Default Application"
-msgstr "تطبيق"
+msgstr "التطبيق المبدئي"
 
 #: gtk/gtkappchooserwidget.c:730
-#, fuzzy
 msgid "Recommended Applications"
-msgstr "تطبيق"
+msgstr "التطبيقات المُزكّاة"
 
 #: gtk/gtkappchooserwidget.c:744
-#, fuzzy
 msgid "Related Applications"
-msgstr "تطبيق"
+msgstr "التطبيقات المتعلقة"
 
 #: gtk/gtkappchooserwidget.c:758
-#, fuzzy
 msgid "Other Applications"
-msgstr "تطبيق"
+msgstr "التطبيقات الأخرى"
 
 #: gtk/gtkbuilderparser.c:342
 #, c-format
@@ -2123,7 +2115,7 @@ msgstr "لا يُمكن العثور على عنصر بالعنوان '%s'"
 #: gtk/gtkrecentmanager.c:2437
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr ""
+msgstr "لا يوجد أي تطبيق مسجّل بالاسم '%s' لعناصر مسار '%s'"
 
 #: gtk/gtkspinner.c:289
 msgctxt "throbbing progress animation widget"
@@ -2645,7 +2637,7 @@ msgstr "_بعّد"
 #: gtk/gtkswitch.c:304 gtk/gtkswitch.c:353 gtk/gtkswitch.c:544
 msgctxt "switch"
 msgid "ON"
-msgstr ""
+msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -2653,17 +2645,16 @@ msgstr ""
 #: gtk/gtkswitch.c:312 gtk/gtkswitch.c:354 gtk/gtkswitch.c:560
 msgctxt "switch"
 msgid "OFF"
-msgstr ""
+msgstr "○"
 
 #: gtk/gtkswitch.c:959
-#, fuzzy
 msgctxt "light switch widget"
 msgid "Switch"
-msgstr "بوصة"
+msgstr "مفتاح"
 
 #: gtk/gtkswitch.c:960
 msgid "Switches between on and off states"
-msgstr ""
+msgstr "يبدّل بين حالات الفتح والإغلاق"
 
 #: gtk/gtktextbufferrichtext.c:650
 #, c-format
