@@ -560,9 +560,6 @@ struct _GtkCellAreaPrivate
 
   /* Tracking which cells are focus siblings of focusable cells */
   GHashTable      *focus_siblings;
-
-  /* Detail string to pass to gtk_paint_*() functions */
-  gchar           *style_detail;
 };
 
 enum {
@@ -905,7 +902,6 @@ gtk_cell_area_finalize (GObject *object)
   g_hash_table_destroy (priv->focus_siblings);
 
   g_free (priv->current_path);
-  g_free (priv->style_detail);
 
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->finalize (object);
 }
@@ -1103,8 +1099,6 @@ render_cell (GtkCellRenderer        *renderer,
           gdk_rectangle_union (&data->focus_rect, &cell_focus, &data->focus_rect);
         }
     }
-  else
-    flags &= ~GTK_CELL_RENDERER_FOCUSED;
 
   gtk_cell_renderer_render (renderer, data->cr, data->widget,
                             cell_background, &inner_area, flags);
@@ -1152,22 +1146,25 @@ gtk_cell_area_real_render (GtkCellArea          *area,
       render_data.focus_rect.width != 0 &&
       render_data.focus_rect.height != 0)
     {
-      GtkStateType renderer_state =
-        flags & GTK_CELL_RENDERER_SELECTED ? GTK_STATE_SELECTED :
-        (flags & GTK_CELL_RENDERER_PRELIT ? GTK_STATE_PRELIGHT :
-         (flags & GTK_CELL_RENDERER_INSENSITIVE ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL));
+      GtkStyleContext *style_context;
+      GtkStateFlags renderer_state = 0;
+
+      style_context = gtk_widget_get_style_context (widget);
+      gtk_style_context_save (style_context);
+
+      renderer_state = gtk_cell_renderer_get_state (NULL, widget, flags);
+      gtk_style_context_set_state (style_context, renderer_state);
 
       cairo_save (cr);
 
       gdk_cairo_rectangle (cr, background_area);
       cairo_clip (cr);
 
-      gtk_paint_focus (gtk_widget_get_style (widget), cr,
-                       renderer_state, widget,
-                       gtk_cell_area_get_style_detail (area),
-                       render_data.focus_rect.x,     render_data.focus_rect.y,
-                       render_data.focus_rect.width, render_data.focus_rect.height);
+      gtk_render_focus (style_context, cr,
+                        render_data.focus_rect.x,     render_data.focus_rect.y,
+                        render_data.focus_rect.width, render_data.focus_rect.height);
 
+      gtk_style_context_restore (style_context);
       cairo_restore (cr);
     }
 }
@@ -1774,56 +1771,6 @@ gtk_cell_area_render (GtkCellArea          *area,
   else
     g_warning ("GtkCellAreaClass::render not implemented for `%s'",
                g_type_name (G_TYPE_FROM_INSTANCE (area)));
-}
-
-/**
- * gtk_cell_area_set_style_detail:
- * @area: a #GtkCellArea
- * @detail: the #GtkStyle detail string to set
- *
- * Sets the detail string used in any gtk_paint_*() functions
- * used by @area.
- *
- * Since: 3.0
- */
-void
-gtk_cell_area_set_style_detail (GtkCellArea *area,
-                                const gchar *detail)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_if_fail (GTK_IS_CELL_AREA (area));
-
-  priv = area->priv;
-
-  if (g_strcmp0 (priv->style_detail, detail) != 0)
-    {
-      g_free (priv->style_detail);
-      priv->style_detail = g_strdup (detail);
-    }
-}
-
-/**
- * gtk_cell_area_get_style_detail:
- * @area: a #GtkCellArea
- *
- * Gets the detail string used in any gtk_paint_*() functions
- * used by @area.
- *
- * Return value: the detail string, the string belongs to the area and should not be freed.
- *
- * Since: 3.0
- */
-G_CONST_RETURN gchar *
-gtk_cell_area_get_style_detail (GtkCellArea *area)
-{
-  GtkCellAreaPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
-
-  priv = area->priv;
-
-  return priv->style_detail;
 }
 
 static gboolean

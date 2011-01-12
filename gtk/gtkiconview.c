@@ -1119,8 +1119,6 @@ gtk_icon_view_constructor (GType               type,
   if (GTK_IS_ORIENTABLE (priv->cell_area))
     gtk_orientable_set_orientation (GTK_ORIENTABLE (priv->cell_area), priv->item_orientation);
 
-  gtk_cell_area_set_style_detail (priv->cell_area, "icon_view");
-
   priv->cell_area_context = gtk_cell_area_create_context (priv->cell_area);
 
   priv->add_editable_id = 

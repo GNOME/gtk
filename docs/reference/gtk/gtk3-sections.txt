@@ -4426,8 +4426,6 @@ gtk_cell_area_foreach
 gtk_cell_area_foreach_alloc
 gtk_cell_area_event
 gtk_cell_area_render
-gtk_cell_area_set_style_detail
-gtk_cell_area_get_style_detail
 gtk_cell_area_get_cell_allocation
 gtk_cell_area_get_cell_at_position
 gtk_cell_area_create_context

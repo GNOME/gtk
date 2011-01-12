@@ -311,10 +311,6 @@ void                  gtk_cell_area_render                         (GtkCellArea 
                                                                     const GdkRectangle   *cell_area,
                                                                     GtkCellRendererState  flags,
                                                                     gboolean              paint_focus);
-void                  gtk_cell_area_set_style_detail               (GtkCellArea          *area,
-                                                                    const gchar          *detail);
-G_CONST_RETURN gchar *gtk_cell_area_get_style_detail               (GtkCellArea          *area);
-
 
 void                  gtk_cell_area_get_cell_allocation            (GtkCellArea          *area,
                                                                     GtkCellAreaContext   *context,

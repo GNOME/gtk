@@ -496,8 +496,6 @@ gtk_tree_view_column_constructor (GType                    type,
       g_object_ref_sink (priv->cell_area);
     }
 
-  gtk_cell_area_set_style_detail (priv->cell_area, "treeview");
-
   priv->add_editable_signal =
     g_signal_connect (priv->cell_area, "add-editable",
 		      G_CALLBACK (gtk_tree_view_column_add_editable_callback),
