@@ -331,12 +331,13 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
 {
   GtkCellRendererToggle *celltoggle = GTK_CELL_RENDERER_TOGGLE (cell);
   GtkCellRendererTogglePrivate *priv = celltoggle->priv;
+  GtkStyleContext *context;
   gint width, height;
   gint x_offset, y_offset;
   gint xpad, ypad;
-  GtkShadowType shadow;
-  GtkStateType state = 0;
+  GtkStateFlags state;
 
+  context = gtk_widget_get_style_context (widget);
   gtk_cell_renderer_toggle_get_size (cell, widget, cell_area,
 				     &x_offset, &y_offset,
 				     &width, &height);
@@ -347,57 +348,42 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
   if (width <= 0 || height <= 0)
     return;
 
-  if (priv->inconsistent)
-    shadow = GTK_SHADOW_ETCHED_IN;
+  if (!priv->activatable)
+    state = GTK_STATE_FLAG_INSENSITIVE;
   else
-    shadow = priv->active ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
+    state = gtk_cell_renderer_get_state (cell, widget, flags);
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE ||
-      !gtk_cell_renderer_get_sensitive (cell))
-    {
-      state = GTK_STATE_INSENSITIVE;
-    }
-  else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
-    {
-      if (gtk_widget_has_focus (widget))
-	state = GTK_STATE_SELECTED;
-      else
-	state = GTK_STATE_ACTIVE;
-    }
-  else
-    {
-      if (priv->activatable)
-        state = GTK_STATE_NORMAL;
-      else
-        state = GTK_STATE_INSENSITIVE;
-    }
+  if (priv->inconsistent)
+    state |= GTK_STATE_FLAG_INCONSISTENT;
+  else if (priv->active)
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   cairo_save (cr);
 
   gdk_cairo_rectangle (cr, cell_area);
   cairo_clip (cr);
 
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+
   if (priv->radio)
     {
-      gtk_paint_option (gtk_widget_get_style (widget),
-                              cr,
-                              state, shadow,
-                              widget, "cellradio",
-                              cell_area->x + x_offset + xpad,
-                              cell_area->y + y_offset + ypad,
-                              width, height);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
+      gtk_render_option (context, cr,
+                         cell_area->x + x_offset + xpad,
+                         cell_area->y + y_offset + ypad,
+                         width, height);
     }
   else
     {
-      gtk_paint_check (gtk_widget_get_style (widget),
-                             cr,
-                             state, shadow,
-                             widget, "cellcheck",
-                             cell_area->x + x_offset + xpad,
-                             cell_area->y + y_offset + ypad,
-                             width, height);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+      gtk_render_check (context, cr,
+                        cell_area->x + x_offset + xpad,
+                        cell_area->y + y_offset + ypad,
+                        width, height);
     }
 
+  gtk_style_context_restore (context);
   cairo_restore (cr);
 }
 
