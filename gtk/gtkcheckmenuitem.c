@@ -455,8 +455,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 {
   GtkCheckMenuItemPrivate *priv = check_menu_item->priv;
   GtkWidget *widget;
-  GtkStateType state_type;
-  GtkShadowType shadow_type;
   gint x, y;
 
   widget = GTK_WIDGET (check_menu_item);
@@ -464,15 +462,20 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
   if (gtk_widget_is_drawable (widget))
     {
       GtkAllocation allocation;
-      GtkStyle *style;
+      GtkStyleContext *context;
       guint border_width;
       guint offset;
       guint toggle_size;
       guint toggle_spacing;
       guint horizontal_padding;
       guint indicator_size;
+      GtkStateFlags state;
+      GtkBorder padding;
 
-      style = gtk_widget_get_style (widget);
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+      gtk_style_context_get_padding (context, state, &padding);
+
       gtk_widget_get_allocation (widget, &allocation);
 
       gtk_widget_style_get (widget,
@@ -483,14 +486,14 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       toggle_size = GTK_MENU_ITEM (check_menu_item)->priv->toggle_size;
       border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-      offset = border_width + style->xthickness + 2;
+      offset = border_width + padding.left + 2;
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
         {
           x = offset + horizontal_padding +
             (toggle_size - toggle_spacing - indicator_size) / 2;
         }
-      else 
+      else
         {
           x = allocation.width -
             offset - horizontal_padding - toggle_size + toggle_spacing +
@@ -501,37 +504,37 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
 
       if (priv->active ||
           priv->always_show_toggle ||
-          (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT))
+          (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT))
         {
           GdkWindow *window;
 
           window = gtk_widget_get_window (widget);
-          state_type = gtk_widget_get_state (widget);
+          gtk_style_context_save (context);
 
           if (priv->inconsistent)
-            shadow_type = GTK_SHADOW_ETCHED_IN;
+            state |= GTK_STATE_FLAG_INCONSISTENT;
           else if (priv->active)
-            shadow_type = GTK_SHADOW_IN;
-          else
-            shadow_type = GTK_SHADOW_OUT;
+            state |= GTK_STATE_FLAG_ACTIVE;
 
           if (!gtk_widget_is_sensitive (widget))
-            state_type = GTK_STATE_INSENSITIVE;
+            state |= GTK_STATE_FLAG_INSENSITIVE;
+
+          gtk_style_context_set_state (context, state);
 
           if (priv->draw_as_radio)
             {
-              gtk_paint_option (style, cr,
-                                state_type, shadow_type,
-                                widget, "option",
-                                x, y, indicator_size, indicator_size);
+              gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
+              gtk_render_option (context, cr, x, y,
+                                 indicator_size, indicator_size);
             }
           else
             {
-              gtk_paint_check (style, cr,
-                               state_type, shadow_type,
-                               widget, "check",
-                               x, y, indicator_size, indicator_size);
+              gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+              gtk_render_check (context, cr, x, y,
+                                indicator_size, indicator_size);
             }
+
+          gtk_style_context_restore (context);
         }
     }
 }
