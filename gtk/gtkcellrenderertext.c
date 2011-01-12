@@ -1690,12 +1690,17 @@ get_size (GtkCellRenderer    *cell,
 
   if (priv->calc_fixed_height)
     {
+      GtkStyleContext *style_context;
+      GtkStateFlags state;
       PangoContext *context;
       PangoFontMetrics *metrics;
       PangoFontDescription *font_desc;
       gint row_height;
 
-      font_desc = pango_font_description_copy_static (gtk_widget_get_style (widget)->font_desc);
+      style_context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      font_desc = pango_font_description_copy_static (gtk_style_context_get_font (style_context, state));
       pango_font_description_merge_static (font_desc, priv->font, TRUE);
 
       if (priv->scale_set)
@@ -1787,8 +1792,8 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 {
   GtkCellRendererText *celltext = GTK_CELL_RENDERER_TEXT (cell);
   GtkCellRendererTextPrivate *priv = celltext->priv;
+  GtkStyleContext *context;
   PangoLayout *layout;
-  GtkStateType state;
   gint x_offset = 0;
   gint y_offset = 0;
   gint xpad, ypad;
@@ -1796,30 +1801,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 
   layout = get_layout (celltext, widget, cell_area, flags);
   get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
-
-  if (!gtk_cell_renderer_get_sensitive (cell))
-    {
-      state = GTK_STATE_INSENSITIVE;
-    }
-  else if ((flags & GTK_CELL_RENDERER_SELECTED) == GTK_CELL_RENDERER_SELECTED)
-    {
-      if (gtk_widget_has_focus (widget))
-	state = GTK_STATE_SELECTED;
-      else
-	state = GTK_STATE_ACTIVE;
-    }
-  else if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT &&
-	   gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
-    {
-      state = GTK_STATE_PRELIGHT;
-    }
-  else
-    {
-      if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE)
-	state = GTK_STATE_INSENSITIVE;
-      else
-	state = GTK_STATE_NORMAL;
-    }
+  context = gtk_widget_get_style_context (widget);
 
   if (priv->background_set && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
@@ -1844,15 +1826,10 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gdk_cairo_rectangle (cr, cell_area);
   cairo_clip (cr);
 
-  gtk_paint_layout (gtk_widget_get_style (widget),
-                          cr,
-                          state,
-                          TRUE,
-                          widget,
-                          "cellrenderertext",
-                          cell_area->x + x_offset + xpad,
-                          cell_area->y + y_offset + ypad,
-                          layout);
+  gtk_render_layout (context, cr,
+                     cell_area->x + x_offset + xpad,
+                     cell_area->y + y_offset + ypad,
+                     layout);
 
   cairo_restore (cr);
 
@@ -2111,7 +2088,8 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
 {
   GtkCellRendererTextPrivate *priv;
   GtkCellRendererText        *celltext;
-  GtkStyle                   *style;
+  GtkStyleContext            *style_context;
+  const PangoFontDescription *font_desc;
   PangoLayout                *layout;
   PangoContext               *context;
   PangoFontMetrics           *metrics;
@@ -2131,7 +2109,7 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   celltext = GTK_CELL_RENDERER_TEXT (cell);
   priv = celltext->priv;
 
-  style = gtk_widget_get_style (widget);
+  style_context = gtk_widget_get_style_context (widget);
 
   gtk_cell_renderer_get_padding (cell, &xpad, NULL);
 
@@ -2144,7 +2122,8 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
 
   /* Fetch the average size of a charachter */
   context = pango_layout_get_context (layout);
-  metrics = pango_context_get_metrics (context, style->font_desc,
+  font_desc = gtk_style_context_get_font (style_context, 0);
+  metrics = pango_context_get_metrics (context, font_desc,
                                        pango_context_get_language (context));
 
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
