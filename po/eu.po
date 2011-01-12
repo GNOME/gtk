@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
 "POT-Creation-Date: 2011-01-10 22:02+0000\n"
-"PO-Revision-Date: 2011-01-12 23:18+0100\n"
+"PO-Revision-Date: 2011-01-12 23:20+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -365,7 +365,7 @@ msgstr "Dokumentazioa"
 
 #: ../gtk/gtkaboutdialog.c:2385
 msgid "Translated by"
-msgstr "Itzulpena"
+msgstr "Itzultzaileak"
 
 #: ../gtk/gtkaboutdialog.c:2390
 msgid "Artwork by"
