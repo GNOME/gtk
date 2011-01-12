@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
 				PreprocessorDefinitions="_DEBUG;$(GtkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -63,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -96,7 +96,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="_DEBUG;$(GtkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -128,7 +128,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\win32"
 				PreprocessorDefinitions="$(GtkDefines)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -137,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib atk-1.0.lib pango-1.0.lib pangocairo-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
+				AdditionalDependencies="atk-1.0.lib pangowin32-1.0.lib imm32.lib winspool.lib comctl32.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)-win32$(GtkDllSuffix).dll"
 				LinkIncremental="2"
 				ModuleDefinitionFile="$(IntDir)\gtk.def"
