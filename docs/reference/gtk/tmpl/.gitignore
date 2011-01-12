@@ -22,6 +22,7 @@ gtkdrawingarea.sgml
 gtkeditable.sgml
 gtkentry.sgml
 gtkentrybuffer.sgml
+gtkenum.sgml
 gtkeventbox.sgml
 gtkexpander.sgml
 gtkfeatures.sgml
@@ -71,6 +72,7 @@ gtktoolbar.sgml
 gtktoolitem.sgml
 gtktooltip.sgml
 gtktreednd.sgml
+gtktreemodel.sgml
 gtktreemodelfilter.sgml
 gtktreeselection.sgml
 gtktreesortable.sgml
