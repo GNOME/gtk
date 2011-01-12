@@ -1050,25 +1050,6 @@ gtk_cell_area_box_dispose (GObject *object)
 }
 
 static void
-reset_orientation_style (GtkCellAreaBox *box)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (box));
-
-  if (box->priv->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VERTICAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-    }
-  else
-    {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VERTICAL);
-    }
-}
-
-static void
 gtk_cell_area_box_set_property (GObject       *object,
                                 guint          prop_id,
                                 const GValue  *value,
@@ -1083,7 +1064,6 @@ gtk_cell_area_box_set_property (GObject       *object,
 
       /* Notify that size needs to be requested again */
       reset_contexts (box);
-      reset_orientation_style (box);
 
       break;
     case PROP_SPACING:

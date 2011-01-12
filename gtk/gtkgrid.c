@@ -187,23 +187,11 @@ gtk_grid_set_orientation (GtkGrid        *grid,
                           GtkOrientation  orientation)
 {
   GtkGridPrivate *priv = grid->priv;
-  GtkStyleContext *context;
 
   if (priv->orientation != orientation)
     {
       priv->orientation = orientation;
-      context = gtk_widget_get_style_context (GTK_WIDGET (grid));
-
-      if (grid->priv->orientation == GTK_ORIENTATION_VERTICAL)
-        {
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_VERTICAL);
-          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-        }
-      else
-        {
-          gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-          gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VERTICAL);
-        }
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
 
       g_object_notify (G_OBJECT (grid), "orientation");
     }

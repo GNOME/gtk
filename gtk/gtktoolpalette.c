@@ -234,25 +234,6 @@ gtk_tool_palette_reconfigured (GtkToolPalette *palette)
 }
 
 static void
-reset_orientation_style (GtkToolPalette *palette)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (palette));
-
-  if (palette->priv->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VERTICAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-    }
-  else
-    {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VERTICAL);
-    }
-}
-
-static void
 gtk_tool_palette_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
@@ -282,7 +263,7 @@ gtk_tool_palette_set_property (GObject      *object,
         if ((guint) g_value_get_enum (value) != palette->priv->orientation)
           {
             palette->priv->orientation = g_value_get_enum (value);
-            reset_orientation_style (palette);
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (palette));
             gtk_tool_palette_reconfigured (palette);
           }
         break;

@@ -415,25 +415,6 @@ gtk_cell_view_get_property (GObject    *object,
 }
 
 static void
-reset_orientation_style (GtkCellView *view)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (view));
-
-  if (view->priv->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_VERTICAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-    }
-  else
-    {
-      gtk_style_context_add_class (context, GTK_STYLE_CLASS_HORIZONTAL);
-      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_VERTICAL);
-    }
-}
-
-static void
 gtk_cell_view_set_property (GObject      *object,
                             guint         param_id,
                             const GValue *value,
@@ -450,7 +431,7 @@ gtk_cell_view_set_property (GObject      *object,
       if (view->priv->context)
 	gtk_cell_area_context_reset (view->priv->context);
 
-      reset_orientation_style (view);
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
       break;
     case PROP_BACKGROUND:
       {
