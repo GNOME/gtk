@@ -146,8 +146,9 @@ def copy_properties(node, props, prop_dict):
 
 class GtkBuilderConverter(object):
 
-    def __init__(self, skip_windows, root):
+    def __init__(self, skip_windows, target_version, root):
         self.skip_windows = skip_windows
+        self.target_version = target_version
         self.root = root
         self.root_objects = []
         self.objects = {}
@@ -295,6 +296,25 @@ class GtkBuilderConverter(object):
                 self._convert_menu(node, popup=True)
         elif klass in WINDOWS and self.skip_windows:
             self._remove_window(node)
+
+        if self.target_version == "3.0":
+            if klass == "GtkComboBoxEntry":
+                node.setAttribute("class","GtkComboBox")
+                prop = self._dom.createElement("property")
+                prop.setAttribute("name", "has-entry")
+                prop.appendChild(self._dom.createTextNode("True"))
+                node.appendChild(prop)
+            elif klass == "GtkDialog":
+                for child in node.childNodes:
+                    if child.nodeType != Node.ELEMENT_NODE:
+                        continue
+                    if child.tagName != 'property':
+                        continue
+                    if (child.getAttribute("name") not in ("has-separator", "has_separator")):
+                        continue;
+                    node.removeChild(child)
+                    break
+
         self._default_widget_converter(node)
 
     def _default_widget_converter(self, node):
@@ -732,7 +752,10 @@ def usage():
 def main(args):
     try:
         opts, args = getopt.getopt(args[1:], "hwr:",
-                                   ["help", "skip-windows", "root="])
+                                   ["help",
+                                    "skip-windows",
+                                    "target-version=",
+                                    "root="])
     except getopt.GetoptError:
         usage()
         return 2
@@ -746,6 +769,7 @@ def main(args):
     skip_windows = False
     split = False
     root = None
+    target_version = "3.0"
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
@@ -754,8 +778,11 @@ def main(args):
             root = a
         elif o in ("-w", "--skip-windows"):
             skip_windows = True
+        elif o in ("-t", "--target-version"):
+            target_version = a
 
     conv = GtkBuilderConverter(skip_windows=skip_windows,
+                               target_version=target_version,
                                root=root)
     conv.parse_file(input_filename)
 
