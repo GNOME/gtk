@@ -504,6 +504,7 @@ gtk_menu_shell_realize (GtkWidget *widget)
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  GtkStyleContext *context;
 
   gtk_widget_set_realized (widget, TRUE);
 
@@ -531,8 +532,8 @@ gtk_menu_shell_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   gdk_window_set_user_data (window, widget);
 
-  gtk_widget_style_attach (widget);
-  gtk_style_set_background (gtk_widget_get_style (widget), window, GTK_STATE_NORMAL);
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_set_background (context, window);
 }
 
 void
@@ -945,7 +946,7 @@ gtk_menu_shell_enter_notify (GtkWidget        *widget,
 
           if (event->detail != GDK_NOTIFY_INFERIOR)
             {
-              if (gtk_widget_get_state (menu_item) != GTK_STATE_PRELIGHT)
+              if ((gtk_widget_get_state_flags (menu_item) & GTK_STATE_FLAG_PRELIGHT) == 0)
                 gtk_menu_shell_select_item (menu_shell, menu_item);
 
               /* If any mouse button is down, and there is a submenu
@@ -1015,7 +1016,7 @@ gtk_menu_shell_leave_notify (GtkWidget        *widget,
           (menu_item->priv->submenu == NULL))
         {
           if ((event->detail != GDK_NOTIFY_INFERIOR) &&
-              (gtk_widget_get_state (GTK_WIDGET (menu_item)) != GTK_STATE_NORMAL))
+              (gtk_widget_get_state_flags (GTK_WIDGET (menu_item)) & GTK_STATE_FLAG_PRELIGHT) != 0)
             {
               gtk_menu_shell_deselect (menu_shell);
             }
