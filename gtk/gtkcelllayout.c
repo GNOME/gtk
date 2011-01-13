@@ -94,7 +94,7 @@
 #include "gtkintl.h"
 
 #define warn_no_cell_area(func)					\
-  g_warning ("%s: Called but no GtkCellArea is available yet", func)
+  g_critical ("%s: Called but no GtkCellArea is available yet", func)
 
 typedef GtkCellLayoutIface GtkCellLayoutInterface;
 G_DEFINE_INTERFACE (GtkCellLayout, gtk_cell_layout, G_TYPE_OBJECT);
