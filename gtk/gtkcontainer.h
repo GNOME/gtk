@@ -62,8 +62,6 @@ struct _GtkContainerClass
 {
   GtkWidgetClass parent_class;
 
-  unsigned int handle_border_width : 1;
-
   void    (*add)       		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
   void    (*remove)    		(GtkContainer	 *container,
@@ -90,6 +88,11 @@ struct _GtkContainerClass
 				 GParamSpec      *pspec);
   GtkWidgetPath * (*get_path_for_child) (GtkContainer *container,
                                          GtkWidget    *child);
+
+
+  /*< private >*/
+
+  unsigned int _handle_border_width : 1;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
