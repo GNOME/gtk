@@ -1,4 +1,26 @@
-Overview of Changes from GTK+ 2.99.1 to 2.99.2
+Overview of Changes in GTK+ 2.99.2
+==================================
+
+* More widget are using GtkStyleContext directly:
+ GtkToolItemGroup, GtkMenuItem, GtkImageMenuItem, GtkMenu,
+ GtkTearoffMenuItem, GtkCheckMenuItem, GtkMenuShell
+
+* gtk-builder-convert now accepts a --target-version option
+
+* Bug fixes:
+ 637965 GtkTreeCellDataFunc called with a wrong column arguments
+ 639127 Misc Win32 GDK building problems
+ 639157 GtkOrientable should add/remove "horizontal" and "vert...
+ 639209 Allow toggling the GtkSwitch by clicking the handle
+ 639286 include gtk/gtktextattributes.h not installed
+ 639327 gtk-builder-convert needs to convert gtkcomboboxentry...
+
+* Translation updates:
+ Arabic
+ Basque
+ Hebrew
+
+Overview of Changes from GTK+ 2.99.0 to 2.99.1
 ==============================================
 
 * More widgets are using GtkStyleContext directly:
