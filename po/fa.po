@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&component=general\n"
 "POT-Creation-Date: 2010-12-19 09:25+0000\n"
-"PO-Revision-Date: 2010-12-19 13:26+0330\n"
+"PO-Revision-Date: 2011-01-13 11:34+0330\n"
 "Last-Translator: Mahyar Moghimi <mahyar.moqimi@gmail.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
 "MIME-Version: 1.0\n"
@@ -2569,7 +2569,7 @@ msgstr "_کوچک نمایی"
 #: ../gtk/gtkswitch.c:531
 msgctxt "switch"
 msgid "ON"
-msgstr "U+2759"
+msgstr "❙"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -2579,7 +2579,7 @@ msgstr "U+2759"
 #: ../gtk/gtkswitch.c:552
 msgctxt "switch"
 msgid "OFF"
-msgstr "U+25CB"
+msgstr "○"
 
 #: ../gtk/gtkswitch.c:943
 msgctxt "light switch widget"
