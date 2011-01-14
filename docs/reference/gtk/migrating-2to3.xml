@@ -747,6 +747,49 @@ on_alpha_screen_changed (GtkWindow *window,
   </section>
 
   <section>
+    <title>Backend-specific code</title>
+    <para>
+      In GTK+ 2.x, GDK could only be compiled for one backend at a time,
+      and the %GDK_WINDOWING_X11 or %GDK_WINDOWING_WIN32 macros could
+      be used to find out which one you are dealing with:
+      <informalexample><programlisting>
+#ifdef GDK_WINDOWING_X11
+      if (timestamp != GDK_CURRENT_TIME)
+        gdk_x11_window_set_user_time (gdk_window, timestamp);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+        /* ... win32 specific code ... */
+#endif
+      </programlisting></informalexample>
+      In GTK+ 3, GDK can be built with multiple backends, and currently
+      used backend has to be determined at runtime, typically using
+      type-check macros on a #GdkDisplay or #GdkWindow. You still need
+      to use the #GDK_WINDOWING macros to only compile code referring
+      to supported backends:
+      <informalexample><programlisting>
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_X11_DISPLAY (display))
+        {
+          if (timestamp != GDK_CURRENT_TIME)
+            gdk_x11_window_set_user_time (gdk_window, timestamp);
+        }
+      else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+      if (GDK_IS_WIN32_DISPLAY (display))
+        {
+          /* ... win32 specific code ... */
+        }
+      else
+#endif
+       {
+         g_warning ("Unsupported GDK backend");
+       }
+      </programlisting></informalexample>
+    </para>
+  </section>
+
+  <section>
     <title>The GtkWidget::draw signal</title>
     <para>
       The GtkWidget #GtkWidget::expose-event signal has been replaced by
