@@ -5,7 +5,7 @@ wimp = ms-windows
 endif
 
 # the theme engines need to be ported to GtkThemingEngine
-# SUBDIRS = $(wimp) pixbuf
+SUBDIRS = $(wimp) pixbuf
 
 DIST_SUBDIRS = ms-windows pixbuf
 
