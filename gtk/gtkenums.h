@@ -648,6 +648,16 @@ typedef enum
   GTK_IM_STATUS_NONE
 } GtkIMStatusStyle;
 
+/**
+ * GtkPackDirection:
+ * @GTK_PACK_DIRECTION_LTR: Widgets are packed left-to-right
+ * @GTK_PACK_DIRECTION_RTL: Widgets are packed right-to-left
+ * @GTK_PACK_DIRECTION_TTB: Widgets are packed top-to-bottom
+ * @GTK_PACK_DIRECTION_BTT: Widgets are packed bottom-to-top
+ *
+ * Determines how widgets should be packed insided menubars
+ * and menuitems contained in menubars.
+ */
 typedef enum
 {
   GTK_PACK_DIRECTION_LTR,
