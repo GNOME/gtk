@@ -458,7 +458,7 @@ How do I draw text ?
 
 <answer>
 <para>
-To draw a piece of text, use a Pango layout and gdk_draw_layout().
+To draw a piece of text, use a Pango layout and pango_cairo_show_layout().
 <informalexample>
 <programlisting>
  layout = gtk_widget_create_pango_layout (widget, text);
