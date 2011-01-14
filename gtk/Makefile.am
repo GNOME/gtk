@@ -969,7 +969,9 @@ introspection_files = \
     gtktypebuiltins.c
 
 Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.0.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
-Gtk_3_0_gir_SCANNERFLAGS = --warn-all --add-include-path=$(top_builddir)/gdk
+Gtk_3_0_gir_SCANNERFLAGS = 			\
+	--add-include-path=$(top_builddir)/gdk	\
+	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 if USE_X11
 Gtk_3_0_gir_SCANNERFLAGS += --add-include-path=$(top_builddir)/gdk/x11
 endif

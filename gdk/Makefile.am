@@ -185,7 +185,8 @@ introspection_files = 		\
         gdkenumtypes.h
 
 Gdk-3.0.gir: libgdk-3.0.la Makefile
-Gdk_3_0_gir_SCANNERFLAGS = --warn-all --c-include="gdk/gdk.h"
+Gdk_3_0_gir_SCANNERFLAGS = 	\
+	--c-include="gdk/gdk.h"
 Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
 Gdk_3_0_gir_LIBS = libgdk-3.0.la
 Gdk_3_0_gir_FILES = $(introspection_files)
@@ -234,7 +235,10 @@ x11_introspection_files = 		\
 	x11/gdkx11window.h
 
 GdkX11-3.0.gir: libgdk-3.0.la Gdk-3.0.gir Makefile
-GdkX11_3_0_gir_SCANNERFLAGS = --warn-all --strip-prefix=Gdk --c-include="gdk/gdkx.h"
+GdkX11_3_0_gir_SCANNERFLAGS = 		\
+	--strip-prefix=Gdk		\
+	--c-include="gdk/gdkx.h"	\
+	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
 GdkX11_3_0_gir_LIBS = libgdk-3.0.la
 GdkX11_3_0_gir_FILES = $(x11_introspection_files)
