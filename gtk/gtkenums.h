@@ -245,7 +245,15 @@ typedef enum
   GTK_JUSTIFY_FILL
 } GtkJustification;
 
-/* Menu keyboard movement types */
+/**
+ * GtkMenuDirectionType:
+ * @GTK_MENU_DIR_PARENT: To the parent menu shell
+ * @GTK_MENU_DIR_CHILD: To the submenu, if any, associated with the item
+ * @GTK_MENU_DIR_NEXT: To the next menu item
+ * @GTK_MENU_DIR_PREV: To the previous menu item
+ *
+ * An enumeration representing directional movements within a menu.
+ */
 typedef enum
 {
   GTK_MENU_DIR_PARENT,

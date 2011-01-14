@@ -24,6 +24,19 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkmenushell
+ * @Title: GtkMenuShell
+ * @Short_description: A base class for menu objects
+ *
+ * A #GtkMenuShell is the abstract base class used to derive the
+ * #GtkMenu and #GtkMenuBar subclasses.
+ *
+ * A #GtkMenuShell is a container of #GtkMenuItem objects arranged
+ * in a list which can be navigated, selected, and activated by the
+ * user to perform application functions. A #GtkMenuItem can have a
+ * submenu associated with it, allowing for nested hierarchical menus.
+ */
 #include "config.h"
 
 #include "gtkbindings.h"
@@ -231,6 +244,12 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
   klass->insert = gtk_menu_shell_real_insert;
   klass->move_selected = gtk_menu_shell_real_move_selected;
 
+  /**
+   * GtkMenuShell::deactivate:
+   * @menushell: the object which received the signal
+   *
+   * This signal is emitted when a menu shell is deactivated.
+   */
   menu_shell_signals[DEACTIVATE] =
     g_signal_new (I_("deactivate"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -240,6 +259,13 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkMenuShell::selection-done:
+   * @menushell: the object which received the signal
+   *
+   * This signal is emitted when a selection has been
+   * completed within a menu shell.
+   */
   menu_shell_signals[SELECTION_DONE] =
     g_signal_new (I_("selection-done"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -249,6 +275,14 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkMenuShell::move-current:
+   * @menushell: the object which received the signal
+   * @direction: the direction to move
+   *
+   * An keybinding signal which moves the current menu item
+   * in the direction specified by @direction.
+   */
   menu_shell_signals[MOVE_CURRENT] =
     g_signal_new (I_("move-current"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -259,6 +293,14 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_MENU_DIRECTION_TYPE);
 
+  /**
+   * GtkMenuShell::activate-current:
+   * @menushell: the object which received the signal
+   * @force_hide: if %TRUE, hide the menu after activating the menu item
+   *
+   * An action signal that activates the current menu item within
+   * the menu shell.
+   */
   menu_shell_signals[ACTIVATE_CURRENT] =
     g_signal_new (I_("activate-current"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -269,6 +311,13 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   G_TYPE_NONE, 1,
                   G_TYPE_BOOLEAN);
 
+  /**
+   * GtkMenuShell::cancel:
+   * @menushell: the object which received the signal
+   *
+   * An action signal which cancels the selection within the menu shell.
+   * Causes the #GtkMenuShell::selection-done signal to be emitted.
+   */
   menu_shell_signals[CANCEL] =
     g_signal_new (I_("cancel"),
                   G_OBJECT_CLASS_TYPE (object_class),
@@ -278,6 +327,14 @@ gtk_menu_shell_class_init (GtkMenuShellClass *klass)
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkMenuShell::cycle-focus:
+   * @menushell: the object which received the signal
+   * @direction: the direction to cycle in
+   *
+   * A keybinding signal which moves the focus in the
+   * given @direction.
+   */
   menu_shell_signals[CYCLE_FOCUS] =
     g_signal_new_class_handler (I_("cycle-focus"),
                                 G_OBJECT_CLASS_TYPE (object_class),
@@ -447,6 +504,14 @@ gtk_menu_shell_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_menu_shell_parent_class)->dispose (object);
 }
 
+/**
+ * gtk_menu_shell_append:
+ * @menu_shell: a #GtkMenuShell
+ * @child: The #GtkMenuItem to add
+ *
+ * Adds a new #GtkMenuItem to the end of the menu shell's
+ * item list.
+ */
 void
 gtk_menu_shell_append (GtkMenuShell *menu_shell,
                        GtkWidget    *child)
@@ -454,6 +519,14 @@ gtk_menu_shell_append (GtkMenuShell *menu_shell,
   gtk_menu_shell_insert (menu_shell, child, -1);
 }
 
+/**
+ * gtk_menu_shell_prepend:
+ * @menu_shell: a #GtkMenuShell
+ * @child: The #GtkMenuItem to add
+ *
+ * Adds a new #GtkMenuItem to the beginning of the menu shell's
+ * item list.
+ */
 void
 gtk_menu_shell_prepend (GtkMenuShell *menu_shell,
                         GtkWidget    *child)
@@ -461,6 +534,16 @@ gtk_menu_shell_prepend (GtkMenuShell *menu_shell,
   gtk_menu_shell_insert (menu_shell, child, 0);
 }
 
+/**
+ * gtk_menu_shell_insert:
+ * @menu_shell: a #GtkMenuShell
+ * @child: The #GtkMenuItem to add
+ * @position: The position in the item list where @child
+ *     is added. Positions are numbered from 0 to n-1
+ *
+ * Adds a new #GtkMenuItem to the menu shell's item list
+ * at the position indicated by @position.
+ */
 void
 gtk_menu_shell_insert (GtkMenuShell *menu_shell,
                        GtkWidget    *child,
@@ -489,6 +572,15 @@ gtk_menu_shell_real_insert (GtkMenuShell *menu_shell,
   gtk_widget_set_parent (child, GTK_WIDGET (menu_shell));
 }
 
+/**
+ * gtk_menu_shell_deactivate:
+ * @menu_shell: a #GtkMenuShell
+ *
+ * Deactivates the menu shell.
+ *
+ * Typically this results in the menu shell being erased
+ * from the screen.
+ */
 void
 gtk_menu_shell_deactivate (GtkMenuShell *menu_shell)
 {
@@ -1173,6 +1265,13 @@ gtk_menu_shell_get_item (GtkMenuShell *menu_shell,
 
 /* Handlers for action signals */
 
+/**
+ * gtk_menu_shell_select_item:
+ * @menu_shell: a #GtkMenuShell
+ * @menu_item: The #GtkMenuItem to select
+ *
+ * Selects the menu item from the menu shell.
+ */
 void
 gtk_menu_shell_select_item (GtkMenuShell *menu_shell,
                             GtkWidget    *menu_item)
@@ -1232,6 +1331,13 @@ gtk_menu_shell_real_select_item (GtkMenuShell *menu_shell,
     gtk_widget_activate (priv->active_menu_item);
 }
 
+/**
+ * gtk_menu_shell_deselect:
+ * @menu_shell: a #GtkMenuShell
+ *
+ * Deselects the currently selected item from the menu shell,
+ * if any.
+ */
 void
 gtk_menu_shell_deselect (GtkMenuShell *menu_shell)
 {
@@ -1247,6 +1353,15 @@ gtk_menu_shell_deselect (GtkMenuShell *menu_shell)
     }
 }
 
+/**
+ * gtk_menu_shell_activate_item:
+ * @menu_shell: a #GtkMenuShell
+ * @menu_item: the #GtkMenuItem to activate
+ * @force_deactivate: if %TRUE, force the deactivation of the
+ *     menu shell after the menu item is activated
+ *
+ * Activates the menu item within the menu shell.
+ */
 void
 gtk_menu_shell_activate_item (GtkMenuShell *menu_shell,
                               GtkWidget    *menu_item,
