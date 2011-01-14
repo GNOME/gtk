@@ -47,6 +47,22 @@
  *
  */
 
+/**
+ * SECTION:GtkTextTag
+ * @Title: GtkTextTag
+ * @Short_description: A tag that can be applied to text in a GtkTextBuffer
+ *
+ * You may wish to begin by reading the <link linkend="TextWidget">text widget
+ * conceptual overview</link> which gives an overview of all the objects and
+ * data types related to the text widget and how they work together.
+ *
+ * Tags should be in the #GtkTextTagTable for a given #GtkTextBuffer
+ * before using them with that buffer.
+ *
+ * gtk_text_buffer_create_tag() is the best way to create tags.
+ * See <application>gtk3-demo</application> for numerous examples.
+ */
+
 #include "config.h"
 
 #include <stdlib.h>

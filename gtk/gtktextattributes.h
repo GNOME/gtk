@@ -67,6 +67,14 @@ typedef struct _GtkTextAttributes GtkTextAttributes;
 
 typedef struct _GtkTextAppearance GtkTextAppearance;
 
+/**
+ * GtkTextAttributes:
+ *
+ * Using #GtkTextAttributes directly should rarely be necessary.
+ * It's primarily useful with gtk_text_iter_get_attributes().
+ * As with most GTK+ structs, the fields in this struct should only
+ * be read, never modified directly.
+ */
 struct _GtkTextAppearance
 {
   /*< public >*/

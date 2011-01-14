@@ -619,7 +619,18 @@ typedef enum
   GTK_WINDOW_POPUP
 } GtkWindowType;
 
-/* Text wrap */
+/**
+ * GtkWrapMode:
+ * @GTK_WRAP_NONE: do not wrap lines; just make the text area wider
+ * @GTK_WRAP_CHAR: wrap text, breaking lines anywhere the cursor can
+ *     appear (between characters, usually - if you want to be technical,
+ *     between graphemes, see pango_get_log_attrs())
+ * @GTK_WRAP_WORD: wrap text, breaking lines in between words
+ * @GTK_WRAP_WORD_CHAR: wrap text, breaking lines in between words, or if
+ *     that is not enough, also between graphemes
+ *
+ * Describes a type of line wrapping.
+ */
 typedef enum
 {
   GTK_WRAP_NONE,
