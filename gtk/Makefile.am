@@ -984,6 +984,7 @@ Gtk_3_0_gir_CFLAGS = \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 Gtk_3_0_gir_LIBS = libgtk-3.0.la
 Gtk_3_0_gir_FILES = $(introspection_files)
+Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
 INTROSPECTION_GIRS += Gtk-3.0.gir
 
 girdir = $(datadir)/gir-1.0

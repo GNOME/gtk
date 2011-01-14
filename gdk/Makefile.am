@@ -191,6 +191,7 @@ Gdk_3_0_gir_INCLUDES = Gio-2.0 GdkPixbuf-2.0 Pango-1.0 cairo-1.0
 Gdk_3_0_gir_LIBS = libgdk-3.0.la
 Gdk_3_0_gir_FILES = $(introspection_files)
 Gdk_3_0_gir_CFLAGS = $(INCLUDES)
+Gdk_3_0_gir_EXPORT_PACKAGES = gdk-3.0
 INTROSPECTION_GIRS += Gdk-3.0.gir
 
 if USE_X11
@@ -243,6 +244,7 @@ GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
 GdkX11_3_0_gir_LIBS = libgdk-3.0.la
 GdkX11_3_0_gir_FILES = $(x11_introspection_files)
 GdkX11_3_0_gir_CFLAGS = $(INCLUDES) -L$(top_builddir)/gdk
+GdkX11_3_0_gir_EXPORT_PACKAGES = gdk-x11-3.0
 INTROSPECTION_GIRS += GdkX11-3.0.gir
 
 endif # USE_X11
