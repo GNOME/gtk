@@ -17,6 +17,21 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gtkprintjob
+ * @Title: GtkPrintJob
+ * @Short_description: Represents a print job
+ *
+ * A #GtkPrintJob object represents a job that is sent to a
+ * printer. You only need to deal directly with print jobs if
+ * you use the non-portable #GtkPrintUnixDialog API.
+ *
+ * Use gtk_print_job_get_surface() to obtain the cairo surface
+ * onto which the pages must be drawn. Use gtk_print_job_send()
+ * to send the finished job to the printer. If you don't use cairo
+ * #GtkPrintJob also supports printing of manually generated postscript,
+ * via gtk_print_job_set_source_file().
+ */
 #include "config.h"
 #include <stdlib.h>
 #include <string.h>
