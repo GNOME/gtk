@@ -556,7 +556,24 @@
       Typically, the provider will be a #GtkCssProvider, which parse CSS
       information from a file or from a string.
     </para>
+    <example>
+      <title>Using a custom GtkStyleProvider</title>
+      <programlisting>
+        GtkStyleContext *context;
+        GtkCssProvider *provider;
 
+        context = gtk_widget_get_style_context (widget);
+        provider = gtk_css_provider_new ();
+        gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
+                                         ".frame1 {\n"
+                                         "   border-image: url('gradient1.png') 10 10 10 10 stretch;\n"
+                                         "}\n", -1, NULL);
+        gtk_style_context_add_provider (context,
+                                        GTK_STYLE_PROVIDER (provider),
+                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+      </programlisting>
+    </example>
     <para>
       Notice that you can also get style information from custom resources
       by implementing the #GtkStyleProvider interface yourself. This is
