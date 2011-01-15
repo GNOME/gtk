@@ -1576,8 +1576,8 @@ gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
  * @iter: (out) (allow-none): An unset #GtkTreeIter to set the new row, or %NULL.
  * @parent: (allow-none): A valid #GtkTreeIter, or %NULL
  * @position: position to insert the new row
- * @columns: an array of column numbers
- * @values: an array of GValues
+ * @columns: (array length=n_values): an array of column numbers
+ * @values: (array length=n_values): an array of GValues
  * @n_values: the length of the @columns and @values arrays
  *
  * A variant of gtk_tree_store_insert_with_values() which takes
@@ -2248,7 +2248,7 @@ gtk_tree_store_reorder_func (gconstpointer a,
  * gtk_tree_store_reorder:
  * @tree_store: A #GtkTreeStore.
  * @parent: A #GtkTreeIter.
- * @new_order: an array of integers mapping the new position of each child
+ * @new_order: (array): an array of integers mapping the new position of each child
  *      to its old position before the re-ordering,
  *      i.e. @new_order<literal>[newpos] = oldpos</literal>.
  *
