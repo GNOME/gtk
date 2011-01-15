@@ -547,23 +547,24 @@ How do I create a transparent toplevel window ?
 <answer>
 <para>
 To make a window transparent, it needs to use a visual which supports that.
-This is done by getting the RGBA colormap of the screen with
-gdk_screen_get_rgba_colormap() and setting it on the window. Note that
-gdk_screen_get_rgba_colormap() will return %NULL if transparent windows
-are not supported on the screen; also note that this may change from
-screen to screen, so it needs to be repeated whenever the window is moved
-to a different screen.
+This is done by getting the RGBA visual of the screen with
+gdk_screen_get_rgba_visual() and setting it on the window. Note that
+gdk_screen_get_rgba_visual() will return %NULL if transparent windows
+are not supported on the screen, you should fall back to
+gdk_screen_get_system_visual() in that case. Additionally, note that this
+will change from screen to screen, so it needs to be repeated whenever the
+window is moved to a different screen.
 <informalexample><programlisting>
-GdkColormap *colormap;
+GdkVisual *visual;
 
-colormap = gdk_screen_get_rgba_colormap (screen);
-if (!colormap)
-  colormap = gdk_screen_get_rgb_colormap (screen);
+visual = gdk_screen_get_rgba_visual (screen);
+if (visual == NULL)
+  visual = gdk_screen_get_system_visual (screen);
 
-gtk_widget_set_colormap (widget, colormap);
+gtk_widget_set_visual (GTK_WIDGET (window), visual);
 </programlisting></informalexample>
-One possibility to fill the alpha channel on the window is to use
-gdk_draw_rgb_32_image().
+To fill the alpha channel on the window simply use cairos
+RGBA drawing capabilities.
 </para>
 <para>
 Note that the presence of an RGBA visual is no guarantee that the
