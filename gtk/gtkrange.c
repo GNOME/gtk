@@ -508,7 +508,7 @@ gtk_range_class_init (GtkRangeClass *class)
                                    PROP_ROUND_DIGITS,
                                    g_param_spec_int ("round-digits",
                                                      P_("Round Digits"),
-                                                     P_("The number of widgets to round the value to."),
+                                                     P_("The number of digits to round the value to."),
                                                      -1,
                                                      G_MAXINT,
                                                      -1,
