@@ -242,6 +242,13 @@ AC_ARG_ENABLE(rebuilds,
                               [disable all source autogeneration rules])],,
               [enable_rebuilds=yes])
 
+AC_ARG_ENABLE(gtk2-dependency,
+              AC_HELP_STRING([--enable-gtk2-dependency],
+                             [Do not build gtk-update-icon-cache and other shared tools]),,
+              [enable_gtk2_dependency=no])
+
+AM_CONDITIONAL(BUILD_ICON_CACHE, [test "x$enable_gtk2_dependency" = xno])
+
 AC_ARG_ENABLE(xkb,
               [AC_HELP_STRING([--enable-xkb],
                               [support XKB extension [default=maybe]])],,
@@ -875,12 +882,14 @@ dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 
-if test $cross_compiling = yes; then
+if test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes; then
   AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
   if test x$GTK_UPDATE_ICON_CACHE = xno; then
     REBUILD_PNGS=#
   fi
 fi
+
+AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes])
 
 AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
 

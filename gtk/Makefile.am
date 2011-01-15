@@ -1000,8 +1000,11 @@ endif
 # Installed tools
 #
 bin_PROGRAMS = \
-	gtk-query-immodules-3.0 \
-	gtk-update-icon-cache
+	gtk-query-immodules-3.0
+
+if BUILD_ICON_CACHE
+bin_PROGRAMS += gtk-update-icon-cache
+endif
 
 bin_SCRIPTS = gtk-builder-convert
 
@@ -1042,8 +1045,10 @@ gtk_query_immodules_3_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_3_0_LDADD = $(LDADDS)
 gtk_query_immodules_3_0_SOURCES = queryimmodules.c
 
+if BUILD_ICON_CACHE
 gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
 gtk_update_icon_cache_SOURCES = updateiconcache.c
+endif
 
 .PHONY: files test test-debug
 
@@ -1336,11 +1341,10 @@ stamp-icons: $(STOCK_ICONS)
 	) done 								\
 	&& touch stamp-icons
 
-if CROSS_COMPILING
+if USE_EXTERNAL_ICON_CACHE
 gtk_update_icon_cache_program = $(GTK_UPDATE_ICON_CACHE)
 else
-gtk_update_icon_cache_program =							\
-	   ./gtk-update-icon-cache
+gtk_update_icon_cache_program = ./gtk-update-icon-cache
 endif
 
 gtkbuiltincache.h: @REBUILD@ stamp-icons
