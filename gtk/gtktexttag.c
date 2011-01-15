@@ -48,7 +48,7 @@
  */
 
 /**
- * SECTION:GtkTextTag
+ * SECTION:gtktexttag
  * @Title: GtkTextTag
  * @Short_description: A tag that can be applied to text in a GtkTextBuffer
  *
