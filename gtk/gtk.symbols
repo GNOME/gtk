@@ -3431,6 +3431,8 @@ gtk_range_set_update_policy
 #endif
 gtk_range_set_upper_stepper_sensitivity
 gtk_range_set_value
+gtk_range_set_round_digits
+gtk_range_get_round_digits
 #endif
 #endif
 
