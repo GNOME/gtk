@@ -1,6 +1,8 @@
 # Files from the Gtk distribution which have already been
 # marked to allow runtime translation of messages
 gdk/gdk.c
+gdk/gdkapplaunchcontext.c
+gdk/gdkcursor.c
 gdk/gdkdevice.c
 gdk/gdkdevicemanager.c
 gdk/gdkdisplaymanager.c
@@ -13,6 +15,7 @@ gdk/x11/gdkapplaunchcontext-x11.c
 gdk/x11/gdkdevice-xi.c
 gdk/x11/gdkdevice-xi2.c
 gdk/x11/gdkdevicemanager-xi.c
+gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkmain-x11.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
@@ -27,6 +30,7 @@ gtk/gtkalignment.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
 gtk/gtkanimationdescription.c
+gtk/gtkappchooser.c
 gtk/gtkappchooserbutton.c
 gtk/gtkappchooserdialog.c
 gtk/gtkappchooserwidget.c
@@ -40,6 +44,9 @@ gtk/gtkbuilder.c
 gtk/gtkbuilderparser.c
 gtk/gtkbutton.c
 gtk/gtkcalendar.c
+gtk/gtkcellarea.c
+gtk/gtkcellareabox.c
+gtk/gtkcellareacontext.c
 gtk/gtkcelleditable.c
 gtk/gtkcelllayout.c
 gtk/gtkcellrendereraccel.c
@@ -87,6 +94,7 @@ gtk/gtkfixed.c
 gtk/gtkfontbutton.c
 gtk/gtkfontsel.c
 gtk/gtkframe.c
+gtk/gtkgrid.c
 gtk/gtkhandlebox.c
 gtk/gtkhbbox.c
 gtk/gtkhbox.c
@@ -124,6 +132,7 @@ gtk/gtkmountoperation.c
 gtk/gtkmountoperation-stub.c
 gtk/gtkmountoperation-x11.c
 gtk/gtknotebook.c
+gtk/gtknumerableicon.c
 gtk/gtkorientable.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
@@ -154,6 +163,7 @@ gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkscalebutton.c
 gtk/gtkscale.c
+gtk/gtkscrollable.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
 gtk/gtkselection.c
