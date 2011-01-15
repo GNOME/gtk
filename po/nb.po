@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.92.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-12 10:50+0100\n"
-"PO-Revision-Date: 2011-01-12 10:54+0100\n"
+"POT-Creation-Date: 2011-01-15 12:07+0100\n"
+"PO-Revision-Date: 2011-01-15 12:07+0100\n"
 "Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "Language: nn\n"
@@ -488,7 +488,9 @@ msgstr "Ingen tilgjengelige programmer for åpning av «%s»-filer"
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
-msgstr "Klikk på «Vis andre programmer» for flere alternativer, eller «Finn programmer på nettet» for å installere et nytt program"
+msgstr ""
+"Klikk på «Vis andre programmer» for flere alternativer, eller «Finn "
+"programmer på nettet» for å installere et nytt program"
 
 #: ../gtk/gtkappchooserdialog.c:428
 msgid "Forget association"
@@ -638,7 +640,7 @@ msgstr "Ugyldig"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:417 ../gtk/gtkcellrendereraccel.c:674
+#: ../gtk/gtkcellrendereraccel.c:417 ../gtk/gtkcellrendereraccel.c:730
 msgid "New accelerator..."
 msgstr "Ny hurtigtast …"
 
@@ -857,23 +859,23 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8806 ../gtk/gtktextview.c:8227
+#: ../gtk/gtkentry.c:8755 ../gtk/gtktextview.c:8228
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8820 ../gtk/gtktextview.c:8241
+#: ../gtk/gtkentry.c:8769 ../gtk/gtktextview.c:8242
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10224
+#: ../gtk/gtkentry.c:10173
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock og Num Lock er på"
 
-#: ../gtk/gtkentry.c:10226
+#: ../gtk/gtkentry.c:10175
 msgid "Num Lock is on"
 msgstr "Num Lock er på"
 
-#: ../gtk/gtkentry.c:10228
+#: ../gtk/gtkentry.c:10177
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -1467,8 +1469,17 @@ msgstr "Kan ikke avslutte prosess med PID %d: %s"
 msgid "Page %u"
 msgstr "Side %u"
 
-#: ../gtk/gtkpagesetup.c:648 ../gtk/gtkpapersize.c:838
-#: ../gtk/gtkpapersize.c:880
+#. Translators: the format here is used to build the string that will be rendered
+#. * in the number emblem.
+#.
+#: ../gtk/gtknumerableicon.c:481
+#, c-format
+msgctxt "Number format"
+msgid "%d"
+msgstr "%d"
+
+#: ../gtk/gtkpagesetup.c:648 ../gtk/gtkpapersize.c:847
+#: ../gtk/gtkpapersize.c:889
 msgid "Not a valid page setup file"
 msgstr "Ikke en gyldig fil for sideoppsett"
 
@@ -2633,7 +2644,7 @@ msgstr "Zoom _ut"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:304 ../gtk/gtkswitch.c:353 ../gtk/gtkswitch.c:544
+#: ../gtk/gtkswitch.c:313 ../gtk/gtkswitch.c:362 ../gtk/gtkswitch.c:553
 msgctxt "switch"
 msgid "ON"
 msgstr "PÅ"
@@ -2641,17 +2652,17 @@ msgstr "PÅ"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:312 ../gtk/gtkswitch.c:354 ../gtk/gtkswitch.c:560
+#: ../gtk/gtkswitch.c:321 ../gtk/gtkswitch.c:363 ../gtk/gtkswitch.c:569
 msgctxt "switch"
 msgid "OFF"
 msgstr "AV"
 
-#: ../gtk/gtkswitch.c:959
+#: ../gtk/gtkswitch.c:968
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Bryter"
 
-#: ../gtk/gtkswitch.c:960
+#: ../gtk/gtkswitch.c:969
 msgid "Switches between on and off states"
 msgstr "Bytter mellom av/på tilstand"
 
