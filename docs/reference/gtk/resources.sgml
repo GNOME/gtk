@@ -2,7 +2,7 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-resources" revision="5 Sept 2001">
+<refentry id="gtk-resources">
 <refmeta>
 <refentrytitle>Mailing lists and bug reports</refentrytitle>
 <manvolnum>3</manvolnum>
