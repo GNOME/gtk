@@ -2482,9 +2482,11 @@ gtk_range_set_adjustment
 gtk_range_get_inverted
 gtk_range_set_inverted
 gtk_range_get_value
+gtk_range_set_value
 gtk_range_set_increments
 gtk_range_set_range
-gtk_range_set_value
+gtk_range_get_round_digits
+gtk_range_set_round_digits
 GtkSensitivityType
 gtk_range_set_lower_stepper_sensitivity
 gtk_range_get_lower_stepper_sensitivity

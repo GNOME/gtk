@@ -143,6 +143,9 @@ gboolean           gtk_range_get_restrict_to_fill_level    (GtkRange      *range
 void               gtk_range_set_fill_level                (GtkRange      *range,
                                                             gdouble        fill_level);
 gdouble            gtk_range_get_fill_level                (GtkRange      *range);
+void               gtk_range_set_round_digits              (GtkRange      *range,
+                                                            gint           round_digits);
+gint                gtk_range_get_round_digits              (GtkRange      *range);
 
 /* internal API */
 gdouble            _gtk_range_get_wheel_delta              (GtkRange      *range,
@@ -152,9 +155,7 @@ void               _gtk_range_set_stop_values              (GtkRange      *range
                                                             gdouble       *values,
                                                             gint           n_values);
 gint               _gtk_range_get_stop_positions           (GtkRange      *range,
-                                                            gint         **values);          
-void               _gtk_range_set_round_digits             (GtkRange      *range,
-                                                            gint           round_digits);
+                                                            gint         **values);
 void               _gtk_range_set_steppers                 (GtkRange      *range,
                                                             gboolean       has_a,
                                                             gboolean       has_b,

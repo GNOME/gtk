@@ -151,7 +151,8 @@ enum {
   PROP_UPPER_STEPPER_SENSITIVITY,
   PROP_SHOW_FILL_LEVEL,
   PROP_RESTRICT_TO_FILL_LEVEL,
-  PROP_FILL_LEVEL
+  PROP_FILL_LEVEL,
+  PROP_ROUND_DIGITS
 };
 
 enum {
@@ -376,7 +377,7 @@ gtk_range_class_init (GtkRangeClass *class)
    * @returns: %TRUE to prevent other handlers from being invoked for the
    * signal, %FALSE to propagate the signal further
    *
-   * The ::change-value signal is emitted when a scroll action is
+   * The #GtkRange::change-value signal is emitted when a scroll action is
    * performed on a range.  It allows an application to determine the
    * type of scroll event that occurred and the resultant new value.
    * The application can handle the event itself and return %TRUE to
@@ -385,12 +386,12 @@ gtk_range_class_init (GtkRangeClass *class)
    * reached.
    *
    * The value parameter is unrounded.  An application that overrides
-   * the ::change-value signal is responsible for clamping the value to
-   * the desired number of decimal digits; the default GTK+ handler 
-   * clamps the value based on @range->round_digits.
+   * the GtkRange::change-value signal is responsible for clamping the
+   * value to the desired number of decimal digits; the default GTK+
+   * handler clamps the value based on #GtkRange:round-digits.
    *
    * It is not possible to use delayed update policies in an overridden
-   * ::change-value handler.
+   * #GtkRange::change-value handler.
    *
    * Since: 2.6
    */
@@ -494,6 +495,24 @@ gtk_range_class_init (GtkRangeClass *class)
 							G_MAXDOUBLE,
                                                         G_MAXDOUBLE,
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkRange:round-digits:
+   *
+   * The number of digits to round the value to when
+   * it changes, or -1. See #GtkRange::change-value.
+   *
+   * Since: 2.24
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_ROUND_DIGITS,
+                                   g_param_spec_int ("round-digits",
+                                                     P_("Round Digits"),
+                                                     P_("The number of widgets to round the value to."),
+                                                     -1,
+                                                     G_MAXINT,
+                                                     -1,
+                                                     GTK_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider-width",
@@ -629,6 +648,9 @@ gtk_range_set_property (GObject      *object,
     case PROP_FILL_LEVEL:
       gtk_range_set_fill_level (range, g_value_get_double (value));
       break;
+    case PROP_ROUND_DIGITS:
+      gtk_range_set_round_digits (range, g_value_get_int (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -669,6 +691,9 @@ gtk_range_get_property (GObject      *object,
       break;
     case PROP_FILL_LEVEL:
       g_value_set_double (value, gtk_range_get_fill_level (range));
+      break;
+    case PROP_ROUND_DIGITS:
+      g_value_set_int (value, gtk_range_get_round_digits (range));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2895,7 +2920,7 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
                                                          181, force_repaint,
                                                          range, NULL);
     }
-  
+
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
    * in response to a change signal on that value; round_digits
@@ -4055,11 +4080,45 @@ _gtk_range_get_stop_positions (GtkRange  *range,
   return priv->n_marks;
 }
 
+/**
+ * gtk_range_set_round_digits:
+ * @range: a #GtkRange
+ * @round_digits: the precision in digits, or -1
+ *
+ * Sets the number of digits to round the value to when
+ * it changes. See #GtkRange::change-value.
+ *
+ * Since: 2.24
+ */
 void
-_gtk_range_set_round_digits (GtkRange *range,
-                             gint     round_digits)
+gtk_range_set_round_digits (GtkRange *range,
+                            gint      round_digits)
 {
+  g_return_if_fail (GTK_IS_RANGE (range));
+  g_return_if_fail (round_digits >= -1);
+
   range->priv->round_digits = round_digits;
+
+  g_object_notify (G_OBJECT (range), "round-digits");
+}
+
+/**
+ * gtk_range_get_round_digits:
+ * @range: a #GtkRange
+ *
+ * Gets the number of digits to round the value to when
+ * it changes. See #GtkRange::change-value.
+ *
+ * Return value: the number of digits to round to
+ *
+ * Since: 2.24
+ */
+gint
+gtk_range_get_round_digits (GtkRange *range)
+{
+  g_return_val_if_fail (GTK_IS_RANGE (range), -1);
+
+  return range->priv->round_digits;
 }
 
 void
