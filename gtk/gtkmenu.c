@@ -24,6 +24,71 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+/**
+ * SECTION:gtkmenu
+ * @Short_description: A menu widget
+ * @Title: GtkMenu
+ *
+ * A #GtkMenu is a #GtkMenuShell that implements a drop down menu
+ * consisting of a list of #GtkMenuItem objects which can be navigated
+ * and activated by the user to perform application functions.
+ *
+ * A #GtkMenu is most commonly dropped down by activating a
+ * #GtkMenuItem in a #GtkMenuBar or popped up by activating a
+ * #GtkMenuItem in another #GtkMenu.
+ *
+ * A #GtkMenu can also be popped up by activating a #GtkOptionMenu.
+ * Other composite widgets such as the #GtkNotebook can pop up a
+ * #GtkMenu as well.
+ *
+ * Applications can display a #GtkMenu as a popup menu by calling the 
+ * gtk_menu_popup() function.  The example below shows how an application
+ * can pop up a menu when the 3rd mouse button is pressed.  
+ *
+ * <example>
+ * <title>Connecting the popup signal handler.</title>
+ * <programlisting>
+ *   /<!---->* connect our handler which will popup the menu *<!---->/
+ *   g_signal_connect_swapped (window, "button_press_event",
+ *	G_CALLBACK (my_popup_handler), menu);
+ * </programlisting>
+ * </example>
+ *
+ * <example>
+ * <title>Signal handler which displays a popup menu.</title>
+ * <programlisting>
+ * static gint
+ * my_popup_handler (GtkWidget *widget, GdkEvent *event)
+ * {
+ *   GtkMenu *menu;
+ *   GdkEventButton *event_button;
+ *
+ *   g_return_val_if_fail (widget != NULL, FALSE);
+ *   g_return_val_if_fail (GTK_IS_MENU (widget), FALSE);
+ *   g_return_val_if_fail (event != NULL, FALSE);
+ *
+ *   /<!---->* The "widget" is the menu that was supplied when 
+ *    * g_signal_connect_swapped() was called.
+ *    *<!---->/
+ *   menu = GTK_MENU (widget);
+ *
+ *   if (event->type == GDK_BUTTON_PRESS)
+ *     {
+ *       event_button = (GdkEventButton *) event;
+ *       if (event_button->button == 3)
+ *         {
+ *           gtk_menu_popup (menu, NULL, NULL, NULL, NULL, 
+ *                           event_button->button, event_button->time);
+ *           return TRUE;
+ *         }
+ *     }
+ * 
+ *   return FALSE;
+ * }
+ * </programlisting>
+ * </example>
+ */
+
 #include "config.h"
 
 #include <string.h>
@@ -492,6 +557,11 @@ gtk_menu_class_init (GtkMenuClass *class)
   menu_shell_class->get_popup_delay = gtk_menu_get_popup_delay;
   menu_shell_class->move_current = gtk_menu_move_current;
 
+  /**
+   * GtkMenu::move-scroll:
+   * @menu: a #GtkMenu
+   * @scroll_type: a #GtkScrollType
+   */
   menu_signals[MOVE_SCROLL] =
     g_signal_new_class_handler (I_("move-scroll"),
                                 G_OBJECT_CLASS_TYPE (gobject_class),
@@ -715,7 +785,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                                GTK_PARAM_READWRITE));
 
  /**
-  * GtkMenu::arrow-scaling
+  * GtkMenu:arrow-scaling
   *
   * Arbitrary constant to scale down the size of the scroll arrow.
   *
@@ -1113,6 +1183,17 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
     menu_change_screen (menu, gtk_widget_get_screen (attach_widget));
 }
 
+/**
+ * gtk_menu_attach_to_widget:
+ * @menu: a #GtkMenu
+ * @attach_widget: the #GtkWidget that the menu will be attached to
+ * @detacher: the user supplied callback functions that will be called
+ *            when the menu calls gtk_menu_detach()
+ *
+ * Attaches the menu to the widget and provides a callback function
+ * that will be invoked when the menu calls gtk_menu_detach() during
+ * its destruction.
+ */
 void
 gtk_menu_attach_to_widget (GtkMenu           *menu,
                            GtkWidget         *attach_widget,
@@ -1164,6 +1245,14 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
   g_object_notify (G_OBJECT (menu), "attach-widget");
 }
 
+/**
+ * gtk_menu_get_attach_widget:
+ * @menu: a #GtkMenu
+ *
+ * Returns the #GtkWidget that the menu is attached to.
+ *
+ * Returns: the #GtkWidget that the menu is attached to
+ */
 GtkWidget*
 gtk_menu_get_attach_widget (GtkMenu *menu)
 {
@@ -1177,6 +1266,14 @@ gtk_menu_get_attach_widget (GtkMenu *menu)
   return NULL;
 }
 
+/**
+ * gtk_menu_detach:
+ * @menu: a #GtkMenu
+ *
+ * Detaches the menu from the widget to which it had been attached.
+ * This function will call the callback function, @detacher, provided
+ * when the gtk_menu_attach_to_widget() function was called.
+ */
 void
 gtk_menu_detach (GtkMenu *menu)
 {
@@ -1237,6 +1334,13 @@ gtk_menu_remove (GtkContainer *container,
   menu_queue_resize (menu);
 }
 
+/**
+ * gtk_menu_new:
+ *
+ * Creates a new #GtkMenu.
+ *
+ * Returns: a new #GtkMenu.
+ */
 GtkWidget*
 gtk_menu_new (void)
 {
@@ -1684,6 +1788,12 @@ gtk_menu_popup (GtkMenu             *menu,
                              button, activate_time);
 }
 
+/**
+ * gtk_menu_popdown:
+ * @menu: a #GtkMenu
+ *
+ * Removes the menu from the screen.
+ */
 void
 gtk_menu_popdown (GtkMenu *menu)
 {
@@ -1772,6 +1882,17 @@ gtk_menu_popdown (GtkMenu *menu)
   menu_grab_transfer_window_destroy (menu);
 }
 
+/**
+ * gtk_menu_get_active:
+ * @menu: a #GtkMenu
+ *
+ * Returns the selected menu item from the menu.  This is used by the
+ * #GtkOptionMenu.
+ *
+ * Returns: the #GtkMenuItem that was last selected in the menu.  If a
+ *          selection has not yet been made, the first menu item is
+ *          selected.
+ */
 GtkWidget*
 gtk_menu_get_active (GtkMenu *menu)
 {
@@ -1804,6 +1925,15 @@ gtk_menu_get_active (GtkMenu *menu)
   return priv->old_active_menu_item;
 }
 
+/**
+ * gtk_menu_set_active:
+ * @menu: a #GtkMenu
+ * @index: the index of the menu item to select.  Iindex values are
+ *         from 0 to n-1
+ *
+ * Selects the specified menu item within the menu.  This is used by
+ * the #GtkOptionMenu and should not be used by anyone else.
+ */
 void
 gtk_menu_set_active (GtkMenu *menu,
                      guint    index)
@@ -1830,7 +1960,15 @@ gtk_menu_set_active (GtkMenu *menu,
 
 /**
  * gtk_menu_set_accel_group:
- * @accel_group: (allow-none):
+ * @menu: a #GtkMenu
+ * @accel_group: (allow-none): the #GtkAccelGroup to be associated
+ *               with the menu.
+ *
+ * Set the #GtkAccelGroup which holds global accelerators for the
+ * menu.  This accelerator group needs to also be added to all windows
+ * that this menu is being used in with gtk_window_add_accel_group(),
+ * in order for those windows to support all the accelerators
+ * contained in this group.
  */
 void
 gtk_menu_set_accel_group (GtkMenu       *menu,
@@ -1850,6 +1988,15 @@ gtk_menu_set_accel_group (GtkMenu       *menu,
     }
 }
 
+/**
+ * gtk_menu_get_accel_group:
+ * @menu a #GtkMenu
+ *
+ * Gets the #GtkAccelGroup which holds global accelerators for the
+ * menu.  See gtk_menu_set_accel_group().
+ *
+ * Returns: the #GtkAccelGroup associated with the menu.
+ */
 GtkAccelGroup*
 gtk_menu_get_accel_group (GtkMenu *menu)
 {
@@ -1978,6 +2125,12 @@ _gtk_menu_refresh_accel_paths (GtkMenu  *menu,
     }
 }
 
+/**
+ * gtk_menu_reposition:
+ * @menu: a #GtkMenu
+ *
+ * Repositions the menu according to its position function.
+ */
 void
 gtk_menu_reposition (GtkMenu *menu)
 {
@@ -2085,6 +2238,16 @@ tearoff_window_destroyed (GtkWidget *widget,
   gtk_menu_set_tearoff_state (menu, FALSE);
 }
 
+/**
+ * gtk_menu_set_tearoff_state:
+ * @menu: a #GtkMenu
+ * @torn_off: If %TRUE, menu is displayed as a tearoff menu.
+ *
+ * Changes the tearoff state of the menu.  A menu is normally
+ * displayed as drop down menu which persists as long as the menu is
+ * active.  It can also be displayed as a tearoff menu which persists
+ * until it is closed or reattached.
+ */
 void
 gtk_menu_set_tearoff_state (GtkMenu  *menu,
                             gboolean  torn_off)
@@ -2254,6 +2417,13 @@ gtk_menu_get_title (GtkMenu *menu)
   return menu->priv->title;
 }
 
+/**
+ * gtk_menu_reorder_child:
+ * @menu: a #GtkMenu
+ * @child: the #GtkMenuItem to move
+ * @position: the new position to place @child.  Positions are
+ *            numbered from 0 to n-1.
+ */
 void
 gtk_menu_reorder_child (GtkMenu   *menu,
                         GtkWidget *child,
