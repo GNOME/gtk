@@ -18,6 +18,30 @@
  * Boston, MA 02111-1307, USA.
  */
 
+/**
+ * SECTION:gtkfilefilter
+ * @Short_description: A filter for selecting a file subset
+ * @Title: GtkFileFilter
+ *
+ * A GtkFileFilter can be used to restrict the files being shown in a
+ * #GtkFileChooser. Files can be filtered based on their name (with
+ * gtk_file_filter_add_pattern()), on their mime type (with
+ * gtk_file_filter_add_mime_type()), or by a custom filter function
+ * (with gtk_file_filter_add_custom()).
+ *
+ * Filtering by mime types handles aliasing and subclassing of mime
+ * types; e.g. a filter for text/plain also matches a file with mime
+ * type application/rtf, since application/rtf is a subclass of
+ * text/plain. Note that #GtkFileFilter allows wildcards for the
+ * subtype of a mime type, so you can e.g. filter for image/<!---->*.
+ *
+ * Normally, filters are used by adding them to a #GtkFileChooser,
+ * see gtk_file_chooser_add_filter(), but it is also possible
+ * to manually use a filter on a file with gtk_file_filter_filter().
+ *
+ * @see_also: #GtkFileChooser
+ */
+
 #include "config.h"
 #include <string.h>
 

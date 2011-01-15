@@ -36,6 +36,17 @@ G_BEGIN_DECLS
 typedef struct _GtkFileFilter     GtkFileFilter;
 typedef struct _GtkFileFilterInfo GtkFileFilterInfo;
 
+/**
+ * GtkFileFilterFlags:
+ * @GTK_FILE_FILTER_FILENAME: the filename of the file being tested
+ * @GTK_FILE_FILTER_URI: the URI for the file being tested
+ * @GTK_FILE_FILTER_DISPLAY_NAME: the string that will be used to 
+ *   display the file in the file chooser
+ * @GTK_FILE_FILTER_MIME_TYPE: the mime type of the file
+ * 
+ * These flags indicate what parts of a #GtkFileFilterInfo struct
+ * are filled or need to be filled. 
+ */
 typedef enum {
   GTK_FILE_FILTER_FILENAME     = 1 << 0,
   GTK_FILE_FILTER_URI          = 1 << 1,
@@ -43,9 +54,33 @@ typedef enum {
   GTK_FILE_FILTER_MIME_TYPE    = 1 << 3
 } GtkFileFilterFlags;
 
+/**
+ * GtkFileFilterFunc:
+ * @filter_info: a #GtkFileFilterInfo that is filled according
+ *   to the @needed flags passed to gtk_file_filter_add_custom()
+ * @data: user data passed to gtk_file_filter_add_custom()
+ *
+ * The type of function that is used with custom filters, see
+ * gtk_file_filter_add_custom().
+ *
+ * @Returns: %TRUE if the file should be displayed
+ */
 typedef gboolean (*GtkFileFilterFunc) (const GtkFileFilterInfo *filter_info,
 				       gpointer                 data);
 
+/**
+ * GtkFileFilterInfo:
+ * @contains: Flags indicating which of the following fields need
+ *   are filled
+ * @filename: the filename of the file being tested
+ * @uri: the URI for the file being tested
+ * @display_name: the string that will be used to display the file
+ *   in the file chooser
+ * @mime_type: the mime type of the file
+ *
+ * A #GtkFileFilterInfo struct is used to pass information about the
+ * tested file to gtk_file_filter_filter().
+ */
 struct _GtkFileFilterInfo
 {
   GtkFileFilterFlags contains;
