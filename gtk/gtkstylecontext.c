@@ -4095,7 +4095,7 @@ gtk_render_frame_gap (GtkStyleContext *context,
   g_return_if_fail (cr != NULL);
   g_return_if_fail (width > 0);
   g_return_if_fail (height > 0);
-  g_return_if_fail (xy0_gap < xy1_gap);
+  g_return_if_fail (xy0_gap <= xy1_gap);
   g_return_if_fail (xy0_gap >= 0);
 
   if (gap_side == GTK_POS_LEFT ||
