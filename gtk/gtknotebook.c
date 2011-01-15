@@ -1901,7 +1901,7 @@ _gtk_notebook_get_tab_flags (GtkNotebook     *notebook,
     {
       GtkNotebookPage *p = pages->data;
 
-      if (!gtk_widget_get_visible (p->tab_label))
+      if (!p->tab_label || !gtk_widget_get_visible (p->tab_label))
         continue;
 
       i++;
