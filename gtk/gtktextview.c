@@ -40,6 +40,7 @@
 #include "gtkmenuitem.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
+#include "gtkselectionprivate.h"
 #include "gtkstock.h"
 #include "gtktextbufferrichtext.h"
 #include "gtktextdisplay.h"

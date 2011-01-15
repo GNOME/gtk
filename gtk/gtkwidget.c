@@ -42,7 +42,7 @@
 #include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkrc.h"
-#include "gtkselection.h"
+#include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
 #include "gtkwidget.h"

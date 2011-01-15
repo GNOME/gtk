@@ -28,6 +28,13 @@
  * sent.
  */
 
+#ifndef __GTK_SELECTIONPRIVATE_H__
+#define __GTK_SELECTIONPRIVATE_H__
+
+#include "gtkselection.h"
+
+G_BEGIN_DECLS
+
 struct _GtkSelectionData
 {
   GdkAtom       selection;
@@ -38,3 +45,33 @@ struct _GtkSelectionData
   gint          length;
   GdkDisplay   *display;
 };
+
+struct _GtkTargetList
+{
+  GList *list;
+  guint ref_count;
+ };
+
+typedef struct _GtkTargetPair GtkTargetPair;
+struct _GtkTargetPair
+{
+  GdkAtom   target;
+  guint     flags;
+  guint     info;
+};
+
+
+gboolean _gtk_selection_clear           (GtkWidget         *widget,
+                                         GdkEventSelection *event);
+gboolean _gtk_selection_request         (GtkWidget         *widget,
+                                         GdkEventSelection *event);
+gboolean _gtk_selection_incr_event      (GdkWindow         *window,
+                                         GdkEventProperty  *event);
+gboolean _gtk_selection_notify          (GtkWidget         *widget,
+                                         GdkEventSelection *event);
+gboolean _gtk_selection_property_notify (GtkWidget         *widget,
+                                         GdkEventProperty  *event);
+
+G_END_DECLS
+
+#endif /* __GTK_SELECTIONPRIVATE_H__ */
