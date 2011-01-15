@@ -93,6 +93,8 @@
 #include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 
+#define warn_no_cell_area(func)					\
+  g_critical ("%s: Called but no GtkCellArea is available yet", func)
 
 typedef GtkCellLayoutIface GtkCellLayoutInterface;
 G_DEFINE_INTERFACE (GtkCellLayout, gtk_cell_layout, G_TYPE_OBJECT);
@@ -134,7 +136,6 @@ gtk_cell_layout_default_init (GtkCellLayoutIface *iface)
   iface->get_cells          = gtk_cell_layout_default_get_cells;
 }
 
-
 /* Default implementation is to fall back on an underlying cell area */
 static void
 gtk_cell_layout_default_pack_start (GtkCellLayout         *cell_layout,
@@ -150,7 +151,10 @@ gtk_cell_layout_default_pack_start (GtkCellLayout         *cell_layout,
     {
       area = iface->get_area (cell_layout);
 
-      gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (area), cell, expand);
+      if (area)
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (area), cell, expand);
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->pack_start()");
     }
 }
 
@@ -168,7 +172,10 @@ gtk_cell_layout_default_pack_end (GtkCellLayout         *cell_layout,
     {
       area = iface->get_area (cell_layout);
 
-      gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (area), cell, expand);
+      if (area)
+	gtk_cell_layout_pack_end (GTK_CELL_LAYOUT (area), cell, expand);
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->pack_end()");
     }
 }
 
@@ -184,7 +191,10 @@ gtk_cell_layout_default_clear (GtkCellLayout *cell_layout)
     {
       area = iface->get_area (cell_layout);
 
-      gtk_cell_layout_clear (GTK_CELL_LAYOUT (area));
+      if (area)
+	gtk_cell_layout_clear (GTK_CELL_LAYOUT (area));
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->clear()");
     }
 }
 
@@ -203,7 +213,10 @@ gtk_cell_layout_default_add_attribute (GtkCellLayout         *cell_layout,
     {
       area = iface->get_area (cell_layout);
 
-      gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (area), cell, attribute, column);
+      if (area)
+	gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT (area), cell, attribute, column);
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->add_attribute()");
     }
 }
 
@@ -223,9 +236,12 @@ gtk_cell_layout_default_set_cell_data_func (GtkCellLayout         *cell_layout,
     {
       area = iface->get_area (cell_layout);
 
-      _gtk_cell_area_set_cell_data_func_with_proxy (area, cell, 
-						    (GFunc)func, func_data, destroy, 
-						    cell_layout);
+      if (area)
+	_gtk_cell_area_set_cell_data_func_with_proxy (area, cell, 
+						      (GFunc)func, func_data, destroy, 
+						      cell_layout);
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->set_cell_data_func()");
     }
 }
 
@@ -242,7 +258,10 @@ gtk_cell_layout_default_clear_attributes (GtkCellLayout         *cell_layout,
     {
       area = iface->get_area (cell_layout);
 
-      gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (area), cell);
+      if (area)
+	gtk_cell_layout_clear_attributes (GTK_CELL_LAYOUT (area), cell);
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->clear_attributes()");
     }
 }
 
@@ -260,7 +279,10 @@ gtk_cell_layout_default_reorder (GtkCellLayout         *cell_layout,
     {
       area = iface->get_area (cell_layout);
 
-      gtk_cell_layout_reorder (GTK_CELL_LAYOUT (area), cell, position);
+      if (area)
+	gtk_cell_layout_reorder (GTK_CELL_LAYOUT (area), cell, position);
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->reorder()");
     }
 }
 
@@ -276,7 +298,10 @@ gtk_cell_layout_default_get_cells (GtkCellLayout *cell_layout)
     {
       area = iface->get_area (cell_layout);
 
-      return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+      if (area)
+	return gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (area));
+      else
+	warn_no_cell_area ("GtkCellLayoutIface->get_cells()");
     }
   return NULL;
 }

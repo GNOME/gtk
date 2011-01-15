@@ -3254,6 +3254,9 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
  * Loads an icon, modifying it to match the system colors for the foreground,
  * success, warning and error colors provided. If the icon is not a symbolic
  * one, the function will return the result from gtk_icon_info_load_icon().
+ * This function uses the regular foreground color and the symbolic colors
+ * with the names "success_color", "warning_color" and "error_color" from
+ * the context.
  *
  * This allows loading symbolic icons that will match the system theme.
  *

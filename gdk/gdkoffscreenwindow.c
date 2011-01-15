@@ -779,7 +779,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->set_functions = NULL;
   impl_class->begin_resize_drag = NULL;
   impl_class->begin_move_drag = NULL;
-  impl_class->enable_synchronized_configure = NULL;
+  impl_class->enable_synchronized_configure = gdk_offscreen_window_do_nothing;
   impl_class->configure_finished = NULL;
   impl_class->set_opacity = NULL;
   impl_class->set_composited = NULL;

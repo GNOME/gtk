@@ -90,7 +90,7 @@ filtermodel_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= expander
 expander_SOURCES		 = expander.c
-expander_LDADD		 = $(progs_ldadd)
+expander_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= action
 action_SOURCES			 = action.c
@@ -99,8 +99,11 @@ action_LDADD			 = $(progs_ldadd)
 TEST_PROGS			+= stylecontext
 stylecontext_SOURCES		 = stylecontext.c
 stylecontext_LDADD		 = $(progs_ldadd)
-EXTRA_DIST += test.css test.png
+EXTRA_DIST			+= test.css test.png
 
+TEST_PROGS			+= papersize
+papersize_SOURCES		 = papersize.c
+papersize_LDADD			 = $(progs_ldadd)
 
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \

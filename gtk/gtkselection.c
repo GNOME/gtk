@@ -51,6 +51,32 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkselection
+ * @Title: Selections
+ * @Short_description: Functions for handling inter-process communication
+ *     via selections
+ * @See_also: #GtkWidget - Much of the operation of selections happens via
+ *     signals for #GtkWidget. In particular, if you are using the functions
+ *     in this section, you may need to pay attention to
+ *     #GtkWidget::selection-get, #GtkWidget::selection-received and
+ *     #GtkWidget::selection-clear-event signals
+ *
+ * The selection mechanism provides the basis for different types
+ * of communication between processes. In particular, drag and drop and
+ * #GtkClipboard work via selections. You will very seldom or
+ * never need to use most of the functions in this section directly;
+ * #GtkClipboard provides a nicer interface to the same functionality.
+ *
+ * Some of the datatypes defined this section are used in
+ * the #GtkClipboard and drag-and-drop API's as well. The
+ * #GtkTargetEntry structure and #GtkTargetList objects represent
+ * lists of data types that are supported when sending or
+ * receiving data. The #GtkSelectionData object is used to
+ * store a chunk of data along with the data type and other
+ * associated information.
+ */
+
 #include "config.h"
 
 #include "gtkselection.h"

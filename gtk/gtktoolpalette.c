@@ -263,6 +263,7 @@ gtk_tool_palette_set_property (GObject      *object,
         if ((guint) g_value_get_enum (value) != palette->priv->orientation)
           {
             palette->priv->orientation = g_value_get_enum (value);
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (palette));
             gtk_tool_palette_reconfigured (palette);
           }
         break;

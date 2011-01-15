@@ -122,7 +122,7 @@
 #include "gtkmodules.h"
 #include "gtkrc.h"
 #include "gtkrecentmanager.h"
-#include "gtkselection.h"
+#include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"

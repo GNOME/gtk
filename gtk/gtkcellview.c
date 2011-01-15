@@ -430,6 +430,8 @@ gtk_cell_view_set_property (GObject      *object,
       view->priv->orientation = g_value_get_enum (value);
       if (view->priv->context)
 	gtk_cell_area_context_reset (view->priv->context);
+
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
       break;
     case PROP_BACKGROUND:
       {

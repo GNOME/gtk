@@ -1,13 +1,13 @@
 # GTK+ omaduste eesti keele tõlge.
 # Estonian translation of GTK+-properties.
 #
-# Copyright (C) 1999, 2002-2006 Free Software Foundation, Inc.
-# Copyright (C) 2007,2009,2010 The GNOME Project.
+# Copyright (C) 1999, 2002–2006 Free Software Foundation, Inc.
+# Copyright (C) 2007, 2009–2011 The GNOME Project.
 # This file is distributed under the same license as the gtk package.
 #
 # Lauris Kaplinski <lauris@ariman.ee>, 1999.
-# Tõivo Leedjärv <toivo@linux.ee>, 2002-2004.
-# Ivar Smolin <okul@linux.ee>, 2005-2007, 2010.
+# Tõivo Leedjärv <toivo@linux.ee>, 2002–2004.
+# Ivar Smolin <okul@linux.ee>, 2005–2007, 2010, 2011.
 # Priit Laes <amd@store20.com>, 2006.
 # Mattias Põldaru <mahfiaz gmail com>, 2009.
 #
@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"+&component=general\n"
-"POT-Creation-Date: 2009-07-30 14:59+0000\n"
+"%2b&component=general\n"
+"POT-Creation-Date: 2011-01-10 22:03+0000\n"
 "PO-Revision-Date: 2010-10-30 11:45+0300\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
@@ -25,72 +25,81 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgid "Loop"
-msgstr "Korduv"
+#, fuzzy
+#| msgid "Default Display"
+msgid "Display"
+msgstr "Kuva"
 
-msgid "Whether the animation should loop when it reaches the end"
-msgstr "Kas animatsioonid peavad lõppedes uuesti alustama või mitte"
+msgid "Cursor type"
+msgstr "Kursori liik"
 
-msgid "Number of Channels"
-msgstr "Kanalite arv"
+#, fuzzy
+msgid "Standard cursor type"
+msgstr "Teisene tekst"
 
-msgid "The number of samples per pixel"
-msgstr "Näidiste arv piksli kohta"
-
-msgid "Colorspace"
-msgstr "Värviruum"
-
-msgid "The colorspace in which the samples are interpreted"
-msgstr "Värviruum, milles näidiseid tõlgendatakse"
-
-msgid "Has Alpha"
-msgstr "Alfa väärtusega"
-
-msgid "Whether the pixbuf has an alpha channel"
-msgstr "Kas pixbuf'il on alfakanal"
-
-msgid "Bits per Sample"
-msgstr "Bitte näidise kohta"
-
-msgid "The number of bits per sample"
-msgstr "Näidise bittide arv"
-
-msgid "Width"
-msgstr "Laius"
-
-msgid "The number of columns of the pixbuf"
-msgstr "Pixbuf'i tulpade arv"
-
-msgid "Height"
-msgstr "Kõrgus"
-
-msgid "The number of rows of the pixbuf"
-msgstr "Pixbuf'i veergude arv"
-
-msgid "Rowstride"
+msgid "Display of this cursor"
 msgstr ""
 
-msgid ""
-"The number of bytes between the start of a row and the start of the next row"
-msgstr "Baitide arv rea ja järgmise rea alguse vahel"
+msgid "Device Display"
+msgstr "Seadme kuva"
 
-msgid "Pixels"
-msgstr "Piksleid"
+msgid "Display which the device belongs to"
+msgstr "Kuva, mille alla seade kuulub"
 
-msgid "A pointer to the pixel data of the pixbuf"
-msgstr "Viit pixbuf'i piksliandmetele"
+msgid "Device manager"
+msgstr "Seadmehaldur"
+
+msgid "Device manager which the device belongs to"
+msgstr "Seadmehaldur, mille alla seade kuulub"
+
+msgid "Device name"
+msgstr "Seadme nimi"
+
+msgid "Device type"
+msgstr "Seadme liik"
+
+msgid "Device role in the device manager"
+msgstr "Seadme roll seadmehalduris"
+
+msgid "Associated device"
+msgstr ""
+
+msgid "Associated pointer or keyboard with this device"
+msgstr ""
+
+msgid "Input source"
+msgstr ""
+
+msgid "Source type for the device"
+msgstr ""
+
+#, fuzzy
+#| msgid "The model for the icon view"
+msgid "Input mode for the device"
+msgstr "Ikoonivaate mudel"
+
+#, fuzzy
+#| msgid "Whether the widget has the input focus"
+msgid "Whether the device has a cursor"
+msgstr "Kas vidin on sisestamisfookuses või mitte"
+
+#, fuzzy
+msgid "Whether there is a visible cursor following device motion"
+msgstr "Kas ikooni suuruse omadus on määratud või mitte"
+
+#, fuzzy
+#| msgid "The number of pages in the document."
+msgid "Number of axes in the device"
+msgstr "Dokumendis olevate lehekülgede arv."
+
+msgid "Display for the device manager"
+msgstr ""
 
 msgid "Default Display"
 msgstr "Vaikimisi kuva"
 
 msgid "The default display for GDK"
 msgstr "GDK vaikimisi kuva"
-
-msgid "Screen"
-msgstr "Ekraan"
-
-msgid "the GdkScreen for the renderer"
-msgstr "Renderdaja GdkScreen"
 
 msgid "Font options"
 msgstr "Kirjatüübi valikud"
@@ -103,6 +112,27 @@ msgstr "Fondi eraldusvõime"
 
 msgid "The resolution for fonts on the screen"
 msgstr "Ekraanifontide eraldusvõime"
+
+msgid "Cursor"
+msgstr "Kursor"
+
+msgid "Device ID"
+msgstr "Seadme ID"
+
+msgid "Device identifier"
+msgstr "Seadme identifikaator"
+
+msgid "Opcode"
+msgstr ""
+
+msgid "Opcode for XInput2 requests"
+msgstr ""
+
+msgid "Event base"
+msgstr ""
+
+msgid "Event base for XInput events"
+msgstr ""
 
 msgid "Program name"
 msgstr "Programmi nimi"
@@ -132,6 +162,12 @@ msgstr "Kommentaaristring"
 msgid "Comments about the program"
 msgstr "Programmi kohta käivad kommentaarid"
 
+msgid "License Type"
+msgstr "Litsentsi liik"
+
+msgid "The license type of the program"
+msgstr "Programmi litsentsi liik"
+
 msgid "Website URL"
 msgstr "Veebisaidi URL"
 
@@ -141,12 +177,10 @@ msgstr "Programmi veebisaidi URL"
 msgid "Website label"
 msgstr "Veebisaidi silt"
 
-msgid ""
-"The label for the link to the website of the program. If this is not set, it "
-"defaults to the URL"
-msgstr ""
-"Programmi veebisaidi URL-i silt. Kui seda pole määratud, siis vaikimis on "
-"selleks URL ise"
+#, fuzzy
+#| msgid "The URL for the link to the website of the program"
+msgid "The label for the link to the website of the program"
+msgstr "Programmi veebisaidi URL"
 
 msgid "Authors"
 msgstr "Autorid"
@@ -311,6 +345,13 @@ msgid ""
 "use)."
 msgstr ""
 
+msgid "Always show image"
+msgstr ""
+
+#, fuzzy
+msgid "Whether the image will always be shown"
+msgstr "Kas vidin on nähtav või mitte"
+
 msgid "A name for the action group."
 msgstr "Tegevuste grupi nimi."
 
@@ -429,6 +470,76 @@ msgstr "Parempoolne polsterdus"
 msgid "The padding to insert at the right of the widget."
 msgstr "Vidina paremale poole lisatav polsterdus."
 
+msgid "Include an 'Other...' item"
+msgstr ""
+
+msgid ""
+"Whether the combobox should include an item that triggers a "
+"GtkAppChooserDialog"
+msgstr ""
+
+msgid "Content type"
+msgstr "Sisu liik"
+
+msgid "The content type used by the open with object"
+msgstr ""
+
+msgid "GFile"
+msgstr ""
+
+msgid "The GFile used by the app chooser dialog"
+msgstr ""
+
+msgid "Show default app"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether the widget is the default widget"
+msgid "Whether the widget should show the default application"
+msgstr "Kas vidin on vaikimisi vidin või mitte"
+
+msgid "Show recommended apps"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether images should be shown on buttons"
+msgid "Whether the widget should show recommended applications"
+msgstr "Kas nuppudel näidatakse pilte või mitte"
+
+msgid "Show fallback apps"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether the widget is the default widget"
+msgid "Whether the widget should show fallback applications"
+msgstr "Kas vidin on vaikimisi vidin või mitte"
+
+#, fuzzy
+#| msgid "Show Tooltips"
+msgid "Show other apps"
+msgstr "Vihjete näitamine"
+
+#, fuzzy
+#| msgid "Whether the widget has the input focus"
+msgid "Whether the widget should show other applications"
+msgstr "Kas vidin on sisestamisfookuses või mitte"
+
+#, fuzzy
+#| msgid "Show Day Names"
+msgid "Show all apps"
+msgstr "Päevanimede näitamine"
+
+#, fuzzy
+#| msgid "Whether images should be shown on buttons"
+msgid "Whether the widget should show all applications"
+msgstr "Kas nuppudel näidatakse pilte või mitte"
+
+msgid "Widget's default text"
+msgstr ""
+
+msgid "The default text appearing when there are no applications"
+msgstr ""
+
 msgid "Arrow direction"
 msgstr "Noole suund"
 
@@ -541,9 +652,13 @@ msgstr ""
 msgid "Layout style"
 msgstr "Paigutuse laad"
 
+#, fuzzy
+#| msgid ""
+#| "How to layout the buttons in the box. Possible values are default, "
+#| "spread, edge, start and end"
 msgid ""
-"How to layout the buttons in the box. Possible values are default, spread, "
-"edge, start and end"
+"How to lay out the buttons in the box. Possible values are: spread, edge, "
+"start and end"
 msgstr ""
 "Kuidas nupud kastis asetsevad. Võimalikud väärtused on vaikimisi, kõrvuti, "
 "serval, alguses ja lõpus"
@@ -665,16 +780,20 @@ msgstr "Pildi asukoht teksti suhtes"
 msgid "Default Spacing"
 msgstr ""
 
-msgid "Extra space to add for CAN_DEFAULT buttons"
+#, fuzzy
+#| msgid "Extra space to add for CAN_DEFAULT buttons"
+msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
 msgstr "CAN_DEFAULT nuppudele lisatav täiendav ruum"
 
 msgid "Default Outside Spacing"
 msgstr ""
 
+#, fuzzy
+#| msgid "Extra space to add for CAN_DEFAULT buttons"
 msgid ""
-"Extra space to add for CAN_DEFAULT buttons that is always drawn outside the "
-"border"
-msgstr ""
+"Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside "
+"the border"
+msgstr "CAN_DEFAULT nuppudele lisatav täiendav ruum"
 
 msgid "Child X Displacement"
 msgstr ""
@@ -709,12 +828,6 @@ msgstr "Pildi kaugus"
 
 msgid "Spacing in pixels between the image and label"
 msgstr "Pildi ja sildi vahel oleva vahe suurus pikslites"
-
-msgid "Show button images"
-msgstr "Nuppude piltide näitamine"
-
-msgid "Whether images should be shown on buttons"
-msgstr "Kas nuppudel näidatakse pilte või mitte"
 
 msgid "Year"
 msgstr "Aasta"
@@ -777,6 +890,152 @@ msgstr "Üksikasjade näitamine"
 
 msgid "If TRUE, details are shown"
 msgstr "Kui märgitud, siis näidatakse üksikasju"
+
+#, fuzzy
+#| msgid "Inner Border"
+msgid "Inner border"
+msgstr "Sisemine ääris"
+
+#, fuzzy
+#| msgid "Inner Border"
+msgid "Inner border space"
+msgstr "Sisemine ääris"
+
+#, fuzzy
+#| msgid "Vertical padding"
+msgid "Vertical separation"
+msgstr "Püstine polsterdus"
+
+#, fuzzy
+msgid "Space between day headers and main area"
+msgstr "Nuppude vahel olev ruum"
+
+#, fuzzy
+#| msgid "Horizontal padding"
+msgid "Horizontal separation"
+msgstr "Rõhtne polsterdus"
+
+#, fuzzy
+msgid "Space between week headers and main area"
+msgstr "Nuppude vahel olev ruum"
+
+msgid "Space which is inserted between cells"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether the widget responds to input"
+msgid "Whether the cell expands"
+msgstr "Kas vidin reageerib sisendile või mitte"
+
+#, fuzzy
+#| msgid "xalign"
+msgid "Align"
+msgstr "x-joondus"
+
+#, fuzzy
+#| msgid "Whether the children should all be the same size"
+msgid "Whether cell should align with adjacent rows"
+msgstr "Kas lapsed peaksid kõik olema sama suurusega või mitte"
+
+#, fuzzy
+#| msgid "Pixel size"
+msgid "Fixed Size"
+msgstr "Piksli suurus"
+
+#, fuzzy
+#| msgid "Whether the children should all be the same size"
+msgid "Whether cells should be the same size in all rows"
+msgstr "Kas lapsed peaksid kõik olema sama suurusega või mitte"
+
+#, fuzzy
+#| msgid "Page type"
+msgid "Pack Type"
+msgstr "Lehekülje liik"
+
+msgid ""
+"A GtkPackType indicating whether the cell is packed with reference to the "
+"start or end of the cell area"
+msgstr ""
+
+msgid "Focus Cell"
+msgstr ""
+
+#, fuzzy
+#| msgid "The item which is currently active"
+msgid "The cell which currently has focus"
+msgstr "Hetkel aktiivne element"
+
+msgid "Edited Cell"
+msgstr ""
+
+#, fuzzy
+#| msgid "The item which is currently active"
+msgid "The cell which is currently being edited"
+msgstr "Hetkel aktiivne element"
+
+#, fuzzy
+#| msgid "Widget"
+msgid "Edit Widget"
+msgstr "Vidin"
+
+#, fuzzy
+#| msgid "The current page in the document"
+msgid "The widget currently editing the edited cell"
+msgstr "Dokumendi käesolev lehekülg"
+
+msgid "Area"
+msgstr ""
+
+msgid "The Cell Area this context was created for"
+msgstr ""
+
+msgid "Minimum Width"
+msgstr "Minimaalne laius"
+
+#, fuzzy
+#| msgid "Minimum child width"
+msgid "Minimum cached width"
+msgstr "Lapse vähim laius"
+
+#, fuzzy
+#| msgid "Minimum child height"
+msgid "Minimum Height"
+msgstr "Lapse vähim kõrgus"
+
+#, fuzzy
+#| msgid "Minimum child height"
+msgid "Minimum cached height"
+msgstr "Lapse vähim kõrgus"
+
+msgid "Editing Canceled"
+msgstr ""
+
+msgid "Indicates that editing has been canceled"
+msgstr ""
+
+msgid "Accelerator key"
+msgstr "Kiirklahv"
+
+msgid "The keyval of the accelerator"
+msgstr "Kiirklahvi väärtus"
+
+msgid "Accelerator modifiers"
+msgstr "Kiirklahvide muuteklahvid"
+
+msgid "The modifier mask of the accelerator"
+msgstr "Kiirklahvide muuteklahvi mask"
+
+msgid "Accelerator keycode"
+msgstr "Kiirklahvi kood"
+
+msgid "The hardware keycode of the accelerator"
+msgstr "Kiirklahvi raudvaraline klahvikood"
+
+msgid "Accelerator Mode"
+msgstr "Kiirklahvide režiim"
+
+msgid "The type of accelerators"
+msgstr "Kiirklahvide liik"
 
 msgid "mode"
 msgstr ""
@@ -853,6 +1112,16 @@ msgstr "Lahtri taustavärv"
 msgid "Cell background color as a GdkColor"
 msgstr "Lahtri taustavärv GdkColor vormingus"
 
+#, fuzzy
+#| msgid "Cell background color"
+msgid "Cell background RGBA color"
+msgstr "Lahtri taustavärv"
+
+#, fuzzy
+#| msgid "Cell background color as a GdkColor"
+msgid "Cell background color as a GdkRGBA"
+msgstr "Lahtri taustavärv GdkColor vormingus"
+
 msgid "Editing"
 msgstr ""
 
@@ -864,30 +1133,6 @@ msgstr ""
 
 msgid "Whether this tag affects the cell background color"
 msgstr ""
-
-msgid "Accelerator key"
-msgstr "Kiirklahv"
-
-msgid "The keyval of the accelerator"
-msgstr "Kiirklahvi väärtus"
-
-msgid "Accelerator modifiers"
-msgstr "Kiirklahvide muuteklahvid"
-
-msgid "The modifier mask of the accelerator"
-msgstr "Kiirklahvide muuteklahvi mask"
-
-msgid "Accelerator keycode"
-msgstr "Kiirklahvi kood"
-
-msgid "The hardware keycode of the accelerator"
-msgstr "Kiirklahvi raudvaraline klahvikood"
-
-msgid "Accelerator Mode"
-msgstr "Kiirklahvide režiim"
-
-msgid "The type of accelerators"
-msgstr "Kiirklahvide liik"
 
 msgid "Model"
 msgstr "Mudel"
@@ -985,16 +1230,18 @@ msgstr "Teksti Y-joondus"
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Teksti püstjoondus: 0 - ülevalt, 1 - alt."
 
-msgid "Orientation"
-msgstr "Asend"
+msgid "Inverted"
+msgstr "Pööratud"
 
-msgid "Orientation and growth direction of the progress bar"
+#, fuzzy
+#| msgid "Orientation and growth direction of the progress bar"
+msgid "Invert the direction in which the progress bar grows"
 msgstr "Edenemisriba ja selle kasvamise suund"
 
 msgid "Adjustment"
 msgstr "Joondus"
 
-msgid "The adjustment that holds the value of the spinbutton."
+msgid "The adjustment that holds the value of the spin button"
 msgstr ""
 
 msgid "Climb rate"
@@ -1008,6 +1255,22 @@ msgstr "Komakohti"
 
 msgid "The number of decimal places to display"
 msgstr "Kuvatavate komakohtade arv"
+
+msgid "Active"
+msgstr "Aktiivne"
+
+#, fuzzy
+#| msgid "Whether the selected font style is shown in the label"
+msgid "Whether the spinner is active (ie. shown) in the cell"
+msgstr "Kas valitud kirjatüübi laadi näidatakse sildil või mitte"
+
+#, fuzzy
+#| msgid "Name of the printer"
+msgid "Pulse of the spinner"
+msgstr "Printeri nimi"
+
+msgid "The GtkIconSize value that specifies the size of the rendered spinner"
+msgstr ""
 
 msgid "Text to render"
 msgstr ""
@@ -1027,7 +1290,9 @@ msgstr ""
 msgid "Single Paragraph Mode"
 msgstr "Ühe lõigu stiil"
 
-msgid "Whether or not to keep all text in a single paragraph"
+#, fuzzy
+#| msgid "Whether or not to keep all text in a single paragraph"
+msgid "Whether to keep all text in a single paragraph"
 msgstr "Kas kogu teksti hoitakse ühe lõiguna"
 
 msgid "Background color name"
@@ -1042,6 +1307,16 @@ msgstr "Taustavärv"
 msgid "Background color as a GdkColor"
 msgstr "Taustavärv GdkColor väärtusena"
 
+#, fuzzy
+#| msgid "Background color name"
+msgid "Background color as RGBA"
+msgstr "Taustavärvi nimi"
+
+#, fuzzy
+#| msgid "Background color as a GdkColor"
+msgid "Background color as a GdkRGBA"
+msgstr "Taustavärv GdkColor väärtusena"
+
 msgid "Foreground color name"
 msgstr "Esiplaanivärvi nimi"
 
@@ -1052,6 +1327,16 @@ msgid "Foreground color"
 msgstr "Esiplaanivärv"
 
 msgid "Foreground color as a GdkColor"
+msgstr "Esiplaanivärv GdkColor väärtusena"
+
+#, fuzzy
+#| msgid "Foreground color name"
+msgid "Foreground color as RGBA"
+msgstr "Esiplaanivärvi nimi"
+
+#, fuzzy
+#| msgid "Foreground color as a GdkColor"
+msgid "Foreground color as a GdkRGBA"
 msgstr "Esiplaanivärv GdkColor väärtusena"
 
 msgid "Editable"
@@ -1143,6 +1428,14 @@ msgstr "Laius märkides"
 
 msgid "The desired width of the label, in characters"
 msgstr "Sildi soovitud laius märkides"
+
+msgid "Maximum Width In Characters"
+msgstr "Maksimaalne laius märkides"
+
+#, fuzzy
+#| msgid "The desired maximum width of the label, in characters"
+msgid "The maximum width of the cell, in characters"
+msgstr "Sildi suurim soovitud laius märkides"
 
 msgid "Wrap mode"
 msgstr "Murdmisrežiim"
@@ -1292,11 +1585,46 @@ msgstr "Näidiku suurus"
 msgid "Size of check or radio indicator"
 msgstr "Märkeruudu või raadionäidiku suurus"
 
+#, fuzzy
+#| msgid "Background color"
+msgid "Background RGBA color"
+msgstr "Taustavärv"
+
 msgid "CellView model"
 msgstr "LahtriVaate (CellView) mudel"
 
 msgid "The model for cell view"
 msgstr "Lahtrivaate mudel"
+
+msgid "Cell Area"
+msgstr ""
+
+msgid "The GtkCellArea used to layout cells"
+msgstr ""
+
+msgid "Cell Area Context"
+msgstr ""
+
+msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
+msgstr ""
+
+#, fuzzy
+#| msgid "Sensitive"
+msgid "Draw Sensitive"
+msgstr "Tundlik"
+
+#, fuzzy
+#| msgid "Whether there should be an icon near the item"
+msgid "Whether to force cells to be drawn in a sensitive state"
+msgstr "Kas kirje ligidal peaks olema ikoon või mitte"
+
+#, fuzzy
+#| msgid "Model"
+msgid "Fit Model"
+msgstr "Mudel"
+
+msgid "Whether to request enough space for every row in the model"
+msgstr ""
 
 msgid "Indicator Size"
 msgstr "Näidiku suurus"
@@ -1306,9 +1634,6 @@ msgstr "Ruum näidiku ümber"
 
 msgid "Spacing around check or radio indicator"
 msgstr "Ruum märkeruudu või raadionäidiku ümber"
-
-msgid "Active"
-msgstr "Aktiivne"
 
 msgid "Whether the menu item is checked"
 msgstr ""
@@ -1328,7 +1653,9 @@ msgstr ""
 msgid "Use alpha"
 msgstr "Läbipaistvuse kasutamine"
 
-msgid "Whether or not to give the color an alpha value"
+#, fuzzy
+#| msgid "Whether or not to give the color an alpha value"
+msgid "Whether to give the color an alpha value"
 msgstr "Kas värvus on läbipaistev või mitte"
 
 msgid "Title"
@@ -1350,6 +1677,16 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Läbipaistvuse tase (0 - täiesti läbipaistev, 65535 - täiesti läbipaistmatu)"
 
+#, fuzzy
+#| msgid "Current Color"
+msgid "Current RGBA Color"
+msgstr "Praegune värvus"
+
+#, fuzzy
+#| msgid "The selected color"
+msgid "The selected RGBA color"
+msgstr "Valitud värvus"
+
 msgid "Has Opacity Control"
 msgstr "Koos katvuse määramisega"
 
@@ -1370,11 +1707,15 @@ msgstr ""
 "Praegune katvuse väärtus (0 on täiesti läbipaistev, 65535 on täiesti "
 "läbipaistmatu)"
 
-msgid "Custom palette"
-msgstr "Kohandatud palett"
+#, fuzzy
+#| msgid "Current Alpha"
+msgid "Current RGBA"
+msgstr "Praegune läbipaistvus"
 
-msgid "Palette to use in the color selector"
-msgstr "Värvusevalikus kasutatav palett"
+#, fuzzy
+#| msgid "The current color"
+msgid "The current RGBA color"
+msgstr "Praegune värvus"
 
 msgid "Color Selection"
 msgstr "Värvuse valik"
@@ -1399,36 +1740,6 @@ msgstr "Abinupp"
 
 msgid "The help button of the dialog."
 msgstr "Dialoogi abinupp."
-
-msgid "Enable arrow keys"
-msgstr "Nooleklahvide lubamine"
-
-msgid "Whether the arrow keys move through the list of items"
-msgstr "Kas nooleklahve saab kasutada kirjete loendis liikumiseks"
-
-msgid "Always enable arrows"
-msgstr "Nooled on alati lubatud"
-
-msgid "Obsolete property, ignored"
-msgstr "Iganenud omadus, mida eiratakse"
-
-msgid "Case sensitive"
-msgstr "Tõstutundlik"
-
-msgid "Whether list item matching is case sensitive"
-msgstr "Kas vastav nimekirja kirje on tõstutundlik või mitte"
-
-msgid "Allow empty"
-msgstr ""
-
-msgid "Whether an empty value may be entered in this field"
-msgstr ""
-
-msgid "Value in list"
-msgstr ""
-
-msgid "Whether entered values must already be present in the list"
-msgstr ""
 
 msgid "ComboBox model"
 msgstr ""
@@ -1494,6 +1805,51 @@ msgstr "Nupu tundlikkus"
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Kas nupp saab selle hiirega klõpsamisel fookuse või mitte"
 
+#, fuzzy
+#| msgid "Whether the combo box draws a frame around the child"
+msgid "Whether combo box has an entry"
+msgstr "Kas valikukast joonistab lapskirje ümber raami või mitte"
+
+#, fuzzy
+#| msgid "Text Column"
+msgid "Entry Text Column"
+msgstr "Tekstiveerg"
+
+msgid ""
+"The column in the combo box's model to associate with strings from the entry "
+"if the combo was created with #GtkComboBox:has-entry = %TRUE"
+msgstr ""
+
+#, fuzzy
+#| msgid "Columns"
+msgid "ID Column"
+msgstr "Veerge"
+
+msgid ""
+"The column in the combo box's model that provides string IDs for the values "
+"in the model"
+msgstr ""
+
+#, fuzzy
+#| msgid "Active"
+msgid "Active id"
+msgstr "Aktiivne"
+
+#, fuzzy
+#| msgid "The name of the icon from the icon theme"
+msgid "The value of the id column for the active row"
+msgstr "Ikooniteemast pärinev ikooni nimi"
+
+#, fuzzy
+#| msgid "Fixed Width"
+msgid "Popup Fixed Width"
+msgstr "Fikseeritud laius"
+
+msgid ""
+"Whether the popup's width should be a fixed width matching the allocated "
+"width of the combo box"
+msgstr ""
+
 msgid "Appears as list"
 msgstr ""
 
@@ -1529,42 +1885,6 @@ msgstr ""
 
 msgid "Can be used to add a new child to the container"
 msgstr ""
-
-msgid "Curve type"
-msgstr "Kaare liik"
-
-msgid "Is this curve linear, spline interpolated, or free-form"
-msgstr ""
-
-msgid "Minimum X"
-msgstr "Väikseim X"
-
-msgid "Minimum possible value for X"
-msgstr "X-i väikseim võimalik väärtus"
-
-msgid "Maximum X"
-msgstr "Suurim X"
-
-msgid "Maximum possible X value"
-msgstr "X-i suurim võimalik väärtus"
-
-msgid "Minimum Y"
-msgstr "Väikseim Y"
-
-msgid "Minimum possible value for Y"
-msgstr "Y-i väikseim võimalik väärtus"
-
-msgid "Maximum Y"
-msgstr "Suurim Y"
-
-msgid "Maximum possible value for Y"
-msgstr "Y-i suurim võimalik väärtus"
-
-msgid "Has separator"
-msgstr "Omab eraldajat"
-
-msgid "The dialog has a separator bar above its buttons"
-msgstr "Kas dialoogil on nuppude kohal eraldaja"
 
 msgid "Content area border"
 msgstr "Sisupiirkonna ääris"
@@ -1697,11 +2017,13 @@ msgstr "Teksti pikkus"
 msgid "Length of the text currently in the entry"
 msgstr ""
 
-msgid "Invisible char set"
-msgstr "Nähtamatu märk määratud"
+#, fuzzy
+#| msgid "Invisible character"
+msgid "Invisible character set"
+msgstr "Nähtamatu märk"
 
 #, fuzzy
-msgid "Whether the invisible char has been set"
+msgid "Whether the invisible character has been set"
 msgstr "Kas ikooni suuruse omadus on määratud või mitte"
 
 msgid "Caps Lock warning"
@@ -1876,24 +2198,6 @@ msgstr "Edenemisriba tekst"
 msgid "Border between text and frame."
 msgstr "Teksti ja raami vahel asuv ääris."
 
-msgid "State Hint"
-msgstr "Olekusvihje"
-
-msgid "Whether to pass a proper state when drawing shadow or background"
-msgstr ""
-
-msgid "Select on focus"
-msgstr "Valimine fokuseerimisel"
-
-msgid "Whether to select the contents of an entry when it is focused"
-msgstr "Kas kirje fokuseerimisel tuleb kirje sisu valida või mitte"
-
-msgid "Password Hint Timeout"
-msgstr "Paroolivihje ajapiirang"
-
-msgid "How long to show the last input character in hidden entries"
-msgstr ""
-
 #, fuzzy
 msgid "The contents of the buffer"
 msgstr "Sildi tekst"
@@ -1989,6 +2293,16 @@ msgstr "Sildividin"
 msgid "A widget to display in place of the usual expander label"
 msgstr ""
 
+#, fuzzy
+#| msgid "Label"
+msgid "Label fill"
+msgstr "Silt"
+
+#, fuzzy
+#| msgid "Whether the children should all be the same size"
+msgid "Whether the label widget should fill all available horizontal space"
+msgstr "Kas lapsed peaksid kõik olema sama suurusega või mitte"
+
 msgid "Expander Size"
 msgstr "Laiendaja suurus"
 
@@ -1998,17 +2312,23 @@ msgstr "Laiendaja noole suurus"
 msgid "Spacing around expander arrow"
 msgstr "Laiendaja noole ümber olev ruum"
 
+msgid "Dialog"
+msgstr "Dialoog"
+
+msgid "The file chooser dialog to use."
+msgstr "Failivalimise dialoog."
+
+msgid "The title of the file chooser dialog."
+msgstr "Failivalimise dialoogi pealkiri"
+
+msgid "The desired width of the button widget, in characters."
+msgstr "Nupuvidina soovitud laius märkides"
+
 msgid "Action"
 msgstr "Tegevus"
 
 msgid "The type of operation that the file selector is performing"
 msgstr "Failivalija poolt teostatava operatsiooni liik."
-
-msgid "File System Backend"
-msgstr "Failisüsteemi taustaprogramm"
-
-msgid "Name of file system backend to use"
-msgstr "Kasutatava failisüsteemi taustaprogrammi nimi"
 
 msgid "Filter"
 msgstr "Filter"
@@ -2073,7 +2393,7 @@ msgstr ""
 
 #, fuzzy
 #| msgid "Show file operations"
-msgid "Allow folders creation"
+msgid "Allow folder creation"
 msgstr "Näita failitegevusi"
 
 #, fuzzy
@@ -2086,30 +2406,6 @@ msgid ""
 msgstr ""
 "Kas failivalija peab salvestamisel küsima faili ülekirjutamise kohta "
 "kinnitust või mitte."
-
-msgid "Dialog"
-msgstr "Dialoog"
-
-msgid "The file chooser dialog to use."
-msgstr "Failivalimise dialoog."
-
-msgid "The title of the file chooser dialog."
-msgstr "Failivalimise dialoogi pealkiri"
-
-msgid "The desired width of the button widget, in characters."
-msgstr "Nupuvidina soovitud laius märkides"
-
-msgid "Filename"
-msgstr "Failinimi"
-
-msgid "The currently selected filename"
-msgstr "Hetkel valitud faili nimi"
-
-msgid "Show file operations"
-msgstr "Näita failitegevusi"
-
-msgid "Whether buttons for creating/manipulating files should be displayed"
-msgstr ""
 
 msgid "X position"
 msgstr "X-asukoht"
@@ -2163,9 +2459,6 @@ msgstr "Kas valitud kirjatüübi suurust näidatakse sildil või mitte"
 msgid "The string that represents this font"
 msgstr "Seda kirjatüüpi esitav X-string"
 
-msgid "The GdkFont that is currently selected"
-msgstr "Hetkel valitud GdkFont"
-
 msgid "Preview text"
 msgstr "Näidistekst"
 
@@ -2187,9 +2480,6 @@ msgstr "Sildi Y-joondus"
 msgid "The vertical alignment of the label"
 msgstr "Sildi püstine joondamine"
 
-msgid "Deprecated property, use shadow_type instead"
-msgstr ""
-
 msgid "Frame shadow"
 msgstr "Raami vari"
 
@@ -2198,6 +2488,68 @@ msgstr "Raami äärise välimus"
 
 msgid "A widget to display in place of the usual frame label"
 msgstr ""
+
+msgid "Row spacing"
+msgstr "Ruum ridade vahel"
+
+msgid "The amount of space between two consecutive rows"
+msgstr "Kahe kohakuti oleva rea vahele jäetava ruumi hulk"
+
+msgid "Column spacing"
+msgstr "Ruum veergude vahel"
+
+msgid "The amount of space between two consecutive columns"
+msgstr "Kahe kõrvuti oleva veeru vahele jäetava ruumi hulk"
+
+#, fuzzy
+#| msgid "Homogeneous"
+msgid "Row Homogeneous"
+msgstr "Homogeenne"
+
+#, fuzzy
+#| msgid "If TRUE, the table cells are all the same width/height"
+msgid "If TRUE, the rows are all the same height"
+msgstr "Kui märgitud, siis on kõik tabeli lahtrid sama kõrguse ja laiusega"
+
+#, fuzzy
+#| msgid "Homogeneous"
+msgid "Column Homogeneous"
+msgstr "Homogeenne"
+
+#, fuzzy
+#| msgid "If TRUE, the table cells are all the same width/height"
+msgid "If TRUE, the columns are all the same width"
+msgstr "Kui märgitud, siis on kõik tabeli lahtrid sama kõrguse ja laiusega"
+
+msgid "Left attachment"
+msgstr ""
+
+msgid "The column number to attach the left side of the child to"
+msgstr ""
+
+msgid "Top attachment"
+msgstr ""
+
+#, fuzzy
+#| msgid "The padding to insert at the top of the widget."
+msgid "The row number to attach the top side of a child widget to"
+msgstr "Vidina ülaosale lisatav polsterdus."
+
+msgid "Width"
+msgstr "Laius"
+
+#, fuzzy
+#| msgid "The number of columns in the table"
+msgid "The number of columns that a child spans"
+msgstr "Tabelis olevate veergude arv"
+
+msgid "Height"
+msgstr "Kõrgus"
+
+#, fuzzy
+#| msgid "The number of rows in the table"
+msgid "The number of rows that a child spans"
+msgstr "Tabelis olevate ridade arv"
 
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Konteineri ümber oleva varju välimus"
@@ -2292,6 +2644,11 @@ msgstr "Ääris"
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Ikoonivaate servadele lisatav ruum"
 
+#, fuzzy
+#| msgid "Orientation"
+msgid "Item Orientation"
+msgstr "Asend"
+
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
 msgstr ""
@@ -2307,6 +2664,14 @@ msgstr "Vihjeveerg"
 
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Mudelis asuv veerg, mis sisaldab kirjete tekstilisi vihjeid"
+
+#, fuzzy
+#| msgid "Bottom Padding"
+msgid "Item Padding"
+msgstr "Alumine polsterdus"
+
+msgid "Padding around icon view items"
+msgstr ""
 
 msgid "Selection Box Color"
 msgstr "Valikukasti värv"
@@ -2326,23 +2691,8 @@ msgstr ""
 msgid "A GdkPixbuf to display"
 msgstr ""
 
-msgid "Pixmap"
-msgstr ""
-
-msgid "A GdkPixmap to display"
-msgstr ""
-
-msgid "Image"
-msgstr "Pilt"
-
-msgid "A GdkImage to display"
-msgstr ""
-
-msgid "Mask"
-msgstr "Mask"
-
-msgid "Mask bitmap to use with GdkImage or GdkPixmap"
-msgstr ""
+msgid "Filename"
+msgstr "Failinimi"
 
 msgid "Filename to load and display"
 msgstr ""
@@ -2387,13 +2737,6 @@ msgstr ""
 msgid "Whether to use the label text to create a stock menu item"
 msgstr "Kas sildi teksti saab hiirega märkida või mitte"
 
-msgid "Always show image"
-msgstr ""
-
-#, fuzzy
-msgid "Whether the image will always be shown"
-msgstr "Kas vidin on nähtav või mitte"
-
 #, fuzzy
 msgid "Accel Group"
 msgstr "Tegevuste grupp"
@@ -2401,12 +2744,6 @@ msgstr "Tegevuste grupp"
 #, fuzzy
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Vidin kiirendite muutumiste jälgimiseks"
-
-msgid "Show menu images"
-msgstr ""
-
-msgid "Whether images should be shown in menus"
-msgstr ""
 
 msgid "Message Type"
 msgstr "Teate liik"
@@ -2425,6 +2762,9 @@ msgstr "Nuppude vahel olev ruum"
 #, fuzzy
 msgid "Width of border around the action area"
 msgstr "Ümber peadialoogi piirkonna oleva äärise laius"
+
+msgid "Screen"
+msgstr "Ekraan"
 
 msgid "The screen where this window will be displayed"
 msgstr ""
@@ -2499,9 +2839,6 @@ msgstr "Nurk"
 msgid "Angle at which the label is rotated"
 msgstr "Nurk, millega silti pööratakse"
 
-msgid "Maximum Width In Characters"
-msgstr "Maksimaalne laius märkides"
-
 msgid "The desired maximum width of the label, in characters"
 msgstr "Sildi suurim soovitud laius märkides"
 
@@ -2510,21 +2847,6 @@ msgstr "Külastatud viitade jälgimine"
 
 msgid "Whether visited links should be tracked"
 msgstr "Kas külastatud viitasid tuleb jälgida või mitte"
-
-msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr ""
-
-msgid "Horizontal adjustment"
-msgstr ""
-
-msgid "The GtkAdjustment for the horizontal position"
-msgstr ""
-
-msgid "Vertical adjustment"
-msgstr ""
-
-msgid "The GtkAdjustment for the vertical position"
-msgstr ""
 
 msgid "The width of the layout"
 msgstr "Paigutuse laius"
@@ -2543,6 +2865,27 @@ msgstr "Külastatud"
 
 msgid "Whether this link has been visited."
 msgstr "Kas viidatud kohta on külastatud või mitte."
+
+msgid "Pack direction"
+msgstr ""
+
+msgid "The pack direction of the menubar"
+msgstr ""
+
+msgid "Child Pack direction"
+msgstr ""
+
+msgid "The child pack direction of the menubar"
+msgstr ""
+
+msgid "Style of bevel around the menubar"
+msgstr ""
+
+msgid "Internal padding"
+msgstr "Sisemine polsterdus"
+
+msgid "Amount of border space between the menubar shadow and the menu items"
+msgstr "Äärise ruum menüüriba varju ja menüükirjete vahel"
 
 msgid "The currently selected menu item"
 msgstr "Hetkel valitud menüükirje"
@@ -2635,9 +2978,6 @@ msgstr "Kerimisnoolte asukohtade määramine"
 msgid "Left Attach"
 msgstr ""
 
-msgid "The column number to attach the left side of the child to"
-msgstr ""
-
 msgid "Right Attach"
 msgstr ""
 
@@ -2658,55 +2998,6 @@ msgstr ""
 
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
 msgstr ""
-
-msgid "Can change accelerators"
-msgstr ""
-
-msgid ""
-"Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr ""
-
-msgid "Delay before submenus appear"
-msgstr ""
-
-msgid ""
-"Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
-
-msgid "Delay before hiding a submenu"
-msgstr ""
-
-msgid ""
-"The time before hiding a submenu when the pointer is moving towards the "
-"submenu"
-msgstr ""
-
-msgid "Pack direction"
-msgstr ""
-
-msgid "The pack direction of the menubar"
-msgstr ""
-
-msgid "Child Pack direction"
-msgstr ""
-
-msgid "The child pack direction of the menubar"
-msgstr ""
-
-msgid "Style of bevel around the menubar"
-msgstr ""
-
-msgid "Internal padding"
-msgstr "Sisemine polsterdus"
-
-msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "Äärise ruum menüüriba varju ja menüükirjete vahel"
-
-msgid "Delay before drop down menus appear"
-msgstr "Viivitus enne rippmenüüde ilmumist"
-
-msgid "Delay before the submenus of a menu bar appear"
-msgstr "Viivitus enne menüüriba alammenüüde ilmumist"
 
 msgid "Right Justified"
 msgstr ""
@@ -2758,13 +3049,6 @@ msgstr "Pildi/sildi ääris"
 msgid "Width of border around the label and image in the message dialog"
 msgstr "Sõnumidialoogis oleva pildi või sildi äärise laius"
 
-msgid "Use separator"
-msgstr "Eraldaja kasutamine"
-
-msgid ""
-"Whether to put a separator between the message dialog's text and the buttons"
-msgstr "Kas teatedialoogi teate ja nuppude vahel peab olema eraldaja"
-
 msgid "Message Buttons"
 msgstr "Teatenupud"
 
@@ -2792,8 +3076,19 @@ msgstr ""
 msgid "The secondary text includes Pango markup."
 msgstr ""
 
+msgid "Image"
+msgstr "Pilt"
+
 msgid "The image"
 msgstr "Pilt"
+
+#, fuzzy
+#| msgid "Message Type"
+msgid "Message area"
+msgstr "Teate liik"
+
+msgid "GtkVBox that holds the dialog's primary and secondary labels"
+msgstr ""
 
 msgid "Y align"
 msgstr "Y-joondus"
@@ -2843,34 +3138,20 @@ msgstr "Sakkide asukoht"
 msgid "Which side of the notebook holds the tabs"
 msgstr "Millisel märkmiku küljel sakke hoitakse"
 
-msgid "Tab Border"
-msgstr "Saki ääris"
-
-msgid "Width of the border around the tab labels"
-msgstr "Saki sildi ümber oleva äärise laius"
-
-msgid "Horizontal Tab Border"
-msgstr "Saki rõhtne ääris"
-
-msgid "Width of the horizontal border of tab labels"
-msgstr "Sakisildi rõhtsa äärise laius"
-
-msgid "Vertical Tab Border"
-msgstr "Saki püstine ääris"
-
-msgid "Width of the vertical border of tab labels"
-msgstr "Sakisildi püstise äärise laius"
-
 msgid "Show Tabs"
 msgstr "Sakkide näitamine"
 
-msgid "Whether tabs should be shown or not"
+#, fuzzy
+#| msgid "Whether tabs should be shown or not"
+msgid "Whether tabs should be shown"
 msgstr "Kas sakke näidatakse või mitte"
 
 msgid "Show Border"
 msgstr "Äärise näitamine"
 
-msgid "Whether the border should be shown or not"
+#, fuzzy
+#| msgid "Whether the border should be shown or not"
+msgid "Whether the border should be shown"
 msgstr "Kas äärist näidatakse või mitte"
 
 msgid "Scrollable"
@@ -2891,20 +3172,15 @@ msgstr ""
 "Kui TÕENE, siis märkmikul parema hiirenupuga klõpsamine avab lehekülje "
 "vahetamise hüpikmenuu"
 
-msgid "Whether tabs should have homogeneous sizes"
-msgstr "Kas sakis peavad olema ühesuurused või mitte"
-
-msgid "Group ID"
+#, fuzzy
+#| msgid "Group ID"
+msgid "Group Name"
 msgstr "Grupi ID"
 
-msgid "Group ID for tabs drag and drop"
+#, fuzzy
+#| msgid "Group ID for tabs drag and drop"
+msgid "Group name for tab drag and drop"
 msgstr "Grupi ID sakkide lohistamiseks"
-
-msgid "Group"
-msgstr "Grupp"
-
-msgid "Group for tabs drag and drop"
-msgstr ""
 
 msgid "Tab label"
 msgstr "Saki silt"
@@ -2921,23 +3197,26 @@ msgstr "Alammenüü kirjes näidatav silt"
 msgid "Tab expand"
 msgstr ""
 
-msgid "Whether to expand the child's tab or not"
-msgstr ""
+#, fuzzy
+#| msgid "Whether to wrap the license text."
+msgid "Whether to expand the child's tab"
+msgstr "Kas litsentsi tekstu murtakse või mitte."
 
 msgid "Tab fill"
 msgstr ""
 
-msgid "Whether the child's tab should fill the allocated area or not"
-msgstr ""
-
-msgid "Tab pack type"
-msgstr ""
+#, fuzzy
+#| msgid "Whether the children should all be the same size"
+msgid "Whether the child's tab should fill the allocated area"
+msgstr "Kas lapsed peaksid kõik olema sama suurusega või mitte"
 
 msgid "Tab reorderable"
 msgstr ""
 
-msgid "Whether the tab is reorderable by user action or not"
-msgstr ""
+#, fuzzy
+#| msgid "Whether the tab is detachable"
+msgid "Whether the tab is reorderable by user action"
+msgstr "Kas sakk on lahtihaagitav või mitte"
 
 msgid "Tab detachable"
 msgstr "Sakk lahtihaagitav"
@@ -2989,20 +3268,50 @@ msgstr ""
 msgid "Scroll arrow spacing"
 msgstr ""
 
-msgid "User Data"
+msgid "Icon's count"
 msgstr ""
 
-msgid "Anonymous User Data Pointer"
+#, fuzzy
+#| msgid "The index of the current page"
+msgid "The count of the emblem currently displayed"
+msgstr "Käesoleva lehe indeks"
+
+#, fuzzy
+#| msgid "Icon Name"
+msgid "Icon's label"
+msgstr "Ikooni nimi"
+
+msgid "The label to be displayed over the icon"
 msgstr ""
 
-msgid "The menu of options"
+#, fuzzy
+#| msgid "Icon size set"
+msgid "Icon's style context"
+msgstr "Ikooni suurus määratud"
+
+msgid "The style context to theme the icon appearance"
 msgstr ""
 
-msgid "Size of dropdown indicator"
+#, fuzzy
+#| msgid "Background color"
+msgid "Background icon"
+msgstr "Taustavärv"
+
+msgid "The icon for the number emblem background"
 msgstr ""
 
-msgid "Spacing around indicator"
-msgstr "Näidiku ümber olev ruum"
+#, fuzzy
+#| msgid "Background color name"
+msgid "Background icon name"
+msgstr "Taustavärvi nimi"
+
+#, fuzzy
+#| msgid "The icon name to use for the printer"
+msgid "The icon name for the number emblem background"
+msgstr "Printeri jaoks kasutatava ikooni nimi"
+
+msgid "Orientation"
+msgstr "Asend"
 
 #, fuzzy
 msgid "The orientation of the orientable"
@@ -3051,8 +3360,10 @@ msgstr ""
 msgid "Embedded"
 msgstr ""
 
-msgid "Whether or not the plug is embedded"
-msgstr ""
+#, fuzzy
+#| msgid "Whether or not the status icon is embedded"
+msgid "Whether the plug is embedded"
+msgstr "Kas olekuikoon on põimitud või mitte"
 
 msgid "Socket Window"
 msgstr ""
@@ -3060,10 +3371,6 @@ msgstr ""
 #, fuzzy
 msgid "The window of the socket the plug is embedded in"
 msgstr "Kas olekuikoon on põimitud või mitte"
-
-msgid ""
-"Whether the preview widget should take up the entire space it is allocated"
-msgstr ""
 
 msgid "Name of the printer"
 msgstr "Printeri nimi"
@@ -3252,7 +3559,7 @@ msgstr ""
 msgid "Has Selection"
 msgstr "Värvuse valik"
 
-msgid "TRUE if a selecion exists."
+msgid "TRUE if a selection exists."
 msgstr ""
 
 #, fuzzy
@@ -3261,6 +3568,16 @@ msgstr "Lehekülje sätted"
 
 msgid "TRUE if page setup combos are embedded in GtkPrintDialog"
 msgstr ""
+
+#, fuzzy
+#| msgid "Number of Pages"
+msgid "Number of Pages To Print"
+msgstr "Lehekülgede arv"
+
+#, fuzzy
+#| msgid "The number of pages in the document."
+msgid "The number of pages that will be printed."
+msgstr "Dokumendis olevate lehekülgede arv."
 
 msgid "The GtkPageSetup to use"
 msgstr ""
@@ -3271,7 +3588,7 @@ msgstr "Valitud printer"
 msgid "The GtkPrinter which is selected"
 msgstr "Valitud GtkPrinter"
 
-msgid "Manual Capabilites"
+msgid "Manual Capabilities"
 msgstr ""
 
 msgid "Capabilities the application can handle"
@@ -3286,52 +3603,6 @@ msgid "Whether the application has a selection"
 msgstr "Kas tegevus on lubatud või mitte."
 
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
-msgstr ""
-
-msgid "Activity mode"
-msgstr ""
-
-msgid ""
-"If TRUE, the GtkProgress is in activity mode, meaning that it signals "
-"something is happening, but not how much of the activity is finished. This "
-"is used when you're doing something but don't know how long it will take."
-msgstr ""
-
-msgid "Show text"
-msgstr "Näidata tekstina"
-
-msgid "Whether the progress is shown as text."
-msgstr "Kas edenemisriba näidatakse tekstina."
-
-msgid "The GtkAdjustment connected to the progress bar (Deprecated)"
-msgstr ""
-
-msgid "Bar style"
-msgstr ""
-
-msgid "Specifies the visual style of the bar in percentage mode (Deprecated)"
-msgstr ""
-
-msgid "Activity Step"
-msgstr ""
-
-msgid "The increment used for each iteration in activity mode (Deprecated)"
-msgstr ""
-
-msgid "Activity Blocks"
-msgstr ""
-
-msgid ""
-"The number of blocks which can fit in the progress bar area in activity mode "
-"(Deprecated)"
-msgstr ""
-
-msgid "Discrete Blocks"
-msgstr ""
-
-msgid ""
-"The number of discrete blocks in a progress bar (when shown in the discrete "
-"style)"
 msgstr ""
 
 msgid "Fraction"
@@ -3349,42 +3620,60 @@ msgstr ""
 msgid "Text to be displayed in the progress bar"
 msgstr ""
 
+msgid "Show text"
+msgstr "Näidata tekstina"
+
+msgid "Whether the progress is shown as text."
+msgstr "Kas edenemisriba näidatakse tekstina."
+
 msgid ""
 "The preferred place to ellipsize the string, if the progress bar does not "
 "have enough room to display the entire string, if at all."
 msgstr ""
 
-msgid "XSpacing"
+#, fuzzy
+#| msgid "XSpacing"
+msgid "X spacing"
 msgstr "X-ruum"
 
 msgid "Extra spacing applied to the width of a progress bar."
 msgstr "Kerimisriba laiusele lisatav täiendav ruum."
 
-msgid "YSpacing"
+#, fuzzy
+#| msgid "YSpacing"
+msgid "Y spacing"
 msgstr "Y-ruum"
 
 msgid "Extra spacing applied to the height of a progress bar."
 msgstr "Kerimisriba kõrgusele lisatav täiendav ruum."
 
-msgid "Min horizontal bar width"
+#, fuzzy
+#| msgid "Min horizontal bar width"
+msgid "Minimum horizontal bar width"
 msgstr "Rõhtriba vähim laius"
 
 msgid "The minimum horizontal width of the progress bar"
 msgstr "Rõhtsa kerimisriba vähim laius"
 
-msgid "Min horizontal bar height"
+#, fuzzy
+#| msgid "Min horizontal bar height"
+msgid "Minimum horizontal bar height"
 msgstr "Rõhtriba vähim kõrgus"
 
 msgid "Minimum horizontal height of the progress bar"
 msgstr "Rõhtsa kerimisriba vähim kõrgus"
 
-msgid "Min vertical bar width"
+#, fuzzy
+#| msgid "Min vertical bar width"
+msgid "Minimum vertical bar width"
 msgstr "Püstriba vähim laius"
 
 msgid "The minimum vertical width of the progress bar"
 msgstr "Püstise kerimisriba vähim laius"
 
-msgid "Min vertical bar height"
+#, fuzzy
+#| msgid "Min vertical bar height"
+msgid "Minimum vertical bar height"
 msgstr "Püstriba vähim kõrgus"
 
 msgid "The minimum vertical height of the progress bar"
@@ -3397,6 +3686,9 @@ msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action "
 "is the current action of its group."
 msgstr ""
+
+msgid "Group"
+msgstr "Grupp"
 
 msgid "The radio action whose group this action belongs to."
 msgstr ""
@@ -3418,17 +3710,8 @@ msgstr ""
 msgid "The radio tool button whose group this button belongs to."
 msgstr ""
 
-msgid "Update policy"
-msgstr ""
-
-msgid "How the range should be updated on the screen"
-msgstr ""
-
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
-
-msgid "Inverted"
-msgstr "Pööratud"
 
 msgid "Invert direction slider moves to increase range value"
 msgstr "Kas liuguri suund on pööratud või mitte"
@@ -3503,22 +3786,6 @@ msgstr ""
 
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
-msgstr ""
-
-msgid "Draw slider ACTIVE during drag"
-msgstr ""
-
-msgid ""
-"With this option set to TRUE, sliders will be drawn ACTIVE and with shadow "
-"IN while they are dragged"
-msgstr ""
-
-msgid "Trough Side Details"
-msgstr ""
-
-msgid ""
-"When TRUE, the parts of the trough on the two sides of the slider are drawn "
-"with different details"
 msgstr ""
 
 msgid "Trough Under Steppers"
@@ -3600,39 +3867,24 @@ msgstr "Hetkel aktiivne filter ressursivaliku kuva filtreerimiseks"
 msgid "The full path to the file to be used to store and read the list"
 msgstr ""
 
-msgid ""
-"The maximum number of items to be returned by gtk_recent_manager_get_items()"
-msgstr ""
-
 msgid "The size of the recently used resources list"
 msgstr ""
 
-msgid "Lower"
+msgid "The value of the scale"
 msgstr ""
 
-msgid "Lower limit of ruler"
+msgid "The icon size"
+msgstr "Ikooni suurus"
+
+msgid ""
+"The GtkAdjustment that contains the current value of this scale button object"
 msgstr ""
 
-msgid "Upper"
-msgstr ""
+msgid "Icons"
+msgstr "Ikoonid"
 
-msgid "Upper limit of ruler"
-msgstr ""
-
-msgid "Position of mark on the ruler"
-msgstr ""
-
-msgid "Max Size"
-msgstr ""
-
-msgid "Maximum size of the ruler"
-msgstr ""
-
-msgid "Metric"
-msgstr ""
-
-msgid "The metric used for the ruler"
-msgstr ""
+msgid "List of icon names"
+msgstr "Ikooninimede loetelu"
 
 msgid "The number of decimal places that are displayed in the value"
 msgstr ""
@@ -3661,21 +3913,34 @@ msgstr "Väärtuse kaugus"
 msgid "Space between value text and the slider/trough area"
 msgstr ""
 
-msgid "The value of the scale"
+msgid "Horizontal adjustment"
 msgstr ""
-
-msgid "The icon size"
-msgstr "Ikooni suurus"
 
 msgid ""
-"The GtkAdjustment that contains the current value of this scale button object"
+"Horizontal adjustment that is shared between the scrollable widget and its "
+"controller"
 msgstr ""
 
-msgid "Icons"
-msgstr "Ikoonid"
+msgid "Vertical adjustment"
+msgstr ""
 
-msgid "List of icon names"
-msgstr "Ikooninimede loetelu"
+msgid ""
+"Vertical adjustment that is shared between the scrollable widget and its "
+"controller"
+msgstr ""
+
+#, fuzzy
+#| msgid "Horizontal scale"
+msgid "Horizontal Scrollable Policy"
+msgstr "Rõhtskaala"
+
+msgid "How the size of the content should be determined"
+msgstr ""
+
+#, fuzzy
+#| msgid "Vertical scale"
+msgid "Vertical Scrollable Policy"
+msgstr "Püstskaala"
 
 msgid "Minimum Slider Length"
 msgstr "Liuguri vähim pikkus"
@@ -3700,7 +3965,13 @@ msgstr ""
 msgid "Horizontal Adjustment"
 msgstr ""
 
+msgid "The GtkAdjustment for the horizontal position"
+msgstr ""
+
 msgid "Vertical Adjustment"
+msgstr ""
+
+msgid "The GtkAdjustment for the vertical position"
 msgstr ""
 
 msgid "Horizontal Scrollbar Policy"
@@ -3749,12 +4020,21 @@ msgstr "Kerimisriba kaugus"
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr "Kerimisriba ja keritava akna vahel olevate pikslite arv"
 
-msgid "Scrolled Window Placement"
+#, fuzzy
+#| msgid "Minimum Width"
+msgid "Minimum Content Width"
+msgstr "Minimaalne laius"
+
+msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 
+#, fuzzy
+#| msgid "Minimum child height"
+msgid "Minimum Content Height"
+msgstr "Lapse vähim kõrgus"
+
 msgid ""
-"Where the contents of scrolled windows are located with respect to the "
-"scrollbars, if not overridden by the scrolled window's own placement."
+"The minimum height that the scrolled window will allocate to its content"
 msgstr ""
 
 msgid "Draw"
@@ -4094,6 +4374,123 @@ msgstr "Vihjete lubamine"
 msgid "Whether tooltips should be shown on widgets"
 msgstr "Kas vidinate vihjeid näidatakse või mitte"
 
+msgid "Toolbar style"
+msgstr "Tööriistarea laad"
+
+msgid ""
+"Whether default toolbars have text only, text and icons, icons only, etc."
+msgstr ""
+"Näitab, kas vaikimisi on tööriistaribadel ainult tekst, ainult ikoonid või "
+"mõlemad, jne."
+
+#, fuzzy
+#| msgid "Toolbar icon size"
+msgid "Toolbar Icon Size"
+msgstr "Tööriistarea ikooni suurus"
+
+#, fuzzy
+#| msgid "Size of icons in default toolbars"
+msgid "The size of icons in default toolbars."
+msgstr "Tööriistareal olevate ikoonide vaikimisi suurus"
+
+#, fuzzy
+#| msgid "Enable Mnemonics"
+msgid "Auto Mnemonics"
+msgstr "Mnemoonilised kiirklahvid"
+
+msgid ""
+"Whether mnemonics should be automatically shown and hidden when the user "
+"presses the mnemonic activator."
+msgstr ""
+
+msgid "Application prefers a dark theme"
+msgstr ""
+
+#, fuzzy
+msgid "Whether the application prefers to have a dark theme."
+msgstr "Kas tegevus on lubatud või mitte."
+
+msgid "Show button images"
+msgstr "Nuppude piltide näitamine"
+
+msgid "Whether images should be shown on buttons"
+msgstr "Kas nuppudel näidatakse pilte või mitte"
+
+msgid "Select on focus"
+msgstr "Valimine fokuseerimisel"
+
+msgid "Whether to select the contents of an entry when it is focused"
+msgstr "Kas kirje fokuseerimisel tuleb kirje sisu valida või mitte"
+
+msgid "Password Hint Timeout"
+msgstr "Paroolivihje ajapiirang"
+
+msgid "How long to show the last input character in hidden entries"
+msgstr ""
+
+msgid "Show menu images"
+msgstr ""
+
+msgid "Whether images should be shown in menus"
+msgstr ""
+
+msgid "Delay before drop down menus appear"
+msgstr "Viivitus enne rippmenüüde ilmumist"
+
+msgid "Delay before the submenus of a menu bar appear"
+msgstr "Viivitus enne menüüriba alammenüüde ilmumist"
+
+msgid "Scrolled Window Placement"
+msgstr ""
+
+msgid ""
+"Where the contents of scrolled windows are located with respect to the "
+"scrollbars, if not overridden by the scrolled window's own placement."
+msgstr ""
+
+msgid "Can change accelerators"
+msgstr ""
+
+msgid ""
+"Whether menu accelerators can be changed by pressing a key over the menu item"
+msgstr ""
+
+msgid "Delay before submenus appear"
+msgstr ""
+
+msgid ""
+"Minimum time the pointer must stay over a menu item before the submenu appear"
+msgstr ""
+
+msgid "Delay before hiding a submenu"
+msgstr ""
+
+msgid ""
+"The time before hiding a submenu when the pointer is moving towards the "
+"submenu"
+msgstr ""
+
+msgid "Whether to select the contents of a selectable label when it is focused"
+msgstr ""
+
+msgid "Custom palette"
+msgstr "Kohandatud palett"
+
+msgid "Palette to use in the color selector"
+msgstr "Värvusevalikus kasutatav palett"
+
+msgid "IM Preedit style"
+msgstr ""
+
+msgid "How to draw the input method preedit string"
+msgstr ""
+
+msgid "IM Status style"
+msgstr ""
+
+msgid "How to draw the input method statusbar"
+msgstr "Kuidas peab sisendmeetodi olekuriba joonistama"
+
 msgid "Mode"
 msgstr ""
 
@@ -4107,9 +4504,6 @@ msgstr ""
 
 msgid ""
 "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr ""
-
-msgid "The adjustment that holds the value of the spinbutton"
 msgstr ""
 
 msgid "Climb Rate"
@@ -4148,11 +4542,9 @@ msgstr ""
 msgid "Style of bevel around the spin button"
 msgstr ""
 
-msgid "Has Resize Grip"
-msgstr ""
-
-msgid "Whether the statusbar has a grip for resizing the toplevel"
-msgstr ""
+#, fuzzy
+msgid "Whether the spinner is active"
+msgstr "Kas tegevus on lubatud või mitte."
 
 msgid "Style of bevel around the statusbar text"
 msgstr ""
@@ -4163,16 +4555,14 @@ msgstr "Ikooni suurus"
 msgid "The screen where this status icon will be displayed"
 msgstr "Ekraan, kus seda olekuikooni kuvatakse"
 
-msgid "Blinking"
-msgstr "Vilkumine"
-
-msgid "Whether or not the status icon is blinking"
-msgstr "Kas olekuikoon vilgub või mitte"
-
-msgid "Whether or not the status icon is visible"
+#, fuzzy
+#| msgid "Whether or not the status icon is visible"
+msgid "Whether the status icon is visible"
 msgstr "Kas olekuikoon on nähtav või mitte"
 
-msgid "Whether or not the status icon is embedded"
+#, fuzzy
+#| msgid "Whether or not the status icon is embedded"
+msgid "Whether the status icon is embedded"
 msgstr "Kas olekuikoon on põimitud või mitte"
 
 msgid "The orientation of the tray"
@@ -4199,6 +4589,33 @@ msgstr "Sellele salveikoonile näidatava vihje sisu"
 msgid "The title of this tray icon"
 msgstr "Selle salveikooni pealkiri"
 
+msgid "Style context"
+msgstr ""
+
+msgid "GtkStyleContext to get style from"
+msgstr ""
+
+msgid "The associated GdkScreen"
+msgstr ""
+
+#, fuzzy
+#| msgid "Text direction"
+msgid "Direction"
+msgstr "Teksti suund"
+
+msgid "Text direction"
+msgstr "Teksti suund"
+
+#, fuzzy
+#| msgid "Whether the widget responds to input"
+msgid "Whether the switch is on or off"
+msgstr "Kas vidin reageerib sisendile või mitte"
+
+#, fuzzy
+#| msgid "The minimum vertical width of the progress bar"
+msgid "The minimum width of the handle"
+msgstr "Püstise kerimisriba vähim laius"
+
 msgid "Rows"
 msgstr "Ridu"
 
@@ -4211,31 +4628,13 @@ msgstr "Veerge"
 msgid "The number of columns in the table"
 msgstr "Tabelis olevate veergude arv"
 
-msgid "Row spacing"
-msgstr "Ruum ridade vahel"
-
-msgid "The amount of space between two consecutive rows"
-msgstr "Kahe kohakuti oleva rea vahele jäetava ruumi hulk"
-
-msgid "Column spacing"
-msgstr "Ruum veergude vahel"
-
-msgid "The amount of space between two consecutive columns"
-msgstr "Kahe kõrvuti oleva veeru vahele jäetava ruumi hulk"
-
 msgid "If TRUE, the table cells are all the same width/height"
 msgstr "Kui märgitud, siis on kõik tabeli lahtrid sama kõrguse ja laiusega"
-
-msgid "Left attachment"
-msgstr ""
 
 msgid "Right attachment"
 msgstr ""
 
 msgid "The column number to attach the right side of a child widget to"
-msgstr ""
-
-msgid "Top attachment"
 msgstr ""
 
 msgid "The row number to attach the top of a child widget to"
@@ -4275,24 +4674,6 @@ msgid ""
 msgstr ""
 "Alamkirje ülemise ja alumise naaberkirje vahele jäetava täiendava ruumi hulk "
 "pikslites"
-
-msgid "Horizontal adjustment for the text widget"
-msgstr "Tekstividina rõhtjoondus"
-
-msgid "Vertical adjustment for the text widget"
-msgstr "Tekstividina püstjoondus"
-
-msgid "Line Wrap"
-msgstr "Reamurdmine"
-
-msgid "Whether lines are wrapped at widget edges"
-msgstr "Kas vidinate servas murtakse ridu või mitte"
-
-msgid "Word Wrap"
-msgstr "Sõnade murdmine"
-
-msgid "Whether words are wrapped at widget edges"
-msgstr "Kas sõnad murtakse vidina serval või mite"
 
 msgid "Tag Table"
 msgstr ""
@@ -4357,23 +4738,8 @@ msgid ""
 "of the tagged characters"
 msgstr ""
 
-msgid "Background stipple mask"
-msgstr ""
-
-msgid "Bitmap to use as a mask when drawing the text background"
-msgstr ""
-
 msgid "Foreground color as a (possibly unallocated) GdkColor"
 msgstr ""
-
-msgid "Foreground stipple mask"
-msgstr ""
-
-msgid "Bitmap to use as a mask when drawing the text foreground"
-msgstr ""
-
-msgid "Text direction"
-msgstr "Teksti suund"
 
 msgid "Text direction, e.g. right-to-left or left-to-right"
 msgstr "Teksti suund, kas vasakult-paremale või paremalt vasakule"
@@ -4490,18 +4856,6 @@ msgstr ""
 msgid "Whether this tag affects background height"
 msgstr ""
 
-msgid "Background stipple set"
-msgstr ""
-
-msgid "Whether this tag affects the background stipple"
-msgstr ""
-
-msgid "Foreground stipple set"
-msgstr ""
-
-msgid "Whether this tag affects the foreground stipple"
-msgstr ""
-
 msgid "Justification set"
 msgstr ""
 
@@ -4610,17 +4964,24 @@ msgstr ""
 msgid "Color with which to draw error-indication underlines"
 msgstr ""
 
+msgid "Theming engine name"
+msgstr ""
+
 msgid "Create the same proxies as a radio action"
 msgstr ""
 
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr ""
 
-msgid "If the toggle action should be active in or not"
-msgstr ""
+#, fuzzy
+#| msgid "Whether visited links should be tracked"
+msgid "Whether the toggle action should be active"
+msgstr "Kas külastatud viitasid tuleb jälgida või mitte"
 
-msgid "If the toggle button should be pressed in or not"
-msgstr ""
+#, fuzzy
+#| msgid "If the toggle part of the button is displayed"
+msgid "If the toggle button should be pressed in"
+msgstr "Kas nupu sisse/väljalülitamise osa kuvatakse või mitte"
 
 msgid "If the toggle button is in an \"in between\" state"
 msgstr ""
@@ -4642,12 +5003,6 @@ msgstr "Noole näitamine"
 
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr "Kui tööriistariba ei mahu aknasse, kas siis näidatakse noolt või mitte"
-
-msgid "Tooltips"
-msgstr "Vihjed"
-
-msgid "If the tooltips of the toolbar should be active or not"
-msgstr "Kas tööriistariba vihjed peaks olema aktiveeritud või mitte"
 
 msgid "Size of icons in this toolbar"
 msgstr "Ikoonide suurus sellel tööriistaribal"
@@ -4694,21 +5049,6 @@ msgstr ""
 msgid "Style of bevel around the toolbar"
 msgstr ""
 
-msgid "Toolbar style"
-msgstr "Tööriistarea laad"
-
-msgid ""
-"Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
-"Näitab, kas vaikimisi on tööriistaribadel ainult tekst, ainult ikoonid või "
-"mõlemad, jne."
-
-msgid "Toolbar icon size"
-msgstr "Tööriistarea ikooni suurus"
-
-msgid "Size of icons in default toolbars"
-msgstr "Tööriistareal olevate ikoonide vaikimisi suurus"
-
 msgid "Text to show in the item."
 msgstr ""
 
@@ -4751,6 +5091,165 @@ msgid ""
 "show text in GTK_TOOLBAR_BOTH_HORIZ mode"
 msgstr ""
 
+#, fuzzy
+#| msgid "A human-readable description of the status"
+msgid "The human-readable title of this item group"
+msgstr "Oleku kirjeldus inimloetaval kujul"
+
+#, fuzzy
+#| msgid "Icon widget to display in the item"
+msgid "A widget to display in place of the usual label"
+msgstr "Ikoonividin kirje kuvamiseks"
+
+msgid "Collapsed"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether the expander has been opened to reveal the child widget"
+msgid "Whether the group has been collapsed and items are hidden"
+msgstr "Las laiendaja on lapsvidina näitamiseks avatud või mitte"
+
+#, fuzzy
+#| msgid "Pixel size"
+msgid "ellipsize"
+msgstr "Piksli suurus"
+
+msgid "Ellipsize for item group headers"
+msgstr ""
+
+#, fuzzy
+#| msgid "Header image"
+msgid "Header Relief"
+msgstr "Päise pilt"
+
+#, fuzzy
+#| msgid "Show the column header buttons"
+msgid "Relief of the group header button"
+msgstr "Nuppude kuvamine veerupäises"
+
+#, fuzzy
+#| msgid "Header Padding"
+msgid "Header Spacing"
+msgstr "Päise polsterdus"
+
+#, fuzzy
+#| msgid "Spacing around expander arrow"
+msgid "Spacing between expander arrow and caption"
+msgstr "Laiendaja noole ümber olev ruum"
+
+#, fuzzy
+#| msgid "Whether the child should receive extra space when the parent grows"
+msgid "Whether the item should receive extra space when the group grows"
+msgstr "Kas lapsobjekt saab rohkem ruumi, kui vanemobjekti suurus kasvab"
+
+#, fuzzy
+#| msgid "Whether the children should all be the same size"
+msgid "Whether the item should fill the available space"
+msgstr "Kas lapsed peaksid kõik olema sama suurusega või mitte"
+
+msgid "New Row"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether the items should be displayed with a number"
+msgid "Whether the item should start a new row"
+msgstr "Kas kirjeid näidatakse koos numbritega või mitte"
+
+msgid "Position of the item within this group"
+msgstr ""
+
+#, fuzzy
+#| msgid "Size of icons in this toolbar"
+msgid "Size of icons in this tool palette"
+msgstr "Ikoonide suurus sellel tööriistaribal"
+
+#, fuzzy
+#| msgid "Size of icons in this toolbar"
+msgid "Style of items in the tool palette"
+msgstr "Ikoonide suurus sellel tööriistaribal"
+
+msgid "Exclusive"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether the items should be displayed with a number"
+msgid "Whether the item group should be the only expanded at a given time"
+msgstr "Kas kirjeid näidatakse koos numbritega või mitte"
+
+#, fuzzy
+#| msgid "Whether the child should receive extra space when the parent grows"
+msgid ""
+"Whether the item group should receive extra space when the palette grows"
+msgstr "Kas lapsobjekt saab rohkem ruumi, kui vanemobjekti suurus kasvab"
+
+#, fuzzy
+#| msgid "Foreground color as a string"
+msgid "Foreground color for symbolic icons"
+msgstr "Esiplaanivärv stringina"
+
+#, fuzzy
+#| msgid "Cursor color"
+msgid "Error color"
+msgstr "Kursori värvus"
+
+msgid "Error color for symbolic icons"
+msgstr ""
+
+#, fuzzy
+#| msgid "Background color"
+msgid "Warning color"
+msgstr "Taustavärv"
+
+msgid "Warning color for symbolic icons"
+msgstr ""
+
+#, fuzzy
+#| msgid "Cursor color"
+msgid "Success color"
+msgstr "Kursori värvus"
+
+msgid "Success color for symbolic icons"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether there should be an icon near the item"
+msgid "Padding that should be put around icons in the tray"
+msgstr "Kas kirje ligidal peaks olema ikoon või mitte"
+
+#, fuzzy
+#| msgid "The selection mode"
+msgid "TreeMenu model"
+msgstr "Valikurežiim"
+
+#, fuzzy
+#| msgid "The model for the icon view"
+msgid "The model for the tree menu"
+msgstr "Ikoonivaate mudel"
+
+msgid "TreeMenu root row"
+msgstr ""
+
+msgid "The TreeMenu will display children of the specified root"
+msgstr ""
+
+#, fuzzy
+#| msgid "Tearoff Title"
+msgid "Tearoff"
+msgstr "Lahtirebimise pealkiri"
+
+#, fuzzy
+#| msgid "Whether this widget has a tooltip"
+msgid "Whether the menu has a tearoff item"
+msgstr "Kas sellel vidinal on vihje või mitte"
+
+#, fuzzy
+#| msgid "Wrap width"
+msgid "Wrap Width"
+msgstr "Murdmise laius"
+
+msgid "Wrap width for laying out items in a grid"
+msgstr ""
+
 msgid "TreeModelSort Model"
 msgstr ""
 
@@ -4762,12 +5261,6 @@ msgstr ""
 
 msgid "The model for the tree view"
 msgstr ""
-
-msgid "Horizontal Adjustment for the widget"
-msgstr "Vidina horisontaalne suund"
-
-msgid "Vertical Adjustment for the widget"
-msgstr "Vidina vertikaalne suund"
 
 msgid "Headers Visible"
 msgstr "Päised nähtaval"
@@ -4894,12 +5387,6 @@ msgstr "Paarituarvulise rea värvus"
 msgid "Color to use for odd rows"
 msgstr "Paarituarvuliste ridade joonistamiseks kasutatav värvus"
 
-msgid "Row Ending details"
-msgstr ""
-
-msgid "Enable extended row background theming"
-msgstr ""
-
 msgid "Grid line width"
 msgstr ""
 
@@ -4936,9 +5423,6 @@ msgstr ""
 msgid "Current width of the column"
 msgstr ""
 
-msgid "Space which is inserted between cells"
-msgstr ""
-
 msgid "Sizing"
 msgstr ""
 
@@ -4950,9 +5434,6 @@ msgstr "Fikseeritud laius"
 
 msgid "Current fixed width of the column"
 msgstr "Veeru fikseeritud laius"
-
-msgid "Minimum Width"
-msgstr "Minimaalne laius"
 
 msgid "Minimum allowed width of the column"
 msgstr "Veeru minimaalne lubatud laius"
@@ -5014,18 +5495,16 @@ msgstr ""
 msgid "An XML string describing the merged UI"
 msgstr ""
 
-msgid ""
-"The GtkAdjustment that determines the values of the horizontal position for "
-"this viewport"
-msgstr ""
-
-msgid ""
-"The GtkAdjustment that determines the values of the vertical position for "
-"this viewport"
-msgstr ""
-
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr ""
+
+msgid "Use symbolic icons"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether to show a sort indicator"
+msgid "Whether to use symbolic icons"
+msgstr "Kas sortimisnäidikut tuleb näidata või mitte"
 
 msgid "Widget name"
 msgstr ""
@@ -5123,12 +5602,6 @@ msgstr ""
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
 msgstr ""
 
-msgid "Extension events"
-msgstr ""
-
-msgid "The mask that decides what kind of extension events this widget gets"
-msgstr ""
-
 msgid "No show all"
 msgstr ""
 
@@ -5148,8 +5621,100 @@ msgid "Double Buffered"
 msgstr ""
 
 #, fuzzy
-msgid "Whether or not the widget is double buffered"
+msgid "Whether the widget is double buffered"
 msgstr "Kas vidin on nähtav või mitte"
+
+msgid "How to position in extra horizontal space"
+msgstr ""
+
+msgid "How to position in extra vertical space"
+msgstr ""
+
+#, fuzzy
+#| msgid "Margin"
+msgid "Margin on Left"
+msgstr "Ääris"
+
+msgid "Pixels of extra space on the left side"
+msgstr ""
+
+msgid "Margin on Right"
+msgstr ""
+
+msgid "Pixels of extra space on the right side"
+msgstr ""
+
+#, fuzzy
+#| msgid "Margin"
+msgid "Margin on Top"
+msgstr "Ääris"
+
+msgid "Pixels of extra space on the top side"
+msgstr ""
+
+msgid "Margin on Bottom"
+msgstr ""
+
+msgid "Pixels of extra space on the bottom side"
+msgstr ""
+
+#, fuzzy
+#| msgid "Margin"
+msgid "All Margins"
+msgstr "Ääris"
+
+msgid "Pixels of extra space on all four sides"
+msgstr ""
+
+#, fuzzy
+#| msgid "Horizontal padding"
+msgid "Horizontal Expand"
+msgstr "Rõhtne polsterdus"
+
+#, fuzzy
+#| msgid "Whether the widget has the input focus"
+msgid "Whether widget wants more horizontal space"
+msgstr "Kas vidin on sisestamisfookuses või mitte"
+
+#, fuzzy
+#| msgid "Horizontal alignment"
+msgid "Horizontal Expand Set"
+msgstr "Rõhtjoondus"
+
+#, fuzzy
+#| msgid "Whether to strike through the text"
+msgid "Whether to use the hexpand property"
+msgstr "Kas tekst on läbi kriipsutatud või mitte"
+
+#, fuzzy
+#| msgid "Vertical padding"
+msgid "Vertical Expand"
+msgstr "Püstine polsterdus"
+
+#, fuzzy
+#| msgid "Whether the widget is visible"
+msgid "Whether widget wants more vertical space"
+msgstr "Kas vidin on nähtav või mitte"
+
+#, fuzzy
+#| msgid "Vertical alignment"
+msgid "Vertical Expand Set"
+msgstr "Püstjoondus"
+
+#, fuzzy
+#| msgid "Whether to wrap the license text."
+msgid "Whether to use the vexpand property"
+msgstr "Kas litsentsi tekstu murtakse või mitte."
+
+#, fuzzy
+#| msgid "Expand"
+msgid "Expand Both"
+msgstr "Laiendamine"
+
+#, fuzzy
+#| msgid "Whether the widget has the input focus"
+msgid "Whether widget wants to expand in both directions"
+msgstr "Kas vidin on sisestamisfookuses või mitte"
 
 msgid "Interior Focus"
 msgstr ""
@@ -5197,10 +5762,12 @@ msgstr ""
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr ""
 
-msgid "Draw Border"
-msgstr "Raami joonistamine"
+#, fuzzy
+#| msgid "Window Position"
+msgid "Window dragging"
+msgstr "Akna asukoht"
 
-msgid "Size of areas outside the widget's allocation to draw"
+msgid "Whether windows can be dragged by clicking on empty areas"
 msgstr ""
 
 msgid "Unvisited Link Color"
@@ -5273,24 +5840,6 @@ msgstr ""
 "Unikaalne käivitusidentifikaator startup-notification'i poolt kasutatava "
 "akna jaoks"
 
-msgid "Allow Shrink"
-msgstr ""
-
-#, no-c-format
-msgid ""
-"If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of the "
-"time a bad idea"
-msgstr ""
-"Kui TÕENE, siis aknal puudub minimaalne suurus. Sättides selle TÕESEKS on "
-"99% ulatuses halb idee"
-
-msgid "Allow Grow"
-msgstr "Luba kasvada"
-
-msgid "If TRUE, users can expand the window beyond its minimum size"
-msgstr ""
-"Kui TÕENE, siis kasutajad saavad laiendada akent miinimumsuurusest suuremaks"
-
 msgid "If TRUE, users can resize the window"
 msgstr "Kui TÕENE, siis kasutajad saavad akna suurust muuta"
 
@@ -5331,6 +5880,14 @@ msgstr "Kas see aken hävitatakse, kui tema vanem hävitatakse"
 
 msgid "Icon for this window"
 msgstr "Selle akna ikoon"
+
+#, fuzzy
+#| msgid "Mnemonic key"
+msgid "Mnemonics Visible"
+msgstr "Mnemooniline klahv"
+
+msgid "Whether mnemonics are currently visible in this window"
+msgstr ""
 
 msgid "Name of the themed icon for this window"
 msgstr "Sellele aknale määratud teemakohane ikoon"
@@ -5397,6 +5954,24 @@ msgstr "Kustutatav"
 msgid "Whether the window frame should have a close button"
 msgstr "Kas aknaraamil peaks olema sulgemisnupp"
 
+#, fuzzy
+#| msgid "Resize mode"
+msgid "Resize grip"
+msgstr "Suuruse muutmise režiim"
+
+#, fuzzy
+#| msgid "Whether the window frame should have a close button"
+msgid "Specifies whether the window should have a resize grip"
+msgstr "Kas aknaraamil peaks olema sulgemisnupp"
+
+msgid "Resize grip is visible"
+msgstr ""
+
+#, fuzzy
+#| msgid "Whether the action group is visible."
+msgid "Specifies whether the window's resize grip is visible."
+msgstr "Kas tegevuste grupp on nähtav või mitte."
+
 msgid "Gravity"
 msgstr "Külgetõmme"
 
@@ -5415,17 +5990,232 @@ msgstr "Akna läbipaistvus"
 msgid "The opacity of the window, from 0 to 1"
 msgstr "Akna läbipaistvus, väärtused vahemikus 0-1"
 
-msgid "IM Preedit style"
+msgid "Width of resize grip"
 msgstr ""
 
-msgid "How to draw the input method preedit string"
+msgid "Height of resize grip"
 msgstr ""
 
-msgid "IM Status style"
-msgstr ""
+msgid "GtkApplication"
+msgstr "GtkApplication"
 
-msgid "How to draw the input method statusbar"
-msgstr "Kuidas peab sisendmeetodi olekuriba joonistama"
+msgid "The GtkApplication for the window"
+msgstr "Akna GtkApplication"
+
+#~ msgid "Loop"
+#~ msgstr "Korduv"
+
+#~ msgid "Whether the animation should loop when it reaches the end"
+#~ msgstr "Kas animatsioonid peavad lõppedes uuesti alustama või mitte"
+
+#~ msgid "Number of Channels"
+#~ msgstr "Kanalite arv"
+
+#~ msgid "The number of samples per pixel"
+#~ msgstr "Näidiste arv piksli kohta"
+
+#~ msgid "Colorspace"
+#~ msgstr "Värviruum"
+
+#~ msgid "The colorspace in which the samples are interpreted"
+#~ msgstr "Värviruum, milles näidiseid tõlgendatakse"
+
+#~ msgid "Has Alpha"
+#~ msgstr "Alfa väärtusega"
+
+#~ msgid "Whether the pixbuf has an alpha channel"
+#~ msgstr "Kas pixbuf'il on alfakanal"
+
+#~ msgid "Bits per Sample"
+#~ msgstr "Bitte näidise kohta"
+
+#~ msgid "The number of bits per sample"
+#~ msgstr "Näidise bittide arv"
+
+#~ msgid "The number of columns of the pixbuf"
+#~ msgstr "Pixbuf'i tulpade arv"
+
+#~ msgid "The number of rows of the pixbuf"
+#~ msgstr "Pixbuf'i veergude arv"
+
+#~ msgid ""
+#~ "The number of bytes between the start of a row and the start of the next "
+#~ "row"
+#~ msgstr "Baitide arv rea ja järgmise rea alguse vahel"
+
+#~ msgid "Pixels"
+#~ msgstr "Piksleid"
+
+#~ msgid "A pointer to the pixel data of the pixbuf"
+#~ msgstr "Viit pixbuf'i piksliandmetele"
+
+#~ msgid "the GdkScreen for the renderer"
+#~ msgstr "Renderdaja GdkScreen"
+
+#~ msgid ""
+#~ "The label for the link to the website of the program. If this is not set, "
+#~ "it defaults to the URL"
+#~ msgstr ""
+#~ "Programmi veebisaidi URL-i silt. Kui seda pole määratud, siis vaikimis on "
+#~ "selleks URL ise"
+
+#~ msgid "Enable arrow keys"
+#~ msgstr "Nooleklahvide lubamine"
+
+#~ msgid "Whether the arrow keys move through the list of items"
+#~ msgstr "Kas nooleklahve saab kasutada kirjete loendis liikumiseks"
+
+#~ msgid "Always enable arrows"
+#~ msgstr "Nooled on alati lubatud"
+
+#~ msgid "Obsolete property, ignored"
+#~ msgstr "Iganenud omadus, mida eiratakse"
+
+#~ msgid "Case sensitive"
+#~ msgstr "Tõstutundlik"
+
+#~ msgid "Whether list item matching is case sensitive"
+#~ msgstr "Kas vastav nimekirja kirje on tõstutundlik või mitte"
+
+#~ msgid "Minimum X"
+#~ msgstr "Väikseim X"
+
+#~ msgid "Minimum possible value for X"
+#~ msgstr "X-i väikseim võimalik väärtus"
+
+#~ msgid "Maximum X"
+#~ msgstr "Suurim X"
+
+#~ msgid "Maximum possible X value"
+#~ msgstr "X-i suurim võimalik väärtus"
+
+#~ msgid "Minimum Y"
+#~ msgstr "Väikseim Y"
+
+#~ msgid "Minimum possible value for Y"
+#~ msgstr "Y-i väikseim võimalik väärtus"
+
+#~ msgid "Maximum Y"
+#~ msgstr "Suurim Y"
+
+#~ msgid "Maximum possible value for Y"
+#~ msgstr "Y-i suurim võimalik väärtus"
+
+#~ msgid "Has separator"
+#~ msgstr "Omab eraldajat"
+
+#~ msgid "The dialog has a separator bar above its buttons"
+#~ msgstr "Kas dialoogil on nuppude kohal eraldaja"
+
+#~ msgid "Invisible char set"
+#~ msgstr "Nähtamatu märk määratud"
+
+#~ msgid "State Hint"
+#~ msgstr "Olekusvihje"
+
+#~ msgid "File System Backend"
+#~ msgstr "Failisüsteemi taustaprogramm"
+
+#~ msgid "Name of file system backend to use"
+#~ msgstr "Kasutatava failisüsteemi taustaprogrammi nimi"
+
+#~ msgid "The currently selected filename"
+#~ msgstr "Hetkel valitud faili nimi"
+
+#~ msgid "Show file operations"
+#~ msgstr "Näita failitegevusi"
+
+#~ msgid "The GdkFont that is currently selected"
+#~ msgstr "Hetkel valitud GdkFont"
+
+#~ msgid "Mask"
+#~ msgstr "Mask"
+
+#~ msgid "Use separator"
+#~ msgstr "Eraldaja kasutamine"
+
+#~ msgid ""
+#~ "Whether to put a separator between the message dialog's text and the "
+#~ "buttons"
+#~ msgstr "Kas teatedialoogi teate ja nuppude vahel peab olema eraldaja"
+
+#~ msgid "Tab Border"
+#~ msgstr "Saki ääris"
+
+#~ msgid "Width of the border around the tab labels"
+#~ msgstr "Saki sildi ümber oleva äärise laius"
+
+#~ msgid "Horizontal Tab Border"
+#~ msgstr "Saki rõhtne ääris"
+
+#~ msgid "Width of the horizontal border of tab labels"
+#~ msgstr "Sakisildi rõhtsa äärise laius"
+
+#~ msgid "Vertical Tab Border"
+#~ msgstr "Saki püstine ääris"
+
+#~ msgid "Width of the vertical border of tab labels"
+#~ msgstr "Sakisildi püstise äärise laius"
+
+#~ msgid "Whether tabs should have homogeneous sizes"
+#~ msgstr "Kas sakis peavad olema ühesuurused või mitte"
+
+#~ msgid "Spacing around indicator"
+#~ msgstr "Näidiku ümber olev ruum"
+
+#~ msgid "Blinking"
+#~ msgstr "Vilkumine"
+
+#~ msgid "Whether or not the status icon is blinking"
+#~ msgstr "Kas olekuikoon vilgub või mitte"
+
+#~ msgid "Horizontal adjustment for the text widget"
+#~ msgstr "Tekstividina rõhtjoondus"
+
+#~ msgid "Vertical adjustment for the text widget"
+#~ msgstr "Tekstividina püstjoondus"
+
+#~ msgid "Line Wrap"
+#~ msgstr "Reamurdmine"
+
+#~ msgid "Whether lines are wrapped at widget edges"
+#~ msgstr "Kas vidinate servas murtakse ridu või mitte"
+
+#~ msgid "Word Wrap"
+#~ msgstr "Sõnade murdmine"
+
+#~ msgid "Whether words are wrapped at widget edges"
+#~ msgstr "Kas sõnad murtakse vidina serval või mite"
+
+#~ msgid "Tooltips"
+#~ msgstr "Vihjed"
+
+#~ msgid "If the tooltips of the toolbar should be active or not"
+#~ msgstr "Kas tööriistariba vihjed peaks olema aktiveeritud või mitte"
+
+#~ msgid "Horizontal Adjustment for the widget"
+#~ msgstr "Vidina horisontaalne suund"
+
+#~ msgid "Vertical Adjustment for the widget"
+#~ msgstr "Vidina vertikaalne suund"
+
+#~ msgid "Draw Border"
+#~ msgstr "Raami joonistamine"
+
+#~ msgid ""
+#~ "If TRUE, the window has no mimimum size. Setting this to TRUE is 99% of "
+#~ "the time a bad idea"
+#~ msgstr ""
+#~ "Kui TÕENE, siis aknal puudub minimaalne suurus. Sättides selle TÕESEKS on "
+#~ "99% ulatuses halb idee"
+
+#~ msgid "Allow Grow"
+#~ msgstr "Luba kasvada"
+
+#~ msgid "If TRUE, users can expand the window beyond its minimum size"
+#~ msgstr ""
+#~ "Kui TÕENE, siis kasutajad saavad laiendada akent miinimumsuurusest "
+#~ "suuremaks"
 
 #~ msgid "The orientation of the toolbar"
 #~ msgstr "Tööriistariba suund"

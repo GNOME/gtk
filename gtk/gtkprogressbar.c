@@ -1208,6 +1208,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
   if (priv->orientation != orientation)
     {
       priv->orientation = orientation;
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (pbar));
 
       if (gtk_widget_is_drawable (GTK_WIDGET (pbar)))
         gtk_widget_queue_resize (GTK_WIDGET (pbar));

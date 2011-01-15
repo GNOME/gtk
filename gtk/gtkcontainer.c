@@ -1766,7 +1766,7 @@ gtk_container_adjust_size_request (GtkWidget         *widget,
 
   container = GTK_CONTAINER (widget);
 
-  if (GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
+  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
     {
       int border_width;
 
@@ -1796,7 +1796,7 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
 
   container = GTK_CONTAINER (widget);
 
-  if (!GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
+  if (!GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
     {
       parent_class->adjust_size_allocation (widget, orientation,
 					    minimum_size, natural_size, allocated_pos,
@@ -1859,7 +1859,7 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
 {
   g_return_if_fail (GTK_IS_CONTAINER_CLASS (klass));
 
-  klass->handle_border_width = TRUE;
+  klass->_handle_border_width = TRUE;
 }
 
 /**

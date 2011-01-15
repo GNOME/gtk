@@ -63,10 +63,16 @@ gtk_show_uri (GdkScreen    *screen,
 {
   GdkAppLaunchContext *context;
   gboolean ret;
+  GdkDisplay *display;
 
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  context = gdk_display_get_app_launch_context (gdk_screen_get_display (screen));
+  if (screen != NULL)
+    display = gdk_screen_get_display (screen);
+  else
+    display = gdk_display_get_default ();
+
+  context = gdk_display_get_app_launch_context (display);
   gdk_app_launch_context_set_screen (context, screen);
   gdk_app_launch_context_set_timestamp (context, timestamp);
 

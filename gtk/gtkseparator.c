@@ -125,6 +125,7 @@ gtk_separator_set_property (GObject      *object,
     {
     case PROP_ORIENTATION:
       private->orientation = g_value_get_enum (value);
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
       gtk_widget_queue_resize (GTK_WIDGET (object));
       break;
     default:

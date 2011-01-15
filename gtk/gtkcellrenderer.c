@@ -1658,8 +1658,8 @@ gtk_cell_renderer_get_aligned_area (GtkCellRenderer      *cell,
   klass = GTK_CELL_RENDERER_GET_CLASS (cell);
   klass->get_aligned_area (cell, widget, flags, cell_area, aligned_area);
 
-  g_assert (aligned_area->x >= cell_area->x && aligned_area->x < cell_area->x + cell_area->width);
-  g_assert (aligned_area->y >= cell_area->y && aligned_area->y < cell_area->y + cell_area->height);
+  g_assert (aligned_area->x >= cell_area->x && aligned_area->x <= cell_area->x + cell_area->width);
+  g_assert (aligned_area->y >= cell_area->y && aligned_area->y <= cell_area->y + cell_area->height);
   g_assert ((aligned_area->x - cell_area->x) + aligned_area->width <= cell_area->width);
   g_assert ((aligned_area->y - cell_area->y) + aligned_area->height <= cell_area->height);
 }

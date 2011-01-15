@@ -1211,6 +1211,8 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   if (border_style == GTK_BORDER_STYLE_SOLID)
     {
       cairo_set_line_width (cr, border_width);
+
+      cairo_new_sub_path (cr);
       cairo_arc (cr,
 		 x + exterior_size / 2.,
 		 y + exterior_size / 2.,
@@ -1266,6 +1268,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 	  pad = MAX (0, (exterior_size - interior_size) / 2);
 	}
 
+      cairo_new_sub_path (cr);
       cairo_arc (cr,
 		 x + pad + interior_size / 2.,
 		 y + pad + interior_size / 2.,
@@ -2029,10 +2032,20 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   if (!running)
     progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
 
-  if (is_rtl)
-    angle = (G_PI) - ((G_PI / 2) * progress);
+  if (!gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_HORIZONTAL))
+    {
+      if (is_rtl)
+        angle = (G_PI) - ((G_PI / 2) * progress);
+      else
+        angle = (G_PI / 2) * progress;
+    }
   else
-    angle = (G_PI / 2) * progress;
+    {
+      if (is_rtl)
+        angle = (G_PI / 2) + ((G_PI / 2) * progress);
+      else
+        angle = (G_PI / 2) - ((G_PI / 2) * progress);
+    }
 
   interp = progress;
 

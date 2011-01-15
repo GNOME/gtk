@@ -1064,6 +1064,7 @@ gtk_cell_area_box_set_property (GObject       *object,
 
       /* Notify that size needs to be requested again */
       reset_contexts (box);
+
       break;
     case PROP_SPACING:
       gtk_cell_area_box_set_spacing (box, g_value_get_int (value));

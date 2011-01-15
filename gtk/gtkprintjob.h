@@ -42,6 +42,16 @@ typedef struct _GtkPrintJob          GtkPrintJob;
 typedef struct _GtkPrintJobClass     GtkPrintJobClass;
 typedef struct _GtkPrintJobPrivate   GtkPrintJobPrivate;
 
+/**
+ * GtkPrintJobCompleteFunc:
+ * @print_job: the #GtkPrintJob
+ * @user_data: user data that has been passed to gtk_print_job_send()
+ * @error: a #GError that contains error information if the sending
+ *     of the print job failed, otherwise %NULL
+ *
+ * The type of callback that is passed to gtk_print_job_send().
+ * It is called when the print job has been completely sent.
+ */
 typedef void (*GtkPrintJobCompleteFunc) (GtkPrintJob  *print_job,
                                          gpointer      user_data,
                                          const GError *error);

@@ -202,6 +202,15 @@ gtk_switch_button_release (GtkWidget      *widget,
       return TRUE;
     }
 
+  /* toggle the switch if the handle was clicked but a drag had not been
+   * initiated */
+  if (!priv->is_dragging && !priv->in_press)
+    {
+      gtk_switch_set_active (GTK_SWITCH (widget), !priv->is_active);
+
+      return TRUE;
+    }
+
   /* dragged toggle */
   if (priv->is_dragging)
     {

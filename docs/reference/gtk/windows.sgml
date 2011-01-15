@@ -2,7 +2,7 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-windows" revision="4 Feb 2001">
+<refentry id="gtk-windows">
 <refmeta>
 <refentrytitle>Using GTK+ on Windows</refentrytitle>
 <manvolnum>3</manvolnum>

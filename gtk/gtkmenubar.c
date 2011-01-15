@@ -24,6 +24,17 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
  */
 
+/**
+ * SECTION:gtkmenubar
+ * @Title: GtkMenuBar
+ * @Short_description: A subclass of GtkMenuShell which holds GtkMenuItem widgets
+ * @See_also: #GtkMenuShell, #GtkMenu, #GtkMenuItem
+ *
+ * The #GtkMenuBar is a subclass of #GtkMenuShell which contains one or
+ * more #GtkMenuItems. The result is a standard menu bar which can hold
+ * many menu items.
+ */
+
 #include "config.h"
 
 #include "gtkmenubar.h"
@@ -224,6 +235,13 @@ gtk_menu_bar_init (GtkMenuBar *menu_bar)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_MENUBAR);
 }
 
+/**
+ * gtk_menu_bar_new:
+ *
+ * Creates a new #GtkMenuBar
+ *
+ * Returns: the new menu bar, as a #GtkWidget
+ */
 GtkWidget*
 gtk_menu_bar_new (void)
 {

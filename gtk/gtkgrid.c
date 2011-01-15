@@ -191,6 +191,7 @@ gtk_grid_set_orientation (GtkGrid        *grid,
   if (priv->orientation != orientation)
     {
       priv->orientation = orientation;
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
 
       g_object_notify (G_OBJECT (grid), "orientation");
     }
