@@ -3242,55 +3242,6 @@ gtk_entry_size_allocate (GtkWidget     *widget,
     }
 }
 
-/* Kudos to the gnome-panel guys. */
-static void
-colorshift_pixbuf (GdkPixbuf *dest,
-                   GdkPixbuf *src,
-                   gint       shift)
-{
-  gint i, j;
-  gint width, height, has_alpha, src_rowstride, dest_rowstride;
-  guchar *target_pixels;
-  guchar *original_pixels;
-  guchar *pix_src;
-  guchar *pix_dest;
-  int val;
-  guchar r, g, b;
-
-  has_alpha       = gdk_pixbuf_get_has_alpha (src);
-  width           = gdk_pixbuf_get_width (src);
-  height          = gdk_pixbuf_get_height (src);
-  src_rowstride   = gdk_pixbuf_get_rowstride (src);
-  dest_rowstride  = gdk_pixbuf_get_rowstride (dest);
-  original_pixels = gdk_pixbuf_get_pixels (src);
-  target_pixels   = gdk_pixbuf_get_pixels (dest);
-
-  for (i = 0; i < height; i++)
-    {
-      pix_dest = target_pixels   + i * dest_rowstride;
-      pix_src  = original_pixels + i * src_rowstride;
-
-      for (j = 0; j < width; j++)
-        {
-          r = *(pix_src++);
-          g = *(pix_src++);
-          b = *(pix_src++);
-
-          val = r + shift;
-          *(pix_dest++) = CLAMP (val, 0, 255);
-
-          val = g + shift;
-          *(pix_dest++) = CLAMP (val, 0, 255);
-
-          val = b + shift;
-          *(pix_dest++) = CLAMP (val, 0, 255);
-
-          if (has_alpha)
-            *(pix_dest++) = *(pix_src++);
-        }
-    }
-}
-
 static gboolean
 should_prelight (GtkEntry             *entry,
                  GtkEntryIconPosition  icon_pos)
@@ -3299,7 +3250,7 @@ should_prelight (GtkEntry             *entry,
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   gboolean prelight;
 
-  if (!icon_info) 
+  if (!icon_info)
     return FALSE;
 
   if (icon_info->nonactivatable && icon_info->target_list == NULL)
@@ -3325,6 +3276,9 @@ draw_icon (GtkWidget            *widget,
   EntryIconInfo *icon_info = priv->icons[icon_pos];
   GdkPixbuf *pixbuf;
   gint x, y, width, height;
+  GtkStyleContext *context;
+  GtkIconSource *icon_source;
+  GtkStateFlags state;
 
   if (!icon_info)
     return;
@@ -3360,28 +3314,23 @@ draw_icon (GtkWidget            *widget,
   x = (width  - gdk_pixbuf_get_width (pixbuf)) / 2;
   y = (height - gdk_pixbuf_get_height (pixbuf)) / 2;
 
-  if (!gtk_widget_is_sensitive (widget) ||
-      icon_info->insensitive)
-    {
-      GdkPixbuf *temp_pixbuf;
+  icon_source = gtk_icon_source_new ();
+  gtk_icon_source_set_pixbuf (icon_source, pixbuf);
+  gtk_icon_source_set_state_wildcarded (icon_source, TRUE);
 
-      temp_pixbuf = gdk_pixbuf_copy (pixbuf);
-      gdk_pixbuf_saturate_and_pixelate (pixbuf,
-                                        temp_pixbuf,
-                                        0.8f,
-                                        TRUE);
-      g_object_unref (pixbuf);
-      pixbuf = temp_pixbuf;
-    }
+  state = 0;
+  if (!gtk_widget_is_sensitive (widget) || icon_info->insensitive)
+    state |= GTK_STATE_FLAG_INSENSITIVE;
   else if (icon_info->prelight)
-    {
-      GdkPixbuf *temp_pixbuf;
+    state |= GTK_STATE_FLAG_PRELIGHT;
 
-      temp_pixbuf = gdk_pixbuf_copy (pixbuf);
-      colorshift_pixbuf (temp_pixbuf, pixbuf, 30);
-      g_object_unref (pixbuf);
-      pixbuf = temp_pixbuf;
-    }
+  context = gtk_widget_get_style_context (widget);
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+  pixbuf = gtk_render_icon_pixbuf (context, icon_source, (GtkIconSize)-1);
+  gtk_style_context_restore (context);
+
+  gtk_icon_source_free (icon_source);
 
   gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
   cairo_paint (cr);
@@ -6671,7 +6620,7 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
         {
           icon_theme = gtk_icon_theme_get_for_screen (screen);
           settings = gtk_settings_get_for_screen (screen);
-          
+
           gtk_icon_size_lookup_for_settings (settings,
                                              GTK_ICON_SIZE_MENU,
                                              &width, &height);

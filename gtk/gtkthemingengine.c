@@ -3017,6 +3017,55 @@ lookup_icon_size (GtkThemingEngine *engine,
   return gtk_icon_size_lookup_for_settings (settings, size, width, height);
 }
 
+/* Kudos to the gnome-panel guys. */
+static void
+colorshift_pixbuf (GdkPixbuf *src,
+                   GdkPixbuf *dest,
+                   gint       shift)
+{
+  gint i, j;
+  gint width, height, has_alpha, src_rowstride, dest_rowstride;
+  guchar *target_pixels;
+  guchar *original_pixels;
+  guchar *pix_src;
+  guchar *pix_dest;
+  int val;
+  guchar r, g, b;
+
+  has_alpha       = gdk_pixbuf_get_has_alpha (src);
+  width           = gdk_pixbuf_get_width (src);
+  height          = gdk_pixbuf_get_height (src);
+  src_rowstride   = gdk_pixbuf_get_rowstride (src);
+  dest_rowstride  = gdk_pixbuf_get_rowstride (dest);
+  original_pixels = gdk_pixbuf_get_pixels (src);
+  target_pixels   = gdk_pixbuf_get_pixels (dest);
+
+  for (i = 0; i < height; i++)
+    {
+      pix_dest = target_pixels   + i * dest_rowstride;
+      pix_src  = original_pixels + i * src_rowstride;
+
+      for (j = 0; j < width; j++)
+        {
+          r = *(pix_src++);
+          g = *(pix_src++);
+          b = *(pix_src++);
+
+          val = r + shift;
+          *(pix_dest++) = CLAMP (val, 0, 255);
+
+          val = g + shift;
+          *(pix_dest++) = CLAMP (val, 0, 255);
+
+          val = b + shift;
+          *(pix_dest++) = CLAMP (val, 0, 255);
+
+          if (has_alpha)
+            *(pix_dest++) = *(pix_src++);
+        }
+    }
+}
+
 static GdkPixbuf *
 gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
                                        const GtkIconSource *source,
@@ -3063,8 +3112,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
       else if (state & GTK_STATE_FLAG_PRELIGHT)
         {
           stated = gdk_pixbuf_copy (scaled);
-          gdk_pixbuf_saturate_and_pixelate (scaled, stated,
-                                            1.2, FALSE);
+          colorshift_pixbuf (scaled, stated, 30);
           g_object_unref (scaled);
         }
       else
