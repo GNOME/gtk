@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+ MASTER\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
-"POT-Creation-Date: 2011-01-05 14:44+0000\n"
-"PO-Revision-Date: 2011-01-05 17:06+0200\n"
+"POT-Creation-Date: 2011-01-15 11:09+0000\n"
+"PO-Revision-Date: 2011-01-15 15:48+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -382,7 +382,7 @@ msgstr "Rakendust pole võimalik käivitada"
 
 #, c-format
 msgid "Could not find '%s'"
-msgstr ""
+msgstr "Rakendust \"%s\" pole võimalik leida"
 
 msgid "Could not find application"
 msgstr "Rakendust pole võimalik leida"
@@ -1198,6 +1198,14 @@ msgstr "Protsessi PID-iga %d pole võimalik lõpetada: %s"
 #, c-format
 msgid "Page %u"
 msgstr "Lehekülg %u"
+
+#. Translators: the format here is used to build the string that will be rendered
+#. * in the number emblem.
+#.
+#, c-format
+msgctxt "Number format"
+msgid "%d"
+msgstr "%d"
 
 msgid "Not a valid page setup file"
 msgstr "Pole korrektne lehekülje sätete fail"
