@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&component=general\n"
-"POT-Creation-Date: 2011-01-10 22:03+0000\n"
-"PO-Revision-Date: 2010-10-30 11:45+0300\n"
+"POT-Creation-Date: 2011-01-15 05:40+0000\n"
+"PO-Revision-Date: 2011-01-15 16:02+0200\n"
 "Last-Translator: Ivar Smolin <okul@linux.ee>\n"
 "Language-Team: Estonian <gnome-et@linux.ee>\n"
 "MIME-Version: 1.0\n"
@@ -68,29 +68,22 @@ msgid "Associated pointer or keyboard with this device"
 msgstr ""
 
 msgid "Input source"
-msgstr ""
+msgstr "Sisendallikas"
 
 msgid "Source type for the device"
-msgstr ""
+msgstr "Selle seadme sisendallika liik"
 
-#, fuzzy
-#| msgid "The model for the icon view"
 msgid "Input mode for the device"
-msgstr "Ikoonivaate mudel"
+msgstr "Seadme sisendrežiim"
 
-#, fuzzy
-#| msgid "Whether the widget has the input focus"
 msgid "Whether the device has a cursor"
-msgstr "Kas vidin on sisestamisfookuses või mitte"
+msgstr "Kas seadmel on kursor või mitte"
 
-#, fuzzy
 msgid "Whether there is a visible cursor following device motion"
-msgstr "Kas ikooni suuruse omadus on määratud või mitte"
+msgstr "Kas seadmel on selle liikumist järgiv nähtav kursor või mitte"
 
-#, fuzzy
-#| msgid "The number of pages in the document."
 msgid "Number of axes in the device"
-msgstr "Dokumendis olevate lehekülgede arv."
+msgstr "Seadme telgede arv"
 
 msgid "Display for the device manager"
 msgstr ""
@@ -891,8 +884,6 @@ msgstr "Üksikasjade näitamine"
 msgid "If TRUE, details are shown"
 msgstr "Kui märgitud, siis näidatakse üksikasju"
 
-#, fuzzy
-#| msgid "Inner Border"
 msgid "Inner border"
 msgstr "Sisemine ääris"
 
@@ -901,19 +892,15 @@ msgstr "Sisemine ääris"
 msgid "Inner border space"
 msgstr "Sisemine ääris"
 
-#, fuzzy
-#| msgid "Vertical padding"
 msgid "Vertical separation"
-msgstr "Püstine polsterdus"
+msgstr ""
 
 #, fuzzy
 msgid "Space between day headers and main area"
 msgstr "Nuppude vahel olev ruum"
 
-#, fuzzy
-#| msgid "Horizontal padding"
 msgid "Horizontal separation"
-msgstr "Rõhtne polsterdus"
+msgstr ""
 
 #, fuzzy
 msgid "Space between week headers and main area"
@@ -1112,10 +1099,8 @@ msgstr "Lahtri taustavärv"
 msgid "Cell background color as a GdkColor"
 msgstr "Lahtri taustavärv GdkColor vormingus"
 
-#, fuzzy
-#| msgid "Cell background color"
 msgid "Cell background RGBA color"
-msgstr "Lahtri taustavärv"
+msgstr "Lahtri RGBA-taustavärv"
 
 #, fuzzy
 #| msgid "Cell background color as a GdkColor"
@@ -1307,15 +1292,11 @@ msgstr "Taustavärv"
 msgid "Background color as a GdkColor"
 msgstr "Taustavärv GdkColor väärtusena"
 
-#, fuzzy
-#| msgid "Background color name"
 msgid "Background color as RGBA"
-msgstr "Taustavärvi nimi"
+msgstr "Taustavärv RGBA vormingus"
 
-#, fuzzy
-#| msgid "Background color as a GdkColor"
 msgid "Background color as a GdkRGBA"
-msgstr "Taustavärv GdkColor väärtusena"
+msgstr "Taustavärv GdkRGBA väärtusena"
 
 msgid "Foreground color name"
 msgstr "Esiplaanivärvi nimi"
@@ -1329,15 +1310,11 @@ msgstr "Esiplaanivärv"
 msgid "Foreground color as a GdkColor"
 msgstr "Esiplaanivärv GdkColor väärtusena"
 
-#, fuzzy
-#| msgid "Foreground color name"
 msgid "Foreground color as RGBA"
-msgstr "Esiplaanivärvi nimi"
+msgstr "Esiplaanivärv RGBA vormingus"
 
-#, fuzzy
-#| msgid "Foreground color as a GdkColor"
 msgid "Foreground color as a GdkRGBA"
-msgstr "Esiplaanivärv GdkColor väärtusena"
+msgstr "Esiplaanivärv GdkRGBA väärtusena"
 
 msgid "Editable"
 msgstr "Muudetav"
@@ -1585,10 +1562,8 @@ msgstr "Näidiku suurus"
 msgid "Size of check or radio indicator"
 msgstr "Märkeruudu või raadionäidiku suurus"
 
-#, fuzzy
-#| msgid "Background color"
 msgid "Background RGBA color"
-msgstr "Taustavärv"
+msgstr "RGBA-taustavärv"
 
 msgid "CellView model"
 msgstr "LahtriVaate (CellView) mudel"
@@ -1677,15 +1652,11 @@ msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
 msgstr ""
 "Läbipaistvuse tase (0 - täiesti läbipaistev, 65535 - täiesti läbipaistmatu)"
 
-#, fuzzy
-#| msgid "Current Color"
 msgid "Current RGBA Color"
-msgstr "Praegune värvus"
+msgstr "Praegune RGBA-värvus"
 
-#, fuzzy
-#| msgid "The selected color"
 msgid "The selected RGBA color"
-msgstr "Valitud värvus"
+msgstr "Valitud RGBA-värvus"
 
 msgid "Has Opacity Control"
 msgstr "Koos katvuse määramisega"
@@ -1707,15 +1678,11 @@ msgstr ""
 "Praegune katvuse väärtus (0 on täiesti läbipaistev, 65535 on täiesti "
 "läbipaistmatu)"
 
-#, fuzzy
-#| msgid "Current Alpha"
 msgid "Current RGBA"
-msgstr "Praegune läbipaistvus"
+msgstr "Praegune RGBA"
 
-#, fuzzy
-#| msgid "The current color"
 msgid "The current RGBA color"
-msgstr "Praegune värvus"
+msgstr "Praegune RGBA-värvus"
 
 msgid "Color Selection"
 msgstr "Värvuse valik"
@@ -2530,10 +2497,8 @@ msgstr ""
 msgid "Top attachment"
 msgstr ""
 
-#, fuzzy
-#| msgid "The padding to insert at the top of the widget."
 msgid "The row number to attach the top side of a child widget to"
-msgstr "Vidina ülaosale lisatav polsterdus."
+msgstr ""
 
 msgid "Width"
 msgstr "Laius"
@@ -2644,10 +2609,8 @@ msgstr "Ääris"
 msgid "Space which is inserted at the edges of the icon view"
 msgstr "Ikoonivaate servadele lisatav ruum"
 
-#, fuzzy
-#| msgid "Orientation"
 msgid "Item Orientation"
-msgstr "Asend"
+msgstr ""
 
 msgid ""
 "How the text and icon of each item are positioned relative to each other"
@@ -2665,10 +2628,8 @@ msgstr "Vihjeveerg"
 msgid "The column in the model containing the tooltip texts for the items"
 msgstr "Mudelis asuv veerg, mis sisaldab kirjete tekstilisi vihjeid"
 
-#, fuzzy
-#| msgid "Bottom Padding"
 msgid "Item Padding"
-msgstr "Alumine polsterdus"
+msgstr ""
 
 msgid "Padding around icon view items"
 msgstr ""
@@ -2882,7 +2843,7 @@ msgid "Style of bevel around the menubar"
 msgstr ""
 
 msgid "Internal padding"
-msgstr "Sisemine polsterdus"
+msgstr "Sisepolsterdus"
 
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Äärise ruum menüüriba varju ja menüükirjete vahel"
@@ -3749,6 +3710,16 @@ msgstr ""
 
 msgid "The fill level."
 msgstr ""
+
+#, fuzzy
+#| msgid "Digits"
+msgid "Round Digits"
+msgstr "Komakohti"
+
+#, fuzzy
+#| msgid "The number of pages in the document."
+msgid "The number of digits to round the value to."
+msgstr "Dokumendis olevate lehekülgede arv."
 
 msgid "Slider Width"
 msgstr "Liuguri laius"
@@ -4656,7 +4627,7 @@ msgid "Options specifying the vertical behaviour of the child"
 msgstr ""
 
 msgid "Horizontal padding"
-msgstr "Rõhtne polsterdus"
+msgstr "Rõhtpolsterdus"
 
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
@@ -4666,7 +4637,7 @@ msgstr ""
 "hulk pikslites"
 
 msgid "Vertical padding"
-msgstr "Püstine polsterdus"
+msgstr "Püstpolsterdus"
 
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
@@ -5666,10 +5637,8 @@ msgstr "Ääris"
 msgid "Pixels of extra space on all four sides"
 msgstr ""
 
-#, fuzzy
-#| msgid "Horizontal padding"
 msgid "Horizontal Expand"
-msgstr "Rõhtne polsterdus"
+msgstr ""
 
 #, fuzzy
 #| msgid "Whether the widget has the input focus"
@@ -5686,10 +5655,8 @@ msgstr "Rõhtjoondus"
 msgid "Whether to use the hexpand property"
 msgstr "Kas tekst on läbi kriipsutatud või mitte"
 
-#, fuzzy
-#| msgid "Vertical padding"
 msgid "Vertical Expand"
-msgstr "Püstine polsterdus"
+msgstr ""
 
 #, fuzzy
 #| msgid "Whether the widget is visible"
