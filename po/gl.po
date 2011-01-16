@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-06 23:53+0100\n"
-"PO-Revision-Date: 2011-01-06 23:57+0100\n"
+"POT-Creation-Date: 2011-01-16 17:11+0100\n"
+"PO-Revision-Date: 2011-01-16 17:11+0100\n"
 "Last-Translator: Fran Diéguez <frandieguez@ubuntu.com>\n"
 "Language-Team: Galician <gnome-gl-list@gnome.org>\n"
 "Language: gl\n"
@@ -522,15 +522,15 @@ msgstr "_Abrir"
 msgid "Default Application"
 msgstr "Aplicativo predeterminado"
 
-#: ../gtk/gtkappchooserwidget.c:729
+#: ../gtk/gtkappchooserwidget.c:730
 msgid "Recommended Applications"
 msgstr "Aplicativos recomendados"
 
-#: ../gtk/gtkappchooserwidget.c:743
+#: ../gtk/gtkappchooserwidget.c:744
 msgid "Related Applications"
 msgstr "Aplicativos relacionados"
 
-#: ../gtk/gtkappchooserwidget.c:756
+#: ../gtk/gtkappchooserwidget.c:758
 msgid "Other Applications"
 msgstr "Outros aplicativos"
 
@@ -566,7 +566,7 @@ msgstr "Etiqueta non compatíbel: «%s»"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:885
+#: ../gtk/gtkcalendar.c:871
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -574,7 +574,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:923
+#: ../gtk/gtkcalendar.c:909
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -583,7 +583,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1903
+#: ../gtk/gtkcalendar.c:1910
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -598,7 +598,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1934 ../gtk/gtkcalendar.c:2623
+#: ../gtk/gtkcalendar.c:1941 ../gtk/gtkcalendar.c:2638
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -614,7 +614,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1966 ../gtk/gtkcalendar.c:2491
+#: ../gtk/gtkcalendar.c:1973 ../gtk/gtkcalendar.c:2499
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -630,7 +630,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2256
+#: ../gtk/gtkcalendar.c:2268
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -656,7 +656,7 @@ msgstr "Incorrecta"
 #. * an accelerator when the cell is clicked to change the
 #. * acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:417 ../gtk/gtkcellrendereraccel.c:674
+#: ../gtk/gtkcellrendereraccel.c:417 ../gtk/gtkcellrendereraccel.c:730
 msgid "New accelerator..."
 msgstr "Tecla rápida nova..."
 
@@ -666,11 +666,11 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkcolorbutton.c:477
+#: ../gtk/gtkcolorbutton.c:187 ../gtk/gtkcolorbutton.c:483
 msgid "Pick a Color"
 msgstr "Seleccione unha cor"
 
-#: ../gtk/gtkcolorbutton.c:366
+#: ../gtk/gtkcolorbutton.c:372
 msgid "Received invalid color data\n"
 msgstr "Recibiuse un dato de cor incorrecto\n"
 
@@ -797,11 +797,11 @@ msgstr ""
 msgid "The color you've chosen."
 msgstr "A cor que seleccionou."
 
-#: ../gtk/gtkcolorsel.c:1444
+#: ../gtk/gtkcolorsel.c:1448
 msgid "_Save color here"
 msgstr "_Gardar a cor aquí"
 
-#: ../gtk/gtkcolorsel.c:1652
+#: ../gtk/gtkcolorsel.c:1656
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -825,7 +825,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:374 ../gtk/gtkprintunixdialog.c:3242
+#: ../gtk/gtkcustompaperunixdialog.c:374 ../gtk/gtkprintunixdialog.c:3255
 msgid "Manage Custom Sizes"
 msgstr "Xestionar os tamaños personalizados"
 
@@ -878,23 +878,23 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: ../gtk/gtkentry.c:8806 ../gtk/gtktextview.c:8222
+#: ../gtk/gtkentry.c:8755 ../gtk/gtktextview.c:8228
 msgid "Input _Methods"
 msgstr "_Métodos de entrada"
 
-#: ../gtk/gtkentry.c:8820 ../gtk/gtktextview.c:8236
+#: ../gtk/gtkentry.c:8769 ../gtk/gtktextview.c:8242
 msgid "_Insert Unicode Control Character"
 msgstr "_Inserir un carácter de control Unicode"
 
-#: ../gtk/gtkentry.c:10224
+#: ../gtk/gtkentry.c:10173
 msgid "Caps Lock and Num Lock are on"
 msgstr "Bloq Maiús e Bloq Num estás activados"
 
-#: ../gtk/gtkentry.c:10226
+#: ../gtk/gtkentry.c:10175
 msgid "Num Lock is on"
 msgstr "Bloq Num está activado"
 
-#: ../gtk/gtkentry.c:10228
+#: ../gtk/gtkentry.c:10177
 msgid "Caps Lock is on"
 msgstr "Bloq Maiús está activado"
 
@@ -1139,19 +1139,19 @@ msgstr "O atallo %s xa existe"
 msgid "Shortcut %s does not exist"
 msgstr "O atallo %s non existe"
 
-#: ../gtk/gtkfilechooserdefault.c:8046 ../gtk/gtkprintunixdialog.c:481
+#: ../gtk/gtkfilechooserdefault.c:8046 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "Xa existe un ficheiro con nome «%s». Quere substituílo?"
 
-#: ../gtk/gtkfilechooserdefault.c:8049 ../gtk/gtkprintunixdialog.c:485
+#: ../gtk/gtkfilechooserdefault.c:8049 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
 msgstr ""
 "O ficheiro xa existe en «%s». Se o substitúe sobrescribirá os seus contidos."
 
-#: ../gtk/gtkfilechooserdefault.c:8054 ../gtk/gtkprintunixdialog.c:492
+#: ../gtk/gtkfilechooserdefault.c:8054 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "_Substituír"
 
@@ -1265,24 +1265,24 @@ msgstr "Tipo de letra"
 msgid "abcdefghijk ABCDEFGHIJK"
 msgstr "abcdefghi ABCDEFGHI"
 
-#: ../gtk/gtkfontsel.c:367
+#: ../gtk/gtkfontsel.c:366
 msgid "_Family:"
 msgstr "_Familia:"
 
-#: ../gtk/gtkfontsel.c:373
+#: ../gtk/gtkfontsel.c:372
 msgid "_Style:"
 msgstr "_Estilo:"
 
-#: ../gtk/gtkfontsel.c:379
+#: ../gtk/gtkfontsel.c:378
 msgid "Si_ze:"
 msgstr "_Tamaño:"
 
 #. create the text entry widget
-#: ../gtk/gtkfontsel.c:555
+#: ../gtk/gtkfontsel.c:554
 msgid "_Preview:"
 msgstr "_Previsualización:"
 
-#: ../gtk/gtkfontsel.c:1655
+#: ../gtk/gtkfontsel.c:1651
 msgid "Font Selection"
 msgstr "Selección do tipo de letra"
 
@@ -1487,8 +1487,17 @@ msgstr "Non é posíbel finalizar o proceso co PID %d: %s"
 msgid "Page %u"
 msgstr "Páxina %u"
 
-#: ../gtk/gtkpagesetup.c:648 ../gtk/gtkpapersize.c:838
-#: ../gtk/gtkpapersize.c:880
+#. Translators: the format here is used to build the string that will be rendered
+#. * in the number emblem.
+#.
+#: ../gtk/gtknumerableicon.c:481
+#, c-format
+msgctxt "Number format"
+msgid "%d"
+msgstr "%d"
+
+#: ../gtk/gtkpagesetup.c:648 ../gtk/gtkpapersize.c:847
+#: ../gtk/gtkpapersize.c:889
 msgid "Not a valid page setup file"
 msgstr "Non é un ficheiro correcto de configuración de páxina"
 
@@ -1515,7 +1524,7 @@ msgstr ""
 " Superior: %s %s\n"
 " Inferior: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:858 ../gtk/gtkprintunixdialog.c:3293
+#: ../gtk/gtkpagesetupunixdialog.c:858 ../gtk/gtkprintunixdialog.c:3306
 msgid "Manage Custom Sizes..."
 msgstr "Xestionar tamaños personalizados..."
 
@@ -1523,7 +1532,7 @@ msgstr "Xestionar tamaños personalizados..."
 msgid "_Format for:"
 msgstr "_Formato para:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:931 ../gtk/gtkprintunixdialog.c:3465
+#: ../gtk/gtkpagesetupunixdialog.c:931 ../gtk/gtkprintunixdialog.c:3478
 msgid "_Paper size:"
 msgstr "Tamaño de _papel:"
 
@@ -1531,7 +1540,7 @@ msgstr "Tamaño de _papel:"
 msgid "_Orientation:"
 msgstr "_Orientación:"
 
-#: ../gtk/gtkpagesetupunixdialog.c:1026 ../gtk/gtkprintunixdialog.c:3527
+#: ../gtk/gtkpagesetupunixdialog.c:1026 ../gtk/gtkprintunixdialog.c:3540
 msgid "Page Setup"
 msgstr "Configuración de páxina"
 
@@ -1703,49 +1712,49 @@ msgstr "O manipulador non é correcto para PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Erro non especificado"
 
-#: ../gtk/gtkprintunixdialog.c:619
+#: ../gtk/gtkprintunixdialog.c:618
 msgid "Getting printer information failed"
 msgstr "Fallou a obtención de información da impresora"
 
-#: ../gtk/gtkprintunixdialog.c:1874
+#: ../gtk/gtkprintunixdialog.c:1873
 msgid "Getting printer information..."
 msgstr "Obtención de información da impresora..."
 
-#: ../gtk/gtkprintunixdialog.c:2141
+#: ../gtk/gtkprintunixdialog.c:2147
 msgid "Printer"
 msgstr "Impresora"
 
 #. Translators: this is the header for the location column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2151
+#: ../gtk/gtkprintunixdialog.c:2157
 msgid "Location"
 msgstr "Localización"
 
 #. Translators: this is the header for the printer status column in the print dialog
-#: ../gtk/gtkprintunixdialog.c:2162
+#: ../gtk/gtkprintunixdialog.c:2168
 msgid "Status"
 msgstr "Estado"
 
-#: ../gtk/gtkprintunixdialog.c:2188
+#: ../gtk/gtkprintunixdialog.c:2194
 msgid "Range"
 msgstr "Intervalo"
 
-#: ../gtk/gtkprintunixdialog.c:2192
+#: ../gtk/gtkprintunixdialog.c:2198
 msgid "_All Pages"
 msgstr "Tod_as as páxinas"
 
-#: ../gtk/gtkprintunixdialog.c:2199
+#: ../gtk/gtkprintunixdialog.c:2205
 msgid "C_urrent Page"
 msgstr "Páxina act_ual"
 
-#: ../gtk/gtkprintunixdialog.c:2209
+#: ../gtk/gtkprintunixdialog.c:2215
 msgid "Se_lection"
 msgstr "_Selección"
 
-#: ../gtk/gtkprintunixdialog.c:2218
+#: ../gtk/gtkprintunixdialog.c:2224
 msgid "Pag_es:"
 msgstr "Páx_inas:"
 
-#: ../gtk/gtkprintunixdialog.c:2219
+#: ../gtk/gtkprintunixdialog.c:2225
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1-3,7,11"
@@ -1753,28 +1762,28 @@ msgstr ""
 "Especificar un ou máis intervalos de páxina,\n"
 " por ex. 1-3,7,11"
 
-#: ../gtk/gtkprintunixdialog.c:2229
+#: ../gtk/gtkprintunixdialog.c:2235
 msgid "Pages"
 msgstr "Páxinas"
 
-#: ../gtk/gtkprintunixdialog.c:2242
+#: ../gtk/gtkprintunixdialog.c:2248
 msgid "Copies"
 msgstr "Copias"
 
 #. FIXME chpe: too much space between Copies and spinbutton, put those 2 in a hbox and make it span 2 columns
-#: ../gtk/gtkprintunixdialog.c:2247
+#: ../gtk/gtkprintunixdialog.c:2253
 msgid "Copie_s:"
 msgstr "Copia_s:"
 
-#: ../gtk/gtkprintunixdialog.c:2265
+#: ../gtk/gtkprintunixdialog.c:2271
 msgid "C_ollate"
 msgstr "_Ordenar"
 
-#: ../gtk/gtkprintunixdialog.c:2273
+#: ../gtk/gtkprintunixdialog.c:2279
 msgid "_Reverse"
 msgstr "In_verter"
 
-#: ../gtk/gtkprintunixdialog.c:2293
+#: ../gtk/gtkprintunixdialog.c:2299
 msgid "General"
 msgstr "Xeral"
 
@@ -1784,42 +1793,42 @@ msgstr "Xeral"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3039
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Left to right, top to bottom"
 msgstr "De esquerda a dereita, de arriba a abaixo"
 
-#: ../gtk/gtkprintunixdialog.c:3026
+#: ../gtk/gtkprintunixdialog.c:3039
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3538
 msgid "Left to right, bottom to top"
 msgstr "De esquerda a dereita, de abaixo a arriba"
 
-#: ../gtk/gtkprintunixdialog.c:3027
+#: ../gtk/gtkprintunixdialog.c:3040
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3539
 msgid "Right to left, top to bottom"
 msgstr "De dereita a esquerda, de arriba a abaixo"
 
-#: ../gtk/gtkprintunixdialog.c:3027
+#: ../gtk/gtkprintunixdialog.c:3040
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3539
 msgid "Right to left, bottom to top"
 msgstr "De dereita a esquerda, de abaixo a arriba"
 
-#: ../gtk/gtkprintunixdialog.c:3028
+#: ../gtk/gtkprintunixdialog.c:3041
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3540
 msgid "Top to bottom, left to right"
 msgstr "De arriba a abaixo, de esquerda a dereita"
 
-#: ../gtk/gtkprintunixdialog.c:3028
+#: ../gtk/gtkprintunixdialog.c:3041
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3540
 msgid "Top to bottom, right to left"
 msgstr "De arriba a abaixo, de dereita a esquerda"
 
-#: ../gtk/gtkprintunixdialog.c:3029
+#: ../gtk/gtkprintunixdialog.c:3042
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3541
 msgid "Bottom to top, left to right"
 msgstr "De abaixo a arriba, de esquerda a dereita"
 
-#: ../gtk/gtkprintunixdialog.c:3029
+#: ../gtk/gtkprintunixdialog.c:3042
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3541
 msgid "Bottom to top, right to left"
 msgstr "De arriba a abaixo, de esquerda a dereita"
@@ -1827,125 +1836,125 @@ msgstr "De arriba a abaixo, de esquerda a dereita"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3033 ../gtk/gtkprintunixdialog.c:3046
+#: ../gtk/gtkprintunixdialog.c:3046 ../gtk/gtkprintunixdialog.c:3059
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:3573
 msgid "Page Ordering"
 msgstr "Ordenación de páxinas"
 
-#: ../gtk/gtkprintunixdialog.c:3062
+#: ../gtk/gtkprintunixdialog.c:3075
 msgid "Left to right"
 msgstr "De esquerda a dereita"
 
-#: ../gtk/gtkprintunixdialog.c:3063
+#: ../gtk/gtkprintunixdialog.c:3076
 msgid "Right to left"
 msgstr "De dereita a esquerda"
 
-#: ../gtk/gtkprintunixdialog.c:3075
+#: ../gtk/gtkprintunixdialog.c:3088
 msgid "Top to bottom"
 msgstr "De arriba a abaixo"
 
-#: ../gtk/gtkprintunixdialog.c:3076
+#: ../gtk/gtkprintunixdialog.c:3089
 msgid "Bottom to top"
 msgstr "De abaixo a arriba"
 
-#: ../gtk/gtkprintunixdialog.c:3316
+#: ../gtk/gtkprintunixdialog.c:3329
 msgid "Layout"
 msgstr "Disposición"
 
-#: ../gtk/gtkprintunixdialog.c:3320
+#: ../gtk/gtkprintunixdialog.c:3333
 msgid "T_wo-sided:"
 msgstr "Polos dous _lados:"
 
-#: ../gtk/gtkprintunixdialog.c:3335
+#: ../gtk/gtkprintunixdialog.c:3348
 msgid "Pages per _side:"
 msgstr "Pá_xinas por lado:"
 
-#: ../gtk/gtkprintunixdialog.c:3352
+#: ../gtk/gtkprintunixdialog.c:3365
 msgid "Page or_dering:"
 msgstr "Or_denación de páxinas:"
 
-#: ../gtk/gtkprintunixdialog.c:3368
+#: ../gtk/gtkprintunixdialog.c:3381
 msgid "_Only print:"
 msgstr "Imprimir _só:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3383
+#: ../gtk/gtkprintunixdialog.c:3396
 msgid "All sheets"
 msgstr "Todas as follas"
 
-#: ../gtk/gtkprintunixdialog.c:3384
+#: ../gtk/gtkprintunixdialog.c:3397
 msgid "Even sheets"
 msgstr "Follas pares"
 
-#: ../gtk/gtkprintunixdialog.c:3385
+#: ../gtk/gtkprintunixdialog.c:3398
 msgid "Odd sheets"
 msgstr "Follas impares"
 
-#: ../gtk/gtkprintunixdialog.c:3388
+#: ../gtk/gtkprintunixdialog.c:3401
 msgid "Sc_ale:"
 msgstr "Esc_ala:"
 
-#: ../gtk/gtkprintunixdialog.c:3415
+#: ../gtk/gtkprintunixdialog.c:3428
 msgid "Paper"
 msgstr "Papel"
 
-#: ../gtk/gtkprintunixdialog.c:3419
+#: ../gtk/gtkprintunixdialog.c:3432
 msgid "Paper _type:"
 msgstr "_Tipo de papel:"
 
-#: ../gtk/gtkprintunixdialog.c:3434
+#: ../gtk/gtkprintunixdialog.c:3447
 msgid "Paper _source:"
 msgstr "_Orixe do papel:"
 
-#: ../gtk/gtkprintunixdialog.c:3449
+#: ../gtk/gtkprintunixdialog.c:3462
 msgid "Output t_ray:"
 msgstr "_Bandexa de saída:"
 
-#: ../gtk/gtkprintunixdialog.c:3489
+#: ../gtk/gtkprintunixdialog.c:3502
 msgid "Or_ientation:"
 msgstr "Or_ientación:"
 
 #. In enum order
-#: ../gtk/gtkprintunixdialog.c:3504
+#: ../gtk/gtkprintunixdialog.c:3517
 msgid "Portrait"
 msgstr "Vertical"
 
-#: ../gtk/gtkprintunixdialog.c:3505
+#: ../gtk/gtkprintunixdialog.c:3518
 msgid "Landscape"
 msgstr "Horizontal"
 
-#: ../gtk/gtkprintunixdialog.c:3506
+#: ../gtk/gtkprintunixdialog.c:3519
 msgid "Reverse portrait"
 msgstr "Vertical invertido"
 
-#: ../gtk/gtkprintunixdialog.c:3507
+#: ../gtk/gtkprintunixdialog.c:3520
 msgid "Reverse landscape"
 msgstr "Horizontal invertido"
 
-#: ../gtk/gtkprintunixdialog.c:3552
+#: ../gtk/gtkprintunixdialog.c:3565
 msgid "Job Details"
 msgstr "Detalles do traballo"
 
-#: ../gtk/gtkprintunixdialog.c:3558
+#: ../gtk/gtkprintunixdialog.c:3571
 msgid "Pri_ority:"
 msgstr "Pri_oridade:"
 
-#: ../gtk/gtkprintunixdialog.c:3573
+#: ../gtk/gtkprintunixdialog.c:3586
 msgid "_Billing info:"
 msgstr "Información de _facturación:"
 
-#: ../gtk/gtkprintunixdialog.c:3591
+#: ../gtk/gtkprintunixdialog.c:3604
 msgid "Print Document"
 msgstr "Imprimir o documento"
 
 #. Translators: this is one of the choices for the print at option
 #. * in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3600
+#: ../gtk/gtkprintunixdialog.c:3613
 msgid "_Now"
 msgstr "_Agora"
 
-#: ../gtk/gtkprintunixdialog.c:3611
+#: ../gtk/gtkprintunixdialog.c:3624
 msgid "A_t:"
 msgstr "_En:"
 
@@ -1953,7 +1962,7 @@ msgstr "_En:"
 #. * You can remove the am/pm values below for your locale if they are not
 #. * supported.
 #.
-#: ../gtk/gtkprintunixdialog.c:3617
+#: ../gtk/gtkprintunixdialog.c:3630
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
@@ -1961,68 +1970,68 @@ msgstr ""
 "Especifique a hora de impresión,\n"
 "por exemplo 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
-#: ../gtk/gtkprintunixdialog.c:3627
+#: ../gtk/gtkprintunixdialog.c:3640
 msgid "Time of print"
 msgstr "Tempo de impresión"
 
-#: ../gtk/gtkprintunixdialog.c:3643
+#: ../gtk/gtkprintunixdialog.c:3656
 msgid "On _hold"
 msgstr "En e_spera"
 
-#: ../gtk/gtkprintunixdialog.c:3644
+#: ../gtk/gtkprintunixdialog.c:3657
 msgid "Hold the job until it is explicitly released"
 msgstr "Termar do traballo até que sexa explicitamente liberado"
 
-#: ../gtk/gtkprintunixdialog.c:3664
+#: ../gtk/gtkprintunixdialog.c:3677
 msgid "Add Cover Page"
 msgstr "Engadir páxina de tapa"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3673
+#: ../gtk/gtkprintunixdialog.c:3686
 msgid "Be_fore:"
 msgstr "An_tes:"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../gtk/gtkprintunixdialog.c:3691
+#: ../gtk/gtkprintunixdialog.c:3704
 msgid "_After:"
 msgstr "_Despois:"
 
 #. Translators: this is the tab label for the notebook tab containing
 #. * job-specific options in the print dialog
 #.
-#: ../gtk/gtkprintunixdialog.c:3709
+#: ../gtk/gtkprintunixdialog.c:3722
 msgid "Job"
 msgstr "Traballo"
 
-#: ../gtk/gtkprintunixdialog.c:3775
+#: ../gtk/gtkprintunixdialog.c:3788
 msgid "Advanced"
 msgstr "Avanzado"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3813
+#: ../gtk/gtkprintunixdialog.c:3826
 msgid "Image Quality"
 msgstr "Calidade da imaxe"
 
 #. Translators: this will appear as tab label in print dialog.
-#: ../gtk/gtkprintunixdialog.c:3817
+#: ../gtk/gtkprintunixdialog.c:3830
 msgid "Color"
 msgstr "Cor"
 
 #. Translators: this will appear as tab label in print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/gtkprintunixdialog.c:3822
+#: ../gtk/gtkprintunixdialog.c:3835
 msgid "Finishing"
 msgstr "Finalizando"
 
-#: ../gtk/gtkprintunixdialog.c:3832
+#: ../gtk/gtkprintunixdialog.c:3845
 msgid "Some of the settings in the dialog conflict"
 msgstr "Algunhas das configuracións do diálogo están en conflito"
 
-#: ../gtk/gtkprintunixdialog.c:3855
+#: ../gtk/gtkprintunixdialog.c:3868
 msgid "Print"
 msgstr "Imprimir"
 
@@ -2654,7 +2663,7 @@ msgstr "Red_ucir"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:304 ../gtk/gtkswitch.c:353 ../gtk/gtkswitch.c:544
+#: ../gtk/gtkswitch.c:313 ../gtk/gtkswitch.c:362 ../gtk/gtkswitch.c:553
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -2662,17 +2671,17 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:312 ../gtk/gtkswitch.c:354 ../gtk/gtkswitch.c:560
+#: ../gtk/gtkswitch.c:321 ../gtk/gtkswitch.c:363 ../gtk/gtkswitch.c:569
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
 
-#: ../gtk/gtkswitch.c:959
+#: ../gtk/gtkswitch.c:968
 msgctxt "light switch widget"
 msgid "Switch"
 msgstr "Interruptor"
 
-#: ../gtk/gtkswitch.c:960
+#: ../gtk/gtkswitch.c:969
 msgid "Switches between on and off states"
 msgstr "Cambia entre os estados acendido e apagado"
 
