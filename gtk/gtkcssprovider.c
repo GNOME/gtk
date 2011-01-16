@@ -970,6 +970,8 @@ selector_style_info_free (SelectorStyleInfo *info)
 
   if (info->path)
     selector_path_unref (info->path);
+
+  g_slice_free (SelectorStyleInfo, info);
 }
 
 static void
