@@ -496,7 +496,7 @@ gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
   switch (type)
     {
     case GDK_DEVICE_TYPE_MASTER:
-      list = device_manager_xi2->master_devices;
+      list = g_list_copy (device_manager_xi2->master_devices);
       break;
     case GDK_DEVICE_TYPE_SLAVE:
     case GDK_DEVICE_TYPE_FLOATING:
@@ -519,7 +519,7 @@ gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
       g_assert_not_reached ();
     }
 
-  return g_list_copy (list);
+  return list;
 }
 
 static GdkDevice *
