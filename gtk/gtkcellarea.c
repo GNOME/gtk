@@ -905,6 +905,7 @@ gtk_cell_area_finalize (GObject *object)
   g_hash_table_destroy (priv->focus_siblings);
 
   g_free (priv->current_path);
+  g_free (priv->style_detail);
 
   G_OBJECT_CLASS (gtk_cell_area_parent_class)->finalize (object);
 }
