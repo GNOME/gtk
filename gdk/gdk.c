@@ -129,7 +129,6 @@ static const GDebugKey gdk_debug_keys[] = {
   {"dnd",           GDK_DEBUG_DND},
   {"xim",           GDK_DEBUG_XIM},
   {"nograbs",       GDK_DEBUG_NOGRABS},
-  {"colormap",      GDK_DEBUG_COLORMAP},
   {"input",         GDK_DEBUG_INPUT},
   {"cursor",        GDK_DEBUG_CURSOR},
   {"multihead",     GDK_DEBUG_MULTIHEAD},
