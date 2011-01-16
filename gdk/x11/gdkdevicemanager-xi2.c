@@ -42,8 +42,7 @@ struct _GdkX11DeviceManagerXI2
 
   GHashTable *id_table;
 
-  GList *master_devices;
-  GList *slave_devices;
+  GList *devices;
 
   GdkDevice *client_pointer;
 
@@ -309,12 +308,7 @@ add_device (GdkX11DeviceManagerXI2 *device_manager,
                         GINT_TO_POINTER (dev->deviceid),
                         g_object_ref (device));
 
-  if (dev->use == XIMasterPointer || dev->use == XIMasterKeyboard)
-    device_manager->master_devices = g_list_append (device_manager->master_devices, device);
-  else if (dev->use == XISlavePointer || dev->use == XISlaveKeyboard || dev->use == XIFloatingSlave)
-    device_manager->slave_devices = g_list_append (device_manager->slave_devices, device);
-  else
-    g_warning ("Unhandled device: %s\n", gdk_device_get_name (device));
+  device_manager->devices = g_list_append (device_manager->devices, device);
 
   if (emit_signal)
     {
@@ -349,8 +343,7 @@ remove_device (GdkX11DeviceManagerXI2 *device_manager,
 
   if (device)
     {
-      device_manager->master_devices = g_list_remove (device_manager->master_devices, device);
-      device_manager->slave_devices = g_list_remove (device_manager->slave_devices, device);
+      device_manager->devices = g_list_remove (device_manager->devices, device);
 
       g_signal_emit_by_name (device_manager, "device-removed", device);
 
@@ -469,11 +462,8 @@ gdk_x11_device_manager_xi2_dispose (GObject *object)
 
   device_manager = GDK_X11_DEVICE_MANAGER_XI2 (object);
 
-  g_list_free_full (device_manager->master_devices, g_object_unref);
-  device_manager->master_devices = NULL;
-
-  g_list_free_full (device_manager->slave_devices, g_object_unref);
-  device_manager->slave_devices = NULL;
+  g_list_free_full (device_manager->devices, g_object_unref);
+  device_manager->devices = NULL;
 
   if (device_manager->id_table)
     {
@@ -489,34 +479,16 @@ gdk_x11_device_manager_xi2_list_devices (GdkDeviceManager *device_manager,
                                          GdkDeviceType     type)
 {
   GdkX11DeviceManagerXI2 *device_manager_xi2;
-  GList *list = NULL;
+  GList *cur, *list = NULL;
 
   device_manager_xi2 = GDK_X11_DEVICE_MANAGER_XI2 (device_manager);
 
-  switch (type)
+  for (cur = device_manager_xi2->devices; cur; cur = cur->next)
     {
-    case GDK_DEVICE_TYPE_MASTER:
-      list = g_list_copy (device_manager_xi2->master_devices);
-      break;
-    case GDK_DEVICE_TYPE_SLAVE:
-    case GDK_DEVICE_TYPE_FLOATING:
-      {
-        GList *devs = device_manager_xi2->slave_devices;
+      GdkDevice *dev = cur->data;
 
-        while (devs)
-          {
-            GdkDevice *dev;
-
-            dev = devs->data;
-            devs = devs->next;
-
-            if (type == gdk_device_get_device_type (dev))
-              list = g_list_prepend (list, dev);
-          }
-      }
-      break;
-    default:
-      g_assert_not_reached ();
+      if (type == gdk_device_get_device_type (dev))
+        list = g_list_prepend (list, dev);
     }
 
   return list;
