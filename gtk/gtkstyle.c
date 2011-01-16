@@ -513,6 +513,7 @@ gtk_style_finalize (GObject *object)
 {
   GtkStyle *style = GTK_STYLE (object);
   GtkStylePrivate *priv = GTK_STYLE_GET_PRIVATE (style);
+  gint i;
 
   g_return_if_fail (style->attach_count == 0);
 
@@ -557,6 +558,12 @@ gtk_style_finalize (GObject *object)
         g_signal_handler_disconnect (priv->context, priv->context_changed_id);
 
       g_object_unref (priv->context);
+    }
+
+  for (i = 0; i < 5; i++)
+    {
+      if (style->background[i])
+        cairo_pattern_destroy (style->background[i]);
     }
 
   G_OBJECT_CLASS (gtk_style_parent_class)->finalize (object);
