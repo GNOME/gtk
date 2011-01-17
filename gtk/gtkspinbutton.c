@@ -923,11 +923,6 @@ gtk_spin_button_draw (GtkWidget      *widget,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
 
-  if (is_rtl)
-    gtk_style_context_set_junction_sides (context, GTK_JUNCTION_LEFT);
-  else
-    gtk_style_context_set_junction_sides (context, GTK_JUNCTION_RIGHT);
-
   GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
 
   gtk_style_context_restore (context);
