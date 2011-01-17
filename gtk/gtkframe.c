@@ -78,6 +78,8 @@ static void gtk_frame_forall        (GtkContainer   *container,
 				     gboolean	     include_internals,
 			             GtkCallback     callback,
 			             gpointer        callback_data);
+static GtkWidgetPath * gtk_frame_get_path_for_child (GtkContainer *container,
+                                                     GtkWidget    *child);
 
 static void gtk_frame_compute_child_allocation      (GtkFrame      *frame,
 						     GtkAllocation *child_allocation);
@@ -177,6 +179,7 @@ gtk_frame_class_init (GtkFrameClass *class)
 
   container_class->remove = gtk_frame_remove;
   container_class->forall = gtk_frame_forall;
+  container_class->get_path_for_child = gtk_frame_get_path_for_child;
 
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
@@ -332,6 +335,21 @@ gtk_frame_forall (GtkContainer *container,
 
   if (priv->label_widget)
     (* callback) (priv->label_widget, callback_data);
+}
+
+static GtkWidgetPath *
+gtk_frame_get_path_for_child (GtkContainer *container,
+                              GtkWidget    *child)
+{
+  GtkFramePrivate *priv = GTK_FRAME (container)->priv;
+  GtkWidgetPath *path;
+
+  path = GTK_CONTAINER_CLASS (gtk_frame_parent_class)->get_path_for_child (container, child);
+
+  if (child == priv->label_widget)
+    gtk_widget_path_iter_add_class (path, -1, GTK_STYLE_CLASS_FRAME);
+
+  return path;
 }
 
 /**
