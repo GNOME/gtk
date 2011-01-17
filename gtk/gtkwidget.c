@@ -14122,8 +14122,22 @@ gtk_widget_get_path (GtkWidget *widget)
         gtk_widget_path_iter_set_name (widget->priv->path, pos, widget->priv->name);
 
       if (widget->priv->context)
-        gtk_style_context_set_path (widget->priv->context,
-                                    widget->priv->path);
+        {
+          GList *classes, *l;
+
+          /* Also add any persistent classes in
+           * the style context the widget path
+           */
+          classes = gtk_style_context_list_classes (widget->priv->context);
+
+          for (l = classes; l; l = l->next)
+            gtk_widget_path_iter_add_class (widget->priv->path, pos, l->data);
+
+          gtk_style_context_set_path (widget->priv->context,
+                                      widget->priv->path);
+
+          g_list_free (classes);
+        }
     }
 
   return widget->priv->path;
