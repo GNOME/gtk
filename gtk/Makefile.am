@@ -1006,8 +1006,6 @@ if BUILD_ICON_CACHE
 bin_PROGRAMS += gtk-update-icon-cache
 endif
 
-bin_SCRIPTS = gtk-builder-convert
-
 if OS_WIN32
 
 # Workaround for UAC silliness: programs with "update" in their name
@@ -1017,8 +1015,7 @@ if OS_WIN32
 
 GTK_UPDATE_ICON_CACHE_MANIFEST = gtk-update-icon-cache.exe.manifest
 
-bin_SCRIPTS += \
-	$(GTK_UPDATE_ICON_CACHE_MANIFEST)
+bin_SCRIPTS = $(GTK_UPDATE_ICON_CACHE_MANIFEST)
 
 $(GTK_UPDATE_ICON_CACHE_MANIFEST):
 	(echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' ; \
@@ -1359,11 +1356,10 @@ EXTRA_DIST +=                   \
 	line-arrow.xbm 		\
 	line-wrap.xbm 		\
 	tree_plus.xbm		\
-	tree_minus.xbm          \
+	tree_minus.xbm		\
 	tree_minus.xpm		\
 	tree_plus.xpm		\
 	gtk.def			\
-	gtk-builder-convert	\
 	gtk-win32.rc		\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
