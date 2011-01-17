@@ -1165,6 +1165,10 @@ style_data_lookup (GtkStyleContext *context)
   gtk_style_properties_get (data->store, 0,
                             "engine", &priv->theming_engine,
                             NULL);
+
+  if (!priv->theming_engine)
+    priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
+
   return data;
 }
 
