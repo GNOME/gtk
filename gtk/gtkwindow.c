@@ -8358,6 +8358,8 @@ gtk_window_group_list_windows (GtkWindowGroup *window_group)
 	group_windows = g_list_prepend (group_windows, window);
     }
 
+  g_list_free (toplevels);
+
   return g_list_reverse (group_windows);
 }
 
