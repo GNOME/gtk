@@ -3506,6 +3506,9 @@ gtk_entry_draw (GtkWidget *widget,
   if (gtk_widget_has_focus (widget))
     state |= GTK_STATE_FLAG_FOCUSED;
 
+  gtk_style_context_save (context);
+  gtk_style_context_set_state (context, state);
+
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
       /* Draw entry_bg, shadow, progress and focus */
@@ -3546,6 +3549,8 @@ gtk_entry_draw (GtkWidget *widget,
             }
         }
     }
+
+  gtk_style_context_restore (context);
 
   return FALSE;
 }
