@@ -3071,11 +3071,11 @@ gdk_color_to_css (GdkColor *color)
 static gchar *
 gdk_rgba_to_css (GdkRGBA *color)
 {
-  return g_strdup_printf ("rgba(%d,%d,%d,%f)",
+  /* drop a for now, since librsvg does not understand rgba() */
+  return g_strdup_printf ("rgb(%d,%d,%d)",
                           (gint)(color->red * 255),
                           (gint)(color->green * 255),
-                          (gint)(color->blue * 255),
-                          color->alpha);
+                          (gint)(color->blue * 255));
 }
 
 static GdkPixbuf *
