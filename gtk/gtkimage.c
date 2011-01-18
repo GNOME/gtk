@@ -150,9 +150,10 @@ struct _GtkImagePrivate
   gint                  last_rendered_state;  /* a GtkStateFlags, with -1 meaning an invalid state,
                                                * only used with GTK_IMAGE_GICON, GTK_IMAGE_ICON_NAME */
   gint                  pixel_size;
-  guint                 need_calc_size : 1;
   gint                  required_width;
   gint                  required_height;
+  guint                 need_calc_size : 1;
+  guint                 use_fallback : 1;
 };
 
 
@@ -202,7 +203,8 @@ enum
   PROP_PIXBUF_ANIMATION,
   PROP_ICON_NAME,
   PROP_STORAGE_TYPE,
-  PROP_GICON
+  PROP_GICON,
+  PROP_USE_FALLBACK
 };
 
 G_DEFINE_TYPE (GtkImage, gtk_image, GTK_TYPE_MISC)
@@ -337,6 +339,24 @@ gtk_image_class_init (GtkImageClass *class)
                                                       GTK_IMAGE_EMPTY,
                                                       GTK_PARAM_READABLE));
 
+  /**
+   * GtkImage:use-fallback:
+   *
+   * Whether the icon displayed in the GtkImage will use
+   * standard icon names fallback. The value of this property
+   * is only relevant for images of type %GTK_IMAGE_ICON_NAME
+   * and %GTK_IMAGE_GICON.
+   *
+   * Since: 3.0
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_USE_FALLBACK,
+                                   g_param_spec_boolean ("use-fallback",
+                                                         P_("Use Fallback"),
+                                                         P_("Whether to use icon names fallback"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE));
+
   g_type_class_add_private (class, sizeof (GtkImagePrivate));
 }
 
@@ -433,6 +453,18 @@ gtk_image_set_property (GObject      *object,
 				priv->icon_size);
       break;
 
+    case PROP_USE_FALLBACK:
+      priv->use_fallback = g_value_get_boolean (value);
+      if (priv->storage_type == GTK_IMAGE_ICON_NAME)
+        gtk_image_set_from_icon_name (image,
+				      priv->data.name.icon_name,
+				      priv->icon_size);
+      else if (priv->storage_type == GTK_IMAGE_GICON)
+        gtk_image_set_from_gicon (image,
+                                  priv->data.gicon.icon,
+                                  priv->icon_size);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -509,6 +541,10 @@ gtk_image_get_property (GObject     *object,
       break;
     case PROP_STORAGE_TYPE:
       g_value_set_enum (value, priv->storage_type);
+      break;
+
+    case PROP_USE_FALLBACK:
+      g_value_set_boolean (value, priv->use_fallback);
       break;
       
     default:
@@ -1408,6 +1444,8 @@ ensure_pixbuf_for_icon_name (GtkImage      *image,
   icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
   flags = GTK_ICON_LOOKUP_USE_BUILTIN;
+  if (priv->use_fallback)
+    flags |= GTK_ICON_LOOKUP_GENERIC_FALLBACK;
   if (priv->data.name.pixbuf == NULL ||
       (priv->was_symbolic && priv->last_rendered_state != state))
     {
@@ -1512,6 +1550,8 @@ ensure_pixbuf_for_gicon (GtkImage      *image,
   icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
   flags = GTK_ICON_LOOKUP_USE_BUILTIN;
+  if (priv->use_fallback)
+    flags |= GTK_ICON_LOOKUP_GENERIC_FALLBACK;
   if (priv->data.gicon.pixbuf == NULL ||
       (priv->was_symbolic && priv->last_rendered_state != state))
     {
