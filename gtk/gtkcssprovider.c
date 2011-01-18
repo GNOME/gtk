@@ -3735,6 +3735,7 @@ gtk_css_provider_get_default (void)
         ".check, .radio {\n"
         "  border-style: solid;\n"
         "  border-width: 1;\n"
+        "  background-color: @base_color;\n"
         "}\n"
         "\n"
         ".check:active, .radio:active,\n"
