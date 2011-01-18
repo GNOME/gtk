@@ -807,8 +807,8 @@ gtk_accel_map_save (const gchar *file_name)
 /**
  * gtk_accel_map_foreach:
  * @data:         data to be passed into @foreach_func
- * @foreach_func: function to be executed for each accel map entry which
- *                is not filtered out
+ * @foreach_func: (scope call): function to be executed for each accel
+ *                map entry which is not filtered out
  *
  * Loops over the entries in the accelerator map whose accel path 
  * doesn't match any of the filters added with gtk_accel_map_add_filter(), 
@@ -844,7 +844,8 @@ gtk_accel_map_foreach (gpointer           data,
 /**
  * gtk_accel_map_foreach_unfiltered:
  * @data:         data to be passed into @foreach_func
- * @foreach_func: function to be executed for each accel map entry
+ * @foreach_func: (scope call): function to be executed for each accel
+ *                map entry
  *
  * Loops over all entries in the accelerator map, and execute
  * @foreach_func on each. The signature of @foreach_func is that of

@@ -4431,8 +4431,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
  * gdk_window_invalidate_maybe_recurse:
  * @window: a #GdkWindow
  * @region: a #cairo_region_t
- * @child_func: function to use to decide if to recurse to a child,
- *              %NULL means never recurse.
+ * @child_func: (scope call): function to use to decide if to recurse
+ *     to a child, %NULL means never recurse.
  * @user_data: data passed to @child_func
  *
  * Adds @region to the update area for @window. The update area is the

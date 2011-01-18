@@ -1624,7 +1624,7 @@ gtk_cell_area_has_renderer (GtkCellArea     *area,
 /**
  * gtk_cell_area_foreach:
  * @area: a #GtkCellArea
- * @callback: the #GtkCellCallback to call
+ * @callback: (scope call): the #GtkCellCallback to call
  * @callback_data: user provided data pointer
  *
  * Calls @callback for every #GtkCellRenderer in @area.
@@ -1657,7 +1657,7 @@ gtk_cell_area_foreach (GtkCellArea        *area,
  * @widget: the #GtkWidget that @area is rendering to
  * @cell_area: the @widget relative coordinates and size for @area
  * @background_area: the @widget relative coordinates of the background area
- * @callback: the #GtkCellAllocCallback to call
+ * @callback: (scope call): the #GtkCellAllocCallback to call
  * @callback_data: user provided data pointer
  *
  * Calls @callback for every #GtkCellRenderer in @area with the

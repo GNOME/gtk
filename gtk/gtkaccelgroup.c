@@ -375,7 +375,8 @@ gtk_accel_groups_from_object (GObject *object)
 /**
  * gtk_accel_group_find:
  * @accel_group: a #GtkAccelGroup
- * @find_func: a function to filter the entries of @accel_group with
+ * @find_func: (scope call): a function to filter the entries
+ *    of @accel_group with
  * @data: data to pass to @find_func
  * @returns: the key of the first entry passing @find_func. The key is 
  * owned by GTK+ and must not be freed.

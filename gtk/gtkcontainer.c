@@ -1865,7 +1865,7 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
 /**
  * gtk_container_forall:
  * @container: a #GtkContainer
- * @callback: a callback
+ * @callback: (scope call): a callback
  * @callback_data: callback user data
  *
  * Invokes @callback on each child of @container, including children

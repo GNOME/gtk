@@ -999,7 +999,8 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
  * @parent: (allow-none): transient parent, or %NULL
  * @page_setup: (allow-none): an existing #GtkPageSetup, or %NULL
  * @settings: a #GtkPrintSettings
- * @done_cb: a function to call when the user saves the modified page setup
+ * @done_cb: (scope async): a function to call when the user saves
+ *           the modified page setup
  * @data: user data to pass to @done_cb
  * 
  * Runs a page setup dialog, letting the user modify the values from @page_setup. 
