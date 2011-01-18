@@ -72,7 +72,7 @@ struct _GtkContainerClass
 				 GtkCallback	  callback,
 				 gpointer	  callback_data);
   void    (*set_focus_child)	(GtkContainer	 *container,
-				 GtkWidget	 *widget);
+				 GtkWidget	 *child);
   GType   (*child_type)		(GtkContainer	 *container);
   gchar*  (*composite_name)	(GtkContainer	 *container,
 				 GtkWidget	 *child);

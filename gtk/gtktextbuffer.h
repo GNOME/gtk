@@ -83,15 +83,15 @@ struct _GtkTextBufferClass
 
   void (* insert_text)     (GtkTextBuffer *buffer,
                             GtkTextIter *pos,
-                            const gchar *text,
-                            gint length);
+                            const gchar *new_text,
+                            gint new_text_length);
 
   void (* insert_pixbuf)   (GtkTextBuffer *buffer,
-                            GtkTextIter   *pos,
+                            GtkTextIter   *iter,
                             GdkPixbuf     *pixbuf);
 
   void (* insert_child_anchor)   (GtkTextBuffer      *buffer,
-                                  GtkTextIter        *pos,
+                                  GtkTextIter        *iter,
                                   GtkTextChildAnchor *anchor);
 
   void (* delete_range)     (GtkTextBuffer *buffer,
@@ -117,13 +117,13 @@ struct _GtkTextBufferClass
 
   void (* apply_tag)          (GtkTextBuffer *buffer,
                                GtkTextTag *tag,
-                               const GtkTextIter *start_char,
-                               const GtkTextIter *end_char);
+                               const GtkTextIter *start,
+                               const GtkTextIter *end);
 
   void (* remove_tag)         (GtkTextBuffer *buffer,
                                GtkTextTag *tag,
-                               const GtkTextIter *start_char,
-                               const GtkTextIter *end_char);
+                               const GtkTextIter *start,
+                               const GtkTextIter *end);
 
   /* Called at the start and end of an atomic user action */
   void (* begin_user_action)  (GtkTextBuffer *buffer);
