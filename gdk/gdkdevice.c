@@ -498,7 +498,7 @@ gdk_device_get_window_at_position (GdkDevice  *device,
  * @window: the window with respect to which which the event coordinates will be reported
  * @start: starting timestamp for range of events to return
  * @stop: ending timestamp for the range of events to return
- * @events: (array length=n_events) (out) (transfer none): location to store a newly-allocated array of #GdkTimeCoord, or %NULL
+ * @events: (array length=n_events) (out) (transfer full): location to store a newly-allocated array of #GdkTimeCoord, or %NULL
  * @n_events: location to store the length of @events, or %NULL
  *
  * Obtains the motion history for a pointer device; given a starting and
@@ -554,8 +554,8 @@ _gdk_device_allocate_history (GdkDevice *device,
 }
 
 /**
- * gdk_device_free_history:
- * @events: (inout) (transfer none): an array of #GdkTimeCoord.
+ * gdk_device_free_history: (skip)
+ * @events: an array of #GdkTimeCoord.
  * @n_events: the length of the array.
  *
  * Frees an array of #GdkTimeCoord that was returned by gdk_device_get_history().

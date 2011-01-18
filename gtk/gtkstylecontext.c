@@ -2387,7 +2387,7 @@ _gtk_style_context_peek_style_property (GtkStyleContext *context,
  * gtk_style_context_get_style_property:
  * @context: a #GtkStyleContext
  * @property_name: the name of the widget style property
- * @value: (out) (transfer full): Return location for the property value
+ * @value: Return location for the property value
  *
  * Gets the value for a widget style property.
  *

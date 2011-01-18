@@ -6816,7 +6816,7 @@ gtk_icon_view_get_dest_item_at_pos (GtkIconView              *icon_view,
  * Creates a #cairo_surface_t representation of the item at @path.  
  * This image is used for a drag icon.
  *
- * Return value: (transfer full) a newly-allocated surface of the drag icon.
+ * Return value: (transfer full): a newly-allocated surface of the drag icon.
  * 
  * Since: 2.8
  **/

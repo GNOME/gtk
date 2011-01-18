@@ -1404,7 +1404,7 @@ gtk_tree_model_iter_previous_default (GtkTreeModel *tree_model,
 /**
  * gtk_tree_model_iter_previous:
  * @tree_model: a #GtkTreeModel
- * @iter: (inout): the #GtkTreeIter
+ * @iter: (in): the #GtkTreeIter
  *
  * Sets @iter to point to the previous node at the current level.
  *

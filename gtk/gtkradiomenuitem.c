@@ -251,7 +251,7 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
  *
  * Creates a new #GtkRadioMenuItem adding it to the same group as @group.
  *
- * Return value: (transfer full): The new #GtkRadioMenuItem
+ * Return value: (transfer none): The new #GtkRadioMenuItem
  *
  * Since: 2.4
  **/
@@ -280,7 +280,7 @@ gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
  *
  * The new #GtkRadioMenuItem is added to the same group as @group.
  *
- * Return value: (transfer full): The new #GtkRadioMenuItem
+ * Return value: (transfer none): The new #GtkRadioMenuItem
  *
  * Since: 2.4
  **/
@@ -306,7 +306,7 @@ gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
  * Creates a new GtkRadioMenuItem whose child is a simple GtkLabel.
  * The new #GtkRadioMenuItem is added to the same group as @group.
  *
- * Return value: (transfer full): The new #GtkRadioMenuItem
+ * Return value: (transfer none): The new #GtkRadioMenuItem
  *
  * Since: 2.4
  **/

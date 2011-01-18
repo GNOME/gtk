@@ -599,9 +599,9 @@ gtk_widget_path_iter_clear_classes (GtkWidgetPath *path,
  * Returns a list with all the class names defined for the widget
  * at position @pos in the hierarchy defined in @path.
  *
- * Returns: (transfer container) (type utf8): The list of classes,
- *          This is a list of strings, the #GSList contents are
- *          owned by GTK+, but you should use g_slist_free() to
+ * Returns: (transfer container) (element-type utf8): The list of
+ *          classes, This is a list of strings, the #GSList contents
+ *          are owned by GTK+, but you should use g_slist_free() to
  *          free the list itself.
  *
  * Since: 3.0
@@ -836,9 +836,9 @@ gtk_widget_path_iter_clear_regions (GtkWidgetPath *path,
  * Returns a list with all the region names defined for the widget
  * at position @pos in the hierarchy defined in @path.
  *
- * Returns: (transfer container) (type utf8): The list of regions,
- *          This is a list of strings, the #GSList contents are
- *          owned by GTK+, but you should use g_slist_free() to
+ * Returns: (transfer container) (element-type utf8): The list of
+ *          regions, This is a list of strings, the #GSList contents
+ *          are owned by GTK+, but you should use g_slist_free() to
  *          free the list itself.
  *
  * Since: 3.0

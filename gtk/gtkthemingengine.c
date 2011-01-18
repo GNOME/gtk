@@ -473,7 +473,7 @@ gtk_theming_engine_get (GtkThemingEngine *engine,
  * gtk_theming_engine_get_style_property:
  * @engine: a #GtkThemingEngine
  * @property_name: the name of the widget style property
- * @value: (out) (transfer full): Return location for the property value, free with
+ * @value: Return location for the property value, free with
  *         g_value_unset() after use.
  *
  * Gets the value for a widget style property.

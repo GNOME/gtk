@@ -4719,7 +4719,7 @@ gtk_widget_queue_shallow_draw (GtkWidget *widget)
 /**
  * gtk_widget_size_allocate:
  * @widget: a #GtkWidget
- * @allocation: (inout): position and size to be allocated to @widget
+ * @allocation: position and size to be allocated to @widget
  *
  * This function is only used by #GtkContainer subclasses, to assign a size
  * and position to their child widgets.

@@ -366,8 +366,9 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
  * gdk_keymap_get_entries_for_keyval:
  * @keymap: a #GdkKeymap
  * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
- * @keys: (out): return location for an array of #GdkKeymapKey
- * @n_keys: (out): return location for number of elements in returned array
+ * @keys: (out) (array length=n_keys) (transfer full): return location
+ *     for an array of #GdkKeymapKey
+ * @n_keys: return location for number of elements in returned array
  *
  * Obtains a list of keycode/group/level combinations that will
  * generate @keyval. Groups and levels are two kinds of keyboard mode;
