@@ -166,7 +166,8 @@ gtk_toggle_action_init (GtkToggleAction *action)
 /**
  * gtk_toggle_action_new:
  * @name: A unique name for the action
- * @label: (allow-none): The label displayed in menu items and on buttons, or %NULL
+ * @label: (allow-none): The label displayed in menu items and on buttons,
+ *         or %NULL
  * @tooltip: (allow-none): A tooltip for the action, or %NULL
  * @stock_id: (allow-none): The stock icon to display in widgets representing
  *            the action, or %NULL

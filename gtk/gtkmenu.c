@@ -1337,9 +1337,9 @@ gtk_menu_remove (GtkContainer *container,
 /**
  * gtk_menu_new:
  *
- * Creates a new #GtkMenu.
+ * Creates a new #GtkMenu
  *
- * Returns: a new #GtkMenu.
+ * Returns: a new #GtkMenu
  */
 GtkWidget*
 gtk_menu_new (void)
@@ -1444,7 +1444,7 @@ popup_grab_on_window (GdkWindow *window,
 
 /**
  * gtk_menu_popup_for_device:
- * @menu: a #GtkMenu.
+ * @menu: a #GtkMenu
  * @device: (allow-none): a #GdkDevice
  * @parent_menu_shell: (allow-none): the menu shell containing the triggering
  *     menu item, or %NULL

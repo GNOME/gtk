@@ -819,8 +819,11 @@ _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group)
  * @accel_group:      the accelerator group to query
  * @accel_key:        key value of the accelerator
  * @accel_mods:       modifier combination of the accelerator
- * @n_entries: (allow-none):        location to return the number of entries found, or %NULL
- * @returns: (allow-none):          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
+ * @n_entries: (allow-none): location to return the number of entries found,
+ *     or %NULL
+ * @returns: (transfer none) (array length=n_entries): an array of
+ *     @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is
+ *     owned by GTK+ and must not be freed.
  *
  * Queries an accelerator group for all entries matching @accel_key and 
  * @accel_mods.

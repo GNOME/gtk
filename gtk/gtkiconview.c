@@ -4562,7 +4562,7 @@ gtk_icon_view_set_tooltip_column (GtkIconView *icon_view,
   g_object_notify (G_OBJECT (icon_view), "tooltip-column");
 }
 
-/** 
+/**
  * gtk_icon_view_get_tooltip_column:
  * @icon_view: a #GtkIconView
  *

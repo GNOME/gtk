@@ -8048,7 +8048,7 @@ gtk_window_begin_move_drag  (GtkWindow *window,
                               timestamp);
 }
 
-/** 
+/**
  * gtk_window_set_screen:
  * @window: a #GtkWindow.
  * @screen: a #GdkScreen.
@@ -8335,8 +8335,8 @@ gtk_window_group_remove_window (GtkWindowGroup *window_group,
  *
  * Returns a list of the #GtkWindows that belong to @window_group.
  *
- * Returns: (element-type GtkWidget) (transfer container): A newly-allocated list of
- *   windows inside the group.
+ * Returns: (element-type GtkWindow) (transfer container): A
+ *   newly-allocated list of windows inside the group.
  *
  * Since: 2.14
  **/

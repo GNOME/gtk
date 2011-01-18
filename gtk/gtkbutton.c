@@ -301,7 +301,7 @@ gtk_button_class_init (GtkButtonClass *klass)
                                                       GTK_PARAM_READWRITE));
 
   /**
-   * GtkButton::image:
+   * GtkButton:image:
    *
    * The child widget to appear next to the button text.
    *

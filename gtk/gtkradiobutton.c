@@ -175,7 +175,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 
   /**
    * GtkRadioButton::group-changed:
-   * @style: the object which received the signal
+   * @button: the object which received the signal
    *
    * Emitted when the group of radio buttons that a radio button belongs
    * to changes. This is emitted when a radio button switches from

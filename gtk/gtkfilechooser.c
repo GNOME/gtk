@@ -2447,9 +2447,9 @@ gtk_file_chooser_remove_shortcut_folder_uri (GtkFileChooser    *chooser,
  * Queries the list of shortcut folders in the file chooser, as set by
  * gtk_file_chooser_add_shortcut_folder_uri().
  *
- * Return value: (element-type utf8) (transfer full): A list of folder URIs, or %NULL if there are no shortcut
- * folders.  Free the returned list with g_slist_free(), and the URIs with
- * g_free().
+ * Return value: (element-type utf8) (transfer full): A list of folder
+ * URIs, or %NULL if there are no shortcut folders.  Free the returned
+ * list with g_slist_free(), and the URIs with g_free().
  *
  * Since: 2.4
  **/

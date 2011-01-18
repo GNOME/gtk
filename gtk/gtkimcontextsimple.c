@@ -155,7 +155,7 @@ gtk_im_context_simple_finalize (GObject *obj)
   G_OBJECT_CLASS (gtk_im_context_simple_parent_class)->finalize (obj);
 }
 
-/** 
+/**
  * gtk_im_context_simple_new:
  * 
  * Creates a new #GtkIMContextSimple.

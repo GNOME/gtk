@@ -284,7 +284,7 @@ gdk_keyval_is_lower (guint keyval)
   return FALSE;
 }
 
-/** 
+/**
  * gdk_keymap_get_default:
  *
  * Returns the #GdkKeymap attached to the default display.

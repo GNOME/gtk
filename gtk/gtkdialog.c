@@ -1131,7 +1131,8 @@ gtk_dialog_run (GtkDialog *dialog)
  * Gets the widget button that uses the given response ID in the action area
  * of a dialog.
  *
- * Returns: (transfer none):the @widget button that uses the given @response_id, or %NULL.
+ * Returns: (transfer none): the @widget button that uses the given
+ *     @response_id, or %NULL.
  *
  * Since: 2.20
  */
