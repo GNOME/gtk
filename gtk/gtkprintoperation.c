@@ -1891,7 +1891,7 @@ gtk_print_operation_set_custom_tab_label (GtkPrintOperation  *op,
 /**
  * gtk_print_operation_set_export_filename:
  * @op: a #GtkPrintOperation
- * @filename: the filename for the exported file
+ * @filename: (type filename): the filename for the exported file
  * 
  * Sets up the #GtkPrintOperation to generate a file instead
  * of showing the print dialog. The indended use of this function

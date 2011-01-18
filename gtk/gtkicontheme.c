@@ -737,7 +737,9 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_get_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: (allow-none) (array length=n_elements) (out): location to store a list of icon theme path directories or %NULL
+
+ * @path: (allow-none) (array length=n_elements) (element-type filename) (out):
+ *        location to store a list of icon theme path directories or %NULL .
  *        The stored value should be freed with g_strfreev().
  * @n_elements: location to store number of elements
  *              in @path, or %NULL
@@ -773,7 +775,7 @@ gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
 /**
  * gtk_icon_theme_append_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: directory name to append to the icon path
+ * @path: (type filename): directory name to append to the icon path
  * 
  * Appends a directory to the search path. 
  * See gtk_icon_theme_set_search_path(). 
@@ -802,7 +804,7 @@ gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_prepend_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: directory name to prepend to the icon path
+ * @path: (type filename): directory name to prepend to the icon path
  * 
  * Prepends a directory to the search path. 
  * See gtk_icon_theme_set_search_path().
@@ -2697,10 +2699,9 @@ gtk_icon_info_get_base_size (GtkIconInfo *icon_info)
  * no filename if a builtin icon is returned; in this
  * case, you should use gtk_icon_info_get_builtin_pixbuf().
  * 
- * Return value: the filename for the icon, or %NULL
- *  if gtk_icon_info_get_builtin_pixbuf() should
- *  be used instead. The return value is owned by
- *  GTK+ and should not be modified or freed.
+ * Return value: (type filename): the filename for the icon, or %NULL
+ *  if gtk_icon_info_get_builtin_pixbuf() should be used instead. The
+ *  return value is owned by GTK+ and should not be modified or freed.
  *
  * Since: 2.4
  **/

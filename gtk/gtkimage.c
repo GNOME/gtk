@@ -556,7 +556,7 @@ gtk_image_get_property (GObject     *object,
 
 /**
  * gtk_image_new_from_file:
- * @filename: a filename
+ * @filename: (type filename): a filename
  * 
  * Creates a new #GtkImage displaying the file @filename. If the file
  * isn't found or can't be loaded, the resulting #GtkImage will
@@ -762,7 +762,7 @@ gtk_image_new_from_gicon (GIcon *icon,
 /**
  * gtk_image_set_from_file:
  * @image: a #GtkImage
- * @filename: (allow-none): a filename or %NULL
+ * @filename: (type filename) (allow-none): a filename or %NULL
  *
  * See gtk_image_new_from_file() for details.
  **/

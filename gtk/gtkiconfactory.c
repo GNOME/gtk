@@ -2018,7 +2018,7 @@ icon_source_clear (GtkIconSource *source)
 /**
  * gtk_icon_source_set_filename:
  * @source: a #GtkIconSource
- * @filename: image file to use
+ * @filename: (type filename): image file to use
  *
  * Sets the name of an image file to use as a base image when creating
  * icon variants for #GtkIconSet. The filename must be absolute.
@@ -2106,8 +2106,8 @@ gtk_icon_source_set_pixbuf (GtkIconSource *source,
  * filename is not a copy, and should not be modified or expected to
  * persist beyond the lifetime of the icon source.
  *
- * Return value: image filename. This string must not be modified
- * or freed.
+ * Return value: (type filename): image filename. This string must not
+ * be modified or freed.
  */
 G_CONST_RETURN gchar*
 gtk_icon_source_get_filename (const GtkIconSource *source)

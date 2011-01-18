@@ -1185,7 +1185,7 @@ gtk_status_icon_new_from_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_status_icon_new_from_file:
- * @filename: a filename
+ * @filename: (type filename): a filename
  * 
  * Creates a status icon displaying the file @filename. 
  *
@@ -1913,7 +1913,7 @@ gtk_status_icon_set_from_pixbuf (GtkStatusIcon *status_icon,
 /**
  * gtk_status_icon_set_from_file:
  * @status_icon: a #GtkStatusIcon
- * @filename: a filename
+ * @filename: (type filename): a filename
  * 
  * Makes @status_icon display the file @filename.
  * See gtk_status_icon_new_from_file() for details.

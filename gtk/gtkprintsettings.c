@@ -1676,7 +1676,7 @@ gtk_print_settings_set_output_bin (GtkPrintSettings *settings,
 /**
  * gtk_print_settings_load_file:
  * @settings: a #GtkPrintSettings
- * @file_name: the filename to read the settings from
+ * @file_name: (type filename): the filename to read the settings from
  * @error: (allow-none): return location for errors, or %NULL
  *
  * Reads the print settings from @file_name. If the file could not be loaded
@@ -1711,7 +1711,7 @@ gtk_print_settings_load_file (GtkPrintSettings *settings,
 
 /**
  * gtk_print_settings_new_from_file:
- * @file_name: the filename to read the settings from
+ * @file_name: (type filename): the filename to read the settings from
  * @error: (allow-none): return location for errors, or %NULL
  * 
  * Reads the print settings from @file_name. Returns a new #GtkPrintSettings
@@ -1836,7 +1836,7 @@ gtk_print_settings_new_from_key_file (GKeyFile     *key_file,
 /**
  * gtk_print_settings_to_file:
  * @settings: a #GtkPrintSettings
- * @file_name: the file to save to
+ * @file_name: (type filename): the file to save to
  * @error: (allow-none): return location for errors, or %NULL
  * 
  * This function saves the print settings from @settings to @file_name. If the

@@ -1700,7 +1700,7 @@ gtk_ui_manager_add_ui_from_string (GtkUIManager *manager,
 /**
  * gtk_ui_manager_add_ui_from_file:
  * @manager: a #GtkUIManager object
- * @filename: the name of the file to parse 
+ * @filename: (type filename): the name of the file to parse 
  * @error: return location for an error
  * 
  * Parses a file containing a <link linkend="XML-UI">UI definition</link> and 

@@ -422,7 +422,7 @@ gtk_print_job_set_status (GtkPrintJob   *job,
 /**
  * gtk_print_job_set_source_file:
  * @job: a #GtkPrintJob
- * @filename: the file to be printed
+ * @filename: (type filename): the file to be printed
  * @error: return location for errors
  * 
  * Make the #GtkPrintJob send an existing document to the 

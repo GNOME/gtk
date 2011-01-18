@@ -526,7 +526,7 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
 /**
  * gtk_page_setup_load_file:
  * @setup: a #GtkPageSetup
- * @file_name: the filename to read the page setup from
+ * @file_name: (type filename): the filename to read the page setup from
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Reads the page setup from the file @file_name.
@@ -560,7 +560,7 @@ gtk_page_setup_load_file (GtkPageSetup *setup,
 
 /**
  * gtk_page_setup_new_from_file:
- * @file_name: the filename to read the page setup from
+ * @file_name: (type filename): the filename to read the page setup from
  * @error: (allow-none): return location for an error, or %NULL
  * 
  * Reads the page setup from the file @file_name. Returns a 
@@ -730,7 +730,7 @@ gtk_page_setup_new_from_key_file (GKeyFile     *key_file,
 /**
  * gtk_page_setup_to_file:
  * @setup: a #GtkPageSetup
- * @file_name: the file to save to
+ * @file_name: (type filename): the file to save to
  * @error: (allow-none): return location for errors, or %NULL
  * 
  * This function saves the information from @setup to @file_name.

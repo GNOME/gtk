@@ -669,7 +669,7 @@ gtk_accel_map_load_fd (gint fd)
 
 /**
  * gtk_accel_map_load:
- * @file_name: a file containing accelerator specifications,
+ * @file_name: (type filename): a file containing accelerator specifications,
  *   in the GLib file name encoding
  *
  * Parses a file previously saved with gtk_accel_map_save() for
@@ -780,8 +780,8 @@ gtk_accel_map_save_fd (gint fd)
 
 /**
  * gtk_accel_map_save:
- * @file_name: the name of the file to contain accelerator specifications,
- *   in the GLib file name encoding
+ * @file_name: (type filename): the name of the file to contain
+ *   accelerator specifications, in the GLib file name encoding
  *
  * Saves current accelerator specifications (accelerator path, key
  * and modifiers) to @file_name.

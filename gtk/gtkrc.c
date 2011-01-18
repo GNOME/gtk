@@ -250,8 +250,8 @@ gtk_rc_make_default_dir (const gchar *type)
 
 /**
  * gtk_rc_get_im_module_path:
- * @returns: a newly-allocated string containing the path in which to 
- *    look for IM modules.
+ * @returns: (type filename): a newly-allocated string containing the
+ *    path in which to look for IM modules.
  *
  * Obtains the path in which to look for IM modules. See the documentation
  * of the <link linkend="im-module-path"><envar>GTK_PATH</envar></link>
@@ -271,8 +271,8 @@ gtk_rc_get_im_module_path (void)
 
 /**
  * gtk_rc_get_im_module_file:
- * @returns: a newly-allocated string containing the name of the file
- * listing the IM modules available for loading
+ * @returns: (type filename): a newly-allocated string containing the
+ *    name of the file listing the IM modules available for loading
  *
  * Obtains the path to the IM modules file. See the documentation
  * of the <link linkend="im-module-file"><envar>GTK_IM_MODULE_FILE</envar></link>
@@ -322,7 +322,7 @@ gtk_rc_get_theme_dir (void)
  * see the docs for <envar>GTK_PATH</envar> in
  * <xref linkend="gtk-running"/>.
  * 
- * return value: the directory. (Must be freed with g_free())
+ * return value: (type filename): the directory. (Must be freed with g_free())
  **/
 gchar *
 gtk_rc_get_module_dir (void)
@@ -332,8 +332,8 @@ gtk_rc_get_module_dir (void)
 
 /**
  * gtk_rc_add_default_file:
- * @filename: the pathname to the file. If @filename is not absolute, it
- *    is searched in the current directory.
+ * @filename: (type filename): the pathname to the file. If @filename
+ *    is not absolute, it is searched in the current directory.
  *
  * Adds a file to the list of files to be parsed at the
  * end of gtk_init().
@@ -347,7 +347,8 @@ gtk_rc_add_default_file (const gchar *filename)
 
 /**
  * gtk_rc_set_default_files:
- * @filenames: A %NULL-terminated list of filenames.
+ * @filenames: (array zero-terminated=1) (element-type filename): A
+ *     %NULL-terminated list of filenames.
  *
  * Sets the list of files that GTK+ will read at the
  * end of gtk_init().
@@ -936,7 +937,7 @@ lookup_color (GtkRcStyle *style,
  * If the file is not found, it outputs a warning message using
  * g_warning() and returns %NULL.
  *
- * Return value: the filename. 
+ * Return value: (type filename): the filename. 
  **/
 gchar*
 gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
@@ -955,8 +956,8 @@ gtk_rc_find_pixmap_in_path (GtkSettings  *settings,
  * Searches for a theme engine in the GTK+ search path. This function
  * is not useful for applications and should not be used.
  * 
- * Return value: The filename, if found (must be freed with g_free()),
- *   otherwise %NULL.
+ * Return value: (type filename): The filename, if found (must be
+ *   freed with g_free()), otherwise %NULL.
  **/
 gchar*
 gtk_rc_find_module_in_path (const gchar *module_file)

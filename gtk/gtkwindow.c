@@ -3686,7 +3686,7 @@ load_pixbuf_verbosely (const char *filename,
 /**
  * gtk_window_set_icon_from_file:
  * @window: a #GtkWindow
- * @filename: location of icon file
+ * @filename: (type filename): location of icon file
  * @err: (allow-none): location to store error, or %NULL.
  *
  * Sets the icon for @window.  
@@ -3864,7 +3864,7 @@ gtk_window_get_default_icon_name (void)
 
 /**
  * gtk_window_set_default_icon_from_file:
- * @filename: location of icon file
+ * @filename: (type filename): location of icon file
  * @err: (allow-none): location to store error, or %NULL.
  *
  * Sets an icon to be used as fallback for windows that haven't
