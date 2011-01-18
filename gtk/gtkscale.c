@@ -510,8 +510,8 @@ gtk_scale_get_property (GObject      *object,
 /**
  * gtk_scale_new:
  * @orientation: the scale's orientation.
- * @adjustment: the #GtkAdjustment which sets the range of the scale, or
- *              %NULL to create a new adjustment.
+ * @adjustment: (allow-none): the #GtkAdjustment which sets the range
+ *              of the scale, or %NULL to create a new adjustment.
  *
  * Creates a new #GtkScale.
  *

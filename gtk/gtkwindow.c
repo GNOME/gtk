@@ -2629,7 +2629,7 @@ gtk_window_release_application (GtkWindow *window)
 /**
  * gtk_window_set_application:
  * @window: a #GtkWindow
- * @application: a #GtkApplication, or %NULL
+ * @application: (allow-none): a #GtkApplication, or %NULL
  *
  * Sets or unsets the #GtkApplication associated with the window.
  *

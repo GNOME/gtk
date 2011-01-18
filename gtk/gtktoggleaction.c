@@ -168,8 +168,8 @@ gtk_toggle_action_init (GtkToggleAction *action)
  * @name: A unique name for the action
  * @label: (allow-none): The label displayed in menu items and on buttons, or %NULL
  * @tooltip: (allow-none): A tooltip for the action, or %NULL
- * @stock_id: The stock icon to display in widgets representing the
- *   action, or %NULL
+ * @stock_id: (allow-none): The stock icon to display in widgets representing
+ *            the action, or %NULL
  *
  * Creates a new #GtkToggleAction object. To add the action to
  * a #GtkActionGroup and set the accelerator for the action,

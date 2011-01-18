@@ -1770,7 +1770,7 @@ gtk_tree_view_column_set_attributes (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_set_cell_data_func:
  * @tree_column: A #GtkTreeViewColumn
  * @cell_renderer: A #GtkCellRenderer
- * @func: The #GtkTreeViewColumnFunc to use. 
+ * @func: (allow-none): The #GtkTreeViewColumnFunc to use. 
  * @func_data: The user data for @func.
  * @destroy: The destroy notification for @func_data
  * 

@@ -837,8 +837,8 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_set_custom_theme:
  * @icon_theme: a #GtkIconTheme
- * @theme_name: name of icon theme to use instead of configured theme,
- *   or %NULL to unset a previously set custom theme
+ * @theme_name: (allow-none): name of icon theme to use instead of
+ *   configured theme, or %NULL to unset a previously set custom theme
  * 
  * Sets the name of the icon theme that the #GtkIconTheme object uses
  * overriding system configuration. This function cannot be called
@@ -1722,8 +1722,8 @@ add_key_to_list (gpointer  key,
 /**
  * gtk_icon_theme_list_icons:
  * @icon_theme: a #GtkIconTheme
- * @context: a string identifying a particular type of icon,
- *           or %NULL to list all icons.
+ * @context: (allow-none): a string identifying a particular type of
+ *           icon, or %NULL to list all icons.
  * 
  * Lists the icons in the current icon theme. Only a subset
  * of the icons can be listed by providing a context string.
