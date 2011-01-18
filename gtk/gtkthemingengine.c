@@ -1731,15 +1731,6 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
 
   junction = gtk_theming_engine_get_junction_sides (engine);
 
-  if (gtk_theming_engine_has_class (engine, "spinbutton") &&
-      gtk_theming_engine_has_class (engine, "button"))
-    {
-      x += 2;
-      y += 2;
-      width -= 4;
-      height -= 4;
-    }
-
   flags = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get (engine, flags,
                           "border-width", &border,
