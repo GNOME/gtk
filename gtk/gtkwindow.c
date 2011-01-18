@@ -2598,7 +2598,7 @@ gtk_window_get_opacity (GtkWindow *window)
  *
  * Gets the #GtkApplication associated with the window (if any).
  *
- * Return value: a #GtkApplication, or %NULL
+ * Return value: (transfer none): a #GtkApplication, or %NULL
  *
  * Since: 3.0
  **/
@@ -8416,7 +8416,7 @@ gtk_window_has_group (GtkWindow *window)
  * Gets the current grab widget of the given group,
  * see gtk_grab_add().
  *
- * Returns: the current grab widget of the group
+ * Returns: (transfer none): the current grab widget of the group
  *
  * Since: 2.22
  */
@@ -8515,7 +8515,7 @@ _gtk_window_group_remove_device_grab (GtkWindowGroup *window_group,
  *
  * Returns the current grab widget for @device, or %NULL if none.
  *
- * Returns: The grab widget, or %NULL
+ * Returns: (transfer none): The grab widget, or %NULL
  *
  * Since: 3.0
  */

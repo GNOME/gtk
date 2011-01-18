@@ -335,7 +335,7 @@ gdk_display_manager_open_display (GdkDisplayManager *manager,
  *
  * Finds or creates an atom corresponding to a given string.
  *
- * Returns: the atom corresponding to @atom_name.
+ * Returns: (transfer none): the atom corresponding to @atom_name.
  */
 GdkAtom
 gdk_atom_intern (const gchar *atom_name,
@@ -361,7 +361,7 @@ gdk_atom_intern (const gchar *atom_name,
  * ever unload the module again (e.g. do not use this function in
  * GTK+ theme engines).
  *
- * Returns: the atom corresponding to @atom_name
+ * Returns: (transfer none): the atom corresponding to @atom_name
  *
  * Since: 2.10
  */

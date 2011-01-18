@@ -1907,7 +1907,7 @@ get_cell_by_position (GtkCellRenderer     *renderer,
  * Gets the #GtkCellRenderer at @x and @y coordinates inside @area and optionally
  * returns the full cell allocation for it inside @cell_area.
  *
- * Return value: the #GtkCellRenderer at @x and @y.
+ * Return value: (transfer none): the #GtkCellRenderer at @x and @y.
  *
  * Since: 3.0
  */
@@ -2433,8 +2433,8 @@ gtk_cell_area_class_install_cell_property (GtkCellAreaClass   *aclass,
  *
  * Finds a cell property of a cell area class by name.
  *
- * Return value: (allow-none): the #GParamSpec of the child property or %NULL if @aclass has no
- *   child property with that name.
+ * Return value: (transfer none): the #GParamSpec of the child property
+ *   or %NULL if @aclass has no child property with that name.
  *
  * Since: 3.0
  */
@@ -2993,7 +2993,7 @@ gtk_cell_area_set_focus_cell (GtkCellArea     *area,
  *
  * Retrieves the currently focused cell for @area
  *
- * Return value: the currently focused cell in @area.
+ * Return value: (transfer none): the currently focused cell in @area.
  *
  * Since: 3.0
  */
@@ -3177,7 +3177,8 @@ gtk_cell_area_get_focus_siblings (GtkCellArea     *area,
  * then chose to activate the focus cell for which the event
  * cell may have been a sibling.
  *
- * Return value: the #GtkCellRenderer for which @renderer is a sibling, or %NULL.
+ * Return value: (transfer none): the #GtkCellRenderer for which @renderer
+ *    is a sibling, or %NULL.
  *
  * Since: 3.0
  */
@@ -3320,7 +3321,7 @@ gtk_cell_area_set_edit_widget (GtkCellArea     *area,
  * Gets the #GtkCellRenderer in @area that is currently
  * being edited.
  *
- * Return value: The currently edited #GtkCellRenderer
+ * Return value: (transfer none): The currently edited #GtkCellRenderer
  *
  * Since: 3.0
  */
@@ -3343,7 +3344,7 @@ gtk_cell_area_get_edited_cell (GtkCellArea *area)
  * Gets the #GtkCellEditable widget currently used
  * to edit the currently edited cell.
  *
- * Return value: The currently active #GtkCellEditable widget
+ * Return value: (transfer none): The currently active #GtkCellEditable widget
  *
  * Since: 3.0
  */

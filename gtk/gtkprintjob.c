@@ -336,7 +336,7 @@ gtk_print_job_new (const gchar      *title,
  * 
  * Gets the #GtkPrintSettings of the print job.
  * 
- * Return value: the settings of @job
+ * Return value: (transfer none): the settings of @job
  *
  * Since: 2.10
  */
@@ -354,7 +354,7 @@ gtk_print_job_get_settings (GtkPrintJob *job)
  * 
  * Gets the #GtkPrinter of the print job.
  * 
- * Return value: the printer of @job
+ * Return value: (transfer none): the printer of @job
  *
  * Since: 2.10
  */
@@ -471,7 +471,7 @@ gtk_print_job_set_source_file (GtkPrintJob *job,
  * Gets a cairo surface onto which the pages of
  * the print job should be rendered.
  * 
- * Return value: the cairo surface of @job
+ * Return value: (transfer none): the cairo surface of @job
  *
  * Since: 2.10
  **/

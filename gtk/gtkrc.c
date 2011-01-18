@@ -752,9 +752,9 @@ gtk_rc_reparse_all (void)
  * created styles, so a new style may not be
  * created.)
  *
- * Returns: the resulting style. No refcount is added
- *   to the returned style, so if you want to save this
- *   style around, you should add a reference yourself.
+ * Returns: (transfer none): the resulting style. No refcount is added
+ *   to the returned style, so if you want to save this style around,
+ *   you should add a reference yourself.
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
  **/

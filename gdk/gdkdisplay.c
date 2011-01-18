@@ -1756,7 +1756,7 @@ gdk_display_real_get_app_launch_context (GdkDisplay *display)
  * Returns a #GdkAppLaunchContext suitable for launching
  * applications on the given display.
  *
- * Returns: a new #GdkAppLaunchContext for @display.
+ * Returns: (transfer full): a new #GdkAppLaunchContext for @display.
  *     Free with g_object_unref() when done
  *
  * Since: 3.0

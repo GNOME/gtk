@@ -1975,7 +1975,7 @@ gtk_recent_info_get_icon (GtkRecentInfo *info,
  *
  * Retrieves the icon associated to the resource MIME type.
  *
- * Return value: a #GIcon containing the icon, or %NULL. Use
+ * Return value: (transfer full): a #GIcon containing the icon, or %NULL. Use
  *   g_object_unref() when finished using the icon
  *
  * Since: 2.22

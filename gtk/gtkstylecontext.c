@@ -2638,7 +2638,7 @@ gtk_style_context_set_screen (GtkStyleContext *context,
  *
  * Returns the #GdkScreen to which @context is attached.
  *
- * Returns: a #GdkScreen.
+ * Returns: (transfer none): a #GdkScreen.
  **/
 GdkScreen *
 gtk_style_context_get_screen (GtkStyleContext *context)
@@ -3571,8 +3571,9 @@ gtk_style_context_get_margin (GtkStyleContext *context,
  * object is const and will remain valid until the
  * #GtkStyleContext::changed signal happens.
  *
- * Returns: the #PangoFontDescription for the given state. This
- *          object is owned by GTK+ and should not be freed.
+ * Returns: (transfer none): the #PangoFontDescription for the given
+ *          state.  This object is owned by GTK+ and should not be
+ *          freed.
  *
  * Since: 3.0
  **/

@@ -2384,9 +2384,9 @@ gtk_invoke_key_snoopers (GtkWidget *grab_widget,
  * the current event will be the #GdkEventButton that triggered
  * the ::clicked signal.
  *
- * Return value: a copy of the current event, or %NULL if there is
- *     no current event. The returned event must be freed with
- *     gdk_event_free().
+ * Return value: (transfer full): a copy of the current event, or
+ *     %NULL if there is no current event. The returned event must be
+ *     freed with gdk_event_free().
  */
 GdkEvent*
 gtk_get_current_event (void)

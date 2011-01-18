@@ -1355,7 +1355,7 @@ gtk_drag_dest_unset (GtkWidget *widget)
  * Returns the list of targets this widget can accept from
  * drag-and-drop.
  * 
- * Return value: the #GtkTargetList, or %NULL if none
+ * Return value: (transfer none): the #GtkTargetList, or %NULL if none
  **/
 GtkTargetList*
 gtk_drag_dest_get_target_list (GtkWidget *widget)
@@ -1666,8 +1666,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
  * that case, they will have to implement a drag_motion handler that
  * passes the correct target list to this function.
  *
- * Return value: first target that the source offers and the dest can
- *     accept, or %GDK_NONE
+ * Return value: (transfer none): first target that the source offers
+ *     and the dest can accept, or %GDK_NONE
  **/
 GdkAtom
 gtk_drag_dest_find_target (GtkWidget      *widget,
@@ -2544,7 +2544,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  * (remember to free the event with gdk_event_free() when you are done).
  * If you can really not pass a real event, pass #NULL instead.
  *
- * Return value: the context for this drag.
+ * Return value: (transfer none): the context for this drag.
  **/
 GdkDragContext *
 gtk_drag_begin (GtkWidget         *widget,
@@ -2657,7 +2657,7 @@ gtk_drag_source_unset (GtkWidget *widget)
  * Gets the list of targets this widget can provide for
  * drag-and-drop.
  *
- * Return value: the #GtkTargetList, or %NULL if none
+ * Return value: (transfer none): the #GtkTargetList, or %NULL if none
  *
  * Since: 2.4
  **/

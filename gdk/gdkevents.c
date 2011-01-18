@@ -1165,7 +1165,7 @@ gdk_event_set_source_device (GdkEvent  *event,
  * If the event does not contain a device field, this function will
  * return %NULL.
  *
- * Returns: a #GdkDevice, or %NULL
+ * Returns: (transfer none): a #GdkDevice, or %NULL.
  *
  * Since: 3.0
  **/

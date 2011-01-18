@@ -348,7 +348,7 @@ gtk_cell_area_context_real_allocate (GtkCellAreaContext *context,
  * that the #GtkCellArea is configured with in order to
  * compute a proper allocation.
  *
- * Return value: the #GtkCellArea this context was created by.
+ * Return value: (transfer none): the #GtkCellArea this context was created by.
  *
  * Since: 3.0
  */

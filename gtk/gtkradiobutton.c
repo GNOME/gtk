@@ -432,7 +432,7 @@ gtk_radio_button_new (GSList *group)
  *
  * Creates a new #GtkRadioButton with a text label.
  *
- * Returns: (transfer full): a new radio button.
+ * Returns: a new radio button.
  */
 GtkWidget*
 gtk_radio_button_new_with_label (GSList      *group,
@@ -461,7 +461,7 @@ gtk_radio_button_new_with_label (GSList      *group,
  * gtk_label_new_with_mnemonic(), so underscores in @label indicate the
  * mnemonic for the button.
  *
- * Returns: (transfer full): a new #GtkRadioButton
+ * Returns: a new #GtkRadioButton
  */
 GtkWidget*
 gtk_radio_button_new_with_mnemonic (GSList      *group,

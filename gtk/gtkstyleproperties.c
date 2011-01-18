@@ -574,7 +574,7 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
  * Returns the symbolic color that is mapped
  * to @name.
  *
- * Returns: The mapped color
+ * Returns: (transfer none): The mapped color
  *
  * Since: 3.0
  **/

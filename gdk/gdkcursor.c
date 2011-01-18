@@ -150,7 +150,7 @@ gdk_cursor_init (GdkCursor *cursor)
  *
  * Adds a reference to @cursor.
  *
- * Return value: Same @cursor that was passed in
+ * Return value: (transfer full): Same @cursor that was passed in
  *
  * Deprecated: 3.0: Use g_object_ref() instead
  */

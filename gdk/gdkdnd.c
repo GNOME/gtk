@@ -445,7 +445,7 @@ gdk_drag_drop_succeeded (GdkDragContext *context)
  *
  * Returns the selection atom for the current source window.
  *
- * Return value: the selection atom, or %GDK_NONE
+ * Return value: (transfer none): the selection atom, or %GDK_NONE
  */
 GdkAtom
 gdk_drag_get_selection (GdkDragContext *context)

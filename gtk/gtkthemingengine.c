@@ -881,8 +881,9 @@ gtk_theming_engine_get_margin (GtkThemingEngine *engine,
  *
  * Returns the font description for a given state.
  *
- * Returns: the #PangoFontDescription for the given state. This
- *          object is owned by GTK+ and should not be freed.
+ * Returns: (transfer none): the #PangoFontDescription for the given
+ *          state. This object is owned by GTK+ and should not be
+ *          freed.
  *
  * Since: 3.0
  **/
@@ -1029,7 +1030,7 @@ gtk_theming_engine_load (const gchar *name)
  *
  * Returns the #GdkScreen to which @engine currently rendering to.
  *
- * Returns: a #GdkScreen, or %NULL.
+ * Returns: (transfer none): a #GdkScreen, or %NULL.
  **/
 GdkScreen *
 gtk_theming_engine_get_screen (GtkThemingEngine *engine)

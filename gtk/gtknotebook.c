@@ -1047,7 +1047,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * necessary properties to the notebook (e.g. the
    * #GtkNotebook:group ).
    *
-   * Returns: a #GtkNotebook that @page should be added to, or %NULL.
+   * Returns: (transfer none): a #GtkNotebook that @page should be
+   *     added to, or %NULL.
    *
    * Since: 2.12
    */

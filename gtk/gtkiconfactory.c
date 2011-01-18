@@ -251,7 +251,7 @@ gtk_icon_factory_add (GtkIconFactory *factory,
  * widget that will display the icon, instead of using this
  * function directly, so that themes are taken into account.
  *
- * Return value: icon set of @stock_id.
+ * Return value: (transfer none): icon set of @stock_id.
  */
 GtkIconSet *
 gtk_icon_factory_lookup (GtkIconFactory *factory,
@@ -330,7 +330,7 @@ _gtk_icon_factory_ensure_default_icons (void)
  * using this function directly, so that themes are taken into
  * account.
  *
- * Return value: a #GtkIconSet, or %NULL
+ * Return value: (transfer none): a #GtkIconSet, or %NULL
  */
 GtkIconSet *
 gtk_icon_factory_lookup_default (const gchar *stock_id)
