@@ -961,7 +961,7 @@ row_reordered_cb (GtkTreeModel    *model,
   GtkTreeMenuPrivate *priv = menu->priv;
   gboolean            this_menu = FALSE;
 
-  if (path == NULL && priv->root == NULL)
+  if (path == NULL || priv->root == NULL)
     this_menu = TRUE;
   else if (priv->root)
     {
@@ -1645,8 +1645,8 @@ _gtk_tree_menu_get_model (GtkTreeMenu *menu)
  * Since: 3.0
  */
 void
-_gtk_tree_menu_set_root (GtkTreeMenu         *menu,
-                         GtkTreePath         *path)
+_gtk_tree_menu_set_root (GtkTreeMenu *menu,
+                         GtkTreePath *path)
 {
   GtkTreeMenuPrivate *priv;
 
