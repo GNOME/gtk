@@ -53,7 +53,7 @@ gdk_x11_display_manager_open_display (GdkDisplayManager *manager,
   GdkDisplay *display;
 
   display = _gdk_x11_display_open (name);
-  if (manager_x11->default_display == NULL)
+  if (manager_x11->default_display == NULL && display != NULL)
     gdk_display_manager_set_default_display (manager, display);
 
   return display;
