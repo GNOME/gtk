@@ -58,7 +58,7 @@ typedef enum {
  * GtkFileFilterFunc:
  * @filter_info: a #GtkFileFilterInfo that is filled according
  *   to the @needed flags passed to gtk_file_filter_add_custom()
- * @data: user data passed to gtk_file_filter_add_custom()
+ * @data: (closure): user data passed to gtk_file_filter_add_custom()
  *
  * The type of function that is used with custom filters, see
  * gtk_file_filter_add_custom().

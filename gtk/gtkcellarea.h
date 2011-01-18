@@ -62,7 +62,7 @@ typedef struct _GtkCellAreaContext       GtkCellAreaContext;
 /**
  * GtkCellCallback:
  * @renderer: the cell renderer to operate on
- * @data: user-supplied data
+ * @data: (closure): user-supplied data
  *
  * The type of the callback functions used for iterating over
  * the cell renderers of a #GtkCellArea, see gtk_cell_area_foreach().
@@ -79,7 +79,7 @@ typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
  *     provided to gtk_cell_area_foreach_alloc().
  * @cell_background: the background area for @renderer inside the
  *     background area provided to gtk_cell_area_foreach_alloc().
- * @data: user-supplied data
+ * @data: (closure): user-supplied data
  *
  * The type of the callback functions used for iterating over the
  * cell renderers and their allocated areas inside a #GtkCellArea,

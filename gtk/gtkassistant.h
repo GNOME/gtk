@@ -111,7 +111,7 @@ struct _GtkAssistantClass
 /**
  * GtkAssistantPageFunc:
  * @current_page: The page number used to calculate the next page.
- * @data: user data.
+ * @data: (closure): user data.
  *
  * A function used by gtk_assistant_set_forward_page_func() to know which
  * is the next page given a current one. It's called both for computing the

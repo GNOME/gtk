@@ -100,7 +100,7 @@ typedef union  _GdkEvent	    GdkEvent;
 /**
  * GdkEventFunc:
  * @event: the #GdkEvent to process.
- * @data: user data set when the event handler was installed with
+ * @data: (closure): user data set when the event handler was installed with
  *   gdk_event_handler_set().
  *
  * Specifies the type of function passed to gdk_event_handler_set() to

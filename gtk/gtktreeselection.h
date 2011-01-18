@@ -44,7 +44,7 @@ typedef struct _GtkTreeSelectionPrivate      GtkTreeSelectionPrivate;
  * @model: A #GtkTreeModel being viewed
  * @path: The #GtkTreePath of the row in question
  * @path_currently_selected: %TRUE, if the path is currently selected
- * @data: user data
+ * @data: (closure): user data
  *
  * A function used by gtk_tree_selection_set_select_function() to filter
  * whether or not a row may be selected.  It is called whenever a row's
@@ -64,7 +64,7 @@ typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
  * @model: The #GtkTreeModel being viewed
  * @path: The #GtkTreePath of a selected row
  * @iter: A #GtkTreeIter pointing to a selected row
- * @data: user data
+ * @data: (closure): user data
  *
  * A function used by gtk_tree_selection_selected_foreach() to map all
  * selected rows.  It will be called on every selected row in the view.

@@ -129,7 +129,7 @@ struct _GtkTreeViewClass
  * @column: The #GtkTreeViewColumn being dragged
  * @prev_column: A #GtkTreeViewColumn on one side of @column
  * @next_column: A #GtkTreeViewColumn on the other side of @column
- * @data: user data
+ * @data: (closure): user data
  *
  * Function type for determining whether @column can be dropped in a
  * particular spot (as determined by @prev_column and @next_column).  In
@@ -167,7 +167,7 @@ typedef void     (* GtkTreeViewMappingFunc)    (GtkTreeView             *tree_vi
  * @key: the key string to compare with
  * @iter: a #GtkTreeIter pointing the row of @model that should be compared
  *  with @key.
- * @search_data: user data from gtk_tree_view_set_search_equal_func()
+ * @search_data: (closure): user data from gtk_tree_view_set_search_equal_func()
  *
  * A function used for checking whether a row in @model matches
  * a search key string entered by the user. Note the return value
@@ -186,7 +186,7 @@ typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
  * GtkTreeViewRowSeparatorFunc:
  * @model: the #GtkTreeModel
  * @iter: a #GtkTreeIter pointing at a row in @model
- * @data: user data
+ * @data: (closure): user data
  *
  * Function type for determining whether the row pointed to by @iter should
  * be rendered as a separator. A common way to implement this is to have a

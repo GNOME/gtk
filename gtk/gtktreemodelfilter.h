@@ -41,7 +41,7 @@ G_BEGIN_DECLS
  * @model: the child model of the #GtkTreeModelFilter
  * @iter: a #GtkTreeIter pointing to the row in @model whose visibility
  *   is determined
- * @data: user data given to gtk_tree_model_filter_set_visible_func()
+ * @data: (closure): user data given to gtk_tree_model_filter_set_visible_func()
  *
  * A function which decides whether the row indicated by @iter is visible.
  *
@@ -58,7 +58,7 @@ typedef gboolean (* GtkTreeModelFilterVisibleFunc) (GtkTreeModel *model,
  * @value: A #GValue which is already initialized for with the correct type for
  *  the column @column.
  * @column: the column whose display value is determined
- * @data: user data given to gtk_tree_model_filter_set_modify_func()
+ * @data: (closure): user data given to gtk_tree_model_filter_set_modify_func()
  *
  * A function which calculates display values from raw values in the model.
  * It must fill @value with the display value for the column @column in the
