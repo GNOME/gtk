@@ -304,6 +304,7 @@ gtk_list_store_new (gint n_columns,
  * Non-vararg creation function.  Used primarily by language bindings.
  *
  * Return value: (transfer none): a new #GtkListStore
+ * Rename to: gtk_list_store_new
  **/
 GtkListStore *
 gtk_list_store_newv (gint   n_columns,
@@ -920,6 +921,7 @@ gtk_list_store_set_valist_internal (GtkListStore *list_store,
  * change is not known until run-time.
  *
  * Since: 2.12
+ * Rename to: gtk_list_store_set
  */
 void
 gtk_list_store_set_valuesv (GtkListStore *list_store,
@@ -1531,7 +1533,7 @@ gtk_list_store_reorder_func (GSequenceIter *a,
 }
   
 /**
- * gtk_list_store_reorder:
+ * gtk_list_store_reorder: (skip)
  * @store: A #GtkListStore.
  * @new_order: (array): an array of integers mapping the new position of each child
  *      to its old position before the re-ordering,

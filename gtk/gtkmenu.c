@@ -1184,10 +1184,10 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
 }
 
 /**
- * gtk_menu_attach_to_widget:
+ * gtk_menu_attach_to_widget: (skip)
  * @menu: a #GtkMenu
  * @attach_widget: the #GtkWidget that the menu will be attached to
- * @detacher: the user supplied callback functions that will be called
+ * @detacher: the user supplied callback function that will be called
  *            when the menu calls gtk_menu_detach()
  *
  * Attaches the menu to the widget and provides a callback function
@@ -1737,15 +1737,15 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
 }
 
 /**
- * gtk_menu_popup:
- * @menu: a #GtkMenu.
+ * gtk_menu_popup: (skip)
+ * @menu: a #GtkMenu
  * @parent_menu_shell: (allow-none): the menu shell containing the
  *     triggering menu item, or %NULL
  * @parent_menu_item: (allow-none): the menu item whose activation
  *     triggered the popup, or %NULL
  * @func: (allow-none): a user supplied function used to position
  *     the menu, or %NULL
- * @data: (allow-none): user supplied data to be passed to @func.
+ * @data: user supplied data to be passed to @func.
  * @button: the mouse button which was pressed to initiate the event.
  * @activate_time: the time at which the activation event occurred.
  *

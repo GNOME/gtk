@@ -2411,7 +2411,7 @@ gdk_window_peek_children (GdkWindow *window)
 }
 
 /**
- * gdk_window_add_filter:
+ * gdk_window_add_filter: (skip)
  * @window: a #GdkWindow
  * @function: filter callback
  * @data: data to pass to filter callback
@@ -2472,7 +2472,7 @@ gdk_window_add_filter (GdkWindow     *window,
 }
 
 /**
- * gdk_window_remove_filter:
+ * gdk_window_remove_filter: (skip)
  * @window: a #GdkWindow
  * @function: previously-added filter function
  * @data: user data for previously-added filter function
@@ -10896,7 +10896,7 @@ gdk_property_get (GdkWindow  *window,
 }
 
 /**
- * gdk_property_change:
+ * gdk_property_change: (skip)
  * @window: a #GdkWindow
  * @property: the property to change
  * @type: the new type for the property. If @mode is

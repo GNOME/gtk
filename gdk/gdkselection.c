@@ -226,7 +226,7 @@ gdk_selection_send_notify_for_display (GdkDisplay       *display,
 }
 
 /**
- * gdk_selection_property_get:
+ * gdk_selection_property_get: (skip)
  * @requestor: the window on which the data is stored
  * @data: location to store a pointer to the retrieved data.
        If the retrieval failed, %NULL we be stored here, otherwise, it

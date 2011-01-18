@@ -329,7 +329,7 @@ _gtk_theming_engine_set_context (GtkThemingEngine *engine,
 }
 
 /**
- * gtk_theming_engine_register_property:
+ * gtk_theming_engine_register_property: (skip)
  * @name_space: namespace for the property name
  * @parse_func: parsing function to use, or %NULL
  * @pspec: the #GParamSpec for the new property

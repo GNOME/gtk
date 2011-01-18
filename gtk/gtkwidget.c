@@ -11459,7 +11459,7 @@ gtk_widget_input_shape_combine_region (GtkWidget *widget,
  */
 
 /**
- * gtk_widget_class_install_style_property_parser:
+ * gtk_widget_class_install_style_property_parser: (skip)
  * @klass: a #GtkWidgetClass
  * @pspec: the #GParamSpec for the style property
  * @parser: the parser for the style property

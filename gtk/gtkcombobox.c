@@ -4944,7 +4944,7 @@ gtk_combo_box_get_popup_accessible (GtkComboBox *combo_box)
 }
 
 /**
- * gtk_combo_box_get_row_separator_func:
+ * gtk_combo_box_get_row_separator_func: (skip)
  * @combo_box: a #GtkComboBox
  *
  * Returns the current row separator function.

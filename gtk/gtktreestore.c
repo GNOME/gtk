@@ -354,6 +354,7 @@ gtk_tree_store_new (gint n_columns,
  * Non vararg creation function.  Used primarily by language bindings.
  *
  * Return value: (transfer full): a new #GtkTreeStore
+ * Rename to: gtk_tree_store_new
  **/
 GtkTreeStore *
 gtk_tree_store_newv (gint   n_columns,
@@ -1084,6 +1085,7 @@ gtk_tree_store_set_valist_internal (GtkTreeStore *tree_store,
  * the number of columns to change is not known until run-time.
  *
  * Since: 2.12
+ * Rename to: gtk_tree_store_set
  **/
 void
 gtk_tree_store_set_valuesv (GtkTreeStore *tree_store,
@@ -1585,6 +1587,7 @@ gtk_tree_store_insert_with_values (GtkTreeStore *tree_store,
  * function is mainly intended for language bindings.
  *
  * Since: 2.10
+ * Rename to: gtk_tree_store_insert_with_values
  */
 void
 gtk_tree_store_insert_with_valuesv (GtkTreeStore *tree_store,
@@ -2245,7 +2248,7 @@ gtk_tree_store_reorder_func (gconstpointer a,
 }
 
 /**
- * gtk_tree_store_reorder:
+ * gtk_tree_store_reorder: (skip)
  * @tree_store: A #GtkTreeStore.
  * @parent: A #GtkTreeIter.
  * @new_order: (array): an array of integers mapping the new position of each child

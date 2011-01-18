@@ -864,7 +864,7 @@ gtk_style_has_context (GtkStyle *style)
 }
 
 /**
- * gtk_style_attach:
+ * gtk_style_attach: (skip)
  * @style: a #GtkStyle.
  * @window: a #GdkWindow.
  *

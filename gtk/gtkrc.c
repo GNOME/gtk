@@ -888,7 +888,7 @@ gtk_rc_get_style_by_paths (GtkSettings *settings,
 }
 
 /**
- * gtk_rc_scanner_new:
+ * gtk_rc_scanner_new: (skip)
  *
  * Deprecated:3.0: Use #GtkCssProvider instead
  */

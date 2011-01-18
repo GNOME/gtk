@@ -565,10 +565,10 @@ gtk_clipboard_set_contents (GtkClipboard         *clipboard,
 }
 
 /**
- * gtk_clipboard_set_with_data:
+ * gtk_clipboard_set_with_data: (skip)
  * @clipboard: a #GtkClipboard
- * @targets: array containing information about the available forms for the
- *     clipboard data
+ * @targets: (array length=n_targets): array containing information
+ *     about the available forms for the clipboard data
  * @n_targets: number of elements in @targets
  * @get_func: (scope async): function to call to get the actual clipboard data
  * @clear_func: (scope async): when the clipboard contents are set again,
@@ -602,10 +602,10 @@ gtk_clipboard_set_with_data (GtkClipboard          *clipboard,
 }
 
 /**
- * gtk_clipboard_set_with_owner:
+ * gtk_clipboard_set_with_owner: (skip)
  * @clipboard: a #GtkClipboard
- * @targets: array containing information about the available forms for
- *     the clipboard data
+ * @targets: (array length=n_targets): array containing information
+ *     about the available forms for the clipboard data
  * @n_targets: number of elements in @targets
  * @get_func: (scope async): function to call to get the actual clipboard data
  * @clear_func: (scope async): when the clipboard contents are set again,

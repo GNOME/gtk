@@ -3013,7 +3013,7 @@ gtk_color_selection_palette_to_string (const GdkColor *colors,
 }
 
 /**
- * gtk_color_selection_set_change_palette_with_screen_hook:
+ * gtk_color_selection_set_change_palette_with_screen_hook: (skip)
  * @func: a function to call when the custom palette needs saving.
  * 
  * Installs a global function to be called whenever the user tries to

@@ -1695,7 +1695,7 @@ gdk_event_send_client_message_for_display (GdkDisplay     *display,
 }
 
 /**
- * gdk_display_add_client_message_filter:
+ * gdk_display_add_client_message_filter: (skip)
  * @display: a #GdkDisplay for which this message filter applies
  * @message_type: the type of ClientMessage events to receive.
  *   This will be checked against the @message_type field
@@ -1719,7 +1719,7 @@ gdk_display_add_client_message_filter (GdkDisplay   *display,
 }
 
 /**
- * gdk_add_client_message_filter:
+ * gdk_add_client_message_filter: (skip)
  * @message_type: the type of ClientMessage events to receive. This will be
  *     checked against the <structfield>message_type</structfield> field of the
  *     XClientMessage event struct.

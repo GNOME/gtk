@@ -406,7 +406,7 @@ property_node_lookup (GQuark quark)
 /* Property registration functions */
 
 /**
- * gtk_style_properties_register_property:
+ * gtk_style_properties_register_property: (skip)
  * @parse_func: parsing function to use, or %NULL
  * @pspec: the #GParamSpec for the new property
  *
@@ -457,10 +457,10 @@ gtk_style_properties_register_property (GtkStylePropertyParser  parse_func,
 }
 
 /**
- * gtk_style_properties_lookup_property:
+ * gtk_style_properties_lookup_property: (skip)
  * @property_name: property name to look up
  * @parse_func: (out): return location for the parse function
- * @pspec: (out): return location for the #GParamSpec
+ * @pspec: (out) (transfer none): return location for the #GParamSpec
  *
  * Returns %TRUE if a property has been registered, if @pspec or
  * @parse_func are not %NULL, the #GParamSpec and parsing function

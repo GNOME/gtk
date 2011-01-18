@@ -1003,9 +1003,9 @@ gtk_action_group_list_actions (GtkActionGroup *action_group)
 
 
 /**
- * gtk_action_group_add_actions:
+ * gtk_action_group_add_actions: (skip)
  * @action_group: the action group
- * @entries: an array of action descriptions
+ * @entries: (array length=n_entries): an array of action descriptions
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
  *
@@ -1054,9 +1054,9 @@ shared_data_unref (gpointer data)
 
 
 /**
- * gtk_action_group_add_actions_full:
+ * gtk_action_group_add_actions_full: (skip)
  * @action_group: the action group
- * @entries: an array of action descriptions
+ * @entries: (array length=n_entries): an array of action descriptions
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
  * @destroy: destroy notification callback for @user_data
@@ -1134,9 +1134,9 @@ gtk_action_group_add_actions_full (GtkActionGroup       *action_group,
 }
 
 /**
- * gtk_action_group_add_toggle_actions:
+ * gtk_action_group_add_toggle_actions: (skip)
  * @action_group: the action group
- * @entries: an array of toggle action descriptions
+ * @entries: (array length=n_entries): an array of toggle action descriptions
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
  *
@@ -1162,9 +1162,9 @@ gtk_action_group_add_toggle_actions (GtkActionGroup             *action_group,
 
 
 /**
- * gtk_action_group_add_toggle_actions_full:
+ * gtk_action_group_add_toggle_actions_full: (skip)
  * @action_group: the action group
- * @entries: an array of toggle action descriptions
+ * @entries: (array length=n_entries): an array of toggle action descriptions
  * @n_entries: the number of entries
  * @user_data: data to pass to the action callbacks
  * @destroy: destroy notification callback for @user_data
@@ -1243,9 +1243,9 @@ gtk_action_group_add_toggle_actions_full (GtkActionGroup             *action_gro
 }
 
 /**
- * gtk_action_group_add_radio_actions:
+ * gtk_action_group_add_radio_actions: (skip)
  * @action_group: the action group
- * @entries: an array of radio action descriptions
+ * @entries: (array length=n_entries): an array of radio action descriptions
  * @n_entries: the number of entries
  * @value: the value of the action to activate initially, or -1 if
  *   no action should be activated
@@ -1276,9 +1276,9 @@ gtk_action_group_add_radio_actions (GtkActionGroup            *action_group,
 }
 
 /**
- * gtk_action_group_add_radio_actions_full:
+ * gtk_action_group_add_radio_actions_full: (skip)
  * @action_group: the action group
- * @entries: an array of radio action descriptions
+ * @entries: (array length=n_entries): an array of radio action descriptions
  * @n_entries: the number of entries
  * @value: the value of the action to activate initially, or -1 if
  *   no action should be activated

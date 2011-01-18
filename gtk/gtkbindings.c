@@ -577,13 +577,13 @@ gtk_binding_entry_activate (GtkBindingEntry *entry,
 }
 
 /**
- * gtk_binding_set_new:
+ * gtk_binding_set_new: (skip)
  * @set_name: unique name of this binding set
  *
  * GTK+ maintains a global list of binding sets. Each binding set has
  * a unique name which needs to be specified upon creation.
  *
- * Return value: new binding set
+ * Return value: (transfer full): new binding set
  */
 GtkBindingSet*
 gtk_binding_set_new (const gchar *set_name)
@@ -607,14 +607,15 @@ gtk_binding_set_new (const gchar *set_name)
 }
 
 /**
- * gtk_binding_set_by_class:
+ * gtk_binding_set_by_class: (skip)
  * @object_class: a valid #GObject class
  *
  * This function returns the binding set named after the type name of
  * the passed in class structure. New binding sets are created on
  * demand by this function.
  *
- * Return value: the binding set corresponding to @object_class
+ * Return value: (transfer full): the binding set corresponding to
+ *     @object_class
  */
 GtkBindingSet*
 gtk_binding_set_by_class (gpointer object_class)

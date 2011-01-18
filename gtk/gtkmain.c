@@ -935,7 +935,7 @@ gtk_set_debug_flags (guint flags)
 }
 
 /**
- * gtk_get_option_group:
+ * gtk_get_option_group: (skip)
  * @open_default_display: whether to open the default display
  *     when parsing the commandline arguments
  *
@@ -2299,7 +2299,7 @@ gtk_device_grab_remove (GtkWidget *widget,
 }
 
 /**
- * gtk_key_snooper_install:
+ * gtk_key_snooper_install: (skip)
  * @snooper: a #GtkKeySnoopFunc
  * @func_data: data to pass to @snooper
  *

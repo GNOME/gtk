@@ -260,7 +260,7 @@ gtk_stock_list_ids (void)
 }
 
 /**
- * gtk_stock_item_copy:
+ * gtk_stock_item_copy: (skip)
  * @item: a #GtkStockItem
  * 
  * Copies a stock item, mostly useful for language bindings and not in applications.
