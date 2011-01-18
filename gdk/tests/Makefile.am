@@ -24,8 +24,12 @@ gdk_color_SOURCES  = gdk-color.c
 gdk_color_LDADD    = $(progs_ldadd)
 
 TEST_PROGS        += encoding
-encoding_SOURCES  = encoding.c
-encoding_LDADD    = $(progs_ldadd)
+encoding_SOURCES   = encoding.c
+encoding_LDADD     = $(progs_ldadd)
+
+TEST_PROGS        += display
+display_SOURCES    = display.c
+display_LDADD      = $(progs_ldadd)
 
 CLEANFILES = \
 	cairosurface.png	\
