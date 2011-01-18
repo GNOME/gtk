@@ -1934,8 +1934,9 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 /**
  * gtk_icon_view_get_cursor:
  * @icon_view: A #GtkIconView
- * @path: (allow-none) (out): Return location for the current cursor path, or %NULL
- * @cell: (allow-none) (out): Return location the current focus cell, or %NULL
+ * @path: (out) (allow-none): Return location for the current cursor path,
+ *        or %NULL
+ * @cell: (out) (allow-none): Return location the current focus cell, or %NULL
  *
  * Fills in @path and @cell with the current cursor path and cell. 
  * If the cursor isn't currently set, then *@path will be %NULL.  
@@ -4202,8 +4203,8 @@ gtk_icon_view_new_with_model (GtkTreeModel *model)
  * @icon_view: a #GtkIconView 
  * @wx: X coordinate relative to the widget
  * @wy: Y coordinate relative to the widget
- * @bx: return location for bin_window X coordinate
- * @by: return location for bin_window Y coordinate
+ * @bx: (out): return location for bin_window X coordinate
+ * @by: (out): return location for bin_window Y coordinate
  * 
  * Converts widget coordinates to coordinates for the bin_window,
  * as expected by e.g. gtk_icon_view_get_path_at_pos(). 
@@ -4274,9 +4275,9 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * @icon_view: A #GtkIconView.
  * @x: The x position to be identified
  * @y: The y position to be identified
- * @path: (allow-none) (out): Return location for the path, or %NULL
- * @cell: (allow-none) (out): Return location for the renderer responsible for
- *   the cell at (@x, @y), or %NULL
+ * @path: (out) (allow-none): Return location for the path, or %NULL
+ * @cell: (out) (allow-none): Return location for the renderer
+ *   responsible for the cell at (@x, @y), or %NULL
  * 
  * Finds the path at the point (@x, @y), relative to bin_window coordinates.
  * In contrast to gtk_icon_view_get_path_at_pos(), this function also 
@@ -4407,8 +4408,8 @@ gtk_icon_view_set_tooltip_cell (GtkIconView     *icon_view,
 /**
  * gtk_icon_view_get_tooltip_context:
  * @icon_view: an #GtkIconView
- * @x: the x coordinate (relative to widget coordinates)
- * @y: the y coordinate (relative to widget coordinates)
+ * @x: (inout): the x coordinate (relative to widget coordinates)
+ * @y: (inout): the y coordinate (relative to widget coordinates)
  * @keyboard_tip: whether this is a keyboard tooltip or not
  * @model: (out) (allow-none): a pointer to receive a #GtkTreeModel or %NULL
  * @path: (out) (allow-none): a pointer to receive a #GtkTreePath or %NULL
@@ -4585,8 +4586,9 @@ gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)
 /**
  * gtk_icon_view_get_visible_range:
  * @icon_view: A #GtkIconView
- * @start_path: (allow-none) (out): Return location for start of region, or %NULL
- * @end_path: (allow-none) (out): Return location for end of region, or %NULL
+ * @start_path: (out) (allow-none): Return location for start of region,
+ *              or %NULL
+ * @end_path: (out) (allow-none): Return location for end of region, or %NULL
  * 
  * Sets @start_path and @end_path to be the first and last visible path. 
  * Note that there may be invisible paths in between.
@@ -6718,8 +6720,9 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
 /**
  * gtk_icon_view_get_drag_dest_item:
  * @icon_view: a #GtkIconView
- * @path: (allow-none) (out): Return location for the path of the highlighted item, or %NULL.
- * @pos: (allow-none) (out): Return location for the drop position, or %NULL
+ * @path: (out) (allow-none): Return location for the path of
+ *        the highlighted item, or %NULL.
+ * @pos: (out) (allow-none): Return location for the drop position, or %NULL
  * 
  * Gets information about the item that is highlighted for feedback.
  *
@@ -6749,8 +6752,9 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @drag_x: the position to determine the destination item for
  * @drag_y: the position to determine the destination item for
- * @path: (allow-none) (out): Return location for the path of the item, or %NULL.
- * @pos: (allow-none) (out): Return location for the drop position, or %NULL
+ * @path: (out) (allow-none): Return location for the path of the item,
+ *    or %NULL.
+ * @pos: (out) (allow-none): Return location for the drop position, or %NULL
  * 
  * Determines the destination item for a given position.
  * 

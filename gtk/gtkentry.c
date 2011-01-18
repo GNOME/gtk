@@ -6814,7 +6814,7 @@ gtk_entry_set_buffer (GtkEntry       *entry,
 /**
  * gtk_entry_get_text_area:
  * @entry: a #GtkEntry
- * @text_area: Return location for the text area.
+ * @text_area: (out): Return location for the text area.
  *
  * Gets the area where the entry's text is drawn. This function is
  * useful when drawing something to the entry in a draw callback.
@@ -7485,8 +7485,8 @@ gtk_entry_text_index_to_layout_index (GtkEntry *entry,
 /**
  * gtk_entry_get_layout_offsets:
  * @entry: a #GtkEntry
- * @x: (allow-none): location to store X offset of layout, or %NULL
- * @y: (allow-none): location to store Y offset of layout, or %NULL
+ * @x: (out) (allow-none): location to store X offset of layout, or %NULL
+ * @y: (out) (allow-none): location to store Y offset of layout, or %NULL
  *
  *
  * Obtains the position of the #PangoLayout used to render text
@@ -8293,7 +8293,7 @@ gtk_entry_get_current_icon_drag_source (GtkEntry *entry)
  * gtk_entry_get_icon_area:
  * @entry: A #GtkEntry
  * @icon_pos: Icon position
- * @icon_area: Return location for the icon's area
+ * @icon_area: (out): Return location for the icon's area
  *
  * Gets the area where entry's icon at @icon_pos is drawn.
  * This function is useful when drawing something to the

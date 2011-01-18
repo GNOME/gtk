@@ -397,7 +397,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   /**
    * GtkSpinButton::input:
    * @spin_button: the object on which the signal was emitted
-   * @new_value: return location for the new value
+   * @new_value: (out) (type double): return location for the new value
    *
    * The ::input signal can be used to influence the conversion of
    * the users input into a double value. The signal handler is
@@ -2133,8 +2133,8 @@ gtk_spin_button_set_increments (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_increments:
  * @spin_button: a #GtkSpinButton
- * @step: (allow-none): location to store step increment, or %NULL
- * @page: (allow-none): location to store page increment, or %NULL
+ * @step: (out) (allow-none): location to store step increment, or %NULL
+ * @page: (out) (allow-none): location to store page increment, or %NULL
  *
  * Gets the current step and page the increments used by @spin_button. See
  * gtk_spin_button_set_increments().
@@ -2187,8 +2187,8 @@ gtk_spin_button_set_range (GtkSpinButton *spin_button,
 /**
  * gtk_spin_button_get_range:
  * @spin_button: a #GtkSpinButton
- * @min: (allow-none): location to store minimum allowed value, or %NULL
- * @max: (allow-none): location to store maximum allowed value, or %NULL
+ * @min: (out) (allow-none): location to store minimum allowed value, or %NULL
+ * @max: (out) (allow-none): location to store maximum allowed value, or %NULL
  *
  * Gets the range allowed for @spin_button.
  * See gtk_spin_button_set_range().

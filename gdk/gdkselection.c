@@ -282,10 +282,11 @@ gdk_selection_convert (GdkWindow *requestor,
  * @display:  a #GdkDisplay
  * @encoding: an atom representing the encoding of the text
  * @format:   the format of the property
- * @text:     the text to convert
+ * @text:     (array length=length): the text to convert
  * @length:   the length of @text, in bytes
- * @list:     location to store the list of strings or %NULL. The
- *            list should be freed with g_strfreev().
+ * @list:     (out) (array zero-terminated=1): location to store the list
+ *            of strings or %NULL. The list should be freed with
+ *            g_strfreev().
  *
  * Converts a text property in the given encoding to
  * a list of UTF-8 strings.

@@ -749,7 +749,8 @@ gtk_print_job_set_pages (GtkPrintJob   *job,
  *
  * Gets the page ranges for this job.
  *
- * Returns: a pointer to an array of #GtkPageRange structs
+ * Returns: (array length=n_ranges) (transfer none): a pointer to an
+ * array of #GtkPageRange structs
  *
  * Since: 3.0
  */
@@ -764,7 +765,9 @@ gtk_print_job_get_page_ranges (GtkPrintJob *job,
 /**
  * gtk_print_job_set_page_ranges:
  * @job: a #GtkPrintJob
- * @ranges: pointer to an array of #GtkPageRange structs
+
+ * @ranges: (array length=n_ranges): pointer to an array of
+ *          #GtkPageRange structs
  * @n_ranges: the length of the @ranges array
  *
  * Sets the page ranges for this job.

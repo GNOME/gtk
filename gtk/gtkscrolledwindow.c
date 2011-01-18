@@ -796,10 +796,10 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
 /**
  * gtk_scrolled_window_get_policy:
  * @scrolled_window: a #GtkScrolledWindow
- * @hscrollbar_policy: location to store the policy for the horizontal 
- *     scrollbar, or %NULL.
- * @vscrollbar_policy: location to store the policy for the vertical
- *     scrollbar, or %NULL.
+ * @hscrollbar_policy: (out) (allow-none): location to store the policy 
+ *     for the horizontal scrollbar, or %NULL.
+ * @vscrollbar_policy: (out) (allow-none): location to store the policy
+ *     for the vertical scrollbar, or %NULL.
  * 
  * Retrieves the current policy values for the horizontal and vertical
  * scrollbars. See gtk_scrolled_window_set_policy().

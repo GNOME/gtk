@@ -1218,10 +1218,11 @@ gtk_container_class_find_child_property (GObjectClass *cclass,
 
 /**
  * gtk_container_class_list_child_properties:
- * @cclass: a #GtkContainerClass
+ * @cclass: (type GtkContainerClass): a #GtkContainerClass
  * @n_properties: location to return the number of child properties found
- * @returns: a newly allocated %NULL-terminated array of #GParamSpec*.
- *           The array must be freed with g_free().
+ * @returns: (array length=n_properties) (transfer container): a newly
+ *           allocated %NULL-terminated array of #GParamSpec*.  The
+ *           array must be freed with g_free().
  *
  * Returns all child properties of a container class.
  */

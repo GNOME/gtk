@@ -366,9 +366,10 @@ gtk_rc_set_default_files (gchar **filenames)
  * Retrieves the current list of RC files that will be parsed
  * at the end of gtk_init().
  *
- * Return value: (transfer none): A %NULL-terminated array of filenames.
- *     This memory is owned by GTK+ and must not be freed by the application.
- *     If you want to store this information, you should make a copy.
+ * Return value: (transfer none) (array zero-terminated=1) (element-type filename):
+ *      A %NULL-terminated array of filenames.  This memory is owned
+ *     by GTK+ and must not be freed by the application.  If you want
+ *     to store this information, you should make a copy.
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
  **/
@@ -968,7 +969,7 @@ gtk_rc_find_module_in_path (const gchar *module_file)
 /**
  * gtk_rc_parse_state:
  * @scanner:
- * @state:
+ * @state: (out):
  *
  * Deprecated:3.0: Use #GtkCssProvider instead
  */
@@ -1026,7 +1027,7 @@ gtk_rc_parse_state (GScanner	 *scanner,
 /**
  * gtk_rc_parse_priority:
  * @scanner:
- * @priority:
+ * @priority: (out):
  *
  * Deprecated:3.0: Use #GtkCssProvider instead
  */
@@ -1083,7 +1084,8 @@ gtk_rc_parse_priority (GScanner	           *scanner,
 /**
  * gtk_rc_parse_color:
  * @scanner: a #GScanner
- * @color: a pointer to a #GdkColor structure in which to store the result
+ * @color: (out): a pointer to a #GdkColor structure in which to store
+ *     the result
  *
  * Parses a color in the <link linkend="color=format">format</link> expected
  * in a RC file. 
@@ -1107,7 +1109,8 @@ gtk_rc_parse_color (GScanner *scanner,
  * gtk_rc_parse_color_full:
  * @scanner: a #GScanner
  * @style: (allow-none): a #GtkRcStyle, or %NULL
- * @color: a pointer to a #GdkColor structure in which to store the result
+ * @color: (out): a pointer to a #GdkColor structure in which to store
+ *     the result
  *
  * Parses a color in the <link linkend="color=format">format</link> expected
  * in a RC file. If @style is not %NULL, it will be consulted to resolve

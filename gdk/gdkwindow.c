@@ -406,8 +406,10 @@ gdk_window_class_init (GdkWindowClass *klass)
    * @window: the offscreen window on which the signal is emitted
    * @offscreen-x: x coordinate in the offscreen window
    * @offscreen-y: y coordinate in the offscreen window
-   * @embedder-x: return location for the x coordinate in the embedder window
-   * @embedder-y: return location for the y coordinate in the embedder window
+   * @embedder-x: (out) (type double): return location for the x
+   *     coordinate in the embedder window
+   * @embedder-y: (out) (type double): return location for the y
+   *     coordinate in the embedder window
    *
    * The ::to-embedder signal is emitted to translate coordinates
    * in an offscreen window to its embedder.
@@ -435,8 +437,10 @@ gdk_window_class_init (GdkWindowClass *klass)
    * @window: the offscreen window on which the signal is emitted
    * @embedder-x: x coordinate in the embedder window
    * @embedder-y: y coordinate in the embedder window
-   * @offscreen-x: return location for the x coordinate in the offscreen window
-   * @offscreen-y: return location for the y coordinate in the offscreen window
+   * @offscreen-x: (out) (type double): return location for the x
+   *     coordinate in the offscreen window
+   * @offscreen-y: (out) (type double): return location for the y
+   *     coordinate in the offscreen window
    *
    * The ::from-embedder signal is emitted to translate coordinates
    * in the embedder of an offscreen window to the offscreen window.
@@ -2076,7 +2080,7 @@ gdk_window_set_user_data (GdkWindow *window,
 /**
  * gdk_window_get_user_data:
  * @window: a #GdkWindow
- * @data: return location for user data
+ * @data: (out): return location for user data
  *
  * Retrieves the user data for @window, which is normally the widget
  * that @window belongs to. See gdk_window_set_user_data().
@@ -4781,8 +4785,8 @@ gdk_window_set_debug_updates (gboolean setting)
  * @flags: a mask indicating what portions of @geometry are set
  * @width: desired width of window
  * @height: desired height of the window
- * @new_width: location to store resulting width
- * @new_height: location to store resulting height
+ * @new_width: (out): location to store resulting width
+ * @new_height: (out): location to store resulting height
  *
  * Constrains a desired width and height according to a
  * set of geometry hints (such as minimum and maximum size).
@@ -6924,8 +6928,8 @@ gdk_window_get_origin (GdkWindow *window,
  * @window: a #GdkWindow
  * @x: X coordinate in window
  * @y: Y coordinate in window
- * @root_x: return location for X coordinate
- * @root_y: return location for Y coordinate
+ * @root_x: (out): return location for X coordinate
+ * @root_y: (out): return location for Y coordinate
  *
  * Obtains the position of a window position in root
  * window coordinates. This is similar to
@@ -10063,8 +10067,8 @@ gdk_window_set_transient_for (GdkWindow *window,
 /**
  * gdk_window_get_root_origin:
  * @window: a toplevel #GdkWindow
- * @x: return location for X position of window frame
- * @y: return location for Y position of window frame
+ * @x: (out): return location for X position of window frame
+ * @y: (out): return location for Y position of window frame
  *
  * Obtains the top-left corner of the window manager frame in root
  * window coordinates.
@@ -10487,7 +10491,7 @@ gdk_window_set_decorations (GdkWindow      *window,
 /**
  * gdk_window_get_decorations:
  * @window: The toplevel #GdkWindow to get the decorations from
- * @decorations: The window decorations will be written here
+ * @decorations: (out): The window decorations will be written here
  *
  * Returns the decorations set on the GdkWindow with
  * gdk_window_set_decorations().
@@ -10837,9 +10841,9 @@ gdk_test_simulate_button (GdkWindow      *window,
  *   when rounded up).
  * @pdelete: if %TRUE, delete the property after retrieving the
  *   data.
- * @actual_property_type: location to store the actual type of
-*   the property.
- * @actual_format: location to store the actual return format of the
+ * @actual_property_type: (out) (transfer none): location to store the
+ *   actual type of the property.
+ * @actual_format: (out): location to store the actual return format of the
  *   data; either 8, 16 or 32 bits.
  * @actual_length: location to store the length of the retrieved data, in
  *   bytes.  Data returned in the 32 bit format is stored
@@ -10847,9 +10851,9 @@ gdk_test_simulate_button (GdkWindow      *window,
  *   elements should be be calculated via
  *   @actual_length / sizeof(glong) to ensure portability to
  *   64 bit systems.
- * @data: location to store a pointer to the data. The retrieved
- *   data should be freed with g_free() when you are finished
- *   using it.
+ * @data: (out) (array length=actual_length) (transfer full): location
+ *   to store a pointer to the data. The retrieved data should be
+ *   freed with g_free() when you are finished using it.
  *
  * Retrieves a portion of the contents of a property. If the
  * property does not exist, then the function returns %FALSE,

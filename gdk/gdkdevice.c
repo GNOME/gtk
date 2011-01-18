@@ -697,8 +697,8 @@ gdk_device_get_n_keys (GdkDevice *device)
  * gdk_device_get_key:
  * @device: a #GdkDevice.
  * @index_: the index of the macro button to get.
- * @keyval: return value for the keyval.
- * @modifiers: return value for modifiers.
+ * @keyval: (out): return value for the keyval.
+ * @modifiers: (out): return value for modifiers.
  *
  * If @index_ has a valid keyval, this function will return %TRUE
  * and fill in @keyval and @modifiers with the keyval settings.

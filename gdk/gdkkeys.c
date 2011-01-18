@@ -397,8 +397,10 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
  * gdk_keymap_get_entries_for_keycode:
  * @keymap: a #GdkKeymap
  * @hardware_keycode: a keycode
- * @keys: (out): return location for array of #GdkKeymapKey, or %NULL
- * @keyvals: (out): return location for array of keyvals, or %NULL
+ * @keys: (out) (array length=n_entries) (transfer full): return
+ *     location for array of #GdkKeymapKey, or %NULL
+ * @keyvals: (out) (array length=n_entries) (transfer full): return
+ *     location for array of keyvals, or %NULL
  * @n_entries: length of @keys and @keyvals
  *
  * Returns the keyvals bound to @hardware_keycode.
@@ -532,7 +534,7 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
 /**
  * gdk_keymap_add_virtual_modifiers:
  * @keymap: a #GdkKeymap
- * @state: pointer to the modifier mask to change
+ * @state: (out): pointer to the modifier mask to change
  *
  * Adds virtual modifiers (i.e. Super, Hyper and Meta) which correspond
  * to the real modifiers (i.e Mod2, Mod3, ...) in @modifiers.
@@ -558,7 +560,7 @@ gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
 /**
  * gdk_keymap_map_virtual_modifiers:
  * @keymap: a #GdkKeymap
- * @state: pointer to the modifier state to map
+ * @state: (out): pointer to the modifier state to map
  *
  * Maps the virtual modifiers (i.e. Super, Hyper and Meta) which
  * are set in @state to their non-virtual counterparts (i.e. Mod2,

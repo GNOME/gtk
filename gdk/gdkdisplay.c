@@ -597,7 +597,7 @@ _gdk_display_enable_motion_hints (GdkDisplay *display,
 /**
  * gdk_display_get_pointer:
  * @display: a #GdkDisplay
- * @screen: (allow-none): location to store the screen that the
+ * @screen: (out) (allow-none): location to store the screen that the
  *          cursor is on, or %NULL.
  * @x: (out) (allow-none): location to store root window X coordinate of pointer, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of pointer, or %NULL.
@@ -1571,7 +1571,8 @@ gdk_display_supports_clipboard_persistence (GdkDisplay *display)
  * @display:          a #GdkDisplay
  * @clipboard_window: a #GdkWindow belonging to the clipboard owner
  * @time_:            a timestamp
- * @targets:	      an array of targets that should be saved, or %NULL
+ * @targets:	      (array length=n_targets): an array of targets
+ *                    that should be saved, or %NULL
  *                    if all available targets should be saved.
  * @n_targets:        length of the @targets array
  *
@@ -1771,7 +1772,7 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
  * gdk_drag_get_protocol_for_display:
  * @display: the #GdkDisplay where the destination window resides
  * @xid: the windowing system id of the destination window.
- * @protocol: location where the supported DND protocol is returned.
+ * @protocol: (out): location where the supported DND protocol is returned.
  *
  * Finds out the DND protocol supported by a window.
  *

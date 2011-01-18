@@ -241,7 +241,8 @@ gdk_query_depths (gint **depths,
 
 /**
  * gdk_query_visual_types:
- * @visual_types: return location for the available visual types
+ * @visual_types: (out) (array length=count) (transfer none): return
+ *     location for the available visual types
  * @count: return location for the number of available visual types
  *
  * This function returns the available visual types for the default

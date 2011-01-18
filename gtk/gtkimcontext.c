@@ -419,12 +419,12 @@ gtk_im_context_set_client_window (GtkIMContext *context,
 /**
  * gtk_im_context_get_preedit_string:
  * @context:    a #GtkIMContext
- * @str:        location to store the retrieved string. The
- *              string retrieved must be freed with g_free ().
- * @attrs:      location to store the retrieved attribute list.
- *              When you are done with this list, you must
- *              unreference it with pango_attr_list_unref().
- * @cursor_pos: location to store position of cursor (in characters)
+ * @str:        (out) (transfer full): location to store the retrieved
+ *              string. The string retrieved must be freed with g_free().
+ * @attrs:      (out) (transfer full): location to store the retrieved
+ *              attribute list.  When you are done with this list, you
+ *              must unreference it with pango_attr_list_unref().
+ * @cursor_pos: (out): location to store position of cursor (in characters)
  *              within the preedit string.  
  * 
  * Retrieve the current preedit string for the input context,
@@ -620,12 +620,12 @@ gtk_im_context_set_surrounding (GtkIMContext  *context,
 /**
  * gtk_im_context_get_surrounding:
  * @context: a #GtkIMContext
- * @text: location to store a UTF-8 encoded string of text
- *        holding context around the insertion point.
- *        If the function returns %TRUE, then you must free
- *        the result stored in this location with g_free().
- * @cursor_index: location to store byte index of the insertion cursor
- *        within @text.
+ * @text: (out) (transfer full): location to store a UTF-8 encoded
+ *        string of text holding context around the insertion point.
+ *        If the function returns %TRUE, then you must free the result
+ *        stored in this location with g_free().
+ * @cursor_index: (out) location to store byte index of the insertion
+ *        cursor within @text.
  * 
  * Retrieves context around the insertion point. Input methods
  * typically want context in order to constrain input text based on

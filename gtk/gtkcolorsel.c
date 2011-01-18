@@ -2650,7 +2650,7 @@ gtk_color_selection_set_previous_alpha (GtkColorSelection *colorsel,
 /**
  * gtk_color_selection_get_previous_color:
  * @colorsel: a #GtkColorSelection.
- * @color: a #GdkColor to fill in with the original color value.
+ * @color: (out): a #GdkColor to fill in with the original color value.
  *
  * Fills @color in with the original color value.
  **/
@@ -2802,7 +2802,7 @@ gtk_color_selection_set_previous_rgba (GtkColorSelection *colorsel,
 /**
  * gtk_color_selection_get_previous_rgba:
  * @colorsel: a #GtkColorSelection.
- * @rgba: a #GdkRGBA to fill in with the original color value.
+ * @rgba: (out): a #GdkRGBA to fill in with the original color value.
  *
  * Fills @rgba in with the original color value.
  *
@@ -2881,7 +2881,8 @@ gtk_color_selection_is_adjusting (GtkColorSelection *colorsel)
 /**
  * gtk_color_selection_palette_from_string:
  * @str: a string encoding a color palette.
- * @colors: return location for allocated array of #GdkColor.
+ * @colors: (out) (array length=n_colors): return location for allocated
+ *          array of #GdkColor.
  * @n_colors: return location for length of array.
  * 
  * Parses a color palette string; the string is a colon-separated
@@ -2966,7 +2967,7 @@ gtk_color_selection_palette_from_string (const gchar *str,
 
 /**
  * gtk_color_selection_palette_to_string:
- * @colors: an array of colors.
+ * @colors: (array length=n_colors): an array of colors.
  * @n_colors: length of the array.
  * 
  * Encodes a palette as a string, useful for persistent storage.

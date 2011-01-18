@@ -2792,10 +2792,10 @@ gtk_tree_view_column_cell_set_cell_data (GtkTreeViewColumn *tree_column,
  * gtk_tree_view_column_cell_get_size:
  * @tree_column: A #GtkTreeViewColumn.
  * @cell_area: (allow-none): The area a cell in the column will be allocated, or %NULL
- * @x_offset: (allow-none): location to return x offset of a cell relative to @cell_area, or %NULL
- * @y_offset: (allow-none): location to return y offset of a cell relative to @cell_area, or %NULL
- * @width: (allow-none): location to return width needed to render a cell, or %NULL
- * @height: (allow-none): location to return height needed to render a cell, or %NULL
+ * @x_offset: (out) (allow-none): location to return x offset of a cell relative to @cell_area, or %NULL
+ * @y_offset: (out) (allow-none): location to return y offset of a cell relative to @cell_area, or %NULL
+ * @width: (out) (allow-none): location to return width needed to render a cell, or %NULL
+ * @height: (out) (allow-none): location to return height needed to render a cell, or %NULL
  * 
  * Obtains the width and height needed to render the column.  This is used
  * primarily by the #GtkTreeView.
@@ -2994,9 +2994,10 @@ _gtk_tree_view_column_cell_get_dirty (GtkTreeViewColumn  *tree_column)
  * gtk_tree_view_column_cell_get_position:
  * @tree_column: a #GtkTreeViewColumn
  * @cell_renderer: a #GtkCellRenderer
- * @x_offset: return location for the horizontal position of @cell within
- *            @tree_column, may be %NULL
- * @width: return location for the width of @cell, may be %NULL
+ * @x_offset: (out) (allow-none): return location for the horizontal
+ *            position of @cell within @tree_column, may be %NULL
+ * @width: (out) (allow-none): return location for the width of @cell,
+ *         may be %NULL
  *
  * Obtains the horizontal position and size of a cell in a column. If the
  * cell is not found in the column, @start_pos and @width are not changed and

@@ -918,7 +918,7 @@ gdk_event_get_root_coords (const GdkEvent *event,
 /**
  * gdk_event_get_axis:
  * @event: a #GdkEvent
- * @axis_use: (out): the axis use to look for
+ * @axis_use: the axis use to look for
  * @value: (out): location to store the value found
  * 
  * Extract the axis value for a particular axis use from
@@ -1261,7 +1261,7 @@ gdk_events_get_axis_distances (GdkEvent *event1,
  * gdk_events_get_distance:
  * @event1: first #GdkEvent
  * @event2: second #GdkEvent
- * @distance: return location for the distance
+ * @distance: (out): return location for the distance
  *
  * If both events have X/Y information, the distance between both coordinates
  * (as in a straight line going from @event1 to @event2) will be returned.
@@ -1284,7 +1284,7 @@ gdk_events_get_distance (GdkEvent *event1,
  * gdk_events_get_angle:
  * @event1: first #GdkEvent
  * @event2: second #GdkEvent
- * @angle: return location for the relative angle between both events
+ * @angle: (out): return location for the relative angle between both events
  *
  * If both events contain X/Y information, this function will return %TRUE
  * and return in @angle the relative angle from @event1 to @event2. The rotation
