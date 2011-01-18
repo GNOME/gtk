@@ -1934,8 +1934,8 @@ gtk_icon_view_set_cursor (GtkIconView     *icon_view,
 /**
  * gtk_icon_view_get_cursor:
  * @icon_view: A #GtkIconView
- * @path: (allow-none): Return location for the current cursor path, or %NULL
- * @cell: (allow-none): Return location the current focus cell, or %NULL
+ * @path: (allow-none) (out): Return location for the current cursor path, or %NULL
+ * @cell: (allow-none) (out): Return location the current focus cell, or %NULL
  *
  * Fills in @path and @cell with the current cursor path and cell. 
  * If the cursor isn't currently set, then *@path will be %NULL.  
@@ -4274,9 +4274,9 @@ gtk_icon_view_get_path_at_pos (GtkIconView *icon_view,
  * @icon_view: A #GtkIconView.
  * @x: The x position to be identified
  * @y: The y position to be identified
- * @path: (allow-none): Return location for the path, or %NULL
- * @cell: Return location for the renderer responsible for the cell
- *   at (@x, @y), or %NULL
+ * @path: (allow-none) (out): Return location for the path, or %NULL
+ * @cell: (allow-none) (out): Return location for the renderer responsible for
+ *   the cell at (@x, @y), or %NULL
  * 
  * Finds the path at the point (@x, @y), relative to bin_window coordinates.
  * In contrast to gtk_icon_view_get_path_at_pos(), this function also 
@@ -4585,8 +4585,8 @@ gtk_icon_view_get_tooltip_column (GtkIconView *icon_view)
 /**
  * gtk_icon_view_get_visible_range:
  * @icon_view: A #GtkIconView
- * @start_path: (allow-none): Return location for start of region, or %NULL
- * @end_path: (allow-none): Return location for end of region, or %NULL
+ * @start_path: (allow-none) (out): Return location for start of region, or %NULL
+ * @end_path: (allow-none) (out): Return location for end of region, or %NULL
  * 
  * Sets @start_path and @end_path to be the first and last visible path. 
  * Note that there may be invisible paths in between.
@@ -6718,8 +6718,8 @@ gtk_icon_view_set_drag_dest_item (GtkIconView              *icon_view,
 /**
  * gtk_icon_view_get_drag_dest_item:
  * @icon_view: a #GtkIconView
- * @path: (allow-none): Return location for the path of the highlighted item, or %NULL.
- * @pos: (allow-none): Return location for the drop position, or %NULL
+ * @path: (allow-none) (out): Return location for the path of the highlighted item, or %NULL.
+ * @pos: (allow-none) (out): Return location for the drop position, or %NULL
  * 
  * Gets information about the item that is highlighted for feedback.
  *
@@ -6749,8 +6749,8 @@ gtk_icon_view_get_drag_dest_item (GtkIconView              *icon_view,
  * @icon_view: a #GtkIconView
  * @drag_x: the position to determine the destination item for
  * @drag_y: the position to determine the destination item for
- * @path: (allow-none): Return location for the path of the item, or %NULL.
- * @pos: (allow-none): Return location for the drop position, or %NULL
+ * @path: (allow-none) (out): Return location for the path of the item, or %NULL.
+ * @pos: (allow-none) (out): Return location for the drop position, or %NULL
  * 
  * Determines the destination item for a given position.
  * 
