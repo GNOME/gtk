@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-18 12:55+0200\n"
-"PO-Revision-Date: 2011-01-18 12:56+0200\n"
+"POT-Creation-Date: 2011-01-19 01:01+0200\n"
+"PO-Revision-Date: 2011-01-19 01:02+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -336,18 +336,18 @@ msgid "GIcon"
 msgstr "GIcon"
 
 #: ../gtk/gtkaction.c:305 ../gtk/gtkcellrendererpixbuf.c:215
-#: ../gtk/gtkimage.c:327 ../gtk/gtkstatusicon.c:245
+#: ../gtk/gtkimage.c:329 ../gtk/gtkstatusicon.c:245
 msgid "The GIcon being displayed"
 msgstr "The GIcon being displayed"
 
 #: ../gtk/gtkaction.c:325 ../gtk/gtkcellrendererpixbuf.c:180
-#: ../gtk/gtkimage.c:309 ../gtk/gtkprinter.c:174 ../gtk/gtkstatusicon.c:228
+#: ../gtk/gtkimage.c:311 ../gtk/gtkprinter.c:174 ../gtk/gtkstatusicon.c:228
 #: ../gtk/gtkwindow.c:721
 msgid "Icon Name"
 msgstr "Icon Name"
 
 #: ../gtk/gtkaction.c:326 ../gtk/gtkcellrendererpixbuf.c:181
-#: ../gtk/gtkimage.c:310 ../gtk/gtkstatusicon.c:229
+#: ../gtk/gtkimage.c:312 ../gtk/gtkstatusicon.c:229
 msgid "The name of the icon from the icon theme"
 msgstr "The name of the icon from the icon theme"
 
@@ -1470,7 +1470,7 @@ msgstr "Pixbuf Expander Closed"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf for closed expander"
 
-#: ../gtk/gtkcellrendererpixbuf.c:144 ../gtk/gtkimage.c:251
+#: ../gtk/gtkcellrendererpixbuf.c:144 ../gtk/gtkimage.c:253
 #: ../gtk/gtkstatusicon.c:220
 msgid "Stock ID"
 msgstr "Stock ID"
@@ -1504,7 +1504,7 @@ msgstr "Follow State"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Whether the rendered pixbuf should be colorized according to the state"
 
-#: ../gtk/gtkcellrendererpixbuf.c:214 ../gtk/gtkimage.c:326
+#: ../gtk/gtkcellrendererpixbuf.c:214 ../gtk/gtkimage.c:328
 #: ../gtk/gtkwindow.c:698
 msgid "Icon"
 msgstr "Icon"
@@ -3388,67 +3388,75 @@ msgstr "Selection Box Alpha"
 msgid "Opacity of the selection box"
 msgstr "Opacity of the selection box"
 
-#: ../gtk/gtkimage.c:234 ../gtk/gtkstatusicon.c:204
+#: ../gtk/gtkimage.c:236 ../gtk/gtkstatusicon.c:204
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: ../gtk/gtkimage.c:235 ../gtk/gtkstatusicon.c:205
+#: ../gtk/gtkimage.c:237 ../gtk/gtkstatusicon.c:205
 msgid "A GdkPixbuf to display"
 msgstr "A GdkPixbuf to display"
 
-#: ../gtk/gtkimage.c:242 ../gtk/gtkrecentmanager.c:294
+#: ../gtk/gtkimage.c:244 ../gtk/gtkrecentmanager.c:294
 #: ../gtk/gtkstatusicon.c:212
 msgid "Filename"
 msgstr "Filename"
 
-#: ../gtk/gtkimage.c:243 ../gtk/gtkstatusicon.c:213
+#: ../gtk/gtkimage.c:245 ../gtk/gtkstatusicon.c:213
 msgid "Filename to load and display"
 msgstr "Filename to load and display"
 
-#: ../gtk/gtkimage.c:252 ../gtk/gtkstatusicon.c:221
+#: ../gtk/gtkimage.c:254 ../gtk/gtkstatusicon.c:221
 msgid "Stock ID for a stock image to display"
 msgstr "Stock ID for a stock image to display"
 
-#: ../gtk/gtkimage.c:259
+#: ../gtk/gtkimage.c:261
 msgid "Icon set"
 msgstr "Icon set"
 
-#: ../gtk/gtkimage.c:260
+#: ../gtk/gtkimage.c:262
 msgid "Icon set to display"
 msgstr "Icon set to display"
 
-#: ../gtk/gtkimage.c:267 ../gtk/gtkscalebutton.c:227 ../gtk/gtktoolbar.c:518
+#: ../gtk/gtkimage.c:269 ../gtk/gtkscalebutton.c:227 ../gtk/gtktoolbar.c:518
 #: ../gtk/gtktoolpalette.c:1032
 msgid "Icon size"
 msgstr "Icon size"
 
-#: ../gtk/gtkimage.c:268
+#: ../gtk/gtkimage.c:270
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr "Symbolic size to use for stock icon, icon set or named icon"
 
-#: ../gtk/gtkimage.c:284
+#: ../gtk/gtkimage.c:286
 msgid "Pixel size"
 msgstr "Pixel size"
 
-#: ../gtk/gtkimage.c:285
+#: ../gtk/gtkimage.c:287
 msgid "Pixel size to use for named icon"
 msgstr "Pixel size to use for named icon"
 
-#: ../gtk/gtkimage.c:293
+#: ../gtk/gtkimage.c:295
 msgid "Animation"
 msgstr "Animation"
 
-#: ../gtk/gtkimage.c:294
+#: ../gtk/gtkimage.c:296
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation to display"
 
-#: ../gtk/gtkimage.c:334 ../gtk/gtkstatusicon.c:252
+#: ../gtk/gtkimage.c:336 ../gtk/gtkstatusicon.c:252
 msgid "Storage type"
 msgstr "Storage type"
 
-#: ../gtk/gtkimage.c:335 ../gtk/gtkstatusicon.c:253
+#: ../gtk/gtkimage.c:337 ../gtk/gtkstatusicon.c:253
 msgid "The representation being used for image data"
 msgstr "The representation being used for image data"
+
+#: ../gtk/gtkimage.c:355
+msgid "Use Fallback"
+msgstr "Use Fallback"
+
+#: ../gtk/gtkimage.c:356
+msgid "Whether to use icon names fallback"
+msgstr "Whether to use icon names fallback"
 
 #: ../gtk/gtkimagemenuitem.c:150
 msgid "Child widget to appear next to the menu text"
@@ -7790,9 +7798,6 @@ msgstr "The GtkApplication for the window"
 
 #~ msgid "Blinking"
 #~ msgstr "Blinking"
-
-#~ msgid "Whether the status icon is blinking"
-#~ msgstr "Whether the status icon is blinking"
 
 #~ msgid "Row Ending details"
 #~ msgstr "Row Ending details"
