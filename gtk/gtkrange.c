@@ -625,6 +625,7 @@ gtk_range_set_property (GObject      *object,
       priv->stepper_detail_quark[2] = 0;
       priv->stepper_detail_quark[3] = 0;
 
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
       gtk_widget_queue_resize (GTK_WIDGET (range));
       break;
     case PROP_ADJUSTMENT:
