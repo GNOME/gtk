@@ -12,7 +12,7 @@
   <link linkend="gtk-compiling">Compiling the GTK+ libraries</link>
   section in this reference.</para>
 
-  <section>
+  <simplesect>
     <title>Basics</title>
 
     <para>To begin our introduction to GTK, we'll start with the simplest
@@ -114,9 +114,9 @@
         </xi:include>
       </programlisting>
     </example>
-  </section>
+  </simplesect>
 
-  <section>
+  <simplesect>
     <title>Packing</title>
 
     <para>When creating an application, you'll want to put more than one widget
@@ -145,9 +145,9 @@
         </xi:include>
       </programlisting>
     </example>
-  </section>
+  </simplesect>
 
-  <section>
+  <simplesect>
     <title>Drawing</title>
 
     <para>Many widgets, like buttons, do all their drawing themselves. You
@@ -183,5 +183,5 @@
         </xi:include>
       </programlisting>
     </example>
-  </section>
+  </simplesect>
 </chapter>
