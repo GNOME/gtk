@@ -1,6 +1,5 @@
 # Greek translation of GTK+ UI Translations
 # Copyright (C) 1999 - 2009 Free Software Foundation, Inc.
-#
 # kostas: 04Sep2003, one more update
 # nikos: 04Sep2003, review (more is needed)
 # nikosK: 06Sep2003, One more review
@@ -27,20 +26,21 @@
 # Simos Xenitellis <simos@gnome.org>, 2009.
 # Jennie Petoumenou <epetoumenou@gmail.com>, 2010.
 # Bakaoukas Nikolaos <nikolaos.x1@gmail.com>, 2010.
-#
+# Michael Kotsarinis <mk73628@gmail.com>, 2011.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.20.1.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 20:30+0200\n"
-"PO-Revision-Date: 2010-11-14 03:02+0200\n"
-"Last-Translator: Bakaoukas Nikolaos <nikolaos.x1@gmail.com>\n"
-"Language-Team: Greek <team@gnome.gr>\n"
+"POT-Creation-Date: 2011-01-19 22:03+0200\n"
+"PO-Revision-Date: 2011-01-19 21:46+0300\n"
+"Last-Translator: Michael Kotsarinis <mk73628@gmail.com>\n"
+"Language-Team: Greek team\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Virtaal 0.5.2\n"
 
 #: ../gdk/gdk.c:152
 #, c-format
@@ -341,6 +341,8 @@ msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY; for details, visit <a href="
 "\"%s\">%s</a>"
 msgstr ""
+"Αυτό πρόγραμμα παρέχεται χωρίς ΑΠΟΛΥΤΩΣ ΚΑΜΙΑ ΕΓΓΥΗΣΗ. Για λεπτομέρειες, "
+"επισκεφθείτε τη σελίδα <a href=\"%s\">%s</a>"
 
 #: ../gtk/gtkaboutdialog.c:346
 msgid "License"
@@ -365,9 +367,8 @@ msgid "Could not show link"
 msgstr "Αδυναμία προβολής συνδέσμου"
 
 #: ../gtk/gtkaboutdialog.c:994
-#, fuzzy
 msgid "Homepage"
-msgstr "Home"
+msgstr "Κεντρική σελίδα"
 
 #: ../gtk/gtkaboutdialog.c:1048
 #, c-format
@@ -375,9 +376,8 @@ msgid "About %s"
 msgstr "Περί %s"
 
 #: ../gtk/gtkaboutdialog.c:2372
-#, fuzzy
 msgid "Created by"
-msgstr "Δη_μιουργία"
+msgstr "Δημιουργήθηκε από"
 
 #: ../gtk/gtkaboutdialog.c:2375
 msgid "Documented by"
@@ -462,95 +462,87 @@ msgid "Backslash"
 msgstr "Ανάποδη κάθετος"
 
 #: ../gtk/gtkappchooserbutton.c:259
-#, fuzzy
 msgid "Other application..."
-msgstr "Εφαρμογή"
+msgstr "Άλλη εφαρμογή…"
 
 #: ../gtk/gtkappchooserdialog.c:127
 msgid "Failed to look for applications online"
-msgstr ""
+msgstr "Αδυναμία εύρεσης εφαρμογών στο διαδίκτυο"
 
 #: ../gtk/gtkappchooserdialog.c:164
 msgid "Find applications online"
-msgstr ""
+msgstr "Εύρεση εφαρμογών στο διαδίκτυο"
 
 #: ../gtk/gtkappchooserdialog.c:208
-#, fuzzy
 msgid "Could not run application"
-msgstr "Αδυναμία εκκαθάρισης λίστας"
+msgstr "Αδυναμία εκτέλεσης εφαρμογής"
 
 #: ../gtk/gtkappchooserdialog.c:221
-#, fuzzy, c-format
+#, c-format
 msgid "Could not find '%s'"
-msgstr "Αδυναμία προσάρτησης του %s"
+msgstr "Αδυναμία εύρεσης '%s'"
 
 #: ../gtk/gtkappchooserdialog.c:224
-#, fuzzy
 msgid "Could not find application"
-msgstr "Αδυναμία προβολής συνδέσμου"
+msgstr "Αδυναμία εύρεσης εφαρμογής"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:334
 #, c-format
 msgid "Select an application to open \"%s\""
-msgstr ""
+msgstr "Επιλέξτε μια εφαρμογή για να ανοίξετε το «%s»"
 
 #: ../gtk/gtkappchooserdialog.c:335 ../gtk/gtkappchooserwidget.c:644
 #, c-format
 msgid "No applications available to open \"%s\""
-msgstr ""
+msgstr "Δεν υπάρχουν διαθέσιμες εφαρμογές για το άνοιγμα του «%s»"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:341
 #, c-format
 msgid "Select an application for \"%s\" files"
-msgstr ""
+msgstr "Επιλέξτε μια εφαρμογή για αρχεία «%s»"
 
 #: ../gtk/gtkappchooserdialog.c:344
 #, c-format
 msgid "No applications available to open \"%s\" files"
-msgstr ""
+msgstr "Δεν υπάρχουν διαθέσιμες εφαρμογές για το άνοιγμα αρχείων «%s»"
 
 #: ../gtk/gtkappchooserdialog.c:358
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
 msgstr ""
+"Πατήστε το «Εμφάνιση άλλων εφαρμογών», για περισσότερες επιλογές ή «Εύρεση "
+"εφαρμογών στο διαδίκτυο για να εγκαταστήσετε μια νέα εφαρμογή"
 
 #: ../gtk/gtkappchooserdialog.c:428
-#, fuzzy
 msgid "Forget association"
-msgstr "Όχ_ι απομνημόνευση του συνθηματικού"
+msgstr "Μη απομνημόνευση του συνθηματικού"
 
 #: ../gtk/gtkappchooserdialog.c:493
-#, fuzzy
 msgid "Show other applications"
-msgstr "Εμφάνιση επιλογών GTK+"
+msgstr "Εμφάνιση άλλων εφαρμογών"
 
 #: ../gtk/gtkappchooserdialog.c:511
-#, fuzzy
 msgid "_Open"
 msgstr "Άν_οιγμα"
 
 #: ../gtk/gtkappchooserwidget.c:593
-#, fuzzy
 msgid "Default Application"
-msgstr "Εφαρμογή"
+msgstr "Προεπιλεγμένη εφαρμογή"
 
 #: ../gtk/gtkappchooserwidget.c:730
-#, fuzzy
 msgid "Recommended Applications"
-msgstr "Εφαρμογή"
+msgstr "Συνιστώμενες εφαρμογές"
 
 #: ../gtk/gtkappchooserwidget.c:744
-#, fuzzy
 msgid "Related Applications"
-msgstr "Εφαρμογή"
+msgstr "Σχετικές εφαρμογές"
 
 #: ../gtk/gtkappchooserwidget.c:758
-#, fuzzy
 msgid "Other Applications"
-msgstr "Εφαρμογή"
+msgstr "Άλλες εφαρμογές…"
 
 #: ../gtk/gtkbuilderparser.c:342
 #, c-format
@@ -721,9 +713,8 @@ msgid "_Saturation:"
 msgstr "Κ_ορεσμός:"
 
 #: ../gtk/gtkcolorsel.c:452
-#, fuzzy
 msgid "Intensity of the color."
-msgstr "Διαφάνεια του χρώματος."
+msgstr "Ένταση του χρώματος."
 
 #: ../gtk/gtkcolorsel.c:453
 msgid "_Value:"
@@ -904,12 +895,11 @@ msgstr "_Εισαγωγή χαρακτήρα ελέγχου Unicode"
 
 #: ../gtk/gtkentry.c:10178
 msgid "Caps Lock and Num Lock are on"
-msgstr ""
+msgstr "Τα Caps Lock και Num Lock είναι ενεργά"
 
 #: ../gtk/gtkentry.c:10180
-#, fuzzy
 msgid "Num Lock is on"
-msgstr "Είναι πατημένο το Caps Lock"
+msgstr "Είναι πατημένο το Num Lock"
 
 #: ../gtk/gtkentry.c:10182
 msgid "Caps Lock is on"
@@ -919,9 +909,8 @@ msgstr "Είναι πατημένο το Caps Lock"
 #. *  Private Macros  *
 #. * ****************
 #: ../gtk/gtkfilechooserbutton.c:62
-#, fuzzy
 msgid "Select a File"
-msgstr "Επιλογή αρχείου"
+msgstr "Επιλέξτε ένα αρχείο"
 
 #: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1834
 msgid "Desktop"
@@ -1512,7 +1501,7 @@ msgstr "Σελίδα %u"
 #. * in the number emblem.
 #.
 #: ../gtk/gtknumerableicon.c:481
-#, fuzzy, c-format
+#, c-format
 msgctxt "Number format"
 msgid "%d"
 msgstr "%d"
@@ -1586,9 +1575,8 @@ msgid "Not available"
 msgstr "Μη διαθέσιμο"
 
 #: ../gtk/gtkprinteroptionwidget.c:786
-#, fuzzy
 msgid "Select a folder"
-msgstr "Επιλογή αρχείου"
+msgstr "Επιλογή φακέλου"
 
 #: ../gtk/gtkprinteroptionwidget.c:805
 msgid "_Save in folder:"
@@ -2165,6 +2153,8 @@ msgstr "Αδυναμία εύρεσης καταχώρησης με URI '%s'"
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
+"Δεν βρέθηκε καταχωρημένη εφαρμογή με το όνομα '%s' για το αντικείμενο με URI "
+"'%s'"
 
 #: ../gtk/gtkspinner.c:289
 msgctxt "throbbing progress animation widget"
@@ -2225,10 +2215,9 @@ msgid "_Cancel"
 msgstr "_Ακύρωση"
 
 #: ../gtk/gtkstock.c:326
-#, fuzzy
 msgctxt "Stock label"
 msgid "_CD-ROM"
-msgstr "_CD-Rom"
+msgstr "_CD-ROM"
 
 #: ../gtk/gtkstock.c:327
 msgctxt "Stock label"
@@ -2278,7 +2267,7 @@ msgstr "Απο_σύνδεση"
 #: ../gtk/gtkstock.c:336
 msgctxt "Stock label"
 msgid "_Execute"
-msgstr "_Εκτέλεση"
+msgstr "Ε_κτέλεση"
 
 #: ../gtk/gtkstock.c:337
 msgctxt "Stock label"
@@ -2286,20 +2275,19 @@ msgid "_Edit"
 msgstr "_Επεξεργασία"
 
 #: ../gtk/gtkstock.c:338
-#, fuzzy
 msgctxt "Stock label"
 msgid "_File"
-msgstr "_Αρχεία"
+msgstr "_Αρχείο"
 
 #: ../gtk/gtkstock.c:339
 msgctxt "Stock label"
 msgid "_Find"
-msgstr "_Εύρεση"
+msgstr "Εύ_ρεση"
 
 #: ../gtk/gtkstock.c:340
 msgctxt "Stock label"
 msgid "Find and _Replace"
-msgstr "Εύρεση και _αντικατάσταση"
+msgstr "Εύρεση και α_ντικατάσταση"
 
 #: ../gtk/gtkstock.c:341
 msgctxt "Stock label"
@@ -2365,7 +2353,6 @@ msgid "_Up"
 msgstr "Πά_νω"
 
 #: ../gtk/gtkstock.c:360
-#, fuzzy
 msgctxt "Stock label"
 msgid "_Hard Disk"
 msgstr "_Σκληρός δίσκος"
@@ -2689,7 +2676,7 @@ msgstr "Σμίκρ_υνση"
 #: ../gtk/gtkswitch.c:313 ../gtk/gtkswitch.c:362 ../gtk/gtkswitch.c:553
 msgctxt "switch"
 msgid "ON"
-msgstr ""
+msgstr "ON"
 
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
@@ -2697,16 +2684,16 @@ msgstr ""
 #: ../gtk/gtkswitch.c:321 ../gtk/gtkswitch.c:363 ../gtk/gtkswitch.c:569
 msgctxt "switch"
 msgid "OFF"
-msgstr ""
+msgstr "OFF"
 
 #: ../gtk/gtkswitch.c:968
 msgctxt "light switch widget"
 msgid "Switch"
-msgstr ""
+msgstr "Διακόπτης"
 
 #: ../gtk/gtkswitch.c:969
 msgid "Switches between on and off states"
-msgstr ""
+msgstr "Εναλλαγή μεταξύ αναμμένου και σβηστού"
 
 #: ../gtk/gtktextbufferrichtext.c:650
 #, c-format
