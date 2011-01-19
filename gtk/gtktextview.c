@@ -452,8 +452,6 @@ static void gtk_text_view_target_list_notify     (GtkTextBuffer     *buffer,
 static void gtk_text_view_paste_done_handler     (GtkTextBuffer     *buffer,
                                                   GtkClipboard      *clipboard,
                                                   gpointer           data);
-static void gtk_text_view_get_cursor_location    (GtkTextView       *text_view,
-						  GdkRectangle      *pos);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
                                                   GtkTextIter       *cursor,
                                                   gint              *x,
@@ -1621,6 +1619,61 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
 }
 
 /**
+ * gtk_text_view_get_cursor_locations:
+ * @text_view: a #GtkTextView
+ * @iter: (allow-none): a #GtkTextIter
+ * @strong: (out) (allow-none): location to store the strong
+ *     cursor position (may be %NULL)
+ * @weak: (out) (allow-none): location to store the weak
+ *     cursor position (may be %NULL)
+ *
+ * Given an @iter within a text layout, determine the positions of the
+ * strong and weak cursors if the insertion point is at that
+ * iterator. The position of each cursor is stored as a zero-width
+ * rectangle. The strong cursor location is the location where
+ * characters of the directionality equal to the base direction of the
+ * paragraph are inserted.  The weak cursor location is the location
+ * where characters of the directionality opposite to the base
+ * direction of the paragraph are inserted.
+ *
+ * If @iter is %NULL, the actual cursor position is used.
+ *
+ * Note that if @iter happens to be the actual cursor position, and
+ * there is currently an IM preedit sequence being entered, the
+ * returned locations will be adjusted to account for the preedit
+ * cursor's offset within the preedit sequence.
+ *
+ * The rectangle position is in buffer coordinates; use
+ * gtk_text_view_buffer_to_window_coords() to convert these
+ * coordinates to coordinates for one of the windows in the text view.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_text_view_get_cursor_locations (GtkTextView       *text_view,
+                                    const GtkTextIter *iter,
+                                    GdkRectangle      *strong,
+                                    GdkRectangle      *weak)
+{
+  GtkTextIter insert;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (iter == NULL ||
+                    gtk_text_iter_get_buffer (iter) == get_buffer (text_view));
+
+  gtk_text_view_ensure_layout (text_view);
+
+  if (iter)
+    insert = *iter;
+  else
+    gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
+                                      gtk_text_buffer_get_insert (get_buffer (text_view)));
+
+  gtk_text_layout_get_cursor_locations (text_view->priv->layout, &insert,
+                                        strong, weak);
+}
+
+/**
  * gtk_text_view_get_iter_at_location:
  * @text_view: a #GtkTextView
  * @iter: (out): a #GtkTextIter
@@ -2119,7 +2172,7 @@ gtk_text_view_update_im_spot_location (GtkTextView *text_view)
   if (text_view->priv->layout == NULL)
     return;
   
-  gtk_text_view_get_cursor_location (text_view, &area);
+  gtk_text_view_get_cursor_locations (text_view, NULL, &area, NULL);
 
   area.x -= text_view->priv->xoffset;
   area.y -= text_view->priv->yoffset;
@@ -7883,18 +7936,6 @@ gtk_text_view_target_list_notify (GtkTextBuffer    *buffer,
 }
 
 static void
-gtk_text_view_get_cursor_location  (GtkTextView   *text_view,
-				    GdkRectangle  *pos)
-{
-  GtkTextIter insert;
-  
-  gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &insert,
-                                    gtk_text_buffer_get_insert (get_buffer (text_view)));
-
-  gtk_text_layout_get_cursor_locations (text_view->priv->layout, &insert, pos, NULL);
-}
-
-static void
 gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
                                       GtkTextIter *cursor,
                                       gint        *x,
@@ -7944,7 +7985,7 @@ gtk_text_view_set_virtual_cursor_pos (GtkTextView *text_view,
     return;
 
   if (x == -1 || y == -1)
-    gtk_text_view_get_cursor_location (text_view, &pos);
+    gtk_text_view_get_cursor_locations (text_view, NULL, &pos, NULL);
 
   text_view->priv->virtual_cursor_x = (x == -1) ? pos.x : x;
   text_view->priv->virtual_cursor_y = (y == -1) ? pos.y + pos.height / 2 : y;
