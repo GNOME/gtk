@@ -1,9 +1,13 @@
 #include <gdk/gdk.h>
 
-gdk_display_get_type
-gdk_display_manager_get_type
-gdk_screen_get_type
-gdk_window_get_type
-gdk_keymap_get_type
+gdk_app_launch_context_get_type
+gdk_cursor_get_type
 gdk_device_get_type
 gdk_device_manager_get_type
+gdk_display_get_type
+gdk_display_manager_get_type
+gdk_drag_context_get_type
+gdk_keymap_get_type
+gdk_screen_get_type
+gdk_visual_get_type
+gdk_window_get_type

@@ -1,6 +1,8 @@
 # Files from the Gtk distribution which have already been
 # marked to allow runtime translation of messages
 gdk/gdk.c
+gdk/gdkapplaunchcontext.c
+gdk/gdkcursor.c
 gdk/gdkdevice.c
 gdk/gdkdevicemanager.c
 gdk/gdkdisplaymanager.c
@@ -13,6 +15,7 @@ gdk/x11/gdkapplaunchcontext-x11.c
 gdk/x11/gdkdevice-xi.c
 gdk/x11/gdkdevice-xi2.c
 gdk/x11/gdkdevicemanager-xi.c
+gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkmain-x11.c
 gtk/gtkaboutdialog.c
 gtk/gtkaccelgroup.c
@@ -26,15 +29,24 @@ gtk/gtkadjustment.c
 gtk/gtkalignment.c
 gtk/gtkarrow.c
 gtk/gtkaspectframe.c
+gtk/gtkanimationdescription.c
+gtk/gtkappchooser.c
+gtk/gtkappchooserbutton.c
+gtk/gtkappchooserdialog.c
+gtk/gtkappchooserwidget.c
 gtk/gtkassistant.c
 gtk/gtkbbox.c
 gtk/gtkbin.c
+gtk/gtkbindings.c
 gtk/gtkbox.c
 gtk/gtkbuildable.c
 gtk/gtkbuilder.c
 gtk/gtkbuilderparser.c
 gtk/gtkbutton.c
 gtk/gtkcalendar.c
+gtk/gtkcellarea.c
+gtk/gtkcellareabox.c
+gtk/gtkcellareacontext.c
 gtk/gtkcelleditable.c
 gtk/gtkcelllayout.c
 gtk/gtkcellrendereraccel.c
@@ -82,6 +94,7 @@ gtk/gtkfixed.c
 gtk/gtkfontbutton.c
 gtk/gtkfontsel.c
 gtk/gtkframe.c
+gtk/gtkgrid.c
 gtk/gtkhandlebox.c
 gtk/gtkhbbox.c
 gtk/gtkhbox.c
@@ -113,11 +126,13 @@ gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
 gtk/gtkmisc.c
+gtk/gtkmodifierstyle.c
 gtk/gtkmodules.c
 gtk/gtkmountoperation.c
 gtk/gtkmountoperation-stub.c
 gtk/gtkmountoperation-x11.c
 gtk/gtknotebook.c
+gtk/gtknumerableicon.c
 gtk/gtkorientable.c
 gtk/gtkpagesetup.c
 gtk/gtkpagesetupunixdialog.c
@@ -148,6 +163,7 @@ gtk/gtkrecentchoosermenu.c
 gtk/gtkrecentmanager.c
 gtk/gtkscalebutton.c
 gtk/gtkscale.c
+gtk/gtkscrollable.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
 gtk/gtkselection.c
@@ -163,6 +179,8 @@ gtk/gtkstatusbar.c
 gtk/gtkstatusicon.c
 gtk/gtkstock.c
 gtk/gtkstyle.c
+gtk/gtkstylecontext.c
+gtk/gtkstyleprovider.c
 gtk/gtkswitch.c
 gtk/gtktable.c
 gtk/gtktearoffmenuitem.c
@@ -178,7 +196,7 @@ gtk/gtktexttag.c
 gtk/gtktexttagtable.c
 gtk/gtktextutil.c
 gtk/gtktextview.c
-gtk/gtkthemes.c
+gtk/gtkthemingengine.c
 gtk/gtktoggleaction.c
 gtk/gtktogglebutton.c
 gtk/gtktoggletoolbutton.c
@@ -190,6 +208,7 @@ gtk/gtktoolpalette.c
 gtk/gtktoolshell.c
 gtk/gtktrayicon-x11.c
 gtk/gtktreednd.c
+gtk/gtktreemenu.c
 gtk/gtktreemodel.c
 gtk/gtktreemodelfilter.c
 gtk/gtktreemodelsort.c
@@ -198,7 +217,6 @@ gtk/gtktreesortable.c
 gtk/gtktreestore.c
 gtk/gtktreeview.c
 gtk/gtktreeviewcolumn.c
-gtk/gtktypeutils.c
 gtk/gtkuimanager.c
 gtk/gtkvbbox.c
 gtk/gtkvbox.c
@@ -210,7 +228,6 @@ gtk/gtkvscrollbar.c
 gtk/gtkvseparator.c
 gtk/gtkwidget.c
 gtk/gtkwindow.c
-gtk/gtkwindow-decorate.c
 gtk/paper_names_offsets.c
 gtk/updateiconcache.c
 modules/input/gtkimcontextxim.c

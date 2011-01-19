@@ -17,12 +17,10 @@ INCLUDES = \
 	$(INCLUDED_IMMODULE_DEFINE)
 
 DEPS = \
-	$(top_builddir)/gdk/$(gdktargetlib) 				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/libgtk-3.0.la
 
 LDADDS = \
-	$(top_builddir)/gdk/$(gdktargetlib) 				\
-	$(top_builddir)/gtk/$(gtktargetlib) 				\
+	$(top_builddir)/gtk/libgtk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
 moduledir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/immodules
@@ -186,7 +184,7 @@ endif
 # install-data-am, and not install-exec-am. We need to ensure this gets run
 # after the libraries are installed in their final locations.
 install-data-hook:
-	@if $(RUN_QUERY_IMMODULES_TEST) ; then \
+	$(AM_V_GEN) if $(RUN_QUERY_IMMODULES_TEST) ; then \
 	  echo $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-3.0/3.0.0 ; \
 	  $(mkinstalldirs) $(DESTDIR)$(libdir)/gtk-3.0/3.0.0 ; \
 	  echo "$(top_builddir)/gtk/gtk-query-immodules-3.0 > $(DESTDIR)$(libdir)/gtk-3.0/3.0.0/immodules.cache" ; \
@@ -238,7 +236,7 @@ noinst_LTLIBRARIES =				\
 included-modules: $(noinst_LTLIBRARIES)
 
 immodules.cache: Makefile.am $(module_LTLIBRARIES)
-	$(top_builddir)/gtk/gtk-query-immodules-3.0 $(module_LTLIBRARIES) > immodules.cache
+	$(AM_V_GEN) $(top_builddir)/gtk/gtk-query-immodules-3.0 $(module_LTLIBRARIES) > immodules.cache
 
 EXTRA_DIST += README.multipress
 

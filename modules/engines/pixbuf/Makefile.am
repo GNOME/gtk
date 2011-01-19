@@ -13,8 +13,8 @@ INCLUDES = \
 
 LDADDS = \
 	$(GTK_DEP_LIBS)							\
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gdk/libgdk-3.0.la				\
+	$(top_builddir)/gtk/libgtk-3.0.la
 
 enginedir = $(libdir)/gtk-3.0/$(GTK_BINARY_VERSION)/engines
 

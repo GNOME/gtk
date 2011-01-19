@@ -62,8 +62,6 @@ struct _GtkContainerClass
 {
   GtkWidgetClass parent_class;
 
-  unsigned int handle_border_width : 1;
-
   void    (*add)       		(GtkContainer	 *container,
 				 GtkWidget	 *widget);
   void    (*remove)    		(GtkContainer	 *container,
@@ -74,7 +72,7 @@ struct _GtkContainerClass
 				 GtkCallback	  callback,
 				 gpointer	  callback_data);
   void    (*set_focus_child)	(GtkContainer	 *container,
-				 GtkWidget	 *widget);
+				 GtkWidget	 *child);
   GType   (*child_type)		(GtkContainer	 *container);
   gchar*  (*composite_name)	(GtkContainer	 *container,
 				 GtkWidget	 *child);
@@ -90,6 +88,11 @@ struct _GtkContainerClass
 				 GParamSpec      *pspec);
   GtkWidgetPath * (*get_path_for_child) (GtkContainer *container,
                                          GtkWidget    *child);
+
+
+  /*< private >*/
+
+  unsigned int _handle_border_width : 1;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);

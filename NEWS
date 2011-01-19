@@ -1,3 +1,296 @@
+Overview of Changes in GTK+ 2.99.2
+==================================
+
+* More widget are using GtkStyleContext directly:
+ GtkToolItemGroup, GtkMenuItem, GtkImageMenuItem, GtkMenu,
+ GtkTearoffMenuItem, GtkCheckMenuItem, GtkMenuShell
+
+* gtk-builder-convert now accepts a --target-version option
+
+* Bug fixes:
+ 637965 GtkTreeCellDataFunc called with a wrong column arguments
+ 639127 Misc Win32 GDK building problems
+ 639157 GtkOrientable should add/remove "horizontal" and "vert...
+ 639209 Allow toggling the GtkSwitch by clicking the handle
+ 639286 include gtk/gtktextattributes.h not installed
+ 639327 gtk-builder-convert needs to convert gtkcomboboxentry...
+
+* Translation updates:
+ Arabic
+ Basque
+ Hebrew
+
+Overview of Changes from GTK+ 2.99.0 to 2.99.1
+==============================================
+
+* More widgets are using GtkStyleContext directly:
+  GtkColorButton, GtkColorSelection, GtkHSV,
+  GtkFontSelection, GtkPrintUnixDialog, GtkImage,
+  GtkLayout, GtkViewport, GtkTextDisplay, GtkTextUtil,
+  GtkCalendar
+
+* GtkBuilder support has been added for setting menus
+  on GtkMenuToolButtons and for adding tags to
+  GtkTextTagTable as well as adding items to
+  GtkComboBoxText
+
+* Bug fixes:
+ 350618 start rubber banding on "white space"
+ 612918 Support disabling X11 extensions
+ 635687 problem with pygtk or gtk with gtk.Plug and gtk.Socket...
+ 638017 GtkTextView: Crash in gtk_text_view_set_tabs()
+ 638119 GtkSpinner animation not correctly stopped...
+ 638880 Need a setter for has_user_ref_count
+ 639030 Small cleanup in gailtextview code.
+ 639047 Fix remaining usage of g[dk]ktargetlib.
+ 639079 Obtain the fg color from the renderer
+ 639105 Port GtkTextDisplay to StyleContext.
+ 639106 New CSS style misses distinction between "selected focused"...
+ 639127 Misc Win32 GDK building problems
+ 639157 GtkOrientable should add/ remove "horizontal" and "vertical"...
+
+* Translation updates:
+ British English
+ Galician
+ Hebrew
+ Indonesian
+ Spanish
+
+
+Overview of Changes from GTK+ 2.91.7 to 2.99.0
+==============================================
+
+* Deprecations and removals:
+ - Long-obsolete linuxfb-related GtkWindow APIs have been dropped
+ - All remaining G_SEALed struct members have been removed
+ - GtkThemeEngine has been removed
+ - gdk_display_get_window_at_device_position() has been renamed to
+   gdk_device_get_window_at_position()
+ - gdk_display_get_device_state() has been renamed to
+   gdk_device_get_position()
+ - gdk_device_set_source() has been dropped
+ - gdk_set_pointer_hooks(), gdk_display_set_pointer_hooks() and
+   gdk_display_set_device_hooks() have been removed
+ - The deprecated GtkNotebook:tab-pack child property has been removed
+ - The deprecated gtk_quit_add() functions have been removed
+ - The GtkRange update-policy facility has been removed
+
+* The gtk-update-icon-cache and gtk-builder-convert utilities have
+  been renamed back to their un-suffixed names. Distributions will
+  have to resolve the conflict between GTK+ 2.x and 3.0 packages
+  by dropping one set of the utilities and adding a dependency.
+
+* It is now possible to include multiple GDK backends in a single
+  library. The --with-gdk-backend option has been split into separate
+  --enable-{x11,win32,quartz}-backend options.
+
+* The GDK Quartz backend has been ported to the new GDK backend API
+
+* A number of widgets have been ported to use GtkStyleContext directly:
+  GtkAccelLabel, GtkArrow, GtkSeparator, GtkSpinButton, GtkMessageDialog,
+  GtkFrame, GtkEventBox, GtkScrolledWindow, GtkProgressBar, GtkEntry,
+  GtkFileChooserEntry, GtkSwitch, GtkHandleBox, GtkToolbar, GtkFixed,
+  GtkToolPalette, GtkAboutDialog, GtkAssistant, GtkTrayIcon, GtkPaned,
+  GtkToolButton, GtkSocket, GtkRecentChooser, GtkTooltip, GtkPathBar,
+  GtkWin32EmbedWidget, GtkCellView, GtkDialog, GtkDrawingArea, GtkPlug,
+  GtkEntryCompletion, GtkFileChooserButton, GtkFileChooser, GtkHandleBox,
+  GtkLinkButton, GtkOffscreenWindow
+
+* Various problems with width-for-height geometry management have been
+  fixed in GtkAlignment, GtkCheckButton, GtkBin
+
+* The GtkComboBox, GtkIconView and GtkCellView widgets have been ported
+  to use GtkCellArea for their cell layouts
+
+* The cups print backend can now send print jobs directly in PDF if
+  cups supports it
+
+* GtkNumerableIcon is a variant of GEmblemedIcon for using numbers
+  as emblems
+
+* Bugs fixed:
+ 144324 Leaking dnd contexts with XDnD
+ 165987 unsets DESKTOP_STARTUP_ID
+ 307963 GtkSpinButton clamps value with the wrong maximum.
+ 321958 gtk.Calendar Notes should also say the format of year
+ 533745 Segfault on gdk.DragContext.drag_get_selection()
+ 553404 Out-of-date comment in gtk_text_view_add_child_in_window()
+ 559503 Description should mention gregorian
+ 560177 Applications should send print jobs to CUPS in PDF format...
+ 562182 gtk_init() docs inaccurate
+ 599130 Ending a drag using space or enter doesn't always cause a...
+ 617312 Move documentation to inline comments: GtkDialog
+ 617315 Move documentation to inline comments: GtkDrawingArea
+ 617322 Move documentation to inline comments: GtkEntryCompletion
+ 617327 Move documentation to inline comments: GtkExpander
+ 617471 Migrate API docs from templates to source files...
+ 621720 Use $(AM_V_GEN) to silent the build a bit.
+ 622125 Note that gtk_show_uri needs gvfs to spawn URLs
+ 629955 Deprecate/remove gtk_main and gtk_init_add/remove* API
+ 633795 gdk_event_get_state wrongly extracts GDK_PROPERTY_NOTIFY...
+ 634711 Xlib warning when RANDR is missing
+ 635299 add gtk_selection_data_get_data_with_length API...
+ 637691 Eating events breaks proxied DND
+ 637721 gtk 2.91.6 issue with gtkcellrendererprogress
+ 637736 [GtkAboutDialog] Newlines are ignored in translator-credits
+ 637763 [GtkAboutDialog] no longer display contact link
+ 637834 gtk_widget_verify_invariants: relax toplevel checks
+ 637849 Shell segfaults when unicode characters after U+00FF...
+ 637895 gdk_pointer_grab() deprecated comment is not helpful enough
+ 637907 gtkwindow.h includes a private header
+ 637910 GtkSpinner - does not animate
+ 637958 print dialog doesn't fit on netbook screen size
+ 637974 Gtk+ 2.91.7 build of introspection fails
+ 638179 in draw signal handle call gtk_style_context_add_provider...
+ 638193 GtkSpinButton documentation out of date
+ 638231 GtkSwitch states translation
+ 638386 gdk_x11_display_init_input careless
+ 638580 'application' window's property released too late
+ 638608 gtkenums: add GTK_STATE_FLAG_NORMAL = 0
+
+* Updated translations:
+ Estonian
+ Kurdish
+ Norwegian bokmål
+ Punjabi
+ Spanish
+ Swedish
+ Uighur
+
+
+Overview of Changes from GTK+ 2.91.6 to 2.91.7
+==============================================
+
+* The treeview-refactor branch has been merged, bringing more
+  flexible cell arrangement with GtkCellArea, GtkCellAreaBox, etc
+
+* The gdk-backend branch has been merged. This branch cleans up the
+  internal frontend/backend separation in GDK, with the ultimate goal
+  of allowing to build a single gdk library that contains multiple
+  backends (interesting combinations are x11+wayland or quartz+x11).
+
+  For now, GDK is still restricted to a single backend, but
+  as a first step, the libraries no longer include the backend name
+  in their soname, but are just libgdk-3.0.so and libgtk-3.0.so.
+
+  Only the x11 backend has been kept up to date with this cleanup
+  work, other backends are broken in this release.
+
+* Deprecations and removals:
+ - G_SEALed struct members have been removed from GtkWindowGroup,
+   GtkDrawingArea, GtkTreeStore, GtkTreeModelSort, GtkTreeSelection,
+   GtkSocket, GtkPrintJob, GtkSelectionData
+ - Input device handling:
+   - gdk_display_list_devices, gdk_display_get_core_pointer,
+     gdk_input_set_extension_events, gtk_widget_set_extension_events,
+     gdk_devices_list have been removed
+   - gdk_display_warp_device has been replaced by gdk_device_warp
+   - gdk_enable_multidevice has been replaced by gdk_disable_multidevice
+ - Drag-and-Drop:
+   gdk_drag_context_new, gdk_drag_find_window and gdk_drag_get_protocol
+   have been removed
+ - Property handling:
+   Functions that deal with X11-specific encodings such as Compound Text
+   have been moved to backend-specific API:
+   gdk_string_to_compound_text[_for_display],
+   gdk_utf8_to_compound_text[_for_display], gdk_free_compound_text,
+   gdk_text_property_to_text_list[_for_display], gdk_free_text_list,
+   gdk_text_property_to_utf8_list
+ - Foreign windows:
+   Functions for dealing with GdkWindow wrappers around foreign
+   windows have been moved to backend-specific API.
+ - Application launching:
+   The gdk_spawn_* APIs have been removed, since they were trivial
+   wrappers around g_spawn_* on most platforms and can be replaced
+   by GIO GAppInfo APIs.
+ - Misc. other functions: gdk_net_wm_supports, gdk_set_locale,
+   gdkx_visual_get have been either removed, gdk_set_sm_client_id
+   has been moved to backend-specific API.
+
+* A number of GTK+ widgets have been ported to use GtkStyleContext
+  directly for rendering
+
+* The tracker search backend for the file chooser has been updated
+  to work with libtracker-sparql as available in tracker >= 0.9
+
+* The GtkAboutDialog has been given a facelift. It no longer
+  opens second-level dialogs
+
+* The GDK X11 backend now uses XI2 (including multi-device capabilities)
+  by default. Use gdk_disable_multidevice() to switch back to the
+  XI1/Core implementation
+
+* Bug fixes:
+ 629923 Consider always calling unmap() when unsetting MAPPED flag
+ 634657 Dynamically attached calendar does not respond to mouse clicks
+ 635401 Setting conflict warning does not disappear when conflict is fixed
+ 636732 Gtk+ fails to build
+ 636777 Leak in gtk_css_provider_get_named
+ 637018 Add checks for id-column/entry-text-column >= 0
+ 637069 Custom print settings set in custom-widget-apply are lost
+ 637155 Remove vestiges of support for themes using XSHAPE
+ 637156 Optimize gtk_widget_shape_combine_region (widget, NULL, ...)
+ 637189 gtk_cell_renderer_spin_start_editing uses g_ascii_strtod but...
+ 637243 docs: fix link failure on gtk-doc scanner binaries
+ 637256 gtkstylecontext: fix typos in annotations
+ 637464 Fix GdkWindowFilter internal refcounting
+ 637471 GTK2_RC_FILES should be renamed to GTK3_RC_FILES
+ 637520 Gtk+ seems to have broken Mutter
+ 637606 Missing out annotations for gtk_accelerator_parse and...
+ 637608 Problems with the new AboutDialog
+
+* Translation updates:
+ Estonian
+ Hebrew
+ Kazakh
+ Norwegian bokmål
+ Persian
+ Spanish
+ Vietnamese
+
+
+Overview of Changes from GTK+ 2.91.5 to 2.91.6
+==============================================
+
+* Deprecations, cleanups and API changes:
+ - GdkDrawable and some X11-specific APIs have been removed
+ - GtkStyle and GtkRcStyle have been deprecated
+ - The GdkWindowClass enumeration is now GdkWindowWindowClass
+ - gdk_window_get_geometry lost its depth argument
+ - The old, unused gtk_decorated_window_... functions have
+   been removed.
+
+* GtkComboBox has gained an 'active id' property that is
+  intended for easy binding to settings
+
+* GtkAppChooser: A new family of widgets that allow choosing
+  an application to open a file. This is strongly based on
+  the corresponding nautilus dialog, which it is replacing.
+
+* The GtkStyleContext branch has been merged, changing the APIs
+  that are used to do themed drawing, and the theme engine interfaces.
+  Among the new classes are GtkStyleContext (replacing GtkStyle) and
+  GtkCssProvider (replacing the gtkrc parser). The migration guide
+  contains a chapter about porting from GtkStyle to GtkStyleContext.
+
+* Bugs fixed:
+ 549720 Add a way to hide GtkScale's slider
+ 582557 need open with dialog box to use with IBM's Lotus Notes...
+ 619148 "active ID" properties (GtkComboBox)
+ 636060 use ATK_DEFINE_TYPE where possible
+ 636129 invalid uninstantiatable type `(null)' in cast to `GtkSpinner'
+ 636388 gtk3-demo craches (segfault) when pressing a key in the textarea...
+ 636511 New style override functions do not work on textview
+
+* Updated translations:
+ Estonian
+ Galician
+ Hebrew
+ Persian
+ Slovenian
+ Spanish
+
+
 Overview of Changes from GTK+ 2.91.4 to 2.91.5
 ==============================================
 

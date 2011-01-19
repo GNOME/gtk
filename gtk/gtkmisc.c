@@ -338,8 +338,6 @@ gtk_misc_realize (GtkWidget *widget)
       window = gtk_widget_get_parent_window (widget);
       gtk_widget_set_window (widget, window);
       g_object_ref (window);
-
-      gtk_widget_style_attach (widget);
     }
   else
     {
@@ -359,7 +357,5 @@ gtk_misc_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, window);
       gdk_window_set_user_data (window, widget);
       gdk_window_set_background_pattern (window, NULL);
-
-      gtk_widget_style_attach (widget);
     }
 }

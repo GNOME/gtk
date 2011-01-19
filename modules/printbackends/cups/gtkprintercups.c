@@ -127,11 +127,19 @@ gtk_printer_cups_new (const char      *name,
 		      GtkPrintBackend *backend)
 {
   GObject *result;
-  
+  gboolean accepts_pdf;
+
+#if (CUPS_VERSION_MAJOR == 1 && CUPS_VERSION_MINOR >= 2) || CUPS_VERSION_MAJOR > 1
+  accepts_pdf = TRUE;
+#else
+  accepts_pdf = FALSE;
+#endif
+
   result = g_object_new (GTK_TYPE_PRINTER_CUPS,
 			 "name", name,
 			 "backend", backend,
 			 "is-virtual", FALSE,
+			 "accepts-pdf", accepts_pdf,
                          NULL);
 
   return (GtkPrinterCups *) result;

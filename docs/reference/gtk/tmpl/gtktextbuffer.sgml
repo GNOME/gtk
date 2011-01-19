@@ -931,7 +931,7 @@ It must return the serialized form of the content.
 </para>
 
 @register_buffer: the #GtkTextBuffer for which the format is registered
-@content_buffer: the #GtkTextsBuffer to serialize
+@content_buffer: the #GtkTextBuffer to serialize
 @start: start of the block of text to serialize
 @end: end of the block of text to serialize
 @length: Return location for the length of the serialized data

@@ -44,29 +44,13 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSocket        GtkSocket;
 typedef struct _GtkSocketClass   GtkSocketClass;
+typedef struct _GtkSocketPrivate GtkSocketPrivate;
 
 struct _GtkSocket
 {
   GtkContainer container;
 
-  guint16 GSEAL (request_width);
-  guint16 GSEAL (request_height);
-  guint16 GSEAL (current_width);
-  guint16 GSEAL (current_height);
-
-  GdkWindow *GSEAL (plug_window);
-  GtkWidget *GSEAL (plug_widget);
-
-  gshort GSEAL (xembed_version); /* -1 == not xembed */
-  guint GSEAL (same_app) : 1;
-  guint GSEAL (focus_in) : 1;
-  guint GSEAL (have_size) : 1;
-  guint GSEAL (need_map) : 1;
-  guint GSEAL (is_mapped) : 1;
-  guint GSEAL (active) : 1;
-
-  GtkAccelGroup *GSEAL (accel_group);
-  GtkWidget *GSEAL (toplevel);
+  GtkSocketPrivate *priv;
 };
 
 struct _GtkSocketClass

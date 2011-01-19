@@ -61,7 +61,7 @@ drag_data_received (GtkWidget        *widget,
 
   GdkPixbuf *pixbuf;
 
-  if (selection_data->length < 0)
+  if (gtk_selection_data_get_length (selection_data) < 0)
     return;
 
   pixbuf = gtk_selection_data_get_pixbuf (selection_data);

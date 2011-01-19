@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk-pixbuf;..\..\..\gdk;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
 				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -43,7 +43,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -64,7 +64,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk-pixbuf;..\..\..\gdk;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
 				PreprocessorDefinitions="_DEBUG;$(GtkPrefixDefine)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -97,7 +97,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\gdk-pixbuf;..\..\..\gdk;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
 				PreprocessorDefinitions="$(GtkPrefixDefine)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -107,7 +107,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"
@@ -130,7 +130,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..\..\..\gdk-pixbuf;..\..\..\gdk;..\..\..\gtk"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gtk"
 				PreprocessorDefinitions="$(GtkPrefixDefine)"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
@@ -140,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="cairo.lib pango-1.0.lib pangocairo-1.0.lib"
+				AdditionalDependencies=""
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="1"

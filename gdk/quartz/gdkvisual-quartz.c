@@ -20,52 +20,25 @@
 
 #include "config.h"
 
-#include "gdkvisual.h"
+#include "gdkvisualprivate.h"
+#include "gdkquartzvisual.h"
 #include "gdkprivate-quartz.h"
+
+
+struct _GdkQuartzVisual
+{
+  GdkVisual visual;
+};
+
+struct _GdkQuartzVisualClass
+{
+  GdkVisualClass visual_class;
+};
+
 
 static GdkVisual *system_visual;
 static GdkVisual *rgba_visual;
 static GdkVisual *gray_visual;
-
-static void
-gdk_visual_finalize (GObject *object)
-{
-  g_error ("A GdkVisual object was finalized. This should not happen");
-}
-
-static void
-gdk_visual_class_init (GObjectClass *class)
-{
-  class->finalize = gdk_visual_finalize;
-}
-
-GType
-gdk_visual_get_type (void)
-{
-  static GType object_type = 0;
-
-  if (!object_type)
-    {
-      const GTypeInfo object_info =
-      {
-        sizeof (GdkVisualClass),
-        (GBaseInitFunc) NULL,
-        (GBaseFinalizeFunc) NULL,
-        (GClassInitFunc) gdk_visual_class_init,
-        NULL,           /* class_finalize */
-        NULL,           /* class_data */
-        sizeof (GdkVisual),
-        0,              /* n_preallocs */
-        (GInstanceInitFunc) NULL,
-      };
-      
-      object_type = g_type_register_static (G_TYPE_OBJECT,
-                                            "GdkVisual",
-                                            &object_info, 0);
-    }
-  
-  return object_type;
-}
 
 static void
 gdk_visual_decompose_mask (gulong  mask,
@@ -89,14 +62,17 @@ gdk_visual_decompose_mask (gulong  mask,
 }
 
 static GdkVisual *
-create_standard_visual (gint depth)
+create_standard_visual (GdkScreen *screen,
+                        gint       depth)
 {
-  GdkVisual *visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+  GdkVisual *visual = g_object_new (GDK_TYPE_QUARTZ_VISUAL, NULL);
+
+  visual->screen = screen;
 
   visual->depth = depth;
   visual->byte_order = GDK_MSB_FIRST; /* FIXME: Should this be different on intel macs? */
   visual->colormap_size = 0;
-  
+
   visual->type = GDK_VISUAL_TRUE_COLOR;
 
   visual->red_mask = 0xff0000;
@@ -117,9 +93,11 @@ create_standard_visual (gint depth)
 }
 
 static GdkVisual *
-create_gray_visual (void)
+create_gray_visual (GdkScreen *screen)
 {
-  GdkVisual *visual = g_object_new (GDK_TYPE_VISUAL, NULL);
+  GdkVisual *visual = g_object_new (GDK_TYPE_QUARTZ_VISUAL, NULL);
+
+  visual->screen = screen;
 
   visual->depth = 1;
   visual->byte_order = GDK_MSB_FIRST;
@@ -130,49 +108,53 @@ create_gray_visual (void)
   return visual;
 }
 
-void
-_gdk_visual_init (void)
+
+G_DEFINE_TYPE (GdkQuartzVisual, gdk_quartz_visual, GDK_TYPE_VISUAL)
+
+static void
+gdk_quartz_visual_init (GdkQuartzVisual *quartz_visual)
 {
-  system_visual = create_standard_visual (24);
-  rgba_visual = create_standard_visual (32);
-  gray_visual = create_gray_visual ();
+}
+
+static void
+gdk_quartz_visual_class_init (GdkQuartzVisualClass *class)
+{
 }
 
 /* We prefer the system visual for now ... */
 gint
-gdk_visual_get_best_depth (void)
+_gdk_quartz_screen_visual_get_best_depth (GdkScreen *screen)
 {
   return system_visual->depth;
 }
 
 GdkVisualType
-gdk_visual_get_best_type (void)
+_gdk_quartz_screen_visual_get_best_type (GdkScreen *screen)
 {
   return system_visual->type;
 }
 
 GdkVisual *
-gdk_screen_get_rgba_visual (GdkScreen *screen)
+_gdk_quartz_screen_get_rgba_visual (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return rgba_visual;
 }
 
 GdkVisual*
-gdk_screen_get_system_visual (GdkScreen *screen)
+_gdk_quartz_screen_get_system_visual (GdkScreen *screen)
 {
   return system_visual;
 }
 
 GdkVisual*
-gdk_visual_get_best (void)
+_gdk_quartz_screen_visual_get_best (GdkScreen *screen)
 {
   return system_visual;
 }
 
 GdkVisual*
-gdk_visual_get_best_with_depth (gint depth)
+_gdk_quartz_screen_visual_get_best_with_depth (GdkScreen *screen,
+                                               gint       depth)
 {
   GdkVisual *visual = NULL;
 
@@ -198,7 +180,8 @@ gdk_visual_get_best_with_depth (gint depth)
 }
 
 GdkVisual*
-gdk_visual_get_best_with_type (GdkVisualType visual_type)
+_gdk_quartz_screen_visual_get_best_with_type (GdkScreen     *screen,
+                                              GdkVisualType  visual_type)
 {
   if (system_visual->type == visual_type)
     return system_visual;
@@ -209,8 +192,9 @@ gdk_visual_get_best_with_type (GdkVisualType visual_type)
 }
 
 GdkVisual*
-gdk_visual_get_best_with_both (gint          depth,
-			       GdkVisualType visual_type)
+_gdk_quartz_screen_visual_get_best_with_both (GdkScreen     *screen,
+                                              gint           depth,
+                                              GdkVisualType  visual_type)
 {
   if (system_visual->depth == depth
       && system_visual->type == visual_type)
@@ -227,23 +211,33 @@ gdk_visual_get_best_with_both (gint          depth,
 
 /* For these, we also prefer the system visual */
 void
-gdk_query_depths  (gint **depths,
-		   gint  *count)
+_gdk_quartz_screen_query_depths  (GdkScreen  *screen,
+                                  gint      **depths,
+                                  gint       *count)
 {
   *count = 1;
   *depths = &system_visual->depth;
 }
 
 void
-gdk_query_visual_types (GdkVisualType **visual_types,
-			gint           *count)
+_gdk_quartz_screen_query_visual_types (GdkScreen      *screen,
+                                       GdkVisualType **visual_types,
+                                       gint           *count)
 {
   *count = 1;
   *visual_types = &system_visual->type;
 }
 
+void
+_gdk_quartz_screen_init_visuals (GdkScreen *screen)
+{
+  system_visual = create_standard_visual (screen, 24);
+  rgba_visual = create_standard_visual (screen, 32);
+  gray_visual = create_gray_visual (screen);
+}
+
 GList*
-gdk_screen_list_visuals (GdkScreen *screen)
+_gdk_quartz_screen_list_visuals (GdkScreen *screen)
 {
   GList *visuals = NULL;
 
@@ -253,12 +247,3 @@ gdk_screen_list_visuals (GdkScreen *screen)
 
   return visuals;
 }
-
-GdkScreen *
-gdk_visual_get_screen (GdkVisual *visual)
-{
-  g_return_val_if_fail (GDK_IS_VISUAL (visual), NULL);
-
-  return gdk_screen_get_default ();
-}
-

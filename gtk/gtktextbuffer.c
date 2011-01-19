@@ -38,6 +38,7 @@
 #include "gtktextbufferrichtext.h"
 #include "gtktextbtree.h"
 #include "gtktextiterprivate.h"
+#include "gtktexttagprivate.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -2504,7 +2505,7 @@ gtk_text_buffer_real_apply_tag (GtkTextBuffer     *buffer,
                                 const GtkTextIter *start,
                                 const GtkTextIter *end)
 {
-  if (tag->table != buffer->priv->tag_table)
+  if (tag->priv->table != buffer->priv->tag_table)
     {
       g_warning ("Can only apply tags that are in the tag table for the buffer");
       return;
@@ -2519,7 +2520,7 @@ gtk_text_buffer_real_remove_tag (GtkTextBuffer     *buffer,
                                  const GtkTextIter *start,
                                  const GtkTextIter *end)
 {
-  if (tag->table != buffer->priv->tag_table)
+  if (tag->priv->table != buffer->priv->tag_table)
     {
       g_warning ("Can only remove tags that are in the tag table for the buffer");
       return;
@@ -2611,7 +2612,7 @@ gtk_text_buffer_apply_tag (GtkTextBuffer     *buffer,
   g_return_if_fail (end != NULL);
   g_return_if_fail (gtk_text_iter_get_buffer (start) == buffer);
   g_return_if_fail (gtk_text_iter_get_buffer (end) == buffer);
-  g_return_if_fail (tag->table == buffer->priv->tag_table);
+  g_return_if_fail (tag->priv->table == buffer->priv->tag_table);
   
   gtk_text_buffer_emit_tag (buffer, tag, TRUE, start, end);
 }
@@ -2640,7 +2641,7 @@ gtk_text_buffer_remove_tag (GtkTextBuffer     *buffer,
   g_return_if_fail (end != NULL);
   g_return_if_fail (gtk_text_iter_get_buffer (start) == buffer);
   g_return_if_fail (gtk_text_iter_get_buffer (end) == buffer);
-  g_return_if_fail (tag->table == buffer->priv->tag_table);
+  g_return_if_fail (tag->priv->table == buffer->priv->tag_table);
   
   gtk_text_buffer_emit_tag (buffer, tag, FALSE, start, end);
 }
@@ -3156,7 +3157,7 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
            * used within-process
            */
           gtk_selection_data_set (selection_data,
-                                  selection_data->target,
+                                  gtk_selection_data_get_target (selection_data),
                                   8, /* bytes */
                                   (void*)&buffer,
                                   sizeof (buffer));
@@ -3167,11 +3168,11 @@ clipboard_get_selection_cb (GtkClipboard     *clipboard,
           gsize   len;
 
           str = gtk_text_buffer_serialize (buffer, buffer,
-                                           selection_data->target,
+                                           gtk_selection_data_get_target (selection_data),
                                            &start, &end, &len);
 
           gtk_selection_data_set (selection_data,
-                                  selection_data->target,
+                                  gtk_selection_data_get_target (selection_data),
                                   8, /* bytes */
                                   str, len);
           g_free (str);
@@ -3226,7 +3227,7 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
        * be used within-process. OK to supply a NULL value for contents.
        */
       gtk_selection_data_set (selection_data,
-                              selection_data->target,
+                              gtk_selection_data_get_target (selection_data),
                               8, /* bytes */
                               (void*)&contents,
                               sizeof (contents));
@@ -3244,11 +3245,11 @@ clipboard_get_contents_cb (GtkClipboard     *clipboard,
       gtk_text_buffer_get_bounds (contents, &start, &end);
 
       str = gtk_text_buffer_serialize (clipboard_source_buffer, contents,
-                                       selection_data->target,
+                                       gtk_selection_data_get_target (selection_data),
                                        &start, &end, &len);
 
       gtk_selection_data_set (selection_data,
-			      selection_data->target,
+			      gtk_selection_data_get_target (selection_data),
 			      8, /* bytes */
 			      str, len);
       g_free (str);
@@ -3404,23 +3405,22 @@ selection_data_get_buffer (GtkSelectionData *selection_data,
   GtkTextBuffer *src_buffer = NULL;
 
   /* If we can get the owner, the selection is in-process */
-  owner = gdk_selection_owner_get_for_display (selection_data->display,
-					       selection_data->selection);
+  owner = gdk_selection_owner_get_for_display (gtk_selection_data_get_display (selection_data),
+					       gtk_selection_data_get_selection (selection_data));
 
   if (owner == NULL)
     return NULL;
   
   if (gdk_window_get_window_type (owner) == GDK_WINDOW_FOREIGN)
     return NULL;
- 
-  if (selection_data->type !=
-      gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
+
+  if (gtk_selection_data_get_data_type (selection_data) != gdk_atom_intern_static_string ("GTK_TEXT_BUFFER_CONTENTS"))
     return NULL;
 
-  if (selection_data->length != sizeof (src_buffer))
+  if (gtk_selection_data_get_length (selection_data) != sizeof (src_buffer))
     return NULL;
-          
-  memcpy (&src_buffer, selection_data->data, sizeof (src_buffer));
+
+  memcpy (&src_buffer, gtk_selection_data_get_data (selection_data), sizeof (src_buffer));
 
   if (src_buffer == NULL)
     return NULL;

@@ -513,11 +513,11 @@ create_full_featured_assistant (GtkWidget *widget)
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
 	 /* set a side image */
-	 pixbuf = gtk_widget_render_icon (page, GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG, NULL);
+	 pixbuf = gtk_widget_render_icon_pixbuf (page, GTK_STOCK_DIALOG_WARNING, GTK_ICON_SIZE_DIALOG);
 	 gtk_assistant_set_page_side_image (GTK_ASSISTANT (assistant), page, pixbuf);
 
 	 /* set a header image */
-	 pixbuf = gtk_widget_render_icon (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+	 pixbuf = gtk_widget_render_icon_pixbuf (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
 	 gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
 
       page = get_test_page ("Invisible page");
@@ -531,7 +531,7 @@ create_full_featured_assistant (GtkWidget *widget)
       gtk_assistant_set_page_complete (GTK_ASSISTANT (assistant), page, TRUE);
 
 	 /* set a header image */
-	 pixbuf = gtk_widget_render_icon (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG, NULL);
+	 pixbuf = gtk_widget_render_icon_pixbuf (page, GTK_STOCK_DIALOG_INFO, GTK_ICON_SIZE_DIALOG);
 	 gtk_assistant_set_page_header_image (GTK_ASSISTANT (assistant), page, pixbuf);
     }
 

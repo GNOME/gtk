@@ -27,6 +27,7 @@
 #include <gtk/gtkcellrenderer.h>
 #include <gtk/gtktreemodel.h>
 #include <gtk/gtktreesortable.h>
+#include <gtk/gtkcellarea.h>
 
 
 G_BEGIN_DECLS
@@ -39,8 +40,9 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_VIEW_COLUMN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_VIEW_COLUMN))
 #define GTK_TREE_VIEW_COLUMN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_VIEW_COLUMN, GtkTreeViewColumnClass))
 
-typedef struct _GtkTreeViewColumn      GtkTreeViewColumn;
-typedef struct _GtkTreeViewColumnClass GtkTreeViewColumnClass;
+typedef struct _GtkTreeViewColumn        GtkTreeViewColumn;
+typedef struct _GtkTreeViewColumnClass   GtkTreeViewColumnClass;
+typedef struct _GtkTreeViewColumnPrivate GtkTreeViewColumnPrivate;
 
 /**
  * GtkTreeViewColumnSizing:
@@ -85,51 +87,7 @@ struct _GtkTreeViewColumn
 {
   GInitiallyUnowned parent_instance;
 
-  GtkWidget *GSEAL (tree_view);
-  GtkWidget *GSEAL (button);
-  GtkWidget *GSEAL (child);
-  GtkWidget *GSEAL (arrow);
-  GtkWidget *GSEAL (alignment);
-  GdkWindow *GSEAL (window);
-  GtkCellEditable *GSEAL (editable_widget);
-  gfloat GSEAL (xalign);
-  gulong GSEAL (property_changed_signal);
-  gint GSEAL (spacing);
-
-  /* Sizing fields */
-  /* see gtk+/doc/tree-column-sizing.txt for more information on them */
-  GtkTreeViewColumnSizing GSEAL (column_type);
-  gint GSEAL (requested_width);
-  gint GSEAL (button_request);
-  gint GSEAL (resized_width);
-  gint GSEAL (width);
-  gint GSEAL (fixed_width);
-  gint GSEAL (min_width);
-  gint GSEAL (max_width);
-
-  /* dragging columns */
-  gint GSEAL (drag_x);
-  gint GSEAL (drag_y);
-
-  gchar *GSEAL (title);
-  GList *GSEAL (cell_list);
-
-  /* Sorting */
-  gulong GSEAL (sort_clicked_signal);
-  gulong GSEAL (sort_column_changed_signal);
-  gint GSEAL (sort_column_id);
-  GtkSortType GSEAL (sort_order);
-
-  /* Flags */
-  guint GSEAL (visible)             : 1;
-  guint GSEAL (resizable)           : 1;
-  guint GSEAL (clickable)           : 1;
-  guint GSEAL (dirty)               : 1;
-  guint GSEAL (show_sort_indicator) : 1;
-  guint GSEAL (maybe_reordered)     : 1;
-  guint GSEAL (reorderable)         : 1;
-  guint GSEAL (use_resized_width)   : 1;
-  guint GSEAL (expand)              : 1;
+  GtkTreeViewColumnPrivate *priv;
 };
 
 struct _GtkTreeViewColumnClass
@@ -147,6 +105,7 @@ struct _GtkTreeViewColumnClass
 
 GType                   gtk_tree_view_column_get_type            (void) G_GNUC_CONST;
 GtkTreeViewColumn      *gtk_tree_view_column_new                 (void);
+GtkTreeViewColumn      *gtk_tree_view_column_new_with_area       (GtkCellArea             *area);
 GtkTreeViewColumn      *gtk_tree_view_column_new_with_attributes (const gchar             *title,
 								  GtkCellRenderer         *cell,
 								  ...) G_GNUC_NULL_TERMINATED;
@@ -252,10 +211,11 @@ void                    gtk_tree_view_column_focus_cell          (GtkTreeViewCol
 								  GtkCellRenderer         *cell);
 gboolean                gtk_tree_view_column_cell_get_position   (GtkTreeViewColumn       *tree_column,
 					                          GtkCellRenderer         *cell_renderer,
-					                          gint                    *start_pos,
+					                          gint                    *x_offset,
 					                          gint                    *width);
 void                    gtk_tree_view_column_queue_resize        (GtkTreeViewColumn       *tree_column);
 GtkWidget              *gtk_tree_view_column_get_tree_view       (GtkTreeViewColumn       *tree_column);
+GtkWidget              *gtk_tree_view_column_get_button          (GtkTreeViewColumn       *tree_column);
 
 
 G_END_DECLS

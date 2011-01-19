@@ -65,8 +65,8 @@ create_stock_icon_store (void)
     {
       if (stock_id[i])
 	{
-	  pixbuf = gtk_widget_render_icon (cellview, stock_id[i],
-					   GTK_ICON_SIZE_BUTTON, NULL);
+	  pixbuf = gtk_widget_render_icon_pixbuf (cellview, stock_id[i],
+					          GTK_ICON_SIZE_BUTTON);
 	  gtk_stock_lookup (stock_id[i], &item);
 	  label = strip_underscore (item.label);
 	  gtk_list_store_append (store, &iter);

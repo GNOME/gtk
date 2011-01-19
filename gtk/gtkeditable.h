@@ -51,8 +51,8 @@ struct _GtkEditableInterface
 
   /* signals */
   void (* insert_text)              (GtkEditable    *editable,
-				     const gchar    *text,
-				     gint            length,
+				     const gchar    *new_text,
+				     gint            new_text_length,
 				     gint           *position);
   void (* delete_text)              (GtkEditable    *editable,
 				     gint            start_pos,
@@ -61,8 +61,8 @@ struct _GtkEditableInterface
 
   /* vtable */
   void (* do_insert_text)           (GtkEditable    *editable,
-				     const gchar    *text,
-				     gint            length,
+				     const gchar    *new_text,
+				     gint            new_text_length,
 				     gint           *position);
   void (* do_delete_text)           (GtkEditable    *editable,
 				     gint            start_pos,

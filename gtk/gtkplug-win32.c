@@ -29,6 +29,7 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkplugprivate.h"
+#include "gtkwindowprivate.h"
 #include "gtkdebug.h"
 
 #include "win32/gdkwin32.h"
@@ -211,7 +212,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 	      /* Start of embedding protocol */
 
 	      GTK_NOTE (PLUGSOCKET, g_printerr ("start of embedding\n"));
-	      priv->socket_window = gdk_window_lookup_for_display (display, (GdkNativeWindow) parent);
+	      priv->socket_window = gdk_win32_window_lookup_for_display (display, (GdkNativeWindow) parent);
 	      if (priv->socket_window)
 		{
 		  gpointer user_data = NULL;
@@ -230,7 +231,7 @@ _gtk_plug_windowing_filter_func (GdkXEvent *gdk_xevent,
 		}
 	      else
 		{
-		  priv->socket_window = gdk_window_foreign_new_for_display (display, (GdkNativeWindow) parent);
+		  priv->socket_window = gdk_win32_window_foreign_new_for_display (display, (GdkNativeWindow) parent);
 		  if (!priv->socket_window) /* Already gone */
 		    break;
 		}

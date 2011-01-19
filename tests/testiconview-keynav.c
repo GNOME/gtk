@@ -209,20 +209,28 @@ focus_in (GtkWidget     *view,
   return FALSE;
 }
 
+#define CSS \
+  "GtkWindow {\n" \
+  "  background-color: @base_color;\n" \
+  "}\n"
+
 static void
-header_style_set (GtkWidget *widget,
-                  GtkStyle  *old_style)
+set_styles (void)
 {
-  GtkStyle *style;
+  GtkCssProvider *provider;
+  GdkScreen *screen;
 
-  style = gtk_widget_get_style (widget);
+  provider = gtk_css_provider_new ();
 
-  g_signal_handlers_block_by_func (widget, header_style_set, NULL);
-  gtk_widget_modify_bg (widget, GTK_STATE_NORMAL,
-                        &style->base[GTK_STATE_NORMAL]);
-  gtk_widget_modify_fg (widget, GTK_STATE_NORMAL,
-                        &style->text[GTK_STATE_NORMAL]);
-  g_signal_handlers_unblock_by_func (widget, header_style_set, NULL);
+  if (!gtk_css_provider_load_from_data (provider, CSS, -1, NULL))
+    {
+      g_assert_not_reached ();
+    }
+
+  screen = gdk_display_get_default_screen (gdk_display_get_default ());
+
+  gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 }
 
 int
@@ -233,6 +241,8 @@ main (int argc, char *argv[])
   Views views;
 
   gtk_init (&argc, &argv);
+
+  set_styles ();
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -263,12 +273,6 @@ main (int argc, char *argv[])
                     G_CALLBACK (focus_in), NULL);
   g_signal_connect (views.view2, "focus-out-event",
                     G_CALLBACK (focus_out), NULL);
-  g_signal_connect (views.header1, "style-set",
-                    G_CALLBACK (header_style_set), NULL);
-  g_signal_connect (views.header2, "style-set",
-                    G_CALLBACK (header_style_set), NULL);
-  g_signal_connect (window, "style-set",
-                    G_CALLBACK (header_style_set), NULL);
 
   gtk_container_add (GTK_CONTAINER (vbox), views.header1);
   gtk_container_add (GTK_CONTAINER (vbox), views.view1);

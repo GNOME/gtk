@@ -45,8 +45,7 @@ enum {
 
 static void gtk_invisible_destroy       (GtkWidget         *widget);
 static void gtk_invisible_realize       (GtkWidget         *widget);
-static void gtk_invisible_style_set     (GtkWidget         *widget,
-					 GtkStyle          *previous_style);
+static void gtk_invisible_style_updated (GtkWidget         *widget);
 static void gtk_invisible_show          (GtkWidget         *widget);
 static void gtk_invisible_size_allocate (GtkWidget         *widget,
 					 GtkAllocation     *allocation);
@@ -75,7 +74,7 @@ gtk_invisible_class_init (GtkInvisibleClass *class)
   gobject_class = (GObjectClass*) class;
 
   widget_class->realize = gtk_invisible_realize;
-  widget_class->style_set = gtk_invisible_style_set;
+  widget_class->style_updated = gtk_invisible_style_updated;
   widget_class->show = gtk_invisible_show;
   widget_class->size_allocate = gtk_invisible_size_allocate;
   widget_class->destroy = gtk_invisible_destroy;
@@ -250,13 +249,10 @@ gtk_invisible_realize (GtkWidget *widget)
   window = gdk_window_new (parent, &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
   gdk_window_set_user_data (window, widget);
-
-  gtk_widget_style_attach (widget);
 }
 
 static void
-gtk_invisible_style_set (GtkWidget *widget,
-			 GtkStyle  *previous_style)
+gtk_invisible_style_updated (GtkWidget *widget)
 {
   /* Don't chain up to parent implementation */
 }

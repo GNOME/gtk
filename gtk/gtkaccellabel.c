@@ -37,8 +37,6 @@
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
-#include <gdk/gdkkeysyms.h>
-
 /**
  * SECTION:gtkaccellabel
  * @Short_description: A label which displays an accelerator key on the right of the text
@@ -392,6 +390,7 @@ gtk_accel_label_draw (GtkWidget *widget,
 
   if (allocation.width >= requisition.width + ac_width)
     {
+      GtkStyleContext *context;
       PangoLayout *label_layout;
       PangoLayout *accel_layout;
       GtkLabel *label = GTK_LABEL (widget);
@@ -400,6 +399,7 @@ gtk_accel_label_draw (GtkWidget *widget,
       gint y;
       gint xpad;
 
+      context = gtk_widget_get_style_context (widget);
       label_layout = gtk_label_get_layout (GTK_LABEL (accel_label));
 
       cairo_save (cr);
@@ -440,14 +440,12 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
 
-      gtk_paint_layout (gtk_widget_get_style (widget),
-                        cr,
-                        gtk_widget_get_state (widget),
-                        FALSE,
-                        widget,
-                        "accellabel",
-                        x, y,
-                        accel_layout);                            
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_ACCELERATOR);
+      gtk_style_context_set_state (context, gtk_widget_get_state_flags (widget));
+
+      gtk_render_layout (context, cr, x, y, accel_layout);
+      gtk_style_context_restore (context);
 
       g_object_unref (accel_layout);
     }

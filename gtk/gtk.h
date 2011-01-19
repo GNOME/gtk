@@ -57,6 +57,9 @@
 #include <gtk/gtkbuilder.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkcalendar.h>
+#include <gtk/gtkcellarea.h>
+#include <gtk/gtkcellareabox.h>
+#include <gtk/gtkcellareacontext.h>
 #include <gtk/gtkcelleditable.h>
 #include <gtk/gtkcelllayout.h>
 #include <gtk/gtkcellrenderer.h>
@@ -134,6 +137,7 @@
 #include <gtk/gtkmodules.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
+#include <gtk/gtknumerableicon.h>
 #include <gtk/gtkoffscreenwindow.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkpagesetup.h>
@@ -185,6 +189,7 @@
 #include <gtk/gtksymboliccolor.h>
 #include <gtk/gtktable.h>
 #include <gtk/gtktearoffmenuitem.h>
+#include <gtk/gtktextattributes.h>
 #include <gtk/gtktextbuffer.h>
 #include <gtk/gtktextbufferrichtext.h>
 #include <gtk/gtktextchild.h>
@@ -214,7 +219,7 @@
 #include <gtk/gtktreestore.h>
 #include <gtk/gtktreeview.h>
 #include <gtk/gtktreeviewcolumn.h>
-#include <gtk/gtktypeutils.h>
+#include <gtk/gtktypebuiltins.h>
 #include <gtk/gtkuimanager.h>
 #include <gtk/gtkvbbox.h>
 #include <gtk/gtkvbox.h>

@@ -375,6 +375,9 @@ struct _GtkWidgetClass
 				    GtkSelectionData   *selection_data,
 				    guint               info,
 				    guint               time_);
+  gboolean (* drag_failed)         (GtkWidget          *widget,
+                                    GdkDragContext     *context,
+                                    GtkDragResult       result);
 
   /* Signals used only for keybindings */
   gboolean (* popup_menu)          (GtkWidget          *widget);
@@ -415,6 +418,7 @@ struct _GtkWidgetClass
                                            gint              *natural_size);
   void         (* adjust_size_allocation) (GtkWidget         *widget,
                                            GtkOrientation     orientation,
+                                           gint              *minimum_size,
                                            gint              *natural_size,
                                            gint              *allocated_pos,
                                            gint              *allocated_size);
@@ -670,10 +674,13 @@ void	   gtk_widget_set_device_events	  (GtkWidget	       *widget,
 void       gtk_widget_add_device_events   (GtkWidget           *widget,
                                            GdkDevice           *device,
 					   GdkEventMask         events);
-void	   gtk_widget_set_extension_events (GtkWidget		*widget,
-					    GdkExtensionMode	mode);
 
-GdkExtensionMode gtk_widget_get_extension_events (GtkWidget	*widget);
+void       gtk_widget_set_device_enabled  (GtkWidget    *widget,
+                                           GdkDevice    *device,
+                                           gboolean      enabled);
+gboolean   gtk_widget_get_device_enabled  (GtkWidget    *widget,
+                                           GdkDevice    *device);
+
 GtkWidget*   gtk_widget_get_toplevel	(GtkWidget	*widget);
 GtkWidget*   gtk_widget_get_ancestor	(GtkWidget	*widget,
 					 GType		 widget_type);
@@ -777,10 +784,9 @@ void         gtk_widget_override_cursor           (GtkWidget       *widget,
                                                    const GdkRGBA   *cursor,
                                                    const GdkRGBA   *secondary_cursor);
 
+#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 
 void        gtk_widget_style_attach               (GtkWidget     *widget);
-
-#if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 
 /* Widget styles.
  */
@@ -830,6 +836,10 @@ void	     gtk_widget_class_path	   (GtkWidget *widget,
 					    gchar    **path,
 					    gchar    **path_reversed);
 
+GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
+                                               const gchar *stock_id,
+                                               GtkIconSize  size,
+                                               const gchar *detail);
 #endif  /* GTK_DISABLE_DEPRECATED */
 
 PangoContext *gtk_widget_create_pango_context (GtkWidget   *widget);
@@ -837,10 +847,9 @@ PangoContext *gtk_widget_get_pango_context    (GtkWidget   *widget);
 PangoLayout  *gtk_widget_create_pango_layout  (GtkWidget   *widget,
 					       const gchar *text);
 
-GdkPixbuf    *gtk_widget_render_icon          (GtkWidget   *widget,
+GdkPixbuf    *gtk_widget_render_icon_pixbuf   (GtkWidget   *widget,
                                                const gchar *stock_id,
-                                               GtkIconSize  size,
-                                               const gchar *detail);
+                                               GtkIconSize  size);
 
 /* handle composite names for GTK_COMPOSITE_CHILD widgets,
  * the returned name is newly allocated.
@@ -895,9 +904,6 @@ void	     gtk_widget_shape_combine_region (GtkWidget *widget,
                                               cairo_region_t *region);
 void	     gtk_widget_input_shape_combine_region (GtkWidget *widget,
                                                     cairo_region_t *region);
-
-/* internal function */
-void	     gtk_widget_reset_shapes	   (GtkWidget *widget);
 
 GList* gtk_widget_list_mnemonic_labels  (GtkWidget *widget);
 void   gtk_widget_add_mnemonic_label    (GtkWidget *widget,

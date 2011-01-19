@@ -263,7 +263,6 @@
 #include "config.h"
 #include "gtkactivatable.h"
 #include "gtkactiongroup.h"
-#include "gtktypeutils.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 

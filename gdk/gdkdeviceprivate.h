@@ -20,8 +20,9 @@
 #ifndef __GDK_DEVICE_PRIVATE_H__
 #define __GDK_DEVICE_PRIVATE_H__
 
-#include <gdk/gdkdevice.h>
-#include <gdk/gdkevents.h>
+#include "gdkdevice.h"
+#include "gdkdevicemanager.h"
+#include "gdkevents.h"
 
 G_BEGIN_DECLS
 
@@ -30,22 +31,50 @@ G_BEGIN_DECLS
 #define GDK_DEVICE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_DEVICE, GdkDeviceClass))
 
 typedef struct _GdkDeviceClass GdkDeviceClass;
+typedef struct _GdkDeviceKey GdkDeviceKey;
+
+struct _GdkDeviceKey
+{
+  guint keyval;
+  GdkModifierType modifiers;
+};
+
+struct _GdkDevice
+{
+  GObject parent_instance;
+
+  gchar *name;
+  GdkInputSource source;
+  GdkInputMode mode;
+  gboolean has_cursor;
+  gint num_keys;
+  GdkDeviceKey *keys;
+  GdkDeviceManager *manager;
+  GdkDisplay *display;
+  /* Paired master for master,
+   * associated master for slaves
+   */
+  GdkDevice *associated;
+  GList *slaves;
+  GdkDeviceType type;
+  GArray *axes;
+};
 
 struct _GdkDeviceClass
 {
   GObjectClass parent_class;
 
-  gboolean (* get_history) (GdkDevice      *device,
-                            GdkWindow      *window,
-                            guint32         start,
-                            guint32         stop,
-                            GdkTimeCoord ***events,
-                            gint           *n_events);
+  gboolean (* get_history)   (GdkDevice      *device,
+                              GdkWindow      *window,
+                              guint32         start,
+                              guint32         stop,
+                              GdkTimeCoord ***events,
+                              gint           *n_events);
 
-  void (* get_state) (GdkDevice       *device,
-                      GdkWindow       *window,
-                      gdouble         *axes,
-                      GdkModifierType *mask);
+  void (* get_state)         (GdkDevice       *device,
+                              GdkWindow       *window,
+                              gdouble         *axes,
+                              GdkModifierType *mask);
 
   void (* set_window_cursor) (GdkDevice *device,
                               GdkWindow *window,
@@ -55,10 +84,10 @@ struct _GdkDeviceClass
                               GdkScreen  *screen,
                               gint        x,
                               gint        y);
-  gboolean (* query_state)   (GdkDevice        *device,
-                              GdkWindow        *window,
-                              GdkWindow       **root_window,
-                              GdkWindow       **child_window,
+  gboolean (* query_state)   (GdkDevice       *device,
+                              GdkWindow       *window,
+                              GdkWindow      **root_window,
+                              GdkWindow      **child_window,
                               gint             *root_x,
                               gint             *root_y,
                               gint             *win_x,
@@ -123,8 +152,24 @@ gboolean   _gdk_device_translate_axis         (GdkDevice *device,
 GdkTimeCoord ** _gdk_device_allocate_history  (GdkDevice *device,
                                                gint       n_events);
 
-void _gdk_input_check_extension_events (GdkDevice *device);
-
+void _gdk_device_add_slave (GdkDevice *device,
+                            GdkDevice *slave);
+void _gdk_device_remove_slave (GdkDevice *device,
+                               GdkDevice *slave);
+gboolean   _gdk_device_query_state            (GdkDevice        *device,
+                                               GdkWindow        *window,
+                                               GdkWindow       **root_window,
+                                               GdkWindow       **child_window,
+                                               gint             *root_x,
+                                               gint             *root_y,
+                                               gint             *win_x,
+                                               gint             *win_y,
+                                               GdkModifierType  *mask);
+GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
+                                               gint             *win_x,
+                                               gint             *win_y,
+                                               GdkModifierType  *mask,
+                                               gboolean          get_toplevel);
 
 G_END_DECLS
 

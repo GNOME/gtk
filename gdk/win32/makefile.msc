@@ -14,7 +14,7 @@ TOP = ../../..
 WTKIT = $(TOP)\wtkit126
 !ENDIF
 
-GTK_VER=2.0
+GTK_VER=3.0
 
 DEFINES = \
 	-DHAVE_CONFIG_H -DINSIDE_GDK_WIN32 -DGDK_VERSION=\"$(GTK_VER)\" \
@@ -22,7 +22,7 @@ DEFINES = \
 
 INCLUDES = -FImsvc_recommended_pragmas.h \
 	-I. -I.. -I..\.. $(GLIB_CFLAGS) $(PANGO_CFLAGS) $(CAIRO_CFLAGS) \
-	-I$(WTKIT)\include -I$(GLIB) \
+	$(GDK_PIXBUF_CFLAGS) -I$(WTKIT)\include -I$(GLIB) \
 
 all: \
 	..\..\config.h	\
@@ -31,25 +31,22 @@ all: \
 	gdk.res
 
 gdk_win32_OBJECTS = \
-	gdkapplaunchcontext-win32.obj \
 	gdkcursor-win32.obj \
+	gdkdevice-win32.obj \
+	gdkdevice-wintab.obj \
+	gdkdevicemanager-win32.obj \
 	gdkdnd-win32.obj \
 	gdkdisplay-win32.obj \
-	gdkdrawable-win32.obj \
+	gdkdisplaymanager-win32.obj \
 	gdkevents-win32.obj \
-	gdkgc-win32.obj \
 	gdkgeometry-win32.obj \
 	gdkglobals-win32.obj \
-	gdkim-win32.obj \
 	gdkinput.obj \
-	gdkinput-win32.obj \
 	gdkkeys-win32.obj \
 	gdkmain-win32.obj \
 	gdkproperty-win32.obj \
-#	gdkregion-win32.obj \
 	gdkscreen-win32.obj \
 	gdkselection-win32.obj \
-	gdkspawn-win32.obj \
 	gdktestutils-win32.obj \
 	gdkvisual-win32.obj \
 	gdkwin32id.obj \

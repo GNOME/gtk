@@ -22,12 +22,11 @@
 
 #include "config.h"
 
-#include "gdkapplaunchcontext.h"
-
-#include "gdkx.h"
+#include "gdkx11applaunchcontext.h"
+#include "gdkapplaunchcontextprivate.h"
 #include "gdkscreen.h"
-#include "gdkinternals.h"
 #include "gdkintl.h"
+#include "gdkprivate-x11.h"
 
 #include <glib.h>
 #include <gio/gdesktopappinfo.h>
@@ -129,10 +128,10 @@ end_startup_notification (GdkDisplay *display,
  * timeouts. The reason our timeout is dumb is that we don't monitor
  * the sequence (don't use an SnMonitorContext)
  */
-#define STARTUP_TIMEOUT_LENGTH_SECONDS 30 
+#define STARTUP_TIMEOUT_LENGTH_SECONDS 30
 #define STARTUP_TIMEOUT_LENGTH (STARTUP_TIMEOUT_LENGTH_SECONDS * 1000)
 
-typedef struct 
+typedef struct
 {
   GdkDisplay *display;
   char *startup_id;
@@ -149,7 +148,7 @@ free_startup_notification_data (gpointer data)
   g_free (sn_data);
 }
 
-typedef struct 
+typedef struct
 {
   GSList *contexts;
   guint timeout_id;
@@ -258,13 +257,12 @@ add_startup_timeout (GdkScreen  *screen,
 }
 
 
-char *
-_gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
-                                      GAppInfo          *info,
-                                      GList             *files)
+static char *
+gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
+                                                  GAppInfo          *info,
+                                                  GList             *files)
 {
   static int sequence = 0;
-  GdkAppLaunchContextPrivate *priv;
   GdkDisplay *display;
   GdkScreen *screen;
   int files_count;
@@ -278,24 +276,15 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
   guint32 timestamp;
   char *startup_id;
   GFileInfo *fileinfo;
+  GdkAppLaunchContext *ctx;
 
-  priv = GDK_APP_LAUNCH_CONTEXT (context)->priv;
+  ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
-  if (priv->screen)
-    {
-      screen = priv->screen;
-      display = gdk_screen_get_display (priv->screen);
-    }
-  else if (priv->display)
-    {
-      display = priv->display;
-      screen = gdk_display_get_default_screen (display);
-    }
+  display = ctx->display;
+  if (ctx->screen)
+    screen = ctx->screen;
   else
-    {
-      display = gdk_display_get_default ();
-      screen = gdk_display_get_default_screen (display);
-    }
+    screen = gdk_display_get_default_screen (ctx->display);
 
   fileinfo = NULL;
 
@@ -325,14 +314,14 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
                                                 files_count), files_count);
 
   icon_name = NULL;
-  if (priv->icon_name)
-    icon_name = g_strdup (priv->icon_name);
+  if (ctx->icon_name)
+    icon_name = g_strdup (ctx->icon_name);
   else
     {
       icon = NULL;
 
-      if (priv->icon != NULL)
-        icon = g_object_ref (priv->icon);
+      if (ctx->icon != NULL)
+        icon = g_object_ref (ctx->icon);
       else if (files_count == 1)
         icon = get_icon (files->data, fileinfo);
 
@@ -350,13 +339,13 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
 
   binary_name = g_app_info_get_executable (info);
 
-  timestamp = priv->timestamp;
+  timestamp = ctx->timestamp;
   if (timestamp == GDK_CURRENT_TIME)
     timestamp = gdk_x11_display_get_user_time (display);
 
   screen_str = g_strdup_printf ("%d", gdk_screen_get_number (screen));
-  if (priv->workspace > -1)
-    workspace_str = g_strdup_printf ("%d", priv->workspace);
+  if (ctx->workspace > -1)
+    workspace_str = g_strdup_printf ("%d", ctx->workspace);
   else
     workspace_str = NULL;
 
@@ -398,24 +387,22 @@ _gdk_windowing_get_startup_notify_id (GAppLaunchContext *context,
 }
 
 
-void
-_gdk_windowing_launch_failed (GAppLaunchContext *context,
-                              const char        *startup_notify_id)
+static void
+gdk_x11_app_launch_context_launch_failed (GAppLaunchContext *context,
+                                          const gchar       *startup_notify_id)
 {
-  GdkAppLaunchContextPrivate *priv;
+  GdkAppLaunchContext *ctx;
   GdkScreen *screen;
   StartupTimeoutData *data;
   StartupNotificationData *sn_data;
   GSList *l;
 
-  priv = GDK_APP_LAUNCH_CONTEXT (context)->priv;
+  ctx = GDK_APP_LAUNCH_CONTEXT (context);
 
-  if (priv->screen)
-    screen = priv->screen;
-  else if (priv->display)
-    screen = gdk_display_get_default_screen (priv->display);
+  if (ctx->screen)
+    screen = ctx->screen;
   else
-    screen = gdk_display_get_default_screen (gdk_display_get_default ());
+    screen = gdk_display_get_default_screen (ctx->display);
 
   data = g_object_get_data (G_OBJECT (screen), "appinfo-startup-data");
 
@@ -440,4 +427,43 @@ _gdk_windowing_launch_failed (GAppLaunchContext *context,
           data->timeout_id = 0;
         }
     }
+}
+
+struct _GdkX11AppLaunchContext
+{
+  GdkAppLaunchContext parent_instance;
+};
+
+struct _GdkX11AppLaunchContextClass
+{
+  GdkAppLaunchContextClass parent_class;
+};
+
+
+G_DEFINE_TYPE (GdkX11AppLaunchContext, gdk_x11_app_launch_context, GDK_TYPE_APP_LAUNCH_CONTEXT)
+
+static void
+gdk_x11_app_launch_context_class_init (GdkX11AppLaunchContextClass *klass)
+{
+  GAppLaunchContextClass *ctx_class = G_APP_LAUNCH_CONTEXT_CLASS (klass);
+
+  ctx_class->get_startup_notify_id = gdk_x11_app_launch_context_get_startup_notify_id;
+  ctx_class->launch_failed = gdk_x11_app_launch_context_launch_failed;
+}
+
+static void
+gdk_x11_app_launch_context_init (GdkX11AppLaunchContext *ctx)
+{
+}
+
+GdkAppLaunchContext *
+_gdk_x11_display_get_app_launch_context (GdkDisplay *display)
+{
+  GdkAppLaunchContext *ctx;
+
+  ctx = g_object_new (GDK_TYPE_X11_APP_LAUNCH_CONTEXT,
+                      "display", display,
+                      NULL);
+
+  return ctx;
 }

@@ -27,6 +27,9 @@
  *  - Using GtkDialog
  */
 #include <string.h>
+
+#undef GDK_DISABLE_DEPRECATED
+
 #include <gtk/gtk.h>
 #include "demo-common.h"
 
@@ -151,7 +154,7 @@ query_for_toplevel (GdkScreen  *screen,
 	toplevel = NULL;
     }
 
-  gdk_cursor_unref (cursor);
+  g_object_unref (cursor);
   gtk_widget_destroy (popup);
   gdk_flush ();			/* Really release the grab */
 

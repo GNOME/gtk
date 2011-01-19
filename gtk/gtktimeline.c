@@ -76,94 +76,94 @@ static void  gtk_timeline_get_property  (GObject         *object,
                                          guint            prop_id,
                                          GValue          *value,
                                          GParamSpec      *pspec);
-static void  gtk_timeline_finalize      (GObject *object);
+static void  _gtk_timeline_finalize     (GObject *object);
 
 
-G_DEFINE_TYPE (GtkTimeline, gtk_timeline, G_TYPE_OBJECT)
+G_DEFINE_TYPE (GtkTimeline, _gtk_timeline, G_TYPE_OBJECT)
 
 
 static void
-gtk_timeline_class_init (GtkTimelineClass *klass)
+_gtk_timeline_class_init (GtkTimelineClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->set_property = gtk_timeline_set_property;
   object_class->get_property = gtk_timeline_get_property;
-  object_class->finalize = gtk_timeline_finalize;
+  object_class->finalize = _gtk_timeline_finalize;
 
   g_object_class_install_property (object_class,
-				   PROP_FPS,
-				   g_param_spec_uint ("fps",
-						      "FPS",
-						      "Frames per second for the timeline",
-						      1, G_MAXUINT,
-						      DEFAULT_FPS,
-						      G_PARAM_READWRITE));
+                                   PROP_FPS,
+                                   g_param_spec_uint ("fps",
+                                                      "FPS",
+                                                      "Frames per second for the timeline",
+                                                      1, G_MAXUINT,
+                                                      DEFAULT_FPS,
+                                                      G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
-				   PROP_DURATION,
-				   g_param_spec_uint ("duration",
-						      "Animation Duration",
-						      "Animation Duration",
-						      0, G_MAXUINT,
-						      0,
-						      G_PARAM_READWRITE));
+                                   PROP_DURATION,
+                                   g_param_spec_uint ("duration",
+                                                      "Animation Duration",
+                                                      "Animation Duration",
+                                                      0, G_MAXUINT,
+                                                      0,
+                                                      G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
-				   PROP_LOOP,
-				   g_param_spec_boolean ("loop",
-							 "Loop",
-							 "Whether the timeline loops or not",
-							 FALSE,
-							 G_PARAM_READWRITE));
+                                   PROP_LOOP,
+                                   g_param_spec_boolean ("loop",
+                                                         "Loop",
+                                                         "Whether the timeline loops or not",
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
   g_object_class_install_property (object_class,
-				   PROP_SCREEN,
-				   g_param_spec_object ("screen",
-							"Screen",
-							"Screen to get the settings from",
-							GDK_TYPE_SCREEN,
-							G_PARAM_READWRITE));
+                                   PROP_SCREEN,
+                                   g_param_spec_object ("screen",
+                                                        "Screen",
+                                                        "Screen to get the settings from",
+                                                        GDK_TYPE_SCREEN,
+                                                        G_PARAM_READWRITE));
 
   signals[STARTED] =
     g_signal_new ("started",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkTimelineClass, started),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTimelineClass, started),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   signals[PAUSED] =
     g_signal_new ("paused",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkTimelineClass, paused),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTimelineClass, paused),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   signals[FINISHED] =
     g_signal_new ("finished",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkTimelineClass, finished),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTimelineClass, finished),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
 
   signals[FRAME] =
     g_signal_new ("frame",
-		  G_TYPE_FROM_CLASS (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkTimelineClass, frame),
-		  NULL, NULL,
-		  g_cclosure_marshal_VOID__DOUBLE,
-		  G_TYPE_NONE, 1,
-		  G_TYPE_DOUBLE);
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTimelineClass, frame),
+                  NULL, NULL,
+                  g_cclosure_marshal_VOID__DOUBLE,
+                  G_TYPE_NONE, 1,
+                  G_TYPE_DOUBLE);
 
   g_type_class_add_private (klass, sizeof (GtkTimelinePriv));
 }
 
 static void
-gtk_timeline_init (GtkTimeline *timeline)
+_gtk_timeline_init (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -194,20 +194,20 @@ gtk_timeline_set_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_FPS:
-      gtk_timeline_set_fps (timeline, g_value_get_uint (value));
+      _gtk_timeline_set_fps (timeline, g_value_get_uint (value));
       break;
     case PROP_DURATION:
-      gtk_timeline_set_duration (timeline, g_value_get_uint (value));
+      _gtk_timeline_set_duration (timeline, g_value_get_uint (value));
       break;
     case PROP_LOOP:
-      gtk_timeline_set_loop (timeline, g_value_get_boolean (value));
+      _gtk_timeline_set_loop (timeline, g_value_get_boolean (value));
       break;
     case PROP_DIRECTION:
-      gtk_timeline_set_direction (timeline, g_value_get_enum (value));
+      _gtk_timeline_set_direction (timeline, g_value_get_enum (value));
       break;
     case PROP_SCREEN:
-      gtk_timeline_set_screen (timeline,
-                               GDK_SCREEN (g_value_get_object (value)));
+      _gtk_timeline_set_screen (timeline,
+                                GDK_SCREEN (g_value_get_object (value)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -249,7 +249,7 @@ gtk_timeline_get_property (GObject    *object,
 }
 
 static void
-gtk_timeline_finalize (GObject *object)
+_gtk_timeline_finalize (GObject *object)
 {
   GtkTimelinePriv *priv;
   GtkTimeline *timeline;
@@ -266,10 +266,10 @@ gtk_timeline_finalize (GObject *object)
   if (priv->timer)
     g_timer_destroy (priv->timer);
 
-  G_OBJECT_CLASS (gtk_timeline_parent_class)->finalize (object);
+  G_OBJECT_CLASS (_gtk_timeline_parent_class)->finalize (object);
 }
 
-gdouble
+static gdouble
 calculate_progress (gdouble                 linear_progress,
                     GtkTimelineProgressType progress_type)
 {
@@ -291,7 +291,7 @@ calculate_progress (gdouble                 linear_progress,
 
       break;
     case GTK_TIMELINE_PROGRESS_EASE:
-      progress = (sinf ((progress - 0.5) * G_PI) + 1) / 2;
+      progress = (sin ((progress - 0.5) * G_PI) + 1) / 2;
       break;
     case GTK_TIMELINE_PROGRESS_EASE_IN:
       progress = pow (progress, 3);
@@ -324,9 +324,9 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
       progress = priv->last_progress;
 
       if (priv->direction == GTK_TIMELINE_DIRECTION_BACKWARD)
-	progress -= delta_progress;
+        progress -= delta_progress;
       else
-	progress += delta_progress;
+        progress += delta_progress;
 
       priv->last_progress = progress;
 
@@ -343,18 +343,18 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
       (priv->direction == GTK_TIMELINE_DIRECTION_BACKWARD && progress == 0.0))
     {
       if (!priv->loop)
-	{
-	  if (priv->source_id)
-	    {
-	      g_source_remove (priv->source_id);
-	      priv->source_id = 0;
-	    }
+        {
+          if (priv->source_id)
+            {
+              g_source_remove (priv->source_id);
+              priv->source_id = 0;
+            }
           g_timer_stop (priv->timer);
-	  g_signal_emit (timeline, signals [FINISHED], 0);
-	  return FALSE;
-	}
+          g_signal_emit (timeline, signals [FINISHED], 0);
+          return FALSE;
+        }
       else
-	gtk_timeline_rewind (timeline);
+        _gtk_timeline_rewind (timeline);
     }
 
   return TRUE;
@@ -369,21 +369,21 @@ gtk_timeline_run_frame (GtkTimeline *timeline)
  * Return Value: the newly created #GtkTimeline
  **/
 GtkTimeline *
-gtk_timeline_new (guint duration)
+_gtk_timeline_new (guint duration)
 {
   return g_object_new (GTK_TYPE_TIMELINE,
-		       "duration", duration,
-		       NULL);
+                       "duration", duration,
+                       NULL);
 }
 
 GtkTimeline *
-gtk_timeline_new_for_screen (guint      duration,
-                             GdkScreen *screen)
+_gtk_timeline_new_for_screen (guint      duration,
+                              GdkScreen *screen)
 {
   return g_object_new (GTK_TYPE_TIMELINE,
-		       "duration", duration,
-		       "screen", screen,
-		       NULL);
+                       "duration", duration,
+                       "screen", screen,
+                       NULL);
 }
 
 /**
@@ -393,7 +393,7 @@ gtk_timeline_new_for_screen (guint      duration,
  * Runs the timeline from the current frame.
  **/
 void
-gtk_timeline_start (GtkTimeline *timeline)
+_gtk_timeline_start (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
   GtkSettings *settings;
@@ -440,7 +440,7 @@ gtk_timeline_start (GtkTimeline *timeline)
  * Pauses the timeline.
  **/
 void
-gtk_timeline_pause (GtkTimeline *timeline)
+_gtk_timeline_pause (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -464,7 +464,7 @@ gtk_timeline_pause (GtkTimeline *timeline)
  * Rewinds the timeline.
  **/
 void
-gtk_timeline_rewind (GtkTimeline *timeline)
+_gtk_timeline_rewind (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -472,7 +472,7 @@ gtk_timeline_rewind (GtkTimeline *timeline)
 
   priv = timeline->priv;
 
-  if (gtk_timeline_get_direction(timeline) != GTK_TIMELINE_DIRECTION_FORWARD)
+  if (_gtk_timeline_get_direction (timeline) != GTK_TIMELINE_DIRECTION_FORWARD)
     priv->progress = priv->last_progress = 1.;
   else
     priv->progress = priv->last_progress = 0.;
@@ -496,7 +496,7 @@ gtk_timeline_rewind (GtkTimeline *timeline)
  * Return Value: %TRUE if the timeline is running
  **/
 gboolean
-gtk_timeline_is_running (GtkTimeline *timeline)
+_gtk_timeline_is_running (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -516,7 +516,7 @@ gtk_timeline_is_running (GtkTimeline *timeline)
  * Return Value: frames per second
  **/
 guint
-gtk_timeline_get_fps (GtkTimeline *timeline)
+_gtk_timeline_get_fps (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -535,7 +535,7 @@ gtk_timeline_get_fps (GtkTimeline *timeline)
  * the timeline will play.
  **/
 void
-gtk_timeline_set_fps (GtkTimeline *timeline,
+_gtk_timeline_set_fps (GtkTimeline *timeline,
                       guint        fps)
 {
   GtkTimelinePriv *priv;
@@ -547,12 +547,12 @@ gtk_timeline_set_fps (GtkTimeline *timeline,
 
   priv->fps = fps;
 
-  if (gtk_timeline_is_running (timeline))
+  if (_gtk_timeline_is_running (timeline))
     {
       g_source_remove (priv->source_id);
       priv->source_id = gdk_threads_add_timeout (FRAME_INTERVAL (priv->fps),
-						 (GSourceFunc) gtk_timeline_run_frame,
-						 timeline);
+                                                 (GSourceFunc) gtk_timeline_run_frame,
+                                                 timeline);
     }
 
   g_object_notify (G_OBJECT (timeline), "fps");
@@ -568,7 +568,7 @@ gtk_timeline_set_fps (GtkTimeline *timeline,
  * Return Value: %TRUE if the timeline loops
  **/
 gboolean
-gtk_timeline_get_loop (GtkTimeline *timeline)
+_gtk_timeline_get_loop (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -587,8 +587,8 @@ gtk_timeline_get_loop (GtkTimeline *timeline)
  * when it has reached the end.
  **/
 void
-gtk_timeline_set_loop (GtkTimeline *timeline,
-                       gboolean     loop)
+_gtk_timeline_set_loop (GtkTimeline *timeline,
+                        gboolean     loop)
 {
   GtkTimelinePriv *priv;
 
@@ -604,8 +604,8 @@ gtk_timeline_set_loop (GtkTimeline *timeline,
 }
 
 void
-gtk_timeline_set_duration (GtkTimeline *timeline,
-                           guint        duration)
+_gtk_timeline_set_duration (GtkTimeline *timeline,
+                            guint        duration)
 {
   GtkTimelinePriv *priv;
 
@@ -621,7 +621,7 @@ gtk_timeline_set_duration (GtkTimeline *timeline,
 }
 
 guint
-gtk_timeline_get_duration (GtkTimeline *timeline)
+_gtk_timeline_get_duration (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -640,8 +640,8 @@ gtk_timeline_get_duration (GtkTimeline *timeline)
  * Sets the direction of the timeline.
  **/
 void
-gtk_timeline_set_direction (GtkTimeline          *timeline,
-                            GtkTimelineDirection  direction)
+_gtk_timeline_set_direction (GtkTimeline          *timeline,
+                             GtkTimelineDirection  direction)
 {
   GtkTimelinePriv *priv;
 
@@ -660,7 +660,7 @@ gtk_timeline_set_direction (GtkTimeline          *timeline,
  * Return Value: direction
  **/
 GtkTimelineDirection
-gtk_timeline_get_direction (GtkTimeline *timeline)
+_gtk_timeline_get_direction (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -671,8 +671,8 @@ gtk_timeline_get_direction (GtkTimeline *timeline)
 }
 
 void
-gtk_timeline_set_screen (GtkTimeline *timeline,
-                         GdkScreen   *screen)
+_gtk_timeline_set_screen (GtkTimeline *timeline,
+                          GdkScreen   *screen)
 {
   GtkTimelinePriv *priv;
 
@@ -690,7 +690,7 @@ gtk_timeline_set_screen (GtkTimeline *timeline,
 }
 
 GdkScreen *
-gtk_timeline_get_screen (GtkTimeline *timeline)
+_gtk_timeline_get_screen (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -701,7 +701,7 @@ gtk_timeline_get_screen (GtkTimeline *timeline)
 }
 
 gdouble
-gtk_timeline_get_progress (GtkTimeline *timeline)
+_gtk_timeline_get_progress (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -712,7 +712,7 @@ gtk_timeline_get_progress (GtkTimeline *timeline)
 }
 
 GtkTimelineProgressType
-gtk_timeline_get_progress_type (GtkTimeline *timeline)
+_gtk_timeline_get_progress_type (GtkTimeline *timeline)
 {
   GtkTimelinePriv *priv;
 
@@ -723,8 +723,8 @@ gtk_timeline_get_progress_type (GtkTimeline *timeline)
 }
 
 void
-gtk_timeline_set_progress_type (GtkTimeline             *timeline,
-                                GtkTimelineProgressType  progress_type)
+_gtk_timeline_set_progress_type (GtkTimeline             *timeline,
+                                 GtkTimelineProgressType  progress_type)
 {
   GtkTimelinePriv *priv;
 

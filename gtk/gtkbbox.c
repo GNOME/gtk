@@ -49,9 +49,9 @@
 #include "gtkbbox.h"
 
 #include "gtkorientable.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtksizerequest.h"
-#include "gtktypeutils.h"
 
 #include "gtkintl.h"
 

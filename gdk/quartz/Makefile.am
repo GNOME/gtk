@@ -1,6 +1,7 @@
 include $(top_srcdir)/Makefile.decl
 
 libgdkincludedir = $(includedir)/gtk-3.0/gdk
+libgdkquartzincludedir = $(includedir)/gtk-3.0/gdk/quartz
 
 INCLUDES = 				\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
@@ -19,33 +20,28 @@ noinst_LTLIBRARIES = libgdk-quartz.la
 libgdk_quartz_la_SOURCES =    	\
 	GdkQuartzView.c		\
 	GdkQuartzView.h		\
-	GdkQuartzWindow.c	\
-	GdkQuartzWindow.h	\
-	gdkapplaunchcontext-quartz.c \
+	GdkQuartzNSWindow.c	\
+	GdkQuartzNSWindow.h	\
 	gdkcursor-quartz.c	\
-	gdkdevice-core.c	\
-	gdkdevicemanager-core.c	\
+	gdkdevice-core-quartz.c	\
+	gdkdevicemanager-core-quartz.c	\
+	gdkdevicemanager-core-quartz.h	\
 	gdkdisplay-quartz.c	\
+	gdkdisplaymanager-quartz.c	\
 	gdkdnd-quartz.c		\
-	gdkdrawable-quartz.c	\
-	gdkdrawable-quartz.h	\
+	gdkdnd-quartz.h		\
 	gdkevents-quartz.c	\
 	gdkeventloop-quartz.c	\
-	gdkgeometry-quartz.c	\
 	gdkglobals-quartz.c	\
-	gdkim-quartz.c		\
-	gdkinput.c		\
-	gdkinputprivate.h	\
 	gdkkeys-quartz.c	\
-	gdkmain-quartz.c	\
 	gdkprivate-quartz.h	\
 	gdkproperty-quartz.c	\
 	gdkquartz.h		\
 	gdkscreen-quartz.c	\
 	gdkscreen-quartz.h	\
 	gdkselection-quartz.c	\
-	gdkspawn-quartz.c	\
 	gdktestutils-quartz.c	\
+	gdkutils-quartz.c	\
 	gdkvisual-quartz.c	\
 	gdkwindow-quartz.c	\
 	gdkwindow-quartz.h	\
@@ -53,6 +49,19 @@ libgdk_quartz_la_SOURCES =    	\
 
 libgdkinclude_HEADERS = 	\
 	gdkquartz.h
+
+libgdkquartzinclude_HEADERS =		\
+	gdkquartzcursor.h		\
+	gdkquartzdevice-core.h		\
+	gdkquartzdevicemanager-core.h	\
+	gdkquartzdisplay.h		\
+	gdkquartzdisplaymanager.h	\
+	gdkquartzdnd.h			\
+	gdkquartzkeys.h			\
+	gdkquartzscreen.h		\
+	gdkquartzutils.h		\
+	gdkquartzvisual.h		\
+	gdkquartzwindow.h
 
 
 -include $(top_srcdir)/git.mk

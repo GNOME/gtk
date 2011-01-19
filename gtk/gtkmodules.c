@@ -312,7 +312,7 @@ load_module (GSList      *module_list,
 		      gtk_modules = g_slist_append (gtk_modules, info);
 		      
 		      /* display_init == NULL indicates a non-multihead aware module.
-		       * For these, we delay the call to init_func until first display is 
+		       * For these, we delay the call to init_func until first display is
 		       * opened, see default_display_notify_cb().
 		       * For multihead aware modules, we call init_func immediately,
 		       * and also call display_init_func on all opened displays.

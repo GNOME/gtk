@@ -525,25 +525,27 @@ test_printer_prepare_for_print (GtkPrinter       *printer,
 {
   gdouble scale;
 
-  print_job->print_pages = gtk_print_settings_get_print_pages (settings);
-  print_job->page_ranges = NULL;
-  print_job->num_page_ranges = 0;
+  gtk_print_job_set_pages (print_job, gtk_print_settings_get_print_pages (settings));
+  gtk_print_job_set_page_ranges (print_job, NULL, 0);
   
-  if (print_job->print_pages == GTK_PRINT_PAGES_RANGES)
-    print_job->page_ranges =
-      gtk_print_settings_get_page_ranges (settings,
-					  &print_job->num_page_ranges);
-  
-  print_job->collate = gtk_print_settings_get_collate (settings);
-  print_job->reverse = gtk_print_settings_get_reverse (settings);
-  print_job->num_copies = gtk_print_settings_get_n_copies (settings);
+  if (gtk_print_job_get_pages (print_job) == GTK_PRINT_PAGES_RANGES)
+    {
+      GtkPageRange *page_ranges;
+      gint num_page_ranges;
+      page_ranges = gtk_print_settings_get_page_ranges (settings, &num_page_ranges);
+      gtk_print_job_set_page_ranges (print_job, page_ranges, num_page_ranges);
+    }
+
+  gtk_print_job_set_collate (print_job, gtk_print_settings_get_collate (settings));
+  gtk_print_job_set_reverse (print_job, gtk_print_settings_get_reverse (settings));
+  gtk_print_job_set_num_copies (print_job, gtk_print_settings_get_n_copies (settings));
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)
-    print_job->scale = scale/100.0;
+    gtk_print_job_set_scale (print_job, scale/100.0);
 
-  print_job->page_set = gtk_print_settings_get_page_set (settings);
-  print_job->rotate_to_orientation = TRUE;
+  gtk_print_job_set_page_set (print_job, gtk_print_settings_get_page_set (settings));
+  gtk_print_job_set_rotate (print_job, TRUE);
 }
 
 static gboolean

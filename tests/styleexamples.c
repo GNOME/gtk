@@ -97,24 +97,17 @@ draw_cb_expanders (GtkWidget *widget, cairo_t *cr)
 static gboolean
 draw_cb_background (GtkWidget *widget, cairo_t *cr)
 {
-  GtkStyleProvider *provider;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
 
-  provider = (GtkStyleProvider *)gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   "* {\n"
-                                   "   border-radius: 10;\n"
-                                   "   border-width: 0;\n"
-                                   "   background-image: -gtk-gradient (linear, left top, right bottom, from(#ff00ff), to(#aabbcc));\n"
-                                   "}\n", -1, NULL);
-  gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  gtk_style_context_add_class (context, "background");
   gtk_style_context_set_junction_sides (context, 0);
   gtk_render_background (context, cr, 12, 12, 100, 100);
-  gtk_style_context_remove_provider (context, provider);
+  gtk_style_context_remove_class (context, "background");
+
   gtk_style_context_restore (context);
 
   return TRUE;
@@ -123,32 +116,11 @@ draw_cb_background (GtkWidget *widget, cairo_t *cr)
 static gboolean
 draw_cb_frame (GtkWidget *widget, cairo_t *cr)
 {
-  GtkStyleProvider *provider;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
-
-  provider = (GtkStyleProvider *)gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   ".frame1 {\n"
-                                   "   border-image: url('gradient1.png') 10 10 10 10 stretch;\n"
-                                   "}\n"
-                                   ".frame2 {\n"
-                                   "   border-style: solid;\n"
-                                   "   border-color: rgb(255,0,0);\n"
-                                   "   border-width: 10;\n"
-                                   "   border-radius: 10;\n"
-                                   "}\n"
-                                   ".frame3 {\n"
-                                   "   border-style: solid;\n"
-                                   "   border-color: rgb(0,0,0);\n"
-                                   "   border-width: 2;\n"
-                                   "   border-radius: 10;\n"
-                                   "}\n",
-                                   -1, NULL);
-  gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   gtk_style_context_add_class (context, "frame1");
   gtk_style_context_set_junction_sides (context, 0);
@@ -166,7 +138,6 @@ draw_cb_frame (GtkWidget *widget, cairo_t *cr)
   gtk_render_frame (context, cr, 68, 74, 56, 50);
   gtk_style_context_remove_class (context, "frame3");
 
-  gtk_style_context_remove_provider (context, provider);
   gtk_style_context_restore (context);
 
   return TRUE;
@@ -269,28 +240,15 @@ static gboolean
 draw_cb_frame_gap (GtkWidget *widget, cairo_t *cr)
 {
   GtkStyleContext *context;
-  GtkStyleProvider *provider;
 
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
 
-  provider = (GtkStyleProvider *)gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
-                                   ".frame {\n"
-                                   "   border-style: solid;\n"
-                                   "   border-width: 1;\n"
-                                   "   border-radius: 0;\n"
-                                   "}\n",
-                                   -1, NULL);
-  gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-
   gtk_style_context_add_class (context, "frame");
   gtk_style_context_set_junction_sides (context, 0);
   gtk_render_frame_gap (context, cr, 12, 12, 50, 50, GTK_POS_TOP, 15, 35);
   gtk_style_context_remove_class (context, "frame");
-
-  gtk_style_context_remove_provider (context, provider);
 
   gtk_style_context_restore (context);
 
@@ -359,6 +317,8 @@ int main (int argc, char *argv[])
 {
   GtkWidget *window;
   GtkWidget *ebox;
+  GtkStyleContext *context;
+  GtkStyleProvider *provider;
 
   gtk_init (&argc, &argv);
 
@@ -373,11 +333,44 @@ int main (int argc, char *argv[])
   gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), TRUE);
   gtk_container_add (GTK_CONTAINER (window), ebox);
   gtk_widget_set_name (ebox, "ebox");
+
+  context = gtk_widget_get_style_context (ebox);
+  provider = (GtkStyleProvider *)gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider),
+                                   ".frame1 {\n"
+                                   "   border-image: url('gradient1.png') 10 10 10 10 stretch;\n"
+                                   "}\n"
+                                   ".frame2 {\n"
+                                   "   border-style: solid;\n"
+                                   "   border-color: rgb(255,0,0);\n"
+                                   "   border-width: 10;\n"
+                                   "   border-radius: 10;\n"
+                                   "}\n"
+                                   ".frame3 {\n"
+                                   "   border-style: solid;\n"
+                                   "   border-color: rgb(0,0,0);\n"
+                                   "   border-width: 2;\n"
+                                   "   border-radius: 10;\n"
+                                   "}\n"
+                                   ".background {\n"
+                                   "   border-radius: 10;\n"
+                                   "   border-width: 0;\n"
+                                   "   background-image: -gtk-gradient (linear, left top, right bottom, from(#ff00ff), to(#aabbcc));\n"
+                                   "}\n"
+                                   ".frame {\n"
+                                   "   border-style: solid;\n"
+                                   "   border-width: 1;\n"
+                                   "   border-radius: 0;\n"
+                                   "}\n", -1, NULL);
+  gtk_style_context_add_provider (context, provider, GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
   g_signal_connect_after (ebox, "draw", G_CALLBACK (draw_cb), NULL);
 
   gtk_widget_show_all (window);
 
   gtk_main ();
+
+  gtk_style_context_remove_provider (context, provider);
 
   return 0;
 }

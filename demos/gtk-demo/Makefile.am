@@ -55,13 +55,12 @@ INCLUDES = \
 	$(GTK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gdk/$(gdktargetlib) 				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/libgtk-3.0.la
 
 LDADDS = \
-	$(top_builddir)/gdk/$(gdktargetlib)        			\
-	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(GTK_DEP_LIBS)							\
+	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.0.la	\
+	$(GTK_DEP_LIBS)				\
 	-lm
 
 bin_PROGRAMS = gtk3-demo

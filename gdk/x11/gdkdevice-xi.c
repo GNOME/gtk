@@ -19,13 +19,13 @@
 
 #include "config.h"
 
-#include "gdkdevice-xi.h"
+#include "gdkx11device-xi.h"
+#include "gdkdeviceprivate-xi.h"
 
 #include "gdkwindow.h"
-#include "gdkdeviceprivate.h"
-#include "gdkprivate-x11.h"
 #include "gdkintl.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
+#include "gdkasync.h"
 
 #define MAX_DEVICE_CLASSES 13
 
@@ -37,67 +37,67 @@ typedef struct
   gdouble root_y;
 } GdkWindowInputInfo;
 
-static void gdk_device_xi_constructed  (GObject *object);
-static void gdk_device_xi_dispose      (GObject *object);
+static void gdk_x11_device_xi_constructed  (GObject *object);
+static void gdk_x11_device_xi_dispose      (GObject *object);
 
-static void gdk_device_xi_set_property (GObject      *object,
-                                        guint         prop_id,
-                                        const GValue *value,
-                                        GParamSpec   *pspec);
-static void gdk_device_xi_get_property (GObject      *object,
-                                        guint         prop_id,
-                                        GValue       *value,
-                                        GParamSpec   *pspec);
+static void gdk_x11_device_xi_set_property (GObject      *object,
+                                            guint         prop_id,
+                                            const GValue *value,
+                                            GParamSpec   *pspec);
+static void gdk_x11_device_xi_get_property (GObject      *object,
+                                            guint         prop_id,
+                                            GValue       *value,
+                                            GParamSpec   *pspec);
 
-static gboolean gdk_device_xi_get_history (GdkDevice      *device,
-                                           GdkWindow      *window,
-                                           guint32         start,
-                                           guint32         stop,
-                                           GdkTimeCoord ***events,
-                                           gint           *n_events);
+static gboolean gdk_x11_device_xi_get_history (GdkDevice      *device,
+                                               GdkWindow      *window,
+                                               guint32         start,
+                                               guint32         stop,
+                                               GdkTimeCoord ***events,
+                                               gint           *n_events);
 
-static void gdk_device_xi_get_state       (GdkDevice       *device,
-                                           GdkWindow       *window,
-                                           gdouble         *axes,
-                                           GdkModifierType *mask);
-static void gdk_device_xi_set_window_cursor (GdkDevice *device,
-                                             GdkWindow *window,
-                                             GdkCursor *cursor);
-static void gdk_device_xi_warp              (GdkDevice *device,
-                                             GdkScreen *screen,
-                                             gint       x,
-                                             gint       y);
-static gboolean gdk_device_xi_query_state   (GdkDevice        *device,
-                                             GdkWindow        *window,
-                                             GdkWindow       **root_window,
-                                             GdkWindow       **child_window,
-                                             gint             *root_x,
-                                             gint             *root_y,
-                                             gint             *win_x,
-                                             gint             *win_y,
-                                             GdkModifierType  *mask);
-static GdkGrabStatus gdk_device_xi_grab     (GdkDevice    *device,
-                                             GdkWindow    *window,
-                                             gboolean      owner_events,
-                                             GdkEventMask  event_mask,
-                                             GdkWindow    *confine_to,
-                                             GdkCursor    *cursor,
-                                             guint32       time_);
-static void          gdk_device_xi_ungrab   (GdkDevice    *device,
-                                             guint32       time_);
+static void gdk_x11_device_xi_get_state       (GdkDevice       *device,
+                                               GdkWindow       *window,
+                                               gdouble         *axes,
+                                               GdkModifierType *mask);
+static void gdk_x11_device_xi_set_window_cursor (GdkDevice *device,
+                                                 GdkWindow *window,
+                                                 GdkCursor *cursor);
+static void gdk_x11_device_xi_warp              (GdkDevice *device,
+                                                 GdkScreen *screen,
+                                                 gint       x,
+                                                 gint       y);
+static gboolean gdk_x11_device_xi_query_state   (GdkDevice        *device,
+                                                 GdkWindow        *window,
+                                                 GdkWindow       **root_window,
+                                                 GdkWindow       **child_window,
+                                                 gint             *root_x,
+                                                 gint             *root_y,
+                                                 gint             *win_x,
+                                                 gint             *win_y,
+                                                 GdkModifierType  *mask);
+static GdkGrabStatus gdk_x11_device_xi_grab     (GdkDevice    *device,
+                                                 GdkWindow    *window,
+                                                 gboolean      owner_events,
+                                                 GdkEventMask  event_mask,
+                                                 GdkWindow    *confine_to,
+                                                 GdkCursor    *cursor,
+                                                 guint32       time_);
+static void          gdk_x11_device_xi_ungrab   (GdkDevice    *device,
+                                                 guint32       time_);
 
-static GdkWindow* gdk_device_xi_window_at_position (GdkDevice       *device,
-                                                    gint            *win_x,
-                                                    gint            *win_y,
-                                                    GdkModifierType *mask,
-                                                    gboolean         get_toplevel);
+static GdkWindow* gdk_x11_device_xi_window_at_position (GdkDevice       *device,
+                                                        gint            *win_x,
+                                                        gint            *win_y,
+                                                        GdkModifierType *mask,
+                                                        gboolean         get_toplevel);
 
-static void gdk_device_xi_select_window_events (GdkDevice    *device,
-                                                GdkWindow    *window,
-                                                GdkEventMask  mask);
+static void gdk_x11_device_xi_select_window_events (GdkDevice    *device,
+                                                    GdkWindow    *window,
+                                                    GdkEventMask  mask);
 
 
-G_DEFINE_TYPE (GdkDeviceXI, gdk_device_xi, GDK_TYPE_DEVICE)
+G_DEFINE_TYPE (GdkX11DeviceXI, gdk_x11_device_xi, GDK_TYPE_DEVICE)
 
 enum {
   PROP_0,
@@ -105,31 +105,31 @@ enum {
 };
 
 static void
-gdk_device_xi_class_init (GdkDeviceXIClass *klass)
+gdk_x11_device_xi_class_init (GdkX11DeviceXIClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkDeviceClass *device_class = GDK_DEVICE_CLASS (klass);
 
   quark_window_input_info = g_quark_from_static_string ("gdk-window-input-info");
 
-  object_class->constructed = gdk_device_xi_constructed;
-  object_class->set_property = gdk_device_xi_set_property;
-  object_class->get_property = gdk_device_xi_get_property;
-  object_class->dispose = gdk_device_xi_dispose;
+  object_class->constructed = gdk_x11_device_xi_constructed;
+  object_class->set_property = gdk_x11_device_xi_set_property;
+  object_class->get_property = gdk_x11_device_xi_get_property;
+  object_class->dispose = gdk_x11_device_xi_dispose;
 
-  device_class->get_history = gdk_device_xi_get_history;
-  device_class->get_state = gdk_device_xi_get_state;
-  device_class->set_window_cursor = gdk_device_xi_set_window_cursor;
-  device_class->warp = gdk_device_xi_warp;
-  device_class->query_state = gdk_device_xi_query_state;
-  device_class->grab = gdk_device_xi_grab;
-  device_class->ungrab = gdk_device_xi_ungrab;
-  device_class->window_at_position = gdk_device_xi_window_at_position;
-  device_class->select_window_events = gdk_device_xi_select_window_events;
+  device_class->get_history = gdk_x11_device_xi_get_history;
+  device_class->get_state = gdk_x11_device_xi_get_state;
+  device_class->set_window_cursor = gdk_x11_device_xi_set_window_cursor;
+  device_class->warp = gdk_x11_device_xi_warp;
+  device_class->query_state = gdk_x11_device_xi_query_state;
+  device_class->grab = gdk_x11_device_xi_grab;
+  device_class->ungrab = gdk_x11_device_xi_ungrab;
+  device_class->window_at_position = gdk_x11_device_xi_window_at_position;
+  device_class->select_window_events = gdk_x11_device_xi_select_window_events;
 
   g_object_class_install_property (object_class,
-				   PROP_DEVICE_ID,
-				   g_param_spec_int ("device-id",
+                                   PROP_DEVICE_ID,
+                                   g_param_spec_int ("device-id",
                                                      P_("Device ID"),
                                                      P_("Device ID"),
                                                      0, G_MAXINT, 0,
@@ -137,38 +137,38 @@ gdk_device_xi_class_init (GdkDeviceXIClass *klass)
 }
 
 static void
-gdk_device_xi_init (GdkDeviceXI *device)
+gdk_x11_device_xi_init (GdkX11DeviceXI *device)
 {
 }
 
 static void
-gdk_device_xi_constructed (GObject *object)
+gdk_x11_device_xi_constructed (GObject *object)
 {
-  GdkDeviceXI *device;
+  GdkX11DeviceXI *device;
   GdkDisplay *display;
 
-  device = GDK_DEVICE_XI (object);
+  device = GDK_X11_DEVICE_XI (object);
   display = gdk_device_get_display (GDK_DEVICE (object));
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   device->xdevice = XOpenDevice (GDK_DISPLAY_XDISPLAY (display),
                                  device->device_id);
 
-  if (gdk_error_trap_pop ())
+  if (gdk_x11_display_error_trap_pop (display))
     g_warning ("Device %s can't be opened",
                gdk_device_get_name (GDK_DEVICE (device)));
 
-  if (G_OBJECT_CLASS (gdk_device_xi_parent_class)->constructed)
-    G_OBJECT_CLASS (gdk_device_xi_parent_class)->constructed (object);
+  if (G_OBJECT_CLASS (gdk_x11_device_xi_parent_class)->constructed)
+    G_OBJECT_CLASS (gdk_x11_device_xi_parent_class)->constructed (object);
 }
 
 static void
-gdk_device_xi_set_property (GObject      *object,
-                            guint         prop_id,
-                            const GValue *value,
-                            GParamSpec   *pspec)
+gdk_x11_device_xi_set_property (GObject      *object,
+                                guint         prop_id,
+                                const GValue *value,
+                                GParamSpec   *pspec)
 {
-  GdkDeviceXI *device = GDK_DEVICE_XI (object);
+  GdkX11DeviceXI *device = GDK_X11_DEVICE_XI (object);
 
   switch (prop_id)
     {
@@ -182,12 +182,12 @@ gdk_device_xi_set_property (GObject      *object,
 }
 
 static void
-gdk_device_xi_get_property (GObject    *object,
-                            guint       prop_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
+gdk_x11_device_xi_get_property (GObject    *object,
+                                guint       prop_id,
+                                GValue     *value,
+                                GParamSpec *pspec)
 {
-  GdkDeviceXI *device = GDK_DEVICE_XI (object);
+  GdkX11DeviceXI *device = GDK_X11_DEVICE_XI (object);
 
   switch (prop_id)
     {
@@ -201,12 +201,12 @@ gdk_device_xi_get_property (GObject    *object,
 }
 
 static void
-gdk_device_xi_dispose (GObject *object)
+gdk_x11_device_xi_dispose (GObject *object)
 {
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
   GdkDisplay *display;
 
-  device_xi = GDK_DEVICE_XI (object);
+  device_xi = GDK_X11_DEVICE_XI (object);
   display = gdk_device_get_display (GDK_DEVICE (device_xi));
 
   if (device_xi->xdevice)
@@ -221,35 +221,35 @@ gdk_device_xi_dispose (GObject *object)
       device_xi->axis_data = NULL;
     }
 
-  G_OBJECT_CLASS (gdk_device_xi_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_x11_device_xi_parent_class)->dispose (object);
 }
 
 static gboolean
-gdk_device_xi_get_history (GdkDevice      *device,
-                           GdkWindow      *window,
-                           guint32         start,
-                           guint32         stop,
-                           GdkTimeCoord ***events,
-                           gint           *n_events)
+gdk_x11_device_xi_get_history (GdkDevice      *device,
+                               GdkWindow      *window,
+                               guint32         start,
+                               guint32         stop,
+                               GdkTimeCoord ***events,
+                               gint           *n_events)
 {
   GdkTimeCoord **coords;
   XDeviceTimeCoord *device_coords;
   GdkWindow *impl_window;
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
   gint n_events_return;
   gint mode_return;
   gint axis_count_return;
   gint i;
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
   impl_window = _gdk_window_get_impl_window (window);
 
   device_coords = XGetDeviceMotionEvents (GDK_WINDOW_XDISPLAY (impl_window),
-					  device_xi->xdevice,
-					  start, stop,
-					  &n_events_return,
+                                          device_xi->xdevice,
+                                          start, stop,
+                                          &n_events_return,
                                           &mode_return,
-					  &axis_count_return);
+                                          &axis_count_return);
 
   if (!device_coords)
     return FALSE;
@@ -260,10 +260,10 @@ gdk_device_xi_get_history (GdkDevice      *device,
   for (i = 0; i < *n_events; i++)
     {
       coords[i]->time = device_coords[i].time;
-      gdk_device_xi_translate_axes (device, window,
-                                    device_coords[i].data,
-                                    coords[i]->axes,
-                                    NULL, NULL);
+      _gdk_x11_device_xi_translate_axes (device, window,
+                                         device_coords[i].data,
+                                         coords[i]->axes,
+                                         NULL, NULL);
     }
 
   XFreeDeviceMotionEvents (device_coords);
@@ -274,12 +274,12 @@ gdk_device_xi_get_history (GdkDevice      *device,
 }
 
 static void
-gdk_device_xi_get_state (GdkDevice       *device,
-                         GdkWindow       *window,
-                         gdouble         *axes,
-                         GdkModifierType *mask)
+gdk_x11_device_xi_get_state (GdkDevice       *device,
+                             GdkWindow       *window,
+                             gdouble         *axes,
+                             GdkModifierType *mask)
 {
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
   XDeviceState *state;
   XInputClass *input_class;
   gint i;
@@ -287,7 +287,7 @@ gdk_device_xi_get_state (GdkDevice       *device,
   if (mask)
     gdk_window_get_pointer (window, NULL, NULL, mask);
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
   state = XQueryDeviceState (GDK_WINDOW_XDISPLAY (window),
                              device_xi->xdevice);
   input_class = state->data;
@@ -298,9 +298,9 @@ gdk_device_xi_get_state (GdkDevice       *device,
         {
         case ValuatorClass:
           if (axes)
-            gdk_device_xi_translate_axes (device, window,
-                                          ((XValuatorState *) input_class)->valuators,
-                                          axes, NULL, NULL);
+            _gdk_x11_device_xi_translate_axes (device, window,
+                                               ((XValuatorState *) input_class)->valuators,
+                                               axes, NULL, NULL);
           break;
 
         case ButtonClass:
@@ -322,17 +322,17 @@ gdk_device_xi_get_state (GdkDevice       *device,
 }
 
 static void
-gdk_device_xi_set_window_cursor (GdkDevice *device,
-                                 GdkWindow *window,
-                                 GdkCursor *cursor)
+gdk_x11_device_xi_set_window_cursor (GdkDevice *device,
+                                     GdkWindow *window,
+                                     GdkCursor *cursor)
 {
 }
 
 static void
-gdk_device_xi_warp (GdkDevice *device,
-                    GdkScreen *screen,
-                    gint       x,
-                    gint       y)
+gdk_x11_device_xi_warp (GdkDevice *device,
+                        GdkScreen *screen,
+                        gint       x,
+                        gint       y)
 {
 }
 
@@ -342,11 +342,11 @@ find_events (GdkDevice    *device,
              XEventClass  *classes,
              int          *num_classes)
 {
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
   XEventClass class;
   gint i;
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
   i = 0;
 
   if (mask & GDK_BUTTON_PRESS_MASK)
@@ -374,10 +374,10 @@ find_events (GdkDevice    *device,
       /* Make sure device->motionnotify_type is set */
       DeviceMotionNotify (device_xi->xdevice, device_xi->motion_notify_type, class);
       if (class != 0)
-	  classes[i++] = class;
+          classes[i++] = class;
       DeviceStateNotify (device_xi->xdevice, device_xi->state_notify_type, class);
       if (class != 0)
-	  classes[i++] = class;
+          classes[i++] = class;
     }
 
   if (mask & GDK_KEY_PRESS_MASK)
@@ -412,36 +412,43 @@ find_events (GdkDevice    *device,
 }
 
 static gboolean
-gdk_device_xi_query_state (GdkDevice        *device,
-                           GdkWindow        *window,
-                           GdkWindow       **root_window,
-                           GdkWindow       **child_window,
-                           gint             *root_x,
-                           gint             *root_y,
-                           gint             *win_x,
-                           gint             *win_y,
-                           GdkModifierType  *mask)
+gdk_x11_device_xi_query_state (GdkDevice        *device,
+                               GdkWindow        *window,
+                               GdkWindow       **root_window,
+                               GdkWindow       **child_window,
+                               gint             *root_x,
+                               gint             *root_y,
+                               gint             *win_x,
+                               gint             *win_y,
+                               GdkModifierType  *mask)
 {
   return FALSE;
 }
 
 static GdkGrabStatus
-gdk_device_xi_grab (GdkDevice    *device,
-                    GdkWindow    *window,
-                    gboolean      owner_events,
-                    GdkEventMask  event_mask,
-                    GdkWindow    *confine_to,
-                    GdkCursor    *cursor,
-                    guint32       time_)
+gdk_x11_device_xi_grab (GdkDevice    *device,
+                        GdkWindow    *window,
+                        gboolean      owner_events,
+                        GdkEventMask  event_mask,
+                        GdkWindow    *confine_to,
+                        GdkCursor    *cursor,
+                        guint32       time_)
 {
   XEventClass event_classes[MAX_DEVICE_CLASSES];
   gint status, num_classes;
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
+  GdkDisplay *display;
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
+  display = gdk_device_get_display (device);
   find_events (device, event_mask, event_classes, &num_classes);
 
-  status = XGrabDevice (GDK_WINDOW_XDISPLAY (window),
+#ifdef G_ENABLE_DEBUG
+  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
+    status = GrabSuccess;
+  else
+#endif
+  status = XGrabDevice (GDK_DISPLAY_XDISPLAY (display),
                         device_xi->xdevice,
                         GDK_WINDOW_XID (window),
                         owner_events,
@@ -449,51 +456,59 @@ gdk_device_xi_grab (GdkDevice    *device,
                         GrabModeAsync, GrabModeAsync,
                         time_);
 
+  _gdk_x11_display_update_grab_info (display, device, status);
+
   return _gdk_x11_convert_grab_status (status);
 }
 
 static void
-gdk_device_xi_ungrab (GdkDevice *device,
-                      guint32    time_)
+gdk_x11_device_xi_ungrab (GdkDevice *device,
+                          guint32    time_)
 {
+  GdkX11DeviceXI *device_xi;
   GdkDisplay *display;
-  GdkDeviceXI *device_xi;
+  Display *xdisplay;
+  unsigned long serial;
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
   display = gdk_device_get_display (device);
+  xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
-  XUngrabDevice (GDK_DISPLAY_XDISPLAY (device),
-                 device_xi->xdevice,
-                 time_);
+  serial = NextRequest (xdisplay);
+
+  XUngrabDevice (xdisplay, device_xi->xdevice, time_);
+
+  _gdk_x11_display_update_grab_info_ungrab (display, device, time_, serial);
 }
 
 static GdkWindow*
-gdk_device_xi_window_at_position (GdkDevice       *device,
-                                  gint            *win_x,
-                                  gint            *win_y,
-                                  GdkModifierType *mask,
-                                  gboolean         get_toplevel)
+gdk_x11_device_xi_window_at_position (GdkDevice       *device,
+                                      gint            *win_x,
+                                      gint            *win_y,
+                                      GdkModifierType *mask,
+                                      gboolean         get_toplevel)
 {
   return NULL;
 }
+
 static void
-gdk_device_xi_select_window_events (GdkDevice    *device,
-                                    GdkWindow    *window,
-                                    GdkEventMask  event_mask)
+gdk_x11_device_xi_select_window_events (GdkDevice    *device,
+                                        GdkWindow    *window,
+                                        GdkEventMask  event_mask)
 {
   XEventClass event_classes[MAX_DEVICE_CLASSES];
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
   gint num_classes;
 
   event_mask |= (GDK_PROXIMITY_IN_MASK |
                  GDK_PROXIMITY_OUT_MASK);
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
   find_events (device, event_mask, event_classes, &num_classes);
 
   XSelectExtensionEvent (GDK_WINDOW_XDISPLAY (window),
-			 GDK_WINDOW_XID (window),
-			 event_classes, num_classes);
+                         GDK_WINDOW_XID (window),
+                         event_classes, num_classes);
 
   if (event_mask)
     {
@@ -512,7 +527,7 @@ gdk_device_xi_select_window_events (GdkDevice    *device,
 }
 
 void
-gdk_device_xi_update_window_info (GdkWindow *window)
+_gdk_x11_device_xi_update_window_info (GdkWindow *window)
 {
   GdkWindowInputInfo *info;
   gint root_x, root_y;
@@ -529,9 +544,9 @@ gdk_device_xi_update_window_info (GdkWindow *window)
 }
 
 static gboolean
-gdk_device_xi_get_window_info (GdkWindow *window,
-                               gdouble   *root_x,
-                               gdouble   *root_y)
+gdk_x11_device_xi_get_window_info (GdkWindow *window,
+                                   gdouble   *root_x,
+                                   gdouble   *root_y)
 {
   GdkWindowInputInfo *info;
 
@@ -548,15 +563,15 @@ gdk_device_xi_get_window_info (GdkWindow *window,
 }
 
 void
-gdk_device_xi_update_axes (GdkDevice *device,
-                           gint       axes_count,
-                           gint       first_axis,
-                           gint      *axis_data)
+_gdk_x11_device_xi_update_axes (GdkDevice *device,
+                                gint       axes_count,
+                                gint       first_axis,
+                                gint      *axis_data)
 {
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
   int i;
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
   g_return_if_fail (first_axis >= 0 &&
                     first_axis + axes_count <= gdk_device_get_n_axes (device));
 
@@ -568,25 +583,25 @@ gdk_device_xi_update_axes (GdkDevice *device,
 }
 
 void
-gdk_device_xi_translate_axes (GdkDevice *device,
-                              GdkWindow *window,
-                              gint      *axis_data,
-                              gdouble   *axes,
-                              gdouble   *x,
-                              gdouble   *y)
+_gdk_x11_device_xi_translate_axes (GdkDevice *device,
+                                   GdkWindow *window,
+                                   gint      *axis_data,
+                                   gdouble   *axes,
+                                   gdouble   *x,
+                                   gdouble   *y)
 {
-  GdkDeviceXI *device_xi;
+  GdkX11DeviceXI *device_xi;
   GdkWindow *impl_window;
   gdouble root_x, root_y;
   gdouble temp_x, temp_y;
   gint n_axes;
   gint i;
 
-  device_xi = GDK_DEVICE_XI (device);
+  device_xi = GDK_X11_DEVICE_XI (device);
   impl_window = _gdk_window_get_impl_window (window);
   temp_x = temp_y = 0;
 
-  if (!gdk_device_xi_get_window_info (impl_window, &root_x, &root_y))
+  if (!gdk_x11_device_xi_get_window_info (impl_window, &root_x, &root_y))
     return;
 
   n_axes = gdk_device_get_n_axes (device);

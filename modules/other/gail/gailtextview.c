@@ -641,6 +641,16 @@ gail_text_view_get_run_attributes (AtkText *text,
 }
 
 static AtkAttributeSet*
+add_text_attribute (AtkAttributeSet *attrib_set, AtkTextAttribute attr, gint i)
+{
+  const gchar *value;
+
+  value = atk_text_attribute_get_value (attr, i);
+
+  return gail_misc_add_attribute (attrib_set, i, g_strdup (value));
+}
+
+static AtkAttributeSet*
 gail_text_view_get_default_attributes (AtkText *text)
 {
   GtkTextView *view;
@@ -648,6 +658,7 @@ gail_text_view_get_default_attributes (AtkText *text)
   GtkTextAttributes *text_attrs;
   AtkAttributeSet *attrib_set = NULL;
   PangoFontDescription *font;
+  gchar *value;
 
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
@@ -661,96 +672,75 @@ gail_text_view_get_default_attributes (AtkText *text)
 
   if (font)
     {
-      attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                              ATK_TEXT_ATTR_STYLE);
+      attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_STYLE,
+                                       pango_font_description_get_style (font));
 
-      attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                              ATK_TEXT_ATTR_VARIANT);
+      attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_VARIANT,
+                                       pango_font_description_get_variant (font));
 
-      attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                              ATK_TEXT_ATTR_STRETCH);
+      attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_STRETCH,
+                                       pango_font_description_get_stretch (font));
+
+      value = g_strdup (pango_font_description_get_family (font));
+      attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FAMILY_NAME, value);
+
+      value = g_strdup_printf ("%d", pango_font_description_get_weight (font));
+      attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_WEIGHT, value);
+
+      value = g_strdup_printf ("%i", pango_font_description_get_size (font) / PANGO_SCALE);
+      attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_SIZE, value);
     }
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_JUSTIFICATION);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_JUSTIFICATION, text_attrs->justification);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_DIRECTION, text_attrs->direction);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_WRAP_MODE, text_attrs->wrap_mode);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_EDITABLE, text_attrs->editable);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_INVISIBLE, text_attrs->invisible);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_BG_FULL_HEIGHT, text_attrs->bg_full_height);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_DIRECTION);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_STRIKETHROUGH,
+                                   text_attrs->appearance.strikethrough);
+  attrib_set = add_text_attribute (attrib_set, ATK_TEXT_ATTR_UNDERLINE,
+                                   text_attrs->appearance.underline);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_WRAP_MODE);
+  value = g_strdup_printf ("%u,%u,%u",
+                           text_attrs->appearance.bg_color.red,
+                           text_attrs->appearance.bg_color.green,
+                           text_attrs->appearance.bg_color.blue);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_BG_COLOR, value);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_FG_STIPPLE);
+  value = g_strdup_printf ("%u,%u,%u",
+                           text_attrs->appearance.fg_color.red,
+                           text_attrs->appearance.fg_color.green,
+                           text_attrs->appearance.fg_color.blue);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_FG_COLOR, value);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_BG_STIPPLE);
+  value = g_strdup_printf ("%g", text_attrs->font_scale);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_SCALE, value);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_FG_COLOR);
+  value = g_strdup ((gchar *)(text_attrs->language));
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_LANGUAGE, value);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_BG_COLOR);
+  value = g_strdup_printf ("%i", text_attrs->appearance.rise);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_RISE, value);
 
-  if (font)
-    {
-      attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                              ATK_TEXT_ATTR_FAMILY_NAME);
-    }
+  value = g_strdup_printf ("%i", text_attrs->pixels_inside_wrap);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP, value);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_LANGUAGE);
+  value = g_strdup_printf ("%i", text_attrs->pixels_below_lines);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_BELOW_LINES, value);
 
-  if (font)
-    {
-      attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                              ATK_TEXT_ATTR_WEIGHT);
-    }
+  value = g_strdup_printf ("%i", text_attrs->pixels_above_lines);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_PIXELS_ABOVE_LINES, value);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_SCALE);
+  value = g_strdup_printf ("%i", text_attrs->indent);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_INDENT, value);
 
-  if (font)
-    {
-      attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                              ATK_TEXT_ATTR_SIZE);
-    }
+  value = g_strdup_printf ("%i", text_attrs->left_margin);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_LEFT_MARGIN, value);
 
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_STRIKETHROUGH);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_UNDERLINE);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_RISE);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_BG_FULL_HEIGHT);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_PIXELS_INSIDE_WRAP);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                         ATK_TEXT_ATTR_PIXELS_BELOW_LINES);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_PIXELS_ABOVE_LINES);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_EDITABLE);
-    
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_INVISIBLE);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_INDENT);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_RIGHT_MARGIN);
-
-  attrib_set = gail_misc_add_to_attr_set (attrib_set, text_attrs, 
-                                          ATK_TEXT_ATTR_LEFT_MARGIN);
+  value = g_strdup_printf ("%i", text_attrs->right_margin);
+  attrib_set = gail_misc_add_attribute (attrib_set, ATK_TEXT_ATTR_RIGHT_MARGIN, value);
 
   gtk_text_attributes_unref (text_attrs);
   return attrib_set;

@@ -670,10 +670,11 @@ gtk_recent_action_init (GtkRecentAction *action)
 /**
  * gtk_recent_action_new:
  * @name: a unique name for the action
- * @label: (allow-none): the label displayed in menu items and on buttons, or %NULL
+ * @label: (allow-none): the label displayed in menu items and on buttons,
+ *   or %NULL
  * @tooltip: (allow-none): a tooltip for the action, or %NULL
- * @stock_id: the stock icon to display in widgets representing the
- *   action, or %NULL
+ * @stock_id: (allow-none): the stock icon to display in widgets representing
+ *   the action, or %NULL
  *
  * Creates a new #GtkRecentAction object. To add the action to
  * a #GtkActionGroup and set the accelerator for the action,
@@ -702,10 +703,11 @@ gtk_recent_action_new (const gchar *name,
 /**
  * gtk_recent_action_new_for_manager:
  * @name: a unique name for the action
- * @label: (allow-none): the label displayed in menu items and on buttons, or %NULL
+ * @label: (allow-none): the label displayed in menu items and on buttons,
+ *   or %NULL
  * @tooltip: (allow-none): a tooltip for the action, or %NULL
- * @stock_id: the stock icon to display in widgets representing the
- *   action, or %NULL
+ * @stock_id: (allow-none): the stock icon to display in widgets representing
+ *   the action, or %NULL
  * @manager: (allow-none): a #GtkRecentManager, or %NULL for using the default
  *   #GtkRecentManager
  *

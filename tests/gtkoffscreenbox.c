@@ -345,7 +345,6 @@ gtk_offscreen_box_realize (GtkWidget *widget)
   g_signal_connect (offscreen_box->offscreen_window2, "from-embedder",
 		    G_CALLBACK (offscreen_window_from_parent2), offscreen_box);
 
-  gtk_widget_style_attach (widget);
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_set_background (context, window);
   gtk_style_context_set_background (context, offscreen_box->offscreen_window1);

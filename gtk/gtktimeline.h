@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_TIMELINE                 (gtk_timeline_get_type ())
+#define GTK_TYPE_TIMELINE                 (_gtk_timeline_get_type ())
 #define GTK_TIMELINE(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TIMELINE, GtkTimeline))
 #define GTK_TIMELINE_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_TIMELINE, GtkTimelineClass))
 #define GTK_IS_TIMELINE(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_TIMELINE))
@@ -73,43 +73,43 @@ struct GtkTimelineClass
 };
 
 
-GType                 gtk_timeline_get_type            (void) G_GNUC_CONST;
+GType                   _gtk_timeline_get_type          (void) G_GNUC_CONST;
 
-GtkTimeline           *gtk_timeline_new                (guint                     duration);
-GtkTimeline           *gtk_timeline_new_for_screen     (guint                     duration,
-                                                        GdkScreen                *screen);
+GtkTimeline *           _gtk_timeline_new               (guint                    duration);
+GtkTimeline *           _gtk_timeline_new_for_screen    (guint                    duration,
+                                                         GdkScreen               *screen);
 
-void                  gtk_timeline_start               (GtkTimeline              *timeline);
-void                  gtk_timeline_pause               (GtkTimeline              *timeline);
-void                  gtk_timeline_rewind              (GtkTimeline              *timeline);
+void                    _gtk_timeline_start             (GtkTimeline             *timeline);
+void                    _gtk_timeline_pause             (GtkTimeline             *timeline);
+void                    _gtk_timeline_rewind            (GtkTimeline             *timeline);
 
-gboolean              gtk_timeline_is_running          (GtkTimeline              *timeline);
+gboolean                _gtk_timeline_is_running        (GtkTimeline             *timeline);
 
-guint                 gtk_timeline_get_fps             (GtkTimeline              *timeline);
-void                  gtk_timeline_set_fps             (GtkTimeline              *timeline,
-                                                        guint                     fps);
+guint                   _gtk_timeline_get_fps           (GtkTimeline             *timeline);
+void                    _gtk_timeline_set_fps           (GtkTimeline             *timeline,
+                                                         guint                    fps);
 
-gboolean              gtk_timeline_get_loop            (GtkTimeline              *timeline);
-void                  gtk_timeline_set_loop            (GtkTimeline              *timeline,
-                                                        gboolean                  loop);
+gboolean                _gtk_timeline_get_loop          (GtkTimeline             *timeline);
+void                    _gtk_timeline_set_loop          (GtkTimeline             *timeline,
+                                                         gboolean                 loop);
 
-guint                 gtk_timeline_get_duration        (GtkTimeline              *timeline);
-void                  gtk_timeline_set_duration        (GtkTimeline              *timeline,
-                                                        guint                     duration);
+guint                   _gtk_timeline_get_duration      (GtkTimeline             *timeline);
+void                    _gtk_timeline_set_duration      (GtkTimeline             *timeline,
+                                                         guint                    duration);
 
-GdkScreen            *gtk_timeline_get_screen          (GtkTimeline              *timeline);
-void                  gtk_timeline_set_screen          (GtkTimeline              *timeline,
-                                                        GdkScreen                *screen);
+GdkScreen *             _gtk_timeline_get_screen        (GtkTimeline             *timeline);
+void                    _gtk_timeline_set_screen        (GtkTimeline             *timeline,
+                                                         GdkScreen               *screen);
 
-GtkTimelineDirection  gtk_timeline_get_direction       (GtkTimeline              *timeline);
-void                  gtk_timeline_set_direction       (GtkTimeline              *timeline,
-                                                        GtkTimelineDirection      direction);
+GtkTimelineDirection    _gtk_timeline_get_direction     (GtkTimeline             *timeline);
+void                    _gtk_timeline_set_direction     (GtkTimeline             *timeline,
+                                                         GtkTimelineDirection     direction);
 
-gdouble               gtk_timeline_get_progress        (GtkTimeline              *timeline);
+gdouble                 _gtk_timeline_get_progress      (GtkTimeline             *timeline);
 
-GtkTimelineProgressType gtk_timeline_get_progress_type (GtkTimeline              *timeline);
-void                    gtk_timeline_set_progress_type (GtkTimeline              *timeline,
-                                                        GtkTimelineProgressType   progress_type);
+GtkTimelineProgressType _gtk_timeline_get_progress_type (GtkTimeline             *timeline);
+void                    _gtk_timeline_set_progress_type (GtkTimeline             *timeline,
+                                                         GtkTimelineProgressType  progress_type);
 
 
 G_END_DECLS

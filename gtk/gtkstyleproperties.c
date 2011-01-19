@@ -186,7 +186,7 @@ property_data_new (void)
 }
 
 static void
-property_data_free (PropertyData *data)
+property_data_remove_values (PropertyData *data)
 {
   guint i;
 
@@ -200,6 +200,14 @@ property_data_free (PropertyData *data)
         g_value_unset (&value_data->value);
     }
 
+  if (data->values->len > 0)
+    g_array_remove_range (data->values, 0, data->values->len);
+}
+
+static void
+property_data_free (PropertyData *data)
+{
+  property_data_remove_values (data);
   g_array_free (data->values, TRUE);
   g_slice_free (PropertyData, data);
 }
@@ -853,6 +861,14 @@ lookup_default_value (PropertyNode *node,
 {
   if (node->pspec->value_type == GTK_TYPE_THEMING_ENGINE)
     g_value_set_object (value, gtk_theming_engine_load (NULL));
+  else if (node->pspec->value_type == PANGO_TYPE_FONT_DESCRIPTION)
+    g_value_take_boxed (value, pango_font_description_from_string ("Sans 10"));
+  else if (node->pspec->value_type == GDK_TYPE_RGBA)
+    {
+      GdkRGBA color;
+      gdk_rgba_parse (&color, "pink");
+      g_value_set_boxed (value, &color);
+    }
   else
     g_param_value_set_default (node->pspec, value);
 }
@@ -1195,6 +1211,16 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
           GValue *value;
 
           data = &g_array_index (prop_to_merge->values, ValueData, i);
+
+          if (replace && data->state == GTK_STATE_FLAG_NORMAL &&
+              G_VALUE_TYPE (&data->value) != PANGO_TYPE_FONT_DESCRIPTION)
+            {
+              /* Let normal state override all states
+               * previously set in the original set
+               */
+              property_data_remove_values (prop);
+            }
+
           value = property_data_get_value (prop, data->state);
 
           if (G_VALUE_TYPE (&data->value) == PANGO_TYPE_FONT_DESCRIPTION &&

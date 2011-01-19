@@ -8,6 +8,7 @@ gtkbuilder.sgml
 gtkbutton.sgml
 gtkcalendar.sgml
 gtkcelleditable.sgml
+gtkcelllayout.sgml
 gtkcellrenderer.sgml
 gtkcellrenderertext.sgml
 gtkcellview.sgml
@@ -16,9 +17,17 @@ gtkcolorsel.sgml
 gtkcombobox.sgml
 gtkcomboboxentry.sgml
 gtkcontainer.sgml
+gtkdialog.sgml
+gtkdrawingarea.sgml
 gtkeditable.sgml
 gtkentry.sgml
 gtkentrybuffer.sgml
+gtkenum.sgml
+gtkeventbox.sgml
+gtkexpander.sgml
+gtkfeatures.sgml
+gtkfixed.sgml
+gtkfilefilter.sgml
 gtkhbox.sgml
 gtkiconview.sgml
 gtkimcontextsimple.sgml
@@ -26,6 +35,10 @@ gtkimmulticontext.sgml
 gtkitemfactory.sgml
 gtklayout.sgml
 gtklinkbutton.sgml
+gtkmain.sgml
+gtkmenu.sgml
+gtkmenubar.sgml
+gtkmenushell.sgml
 gtkmessagedialog.sgml
 gtknotebook.sgml
 gtkobject.sgml
@@ -35,6 +48,7 @@ gtkpagesetupunixdialog.sgml
 gtkpaned.sgml
 gtkpapersize.sgml
 gtkprinter.sgml
+gtkprintjob.sgml
 gtkprogressbar.sgml
 gtkradioaction.sgml
 gtkradiobutton.sgml
@@ -49,6 +63,7 @@ gtkscale.sgml
 gtkscalebutton.sgml
 gtkscrollbar.sgml
 gtkscrolledwindow.sgml
+gtkselection.sgml
 gtkseparator.sgml
 gtkseparatormenuitem.sgml
 gtkseparatortoolitem.sgml
@@ -57,6 +72,7 @@ gtkstatusbar.sgml
 gtkstyle.sgml
 gtktesting.sgml
 gtktextiter.sgml
+gtktexttag.sgml
 gtktexttagtable.sgml
 gtktextview.sgml
 gtktoggleaction.sgml
@@ -64,6 +80,7 @@ gtktoolbar.sgml
 gtktoolitem.sgml
 gtktooltip.sgml
 gtktreednd.sgml
+gtktreemodel.sgml
 gtktreemodelfilter.sgml
 gtktreeselection.sgml
 gtktreesortable.sgml

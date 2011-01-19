@@ -465,13 +465,17 @@ _shade_color (GdkRGBA *color,
 /**
  * gtk_symbolic_color_resolve:
  * @color: a #GtkSymbolicColor
- * @props: #GtkStyleProperties to use when resolving named colors
+ * @props: (allow-none): #GtkStyleProperties to use when resolving
+ *    named colors, or %NULL
  * @resolved_color: (out): return location for the resolved color
  *
  * If @color is resolvable, @resolved_color will be filled in
  * with the resolved color, and %TRUE will be returned. Generally,
  * if @color can't be resolved, it is due to it being defined on
  * top of a named color that doesn't exist in @props.
+ *
+ * @props must be non-%NULL if @color was created using
+ * gtk_symbolic_color_named_new(), but can be omitted in other cases.
  *
  * Returns: %TRUE if the color has been resolved
  *

@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -28,6 +28,8 @@
 #define __GTK_PRIVATE_H__
 
 #include <glib.h>
+
+#include "gtksettings.h"
 
 G_BEGIN_DECLS
 
@@ -65,9 +67,21 @@ const gchar *_gtk_get_data_prefix ();
 #define GTK_DEFAULT_ACCEL_MOD_MASK GDK_META_MASK
 #endif
 
-gboolean _gtk_fnmatch (const char *pattern,
-		       const char *string,
-		       gboolean    no_leading_period);
+gboolean _gtk_fnmatch      (const char *pattern,
+                            const char *string,
+                            gboolean    no_leading_period);
+
+gchar   *_gtk_get_lc_ctype (void);
+
+gchar * _gtk_find_module              (const gchar  *name,
+                                       const gchar  *type);
+gchar **_gtk_get_module_path          (const gchar  *type);
+
+void    _gtk_modules_init             (gint          *argc,
+                                       gchar       ***argv,
+                                       const gchar   *gtk_modules_args);
+void    _gtk_modules_settings_changed (GtkSettings   *settings,
+                                       const gchar   *modules);
 
 G_END_DECLS
 

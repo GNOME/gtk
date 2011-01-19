@@ -501,6 +501,7 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
 			  "name", _("Print to File"),
 			  "backend", backend,
 			  "is-virtual", TRUE,
+			  "accepts-pdf", TRUE,
 			  NULL); 
 
   gtk_printer_set_has_details (printer, TRUE);
@@ -513,17 +514,63 @@ gtk_print_backend_file_init (GtkPrintBackendFile *backend)
   gtk_print_backend_set_list_done (GTK_PRINT_BACKEND (backend));
 }
 
+typedef struct {
+  GtkPrinter          *printer;
+  GtkPrinterOptionSet *set;
+} _OutputFormatChangedData;
+
+static void
+set_printer_format_from_option_set (GtkPrinter          *printer,
+				    GtkPrinterOptionSet *set)
+{
+  GtkPrinterOption *format_option;
+  const gchar *value;
+  gint i;
+
+  format_option = gtk_printer_option_set_lookup (set, "output-file-format");
+  if (format_option && format_option->value)
+    {
+      value = format_option->value;
+      if (value)
+        {
+	  for (i = 0; i < N_FORMATS; ++i)
+	    if (strcmp (value, formats[i]) == 0)
+	      break;
+
+	  g_assert (i < N_FORMATS);
+
+	  switch (i)
+	    {
+	      case FORMAT_PDF:
+		gtk_printer_set_accepts_pdf (printer, TRUE);
+		gtk_printer_set_accepts_ps (printer, FALSE);
+		break;
+	      case FORMAT_PS:
+		gtk_printer_set_accepts_pdf (printer, FALSE);
+		gtk_printer_set_accepts_ps (printer, TRUE);
+		break;
+	      case FORMAT_SVG:
+	      default:
+		gtk_printer_set_accepts_pdf (printer, FALSE);
+		gtk_printer_set_accepts_ps (printer, FALSE);
+		break;
+	    }
+	}
+    }
+}
+
 static void
 file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
-                                         GtkPrinterOptionSet *set)
+					 gpointer             user_data)
 {
   GtkPrinterOption *uri_option;
   gchar            *base = NULL;
+  _OutputFormatChangedData *data = (_OutputFormatChangedData *) user_data;
 
   if (! format_option->value)
     return;
 
-  uri_option = gtk_printer_option_set_lookup (set,
+  uri_option = gtk_printer_option_set_lookup (data->set,
                                               "gtk-main-page-custom-input");
 
   if (uri_option && uri_option->value)
@@ -563,6 +610,8 @@ file_printer_output_file_format_changed (GtkPrinterOption    *format_option,
       g_free (tmp);
       g_free (base);
     }
+
+  set_printer_format_from_option_set (data->printer, data->set);
 }
 
 static GtkPrinterOptionSet *
@@ -582,6 +631,7 @@ file_printer_get_options (GtkPrinter           *printer,
   OutputFormat format;
   gchar *uri;
   gint current_format = 0;
+  _OutputFormatChangedData *format_changed_data;
 
   format = format_from_settings (settings);
 
@@ -666,9 +716,13 @@ file_printer_get_options (GtkPrinter           *printer,
       gtk_printer_option_set (option, supported_formats[current_format]);
       gtk_printer_option_set_add (set, option);
 
-      g_signal_connect (option, "changed",
-                        G_CALLBACK (file_printer_output_file_format_changed),
-                        set);
+      set_printer_format_from_option_set (printer, set);
+      format_changed_data = g_new (_OutputFormatChangedData, 1);
+      format_changed_data->printer = printer;
+      format_changed_data->set = set;
+      g_signal_connect_data (option, "changed",
+			     G_CALLBACK (file_printer_output_file_format_changed),
+			     format_changed_data, (GClosureNotify)g_free, 0);
 
       g_object_unref (option);
     }
@@ -706,28 +760,34 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
 				GtkPageSetup     *page_setup)
 {
   gdouble scale;
+  GtkPrintPages pages;
+  GtkPageRange *ranges;
+  gint n_ranges;
 
-  print_job->print_pages = gtk_print_settings_get_print_pages (settings);
-  print_job->page_ranges = NULL;
-  print_job->num_page_ranges = 0;
-  
-  if (print_job->print_pages == GTK_PRINT_PAGES_RANGES)
-    print_job->page_ranges =
-      gtk_print_settings_get_page_ranges (settings,
-					  &print_job->num_page_ranges);
-  
-  print_job->collate = gtk_print_settings_get_collate (settings);
-  print_job->reverse = gtk_print_settings_get_reverse (settings);
-  print_job->num_copies = gtk_print_settings_get_n_copies (settings);
-  print_job->number_up = gtk_print_settings_get_number_up (settings);
-  print_job->number_up_layout = gtk_print_settings_get_number_up_layout (settings);
+  pages = gtk_print_settings_get_print_pages (settings);
+  gtk_print_job_set_pages (print_job, pages);
+
+  if (pages == GTK_PRINT_PAGES_RANGES)
+    ranges = gtk_print_settings_get_page_ranges (settings, &n_ranges);
+  else
+    {
+      ranges = NULL;
+      n_ranges = 0;
+    }
+
+  gtk_print_job_set_page_ranges (print_job, ranges, n_ranges);
+  gtk_print_job_set_collate (print_job, gtk_print_settings_get_collate (settings));
+  gtk_print_job_set_reverse (print_job, gtk_print_settings_get_reverse (settings));
+  gtk_print_job_set_num_copies (print_job, gtk_print_settings_get_n_copies (settings));
+  gtk_print_job_set_n_up (print_job, gtk_print_settings_get_number_up (settings));
+  gtk_print_job_set_n_up_layout (print_job, gtk_print_settings_get_number_up_layout (settings));
 
   scale = gtk_print_settings_get_scale (settings);
   if (scale != 100.0)
-    print_job->scale = scale/100.0;
+    gtk_print_job_set_scale (print_job, scale / 100.0);
 
-  print_job->page_set = gtk_print_settings_get_page_set (settings);
-  print_job->rotate_to_orientation = TRUE;
+  gtk_print_job_set_page_set (print_job, gtk_print_settings_get_page_set (settings));
+  gtk_print_job_set_rotate (print_job, TRUE);
 }
 
 static GList *

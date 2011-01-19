@@ -1,7 +1,7 @@
 /*
  * gdkdisplay.h
- * 
- * Copyright 2001 Sun Microsystems Inc. 
+ *
+ * Copyright 2001 Sun Microsystems Inc.
  *
  * Erwann Chenede <erwann.chenede@sun.com>
  *
@@ -34,180 +34,12 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GdkDisplayClass GdkDisplayClass;
-typedef struct _GdkDisplayPointerHooks GdkDisplayPointerHooks;
-typedef struct _GdkDisplayDeviceHooks GdkDisplayDeviceHooks;
-
 #define GDK_TYPE_DISPLAY              (gdk_display_get_type ())
-#define GDK_DISPLAY_OBJECT(object)    (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY, GdkDisplay))
-#define GDK_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY, GdkDisplayClass))
+#define GDK_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY, GdkDisplay))
 #define GDK_IS_DISPLAY(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY))
-#define GDK_IS_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY))
-#define GDK_DISPLAY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY, GdkDisplayClass))
-
-/* Tracks information about the keyboard grab on this display */
-typedef struct
-{
-  GdkWindow *window;
-  GdkWindow *native_window;
-  gulong serial;
-  gboolean owner_events;
-  guint32 time;
-} GdkKeyboardGrabInfo;
-
-/* Tracks information about which window and position the pointer last was in.
- * This is useful when we need to synthesize events later.
- * Note that we track toplevel_under_pointer using enter/leave events,
- * so in the case of a grab, either with owner_events==FALSE or with the
- * pointer in no clients window the x/y coordinates may actually be outside
- * the window.
- */
-typedef struct
-{
-  GdkWindow *toplevel_under_pointer; /* The toplevel window with mouse inside, tracked via native events */
-  GdkWindow *window_under_pointer; /* The window that last got sent a normal enter event */
-  gdouble toplevel_x, toplevel_y; 
-  guint32 state;
-  guint32 button;
-} GdkPointerWindowInfo;
-
-typedef struct
-{
-  guint32 button_click_time[2];	/* The last 2 button click times. */
-  GdkWindow *button_window[2];  /* The last 2 windows to receive button presses. */
-  gint button_number[2];        /* The last 2 buttons to be pressed. */
-  gint button_x[2];             /* The last 2 button click positions. */
-  gint button_y[2];
-} GdkMultipleClickInfo;
-
-struct _GdkDisplay
-{
-  GObject parent_instance;
-
-  /*< private >*/
-  GList *GSEAL (queued_events);
-  GList *GSEAL (queued_tail);
-
-  /* Information for determining if the latest button click
-   * is part of a double-click or triple-click
-   */
-  GHashTable *GSEAL (multiple_click_info);
-
-  guint GSEAL (double_click_time);	/* Maximum time between clicks in msecs */
-  GdkDevice *GSEAL (core_pointer);	/* Core pointer device */
-
-  const GdkDisplayDeviceHooks *GSEAL (device_hooks); /* Current hooks for querying pointer */
-  
-  guint GSEAL (closed) : 1;		/* Whether this display has been closed */
-  guint GSEAL (ignore_core_events) : 1; /* Don't send core motion and button event */
-
-  guint GSEAL (double_click_distance);	/* Maximum distance between clicks in pixels */
-
-  GHashTable *GSEAL (device_grabs);
-  GHashTable *GSEAL (motion_hint_info);
-
-  /* Hashtable containing a GdkPointerWindowInfo for each device */
-  GHashTable *GSEAL (pointers_info);
-
-  /* Last reported event time from server */
-  guint32 GSEAL (last_event_time);
-
-  /* Device manager associated to the display */
-  GdkDeviceManager *GSEAL (device_manager);
-};
-
-struct _GdkDisplayClass
-{
-  GObjectClass parent_class;
-  
-  G_CONST_RETURN gchar *     (*get_display_name)   (GdkDisplay *display);
-  gint			     (*get_n_screens)      (GdkDisplay *display);
-  GdkScreen *		     (*get_screen)         (GdkDisplay *display,
-						    gint        screen_num);
-  GdkScreen *		     (*get_default_screen) (GdkDisplay *display);
-
-  
-  /* Signals */
-  void (*closed) (GdkDisplay *display,
-		  gboolean    is_error);
-};
-
-/**
- * GdkDisplayPointerHooks:
- * @get_pointer: Obtains the current pointer position and modifier state.
- *  The position is given in coordinates relative to the screen containing
- *  the pointer, which is returned in @screen.
- * @window_get_pointer: Obtains the window underneath the mouse pointer.
- *  Current pointer position and modifier state are returned in @x, @y and
- *  @mask. The position is given in coordinates relative to @window.
- * @window_at_pointer: Obtains the window underneath the mouse pointer,
- *  returning the location of that window in @win_x, @win_y. Returns %NULL
- *  if the window under the mouse pointer is not known to GDK (for example,
- *  belongs to another application).
- *
- * A table of pointers to functions for getting quantities related to
- * the current pointer position. Each #GdkDisplay has a table of this type,
- * which can be set using gdk_display_set_pointer_hooks().
- *
- * This is only useful for such low-level tools as an event recorder.
- * Applications should never have any reason to use this facility
- *
- * Since: 2.2
- */
-struct _GdkDisplayPointerHooks
-{
-  void (*get_pointer)              (GdkDisplay      *display,
-				    GdkScreen      **screen,
-				    gint            *x,
-				    gint            *y,
-				    GdkModifierType *mask);
-  GdkWindow* (*window_get_pointer) (GdkDisplay      *display,
-				    GdkWindow       *window,
-				    gint            *x,
-				    gint            *y,
-				    GdkModifierType *mask);
-  GdkWindow* (*window_at_pointer)  (GdkDisplay      *display,
-				    gint            *win_x,
-				    gint            *win_y);
-};
-
-/**
- * GdkDisplayDeviceHooks:
- * @get_device_state: Obtains the current position and modifier state for
- * @device. The position is given in coordinates relative to the window
- * containing the pointer, which is returned in @window.
- * @window_get_device_position: Obtains the window underneath the device
- * position. Current device position and modifier state are returned in
- * @x, @y and @mask. The position is given in coordinates relative to
- * @window.
- * @window_at_device_position: Obtains the window underneath the device
- * position, returning the location of that window in @win_x, @win_y.
- * Returns %NULL if the window under the mouse pointer is not known to
- * GDK (for example, belongs to another application).
- *
- * A table of pointers to functions for getting quantities related to
- * the current device position. Each #GdkDisplay has a table of this type,
- * which can be set using gdk_display_set_device_hooks().
- */
-struct _GdkDisplayDeviceHooks
-{
-  void (* get_device_state)                  (GdkDisplay       *display,
-                                              GdkDevice        *device,
-                                              GdkScreen       **screen,
-                                              gint             *x,
-                                              gint             *y,
-                                              GdkModifierType  *mask);
-  GdkWindow * (* window_get_device_position) (GdkDisplay      *display,
-                                              GdkDevice       *device,
-                                              GdkWindow       *window,
-                                              gint            *x,
-                                              gint            *y,
-                                              GdkModifierType *mask);
-  GdkWindow * (* window_at_device_position)  (GdkDisplay *display,
-                                              GdkDevice  *device,
-                                              gint       *win_x,
-                                              gint       *win_y);
-};
+#ifndef GDK_DISABLE_DEPRECATED
+#define GDK_DISPLAY_OBJECT(object)    GDK_DISPLAY(object)
+#endif
 
 GType       gdk_display_get_type (void) G_GNUC_CONST;
 GdkDisplay *gdk_display_open                (const gchar *display_name);
@@ -216,15 +48,17 @@ G_CONST_RETURN gchar * gdk_display_get_name (GdkDisplay *display);
 
 gint        gdk_display_get_n_screens      (GdkDisplay  *display);
 GdkScreen * gdk_display_get_screen         (GdkDisplay  *display,
-					    gint         screen_num);
+                                            gint         screen_num);
 GdkScreen * gdk_display_get_default_screen (GdkDisplay  *display);
 
 #ifndef GDK_MULTIDEVICE_SAFE
+#ifndef GDK_DISABLE_DEPRECATED
 void        gdk_display_pointer_ungrab     (GdkDisplay  *display,
-					    guint32      time_);
+                                            guint32      time_);
 void        gdk_display_keyboard_ungrab    (GdkDisplay  *display,
-					    guint32      time_);
+                                            guint32      time_);
 gboolean    gdk_display_pointer_is_grabbed (GdkDisplay  *display);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
 
 gboolean    gdk_display_device_is_grabbed  (GdkDisplay  *display,
@@ -233,7 +67,7 @@ void        gdk_display_beep               (GdkDisplay  *display);
 void        gdk_display_sync               (GdkDisplay  *display);
 void        gdk_display_flush              (GdkDisplay  *display);
 
-void	    gdk_display_close		       (GdkDisplay  *display);
+void        gdk_display_close                  (GdkDisplay  *display);
 gboolean    gdk_display_is_closed          (GdkDisplay  *display);
 
 #ifndef GDK_DISABLE_DEPRECATED
@@ -243,63 +77,37 @@ GList *     gdk_display_list_devices       (GdkDisplay  *display);
 GdkEvent* gdk_display_get_event  (GdkDisplay     *display);
 GdkEvent* gdk_display_peek_event (GdkDisplay     *display);
 void      gdk_display_put_event  (GdkDisplay     *display,
-				  const GdkEvent *event);
+                                  const GdkEvent *event);
+gboolean  gdk_display_has_pending (GdkDisplay  *display);
 
 void gdk_display_add_client_message_filter (GdkDisplay   *display,
-					    GdkAtom       message_type,
-					    GdkFilterFunc func,
-					    gpointer      data);
+                                            GdkAtom       message_type,
+                                            GdkFilterFunc func,
+                                            gpointer      data);
 
 void gdk_display_set_double_click_time     (GdkDisplay   *display,
-					    guint         msec);
+                                            guint         msec);
 void gdk_display_set_double_click_distance (GdkDisplay   *display,
-					    guint         distance);
+                                            guint         distance);
 
 GdkDisplay *gdk_display_get_default (void);
 
 #ifndef GDK_MULTIDEVICE_SAFE
-
 #ifndef GDK_DISABLE_DEPRECATED
-GdkDevice  *gdk_display_get_core_pointer (GdkDisplay *display);
-#endif /* GDK_DISABLE_DEPRECATED */
-
 void             gdk_display_get_pointer           (GdkDisplay             *display,
-						    GdkScreen             **screen,
-						    gint                   *x,
-						    gint                   *y,
-						    GdkModifierType        *mask);
+                                                    GdkScreen             **screen,
+                                                    gint                   *x,
+                                                    gint                   *y,
+                                                    GdkModifierType        *mask);
 GdkWindow *      gdk_display_get_window_at_pointer (GdkDisplay             *display,
-						    gint                   *win_x,
-						    gint                   *win_y);
+                                                    gint                   *win_x,
+                                                    gint                   *win_y);
 void             gdk_display_warp_pointer          (GdkDisplay             *display,
-						    GdkScreen              *screen,
-						    gint                   x,
-						    gint                   y);
+                                                    GdkScreen              *screen,
+                                                    gint                   x,
+                                                    gint                   y);
+#endif /* GDK_DISABLE_DEPRECATED */
 #endif /* GDK_MULTIDEVICE_SAFE */
-
-void             gdk_display_get_device_state              (GdkDisplay            *display,
-                                                            GdkDevice             *device,
-                                                            GdkScreen            **screen,
-                                                            gint                  *x,
-                                                            gint                  *y,
-                                                            GdkModifierType       *mask);
-GdkWindow *      gdk_display_get_window_at_device_position (GdkDisplay            *display,
-                                                            GdkDevice             *device,
-                                                            gint                  *win_x,
-                                                            gint                  *win_y);
-void             gdk_display_warp_device                   (GdkDisplay            *display,
-                                                            GdkDevice             *device,
-                                                            GdkScreen             *screen,
-                                                            gint                   x,
-                                                            gint                   y);
-
-#ifndef GDK_MULTIDEVICE_SAFE
-GdkDisplayPointerHooks *gdk_display_set_pointer_hooks (GdkDisplay                   *display,
-						       const GdkDisplayPointerHooks *new_hooks);
-#endif /* GDK_MULTIDEVICE_SAFE */
-
-GdkDisplayDeviceHooks *gdk_display_set_device_hooks (GdkDisplay                  *display,
-                                                     const GdkDisplayDeviceHooks *new_hooks);
 
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
 
@@ -307,29 +115,32 @@ gboolean gdk_display_supports_cursor_alpha     (GdkDisplay    *display);
 gboolean gdk_display_supports_cursor_color     (GdkDisplay    *display);
 guint    gdk_display_get_default_cursor_size   (GdkDisplay    *display);
 void     gdk_display_get_maximal_cursor_size   (GdkDisplay    *display,
-						guint         *width,
-						guint         *height);
+                                                guint         *width,
+                                                guint         *height);
 
 GdkWindow *gdk_display_get_default_group       (GdkDisplay *display); 
 
 gboolean gdk_display_supports_selection_notification (GdkDisplay *display);
 gboolean gdk_display_request_selection_notification  (GdkDisplay *display,
-						      GdkAtom     selection);
+                                                      GdkAtom     selection);
 
 gboolean gdk_display_supports_clipboard_persistence (GdkDisplay    *display);
 void     gdk_display_store_clipboard                (GdkDisplay    *display,
-						     GdkWindow     *clipboard_window,
-						     guint32        time_,
-						     const GdkAtom *targets,
-						     gint           n_targets);
+                                                     GdkWindow     *clipboard_window,
+                                                     guint32        time_,
+                                                     const GdkAtom *targets,
+                                                     gint           n_targets);
 
 gboolean gdk_display_supports_shapes           (GdkDisplay    *display);
 gboolean gdk_display_supports_input_shapes     (GdkDisplay    *display);
 gboolean gdk_display_supports_composite        (GdkDisplay    *display);
+void     gdk_display_notify_startup_complete   (GdkDisplay    *display,
+                                                const gchar   *startup_id);
 
 GdkDeviceManager * gdk_display_get_device_manager (GdkDisplay *display);
 
+GdkAppLaunchContext *gdk_display_get_app_launch_context (GdkDisplay *display);
 
 G_END_DECLS
 
-#endif	/* __GDK_DISPLAY_H__ */
+#endif  /* __GDK_DISPLAY_H__ */

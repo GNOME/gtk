@@ -351,7 +351,7 @@ set_columns_type (GtkTreeView *tree_view, ColumnsType type)
       gtk_tree_view_set_rules_hint (tree_view, TRUE);
       
       rend = gtk_cell_renderer_text_new ();
-      
+
       col = gtk_tree_view_column_new_with_attributes ("Column 1",
                                                       rend,
                                                       "text", 1,
@@ -708,6 +708,9 @@ main (int    argc,
   gint i;
   
   gtk_init (&argc, &argv);
+
+  if (g_getenv ("RTL"))
+    gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
   our_pixbuf = gdk_pixbuf_new_from_xpm_data ((const char **) book_closed_xpm);  
   

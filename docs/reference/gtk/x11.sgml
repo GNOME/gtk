@@ -2,7 +2,7 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-x11" revision="17 Jan 2002">
+<refentry id="gtk-x11">
 <refmeta>
 <refentrytitle>Using GTK+ on the X Window System</refentrytitle>
 <manvolnum>3</manvolnum>
@@ -20,13 +20,13 @@ X11 aspects of using GTK+
 <title>GTK+ for the X Window System</title>
 
 <para>
-On UNIX, the X backend is the default build for GTK+. So 
-you don't need to do anything special when compiling it,
+On UNIX, the X backend is the default build for GTK+.
+So you don't need to do anything special when compiling it,
 and everything should "just work."
 </para>
 
 <para>
-To mix low-level Xlib routines into a GTK program, 
+To mix low-level Xlib routines into a GTK program,
 see <link linkend="gdk-X-Window-System-Interaction">GDK X Window
 System interaction</link> in the GDK manual.
 </para>
@@ -35,8 +35,7 @@ System interaction</link> in the GDK manual.
 <title>X11-specific commandline options</title>
 
 <para>
-The X backend understands some additional command line 
-arguments.
+The X backend understands some additional command line arguments.
 </para>
 
 <formalpara>
@@ -44,34 +43,7 @@ arguments.
 
 <para>
 The name of the X display to open instead of the one specified
-in the <envar>DISPLAY</envar> environment variable. 
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--screen <replaceable>screen_number</replaceable></systemitem></title>
-
-<para>
-  The number of the screen within the default display. This overrides
-  any screen number specified in the display name specified by
-  by he <systemitem>--display</systemitem> command line option or
-  the <envar>DISPLAY</envar> environment variable. If this screen
-  cannot be opened, then GTK+ will fall back to the screen
-  specified in the display name. This option is not useful
-  interactively; the intended purposes is that when a program
-  registers its command line with a <firstterm>session
-  manager</firstterm> for later restarting, it can save the
-  screen it is on, without having to worry if it might be
-  restarted on a different display.
-</para>
-</formalpara>
-
-<formalpara>
-<title><systemitem>--sync</systemitem></title>
-
-<para>
-Makes all X requests synchronously. This is a useful option for 
-debugging, but it will slow down the performance considerably.
+in the <envar>DISPLAY</envar> environment variable.
 </para>
 </formalpara>
 

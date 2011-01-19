@@ -23,7 +23,6 @@
 
 #include "gtkfilechooserdefault.h"
 
-#include "gdk/gdkkeysyms.h"
 #include "gtkalignment.h"
 #include "gtkbindings.h"
 #include "gtkcelllayout.h"
@@ -280,8 +279,7 @@ static void     gtk_file_chooser_default_map            (GtkWidget             *
 static void     gtk_file_chooser_default_unmap          (GtkWidget             *widget);
 static void     gtk_file_chooser_default_hierarchy_changed (GtkWidget          *widget,
 							    GtkWidget          *previous_toplevel);
-static void     gtk_file_chooser_default_style_set      (GtkWidget             *widget,
-							 GtkStyle              *previous_style);
+static void     gtk_file_chooser_default_style_updated  (GtkWidget             *widget);
 static void     gtk_file_chooser_default_screen_changed (GtkWidget             *widget,
 							 GdkScreen             *previous_screen);
 static void     gtk_file_chooser_default_size_allocate  (GtkWidget             *widget,
@@ -487,7 +485,7 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
   widget_class->map = gtk_file_chooser_default_map;
   widget_class->unmap = gtk_file_chooser_default_unmap;
   widget_class->hierarchy_changed = gtk_file_chooser_default_hierarchy_changed;
-  widget_class->style_set = gtk_file_chooser_default_style_set;
+  widget_class->style_updated = gtk_file_chooser_default_style_updated;
   widget_class->screen_changed = gtk_file_chooser_default_screen_changed;
   widget_class->size_allocate = gtk_file_chooser_default_size_allocate;
 
@@ -1124,7 +1122,7 @@ set_preview_widget (GtkFileChooserDefault *impl,
 static GdkPixbuf *
 render_search_icon (GtkFileChooserDefault *impl)
 {
-  return gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FIND, GTK_ICON_SIZE_MENU, NULL);
+  return gtk_widget_render_icon_pixbuf (GTK_WIDGET (impl), GTK_STOCK_FIND, GTK_ICON_SIZE_MENU);
 }
 
 static GdkPixbuf *
@@ -1144,7 +1142,7 @@ render_recent_icon (GtkFileChooserDefault *impl)
 
   /* fallback */
   if (!retval)
-    retval = gtk_widget_render_icon (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU, NULL);
+    retval = gtk_widget_render_icon_pixbuf (GTK_WIDGET (impl), GTK_STOCK_FILE, GTK_ICON_SIZE_MENU);
 
   return retval;
 }
@@ -1180,11 +1178,14 @@ shortcuts_reload_icons_get_info_cb (GCancellable *cancellable,
   pixbuf = _gtk_file_info_render_icon (info, GTK_WIDGET (data->impl), data->impl->icon_size);
 
   path = gtk_tree_row_reference_get_path (data->row_ref);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
-  gtk_list_store_set (data->impl->shortcuts_model, &iter,
-		      SHORTCUTS_COL_PIXBUF, pixbuf,
-		      -1);
-  gtk_tree_path_free (path);
+  if (path)
+    {
+      gtk_tree_model_get_iter (GTK_TREE_MODEL (data->impl->shortcuts_model), &iter, path);
+      gtk_list_store_set (data->impl->shortcuts_model, &iter,
+			  SHORTCUTS_COL_PIXBUF, pixbuf,
+			  -1);
+      gtk_tree_path_free (path);
+    }
 
   if (pixbuf)
     g_object_unref (pixbuf);
@@ -2998,14 +2999,18 @@ shortcuts_compute_drop_position (GtkFileChooserDefault   *impl,
   GdkRectangle cell;
   int row;
   int bookmarks_index;
+  int header_height = 0;
 
   tree_view = GTK_TREE_VIEW (impl->browse_shortcuts_tree_view);
+
+  if (gtk_tree_view_get_headers_visible (tree_view))
+    header_height = _gtk_tree_view_get_header_height (tree_view);
 
   bookmarks_index = shortcuts_get_index (impl, SHORTCUTS_BOOKMARKS);
 
   if (!gtk_tree_view_get_path_at_pos (tree_view,
                                       x,
-				      y - TREE_VIEW_HEADER_HEIGHT (tree_view),
+				      y - header_height,
                                       path,
                                       &column,
                                       NULL,
@@ -3071,11 +3076,11 @@ shortcuts_drag_motion_cb (GtkWidget             *widget,
     }
 #endif
 
-  if (context->suggested_action == GDK_ACTION_COPY ||
-      (context->actions & GDK_ACTION_COPY) != 0)
+  if (gdk_drag_context_get_suggested_action (context) == GDK_ACTION_COPY ||
+      (gdk_drag_context_get_actions (context) & GDK_ACTION_COPY) != 0)
     action = GDK_ACTION_COPY;
-  else if (context->suggested_action == GDK_ACTION_MOVE ||
-           (context->actions & GDK_ACTION_MOVE) != 0)
+  else if (gdk_drag_context_get_suggested_action (context) == GDK_ACTION_MOVE ||
+           (gdk_drag_context_get_actions (context) & GDK_ACTION_MOVE) != 0)
     action = GDK_ACTION_MOVE;
   else
     {
@@ -3224,6 +3229,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   GtkFileChooserDefault *impl;
   GtkTreePath *tree_path;
   GtkTreeViewDropPosition tree_pos;
+  GdkAtom target;
   int position;
   int bookmarks_index;
 
@@ -3243,9 +3249,11 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   g_assert (position >= bookmarks_index);
   position -= bookmarks_index;
 
-  if (gtk_targets_include_uri (&selection_data->target, 1))
+  target = gtk_selection_data_get_target (selection_data);
+
+  if (gtk_targets_include_uri (&target, 1))
     shortcuts_drop_uris (impl, selection_data, position);
-  else if (selection_data->target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
+  else if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
     shortcuts_reorder (impl, position);
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");
@@ -5581,21 +5589,20 @@ gtk_file_chooser_default_hierarchy_changed (GtkWidget *widget,
   GtkWidget *toplevel;
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
+  toplevel = gtk_widget_get_toplevel (widget);
 
-  if (previous_toplevel)
+  if (previous_toplevel && 
+      impl->toplevel_set_focus_id != 0)
     {
-      g_assert (impl->toplevel_set_focus_id != 0);
       g_signal_handler_disconnect (previous_toplevel,
                                    impl->toplevel_set_focus_id);
       impl->toplevel_set_focus_id = 0;
       impl->toplevel_last_focus_widget = NULL;
     }
-  else
-    g_assert (impl->toplevel_set_focus_id == 0);
 
-  toplevel = gtk_widget_get_toplevel (widget);
-  if (GTK_IS_WINDOW (toplevel))
+  if (gtk_widget_is_toplevel (toplevel))
     {
+      g_assert (impl->toplevel_set_focus_id == 0);
       impl->toplevel_set_focus_id = g_signal_connect (toplevel, "set-focus",
 						      G_CALLBACK (toplevel_set_focus_cb), impl);
       impl->toplevel_last_focus_widget = gtk_window_get_focus (GTK_WINDOW (toplevel));
@@ -5682,8 +5689,7 @@ check_icon_theme (GtkFileChooserDefault *impl)
 }
 
 static void
-gtk_file_chooser_default_style_set (GtkWidget *widget,
-				    GtkStyle  *previous_style)
+gtk_file_chooser_default_style_updated (GtkWidget *widget)
 {
   GtkFileChooserDefault *impl;
 
@@ -5691,9 +5697,9 @@ gtk_file_chooser_default_style_set (GtkWidget *widget,
 
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
-  profile_msg ("    parent class style_set start", NULL);
-  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_set (widget, previous_style);
-  profile_msg ("    parent class style_set end", NULL);
+  profile_msg ("    parent class style_udpated start", NULL);
+  GTK_WIDGET_CLASS (_gtk_file_chooser_default_parent_class)->style_updated (widget);
+  profile_msg ("    parent class style_updated end", NULL);
 
   if (gtk_widget_has_screen (GTK_WIDGET (impl)))
     change_icon_theme (impl);
@@ -6046,7 +6052,7 @@ set_busy_cursor (GtkFileChooserDefault *impl,
   gdk_display_flush (display);
 
   if (cursor)
-    gdk_cursor_unref (cursor);
+    g_object_unref (cursor);
 }
 
 /* Creates a sort model to wrap the file system model and sets it on the tree view */
@@ -7833,14 +7839,15 @@ find_good_size_from_style (GtkWidget *widget,
 			   gint      *height)
 {
   GtkFileChooserDefault *impl;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkStateFlags state;
   int font_size;
   GdkScreen *screen;
   double resolution;
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
 
-  g_assert (style != NULL);
   impl = GTK_FILE_CHOOSER_DEFAULT (widget);
 
   screen = gtk_widget_get_screen (widget);
@@ -7853,7 +7860,7 @@ find_good_size_from_style (GtkWidget *widget,
   else
     resolution = 96.0; /* wheeee */
 
-  font_size = pango_font_description_get_size (style->font_desc);
+  font_size = pango_font_description_get_size (gtk_style_context_get_font (context, state));
   font_size = PANGO_PIXELS (font_size) * resolution / 72.0;
 
   *width = font_size * NUM_CHARS;

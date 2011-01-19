@@ -88,6 +88,11 @@ void _gtk_widget_restore_size_request  (GtkWidget *widget,
 					int        old_width,
 					int        old_height);
 
+gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
+						GdkWindow      *window,
+						int            *x,
+						int            *y);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

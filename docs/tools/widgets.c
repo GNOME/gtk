@@ -1070,6 +1070,39 @@ create_assistant (void)
   return info;
 }
 
+static WidgetInfo *
+create_appchooserbutton (void)
+{
+  GtkWidget *picker;
+  GtkWidget *align, *vbox;
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
+  align = gtk_alignment_new (0.5, 0.5, 0.0, 0.0);
+  picker = gtk_app_chooser_button_new ("text/plain");
+  gtk_container_add (GTK_CONTAINER (align), picker);
+  gtk_box_pack_start (GTK_BOX (vbox), align, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (vbox),
+                      gtk_label_new ("Application Button"),
+                      FALSE, FALSE, 0);
+
+  return new_widget_info ("appchooserbutton", vbox, SMALL);
+}
+
+static WidgetInfo *
+create_appchooserdialog (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+
+  widget = gtk_app_chooser_dialog_new_for_content_type (NULL, 0, "image/png");
+  gtk_window_set_default_size (GTK_WINDOW (widget), 200, 300);
+
+  info = new_widget_info ("appchooserdialog", widget, ASIS);
+  info->include_decorations = TRUE;
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1117,6 +1150,8 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_print_dialog ());
   retval = g_list_prepend (retval, create_volume_button ());
   retval = g_list_prepend (retval, create_switch ());
+  retval = g_list_prepend (retval, create_appchooserbutton ());
+  retval = g_list_prepend (retval, create_appchooserdialog ());
 
   return retval;
 }

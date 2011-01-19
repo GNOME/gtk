@@ -27,14 +27,13 @@
 #include "config.h"
 
 #include "gdkproperty.h"
-
 #include "gdkmain.h"
-#include "gdkx.h"
 #include "gdkprivate.h"
 #include "gdkinternals.h"
+#include "gdkselection.h"
+#include "gdkprivate-x11.h"
 #include "gdkdisplay-x11.h"
 #include "gdkscreen-x11.h"
-#include "gdkselection.h"
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -175,7 +174,7 @@ insert_atom_pair (GdkDisplay *display,
 		  GdkAtom     virtual_atom,
 		  Atom        xatom)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);  
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);  
   
   if (!display_x11->atom_from_virtual)
     {
@@ -195,7 +194,7 @@ static Atom
 lookup_cached_xatom (GdkDisplay *display,
 		     GdkAtom     atom)
 {
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
   if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (xatoms_offset) - N_CUSTOM_PREDEFINED)
     return ATOM_TO_INDEX (atom);
@@ -231,7 +230,7 @@ gdk_x11_atom_to_xatom_for_display (GdkDisplay *display,
   if (atom == GDK_NONE)
     return None;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return None;
 
   xatom = lookup_cached_xatom (display, atom);
@@ -329,7 +328,7 @@ GdkAtom
 gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 				   Atom	       xatom)
 {
-  GdkDisplayX11 *display_x11;
+  GdkX11Display *display_x11;
   GdkAtom virtual_atom = GDK_NONE;
   
   g_return_val_if_fail (GDK_IS_DISPLAY (display), GDK_NONE);
@@ -337,10 +336,10 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
   if (xatom == None)
     return GDK_NONE;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return GDK_NONE;
 
-  display_x11 = GDK_DISPLAY_X11 (display);
+  display_x11 = GDK_X11_DISPLAY (display);
   
   if (xatom < G_N_ELEMENTS (xatoms_offset) - N_CUSTOM_PREDEFINED)
     return INDEX_TO_ATOM (xatom);
@@ -355,9 +354,9 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
        * we take precautions
        */
       char *name;
-      gdk_error_trap_push ();
+      gdk_x11_display_error_trap_push (display);
       name = XGetAtomName (GDK_DISPLAY_XDISPLAY (display), xatom);
-      if (gdk_error_trap_pop ())
+      if (gdk_x11_display_error_trap_pop (display))
 	{
 	  g_warning (G_STRLOC " invalid X atom: %ld", xatom);
 	}
@@ -394,87 +393,44 @@ virtual_atom_check_init (void)
   if (!virtual_atom_hash)
     {
       gint i;
-      
+
       virtual_atom_hash = g_hash_table_new (g_str_hash, g_str_equal);
       virtual_atom_array = g_ptr_array_new ();
-      
+
       for (i = 0; i < G_N_ELEMENTS (xatoms_offset); i++)
-	{
-	  g_ptr_array_add (virtual_atom_array, (gchar *)(xatoms_string + xatoms_offset[i]));
-	  g_hash_table_insert (virtual_atom_hash, (gchar *)(xatoms_string + xatoms_offset[i]),
-			       GUINT_TO_POINTER (i));
-	}
+        {
+          g_ptr_array_add (virtual_atom_array, (gchar *)(xatoms_string + xatoms_offset[i]));
+          g_hash_table_insert (virtual_atom_hash, (gchar *)(xatoms_string + xatoms_offset[i]),
+                               GUINT_TO_POINTER (i));
+        }
     }
 }
 
-static GdkAtom
-intern_atom (const gchar *atom_name, 
-	     gboolean     dup)
+GdkAtom
+_gdk_x11_display_manager_atom_intern (GdkDisplayManager *manager,
+                                      const gchar       *atom_name,
+                                      gboolean           dup)
 {
   GdkAtom result;
 
   virtual_atom_check_init ();
-  
+
   result = GDK_POINTER_TO_ATOM (g_hash_table_lookup (virtual_atom_hash, atom_name));
   if (!result)
     {
       result = INDEX_TO_ATOM (virtual_atom_array->len);
-      
+
       g_ptr_array_add (virtual_atom_array, dup ? g_strdup (atom_name) : (gchar *)atom_name);
-      g_hash_table_insert (virtual_atom_hash, 
-			   g_ptr_array_index (virtual_atom_array,
-					      ATOM_TO_INDEX (result)),
-			   GDK_ATOM_TO_POINTER (result));
+      g_hash_table_insert (virtual_atom_hash,
+                           g_ptr_array_index (virtual_atom_array,
+                                              ATOM_TO_INDEX (result)),
+                                              GDK_ATOM_TO_POINTER (result));
     }
 
   return result;
 }
 
-/**
- * gdk_atom_intern:
- * @atom_name: a string.
- * @only_if_exists: if %TRUE, GDK is allowed to not create a new atom, but
- *   just return %GDK_NONE if the requested atom doesn't already
- *   exists. Currently, the flag is ignored, since checking the
- *   existance of an atom is as expensive as creating it.
- *
- * Finds or creates an atom corresponding to a given string.
- *
- * Returns: the atom corresponding to @atom_name.
- */
-GdkAtom
-gdk_atom_intern (const gchar *atom_name, 
-		 gboolean     only_if_exists)
-{
-  return intern_atom (atom_name, TRUE);
-}
-
-/**
- * gdk_atom_intern_static_string:
- * @atom_name: a static string
- *
- * Finds or creates an atom corresponding to a given string.
- *
- * Note that this function is identical to gdk_atom_intern() except
- * that if a new #GdkAtom is created the string itself is used rather 
- * than a copy. This saves memory, but can only be used if the string 
- * will <emphasis>always</emphasis> exist. It can be used with statically
- * allocated strings in the main program, but not with statically 
- * allocated memory in dynamically loaded modules, if you expect to
- * ever unload the module again (e.g. do not use this function in
- * GTK+ theme engines).
- *
- * Returns: the atom corresponding to @atom_name
- * 
- * Since: 2.10
- */
-GdkAtom
-gdk_atom_intern_static_string (const gchar *atom_name)
-{
-  return intern_atom (atom_name, FALSE);
-}
-
-static G_CONST_RETURN char *
+static const gchar *
 get_atom_name (GdkAtom atom)
 {
   virtual_atom_check_init ();
@@ -485,18 +441,10 @@ get_atom_name (GdkAtom atom)
     return NULL;
 }
 
-/**
- * gdk_atom_name:
- * @atom: a #GdkAtom.
- *
- * Determines the string corresponding to an atom.
- *
- * Returns: a newly-allocated string containing the string
- *   corresponding to @atom. When you are done with the
- *   return value, you should free it using g_free().
- */
+
 gchar *
-gdk_atom_name (GdkAtom atom)
+_gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
+                                        GdkAtom            atom)
 {
   return g_strdup (get_atom_name (atom));
 }
@@ -583,70 +531,17 @@ gdk_x11_get_xatom_name (Atom xatom)
   return get_atom_name (gdk_x11_xatom_to_atom (xatom));
 }
 
-/**
- * gdk_property_get:
- * @window: a #GdkWindow.
- * @property: the property to retrieve.
- * @type: the desired property type, or %GDK_NONE, if any type of data
- *   is acceptable. If this does not match the actual
- *   type, then @actual_format and @actual_length will
- *   be filled in, a warning will be printed to stderr
- *   and no data will be returned.
- * @offset: the offset into the property at which to begin
- *   retrieving data, in 4 byte units.
- * @length: the length of the data to retrieve in bytes.  Data is
- *   considered to be retrieved in 4 byte chunks, so @length
- *   will be rounded up to the next highest 4 byte boundary
- *   (so be careful not to pass a value that might overflow
- *   when rounded up).
- * @pdelete: if %TRUE, delete the property after retrieving the
- *   data.
- * @actual_property_type: location to store the actual type of
- *   the property.
- * @actual_format: location to store the actual return format of the
- *   data; either 8, 16 or 32 bits.
- * @actual_length: location to store the length of the retrieved data, in
- *   bytes.  Data returned in the 32 bit format is stored
- *   in a long variable, so the actual number of 32 bit
- *   elements should be be calculated via
- *   @actual_length / sizeof(glong) to ensure portability to
- *   64 bit systems.
- * @data: location to store a pointer to the data. The retrieved
- *   data should be freed with g_free() when you are finished
- *   using it.
- *
- * Retrieves a portion of the contents of a property. If the
- * property does not exist, then the function returns %FALSE,
- * and %GDK_NONE will be stored in @actual_property_type.
- *
- * <note>
- * <para>
- * The XGetWindowProperty() function that gdk_property_get()
- * uses has a very confusing and complicated set of semantics.
- * Unfortunately, gdk_property_get() makes the situation
- * worse instead of better (the semantics should be considered
- * undefined), and also prints warnings to stderr in cases where it
- * should return a useful error to the program. You are advised to use
- * XGetWindowProperty() directly until a replacement function for
- * gdk_property_get()
- * is provided.
- * </para>
- * </note>
- *
- * Returns: %TRUE if data was successfully received and stored
- *   in @data, otherwise %FALSE.
- */
 gboolean
-gdk_property_get (GdkWindow   *window,
-		  GdkAtom      property,
-		  GdkAtom      type,
-		  gulong       offset,
-		  gulong       length,
-		  gint         pdelete,
-		  GdkAtom     *actual_property_type,
-		  gint        *actual_format_type,
-		  gint        *actual_length,
-		  guchar     **data)
+_gdk_x11_window_get_property (GdkWindow   *window,
+                              GdkAtom      property,
+                              GdkAtom      type,
+                              gulong       offset,
+                              gulong       length,
+                              gint         pdelete,
+                              GdkAtom     *actual_property_type,
+                              gint        *actual_format_type,
+                              gint        *actual_length,
+                              guchar     **data)
 {
   GdkDisplay *display;
   Atom ret_prop_type;
@@ -782,34 +677,14 @@ gdk_property_get (GdkWindow   *window,
   return TRUE;
 }
 
-/**
- * gdk_property_change:
- * @window: a #GdkWindow.
- * @property: the property to change.
- * @type: the new type for the property. If @mode is
- *   %GDK_PROP_MODE_PREPEND or %GDK_PROP_MODE_APPEND, then this
- *   must match the existing type or an error will occur.
- * @format: the new format for the property. If @mode is
- *   %GDK_PROP_MODE_PREPEND or %GDK_PROP_MODE_APPEND, then this
- *   must match the existing format or an error will occur.
- * @mode: a value describing how the new data is to be combined
- *   with the current data.
- * @data: the data (a <literal>guchar *</literal>
- *   <literal>gushort *</literal>, or <literal>gulong *</literal>,
- *   depending on @format), cast to a <literal>guchar *</literal>.
- * @nelements: the number of elements of size determined by the format,
- *   contained in @data.
- *
- * Changes the contents of a property on a window.
- */
 void
-gdk_property_change (GdkWindow    *window,
-		     GdkAtom       property,
-		     GdkAtom       type,
-		     gint          format,
-		     GdkPropMode   mode,
-		     const guchar *data,
-		     gint          nelements)
+_gdk_x11_window_change_property (GdkWindow    *window,
+                                 GdkAtom       property,
+                                 GdkAtom       type,
+                                 gint          format,
+                                 GdkPropMode   mode,
+                                 const guchar *data,
+                                 gint          nelements)
 {
   GdkDisplay *display;
   Window xwindow;
@@ -865,16 +740,9 @@ gdk_property_change (GdkWindow    *window,
 		     xtype, format, mode, (guchar *)data, nelements);
 }
 
-/**
- * gdk_property_delete:
- * @window: a #GdkWindow.
- * @property: the property to delete.
- *
- * Deletes a property from a window.
- */
 void
-gdk_property_delete (GdkWindow *window,
-		     GdkAtom    property)
+_gdk_x11_window_delete_property (GdkWindow *window,
+                                 GdkAtom    property)
 {
   g_return_if_fail (!window || GDK_WINDOW_IS_X11 (window));
 

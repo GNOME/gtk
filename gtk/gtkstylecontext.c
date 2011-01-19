@@ -34,6 +34,7 @@
 #include "gtkanimationdescription.h"
 #include "gtktimeline.h"
 #include "gtkiconfactory.h"
+#include "gtkwidgetprivate.h"
 
 /**
  * SECTION:gtkstylecontext
@@ -453,6 +454,12 @@ struct AnimationInfo
   GtkTimeline *timeline;
 
   gpointer region_id;
+
+  /* Region stack (until region_id) at the time of
+   * rendering, this is used for nested cancellation.
+   */
+  GSList *parent_regions;
+
   GdkWindow *window;
   GtkStateType state;
   gboolean target_value;
@@ -495,9 +502,11 @@ enum {
   LAST_SIGNAL
 };
 
-guint signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 static GQuark provider_list_quark = 0;
+static GdkRGBA fallback_color = { 1.0, 0.75, 0.75, 1.0 };
+static GtkBorder fallback_border = { 0 };
 
 static void gtk_style_context_finalize (GObject *object);
 
@@ -746,6 +755,7 @@ animation_info_free (AnimationInfo *info)
     cairo_region_destroy (info->invalidation_region);
 
   g_array_free (info->rectangles, TRUE);
+  g_slist_free (info->parent_regions);
   g_slice_free (AnimationInfo, info);
 }
 
@@ -842,19 +852,19 @@ animation_info_new (GtkStyleContext         *context,
   info = g_slice_new0 (AnimationInfo);
 
   info->rectangles = g_array_new (FALSE, FALSE, sizeof (cairo_rectangle_int_t));
-  info->timeline = gtk_timeline_new (duration);
+  info->timeline = _gtk_timeline_new (duration);
   info->window = g_object_ref (window);
   info->state = state;
   info->target_value = target_value;
   info->region_id = region_id;
 
-  gtk_timeline_set_progress_type (info->timeline, progress_type);
-  gtk_timeline_set_loop (info->timeline, loop);
+  _gtk_timeline_set_progress_type (info->timeline, progress_type);
+  _gtk_timeline_set_loop (info->timeline, loop);
 
   if (!loop && !target_value)
     {
-      gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
-      gtk_timeline_rewind (info->timeline);
+      _gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+      _gtk_timeline_rewind (info->timeline);
     }
 
   g_signal_connect (info->timeline, "frame",
@@ -862,7 +872,7 @@ animation_info_new (GtkStyleContext         *context,
   g_signal_connect (info->timeline, "finished",
                     G_CALLBACK (timeline_finished_cb), context);
 
-  gtk_timeline_start (info->timeline);
+  _gtk_timeline_start (info->timeline);
 
   return info;
 }
@@ -1076,7 +1086,7 @@ build_icon_factories (GtkStyleContext *context,
     }
 }
 
-GtkWidgetPath *
+static GtkWidgetPath *
 create_query_path (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
@@ -1155,6 +1165,10 @@ style_data_lookup (GtkStyleContext *context)
   gtk_style_properties_get (data->store, 0,
                             "engine", &priv->theming_engine,
                             NULL);
+
+  if (!priv->theming_engine)
+    priv->theming_engine = g_object_ref (gtk_theming_engine_load (NULL));
+
   return data;
 }
 
@@ -1569,7 +1583,6 @@ context_has_animatable_region (GtkStyleContext *context,
                                gpointer         region_id)
 {
   GtkStyleContextPrivate *priv;
-  GSList *r;
 
   /* NULL region_id means everything
    * rendered through the style context
@@ -1578,14 +1591,7 @@ context_has_animatable_region (GtkStyleContext *context,
     return TRUE;
 
   priv = context->priv;
-
-  for (r = priv->animation_regions; r; r = r->next)
-    {
-      if (r->data == region_id)
-        return TRUE;
-    }
-
-  return FALSE;
+  return g_slist_find (priv->animation_regions, region_id) != NULL;
 }
 
 /**
@@ -1628,7 +1634,7 @@ gtk_style_context_state_is_running (GtkStyleContext *context,
           context_has_animatable_region (context, info->region_id))
         {
           if (progress)
-            *progress = gtk_timeline_get_progress (info->timeline);
+            *progress = _gtk_timeline_get_progress (info->timeline);
 
           return TRUE;
         }
@@ -2063,6 +2069,26 @@ gtk_style_context_list_regions (GtkStyleContext *context)
   return classes;
 }
 
+gboolean
+_gtk_style_context_check_region_name (const gchar *str)
+{
+  g_return_val_if_fail (str != NULL, FALSE);
+
+  if (!g_ascii_islower (str[0]))
+    return FALSE;
+
+  while (*str)
+    {
+      if (*str != '-' &&
+          !g_ascii_islower (*str))
+        return FALSE;
+
+      str++;
+    }
+
+  return TRUE;
+}
+
 /**
  * gtk_style_context_add_region:
  * @context: a #GtkStyleContext
@@ -2089,6 +2115,9 @@ gtk_style_context_list_regions (GtkStyleContext *context)
  *
  * would apply to even and odd rows, respectively.
  *
+ * <note><para>Region names must only contain lowercase letters
+ * and '-', starting always with a lowercase letter.</para></note>
+ *
  * Since: 3.0
  **/
 void
@@ -2103,6 +2132,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (region_name != NULL);
+  g_return_if_fail (_gtk_style_context_check_region_name (region_name));
 
   priv = context->priv;
   region_quark = g_quark_from_string (region_name);
@@ -2385,7 +2415,15 @@ gtk_style_context_get_style_property (GtkStyleContext *context,
   if (!priv->widget_path)
     return;
 
-  widget_type = gtk_widget_path_get_widget_type (priv->widget_path);
+  widget_type = gtk_widget_path_get_object_type (priv->widget_path);
+
+  if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+    {
+      g_warning ("%s: can't get style properties for non-widget class `%s'",
+                 G_STRLOC,
+                 g_type_name (widget_type));
+      return;
+    }
 
   widget_class = g_type_class_ref (widget_type);
   pspec = gtk_widget_class_find_style_property (widget_class, property_name);
@@ -2432,6 +2470,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
   GtkStyleContextPrivate *priv;
   const gchar *prop_name;
   GtkStateFlags state;
+  GType widget_type;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
@@ -2441,6 +2480,16 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
   if (!priv->widget_path)
     return;
 
+  widget_type = gtk_widget_path_get_object_type (priv->widget_path);
+
+  if (!g_type_is_a (widget_type, GTK_TYPE_WIDGET))
+    {
+      g_warning ("%s: can't get style properties for non-widget class `%s'",
+                 G_STRLOC,
+                 g_type_name (widget_type));
+      return;
+    }
+
   state = gtk_style_context_get_state (context);
 
   while (prop_name)
@@ -2448,10 +2497,7 @@ gtk_style_context_get_style_valist (GtkStyleContext *context,
       GtkWidgetClass *widget_class;
       GParamSpec *pspec;
       const GValue *peek_value;
-      GType widget_type;
       gchar *error;
-
-      widget_type = gtk_widget_path_get_widget_type (priv->widget_path);
 
       widget_class = g_type_class_ref (widget_type);
       pspec = gtk_widget_class_find_style_property (widget_class, prop_name);
@@ -2855,9 +2901,9 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   if (!desc)
     return;
 
-  if (gtk_animation_description_get_duration (desc) == 0)
+  if (_gtk_animation_description_get_duration (desc) == 0)
     {
-      gtk_animation_description_unref (desc);
+      _gtk_animation_description_unref (desc);
       return;
     }
 
@@ -2867,37 +2913,154 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
       info->target_value != state_value)
     {
       /* Target values are the opposite */
-      if (!gtk_timeline_get_loop (info->timeline))
+      if (!_gtk_timeline_get_loop (info->timeline))
         {
           /* Reverse the animation */
-          if (gtk_timeline_get_direction (info->timeline) == GTK_TIMELINE_DIRECTION_FORWARD)
-            gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
+          if (_gtk_timeline_get_direction (info->timeline) == GTK_TIMELINE_DIRECTION_FORWARD)
+            _gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_BACKWARD);
           else
-            gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_FORWARD);
+            _gtk_timeline_set_direction (info->timeline, GTK_TIMELINE_DIRECTION_FORWARD);
 
           info->target_value = state_value;
         }
       else
         {
           /* Take it out of its looping state */
-          gtk_timeline_set_loop (info->timeline, FALSE);
+          _gtk_timeline_set_loop (info->timeline, FALSE);
         }
     }
   else if (!info &&
-           (!gtk_animation_description_get_loop (desc) ||
+           (!_gtk_animation_description_get_loop (desc) ||
             state_value))
     {
       info = animation_info_new (context, region_id,
-                                 gtk_animation_description_get_duration (desc),
-                                 gtk_animation_description_get_progress_type (desc),
-                                 gtk_animation_description_get_loop (desc),
+                                 _gtk_animation_description_get_duration (desc),
+                                 _gtk_animation_description_get_progress_type (desc),
+                                 _gtk_animation_description_get_loop (desc),
                                  state, state_value, window);
 
       priv->animations = g_slist_prepend (priv->animations, info);
       priv->animations_invalidated = TRUE;
     }
 
-  gtk_animation_description_unref (desc);
+  _gtk_animation_description_unref (desc);
+}
+
+/**
+ * gtk_style_context_cancel_animations:
+ * @context: a #GtkStyleContext
+ * @region_id: (allow-none): animatable region to stop, or %NULL.
+ *     See gtk_style_context_push_animatable_region()
+ *
+ * Stops all running animations for @region_id and all animatable
+ * regions underneath.
+ *
+ * A %NULL @region_id will stop all ongoing animations in @context,
+ * when dealing with a #GtkStyleContext obtained through
+ * gtk_widget_get_style_context(), this is normally done for you
+ * in all circumstances you would expect all widget to be stopped,
+ * so this should be only used in complex widgets with different
+ * animatable regions.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_cancel_animations (GtkStyleContext *context,
+                                     gpointer         region_id)
+{
+  GtkStyleContextPrivate *priv;
+  AnimationInfo *info;
+  GSList *l, *node;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  priv = context->priv;
+  l = priv->animations;
+
+  while (l)
+    {
+      info = l->data;
+      node = l;
+      l = l->next;
+
+      if (!region_id ||
+          info->region_id == region_id ||
+          g_slist_find (info->parent_regions, region_id))
+        {
+          priv->animations = g_slist_remove (priv->animations, info);
+          animation_info_free (info);
+        }
+    }
+}
+
+static gboolean
+is_parent_of (GdkWindow *parent,
+              GdkWindow *child)
+{
+  GtkWidget *child_widget, *parent_widget;
+  GdkWindow *window;
+
+  gdk_window_get_user_data (child, (gpointer *) &child_widget);
+  gdk_window_get_user_data (parent, (gpointer *) &parent_widget);
+
+  if (child_widget != parent_widget &&
+      !gtk_widget_is_ancestor (child_widget, parent_widget))
+    return FALSE;
+
+  window = child;
+
+  while (window)
+    {
+      if (window == parent)
+        return TRUE;
+
+      window = gdk_window_get_parent (window);
+    }
+
+  return FALSE;
+}
+
+/**
+ * gtk_style_context_scroll_animations:
+ * @context: a #GtkStyleContext
+ * @window: a #GdkWindow used previously in
+ *          gtk_style_context_notify_state_change()
+ * @dx: Amount to scroll in the X axis
+ * @dy: Amount to scroll in the Y axis
+ *
+ * This function is analogous to gdk_window_scroll(), and
+ * should be called together with it so the invalidation
+ * areas for any ongoing animation are scrolled together
+ * with it.
+ *
+ * Since: 3.0
+ **/
+void
+gtk_style_context_scroll_animations (GtkStyleContext *context,
+                                     GdkWindow       *window,
+                                     gint             dx,
+                                     gint             dy)
+{
+  GtkStyleContextPrivate *priv;
+  AnimationInfo *info;
+  GSList *l;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  priv = context->priv;
+  l = priv->animations;
+
+  while (l)
+    {
+      info = l->data;
+      l = l->next;
+
+      if (info->invalidation_region &&
+          (window == info->window ||
+           is_parent_of (window, info->window)))
+        cairo_region_translate (info->invalidation_region, dx, dy);
+    }
 }
 
 /**
@@ -2982,8 +3145,7 @@ _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context)
 
 void
 _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
-                                             gint             rel_x,
-                                             gint             rel_y)
+					     GtkWidget       *widget)
 {
   GtkStyleContextPrivate *priv;
   GSList *l;
@@ -2998,6 +3160,7 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
   while (l)
     {
       AnimationInfo *info;
+      gint rel_x, rel_y;
       GSList *cur;
       guint i;
 
@@ -3008,23 +3171,23 @@ _gtk_style_context_coalesce_animation_areas (GtkStyleContext *context,
       if (info->invalidation_region)
         continue;
 
-      /* There's not much point in keeping the animation running */
       if (info->rectangles->len == 0)
-        {
-          priv->animations = g_slist_remove (priv->animations, info);
-          animation_info_free (info);
-          continue;
-        }
+        continue;
 
       info->invalidation_region = cairo_region_create ();
+      _gtk_widget_get_translation_to_window (widget, info->window, &rel_x, &rel_y);
 
       for (i = 0; i < info->rectangles->len; i++)
         {
           cairo_rectangle_int_t *rect;
 
           rect = &g_array_index (info->rectangles, cairo_rectangle_int_t, i);
-          rect->x += rel_x;
-          rect->y += rel_y;
+
+	  /* These are widget relative coordinates,
+	   * so have them inverted to be window relative
+	   */
+          rect->x -= rel_x;
+          rect->y -= rel_y;
 
           cairo_region_union_rectangle (info->invalidation_region, rect);
         }
@@ -3072,6 +3235,14 @@ store_animation_region (GtkStyleContext *context,
           rect.height = (gint) height;
 
           g_array_append_val (info->rectangles, rect);
+
+          if (!info->parent_regions)
+            {
+              GSList *parent_regions;
+
+              parent_regions = g_slist_find (priv->animation_regions, info->region_id);
+              info->parent_regions = g_slist_copy (parent_regions);
+            }
         }
     }
 }
@@ -3174,6 +3345,9 @@ gtk_style_context_get_color (GtkStyleContext *context,
   const GValue *value;
   GdkRGBA *c;
 
+  g_return_if_fail (color != NULL);
+  *color = fallback_color;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3182,8 +3356,12 @@ gtk_style_context_get_color (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "color", state);
-  c = g_value_get_boxed (value);
-  *color = *c;
+
+  if (value)
+    {
+      c = g_value_get_boxed (value);
+      *color = *c;
+    }
 }
 
 /**
@@ -3206,6 +3384,9 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
   const GValue *value;
   GdkRGBA *c;
 
+  g_return_if_fail (color != NULL);
+  *color = fallback_color;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3214,8 +3395,12 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "background-color", state);
-  c = g_value_get_boxed (value);
-  *color = *c;
+
+  if (value)
+    {
+      c = g_value_get_boxed (value);
+      *color = *c;
+    }
 }
 
 /**
@@ -3238,6 +3423,9 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
   const GValue *value;
   GdkRGBA *c;
 
+  g_return_if_fail (color != NULL);
+  *color = fallback_color;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3246,17 +3434,22 @@ gtk_style_context_get_border_color (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "border-color", state);
-  c = g_value_get_boxed (value);
-  *color = *c;
+
+  if (value)
+    {
+      c = g_value_get_boxed (value);
+      *color = *c;
+    }
 }
 
 /**
  * gtk_style_context_get_border:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the border for
- * @color: (out): return value for the border settings
+ * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
+ * See %GTK_STYLE_PROPERTY_BORDER_WIDTH.
  *
  * Since: 3.0
  **/
@@ -3270,6 +3463,9 @@ gtk_style_context_get_border (GtkStyleContext *context,
   const GValue *value;
   GtkBorder *b;
 
+  g_return_if_fail (border != NULL);
+  *border = fallback_border;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3278,17 +3474,22 @@ gtk_style_context_get_border (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "border-width", state);
-  b = g_value_get_boxed (value);
-  *border = *b;
+
+  if (value)
+    {
+      b = g_value_get_boxed (value);
+      *border = *b;
+    }
 }
 
 /**
  * gtk_style_context_get_padding:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the padding for
- * @color: (out): return value for the padding settings
+ * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
+ * See %GTK_STYLE_PROPERTY_PADDING.
  *
  * Since: 3.0
  **/
@@ -3302,6 +3503,9 @@ gtk_style_context_get_padding (GtkStyleContext *context,
   const GValue *value;
   GtkBorder *b;
 
+  g_return_if_fail (padding != NULL);
+  *padding = fallback_border;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3310,17 +3514,22 @@ gtk_style_context_get_padding (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "padding", state);
-  b = g_value_get_boxed (value);
-  *padding = *b;
+
+  if (value)
+    {
+      b = g_value_get_boxed (value);
+      *padding = *b;
+    }
 }
 
 /**
  * gtk_style_context_get_margin:
  * @context: a #GtkStyleContext
  * @state: state to retrieve the border for
- * @color: (out): return value for the margin settings
+ * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
+ * See %GTK_STYLE_PROPERTY_MARGIN.
  *
  * Since: 3.0
  **/
@@ -3334,6 +3543,9 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   const GValue *value;
   GtkBorder *b;
 
+  g_return_if_fail (margin != NULL);
+  *margin = fallback_border;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
@@ -3342,8 +3554,48 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   data = style_data_lookup (context);
   value = _gtk_style_properties_peek_property (data->store,
                                                "margin", state);
-  b = g_value_get_boxed (value);
-  *margin = *b;
+
+  if (value)
+    {
+      b = g_value_get_boxed (value);
+      *margin = *b;
+    }
+}
+
+/**
+ * gtk_style_context_get_font:
+ * @context: a #GtkStyleContext
+ * @state: state to retrieve the font for
+ *
+ * Returns the font description for a given state. The returned
+ * object is const and will remain valid until the
+ * #GtkStyleContext::changed signal happens.
+ *
+ * Returns: the #PangoFontDescription for the given state. This
+ *          object is owned by GTK+ and should not be freed.
+ *
+ * Since: 3.0
+ **/
+const PangoFontDescription *
+gtk_style_context_get_font (GtkStyleContext *context,
+                            GtkStateFlags    state)
+{
+  GtkStyleContextPrivate *priv;
+  StyleData *data;
+  const GValue *value;
+
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  priv = context->priv;
+  g_return_val_if_fail (priv->widget_path != NULL, NULL);
+
+  data = style_data_lookup (context);
+  value = _gtk_style_properties_peek_property (data->store, "font", state);
+
+  if (value)
+    return g_value_get_boxed (value);
+
+  return NULL;
 }
 
 /* Paint methods */
@@ -3383,15 +3635,21 @@ gtk_render_check (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_check (priv->theming_engine, cr,
                               x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3427,15 +3685,21 @@ gtk_render_option (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_option (priv->theming_engine, cr,
                                x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3469,15 +3733,20 @@ gtk_render_arrow (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (size > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, size, size);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_arrow (priv->theming_engine, cr,
                               angle, x, y, size);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3514,14 +3783,20 @@ gtk_render_background (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_background (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3560,14 +3835,20 @@ gtk_render_frame (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_frame (priv->theming_engine, cr, x, y, width, height);
+  
+  cairo_restore (cr);
 }
 
 /**
@@ -3603,14 +3884,20 @@ gtk_render_expander (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_expander (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3643,14 +3930,20 @@ gtk_render_focus (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_focus (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3677,10 +3970,13 @@ gtk_render_layout (GtkStyleContext *context,
   PangoRectangle extents;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (PANGO_IS_LAYOUT (layout));
   g_return_if_fail (cr != NULL);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   pango_layout_get_extents (layout, &extents, NULL);
 
@@ -3692,6 +3988,8 @@ gtk_render_layout (GtkStyleContext *context,
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_layout (priv->theming_engine, cr, x, y, layout);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3724,8 +4022,12 @@ gtk_render_line (GtkStyleContext *context,
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
 
+  cairo_save (cr);
+
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_line (priv->theming_engine, cr, x0, y0, x1, y1);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3763,14 +4065,20 @@ gtk_render_slider (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_slider (priv->theming_engine, cr, x, y, width, height, orientation);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3813,9 +4121,21 @@ gtk_render_frame_gap (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
+  g_return_if_fail (xy0_gap <= xy1_gap);
+  g_return_if_fail (xy0_gap >= 0);
+
+  if (gap_side == GTK_POS_LEFT ||
+      gap_side == GTK_POS_RIGHT)
+    g_return_if_fail (xy1_gap <= height);
+  else
+    g_return_if_fail (xy1_gap <= width);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
@@ -3823,6 +4143,8 @@ gtk_render_frame_gap (GtkStyleContext *context,
   engine_class->render_frame_gap (priv->theming_engine, cr,
                                   x, y, width, height, gap_side,
                                   xy0_gap, xy1_gap);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3860,14 +4182,20 @@ gtk_render_extension (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_extension (priv->theming_engine, cr, x, y, width, height, gap_side);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3903,14 +4231,20 @@ gtk_render_handle (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_handle (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -3941,14 +4275,20 @@ gtk_render_activity (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
+  g_return_if_fail (width > 0);
+  g_return_if_fail (height > 0);
 
   priv = context->priv;
   engine_class = GTK_THEMING_ENGINE_GET_CLASS (priv->theming_engine);
+
+  cairo_save (cr);
 
   store_animation_region (context, x, y, width, height);
 
   _gtk_theming_engine_set_context (priv->theming_engine, context);
   engine_class->render_activity (priv->theming_engine, cr, x, y, width, height);
+
+  cairo_restore (cr);
 }
 
 /**

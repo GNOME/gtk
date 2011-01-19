@@ -52,13 +52,14 @@
 
 #include "gtkfilechooserbutton.h"
 
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 
 /* **************** *
  *  Private Macros  *
  * **************** */
 
-#define DEFAULT_TITLE		N_("Select A File")
+#define DEFAULT_TITLE		N_("Select a File")
 #define DESKTOP_DISPLAY_NAME	N_("Desktop")
 #define FALLBACK_DISPLAY_NAME	N_("(None)")
 #define FALLBACK_ICON_NAME	"stock_unknown"
@@ -222,8 +223,7 @@ static void     gtk_file_chooser_button_hide               (GtkWidget        *wi
 static void     gtk_file_chooser_button_map                (GtkWidget        *widget);
 static gboolean gtk_file_chooser_button_mnemonic_activate  (GtkWidget        *widget,
 							    gboolean          group_cycling);
-static void     gtk_file_chooser_button_style_set          (GtkWidget        *widget,
-							    GtkStyle         *old_style);
+static void     gtk_file_chooser_button_style_updated      (GtkWidget        *widget);
 static void     gtk_file_chooser_button_screen_changed     (GtkWidget        *widget,
 							    GdkScreen        *old_screen);
 
@@ -330,7 +330,7 @@ gtk_file_chooser_button_class_init (GtkFileChooserButtonClass * class)
   widget_class->show = gtk_file_chooser_button_show;
   widget_class->hide = gtk_file_chooser_button_hide;
   widget_class->map = gtk_file_chooser_button_map;
-  widget_class->style_set = gtk_file_chooser_button_style_set;
+  widget_class->style_updated = gtk_file_chooser_button_style_updated;
   widget_class->screen_changed = gtk_file_chooser_button_screen_changed;
   widget_class->mnemonic_activate = gtk_file_chooser_button_mnemonic_activate;
 
@@ -1041,7 +1041,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
 										 data, type,
 										 drag_time);
 
-  if (widget == NULL || context == NULL || data == NULL || data->length < 0)
+  if (widget == NULL || context == NULL || data == NULL || gtk_selection_data_get_length (data) < 0)
     return;
 
   switch (type)
@@ -1347,11 +1347,9 @@ change_icon_theme (GtkFileChooserButton *button)
 }
 
 static void
-gtk_file_chooser_button_style_set (GtkWidget *widget,
-				   GtkStyle  *old_style)
+gtk_file_chooser_button_style_updated (GtkWidget *widget)
 {
-  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_set (widget,
-								      old_style);
+  GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_updated (widget);
 
   if (gtk_widget_has_screen (widget))
     change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));

@@ -37,6 +37,7 @@ struct _GtkEntryCompletionPrivate
   GtkTreeModelFilter *filter_model;
   GtkListStore *actions;
   gboolean first_sel_changed;
+  GtkCellArea *cell_area;
 
   GtkEntryCompletionMatchFunc match_func;
   gpointer match_data;
@@ -85,6 +86,10 @@ void     _gtk_entry_effective_inner_border (GtkEntry  *entry,
 					    GtkBorder *border);
 void     _gtk_entry_reset_im_context       (GtkEntry  *entry);
 GtkIMContext* _gtk_entry_get_im_context    (GtkEntry  *entry);
+void     _gtk_entry_set_is_cell_renderer   (GtkEntry  *entry,
+                                            gboolean   is_cell_renderer);
+
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_PRIVATE_H__ */

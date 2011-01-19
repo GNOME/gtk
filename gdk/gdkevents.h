@@ -100,7 +100,7 @@ typedef union  _GdkEvent	    GdkEvent;
 /**
  * GdkEventFunc:
  * @event: the #GdkEvent to process.
- * @data: user data set when the event handler was installed with
+ * @data: (closure): user data set when the event handler was installed with
  *   gdk_event_handler_set().
  *
  * Specifies the type of function passed to gdk_event_handler_set() to
@@ -1089,6 +1089,9 @@ gboolean  gdk_event_get_axis            (const GdkEvent  *event,
 void       gdk_event_set_device         (GdkEvent        *event,
                                          GdkDevice       *device);
 GdkDevice* gdk_event_get_device         (const GdkEvent  *event);
+void       gdk_event_set_source_device  (GdkEvent        *event,
+                                         GdkDevice       *device);
+GdkDevice* gdk_event_get_source_device  (const GdkEvent  *event);
 void      gdk_event_request_motions     (const GdkEventMotion *event);
 
 gboolean  gdk_events_get_distance       (GdkEvent        *event1,

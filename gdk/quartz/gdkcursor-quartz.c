@@ -22,9 +22,24 @@
 
 #include "gdkdisplay.h"
 #include "gdkcursor.h"
+#include "gdkcursorprivate.h"
+#include "gdkquartzcursor.h"
 #include "gdkprivate-quartz.h"
 
 #include "xcursors.h"
+
+struct _GdkQuartzCursor
+{
+  GdkCursor cursor;
+
+  NSCursor *nscursor;
+};
+
+struct _GdkQuartzCursorClass
+{
+  GdkCursorClass cursor_class;
+};
+
 
 static GdkCursor *cached_xcursors[G_N_ELEMENTS (xcursors)];
 
@@ -32,17 +47,15 @@ static GdkCursor *
 gdk_quartz_cursor_new_from_nscursor (NSCursor      *nscursor,
                                      GdkCursorType  cursor_type)
 {
-  GdkCursorPrivate *private;
-  GdkCursor *cursor;
+  GdkQuartzCursor *private;
 
-  private = g_new (GdkCursorPrivate, 1);
+  private = g_object_new (GDK_TYPE_QUARTZ_CURSOR,
+                          "cursor-type", cursor_type,
+                          "display", _gdk_display,
+                          NULL);
   private->nscursor = nscursor;
 
-  cursor = (GdkCursor *)private;
-  cursor->type = cursor_type;
-  cursor->ref_count = 1;
-
-  return cursor;
+  return GDK_CURSOR (private);
 }
 
 static GdkCursor *
@@ -175,14 +188,14 @@ create_builtin_cursor (GdkCursorType cursor_type)
 }
 
 GdkCursor*
-gdk_cursor_new_for_display (GdkDisplay    *display,
-			    GdkCursorType  cursor_type)
+_gdk_quartz_display_get_cursor_for_type (GdkDisplay    *display,
+                                         GdkCursorType  cursor_type)
 {
   NSCursor *nscursor;
 
   g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
-  switch (cursor_type) 
+  switch (cursor_type)
     {
     case GDK_XTERM:
       nscursor = [NSCursor IBeamCursor];
@@ -237,92 +250,23 @@ gdk_cursor_new_for_display (GdkDisplay    *display,
   return gdk_quartz_cursor_new_from_nscursor (nscursor, cursor_type);
 }
 
-static NSImage *
-_gdk_quartz_pixbuf_to_ns_image (GdkPixbuf *pixbuf)
-{
-  NSBitmapImageRep  *bitmap_rep;
-  NSImage           *image;
-  gboolean           has_alpha;
-  
-  has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
-  
-  /* Create a bitmap image rep */
-  bitmap_rep = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL 
-                                         pixelsWide:gdk_pixbuf_get_width (pixbuf)
-					 pixelsHigh:gdk_pixbuf_get_height (pixbuf)
-					 bitsPerSample:8 samplesPerPixel:has_alpha ? 4 : 3
-					 hasAlpha:has_alpha isPlanar:NO colorSpaceName:NSDeviceRGBColorSpace
-					 bytesPerRow:0 bitsPerPixel:0];
-	
-  {
-    /* Add pixel data to bitmap rep */
-    guchar *src, *dst;
-    int src_stride, dst_stride;
-    int x, y;
-		
-    src_stride = gdk_pixbuf_get_rowstride (pixbuf);
-    dst_stride = [bitmap_rep bytesPerRow];
-		
-    for (y = 0; y < gdk_pixbuf_get_height (pixbuf); y++) 
-      {
-	src = gdk_pixbuf_get_pixels (pixbuf) + y * src_stride;
-	dst = [bitmap_rep bitmapData] + y * dst_stride;
-	
-	for (x = 0; x < gdk_pixbuf_get_width (pixbuf); x++)
-	  {
-	    if (has_alpha)
-	      {
-		guchar red, green, blue, alpha;
-		
-		red = *src++;
-		green = *src++;
-		blue = *src++;
-		alpha = *src++;
-		
-		*dst++ = (red * alpha) / 255;
-		*dst++ = (green * alpha) / 255;
-		*dst++ = (blue * alpha) / 255;
-		*dst++ = alpha;
-	      }
-	    else
-	     {
-	       *dst++ = *src++;
-	       *dst++ = *src++;
-	       *dst++ = *src++;
-	     }
-	  }
-      }	
-  }
-	
-  image = [[NSImage alloc] init];
-  [image addRepresentation:bitmap_rep];
-  [bitmap_rep release];
-  [image autorelease];
-	
-  return image;
-}
 
 GdkCursor *
-gdk_cursor_new_from_pixbuf (GdkDisplay *display, 
-			    GdkPixbuf  *pixbuf,
-			    gint        x,
-			    gint        y)
+_gdk_quartz_display_get_cursor_for_pixbuf (GdkDisplay *display,
+                                           GdkPixbuf  *pixbuf,
+                                           gint        x,
+                                           gint        y)
 {
   NSImage *image;
   NSCursor *nscursor;
   GdkCursor *cursor;
   gboolean has_alpha;
 
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
-  g_return_val_if_fail (GDK_IS_PIXBUF (pixbuf), NULL);
-  g_return_val_if_fail (0 <= x && x < gdk_pixbuf_get_width (pixbuf), NULL);
-  g_return_val_if_fail (0 <= y && y < gdk_pixbuf_get_height (pixbuf), NULL);
-
   GDK_QUARTZ_ALLOC_POOL;
 
   has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
 
-  image = _gdk_quartz_pixbuf_to_ns_image (pixbuf);
+  image = gdk_quartz_pixbuf_to_ns_image_libgtk_only (pixbuf);
   nscursor = [[NSCursor alloc] initWithImage:image hotSpot:NSMakePoint(x, y)];
 
   cursor = gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_CURSOR_IS_PIXMAP);
@@ -332,82 +276,95 @@ gdk_cursor_new_from_pixbuf (GdkDisplay *display,
   return cursor;
 }
 
-GdkCursor*  
-gdk_cursor_new_from_name (GdkDisplay  *display,  
-			  const gchar *name)
+GdkCursor*
+_gdk_quartz_display_get_cursor_for_name (GdkDisplay  *display,
+                                         const gchar *name)
 {
   /* FIXME: Implement */
   return NULL;
 }
 
+G_DEFINE_TYPE (GdkQuartzCursor, gdk_quartz_cursor, GDK_TYPE_CURSOR)
+
+static GdkPixbuf *gdk_quartz_cursor_get_image (GdkCursor *cursor);
+
+static void
+gdk_quartz_cursor_finalize (GObject *object)
+{
+  GdkQuartzCursor *private = GDK_QUARTZ_CURSOR (object);
+
+  if (private->nscursor)
+    [private->nscursor release];
+  private->nscursor = NULL;
+}
+
+static void
+gdk_quartz_cursor_class_init (GdkQuartzCursorClass *quartz_cursor_class)
+{
+  GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (quartz_cursor_class);
+  GObjectClass *object_class = G_OBJECT_CLASS (quartz_cursor_class);
+
+  object_class->finalize = gdk_quartz_cursor_finalize;
+
+  cursor_class->get_image = gdk_quartz_cursor_get_image;
+}
+
+static void
+gdk_quartz_cursor_init (GdkQuartzCursor *cursor)
+{
+}
+
+
+gboolean
+_gdk_quartz_display_supports_cursor_alpha (GdkDisplay *display)
+{
+  return TRUE;
+}
+
+gboolean
+_gdk_quartz_display_supports_cursor_color (GdkDisplay *display)
+{
+  return TRUE;
+}
+
 void
-_gdk_cursor_destroy (GdkCursor *cursor)
+_gdk_quartz_display_get_default_cursor_size (GdkDisplay *display,
+                                             guint      *width,
+                                             guint      *height)
 {
-  GdkCursorPrivate *private;
-
-  g_return_if_fail (cursor != NULL);
-  g_return_if_fail (cursor->ref_count == 0);
-
-  private = (GdkCursorPrivate *)cursor;
-  [private->nscursor release];
-  
-  g_free (private);
-}
-
-gboolean 
-gdk_display_supports_cursor_alpha (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return TRUE;
-}
-
-gboolean 
-gdk_display_supports_cursor_color (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
-
-  return TRUE;
-}
-
-guint     
-gdk_display_get_default_cursor_size (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_DISPLAY (display), 0);
-
   /* Mac OS X doesn't have the notion of a default size */
-  return 32;
+  *width = 32;
+  *height = 32;
 }
 
-void     
-gdk_display_get_maximal_cursor_size (GdkDisplay *display,
-				     guint       *width,
-				     guint       *height)
+void
+_gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
+                                             guint       *width,
+                                             guint       *height)
 {
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
   /* Cursor sizes in Mac OS X can be arbitrarily large */
   *width = 65536;
   *height = 65536;
 }
 
-GdkDisplay *
-gdk_cursor_get_display (GdkCursor *cursor)
+NSCursor *
+_gdk_quartz_cursor_get_ns_cursor (GdkCursor *cursor)
 {
-  g_return_val_if_fail (cursor != NULL, NULL);
+  GdkQuartzCursor *cursor_private;
 
-  return gdk_display_get_default ();
+  if (!cursor)
+    return [NSCursor arrowCursor];
+
+  g_return_val_if_fail (GDK_IS_QUARTZ_CURSOR (cursor), NULL);
+
+  cursor_private = GDK_QUARTZ_CURSOR (cursor);
+
+  return cursor_private->nscursor;
 }
 
-GdkPixbuf *
-gdk_cursor_get_image (GdkCursor *cursor)
+static GdkPixbuf *
+gdk_quartz_cursor_get_image (GdkCursor *cursor)
 {
   /* FIXME: Implement */
   return NULL;
-}
-
-NSImage *
-gdk_quartz_pixbuf_to_ns_image_libgtk_only (GdkPixbuf *pixbuf)
-{
-  return _gdk_quartz_pixbuf_to_ns_image (pixbuf);
 }

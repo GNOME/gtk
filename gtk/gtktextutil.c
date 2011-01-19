@@ -208,14 +208,15 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
                                  gchar     *text,
                                  gsize      len)
 {
-  GtkStyle     *style;
-  GtkStateType  state;
+  GtkStyleContext *style_context;
+  GtkStateFlags state;
   cairo_surface_t *surface;
   PangoContext *context;
   PangoLayout  *layout;
   cairo_t      *cr;
   gint          pixmap_height, pixmap_width;
   gint          layout_width, layout_height;
+  GdkRGBA       color;
 
   g_return_val_if_fail (widget != NULL, NULL);
   g_return_val_if_fail (text != NULL, NULL);
@@ -238,18 +239,24 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
   pixmap_width  = layout_width  / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
   pixmap_height = layout_height / PANGO_SCALE + DRAG_ICON_LAYOUT_BORDER * 2;
 
-  style = gtk_widget_get_style (widget);
-  state = gtk_widget_get_state (widget);
+  style_context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
   surface = gdk_window_create_similar_surface (gtk_widget_get_window (widget),
                                                CAIRO_CONTENT_COLOR,
                                                pixmap_width  + 2,
                                                pixmap_height + 2);
   cr = cairo_create (surface);
 
-  gdk_cairo_set_source_color (cr, &style->base [state]);
+  gtk_style_context_save (style_context);
+  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_VIEW);
+
+  gtk_style_context_get_background_color (style_context, state, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_paint (cr);
 
-  gdk_cairo_set_source_color (cr, &style->text [state]);
+  gtk_style_context_get_color (style_context, state, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_move_to (cr, 1 + DRAG_ICON_LAYOUT_BORDER, 1 + DRAG_ICON_LAYOUT_BORDER);
   pango_cairo_show_layout (cr, layout);
 
@@ -263,21 +270,37 @@ _gtk_text_util_create_drag_icon (GtkWidget *widget,
 
   cairo_surface_set_device_offset (surface, 2, 2);
 
+  gtk_style_context_restore (style_context);
+
   return surface;
 }
 
 static void
 gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
-                                         GtkTextAttributes  *values,
-                                         GtkStyle           *style)
+                                         GtkTextAttributes  *values)
 {
-  values->appearance.bg_color = style->base[GTK_STATE_NORMAL];
-  values->appearance.fg_color = style->text[GTK_STATE_NORMAL];
+  GtkStyleContext *context;
+  GdkRGBA bg_color, fg_color;
+  GtkStateFlags state;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
+  state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
+
+  gtk_style_context_get_background_color (context, state, &bg_color);
+  gtk_style_context_get_color (context, state, &fg_color);
+
+  values->appearance.bg_color.red = CLAMP (bg_color.red * 65535. + 0.5, 0, 65535);
+  values->appearance.bg_color.green = CLAMP (bg_color.green * 65535. + 0.5, 0, 65535);
+  values->appearance.bg_color.blue = CLAMP (bg_color.blue * 65535. + 0.5, 0, 65535);
+
+  values->appearance.fg_color.red = CLAMP (fg_color.red * 65535. + 0.5, 0, 65535);
+  values->appearance.fg_color.green = CLAMP (fg_color.green * 65535. + 0.5, 0, 65535);
+  values->appearance.fg_color.blue = CLAMP (fg_color.blue * 65535. + 0.5, 0, 65535);
 
   if (values->font)
     pango_font_description_free (values->font);
 
-  values->font = pango_font_description_copy (style->font_desc);
+  values->font = pango_font_description_copy (gtk_style_context_get_font (context, state));
 }
 
 cairo_surface_t *
@@ -290,7 +313,9 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
   cairo_surface_t   *surface;
   gint               pixmap_height, pixmap_width;
   gint               layout_width, layout_height;
-  GtkStyle          *widget_style;
+  GtkStyleContext   *context;
+  GtkStateFlags      state;
+  GdkRGBA            color;
   GtkTextBuffer     *new_buffer;
   GtkTextLayout     *layout;
   GtkTextAttributes *style;
@@ -303,7 +328,8 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    g_return_val_if_fail (start != NULL, NULL);
    g_return_val_if_fail (end != NULL, NULL);
 
-   widget_style = gtk_widget_get_style (widget);
+   context = gtk_widget_get_style_context (widget);
+   state = gtk_widget_get_state_flags (widget);
 
    new_buffer = gtk_text_buffer_new (gtk_text_buffer_get_tag_table (buffer));
    gtk_text_buffer_get_start_iter (new_buffer, &iter);
@@ -331,9 +357,7 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
 
    if (GTK_IS_TEXT_VIEW (widget))
      {
-       gtk_widget_ensure_style (widget);
-       gtk_text_view_set_attributes_from_style (GTK_TEXT_VIEW (widget),
-                                                style, widget_style);
+       gtk_text_view_set_attributes_from_style (GTK_TEXT_VIEW (widget), style);
 
        layout_width = layout_width
          - gtk_text_view_get_border_window_size (GTK_TEXT_VIEW (widget), GTK_TEXT_WINDOW_LEFT)
@@ -366,7 +390,11 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
 
    cr = cairo_create (surface);
 
-   gdk_cairo_set_source_color (cr, &widget_style->base [gtk_widget_get_state (widget)]);
+   gtk_style_context_save (context);
+   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
+
+   gtk_style_context_get_background_color (context, state, &color);
+   gdk_cairo_set_source_rgba (cr, &color);
    cairo_paint (cr);
 
    cairo_save (cr);
@@ -386,6 +414,8 @@ _gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
    g_object_unref (new_buffer);
 
    cairo_surface_set_device_offset (surface, 2, 2);
+
+   gtk_style_context_restore (context);
 
    return surface;
 }

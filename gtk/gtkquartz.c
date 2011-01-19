@@ -21,6 +21,7 @@
 #include "config.h"
 
 #include "gtkquartz.h"
+#include "gtkselectionprivate.h"
 #include <gdk/quartz/gdkquartz.h>
 
 NSImage *
@@ -290,30 +291,17 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
     }
   else if ([type isEqualTo:NSURLPboardType])
     {
-      gchar **list = NULL;
-      int count;
+      gchar **uris;
 
-      count = gdk_text_property_to_utf8_list_for_display (display,
-                                                          gdk_atom_intern_static_string ("UTF8_STRING"),
-                                                          format,
-                                                          data,
-                                                          length,
-                                                          &list);
-
-      if (count > 0)
+      uris = gtk_selection_data_get_uris (selection_data);
+      if (uris != NULL)
         {
-          gchar **result;
           NSURL *url;
 
-          result = g_uri_list_extract_uris (list[0]);
-
-          url = [NSURL URLWithString:[NSString stringWithUTF8String:result[0]]];
+          url = [NSURL URLWithString:[NSString stringWithUTF8String:uris[0]]];
           [url writeToPasteboard:pasteboard];
-
-          g_strfreev (result);
         }
-
-      g_strfreev (list);
+      g_strfreev (uris);
     }
   else
     [pasteboard setData:[NSData dataWithBytesNoCopy:(void *)data

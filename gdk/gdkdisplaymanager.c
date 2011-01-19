@@ -21,19 +21,32 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
 
-#include "gdkdisplaymanager.h"
-
-#include "gdkscreen.h"
-#include "gdkdisplay.h"
+#include "gdkconfig.h"
+#include "gdkdisplaymanagerprivate.h"
 #include "gdkinternals.h"
 #include "gdkmarshalers.h"
 #include "gdkintl.h"
 
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+
+#ifdef GDK_WINDOWING_QUARTZ
+/* We immediately include gdkquartzdisplaymanager.h here instead of
+ * gdkquartz.h so that we do not have to enable -xobjective-c for the
+ * "generic" GDK source code.
+ */
+#include "quartz/gdkquartzdisplaymanager.h"
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkwin32.h"
+#endif
 
 /**
  * SECTION:gdkdisplaymanager
@@ -58,17 +71,15 @@ enum {
 
 static void gdk_display_manager_class_init   (GdkDisplayManagerClass *klass);
 static void gdk_display_manager_set_property (GObject                *object,
-					      guint                   prop_id,
-					      const GValue           *value,
-					      GParamSpec             *pspec);
+                                              guint                   prop_id,
+                                              const GValue           *value,
+                                              GParamSpec             *pspec);
 static void gdk_display_manager_get_property (GObject                *object,
-					      guint                   prop_id,
-					      GValue                 *value,
-					      GParamSpec             *pspec);
+                                              guint                   prop_id,
+                                              GValue                 *value,
+                                              GParamSpec             *pspec);
 
 static guint signals[LAST_SIGNAL] = { 0 };
-
-static GdkDisplay *default_display = NULL;
 
 G_DEFINE_TYPE (GdkDisplayManager, gdk_display_manager, G_TYPE_OBJECT)
 
@@ -82,32 +93,32 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
 
   /**
    * GdkDisplayManager::display-opened:
-   * @display_manager: the object on which the signal is emitted
+   * @manager: the object on which the signal is emitted
    * @display: the opened display
    *
-   * The ::display_opened signal is emitted when a display is opened.
+   * The ::display-opened signal is emitted when a display is opened.
    *
    * Since: 2.2
    */
   signals[DISPLAY_OPENED] =
     g_signal_new (g_intern_static_string ("display-opened"),
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GdkDisplayManagerClass, display_opened),
-		  NULL, NULL,
-		  _gdk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE,
-		  1,
-		  GDK_TYPE_DISPLAY);
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GdkDisplayManagerClass, display_opened),
+                  NULL, NULL,
+                  _gdk_marshal_VOID__OBJECT,
+                  G_TYPE_NONE,
+                  1,
+                  GDK_TYPE_DISPLAY);
 
   g_object_class_install_property (object_class,
-				   PROP_DEFAULT_DISPLAY,
-				   g_param_spec_object ("default-display",
- 							P_("Default Display"),
- 							P_("The default display for GDK"),
-							GDK_TYPE_DISPLAY,
- 							G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
-							G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
+                                   PROP_DEFAULT_DISPLAY,
+                                   g_param_spec_object ("default-display",
+                                                        P_("Default Display"),
+                                                        P_("The default display for GDK"),
+                                                        GDK_TYPE_DISPLAY,
+                                                        G_PARAM_READWRITE|G_PARAM_STATIC_NAME|
+                                                        G_PARAM_STATIC_NICK|G_PARAM_STATIC_BLURB));
 }
 
 static void
@@ -117,15 +128,15 @@ gdk_display_manager_init (GdkDisplayManager *manager)
 
 static void
 gdk_display_manager_set_property (GObject      *object,
-				  guint         prop_id,
-				  const GValue *value,
-				  GParamSpec   *pspec)
+                                  guint         prop_id,
+                                  const GValue *value,
+                                  GParamSpec   *pspec)
 {
   switch (prop_id)
     {
     case PROP_DEFAULT_DISPLAY:
       gdk_display_manager_set_default_display (GDK_DISPLAY_MANAGER (object),
-					       g_value_get_object (value));
+                                               g_value_get_object (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -135,14 +146,15 @@ gdk_display_manager_set_property (GObject      *object,
 
 static void
 gdk_display_manager_get_property (GObject      *object,
-				  guint         prop_id,
-				  GValue       *value,
-				  GParamSpec   *pspec)
+                                  guint         prop_id,
+                                  GValue       *value,
+                                  GParamSpec   *pspec)
 {
   switch (prop_id)
     {
     case PROP_DEFAULT_DISPLAY:
-      g_value_set_object (value, default_display);
+      g_value_set_object (value,
+                          gdk_display_manager_get_default_display (GDK_DISPLAY_MANAGER (object)));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -155,37 +167,66 @@ gdk_display_manager_get_property (GObject      *object,
  *
  * Gets the singleton #GdkDisplayManager object.
  *
- * Returns: (transfer none): The global #GdkDisplayManager singleton; gdk_parse_pargs(),
- * gdk_init(), or gdk_init_check() must have been called first.
+ * When called for the first time, this function consults the
+ * <envar>GDK_BACKEND</envar> to find out which of the supported
+ * GDK backends to use (in case GDK has been compiled with multiple
+ * backends).
+ *
+ * Returns: (transfer none): The global #GdkDisplayManager singleton;
+ *     gdk_parse_args(), gdk_init(), or gdk_init_check() must have
+ *     been called first.
  *
  * Since: 2.2
  **/
 GdkDisplayManager*
 gdk_display_manager_get (void)
 {
-  static GdkDisplayManager *display_manager = NULL;
+  static GdkDisplayManager *manager = NULL;
 
-  if (!display_manager)
-    display_manager = g_object_new (GDK_TYPE_DISPLAY_MANAGER, NULL);
+  if (!manager)
+    {
+      const gchar *backend;
 
-  return display_manager;
+      backend = g_getenv ("GDK_BACKEND");
+#ifdef GDK_WINDOWING_X11
+      if (backend == NULL || strcmp (backend, "x11") == 0)
+        manager = g_object_new (gdk_x11_display_manager_get_type (), NULL);
+      else
+#endif
+#ifdef GDK_WINDOWING_QUARTZ
+      if (backend == NULL || strcmp (backend, "quartz") == 0)
+        manager = g_object_new (gdk_quartz_display_manager_get_type (), NULL);
+      else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+      if (backend == NULL || strcmp (backend, "win32") == 0)
+        manager = g_object_new (gdk_win32_display_manager_get_type (), NULL);
+      else
+#endif
+      if (backend != NULL)
+        g_error ("Unsupported GDK backend: %s", backend);
+      else
+        g_error ("No GDK backend found");
+    }
+
+  return manager;
 }
 
 /**
  * gdk_display_manager_get_default_display:
- * @display_manager: a #GdkDisplayManager 
+ * @manager: a #GdkDisplayManager
  *
  * Gets the default #GdkDisplay.
  *
- * Returns: (transfer none): a #GdkDisplay, or %NULL if there is no default
- *   display.
+ * Returns: (transfer none): a #GdkDisplay, or %NULL
+ *     if there is no default display.
  *
  * Since: 2.2
  */
 GdkDisplay *
-gdk_display_manager_get_default_display (GdkDisplayManager *display_manager)
+gdk_display_manager_get_default_display (GdkDisplayManager *manager)
 {
-  return default_display;
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_default_display (manager);
 }
 
 /**
@@ -203,7 +244,7 @@ gdk_display_manager_get_default_display (GdkDisplayManager *display_manager)
 GdkDisplay *
 gdk_display_get_default (void)
 {
-  return default_display;
+  return gdk_display_manager_get_default_display (gdk_display_manager_get ());
 }
 
 /**
@@ -219,6 +260,10 @@ gdk_display_get_default (void)
 GdkScreen *
 gdk_screen_get_default (void)
 {
+  GdkDisplay *default_display;
+
+  default_display = gdk_display_get_default ();
+
   if (default_display)
     return gdk_display_get_default_screen (default_display);
   else
@@ -227,7 +272,7 @@ gdk_screen_get_default (void)
 
 /**
  * gdk_display_manager_set_default_display:
- * @display_manager: a #GdkDisplayManager
+ * @manager: a #GdkDisplayManager
  * @display: a #GdkDisplay
  * 
  * Sets @display as the default display.
@@ -235,30 +280,113 @@ gdk_screen_get_default (void)
  * Since: 2.2
  **/
 void
-gdk_display_manager_set_default_display (GdkDisplayManager *display_manager,
-					 GdkDisplay        *display)
+gdk_display_manager_set_default_display (GdkDisplayManager *manager,
+                                         GdkDisplay        *display)
 {
-  default_display = display;
+  GDK_DISPLAY_MANAGER_GET_CLASS (manager)->set_default_display (manager, display);
 
-  _gdk_windowing_set_default_display (display);
-
-  g_object_notify (G_OBJECT (display_manager), "default-display");
+  g_object_notify (G_OBJECT (manager), "default-display");
 }
 
 /**
  * gdk_display_manager_list_displays:
- * @display_manager: a #GdkDisplayManager 
+ * @manager: a #GdkDisplayManager
  *
  * List all currently open displays.
- * 
- * Return value: (transfer container) (element-type GdkDisplay): a newly allocated
- * #GSList of #GdkDisplay objects. Free this list with g_slist_free() when you
- * are done with it.
+ *
+ * Return value: (transfer container) (element-type GdkDisplay): a newly
+ *     allocated #GSList of #GdkDisplay objects. Free with g_slist_free()
+ *     when you are done with it.
  *
  * Since: 2.2
  **/
 GSList *
-gdk_display_manager_list_displays (GdkDisplayManager *display_manager)
+gdk_display_manager_list_displays (GdkDisplayManager *manager)
 {
-  return g_slist_copy (_gdk_displays);
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->list_displays (manager);
+}
+
+/**
+ * gdk_display_manager_open_display:
+ * @manager: a #GdkDisplayManager
+ * @name: the name of the display to open
+ *
+ * Opens a display.
+ *
+ * Return value: (transfer none): a #GdkDisplay, or %NULL
+ *     if the display could not be opened
+ *
+ * Since: 3.0
+ */
+GdkDisplay *
+gdk_display_manager_open_display (GdkDisplayManager *manager,
+                                  const gchar       *name)
+{
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->open_display (manager, name);
+}
+
+/**
+ * gdk_atom_intern:
+ * @atom_name: a string.
+ * @only_if_exists: if %TRUE, GDK is allowed to not create a new atom, but
+ *   just return %GDK_NONE if the requested atom doesn't already
+ *   exists. Currently, the flag is ignored, since checking the
+ *   existance of an atom is as expensive as creating it.
+ *
+ * Finds or creates an atom corresponding to a given string.
+ *
+ * Returns: the atom corresponding to @atom_name.
+ */
+GdkAtom
+gdk_atom_intern (const gchar *atom_name,
+                 gboolean     only_if_exists)
+{
+  GdkDisplayManager *manager = gdk_display_manager_get ();
+
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->atom_intern (manager, atom_name, TRUE);
+}
+
+/**
+ * gdk_atom_intern_static_string:
+ * @atom_name: a static string
+ *
+ * Finds or creates an atom corresponding to a given string.
+ *
+ * Note that this function is identical to gdk_atom_intern() except
+ * that if a new #GdkAtom is created the string itself is used rather
+ * than a copy. This saves memory, but can only be used if the string
+ * will <emphasis>always</emphasis> exist. It can be used with statically
+ * allocated strings in the main program, but not with statically
+ * allocated memory in dynamically loaded modules, if you expect to
+ * ever unload the module again (e.g. do not use this function in
+ * GTK+ theme engines).
+ *
+ * Returns: the atom corresponding to @atom_name
+ *
+ * Since: 2.10
+ */
+GdkAtom
+gdk_atom_intern_static_string (const gchar *atom_name)
+{
+  GdkDisplayManager *manager = gdk_display_manager_get ();
+
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->atom_intern (manager, atom_name, FALSE);
+}
+
+/**
+ * gdk_atom_name:
+ * @atom: a #GdkAtom.
+ *
+ * Determines the string corresponding to an atom.
+ *
+ * Returns: a newly-allocated string containing the string
+ *   corresponding to @atom. When you are done with the
+ *   return value, you should free it using g_free().
+ */
+gchar *
+gdk_atom_name (GdkAtom atom)
+{
+  GdkDisplayManager *manager = gdk_display_manager_get ();
+
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_atom_name (manager, atom);
 }

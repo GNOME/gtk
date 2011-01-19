@@ -6,19 +6,19 @@ INCLUDES = \
 	-I$(top_srcdir)/gdk		\
 	-DGDK_DISABLE_DEPRECATED	\
 	-DGTK_DISABLE_DEPRECATED	\
+	-DSRCDIR=\""$(abs_srcdir)"\"	\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)
 
 DEPS = \
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/libgtk-3.0.la
 
 progs_ldadd = \
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)				\
+	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
-noinst_PROGRAMS = $(TEST_PROGS) $(SAMPLE_PROGS)
+noinst_PROGRAMS = $(TEST_PROGS)
 
 
 TEST_PROGS			+= testing
@@ -57,8 +57,8 @@ floating_LDADD			 = $(progs_ldadd)
 # on a naked X server creates slightly different event
 # sequences than running on a normal desktop
 # TEST_PROGS			+= crossingevents
-crossingevents_SOURCES		 = crossingevents.c
-crossingevents_LDADD		 = $(progs_ldadd)
+#crossingevents_SOURCES		 = crossingevents.c
+#crossingevents_LDADD		 = $(progs_ldadd)
 
 # Should be ported to new API's
 #TEST_PROGS			+= filechooser
@@ -72,9 +72,9 @@ builder_LDFLAGS			 = -export-dynamic
 
 if OS_UNIX
 #TEST_PROGS			+= defaultvalue
+#defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
+#defaultvalue_LDADD 		 = $(progs_ldadd)
 endif
-defaultvalue_SOURCES		 = defaultvalue.c pixbuf-init.c
-defaultvalue_LDADD 		 = $(progs_ldadd)
 
 TEST_PROGS			+= textbuffer
 textbuffer_SOURCES		 = textbuffer.c pixbuf-init.c
@@ -90,21 +90,20 @@ filtermodel_LDADD		 = $(progs_ldadd)
 
 TEST_PROGS			+= expander
 expander_SOURCES		 = expander.c
-expander_LDADD		 = $(progs_ldadd)
+expander_LDADD			 = $(progs_ldadd)
 
 TEST_PROGS			+= action
 action_SOURCES			 = action.c
 action_LDADD			 = $(progs_ldadd)
 
-SAMPLE_PROGS = gtk-example-application
-gtk_example_application_SOURCES	= gtk-example-application.c
-gtk_example_application_LDADD	= $(progs_ldadd)
-
 TEST_PROGS			+= stylecontext
 stylecontext_SOURCES		 = stylecontext.c
 stylecontext_LDADD		 = $(progs_ldadd)
-EXTRA_DIST += test.css test.png
+EXTRA_DIST			+= test.css test.png
 
+TEST_PROGS			+= papersize
+papersize_SOURCES		 = papersize.c
+papersize_LDADD			 = $(progs_ldadd)
 
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \

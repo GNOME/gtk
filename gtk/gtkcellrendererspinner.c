@@ -32,7 +32,7 @@
 #include "gtkcellrendererspinner.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
-#include "gtktypeutils.h"
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
 
@@ -126,10 +126,8 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
    * Pulse of the spinner. Increment this value to draw the next frame of the
    * spinner animation. Usually, you would update this value in a timeout.
    *
-   * The #GtkSpinner widget draws one full cycle of the animation per second by default.
-   * You can learn about the number of frames used by the theme
-   * by looking at the #GtkSpinner:num-steps style property and the duration
-   * of the cycle by looking at #GtkSpinner:cycle-duration.
+   * By default, the #GtkSpinner widget draws one full cycle of the animation,
+   * consisting of 12 frames, in 750 milliseconds.
    *
    * Since: 2.20
    */
@@ -172,7 +170,7 @@ gtk_cell_renderer_spinner_init (GtkCellRendererSpinner *cell)
 }
 
 /**
- * gtk_cell_renderer_spinner_new
+ * gtk_cell_renderer_spinner_new:
  *
  * Returns a new cell renderer which will show a spinner to indicate
  * activity.
@@ -372,6 +370,11 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
         state = GTK_STATE_PRELIGHT;
     }
 
+  cairo_save (cr);
+
+  gdk_cairo_rectangle (cr, cell_area);
+  cairo_clip (cr);
+
   gtk_paint_spinner (gtk_widget_get_style (widget),
                            cr,
                            state,
@@ -380,4 +383,6 @@ gtk_cell_renderer_spinner_render (GtkCellRenderer      *cellr,
                            priv->pulse,
                            draw_rect.x, draw_rect.y,
                            draw_rect.width, draw_rect.height);
+
+  cairo_restore (cr);
 }

@@ -43,6 +43,10 @@
 
 #include "gtk/gtk.h"
 #include "gtk/gtk.h"
+#ifndef GTK_COMPILATION
+#define GTK_COMPILATION
+#endif
+#include "gtk/gtkmenushellprivate.h"
 
 #ifdef BUILDING_STANDALONE
 #include "gdk/gdkwin32.h"
@@ -1337,9 +1341,9 @@ draw_arrow (GtkStyle *style,
       reverse_engineer_stepper_box (widget, arrow_type,
 				    &box_x, &box_y, &box_width, &box_height);
 
-      if (gtk_range_get_adjustment(&scrollbar->range)->page_size >=
-          (gtk_range_get_adjustment(&scrollbar->range)->upper -
-           gtk_range_get_adjustment(&scrollbar->range)->lower))
+      if (gtk_adjustment_get_page_size(gtk_range_get_adjustment(&scrollbar->range)) >=
+          (gtk_adjustment_get_upper(gtk_range_get_adjustment(&scrollbar->range)) -
+           gtk_adjustment_get_lower(gtk_range_get_adjustment(&scrollbar->range))))
 	{
 	  is_disabled = TRUE;
 	}
@@ -1577,7 +1581,7 @@ draw_menu_item (cairo_t *cr, GtkWidget *widget, GtkStyle *style,
 
       if (state_type == GTK_STATE_PRELIGHT)
 	{
-	  draw_3d_border (dc, &rect, bar->active);
+        draw_3d_border (dc, &rect, bar->priv->active);
 	}
 
       release_window_dc (&dc_info);
@@ -1881,9 +1885,9 @@ draw_box (GtkStyle *style,
 	    }
 	  else
 	    {
-              if (gtk_range_get_adjustment(&scrollbar->range)->page_size >=
-        	  (gtk_range_get_adjustment(&scrollbar->range)->upper -
-        	   gtk_range_get_adjustment(&scrollbar->range)->lower))
+              if (gtk_adjustment_get_page_size(gtk_range_get_adjustment(&scrollbar->range)) >=
+        	  (gtk_adjustment_get_page_size(gtk_range_get_adjustment(&scrollbar->range)) -
+        	   gtk_adjustment_get_page_size(gtk_range_get_adjustment(&scrollbar->range))))
 		{
 		  return;
 		}

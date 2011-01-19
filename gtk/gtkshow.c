@@ -28,14 +28,17 @@
 
 /**
  * gtk_show_uri:
- * @screen: (allow-none): screen to show the uri on or %NULL for the default screen
+ * @screen: (allow-none): screen to show the uri on
+ *     or %NULL for the default screen
  * @uri: the uri to show
- * @timestamp: a timestamp to prevent focus stealing.
+ * @timestamp: a timestamp to prevent focus stealing
  * @error: a #GError that is returned in case of errors
  *
  * This is a convenience function for launching the default application
- * to show the uri. The uri must be of a form understood by GIO. Typical
- * examples are
+ * to show the uri. The uri must be of a form understood by GIO (i.e. you
+ * need to install gvfs to get support for uri schemes such as http://
+ * or ftp://, as only local files are handled by GIO itself).
+ * Typical examples are
  * <simplelist>
  *   <member><filename>file:///home/gnome/pict.jpg</filename></member>
  *   <member><filename>http://www.gnome.org</filename></member>
@@ -48,7 +51,7 @@
  * This function can be used as a replacement for gnome_vfs_url_show()
  * and gnome_url_show().
  *
- * Returns: %TRUE on success, %FALSE on error.
+ * Returns: %TRUE on success, %FALSE on error
  *
  * Since: 2.14
  */
@@ -60,10 +63,16 @@ gtk_show_uri (GdkScreen    *screen,
 {
   GdkAppLaunchContext *context;
   gboolean ret;
+  GdkDisplay *display;
 
   g_return_val_if_fail (uri != NULL, FALSE);
 
-  context = gdk_app_launch_context_new ();
+  if (screen != NULL)
+    display = gdk_screen_get_display (screen);
+  else
+    display = gdk_display_get_default ();
+
+  context = gdk_display_get_app_launch_context (display);
   gdk_app_launch_context_set_screen (context, screen);
   gdk_app_launch_context_set_timestamp (context, timestamp);
 

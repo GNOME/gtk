@@ -36,13 +36,15 @@ G_BEGIN_DECLS
 #define GTK_IS_TREE_SELECTION_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_TREE_SELECTION))
 #define GTK_TREE_SELECTION_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_TREE_SELECTION, GtkTreeSelectionClass))
 
+typedef struct _GtkTreeSelectionPrivate      GtkTreeSelectionPrivate;
+
 /**
  * GtkTreeSelectionFunc:
  * @selection: A #GtkTreeSelection
  * @model: A #GtkTreeModel being viewed
  * @path: The #GtkTreePath of the row in question
  * @path_currently_selected: %TRUE, if the path is currently selected
- * @data: user data
+ * @data: (closure): user data
  *
  * A function used by gtk_tree_selection_set_select_function() to filter
  * whether or not a row may be selected.  It is called whenever a row's
@@ -62,7 +64,7 @@ typedef gboolean (* GtkTreeSelectionFunc)    (GtkTreeSelection  *selection,
  * @model: The #GtkTreeModel being viewed
  * @path: The #GtkTreePath of a selected row
  * @iter: A #GtkTreeIter pointing to a selected row
- * @data: user data
+ * @data: (closure): user data
  *
  * A function used by gtk_tree_selection_selected_foreach() to map all
  * selected rows.  It will be called on every selected row in the view.
@@ -74,15 +76,10 @@ typedef void (* GtkTreeSelectionForeachFunc) (GtkTreeModel      *model,
 
 struct _GtkTreeSelection
 {
+  /*< private >*/
   GObject parent;
 
-  /*< private >*/
-
-  GtkTreeView *GSEAL (tree_view);
-  GtkSelectionMode GSEAL (type);
-  GtkTreeSelectionFunc GSEAL (user_func);
-  gpointer GSEAL (user_data);
-  GDestroyNotify GSEAL (destroy);
+  GtkTreeSelectionPrivate *priv;
 };
 
 struct _GtkTreeSelectionClass

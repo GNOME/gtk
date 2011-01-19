@@ -221,7 +221,12 @@ gtk_modifier_style_set_font (GtkModifierStyle           *style,
   if ((!old_font && !font_desc) ||
       (old_font && font_desc &&
        pango_font_description_equal (old_font, font_desc)))
-    return;
+    {
+      if (old_font)
+	pango_font_description_free (old_font);
+
+      return;
+    }
 
   if (font_desc)
     gtk_style_properties_set (priv->style, 0,
@@ -229,6 +234,9 @@ gtk_modifier_style_set_font (GtkModifierStyle           *style,
                               NULL);
   else
     gtk_style_properties_unset_property (priv->style, "font", 0);
+
+  if (old_font)
+    pango_font_description_free (old_font);
 
   g_signal_emit (style, signals[CHANGED], 0);
 }
@@ -282,11 +290,15 @@ gtk_modifier_style_set_color_property (GtkModifierStyle *style,
     }
 
   if (color)
-    g_hash_table_insert (priv->color_properties, str,
-                         gdk_rgba_copy (color));
+    {
+      g_hash_table_insert (priv->color_properties, str,
+                           gdk_rgba_copy (color));
+    }
   else
-    g_hash_table_remove (priv->color_properties, str);
+    {
+      g_hash_table_remove (priv->color_properties, str);
+      g_free (str);
+    }
 
   g_signal_emit (style, signals[CHANGED], 0);
-  g_free (str);
 }

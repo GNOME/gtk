@@ -2,7 +2,7 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-compiling" revision="4 Feb 2001">
+<refentry id="gtk-compiling">
 <refmeta>
 <refentrytitle>Compiling GTK+ Applications</refentrytitle>
 <manvolnum>3</manvolnum>
@@ -32,7 +32,7 @@ your system may be different):
 $ pkg-config --cflags gtk+-3.0
  -pthread -I/usr/include/gtk-3.0 -I/usr/lib64/gtk-3.0/include -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng12
 $ pkg-config --libs gtk+-3.0
- -pthread -lgtk-x11-3.0 -lgdk-x11-3.0 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lgdk_pixbuf-3.0 -lpangocairo-1.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
+ -pthread -lgtk-3.0 -lgdk-3.0 -latk-1.0 -lgio-2.0 -lpangoft2-1.0 -lgdk_pixbuf-3.0 -lpangocairo-1.0 -lcairo -lpango-1.0 -lfreetype -lfontconfig -lgobject-2.0 -lgmodule-2.0 -lgthread-2.0 -lrt -lglib-2.0
 </programlisting>
 </para>
 <para>
@@ -67,25 +67,6 @@ Similarly, if you want to make sure that your program doesn't use any
 functions which may be problematic in a multidevice setting, you can
 define the preprocessor symbol GDK_MULTIDEVICE_SAFE by using the command
 line option <literal>-DGTK_MULTIDEVICE_SAFE=1</literal>.
-</para>
-
-<para>
-The recommended way of using GTK+ has always been to only include the
-toplevel headers <filename>gtk.h</filename>, <filename>gdk.h</filename>,
-<filename>gdk-pixbuf.h</filename>.
-If you want to make sure that your program follows this recommended
-practise, you can define the preprocessor symbols GTK_DISABLE_SINGLE_INCLUDES
-and GDK_PIXBUF_DISABLE_SINGLE_INCLUDES to make GTK+ generate an error
-when individual headers are directly included.
-There are some exceptions: <filename>gdkkeysyms.h</filename> is not included in
-<filename>gdk.h</filename> because the file is quite large; see
-<link linkend="gdk-Keyboard-Handling">Key Values documentation</link>.
-<filename>gdkx.h</filename> must be included independently because It's
-platform-specific; see
-<link linkend="gdk-X-Window-System-Interaction">X Window System Interaction</link>
-documentation.
-The same for <filename>gtkunixprint.h</filename> if you use the non-portable
-<link linkend="GtkPrintUnixDialog">GtkPrintUnixDialog</link> API.
 </para>
 
 </refsect1>

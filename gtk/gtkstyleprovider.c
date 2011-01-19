@@ -107,7 +107,7 @@ gtk_style_provider_get_style_property (GtkStyleProvider *provider,
   g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), FALSE);
   g_return_val_if_fail (G_IS_PARAM_SPEC (pspec), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
-  g_return_val_if_fail (g_type_is_a (gtk_widget_path_get_widget_type (path), pspec->owner_type), FALSE);
+  g_return_val_if_fail (g_type_is_a (gtk_widget_path_get_object_type (path), pspec->owner_type), FALSE);
   g_return_val_if_fail (value != NULL, FALSE);
 
   iface = GTK_STYLE_PROVIDER_GET_IFACE (provider);

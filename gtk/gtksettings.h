@@ -38,9 +38,9 @@ G_BEGIN_DECLS
 
 
 /* --- typedefs --- */
-typedef struct    _GtkSettingsClass GtkSettingsClass;
-typedef struct    _GtkSettingsValue GtkSettingsValue;
-typedef struct    _GtkSettingsPropertyValue GtkSettingsPropertyValue; /* Internal */
+typedef struct _GtkSettingsPrivate GtkSettingsPrivate;
+typedef struct _GtkSettingsClass GtkSettingsClass;
+typedef struct _GtkSettingsValue GtkSettingsValue;
 
 
 /* --- structures --- */
@@ -48,16 +48,19 @@ struct _GtkSettings
 {
   GObject parent_instance;
 
-  GData  *GSEAL (queued_settings);	/* of type GtkSettingsValue* */
-  GtkSettingsPropertyValue *GSEAL (property_values);
-
-  GtkRcContext *GSEAL (rc_context);
-  GdkScreen    *GSEAL (screen);
+  /*< private >*/
+  GtkSettingsPrivate *priv;
 };
 
 struct _GtkSettingsClass
 {
   GObjectClass parent_class;
+
+  /* Padding for future expansion */
+  void (*_gtk_reserved1) (void);
+  void (*_gtk_reserved2) (void);
+  void (*_gtk_reserved3) (void);
+  void (*_gtk_reserved4) (void);
 };
 
 struct _GtkSettingsValue
@@ -75,65 +78,48 @@ struct _GtkSettingsValue
 
 
 /* --- functions --- */
-GType		gtk_settings_get_type		     (void) G_GNUC_CONST;
+GType           gtk_settings_get_type                (void) G_GNUC_CONST;
 #ifndef GDK_MULTIHEAD_SAFE
-GtkSettings*	gtk_settings_get_default	     (void);
+GtkSettings*    gtk_settings_get_default             (void);
 #endif
-GtkSettings*	gtk_settings_get_for_screen	     (GdkScreen *screen);
+GtkSettings*    gtk_settings_get_for_screen          (GdkScreen *screen);
 
-void		gtk_settings_install_property	     (GParamSpec         *pspec);
-void		gtk_settings_install_property_parser (GParamSpec         *pspec,
-						      GtkRcPropertyParser parser);
+void            gtk_settings_install_property        (GParamSpec         *pspec);
+void            gtk_settings_install_property_parser (GParamSpec         *pspec,
+                                                      GtkRcPropertyParser parser);
 
 /* --- precoded parsing functions --- */
 gboolean gtk_rc_property_parse_color       (const GParamSpec *pspec,
-					    const GString    *gstring,
-					    GValue           *property_value);
+                                            const GString    *gstring,
+                                            GValue           *property_value);
 gboolean gtk_rc_property_parse_enum        (const GParamSpec *pspec,
-					    const GString    *gstring,
-					    GValue           *property_value);
+                                            const GString    *gstring,
+                                            GValue           *property_value);
 gboolean gtk_rc_property_parse_flags       (const GParamSpec *pspec,
-					    const GString    *gstring,
-					    GValue           *property_value);
+                                            const GString    *gstring,
+                                            GValue           *property_value);
 gboolean gtk_rc_property_parse_requisition (const GParamSpec *pspec,
-					    const GString    *gstring,
-					    GValue           *property_value);
+                                            const GString    *gstring,
+                                            GValue           *property_value);
 gboolean gtk_rc_property_parse_border      (const GParamSpec *pspec,
-					    const GString    *gstring,
-					    GValue           *property_value);
+                                            const GString    *gstring,
+                                            GValue           *property_value);
 
-/*< private >*/
-void		gtk_settings_set_property_value	 (GtkSettings	*settings,
-						  const gchar	*name,
-						  const GtkSettingsValue *svalue);
-void		gtk_settings_set_string_property (GtkSettings	*settings,
-						  const gchar	*name,
-						  const gchar	*v_string,
-						  const gchar   *origin);
-void		gtk_settings_set_long_property	 (GtkSettings	*settings,
-						  const gchar	*name,
-						  glong		 v_long,
-						  const gchar   *origin);
-void		gtk_settings_set_double_property (GtkSettings	*settings,
-						  const gchar	*name,
-						  gdouble	 v_double,
-						  const gchar   *origin);
-
-
-/* implementation details */
-void _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
-					       const gchar            *name,
-					       const GtkSettingsValue *svalue);
-void _gtk_settings_reset_rc_values            (GtkSettings            *settings);
-
-void                _gtk_settings_handle_event        (GdkEventSetting    *event);
-GtkRcPropertyParser _gtk_rc_property_parser_from_type (GType               type);
-gboolean	    _gtk_settings_parse_convert       (GtkRcPropertyParser parser,
-						       const GValue       *src_value,
-						       GParamSpec         *pspec,
-						       GValue	          *dest_value);
-
-GdkScreen          *_gtk_settings_get_screen          (GtkSettings        *settings);
+void     gtk_settings_set_property_value   (GtkSettings            *settings,
+                                            const gchar            *name,
+                                            const GtkSettingsValue *svalue);
+void     gtk_settings_set_string_property  (GtkSettings            *settings,
+                                            const gchar            *name,
+                                            const gchar            *v_string,
+                                            const gchar            *origin);
+void     gtk_settings_set_long_property    (GtkSettings            *settings,
+                                            const gchar            *name,
+                                            glong                   v_long,
+                                            const gchar            *origin);
+void     gtk_settings_set_double_property  (GtkSettings            *settings,
+                                            const gchar            *name,
+                                            gdouble                 v_double,
+                                            const gchar            *origin);
 
 
 G_END_DECLS

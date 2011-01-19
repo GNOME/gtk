@@ -372,6 +372,11 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
         state = GTK_STATE_INSENSITIVE;
     }
 
+  cairo_save (cr);
+
+  gdk_cairo_rectangle (cr, cell_area);
+  cairo_clip (cr);
+
   if (priv->radio)
     {
       gtk_paint_option (gtk_widget_get_style (widget),
@@ -392,6 +397,8 @@ gtk_cell_renderer_toggle_render (GtkCellRenderer      *cell,
                              cell_area->y + y_offset + ypad,
                              width, height);
     }
+
+  cairo_restore (cr);
 }
 
 static gint

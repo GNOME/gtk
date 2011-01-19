@@ -64,8 +64,8 @@ libgailutil_3_0_la_CFLAGS = \
 	$(AM_CFLAGS)
 
 libgailutil_3_0_la_LIBADD = \
-	$(top_builddir)/gtk/$(gtktargetlib)	\
-	$(top_builddir)/gdk/$(gdktargetlib)	\
+	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
 libgailutil_3_0_la_LDFLAGS = \

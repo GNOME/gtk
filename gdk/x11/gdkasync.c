@@ -46,7 +46,7 @@ in this Software without prior written authorization from The Open Group.
 #include "config.h"
 
 #include "gdkasync.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 #ifdef NEED_XIPROTO_H_FOR_XREPLY
 #include <X11/extensions/XIproto.h>
@@ -653,12 +653,12 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
   state.children = NULL;
   state.nchildren = 0;
 
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (display);
   result = list_children_and_wm_state (dpy, window,
 				       win_has_wm_state ? wm_state_atom : None,
 				       &has_wm_state,
 				       &state.children, &state.nchildren);
-  gdk_error_trap_pop_ignored ();
+  gdk_x11_display_error_trap_pop_ignored (display);
   if (!result)
     {
       g_free (state.children);

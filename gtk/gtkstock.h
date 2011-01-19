@@ -33,9 +33,22 @@
 
 
 #include <gdk/gdk.h>
-#include <gtk/gtktypeutils.h> /* for GtkTranslateFunc */
 
 G_BEGIN_DECLS
+
+/*
+ * GtkTranslateFunc:
+ * @path: The id of the message. In #GtkActionGroup this will be a label
+ *   or tooltip from a #GtkActionEntry.
+ * @func_data: user data passed in when registering the function
+ *
+ * The function used to translate messages in e.g. #GtkIconFactory
+ * and #GtkActionGroup.
+ *
+ * Returns: the translated message
+ */
+typedef gchar * (*GtkTranslateFunc) (const gchar  *path,
+                                     gpointer      func_data);
 
 typedef struct _GtkStockItem GtkStockItem;
 

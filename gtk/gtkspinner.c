@@ -119,43 +119,6 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
                                                          P_("Whether the spinner is active"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
-  /**
-   * GtkSpinner:num-steps:
-   *
-   * The number of steps for the spinner to complete a full loop.
-   * The animation will complete a full cycle in one second by default
-   * (see the #GtkSpinner:cycle-duration style property).
-   *
-   * Since: 2.20
-   *
-   * Deprecated: 3.0
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_uint ("num-steps",
-                                                             P_("Number of steps"),
-                                                             P_("The number of steps for the spinner to complete a full loop. The animation will complete a full cycle in one second by default (see #GtkSpinner:cycle-duration)."),
-                                                             1,
-                                                             G_MAXUINT,
-                                                             12,
-                                                             G_PARAM_READABLE));
-
-  /**
-   * GtkSpinner:cycle-duration:
-   *
-   * The duration in milliseconds for the spinner to complete a full cycle.
-   *
-   * Since: 2.20
-   *
-   * Deprecated: 3.0
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_uint ("cycle-duration",
-                                                             P_("Animation duration"),
-                                                             P_("The length of time in milliseconds for the spinner to complete a full loop"),
-                                                             500,
-                                                             G_MAXUINT,
-                                                             1000,
-                                                             G_PARAM_READABLE));
 }
 
 static void
@@ -345,7 +308,7 @@ typedef AtkObjectFactory        GtkSpinnerAccessibleFactory;
 typedef AtkObjectFactoryClass   GtkSpinnerAccessibleFactoryClass;
 
 G_DEFINE_TYPE (GtkSpinnerAccessibleFactory,
-               gtk_spinner_accessible_factory,
+               _gtk_spinner_accessible_factory,
                ATK_TYPE_OBJECT_FACTORY);
 
 static GType
@@ -366,14 +329,14 @@ gtk_spinner_accessible_factory_create_accessible (GObject *obj)
 }
 
 static void
-gtk_spinner_accessible_factory_class_init (AtkObjectFactoryClass *klass)
+_gtk_spinner_accessible_factory_class_init (AtkObjectFactoryClass *klass)
 {
   klass->create_accessible = gtk_spinner_accessible_factory_create_accessible;
   klass->get_accessible_type = gtk_spinner_accessible_factory_get_accessible_type;
 }
 
 static void
-gtk_spinner_accessible_factory_init (AtkObjectFactory *factory)
+_gtk_spinner_accessible_factory_init (AtkObjectFactory *factory)
 {
 }
 
@@ -402,7 +365,7 @@ gtk_spinner_get_accessible (GtkWidget *widget)
       if (g_type_is_a (derived_atk_type, GTK_TYPE_ACCESSIBLE))
         atk_registry_set_factory_type (registry,
                                        GTK_TYPE_SPINNER,
-                                       gtk_spinner_accessible_factory_get_type ());
+                                       _gtk_spinner_accessible_factory_get_type ());
       first_time = FALSE;
     }
 

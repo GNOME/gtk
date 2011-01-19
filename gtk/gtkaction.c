@@ -506,10 +506,11 @@ gtk_action_buildable_get_name (GtkBuildable *buildable)
 /**
  * gtk_action_new:
  * @name: A unique name for the action
- * @label: (allow-none): the label displayed in menu items and on buttons, or %NULL
+ * @label: (allow-none): the label displayed in menu items and on buttons,
+ *         or %NULL
  * @tooltip: (allow-none): a tooltip for the action, or %NULL
- * @stock_id: the stock icon to display in widgets representing the
- *   action, or %NULL
+ * @stock_id: (allow-none): the stock icon to display in widgets representing
+ *            the action, or %NULL
  *
  * Creates a new #GtkAction object. To add the action to a
  * #GtkActionGroup and set the accelerator for the action,

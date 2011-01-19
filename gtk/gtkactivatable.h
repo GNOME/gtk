@@ -25,7 +25,6 @@
 #define __GTK_ACTIVATABLE_H__
 
 #include <gtk/gtkaction.h>
-#include <gtk/gtktypeutils.h>
 
 G_BEGIN_DECLS
 

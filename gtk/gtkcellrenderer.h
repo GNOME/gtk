@@ -111,6 +111,11 @@ struct _GtkCellRendererClass
                                                           gint                  height,
                                                           gint                 *minimum_width,
                                                           gint                 *natural_width);
+  void               (* get_aligned_area)                (GtkCellRenderer      *cell,
+                                                          GtkWidget            *widget,
+							  GtkCellRendererState  flags,
+                                                          const GdkRectangle   *cell_area,
+                                                          GdkRectangle         *aligned_area);
   void               (* get_size)                        (GtkCellRenderer      *cell,
                                                           GtkWidget            *widget,
                                                           const GdkRectangle   *cell_area,
@@ -177,6 +182,12 @@ void               gtk_cell_renderer_get_preferred_size             (GtkCellRend
                                                                      GtkWidget          *widget,
                                                                      GtkRequisition     *minimum_size,
                                                                      GtkRequisition     *natural_size);
+void               gtk_cell_renderer_get_aligned_area               (GtkCellRenderer    *cell,
+								     GtkWidget          *widget,
+								     GtkCellRendererState flags,
+								     const GdkRectangle *cell_area,
+								     GdkRectangle       *aligned_area);
+
 #ifndef GTK_DISABLE_DEPRECATED
 void             gtk_cell_renderer_get_size       (GtkCellRenderer      *cell,
 						   GtkWidget            *widget,
@@ -235,6 +246,8 @@ gboolean         gtk_cell_renderer_get_visible    (GtkCellRenderer      *cell);
 void             gtk_cell_renderer_set_sensitive  (GtkCellRenderer      *cell,
                                                    gboolean              sensitive);
 gboolean         gtk_cell_renderer_get_sensitive  (GtkCellRenderer      *cell);
+
+gboolean         gtk_cell_renderer_is_activatable (GtkCellRenderer      *cell);
 
 /* For use by cell renderer implementations only */
 void             gtk_cell_renderer_stop_editing   (GtkCellRenderer      *cell,

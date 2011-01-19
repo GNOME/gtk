@@ -215,6 +215,8 @@ static void         gtk_tree_model_filter_get_value                       (GtkTr
                                                                            GValue                 *value);
 static gboolean     gtk_tree_model_filter_iter_next                       (GtkTreeModel           *model,
                                                                            GtkTreeIter            *iter);
+static gboolean     gtk_tree_model_filter_iter_previous                   (GtkTreeModel           *model,
+                                                                           GtkTreeIter            *iter);
 static gboolean     gtk_tree_model_filter_iter_children                   (GtkTreeModel           *model,
                                                                            GtkTreeIter            *iter,
                                                                            GtkTreeIter            *parent);
@@ -385,6 +387,7 @@ gtk_tree_model_filter_tree_model_init (GtkTreeModelIface *iface)
   iface->get_path = gtk_tree_model_filter_get_path;
   iface->get_value = gtk_tree_model_filter_get_value;
   iface->iter_next = gtk_tree_model_filter_iter_next;
+  iface->iter_previous = gtk_tree_model_filter_iter_previous;
   iface->iter_children = gtk_tree_model_filter_iter_children;
   iface->iter_has_child = gtk_tree_model_filter_iter_has_child;
   iface->iter_n_children = gtk_tree_model_filter_iter_n_children;
@@ -2509,6 +2512,41 @@ gtk_tree_model_filter_iter_next (GtkTreeModel *model,
     }
 
   /* no next visible iter */
+  iter->stamp = 0;
+
+  return FALSE;
+}
+
+static gboolean
+gtk_tree_model_filter_iter_previous (GtkTreeModel *model,
+                                     GtkTreeIter  *iter)
+{
+  int i;
+  FilterLevel *level;
+  FilterElt *elt;
+
+  g_return_val_if_fail (GTK_IS_TREE_MODEL_FILTER (model), FALSE);
+  g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->child_model != NULL, FALSE);
+  g_return_val_if_fail (GTK_TREE_MODEL_FILTER (model)->priv->stamp == iter->stamp, FALSE);
+
+  level = iter->user_data;
+  elt = iter->user_data2;
+
+  i = elt - FILTER_ELT (level->array->data);
+
+  while (i > 0)
+    {
+      i--;
+      elt--;
+
+      if (elt->visible)
+        {
+          iter->user_data2 = elt;
+          return TRUE;
+        }
+    }
+
+  /* no previous visible iter */
   iter->stamp = 0;
 
   return FALSE;

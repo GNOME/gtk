@@ -35,8 +35,27 @@
 #include "gdkprivate-win32.h"
 #include "gdkinternals.h"
 #include "gdkkeysyms.h"
+#include "gdkkeysprivate.h"
+#include "gdkwin32keys.h"
 
 #include "config.h"
+
+struct _GdkWin32KeymapClass
+{
+  GdkKeymapClass parent_class;
+};
+
+struct _GdkWin32Keymap
+{
+  GdkKeymap parent_instance;
+};
+
+G_DEFINE_TYPE (GdkWin32Keymap, gdk_win32_keymap, GDK_TYPE_KEYMAP)
+
+static void
+gdk_win32_keymap_init (GdkWin32Keymap *keymap)
+{
+}
 
 guint _gdk_keymap_serial = 0;
 gboolean _gdk_keyboard_has_altgr = FALSE;
@@ -489,18 +508,18 @@ update_keymap (void)
 } 
 
 GdkKeymap*
-gdk_keymap_get_for_display (GdkDisplay *display)
+_gdk_win32_display_get_keymap (GdkDisplay *display)
 {
   g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
   if (default_keymap == NULL)
-    default_keymap = g_object_new (gdk_keymap_get_type (), NULL);
+    default_keymap = g_object_new (gdk_win32_keymap_get_type (), NULL);
 
   return default_keymap;
 }
 
-PangoDirection
-gdk_keymap_get_direction (GdkKeymap *keymap)
+static PangoDirection
+gdk_win32_keymap_get_direction (GdkKeymap *keymap)
 {
   update_keymap ();
 
@@ -520,8 +539,8 @@ gdk_keymap_get_direction (GdkKeymap *keymap)
     }
 }
 
-gboolean
-gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
+static gboolean
+gdk_win32_keymap_have_bidi_layouts (GdkKeymap *keymap)
 {
   /* Should we check if the kayboard layouts switchable at the moment
    * cover both directionalities? What does the doc comment in
@@ -530,20 +549,20 @@ gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
   return FALSE;
 }
 
-gboolean
-gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+static gboolean
+gdk_win32_keymap_get_caps_lock_state (GdkKeymap *keymap)
 {
   return ((GetKeyState (VK_CAPITAL) & 1) != 0);
 }
 
-gboolean
-gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
+static gboolean
+gdk_win32_keymap_get_num_lock_state (GdkKeymap *keymap)
 {
   return ((GetKeyState (VK_NUMLOCK) & 1) != 0);
 }
 
-gboolean
-gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
+static gboolean
+gdk_win32_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                    guint          keyval,
                                    GdkKeymapKey **keys,
                                    gint          *n_keys)
@@ -618,8 +637,8 @@ gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   return *n_keys > 0;
 }
 
-gboolean
-gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
+static gboolean
+gdk_win32_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
                                     guint          hardware_keycode,
                                     GdkKeymapKey **keys,
                                     guint        **keyvals,
@@ -712,8 +731,8 @@ gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
   return *n_entries > 0;
 }
 
-guint
-gdk_keymap_lookup_key (GdkKeymap          *keymap,
+static guint
+gdk_win32_keymap_lookup_key (GdkKeymap          *keymap,
                        const GdkKeymapKey *key)
 {
   guint sym;
@@ -741,8 +760,8 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
     return sym;
 }
 
-gboolean
-gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
+static gboolean
+gdk_win32_keymap_translate_keyboard_state (GdkKeymap       *keymap,
                                      guint            hardware_keycode,
                                      GdkModifierType  state,
                                      gint             group,
@@ -878,16 +897,41 @@ gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   return tmp_keyval != GDK_KEY_VoidSymbol;
 }
 
-void
-gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+static void
+gdk_win32_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
                                   GdkModifierType *state)
 {
 }
 
-gboolean
-gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+static gboolean
+gdk_win32_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
                                   GdkModifierType *state)
 {
   /* FIXME: Is this the right thing to do? */
   return TRUE;
+}
+
+static void
+gdk_win32_keymap_finalize (GObject *object)
+{
+}
+
+static void
+gdk_win32_keymap_class_init (GdkWin32KeymapClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkKeymapClass *keymap_class = GDK_KEYMAP_CLASS (klass);
+
+  object_class->finalize = gdk_win32_keymap_finalize;
+
+  keymap_class->get_direction = gdk_win32_keymap_get_direction;
+  keymap_class->have_bidi_layouts = gdk_win32_keymap_have_bidi_layouts;
+  keymap_class->get_caps_lock_state = gdk_win32_keymap_get_caps_lock_state;
+  keymap_class->get_num_lock_state = gdk_win32_keymap_get_num_lock_state;
+  keymap_class->get_entries_for_keyval = gdk_win32_keymap_get_entries_for_keyval;
+  keymap_class->get_entries_for_keycode = gdk_win32_keymap_get_entries_for_keycode;
+  keymap_class->lookup_key = gdk_win32_keymap_lookup_key;
+  keymap_class->translate_keyboard_state = gdk_win32_keymap_translate_keyboard_state;
+  keymap_class->add_virtual_modifiers = gdk_win32_keymap_add_virtual_modifiers;
+  keymap_class->map_virtual_modifiers = gdk_win32_keymap_map_virtual_modifiers;
 }

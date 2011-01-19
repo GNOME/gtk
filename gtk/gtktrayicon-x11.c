@@ -23,18 +23,20 @@
  */
 
 #include "config.h"
+
 #include <math.h>
 #include <string.h>
+
+#include "x11/gdkx.h"
+#include <X11/Xatom.h>
+#include <cairo-xlib.h>
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktrayicon.h"
 #include "gtktestutils.h"
 #include "gtkdebug.h"
-
-#include "x11/gdkx.h"
-#include <X11/Xatom.h>
-#include <cairo-xlib.h>
+#include "gtktypebuiltins.h"
 
 #define SYSTEM_TRAY_REQUEST_DOCK    0
 #define SYSTEM_TRAY_BEGIN_MESSAGE   1
@@ -85,8 +87,7 @@ static void gtk_tray_icon_get_property  (GObject     *object,
 					 GParamSpec  *pspec);
 
 static void     gtk_tray_icon_realize   (GtkWidget   *widget);
-static void     gtk_tray_icon_style_set (GtkWidget   *widget,
-					 GtkStyle    *previous_style);
+static void     gtk_tray_icon_style_updated (GtkWidget   *widget);
 static gboolean gtk_tray_icon_delete    (GtkWidget   *widget,
 					 GdkEventAny *event);
 static gboolean gtk_tray_icon_draw      (GtkWidget   *widget,
@@ -114,7 +115,7 @@ gtk_tray_icon_class_init (GtkTrayIconClass *class)
   gobject_class->dispose = gtk_tray_icon_dispose;
 
   widget_class->realize = gtk_tray_icon_realize;
-  widget_class->style_set = gtk_tray_icon_style_set;
+  widget_class->style_updated = gtk_tray_icon_style_updated;
   widget_class->delete_event = gtk_tray_icon_delete;
   widget_class->draw = gtk_tray_icon_draw;
 
@@ -254,8 +255,8 @@ gtk_tray_icon_clear_manager_window (GtkTrayIcon *icon)
     {
       GdkWindow *gdkwin;
 
-      gdkwin = gdk_window_lookup_for_display (display,
-                                              icon->priv->manager_window);
+      gdkwin = gdk_x11_window_lookup_for_display (display,
+                                                  icon->priv->manager_window);
 
       gdk_window_remove_filter (gdkwin, gtk_tray_icon_manager_filter, icon);
 
@@ -361,15 +362,21 @@ gtk_tray_icon_draw (GtkWidget *widget,
   focus_child = gtk_container_get_focus_child (GTK_CONTAINER (widget));
   if (focus_child && gtk_widget_has_focus (focus_child))
     {
-      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      GtkStyleContext *context;
+      GtkStateFlags state;
 
-      gtk_paint_focus (gtk_widget_get_style (widget),
-                       cr,
-                       gtk_widget_get_state (widget),
-                       widget, "tray_icon",
-                       border_width, border_width,
-                       gtk_widget_get_allocated_width (widget) - 2 * border_width,
-                       gtk_widget_get_allocated_height (widget) - 2 * border_width);
+      border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+
+      gtk_render_focus (context, cr, border_width, border_width,
+                        gtk_widget_get_allocated_width (widget) - 2 * border_width,
+                        gtk_widget_get_allocated_height (widget) - 2 * border_width);
+
+      gtk_style_context_restore (context);
     }
 
   return retval;
@@ -445,6 +452,9 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
   gulong bytes_after;
   int error, result;
   GdkVisual *visual;
+  gint red_prec;
+  gint green_prec;
+  gint blue_prec;
 
   g_assert (icon->priv->manager_window != None);
 
@@ -468,9 +478,13 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
       visual = gdk_x11_screen_lookup_visual (screen, visual_id);
     }
 
+  gdk_visual_get_red_pixel_details (visual, NULL, NULL, &red_prec);
+  gdk_visual_get_green_pixel_details (visual, NULL, NULL, &green_prec);
+  gdk_visual_get_blue_pixel_details (visual, NULL, NULL, &blue_prec);
+
   icon->priv->manager_visual = visual;
   icon->priv->manager_visual_rgba = visual != NULL &&
-    (visual->red_prec + visual->blue_prec + visual->green_prec < visual->depth);
+    (red_prec + blue_prec + green_prec < gdk_visual_get_depth (visual));
 
   /* For the background-relative hack we use when we aren't using a real RGBA
    * visual, we can't be double-buffered */
@@ -760,12 +774,12 @@ gtk_tray_icon_update_manager_window (GtkTrayIcon *icon)
       GdkWindow *gdkwin;
 
       GTK_NOTE (PLUGSOCKET,
-		g_print ("GtkStatusIcon %p: is being managed by window %lx\n",
-				icon, (gulong) icon->priv->manager_window));
+        g_print ("GtkStatusIcon %p: is being managed by window %lx\n",
+                 icon, (gulong) icon->priv->manager_window));
 
-      gdkwin = gdk_window_lookup_for_display (display,
-					      icon->priv->manager_window);
-      
+      gdkwin = gdk_x11_window_lookup_for_display (display,
+                                                  icon->priv->manager_window);
+
       gdk_window_add_filter (gdkwin, gtk_tray_icon_manager_filter, icon);
 
       gtk_tray_icon_get_orientation_property (icon);
@@ -844,7 +858,7 @@ gtk_tray_icon_set_visual (GtkTrayIcon *icon)
    * to be either the screen default visual or a TrueColor visual; ignore it
    * if it is something else
    */
-  if (visual && visual->type != GDK_VISUAL_TRUE_COLOR)
+  if (visual && gdk_visual_get_visual_type (visual) != GDK_VISUAL_TRUE_COLOR)
     visual = NULL;
 
   if (visual == NULL)
@@ -888,8 +902,7 @@ gtk_tray_icon_realize (GtkWidget *widget)
 }
 
 static void
-gtk_tray_icon_style_set (GtkWidget   *widget,
-			 GtkStyle    *previous_style)
+gtk_tray_icon_style_updated (GtkWidget   *widget)
 {
   /* The default handler resets the background according to the style. We either
    * use a transparent background or a parent-relative background and ignore the

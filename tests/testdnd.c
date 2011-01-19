@@ -335,7 +335,7 @@ target_drag_motion	   (GtkWidget	       *widget,
 	   G_OBJECT_TYPE_NAME (source_widget) :
 	   "NULL");
 
-  tmp_list = context->targets;
+  tmp_list = gdk_drag_context_list_targets (context);
   while (tmp_list)
     {
       char *name = gdk_atom_name (GDK_POINTER_TO_ATOM (tmp_list->data));
@@ -345,7 +345,8 @@ target_drag_motion	   (GtkWidget	       *widget,
       tmp_list = tmp_list->next;
     }
 
-  gdk_drag_status (context, context->suggested_action, time);
+  gdk_drag_status (context, gdk_drag_context_get_suggested_action (context), time);
+
   return TRUE;
 }
 
@@ -361,10 +362,10 @@ target_drag_drop	   (GtkWidget	       *widget,
 
   gtk_image_set_from_pixbuf (GTK_IMAGE (widget), trashcan_closed);
 
-  if (context->targets)
+  if (gdk_drag_context_list_targets (context))
     {
-      gtk_drag_get_data (widget, context, 
-			 GDK_POINTER_TO_ATOM (context->targets->data), 
+      gtk_drag_get_data (widget, context,
+			 GDK_POINTER_TO_ATOM (gdk_drag_context_list_targets (context)->data),
 			 time);
       return TRUE;
     }
@@ -377,13 +378,14 @@ target_drag_data_received  (GtkWidget          *widget,
 			    GdkDragContext     *context,
 			    gint                x,
 			    gint                y,
-			    GtkSelectionData   *data,
+			    GtkSelectionData   *selection_data,
 			    guint               info,
 			    guint               time)
 {
-  if ((data->length >= 0) && (data->format == 8))
+  if (gtk_selection_data_get_length (selection_data) >= 0 &&
+      gtk_selection_data_get_format (selection_data) == 8)
     {
-      g_print ("Received \"%s\" in trashcan\n", (gchar *)data->data);
+      g_print ("Received \"%s\" in trashcan\n", (gchar *) gtk_selection_data_get_data (selection_data));
       gtk_drag_finish (context, TRUE, FALSE, time);
       return;
     }
@@ -396,13 +398,14 @@ label_drag_data_received  (GtkWidget          *widget,
 			    GdkDragContext     *context,
 			    gint                x,
 			    gint                y,
-			    GtkSelectionData   *data,
+			    GtkSelectionData   *selection_data,
 			    guint               info,
 			    guint               time)
 {
-  if ((data->length >= 0) && (data->format == 8))
+  if (gtk_selection_data_get_length (selection_data) >= 0 &&
+      gtk_selection_data_get_format (selection_data) == 8)
     {
-      g_print ("Received \"%s\" in label\n", (gchar *)data->data);
+      g_print ("Received \"%s\" in label\n", (gchar *) gtk_selection_data_get_data (selection_data));
       gtk_drag_finish (context, TRUE, FALSE, time);
       return;
     }
@@ -422,7 +425,7 @@ source_drag_data_get  (GtkWidget          *widget,
     g_print ("I was dropped on the rootwin\n");
   else
     gtk_selection_data_set (selection_data,
-			    selection_data->target,
+			    gtk_selection_data_get_target (selection_data),
 			    8, (guchar *) "I'm Data!", 9);
 }
   

@@ -102,6 +102,7 @@ static void       gail_widget_focus_event        (AtkObject     *obj,
 
 static void       gail_widget_real_initialize    (AtkObject     *obj,
                                                   gpointer      data);
+static char *gail_widget_get_attributes(AtkObject *obj);
 static GtkWidget* gail_widget_find_viewport      (GtkWidget     *widget);
 static gboolean   gail_widget_on_screen          (GtkWidget     *widget);
 static gboolean   gail_widget_all_parents_visible(GtkWidget     *widget);
@@ -126,6 +127,7 @@ gail_widget_class_init (GailWidgetClass *klass)
   class->ref_state_set = gail_widget_ref_state_set;
   class->get_index_in_parent = gail_widget_get_index_in_parent;
   class->initialize = gail_widget_real_initialize;
+  class->get_attributes = gail_widget_get_attributes;
 }
 
 static void
@@ -511,6 +513,18 @@ gail_widget_ref_state_set (AtkObject *accessible)
         {
           atk_state_set_add_state (state_set, ATK_STATE_DEFAULT);
         }
+
+      if (GTK_IS_ORIENTABLE(widget))
+        switch (gtk_orientable_get_orientation (GTK_ORIENTABLE (widget)))
+          {
+          case GTK_ORIENTATION_HORIZONTAL:
+            atk_state_set_add_state (state_set, ATK_STATE_HORIZONTAL);
+            break;
+
+          case GTK_ORIENTATION_VERTICAL:
+            atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
+            break;
+          }
     }
   return state_set;
 }
@@ -976,6 +990,15 @@ gail_widget_real_notify_gtk (GObject     *obj,
       state = ATK_STATE_SENSITIVE;
       value = gtk_widget_get_sensitive (widget);
     }
+  else if (strcmp (pspec->name, "orientation") == 0)
+    {
+      GtkOrientable *orientable;
+
+      orientable = GTK_ORIENTABLE (widget);
+
+      state = ATK_STATE_HORIZONTAL;
+      value = (gtk_orientable_get_orientation (orientable) == GTK_ORIENTATION_HORIZONTAL);
+    }
   else
     return;
 
@@ -983,6 +1006,8 @@ gail_widget_real_notify_gtk (GObject     *obj,
   if (state == ATK_STATE_SENSITIVE)
     atk_object_notify_state_change (atk_obj, ATK_STATE_ENABLED, value);
 
+  if (state == ATK_STATE_HORIZONTAL)
+    atk_object_notify_state_change (atk_obj, ATK_STATE_VERTICAL, !value);
 }
 
 static void 
@@ -1038,9 +1063,9 @@ static gboolean gail_widget_on_screen (GtkWidget *widget)
       gtk_widget_get_allocation (viewport, &viewport_allocation);
 
       adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (viewport));
-      visible_rect.y = adjustment->value;
+      visible_rect.y = gtk_adjustment_get_value (adjustment);
       adjustment = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (viewport));
-      visible_rect.x = adjustment->value;
+      visible_rect.x = gtk_adjustment_get_value (adjustment);
       visible_rect.width = viewport_allocation.width;
       visible_rect.height = viewport_allocation.height;
 
@@ -1093,4 +1118,17 @@ static gboolean gail_widget_all_parents_visible (GtkWidget *widget)
     }
 
   return result;
+}
+
+static char *gail_widget_get_attributes(AtkObject *obj)
+{
+	AtkAttributeSet *attributes;
+	AtkAttribute *toolkit = g_malloc(sizeof(AtkAttribute));
+
+	toolkit->name = g_strdup("toolkit");
+	toolkit->value = g_strdup("gail");
+
+attributes = g_slist_append(NULL, toolkit);
+
+return attributes;
 }

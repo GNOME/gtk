@@ -10,13 +10,11 @@ TOP = ..\..
 ################################################################
 
 # Not the real version but the one used in the DLL names
-GTK_VER = 2.0
-GDK_PIXBUF_VER = 2.0
+GTK_VER = 3.0
 
 
 GDK_LIBS = ../gdk/gdk-win32-$(GTK_VER).lib
 GTK_LIBS = gtk-win32-$(GTK_VER).lib
-GDK_PIXBUF_LIBS = ../gdk-pixbuf/gdk_pixbuf-$(GDK_PIXBUF_VER).lib
 GTK_BINARY_VERSION = @GTK_BINARY_VERSION@
 
 # Perl and awk are needed to generate some source files.
@@ -25,7 +23,7 @@ GTK_BINARY_VERSION = @GTK_BINARY_VERSION@
 PERL = perl
 AWK = gawk
 
-INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk -I ../gdk-pixbuf
+INCLUDES = -FImsvc_recommended_pragmas.h -I . -I .. -I ../gdk $(GDK_PIXBUF_CFLAGS)
 DEPCFLAGS = $(PANGO_CFLAGS) $(GLIB_CFLAGS) $(LIBICONV_CFLAGS) \
 		$(INTL_CFLAGS) $(ATK_CFLAGS) $(CAIRO_CFLAGS)
 LDFLAGS = $(ATK_LIBS) /link /machine:ix86 $(LINKDEBUG)
@@ -38,54 +36,29 @@ DEFINES = \
 	-DGTK_VERSION=\"$(GTK_VER)\" -DGTK_BINARY_VERSION=\"$(GTK_BINARY_VERSION)\" \
 	-DGTK_HOST=\"win32\" \
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED \
-	-DGTK_PRINT_BACKENDS=\"file,lpr\"	\
+	-DGTK_PRINT_BACKENDS=\"file,lpr\" \
+	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED \
 	-DGTK_PRINT_PREVIEW_COMMAND="\"evince --unlink-tempfile --preview %f\"" \
 	-DGTK_LIBDIR=\"/magic/path/replaced/at/runtime\"
+
+EXTRALIBS = \
+	$(GDK_LIBS) \
+	$(GDK_PIXBUF_LIBS) \
+	$(PANGO_LIBS) $(INTL_LIBS) \
+	$(GLIB_LIBS) $(GMODULE_LIBS) $(GIO_LIBS) \
+	$(CAIRO_LIBS) $(PANGOCAIRO_LIBS) $(CAIRO_GOBJECT_LIBS) \
 
 TOUCH = copy makefile.msc+nul
 
 gtkbuiltincache.h: gtk-update-icon-cache.exe
-	cd stock-icons\16
-	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
-	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
-	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
-	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
-	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
-	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
-	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
-	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
-	copy gtk-floppy.png gtk-save.png
-	copy gtk-harddisk.png drive-harddisk.png
-	copy gtk-directory.png folder.png
-	copy gtk-directory.png folder-remote.png
-	copy gtk-home.png user-home.png
-	copy gtk-directory.png user-desktop.png
-	copy gtk-file.png text-x-generic.png
-	cd ..\24
-	copy gtk-go-forward-ltr.png gtk-go-back-rtl.png
-	copy gtk-go-back-ltr.png gtk-go-forward-rtl.png
-	copy gtk-goto-last-ltr.png gtk-goto-first-rtl.png
-	copy gtk-goto-first-ltr.png gtk-goto-last-rtl.png
-	copy gtk-media-rewind-ltr.png gtk-media-forward-rtl.png
-	copy gtk-media-previous-ltr.png gtk-media-next-rtl.png
-	copy gtk-media-next-ltr.png gtk-media-previous-rtl.png
-	copy gtk-media-forward-ltr.png gtk-media-rewind-rtl.png
-	copy gtk-floppy.png gtk-save.png
-	copy gtk-harddisk.png drive-harddisk.png
-	copy gtk-directory.png folder.png
-	copy gtk-directory.png folder-remote.png
-	copy gtk-home.png user-home.png
-	copy gtk-directory.png user-desktop.png
-	copy gtk-file.png text-x-generic.png
-	cd ..\..
 	del gtkicontheme.obj
 	gtk-update-icon-cache --force --ignore-theme-index 	\
 	   --source builtin_icons stock-icons > gtkbuiltincache.h
 
 GENERATED = \
 	gtktypebuiltins.h gtktypebuiltins.c \
-	gtkmarshal.h gtkmarshal.c gtkmarshalers.h gtkmarshalers.c \
-	gtk.def gtktypefuncs.c
+	gtkmarshalers.h gtkmarshalers.c \
+	gtk.def gtkalias.h gtkaliasdef.c gtktypefuncs.c
 
 all :						\
 	..\config.h				\
@@ -96,28 +69,6 @@ all :						\
 	gtk-query-immodules-$(GTK_VER).exe \
 #	gtk-win32-$(GTK_VER)s.lib \
 #	gtk-x11-$(GTK_VER).dll
-
-gtk_OBJECTS_deprecated = \
-	gtkcombo.obj \
-	gtkclist.obj \
-	gtkctree.obj \
-	gtkfilesel.obj \
-	gtktext.obj \
-	gtktoolbar.obj \
-	gtklist.obj \
-	gtkitemfactory.obj \
-	gtkoptionmenu.obj \
-	gtktree.obj \
-	gtktreeitem.obj \
-	gtkoldeditable.obj \
-	gtklistitem.obj \
-	gtkprogress.obj \
-	gtktipsquery.obj \
-	gtkshow.obj \
-	gtkpreview.obj \
-	gtkseparatortoolitem.obj \
-	gtktypeutils.obj \
-	gtktooltips.obj \
 
 gtk_OBJECTS_cell = \
 	gtkcelleditable.obj \
@@ -131,6 +82,7 @@ gtk_OBJECTS_cell = \
 	gtkcellrendererprogress.obj \
 	gtkcellrendererspin.obj	\
 	gtkcellrendererspinner.obj \
+#	gtkcellsizerequest.obj \
 	gtkcellview.obj \
 	gtkliststore.obj \
 	gtktreednd.obj \
@@ -150,7 +102,7 @@ gtk_OBJECTS_file = \
 	gtkfilechooserdialog.obj \
 	gtkfilechooserembed.obj \
 	gtkfilechooserentry.obj \
-	gtkfilechoosersettings.obj \
+#	gtkfilechoosersettings.obj \
 	gtkfilechooserutils.obj \
 	gtkfilechooserwidget.obj \
 	gtkfilefilter.obj \
@@ -160,9 +112,9 @@ gtk_OBJECTS_file = \
 gtk_OBJECTS_print = \
 	gtkprint-win32.obj \
 	gtkprintcontext.obj \
+	gtkprintoperation-win32.obj \
 	gtkprintoperation.obj \
 	gtkprintoperationpreview.obj \
-	gtkprintoperation-win32.obj \
 	gtkprintsettings.obj \
 	gtkprintutils.obj \
 
@@ -197,6 +149,7 @@ gtk_OBJECTS_recent = \
 
 gtk_OBJECTS = \
 	fnmatch.obj \
+	gtk9slice.obj \
 	gtkaboutdialog.obj \
 	gtkaccelgroup.obj \
 	gtkaccellabel.obj \
@@ -207,6 +160,15 @@ gtk_OBJECTS = \
 	gtkactivatable.obj \
 	gtkadjustment.obj \
 	gtkalignment.obj \
+	gtkanimationdescription.obj \
+	gtkappchooser.obj \
+	gtkappchooserbutton.obj \
+	gtkappchooserdialog.obj \
+	gtkappchoosermodule.obj \
+	gtkappchooseronline.obj \
+	gtkappchooseronlinepk.obj \
+	gtkappchooserwidget.obj \
+	gtkapplication.obj \
 	gtkarrow.obj \
 	gtkaspectframe.obj \
 	gtkassistant.obj \
@@ -214,11 +176,16 @@ gtk_OBJECTS = \
 	gtkbindings.obj \
 	gtkbbox.obj \
 	gtkbox.obj \
+	gtkborder.obj \
 	gtkbuildable.obj \
 	gtkbuilder.obj \
 	gtkbuilderparser.obj \
 	gtkbutton.obj \
 	gtkcalendar.obj \
+	gtkcellarea.obj \
+	gtkcellareabox.obj \
+	gtkcellareaboxcontext.obj \
+	gtkcellareacontext.obj \
 	gtkcheckbutton.obj \
 	gtkcheckmenuitem.obj \
 	gtkclipboard.obj \
@@ -226,9 +193,9 @@ gtk_OBJECTS = \
 	gtkcolorsel.obj \
 	gtkcolorseldialog.obj \
 	gtkcombobox.obj	\
-	gtkcomboboxentry.obj \
+	gtkcomboboxtext.obj \
 	gtkcontainer.obj \
-	gtkcurve.obj \
+	gtkcssprovider.obj \
 	gtkdialog.obj \
 	gtkdnd.obj \
 	gtkdrawingarea.obj \
@@ -242,8 +209,8 @@ gtk_OBJECTS = \
 	gtkfontsel.obj \
 	gtkfontbutton.obj \
 	gtkframe.obj \
-	gtkgamma.obj \
-	gtkgc.obj \
+	gtkgradient.obj \
+	gtkgrid.obj \
 	gtkhandlebox.obj \
 	gtkhbbox.obj \
 	gtkhbox.obj \
@@ -264,16 +231,13 @@ gtk_OBJECTS = \
 	gtkimmodule.obj	\
 	gtkimmulticontext.obj \
 	gtkinfobar.obj \
-	gtkinputdialog.obj \
 	gtkinvisible.obj \
-	gtkitem.obj \
 	gtkkeyhash.obj	\
 	gtklabel.obj \
 	gtklayout.obj \
 	gtklinkbutton.obj \
 	gtkmain.obj \
 	gtkmarshalers.obj \
-	gtkmarshal.obj \
 	gtkmenu.obj \
 	gtkmenubar.obj \
 	gtkmenuitem.obj \
@@ -282,15 +246,16 @@ gtk_OBJECTS = \
 	gtkmessagedialog.obj \
 	gtkmisc.obj \
 	gtkmnemonichash.obj \
+	gtkmodifierstyle.obj \
 	gtkmodules.obj \
 	gtkmountoperation.obj \
 	gtkmountoperation-stub.obj \
 	gtknotebook.obj \
-	gtkobject.obj \
 	gtkoffscreenwindow.obj \
 	gtkorientable.obj \
 	gtkpagesetup.obj \
 	gtkpaned.obj \
+	gtkpango.obj \
 	gtkpapersize.obj \
 	gtkpathbar.obj \
 	gtkplug.obj \
@@ -306,6 +271,7 @@ gtk_OBJECTS = \
 	gtkrc.obj \
 	gtkscale.obj \
 	gtkscalebutton.obj \
+	gtkscrollable.obj \
 	gtkscrollbar.obj \
 	gtkscrolledwindow.obj \
 	gtksearchengine.obj \
@@ -315,22 +281,32 @@ gtk_OBJECTS = \
 	gtkselection.obj \
 	gtkseparator.obj \
 	gtkseparatormenuitem.obj \
+	gtkseparatortoolitem.obj \
 	gtksettings.obj \
+	gtkshow.obj \
 	gtksizegroup.obj \
+	gtksizerequest.obj \
 	gtksocket.obj \
 	gtksocket-win32.obj \
 	gtkspinbutton.obj \
 	gtkspinner.obj \
 	gtkstatusicon.obj \
 	gtkstyle.obj \
+	gtkstylecontext.obj \
+	gtkstyleproperties.obj \
+	gtkstyleprovider.obj \
 	gtkstatusbar.obj \
 	gtkstock.obj \
+	gtkswitch.obj \
+	gtksymboliccolor.obj \
 	gtktable.obj \
 	gtktearoffmenuitem.obj \
-	gtkthemes.obj \
+	gtkthemingengine.obj \
+	gtktimeline.obj \
 	gtktoggleaction.obj \
 	gtktogglebutton.obj \
 	gtktoggletoolbutton.obj \
+	gtktoolbar.obj \
 	gtktoolbutton.obj \
 	gtktoolitem.obj \
 	gtktoolitemgroup.obj \
@@ -339,6 +315,7 @@ gtk_OBJECTS = \
 	gtktooltip.obj \
 	gtktreedatalist.obj \
 	gtktypebuiltins.obj \
+	gtktypeutils.obj \
 	gtkuimanager.obj \
 	gtkvbbox.obj \
 	gtkvbox.obj \
@@ -349,13 +326,14 @@ gtk_OBJECTS = \
 	gtkvscrollbar.obj \
 	gtkvseparator.obj \
 	gtkwidget.obj \
+	gtkwidgetpath.obj \
 	gtkwin32embed.obj \
 	gtkwin32embedwidget.obj \
 	gtkwindow.obj \
-	gtkwindow-decorate.obj
+#	gtkwrapbox.obj \
 
 # Source headers which are non-autogenerated headers
-gtk_public_h_sources =		\
+gtk_public_h_sources = 		\
 	gtk.h			\
 	gtkaboutdialog.h	\
 	gtkaccelgroup.h		\
@@ -367,17 +345,27 @@ gtk_public_h_sources =		\
 	gtkactivatable.h	\
 	gtkadjustment.h		\
 	gtkalignment.h		\
+	gtkappchooser.h		\
+	gtkappchooserbutton.h	\
+	gtkappchooserdialog.h	\
+	gtkappchooserwidget.h	\
+	gtkapplication.h	\
 	gtkarrow.h		\
 	gtkaspectframe.h	\
 	gtkassistant.h		\
 	gtkbbox.h		\
 	gtkbin.h		\
 	gtkbindings.h		\
+	gtkborder.h		\
 	gtkbox.h		\
 	gtkbuilder.h		\
 	gtkbuildable.h		\
 	gtkbutton.h		\
 	gtkcalendar.h		\
+	gtkcellarea.h		\
+	gtkcellareacontext.h	\
+	gtkcellareabox.h	\
+	gtkcellareaboxcontext.h	\
 	gtkcelleditable.h	\
 	gtkcelllayout.h		\
 	gtkcellrenderer.h	\
@@ -385,47 +373,43 @@ gtk_public_h_sources =		\
 	gtkcellrenderercombo.h	\
 	gtkcellrendererpixbuf.h	\
 	gtkcellrendererprogress.h \
-	gtkcellrendererspin.h   \
-	gtkcellrendererspinner.h \
+	gtkcellrendererspin.h	\
+	gtkcellrendererspinner.h\
 	gtkcellrenderertext.h	\
 	gtkcellrenderertoggle.h	\
 	gtkcellview.h		\
 	gtkcheckbutton.h	\
 	gtkcheckmenuitem.h	\
 	gtkclipboard.h		\
-	gtkclist.h		\
 	gtkcolorbutton.h	\
 	gtkcolorsel.h		\
 	gtkcolorseldialog.h	\
-	gtkcombo.h		\
 	gtkcombobox.h		\
-	gtkcomboboxentry.h	\
+	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
-	gtkctree.h		\
-	gtkcurve.h		\
-	gtkdebug.h              \
+	gtkcssprovider.h	\
+	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
 	gtkdrawingarea.h	\
-	gtkeditable.h           \
+	gtkeditable.h		\
 	gtkentry.h		\
 	gtkentrybuffer.h	\
 	gtkentrycompletion.h	\
 	gtkenums.h		\
 	gtkeventbox.h		\
 	gtkexpander.h		\
-	gtkfilechooser.h        \
-	gtkfilechooserbutton.h  \
-	gtkfilechooserdialog.h  \
-	gtkfilechooserwidget.h  \
+	gtkfilechooser.h	\
+	gtkfilechooserbutton.h	\
+	gtkfilechooserdialog.h	\
+	gtkfilechooserwidget.h	\
 	gtkfilefilter.h		\
-	gtkfilesel.h		\
 	gtkfixed.h		\
 	gtkfontbutton.h		\
 	gtkfontsel.h		\
 	gtkframe.h		\
-	gtkgamma.h		\
-	gtkgc.h			\
+	gtkgradient.h		\
+	gtkgrid.h		\
 	gtkhandlebox.h		\
 	gtkhbbox.h		\
 	gtkhbox.h		\
@@ -433,6 +417,7 @@ gtk_public_h_sources =		\
 	gtkhscale.h		\
 	gtkhscrollbar.h		\
 	gtkhseparator.h		\
+	gtkhsv.h		\
 	gtkiconfactory.h	\
 	gtkicontheme.h		\
 	gtkiconview.h		\
@@ -442,15 +427,11 @@ gtk_public_h_sources =		\
 	gtkimcontextsimple.h	\
 	gtkimmodule.h		\
 	gtkimmulticontext.h	\
-	gtkinputdialog.h	\
+	gtkinfobar.h		\
 	gtkinvisible.h		\
-	gtkitem.h		\
-	gtkitemfactory.h	\
 	gtklabel.h		\
-	gtklayout.h             \
+	gtklayout.h		\
 	gtklinkbutton.h		\
-	gtklist.h		\
-	gtklistitem.h		\
 	gtkliststore.h		\
 	gtkmain.h		\
 	gtkmenu.h		\
@@ -463,21 +444,16 @@ gtk_public_h_sources =		\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
-	gtkobject.h		\
 	gtkoffscreenwindow.h	\
-	gtkoldeditable.h	\
-	gtkoptionmenu.h		\
+	gtkorientable.h		\
 	gtkpagesetup.h		\
 	gtkpaned.h		\
 	gtkpapersize.h		\
 	gtkplug.h		\
-	gtkpreview.h		\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
-	gtkprintoperationpreview.h	\
+	gtkprintoperationpreview.h \
 	gtkprintsettings.h	\
-	gtkprivate.h		\
-	gtkprogress.h		\
 	gtkprogressbar.h	\
 	gtkradioaction.h	\
 	gtkradiobutton.h	\
@@ -486,14 +462,15 @@ gtk_public_h_sources =		\
 	gtkrange.h		\
 	gtkrc.h			\
 	gtkrecentaction.h	\
-	gtkrecentchooser.h 	\
+	gtkrecentchooser.h	\
 	gtkrecentchooserdialog.h \
-	gtkrecentchoosermenu.h 	\
+	gtkrecentchoosermenu.h	\
 	gtkrecentchooserwidget.h \
-	gtkrecentfilter.h 	\
-	gtkrecentmanager.h 	\
+	gtkrecentfilter.h	\
+	gtkrecentmanager.h	\
 	gtkscale.h		\
 	gtkscalebutton.h	\
+	gtkscrollable.h		\
 	gtkscrollbar.h		\
 	gtkscrolledwindow.h	\
 	gtkselection.h		\
@@ -501,17 +478,24 @@ gtk_public_h_sources =		\
 	gtkseparatormenuitem.h	\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
+	gtkshow.h		\
 	gtksizegroup.h		\
+	gtksizerequest.h	\
 	gtksocket.h		\
 	gtkspinbutton.h		\
 	gtkspinner.h		\
 	gtkstatusbar.h		\
 	gtkstatusicon.h		\
 	gtkstock.h		\
+	gtkstylecontext.h	\
+	gtkstyleproperties.h	\
+	gtkstyleprovider.h	\
 	gtkstyle.h		\
+	gtkswitch.h		\
+	gtksymboliccolor.h	\
 	gtktable.h		\
-	gtktearoffmenuitem.h    \
-	gtktext.h		\
+	gtktearoffmenuitem.h	\
+	gtktestutils.h		\
 	gtktextbuffer.h		\
 	gtktextbufferrichtext.h	\
 	gtktextchild.h		\
@@ -521,20 +505,18 @@ gtk_public_h_sources =		\
 	gtktexttag.h		\
 	gtktexttagtable.h	\
 	gtktextview.h		\
-	gtktipsquery.h		\
+	gtkthemingengine.h	\
 	gtktoggleaction.h	\
 	gtktogglebutton.h	\
 	gtktoggletoolbutton.h	\
 	gtktoolbar.h		\
 	gtktoolbutton.h		\
 	gtktoolitem.h		\
-	gtktoolitemgroup.h		\
+	gtktoolitemgroup.h	\
 	gtktoolpalette.h	\
+	gtktoolshell.h		\
 	gtktooltip.h		\
-	gtktooltips.h		\
-	gtktree.h		\
 	gtktreednd.h		\
-	gtktreeitem.h		\
 	gtktreemodel.h		\
 	gtktreemodelfilter.h	\
 	gtktreemodelsort.h	\
@@ -554,6 +536,7 @@ gtk_public_h_sources =		\
 	gtkvscrollbar.h		\
 	gtkvseparator.h		\
 	gtkwidget.h		\
+	gtkwidgetpath.h		\
 	gtkwindow.h
 
 # these aren't use here, but listed for reference
@@ -567,7 +550,7 @@ gtk_extra_sources = \
 
 gtk.def: gtk.symbols makefile.msc
 	echo EXPORTS > gtk.def
-	cl /EP -DG_OS_WIN32 \
+	cl /EP -DG_OS_WIN32 -DGDK_WINDOWING_WIN32 \
 		-DG_GNUC_MALLOC= -DG_GNUC_CONST= -DG_GNUC_NULL_TERMINATED= -DG_GNUC_NORETURN= \
 		-DG_GNUC_PRINTF=;G_GNUC_PRINTF gtk.symbols >> gtk.def
 
@@ -601,15 +584,6 @@ gtkmarshalers.h : gtkmarshalers.list makefile.msc
 gtkmarshalers.c : gtkmarshalers.list makefile.msc
 	$(GLIB)\gobject\glib-genmarshal --prefix=_gtk_marshal gtkmarshalers.list --body >gtkmarshalers.c
 
-# public, deprecated marshalers
-gtkmarshal.h : gtkmarshal.list
-	echo #ifndef GTK_DISABLE_DEPRECATED >gtkmarshal.h
-	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --header >>gtkmarshal.h
-	echo #endif /* GTK_DISABLE_DEPRECATED */ >>gtkmarshal.h
-
-gtkmarshal.c : gtkmarshal.list
-	$(GLIB)\gobject\glib-genmarshal --prefix=gtk_marshal gtkmarshal.list --body >gtkmarshal.c
-
 gtktypefuncs.c : makefile.msc
 	echo /*none*/ > gtktypefuncs.c
 
@@ -618,8 +592,6 @@ gtk-win32.res : gtk-win32.rc
 
 # build some static limits to covercome command line too long
 # may also speed up the build
-gtk-deprecated.lib : $(gtk_OBJECTS_deprecated)
-	lib /out:gtk-deprecated.lib $(gtk_OBJECTS_deprecated)
 
 gtk-cell.lib : $(gtk_OBJECTS_cell)
 	lib /out:gtk-cell.lib $(gtk_OBJECTS_cell)
@@ -640,7 +612,6 @@ gtk-core.lib : $(gtk_OBJECTS)
 	lib /out:gtk-core.lib $(gtk_OBJECTS)
 
 gtk_SUBLIBS = \
-	gtk-deprecated.lib \
 	gtk-cell.lib \
 	gtk-file.lib \
 	gtk-print.lib \
@@ -652,10 +623,9 @@ gtk_SUBLIBS = \
 # Linking:
 #
 libgtk-win32-$(GTK_VER)-0.dll : $(gtk_SUBLIBS) gtk.def gtk-win32.res
-	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_SUBLIBS) gtk-win32.res \
-	$(GDK_LIBS) $(GDK_PIXBUF_LIBS) $(PANGO_LIBS) $(INTL_LIBS) $(GLIB_LIBS) $(GMODULE_LIBS) \
-	$(CAIRO_LIBS) $(PANGOCAIRO_LIBS) \
-	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib ole32.lib comdlg32.lib winspool.lib comctl32.lib \
+	$(CC) $(CFLAGS) -LD -Fm -Fe$@ $(gtk_SUBLIBS) gtk-win32.res $(EXTRALIBS) \
+	gdi32.lib user32.lib advapi32.lib wsock32.lib shell32.lib ole32.lib \
+	comdlg32.lib winspool.lib comctl32.lib \
 	$(LDFLAGS) /implib:gtk-win32-$(GTK_VER).lib /def:gtk.def
 
 gtk-win32-$(GTK_VER)s.lib : $(gtk_OBJECTS)

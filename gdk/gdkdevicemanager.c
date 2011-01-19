@@ -19,74 +19,90 @@
 
 #include "config.h"
 
-#include "gdkdevicemanager.h"
-
+#include "gdkdevicemanagerprivate.h"
+#include "gdkdisplay.h"
 #include "gdkintl.h"
-#include "gdkinternals.h"
 
 
 /**
  * SECTION:gdkdevicemanager
  * @Short_description: Functions for handling input devices
- * @Long_description: In addition to a single pointer and keyboard for user interface input, GDK
- *                    contains support for a variety of input devices, including graphics tablets,
- *                    touchscreens and multiple pointers/keyboards interacting simultaneously with
- *                    the user interface. Under X, the support for multiple input devices is done
- *                    through the <firstterm>XInput 2</firstterm> extension, which also supports
- *                    additional features such as sub-pixel positioning information and additional
- *                    device-dependent information.
  * @Title: GdkDeviceManager
- * @See_also: #GdkDevice, #GdkEvent, gdk_enable_multidevice()
+ * @See_also: #GdkDevice, #GdkEvent
  *
- * By default, GDK supports the traditional single keyboard/pointer input scheme (Plus additional
- * special input devices such as tablets. In short, backwards compatible with 2.X). Since version 3.0,
- * if gdk_enable_multidevice() is called before gdk_display_open() and the platform supports it, GDK
- * will be aware of multiple keyboard/pointer pairs interacting simultaneously with the user interface.
+ * In addition to a single pointer and keyboard for user interface input,
+ * GDK contains support for a variety of input devices, including graphics
+ * tablets, touchscreens and multiple pointers/keyboards interacting
+ * simultaneously with the user interface. Under X, the support for multiple
+ * input devices is done through the <firstterm>XInput 2</firstterm> extension,
+ * which also supports additional features such as sub-pixel positioning
+ * information and additional device-dependent information.
  *
- * Conceptually, in multidevice mode there are 2 device types, virtual devices (or master devices)
- * are represented by the pointer cursors and keyboard foci that are seen on the screen. physical
- * devices (or slave devices) represent the hardware that is controlling the virtual devices, and
- * thus has no visible cursor on the screen.
+ * By default, and if the platform supports it, GDK is aware of multiple
+ * keyboard/pointer pairs and multitouch devices, this behavior can be
+ * changed by calling gdk_disable_multidevice() before gdk_display_open(),
+ * although there would be rarely a reason to do that. For a widget or
+ * window to be dealt as multipointer aware,
+ * gdk_window_set_support_multidevice() or
+ * gtk_widget_set_support_multidevice() must have been called on it.
  *
- * Virtual devices are always paired, there is a keyboard device for every pointer device,
- * associations between devices may be inspected through gdk_device_get_associated_device().
+ * Conceptually, in multidevice mode there are 2 device types, virtual
+ * devices (or master devices) are represented by the pointer cursors
+ * and keyboard foci that are seen on the screen. Physical devices (or
+ * slave devices) represent the hardware that is controlling the virtual
+ * devices, and thus has no visible cursor on the screen.
  *
- * There may be several virtual devices, and several physical devices could be controlling each of
- * these virtual devices. Physical devices may also be "floating", which means they are not attached
- * to any virtual device.
+ * Virtual devices are always paired, there is a keyboard device for every
+ * pointer device, associations between devices may be inspected through
+ * gdk_device_get_associated_device().
  *
- * By default, GDK will automatically listen for events coming from all master devices, setting the
- * #GdkDevice for all events coming from input devices
+ * There may be several virtual devices, and several physical devices could
+ * be controlling each of these virtual devices. Physical devices may also
+ * be "floating", which means they are not attached to any virtual device.
+ *
+ * By default, GDK will automatically listen for events coming from all
+ * master devices, setting the #GdkDevice for all events coming from input
+ * devices,
  * <footnote>
- *   Events containing device information are #GDK_MOTION_NOTIFY, #GDK_BUTTON_PRESS, #GDK_2BUTTON_PRESS,
- *   #GDK_3BUTTON_PRESS, #GDK_BUTTON_RELEASE, #GDK_SCROLL, #GDK_KEY_PRESS, #GDK_KEY_RELEASE,
- *   #GDK_ENTER_NOTIFY, #GDK_LEAVE_NOTIFY, #GDK_FOCUS_CHANGE, #GDK_PROXIMITY_IN, #GDK_PROXIMITY_OUT,
- *   #GDK_DRAG_ENTER, #GDK_DRAG_LEAVE, #GDK_DRAG_MOTION, #GDK_DRAG_STATUS, #GDK_DROP_START,
- *   #GDK_DROP_FINISHED and #GDK_GRAB_BROKEN.
+ * Events containing device information are #GDK_MOTION_NOTIFY,
+ * #GDK_BUTTON_PRESS, #GDK_2BUTTON_PRESS, #GDK_3BUTTON_PRESS,
+ * #GDK_BUTTON_RELEASE, #GDK_SCROLL, #GDK_KEY_PRESS, #GDK_KEY_RELEASE,
+ * #GDK_ENTER_NOTIFY, #GDK_LEAVE_NOTIFY, #GDK_FOCUS_CHANGE,
+ * #GDK_PROXIMITY_IN, #GDK_PROXIMITY_OUT, #GDK_DRAG_ENTER, #GDK_DRAG_LEAVE,
+ * #GDK_DRAG_MOTION, #GDK_DRAG_STATUS, #GDK_DROP_START, #GDK_DROP_FINISHED
+ * and #GDK_GRAB_BROKEN.
  * </footnote>
- * , although gdk_window_set_support_multidevice() has to be called on #GdkWindow<!-- --> in order to
- * support additional features of multiple pointer interaction, such as multiple, per-device enter/leave
- * events. The default setting will emit just one enter/leave event pair for all devices on the window.
- * See gdk_window_set_support_multidevice() documentation for more information.
+ * although gdk_window_set_support_multidevice() has to be called on
+ * #GdkWindows in order to support additional features of multiple pointer
+ * interaction, such as multiple, per-device enter/leave events. The default
+ * setting will emit just one enter/leave event pair for all devices on the
+ * window. See gdk_window_set_support_multidevice() documentation for more
+ * information.
  *
- * In order to listen for events coming from other than a virtual device, gdk_window_set_device_events()
- * must be called. Generally, this function can be used to modify the event mask for any given device.
+ * In order to listen for events coming from other than a virtual device,
+ * gdk_window_set_device_events() must be called. Generally, this function
+ * can be used to modify the event mask for any given device.
  *
- * Input devices may also provide additional information besides X/Y. For example, graphics tablets may
- * also provide pressure and X/Y tilt information. This information is device-dependent, and may be
- * queried through gdk_device_get_axis(). In multidevice mode, virtual devices will change axes in order
- * to always represent the physical device that is routing events through it. Whenever the physical device
- * changes, the #GdkDevice:n-axes property will be notified, and gdk_device_list_axes() will return the
- * new device axes.
+ * Input devices may also provide additional information besides X/Y.
+ * For example, graphics tablets may also provide pressure and X/Y tilt
+ * information. This information is device-dependent, and may be
+ * queried through gdk_device_get_axis(). In multidevice mode, virtual
+ * devices will change axes in order to always represent the physical
+ * device that is routing events through it. Whenever the physical device
+ * changes, the #GdkDevice:n-axes property will be notified, and
+ * gdk_device_list_axes() will return the new device axes.
  *
- * Devices may also have associated <firstterm>keys</firstterm> or macro buttons. Such keys can be
- * globally set to map into normal X keyboard events. The mapping is set using gdk_device_set_key().
+ * Devices may also have associated <firstterm>keys</firstterm> or
+ * macro buttons. Such keys can be globally set to map into normal X
+ * keyboard events. The mapping is set using gdk_device_set_key().
  *
- * In order to query the device hierarchy and be aware of changes in the device hierarchy (such as
- * virtual devices being created or removed, or physical devices being plugged or unplugged), GDK
- * provides #GdkDeviceManager. On X11, multidevice support is implemented through XInput 2. If
- * gdk_enable_multidevice() is called, the XInput 2.x #GdkDeviceManager implementation will be used
- * as input source, else either the core or XInput 1.x implementations will be used.
+ * In order to query the device hierarchy and be aware of changes in the
+ * device hierarchy (such as virtual devices being created or removed, or
+ * physical devices being plugged or unplugged), GDK provides
+ * #GdkDeviceManager. On X11, multidevice support is implemented through
+ * XInput 2. Unless gdk_disable_multidevice() is called, the XInput 2.x
+ * #GdkDeviceManager implementation will be used as input source, else
+ * either the core or XInput 1.x implementations will be used.
  */
 
 static void gdk_device_manager_set_property (GObject      *object,
@@ -114,12 +130,6 @@ enum {
 };
 
 static guint signals [LAST_SIGNAL] = { 0 };
-
-
-struct _GdkDeviceManagerPrivate
-{
-  GdkDisplay *display;
-};
 
 
 static void
@@ -182,12 +192,16 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
    * @device_manager: the object on which the signal is emitted
    * @device: the #GdkDevice that changed.
    *
-   * The ::device-changed signal is emitted either when some
-   * #GdkDevice has changed the number of either axes or keys.
-   * For example In X this will normally happen when the slave
-   * device routing events through the master device changes,
-   * in that case the master device will change to reflect the
-   * new slave device axes and keys.
+   * The ::device-changed signal is emitted whenever a device
+   * has changed in the hierarchy, either slave devices being
+   * disconnected from their master device or connected to
+   * another one, or master devices being added or removed
+   * a slave device.
+   *
+   * If a slave device is detached from all master devices
+   * (gdk_device_get_associated_device() returns %NULL), its
+   * #GdkDeviceType will change to %GDK_DEVICE_TYPE_FLOATING,
+   * if it's attached, it will change to %GDK_DEVICE_TYPE_SLAVE.
    */
   signals [DEVICE_CHANGED] =
     g_signal_new (g_intern_static_string ("device-changed"),
@@ -198,18 +212,11 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
                   g_cclosure_marshal_VOID__OBJECT,
                   G_TYPE_NONE, 1,
                   GDK_TYPE_DEVICE);
-
-  g_type_class_add_private (object_class, sizeof (GdkDeviceManagerPrivate));
 }
 
 static void
 gdk_device_manager_init (GdkDeviceManager *device_manager)
 {
-  GdkDeviceManagerPrivate *priv;
-
-  device_manager->priv = priv = G_TYPE_INSTANCE_GET_PRIVATE (device_manager,
-                                                             GDK_TYPE_DEVICE_MANAGER,
-                                                             GdkDeviceManagerPrivate);
 }
 
 static void
@@ -218,14 +225,10 @@ gdk_device_manager_set_property (GObject      *object,
                                  const GValue *value,
                                  GParamSpec   *pspec)
 {
-  GdkDeviceManagerPrivate *priv;
-
-  priv = GDK_DEVICE_MANAGER (object)->priv;
-
   switch (prop_id)
     {
     case PROP_DISPLAY:
-      priv->display = g_value_get_object (value);
+      GDK_DEVICE_MANAGER (object)->display = g_value_get_object (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -239,14 +242,11 @@ gdk_device_manager_get_property (GObject      *object,
                                  GValue       *value,
                                  GParamSpec   *pspec)
 {
-  GdkDeviceManagerPrivate *priv;
-
-  priv = GDK_DEVICE_MANAGER (object)->priv;
 
   switch (prop_id)
     {
     case PROP_DISPLAY:
-      g_value_set_object (value, priv->display);
+      g_value_set_object (value, GDK_DEVICE_MANAGER (object)->display);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -269,13 +269,9 @@ gdk_device_manager_get_property (GObject      *object,
 GdkDisplay *
 gdk_device_manager_get_display (GdkDeviceManager *device_manager)
 {
-  GdkDeviceManagerPrivate *priv;
-
   g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
 
-  priv = device_manager->priv;
-
-  return priv->display;
+  return device_manager->display;
 }
 
 /**

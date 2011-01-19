@@ -28,48 +28,33 @@
 #define __GDK_APP_LAUNCH_CONTEXT_H__
 
 #include <gio/gio.h>
+#include <gdk/gdktypes.h>
 #include <gdk/gdkscreen.h>
 
 G_BEGIN_DECLS
 
 #define GDK_TYPE_APP_LAUNCH_CONTEXT         (gdk_app_launch_context_get_type ())
 #define GDK_APP_LAUNCH_CONTEXT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GDK_TYPE_APP_LAUNCH_CONTEXT, GdkAppLaunchContext))
-#define GDK_APP_LAUNCH_CONTEXT_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GDK_TYPE_APP_LAUNCH_CONTEXT, GdkAppLaunchContextClass))
 #define GDK_IS_APP_LAUNCH_CONTEXT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GDK_TYPE_APP_LAUNCH_CONTEXT))
-#define GDK_IS_APP_LAUNCH_CONTEXT_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GDK_TYPE_APP_LAUNCH_CONTEXT))
-#define GDK_APP_LAUNCH_CONTEXT_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GDK_TYPE_APP_LAUNCH_CONTEXT, GdkAppLaunchContextClass))
 
-typedef struct GdkAppLaunchContext	      GdkAppLaunchContext;
-typedef struct GdkAppLaunchContextClass       GdkAppLaunchContextClass;
-typedef struct GdkAppLaunchContextPrivate     GdkAppLaunchContextPrivate;
-
-struct GdkAppLaunchContext
-{
-  GAppLaunchContext parent_instance;
-
-  GdkAppLaunchContextPrivate *priv;
-};
-
-struct GdkAppLaunchContextClass
-{
-  GAppLaunchContextClass parent_class;
-};
 
 GType                gdk_app_launch_context_get_type      (void);
 
+#ifndef GDK_DISABLE_DEPRECATED
 GdkAppLaunchContext *gdk_app_launch_context_new           (void);
 void                 gdk_app_launch_context_set_display   (GdkAppLaunchContext *context,
-							   GdkDisplay          *display);
+                                                           GdkDisplay          *display);
+#endif
 void                 gdk_app_launch_context_set_screen    (GdkAppLaunchContext *context,
-							   GdkScreen           *screen);
+                                                           GdkScreen           *screen);
 void                 gdk_app_launch_context_set_desktop   (GdkAppLaunchContext *context,
-							   gint                 desktop);
+                                                           gint                 desktop);
 void                 gdk_app_launch_context_set_timestamp (GdkAppLaunchContext *context,
-							   guint32              timestamp);
+                                                           guint32              timestamp);
 void                 gdk_app_launch_context_set_icon      (GdkAppLaunchContext *context,
-							   GIcon               *icon);
+                                                           GIcon               *icon);
 void                 gdk_app_launch_context_set_icon_name (GdkAppLaunchContext *context,
-							   const char          *icon_name);
+                                                           const char          *icon_name);
 
 G_END_DECLS
 

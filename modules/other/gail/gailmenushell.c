@@ -88,8 +88,8 @@ static gboolean
 gail_menu_shell_add_selection (AtkSelection *selection,
                                gint          i)
 {
-  GtkMenuShell *shell;
-  GList *item;
+  GList *kids;
+  GtkWidget *item;
   guint length;
   GtkWidget *widget;
 
@@ -100,16 +100,18 @@ gail_menu_shell_add_selection (AtkSelection *selection,
     return FALSE;
   }
 
-  shell = GTK_MENU_SHELL (widget);
-  length = g_list_length (shell->children);
+  kids = gtk_container_get_children (GTK_CONTAINER (widget));
+  length = g_list_length (kids);
   if (i < 0 || i > length)
-    return FALSE;
+    {
+      g_list_free (kids);
+      return FALSE;
+    }
 
-  item = g_list_nth (shell->children, i);
-  g_return_val_if_fail (item != NULL, FALSE);
-  g_return_val_if_fail (GTK_IS_MENU_ITEM(item->data), FALSE);
-   
-  gtk_menu_shell_select_item (shell, GTK_WIDGET (item->data));
+  item = g_list_nth_data (kids, i);
+  g_list_free (kids);
+  g_return_val_if_fail (GTK_IS_MENU_ITEM(item), FALSE);
+  gtk_menu_shell_select_item (GTK_MENU_SHELL (widget), item);
   return TRUE;
 }
 
@@ -139,6 +141,7 @@ gail_menu_shell_ref_selection (AtkSelection   *selection,
   GtkMenuShell *shell;
   AtkObject *obj;
   GtkWidget *widget;
+  GtkWidget *item;
 
   if (i != 0)
     return NULL;
@@ -151,10 +154,11 @@ gail_menu_shell_ref_selection (AtkSelection   *selection,
   }
 
   shell = GTK_MENU_SHELL (widget);
-  
-  if (shell->active_menu_item != NULL)
+
+  item = gtk_menu_shell_get_selected_item (shell);
+  if (item != NULL)
   {
-    obj = gtk_widget_get_accessible (shell->active_menu_item);
+    obj = gtk_widget_get_accessible (item);
     g_object_ref (obj);
     return obj;
   }
@@ -182,7 +186,7 @@ gail_menu_shell_get_selection_count (AtkSelection   *selection)
   /*
    * Identifies the currently selected menu item
    */
-  if (shell->active_menu_item == NULL)
+  if (gtk_menu_shell_get_selected_item (shell) == NULL)
   {
     return 0;
   }
@@ -197,8 +201,10 @@ gail_menu_shell_is_child_selected (AtkSelection   *selection,
                                    gint           i)
 {
   GtkMenuShell *shell;
+  GList *kids;
   gint j;
   GtkWidget *widget;
+  GtkWidget *item;
 
   widget =  gtk_accessible_get_widget (GTK_ACCESSIBLE (selection));
   if (widget == NULL)
@@ -208,12 +214,15 @@ gail_menu_shell_is_child_selected (AtkSelection   *selection,
   }
 
   shell = GTK_MENU_SHELL (widget);
-  if (shell->active_menu_item == NULL)
+  item = gtk_menu_shell_get_selected_item (shell);
+  if (item == NULL)
     return FALSE;
-  
-  j = g_list_index (shell->children, shell->active_menu_item);
 
-  return (j==i);   
+  kids = gtk_container_get_children (GTK_CONTAINER (shell));
+  j = g_list_index (kids, item);
+  g_list_free (kids);
+
+  return (j==i);
 }
 
 static gboolean
@@ -222,6 +231,7 @@ gail_menu_shell_remove_selection (AtkSelection   *selection,
 {
   GtkMenuShell *shell;
   GtkWidget *widget;
+  GtkWidget *item;
 
   if (i != 0)
     return FALSE;
@@ -235,8 +245,8 @@ gail_menu_shell_remove_selection (AtkSelection   *selection,
 
   shell = GTK_MENU_SHELL (widget);
 
-  if (shell->active_menu_item && 
-      GTK_MENU_ITEM (shell->active_menu_item)->submenu)
+  item = gtk_menu_shell_get_selected_item (shell);
+  if (item && gtk_menu_item_get_submenu (GTK_MENU_ITEM (item)))
   {
     /*
      * Menu item contains a menu and it is the selected menu item

@@ -1,22 +1,21 @@
 include $(top_srcdir)/Makefile.decl
 
-INCLUDES = 						\
-	-I$(top_srcdir)				\
-	-I$(top_builddir)/gdk				\
-	-I$(top_srcdir)/gdk				\
-	-I$(top_srcdir)/gdk/x11				\
-	$(GTK_DEBUG_FLAGS)				\
+INCLUDES = \
+	-I$(top_srcdir)			\
+	-I$(top_builddir)/gdk		\
+	-I$(top_srcdir)/gdk		\
+	-I$(top_srcdir)/gdk/x11		\
+	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)
 
-DEPS = 									\
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+DEPS = \
+	$(top_builddir)/gtk/libgtk-3.0.la
 
-LDADDS = 								\
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(GTK_DEP_LIBS)							\
-	$(GDK_DEP_LIBS)							\
+LDADDS = \
+	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.0.la	\
+	$(GTK_DEP_LIBS)				\
+	$(GDK_DEP_LIBS)				\
 	-lm
 
 if USE_X11

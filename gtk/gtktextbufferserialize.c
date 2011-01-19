@@ -32,6 +32,7 @@
 
 #include "gdk-pixbuf/gdk-pixdata.h"
 #include "gtktextbufferserialize.h"
+#include "gtktexttagprivate.h"
 #include "gtkintl.h"
 
 
@@ -292,9 +293,9 @@ serialize_tag (gpointer key,
   g_string_append (context->tag_table_str, "  <tag ");
 
   /* Handle anonymous tags */
-  if (tag->name)
+  if (tag->priv->name)
     {
-      tag_name = g_markup_escape_text (tag->name, -1);
+      tag_name = g_markup_escape_text (tag->priv->name, -1);
       g_string_append_printf (context->tag_table_str, "name=\"%s\"", tag_name);
       g_free (tag_name);
     }
@@ -305,7 +306,7 @@ serialize_tag (gpointer key,
       g_string_append_printf (context->tag_table_str, "id=\"%d\"", tag_id);
     }
 
-  g_string_append_printf (context->tag_table_str, " priority=\"%d\">\n", tag->priority);
+  g_string_append_printf (context->tag_table_str, " priority=\"%d\">\n", tag->priv->priority);
 
   /* Serialize properties */
   pspecs = g_object_class_list_properties (G_OBJECT_GET_CLASS (tag), &n_pspecs);
@@ -489,9 +490,9 @@ serialize_text (GtkTextBuffer        *buffer,
 	  /* Add it to the tag hash table */
 	  g_hash_table_insert (context->tags, tag, tag);
 
-	  if (tag->name)
+	  if (tag->priv->name)
 	    {
-	      tag_name = g_markup_escape_text (tag->name, -1);
+	      tag_name = g_markup_escape_text (tag->priv->name, -1);
 
 	      g_string_append_printf (context->text_str, "<apply_tag name=\"%s\">", tag_name);
 	      g_free (tag_name);
@@ -1481,10 +1482,10 @@ end_element_handler (GMarkupParseContext  *context,
       pop_state (info);
       g_assert (peek_state (info) == STATE_TAGS);
 
-      if (info->current_tag->name)
+      if (info->current_tag->priv->name)
 	{
 	  /* Add tag to defined tags hash */
-	  tmp = g_strdup (info->current_tag->name);
+	  tmp = g_strdup (info->current_tag->priv->name);
 	  g_hash_table_insert (info->defined_tags,
 			       tmp, tmp);
 	}

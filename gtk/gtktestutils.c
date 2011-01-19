@@ -73,10 +73,17 @@ gtk_test_init (int    *argcp,
    * - this function could install a mock object around GtkSettings
    */
   g_setenv ("GTK_MODULES", "", TRUE);
-  g_setenv ("GTK2_RC_FILES", "/dev/null", TRUE);
   gtk_disable_setlocale();
   setlocale (LC_ALL, "C");
   g_test_bug_base ("http://bugzilla.gnome.org/show_bug.cgi?id=%s");
+
+  /* XSendEvent() doesn't work yet on XI2 events.
+   * So at the moment gdk_test_simulate_* can only
+   * send events that GTK+ understands if XI2 is
+   * disabled, bummer.
+   */
+  gdk_disable_multidevice ();
+
   gtk_init (argcp, argvp);
 }
 
@@ -408,7 +415,12 @@ gtk_test_slider_set_perc (GtkWidget      *widget,
   else if (GTK_IS_SPIN_BUTTON (widget))
     adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
   if (adjustment)
-    gtk_adjustment_set_value (adjustment, adjustment->lower + (adjustment->upper - adjustment->lower - adjustment->page_size) * percentage * 0.01);
+    gtk_adjustment_set_value (adjustment, 
+                              gtk_adjustment_get_lower (adjustment) 
+                              + (gtk_adjustment_get_upper (adjustment) 
+                                 - gtk_adjustment_get_lower (adjustment) 
+                                 - gtk_adjustment_get_page_size (adjustment))
+                                * percentage * 0.01);
 }
 
 /**
@@ -421,7 +433,7 @@ gtk_test_slider_set_perc (GtkWidget      *widget,
  * of the adjustment belonging to @widget, and is not a percentage
  * as passed in to gtk_test_slider_set_perc().
  *
- * Returns: adjustment->value for an adjustment belonging to @widget.
+ * Returns: gtk_adjustment_get_value (adjustment) for an adjustment belonging to @widget.
  *
  * Since: 2.14
  **/
@@ -433,7 +445,7 @@ gtk_test_slider_get_value (GtkWidget *widget)
     adjustment = gtk_range_get_adjustment (GTK_RANGE (widget));
   else if (GTK_IS_SPIN_BUTTON (widget))
     adjustment = gtk_spin_button_get_adjustment (GTK_SPIN_BUTTON (widget));
-  return adjustment ? adjustment->value : 0;
+  return adjustment ? gtk_adjustment_get_value (adjustment) : 0;
 }
 
 /**

@@ -67,6 +67,8 @@ struct _GtkComboBoxClass
 /* construction */
 GType         gtk_combo_box_get_type                 (void) G_GNUC_CONST;
 GtkWidget    *gtk_combo_box_new                      (void);
+GtkWidget    *gtk_combo_box_new_with_area            (GtkCellArea  *area);
+GtkWidget    *gtk_combo_box_new_with_area_and_entry  (GtkCellArea  *area);
 GtkWidget    *gtk_combo_box_new_with_entry           (void);
 GtkWidget    *gtk_combo_box_new_with_model           (GtkTreeModel *model);
 GtkWidget    *gtk_combo_box_new_with_model_and_entry (GtkTreeModel *model);
@@ -84,15 +86,15 @@ void          gtk_combo_box_set_column_span_column (GtkComboBox *combo_box,
 
 gboolean      gtk_combo_box_get_add_tearoffs       (GtkComboBox *combo_box);
 void          gtk_combo_box_set_add_tearoffs       (GtkComboBox *combo_box,
-						    gboolean     add_tearoffs);
+                                                    gboolean     add_tearoffs);
 
 G_CONST_RETURN gchar *gtk_combo_box_get_title      (GtkComboBox *combo_box);
 void                  gtk_combo_box_set_title      (GtkComboBox *combo_box,
-					            const gchar *title);
+                                                    const gchar *title);
 
 gboolean      gtk_combo_box_get_focus_on_click     (GtkComboBox *combo);
 void          gtk_combo_box_set_focus_on_click     (GtkComboBox *combo,
-						    gboolean     focus_on_click);
+                                                    gboolean     focus_on_click);
 
 /* get/set active item */
 gint          gtk_combo_box_get_active       (GtkComboBox     *combo_box);
@@ -110,21 +112,21 @@ GtkTreeModel *gtk_combo_box_get_model        (GtkComboBox     *combo_box);
 
 GtkTreeViewRowSeparatorFunc gtk_combo_box_get_row_separator_func (GtkComboBox                *combo_box);
 void                        gtk_combo_box_set_row_separator_func (GtkComboBox                *combo_box,
-								  GtkTreeViewRowSeparatorFunc func,
-								  gpointer                    data,
-								  GDestroyNotify              destroy);
+                                                                  GtkTreeViewRowSeparatorFunc func,
+                                                                  gpointer                    data,
+                                                                  GDestroyNotify              destroy);
 
 void               gtk_combo_box_set_button_sensitivity (GtkComboBox        *combo_box,
-							 GtkSensitivityType  sensitivity);
+                                                         GtkSensitivityType  sensitivity);
 GtkSensitivityType gtk_combo_box_get_button_sensitivity (GtkComboBox        *combo_box);
 
 gboolean           gtk_combo_box_get_has_entry          (GtkComboBox        *combo_box);
 void               gtk_combo_box_set_entry_text_column  (GtkComboBox        *combo_box,
-							 gint                text_column);
+                                                         gint                text_column);
 gint               gtk_combo_box_get_entry_text_column  (GtkComboBox        *combo_box);
 
 void               gtk_combo_box_set_popup_fixed_width  (GtkComboBox      *combo_box,
-							 gboolean          fixed);
+                                                         gboolean          fixed);
 gboolean           gtk_combo_box_get_popup_fixed_width  (GtkComboBox      *combo_box);
 
 /* programmatic control */

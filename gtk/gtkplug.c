@@ -33,8 +33,16 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtkplugprivate.h"
+#include "gtksocketprivate.h"
 #include "gtkwidgetprivate.h"
-#include "gtkwindow.h"
+#include "gtkwindowprivate.h"
+
+#ifdef GDK_WINDOWING_X11
+#include "x11/gdkx.h"
+#endif
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkwin32.h"
+#endif
 
 /**
  * SECTION:gtkplug
@@ -346,8 +354,8 @@ _gtk_plug_add_to_socket (GtkPlug   *plug,
 
   gtk_plug_set_is_child (plug, TRUE);
   priv->same_app = TRUE;
-  socket_->same_app = TRUE;
-  socket_->plug_widget = widget;
+  socket_->priv->same_app = TRUE;
+  socket_->priv->plug_widget = widget;
 
   priv->socket_window = gtk_widget_get_window (GTK_WIDGET (socket_));
   g_object_ref (priv->socket_window);
@@ -436,14 +444,14 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
   gtk_widget_unparent (GTK_WIDGET (plug));
   _gtk_widget_set_in_reparent (widget, FALSE);
   
-  socket_->plug_widget = NULL;
-  if (socket_->plug_window != NULL)
+  socket_->priv->plug_widget = NULL;
+  if (socket_->priv->plug_window != NULL)
     {
-      g_object_unref (socket_->plug_window);
-      socket_->plug_window = NULL;
+      g_object_unref (socket_->priv->plug_window);
+      socket_->priv->plug_window = NULL;
     }
   
-  socket_->same_app = FALSE;
+  socket_->priv->same_app = FALSE;
 
   priv->same_app = FALSE;
   if (priv->socket_window != NULL)
@@ -512,7 +520,13 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
     {
       gpointer user_data = NULL;
 
-      priv->socket_window = gdk_window_lookup_for_display (display, socket_id);
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_X11_DISPLAY (display))
+        priv->socket_window = gdk_x11_window_lookup_for_display (display, socket_id);
+      else
+#endif
+        priv->socket_window = NULL;
+
       if (priv->socket_window)
 	{
 	  gdk_window_get_user_data (priv->socket_window, &user_data);
@@ -531,7 +545,14 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 	    g_object_ref (priv->socket_window);
 	}
       else
-	priv->socket_window = gdk_window_foreign_new_for_display (display, socket_id);
+#ifdef GDK_WINDOWING_X11
+      if (GDK_IS_X11_DISPLAY (display))
+        priv->socket_window = gdk_x11_window_foreign_new_for_display (display, socket_id);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+      if (GDK_IS_WIN32_DISPLAY (display))
+        priv->socket_window = gdk_win32_window_foreign_new_for_display (display, socket_id);
+#endif
 
       if (priv->socket_window) {
 	g_signal_emit (plug, plug_signals[EMBEDDED], 0);
@@ -707,9 +728,8 @@ gtk_plug_realize (GtkWidget *widget)
 
   gdk_window_set_user_data (gdk_window, window);
 
-  gtk_widget_style_attach (widget);
-  gtk_style_set_background (gtk_widget_get_style (widget),
-                            gdk_window, GTK_STATE_NORMAL);
+  gtk_style_context_set_background (gtk_widget_get_style_context (widget),
+                                    gdk_window);
 
   gdk_window_enable_synchronized_configure (gdk_window);
 }

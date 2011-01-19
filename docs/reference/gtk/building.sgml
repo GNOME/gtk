@@ -2,7 +2,7 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="gtk-building" revision="6 Sept 2001">
+<refentry id="gtk-building">
 <refmeta>
 <refentrytitle>Compiling the GTK+ libraries</refentrytitle>
 <manvolnum>3</manvolnum>
@@ -30,7 +30,7 @@ How to compile GTK+ itself
       your operating system will be available, either from your
       operating system vendor or from independent sources. If such a
       set of packages is available, installing it will get you
-      programming wih GTK+ much faster than building it yourself. In
+      programming with GTK+ much faster than building it yourself. In
       fact, you may well already have GTK+ installed on your system
       already.
     </para>
@@ -45,7 +45,7 @@ How to compile GTK+ itself
     </para>
     <para>
       If you are building GTK+ from the distributed source packages,
-      then won't need these tools installed; the necessary pieces
+      then you won't need these tools installed; the necessary pieces
       of the tools are already included in the source packages. But
       it's useful to know a bit about how packages that use these
       tools work. A source package is distributed as a
@@ -57,14 +57,15 @@ How to compile GTK+ itself
       tar xvfj gtk+-3.0.0.tar.bz2
     </programlisting>
     <para>
-      In the toplevel of the directory that is created, there will be
+      In the toplevel directory that is created, there will be
       a shell script called <filename>configure</filename> which
       you then run to take the template makefiles called
       <filename>Makefile.in</filename> in the package and create
-      makefiles customized for your operating system. The <filename>configure</filename>
-      script can be passed various command line arguments to determine how
-      the package is built and installed. The most commonly useful
-      argument is the <systemitem>--prefix</systemitem> argument which
+      makefiles customized for your operating system.
+      The <filename>configure</filename> script can be passed
+      various command line arguments to determine how the package
+      is built and installed. The most commonly useful argument is
+      the <systemitem>--prefix</systemitem> argument which
       determines where the package is installed. To install a package
       in <filename>/opt/gtk</filename> you would run configure as:
     </para>
@@ -212,22 +213,6 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
         <para>
-          The <ulink url="http://en.wikipedia.org/wiki/Libjpeg">JPEG</ulink>,
-          <ulink url="http://www.libpng.org">PNG</ulink>, and
-          <ulink url="http://www.libtiff.org">TIFF</ulink> image
-          loading libraries are needed to compile GTK+. You probably
-          already have these libraries installed, but if not, the
-          versions you need are available in the
-           <filename>dependencies</filename> directory on the the
-          <ulink url="ftp://ftp.gtk.org/pub/gtk/v2.10/dependencies/">GTK+
-            FTP site.</ulink>. (Before installing these libraries
-          from source, you should check if your operating system
-          vendor has prebuilt packages of these libraries that you
-          don't have installed.)
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           The libraries from the X window system are needed to build
           Pango and GTK+. You should already have these installed on
           your system, but it's possible that you'll need to install
@@ -246,8 +231,14 @@ How to compile GTK+ itself
         <para>
           <ulink url="http://www.cairographics.org">Cairo</ulink>
           is a graphics library that supports vector graphics and image
-          compositing. Both Pango and GTK+ use cairo for much of their
+          compositing. Both Pango and GTK+ use cairo for all of their
           drawing.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The GdkPixbuf library provides facilities for loading
+          images in a variety of file formats.
         </para>
       </listitem>
       <listitem>
@@ -289,8 +280,8 @@ How to compile GTK+ itself
       <literal>make install</literal> mentioned above. If you're
       lucky, this will all go smoothly, and you'll be ready to
       <link linkend="gtk-compiling">start compiling your own GTK+
-        applications</link>. You can test your GTK+ installation
-      by running the <command>gtk-demo</command> program that
+      applications</link>. You can test your GTK+ installation
+      by running the <command>gtk3-demo</command> program that
       GTK+ installs.
     </para>
     <para>
@@ -327,7 +318,7 @@ How to compile GTK+ itself
             <arg>--with-included-immodules=MODULE1,MODULE2,...</arg>
           </group>
           <group>
-            <arg>--enable-debug=[no|minimum|yes]</arg>
+            <arg>--enable-debug=[no/minimum/yes]</arg>
           </group>
           <group>
             <arg>--disable-Bsymbolic</arg>
@@ -354,13 +345,27 @@ How to compile GTK+ itself
             <arg>--enable-papi</arg>
           </group>
           <group>
-            <arg>--with-xinput=[no|yes]</arg>
+            <arg>--enable-xinput</arg>
+            <arg>--disable-xinput</arg>
           </group>
           <group>
-            <arg>--with-gdktarget=[x11|win32|quartz]</arg>
+            <arg>--enable-packagekit</arg>
+            <arg>--disable-packagekit</arg>
           </group>
           <group>
-            <arg>--disable-introspection</arg>
+            <arg>--enable-x11-backend</arg>
+            <arg>--disable-x11-backend</arg>
+            <arg>--enable-win32-backend</arg>
+            <arg>--disable-win32-backend</arg>
+            <arg>--enable-quartz-backend</arg>
+            <arg>--disable-quartz-backend</arg>
+          </group>
+          <group>
+            <arg>--enable-introspection=[no/auto/yes]</arg>
+          </group>
+          <group>
+            <arg>--enable-gtk2-dependency</arg>
+            <arg>--disable-gtk2-dependency</arg>
           </group>
         </cmdsynopsis>
       </para>
@@ -371,14 +376,14 @@ How to compile GTK+ itself
 
         <para>
           Normally GTK+ will try to build the input method modules
-          as little shared libraries that are loaded on
-          demand.  The <systemitem>--disable-modules</systemitem>
-          argument indicates that they should all be built statically
-          into the GTK+ library instead.  This is useful for
-          people who need to produce statically-linked binaries.  If
-          neither <systemitem>--disable-modules</systemitem> nor
-          <systemitem>--enable-modules</systemitem> is specified, then
-          the <command>configure</command> script will try to
+          as little shared libraries that are loaded on demand.
+          The <systemitem>--disable-modules</systemitem> argument
+          indicates that they should all be built statically
+          into the GTK+ library instead. This is useful for
+          people who need to produce statically-linked binaries.
+          If neither <systemitem>--disable-modules</systemitem> nor
+          <systemitem>--enable-modules</systemitem> is specified,
+          then the <command>configure</command> script will try to
           auto-detect whether shared modules work on your system.
         </para>
       </formalpara>
@@ -388,7 +393,8 @@ How to compile GTK+ itself
 
         <para>
          This option allows you to specify which input method modules you
-         want to include.
+         want to include directly into the GTK+ shared library, as opposed
+         to building them as loadable modules.
         </para>
       </formalpara>
 
@@ -396,10 +402,9 @@ How to compile GTK+ itself
         <title><systemitem>--enable-debug</systemitem></title>
 
         <para>
-         Turns on various amounts of debugging support. Setting this to 'no'
-         disables g_assert(), g_return_if_fail(), g_return_val_if_fail() and
-         all cast checks between different object types. Setting it to 'minimum'
-         disables only cast checks. Setting it to 'yes' enables
+         Turns on various amounts of debugging support. Setting this to
+         'no' disables g_assert(), g_return_if_fail(), g_return_val_if_fail()           and all cast checks between different object types. Setting it
+         to 'minimum' disables only cast checks. Setting it to 'yes' enables
          <link linkend="GTK-Debug-Options">runtime debugging</link>.
          The default is 'minimum'.
          Note that 'no' is fast, but dangerous as it tends to destabilize
@@ -416,6 +421,8 @@ How to compile GTK+ itself
         <para>
           The option <systemitem>--disable-Bsymbolic</systemitem>
           turns off the use of the -Bsymbolic-functions linker flag.
+          This is only necessary if you want to override GTK+ functions
+          by using <envar>LD_PRELOAD</envar>.
         </para>
       </formalpara>
 
@@ -470,6 +477,21 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
+        <title><systemitem>--disable-xinput</systemitem> and
+           <systemitem>--enable-xinput</systemitem></title>
+        <para>
+          Controls whether GTK+ is built with support for the XInput
+          or XInput2 extension. These extensions provide an extended
+          interface to input devices such as graphics tablets.
+          When this support is compiled in, specially written
+          GTK+ programs can get access to subpixel positions,
+          multiple simultaneous input devices, and extra "axes"
+          provided by the device such as pressure and tilt
+          information.
+        </para>
+      </formalpara>
+
+      <formalpara>
         <title><systemitem>--disable-gtk-doc</systemitem> and
           <systemitem>--enable-gtk-doc</systemitem></title>
 
@@ -513,33 +535,54 @@ How to compile GTK+ itself
       </formalpara>
 
       <formalpara>
-        <title><systemitem>--with-xinput</systemitem></title>
+        <title><systemitem>--disable-packagekit</systemitem> and
+           <systemitem>--enable-packagekit</systemitem></title>
         <para>
-          Controls whether GTK+ is built with support for the XInput
-          or XInput2 extension. These extensions provide an extended
-          interface to input devices such as graphics tablets.
-          When this support is compiled in, specially written
-          GTK+ programs can get access to subpixel positions,
-          multiple simultaneous input devices, and extra "axes"
-          provided by the device such as pressure and tilt
-          information.
+          By default the <command>configure</command> script will try
+          to build the PackageKit support for the open-with dialog if
+          the PackageKit libraries are found.
+          These options can be used to explicitly control whether
+          PackageKit support should be built.
         </para>
       </formalpara>
+
       <formalpara>
-        <title><systemitem>--with-gdktarget</systemitem></title>
+        <title><systemitem>--enable-x11-backend</systemitem>,
+          <systemitem>--disable-x11-backend</systemitem>,
+          <systemitem>--enable-win32-backend</systemitem>,
+          <systemitem>--disable-win32-backend</systemitem>,
+          <systemitem>--enable-quartz-backend</systemitem>,
+          and <systemitem>--disable-quartz-backend</systemitem></title>
 
         <para>
-          Toggles between the supported backends for GDK.
-          The default is x11, unless the platform is Windows, in which
-          case the default is win32. Other supported backends are
-          the quartz backend for OS X.
+          Enables specific backends for GDK.  If none of these options
+          are given, the x11 backend will be enabled by default,
+          unless the platform is Windows, in which case the default is
+          win32.  If any backend is explicitly enabled or disabled, no
+          other platform will be enabled automatically.  Other
+          supported backends are the quartz backend for OS X.
         </para>
       </formalpara>
+
       <formalpara>
-        <title><systemitem>--disable-introspection</systemitem></title>
+        <title><systemitem>--enable-introspection</systemitem></title>
 
         <para>
-          Build without introspection support.
+          Build with or without introspection support.
+          The default is 'auto'.
+        </para>
+      </formalpara>
+
+      <formalpara>
+        <title><systemitem>--enable-gtk2-dependency</systemitem> or
+           <systemitem>--disable-gtk2-dependency</systemitem></title>
+
+        <para>
+          Whether to rely on an exiting gtk-update-icon-cache utility
+          instead of building our own. Distributions which are shipping
+          both GTK+ 2.x and GTK+ 3 may want to use this option to
+          avoid file conflicts between these packages.
+          The default is to build gtk-update-icon-cache.
         </para>
       </formalpara>
     </refsect1>

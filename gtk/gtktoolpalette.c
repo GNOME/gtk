@@ -26,7 +26,7 @@
 
 #include "gtktoolpaletteprivate.h"
 #include "gtkmarshalers.h"
-
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkintl.h"
@@ -263,6 +263,7 @@ gtk_tool_palette_set_property (GObject      *object,
         if ((guint) g_value_get_enum (value) != palette->priv->orientation)
           {
             palette->priv->orientation = g_value_get_enum (value);
+            _gtk_orientable_set_style_classes (GTK_ORIENTABLE (palette));
             gtk_tool_palette_reconfigured (palette);
           }
         break;
@@ -662,33 +663,35 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   /* update the scrollbar to match the displayed adjustment */
   if (adjustment)
     {
-      gdouble value;
-
-      adjustment->page_increment = page_size * 0.9;
-      adjustment->step_increment = page_size * 0.1;
-      adjustment->page_size = page_size;
+      gdouble value, lower, upper;
 
       if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation ||
           GTK_TEXT_DIR_LTR == direction)
         {
-          adjustment->lower = 0;
-          adjustment->upper = MAX (0, page_start);
+          lower = 0;
+          upper = MAX (0, page_start);
 
-          value = MIN (offset, adjustment->upper - adjustment->page_size);
+          value = MIN (offset, upper - page_size);
           gtk_adjustment_clamp_page (adjustment, value, offset + page_size);
         }
       else
         {
-          adjustment->lower = page_size - MAX (0, page_start);
-          adjustment->upper = page_size;
+          lower = page_size - MAX (0, page_start);
+          upper = page_size;
 
           offset = -offset;
 
-          value = MAX (offset, adjustment->lower);
+          value = MAX (offset, lower);
           gtk_adjustment_clamp_page (adjustment, offset, value + page_size);
         }
 
-      gtk_adjustment_changed (adjustment);
+      gtk_adjustment_configure (adjustment,
+                                value,
+                                lower,
+                                upper,
+                                page_size * 0.1,
+                                page_size * 0.9,
+                                page_size);
     }
 }
 
@@ -757,9 +760,8 @@ gtk_tool_palette_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   gdk_window_set_user_data (window, widget);
 
-  gtk_widget_style_attach (widget);
-  gtk_style_set_background (gtk_widget_get_style (widget),
-                            window, GTK_STATE_NORMAL);
+  gtk_style_context_set_background (gtk_widget_get_style_context (widget),
+                                    window);
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback) gtk_widget_set_parent_window,
@@ -1672,23 +1674,25 @@ gtk_tool_palette_get_drag_item (GtkToolPalette         *palette,
                                 const GtkSelectionData *selection)
 {
   GtkToolPaletteDragData *data;
+  GdkAtom target;
 
   g_return_val_if_fail (GTK_IS_TOOL_PALETTE (palette), NULL);
   g_return_val_if_fail (NULL != selection, NULL);
 
-  g_return_val_if_fail (selection->format == 8, NULL);
-  g_return_val_if_fail (selection->length == sizeof (GtkToolPaletteDragData), NULL);
-  g_return_val_if_fail (selection->target == dnd_target_atom_item ||
-                        selection->target == dnd_target_atom_group,
+  g_return_val_if_fail (gtk_selection_data_get_format (selection) == 8, NULL);
+  g_return_val_if_fail (gtk_selection_data_get_length (selection) == sizeof (GtkToolPaletteDragData), NULL);
+  target = gtk_selection_data_get_target (selection);
+  g_return_val_if_fail (target == dnd_target_atom_item ||
+                        target == dnd_target_atom_group,
                         NULL);
 
-  data = (GtkToolPaletteDragData*) selection->data;
+  data = (GtkToolPaletteDragData*) gtk_selection_data_get_data (selection);
 
   g_return_val_if_fail (data->palette == palette, NULL);
 
-  if (dnd_target_atom_item == selection->target)
+  if (dnd_target_atom_item == target)
     g_return_val_if_fail (GTK_IS_TOOL_ITEM (data->item), NULL);
-  else if (dnd_target_atom_group == selection->target)
+  else if (dnd_target_atom_group == target)
     g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (data->item), NULL);
 
   return data->item;
@@ -1818,12 +1822,15 @@ gtk_tool_palette_item_drag_data_get (GtkWidget        *widget,
                                      gpointer          data)
 {
   GtkToolPaletteDragData drag_data = { GTK_TOOL_PALETTE (data), NULL };
+  GdkAtom target;
 
-  if (selection->target == dnd_target_atom_item)
+  target = gtk_selection_data_get_target (selection);
+
+  if (target == dnd_target_atom_item)
     drag_data.item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM);
 
   if (drag_data.item)
-    gtk_selection_data_set (selection, selection->target, 8,
+    gtk_selection_data_set (selection, target, 8,
                             (guchar*) &drag_data, sizeof (drag_data));
 }
 
@@ -1836,12 +1843,15 @@ gtk_tool_palette_child_drag_data_get (GtkWidget        *widget,
                                       gpointer          data)
 {
   GtkToolPaletteDragData drag_data = { GTK_TOOL_PALETTE (data), NULL };
+  GdkAtom target;
 
-  if (selection->target == dnd_target_atom_group)
+  target = gtk_selection_data_get_target (selection);
+
+  if (target == dnd_target_atom_group)
     drag_data.item = gtk_widget_get_ancestor (widget, GTK_TYPE_TOOL_ITEM_GROUP);
 
   if (drag_data.item)
-    gtk_selection_data_set (selection, selection->target, 8,
+    gtk_selection_data_set (selection, target, 8,
                             (guchar*) &drag_data, sizeof (drag_data));
 }
 

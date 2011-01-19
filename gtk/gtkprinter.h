@@ -124,7 +124,7 @@ gboolean                 gtk_printer_get_hard_margins      (GtkPrinter       *pr
 /**
  * GtkPrinterFunc:
  * @printer: a #GtkPrinter
- * @data: user data passed to gtk_enumerate_printers()
+ * @data: (closure): user data passed to gtk_enumerate_printers()
  *
  * The type of function passed to gtk_enumerate_printers().
  * Note that you need to ref @printer, if you want to keep

@@ -45,8 +45,15 @@ INCLUDES = \
 	$(GTK_DEP_CFLAGS)
 
 LDADD = \
-	$(top_builddir)/gdk/$(gdktargetlib)		\
-	$(top_builddir)/gtk/$(gtktargetlib)		\
+	$(top_builddir)/gtk/libgtk-3.0.la	\
 	$(GTK_DEP_LIBS)
 
-noinst_PROGRAMS = hello-world window-default
+drawing_LDADD = $(LDADD) \
+	$(top_builddir)/gdk/libgdk-3.0.la
+
+noinst_PROGRAMS = \
+	hello-world				\
+	window-default				\
+	bloatpad				\
+	grid-packing				\
+	drawing

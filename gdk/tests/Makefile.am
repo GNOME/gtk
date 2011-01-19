@@ -12,16 +12,24 @@ AM_CPPFLAGS = \
 
 progs_ldadd = \
 	$(GDK_DEP_LIBS) \
-	$(top_builddir)/gdk/libgdk-$(gdktarget)-$(GTK_API_VERSION).la \
+	$(top_builddir)/gdk/libgdk-$(GTK_API_VERSION).la \
 	$(NULL)
 
 #TEST_PROGS              += check-gdk-cairo
-check_gdk_cairo_SOURCES  = check-gdk-cairo.c
-check_gdk_cairo_LDADD    = $(progs_ldadd)
+#check_gdk_cairo_SOURCES  = check-gdk-cairo.c
+#check_gdk_cairo_LDADD    = $(progs_ldadd)
 
 TEST_PROGS        += gdk-color
 gdk_color_SOURCES  = gdk-color.c
 gdk_color_LDADD    = $(progs_ldadd)
+
+TEST_PROGS        += encoding
+encoding_SOURCES   = encoding.c
+encoding_LDADD     = $(progs_ldadd)
+
+TEST_PROGS        += display
+display_SOURCES    = display.c
+display_LDADD      = $(progs_ldadd)
 
 CLEANFILES = \
 	cairosurface.png	\

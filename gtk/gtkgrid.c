@@ -191,6 +191,7 @@ gtk_grid_set_orientation (GtkGrid        *grid,
   if (priv->orientation != orientation)
     {
       priv->orientation = orientation;
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (grid));
 
       g_object_notify (G_OBJECT (grid), "orientation");
     }
@@ -439,9 +440,11 @@ gtk_grid_forall (GtkContainer *container,
   GtkGridChild *child;
   GList *list;
 
-  for (list = priv->children; list; list = list->next)
+  list = priv->children;
+  while (list)
     {
       child = list->data;
+      list  = list->next;
 
       (* callback) (child->widget, callback_data);
     }

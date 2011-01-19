@@ -26,33 +26,50 @@
 #ifndef __GTK_SOCKET_PRIVATE_H__
 #define __GTK_SOCKET_PRIVATE_H__
 
-typedef struct _GtkSocketPrivate GtkSocketPrivate;
+#include "gtksocket.h"
 
 struct _GtkSocketPrivate
 {
   gint resize_count;
+
+  guint16 request_width;
+  guint16 request_height;
+  guint16 current_width;
+  guint16 current_height;
+
+  GdkWindow *plug_window;
+  GtkWidget *plug_widget;
+
+  gshort xembed_version; /* -1 == not xembed */
+  guint same_app  : 1;
+  guint focus_in  : 1;
+  guint have_size : 1;
+  guint need_map  : 1;
+  guint is_mapped : 1;
+  guint active    : 1;
+
+  GtkAccelGroup *accel_group;
+  GtkWidget *toplevel;
 };
 
 /* In gtksocket.c: */
-GtkSocketPrivate *_gtk_socket_get_private (GtkSocket *socket);
-
 void _gtk_socket_add_grabbed_key  (GtkSocket        *socket,
-				   guint             keyval,
-				   GdkModifierType   modifiers);
+                                   guint             keyval,
+                                   GdkModifierType   modifiers);
 void _gtk_socket_remove_grabbed_key (GtkSocket      *socket,
-				     guint           keyval,
-				     GdkModifierType modifiers);
-void _gtk_socket_claim_focus 	  (GtkSocket        *socket,
-			     	   gboolean          send_event);
-void _gtk_socket_add_window  	  (GtkSocket        *socket,
-			     	   GdkNativeWindow   xid,
-			     	   gboolean          need_reparent);
+                                     guint           keyval,
+                                     GdkModifierType modifiers);
+void _gtk_socket_claim_focus      (GtkSocket        *socket,
+                                   gboolean          send_event);
+void _gtk_socket_add_window       (GtkSocket        *socket,
+                                   GdkNativeWindow   xid,
+                                   gboolean          need_reparent);
 void _gtk_socket_end_embedding    (GtkSocket        *socket);
 
 void _gtk_socket_handle_map_request     (GtkSocket        *socket);
 void _gtk_socket_unmap_notify           (GtkSocket        *socket);
 void _gtk_socket_advance_toplevel_focus (GtkSocket        *socket,
-					 GtkDirectionType  direction);
+                                         GtkDirectionType  direction);
 
 /* In backend-specific file: */
 
@@ -88,36 +105,36 @@ void _gtk_socket_windowing_size_request (GtkSocket *socket);
  *
  */
 void _gtk_socket_windowing_send_key_event (GtkSocket *socket,
-					   GdkEvent  *gdk_event,
-					   gboolean   mask_key_presses);
+                                           GdkEvent  *gdk_event,
+                                           gboolean   mask_key_presses);
 
 /*
  * _gtk_socket_windowing_focus_change:
  *
  */
 void _gtk_socket_windowing_focus_change (GtkSocket *socket,
-					 gboolean   focus_in);
+                                         gboolean   focus_in);
 
 /*
  * _gtk_socket_windowing_update_active:
  *
  */
 void _gtk_socket_windowing_update_active (GtkSocket *socket,
-					  gboolean   active);
+                                          gboolean   active);
 
 /*
  * _gtk_socket_windowing_update_modality:
  *
  */
 void _gtk_socket_windowing_update_modality (GtkSocket *socket,
-					    gboolean   modality);
+                                            gboolean   modality);
 
 /*
  * _gtk_socket_windowing_focus:
  *
  */
 void _gtk_socket_windowing_focus (GtkSocket *socket,
-				  GtkDirectionType direction);
+                                  GtkDirectionType direction);
 
 /*
  * _gtk_socket_windowing_send_configure_event:
@@ -165,7 +182,7 @@ void _gtk_socket_windowing_embed_set_focus_wrapped (void);
  *
  */
 GdkFilterReturn _gtk_socket_windowing_filter_func (GdkXEvent *gdk_xevent,
-						   GdkEvent  *event,
-						   gpointer   data);
+                                                   GdkEvent  *event,
+                                                   gpointer   data);
 
 #endif /* __GTK_SOCKET_PRIVATE_H__ */

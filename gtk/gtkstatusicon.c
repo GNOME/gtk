@@ -29,9 +29,9 @@
 
 #include "config.h"
 
-#include "gtkstatusicon.h"
-
 #include <string.h>
+
+#include "gtkstatusicon.h"
 
 #include "gtkintl.h"
 #include "gtkiconfactory.h"
@@ -39,29 +39,21 @@
 #include "gtkmarshalers.h"
 #include "gtksizerequest.h"
 #include "gtktrayicon.h"
-
 #include "gtkprivate.h"
 #include "gtkwidget.h"
 #include "gtktooltip.h"
+#include "gtkicontheme.h"
+#include "gtklabel.h"
+#include "gtktypebuiltins.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "gdk/x11/gdkx.h"
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
-#include "gtkicontheme.h"
-#include "gtklabel.h"
-
-#include "win32/gdkwin32.h"
+#include "gdk/win32/gdkwin32.h"
 #define WM_GTK_TRAY_NOTIFICATION (WM_USER+1)
 #endif
-
-#ifdef GDK_WINDOWING_QUARTZ
-#include "gtkicontheme.h"
-#include "gtklabel.h"
-#endif	
-
-#include "gdkkeysyms.h"
 
 #define BLINK_TIMEOUT 500
 
@@ -643,7 +635,7 @@ build_button_event (GtkStatusIconPrivate *priv,
   e->axes = NULL;
   e->state = 0;
   e->button = button;
-  e->device = gdk_display_get_default ()->core_pointer;
+  //FIXME: e->device = gdk_display_get_default ()->core_pointer;
   e->x_root = e->x;
   e->y_root = e->y;
 }
@@ -1193,7 +1185,7 @@ gtk_status_icon_new_from_pixbuf (GdkPixbuf *pixbuf)
 
 /**
  * gtk_status_icon_new_from_file:
- * @filename: a filename
+ * @filename: (type filename): a filename
  * 
  * Creates a status icon displaying the file @filename. 
  *
@@ -1434,10 +1426,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 #ifdef GDK_WINDOWING_WIN32
 	{
 	  GdkPixbuf *pixbuf =
-	    gtk_widget_render_icon (priv->dummy_widget,
-				    priv->image_data.stock_id,
-				    GTK_ICON_SIZE_SMALL_TOOLBAR,
-				    NULL);
+	    gtk_widget_render_icon_pixbuf (priv->dummy_widget,
+                                           priv->image_data.stock_id,
+                                           GTK_ICON_SIZE_SMALL_TOOLBAR);
 
 	  prev_hicon = priv->nid.hIcon;
 	  priv->nid.hIcon = gdk_win32_pixbuf_to_hicon_libgtk_only (pixbuf);
@@ -1454,10 +1445,9 @@ gtk_status_icon_update_image (GtkStatusIcon *status_icon)
 	{
 	  GdkPixbuf *pixbuf;
 
-	  pixbuf = gtk_widget_render_icon (priv->dummy_widget,
-					   priv->image_data.stock_id,
-					   GTK_ICON_SIZE_SMALL_TOOLBAR,
-					   NULL);
+	  pixbuf = gtk_widget_render_icon_pixbuf (priv->dummy_widget,
+                                                  priv->image_data.stock_id,
+                                                  GTK_ICON_SIZE_SMALL_TOOLBAR);
 	  QUARTZ_POOL_ALLOC;
 	  [priv->status_item setImage:pixbuf];
 	  QUARTZ_POOL_RELEASE;
@@ -1923,7 +1913,7 @@ gtk_status_icon_set_from_pixbuf (GtkStatusIcon *status_icon,
 /**
  * gtk_status_icon_set_from_file:
  * @status_icon: a #GtkStatusIcon
- * @filename: a filename
+ * @filename: (type filename): a filename
  * 
  * Makes @status_icon display the file @filename.
  * See gtk_status_icon_new_from_file() for details.
@@ -2474,14 +2464,14 @@ gtk_status_icon_position_menu (GtkMenu  *menu,
 /**
  * gtk_status_icon_get_geometry:
  * @status_icon: a #GtkStatusIcon
- * @screen: (out) (transfer none) (allow-none): return location for the screen, or %NULL if the
- *          information is not needed
- * @area: (out) (allow-none): return location for the area occupied by the status
- *        icon, or %NULL
- * @orientation: (out) (allow-none): return location for the orientation of the panel
- *    in which the status icon is embedded, or %NULL. A panel
- *    at the top or bottom of the screen is horizontal, a panel
- *    at the left or right is vertical.
+ * @screen: (out) (transfer none) (allow-none): return location for
+ *          the screen, or %NULL if the information is not needed
+ * @area: (out) (allow-none): return location for the area occupied by
+ *        the status icon, or %NULL
+ * @orientation: (out) (allow-none): return location for the
+ *    orientation of the panel in which the status icon is embedded,
+ *    or %NULL. A panel at the top or bottom of the screen is
+ *    horizontal, a panel at the left or right is vertical.
  *
  * Obtains information about the location of the status icon
  * on screen. This information can be used to e.g. position 

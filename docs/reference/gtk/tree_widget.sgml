@@ -2,7 +2,7 @@
 <!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
                "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 ]>
-<refentry id="TreeWidget" revision="20 Mar 2002">
+<refentry id="TreeWidget">
   <refmeta>
     <refentrytitle>Tree and List Widget Overview</refentrytitle>
     <manvolnum>3</manvolnum>

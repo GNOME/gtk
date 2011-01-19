@@ -30,11 +30,10 @@
 
 #include "gtkaccelgroup.h"
 #include "gtkaccelgroupprivate.h"
-#include "gtkaccellabel.h" /* For _gtk_accel_label_class_get_accelerator_label */
+#include "gtkaccellabel.h"
 #include "gtkaccelmap.h"
 #include "gtkintl.h"
-#include "gtkmain.h"		/* For _gtk_boolean_handled_accumulator */
-#include "gdk/gdkkeysyms.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 
 
@@ -44,7 +43,7 @@
  * @Title: Accelerator Groups
  * @See_also:gtk_window_add_accel_group(), gtk_accel_map_change_entry(),
  * gtk_item_factory_new(), gtk_label_new_with_mnemonic()
- * 
+ *
  * A #GtkAccelGroup represents a group of keyboard accelerators,
  * typically attached to a toplevel #GtkWindow (with
  * gtk_window_add_accel_group()). Usually you won't need to create a
@@ -820,8 +819,11 @@ _gtk_accel_group_get_accelerables (GtkAccelGroup *accel_group)
  * @accel_group:      the accelerator group to query
  * @accel_key:        key value of the accelerator
  * @accel_mods:       modifier combination of the accelerator
- * @n_entries: (allow-none):        location to return the number of entries found, or %NULL
- * @returns: (allow-none):          an array of @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is owned by GTK+ and must not be freed. 
+ * @n_entries: (allow-none): location to return the number of entries found,
+ *     or %NULL
+ * @returns: (transfer none) (array length=n_entries): an array of
+ *     @n_entries #GtkAccelGroupEntry elements, or %NULL. The array is
+ *     owned by GTK+ and must not be freed.
  *
  * Queries an accelerator group for all entries matching @accel_key and 
  * @accel_mods.
@@ -951,11 +953,11 @@ gtk_accel_groups_activate (GObject	  *object,
  * @keyval:    a GDK keyval
  * @modifiers: modifier mask
  * @returns:   %TRUE if the accelerator is valid
- * 
+ *
  * Determines whether a given keyval and modifier mask constitute
- * a valid keyboard accelerator. For example, the #GDK_a keyval
+ * a valid keyboard accelerator. For example, the #GDK_KEY_a keyval
  * plus #GDK_CONTROL_MASK is valid - this is a "Ctrl+a" accelerator.
- * But, you can't, for instance, use the #GDK_Control_L keyval
+ * But, you can't, for instance, use the #GDK_KEY_Control_L keyval
  * as an accelerator.
  */
 gboolean
@@ -1139,8 +1141,8 @@ is_hyper (const gchar *string)
 /**
  * gtk_accelerator_parse:
  * @accelerator:      string representing an accelerator
- * @accelerator_key:  return location for accelerator keyval
- * @accelerator_mods: return location for accelerator modifier mask
+ * @accelerator_key: (out):  return location for accelerator keyval
+ * @accelerator_mods: (out): return location for accelerator modifier mask
  *
  * Parses a string representing an accelerator. The
  * format looks like "&lt;Control&gt;a" or "&lt;Shift&gt;&lt;Alt&gt;F1" or
@@ -1279,11 +1281,11 @@ gtk_accelerator_parse (const gchar     *accelerator,
  * gtk_accelerator_name:
  * @accelerator_key:  accelerator keyval
  * @accelerator_mods: accelerator modifier mask
- * 
+ *
  * Converts an accelerator keyval and modifier mask
  * into a string parseable by gtk_accelerator_parse().
- * For example, if you pass in #GDK_q and #GDK_CONTROL_MASK,
- * this function returns "&lt;Control&gt;q". 
+ * For example, if you pass in #GDK_KEY_q and #GDK_CONTROL_MASK,
+ * this function returns "&lt;Control&gt;q".
  *
  * If you need to display accelerators in the user interface,
  * see gtk_accelerator_get_label().

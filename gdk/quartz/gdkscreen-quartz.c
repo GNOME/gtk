@@ -1,7 +1,7 @@
 /* gdkscreen-quartz.c
  *
  * Copyright (C) 2005 Imendio AB
- * Copyright (C) 2009  Kristian Rietveld  <kris@gtk.org>
+ * Copyright (C) 2009,2010  Kristian Rietveld  <kris@gtk.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,8 +20,9 @@
  */
 
 #include "config.h"
-#include "gdk.h"
-#include "gdkscreen-quartz.h"
+
+#include <gdk/gdk.h>
+
 #include "gdkprivate-quartz.h"
  
 
@@ -48,7 +49,7 @@
  * all monitors in the root window.  Once that size is known, we iterate
  * over the monitors and translate their Cocoa position to a position
  * in the root window of the GdkScreen.  This happens below in the
- * function gdk_screen_quartz_calculate_layout().
+ * function gdk_quartz_screen_calculate_layout().
  *
  * A Cocoa coordinate is always relative to the origin of the monitor
  * coordinate space.  Such coordinates are mapped to their respective
@@ -59,47 +60,38 @@
  * but GDK coordinates can *not*!
  */
 
-static void  gdk_screen_quartz_dispose          (GObject         *object);
-static void  gdk_screen_quartz_finalize         (GObject         *object);
-static void  gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen);
+static void  gdk_quartz_screen_dispose          (GObject         *object);
+static void  gdk_quartz_screen_finalize         (GObject         *object);
+static void  gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen);
 
 static void display_reconfiguration_callback (CGDirectDisplayID            display,
                                               CGDisplayChangeSummaryFlags  flags,
                                               void                        *userInfo);
 
-G_DEFINE_TYPE (GdkScreenQuartz, _gdk_screen_quartz, GDK_TYPE_SCREEN);
+G_DEFINE_TYPE (GdkQuartzScreen, gdk_quartz_screen, GDK_TYPE_SCREEN);
 
 static void
-_gdk_screen_quartz_class_init (GdkScreenQuartzClass *klass)
+gdk_quartz_screen_init (GdkQuartzScreen *quartz_screen)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->dispose = gdk_screen_quartz_dispose;
-  object_class->finalize = gdk_screen_quartz_finalize;
-}
-
-static void
-_gdk_screen_quartz_init (GdkScreenQuartz *screen_quartz)
-{
-  GdkScreen *screen = GDK_SCREEN (screen_quartz);
+  GdkScreen *screen = GDK_SCREEN (quartz_screen);
   NSScreen *nsscreen;
 
   nsscreen = [[NSScreen screens] objectAtIndex:0];
   gdk_screen_set_resolution (screen,
                              72.0 * [nsscreen userSpaceScaleFactor]);
 
-  gdk_screen_quartz_calculate_layout (screen_quartz);
+  gdk_quartz_screen_calculate_layout (quartz_screen);
 
   CGDisplayRegisterReconfigurationCallback (display_reconfiguration_callback,
                                             screen);
 
-  screen_quartz->emit_monitors_changed = FALSE;
+  quartz_screen->emit_monitors_changed = FALSE;
 }
 
 static void
-gdk_screen_quartz_dispose (GObject *object)
+gdk_quartz_screen_dispose (GObject *object)
 {
-  GdkScreenQuartz *screen = GDK_SCREEN_QUARTZ (object);
+  GdkQuartzScreen *screen = GDK_QUARTZ_SCREEN (object);
 
   if (screen->screen_changed_id)
     {
@@ -110,11 +102,11 @@ gdk_screen_quartz_dispose (GObject *object)
   CGDisplayRemoveReconfigurationCallback (display_reconfiguration_callback,
                                           screen);
 
-  G_OBJECT_CLASS (_gdk_screen_quartz_parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_quartz_screen_parent_class)->dispose (object);
 }
 
 static void
-gdk_screen_quartz_screen_rects_free (GdkScreenQuartz *screen)
+gdk_quartz_screen_screen_rects_free (GdkQuartzScreen *screen)
 {
   screen->n_screens = 0;
 
@@ -126,16 +118,16 @@ gdk_screen_quartz_screen_rects_free (GdkScreenQuartz *screen)
 }
 
 static void
-gdk_screen_quartz_finalize (GObject *object)
+gdk_quartz_screen_finalize (GObject *object)
 {
-  GdkScreenQuartz *screen = GDK_SCREEN_QUARTZ (object);
+  GdkQuartzScreen *screen = GDK_QUARTZ_SCREEN (object);
 
-  gdk_screen_quartz_screen_rects_free (screen);
+  gdk_quartz_screen_screen_rects_free (screen);
 }
 
 
 static void
-gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
+gdk_quartz_screen_calculate_layout (GdkQuartzScreen *screen)
 {
   NSArray *array;
   int i;
@@ -143,7 +135,7 @@ gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
 
   GDK_QUARTZ_ALLOC_POOL;
 
-  gdk_screen_quartz_screen_rects_free (screen);
+  gdk_quartz_screen_screen_rects_free (screen);
 
   array = [NSScreen screens];
 
@@ -192,18 +184,48 @@ gdk_screen_quartz_calculate_layout (GdkScreenQuartz *screen)
   GDK_QUARTZ_RELEASE_POOL;
 }
 
+void
+_gdk_quartz_screen_update_window_sizes (GdkScreen *screen)
+{
+  GList *windows, *list;
+
+  /* The size of the root window is so that it can contain all
+   * monitors attached to this machine.  The monitors are laid out
+   * within this root window.  We calculate the size of the root window
+   * and the positions of the different monitors in gdkscreen-quartz.c.
+   *
+   * This data is updated when the monitor configuration is changed.
+   */
+
+  /* FIXME: At some point, fetch the root window from GdkScreen.  But
+   * on OS X will we only have a single root window anyway.
+   */
+  _gdk_root->x = 0;
+  _gdk_root->y = 0;
+  _gdk_root->abs_x = 0;
+  _gdk_root->abs_y = 0;
+  _gdk_root->width = gdk_screen_get_width (screen);
+  _gdk_root->height = gdk_screen_get_height (screen);
+
+  windows = gdk_screen_get_toplevel_windows (screen);
+
+  for (list = windows; list; list = list->next)
+    _gdk_quartz_window_update_position (list->data);
+
+  g_list_free (windows);
+}
 
 static void
-process_display_reconfiguration (GdkScreenQuartz *screen)
+process_display_reconfiguration (GdkQuartzScreen *screen)
 {
   int width, height;
 
   width = gdk_screen_get_width (GDK_SCREEN (screen));
   height = gdk_screen_get_height (GDK_SCREEN (screen));
 
-  gdk_screen_quartz_calculate_layout (GDK_SCREEN_QUARTZ (screen));
+  gdk_quartz_screen_calculate_layout (GDK_QUARTZ_SCREEN (screen));
 
-  _gdk_windowing_update_window_sizes (GDK_SCREEN (screen));
+  _gdk_quartz_screen_update_window_sizes (GDK_SCREEN (screen));
 
   if (screen->emit_monitors_changed)
     {
@@ -219,7 +241,7 @@ process_display_reconfiguration (GdkScreenQuartz *screen)
 static gboolean
 screen_changed_idle (gpointer data)
 {
-  GdkScreenQuartz *screen = data;
+  GdkQuartzScreen *screen = data;
 
   process_display_reconfiguration (data);
 
@@ -233,7 +255,7 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
                                   CGDisplayChangeSummaryFlags  flags,
                                   void                        *userInfo)
 {
-  GdkScreenQuartz *screen = userInfo;
+  GdkQuartzScreen *screen = userInfo;
 
   if (flags & kCGDisplayBeginConfigurationFlag)
     {
@@ -263,34 +285,22 @@ display_reconfiguration_callback (CGDirectDisplayID            display,
     }
 }
 
-GdkScreen *
-_gdk_screen_quartz_new (void)
+static GdkDisplay *
+gdk_quartz_screen_get_display (GdkScreen *screen)
 {
-  return g_object_new (GDK_TYPE_SCREEN_QUARTZ, NULL);
-}
-
-GdkDisplay *
-gdk_screen_get_display (GdkScreen *screen)
-{
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return _gdk_display;
 }
 
 
-GdkWindow *
-gdk_screen_get_root_window (GdkScreen *screen)
+static GdkWindow *
+gdk_quartz_screen_get_root_window (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return _gdk_root;
 }
 
-gint
-gdk_screen_get_number (GdkScreen *screen)
+static gint
+gdk_quartz_screen_get_number (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return 0;
 }
 
@@ -304,20 +314,16 @@ _gdk_windowing_substitute_screen_number (const gchar *display_name,
   return g_strdup (display_name);
 }
 
-gint
-gdk_screen_get_width (GdkScreen *screen)
+static gint
+gdk_quartz_screen_get_width (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_QUARTZ (screen)->width;
+  return GDK_QUARTZ_SCREEN (screen)->width;
 }
 
-gint
-gdk_screen_get_height (GdkScreen *screen)
+static gint
+gdk_quartz_screen_get_height (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_QUARTZ (screen)->height;
+  return GDK_QUARTZ_SCREEN (screen)->height;
 }
 
 static gint
@@ -352,110 +358,125 @@ get_nsscreen_for_monitor (gint monitor_num)
   return screen;
 }
 
-gint
-gdk_screen_get_width_mm (GdkScreen *screen)
+static gint
+gdk_quartz_screen_get_width_mm (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return get_mm_from_pixels (get_nsscreen_for_monitor (0),
-                             GDK_SCREEN_QUARTZ (screen)->width);
+                             GDK_QUARTZ_SCREEN (screen)->width);
 }
 
-gint
-gdk_screen_get_height_mm (GdkScreen *screen)
+static gint
+gdk_quartz_screen_get_height_mm (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return get_mm_from_pixels (get_nsscreen_for_monitor (0),
-                             GDK_SCREEN_QUARTZ (screen)->height);
+                             GDK_QUARTZ_SCREEN (screen)->height);
 }
 
-gint
-gdk_screen_get_n_monitors (GdkScreen *screen)
+static gint
+gdk_quartz_screen_get_n_monitors (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
-  return GDK_SCREEN_QUARTZ (screen)->n_screens;
+  return GDK_QUARTZ_SCREEN (screen)->n_screens;
 }
 
-gint
-gdk_screen_get_primary_monitor (GdkScreen *screen)
+static gint
+gdk_quartz_screen_get_primary_monitor (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-
   return 0;
 }
 
-gint
-gdk_screen_get_monitor_width_mm	(GdkScreen *screen,
-				 gint       monitor_num)
+static gint
+gdk_quartz_screen_get_monitor_width_mm (GdkScreen *screen,
+                                        gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), 0);
-  g_return_val_if_fail (monitor_num >= 0, 0);
-
   return get_mm_from_pixels (get_nsscreen_for_monitor (monitor_num),
-                             GDK_SCREEN_QUARTZ (screen)->screen_rects[monitor_num].width);
+                             GDK_QUARTZ_SCREEN (screen)->screen_rects[monitor_num].width);
 }
 
-gint
-gdk_screen_get_monitor_height_mm (GdkScreen *screen,
-                                  gint       monitor_num)
+static gint
+gdk_quartz_screen_get_monitor_height_mm (GdkScreen *screen,
+                                         gint       monitor_num)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), 0);
-  g_return_val_if_fail (monitor_num < gdk_screen_get_n_monitors (screen), 0);
-  g_return_val_if_fail (monitor_num >= 0, 0);
-
   return get_mm_from_pixels (get_nsscreen_for_monitor (monitor_num),
-                             GDK_SCREEN_QUARTZ (screen)->screen_rects[monitor_num].height);
+                             GDK_QUARTZ_SCREEN (screen)->screen_rects[monitor_num].height);
 }
 
-gchar *
-gdk_screen_get_monitor_plug_name (GdkScreen *screen,
-				  gint       monitor_num)
+static gchar *
+gdk_quartz_screen_get_monitor_plug_name (GdkScreen *screen,
+                                         gint       monitor_num)
 {
   /* FIXME: Is there some useful name we could use here? */
   return NULL;
 }
 
-void
-gdk_screen_get_monitor_geometry (GdkScreen    *screen, 
-				 gint          monitor_num,
-				 GdkRectangle *dest)
+static void
+gdk_quartz_screen_get_monitor_geometry (GdkScreen    *screen,
+                                        gint          monitor_num,
+                                        GdkRectangle *dest)
 {
-  g_return_if_fail (GDK_IS_SCREEN (screen));
-  g_return_if_fail (monitor_num < gdk_screen_get_n_monitors (screen));
-  g_return_if_fail (monitor_num >= 0);
-
-  *dest = GDK_SCREEN_QUARTZ (screen)->screen_rects[monitor_num];
+  *dest = GDK_QUARTZ_SCREEN (screen)->screen_rects[monitor_num];
 }
 
-gchar *
-gdk_screen_make_display_name (GdkScreen *screen)
+static gchar *
+gdk_quartz_screen_make_display_name (GdkScreen *screen)
 {
   return g_strdup (gdk_display_get_name (_gdk_display));
 }
 
-GdkWindow *
-gdk_screen_get_active_window (GdkScreen *screen)
+static GdkWindow *
+gdk_quartz_screen_get_active_window (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return NULL;
 }
 
-GList *
-gdk_screen_get_window_stack (GdkScreen *screen)
+static GList *
+gdk_quartz_screen_get_window_stack (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-
   return NULL;
 }
 
-gboolean
-gdk_screen_is_composited (GdkScreen *screen)
+static gboolean
+gdk_quartz_screen_is_composited (GdkScreen *screen)
 {
-  g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
-
   return TRUE;
+}
+
+static void
+gdk_quartz_screen_class_init (GdkQuartzScreenClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GdkScreenClass *screen_class = GDK_SCREEN_CLASS (klass);
+
+  object_class->dispose = gdk_quartz_screen_dispose;
+  object_class->finalize = gdk_quartz_screen_finalize;
+
+  screen_class->get_display = gdk_quartz_screen_get_display;
+  screen_class->get_width = gdk_quartz_screen_get_width;
+  screen_class->get_height = gdk_quartz_screen_get_height;
+  screen_class->get_width_mm = gdk_quartz_screen_get_width_mm;
+  screen_class->get_height_mm = gdk_quartz_screen_get_height_mm;
+  screen_class->get_number = gdk_quartz_screen_get_number;
+  screen_class->get_root_window = gdk_quartz_screen_get_root_window;
+  screen_class->get_n_monitors = gdk_quartz_screen_get_n_monitors;
+  screen_class->get_primary_monitor = gdk_quartz_screen_get_primary_monitor;
+  screen_class->get_monitor_width_mm = gdk_quartz_screen_get_monitor_width_mm;
+  screen_class->get_monitor_height_mm = gdk_quartz_screen_get_monitor_height_mm;
+  screen_class->get_monitor_plug_name = gdk_quartz_screen_get_monitor_plug_name;
+  screen_class->get_monitor_geometry = gdk_quartz_screen_get_monitor_geometry;
+  screen_class->is_composited = gdk_quartz_screen_is_composited;
+  screen_class->make_display_name = gdk_quartz_screen_make_display_name;
+  screen_class->get_active_window = gdk_quartz_screen_get_active_window;
+  screen_class->get_window_stack = gdk_quartz_screen_get_window_stack;
+  screen_class->broadcast_client_message = _gdk_quartz_screen_broadcast_client_message;
+  screen_class->get_setting = _gdk_quartz_screen_get_setting;
+  screen_class->get_rgba_visual = _gdk_quartz_screen_get_rgba_visual;
+  screen_class->get_system_visual = _gdk_quartz_screen_get_system_visual;
+  screen_class->visual_get_best_depth = _gdk_quartz_screen_visual_get_best_depth;
+  screen_class->visual_get_best_type = _gdk_quartz_screen_visual_get_best_type;
+  screen_class->visual_get_best = _gdk_quartz_screen_visual_get_best;
+  screen_class->visual_get_best_with_depth = _gdk_quartz_screen_visual_get_best_with_depth;
+  screen_class->visual_get_best_with_type = _gdk_quartz_screen_visual_get_best_with_type;
+  screen_class->visual_get_best_with_both = _gdk_quartz_screen_visual_get_best_with_both;
+  screen_class->query_depths = _gdk_quartz_screen_query_depths;
+  screen_class->query_visual_types = _gdk_quartz_screen_query_visual_types;
+  screen_class->list_visuals = _gdk_quartz_screen_list_visuals;
 }

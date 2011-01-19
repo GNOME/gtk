@@ -28,13 +28,12 @@
 
 #include "gtkpaned.h"
 
-#include "gdk/gdkkeysyms.h"
 #include "gtkbindings.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientable.h"
 #include "gtkwindow.h"
-
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -182,8 +181,8 @@ static void     gtk_paned_realize               (GtkWidget        *widget);
 static void     gtk_paned_unrealize             (GtkWidget        *widget);
 static void     gtk_paned_map                   (GtkWidget        *widget);
 static void     gtk_paned_unmap                 (GtkWidget        *widget);
-static void     gtk_paned_state_changed         (GtkWidget        *widget,
-                                                 GtkStateType      previous_state);
+static void     gtk_paned_state_flags_changed   (GtkWidget        *widget,
+                                                 GtkStateFlags     previous_state);
 static gboolean gtk_paned_draw                  (GtkWidget        *widget,
 						 cairo_t          *cr);
 static gboolean gtk_paned_enter                 (GtkWidget        *widget,
@@ -299,7 +298,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   widget_class->motion_notify_event = gtk_paned_motion;
   widget_class->grab_broken_event = gtk_paned_grab_broken;
   widget_class->grab_notify = gtk_paned_grab_notify;
-  widget_class->state_changed = gtk_paned_state_changed;
+  widget_class->state_flags_changed = gtk_paned_state_flags_changed;
 
   container_class->add = gtk_paned_add;
   container_class->remove = gtk_paned_remove;
@@ -649,6 +648,7 @@ static void
 gtk_paned_init (GtkPaned *paned)
 {
   GtkPanedPrivate *priv;
+  GtkStyleContext *context;
 
   gtk_widget_set_has_window (GTK_WIDGET (paned), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (paned), TRUE);
@@ -685,6 +685,9 @@ gtk_paned_init (GtkPaned *paned)
   priv->handle_pos.y = -1;
 
   priv->drag_pos = -1;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (paned));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR);
 }
 
 static void
@@ -706,8 +709,8 @@ gtk_paned_set_property (GObject        *object,
       else
         priv->cursor_type = GDK_SB_V_DOUBLE_ARROW;
 
-      /* state_changed updates the cursor */
-      gtk_paned_state_changed (GTK_WIDGET (paned), gtk_widget_get_state (GTK_WIDGET (paned)));
+      /* state_flags_changed updates the cursor */
+      gtk_paned_state_flags_changed (GTK_WIDGET (paned), 0);
       gtk_widget_queue_resize (GTK_WIDGET (paned));
       break;
     case PROP_POSITION:
@@ -1134,9 +1137,7 @@ gtk_paned_realize (GtkWidget *widget)
                                  &attributes, attributes_mask);
   gdk_window_set_user_data (priv->handle, paned);
   if (attributes_mask & GDK_WA_CURSOR)
-    gdk_cursor_unref (attributes.cursor);
-
-  gtk_widget_style_attach (widget);
+    g_object_unref (attributes.cursor);
 
   if (priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
@@ -1197,27 +1198,28 @@ gtk_paned_draw (GtkWidget *widget,
       priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      GtkStateType state;
+      GtkStyleContext *context;
+      GtkStateFlags state;
       GtkAllocation allocation;
 
       gtk_widget_get_allocation (widget, &allocation);
-      
-      if (gtk_widget_is_focus (widget))
-	state = GTK_STATE_SELECTED;
-      else if (priv->handle_prelit)
-	state = GTK_STATE_PRELIGHT;
-      else
-	state = gtk_widget_get_state (widget);
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
 
-      gtk_paint_handle (gtk_widget_get_style (widget),
-                        cr,
-			state, GTK_SHADOW_NONE,
-			widget, "paned",
-			priv->handle_pos.x - allocation.x,
-                        priv->handle_pos.y - allocation.y,
-			priv->handle_pos.width,
-                        priv->handle_pos.height,
-			!priv->orientation);
+      if (gtk_widget_is_focus (widget))
+	state |= GTK_STATE_FLAG_SELECTED;
+      if (priv->handle_prelit)
+	state |= GTK_STATE_FLAG_PRELIGHT;
+
+      gtk_style_context_save (context);
+      gtk_style_context_set_state (context, state);
+      gtk_render_handle (context, cr,
+                         priv->handle_pos.x - allocation.x,
+                         priv->handle_pos.y - allocation.y,
+                         priv->handle_pos.width,
+                         priv->handle_pos.height);
+
+      gtk_style_context_restore (context);
     }
 
   /* Chain up to draw children */
@@ -1421,8 +1423,8 @@ gtk_paned_grab_notify (GtkWidget *widget,
 }
 
 static void
-gtk_paned_state_changed (GtkWidget    *widget,
-                         GtkStateType  previous_state)
+gtk_paned_state_flags_changed (GtkWidget     *widget,
+                               GtkStateFlags  previous_state)
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
@@ -1439,7 +1441,7 @@ gtk_paned_state_changed (GtkWidget    *widget,
       gdk_window_set_cursor (priv->handle, cursor);
 
       if (cursor)
-        gdk_cursor_unref (cursor);
+        g_object_unref (cursor);
     }
 }
 

@@ -372,7 +372,7 @@ _gdk_input_check_extension_events (GdkDevice *device)
 
   for (l = input_windows; l; l = l->next)
     {
-      GdkWindowObject *window_private;
+      GdkWindow *window_private;
       GdkEventMask event_mask = 0;
 
       window_private = l->data;

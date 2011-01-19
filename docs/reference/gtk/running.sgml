@@ -268,15 +268,6 @@ additional environment variables.
 </formalpara>
 
 <formalpara>
-  <title><envar>GTK2_RC_FILES</envar></title>
-
-  <para>
-    Specifies a list of RC files to parse instead of the default ones;
-    see <link linkend="gtk-Resource-Files">Resource Files</link>.
-  </para>
-</formalpara>
-
-<formalpara>
   <title><envar>GTK_EXE_PREFIX</envar></title>
 
   <para>
@@ -378,6 +369,15 @@ nevertheless.
 </formalpara>
 
 <formalpara>
+  <title><envar>GDK_SYNCHRONIZE</envar></title>
+
+  <para>
+    If set, GDK makes all X requests synchronously. This is a useful
+    option for debugging, but it will slow down the performance considerably.
+  </para>
+</formalpara>
+
+<formalpara>
   <title><envar>XDG_DATA_HOME</envar>, <envar>XDG_DATA_DIRS</envar></title>
 
   <para>
@@ -386,6 +386,19 @@ nevertheless.
     <ulink url="http://freedesktop.org/Standards/icon-theme-spec">Icon Theme Specification</ulink>,
     the <ulink url="http://freedesktop.org/Standards/shared-mime-info-spec">Shared MIME-info Database</ulink>
     and the <ulink url="http://freedesktop.org/Standards/basedir-spec">Base Directory Specification</ulink>.
+  </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>DESKTOP_STARTUP_ID</envar></title>
+
+  <para>
+    GTK+ uses this environment variable to provide startup notification
+    according to the <ulink url="http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt">Startup Notification Spec</ulink>.
+    Following the specification, GTK+ unsets this variable after reading
+    it (to keep it from leaking to child processes). So, if you need its
+    value for your own purposes, you have to read it before calling
+    gtk_init().
   </para>
 </formalpara>
 

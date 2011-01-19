@@ -9,7 +9,7 @@ void value_changed( GtkAdjustment *adjustment,
 {
   char buffer[16];
 
-  sprintf(buffer,"%4.2f",adjustment->value);
+  sprintf(buffer,"%4.2f",gtk_adjustment_get_value (adjustment));
   gtk_label_set_text (GTK_LABEL (label), buffer);
 }
 

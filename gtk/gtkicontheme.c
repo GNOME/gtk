@@ -45,6 +45,7 @@
 #include "gtkbuiltincache.h"
 #include "gtkintl.h"
 #include "gtkmain.h"
+#include "gtknumerableiconprivate.h"
 #include "gtksettings.h"
 #include "gtkprivate.h"
 
@@ -310,7 +311,6 @@ gtk_icon_theme_get_for_screen (GdkScreen *screen)
   GtkIconTheme *icon_theme;
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
-  g_return_val_if_fail (!screen->closed, NULL);
 
   icon_theme = g_object_get_data (G_OBJECT (screen), "gtk-icon-theme");
   if (!icon_theme)
@@ -737,7 +737,9 @@ gtk_icon_theme_set_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_get_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: (allow-none) (array length=n_elements) (out): location to store a list of icon theme path directories or %NULL
+
+ * @path: (allow-none) (array length=n_elements) (element-type filename) (out):
+ *        location to store a list of icon theme path directories or %NULL .
  *        The stored value should be freed with g_strfreev().
  * @n_elements: location to store number of elements
  *              in @path, or %NULL
@@ -773,7 +775,7 @@ gtk_icon_theme_get_search_path (GtkIconTheme      *icon_theme,
 /**
  * gtk_icon_theme_append_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: directory name to append to the icon path
+ * @path: (type filename): directory name to append to the icon path
  * 
  * Appends a directory to the search path. 
  * See gtk_icon_theme_set_search_path(). 
@@ -802,7 +804,7 @@ gtk_icon_theme_append_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_prepend_search_path:
  * @icon_theme: a #GtkIconTheme
- * @path: directory name to prepend to the icon path
+ * @path: (type filename): directory name to prepend to the icon path
  * 
  * Prepends a directory to the search path. 
  * See gtk_icon_theme_set_search_path().
@@ -835,8 +837,8 @@ gtk_icon_theme_prepend_search_path (GtkIconTheme *icon_theme,
 /**
  * gtk_icon_theme_set_custom_theme:
  * @icon_theme: a #GtkIconTheme
- * @theme_name: name of icon theme to use instead of configured theme,
- *   or %NULL to unset a previously set custom theme
+ * @theme_name: (allow-none): name of icon theme to use instead of
+ *   configured theme, or %NULL to unset a previously set custom theme
  * 
  * Sets the name of the icon theme that the #GtkIconTheme object uses
  * overriding system configuration. This function cannot be called
@@ -1720,8 +1722,8 @@ add_key_to_list (gpointer  key,
 /**
  * gtk_icon_theme_list_icons:
  * @icon_theme: a #GtkIconTheme
- * @context: a string identifying a particular type of icon,
- *           or %NULL to list all icons.
+ * @context: (allow-none): a string identifying a particular type of
+ *           icon, or %NULL to list all icons.
  * 
  * Lists the icons in the current icon theme. Only a subset
  * of the icons can be listed by providing a context string.
@@ -1791,10 +1793,10 @@ gtk_icon_theme_list_icons (GtkIconTheme *icon_theme,
  * Gets the list of contexts available within the current
  * hierarchy of icon themes
  *
- * Return value: (element-type utf8) (transfer full): a #GList list holding the names of all the
- *  contexts in the theme. You must first free each element
- *  in the list with g_free(), then free the list itself
- *  with g_list_free().
+ * Return value: (element-type utf8) (transfer full): a #GList list
+ *  holding the names of all the contexts in the theme. You must first
+ *  free each element in the list with g_free(), then free the list
+ *  itself with g_list_free().
  *
  * Since: 2.12
  **/
@@ -2697,10 +2699,9 @@ gtk_icon_info_get_base_size (GtkIconInfo *icon_info)
  * no filename if a builtin icon is returned; in this
  * case, you should use gtk_icon_info_get_builtin_pixbuf().
  * 
- * Return value: the filename for the icon, or %NULL
- *  if gtk_icon_info_get_builtin_pixbuf() should
- *  be used instead. The return value is owned by
- *  GTK+ and should not be modified or freed.
+ * Return value: (type filename): the filename for the icon, or %NULL
+ *  if gtk_icon_info_get_builtin_pixbuf() should be used instead. The
+ *  return value is owned by GTK+ and should not be modified or freed.
  *
  * Since: 2.4
  **/
@@ -3071,11 +3072,11 @@ gdk_color_to_css (GdkColor *color)
 static gchar *
 gdk_rgba_to_css (GdkRGBA *color)
 {
-  return g_strdup_printf ("rgba(%d,%d,%d,%f)",
+  /* drop a for now, since librsvg does not understand rgba() */
+  return g_strdup_printf ("rgb(%d,%d,%d)",
                           (gint)(color->red * 255),
                           (gint)(color->green * 255),
-                          (gint)(color->blue * 255),
-                          color->alpha);
+                          (gint)(color->blue * 255));
 }
 
 static GdkPixbuf *
@@ -3245,7 +3246,7 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
 /**
  * gtk_icon_info_load_symbolic_for_context:
  * @icon_info: a #GtkIconInfo
- * context: a #GtkStyleContext
+ * @context: a #GtkStyleContext
  * @was_symbolic: (allow-none): a #gboolean, returns whether the loaded icon
  *     was a symbolic one and whether the @fg color was applied to it.
  * @error: (allow-none): location to store error information on failure,
@@ -3254,6 +3255,9 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
  * Loads an icon, modifying it to match the system colors for the foreground,
  * success, warning and error colors provided. If the icon is not a symbolic
  * one, the function will return the result from gtk_icon_info_load_icon().
+ * This function uses the regular foreground color and the symbolic colors
+ * with the names "success_color", "warning_color" and "error_color" from
+ * the context.
  *
  * This allows loading symbolic icons that will match the system theme.
  *
@@ -3799,6 +3803,9 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *icon_theme,
       GIcon *base, *emblem;
       GList *list, *l;
       GtkIconInfo *emblem_info;
+
+      if (GTK_IS_NUMERABLE_ICON (icon))
+        _gtk_numerable_icon_set_background_icon_size (GTK_NUMERABLE_ICON (icon), size / 2);
 
       base = g_emblemed_icon_get_icon (G_EMBLEMED_ICON (icon));
       info = gtk_icon_theme_lookup_by_gicon (icon_theme, base, size, flags);

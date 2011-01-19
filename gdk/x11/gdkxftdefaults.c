@@ -54,7 +54,7 @@
 #endif
 
 #include <gdkscreen-x11.h>
-#include <gdkx.h>
+#include <gdkprivate-x11.h>
 
 static gint
 parse_boolean (char *v)
@@ -151,33 +151,32 @@ get_integer_default (Display *dpy,
 static void
 init_xft_settings (GdkScreen *screen)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   Display *xdisplay = GDK_SCREEN_XDISPLAY (screen);
-  int xscreen = GDK_SCREEN_XNUMBER (screen);
   double dpi_double;
 
-  if (screen_x11->xft_init)
+  if (x11_screen->xft_init)
     return;
 
-  screen_x11->xft_init = TRUE;
+  x11_screen->xft_init = TRUE;
 
-  if (!get_boolean_default (xdisplay, "antialias", &screen_x11->xft_antialias))
-    screen_x11->xft_antialias = TRUE;
+  if (!get_boolean_default (xdisplay, "antialias", &x11_screen->xft_antialias))
+    x11_screen->xft_antialias = TRUE;
 
-  if (!get_boolean_default (xdisplay, "hinting", &screen_x11->xft_hinting))
-    screen_x11->xft_hinting = TRUE;
+  if (!get_boolean_default (xdisplay, "hinting", &x11_screen->xft_hinting))
+    x11_screen->xft_hinting = TRUE;
 
-  if (!get_integer_default (xdisplay, "hintstyle", &screen_x11->xft_hintstyle))
-    screen_x11->xft_hintstyle = FC_HINT_FULL;
+  if (!get_integer_default (xdisplay, "hintstyle", &x11_screen->xft_hintstyle))
+    x11_screen->xft_hintstyle = FC_HINT_FULL;
 
-  if (!get_integer_default (xdisplay, "rgba", &screen_x11->xft_rgba))
-    screen_x11->xft_rgba = FC_RGBA_UNKNOWN;
+  if (!get_integer_default (xdisplay, "rgba", &x11_screen->xft_rgba))
+    x11_screen->xft_rgba = FC_RGBA_UNKNOWN;
 
   if (!get_double_default (xdisplay, "dpi", &dpi_double))
-    dpi_double = (((double) DisplayHeight (xdisplay, xscreen) * 25.4) / 
-		  (double) DisplayHeightMM (xdisplay, xscreen));
+    dpi_double = (((double) DisplayHeight (xdisplay, x11_screen->screen_num) * 25.4) /
+		  (double) DisplayHeightMM (xdisplay, x11_screen->screen_num));
 
-  screen_x11->xft_dpi = (int)(0.5 + PANGO_SCALE * dpi_double);
+  x11_screen->xft_dpi = (int)(0.5 + PANGO_SCALE * dpi_double);
 }
 
 gboolean
@@ -185,7 +184,7 @@ _gdk_x11_get_xft_setting (GdkScreen   *screen,
 			  const gchar *name,
 			  GValue      *value)
 {
-  GdkScreenX11 *screen_x11 = GDK_SCREEN_X11 (screen);
+  GdkX11Screen *x11_screen = GDK_X11_SCREEN (screen);
   
   if (strncmp (name, "gtk-xft-", 8) != 0)
     return FALSE;
@@ -196,19 +195,19 @@ _gdk_x11_get_xft_setting (GdkScreen   *screen,
 
   if (strcmp (name, "antialias") == 0)
     {
-      g_value_set_int (value, screen_x11->xft_antialias);
+      g_value_set_int (value, x11_screen->xft_antialias);
       return TRUE;
     }
   else if (strcmp (name, "hinting") == 0)
     {
-      g_value_set_int (value, screen_x11->xft_hinting);
+      g_value_set_int (value, x11_screen->xft_hinting);
       return TRUE;
     }
   else if (strcmp (name, "hintstyle") == 0)
     {
       const char *str;
       
-      switch (screen_x11->xft_hintstyle)
+      switch (x11_screen->xft_hintstyle)
 	{
 	case FC_HINT_NONE:
 	  str = "hintnone";
@@ -233,7 +232,7 @@ _gdk_x11_get_xft_setting (GdkScreen   *screen,
     {
       const char *str;
       
-      switch (screen_x11->xft_rgba)
+      switch (x11_screen->xft_rgba)
 	{
 	case FC_RGBA_NONE:
 	  str = "none";
@@ -260,7 +259,7 @@ _gdk_x11_get_xft_setting (GdkScreen   *screen,
    }
   else if (strcmp (name, "dpi") == 0)
     {
-      g_value_set_int (value, screen_x11->xft_dpi);
+      g_value_set_int (value, x11_screen->xft_dpi);
       return TRUE;
     }
 

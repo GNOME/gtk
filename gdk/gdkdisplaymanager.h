@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -39,34 +39,18 @@ G_BEGIN_DECLS
 
 #define GDK_TYPE_DISPLAY_MANAGER              (gdk_display_manager_get_type ())
 #define GDK_DISPLAY_MANAGER(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_MANAGER, GdkDisplayManager))
-#define GDK_DISPLAY_MANAGER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_MANAGER, GdkDisplayManagerClass))
 #define GDK_IS_DISPLAY_MANAGER(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_DISPLAY_MANAGER))
-#define GDK_IS_DISPLAY_MANAGER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_DISPLAY_MANAGER))
-#define GDK_DISPLAY_MANAGER_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_DISPLAY_MANAGER, GdkDisplayManagerClass))
 
-typedef struct _GdkDisplayManager      GdkDisplayManager;
-typedef struct _GdkDisplayManagerClass GdkDisplayManagerClass;
 
-struct _GdkDisplayManager
-{
-  GObject parent_instance;
-};
-
-struct _GdkDisplayManagerClass
-{
-  GObjectClass parent_class;
-
-  void (*display_opened) (GdkDisplayManager *display_manager,
-			  GdkDisplay *display);
-};
-
-GType gdk_display_manager_get_type (void) G_GNUC_CONST;
+GType              gdk_display_manager_get_type            (void) G_GNUC_CONST;
 
 GdkDisplayManager *gdk_display_manager_get                 (void);
-GdkDisplay *       gdk_display_manager_get_default_display (GdkDisplayManager *display_manager);
-void               gdk_display_manager_set_default_display (GdkDisplayManager *display_manager,
-							    GdkDisplay        *display);
-GSList     *       gdk_display_manager_list_displays       (GdkDisplayManager *display_manager);
+GdkDisplay *       gdk_display_manager_get_default_display (GdkDisplayManager *manager);
+void               gdk_display_manager_set_default_display (GdkDisplayManager *manager,
+                                                            GdkDisplay        *display);
+GSList *           gdk_display_manager_list_displays       (GdkDisplayManager *manager);
+GdkDisplay *       gdk_display_manager_open_display        (GdkDisplayManager *manager,
+                                                            const gchar       *name);
 
 G_END_DECLS
 

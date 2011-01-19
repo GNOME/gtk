@@ -45,6 +45,17 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+/**
+ * SECTION:gtkappchooserwidget
+ * @Title: GtkAppChooserWidget
+ * @Short_description: Application chooser widget that can be embedded in other widgets
+ *
+ * #GtkAppChooserWidget is a widget for selecting applications.
+ * It is the main building block for #GtkAppChooserDialog. Most
+ * applications only need to use the latter; but you can use
+ * this widget as part of a larger widget if you have special needs.
+ */
+
 struct _GtkAppChooserWidgetPrivate {
   GAppInfo *selected_app_info;
 
@@ -402,13 +413,13 @@ gtk_app_chooser_sort_func (GtkTreeModel *model,
   /* they're both recommended/falback or not, so if one is a heading, wins */
   if (a_heading)
     {
-      return -1;
+      retval = -1;
       goto out;
     }
 
   if (b_heading)
     {
-      return 1;
+      retval = 1;
       goto out;
     }
 
@@ -711,6 +722,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
         }
     }
 
+#ifndef G_OS_WIN32
   if (self->priv->show_recommended || self->priv->show_all)
     {
       recommended_apps = g_app_info_get_recommended_for_type (self->priv->content_type);
@@ -737,6 +749,7 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
       exclude_apps = g_list_concat (exclude_apps,
                                     g_list_copy (fallback_apps));
     }
+#endif
 
   if (self->priv->show_other || self->priv->show_all)
     {

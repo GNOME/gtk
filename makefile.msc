@@ -1,7 +1,7 @@
 ## Makefile for building the Gtk+ dlls with Microsoft C
 ## Use: nmake -f makefile.msc
 
-PARTS = gdk-pixbuf gdk gtk tests
+PARTS = gdk gtk tests
 
 all : \
 	config.h \

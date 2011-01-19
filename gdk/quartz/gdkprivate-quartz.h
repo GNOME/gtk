@@ -25,8 +25,11 @@
 #define GDK_QUARTZ_RELEASE_POOL [pool release]
 
 #include <gdk/gdkprivate.h>
-#include <gdk/quartz/gdkwindow-quartz.h>
 #include <gdk/quartz/gdkquartz.h>
+#include <gdk/quartz/gdkdevicemanager-core-quartz.h>
+#include <gdk/quartz/gdkdnd-quartz.h>
+#include <gdk/quartz/gdkscreen-quartz.h>
+#include <gdk/quartz/gdkwindow-quartz.h>
 
 #include <gdk/gdk.h>
 
@@ -34,50 +37,191 @@
 
 #include "config.h"
 
-#define GDK_DRAG_CONTEXT_PRIVATE(context) ((GdkDragContextPrivate *) GDK_DRAG_CONTEXT (context)->windowing_data)
-
-typedef struct _GdkCursorPrivate GdkCursorPrivate;
-typedef struct _GdkDragContextPrivate GdkDragContextPrivate;
-
-struct _GdkVisualClass
-{
-  GObjectClass parent_class;
-};
-
-struct _GdkCursorPrivate
-{
-  GdkCursor cursor;
-  NSCursor *nscursor;
-};
-
-struct _GdkDragContextPrivate
-{
-  id <NSDraggingInfo> dragging_info;
-  GdkDevice *device;
-};
-
 extern GdkDisplay *_gdk_display;
 extern GdkScreen *_gdk_screen;
 extern GdkWindow *_gdk_root;
 
 extern GdkDragContext *_gdk_quartz_drag_source_context;
 
-#define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindowObject *)win)->impl))
+#define GDK_WINDOW_IS_QUARTZ(win)        (GDK_IS_WINDOW_IMPL_QUARTZ (((GdkWindow *)win)->impl))
 
 /* Initialization */
-void _gdk_windowing_update_window_sizes     (GdkScreen *screen);
-void _gdk_windowing_window_init             (void);
-void _gdk_events_init                       (void);
-void _gdk_visual_init                       (void);
-void _gdk_input_init                        (void);
+void _gdk_quartz_window_init_windowing      (GdkDisplay *display,
+                                             GdkScreen  *screen);
+void _gdk_quartz_events_init                (void);
 void _gdk_quartz_event_loop_init            (void);
 
-/* GC */
+/* Cursor */
+NSCursor   *_gdk_quartz_cursor_get_ns_cursor        (GdkCursor *cursor);
+
+/* Events */
 typedef enum {
-  GDK_QUARTZ_CONTEXT_STROKE = 1 << 0,
-  GDK_QUARTZ_CONTEXT_FILL   = 1 << 1,
-  GDK_QUARTZ_CONTEXT_TEXT   = 1 << 2
-} GdkQuartzContextValuesMask;
+  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP
+} GdkQuartzEventSubType;
+
+void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
+                                                        gboolean   got_focus);
+void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
+GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
+
+void         _gdk_quartz_events_send_enter_notify_event (GdkWindow *window);
+
+/* Event loop */
+gboolean   _gdk_quartz_event_loop_check_pending (void);
+NSEvent *  _gdk_quartz_event_loop_get_pending   (void);
+void       _gdk_quartz_event_loop_release_event (NSEvent *event);
+
+/* Keys */
+GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
+gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
+
+/* Drag and Drop */
+void        _gdk_quartz_window_register_dnd      (GdkWindow   *window);
+GdkDragContext * _gdk_quartz_window_drag_begin   (GdkWindow   *window,
+                                                  GdkDevice   *device,
+                                                  GList       *targets);
+
+/* Display */
+
+GdkDisplay *    _gdk_quartz_display_open (const gchar *name);
+
+/* Display methods - events */
+void     _gdk_quartz_display_queue_events (GdkDisplay *display);
+gboolean _gdk_quartz_display_has_pending  (GdkDisplay *display);
+
+void       _gdk_quartz_display_event_data_copy (GdkDisplay     *display,
+                                                const GdkEvent *src,
+                                                GdkEvent       *dst);
+void       _gdk_quartz_display_event_data_free (GdkDisplay     *display,
+                                                GdkEvent       *event);
+
+gboolean    _gdk_quartz_display_send_client_message       (GdkDisplay      *display,
+                                                           GdkEvent        *event,
+                                                           GdkNativeWindow  winid);
+void        _gdk_quartz_display_add_client_message_filter (GdkDisplay      *display,
+                                                           GdkAtom          message_type,
+                                                           GdkFilterFunc    func,
+                                                           gpointer         data);
+
+/* Display methods - cursor */
+GdkCursor *_gdk_quartz_display_get_cursor_for_type     (GdkDisplay    *display,
+                                                        GdkCursorType  type);
+GdkCursor *_gdk_quartz_display_get_cursor_for_name     (GdkDisplay    *display,
+                                                        const gchar   *name);
+GdkCursor *_gdk_quartz_display_get_cursor_for_pixbuf   (GdkDisplay    *display,
+                                                        GdkPixbuf     *pixbuf,
+                                                        gint           x,
+                                                        gint           y);
+gboolean   _gdk_quartz_display_supports_cursor_alpha   (GdkDisplay    *display);
+gboolean   _gdk_quartz_display_supports_cursor_color   (GdkDisplay    *display);
+void       _gdk_quartz_display_get_default_cursor_size (GdkDisplay *display,
+                                                        guint      *width,
+                                                        guint      *height);
+void       _gdk_quartz_display_get_maximal_cursor_size (GdkDisplay *display,
+                                                        guint      *width,
+                                                        guint      *height);
+
+/* Display methods - window */
+void       _gdk_quartz_display_before_process_all_updates (GdkDisplay *display);
+void       _gdk_quartz_display_after_process_all_updates  (GdkDisplay *display);
+void       _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
+                                                   GdkWindow     *window,
+                                                   GdkWindow     *real_parent,
+                                                   GdkScreen     *screen,
+                                                   GdkEventMask   event_mask,
+                                                   GdkWindowAttr *attributes,
+                                                   gint           attributes_mask);
+
+/* Display methods - keymap */
+GdkKeymap * _gdk_quartz_display_get_keymap (GdkDisplay *display);
+
+/* Display methods - Drag and Drop */
+GdkNativeWindow _gdk_quartz_display_get_drag_protocol     (GdkDisplay      *display,
+                                                           GdkNativeWindow  xid,
+                                                           GdkDragProtocol *protocol,
+                                                           guint           *version);
+
+/* Display methods - selection */
+gboolean    _gdk_quartz_display_set_selection_owner (GdkDisplay *display,
+                                                     GdkWindow  *owner,
+                                                     GdkAtom     selection,
+                                                     guint32     time,
+                                                     gboolean    send_event);
+GdkWindow * _gdk_quartz_display_get_selection_owner (GdkDisplay *display,
+                                                     GdkAtom     selection);
+void        _gdk_quartz_display_send_selection_notify (GdkDisplay       *display,
+                                                       GdkNativeWindow  requestor,
+                                                       GdkAtom          selection,
+                                                       GdkAtom          target,
+                                                       GdkAtom          property,
+                                                       guint32          time);
+gint        _gdk_quartz_display_get_selection_property (GdkDisplay     *display,
+                                                        GdkWindow      *requestor,
+                                                        guchar        **data,
+                                                        GdkAtom        *ret_type,
+                                                        gint           *ret_format);
+void        _gdk_quartz_display_convert_selection      (GdkDisplay     *display,
+                                                        GdkWindow      *requestor,
+                                                        GdkAtom         selection,
+                                                        GdkAtom         target,
+                                                        guint32         time);
+gint        _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay     *display,
+                                                            GdkAtom         encoding,
+                                                            gint            format,
+                                                            const guchar   *text,
+                                                            gint            length,
+                                                            gchar        ***list);
+gchar *     _gdk_quartz_display_utf8_to_string_target      (GdkDisplay     *displayt,
+                                                            const gchar    *str);
+
+
+/* Display manager */
+void    _gdk_quartz_display_manager_add_display    (GdkDisplayManager *manager,
+                                                    GdkDisplay        *display);
+void    _gdk_quartz_display_manager_remove_display (GdkDisplayManager *manager,
+                                                    GdkDisplay        *display);
+
+/* Display manager methods - events */
+GdkAtom _gdk_quartz_display_manager_atom_intern   (GdkDisplayManager *manager,
+                                                   const gchar       *atom_name,
+                                                   gboolean           copy_name);
+gchar * _gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
+                                                   GdkAtom            atom);
+
+/* Screen */
+GdkScreen  *_gdk_quartz_screen_new                      (void);
+void        _gdk_quartz_screen_update_window_sizes      (GdkScreen *screen);
+
+/* Screen methods - visual */
+GdkVisual *   _gdk_quartz_screen_get_rgba_visual            (GdkScreen      *screen);
+GdkVisual *   _gdk_quartz_screen_get_system_visual          (GdkScreen      *screen);
+gint          _gdk_quartz_screen_visual_get_best_depth      (GdkScreen      *screen);
+GdkVisualType _gdk_quartz_screen_visual_get_best_type       (GdkScreen      *screen);
+GdkVisual *   _gdk_quartz_screen_get_system_visual          (GdkScreen      *screen);
+GdkVisual*    _gdk_quartz_screen_visual_get_best            (GdkScreen      *screen);
+GdkVisual*    _gdk_quartz_screen_visual_get_best_with_depth (GdkScreen      *screen,
+                                                             gint            depth);
+GdkVisual*    _gdk_quartz_screen_visual_get_best_with_type  (GdkScreen      *screen,
+                                                             GdkVisualType   visual_type);
+GdkVisual*    _gdk_quartz_screen_visual_get_best_with_both  (GdkScreen      *screen,
+                                                             gint            depth,
+                                                             GdkVisualType   visual_type);
+void          _gdk_quartz_screen_query_depths               (GdkScreen      *screen,
+                                                             gint          **depths,
+                                                             gint           *count);
+void          _gdk_quartz_screen_query_visual_types         (GdkScreen      *screen,
+                                                             GdkVisualType **visual_types,
+                                                             gint           *count);
+void          _gdk_quartz_screen_init_visuals               (GdkScreen      *screen);
+GList *       _gdk_quartz_screen_list_visuals               (GdkScreen      *screen);
+
+/* Screen methods - events */
+void        _gdk_quartz_screen_broadcast_client_message (GdkScreen   *screen,
+                                                         GdkEvent    *event);
+gboolean    _gdk_quartz_screen_get_setting              (GdkScreen   *screen,
+                                                         const gchar *name,
+                                                         GValue      *value);
+
 
 /* Window */
 gboolean    _gdk_quartz_window_is_ancestor          (GdkWindow *ancestor,
@@ -104,45 +248,44 @@ void       _gdk_quartz_window_did_resign_main       (GdkWindow *window);
 void       _gdk_quartz_window_debug_highlight       (GdkWindow *window,
                                                      gint       number);
 
-void       _gdk_quartz_window_set_needs_display_in_region (GdkWindow    *window,
-                                                           cairo_region_t    *region);
-
 void       _gdk_quartz_window_update_position           (GdkWindow    *window);
 
-/* Events */
-typedef enum {
-  GDK_QUARTZ_EVENT_SUBTYPE_EVENTLOOP
-} GdkQuartzEventSubType;
 
-void         _gdk_quartz_events_update_focus_window    (GdkWindow *new_window,
-                                                        gboolean   got_focus);
-void         _gdk_quartz_events_send_map_event         (GdkWindow *window);
-GdkEventMask _gdk_quartz_events_get_current_event_mask (void);
+/* Window methods - testing */
+void     _gdk_quartz_window_sync_rendering    (GdkWindow       *window);
+gboolean _gdk_quartz_window_simulate_key      (GdkWindow       *window,
+                                               gint             x,
+                                               gint             y,
+                                               guint            keyval,
+                                               GdkModifierType  modifiers,
+                                               GdkEventType     key_pressrelease);
+gboolean _gdk_quartz_window_simulate_button   (GdkWindow       *window,
+                                               gint             x,
+                                               gint             y,
+                                               guint            button,
+                                               GdkModifierType  modifiers,
+                                               GdkEventType     button_pressrelease);
 
-void         _gdk_quartz_events_send_enter_notify_event (GdkWindow *window);
+/* Window methods - property */
+gboolean _gdk_quartz_window_get_property      (GdkWindow    *window,
+                                               GdkAtom       property,
+                                               GdkAtom       type,
+                                               gulong        offset,
+                                               gulong        length,
+                                               gint          pdelete,
+                                               GdkAtom      *actual_property_type,
+                                               gint         *actual_format_type,
+                                               gint         *actual_length,
+                                               guchar      **data);
+void     _gdk_quartz_window_change_property   (GdkWindow    *window,
+                                               GdkAtom       property,
+                                               GdkAtom       type,
+                                               gint          format,
+                                               GdkPropMode   mode,
+                                               const guchar *data,
+                                               gint          nelements);
+void     _gdk_quartz_window_delete_property   (GdkWindow    *window,
+                                               GdkAtom       property);
 
-/* Event loop */
-gboolean   _gdk_quartz_event_loop_check_pending (void);
-NSEvent *  _gdk_quartz_event_loop_get_pending   (void);
-void       _gdk_quartz_event_loop_release_event (NSEvent *event);
-
-/* Keys */
-GdkEventType _gdk_quartz_keys_event_type  (NSEvent   *event);
-gboolean     _gdk_quartz_keys_is_modifier (guint      keycode);
-
-/* Drawable */
-void        _gdk_quartz_drawable_finish (GdkDrawable *drawable);
-void        _gdk_quartz_drawable_flush  (GdkDrawable *drawable);
-
-/* Geometry */
-void        _gdk_quartz_window_scroll      (GdkWindow       *window,
-                                            gint             dx,
-                                            gint             dy);
-void        _gdk_quartz_window_translate   (GdkWindow       *window,
-                                            cairo_region_t  *area,
-                                            gint             dx,
-                                            gint             dy);
-gboolean    _gdk_quartz_window_queue_antiexpose  (GdkWindow *window,
-                                                  cairo_region_t *area);
 
 #endif /* __GDK_PRIVATE_QUARTZ_H__ */

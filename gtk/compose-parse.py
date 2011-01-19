@@ -253,7 +253,7 @@ def process_gdkkeysymsh():
 	for line in gdkkeysymsh.readlines():
 		linenum_gdkkeysymsh += 1
 		line = line.strip()
-		if line == "" or not match('^#define GDK_', line):
+		if line == "" or not match('^#define GDK_KEY_', line):
 			continue
 		components = split('\s+', line)
 		if len(components) < 3:
@@ -261,10 +261,10 @@ def process_gdkkeysymsh():
 			% {'linenum': linenum_gdkkeysymsh, 'filename': filename_gdkkeysymsh, 'line': line}
 			print "Was expecting 3 items in the line"
 			sys.exit(-1)
-		if not match('^GDK_', components[1]):
+		if not match('^GDK_KEY_', components[1]):
 			print "Invalid line %(linenum)d in %(filename)s: %(line)s"\
 			% {'linenum': linenum_gdkkeysymsh, 'filename': filename_gdkkeysymsh, 'line': line}
-			print "Was expecting a keysym starting with GDK_"
+			print "Was expecting a keysym starting with GDK_KEY_"
 			sys.exit(-1)
 		if match('^0x[0-9a-fA-F]+$', components[2]):
 			unival = long(components[2][2:], 16)
@@ -772,9 +772,9 @@ def convert_UnotationToHex(arg):
 
 def addprefix_GDK(arg):
 	if match('^0x', arg):
-		return '%(arg)s, ' % { 'arg': arg } 
+		return '%(arg)s, ' % { 'arg': arg }
 	else:
-		return 'GDK_%(arg)s, ' % { 'arg': arg } 
+		return 'GDK_KEY_%(arg)s, ' % { 'arg': arg }
 
 if opt_gtk:
 	first_keysym = ""
@@ -818,7 +818,7 @@ if opt_gtk:
 			print "0x%(ks)04X," % { "ks": keysymvalue(i[0]) },
 			print '%(str)s' % { 'str': "".join(map(lambda x : str(x) + ", ", i[1:])) }
 		elif not match('^0x', i[0]):
-			print 'GDK_%(str)s' % { 'str': "".join(map(lambda x : str(x) + ", ", i)) }
+			print 'GDK_KEY_%(str)s' % { 'str': "".join(map(lambda x : str(x) + ", ", i)) }
 		else:
 			print '%(str)s' % { 'str': "".join(map(lambda x : str(x) + ", ", i)) }
 	for i in ct_second_part:

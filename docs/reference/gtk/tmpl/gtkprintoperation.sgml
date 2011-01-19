@@ -630,14 +630,11 @@ The #GQuark used for #GtkPrintError errors.
 
 <!-- ##### USER_FUNCTION GtkPageSetupDoneFunc ##### -->
 <para>
-The type of function that is passed to gtk_print_run_page_setup_dialog_async().
-This function will be called when the page setup dialog is dismissed, and
-also serves as destroy notify for @data.
+
 </para>
 
-@page_setup: the #GtkPageSetup that has been
-@data: user data that has been passed to 
-       gtk_print_run_page_setup_dialog_async().
+@page_setup:
+@data:
 
 
 <!-- ##### FUNCTION gtk_print_run_page_setup_dialog_async ##### -->

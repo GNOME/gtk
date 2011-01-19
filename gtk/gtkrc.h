@@ -123,7 +123,6 @@ struct _GtkRcStyleClass
   void (*_gtk_reserved4) (void);
 };
 
-void	  _gtk_rc_init			 (void);
 GSList*   _gtk_rc_parse_widget_class_path (const gchar *pattern);
 void      _gtk_rc_free_widget_class_path (GSList       *list);
 gboolean  _gtk_rc_match_widget_class     (GSList       *list,
@@ -234,23 +233,6 @@ struct _GtkRcProperty
   gchar *origin;
   GValue value;
 };
-const GtkRcProperty* _gtk_rc_style_lookup_rc_property (GtkRcStyle *rc_style,
-						       GQuark      type_name,
-						       GQuark      property_name);
-void	      _gtk_rc_style_set_rc_property	      (GtkRcStyle *rc_style,
-						       GtkRcProperty *property);
-void	      _gtk_rc_style_unset_rc_property	      (GtkRcStyle *rc_style,
-						       GQuark      type_name,
-						       GQuark      property_name);
-
-GSList     * _gtk_rc_style_get_color_hashes        (GtkRcStyle *rc_style);
-
-void         _gtk_rc_style_set_symbolic_color       (GtkRcStyle     *rc_style,
-                                                     const gchar    *name,
-                                                     const GdkColor *color);
-
-const gchar* _gtk_rc_context_get_default_font_name (GtkSettings *settings);
-void         _gtk_rc_context_destroy               (GtkSettings *settings);
 
 G_END_DECLS
 

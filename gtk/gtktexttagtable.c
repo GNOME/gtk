@@ -25,7 +25,11 @@
  */
 
 #include "config.h"
+
 #include "gtktexttagtable.h"
+
+#include "gtkbuildable.h"
+#include "gtktexttagprivate.h"
 #include "gtkmarshalers.h"
 #include "gtktextbuffer.h" /* just for the lame notify_will_remove_tag hack */
 #include "gtkintl.h"
@@ -39,10 +43,29 @@
  * @Title: GtkTextTagTable
  *
  * You may wish to begin by reading the <link linkend="TextWidget">text widget
- * conceptual overview</link> which gives an overview of all the objects and data
- * types related to the text widget and how they work together.
+ * conceptual overview</link> which gives an overview of all the objects and
+ * data types related to the text widget and how they work together.
+ *
+ * <refsect2 id="GtkTextTagTable-BUILDER-UI">
+ * <title>GtkTextTagTables as GtkBuildable</title>
+ * <para>
+ * The GtkTextTagTable implementation of the GtkBuildable interface
+ * supports adding tags by specifying "tag" as the "type"
+ * attribute of a &lt;child&gt; element.
+ *
+ * <example>
+ * <title>A UI definition fragment specifying tags</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkTextTagTable">
+ *  <child type="tag">
+ *    <object class="GtkTextTag"/>
+ *  </child>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </para>
+ * </refsect2>
  */
-
 
 struct _GtkTextTagTablePrivate
 {
@@ -75,9 +98,17 @@ static void gtk_text_tag_table_get_property (GObject              *object,
                                              GValue               *value,
                                              GParamSpec           *pspec);
 
+static void gtk_text_tag_table_buildable_interface_init (GtkBuildableIface   *iface);
+static void gtk_text_tag_table_buildable_add_child      (GtkBuildable        *buildable,
+							 GtkBuilder          *builder,
+							 GObject             *child,
+							 const gchar         *type);
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_CODE (GtkTextTagTable, gtk_text_tag_table, G_TYPE_OBJECT,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_text_tag_table_buildable_interface_init))
 
 static void
 gtk_text_tag_table_class_init (GtkTextTagTableClass *klass)
@@ -176,7 +207,7 @@ gtk_text_tag_table_new (void)
 static void
 foreach_unref (GtkTextTag *tag, gpointer data)
 {
-  GtkTextTagTable *table = GTK_TEXT_TAG_TABLE (tag->table);
+  GtkTextTagTable *table = GTK_TEXT_TAG_TABLE (tag->priv->table);
   GtkTextTagTablePrivate *priv = table->priv;
   GSList *tmp;
   
@@ -193,7 +224,7 @@ foreach_unref (GtkTextTag *tag, gpointer data)
       tmp = tmp->next;
     }
   
-  tag->table = NULL;
+  tag->priv->table = NULL;
   g_object_unref (tag);
 }
 
@@ -243,6 +274,23 @@ gtk_text_tag_table_get_property (GObject      *object,
     }
 }
 
+static void
+gtk_text_tag_table_buildable_interface_init (GtkBuildableIface   *iface)
+{
+  iface->add_child = gtk_text_tag_table_buildable_add_child;
+}
+
+static void
+gtk_text_tag_table_buildable_add_child (GtkBuildable        *buildable,
+					GtkBuilder          *builder,
+					GObject             *child,
+					const gchar         *type)
+{
+  if (type && strcmp (type, "tag") == 0)
+    gtk_text_tag_table_add (GTK_TEXT_TAG_TABLE (buildable),
+			    GTK_TEXT_TAG (child));
+}
+
 /**
  * gtk_text_tag_table_add:
  * @table: a #GtkTextTagTable
@@ -263,35 +311,35 @@ gtk_text_tag_table_add (GtkTextTagTable *table,
 
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
-  g_return_if_fail (tag->table == NULL);
+  g_return_if_fail (tag->priv->table == NULL);
 
   priv = table->priv;
 
-  if (tag->name && g_hash_table_lookup (priv->hash, tag->name))
+  if (tag->priv->name && g_hash_table_lookup (priv->hash, tag->priv->name))
     {
       g_warning ("A tag named '%s' is already in the tag table.",
-                 tag->name);
+                 tag->priv->name);
       return;
     }
   
   g_object_ref (tag);
 
-  if (tag->name)
-    g_hash_table_insert (priv->hash, tag->name, tag);
+  if (tag->priv->name)
+    g_hash_table_insert (priv->hash, tag->priv->name, tag);
   else
     {
       priv->anonymous = g_slist_prepend (priv->anonymous, tag);
       priv->anon_count += 1;
     }
 
-  tag->table = table;
+  tag->priv->table = table;
 
   /* We get the highest tag priority, as the most-recently-added
      tag. Note that we do NOT use gtk_text_tag_set_priority,
      as it assumes the tag is already in the table. */
   size = gtk_text_tag_table_get_size (table);
   g_assert (size > 0);
-  tag->priority = size - 1;
+  tag->priv->priority = size - 1;
 
   g_signal_emit (table, signals[TAG_ADDED], 0, tag);
 }
@@ -337,7 +385,7 @@ gtk_text_tag_table_remove (GtkTextTagTable *table,
   
   g_return_if_fail (GTK_IS_TEXT_TAG_TABLE (table));
   g_return_if_fail (GTK_IS_TEXT_TAG (tag));
-  g_return_if_fail (tag->table == table);
+  g_return_if_fail (tag->priv->table == table);
 
   priv = table->priv;
 
@@ -358,10 +406,10 @@ gtk_text_tag_table_remove (GtkTextTagTable *table,
      priorities of the tags in the table. */
   gtk_text_tag_set_priority (tag, gtk_text_tag_table_get_size (table) - 1);
 
-  tag->table = NULL;
+  tag->priv->table = NULL;
 
-  if (tag->name)
-    g_hash_table_remove (priv->hash, tag->name);
+  if (tag->priv->name)
+    g_hash_table_remove (priv->hash, tag->priv->name);
   else
     {
       priv->anonymous = g_slist_remove (priv->anonymous, tag);

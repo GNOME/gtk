@@ -26,6 +26,9 @@ gtk_buildable_get_type
 gtk_button_box_get_type
 gtk_button_get_type
 gtk_calendar_get_type
+gtk_cell_area_get_type
+gtk_cell_area_box_get_type
+gtk_cell_area_context_get_type
 gtk_cell_editable_get_type
 gtk_cell_layout_get_type
 gtk_cell_renderer_accel_get_type
@@ -98,6 +101,7 @@ gtk_message_dialog_get_type
 gtk_misc_get_type
 gtk_mount_operation_get_type
 gtk_notebook_get_type
+gtk_numerable_icon_get_type
 gtk_offscreen_window_get_type
 gtk_orientable_get_type
 gtk_page_setup_get_type

@@ -809,7 +809,7 @@ gtk_theming_engine_get_border_color (GtkThemingEngine *engine,
  * gtk_theming_engine_get_border:
  * @engine: a #GtkthemingEngine
  * @state: state to retrieve the border for
- * @color: (out): return value for the border settings
+ * @border: (out): return value for the border settings
  *
  * Gets the border for a given state as a #GtkBorder.
  *
@@ -832,7 +832,7 @@ gtk_theming_engine_get_border (GtkThemingEngine *engine,
  * gtk_theming_engine_get_padding:
  * @engine: a #GtkthemingEngine
  * @state: state to retrieve the padding for
- * @color: (out): return value for the padding settings
+ * @padding: (out): return value for the padding settings
  *
  * Gets the padding for a given state as a #GtkBorder.
  *
@@ -853,9 +853,9 @@ gtk_theming_engine_get_padding (GtkThemingEngine *engine,
 
 /**
  * gtk_theming_engine_get_margin:
- * @engien: a #GtkThemingEngine
+ * @engine: a #GtkThemingEngine
  * @state: state to retrieve the border for
- * @color: (out): return value for the margin settings
+ * @margin: (out): return value for the margin settings
  *
  * Gets the margin for a given state as a #GtkBorder.
  *
@@ -874,6 +874,29 @@ gtk_theming_engine_get_margin (GtkThemingEngine *engine,
   gtk_style_context_get_margin (priv->context, state, margin);
 }
 
+/**
+ * gtk_theming_engine_get_font:
+ * @engine: a #GtkThemingEngine
+ * @state: state to retrieve the font for
+ *
+ * Returns the font description for a given state.
+ *
+ * Returns: the #PangoFontDescription for the given state. This
+ *          object is owned by GTK+ and should not be freed.
+ *
+ * Since: 3.0
+ **/
+const PangoFontDescription *
+gtk_theming_engine_get_font (GtkThemingEngine *engine,
+                             GtkStateFlags     state)
+{
+  GtkThemingEnginePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_THEMING_ENGINE (engine), NULL);
+
+  priv = engine->priv;
+  return gtk_style_context_get_font (priv->context, state);
+}
 
 /* GtkThemingModule */
 
@@ -889,19 +912,13 @@ gtk_theming_module_load (GTypeModule *type_module)
   module_path = _gtk_find_module (name, "theming-engines");
 
   if (!module_path)
-    {
-      g_warning (_("Unable to locate theme engine in module path: \"%s\","), name);
-      return FALSE;
-    }
+    return FALSE;
 
   module = g_module_open (module_path, G_MODULE_BIND_LAZY | G_MODULE_BIND_LOCAL);
   g_free (module_path);
 
   if (!module)
-    {
-      g_warning ("%s", g_module_error ());
-      return FALSE;
-    }
+    return FALSE;
 
   if (!g_module_symbol (module, "theme_init",
                         (gpointer *) &theming_module->init) ||
@@ -910,7 +927,6 @@ gtk_theming_module_load (GTypeModule *type_module)
       !g_module_symbol (module, "create_engine",
                         (gpointer *) &theming_module->create_engine))
     {
-      g_warning ("%s", g_module_error ());
       g_module_close (module);
 
       return FALSE;
@@ -1195,6 +1211,8 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   if (border_style == GTK_BORDER_STYLE_SOLID)
     {
       cairo_set_line_width (cr, border_width);
+
+      cairo_new_sub_path (cr);
       cairo_arc (cr,
 		 x + exterior_size / 2.,
 		 y + exterior_size / 2.,
@@ -1250,6 +1268,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 	  pad = MAX (0, (exterior_size - interior_size) / 2);
 	}
 
+      cairo_new_sub_path (cr);
       cairo_arc (cr,
 		 x + pad + interior_size / 2.,
 		 y + pad + interior_size / 2.,
@@ -1468,8 +1487,7 @@ render_background_internal (GtkThemingEngine *engine,
   GtkStateFlags flags;
   gboolean running;
   gdouble progress, alpha = 1;
-  gint radius, border_width;
-  GtkBorder *border;
+  gint radius;
 
   flags = gtk_theming_engine_get_state (engine);
   cairo_save (cr);
@@ -1477,14 +1495,10 @@ render_background_internal (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "background-image", &pattern,
                           "background-color", &bg_color,
-                          "border-width", &border,
                           "border-radius", &radius,
                           NULL);
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
-  border_width = MIN (MIN (border->top, border->bottom),
-                      MIN (border->left, border->right));
-
   _cairo_round_rectangle_sides (cr, (gdouble) radius,
                                 x, y, width, height,
                                 SIDE_ALL, junction);
@@ -1701,7 +1715,6 @@ render_background_internal (GtkThemingEngine *engine,
   cairo_restore (cr);
 
   gdk_rgba_free (bg_color);
-  gtk_border_free (border);
 }
 
 static void
@@ -1717,15 +1730,6 @@ gtk_theming_engine_render_background (GtkThemingEngine *engine,
   GtkBorder *border;
 
   junction = gtk_theming_engine_get_junction_sides (engine);
-
-  if (gtk_theming_engine_has_class (engine, "spinbutton") &&
-      gtk_theming_engine_has_class (engine, "button"))
-    {
-      x += 2;
-      y += 2;
-      width -= 4;
-      height -= 4;
-    }
 
   flags = gtk_theming_engine_get_state (engine);
   gtk_theming_engine_get (engine, flags,
@@ -1971,8 +1975,8 @@ gtk_theming_engine_render_frame (GtkThemingEngine *engine,
 
   if (slice)
     {
-      gtk_9slice_render (slice, cr, x, y, width, height);
-      gtk_9slice_unref (slice);
+      _gtk_9slice_render (slice, cr, x, y, width, height);
+      _gtk_9slice_unref (slice);
     }
   else if (border_style != GTK_BORDER_STYLE_NONE)
     render_frame_internal (engine, cr,
@@ -1999,6 +2003,8 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   double x_double, y_double;
   gdouble angle;
   gint line_width;
+  gboolean running, is_rtl;
+  gdouble progress;
 
   cairo_save (cr);
   flags = gtk_theming_engine_get_state (engine);
@@ -2006,23 +2012,33 @@ gtk_theming_engine_render_expander (GtkThemingEngine *engine,
   gtk_theming_engine_get (engine, flags,
                           "color", &fg_color,
                           NULL);
-  gtk_theming_engine_get (engine, 0,
-                          "color", &outline_color,
+  gtk_theming_engine_get (engine, flags,
+                          "border-color", &outline_color,
                           NULL);
 
+  running = gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress);
+  is_rtl = (gtk_theming_engine_get_direction (engine) == GTK_TEXT_DIR_RTL);
   line_width = 1;
 
-  /* FIXME: LTR/RTL */
-  if (flags & GTK_STATE_FLAG_ACTIVE)
+  if (!running)
+    progress = (flags & GTK_STATE_FLAG_ACTIVE) ? 1 : 0;
+
+  if (!gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_HORIZONTAL))
     {
-      angle = G_PI / 2;
-      interp = 1.0;
+      if (is_rtl)
+        angle = (G_PI) - ((G_PI / 2) * progress);
+      else
+        angle = (G_PI / 2) * progress;
     }
   else
     {
-      angle = 0;
-      interp = 0;
+      if (is_rtl)
+        angle = (G_PI / 2) + ((G_PI / 2) * progress);
+      else
+        angle = (G_PI / 2) - ((G_PI / 2) * progress);
     }
+
+  interp = progress;
 
   /* Compute distance that the stroke extends beyonds the end
    * of the triangle we draw.
@@ -2311,13 +2327,13 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       cairo_set_matrix (cr, &cairo_matrix);
     }
   else
-    cairo_translate (cr, x, y);
+    cairo_move_to (cr, x, y);
 
   if (flags & GTK_STATE_FLAG_INSENSITIVE)
     {
       cairo_save (cr);
       cairo_set_source_rgb (cr, 1, 1, 1);
-      cairo_move_to (cr, 1, 1);
+      cairo_move_to (cr, x + 1, y + 1);
       _gtk_pango_fill_layout (cr, layout);
       cairo_restore (cr);
     }
@@ -2517,12 +2533,11 @@ gtk_theming_engine_render_extension (GtkThemingEngine *engine,
       gap_side == GTK_POS_BOTTOM)
     render_background_internal (engine, cr,
                                 0, 0, width, height,
-                                junction);
+                                GTK_JUNCTION_BOTTOM);
   else
     render_background_internal (engine, cr,
                                 0, 0, height, width,
-                                junction);
-
+                                GTK_JUNCTION_BOTTOM);
   cairo_restore (cr);
 
   cairo_save (cr);
@@ -2593,7 +2608,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   cairo_rectangle (cr, x, y, width, height);
   cairo_fill (cr);
 
-  if (gtk_theming_engine_has_class (engine, "grip"))
+  if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
       GtkJunctionSides sides;
       gint skip = -1;
@@ -2858,7 +2873,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
 
       cairo_restore (cr);
     }
-  else if (gtk_theming_engine_has_class (engine, "paned"))
+  else if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_PANE_SEPARATOR))
     {
       if (width > height)
         for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
@@ -2901,18 +2916,12 @@ gtk_theming_engine_render_activity (GtkThemingEngine *engine,
       gdouble half;
       gint i;
 
-      num_steps = 0;
-
-      gtk_theming_engine_get_style (engine,
-                                    "num-steps", &num_steps,
-                                    NULL);
+      num_steps = 12;
 
       state = gtk_theming_engine_get_state (engine);
       gtk_theming_engine_get (engine, state,
                               "color", &color,
                               NULL);
-      if (num_steps == 0)
-        num_steps = 12;
 
       if (gtk_theming_engine_state_is_running (engine, GTK_STATE_ACTIVE, &progress))
         step = (guint) (progress * num_steps);
@@ -2999,6 +3008,55 @@ lookup_icon_size (GtkThemingEngine *engine,
   return gtk_icon_size_lookup_for_settings (settings, size, width, height);
 }
 
+/* Kudos to the gnome-panel guys. */
+static void
+colorshift_pixbuf (GdkPixbuf *src,
+                   GdkPixbuf *dest,
+                   gint       shift)
+{
+  gint i, j;
+  gint width, height, has_alpha, src_rowstride, dest_rowstride;
+  guchar *target_pixels;
+  guchar *original_pixels;
+  guchar *pix_src;
+  guchar *pix_dest;
+  int val;
+  guchar r, g, b;
+
+  has_alpha       = gdk_pixbuf_get_has_alpha (src);
+  width           = gdk_pixbuf_get_width (src);
+  height          = gdk_pixbuf_get_height (src);
+  src_rowstride   = gdk_pixbuf_get_rowstride (src);
+  dest_rowstride  = gdk_pixbuf_get_rowstride (dest);
+  original_pixels = gdk_pixbuf_get_pixels (src);
+  target_pixels   = gdk_pixbuf_get_pixels (dest);
+
+  for (i = 0; i < height; i++)
+    {
+      pix_dest = target_pixels   + i * dest_rowstride;
+      pix_src  = original_pixels + i * src_rowstride;
+
+      for (j = 0; j < width; j++)
+        {
+          r = *(pix_src++);
+          g = *(pix_src++);
+          b = *(pix_src++);
+
+          val = r + shift;
+          *(pix_dest++) = CLAMP (val, 0, 255);
+
+          val = g + shift;
+          *(pix_dest++) = CLAMP (val, 0, 255);
+
+          val = b + shift;
+          *(pix_dest++) = CLAMP (val, 0, 255);
+
+          if (has_alpha)
+            *(pix_dest++) = *(pix_src++);
+        }
+    }
+}
+
 static GdkPixbuf *
 gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
                                        const GtkIconSource *source,
@@ -3045,8 +3103,7 @@ gtk_theming_engine_render_icon_pixbuf (GtkThemingEngine    *engine,
       else if (state & GTK_STATE_FLAG_PRELIGHT)
         {
           stated = gdk_pixbuf_copy (scaled);
-          gdk_pixbuf_saturate_and_pixelate (scaled, stated,
-                                            1.2, FALSE);
+          colorshift_pixbuf (scaled, stated, 30);
           g_object_unref (scaled);
         }
       else

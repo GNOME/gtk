@@ -1,12 +1,12 @@
 /* GTK - The GIMP Toolkit
  * gtklinkbutton.c - an hyperlink-enabled button
- * 
+ *
  * Copyright (C) 2006 Emmanuele Bassi <ebassi@gmail.com>
  * All rights reserved.
  *
  * Based on gnome-href code by:
- * 	James Henstridge <james@daa.com.au>
- * 
+ *      James Henstridge <james@daa.com.au>
+ *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
@@ -55,7 +55,7 @@
 #include "gtkdnd.h"
 #include "gtkimagemenuitem.h"
 #include "gtklabel.h"
-#include "gtkmain.h"
+#include "gtkmainprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
@@ -105,8 +105,7 @@ static gboolean gtk_link_button_button_press (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static void     gtk_link_button_clicked      (GtkButton        *button);
 static gboolean gtk_link_button_popup_menu   (GtkWidget        *widget);
-static void     gtk_link_button_style_set    (GtkWidget        *widget,
-					      GtkStyle         *old_style);
+static void     gtk_link_button_style_updated (GtkWidget        *widget);
 static gboolean gtk_link_button_enter_cb     (GtkWidget        *widget,
 					      GdkEventCrossing *event,
 					      gpointer          user_data);
@@ -153,7 +152,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   
   widget_class->button_press_event = gtk_link_button_button_press;
   widget_class->popup_menu = gtk_link_button_popup_menu;
-  widget_class->style_set = gtk_link_button_style_set;
+  widget_class->style_updated = gtk_link_button_style_updated;
   
   container_class->add = gtk_link_button_add;
 
@@ -365,8 +364,7 @@ gtk_link_button_add (GtkContainer *container,
 }
 
 static void
-gtk_link_button_style_set (GtkWidget *widget,
-			   GtkStyle  *old_style)
+gtk_link_button_style_updated (GtkWidget *widget)
 {
   GtkLinkButton *link_button = GTK_LINK_BUTTON (widget);
 
@@ -390,7 +388,7 @@ set_hand_cursor (GtkWidget *widget,
   gdk_display_flush (display);
 
   if (cursor)
-    gdk_cursor_unref (cursor);
+    g_object_unref (cursor);
 }
 
 static void
@@ -601,7 +599,7 @@ gtk_link_button_drag_data_get_cb (GtkWidget        *widget,
   
   uri = g_strdup_printf ("%s\r\n", link_button->priv->uri);
   gtk_selection_data_set (selection,
-  			  selection->target,
+                          gtk_selection_data_get_target (selection),
   			  8,
   			  (guchar *) uri,
 			  strlen (uri));

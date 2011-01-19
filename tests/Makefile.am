@@ -11,14 +11,13 @@ INCLUDES =				\
 	$(GTK_DEP_CFLAGS)		\
 	$(GDK_DEP_CFLAGS)
 
-DEPS =									\
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)
+DEPS = \
+	$(top_builddir)/gtk/libgtk-3.0.la
 
-LDADDS =								\
-	$(top_builddir)/gdk/$(gdktargetlib)				\
-	$(top_builddir)/gtk/$(gtktargetlib)				\
-	$(GTK_DEP_LIBS)							\
+LDADDS = \
+	$(top_builddir)/gtk/libgtk-3.0.la	\
+	$(top_builddir)/gdk/libgdk-3.0.la	\
+	$(GTK_DEP_LIBS)				\
 	-lm
 
 if USE_X11
@@ -64,6 +63,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testmultidisplay		\
 	testmultiscreen			\
 	testnotebookdnd			\
+	testnumerableicon		\
 	testnouiprint			\
 	testoffscreen			\
 	testoffscreenwindow		\
@@ -87,6 +87,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtreecolumns			\
 	testtreecolumnsizing		\
 	testtreesort			\
+	testverticalcells			\
 	treestoretest			\
 	testxinerama			\
 	testwindows			\
@@ -99,7 +100,11 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testvolumebutton		\
 	testscrolledwindow		\
 	testswitch			\
-	styleexamples
+	testcellarea			\
+	testswitch			\
+	styleexamples			\
+	testtreemenu			\
+	testtoplevelembed
 
 if USE_X11
 noinst_PROGRAMS += testerrors
@@ -155,6 +160,7 @@ testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
 testmultiscreen_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
+testnumerableicon_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
@@ -178,6 +184,7 @@ testtreeflow_DEPENDENCIES = $(DEPS)
 testtreecolumns_DEPENDENCIES = $(DEPS)
 testtreecolumnsizing_DEPENDENCIES = $(DEPS)
 testtreesort_DEPENDENCIES = $(DEPS)
+testverticalcells_DEPENDENCIES = $(DEPS)
 treestoretest_DEPENDENCIES = $(TEST_DEPS)
 testxinerama_DEPENDENCIES = $(TEST_DEPS)
 testmerge_DEPENDENCIES = $(TEST_DEPS)
@@ -186,11 +193,14 @@ testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 testscrolledwindow_DEPENDENCIES = $(TEST_DEPS)
+testcellarea_DEPENDENCIES = $(TEST_DEPS)
+testtreemenu_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
 testexpand_DEPENDENCIES = $(TEST_DEPS)
 testexpander_DEPENDENCIES = $(TEST_DEPS)
 testswitch_DEPENDENCIES = $(TEST_DEPS)
 styleexamples_DEPENDENCIES = $(TEST_DEPS)
+testtoplevelembed_DEPENDENCIES = $(TEST_DEPS)
 
 flicker_LDADD = $(LDADDS)
 simple_LDADD = $(LDADDS)
@@ -230,6 +240,7 @@ testmultidisplay_LDADD = $(LDADDS)
 testmultiscreen_LDADD = $(LDADDS)
 testnotebookdnd_LDADD = $(LDADDS)
 testnouiprint_LDADD = $(LDADDS)
+testnumerableicon_LDADD = $(LDADDS)
 testoffscreen_LDADD = $(LDADDS)
 testoffscreenwindow_LDADD = $(LDADDS)
 testappchooser_LDADD = $(LDADDS)
@@ -255,6 +266,7 @@ testtreeflow_LDADD = $(LDADDS)
 testtreecolumns_LDADD = $(LDADDS)
 testtreecolumnsizing_LDADD = $(LDADDS)
 testtreesort_LDADD = $(LDADDS)
+testverticalcells_LDADD = $(LDADDS)
 treestoretest_LDADD = $(LDADDS)
 testxinerama_LDADD = $(LDADDS)
 testmerge_LDADD = $(LDADDS)
@@ -263,11 +275,14 @@ testgrouping_LDADD = $(LDADDS)
 testtooltips_LDADD = $(LDADDS)
 testvolumebutton_LDADD = $(LDADDS)
 testscrolledwindow_LDADD = $(LDADDS)
+testcellarea_LDADD = $(LDADDS)
+testtreemenu_LDADD = $(LDADDS)
 testwindows_LDADD = $(LDADDS)
 testexpand_LDADD = $(LDADDS)
 testexpander_LDADD = $(LDADDS)
 testswitch_LDADD = $(LDADDS)
 styleexamples_LDADD = $(LDADDS)
+testtoplevelembed_LDADD = $(LDADDS)
 
 testentrycompletion_SOURCES = 	\
 	prop-editor.c		\
@@ -354,6 +369,10 @@ testiconview_SOURCES = 		\
 testiconview_keynav_SOURCES = 	\
 	testiconview-keynav.c
 
+testnumerableicon_SOURCES =	\
+	testnumerableicon.c	\
+	prop-editor.c
+
 testrecentchooser_SOURCES = 	\
 	prop-editor.c 		\
 	testrecentchooser.c
@@ -372,6 +391,14 @@ testvolumebutton_SOURCES =	\
 
 testscrolledwindow_SOURCES =	\
 	testscrolledwindow.c
+
+testcellarea_SOURCES =		\
+	testcellarea.c		\
+	cellareascaffold.c	\
+	cellareascaffold.h
+
+testtreemenu_SOURCES =		\
+	testtreemenu.c
 
 testoffscreen_SOURCES = 	\
 	gtkoffscreenbox.c	\
@@ -395,9 +422,13 @@ testexpand_SOURCES = testexpand.c
 testexpander_SOURCES = testexpander.c
 
 testswitch_SOURCES = testswitch.c
+
 styleexamples_SOURCES = styleexamples.c
 
+testtoplevelembed_SOURCES = testtoplevelembed.c
+
 EXTRA_DIST += 			\
+	gradient1.png		\
 	prop-editor.h		\
 	testgtk.1 		\
 	testgtk.css		\

@@ -22,6 +22,8 @@
 #define __GDK_QUARTZ_H__
 
 #include <AppKit/AppKit.h>
+
+#include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
 
 G_BEGIN_DECLS
@@ -39,12 +41,22 @@ typedef unsigned int NSUInteger;
 typedef float CGFloat;
 #endif
 
-NSWindow *gdk_quartz_window_get_nswindow                        (GdkWindow      *window);
-NSView   *gdk_quartz_window_get_nsview                          (GdkWindow      *window);
-NSImage  *gdk_quartz_pixbuf_to_ns_image_libgtk_only             (GdkPixbuf      *pixbuf);
-id        gdk_quartz_drag_context_get_dragging_info_libgtk_only (GdkDragContext *context);
-NSEvent  *gdk_quartz_event_get_nsevent                          (GdkEvent       *event);
-
 G_END_DECLS
+
+#define __GDKQUARTZ_H_INSIDE__
+
+#include <gdk/quartz/gdkquartzcursor.h>
+#include <gdk/quartz/gdkquartzdevice-core.h>
+#include <gdk/quartz/gdkquartzdevicemanager-core.h>
+#include <gdk/quartz/gdkquartzdisplay.h>
+#include <gdk/quartz/gdkquartzdisplaymanager.h>
+#include <gdk/quartz/gdkquartzdnd.h>
+#include <gdk/quartz/gdkquartzkeys.h>
+#include <gdk/quartz/gdkquartzscreen.h>
+#include <gdk/quartz/gdkquartzutils.h>
+#include <gdk/quartz/gdkquartzvisual.h>
+#include <gdk/quartz/gdkquartzwindow.h>
+
+#undef __GDKQUARTZ_H_INSIDE__
 
 #endif /* __GDK_QUARTZ_H__ */

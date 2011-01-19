@@ -30,11 +30,14 @@
 #include "gdk/x11/gdkprivate-x11.h"
 #include "gdk/gdkwindowimpl.h"
 
+#include <X11/Xlib.h>
+
 #ifdef HAVE_XDAMAGE
 #include <X11/extensions/Xdamage.h>
 #endif
 
 #ifdef HAVE_XSYNC
+#include <X11/Xlib.h>
 #include <X11/extensions/sync.h>
 #endif
 
@@ -160,9 +163,6 @@ void            _gdk_x11_window_tmp_unset_parent_bg (GdkWindow *window);
 void            _gdk_x11_window_tmp_reset_parent_bg (GdkWindow *window);
 
 GdkCursor      *_gdk_x11_window_get_cursor          (GdkWindow *window);
-void            _gdk_x11_window_get_offsets         (GdkWindow *window,
-                                                     gint      *x_offset,
-                                                     gint      *y_offset);
 
 void            _gdk_x11_window_update_size         (GdkWindowImplX11 *impl);
 

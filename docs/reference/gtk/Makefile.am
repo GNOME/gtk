@@ -1,5 +1,4 @@
 ## Process this file with automake to produce Makefile.in
-include $(top_srcdir)/Makefile.decl
 
 AUTOMAKE_OPTIONS = 1.6
 
@@ -107,8 +106,8 @@ CPPFLAGS += \
 	-UGTK_DISABLE_SINGLE_INCLUDES
 
 GTKDOC_LIBS = \
-	$(top_builddir)/gdk/$(gdktargetlib)        			\
-	$(top_builddir)/gtk/$(gtktargetlib)
+	$(top_builddir)/gtk/libgtk-3.0.la				\
+	$(GTK_DEP_LIBS)
 
 
 # Extra options to supply to gtkdoc-mkdb
@@ -135,8 +134,7 @@ content_files =					\
 	windows.sgml				\
 	x11.sgml				\
 	gtk-query-immodules-3.0.xml		\
-	gtk-update-icon-cache-3.0.xml		\
-	gtk-builder-convert-3.0.xml		\
+	gtk-update-icon-cache.xml		\
 	visual_index.xml			\
 	getting_started.xml			\
 	overview.xml
@@ -276,6 +274,8 @@ HTML_IMAGES = \
 	$(top_srcdir)/gtk/stock-icons/24/gtk-page-setup.png		\
 	$(srcdir)/images/aboutdialog.png				\
 	$(srcdir)/images/accel-label.png				\
+	$(srcdir)/images/appchooserbutton.png				\
+	$(srcdir)/images/appchooserdialog.png				\
 	$(srcdir)/images/assistant.png					\
 	$(srcdir)/images/button.png					\
 	$(srcdir)/images/check-button.png				\
@@ -328,7 +328,9 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-tbrl.png				\
 	$(srcdir)/images/window-default.png				\
 	$(srcdir)/images/hello-world.png				\
-	$(srcdir)/images/switch.png
+	$(srcdir)/images/grid-packing.png				\
+	$(srcdir)/images/drawing.png					\
+	$(srcdir)/images/switch.png					\
 	$(srcdir)/images/linear.png					\
 	$(srcdir)/images/ease.png					\
 	$(srcdir)/images/ease-in-out.png				\
@@ -352,7 +354,9 @@ HTML_IMAGES = \
 	$(srcdir)/images/sliders.png					\
 	$(srcdir)/images/focus.png					\
 	$(srcdir)/images/handles.png					\
-	$(srcdir)/images/extensions.png
+	$(srcdir)/images/extensions.png					\
+	$(srcdir)/images/numerableicon.png				\
+	$(srcdir)/images/numerableicon2.png
 
 # Extra options to supply to gtkdoc-fixref
 FIXXREF_OPTIONS=--extra-dir=../gdk/html \
@@ -371,8 +375,7 @@ EXTRA_DIST += version.xml.in
 
 man_MANS = 				\
 	gtk-query-immodules-3.0.1	\
-	gtk-update-icon-cache-3.0.1	\
-	gtk-builder-convert-3.0.1
+	gtk-update-icon-cache.1
 
 if ENABLE_MAN
 

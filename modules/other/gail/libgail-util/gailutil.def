@@ -1,6 +1,5 @@
 EXPORTS
 	gail_misc_add_attribute
-	gail_misc_add_to_attr_set
 	gail_misc_buffer_get_run_attributes
 	gail_misc_get_default_attributes
 	gail_misc_get_extents_from_pango_rectangle

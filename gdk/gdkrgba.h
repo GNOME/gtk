@@ -45,7 +45,7 @@ struct _GdkRGBA
 
 #define GDK_TYPE_RGBA (gdk_rgba_get_type ())
 
-GdkRGBA * gdk_rgba_copy (GdkRGBA *rgba);
+GdkRGBA * gdk_rgba_copy (const GdkRGBA *rgba);
 void      gdk_rgba_free (GdkRGBA *rgba);
 
 gboolean  gdk_rgba_parse (GdkRGBA     *rgba,

@@ -32,8 +32,12 @@
 #include <string.h>
 #include <stdlib.h>
 
+#include <gobject/gobjectnotifyqueue.c>
+#include <gobject/gvaluecollector.h>
+
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
@@ -42,8 +46,6 @@
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtktoolbar.h"
-#include <gobject/gobjectnotifyqueue.c>
-#include <gobject/gvaluecollector.h>
 
 
 /**
@@ -140,32 +142,6 @@
  *      {
  *        ... execute the real width-for-height request here based on the required width
  *        of the children collectively if the container were to be allocated the said height ...
- *      }
- * }
- * ]]></programlisting>
- *
- * Furthermore, in order to ensure correct height-for-width requests it is important
- * to check the input width against the real required minimum width. This can
- * easily be achieved as follows:
- *
- * <programlisting><![CDATA[
- * static void
- * foo_container_get_preferred_height_for_width (GtkWidget *widget, gint for_width,
- *                                               gint *min_height, gint *nat_height)
- * {
- *    if (i_am_in_height_for_width_mode)
- *      {
- *        gint min_width;
- *
- *        GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, &min_width, NULL);
- *
- *        for_width = MAX (min_width, for_width);
- *
- *        execute_real_height_for_width_request_code (widget, for_width, min_height, nat_height);
- *      }
- *    else
- *      {
- *        ... fall back on virtual results as mentioned in the previous example ...
  *      }
  * }
  * ]]></programlisting>
@@ -327,6 +303,7 @@ static void     gtk_container_adjust_size_request  (GtkWidget         *widget,
                                                     gint              *natural_size);
 static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
                                                       GtkOrientation   orientation,
+                                                      gint            *minimum_size,
                                                       gint            *natural_size,
                                                       gint            *allocated_pos,
                                                       gint            *allocated_size);
@@ -1789,7 +1766,7 @@ gtk_container_adjust_size_request (GtkWidget         *widget,
 
   container = GTK_CONTAINER (widget);
 
-  if (GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
+  if (GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
     {
       int border_width;
 
@@ -1809,6 +1786,7 @@ gtk_container_adjust_size_request (GtkWidget         *widget,
 static void
 gtk_container_adjust_size_allocation (GtkWidget         *widget,
                                       GtkOrientation     orientation,
+                                      gint              *minimum_size,
                                       gint              *natural_size,
                                       gint              *allocated_pos,
                                       gint              *allocated_size)
@@ -1818,10 +1796,10 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
 
   container = GTK_CONTAINER (widget);
 
-  if (!GTK_CONTAINER_GET_CLASS (widget)->handle_border_width)
+  if (!GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
     {
       parent_class->adjust_size_allocation (widget, orientation,
-					    natural_size, allocated_pos,
+					    minimum_size, natural_size, allocated_pos,
 					    allocated_size);
       return;
     }
@@ -1845,6 +1823,7 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
   else
     {
       *allocated_pos += border_width;
+      *minimum_size -= border_width * 2;
       *natural_size -= border_width * 2;
     }
 
@@ -1856,7 +1835,7 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
    * and padding values.
    */
   parent_class->adjust_size_allocation (widget, orientation,
-					natural_size, allocated_pos,
+					minimum_size, natural_size, allocated_pos,
 					allocated_size);
 }
 
@@ -1880,7 +1859,7 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
 {
   g_return_if_fail (GTK_IS_CONTAINER_CLASS (klass));
 
-  klass->handle_border_width = TRUE;
+  klass->_handle_border_width = TRUE;
 }
 
 /**
@@ -3133,12 +3112,17 @@ gtk_container_unmap (GtkWidget *widget)
 {
   gtk_widget_set_mapped (widget, FALSE);
 
+  /* hide our window first so user doesn't see all the child windows
+   * vanishing one by one.  (only matters these days if one of the
+   * children has an actual native window instead of client-side
+   * window, e.g. a GtkSocket would)
+   */
   if (gtk_widget_get_has_window (widget))
     gdk_window_hide (gtk_widget_get_window (widget));
-  else
-    gtk_container_forall (GTK_CONTAINER (widget),
-			  (GtkCallback)gtk_widget_unmap,
-			  NULL);
+
+  gtk_container_forall (GTK_CONTAINER (widget),
+                        (GtkCallback)gtk_widget_unmap,
+                        NULL);
 }
 
 /**

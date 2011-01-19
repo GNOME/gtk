@@ -201,8 +201,8 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 						      GtkWindow         *parent,
 						      const gchar       *filename)
 {
-  gint argc;
-  gchar **argv;
+  GAppInfo *appinfo;
+  GdkAppLaunchContext *context;
   gchar *cmd;
   gchar *preview_cmd;
   GtkSettings *settings;
@@ -276,7 +276,11 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   quoted_filename = g_shell_quote (filename);
   quoted_settings_filename = g_shell_quote (settings_filename);
   cmd = shell_command_substitute_file (preview_cmd, quoted_filename, quoted_settings_filename, &filename_used, &settings_used);
-  g_shell_parse_argv (cmd, &argc, &argv, &error);
+
+  appinfo = g_app_info_create_from_commandline (cmd,
+                                                "Print Preview",
+                                                G_APP_INFO_CREATE_NONE,
+                                                &error);
 
   g_free (preview_cmd);
   g_free (quoted_filename);
@@ -286,9 +290,12 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
   if (error != NULL)
     goto out;
 
-  gdk_spawn_on_screen (screen, NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, &error);
+  context = gdk_display_get_app_launch_context (gdk_screen_get_display (screen));
+  gdk_app_launch_context_set_screen (context, screen);
+  g_app_info_launch (appinfo, NULL, G_APP_LAUNCH_CONTEXT (context), &error);
 
-  g_strfreev (argv);
+  g_object_unref (context);
+  g_object_unref (appinfo);
 
   if (error != NULL)
     {
@@ -311,9 +318,9 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
       else
         g_error_free (error);
 
-      filename_used = FALSE; 
+      filename_used = FALSE;
       settings_used = FALSE;
-   } 
+   }
 
   if (!filename_used)
     g_unlink (filename);
@@ -323,7 +330,7 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
 
   if (fd > 0)
     close (fd);
-  
+
   if (key_file)
     g_key_file_free (key_file);
   g_free (data);
@@ -577,18 +584,16 @@ finish_print (PrintResponseData *rdata,
 	    g_signal_connect (job, "status-changed",
 			      G_CALLBACK (job_status_changed_cb), op);
 	  
-          priv->print_pages = job->print_pages;
-          priv->page_ranges = job->page_ranges;
-          priv->num_page_ranges = job->num_page_ranges;
-	  
-          priv->manual_num_copies = job->num_copies;
-          priv->manual_collation = job->collate;
-          priv->manual_reverse = job->reverse;
-          priv->manual_page_set = job->page_set;
-          priv->manual_scale = job->scale;
-          priv->manual_orientation = job->rotate_to_orientation;
-          priv->manual_number_up = job->number_up;
-          priv->manual_number_up_layout = job->number_up_layout;
+          priv->print_pages = gtk_print_job_get_pages (job);
+          priv->page_ranges = gtk_print_job_get_page_ranges (job, &priv->num_page_ranges);
+          priv->manual_num_copies = gtk_print_job_get_num_copies (job);
+          priv->manual_collation = gtk_print_job_get_collate (job);
+          priv->manual_reverse = gtk_print_job_get_reverse (job);
+          priv->manual_page_set = gtk_print_job_get_page_set (job);
+          priv->manual_scale = gtk_print_job_get_scale (job);
+          priv->manual_orientation = gtk_print_job_get_rotate (job);
+          priv->manual_number_up = gtk_print_job_get_n_up (job);
+          priv->manual_number_up_layout = gtk_print_job_get_n_up_layout (job);
         }
     } 
  out:
@@ -635,7 +640,11 @@ handle_print_response (GtkWidget *dialog,
       settings = gtk_print_unix_dialog_get_settings (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup = gtk_print_unix_dialog_get_page_setup (GTK_PRINT_UNIX_DIALOG (pd));
       page_setup_set = gtk_print_unix_dialog_get_page_setup_set (GTK_PRINT_UNIX_DIALOG (pd));
-      
+
+      /* Set new print settings now so that custom-widget options
+       * can be added to the settings in the callback
+       */
+      gtk_print_operation_set_print_settings (rdata->op, settings);
       g_signal_emit_by_name (rdata->op, "custom-widget-apply", rdata->op->priv->custom_widget);
     }
   

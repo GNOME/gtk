@@ -121,11 +121,10 @@ on_draw (GtkWidget *widget,
 {
   cairo_surface_t *overlay, *punch, *circles;
   cairo_t *overlay_cr, *punch_cr, *circles_cr;
-  int width, height;
 
   /* Fill the background */
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
+  int width = gtk_widget_get_allocated_width (widget);
+  int height = gtk_widget_get_allocated_height (widget);
   double radius = 0.5 * (width < height ? width : height) - 10;
   double xc = width / 2.;
   double yc = height / 2.;

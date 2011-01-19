@@ -220,13 +220,7 @@ gail_toplevel_show_event_watcher (GSignalInvocationHint *ihint,
     return TRUE;
 
   child = gtk_widget_get_accessible (widget);
-  if (!strcmp (atk_role_get_name (atk_object_get_role (child)), "redundant object"))
-    {
-      return TRUE;
-    }
-
-  child = gtk_widget_get_accessible (widget);
-  if (!strcmp (atk_role_get_name (atk_object_get_role (child)), "redundant object"))
+  if (atk_object_get_role (child) == ATK_ROLE_REDUNDANT_OBJECT)
     {
       return TRUE;
     }
@@ -235,21 +229,23 @@ gail_toplevel_show_event_watcher (GSignalInvocationHint *ihint,
    * Add the window to the list & emit the signal.
    * Don't do this for tooltips (Bug #150649).
    */
-  if (atk_object_get_role (child) != ATK_ROLE_TOOL_TIP)
-  {
-      toplevel->window_list = g_list_append (toplevel->window_list, widget);
+  if (atk_object_get_role (child) == ATK_ROLE_TOOL_TIP)
+    {
+      return TRUE;
+    }
 
-      n_children = g_list_length (toplevel->window_list);
+  toplevel->window_list = g_list_append (toplevel->window_list, widget);
 
-      /*
-       * Must subtract 1 from the n_children since the index is 0-based
-       * but g_list_length is 1-based.
-       */
-      atk_object_set_parent (child, atk_obj);
-      g_signal_emit_by_name (atk_obj, "children-changed::add",
-			     n_children - 1, 
-			     child, NULL);
-  }
+  n_children = g_list_length (toplevel->window_list);
+
+  /*
+   * Must subtract 1 from the n_children since the index is 0-based
+   * but g_list_length is 1-based.
+   */
+  atk_object_set_parent (child, atk_obj);
+  g_signal_emit_by_name (atk_obj, "children-changed::add",
+                         n_children - 1, 
+                         child, NULL);
 
   /* Connect destroy signal callback */
   g_signal_connect (G_OBJECT(object), 

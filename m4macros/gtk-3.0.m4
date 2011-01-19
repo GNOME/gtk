@@ -27,7 +27,7 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
   AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
   if test x$PKG_CONFIG != xno ; then
-    if pkg-config --atleast-pkgconfig-version 0.7 ; then
+    if $PKG_CONFIG --atleast-pkgconfig-version 0.7 ; then
       :
     else
       echo "*** pkg-config too old; version 0.7 or better required."

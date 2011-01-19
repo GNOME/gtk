@@ -25,20 +25,22 @@
  */
 
 #include "config.h"
+
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
+
 #include "gtkiconfactory.h"
 #include "gtkiconcache.h"
 #include "gtkdebug.h"
 #include "gtkicontheme.h"
-#include "gtksettings.h"
+#include "gtksettingsprivate.h"
 #include "gtkstock.h"
 #include "gtkwidget.h"
 #include "gtkintl.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"
-
+#include "gtktypebuiltins.h"
 
 static GSList *all_icon_factories = NULL;
 
@@ -865,14 +867,14 @@ icon_size_lookup_intern (GtkSettings *settings,
  * @settings: a #GtkSettings object, used to determine
  *   which set of user preferences to used.
  * @size: (type int): an icon size
- * @width: location to store icon width
- * @height: location to store icon height
+ * @width: (out): location to store icon width
+ * @height: (out): location to store icon height
  *
  * Obtains the pixel size of a semantic icon size, possibly
  * modified by user preferences for a particular
  * #GtkSettings. Normally @size would be
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
- * isn't normally needed, gtk_widget_render_icon() is the usual
+ * isn't normally needed, gtk_widget_render_icon_pixbuf() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
@@ -897,15 +899,15 @@ gtk_icon_size_lookup_for_settings (GtkSettings *settings,
 /**
  * gtk_icon_size_lookup:
  * @size: (type int): an icon size
- * @width: location to store icon width
- * @height: location to store icon height
+ * @width: (out): location to store icon width
+ * @height: (out): location to store icon height
  *
  * Obtains the pixel size of a semantic icon size, possibly
  * modified by user preferences for the default #GtkSettings.
  * (See gtk_icon_size_lookup_for_settings().)
  * Normally @size would be
  * #GTK_ICON_SIZE_MENU, #GTK_ICON_SIZE_BUTTON, etc.  This function
- * isn't normally needed, gtk_widget_render_icon() is the usual
+ * isn't normally needed, gtk_widget_render_icon_pixbuf() is the usual
  * way to get an icon for rendering, then just look at the size of
  * the rendered pixbuf. The rendered pixbuf may not even correspond to
  * the width/height returned by gtk_icon_size_lookup(), because themes
@@ -1131,7 +1133,7 @@ static guint cache_serial = 0;
  * for a given size and state on request, and automatically caches
  * some of the rendered #GdkPixbuf objects.
  *
- * Normally you would use gtk_widget_render_icon() instead of
+ * Normally you would use gtk_widget_render_icon_pixbuf() instead of
  * using #GtkIconSet directly. The one case where you'd use
  * #GtkIconSet is to create application-specific icon sets to place in
  * a #GtkIconFactory.
@@ -1577,7 +1579,7 @@ render_fallback_image (GtkStyleContext   *context,
  *        means render at the size of the source and don't scale.
  *
  * Renders an icon using gtk_render_icon_pixbuf(). In most cases,
- * gtk_widget_render_icon() is better, since it automatically provides
+ * gtk_widget_render_icon_pixbuf() is better, since it automatically provides
  * most of the arguments from the current widget settings.  This
  * function never returns %NULL; if the icon can't be rendered
  * (perhaps because an image file fails to load), a default "missing
@@ -2016,7 +2018,7 @@ icon_source_clear (GtkIconSource *source)
 /**
  * gtk_icon_source_set_filename:
  * @source: a #GtkIconSource
- * @filename: image file to use
+ * @filename: (type filename): image file to use
  *
  * Sets the name of an image file to use as a base image when creating
  * icon variants for #GtkIconSet. The filename must be absolute.
@@ -2104,8 +2106,8 @@ gtk_icon_source_set_pixbuf (GtkIconSource *source,
  * filename is not a copy, and should not be modified or expected to
  * persist beyond the lifetime of the icon source.
  *
- * Return value: image filename. This string must not be modified
- * or freed.
+ * Return value: (type filename): image filename. This string must not
+ * be modified or freed.
  */
 G_CONST_RETURN gchar*
 gtk_icon_source_get_filename (const GtkIconSource *source)

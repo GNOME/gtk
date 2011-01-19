@@ -25,15 +25,16 @@
  */
 
 #include "config.h"
+
 #include <math.h>
-#include <gdk/gdkkeysyms.h>
+
 #include "gtkbindings.h"
 #include "gtkmarshalers.h"
 #include "gtkscrollable.h"
 #include "gtkscrolledwindow.h"
 #include "gtkwindow.h"
-#include "gtktypeutils.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 
 
@@ -377,6 +378,13 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 							     DEFAULT_SCROLLBAR_SPACING,
 							     GTK_PARAM_READABLE));
 
+  /**
+   * GtkScrolledWindow:min-content-width:
+   *
+   * The minimum content width of @scrolled_window, or -1 if not set.
+   *
+   * Since: 3.0
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_MIN_CONTENT_WIDTH,
                                    g_param_spec_int ("min-content-width",
@@ -384,6 +392,14 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                      P_("The minimum width that the scrolled window will allocate to its content"),
                                                      -1, G_MAXINT, -1,
                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkScrolledWindow:min-content-height:
+   *
+   * The minimum content height of @scrolled_window, or -1 if not set.
+   *
+   * Since: 3.0
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_MIN_CONTENT_HEIGHT,
                                    g_param_spec_int ("min-content-height",
@@ -1184,20 +1200,31 @@ gtk_scrolled_window_draw (GtkWidget *widget,
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
       GtkAllocation relative_allocation;
-      GtkStyle *style;
+      GtkStyleContext *context;
       gboolean scrollbars_within_bevel;
 
-      style = gtk_widget_get_style (widget);
+      context = gtk_widget_get_style_context (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+
       gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
 
       if (!scrollbars_within_bevel)
         {
+          GtkStateFlags state;
+          GtkBorder padding, border;
+
+          state = gtk_widget_get_state_flags (widget);
+          gtk_style_context_get_padding (context, state, &padding);
+          gtk_style_context_get_border (context, state, &border);
+
           gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
 
-          relative_allocation.x -= style->xthickness;
-          relative_allocation.y -= style->ythickness;
-          relative_allocation.width += 2 * style->xthickness;
-          relative_allocation.height += 2 * style->ythickness;
+          relative_allocation.x -= padding.left + border.left;
+          relative_allocation.y -= padding.top + border.top;
+          relative_allocation.width += padding.left + padding.right + border.left + border.right;
+          relative_allocation.height += padding.top + padding.bottom + border.top + border.bottom;
         }
       else
         {
@@ -1207,14 +1234,13 @@ gtk_scrolled_window_draw (GtkWidget *widget,
           relative_allocation.height = gtk_widget_get_allocated_height (widget);
         }
 
-      gtk_paint_shadow (style,
-                        cr,
-			GTK_STATE_NORMAL, priv->shadow_type,
-			widget, "scrolled_window",
+      gtk_render_frame (context, cr,
                         relative_allocation.x,
                         relative_allocation.y,
 			relative_allocation.width,
 			relative_allocation.height);
+
+      gtk_style_context_restore (context);
     }
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->draw (widget, cr);
@@ -1321,27 +1347,27 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
 
   if (adjustment)
     {
-      gdouble value = adjustment->value;
+      gdouble value = gtk_adjustment_get_value (adjustment);
       
       switch (scroll)
 	{
 	case GTK_SCROLL_STEP_FORWARD:
-	  value += adjustment->step_increment;
+	  value += gtk_adjustment_get_step_increment (adjustment);
 	  break;
 	case GTK_SCROLL_STEP_BACKWARD:
-	  value -= adjustment->step_increment;
+	  value -= gtk_adjustment_get_step_increment (adjustment);
 	  break;
 	case GTK_SCROLL_PAGE_FORWARD:
-	  value += adjustment->page_increment;
+	  value += gtk_adjustment_get_page_increment (adjustment);
 	  break;
 	case GTK_SCROLL_PAGE_BACKWARD:
-	  value -= adjustment->page_increment;
+	  value -= gtk_adjustment_get_page_increment (adjustment);
 	  break;
 	case GTK_SCROLL_START:
-	  value = adjustment->lower;
+	  value = gtk_adjustment_get_lower (adjustment);
 	  break;
 	case GTK_SCROLL_END:
-	  value = adjustment->upper;
+	  value = gtk_adjustment_get_upper (adjustment);
 	  break;
 	default:
 	  g_assert_not_reached ();
@@ -1386,7 +1412,6 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
   GtkAllocation widget_allocation;
   GtkScrolledWindow *scrolled_window;
   GtkScrolledWindowPrivate *priv;
-  GtkStyle *style;
   gint sb_spacing;
   gint sb_width;
   gint sb_height;
@@ -1408,9 +1433,23 @@ gtk_scrolled_window_relative_allocation (GtkWidget     *widget,
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
-      style = gtk_widget_get_style (widget);
-      allocation->x += style->xthickness;
-      allocation->y += style->ythickness;
+      GtkStyleContext *context;
+      GtkStateFlags state;
+      GtkBorder padding, border;
+
+      context = gtk_widget_get_style_context (widget);
+      state = gtk_widget_get_state_flags (widget);
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+
+      gtk_style_context_get_border (context, state, &border);
+      gtk_style_context_get_padding (context, state, &padding);
+
+      allocation->x += padding.left + border.left;
+      allocation->y += padding.top + border.top;
+
+      gtk_style_context_restore (context);
     }
 
   gtk_widget_get_allocation (widget, &widget_allocation);
@@ -1471,7 +1510,9 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 {
   GtkScrolledWindow *scrolled_window;
   GtkScrolledWindowPrivate *priv;
-  GtkStyle *style;
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder padding, border;
   GtkBin *bin;
   GtkAllocation relative_allocation;
   GtkAllocation child_allocation;
@@ -1493,10 +1534,20 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   gtk_widget_get_preferred_height (priv->hscrollbar, &sb_height, NULL);
   gtk_widget_get_preferred_width (priv->vscrollbar, &sb_width, NULL);
 
-  style = gtk_widget_get_style (widget);
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+
+  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_border (context, state, &border);
+
   gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
 
   gtk_widget_set_allocation (widget, allocation);
+
+  gtk_style_context_restore (context);
 
   if (priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
     priv->hscrollbar_visible = TRUE;
@@ -1704,7 +1755,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 			      relative_allocation.height +
 			      sb_spacing +
 			      (priv->shadow_type == GTK_SHADOW_NONE ?
-			       0 : style->ythickness));
+			       0 : padding.top + border.top));
       else
 	child_allocation.y = 0;
 
@@ -1717,17 +1768,17 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	{
           if (!scrollbars_within_bevel)
             {
-              child_allocation.x -= style->xthickness;
-              child_allocation.width += 2 * style->xthickness;
+              child_allocation.x -= padding.left + border.left;
+              child_allocation.width += padding.left + padding.right + border.left + border.right;
             }
           else if (GTK_CORNER_TOP_RIGHT == priv->real_window_placement ||
                    GTK_CORNER_TOP_LEFT == priv->real_window_placement)
             {
-              child_allocation.y -= style->ythickness;
+              child_allocation.y -= padding.top + border.top;
             }
           else
             {
-              child_allocation.y += style->ythickness;
+              child_allocation.y += padding.top + border.top;
             }
 	}
 
@@ -1751,7 +1802,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 			      relative_allocation.width +
 			      sb_spacing +
 			      (priv->shadow_type == GTK_SHADOW_NONE ?
-			       0 : style->xthickness));
+			       0 : padding.left + border.left));
       else
 	child_allocation.x = 0;
 
@@ -1765,17 +1816,17 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 	{
           if (!scrollbars_within_bevel)
             {
-              child_allocation.y -= style->ythickness;
-	      child_allocation.height += 2 * style->ythickness;
+              child_allocation.y -= padding.top + border.top;
+	      child_allocation.height += padding.top + padding.bottom + border.top + border.bottom;
             }
           else if (GTK_CORNER_BOTTOM_LEFT == priv->real_window_placement ||
                    GTK_CORNER_TOP_LEFT == priv->real_window_placement)
             {
-              child_allocation.x -= style->xthickness;
+              child_allocation.x -= padding.left + border.left;
             }
           else
             {
-              child_allocation.x += style->xthickness;
+              child_allocation.x += padding.left + border.left;
             }
 	}
 
@@ -1806,12 +1857,12 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   if (range && gtk_widget_get_visible (range))
     {
-      GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (range));
+      GtkAdjustment *adjustment = gtk_range_get_adjustment (GTK_RANGE (range));
       gdouble delta;
 
       delta = _gtk_range_get_wheel_delta (GTK_RANGE (range), event->direction);
 
-      gtk_adjustment_set_value (adj, adj->value + delta);
+      gtk_adjustment_set_value (adjustment, gtk_adjustment_get_value (adjustment) + delta);
 
       return TRUE;
     }
@@ -1879,8 +1930,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  gboolean visible;
 
 	  visible = priv->hscrollbar_visible;
-	  priv->hscrollbar_visible = (adjustment->upper - adjustment->lower >
-					      adjustment->page_size);
+	  priv->hscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
+				      gtk_adjustment_get_page_size (adjustment));
 
 	  if (priv->hscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
@@ -1894,8 +1945,8 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 	  gboolean visible;
 
 	  visible = priv->vscrollbar_visible;
-	  priv->vscrollbar_visible = (adjustment->upper - adjustment->lower >
-					      adjustment->page_size);
+	  priv->vscrollbar_visible = (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment) >
+			              gtk_adjustment_get_page_size (adjustment));
 
 	  if (priv->vscrollbar_visible != visible)
 	    gtk_widget_queue_resize (GTK_WIDGET (scrolled_window));
@@ -2051,7 +2102,6 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
   GtkRequisition hscrollbar_requisition;
   GtkRequisition vscrollbar_requisition;
   GtkRequisition minimum_req, natural_req;
-  GtkStyle *style;
   GtkWidget *child;
   gint min_child_size, nat_child_size;
 
@@ -2155,11 +2205,25 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 
   if (priv->shadow_type != GTK_SHADOW_NONE)
     {
-      style = gtk_widget_get_style (GTK_WIDGET (widget));
-      minimum_req.width += 2 * style->xthickness;
-      minimum_req.height += 2 * style->ythickness;
-      natural_req.width += 2 * style->xthickness;
-      natural_req.height += 2 * style->ythickness;
+      GtkStyleContext *context;
+      GtkStateFlags state;
+      GtkBorder padding, border;
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (widget));
+      state = gtk_widget_get_state_flags (GTK_WIDGET (widget));
+
+      gtk_style_context_save (context);
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+
+      gtk_style_context_get_padding (context, state, &padding);
+      gtk_style_context_get_border (context, state, &border);
+
+      minimum_req.width += padding.left + padding.right + border.left + border.right;
+      minimum_req.height += padding.top + padding.bottom + border.top + border.bottom;
+      natural_req.width += padding.left + padding.right + border.left + border.right;
+      natural_req.height += padding.top + padding.bottom + border.top + border.bottom;
+
+      gtk_style_context_restore (context);
     }
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)

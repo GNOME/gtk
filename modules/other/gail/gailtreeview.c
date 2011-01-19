@@ -1391,7 +1391,7 @@ gail_tree_view_get_selected_rows (AtkTable *table,
 
   selection = gtk_tree_view_get_selection (tree_view);
 
-  switch (selection->type)
+  switch (gtk_tree_selection_get_mode (selection))
     {
     case GTK_SELECTION_SINGLE:
     case GTK_SELECTION_BROWSE:
@@ -4651,7 +4651,7 @@ get_header_from_column (GtkTreeViewColumn *tv_col)
       /* If the user has not set a header object, grab the column */
       /* header object defined by the GtkTreeView */
 
-      header_widget = tv_col->button;
+      header_widget = gtk_tree_view_column_get_button (tv_col);
 
       if (header_widget)
         {

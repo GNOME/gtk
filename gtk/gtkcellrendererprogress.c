@@ -93,7 +93,7 @@ static void gtk_cell_renderer_progress_render       (GtkCellRenderer         *ce
 						     GtkWidget               *widget,
 						     const GdkRectangle      *background_area,
 						     const GdkRectangle      *cell_area,
-						     guint                    flags);
+				                     GtkCellRendererState    flags);
 
      
 G_DEFINE_TYPE_WITH_CODE (GtkCellRendererProgress, gtk_cell_renderer_progress, GTK_TYPE_CELL_RENDERER,
@@ -604,12 +604,13 @@ gtk_cell_renderer_progress_render (GtkCellRenderer      *cell,
       clip.y = bar_position;
     }
 
-  gtk_paint_box (style,
-                       cr,
-                       GTK_STATE_SELECTED, GTK_SHADOW_OUT,
-                       widget, "bar",
-                       clip.x, clip.y,
-                       clip.width, clip.height);
+  if (bar_size > 0)
+    gtk_paint_box (style,
+                   cr,
+                   GTK_STATE_SELECTED, GTK_SHADOW_OUT,
+                   widget, "bar",
+                   clip.x, clip.y,
+                   clip.width, clip.height);
 
   if (priv->label)
     {

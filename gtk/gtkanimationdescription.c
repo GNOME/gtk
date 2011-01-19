@@ -30,9 +30,9 @@ struct GtkAnimationDescription
 };
 
 GtkAnimationDescription *
-gtk_animation_description_new (gdouble                 duration,
-                               GtkTimelineProgressType progress_type,
-                               gboolean                loop)
+_gtk_animation_description_new (gdouble                 duration,
+                                GtkTimelineProgressType progress_type,
+                                gboolean                loop)
 {
   GtkAnimationDescription *desc;
 
@@ -46,32 +46,32 @@ gtk_animation_description_new (gdouble                 duration,
 }
 
 gdouble
-gtk_animation_description_get_duration (GtkAnimationDescription *desc)
+_gtk_animation_description_get_duration (GtkAnimationDescription *desc)
 {
   return desc->duration;
 }
 
 GtkTimelineProgressType
-gtk_animation_description_get_progress_type (GtkAnimationDescription *desc)
+_gtk_animation_description_get_progress_type (GtkAnimationDescription *desc)
 {
   return desc->progress_type;
 }
 
 gboolean
-gtk_animation_description_get_loop (GtkAnimationDescription *desc)
+_gtk_animation_description_get_loop (GtkAnimationDescription *desc)
 {
   return (desc->loop != 0);
 }
 
 GtkAnimationDescription *
-gtk_animation_description_ref (GtkAnimationDescription *desc)
+_gtk_animation_description_ref (GtkAnimationDescription *desc)
 {
   desc->ref_count++;
   return desc;
 }
 
 void
-gtk_animation_description_unref (GtkAnimationDescription *desc)
+_gtk_animation_description_unref (GtkAnimationDescription *desc)
 {
   desc->ref_count--;
 
@@ -80,7 +80,7 @@ gtk_animation_description_unref (GtkAnimationDescription *desc)
 }
 
 GtkAnimationDescription *
-gtk_animation_description_from_string (const gchar *str)
+_gtk_animation_description_from_string (const gchar *str)
 {
   gchar timing_function[16] = { 0, };
   gchar duration_unit[3] = { 0, };
@@ -120,18 +120,18 @@ gtk_animation_description_from_string (const gchar *str)
       return NULL;
     }
 
-  return gtk_animation_description_new ((gdouble) duration, progress_type, loop);
+  return _gtk_animation_description_new ((gdouble) duration, progress_type, loop);
 }
 
 GType
-gtk_animation_description_get_type (void)
+_gtk_animation_description_get_type (void)
 {
   static GType type = 0;
 
   if (G_UNLIKELY (!type))
     type = g_boxed_type_register_static (I_("GtkAnimationDescription"),
-					 (GBoxedCopyFunc) gtk_animation_description_ref,
-					 (GBoxedFreeFunc) gtk_animation_description_unref);
+                                         (GBoxedCopyFunc) _gtk_animation_description_ref,
+                                         (GBoxedFreeFunc) _gtk_animation_description_unref);
 
   return type;
 }

@@ -12,97 +12,176 @@
   <link linkend="gtk-compiling">Compiling the GTK+ libraries</link>
   section in this reference.</para>
 
-  <para>To begin our introduction to GTK, we'll start with the simplest
-  program possible. This program will create an empty 200x200 pixel
-  window:</para>
+  <section>
+    <title>Basics</title>
 
-  <para>
-    <inlinegraphic fileref="window-default.png" format="PNG"></inlinegraphic>
-  </para>
+    <para>To begin our introduction to GTK, we'll start with the simplest
+    program possible. This program will create an empty 200x200 pixel
+    window:</para>
 
-  <informalexample><programlisting>
-    <xi:include href="../../../../examples/window-default.c" parse="text">
-      <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
-    </xi:include>
-  </programlisting></informalexample>
+    <para>
+      <inlinegraphic fileref="window-default.png" format="PNG"></inlinegraphic>
+    </para>
 
-  <para>You can compile the program above with GCC using:</para>
-
-  <para><literallayout>
-    <literal>gcc `pkg-config --cflags gtk+-3.0` -o window-default window-default.c `pkg-config --libs gtk+-3.0`</literal>
-  </literallayout></para>
-
-  <note><para>For more information on how to compile a GTK+ application, please
-  refer to the <link linkend="gtk-compiling">Compiling GTK+ Applications</link>
-  section in this reference.</para></note>
-
-  <para>All GTK+ applications will, of course, include
-  <filename>gtk/gtk.h</filename>, which declares functions, types and
-  macros required by GTK+ applications.</para>
-
-  <warning><para>Even if GTK+ installs multiple header files, only the
-  top-level <filename>gtk/gtk.h</filename> header can be directly included
-  by third party code. The compiler will abort with an error if any other
-  header will be included.</para></warning>
-
-  <para>We then proceed into the <function>main</function>() function of the
-  application, and we declare a <varname>window</varname> variable as a pointer
-  of type #GtkWidget.</para>
-
-  <para>The following line will call gtk_init(), which
-  is the initialization function for GTK+; this function will set up GTK+,
-  the type system, the connection to the windowing environment, etc. The
-  gtk_init() takes as arguments the pointers to the command line arguments
-  counter and string array; this allows GTK+ to parse specific command line
-  arguments that control the behavior of GTK+ itself. The parsed arguments
-  will be removed from the array, leaving the unrecognized ones for your
-  application to parse.</para>
-
-  <note><para>For more information on which command line arguments GTK+
-  recognizes, please refer to the <link linkend="gtk-running">Running GTK+
-  Applications</link> section in this reference.</para></note>
-
-  <para>The call to gtk_window_new() will create a new #GtkWindow and store
-  it inside the <varname>window</varname> variable. The type of the window
-  is %GTK_WINDOW_TOPLEVEL, which means that the #GtkWindow will be managed
-  by the windowing system: it will have a frame, a title bar and window
-  controls, depending on the platform.</para>
-
-  <para>In order to terminate the application when the #GtkWindow is
-  destroyed, we connect the #GtkWidget::destroy signal to the gtk_main_quit()
-  function. This function will terminate the GTK+ main loop started by calling
-  gtk_main() later. The #GtkWidget::destroy signal is emitted when a widget is
-  destroyed, either by explicitly calling gtk_widget_destroy() or when the
-  widget is unparented. Top-level #GtkWindow<!-- -->s are also destroyed when
-  the Close window control button is clicked.</para>
-
-  <para>#GtkWidget<!-- -->s are hidden by default. By calling gtk_widget_show()
-  on a #GtkWidget we are asking GTK+ to set the visibility attribute so that it
-  can be displayed. All this work is done after the main loop has been
-  started.</para>
-
-  <para>The last line of interest is the call to gtk_main(). This function will
-  start the GTK+ main loop and will block the control flow of the
-  <function>main</function>() until the gtk_main_quit() function is
-  called.</para>
-
-  <para>The following example is slightly more complex, and tries to
-  showcase some of the capabilities of GTK+.</para>
-
-  <para>In the long tradition of programming languages and libraries,
-  it is called <emphasis>Hello, World</emphasis>.</para>
-
-  <para>
-    <inlinegraphic fileref="hello-world.png" format="PNG"></inlinegraphic>
-  </para>
-
-  <example id="gtk-getting-started-hello-world">
-    <title>Hello World in GTK+</title>
-    <programlisting>
-      <xi:include href="../../../../examples/hello-world.c" parse="text">
+    <informalexample><programlisting>
+      <xi:include href="../../../../examples/window-default.c" parse="text">
         <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
       </xi:include>
-    </programlisting>
-  </example>
+    </programlisting></informalexample>
 
+    <para>You can compile the program above with GCC using:</para>
+
+    <para><literallayout>
+      <literal>gcc `pkg-config --cflags gtk+-3.0` -o window-default window-default.c `pkg-config --libs gtk+-3.0`</literal>
+    </literallayout></para>
+
+    <note><para>For more information on how to compile a GTK+ application, please
+    refer to the <link linkend="gtk-compiling">Compiling GTK+ Applications</link>
+    section in this reference.</para></note>
+
+    <para>All GTK+ applications will, of course, include
+    <filename>gtk/gtk.h</filename>, which declares functions, types and
+    macros required by GTK+ applications.</para>
+
+    <warning><para>Even if GTK+ installs multiple header files, only the
+    top-level <filename>gtk/gtk.h</filename> header can be directly included
+    by third party code. The compiler will abort with an error if any other
+    header is directly included.</para></warning>
+
+    <para>We then proceed into the <function>main</function>() function of the
+    application, and we declare a <varname>window</varname> variable as a pointer
+    of type #GtkWidget.</para>
+
+    <para>The following line will call gtk_init(), which
+    is the initialization function for GTK+; this function will set up GTK+,
+    the type system, the connection to the windowing environment, etc. The
+    gtk_init() takes as arguments the pointers to the command line arguments
+    counter and string array; this allows GTK+ to parse specific command line
+    arguments that control the behavior of GTK+ itself. The parsed arguments
+    will be removed from the array, leaving the unrecognized ones for your
+    application to parse.</para>
+
+    <note><para>For more information on which command line arguments GTK+
+    recognizes, please refer to the <link linkend="gtk-running">Running GTK+
+    Applications</link> section in this reference.</para></note>
+
+    <para>The call to gtk_window_new() will create a new #GtkWindow and store
+    it inside the <varname>window</varname> variable. The type of the window
+    is %GTK_WINDOW_TOPLEVEL, which means that the #GtkWindow will be managed
+    by the windowing system: it will have a frame, a title bar and window
+    controls, depending on the platform.</para>
+
+    <para>In order to terminate the application when the #GtkWindow is
+    destroyed, we connect the #GtkWidget::destroy signal to the gtk_main_quit()
+    function. This function will terminate the GTK+ main loop started by calling
+    gtk_main() later. The #GtkWidget::destroy signal is emitted when a widget is
+    destroyed, either by explicitly calling gtk_widget_destroy() or when the
+    widget is unparented. Top-level #GtkWindow<!-- -->s are also destroyed when
+    the Close window control button is clicked.</para>
+
+    <para>#GtkWidget<!-- -->s are hidden by default. By calling gtk_widget_show()
+    on a #GtkWidget we are asking GTK+ to set the visibility attribute so that it
+    can be displayed. All this work is done after the main loop has been
+    started.</para>
+
+    <para>The last line of interest is the call to gtk_main(). This function will
+    start the GTK+ main loop and will block the control flow of the
+    main() until the gtk_main_quit() function is called.</para>
+
+    <para>While the program is running, GTK+ is receiving
+    <firstterm>events</firstterm>. These are typically input events caused by
+    the user interacting with your program, but also things like messages from
+    the window manager or other applications. GTK+ processes these and as a
+    result, <firstterm>signals</firstterm> may be emitted on your widgets.
+    Connecting handlers for these signals is how you normally make your
+    program do something in response to user input.</para>
+
+    <para>The following example is slightly more complex, and tries to
+    showcase some of the capabilities of GTK+.</para>
+
+    <para>In the long tradition of programming languages and libraries,
+    it is called <emphasis>Hello, World</emphasis>.</para>
+
+    <para>
+      <inlinegraphic fileref="hello-world.png" format="PNG"></inlinegraphic>
+    </para>
+
+    <example id="gtk-getting-started-hello-world">
+      <title>Hello World in GTK+</title>
+      <programlisting>
+        <xi:include href="../../../../examples/hello-world.c" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+        </xi:include>
+      </programlisting>
+    </example>
+  </section>
+
+  <section>
+    <title>Packing</title>
+
+    <para>When creating an application, you'll want to put more than one widget
+    inside a window. Our first helloworld example only used one widget so we
+    could simply use a gtk_container_add() call to "pack" the widget into the
+    window. But when you want to put more than one widget into a window, it
+    it becomes important to control how each widget is positioned and sized.
+    This is where packing comes in.</para>
+
+    <para>GTK+ comes with a large variety of <firstterm>layout containers</firstterm>
+    whose purpose it is to control the layout of the child widgets that are
+    added to them. See <xref linkend="LayoutContainers"/> for an overview.</para>
+
+    <para>The following example shows how the GtkGrid container lets you
+    arrange several buttons:</para>
+
+    <para>
+      <inlinegraphic fileref="grid-packing.png" format="PNG"></inlinegraphic>
+    </para>
+
+    <example id="gtk-getting-started-grid-packing">
+      <title>Packing buttons</title>
+      <programlisting>
+        <xi:include href="../../../../examples/grid-packing.c" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+        </xi:include>
+      </programlisting>
+    </example>
+  </section>
+
+  <section>
+    <title>Drawing</title>
+
+    <para>Many widgets, like buttons, do all their drawing themselves. You
+    just tell them the label you want to see, and they figure out what font
+    to use, draw the button outline and focus rectangle, etc. Sometimes, it
+    is necessary to do some custom drawing. In that case, a #GtkDrawingArea
+    might be the right widget to use. It offers a canvas on which you can
+    draw by connecting to the #GtkWidget::draw signal.
+    </para>
+
+    <para>The contents of a widget often need to be partially or fully redrawn,
+    e.g. when another window is moved and uncovers part of the widget, or
+    when tie window containing it is resized. It is also possible to explicitly
+    cause part or all of the widget to be redrawn, by calling
+    gtk_widget_queue_draw() or its variants. GTK+ takes care of most of the
+    details by providing a ready-to-use cairo context to the ::draw signal
+    handler.</para>
+
+    <para>The following example shows a ::draw signal handler. It is a bit
+    more complicated than the previous examples, since it also demonstrates
+    input event handling by means of ::button-press and ::motion-notify
+    handlers.</para>
+
+    <para>
+      <inlinegraphic fileref="drawing.png" format="PNG"></inlinegraphic>
+    </para>
+
+    <example id="gtk-getting-started-drawing">
+      <title>Drawing in response to input</title>
+      <programlisting>
+        <xi:include href="../../../../examples/drawing.c" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+        </xi:include>
+      </programlisting>
+    </example>
+  </section>
 </chapter>

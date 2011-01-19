@@ -29,9 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "gdkconfig.h"
-
-#include "gdk/gdkkeysyms.h"
+#include "gdk/gdk.h"
 
 #include "gtkdnd.h"
 #include "gtkiconfactory.h"
@@ -45,6 +43,7 @@
 #include "gtkintl.h"
 #include "gtkquartz.h"
 #include "gdk/quartz/gdkquartz.h"
+#include "gtkselectionprivate.h"
 
 typedef struct _GtkDragSourceSite GtkDragSourceSite;
 typedef struct _GtkDragSourceInfo GtkDragSourceInfo;
@@ -231,7 +230,7 @@ gtk_drag_get_data (GtkWidget      *widget,
     {
       gtk_drag_finish (context, 
 		       (selection_data->length >= 0),
-		       (context->action == GDK_ACTION_MOVE),
+		       (gdk_drag_context_get_selected_action (context) == GDK_ACTION_MOVE),
 		       time);
     }      
 }
@@ -348,11 +347,14 @@ gtk_drag_highlight_draw (GtkWidget *widget,
 {
   int width = gtk_widget_get_allocated_width (widget);
   int height = gtk_widget_get_allocated_height (widget);
+  GtkStyleContext *context;
 
-  gtk_paint_shadow (gtk_widget_get_style (widget), cr,
-                    GTK_STATE_NORMAL, GTK_SHADOW_OUT,
-                    widget, "dnd",
-                    0, 0, width, height);
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
+
+  gtk_render_frame (context, cr, 0, 0, width, height);
+
+  gtk_style_context_restore (context);
 
   cairo_set_source_rgb (cr, 0.0, 0.0, 0.0); /* black */
   cairo_set_line_width (cr, 1.0);
@@ -809,8 +811,8 @@ gtk_drag_dest_motion (GtkWidget	     *widget,
 
   if (site->track_motion || site->flags & GTK_DEST_DEFAULT_MOTION)
     {
-      if (context->suggested_action & site->actions)
-	action = context->suggested_action;
+      if (gdk_drag_context_get_suggested_action (context) & site->actions)
+	action = gdk_drag_context_get_suggested_action (context);
       
       if (action && gtk_drag_dest_find_target (widget, context, NULL))
 	{
@@ -1003,7 +1005,6 @@ gtk_drag_dest_find_target (GtkWidget      *widget,
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GDK_NONE);
   g_return_val_if_fail (GDK_IS_DRAG_CONTEXT (context), GDK_NONE);
-  g_return_val_if_fail (!context->is_source, GDK_NONE);
 
   dragging_info = gdk_quartz_drag_context_get_dragging_info_libgtk_only (context);
   pasteboard = [dragging_info draggingPasteboard];
@@ -1111,8 +1112,7 @@ gtk_drag_begin_internal (GtkWidget         *widget,
   GdkDragContext *context;
   NSWindow *nswindow;
 
-  context = gdk_drag_begin (NULL, NULL);
-  context->is_source = TRUE;
+  context = gdk_drag_begin (gtk_widget_get_window (widget), NULL);
 
   info = gtk_drag_get_source_info (context, TRUE);
   
@@ -1547,7 +1547,6 @@ gtk_drag_set_icon_widget (GdkDragContext    *context,
 			  gint               hot_y)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (context->is_source);
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   g_warning ("gtk_drag_set_icon_widget is not supported on Mac OS X");
@@ -1566,8 +1565,8 @@ set_icon_stock_pixbuf (GdkDragContext    *context,
 
   if (stock_id)
     {
-      pixbuf = gtk_widget_render_icon (info->widget, stock_id,
-				       GTK_ICON_SIZE_DND, NULL);
+      pixbuf = gtk_widget_render_icon_pixbuf (info->widget, stock_id,
+				              GTK_ICON_SIZE_DND);
 
       if (!pixbuf)
 	{
@@ -1602,7 +1601,6 @@ gtk_drag_set_icon_pixbuf  (GdkDragContext *context,
 			   gint            hot_y)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (context->is_source);
   g_return_if_fail (GDK_IS_PIXBUF (pixbuf));
 
   set_icon_stock_pixbuf (context, NULL, pixbuf, hot_x, hot_y);
@@ -1626,7 +1624,6 @@ gtk_drag_set_icon_stock  (GdkDragContext *context,
 {
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (context->is_source);
   g_return_if_fail (stock_id != NULL);
 
   set_icon_stock_pixbuf (context, stock_id, NULL, hot_x, hot_y);
@@ -1694,7 +1691,6 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   double x_offset, y_offset;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (context->is_source);
   g_return_if_fail (surface != NULL);
 
   _gtk_cairo_surface_extents (surface, &extents);
@@ -1736,10 +1732,9 @@ gtk_drag_set_icon_name (GdkDragContext *context,
   gint width, height, icon_size;
 
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (context->is_source);
   g_return_if_fail (icon_name != NULL);
 
-  screen = gdk_window_get_screen (context->source_window);
+  screen = gdk_window_get_screen (gdk_drag_context_get_source_window (context));
   g_return_if_fail (screen != NULL);
 
   settings = gtk_settings_get_for_screen (screen);
@@ -1772,7 +1767,6 @@ void
 gtk_drag_set_icon_default (GdkDragContext    *context)
 {
   g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
-  g_return_if_fail (context->is_source);
 
   gtk_drag_set_icon_stock (context, GTK_STOCK_DND, -2, -2);
 }

@@ -26,109 +26,62 @@
 #include "gdkproperty.h"
 
 gboolean
-gdk_selection_owner_set_for_display (GdkDisplay *display,
-				     GdkWindow  *owner,
-				     GdkAtom     selection,
-				     guint32     time,
-				     gint        send_event)
+_gdk_quartz_display_set_selection_owner (GdkDisplay *display,
+                                         GdkWindow  *owner,
+                                         GdkAtom     selection,
+                                         guint32     time,
+                                         gint        send_event)
 {
   /* FIXME: Implement */
   return TRUE;
 }
 
 GdkWindow*
-gdk_selection_owner_get_for_display (GdkDisplay *display,
-				     GdkAtom     selection)
+_gdk_quartz_display_get_selection_owner (GdkDisplay *display,
+                                         GdkAtom     selection)
 {
   /* FIXME: Implement */
   return NULL;
 }
 
 void
-gdk_selection_convert (GdkWindow *requestor,
-		       GdkAtom    selection,
-		       GdkAtom    target,
-		       guint32    time)
+_gdk_quartz_display_convert_selection (GdkDisplay *display,
+                                       GdkWindow  *requestor,
+                                       GdkAtom     selection,
+                                       GdkAtom     target,
+                                       guint32     time)
 {
   /* FIXME: Implement */
 }
 
 gint
-gdk_selection_property_get (GdkWindow  *requestor,
-			    guchar    **data,
-			    GdkAtom    *ret_type,
-			    gint       *ret_format)
+_gdk_quartz_display_get_selection_property (GdkDisplay *display,
+                                            GdkWindow  *requestor,
+                                            guchar    **data,
+                                            GdkAtom    *ret_type,
+                                            gint       *ret_format)
 {
   /* FIXME: Implement */
   return 0;
 }
 
 void
-gdk_selection_send_notify_for_display (GdkDisplay *display,
-				       guint32     requestor,
-				       GdkAtom     selection,
-				       GdkAtom     target,
-				       GdkAtom     property,
-				       guint32     time)
-{
-  /* FIXME: Implement */
-}
-
-gint
-gdk_text_property_to_text_list_for_display (GdkDisplay   *display,
-					    GdkAtom       encoding,
-					    gint          format, 
-					    const guchar *text,
-					    gint          length,
-					    gchar      ***list)
-{
-  /* FIXME: Implement */
-  return 0;
-}
-
-gint
-gdk_string_to_compound_text_for_display (GdkDisplay  *display,
-					 const gchar *str,
-					 GdkAtom     *encoding,
-					 gint        *format,
-					 guchar     **ctext,
-					 gint        *length)
-{
-  /* FIXME: Implement */
-  return 0;
-}
-
-void gdk_free_compound_text (guchar *ctext)
+_gdk_quartz_display_send_selection_notify (GdkDisplay      *display,
+                                           GdkNativeWindow  requestor,
+                                           GdkAtom          selection,
+                                           GdkAtom          target,
+                                           GdkAtom          property,
+                                           guint32          time)
 {
   /* FIXME: Implement */
 }
 
 gchar *
-gdk_utf8_to_string_target (const gchar *str)
+_gdk_quartz_display_utf8_to_string_target (GdkDisplay  *display,
+                                           const gchar *str)
 {
   /* FIXME: Implement */
   return NULL;
-}
-
-gboolean
-gdk_utf8_to_compound_text_for_display (GdkDisplay  *display,
-				       const gchar *str,
-				       GdkAtom     *encoding,
-				       gint        *format,
-				       guchar     **ctext,
-				       gint        *length)
-{
-  /* FIXME: Implement */
-  return 0;
-}
-
-void
-gdk_free_text_list (gchar **list)
-{
-  g_return_if_fail (list != NULL);
-
-  g_free (*list);
-  g_free (list);
 }
 
 static gint
@@ -200,13 +153,13 @@ make_list (const gchar  *text,
   return n_strings;
 }
 
-gint 
-gdk_text_property_to_utf8_list_for_display (GdkDisplay    *display,
-					    GdkAtom        encoding,
-					    gint           format,
-					    const guchar  *text,
-					    gint           length,
-					    gchar       ***list)
+gint
+_gdk_quartz_display_text_property_to_utf8_list (GdkDisplay    *display,
+                                                GdkAtom        encoding,
+                                                gint           format,
+                                                const guchar  *text,
+                                                gint           length,
+                                                gchar       ***list)
 {
   g_return_val_if_fail (text != NULL, 0);
   g_return_val_if_fail (length >= 0, 0);

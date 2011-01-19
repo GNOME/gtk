@@ -913,7 +913,7 @@ gtk_builder_add_from_file (GtkBuilder   *builder,
  * gtk_builder_add_objects_from_file:
  * @builder: a #GtkBuilder
  * @filename: the name of the file to parse
- * @object_ids: nul-terminated array of objects to build
+ * @object_ids: (array zero-terminated=1) (element-type utf8): nul-terminated array of objects to build
  * @error: (allow-none): return location for an error, or %NULL
  *
  * Parses a file containing a <link linkend="BUILDER-UI">GtkBuilder 

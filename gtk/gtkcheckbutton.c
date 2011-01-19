@@ -96,6 +96,7 @@ gtk_check_button_init (GtkCheckButton *check_button)
   gtk_widget_set_has_window (GTK_WIDGET (check_button), FALSE);
   gtk_widget_set_receives_default (GTK_WIDGET (check_button), FALSE);
   gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (check_button), TRUE);
+  gtk_button_set_alignment (GTK_BUTTON (check_button), 0.0, 0.5);
 }
 
 GtkWidget*
@@ -331,19 +332,13 @@ gtk_check_button_size_allocate (GtkWidget     *widget,
       child = gtk_bin_get_child (GTK_BIN (button));
       if (child && gtk_widget_get_visible (child))
 	{
-	  GtkRequisition child_requisition;
           guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
-          gtk_widget_get_preferred_size (child, &child_requisition, NULL);
-
-	  child_allocation.width = MIN (child_requisition.width,
-					allocation->width -
-					((border_width + focus_width + focus_pad) * 2
-					 + indicator_size + indicator_spacing * 3));
+	  child_allocation.width = allocation->width -
+	    ((border_width + focus_width + focus_pad) * 2 + indicator_size + indicator_spacing * 3);
 	  child_allocation.width = MAX (child_allocation.width, 1);
 
-	  child_allocation.height = MIN (child_requisition.height,
-					 allocation->height - (border_width + focus_width + focus_pad) * 2);
+	  child_allocation.height = allocation->height - (border_width + focus_width + focus_pad) * 2;
 	  child_allocation.height = MAX (child_allocation.height, 1);
 	  
 	  child_allocation.x = (border_width + indicator_size + indicator_spacing * 3 +

@@ -150,6 +150,84 @@ test_select_collapsed_row (void)
   gtk_tree_path_free (path);
 }
 
+static gboolean
+test_row_separator_height_func (GtkTreeModel *model,
+                                GtkTreeIter  *iter,
+                                gpointer      data)
+{
+  gboolean ret = FALSE;
+  GtkTreePath *path;
+
+  path = gtk_tree_model_get_path (model, iter);
+  if (gtk_tree_path_get_indices (path)[0] == 2)
+    ret = TRUE;
+  gtk_tree_path_free (path);
+
+  return ret;
+}
+
+static void
+test_row_separator_height (void)
+{
+  int focus_pad, separator_height, height;
+  gboolean wide_separators;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+  GtkListStore *store;
+  GtkWidget *window;
+  GtkWidget *tree_view;
+  GdkRectangle rect, cell_rect;
+
+  store = gtk_list_store_new (1, G_TYPE_STRING);
+  gtk_list_store_insert_with_values (store, &iter, 0, 0, "Row content", -1);
+  gtk_list_store_insert_with_values (store, &iter, 1, 0, "Row content", -1);
+  gtk_list_store_insert_with_values (store, &iter, 2, 0, "Row content", -1);
+  gtk_list_store_insert_with_values (store, &iter, 3, 0, "Row content", -1);
+  gtk_list_store_insert_with_values (store, &iter, 4, 0, "Row content", -1);
+
+  window = gtk_offscreen_window_new ();
+
+  tree_view = gtk_tree_view_new_with_model (GTK_TREE_MODEL (store));
+  gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (tree_view),
+                                        test_row_separator_height_func,
+                                        NULL,
+                                        NULL);
+
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (tree_view),
+                                               0,
+                                               "Test",
+                                               gtk_cell_renderer_text_new (),
+                                               "text", 0,
+                                               NULL);
+
+  gtk_container_add (GTK_CONTAINER (window), tree_view);
+  gtk_widget_show_all (window);
+
+
+  path = gtk_tree_path_new_from_indices (2, -1);
+  gtk_tree_view_get_background_area (GTK_TREE_VIEW (tree_view),
+                                     path, NULL, &rect);
+  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (tree_view),
+                               path, NULL, &cell_rect);
+  gtk_tree_path_free (path);
+
+  gtk_widget_style_get (tree_view,
+                        "focus-padding", &focus_pad,
+                        "wide-separators", &wide_separators,
+                        "separator-height", &separator_height,
+                        NULL);
+
+  if (wide_separators)
+    height = separator_height + 2 * focus_pad;
+  else
+    height = 2 + 2 * focus_pad;
+
+  g_assert_cmpint (rect.height, ==, height);
+  g_assert_cmpint (cell_rect.height, ==, height);
+
+  gtk_widget_destroy (tree_view);
+}
+
 int
 main (int    argc,
       char **argv)
@@ -160,6 +238,8 @@ main (int    argc,
   g_test_add_func ("/TreeView/cursor/bug-539377", test_bug_539377);
   g_test_add_func ("/TreeView/cursor/select-collapsed_row",
                    test_select_collapsed_row);
+  g_test_add_func ("/TreeView/sizing/row-separator-height",
+                   test_row_separator_height);
 
   return g_test_run ();
 }

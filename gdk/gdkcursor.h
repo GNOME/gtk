@@ -36,7 +36,10 @@
 
 G_BEGIN_DECLS
 
-#define GDK_TYPE_CURSOR (gdk_cursor_get_type ())
+#define GDK_TYPE_CURSOR              (gdk_cursor_get_type ())
+#define GDK_CURSOR(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_CURSOR, GdkCursor))
+#define GDK_IS_CURSOR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_CURSOR))
+
 
 /**
  * GdkCursorType:
@@ -208,18 +211,6 @@ typedef enum
   GDK_CURSOR_IS_PIXMAP 	  = -1
 } GdkCursorType;
 
-/**
- * GdkCursor:
- *
- * A #GdkCursor structure represents a cursor.
- */
-struct _GdkCursor
-{
-  /*< private >*/
-  GdkCursorType GSEAL (type);
-  guint GSEAL (ref_count);
-};
-
 /* Cursors
  */
 
@@ -234,11 +225,13 @@ GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
 					  GdkPixbuf       *pixbuf,
 					  gint             x,
 					  gint             y);
-GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
-GdkCursor*  gdk_cursor_ref               (GdkCursor       *cursor);
-void        gdk_cursor_unref             (GdkCursor       *cursor);
 GdkCursor*  gdk_cursor_new_from_name	 (GdkDisplay      *display,
 					  const gchar     *name);
+GdkDisplay* gdk_cursor_get_display	 (GdkCursor	  *cursor);
+#ifndef GDK_DISABLE_DEPRECATED
+GdkCursor*  gdk_cursor_ref               (GdkCursor       *cursor);
+void        gdk_cursor_unref             (GdkCursor       *cursor);
+#endif
 GdkPixbuf*  gdk_cursor_get_image         (GdkCursor       *cursor);
 GdkCursorType gdk_cursor_get_cursor_type (GdkCursor       *cursor);
 

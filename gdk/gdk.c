@@ -8,7 +8,7 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
@@ -48,6 +48,48 @@
  * utility functions.
  */
 
+/**
+ * GDK_WINDOWING_X11:
+ *
+ * The #GDK_WINDOWING_X11 macro is defined if the X11 backend
+ * is supported.
+ *
+ * Use this macro to guard code that is specific to the X11-backend.
+ * Since GDK may be configured with multiple backends, an additional
+ * runtime check for the used backend is recommended:
+ *
+ * |[
+ * #ifdef GDK_WINDOWING_X11
+ *   if (GDK_IS_X11_DISPLAY (display))
+ *     {
+ *       /&ast; make X11-specific calls here &ast;/
+ *     }
+ *   else
+ * #endif
+ * #ifdef GDK_WINDOWING_QUARTZ
+ *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ *     {
+ *       /&ast; make Quartz-specific calls here &ast/
+ *     }
+ *   else
+ * #endif
+ *   g_error ("Unsupported GDK backend");
+ * ]|
+ */
+
+/**
+ * GDK_WINDOWING_WIN32:
+ *
+ * The #GDK_WINDOWING_WIN32 macro is defined if the Win32 backend
+ * is supported.
+ */
+
+/**
+ * GDK_WINDOWING_QUARTZ:
+ *
+ * The #GDK_WINDOWING_QUARTZ macro is defined if the Quartz backend
+ * is supported.
+ */
 
 typedef struct _GdkPredicate  GdkPredicate;
 
@@ -69,9 +111,9 @@ struct _GdkThreadsDispatch
 
 /* Private variable declarations
  */
-static int gdk_initialized = 0;			    /* 1 if the library is initialized,
-						     * 0 otherwise.
-						     */
+static int gdk_initialized = 0;                     /* 1 if the library is initialized,
+                                                     * 0 otherwise.
+                                                     */
 
 static gchar  *gdk_progclass = NULL;
 
@@ -82,37 +124,32 @@ static GCallback gdk_threads_unlock = NULL;
 
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
-  {"events",	    GDK_DEBUG_EVENTS},
-  {"misc",	    GDK_DEBUG_MISC},
-  {"dnd",	    GDK_DEBUG_DND},
-  {"xim",	    GDK_DEBUG_XIM},
+  {"events",        GDK_DEBUG_EVENTS},
+  {"misc",          GDK_DEBUG_MISC},
+  {"dnd",           GDK_DEBUG_DND},
+  {"xim",           GDK_DEBUG_XIM},
   {"nograbs",       GDK_DEBUG_NOGRABS},
-  {"colormap",	    GDK_DEBUG_COLORMAP},
-  {"input",	    GDK_DEBUG_INPUT},
-  {"cursor",	    GDK_DEBUG_CURSOR},
-  {"multihead",	    GDK_DEBUG_MULTIHEAD},
-  {"xinerama",	    GDK_DEBUG_XINERAMA},
-  {"draw",	    GDK_DEBUG_DRAW},
-  {"eventloop",	    GDK_DEBUG_EVENTLOOP}
+  {"colormap",      GDK_DEBUG_COLORMAP},
+  {"input",         GDK_DEBUG_INPUT},
+  {"cursor",        GDK_DEBUG_CURSOR},
+  {"multihead",     GDK_DEBUG_MULTIHEAD},
+  {"xinerama",      GDK_DEBUG_XINERAMA},
+  {"draw",          GDK_DEBUG_DRAW},
+  {"eventloop",     GDK_DEBUG_EVENTLOOP}
 };
 
-static const int gdk_ndebug_keys = G_N_ELEMENTS (gdk_debug_keys);
-
-#endif /* G_ENABLE_DEBUG */
-
-#ifdef G_ENABLE_DEBUG
 static gboolean
 gdk_arg_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
   guint debug_value = g_parse_debug_string (value,
-					    (GDebugKey *) gdk_debug_keys,
-					    gdk_ndebug_keys);
+                                            (GDebugKey *) gdk_debug_keys,
+                                            G_N_ELEMENTS (gdk_debug_keys));
 
   if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
     {
-      g_set_error (error, 
-		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
-		   _("Error parsing option --gdk-debug"));
+      g_set_error (error,
+                   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+                   _("Error parsing option --gdk-debug"));
       return FALSE;
     }
 
@@ -125,14 +162,14 @@ static gboolean
 gdk_arg_no_debug_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
   guint debug_value = g_parse_debug_string (value,
-					    (GDebugKey *) gdk_debug_keys,
-					    gdk_ndebug_keys);
+                                            (GDebugKey *) gdk_debug_keys,
+                                            G_N_ELEMENTS (gdk_debug_keys));
 
   if (debug_value == 0 && value != NULL && strcmp (value, "") != 0)
     {
-      g_set_error (error, 
-		   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
-		   _("Error parsing option --gdk-no-debug"));
+      g_set_error (error,
+                   G_OPTION_ERROR, G_OPTION_ERROR_FAILED,
+                   _("Error parsing option --gdk-no-debug"));
       return FALSE;
     }
 
@@ -168,9 +205,6 @@ static const GOptionEntry gdk_args[] = {
   { "display",      0, G_OPTION_FLAG_IN_MAIN, G_OPTION_ARG_STRING,   &_gdk_display_name,
     /* Description of --display=DISPLAY in --help output */    N_("X display to use"),
     /* Placeholder in --display=DISPLAY in --help output */    N_("DISPLAY") },
-  { "screen",       0, 0, G_OPTION_ARG_INT,      &_gdk_screen_number,
-    /* Description of --screen=SCREEN in --help output */      N_("X screen to use"),
-    /* Placeholder in --screen=SCREEN in --help output */      N_("SCREEN") },
 #ifdef G_ENABLE_DEBUG
   { "gdk-debug",    0, 0, G_OPTION_ARG_CALLBACK, gdk_arg_debug_cb,  
     /* Description of --gdk-debug=FLAGS in --help output */    N_("GDK debugging flags to set"),
@@ -185,15 +219,14 @@ static const GOptionEntry gdk_args[] = {
 /**
  * gdk_add_option_entries_libgtk_only:
  * @group: An option group.
- * 
+ *
  * Appends gdk option entries to the passed in option group. This is
  * not public API and must not be used by applications.
- **/
+ */
 void
 gdk_add_option_entries_libgtk_only (GOptionGroup *group)
 {
   g_option_group_add_entries (group, gdk_args);
-  g_option_group_add_entries (group, _gdk_windowing_args);
 }
 
 void
@@ -213,24 +246,22 @@ gdk_pre_parse_libgtk_only (void)
     gchar *debug_string = getenv("GDK_DEBUG");
     if (debug_string != NULL)
       _gdk_debug_flags = g_parse_debug_string (debug_string,
-					      (GDebugKey *) gdk_debug_keys,
-					      gdk_ndebug_keys);
+                                              (GDebugKey *) gdk_debug_keys,
+                                              G_N_ELEMENTS (gdk_debug_keys));
   }
-#endif	/* G_ENABLE_DEBUG */
+#endif  /* G_ENABLE_DEBUG */
 
   if (getenv ("GDK_NATIVE_WINDOWS"))
     {
       _gdk_native_windows = TRUE;
-      /* Ensure that this is not propagated
-	 to spawned applications */
+      /* Ensure that this is not propagated to spawned applications */
       g_unsetenv ("GDK_NATIVE_WINDOWS");
     }
 
   g_type_init ();
 
-  /* Do any setup particular to the windowing system
-   */
-  _gdk_windowing_init ();  
+  /* Do any setup particular to the windowing system */
+  gdk_display_manager_get ();
 }
 
   
@@ -252,7 +283,7 @@ gdk_pre_parse_libgtk_only (void)
  **/
 void
 gdk_parse_args (int    *argc,
-		char ***argv)
+                char ***argv)
 {
   GOptionContext *option_context;
   GOptionGroup *option_group;
@@ -262,15 +293,14 @@ gdk_parse_args (int    *argc,
     return;
 
   gdk_pre_parse_libgtk_only ();
-  
+
   option_context = g_option_context_new (NULL);
   g_option_context_set_ignore_unknown_options (option_context, TRUE);
   g_option_context_set_help_enabled (option_context, FALSE);
   option_group = g_option_group_new (NULL, NULL, NULL, NULL, NULL);
   g_option_context_set_main_group (option_context, option_group);
-  
+
   g_option_group_add_entries (option_group, gdk_args);
-  g_option_group_add_entries (option_group, _gdk_windowing_args);
 
   if (!g_option_context_parse (option_context, argc, argv, &error))
     {
@@ -282,7 +312,7 @@ gdk_parse_args (int    *argc,
   GDK_NOTE (MISC, g_message ("progname: \"%s\"", g_get_prgname ()));
 }
 
-/** 
+/**
  * gdk_get_display_arg_name:
  *
  * Gets the display name specified in the command line arguments passed
@@ -297,25 +327,20 @@ G_CONST_RETURN gchar *
 gdk_get_display_arg_name (void)
 {
   if (!_gdk_display_arg_name)
-    {
-      if (_gdk_screen_number >= 0)
-	_gdk_display_arg_name = _gdk_windowing_substitute_screen_number (_gdk_display_name, _gdk_screen_number);
-      else
-	_gdk_display_arg_name = g_strdup (_gdk_display_name);
-   }
+    _gdk_display_arg_name = g_strdup (_gdk_display_name);
 
    return _gdk_display_arg_name;
 }
 
 /**
  * gdk_display_open_default_libgtk_only:
- * 
+ *
  * Opens the default display specified by command line arguments or
  * environment variables, sets it as the default display, and returns
  * it.  gdk_parse_args must have been called first. If the default
  * display has previously been set, simply returns that. An internal
  * function that should not be used by applications.
- * 
+ *
  * Return value: (transfer none): the default display, if it could be
  *   opened, otherwise %NULL.
  **/
@@ -325,25 +350,13 @@ gdk_display_open_default_libgtk_only (void)
   GdkDisplay *display;
 
   g_return_val_if_fail (gdk_initialized, NULL);
-  
+
   display = gdk_display_get_default ();
   if (display)
     return display;
 
   display = gdk_display_open (gdk_get_display_arg_name ());
 
-  if (!display && _gdk_screen_number >= 0)
-    {
-      g_free (_gdk_display_arg_name);
-      _gdk_display_arg_name = g_strdup (_gdk_display_name);
-      
-      display = gdk_display_open (_gdk_display_name);
-    }
-  
-  if (display)
-    gdk_display_manager_set_default_display (gdk_display_manager_get (),
-					     display);
-  
   return display;
 }
 
@@ -352,20 +365,20 @@ gdk_display_open_default_libgtk_only (void)
  * @argc: (inout): the number of command line arguments.
  * @argv: (array length=argc) (inout): the array of command line arguments.
  *
- * Initializes the GDK library and connects to the X server, returning %TRUE on
- * success.
+ * Initializes the GDK library and connects to the windowing system,
+ * returning %TRUE on success.
  *
- * Any arguments used by GDK are removed from the array and @argc and @argv are
- * updated accordingly.
+ * Any arguments used by GDK are removed from the array and @argc and @argv
+ * are updated accordingly.
  *
- * GTK+ initializes GDK in gtk_init() and so this function is not usually needed
- * by GTK+ applications.
+ * GTK+ initializes GDK in gtk_init() and so this function is not usually
+ * needed by GTK+ applications.
  *
  * Returns: %TRUE if initialization succeeded.
  */
 gboolean
 gdk_init_check (int    *argc,
-		char ***argv)
+                char ***argv)
 {
   gdk_parse_args (argc, argv);
 
@@ -378,15 +391,15 @@ gdk_init_check (int    *argc,
  * @argc: (inout): the number of command line arguments.
  * @argv: (array length=argc) (inout): the array of command line arguments.
  *
- * Initializes the GDK library and connects to the X server.
+ * Initializes the GDK library and connects to the windowing system.
  * If initialization fails, a warning message is output and the application
  * terminates with a call to <literal>exit(1)</literal>.
  *
- * Any arguments used by GDK are removed from the array and @argc and @argv are
- * updated accordingly.
+ * Any arguments used by GDK are removed from the array and @argc and @argv
+ * are updated accordingly.
  *
- * GTK+ initializes GDK in gtk_init() and so this function is not usually needed
- * by GTK+ applications.
+ * GTK+ initializes GDK in gtk_init() and so this function is not usually
+ * needed by GTK+ applications.
  */
 void
 gdk_init (int *argc, char ***argv)
@@ -549,28 +562,28 @@ gdk_init (int *argc, char ***argv)
  *       say_something = (yes_or_no != data->what);
  *
  *       if(say_something)
- * 	{
- * 	  /<!---->* set the variable *<!---->/
- * 	  yes_or_no = data->what;
- * 	}
+ *      {
+ *        /<!---->* set the variable *<!---->/
+ *        yes_or_no = data->what;
+ *      }
  *
  *       /<!---->* Unlock the yes_or_no variable *<!---->/
  *       G_UNLOCK (yes_or_no);
  *
  *       if (say_something)
- * 	{
- * 	  /<!---->* get GTK thread lock *<!---->/
- * 	  gdk_threads_enter (<!-- -->);
+ *      {
+ *        /<!---->* get GTK thread lock *<!---->/
+ *        gdk_threads_enter (<!-- -->);
  *
- *	  /<!---->* set label text *<!---->/
- * 	  if(data->what == YES_IT_IS)
- * 	    gtk_label_set_text (GTK_LABEL (data->label), "O yes, it is!");
- * 	  else
- * 	    gtk_label_set_text (GTK_LABEL (data->label), "O no, it isn't!");
+ *        /<!---->* set label text *<!---->/
+ *        if(data->what == YES_IT_IS)
+ *          gtk_label_set_text (GTK_LABEL (data->label), "O yes, it is!");
+ *        else
+ *          gtk_label_set_text (GTK_LABEL (data->label), "O no, it isn't!");
  *
- * 	  /<!---->* release GTK thread lock *<!---->/
- * 	  gdk_threads_leave (<!-- -->);
- * 	}
+ *        /<!---->* release GTK thread lock *<!---->/
+ *        gdk_threads_leave (<!-- -->);
+ *      }
  *     }
  *
  *   return NULL;
@@ -724,10 +737,10 @@ gdk_threads_init (void)
  **/
 void
 gdk_threads_set_lock_functions (GCallback enter_fn,
-				GCallback leave_fn)
+                                GCallback leave_fn)
 {
   g_return_if_fail (gdk_threads_lock == NULL &&
-		    gdk_threads_unlock == NULL);
+                    gdk_threads_unlock == NULL);
 
   gdk_threads_lock = enter_fn;
   gdk_threads_unlock = leave_fn;
@@ -764,7 +777,7 @@ gdk_threads_dispatch_free (gpointer data)
 /**
  * gdk_threads_add_idle_full:
  * @priority: the priority of the idle source. Typically this will be in the
- *            range btweeen #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE
+ *            range between #G_PRIORITY_DEFAULT_IDLE and #G_PRIORITY_HIGH_IDLE
  * @function: function to call
  * @data:     data to pass to @function
  * @notify: (allow-none):   function to call when the idle is removed, or %NULL
@@ -817,9 +830,9 @@ gdk_threads_dispatch_free (gpointer data)
  */
 guint
 gdk_threads_add_idle_full (gint           priority,
-		           GSourceFunc    function,
-		           gpointer       data,
-		           GDestroyNotify notify)
+                           GSourceFunc    function,
+                           gpointer       data,
+                           GDestroyNotify notify)
 {
   GdkThreadsDispatch *dispatch;
 
@@ -852,7 +865,7 @@ gdk_threads_add_idle_full (gint           priority,
  */
 guint
 gdk_threads_add_idle (GSourceFunc    function,
-		      gpointer       data)
+                      gpointer       data)
 {
   return gdk_threads_add_idle_full (G_PRIORITY_DEFAULT_IDLE,
                                     function, data, NULL);
@@ -973,9 +986,9 @@ gdk_threads_add_timeout (guint       interval,
  * @interval: the time between calls to the function, in seconds
  * @function: function to call
  * @data:     data to pass to @function
- * @notify: (allow-none):   function to call when the timeout is removed, or %NULL
+ * @notify: (allow-none): function to call when the timeout is removed, or %NULL
  *
- * A variant of gdk_threads_add_timout_full() with second-granularity.
+ * A variant of gdk_threads_add_timeout_full() with second-granularity.
  * See g_timeout_add_seconds_full() for a discussion of why it is
  * a good idea to use this function if you don't need finer granularity.
  *
@@ -1063,24 +1076,24 @@ gdk_set_program_class (const char *program_class)
 }
 
 /**
- * gdk_enable_multidevice:
+ * gdk_disable_multidevice:
  *
- * Enables multidevice support in GDK. This call must happen prior
+ * Disables multidevice support in GDK. This call must happen prior
  * to gdk_display_open(), gtk_init(), gtk_init_with_args() or
  * gtk_init_check() in order to take effect.
  *
- * Note that individual #GdkWindow<!-- -->s still need to explicitly
- * enable multidevice awareness through gdk_window_set_support_multidevice().
- *
- * This function must be called before initializing GDK.
+ * Most common GTK+ applications won't ever need to call this. Only
+ * applications that do mixed GDK/Xlib calls could want to disable
+ * multidevice support if such Xlib code deals with input devices in
+ * any way and doesn't observe the presence of XInput 2.
  *
  * Since: 3.0
- **/
+ */
 void
-gdk_enable_multidevice (void)
+gdk_disable_multidevice (void)
 {
   if (gdk_initialized)
     return;
 
-  _gdk_enable_multidevice = TRUE;
+  _gdk_disable_multidevice = TRUE;
 }

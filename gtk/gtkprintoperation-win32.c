@@ -655,7 +655,7 @@ static HWND
 get_parent_hwnd (GtkWidget *widget)
 {
   gtk_widget_realize (widget);
-  return gdk_win32_drawable_get_handle (gtk_widget_get_window (widget));
+  return gdk_win32_window_get_handle (gtk_widget_get_window (widget));
 }
 
 static void

@@ -175,7 +175,7 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
 
   /**
    * GtkRadioButton::group-changed:
-   * @style: the object which received the signal
+   * @button: the object which received the signal
    *
    * Emitted when the group of radio buttons that a radio button belongs
    * to changes. This is emitted when a radio button switches from
@@ -952,7 +952,7 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
                            allocation.width - (2 * border_width),
                            allocation.height - (2 * border_width));
 
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
 
   gtk_render_option (context, cr,
                      x, y, indicator_size, indicator_size);

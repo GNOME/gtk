@@ -151,61 +151,56 @@ intern_atom_internal (const gchar *atom_name, gboolean allocate)
 }
 
 GdkAtom
-gdk_atom_intern (const gchar *atom_name,
-		 gboolean     only_if_exists)
+_gdk_quartz_display_manager_atom_intern (GdkDisplayManager *manager,
+                                         const gchar       *atom_name,
+                                         gboolean           copy_name)
 {
-  return intern_atom_internal (atom_name, TRUE);
+  return intern_atom_internal (atom_name, copy_name);
 }
-
-GdkAtom
-gdk_atom_intern_static_string (const gchar *atom_name)
-{
-  return intern_atom_internal (atom_name, FALSE);
-}
-
 
 gchar *
-gdk_atom_name (GdkAtom atom)
+_gdk_quartz_display_manager_get_atom_name (GdkDisplayManager *manager,
+                                           GdkAtom            atom)
 {
   ensure_atom_tables ();
-    
+
   if (GPOINTER_TO_INT (atom) >= atoms_to_names->len)
     return NULL;
-    
+
   return g_strdup (g_ptr_array_index (atoms_to_names, GPOINTER_TO_INT (atom)));
 }
 
 void
-gdk_property_delete (GdkWindow *window,
-		     GdkAtom    property)
+_gdk_quartz_window_delete_property (GdkWindow *window,
+                                    GdkAtom    property)
 {
   /* FIXME: Implement */
 }
 
 gint
-gdk_property_get (GdkWindow   *window,
-		  GdkAtom      property,
-		  GdkAtom      type,
-		  gulong       offset,
-		  gulong       length,
-		  gint         pdelete,
-		  GdkAtom     *actual_property_type,
-		  gint        *actual_format_type,
-		  gint        *actual_length,
-		  guchar     **data)
+_gdk_quartz_window_get_property (GdkWindow   *window,
+                                 GdkAtom      property,
+                                 GdkAtom      type,
+                                 gulong       offset,
+                                 gulong       length,
+                                 gint         pdelete,
+                                 GdkAtom     *actual_property_type,
+                                 gint        *actual_format_type,
+                                 gint        *actual_length,
+                                 guchar     **data)
 {
   /* FIXME: Implement */
   return 0;
 }
 
 void
-gdk_property_change (GdkWindow   *window,
-		     GdkAtom      property,
-		     GdkAtom      type,
-		     gint         format,
-		     GdkPropMode  mode,
-		     const guchar *data,
-		     gint         nelements)
+_gdk_quartz_window_change_property (GdkWindow   *window,
+                                    GdkAtom      property,
+                                    GdkAtom      type,
+                                    gint         format,
+                                    GdkPropMode  mode,
+                                    const guchar *data,
+                                    gint         nelements)
 {
   /* FIXME: Implement */
 }

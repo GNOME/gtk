@@ -47,47 +47,45 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/install-sh \
 	$(srcdir)/ltmain.sh \
 	$(srcdir)/missing \
-	$(srcdir)/mkinstalldirs \
 	$(srcdir)/omf.make \
 	$(srcdir)/xmldocs.make \
 	$(srcdir)/gtk-doc.make \
 	$(srcdir)/ChangeLog \
 	`find "$(srcdir)" -type f -name Makefile.in -print`
 
-GDKTARGET=@gdktarget@
 
 ## Copy .pc files to target-specific names
-gtk+-$(GDKTARGET)-3.0.pc: gtk+-3.0.pc
-	rm -f gtk+-$(GDKTARGET)-3.0.pc && \
-	cp gtk+-3.0.pc gtk+-$(GDKTARGET)-3.0.pc
+gtk+-x11-3.0.pc gtk+-win32-3.0.pc gtk+-quartz-3.0.pc: gtk+-3.0.pc
+	rm -f $@ && \
+	cp gtk+-3.0.pc $@
 
-gdk-$(GDKTARGET)-3.0.pc: gdk-3.0.pc
-	rm -f gdk-$(GDKTARGET)-3.0.pc && \
-	cp gdk-3.0.pc gdk-$(GDKTARGET)-3.0.pc
+gdk-x11-3.0.pc gdk-win32-3.0.pc gdk-quartz-3.0.pc: gdk-3.0.pc
+	rm -f $@ && \
+	cp gdk-3.0.pc $@
 
-gtk+-$(GDKTARGET)-3.0-uninstalled.pc: gtk+-3.0-uninstalled.pc
-	rm -f gtk+-$(GDKTARGET)-3.0-uninstalled.pc && \
-	cp gtk+-3.0-uninstalled.pc gtk+-$(GDKTARGET)-3.0-uninstalled.pc
-
-gdk-$(GDKTARGET)-3.0-uninstalled.pc: gdk-3.0-uninstalled.pc
-	rm -f gdk-$(GDKTARGET)-3.0-uninstalled.pc && \
-	cp gdk-3.0-uninstalled.pc gdk-$(GDKTARGET)-3.0-uninstalled.pc
+gtk+-*-3.0-uninstalled.pc: gtk+-3.0-uninstalled.pc
+	rm -f $@ && \
+	cp gtk+-3.0-uninstalled.pc $@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = gdk-$(GDKTARGET)-3.0.pc gtk+-$(GDKTARGET)-3.0.pc gail-3.0.pc
+pkgconfig_DATA = gdk-3.0.pc gtk+-3.0.pc gail-3.0.pc
+
+pkgconfig_DATA += ${GDK_BACKENDS:%=gtk+-%-3.0.pc}
+pkgconfig_DATA += ${GDK_BACKENDS:%=gdk-%-3.0.pc}
 
 if OS_UNIX
 pkgconfig_DATA += gtk+-unix-print-3.0.pc
 endif
 
-DISTCLEANFILES =				\
-	gtk+-unix-print-3.0.pc			\
-	gtk+-$(GDKTARGET)-3.0.pc		\
-	gdk-$(GDKTARGET)-3.0.pc			\
-	gail-3.0.pc				\
-	gtk+-$(GDKTARGET)-3.0-uninstalled.pc	\
-	gdk-$(GDKTARGET)-3.0-uninstalled.pc	\
-	gail-3.0-uninstalled.pc			\
+DISTCLEANFILES = \
+	gtk+-unix-print-3.0.pc		\
+	gtk+-3.0.pc			\
+	gtk+-x11-3.0.pc			\
+	gdk-3.0.pc			\
+	gdk-x11-3.0.pc			\
+	gail-3.0.pc			\
+	gtk+-3.0-uninstalled.pc		\
+	gail-3.0-uninstalled.pc		\
 	config.lt
 
 distclean-local:
@@ -96,8 +94,7 @@ distclean-local:
 	fi
 
 ChangeLog:
-	@echo Creating $@
-	@if test -d "$(srcdir)/.git"; then \
+	$(AM_V_GEN) if test -d "$(srcdir)/.git"; then \
 	  (GIT_DIR=$(top_srcdir)/.git ./missing --run git log GTK_2_16_0^^.. --stat) | fmt --split-only > $@.tmp \
 	  && mv -f $@.tmp $@ \
 	  || ($(RM) $@.tmp; \
@@ -109,20 +106,7 @@ ChangeLog:
 	  echo A git checkout and git-log is required to generate this file >> $@); \
 	fi
 
-## copy the default target for this platform to gdk-3.0.pc and gtk+-3.0.pc
-DEFAULT_GDKTARGET=x11
-install-data-hook:
-	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 test -f gdk-$(DEFAULT_GDKTARGET)-3.0.pc && \
-	 test -f gtk+-$(DEFAULT_GDKTARGET)-3.0.pc && \
-	 rm -f gdk-3.0.pc && cp -f gdk-$(DEFAULT_GDKTARGET)-3.0.pc gdk-3.0.pc && \
-	 rm -f gtk+-3.0.pc && cp -f gtk+-$(DEFAULT_GDKTARGET)-3.0.pc gtk+-3.0.pc) || \
-	(cd $(DESTDIR)$(pkgconfigdir) && \
-	 rm -f gdk-3.0.pc && cp -f gdk-$(GDKTARGET)-3.0.pc gdk-3.0.pc && \
-	 rm -f gtk+-3.0.pc && cp -f gtk+-$(GDKTARGET)-3.0.pc gtk+-3.0.pc)
-
 uninstall-local:
-	rm -f $(DESTDIR)$(pkgconfigdir)/gdk-3.0.pc
 	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-3.0.pc
 
 dist-hook:

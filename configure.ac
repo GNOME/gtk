@@ -9,8 +9,8 @@
 # set GTK_BINARY_AGE and GTK_INTERFACE_AGE to 0.
 
 m4_define([gtk_major_version], [2])
-m4_define([gtk_minor_version], [91])
-m4_define([gtk_micro_version], [6])
+m4_define([gtk_minor_version], [99])
+m4_define([gtk_micro_version], [3])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
@@ -19,7 +19,7 @@ m4_define([gtk_version],
 # This is the X.Y used in -lgtk-FOO-X.Y
 m4_define([gtk_api_version], [3.0])
 
-AC_PREREQ([2.64])
+AC_PREREQ([2.62])
 AC_INIT([gtk+], [gtk_version],
         [http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2B],
         [gtk+])
@@ -38,7 +38,7 @@ AC_CONFIG_MACRO_DIR([m4])
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.27.3])
+m4_define([glib_required_version], [2.27.5])
 m4_define([pango_required_version], [1.20])
 m4_define([atk_required_version], [1.29.2])
 m4_define([cairo_required_version], [1.10.0])
@@ -236,42 +236,138 @@ AC_ARG_ENABLE(debug,
               AC_HELP_STRING([--enable-debug=@<:@no/minimum/yes@:>@],
                              [turn on debugging @<:@default=debug_default@:>@]),,
               enable_debug=debug_default)
-AC_ARG_ENABLE(xkb,
-              [AC_HELP_STRING([--enable-xkb],
-                              [support XKB [default=maybe]])],,
-              [enable_xkb="maybe"])
-AC_ARG_ENABLE(xinerama,
-              [AC_HELP_STRING([--enable-xinerama],
-	                      [support xinerama extension if available [default=yes]])],,
-              [enable_xinerama="yes"])
+
 AC_ARG_ENABLE(rebuilds,
               [AC_HELP_STRING([--disable-rebuilds],
                               [disable all source autogeneration rules])],,
               [enable_rebuilds=yes])
 
-AC_ARG_WITH(xinput,
-            [AC_HELP_STRING([--with-xinput=@<:@no/yes@:>@], [support XInput])])
+AC_ARG_ENABLE(gtk2-dependency,
+              AC_HELP_STRING([--enable-gtk2-dependency],
+                             [Do not build gtk-update-icon-cache and other shared tools]),,
+              [enable_gtk2_dependency=no])
 
-if test "$platform_win32" = yes; then
-  gdktarget=win32
-else
-  gdktarget=x11
+AM_CONDITIONAL(BUILD_ICON_CACHE, [test "x$enable_gtk2_dependency" = xno])
+
+AC_ARG_ENABLE(xkb,
+              [AC_HELP_STRING([--enable-xkb],
+                              [support XKB extension [default=maybe]])],,
+              [enable_xkb="maybe"])
+AC_ARG_ENABLE(xinerama,
+              [AC_HELP_STRING([--enable-xinerama],
+	                      [support Xinerama extension if available [default=maybe]])],,
+              [enable_xinerama="maybe"])
+AC_ARG_ENABLE(xinput,
+              [AC_HELP_STRING([--enable-xinput],
+                              [support XInput extension if available [default=yes]])],,
+              [enable_xinput="maybe"])
+AC_ARG_ENABLE(xrandr,
+              [AC_HELP_STRING([--enable-xrandr],
+                              [support XRandR extension if available [default=maybe]])],,
+              [enable_xrandr="maybe"])
+AC_ARG_ENABLE(xfixes,
+              [AC_HELP_STRING([--enable-xfixes],
+                              [support XFixes extension if available [default=maybe]])],,
+              [enable_xfixes="maybe"])
+AC_ARG_ENABLE(xcomposite,
+              [AC_HELP_STRING([--enable-xcomposite],
+                              [support X Composite extension if available [default=maybe]])],,
+              [enable_xcomposite="maybe"])
+AC_ARG_ENABLE(xdamage,
+              [AC_HELP_STRING([--enable-xdamage],
+                              [support X Damage extension if available [default=maybe]])],,
+              [enable_xdamage="maybe"])
+
+AC_ARG_ENABLE(x11-backend,
+              [AC_HELP_STRING([--enable-x11-backend],
+                              [enable the X11 gdk backend])],
+			      [backend_set=yes])
+AC_ARG_ENABLE(win32-backend,
+              [AC_HELP_STRING([--enable-win32-backend],
+                              [enable the Win32 gdk backend])],
+			      [backend_set=yes])
+AC_ARG_ENABLE(quartz-backend,
+              [AC_HELP_STRING([--enable-quartz-backend],
+                              [enable the quartz gdk backend])],
+			      [backend_set=yes])
+AC_ARG_ENABLE(broadway-backend,
+              [AC_HELP_STRING([--enable-broadway-backend],
+                              [enable the broadway (HTML5) gdk backend])],
+			      [backend_set=yes])
+
+if test -z "$backend_set"; then
+  if test "$platform_win32" = yes; then
+    enable_win32_backend=yes
+  else
+    enable_x11_backend=yes
+  fi
 fi
 
-AC_ARG_WITH(gdktarget, [  --with-gdktarget=[[x11/win32/quartz/broadway]] select non-default GDK target],
-	gdktarget=$with_gdktarget)
+cairo_backends=
+backend_immodules=
+GDK_BACKENDS=
+GDK_EXTRA_LIBS=
+GDK_EXTRA_CFLAGS=
+GDK_WINDOWING=
+GIO_PACKAGE=gio-2.0
+PANGO_PACKAGES="pango pangocairo"
 
-AC_SUBST(gdktarget)
-case $gdktarget in
-  x11|win32|quartz|broadway) ;;
-  *) AC_MSG_ERROR([Invalid target for GDK: use x11, broadway, quartz or win32.]);;
-esac
+if test "x$enable_x11_backend" == xyes; then
+  # GDK calls the xlib backend "x11," cairo calls it "xlib." Other
+  # backend names are identical.
+  cairo_backends="$cairo_backends cairo-xlib"
+  GDK_BACKENDS="$GDK_BACKENDS x11"
+  # Pull in gio-unix for GDesktopAppInfo usage, see at least
+  # gdkapplaunchcontext-x11.c
+  GIO_PACKAGE=gio-unix-2.0
+  backend_immodules="$backend_immodules,xim"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_X11"
+fi
 
-gdktargetlib=libgdk-$gdktarget-$GTK_API_VERSION.la
-gtktargetlib=libgtk-$gdktarget-$GTK_API_VERSION.la
+if test "x$enable_win32_backend" == xyes; then
+  cairo_backends="$cairo_backends cairo-win32"
+  GDK_BACKENDS="$GDK_BACKENDS win32"
+  backend_immodules="$backend_immodules,ime"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_NATIVE_WINDOW_POINTER
+#define GDK_WINDOWING_WIN32"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
+  AM_CONDITIONAL(USE_WIN32, true)
+  PANGO_PACKAGES="pangowin32 pangocairo"
+else
+  AM_CONDITIONAL(USE_WIN32, false)
+fi
 
-AC_SUBST(gdktargetlib)
-AC_SUBST(gtktargetlib)
+if test "x$enable_quartz_backend" == xyes; then
+  cairo_backends="$cairo_backends cairo-quartz"
+  GDK_BACKENDS="$GDK_BACKENDS quartz"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_QUARTZ"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
+  AM_CONDITIONAL(USE_QUARTZ, true)
+else
+  AM_CONDITIONAL(USE_QUARTZ, false)
+fi
+
+if test "x$enable_broadway_backend" == xyes; then
+  GDK_BACKENDS="$GDK_BACKENDS broadway"
+  GDK_WINDOWING="$GDK_WINDOWING
+#define GDK_WINDOWING_BROADWAY"
+  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lz"
+  AM_CONDITIONAL(USE_BROADWAY, true)
+else
+  AM_CONDITIONAL(USE_BROADWAY, false)
+fi
+
+# strip leading space
+GDK_BACKENDS=${GDK_BACKENDS/# }
+
+AC_SUBST(GDK_BACKENDS)
+
+if test -z "$GDK_BACKENDS"; then
+  AC_MSG_ERROR([No GDK backends selected.])
+fi
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
@@ -364,21 +460,7 @@ PKG_CHECK_MODULES(BASE_DEPENDENCIES,
    cairo-gobject >= cairo_required_version dnl
    gdk-pixbuf-2.0 >= gdk_pixbuf_required_version])
 
-## In addition to checking that cairo is present, we also need to
-## check that the correct cairo backend is there. E.g. if the GDK
-## target is win32 we need the cairo-win32 backend and so on.
-cairo_backend=cairo-$gdktarget
-
-# GDK calls the xlib backend "x11," cairo calls it "xlib." Other
-# backend names are identical.
-if test "x$cairo_backend" = "xcairo-x11"; then
-   cairo_backend=cairo-xlib
-fi
-if test "x$cairo_backend" = "xcairo-broadway"; then
-   cairo_backend=cairo
-fi
-PKG_CHECK_MODULES(CAIRO_BACKEND,
-  [$cairo_backend >= cairo_required_version])
+PKG_CHECK_MODULES(CAIRO_BACKEND, [$cairo_backends])
 
 if test "$os_win32" != yes; then
     # libtool option to control which symbols are exported
@@ -669,53 +751,6 @@ else
     fi
 fi
 
-# `widechar' tests for gdki18n.h
-AC_MSG_CHECKING(for wchar.h)
-AC_TRY_CPP([#include <wchar.h>], gdk_wchar_h=yes, gdk_wchar_h=no)
-if test $gdk_wchar_h = yes; then
-   AC_DEFINE(HAVE_WCHAR_H, 1, [Have wchar.h include file])
-fi
-AC_MSG_RESULT($gdk_wchar_h)
-
-# Check for wctype.h (for iswalnum)
-AC_MSG_CHECKING(for wctype.h)
-AC_TRY_CPP([#include <wctype.h>], gdk_wctype_h=yes, gdk_wctype_h=no)
-if test $gdk_wctype_h = yes; then
-   AC_DEFINE(HAVE_WCTYPE_H, 1, [Have wctype.h include file])
-fi
-AC_MSG_RESULT($gdk_wctype_h)
-
-# in Solaris 2.5, `iswalnum' is in -lw
-GDK_WLIBS=
-AC_CHECK_FUNC(iswalnum,,[AC_CHECK_LIB(w,iswalnum,GDK_WLIBS=-lw)])
-
-oLIBS="$LIBS"
-LIBS="$LIBS $GDK_WLIBS"
-# The following is necessary for Linux libc-5.4.38
-AC_MSG_CHECKING(if iswalnum() and friends are properly defined)
-AC_TRY_LINK([#include <stdlib.h>],[
-#if (defined(HAVE_WCTYPE_H) || defined(HAVE_WCHAR_H))
-#  ifdef HAVE_WCTYPE_H
-#    include <wctype.h>
-#  else
-#    ifdef HAVE_WCHAR_H
-#      include <wchar.h>
-#    endif
-#  endif
-#else
-#  define iswalnum(c) ((wchar_t)(c) <= 0xFF && isalnum(c))
-#endif
-iswalnum((wchar_t) 0);
-], gdk_working_wctype=yes, gdk_working_wctype=no)
-LIBS="$oLIBS"
-
-if test $gdk_working_wctype = no; then
-   AC_DEFINE(HAVE_BROKEN_WCTYPE, 1, [Is the wctype implementation broken])
-   GDK_WLIBS=
-fi
-AC_MSG_RESULT($gdk_working_wctype)
-AC_SUBST(GDK_WLIBS)
-
 # Check for uxtheme.h (for MS-Windows Engine)
 AC_MSG_CHECKING(for uxtheme.h)
 AC_TRY_CPP([#include <uxtheme.h>], gtk_uxtheme_h=yes, gtk_uxtheme_h=no)
@@ -735,6 +770,7 @@ AC_ARG_ENABLE(modules,
                               [disable dynamic module loading])])
 
 dynworks=false
+build_dynamic_modules=no
 deps=
 if test x$enable_modules = xno; then
     AC_MSG_RESULT(no)
@@ -762,10 +798,12 @@ else
     fi
 
     if $dynworks; then
+        build_dynamic_modules=yes
         AC_DEFINE(USE_GMODULE, 1,
                   [Define to 1 if gmodule works and should be used])
         AC_MSG_RESULT(yes)
     else
+        build_dynamic_modules=no
         AC_MSG_RESULT(no)
     fi
 fi
@@ -782,8 +820,8 @@ dnl AC_HELP_STRING cause problems.
 dnl AC_HELP_STRING([--with-included-immodules=MODULE1 MODULE2 ...],
 dnl                [build the specified input method modules into gtk])
 AC_ARG_WITH(included_immodules,
-[  --with-included-immodules=MODULE1,MODULE2,...
-                          build the specified input methods into gtk])
+            AC_HELP_STRING([--with-included-immodules=MODULE1,MODULE2,...],
+                           [build the specified input methods into gtk]))
 
 if $dynworks; then
    :
@@ -794,14 +832,7 @@ else
    fi
 fi
 
-all_immodules="am-et,cedilla,cyrillic-translit"
-if test "$gdktarget" = "win32"; then
-   all_immodules="${all_immodules},ime"
-fi
-all_immodules="${all_immodules},inuktitut,ipa,multipress,thai,ti-er,ti-et,viqr"
-if test "$gdktarget" = "x11"; then
-   all_immodules="${all_immodules},xim"
-fi
+all_immodules="am-et,cedilla,cyrillic-translit,inuktitut,ipa,multipress,thai,ti-er,ti-et,viqr$backend_immodules"
 
 included_immodules=""
 # If the switch specified without listing any specific ones, include all
@@ -865,12 +896,14 @@ dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
 
-if test $cross_compiling = yes; then
+if test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes; then
   AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
   if test x$GTK_UPDATE_ICON_CACHE = xno; then
     REBUILD_PNGS=#
   fi
 fi
+
+AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$cross_compiling" = xyes || test "x$enable_gtk2_dependency" = xyes])
 
 AC_PATH_PROG(GDK_PIXBUF_CSOURCE, gdk-pixbuf-csource, no)
 
@@ -886,14 +919,12 @@ fi
 # Windowing system checks
 ########################################
 
-GDK_EXTRA_LIBS="$GDK_WLIBS"
-GDK_EXTRA_CFLAGS=
-
 # GTK+ uses some X calls, so needs to link against X directly
 GTK_DEP_PACKAGES_FOR_X=
 GTK_DEP_LIBS_FOR_X=
+X_EXTENSIONS=
 
-if test "x$gdktarget" = "xx11"; then
+if test "x$enable_x11_backend" == xyes; then
   X_PACKAGES=fontconfig
 
   #
@@ -991,10 +1022,13 @@ if test "x$gdktarget" = "xx11"; then
   # Check for XKB support.
 
   if test "x$enable_xkb" = "xyes"; then
-        AC_MSG_WARN(XKB support explicitly enabled)
-        AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension])
+        AC_CHECK_FUNC(XkbQueryExtension,
+                      X_EXTENSIONS="$X_EXTENSIONS XKB"
+                      AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension]),
+                      AC_MSG_ERROR([*** XKB extension not found. Check 'config.log' for more details.]))
   elif test "x$enable_xkb" = "xmaybe"; then
         AC_CHECK_FUNC(XkbQueryExtension,
+                      X_EXTENSIONS="$X_EXTENSIONS XKB"
                       AC_DEFINE(HAVE_XKB, 1, [Define to use XKB extension]))
   else
         AC_MSG_WARN(XKB support explicitly disabled)
@@ -1016,19 +1050,23 @@ if test "x$gdktarget" = "xx11"; then
 
   CFLAGS="$gtk_save_CFLAGS"
 
-  if test "x$enable_xinerama" = "xyes"; then
+  if test "x$enable_xinerama" != "xno"; then
     # Check for Xinerama extension (Solaris impl or Xfree impl)
+    have_xfree_xinerama=false
+    have_solaris_xinerama=false
+
     gtk_save_cppflags="$CPPFLAGS"
     CPPFLAGS="$CPPFLAGS $x_cflags"
 
     # Check for XFree
-    AC_MSG_CHECKING(for Xinerama support on XFree86)
+    AC_MSG_CHECKING(for Xinerama packages)
 
-    have_xfree_xinerama=false
     if $PKG_CONFIG --exists xinerama ; then
+       AC_MSG_RESULT(yes)
        have_xfree_xinerama=true
        X_PACKAGES="$X_PACKAGES xinerama"
     else
+       AC_MSG_RESULT(no)
        AC_CHECK_LIB(Xinerama, XineramaQueryExtension,
 	   [AC_CHECK_HEADER(X11/extensions/Xinerama.h,
 	   [GTK_ADD_LIB(x_extra_libs,Xinerama)
@@ -1037,14 +1075,12 @@ if test "x$gdktarget" = "xx11"; then
     fi
 
     if $have_xfree_xinerama ; then
+      X_EXTENSIONS="$X_EXTENSIONS Xinerama"
       AC_DEFINE(HAVE_XFREE_XINERAMA, 1,
                 [Define to 1 if XFree Xinerama is available])
       AC_DEFINE(HAVE_XINERAMA, 1,
                 [Define to 1 is Xinerama is available])
-      AC_MSG_RESULT(yes)
     else
-      AC_MSG_RESULT(no)
-
       case "$host" in
         *-*-solaris*)
             # Check for solaris
@@ -1057,6 +1093,7 @@ if test "x$gdktarget" = "xx11"; then
 		    [#include <X11/Xlib.h>])])
 
             if $have_solaris_xinerama ; then
+              X_EXTENSIONS="$X_EXTENSIONS Xinerama"
               AC_DEFINE(HAVE_SOLARIS_XINERAMA, 1,
                         [Define to 1 if solaris xinerama is available])
 	      AC_DEFINE(HAVE_XINERAMA, 1,
@@ -1071,9 +1108,14 @@ if test "x$gdktarget" = "xx11"; then
       esac
     fi
   fi
+  if test "x$enable_xinerama" = "xyes" ; then
+    if test "x$have_xfree_xinerama" != "xtrue" -a "x$have_solaris_xinerama" != "xtrue" ; then
+      AC_MSG_ERROR([*** Xinerama extension not found. Check 'config.log' for more details.])
+    fi
+  fi
 
   # set up things for XInput
-  if test "x$with_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
+  if test "x$enable_xinput" != "xno" && $PKG_CONFIG --exists "xi" ; then
     have_xinput=yes
 
     AC_DEFINE(XINPUT_XFREE, 1,
@@ -1082,7 +1124,11 @@ if test "x$gdktarget" = "xx11"; then
     X_PACKAGES="$X_PACKAGES xi"
 
     AC_CHECK_HEADER(X11/extensions/XInput2.h,
-                    have_xinput2=yes; AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]))
+                    have_xinput2=yes
+                    X_EXTENSIONS="$X_EXTENSIONS XI2"
+                    AC_DEFINE(XINPUT_2, 1, [Define to 1 if XInput 2.0 is available]),
+                    X_EXTENSIONS="$X_EXTENSIONS XInput")
+
   else
     AC_DEFINE(XINPUT_NONE, 1,
               [Define to 1 if no XInput should be used])
@@ -1091,11 +1137,22 @@ if test "x$gdktarget" = "xx11"; then
   AM_CONDITIONAL(XINPUT_XFREE, test "x$have_xinput" = "xyes")
   AM_CONDITIONAL(XINPUT_2,     test "x$have_xinput2" = "xyes")
 
-  # Check for the RANDR extension
-  if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
-     AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
+  if test "x$enable_xinput" = "xyes" ; then
+    if test "x$have_xinput" != "xyes" -a "x$have_xinput2" != "xyes" ; then
+      AC_MSG_ERROR([*** XInput extension not found. Check 'config.log' for more details.])
+    fi
+  fi
 
-     X_PACKAGES="$X_PACKAGES xrandr"
+  # Check for the RANDR extension
+  if test x"$enable_xrandr" != xno; then
+    if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
+      AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
+
+      X_PACKAGES="$X_PACKAGES xrandr"
+      X_EXTENSIONS="$X_EXTENSIONS XRANDR"
+    elif test x"$enable_xrandr" = xyes; then
+      AC_MSG_ERROR([RANDR support requested but xrandr not found])
+    fi
   fi
 
   # Checks for Xcursor library
@@ -1108,29 +1165,44 @@ if test "x$gdktarget" = "xx11"; then
 
   # Checks for XFixes extension
 
-  if $PKG_CONFIG --exists xfixes ; then
-    AC_DEFINE(HAVE_XFIXES, 1, [Have the XFIXES X extension])
+  if test x"$enable_xfixes" != xno; then
+    if $PKG_CONFIG --exists xfixes ; then
+      AC_DEFINE(HAVE_XFIXES, 1, [Have the XFIXES X extension])
 
-    X_PACKAGES="$X_PACKAGES xfixes"
-    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
+      X_PACKAGES="$X_PACKAGES xfixes"
+      X_EXTENSIONS="$X_EXTENSIONS XFIXES"
+      GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xfixes"
+    elif test x"$enable_xfixes" = xyes; then
+      AC_MSG_ERROR([XFixes support requested but xfixes not found])
+    fi
   fi
 
   # Checks for Xcomposite extension
 
-  if $PKG_CONFIG --exists xcomposite ; then
-    AC_DEFINE(HAVE_XCOMPOSITE, 1, [Have the XCOMPOSITE X extension])
+  if test x"$enable_xcomposite" != xno; then
+    if $PKG_CONFIG --exists xcomposite ; then
+      AC_DEFINE(HAVE_XCOMPOSITE, 1, [Have the XCOMPOSITE X extension])
 
-    X_PACKAGES="$X_PACKAGES xcomposite"
-    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcomposite"
+      X_PACKAGES="$X_PACKAGES xcomposite"
+      X_EXTENSIONS="$X_EXTENSIONS Composite"
+      GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcomposite"
+    elif test x"$enable_xcomposite" = xyes; then
+      AC_MSG_ERROR([Xcomposite support requested but xcomposite not found])
+    fi
   fi
 
   # Checks for Xdamage extension
 
-  if $PKG_CONFIG --exists xdamage ; then
-    AC_DEFINE(HAVE_XDAMAGE, 1, [Have the XDAMAGE X extension])
+  if test x"$enable_xdamage" != xno; then
+    if $PKG_CONFIG --exists xdamage ; then
+      AC_DEFINE(HAVE_XDAMAGE, 1, [Have the XDAMAGE X extension])
 
-    X_PACKAGES="$X_PACKAGES xdamage"
-    GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
+      X_PACKAGES="$X_PACKAGES xdamage"
+      X_EXTENSIONS="$X_EXTENSIONS DAMAGE"
+      GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
+    elif test x"$enable_xdamage" = xyes; then
+      AC_MSG_ERROR([Xdamage support requested but xdamage not found])
+    fi
   fi
 
   if $have_base_x_pc ; then
@@ -1143,6 +1215,10 @@ if test "x$gdktarget" = "xx11"; then
   LIBS="$gtk_save_libs"
 
   AM_CONDITIONAL(USE_X11, true)
+
+  # strip leading space
+  X_EXTENSIONS=${X_EXTENSIONS/# }
+
 else
   XPACKAGES=
 
@@ -1152,31 +1228,7 @@ else
   AM_CONDITIONAL(HAVE_X11R6, false)
 fi
 
-if test "x$gdktarget" = "xwin32"; then
-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lgdi32 -limm32 -lshell32 -lole32 -Wl,-luuid"
-  AM_CONDITIONAL(USE_WIN32, true)
-else
-  AM_CONDITIONAL(USE_WIN32, false)
-fi
-
-if test "x$gdktarget" = "xquartz"; then
-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -framework Cocoa"
-  AM_CONDITIONAL(USE_QUARTZ, true)
-else
-  AM_CONDITIONAL(USE_QUARTZ, false)
-fi
-
-if test "x$gdktarget" = "xbroadway" ; then
-  GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lz"
-fi
-
 # Check for Pango flags
-
-if test "x$gdktarget" = "xwin32"; then
-	PANGO_PACKAGES="pangowin32 pangocairo"
-else
-	PANGO_PACKAGES="pango pangocairo"
-fi
 
 AC_MSG_CHECKING(Pango flags)
 if $PKG_CONFIG --exists $PANGO_PACKAGES ; then
@@ -1207,12 +1259,7 @@ fi
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"
 
-# Pull in gio-unix for GDesktopAppInfo usage, see at least gdkapplaunchcontext-x11.c
-if test "x$gdktarget" = "xx11" || test "x$gdktarget" = "xbroadway" ; then
-  GDK_PACKAGES="$PANGO_PACKAGES gio-unix-2.0 $X_PACKAGES gdk-pixbuf-2.0 $cairo_backend cairo-gobject"
-else
-  GDK_PACKAGES="$PANGO_PACKAGES gio-2.0 gdk-pixbuf-2.0 $cairo_backend cairo-gobject"
-fi
+GDK_PACKAGES="$PANGO_PACKAGES $GIO_PACKAGE $X_PACKAGES gdk-pixbuf-2.0 $cairo_backends cairo-gobject"
 
 GDK_DEP_LIBS="$GDK_EXTRA_LIBS `$PKG_CONFIG --libs $GDK_PACKAGES`"
 GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFLAGS"
@@ -1221,7 +1268,7 @@ GDK_DEP_CFLAGS="`$PKG_CONFIG --cflags  gthread-2.0 $GDK_PACKAGES` $GDK_EXTRA_CFL
 # into the pkg-config files
 #
 if test $enable_explicit_deps != yes ; then
-  GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0"
+  GDK_PACKAGES="$PANGO_PACKAGES gdk-pixbuf-2.0 cairo-gobject"
   GDK_EXTRA_LIBS=
 fi
 
@@ -1262,7 +1309,7 @@ else
 fi
 
 GTK_PACKAGES="atk cairo cairo-gobject gdk-pixbuf-2.0 gio-2.0"
-if test "x$gdktarget" = "xx11"; then
+if test "x$enable_x11_backend" == xyes; then
   GTK_PACKAGES="$GTK_PACKAGES pangoft2"
 fi
 GTK_EXTRA_LIBS=
@@ -1331,8 +1378,10 @@ LIBS="$old_LIBS"
 # Printing system checks
 ################################################################
 
+PRINT_BACKENDS="file lpr"
+
 AC_ARG_ENABLE(cups,
-              [AC_HELP_STRING([--disable-cups]
+              [AC_HELP_STRING([--disable-cups],
                               [disable cups print backend])],,
               [enable_cups=auto])
 
@@ -1369,6 +1418,7 @@ else
 
     AC_CHECK_HEADER(cups/cups.h,,AC_MSG_ERROR([[*** Sorry, cups-config present but cups/cups.h missing.]]))
 
+    PRINT_BACKENDS="$PRINT_BACKENDS cups"
     AM_CONDITIONAL(HAVE_CUPS, true)
 
     gtk_save_cflags="$CFLAGS"
@@ -1392,7 +1442,7 @@ fi
 #
 
 AC_ARG_ENABLE(papi,
-              [AC_HELP_STRING([--disable-papi]
+              [AC_HELP_STRING([--disable-papi],
                               [disable papi print backend])],,
              [enable_papi=auto])
 
@@ -1402,6 +1452,7 @@ else
   AC_MSG_CHECKING(libpapi)
   AC_CHECK_LIB(papi, papiServiceCreate, have_papi=yes, have_papi=no)
   if test $have_papi = yes; then
+    PRINT_BACKENDS="$PRINT_BACKENDS papi"
     AC_DEFINE([HAVE_PAPI], [], [Define to 1 if libpapi available])
   fi
   AM_CONDITIONAL(HAVE_PAPI, test $have_papi = yes)
@@ -1427,7 +1478,7 @@ if test "$os_win32" != "yes"; then
 *** postscript backend enabled.]))
 
   AC_CHECK_HEADER(cairo-svg.h,,AC_MSG_ERROR([
-*** Can't find cairo-svg.h. You must build Cairo with the
+*** Cannot find cairo-svg.h. You must build Cairo with the
 *** svg backend enabled.]))
 fi
 
@@ -1438,6 +1489,9 @@ AC_ARG_ENABLE(test-print-backend,
               [AC_HELP_STRING([--enable-test-print-backend],
                               [build test print backend])],,
               [enable_test_print_backend=no])
+if test "x$enable_test_print_backend" != "xno" ; then
+  PRINT_BACKENDS="$PRINT_BACKENDS test"
+fi
 AM_CONDITIONAL(TEST_PRINT_BACKEND, test "x$enable_test_print_backend" != "xno")
 
 
@@ -1478,19 +1532,18 @@ GOBJECT_INTROSPECTION_CHECK([0.9.3])
 #################################################
 
 AC_ARG_ENABLE(packagekit,
-	      AC_HELP_STRING([--disable-packagekit],
-			     [build packagekit open with module]))
+              AC_HELP_STRING([--disable-packagekit],
+                             [build packagekit open-with module]))
 
-ENABLE_PACKAGEKIT=
+build_packagekit=no
 if test "os_win32" != "yes"; then
-   	if test "x$enable_packagekit" != "xno"; then
-	   	ENABLE_PACKAGEKIT=1
-      	   	AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
-	fi
+        if test "x$enable_packagekit" != "xno"; then
+                build_packagekit=yes
+                AC_DEFINE(ENABLE_PACKAGEKIT, 1, [define to enable packagekit])
+        fi
 fi
 
-AC_SUBST(ENABLE_PACKAGEKIT)
-AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$ENABLE_PACKAGEKIT" = "x1")
+AM_CONDITIONAL(ENABLE_PACKAGEKIT, test "x$build_packagekit" = "xyes")
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
@@ -1537,36 +1590,28 @@ AC_CONFIG_COMMANDS([gdk/gdkconfig.h], [
  * This is a generated file.  Please modify `configure.ac'
  */
 
-#ifndef GDKCONFIG_H
-#define GDKCONFIG_H
+#ifndef __GDKCONFIG_H__
+#define __GDKCONFIG_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
+#error "Only <gdk/gdk.h> can be included directly."
+#endif
 
-#ifndef GSEAL
-/* introduce GSEAL() here for all of Gdk and Gtk+ without the need to modify GLib */
-#  ifdef GSEAL_ENABLE
-#    define GSEAL(ident)      _g_sealed__ ## ident
-#  else
-#    define GSEAL(ident)      ident
-#  endif
-#endif /* !GSEAL */
+#include <glib.h>
+
+G_BEGIN_DECLS
 
 _______EOF
 
 	cat >>$outfile <<_______EOF
 $gdk_windowing
-$gdk_wc
 _______EOF
 
 	cat >>$outfile <<_______EOF
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+G_END_DECLS
 
-#endif /* GDKCONFIG_H */
+#endif  /* __GDKCONFIG_H__ */
 _______EOF
 
 
@@ -1577,34 +1622,7 @@ _______EOF
 	  mv $outfile gdk/gdkconfig.h
 	fi
 ],[
-if test "x$gdktarget" = "xx11" ; then
-  gdk_windowing='
-#define GDK_WINDOWING_X11'
-elif test "x$gdktarget" = "xwin32" ; then
-  gdk_windowing='
-#define GDK_NATIVE_WINDOW_POINTER
-
-#define GDK_WINDOWING_WIN32'
-elif test "x$gdktarget" = "xquartz" ; then
-  gdk_windowing='
-#define GDK_WINDOWING_QUARTZ'
-elif test "x$gdktarget" = "xbroadway" ; then
-  gdk_windowing='
-#define GDK_WINDOWING_BROADWAY'
-fi
-
-if test x$gdk_wchar_h = xyes; then
-  gdk_wc='
-#define GDK_HAVE_WCHAR_H 1'
-fi
-if test x$gdk_wctype_h = xyes; then
-  gdk_wc="\$gdk_wc
-#define GDK_HAVE_WCTYPE_H 1"
-fi
-if test x$gdk_working_wctype = xno; then
-  gdk_wc="\$gdk_wc
-#define GDK_HAVE_BROKEN_WCTYPE 1"
-fi
+gdk_windowing='$GDK_WINDOWING'
 ])
 
 dnl
@@ -1624,7 +1642,7 @@ AC_ARG_ENABLE(Bsymbolic,
                            enable_Bsymbolic=no)
                LDFLAGS="${SAVED_LDFLAGS}"])
 
-if test "x${enable_Bsymbolic}" == "xyes"; then
+if test "x${enable_Bsymbolic}" = "xyes" ; then
   GTK_LINK_FLAGS=-Wl,-Bsymbolic-functions
 fi
 AC_SUBST(GTK_LINK_FLAGS)
@@ -1637,7 +1655,6 @@ gdk-3.0.pc
 gtk+-3.0.pc
 gtk+-unix-print-3.0.pc
 gail-3.0.pc
-gdk-3.0-uninstalled.pc
 gtk+-3.0-uninstalled.pc
 gail-3.0-uninstalled.pc
 m4macros/Makefile
@@ -1655,6 +1672,7 @@ docs/reference/gdk/version.xml
 docs/reference/gtk/Makefile
 docs/reference/gtk/version.xml
 docs/reference/libgail-util/Makefile
+docs/reference/libgail-util/version.xml
 docs/tools/Makefile
 build/Makefile
 build/win32/Makefile
@@ -1695,5 +1713,19 @@ perf/Makefile
 
 AC_OUTPUT
 
-echo "configuration:
-        target:             $gdktarget"
+# beautify the immodule list a bit
+included_immodules=${included_immodules//,/ }
+included_immodules=${included_immodules:-none}
+
+echo "configuration:"
+echo "        GDK backends:         $GDK_BACKENDS"
+if test "x$enable_x11_backend" = "xyes"; then
+echo "        X11 extensions:       $X_EXTENSIONS"
+fi
+echo "        Print backends:       $PRINT_BACKENDS"
+echo "        Dynamic modules:      $build_dynamic_modules"
+echo "        Included immodules:   $included_immodules"
+echo "        PackageKit support:   $build_packagekit"
+echo "        Introspection:        $found_introspection"
+echo "        Debugging:            $enable_debug"
+echo "        Documentation:        $enable_gtk_doc"

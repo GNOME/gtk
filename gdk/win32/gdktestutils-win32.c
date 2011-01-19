@@ -22,13 +22,8 @@
 #include <win32/gdkwin32.h>
 
 
-void
-gdk_test_render_sync (GdkWindow *window)
-{
-}
-
 gboolean
-gdk_test_simulate_key (GdkWindow      *window,
+_gdk_win32_window_simulate_key (GdkWindow      *window,
                        gint            x,
                        gint            y,
                        guint           keyval,
@@ -41,7 +36,7 @@ gdk_test_simulate_key (GdkWindow      *window,
 }
 
 gboolean
-gdk_test_simulate_button (GdkWindow      *window,
+_gdk_win32_window_simulate_button (GdkWindow      *window,
                           gint            x,
                           gint            y,
                           guint           button, /*1..3*/

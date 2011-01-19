@@ -24,6 +24,18 @@
  *          Cosimo Cecchi <ccecchi@redhat.com>
  */
 
+/**
+ * SECTION:gtkappchooserdialog
+ * @Title: GtkAppChooserDialog
+ * @Short_description: An application chooser dialog
+ *
+ * #GtkAppChooserDialog shows a #GtkAppChooserWidget inside a #GtkDialog.
+ *
+ * Note that #GtkAppChooserDialog does not have any interesting methods
+ * of its own. Instead, you should get the embedded #GtkAppChooserWidget
+ * using gtk_app_chooser_dialog_get_widget() and call its methods if
+ * the generic #GtkAppChooser interface is not sufficient for your needs.
+ */
 #include "config.h"
 
 #include "gtkappchooserdialog.h"
@@ -108,7 +120,7 @@ search_for_mimetype_ready_cb (GObject      *source,
   GtkAppChooserDialog *self = user_data;
   GError *error = NULL;
 
-  gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
+  _gtk_app_chooser_online_search_for_mimetype_finish (online, res, &error);
 
   if (error != NULL)
     {
@@ -128,11 +140,11 @@ online_button_clicked_cb (GtkButton *b,
 {
   GtkAppChooserDialog *self = user_data;
 
-  gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
-                                                    self->priv->content_type,
-                                                    GTK_WINDOW (self),
-                                                    search_for_mimetype_ready_cb,
-                                                    self);
+  _gtk_app_chooser_online_search_for_mimetype_async (self->priv->online,
+                                                     self->priv->content_type,
+                                                     GTK_WINDOW (self),
+                                                     search_for_mimetype_ready_cb,
+                                                     self);
 }
 
 static void
@@ -142,7 +154,7 @@ app_chooser_online_get_default_ready_cb (GObject *source,
 {
   GtkAppChooserDialog *self = user_data;
 
-  self->priv->online = gtk_app_chooser_online_get_default_finish (source, res);
+  self->priv->online = _gtk_app_chooser_online_get_default_finish (source, res);
 
   if (self->priv->online != NULL)
     {
@@ -164,7 +176,7 @@ app_chooser_online_get_default_ready_cb (GObject *source,
 static void
 ensure_online_button (GtkAppChooserDialog *self)
 {
-  gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb, self);
+  _gtk_app_chooser_online_get_default_async (app_chooser_online_get_default_ready_cb, self);
 }
 
 /* An application is valid if:
@@ -234,9 +246,9 @@ add_or_find_application (GtkAppChooserDialog *self)
   app = gtk_app_chooser_get_app_info (GTK_APP_CHOOSER (self));
 
   /* we don't care about reporting errors here */
-  g_app_info_add_supports_type (app,
-                                self->priv->content_type,
-                                NULL);
+  g_app_info_set_as_last_used_for_type (app,
+                                        self->priv->content_type,
+                                        NULL);
 
   g_object_unref (app);
 }

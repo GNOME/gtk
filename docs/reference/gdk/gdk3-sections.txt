@@ -8,8 +8,6 @@ gdk_init
 gdk_init_check
 gdk_parse_args
 gdk_get_display_arg_name
-gdk_set_locale
-gdk_set_sm_client_id
 gdk_notify_startup_complete
 gdk_notify_startup_complete_with_id
 
@@ -63,7 +61,6 @@ GdkStatus
 GDKVAR
 gdk_axis_use_get_type
 gdk_byte_order_get_type
-gdk_cap_style_get_type
 gdk_crossing_mode_get_type
 gdk_cursor_type_get_type
 gdk_drag_action_get_type
@@ -79,17 +76,14 @@ gdk_input_mode_get_type
 gdk_input_source_get_type
 gdk_modifier_type_get_type
 gdk_notify_type_get_type
-gdk_overlap_type_get_type
 gdk_property_state_get_type
 gdk_prop_mode_get_type
 gdk_scroll_direction_get_type
 gdk_setting_action_get_type
 gdk_status_get_type
-gdk_subwindow_mode_get_type
 gdk_visibility_state_get_type
 gdk_visual_type_get_type
 gdk_window_attributes_type_get_type
-gdk_window_class_get_type
 gdk_window_edge_get_type
 gdk_window_hints_get_type
 gdk_window_state_get_type
@@ -122,23 +116,17 @@ gdk_display_sync
 gdk_display_flush
 gdk_display_close
 gdk_display_is_closed
-gdk_display_list_devices
 gdk_display_get_event
 gdk_display_peek_event
 gdk_display_put_event
+gdk_display_has_pending
 gdk_display_add_client_message_filter
 gdk_display_set_double_click_time
 gdk_display_set_double_click_distance
 gdk_display_get_pointer
-gdk_display_get_device_state
+gdk_display_list_devices
 gdk_display_get_window_at_pointer
-gdk_display_get_window_at_device_position
-GdkDisplayPointerHooks
-gdk_display_set_pointer_hooks
-GdkDisplayDeviceHooks
-gdk_display_set_device_hooks
 gdk_display_warp_pointer
-gdk_display_warp_device
 gdk_display_supports_cursor_color
 gdk_display_supports_cursor_alpha
 gdk_display_get_default_cursor_size
@@ -151,7 +139,11 @@ gdk_display_store_clipboard
 gdk_display_supports_shapes
 gdk_display_supports_input_shapes
 gdk_display_supports_composite
+gdk_display_get_app_launch_context
+gdk_display_notify_startup_complete
+
 <SUBSECTION Standard>
+GDK_DISPLAY
 GDK_DISPLAY_OBJECT
 GDK_IS_DISPLAY
 GDK_TYPE_DISPLAY
@@ -173,7 +165,8 @@ gdk_display_manager_get
 gdk_display_manager_get_default_display
 gdk_display_manager_set_default_display
 gdk_display_manager_list_displays
-gdk_display_get_core_pointer
+gdk_display_manager_open_display
+
 <SUBSECTION Standard>
 GDK_DISPLAY_MANAGER
 GDK_DISPLAY_MANAGER_CLASS
@@ -219,10 +212,6 @@ gdk_screen_get_resolution
 gdk_screen_set_resolution
 gdk_screen_get_active_window
 gdk_screen_get_window_stack
-<SUBSECTION Spawning>
-gdk_spawn_on_screen
-gdk_spawn_on_screen_with_pipes
-gdk_spawn_command_line_on_screen
 
 <SUBSECTION Standard>
 GDK_SCREEN
@@ -317,7 +306,6 @@ GDK_VISUAL_GET_CLASS
 
 <SUBSECTION Private>
 GdkVisualClass
-GdkVisualPrivate
 gdk_visual_get_type
 </SECTION>
 
@@ -478,10 +466,8 @@ gdk_window_get_device_cursor
 gdk_window_set_device_cursor
 gdk_window_get_device_events
 gdk_window_set_device_events
-
-<SUBSECTION>
-GdkPointerHooks
-gdk_set_pointer_hooks
+gdk_window_get_source_events
+gdk_window_set_source_events
 
 <SUBSECTION>
 gdk_offscreen_window_get_surface
@@ -504,7 +490,6 @@ GDK_TYPE_FILTER_RETURN
 GDK_TYPE_GRAVITY
 GDK_TYPE_MODIFIER_TYPE
 GDK_TYPE_WINDOW_ATTRIBUTES_TYPE
-GDK_TYPE_WINDOW_CLASS
 GDK_TYPE_WINDOW_EDGE
 GDK_TYPE_WINDOW_HINTS
 GDK_TYPE_WINDOW_TYPE
@@ -515,7 +500,6 @@ GDK_TYPE_WM_FUNCTION
 <SUBSECTION Private>
 gdk_window_get_type
 gdk_window_window_class_get_type
-GdkWindowObject
 GdkWindowClass
 GdkWindowImpl
 GdkWindowImplClass
@@ -561,17 +545,8 @@ GdkAtom
 GDK_ATOM_TO_POINTER
 GDK_POINTER_TO_ATOM
 GDK_NONE
-gdk_text_property_to_text_list
-gdk_text_property_to_text_list_for_display
-gdk_free_text_list
-gdk_text_property_to_utf8_list
 gdk_text_property_to_utf8_list_for_display
-gdk_string_to_compound_text
-gdk_string_to_compound_text_for_display
-gdk_free_compound_text
 gdk_utf8_to_string_target
-gdk_utf8_to_compound_text
-gdk_utf8_to_compound_text_for_display
 gdk_atom_intern
 gdk_atom_intern_static_string
 gdk_atom_name
@@ -637,10 +612,6 @@ gdk_threads_add_timeout
 gdk_threads_add_timeout_full
 gdk_threads_add_timeout_seconds
 gdk_threads_add_timeout_seconds_full
-
-<SUBSECTION Private>
-gdk_threads_lock
-gdk_threads_unlock
 </SECTION>
 
 <SECTION>
@@ -690,25 +661,17 @@ gdk_keymap_get_type
 </SECTION>
 
 <SECTION>
-<TITLE>GdkDeviceManager</TITLE>
-<FILE>gdkdevicemanager</FILE>
-GdkDeviceManager
+<TITLE>GdkDevice</TITLE>
+<FILE>gdkdevice</FILE>
 GdkDevice
-GdkDeviceType
 GdkInputSource
 GdkInputMode
-GdkDeviceKey
-GdkDeviceAxis
 GdkAxisUse
+GdkDeviceType
 GdkGrabOwnership
-gdk_enable_multidevice
-gdk_device_manager_get_display
-gdk_device_manager_list_devices
-gdk_device_manager_get_client_pointer
 
 <SUBSECTION>
 gdk_device_get_name
-gdk_device_set_source
 gdk_device_get_source
 gdk_device_set_mode
 gdk_device_get_mode
@@ -717,11 +680,13 @@ gdk_device_get_key
 gdk_device_set_axis_use
 gdk_device_get_axis_use
 gdk_device_get_associated_device
+gdk_device_list_slave_devices
 gdk_device_get_device_type
 gdk_device_get_display
 gdk_device_get_has_cursor
 gdk_device_get_n_axes
 gdk_device_get_n_keys
+gdk_device_warp
 
 <SUBSECTION>
 gdk_device_grab
@@ -729,20 +694,14 @@ gdk_device_ungrab
 
 <SUBSECTION>
 gdk_device_get_state
+gdk_device_get_position
+gdk_device_get_window_at_position
 gdk_device_get_history
 gdk_device_free_history
 GdkTimeCoord
 gdk_device_get_axis
 gdk_device_list_axes
 gdk_device_get_axis_value
-
-<SUBSECTION>
-gdk_input_set_extension_events
-GdkExtensionMode
-
-<SUBSECTION>
-gdk_devices_list
-gdk_device_get_core_pointer
 
 <SUBSECTION Standard>
 GDK_TYPE_AXIS_USE
@@ -751,12 +710,6 @@ GDK_TYPE_INPUT_MODE
 GDK_TYPE_INPUT_SOURCE
 GDK_TYPE_DEVICE_TYPE
 GDK_TYPE_GRAB_OWNERSHIP
-GDK_DEVICE_MANAGER
-GDK_DEVICE_MANAGER_CLASS
-GDK_DEVICE_MANAGER_GET_CLASS
-GDK_IS_DEVICE_MANAGER
-GDK_IS_DEVICE_MANAGER_CLASS
-GDK_TYPE_DEVICE_MANAGER
 GDK_DEVICE
 GDK_DEVICE_CLASS
 GDK_DEVICE_GET_CLASS
@@ -766,13 +719,31 @@ GDK_TYPE_DEVICE
 
 <SUBSECTION Private>
 GdkDeviceClass
-GdkDevicePrivate
-GdkDeviceManagerClass
-GdkDeviceManagerPrivate
 gdk_device_get_type
-gdk_device_manager_get_type
 gdk_device_type_get_type
 GDK_MAX_TIMECOORD_AXES
+</SECTION>
+
+<SECTION>
+<TITLE>GdkDeviceManager</TITLE>
+<FILE>gdkdevicemanager</FILE>
+GdkDeviceManager
+gdk_disable_multidevice
+gdk_device_manager_get_display
+gdk_device_manager_list_devices
+gdk_device_manager_get_client_pointer
+
+<SUBSECTION Standard>
+GDK_DEVICE_MANAGER
+GDK_DEVICE_MANAGER_CLASS
+GDK_DEVICE_MANAGER_GET_CLASS
+GDK_IS_DEVICE_MANAGER
+GDK_IS_DEVICE_MANAGER_CLASS
+GDK_TYPE_DEVICE_MANAGER
+
+<SUBSECTION Private>
+GdkDeviceManagerClass
+gdk_device_manager_get_type
 </SECTION>
 
 <SECTION>
@@ -783,7 +754,6 @@ GdkEventMask
 GDK_CURRENT_TIME
 GDK_PRIORITY_EVENTS
 GDK_PRIORITY_REDRAW
-
 
 <SUBSECTION>
 gdk_events_pending
@@ -820,6 +790,8 @@ gdk_event_set_screen
 gdk_event_get_screen
 gdk_event_get_device
 gdk_event_set_device
+gdk_event_get_source_device
+gdk_event_set_source_device
 
 <SUBSECTION>
 gdk_setting_get
@@ -909,30 +881,31 @@ gdk_cursor_get_type
 <SECTION>
 <TITLE>Drag and Drop</TITLE>
 <FILE>dnd</FILE>
+GdkDragContext
 gdk_drag_get_selection
 gdk_drag_abort
 gdk_drop_reply
-gdk_drag_context_new
 gdk_drag_drop
-gdk_drag_find_window
 gdk_drag_find_window_for_screen
-gdk_drag_context_get_source_window
 gdk_drag_begin
+gdk_drag_begin_for_device
 gdk_drag_motion
 gdk_drop_finish
-gdk_drag_get_protocol
 gdk_drag_get_protocol_for_display
 GdkDragProtocol
-GdkDragContext
 GdkDragAction
 gdk_drag_status
 gdk_drag_drop_succeeded
+
 gdk_drag_context_get_actions
 gdk_drag_context_get_suggested_action
 gdk_drag_context_get_selected_action
 gdk_drag_context_list_targets
 gdk_drag_context_get_device
 gdk_drag_context_set_device
+gdk_drag_context_get_source_window
+gdk_drag_context_get_dest_window
+gdk_drag_context_get_protocol
 
 <SUBSECTION Standard>
 GDK_DRAG_CONTEXT
@@ -961,25 +934,9 @@ GDK_SCREEN_XNUMBER
 GDK_SCREEN_XSCREEN
 GDK_CURSOR_XCURSOR
 GDK_CURSOR_XDISPLAY
-gdkx_visual_get
-gdk_window_foreign_new
-gdk_window_foreign_new_for_display
-gdk_xid_table_lookup
-gdk_xid_table_lookup_for_display
-gdk_window_lookup
-gdk_window_lookup_for_display
 gdk_x11_lookup_xdisplay
 gdk_x11_get_server_time
-gdk_net_wm_supports
-gdk_x11_screen_supports_net_wm_hint
-gdk_x11_screen_get_window_manager_name
-gdk_x11_screen_get_monitor_output
-gdk_x11_screen_lookup_visual
-gdk_x11_window_set_user_time
-gdk_x11_window_move_to_current_desktop
 gdk_x11_display_get_user_time
-gdk_x11_cursor_get_xcursor
-gdk_x11_cursor_get_xdisplay
 gdk_x11_display_broadcast_startup_message
 gdk_x11_display_get_startup_notification_id
 gdk_x11_display_set_startup_notification_id
@@ -991,14 +948,24 @@ gdk_x11_display_error_trap_pop
 gdk_x11_display_error_trap_pop_ignored
 gdk_x11_display_set_cursor_theme
 gdk_x11_register_standard_event_type
+gdk_x11_screen_get_screen_number
+gdk_x11_screen_get_xscreen
+gdk_x11_screen_get_window_manager_name
+gdk_x11_screen_get_monitor_output
+gdk_x11_screen_lookup_visual
+gdk_x11_screen_supports_net_wm_hint
+gdk_x11_window_foreign_new_for_display
+gdk_x11_window_lookup_for_display
 gdk_x11_window_get_xid
+gdk_x11_window_set_user_time
+gdk_x11_window_move_to_current_desktop
 gdk_x11_get_default_root_xwindow
 gdk_x11_get_default_screen
 gdk_x11_get_default_xdisplay
 gdk_x11_grab_server
-gdk_x11_screen_get_screen_number
-gdk_x11_screen_get_xscreen
 gdk_x11_ungrab_server
+gdk_x11_cursor_get_xcursor
+gdk_x11_cursor_get_xdisplay
 gdk_x11_visual_get_xvisual
 gdk_x11_atom_to_xatom
 gdk_x11_atom_to_xatom_for_display
@@ -1008,10 +975,30 @@ gdk_x11_get_xatom_by_name
 gdk_x11_get_xatom_by_name_for_display
 gdk_x11_get_xatom_name
 gdk_x11_get_xatom_name_for_display
+gdk_x11_set_sm_client_id
+gdk_x11_display_text_property_to_text_list
+gdk_x11_free_text_list
+gdk_x11_display_string_to_compound_text
+gdk_x11_display_utf8_to_compound_text
+gdk_x11_free_compound_text
 
 <SUBSECTION Private>
-GDK_HAVE_WCHAR_H
-GDK_HAVE_WCTYPE_H
+gdk_x11_app_launch_context_get_type
+gdk_x11_cursor_get_type
+gdk_x11_device_core_get_type
+gdk_x11_device_manager_core_get_type
+gdk_x11_device_manager_xi2_get_type
+gdk_x11_device_manager_xi_get_type
+gdk_x11_device_xi2_get_type
+gdk_x11_device_xi_get_type
+gdk_x11_display_get_type
+gdk_x11_display_manager_get_type
+gdk_x11_drag_context_get_type
+gdk_x11_keymap_get_type
+gdk_x11_screen_get_type
+gdk_x11_visual_get_type
+gdk_x11_window_get_type
+gdk_window_impl_x11_get_type
 </SECTION>
 
 <SECTION>
@@ -1033,7 +1020,6 @@ GDK_IS_APP_LAUNCH_CONTEXT
 GDK_IS_APP_LAUNCH_CONTEXT_CLASS
 GDK_TYPE_APP_LAUNCH_CONTEXT
 GdkAppLaunchContextClass
-GdkAppLaunchContextPrivate
 <SUBSECTION Private>
 gdk_app_launch_context_get_type
 </SECTION>

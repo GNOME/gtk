@@ -32,8 +32,7 @@
 #include <math.h>
 #include <string.h>
 
-#include "gdkconfig.h"
-#include "gdk/gdkkeysyms.h"
+#include "gdk/gdk.h"
 #include "gtkhsv.h"
 #include "gtkwindow.h"
 #include "gtkselection.h"
@@ -808,6 +807,7 @@ color_sample_drop_handle (GtkWidget        *widget,
 {
   GtkColorSelection *colorsel = data;
   GtkColorSelectionPrivate *priv;
+  gint length;
   guint16 *vals;
   gdouble color[4];
   priv = colorsel->private_data;
@@ -818,21 +818,23 @@ color_sample_drop_handle (GtkWidget        *widget,
    * B
    * opacity
    */
-  
-  if (selection_data->length < 0)
+
+  length = gtk_selection_data_get_length (selection_data);
+
+  if (length < 0)
     return;
   
   /* We accept drops with the wrong format, since the KDE color
    * chooser incorrectly drops application/x-color with format 8.
    */
-  if (selection_data->length != 8)
+  if (length != 8)
     {
       g_warning ("Received invalid color data\n");
       return;
     }
-  
-  vals = (guint16 *)selection_data->data;
-  
+
+  vals = (guint16 *) gtk_selection_data_get_data (selection_data);
+
   if (widget == priv->cur_sample)
     {
       color[0] = (gdouble)vals[0] / 0xffff;
@@ -1110,11 +1112,15 @@ palette_draw (GtkWidget *drawing_area,
                cairo_t   *cr,
 	       gpointer   data)
 {
+  GtkStyleContext *context;
   gint focus_width;
+  GdkRGBA color;
 
-  gdk_cairo_set_source_color (cr, &gtk_widget_get_style (drawing_area)->bg[GTK_STATE_NORMAL]);
+  context = gtk_widget_get_style_context (drawing_area);
+  gtk_style_context_get_background_color (context, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_paint (cr);
-  
+
   if (gtk_widget_has_focus (drawing_area))
     {
       set_focus_line_attributes (drawing_area, cr, &focus_width);
@@ -1533,23 +1539,26 @@ palette_drop_handle (GtkWidget        *widget,
 		     gpointer          data)
 {
   GtkColorSelection *colorsel = GTK_COLOR_SELECTION (data);
+  gint length;
   guint16 *vals;
   gdouble color[4];
-  
-  if (selection_data->length < 0)
+
+  length = gtk_selection_data_get_length (selection_data);
+
+  if (length < 0)
     return;
   
   /* We accept drops with the wrong format, since the KDE color
    * chooser incorrectly drops application/x-color with format 8.
    */
-  if (selection_data->length != 8)
+  if (length != 8)
     {
       g_warning ("Received invalid color data\n");
       return;
     }
-  
-  vals = (guint16 *)selection_data->data;
-  
+
+  vals = (guint16 *) gtk_selection_data_get_data (selection_data);
+
   color[0] = (gdouble)vals[0] / 0xffff;
   color[1] = (gdouble)vals[1] / 0xffff;
   color[2] = (gdouble)vals[2] / 0xffff;
@@ -1705,8 +1714,7 @@ grab_color_at_pointer (GdkScreen *screen,
   if (!pixbuf)
     {
       gint x, y;
-      GdkDisplay *display = gdk_screen_get_display (screen);
-      GdkWindow *window = gdk_display_get_window_at_device_position (display, device, &x, &y);
+      GdkWindow *window = gdk_device_get_window_at_position (device, &x, &y);
       if (!window)
 	return;
       pixbuf = gdk_pixbuf_get_from_window (window,
@@ -1799,7 +1807,6 @@ key_press (GtkWidget   *invisible,
            GdkEventKey *event,
            gpointer     data)
 {  
-  GdkDisplay *display = gtk_widget_get_display (invisible);
   GdkScreen *screen = gdk_event_get_screen ((GdkEvent *) event);
   GdkDevice *device, *pointer_device;
   guint state = event->state & gtk_accelerator_get_default_mod_mask ();
@@ -1808,7 +1815,7 @@ key_press (GtkWidget   *invisible,
 
   device = gdk_event_get_device ((GdkEvent * ) event);
   pointer_device = gdk_device_get_associated_device (device);
-  gdk_display_get_device_state (display, pointer_device, NULL, &x, &y, NULL);
+  gdk_device_get_position (pointer_device, NULL, &x, &y);
 
   dx = 0;
   dy = 0;
@@ -1861,7 +1868,7 @@ key_press (GtkWidget   *invisible,
       return FALSE;
     }
 
-  gdk_display_warp_device (display, pointer_device, screen, x + dx, y + dy);
+  gdk_device_warp (pointer_device, screen, x + dx, y + dy);
 
   return TRUE;
 
@@ -1963,7 +1970,7 @@ get_screen_color (GtkWidget *button)
                                  GDK_BUTTON_RELEASE_MASK | GDK_BUTTON_PRESS_MASK | GDK_POINTER_MOTION_MASK,
                                  picker_cursor,
                                  time);
-  gdk_cursor_unref (picker_cursor);
+  g_object_unref (picker_cursor);
 
   if (grab_status != GDK_GRAB_SUCCESS)
     {
@@ -2071,7 +2078,7 @@ adjustment_changed (GtkAdjustment *adjustment,
     {
     case COLORSEL_SATURATION:
     case COLORSEL_VALUE:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 100;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 100;
       gtk_hsv_to_rgb (priv->color[COLORSEL_HUE],
 		      priv->color[COLORSEL_SATURATION],
 		      priv->color[COLORSEL_VALUE],
@@ -2080,7 +2087,7 @@ adjustment_changed (GtkAdjustment *adjustment,
 		      &priv->color[COLORSEL_BLUE]);
       break;
     case COLORSEL_HUE:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 360;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 360;
       gtk_hsv_to_rgb (priv->color[COLORSEL_HUE],
 		      priv->color[COLORSEL_SATURATION],
 		      priv->color[COLORSEL_VALUE],
@@ -2091,7 +2098,7 @@ adjustment_changed (GtkAdjustment *adjustment,
     case COLORSEL_RED:
     case COLORSEL_GREEN:
     case COLORSEL_BLUE:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 255;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 255;
       
       gtk_rgb_to_hsv (priv->color[COLORSEL_RED],
 		      priv->color[COLORSEL_GREEN],
@@ -2101,7 +2108,7 @@ adjustment_changed (GtkAdjustment *adjustment,
 		      &priv->color[COLORSEL_VALUE]);
       break;
     default:
-      priv->color[GPOINTER_TO_INT (data)] = adjustment->value / 255;
+      priv->color[GPOINTER_TO_INT (data)] = gtk_adjustment_get_value (adjustment) / 255;
       break;
     }
   update_color (colorsel);

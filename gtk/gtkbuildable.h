@@ -26,7 +26,6 @@
 #define __GTK_BUILDABLE_H__
 
 #include <gtk/gtkbuilder.h>
-#include <gtk/gtktypeutils.h>
 
 G_BEGIN_DECLS
 

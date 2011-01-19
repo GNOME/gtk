@@ -21,11 +21,12 @@
 #include <string.h>
 #include "gtkcellview.h"
 #include "gtkcelllayout.h"
+#include "gtkcellareabox.h"
 #include "gtkintl.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcellrendererpixbuf.h"
 #include "gtkprivate.h"
-#include "gtksizerequest.h"
+#include "gtkorientable.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
 
@@ -35,45 +36,24 @@
  * @Short_description: A widget displaying a single row of a GtkTreeModel
  * @Title: GtkCellView
  *
- * A #GtkCellView displays a single row of a #GtkTreeModel, using
- * cell renderers just like #GtkTreeView. #GtkCellView doesn't support
- * some of the more complex features of #GtkTreeView, like cell editing
- * and drag and drop.
+ * A #GtkCellView displays a single row of a #GtkTreeModel using a #GtkCellArea
+ * and #GtkCellAreaContext. A #GtkCellAreaContext can be provided to the 
+ * #GtkCellView at construction time in order to keep the cellview in context
+ * of a group of cell views, this ensures that the renderers displayed will
+ * be properly aligned with eachother (like the aligned cells in the menus
+ * of #GtkComboBox).
+ *
+ * #GtkCellView is #GtkOrientable in order to decide in which orientation
+ * the underlying #GtkCellAreaContext should be allocated. Taking the #GtkComboBox
+ * menu as an example, cellviews should be oriented horizontally if the menus are
+ * listed top-to-bottom and thus all share the same width but may have separate
+ * individual heights (left-to-right menus should be allocated vertically since
+ * they all share the same height but may have variable widths).
  */
 
-
-
-typedef struct _GtkCellViewCellInfo GtkCellViewCellInfo;
-struct _GtkCellViewCellInfo
-{
-  GtkCellRenderer *cell;
-
-  gint requested_width;
-  gint natural_width;
-  gint real_width;
-  guint expand : 1;
-  guint pack : 1;
-
-  GSList *attributes;
-
-  GtkCellLayoutDataFunc func;
-  gpointer func_data;
-  GDestroyNotify destroy;
-};
-
-struct _GtkCellViewPrivate
-{
-  GtkTreeModel *model;
-  GtkTreeRowReference *displayed_row;
-  GList *cell_list;
-  gint spacing;
-
-  GdkRGBA background;
-  gboolean background_set;
-};
-
-
-static void        gtk_cell_view_cell_layout_init         (GtkCellLayoutIface *iface);
+static GObject    *gtk_cell_view_constructor              (GType                  type,
+							   guint                  n_construct_properties,
+							   GObjectConstructParam *construct_properties);
 static void        gtk_cell_view_get_property             (GObject           *object,
                                                            guint             param_id,
                                                            GValue           *value,
@@ -83,6 +63,7 @@ static void        gtk_cell_view_set_property             (GObject          *obj
                                                            const GValue     *value,
                                                            GParamSpec       *pspec);
 static void        gtk_cell_view_finalize                 (GObject          *object);
+static void        gtk_cell_view_dispose                  (GObject          *object);
 static void        gtk_cell_view_size_allocate            (GtkWidget        *widget,
                                                            GtkAllocation    *allocation);
 static gboolean    gtk_cell_view_draw                     (GtkWidget        *widget,
@@ -91,33 +72,12 @@ static void        gtk_cell_view_set_value                (GtkCellView     *cell
                                                            GtkCellRenderer *renderer,
                                                            gchar           *property,
                                                            GValue          *value);
-static GtkCellViewCellInfo *gtk_cell_view_get_cell_info   (GtkCellView      *cellview,
-                                                           GtkCellRenderer  *renderer);
 static void        gtk_cell_view_set_cell_data            (GtkCellView      *cell_view);
 
+/* celllayout */
+static void        gtk_cell_view_cell_layout_init         (GtkCellLayoutIface *iface);
+static GtkCellArea *gtk_cell_view_cell_layout_get_area         (GtkCellLayout         *layout);
 
-static void        gtk_cell_view_cell_layout_pack_start        (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer,
-                                                                gboolean               expand);
-static void        gtk_cell_view_cell_layout_pack_end          (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer,
-                                                                gboolean               expand);
-static void        gtk_cell_view_cell_layout_add_attribute     (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer,
-                                                                const gchar           *attribute,
-                                                                gint                   column);
-static void       gtk_cell_view_cell_layout_clear              (GtkCellLayout         *layout);
-static void       gtk_cell_view_cell_layout_clear_attributes   (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *renderer);
-static void       gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *cell,
-                                                                GtkCellLayoutDataFunc  func,
-                                                                gpointer               func_data,
-                                                                GDestroyNotify         destroy);
-static void       gtk_cell_view_cell_layout_reorder            (GtkCellLayout         *layout,
-                                                                GtkCellRenderer       *cell,
-                                                                gint                   position);
-static GList *    gtk_cell_view_cell_layout_get_cells          (GtkCellLayout         *layout);
 
 /* buildable */
 static void       gtk_cell_view_buildable_init                 (GtkBuildableIface     *iface);
@@ -148,35 +108,70 @@ static void       gtk_cell_view_get_preferred_height_for_width (GtkWidget       
 								gint                  *minimum_size,
 								gint                  *natural_size);
 
-static GtkBuildableIface *parent_buildable_iface;
+static void       context_size_changed_cb                      (GtkCellAreaContext   *context,
+								GParamSpec           *pspec,
+								GtkWidget            *view);
+static void       row_changed_cb                               (GtkTreeModel         *model,
+								GtkTreePath          *path,
+								GtkTreeIter          *iter,
+								GtkCellView          *view);
 
+
+struct _GtkCellViewPrivate
+{
+  GtkTreeModel        *model;
+  GtkTreeRowReference *displayed_row;
+
+  GtkCellArea         *area;
+  GtkCellAreaContext  *context;
+
+  GtkOrientation       orientation;
+
+  GdkRGBA              background;
+  gboolean             background_set;
+
+  gulong               size_changed_id;
+  gulong               row_changed_id;
+
+  guint32              draw_sensitive : 1;
+  guint32              fit_model      : 1;
+};
+
+static GtkBuildableIface *parent_buildable_iface;
 
 enum
 {
   PROP_0,
+  PROP_ORIENTATION,
   PROP_BACKGROUND,
   PROP_BACKGROUND_GDK,
   PROP_BACKGROUND_RGBA,
   PROP_BACKGROUND_SET,
-  PROP_MODEL
+  PROP_MODEL,
+  PROP_CELL_AREA,
+  PROP_CELL_AREA_CONTEXT,
+  PROP_DRAW_SENSITIVE,
+  PROP_FIT_MODEL
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkCellView, gtk_cell_view, GTK_TYPE_WIDGET, 
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_LAYOUT,
 						gtk_cell_view_cell_layout_init)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-						gtk_cell_view_buildable_init))
-
+						gtk_cell_view_buildable_init)
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL));
 
 static void
 gtk_cell_view_class_init (GtkCellViewClass *klass)
 {
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GObjectClass   *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  gobject_class->constructor = gtk_cell_view_constructor;
   gobject_class->get_property = gtk_cell_view_get_property;
   gobject_class->set_property = gtk_cell_view_set_property;
   gobject_class->finalize = gtk_cell_view_finalize;
+  gobject_class->dispose = gtk_cell_view_dispose;
 
   widget_class->draw                           = gtk_cell_view_draw;
   widget_class->size_allocate                  = gtk_cell_view_size_allocate;
@@ -186,6 +181,8 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
   widget_class->get_preferred_height_for_width = gtk_cell_view_get_preferred_height_for_width;
 
   /* properties */
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
+
   g_object_class_install_property (gobject_class,
                                    PROP_BACKGROUND,
                                    g_param_spec_string ("background",
@@ -229,6 +226,85 @@ gtk_cell_view_class_init (GtkCellViewClass *klass)
 							 P_("The model for cell view"),
 							 GTK_TYPE_TREE_MODEL,
 							 GTK_PARAM_READWRITE));
+
+
+  /**
+   * GtkCellView:cell-area
+   *
+   * The #GtkCellArea rendering cells
+   *
+   * since 3.0
+   */
+   g_object_class_install_property (gobject_class,
+                                    PROP_CELL_AREA,
+                                    g_param_spec_object ("cell-area",
+							 P_("Cell Area"),
+							 P_("The GtkCellArea used to layout cells"),
+							 GTK_TYPE_CELL_AREA,
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  /**
+   * GtkCellView:cell-area-context
+   *
+   * The #GtkCellAreaContext used to compute the geometry of the cell view.
+   *
+   * A group of cell views can be assigned the same context in order to
+   * ensure the sizes and cell alignments match across all the views with
+   * the same context.
+   *
+   * #GtkComboBox menus uses this to assign the same context to all cell views
+   * in the menu items for a single menu (each submenu creates it's own
+   * context since the size of each submenu does not depend on parent
+   * or sibling menus).
+   *
+   * since 3.0
+   */
+   g_object_class_install_property (gobject_class,
+                                    PROP_CELL_AREA_CONTEXT,
+                                    g_param_spec_object ("cell-area-context",
+							 P_("Cell Area Context"),
+							 P_("The GtkCellAreaContext used to "
+							    "compute the geometry of the cell view"),
+							 GTK_TYPE_CELL_AREA_CONTEXT,
+							 GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+
+  /**
+   * GtkCellView:draw-sensitive
+   *
+   * Whether all cells should be draw as sensitive for this view regardless
+   * of the actual cell properties (used to make menus with submenus appear
+   * sensitive when the items in submenus might be insensitive).
+   *
+   * since 3.0
+   */
+   g_object_class_install_property (gobject_class,
+                                    PROP_DRAW_SENSITIVE,
+                                    g_param_spec_boolean ("draw-sensitive",
+							  P_("Draw Sensitive"),
+							  P_("Whether to force cells to be drawn in a "
+							     "sensitive state"),
+							  FALSE,
+							  GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCellView:fit-model
+   *
+   * Whether the view should request enough space to always fit
+   * the size of every row in the model (used by the combo box to
+   * ensure the combo box size doesnt change when different items
+   * are selected).
+   *
+   * since 3.0
+   */
+   g_object_class_install_property (gobject_class,
+                                    PROP_FIT_MODEL,
+                                    g_param_spec_boolean ("fit-model",
+							  P_("Fit Model"),
+							  P_("Whether to request enough space for "
+							     "every row in the model"),
+							  FALSE,
+							  GTK_PARAM_READWRITE));
+
   
 #define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (gobject_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
 
@@ -251,14 +327,39 @@ gtk_cell_view_buildable_init (GtkBuildableIface *iface)
 static void
 gtk_cell_view_cell_layout_init (GtkCellLayoutIface *iface)
 {
-  iface->pack_start = gtk_cell_view_cell_layout_pack_start;
-  iface->pack_end = gtk_cell_view_cell_layout_pack_end;
-  iface->clear = gtk_cell_view_cell_layout_clear;
-  iface->add_attribute = gtk_cell_view_cell_layout_add_attribute;
-  iface->set_cell_data_func = gtk_cell_view_cell_layout_set_cell_data_func;
-  iface->clear_attributes = gtk_cell_view_cell_layout_clear_attributes;
-  iface->reorder = gtk_cell_view_cell_layout_reorder;
-  iface->get_cells = gtk_cell_view_cell_layout_get_cells;
+  iface->get_area = gtk_cell_view_cell_layout_get_area;
+}
+
+static GObject *
+gtk_cell_view_constructor (GType                  type,
+			   guint                  n_construct_properties,
+			   GObjectConstructParam *construct_properties)
+{
+  GObject            *object;
+  GtkCellView        *view;
+  GtkCellViewPrivate *priv;
+
+  object = G_OBJECT_CLASS (gtk_cell_view_parent_class)->constructor
+    (type, n_construct_properties, construct_properties);
+
+  view = GTK_CELL_VIEW (object);
+  priv = view->priv;
+
+  if (!priv->area)
+    {
+      GtkCellArea *area = gtk_cell_area_box_new ();
+
+      priv->area = g_object_ref_sink (area);
+    }
+
+  if (!priv->context)
+    priv->context = gtk_cell_area_create_context (priv->area);
+
+  priv->size_changed_id = 
+    g_signal_connect (priv->context, "notify",
+		      G_CALLBACK (context_size_changed_cb), view);
+
+  return object;
 }
 
 static void
@@ -271,30 +372,45 @@ gtk_cell_view_get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_BACKGROUND_GDK:
-        {
-          GdkColor color;
-
-          color.red = (guint) (view->priv->background.red * 65535);
-          color.green = (guint) (view->priv->background.green * 65535);
-          color.blue = (guint) (view->priv->background.blue * 65535);
-          color.pixel = 0;
-
-          g_value_set_boxed (value, &color);
-        }
-        break;
-      case PROP_BACKGROUND_RGBA:
-        g_value_set_boxed (value, &view->priv->background);
-        break;
-      case PROP_BACKGROUND_SET:
-        g_value_set_boolean (value, view->priv->background_set);
-        break;
-      case PROP_MODEL:
-	g_value_set_object (value, view->priv->model);
-	break;
-      default:
-        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-        break;
+    case PROP_ORIENTATION:
+      g_value_set_enum (value, view->priv->orientation);
+      break;
+    case PROP_BACKGROUND_GDK:
+      {
+	GdkColor color;
+	
+	color.red = (guint) (view->priv->background.red * 65535);
+	color.green = (guint) (view->priv->background.green * 65535);
+	color.blue = (guint) (view->priv->background.blue * 65535);
+	color.pixel = 0;
+	
+	g_value_set_boxed (value, &color);
+      }
+      break;
+    case PROP_BACKGROUND_RGBA:
+      g_value_set_boxed (value, &view->priv->background);
+      break;
+    case PROP_BACKGROUND_SET:
+      g_value_set_boolean (value, view->priv->background_set);
+      break;
+    case PROP_MODEL:
+      g_value_set_object (value, view->priv->model);
+      break;
+    case PROP_CELL_AREA:
+      g_value_set_object (value, view->priv->area);
+      break;
+    case PROP_CELL_AREA_CONTEXT:
+      g_value_set_object (value, view->priv->context);
+      break;
+    case PROP_DRAW_SENSITIVE:
+      g_value_set_boolean (value, view->priv->draw_sensitive);
+      break;
+    case PROP_FIT_MODEL:
+      g_value_set_boolean (value, view->priv->fit_model);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
     }
 }
 
@@ -305,35 +421,67 @@ gtk_cell_view_set_property (GObject      *object,
                             GParamSpec   *pspec)
 {
   GtkCellView *view = GTK_CELL_VIEW (object);
+  GtkCellArea *area;
+  GtkCellAreaContext *context;
 
   switch (param_id)
     {
-      case PROP_BACKGROUND:
-        {
-          GdkColor color;
+    case PROP_ORIENTATION:
+      view->priv->orientation = g_value_get_enum (value);
+      if (view->priv->context)
+	gtk_cell_area_context_reset (view->priv->context);
 
-          if (!g_value_get_string (value))
-            gtk_cell_view_set_background_color (view, NULL);
-          else if (gdk_color_parse (g_value_get_string (value), &color))
-            gtk_cell_view_set_background_color (view, &color);
-          else
-            g_warning ("Don't know color `%s'", g_value_get_string (value));
+      _gtk_orientable_set_style_classes (GTK_ORIENTABLE (object));
+      break;
+    case PROP_BACKGROUND:
+      {
+	GdkColor color;
+	
+	if (!g_value_get_string (value))
+	  gtk_cell_view_set_background_color (view, NULL);
+	else if (gdk_color_parse (g_value_get_string (value), &color))
+	  gtk_cell_view_set_background_color (view, &color);
+	else
+	  g_warning ("Don't know color `%s'", g_value_get_string (value));
+	
+	g_object_notify (object, "background-gdk");
+      }
+      break;
+    case PROP_BACKGROUND_GDK:
+      gtk_cell_view_set_background_color (view, g_value_get_boxed (value));
+      break;
+    case PROP_BACKGROUND_RGBA:
+      gtk_cell_view_set_background_rgba (view, g_value_get_boxed (value));
+      break;
+    case PROP_BACKGROUND_SET:
+      view->priv->background_set = g_value_get_boolean (value);
+      break;
+    case PROP_MODEL:
+      gtk_cell_view_set_model (view, g_value_get_object (value));
+      break;
+    case PROP_CELL_AREA:
+      /* Construct-only, can only be assigned once */
+      area = g_value_get_object (value);
+      
+      if (area)
+	view->priv->area = g_object_ref_sink (area);
+      break;
+    case PROP_CELL_AREA_CONTEXT:
+      /* Construct-only, can only be assigned once */
+      context = g_value_get_object (value);
+      
+      if (context)
+	view->priv->context = g_object_ref (context);
+      break;
 
-          g_object_notify (object, "background-gdk");
-        }
-        break;
-      case PROP_BACKGROUND_GDK:
-        gtk_cell_view_set_background_color (view, g_value_get_boxed (value));
-        break;
-      case PROP_BACKGROUND_RGBA:
-        gtk_cell_view_set_background_rgba (view, g_value_get_boxed (value));
-        break;
-      case PROP_BACKGROUND_SET:
-        view->priv->background_set = g_value_get_boolean (value);
-        break;
-      case PROP_MODEL:
-	gtk_cell_view_set_model (view, g_value_get_object (value));
-	break;
+    case PROP_DRAW_SENSITIVE:
+      gtk_cell_view_set_draw_sensitive (view, g_value_get_boolean (value));
+      break;
+
+    case PROP_FIT_MODEL:
+      gtk_cell_view_set_fit_model (view, g_value_get_boolean (value));
+      break;
+
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
@@ -351,17 +499,14 @@ gtk_cell_view_init (GtkCellView *cellview)
   priv = cellview->priv;
 
   gtk_widget_set_has_window (GTK_WIDGET (cellview), FALSE);
+
+  priv->orientation = GTK_ORIENTATION_HORIZONTAL;
 }
 
 static void
 gtk_cell_view_finalize (GObject *object)
 {
   GtkCellView *cellview = GTK_CELL_VIEW (object);
-
-  gtk_cell_view_cell_layout_clear (GTK_CELL_LAYOUT (cellview));
-
-  if (cellview->priv->model)
-     g_object_unref (cellview->priv->model);
 
   if (cellview->priv->displayed_row)
      gtk_tree_row_reference_free (cellview->priv->displayed_row);
@@ -370,116 +515,228 @@ gtk_cell_view_finalize (GObject *object)
 }
 
 static void
+gtk_cell_view_dispose (GObject *object)
+{
+  GtkCellView *cellview = GTK_CELL_VIEW (object);
+
+  gtk_cell_view_set_model (cellview, NULL);
+
+  if (cellview->priv->area)
+    {
+      g_object_unref (cellview->priv->area);
+      cellview->priv->area = NULL;
+    }
+
+  if (cellview->priv->context)
+    {
+      g_signal_handler_disconnect (cellview->priv->context, cellview->priv->size_changed_id);
+
+      g_object_unref (cellview->priv->context);
+      cellview->priv->context = NULL;
+      cellview->priv->size_changed_id = 0;
+    }
+
+  G_OBJECT_CLASS (gtk_cell_view_parent_class)->dispose (object);
+}
+
+static void
 gtk_cell_view_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
-  GtkCellView      *cellview;
-  GtkRequestedSize *sizes;
-  GList            *list;
-  gint              n_visible_cells, n_expand_cells;
-  gint              avail_width = 0;
-  gint              extra_per_cell, extra_extra, i;
-  gboolean          first_cell = TRUE;
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+  gint                alloc_width, alloc_height;
 
   gtk_widget_set_allocation (widget, allocation);
 
-  cellview = GTK_CELL_VIEW (widget);
+  gtk_cell_area_context_get_allocation (priv->context, &alloc_width, &alloc_height);
 
-  avail_width = allocation->width;
+  /* The first cell view in context is responsible for allocating the context at allocate time 
+   * (or the cellview has its own context and is not grouped with any other cell views) 
+   *
+   * If the cellview is in "fit model" mode, we assume its not in context and needs to
+   * allocate every time.
+   */
+  if (priv->fit_model)
+    gtk_cell_area_context_allocate (priv->context, allocation->width, allocation->height);
+  else if (alloc_width != allocation->width && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+    gtk_cell_area_context_allocate (priv->context, allocation->width, -1);
+  else if (alloc_height != allocation->height && priv->orientation == GTK_ORIENTATION_VERTICAL)
+    gtk_cell_area_context_allocate (priv->context, -1, allocation->height);
+}
 
-  /* Count visible/expand children */
-  for (n_visible_cells = 0, n_expand_cells = 0, list = cellview->priv->cell_list; 
-       list; list = list->next)
+static void
+gtk_cell_view_request_model (GtkCellView        *cellview,
+			     GtkTreeIter        *parent,
+			     GtkOrientation      orientation,
+			     gint                for_size,
+			     gint               *minimum_size,
+			     gint               *natural_size)
+{
+  GtkCellViewPrivate *priv = cellview->priv;
+  GtkTreeIter         iter;
+  gboolean            valid;
+
+  valid = gtk_tree_model_iter_children (priv->model, &iter, parent);
+  while (valid)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
+      gint min, nat;
 
-      n_visible_cells++;
+      gtk_cell_area_apply_attributes (priv->area, priv->model, &iter, FALSE, FALSE);
 
-      if (info->expand)
-        n_expand_cells++;
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+	{
+	  if (for_size < 0)
+	    gtk_cell_area_get_preferred_width (priv->area, priv->context, 
+					       GTK_WIDGET (cellview), &min, &nat);
+	  else
+	    gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, 
+							  GTK_WIDGET (cellview), for_size, &min, &nat);
+	}
+      else
+	{
+	  if (for_size < 0)
+	    gtk_cell_area_get_preferred_height (priv->area, priv->context, 
+						GTK_WIDGET (cellview), &min, &nat);
+	  else
+	    gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, 
+							  GTK_WIDGET (cellview), for_size, &min, &nat);
+	}
+
+      *minimum_size = MAX (min, *minimum_size);
+      *natural_size = MAX (nat, *natural_size);
+
+      /* Recurse into children when they exist */
+      gtk_cell_view_request_model (cellview, &iter, orientation, for_size, minimum_size, natural_size);
+
+      valid = gtk_tree_model_iter_next (priv->model, &iter);
     }
+}
 
-  sizes = g_new0 (GtkRequestedSize, n_visible_cells);
+static void
+gtk_cell_view_get_preferred_width  (GtkWidget *widget,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
 
-  /* checking how much extra space we have */
-  for (i = 0, list = cellview->priv->cell_list; list; list = list->next)
+  g_signal_handler_block (priv->context, priv->size_changed_id);
+
+  if (priv->fit_model)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
-
-      if (!gtk_cell_renderer_get_visible (info->cell))
-        continue;
-
-      sizes[i].data = info;
-      sizes[i].minimum_size = info->requested_width;
-      sizes[i].natural_size = info->natural_width;
-
-      if (!first_cell)
-	avail_width -= cellview->priv->spacing;
-
-      avail_width -= sizes[i].minimum_size;
-
-      first_cell = FALSE;
-
-      i++;
-    }
-
-  avail_width = gtk_distribute_natural_allocation (MAX (0, avail_width), n_visible_cells, sizes);
-
-  /* Deal with any expand space... */
-  if (n_expand_cells > 0)
-    {
-      extra_per_cell = avail_width / n_expand_cells;
-      extra_extra    = avail_width % n_expand_cells;
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_HORIZONTAL, -1, &min, &nat);
     }
   else
-    /* Everything just left-aligned if no cells expand */
-    extra_per_cell = extra_extra = 0;
-
-  for (i = 0, list = cellview->priv->cell_list; list; list = list->next)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
 
-      if (!gtk_cell_renderer_get_visible (info->cell))
-        continue;
-
-      info->real_width = sizes[i].minimum_size;
-
-      if (info->expand)
-        {
-	  info->real_width += extra_per_cell;
-
-	  if (extra_extra)
-	    {
-	      info->real_width++;
-	      extra_extra--;
-	    }
-	}
-      
-      /* increment index into sizes for visible children */
-      i++;
+      gtk_cell_area_get_preferred_width (priv->area, priv->context, widget, NULL, NULL);
     }
 
-  g_free (sizes);
+  gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
+
+  g_signal_handler_unblock (priv->context, priv->size_changed_id);
+}
+
+static void       
+gtk_cell_view_get_preferred_height (GtkWidget *widget,
+                                    gint      *minimum_size,
+                                    gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  g_signal_handler_block (priv->context, priv->size_changed_id);
+
+  if (priv->fit_model)
+    {
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_VERTICAL, -1, &min, &nat);
+    }
+  else
+    {
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
+      
+      gtk_cell_area_get_preferred_height (priv->area, priv->context, widget, NULL, NULL);
+    }
+
+  gtk_cell_area_context_get_preferred_height (priv->context, minimum_size, natural_size);
+
+  g_signal_handler_unblock (priv->context, priv->size_changed_id);
+}
+
+static void       
+gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  if (priv->fit_model)
+    {
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_HORIZONTAL, for_size, &min, &nat);
+
+      *minimum_size = min;
+      *natural_size = nat;
+    }
+  else
+    {
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
+
+      gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, widget, 
+						    for_size, minimum_size, natural_size);
+    }
+}
+
+static void       
+gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
+                                              gint       for_size,
+                                              gint      *minimum_size,
+                                              gint      *natural_size)
+{
+  GtkCellView        *cellview = GTK_CELL_VIEW (widget);
+  GtkCellViewPrivate *priv = cellview->priv;
+
+  if (priv->fit_model)
+    {
+      gint min = 0, nat = 0;
+      gtk_cell_view_request_model (cellview, NULL, GTK_ORIENTATION_VERTICAL, for_size, &min, &nat);
+
+      *minimum_size = min;
+      *natural_size = nat;
+    }
+  else
+    {
+      if (cellview->priv->displayed_row)
+	gtk_cell_view_set_cell_data (cellview);
+
+      gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, widget, 
+						    for_size, minimum_size, natural_size);
+    }
 }
 
 static gboolean
 gtk_cell_view_draw (GtkWidget *widget,
                     cairo_t   *cr)
 {
-  GList *list;
   GtkCellView *cellview;
   GdkRectangle area;
   GtkCellRendererState state;
-  gboolean rtl = (gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL);
-  GtkPackType packing;
-  int width;
 
   cellview = GTK_CELL_VIEW (widget);
 
   /* render cells */
   area.x = 0;
   area.y = 0;
-  area.width = width = gtk_widget_get_allocated_width (widget);
+  area.width  = gtk_widget_get_allocated_width (widget);
   area.height = gtk_widget_get_allocated_height (widget);
 
   /* "blank" background */
@@ -496,77 +753,23 @@ gtk_cell_view_draw (GtkWidget *widget,
   else if (cellview->priv->model)
     return FALSE;
 
-  if (gtk_widget_get_state (widget) == GTK_STATE_PRELIGHT)
+  if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT)
     state = GTK_CELL_RENDERER_PRELIT;
-  else if (gtk_widget_get_state (widget) == GTK_STATE_INSENSITIVE)
+  else if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
     state = GTK_CELL_RENDERER_INSENSITIVE;
   else
     state = 0;
       
-  for (packing = GTK_PACK_START; packing <= GTK_PACK_END; ++packing)
-    {
-      if (packing == GTK_PACK_START)
-	area.x = rtl ? width : 0;
-      else
-	area.x = rtl ? 0 : width;
-
-      for (list = cellview->priv->cell_list; list; list = list->next)
-	{
-	  GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
-
-	  if (info->pack != packing)
-	    continue;
-
-	  if (!gtk_cell_renderer_get_visible (info->cell))
-	    continue;
-
-	  area.width = info->real_width;
-
-	  if ((packing == GTK_PACK_START && rtl) ||
-	      (packing == GTK_PACK_END && !rtl))
-	    area.x -= area.width;
-
-	  gtk_cell_renderer_render (info->cell,
-                                    cr,
-                                    widget,
-                                    /* FIXME! */
-                                    &area, &area, state);
-
-	  if ((packing == GTK_PACK_START && !rtl) ||
-	      (packing == GTK_PACK_END && rtl))
-	    {
-	      area.x += area.width;
-	      area.x += cellview->priv->spacing;
-	    }
-	  else
-	    area.x -= cellview->priv->spacing;
-	}
-    }
+  /* Render the cells */
+  gtk_cell_area_render (cellview->priv->area, cellview->priv->context, 
+			widget, cr, &area, &area, state, FALSE);
 
   return FALSE;
-}
-
-static GtkCellViewCellInfo *
-gtk_cell_view_get_cell_info (GtkCellView     *cellview,
-                             GtkCellRenderer *renderer)
-{
-  GList *i;
-
-  for (i = cellview->priv->cell_list; i; i = i->next)
-    {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)i->data;
-
-      if (info->cell == renderer)
-        return info;
-    }
-
-  return NULL;
 }
 
 static void
 gtk_cell_view_set_cell_data (GtkCellView *cell_view)
 {
-  GList *i;
   GtkTreeIter iter;
   GtkTreePath *path;
 
@@ -579,190 +782,101 @@ gtk_cell_view_set_cell_data (GtkCellView *cell_view)
   gtk_tree_model_get_iter (cell_view->priv->model, &iter, path);
   gtk_tree_path_free (path);
 
-  for (i = cell_view->priv->cell_list; i; i = i->next)
+  gtk_cell_area_apply_attributes (cell_view->priv->area, 
+				  cell_view->priv->model, 
+				  &iter, FALSE, FALSE);
+
+  if (cell_view->priv->draw_sensitive)
     {
-      GSList *j;
-      GtkCellViewCellInfo *info = i->data;
+      GList *l, *cells = 
+	gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view->priv->area));
 
-      g_object_freeze_notify (G_OBJECT (info->cell));
+      for (l = cells; l; l = l->next)
+	{
+	  GObject *renderer = l->data;
 
-      for (j = info->attributes; j && j->next; j = j->next->next)
-        {
-          gchar *property = j->data;
-          gint column = GPOINTER_TO_INT (j->next->data);
-          GValue value = {0, };
-
-          gtk_tree_model_get_value (cell_view->priv->model, &iter,
-                                    column, &value);
-          g_object_set_property (G_OBJECT (info->cell),
-                                 property, &value);
-          g_value_unset (&value);
-        }
-
-      if (info->func)
-	(* info->func) (GTK_CELL_LAYOUT (cell_view),
-			info->cell,
-			cell_view->priv->model,
-			&iter,
-			info->func_data);
-
-      g_object_thaw_notify (G_OBJECT (info->cell));
+	  g_object_set (renderer, "sensitive", TRUE, NULL);
+	}
+      g_list_free (cells);
     }
 }
 
 /* GtkCellLayout implementation */
-static void
-gtk_cell_view_cell_layout_pack_start (GtkCellLayout   *layout,
-                                      GtkCellRenderer *renderer,
-                                      gboolean         expand)
+static GtkCellArea *
+gtk_cell_view_cell_layout_get_area (GtkCellLayout   *layout)
 {
-  GtkCellViewCellInfo *info;
   GtkCellView *cellview = GTK_CELL_VIEW (layout);
 
-  g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
+  return cellview->priv->area;
+}
 
-  g_object_ref_sink (renderer);
+/* GtkBuildable implementation */
+static gboolean
+gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
+					  GtkBuilder    *builder,
+					  GObject       *child,
+					  const gchar   *tagname,
+					  GMarkupParser *parser,
+					  gpointer      *data)
+{
+  if (parent_buildable_iface->custom_tag_start &&
+      parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, data))
+    return TRUE;
 
-  info = g_slice_new0 (GtkCellViewCellInfo);
-  info->cell = renderer;
-  info->expand = expand ? TRUE : FALSE;
-  info->pack = GTK_PACK_START;
-
-  cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
-
-  gtk_widget_queue_resize (GTK_WIDGET (cellview));
+  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
+						      tagname, parser, data);
 }
 
 static void
-gtk_cell_view_cell_layout_pack_end (GtkCellLayout   *layout,
-                                    GtkCellRenderer *renderer,
-                                    gboolean         expand)
+gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
+					GtkBuilder   *builder,
+					GObject      *child,
+					const gchar  *tagname,
+					gpointer     *data)
 {
-  GtkCellViewCellInfo *info;
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  g_return_if_fail (!gtk_cell_view_get_cell_info (cellview, renderer));
-
-  g_object_ref_sink (renderer);
-
-  info = g_slice_new0 (GtkCellViewCellInfo);
-  info->cell = renderer;
-  info->expand = expand ? TRUE : FALSE;
-  info->pack = GTK_PACK_END;
-
-  cellview->priv->cell_list = g_list_append (cellview->priv->cell_list, info);
-
-  gtk_widget_queue_resize (GTK_WIDGET (cellview));
+  if (_gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
+						 data))
+    return;
+  else if (parent_buildable_iface->custom_tag_end)
+    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
+					    data);
 }
 
 static void
-gtk_cell_view_cell_layout_add_attribute (GtkCellLayout   *layout,
-                                         GtkCellRenderer *renderer,
-                                         const gchar     *attribute,
-                                         gint             column)
+context_size_changed_cb (GtkCellAreaContext  *context,
+			 GParamSpec          *pspec,
+			 GtkWidget           *view)
 {
-  GtkCellViewCellInfo *info;
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-
-  info = gtk_cell_view_get_cell_info (cellview, renderer);
-  g_return_if_fail (info != NULL);
-
-  info->attributes = g_slist_prepend (info->attributes,
-                                      GINT_TO_POINTER (column));
-  info->attributes = g_slist_prepend (info->attributes,
-                                      g_strdup (attribute));
+  if (!strcmp (pspec->name, "minimum-width") ||
+      !strcmp (pspec->name, "natural-width") ||
+      !strcmp (pspec->name, "minimum-height") ||
+      !strcmp (pspec->name, "natural-height"))
+    gtk_widget_queue_resize (view);
 }
 
 static void
-gtk_cell_view_cell_layout_clear (GtkCellLayout *layout)
+row_changed_cb (GtkTreeModel         *model,
+		GtkTreePath          *path,
+		GtkTreeIter          *iter,
+		GtkCellView          *view)
 {
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
+  GtkTreePath *row_path;
 
-  while (cellview->priv->cell_list)
+  if (view->priv->displayed_row)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)cellview->priv->cell_list->data;
+      row_path = 
+	gtk_tree_row_reference_get_path (view->priv->displayed_row);
 
-      gtk_cell_view_cell_layout_clear_attributes (layout, info->cell);
-      g_object_unref (info->cell);
-      g_slice_free (GtkCellViewCellInfo, info);
-      cellview->priv->cell_list = g_list_delete_link (cellview->priv->cell_list, 
-						      cellview->priv->cell_list);
-    }
-}
-
-static void
-gtk_cell_view_cell_layout_set_cell_data_func (GtkCellLayout         *layout,
-                                              GtkCellRenderer       *cell,
-                                              GtkCellLayoutDataFunc  func,
-                                              gpointer               func_data,
-                                              GDestroyNotify         destroy)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-  GtkCellViewCellInfo *info;
-
-  info = gtk_cell_view_get_cell_info (cellview, cell);
-  g_return_if_fail (info != NULL);
-
-  if (info->destroy)
-    {
-      GDestroyNotify d = info->destroy;
-
-      info->destroy = NULL;
-      d (info->func_data);
-    }
-
-  info->func = func;
-  info->func_data = func_data;
-  info->destroy = destroy;
-}
-
-static void
-gtk_cell_view_cell_layout_clear_attributes (GtkCellLayout   *layout,
-                                            GtkCellRenderer *renderer)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-  GtkCellViewCellInfo *info;
-  GSList *list;
-
-  info = gtk_cell_view_get_cell_info (cellview, renderer);
-  if (info != NULL)
-    {
-      list = info->attributes;
-      while (list && list->next)
+      if (row_path)
 	{
-	  g_free (list->data);
-	  list = list->next->next;
+	  /* Resize everything in our context if our row changed */
+	  if (gtk_tree_path_compare (row_path, path) == 0)
+	    gtk_cell_area_context_reset (view->priv->context);
+
+	  gtk_tree_path_free (row_path);
 	}
-      
-      g_slist_free (info->attributes);
-      info->attributes = NULL;
     }
-}
-
-static void
-gtk_cell_view_cell_layout_reorder (GtkCellLayout   *layout,
-                                   GtkCellRenderer *cell,
-                                   gint             position)
-{
-  GtkCellView *cellview = GTK_CELL_VIEW (layout);
-  GtkCellViewCellInfo *info;
-  GList *link;
-
-  info = gtk_cell_view_get_cell_info (cellview, cell);
-
-  g_return_if_fail (info != NULL);
-  g_return_if_fail (position >= 0);
-
-  link = g_list_find (cellview->priv->cell_list, info);
-
-  g_return_if_fail (link != NULL);
-
-  cellview->priv->cell_list = g_list_delete_link (cellview->priv->cell_list,
-                                                  link);
-  cellview->priv->cell_list = g_list_insert (cellview->priv->cell_list,
-                                             info, position);
-
-  gtk_widget_queue_draw (GTK_WIDGET (cellview));
 }
 
 /**
@@ -782,6 +896,37 @@ gtk_cell_view_new (void)
   cellview = g_object_new (gtk_cell_view_get_type (), NULL);
 
   return GTK_WIDGET (cellview);
+}
+
+
+/**
+ * gtk_cell_view_new_with_context:
+ * @area: the #GtkCellArea to layout cells
+ * @context: the #GtkCellAreaContext in which to calculate cell geometry
+ *
+ * Creates a new #GtkCellView widget with a specific #GtkCellArea
+ * to layout cells and a specific #GtkCellAreaContext.
+ *
+ * Specifying the same context for a handfull of cells lets
+ * the underlying area synchronize the geometry for those cells,
+ * in this way alignments with cellviews for other rows are
+ * possible.
+ *
+ * Return value: A newly created #GtkCellView widget.
+ *
+ * Since: 2.6
+ */
+GtkWidget *
+gtk_cell_view_new_with_context (GtkCellArea        *area,
+				GtkCellAreaContext *context)
+{
+  g_return_val_if_fail (GTK_IS_CELL_AREA (area), NULL);
+  g_return_val_if_fail (context == NULL || GTK_IS_CELL_AREA_CONTEXT (context), NULL);
+
+  return (GtkWidget *)g_object_new (GTK_TYPE_CELL_VIEW, 
+				    "cell-area", area,
+				    "cell-area-context", context,
+				    NULL);
 }
 
 /**
@@ -805,8 +950,8 @@ gtk_cell_view_new_with_text (const gchar *text)
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
   renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_view_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
-                                        renderer, TRUE);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+			      renderer, TRUE);
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, text);
@@ -839,8 +984,8 @@ gtk_cell_view_new_with_markup (const gchar *markup)
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
   renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_view_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
-                                        renderer, TRUE);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+			      renderer, TRUE);
 
   g_value_init (&value, G_TYPE_STRING);
   g_value_set_string (&value, markup);
@@ -871,8 +1016,8 @@ gtk_cell_view_new_with_pixbuf (GdkPixbuf *pixbuf)
   cellview = GTK_CELL_VIEW (gtk_cell_view_new ());
 
   renderer = gtk_cell_renderer_pixbuf_new ();
-  gtk_cell_view_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
-                                        renderer, TRUE);
+  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (cellview),
+			      renderer, TRUE);
 
   g_value_init (&value, GDK_TYPE_PIXBUF);
   g_value_set_object (&value, pixbuf);
@@ -927,6 +1072,10 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
 
   if (cell_view->priv->model)
     {
+      g_signal_handler_disconnect (cell_view->priv->model, 
+				   cell_view->priv->row_changed_id);
+      cell_view->priv->row_changed_id = 0;
+
       if (cell_view->priv->displayed_row)
         gtk_tree_row_reference_free (cell_view->priv->displayed_row);
       cell_view->priv->displayed_row = NULL;
@@ -938,7 +1087,13 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
   cell_view->priv->model = model;
 
   if (cell_view->priv->model)
-    g_object_ref (cell_view->priv->model);
+    {
+      g_object_ref (cell_view->priv->model);
+
+      cell_view->priv->row_changed_id = 
+	g_signal_connect (cell_view->priv->model, "row-changed",
+			  G_CALLBACK (row_changed_cb), cell_view);
+    }
 }
 
 /**
@@ -1033,107 +1188,36 @@ gtk_cell_view_get_displayed_row (GtkCellView *cell_view)
  *
  * Since: 2.6
  * 
- * Deprecated: 3.0: Use gtk_cell_view_get_desired_width_of_row() and
- * gtk_cell_view_get_desired_height_for_width_of_row() instead.
+ * Deprecated: 3.0: Combo box formerly used this to calculate the
+ * sizes for cellviews, now you can achieve this by either using
+ * the #GtkCellView:fit-model property or by setting the currently
+ * displayed row of the #GtkCellView and using gtk_widget_get_preferred_size().
  */
 gboolean
 gtk_cell_view_get_size_of_row (GtkCellView    *cell_view,
                                GtkTreePath    *path,
                                GtkRequisition *requisition)
 {
+  GtkTreeRowReference *tmp;
   GtkRequisition req;
 
   g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
   g_return_val_if_fail (path != NULL, FALSE);
 
-  /* Return the minimum height for the minimum width */
-  gtk_cell_view_get_desired_width_of_row (cell_view, path, &req.width, NULL);
-  gtk_cell_view_get_desired_height_for_width_of_row (cell_view, path, req.width, &req.height, NULL);
+  tmp = cell_view->priv->displayed_row;
+  cell_view->priv->displayed_row =
+    gtk_tree_row_reference_new (cell_view->priv->model, path);
+
+  gtk_widget_get_preferred_width (GTK_WIDGET (cell_view), &req.width, NULL);
+  gtk_widget_get_preferred_height_for_width (GTK_WIDGET (cell_view), req.width, &req.height, NULL);
+
+  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
+  cell_view->priv->displayed_row = tmp;
 
   if (requisition)
     *requisition = req;
 
   return TRUE;
-}
-
-
-/**
- * gtk_cell_view_get_desired_width_of_row:
- * @cell_view: a #GtkCellView
- * @path: a #GtkTreePath 
- * @minimum_size: location to store the minimum size 
- * @natural_size: location to store the natural size 
- *
- * Sets @minimum_size and @natural_size to the width desired by @cell_view 
- * to display the model row pointed to by @path.
- * 
- * Since: 3.0
- */
-void
-gtk_cell_view_get_desired_width_of_row (GtkCellView     *cell_view,
-					GtkTreePath     *path,
-					gint            *minimum_size,
-					gint            *natural_size)
-{
-  GtkTreeRowReference *tmp;
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (minimum_size != NULL || natural_size != NULL);
-
-  tmp = cell_view->priv->displayed_row;
-  cell_view->priv->displayed_row =
-    gtk_tree_row_reference_new (cell_view->priv->model, path);
-
-  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), minimum_size, natural_size);
-
-  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
-  cell_view->priv->displayed_row = tmp;
-
-  /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
-  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), NULL, NULL);
-}
-
-
-/**
- * gtk_cell_view_get_desired_height_for_width_of_row:
- * @cell_view: a #GtkCellView
- * @path: a #GtkTreePath 
- * @avail_size: available width
- * @minimum_size: location to store the minimum height 
- * @natural_size: location to store the natural height
- *
- * Sets @minimum_size and @natural_size to the height desired by @cell_view 
- * if it were allocated a width of @avail_size to display the model row 
- * pointed to by @path.
- * 
- * Since: 3.0
- */
-void
-gtk_cell_view_get_desired_height_for_width_of_row (GtkCellView     *cell_view,
-						   GtkTreePath     *path,
-						   gint             avail_size,
-						   gint            *minimum_size,
-						   gint            *natural_size)
-{
-  GtkTreeRowReference *tmp;
-
-  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
-  g_return_if_fail (path != NULL);
-  g_return_if_fail (minimum_size != NULL || natural_size != NULL);
-
-  tmp = cell_view->priv->displayed_row;
-  cell_view->priv->displayed_row =
-    gtk_tree_row_reference_new (cell_view->priv->model, path);
-
-  /* Then get the collective height_for_width based on the cached values */
-  gtk_cell_view_get_preferred_height_for_width (GTK_WIDGET (cell_view), avail_size, minimum_size, natural_size);
-
-  gtk_tree_row_reference_free (cell_view->priv->displayed_row);
-  cell_view->priv->displayed_row = tmp;
-
-  /* Restore active size (this will restore the cellrenderer info->width/requested_width's) */
-  gtk_cell_view_get_preferred_width (GTK_WIDGET (cell_view), NULL, NULL);
 }
 
 /**
@@ -1213,235 +1297,113 @@ gtk_cell_view_set_background_rgba (GtkCellView   *cell_view,
   gtk_widget_queue_draw (GTK_WIDGET (cell_view));
 }
 
-static GList *
-gtk_cell_view_cell_layout_get_cells (GtkCellLayout *layout)
+/**
+ * gtk_cell_view_get_draw_sensitive:
+ * @cell_view: a #GtkCellView
+ *
+ * Gets whether @cell_view is configured to draw all of it's
+ * cells in a sensitive state.
+ *
+ * Return value: whether @cell_view draws all of it's
+ * cells in a sensitive state
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_cell_view_get_draw_sensitive (GtkCellView     *cell_view)
 {
-  GtkCellView *cell_view = GTK_CELL_VIEW (layout);
-  GList *retval = NULL, *list;
+  GtkCellViewPrivate *priv;
 
-  g_return_val_if_fail (cell_view != NULL, NULL);
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
 
-  gtk_cell_view_set_cell_data (cell_view);
+  priv = cell_view->priv;
 
-  for (list = cell_view->priv->cell_list; list; list = list->next)
+  return priv->draw_sensitive;
+}
+
+/**
+ * gtk_cell_view_set_draw_sensitive:
+ * @cell_view: a #GtkCellView
+ * @draw_sensitive: whether to draw all cells in a sensitive state.
+ *
+ * Sets whether @cell_view should draw all of it's
+ * cells in a sensitive state, this is used by #GtkComboBox menus
+ * to ensure that rows with insensitive cells that contain
+ * children appear sensitive in the parent menu item.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_view_set_draw_sensitive (GtkCellView     *cell_view,
+				  gboolean         draw_sensitive)
+{
+  GtkCellViewPrivate *priv;
+
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
+
+  priv = cell_view->priv;
+
+  if (priv->draw_sensitive != draw_sensitive)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
+      priv->draw_sensitive = draw_sensitive;
 
-      retval = g_list_prepend (retval, info->cell);
+      g_object_notify (G_OBJECT (cell_view), "draw-sensitive");
     }
-
-  return g_list_reverse (retval);
 }
 
-static gboolean
-gtk_cell_view_buildable_custom_tag_start (GtkBuildable  *buildable,
-					  GtkBuilder    *builder,
-					  GObject       *child,
-					  const gchar   *tagname,
-					  GMarkupParser *parser,
-					  gpointer      *data)
+/**
+ * gtk_cell_view_get_fit_model:
+ * @cell_view: a #GtkCellView
+ *
+ * Gets whether @cell_view is configured to request space
+ * to fit the entire #GtkTreeModel.
+ *
+ * Return value: whether @cell_view requests space to fit
+ * the entire #GtkTreeModel.
+ *
+ * Since: 3.0
+ */
+gboolean
+gtk_cell_view_get_fit_model (GtkCellView     *cell_view)
 {
-  if (parent_buildable_iface->custom_tag_start &&
-      parent_buildable_iface->custom_tag_start (buildable, builder, child,
-						tagname, parser, data))
-    return TRUE;
+  GtkCellViewPrivate *priv;
 
-  return _gtk_cell_layout_buildable_custom_tag_start (buildable, builder, child,
-						      tagname, parser, data);
+  g_return_val_if_fail (GTK_IS_CELL_VIEW (cell_view), FALSE);
+
+  priv = cell_view->priv;
+
+  return priv->fit_model;
 }
 
-static void
-gtk_cell_view_buildable_custom_tag_end (GtkBuildable *buildable,
-					GtkBuilder   *builder,
-					GObject      *child,
-					const gchar  *tagname,
-					gpointer     *data)
+/**
+ * gtk_cell_view_set_fit_model:
+ * @cell_view: a #GtkCellView
+ * @fit_model: whether @cell_view should request space for the whole model.
+ *
+ * Sets whether @cell_view should request space to fit the entire #GtkTreeModel.
+ *
+ * This is used by #GtkComboBox to ensure that the cell view displayed on
+ * the combo box's button always gets enough space and does not resize
+ * when selection changes.
+ *
+ * Since: 3.0
+ */
+void
+gtk_cell_view_set_fit_model (GtkCellView     *cell_view,
+			     gboolean         fit_model)
 {
-  if (strcmp (tagname, "attributes") == 0)
-    _gtk_cell_layout_buildable_custom_tag_end (buildable, builder, child, tagname,
-					       data);
-  else if (parent_buildable_iface->custom_tag_end)
-    parent_buildable_iface->custom_tag_end (buildable, builder, child, tagname,
-					    data);
-}
+  GtkCellViewPrivate *priv;
 
-static void
-gtk_cell_view_get_preferred_width  (GtkWidget *widget,
-                                    gint      *minimum_size,
-                                    gint      *natural_size)
-{
-  GList *list;
-  gint cell_min, cell_nat;
-  gboolean first_cell = TRUE;
-  GtkCellView *cellview = GTK_CELL_VIEW (widget);
-  gint minimum, natural;
+  g_return_if_fail (GTK_IS_CELL_VIEW (cell_view));
 
-  minimum = natural = 0;
+  priv = cell_view->priv;
 
-  if (cellview->priv->displayed_row)
-    gtk_cell_view_set_cell_data (cellview);
-
-  for (list = cellview->priv->cell_list; list; list = list->next)
+  if (priv->fit_model != fit_model)
     {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
+      priv->fit_model = fit_model;
 
-      if (gtk_cell_renderer_get_visible (info->cell))
-        {
-	  
-	  if (!first_cell)
-	    {
-	      minimum += cellview->priv->spacing;
-	      natural += cellview->priv->spacing;
-	    }
+      gtk_cell_area_context_reset (cell_view->priv->context);
 
-	  gtk_cell_renderer_get_preferred_width (info->cell,
-                                                 GTK_WIDGET (cellview), &cell_min, &cell_nat);
-	  
-	  info->requested_width = cell_min;
-	  info->natural_width   = cell_nat;
-	  
-	  minimum += info->requested_width;
-	  natural += info->natural_width;
-
-	  first_cell = FALSE;
-        }
+      g_object_notify (G_OBJECT (cell_view), "fit-model");
     }
-
-  if (minimum_size)
-    *minimum_size = minimum;
-
-  if (natural_size)
-    *natural_size = natural;
-}
-
-static void       
-gtk_cell_view_get_preferred_height (GtkWidget *widget,
-                                    gint      *minimum_size,
-                                    gint      *natural_size)
-{
-  gint minimum_width;
-
-  /* CellViews only need to respond to height-for-width mode (cellview is pretty much
-   * an implementation detail of GtkComboBox) */
-  gtk_cell_view_get_preferred_width (widget, &minimum_width, NULL);
-  gtk_cell_view_get_preferred_height_for_width (widget, minimum_width, minimum_size, natural_size);
-}
-
-static void       
-gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
-                                              gint       for_size,
-                                              gint      *minimum_size,
-                                              gint      *natural_size)
-{
-  /* CellViews only need to respond to height-for-width mode (cellview is pretty much
-   * an implementation detail of GtkComboBox) */
-  gtk_cell_view_get_preferred_width (widget, minimum_size, natural_size);
-}
-
-static void       
-gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
-                                              gint       for_size,
-                                              gint      *minimum_size,
-                                              gint      *natural_size)
-{
-  GtkCellView      *cellview = GTK_CELL_VIEW (widget);
-  GList            *list;
-  GtkRequestedSize *sizes;
-  GArray           *array;
-  gint              minimum, natural, avail_size;
-  gboolean          first_cell = TRUE;
-  gint              n_expand_cells = 0;
-  gint              extra_per_cell, extra_extra, i;
-
-  minimum = natural = 0;
-  avail_size = for_size;
-
-  array = g_array_new (0, TRUE, sizeof (GtkRequestedSize));
-
-  if (cellview->priv->displayed_row)
-    gtk_cell_view_set_cell_data (cellview);
-
-  /* First allocate the right width to all cells */
-  for (list = cellview->priv->cell_list; list; list = list->next)
-    {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
-
-      if (gtk_cell_renderer_get_visible (info->cell))
-        {
-	  GtkRequestedSize requested;
-
-	  gtk_cell_renderer_get_preferred_width (GTK_CELL_RENDERER (info->cell),
-                                                 GTK_WIDGET (cellview), 
-                                                 &requested.minimum_size, 
-                                                 &requested.natural_size);
-
-	  requested.data = info;
-	  g_array_append_val (array, requested);
-
-	  avail_size -= requested.minimum_size;
-
-	  if (!first_cell)
-	    avail_size -= cellview->priv->spacing;
-
-	  first_cell = FALSE;
-
-	  if (info->expand)
-	    n_expand_cells++;
-        }
-    }
-
-  sizes      = (GtkRequestedSize *)array->data;
-  avail_size = gtk_distribute_natural_allocation (MAX (0, avail_size), array->len, sizes);
-
-  /* Deal with any expand space... */
-  if (n_expand_cells > 0)
-    {
-      extra_per_cell = avail_size / n_expand_cells;
-      extra_extra    = avail_size % n_expand_cells;
-    }
-  else
-    /* Everything just left-aligned if no cells expand */
-    extra_per_cell = extra_extra = 0;
-
-  /* Now get the height for the real width of each cell */
-  for (i = 0, list = cellview->priv->cell_list; list; list = list->next)
-    {
-      GtkCellViewCellInfo *info = (GtkCellViewCellInfo *)list->data;
-      gint cell_minimum, cell_natural;
-
-      if (gtk_cell_renderer_get_visible (info->cell))
-        {
-	  gint cell_width = sizes[i].minimum_size;
-
-	  g_assert (sizes[i].data == info);
-
-	  if (info->expand)
-	    {
-	      cell_width += extra_per_cell;
-	      if (extra_extra)
-		{
-		  cell_width++;
-		  extra_extra--;
-		}
-	    }
-
-	  /* Get the height for the real width of this cell */
-	  gtk_cell_renderer_get_preferred_height_for_width (GTK_CELL_RENDERER (info->cell),
-                                                            GTK_WIDGET (widget),
-                                                            cell_width, &cell_minimum, &cell_natural);
-
-	  minimum = MAX (minimum, cell_minimum);
-	  natural = MAX (natural, cell_natural);
-
-	  /* increment sizes[] index for visible cells */
-	  i++;
-        }
-    }
-
-  g_array_free (array, TRUE);
-
-  if (minimum_size)
-    *minimum_size = minimum;
-  if (natural_size)
-    *natural_size = natural;
 }

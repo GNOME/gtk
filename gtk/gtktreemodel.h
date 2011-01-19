@@ -42,15 +42,55 @@ typedef struct _GtkTreePath         GtkTreePath;
 typedef struct _GtkTreeRowReference GtkTreeRowReference;
 typedef struct _GtkTreeModel        GtkTreeModel; /* Dummy typedef */
 typedef struct _GtkTreeModelIface   GtkTreeModelIface;
+
+/**
+ * GtkTreeModelForeachFunc:
+ * @model: the #GtkTreeModel being iterated
+ * @path: the current #GtkTreePath
+ * @iter: the current #GtkTreeIter
+ * @data: The user data passed to gtk_tree_model_foreach()
+ *
+ * Type of the callback passed to gtk_tree_model_foreach() to
+ * iterate over the rows in a tree model.
+ *
+ * Return value: %TRUE to stop iterating, %FALSE to continue
+ *
+ */
 typedef gboolean (* GtkTreeModelForeachFunc) (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
 
-
+/**
+ * GtkTreeModelFlags:
+ * @GTK_TREE_MODEL_ITERS_PERSIST: iterators survive all signals
+ *     emitted by the tree
+ * @GTK_TREE_MODEL_LIST_ONLY: the model is a list only, and never
+ *     has children
+ *
+ * These flags indicate various properties of a #GtkTreeModel.
+ *
+ * They are returned by gtk_tree_model_get_flags(), and must be
+ * static for the lifetime of the object. A more complete description
+ * of #GTK_TREE_MODEL_ITERS_PERSIST can be found in the overview of
+ * this section.
+ */
 typedef enum
 {
   GTK_TREE_MODEL_ITERS_PERSIST = 1 << 0,
   GTK_TREE_MODEL_LIST_ONLY = 1 << 1
 } GtkTreeModelFlags;
 
+/**
+ * GtkTreeIter:
+ * @stamp: a unique stamp to catch invalid iterators
+ * @user_data: model-specific data
+ * @user_data2: model-specific data
+ * @user_data3: model-specific data
+ *
+ * The <structname>GtkTreeIter</structname> is the primary structure
+ * for accessing a #GtkTreeModel. Models are expected to put a unique
+ * integer in the <structfield>stamp</structfield> member, and put
+ * model-specific data in the three <structfield>user_data</structfield>
+ * members.
+ */
 struct _GtkTreeIter
 {
   gint stamp;
@@ -96,6 +136,8 @@ struct _GtkTreeModelIface
 				    gint          column,
 				    GValue       *value);
   gboolean     (* iter_next)       (GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter);
+  gboolean     (* iter_previous)   (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter);
   gboolean     (* iter_children)   (GtkTreeModel *tree_model,
 				    GtkTreeIter  *iter,
@@ -206,6 +248,8 @@ void              gtk_tree_model_get_value       (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter,
 						  gint          column,
 						  GValue       *value);
+gboolean          gtk_tree_model_iter_previous   (GtkTreeModel *tree_model,
+						  GtkTreeIter  *iter);
 gboolean          gtk_tree_model_iter_next       (GtkTreeModel *tree_model,
 						  GtkTreeIter  *iter);
 gboolean          gtk_tree_model_iter_children   (GtkTreeModel *tree_model,

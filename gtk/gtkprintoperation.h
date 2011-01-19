@@ -196,6 +196,17 @@ GtkPageSetup           *gtk_print_run_page_setup_dialog            (GtkWindow   
 								    GtkPageSetup       *page_setup,
 								    GtkPrintSettings   *settings);
 
+/**
+ * GtkPageSetupDoneFunc:
+ * @page_setup: the #GtkPageSetup that has been
+ * @data: (closure): user data that has been passed to 
+ *        gtk_print_run_page_setup_dialog_async().
+ *
+ * The type of function that is passed to
+ * gtk_print_run_page_setup_dialog_async().  This function will be
+ * called when the page setup dialog is dismissed, and also serves as
+ * destroy notify for @data.
+ */
 typedef void  (* GtkPageSetupDoneFunc) (GtkPageSetup *page_setup,
 					gpointer      data);
 

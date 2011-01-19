@@ -124,8 +124,7 @@ static void gtk_path_bar_grab_notify              (GtkWidget        *widget,
 						   gboolean          was_grabbed);
 static void gtk_path_bar_state_changed            (GtkWidget        *widget,
 						   GtkStateType      previous_state);
-static void gtk_path_bar_style_set                (GtkWidget        *widget,
-						   GtkStyle         *previous_style);
+static void gtk_path_bar_style_updated            (GtkWidget        *widget);
 static void gtk_path_bar_screen_changed           (GtkWidget        *widget,
 						   GdkScreen        *previous_screen);
 static void gtk_path_bar_check_icon_theme         (GtkPathBar       *path_bar);
@@ -227,7 +226,7 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   widget_class->map = gtk_path_bar_map;
   widget_class->unmap = gtk_path_bar_unmap;
   widget_class->size_allocate = gtk_path_bar_size_allocate;
-  widget_class->style_set = gtk_path_bar_style_set;
+  widget_class->style_updated = gtk_path_bar_style_updated;
   widget_class->screen_changed = gtk_path_bar_screen_changed;
   widget_class->grab_notify = gtk_path_bar_grab_notify;
   widget_class->state_changed = gtk_path_bar_state_changed;
@@ -465,8 +464,6 @@ gtk_path_bar_realize (GtkWidget *widget)
   path_bar->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
                                            &attributes, attributes_mask);
   gdk_window_set_user_data (path_bar->event_window, widget);
-
-  gtk_widget_style_attach (widget);
 }
 
 static void
@@ -713,10 +710,9 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 }
 
 static void
-gtk_path_bar_style_set (GtkWidget *widget,
-			GtkStyle  *previous_style)
+gtk_path_bar_style_updated (GtkWidget *widget)
 {
-  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_set (widget, previous_style);
+  GTK_WIDGET_CLASS (gtk_path_bar_parent_class)->style_updated (widget);
 
   gtk_path_bar_check_icon_theme (GTK_PATH_BAR (widget));
 }

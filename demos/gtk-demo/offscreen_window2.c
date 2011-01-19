@@ -228,7 +228,6 @@ gtk_mirror_bin_realize (GtkWidget *widget)
   g_signal_connect (bin->offscreen_window, "from-embedder",
                     G_CALLBACK (offscreen_window_from_parent), bin);
 
-  gtk_widget_style_attach (widget);
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_set_background (context, window);
   gtk_style_context_set_background (context, bin->offscreen_window);

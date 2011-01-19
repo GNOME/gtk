@@ -26,9 +26,9 @@
 
 #include "config.h"
 
-#include "gdkkeys.h"
-
+#include "gdkkeysprivate.h"
 #include "gdkdisplay.h"
+#include "gdkdisplaymanagerprivate.h"
 
 
 /**
@@ -183,12 +183,6 @@ gdk_keymap_init (GdkKeymap *keymap)
 /* Other key-handling stuff
  */
 
-#ifndef HAVE_XCONVERTCASE
-#include "gdkkeysyms.h"
-
-/* compatibility function from X11R6.3, since XConvertCase is not
- * supplied by X11R5.
- */
 /**
  * gdk_keyval_convert_case:
  * @symbol: a keyval
@@ -197,133 +191,16 @@ gdk_keymap_init (GdkKeymap *keymap)
  *
  * Obtains the upper- and lower-case versions of the keyval @symbol.
  * Examples of keyvals are #GDK_KEY_a, #GDK_KEY_Enter, #GDK_KEY_F1, etc.
- *
- **/
+ */
 void
 gdk_keyval_convert_case (guint symbol,
-			 guint *lower,
-			 guint *upper)
+                         guint *lower,
+                         guint *upper)
 {
-  guint xlower = symbol;
-  guint xupper = symbol;
+  GdkDisplayManager *manager = gdk_display_manager_get ();
 
-  /* Check for directly encoded 24-bit UCS characters: */
-  if ((symbol & 0xff000000) == 0x01000000)
-    {
-      if (lower)
-	*lower = gdk_unicode_to_keyval (g_unichar_tolower (symbol & 0x00ffffff));
-      if (upper)
-	*upper = gdk_unicode_to_keyval (g_unichar_toupper (symbol & 0x00ffffff));
-      return;
-    }
-
-  switch (symbol >> 8)
-    {
-    case 0: /* Latin 1 */
-      if ((symbol >= GDK_KEY_A) && (symbol <= GDK_KEY_Z))
-	xlower += (GDK_KEY_a - GDK_KEY_A);
-      else if ((symbol >= GDK_KEY_a) && (symbol <= GDK_KEY_z))
-	xupper -= (GDK_KEY_a - GDK_KEY_A);
-      else if ((symbol >= GDK_KEY_Agrave) && (symbol <= GDK_KEY_Odiaeresis))
-	xlower += (GDK_KEY_agrave - GDK_KEY_Agrave);
-      else if ((symbol >= GDK_KEY_agrave) && (symbol <= GDK_KEY_odiaeresis))
-	xupper -= (GDK_KEY_agrave - GDK_KEY_Agrave);
-      else if ((symbol >= GDK_KEY_Ooblique) && (symbol <= GDK_KEY_Thorn))
-	xlower += (GDK_KEY_oslash - GDK_KEY_Ooblique);
-      else if ((symbol >= GDK_KEY_oslash) && (symbol <= GDK_KEY_thorn))
-	xupper -= (GDK_KEY_oslash - GDK_KEY_Ooblique);
-      break;
-      
-    case 1: /* Latin 2 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol == GDK_KEY_Aogonek)
-	xlower = GDK_KEY_aogonek;
-      else if (symbol >= GDK_KEY_Lstroke && symbol <= GDK_KEY_Sacute)
-	xlower += (GDK_KEY_lstroke - GDK_KEY_Lstroke);
-      else if (symbol >= GDK_KEY_Scaron && symbol <= GDK_KEY_Zacute)
-	xlower += (GDK_KEY_scaron - GDK_KEY_Scaron);
-      else if (symbol >= GDK_KEY_Zcaron && symbol <= GDK_KEY_Zabovedot)
-	xlower += (GDK_KEY_zcaron - GDK_KEY_Zcaron);
-      else if (symbol == GDK_KEY_aogonek)
-	xupper = GDK_KEY_Aogonek;
-      else if (symbol >= GDK_KEY_lstroke && symbol <= GDK_KEY_sacute)
-	xupper -= (GDK_KEY_lstroke - GDK_KEY_Lstroke);
-      else if (symbol >= GDK_KEY_scaron && symbol <= GDK_KEY_zacute)
-	xupper -= (GDK_KEY_scaron - GDK_KEY_Scaron);
-      else if (symbol >= GDK_KEY_zcaron && symbol <= GDK_KEY_zabovedot)
-	xupper -= (GDK_KEY_zcaron - GDK_KEY_Zcaron);
-      else if (symbol >= GDK_KEY_Racute && symbol <= GDK_KEY_Tcedilla)
-	xlower += (GDK_KEY_racute - GDK_KEY_Racute);
-      else if (symbol >= GDK_KEY_racute && symbol <= GDK_KEY_tcedilla)
-	xupper -= (GDK_KEY_racute - GDK_KEY_Racute);
-      break;
-      
-    case 2: /* Latin 3 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Hstroke && symbol <= GDK_KEY_Hcircumflex)
-	xlower += (GDK_KEY_hstroke - GDK_KEY_Hstroke);
-      else if (symbol >= GDK_KEY_Gbreve && symbol <= GDK_KEY_Jcircumflex)
-	xlower += (GDK_KEY_gbreve - GDK_KEY_Gbreve);
-      else if (symbol >= GDK_KEY_hstroke && symbol <= GDK_KEY_hcircumflex)
-	xupper -= (GDK_KEY_hstroke - GDK_KEY_Hstroke);
-      else if (symbol >= GDK_KEY_gbreve && symbol <= GDK_KEY_jcircumflex)
-	xupper -= (GDK_KEY_gbreve - GDK_KEY_Gbreve);
-      else if (symbol >= GDK_KEY_Cabovedot && symbol <= GDK_KEY_Scircumflex)
-	xlower += (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
-      else if (symbol >= GDK_KEY_cabovedot && symbol <= GDK_KEY_scircumflex)
-	xupper -= (GDK_KEY_cabovedot - GDK_KEY_Cabovedot);
-      break;
-      
-    case 3: /* Latin 4 */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Rcedilla && symbol <= GDK_KEY_Tslash)
-	xlower += (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
-      else if (symbol >= GDK_KEY_rcedilla && symbol <= GDK_KEY_tslash)
-	xupper -= (GDK_KEY_rcedilla - GDK_KEY_Rcedilla);
-      else if (symbol == GDK_KEY_ENG)
-	xlower = GDK_KEY_eng;
-      else if (symbol == GDK_KEY_eng)
-	xupper = GDK_KEY_ENG;
-      else if (symbol >= GDK_KEY_Amacron && symbol <= GDK_KEY_Umacron)
-	xlower += (GDK_KEY_amacron - GDK_KEY_Amacron);
-      else if (symbol >= GDK_KEY_amacron && symbol <= GDK_KEY_umacron)
-	xupper -= (GDK_KEY_amacron - GDK_KEY_Amacron);
-      break;
-      
-    case 6: /* Cyrillic */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Serbian_DJE && symbol <= GDK_KEY_Serbian_DZE)
-	xlower -= (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
-      else if (symbol >= GDK_KEY_Serbian_dje && symbol <= GDK_KEY_Serbian_dze)
-	xupper += (GDK_KEY_Serbian_DJE - GDK_KEY_Serbian_dje);
-      else if (symbol >= GDK_KEY_Cyrillic_YU && symbol <= GDK_KEY_Cyrillic_HARDSIGN)
-	xlower -= (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
-      else if (symbol >= GDK_KEY_Cyrillic_yu && symbol <= GDK_KEY_Cyrillic_hardsign)
-	xupper += (GDK_KEY_Cyrillic_YU - GDK_KEY_Cyrillic_yu);
-      break;
-      
-    case 7: /* Greek */
-      /* Assume the KeySym is a legal value (ignore discontinuities) */
-      if (symbol >= GDK_KEY_Greek_ALPHAaccent && symbol <= GDK_KEY_Greek_OMEGAaccent)
-	xlower += (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
-      else if (symbol >= GDK_KEY_Greek_alphaaccent && symbol <= GDK_KEY_Greek_omegaaccent &&
-	       symbol != GDK_KEY_Greek_iotaaccentdieresis &&
-	       symbol != GDK_KEY_Greek_upsilonaccentdieresis)
-	xupper -= (GDK_KEY_Greek_alphaaccent - GDK_KEY_Greek_ALPHAaccent);
-      else if (symbol >= GDK_KEY_Greek_ALPHA && symbol <= GDK_KEY_Greek_OMEGA)
-	xlower += (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
-      else if (symbol >= GDK_KEY_Greek_alpha && symbol <= GDK_KEY_Greek_omega &&
-	       symbol != GDK_KEY_Greek_finalsmallsigma)
-	xupper -= (GDK_KEY_Greek_alpha - GDK_KEY_Greek_ALPHA);
-      break;
-    }
-
-  if (lower)
-    *lower = xlower;
-  if (upper)
-    *upper = xupper;
+  GDK_DISPLAY_MANAGER_GET_CLASS (manager)->keyval_convert_case (manager, symbol, lower, upper);
 }
-#endif
 
 /**
  * gdk_keyval_to_upper:
@@ -407,7 +284,7 @@ gdk_keyval_is_lower (guint keyval)
   return FALSE;
 }
 
-/** 
+/**
  * gdk_keymap_get_default:
  *
  * Returns the #GdkKeymap attached to the default display.
@@ -418,4 +295,330 @@ GdkKeymap*
 gdk_keymap_get_default (void)
 {
   return gdk_keymap_get_for_display (gdk_display_get_default ());
+}
+
+/**
+ * gdk_keymap_get_direction:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns the direction of effective layout of the keymap.
+ *
+ * Returns: %PANGO_DIRECTION_LTR or %PANGO_DIRECTION_RTL
+ *   if it can determine the direction. %PANGO_DIRECTION_NEUTRAL
+ *   otherwise.
+ **/
+PangoDirection
+gdk_keymap_get_direction (GdkKeymap *keymap)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->get_direction (keymap);
+}
+
+/**
+ * gdk_keymap_have_bidi_layouts:
+ * @keymap: a #GdkKeymap
+ *
+ * Determines if keyboard layouts for both right-to-left and left-to-right
+ * languages are in use.
+ *
+ * Returns: %TRUE if there are layouts in both directions, %FALSE otherwise
+ *
+ * Since: 2.12
+ **/
+gboolean
+gdk_keymap_have_bidi_layouts (GdkKeymap *keymap)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->have_bidi_layouts (keymap);
+}
+
+/**
+ * gdk_keymap_get_caps_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Caps Lock modifer is locked.
+ *
+ * Returns: %TRUE if Caps Lock is on
+ *
+ * Since: 2.16
+ */
+gboolean
+gdk_keymap_get_caps_lock_state (GdkKeymap *keymap)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->get_caps_lock_state (keymap);
+}
+
+/**
+ * gdk_keymap_get_num_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Num Lock modifer is locked.
+ *
+ * Returns: %TRUE if Num Lock is on
+ *
+ * Since: 3.0
+ */
+gboolean
+gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->get_num_lock_state (keymap);
+}
+
+/**
+ * gdk_keymap_get_entries_for_keyval:
+ * @keymap: a #GdkKeymap
+ * @keyval: a keyval, such as %GDK_a, %GDK_Up, %GDK_Return, etc.
+ * @keys: (out): return location for an array of #GdkKeymapKey
+ * @n_keys: (out): return location for number of elements in returned array
+ *
+ * Obtains a list of keycode/group/level combinations that will
+ * generate @keyval. Groups and levels are two kinds of keyboard mode;
+ * in general, the level determines whether the top or bottom symbol
+ * on a key is used, and the group determines whether the left or
+ * right symbol is used. On US keyboards, the shift key changes the
+ * keyboard level, and there are no groups. A group switch key might
+ * convert a keyboard between Hebrew to English modes, for example.
+ * #GdkEventKey contains a %group field that indicates the active
+ * keyboard group. The level is computed from the modifier mask.
+ * The returned array should be freed
+ * with g_free().
+ *
+ * Return value: %TRUE if keys were found and returned
+ **/
+gboolean
+gdk_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
+                                   guint          keyval,
+                                   GdkKeymapKey **keys,
+                                   gint          *n_keys)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->get_entries_for_keyval (keymap, keyval, keys, n_keys);
+}
+
+/**
+ * gdk_keymap_get_entries_for_keycode:
+ * @keymap: a #GdkKeymap
+ * @hardware_keycode: a keycode
+ * @keys: (out): return location for array of #GdkKeymapKey, or %NULL
+ * @keyvals: (out): return location for array of keyvals, or %NULL
+ * @n_entries: length of @keys and @keyvals
+ *
+ * Returns the keyvals bound to @hardware_keycode.
+ * The Nth #GdkKeymapKey in @keys is bound to the Nth
+ * keyval in @keyvals. Free the returned arrays with g_free().
+ * When a keycode is pressed by the user, the keyval from
+ * this list of entries is selected by considering the effective
+ * keyboard group and level. See gdk_keymap_translate_keyboard_state().
+ *
+ * Returns: %TRUE if there were any entries
+ **/
+gboolean
+gdk_keymap_get_entries_for_keycode (GdkKeymap     *keymap,
+                                    guint          hardware_keycode,
+                                    GdkKeymapKey **keys,
+                                    guint        **keyvals,
+                                    gint          *n_entries)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->get_entries_for_keycode (keymap, hardware_keycode, keys, keyvals, n_entries);
+}
+
+/**
+ * gdk_keymap_lookup_key:
+ * @keymap: a #GdkKeymap
+ * @key: a #GdkKeymapKey with keycode, group, and level initialized
+ *
+ * Looks up the keyval mapped to a keycode/group/level triplet.
+ * If no keyval is bound to @key, returns 0. For normal user input,
+ * you want to use gdk_keymap_translate_keyboard_state() instead of
+ * this function, since the effective group/level may not be
+ * the same as the current keyboard state.
+ *
+ * Return value: a keyval, or 0 if none was mapped to the given @key
+ **/
+guint
+gdk_keymap_lookup_key (GdkKeymap          *keymap,
+                       const GdkKeymapKey *key)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->lookup_key (keymap, key);
+}
+
+/**
+ * gdk_keymap_translate_keyboard_state:
+ * @keymap: a #GdkKeymap
+ * @hardware_keycode: a keycode
+ * @state: a modifier state
+ * @group: active keyboard group
+ * @keyval: (out) (allow-none): return location for keyval, or %NULL
+ * @effective_group: (out) (allow-none): return location for effective
+ *     group, or %NULL
+ * @level: (out) (allow-none): return location for level, or %NULL
+ * @consumed_modifiers: (out) (allow-none): return location for modifiers
+ *     that were used to determine the group or level, or %NULL
+ *
+ * Translates the contents of a #GdkEventKey into a keyval, effective
+ * group, and level. Modifiers that affected the translation and
+ * are thus unavailable for application use are returned in
+ * @consumed_modifiers.
+ * See <xref linkend="key-group-explanation"/> for an explanation of
+ * groups and levels. The @effective_group is the group that was
+ * actually used for the translation; some keys such as Enter are not
+ * affected by the active keyboard group. The @level is derived from
+ * @state. For convenience, #GdkEventKey already contains the translated
+ * keyval, so this function isn't as useful as you might think.
+ *
+ * <note><para>
+ * @consumed_modifiers gives modifiers that should be masked out
+ * from @state when comparing this key press to a hot key. For
+ * instance, on a US keyboard, the <literal>plus</literal>
+ * symbol is shifted, so when comparing a key press to a
+ * <literal>&lt;Control&gt;plus</literal> accelerator &lt;Shift&gt; should
+ * be masked out.
+ * </para>
+ * <informalexample><programlisting>
+ * &sol;* We want to ignore irrelevant modifiers like ScrollLock *&sol;
+ * &num;define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK)
+ * gdk_keymap_translate_keyboard_state (keymap, event->hardware_keycode,
+ *                                      event->state, event->group,
+ *                                      &amp;keyval, NULL, NULL, &amp;consumed);
+ * if (keyval == GDK_PLUS &&
+ *     (event->state &amp; ~consumed &amp; ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
+ *   &sol;* Control was pressed *&sol;
+ * </programlisting></informalexample>
+ * <para>
+ * An older interpretation @consumed_modifiers was that it contained
+ * all modifiers that might affect the translation of the key;
+ * this allowed accelerators to be stored with irrelevant consumed
+ * modifiers, by doing:</para>
+ * <informalexample><programlisting>
+ * &sol;* XXX Don't do this XXX *&sol;
+ * if (keyval == accel_keyval &&
+ *     (event->state &amp; ~consumed &amp; ALL_ACCELS_MASK) == (accel_mods &amp; ~consumed))
+ *   &sol;* Accelerator was pressed *&sol;
+ * </programlisting></informalexample>
+ * <para>
+ * However, this did not work if multi-modifier combinations were
+ * used in the keymap, since, for instance, <literal>&lt;Control&gt;</literal>
+ * would be masked out even if only <literal>&lt;Control&gt;&lt;Alt&gt;</literal>
+ * was used in the keymap. To support this usage as well as well as
+ * possible, all <emphasis>single modifier</emphasis> combinations
+ * that could affect the key for any combination of modifiers will
+ * be returned in @consumed_modifiers; multi-modifier combinations
+ * are returned only when actually found in @state. When you store
+ * accelerators, you should always store them with consumed modifiers
+ * removed. Store <literal>&lt;Control&gt;plus</literal>,
+ * not <literal>&lt;Control&gt;&lt;Shift&gt;plus</literal>,
+ * </para></note>
+ *
+ * Return value: %TRUE if there was a keyval bound to the keycode/state/group
+ **/
+gboolean
+gdk_keymap_translate_keyboard_state (GdkKeymap       *keymap,
+                                     guint            hardware_keycode,
+                                     GdkModifierType  state,
+                                     gint             group,
+                                     guint           *keyval,
+                                     gint            *effective_group,
+                                     gint            *level,
+                                     GdkModifierType *consumed_modifiers)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->translate_keyboard_state (keymap,
+								  hardware_keycode,
+								  state,
+								  group,
+								  keyval,
+								  effective_group,
+								  level,
+								  consumed_modifiers);
+}
+
+/**
+ * gdk_keymap_add_virtual_modifiers:
+ * @keymap: a #GdkKeymap
+ * @state: pointer to the modifier mask to change
+ *
+ * Adds virtual modifiers (i.e. Super, Hyper and Meta) which correspond
+ * to the real modifiers (i.e Mod2, Mod3, ...) in @modifiers.
+ * are set in @state to their non-virtual counterparts (i.e. Mod2,
+ * Mod3,...) and set the corresponding bits in @state.
+ *
+ * GDK already does this before delivering key events, but for
+ * compatibility reasons, it only sets the first virtual modifier
+ * it finds, whereas this function sets all matching virtual modifiers.
+ *
+ * This function is useful when matching key events against
+ * accelerators.
+ *
+ * Since: 2.20
+ */
+void
+gdk_keymap_add_virtual_modifiers (GdkKeymap       *keymap,
+			          GdkModifierType *state)
+{
+  GDK_KEYMAP_GET_CLASS(keymap)->add_virtual_modifiers (keymap, state);
+}
+
+/**
+ * gdk_keymap_map_virtual_modifiers:
+ * @keymap: a #GdkKeymap
+ * @state: pointer to the modifier state to map
+ *
+ * Maps the virtual modifiers (i.e. Super, Hyper and Meta) which
+ * are set in @state to their non-virtual counterparts (i.e. Mod2,
+ * Mod3,...) and set the corresponding bits in @state.
+ *
+ * This function is useful when matching key events against
+ * accelerators.
+ *
+ * Returns: %TRUE if no virtual modifiers were mapped to the
+ *     same non-virtual modifier. Note that %FALSE is also returned
+ *     if a virtual modifier is mapped to a non-virtual modifier that
+ *     was already set in @state.
+ *
+ * Since: 2.20
+ */
+gboolean
+gdk_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
+                                  GdkModifierType *state)
+{
+  return GDK_KEYMAP_GET_CLASS(keymap)->map_virtual_modifiers (keymap, state);
+}
+
+/**
+ * gdk_keyval_name:
+ * @keyval: a key value
+ *
+ * Converts a key value into a symbolic name.
+ *
+ * The names are the same as those in the
+ * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+ * but without the leading "GDK_KEY_".
+ *
+ * Return value: (transfer none): a string containing the name of the key,
+ *     or %NULL if @keyval is not a valid key. The string should not be
+ *     modified.
+ */
+gchar*
+gdk_keyval_name (guint keyval)
+{
+  GdkDisplayManager *manager = gdk_display_manager_get ();
+
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->get_keyval_name (manager, keyval);
+}
+
+/**
+ * gdk_keyval_from_name:
+ * @keyval_name: a key name
+ *
+ * Converts a key name to a key value.
+ *
+ * The names are the same as those in the
+ * <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file
+ * but without the leading "GDK_KEY_".
+ *
+ * Returns: the corresponding key value, or %GDK_KEY_VoidSymbol
+ *     if the key name is not a valid key
+ */
+guint
+gdk_keyval_from_name (const gchar *keyval_name)
+{
+  GdkDisplayManager *manager = gdk_display_manager_get ();
+
+  return GDK_DISPLAY_MANAGER_GET_CLASS (manager)->lookup_keyval (manager, keyval_name);
 }

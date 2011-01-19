@@ -26,13 +26,12 @@
 
 #include "config.h"
 
-#include "gdkx.h"
+#include "gdkdeviceprivate.h"
+#include "gdkinternals.h"
+#include "gdkintl.h"
 #include "gdkasync.h"
 #include "gdkdisplay-x11.h"
-#include "gdkinternals.h"
 #include "gdkprivate-x11.h"
-#include "gdkintl.h"
-#include "gdkdeviceprivate.h"
 
 #include <glib/gprintf.h>
 #include <stdlib.h>
@@ -49,9 +48,41 @@
 #include <X11/XKBlib.h>
 #endif
 
+/**
+ * SECTION:x_interaction
+ * @Short_description: X backend-specific functions
+ * @Title: X Window System Interaction
+ *
+ * The functions in this section are specific to the GDK X11 backend.
+ * To use them, you need to include the <literal>&lt;gdk/gdkx.h&gt;</literal>
+ * header and use the X11-specific pkg-config files to build your
+ * application (either <literal>gdk-x11-3.0</literal> or
+ * <literal>gtk+-x11-3.0</literal>).
+ *
+ * To make your code compile with other GDK backends, guard backend-specific
+ * calls by an ifdef as follows. Since GDK may be built with multiple
+ * backends, you should also check for the backend that is in use (e.g. by
+ * using the GDK_IS_X11_DISPLAY() macro).
+ * |[
+ * #ifdef GDK_WINDOWING_X11
+ *   if (GDK_IS_X11_DISPLAY (display))
+ *     {
+ *       /&ast; make X11-specific calls here &ast;/
+ *     }
+ *   else
+ * #endif
+ * #ifdef GDK_WINDOWING_QUARTZ
+ *   if (GDK_IS_QUARTZ_DISPLAY (display))
+ *     {
+ *       /&ast; make Quartz-specific calls here &ast/
+ *     }
+ *   else
+ * #endif
+ *   g_error ("Unsupported GDK backend");
+ * ]|
+ */
 
-typedef struct _GdkPredicate        GdkPredicate;
-typedef struct _GdkGlobalErrorTrap  GdkGlobalErrorTrap;
+typedef struct _GdkPredicate GdkPredicate;
 
 struct _GdkPredicate
 {
@@ -65,12 +96,7 @@ static GdkXErrorHandler _gdk_old_error_handler;
 /* number of times we've pushed the GDK error handler */
 static int _gdk_error_handler_push_count = 0;
 
-struct _GdkGlobalErrorTrap
-{
-  GSList *displays;
-};
-
-/* 
+/*
  * Private function declarations
  */
 
@@ -85,26 +111,11 @@ static int	    gdk_x_error			 (Display     *display,
 						  XErrorEvent *error);
 static int	    gdk_x_io_error		 (Display     *display);
 
-/* Private variable declarations
- */
-static GQueue gdk_error_traps;
-
-const GOptionEntry _gdk_windowing_args[] = {
-  { "sync", 0, 0, G_OPTION_ARG_NONE, &_gdk_synchronize, 
-    /* Description of --sync in --help output */ N_("Make X calls synchronous"), NULL },
-  { NULL }
-};
-
 void
-_gdk_windowing_init (void)
+_gdk_x11_windowing_init (void)
 {
-  _gdk_x11_initialize_locale ();
-
-  g_queue_init (&gdk_error_traps);
   XSetErrorHandler (gdk_x_error);
   XSetIOErrorHandler (gdk_x_io_error);
-
-  _gdk_selection_property = gdk_atom_intern_static_string ("GDK_SELECTION");
 }
 
 GdkGrabStatus
@@ -129,66 +140,19 @@ _gdk_x11_convert_grab_status (gint status)
   return 0;
 }
 
-static void
-has_pointer_grab_callback (GdkDisplay *display,
-			   gpointer data,
-			   gulong serial)
-{
-  GdkDevice *device = data;
-
-  _gdk_display_device_grab_update (display, device, serial);
-}
-
-GdkGrabStatus
-_gdk_windowing_device_grab (GdkDevice    *device,
-                            GdkWindow    *window,
-                            GdkWindow    *native,
-                            gboolean      owner_events,
-                            GdkEventMask  event_mask,
-                            GdkWindow    *confine_to,
-                            GdkCursor    *cursor,
-                            guint32       time)
-{
-  GdkDisplay *display;
-  GdkGrabStatus status = GDK_GRAB_SUCCESS;
-
-  if (!window || GDK_WINDOW_DESTROYED (window))
-    return GDK_GRAB_NOT_VIEWABLE;
-
-  display = gdk_device_get_display (device);
-
-#ifdef G_ENABLE_DEBUG
-  if (_gdk_debug_flags & GDK_DEBUG_NOGRABS)
-    status = GrabSuccess;
-  else
-#endif
-    status = GDK_DEVICE_GET_CLASS (device)->grab (device,
-                                                  native,
-                                                  owner_events,
-                                                  event_mask,
-                                                  confine_to,
-                                                  cursor,
-                                                  time);
-  if (status == GDK_GRAB_SUCCESS)
-    _gdk_x11_roundtrip_async (display,
-			      has_pointer_grab_callback,
-                              device);
-  return status;
-}
-
-/**
- * _gdk_xgrab_check_unmap:
+/*
+ * _gdk_x11_window_grab_check_unmap:
  * @window: a #GdkWindow
  * @serial: serial from Unmap event (or from NextRequest(display)
  *   if the unmap is being done by this client.)
- * 
+ *
  * Checks to see if an unmap request or event causes the current
  * grab window to become not viewable, and if so, clear the
  * the pointer we keep to it.
  **/
 void
-_gdk_xgrab_check_unmap (GdkWindow *window,
-			gulong     serial)
+_gdk_x11_window_grab_check_unmap (GdkWindow *window,
+                                  gulong     serial)
 {
   GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;
@@ -208,15 +172,15 @@ _gdk_xgrab_check_unmap (GdkWindow *window,
   g_list_free (devices);
 }
 
-/**
- * _gdk_xgrab_check_destroy:
+/*
+ * _gdk_x11_window_grab_check_destroy:
  * @window: a #GdkWindow
  * 
  * Checks to see if window is the current grab window, and if
  * so, clear the current grab window.
  **/
 void
-_gdk_xgrab_check_destroy (GdkWindow *window)
+_gdk_x11_window_grab_check_destroy (GdkWindow *window)
 {
   GdkDisplay *display = gdk_window_get_display (window);
   GdkDeviceManager *device_manager;
@@ -248,42 +212,6 @@ _gdk_xgrab_check_destroy (GdkWindow *window)
     }
 
   g_list_free (devices);
-}
-
-void
-_gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
-					 const gchar *sm_client_id)
-{
-  GdkDisplayX11 *display_x11 = GDK_DISPLAY_X11 (display);
-
-  if (display->closed)
-    return;
-
-  if (sm_client_id && strcmp (sm_client_id, ""))
-    {
-      XChangeProperty (display_x11->xdisplay, display_x11->leader_window,
-		       gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"),
-		       XA_STRING, 8, PropModeReplace, (guchar *)sm_client_id,
-		       strlen (sm_client_id));
-    }
-  else
-    XDeleteProperty (display_x11->xdisplay, display_x11->leader_window,
-		     gdk_x11_get_xatom_by_name_for_display (display, "SM_CLIENT_ID"));
-}
-
-/* Close all open displays
- */
-void
-_gdk_windowing_exit (void)
-{
-  GSList *tmp_list = _gdk_displays;
-    
-  while (tmp_list)
-    {
-      XCloseDisplay (GDK_DISPLAY_XDISPLAY (tmp_list->data));
-      
-      tmp_list = tmp_list->next;
-  }
 }
 
 /*
@@ -352,11 +280,11 @@ gdk_x_error (Display	 *xdisplay,
       displays = gdk_display_manager_list_displays (manager);
       while (displays != NULL)
         {
-          GdkDisplayX11 *gdk_display = displays->data;
+          GdkX11Display *gdk_display = displays->data;
 
           if (xdisplay == gdk_display->xdisplay)
             {
-              error_display = GDK_DISPLAY_OBJECT (gdk_display);
+              error_display = GDK_DISPLAY (gdk_display);
               g_slist_free (displays);
               displays = NULL;
             }
@@ -415,186 +343,35 @@ _gdk_x11_error_handler_pop  (void)
     }
 }
 
-/**
- * gdk_error_trap_push:
- *
- * This function allows X errors to be trapped instead of the normal
- * behavior of exiting the application. It should only be used if it
- * is not possible to avoid the X error in any other way. Errors are
- * ignored on all #GdkDisplay currently known to the
- * #GdkDisplayManager. If you don't care which error happens and just
- * want to ignore everything, pop with gdk_error_trap_pop_ignored().
- * If you need the error code, use gdk_error_trap_pop() which may have
- * to block and wait for the error to arrive from the X server.
- *
- * This API exists on all platforms but only does anything on X.
- *
- * You can use gdk_x11_display_error_trap_push() to ignore errors
- * on only a single display.
- *
- * <example>
- * <title>Trapping an X error</title>
- * <programlisting>
- * gdk_error_trap_push (<!-- -->);
- *
- *  // ... Call the X function which may cause an error here ...
- *
- *
- * if (gdk_error_trap_pop (<!-- -->))
- *  {
- *    // ... Handle the error here ...
- *  }
- * </programlisting>
- * </example>
- *
- */
-void
-gdk_error_trap_push (void)
-{
-  GdkGlobalErrorTrap *trap;
-  GdkDisplayManager *manager;
-  GSList *tmp_list;
-
-  trap = g_slice_new (GdkGlobalErrorTrap);
-  manager = gdk_display_manager_get ();
-  trap->displays = gdk_display_manager_list_displays (manager);
-
-  g_slist_foreach (trap->displays, (GFunc) g_object_ref, NULL);
-  for (tmp_list = trap->displays;
-       tmp_list != NULL;
-       tmp_list = tmp_list->next)
-    {
-      gdk_x11_display_error_trap_push (tmp_list->data);
-    }
-
-  g_queue_push_head (&gdk_error_traps, trap);
-}
-
-static gint
-gdk_error_trap_pop_internal (gboolean need_code)
-{
-  GdkGlobalErrorTrap *trap;
-  gint result;
-  GSList *tmp_list;
-
-  trap = g_queue_pop_head (&gdk_error_traps);
-
-  g_return_val_if_fail (trap != NULL, Success);
-
-  result = Success;
-  for (tmp_list = trap->displays;
-       tmp_list != NULL;
-       tmp_list = tmp_list->next)
-    {
-      gint code = Success;
-
-      if (need_code)
-        code = gdk_x11_display_error_trap_pop (tmp_list->data);
-      else
-        gdk_x11_display_error_trap_pop_ignored (tmp_list->data);
-
-      /* we use the error on the last display listed, why not. */
-      if (code != Success)
-        result = code;
-    }
-
-  g_slist_foreach (trap->displays, (GFunc) g_object_unref, NULL);
-  g_slist_free (trap->displays);
-
-  g_slice_free (GdkGlobalErrorTrap, trap);
-
-  return result;
-}
-
-/**
- * gdk_error_trap_pop_ignored:
- *
- * Removes an error trap pushed with gdk_error_trap_push(), but
- * without bothering to wait and see whether an error occurred.  If an
- * error arrives later asynchronously that was triggered while the
- * trap was pushed, that error will be ignored.
- *
- * Since: 3.0
- */
-void
-gdk_error_trap_pop_ignored (void)
-{
-  gdk_error_trap_pop_internal (FALSE);
-}
-
-/**
- * gdk_error_trap_pop:
- *
- * Removes an error trap pushed with gdk_error_trap_push().
- * May block until an error has been definitively received
- * or not received from the X server. gdk_error_trap_pop_ignored()
- * is preferred if you don't need to know whether an error
- * occurred, because it never has to block. If you don't
- * need the return value of gdk_error_trap_pop(), use
- * gdk_error_trap_pop_ignored().
- *
- * Prior to GDK 3.0, this function would not automatically
- * sync for you, so you had to gdk_flush() if your last
- * call to Xlib was not a blocking round trip.
- *
- * Return value: X error code or 0 on success
- */
 gint
-gdk_error_trap_pop (void)
-{
-  return gdk_error_trap_pop_internal (TRUE);
-}
-
-gchar *
-gdk_get_display (void)
-{
-  return g_strdup (gdk_display_get_name (gdk_display_get_default ()));
-}
-
-/**
- * _gdk_send_xevent:
- * @display: #GdkDisplay which @window is on
- * @window: window ID to which to send the event
- * @propagate: %TRUE if the event should be propagated if the target window
- *             doesn't handle it.
- * @event_mask: event mask to match against, or 0 to send it to @window
- *              without regard to event masks.
- * @event_send: #XEvent to send
- * 
- * Send an event, like XSendEvent(), but trap errors and check
- * the result.
- * 
- * Return value: %TRUE if sending the event succeeded.
- **/
-gint 
-_gdk_send_xevent (GdkDisplay *display,
-		  Window      window, 
-		  gboolean    propagate, 
-		  glong       event_mask,
-		  XEvent     *event_send)
+_gdk_x11_display_send_xevent (GdkDisplay *display,
+                              Window      window,
+                              gboolean    propagate,
+                              glong       event_mask,
+                              XEvent     *event_send)
 {
   gboolean result;
 
-  if (display->closed)
+  if (gdk_display_is_closed (display))
     return FALSE;
 
-  gdk_error_trap_push ();
-  result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window, 
-		       propagate, event_mask, event_send);
+  gdk_x11_display_error_trap_push (display);
+  result = XSendEvent (GDK_DISPLAY_XDISPLAY (display), window,
+                       propagate, event_mask, event_send);
   XSync (GDK_DISPLAY_XDISPLAY (display), False);
-  
-  if (gdk_error_trap_pop ())
+
+  if (gdk_x11_display_error_trap_pop (display))
     return FALSE;
- 
+
   return result;
 }
 
 void
-_gdk_region_get_xrectangles (const cairo_region_t *region,
-                             gint             x_offset,
-                             gint             y_offset,
-                             XRectangle     **rects,
-                             gint            *n_rects)
+_gdk_x11_region_get_xrectangles (const cairo_region_t *region,
+                                 gint             x_offset,
+                                 gint             y_offset,
+                                 XRectangle     **rects,
+                                 gint            *n_rects)
 {
   XRectangle *rectangles;
   cairo_rectangle_int_t box;
@@ -684,15 +461,4 @@ Display *
 gdk_x11_get_default_xdisplay (void)
 {
   return GDK_DISPLAY_XDISPLAY (gdk_display_get_default ());
-}
-
-void
-_gdk_windowing_event_data_copy (const GdkEvent *src,
-                                GdkEvent       *dst)
-{
-}
-
-void
-_gdk_windowing_event_data_free (GdkEvent *event)
-{
 }

@@ -79,29 +79,38 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_PROPERTY_FONT "font"
 
 /**
- * GTK_STYLE_PROPERTY_MARGIN:
- *
- * A property holding the rendered element's margin as a #GtkBorder. The
- * margin is defined as the spacing between the border of the element
- * and its surrounding elements.
- */
-#define GTK_STYLE_PROPERTY_MARGIN "margin"
-
-/**
  * GTK_STYLE_PROPERTY_PADDING:
  *
  * A property holding the rendered element's padding as a #GtkBorder. The
  * padding is defined as the spacing between the inner part of the element border
- * and its child.
+ * and its child. It's the innermost spacing property of the padding/border/margin
+ * series.
  */
 #define GTK_STYLE_PROPERTY_PADDING "padding"
 
 /**
  * GTK_STYLE_PROPERTY_BORDER_WIDTH:
  *
- * A property holding the rendered element's border width in pixels as a #gint.
+ * A property holding the rendered element's border width in pixels as
+ * a #GtkBorder. The border is the intermediary spacing property of the
+ * padding/border/margin series.
+ *
+ * gtk_render_frame() uses this property to find out the frame line width,
+ * so #GtkWidget<!-- -->s rendering frames may need to add up this padding when
+ * requesting size
  */
 #define GTK_STYLE_PROPERTY_BORDER_WIDTH "border-width"
+
+/**
+ * GTK_STYLE_PROPERTY_MARGIN:
+ *
+ * A property holding the rendered element's margin as a #GtkBorder. The
+ * margin is defined as the spacing between the border of the element
+ * and its surrounding elements. It is external to #GtkWidget<!-- -->s's
+ * size allocations, and the most external spacing property of the
+ * padding/border/margin series.
+ */
+#define GTK_STYLE_PROPERTY_MARGIN "margin"
 
 /**
  * GTK_STYLE_PROPERTY_BORDER_RADIUS:
@@ -254,6 +263,13 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_SCROLLBAR "scrollbar"
 
 /**
+ * GTK_STYLE_CLASS_SCALE:
+ *
+ * A CSS class to match scale widgets.
+ */
+#define GTK_STYLE_CLASS_SCALE "scale"
+
+/**
  * GTK_STYLE_CLASS_HEADER:
  *
  * A CSS class to match a header element.
@@ -294,6 +310,118 @@ struct _GtkStyleContextClass
  * A widget class defining a spinner
  */
 #define GTK_STYLE_CLASS_SPINNER "spinner"
+
+/**
+ * GTK_STYLE_CLASS_MARK:
+ *
+ * A widget class defining marks in a widget, such as in scales
+ */
+#define GTK_STYLE_CLASS_MARK "mark"
+
+/**
+ * GTK_STYLE_CLASS_EXPANDER:
+ *
+ * A widget class defining an expander, such as those in treeviews
+ */
+#define GTK_STYLE_CLASS_EXPANDER "expander"
+
+/**
+ * GTK_STYLE_CLASS_SPINBUTTON:
+ *
+ * A widget class defining an spinbutton
+ */
+#define GTK_STYLE_CLASS_SPINBUTTON "spinbutton"
+
+/**
+ * GTK_STYLE_CLASS_NOTEBOOK:
+ *
+ * A widget class defining a notebook
+ */
+#define GTK_STYLE_CLASS_NOTEBOOK "notebook"
+
+/**
+ * GTK_STYLE_CLASS_VIEW:
+ *
+ * A widget class defining a view, such as iconviews or treeviews
+ */
+#define GTK_STYLE_CLASS_VIEW "view"
+
+/**
+ * GTK_STYLE_CLASS_HIGHLIGHT:
+ *
+ * A CSS class defining a highlighted area, such as headings in
+ * assistants.
+ */
+#define GTK_STYLE_CLASS_HIGHLIGHT "highlight"
+
+/**
+ * GTK_STYLE_CLASS_FRAME:
+ *
+ * A CSS class defining a frame delimiting content, such as GtkFrame
+ * or the scrolled window frame around the scrollable area.
+ */
+#define GTK_STYLE_CLASS_FRAME "frame"
+
+/**
+ * GTK_STYLE_CLASS_DND:
+ *
+ * A CSS class for a drag-and-drop indicator
+ */
+#define GTK_STYLE_CLASS_DND "dnd"
+
+/**
+ * GTK_STYLE_CLASS_PANE_SEPARATOR:
+ *
+ * A CSS class for a pane separator, such as those in #GtkPaned.
+ */
+#define GTK_STYLE_CLASS_PANE_SEPARATOR "pane-separator"
+
+/**
+ * GTK_STYLE_CLASS_INFO:
+ *
+ * A widget class for an area displaying an informational message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_INFO "info"
+
+/**
+ * GTK_STYLE_CLASS_WARNING:
+ *
+ * A widget class for an area displaying a warning message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_WARNING "warning"
+
+/**
+ * GTK_STYLE_CLASS_QUESTION:
+ *
+ * A widget class for an area displaying a question to the user,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_QUESTION "question"
+
+/**
+ * GTK_STYLE_CLASS_ERROR:
+ *
+ * A widget class for an area displaying an error message,
+ * such as those in infobars
+ */
+#define GTK_STYLE_CLASS_ERROR "error"
+
+/**
+ * GTK_STYLE_CLASS_HORIZONTAL:
+ *
+ * A widget class for horizontally layered widgets.
+ */
+#define GTK_STYLE_CLASS_HORIZONTAL "horizontal"
+
+/**
+ * GTK_STYLE_CLASS_VERTICAL:
+ *
+ * A widget class for vertically layered widgets.
+ */
+#define GTK_STYLE_CLASS_VERTICAL "vertical"
+
 
 /* Predefined set of widget regions */
 
@@ -424,6 +552,13 @@ void  gtk_style_context_notify_state_change (GtkStyleContext *context,
                                              gpointer         region_id,
                                              GtkStateType     state,
                                              gboolean         state_value);
+void  gtk_style_context_cancel_animations   (GtkStyleContext *context,
+                                             gpointer         region_id);
+void  gtk_style_context_scroll_animations   (GtkStyleContext *context,
+                                             GdkWindow       *window,
+                                             gint             dx,
+                                             gint             dy);
+
 void gtk_style_context_push_animatable_region (GtkStyleContext *context,
                                                gpointer         region_id);
 void gtk_style_context_pop_animatable_region  (GtkStyleContext *context);
@@ -438,6 +573,9 @@ void gtk_style_context_get_background_color (GtkStyleContext *context,
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
+
+const PangoFontDescription * gtk_style_context_get_font (GtkStyleContext *context,
+                                                    GtkStateFlags    state);
 
 void gtk_style_context_get_border           (GtkStyleContext *context,
                                              GtkStateFlags    state,
@@ -456,8 +594,9 @@ const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
                                                        GParamSpec      *pspec);
 void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);
 void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,
-                                                              gint             rel_x,
-                                                              gint             rel_y);
+							      GtkWidget       *widget);
+gboolean       _gtk_style_context_check_region_name   (const gchar     *str);
+
 
 void gtk_style_context_invalidate (GtkStyleContext *context);
 void gtk_style_context_reset_widgets (GdkScreen *screen);

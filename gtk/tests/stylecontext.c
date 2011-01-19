@@ -26,11 +26,11 @@ test_parse_at (void)
   gboolean res;
   gint i;
   const gchar *valid[] = {
-    "@import \"test.css\";",
-    "@import 'test.css';",
-    "@import url(\"test.css\");",
-    "@import url('test.css');",
-    "@import\nurl (\t\"test.css\" ) ;",
+    "@import \"" SRCDIR "/test.css\";",
+    "@import '" SRCDIR "/test.css';",
+    "@import url(\"" SRCDIR "/test.css\");",
+    "@import url('" SRCDIR "/test.css');",
+    "@import\nurl (\t\"" SRCDIR "/test.css\" ) ;",
     "@define-color bg_color #f9a039;",
     "@define-color color @bg_color;",
     "@define-color color rgb(100, 99, 88);",
@@ -48,8 +48,8 @@ test_parse_at (void)
   };
 
   const gchar *invalid[] = {
-    "@import test.css ;",
-    "@import url ( \"test.css\" xyz );",
+    "@import " SRCDIR "/test.css ;",
+    "@import url ( \"" SRCDIR "/test.css\" xyz );",
     "@import url(\");",
     "@import url(');",
     "@import url(\"abc');",
@@ -77,6 +77,8 @@ test_parse_at (void)
     {
       provider = gtk_css_provider_new ();
       res = gtk_css_provider_load_from_data (provider, valid[i], -1, &error);
+      if (error)
+        g_print ("parsing '%s': got unexpected error: %s\n", valid[i], error->message);
       g_assert_no_error (error);
       g_assert (res);
 
@@ -217,8 +219,8 @@ test_parse_declarations (void)
     "                                     center center, 0.8,   \n"
     "                                     color-stop (0.0,#fff),\n"
     "                                     color-stop (1.0,#000))}\n",
-    "* { border-image: url (\"test.png\") 3 4 3 4 stretch       }",
-    "* { border-image: url (\"test.png\") 3 4 3 4 repeat stretch}",
+    "* { border-image: url (\"" SRCDIR "/test.png\") 3 4 3 4 stretch       }",
+    "* { border-image: url (\"" SRCDIR "/test.png\") 3 4 3 4 repeat stretch}",
     "* { transition: 150ms ease-in-out                          }",
     "* { transition: 1s linear loop                             }",
     NULL
@@ -272,14 +274,14 @@ test_path (void)
   pos = gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
   g_assert_cmpint (pos, ==, 0);
   g_assert_cmpint (gtk_widget_path_length (path), ==, 1);
-  g_assert (gtk_widget_path_iter_get_widget_type (path, 0) == GTK_TYPE_WINDOW);
+  g_assert (gtk_widget_path_iter_get_object_type (path, 0) == GTK_TYPE_WINDOW);
   g_assert (gtk_widget_path_is_type (path, GTK_TYPE_WIDGET));
   g_assert (gtk_widget_path_iter_get_name (path, 0) == NULL);
 
   pos = gtk_widget_path_append_type (path, GTK_TYPE_WIDGET);
   g_assert_cmpint (pos, ==, 1);
   g_assert_cmpint (gtk_widget_path_length (path), ==, 2);
-  gtk_widget_path_iter_set_widget_type (path, pos, GTK_TYPE_BUTTON);
+  gtk_widget_path_iter_set_object_type (path, pos, GTK_TYPE_BUTTON);
   g_assert (gtk_widget_path_is_type (path, GTK_TYPE_BUTTON));
   g_assert (gtk_widget_path_has_parent (path, GTK_TYPE_WIDGET));
   g_assert (gtk_widget_path_has_parent (path, GTK_TYPE_WINDOW));
@@ -516,6 +518,36 @@ test_style_property (void)
   g_object_unref (context);
 }
 
+void
+test_basic_properties (void)
+{
+  GtkStyleContext *context;
+  GtkWidgetPath *path;
+  GdkRGBA *color;
+  GdkRGBA *bg_color;
+  PangoFontDescription *font;
+
+  context = gtk_style_context_new ();
+  path = gtk_widget_path_new ();
+  gtk_style_context_set_path (context, path);
+  gtk_widget_path_free (path);
+
+  gtk_style_context_get (context, 0,
+                         "color", &color,
+                         "background-color", &bg_color,
+                         "font", &font,
+                         NULL);
+  g_assert (color != NULL);
+  g_assert (bg_color != NULL);
+  g_assert (font != NULL);
+
+  gdk_rgba_free (color);
+  gdk_rgba_free (bg_color);
+  pango_font_description_free (font);
+
+  g_object_unref (context);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -529,6 +561,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/path", test_path);
   g_test_add_func ("/style/match", test_match);
   g_test_add_func ("/style/style-property", test_style_property);
+  g_test_add_func ("/style/basic", test_basic_properties);
 
   return g_test_run ();
 }

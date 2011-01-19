@@ -23,23 +23,12 @@
 #include "gdktestutils.h"
 
 #include "gdkkeysyms.h"
-#include "gdkx.h"
+#include "gdkprivate-x11.h"
 
 #include <X11/Xlib.h>
 
-/**
- * gdk_test_render_sync:
- * @window: a mapped #GdkWindow
- *
- * This function retrieves a pixel from @window to force the windowing
- * system to carry out any pending rendering commands.
- * This function is intended to be used to syncronize with rendering
- * pipelines, to benchmark windowing system rendering operations.
- *
- * Since: 2.14
- **/
 void
-gdk_test_render_sync (GdkWindow *window)
+_gdk_x11_window_sync_rendering (GdkWindow *window)
 {
   Display *display = GDK_WINDOW_XDISPLAY (window);
   XImage *ximage;
@@ -53,44 +42,13 @@ gdk_test_render_sync (GdkWindow *window)
     XDestroyImage (ximage);
 }
 
-/**
- * gdk_test_simulate_key
- * @window: a #GdkWindow to simulate a key event for.
- * @x:      x coordinate within @window for the key event.
- * @y:      y coordinate within @window for the key event.
- * @keyval: A GDK keyboard value.
- * @modifiers: Keyboard modifiers the event is setup with.
- * @key_pressrelease: either %GDK_KEY_PRESS or %GDK_KEY_RELEASE
- *
- * This function is intended to be used in GTK+ test programs.
- * If (@x,@y) are > (-1,-1), it will warp the mouse pointer to
- * the given (@x,@y) corrdinates within @window and simulate a
- * key press or release event.
- *
- * When the mouse pointer is warped to the target location, use
- * of this function outside of test programs that run in their
- * own virtual windowing system (e.g. Xvfb) is not recommended.
- * If (@x,@y) are passed as (-1,-1), the mouse pointer will not
- * be warped and @window origin will be used as mouse pointer
- * location for the event.
- *
- * Also, gtk_test_simulate_key() is a fairly low level function,
- * for most testing purposes, gtk_test_widget_send_key() is the
- * right function to call which will generate a key press event
- * followed by its accompanying key release event.
- *
- * Returns: whether all actions neccessary for a key event simulation 
- *     were carried out successfully.
- *
- * Since: 2.14
- **/
 gboolean
-gdk_test_simulate_key (GdkWindow      *window,
-                       gint            x,
-                       gint            y,
-                       guint           keyval,
-                       GdkModifierType modifiers,
-                       GdkEventType    key_pressrelease)
+_gdk_x11_window_simulate_key (GdkWindow      *window,
+                              gint            x,
+                              gint            y,
+                              guint           keyval,
+                              GdkModifierType modifiers,
+                              GdkEventType    key_pressrelease)
 {
   GdkScreen *screen;
   GdkKeymapKey *keys = NULL;
@@ -121,7 +79,7 @@ gdk_test_simulate_key (GdkWindow      *window,
   xev.type = key_pressrelease == GDK_KEY_PRESS ? KeyPress : KeyRelease;
   xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
+  xev.root = RootWindow (xev.display, GDK_X11_SCREEN (screen)->screen_num);
   xev.subwindow = 0;
   xev.time = 0;
   xev.x = MAX (x, 0);
@@ -147,7 +105,7 @@ gdk_test_simulate_key (GdkWindow      *window,
   g_free (keys);
   if (!success)
     return FALSE;
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (GDK_WINDOW_DISPLAY (window));
   xev.same_screen = XTranslateCoordinates (xev.display, xev.window, xev.root,
                                            xev.x, xev.y, &xev.x_root, &xev.y_root,
                                            &xev.subwindow);
@@ -158,44 +116,17 @@ gdk_test_simulate_key (GdkWindow      *window,
     success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
   success &= 0 != XSendEvent (xev.display, xev.window, True, key_pressrelease == GDK_KEY_PRESS ? KeyPressMask : KeyReleaseMask, (XEvent*) &xev);
   XSync (xev.display, False);
-  success &= 0 == gdk_error_trap_pop();
+  success &= 0 == gdk_x11_display_error_trap_pop (GDK_WINDOW_DISPLAY (window));
   return success;
 }
 
-/**
- * gdk_test_simulate_button
- * @window: a #GdkWindow to simulate a button event for.
- * @x:      x coordinate within @window for the button event.
- * @y:      y coordinate within @window for the button event.
- * @button: Number of the pointer button for the event, usually 1, 2 or 3.
- * @modifiers: Keyboard modifiers the event is setup with.
- * @button_pressrelease: either %GDK_BUTTON_PRESS or %GDK_BUTTON_RELEASE
- *
- * This function is intended to be used in GTK+ test programs.
- * It will warp the mouse pointer to the given (@x,@y) corrdinates
- * within @window and simulate a button press or release event.
- * Because the mouse pointer needs to be warped to the target
- * location, use of this function outside of test programs that
- * run in their own virtual windowing system (e.g. Xvfb) is not
- * recommended.
- *
- * Also, gtk_test_simulate_button() is a fairly low level function,
- * for most testing purposes, gtk_test_widget_click() is the right
- * function to call which will generate a button press event followed
- * by its accompanying button release event.
- *
- * Returns: whether all actions neccessary for a button event simulation 
- *     were carried out successfully.
- *
- * Since: 2.14
- **/
 gboolean
-gdk_test_simulate_button (GdkWindow      *window,
-                          gint            x,
-                          gint            y,
-                          guint           button, /*1..3*/
-                          GdkModifierType modifiers,
-                          GdkEventType    button_pressrelease)
+_gdk_x11_window_simulate_button (GdkWindow      *window,
+                                 gint            x,
+                                 gint            y,
+                                 guint           button, /*1..3*/
+                                 GdkModifierType modifiers,
+                                 GdkEventType    button_pressrelease)
 {
   GdkScreen *screen;
   XButtonEvent xev = {
@@ -226,7 +157,7 @@ gdk_test_simulate_button (GdkWindow      *window,
   xev.type = button_pressrelease == GDK_BUTTON_PRESS ? ButtonPress : ButtonRelease;
   xev.display = GDK_WINDOW_XDISPLAY (window);
   xev.window = GDK_WINDOW_XID (window);
-  xev.root = RootWindow (xev.display, GDK_SCREEN_XNUMBER (screen));
+  xev.root = RootWindow (xev.display, GDK_X11_SCREEN (screen)->screen_num);
   xev.subwindow = 0;
   xev.time = 0;
   xev.x = x;
@@ -235,7 +166,7 @@ gdk_test_simulate_button (GdkWindow      *window,
   xev.y_root = 0;
   xev.state = modifiers;
   xev.button = button;
-  gdk_error_trap_push ();
+  gdk_x11_display_error_trap_push (GDK_WINDOW_DISPLAY (window));
   xev.same_screen = XTranslateCoordinates (xev.display, xev.window, xev.root,
                                            xev.x, xev.y, &xev.x_root, &xev.y_root,
                                            &xev.subwindow);
@@ -245,6 +176,6 @@ gdk_test_simulate_button (GdkWindow      *window,
   success &= 0 != XWarpPointer (xev.display, None, xev.window, 0, 0, 0, 0, xev.x, xev.y);
   success &= 0 != XSendEvent (xev.display, xev.window, True, button_pressrelease == GDK_BUTTON_PRESS ? ButtonPressMask : ButtonReleaseMask, (XEvent*) &xev);
   XSync (xev.display, False);
-  success &= 0 == gdk_error_trap_pop();
+  success &= 0 == gdk_x11_display_error_trap_pop(GDK_WINDOW_DISPLAY (window));
   return success;
 }

@@ -31,8 +31,9 @@
 #ifndef __GTK_TEXT_ITER_H__
 #define __GTK_TEXT_ITER_H__
 
-#include <gtk/gtktexttag.h>
+#include <gtk/gtktextattributes.h>
 #include <gtk/gtktextchild.h>
+#include <gtk/gtktexttag.h>
 
 G_BEGIN_DECLS
 

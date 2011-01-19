@@ -471,25 +471,19 @@ gtk_toggle_button_draw (GtkWidget *widget,
   GtkToggleButtonPrivate *priv = toggle_button->priv;
   GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
   GtkButton *button = GTK_BUTTON (widget);
-  GtkStateType state_type;
-  GtkShadowType shadow_type;
+  GtkStateType state;
 
-  state_type = gtk_widget_get_state (widget);
+  state = gtk_widget_get_state_flags (widget);
 
   if (priv->inconsistent)
-    {
-      if (state_type == GTK_STATE_ACTIVE)
-        state_type = GTK_STATE_NORMAL;
-      shadow_type = GTK_SHADOW_ETCHED_IN;
-    }
-  else
-    shadow_type = button->priv->depressed ? GTK_SHADOW_IN : GTK_SHADOW_OUT;
+    state |= GTK_STATE_FLAG_INCONSISTENT;
+  else if (button->priv->depressed)
+    state |= GTK_STATE_FLAG_ACTIVE;
 
   _gtk_button_paint (button, cr,
                      gtk_widget_get_allocated_width (widget),
                      gtk_widget_get_allocated_height (widget),
-                     state_type, shadow_type,
-                     "togglebutton", "togglebuttondefault");
+                     state);
 
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);

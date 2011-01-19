@@ -1755,14 +1755,19 @@ static gboolean
 on_status_window_draw (GtkWidget *widget,
                        cairo_t   *cr)
 {
-  GtkStyle *style;
+  GtkStyleContext *style;
+  GdkRGBA color;
 
-  style = gtk_widget_get_style (widget);
+  style = gtk_widget_get_style_context (widget);
 
-  gdk_cairo_set_source_color (cr, &style->base[GTK_STATE_NORMAL]);
+  gtk_style_context_get_background_color (style, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_paint (cr);
 
-  gdk_cairo_set_source_color (cr, &style->text[GTK_STATE_NORMAL]);
+  gtk_style_context_get_color (style, 0, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
+  cairo_paint (cr);
+
   cairo_rectangle (cr, 
                    0, 0,
                    gtk_widget_get_allocated_width (widget) - 1,
@@ -1770,26 +1775,6 @@ on_status_window_draw (GtkWidget *widget,
   cairo_fill (cr);
 
   return FALSE;
-}
-
-/* We watch the ::style-set signal for our label widget
- * and use that to change it's foreground color to match
- * the 'text' color of the toplevel window. The text/base
- * pair of colors might be reversed from the fg/bg pair
- * that are normally used for labels.
- */
-static void
-on_status_window_style_set (GtkWidget *toplevel,
-			    GtkStyle  *previous_style,
-			    GtkWidget *label)
-{
-  GtkStyle *style;
-  gint i;
-
-  style = gtk_widget_get_style (toplevel);
-
-  for (i = 0; i < 5; i++)
-    gtk_widget_modify_fg (label, i, &style->text[i]);
 }
 
 /* Creates the widgets for the status window; called when we
@@ -1811,8 +1796,6 @@ status_window_make_window (StatusWindow *status_window)
   gtk_misc_set_padding (GTK_MISC (status_label), 1, 1);
   gtk_widget_show (status_label);
   
-  g_signal_connect (window, "style-set",
-		    G_CALLBACK (on_status_window_style_set), status_label);
   gtk_container_add (GTK_CONTAINER (window), status_label);
   
   g_signal_connect (window, "draw",
