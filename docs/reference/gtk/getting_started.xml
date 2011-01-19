@@ -116,4 +116,35 @@
     </example>
   </section>
 
+  <section>
+    <title>Packing</title>
+
+    <para>When creating an application, you'll want to put more than one widget
+    inside a window. Our first helloworld example only used one widget so we
+    could simply use a gtk_container_add() call to "pack" the widget into the
+    window. But when you want to put more than one widget into a window, it
+    it becomes important to control how each widget is positioned and sized.
+    This is where packing comes in.</para>
+
+    <para>GTK+ comes with a large variety of <firstterm>layout containers</firstterm>
+    whose purpose it is to control the layout of the child widgets that are
+    added to them. See <xref linkend="LayoutContainers"/> for an overview.</para>
+
+    <para>The following example shows how the GtkGrid container lets you
+    arrange several buttons:</para>
+
+    <para>
+      <inlinegraphic fileref="grid-packing.png" format="PNG"></inlinegraphic>
+    </para>
+
+    <example id="gtk-getting-started-grid-packing">
+      <title>Packing buttons</title>
+      <programlisting>
+        <xi:include href="../../../../examples/grid-packing.c" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+        </xi:include>
+      </programlisting>
+    </example>
+  </section>
+
 </chapter>
