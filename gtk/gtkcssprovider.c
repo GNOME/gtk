@@ -157,6 +157,12 @@
  * style classes they define and see <xref linkend="gtkstylecontext-classes"/>
  * for a list of all style classes used by GTK+ widgets.
  * </para>
+ * <para>
+ * Note that there is some ambiguity in the selector syntax when it comes
+ * to differentiation widget class names from regions. GTK+ currently treats
+ * a string as a widget class name if it contains any uppercase characters
+ * (which should work for more widgets with names like GtkLabel).
+ * </para>
  * <example>
  * <title>Style classes in selectors</title>
  * <programlisting language="text">
@@ -1718,7 +1724,8 @@ is_widget_class_name (const gchar *str)
    * widget class names contain only CamelCase
    * (gtkmm widgets don't), but at least part of
    * the name will be CamelCase, so check for
-   * the first uppercase char */
+   * the first uppercase char
+   */
   while (*str)
     {
       if (g_ascii_isupper (*str))
