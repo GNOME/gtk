@@ -1711,6 +1711,25 @@ parse_classes (SelectorPath   *path,
   selector_path_prepend_class (path, str);
 }
 
+static gboolean
+is_widget_class_name (const gchar *str)
+{
+  /* Do a pretty lax check here, not all
+   * widget class names contain only CamelCase
+   * (gtkmm widgets don't), but at least part of
+   * the name will be CamelCase, so check for
+   * the first uppercase char */
+  while (*str)
+    {
+      if (g_ascii_isupper (*str))
+        return TRUE;
+
+      str++;
+    }
+
+  return FALSE;
+}
+
 static GTokenType
 parse_selector (GtkCssProvider  *css_provider,
                 GScanner        *scanner,
@@ -1761,7 +1780,7 @@ parse_selector (GtkCssProvider  *css_provider,
                 parse_classes (path, pos + 1);
             }
         }
-      else if (g_ascii_isupper (scanner->value.v_identifier[0]))
+      else if (is_widget_class_name (scanner->value.v_identifier))
         {
           gchar *pos;
 
@@ -1802,7 +1821,7 @@ parse_selector (GtkCssProvider  *css_provider,
           else
             selector_path_prepend_type (path, scanner->value.v_identifier);
         }
-      else if (g_ascii_islower (scanner->value.v_identifier[0]))
+      else if (_gtk_style_context_check_region_name (scanner->value.v_identifier))
         {
           GtkRegionFlags flags = 0;
           gchar *region_name;
@@ -3313,8 +3332,7 @@ parse_rule (GtkCssProvider  *css_provider,
               return G_TOKEN_IDENTIFIER;
             }
         }
-      else if (prop[0] == '-' &&
-               g_ascii_isupper (prop[1]))
+      else if (prop[0] == '-')
         {
           GValue *val;
 

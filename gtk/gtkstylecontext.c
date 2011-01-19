@@ -2069,6 +2069,26 @@ gtk_style_context_list_regions (GtkStyleContext *context)
   return classes;
 }
 
+gboolean
+_gtk_style_context_check_region_name (const gchar *str)
+{
+  g_return_val_if_fail (str != NULL, FALSE);
+
+  if (!g_ascii_islower (str[0]))
+    return FALSE;
+
+  while (*str)
+    {
+      if (*str != '-' &&
+          !g_ascii_islower (*str))
+        return FALSE;
+
+      str++;
+    }
+
+  return TRUE;
+}
+
 /**
  * gtk_style_context_add_region:
  * @context: a #GtkStyleContext
@@ -2095,6 +2115,9 @@ gtk_style_context_list_regions (GtkStyleContext *context)
  *
  * would apply to even and odd rows, respectively.
  *
+ * <note><para>Region names must only contain lowercase letters
+ * and '-', starting always with a lowercase letter.</para></note>
+ *
  * Since: 3.0
  **/
 void
@@ -2109,6 +2132,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (region_name != NULL);
+  g_return_if_fail (_gtk_style_context_check_region_name (region_name));
 
   priv = context->priv;
   region_quark = g_quark_from_string (region_name);
