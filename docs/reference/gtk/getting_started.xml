@@ -147,4 +147,41 @@
     </example>
   </section>
 
+  <section>
+    <title>Drawing</title>
+
+    <para>Many widgets, like buttons, do all their drawing themselves. You
+    just tell them the label you want to see, and they figure out what font
+    to use, draw the button outline and focus rectangle, etc. Sometimes, it
+    is necessary to do some custom drawing. In that case, a #GtkDrawingArea
+    might be the right widget to use. It offers a canvas on which you can
+    draw by connecting to the #GtkWidget::draw signal.
+    </para>
+
+    <para>The contents of a widget often need to be partially or fully redrawn,
+    e.g. when another window is moved and uncovers part of the widget, or
+    when tie window containing it is resized. It is also possible to explicitly
+    cause part or all of the widget to be redrawn, by calling
+    gtk_widget_queue_draw() or its variants. GTK+ takes care of most of the
+    details by providing a ready-to-use cairo context to the ::draw signal
+    handler.</para>
+
+    <para>The following example shows a ::draw signal handler. It is a bit
+    more complicated than the previous examples, since it also demonstrates
+    input event handling by means of ::button-press and ::motion-notify
+    handlers.</para>
+
+    <para>
+      <inlinegraphic fileref="drawing.png" format="PNG"></inlinegraphic>
+    </para>
+
+    <example id="gtk-getting-started-drawing">
+      <title>Drawing in response to input</title>
+      <programlisting>
+        <xi:include href="../../../../examples/drawing.c" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+        </xi:include>
+      </programlisting>
+    </example>
+  </section>
 </chapter>

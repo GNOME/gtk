@@ -328,6 +328,8 @@ HTML_IMAGES = \
 	$(srcdir)/images/layout-tbrl.png				\
 	$(srcdir)/images/window-default.png				\
 	$(srcdir)/images/hello-world.png				\
+	$(srcdir)/images/grid-packing.png				\
+	$(srcdir)/images/drawing.png					\
 	$(srcdir)/images/switch.png					\
 	$(srcdir)/images/linear.png					\
 	$(srcdir)/images/ease.png					\
