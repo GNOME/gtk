@@ -491,8 +491,9 @@ struct _GdkEventVisibility
  * @y: the y coordinate of the pointer relative to the window.
  * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
  *   the mouse.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @is_hint: set to 1 if this event is just a hint, see the
  *   %GDK_POINTER_MOTION_HINT_MASK value of #GdkEventMask.
  * @device: the device where the event originated.
@@ -530,8 +531,9 @@ struct _GdkEventMotion
  * @y: the y coordinate of the pointer relative to the window.
  * @axes: @x, @y translated to the axes of @device, or %NULL if @device is
  *   the mouse.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @button: the button which was pressed or released, numbered from 1 to 5.
  *   Normally button 1 is the left mouse button, 2 is the middle button,
  *   and 3 is the right button. On 2-button mice, the middle button can
@@ -601,8 +603,9 @@ struct _GdkEventButton
  * @time: the time of the event in milliseconds.
  * @x: the x coordinate of the pointer relative to the window.
  * @y: the y coordinate of the pointer relative to the window.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @direction: the direction to scroll to (one of %GDK_SCROLL_UP,
  *   %GDK_SCROLL_DOWN, %GDK_SCROLL_LEFT and %GDK_SCROLL_RIGHT).
  * @device: the device where the event originated.
@@ -636,8 +639,9 @@ struct _GdkEventScroll
  * @send_event: %TRUE if the event was sent explicitly (e.g. using
  *   <function>XSendEvent</function>).
  * @time: the time of the event in milliseconds.
- * @state: a bit-mask representing the state of the modifier keys (e.g.
- *   Control, Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  * @keyval: the key that was pressed or released. See the
  *   <filename>&lt;gdk/gdkkeysyms.h&gt;</filename> header file for a
  *   complete list of GDK key codes.
@@ -696,8 +700,9 @@ struct _GdkEventKey
  *  %GDK_NOTIFY_ANCESTOR, %GDK_NOTIFY_VIRTUAL, %GDK_NOTIFY_NONLINEAR or
  *  %GDK_NOTIFY_NONLINEAR_VIRTUAL).
  * @focus: %TRUE if @window is the focus window or an inferior.
- * @state: a bit-mask representing the state of the modifier keys (e.g. Control,
- *  Shift and Alt) and the pointer buttons. See #GdkModifierType.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
  *
  * Generated when the pointer enters or leaves a window.
  */
