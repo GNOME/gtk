@@ -394,7 +394,7 @@ widget_notify_for_button_cb (GObject    *source,
   GtkAppChooserWidget *widget = GTK_APP_CHOOSER_WIDGET (source);
   gboolean should_hide;
 
-  should_hide = gtk_app_chooser_widget_get_show_all (widget) ||
+  should_hide = gtk_app_chooser_widget_get_show_other (widget) ||
     self->priv->show_more_clicked;
 
   if (should_hide)
@@ -485,7 +485,7 @@ build_dialog_ui (GtkAppChooserDialog *self)
                     G_CALLBACK (widget_application_selected_cb), self);
   g_signal_connect (self->priv->app_chooser_widget, "application-activated",
                     G_CALLBACK (widget_application_activated_cb), self);
-  g_signal_connect (self->priv->app_chooser_widget, "notify::show-all",
+  g_signal_connect (self->priv->app_chooser_widget, "notify::show-other",
                     G_CALLBACK (widget_notify_for_button_cb), self);
   g_signal_connect (self->priv->app_chooser_widget, "populate-popup",
                     G_CALLBACK (widget_populate_popup_cb), self);
