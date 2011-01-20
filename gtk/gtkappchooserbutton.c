@@ -238,13 +238,10 @@ static void
 gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
                                            GtkTreeIter *prev_iter)
 {
-  GIcon *icon;
   GtkTreeIter iter, iter2;
 
   if (!self->priv->show_dialog_item)
     return;
-
-  icon = g_themed_icon_new ("application-x-executable");
 
   if (prev_iter == NULL)
     gtk_list_store_append (self->priv->store, &iter);
@@ -256,10 +253,8 @@ gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
 
   gtk_list_store_insert_after (self->priv->store, &iter, &iter2);
   real_insert_custom_item (self, CUSTOM_ITEM_OTHER_APP,
-                           _("Other application..."), icon,
+                           _("Other application..."), NULL,
                            FALSE, &iter);
-
-  g_object_unref (icon);
 }
 
 static void
