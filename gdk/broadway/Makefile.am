@@ -50,7 +50,6 @@ libgdk_broadway_la_SOURCES =		\
 	gdkeventsource.h	\
 	gdkglobals-broadway.c	\
 	gdkim-broadway.c	\
-	gdkinput.c		\
 	gdkkeys-broadway.c	\
 	gdkmain-broadway.c	\
 	gdkproperty-broadway.c	\
