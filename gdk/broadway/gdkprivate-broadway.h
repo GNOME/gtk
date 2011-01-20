@@ -87,7 +87,7 @@ void _gdk_broadway_window_change_property (GdkWindow    *window,
 void _gdk_broadway_window_delete_property (GdkWindow *window,
 					   GdkAtom    property);
 
-void     _gdk_selection_window_destroyed   (GdkWindow            *window);
+void     _gdk_broadway_selection_window_destroyed   (GdkWindow            *window);
 
 void _gdk_keymap_keys_changed     (GdkDisplay      *display);
 gint _gdk_broadway_get_group_for_state (GdkDisplay      *display,

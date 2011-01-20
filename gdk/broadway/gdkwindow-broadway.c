@@ -472,7 +472,7 @@ _gdk_broadway_window_destroy (GdkWindow *window,
 
   impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
 
-  _gdk_selection_window_destroyed (window);
+  _gdk_broadway_selection_window_destroyed (window);
 
   if (impl->ref_surface)
     {
