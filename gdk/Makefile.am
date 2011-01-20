@@ -237,7 +237,7 @@ x11_introspection_files = 		\
 
 GdkX11-3.0.gir: libgdk-3.0.la Gdk-3.0.gir Makefile
 GdkX11_3_0_gir_SCANNERFLAGS = 		\
-	--strip-prefix=Gdk		\
+	--identifier-prefix=Gdk		\
 	--c-include="gdk/gdkx.h"	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 GdkX11_3_0_gir_INCLUDES = Gio-2.0 Gdk-3.0 GdkPixbuf-2.0 Pango-1.0 xlib-2.0
