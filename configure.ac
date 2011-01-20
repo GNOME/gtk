@@ -1511,7 +1511,7 @@ GLIB_GSETTINGS
 # GObject introspection
 ##################################################
 
-GOBJECT_INTROSPECTION_CHECK([0.9.3])
+GOBJECT_INTROSPECTION_CHECK([0.10.1])
 
 ##################################################
 # Packagekit module
