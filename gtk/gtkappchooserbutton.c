@@ -299,7 +299,7 @@ gtk_app_chooser_button_populate (GtkAppChooserButton *self)
 
       gtk_list_store_set (self->priv->store, &iter,
                           COLUMN_APP_INFO, app,
-                          COLUMN_LABEL, g_app_info_get_display_name (app),
+                          COLUMN_LABEL, g_app_info_get_name (app),
                           COLUMN_ICON, icon,
                           COLUMN_CUSTOM, FALSE,
                           -1);

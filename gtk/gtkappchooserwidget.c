@@ -541,11 +541,9 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
           heading_added = TRUE;
         }
 
-      app_string = g_markup_printf_escaped ("<b>%s</b>\n%s",
-                                            g_app_info_get_display_name (app) != NULL ?
-                                            g_app_info_get_display_name (app) : "",
-                                            g_app_info_get_description (app) != NULL ?
-                                            g_app_info_get_description (app) : "");
+      app_string = g_markup_printf_escaped ("%s",
+                                            g_app_info_get_name (app) != NULL ?
+                                            g_app_info_get_name (app) : "");
 
       icon = g_app_info_get_icon (app);
       unref_icon = FALSE;
@@ -559,7 +557,7 @@ gtk_app_chooser_widget_add_section (GtkAppChooserWidget *self,
       gtk_list_store_set (self->priv->program_list_store, &iter,
                           COLUMN_APP_INFO, app,
                           COLUMN_GICON, icon,
-                          COLUMN_NAME, g_app_info_get_display_name (app),
+                          COLUMN_NAME, g_app_info_get_name (app),
                           COLUMN_DESC, app_string,
                           COLUMN_EXEC, g_app_info_get_executable (app),
                           COLUMN_HEADING, FALSE,
@@ -601,11 +599,9 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
 
   g_free (string);
 
-  string = g_markup_printf_escaped ("<b>%s</b>\n%s",
-                                    g_app_info_get_display_name (app) != NULL ?
-                                    g_app_info_get_display_name (app) : "",
-                                    g_app_info_get_description (app) != NULL ?
-                                    g_app_info_get_description (app) : "");
+  string = g_markup_printf_escaped ("%s",
+                                    g_app_info_get_name (app) != NULL ?
+                                    g_app_info_get_name (app) : "");
 
   icon = g_app_info_get_icon (app);
   if (icon == NULL)
@@ -618,7 +614,7 @@ gtk_app_chooser_add_default (GtkAppChooserWidget *self,
   gtk_list_store_set (self->priv->program_list_store, &iter,
                       COLUMN_APP_INFO, app,
                       COLUMN_GICON, icon,
-                      COLUMN_NAME, g_app_info_get_display_name (app),
+                      COLUMN_NAME, g_app_info_get_name (app),
                       COLUMN_DESC, string,
                       COLUMN_EXEC, g_app_info_get_executable (app),
                       COLUMN_HEADING, FALSE,
@@ -857,7 +853,7 @@ gtk_app_chooser_widget_add_items (GtkAppChooserWidget *self)
                                        "gicon", COLUMN_GICON,
                                        NULL);
   g_object_set (renderer,
-                "stock-size", GTK_ICON_SIZE_DIALOG,
+                "stock-size", GTK_ICON_SIZE_MENU,
                 NULL);
 
   /* app name renderer */
