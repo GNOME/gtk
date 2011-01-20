@@ -272,7 +272,7 @@ gdk_rgba_parse (GdkRGBA     *rgba,
 
 /**
  * gdk_rgba_hash:
- * @p: a #GdkRGBA pointer.
+ * @p: (type GdkRGBA): a #GdkRGBA pointer.
  *
  * A hash function suitable for using for a hash
  * table that stores #GdkRGBA<!-- -->s.
@@ -294,8 +294,8 @@ gdk_rgba_hash (gconstpointer p)
 
 /**
  * gdk_rgba_equal:
- * @p1: a #GdkRGBA pointer.
- * @p2: another #GdkRGBA pointer.
+ * @p1: (type GdkRGBA): a #GdkRGBA pointer.
+ * @p2: (type GdkRGBA): another #GdkRGBA pointer.
  *
  * Compares two RGBA colors.
  *

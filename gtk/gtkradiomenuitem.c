@@ -331,7 +331,8 @@ gtk_radio_menu_item_new_with_label_from_widget (GtkRadioMenuItem *group,
  * Returns the group to which the radio menu item belongs, as a #GList of
  * #GtkRadioMenuItem. The list belongs to GTK+ and should not be freed.
  *
- * Returns: (transfer none): the group of @radio_menu_item
+ * Returns: (element-type GtkRadioMenuItem) (transfer none): the group
+ *     of @radio_menu_item
  */
 GSList*
 gtk_radio_menu_item_get_group (GtkRadioMenuItem *radio_menu_item)

@@ -912,9 +912,10 @@ _gdk_device_set_associated_device (GdkDevice *device,
  * the list of slave devices attached to it, otherwise it will return
  * %NULL
  *
- * Returns: (transfer container): the list of slave devices, or %NULL. The
- *          list must be freed with g_list_free(), the contents of the list
- *          are owned by GTK+ and should not be freed.
+ * Returns: (transfer container) (element-type GdkDevice): the list of
+ *          slave devices, or %NULL. The list must be freed with
+ *          g_list_free(), the contents of the list are owned by GTK+
+ *          and should not be freed.
  **/
 GList *
 gdk_device_list_slave_devices (GdkDevice *device)

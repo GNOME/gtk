@@ -2337,11 +2337,12 @@ gtk_status_icon_is_embedded (GtkStatusIcon *status_icon)
 /**
  * gtk_status_icon_position_menu:
  * @menu: the #GtkMenu
- * @x: return location for the x position
- * @y: return location for the y position
- * @push_in: whether the first menu item should be offset (pushed in) to be
- *           aligned with the menu popup position (only useful for GtkOptionMenu).
- * @user_data: the status icon to position the menu on
+ * @x: (out): return location for the x position
+ * @y: (out): return location for the y position
+ * @push_in: (out): whether the first menu item should be offset
+ *           (pushed in) to be aligned with the menu popup position
+ *           (only useful for GtkOptionMenu).
+ * @user_data: (type GtkStatusIcon): the status icon to position the menu on
  *
  * Menu positioning function to use with gtk_menu_popup()
  * to position @menu aligned to the status icon @user_data.

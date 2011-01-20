@@ -1213,7 +1213,7 @@ gtk_selection_data_get_format (const GtkSelectionData *selection_data)
 }
 
 /**
- * gtk_selection_data_get_data:
+ * gtk_selection_data_get_data: (skip)
  * @selection_data: a pointer to a #GtkSelectionData structure.
  *
  * Retrieves the raw data of the selection.
@@ -1596,9 +1596,9 @@ gtk_selection_data_set_text (GtkSelectionData     *selection_data,
  * 
  * Gets the contents of the selection data as a UTF-8 string.
  * 
- * Return value: if the selection data contained a recognized
- *   text type and it could be converted to UTF-8, a newly allocated
- *   string containing the converted text, otherwise %NULL.
+ * Return value: (type utf8): if the selection data contained a
+ *   recognized text type and it could be converted to UTF-8, a newly
+ *   allocated string containing the converted text, otherwise %NULL.
  *   If the result is non-%NULL it must be freed with g_free().
  **/
 guchar *

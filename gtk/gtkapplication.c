@@ -253,7 +253,7 @@ gtk_application_remove_window (GtkApplication *application,
  *
  * The list that is returned should not be modified in any way.
  *
- * Returns: a #GList of #GtkWindow
+ * Returns: (element-type GtkWindow) (transfer none): a #GList of #GtkWindow
  *
  * Since: 3.0
  **/
