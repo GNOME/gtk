@@ -113,7 +113,7 @@ test_find_widget_input_windows (GtkWidget *widget,
 }
 
 /**
- * gtk_test_widget_send_key
+ * gtk_test_widget_send_key:
  * @widget: Widget to generate a key press and release on.
  * @keyval: A Gdk keyboard value.
  * @modifiers: Keyboard modifiers the event is setup with.
@@ -148,7 +148,7 @@ gtk_test_widget_send_key (GtkWidget      *widget,
 }
 
 /**
- * gtk_test_widget_click
+ * gtk_test_widget_click:
  * @widget: Widget to generate a button click on.
  * @button: Number of the pointer button for the event, usually 1, 2 or 3.
  * @modifiers: Keyboard modifiers the event is setup with.
@@ -184,7 +184,7 @@ gtk_test_widget_click (GtkWidget      *widget,
 }
 
 /**
- * gtk_test_spin_button_click
+ * gtk_test_spin_button_click:
  * @spinner: valid GtkSpinButton widget.
  * @button:  Number of the pointer button for the event, usually 1, 2 or 3.
  * @upwards: %TRUE for upwards arrow click, %FALSE for downwards arrow click.
@@ -219,7 +219,7 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
 }
 
 /**
- * gtk_test_find_label
+ * gtk_test_find_label:
  * @widget:        Valid label or container widget.
  * @label_pattern: Shell-glob pattern to match a label string.
  *
@@ -322,7 +322,7 @@ widget_geo_cmp (gconstpointer a,
 }
 
 /**
- * gtk_test_find_sibling
+ * gtk_test_find_sibling:
  * @base_widget:        Valid widget, part of a widget hierarchy
  * @widget_type:        Type of a aearched for sibling widget
  *
@@ -363,7 +363,7 @@ gtk_test_find_sibling (GtkWidget *base_widget,
 }
 
 /**
- * gtk_test_find_widget
+ * gtk_test_find_widget:
  * @widget:        Container widget, usually a GtkWindow.
  * @label_pattern: Shell-glob pattern to match a label string.
  * @widget_type:   Type of a aearched for label sibling widget.
@@ -394,7 +394,7 @@ gtk_test_find_widget (GtkWidget    *widget,
 }
 
 /**
- * gtk_test_slider_set_perc
+ * gtk_test_slider_set_perc:
  * @widget:     valid widget pointer.
  * @percentage: value between 0 and 100.
  *
@@ -425,7 +425,7 @@ gtk_test_slider_set_perc (GtkWidget      *widget,
 }
 
 /**
- * gtk_test_slider_get_value
+ * gtk_test_slider_get_value:
  * @widget:     valid widget pointer.
  *
  * Retrive the literal adjustment value for GtkRange based
@@ -450,7 +450,7 @@ gtk_test_slider_get_value (GtkWidget *widget)
 }
 
 /**
- * gtk_test_text_set
+ * gtk_test_text_set:
  * @widget:     valid widget pointer.
  * @string:     a 0-terminated C string
  *
@@ -479,7 +479,7 @@ gtk_test_text_set (GtkWidget   *widget,
 }
 
 /**
- * gtk_test_text_get
+ * gtk_test_text_get:
  * @widget:     valid widget pointer.
  *
  * Retrive the text string of @widget if it is a GtkLabel,
@@ -510,7 +510,7 @@ gtk_test_text_get (GtkWidget *widget)
 }
 
 /**
- * gtk_test_create_widget
+ * gtk_test_create_widget:
  * @widget_type: a valid widget type.
  * @first_property_name: (allow-none): Name of first property to set or %NULL
  * @Varargs: value to set the first property to, followed by more
@@ -521,7 +521,7 @@ gtk_test_text_get (GtkWidget *widget)
  * g_object_ref_sink() them (to keep them alive across a running test)
  * and set them up for destruction during the next test teardown phase.
  *
- * Returns: a newly created widget.
+ * Returns: (transfer none): a newly created widget.
  *
  * Since: 2.14
  */
@@ -563,7 +563,7 @@ test_increment_intp (int *intp)
 }
 
 /**
- * gtk_test_display_button_window
+ * gtk_test_display_button_window:
  * @window_title:       Title of the window to be displayed.
  * @dialog_text:        Text inside the window to be displayed.
  * @...:                %NULL terminated list of (const char *label, int *nump) pairs.
@@ -579,7 +579,7 @@ test_increment_intp (int *intp)
  * The window will quit any running gtk_main()-loop when destroyed, and it
  * will automatically be destroyed upon test function teardown.
  *
- * Returns: a widget pointer to the newly created GtkWindow.
+ * Returns: (transfer full): a widget pointer to the newly created GtkWindow.
  *
  * Since: 2.14
  **/
@@ -612,7 +612,7 @@ gtk_test_display_button_window (const gchar *window_title,
 }
 
 /**
- * gtk_test_create_simple_window
+ * gtk_test_create_simple_window:
  * @window_title:       Title of the window to be displayed.
  * @dialog_text:        Text inside the window to be displayed.
  *
@@ -641,7 +641,7 @@ static GType *all_registered_types = NULL;
 static guint  n_all_registered_types = 0;
 
 /**
- * gtk_test_list_all_types
+ * gtk_test_list_all_types:
  * @n_types: location to store number of types
  * @returns: (array length=n_types zero-terminated=1) (transfer none):
  *    0-terminated array of type ids
@@ -660,7 +660,7 @@ gtk_test_list_all_types (guint *n_types)
 }
 
 /**
- * gtk_test_register_all_types
+ * gtk_test_register_all_types:
  *
  * Force registration of all core Gtk+ and Gdk object types.
  * This allowes to refer to any of those object types via
