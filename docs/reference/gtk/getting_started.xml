@@ -184,4 +184,54 @@
       </programlisting>
     </example>
   </simplesect>
+
+  <simplesect>
+    <title>Building UIs</title>
+
+    <para>When construcing a more complicated interface, with dozens
+    or hundreds of widgets, doing all the setup work in C code is
+    cumbersome, and making changes becomes next to impossible.</para>
+
+    <para>Thankfully, GTK+ supports the separation of user interface
+    layout from your business logic, by using UI descriptions in an
+    XML format that can be parsed by the #GtkBuilder class.</para>
+
+    <example>
+      <title>Packing buttons with GtkBuilder</title>
+      <programlisting>
+        <xi:include href="../../../../examples/builder.c" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+        </xi:include>
+      </programlisting>
+      The builder.ui file looks like this:
+      <programlisting>
+        <xi:include href="../../../../examples/builder.ui" parse="text">
+          <xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback>
+        </xi:include>
+      </programlisting>
+    </example>
+
+    <para>Note that GtkBuilder can also be used to construct objects
+    that are not widgets, such as tree models, adjustments, etc.
+    That is the reason the method we use here is called
+    gtk_builder_get_object() and returns a GObject* instead of a
+    GtkWidget*.</para>
+
+    <para>Normally, you would pass a full path to
+    gtk_builder_add_From_file() to make the execution of your program
+    independent of the current directory. A common location to install
+    UI descriptions and similar data is
+    <filename>/usr/share/<replaceable>appname</replaceable></filename>.
+    </para>
+
+    <para>It is also possible to embed the UI description in the source
+    code as a string and use gtk_builder_add_from_string() to load it.
+    But keeping the UI description in a separate file has several
+    advantages: It is then possible to make minor adjustments to the UI
+    without recompiling your program, and, more importantly, graphical
+    UI editors such as <ulink url="http://glade.gnome.org">glade</ulink>
+    can load the file and allow you to create and modify your UI by
+    point-and-click.</para>
+
+  </simplesect>
 </chapter>

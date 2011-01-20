@@ -56,4 +56,7 @@ noinst_PROGRAMS = \
 	window-default				\
 	bloatpad				\
 	grid-packing				\
-	drawing
+	drawing					\
+	builder
+
+EXTRA_DIST = builder.ui
