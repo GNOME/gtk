@@ -58,8 +58,6 @@ struct _GdkBroadwayDisplay
   GdkWindow *mouse_in_toplevel;
   int last_x, last_y;
 
-  gint grab_count;
-
   /* Keyboard related information */
   GdkKeymap *keymap;
 
