@@ -315,6 +315,7 @@ static void
 gtk_app_chooser_button_build_ui (GtkAppChooserButton *self)
 {
   GtkCellRenderer *cell;
+  GtkCellArea *area;
 
   self->priv->store = gtk_list_store_new (NUM_COLUMNS,
                                           G_TYPE_APP_INFO,
@@ -327,23 +328,29 @@ gtk_app_chooser_button_build_ui (GtkAppChooserButton *self)
   gtk_combo_box_set_model (GTK_COMBO_BOX (self),
                            GTK_TREE_MODEL (self->priv->store));
 
+  area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (self));
+
   gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (self),
                                         row_separator_func, NULL, NULL);
 
   cell = gtk_cell_renderer_pixbuf_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self), cell, FALSE);
+  gtk_cell_area_add_with_properties (area, cell,
+                                     "align", FALSE,
+                                     "expand", FALSE,
+                                     "fixed-size", FALSE,
+                                     NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (self), cell,
                                   "gicon", COLUMN_ICON,
                                   NULL);
 
   cell = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (self), cell, TRUE);
+  gtk_cell_area_add_with_properties (area, cell,
+                                     "align", FALSE,
+                                     "expand", TRUE,
+                                     NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (self), cell,
                                   "text", COLUMN_LABEL,
                                   NULL);
-  g_object_set (cell,
-                "xpad", 6,
-                NULL);
 
   gtk_app_chooser_button_populate (self);
 }
