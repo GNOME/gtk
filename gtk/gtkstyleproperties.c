@@ -869,6 +869,10 @@ lookup_default_value (PropertyNode *node,
       gdk_rgba_parse (&color, "pink");
       g_value_set_boxed (value, &color);
     }
+  else if (node->pspec->value_type == GTK_TYPE_BORDER)
+    {
+      g_value_take_boxed (value, gtk_border_new ());
+    }
   else
     g_param_value_set_default (node->pspec, value);
 }
