@@ -88,6 +88,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkAppChooserButton, gtk_app_chooser_button, GTK_TYPE_C
 struct _GtkAppChooserButtonPrivate {
   GtkListStore *store;
 
+  int last_active;
   gchar *content_type;
   gboolean show_dialog_item;
 
@@ -200,7 +201,7 @@ other_application_dialog_response_cb (GtkDialog *dialog,
       /* reset the active item, otherwise we are stuck on
        * 'Other application...'
        */
-      gtk_combo_box_set_active (GTK_COMBO_BOX (self), 0);
+      gtk_combo_box_set_active (GTK_COMBO_BOX (self), self->priv->last_active);
       gtk_widget_destroy (GTK_WIDGET (dialog));
       return;
     }
@@ -404,6 +405,7 @@ gtk_app_chooser_button_changed (GtkComboBox *object)
         {
           name_quark = g_quark_from_string (name);
           g_signal_emit (self, signals[SIGNAL_CUSTOM_ITEM_ACTIVATED], name_quark, name);
+          self->priv->last_active = gtk_combo_box_get_active (object);
         }
       else
         {
@@ -413,6 +415,8 @@ gtk_app_chooser_button_changed (GtkComboBox *object)
 
       g_free (name);
     }
+  else
+    self->priv->last_active = gtk_combo_box_get_active (object);
 }
 
 static void
