@@ -286,13 +286,6 @@ _gdk_broadway_screen_events_init (GdkScreen *screen)
 {
 }
 
-gchar *
-_gdk_windowing_substitute_screen_number (const gchar *display_name,
-					 gint         screen_number)
-{
-  return g_strdup ("browser");
-}
-
 static void
 gdk_broadway_screen_class_init (GdkBroadwayScreenClass *klass)
 {

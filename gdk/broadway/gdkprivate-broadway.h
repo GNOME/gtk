@@ -42,6 +42,7 @@
 #include "gdkbroadwaywindow.h"
 
 void _gdk_broadway_resync_windows (void);
+void _gdk_broadway_windowing_init (void);
 
 gchar * _gdk_broadway_display_manager_get_atom_name (GdkDisplayManager *manager,
 						     GdkAtom atom);

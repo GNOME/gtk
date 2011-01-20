@@ -36,7 +36,6 @@ broadway_built_sources =		\
 
 libgdk_broadway_la_SOURCES =		\
 	${broadway_built_private_headers}\
-	gdkapplaunchcontext-broadway.c \
 	gdkbroadwaydisplaymanager.h	\
 	gdkcursor-broadway.c	\
 	gdkdevice-broadway.h	\

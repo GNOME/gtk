@@ -39,51 +39,8 @@
 #include <limits.h>
 #include <errno.h>
 
-typedef struct _GdkPredicate        GdkPredicate;
-typedef struct _GdkGlobalErrorTrap  GdkGlobalErrorTrap;
-
-struct _GdkPredicate
-{
-  GdkEventFunc func;
-  gpointer data;
-};
-
-/* Private variable declarations
- */
-const GOptionEntry _gdk_windowing_args[] = {
-  { NULL }
-};
-
 void
-_gdk_windowing_init (void)
+_gdk_broadway_windowing_init (void)
 {
   _gdk_broadway_initialize_locale ();
-}
-
-GdkGrabStatus
-_gdk_windowing_device_grab (GdkDevice    *device,
-                            GdkWindow    *window,
-                            GdkWindow    *native,
-                            gboolean      owner_events,
-                            GdkEventMask  event_mask,
-                            GdkWindow    *confine_to,
-                            GdkCursor    *cursor,
-                            guint32       time)
-{
-  return GDK_GRAB_NOT_VIEWABLE;
-}
-
-void
-_gdk_windowing_display_set_sm_client_id (GdkDisplay  *display,
-					 const gchar *sm_client_id)
-{
-  if (display->closed)
-    return;
- }
-
-/* Close all open displays
- */
-void
-_gdk_windowing_exit (void)
-{
 }
