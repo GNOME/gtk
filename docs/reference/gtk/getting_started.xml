@@ -218,7 +218,7 @@
     GtkWidget*.</para>
 
     <para>Normally, you would pass a full path to
-    gtk_builder_add_From_file() to make the execution of your program
+    gtk_builder_add_from_file() to make the execution of your program
     independent of the current directory. A common location to install
     UI descriptions and similar data is
     <filename>/usr/share/<replaceable>appname</replaceable></filename>.
