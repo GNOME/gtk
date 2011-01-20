@@ -38,12 +38,3 @@ void
 _gdk_broadway_initialize_locale (void)
 {
 }
-
-gchar*
-gdk_set_locale (void)
-{
-  if (!setlocale (LC_ALL,""))
-    g_warning ("locale not supported by C library");
-
-  return setlocale (LC_ALL, NULL);
-}
