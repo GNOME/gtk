@@ -207,7 +207,7 @@ lookup_cached_xatom (GdkDisplay *display,
 }
 
 /**
- * gdk_x11_atom_to_xatom_for_display:
+ * gdk_x11_atom_to_xatom_for_display: (skip)
  * @display: A #GdkDisplay
  * @atom: A #GdkAtom, or %GDK_NONE
  *
@@ -298,7 +298,7 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
 }
 
 /**
- * gdk_x11_atom_to_xatom:
+ * gdk_x11_atom_to_xatom: (skip)
  * @atom: A #GdkAtom 
  * 
  * Converts from a #GdkAtom to the X atom for the default GDK display
@@ -313,7 +313,7 @@ gdk_x11_atom_to_xatom (GdkAtom atom)
 }
 
 /**
- * gdk_x11_xatom_to_atom_for_display:
+ * gdk_x11_xatom_to_atom_for_display: (skip)
  * @display: A #GdkDisplay
  * @xatom: an X atom 
  * 
@@ -373,7 +373,7 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 }
 
 /**
- * gdk_x11_xatom_to_atom:
+ * gdk_x11_xatom_to_atom: (skip)
  * @xatom: an X atom for the default GDK display
  * 
  * Convert from an X atom for the default display to the corresponding
@@ -450,7 +450,7 @@ _gdk_x11_display_manager_get_atom_name (GdkDisplayManager *manager,
 }
 
 /**
- * gdk_x11_get_xatom_by_name_for_display:
+ * gdk_x11_get_xatom_by_name_for_display: (skip)
  * @display: a #GdkDisplay
  * @atom_name: a string
  * 
@@ -472,7 +472,7 @@ gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
 }
 
 /**
- * gdk_x11_get_xatom_by_name:
+ * gdk_x11_get_xatom_by_name: (skip)
  * @atom_name: a string
  * 
  * Returns the X atom for GDK's default display corresponding to @atom_name.

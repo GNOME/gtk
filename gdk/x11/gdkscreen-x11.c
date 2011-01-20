@@ -265,7 +265,7 @@ gdk_x11_screen_get_monitor_plug_name (GdkScreen *screen,
 }
 
 /**
- * gdk_x11_screen_get_monitor_output:
+ * gdk_x11_screen_get_monitor_output: (skip)
  * @screen: a #GdkScreen
  * @monitor_num: number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)
  *

@@ -564,7 +564,7 @@ _gdk_visual_get_x11_colormap (GdkVisual *visual)
 }
 
 /**
- * gdk_x11_visual_get_xvisual:
+ * gdk_x11_visual_get_xvisual: (skip)
  * @visual: a #GdkVisual.
  *
  * Returns the X visual belonging to a #GdkVisual.

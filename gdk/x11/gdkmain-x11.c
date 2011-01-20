@@ -435,7 +435,7 @@ gdk_x11_get_default_screen (void)
 }
 
 /**
- * gdk_x11_get_default_root_xwindow:
+ * gdk_x11_get_default_root_xwindow: (skip)
  * 
  * Gets the root window of the default screen 
  * (see gdk_x11_get_default_screen()).  
@@ -449,7 +449,7 @@ gdk_x11_get_default_root_xwindow (void)
 }
 
 /**
- * gdk_x11_get_default_xdisplay:
+ * gdk_x11_get_default_xdisplay: (skip)
  * 
  * Gets the default GTK+ display.
  * 
