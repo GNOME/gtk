@@ -3074,7 +3074,7 @@ gdk_color_to_css (GdkColor *color)
 static gchar *
 gdk_rgba_to_css (GdkRGBA *color)
 {
-  /* drop a for now, since librsvg does not understand rgba() */
+  /* drop alpha for now, since librsvg does not understand rgba() */
   return g_strdup_printf ("rgb(%d,%d,%d)",
                           (gint)(color->red * 255),
                           (gint)(color->green * 255),
@@ -3221,18 +3221,18 @@ gtk_icon_info_load_symbolic (GtkIconInfo  *icon_info,
   if (was_symbolic)
     *was_symbolic = TRUE;
 
-  css_fg = gdk_rgba_to_string (fg);
+  css_fg = gdk_rgba_to_css (fg);
 
   css_success = css_warning = css_error = NULL;
 
   if (warning_color)
-    css_warning = gdk_rgba_to_string (warning_color);
+    css_warning = gdk_rgba_to_css (warning_color);
 
   if (error_color)
-    css_error = gdk_rgba_to_string (error_color);
+    css_error = gdk_rgba_to_css (error_color);
 
   if (success_color)
-    css_success = gdk_rgba_to_string (success_color);
+    css_success = gdk_rgba_to_css (success_color);
 
   pixbuf = _gtk_icon_info_load_symbolic_internal (icon_info,
                                                   css_fg, css_success,
