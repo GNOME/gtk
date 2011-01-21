@@ -577,6 +577,9 @@ gtk_cell_view_request_model (GtkCellView        *cellview,
   GtkTreeIter         iter;
   gboolean            valid;
 
+  if (!priv->model)
+    return;
+
   valid = gtk_tree_model_iter_children (priv->model, &iter, parent);
   while (valid)
     {
