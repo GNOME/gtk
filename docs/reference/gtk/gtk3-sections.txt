@@ -6982,6 +6982,8 @@ GtkAppChooserDialog
 gtk_app_chooser_dialog_new
 gtk_app_chooser_dialog_new_for_content_type
 gtk_app_chooser_dialog_get_widget
+gtk_app_chooser_dialog_set_heading
+gtk_app_chooser_dialog_get_heading
 
 <SUBSECTION Standard>
 GtkAppChooserDialogClass

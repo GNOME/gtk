@@ -98,6 +98,8 @@ prepare_dialog (void)
                                                             0, content_type);
     }
 
+  gtk_app_chooser_dialog_set_heading (GTK_APP_CHOOSER_DIALOG (dialog), "Select one already, you <i>fool</i>");
+
   g_signal_connect (dialog, "response",
                     G_CALLBACK (dialog_response), NULL);
 
