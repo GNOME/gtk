@@ -3346,14 +3346,11 @@ gtk_entry_draw_frame (GtkWidget       *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
-  GdkWindow *window;
   gint x = 0, y = 0, width, height;
   GtkAllocation allocation;
   gint frame_x, frame_y;
 
   cairo_save (cr);
-
-  window = gtk_widget_get_window (widget);
 
   get_frame_size (GTK_ENTRY (widget), &frame_x, &frame_y, &width, &height);
   gtk_widget_get_allocation (widget, &allocation);
