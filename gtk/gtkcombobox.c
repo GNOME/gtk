@@ -104,7 +104,6 @@ struct _GtkComboBoxPrivate
   GtkTreeRowReference *active_row;
 
   GtkWidget *tree_view;
-  GtkTreeViewColumn *column;
 
   GtkWidget *cell_view;
   GtkWidget *cell_view_frame;
@@ -129,7 +128,8 @@ struct _GtkComboBoxPrivate
   guint resize_idle_id;
 
   /* For "has-entry" specific behavior we track
-   * an automated cell renderer and text column */
+   * an automated cell renderer and text column
+   */
   gint  text_column;
   GtkCellRenderer *text_renderer;
 
@@ -1961,12 +1961,12 @@ gtk_combo_box_list_position (GtkComboBox *combo_box,
 }
 
 static gboolean
-cell_view_is_sensitive (GtkCellView *cell_view)
+cell_layout_is_sensitive (GtkCellLayout *layout)
 {
   GList *cells, *list;
   gboolean sensitive;
 
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (cell_view));
+  cells = gtk_cell_layout_get_cells (layout);
 
   sensitive = FALSE;
   for (list = cells; list; list = list->next)
@@ -1982,15 +1982,21 @@ cell_view_is_sensitive (GtkCellView *cell_view)
 }
 
 static gboolean
+cell_is_sensitive (GtkCellRenderer *cell,
+                   gpointer         data)
+{
+  gboolean *sensitive = data;
+
+  g_object_get (cell, "sensitive", sensitive, NULL);
+
+  return *sensitive;
+}
+
+static gboolean
 tree_column_row_is_sensitive (GtkComboBox *combo_box,
                               GtkTreeIter *iter)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
-  GList *cells, *list;
-  gboolean sensitive;
-
-  if (!priv->column)
-    return TRUE;
 
   if (priv->row_separator_func)
     {
@@ -1999,23 +2005,20 @@ tree_column_row_is_sensitive (GtkComboBox *combo_box,
         return FALSE;
     }
 
-  gtk_tree_view_column_cell_set_cell_data (priv->column,
-                                           priv->model,
-                                           iter, FALSE, FALSE);
-
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (priv->column));
-
-  sensitive = FALSE;
-  for (list = cells; list; list = list->next)
+  if (priv->area)
     {
-      g_object_get (list->data, "sensitive", &sensitive, NULL);
+      gboolean sensitive;
 
-      if (sensitive)
-        break;
+      gtk_cell_area_apply_attributes (priv->area, priv->model, iter, FALSE, FALSE);
+
+      sensitive = FALSE;
+
+      gtk_cell_area_foreach (priv->area, cell_is_sensitive, &sensitive);
+
+      return sensitive;
     }
-  g_list_free (cells);
 
-  return sensitive;
+  return TRUE;
 }
 
 static void
@@ -2049,7 +2052,7 @@ update_menu_sensitivity (GtkComboBox *combo_box,
         }
       else
         {
-          sensitive = cell_view_is_sensitive (GTK_CELL_VIEW (cell_view));
+          sensitive = cell_layout_is_sensitive (GTK_CELL_LAYOUT (cell_view));
 
           if (menu != priv->popup_widget && child == children)
             {
@@ -3048,8 +3051,6 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
   priv->arrow = NULL;
   priv->separator = NULL;
 
-  priv->column = NULL;
-
   /* changing the popup window will unref the menu and the children */
 }
 
@@ -3325,8 +3326,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   if (priv->model)
     gtk_tree_view_set_model (GTK_TREE_VIEW (priv->tree_view), priv->model);
 
-  priv->column = gtk_tree_view_column_new_with_area (priv->area);
-  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->tree_view), priv->column);
+  gtk_tree_view_append_column (GTK_TREE_VIEW (priv->tree_view),
+                               gtk_tree_view_column_new_with_area (priv->area));
 
   if (gtk_tree_row_reference_valid (priv->active_row))
     {
