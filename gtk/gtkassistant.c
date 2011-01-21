@@ -644,6 +644,7 @@ set_current_page (GtkAssistant     *assistant,
   if (gtk_widget_get_visible (priv->current_page->page) && gtk_widget_get_mapped (GTK_WIDGET (assistant)))
     {
       gtk_widget_set_child_visible (priv->current_page->page, TRUE);
+      gtk_widget_set_child_visible (priv->current_page->title, TRUE);
       gtk_widget_map (priv->current_page->page);
       gtk_widget_map (priv->current_page->title);
     }
@@ -651,6 +652,7 @@ set_current_page (GtkAssistant     *assistant,
   if (old_page && gtk_widget_get_mapped (old_page->page))
     {
       gtk_widget_set_child_visible (old_page->page, FALSE);
+      gtk_widget_set_child_visible (old_page->title, FALSE);
       gtk_widget_unmap (old_page->page);
       gtk_widget_unmap (old_page->title);
     }
@@ -1371,7 +1373,12 @@ gtk_assistant_unmap (GtkWidget *widget)
 
   if (priv->current_page &&
       gtk_widget_is_drawable (priv->current_page->page))
-    gtk_widget_unmap (priv->current_page->page);
+    {
+      gtk_widget_set_child_visible (priv->current_page->page, FALSE);
+      gtk_widget_set_child_visible (priv->current_page->title, FALSE);
+      gtk_widget_unmap (priv->current_page->title);
+      gtk_widget_unmap (priv->current_page->page);
+    }
 
   g_slist_free (priv->visited_pages);
   priv->visited_pages = NULL;
@@ -1902,6 +1909,7 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   priv->pages = g_list_insert (priv->pages, page_info, position);
 
   gtk_widget_set_child_visible (page_info->page, FALSE);
+  gtk_widget_set_child_visible (page_info->title, FALSE);
   gtk_widget_set_parent (page_info->page,  GTK_WIDGET (assistant));
   gtk_widget_set_parent (page_info->title, GTK_WIDGET (assistant));
 
