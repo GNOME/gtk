@@ -993,6 +993,21 @@ error_creating_folder_over_existing_file_dialog (GtkFileChooserDefault *impl,
 		file, error);
 }
 
+static void
+error_with_file_under_nonfolder (GtkFileChooserDefault *impl,
+				 GFile *parent_file)
+{
+  GError *error;
+
+  error = NULL;
+  g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_NOT_DIRECTORY,
+		       _("You need to choose a valid filename."));
+
+  error_dialog (impl,
+		_("Cannot create a file under %s as it is not a folder"),
+		parent_file, error);
+}
+
 /* Shows an error about not being able to select a folder because a file with
  * the same name is already there.
  */
@@ -8200,7 +8215,11 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
 
   if (parent_is_folder)
     {
-      if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
+      if (data->impl->action == GTK_FILE_CHOOSER_ACTION_OPEN)
+	{
+	  g_signal_emit_by_name (data->impl, "response-requested"); /* even if the file doesn't exist, apps can make good use of that (e.g. Emacs) */
+	}
+      else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SAVE)
         {
           if (data->file_exists_and_is_not_folder)
 	    {
@@ -8224,28 +8243,40 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
       else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER
 	       || data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
         {
-	  GError *error = NULL;
+	  GError *mkdir_error = NULL;
 
 	  /* In both cases (SELECT_FOLDER and CREATE_FOLDER), if you type
 	   * "/blah/nonexistent" you *will* want a folder created.
 	   */
 
 	  set_busy_cursor (data->impl, TRUE);
-	  g_file_make_directory (data->file, NULL, &error);
+	  g_file_make_directory (data->file, NULL, &mkdir_error);
 	  set_busy_cursor (data->impl, FALSE);
 
-	  if (!error)
+	  if (!mkdir_error)
 	    g_signal_emit_by_name (data->impl, "response-requested");
 	  else
-	    error_creating_folder_dialog (data->impl, data->file, error);
+	    error_creating_folder_dialog (data->impl, data->file, mkdir_error);
         }
       else
 	g_assert_not_reached ();
     }
   else
     {
-      /* This will display an error, which is what we want */
-      change_folder_and_display_error (data->impl, data->parent_file, FALSE);
+      if (info)
+	{
+	  /* The parent exists, but it's not a folder!  Someone probably typed existing_file.txt/subfile.txt */
+	  error_with_file_under_nonfolder (data->impl, data->parent_file);
+	}
+      else
+	{
+	  GError *error_copy;
+
+	  /* The parent folder is not readable for some reason */
+
+	  error_copy = g_error_copy (error);
+	  error_changing_folder_dialog (data->impl, data->parent_file, error_copy);
+	}
     }
 
 out:
@@ -8267,7 +8298,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   gboolean file_exists;
   gboolean is_folder;
-  gboolean needs_file_type_check = FALSE;
+  gboolean needs_parent_check = FALSE;
   struct FileExistsData *data = user_data;
 
   if (cancellable != data->impl->file_exists_get_info_cancellable)
@@ -8289,8 +8320,10 @@ file_exists_get_info_cb (GCancellable *cancellable,
 	change_folder_and_display_error (data->impl, data->file, TRUE);
       else
 	{
-	  /* user typed a filename; we are done */
-	  g_signal_emit_by_name (data->impl, "response-requested");
+	  if (file_exists)
+	    g_signal_emit_by_name (data->impl, "response-requested"); /* user typed an existing filename; we are done */
+	  else
+	    needs_parent_check = TRUE; /* file doesn't exist; see if its parent exists */
 	}
     }
   else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
@@ -8305,14 +8338,14 @@ file_exists_get_info_cb (GCancellable *cancellable,
         }
       else
         {
-          needs_file_type_check = TRUE;
+          needs_parent_check = TRUE;
         }
     }
   else if (data->impl->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       if (!file_exists)
         {
-	  needs_file_type_check = TRUE;
+	  needs_parent_check = TRUE;
         }
       else
 	{
@@ -8330,15 +8363,15 @@ file_exists_get_info_cb (GCancellable *cancellable,
       if (is_folder)
 	change_folder_and_display_error (data->impl, data->file, TRUE);
       else
-	needs_file_type_check = TRUE;
+	needs_parent_check = TRUE;
     }
   else
     {
       g_assert_not_reached();
     }
 
-  if (needs_file_type_check) {
-    /* check that everything up to the last component exists */
+  if (needs_parent_check) {
+    /* check that everything up to the last path component exists (i.e. the parent) */
 
     data->file_exists_and_is_not_folder = file_exists && !is_folder;
     data_ownership_taken = TRUE;
