@@ -51,7 +51,6 @@ static void     gtk_file_chooser_dialog_get_property (GObject               *obj
 						      GParamSpec            *pspec);
 
 static void     gtk_file_chooser_dialog_map          (GtkWidget             *widget);
-static void     gtk_file_chooser_dialog_unmap        (GtkWidget             *widget);
 
 static void response_cb (GtkDialog *dialog,
 			 gint       response_id);
@@ -72,7 +71,6 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
   gobject_class->finalize = gtk_file_chooser_dialog_finalize;
 
   widget_class->map       = gtk_file_chooser_dialog_map;
-  widget_class->unmap     = gtk_file_chooser_dialog_unmap;
 
   _gtk_file_chooser_install_properties (gobject_class);
 
@@ -371,30 +369,9 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
 
   ensure_default_response (dialog);
 
-  if (!gtk_widget_get_mapped (priv->widget))
-    gtk_widget_map (priv->widget);
-
   _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
 
   GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->map (widget);
-}
-
-/* GtkWidget::unmap handler */
-static void
-gtk_file_chooser_dialog_unmap (GtkWidget *widget)
-{
-  GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (widget);
-  GtkFileChooserDialogPrivate *priv = GTK_FILE_CHOOSER_DIALOG_GET_PRIVATE (dialog);
-
-  GTK_WIDGET_CLASS (gtk_file_chooser_dialog_parent_class)->unmap (widget);
-
-  /* See bug #145470.  We unmap the GtkFileChooserWidget so that if the dialog
-   * is remapped, the widget will be remapped as well.  Implementations should
-   * refresh their contents when this happens, as some applications keep a
-   * single file chooser alive and map/unmap it as needed, rather than creating
-   * a new file chooser every time they need one.
-   */
-  gtk_widget_unmap (priv->widget);
 }
 
 /* GtkDialog::response handler */
