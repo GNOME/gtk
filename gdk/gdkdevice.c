@@ -1149,7 +1149,7 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  *                @event_mask. In either mode, unreported events are discarded.
  * @event_mask: specifies the event mask, which is used in accordance with
  *              @owner_events.
- * @cursor: the cursor to display while the grab is active if the device is
+ * @cursor: (allow-none): the cursor to display while the grab is active if the device is
  *          a pointer. If this is %NULL then the normal cursors are used for
  *          @window and its descendants, and the cursor for @window is used
  *          elsewhere.
