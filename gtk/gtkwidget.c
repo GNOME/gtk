@@ -6971,6 +6971,14 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
 
   flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
 
+  /* Focused state is meant to be set only on the widget
+   * being changed itself, not on the children */
+  if ((flags & GTK_STATE_FLAG_FOCUSED) !=
+      (priv->state_flags & GTK_STATE_FLAG_FOCUSED))
+    priv->state_flags |= GTK_STATE_FLAG_FOCUSED;
+
+  flags &= ~(GTK_STATE_FLAG_FOCUSED);
+
   if (flags != 0 ||
       operation == STATE_CHANGE_REPLACE)
     {
@@ -7074,6 +7082,9 @@ gtk_widget_get_state_flags (GtkWidget *widget)
 
   if (!gtk_widget_is_sensitive (widget))
     flags |= GTK_STATE_FLAG_INSENSITIVE;
+
+  if (gtk_widget_has_focus (widget))
+    flags |= GTK_STATE_FLAG_FOCUSED;
 
   return flags;
 }
@@ -13906,6 +13917,11 @@ _gtk_widget_set_has_focus (GtkWidget *widget,
                            gboolean   has_focus)
 {
   widget->priv->has_focus = has_focus;
+
+  if (has_focus)
+    gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_FOCUSED, FALSE);
+  else
+    gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_FOCUSED);
 }
 
 /**
