@@ -921,12 +921,10 @@ gtk_spin_button_draw (GtkWidget      *widget,
 
   is_rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
 
-  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
-
-  gtk_style_context_restore (context);
   cairo_save (cr);
+  GTK_WIDGET_CLASS (gtk_spin_button_parent_class)->draw (widget, cr);
+  cairo_restore (cr);
 
   state = gtk_widget_get_state_flags (widget);
 
@@ -953,7 +951,6 @@ gtk_spin_button_draw (GtkWidget      *widget,
   gtk_spin_button_draw_arrow (spin, context, cr, GTK_ARROW_DOWN);
 
   gtk_style_context_restore (context);
-  cairo_restore (cr);
 
   return FALSE;
 }
