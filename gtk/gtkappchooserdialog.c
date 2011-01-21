@@ -508,7 +508,7 @@ build_dialog_ui (GtkAppChooserDialog *self)
   /* Create a custom stock icon */
   self->priv->button = gtk_button_new ();
 
-  label = gtk_label_new_with_mnemonic (_("_Open"));
+  label = gtk_label_new_with_mnemonic (_("_Select"));
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), GTK_WIDGET (self->priv->button));
   gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
   gtk_widget_show (label);
