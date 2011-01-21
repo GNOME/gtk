@@ -223,6 +223,9 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
   toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self)));
   dialog = gtk_app_chooser_dialog_new_for_content_type (toplevel, GTK_DIALOG_DESTROY_WITH_PARENT,
                                                         self->priv->content_type);
+
+  gtk_window_set_modal (GTK_WINDOW (dialog), gtk_window_get_modal (toplevel));
+
   widget = gtk_app_chooser_dialog_get_widget (GTK_APP_CHOOSER_DIALOG (dialog));
   g_object_set (widget,
                 "show-fallback", TRUE,
