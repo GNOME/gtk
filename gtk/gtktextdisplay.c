@@ -210,9 +210,6 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     {
       state |= GTK_STATE_FLAG_SELECTED;
 
-      if (gtk_widget_has_focus (text_renderer->widget))
-        state |= GTK_STATE_FLAG_FOCUSED;
-
       gtk_style_context_get (context, state,
                              "color", &fg_rgba,
                               NULL);

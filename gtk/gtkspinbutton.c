@@ -928,9 +928,6 @@ gtk_spin_button_draw (GtkWidget      *widget,
 
   state = gtk_widget_get_state_flags (widget);
 
-  if (gtk_widget_has_focus (widget))
-    state |= GTK_STATE_FLAG_FOCUSED;
-
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_ENTRY);
