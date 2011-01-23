@@ -6242,9 +6242,9 @@ gtk_notebook_update_tab_states (GtkNotebook *notebook)
       if (page->tab_label)
         {
           if (page == priv->cur_page)
-            gtk_widget_set_state_flags (page->tab_label, GTK_STATE_FLAG_ACTIVE, TRUE);
+            gtk_widget_set_state_flags (page->tab_label, GTK_STATE_FLAG_ACTIVE, FALSE);
           else
-            gtk_widget_set_state_flags (page->tab_label, 0, TRUE);
+            gtk_widget_unset_state_flags (page->tab_label, GTK_STATE_FLAG_ACTIVE);
 
           gtk_widget_reset_style (page->tab_label);
         }
