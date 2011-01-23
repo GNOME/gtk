@@ -769,7 +769,7 @@ def main(args):
     skip_windows = False
     split = False
     root = None
-    target_version = "3.0"
+    target_version = "2.0"
     for o, a in opts:
         if o in ("-h", "--help"):
             usage()
