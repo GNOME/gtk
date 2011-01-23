@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.92.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-15 12:07+0100\n"
-"PO-Revision-Date: 2011-01-15 12:07+0100\n"
+"POT-Creation-Date: 2011-01-23 11:40+0100\n"
+"PO-Revision-Date: 2011-01-23 11:41+0100\n"
 "Last-Translator: Torstein Adolf Winterseth <kvikende@fsfe.org>\n"
 "Language-Team: Norwegian Nynorsk <i18n-nn@lister.ping.uio.no>\n"
 "Language: nn\n"
@@ -18,48 +18,48 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 1.1\n"
 
-#: ../gdk/gdk.c:152
+#: ../gdk/gdk.c:151
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Feil ved lesing av flagg --gdk-debug"
 
-#: ../gdk/gdk.c:172
+#: ../gdk/gdk.c:171
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Feil ved lesing av flagg --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:200
+#: ../gdk/gdk.c:199
 msgid "Program class as used by the window manager"
 msgstr "Programklasse som brukes av vindushåndtereren"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:201
+#: ../gdk/gdk.c:200
 msgid "CLASS"
 msgstr "KLASSE"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:203
+#: ../gdk/gdk.c:202
 msgid "Program name as used by the window manager"
 msgstr "Programnavn som brukes av vindushåndtereren"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:204
+#: ../gdk/gdk.c:203
 msgid "NAME"
 msgstr "NAVN"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:206
+#: ../gdk/gdk.c:205
 msgid "X display to use"
 msgstr "X-skjerm som skal brukes"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:207
+#: ../gdk/gdk.c:206
 msgid "DISPLAY"
 msgstr "SKJERM"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:210
+#: ../gdk/gdk.c:209
 msgid "GDK debugging flags to set"
 msgstr "Feilsøkingsflagg som skal settes for GDK"
 
@@ -67,12 +67,12 @@ msgstr "Feilsøkingsflagg som skal settes for GDK"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:211 ../gdk/gdk.c:214 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
+#: ../gdk/gdk.c:210 ../gdk/gdk.c:213 ../gtk/gtkmain.c:570 ../gtk/gtkmain.c:573
 msgid "FLAGS"
 msgstr "FLAGG"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:212
 msgid "GDK debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
@@ -437,54 +437,54 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:259
+#: ../gtk/gtkappchooserbutton.c:260
 msgid "Other application..."
 msgstr "Annet program..."
 
-#: ../gtk/gtkappchooserdialog.c:127
+#: ../gtk/gtkappchooserdialog.c:129
 msgid "Failed to look for applications online"
 msgstr "Klarte ikke å se etter programmer på nettet"
 
-#: ../gtk/gtkappchooserdialog.c:164
+#: ../gtk/gtkappchooserdialog.c:166
 msgid "Find applications online"
 msgstr "Finn programmer på nettet"
 
-#: ../gtk/gtkappchooserdialog.c:208
+#: ../gtk/gtkappchooserdialog.c:210
 msgid "Could not run application"
 msgstr "Klarte ikke å kjøre programmet"
 
-#: ../gtk/gtkappchooserdialog.c:221
+#: ../gtk/gtkappchooserdialog.c:223
 #, c-format
 msgid "Could not find '%s'"
 msgstr "Klarte ikke å finne «%s»"
 
-#: ../gtk/gtkappchooserdialog.c:224
+#: ../gtk/gtkappchooserdialog.c:226
 msgid "Could not find application"
 msgstr "Klarte ikke å finne programmet"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:334
+#: ../gtk/gtkappchooserdialog.c:336
 #, c-format
 msgid "Select an application to open \"%s\""
 msgstr "Velg et program å åpne «%s» i"
 
-#: ../gtk/gtkappchooserdialog.c:335 ../gtk/gtkappchooserwidget.c:644
+#: ../gtk/gtkappchooserdialog.c:337 ../gtk/gtkappchooserwidget.c:640
 #, c-format
 msgid "No applications available to open \"%s\""
 msgstr "Ingen tilgjengelige programmer for åpning av «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:341
+#: ../gtk/gtkappchooserdialog.c:343
 #, c-format
 msgid "Select an application for \"%s\" files"
 msgstr "Velg et program for «%s»-filer"
 
-#: ../gtk/gtkappchooserdialog.c:344
+#: ../gtk/gtkappchooserdialog.c:346
 #, c-format
 msgid "No applications available to open \"%s\" files"
 msgstr "Ingen tilgjengelige programmer for åpning av «%s»-filer"
 
-#: ../gtk/gtkappchooserdialog.c:358
+#: ../gtk/gtkappchooserdialog.c:363
 msgid ""
 "Click \"Show other applications\", for more options, or \"Find applications "
 "online\" to install a new application"
@@ -492,31 +492,31 @@ msgstr ""
 "Klikk på «Vis andre programmer» for flere alternativer, eller «Finn "
 "programmer på nettet» for å installere et nytt program"
 
-#: ../gtk/gtkappchooserdialog.c:428
+#: ../gtk/gtkappchooserdialog.c:433
 msgid "Forget association"
 msgstr "Glem kobling"
 
-#: ../gtk/gtkappchooserdialog.c:493
+#: ../gtk/gtkappchooserdialog.c:498
 msgid "Show other applications"
 msgstr "Vis andre programmer"
 
-#: ../gtk/gtkappchooserdialog.c:511
-msgid "_Open"
-msgstr "_Åpne"
+#: ../gtk/gtkappchooserdialog.c:516
+msgid "_Select"
+msgstr "Vel_g"
 
-#: ../gtk/gtkappchooserwidget.c:593
+#: ../gtk/gtkappchooserwidget.c:591
 msgid "Default Application"
 msgstr "Forvalgt program"
 
-#: ../gtk/gtkappchooserwidget.c:730
+#: ../gtk/gtkappchooserwidget.c:726
 msgid "Recommended Applications"
 msgstr "Anbefalte programmer"
 
-#: ../gtk/gtkappchooserwidget.c:744
+#: ../gtk/gtkappchooserwidget.c:740
 msgid "Related Applications"
 msgstr "Relaterte programmer"
 
-#: ../gtk/gtkappchooserwidget.c:758
+#: ../gtk/gtkappchooserwidget.c:754
 msgid "Other Applications"
 msgstr "Andre programmer"
 
@@ -859,23 +859,23 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:8755 ../gtk/gtktextview.c:8228
+#: ../gtk/gtkentry.c:8754 ../gtk/gtktextview.c:8269
 msgid "Input _Methods"
 msgstr "Inndata_metoder"
 
-#: ../gtk/gtkentry.c:8769 ../gtk/gtktextview.c:8242
+#: ../gtk/gtkentry.c:8768 ../gtk/gtktextview.c:8283
 msgid "_Insert Unicode Control Character"
 msgstr "Sett _inn Unicode kontrolltegn"
 
-#: ../gtk/gtkentry.c:10173
+#: ../gtk/gtkentry.c:10172
 msgid "Caps Lock and Num Lock are on"
 msgstr "Caps Lock og Num Lock er på"
 
-#: ../gtk/gtkentry.c:10175
+#: ../gtk/gtkentry.c:10174
 msgid "Num Lock is on"
 msgstr "Num Lock er på"
 
-#: ../gtk/gtkentry.c:10177
+#: ../gtk/gtkentry.c:10176
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -883,10 +883,10 @@ msgstr "Caps Lock er på"
 #. *  Private Macros  *
 #. * ****************
 #: ../gtk/gtkfilechooserbutton.c:62
-msgid "Select A File"
+msgid "Select a File"
 msgstr "Velg en fil"
 
-#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1834
+#: ../gtk/gtkfilechooserbutton.c:63 ../gtk/gtkfilechooserdefault.c:1849
 msgid "Desktop"
 msgstr "Skrivebord"
 
@@ -927,6 +927,15 @@ msgstr ""
 "samme navn. Bruk et annet navn for mappen eller gi et nytt navn til filen."
 
 #: ../gtk/gtkfilechooserdefault.c:1004
+msgid "You need to choose a valid filename."
+msgstr "Du må velge et gyldig filnavn."
+
+#: ../gtk/gtkfilechooserdefault.c:1007
+#, c-format
+msgid "Cannot create a file under %s as it is not a folder"
+msgstr "Kan ikke lage en fil under %s fordi den ikke er en mappe"
+
+#: ../gtk/gtkfilechooserdefault.c:1019
 msgid ""
 "You may only select folders.  The item that you selected is not a folder; "
 "try using a different item."
@@ -934,11 +943,11 @@ msgstr ""
 "Du kan kun velge mapper. Oppføringen du valgte er ikke en mappe. Prøv å "
 "bruke en annen oppføring."
 
-#: ../gtk/gtkfilechooserdefault.c:1014
+#: ../gtk/gtkfilechooserdefault.c:1029
 msgid "Invalid file name"
 msgstr "Ugyldig filnavn"
 
-#: ../gtk/gtkfilechooserdefault.c:1024
+#: ../gtk/gtkfilechooserdefault.c:1039
 msgid "The folder contents could not be displayed"
 msgstr "Mappeinholdet kunne ikke vises"
 
@@ -946,186 +955,186 @@ msgstr "Mappeinholdet kunne ikke vises"
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
 #.
-#: ../gtk/gtkfilechooserdefault.c:1577
+#: ../gtk/gtkfilechooserdefault.c:1592
 #, c-format
 msgid "%1$s on %2$s"
 msgstr "%1$s på %2$s"
 
-#: ../gtk/gtkfilechooserdefault.c:1753
+#: ../gtk/gtkfilechooserdefault.c:1768
 msgid "Search"
 msgstr "Søk"
 
-#: ../gtk/gtkfilechooserdefault.c:1777 ../gtk/gtkfilechooserdefault.c:9424
+#: ../gtk/gtkfilechooserdefault.c:1792 ../gtk/gtkfilechooserdefault.c:9457
 msgid "Recently Used"
 msgstr "Sist brukt"
 
-#: ../gtk/gtkfilechooserdefault.c:2438
+#: ../gtk/gtkfilechooserdefault.c:2453
 msgid "Select which types of files are shown"
 msgstr "Velg hvilke filtyper som skal vises"
 
-#: ../gtk/gtkfilechooserdefault.c:2797
+#: ../gtk/gtkfilechooserdefault.c:2812
 #, c-format
 msgid "Add the folder '%s' to the bookmarks"
 msgstr "Legg til mappe «%s» i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2841
+#: ../gtk/gtkfilechooserdefault.c:2856
 #, c-format
 msgid "Add the current folder to the bookmarks"
 msgstr "Legg til aktiv mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2843
+#: ../gtk/gtkfilechooserdefault.c:2858
 #, c-format
 msgid "Add the selected folders to the bookmarks"
 msgstr "Legg til valgte mapper i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:2881
+#: ../gtk/gtkfilechooserdefault.c:2896
 #, c-format
 msgid "Remove the bookmark '%s'"
 msgstr "Fjern bokmerke «%s»"
 
-#: ../gtk/gtkfilechooserdefault.c:2883
+#: ../gtk/gtkfilechooserdefault.c:2898
 #, c-format
 msgid "Bookmark '%s' cannot be removed"
 msgstr "Bokmerke «%s» kan ikke fjernes"
 
-#: ../gtk/gtkfilechooserdefault.c:2890 ../gtk/gtkfilechooserdefault.c:3758
+#: ../gtk/gtkfilechooserdefault.c:2905 ../gtk/gtkfilechooserdefault.c:3773
 msgid "Remove the selected bookmark"
 msgstr "Fjern valgt bokmerke"
 
-#: ../gtk/gtkfilechooserdefault.c:3453
+#: ../gtk/gtkfilechooserdefault.c:3468
 msgid "Remove"
 msgstr "Fjern"
 
-#: ../gtk/gtkfilechooserdefault.c:3462
+#: ../gtk/gtkfilechooserdefault.c:3477
 msgid "Rename..."
 msgstr "Gi nytt navn …"
 
 #. Accessible object name for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3625
+#: ../gtk/gtkfilechooserdefault.c:3640
 msgid "Places"
 msgstr "Steder"
 
 #. Column header for the file chooser's shortcuts pane
-#: ../gtk/gtkfilechooserdefault.c:3682
+#: ../gtk/gtkfilechooserdefault.c:3697
 msgid "_Places"
 msgstr "_Steder"
 
-#: ../gtk/gtkfilechooserdefault.c:3739
+#: ../gtk/gtkfilechooserdefault.c:3754
 msgid "_Add"
 msgstr "_Legg til"
 
-#: ../gtk/gtkfilechooserdefault.c:3746
+#: ../gtk/gtkfilechooserdefault.c:3761
 msgid "Add the selected folder to the Bookmarks"
 msgstr "Legg til valgt mappe i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:3751
+#: ../gtk/gtkfilechooserdefault.c:3766
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: ../gtk/gtkfilechooserdefault.c:3893
+#: ../gtk/gtkfilechooserdefault.c:3908
 msgid "Could not select file"
 msgstr "Klarte ikke å merke filen"
 
-#: ../gtk/gtkfilechooserdefault.c:4068
+#: ../gtk/gtkfilechooserdefault.c:4083
 msgid "_Add to Bookmarks"
 msgstr "L_egg til i bokmerker"
 
-#: ../gtk/gtkfilechooserdefault.c:4081
+#: ../gtk/gtkfilechooserdefault.c:4096
 msgid "Show _Hidden Files"
 msgstr "Vis sk_julte filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4088
+#: ../gtk/gtkfilechooserdefault.c:4103
 msgid "Show _Size Column"
 msgstr "Vis kolonne for _størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4314
+#: ../gtk/gtkfilechooserdefault.c:4329
 msgid "Files"
 msgstr "Filer"
 
-#: ../gtk/gtkfilechooserdefault.c:4365
+#: ../gtk/gtkfilechooserdefault.c:4380
 msgid "Name"
 msgstr "Navn"
 
-#: ../gtk/gtkfilechooserdefault.c:4388
+#: ../gtk/gtkfilechooserdefault.c:4403
 msgid "Size"
 msgstr "Størrelse"
 
-#: ../gtk/gtkfilechooserdefault.c:4402
+#: ../gtk/gtkfilechooserdefault.c:4417
 msgid "Modified"
 msgstr "Endret"
 
 #. Label
-#: ../gtk/gtkfilechooserdefault.c:4657 ../gtk/gtkprinteroptionwidget.c:793
+#: ../gtk/gtkfilechooserdefault.c:4672 ../gtk/gtkprinteroptionwidget.c:793
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: ../gtk/gtkfilechooserdefault.c:4700
+#: ../gtk/gtkfilechooserdefault.c:4715
 msgid "_Browse for other folders"
 msgstr "_Se gjennom andre mapper"
 
-#: ../gtk/gtkfilechooserdefault.c:4970
+#: ../gtk/gtkfilechooserdefault.c:4985
 msgid "Type a file name"
 msgstr "Skriv et filnavn"
 
 #. Create Folder
-#: ../gtk/gtkfilechooserdefault.c:5013
+#: ../gtk/gtkfilechooserdefault.c:5028
 msgid "Create Fo_lder"
 msgstr "Opprett _mappe"
 
-#: ../gtk/gtkfilechooserdefault.c:5023
+#: ../gtk/gtkfilechooserdefault.c:5038
 msgid "_Location:"
 msgstr "_Adresse:"
 
-#: ../gtk/gtkfilechooserdefault.c:5227
+#: ../gtk/gtkfilechooserdefault.c:5242
 msgid "Save in _folder:"
 msgstr "Lagre i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:5229
+#: ../gtk/gtkfilechooserdefault.c:5244
 msgid "Create in _folder:"
 msgstr "Opprett i _mappe:"
 
-#: ../gtk/gtkfilechooserdefault.c:6296
+#: ../gtk/gtkfilechooserdefault.c:6311
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Klarte ikke å lese innholdet av %s"
 
-#: ../gtk/gtkfilechooserdefault.c:6300
+#: ../gtk/gtkfilechooserdefault.c:6315
 msgid "Could not read the contents of the folder"
 msgstr "Klarte ikke å lese innholdet i mappen"
 
-#: ../gtk/gtkfilechooserdefault.c:6393 ../gtk/gtkfilechooserdefault.c:6461
-#: ../gtk/gtkfilechooserdefault.c:6606
+#: ../gtk/gtkfilechooserdefault.c:6408 ../gtk/gtkfilechooserdefault.c:6476
+#: ../gtk/gtkfilechooserdefault.c:6621
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../gtk/gtkfilechooserdefault.c:6408
+#: ../gtk/gtkfilechooserdefault.c:6423
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:6410
+#: ../gtk/gtkfilechooserdefault.c:6425
 msgid "Yesterday at %H:%M"
 msgstr "I går kl. %H.%M"
 
-#: ../gtk/gtkfilechooserdefault.c:7076
+#: ../gtk/gtkfilechooserdefault.c:7091
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal"
 
-#: ../gtk/gtkfilechooserdefault.c:7673 ../gtk/gtkfilechooserdefault.c:7694
+#: ../gtk/gtkfilechooserdefault.c:7688 ../gtk/gtkfilechooserdefault.c:7709
 #, c-format
 msgid "Shortcut %s already exists"
 msgstr "Snarvei %s eksisterer allerede"
 
-#: ../gtk/gtkfilechooserdefault.c:7784
+#: ../gtk/gtkfilechooserdefault.c:7799
 #, c-format
 msgid "Shortcut %s does not exist"
 msgstr "Snarvei %s eksisterer ikke"
 
-#: ../gtk/gtkfilechooserdefault.c:8046 ../gtk/gtkprintunixdialog.c:480
+#: ../gtk/gtkfilechooserdefault.c:8061 ../gtk/gtkprintunixdialog.c:480
 #, c-format
 msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserdefault.c:8049 ../gtk/gtkprintunixdialog.c:484
+#: ../gtk/gtkfilechooserdefault.c:8064 ../gtk/gtkprintunixdialog.c:484
 #, c-format
 msgid ""
 "The file already exists in \"%s\".  Replacing it will overwrite its contents."
@@ -1133,15 +1142,15 @@ msgstr ""
 "Fila eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: ../gtk/gtkfilechooserdefault.c:8054 ../gtk/gtkprintunixdialog.c:491
+#: ../gtk/gtkfilechooserdefault.c:8069 ../gtk/gtkprintunixdialog.c:491
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: ../gtk/gtkfilechooserdefault.c:8762
+#: ../gtk/gtkfilechooserdefault.c:8795
 msgid "Could not start the search process"
 msgstr "Klarte ikke å starte søkeprosessen"
 
-#: ../gtk/gtkfilechooserdefault.c:8763
+#: ../gtk/gtkfilechooserdefault.c:8796
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -1149,15 +1158,15 @@ msgstr ""
 "Programmet kunne ikke opprette en tilkobling til indekseringstjenesten. "
 "Sjekk at denne kjører."
 
-#: ../gtk/gtkfilechooserdefault.c:8777
+#: ../gtk/gtkfilechooserdefault.c:8810
 msgid "Could not send the search request"
 msgstr "Klarte ikke å sende søkeforespørselen"
 
-#: ../gtk/gtkfilechooserdefault.c:8996
+#: ../gtk/gtkfilechooserdefault.c:9029
 msgid "Search:"
 msgstr "Søk:"
 
-#: ../gtk/gtkfilechooserdefault.c:9601
+#: ../gtk/gtkfilechooserdefault.c:9634
 #, c-format
 msgid "Could not mount %s"
 msgstr "Klarte ikke å montere %s"
@@ -1276,7 +1285,7 @@ msgstr "Valg av skrift"
 msgid "Error loading icon: %s"
 msgstr "Feil under lasting av ikon: %s"
 
-#: ../gtk/gtkicontheme.c:1352
+#: ../gtk/gtkicontheme.c:1355
 #, c-format
 msgid ""
 "Could not find the icon '%s'. The '%s' theme\n"
@@ -1289,12 +1298,12 @@ msgstr ""
 "Du kan finne en kopi av det på:\n"
 "\t%s"
 
-#: ../gtk/gtkicontheme.c:1533
+#: ../gtk/gtkicontheme.c:1537
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "Ikon «%s» er ikke tilstede i tema"
 
-#: ../gtk/gtkicontheme.c:3054
+#: ../gtk/gtkicontheme.c:3057
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
@@ -1319,12 +1328,12 @@ msgid "System (%s)"
 msgstr "System (%s)"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6250
+#: ../gtk/gtklabel.c:6251
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6262
+#: ../gtk/gtklabel.c:6263
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -1464,7 +1473,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke avslutte prosess med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:4817 ../gtk/gtknotebook.c:7392
+#: ../gtk/gtknotebook.c:4818 ../gtk/gtknotebook.c:7393
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -2017,7 +2026,7 @@ msgstr "Noen innstillinger i dialogen er i konflikt"
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../gtk/gtkrc.c:946
+#: ../gtk/gtkrc.c:948
 #, c-format
 msgid "Unable to locate image file in pixmap_path: \"%s\""
 msgstr "Klarte ikke å finne bildefil i pixmap_path: «%s»"
@@ -2666,12 +2675,12 @@ msgstr "Bryter"
 msgid "Switches between on and off states"
 msgstr "Bytter mellom av/på tilstand"
 
-#: ../gtk/gtktextbufferrichtext.c:650
+#: ../gtk/gtktextbufferrichtext.c:651
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr "Ukjent feil ved forsøk på å deserialisere %s"
 
-#: ../gtk/gtktextbufferrichtext.c:709
+#: ../gtk/gtktextbufferrichtext.c:710
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Ingen de-serialiseringsfunksjon funnet for format %s"
