@@ -606,6 +606,7 @@ gtk_fixed_get_preferred_height (GtkWidget *widget,
       find-and-replace task. Please refer to the following table:
       <table>
         <tgroup cols="2">
+          <title>GdkRegion to cairo_region_t</title>
           <thead>
             <row><entry>GDK</entry><entry>cairo</entry></row>
           </thead>
@@ -697,7 +698,7 @@ g_object_unref (pixbuf);
   </section>
 
   <section>
-    <title>Replace colormaps by visuals</title>
+    <title>Replace GdkColormap by GdkVisual</title>
     <para>
       For drawing with cairo, it is not necessary to allocate colors, and
       a #GdkVisual provides enough information for cairo to handle colors
@@ -744,6 +745,38 @@ on_alpha_screen_changed (GtkWindow *window,
 }
     </programlisting>
     </example>
+  </section>
+
+  <section>
+    <title>GdkDrawable is gone</title>
+
+    <para>
+      #GdkDrawable has been removed in GTK+ 3, together with #GdkPixmap
+      and #GdkImage. The only remaining drawable class is #GdkWindow.
+      For dealing with image data, you should use cairo surfaces or
+      #GdkPixbufs.
+    </para>
+
+    <para>
+      GdkDrawable functions that are useful with windows have been replaced
+      by corresponding GdkWindow functions:
+      <table>
+        <title>GdkDrawable to GdkWindow</title>
+        <tgroup cols="2">
+          <thead>
+            <row><entry>GDK 2.x</entry><entry>GDK 3</entry></row>
+          </thead>
+          <tbody>
+            <row><entry>gdk_drawable_get_visual()</entry><entry>gdk_window_get_visual()</entry></row>
+            <row><entry>gdk_drawable_get_size()</entry><entry>gdk_window_get_width()
+                                                              gdk_window_get_height()</entry></row>
+            <row><entry>gdk_pixbuf_get_from_drawable()</entry><entry>gdk_pixbuf_get_from_window()</entry></row>
+            <row><entry>gdk_drawable_get_clip_region()</entry><entry>gdk_window_get_clip_region()</entry></row>
+            <row><entry>gdk_drawable_get_visible_region()</entry><entry>gdk_window_get_visible_region()</entry></row>
+          </tbody>
+        </tgroup>
+      </table>
+    </para>
   </section>
 
   <section>
