@@ -1743,14 +1743,14 @@ get_size (GtkCellRenderer    *cell,
       gtk_cell_renderer_get_alignment (cell, &xalign, &yalign);
 
       rect.height = MIN (rect.height, cell_area->height - 2 * ypad);
-      rect.width  = MIN (rect.width, cell_area->width - (2 * xpad) - rect.x);
+      rect.width  = MIN (rect.width, cell_area->width - 2 * xpad);
 
       if (x_offset)
 	{
 	  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-	    *x_offset = (1.0 - xalign) * (cell_area->width - (rect.x + rect.width + (2 * xpad)));
+	    *x_offset = (1.0 - xalign) * (cell_area->width - (rect.width + (2 * xpad)));
 	  else 
-	    *x_offset = xalign * (cell_area->width - (rect.x + rect.width + (2 * xpad)));
+	    *x_offset = xalign * (cell_area->width - (rect.width + (2 * xpad)));
 
 	  if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->wrap_width != -1)
 	    *x_offset = MAX(*x_offset, 0);
@@ -1771,7 +1771,7 @@ get_size (GtkCellRenderer    *cell,
     *height = ypad * 2 + rect.height;
 
   if (width)
-    *width = xpad * 2 + rect.x + rect.width;
+    *width = xpad * 2 + rect.width;
 
   g_object_unref (layout);
 }
@@ -1792,6 +1792,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gint x_offset = 0;
   gint y_offset = 0;
   gint xpad, ypad;
+  PangoRectangle rect;
 
   layout = get_layout (celltext, widget, cell_area, flags);
   get_size (cell, widget, cell_area, layout, &x_offset, &y_offset, NULL, NULL);
@@ -1820,8 +1821,7 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
 	state = GTK_STATE_NORMAL;
     }
 
-  if (priv->background_set && 
-      (flags & GTK_CELL_RENDERER_SELECTED) == 0)
+  if (priv->background_set && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
     {
       gdk_cairo_rectangle (cr, background_area);
       gdk_cairo_set_source_rgba (cr, &priv->background);
@@ -1831,10 +1831,13 @@ gtk_cell_renderer_text_render (GtkCellRenderer      *cell,
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 
   if (priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE)
-    pango_layout_set_width (layout, 
+    pango_layout_set_width (layout,
 			    (cell_area->width - x_offset - 2 * xpad) * PANGO_SCALE);
   else if (priv->wrap_width == -1)
     pango_layout_set_width (layout, -1);
+
+  pango_layout_get_pixel_extents (layout, NULL, &rect);
+  x_offset = x_offset - rect.x;
 
   cairo_save (cr);
 
