@@ -23,6 +23,7 @@
 
 #include "gtkwidget.h"
 #include "gtkwidgetpath.h"
+#include "gtkstylecontextprivate.h"
 
 /**
  * SECTION:gtkwidgetpath

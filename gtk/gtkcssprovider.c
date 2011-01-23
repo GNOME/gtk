@@ -21,14 +21,17 @@
 
 #include <string.h>
 #include <stdlib.h>
-#include <gtk/gtk.h>
-#include <gtkstyleprovider.h>
+
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <cairo-gobject.h>
 
 #include "gtkanimationdescription.h"
 #include "gtk9slice.h"
+#include "gtkgradient.h"
+#include "gtkthemingengine.h"
+#include "gtkstyleprovider.h"
 #include "gtkcssprovider.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
 
 /**

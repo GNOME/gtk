@@ -34,6 +34,7 @@
 #include "gtkrc.h"
 #include "gtkspinbutton.h"
 #include "gtkstyle.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkwidget.h"
 #include "gtkiconfactory.h"
 #include "gtkintl.h"

@@ -23,7 +23,7 @@
 #include <stdlib.h>
 #include <gobject/gvaluecollector.h>
 
-#include "gtkstylecontext.h"
+#include "gtkstylecontextprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkthemingengine.h"
 #include "gtkintl.h"

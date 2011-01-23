@@ -526,7 +526,7 @@ void gtk_style_context_get_style          (GtkStyleContext *context,
                                            ...);
 
 GtkIconSet * gtk_style_context_lookup_icon_set (GtkStyleContext *context,
-						const gchar     *stock_id);
+                                                const gchar     *stock_id);
 GdkPixbuf  * gtk_icon_set_render_icon_pixbuf   (GtkIconSet      *icon_set,
                                                 GtkStyleContext *context,
                                                 GtkIconSize      size);
@@ -540,7 +540,7 @@ void             gtk_style_context_set_direction (GtkStyleContext  *context,
 GtkTextDirection gtk_style_context_get_direction (GtkStyleContext  *context);
 
 void             gtk_style_context_set_junction_sides (GtkStyleContext  *context,
-						       GtkJunctionSides  sides);
+                                                       GtkJunctionSides  sides);
 GtkJunctionSides gtk_style_context_get_junction_sides (GtkStyleContext  *context);
 
 gboolean gtk_style_context_lookup_color (GtkStyleContext *context,
@@ -573,10 +573,9 @@ void gtk_style_context_get_background_color (GtkStyleContext *context,
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
-
-const PangoFontDescription * gtk_style_context_get_font (GtkStyleContext *context,
-                                                    GtkStateFlags    state);
-
+const PangoFontDescription *
+     gtk_style_context_get_font             (GtkStyleContext *context,
+                                             GtkStateFlags    state);
 void gtk_style_context_get_border           (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *border);
@@ -587,113 +586,101 @@ void gtk_style_context_get_margin           (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GtkBorder       *margin);
 
-/* Semi-private API */
-const GValue * _gtk_style_context_peek_style_property (GtkStyleContext *context,
-                                                       GType            widget_type,
-                                                       GtkStateFlags    state,
-                                                       GParamSpec      *pspec);
-void           _gtk_style_context_invalidate_animation_areas (GtkStyleContext *context);
-void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *context,
-							      GtkWidget       *widget);
-gboolean       _gtk_style_context_check_region_name   (const gchar     *str);
+void gtk_style_context_invalidate           (GtkStyleContext *context);
+void gtk_style_context_reset_widgets        (GdkScreen       *screen);
 
-
-void gtk_style_context_invalidate (GtkStyleContext *context);
-void gtk_style_context_reset_widgets (GdkScreen *screen);
-
-void gtk_style_context_set_background (GtkStyleContext *context,
-                                       GdkWindow       *window);
+void gtk_style_context_set_background       (GtkStyleContext *context,
+                                             GdkWindow       *window);
 
 /* Paint methods */
-void gtk_render_check (GtkStyleContext *context,
-                       cairo_t         *cr,
-                       gdouble          x,
-                       gdouble          y,
-                       gdouble          width,
-                       gdouble          height);
-void gtk_render_option (GtkStyleContext *context,
-                        cairo_t         *cr,
-                        gdouble          x,
-                        gdouble          y,
-                        gdouble          width,
-                        gdouble          height);
-void gtk_render_arrow  (GtkStyleContext *context,
-                        cairo_t         *cr,
-                        gdouble          angle,
-                        gdouble          x,
-                        gdouble          y,
-                        gdouble          size);
-void gtk_render_background (GtkStyleContext *context,
-                            cairo_t         *cr,
-                            gdouble          x,
-                            gdouble          y,
-                            gdouble          width,
-                            gdouble          height);
-void gtk_render_frame  (GtkStyleContext *context,
-                        cairo_t         *cr,
-                        gdouble          x,
-                        gdouble          y,
-                        gdouble          width,
-                        gdouble          height);
-void gtk_render_expander (GtkStyleContext *context,
-                          cairo_t         *cr,
-                          gdouble          x,
-                          gdouble          y,
-                          gdouble          width,
-                          gdouble          height);
-void gtk_render_focus    (GtkStyleContext *context,
-                          cairo_t         *cr,
-                          gdouble          x,
-                          gdouble          y,
-                          gdouble          width,
-                          gdouble          height);
-void gtk_render_layout   (GtkStyleContext *context,
-                          cairo_t         *cr,
-                          gdouble          x,
-                          gdouble          y,
-                          PangoLayout     *layout);
-void gtk_render_line     (GtkStyleContext *context,
-                          cairo_t         *cr,
-                          gdouble          x0,
-                          gdouble          y0,
-                          gdouble          x1,
-                          gdouble          y1);
-void gtk_render_slider   (GtkStyleContext *context,
-                          cairo_t         *cr,
-                          gdouble          x,
-                          gdouble          y,
-                          gdouble          width,
-                          gdouble          height,
-                          GtkOrientation   orientation);
-void gtk_render_frame_gap (GtkStyleContext *context,
-                           cairo_t         *cr,
-                           gdouble          x,
-                           gdouble          y,
-                           gdouble          width,
-                           gdouble          height,
-                           GtkPositionType  gap_side,
-                           gdouble          xy0_gap,
-                           gdouble          xy1_gap);
-void gtk_render_extension (GtkStyleContext *context,
-                           cairo_t         *cr,
-                           gdouble          x,
-                           gdouble          y,
-                           gdouble          width,
-                           gdouble          height,
-                           GtkPositionType  gap_side);
-void gtk_render_handle    (GtkStyleContext *context,
-                           cairo_t         *cr,
-                           gdouble          x,
-                           gdouble          y,
-                           gdouble          width,
-                           gdouble          height);
-void gtk_render_activity  (GtkStyleContext *context,
-                           cairo_t         *cr,
-                           gdouble          x,
-                           gdouble          y,
-                           gdouble          width,
-                           gdouble          height);
-
+void        gtk_render_check       (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
+void        gtk_render_option      (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
+void        gtk_render_arrow       (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              angle,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              size);
+void        gtk_render_background  (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
+void        gtk_render_frame       (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
+void        gtk_render_expander    (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
+void        gtk_render_focus       (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
+void        gtk_render_layout      (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    PangoLayout         *layout);
+void        gtk_render_line        (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x0,
+                                    gdouble              y0,
+                                    gdouble              x1,
+                                    gdouble              y1);
+void        gtk_render_slider      (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height,
+                                    GtkOrientation       orientation);
+void        gtk_render_frame_gap   (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height,
+                                    GtkPositionType      gap_side,
+                                    gdouble              xy0_gap,
+                                    gdouble              xy1_gap);
+void        gtk_render_extension   (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height,
+                                    GtkPositionType      gap_side);
+void        gtk_render_handle      (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
+void        gtk_render_activity    (GtkStyleContext     *context,
+                                    cairo_t             *cr,
+                                    gdouble              x,
+                                    gdouble              y,
+                                    gdouble              width,
+                                    gdouble              height);
 GdkPixbuf * gtk_render_icon_pixbuf (GtkStyleContext     *context,
                                     const GtkIconSource *source,
                                     GtkIconSize          size);
