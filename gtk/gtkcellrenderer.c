@@ -683,6 +683,8 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
 {
   gboolean selected = FALSE;
   GtkCellRendererPrivate *priv = cell->priv;
+  GtkStyleContext *context;
+  GtkStateFlags state;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
   g_return_if_fail (GTK_CELL_RENDERER_GET_CLASS (cell)->render != NULL);
@@ -702,13 +704,21 @@ gtk_cell_renderer_render (GtkCellRenderer      *cell,
   gdk_cairo_rectangle (cr, background_area);
   cairo_clip (cr);
 
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
+
+  state = gtk_cell_renderer_get_state (cell, widget, flags);
+  gtk_style_context_set_state (context, state);
+
   GTK_CELL_RENDERER_GET_CLASS (cell)->render (cell,
                                               cr,
 					      widget,
 					      background_area,
 					      cell_area,
 					      flags);
-
+  gtk_style_context_restore (context);
   cairo_restore (cr);
 }
 
