@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-01-19 01:01+0200\n"
-"PO-Revision-Date: 2011-01-19 01:02+0200\n"
+"POT-Creation-Date: 2011-01-23 02:39+0200\n"
+"PO-Revision-Date: 2011-01-23 02:40+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <he@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -134,11 +134,11 @@ msgstr "Device ID"
 msgid "Device identifier"
 msgstr "Device identifier"
 
-#: ../gdk/x11/gdkdevicemanager-xi2.c:115
+#: ../gdk/x11/gdkdevicemanager-xi2.c:114
 msgid "Opcode"
 msgstr "Opcode"
 
-#: ../gdk/x11/gdkdevicemanager-xi2.c:116
+#: ../gdk/x11/gdkdevicemanager-xi2.c:115
 msgid "Opcode for XInput2 requests"
 msgstr "Opcode for XInput2 requests"
 
@@ -603,11 +603,11 @@ msgstr "Right Padding"
 msgid "The padding to insert at the right of the widget."
 msgstr "The padding to insert at the right of the widget."
 
-#: ../gtk/gtkappchooserbutton.c:538
+#: ../gtk/gtkappchooserbutton.c:547
 msgid "Include an 'Other...' item"
 msgstr "Include an 'Other...' item"
 
-#: ../gtk/gtkappchooserbutton.c:539
+#: ../gtk/gtkappchooserbutton.c:548
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
@@ -623,59 +623,67 @@ msgstr "Content type"
 msgid "The content type used by the open with object"
 msgstr "The content type used by the open with object"
 
-#: ../gtk/gtkappchooserdialog.c:683
+#: ../gtk/gtkappchooserdialog.c:694
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:684
+#: ../gtk/gtkappchooserdialog.c:695
 msgid "The GFile used by the app chooser dialog"
 msgstr "The GFile used by the app chooser dialog"
 
-#: ../gtk/gtkappchooserwidget.c:1017
+#: ../gtk/gtkappchooserdialog.c:708
+msgid "Heading"
+msgstr "Heading"
+
+#: ../gtk/gtkappchooserdialog.c:709
+msgid "The text to show at the top of the dialog"
+msgstr "The text to show at the top of the dialog"
+
+#: ../gtk/gtkappchooserwidget.c:1013
 msgid "Show default app"
 msgstr "Show default app"
 
-#: ../gtk/gtkappchooserwidget.c:1018
+#: ../gtk/gtkappchooserwidget.c:1014
 msgid "Whether the widget should show the default application"
 msgstr "Whether the widget should show the default application"
 
-#: ../gtk/gtkappchooserwidget.c:1031
+#: ../gtk/gtkappchooserwidget.c:1027
 msgid "Show recommended apps"
 msgstr "Show recommended apps"
 
-#: ../gtk/gtkappchooserwidget.c:1032
+#: ../gtk/gtkappchooserwidget.c:1028
 msgid "Whether the widget should show recommended applications"
 msgstr "Whether the widget should show recommended applications"
 
-#: ../gtk/gtkappchooserwidget.c:1045
+#: ../gtk/gtkappchooserwidget.c:1041
 msgid "Show fallback apps"
 msgstr "Show fallback apps"
 
-#: ../gtk/gtkappchooserwidget.c:1046
+#: ../gtk/gtkappchooserwidget.c:1042
 msgid "Whether the widget should show fallback applications"
 msgstr "Whether the widget should show fallback applications"
 
-#: ../gtk/gtkappchooserwidget.c:1058
+#: ../gtk/gtkappchooserwidget.c:1054
 msgid "Show other apps"
 msgstr "Show other apps"
 
-#: ../gtk/gtkappchooserwidget.c:1059
+#: ../gtk/gtkappchooserwidget.c:1055
 msgid "Whether the widget should show other applications"
 msgstr "Whether the widget should show other applications"
 
-#: ../gtk/gtkappchooserwidget.c:1072
+#: ../gtk/gtkappchooserwidget.c:1068
 msgid "Show all apps"
 msgstr "Show all apps"
 
-#: ../gtk/gtkappchooserwidget.c:1073
+#: ../gtk/gtkappchooserwidget.c:1069
 msgid "Whether the widget should show all applications"
 msgstr "Whether the widget should show all applications"
 
-#: ../gtk/gtkappchooserwidget.c:1086
+#: ../gtk/gtkappchooserwidget.c:1082
 msgid "Widget's default text"
 msgstr "Widget's default text"
 
-#: ../gtk/gtkappchooserwidget.c:1087
+#: ../gtk/gtkappchooserwidget.c:1083
 msgid "The default text appearing when there are no applications"
 msgstr "The default text appearing when there are no applications"
 
@@ -1691,12 +1699,12 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Foreground color as a GdkRGBA"
 
 #: ../gtk/gtkcellrenderertext.c:350 ../gtk/gtkentry.c:754
-#: ../gtk/gtktexttag.c:245 ../gtk/gtktextview.c:686
+#: ../gtk/gtktexttag.c:245 ../gtk/gtktextview.c:684
 msgid "Editable"
 msgstr "Editable"
 
 #: ../gtk/gtkcellrenderertext.c:351 ../gtk/gtktexttag.c:246
-#: ../gtk/gtktextview.c:687
+#: ../gtk/gtktextview.c:685
 msgid "Whether the text can be modified by the user"
 msgstr "Whether the text can be modified by the user"
 
@@ -2556,7 +2564,7 @@ msgstr "Whether to truncate multiline pastes to one line."
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr "Which kind of shadow to draw around the entry when has-frame is set"
 
-#: ../gtk/gtkentry.c:895 ../gtk/gtktextview.c:766
+#: ../gtk/gtkentry.c:895 ../gtk/gtktextview.c:764
 msgid "Overwrite mode"
 msgstr "Overwrite mode"
 
@@ -2744,11 +2752,11 @@ msgstr "Primary icon tooltip markup"
 msgid "Secondary icon tooltip markup"
 msgstr "Secondary icon tooltip markup"
 
-#: ../gtk/gtkentry.c:1311 ../gtk/gtktextview.c:794
+#: ../gtk/gtkentry.c:1311 ../gtk/gtktextview.c:792
 msgid "IM module"
 msgstr "IM module"
 
-#: ../gtk/gtkentry.c:1312 ../gtk/gtktextview.c:795
+#: ../gtk/gtkentry.c:1312 ../gtk/gtktextview.c:793
 msgid "Which IM module should be used"
 msgstr "Which IM module should be used"
 
@@ -3037,19 +3045,19 @@ msgstr ""
 "Whether a file chooser not in open mode will offer the user to create new "
 "folders."
 
-#: ../gtk/gtkfixed.c:152 ../gtk/gtklayout.c:632
+#: ../gtk/gtkfixed.c:152 ../gtk/gtklayout.c:634
 msgid "X position"
 msgstr "X position"
 
-#: ../gtk/gtkfixed.c:153 ../gtk/gtklayout.c:633
+#: ../gtk/gtkfixed.c:153 ../gtk/gtklayout.c:635
 msgid "X position of child widget"
 msgstr "X position of child widget"
 
-#: ../gtk/gtkfixed.c:160 ../gtk/gtklayout.c:642
+#: ../gtk/gtkfixed.c:160 ../gtk/gtklayout.c:644
 msgid "Y position"
 msgstr "Y position"
 
-#: ../gtk/gtkfixed.c:161 ../gtk/gtklayout.c:643
+#: ../gtk/gtkfixed.c:161 ../gtk/gtklayout.c:645
 msgid "Y position of child widget"
 msgstr "Y position of child widget"
 
@@ -3193,7 +3201,7 @@ msgstr "Top attachment"
 msgid "The row number to attach the top side of a child widget to"
 msgstr "The row number to attach the top side of a child widget to"
 
-#: ../gtk/gtkgrid.c:1311 ../gtk/gtklayout.c:658 ../gtk/gtktreeviewcolumn.c:259
+#: ../gtk/gtkgrid.c:1311 ../gtk/gtklayout.c:660 ../gtk/gtktreeviewcolumn.c:259
 msgid "Width"
 msgstr "Width"
 
@@ -3201,7 +3209,7 @@ msgstr "Width"
 msgid "The number of columns that a child spans"
 msgstr "The number of columns that a child spans"
 
-#: ../gtk/gtkgrid.c:1318 ../gtk/gtklayout.c:667
+#: ../gtk/gtkgrid.c:1318 ../gtk/gtklayout.c:669
 msgid "Height"
 msgstr "Height"
 
@@ -3512,7 +3520,7 @@ msgstr "The text of the label"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "A list of style attributes to apply to the text of the label"
 
-#: ../gtk/gtklabel.c:596 ../gtk/gtktexttag.c:353 ../gtk/gtktextview.c:703
+#: ../gtk/gtklabel.c:596 ../gtk/gtktexttag.c:353 ../gtk/gtktextview.c:701
 msgid "Justification"
 msgstr "Justification"
 
@@ -3614,11 +3622,11 @@ msgstr "Track visited links"
 msgid "Whether visited links should be tracked"
 msgstr "Whether visited links should be tracked"
 
-#: ../gtk/gtklayout.c:659
+#: ../gtk/gtklayout.c:661
 msgid "The width of the layout"
 msgstr "The width of the layout"
 
-#: ../gtk/gtklayout.c:668
+#: ../gtk/gtklayout.c:670
 msgid "The height of the layout"
 msgstr "The height of the layout"
 
@@ -4663,7 +4671,7 @@ msgstr ""
 "is the current action of its group."
 
 #: ../gtk/gtkradioaction.c:135 ../gtk/gtkradiobutton.c:163
-#: ../gtk/gtkradiomenuitem.c:373 ../gtk/gtkradiotoolbutton.c:65
+#: ../gtk/gtkradiomenuitem.c:374 ../gtk/gtkradiotoolbutton.c:65
 msgid "Group"
 msgstr "Group"
 
@@ -4687,7 +4695,7 @@ msgstr ""
 msgid "The radio button whose group this widget belongs to."
 msgstr "The radio button whose group this widget belongs to."
 
-#: ../gtk/gtkradiomenuitem.c:374
+#: ../gtk/gtkradiomenuitem.c:375
 msgid "The radio menu item whose group this widget belongs to."
 msgstr "The radio menu item whose group this widget belongs to."
 
@@ -6105,7 +6113,7 @@ msgstr ""
 "adapts to theme changes etc. so is recommended. Pango predefines some scales "
 "such as PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:354 ../gtk/gtktextview.c:704
+#: ../gtk/gtktexttag.c:354 ../gtk/gtktextview.c:702
 msgid "Left, right, or center justification"
 msgstr "Left, right, or center justification"
 
@@ -6121,7 +6129,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Left margin"
 
-#: ../gtk/gtktexttag.c:381 ../gtk/gtktextview.c:713
+#: ../gtk/gtktexttag.c:381 ../gtk/gtktextview.c:711
 msgid "Width of the left margin in pixels"
 msgstr "Width of the left margin in pixels"
 
@@ -6129,15 +6137,15 @@ msgstr "Width of the left margin in pixels"
 msgid "Right margin"
 msgstr "Right margin"
 
-#: ../gtk/gtktexttag.c:391 ../gtk/gtktextview.c:723
+#: ../gtk/gtktexttag.c:391 ../gtk/gtktextview.c:721
 msgid "Width of the right margin in pixels"
 msgstr "Width of the right margin in pixels"
 
-#: ../gtk/gtktexttag.c:401 ../gtk/gtktextview.c:732
+#: ../gtk/gtktexttag.c:401 ../gtk/gtktextview.c:730
 msgid "Indent"
 msgstr "Indent"
 
-#: ../gtk/gtktexttag.c:402 ../gtk/gtktextview.c:733
+#: ../gtk/gtktexttag.c:402 ../gtk/gtktextview.c:731
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Amount to indent the paragraph, in pixels"
 
@@ -6153,7 +6161,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Pixels above lines"
 
-#: ../gtk/gtktexttag.c:423 ../gtk/gtktextview.c:657
+#: ../gtk/gtktexttag.c:423 ../gtk/gtktextview.c:655
 msgid "Pixels of blank space above paragraphs"
 msgstr "Pixels of blank space above paragraphs"
 
@@ -6161,7 +6169,7 @@ msgstr "Pixels of blank space above paragraphs"
 msgid "Pixels below lines"
 msgstr "Pixels below lines"
 
-#: ../gtk/gtktexttag.c:433 ../gtk/gtktextview.c:667
+#: ../gtk/gtktexttag.c:433 ../gtk/gtktextview.c:665
 msgid "Pixels of blank space below paragraphs"
 msgstr "Pixels of blank space below paragraphs"
 
@@ -6169,21 +6177,21 @@ msgstr "Pixels of blank space below paragraphs"
 msgid "Pixels inside wrap"
 msgstr "Pixels inside wrap"
 
-#: ../gtk/gtktexttag.c:443 ../gtk/gtktextview.c:677
+#: ../gtk/gtktexttag.c:443 ../gtk/gtktextview.c:675
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels of blank space between wrapped lines in a paragraph"
 
-#: ../gtk/gtktexttag.c:470 ../gtk/gtktextview.c:695
+#: ../gtk/gtktexttag.c:470 ../gtk/gtktextview.c:693
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 
-#: ../gtk/gtktexttag.c:479 ../gtk/gtktextview.c:742
+#: ../gtk/gtktexttag.c:479 ../gtk/gtktextview.c:740
 msgid "Tabs"
 msgstr "Tabs"
 
-#: ../gtk/gtktexttag.c:480 ../gtk/gtktextview.c:743
+#: ../gtk/gtktexttag.c:480 ../gtk/gtktextview.c:741
 msgid "Custom tabs for this text"
 msgstr "Custom tabs for this text"
 
@@ -6311,63 +6319,63 @@ msgstr "Paragraph background set"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Whether this tag affects the paragraph background color"
 
-#: ../gtk/gtktextview.c:656
+#: ../gtk/gtktextview.c:654
 msgid "Pixels Above Lines"
 msgstr "Pixels Above Lines"
 
-#: ../gtk/gtktextview.c:666
+#: ../gtk/gtktextview.c:664
 msgid "Pixels Below Lines"
 msgstr "Pixels Below Lines"
 
-#: ../gtk/gtktextview.c:676
+#: ../gtk/gtktextview.c:674
 msgid "Pixels Inside Wrap"
 msgstr "Pixels Inside Wrap"
 
-#: ../gtk/gtktextview.c:694
+#: ../gtk/gtktextview.c:692
 msgid "Wrap Mode"
 msgstr "Wrap Mode"
 
-#: ../gtk/gtktextview.c:712
+#: ../gtk/gtktextview.c:710
 msgid "Left Margin"
 msgstr "Left Margin"
 
-#: ../gtk/gtktextview.c:722
+#: ../gtk/gtktextview.c:720
 msgid "Right Margin"
 msgstr "Right Margin"
 
-#: ../gtk/gtktextview.c:750
+#: ../gtk/gtktextview.c:748
 msgid "Cursor Visible"
 msgstr "Cursor Visible"
 
-#: ../gtk/gtktextview.c:751
+#: ../gtk/gtktextview.c:749
 msgid "If the insertion cursor is shown"
 msgstr "If the insertion cursor is shown"
 
-#: ../gtk/gtktextview.c:758
+#: ../gtk/gtktextview.c:756
 msgid "Buffer"
 msgstr "Buffer"
 
-#: ../gtk/gtktextview.c:759
+#: ../gtk/gtktextview.c:757
 msgid "The buffer which is displayed"
 msgstr "The buffer which is displayed"
 
-#: ../gtk/gtktextview.c:767
+#: ../gtk/gtktextview.c:765
 msgid "Whether entered text overwrites existing contents"
 msgstr "Whether entered text overwrites existing contents"
 
-#: ../gtk/gtktextview.c:774
+#: ../gtk/gtktextview.c:772
 msgid "Accepts tab"
 msgstr "Accepts tab"
 
-#: ../gtk/gtktextview.c:775
+#: ../gtk/gtktextview.c:773
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Whether Tab will result in a tab character being entered"
 
-#: ../gtk/gtktextview.c:810
+#: ../gtk/gtktextview.c:808
 msgid "Error underline color"
 msgstr "Error underline color"
 
-#: ../gtk/gtktextview.c:811
+#: ../gtk/gtktextview.c:809
 msgid "Color with which to draw error-indication underlines"
 msgstr "Color with which to draw error-indication underlines"
 
