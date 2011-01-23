@@ -6969,7 +6969,8 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
     gtk_widget_set_sensitive (widget,
                               operation != STATE_CHANGE_UNSET);
 
-  flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+  if (operation != STATE_CHANGE_REPLACE)
+    flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
 
   /* Focused state is meant to be set only on the widget
    * being changed itself, not on the children */
