@@ -362,6 +362,8 @@ gdk_x11_device_xi2_query_state (GdkDevice        *device,
   if (mask)
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state);
 
+  g_free (button_state.mask);
+
   return TRUE;
 }
 
@@ -449,7 +451,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
   GdkWindow *window;
   Window xwindow, root, child, last = None;
   gdouble xroot_x, xroot_y, xwin_x, xwin_y;
-  XIButtonState button_state;
+  XIButtonState button_state = { 0 };
   XIModifierState mod_state;
   XIGroupState group_state;
 
@@ -501,6 +503,10 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
             {
               window = GDK_WINDOW (list->data);
               xwindow = GDK_WINDOW_XID (window);
+
+              /* Free previous button mask, if any */
+              g_free (button_state.mask);
+
               gdk_x11_display_error_trap_push (display);
               XIQueryPointer (xdisplay,
                               device_xi2->device_id,
@@ -524,6 +530,8 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
                   /* A childless toplevel, or below another window? */
                   XSetWindowAttributes attributes;
                   Window w;
+
+                  g_free (button_state.mask);
 
                   w = XCreateWindow (xdisplay, xwindow, (int)xwin_x, (int)xwin_y, 1, 1, 0,
                                      CopyFromParent, InputOnly, CopyFromParent,
@@ -558,6 +566,8 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
   while (xwindow)
     {
       last = xwindow;
+      g_free (button_state.mask);
+
       gdk_x11_display_error_trap_push (display);
       XIQueryPointer (xdisplay,
                       device_xi2->device_id,
@@ -592,6 +602,8 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
 
   if (mask)
     *mask = _gdk_x11_device_xi2_translate_state (&mod_state, &button_state);
+
+  g_free (button_state.mask);
 
   return window;
 }
