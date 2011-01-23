@@ -87,15 +87,11 @@ gdk_offscreen_window_init (GdkOffscreenWindow *window)
 
 static void
 gdk_offscreen_window_destroy (GdkWindow *window,
-			      gboolean   recursing,
-			      gboolean   foreign_destroy)
+                              gboolean   recursing,
+                              gboolean   foreign_destroy)
 {
-  GdkOffscreenWindow *offscreen;
-
-  offscreen = GDK_OFFSCREEN_WINDOW (window->impl);
-
   gdk_offscreen_window_set_embedder (window, NULL);
-  
+
   if (!recursing)
     gdk_offscreen_window_hide (window);
 }
@@ -367,14 +363,13 @@ gdk_offscreen_window_lower (GdkWindow *window)
 
 static void
 gdk_offscreen_window_move_resize_internal (GdkWindow *window,
-					   gint       x,
-					   gint       y,
-					   gint       width,
-					   gint       height,
-					   gboolean   send_expose_events)
+                                           gint       x,
+                                           gint       y,
+                                           gint       width,
+                                           gint       height,
+                                           gboolean   send_expose_events)
 {
   GdkOffscreenWindow *offscreen;
-  gint dx, dy, dw, dh;
 
   offscreen = GDK_OFFSCREEN_WINDOW (window->impl);
 
@@ -385,11 +380,6 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
 
   if (window->destroyed)
     return;
-
-  dx = x - window->x;
-  dy = y - window->y;
-  dw = width - window->width;
-  dh = height - window->height;
 
   window->x = x;
   window->y = y;
@@ -421,7 +411,7 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {
-      // TODO: Only invalidate new area, i.e. for larger windows
+      /* TODO: Only invalidate new area, i.e. for larger windows */
       gdk_window_invalidate_rect (window, NULL, TRUE);
       _gdk_synthesize_crossing_events_for_geometry_change (window);
     }
@@ -429,16 +419,12 @@ gdk_offscreen_window_move_resize_internal (GdkWindow *window,
 
 static void
 gdk_offscreen_window_move_resize (GdkWindow *window,
-				  gboolean   with_move,
-				  gint       x,
-				  gint       y,
-				  gint       width,
-				  gint       height)
+                                  gboolean   with_move,
+                                  gint       x,
+                                  gint       y,
+                                  gint       width,
+                                  gint       height)
 {
-  GdkOffscreenWindow *offscreen;
-
-  offscreen = GDK_OFFSCREEN_WINDOW (window->impl);
-
   if (!with_move)
     {
       x = window->x;
@@ -451,9 +437,9 @@ gdk_offscreen_window_move_resize (GdkWindow *window,
   if (height < 0)
     height = window->height;
 
-  gdk_offscreen_window_move_resize_internal (window, x, y,
-					     width, height,
-					     TRUE);
+  gdk_offscreen_window_move_resize_internal (window,
+                                             x, y, width, height,
+                                             TRUE);
 }
 
 static void
@@ -469,6 +455,8 @@ gdk_offscreen_window_show (GdkWindow *window,
 static void
 gdk_offscreen_window_hide (GdkWindow *window)
 {
+  /* TODO: This needs updating to the new grab world */
+#if 0
   GdkOffscreenWindow *offscreen;
   GdkDisplay *display;
 
@@ -479,8 +467,6 @@ gdk_offscreen_window_hide (GdkWindow *window)
   /* May need to break grabs on children */
   display = gdk_window_get_display (window);
 
-  /* TODO: This needs updating to the new grab world */
-#if 0
   if (display->pointer_grab.window != NULL)
     {
       if (is_parent_of (window, display->pointer_grab.window))

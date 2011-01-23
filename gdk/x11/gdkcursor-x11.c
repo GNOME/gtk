@@ -429,7 +429,7 @@ update_cursor (gpointer data,
 
   if (!cursor)
     return;
-  
+
   _gdk_x11_cursor_update_theme (cursor);
 }
 
@@ -437,18 +437,18 @@ update_cursor (gpointer data,
  * gdk_x11_display_set_cursor_theme:
  * @display: a #GdkDisplay
  * @theme: the name of the cursor theme to use, or %NULL to unset
- *         a previously set value 
+ *         a previously set value
  * @size: the cursor size to use, or 0 to keep the previous size
  *
  * Sets the cursor theme from which the images for cursor
- * should be taken. 
- * 
- * If the windowing system supports it, existing cursors created 
- * with gdk_cursor_new(), gdk_cursor_new_for_display() and 
- * gdk_cursor_new_for_name() are updated to reflect the theme 
+ * should be taken.
+ *
+ * If the windowing system supports it, existing cursors created
+ * with gdk_cursor_new(), gdk_cursor_new_for_display() and
+ * gdk_cursor_new_for_name() are updated to reflect the theme
  * change. Custom cursors constructed with
  * gdk_cursor_new_from_pixbuf() will have to be handled
- * by the application (GTK+ applications can learn about 
+ * by the application (GTK+ applications can learn about
  * cursor theme changes by listening for change notification
  * for the corresponding #GtkSetting).
  *
@@ -459,14 +459,12 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                   const gchar *theme,
                                   const gint   size)
 {
-  GdkX11Display *display_x11;
   Display *xdisplay;
   gchar *old_theme;
   gint old_size;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
-  display_x11 = GDK_X11_DISPLAY (display);
   xdisplay = GDK_DISPLAY_XDISPLAY (display);
 
   old_theme = XcursorGetTheme (xdisplay);
@@ -482,13 +480,13 @@ gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
   XcursorSetTheme (xdisplay, theme);
   if (size > 0)
     XcursorSetDefaultSize (xdisplay, size);
-    
+
   g_slist_foreach (cursor_cache, update_cursor, NULL);
 }
 
 #else
 
-static GdkPixbuf*  
+static GdkPixbuf*
 gdk_x11_cursor_get_image (GdkCursor *cursor)
 {
   return NULL;

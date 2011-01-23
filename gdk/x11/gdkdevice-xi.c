@@ -497,13 +497,11 @@ gdk_x11_device_xi_select_window_events (GdkDevice    *device,
                                         GdkEventMask  event_mask)
 {
   XEventClass event_classes[MAX_DEVICE_CLASSES];
-  GdkX11DeviceXI *device_xi;
   gint num_classes;
 
   event_mask |= (GDK_PROXIMITY_IN_MASK |
                  GDK_PROXIMITY_OUT_MASK);
 
-  device_xi = GDK_X11_DEVICE_XI (device);
   find_events (device, event_mask, event_classes, &num_classes);
 
   XSelectExtensionEvent (GDK_WINDOW_XDISPLAY (window),
@@ -590,14 +588,12 @@ _gdk_x11_device_xi_translate_axes (GdkDevice *device,
                                    gdouble   *x,
                                    gdouble   *y)
 {
-  GdkX11DeviceXI *device_xi;
   GdkWindow *impl_window;
   gdouble root_x, root_y;
   gdouble temp_x, temp_y;
   gint n_axes;
   gint i;
 
-  device_xi = GDK_X11_DEVICE_XI (device);
   impl_window = _gdk_window_get_impl_window (window);
   temp_x = temp_y = 0;
 

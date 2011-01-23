@@ -411,10 +411,8 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   /* Initialize devices list */
   for (i = 0; i < ndevices; i++)
     {
-      GdkDevice *device;
-
       dev = &info[i];
-      device = add_device (device_manager, dev, FALSE);
+      add_device (device_manager, dev, FALSE);
 
       if (dev->use == XIMasterPointer ||
           dev->use == XIMasterKeyboard)
@@ -567,7 +565,6 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
 {
   GdkDisplay *display;
   Display *xdisplay;
-  GdkDevice *device;
   XIDeviceInfo *info;
   int ndevices;
   gint i;
@@ -580,7 +577,7 @@ handle_hierarchy_changed (GdkX11DeviceManagerXI2 *device_manager,
       if (ev->info[i].flags & XIDeviceEnabled)
         {
           info = XIQueryDevice (xdisplay, ev->info[i].deviceid, &ndevices);
-          device = add_device (device_manager, &info[0], TRUE);
+          add_device (device_manager, &info[0], TRUE);
           XIFreeDeviceInfo (info);
         }
       else if (ev->info[i].flags & XIDeviceDisabled)
@@ -870,17 +867,13 @@ translate_axes (GdkDevice       *device,
                 XIValuatorState *valuators)
 {
   guint n_axes, i;
-  gint width, height;
   gdouble *axes;
-  double *vals;
+  gdouble *vals;
 
   g_object_get (device, "n-axes", &n_axes, NULL);
 
   axes = g_new0 (gdouble, n_axes);
   vals = valuators->values;
-
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
 
   for (i = 0; i < valuators->mask_len * 8; i++)
     {

@@ -2478,14 +2478,13 @@ gdk_window_add_filter (GdkWindow     *window,
  * @data: user data for previously-added filter function
  *
  * Remove a filter previously added with gdk_window_add_filter().
- *
- **/
+ */
 void
 gdk_window_remove_filter (GdkWindow     *window,
-			  GdkFilterFunc  function,
-			  gpointer       data)
+                          GdkFilterFunc  function,
+                          gpointer       data)
 {
-  GList *tmp_list, *node;
+  GList *tmp_list;
   GdkEventFilter *filter;
 
   g_return_if_fail (window == NULL || GDK_IS_WINDOW (window));
@@ -2498,17 +2497,16 @@ gdk_window_remove_filter (GdkWindow     *window,
   while (tmp_list)
     {
       filter = (GdkEventFilter *)tmp_list->data;
-      node = tmp_list;
       tmp_list = tmp_list->next;
 
       if ((filter->function == function) && (filter->data == data))
-	{
+        {
           filter->flags |= GDK_EVENT_FILTER_REMOVED;
 
-	  _gdk_event_filter_unref (window, filter);
+          _gdk_event_filter_unref (window, filter);
 
-	  return;
-	}
+          return;
+        }
     }
 }
 
@@ -5901,24 +5899,19 @@ gdk_window_get_device_events (GdkWindow *window,
 
 static void
 gdk_window_move_resize_toplevel (GdkWindow *window,
-				 gboolean   with_move,
-				 gint       x,
-				 gint       y,
-				 gint       width,
-				 gint       height)
+                                 gboolean   with_move,
+                                 gint       x,
+                                 gint       y,
+                                 gint       width,
+                                 gint       height)
 {
   cairo_region_t *old_region, *new_region;
   GdkWindowImplClass *impl_class;
   gboolean expose;
-  int old_x, old_y, old_abs_x, old_abs_y;
-  int dx, dy;
   gboolean is_resize;
 
   expose = FALSE;
   old_region = NULL;
-
-  old_x = window->x;
-  old_y = window->y;
 
   is_resize = (width != -1) || (height != -1);
 
@@ -5932,12 +5925,6 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
   impl_class->move_resize (window, with_move, x, y, width, height);
 
-  dx = window->x - old_x;
-  dy = window->y - old_y;
-
-  old_abs_x = window->abs_x;
-  old_abs_y = window->abs_y;
-
   /* Avoid recomputing for pure toplevel moves, for performance reasons */
   if (is_resize)
     recompute_visible_regions (window, TRUE, FALSE);
@@ -5947,8 +5934,7 @@ gdk_window_move_resize_toplevel (GdkWindow *window,
       new_region = cairo_region_copy (window->clip_region);
 
       /* This is the newly exposed area (due to any resize),
-       * X will expose it, but lets do that without the
-       * roundtrip
+       * X will expose it, but lets do that without the roundtrip
        */
       cairo_region_subtract (new_region, old_region);
       gdk_window_invalidate_region_full (window, new_region, TRUE, CLEAR_BG_WINCLEARED);
@@ -9059,13 +9045,10 @@ do_synthesize_crossing_event (gpointer data)
 void
 _gdk_synthesize_crossing_events_for_geometry_change (GdkWindow *changed_window)
 {
-  GdkDisplay *display;
   GdkWindow *toplevel;
 
   if (_gdk_native_windows)
     return; /* We use the native crossing events if all native */
-
-  display = gdk_window_get_display (changed_window);
 
   toplevel = get_event_toplevel (changed_window);
 

@@ -415,7 +415,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 {
   GdkX11DeviceManagerCore *device_manager;
   GdkWindow *window;
-  GdkWindowImplX11 *window_impl = NULL;
   gboolean return_val;
   GdkToplevelX11 *toplevel = NULL;
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
@@ -431,7 +430,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
         return FALSE;
 
       toplevel = _gdk_x11_window_get_toplevel (window);
-      window_impl = GDK_WINDOW_IMPL_X11 (window->impl);
       g_object_ref (window);
     }
 
