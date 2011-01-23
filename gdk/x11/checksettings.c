@@ -40,10 +40,7 @@ main (int   argc,
       if (gdk_settings_map[i].gdk_offset != accu)
         g_error ("settings_map[%u].gdk_offset != %u\n", i, accu);
       accu += strlen (gdk_settings_names + accu) + 1;
-      // g_print ("%u) ok.\n", i);
     }
-
-  g_print ("checksettings: all ok.\n");
 
   return 0;
 }
