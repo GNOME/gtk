@@ -6972,14 +6972,6 @@ _gtk_widget_update_state_flags (GtkWidget     *widget,
   if (operation != STATE_CHANGE_REPLACE)
     flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
 
-  /* Focused state is meant to be set only on the widget
-   * being changed itself, not on the children */
-  if ((flags & GTK_STATE_FLAG_FOCUSED) !=
-      (priv->state_flags & GTK_STATE_FLAG_FOCUSED))
-    priv->state_flags |= GTK_STATE_FLAG_FOCUSED;
-
-  flags &= ~(GTK_STATE_FLAG_FOCUSED);
-
   if (flags != 0 ||
       operation == STATE_CHANGE_REPLACE)
     {
@@ -11266,7 +11258,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
           data->parent_sensitive = gtk_widget_is_sensitive (widget);
 
           /* Do not propagate insensitive state further */
-          data->flags &= ~(GTK_STATE_FLAG_INSENSITIVE);
+          data->flags &= ~(GTK_STATE_FLAG_INSENSITIVE | GTK_STATE_FLAG_FOCUSED);
 
           if (data->use_forall)
             gtk_container_forall (GTK_CONTAINER (widget),
