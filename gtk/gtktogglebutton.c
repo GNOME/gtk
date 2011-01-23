@@ -563,6 +563,11 @@ gtk_toggle_button_update_state (GtkButton *button)
                 "gtk-touchscreen-mode", &touchscreen,
                 NULL);
 
+  new_state = gtk_widget_get_state_flags (GTK_WIDGET (button)) &
+    ~(GTK_STATE_FLAG_INCONSISTENT |
+      GTK_STATE_FLAG_PRELIGHT |
+      GTK_STATE_FLAG_ACTIVE);
+
   if (priv->inconsistent)
     new_state |= GTK_STATE_FLAG_INCONSISTENT;
 
