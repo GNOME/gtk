@@ -3972,17 +3972,11 @@ gtk_paint_spinner (GtkStyle           *style,
 }
 
 static void
-get_cursor_color (GtkWidget *widget,
-                  gboolean   primary,
-                  GdkColor  *color)
+get_cursor_color (GtkStyleContext *context,
+                  gboolean         primary,
+                  GdkColor        *color)
 {
-  GtkStyleContext *context;
   GdkColor *style_color;
-
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (color != NULL);
-
-  context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_get_style (context,
                                primary ? "cursor-color" : "secondary-cursor-color",
@@ -4022,7 +4016,11 @@ void
 _gtk_widget_get_cursor_color (GtkWidget *widget,
                               GdkColor  *color)
 {
-  get_cursor_color (widget, TRUE, color);
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (widget);
+
+  get_cursor_color (context, TRUE, color);
 }
 
 /**
@@ -4064,7 +4062,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
 
   context = gtk_widget_get_style_context (widget);
 
-  get_cursor_color (widget, is_primary, &color);
+  get_cursor_color (context, is_primary, &color);
   gdk_cairo_set_source_color (cr, &color);
 
   /* When changing the shape or size of the cursor here,
