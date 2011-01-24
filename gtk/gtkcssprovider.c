@@ -3688,6 +3688,7 @@ gtk_css_provider_get_default (void)
         "GtkTreeView > row {\n"
         "  background-color: @base_color;\n"
         "  color: @text_color;\n"
+        "  border-width: 0;\n"
         "}\n"
         "\n"
         "GtkTreeView > row:nth-child(odd) { \n"
