@@ -1036,7 +1036,6 @@ gtk_scale_draw (GtkWidget *widget,
   GtkRange *range = GTK_RANGE (scale);
   GtkStateFlags state = 0;
   GtkStyleContext *context;
-  gint n_marks;
   gint *marks;
   gint focus_padding;
   gint slider_width;
@@ -1046,8 +1045,8 @@ gtk_scale_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   gtk_widget_style_get (widget,
                         "focus-padding", &focus_padding,
-                        "slider-width", &slider_width, 
-                        "value-spacing", &value_spacing, 
+                        "slider-width", &slider_width,
+                        "value-spacing", &value_spacing,
                         NULL);
 
   /* We need to chain up _first_ so the various geometry members of
@@ -1071,7 +1070,7 @@ gtk_scale_draw (GtkWidget *widget,
       gint min_pos, max_pos;
 
       orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
-      n_marks = _gtk_range_get_stop_positions (range, &marks);
+      _gtk_range_get_stop_positions (range, &marks);
       layout = gtk_widget_create_pango_layout (widget, NULL);
       gtk_range_get_range_rect (range, &range_rect);
 
@@ -1189,7 +1188,7 @@ gtk_scale_draw (GtkWidget *widget,
 
               gtk_style_context_restore (context);
             }
-        } 
+        }
 
       g_object_unref (layout);
       g_free (marks);
@@ -1197,13 +1196,11 @@ gtk_scale_draw (GtkWidget *widget,
 
   if (priv->draw_value)
     {
-      GtkOrientation orientation;
       GtkAllocation allocation;
 
       PangoLayout *layout;
       gint x, y;
 
-      orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (range));
       layout = gtk_scale_get_layout (scale);
       gtk_scale_get_layout_offsets (scale, &x, &y);
       gtk_widget_get_allocation (widget, &allocation);

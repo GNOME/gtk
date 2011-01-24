@@ -187,11 +187,7 @@ gtk_info_bar_set_property (GObject      *object,
                            const GValue *value,
                            GParamSpec   *pspec)
 {
-  GtkInfoBar *info_bar;
-  GtkInfoBarPrivate *priv;
-
-  info_bar = GTK_INFO_BAR (object);
-  priv = info_bar->priv;
+  GtkInfoBar *info_bar = GTK_INFO_BAR (object);
 
   switch (prop_id)
     {
@@ -210,11 +206,7 @@ gtk_info_bar_get_property (GObject    *object,
                            GValue     *value,
                            GParamSpec *pspec)
 {
-  GtkInfoBar *info_bar;
-  GtkInfoBarPrivate *priv;
-
-  info_bar = GTK_INFO_BAR (object);
-  priv = info_bar->priv;
+  GtkInfoBar *info_bar = GTK_INFO_BAR (object);
 
   switch (prop_id)
     {

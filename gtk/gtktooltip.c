@@ -1160,18 +1160,17 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   GdkWindow *window;
   GtkWidget *tooltip_widget;
-  GtkWidget *pointer_widget;
   GtkTooltip *tooltip;
   gboolean has_tooltip;
   gboolean return_value = FALSE;
 
   tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
+                               "gdk-display-current-tooltip");
 
   if (tooltip->keyboard_mode_enabled)
     {
       x = y = -1;
-      pointer_widget = tooltip_widget = tooltip->keyboard_widget;
+      tooltip_widget = tooltip->keyboard_widget;
     }
   else
     {
@@ -1180,7 +1179,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       window = tooltip->last_window;
 
       if (!GDK_IS_WINDOW (window))
-	return;
+        return;
 
       gdk_window_get_pointer (window, &x, &y, NULL);
 
@@ -1188,9 +1187,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
       tooltip->last_x = tx;
       tooltip->last_y = ty;
 
-      pointer_widget = tooltip_widget = _gtk_widget_find_at_coords (window,
-                                                                    x, y,
-                                                                    &x, &y);
+      tooltip_widget = _gtk_widget_find_at_coords (window, x, y, &x, &y);
     }
 
   if (!tooltip_widget)
@@ -1205,9 +1202,9 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
   if (!tooltip->current_window)
     {
       if (gtk_widget_get_tooltip_window (tooltip_widget))
-	tooltip->current_window = gtk_widget_get_tooltip_window (tooltip_widget);
+        tooltip->current_window = gtk_widget_get_tooltip_window (tooltip_widget);
       else
-	tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
+        tooltip->current_window = GTK_WINDOW (GTK_TOOLTIP (tooltip)->window);
     }
 
   screen = gtk_widget_get_screen (tooltip_widget);
@@ -1216,13 +1213,13 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
   if (screen != gtk_widget_get_screen (tooltip->window))
     {
       g_signal_handlers_disconnect_by_func (display,
-					    gtk_tooltip_display_closed,
-					    tooltip);
+                                            gtk_tooltip_display_closed,
+                                            tooltip);
 
       gtk_window_set_screen (GTK_WINDOW (tooltip->window), screen);
 
       g_signal_connect (display, "closed",
-			G_CALLBACK (gtk_tooltip_display_closed), tooltip);
+                        G_CALLBACK (gtk_tooltip_display_closed), tooltip);
     }
 
   gtk_tooltip_position (tooltip, display, tooltip_widget);

@@ -2429,7 +2429,6 @@ gtk_tree_view_size_request (GtkWidget      *widget,
                             gboolean        may_validate)
 {
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
-  GList *tmp_list;
 
   if (may_validate)
     {
@@ -2444,8 +2443,6 @@ gtk_tree_view_size_request (GtkWidget      *widget,
 
   requisition->width = tree_view->priv->width;
   requisition->height = tree_view->priv->height + gtk_tree_view_get_effective_header_height (tree_view);
-
-  tmp_list = tree_view->priv->children;
 }
 
 static void
@@ -15542,7 +15539,6 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
   GtkTreeIter iter;
   GdkRectangle cell_area;
   GtkTreeViewColumn *focus_column;
-  gchar *path_string;
   guint flags = 0; /* can be 0, as the flags are primarily for rendering */
   gint retval = FALSE;
   GtkRBTree *cursor_tree;
@@ -15558,20 +15554,19 @@ gtk_tree_view_start_editing (GtkTreeView *tree_view,
       cursor_node == NULL)
     return FALSE;
 
-  path_string = gtk_tree_path_to_string (cursor_path);
   gtk_tree_model_get_iter (tree_view->priv->model, &iter, cursor_path);
 
   validate_row (tree_view, cursor_tree, cursor_node, &iter, cursor_path);
 
   gtk_tree_view_column_cell_set_cell_data (focus_column,
-					   tree_view->priv->model,
-					   &iter,
-					   GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
-					   cursor_node->children?TRUE:FALSE);
+                                           tree_view->priv->model,
+                                           &iter,
+                                           GTK_RBNODE_FLAG_SET (cursor_node, GTK_RBNODE_IS_PARENT),
+                                           cursor_node->children ? TRUE : FALSE);
   gtk_tree_view_get_cell_area (tree_view,
-			       cursor_path,
-			       focus_column,
-			       &cell_area);
+                               cursor_path,
+                               focus_column,
+                               &cell_area);
 
   if (gtk_cell_area_activate (gtk_cell_layout_get_area (GTK_CELL_LAYOUT (focus_column)),
                               _gtk_tree_view_column_get_context (focus_column),

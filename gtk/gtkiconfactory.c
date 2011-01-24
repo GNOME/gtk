@@ -2733,12 +2733,12 @@ typedef struct {
 } IconSourceParserData;
 
 static void
-icon_source_start_element (GMarkupParseContext *context,
-			   const gchar         *element_name,
-			   const gchar        **names,
-			   const gchar        **values,
-			   gpointer             user_data,
-			   GError             **error)
+icon_source_start_element (GMarkupParseContext  *context,
+                           const gchar          *element_name,
+                           const gchar         **names,
+                           const gchar         **values,
+                           gpointer              user_data,
+                           GError              **error)
 {
   gint i;
   gchar *stock_id = NULL;
@@ -2757,63 +2757,63 @@ icon_source_start_element (GMarkupParseContext *context,
   if (!parser_data->in_source)
     {
       if (strcmp (element_name, "sources") != 0)
-	{
-	  error_msg = g_strdup_printf ("Unexpected element %s, expected <sources>", element_name);
-	  error_domain = GTK_BUILDER_ERROR_INVALID_TAG;
-	  goto error;
-	}
+        {
+          error_msg = g_strdup_printf ("Unexpected element %s, expected <sources>", element_name);
+          error_domain = GTK_BUILDER_ERROR_INVALID_TAG;
+          goto error;
+        }
       parser_data->in_source = TRUE;
       return;
     }
   else
     {
       if (strcmp (element_name, "source") != 0)
-	{
-	  error_msg = g_strdup_printf ("Unexpected element %s, expected <source>", element_name);
-	  error_domain = GTK_BUILDER_ERROR_INVALID_TAG;
-	  goto error;
-	}
+        {
+          error_msg = g_strdup_printf ("Unexpected element %s, expected <source>", element_name);
+          error_domain = GTK_BUILDER_ERROR_INVALID_TAG;
+          goto error;
+        }
     }
 
   for (i = 0; names[i]; i++)
     {
       if (strcmp (names[i], "stock-id") == 0)
-	stock_id = g_strdup (values[i]);
+        stock_id = g_strdup (values[i]);
       else if (strcmp (names[i], "filename") == 0)
-	filename = g_strdup (values[i]);
+        filename = g_strdup (values[i]);
       else if (strcmp (names[i], "icon-name") == 0)
-	icon_name = g_strdup (values[i]);
+        icon_name = g_strdup (values[i]);
       else if (strcmp (names[i], "size") == 0)
-	{
+        {
           if (!_gtk_builder_enum_from_string (GTK_TYPE_ICON_SIZE,
                                               values[i],
                                               &size,
                                               error))
-	      return;
-	}
+            return;
+        }
       else if (strcmp (names[i], "direction") == 0)
-	{
+        {
           if (!_gtk_builder_enum_from_string (GTK_TYPE_TEXT_DIRECTION,
                                               values[i],
                                               &direction,
                                               error))
-	      return;
-	}
+            return;
+        }
       else if (strcmp (names[i], "state") == 0)
-	{
+        {
           if (!_gtk_builder_enum_from_string (GTK_TYPE_STATE_TYPE,
                                               values[i],
                                               &state,
                                               error))
-	      return;
-	}
+            return;
+        }
       else
-	{
-	  error_msg = g_strdup_printf ("'%s' is not a valid attribute of <%s>",
-				       names[i], "source");
-	  error_domain = GTK_BUILDER_ERROR_INVALID_ATTRIBUTE;
-	  goto error;
-	}
+        {
+          error_msg = g_strdup_printf ("'%s' is not a valid attribute of <%s>",
+                                       names[i], "source");
+          error_domain = GTK_BUILDER_ERROR_INVALID_ATTRIBUTE;
+          goto error;
+        }
     }
 
   if (!stock_id)
@@ -2839,20 +2839,11 @@ icon_source_start_element (GMarkupParseContext *context,
     gchar *tmp;
     gint line_number, char_number;
 
-    g_markup_parse_context_get_position (context,
-					 &line_number,
-					 &char_number);
+    g_markup_parse_context_get_position (context, &line_number, &char_number);
 
     tmp = g_strdup_printf ("%s:%d:%d %s", "input",
-			   line_number, char_number, error_msg);
-#if 0
-    g_set_error_literal (error,
-		 GTK_BUILDER_ERROR,
-		 error_domain,
-		 tmp);
-#else
-    g_warning ("%s", tmp);
-#endif
+                           line_number, char_number, error_msg);
+    g_set_error_literal (error, GTK_BUILDER_ERROR, error_domain, tmp);
     g_free (tmp);
     g_free (stock_id);
     g_free (filename);

@@ -1189,59 +1189,58 @@ gtk_recent_manager_lookup_item (GtkRecentManager  *manager,
  * Return value: %TRUE on success.
  *
  * Since: 2.10
- */ 
+ */
 gboolean
 gtk_recent_manager_move_item (GtkRecentManager  *recent_manager,
-			      const gchar       *uri,
-			      const gchar       *new_uri,
-			      GError           **error)
+                              const gchar       *uri,
+                              const gchar       *new_uri,
+                              GError           **error)
 {
   GtkRecentManagerPrivate *priv;
   GError *move_error;
-  gboolean res;
-  
+
   g_return_val_if_fail (GTK_IS_RECENT_MANAGER (recent_manager), FALSE);
   g_return_val_if_fail (uri != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
-  
+
   priv = recent_manager->priv;
 
   if (!priv->recent_items)
     {
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-      		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-      		   _("Unable to find an item with URI '%s'"),
-      		   uri);
+                   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
+                   _("Unable to find an item with URI '%s'"),
+                   uri);
       return FALSE;
     }
 
   if (!g_bookmark_file_has_item (priv->recent_items, uri))
     {
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-      		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-      		   _("Unable to find an item with URI '%s'"),
-      		   uri);
+                   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
+                   _("Unable to find an item with URI '%s'"),
+                   uri);
       return FALSE;
     }
-  
+
   move_error = NULL;
-  res = g_bookmark_file_move_item (priv->recent_items,
-                                   uri, new_uri,
-                                   &move_error);
-  if (move_error)
+  if (!g_bookmark_file_move_item (priv->recent_items,
+                                  uri,
+                                  new_uri,
+                                  &move_error))
     {
       g_error_free (move_error);
 
       g_set_error (error, GTK_RECENT_MANAGER_ERROR,
-      		   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
-      		   _("Unable to find an item with URI '%s'"),
-      		   uri);
+                   GTK_RECENT_MANAGER_ERROR_NOT_FOUND,
+                   _("Unable to find an item with URI '%s'"),
+                   uri);
       return FALSE;
     }
-  
+
   priv->is_dirty = TRUE;
   gtk_recent_manager_changed (recent_manager);
-  
+
   return TRUE;
 }
 

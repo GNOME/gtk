@@ -1487,7 +1487,6 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   GtkRequisition arrow_requisition;
   gboolean overflowing;
   gboolean size_changed;
-  gdouble elapsed;
   GtkAllocation item_area;
   GtkShadowType shadow_type;
 
@@ -1497,14 +1496,14 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   size_changed = FALSE;
-  if (widget_allocation.x != allocation->x		||
-      widget_allocation.y != allocation->y		||
-      widget_allocation.width != allocation->width	||
+  if (widget_allocation.x != allocation->x ||
+      widget_allocation.y != allocation->y ||
+      widget_allocation.width != allocation->width ||
       widget_allocation.height != allocation->height)
     {
       size_changed = TRUE;
     }
-  
+
   if (size_changed)
     gtk_toolbar_stop_sliding (toolbar);
 
@@ -1513,14 +1512,12 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (toolbar));
 
   if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_move_resize (priv->event_window,
-                              allocation->x + border_width,
-                              allocation->y + border_width,
-                              allocation->width - border_width * 2,
-                              allocation->height - border_width * 2);
-    }
-  
+    gdk_window_move_resize (priv->event_window,
+                            allocation->x + border_width,
+                            allocation->y + border_width,
+                            allocation->width - border_width * 2,
+                            allocation->height - border_width * 2);
+
   border_width += get_internal_padding (toolbar);
 
   gtk_widget_get_preferred_size (priv->arrow_button,
@@ -1533,163 +1530,163 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       available_size = size = allocation->width - 2 * border_width;
       short_size = allocation->height - 2 * border_width;
       arrow_size = arrow_requisition.width;
-      
+
       if (shadow_type != GTK_SHADOW_NONE)
-	{
+        {
           available_size -= padding.left + padding.right;
           short_size -= padding.top + padding.bottom;
-	}
+        }
     }
   else
     {
       available_size = size = allocation->height - 2 * border_width;
       short_size = allocation->width - 2 * border_width;
       arrow_size = arrow_requisition.height;
-      
+
       if (shadow_type != GTK_SHADOW_NONE)
-	{
+        {
           available_size -= padding.top + padding.bottom;
           short_size -= padding.left + padding.right;
-	}
+        }
     }
-  
+
   n_items = g_list_length (priv->content);
   allocations = g_new0 (GtkAllocation, n_items);
   new_states = g_new0 (ItemState, n_items);
-  
+
   needed_size = 0;
   need_arrow = FALSE;
   for (list = priv->content; list != NULL; list = list->next)
     {
       ToolbarContent *content = list->data;
-      
-      if (toolbar_content_visible (content, toolbar))
-	{
-	  needed_size += get_item_size (toolbar, content);
 
-	  /* Do we need an arrow?
-	   *
-	   * Assume we don't, and see if any non-separator item with a
-	   * proxy menu item is then going to overflow.
-	   */
-	  if (needed_size > available_size			&&
-	      !need_arrow					&&
-	      priv->show_arrow					&&
-	      toolbar_content_has_proxy_menu_item (content)	&&
-	      !toolbar_content_is_separator (content))
-	    {
-	      need_arrow = TRUE;
-	    }
-	}
+      if (toolbar_content_visible (content, toolbar))
+        {
+          needed_size += get_item_size (toolbar, content);
+
+          /* Do we need an arrow?
+           *
+           * Assume we don't, and see if any non-separator item
+           * with a proxy menu item is then going to overflow.
+           */
+          if (needed_size > available_size &&
+              !need_arrow &&
+              priv->show_arrow &&
+              toolbar_content_has_proxy_menu_item (content) &&
+              !toolbar_content_is_separator (content))
+            {
+              need_arrow = TRUE;
+            }
+        }
     }
-  
+
   if (need_arrow)
     size = available_size - arrow_size;
   else
     size = available_size;
-  
+
   /* calculate widths and states of items */
   overflowing = FALSE;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
       ToolbarContent *content = list->data;
       gint item_size;
-      
+
       if (!toolbar_content_visible (content, toolbar))
-	{
-	  new_states[i] = HIDDEN;
-	  continue;
-	}
-      
+        {
+          new_states[i] = HIDDEN;
+          continue;
+        }
+
       item_size = get_item_size (toolbar, content);
       if (item_size <= size && !overflowing)
-	{
-	  size -= item_size;
-	  allocations[i].width = item_size;
-	  new_states[i] = NORMAL;
-	}
+        {
+          size -= item_size;
+          allocations[i].width = item_size;
+          new_states[i] = NORMAL;
+        }
       else
-	{
-	  overflowing = TRUE;
-	  new_states[i] = OVERFLOWN;
-	  allocations[i].width = item_size;
-	}
+        {
+          overflowing = TRUE;
+          new_states[i] = OVERFLOWN;
+          allocations[i].width = item_size;
+        }
     }
-  
-  /* calculate width of arrow */  
+
+  /* calculate width of arrow */
   if (need_arrow)
     {
       arrow_allocation.width = arrow_size;
       arrow_allocation.height = MAX (short_size, 1);
     }
-  
+
   /* expand expandable items */
-  
-  /* We don't expand when there is an overflow menu, because that leads to
-   * weird jumps when items get moved to the overflow menu and the expanding
+
+  /* We don't expand when there is an overflow menu,
+   * because that leads to weird jumps when items get
+   * moved to the overflow menu and the expanding
    * items suddenly get a lot of extra space
    */
   if (!overflowing)
     {
       gint max_child_expand;
       n_expand_items = 0;
-      
+
       for (i = 0, list = priv->content; list != NULL; list = list->next, ++i)
-	{
-	  ToolbarContent *content = list->data;
-	  
-	  if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
-	    n_expand_items++;
-	}
-      
+        {
+          ToolbarContent *content = list->data;
+
+          if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
+            n_expand_items++;
+        }
+
       max_child_expand = get_max_child_expand (toolbar);
       for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
-	{
-	  ToolbarContent *content = list->data;
-	  
-	  if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
-	    {
-	      gint extra = size / n_expand_items;
-	      if (size % n_expand_items != 0)
-		extra++;
+        {
+          ToolbarContent *content = list->data;
+
+          if (toolbar_content_get_expand (content) && new_states[i] == NORMAL)
+            {
+              gint extra = size / n_expand_items;
+              if (size % n_expand_items != 0)
+                extra++;
 
               if (extra > max_child_expand)
                 extra = max_child_expand;
 
-	      allocations[i].width += extra;
-	      size -= extra;
-	      n_expand_items--;
-	    }
-	}
-      
+              allocations[i].width += extra;
+              size -= extra;
+              n_expand_items--;
+            }
+        }
+
       g_assert (n_expand_items == 0);
     }
-  
+
   /* position items */
   pos = border_width;
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
-      /* both NORMAL and OVERFLOWN items get a position. This ensures
-       * that sliding will work for OVERFLOWN items too
+      /* Both NORMAL and OVERFLOWN items get a position.
+       * This ensures that sliding will work for OVERFLOWN items too.
        */
-      if (new_states[i] == NORMAL ||
-	  new_states[i] == OVERFLOWN)
-	{
-	  allocations[i].x = pos;
-	  allocations[i].y = border_width;
-	  allocations[i].height = short_size;
-	  
-	  pos += allocations[i].width;
-	}
+      if (new_states[i] == NORMAL || new_states[i] == OVERFLOWN)
+        {
+          allocations[i].x = pos;
+          allocations[i].y = border_width;
+          allocations[i].height = short_size;
+
+          pos += allocations[i].width;
+        }
     }
-  
+
   /* position arrow */
   if (need_arrow)
     {
       arrow_allocation.x = available_size - border_width - arrow_allocation.width;
       arrow_allocation.y = border_width;
     }
-  
+
   item_area.x = border_width;
   item_area.y = border_width;
   item_area.width = available_size - (need_arrow? arrow_size : 0);
@@ -1699,47 +1696,47 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
       for (i = 0; i < n_items; ++i)
-	fixup_allocation_for_vertical (&(allocations[i]));
-      
+        fixup_allocation_for_vertical (&(allocations[i]));
+
       if (need_arrow)
-	fixup_allocation_for_vertical (&arrow_allocation);
+        fixup_allocation_for_vertical (&arrow_allocation);
 
       fixup_allocation_for_vertical (&item_area);
     }
   else if (gtk_widget_get_direction (GTK_WIDGET (toolbar)) == GTK_TEXT_DIR_RTL)
     {
       for (i = 0; i < n_items; ++i)
-	fixup_allocation_for_rtl (available_size, &(allocations[i]));
-      
+        fixup_allocation_for_rtl (available_size, &(allocations[i]));
+
       if (need_arrow)
-	fixup_allocation_for_rtl (available_size, &arrow_allocation);
+        fixup_allocation_for_rtl (available_size, &arrow_allocation);
 
       fixup_allocation_for_rtl (available_size, &item_area);
     }
-  
+
   /* translate the items by allocation->(x,y) */
   for (i = 0; i < n_items; ++i)
     {
       allocations[i].x += allocation->x;
       allocations[i].y += allocation->y;
-      
+
       if (shadow_type != GTK_SHADOW_NONE)
-	{
+        {
           allocations[i].x += padding.left;
           allocations[i].y += padding.top;
-	}
+        }
     }
-  
+
   if (need_arrow)
     {
       arrow_allocation.x += allocation->x;
       arrow_allocation.y += allocation->y;
-      
+
       if (shadow_type != GTK_SHADOW_NONE)
-	{
+        {
           arrow_allocation.x += padding.left;
           arrow_allocation.y += padding.top;
-	}
+        }
     }
 
   item_area.x += allocation->x;
@@ -1754,89 +1751,87 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
   for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
     {
       ToolbarContent *content = list->data;
-      
+
       if (toolbar_content_get_state (content) == NORMAL &&
-	  new_states[i] != NORMAL)
-	{
-	  /* an item disappeared and we didn't change size, so begin sliding */
-	  if (!size_changed)
-	    gtk_toolbar_begin_sliding (toolbar);
-	}
+          new_states[i] != NORMAL)
+        {
+          /* an item disappeared and we didn't change size, so begin sliding */
+          if (!size_changed)
+            gtk_toolbar_begin_sliding (toolbar);
+        }
     }
-  
+
   /* finally allocate the items */
   if (priv->is_sliding)
     {
       for (list = priv->content, i = 0; list != NULL; list = list->next, i++)
-	{
-	  ToolbarContent *content = list->data;
-	  
-	  toolbar_content_set_goal_allocation (content, &(allocations[i]));
-	}
+        {
+          ToolbarContent *content = list->data;
+
+          toolbar_content_set_goal_allocation (content, &(allocations[i]));
+        }
     }
 
-  elapsed = g_timer_elapsed (priv->timer, NULL);
   for (list = priv->content, i = 0; list != NULL; list = list->next, ++i)
     {
       ToolbarContent *content = list->data;
 
-      if (new_states[i] == OVERFLOWN ||
-	  new_states[i] == NORMAL)
-	{
-	  GtkAllocation alloc;
-	  GtkAllocation start_allocation = { 0, };
-	  GtkAllocation goal_allocation;
+      if (new_states[i] == OVERFLOWN || new_states[i] == NORMAL)
+        {
+          GtkAllocation alloc;
+          GtkAllocation start_allocation = { 0, };
+          GtkAllocation goal_allocation;
 
-	  if (priv->is_sliding)
-	    {
-	      toolbar_content_get_start_allocation (content, &start_allocation);
-	      toolbar_content_get_goal_allocation (content, &goal_allocation);
-	      
-	      compute_intermediate_allocation (toolbar,
-					       &start_allocation,
-					       &goal_allocation,
-					       &alloc);
+          if (priv->is_sliding)
+            {
+              toolbar_content_get_start_allocation (content, &start_allocation);
+              toolbar_content_get_goal_allocation (content, &goal_allocation);
 
-	      priv->need_sync = TRUE;
-	    }
-	  else
-	    {
-	      alloc = allocations[i];
-	    }
+              compute_intermediate_allocation (toolbar,
+                                               &start_allocation,
+                                               &goal_allocation,
+                                               &alloc);
 
-	  if (alloc.width <= 0 || alloc.height <= 0)
-	    {
-	      toolbar_content_set_child_visible (content, toolbar, FALSE);
-	    }
-	  else
-	    {
-	      if (!rect_within (&alloc, &item_area))
-		{
-		  toolbar_content_set_child_visible (content, toolbar, FALSE);
-		  toolbar_content_size_allocate (content, &alloc);
-		}
-	      else
-		{
-		  toolbar_content_set_child_visible (content, toolbar, TRUE);
-		  toolbar_content_size_allocate (content, &alloc);
-		}
-	    }
-	}
+              priv->need_sync = TRUE;
+            }
+          else
+            {
+              alloc = allocations[i];
+            }
+
+          if (alloc.width <= 0 || alloc.height <= 0)
+            {
+              toolbar_content_set_child_visible (content, toolbar, FALSE);
+            }
+          else
+            {
+              if (!rect_within (&alloc, &item_area))
+                {
+                  toolbar_content_set_child_visible (content, toolbar, FALSE);
+                  toolbar_content_size_allocate (content, &alloc);
+                }
+              else
+                {
+                  toolbar_content_set_child_visible (content, toolbar, TRUE);
+                  toolbar_content_size_allocate (content, &alloc);
+                }
+            }
+        }
       else
-	{
-	  toolbar_content_set_child_visible (content, toolbar, FALSE);
-	}
-	  
+        {
+          toolbar_content_set_child_visible (content, toolbar, FALSE);
+        }
+
       toolbar_content_set_state (content, new_states[i]);
     }
-  
+
   if (priv->menu && priv->need_rebuild)
     rebuild_menu (toolbar);
-  
+
   if (need_arrow)
     {
       gtk_widget_size_allocate (GTK_WIDGET (priv->arrow_button),
-				&arrow_allocation);
+                                &arrow_allocation);
       gtk_widget_show (GTK_WIDGET (priv->arrow_button));
     }
   else
@@ -1844,7 +1839,7 @@ gtk_toolbar_size_allocate (GtkWidget     *widget,
       gtk_widget_hide (GTK_WIDGET (priv->arrow_button));
 
       if (priv->menu && gtk_widget_get_visible (GTK_WIDGET (priv->menu)))
-	gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
+        gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
     }
 
   g_free (allocations);
@@ -3673,18 +3668,16 @@ _gtk_toolbar_paint_space_line (GtkWidget           *widget,
   GtkOrientation orientation;
   GtkStyleContext *context;
   GtkStateFlags state;
-  GdkWindow    *window;
   GtkBorder padding;
-  int width, height;
-  const double start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
-  const double end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
+  gint width, height;
+  const gdouble start_fraction = (SPACE_LINE_START / SPACE_LINE_DIVISION);
+  const gdouble end_fraction = (SPACE_LINE_END / SPACE_LINE_DIVISION);
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  orientation = toolbar? priv->orientation : GTK_ORIENTATION_HORIZONTAL;
+  orientation = toolbar ? priv->orientation : GTK_ORIENTATION_HORIZONTAL;
 
   context = gtk_widget_get_style_context (widget);
-  window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state_flags (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);

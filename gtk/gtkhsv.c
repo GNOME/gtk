@@ -795,8 +795,7 @@ gtk_hsv_motion (GtkWidget      *widget,
 {
   GtkHSV *hsv = GTK_HSV (widget);
   GtkHSVPrivate *priv = hsv->priv;
-  GdkModifierType mods;
-  double x, y;
+  gdouble x, y;
 
   if (priv->mode == DRAG_NONE)
     return FALSE;
@@ -804,7 +803,6 @@ gtk_hsv_motion (GtkWidget      *widget,
   gdk_event_request_motions (event);
   x = event->x;
   y = event->y;
-  mods = event->state;
 
   if (priv->mode == DRAG_H)
     {

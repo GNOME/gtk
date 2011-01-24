@@ -267,31 +267,31 @@ static void     gtk_container_class_init           (GtkContainerClass *klass);
 static void     gtk_container_init                 (GtkContainer      *container);
 static void     gtk_container_destroy              (GtkWidget         *widget);
 static void     gtk_container_set_property         (GObject         *object,
-						    guint            prop_id,
-						    const GValue    *value,
-						    GParamSpec      *pspec);
+                                                    guint            prop_id,
+                                                    const GValue    *value,
+                                                    GParamSpec      *pspec);
 static void     gtk_container_get_property         (GObject         *object,
-						    guint            prop_id,
-						    GValue          *value,
-						    GParamSpec      *pspec);
+                                                    guint            prop_id,
+                                                    GValue          *value,
+                                                    GParamSpec      *pspec);
 static void     gtk_container_add_unimplemented    (GtkContainer      *container,
-						    GtkWidget         *widget);
+                                                    GtkWidget         *widget);
 static void     gtk_container_remove_unimplemented (GtkContainer      *container,
-						    GtkWidget         *widget);
+                                                    GtkWidget         *widget);
 static void     gtk_container_real_check_resize    (GtkContainer      *container);
 static void     gtk_container_compute_expand       (GtkWidget         *widget,
                                                     gboolean          *hexpand_p,
                                                     gboolean          *vexpand_p);
 static gboolean gtk_container_focus                (GtkWidget         *widget,
-						    GtkDirectionType   direction);
+                                                    GtkDirectionType   direction);
 static void     gtk_container_real_set_focus_child (GtkContainer      *container,
-						    GtkWidget         *widget);
+                                                    GtkWidget         *widget);
 
 static gboolean gtk_container_focus_move           (GtkContainer      *container,
-						    GList             *children,
-						    GtkDirectionType   direction);
+                                                    GList             *children,
+                                                    GtkDirectionType   direction);
 static void     gtk_container_children_callback    (GtkWidget         *widget,
-						    gpointer           client_data);
+                                                    gpointer           client_data);
 static void     gtk_container_show_all             (GtkWidget         *widget);
 static gint     gtk_container_draw                 (GtkWidget         *widget,
                                                     cairo_t           *cr);
@@ -309,7 +309,7 @@ static void     gtk_container_adjust_size_allocation (GtkWidget       *widget,
                                                       gint            *allocated_size);
 
 static gchar* gtk_container_child_default_composite_name (GtkContainer *container,
-							  GtkWidget    *child);
+                                                          GtkWidget    *child);
 
 static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *container,
                                                               GtkWidget    *child);
@@ -317,20 +317,20 @@ static GtkWidgetPath * gtk_container_real_get_path_for_child (GtkContainer *cont
 /* GtkBuildable */
 static void gtk_container_buildable_init           (GtkBuildableIface *iface);
 static void gtk_container_buildable_add_child      (GtkBuildable *buildable,
-						    GtkBuilder   *builder,
-						    GObject      *child,
-						    const gchar  *type);
+                                                    GtkBuilder   *builder,
+                                                    GObject      *child,
+                                                    const gchar  *type);
 static gboolean gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
-							  GtkBuilder    *builder,
-							  GObject       *child,
-							  const gchar   *tagname,
-							  GMarkupParser *parser,
-							  gpointer      *data);
+                                                          GtkBuilder    *builder,
+                                                          GObject       *child,
+                                                          const gchar   *tagname,
+                                                          GMarkupParser *parser,
+                                                          gpointer      *data);
 static void    gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
-						       GtkBuilder   *builder,
-						       GObject      *child,
-						       const gchar  *tagname,
-						       gpointer     *data);
+                                                       GtkBuilder   *builder,
+                                                       GObject      *child,
+                                                       const gchar  *tagname,
+                                                       gpointer     *data);
 
 
 /* --- variables --- */
@@ -338,7 +338,7 @@ static const gchar           vadjustment_key[] = "gtk-vadjustment";
 static guint                 vadjustment_key_id = 0;
 static const gchar           hadjustment_key[] = "gtk-hadjustment";
 static guint                 hadjustment_key_id = 0;
-static GSList	            *container_resize_queue = NULL;
+static GSList               *container_resize_queue = NULL;
 static guint                 container_signals[LAST_SIGNAL] = { 0 };
 static GtkWidgetClass       *parent_class = NULL;
 extern GParamSpecPool       *_gtk_widget_child_property_pool;
@@ -356,32 +356,32 @@ gtk_container_get_type (void)
     {
       const GTypeInfo container_info =
       {
-	sizeof (GtkContainerClass),
-	(GBaseInitFunc) gtk_container_base_class_init,
-	(GBaseFinalizeFunc) gtk_container_base_class_finalize,
-	(GClassInitFunc) gtk_container_class_init,
-	NULL        /* class_finalize */,
-	NULL        /* class_data */,
-	sizeof (GtkContainer),
-	0           /* n_preallocs */,
-	(GInstanceInitFunc) gtk_container_init,
-	NULL,       /* value_table */
+        sizeof (GtkContainerClass),
+        (GBaseInitFunc) gtk_container_base_class_init,
+        (GBaseFinalizeFunc) gtk_container_base_class_finalize,
+        (GClassInitFunc) gtk_container_class_init,
+        NULL        /* class_finalize */,
+        NULL        /* class_data */,
+        sizeof (GtkContainer),
+        0           /* n_preallocs */,
+        (GInstanceInitFunc) gtk_container_init,
+        NULL,       /* value_table */
       };
 
       const GInterfaceInfo buildable_info =
       {
-	(GInterfaceInitFunc) gtk_container_buildable_init,
-	NULL,
-	NULL
+        (GInterfaceInitFunc) gtk_container_buildable_init,
+        NULL,
+        NULL
       };
 
       container_type =
-	g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
-				&container_info, G_TYPE_FLAG_ABSTRACT);
+        g_type_register_static (GTK_TYPE_WIDGET, I_("GtkContainer"),
+                                &container_info, G_TYPE_FLAG_ABSTRACT);
 
       g_type_add_interface_static (container_type,
-				   GTK_TYPE_BUILDABLE,
-				   &buildable_info);
+                                   GTK_TYPE_BUILDABLE,
+                                   &buildable_info);
 
     }
 
@@ -460,9 +460,9 @@ gtk_container_class_init (GtkContainerClass *class)
                                    g_param_spec_uint ("border-width",
                                                       P_("Border width"),
                                                       P_("The width of the empty border outside the containers children"),
-						      0,
-						      65535,
-						      0,
+                                                      0,
+                                                      65535,
+                                                      0,
                                                       GTK_PARAM_READWRITE));
   g_object_class_install_property (gobject_class,
                                    PROP_CHILD,
@@ -470,42 +470,42 @@ gtk_container_class_init (GtkContainerClass *class)
                                                       P_("Child"),
                                                       P_("Can be used to add a new child to the container"),
                                                       GTK_TYPE_WIDGET,
-						      GTK_PARAM_WRITABLE));
+                                                      GTK_PARAM_WRITABLE));
   container_signals[ADD] =
     g_signal_new (I_("add"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkContainerClass, add),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_WIDGET);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkContainerClass, add),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_WIDGET);
   container_signals[REMOVE] =
     g_signal_new (I_("remove"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkContainerClass, remove),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_WIDGET);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkContainerClass, remove),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_WIDGET);
   container_signals[CHECK_RESIZE] =
     g_signal_new (I_("check-resize"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_LAST,
-		  G_STRUCT_OFFSET (GtkContainerClass, check_resize),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__VOID,
-		  G_TYPE_NONE, 0);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkContainerClass, check_resize),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
   container_signals[SET_FOCUS_CHILD] =
     g_signal_new (I_("set-focus-child"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GtkContainerClass, set_focus_child),
-		  NULL, NULL,
-		  _gtk_marshal_VOID__OBJECT,
-		  G_TYPE_NONE, 1,
-		  GTK_TYPE_WIDGET);
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_FIRST,
+                  G_STRUCT_OFFSET (GtkContainerClass, set_focus_child),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__OBJECT,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_WIDGET);
 
   g_type_class_add_private (class, sizeof (GtkContainerPrivate));
 }
@@ -521,9 +521,9 @@ gtk_container_buildable_init (GtkBuildableIface *iface)
 
 static void
 gtk_container_buildable_add_child (GtkBuildable  *buildable,
-				   GtkBuilder    *builder,
-				   GObject       *child,
-				   const gchar   *type)
+                                   GtkBuilder    *builder,
+                                   GObject       *child,
+                                   const gchar   *type)
 {
   if (type)
     {
@@ -536,15 +536,15 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
     }
   else
     g_warning ("Cannot add an object of type %s to a container of type %s",
-	       g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
+               g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
 }
 
 static void
 gtk_container_buildable_set_child_property (GtkContainer *container,
-					    GtkBuilder   *builder,
-					    GtkWidget    *child,
-					    gchar        *name,
-					    const gchar  *value)
+                                            GtkBuilder   *builder,
+                                            GtkWidget    *child,
+                                            gchar        *name,
+                                            const gchar  *value)
 {
   GParamSpec *pspec;
   GValue gvalue = { 0, };
@@ -555,18 +555,18 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   if (!pspec)
     {
       g_warning ("%s does not have a property called %s",
-		 g_type_name (G_OBJECT_TYPE (container)), name);
+                 g_type_name (G_OBJECT_TYPE (container)), name);
       return;
     }
 
   if (!gtk_builder_value_from_string (builder, pspec, value, &gvalue, &error))
     {
       g_warning ("Could not read property %s:%s with value %s of type %s: %s",
-		 g_type_name (G_OBJECT_TYPE (container)),
-		 name,
-		 value,
-		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-		 error->message);
+                 g_type_name (G_OBJECT_TYPE (container)),
+                 name,
+                 value,
+                 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+                 error->message);
       g_error_free (error);
       return;
     }
@@ -586,11 +586,11 @@ typedef struct {
 
 static void
 attributes_start_element (GMarkupParseContext *context,
-			  const gchar         *element_name,
-			  const gchar        **names,
-			  const gchar        **values,
-			  gpointer             user_data,
-			  GError             **error)
+                          const gchar         *element_name,
+                          const gchar        **names,
+                          const gchar        **values,
+                          gpointer             user_data,
+                          GError             **error)
 {
   PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
   guint i;
@@ -598,22 +598,22 @@ attributes_start_element (GMarkupParseContext *context,
   if (strcmp (element_name, "property") == 0)
     {
       for (i = 0; names[i]; i++)
-	if (strcmp (names[i], "name") == 0)
-	  parser_data->child_prop_name = g_strdup (values[i]);
-	else if (strcmp (names[i], "translatable") == 0)
-	  {
-	    if (!_gtk_builder_boolean_from_string (values[1],
-						   &parser_data->translatable,
-						   error))
-	      return;
-	  }
-	else if (strcmp (names[i], "comments") == 0)
-	  ; /* for translators */
-	else if (strcmp (names[i], "context") == 0)
-	  parser_data->context = g_strdup (values[1]);
-	else
-	  g_warning ("Unsupported attribute for GtkContainer Child "
-		     "property: %s\n", names[i]);
+        if (strcmp (names[i], "name") == 0)
+          parser_data->child_prop_name = g_strdup (values[i]);
+        else if (strcmp (names[i], "translatable") == 0)
+          {
+            if (!_gtk_builder_boolean_from_string (values[1],
+                                                   &parser_data->translatable,
+                                                   error))
+              return;
+          }
+        else if (strcmp (names[i], "comments") == 0)
+          ; /* for translators */
+        else if (strcmp (names[i], "context") == 0)
+          parser_data->context = g_strdup (values[1]);
+        else
+          g_warning ("Unsupported attribute for GtkContainer Child "
+                     "property: %s\n", names[i]);
     }
   else if (strcmp (element_name, "packing") == 0)
     return;
@@ -623,10 +623,10 @@ attributes_start_element (GMarkupParseContext *context,
 
 static void
 attributes_text_element (GMarkupParseContext *context,
-			 const gchar         *text,
-			 gsize                text_len,
-			 gpointer             user_data,
-			 GError             **error)
+                         const gchar         *text,
+                         gsize                text_len,
+                         gpointer             user_data,
+                         GError             **error)
 {
   PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
   gchar* value;
@@ -640,8 +640,8 @@ attributes_text_element (GMarkupParseContext *context,
       domain = gtk_builder_get_translation_domain (parser_data->builder);
 
       value = _gtk_builder_parser_translate (domain,
-					     parser_data->context,
-					     text);
+                                             parser_data->context,
+                                             text);
     }
   else
     {
@@ -649,10 +649,10 @@ attributes_text_element (GMarkupParseContext *context,
     }
 
   gtk_container_buildable_set_child_property (parser_data->container,
-					      parser_data->builder,
-					      parser_data->child,
-					      parser_data->child_prop_name,
-					      value);
+                                              parser_data->builder,
+                                              parser_data->child,
+                                              parser_data->child_prop_name,
+                                              value);
 
   g_free (parser_data->child_prop_name);
   g_free (parser_data->context);
@@ -671,16 +671,16 @@ static const GMarkupParser attributes_parser =
 
 static gboolean
 gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
-					  GtkBuilder    *builder,
-					  GObject       *child,
-					  const gchar   *tagname,
-					  GMarkupParser *parser,
-					  gpointer      *data)
+                                          GtkBuilder    *builder,
+                                          GObject       *child,
+                                          const gchar   *tagname,
+                                          GMarkupParser *parser,
+                                          gpointer      *data)
 {
   PackingPropertiesData *parser_data;
 
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
-						tagname, parser, data))
+                                                tagname, parser, data))
     return TRUE;
 
   if (child && strcmp (tagname, "packing") == 0)
@@ -701,10 +701,10 @@ gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
 
 static void
 gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
-					GtkBuilder   *builder,
-					GObject      *child,
-					const gchar  *tagname,
-					gpointer     *data)
+                                        GtkBuilder   *builder,
+                                        GObject      *child,
+                                        const gchar  *tagname,
+                                        gpointer     *data)
 {
   if (strcmp (tagname, "packing") == 0)
     {
@@ -715,7 +715,7 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
 
   if (parent_buildable_iface->custom_tag_end)
     parent_buildable_iface->custom_tag_end (buildable, builder,
-					    child, tagname, data);
+                                            child, tagname, data);
 
 }
 
@@ -751,9 +751,9 @@ gtk_container_child_type (GtkContainer *container)
 /* --- GtkContainer child property mechanism --- */
 static inline void
 container_get_child_property (GtkContainer *container,
-			      GtkWidget    *child,
-			      GParamSpec   *pspec,
-			      GValue       *value)
+                              GtkWidget    *child,
+                              GParamSpec   *pspec,
+                              GValue       *value)
 {
   GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
 
@@ -762,10 +762,10 @@ container_get_child_property (GtkContainer *container,
 
 static inline void
 container_set_child_property (GtkContainer       *container,
-			      GtkWidget		 *child,
-			      GParamSpec         *pspec,
-			      const GValue       *value,
-			      GObjectNotifyQueue *nqueue)
+                              GtkWidget          *child,
+                              GParamSpec         *pspec,
+                              const GValue       *value,
+                              GObjectNotifyQueue *nqueue)
 {
   GValue tmp_value = { 0, };
   GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
@@ -774,18 +774,18 @@ container_set_child_property (GtkContainer       *container,
   g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   if (!g_value_transform (value, &tmp_value))
     g_warning ("unable to set child property `%s' of type `%s' from value of type `%s'",
-	       pspec->name,
-	       g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-	       G_VALUE_TYPE_NAME (value));
+               pspec->name,
+               g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+               G_VALUE_TYPE_NAME (value));
   else if (g_param_value_validate (pspec, &tmp_value) && !(pspec->flags & G_PARAM_LAX_VALIDATION))
     {
       gchar *contents = g_strdup_value_contents (value);
 
       g_warning ("value \"%s\" of type `%s' is invalid for property `%s' of type `%s'",
-		 contents,
-		 G_VALUE_TYPE_NAME (value),
-		 pspec->name,
-		 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+                 contents,
+                 G_VALUE_TYPE_NAME (value),
+                 pspec->name,
+                 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
       g_free (contents);
     }
   else
@@ -808,9 +808,9 @@ container_set_child_property (GtkContainer       *container,
  **/
 void
 gtk_container_child_get_valist (GtkContainer *container,
-				GtkWidget    *child,
-				const gchar  *first_property_name,
-				va_list       var_args)
+                                GtkWidget    *child,
+                                const gchar  *first_property_name,
+                                va_list       var_args)
 {
   const gchar *name;
 
@@ -829,35 +829,35 @@ gtk_container_child_get_valist (GtkContainer *container,
       gchar *error;
 
       pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
-					name,
-					G_OBJECT_TYPE (container),
-					TRUE);
+                                        name,
+                                        G_OBJECT_TYPE (container),
+                                        TRUE);
       if (!pspec)
-	{
-	  g_warning ("%s: container class `%s' has no child property named `%s'",
-		     G_STRLOC,
-		     G_OBJECT_TYPE_NAME (container),
-		     name);
-	  break;
-	}
+        {
+          g_warning ("%s: container class `%s' has no child property named `%s'",
+                     G_STRLOC,
+                     G_OBJECT_TYPE_NAME (container),
+                     name);
+          break;
+        }
       if (!(pspec->flags & G_PARAM_READABLE))
-	{
-	  g_warning ("%s: child property `%s' of container class `%s' is not readable",
-		     G_STRLOC,
-		     pspec->name,
-		     G_OBJECT_TYPE_NAME (container));
-	  break;
-	}
+        {
+          g_warning ("%s: child property `%s' of container class `%s' is not readable",
+                     G_STRLOC,
+                     pspec->name,
+                     G_OBJECT_TYPE_NAME (container));
+          break;
+        }
       g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
       container_get_child_property (container, child, pspec, &value);
       G_VALUE_LCOPY (&value, var_args, 0, &error);
       if (error)
-	{
-	  g_warning ("%s: %s", G_STRLOC, error);
-	  g_free (error);
-	  g_value_unset (&value);
-	  break;
-	}
+        {
+          g_warning ("%s: %s", G_STRLOC, error);
+          g_free (error);
+          g_value_unset (&value);
+          break;
+        }
       g_value_unset (&value);
       name = va_arg (var_args, gchar*);
     }
@@ -877,9 +877,9 @@ gtk_container_child_get_valist (GtkContainer *container,
  **/
 void
 gtk_container_child_get_property (GtkContainer *container,
-				  GtkWidget    *child,
-				  const gchar  *property_name,
-				  GValue       *value)
+                                  GtkWidget    *child,
+                                  const gchar  *property_name,
+                                  GValue       *value)
 {
   GParamSpec *pspec;
 
@@ -892,17 +892,17 @@ gtk_container_child_get_property (GtkContainer *container,
   g_object_ref (container);
   g_object_ref (child);
   pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
-				    G_OBJECT_TYPE (container), TRUE);
+                                    G_OBJECT_TYPE (container), TRUE);
   if (!pspec)
     g_warning ("%s: container class `%s' has no child property named `%s'",
-	       G_STRLOC,
-	       G_OBJECT_TYPE_NAME (container),
-	       property_name);
+               G_STRLOC,
+               G_OBJECT_TYPE_NAME (container),
+               property_name);
   else if (!(pspec->flags & G_PARAM_READABLE))
     g_warning ("%s: child property `%s' of container class `%s' is not readable",
-	       G_STRLOC,
-	       pspec->name,
-	       G_OBJECT_TYPE_NAME (container));
+               G_STRLOC,
+               pspec->name,
+               G_OBJECT_TYPE_NAME (container));
   else
     {
       GValue *prop_value, tmp_value = { 0, };
@@ -910,31 +910,31 @@ gtk_container_child_get_property (GtkContainer *container,
       /* auto-conversion of the callers value type
        */
       if (G_VALUE_TYPE (value) == G_PARAM_SPEC_VALUE_TYPE (pspec))
-	{
-	  g_value_reset (value);
-	  prop_value = value;
-	}
+        {
+          g_value_reset (value);
+          prop_value = value;
+        }
       else if (!g_value_type_transformable (G_PARAM_SPEC_VALUE_TYPE (pspec), G_VALUE_TYPE (value)))
-	{
-	  g_warning ("can't retrieve child property `%s' of type `%s' as value of type `%s'",
-		     pspec->name,
-		     g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-		     G_VALUE_TYPE_NAME (value));
-	  g_object_unref (child);
-	  g_object_unref (container);
-	  return;
-	}
+        {
+          g_warning ("can't retrieve child property `%s' of type `%s' as value of type `%s'",
+                     pspec->name,
+                     g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+                     G_VALUE_TYPE_NAME (value));
+          g_object_unref (child);
+          g_object_unref (container);
+          return;
+        }
       else
-	{
-	  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-	  prop_value = &tmp_value;
-	}
+        {
+          g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+          prop_value = &tmp_value;
+        }
       container_get_child_property (container, child, pspec, prop_value);
       if (prop_value != value)
-	{
-	  g_value_transform (prop_value, value);
-	  g_value_unset (&tmp_value);
-	}
+        {
+          g_value_transform (prop_value, value);
+          g_value_unset (&tmp_value);
+        }
     }
   g_object_unref (child);
   g_object_unref (container);
@@ -952,9 +952,9 @@ gtk_container_child_get_property (GtkContainer *container,
  **/
 void
 gtk_container_child_set_valist (GtkContainer *container,
-				GtkWidget    *child,
-				const gchar  *first_property_name,
-				va_list       var_args)
+                                GtkWidget    *child,
+                                const gchar  *first_property_name,
+                                va_list       var_args)
 {
   GObjectNotifyQueue *nqueue;
   const gchar *name;
@@ -973,37 +973,37 @@ gtk_container_child_set_valist (GtkContainer *container,
       GValue value = { 0, };
       gchar *error = NULL;
       GParamSpec *pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
-						    name,
-						    G_OBJECT_TYPE (container),
-						    TRUE);
+                                                    name,
+                                                    G_OBJECT_TYPE (container),
+                                                    TRUE);
       if (!pspec)
-	{
-	  g_warning ("%s: container class `%s' has no child property named `%s'",
-		     G_STRLOC,
-		     G_OBJECT_TYPE_NAME (container),
-		     name);
-	  break;
-	}
+        {
+          g_warning ("%s: container class `%s' has no child property named `%s'",
+                     G_STRLOC,
+                     G_OBJECT_TYPE_NAME (container),
+                     name);
+          break;
+        }
       if (!(pspec->flags & G_PARAM_WRITABLE))
-	{
-	  g_warning ("%s: child property `%s' of container class `%s' is not writable",
-		     G_STRLOC,
-		     pspec->name,
-		     G_OBJECT_TYPE_NAME (container));
-	  break;
-	}
+        {
+          g_warning ("%s: child property `%s' of container class `%s' is not writable",
+                     G_STRLOC,
+                     pspec->name,
+                     G_OBJECT_TYPE_NAME (container));
+          break;
+        }
       g_value_init (&value, G_PARAM_SPEC_VALUE_TYPE (pspec));
       G_VALUE_COLLECT (&value, var_args, 0, &error);
       if (error)
-	{
-	  g_warning ("%s: %s", G_STRLOC, error);
-	  g_free (error);
+        {
+          g_warning ("%s: %s", G_STRLOC, error);
+          g_free (error);
 
-	  /* we purposely leak the value here, it might not be
-	   * in a sane state if an error condition occoured
-	   */
-	  break;
-	}
+          /* we purposely leak the value here, it might not be
+           * in a sane state if an error condition occoured
+           */
+          break;
+        }
       container_set_child_property (container, child, pspec, &value, nqueue);
       g_value_unset (&value);
       name = va_arg (var_args, gchar*);
@@ -1025,9 +1025,9 @@ gtk_container_child_set_valist (GtkContainer *container,
  **/
 void
 gtk_container_child_set_property (GtkContainer *container,
-				  GtkWidget    *child,
-				  const gchar  *property_name,
-				  const GValue *value)
+                                  GtkWidget    *child,
+                                  const gchar  *property_name,
+                                  const GValue *value)
 {
   GObjectNotifyQueue *nqueue;
   GParamSpec *pspec;
@@ -1043,17 +1043,17 @@ gtk_container_child_set_property (GtkContainer *container,
 
   nqueue = g_object_notify_queue_freeze (G_OBJECT (child), _gtk_widget_child_property_notify_context);
   pspec = g_param_spec_pool_lookup (_gtk_widget_child_property_pool, property_name,
-				    G_OBJECT_TYPE (container), TRUE);
+                                    G_OBJECT_TYPE (container), TRUE);
   if (!pspec)
     g_warning ("%s: container class `%s' has no child property named `%s'",
-	       G_STRLOC,
-	       G_OBJECT_TYPE_NAME (container),
-	       property_name);
+               G_STRLOC,
+               G_OBJECT_TYPE_NAME (container),
+               property_name);
   else if (!(pspec->flags & G_PARAM_WRITABLE))
     g_warning ("%s: child property `%s' of container class `%s' is not writable",
-	       G_STRLOC,
-	       pspec->name,
-	       G_OBJECT_TYPE_NAME (container));
+               G_STRLOC,
+               pspec->name,
+               G_OBJECT_TYPE_NAME (container));
   else
     {
       container_set_child_property (container, child, pspec, value, nqueue);
@@ -1076,9 +1076,9 @@ gtk_container_child_set_property (GtkContainer *container,
  **/
 void
 gtk_container_add_with_properties (GtkContainer *container,
-				   GtkWidget    *widget,
-				   const gchar  *first_prop_name,
-				   ...)
+                                   GtkWidget    *widget,
+                                   const gchar  *first_prop_name,
+                                   ...)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1115,9 +1115,9 @@ gtk_container_add_with_properties (GtkContainer *container,
  **/
 void
 gtk_container_child_set (GtkContainer      *container,
-			 GtkWidget         *child,
-			 const gchar       *first_prop_name,
-			 ...)
+                         GtkWidget         *child,
+                         const gchar       *first_prop_name,
+                         ...)
 {
   va_list var_args;
 
@@ -1142,9 +1142,9 @@ gtk_container_child_set (GtkContainer      *container,
  **/
 void
 gtk_container_child_get (GtkContainer      *container,
-			 GtkWidget         *child,
-			 const gchar       *first_prop_name,
-			 ...)
+                         GtkWidget         *child,
+                         const gchar       *first_prop_name,
+                         ...)
 {
   va_list var_args;
 
@@ -1167,8 +1167,8 @@ gtk_container_child_get (GtkContainer      *container,
  **/
 void
 gtk_container_class_install_child_property (GtkContainerClass *cclass,
-					    guint              property_id,
-					    GParamSpec        *pspec)
+                                            guint              property_id,
+                                            GParamSpec        *pspec)
 {
   g_return_if_fail (GTK_IS_CONTAINER_CLASS (cclass));
   g_return_if_fail (G_IS_PARAM_SPEC (pspec));
@@ -1184,8 +1184,8 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
   if (g_param_spec_pool_lookup (_gtk_widget_child_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (cclass), FALSE))
     {
       g_warning (G_STRLOC ": class `%s' already contains a child property named `%s'",
-		 G_OBJECT_CLASS_NAME (cclass),
-		 pspec->name);
+                 G_OBJECT_CLASS_NAME (cclass),
+                 pspec->name);
       return;
     }
   g_param_spec_ref (pspec);
@@ -1205,15 +1205,15 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  */
 GParamSpec*
 gtk_container_class_find_child_property (GObjectClass *cclass,
-					 const gchar  *property_name)
+                                         const gchar  *property_name)
 {
   g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (cclass), NULL);
   g_return_val_if_fail (property_name != NULL, NULL);
 
   return g_param_spec_pool_lookup (_gtk_widget_child_property_pool,
-				   property_name,
-				   G_OBJECT_CLASS_TYPE (cclass),
-				   TRUE);
+                                   property_name,
+                                   G_OBJECT_CLASS_TYPE (cclass),
+                                   TRUE);
 }
 
 /**
@@ -1228,7 +1228,7 @@ gtk_container_class_find_child_property (GObjectClass *cclass,
  */
 GParamSpec**
 gtk_container_class_list_child_properties (GObjectClass *cclass,
-					   guint        *n_properties)
+                                           guint        *n_properties)
 {
   GParamSpec **pspecs;
   guint n;
@@ -1236,8 +1236,8 @@ gtk_container_class_list_child_properties (GObjectClass *cclass,
   g_return_val_if_fail (GTK_IS_CONTAINER_CLASS (cclass), NULL);
 
   pspecs = g_param_spec_pool_list (_gtk_widget_child_property_pool,
-				   G_OBJECT_CLASS_TYPE (cclass),
-				   &n);
+                                   G_OBJECT_CLASS_TYPE (cclass),
+                                   &n);
   if (n_properties)
     *n_properties = n;
 
@@ -1246,14 +1246,14 @@ gtk_container_class_list_child_properties (GObjectClass *cclass,
 
 static void
 gtk_container_add_unimplemented (GtkContainer     *container,
-				 GtkWidget        *widget)
+                                 GtkWidget        *widget)
 {
   g_warning ("GtkContainerClass::add not implemented for `%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
 }
 
 static void
 gtk_container_remove_unimplemented (GtkContainer     *container,
-				    GtkWidget        *widget)
+                                    GtkWidget        *widget)
 {
   g_warning ("GtkContainerClass::remove not implemented for `%s'", g_type_name (G_TYPE_FROM_INSTANCE (container)));
 }
@@ -1303,9 +1303,9 @@ gtk_container_destroy (GtkWidget *widget)
 
 static void
 gtk_container_set_property (GObject         *object,
-			    guint            prop_id,
-			    const GValue    *value,
-			    GParamSpec      *pspec)
+                            guint            prop_id,
+                            const GValue    *value,
+                            GParamSpec      *pspec)
 {
   GtkContainer *container = GTK_CONTAINER (object);
 
@@ -1328,9 +1328,9 @@ gtk_container_set_property (GObject         *object,
 
 static void
 gtk_container_get_property (GObject         *object,
-			    guint            prop_id,
-			    GValue          *value,
-			    GParamSpec      *pspec)
+                            guint            prop_id,
+                            GValue          *value,
+                            GParamSpec      *pspec)
 {
   GtkContainer *container = GTK_CONTAINER (object);
   GtkContainerPrivate *priv = container->priv;
@@ -1368,7 +1368,7 @@ gtk_container_get_property (GObject         *object,
  **/
 void
 gtk_container_set_border_width (GtkContainer *container,
-				guint         border_width)
+                                guint         border_width)
 {
   GtkContainerPrivate *priv;
 
@@ -1382,7 +1382,7 @@ gtk_container_set_border_width (GtkContainer *container,
       g_object_notify (G_OBJECT (container), "border-width");
 
       if (gtk_widget_get_realized (GTK_WIDGET (container)))
-	gtk_widget_queue_resize (GTK_WIDGET (container));
+        gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }
 
@@ -1419,7 +1419,7 @@ gtk_container_get_border_width (GtkContainer *container)
  **/
 void
 gtk_container_add (GtkContainer *container,
-		   GtkWidget    *widget)
+                   GtkWidget    *widget)
 {
   GtkWidget *parent;
 
@@ -1459,7 +1459,7 @@ gtk_container_add (GtkContainer *container,
  **/
 void
 gtk_container_remove (GtkContainer *container,
-		      GtkWidget    *widget)
+                      GtkWidget    *widget)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -1491,7 +1491,7 @@ _gtk_container_dequeue_resize_handler (GtkContainer *container)
  **/
 void
 gtk_container_set_resize_mode (GtkContainer  *container,
-			       GtkResizeMode  resize_mode)
+                               GtkResizeMode  resize_mode)
 {
   GtkContainerPrivate *priv;
 
@@ -1544,7 +1544,7 @@ gtk_container_get_resize_mode (GtkContainer *container)
  **/
 void
 gtk_container_set_reallocate_redraws (GtkContainer *container,
-				      gboolean      needs_redraws)
+                                      gboolean      needs_redraws)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
@@ -1597,16 +1597,14 @@ gtk_container_idle_sizer (gpointer data)
 
 static void
 _gtk_container_queue_resize_internal (GtkContainer *container,
-				      gboolean      invalidate_only)
+                                      gboolean      invalidate_only)
 {
-  GtkContainerPrivate *priv;
   GtkContainer *resize_container;
   GtkWidget *parent;
   GtkWidget *widget;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
 
-  priv = container->priv;
   widget = GTK_WIDGET (container);
 
   resize_container = gtk_container_get_resize_container (container);
@@ -1618,8 +1616,8 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
       _gtk_widget_set_height_request_needed (widget, TRUE);
 
       if ((resize_container && widget == GTK_WIDGET (resize_container)) ||
-	  !(parent = gtk_widget_get_parent (widget)))
-	break;
+          !(parent = gtk_widget_get_parent (widget)))
+        break;
 
       widget = parent;
     }
@@ -1629,38 +1627,38 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
       if (gtk_widget_get_visible (GTK_WIDGET (resize_container)) &&
           (gtk_widget_is_toplevel (GTK_WIDGET (resize_container)) ||
            gtk_widget_get_realized (GTK_WIDGET (resize_container))))
-	{
-	  switch (resize_container->priv->resize_mode)
-	    {
-	    case GTK_RESIZE_QUEUE:
-	      if (!_gtk_widget_get_resize_pending (GTK_WIDGET (resize_container)))
-		{
-		  _gtk_widget_set_resize_pending (GTK_WIDGET (resize_container), TRUE);
-		  if (container_resize_queue == NULL)
-		    gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
-				     gtk_container_idle_sizer,
-				     NULL, NULL);
-		  container_resize_queue = g_slist_prepend (container_resize_queue, resize_container);
-		}
-	      break;
+        {
+          switch (resize_container->priv->resize_mode)
+            {
+            case GTK_RESIZE_QUEUE:
+              if (!_gtk_widget_get_resize_pending (GTK_WIDGET (resize_container)))
+                {
+                  _gtk_widget_set_resize_pending (GTK_WIDGET (resize_container), TRUE);
+                  if (container_resize_queue == NULL)
+                    gdk_threads_add_idle_full (GTK_PRIORITY_RESIZE,
+                                     gtk_container_idle_sizer,
+                                     NULL, NULL);
+                  container_resize_queue = g_slist_prepend (container_resize_queue, resize_container);
+                }
+              break;
 
-	    case GTK_RESIZE_IMMEDIATE:
-	      gtk_container_check_resize (resize_container);
-	      break;
+            case GTK_RESIZE_IMMEDIATE:
+              gtk_container_check_resize (resize_container);
+              break;
 
-	    case GTK_RESIZE_PARENT:
-	      g_assert_not_reached ();
-	      break;
-	    }
-	}
+            case GTK_RESIZE_PARENT:
+              g_assert_not_reached ();
+              break;
+            }
+        }
       else
-	{
-	  /* we need to let hidden resize containers know that something
-	   * changed while they where hidden (currently only evaluated by
-	   * toplevels).
-	   */
-	  resize_container->priv->need_resize = TRUE;
-	}
+        {
+          /* we need to let hidden resize containers know that something
+           * changed while they where hidden (currently only evaluated by
+           * toplevels).
+           */
+          resize_container->priv->need_resize = TRUE;
+        }
     }
 }
 
@@ -1722,7 +1720,7 @@ gtk_container_real_check_resize (GtkContainer *container)
           gtk_widget_set_allocation (widget, &allocation);
         }
       else
-	gtk_widget_queue_resize (widget);
+        gtk_widget_queue_resize (widget);
     }
   else
     {
@@ -1800,8 +1798,8 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
   if (!GTK_CONTAINER_GET_CLASS (widget)->_handle_border_width)
     {
       parent_class->adjust_size_allocation (widget, orientation,
-					    minimum_size, natural_size, allocated_pos,
-					    allocated_size);
+                                            minimum_size, natural_size, allocated_pos,
+                                            allocated_size);
       return;
     }
 
@@ -1836,8 +1834,8 @@ gtk_container_adjust_size_allocation (GtkWidget         *widget,
    * and padding values.
    */
   parent_class->adjust_size_allocation (widget, orientation,
-					minimum_size, natural_size, allocated_pos,
-					allocated_size);
+                                        minimum_size, natural_size, allocated_pos,
+                                        allocated_size);
 }
 
 /**
@@ -1878,8 +1876,8 @@ gtk_container_class_handle_border_width (GtkContainerClass *klass)
  **/
 void
 gtk_container_forall (GtkContainer *container,
-		      GtkCallback   callback,
-		      gpointer      callback_data)
+                      GtkCallback   callback,
+                      gpointer      callback_data)
 {
   GtkContainerClass *class;
 
@@ -1905,8 +1903,8 @@ gtk_container_forall (GtkContainer *container,
  **/
 void
 gtk_container_foreach (GtkContainer *container,
-		       GtkCallback   callback,
-		       gpointer      callback_data)
+                       GtkCallback   callback,
+                       gpointer      callback_data)
 {
   GtkContainerClass *class;
 
@@ -1935,7 +1933,7 @@ gtk_container_foreach (GtkContainer *container,
  */
 void
 gtk_container_set_focus_child (GtkContainer *container,
-			       GtkWidget    *child)
+                               GtkWidget    *child)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   if (child)
@@ -1981,15 +1979,15 @@ gtk_container_get_children (GtkContainer *container)
   GList *children = NULL;
 
   gtk_container_foreach (container,
-			 gtk_container_children_callback,
-			 &children);
+                         gtk_container_children_callback,
+                         &children);
 
   return g_list_reverse (children);
 }
 
 static void
 gtk_container_child_position_callback (GtkWidget *widget,
-				       gpointer   client_data)
+                                       gpointer   client_data)
 {
   struct {
     GtkWidget *child;
@@ -2004,7 +2002,7 @@ gtk_container_child_position_callback (GtkWidget *widget,
 
 static gchar*
 gtk_container_child_default_composite_name (GtkContainer *container,
-					    GtkWidget    *child)
+                                            GtkWidget    *child)
 {
   struct {
     GtkWidget *child;
@@ -2018,19 +2016,19 @@ gtk_container_child_default_composite_name (GtkContainer *container,
   data.i = 0;
   data.index = 0;
   gtk_container_forall (container,
-			gtk_container_child_position_callback,
-			&data);
+                        gtk_container_child_position_callback,
+                        &data);
 
   name = g_strdup_printf ("%s-%u",
-			  g_type_name (G_TYPE_FROM_INSTANCE (child)),
-			  data.index);
+                          g_type_name (G_TYPE_FROM_INSTANCE (child)),
+                          data.index);
 
   return name;
 }
 
 gchar*
 _gtk_container_child_composite_name (GtkContainer *container,
-				    GtkWidget    *child)
+                                    GtkWidget    *child)
 {
   gboolean composite_child;
 
@@ -2045,19 +2043,19 @@ _gtk_container_child_composite_name (GtkContainer *container,
       gchar *name;
 
       if (!quark_composite_name)
-	quark_composite_name = g_quark_from_static_string ("gtk-composite-name");
+        quark_composite_name = g_quark_from_static_string ("gtk-composite-name");
 
       name = g_object_get_qdata (G_OBJECT (child), quark_composite_name);
       if (!name)
-	{
-	  GtkContainerClass *class;
+        {
+          GtkContainerClass *class;
 
-	  class = GTK_CONTAINER_GET_CLASS (container);
-	  if (class->composite_name)
-	    name = class->composite_name (container, child);
-	}
+          class = GTK_CONTAINER_GET_CLASS (container);
+          if (class->composite_name)
+            name = class->composite_name (container, child);
+        }
       else
-	name = g_strdup (name);
+        name = g_strdup (name);
 
       return name;
     }
@@ -2072,7 +2070,7 @@ typedef struct {
 
 static void
 gtk_container_compute_expand_callback (GtkWidget *widget,
-				       gpointer   client_data)
+                                       gpointer   client_data)
 {
   ComputeExpandData *data = client_data;
 
@@ -2114,7 +2112,7 @@ gtk_container_compute_expand (GtkWidget         *widget,
 
 static void
 gtk_container_real_set_focus_child (GtkContainer     *container,
-				    GtkWidget        *child)
+                                    GtkWidget        *child)
 {
   GtkContainerPrivate *priv;
 
@@ -2126,10 +2124,10 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
   if (child != priv->focus_child)
     {
       if (priv->focus_child)
-	g_object_unref (priv->focus_child);
+        g_object_unref (priv->focus_child);
       priv->focus_child = child;
       if (priv->focus_child)
-	g_object_ref (priv->focus_child);
+        g_object_ref (priv->focus_child);
     }
 
 
@@ -2146,16 +2144,16 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
       hadj = g_object_get_qdata (G_OBJECT (container), hadjustment_key_id);
       vadj = g_object_get_qdata (G_OBJECT (container), vadjustment_key_id);
       if (hadj || vadj)
-	{
+        {
 
-	  focus_child = priv->focus_child;
-	  while (GTK_IS_CONTAINER (focus_child) && gtk_container_get_focus_child (GTK_CONTAINER (focus_child)))
-	    {
-	      focus_child = gtk_container_get_focus_child (GTK_CONTAINER (focus_child));
-	    }
+          focus_child = priv->focus_child;
+          while (GTK_IS_CONTAINER (focus_child) && gtk_container_get_focus_child (GTK_CONTAINER (focus_child)))
+            {
+              focus_child = gtk_container_get_focus_child (GTK_CONTAINER (focus_child));
+            }
 
-	  gtk_widget_translate_coordinates (focus_child, priv->focus_child,
-					    0, 0, &x, &y);
+          gtk_widget_translate_coordinates (focus_child, priv->focus_child,
+                                            0, 0, &x, &y);
 
           gtk_widget_get_allocation (priv->focus_child, &allocation);
           x += allocation.x;
@@ -2163,12 +2161,12 @@ gtk_container_real_set_focus_child (GtkContainer     *container,
 
           gtk_widget_get_allocation (focus_child, &allocation);
 
-	  if (vadj)
-	    gtk_adjustment_clamp_page (vadj, y, y + allocation.height);
+          if (vadj)
+            gtk_adjustment_clamp_page (vadj, y, y + allocation.height);
 
-	  if (hadj)
-	    gtk_adjustment_clamp_page (hadj, x, x + allocation.width);
-	}
+          if (hadj)
+            gtk_adjustment_clamp_page (hadj, x, x + allocation.width);
+        }
     }
 }
 
@@ -2186,8 +2184,8 @@ gtk_container_get_all_children (GtkContainer *container)
   GList *children = NULL;
 
   gtk_container_forall (container,
-			 gtk_container_children_callback,
-			 &children);
+                         gtk_container_children_callback,
+                         &children);
 
   return children;
 }
@@ -2240,10 +2238,10 @@ gtk_container_focus (GtkWidget        *widget,
   if (gtk_widget_get_can_focus (widget))
     {
       if (!gtk_widget_has_focus (widget))
-	{
-	  gtk_widget_grab_focus (widget);
-	  return_val = TRUE;
-	}
+        {
+          gtk_widget_grab_focus (widget);
+          return_val = TRUE;
+        }
     }
   else
     {
@@ -2251,21 +2249,21 @@ gtk_container_focus (GtkWidget        *widget,
        * chain to override.
        */
       if (priv->has_focus_chain)
-	children = g_list_copy (get_focus_chain (container));
+        children = g_list_copy (get_focus_chain (container));
       else
-	children = gtk_container_get_all_children (container);
+        children = gtk_container_get_all_children (container);
 
       if (priv->has_focus_chain &&
-	  (direction == GTK_DIR_TAB_FORWARD ||
-	   direction == GTK_DIR_TAB_BACKWARD))
-	{
-	  sorted_children = g_list_copy (children);
+          (direction == GTK_DIR_TAB_FORWARD ||
+           direction == GTK_DIR_TAB_BACKWARD))
+        {
+          sorted_children = g_list_copy (children);
 
-	  if (direction == GTK_DIR_TAB_BACKWARD)
-	    sorted_children = g_list_reverse (sorted_children);
-	}
+          if (direction == GTK_DIR_TAB_BACKWARD)
+            sorted_children = g_list_reverse (sorted_children);
+        }
       else
-	sorted_children = _gtk_container_focus_sort (container, children, direction, NULL);
+        sorted_children = _gtk_container_focus_sort (container, children, direction, NULL);
 
       return_val = gtk_container_focus_move (container, sorted_children, direction);
 
@@ -2278,8 +2276,8 @@ gtk_container_focus (GtkWidget        *widget,
 
 static gint
 tab_compare (gconstpointer a,
-	     gconstpointer b,
-	     gpointer      data)
+             gconstpointer b,
+             gpointer      data)
 {
   GtkAllocation child1_allocation, child2_allocation;
   const GtkWidget *child1 = a;
@@ -2299,9 +2297,9 @@ tab_compare (gconstpointer a,
       gint x2 = child2_allocation.x + child2_allocation.width / 2;
 
       if (text_direction == GTK_TEXT_DIR_RTL)
-	return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
+        return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
       else
-	return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
+        return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
   else
     return (y1 < y2) ? -1 : 1;
@@ -2309,9 +2307,9 @@ tab_compare (gconstpointer a,
 
 static GList *
 gtk_container_focus_sort_tab (GtkContainer     *container,
-			      GList            *children,
-			      GtkDirectionType  direction,
-			      GtkWidget        *old_focus)
+                              GList            *children,
+                              GtkDirectionType  direction,
+                              GtkWidget        *old_focus)
 {
   GtkTextDirection text_direction = gtk_widget_get_direction (GTK_WIDGET (container));
   children = g_list_sort_with_data (children, tab_compare, GINT_TO_POINTER (text_direction));
@@ -2330,13 +2328,13 @@ gtk_container_focus_sort_tab (GtkContainer     *container,
  */
 static gboolean
 get_allocation_coords (GtkContainer  *container,
-		       GtkWidget     *widget,
-		       GdkRectangle  *allocation)
+                       GtkWidget     *widget,
+                       GdkRectangle  *allocation)
 {
   gtk_widget_get_allocation (widget, allocation);
 
   return gtk_widget_translate_coordinates (widget, GTK_WIDGET (container),
-					   0, 0, &allocation->x, &allocation->y);
+                                           0, 0, &allocation->x, &allocation->y);
 }
 
 /* Look for a child in @children that is intermediate between
@@ -2345,7 +2343,7 @@ get_allocation_coords (GtkContainer  *container,
  */
 static GtkWidget *
 find_old_focus (GtkContainer *container,
-		GList        *children)
+                GList        *children)
 {
   GList *tmp_list = children;
   while (tmp_list)
@@ -2354,16 +2352,16 @@ find_old_focus (GtkContainer *container,
       GtkWidget *widget = child;
 
       while (widget && widget != (GtkWidget *)container)
-	{
-	  GtkWidget *parent;
+        {
+          GtkWidget *parent;
 
           parent = gtk_widget_get_parent (widget);
 
-	  if (parent && (gtk_container_get_focus_child (GTK_CONTAINER (parent)) != widget))
-	    goto next;
+          if (parent && (gtk_container_get_focus_child (GTK_CONTAINER (parent)) != widget))
+            goto next;
 
-	  widget = parent;
-	}
+          widget = parent;
+        }
 
       return child;
 
@@ -2376,7 +2374,7 @@ find_old_focus (GtkContainer *container,
 
 static gboolean
 old_focus_coords (GtkContainer *container,
-		  GdkRectangle *old_focus_rect)
+                  GdkRectangle *old_focus_rect)
 {
   GtkWidget *widget = GTK_WIDGET (container);
   GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
@@ -2404,8 +2402,8 @@ struct _CompareInfo
 
 static gint
 up_down_compare (gconstpointer a,
-		 gconstpointer b,
-		 gpointer      data)
+                 gconstpointer b,
+                 gpointer      data)
 {
   GdkRectangle allocation1;
   GdkRectangle allocation2;
@@ -2424,9 +2422,9 @@ up_down_compare (gconstpointer a,
       gint x2 = abs (allocation2.x + allocation2.width / 2 - compare->x);
 
       if (compare->reverse)
-	return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
+        return (x1 < x2) ? 1 : ((x1 == x2) ? 0 : -1);
       else
-	return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
+        return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
     }
   else
     return (y1 < y2) ? -1 : 1;
@@ -2434,9 +2432,9 @@ up_down_compare (gconstpointer a,
 
 static GList *
 gtk_container_focus_sort_up_down (GtkContainer     *container,
-				  GList            *children,
-				  GtkDirectionType  direction,
-				  GtkWidget        *old_focus)
+                                  GList            *children,
+                                  GtkDirectionType  direction,
+                                  GtkWidget        *old_focus)
 {
   CompareInfo compare;
   GList *tmp_list;
@@ -2460,38 +2458,38 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
       compare_x2 = old_allocation.x + old_allocation.width;
 
       if (direction == GTK_DIR_UP)
-	compare_y = old_allocation.y;
+        compare_y = old_allocation.y;
       else
-	compare_y = old_allocation.y + old_allocation.height;
+        compare_y = old_allocation.y + old_allocation.height;
 
       tmp_list = children;
       while (tmp_list)
-	{
-	  GtkWidget *child = tmp_list->data;
-	  GList *next = tmp_list->next;
-	  gint child_x1, child_x2;
-	  GdkRectangle child_allocation;
+        {
+          GtkWidget *child = tmp_list->data;
+          GList *next = tmp_list->next;
+          gint child_x1, child_x2;
+          GdkRectangle child_allocation;
 
-	  if (child != old_focus)
-	    {
-	      if (get_allocation_coords (container, child, &child_allocation))
-		{
-		  child_x1 = child_allocation.x;
-		  child_x2 = child_allocation.x + child_allocation.width;
+          if (child != old_focus)
+            {
+              if (get_allocation_coords (container, child, &child_allocation))
+                {
+                  child_x1 = child_allocation.x;
+                  child_x2 = child_allocation.x + child_allocation.width;
 
-		  if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
-		      (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
-		      (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
-		    {
-		      children = g_list_delete_link (children, tmp_list);
-		    }
-		}
-	      else
-		children = g_list_delete_link (children, tmp_list);
-	    }
+                  if ((child_x2 <= compare_x1 || child_x1 >= compare_x2) /* No horizontal overlap */ ||
+                      (direction == GTK_DIR_DOWN && child_allocation.y + child_allocation.height < compare_y) || /* Not below */
+                      (direction == GTK_DIR_UP && child_allocation.y > compare_y)) /* Not above */
+                    {
+                      children = g_list_delete_link (children, tmp_list);
+                    }
+                }
+              else
+                children = g_list_delete_link (children, tmp_list);
+            }
 
-	  tmp_list = next;
-	}
+          tmp_list = next;
+        }
 
       compare.x = (compare_x1 + compare_x2) / 2;
       compare.y = old_allocation.y + old_allocation.height / 2;
@@ -2507,21 +2505,21 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
       gtk_widget_get_allocation (widget, &allocation);
 
       if (old_focus_coords (container, &old_focus_rect))
-	{
-	  compare.x = old_focus_rect.x + old_focus_rect.width / 2;
-	}
+        {
+          compare.x = old_focus_rect.x + old_focus_rect.width / 2;
+        }
       else
-	{
-	  if (!gtk_widget_get_has_window (widget))
-	    compare.x = allocation.x + allocation.width / 2;
-	  else
-	    compare.x = allocation.width / 2;
-	}
+        {
+          if (!gtk_widget_get_has_window (widget))
+            compare.x = allocation.x + allocation.width / 2;
+          else
+            compare.x = allocation.width / 2;
+        }
 
       if (!gtk_widget_get_has_window (widget))
-	compare.y = (direction == GTK_DIR_DOWN) ? allocation.y : allocation.y + allocation.height;
+        compare.y = (direction == GTK_DIR_DOWN) ? allocation.y : allocation.y + allocation.height;
       else
-	compare.y = (direction == GTK_DIR_DOWN) ? 0 : + allocation.height;
+        compare.y = (direction == GTK_DIR_DOWN) ? 0 : + allocation.height;
     }
 
   children = g_list_sort_with_data (children, up_down_compare, &compare);
@@ -2534,8 +2532,8 @@ gtk_container_focus_sort_up_down (GtkContainer     *container,
 
 static gint
 left_right_compare (gconstpointer a,
-		    gconstpointer b,
-		    gpointer      data)
+                    gconstpointer b,
+                    gpointer      data)
 {
   GdkRectangle allocation1;
   GdkRectangle allocation2;
@@ -2554,9 +2552,9 @@ left_right_compare (gconstpointer a,
       gint y2 = abs (allocation2.y + allocation2.height / 2 - compare->y);
 
       if (compare->reverse)
-	return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
+        return (y1 < y2) ? 1 : ((y1 == y2) ? 0 : -1);
       else
-	return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
+        return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
     }
   else
     return (x1 < x2) ? -1 : 1;
@@ -2564,9 +2562,9 @@ left_right_compare (gconstpointer a,
 
 static GList *
 gtk_container_focus_sort_left_right (GtkContainer     *container,
-				     GList            *children,
-				     GtkDirectionType  direction,
-				     GtkWidget        *old_focus)
+                                     GList            *children,
+                                     GtkDirectionType  direction,
+                                     GtkWidget        *old_focus)
 {
   CompareInfo compare;
   GList *tmp_list;
@@ -2590,38 +2588,38 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
       compare_y2 = old_allocation.y + old_allocation.height;
 
       if (direction == GTK_DIR_LEFT)
-	compare_x = old_allocation.x;
+        compare_x = old_allocation.x;
       else
-	compare_x = old_allocation.x + old_allocation.width;
+        compare_x = old_allocation.x + old_allocation.width;
 
       tmp_list = children;
       while (tmp_list)
-	{
-	  GtkWidget *child = tmp_list->data;
-	  GList *next = tmp_list->next;
-	  gint child_y1, child_y2;
-	  GdkRectangle child_allocation;
+        {
+          GtkWidget *child = tmp_list->data;
+          GList *next = tmp_list->next;
+          gint child_y1, child_y2;
+          GdkRectangle child_allocation;
 
-	  if (child != old_focus)
-	    {
-	      if (get_allocation_coords (container, child, &child_allocation))
-		{
-		  child_y1 = child_allocation.y;
-		  child_y2 = child_allocation.y + child_allocation.height;
+          if (child != old_focus)
+            {
+              if (get_allocation_coords (container, child, &child_allocation))
+                {
+                  child_y1 = child_allocation.y;
+                  child_y2 = child_allocation.y + child_allocation.height;
 
-		  if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
-		      (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
-		      (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
-		    {
-		      children = g_list_delete_link (children, tmp_list);
-		    }
-		}
-	      else
-		children = g_list_delete_link (children, tmp_list);
-	    }
+                  if ((child_y2 <= compare_y1 || child_y1 >= compare_y2) /* No vertical overlap */ ||
+                      (direction == GTK_DIR_RIGHT && child_allocation.x + child_allocation.width < compare_x) || /* Not to left */
+                      (direction == GTK_DIR_LEFT && child_allocation.x > compare_x)) /* Not to right */
+                    {
+                      children = g_list_delete_link (children, tmp_list);
+                    }
+                }
+              else
+                children = g_list_delete_link (children, tmp_list);
+            }
 
-	  tmp_list = next;
-	}
+          tmp_list = next;
+        }
 
       compare.y = (compare_y1 + compare_y2) / 2;
       compare.x = old_allocation.x + old_allocation.width / 2;
@@ -2637,21 +2635,21 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
       gtk_widget_get_allocation (widget, &allocation);
 
       if (old_focus_coords (container, &old_focus_rect))
-	{
-	  compare.y = old_focus_rect.y + old_focus_rect.height / 2;
-	}
+        {
+          compare.y = old_focus_rect.y + old_focus_rect.height / 2;
+        }
       else
-	{
-	  if (!gtk_widget_get_has_window (widget))
-	    compare.y = allocation.y + allocation.height / 2;
-	  else
-	    compare.y = allocation.height / 2;
-	}
+        {
+          if (!gtk_widget_get_has_window (widget))
+            compare.y = allocation.y + allocation.height / 2;
+          else
+            compare.y = allocation.height / 2;
+        }
 
       if (!gtk_widget_get_has_window (widget))
-	compare.x = (direction == GTK_DIR_RIGHT) ? allocation.x : allocation.x + allocation.width;
+        compare.x = (direction == GTK_DIR_RIGHT) ? allocation.x : allocation.x + allocation.width;
       else
-	compare.x = (direction == GTK_DIR_RIGHT) ? 0 : allocation.width;
+        compare.x = (direction == GTK_DIR_RIGHT) ? 0 : allocation.width;
     }
 
   children = g_list_sort_with_data (children, left_right_compare, &compare);
@@ -2683,16 +2681,16 @@ gtk_container_focus_sort_left_right (GtkContainer     *container,
  **/
 GList *
 _gtk_container_focus_sort (GtkContainer     *container,
-			   GList            *children,
-			   GtkDirectionType  direction,
-			   GtkWidget        *old_focus)
+                           GList            *children,
+                           GtkDirectionType  direction,
+                           GtkWidget        *old_focus)
 {
   GList *visible_children = NULL;
 
   while (children)
     {
       if (gtk_widget_get_realized (children->data))
-	visible_children = g_list_prepend (visible_children, children->data);
+        visible_children = g_list_prepend (visible_children, children->data);
       children = children->next;
     }
 
@@ -2716,8 +2714,8 @@ _gtk_container_focus_sort (GtkContainer     *container,
 
 static gboolean
 gtk_container_focus_move (GtkContainer     *container,
-			  GList            *children,
-			  GtkDirectionType  direction)
+                          GList            *children,
+                          GtkDirectionType  direction)
 {
   GtkContainerPrivate *priv = container->priv;
   GtkWidget *focus_child;
@@ -2731,7 +2729,7 @@ gtk_container_focus_move (GtkContainer     *container,
       children = children->next;
 
       if (!child)
-	continue;
+        continue;
 
       if (focus_child)
         {
@@ -2739,8 +2737,8 @@ gtk_container_focus_move (GtkContainer     *container,
             {
               focus_child = NULL;
 
-		if (gtk_widget_child_focus (child, direction))
-		  return TRUE;
+                if (gtk_widget_child_focus (child, direction))
+                  return TRUE;
             }
         }
       else if (gtk_widget_is_drawable (child) &&
@@ -2757,7 +2755,7 @@ gtk_container_focus_move (GtkContainer     *container,
 
 static void
 gtk_container_children_callback (GtkWidget *widget,
-				 gpointer   client_data)
+                                 gpointer   client_data)
 {
   GList **children;
 
@@ -2870,7 +2868,7 @@ gtk_container_set_focus_chain (GtkContainer *container,
  **/
 gboolean
 gtk_container_get_focus_chain (GtkContainer *container,
-			       GList       **focus_chain)
+                               GList       **focus_chain)
 {
   GtkContainerPrivate *priv;
 
@@ -2881,9 +2879,9 @@ gtk_container_get_focus_chain (GtkContainer *container,
   if (focus_chain)
     {
       if (priv->has_focus_chain)
-	*focus_chain = g_list_copy (get_focus_chain (container));
+        *focus_chain = g_list_copy (get_focus_chain (container));
       else
-	*focus_chain = NULL;
+        *focus_chain = NULL;
     }
 
   return priv->has_focus_chain;
@@ -2949,7 +2947,7 @@ gtk_container_unset_focus_chain (GtkContainer  *container)
  */
 void
 gtk_container_set_focus_vadjustment (GtkContainer  *container,
-				     GtkAdjustment *adjustment)
+                                     GtkAdjustment *adjustment)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   if (adjustment)
@@ -2959,9 +2957,9 @@ gtk_container_set_focus_vadjustment (GtkContainer  *container,
     g_object_ref (adjustment);
 
   g_object_set_qdata_full (G_OBJECT (container),
-			   vadjustment_key_id,
-			   adjustment,
-			   g_object_unref);
+                           vadjustment_key_id,
+                           adjustment,
+                           g_object_unref);
 }
 
 /**
@@ -3004,7 +3002,7 @@ gtk_container_get_focus_vadjustment (GtkContainer *container)
  */
 void
 gtk_container_set_focus_hadjustment (GtkContainer  *container,
-				     GtkAdjustment *adjustment)
+                                     GtkAdjustment *adjustment)
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   if (adjustment)
@@ -3014,9 +3012,9 @@ gtk_container_set_focus_hadjustment (GtkContainer  *container,
     g_object_ref (adjustment);
 
   g_object_set_qdata_full (G_OBJECT (container),
-			   hadjustment_key_id,
-			   adjustment,
-			   g_object_unref);
+                           hadjustment_key_id,
+                           adjustment,
+                           g_object_unref);
 }
 
 /**
@@ -3048,14 +3046,14 @@ gtk_container_show_all (GtkWidget *widget)
   g_return_if_fail (GTK_IS_CONTAINER (widget));
 
   gtk_container_foreach (GTK_CONTAINER (widget),
-			 (GtkCallback) gtk_widget_show_all,
-			 NULL);
+                         (GtkCallback) gtk_widget_show_all,
+                         NULL);
   gtk_widget_show (widget);
 }
 
 static void
 gtk_container_draw_child (GtkWidget *child,
-			  gpointer   client_data)
+                          gpointer   client_data)
 {
   struct {
     GtkWidget *container;
@@ -3063,8 +3061,8 @@ gtk_container_draw_child (GtkWidget *child,
   } *data = client_data;
 
   gtk_container_propagate_draw (GTK_CONTAINER (data->container),
-				child,
-				data->cr);
+                                child,
+                                data->cr);
 }
 
 static gint
@@ -3081,14 +3079,14 @@ gtk_container_draw (GtkWidget *widget,
 
   gtk_container_forall (GTK_CONTAINER (widget),
                         gtk_container_draw_child,
-			&data);
+                        &data);
 
   return FALSE;
 }
 
 static void
 gtk_container_map_child (GtkWidget *child,
-			 gpointer   client_data)
+                         gpointer   client_data)
 {
   if (gtk_widget_get_visible (child) &&
       gtk_widget_get_child_visible (child) &&
@@ -3102,8 +3100,8 @@ gtk_container_map (GtkWidget *widget)
   gtk_widget_set_mapped (widget, TRUE);
 
   gtk_container_forall (GTK_CONTAINER (widget),
-			gtk_container_map_child,
-			NULL);
+                        gtk_container_map_child,
+                        NULL);
 
   if (gtk_widget_get_has_window (widget))
     gdk_window_show (gtk_widget_get_window (widget));

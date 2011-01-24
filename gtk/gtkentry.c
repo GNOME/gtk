@@ -3933,7 +3933,6 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = NULL;
-  GdkDragContext *context;
   gint tmp_pos;
   gint i;
 
@@ -3956,11 +3955,11 @@ gtk_entry_motion_notify (GtkWidget      *widget,
             {
               icon_info->in_drag = TRUE;
               icon_info->pressed = FALSE;
-              context = gtk_drag_begin (widget,
-                                        icon_info->target_list,
-                                        icon_info->actions,
-                                        1,
-                                        (GdkEvent*)event);
+              gtk_drag_begin (widget,
+                              icon_info->target_list,
+                              icon_info->actions,
+                              1,
+                              (GdkEvent*)event);
             }
 
           return TRUE;
@@ -3970,7 +3969,7 @@ gtk_entry_motion_notify (GtkWidget      *widget,
   if (priv->mouse_cursor_obscured)
     {
       GdkCursor *cursor;
-      
+
       cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       gdk_window_set_cursor (priv->text_area, cursor);
       g_object_unref (cursor);

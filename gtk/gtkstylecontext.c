@@ -941,11 +941,9 @@ gtk_style_context_impl_set_property (GObject      *object,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  GtkStyleContextPrivate *priv;
   GtkStyleContext *style_context;
 
   style_context = GTK_STYLE_CONTEXT (object);
-  priv = style_context->priv;
 
   switch (prop_id)
     {
@@ -969,8 +967,8 @@ gtk_style_context_impl_get_property (GObject    *object,
                                      GValue     *value,
                                      GParamSpec *pspec)
 {
-  GtkStyleContextPrivate *priv;
   GtkStyleContext *style_context;
+  GtkStyleContextPrivate *priv;
 
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
@@ -2970,7 +2968,7 @@ gtk_style_context_cancel_animations (GtkStyleContext *context,
 {
   GtkStyleContextPrivate *priv;
   AnimationInfo *info;
-  GSList *l, *node;
+  GSList *l;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
@@ -2980,7 +2978,6 @@ gtk_style_context_cancel_animations (GtkStyleContext *context,
   while (l)
     {
       info = l->data;
-      node = l;
       l = l->next;
 
       if (!region_id ||

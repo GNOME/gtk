@@ -213,21 +213,17 @@ _gtk_print_context_rotate_according_to_orientation (GtkPrintContext *context)
 void
 _gtk_print_context_translate_into_margin (GtkPrintContext *context)
 {
-  GtkPrintOperationPrivate *priv;
   gdouble left, top;
 
   g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
 
-  priv = context->op->priv;
-
   /* We do it this way to also handle GTK_UNIT_PIXELS */
-  
   left = gtk_page_setup_get_left_margin (context->page_setup, GTK_UNIT_INCH);
   top = gtk_page_setup_get_top_margin (context->page_setup, GTK_UNIT_INCH);
 
   cairo_translate (context->cr,
-		   left * context->surface_dpi_x / context->pixels_per_unit_x,
-		   top * context->surface_dpi_y / context->pixels_per_unit_y);
+                   left * context->surface_dpi_x / context->pixels_per_unit_x,
+                   top * context->surface_dpi_y / context->pixels_per_unit_y);
 }
 
 void

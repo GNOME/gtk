@@ -894,7 +894,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
   GtkToggleButton *toggle_button;
   GtkStyleContext *context;
   GtkStateFlags state = 0;
-  GdkWindow *window;
   gint x, y;
   gint indicator_size, indicator_spacing;
   gint focus_width;
@@ -915,8 +914,6 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
                         "focus-padding", &focus_pad,
                         NULL);
 
-  window = gtk_widget_get_window (widget);
-
   _gtk_check_button_get_props (check_button, &indicator_size, &indicator_spacing);
 
   gtk_widget_get_allocation (widget, &allocation);
@@ -926,14 +923,15 @@ gtk_radio_button_draw_indicator (GtkCheckButton *check_button,
 
   child = gtk_bin_get_child (GTK_BIN (check_button));
   if (!interior_focus || !(child && gtk_widget_get_visible (child)))
-    x += focus_width + focus_pad;      
+    x += focus_width + focus_pad;
 
   if (gtk_toggle_button_get_inconsistent (toggle_button))
     state |= GTK_STATE_FLAG_INCONSISTENT;
   else if (gtk_toggle_button_get_active (toggle_button))
     state |= GTK_STATE_FLAG_ACTIVE;
 
-  if (button->priv->activate_timeout || (button->priv->button_down && button->priv->in_button))
+  if (button->priv->activate_timeout ||
+      (button->priv->button_down && button->priv->in_button))
     state |= GTK_STATE_FLAG_SELECTED;
 
   if (button->priv->in_button)

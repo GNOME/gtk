@@ -191,14 +191,12 @@ gtk_cell_renderer_spinner_update_size (GtkCellRendererSpinner *cell,
 {
   GtkCellRendererSpinnerPrivate *priv = cell->priv;
   GdkScreen *screen;
-  GtkIconTheme *icon_theme;
   GtkSettings *settings;
 
-  if (cell->priv->old_icon_size == cell->priv->icon_size)
+  if (priv->old_icon_size == priv->icon_size)
     return;
 
   screen = gtk_widget_get_screen (GTK_WIDGET (widget));
-  icon_theme = gtk_icon_theme_get_for_screen (screen);
   settings = gtk_settings_get_for_screen (screen);
 
   if (!gtk_icon_size_lookup_for_settings (settings, priv->icon_size, &priv->size, NULL))

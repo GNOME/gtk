@@ -1956,7 +1956,7 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 
 static void
 gtk_scrolled_window_add (GtkContainer *container,
-			 GtkWidget    *child)
+                         GtkWidget    *child)
 {
   GtkScrolledWindowPrivate *priv;
   GtkScrolledWindow *scrolled_window;
@@ -1974,8 +1974,8 @@ gtk_scrolled_window_add (GtkContainer *container,
   _gtk_bin_set_child (bin, child);
   gtk_widget_set_parent (child, GTK_WIDGET (bin));
 
-  hadj = gtk_range_get_adjustment (GTK_RANGE (scrolled_window->priv->hscrollbar));
-  vadj = gtk_range_get_adjustment (GTK_RANGE (scrolled_window->priv->vscrollbar));
+  hadj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+  vadj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
 
   if (GTK_IS_SCROLLABLE (child))
     g_object_set (child, "hadjustment", hadj, "vadjustment", vadj, NULL);

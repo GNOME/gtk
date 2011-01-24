@@ -1298,8 +1298,8 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
     gtk_tree_model_get_iter (c_model, &real_c_iter, c_path);
 
   /* is this node above the virtual root? */
-  if (filter->priv->virtual_root
-      && (gtk_tree_path_get_depth (filter->priv->virtual_root)
+  if (filter->priv->virtual_root &&
+      (gtk_tree_path_get_depth (filter->priv->virtual_root)
           >= gtk_tree_path_get_depth (c_path)))
     goto done;
 
@@ -1367,8 +1367,6 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
   /* make sure the new item has been pulled in */
   if (!filter->priv->root)
     {
-      FilterLevel *root;
-
       gtk_tree_model_filter_build_level (filter, NULL, -1, TRUE);
 
       /* We will only proceed below if the item is found.  If the item
@@ -1376,8 +1374,6 @@ gtk_tree_model_filter_row_changed (GtkTreeModel *c_model,
        * for it.
        */
       signals_emitted = TRUE;
-
-      root = FILTER_LEVEL (filter->priv->root);
     }
 
   gtk_tree_model_filter_increment_stamp (filter);

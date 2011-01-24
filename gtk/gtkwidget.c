@@ -7844,19 +7844,21 @@ gtk_widget_has_rc_style (GtkWidget *widget)
 /**
  * gtk_widget_set_style:
  * @widget: a #GtkWidget
- * @style: (allow-none): a #GtkStyle, or %NULL to remove the effect of a previous
- *         gtk_widget_set_style() and go back to the default style
+ * @style: (allow-none): a #GtkStyle, or %NULL to remove the effect
+ *     of a previous call to gtk_widget_set_style() and go back to
+ *     the default style
  *
- * Sets the #GtkStyle for a widget (@widget->style). You probably don't
- * want to use this function; it interacts badly with themes, because
- * themes work by replacing the #GtkStyle. Instead, use
- * gtk_widget_modify_style().
+ * Sets the #GtkStyle for a widget (@widget->style).
+ *
+ * You probably don't want to use this function; it interacts
+ * badly with themes, because themes work by replacing the #GtkStyle.
+ * Instead, use gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
- **/
+ */
 void
 gtk_widget_set_style (GtkWidget *widget,
-		      GtkStyle	*style)
+                      GtkStyle  *style)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 }
@@ -7865,13 +7867,14 @@ gtk_widget_set_style (GtkWidget *widget,
  * gtk_widget_ensure_style:
  * @widget: a #GtkWidget
  *
- * Ensures that @widget has a style (@widget->style). Not a very useful
- * function; most of the time, if you want the style, the widget is
- * realized, and realized widgets are guaranteed to have a style
- * already.
+ * Ensures that @widget has a style (@widget->style).
+ *
+ * Not a very useful function; most of the time, if you
+ * want the style, the widget is realized, and realized
+ * widgets are guaranteed to have a style already.
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
- **/
+ */
 void
 gtk_widget_ensure_style (GtkWidget *widget)
 {
@@ -7908,7 +7911,7 @@ gtk_widget_ensure_style (GtkWidget *widget)
  * Return value: (transfer none): the widget's #GtkStyle
  *
  * Deprecated:3.0: Use #GtkStyleContext instead
- **/
+ */
 GtkStyle*
 gtk_widget_get_style (GtkWidget *widget)
 {
@@ -7922,13 +7925,14 @@ gtk_widget_get_style (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @style: the #GtkRcStyle holding the style modifications
  *
- * Modifies style values on the widget. Modifications made using this
- * technique take precedence over style values set via an RC file,
- * however, they will be overriden if a style is explicitely set on
- * the widget using gtk_widget_set_style(). The #GtkRcStyle structure
- * is designed so each field can either be set or unset, so it is
- * possible, using this function, to modify some style values and
- * leave the others unchanged.
+ * Modifies style values on the widget.
+ *
+ * Modifications made using this technique take precedence over
+ * style values set via an RC file, however, they will be overridden
+ * if a style is explicitely set on the widget using gtk_widget_set_style().
+ * The #GtkRcStyle structure is designed so each field can either be
+ * set or unset, so it is possible, using this function, to modify some
+ * style values and leave the others unchanged.
  *
  * Note that modifications made with this function are not cumulative
  * with previous calls to gtk_widget_modify_style() or with such
@@ -7941,18 +7945,18 @@ gtk_widget_get_style (GtkWidget *widget)
  * effect with the initial modifications.
  *
  * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
- **/
+ */
 void
 gtk_widget_modify_style (GtkWidget      *widget,
-			 GtkRcStyle     *style)
+                         GtkRcStyle     *style)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (GTK_IS_RC_STYLE (style));
 
   g_object_set_qdata_full (G_OBJECT (widget),
-			   quark_rc_style,
-			   gtk_rc_style_copy (style),
-			   (GDestroyNotify) g_object_unref);
+                           quark_rc_style,
+                           gtk_rc_style_copy (style),
+                           (GDestroyNotify) g_object_unref);
 }
 
 /**
@@ -7978,7 +7982,7 @@ gtk_widget_modify_style (GtkWidget      *widget,
  *     g_object_ref().
  *
  * Deprecated:3.0: Use #GtkStyleContext with a custom #GtkStyleProvider instead
- **/
+ */
 GtkRcStyle *
 gtk_widget_get_modifier_style (GtkWidget *widget)
 {
@@ -7992,9 +7996,9 @@ gtk_widget_get_modifier_style (GtkWidget *widget)
     {
       rc_style = gtk_rc_style_new ();
       g_object_set_qdata_full (G_OBJECT (widget),
-			       quark_rc_style,
-			       rc_style,
-			       (GDestroyNotify) g_object_unref);
+                               quark_rc_style,
+                               rc_style,
+                               (GDestroyNotify) g_object_unref);
     }
 
   return rc_style;
@@ -8002,31 +8006,31 @@ gtk_widget_get_modifier_style (GtkWidget *widget)
 
 static void
 gtk_widget_modify_color_component (GtkWidget      *widget,
-				   GtkRcFlags      component,
-				   GtkStateType    state,
-				   const GdkColor *color)
+                                   GtkRcFlags      component,
+                                   GtkStateType    state,
+                                   const GdkColor *color)
 {
   GtkRcStyle *rc_style = gtk_widget_get_modifier_style (widget);
 
   if (color)
     {
       switch (component)
-	{
-	case GTK_RC_FG:
-	  rc_style->fg[state] = *color;
-	  break;
-	case GTK_RC_BG:
-	  rc_style->bg[state] = *color;
-	  break;
-	case GTK_RC_TEXT:
-	  rc_style->text[state] = *color;
-	  break;
-	case GTK_RC_BASE:
-	  rc_style->base[state] = *color;
-	  break;
-	default:
-	  g_assert_not_reached();
-	}
+        {
+        case GTK_RC_FG:
+          rc_style->fg[state] = *color;
+          break;
+        case GTK_RC_BG:
+          rc_style->bg[state] = *color;
+          break;
+        case GTK_RC_TEXT:
+          rc_style->text[state] = *color;
+          break;
+        case GTK_RC_BASE:
+          rc_style->base[state] = *color;
+          break;
+        default:
+          g_assert_not_reached();
+        }
 
       rc_style->color_flags[state] |= component;
     }
@@ -8081,39 +8085,35 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  * @widget: a #GtkWidget
  * @state: the state for which to set the color
  * @color: the color to assign, or %NULL to undo the effect
- *         of previous calls to gtk_widget_override_color()
+ *     of previous calls to gtk_widget_override_color()
  *
- * Sets the color to use for a widget. All other style values are left
- * untouched.
+ * Sets the color to use for a widget.
  *
- * <note>
- * <para>
- * This API is mostly meant as a quick way for applications to change a
- * widget appearance. If you are developing a widgets library and intend
- * this change to be themeable, it is better done by setting meaningful
- * CSS classes and regions in your widget/container implementation through
- * gtk_style_context_add_class() and gtk_style_context_add_region().
- * </para>
- * <para>
- * This way, your widget library can install a #GtkCssProvider with the
- * %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK priority in order to provide a
- * default styling for those widgets that need so, and this theming may
- * fully overridden by the user's theme.
- * </para>
- * </note>
+ * All other style values are left untouched.
  *
- * <note>
- * <para>
- * Note that for complex widgets this may bring in
- * undesired results (such as uniform background color everywhere),
- * in these cases it is better to fully style such widgets through a
+ * <note><para>
+ * This API is mostly meant as a quick way for applications to
+ * change a widget appearance. If you are developing a widgets
+ * library and intend this change to be themeable, it is better
+ * done by setting meaningful CSS classes and regions in your
+ * widget/container implementation through gtk_style_context_add_class()
+ * and gtk_style_context_add_region().
+ * </para><para>
+ * This way, your widget library can install a #GtkCssProvider
+ * with the %GTK_STYLE_PROVIDER_PRIORITY_FALLBACK priority in order
+ * to provide a default styling for those widgets that need so, and
+ * this theming may fully overridden by the user's theme.
+ * </para></note>
+ * <note><para>
+ * Note that for complex widgets this may bring in undesired
+ * results (such as uniform background color everywhere), in
+ * these cases it is better to fully style such widgets through a
  * #GtkCssProvider with the %GTK_STYLE_PROVIDER_PRIORITY_APPLICATION
  * priority.
- * </para>
- * </note>
+ * </para></note>
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_color (GtkWidget     *widget,
                            GtkStateFlags  state,
@@ -8132,13 +8132,15 @@ gtk_widget_override_color (GtkWidget     *widget,
  * @widget: a #GtkWidget
  * @state: the state for which to set the background color
  * @color: the color to assign, or %NULL to undo the effect
- *         of previous calls to gtk_widget_override_background_color()
+ *     of previous calls to gtk_widget_override_background_color()
  *
- * Sets the background color to use for a widget. All other style values
- * are left untouched. See gtk_widget_override_color().
+ * Sets the background color to use for a widget.
+ *
+ * All other style values are left untouched.
+ * See gtk_widget_override_color().
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_background_color (GtkWidget     *widget,
                                       GtkStateFlags  state,
@@ -8156,14 +8158,13 @@ gtk_widget_override_background_color (GtkWidget     *widget,
  * gtk_widget_override_font:
  * @widget: a #GtkWidget
  * @font_desc: the font descriptiong to use, or %NULL to undo
- *             the effect of previous calls to
- *             gtk_widget_override_font().
+ *     the effect of previous calls to gtk_widget_override_font()
  *
  * Sets the font to use for a widget. All other style values are
  * left untouched. See gtk_widget_override_color().
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_font (GtkWidget                  *widget,
                           const PangoFontDescription *font_desc)
@@ -8180,16 +8181,18 @@ gtk_widget_override_font (GtkWidget                  *widget,
  * gtk_widget_override_symbolic_color:
  * @widget: a #GtkWidget
  * @name: the name of the symbolic color to modify
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         gtk_widget_override_symbolic_color().
+ * @color: (allow-none): the color to assign (does not need
+ *     to be allocated), or %NULL to undo the effect of previous
+ *     calls to gtk_widget_override_symbolic_color()
  *
- * Sets a symbolic color for a widget, All other style values are left
- * untouched. See gtk_widget_override_color() for overriding the foreground
+ * Sets a symbolic color for a widget.
+ *
+ * All other style values are left untouched.
+ * See gtk_widget_override_color() for overriding the foreground
  * or background color.
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_widget_override_symbolic_color (GtkWidget     *widget,
                                     const gchar   *name,
@@ -8247,19 +8250,20 @@ gtk_widget_override_cursor (GtkWidget     *widget,
  * @widget: a #GtkWidget
  * @state: the state for which to set the foreground color
  * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_fg().
+ *     or %NULL to undo the effect of previous calls to
+ *     of gtk_widget_modify_fg().
  *
  * Sets the foreground color for a widget in a particular state.
- * All other style values are left untouched. See also
- * gtk_widget_modify_style().
+ *
+ * All other style values are left untouched.
+ * See also gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use gtk_widget_override_color() instead
- **/
+ */
 void
 gtk_widget_modify_fg (GtkWidget      *widget,
-		      GtkStateType    state,
-		      const GdkColor *color)
+                      GtkStateType    state,
+                      const GdkColor *color)
 {
   GtkStateFlags flags;
   GdkRGBA rgba;
@@ -8293,38 +8297,43 @@ gtk_widget_modify_fg (GtkWidget      *widget,
       rgba.blue = color->blue / 65535.;
       rgba.alpha = 1;
 
-      gtk_widget_override_color (widget, state, &rgba);
+      gtk_widget_override_color (widget, flags, &rgba);
     }
   else
-    gtk_widget_override_color (widget, state, NULL);
+    gtk_widget_override_color (widget, flags, NULL);
 }
 
 /**
  * gtk_widget_modify_bg:
  * @widget: a #GtkWidget
  * @state: the state for which to set the background color
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_bg().
+ * @color: (allow-none): the color to assign (does not need
+ *     to be allocated), or %NULL to undo the effect of previous
+ *     calls to of gtk_widget_modify_bg().
  *
  * Sets the background color for a widget in a particular state.
- * All other style values are left untouched. See also
- * gtk_widget_modify_style().
  *
- * Note that "no window" widgets (which have the %GTK_NO_WINDOW flag set)
- * draw on their parent container's window and thus may not draw any
- * background themselves. This is the case for e.g. #GtkLabel. To modify
- * the background of such widgets, you have to set the background color
- * on their parent; if you want to set the background of a rectangular
- * area around a label, try placing the label in a #GtkEventBox widget
- * and setting the background color on that.
+ * All other style values are left untouched.
+ * See also gtk_widget_modify_style().
+ *
+ * <note><para>
+ * Note that "no window" widgets (which have the %GTK_NO_WINDOW
+ * flag set) draw on their parent container's window and thus may
+ * not draw any background themselves. This is the case for e.g.
+ * #GtkLabel.
+ * </para><para>
+ * To modify the background of such widgets, you have to set the
+ * background color on their parent; if you want to set the background
+ * of a rectangular area around a label, try placing the label in
+ * a #GtkEventBox widget and setting the background color on that.
+ * </para></note>
  *
  * Deprecated:3.0: Use gtk_widget_override_background_color() instead
- **/
+ */
 void
 gtk_widget_modify_bg (GtkWidget      *widget,
-		      GtkStateType    state,
-		      const GdkColor *color)
+                      GtkStateType    state,
+                      const GdkColor *color)
 {
   GtkStateFlags flags;
   GdkRGBA rgba;
@@ -8358,32 +8367,34 @@ gtk_widget_modify_bg (GtkWidget      *widget,
       rgba.blue = color->blue / 65535.;
       rgba.alpha = 1;
 
-      gtk_widget_override_background_color (widget, state, &rgba);
+      gtk_widget_override_background_color (widget, flags, &rgba);
     }
   else
-    gtk_widget_override_background_color (widget, state, NULL);
+    gtk_widget_override_background_color (widget, flags, NULL);
 }
 
 /**
  * gtk_widget_modify_text:
  * @widget: a #GtkWidget
  * @state: the state for which to set the text color
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_text().
+ * @color: (allow-none): the color to assign (does not need to
+ *     be allocated), or %NULL to undo the effect of previous
+ *     calls to of gtk_widget_modify_text().
  *
- * Sets the text color for a widget in a particular state.  All other
- * style values are left untouched. The text color is the foreground
- * color used along with the base color (see gtk_widget_modify_base())
- * for widgets such as #GtkEntry and #GtkTextView. See also
- * gtk_widget_modify_style().
+ * Sets the text color for a widget in a particular state.
+ *
+ * All other style values are left untouched.
+ * The text color is the foreground color used along with the
+ * base color (see gtk_widget_modify_base()) for widgets such
+ * as #GtkEntry and #GtkTextView.
+ * See also gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use gtk_widget_override_color() instead
- **/
+ */
 void
 gtk_widget_modify_text (GtkWidget      *widget,
-			GtkStateType    state,
-			const GdkColor *color)
+                        GtkStateType    state,
+                        const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
@@ -8395,9 +8406,9 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * gtk_widget_modify_base:
  * @widget: a #GtkWidget
  * @state: the state for which to set the base color
- * @color: (allow-none): the color to assign (does not need to be allocated),
- *         or %NULL to undo the effect of previous calls to
- *         of gtk_widget_modify_base().
+ * @color: (allow-none): the color to assign (does not need to
+ *     be allocated), or %NULL to undo the effect of previous
+ *     calls to of gtk_widget_modify_base().
  *
  * Sets the base color for a widget in a particular state.
  * All other style values are left untouched. The base color
@@ -8405,20 +8416,24 @@ gtk_widget_modify_text (GtkWidget      *widget,
  * (see gtk_widget_modify_text()) for widgets such as #GtkEntry
  * and #GtkTextView. See also gtk_widget_modify_style().
  *
- * Note that "no window" widgets (which have the %GTK_NO_WINDOW flag set)
- * draw on their parent container's window and thus may not draw any
- * background themselves. This is the case for e.g. #GtkLabel. To modify
- * the background of such widgets, you have to set the base color on their
- * parent; if you want to set the background of a rectangular area around
- * a label, try placing the label in a #GtkEventBox widget and setting
- * the base color on that.
+ * <note><para>
+ * Note that "no window" widgets (which have the %GTK_NO_WINDOW
+ * flag set) draw on their parent container's window and thus may
+ * not draw any background themselves. This is the case for e.g.
+ * #GtkLabel.
+ * </para><para>
+ * To modify the background of such widgets, you have to set the
+ * base color on their parent; if you want to set the background
+ * of a rectangular area around a label, try placing the label in
+ * a #GtkEventBox widget and setting the base color on that.
+ * </para></note>
  *
  * Deprecated:3.0: Use gtk_widget_override_background_color() instead
- **/
+ */
 void
 gtk_widget_modify_base (GtkWidget      *widget,
-			GtkStateType    state,
-			const GdkColor *color)
+                        GtkStateType    state,
+                        const GdkColor *color)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (state >= GTK_STATE_NORMAL && state <= GTK_STATE_INSENSITIVE);
@@ -8430,25 +8445,27 @@ gtk_widget_modify_base (GtkWidget      *widget,
  * gtk_widget_modify_cursor:
  * @widget: a #GtkWidget
  * @primary: the color to use for primary cursor (does not need to be
- *           allocated), or %NULL to undo the effect of previous calls to
- *           of gtk_widget_modify_cursor().
+ *     allocated), or %NULL to undo the effect of previous calls to
+ *     of gtk_widget_modify_cursor().
  * @secondary: the color to use for secondary cursor (does not need to be
- *             allocated), or %NULL to undo the effect of previous calls to
- *             of gtk_widget_modify_cursor().
+ *     allocated), or %NULL to undo the effect of previous calls to
+ *     of gtk_widget_modify_cursor().
  *
  * Sets the cursor color to use in a widget, overriding the
  * #GtkWidget:cursor-color and #GtkWidget:secondary-cursor-color
- * style properties. All other style values are left untouched.
+ * style properties.
+ *
+ * All other style values are left untouched.
  * See also gtk_widget_modify_style().
  *
  * Since: 2.12
  *
  * Deprecated: 3.0. Use gtk_widget_override_cursor() instead.
- **/
+ */
 void
 gtk_widget_modify_cursor (GtkWidget      *widget,
-			  const GdkColor *primary,
-			  const GdkColor *secondary)
+                          const GdkColor *primary,
+                          const GdkColor *secondary)
 {
   GdkRGBA primary_rgba, secondary_rgba;
 
@@ -8470,17 +8487,19 @@ gtk_widget_modify_cursor (GtkWidget      *widget,
 /**
  * gtk_widget_modify_font:
  * @widget: a #GtkWidget
- * @font_desc: (allow-none): the font description to use, or %NULL to undo
- *   the effect of previous calls to gtk_widget_modify_font().
+ * @font_desc: (allow-none): the font description to use, or %NULL
+ *     to undo the effect of previous calls to gtk_widget_modify_font()
  *
- * Sets the font to use for a widget.  All other style values are left
- * untouched. See also gtk_widget_modify_style().
+ * Sets the font to use for a widget.
+ *
+ * All other style values are left untouched.
+ * See also gtk_widget_modify_style().
  *
  * Deprecated:3.0: Use gtk_widget_override_font() instead
- **/
+ */
 void
 gtk_widget_modify_font (GtkWidget            *widget,
-			PangoFontDescription *font_desc)
+                        PangoFontDescription *font_desc)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -11168,8 +11187,8 @@ _gtk_widget_synthesize_crossing (GtkWidget       *from,
 }
 
 static void
-gtk_widget_propagate_state (GtkWidget           *widget,
-			    GtkStateData        *data)
+gtk_widget_propagate_state (GtkWidget    *widget,
+                            GtkStateData *data)
 {
   GtkWidgetPrivate *priv = widget->priv;
   GtkStateFlags new_flags, old_flags = priv->state_flags;
@@ -11202,7 +11221,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       window = gtk_widget_get_toplevel (widget);
 
       if (window && gtk_widget_is_toplevel (window))
-	gtk_window_set_focus (GTK_WINDOW (window), NULL);
+        gtk_window_set_focus (GTK_WINDOW (window), NULL);
     }
 
   new_flags = gtk_widget_get_state_flags (widget);
@@ -11212,7 +11231,7 @@ gtk_widget_propagate_state (GtkWidget           *widget,
       g_object_ref (widget);
 
       if (!gtk_widget_is_sensitive (widget) && gtk_widget_has_grab (widget))
-	gtk_grab_remove (widget);
+        gtk_grab_remove (widget);
 
       g_signal_emit (widget, widget_signals[STATE_CHANGED], 0, old_state);
       g_signal_emit (widget, widget_signals[STATE_FLAGS_CHANGED], 0, old_flags);
@@ -11275,10 +11294,8 @@ gtk_widget_propagate_state (GtkWidget           *widget,
           gtk_widget_get_mapped (widget))
         {
           gint diff, flag = 1;
-          GdkWindow *window;
 
           diff = old_flags ^ new_flags;
-          window = gtk_widget_get_window (widget);
 
           while (diff != 0)
             {

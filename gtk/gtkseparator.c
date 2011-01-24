@@ -210,15 +210,14 @@ gtk_separator_get_preferred_height (GtkWidget *widget,
 }
 
 static gboolean
-gtk_separator_draw (GtkWidget    *widget,
-                    cairo_t      *cr)
+gtk_separator_draw (GtkWidget *widget,
+                    cairo_t   *cr)
 {
   GtkSeparator *separator = GTK_SEPARATOR (widget);
   GtkSeparatorPrivate *private = separator->priv;
   GtkStateFlags state;
   GtkStyleContext *context;
   GtkBorder padding;
-  GdkWindow *window;
   gboolean wide_separators;
   gint separator_width;
   gint separator_height;
@@ -231,7 +230,6 @@ gtk_separator_draw (GtkWidget    *widget,
                         "separator-height", &separator_height,
                         NULL);
 
-  window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state_flags (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
@@ -276,7 +274,7 @@ gtk_separator_draw (GtkWidget    *widget,
  * Return value: a new #GtkSeparator.
  *
  * Since: 3.0
- **/
+ */
 GtkWidget *
 gtk_separator_new (GtkOrientation orientation)
 {

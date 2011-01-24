@@ -418,7 +418,6 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
                                   gint      **widths,
                                   gint      **heights)
 {
-  GtkButtonBoxPrivate *priv;
   GtkButtonBox *bbox;
   GList *children, *list;
   gint nchildren;
@@ -439,7 +438,6 @@ gtk_button_box_child_requisition (GtkWidget  *widget,
   g_return_if_fail (GTK_IS_BUTTON_BOX (widget));
 
   bbox = GTK_BUTTON_BOX (widget);
-  priv = bbox->priv;
 
   homogeneous = gtk_box_get_homogeneous (GTK_BOX (widget));
 

@@ -414,7 +414,6 @@ gtk_handle_box_realize (GtkWidget *widget)
   GtkHandleBoxPrivate *priv = hb->priv;
   GtkAllocation allocation;
   GtkRequisition requisition;
-  GtkStateFlags state;
   GtkStyleContext *context;
   GtkWidget *child;
   GdkWindow *window;
@@ -433,7 +432,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
   attributes.event_mask = (gtk_widget_get_events (widget)
-			   | GDK_EXPOSURE_MASK);
+                           | GDK_EXPOSURE_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
   window = gdk_window_new (gtk_widget_get_parent_window (widget),
@@ -446,12 +445,12 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes.width = allocation.width;
   attributes.height = allocation.height;
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.event_mask = (gtk_widget_get_events (widget) |
-			   GDK_EXPOSURE_MASK |
-			   GDK_BUTTON1_MOTION_MASK |
-			   GDK_POINTER_MOTION_HINT_MASK |
-			   GDK_BUTTON_PRESS_MASK |
-			    GDK_BUTTON_RELEASE_MASK);
+  attributes.event_mask = (gtk_widget_get_events (widget)
+                           | GDK_EXPOSURE_MASK
+                           | GDK_BUTTON1_MOTION_MASK
+                           | GDK_POINTER_MOTION_HINT_MASK
+                           | GDK_BUTTON_PRESS_MASK
+                           | GDK_BUTTON_RELEASE_MASK);
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
   priv->bin_window = gdk_window_new (window,
@@ -461,7 +460,7 @@ gtk_handle_box_realize (GtkWidget *widget)
   child = gtk_bin_get_child (GTK_BIN (hb));
   if (child)
     gtk_widget_set_parent_window (child, priv->bin_window);
-  
+
   gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   attributes.x = 0;
@@ -471,23 +470,21 @@ gtk_handle_box_realize (GtkWidget *widget)
   attributes.window_type = GDK_WINDOW_TOPLEVEL;
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.visual = gtk_widget_get_visual (widget);
-  attributes.event_mask = (gtk_widget_get_events (widget) |
-			   GDK_KEY_PRESS_MASK |
-			   GDK_ENTER_NOTIFY_MASK |
-			   GDK_LEAVE_NOTIFY_MASK |
-			   GDK_FOCUS_CHANGE_MASK |
-			   GDK_STRUCTURE_MASK);
+  attributes.event_mask = (gtk_widget_get_events (widget)
+                           | GDK_KEY_PRESS_MASK
+                           | GDK_ENTER_NOTIFY_MASK
+                           | GDK_LEAVE_NOTIFY_MASK
+                           | GDK_FOCUS_CHANGE_MASK
+                           | GDK_STRUCTURE_MASK);
   attributes.type_hint = GDK_WINDOW_TYPE_HINT_TOOLBAR;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_TYPE_HINT;
   priv->float_window = gdk_window_new (gtk_widget_get_root_window (widget),
-				     &attributes, attributes_mask);
+                                       &attributes, attributes_mask);
   gdk_window_set_user_data (priv->float_window, widget);
   gdk_window_set_decorations (priv->float_window, 0);
   gdk_window_set_type_hint (priv->float_window, GDK_WINDOW_TYPE_HINT_TOOLBAR);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
   gtk_style_context_set_background (context, window);
   gtk_style_context_set_background (context, priv->bin_window);
   gtk_style_context_set_background (context, priv->float_window);
@@ -780,7 +777,6 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
   GtkWidget *widget = GTK_WIDGET (hb);
   GtkStateFlags state;
   GtkStyleContext *context;
-  GdkWindow *window;
   guint x;
   guint y;
   guint width;
@@ -810,7 +806,6 @@ gtk_handle_box_draw_ghost (GtkHandleBox *hb,
     }
 
   context = gtk_widget_get_style_context (widget);
-  window = gtk_widget_get_window (widget);
   state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_save (context);
@@ -964,8 +959,8 @@ gtk_handle_box_get_child_detached (GtkHandleBox *handle_box)
 }
 
 static void
-gtk_handle_box_paint (GtkWidget      *widget,
-                      cairo_t        *cr)
+gtk_handle_box_paint (GtkWidget *widget,
+                      cairo_t   *cr)
 {
   GtkHandleBox *hb = GTK_HANDLE_BOX (widget);
   GtkHandleBoxPrivate *priv = hb->priv;
@@ -976,7 +971,6 @@ gtk_handle_box_paint (GtkWidget      *widget,
   gint width, height;
   GdkRectangle rect;
   gint handle_position;
-  GtkOrientation handle_orientation;
 
   handle_position = effective_handle_position (hb);
 
@@ -996,33 +990,29 @@ gtk_handle_box_paint (GtkWidget      *widget,
     {
     case GTK_POS_LEFT:
       rect.x = 0;
-      rect.y = 0; 
-      rect.width = DRAG_HANDLE_SIZE;
-      rect.height = height;
-      handle_orientation = GTK_ORIENTATION_VERTICAL;
-      break;
-    case GTK_POS_RIGHT:
-      rect.x = width - DRAG_HANDLE_SIZE; 
       rect.y = 0;
       rect.width = DRAG_HANDLE_SIZE;
       rect.height = height;
-      handle_orientation = GTK_ORIENTATION_VERTICAL;
+      break;
+    case GTK_POS_RIGHT:
+      rect.x = width - DRAG_HANDLE_SIZE;
+      rect.y = 0;
+      rect.width = DRAG_HANDLE_SIZE;
+      rect.height = height;
       break;
     case GTK_POS_TOP:
       rect.x = 0;
-      rect.y = 0; 
+      rect.y = 0;
       rect.width = width;
       rect.height = DRAG_HANDLE_SIZE;
-      handle_orientation = GTK_ORIENTATION_HORIZONTAL;
       break;
     case GTK_POS_BOTTOM:
       rect.x = 0;
       rect.y = height - DRAG_HANDLE_SIZE;
       rect.width = width;
       rect.height = DRAG_HANDLE_SIZE;
-      handle_orientation = GTK_ORIENTATION_HORIZONTAL;
       break;
-    default: 
+    default:
       g_assert_not_reached ();
       break;
     }

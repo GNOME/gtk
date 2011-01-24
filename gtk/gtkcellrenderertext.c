@@ -2109,14 +2109,14 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
                                             gint            *minimum_size,
                                             gint            *natural_size)
 {
-  GtkCellRendererTextPrivate    *priv;
+  GtkCellRendererTextPrivate *priv;
   GtkCellRendererText        *celltext;
   GtkStyle                   *style;
   PangoLayout                *layout;
   PangoContext               *context;
   PangoFontMetrics           *metrics;
   PangoRectangle              rect;
-  gint char_width, digit_width, char_pixels, text_width, ellipsize_chars, xpad;
+  gint char_width, text_width, ellipsize_chars, xpad;
   gint min_width, nat_width;
 
   /* "width-chars" Hard-coded minimum width:
@@ -2145,11 +2145,9 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
   /* Fetch the average size of a charachter */
   context = pango_layout_get_context (layout);
   metrics = pango_context_get_metrics (context, style->font_desc,
-				       pango_context_get_language (context));
-  
+                                       pango_context_get_language (context));
+
   char_width = pango_font_metrics_get_approximate_char_width (metrics);
-  digit_width = pango_font_metrics_get_approximate_digit_width (metrics);
-  char_pixels = MAX (char_width, digit_width);
 
   pango_font_metrics_unref (metrics);
   g_object_unref (layout);
@@ -2159,12 +2157,11 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
     ellipsize_chars = 3;
   else
     ellipsize_chars = 0;
-  
+
   if ((priv->ellipsize_set && priv->ellipsize != PANGO_ELLIPSIZE_NONE) || priv->width_chars > 0)
-    min_width = 
-      xpad * 2 + 
-      MIN (PANGO_PIXELS_CEIL (text_width), 
-	   (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars)));
+    min_width = xpad * 2 +
+      MIN (PANGO_PIXELS_CEIL (text_width),
+           (PANGO_PIXELS (char_width) * MAX (priv->width_chars, ellipsize_chars)));
   /* If no width-chars set, minimum for wrapping text will be the wrap-width */
   else if (priv->wrap_width > -1)
     min_width = xpad * 2 + rect.x + MIN (PANGO_PIXELS_CEIL (text_width), priv->wrap_width);
@@ -2172,14 +2169,13 @@ gtk_cell_renderer_text_get_preferred_width (GtkCellRenderer *cell,
     min_width = xpad * 2 + rect.x + PANGO_PIXELS_CEIL (text_width);
 
   if (priv->width_chars > 0)
-    nat_width = xpad * 2 + 
+    nat_width = xpad * 2 +
       MAX ((PANGO_PIXELS (char_width) * priv->width_chars), PANGO_PIXELS_CEIL (text_width));
   else
     nat_width = xpad * 2 + PANGO_PIXELS_CEIL (text_width);
 
-
   nat_width = MAX (nat_width, min_width);
-  
+
   if (priv->max_width_chars > 0)
     {
       gint max_width = xpad * 2 + PANGO_PIXELS (char_width) * priv->max_width_chars;
@@ -2202,14 +2198,12 @@ gtk_cell_renderer_text_get_preferred_height_for_width (GtkCellRenderer *cell,
                                                        gint            *minimum_height,
                                                        gint            *natural_height)
 {
-  GtkCellRendererTextPrivate    *priv;
-  GtkCellRendererText        *celltext;
-  PangoLayout                *layout;
-  gint                        text_height, xpad, ypad;
+  GtkCellRendererText *celltext;
+  PangoLayout         *layout;
+  gint                 text_height, xpad, ypad;
 
 
   celltext = GTK_CELL_RENDERER_TEXT (cell);
-  priv = celltext->priv;
 
   gtk_cell_renderer_get_padding (cell, &xpad, &ypad);
 

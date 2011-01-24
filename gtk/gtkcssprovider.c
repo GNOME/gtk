@@ -1323,14 +1323,12 @@ gtk_css_provider_get_style (GtkStyleProvider *provider,
                             GtkWidgetPath    *path)
 {
   GtkCssProvider *css_provider;
-  GtkCssProviderPrivate *priv;
   GtkStyleProperties *props;
   GArray *priority_info;
   guint i;
 
   css_provider = GTK_CSS_PROVIDER (provider);
   props = gtk_style_properties_new ();
-  priv = css_provider->priv;
 
   css_provider_dump_symbolic_colors (css_provider, props);
   priority_info = css_provider_get_selectors (css_provider, path);

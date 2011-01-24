@@ -4252,9 +4252,9 @@ gtk_window_get_size (GtkWindow *window,
  * gdk_screen_height () - window_height)</literal> (note that this
  * example does not take multi-head scenarios into account).
  *
- * The Extended Window Manager Hints specification at <ulink 
+ * The Extended Window Manager Hints specification at <ulink
  * url="http://www.freedesktop.org/Standards/wm-spec">
- * http://www.freedesktop.org/Standards/wm-spec</ulink> has a 
+ * http://www.freedesktop.org/Standards/wm-spec</ulink> has a
  * nice table of gravities in the "implementation notes" section.
  *
  * The gtk_window_get_position() documentation may also be relevant.
@@ -4264,17 +4264,15 @@ gtk_window_move (GtkWindow *window,
                  gint       x,
                  gint       y)
 {
-  GtkWindowPrivate *priv;
   GtkWindowGeometryInfo *info;
   GtkWidget *widget;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
   widget = GTK_WIDGET (window);
 
   info = gtk_window_get_geometry_info (window, TRUE);  
-  
+
   if (gtk_widget_get_mapped (widget))
     {
       GtkAllocation allocation;
@@ -4297,7 +4295,7 @@ gtk_window_move (GtkWindow *window,
       gtk_window_constrain_position (window,
                                      allocation.width, allocation.height,
                                      &x, &y);
-      
+
       /* Note that this request doesn't go through our standard request
        * framework, e.g. doesn't increment configure_request_count,
        * doesn't set info->last, etc.; that's because
@@ -6500,21 +6498,18 @@ gtk_window_compute_configure_request (GtkWindow    *window,
   GdkGeometry new_geometry;
   guint new_flags;
   int w, h;
-  GtkWidget *widget;
   GtkWindowPosition pos;
   GtkWidget *parent_widget;
   GtkWindowGeometryInfo *info;
   GdkScreen *screen;
   int x, y;
-  
-  widget = GTK_WIDGET (window);
 
   screen = gtk_window_check_screen (window);
 
   gtk_window_compute_hints (window, &new_geometry, &new_flags);
   gtk_window_compute_configure_request_size (window,
-					     &new_geometry, new_flags,
-					     (guint *)&w, (guint *)&h);
+                                             &new_geometry, new_flags,
+                                             (guint *)&w, (guint *)&h);
 
   gtk_window_constrain_size (window,
                              &new_geometry, new_flags,
@@ -6522,10 +6517,10 @@ gtk_window_compute_configure_request (GtkWindow    *window,
                              &w, &h);
 
   parent_widget = (GtkWidget*) priv->transient_parent;
-  
+
   pos = get_effective_position (window);
   info = gtk_window_get_geometry_info (window, FALSE);
-  
+
   /* by default, don't change position requested */
   if (info)
     {
@@ -6547,7 +6542,6 @@ gtk_window_compute_configure_request (GtkWindow    *window,
        *
        * Not sure how to go about that.
        */
-      
       switch (pos)
         {
           /* here we are only handling CENTER_ALWAYS
@@ -6558,7 +6552,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
         case GTK_WIN_POS_CENTER:
           center_window_on_monitor (window, w, h, &x, &y);
           break;
-      
+
         case GTK_WIN_POS_CENTER_ON_PARENT:
           {
             GtkAllocation allocation;
@@ -6566,7 +6560,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
             gint monitor_num;
             GdkRectangle monitor;
             gint ox, oy;
-            
+
             g_assert (gtk_widget_get_mapped (parent_widget)); /* established earlier */
 
             gdk_window = gtk_widget_get_window (parent_widget);
@@ -6600,8 +6594,8 @@ gtk_window_compute_configure_request (GtkWindow    *window,
           {
             gint screen_width = gdk_screen_get_width (screen);
             gint screen_height = gdk_screen_get_height (screen);
-	    gint monitor_num;
-	    GdkRectangle monitor;
+            gint monitor_num;
+            GdkRectangle monitor;
             GdkDisplay *display;
             GdkDeviceManager *device_manager;
             GdkDevice *pointer;
@@ -6620,7 +6614,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
               monitor_num = gdk_screen_get_monitor_at_point (screen, px, py);
             else
               monitor_num = -1;
-            
+
             x = px - w / 2;
             y = py - h / 2;
             x = CLAMP (x, 0, screen_width - w);
@@ -6650,7 +6644,7 @@ gtk_window_compute_configure_request (GtkWindow    *window,
       y = info->initial_y;
       gtk_window_constrain_position (window, w, h, &x, &y);
     }
-  
+
   request->x = x;
   request->y = y;
   request->width = w;
@@ -7989,15 +7983,12 @@ gtk_window_begin_resize_drag  (GtkWindow    *window,
                                gint          root_y,
                                guint32       timestamp)
 {
-  GtkWindowPrivate *priv;
   GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
   widget = GTK_WIDGET (window);
   g_return_if_fail (gtk_widget_get_visible (widget));
-
-  priv = window->priv;
 
   toplevel = gtk_widget_get_window (widget);
 
@@ -8030,15 +8021,12 @@ gtk_window_begin_move_drag  (GtkWindow *window,
                              gint       root_y,
                              guint32    timestamp)
 {
-  GtkWindowPrivate *priv;
   GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
   widget = GTK_WIDGET (window);
   g_return_if_fail (gtk_widget_get_visible (widget));
-
-  priv = window->priv;
 
   toplevel = gtk_widget_get_window (widget);
 
@@ -9217,11 +9205,10 @@ _gtk_window_set_is_active (GtkWindow *window,
  */
 void
 _gtk_window_set_is_toplevel (GtkWindow *window,
-			     gboolean   is_toplevel)
+                             gboolean   is_toplevel)
 {
   GtkWidget *widget;
   GtkWidget *toplevel;
-  gboolean   was_anchored;
 
   widget = GTK_WIDGET (window);
 
@@ -9232,8 +9219,6 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
 
   if (is_toplevel == gtk_widget_is_toplevel (widget))
     return;
-
-  was_anchored = _gtk_widget_get_anchored (widget);
 
   if (is_toplevel)
     {
@@ -9249,7 +9234,7 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
       gtk_widget_hide (widget);
 
       /* Save the toplevel this widget was previously anchored into before
-       * propagating a hierarchy-changed. 
+       * propagating a hierarchy-changed.
        *
        * Usually this happens by way of gtk_widget_unparent() and we are
        * already unanchored at this point, just adding this clause incase
@@ -9257,13 +9242,13 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
        */
       toplevel = gtk_widget_get_toplevel (widget);
       if (!gtk_widget_is_toplevel (toplevel))
-	toplevel = NULL;
+        toplevel = NULL;
 
       _gtk_widget_set_is_toplevel (widget, TRUE);
 
       /* When a window becomes toplevel after being embedded and anchored
        * into another window we need to unset it's anchored flag so that
-       * the hierarchy changed signal kicks in properly. 
+       * the hierarchy changed signal kicks in properly.
        */
       _gtk_widget_set_anchored (widget, FALSE);
       _gtk_widget_propagate_hierarchy_changed (widget, toplevel);

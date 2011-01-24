@@ -1801,15 +1801,15 @@ gtk_list_store_compare_func (GSequenceIter *a,
 
   g_assert (VALID_ITER (&iter_a, list_store));
   g_assert (VALID_ITER (&iter_b, list_store));
-  
+
   retval = (* func) (GTK_TREE_MODEL (list_store), &iter_a, &iter_b, data);
 
   if (priv->order == GTK_SORT_DESCENDING)
     {
       if (retval > 0)
-	retval = -1;
+        retval = -1;
       else if (retval < 0)
-	retval = 1;
+        retval = 1;
     }
 
   return retval;

@@ -506,9 +506,6 @@ gtk_real_check_menu_item_draw_indicator (GtkCheckMenuItem *check_menu_item,
           priv->always_show_toggle ||
           (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_PRELIGHT))
         {
-          GdkWindow *window;
-
-          window = gtk_widget_get_window (widget);
           gtk_style_context_save (context);
 
           if (priv->inconsistent)

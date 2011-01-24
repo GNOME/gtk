@@ -1566,7 +1566,6 @@ _gtk_button_paint (GtkButton          *button,
   gint focus_width;
   gint focus_pad;
   GtkAllocation allocation;
-  GdkWindow *window;
   GtkStyleContext *context;
 
   widget = GTK_WIDGET (button);
@@ -1582,7 +1581,6 @@ _gtk_button_paint (GtkButton          *button,
                                NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
-  window = gtk_widget_get_window (widget);
 
   x = 0;
   y = 0;

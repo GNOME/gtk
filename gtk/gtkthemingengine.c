@@ -1184,10 +1184,8 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
   gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
   GtkBorder *border;
-  gdouble radius;
 
   flags = gtk_theming_engine_get_state (engine);
-  radius = MIN (width, height) / 2 - 0.5;
 
   cairo_save (cr);
 
@@ -1215,10 +1213,10 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
 
       cairo_new_sub_path (cr);
       cairo_arc (cr,
-		 x + exterior_size / 2.,
-		 y + exterior_size / 2.,
-		 (exterior_size - 1) / 2.,
-		 0, 2 * G_PI);
+                 x + exterior_size / 2.,
+                 y + exterior_size / 2.,
+                 (exterior_size - 1) / 2.,
+                 0, 2 * G_PI);
 
       gdk_cairo_set_source_rgba (cr, bg_color);
       cairo_fill_preserve (cr);
@@ -1252,10 +1250,10 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
       line_thickness = MAX (1, (3 + interior_size * 2) / 7);
 
       cairo_rectangle (cr,
-		       x + pad,
-		       y + pad + (interior_size - line_thickness) / 2.,
-		       interior_size,
-		       line_thickness);
+                       x + pad,
+                       y + pad + (interior_size - line_thickness) / 2.,
+                       interior_size,
+                       line_thickness);
       cairo_fill (cr);
     }
   if (flags & GTK_STATE_FLAG_ACTIVE)
@@ -1264,17 +1262,17 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
       interior_size = MAX (1, exterior_size - 2 * pad);
 
       if (interior_size < 5)
-	{
-	  interior_size = 7;
-	  pad = MAX (0, (exterior_size - interior_size) / 2);
-	}
+        {
+          interior_size = 7;
+          pad = MAX (0, (exterior_size - interior_size) / 2);
+        }
 
       cairo_new_sub_path (cr);
       cairo_arc (cr,
-		 x + pad + interior_size / 2.,
-		 y + pad + interior_size / 2.,
-		 interior_size / 2.,
-		 0, 2 * G_PI);
+                 x + pad + interior_size / 2.,
+                 y + pad + interior_size / 2.,
+                 interior_size / 2.,
+                 0, 2 * G_PI);
       cairo_fill (cr);
     }
 
@@ -2261,7 +2259,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   const PangoMatrix *matrix;
   GdkRGBA *fg_color;
   GtkStateFlags flags;
-  GdkScreen *screen;
   gdouble progress;
   gboolean running;
 
@@ -2272,7 +2269,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
                           "color", &fg_color,
                           NULL);
 
-  screen = gtk_theming_engine_get_screen (engine);
   matrix = pango_context_get_matrix (pango_layout_get_context (layout));
 
   running = gtk_theming_engine_state_is_running (engine, GTK_STATE_PRELIGHT, &progress);
@@ -2309,7 +2305,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
   if (matrix)
     {
       cairo_matrix_t cairo_matrix;
-      PangoMatrix tmp_matrix;
       PangoRectangle rect;
 
       cairo_matrix_init (&cairo_matrix,
@@ -2321,7 +2316,6 @@ gtk_theming_engine_render_layout (GtkThemingEngine *engine,
       pango_matrix_transform_rectangle (matrix, &rect);
       pango_extents_to_pixels (&rect, NULL);
 
-      tmp_matrix = *matrix;
       cairo_matrix.x0 += x - rect.x;
       cairo_matrix.y0 += y - rect.y;
 
@@ -2612,7 +2606,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   if (gtk_theming_engine_has_class (engine, GTK_STYLE_CLASS_GRIP))
     {
       GtkJunctionSides sides;
-      gint skip = -1;
 
       cairo_save (cr);
 
@@ -2641,8 +2634,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
             height = width;
           else if (height < width)
             width = height;
-
-          skip = 2;
         }
       else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
         {
@@ -2654,8 +2645,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
             }
           else if (height < width)
             width = height;
-
-          skip = 1;
         }
       else if (sides == GTK_JUNCTION_RIGHT)
         {
@@ -2675,8 +2664,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               x += (width - height);
               width = height;
             }
-
-          skip = 3;
         }
       else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
         {
@@ -2691,8 +2678,6 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               x += (width - height);
               width = height;
             }
-
-          skip = 0;
         }
       else if (sides == GTK_JUNCTION_TOP)
         {
@@ -2748,7 +2733,7 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
               gdk_cairo_set_source_rgba (cr, &darker);
               add_path_line (cr, x, yi, x + width, yi);
               cairo_stroke (cr);
-              yi+= 2;
+              yi += 2;
             }
         }
       else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
@@ -2886,11 +2871,11 @@ gtk_theming_engine_render_handle (GtkThemingEngine *engine,
   else
     {
       for (yy = y; yy < y + height; yy += 3)
-	for (xx = x; xx < x + width; xx += 6)
-	  {
-	    render_dot (cr, &lighter, &darker, xx, yy, 2);
-	    render_dot (cr, &lighter, &darker, xx + 3, yy + 1, 2);
-	  }
+        for (xx = x; xx < x + width; xx += 6)
+          {
+            render_dot (cr, &lighter, &darker, xx, yy, 2);
+            render_dot (cr, &lighter, &darker, xx + 3, yy + 1, 2);
+          }
     }
 
   cairo_restore (cr);

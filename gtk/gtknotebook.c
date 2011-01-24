@@ -1472,7 +1472,6 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkDirectionType effective_direction = get_effective_direction (notebook, direction_type);
-  GtkNotebookPage *page;
   GList *last, *child;
   gint page_num;
 
@@ -1509,8 +1508,6 @@ gtk_notebook_reorder_tab (GtkNotebook      *notebook,
 
   if (!child || child->data == priv->cur_page)
     return FALSE;
-
-  page = child->data;
 
   if (effective_direction == GTK_DIR_RIGHT)
     page_num = reorder_tab (notebook, child->next, priv->focus_tab);
@@ -2281,12 +2278,9 @@ gtk_notebook_size_allocate (GtkWidget     *widget,
 {
   GtkNotebook *notebook = GTK_NOTEBOOK (widget);
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkStyleContext *context;
   gint tab_pos = get_effective_tab_pos (notebook);
   gboolean is_rtl;
   gint focus_width;
-
-  context = gtk_widget_get_style_context (widget);
 
   gtk_widget_style_get (widget, "focus-line-width", &focus_width, NULL);
 
@@ -3206,12 +3200,10 @@ check_threshold (GtkNotebook *notebook,
                  gint         current_y)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GtkWidget *widget;
   gint dnd_threshold;
   GdkRectangle rectangle = { 0, }; /* shut up gcc */
   GtkSettings *settings;
 
-  widget = GTK_WIDGET (notebook);
   settings = gtk_widget_get_settings (GTK_WIDGET (notebook));
   g_object_get (G_OBJECT (settings), "gtk-dnd-drag-threshold", &dnd_threshold, NULL);
 
@@ -3520,10 +3512,8 @@ gtk_notebook_drag_failed (GtkWidget      *widget,
       GtkNotebook *notebook = GTK_NOTEBOOK (widget);
       GtkNotebookPrivate *priv = notebook->priv;
       GtkNotebook *dest_notebook = NULL;
-      GdkDisplay *display;
       gint x, y;
 
-      display = gtk_widget_get_display (widget);
       gdk_device_get_position (gdk_drag_context_get_device (context),
                                NULL, &x, &y);
 
@@ -5403,26 +5393,23 @@ gtk_notebook_tab_space (GtkNotebook *notebook,
 }
 
 static void
-gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
-                                   gboolean     show_arrows,
-                                   gint         min,
-                                   gint         max,
-                                   gint         tab_space,
-                                   GList      **last_child,
-                                   gint        *n,
-                                   gint        *remaining_space)
+gtk_notebook_calculate_shown_tabs (GtkNotebook  *notebook,
+                                   gboolean      show_arrows,
+                                   gint          min,
+                                   gint          max,
+                                   gint          tab_space,
+                                   GList       **last_child,
+                                   gint         *n,
+                                   gint         *remaining_space)
 {
   GtkNotebookPrivate *priv = notebook->priv;
   GtkWidget *widget;
-  GtkContainer *container;
   GList *children;
   GtkNotebookPage *page;
-  gint tab_pos, tab_overlap;
+  gint tab_overlap;
 
   widget = GTK_WIDGET (notebook);
-  container = GTK_CONTAINER (notebook);
   gtk_widget_style_get (widget, "tab-overlap", &tab_overlap, NULL);
-  tab_pos = get_effective_tab_pos (notebook);
 
   if (show_arrows) /* first_tab <- focus_tab */
     {
@@ -5471,7 +5458,7 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
                 priv->first_tab = priv->focus_tab;
               else
                 priv->first_tab = gtk_notebook_search_page (notebook, priv->focus_tab,
-                                                                STEP_NEXT, TRUE);
+                                                            STEP_NEXT, TRUE);
             }
           else
             /* calculate shown tabs counting backwards from the focus tab */
@@ -5480,7 +5467,8 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
                                                               priv->focus_tab,
                                                               STEP_PREV,
                                                               TRUE),
-                                    &(priv->first_tab), remaining_space,
+                                    &(priv->first_tab),
+                                    remaining_space,
                                     STEP_PREV);
 
           if (*remaining_space < 0)
@@ -5498,16 +5486,18 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
             {
               if (!priv->first_tab)
                 priv->first_tab = gtk_notebook_search_page (notebook,
-                                                                NULL,
-                                                                STEP_NEXT,
-                                                                TRUE);
+                                                            NULL,
+                                                            STEP_NEXT,
+                                                            TRUE);
               children = NULL;
               gtk_notebook_calc_tabs (notebook,
                                       gtk_notebook_search_page (notebook,
                                                                 priv->focus_tab,
                                                                 STEP_NEXT,
                                                                 TRUE),
-                                      &children, remaining_space, STEP_NEXT);
+                                      &children,
+                                      remaining_space,
+                                      STEP_NEXT);
 
               if (*remaining_space <= 0)
                 *last_child = children;
@@ -5521,15 +5511,17 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
                                                                     priv->first_tab,
                                                                     STEP_PREV,
                                                                     TRUE),
-                                          &children, remaining_space, STEP_PREV);
+                                          &children,
+                                          remaining_space,
+                                          STEP_PREV);
 
                   if (*remaining_space == 0)
                     priv->first_tab = children;
                   else
                     priv->first_tab = gtk_notebook_search_page(notebook,
-                                                                   children,
-                                                                   STEP_NEXT,
-                                                                   TRUE);
+                                                               children,
+                                                               STEP_NEXT,
+                                                               TRUE);
                 }
             }
 
@@ -5587,7 +5579,7 @@ gtk_notebook_calculate_shown_tabs (GtkNotebook *notebook,
       *remaining_space = max - min - tab_overlap - tab_space;
       children = priv->children;
       priv->first_tab = gtk_notebook_search_page (notebook, NULL,
-                                                      STEP_NEXT, TRUE);
+                                                  STEP_NEXT, TRUE);
       while (children)
         {
           page = children->data;
@@ -6372,13 +6364,11 @@ gtk_notebook_switch_focus_tab (GtkNotebook *notebook,
                                GList       *new_child)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GList *old_child;
   GtkNotebookPage *page;
 
   if (priv->focus_tab == new_child)
     return;
 
-  old_child = priv->focus_tab;
   priv->focus_tab = new_child;
 
   if (priv->scrollable)

@@ -2481,7 +2481,7 @@ gtk_label_set_markup_internal (GtkLabel    *label,
  * g_markup_printf_escaped()<!-- -->:
  * |[
  * char *markup;
- *   
+ *
  * markup = g_markup_printf_escaped ("&lt;span style=\"italic\"&gt;&percnt;s&lt;/span&gt;", str);
  * gtk_label_set_markup (GTK_LABEL (label), markup);
  * g_free (markup);
@@ -2491,18 +2491,14 @@ void
 gtk_label_set_markup (GtkLabel    *label,
                       const gchar *str)
 {
-  GtkLabelPrivate *priv;
-
   g_return_if_fail (GTK_IS_LABEL (label));
-
-  priv = label->priv;
 
   g_object_freeze_notify (G_OBJECT (label));
 
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
   gtk_label_set_use_underline_internal (label, FALSE);
-  
+
   gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
@@ -2511,32 +2507,30 @@ gtk_label_set_markup (GtkLabel    *label,
 /**
  * gtk_label_set_markup_with_mnemonic:
  * @label: a #GtkLabel
- * @str: a markup string (see <link linkend="PangoMarkupFormat">Pango markup format</link>)
- * 
- * Parses @str which is marked up with the <link linkend="PangoMarkupFormat">Pango text markup language</link>,
+ * @str: a markup string (see
+ *     <link linkend="PangoMarkupFormat">Pango markup format</link>)
+ *
+ * Parses @str which is marked up with the
+ * <link linkend="PangoMarkupFormat">Pango text markup language</link>,
  * setting the label's text and attribute list based on the parse results.
  * If characters in @str are preceded by an underscore, they are underlined
  * indicating that they represent a keyboard accelerator called a mnemonic.
  *
- * The mnemonic key can be used to activate another widget, chosen 
+ * The mnemonic key can be used to activate another widget, chosen
  * automatically, or explicitly using gtk_label_set_mnemonic_widget().
- **/
+ */
 void
 gtk_label_set_markup_with_mnemonic (GtkLabel    *label,
-				    const gchar *str)
+                                    const gchar *str)
 {
-  GtkLabelPrivate *priv;
-
   g_return_if_fail (GTK_IS_LABEL (label));
-
-  priv = label->priv;
 
   g_object_freeze_notify (G_OBJECT (label));
 
   gtk_label_set_label_internal (label, g_strdup (str ? str : ""));
   gtk_label_set_use_markup_internal (label, TRUE);
   gtk_label_set_use_underline_internal (label, TRUE);
-  
+
   gtk_label_recalculate (label);
 
   g_object_thaw_notify (G_OBJECT (label));
@@ -4083,7 +4077,6 @@ gtk_label_draw (GtkWidget *widget,
   GtkAllocation allocation;
   GtkStyleContext *context;
   GtkStateFlags state;
-  GdkWindow *window;
   gint x, y;
 
   gtk_label_ensure_layout (label, FALSE);
@@ -4095,7 +4088,6 @@ gtk_label_draw (GtkWidget *widget,
       get_layout_location (label, &x, &y);
 
       context = gtk_widget_get_style_context (widget);
-      window = gtk_widget_get_window (widget);
       gtk_widget_get_allocation (widget, &allocation);
 
       cairo_translate (cr, -allocation.x, -allocation.y);
@@ -4112,7 +4104,6 @@ gtk_label_draw (GtkWidget *widget,
         {
           gint range[2];
           cairo_region_t *clip;
-	  GtkStateType state;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -4129,10 +4120,7 @@ gtk_label_draw (GtkWidget *widget,
                                                    range,
                                                    1);
 
-         /* FIXME should use gtk_paint, but it can't use a clip
-           * region
-           */
-
+         /* FIXME should use gtk_paint, but it can't use a clip region */
           cairo_save (cr);
 
           gdk_cairo_region (cr, clip);
@@ -4140,8 +4128,8 @@ gtk_label_draw (GtkWidget *widget,
 
           state = GTK_STATE_FLAG_SELECTED;
 
-	  if (gtk_widget_has_focus (widget))
-	    state |= GTK_STATE_FLAG_FOCUSED;
+          if (gtk_widget_has_focus (widget))
+            state |= GTK_STATE_FLAG_FOCUSED;
 
           gtk_style_context_get (context, state,
                                  "background-color", &bg_color,
@@ -4173,7 +4161,7 @@ gtk_label_draw (GtkWidget *widget,
           GdkColor *visited_link_color;
 
           if (info->selectable && gtk_widget_has_focus (widget))
-	    gtk_label_draw_cursor (label, cr, x, y);
+            gtk_label_draw_cursor (label, cr, x, y);
 
           focus_link = gtk_label_get_focus_link (label);
           active_link = info->active_link;

@@ -1569,13 +1569,11 @@ gtk_menu_item_draw (GtkWidget *widget,
   GtkStyleContext *context;
   GtkBorder padding;
   GtkWidget *child, *parent;
-  GdkWindow *window;
   gint x, y, w, h, width, height;
   guint border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
 
   state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
-  window = gtk_widget_get_window (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 

@@ -642,14 +642,12 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
   GtkAllocation item_area;
 
   GtkOrientation orientation;
-  GtkToolbarStyle style;
 
   gint min_rows;
   guint border_width;
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
-  style = gtk_tool_shell_get_style (GTK_TOOL_SHELL (group));
 
   /* figure out the size of homogeneous items */
   gtk_tool_item_group_get_item_size (group, &item_size, TRUE, &min_rows);
@@ -665,7 +663,9 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
   item_area.width = 0;
   item_area.height = 0;
 
-  /* figure out the required columns (n_columns) and rows (n_rows) to place all items */
+  /* figure out the required columns (n_columns) and rows (n_rows)
+   * to place all items
+   */
   if (!priv->collapsed || !priv->animation || priv->animation_timeout)
     {
       guint n_columns;
@@ -740,7 +740,9 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
 
           row_min_width = g_new0 (guint, n_rows);
 
-          /* calculate minimal and maximal required cols and minimal required rows */
+          /* calculate minimal and maximal required cols and minimal
+           * required rows
+           */
           for (it = priv->children; it != NULL; it = it->next)
             {
               GtkToolItemGroupChild *child = it->data;
@@ -791,7 +793,9 @@ gtk_tool_item_group_real_size_query (GtkWidget      *widget,
               min_col = MAX (min_col, row_min_width[i]);
             }
 
-          /* simple linear search for minimal required columns for the given maximal number of rows (n_rows) */
+          /* simple linear search for minimal required columns
+           * for the given maximal number of rows (n_rows)
+           */
           for (n_columns = min_col; n_columns < max_col; n_columns ++)
             {
               new_row = TRUE;
@@ -885,7 +889,6 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
   GtkAllocation item_area;
 
   GtkOrientation orientation;
-  GtkToolbarStyle style;
 
   GList *it;
 
@@ -899,7 +902,6 @@ gtk_tool_item_group_real_size_allocate (GtkWidget     *widget,
   direction = gtk_widget_get_direction (widget);
 
   orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
-  style = gtk_tool_shell_get_style (GTK_TOOL_SHELL (group));
 
   /* chain up */
   GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->size_allocate (widget, allocation);
@@ -2245,13 +2247,11 @@ gtk_tool_item_group_get_drop_item (GtkToolItemGroup *group,
                                    gint              y)
 {
   GtkAllocation allocation;
-  GtkOrientation orientation;
   GList *it;
 
   g_return_val_if_fail (GTK_IS_TOOL_ITEM_GROUP (group), NULL);
 
   gtk_widget_get_allocation (GTK_WIDGET (group), &allocation);
-  orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
 
   g_return_val_if_fail (x >= 0 && x < allocation.width, NULL);
   g_return_val_if_fail (y >= 0 && y < allocation.height, NULL);
@@ -2288,14 +2288,9 @@ _gtk_tool_item_group_item_size_request (GtkToolItemGroup *group,
   GList *it;
   gint rows = 0;
   gboolean new_row = TRUE;
-  GtkOrientation orientation;
-  GtkToolbarStyle style;
 
   g_return_if_fail (GTK_IS_TOOL_ITEM_GROUP (group));
   g_return_if_fail (NULL != item_size);
-
-  orientation = gtk_tool_shell_get_orientation (GTK_TOOL_SHELL (group));
-  style = gtk_tool_shell_get_style (GTK_TOOL_SHELL (group));
 
   item_size->width = item_size->height = 0;
 

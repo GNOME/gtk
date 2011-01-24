@@ -202,11 +202,9 @@ static gboolean
 gtk_spinner_draw (GtkWidget *widget,
                   cairo_t   *cr)
 {
-  GtkSpinnerPrivate *priv;
   GtkStyleContext *context;
   GtkStateFlags state;
 
-  priv = GTK_SPINNER (widget)->priv;
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 

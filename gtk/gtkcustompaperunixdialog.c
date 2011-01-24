@@ -245,10 +245,8 @@ static void
 gtk_custom_paper_unix_dialog_class_init (GtkCustomPaperUnixDialogClass *class)
 {
   GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
 
   object_class = (GObjectClass *) class;
-  widget_class = (GtkWidgetClass *) class;
 
   object_class->finalize = gtk_custom_paper_unix_dialog_finalize;
 

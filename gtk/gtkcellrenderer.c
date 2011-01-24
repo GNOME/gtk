@@ -1113,7 +1113,7 @@ gtk_cell_renderer_get_sensitive (GtkCellRenderer *cell)
  *
  * Checks whether the cell renderer can do something when activated.
  *
- * Returns: %TRUE if the cell renderer can do anything when activated.
+ * Returns: %TRUE if the cell renderer can do anything when activated
  *
  * Since: 3.0
  */
@@ -1126,9 +1126,9 @@ gtk_cell_renderer_is_activatable (GtkCellRenderer *cell)
 
   priv = cell->priv;
 
-  return (cell->priv->visible &&
-	  (cell->priv->mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
-	   cell->priv->mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE));
+  return (priv->visible &&
+          (priv->mode == GTK_CELL_RENDERER_MODE_EDITABLE ||
+           priv->mode == GTK_CELL_RENDERER_MODE_ACTIVATABLE));
 }
 
 

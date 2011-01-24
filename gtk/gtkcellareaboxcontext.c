@@ -744,14 +744,12 @@ allocate_for_orientation (GtkCellAreaBoxContext *context,
   GtkCellAreaBoxContextPrivate *priv = context->priv;
   GtkCellAreaBoxAllocation     *allocs;
   GtkRequestedSize             *sizes;
-  GArray                       *array;
   gint                          n_expand_groups = 0;
   gint                          i, n_groups, position, vis_position;
   gint                          extra_size, extra_extra;
   gint                          avail_size = size;
 
   sizes           = _gtk_cell_area_box_context_get_requests (context, area, orientation, for_size, &n_groups);
-  array           = get_array (context, orientation, for_size);
   n_expand_groups = count_expand_groups (context);
 
   /* First start by naturally allocating space among groups */

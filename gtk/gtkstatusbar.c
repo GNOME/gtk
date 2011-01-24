@@ -125,10 +125,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkStatusbar, gtk_statusbar, GTK_TYPE_HBOX,
 static void
 gtk_statusbar_class_init (GtkStatusbarClass *class)
 {
-  GObjectClass *gobject_class;
   GtkWidgetClass *widget_class;
 
-  gobject_class = (GObjectClass *) class;
   widget_class = (GtkWidgetClass *) class;
 
   widget_class->realize = gtk_statusbar_realize;
@@ -139,12 +137,12 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
   class->text_pushed = gtk_statusbar_update;
   class->text_popped = gtk_statusbar_update;
 
-  /** 
+  /**
    * GtkStatusbar::text-pushed:
-   * @statusbar: the object which received the signal.
-   * @context_id: the context id of the relevant message/statusbar.
-   * @text: the message that was pushed.
-   * 
+   * @statusbar: the object which received the signal
+   * @context_id: the context id of the relevant message/statusbar
+   * @text: the message that was pushed
+   *
    * Is emitted whenever a new message gets pushed onto a statusbar's stack.
    */
   statusbar_signals[SIGNAL_TEXT_PUSHED] =
@@ -160,9 +158,9 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
 
   /**
    * GtkStatusbar::text-popped:
-   * @statusbar: the object which received the signal.
-   * @context_id: the context id of the relevant message/statusbar.
-   * @text: the message that was just popped.
+   * @statusbar: the object which received the signal
+   * @context_id: the context id of the relevant message/statusbar
+   * @text: the message that was just popped
    *
    * Is emitted whenever a new message is popped off a statusbar's stack.
    */

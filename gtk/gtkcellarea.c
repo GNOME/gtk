@@ -3574,16 +3574,13 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
                                 gint               *minimum_size,
                                 gint               *natural_size)
 {
-  GtkCellAreaPrivate *priv;
-  gint                focus_line_width;
+  gint focus_line_width;
 
   g_return_if_fail (GTK_IS_CELL_AREA (area));
   g_return_if_fail (GTK_IS_CELL_RENDERER (renderer));
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (minimum_size != NULL);
   g_return_if_fail (natural_size != NULL);
-
-  priv = area->priv;
 
   gtk_widget_style_get (widget, "focus-line-width", &focus_line_width, NULL);
 
