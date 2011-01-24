@@ -3980,9 +3980,15 @@ struct _CursorInfo
   GdkColor secondary;
 };
 
+static void
+cursor_info_free (gpointer data)
+{
+  g_slice_free (CursorInfo, data);
+}
+
 static const GdkColor *
 get_insertion_cursor_color (GtkWidget *widget,
-			    gboolean   is_primary)
+                            gboolean   is_primary)
 {
   CursorInfo *cursor_info;
   GtkStyle *style;
@@ -3993,8 +3999,9 @@ get_insertion_cursor_color (GtkWidget *widget,
   cursor_info = g_object_get_data (G_OBJECT (style), "gtk-style-cursor-info");
   if (!cursor_info)
     {
-      cursor_info = g_new0 (CursorInfo, 1);
-      g_object_set_data (G_OBJECT (style), I_("gtk-style-cursor-info"), cursor_info);
+      cursor_info = g_slice_new (CursorInfo);
+      g_object_set_data_full (G_OBJECT (style), I_("gtk-style-cursor-info"),
+                              cursor_info, cursor_info_free);
       cursor_info->for_type = G_TYPE_INVALID;
     }
 
@@ -4009,7 +4016,8 @@ get_insertion_cursor_color (GtkWidget *widget,
       cursor_info->for_type = G_OBJECT_TYPE (widget);
 
       /* Cursors in text widgets are drawn only in NORMAL state,
-       * so we can use text[GTK_STATE_NORMAL] as text color here */
+       * so we can use text[GTK_STATE_NORMAL] as text color here
+       */
       gtk_widget_style_get (widget, "cursor-color", &cursor_color, NULL);
       if (cursor_color)
         {
@@ -4043,7 +4051,7 @@ get_insertion_cursor_color (GtkWidget *widget,
 
 void
 _gtk_widget_get_cursor_color (GtkWidget *widget,
-			      GdkColor  *color)
+                              GdkColor  *color)
 {
   GdkColor *style_color;
 
@@ -4076,7 +4084,7 @@ _gtk_widget_get_cursor_color (GtkWidget *widget,
  * but merely a convenience function for drawing the standard cursor shape.
  *
  * Since: 3.0
- **/
+ */
 void
 gtk_draw_insertion_cursor (GtkWidget          *widget,
                            cairo_t            *cr,
@@ -4090,7 +4098,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
   gint x, y;
   gfloat cursor_aspect_ratio;
   gint offset;
-  
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cr != NULL);
   g_return_if_fail (location != NULL);
@@ -4103,7 +4111,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
    */
 
   gtk_widget_style_get (widget, "cursor-aspect-ratio", &cursor_aspect_ratio, NULL);
-  
+
   stem_width = location->height * cursor_aspect_ratio + 1;
   arrow_width = stem_width + 1;
 
@@ -4112,8 +4120,8 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
     offset = stem_width / 2;
   else
     offset = stem_width - stem_width / 2;
-  
-  cairo_rectangle (cr, 
+
+  cairo_rectangle (cr,
                    location->x - offset, location->y,
                    stem_width, location->height);
   cairo_fill (cr);
@@ -4124,7 +4132,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
         {
           x = location->x - offset - 1;
           y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
-  
+
           cairo_move_to (cr, x, y + 1);
           cairo_line_to (cr, x - arrow_width, y + arrow_width);
           cairo_line_to (cr, x, y + 2 * arrow_width);
@@ -4134,7 +4142,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
         {
           x = location->x + stem_width - offset;
           y = location->y + location->height - arrow_width * 2 - arrow_width + 1;
-  
+
           cairo_move_to (cr, x, y + 1);
           cairo_line_to (cr, x + arrow_width, y + arrow_width);
           cairo_line_to (cr, x, y + 2 * arrow_width);
