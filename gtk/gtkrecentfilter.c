@@ -66,6 +66,7 @@
  *   </patterns>
  *   <applications>
  *     <application>gimp</application>
+ *     <application>gedit</application>
  *     <application>glade</application>
  *   </applications>
  * </object>
