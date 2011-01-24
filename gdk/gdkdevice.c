@@ -273,7 +273,9 @@ gdk_device_dispose (GObject *object)
 
   if (device->associated)
     {
-      _gdk_device_set_associated_device (device->associated, NULL);
+      if (device->type == GDK_DEVICE_TYPE_MASTER)
+        _gdk_device_set_associated_device (device->associated, NULL);
+
       g_object_unref (device->associated);
       device->associated = NULL;
     }
