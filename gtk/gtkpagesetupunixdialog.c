@@ -148,10 +148,8 @@ static void
 gtk_page_setup_unix_dialog_class_init (GtkPageSetupUnixDialogClass *class)
 {
   GObjectClass *object_class;
-  GtkWidgetClass *widget_class;
 
   object_class = (GObjectClass *) class;
-  widget_class = (GtkWidgetClass *) class;
 
   object_class->finalize = gtk_page_setup_unix_dialog_finalize;
 
