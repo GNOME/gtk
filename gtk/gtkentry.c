@@ -65,6 +65,7 @@
 #include "gtktooltip.h"
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
+#include "gtkwidgetprivate.h"
 
 
 /**
