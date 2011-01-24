@@ -913,7 +913,7 @@ switch_to_pointer_grab (GdkDisplay        *display,
   GdkPointerWindowInfo *info;
   GList *old_grabs;
   GdkModifierType state;
-  int x, y;
+  int x = 0, y = 0;
 
   /* Temporarily unset pointer to make sure we send the crossing events below */
   old_grabs = g_hash_table_lookup (display->device_grabs, device);
@@ -966,7 +966,14 @@ switch_to_pointer_grab (GdkDisplay        *display,
 	    g_object_unref (info->toplevel_under_pointer);
 	  info->toplevel_under_pointer = NULL;
 
-	  new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
+          /* Ungrabbed slave devices don't have a position by
+           * itself, rather depend on its master pointer, so
+           * it doesn't make sense to track any position for
+           * these after the grab
+           */
+          if (grab || gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE)
+            new_toplevel = get_current_toplevel (display, device, &x, &y, &state);
+
 	  if (new_toplevel)
 	    {
 	      /* w is now toplevel and x,y in toplevel coords */
