@@ -384,7 +384,10 @@ gdk_device_get_property (GObject    *object,
  * or %NULL.
  * @mask: location to store the modifiers, or %NULL.
  *
- * Gets the current state of a pointer device relative to @window.
+ * Gets the current state of a pointer device relative to @window. As a slave
+ * device coordinates are those of its master pointer, This
+ * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
  */
 void
 gdk_device_get_state (GdkDevice       *device,
@@ -395,6 +398,8 @@ gdk_device_get_state (GdkDevice       *device,
   g_return_if_fail (GDK_IS_DEVICE (device));
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
   g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+                    gdk_display_device_is_grabbed (gdk_device_get_display (device), device));
 
   if (GDK_DEVICE_GET_CLASS (device)->get_state)
     GDK_DEVICE_GET_CLASS (device)->get_state (device, window, axes, mask);
@@ -408,7 +413,10 @@ gdk_device_get_state (GdkDevice       *device,
  * @x: (out) (allow-none): location to store root window X coordinate of @device, or %NULL.
  * @y: (out) (allow-none): location to store root window Y coordinate of @device, or %NULL.
  *
- * Gets the current location of @device.
+ * Gets the current location of @device. As a slave device
+ * coordinates are those of its master pointer, This function
+ * may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
  *
  * Since: 3.0
  **/
@@ -427,6 +435,10 @@ gdk_device_get_position (GdkDevice        *device,
   g_return_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD);
 
   display = gdk_device_get_display (device);
+
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+                    gdk_display_device_is_grabbed (display, device));
+
   default_screen = gdk_display_get_default_screen (display);
 
   _gdk_device_query_state (device,
@@ -454,6 +466,10 @@ gdk_device_get_position (GdkDevice        *device,
  * Obtains the window underneath @device, returning the location of the device in @win_x and @win_y. Returns
  * %NULL if the window tree under @device is not known to GDK (for example, belongs to another application).
  *
+ * As a slave device coordinates are those of its master pointer, This
+ * function may not be called on devices of type %GDK_DEVICE_TYPE_SLAVE,
+ * unless there is an ongoing grab on them, see gdk_device_grab().
+ *
  * Returns: (transfer none): the #GdkWindow under the device position, or %NULL.
  *
  * Since: 3.0
@@ -468,6 +484,8 @@ gdk_device_get_window_at_position (GdkDevice  *device,
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE ||
+                        gdk_display_device_is_grabbed (gdk_device_get_display (device), device), NULL);
 
   window = _gdk_device_window_at_position (device, &tmp_x, &tmp_y, NULL, FALSE);
 
