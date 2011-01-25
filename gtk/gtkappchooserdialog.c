@@ -81,8 +81,7 @@ struct _GtkAppChooserDialogPrivate {
 enum {
   PROP_GFILE = 1,
   PROP_CONTENT_TYPE,
-  PROP_HEADING,
-  N_PROPERTIES
+  PROP_HEADING
 };
 
 static void gtk_app_chooser_dialog_iface_init (GtkAppChooserIface *iface);

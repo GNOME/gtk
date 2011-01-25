@@ -74,5 +74,10 @@ void     gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *sel
 void     gtk_app_chooser_button_set_show_dialog_item  (GtkAppChooserButton *self,
                                                        gboolean             setting);
 gboolean gtk_app_chooser_button_get_show_dialog_item  (GtkAppChooserButton *self);
+void     gtk_app_chooser_button_set_heading           (GtkAppChooserButton *self,
+                                                       const gchar         *heading);
+const gchar *
+         gtk_app_chooser_button_get_heading           (GtkAppChooserButton *self);
+
 
 #endif /* __GTK_APP_CHOOSER_BUTTON_H__ */
