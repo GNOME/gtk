@@ -943,15 +943,18 @@ gtk_window_class_init (GtkWindowClass *klass)
                                                              0, G_MAXINT, 16, GTK_PARAM_READWRITE));
 
 
-  /* Signals
-   */
   /**
    * GtkWindow:application:
    *
    * The #GtkApplication associated with the window.
    *
-   * The application will be kept alive for at least as long as the
-   * window is open.
+   * The application will be kept alive for at least as long as it
+   * has any windows associated with it (see g_application_hold()
+   * for a way to keep it alive without windows).
+   *
+   * Normally, the connection between the application and the window
+   * will remain until the window is destroyed, but you can explicitly
+   * remove it by setting the ::application property to %NULL.
    *
    * Since: 3.0
    */

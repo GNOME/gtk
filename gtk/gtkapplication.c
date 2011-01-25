@@ -192,6 +192,13 @@ gtk_application_new (const gchar       *application_id,
  * This call is equivalent to setting the #GtkWindow:application
  * property of @window to @application.
  *
+ * Normally, the connection between the application and the window
+ * will remain until the window is destroyed, but you can explicitly
+ * remove it with gtk_application_remove_window().
+ *
+ * GTK+ will keep the application running as long as it has
+ * any windows.
+ *
  * Since: 3.0
  **/
 void
