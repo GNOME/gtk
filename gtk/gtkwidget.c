@@ -7154,14 +7154,10 @@ gtk_widget_get_state (GtkWidget *widget)
 
   if (flags & GTK_STATE_FLAG_INSENSITIVE)
     return GTK_STATE_INSENSITIVE;
-  else if (flags & GTK_STATE_FLAG_INCONSISTENT)
-    return GTK_STATE_INCONSISTENT;
   else if (flags & GTK_STATE_FLAG_ACTIVE)
     return GTK_STATE_ACTIVE;
   else if (flags & GTK_STATE_FLAG_SELECTED)
     return GTK_STATE_SELECTED;
-  else if (flags & GTK_STATE_FLAG_FOCUSED)
-    return GTK_STATE_FOCUSED;
   else if (flags & GTK_STATE_FLAG_PRELIGHT)
     return GTK_STATE_PRELIGHT;
   else
