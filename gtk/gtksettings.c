@@ -45,19 +45,27 @@
  * @Short_description: Sharing settings between applications
  * @Title: Settings
  *
- * GtkSettings provide a mechanism to share global settings between applications.
+ * GtkSettings provide a mechanism to share global settings between
+ * applications.
+ *
  * On the X window system, this sharing is realized by an
  * <ulink url="http://www.freedesktop.org/wiki/Specifications/xsettings-spec">XSettings</ulink>
- * manager that is usually part of the desktop environment, along with utilities
- * that let the user change these settings. In the absence of an Xsettings manager,
- * settings can also be specified in RC files.
+ * manager that is usually part of the desktop environment, along with
+ * utilities that let the user change these settings. In the absence of
+ * an Xsettings manager, GTK+ reads default values for settings from
+ * <filename>settings.ini</filename> files in
+ * <filename>/etc/gtk-3.0</filename> and <filename>$XDG_CONFIG_HOME/gtk-3.0</filename>. These files must be valid key files (see #GKeyFile), and have
+ * a section called Settings. Themes can also provide default values
+ * for settings by installing a <filename>settings.ini</filename> file
+ * next to their <filename>gtk.css</filename> file.
  *
- * Applications can override system-wide settings with gtk_settings_set_string_property(),
- * gtk_settings_set_long_property(), etc. This should be restricted to special
- * cases though; GtkSettings are not meant as an application configuration
- * facility. When doing so, you need to be aware that settings that are specific
- * to individual widgets may not be available before the widget type has been
- * realized at least once. The following example demonstrates a way to do this:
+ * Applications can override system-wide settings with
+ * gtk_settings_set_string_property(), gtk_settings_set_long_property(),
+ * etc. This should be restricted to special cases though; GtkSettings are
+ * not meant as an application configuration facility. When doing so, you
+ * need to be aware that settings that are specific to individual widgets
+ * may not be available before the widget type has been realized at least
+ * once. The following example demonstrates a way to do this:
  * <informalexample><programlisting>
  *   gtk_init (&argc, &argv);
  *
