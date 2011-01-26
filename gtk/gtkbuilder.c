@@ -233,6 +233,8 @@
  * <link linkend="GtkMenuItem-BUILDER-UI">GtkMenuItem</link>,
  * <link linkend="GtkAssistant-BUILDER-UI">GtkAssistant</link>,
  * <link linkend="GtkScale-BUILDER-UI">GtkScale</link>.
+ * <link linkend="GtkComboBoxText-BUILDER-UI">GtkComboBoxText</link>.
+ * <link linkend="GtkRecentFilter-BUILDER-UI">GtkRecentFilter</link>.
  * </para>
  * </refsect2>
  */
