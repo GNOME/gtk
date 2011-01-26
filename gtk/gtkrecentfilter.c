@@ -244,7 +244,7 @@ typedef enum {
 typedef struct {
   GtkRecentFilter *filter;
   ParserType       type;
-  gchar           *string;
+  GString         *string;
   gboolean         parsing;
 } SubParserData;
 
@@ -291,9 +291,14 @@ parser_text_element (GMarkupParseContext *context,
 		     GError             **error)
 {
   SubParserData *parser_data = (SubParserData*)user_data;
+  gchar *string;
 
   if (parser_data->parsing)
-    parser_data->string = g_strndup (text, text_len);
+    {
+      string = g_strndup (text, text_len);
+      g_string_append (parser_data->string, string);
+      g_free (string);
+    }
 }
 
 static void
@@ -309,21 +314,20 @@ parser_end_element (GMarkupParseContext *context,
       switch (parser_data->type)
 	{
 	case PARSE_MIME_TYPES:
-	  gtk_recent_filter_add_mime_type (parser_data->filter, parser_data->string);
+	  gtk_recent_filter_add_mime_type (parser_data->filter, parser_data->string->str);
 	  break;
 	case PARSE_PATTERNS:
-	  gtk_recent_filter_add_pattern (parser_data->filter, parser_data->string);
+	  gtk_recent_filter_add_pattern (parser_data->filter, parser_data->string->str);
 	  break;
 	case PARSE_APPLICATIONS:
-	  gtk_recent_filter_add_application (parser_data->filter, parser_data->string);
+	  gtk_recent_filter_add_application (parser_data->filter, parser_data->string->str);
 	  break;
 	default:
 	  break;
 	}
-      g_free (parser_data->string);
     }
 
-  parser_data->string = NULL;
+  g_string_set_size (parser_data->string, 0);
   parser_data->parsing = FALSE;
 }
 
@@ -347,6 +351,7 @@ gtk_recent_filter_buildable_custom_tag_start (GtkBuildable  *buildable,
   if (strcmp (tagname, "mime-types") == 0)
     {
       parser_data         = g_slice_new0 (SubParserData);
+      parser_data->string = g_string_new ("");
       parser_data->type   = PARSE_MIME_TYPES;
       parser_data->filter = GTK_RECENT_FILTER (buildable);
 
@@ -356,6 +361,7 @@ gtk_recent_filter_buildable_custom_tag_start (GtkBuildable  *buildable,
   else if (strcmp (tagname, "patterns") == 0)
     {
       parser_data         = g_slice_new0 (SubParserData);
+      parser_data->string = g_string_new ("");
       parser_data->type   = PARSE_PATTERNS;
       parser_data->filter = GTK_RECENT_FILTER (buildable);
 
@@ -365,6 +371,7 @@ gtk_recent_filter_buildable_custom_tag_start (GtkBuildable  *buildable,
   else if (strcmp (tagname, "applications") == 0)
     {
       parser_data         = g_slice_new0 (SubParserData);
+      parser_data->string = g_string_new ("");
       parser_data->type   = PARSE_APPLICATIONS;
       parser_data->filter = GTK_RECENT_FILTER (buildable);
 
@@ -386,7 +393,10 @@ gtk_recent_filter_buildable_custom_tag_end (GtkBuildable *buildable,
       strcmp (tagname, "patterns") == 0 ||
       strcmp (tagname, "applications") == 0)
     {
-      g_slice_free (SubParserData, (gpointer)data);
+      SubParserData *parser_data = (SubParserData*)data;
+
+      g_string_free (parser_data->string, TRUE);
+      g_slice_free (SubParserData, parser_data);
     }
 }
 
