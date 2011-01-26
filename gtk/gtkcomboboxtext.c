@@ -206,14 +206,9 @@ item_text (GMarkupParseContext *context,
 	   GError             **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
-  gchar *string;
 
-  if (!data->is_text)
-    return;
-
-  string = g_strndup (text, text_len);
-  g_string_append (data->string, string);
-  g_free (string);
+  if (data->is_text)
+    g_string_append_len (data->string, text, text_len);
 }
 
 static void
