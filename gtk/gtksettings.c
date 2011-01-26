@@ -223,6 +223,9 @@ static void    merge_color_scheme                (GtkSettings           *setting
                                                   GtkSettingsSource      source);
 static gchar  *get_color_scheme                  (GtkSettings           *settings);
 static GHashTable *get_color_hash                (GtkSettings           *settings);
+static void gtk_settings_load_from_key_file      (GtkSettings           *settings,
+                                                  const gchar           *path,
+                                                  GtkSettingsSource      source);
 
 /* the default palette for GtkColorSelelection */
 static const gchar default_color_palette[] =
@@ -246,10 +249,7 @@ gtk_settings_init (GtkSettings *settings)
   GtkSettingsPrivate *priv;
   GParamSpec **pspecs, **p;
   guint i = 0;
-  GKeyFile *keyfile;
-  gchar *dirs[3];
   gchar *path;
-  GError *error;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (settings,
                                       GTK_TYPE_SETTINGS,
@@ -271,25 +271,6 @@ gtk_settings_init (GtkSettings *settings)
   i = 0;
   g_object_freeze_notify (G_OBJECT (settings));
 
-  keyfile = g_key_file_new ();
-  dirs[0] = g_build_filename (g_get_user_config_dir (), "gtk-3.0", NULL);
-  dirs[1] = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", NULL);
-  dirs[2] = NULL;
-  path = NULL;
-
-  error = NULL;
-  if (!g_key_file_load_from_dirs (keyfile, "settings.ini",
-                                  (const gchar**)dirs, &path,
-                                  G_KEY_FILE_NONE,
-                                  &error))
-    {
-      if (!g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_NOT_FOUND))
-        g_warning ("Failed to parse %s: %s", path ? path : "settings.ini", error->message);
-
-      g_error_free (error);
-      error = NULL;
-    }
-
   for (p = pspecs; *p; p++)
     {
       GParamSpec *pspec = *p;
@@ -300,75 +281,23 @@ gtk_settings_init (GtkSettings *settings)
       g_value_init (&priv->property_values[i].value, value_type);
       g_param_value_set_default (pspec, &priv->property_values[i].value);
 
-      error = NULL;
-      switch (value_type)
-        {
-        case G_TYPE_BOOLEAN:
-          {
-            gboolean b_val;
-
-            b_val = g_key_file_get_boolean (keyfile, "Settings", pspec->name, &error);
-            if (!error)
-              g_value_set_boolean (&priv->property_values[i].value, b_val);
-            break;
-          }
-
-        case G_TYPE_INT:
-          {
-            gint i_val;
-
-            i_val = g_key_file_get_integer (keyfile, "Settings", pspec->name, &error);
-            if (!error)
-              g_value_set_int (&priv->property_values[i].value, i_val);
-            break;
-          }
-
-        case G_TYPE_DOUBLE:
-          {
-            gdouble d_val;
-
-            d_val = g_key_file_get_double (keyfile, "Settings", pspec->name, &error);
-            if (!error)
-              g_value_set_double (&priv->property_values[i].value, d_val);
-            break;
-          }
-
-        case G_TYPE_STRING:
-          {
-            gchar *s_val;
-
-            s_val = g_key_file_get_string (keyfile, "Settings", pspec->name, &error);
-            if (!error)
-              g_value_set_string (&priv->property_values[i].value, s_val);
-            g_free (s_val);
-            break;
-          }
-        default: ;
-          /* FIXME: handle parsing nicks, colors, etc */
-        }
-
-      if (error)
-        {
-          if (!g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND) &&
-              !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
-            g_warning ("Failed to parse %s: %s", path ? path : "settings.ini", error->message);
-
-          g_error_free (error);
-          error = NULL;
-        }
-
       g_object_notify (G_OBJECT (settings), pspec->name);
       priv->property_values[i].source = GTK_SETTINGS_SOURCE_DEFAULT;
       i++;
     }
+  g_free (pspecs);
 
-  g_key_file_free (keyfile);
+  path = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", "settings.ini", NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
   g_free (path);
-  g_free (dirs[0]);
-  g_free (dirs[1]);
+
+  path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "settings.ini", NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_DEFAULT);
+  g_free (path);
 
   g_object_thaw_notify (G_OBJECT (settings));
-  g_free (pspecs);
 }
 
 static void
@@ -1736,7 +1665,8 @@ _gtk_settings_parse_convert (GtkRcPropertyParser parser,
         {
           gchar *tstr = g_strescape (g_value_get_string (src_value), NULL);
 
-          gstring = g_string_new ("\"");
+          gstring = g_string_new (NULL);
+          g_string_append_c (gstring, '\"');
           g_string_append (gstring, tstr);
           g_string_append_c (gstring, '\"');
           g_free (tstr);
@@ -1964,7 +1894,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
       !G_VALUE_HOLDS_STRING (&new_value->value) &&
       !G_VALUE_HOLDS (&new_value->value, G_TYPE_GSTRING))
     {
-      g_warning (G_STRLOC ": value type invalid");
+      g_warning (G_STRLOC ": value type invalid (%s)", g_type_name (G_VALUE_TYPE (&new_value->value)));
       return;
     }
 
@@ -3012,4 +2942,124 @@ GdkScreen *
 _gtk_settings_get_screen (GtkSettings *settings)
 {
   return settings->priv->screen;
+}
+
+
+static void
+gtk_settings_load_from_key_file (GtkSettings       *settings,
+                                 const gchar       *path,
+                                 GtkSettingsSource  source)
+{
+  GError *error;
+  GKeyFile *keyfile;
+  gchar **keys;
+  gsize n_keys;
+  gint i;
+
+  error = NULL;
+  keys = NULL;
+
+  keyfile = g_key_file_new ();
+
+  if (!g_key_file_load_from_file (keyfile, path, G_KEY_FILE_NONE, &error))
+    {
+      g_warning ("Failed to parse %s: %s", path, error->message);
+
+      g_error_free (error);
+
+      goto out;
+    }
+
+  keys = g_key_file_get_keys (keyfile, "Settings", &n_keys, &error);
+  if (error)
+    {
+      g_warning ("Failed to parse %s: %s", path, error->message);
+      g_error_free (error);
+      goto out;
+    }
+
+  for (i = 0; i < n_keys; i++)
+    {
+      gchar *key;
+      GParamSpec *pspec;
+      GType value_type;
+      GtkSettingsValue svalue = { NULL, { 0, }, };
+
+      key = keys[i];
+      pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), key);
+      if (!pspec)
+        {
+          g_warning ("Unknown key %s in %s", key, path);
+          continue;
+        }
+
+      if (pspec->owner_type != G_OBJECT_TYPE (settings))
+        continue;
+
+      value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
+      switch (value_type)
+        {
+        case G_TYPE_BOOLEAN:
+          {
+            gboolean b_val;
+
+            g_value_init (&svalue.value, G_TYPE_LONG);
+            b_val = g_key_file_get_boolean (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_long (&svalue.value, b_val);
+            break;
+          }
+
+        case G_TYPE_INT:
+          {
+            gint i_val;
+
+            g_value_init (&svalue.value, G_TYPE_LONG);
+            i_val = g_key_file_get_integer (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_long (&svalue.value, i_val);
+            break;
+          }
+
+        case G_TYPE_DOUBLE:
+          {
+            gdouble d_val;
+
+            g_value_init (&svalue.value, G_TYPE_DOUBLE);
+            d_val = g_key_file_get_double (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_double (&svalue.value, d_val);
+            break;
+          }
+
+        default:
+          {
+            gchar *s_val;
+
+            g_value_init (&svalue.value, G_TYPE_GSTRING);
+            s_val = g_key_file_get_string (keyfile, "Settings", key, &error);
+            if (!error)
+              g_value_set_boxed (&svalue.value, g_string_new (s_val));
+            g_free (s_val);
+            break;
+          }
+        }
+      if (error)
+        {
+          g_warning ("Error setting %s in %s: %s", key, path, error->message);
+          g_error_free (error);
+          error = NULL;
+        }
+      else
+        {
+          if (g_getenv ("GTK_DEBUG"))
+            svalue.origin = (gchar *)path;
+          gtk_settings_set_property_value_internal (settings, key, &svalue, source);
+          g_value_unset (&svalue.value);
+        }
+    }
+
+ out:
+  g_strfreev (keys);
+  g_key_file_free (keyfile);
 }
