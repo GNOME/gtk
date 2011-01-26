@@ -25,12 +25,13 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <cairo-gobject.h>
 
+#include "gtkcssproviderprivate.h"
+
 #include "gtkanimationdescription.h"
 #include "gtk9slice.h"
 #include "gtkgradient.h"
 #include "gtkthemingengine.h"
 #include "gtkstyleprovider.h"
-#include "gtkcssprovider.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkprivate.h"
 
@@ -3936,8 +3937,8 @@ gtk_css_provider_get_default (void)
   return provider;
 }
 
-static gchar *
-css_provider_get_theme_dir (void)
+gchar *
+_gtk_css_provider_get_theme_dir (void)
 {
   const gchar *var;
   gchar *path;
@@ -4000,7 +4001,7 @@ gtk_css_provider_get_named (const gchar *name,
 
       if (!path)
         {
-          gchar *theme_dir = css_provider_get_theme_dir ();
+          gchar *theme_dir = _gtk_css_provider_get_theme_dir ();
           path = g_build_filename (theme_dir, name, subpath, NULL);
           g_free (theme_dir);
 
