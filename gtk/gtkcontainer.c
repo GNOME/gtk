@@ -579,9 +579,10 @@ typedef struct {
   GtkBuilder   *builder;
   GtkContainer *container;
   GtkWidget    *child;
+  GString      *string;
   gchar        *child_prop_name;
   gchar        *context;
-  gboolean     translatable;
+  gboolean      translatable;
 } PackingPropertiesData;
 
 static void
@@ -629,34 +630,46 @@ attributes_text_element (GMarkupParseContext *context,
                          GError             **error)
 {
   PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
-  gchar* value;
 
-  if (!parser_data->child_prop_name)
-    return;
+  if (parser_data->child_prop_name)
+    g_string_append_len (parser_data->string, text, text_len);
+}
 
-  if (parser_data->translatable && text_len)
+static void
+attributes_end_element (GMarkupParseContext *context,
+			const gchar         *element_name,
+			gpointer             user_data,
+			GError             **error)
+{
+  PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
+
+  /* Append the translated strings */
+  if (parser_data->string->len)
     {
-      const gchar* domain;
-      domain = gtk_builder_get_translation_domain (parser_data->builder);
+      if (parser_data->translatable)
+	{
+	  gchar *translated;
+	  const gchar* domain;
 
-      value = _gtk_builder_parser_translate (domain,
-                                             parser_data->context,
-                                             text);
+	  domain = gtk_builder_get_translation_domain (parser_data->builder);
+
+	  translated = _gtk_builder_parser_translate (domain,
+						      parser_data->context,
+						      parser_data->string->str);
+	  g_string_set_size (parser_data->string, 0);
+	  g_string_append (parser_data->string, translated);
+	}
+
+      gtk_container_buildable_set_child_property (parser_data->container,
+						  parser_data->builder,
+						  parser_data->child,
+						  parser_data->child_prop_name,
+						  parser_data->string->str);
     }
-  else
-    {
-      value = g_strdup (text);
-    }
 
-  gtk_container_buildable_set_child_property (parser_data->container,
-                                              parser_data->builder,
-                                              parser_data->child,
-                                              parser_data->child_prop_name,
-                                              value);
-
+  g_string_set_size (parser_data->string, 0);
   g_free (parser_data->child_prop_name);
   g_free (parser_data->context);
-  g_free (value);
   parser_data->child_prop_name = NULL;
   parser_data->context = NULL;
   parser_data->translatable = FALSE;
@@ -665,7 +678,7 @@ attributes_text_element (GMarkupParseContext *context,
 static const GMarkupParser attributes_parser =
   {
     attributes_start_element,
-    NULL,
+    attributes_end_element,
     attributes_text_element,
   };
 
@@ -686,6 +699,7 @@ gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
   if (child && strcmp (tagname, "packing") == 0)
     {
       parser_data = g_slice_new0 (PackingPropertiesData);
+      parser_data->string = g_string_new ("");
       parser_data->builder = builder;
       parser_data->container = GTK_CONTAINER (buildable);
       parser_data->child = GTK_WIDGET (child);
@@ -708,15 +722,15 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
 {
   if (strcmp (tagname, "packing") == 0)
     {
-      g_slice_free (PackingPropertiesData, (gpointer)data);
+      PackingPropertiesData *parser_data = (PackingPropertiesData*)data;
+      g_string_free (parser_data->string, TRUE);
+      g_slice_free (PackingPropertiesData, parser_data);
       return;
-
     }
 
   if (parent_buildable_iface->custom_tag_end)
     parent_buildable_iface->custom_tag_end (buildable, builder,
                                             child, tagname, data);
-
 }
 
 /**
