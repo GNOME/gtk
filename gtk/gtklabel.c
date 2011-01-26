@@ -1963,7 +1963,8 @@ gtk_label_set_attributes (GtkLabel         *label,
  * effective attributes for the label, use
  * pango_layout_get_attribute (gtk_label_get_layout (label)).
  *
- * Return value: the attribute list, or %NULL if none was set.
+ * Return value: (transfer none): the attribute list, or %NULL
+ *     if none was set.
  **/
 PangoAttrList *
 gtk_label_get_attributes (GtkLabel *label)

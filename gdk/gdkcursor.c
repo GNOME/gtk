@@ -48,7 +48,7 @@ gdk_cursor_get_type (void)
  * 
  * Adds a reference to @cursor.
  * 
- * Return value: Same @cursor that was passed in
+ * Return value: (transfer full): Same @cursor that was passed in
  **/
 GdkCursor*
 gdk_cursor_ref (GdkCursor *cursor)

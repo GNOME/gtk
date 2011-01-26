@@ -551,8 +551,8 @@ gdk_screen_list_visuals (GdkScreen *screen)
  *
  * Looks up the #GdkVisual for a particular screen and X Visual ID.
  *
- * Returns: the #GdkVisual (owned by the screen object), or %NULL
- *   if the visual ID wasn't found.
+ * Returns: (transfer none): the #GdkVisual (owned by the screen
+ *   object), or %NULL if the visual ID wasn't found.
  *
  * Since: 2.2
  */

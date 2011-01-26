@@ -2286,7 +2286,8 @@ gtk_invoke_input (gpointer	    data,
  * signal. The returned event must be freed with gdk_event_free().
  * If there is no current event, the function returns %NULL.
  * 
- * Return value: a copy of the current event, or %NULL if no current event.
+ * Return value: (transfer full): a copy of the current event, or %NULL if no
+ *     current event.
  **/
 GdkEvent*
 gtk_get_current_event (void)

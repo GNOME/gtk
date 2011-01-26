@@ -881,8 +881,8 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
    * signal is emitted on the operation. Then you can read out any 
    * information you need from the widgets.
    *
-   * Returns: A custom widget that gets embedded in the print dialog,
-   *          or %NULL
+   * Returns: (transfer none): A custom widget that gets embedded in
+   *          the print dialog, or %NULL
    *
    * Since: 2.10
    */

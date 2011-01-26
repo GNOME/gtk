@@ -67,8 +67,8 @@ static GQuark    deserialize_quark (void);
  * This function registers a rich text serialization @function along with
  * its @mime_type with the passed @buffer.
  *
- * Return value: the #GdkAtom that corresponds to the newly registered
- *               format's mime-type.
+ * Return value: (transfer none): the #GdkAtom that corresponds to the
+ *               newly registered format's mime-type.
  *
  * Since: 2.10
  **/
@@ -124,8 +124,8 @@ gtk_text_buffer_register_serialize_format (GtkTextBuffer              *buffer,
  * identifier != %NULL here, since the %NULL tagset requires the
  * receiving buffer to deal with with pasting of arbitrary tags.
  *
- * Return value: the #GdkAtom that corresponds to the newly registered
- *               format's mime-type.
+ * Return value: (transfer none): the #GdkAtom that corresponds to the
+ *               newly registered format's mime-type.
  *
  * Since: 2.10
  **/
@@ -165,8 +165,8 @@ gtk_text_buffer_register_serialize_tagset (GtkTextBuffer *buffer,
  * This function registers a rich text deserialization @function along with
  * its @mime_type with the passed @buffer.
  *
- * Return value: the #GdkAtom that corresponds to the newly registered
- *               format's mime-type.
+ * Return value: (transfer none): the #GdkAtom that corresponds to the
+ *               newly registered format's mime-type.
  *
  * Since: 2.10
  **/
@@ -208,8 +208,8 @@ gtk_text_buffer_register_deserialize_format (GtkTextBuffer                *buffe
  * format with the passed @buffer. See
  * gtk_text_buffer_register_serialize_tagset() for details.
  *
- * Return value: the #GdkAtom that corresponds to the newly registered
- *               format's mime-type.
+ * Return value: (transfer none): the #GdkAtom that corresponds to the
+ *               newly registered format's mime-type.
  *
  * Since: 2.10
  **/

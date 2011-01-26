@@ -924,7 +924,8 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
  * Given the root window ID of one of the screen's of a #GdkDisplay,
  * finds the screen.
  * 
- * Return value: the #GdkScreen corresponding to @xrootwin, or %NULL.
+ * Return value: (transfer none): the #GdkScreen corresponding to
+ *     @xrootwin, or %NULL.
  **/
 GdkScreen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,

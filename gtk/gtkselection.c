@@ -193,7 +193,7 @@ static const char gtk_selection_handler_key[] = "gtk-selection-handlers";
  * 
  * Creates a new #GtkTargetList from an array of #GtkTargetEntry.
  * 
- * Return value: the new #GtkTargetList.
+ * Return value: (transfer full): the new #GtkTargetList.
  **/
 GtkTargetList *
 gtk_target_list_new (const GtkTargetEntry *targets,
@@ -1118,7 +1118,7 @@ gtk_selection_convert (GtkWidget *widget,
  *
  * Retrieves the selection #GdkAtom of the selection data.
  *
- * Returns: the selection #GdkAtom of the selection data.
+ * Returns: (transfer none): the selection #GdkAtom of the selection data.
  *
  * Since: 2.16
  **/
@@ -1136,7 +1136,7 @@ gtk_selection_data_get_selection (GtkSelectionData *selection_data)
  *
  * Retrieves the target of the selection.
  *
- * Returns:  the target of the selection.
+ * Returns: (transfer none): the target of the selection.
  *
  * Since: 2.14
  **/
@@ -1154,7 +1154,7 @@ gtk_selection_data_get_target (GtkSelectionData *selection_data)
  *
  * Retrieves the data type of the selection.
  *
- * Returns:  the data type of the selection.
+ * Returns: (transfer none): the data type of the selection.
  *
  * Since: 2.14
  **/

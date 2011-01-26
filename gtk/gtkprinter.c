@@ -398,7 +398,7 @@ gtk_printer_new (const gchar     *name,
  * 
  * Returns the backend of the printer.
  * 
- * Return value: the backend of @printer
+ * Return value: (transfer none): the backend of @printer
  * 
  * Since: 2.10
  */

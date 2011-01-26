@@ -220,7 +220,7 @@ gtk_test_spin_button_click (GtkSpinButton  *spinner,
  * so this function is genrally only useful in test programs with
  * predetermined locales, see gtk_test_init() for more details.
  *
- * Returns: a GtkLabel widget if any is found.
+ * Returns: (transfer none): a GtkLabel widget if any is found.
  *
  * Since: 2.14
  **/
@@ -316,7 +316,7 @@ widget_geo_cmp (gconstpointer a,
  * widget, relative to another labeling widget. Such as finding a
  * button or text entry widget, given it's corresponding label widget.
  *
- * Returns: a widget of type @widget_type if any is found.
+ * Returns: (transfer none): a widget of type @widget_type if any is found.
  *
  * Since: 2.14
  **/
@@ -358,7 +358,7 @@ gtk_test_find_sibling (GtkWidget *base_widget,
  * gtk_test_widget_click() for possible caveats involving the search of
  * such widgets and synthesizing widget events.
  *
- * Returns: a valid widget if any is found or %NULL.
+ * Returns: (transfer none): a valid widget if any is found or %NULL.
  *
  * Since: 2.14
  **/
@@ -598,7 +598,7 @@ gtk_test_display_button_window (const gchar *window_title,
  * The window will quit any running gtk_main()-loop when destroyed, and it
  * will automatically be destroyed upon test function teardown.
  *
- * Returns: a widget pointer to the newly created GtkWindow.
+ * Returns: (transfer none): a widget pointer to the newly created GtkWindow.
  *
  * Since: 2.14
  **/

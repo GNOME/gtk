@@ -3860,7 +3860,7 @@ gtk_print_unix_dialog_new (const gchar *title,
  *
  * Gets the currently selected printer.
  *
- * Returns: the currently selected printer
+ * Returns: (transfer none): the currently selected printer
  *
  * Since: 2.10
  */
@@ -3909,7 +3909,7 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
  *
  * Gets the page setup that is used by the #GtkPrintUnixDialog.
  *
- * Returns: the page setup of @dialog.
+ * Returns: (transfer none): the page setup of @dialog.
  *
  * Since: 2.10
  */

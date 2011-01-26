@@ -1229,6 +1229,14 @@ gtk_menu_attach_to_widget (GtkMenu	       *menu,
   g_object_notify (G_OBJECT (menu), "attach-widget");
 }
 
+/**
+ * gtk_menu_get_attach_widget:
+ * @menu: a #GtkMenu
+ *
+ * Returns the #GtkWidget that the menu is attached to.
+ *
+ * Returns: (transfer none): the #GtkWidget that the menu is attached to
+ */
 GtkWidget*
 gtk_menu_get_attach_widget (GtkMenu *menu)
 {
@@ -1712,6 +1720,17 @@ gtk_menu_popdown (GtkMenu *menu)
   menu_grab_transfer_window_destroy (menu);
 }
 
+/**
+ * gtk_menu_get_active:
+ * @menu: a #GtkMenu
+ *
+ * Returns the selected menu item from the menu.  This is used by the
+ * #GtkOptionMenu.
+ *
+ * Returns: (transfer none): the #GtkMenuItem that was last selected
+ *          in the menu.  If a selection has not yet been made, the
+ *          first menu item is selected.
+ */
 GtkWidget*
 gtk_menu_get_active (GtkMenu *menu)
 {
@@ -1788,6 +1807,15 @@ gtk_menu_set_accel_group (GtkMenu	*menu,
     }
 }
 
+/**
+ * gtk_menu_get_accel_group:
+ * @menu a #GtkMenu
+ *
+ * Gets the #GtkAccelGroup which holds global accelerators for the
+ * menu.  See gtk_menu_set_accel_group().
+ *
+ * Returns: (transfer none): the #GtkAccelGroup associated with the menu.
+ */
 GtkAccelGroup*
 gtk_menu_get_accel_group (GtkMenu *menu)
 {

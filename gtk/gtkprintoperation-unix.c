@@ -983,7 +983,7 @@ get_page_setup_dialog (GtkWindow        *parent,
  * setup dialog. See gtk_print_run_page_setup_dialog_async() if this is 
  * a problem.
  * 
- * Return value: a new #GtkPageSetup
+ * Return value: (transfer full): a new #GtkPageSetup
  *
  * Since: 2.10
  */

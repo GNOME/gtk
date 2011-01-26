@@ -636,7 +636,7 @@ gtk_binding_set_by_class (gpointer object_class)
  * either be a name used for gtk_binding_set_new() or the type name of
  * a class used in gtk_binding_set_by_class().
  *
- * Return value: %NULL or the specified binding set
+ * Return value: (transfer none): %NULL or the specified binding set
  */
 GtkBindingSet*
 gtk_binding_set_find (const gchar *set_name)

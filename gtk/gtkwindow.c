@@ -7790,7 +7790,7 @@ gtk_window_has_group (GtkWindow *window)
  * Gets the current grab widget of the given group,
  * see gtk_grab_add().
  *
- * Returns: the current grab widget of the group
+ * Returns: (transfer none): the current grab widget of the group
  *
  * Since: 2.22
  */

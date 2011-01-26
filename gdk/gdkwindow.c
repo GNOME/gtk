@@ -507,7 +507,8 @@ gdk_window_class_init (GdkWindowObjectClass *klass)
    * The ::pick-embedded-child signal is emitted to find an embedded
    * child at the given position.
    *
-   * Returns: the #GdkWindow of the embedded child at @x, @y, or %NULL
+   * Returns: (transfer none): the #GdkWindow of the embedded child at
+   *     @x, @y, or %NULL
    *
    * Since: 2.18
    */
@@ -8086,8 +8087,8 @@ gdk_window_set_back_pixmap (GdkWindow *window,
  * does not have its own background and reuses the parent's, %NULL is
  * returned and you'll have to query it yourself.
  *
- * Returns: The pattern to use for the background or %NULL to use the
- * parent's background.
+ * Returns: (transfer none): The pattern to use for the background or
+ *     %NULL to use the parent's background.
  *
  * Since: 2.22
  **/
@@ -8137,9 +8138,10 @@ gdk_window_get_background_pattern (GdkWindow *window)
  * there is no custom cursor set on the specified window, and it is
  * using the cursor for its parent window.
  *
- * Return value: a #GdkCursor, or %NULL. The returned object is owned
- *   by the #GdkWindow and should not be unreferenced directly. Use
- *   gdk_window_set_cursor() to unset the cursor of the window
+ * Return value: (transfer none): a #GdkCursor, or %NULL. The returned
+ *   object is owned by the #GdkWindow and should not be unreferenced
+ *   directly. Use gdk_window_set_cursor() to unset the cursor of the
+ *   window
  *
  * Since: 2.18
  */

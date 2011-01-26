@@ -1681,9 +1681,9 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
  *
  * Returns the pixbuf displayed as logo in the about dialog.
  *
- * Return value: the pixbuf displayed as logo. The pixbuf is
- *   owned by the about dialog. If you want to keep a reference
- *   to it, you have to call g_object_ref() on it.
+ * Return value: (transfer none): the pixbuf displayed as logo. The
+ *   pixbuf is owned by the about dialog. If you want to keep a
+ *   reference to it, you have to call g_object_ref() on it.
  *
  * Since: 2.6
  */

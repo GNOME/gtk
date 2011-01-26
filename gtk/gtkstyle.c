@@ -877,7 +877,7 @@ gtk_style_realize (GtkStyle    *style,
  * and the default icon factory, returning an icon set if found,
  * otherwise %NULL.
  *
- * Return value: icon set of @stock_id
+ * Return value: (transfer none): icon set of @stock_id
  */
 GtkIconSet*
 gtk_style_lookup_icon_set (GtkStyle   *style,

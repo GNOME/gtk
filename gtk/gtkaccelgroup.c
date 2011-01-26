@@ -370,8 +370,8 @@ gtk_accel_groups_from_object (GObject *object)
  * @accel_group: a #GtkAccelGroup
  * @find_func: a function to filter the entries of @accel_group with
  * @data: data to pass to @find_func
- * @returns: the key of the first entry passing @find_func. The key is 
- * owned by GTK+ and must not be freed.
+ * @returns: (transfer none): the key of the first entry passing
+ *    @find_func. The key is owned by GTK+ and must not be freed.
  *
  * Finds the first entry in an accelerator group for which 
  * @find_func returns %TRUE and returns its #GtkAccelKey.
@@ -832,7 +832,8 @@ gtk_accel_group_query (GtkAccelGroup  *accel_group,
 /**
  * gtk_accel_group_from_accel_closure:
  * @closure: a #GClosure
- * @returns: (allow-none): the #GtkAccelGroup to which @closure is connected, or %NULL.
+ * @returns: (transfer none): the #GtkAccelGroup to which @closure
+ *     is connected, or %NULL.
  *
  * Finds the #GtkAccelGroup to which @closure is connected; 
  * see gtk_accel_group_connect().

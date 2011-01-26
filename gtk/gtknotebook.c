@@ -1005,7 +1005,8 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    * The default handler uses the global window creation hook,
    * if one has been set with gtk_notebook_set_window_creation_hook().
    *
-   * Returns: a #GtkNotebook that @page should be added to, or %NULL.
+   * Returns: (transfer none): a #GtkNotebook that @page should be
+   *     added to, or %NULL.
    *
    * Since: 2.12
    */

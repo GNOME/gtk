@@ -254,7 +254,7 @@ _gtk_print_context_set_page_setup (GtkPrintContext *context,
  * Obtains the cairo context that is associated with the
  * #GtkPrintContext.
  *
- * Return value: the cairo context of @context
+ * Return value: (transfer none): the cairo context of @context
  *
  * Since: 2.10
  */

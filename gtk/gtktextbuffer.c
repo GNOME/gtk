@@ -4167,7 +4167,7 @@ gtk_text_buffer_get_target_list (GtkTextBuffer   *buffer,
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
- * Return value: the #GtkTargetList
+ * Return value: (transfer none): the #GtkTargetList
  *
  * Since: 2.10
  **/
@@ -4199,7 +4199,7 @@ gtk_text_buffer_get_copy_target_list (GtkTextBuffer *buffer)
  * using gtk_target_list_add_rich_text_targets() and
  * gtk_target_list_add_text_targets().
  *
- * Return value: the #GtkTargetList
+ * Return value: (transfer none): the #GtkTargetList
  *
  * Since: 2.10
  **/
