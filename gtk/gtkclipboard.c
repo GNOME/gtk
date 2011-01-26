@@ -649,7 +649,7 @@ gtk_clipboard_set_with_owner (GtkClipboard          *clipboard,
  * gtk_clipboard_clear() has not subsequently called, returns the owner set 
  * by gtk_clipboard_set_with_owner().
  * 
- * Return value: the owner of the clipboard, if any; otherwise %NULL.
+ * Return value: (transfer none): the owner of the clipboard, if any; otherwise %NULL.
  **/
 GObject *
 gtk_clipboard_get_owner (GtkClipboard *clipboard)
@@ -1407,7 +1407,8 @@ clipboard_rich_text_received_func (GtkClipboard *clipboard,
  * waits for the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  *
- * Return value: a newly-allocated binary block of data which must
+ * Return value: (array length=length) (transfer full): a
+ *               newly-allocated binary block of data which must
  *               be freed with g_free(), or %NULL if retrieving
  *               the selection data failed. (This could happen
  *               for various reasons, in particular if the
@@ -1473,7 +1474,7 @@ clipboard_image_received_func (GtkClipboard *clipboard,
  * the data to be received using the main loop, so events,
  * timeouts, etc, may be dispatched during the wait.
  * 
- * Return value: a newly-allocated #GdkPixbuf object which must
+ * Return value: (transfer full): a newly-allocated #GdkPixbuf object which must
  *               be disposed with g_object_unref(), or %NULL if 
  *               retrieving the selection data failed. (This 
  *               could happen for various reasons, in particular 
@@ -1569,7 +1570,7 @@ gtk_clipboard_wait_for_uris (GtkClipboard *clipboard)
  *
  * Gets the #GdkDisplay associated with @clipboard
  *
- * Return value: the #GdkDisplay associated with @clipboard
+ * Return value: (transfer none): the #GdkDisplay associated with @clipboard
  *
  * Since: 2.2
  **/
@@ -1725,7 +1726,8 @@ gtk_clipboard_wait_is_uris_available (GtkClipboard *clipboard)
 /**
  * gtk_clipboard_wait_for_targets
  * @clipboard: a #GtkClipboard
- * @targets: location to store an array of targets. The result
+ * @targets: (out) (array length=n_targets) (transfer container):  
+ *           location to store an array of targets. The result
  *           stored here must be freed with g_free().
  * @n_targets: location to store number of items in @targets.
  *

@@ -388,6 +388,13 @@ gtk_progress_bar_get_property (GObject      *object,
     }
 }
 
+/**
+ * gtk_progress_bar_new:
+ *
+ * Creates a new #GtkProgressBar.
+ *
+ * Returns: a #GtkProgressBar.
+ */
 GtkWidget*
 gtk_progress_bar_new (void)
 {

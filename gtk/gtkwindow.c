@@ -3862,7 +3862,7 @@ gtk_window_set_default_icon_from_file (const gchar *filename,
  * but the pixbufs in the list have not had their reference count
  * incremented.
  * 
- * Return value: copy of default icon list 
+ * Return value: (element-type GdkPixbuf) (transfer container): copy of default icon list 
  **/
 GList*
 gtk_window_get_default_icon_list (void)
