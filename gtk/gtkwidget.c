@@ -4503,7 +4503,13 @@ gtk_widget_queue_draw_region (GtkWidget      *widget,
  *
  * Convenience function that calls gtk_widget_queue_draw_region() on
  * the region created from the given coordinates.
- **/
+ *
+ * The region here is specified in widget coordinates.
+ * Widget coordinates are a bit odd; for historical reasons, they are
+ * defined as @widget->window coordinates for widgets that are not
+ * #GTK_NO_WINDOW widgets, and are relative to @widget->allocation.x,
+ * @widget->allocation.y for widgets that are #GTK_NO_WINDOW widgets.
+ */
 void
 gtk_widget_queue_draw_area (GtkWidget *widget,
 			    gint       x,
