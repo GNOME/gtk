@@ -10,17 +10,17 @@
 # Pablo Gonzalo del Campo <pablodc@bigfoot.com>, 2002-2003.
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010, 2011.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2010, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&component=general\n"
-"POT-Creation-Date: 2011-01-21 01:58+0000\n"
-"PO-Revision-Date: 2011-01-23 14:50+0100\n"
-"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%"
+"2b&component=general\n"
+"POT-Creation-Date: 2011-01-23 22:29+0000\n"
+"PO-Revision-Date: 2011-01-26 14:00+0100\n"
+"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -635,11 +635,11 @@ msgstr "Separación por la derecha"
 msgid "The padding to insert at the right of the widget."
 msgstr "La separación que introducir por el lado derecho del widget."
 
-#: ../gtk/gtkappchooserbutton.c:540
+#: ../gtk/gtkappchooserbutton.c:547
 msgid "Include an 'Other...' item"
 msgstr ""
 
-#: ../gtk/gtkappchooserbutton.c:541
+#: ../gtk/gtkappchooserbutton.c:548
 msgid ""
 "Whether the combobox should include an item that triggers a "
 "GtkAppChooserDialog"
@@ -666,40 +666,37 @@ msgid "The GFile used by the app chooser dialog"
 msgstr "El título del diálogo de selección de archivos."
 
 #: ../gtk/gtkappchooserdialog.c:708
-#, fuzzy
 #| msgid "Show Heading"
 msgid "Heading"
-msgstr "Mostrar cabecera"
+msgstr "Encabezado"
 
 #: ../gtk/gtkappchooserdialog.c:709
-#, fuzzy
 #| msgid "The padding to insert at the top of the widget."
 msgid "The text to show at the top of the dialog"
-msgstr "La separación que introducir por encima del widget."
+msgstr "El texto que mostrar en la parte superior del diálogo"
 
-#: ../gtk/gtkappchooserwidget.c:1017
+#: ../gtk/gtkappchooserwidget.c:1013
 msgid "Show default app"
 msgstr ""
 
-#: ../gtk/gtkappchooserwidget.c:1018
+#: ../gtk/gtkappchooserwidget.c:1014
 msgid "Whether the widget should show the default application"
 msgstr "Indica si el widget debería mostrar la aplicación predeterminada"
 
-#: ../gtk/gtkappchooserwidget.c:1031
+#: ../gtk/gtkappchooserwidget.c:1027
 msgid "Show recommended apps"
 msgstr ""
 
-#: ../gtk/gtkappchooserwidget.c:1032
-#, fuzzy
+#: ../gtk/gtkappchooserwidget.c:1028
 #| msgid "Whether images should be shown on buttons"
 msgid "Whether the widget should show recommended applications"
-msgstr "Indica si se deben mostrar las imágenes en los botones"
+msgstr "Indica si el widget debe mostrar las aplicaciones recomendadas"
 
-#: ../gtk/gtkappchooserwidget.c:1045
+#: ../gtk/gtkappchooserwidget.c:1041
 msgid "Show fallback apps"
 msgstr ""
 
-#: ../gtk/gtkappchooserwidget.c:1046
+#: ../gtk/gtkappchooserwidget.c:1042
 #, fuzzy
 #| msgid "Whether the label widget should fill all available horizontal space"
 msgid "Whether the widget should show fallback applications"
@@ -707,33 +704,29 @@ msgstr ""
 "Indica si el widget de etiqueta debería llenar todo el espacio horizontal "
 "disponible"
 
-#: ../gtk/gtkappchooserwidget.c:1058
+#: ../gtk/gtkappchooserwidget.c:1054
 msgid "Show other apps"
 msgstr "Mostrar otras aplicaciones"
 
-#: ../gtk/gtkappchooserwidget.c:1059
-#, fuzzy
+#: ../gtk/gtkappchooserwidget.c:1055
 #| msgid "Whether the widget has the input focus"
 msgid "Whether the widget should show other applications"
-msgstr "Indica si el widget tiene el foco de entrada"
+msgstr "Indica si el widget debe mostrar otras aplicaciones"
 
-#: ../gtk/gtkappchooserwidget.c:1072
+#: ../gtk/gtkappchooserwidget.c:1068
 msgid "Show all apps"
 msgstr "Mostrar todas las aplicaciones"
 
-#: ../gtk/gtkappchooserwidget.c:1073
-#, fuzzy
+#: ../gtk/gtkappchooserwidget.c:1069
 #| msgid "Whether the label widget should fill all available horizontal space"
 msgid "Whether the widget should show all applications"
-msgstr ""
-"Indica si el widget de etiqueta debería llenar todo el espacio horizontal "
-"disponible"
+msgstr "Indica si el widget debe mostrar todas las aplicaciones"
 
-#: ../gtk/gtkappchooserwidget.c:1086
+#: ../gtk/gtkappchooserwidget.c:1082
 msgid "Widget's default text"
 msgstr ""
 
-#: ../gtk/gtkappchooserwidget.c:1087
+#: ../gtk/gtkappchooserwidget.c:1083
 msgid "The default text appearing when there are no applications"
 msgstr ""
 
@@ -1238,30 +1231,27 @@ msgid "Space which is inserted between cells"
 msgstr "Espacio que se introduce entre las celdas"
 
 #: ../gtk/gtkcellareabox.c:339
-#, fuzzy
 #| msgid "Whether to use the hexpand property"
 msgid "Whether the cell expands"
-msgstr "Indica si se debe usar la propiedad hexpand"
+msgstr "Indica si la celda se expande"
 
 #: ../gtk/gtkcellareabox.c:354
 msgid "Align"
 msgstr "Alineación"
 
 #: ../gtk/gtkcellareabox.c:355
-#, fuzzy
 #| msgid "Whether the item should start a new row"
 msgid "Whether cell should align with adjacent rows"
-msgstr "Indica si el elemento debería iniciar una fila nueva"
+msgstr "Indica si la celda debe alinearse con las filas adyacentes"
 
 #: ../gtk/gtkcellareabox.c:371
 msgid "Fixed Size"
 msgstr "Tamaño fijo"
 
 #: ../gtk/gtkcellareabox.c:372
-#, fuzzy
 #| msgid "Whether the children should all be the same size"
 msgid "Whether cells should be the same size in all rows"
-msgstr "Indica si todos los hijos deben ser del mismo tamaño"
+msgstr "Indica si la celda debe tener el mismo tamaño en todas las filas"
 
 #: ../gtk/gtkcellareabox.c:388
 msgid "Pack Type"
@@ -1284,20 +1274,18 @@ msgid "Focus Cell"
 msgstr ""
 
 #: ../gtk/gtkcellarea.c:774
-#, fuzzy
 #| msgid "The item which is currently active"
 msgid "The cell which currently has focus"
-msgstr "El elemento que está activo actualmente"
+msgstr "La celda que tiene el foco actualmente"
 
 #: ../gtk/gtkcellarea.c:792
 msgid "Edited Cell"
 msgstr ""
 
 #: ../gtk/gtkcellarea.c:793
-#, fuzzy
 #| msgid "The item which is currently active"
 msgid "The cell which is currently being edited"
-msgstr "El elemento que está activo actualmente"
+msgstr "La celda que se está editando actualmente"
 
 #: ../gtk/gtkcellarea.c:811
 msgid "Edit Widget"
@@ -1521,8 +1509,7 @@ msgstr "Tiene entrada"
 
 #: ../gtk/gtkcellrenderercombo.c:151
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
+msgstr "Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
 
 #: ../gtk/gtkcellrendererpixbuf.c:120
 msgid "Pixbuf Object"
@@ -1789,8 +1776,7 @@ msgstr "Tipografía"
 
 #: ../gtk/gtkcellrenderertext.c:359 ../gtk/gtktexttag.c:262
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
-"Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
+msgstr "Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
 
 #: ../gtk/gtkcellrenderertext.c:367 ../gtk/gtktexttag.c:270
 msgid "Font description as a PangoFontDescription struct"
@@ -2142,10 +2128,9 @@ msgid "The GtkCellArea used to layout cells"
 msgstr "El GtkCellArea usado para la distribución de las celdas"
 
 #: ../gtk/gtkcellview.c:265
-#, fuzzy
 #| msgid "Cell Area"
 msgid "Cell Area Context"
-msgstr "Área de la celda"
+msgstr "Contexto del área de la celda"
 
 #: ../gtk/gtkcellview.c:266
 #, fuzzy
@@ -3289,7 +3274,6 @@ msgid "Row Homogeneous"
 msgstr "Fila homogénea"
 
 #: ../gtk/gtkgrid.c:1284
-#| msgid "If TRUE, the table cells are all the same width/height"
 msgid "If TRUE, the rows are all the same height"
 msgstr "Si es cierto, las filas tienen todas la misma altura"
 
@@ -3298,7 +3282,6 @@ msgid "Column Homogeneous"
 msgstr "Columna homogénea"
 
 #: ../gtk/gtkgrid.c:1291
-#| msgid "If TRUE, the table cells are all the same width/height"
 msgid "If TRUE, the columns are all the same width"
 msgstr "Si es cierto, las columnas tienen todas la misma altura"
 
@@ -3325,7 +3308,6 @@ msgid "Width"
 msgstr "Anchura"
 
 #: ../gtk/gtkgrid.c:1312
-#| msgid "The number of columns in the table"
 msgid "The number of columns that a child spans"
 msgstr "El número de columnas que un hijo engendra"
 
@@ -3334,7 +3316,6 @@ msgid "Height"
 msgstr "Altura"
 
 #: ../gtk/gtkgrid.c:1319
-#| msgid "The number of rows in the table"
 msgid "The number of rows that a child spans"
 msgstr "El número de filas que un hijo engendra"
 
@@ -3583,12 +3564,10 @@ msgid "The representation being used for image data"
 msgstr "La representación empleada para los datos de la imagen"
 
 #: ../gtk/gtkimage.c:355
-#| msgid "Use alpha"
 msgid "Use Fallback"
 msgstr "Usar alternativa"
 
 #: ../gtk/gtkimage.c:356
-#| msgid "Whether the status icon is blinking"
 msgid "Whether to use icon names fallback"
 msgstr "Indica si usar nombres de iconos como alternativa"
 
@@ -4300,12 +4279,10 @@ msgid "Scroll arrow spacing"
 msgstr "Espaciado del desplazamiento de las flechas"
 
 #: ../gtk/gtknumerableicon.c:652
-#| msgid "Icon set"
 msgid "Icon's count"
 msgstr "Conteo de iconos"
 
 #: ../gtk/gtknumerableicon.c:653
-#| msgid "The index of the current page"
 msgid "The count of the emblem currently displayed"
 msgstr "El conteo del emblema mostrado actualmente"
 
@@ -4314,12 +4291,10 @@ msgid "Icon's label"
 msgstr "Etiqueta del icono"
 
 #: ../gtk/gtknumerableicon.c:660
-#| msgid "The stock icon displayed on the item"
 msgid "The label to be displayed over the icon"
 msgstr "La etiqueta que mostrar sobre el icono"
 
 #: ../gtk/gtknumerableicon.c:666
-#| msgid "Style context"
 msgid "Icon's style context"
 msgstr "Estilo del contexto del icono"
 
@@ -4923,12 +4898,10 @@ msgid "The fill level."
 msgstr "El nivel de llenado."
 
 #: ../gtk/gtkrange.c:510
-#| msgid "Digits"
 msgid "Round Digits"
 msgstr "Redondear dígitos"
 
 #: ../gtk/gtkrange.c:511
-#| msgid "The number of pages in the document."
 msgid "The number of digits to round the value to."
 msgstr "El número de dígitos al que redondear el valor."
 
@@ -5068,7 +5041,7 @@ msgstr "Sólo local"
 #: ../gtk/gtkrecentchooser.c:218
 msgid "Whether the selected resource(s) should be limited to local file: URIs"
 msgstr ""
-"Indica si los recursos seleccionados deben limitarse a URI locales file:"
+"Indica si los recursos seleccionados deben limitarse a un archivo local: URI"
 
 #: ../gtk/gtkrecentchooser.c:234
 msgid "Limit"
@@ -5076,7 +5049,7 @@ msgstr "Límite"
 
 #: ../gtk/gtkrecentchooser.c:235
 msgid "The maximum number of items to be displayed"
-msgstr "El número máximo de elementos a mostrar"
+msgstr "El número máximo de elementos que mostrar"
 
 #: ../gtk/gtkrecentchooser.c:249
 msgid "Sort Type"
@@ -5181,7 +5154,6 @@ msgstr ""
 "Ajuste vertical compartido entre el widget desplazable y su controlador"
 
 #: ../gtk/gtkscrollable.c:120
-#| msgid "Horizontal Scrollbar Policy"
 msgid "Horizontal Scrollable Policy"
 msgstr "Directiva de desplazamiento horizontal"
 
@@ -5190,7 +5162,6 @@ msgid "How the size of the content should be determined"
 msgstr "Cómo se debería determinar el tamaño del contenido"
 
 #: ../gtk/gtkscrollable.c:136
-#| msgid "Vertical Scrollbar Policy"
 msgid "Vertical Scrollable Policy"
 msgstr "Directiva de desplazamiento vertical"
 
@@ -5473,8 +5444,8 @@ msgstr "Suavizado Xft"
 #: ../gtk/gtksettings.c:465
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, "
-"-1=predeterminado"
+"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, -"
+"1=predeterminado"
 
 #: ../gtk/gtksettings.c:474
 msgid "Xft Hinting"
@@ -6104,7 +6075,6 @@ msgid "GtkStyleContext to get style from"
 msgstr "GtkStyleContext del que obtener el estilo"
 
 #: ../gtk/gtkstylecontext.c:547
-#| msgid "Associated device"
 msgid "The associated GdkScreen"
 msgstr "La GdkScreen asociada"
 
@@ -6616,7 +6586,6 @@ msgid "Color with which to draw error-indication underlines"
 msgstr "Color con el que dibujar el subrayado de indicación de errores"
 
 #: ../gtk/gtkthemingengine.c:249
-#| msgid "Theme Name"
 msgid "Theming engine name"
 msgstr "Nombre del motor de temas"
 
@@ -6908,16 +6877,14 @@ msgid "Padding that should be put around icons in the tray"
 msgstr "Separación que poner alrededor de los iconos en la bandeja"
 
 #: ../gtk/gtktreemenu.c:287
-#, fuzzy
 #| msgid "TreeView Model"
 msgid "TreeMenu model"
-msgstr "Modelo TreeView"
+msgstr "Modelo TreeMenu"
 
 #: ../gtk/gtktreemenu.c:288
-#, fuzzy
 #| msgid "The model for the tree view"
 msgid "The model for the tree menu"
-msgstr "El modelo para la vista de árbol"
+msgstr "El modelo para el menú de árbol"
 
 #: ../gtk/gtktreemenu.c:310
 msgid "TreeMenu root row"
@@ -6940,16 +6907,14 @@ msgid "Whether the menu has a tearoff item"
 msgstr "Indica si la marca tiene gravedad izquierda"
 
 #: ../gtk/gtktreemenu.c:361
-#, fuzzy
 #| msgid "Wrap width"
 msgid "Wrap Width"
 msgstr "Ajustar anchura"
 
 #: ../gtk/gtktreemenu.c:362
-#, fuzzy
 #| msgid "Wrap width for laying out the items in a grid"
 msgid "Wrap width for laying out items in a grid"
-msgstr "Ajusta la anchura para distribuir los elementos en una rejilla"
+msgstr "Ajustar la anchura para distribuir los elementos en una rejilla"
 
 #: ../gtk/gtktreemodelsort.c:312
 msgid "TreeModelSort Model"
