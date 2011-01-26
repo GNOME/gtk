@@ -291,14 +291,9 @@ parser_text_element (GMarkupParseContext *context,
 		     GError             **error)
 {
   SubParserData *parser_data = (SubParserData*)user_data;
-  gchar *string;
 
   if (parser_data->parsing)
-    {
-      string = g_strndup (text, text_len);
-      g_string_append (parser_data->string, string);
-      g_free (string);
-    }
+    g_string_append_len (parser_data->string, text, text_len);
 }
 
 static void
