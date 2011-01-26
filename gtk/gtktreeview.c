@@ -13250,8 +13250,8 @@ gtk_tree_view_real_set_cursor (GtkTreeView     *tree_view,
 /**
  * gtk_tree_view_get_cursor:
  * @tree_view: A #GtkTreeView
- * @path: (out) (allow-none): A pointer to be filled with the current cursor path, or %NULL
- * @focus_column: (out) (allow-none): A pointer to be filled with the current focus column, or %NULL
+ * @path: (out) (transfer full) (allow-none): A pointer to be filled with the current cursor path, or %NULL
+ * @focus_column: (out) (transfer none) (allow-none): A pointer to be filled with the current focus column, or %NULL
  *
  * Fills in @path and @focus_column with the current path and focus column.  If
  * the cursor isn't currently set, then *@path will be %NULL.  If no column
