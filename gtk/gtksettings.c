@@ -246,6 +246,10 @@ gtk_settings_init (GtkSettings *settings)
   GtkSettingsPrivate *priv;
   GParamSpec **pspecs, **p;
   guint i = 0;
+  GKeyFile *keyfile;
+  gchar *dirs[3];
+  gchar *path;
+  GError *error;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (settings,
                                       GTK_TYPE_SETTINGS,
@@ -266,18 +270,103 @@ gtk_settings_init (GtkSettings *settings)
   priv->property_values = g_new0 (GtkSettingsPropertyValue, i);
   i = 0;
   g_object_freeze_notify (G_OBJECT (settings));
+
+  keyfile = g_key_file_new ();
+  dirs[0] = g_build_filename (g_get_user_config_dir (), "gtk-3.0", NULL);
+  dirs[1] = g_build_filename (GTK_SYSCONFDIR, "gtk-3.0", NULL);
+  dirs[2] = NULL;
+  path = NULL;
+
+  error = NULL;
+  if (!g_key_file_load_from_dirs (keyfile, "settings.ini",
+                                  (const gchar**)dirs, &path,
+                                  G_KEY_FILE_NONE,
+                                  &error))
+    {
+      if (!g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_NOT_FOUND))
+        g_warning ("Failed to parse %s: %s", path ? path : "settings.ini", error->message);
+
+      g_error_free (error);
+      error = NULL;
+    }
+
   for (p = pspecs; *p; p++)
     {
       GParamSpec *pspec = *p;
+      GType value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
 
       if (pspec->owner_type != G_OBJECT_TYPE (settings))
         continue;
-      g_value_init (&priv->property_values[i].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+      g_value_init (&priv->property_values[i].value, value_type);
       g_param_value_set_default (pspec, &priv->property_values[i].value);
+
+      error = NULL;
+      switch (value_type)
+        {
+        case G_TYPE_BOOLEAN:
+          {
+            gboolean b_val;
+
+            b_val = g_key_file_get_boolean (keyfile, "Settings", pspec->name, &error);
+            if (!error)
+              g_value_set_boolean (&priv->property_values[i].value, b_val);
+            break;
+          }
+
+        case G_TYPE_INT:
+          {
+            gint i_val;
+
+            i_val = g_key_file_get_integer (keyfile, "Settings", pspec->name, &error);
+            if (!error)
+              g_value_set_int (&priv->property_values[i].value, i_val);
+            break;
+          }
+
+        case G_TYPE_DOUBLE:
+          {
+            gdouble d_val;
+
+            d_val = g_key_file_get_double (keyfile, "Settings", pspec->name, &error);
+            if (!error)
+              g_value_set_double (&priv->property_values[i].value, d_val);
+            break;
+          }
+
+        case G_TYPE_STRING:
+          {
+            gchar *s_val;
+
+            s_val = g_key_file_get_string (keyfile, "Settings", pspec->name, &error);
+            if (!error)
+              g_value_set_string (&priv->property_values[i].value, s_val);
+            g_free (s_val);
+            break;
+          }
+        default: ;
+          /* FIXME: handle parsing nicks, colors, etc */
+        }
+
+      if (error)
+        {
+          if (!g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_GROUP_NOT_FOUND) &&
+              !g_error_matches (error, G_KEY_FILE_ERROR, G_KEY_FILE_ERROR_KEY_NOT_FOUND))
+            g_warning ("Failed to parse %s: %s", path ? path : "settings.ini", error->message);
+
+          g_error_free (error);
+          error = NULL;
+        }
+
       g_object_notify (G_OBJECT (settings), pspec->name);
       priv->property_values[i].source = GTK_SETTINGS_SOURCE_DEFAULT;
       i++;
     }
+
+  g_key_file_free (keyfile);
+  g_free (path);
+  g_free (dirs[0]);
+  g_free (dirs[1]);
+
   g_object_thaw_notify (G_OBJECT (settings));
   g_free (pspecs);
 }
