@@ -97,7 +97,7 @@ struct _GtkSettingsPrivate
 typedef enum
 {
   GTK_SETTINGS_SOURCE_DEFAULT,
-  GTK_SETTINGS_SOURCE_RC_FILE,
+  GTK_SETTINGS_SOURCE_THEME,
   GTK_SETTINGS_SOURCE_XSETTING,
   GTK_SETTINGS_SOURCE_APPLICATION
 } GtkSettingsSource;
@@ -1946,7 +1946,7 @@ _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
   g_return_if_fail (new_value != NULL);
 
   gtk_settings_set_property_value_internal (settings, prop_name, new_value,
-                                            GTK_SETTINGS_SOURCE_RC_FILE);
+                                            GTK_SETTINGS_SOURCE_THEME);
 }
 
 void
@@ -2377,7 +2377,7 @@ reset_rc_values_foreach (GQuark   key_id,
   GtkSettingsValuePrivate *qvalue = data;
   GSList **to_reset = user_data;
 
-  if (qvalue->source == GTK_SETTINGS_SOURCE_RC_FILE)
+  if (qvalue->source == GTK_SETTINGS_SOURCE_THEME)
     *to_reset = g_slist_prepend (*to_reset, GUINT_TO_POINTER (key_id));
 }
 
@@ -2411,7 +2411,7 @@ _gtk_settings_reset_rc_values (GtkSettings *settings)
   g_object_freeze_notify (G_OBJECT (settings));
   for (p = pspecs; *p; p++)
     {
-      if (priv->property_values[i].source == GTK_SETTINGS_SOURCE_RC_FILE)
+      if (priv->property_values[i].source == GTK_SETTINGS_SOURCE_THEME)
         {
           GParamSpec *pspec = *p;
 
@@ -2715,7 +2715,7 @@ settings_update_theme (GtkSettings *settings)
       path = g_build_filename (theme_dir, theme_name, "gtk-3.0", "settings.ini", NULL);
 
      if (g_file_test (path, G_FILE_TEST_EXISTS))
-       gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_RC_FILE);
+       gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_THEME);
 
       g_free (theme_dir);
       g_free (path);
@@ -2808,10 +2808,10 @@ update_color_hash (ColorSchemeData   *data,
   if (str && data->lastentry[source] && strcmp (str, data->lastentry[source]) == 0)
     return FALSE;
 
-  /* For the RC_FILE source we merge the values rather than over-writing
+  /* For the THEME source we merge the values rather than over-writing
    * them, since multiple rc files might define independent sets of colors
    */
-  if ((source != GTK_SETTINGS_SOURCE_RC_FILE) &&
+  if ((source != GTK_SETTINGS_SOURCE_THEME) &&
       data->tables[source] && g_hash_table_size (data->tables[source]) > 0)
     {
       g_hash_table_unref (data->tables[source]);
