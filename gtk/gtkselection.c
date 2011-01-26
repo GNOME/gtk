@@ -1243,7 +1243,7 @@ gtk_selection_data_get_display (GtkSelectionData *selection_data)
  * @selection_data: a pointer to a #GtkSelectionData structure.
  * @type: the type of selection data
  * @format: format (number of bits in a unit)
- * @data: pointer to the data (will be copied)
+ * @data: (array length=length): pointer to the data (will be copied)
  * @length: length of the data
  * 
  * Stores new data into a #GtkSelectionData object. Should

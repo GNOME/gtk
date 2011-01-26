@@ -339,7 +339,7 @@ gtk_radio_button_new_with_mnemonic (GSList      *group,
  * @radio_group_member. As with gtk_radio_button_new(), a widget
  * should be packed into the radio button.
  *
- * Returns: (transfer full): a new radio button.
+ * Returns: (transfer none): a new radio button.
  */
 GtkWidget*
 gtk_radio_button_new_from_widget (GtkRadioButton *radio_group_member)
@@ -380,7 +380,7 @@ gtk_radio_button_new_with_label_from_widget (GtkRadioButton *radio_group_member,
  * will be created using gtk_label_new_with_mnemonic(), so underscores
  * in @label indicate the mnemonic for the button.
  *
- * Returns: (transfer full): a new #GtkRadioButton
+ * Returns: (transfer none): a new #GtkRadioButton
  **/
 GtkWidget*
 gtk_radio_button_new_with_mnemonic_from_widget (GtkRadioButton *radio_group_member,

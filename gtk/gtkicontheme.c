@@ -1740,10 +1740,10 @@ add_key_to_list (gpointer  key,
  * but will typically include such values as "Applications" and
  * "MimeTypes".
  *
- * Return value: (element-type utf8) (transfer none): a #GList list holding the names of all the
- *  icons in the theme. You must first free each element
- *  in the list with g_free(), then free the list itself
- *  with g_list_free().
+ * Return value: (element-type utf8) (transfer full): a #GList list
+ *  holding the names of all the icons in the theme. You must first
+ *  free each element in the list with g_free(), then free the list
+ *  itself with g_list_free().
  *
  * Since: 2.4
  **/

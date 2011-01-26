@@ -167,7 +167,7 @@ gtk_radio_tool_button_new_from_stock (GSList      *group,
  *
  * Creates a new #GtkRadioToolButton adding it to the same group as @gruup
  *
- * Return value: (transfer full): The new #GtkRadioToolButton
+ * Return value: (transfer none): The new #GtkRadioToolButton
  *
  * Since: 2.4
  **/
@@ -193,7 +193,7 @@ gtk_radio_tool_button_new_from_widget (GtkRadioToolButton *group)
  * The new #GtkRadioToolButton will contain an icon and label from the
  * stock item indicated by @stock_id.
  *
- * Return value: (transfer full): A new #GtkRadioToolButton
+ * Return value: (transfer none): A new #GtkRadioToolButton
  *
  * Since: 2.4
  **/

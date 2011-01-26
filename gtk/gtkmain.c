@@ -904,7 +904,8 @@ gtk_init_with_args (int            *argc,
 /**
  * gtk_parse_args:
  * @argc: (inout): a pointer to the number of command line arguments
- * @argv: (array) (inout): a pointer to the array of command line arguments
+ * @argv: (array length=argc) (inout): a pointer to the array of
+ *     command line arguments
  *
  * Parses command line arguments, and initializes global
  * attributes of GTK+, but does not actually open a connection
