@@ -29,7 +29,7 @@
 #include "gtkintl.h"
 #include "gtkwidget.h"
 #include "gtkprivate.h"
-#include "gtkcssprovider.h"
+#include "gtkcssproviderprivate.h"
 #include "gtksymboliccolor.h"
 #include "gtktypebuiltins.h"
 #include "gtkversion.h"
@@ -2685,7 +2685,6 @@ settings_update_theme (GtkSettings *settings)
         variant = "dark";
 
       new_provider = gtk_css_provider_get_named (theme_name, variant);
-      g_free (theme_name);
     }
 
   if (new_provider != provider)
@@ -2705,6 +2704,24 @@ settings_update_theme (GtkSettings *settings)
       g_object_set_qdata_full (G_OBJECT (settings), quark_theme_name,
                                new_provider, (GDestroyNotify) g_object_unref);
     }
+
+  if (theme_name && *theme_name)
+    {
+      gchar *theme_dir;
+      gchar *path;
+
+      /* reload per-theme settings */
+      theme_dir = _gtk_css_provider_get_theme_dir ();
+      path = g_build_filename (theme_dir, theme_name, "gtk-3.0", "settings.ini", NULL);
+
+     if (g_file_test (path, G_FILE_TEST_EXISTS))
+       gtk_settings_load_from_key_file (settings, path, GTK_SETTINGS_SOURCE_RC_FILE);
+
+      g_free (theme_dir);
+      g_free (path);
+    }
+
+  g_free (theme_name);
 }
 
 static gboolean
