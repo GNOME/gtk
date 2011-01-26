@@ -231,10 +231,12 @@
  * <link linkend="GtkUIManager-BUILDER-UI">GtkUIManager</link>,
  * <link linkend="GtkActionGroup-BUILDER-UI">GtkActionGroup</link>.
  * <link linkend="GtkMenuItem-BUILDER-UI">GtkMenuItem</link>,
+ * <link linkend="GtkMenuToolButton-BUILDER-UI">GtkMenuToolButton</link>,
  * <link linkend="GtkAssistant-BUILDER-UI">GtkAssistant</link>,
- * <link linkend="GtkScale-BUILDER-UI">GtkScale</link>.
- * <link linkend="GtkComboBoxText-BUILDER-UI">GtkComboBoxText</link>.
- * <link linkend="GtkRecentFilter-BUILDER-UI">GtkRecentFilter</link>.
+ * <link linkend="GtkScale-BUILDER-UI">GtkScale</link>,
+ * <link linkend="GtkComboBoxText-BUILDER-UI">GtkComboBoxText</link>,
+ * <link linkend="GtkRecentFilter-BUILDER-UI">GtkRecentFilter</link>,
+ * <link linkend="GtkTextTagTable-BUILDER-UI">GtkTextTagTable</link>.
  * </para>
  * </refsect2>
  */
