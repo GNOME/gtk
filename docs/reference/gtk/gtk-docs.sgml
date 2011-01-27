@@ -8,11 +8,11 @@
 ]>
 <book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
   <bookinfo>
-    <title>GTK+ Reference Manual</title>
+    <title>GTK+ 3 Reference Manual</title>
     <releaseinfo>
-      for GTK+ &version;
-      The latest version of this documentation can be found on-line at
-      <ulink role="online-location" url="http://library.gnome.org/devel/gtk/unstable/">http://library.gnome.org/devel/gtk/unstable/</ulink>.
+      This document is for GTK+ 3 library; the latest version can be found online at
+      <ulink role="online-location" url="http://library.gnome.org/devel/gtk/unstable/">http://library.gnome.org/devel/gtk/unstable/</ulink>.  
+      If you're looking for the older GTK+ 2 series of libraries, they can be found under their version numbers; for example, 2.22 is available at <ulink role="online-location" url="http://library.gnome.org/devel/gtk/2.22/">http://library.gnome.org/devel/gtk/2.22/</ulink>.
     </releaseinfo>
   </bookinfo>
 
