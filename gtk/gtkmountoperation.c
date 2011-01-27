@@ -1182,7 +1182,7 @@ on_button_press_event_for_process_tree_view (GtkWidget      *widget,
   return ret;
 }
 
-static void
+static GtkWidget *
 create_show_processes_dialog (GMountOperation *op,
                               const char      *message,
                               const char      *choices[])
@@ -1309,9 +1309,9 @@ create_show_processes_dialog (GMountOperation *op,
   g_object_add_weak_pointer (G_OBJECT (tree_view), (gpointer *) &priv->process_tree_view);
 
   g_object_unref (list_store);
-
-  gtk_widget_show_all (dialog);
   g_object_ref (op);
+
+  return dialog;
 }
 
 static void
@@ -1321,6 +1321,7 @@ gtk_mount_operation_show_processes (GMountOperation *op,
                                     const char      *choices[])
 {
   GtkMountOperationPrivate *priv;
+  GtkWidget *dialog = NULL;
 
   g_return_if_fail (GTK_IS_MOUNT_OPERATION (op));
   g_return_if_fail (message != NULL);
@@ -1332,7 +1333,7 @@ gtk_mount_operation_show_processes (GMountOperation *op,
   if (priv->process_list_store == NULL)
     {
       /* need to create the dialog */
-      create_show_processes_dialog (op, message, choices);
+      dialog = create_show_processes_dialog (op, message, choices);
     }
 
   /* otherwise, we're showing the dialog, assume messages+choices hasn't changed */
@@ -1340,6 +1341,11 @@ gtk_mount_operation_show_processes (GMountOperation *op,
   update_process_list_store (GTK_MOUNT_OPERATION (op),
                              priv->process_list_store,
                              processes);
+
+  if (dialog != NULL)
+    {
+      gtk_widget_show_all (dialog);
+    }
 }
 
 static void
