@@ -236,6 +236,7 @@
  * <link linkend="GtkScale-BUILDER-UI">GtkScale</link>,
  * <link linkend="GtkComboBoxText-BUILDER-UI">GtkComboBoxText</link>,
  * <link linkend="GtkRecentFilter-BUILDER-UI">GtkRecentFilter</link>,
+ * <link linkend="GtkFileFilter-BUILDER-UI">GtkFileFilter</link>,
  * <link linkend="GtkTextTagTable-BUILDER-UI">GtkTextTagTable</link>.
  * </para>
  * </refsect2>

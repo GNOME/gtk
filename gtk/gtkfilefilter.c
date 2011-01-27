@@ -39,6 +39,33 @@
  * see gtk_file_chooser_add_filter(), but it is also possible
  * to manually use a filter on a file with gtk_file_filter_filter().
  *
+ * <refsect2 id="GtkFileFilter-BUILDER-UI">
+ * <title>GtkFileFilter as GtkBuildable</title>
+ * <para>
+ * The GtkFileFilter implementation of the GtkBuildable interface
+ * supports adding rules using the &lt;mime-types&gt, &lt;patterns&gt and
+ * &lt;applications&gt elements and listing the rules within. Specifying
+ * a &lt;mime-type&gt or &lt;pattern&gt is the same
+ * as calling gtk_recent_filter_add_mime_type() or gtk_recent_filter_add_pattern()
+ *
+ * <example>
+ * <title>A UI definition fragment specifying GtkFileFilter rules</title>
+ * <programlisting><![CDATA[
+ * <object class="GtkFileFilter">
+ *   <mime-types>
+ *     <mime-type>text/plain</mime-type>
+ *     <mime-type>image/*</mime-type>
+ *   </mime-types>
+ *   <patterns>
+ *     <pattern>*.txt</pattern>
+ *     <pattern>*.png</pattern>
+ *   </patterns>
+ * </object>
+ * ]]></programlisting>
+ * </example>
+ * </para>
+ * </refsect2>
+ *
  * @see_also: #GtkFileChooser
  */
 
@@ -48,6 +75,7 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
 #include "gtkfilefilter.h"
+#include "gtkbuildable.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
@@ -100,7 +128,22 @@ struct _FilterRule
 static void gtk_file_filter_finalize   (GObject            *object);
 
 
-G_DEFINE_TYPE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED)
+static void     gtk_file_filter_buildable_init                 (GtkBuildableIface *iface);
+static gboolean gtk_file_filter_buildable_custom_tag_start     (GtkBuildable  *buildable,
+								GtkBuilder    *builder,
+								GObject       *child,
+								const gchar   *tagname,
+								GMarkupParser *parser,
+								gpointer      *data);
+static void     gtk_file_filter_buildable_custom_tag_end       (GtkBuildable  *buildable,
+								GtkBuilder    *builder,
+								GObject       *child,
+								const gchar   *tagname,
+								gpointer      *data);
+
+G_DEFINE_TYPE_WITH_CODE (GtkFileFilter, gtk_file_filter, G_TYPE_INITIALLY_UNOWNED,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_file_filter_buildable_init))
 
 static void
 gtk_file_filter_init (GtkFileFilter *object)
@@ -152,6 +195,155 @@ gtk_file_filter_finalize (GObject  *object)
 
   G_OBJECT_CLASS (gtk_file_filter_parent_class)->finalize (object);
 }
+
+/*
+ * GtkBuildable implementation
+ */
+static void
+gtk_file_filter_buildable_init (GtkBuildableIface *iface)
+{
+  iface->custom_tag_start = gtk_file_filter_buildable_custom_tag_start;
+  iface->custom_tag_end = gtk_file_filter_buildable_custom_tag_end;
+}
+
+typedef enum {
+  PARSE_MIME_TYPES,
+  PARSE_PATTERNS
+} ParserType;
+
+typedef struct {
+  GtkFileFilter *filter;
+  ParserType     type;
+  GString       *string;
+  gboolean       parsing;
+} SubParserData;
+
+static void
+parser_start_element (GMarkupParseContext *context,
+		      const gchar         *element_name,
+		      const gchar        **names,
+		      const gchar        **values,
+		      gpointer             user_data,
+		      GError             **error)
+{
+  SubParserData *parser_data = (SubParserData*)user_data;
+
+  if (strcmp (element_name, "mime-types") == 0)
+    return;
+  else if (strcmp (element_name, "mime-type") == 0)
+    {
+      parser_data->parsing = TRUE;
+      return;
+    }
+  else if (strcmp (element_name, "patterns") == 0)
+    return;
+  else if (strcmp (element_name, "pattern") == 0)
+    {
+      parser_data->parsing = TRUE;
+      return;
+    }
+  else
+    g_warning ("Unsupported tag for GtkFileFilter: %s\n", element_name);
+}
+
+static void
+parser_text_element (GMarkupParseContext *context,
+		     const gchar         *text,
+		     gsize                text_len,
+		     gpointer             user_data,
+		     GError             **error)
+{
+  SubParserData *parser_data = (SubParserData*)user_data;
+
+  if (parser_data->parsing)
+    g_string_append_len (parser_data->string, text, text_len);
+}
+
+static void
+parser_end_element (GMarkupParseContext *context,
+		    const gchar         *element_name,
+		    gpointer             user_data,
+		    GError             **error)
+{
+  SubParserData *parser_data = (SubParserData*)user_data;
+
+  if (parser_data->string)
+    {
+      switch (parser_data->type)
+	{
+	case PARSE_MIME_TYPES:
+	  gtk_file_filter_add_mime_type (parser_data->filter, parser_data->string->str);
+	  break;
+	case PARSE_PATTERNS:
+	  gtk_file_filter_add_pattern (parser_data->filter, parser_data->string->str);
+	  break;
+	default:
+	  break;
+	}
+    }
+
+  g_string_set_size (parser_data->string, 0);
+  parser_data->parsing = FALSE;
+}
+
+static const GMarkupParser sub_parser =
+  {
+    parser_start_element,
+    parser_end_element,
+    parser_text_element,
+  };
+
+static gboolean
+gtk_file_filter_buildable_custom_tag_start (GtkBuildable  *buildable,
+					      GtkBuilder    *builder,
+					      GObject       *child,
+					      const gchar   *tagname,
+					      GMarkupParser *parser,
+					      gpointer      *data)
+{
+  SubParserData *parser_data = NULL;
+
+  if (strcmp (tagname, "mime-types") == 0)
+    {
+      parser_data         = g_slice_new0 (SubParserData);
+      parser_data->string = g_string_new ("");
+      parser_data->type   = PARSE_MIME_TYPES;
+      parser_data->filter = GTK_FILE_FILTER (buildable);
+
+      *parser = sub_parser;
+      *data = parser_data;
+    }
+  else if (strcmp (tagname, "patterns") == 0)
+    {
+      parser_data         = g_slice_new0 (SubParserData);
+      parser_data->string = g_string_new ("");
+      parser_data->type   = PARSE_PATTERNS;
+      parser_data->filter = GTK_FILE_FILTER (buildable);
+
+      *parser = sub_parser;
+      *data = parser_data;
+    }
+
+  return parser_data != NULL;
+}
+
+static void
+gtk_file_filter_buildable_custom_tag_end (GtkBuildable *buildable,
+					  GtkBuilder   *builder,
+					  GObject      *child,
+					  const gchar  *tagname,
+					  gpointer     *data)
+{
+  if (strcmp (tagname, "mime-types") == 0 ||
+      strcmp (tagname, "patterns") == 0)
+    {
+      SubParserData *parser_data = (SubParserData*)data;
+
+      g_string_free (parser_data->string, TRUE);
+      g_slice_free (SubParserData, parser_data);
+    }
+}
+
 
 /**
  * gtk_file_filter_new:
