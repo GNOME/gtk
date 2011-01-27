@@ -232,7 +232,11 @@
  * <link linkend="GtkActionGroup-BUILDER-UI">GtkActionGroup</link>.
  * <link linkend="GtkMenuItem-BUILDER-UI">GtkMenuItem</link>,
  * <link linkend="GtkAssistant-BUILDER-UI">GtkAssistant</link>,
- * <link linkend="GtkScale-BUILDER-UI">GtkScale</link>.
+ * <link linkend="GtkScale-BUILDER-UI">GtkScale</link>,
+ * <link linkend="GtkComboBoxText-BUILDER-UI">GtkComboBoxText</link>,
+ * <link linkend="GtkRecentFilter-BUILDER-UI">GtkRecentFilter</link>,
+ * <link linkend="GtkFileFilter-BUILDER-UI">GtkFileFilter</link>,
+ * <link linkend="GtkTextTagTable-BUILDER-UI">GtkTextTagTable</link>.
  * </para>
  * </refsect2>
  */
