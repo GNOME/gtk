@@ -1084,7 +1084,6 @@ gtk_cell_view_set_model (GtkCellView  *cell_view,
       cell_view->priv->displayed_row = NULL;
 
       g_object_unref (cell_view->priv->model);
-      cell_view->priv->model = NULL;
     }
 
   cell_view->priv->model = model;
