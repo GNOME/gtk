@@ -1011,6 +1011,17 @@ gtk_arrow_draw (GtkWidget *widget,
   </section>
 
   <section>
+    <title>GtkEntryCompletion signal parameters</title>
+
+    <para>
+      The #GtkEntryCompletion::match-selected and
+      #GtkEntryCompletion::cursor-on-match signals were erroneously
+      given the internal filter model instead of the users model.
+      This oversight has been fixed in GTK+ 3; if you have handlers
+      for these signals, they will likely need slight adjustments.
+  </section>
+
+  <section>
     <title>Resize grips</title>
 
     <para>
