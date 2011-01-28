@@ -1,6 +1,11 @@
 /* testgtk2.css sets all the buttons in the main window to blue by default */
 @import url("testgtk2.css");
 
+@binding-set entry-bindings {
+    bind "<alt>s" { "move-cursor" (visual-positions, 3, 0) };
+    bind "<alt>a" { "move-cursor" (visual-positions, -3, 0) };
+};
+
 * {
     -GtkButton-child-displacement-x: 1;
     -GtkButton-child-displacement-y: 1;
@@ -30,4 +35,8 @@ GtkLabel:prelight {
 /* override testgtk2, introduce the green color in the button list */
 #main_window GtkScrolledWindow GtkButton:prelight {
     background-color: rgb (0%, 75%, 0);
+}
+
+GtkEntry {
+    gtk-key-bindings: entry-bindings;
 }
