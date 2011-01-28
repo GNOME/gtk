@@ -59,9 +59,16 @@
  * Any widgets contained in the #GtkPlug then will appear
  * inside the first application's window.
  *
+ * The communication between a #GtkSocket and a #GtkPlug follows the
+ * <ulink url="http://www.freedesktop.org/Standards/xembed-spec">XEmbed</ulink>
+ * protocol. This protocol has also been implemented in other toolkits, e.g.
+ * <application>Qt</application>, allowing the same level of integration
+ * when embedding a <application>Qt</application> widget in GTK or vice versa.
+ *
  * <note>
- * The #GtkPlug and #GtkSocket widgets are currently not available
- * on all platforms supported by GTK+.
+ * The #GtkPlug and #GtkSocket widgets are only available when GTK is
+ * compiled for the X11 platform and %GDK_WINDOWING_X11 is defined.
+ * They can only be used on a #GdkX11Display.
  * </note>
  */
 
