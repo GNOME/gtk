@@ -5072,7 +5072,7 @@ browse_widgets_create (GtkFileChooserDefault *impl)
   gtk_paned_pack1 (GTK_PANED (hpaned), widget, FALSE, FALSE);
   widget = file_pane_create (impl, size_group);
   gtk_paned_pack2 (GTK_PANED (hpaned), widget, TRUE, FALSE);
-
+  gtk_paned_set_position (GTK_PANED (hpaned), 148);
   g_object_unref (size_group);
 
   return vbox;
