@@ -258,8 +258,6 @@ gtk_OBJECTS = \
 	gtkpango.obj \
 	gtkpapersize.obj \
 	gtkpathbar.obj \
-	gtkplug.obj \
-	gtkplug-win32.obj \
 	gtkprogressbar.obj \
 	gtkquery.obj \
 	gtkradioaction.obj \
@@ -286,8 +284,6 @@ gtk_OBJECTS = \
 	gtkshow.obj \
 	gtksizegroup.obj \
 	gtksizerequest.obj \
-	gtksocket.obj \
-	gtksocket-win32.obj \
 	gtkspinbutton.obj \
 	gtkspinner.obj \
 	gtkstatusicon.obj \
