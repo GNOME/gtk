@@ -303,12 +303,14 @@
  *   unbind "End";
  * };
  *
- * &commat;binding-set binding-set1 {
+ * &commat;binding-set binding-set2 {
  *   bind "&lt;alt&gt;Right" { "move-cursor" (visual-positions, 3, 0) };
+ *   bind "&lt;alt&gt;KP_space" { "delete-from-cursor" (whitespace, 1)
+ *                                "insert-at-cursor" (" ") };
  * };
  *
  * GtkEntry {
- *   gtk-binding-set: binding-set1, binding-set2;
+ *   gtk-key-bindings: binding-set1, binding-set2;
  * }
  * </programlisting>
  * </example>
@@ -3303,11 +3305,11 @@ parse_rule (GtkCssProvider  *css_provider,
             }
 
           binding_set_name = scanner->value.v_identifier;
-          binding_set = gtk_binding_set_find (scanner->value.v_identifier);
+          binding_set = gtk_binding_set_find (binding_set_name);
 
           if (!binding_set)
             {
-              binding_set = gtk_binding_set_new (scanner->value.v_identifier);
+              binding_set = gtk_binding_set_new (binding_set_name);
               binding_set->parsed = TRUE;
             }
 
