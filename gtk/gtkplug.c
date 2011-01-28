@@ -37,12 +37,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"
 
-#ifdef GDK_WINDOWING_X11
-#include "x11/gdkx.h"
-#endif
-#ifdef GDK_WINDOWING_WIN32
-#include "win32/gdkwin32.h"
-#endif
+#include <gdk/gdkx.h>
 
 /**
  * SECTION:gtkplug
@@ -527,11 +522,9 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
     {
       gpointer user_data = NULL;
 
-#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (display))
         priv->socket_window = gdk_x11_window_lookup_for_display (display, socket_id);
       else
-#endif
         priv->socket_window = NULL;
 
       if (priv->socket_window)
@@ -551,15 +544,8 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
 	  else
 	    g_object_ref (priv->socket_window);
 	}
-      else
-#ifdef GDK_WINDOWING_X11
-      if (GDK_IS_X11_DISPLAY (display))
+      else if (GDK_IS_X11_DISPLAY (display))
         priv->socket_window = gdk_x11_window_foreign_new_for_display (display, socket_id);
-#endif
-#ifdef GDK_WINDOWING_WIN32
-      if (GDK_IS_WIN32_DISPLAY (display))
-        priv->socket_window = gdk_win32_window_foreign_new_for_display (display, socket_id);
-#endif
 
       if (priv->socket_window) {
 	g_signal_emit (plug, plug_signals[EMBEDDED], 0);
