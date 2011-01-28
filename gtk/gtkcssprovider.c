@@ -2762,6 +2762,32 @@ border_parse_str (const gchar  *str,
   return border;
 }
 
+static void
+resolve_binding_sets (const gchar *value_str,
+                      GValue      *value)
+{
+  GPtrArray *array;
+  gchar **bindings, **str;
+
+  bindings = g_strsplit (value_str, ",", -1);
+  array = g_ptr_array_new ();
+
+  for (str = bindings; *str; str++)
+    {
+      GtkBindingSet *binding_set;
+
+      binding_set = gtk_binding_set_find (g_strstrip (*str));
+
+      if (!binding_set)
+        continue;
+
+      g_ptr_array_add (array, binding_set);
+    }
+
+  g_value_take_boxed (value, array);
+  g_strfreev (bindings);
+}
+
 static gboolean
 css_provider_parse_value (GtkCssProvider  *css_provider,
                           const gchar     *value_str,
@@ -3376,6 +3402,12 @@ parse_rule (GtkCssProvider  *css_provider,
                * to override other style providers when merged
                */
               g_param_value_set_default (pspec, val);
+              g_hash_table_insert (priv->cur_properties, prop, val);
+            }
+          else if (strcmp (prop, "gtk-key-bindings") == 0)
+            {
+              /* Private property holding the binding sets */
+              resolve_binding_sets (value_str, val);
               g_hash_table_insert (priv->cur_properties, prop, val);
             }
           else if (pspec->value_type == G_TYPE_STRING)

@@ -171,6 +171,13 @@ gtk_style_properties_class_init (GtkStylePropertiesClass *klass)
                                                               "Transition animation description",
                                                               GTK_TYPE_ANIMATION_DESCRIPTION, 0));
 
+  /* Private property holding the binding sets */
+  gtk_style_properties_register_property (NULL,
+                                          g_param_spec_boxed ("gtk-key-bindings",
+                                                              "Key bindings",
+                                                              "Key bindings",
+                                                              G_TYPE_PTR_ARRAY, 0));
+
   g_type_class_add_private (object_class, sizeof (GtkStylePropertiesPrivate));
 }
 
@@ -1238,6 +1245,21 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               font_desc_to_merge = g_value_get_boxed (&data->value);
 
               pango_font_description_merge (font_desc, font_desc_to_merge, replace);
+            }
+          else if (G_VALUE_TYPE (&data->value) == G_TYPE_PTR_ARRAY &&
+                   G_IS_VALUE (value))
+            {
+              GPtrArray *array, *array_to_merge;
+              gint i;
+
+              /* Append the array, mainly thought
+               * for the gtk-key-bindings property
+               */
+              array = g_value_get_boxed (value);
+              array_to_merge = g_value_get_boxed (&data->value);
+
+              for (i = 0; i < array_to_merge->len; i++)
+                g_ptr_array_add (array, g_ptr_array_index (array_to_merge, i));
             }
           else if (replace || !G_IS_VALUE (value))
             {
