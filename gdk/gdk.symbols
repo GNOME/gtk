@@ -231,6 +231,15 @@ gdk_pango_context_get_for_screen
 gdk_pango_layout_get_clip_region
 gdk_pango_layout_line_get_clip_region
 gdk_parse_args
+gdk_picture_changed
+gdk_picture_changed_rect
+gdk_picture_changed_region
+gdk_picture_draw
+gdk_picture_get_height
+gdk_picture_get_type
+gdk_picture_get_width
+gdk_picture_ref_surface
+gdk_picture_resized
 gdk_pixbuf_get_from_surface
 gdk_pixbuf_get_from_window
 gdk_pointer_grab

@@ -45,6 +45,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkmain.h>
 #include <gdk/gdkpango.h>
+#include <gdk/gdkpicture.h>
 #include <gdk/gdkpixbuf.h>
 #include <gdk/gdkproperty.h>
 #include <gdk/gdkrectangle.h>

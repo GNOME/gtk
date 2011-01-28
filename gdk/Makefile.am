@@ -79,6 +79,7 @@ gdk_public_h_sources = 				\
 	gdkkeysyms-compat.h			\
 	gdkmain.h				\
 	gdkpango.h				\
+	gdkpicture.h				\
 	gdkpixbuf.h				\
 	gdkprivate.h				\
 	gdkproperty.h				\
@@ -128,6 +129,7 @@ gdk_c_sources = 				\
 	gdkkeyuni.c				\
 	gdkoffscreenwindow.c			\
 	gdkpango.c				\
+	gdkpicture.c				\
 	gdkpixbuf-drawable.c			\
 	gdkrectangle.c				\
 	gdkrgba.c				\
