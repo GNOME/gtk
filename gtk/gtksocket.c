@@ -149,7 +149,7 @@ static void     gtk_socket_forall               (GtkContainer     *container,
 						 GtkCallback       callback,
 						 gpointer          callback_data);
 static void     gtk_socket_add_window           (GtkSocket        *socket,
-                                                 GdkNativeWindow   xid,
+                                                 Window            xid,
                                                  gboolean          need_reparent);
 static GdkFilterReturn gtk_socket_filter_func   (GdkXEvent        *gdk_xevent,
                                                  GdkEvent         *event,
@@ -307,7 +307,7 @@ gtk_socket_new (void)
 /**
  * gtk_socket_add_id:
  * @socket_: a #GtkSocket
- * @window_id: the window ID of a client participating in the XEMBED protocol.
+ * @window: the Window of a client participating in the XEMBED protocol.
  *
  * Adds an XEMBED client, such as a #GtkPlug, to the #GtkSocket.  The
  * client may be in the same process or in a different process. 
@@ -324,7 +324,7 @@ gtk_socket_new (void)
  **/
 void           
 gtk_socket_add_id (GtkSocket      *socket,
-		   GdkNativeWindow window_id)
+		   Window          window)
 {
   g_return_if_fail (GTK_IS_SOCKET (socket));
   g_return_if_fail (_gtk_widget_get_anchored (GTK_WIDGET (socket)));
@@ -332,7 +332,7 @@ gtk_socket_add_id (GtkSocket      *socket,
   if (!gtk_widget_get_realized (GTK_WIDGET (socket)))
     gtk_widget_realize (GTK_WIDGET (socket));
 
-  gtk_socket_add_window (socket, window_id, TRUE);
+  gtk_socket_add_window (socket, window, TRUE);
 }
 
 /**
@@ -348,7 +348,7 @@ gtk_socket_add_id (GtkSocket      *socket,
  * 
  * Return value: the window ID for the socket
  **/
-GdkNativeWindow
+Window
 gtk_socket_get_id (GtkSocket *socket)
 {
   g_return_val_if_fail (GTK_IS_SOCKET (socket), 0);
@@ -1027,7 +1027,7 @@ gtk_socket_forall (GtkContainer *container,
  */
 static void
 gtk_socket_add_window (GtkSocket       *socket,
-		       GdkNativeWindow  xid,
+		       Window           xid,
 		       gboolean         need_reparent)
 {
   GtkWidget *widget = GTK_WIDGET (socket);
