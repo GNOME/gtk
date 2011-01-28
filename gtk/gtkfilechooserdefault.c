@@ -2454,15 +2454,18 @@ filter_create (GtkFileChooserDefault *impl)
 
 static GtkWidget *
 toolbutton_new (GtkFileChooserDefault *impl,
-                const char            *icon_name,
+                GIcon                 *icon,
                 gboolean               sensitive,
                 gboolean               show,
                 GCallback              callback)
 {
   GtkToolItem *item;
+  GtkWidget *image;
 
   item = gtk_tool_button_new (NULL, NULL);
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (item), icon_name);
+  image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_widget_show (image);
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
 
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
   g_signal_connect (item, "clicked", callback, impl);
@@ -3726,6 +3729,7 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   GtkWidget *toolbar;
   GtkWidget *widget;
   GtkStyleContext *context;
+  GIcon *icon;
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_show (vbox);
@@ -3752,23 +3756,26 @@ shortcuts_pane_create (GtkFileChooserDefault *impl,
   gtk_style_context_set_junction_sides (context, GTK_JUNCTION_TOP);
 
   /* Add bookmark button */
-
+  icon = g_themed_icon_new_with_default_fallbacks ("list-add-symbolic");
   impl->browse_shortcuts_add_button = toolbutton_new (impl,
-                                                      "list-add-symbolic",
+                                                      icon,
                                                       FALSE,
                                                       TRUE,
                                                       G_CALLBACK (add_bookmark_button_clicked_cb));
+  g_object_unref (icon);
+
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (impl->browse_shortcuts_add_button), 0);
   gtk_widget_set_tooltip_text (impl->browse_shortcuts_add_button,
                                _("Add the selected folder to the Bookmarks"));
 
   /* Remove bookmark button */
-
+  icon = g_themed_icon_new_with_default_fallbacks ("list-remove-symbolic");
   impl->browse_shortcuts_remove_button = toolbutton_new (impl,
-                                                         "list-remove-symbolic",
+                                                         icon,
                                                          FALSE,
                                                          TRUE,
                                                          G_CALLBACK (remove_bookmark_button_clicked_cb));
+  g_object_unref (icon);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), GTK_TOOL_ITEM (impl->browse_shortcuts_remove_button), 1);
   gtk_widget_set_tooltip_text (impl->browse_shortcuts_remove_button,
                                _("Remove the selected bookmark"));
