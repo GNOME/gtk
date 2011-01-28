@@ -634,6 +634,7 @@ static void             gtk_widget_buildable_custom_finished    (GtkBuildable   
 static void             gtk_widget_buildable_parser_finished    (GtkBuildable     *buildable,
                                                                  GtkBuilder       *builder);
 
+static GtkSizeRequestMode gtk_widget_real_get_request_mode      (GtkWidget         *widget);
 static void             gtk_widget_real_get_width               (GtkWidget         *widget,
                                                                  gint              *minimum_size,
                                                                  gint              *natural_size);
@@ -834,6 +835,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->realize = gtk_widget_real_realize;
   klass->unrealize = gtk_widget_real_unrealize;
   klass->size_allocate = gtk_widget_real_size_allocate;
+  klass->get_request_mode = gtk_widget_real_get_request_mode;
   klass->get_preferred_width = gtk_widget_real_get_width;
   klass->get_preferred_height = gtk_widget_real_get_height;
   klass->get_preferred_width_for_height = gtk_widget_real_get_width_for_height;
@@ -12938,6 +12940,13 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 
       g_slice_free (AccessibilitySubParserData, a11y_data);
     }
+}
+
+static GtkSizeRequestMode 
+gtk_widget_real_get_request_mode (GtkWidget *widget)
+{ 
+  /* By default widgets are height-for-width. */
+  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
 }
 
 static void
