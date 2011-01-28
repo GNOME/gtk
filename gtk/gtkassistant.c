@@ -1103,6 +1103,8 @@ set_title_font (GtkWidget *assistant,
   GtkStyleContext *context;
   gint size;
 
+  gtk_widget_override_font (title_label, NULL);
+
   desc = pango_font_description_new ();
   context = gtk_widget_get_style_context (title_label);
   size = pango_font_description_get_size (gtk_style_context_get_font (context, 0));
@@ -1110,7 +1112,7 @@ set_title_font (GtkWidget *assistant,
   pango_font_description_set_weight (desc, PANGO_WEIGHT_ULTRABOLD);
   pango_font_description_set_size   (desc, size * PANGO_SCALE_XX_LARGE);
 
-  gtk_widget_modify_font (title_label, desc);
+  gtk_widget_override_font (title_label, desc);
   pango_font_description_free (desc);
 }
 
