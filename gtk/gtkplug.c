@@ -346,7 +346,7 @@ gtk_plug_set_is_child (GtkPlug  *plug,
  * 
  * Return value: the window ID for the plug
  **/
-GdkNativeWindow
+Window
 gtk_plug_get_id (GtkPlug *plug)
 {
   g_return_val_if_fail (GTK_IS_PLUG (plug), 0);
@@ -547,8 +547,8 @@ _gtk_plug_remove_from_socket (GtkPlug   *plug,
  * @socket_id. This function will generally only be used by classes deriving from #GtkPlug.
  **/
 void
-gtk_plug_construct (GtkPlug         *plug,
-		    GdkNativeWindow  socket_id)
+gtk_plug_construct (GtkPlug *plug,
+		    Window   socket_id)
 {
   gtk_plug_construct_for_display (plug, gdk_display_get_default (), socket_id);
 }
@@ -567,9 +567,9 @@ gtk_plug_construct (GtkPlug         *plug,
  * Since: 2.2
  **/
 void
-gtk_plug_construct_for_display (GtkPlug         *plug,
-				GdkDisplay	*display,
-				GdkNativeWindow  socket_id)
+gtk_plug_construct_for_display (GtkPlug    *plug,
+				GdkDisplay *display,
+				Window      socket_id)
 {
   GtkPlugPrivate *priv;
 
@@ -626,7 +626,7 @@ gtk_plug_construct_for_display (GtkPlug         *plug,
  * Return value: the new #GtkPlug widget.
  **/
 GtkWidget*
-gtk_plug_new (GdkNativeWindow socket_id)
+gtk_plug_new (Window socket_id)
 {
   return gtk_plug_new_for_display (gdk_display_get_default (), socket_id);
 }
@@ -643,8 +643,8 @@ gtk_plug_new (GdkNativeWindow socket_id)
  * Since: 2.2
  */
 GtkWidget*
-gtk_plug_new_for_display (GdkDisplay	  *display,
-			  GdkNativeWindow  socket_id)
+gtk_plug_new_for_display (GdkDisplay *display,
+			  Window      socket_id)
 {
   GtkPlug *plug;
 
