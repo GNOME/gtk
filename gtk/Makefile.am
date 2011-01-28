@@ -929,17 +929,15 @@ dist-hook: ../build/win32/vs9/gtk.vcproj
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme
 	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0
-	$(INSTALL_DATA) $(srcdir)/gtkrc.default $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
+	$(INSTALL_DATA) $(srcdir)/gtk.css.raleigh $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtk.css
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Default/gtk-3.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0
 	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
-	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
-	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
-	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtk.css
+	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
 	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 # if srcdir!=builddir, clean out maintainer-clean files from builddir
@@ -1360,11 +1358,9 @@ EXTRA_DIST +=                   \
 	gtkprint-win32.h	\
 	gtkprint-win32.c	\
 	gtksearchenginequartz.h \
-	gtkrc.default		\
-	gtkrc.key.default	\
-	gtkrc.key.emacs		\
+	gtk.css.raleigh		\
+	gtk-keys.css.default	\
 	gtk-keys.css.emacs	\
-	gtkrc.key.mac		\
 	gtk-keys.css.mac	\
 	makefile.msc		\
 	makefile.msc.in		\
