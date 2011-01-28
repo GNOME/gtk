@@ -3028,8 +3028,6 @@ gtk_status_icon_set_name (GtkStatusIcon *status_icon,
   else
     gtk_window_set_wmclass (GTK_WINDOW (priv->tray_icon), name, name);
 #endif
-
-  g_object_notify (G_OBJECT (status_icon), "name");
 }
 
 
