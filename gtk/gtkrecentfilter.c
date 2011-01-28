@@ -34,7 +34,7 @@
  * types; e.g. a filter for text/plain also matches a file with mime
  * type application/rtf, since application/rtf is a subclass of text/plain.
  * Note that #GtkRecentFilter allows wildcards for the subtype of a
- * mime type, so you can e.g. filter for image/*.
+ * mime type, so you can e.g. filter for image/<!-- -->*.
  *
  * Normally, filters are used by adding them to a #GtkRecentChooser,
  * see gtk_recent_chooser_add_filter(), but it is also possible to
@@ -58,7 +58,7 @@
  * <object class="GtkRecentFilter">
  *   <mime-types>
  *     <mime-type>text/plain</mime-type>
- *     <mime-type>image/*</mime-type>
+ *     <mime-type>image/png</mime-type>
  *   </mime-types>
  *   <patterns>
  *     <pattern>*.txt</pattern>
