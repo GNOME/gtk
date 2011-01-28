@@ -3678,7 +3678,6 @@ gtk_window_activate_default
 gtk_window_activate_focus
 gtk_window_activate_key
 gtk_window_add_accel_group
-gtk_window_add_embedded_xid
 gtk_window_add_mnemonic
 gtk_window_begin_move_drag
 gtk_window_begin_resize_drag
@@ -3741,7 +3740,6 @@ gtk_window_present
 gtk_window_present_with_time
 gtk_window_propagate_key_event
 gtk_window_remove_accel_group
-gtk_window_remove_embedded_xid
 gtk_window_remove_mnemonic
 gtk_window_reshow_with_initial_size
 gtk_window_resize
