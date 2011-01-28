@@ -784,6 +784,8 @@ void         gtk_widget_override_cursor           (GtkWidget       *widget,
                                                    const GdkRGBA   *cursor,
                                                    const GdkRGBA   *secondary_cursor);
 
+void       gtk_widget_reset_style       (GtkWidget      *widget);
+
 #if !defined(GTK_DISABLE_DEPRECATED) || defined(GTK_COMPILATION)
 
 void        gtk_widget_style_attach               (GtkWidget     *widget);
@@ -819,7 +821,6 @@ void        gtk_widget_modify_font        (GtkWidget            *widget,
 
 /* Descend recursively and set rc-style on all widgets without user styles */
 void       gtk_widget_reset_rc_styles   (GtkWidget      *widget);
-void       gtk_widget_reset_style       (GtkWidget      *widget);
 
 /* Set certain default values to be used at widget creation time  */
 GtkStyle*    gtk_widget_get_default_style    (void);
