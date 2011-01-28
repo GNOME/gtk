@@ -1019,12 +1019,12 @@ gdk_x11_screen_get_active_window (GdkScreen *screen)
     {
       if ((type_return == XA_WINDOW) && (format_return == 32) && (data))
         {
-          GdkNativeWindow window = *(GdkNativeWindow *) data;
+          Window window = *(Window *) data;
 
           if (window != None)
             {
               ret = gdk_x11_window_foreign_new_for_display (x11_screen->display,
-                                                        *(Window *) data);
+                                                            window);
             }
         }
     }
