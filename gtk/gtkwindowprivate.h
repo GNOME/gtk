@@ -27,9 +27,9 @@ G_BEGIN_DECLS
 
 void            _gtk_window_internal_set_focus (GtkWindow *window,
                                                 GtkWidget *focus);
-void            gtk_window_remove_embedded_xid (GtkWindow       *window,
+void            _gtk_window_remove_embedded_xid (GtkWindow       *window,
                                                 GdkNativeWindow  xid);
-void            gtk_window_add_embedded_xid    (GtkWindow       *window,
+void            _gtk_window_add_embedded_xid    (GtkWindow       *window,
                                                 GdkNativeWindow  xid);
 void            _gtk_window_reposition         (GtkWindow *window,
                                                 gint       x,

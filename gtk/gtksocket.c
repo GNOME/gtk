@@ -454,7 +454,7 @@ gtk_socket_end_embedding (GtkSocket *socket)
   GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
 
   if (GTK_IS_WINDOW (toplevel))
-    gtk_window_remove_embedded_xid (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (socket))),
+    _gtk_window_remove_embedded_xid (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (socket))),
                                     GDK_WINDOW_XID (socket->priv->plug_window));
 
   g_object_unref (private->plug_window);
@@ -1134,7 +1134,7 @@ gtk_socket_add_window (GtkSocket       *socket,
 
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (socket));
       if (GTK_IS_WINDOW (toplevel))
-	gtk_window_add_embedded_xid (GTK_WINDOW (toplevel), xid);
+	_gtk_window_add_embedded_xid (GTK_WINDOW (toplevel), xid);
 
 #ifdef HAVE_XFIXES
       gdk_error_trap_push ();

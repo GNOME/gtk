@@ -2295,7 +2295,7 @@ gtk_window_list_toplevels (void)
 }
 
 void
-gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
+_gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 {
   GList *embedded_windows;
 
@@ -2314,7 +2314,7 @@ gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 }
 
 void
-gtk_window_remove_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
+_gtk_window_remove_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 {
   GList *embedded_windows;
   GList *node;
