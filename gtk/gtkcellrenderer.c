@@ -1680,9 +1680,9 @@ gtk_cell_renderer_get_aligned_area (GtkCellRenderer      *cell,
  * @widget: a #GtkWidget, or %NULL
  * @cell_state: cell renderer state
  *
- * Translates the cell renderer state to a #GtkStateFlags,
+ * Translates the cell renderer state to #GtkStateFlags,
  * based on the cell renderer and widget sensitivity, and
- * the given #GtkCellRendererState
+ * the given #GtkCellRendererState.
  *
  * Returns: the widget state flags applying to @cell
  *
