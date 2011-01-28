@@ -2296,7 +2296,7 @@ gtk_window_list_toplevels (void)
 
 #ifdef GDK_WINDOWING_X11
 void
-_gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
+_gtk_window_add_embedded_xid (GtkWindow *window, Window xid)
 {
   GList *embedded_windows;
 
@@ -2306,7 +2306,7 @@ _gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
   if (embedded_windows)
     g_object_steal_qdata (G_OBJECT (window), quark_gtk_embedded);
   embedded_windows = g_list_prepend (embedded_windows,
-				     GUINT_TO_POINTER (xid));
+				     GDK_XID_TO_POINTER (xid));
 
   g_object_set_qdata_full (G_OBJECT (window), quark_gtk_embedded, 
 			   embedded_windows,
@@ -2315,7 +2315,7 @@ _gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 }
 
 void
-_gtk_window_remove_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
+_gtk_window_remove_embedded_xid (GtkWindow *window, Window xid)
 {
   GList *embedded_windows;
   GList *node;
@@ -2326,7 +2326,7 @@ _gtk_window_remove_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
   if (embedded_windows)
     g_object_steal_qdata (G_OBJECT (window), quark_gtk_embedded);
 
-  node = g_list_find (embedded_windows, GUINT_TO_POINTER (xid));
+  node = g_list_find (embedded_windows, GDK_XID_TO_POINTER (xid));
   if (node)
     {
       embedded_windows = g_list_remove_link (embedded_windows, node);
@@ -5931,7 +5931,7 @@ send_client_message_to_embedded_windows (GtkWidget *widget,
       
       while (embedded_windows)
 	{
-	  GdkNativeWindow xid = GDK_GPOINTER_TO_NATIVE_WINDOW(embedded_windows->data);
+	  Window xid = GDK_POINTER_TO_XID (embedded_windows->data);
 	  gdk_event_send_client_message_for_display (gtk_widget_get_display (widget), send_event, xid);
 	  embedded_windows = embedded_windows->next;
 	}
