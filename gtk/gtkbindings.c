@@ -1497,46 +1497,105 @@ gtk_binding_entries_sort_patterns (GSList      *entries,
   return patterns;
 }
 
+static gint
+find_entry_with_binding (GtkBindingEntry *entry,
+                         GtkBindingSet   *binding_set)
+{
+  return (entry->binding_set == binding_set) ? 0 : 1;
+}
+
+static gboolean
+binding_activate (GtkBindingSet *binding_set,
+                  GSList        *entries,
+                  GObject       *object,
+                  gboolean       is_release,
+                  gboolean      *unbound)
+{
+  GtkBindingEntry *entry;
+  GSList *elem;
+
+  elem = g_slist_find_custom (entries, binding_set,
+                              (GCompareFunc) find_entry_with_binding);
+
+  if (!elem)
+    return FALSE;
+
+  entry = elem->data;
+
+  if (is_release != ((entry->modifiers & GDK_RELEASE_MASK) != 0))
+    return FALSE;
+
+  if (entry->marks_unbound)
+    {
+      *unbound = TRUE;
+      return FALSE;
+    }
+
+  if (gtk_binding_entry_activate (entry, object))
+    return TRUE;
+
+  return FALSE;
+}
+
 static gboolean
 gtk_bindings_activate_list (GObject   *object,
                             GSList    *entries,
                             gboolean   is_release)
 {
+  GtkStyleContext *context;
+  GtkBindingSet *binding_set;
+  GtkStateFlags state;
   gboolean handled = FALSE;
+  gboolean unbound = FALSE;
+  GPtrArray *array;
 
   if (!entries)
     return FALSE;
 
-  /* FIXME: Add back binding parsing from user config files */
+  context = gtk_widget_get_style_context (GTK_WIDGET (object));
+  state = gtk_widget_get_state_flags (GTK_WIDGET (object));
+
+  gtk_style_context_get (context, state,
+                         "gtk-key-bindings", &array,
+                         NULL);
+  if (array)
+    {
+      gint i;
+
+      for (i = 0; i < array->len; i++)
+        {
+          binding_set = g_ptr_array_index (array, i);
+          handled = binding_activate (binding_set, entries,
+                                      object, is_release,
+                                      &unbound);
+          if (handled)
+            break;
+        }
+
+      g_ptr_array_unref (array);
+
+      if (unbound)
+        return FALSE;
+    }
 
   if (!handled)
     {
-      GSList *patterns;
       GType class_type;
-      gboolean unbound = FALSE;
 
-      patterns = gtk_binding_entries_sort_patterns (entries, GTK_PATH_CLASS, is_release);
       class_type = G_TYPE_FROM_INSTANCE (object);
+
       while (class_type && !handled)
         {
-          guint path_length;
-          gchar *path;
-          gchar *path_reversed;
-
-          path = g_strdup (g_type_name (class_type));
-          path_reversed = g_strdup (path);
-          g_strreverse (path_reversed);
-          path_length = strlen (path);
-          handled = binding_match_activate (patterns, object, path_length, path, path_reversed, &unbound);
-          g_free (path);
-          g_free (path_reversed);
-
-          if (unbound)
-            break;
-
+          binding_set = gtk_binding_set_find (g_type_name (class_type));
           class_type = g_type_parent (class_type);
+
+          if (!binding_set)
+            continue;
+
+          handled = binding_activate (binding_set, entries,
+                                      object, is_release,
+                                      &unbound);
         }
-      g_slist_free (patterns);
 
       if (unbound)
         return FALSE;
