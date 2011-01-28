@@ -934,6 +934,7 @@ install-data-local: install-ms-lib install-def-file install-mac-key-theme
 	$(INSTALL_DATA) $(srcdir)/gtkrc.key.default $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
 	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key
 	$(INSTALL_DATA) $(srcdir)/gtkrc.key.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
 	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
@@ -1361,6 +1362,7 @@ EXTRA_DIST +=                   \
 	gtkrc.default		\
 	gtkrc.key.default	\
 	gtkrc.key.emacs		\
+	gtk-keys.css.emacs	\
 	gtkrc.key.mac		\
 	makefile.msc		\
 	makefile.msc.in		\
