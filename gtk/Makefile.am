@@ -724,7 +724,6 @@ endif
 gtk_use_x11_c_sources = 	\
 	gtkplug.c		\
 	gtksocket.c		\
-	gtksocket-x11.c		\
 	gtkxembed.c		\
 	gtktrayicon-x11.c	\
 	gtkmountoperation-x11.c
