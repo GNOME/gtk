@@ -291,6 +291,28 @@
  * </programlisting>
  * </example>
  * <para>
+ * In order to extend key bindings affecting different widgets, GTK+
+ * supports the &commat;binding-set rule to parse a set of bind/unbind
+ * directives, see #GtkBindingSet for the syntax supported
+ * </para>
+ * <example>
+ * <title>Using the &commat;binding rule</title>
+ * <programlisting language="text">
+ * &commat;binding-set binding-set1 {
+ *   bind "&lt;alt&gt;Left" { "move-cursor" (visual-positions, -3, 0) };
+ *   unbind "End";
+ * };
+ *
+ * &commat;binding-set binding-set1 {
+ *   bind "&lt;alt&gt;Right" { "move-cursor" (visual-positions, 3, 0) };
+ * };
+ *
+ * GtkEntry {
+ *   gtk-binding-set: binding-set1, binding-set2;
+ * }
+ * </programlisting>
+ * </example>
+ * <para>
  * GTK+ also supports an additional &commat;define-color rule, in order
  * to define a color name which may be used instead of color numeric
  * representations. Also see the #GtkSettings:gtk-color-scheme setting
@@ -664,6 +686,13 @@
  *         <entry>internal use only</entry>
  *         <entry><literallayout>transition: 150ms ease-in-out;
  * transition: 1s linear loop;</literallayout>
+ *         </entry>
+ *       </row>
+ *       <row>
+ *         <entry>gtk-key-bindings</entry>
+ *         <entry>binding set name list</entry>
+ *         <entry>internal use only</entry>
+ *         <entry><literallayout>gtk-bindings: binding1, binding2, ...;</literallayout>
  *         </entry>
  *       </row>
  *     </tbody>
