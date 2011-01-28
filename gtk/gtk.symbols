@@ -254,6 +254,7 @@ gtk_assistant_update_buttons_state
 gtk_attach_options_get_type G_GNUC_CONST
 gtk_binding_entry_add_signal
 gtk_binding_entry_add_signall
+gtk_binding_entry_add_signal_from_string
 gtk_binding_entry_remove
 gtk_binding_entry_skip
 gtk_bindings_activate

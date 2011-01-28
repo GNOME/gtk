@@ -53,6 +53,10 @@ typedef struct {
   guint         seq_id;
 } PatternSpec;
 
+typedef enum {
+  GTK_BINDING_TOKEN_BIND,
+  GTK_BINDING_TOKEN_UNBIND
+} GtkBindingTokens;
 
 /* --- variables --- */
 static GHashTable       *binding_entry_hash_table = NULL;
@@ -976,6 +980,323 @@ gtk_binding_entry_add_signal (GtkBindingSet  *binding_set,
       slist = slist->next;
     }
   g_slist_free (free_slist);
+}
+
+static guint
+gtk_binding_parse_signal (GScanner       *scanner,
+                          GtkBindingSet  *binding_set,
+                          guint           keyval,
+                          GdkModifierType modifiers)
+{
+  gchar *signal;
+  guint expected_token = 0;
+  GSList *args;
+  GSList *slist;
+  gboolean done;
+  gboolean negate;
+  gboolean need_arg;
+  gboolean seen_comma;
+
+  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
+
+  g_scanner_get_next_token (scanner);
+
+  if (scanner->token != G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+
+  g_scanner_peek_next_token (scanner);
+
+  if (scanner->next_token != '(')
+    {
+      g_scanner_get_next_token (scanner);
+      return '(';
+    }
+
+  signal = g_strdup (scanner->value.v_string);
+  g_scanner_get_next_token (scanner);
+
+  negate = FALSE;
+  args = NULL;
+  done = FALSE;
+  need_arg = TRUE;
+  seen_comma = FALSE;
+  scanner->config->scan_symbols = FALSE;
+
+  do
+    {
+      GtkBindingArg *arg;
+
+      if (need_arg)
+        expected_token = G_TOKEN_INT;
+      else
+        expected_token = ')';
+
+      g_scanner_get_next_token (scanner);
+
+      switch ((guint) scanner->token)
+        {
+        case G_TOKEN_FLOAT:
+          if (need_arg)
+            {
+              need_arg = FALSE;
+              arg = g_new (GtkBindingArg, 1);
+              arg->arg_type = G_TYPE_DOUBLE;
+              arg->d.double_data = scanner->value.v_float;
+
+              if (negate)
+                {
+                  arg->d.double_data = - arg->d.double_data;
+                  negate = FALSE;
+                }
+              args = g_slist_prepend (args, arg);
+            }
+          else
+            done = TRUE;
+
+          break;
+        case G_TOKEN_INT:
+          if (need_arg)
+            {
+              need_arg = FALSE;
+              arg = g_new (GtkBindingArg, 1);
+              arg->arg_type = G_TYPE_LONG;
+              arg->d.long_data = scanner->value.v_int;
+
+              if (negate)
+                {
+                  arg->d.long_data = - arg->d.long_data;
+                  negate = FALSE;
+                }
+              args = g_slist_prepend (args, arg);
+            }
+          else
+            done = TRUE;
+          break;
+        case G_TOKEN_STRING:
+          if (need_arg && !negate)
+            {
+              need_arg = FALSE;
+              arg = g_new (GtkBindingArg, 1);
+              arg->arg_type = G_TYPE_STRING;
+              arg->d.string_data = g_strdup (scanner->value.v_string);
+              args = g_slist_prepend (args, arg);
+            }
+          else
+            done = TRUE;
+
+          break;
+        case G_TOKEN_IDENTIFIER:
+          if (need_arg && !negate)
+            {
+              need_arg = FALSE;
+              arg = g_new (GtkBindingArg, 1);
+              arg->arg_type = GTK_TYPE_IDENTIFIER;
+              arg->d.string_data = g_strdup (scanner->value.v_identifier);
+              args = g_slist_prepend (args, arg);
+            }
+          else
+            done = TRUE;
+
+          break;
+        case '-':
+          if (!need_arg)
+            done = TRUE;
+          else if (negate)
+            {
+              expected_token = G_TOKEN_INT;
+              done = TRUE;
+            }
+          else
+            negate = TRUE;
+
+          break;
+        case ',':
+          seen_comma = TRUE;
+          if (need_arg)
+            done = TRUE;
+          else
+            need_arg = TRUE;
+
+          break;
+        case ')':
+          if (!(need_arg && seen_comma) && !negate)
+            {
+              args = g_slist_reverse (args);
+              _gtk_binding_entry_add_signall (binding_set,
+                                              keyval,
+                                              modifiers,
+                                              signal,
+                                              args);
+              expected_token = G_TOKEN_NONE;
+            }
+
+          done = TRUE;
+          break;
+        default:
+          done = TRUE;
+          break;
+        }
+    }
+  while (!done);
+
+  scanner->config->scan_symbols = TRUE;
+
+  for (slist = args; slist; slist = slist->next)
+    {
+      GtkBindingArg *arg;
+
+      arg = slist->data;
+
+      if (G_TYPE_FUNDAMENTAL (arg->arg_type) == G_TYPE_STRING)
+        g_free (arg->d.string_data);
+      g_free (arg);
+    }
+
+  g_slist_free (args);
+  g_free (signal);
+
+  return expected_token;
+}
+
+static inline guint
+gtk_binding_parse_bind (GScanner       *scanner,
+                        GtkBindingSet  *binding_set)
+{
+  guint keyval = 0;
+  GdkModifierType modifiers = 0;
+  gboolean unbind = FALSE;
+
+  g_return_val_if_fail (scanner != NULL, G_TOKEN_ERROR);
+
+  g_scanner_get_next_token (scanner);
+
+  if (scanner->token != G_TOKEN_SYMBOL)
+    return G_TOKEN_SYMBOL;
+
+  if (scanner->value.v_symbol != GUINT_TO_POINTER (GTK_BINDING_TOKEN_BIND) &&
+      scanner->value.v_symbol != GUINT_TO_POINTER (GTK_BINDING_TOKEN_UNBIND))
+    return G_TOKEN_SYMBOL;
+
+  unbind = (scanner->value.v_symbol == GUINT_TO_POINTER (GTK_BINDING_TOKEN_UNBIND));
+  g_scanner_get_next_token (scanner);
+
+  if (scanner->token != (guint) G_TOKEN_STRING)
+    return G_TOKEN_STRING;
+
+  gtk_accelerator_parse (scanner->value.v_string, &keyval, &modifiers);
+  modifiers &= BINDING_MOD_MASK ();
+
+  if (keyval == 0)
+    return G_TOKEN_STRING;
+
+  if (unbind)
+    {
+      gtk_binding_entry_skip (binding_set, keyval, modifiers);
+      return G_TOKEN_NONE;
+    }
+
+  g_scanner_get_next_token (scanner);
+
+  if (scanner->token != '{')
+    return '{';
+
+  gtk_binding_entry_clear_internal (binding_set, keyval, modifiers);
+  g_scanner_peek_next_token (scanner);
+
+  while (scanner->next_token != '}')
+    {
+      guint expected_token;
+
+      switch (scanner->next_token)
+        {
+        case G_TOKEN_STRING:
+          expected_token = gtk_binding_parse_signal (scanner,
+                                                     binding_set,
+                                                     keyval,
+                                                     modifiers);
+          if (expected_token != G_TOKEN_NONE)
+            return expected_token;
+          break;
+        default:
+          g_scanner_get_next_token (scanner);
+          return '}';
+        }
+
+      g_scanner_peek_next_token (scanner);
+    }
+
+  g_scanner_get_next_token (scanner);
+
+  return G_TOKEN_NONE;
+}
+
+static GScanner *
+create_signal_scanner (void)
+{
+  GScanner *scanner;
+
+  scanner = g_scanner_new (NULL);
+  scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "-_";
+
+  g_scanner_scope_add_symbol (scanner, 0, "bind", GUINT_TO_POINTER (GTK_BINDING_TOKEN_BIND));
+  g_scanner_scope_add_symbol (scanner, 0, "unbind", GUINT_TO_POINTER (GTK_BINDING_TOKEN_UNBIND));
+
+  g_scanner_set_scope (scanner, 0);
+
+  return scanner;
+}
+
+/**
+ * gtk_binding_entry_add_signal_from_string:
+ * @binding_set: a #GtkBindingSet
+ * @signal_desc: a signal description
+ *
+ * Parses a signal description from @signal_desc and incorporates
+ * it into @binding_set.
+ *
+ * signal descriptions may either bind a key combination to
+ * a signal:
+ * <informalexample><programlisting>
+ *   bind <replaceable>key</replaceable> {
+ *     <replaceable>signalname</replaceable> (<replaceable>param</replaceable>, ...)
+ *     ...
+ *   }
+ * </programlisting></informalexample>
+ *
+ * Or they may also unbind a key combination:
+ * <informalexample><programlisting>
+ *   unbind <replaceable>key</replaceable>
+ * </programlisting></informalexample>
+ *
+ * Key combinations must be in a format that can be parsed by
+ * gtk_accelerator_parse().
+ *
+ * Since: 3.0
+ **/
+void
+gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
+					  const gchar   *signal_desc)
+{
+  static GScanner *scanner = NULL;
+  GTokenType ret;
+
+  g_return_if_fail (binding_set != NULL);
+  g_return_if_fail (signal_desc != NULL);
+
+  if (G_UNLIKELY (!scanner))
+    scanner = create_signal_scanner ();
+
+  g_scanner_input_text (scanner, signal_desc,
+                        (guint) strlen (signal_desc));
+
+  ret = gtk_binding_parse_bind (scanner, binding_set);
+
+  if (ret != G_TOKEN_NONE)
+    g_scanner_unexp_token (scanner, ret, NULL, NULL, NULL,
+                           "Could not parse binding", FALSE);
+
+  /* Reset for next use */
+  g_scanner_set_scope (scanner, 0);
 }
 
 /**
