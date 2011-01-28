@@ -905,10 +905,10 @@ endif
 
 if USE_QUARTZ
 install-mac-key-theme:
-	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key
-	$(INSTALL_DATA) $(srcdir)/gtkrc.key.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
+	$(mkdir_p) $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0
+	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.mac $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
 uninstall-mac-key-theme:
-	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Mac/gtk-3.0/gtk-keys.css
 else
 install-mac-key-theme:
 uninstall-mac-key-theme:
@@ -940,6 +940,7 @@ uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
 	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0-key/gtkrc
 	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0-key/gtkrc
+	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 # if srcdir!=builddir, clean out maintainer-clean files from builddir
 # this allows dist to pass.
@@ -1364,6 +1365,7 @@ EXTRA_DIST +=                   \
 	gtkrc.key.emacs		\
 	gtk-keys.css.emacs	\
 	gtkrc.key.mac		\
+	gtk-keys.css.mac	\
 	makefile.msc		\
 	makefile.msc.in		\
 	abicheck.sh		\
