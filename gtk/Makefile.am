@@ -731,19 +731,13 @@ gtk_use_x11_c_sources = 	\
 	gtktrayicon-x11.c	\
 	gtkmountoperation-x11.c
 gtk_use_win32_c_sources = 	\
-	gtkplug-win32.c		\
-	gtksocket-win32.c	\
 	gtkwin32embed.c		\
 	gtkwin32embedwidget.c	\
 	gtkmountoperation-stub.c
 gtk_use_quartz_c_sources = 	\
 	gtksearchenginequartz.c	\
-	gtkplug-stub.c		\
-	gtksocket-stub.c	\
 	gtkmountoperation-stub.c
 gtk_use_stub_c_sources = 	\
-	gtkplug-stub.c		\
-	gtksocket-stub.c	\
 	gtkmountoperation-stub.c
 gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
 if USE_X11
