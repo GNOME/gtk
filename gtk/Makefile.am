@@ -579,7 +579,6 @@ gtk_base_c_sources = 		\
 	gtkpango.c		\
 	gtkpapersize.c		\
 	gtkpathbar.c		\
-	gtkplug.c		\
 	gtkprintcontext.c	\
 	gtkprintoperation.c	\
 	gtkprintoperationpreview.c \
@@ -615,7 +614,6 @@ gtk_base_c_sources = 		\
 	gtksizegroup.c		\
 	gtksizerequest.c	\
 	gtkshow.c		\
-	gtksocket.c		\
 	gtkspinbutton.c		\
 	gtkspinner.c		\
 	gtkstatusbar.c		\
@@ -725,7 +723,9 @@ gtk_c_sources += $(gtk_os_win32_c_sources)
 endif
 
 gtk_use_x11_c_sources = 	\
+	gtkplug.c		\
 	gtkplug-x11.c		\
+	gtksocket.c		\
 	gtksocket-x11.c		\
 	gtkxembed.c		\
 	gtktrayicon-x11.c	\

@@ -30,6 +30,10 @@
 #ifndef __GTK_SOCKET_H__
 #define __GTK_SOCKET_H__
 
+#include <gdk/gdk.h>
+
+#ifdef GDK_WINDOWING_X11
+
 #include <gtk/gtkcontainer.h>
 
 G_BEGIN_DECLS
@@ -77,5 +81,7 @@ GdkNativeWindow gtk_socket_get_id (GtkSocket       *socket_);
 GdkWindow*      gtk_socket_get_plug_window (GtkSocket       *socket_);
 
 G_END_DECLS
+
+#endif /* GDK_WINDOWING_X11 */
 
 #endif /* __GTK_SOCKET_H__ */

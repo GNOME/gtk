@@ -30,6 +30,10 @@
 #ifndef __GTK_PLUG_H__
 #define __GTK_PLUG_H__
 
+#include <gdk/gdk.h>
+
+#ifdef GDK_WINDOWING_X11
+
 
 #include <gtk/gtksocket.h>
 #include <gtk/gtkwindow.h>
@@ -97,5 +101,7 @@ void _gtk_plug_remove_from_socket (GtkPlug   *plug,
 				   GtkSocket *socket_);
 
 G_END_DECLS
+
+#endif /* GDK_WINDOWING_X11 */
 
 #endif /* __GTK_PLUG_H__ */
