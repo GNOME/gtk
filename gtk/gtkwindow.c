@@ -2294,6 +2294,7 @@ gtk_window_list_toplevels (void)
   return list;
 }
 
+#ifdef GDK_WINDOWING_X11
 void
 _gtk_window_add_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 {
@@ -2337,6 +2338,7 @@ _gtk_window_remove_embedded_xid (GtkWindow *window, GdkNativeWindow xid)
 			   embedded_windows ?
 			   (GDestroyNotify) g_list_free : NULL);
 }
+#endif
 
 static void
 gtk_window_dispose (GObject *object)
@@ -5906,6 +5908,7 @@ gtk_window_focus_out_event (GtkWidget     *widget,
   return FALSE;
 }
 
+#ifdef GDK_WINDOWING_X11
 static GdkAtom atom_rcfiles = GDK_NONE;
 static GdkAtom atom_iconthemes = GDK_NONE;
 
@@ -5936,11 +5939,13 @@ send_client_message_to_embedded_windows (GtkWidget *widget,
       gdk_event_free (send_event);
     }
 }
+#endif
 
 static gint
 gtk_window_client_event (GtkWidget	*widget,
 			 GdkEventClient	*event)
 {
+#ifdef GDK_WINDOWING_X11
   if (!atom_rcfiles)
     {
       atom_rcfiles = gdk_atom_intern_static_string ("_GTK_READ_RCFILES");
@@ -5958,6 +5963,7 @@ gtk_window_client_event (GtkWidget	*widget,
       send_client_message_to_embedded_windows (widget, atom_iconthemes);
       _gtk_icon_theme_check_reload (gtk_widget_get_display (widget));    
     }
+#endif
 
   return FALSE;
 }

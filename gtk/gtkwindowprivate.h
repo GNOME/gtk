@@ -21,16 +21,20 @@
 #ifndef __GTK_WINDOW_PRIVATE_H__
 #define __GTK_WINDOW_PRIVATE_H__
 
+#include <gdk/gdk.h>
+
 #include "gtkwindow.h"
 
 G_BEGIN_DECLS
 
 void            _gtk_window_internal_set_focus (GtkWindow *window,
                                                 GtkWidget *focus);
+#ifdef GDK_WINDOWING_X11
 void            _gtk_window_remove_embedded_xid (GtkWindow       *window,
                                                 GdkNativeWindow  xid);
 void            _gtk_window_add_embedded_xid    (GtkWindow       *window,
                                                 GdkNativeWindow  xid);
+#endif
 void            _gtk_window_reposition         (GtkWindow *window,
                                                 gint       x,
                                                 gint       y);
