@@ -96,11 +96,6 @@ gboolean  gtk_plug_get_embedded (GtkPlug         *plug);
 
 GdkWindow *gtk_plug_get_socket_window (GtkPlug   *plug);
 
-void _gtk_plug_add_to_socket      (GtkPlug   *plug,
-				   GtkSocket *socket_);
-void _gtk_plug_remove_from_socket (GtkPlug   *plug,
-				   GtkSocket *socket_);
-
 G_END_DECLS
 
 #endif /* GDK_WINDOWING_X11 */

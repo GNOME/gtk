@@ -26,6 +26,7 @@
 #ifndef __GTK_SOCKET_PRIVATE_H__
 #define __GTK_SOCKET_PRIVATE_H__
 
+#include "gtkplug.h"
 #include "gtksocket.h"
 
 struct _GtkSocketPrivate
@@ -51,5 +52,11 @@ struct _GtkSocketPrivate
   GtkAccelGroup *accel_group;
   GtkWidget *toplevel;
 };
+
+/* from gtkplug.c */
+void _gtk_plug_add_to_socket      (GtkPlug   *plug,
+				   GtkSocket *socket_);
+void _gtk_plug_remove_from_socket (GtkPlug   *plug,
+				   GtkSocket *socket_);
 
 #endif /* __GTK_SOCKET_PRIVATE_H__ */
