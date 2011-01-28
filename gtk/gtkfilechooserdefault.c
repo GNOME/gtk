@@ -3603,6 +3603,7 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
+  GtkStyleContext *style;
 
   /* Target types for dragging a row to/from the shortcuts list */
   const GtkTargetEntry tree_model_row_targets[] = {
@@ -3619,8 +3620,9 @@ shortcuts_list_create (GtkFileChooserDefault *impl)
   gtk_widget_show (swin);
 
   /* Tree */
-
   impl->browse_shortcuts_tree_view = gtk_tree_view_new ();
+  gtk_style_context_add_class (gtk_widget_get_style_context (impl->browse_shortcuts_tree_view),
+                               GTK_STYLE_CLASS_SIDEBAR);
   gtk_tree_view_set_enable_search (GTK_TREE_VIEW (impl->browse_shortcuts_tree_view), FALSE);
 #ifdef PROFILE_FILE_CHOOSER
   g_object_set_data (G_OBJECT (impl->browse_shortcuts_tree_view), "fmq-name", "shortcuts");
