@@ -33,6 +33,7 @@
 #include "gtkthemingengine.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
+#include "gtkbindings.h"
 #include "gtkprivate.h"
 
 /**
@@ -1475,7 +1476,7 @@ scanner_apply_scope (GScanner    *scanner,
   if (scope == SCOPE_VALUE)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
-      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(),.%\t\n'/\"";
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(){}<>,.%\t\n'/\"";
       scanner->config->scan_identifier_1char = TRUE;
     }
   else if (scope == SCOPE_SELECTOR)
@@ -3232,6 +3233,60 @@ parse_rule (GtkCssProvider  *css_provider,
             }
           else
             return G_TOKEN_NONE;
+        }
+      else if (strcmp (directive, "binding-set") == 0)
+        {
+          GtkBindingSet *binding_set;
+          gchar *binding_set_name;
+
+          g_scanner_get_next_token (scanner);
+
+          if (scanner->token != G_TOKEN_IDENTIFIER)
+            {
+              scanner->user_data = "Binding name";
+              return G_TOKEN_IDENTIFIER;
+            }
+
+          binding_set_name = scanner->value.v_identifier;
+          binding_set = gtk_binding_set_find (scanner->value.v_identifier);
+
+          if (!binding_set)
+            {
+              binding_set = gtk_binding_set_new (scanner->value.v_identifier);
+              binding_set->parsed = TRUE;
+            }
+
+          g_scanner_get_next_token (scanner);
+
+          if (scanner->token != G_TOKEN_LEFT_CURLY)
+            return G_TOKEN_LEFT_CURLY;
+
+          css_provider_push_scope (css_provider, SCOPE_VALUE);
+          g_scanner_get_next_token (scanner);
+
+          do
+            {
+              if (scanner->token != G_TOKEN_IDENTIFIER)
+                {
+                  scanner->user_data = "Binding definition";
+                  return G_TOKEN_IDENTIFIER;
+                }
+
+              gtk_binding_entry_add_signal_from_string (binding_set,
+                                                        scanner->value.v_identifier);
+              g_scanner_get_next_token (scanner);
+
+              if (scanner->token != ';')
+                return ';';
+
+              g_scanner_get_next_token (scanner);
+            }
+          while (scanner->token != G_TOKEN_RIGHT_CURLY);
+
+          css_provider_pop_scope (css_provider);
+          g_scanner_get_next_token (scanner);
+
+          return G_TOKEN_NONE;
         }
       else
         {
