@@ -408,7 +408,6 @@ gtk_private_h_sources =		\
 	gtknumerableiconprivate.h \
 	gtkpango.h		\
 	gtkpathbar.h		\
-	gtkplugprivate.h	\
 	gtkprintoperation-private.h \
 	gtkprintutils.h		\
 	gtkprivate.h		\
@@ -724,7 +723,6 @@ endif
 
 gtk_use_x11_c_sources = 	\
 	gtkplug.c		\
-	gtkplug-x11.c		\
 	gtksocket.c		\
 	gtksocket-x11.c		\
 	gtkxembed.c		\
