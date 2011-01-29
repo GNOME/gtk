@@ -780,7 +780,7 @@ render_para (GtkTextRenderer    *text_renderer,
 		    (at_last_line && line_display->insert_index == byte_offset + line->length)))
 	    {
 	      GdkRectangle cursor_rect;
-              GdkColor cursor_color;
+              GdkRGBA cursor_color;
               cairo_t *cr = text_renderer->cr;
 
 	      /* we draw text using base color on filled cursor rectangle of cursor color
@@ -797,7 +797,7 @@ render_para (GtkTextRenderer    *text_renderer,
               gdk_cairo_rectangle (cr, &cursor_rect);
               cairo_clip (cr);
 
-              gdk_cairo_set_source_color (cr, &cursor_color);
+              gdk_cairo_set_source_rgba (cr, &cursor_color);
               cairo_paint (cr);
 
               /* draw text under the cursor if any */

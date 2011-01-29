@@ -3974,7 +3974,7 @@ gtk_paint_spinner (GtkStyle           *style,
 static void
 get_cursor_color (GtkStyleContext *context,
                   gboolean         primary,
-                  GdkColor        *color)
+                  GdkRGBA         *color)
 {
   GdkColor *style_color;
 
@@ -3985,36 +3985,33 @@ get_cursor_color (GtkStyleContext *context,
 
   if (style_color)
     {
-      *color = *style_color;
+      color->red = style_color->red / 65535;
+      color->green = style_color->green / 65535;
+      color->blue = style_color->blue / 65535;
+      color->alpha = 1;
+
       gdk_color_free (style_color);
-    }
-  else if (primary)
-    {
-      GdkRGBA fg;
-
-      gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &fg);
-
-      color->red = fg.red * 65535;
-      color->green = fg.green * 65535;
-      color->blue = fg.blue * 65535;
     }
   else
     {
-      GdkRGBA fg;
-      GdkRGBA bg;
+      gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, color);
 
-      gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &fg);
-      gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+      if (!primary)
+      {
+        GdkRGBA bg;
 
-      color->red = (fg.red + bg.red) * 0.5 * 65535;
-      color->green = (fg.green + bg.green) * 0.5 * 65535;
-      color->blue = (fg.blue + bg.blue) * 0.5 * 65535;
+        gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+
+        color->red = (color->red + bg.red) * 0.5;
+        color->green = (color->green + bg.green) * 0.5;
+        color->blue = (color->blue + bg.blue) * 0.5;
+      }
     }
 }
 
 void
 _gtk_widget_get_cursor_color (GtkWidget *widget,
-                              GdkColor  *color)
+                              GdkRGBA   *color)
 {
   GtkStyleContext *context;
 
@@ -4053,7 +4050,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
   gfloat cursor_aspect_ratio;
   gint offset;
   GtkStyleContext *context;
-  GdkColor color;
+  GdkRGBA color;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (cr != NULL);
@@ -4063,7 +4060,7 @@ gtk_draw_insertion_cursor (GtkWidget          *widget,
   context = gtk_widget_get_style_context (widget);
 
   get_cursor_color (context, is_primary, &color);
-  gdk_cairo_set_source_color (cr, &color);
+  gdk_cairo_set_source_rgba (cr, &color);
 
   /* When changing the shape or size of the cursor here,
    * propagate the changes to gtktextview.c:text_window_invalidate_cursors().
