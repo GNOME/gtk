@@ -1019,6 +1019,7 @@ gtk_arrow_draw (GtkWidget *widget,
       given the internal filter model instead of the users model.
       This oversight has been fixed in GTK+ 3; if you have handlers
       for these signals, they will likely need slight adjustments.
+    </para>
   </section>
 
   <section>
