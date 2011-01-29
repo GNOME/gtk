@@ -4008,7 +4008,7 @@ get_cursor_color (GtkStyleContext *context,
 
       color->red = (fg.red + bg.red) * 0.5 * 65535;
       color->green = (fg.green + bg.green) * 0.5 * 65535;
-      color->blue = (fg.blue + bg.green) * 0.5 * 65535;
+      color->blue = (fg.blue + bg.blue) * 0.5 * 65535;
     }
 }
 
