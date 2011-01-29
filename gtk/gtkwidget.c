@@ -4202,6 +4202,9 @@ gtk_widget_unmap (GtkWidget *widget)
 
       if (priv->context)
         gtk_style_context_cancel_animations (priv->context, NULL);
+
+      /* Unset pointer/window info */
+      g_object_set_qdata (G_OBJECT (widget), quark_pointer_window, NULL);
     }
 }
 
@@ -10833,7 +10836,6 @@ _gtk_widget_peek_request_cache (GtkWidget *widget)
  * @window: the new device window.
  *
  * Sets pointer window for @widget and @device.  Does not ref @window.
- * Actually stores it on the #GdkScreen, but you don't need to know that.
  */
 void
 _gtk_widget_set_device_window (GtkWidget *widget,
@@ -10841,7 +10843,6 @@ _gtk_widget_set_device_window (GtkWidget *widget,
                                GdkWindow *window)
 {
   GtkWidgetPrivate *priv;
-  GdkScreen *screen;
   GHashTable *device_window;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
@@ -10850,16 +10851,15 @@ _gtk_widget_set_device_window (GtkWidget *widget,
 
   priv = widget->priv;
 
-  if (!gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_mapped (widget))
     return;
 
-  screen = gdk_window_get_screen (priv->window);
-  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
 
-  if (G_UNLIKELY (!device_window))
+  if (!device_window && window)
     {
       device_window = g_hash_table_new (NULL, NULL);
-      g_object_set_qdata_full (G_OBJECT (screen),
+      g_object_set_qdata_full (G_OBJECT (widget),
                                quark_pointer_window,
                                device_window,
                                (GDestroyNotify) g_hash_table_destroy);
@@ -10867,8 +10867,13 @@ _gtk_widget_set_device_window (GtkWidget *widget,
 
   if (window)
     g_hash_table_insert (device_window, device, window);
-  else
-    g_hash_table_remove (device_window, device);
+  else if (device_window)
+    {
+      g_hash_table_remove (device_window, device);
+
+      if (g_hash_table_size (device_window) == 0)
+        g_object_set_qdata (G_OBJECT (widget), quark_pointer_window, NULL);
+    }
 }
 
 /*
@@ -10884,36 +10889,22 @@ _gtk_widget_get_device_window (GtkWidget *widget,
                                GdkDevice *device)
 {
   GtkWidgetPrivate *priv;
-  GdkScreen *screen;
   GHashTable *device_window;
-  GdkWindow *window;
-  GtkWidget *w;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
 
   priv = widget->priv;
 
-  if (!gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_mapped (widget))
     return NULL;
 
-  screen = gdk_window_get_screen (priv->window);
-  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
 
-  if (G_UNLIKELY (!device_window))
+  if (!device_window)
     return NULL;
 
-  window = g_hash_table_lookup (device_window, device);
-
-  if (!window)
-    return NULL;
-
-  gdk_window_get_user_data (window, (gpointer *) &w);
-
-  if (widget != w)
-    return NULL;
-
-  return window;
+  return g_hash_table_lookup (device_window, device);
 }
 
 /*
@@ -10928,7 +10919,6 @@ GList *
 _gtk_widget_list_devices (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv;
-  GdkScreen *screen;
   GHashTableIter iter;
   GHashTable *device_window;
   GList *devices = NULL;
@@ -10938,11 +10928,10 @@ _gtk_widget_list_devices (GtkWidget *widget)
 
   priv = widget->priv;
 
-  if (!gtk_widget_get_realized (widget))
+  if (!gtk_widget_get_mapped (widget))
     return NULL;
 
-  screen = gdk_window_get_screen (priv->window);
-  device_window = g_object_get_qdata (G_OBJECT (screen), quark_pointer_window);
+  device_window = g_object_get_qdata (G_OBJECT (widget), quark_pointer_window);
 
   if (G_UNLIKELY (!device_window))
     return NULL;
@@ -10950,19 +10939,7 @@ _gtk_widget_list_devices (GtkWidget *widget)
   g_hash_table_iter_init (&iter, device_window);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      GdkDevice *device = key;
-      GdkWindow *window = value;
-      GtkWidget *w;
-
-      if (window)
-        {
-          gdk_window_get_user_data (window, (gpointer *) &w);
-
-          if (widget == w)
-            devices = g_list_prepend (devices, device);
-        }
-    }
+    devices = g_list_prepend (devices, key);
 
   return devices;
 }
