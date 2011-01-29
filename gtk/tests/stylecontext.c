@@ -44,6 +44,15 @@ test_parse_at (void)
     "@define-color color mix(shade (#121212, 0.5), mix (rgb(10%,20%,100%), @blue,0.5), 0.2);",
     "@define-color blue @blue;",
     "@define-color blue123_a-b #123;",
+    "@binding-set gtk-emacs-menu { bind \"<ctrl>n\" { \"move-current\" (next) }; };",
+    "@binding-set gtk-emacs-text-view {\n"
+      "  bind \"<ctrl>u\" { \"move-cursor\" (paragraph-ends, -1, 0)\n"
+      "                   \"delete-from-cursor\" (paragraph-ends, 1) };\n"
+      "};",
+    "@binding-set test {\n"
+       "  bind \"<ctrl>space\" { \"set-anchor\" () };\n"
+       "  unbind \"<ctrl>v\";\n"
+       "};",
     NULL
   };
 
@@ -69,6 +78,12 @@ test_parse_at (void)
     "@define-color color rgb(50%, a);",
     "@define-color 1col rgb(50%, a);",
     "@three-dee { some other crap };",
+    "@binding-set \"foo\";",
+    "@binding-set foo { bind key { \"action\"() }; };",
+    "@binding-set foo { bind key { \"action\"() }; };",
+    "@binding-set foo { bind \"key\" { action() }; };",
+    "@binding-set foo { bind \"key\"; };",
+    "@binding-set foo { unbind \"key\" { \"bla\" () }; };",
     NULL
   };
 
@@ -163,6 +178,8 @@ test_parse_selectors (void)
     {
       provider = gtk_css_provider_new ();
       res = gtk_css_provider_load_from_data (provider, valid[i], -1, &error);
+      if (error)
+        g_print ("parsing '%s': got unexpected error: %s\n", valid[i], error->message);
       g_assert_no_error (error);
       g_assert (res);
 
@@ -243,6 +260,8 @@ test_parse_declarations (void)
     {
       provider = gtk_css_provider_new ();
       res = gtk_css_provider_load_from_data (provider, valid[i], -1, &error);
+      if (error)
+        g_print ("parsing '%s': got unexpected error: %s\n", valid[i], error->message);
       g_assert_no_error (error);
       g_assert (res);
 
