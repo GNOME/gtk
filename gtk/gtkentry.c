@@ -66,7 +66,7 @@
 #include "gtkiconfactory.h"
 #include "gtkicontheme.h"
 #include "gtkwidgetprivate.h"
-
+#include "gtkstylecontextprivate.h"
 
 /**
  * SECTION:gtkentry
@@ -5805,6 +5805,7 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
     }
   else /* overwrite_mode */
     {
+      GtkStyleContext *context;
       GdkRGBA cursor_color;
       GdkRectangle rect;
       gint x, y;
@@ -5818,18 +5819,18 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
       rect.width = PANGO_PIXELS (cursor_rect.width);
       rect.height = PANGO_PIXELS (cursor_rect.height);
 
-      _gtk_widget_get_cursor_color (widget, &cursor_color);
+      context = gtk_widget_get_style_context (widget);
+
+      _gtk_style_context_get_cursor_color (context, &cursor_color, NULL);
       gdk_cairo_set_source_rgba (cr, &cursor_color);
       gdk_cairo_rectangle (cr, &rect);
       cairo_fill (cr);
 
       if (!block_at_line_end)
         {
-          GtkStyleContext *context;
           GtkStateFlags state;
           GdkRGBA color;
 
-          context = gtk_widget_get_style_context (widget);
           state = gtk_widget_get_state_flags (widget);
           gtk_style_context_get_background_color (context, state, &color);
 

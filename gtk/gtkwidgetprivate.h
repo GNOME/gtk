@@ -93,9 +93,6 @@ gboolean _gtk_widget_get_translation_to_window (GtkWidget      *widget,
                                                 int            *x,
                                                 int            *y);
 
-void  _gtk_widget_get_cursor_color (GtkWidget *widget,
-                                    GdkRGBA  *color);
-
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */

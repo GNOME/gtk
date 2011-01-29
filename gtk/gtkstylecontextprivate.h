@@ -34,6 +34,9 @@ void           _gtk_style_context_coalesce_animation_areas   (GtkStyleContext *c
                                                               GtkWidget       *widget);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
+void           _gtk_style_context_get_cursor_color           (GtkStyleContext *context,
+                                                              GdkRGBA         *primary_color,
+                                                              GdkRGBA         *secondary_color);
 
 G_END_DECLS
 

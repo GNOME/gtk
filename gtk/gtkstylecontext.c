@@ -3596,6 +3596,56 @@ gtk_style_context_get_font (GtkStyleContext *context,
   return NULL;
 }
 
+static void
+get_cursor_color (GtkStyleContext *context,
+                  gboolean         primary,
+                  GdkRGBA         *color)
+{
+  GdkColor *style_color;
+
+  gtk_style_context_get_style (context,
+                               primary ? "cursor-color" : "secondary-cursor-color",
+                               &style_color,
+                               NULL);
+
+  if (style_color)
+    {
+      color->red = style_color->red / 65535;
+      color->green = style_color->green / 65535;
+      color->blue = style_color->blue / 65535;
+      color->alpha = 1;
+
+      gdk_color_free (style_color);
+    }
+  else
+    {
+      gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, color);
+
+      if (!primary)
+      {
+        GdkRGBA bg;
+
+        gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+
+        color->red = (color->red + bg.red) * 0.5;
+        color->green = (color->green + bg.green) * 0.5;
+        color->blue = (color->blue + bg.blue) * 0.5;
+      }
+    }
+}
+
+void
+_gtk_style_context_get_cursor_color (GtkStyleContext *context,
+                                     GdkRGBA         *primary_color,
+                                     GdkRGBA         *secondary_color)
+{
+  if (primary_color)
+    get_cursor_color (context, TRUE, primary_color);
+
+  if (secondary_color)
+    get_cursor_color (context, FALSE, secondary_color);
+}
+
 /* Paint methods */
 
 /**
