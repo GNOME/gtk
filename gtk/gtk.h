@@ -143,7 +143,6 @@
 #include <gtk/gtkpagesetup.h>
 #include <gtk/gtkpapersize.h>
 #include <gtk/gtkpaned.h>
-#include <gtk/gtkplug.h>
 #include <gtk/gtkprintcontext.h>
 #include <gtk/gtkprintoperation.h>
 #include <gtk/gtkprintoperationpreview.h>
@@ -175,7 +174,6 @@
 #include <gtk/gtkshow.h>
 #include <gtk/gtksizegroup.h>
 #include <gtk/gtksizerequest.h>
-#include <gtk/gtksocket.h>
 #include <gtk/gtkspinbutton.h>
 #include <gtk/gtkspinner.h>
 #include <gtk/gtkstatusbar.h>

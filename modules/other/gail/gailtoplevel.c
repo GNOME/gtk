@@ -22,7 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <gtk/gtk.h>
+#include <gtk/gtkx.h>
 
 #include "gailtoplevel.h"
 

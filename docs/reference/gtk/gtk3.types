@@ -1,4 +1,4 @@
-#include <gtk/gtk.h>
+#include <gtk/gtkx.h>
 #include <gtk/gtkunixprint.h>
 
 gtk_about_dialog_get_type

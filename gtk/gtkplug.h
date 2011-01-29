@@ -23,21 +23,20 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
-#error "Only <gtk/gtk.h> can be included directly."
+#if !defined (__GTKX_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtkx.h> can be included directly."
 #endif
 
 #ifndef __GTK_PLUG_H__
 #define __GTK_PLUG_H__
 
-#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 
 #ifdef GDK_WINDOWING_X11
 
 #include <gdk/gdkx.h>
 
 #include <gtk/gtksocket.h>
-#include <gtk/gtkwindow.h>
 
 
 G_BEGIN_DECLS
@@ -50,9 +49,9 @@ G_BEGIN_DECLS
 #define GTK_PLUG_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PLUG, GtkPlugClass))
 
 
-typedef struct _GtkPlug              GtkPlug;
-typedef struct _GtkPlugPrivate       GtkPlugPrivate;
-typedef struct _GtkPlugClass         GtkPlugClass;
+typedef struct _GtkPlug        GtkPlug;
+typedef struct _GtkPlugPrivate GtkPlugPrivate;
+typedef struct _GtkPlugClass   GtkPlugClass;
 
 
 struct _GtkPlug
@@ -75,26 +74,22 @@ struct _GtkPlugClass
   void (*_gtk_reserved4) (void);
 };
 
-
-GType      gtk_plug_get_type  (void) G_GNUC_CONST;
+GType      gtk_plug_get_type              (void) G_GNUC_CONST;
 
 #ifndef GDK_MULTIHEAD_SAFE
-void       gtk_plug_construct             (GtkPlug         *plug,
-			                   Window           socket_id);
-GtkWidget* gtk_plug_new                   (Window           socket_id);
+void       gtk_plug_construct             (GtkPlug    *plug,
+                                           Window      socket_id);
+GtkWidget *gtk_plug_new                   (Window      socket_id);
 #endif
 
-void       gtk_plug_construct_for_display (GtkPlug         *plug,
-					   GdkDisplay      *display,
-					   Window           socket_id);
-GtkWidget* gtk_plug_new_for_display       (GdkDisplay      *display,
-					   Window           socket_id);
-
-Window     gtk_plug_get_id                (GtkPlug         *plug);
-
-gboolean  gtk_plug_get_embedded (GtkPlug         *plug);
-
-GdkWindow *gtk_plug_get_socket_window (GtkPlug   *plug);
+void       gtk_plug_construct_for_display (GtkPlug    *plug,
+                                           GdkDisplay *display,
+                                           Window      socket_id);
+GtkWidget *gtk_plug_new_for_display       (GdkDisplay *display,
+                                           Window      socket_id);
+Window     gtk_plug_get_id                (GtkPlug    *plug);
+gboolean   gtk_plug_get_embedded          (GtkPlug    *plug);
+GdkWindow *gtk_plug_get_socket_window     (GtkPlug    *plug);
 
 G_END_DECLS
 

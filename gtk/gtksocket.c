@@ -56,21 +56,19 @@
  * SECTION:gtksocket
  * @Short_description: Container for widgets from other processes
  * @Title: GtkSocket
+ * @include: gtk/gtkx.h
  * @See_also: #GtkPlug, <ulink url="http://www.freedesktop.org/Standards/xembed-spec">XEmbed</ulink>
  *
- * Together with #GtkPlug, #GtkSocket provides the ability
- * to embed widgets from one process into another process
- * in a fashion that is transparent to the user. One
- * process creates a #GtkSocket widget and passes
- * that widget's window ID to the other process,
- * which then creates a #GtkPlug with that window ID.
- * Any widgets contained in the #GtkPlug then will appear
- * inside the first application's window.
+ * Together with #GtkPlug, #GtkSocket provides the ability to embed
+ * widgets from one process into another process in a fashion that
+ * is transparent to the user. One process creates a #GtkSocket widget
+ * and passes that widget's window ID to the other process, which then
+ * creates a #GtkPlug with that window ID. Any widgets contained in the
+ * #GtkPlug then will appear inside the first application's window.
  *
- * The socket's window ID is obtained by using
- * gtk_socket_get_id(). Before using this function,
- * the socket must have been realized, and for hence,
- * have been added to its parent.
+ * The socket's window ID is obtained by using gtk_socket_get_id().
+ * Before using this function, the socket must have been realized,
+ * and for hence, have been added to its parent.
  *
  * <example>
  * <title>Obtaining the window ID of a socket.</title>
@@ -79,9 +77,9 @@
  * gtk_widget_show (socket);
  * gtk_container_add (GTK_CONTAINER (parent), socket);
  *
- * /<!---->* The following call is only necessary if one of
+ * /&ast; The following call is only necessary if one of
  *  * the ancestors of the socket is not yet visible.
- *  *<!---->/
+ *  &ast;/
  * gtk_widget_realize (socket);
  * g_print ("The ID of the sockets window is %#x\n",
  *          gtk_socket_get_id (socket));
@@ -89,33 +87,34 @@
  * </example>
  *
  * Note that if you pass the window ID of the socket to another
- * process that will create a plug in the socket, you
- * must make sure that the socket widget is not destroyed
- * until that plug is created. Violating this rule will
- * cause unpredictable consequences, the most likely
- * consequence being that the plug will appear as a
- * separate toplevel window. You can check if the plug
- * has been created by using gtk_socket_get_plug_window(). If
- * it returns a non-%NULL value, then the plug has been
+ * process that will create a plug in the socket, you must make
+ * sure that the socket widget is not destroyed until that plug
+ * is created. Violating this rule will cause unpredictable
+ * consequences, the most likely consequence being that the plug
+ * will appear as a separate toplevel window. You can check if
+ * the plug has been created by using gtk_socket_get_plug_window().
+ * If it returns a non-%NULL value, then the plug has been
  * successfully created inside of the socket.
  *
- * When GTK+ is notified that the embedded window has been
- * destroyed, then it will destroy the socket as well. You
- * should always, therefore, be prepared for your sockets
- * to be destroyed at any time when the main event loop
- * is running. To prevent this from happening, you can
- * connect to the #GtkSocket::plug-removed signal.
+ * When GTK+ is notified that the embedded window has been destroyed,
+ * then it will destroy the socket as well. You should always,
+ * therefore, be prepared for your sockets to be destroyed at any
+ * time when the main event loop is running. To prevent this from
+ * happening, you can connect to the #GtkSocket::plug-removed signal.
  *
  * The communication between a #GtkSocket and a #GtkPlug follows the
  * <ulink url="http://www.freedesktop.org/Standards/xembed-spec">XEmbed</ulink>
- * protocol. This protocol has also been implemented in other toolkits, e.g.
- * <application>Qt</application>, allowing the same level of integration
- * when embedding a <application>Qt</application> widget in GTK or vice versa.
+ * protocol. This protocol has also been implemented in other toolkits,
+ * e.g. <application>Qt</application>, allowing the same level of
+ * integration when embedding a <application>Qt</application> widget
+ * in GTK or vice versa.
  *
  * <note>
- * The #GtkPlug and #GtkSocket widgets are only available when GTK is
- * compiled for the X11 platform and %GDK_WINDOWING_X11 is defined.
- * They can only be used on a #GdkX11Display.
+ * The #GtkPlug and #GtkSocket widgets are only available when GTK+
+ * is compiled for the X11 platform and %GDK_WINDOWING_X11 is defined.
+ * They can only be used on a #GdkX11Display. To use #GtkPlug and
+ * #GtkSocket, you need to include the <filename>gtk/gtkx.h</filename>
+ * header.
  * </note>
  */
 
