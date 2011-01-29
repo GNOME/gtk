@@ -465,6 +465,22 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserDefault, _gtk_file_chooser_default, GTK_T
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_FILE_CHOOSER_EMBED,
 						gtk_file_chooser_embed_default_iface_init));						
 
+
+static void
+add_normal_and_shifted_binding (GtkBindingSet  *binding_set,
+				guint           keyval,
+				GdkModifierType modifiers,
+				const gchar    *signal_name)
+{
+  gtk_binding_entry_add_signal (binding_set,
+				keyval, modifiers,
+				signal_name, 0);
+
+  gtk_binding_entry_add_signal (binding_set,
+				keyval, modifiers | GDK_SHIFT_MASK,
+				signal_name, 0);
+}
+
 static void
 _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 {
@@ -618,26 +634,24 @@ _gtk_file_chooser_default_class_init (GtkFileChooserDefaultClass *class)
 				"location-popup-on-paste",
 				0);
   gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Up, GDK_MOD1_MASK,
-				"up-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
 		  		GDK_KEY_BackSpace, 0,
 				"up-folder",
 				0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Up, GDK_MOD1_MASK,
-				"up-folder",
-				0);
 
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_Down, GDK_MOD1_MASK,
-				"down-folder",
-				0);
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Down, GDK_MOD1_MASK,
-				"down-folder",
-				0);
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_Up, GDK_MOD1_MASK,
+				  "up-folder");
+
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_KP_Up, GDK_MOD1_MASK,
+				  "up-folder");
+
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_Down, GDK_MOD1_MASK,
+				  "down-folder");
+  add_normal_and_shifted_binding (binding_set,
+				  GDK_KEY_KP_Down, GDK_MOD1_MASK,
+				  "down-folder");
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KEY_Home, GDK_MOD1_MASK,

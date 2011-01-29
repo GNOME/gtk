@@ -222,18 +222,25 @@
  * 	      <row>
  * 		<entry>up-folder</entry>
  * 		<entry>
- * 		  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>
+ * 		  <keycombo><keycap>Alt</keycap><keycap>Up</keycap></keycombo>;
+ *                <keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Up</keycap></keycombo>
  *                <footnote>
  * 		      Both the individual Up key and the numeric
  * 		      keypad's Up key are supported.
- * 		  </footnote>
- * 		  ;
+ * 		  </footnote>;
  * 		  <keycap>Backspace</keycap>
  * 		</entry>
  * 	      </row>
  * 	      <row>
  * 		<entry>down-folder</entry>
- * 		<entry><keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo></entry>
+ * 		<entry>
+ *                <keycombo><keycap>Alt</keycap><keycap>Down</keycap></keycombo>;
+ *                <keycombo><keycap>Alt</keycap><keycap>Shift</keycap><keycap>Down</keycap></keycombo>
+ *                <footnote>
+ * 		      Both the individual Down key and the numeric
+ * 		      keypad's Down key are supported.
+ * 		  </footnote>
+ *              </entry>
  * 	      </row>
  * 	      <row>
  * 		<entry>home-folder</entry>
