@@ -125,8 +125,8 @@ void	 gtk_binding_entry_add_signall	(GtkBindingSet	*binding_set,
 					 const gchar	*signal_name,
 					 GSList		*binding_args);
 
-void     gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
-						   const gchar   *signal_desc);
+GTokenType gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
+                                                     const gchar   *signal_desc);
 
 void	 gtk_binding_entry_remove	(GtkBindingSet	*binding_set,
 					 guint		 keyval,

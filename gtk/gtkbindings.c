@@ -1271,17 +1271,20 @@ create_signal_scanner (void)
  * Key combinations must be in a format that can be parsed by
  * gtk_accelerator_parse().
  *
+ * Returns: %G_TOKEN_NONE if the signal was successfully parsed and added,
+ *     the expected token otherwise
+ *
  * Since: 3.0
- **/
-void
+ */
+GTokenType
 gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
-					  const gchar   *signal_desc)
+                                          const gchar   *signal_desc)
 {
   static GScanner *scanner = NULL;
   GTokenType ret;
 
-  g_return_if_fail (binding_set != NULL);
-  g_return_if_fail (signal_desc != NULL);
+  g_return_val_if_fail (binding_set != NULL, G_TOKEN_NONE);
+  g_return_val_if_fail (signal_desc != NULL, G_TOKEN_NONE);
 
   if (G_UNLIKELY (!scanner))
     scanner = create_signal_scanner ();
@@ -1291,12 +1294,10 @@ gtk_binding_entry_add_signal_from_string (GtkBindingSet *binding_set,
 
   ret = gtk_binding_parse_bind (scanner, binding_set);
 
-  if (ret != G_TOKEN_NONE)
-    g_scanner_unexp_token (scanner, ret, NULL, NULL, NULL,
-                           "Could not parse binding", FALSE);
-
   /* Reset for next use */
   g_scanner_set_scope (scanner, 0);
+
+  return ret;
 }
 
 /**

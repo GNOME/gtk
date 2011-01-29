@@ -801,7 +801,8 @@ enum ParserScope {
   SCOPE_PSEUDO_CLASS,
   SCOPE_NTH_CHILD,
   SCOPE_DECLARATION,
-  SCOPE_VALUE
+  SCOPE_VALUE,
+  SCOPE_BINDING_SET
 };
 
 /* Extend GtkStateType, since these
@@ -1505,6 +1506,12 @@ scanner_apply_scope (GScanner    *scanner,
   g_scanner_set_scope (scanner, scope);
 
   if (scope == SCOPE_VALUE)
+    {
+      scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
+      scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(),.%\t\n'/\"";
+      scanner->config->scan_identifier_1char = TRUE;
+    }
+  else if (scope == SCOPE_BINDING_SET)
     {
       scanner->config->cset_identifier_first = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_";
       scanner->config->cset_identifier_nth = G_CSET_a_2_z G_CSET_A_2_Z G_CSET_DIGITS "@#-_ +(){}<>,.%\t\n'/\"";
@@ -3318,19 +3325,27 @@ parse_rule (GtkCssProvider  *css_provider,
           if (scanner->token != G_TOKEN_LEFT_CURLY)
             return G_TOKEN_LEFT_CURLY;
 
-          css_provider_push_scope (css_provider, SCOPE_VALUE);
+          css_provider_push_scope (css_provider, SCOPE_BINDING_SET);
           g_scanner_get_next_token (scanner);
 
           do
             {
+              GTokenType ret;
+
               if (scanner->token != G_TOKEN_IDENTIFIER)
                 {
                   scanner->user_data = "Binding definition";
                   return G_TOKEN_IDENTIFIER;
                 }
 
-              gtk_binding_entry_add_signal_from_string (binding_set,
-                                                        scanner->value.v_identifier);
+              ret = gtk_binding_entry_add_signal_from_string (binding_set,
+                                                              scanner->value.v_identifier);
+              if (ret != G_TOKEN_NONE)
+                {
+                  scanner->user_data = "Binding definition";
+                  return ret;
+                }
+
               g_scanner_get_next_token (scanner);
 
               if (scanner->token != ';')
