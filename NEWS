@@ -1,3 +1,25 @@
+Overview of Changes from GTK+ 2.23.90 to 2.24
+=============================================
+
+* GtkBuilder has gained support for
+ - items in GtkComboBoxText
+ - tags in GtkTextTagTable
+ - menus in GtkMenuToolButton
+
+* The gtk-builder-convert script gained a
+  --target-version option
+
+* Many introspection annotation fixes
+
+* Bugs fixed:
+ 351755 GTK_RANGE (range) -> round_digits should be exposed...
+ 590459 Text is sometimes not pasted at the right location
+ 639327 gtk-builder-convert needs to convert gtkcomboboxentry...
+
+* Updated translations:
+ British English
+
+
 Overview of Changes from GTK+ 2.23.3 to 2.23.90
 ===============================================
 
