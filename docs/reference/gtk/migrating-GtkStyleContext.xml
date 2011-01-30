@@ -27,6 +27,13 @@
       with possible variants such as the dark theme being named
       <filename>gtk-dark.css</filename> in the same directory.
     </para>
+
+    <para>
+      If your theme gtkrc file was providing values for #GtkSettings, you
+      can install a <filename>settings.ini</filename> keyfile along with
+      the <filename>gtk.css</filename> to provide theme-specific defaults
+      for settings.
+    </para>
   </section>
 
   <section id="gtk-migrating-theme-GtkStyleContext-engines">
@@ -414,8 +421,8 @@
 
     <orderedlist>
       <listitem>
-        Replace <literal>style_set()</literal> calls with
-        <literal>style_updated()</literal>.
+        Replace #GtkWidget::style-set handlers with
+        #GtkWidget::style-updated handlers.
       </listitem>
 
       <listitem>
